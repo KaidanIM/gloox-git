@@ -31,7 +31,15 @@ class JThread;
  * To use, create a new JClient instance, feed it connection credentials, either in the Constructor or afterwards
  * using the setters. You should then register packet handlers implementing the corresponding
  * Interfaces (ConnectionListener, PresenceHandler, MessageHandler, IqHandler,
- * SubscriptionHandler), and call @ref connect() to establish the connection to the server. 
+ * SubscriptionHandler), and call @ref connect() to establish the connection to the server.
+ * Example:
+ * \code
+ * JClient* j = new JClient( "user", "resource", "password", "resource" );
+ * j->setDebug( true );
+ * c->registerPresenceHandler( this );
+ * c->registerSubscriptionHandler( this );
+ * j->connect();
+ * \endcode
  * @author Jakob Schroeter <js@camaya.net>
  */
 class JClient : public Stream
@@ -164,13 +172,13 @@ class JClient : public Stream
     void setDebug( bool debug ) { m_debug = debug; };
 
     /**
-     * switch usage of SASL on/off (if available)
+     * switch usage of SASL on/off (if available). Default: on
      * @param sasl Whether to switch SASL usage on or off
      */
     void setSasl( bool sasl ) { m_sasl = sasl;   };
 
     /**
-     * switch usage of TLS on/off (if available)
+     * switch usage of TLS on/off (if available). Default: on
      * @param tls Whether to switch TLS usage on or off
      */
     void setTls( bool tls ) { m_tls = tls;     };
