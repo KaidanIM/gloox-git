@@ -21,6 +21,7 @@ Feeder::Feeder( const string username, const string resource,
   c->setDebug( debug );
   c->registerConnectionListener( this );
   c->registerMessageHandler( this );
+  c->setVersion( "Feeder", "0.1" );
   c->connect();
 }
 
