@@ -31,14 +31,21 @@ class JThread;
  * To use, create a new JClient instance, feed it connection credentials, either in the Constructor or afterwards
  * using the setters. You should then register packet handlers implementing the corresponding
  * Interfaces (ConnectionListener, PresenceHandler, MessageHandler, IqHandler,
- * SubscriptionHandler), and call @ref connect() to establish the connection to the server.
- * Example:
+ * SubscriptionHandler), and call @ref connect() to establish the connection to the server.<br>
+ * Usage example:
  * \code
- * JClient* j = new JClient( "user", "resource", "password", "resource" );
- * j->setDebug( true );
- * j->registerPresenceHandler( this );
- * j->registerSubscriptionHandler( this );
- * j->connect();
+ * void Class::doIt()
+ * {
+ *   JClient* j = new JClient( "user", "resource", "password", "resource" );
+ *   j->setDebug( true );
+ *   j->registerPresenceHandler( this );
+ *   j->connect();
+ * }
+ *
+ * virtual void Class::presenceHandler( iksid* from, iksubtype type, ikshowtype show, const char* msg )
+ * {
+ *   // handle incoming presence packets here
+ * }
  * \endcode
  * @author Jakob Schroeter <js@camaya.net>
  */
