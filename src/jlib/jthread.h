@@ -22,6 +22,7 @@ class JThread : public Thread
   public:
     /**
      * Constructor
+     * @param parent An initialised JClient instance.
      */
     JThread( JClient* parent );
 

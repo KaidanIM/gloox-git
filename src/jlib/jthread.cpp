@@ -12,9 +12,8 @@
 
 
 JThread::JThread( JClient* parent )
-  : m_parent( parent ), m_cancel( false )
+  : m_parent( parent ), m_cancel( false ), m_parser( m_parent->parser() )
 {
-  m_parser = m_parent->parser();
 }
 
 JThread::~JThread()
@@ -30,7 +29,7 @@ void JThread::run()
     ret = iks_recv( m_parser, 0 );
     // check for error
     if( ret != IKS_OK ) {
-      switch( ret ) { 
+      switch( ret ) {
         case IKS_HOOK:
           if( m_parent->debug() ) printf("IKS_HOOK\n");
           m_parent->disconnect();
