@@ -34,7 +34,7 @@ class JThread;
  * SubscriptionHandler), and call @ref connect() to establish the connection to the server.<br>
  *
  * Usage example:
- * \code
+ * @code
  * void Class::doIt()
  * {
  *   JClient* j = new JClient( "user", "resource", "password", "resource" );
@@ -46,9 +46,12 @@ class JThread;
  * {
  *   // handle incoming presence packets here
  * }
- * \endcode
+ * @endcode
  *
- * For debugging purposes you might want to @ref setDebug() and @ref set_log_hook().
+ * For debugging purposes you might want to @ref setDebug() and set_log_hook(). <br>
+ * By default, the library handles a few IQ namespaces on the application's behalf. These include:
+ * @li JEP-0092 (Software Version) If no version is specified, a name of "based on Jlib" with Jlib's current version is announced.
+ * @li JEP-0030 (Service Discovery) All supported/available services are announced. No items are returned.
  * @author Jakob Schroeter <js@camaya.net>
  */
 class JClient : public Stream
@@ -206,7 +209,7 @@ class JClient : public Stream
 
     /**
      * enables/disables the automatic sending of a presence packet
-     * upon successful authentication @emp before the ConnectionListeners
+     * upon successful authentication @em before the ConnectionListeners
      * are notified. Default: on
      * @param autoPresence Whether to switch AutoPresence on or off
      */
@@ -226,17 +229,17 @@ class JClient : public Stream
      * The list will be posted as an answer to IQ queries in the
      * "http://jabber.org/protocol/disco#info" namespace.
      * These IQ packets will not be forwarded but answered on the
-     * application's behalf, unless @ref disableDisco() is called. By
-     * default, disco(very) queries are handled by the
-     * library.<br>
-     * @param feature A feature the host app supports.
+     * application's behalf, unless @ref disableDiscoInfo() is called. By
+     * default, disco(very) queries are handled by the library.
+     * By default, all supported, not disabled features are announced.
+     * @param feature A feature (namespace) the host app supports.
      */
     void setFeature( const char* feature );
 
     /**
      * Disables automatic handling of disco#info.
      * All disco#info IQ packets will be forwarded
-     * to the IqHandlers.
+     * to the IqHandlers. This is independent of @ref disableDiscoItems().
      * There is no way to re-enable disco#info-handling.
      */
     void disableDiscoInfo();
@@ -244,7 +247,7 @@ class JClient : public Stream
     /**
      * Disables automatic handling of disco#items.
      * All disco#items IQ packets will be forwarded
-     * to the IqHandlers.
+     * to the IqHandlers. This is independent of @ref disableDiscoInfo().
      * There is no way to re-enable disco#item-handling.
      */
     void disableDiscoItems();
