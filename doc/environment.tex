@@ -59,13 +59,13 @@ The Build System helps users and developers building binary executables as well 
 
 \subsubsection{Source Code Compilation}
 \paragraph{}
-For this project a combination of the tools autoconf\footnote{Autoconf's homepage is at http://www.gnu.org/software/autoconf/} and automake\footnote{Automake's homepage is at http://www.gnu.org/software/automake/} is used. Of course, The GNU Compiler Collection  takes care of the final compilation.
+For this project a combination of the tools autoconf\footnote{Autoconf's homepage is at http://www.gnu.org/software/autoconf/} and automake\footnote{Automake's homepage is at http://www.gnu.org/software/automake/} is used. Of course, the GNU Compiler Collection  takes care of the final compilation.
 
 \paragraph{autoconf}
 Autoconf is used to create a \texttt{configure} script. This contains various checks for more or less obvious dependencies, including those listed in Section \ref{sec:depend}.
 
 \paragraph{automake}
-Automake is used to create target-platform specific \texttt{Makefile}s from their corresponding templates (called \texttt{Makefile.am}). A \texttt{Makefile} the includes a set of rules to build the source code, i.e. the actual commands and the order they are executed in.
+Automake is used to create target-platform specific \texttt{Makefile}s from their corresponding templates (called \texttt{Makefile.am}). A \texttt{Makefile} contains a set of rules to build the source code, i.e. the actual compile commands and their order of execution.
 
 \subsubsection{API Documentation}
 \paragraph{}
@@ -74,4 +74,4 @@ The API documentation is created by Doxygen\footnote{Doxygen's homepage is at ht
 
 \subsubsection{Project Documentation}
 \paragraph{}
-The project documentation is written in \LaTeX.
+The project documentation is built using \LaTeX, BibTeX and MetaPost.
