@@ -212,6 +212,15 @@ class JClient : public Stream
      */
    void setAutoPresence( bool autoPresence ) { m_autoPresence = autoPresence; };
 
+   /**
+    * sets the version of the host application using this library.
+    * If this is called, the library will talke care of any jabber:iq:version
+    * requests. These IQ packets will not be forwarded to the IqHandlers.
+    * @param name The name to be returned to inquireing clients
+    * @param version The version to be returned to inquireing clients
+    */
+   void setVersion( const char* name, const char* version );
+
     /**
      * returns the parser of the JClient
      * @return A pointer to the current iksparser
@@ -356,6 +365,7 @@ class JClient : public Stream
     bool m_tls;
     bool m_createAccount;
     bool m_autoPresence;
+    bool m_handleVersion;
     int m_port;
     state m_state;
 
