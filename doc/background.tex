@@ -4,22 +4,23 @@ The project is based on well-known and well-understood technologies. This sectio
 
 \subsection{Distributed Computing}
 \paragraph{}
-Basically, the term Distributed Computing describes a technology where more or less loosely connected machines work together on solving a problem. They do so by each dealing with a small fraction of the complete problem. This, of course, implies that it is possible to split the problem in smaller sub-problems that can be solved individually. There are lots of challenges out there that meet these requirements. Accordingly, there are many projects that make use of clusters to work on such a problem. Usually, a single machine takes care of assigning tasks to the nodes. The processing of the task could then even happen in a disconnected mode. But upon completion of the computing the result is delivered back to the co-ordinating master.
-\paragraph{}
-Prominent examples are the afore mentioned Seti@Home ...
+Basically, the term Distributed Computing describes a technology where more or less loosely connected machines, called nodes, work together on solving a problem. They do so by each dealing with a small fraction of the overall problem. This, of course, implies that it is possible to split the problem into smaller sub-problems that can be solved individually. There are lots of challenges out there that meet these requirements. Accordingly, there are many projects that make use of clusters to work on such a problem. Usually, a dedicated machine takes care of assigning tasks to the nodes. The processing of the task could then even happen in a disconnected mode. Upon completion of the computation the result is delivered back to the co-ordinating master.
 
 \paragraph{}
-Software solutions used in this field are very problem specific in that they do not allow for solving a completely different one. 
+Software solutions used in this field are very problem specific in that they do not allow for adaption to any other task.
 
 \paragraph{}
-Example institutions where clusters could easily be deployed include schools, universities, corporate environments or laboratories. In those locations usually a large number of computers is available which are used only in the daytime and not at all at night. During those hours of less or no usage these machines can be used as nodes of a cluster. Such a cluster would be static since the machines don't change their membership in the cluster. Another way to form a cluster is to deploy the Internet. Many more people and machines are reachable and can participate.
+Institutions where clusters could easily be deployed include schools, universities, corporate environments or laboratories. They usually have large numbers of computers available which are used only in the daytime and not at all at night. During those hours of less or no usage these machines can be turned into nodes of a cluster. Such a cluster would be rather static since the machines don't change their membership in the cluster. Another way to form a cluster is to deploy the Internet. Many more people and machines are reachable and can participate.
+
+\paragraph{}
+A prominent example for the latter is the afore mentioned Seti@Home, short for Search for Extraterrestrial Intelligence, which tries to find patterns in noise recorded from space using radio telescopes. These patterns could give hints on other intelligent life forms in the universe.
 
 \subsection{Extensible Markup Language (XML)}
 \paragraph{}
 The Extensible Markup Language (XML) is an universal means to describe hierarchical data. It is human readable as well as easily machine parsable. It has been developed by the World Wide Web Consortium (W3C) and is a W3C standard. It is a subset of the Standard Generalized Markup Language (SGML).
 
 \paragraph{}
-XML alone is not a programming language, neither is it a markup language per se. It rather is a ruleset that defines a way how to describe hierarchical data. A user of XML has to define specific rules for their specific kind of data on their own in a formal way. Such a formal description can, for example, be a Document Type Definition (DTD). It is not absolutely necessary to write down a DTD to use an XML-derived markup language. But using such a formal description, software can validate a given document for its conformity.
+XML alone is not a programming language, neither is it a markup language per se. It rather is a ruleset that defines a way how to describe hierarchical data. A user of XML has to define specific rules for their specific kind of data on their own in a formal way. Such a formal description can, for example, be a Document Type Definition (DTD). It is not absolutely necessary to write down a DTD to use an XML-derived markup language. But, using such a formal description, software can validate a given document for its conformity.
 
 \paragraph{}
 XML consists of elements, their attributes and character data. An element has an opening tag and a corresponding closing tag. A tag is a charcter string enclosed by \glqq{}<\grqq{} and \glqq{}>\grqq{}. A closing tag additionally has a slash \glqq{}/\grqq{} right after the first \glqq{}<\grqq{}. Attributes are placed as \texttt{Key="Value"} pairs inside a tag. Data is put between opening and closing tags.
@@ -43,20 +44,24 @@ Tags can be nested infinitely and build up hierarchies as long as hierarchy leve
 \paragraph{}
 A relatively new feature in XML are namespaces. Since XML instances may contain elements from different vocabularies, namespaces are used to remove ambiguities and distinguish semantically between equally named elements. The special attribute \texttt{xmlns} denotes the namespace. For example, in Figure \ref{fig:XMLexample} the \texttt{<inner>} element belongs to the namespace \texttt{namespace}.
 
-\subsubsection{XML Parser}
+\subsubsection{XML Parsers}
 \paragraph{}
-* DOM
-* SAX
+There are several ways to parse XML. Two of the more common ones are the Document Object Model (DOM) and SAX, respectively.
+\paragraph{Document Object Model}
+The Document Object Model is used to parse XML if all the data between the XML root elements is available at parsing time. This is, for example, true for ordinary files stored in a file system. After parsing the file's contents, the XML is kept in memory in a tree-like structure. Usually, functions exist that allow for traversing the tree and looking for specific content.
+
+\paragraph{SAX}
+On the contrary, a SAX parser does not necessarily need to have the whole document in memory at once. It rather parses chunks of XML as they come in over, say, a network connection. Special hook funtions are called if specific XML elements fly by in the stream.
 
 
 \subsection{Extensible Message and Presence Protocol (XMPP)}
 \label{sec:xmpp}
 \paragraph{}
-The Extensible Message and Presence Protocol is developed in an Internet community since 1999\footnote{More on the history of Jabber and XMPP can be found on http://www.xmpp.org/history.html}. It is also known as Jabber, which also is the original name, and its primary purpose was Instant Messaging. With the formation of a dedicated XMPP Working Group within the Internet Engineering Task Force (IETF) the protocol became an Internet Standard in 2004. It is published by IETF as Request for Comments (RFC) memos 3920 and 3921.
+The Extensible Message and Presence Protocol is developed in an Internet community since 1999\footnote{More on the history of Jabber and XMPP can be found on http://www.xmpp.org/\-history.html}. It is also known as Jabber, which also is the original name, and its primary purpose was Instant Messaging. With the formation of a dedicated XMPP Working Group within the Internet Engineering Task Force (IETF) the protocol became an Internet Standard in 2004. It is published by IETF as Request for Comments (RFC) memos 3920 and 3921.
 \paragraph{}
 XMPP is based on XML in that the actual data exchanged between client and server is an XML stream. After a TCP/IP connection is established between client and server (or two servers), a stream opening tag is sent by both parties. Communication then happens by sending so-called stanzas to and fro. Closing the initial stream tag also closes the underlying TCP/IP connection.
 \paragraph{}
-A stanza in XMPP is exactly one element, consisting of its opening tag, any number of corresponding attributes, nested tags and character data, respectively, and the closing tag. Figure \ref{fig:streamExample} shows an example stream and a stanza.
+A stanza in XMPP is exactly one element, consisting of its opening tag, any number of corresponding attributes, nested tags and character data, respectively, and the closing tag. Figure \ref{fig:streamExample} shows an example stream containing one stanza.
 
 \begin{figure}[H]
 \begin{listing}{1}
@@ -78,4 +83,8 @@ A stanza in XMPP is exactly one element, consisting of its opening tag, any numb
 \paragraph{}
 Line 1 denotes that the following content complies with XML version 1.0, and is mandatory for any XML document. A stream can be seen as a special type of document. The stream is opened in line 2 and the opening tag of a \texttt{presence} stanza is sent in line 3. The stream is closed again in line 10.
 \paragraph{}
-In the Instant Messaging world, a widely-used feature of XMPP is the roster. Users can authorise other users to allow them to see their online presence. These authorised users are then (usually) added to the authorising users personal contact list. Upon connection of a user, their client sends the current presence status (usually 'online') to the server which then distributes it to authorised contacts in the user's roster.
+In the Instant Messaging world, a widely-used feature of XMPP is the roster. Users can authorise other users to allow them to see their online presence. These authorised users are then (usually) added to the authorising users personal contact list. Upon connection of a user, their client sends the current presence status (e.g., 'online') to the server which then distributes it to authorised contacts in the user's roster.
+
+\subsubsection{Protocol Extensions}
+\paragraph{}
+RFCs 3920 and 3921 only describe the core functionality of XMPP, like authentication, as well as Instant Messaging-specific extensions, like the roster. By the time, the protocol has been extended by so-called Jabber Enhancement Proposals (JEP) to provide much more functionality than the core RFCs. A very interesting extension, though not used in this project, is \cite{jep0060} which describes a data push mechanism.
