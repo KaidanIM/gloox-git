@@ -1,6 +1,6 @@
 
 
-final-report.pdf: final-report.tex
+final-report.pdf: final-report.tex fyp.mp final-report.bib
 	mpost -interaction=nonstopmode 'fyp'
 	latex -src -interaction=nonstopmode 'final-report.tex'
 	bibtex 'final-report'
@@ -32,4 +32,3 @@ clean:
 	rm -rf *.aux
 	rm -rf *.blg
 	rm -rf *.mpx
-
