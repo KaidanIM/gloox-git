@@ -68,7 +68,7 @@ class JThread;
  * @endcode
  *
  * For debugging purposes you might want to @ref setDebug() and set_log_hook(). <br>
- * By default, the library handles a few IQ namespaces on the application's behalf. These include:
+ * By default, the library handles a few (incoming) IQ namespaces on the application's behalf. These include:
  * @li JEP-0092 (Software Version) If no version is specified, a name of "based on Jlib" with Jlib's current version is announced.
  * @li JEP-0030 (Service Discovery) All supported/available services are announced. No items are returned.
  * @author Jakob Schroeter <js@camaya.net>
@@ -94,7 +94,7 @@ class JClient : public Stream
 
     /**
      * Constructs a new JClient.
-     * SASL and TLS are on by default. No further initialisations are made. It is absolutely necessary to 
+     * SASL and TLS are on by default. No further initialisations are made. It is absolutely necessary to
      * set server, username, password and resource using the corresponding setters.
      */
     JClient();
@@ -102,10 +102,10 @@ class JClient : public Stream
     /**
      * Constructs a new JClient.
      * SASL and TLS are on by default.
-     * @param username The username/local part of the JID
-     * @param resource The resource part of the JID
-     * @param password The password to use for authentication
-     * @param server The jabber server's address or host name to connect to
+     * @param username The username/local part of the JID.
+     * @param resource The resource part of the JID.
+     * @param password The password to use for authentication.
+     * @param server The jabber server's address or host name to connect to.
      * @param port The port to connect to. Default: 5222
      */
     JClient( const std::string username, const std::string resource,
@@ -172,57 +172,57 @@ class JClient : public Stream
     int port()             { return m_port; };
 
     /**
-     * Returns the current status of AutoPresence
-     * @return The current AutoPresence status
+     * Returns the current status of AutoPresence.
+     * @return The current AutoPresence status.
      */
     bool autoPresence()    { return m_autoPresence; };
 
     // FIXME: setters have to update each other, e.g. username, server, resource --> jid
     /**
-     * Sets the username to use to connect to the XMPP server
-     * @param username The username to authenticate with
+     * Sets the username to use to connect to the XMPP server.
+     * @param username The username to authenticate with.
      */
     void setUsername( const std::string &username ) { m_username = username; };
 
     /**
-     * Sets the resource to use to connect to the XMPP server
-     * @param resource The resource to use to log into the server
+     * Sets the resource to use to connect to the XMPP server.
+     * @param resource The resource to use to log into the server.
      */
     void setResource( const std::string &resource ) { m_resource = resource; };
 
     /**
-     * Sets the password to use to connect to the XMPP server
-     * @param password The password to use for authentication
+     * Sets the password to use to connect to the XMPP server.
+     * @param password The password to use for authentication.
      */
     void setPassword( const std::string &password ) { m_password = password; };
 
     /**
-     * Sets the XMPP Cserver to connect to
-     * @param server The server to connect to. Either IP or fully qualified domain name
+     * Sets the XMPP Cserver to connect to.
+     * @param server The server to connect to. Either IP or fully qualified domain name.
      */
     void setServer( const std::string &server ) { m_server = server;     };
 
     /**
-     * Switches debug output on/off
-     * @param debug Whether to switch debug output on or off
+     * Switches debug output on/off. Default: off
+     * @param debug Whether to switch debug output on or off.
      */
     void setDebug( bool debug ) { m_debug = debug; };
 
     /**
      * Switches usage of SASL on/off (if available). Default: on
-     * @param sasl Whether to switch SASL usage on or off
+     * @param sasl Whether to switch SASL usage on or off.
      */
     void setSasl( bool sasl ) { m_sasl = sasl;   };
 
     /**
      * Switches usage of TLS on/off (if available). Default: on
-     * @param tls Whether to switch TLS usage on or off
+     * @param tls Whether to switch TLS usage on or off.
      */
     void setTls( bool tls ) { m_tls = tls;     };
 
     /**
-     * Sets the port to connect to
-     * @param port The port to connect to
+     * Sets the port to connect to.
+     * @param port The port to connect to.
      */
     void setPort( int port ) { m_port = port;   };
 
@@ -230,7 +230,7 @@ class JClient : public Stream
      * Enables/disables the automatic sending of a presence packet
      * upon successful authentication @em before the ConnectionListeners
      * are notified. Default: on
-     * @param autoPresence Whether to switch AutoPresence on or off
+     * @param autoPresence Whether to switch AutoPresence on or off.
      */
     void setAutoPresence( bool autoPresence ) { m_autoPresence = autoPresence; };
 
@@ -238,8 +238,8 @@ class JClient : public Stream
      * Sets the version of the host application using this library.
      * The library takes care of jabber:iq:version requests. These
      * IQ packets will not be forwarded to the IqHandlers.
-     * @param name The name to be returned to inquireing clients
-     * @param version The version to be returned to inquireing clients
+     * @param name The name to be returned to inquireing clients.
+     * @param version The version to be returned to inquireing clients.
      */
     void setVersion( const char* name, const char* version );
 
@@ -271,7 +271,7 @@ class JClient : public Stream
      * All further disco#info IQ packets will be forwarded
      * to the IqHandlers. This is independent of @ref disableDiscoItems().
      * There is no way to re-enable disco#info-handling.
-     * @note This does @em not influence the browsing capabilities, 
+     * @note This does @em not influence the browsing capabilities,
      * but handling of incoming queries only.
      */
     void disableDiscoInfo();
@@ -281,7 +281,7 @@ class JClient : public Stream
      * All further disco#items IQ packets will be forwarded
      * to the IqHandlers. This is independent of @ref disableDiscoInfo().
      * There is no way to re-enable disco#item-handling.
-     * @note This does @em not influence the browsing capabilities, 
+     * @note This does @em not influence the browsing capabilities,
      * but handling of incoming queries only.
      */
     void disableDiscoItems();
@@ -304,93 +304,93 @@ class JClient : public Stream
 
     /**
      * Returns the current client state.
-     * @return The current client state
+     * @return The current client state.
      */
     state clientState();
 
     /**
      * Sends the given xml via the established connection.
      * @note @ref x is automatically free()'ed.
-     * @param x The xml data
+     * @param x The xml data.
      */
     void send( iks* x );
 
     /**
      * Sends the given data to the given jid as a message.
-     * @param jid The Jabber ID to send the data to
-     * @param data The data to send
+     * @param jid The Jabber ID to send the data to.
+     * @param data The data to send.
      */
     void send( const char* jid, const char* data );
 
     /**
      * Connects to the XMPP server, authenticates and gets the whole thing running.
-     * creates a new thread that receives arriving data and feeds the parser.
+     * Creates a new thread that receives arriving data and feeds the parser.
      * @note This function currently blocks.
      */
     void connect();
 
     /**
-     * Disconnects from the server by ending the receiver thread
+     * Disconnects from the server by ending the receiver thread.
      */
     void disconnect();
 
     /**
-     * Registers @c cl as object that receives connection notifications
-     * @param cl The object to receive connection notifications
+     * Registers @c cl as object that receives connection notifications.
+     * @param cl The object to receive connection notifications.
      */
     void registerConnectionListener( ConnectionListener* cl );
 
     /**
-     * Registers @c ih as object that receives Iq packet notifications
-     * @param ih The object to receive Iq packet notifications
+     * Registers @c ih as object that receives Iq packet notifications.
+     * @param ih The object to receive Iq packet notifications.
      */
     void registerIqHandler( IqHandler* ih, std::string xmlns );
 
     /**
-     * Registers @c mh as object that receives Message packet notifications
-     * @param mh The object to receive Message packet notifications
+     * Registers @c mh as object that receives Message packet notifications.
+     * @param mh The object to receive Message packet notifications.
      */
     void registerMessageHandler( MessageHandler* mh );
 
     /**
-     * Registers @c ph as object that receives Presence packet notifications
-     * @param ph The object to receive Presence packet notifications
+     * Registers @c ph as object that receives Presence packet notifications.
+     * @param ph The object to receive Presence packet notifications.
      */
     void registerPresenceHandler( PresenceHandler* ph );
 
     /**
-     * Registers @c sh as object that receives Subscription packet notifications
-     * @param sh The object to receive Subscription packet notifications
+     * Registers @c sh as object that receives Subscription packet notifications.
+     * @param sh The object to receive Subscription packet notifications.
      */
     void registerSubscriptionHandler( SubscriptionHandler* sh );
 
 
     /**
-     * Removes the given object from the list of connection listeners
+     * Removes the given object from the list of connection listeners.
      * @param cl The object to remove from the list
      */
     void removeConnectionListener( ConnectionListener* cl );
 
     /**
-     * Removes the given object from the list of Iq handlers
+     * Removes the given object from the list of Iq handlers.
      * @param ih The object to remove from the list
      */
     void removeIqHandler( std::string mlns );
 
     /**
-     * Removes the given object from the list of message handlers
+     * Removes the given object from the list of message handlers.
      * @param mh The object to remove from the list
      */
     void removeMessageHandler( MessageHandler* mh );
 
     /**
-     * Removes the given object from the list of presence handlers
+     * Removes the given object from the list of presence handlers.
      * @param ph The object to remove from the list
      */
     void removePresenceHandler( PresenceHandler* ph );
 
     /**
-     * Removes the given object from the list of subscription handlers
+     * Removes the given object from the list of subscription handlers.
      * @param sh The object to remove from the list
      */
     void removeSubscriptionHandler( SubscriptionHandler* sh );
