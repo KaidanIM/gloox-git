@@ -30,3 +30,14 @@ Result::~Result()
 {
 
 }
+
+XMPPResult::XMPPResult( JClient* parent )
+  : Result( parent )
+{
+
+}
+
+XMPPResult::~XMPPResult()
+{
+
+}

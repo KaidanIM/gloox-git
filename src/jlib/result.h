@@ -23,6 +23,10 @@
 #include "jclient.h"
 
 
+/**
+ * This class is an abstract base for all Result and Error classes.
+ * @author Jakob Schroeter <js@camaya.net>
+ */
 class Result
 {
   public:
@@ -38,7 +42,25 @@ class Result
 
   private:
     JClient* m_parent;
+};
 
+
+/**
+ * This class encapsulates a @ref Result of a XMPP operation.
+ * @author Jakob Schroeter <js@camaya.net>
+ */
+class XMPPResult : public Result
+{
+  public:
+    /**
+     * Constructor
+     */
+    XMPPResult( JClient* parent );
+
+    /**
+     * Destructor
+     */
+    virtual ~XMPPResult();
 };
 
 #endif // RESULT_H__
