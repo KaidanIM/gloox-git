@@ -14,7 +14,8 @@
 JClient::JClient()
   : m_username( 0 ), m_resource( 0 ), m_password( 0 ),
   m_server( 0 ), m_port( 0 ), m_thread( 0 ),
-  m_tls( true ), m_sasl( true )
+  m_tls( true ), m_sasl( true ),
+  m_autoPresence( true )
 {
   init();
 }
@@ -343,8 +344,11 @@ void JClient::notifyMessageHandlers( iksid* from, iksubtype type, const char* ms
 void authHook( JClient* stream, ikspak* pak )
 {
   if( stream->debug() ) printf("authHook\n");
-  iks* x = iks_make_pres( IKS_SHOW_AVAILABLE, "online" );
-  stream->send( x );
+  if( stream->autoPresence() )
+  {
+    iks* x = iks_make_pres( IKS_SHOW_AVAILABLE, "online" );
+    stream->send( x );
+  }
 
   stream->notifyOnConnect();
 }
