@@ -15,7 +15,8 @@ JClient::JClient()
   : m_username( 0 ), m_resource( 0 ), m_password( 0 ),
   m_server( 0 ), m_port( 0 ), m_thread( 0 ),
   m_tls( true ), m_sasl( true ),
-  m_autoPresence( true ), m_handleVersion( false )
+  m_autoPresence( true ), m_handleVersion( false ),
+  m_handleDiscoInfo( true ), m_handleDiscoItems( true )
 {
   init();
 }
@@ -25,7 +26,8 @@ JClient::JClient( const std::string username, const std::string resource, const 
   : m_username( username ), m_resource( resource ), m_password( password ),
   m_server( server ), m_port( port ), m_thread( 0 ),
   m_tls( true ), m_sasl( true ),
-  m_autoPresence( true ), m_handleVersion( false )
+  m_autoPresence( true ), m_handleVersion( false ),
+  m_handleDiscoInfo( true ), m_handleDiscoItems( true )
 {
   init();
 }
@@ -58,25 +60,25 @@ void JClient::on_stream( int type, iks* node )
       break;
       case IKS_NODE_NORMAL:     // first level child of stream
         if ( strncmp( "stream:features", iks_name( node ), 15 ) == 0 ) {
-          m_features = iks_stream_features( node );
+          m_streamFeatures = iks_stream_features( node );
           if ( m_sasl ) {
             if ( m_tls && !is_secure() )
               break;
             if ( m_authorized ) {
               iks* t;
-              if ( m_features & IKS_STREAM_BIND ) {
+              if ( m_streamFeatures & IKS_STREAM_BIND ) {
                 send( iks_make_resource_bind( m_self ) );
               }
-              if ( m_features & IKS_STREAM_SESSION ) {
+              if ( m_streamFeatures & IKS_STREAM_SESSION ) {
                 iks* x = iks_make_session();
                 iks_insert_attrib( x, "id", "auth" );
                 send( x );
               }
             } else {
-              if ( m_features & IKS_STREAM_SASL_MD5 )
+              if ( m_streamFeatures & IKS_STREAM_SASL_MD5 )
                 start_sasl( IKS_SASL_DIGEST_MD5, (char *) username().c_str(),
                             (char *) password().c_str() );
-              else if ( m_features & IKS_STREAM_SASL_PLAIN )
+              else if ( m_streamFeatures & IKS_STREAM_SASL_PLAIN )
                 start_sasl( IKS_SASL_PLAIN, (char *) username().c_str(),
                             (char *) password().c_str() );
             }
@@ -129,6 +131,23 @@ void JClient::setVersion( const char* name, const char* version )
   m_versionVersion = strdup( version );
   m_handleVersion = true;
 }
+
+void JClient::setFeature( const char* feature )
+{
+  m_discoList.push_back( strdup( feature ) );
+}
+
+void JClient::disableDiscoInfo()
+{
+  m_handleDiscoInfo = false;
+  m_discoList.clear();
+}
+
+void JClient::disableDiscoItems()
+{
+  m_handleDiscoItems = false;
+}
+
 
 void JClient::login( char* sid )
 {
@@ -347,6 +366,43 @@ void JClient::notifyIqHandlers( const char* xmlns, ikspak* pak )
     iks_insert_cdata( z, m_versionName.c_str(), m_versionName.length() );
     z = iks_insert( y, "version" );
     iks_insert_cdata( z, m_versionVersion.c_str(), m_versionVersion.length() );
+    send( x );
+    free( x );
+  }
+  else if( ( iks_strncmp( xmlns, "http://jabber.org/protocol/disco#info", 37 ) == 0 )
+             && ( m_handleDiscoInfo ) )
+  {
+    iks* x = iks_new( "iq" );
+    iks_insert_attrib( x, "type", "result" );
+    iks_insert_attrib( x, "id", pak->id );
+    iks_insert_attrib( x, "to", pak->from->full );
+    iks_insert_attrib( x, "from", jid().c_str() );
+    iks* y = iks_insert( x, "query" );
+    iks_insert_attrib( y, "xmlns", "http://jabber.org/protocol/disco#info" );
+    iks* i = iks_insert( y, "identity" );
+    iks_insert_attrib( i, "category", "client" );
+    iks_insert_attrib( i, "type", "bot" );
+    iks_insert_attrib( i, "name", m_versionName.c_str() );
+
+    DiscoList::const_iterator it = m_discoList.begin();
+    for( it; it != m_discoList.end(); ++it )
+    {
+      iks* z = iks_insert( y, "feature" );
+      iks_insert_attrib( z, "var", (*it) );
+    }
+    send( x );
+    free( x );
+  }
+  else if( ( iks_strncmp( xmlns, "http://jabber.org/protocol/disco#items", 38 ) == 0 )
+             && ( m_handleDiscoItems ) )
+  {
+    iks* x = iks_new( "iq" );
+    iks_insert_attrib( x, "type", "result" );
+    iks_insert_attrib( x, "id", pak->id );
+    iks_insert_attrib( x, "to", pak->from->full );
+    iks_insert_attrib( x, "from", jid().c_str() );
+    iks* y = iks_insert( x, "query" );
+    iks_insert_attrib( y, "xmlns", "http://jabber.org/protocol/disco#items" );
     send( x );
     free( x );
   }

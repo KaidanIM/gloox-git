@@ -210,22 +210,44 @@ class JClient : public Stream
      * are notified. Default: on
      * @param autoPresence Whether to switch AutoPresence on or off
      */
-   void setAutoPresence( bool autoPresence ) { m_autoPresence = autoPresence; };
-
-   /**
-    * sets the version of the host application using this library.
-    * If this is called, the library will talke care of any jabber:iq:version
-    * requests. These IQ packets will not be forwarded to the IqHandlers.
-    * @param name The name to be returned to inquireing clients
-    * @param version The version to be returned to inquireing clients
-    */
-   void setVersion( const char* name, const char* version );
+    void setAutoPresence( bool autoPresence ) { m_autoPresence = autoPresence; };
 
     /**
-     * returns the parser of the JClient
-     * @return A pointer to the current iksparser
+      * Sets the version of the host application using this library.
+      * If this is called, the library will talke care of any jabber:iq:version
+      * requests. These IQ packets will not be forwarded to the IqHandlers.
+      * @param name The name to be returned to inquireing clients
+      * @param version The version to be returned to inquireing clients
+      */
+    void setVersion( const char* name, const char* version );
+
+    /**
+     * Adds a feature to the list of supported Jabber features.
+     * The list will be posted as an answer to IQ queries in the
+     * "http://jabber.org/protocol/disco#info" namespace.
+     * These IQ packets will not be forwarded but answered on the
+     * application's behalf, unless @ref disableDisco() is called. By
+     * default, disco(very) queries are handled by the
+     * library.<br>
+     * @param feature A feature the host app supports.
      */
-    iksparser* parser();
+    void setFeature( const char* feature );
+
+    /**
+     * Disables automatic handling of disco#info.
+     * All disco#info IQ packets will be forwarded
+     * to the IqHandlers.
+     * There is no way to re-enable disco#info-handling.
+     */
+    void disableDiscoInfo();
+
+    /**
+     * Disables automatic handling of disco#items.
+     * All disco#items IQ packets will be forwarded
+     * to the IqHandlers.
+     * There is no way to re-enable disco#item-handling.
+     */
+    void disableDiscoItems();
 
     /**
      * returns the current client state
@@ -325,6 +347,8 @@ class JClient : public Stream
     void notifyMessageHandlers( iksid* from, iksubtype type, const char* msg );
     void notifyPresenceHandlers( iksid* from, iksubtype type, ikshowtype show, const char* msg );
     void notifySubscriptionHandlers( iksid* from, iksubtype type, const char* msg );
+    iksparser* parser();
+
 
     friend void authHook(JClient* stream, ikspak* pak);
     friend void registerHook(JClient* stream, ikspak* pak);
@@ -335,11 +359,12 @@ class JClient : public Stream
     friend void subscriptionHook(JClient* stream, ikspak* pak);
     friend void iqHook(JClient* stream, ikspak* pak);
 
-    typedef list<ConnectionListener*> ConnectionListenerList;
-    typedef list<IqHandler*> IqHandlerList;
-    typedef list<MessageHandler*> MessageHandlerList;
-    typedef list<PresenceHandler*> PresenceHandlerList;
+    typedef list<ConnectionListener*>  ConnectionListenerList;
+    typedef list<IqHandler*>           IqHandlerList;
+    typedef list<MessageHandler*>      MessageHandlerList;
+    typedef list<PresenceHandler*>     PresenceHandlerList;
     typedef list<SubscriptionHandler*> SubscriptionHandlerList;
+    typedef list<const char*>          DiscoList;
 
     virtual void on_log( const char* data, size_t size, int is_incoming );
     virtual void on_stream( int type, iks* node );
@@ -368,16 +393,19 @@ class JClient : public Stream
     bool m_createAccount;
     bool m_autoPresence;
     bool m_handleVersion;
+    bool m_handleDiscoInfo;
+    bool m_handleDiscoItems;
     int m_port;
     state m_state;
 
-    ConnectionListenerList m_connectionListeners;
-    IqHandlerList m_iqHandlers;
-    MessageHandlerList m_messageHandlers;
-    PresenceHandlerList m_presenceHandlers;
+    ConnectionListenerList  m_connectionListeners;
+    IqHandlerList           m_iqHandlers;
+    MessageHandlerList      m_messageHandlers;
+    PresenceHandlerList     m_presenceHandlers;
     SubscriptionHandlerList m_subscriptionHandlers;
+    DiscoList               m_discoList;
 
-    int m_features;
+    int m_streamFeatures;
 };
 
 #endif // JCLIENT_H__
