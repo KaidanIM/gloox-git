@@ -24,7 +24,8 @@ JClient::JClient( const std::string username, const std::string resource, const 
                   const std::string server, int port )
   : m_username( username ), m_resource( resource ), m_password( password ),
   m_server( server ), m_port( port ), m_thread( 0 ),
-  m_tls( true ), m_sasl( true )
+  m_tls( true ), m_sasl( true ),
+  m_autoPresence( true )
 {
   init();
 }
