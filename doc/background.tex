@@ -6,7 +6,7 @@ The project is based on well-known and well-understood technologies. This sectio
 \paragraph{}
 Basically, the term Distributed Computing describes a technology where more or less loosely connected machines work together on solving a problem. They do so by each dealing with a small fraction of the complete problem. This, of course, implies that it is possible to split the problem in smaller sub-problems that can be solved individually. There are lots of challenges out there that meet these requirements. Accordingly, there are many projects that make use of clusters to work on such a problem. Usually, a single machine takes care of assigning tasks to the nodes. The processing of the task could then even happen in a disconnected mode. But upon completion of the computing the result is delivered back to the co-ordinating master.
 \paragraph{}
-Prominent examples are the afor ementioned Seti@Home ...
+Prominent examples are the afore mentioned Seti@Home ...
 
 \paragraph{}
 Software solutions used in this field are very problem specific in that they do not allow for solving a completely different one. 
@@ -64,7 +64,7 @@ A stanza in XMPP is exactly one element, consisting of its opening tag, any numb
 <stream:stream 
       xmlns:stream='http://etherx.jabber.org/streams' 
       xmlns='jabber:client' to='jabber.cc' version='1.0'>
-  <presence>
+  <presence from="sender@server.com" to="receiver@server.com">
     <status>
       online
     </status>
