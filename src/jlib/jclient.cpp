@@ -390,7 +390,7 @@ void registeredHook( JClient* stream, ikspak* pak )
 void msgHook( JClient* stream, ikspak* pak )
 {
   if( stream->debug() ) printf("msgHook\n");
-  stream->notifyMessageHandlers( pak->from, pak->subtype, iks_find_cdata( pak->x, "message" ) );
+  stream->notifyMessageHandlers( pak->from, pak->subtype, iks_find_cdata( pak->x, "body" ) );
 }
 
 void iqHook( JClient* stream, ikspak* pak )
