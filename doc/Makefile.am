@@ -1,8 +1,9 @@
 
 
 final-report.pdf: final-report.tex
+	mpost -interaction=nonstopmode 'fyp'
 	latex -src -interaction=nonstopmode 'final-report.tex'
-# 	bibtex 'final-report'
+	bibtex 'final-report'
 	latex -src -interaction=nonstopmode 'final-report.tex'
 	latex -src -interaction=nonstopmode 'final-report.tex'
 	dvips -o 'final-report.ps' 'final-report.dvi'
