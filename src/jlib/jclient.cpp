@@ -29,7 +29,7 @@ JClient::JClient()
   : m_username( 0 ), m_resource( 0 ), m_password( 0 ),
   m_server( 0 ), m_port( 0 ), m_thread( 0 ),
   m_tls( true ), m_sasl( true ),
-  m_autoPresence( true ), m_handleVersion( false ),
+  m_autoPresence( true ),
   m_handleDiscoInfo( true ), m_handleDiscoItems( true ),
   m_idCount( 0 )
 {
@@ -41,7 +41,7 @@ JClient::JClient( const std::string username, const std::string resource, const 
   : m_username( username ), m_resource( resource ), m_password( password ),
   m_server( server ), m_port( port ), m_thread( 0 ),
   m_tls( true ), m_sasl( true ),
-  m_autoPresence( true ), m_handleVersion( false ),
+  m_autoPresence( true ),
   m_handleDiscoInfo( true ), m_handleDiscoItems( true ),
   m_idCount( 0 )
 {
@@ -58,14 +58,15 @@ void JClient::init()
   setFeature( "jabber:iq:version" );
   setFeature( "http://jabber.org/protocol/disco#info" );
   setFeature( "http://jabber.org/protocol/disco#items" );
-  setVersion( "based on Jlib", JLIB_VERSION );
+  setVersion( "JLib", JLIB_VERSION );
+  setIdentity( "client", "bot" );
 }
 
 void JClient::on_stream( int type, iks* node )
 {
   if( m_debug ) printf("in on_stream\n");
   ikspak* pak = iks_packet( node );
-//   iks_filter_packet(m_filter, pak);
+
   switch (type)
   {
     case IKS_NODE_START:      // <stream:stream>
@@ -103,11 +104,8 @@ void JClient::on_stream( int type, iks* node )
                             (char *) password().c_str() );
             }
           }
-//           break;
         } else if ( strcmp ( "failure", iks_name ( node ) ) == 0 ) {
-          if( m_debug ) printf("failure...\n");
-//           j_error ("sasl authentication failed");
-//           break;
+          if( m_debug ) printf("sasl authentication failed...\n");
         } else if ( strcmp ( "success", iks_name ( node ) ) == 0 ) {
           if( m_debug ) printf( "sasl initialisation successful...\n" );
           m_authorized = true;
@@ -116,7 +114,6 @@ void JClient::on_stream( int type, iks* node )
           ikspak* pak;
           pak = iks_packet ( node );
           iks_filter_packet ( m_filter, pak );
-//          if (sess->job_done == 1) return IKS_HOOK;
         }
         break;
     case IKS_NODE_ERROR:      // <stream:error>
@@ -126,7 +123,7 @@ void JClient::on_stream( int type, iks* node )
     case IKS_NODE_STOP:       // </stream:stream>
       break;
   }
-  if( m_debug ) printf("at the end of on_stream\n");
+//   if( m_debug ) printf("at the end of on_stream\n");
 }
 
 
@@ -149,7 +146,12 @@ void JClient::setVersion( const char* name, const char* version )
 {
   m_versionName = strdup( name );
   m_versionVersion = strdup( version );
-  m_handleVersion = true;
+}
+
+void JClient::setIdentity( const char* category, const char* type )
+{
+  m_identityCategory = strdup( category );
+  m_identityType = strdup( type );
 }
 
 void JClient::setFeature( const char* feature )
@@ -287,7 +289,7 @@ void JClient::connect()
     }
   }
 
-  m_thread->join();
+//   m_thread->join();
 }
 
 void JClient::disconnect()
@@ -410,7 +412,7 @@ void JClient::notifySubscriptionHandlers( iksid* from, iksubtype type, const cha
 
 void JClient::notifyIqHandlers( const char* xmlns, ikspak* pak )
 {
-  if( ( iks_strncmp( xmlns, "jabber:iq:version", 17 ) == 0 ) && ( m_handleVersion ) )
+  if( iks_strncmp( xmlns, "jabber:iq:version", 17 ) == 0 )
   {
     iks* x = iks_new( "iq" );
     iks_insert_attrib( x, "type", "result" );
@@ -436,8 +438,8 @@ void JClient::notifyIqHandlers( const char* xmlns, ikspak* pak )
     iks* y = iks_insert( x, "query" );
     iks_insert_attrib( y, "xmlns", "http://jabber.org/protocol/disco#info" );
     iks* i = iks_insert( y, "identity" );
-    iks_insert_attrib( i, "category", "client" );
-    iks_insert_attrib( i, "type", "bot" );
+    iks_insert_attrib( i, "category", m_identityCategory.c_str() );
+    iks_insert_attrib( i, "type", m_identityType.c_str() );
     iks_insert_attrib( i, "name", m_versionName.c_str() );
 
     CharList::const_iterator it = m_discoCapabilities.begin();
