@@ -152,7 +152,6 @@ void JClient::disableDiscoItems()
   m_handleDiscoItems = false;
 }
 
-
 void JClient::login( char* sid )
 {
   if( m_debug ) printf("in login()\n");
