@@ -1,6 +1,9 @@
 
+TEX=aim-objectives.tex conclusions.tex final-planning.tex results.tex \
+    approach.tex deliverables.tex final-report.tex introduction.tex revised-planning.tex \
+    background.tex environment.tex interim-planning.tex
 
-final-report.pdf: final-report.tex fyp.mp final-report.bib
+final-report.pdf: ${TEX} fyp.mp final-report.bib
 	mpost -interaction=nonstopmode 'fyp'
 	latex -src -interaction=nonstopmode 'final-report.tex'
 	bibtex 'final-report'
@@ -16,7 +19,14 @@ interim-report.pdf: interim-report.tex fyp.mp interim-report.bib
 	latex -src -interaction=nonstopmode 'interim-report.tex'
 	dvipdfm 'interim-report.dvi'
 
-all: final-report.pdf interim-report.pdf
+presentation.pdf: presentation.tex fyp.mp
+	mpost -interaction=nonstopmode 'fyp'
+	latex -src -interaction=nonstopmode 'presentation.tex'
+	latex -src -interaction=nonstopmode 'presentation.tex'
+	latex -src -interaction=nonstopmode 'presentation.tex'
+	dvipdfm 'presentation.dvi'
+
+all: final-report.pdf interim-report.pdf presentation.pdf
 
 clean:
 	rm -rf *.pdf
