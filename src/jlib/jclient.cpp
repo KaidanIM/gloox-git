@@ -125,7 +125,7 @@ void JClient::on_log( const char* data, size_t size, int is_incoming ) {
 
 void JClient::setVersion( const char* name, const char* version )
 {
-  m_nameVersion = strdup( name );
+  m_versionName = strdup( name );
   m_versionVersion = strdup( version );
   m_handleVersion = true;
 }
@@ -339,15 +339,15 @@ void JClient::notifyIqHandlers( const char* xmlns, ikspak* pak )
     iks* x = iks_new( "iq" );
     iks_insert_attrib( x, "type", "result" );
     iks_insert_attrib( x, "to", pak->from->full );
-    iks_insert_attrib( x, "from", c->jid().c_str() );
+    iks_insert_attrib( x, "from", jid().c_str() );
     iks_insert_attrib( x, "id", pak->id );
     iks* y = iks_insert( x, "query" );
     iks_insert_attrib( y, "xmlns", "jabber:iq:version" );
     iks* z = iks_insert( y, "name" );
-    iks_insert_cdata( z, m_versionName, iks_strlen( m_versionName ) );
+    iks_insert_cdata( z, m_versionName.c_str(), m_versionName.length() );
     z = iks_insert( y, "version" );
-    iks_insert_cdata( z, m_versionVersion, iks_strlen( m_versionVersion ) );
-    c->send( x );
+    iks_insert_cdata( z, m_versionVersion.c_str(), m_versionVersion.length() );
+    send( x );
     free( x );
   }
   else
