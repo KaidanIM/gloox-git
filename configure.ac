@@ -29,10 +29,6 @@ PKG_CHECK_MODULES(IKSEMEL,iksemel >= 1.2,,exit)
 AC_SUBST(IKSEMEL_CFLAGS)
 AC_SUBST(IKSEMEL_LIBS)
 
-PKG_CHECK_MODULES(IKSEMELMM,iksemelmm >= 0.1,,exit)
-AC_SUBST(IKSEMELMM_CFLAGS)
-AC_SUBST(IKSEMELMM_LIBS)
-
 dnl Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS(unistd.h strings.h errno.h)
@@ -47,6 +43,7 @@ Makefile
 doc/Makefile
 src/Makefile
 src/jlib/Makefile
+src/jlib/wrapper/Makefile
 src/feeder/Makefile
 src/worker/Makefile
 src/test/Makefile
