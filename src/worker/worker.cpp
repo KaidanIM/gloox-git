@@ -21,6 +21,7 @@ Worker::Worker( const string username, const string resource,
   c->setDebug( debug );
   c->registerMessageHandler( this );
   c->registerSubscriptionHandler( this );
+  c->setVersion( "Worker", "0.1" );
   c->connect();
 }
 
