@@ -1,40 +1,188 @@
-presentation
-------------
-
-slide 1:
---------
-
-title, name, thanks
 
 
-% greeting, name, purpose of being here
-%
-% introduction
+% presentation
 % ------------
-% - need for lots of processing power to calculate some data
-% - often, data format is specific and fixed
-% --> no need for a dedicated and universally usable cluster
-% - popular example: Seti@Home
-% --> important: volatile clientele, easy deployment
+% 
+% slide 1:
+% --------
+% 
+% title, name, thanks
+% 
+% 
+% % greeting, name, purpose of being here
+% %
+% % introduction
+% % ------------
+% % - need for lots of processing power to calculate some data
+% % - often, data format is specific and fixed
+% % --> no need for a dedicated and universally usable cluster
+% % - popular example: Seti@Home
+% % --> important: volatile clientele, easy deployment
+% 
+% % Aim: to create a set of software tools to easily set up a dynamic cluster
+% %      that takes care of distributing jobs to a number of clients and collecting
+% %      the corresponding results.
+% 
+% 
+% 
+% slide 2:
+% --------
+% 
+% rough architecture of framework
+% 
+% 
+% % - to achieve the aim, this system was developed
+% % explanation of architecture
+% % components an their purpose
+% 
+% 
+% 
+% slide 3:
+% --------
 
-% Aim: to create a set of software tools to easily set up a "virtual" cluster
-%      that takes care of distributing jobs to a number of clients and collecting
-%      the corresponding results.
+% $Header: /cvsroot/latex-beamer/latex-beamer/solutions/generic-talks/generic-ornate-15min-45min.en.tex,v 1.4 2004/10/07 20:53:08 tantau Exp $
+
+\documentclass{beamer}
+\mode<presentation>
+\usepackage[T1]{fontenc}
+\usepackage[latin1]{inputenc}
+\usepackage[english]{babel}
+\usepackage{times}
+
+\title{Framework for Dynamic Clusters}
+\subtitle{Final Year Project 2004/2005}
+
+\author{Jakob Schröter}
+
+\date{16/03/2005}
+
+\subject{Framework for Dynamic Clusters}
+
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}
+  \frametitle{Outline}
+  \tableofcontents
+\end{frame}
 
 
 
-slide 2:
---------
+\section{Introduction}
 
-rough architecture of framework
+\subsection{Extensible Markup Language}
+\begin{frame}[fragile]
+  \frametitle{Extensible Markup Language}
+  \begin{itemize}
+    \item Not a Programming Languange
+    \item Rules to Describe Hierarchical Data
+    \item Related to HTML
+  \end{itemize}
+\ \ \ \ Example:
+  \begin{verbatim}
+    <tag key="value">
+      charachter data
+    </tag>
+  \end{verbatim}
+\end{frame}
+
+\subsection{Extensible Message and Presence Protocol}
+\begin{frame}[fragile]
+  \frametitle{Extensible Message and Presence Protocol}
+  \begin{itemize}
+    \item Based on XML
+    \item Streaming Protocol
+    \item Described in RFC 3920 and RFC 3921
+  \end{itemize}
+\ \ \ \ Example:
+  \begin{verbatim}
+    <presence
+           from="jid@server.com"
+           to="other@server.com">
+      <status>
+        online
+      </status>
+    </presence>
+  \end{verbatim}
+\end{frame}
 
 
-% - to achieve the aim, this system was developed
-% explanation of architecture
-% components an their purpose
+\section{Architecture}
+\begin{frame}
+  \frametitle{Architecture}
+  \begin{center}
+    \includegraphics{fyp.0}
+  \end{center}
+\end{frame}
 
 
+\section{Implementation}
+\begin{frame}
+  \frametitle{Implementation}
+  \begin{center}
+    \includegraphics{fyp.8}
+  \end{center}
+\end{frame}
 
-slide 3:
---------
+\subsection{XMPP Client Library}
+\begin{frame}
+  \frametitle{XMPP Client Library}
+  \begin{itemize}
+    \item Encapsulates XMPP Communication
+    \item Uses Observer Pattern
+    \item Reusable
+  \end{itemize}
+\end{frame}
+
+\subsection{Feeder Library}
+\begin{frame}
+  \frametitle{Feeder Library}
+  \begin{itemize}
+    \item Keeps Track of Connected Workers
+    \item Receives Data from Host Application
+    \item Distributes Data According to Availability
+    \item Receives Results and Hands them to the Host Application
+  \end{itemize}
+\end{frame}
+
+\subsection{Worker Library}
+\begin{frame}
+  \frametitle{Worker Library}
+  \begin{itemize}
+    \item Registers with the Feeder
+    \item Receives Data, Hands it to its Host Application
+    \item Receives Result from Host Application
+    \item Sends the Result Back to the Feeder
+  \end{itemize}
+\end{frame}
+
+
+\section*{Summary}
+\begin{frame}
+  \frametitle<presentation>{Summary}
+  \begin{itemize}
+    \item Finished Implementation of Core Libraries
+    \item 
+    \item 
+  \end{itemize}
+
+  % The following outlook is optional.
+  \vskip0pt plus.5fill
+  \begin{itemize}
+  \item
+    Outlook
+    \begin{itemize}
+      \item 
+      \item 
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+
+\end{document}
+
 
