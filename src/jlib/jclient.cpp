@@ -42,6 +42,7 @@ void JClient::init()
   setFeature( "jabber:iq:version" );
   setFeature( "http://jabber.org/protocol/disco#info" );
   setFeature( "http://jabber.org/protocol/disco#items" );
+  setVersion( "based on Jlib", "0.1" );
 }
 
 void JClient::on_stream( int type, iks* node )
