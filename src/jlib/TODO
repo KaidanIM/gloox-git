@@ -1,6 +1,8 @@
 Todo
 ----
 
+- introduce result handler
+- extract disco into separate class
 - config file
 - more command line support
 - use struct for version and identity info
@@ -24,3 +26,4 @@ Done
 ----
 
 - remove iksemelmm dependency
+- iq xmlns filter

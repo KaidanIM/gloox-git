@@ -57,6 +57,7 @@ class JThread;
  *   JClient* j = new JClient( "user", "resource", "password", "resource" );
  *   j->registerPresenceHandler( this );
  *   j->setVersion( "TestProg", "1.0" );
+ *   j->setIdentity( "client", "bot" );
  *   j->connect();
  * }
  *
@@ -323,7 +324,8 @@ class JClient : public Stream
 
     /**
      * Connects to the XMPP server, authenticates and gets the whole thing running.
-     * creates a new thread that receives arrivin data and feeds the parser.
+     * creates a new thread that receives arriving data and feeds the parser.
+     * @note This function currently blocks.
      */
     void connect();
 
@@ -342,7 +344,7 @@ class JClient : public Stream
      * Registers @c ih as object that receives Iq packet notifications
      * @param ih The object to receive Iq packet notifications
      */
-    void registerIqHandler( IqHandler* ih );
+    void registerIqHandler( IqHandler* ih, std::string xmlns );
 
     /**
      * Registers @c mh as object that receives Message packet notifications
@@ -412,13 +414,13 @@ class JClient : public Stream
     friend void subscriptionHook(JClient* stream, ikspak* pak);
     friend void iqHook(JClient* stream, ikspak* pak);
 
-    typedef list<ConnectionListener*>  ConnectionListenerList;
-    typedef list<IqHandler*>           IqHandlerList;
-    typedef list<MessageHandler*>      MessageHandlerList;
-    typedef list<PresenceHandler*>     PresenceHandlerList;
-    typedef list<SubscriptionHandler*> SubscriptionHandlerList;
-    typedef list<const char*>          CharList;
-    typedef map<std::string, std::string>        StringMap;
+    typedef list<ConnectionListener*>     ConnectionListenerList;
+    typedef map<IqHandler*, std::string>  IqHandlerMap;
+    typedef list<MessageHandler*>         MessageHandlerList;
+    typedef list<PresenceHandler*>        PresenceHandlerList;
+    typedef list<SubscriptionHandler*>    SubscriptionHandlerList;
+    typedef list<const char*>             CharList;
+    typedef map<std::string, std::string> StringMap;
 
     virtual void on_log( const char* data, size_t size, int is_incoming );
     virtual void on_stream( int type, iks* node );
@@ -456,7 +458,7 @@ class JClient : public Stream
     state m_state;
 
     ConnectionListenerList  m_connectionListeners;
-    IqHandlerList           m_iqHandlers;
+    IqHandlerMap            m_iqHandlers;
     MessageHandlerList      m_messageHandlers;
     PresenceHandlerList     m_presenceHandlers;
     SubscriptionHandlerList m_subscriptionHandlers;
