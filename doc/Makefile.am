@@ -6,8 +6,7 @@ final-report.pdf: final-report.tex fyp.mp final-report.bib
 	bibtex 'final-report'
 	latex -src -interaction=nonstopmode 'final-report.tex'
 	latex -src -interaction=nonstopmode 'final-report.tex'
-	dvips -o 'final-report.ps' 'final-report.dvi'
-	ps2pdf 'final-report.ps' 'final-report.pdf'
+	dvipdfm 'final-report.dvi'
 
 interim-report.pdf: interim-report.tex fyp.mp interim-report.bib
 	mpost -interaction=nonstopmode 'fyp'
@@ -15,8 +14,7 @@ interim-report.pdf: interim-report.tex fyp.mp interim-report.bib
 	bibtex 'interim-report'
 	latex -src -interaction=nonstopmode 'interim-report.tex'
 	latex -src -interaction=nonstopmode 'interim-report.tex'
-	dvips -o 'interim-report.ps' 'interim-report.dvi'
-	ps2pdf 'interim-report.ps' 'interim-report.pdf'
+	dvipdfm 'interim-report.dvi'
 
 all: final-report.pdf interim-report.pdf
 
