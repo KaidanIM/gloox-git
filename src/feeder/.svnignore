@@ -1,0 +1,6 @@
+Makefile.in
+.libs
+.deps
+feeder
+Makefile
+

@@ -1,0 +1,7 @@
+Makefile.in
+.libs
+.deps
+connect
+Makefile
+feedertest
+workertest
