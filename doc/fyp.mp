@@ -38,6 +38,7 @@ etex
   draw (28u,16.5u)--(34u,16.5u)--(34u,18.5u)--(28u,18.5u)--cycle;
   label(btex Feeder etex, (31u,17.5u));
   drawdblarrow (28u,17.5u)--(23u,17.5u);
+  drawarrow (36u,17.5u)--(34u,17.5u) dashed evenly;
 
   % database
   draw (30u,22u)--(30u,24u);
@@ -446,4 +447,43 @@ beginfig(8)
   label(btex XMPP Client Lib etex, (20u,26.5u));
 
 endfig;
+
+
+beginfig(9)
+  % Worker
+  draw (26u,15u)--(32u,15u)--(32u,18u)--(26u,18u)--cycle;
+  label(btex Feeder etex, (29u,16.5u));
+  drawarrow (26u,17u)--(24u,17u);
+  drawarrow (24u,16u)--(26u,16u);
+  drawarrow (35u,17u)--(32u,17u) dashed evenly;
+
+  % Worker Library
+  draw (16u,15u)--(24u,15u)--(24u,18u)--(16u,18u)--cycle;
+  label(btex Feeder Library etex, (20u,16.5u));
+  drawarrow (16u,17u)--(10u,17u);
+  drawarrow (10u,16u)--(16u,16u);
+
+  label(btex Data etex,   (13u, 18u));
+  label(btex Result etex, (13u, 15u));
+endfig;
+
+
+beginfig(10)
+  % Worker
+  draw (10u,15u)--(16u,15u)--(16u,18u)--(10u,18u)--cycle;
+  label(btex Worker etex, (13u,16.5u));
+  drawarrow (18u,17u)--(16u,17u);
+  drawarrow (16u,16u)--(18u,16u);
+
+  % Worker Library
+  draw (18u,15u)--(26u,15u)--(26u,18u)--(18u,18u)--cycle;
+  label(btex Worker Library etex, (22u,16.5u));
+  drawarrow (32u,17u)--(26u,17u);
+  drawarrow (26u,16u)--(32u,16u);
+
+  label(btex Data etex,   (29u, 18u));
+  label(btex Result etex, (29u, 15u));
+endfig;
+
+
 end
