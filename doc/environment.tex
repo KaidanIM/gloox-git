@@ -8,7 +8,6 @@ The Operating System the development of this framework takes place on is a home-
 \subsection{Dependencies}
 \label{sec:depend}
 
-
 \subsubsection{Compile-Time Dependencies}
 \paragraph{}
 The most important dependency is the Iksemel library, written by Gurer Ozen. Iksemel contains XML parsers (DOM as well as SAX) and offers many XMPP related functions. It was chosen as parsing library for this project due to its simplicity and efficiency of usage, the small size and its self-containment.
@@ -45,7 +44,7 @@ For software developers it is very important to have full control over source co
 From the very first this project used a RCS called Subversion\footnote{Subversion lives at http://subversion.tigris.org}. It has been choosen due to positive experience in earlier and current projects.
 
 \paragraph{}
-The Subversion repository for this project can be found at \texttt{http://svn.camaya.net/uni/fyp-lsbu/}. The version accessible via HTTP is the current one. Older revisions can be accessed with an appropriate Subversion client. The repository hosts the complete source code and all the documentation written during this project's life-span.
+The Subversion repository for this project can be found at \\ \texttt{http://svn.camaya.net/uni/fyp-lsbu/}. The version accessible via HTTP is the current one. Older revisions can be accessed with an appropriate Subversion client. The repository hosts the complete source code and all the documentation written during this project's life-span.
 
 
 \subsection{Build System}
@@ -60,19 +59,19 @@ The Build System helps users and developers building binary executables as well 
 
 \subsubsection{Source Code Compilation}
 \paragraph{}
-For this project a combination of the tools autoconf\footnote{Autoconf's homepage is at http://www.gnu.org/software/autoconf/} and automake\footnote{Automake's homepage is at http://www.gnu.org/software/automake/} is used.
+For this project a combination of the tools autoconf\footnote{Autoconf's homepage is at http://www.gnu.org/software/autoconf/} and automake\footnote{Automake's homepage is at http://www.gnu.org/software/automake/} is used. Of course, The GNU Compiler Collection  takes care of the final compilation.
 
 \paragraph{autoconf}
 Autoconf is used to create a \texttt{configure} script. This contains various checks for more or less obvious dependencies, including those listed in Section \ref{sec:depend}.
 
 \paragraph{automake}
-
+Automake is used to create target-platform specific \texttt{Makefile}s from their corresponding templates (called \texttt{Makefile.am}). A \texttt{Makefile} the includes a set of rules to build the source code, i.e. the actual commands and the order they are executed in.
 
 \subsubsection{API Documentation}
 \paragraph{}
-* doxygen
+The API documentation is created by Doxygen\footnote{Doxygen's homepage is at http://www.doxygen.org}. It extracts comments from the source files and builds a nice documentation in HTML format from it.
 
 
 \subsubsection{Project Documentation}
 \paragraph{}
-* latex
+The project documentation is written in \LaTeX.
