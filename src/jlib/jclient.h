@@ -39,6 +39,7 @@ class JThread;
  * {
  *   JClient* j = new JClient( "user", "resource", "password", "resource" );
  *   j->registerPresenceHandler( this );
+ *   j->setVersion( "TestProg", "1.0" );
  *   j->connect();
  * }
  *
