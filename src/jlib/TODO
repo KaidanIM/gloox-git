@@ -7,6 +7,7 @@ Todo
 - config file
 - more command line support
 - use struct for version and identity info
+- char* --> std::string
 - JEP-0012 (Last Activity)
 - JEP-0013 (Flexible Offline Message Retrieval)
 - JEP-0047 (In-Band Bytestreams)
