@@ -2,6 +2,7 @@
    iksemelmm -- c++ wrapper for iksemel xml/xmpp library
 
    Copyright (C) 2004 Igor Goryachieff <igor@jahber.org>
+   Copyright (C) 2005 Jakob Schroeter <js@camaya.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Lesser General Public
