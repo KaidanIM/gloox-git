@@ -8,7 +8,7 @@
 
 #include <iostream>
 
-// using namespace Iksemel;
+#define JLIB_VERSION "0.1"
 
 
 JClient::JClient()
@@ -42,7 +42,7 @@ void JClient::init()
   setFeature( "jabber:iq:version" );
   setFeature( "http://jabber.org/protocol/disco#info" );
   setFeature( "http://jabber.org/protocol/disco#items" );
-  setVersion( "based on Jlib", "0.1" );
+  setVersion( "based on Jlib", JLIB_VERSION );
 }
 
 void JClient::on_stream( int type, iks* node )
