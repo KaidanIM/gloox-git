@@ -149,6 +149,12 @@ class JClient : public Stream
      */
     int port()             { return m_port; };
 
+    /**
+     * Get the current status of AutoPresence
+     * @return The current AutoPresence status
+     */
+    bool autoPresence()    { return m_autoPresence; };
+
     // FIXME: setters have to update each other, e.g. username, server, resource --> jid
     /**
      * set the username to use to connect to the XMPP server
@@ -197,6 +203,14 @@ class JClient : public Stream
      * @param port The port to connect to
      */
     void setPort( int port ) { m_port = port;   };
+
+    /**
+     * enables/disables the automatic sending of a presence packet
+     * upon successful authentication @emp before the ConnectionListeners
+     * are notified. Default: on
+     * @param autoPresence Whether to switch AutoPresence on or off
+     */
+   void setAutoPresence( bool autoPresence ) { m_autoPresence = autoPresence; };
 
     /**
      * returns the parser of the JClient
@@ -341,6 +355,7 @@ class JClient : public Stream
     bool m_sasl;
     bool m_tls;
     bool m_createAccount;
+    bool m_autoPresence;
     int m_port;
     state m_state;
 
