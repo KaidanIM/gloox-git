@@ -15,7 +15,7 @@ JClient::JClient()
   : m_username( 0 ), m_resource( 0 ), m_password( 0 ),
   m_server( 0 ), m_port( 0 ), m_thread( 0 ),
   m_tls( true ), m_sasl( true ),
-  m_autoPresence( true )
+  m_autoPresence( true ), m_handleVersion( false )
 {
   init();
 }
@@ -25,7 +25,7 @@ JClient::JClient( const std::string username, const std::string resource, const 
   : m_username( username ), m_resource( resource ), m_password( password ),
   m_server( server ), m_port( port ), m_thread( 0 ),
   m_tls( true ), m_sasl( true ),
-  m_autoPresence( true )
+  m_autoPresence( true ), m_handleVersion( false )
 {
   init();
 }
@@ -121,6 +121,13 @@ void JClient::on_log( const char* data, size_t size, int is_incoming ) {
 
     cerr << "[" << data << "]" << endl;
   }
+}
+
+void JClient::setVersion( const char* name, const char* version )
+{
+  m_nameVersion = strdup( name );
+  m_versionVersion = strdup( version );
+  m_handleVersion = true;
 }
 
 void JClient::login( char* sid )
@@ -327,9 +334,28 @@ void JClient::notifySubscriptionHandlers( iksid* from, iksubtype type, const cha
 
 void JClient::notifyIqHandlers( const char* xmlns, ikspak* pak )
 {
-  IqHandlerList::const_iterator it = m_iqHandlers.begin();
-  for( it; it != m_iqHandlers.end(); it++ ) {
-    (*it)->handleIq( xmlns, pak );
+  if( ( iks_strncmp( xmlns, "jabber:iq:version", 17 ) == 0 ) && ( m_handleVersion ) )
+  {
+    iks* x = iks_new( "iq" );
+    iks_insert_attrib( x, "type", "result" );
+    iks_insert_attrib( x, "to", pak->from->full );
+    iks_insert_attrib( x, "from", c->jid().c_str() );
+    iks_insert_attrib( x, "id", pak->id );
+    iks* y = iks_insert( x, "query" );
+    iks_insert_attrib( y, "xmlns", "jabber:iq:version" );
+    iks* z = iks_insert( y, "name" );
+    iks_insert_cdata( z, m_versionName, iks_strlen( m_versionName ) );
+    z = iks_insert( y, "version" );
+    iks_insert_cdata( z, m_versionVersion, iks_strlen( m_versionVersion ) );
+    c->send( x );
+    free( x );
+  }
+  else
+  {
+    IqHandlerList::const_iterator it = m_iqHandlers.begin();
+    for( it; it != m_iqHandlers.end(); it++ ) {
+      (*it)->handleIq( xmlns, pak );
+    }
   }
 }
 
