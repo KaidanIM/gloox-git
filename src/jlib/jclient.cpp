@@ -30,7 +30,8 @@ JClient::JClient()
   m_server( 0 ), m_port( 0 ), m_thread( 0 ),
   m_tls( true ), m_sasl( true ),
   m_autoPresence( true ), m_handleVersion( false ),
-  m_handleDiscoInfo( true ), m_handleDiscoItems( true )
+  m_handleDiscoInfo( true ), m_handleDiscoItems( true ),
+  m_idCount( 0 )
 {
   init();
 }
@@ -41,7 +42,8 @@ JClient::JClient( const std::string username, const std::string resource, const 
   m_server( server ), m_port( port ), m_thread( 0 ),
   m_tls( true ), m_sasl( true ),
   m_autoPresence( true ), m_handleVersion( false ),
-  m_handleDiscoInfo( true ), m_handleDiscoItems( true )
+  m_handleDiscoInfo( true ), m_handleDiscoItems( true ),
+  m_idCount( 0 )
 {
   init();
 }
@@ -114,7 +116,7 @@ void JClient::on_stream( int type, iks* node )
           ikspak* pak;
           pak = iks_packet ( node );
           iks_filter_packet ( m_filter, pak );
-/*          if (sess->job_done == 1) return IKS_HOOK;*/
+//          if (sess->job_done == 1) return IKS_HOOK;
         }
         break;
     case IKS_NODE_ERROR:      // <stream:error>
@@ -152,18 +154,55 @@ void JClient::setVersion( const char* name, const char* version )
 
 void JClient::setFeature( const char* feature )
 {
-  m_discoList.push_back( strdup( feature ) );
+  m_discoCapabilities.push_back( strdup( feature ) );
 }
 
 void JClient::disableDiscoInfo()
 {
   m_handleDiscoInfo = false;
-  m_discoList.clear();
+  m_discoCapabilities.clear();
 }
 
 void JClient::disableDiscoItems()
 {
   m_handleDiscoItems = false;
+}
+
+void JClient::getDiscoInfo( const char* to )
+{
+  std::string id = getID();
+  iks* x = iks_make_iq( IKS_TYPE_GET, XMLNS_DISCO_INFO );
+  iks_insert_attrib( x, "from", jid().c_str() );
+  iks_insert_attrib( x, "to", to );
+  iks_insert_attrib( x, "id", id.c_str() );
+  send( x );
+  addQueryID( to, id );
+}
+
+void JClient::getDiscoItems( const char* to )
+{
+  std::string id = getID();
+  iks* x = iks_make_iq( IKS_TYPE_GET, XMLNS_DISCO_ITEMS );
+  iks_insert_attrib( x, "from", jid().c_str() );
+  iks_insert_attrib( x, "to", to );
+  iks_insert_attrib( x, "id", id.c_str() );
+  send( x );
+  addQueryID( to, id );
+}
+
+void JClient::addQueryID( std::string jid, std::string id )
+{
+  m_queryIDs[id] = jid;
+}
+
+std::string JClient::getID()
+{
+  char* tmp = (char*)malloc( strlen( "id" ) + sizeof( int ) );
+  tmp = strdup( "id%d" );
+  sprintf( tmp, tmp, ++m_idCount );
+  std::string str( tmp );
+  free( tmp );
+  return str;
 }
 
 void JClient::login( char* sid )
@@ -263,6 +302,7 @@ void JClient::disconnect()
 void JClient::send( iks* x )
 {
   Stream::send( this->P, x );
+  iks_free( x );
 }
 
 void JClient::send( const char* jid, const char* data )
@@ -384,7 +424,6 @@ void JClient::notifyIqHandlers( const char* xmlns, ikspak* pak )
     z = iks_insert( y, "version" );
     iks_insert_cdata( z, m_versionVersion.c_str(), m_versionVersion.length() );
     send( x );
-    free( x );
   }
   else if( ( iks_strncmp( xmlns, "http://jabber.org/protocol/disco#info", 37 ) == 0 )
              && ( m_handleDiscoInfo ) )
@@ -401,14 +440,13 @@ void JClient::notifyIqHandlers( const char* xmlns, ikspak* pak )
     iks_insert_attrib( i, "type", "bot" );
     iks_insert_attrib( i, "name", m_versionName.c_str() );
 
-    DiscoList::const_iterator it = m_discoList.begin();
-    for( it; it != m_discoList.end(); ++it )
+    CharList::const_iterator it = m_discoCapabilities.begin();
+    for( it; it != m_discoCapabilities.end(); ++it )
     {
       iks* z = iks_insert( y, "feature" );
       iks_insert_attrib( z, "var", (*it) );
     }
     send( x );
-    free( x );
   }
   else if( ( iks_strncmp( xmlns, "http://jabber.org/protocol/disco#items", 38 ) == 0 )
              && ( m_handleDiscoItems ) )
@@ -421,7 +459,6 @@ void JClient::notifyIqHandlers( const char* xmlns, ikspak* pak )
     iks* y = iks_insert( x, "query" );
     iks_insert_attrib( y, "xmlns", "http://jabber.org/protocol/disco#items" );
     send( x );
-    free( x );
   }
   else
   {
