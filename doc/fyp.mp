@@ -18,23 +18,23 @@ etex
   draw (15u,15u)--(23u,15u)--(23u,20u)--(15u,20u)--cycle;
   label(btex XMPP Server etex, (19u,17.5u));
 
-  % clients
+  % Workers
   draw (4u,19u)--(10u,19u)--(10u,21u)--(4u,21u)--cycle;
-  label(btex Client etex, (7u,20u));
+  label(btex Worker etex, (7u,20u));
   drawdblarrow (15u,18.5u)--(10u,20u);
 
   draw (4u,14u)--(10u,14u)--(10u,16u)--(4u,16u)--cycle;
-  label(btex Client etex, (7u,15u));
+  label(btex Worker etex, (7u,15u));
   drawdblarrow (15u,16.5u)--(10u,15u);
 
-  % dots between clients
+  % dots between Workers
   pickup pencircle scaled 1.5;
   draw (7u,16.75u);
   draw (7u,17.25u);
   draw (7u,17.75u);
   pickup pencircle scaled 0.5; % restore default pen
 
-  % feeder
+  % Feeder
   draw (28u,16.5u)--(34u,16.5u)--(34u,18.5u)--(28u,18.5u)--cycle;
   label(btex Feeder etex, (31u,17.5u));
   drawdblarrow (28u,17.5u)--(23u,17.5u);
@@ -426,6 +426,24 @@ beginfig(7)
   %drawarrow (pf*1+le/2,60)--(pd*2+le/2,60);
   drawarrow (pf*2+le/2,70)--(pf*1+le/2,70);    label (btex incoming XMPP message etex, (((pf*2+le/2)-(pf*1+le/2))/2+(pf*1+le/2),70+5));
   drawarrow (pf*1+le/2,50)--(pf*0+le/2,50);    label (btex handleMessage() etex,       (((pf*1+le/2)-(pf*0+le/2))/2+(pf*0+le/2),50+5));
+
+endfig;
+
+u:=10;
+beginfig(8)
+  % Worker
+  draw (8u,15u)--(14u,15u)--(14u,18u)--(8u,18u)--cycle;
+  label(btex Worker etex, (11u,16.5u));
+  drawarrow (11u,18u)--(17.5u,25u);
+
+  % Feeder
+  draw (26u,15u)--(32u,15u)--(32u,18u)--(26u,18u)--cycle;
+  label(btex Feeder etex, (29u,16.5u));
+  drawarrow (29u,18u)--(22.5u,25u);
+
+  % XMPP Client Lib
+  draw (15u,25u)--(25u,25u)--(25u,28u)--(15u,28u)--cycle;
+  label(btex XMPP Client Lib etex, (20u,26.5u));
 
 endfig;
 end
