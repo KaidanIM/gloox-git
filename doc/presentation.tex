@@ -49,7 +49,7 @@
 \usepackage[english]{babel}
 \usepackage{times}
 
-\title{Framework for Dynamic Clusters}
+\title{A Software Framework for Dynamic Clusters}
 \subtitle{Final Year Project 2004/2005}
 
 \author{Jakob Schröter}
@@ -74,29 +74,13 @@
 
 \section{Introduction}
 
-\subsection{Extensible Markup Language}
-\begin{frame}[fragile]
-  \frametitle{Extensible Markup Language}
-  \begin{itemize}
-    \item Not a Programming Languange
-    \item Rules to Describe Hierarchical Data
-    \item Related to HTML
-  \end{itemize}
-\ \ \ \ Example:
-  \begin{verbatim}
-    <tag key="value">
-      charachter data
-    </tag>
-  \end{verbatim}
-\end{frame}
-
 \subsection{Extensible Message and Presence Protocol}
 \begin{frame}[fragile]
   \frametitle{Extensible Message and Presence Protocol}
   \begin{itemize}
-    \item Based on XML
+    \item Based on the Extensibel Markup Language (XML)
     \item Streaming Protocol
-    \item Described in RFC 3920 and RFC 3921
+    \item Relative to HTML
   \end{itemize}
 \ \ \ \ Example:
   \begin{verbatim}
@@ -120,9 +104,9 @@
 \end{frame}
 
 
-\section{Implementation}
+\section{Components}
 \begin{frame}
-  \frametitle{Implementation}
+  \frametitle{Components}
   \begin{center}
     \includegraphics{fyp.8}
   \end{center}
@@ -143,9 +127,8 @@
   \frametitle{Feeder Library}
   \begin{itemize}
     \item Keeps Track of Connected Workers
-    \item Receives Data from Host Application
     \item Distributes Data According to Availability
-    \item Receives Results and Hands them to the Host Application
+    \item Receives Results
   \end{itemize}
 \end{frame}
 
@@ -166,8 +149,7 @@
   \frametitle<presentation>{Summary}
   \begin{itemize}
     \item Finished Implementation of Core Libraries
-    \item 
-    \item 
+    \item XMPP Client Library Used in Two More Applications
   \end{itemize}
 
   % The following outlook is optional.
@@ -176,8 +158,9 @@
   \item
     Outlook
     \begin{itemize}
-      \item 
-      \item 
+      \item Example Implementations
+      \item Statistics Viewer
+      \item Documentation
     \end{itemize}
   \end{itemize}
 \end{frame}
