@@ -28,65 +28,71 @@
 #include <iksemel.h>
 
 
+/**
+ * documented in parser.h
+ */
 namespace Iksemel
 {
+  /**
+   * This encapsulates a stream from Iksemel.
+   */
   class Stream: public Parser, public Tree
   {
     public:
       Stream();
-      Stream(char *);
+      Stream( char* );
       virtual ~Stream();
 
       void set_log_hook();
 
-      int connect(iksparser *, const std::string&, int);
-      int connect(const std::string&, int);
-      int connect(const std::string&);
+      int connect( iksparser* , const std::string&, int );
+      int connect( const std::string&, int );
+      int connect( const std::string& );
 
-      int connect(iksparser *, int);
-      int connect(int);
+      int connect( iksparser* , int );
+      int connect( int );
 
-      void disconnect(iksparser *);
+      void disconnect( iksparser* );
       void disconnect();
 
-      int recv(iksparser *, int);
-      int recv(int);
+      int recv( iksparser* , int );
+      int recv( int );
       int recv();
 
-      int fd(iksparser *);
+      int fd( iksparser* );
       int fd();
 
-      int send(iksparser *, iks *);
+      int send( iksparser* , iks* );
       int send();
 
-      int send(iksparser *, const std::string&);
-      int send(const std::string&);
+      int send( iksparser* , const std::string& );
+      int send( const std::string& );
 
-      void no_version(iksparser *, bool);
-      void no_version(bool);
+      void no_version( iksparser* , bool );
+      void no_version( bool );
 
-      int header(iksparser *, const std::string&);
-      int header(const std::string&);
+      int header( iksparser* , const std::string& );
+      int header( const std::string& );
 
       bool has_tls();
 
-      int start_tls(iksparser *);
+      int start_tls( iksparser* );
       int start_tls();
 
-      bool is_secure(iksparser *);
+      bool is_secure( iksparser* );
       bool is_secure();
 
-      int start_sasl(iksparser *, enum ikssasltype, char *, char *);
-      int start_sasl(enum ikssasltype, char *, char *);
+      int start_sasl( iksparser* , enum ikssasltype, char* , char* );
+      int start_sasl( enum ikssasltype, char* , char* );
 
-      virtual void on_stream(int type, iks *node) {};
-      virtual void on_log(const char *data, size_t size, int is_incoming) {};
+      virtual void on_stream( int type, iks* node ) {};
+      virtual void on_log( const char* data, size_t size, int is_incoming ) {};
 
     protected:
 
     private:
-      Stream(const Stream&);
-      Stream& operator=(const Stream&);
+      Stream( const Stream& );
+      Stream& operator=( const Stream& );
   };
 };
 

@@ -28,54 +28,60 @@
 
 using namespace std;
 
+/**
+ * documented in parser.h
+ */
 namespace Iksemel
 {
+  /**
+   * This class encapsulates a tree from Iksemel.
+   */
   class Tree
   {
     public:
       Tree();
-      Tree(ikstack *);
-      Tree(iks *);
-      Tree(const std::string&);
+      Tree( ikstack* );
+      Tree( iks* );
+      Tree( const std::string& );
       ~Tree();
 
-      iks *tag(iks *, const std::string&);
-      iks *tag(const std::string&);
+      iks* tag( iks*, const std::string& );
+      iks* tag( const std::string& );
 
-      iks *cdata(iks *, const std::string&);
-      iks *cdata(const std::string&);
-      iks *cdata(const std::string&, const std::string&);
+      iks* cdata( iks*, const std::string& );
+      iks* cdata( const std::string& );
+      iks* cdata( const std::string&, const std::string& );
 
-      iks *attrib(iks *, const std::string&, const std::string&);
-      iks *attrib(const std::string&, const std::string&);
-      iks *attrib(const std::string&, const std::string&, const std::string&);
+      iks* attrib( iks*, const std::string&, const std::string& );
+      iks* attrib( const std::string&, const std::string& );
+      iks* attrib( const std::string&, const std::string&, const std::string& );
 
-      iks *next() const;
-      iks *move_next();
+      iks* next() const;
+      iks* move_next();
 
-      iks *prev() const;
-      iks *move_prev();
+      iks* prev() const;
+      iks* move_prev();
 
-      iks *parent() const;
-      iks *move_parent();
+      iks* parent() const;
+      iks* move_parent();
 
-      iks *child() const;
-      iks *move_child();
+      iks* child() const;
+      iks* move_child();
 
-      iks *attr() const;
-      iks *move_attr();
+      iks* attr() const;
+      iks* move_attr();
 
-      iks *root() const;
-      iks *move_root();
+      iks* root() const;
+      iks* move_root();
 
-      iks *next_tag() const;
-      iks *move_next_tag();
+      iks* next_tag() const;
+      iks* move_next_tag();
 
-      iks *prev_tag() const;
-      iks *move_prev_tag();
+      iks* prev_tag() const;
+      iks* move_prev_tag();
 
-      iks *first_tag() const;
-      iks *move_first_tag();
+      iks* first_tag() const;
+      iks* move_first_tag();
 
       const enum ikstype type() const;
 
@@ -87,28 +93,28 @@ namespace Iksemel
       const bool has_children() const;
       const bool has_attribs() const;
 
-      iks *find_node(const std::string&) const;
-      const std::string find_cdata(const std::string&) const;
-      const std::string find_attrib(const std::string&) const;
+      iks* find_node( const std::string& ) const;
+      const std::string find_cdata( const std::string& ) const;
+      const std::string find_attrib( const std::string& ) const;
 
-      iks *find_with_attrib(iks *, const std::string&, const std::string&, const std::string&) const;
-      iks *find_with_attrib(const std::string&, const std::string&, const std::string&) const;
+      iks* find_with_attrib( iks*, const std::string&, const std::string&, const std::string& ) const;
+      iks* find_with_attrib( const std::string&, const std::string&, const std::string& ) const;
 
       const bool boolean() const;
 
-      iks *get_iks() const;
-      ikstack *get_stack() const;
+      iks* get_iks() const;
+      ikstack* get_stack() const;
 
-      std::string string(ikstack *, iks *) const;
-      std::string string(iks *) const;
+      std::string string( ikstack*, iks* ) const;
+      std::string string( iks* ) const;
       std::string string() const;
 
     protected:
-      iks *X;
+      iks* X;
 
     private:
-      Tree(const Tree&);
-      Tree& operator=(const Tree&);
+      Tree( const Tree& );
+      Tree& operator=( const Tree& );
   };
 }
 
