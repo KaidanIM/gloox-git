@@ -154,7 +154,6 @@ void JClient::setupFilter()
   iks_filter_add_rule( m_filter, (iksFilterHook*) errorHook, this,
                       IKS_RULE_TYPE, IKS_PAK_IQ,
                       IKS_RULE_SUBTYPE, IKS_TYPE_ERROR,
-                      IKS_RULE_ID, "auth",
                       IKS_RULE_DONE );
   iks_filter_add_rule( m_filter, (iksFilterHook*) msgHook, this,
                       IKS_RULE_TYPE, IKS_PAK_MESSAGE,
