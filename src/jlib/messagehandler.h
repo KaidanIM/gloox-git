@@ -27,7 +27,7 @@ class MessageHandler
      * incoming messages.
      * @param from The sender's jid
      * @param type The packets type
-     * @param msg The actual message content
+     * @param msg The actual message body
      */
     virtual void handleMessage( iksid* from, iksubtype type, const char *msg ) {};
 };
