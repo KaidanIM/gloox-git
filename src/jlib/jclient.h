@@ -341,8 +341,10 @@ class JClient : public Stream
     void registerConnectionListener( ConnectionListener* cl );
 
     /**
-     * Registers @c ih as object that receives Iq packet notifications.
+     * Registers @c ih as object that receives Iq packet notifications for namespace
+     * @c xmlns. Only one handler per namespace is possible.
      * @param ih The object to receive Iq packet notifications.
+     * @param xmlns The namespace the object handles.
      */
     void registerIqHandler( IqHandler* ih, std::string xmlns );
 
@@ -367,31 +369,31 @@ class JClient : public Stream
 
     /**
      * Removes the given object from the list of connection listeners.
-     * @param cl The object to remove from the list
+     * @param cl The object to remove from the list.
      */
     void removeConnectionListener( ConnectionListener* cl );
 
     /**
-     * Removes the given object from the list of Iq handlers.
-     * @param ih The object to remove from the list
+     * Removes the hzandler for the given namespace from the list of Iq handlers.
+     * @param xmlns The namespace to remove from the list.
      */
     void removeIqHandler( std::string mlns );
 
     /**
      * Removes the given object from the list of message handlers.
-     * @param mh The object to remove from the list
+     * @param mh The object to remove from the list.
      */
     void removeMessageHandler( MessageHandler* mh );
 
     /**
      * Removes the given object from the list of presence handlers.
-     * @param ph The object to remove from the list
+     * @param ph The object to remove from the list.
      */
     void removePresenceHandler( PresenceHandler* ph );
 
     /**
      * Removes the given object from the list of subscription handlers.
-     * @param sh The object to remove from the list
+     * @param sh The object to remove from the list.
      */
     void removeSubscriptionHandler( SubscriptionHandler* sh );
 
