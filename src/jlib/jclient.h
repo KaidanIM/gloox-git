@@ -38,7 +38,6 @@ class JThread;
  * void Class::doIt()
  * {
  *   JClient* j = new JClient( "user", "resource", "password", "resource" );
- *   j->setDebug( true );
  *   j->registerPresenceHandler( this );
  *   j->connect();
  * }
@@ -48,6 +47,8 @@ class JThread;
  *   // handle incoming presence packets here
  * }
  * \endcode
+ *
+ * For debugging purposes you might want to @ref setDebug() and @ref set_log_hook().
  * @author Jakob Schroeter <js@camaya.net>
  */
 class JClient : public Stream
