@@ -1,0 +1,61 @@
+\begin{table}[H]
+\begin{tabularx}{\linewidth}{llcc}
+\toprule
+\textbf{} & \textbf{Task} & \textbf{Dependency} & \textbf{Time in Weeks} \\
+\midrule
+\endhead
+A & Requirements                       & --      & 2  \\
+B & Design::XMPP Client Lib            & A       & 6  \\
+C & Design::Worker                     & A       & 6  \\
+D & Design::Feeder                     & A       & 6  \\
+E & Design::Sample Application         & A       & 2  \\
+F & Design::Database                   & A       & 1  \\
+G & Design::Statistics Viewer          & A       & 2  \\
+H & Design::Feeder Frontend            & A       & 2  \\
+I & Implementation::Database           & F       & 1  \\
+J & Implementation::XMPP Client Lib    & B       & 7  \\
+K & Implementation::Worker             & C       & 7  \\
+L & Implementation::Feeder             & D, I    & 7  \\
+M & Implementation::Sample Application & E       & 9  \\
+N & Implementation::Statistics Viewer  & G, I    & 3  \\
+O & Implementation::Feeder Frontend    & H, L    & 3  \\
+P & Documentation::API Docs            & J, K, L & 5  \\
+Q & Documentation::User Manuals        & M, N, O & 11 \\
+\bottomrule
+\end{tabularx}
+\caption{Action Plan}
+\label{tab:fin_actionplan}
+\end{table}
+
+\begin{figure}[H]
+\begin{flushleft}
+\includegraphics{fyp.5}
+\end{flushleft}
+\caption{Proposed Schedule $\cdot$ Semester 1}
+\label{fig:fin_gantt1}
+\end{figure}
+
+\begin{figure}[H]
+\begin{flushleft}
+\includegraphics{fyp.6}
+\end{flushleft}
+\caption{Proposed Schedule $\cdot$ Semester 2}
+\label{fig:fin_gantt2}
+\end{figure}
+
+\begin{table}[H]
+\begin{tabularx}{\linewidth}{cX}
+\toprule
+\textbf{Milestone} & \textbf{Description} \\
+\midrule
+\endhead
+M1 & Interim Report finished by 9th November 2004 \\
+M2 & Requirements and Design finished by mid December 2004 \\
+M3 & Implementation of core (Worker and Feeder) libraries finished by end February 2005 \\
+M4 & Implementation of additional objectives (Feeder Frontend, Statistics Viewer) and documentation finished by mid of March 2005 \\
+M5 & Final Report finished by 26th April 2005 \\
+\bottomrule
+\end{tabularx}
+\caption{Milestones}
+\label{tab:fin_milestones}
+\end{table}

@@ -1,0 +1,57 @@
+\section{Technical Approach}
+\paragraph{}
+
+\subsection{Adressing of Workers}
+\paragraph{}
+
+
+\subsection{Libraries}
+\paragraph{}
+This section gives an overview of the features of the various libraries that are part of and have been produced during this project.
+
+\subsubsection{The XMPP Client Library}
+The project eventually contains a dedicated XMPP client library (herein refered to as the client library). Formerly, it was only mentioned briefly that both Worker and Feeder are likely to contain similar code which should be shared. Since the connectivity functionality is identical for both of the higher level components and is self-contained, it was decided to write a universal XMPP client library that can be (and by the time of this writing is) used in other projects.
+\paragraph{}
+The library offers a simple yet powerful public interface that enables programs to connect to and receive events from an XMPP server with approximately 10 additional lines of code. The supported events are:
+\begin{itemize}
+\item Established and canceled (also lost) connection
+\item Incoming messages
+\item Incoming IQ stanzas
+\item Incoming presence stanzas
+\item Incoming subscription stanzas
+\end{itemize}
+\paragraph{}
+With it, all the possible stanza types that XMPP Core supports are covered.
+
+\paragraph{}
+The event notification scheme used by the client library follows the so-called Observer Pattern. A object interested in XMPP events needs to indicate this to the client library by registering with it as an appropriate event handler. When a stanza arrives from the server, the library calls a special function in every registered object. Figure \ref{fig:observer1} shows an example sequence of registering with the client and being called by it at a later date.
+
+\begin{figure}[H]
+\begin{flushleft}
+\includegraphics{fyp.7}
+\end{flushleft}
+\caption{Sequence Diagram Illustrating the Observer Pattern}
+\label{fig:observer1}
+\end{figure}
+
+\paragraph{}
+* class description
+
+\subsubsection{Interfaces}
+\paragraph{}
+
+\subsubsection{The Feeder Library}
+\paragraph{}
+
+\subsubsection{The Worker Library}
+\paragraph{}
+
+
+\subsection{Example Programs}
+\paragraph{}
+
+\subsection{Statistics Viewer}
+\paragraph{}
+
+\subsection{Feeder Frontend}
+\paragraph{}

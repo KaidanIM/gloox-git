@@ -1,0 +1,80 @@
+\section{Development Environment}
+\paragraph{}
+
+\subsection{Operating System}
+\paragraph{}
+* linux
+
+
+\subsection{Dependencies}
+\label{sec:depend}
+
+\subsubsection{Compile-Time Dependencies}
+\paragraph{}
+* iksemel
+* iksemelmm
+
+\subsubsection{Run-Time Dependencies}
+
+\paragraph{XMPP Server}
+The central workhorse, as far as the communication between Worker and Feeder is concerned, is the XMPP server. For this project the jabberd2\footnote{Jabberd2 has its home at http://jabberd.jabberstudio.org} server was chosen. Jabberd2 is an open source XMPP compliant server implementation.
+\paragraph{}
+The XMPP server is responsible for authenticating users and routing stanzas between clients in an XMPP/Jabber network. As mentioned in Section \ref{sec:xmpp}, it also distributes presence information to authorised contacts.
+
+\paragraph{Database}
+\paragraph{}
+* mysql
+\paragraph{Webserver}
+\paragraph{}
+* apache
+
+
+
+\subsection{Source Code Versioning}
+\paragraph{}
+For software developers it is very important to have full control over source code they have written. This becomes more important with a higher number of developers involved in a single project. In this case usually a Revision Control System (RCS) is used to keep track of code changes. But even for one-person a project a RCS has several advantages.
+
+\begin{itemize}
+\item backup, if revision control system is kept on different machine
+\item history of modifications including log messages
+\item recovery of older versions
+\item branching and merging of changes
+\end{itemize}
+
+\paragraph{}
+From the very first this project used a RCS called Subversion\footnote{Subversion lives at http://subversion.tigris.org}. It has been choosen due to positive experience in earlier and current projects.
+
+\paragraph{}
+The Subversion repository for this project can be found at \texttt{http://svn.camaya.net/uni/fyp-lsbu/}. The version accessible via HTTP is the current one. Older revisions can be accessed with an appropriate Subversion client. The repository hosts the complete source code and all the documentation written during this projects life-span.
+
+
+\subsection{Build System}
+\paragraph{}
+The Build System helps users and developers building binary executables from source code and process and create documentation. The responsibilities of the Build System include:
+
+\begin{itemize}
+\item Checking for availability of dependecies
+\item Compiling source files using an appropriate compiler
+\item Installing executables and data files to their destination directories
+\end{itemize}
+
+\subsubsection{Source Code Compilation}
+\paragraph{}
+
+\paragraph{}
+For this project a combination of the tools autoconf\footnote{Autoconf's homepage is at http://www.gnu.org/software/autoconf/} and automake\footnote{Automake's homepage is at http://www.gnu.org/software/automake/} is used.
+
+\paragraph{autoconf}
+Autoconf is used to create a \texttt{configure} script. This contains various checks for more or less obvious dependencies, including those listed in Section \ref{sec:depend}.
+
+\paragraph{automake}
+
+
+\subsubsection{API Documentation}
+\paragraph{}
+* doxygen
+
+
+\subsubsection{Project Documentation}
+\paragraph{}
+* latex

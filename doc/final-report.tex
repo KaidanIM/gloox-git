@@ -1,0 +1,141 @@
+\documentclass[english,a4paper,12pt]{article}
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage[lsbu]{harvard}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{ltablex}
+\usepackage{booktabs}
+\usepackage{helvet}
+\usepackage{moreverb}
+\usepackage{float}
+\usepackage{lastpage}
+\usepackage{appendix}
+%\usepackage{tocloft}
+
+% redefine from "URL:"
+\def\harvardurl{[Online] Availabe at }
+\def\harvardaccessed{accessed }
+% remove leading "References" from the bibliography
+\makeatletter
+  \def\thebibliography#1{\list
+      {[\arabic{enumi}]}{\settowidth\labelwidth{[#1]}\leftmargin\labelwidth
+        \advance\leftmargin\labelsep
+        \usecounter{enumi}}
+        \def\newblock{\hskip .11em plus .33em minus .07em}
+        \sloppy\clubpenalty4000\widowpenalty4000
+        \sfcode`\.=1000\relax}
+\makeatother
+
+% sans-serife for the whole document
+\renewcommand*{\familydefault}{\sfdefault}
+
+% set up header and footer
+%\pagestyle{fancy}
+\fancyhead{}
+%\fancyhead[RE]{Framework for Distributing Data using XMPP}
+%\fancyhead[LE]{Final Year Project}
+%\fancyhead[RO]{Interim Report}
+\lhead{Jakob Schröter\\
+       Framework for Setting up a Dynamic Virtual Cluster}
+\rhead{Final Year Project 2004/2005\\
+       Final Report - Draft}
+\fancyfoot{}
+%\fancyfoot[CO,CE]{\thepage{} of \pageref{LastPage}}
+\cfoot{\thepage{} of \pageref{LastPage}}
+\setlength{\headheight}{28pt}
+%\fancyheadoffset[LE,RO]{\marginparsep+\marginparwidth}
+
+\title{Final Year Project\\
+%       Framework for Distributing and Processing Scientifical Data using XMPP \\
+       Framework for Setting up a Dynamic Virtual Cluster\\
+       Final Report}
+\author{Jakob Schröter\\
+        \texttt{js@camaya.net}\\
+        Computer Systems and Networks}
+
+
+\begin{document}
+\maketitle
+\addvspace{9cm}
+This report has been submitted for assessment towards a Bachelor of Engineering Degree in Computer Systems and Networks in the School of Engineering, South Bank University.
+This report is written in the authors own words and all sources have been properly cited.
+
+\begin{center}
+Author's signature:
+\end{center}
+\thispagestyle{empty}
+
+\clearpage
+\begin{center}
+\thanks{\textbf{Acknowledgements}
+          \\
+          \addvspace{3cm}
+          I would like to thank Dr Goran Bezanov for his support throughout the whole project life time.}
+\end{center}
+\thispagestyle{empty}
+
+
+\clearpage
+\begin{abstract}
+Clusters provide a means for solving computational expensive tasks in a more reasonable time frame than a single machine can offer. Be it prime factorisation or searching for extraterrestrial intelligence by filtering background noise captured from space, applications for clusters are plenty. To make use of a number of computers to process data in a distributed manner, some kind of software is necessary to coordinate the effort.
+
+The Extensible Message and Presence Protocol (XMPP) is currently mostly used in the Instant Messaging domain. But its possible field of operation is much wider. Its extensibility allows for customisation to a great extent.
+
+This project researches the usability of XMPP in a cluster-like environment to distribute data to a cluster's nodes. These nodes carry out the actual processing and return the result.
+
+During the life-span of this project jointly acting software components have been described and created to make arbitrary numbers of computers accessible and act cluster-like.
+\end{abstract}
+\thispagestyle{empty}
+
+
+\clearpage
+\thispagestyle{empty}
+\tableofcontents
+\thispagestyle{empty}
+
+
+\clearpage
+\pagestyle{fancy}
+
+\include{introduction}
+
+\include{aim-objectives}
+
+\include{deliverables}
+
+\include{background}
+
+\include{environment}
+
+\include{approach}
+
+\include{results}
+
+\include{conclusions}
+
+\clearpage
+\section{Project Planning}
+
+\subsection{Initial Schedule}
+\input{interim-planning}
+
+\subsection{Revised Schedule}
+\input{revised-planning}
+
+\subsection{Final Schedule}
+\input{final-planning}
+
+\clearpage
+\section{Bibliography}
+\bibliography{final-report}
+
+\clearpage
+\appendix
+\appendixpage
+\addappheadtotoc
+
+
+
+\end{document}
