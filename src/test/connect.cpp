@@ -33,6 +33,7 @@ void Connect::start()
   c->set_log_hook();
   c->setTls( false );
   c->setSasl( false );
+  c->setDebug( true );
   c->connect();
   c->disconnect();
 }
