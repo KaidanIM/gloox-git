@@ -1,10 +1,11 @@
 Todo
 ----
 
-
+- config file
+- more command line support
+- use struct for version and identity info
 - JEP-0012 (Last Activity)
 - JEP-0013 (Flexible Offline Message Retrieval)
-- JEP-0030 (Service Discovery) - Client Side
 - JEP-0047 (In-Band Bytestreams)
 - JEP-0048 (Bookmark Storage)
 - JEP-0049 (Private XML Storage)
@@ -12,6 +13,11 @@ Todo
 - JEP-0138 (Stream Compression)
 - JEP-0145 (Annotations)
 
+
+In the pipe
+-----------
+
+- JEP-0030 (Service Discovery) - Client Side
 
 
 Done

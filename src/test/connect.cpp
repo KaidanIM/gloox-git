@@ -35,5 +35,6 @@ void Connect::start()
   c->setSasl( true );
   c->setDebug( true );
   c->connect();
+  printf("hello world\n");
   c->disconnect();
 }
