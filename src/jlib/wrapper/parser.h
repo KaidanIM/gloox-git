@@ -24,30 +24,38 @@
 
 #include <iksemel.h>
 
-
+/**
+ * This namespace is used for the classes taken from Igor Goryachieff's Iksemelmm
+ * wrapper around Iksemel. It was included for convenience reasons and to decrease
+ * external dependencies of JLib.
+ *
+ */
 namespace Iksemel
 {
+  /**
+   * This class encapsulates the iks_parser from Iksemel.
+   */
   class Parser
   {
     public:
       Parser();
       ~Parser();
 
-      void init(iksparser *);
+      void init( iksparser* );
 
-      int parse(char *, size_t, int);
+      int parse( char*, size_t, int );
       void reset();
 
       unsigned long bytes() const;
       unsigned long lines() const;
     protected:
-      iksparser *P;
+      iksparser* P;
       bool inited;
 
     private:
       // for copying prevention
-      Parser(const Parser&);
-      Parser& operator=(const Parser&);
+      Parser( const Parser& );
+      Parser& operator=( const Parser& );
   };
 }
 
