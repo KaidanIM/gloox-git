@@ -28,10 +28,11 @@ class JThread;
  * It supports SASL (Authentication) as well as TLS (Encryption), which can be switched on/off separately.
  * It uses a thread to poll for new data arriving over the network which is then fed into the XML stream parser.
  *
- * To use, create a new JClient instance, feed it connection credentials, either in the Constructor or afterwards
+ * To use, create a new JClient instance and feed it connection credentials, either in the Constructor or afterwards
  * using the setters. You should then register packet handlers implementing the corresponding
  * Interfaces (ConnectionListener, PresenceHandler, MessageHandler, IqHandler,
  * SubscriptionHandler), and call @ref connect() to establish the connection to the server.<br>
+ *
  * Usage example:
  * \code
  * void Class::doIt()
