@@ -12,7 +12,7 @@
 #include "presencehandler.h"
 #include "subscriptionhandler.h"
 
-#include <iksemelmm.hh>
+#include "wrapper/stream.h"
 
 #include <list>
 #include <string>

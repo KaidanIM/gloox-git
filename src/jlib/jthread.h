@@ -8,7 +8,7 @@
 
 #include "thread.h"
 
-#include <iksemelmm.hh>
+#include <iksemel.h>
 
 class JClient;
 

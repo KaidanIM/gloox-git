@@ -12,7 +12,7 @@
 #include "../jlib/presencehandler.h"
 #include "pollhandler.h"
 
-#include <iksemelmm.hh>
+#include <iksemel.h>
 
 #include <map>
 #include <string>
