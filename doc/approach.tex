@@ -3,7 +3,16 @@
 
 \subsection{Adressing of Workers}
 \paragraph{}
+\subsubsection{Node Addresses in XMPP}
+\paragraph{}
+In general a node in XMPP is addressed in the form of \texttt{[\{local\}@]\{server\}[/\{resource\}]} and can be either a client (\texttt{\{local\}@\{server\}/\{resource\}}), a component (\texttt{\{local\}@\{server\}}) or a server (\texttt{\{server\}}). This addressing scheme is decribed in RFC 3920: XMPP Core \cite{xmpp-core}. An address in XMPP is also known as Jabber ID or JID.
 
+\subsubsection{Addressing in This Project}
+\label{sec:addr}
+\paragraph{}
+The design of Worker and Feeder Libraries does not impose any limit whatsoever on the addresses of Workers besides those already defined in RFC 3920. This means it is even possible to have a Worker use the same Jabber ID like a users Instant Messaging account, except for the resource part. An example: User Joe has got an account on server \texttt{example.org}. Their client adds a resource of \texttt{JoesChatClient}. The resulting JID under which Joe is reachable for chatting would be: \texttt{joe@example.org/JoesChatClient}. If Joe chose to have a Worker use the same address, the full JID would look like: \texttt{joe@example.org/JoesWorker}. Following this scheme, it is possible to run a whole cluster using only a single account. Each Worker would simply add a different resource part to the bare address to form its unique JID.
+\paragraph{}
+Another very interesting outcome of this restriction-less design is the possibility to add more than one XMPP server to the cluster and thereby effectively create a load-balanced XMPP server cluster.
 
 \subsection{Libraries}
 \paragraph{}
@@ -21,10 +30,10 @@ The library offers a simple yet powerful public interface that enables programs 
 \item Incoming subscription stanzas
 \end{itemize}
 \paragraph{}
-With it, all the possible stanza types that XMPP Core supports are covered.
+With it, all the possible stanza types that XMPP Core supports are covered. Additionally, for IQ events a namespace filter can be utilised.
 
 \paragraph{}
-The event notification scheme used by the client library follows the so-called Observer Pattern. A object interested in XMPP events needs to indicate this to the client library by registering with it as an appropriate event handler. When a stanza arrives from the server, the library calls a special function in every registered object. Figure \ref{fig:observer1} shows an example sequence of registering with the client and being called by it at a later date.
+The event notification scheme used by the client library follows the so-called Observer Pattern \cite{wikipedia003}. An object interested in XMPP events needs to indicate this to the client library by registering with it as an appropriate event handler. When a stanza arrives from the server, the library calls a special function in every registered object. Figure \ref{fig:observer1} shows an example sequence of registering with the client and being called by it at a later date.
 
 \begin{figure}[H]
 \begin{flushleft}
