@@ -25,7 +25,7 @@ class JThread;
 
 /**
  * This class implements a Jabber Client.
- * It supports TLS (Encryption) as well as SASL (Authentication), which can be switched on/off separately.
+ * It supports SASL (Authentication) as well as TLS (Encryption), which can be switched on/off separately.
  * It uses a thread to poll for new data arriving over the network which is then fed into the XML stream parser.
  *
  * To use, create a new JClient instance, feed it connection credentials, either in the Constructor or afterwards
