@@ -36,8 +36,8 @@ class JThread;
  * \code
  * JClient* j = new JClient( "user", "resource", "password", "resource" );
  * j->setDebug( true );
- * c->registerPresenceHandler( this );
- * c->registerSubscriptionHandler( this );
+ * j->registerPresenceHandler( this );
+ * j->registerSubscriptionHandler( this );
  * j->connect();
  * \endcode
  * @author Jakob Schroeter <js@camaya.net>
