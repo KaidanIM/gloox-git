@@ -20,13 +20,13 @@
 #include "result.h"
 
 
-Result( JClient* parent )
+Result::Result( JClient* parent )
   : m_parent( parent )
 {
 
 }
 
-~Result()
+Result::~Result()
 {
 
 }

@@ -29,7 +29,7 @@ class Result
     /**
      * Constructor
      */
-    Result();
+    Result( JClient* parent );
 
     /**
      * Destructor
