@@ -20,7 +20,8 @@ class ConnectionListener
   public:
     /**
      * Reimplement this function if you want to be notified about
-     * successful connections.
+     * successful connections. It will be called after all authentication
+     * is finished and a presence of "online" has been sent.
      */
     virtual void onConnect() {};
 
