@@ -360,6 +360,8 @@ class JClient : public Stream
     std::string m_password;
     std::string m_server;
     std::string m_jid;
+    std::string m_versionName;
+    std::string m_versionVersion;
     bool m_debug;
     bool m_sasl;
     bool m_tls;
