@@ -340,12 +340,12 @@ void JClient::removePresenceHandler( PresenceHandler* ph )
 
 void JClient::registerIqHandler( IqHandler* ih, std::string xmlns )
 {
-  m_iqHandlers[ih] = xmlns;
+  m_iqHandlers[xmlns] = ih;
 }
 
-void JClient::removeIqHandler( IqHandler* ih )
+void JClient::removeIqHandler( std::string xmlns )
 {
-  m_iqHandlers.erase( ih );
+  m_iqHandlers.erase( xmlns );
 }
 
 void JClient::registerMessageHandler( MessageHandler* mh )
@@ -466,8 +466,8 @@ void JClient::notifyIqHandlers( const char* xmlns, ikspak* pak )
   {
     IqHandlerMap::const_iterator it = m_iqHandlers.begin();
     for( it; it != m_iqHandlers.end(); it++ ) {
-      if( (*it).second == xmlns )
-      (*it).first->handleIq( xmlns, pak );
+      if( (*it).first == xmlns )
+      (*it).second->handleIq( xmlns, pak );
     }
   }
 }

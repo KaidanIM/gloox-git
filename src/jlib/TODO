@@ -1,6 +1,7 @@
 Todo
 ----
 
+- check if for and iterators can be replaced by find
 - introduce result handler
 - extract disco into separate class
 - config file

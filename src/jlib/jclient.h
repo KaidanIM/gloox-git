@@ -375,7 +375,7 @@ class JClient : public Stream
      * Removes the given object from the list of Iq handlers
      * @param ih The object to remove from the list
      */
-    void removeIqHandler( IqHandler* ih );
+    void removeIqHandler( std::string mlns );
 
     /**
      * Removes the given object from the list of message handlers
@@ -415,7 +415,7 @@ class JClient : public Stream
     friend void iqHook(JClient* stream, ikspak* pak);
 
     typedef list<ConnectionListener*>     ConnectionListenerList;
-    typedef map<IqHandler*, std::string>  IqHandlerMap;
+    typedef map<std::string, IqHandler*>  IqHandlerMap;
     typedef list<MessageHandler*>         MessageHandlerList;
     typedef list<PresenceHandler*>        PresenceHandlerList;
     typedef list<SubscriptionHandler*>    SubscriptionHandlerList;
