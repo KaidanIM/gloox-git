@@ -403,13 +403,6 @@ void presenceHook( JClient* stream, ikspak* pak )
 void subscriptionHook( JClient* stream, ikspak* pak )
 {
   if( stream->debug() ) printf("subscriptionHook\n");
-/*  if( pak->subtype == IKS_TYPE_SUBSCRIBE )
-  {
-    iks* x = iks_make_s10n( IKS_TYPE_SUBSCRIBED, pak->from->full, "welcome aboard" );
-    stream->send( x );
-    x = iks_make_s10n( IKS_TYPE_SUBSCRIBE, pak->from->full, "welcome aboard" );
-    stream->send( x );
-  }*/
   stream->notifySubscriptionHandlers( pak->from, pak->subtype, iks_find_cdata( pak->x, "status" ) );
 }
 

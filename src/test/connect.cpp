@@ -32,7 +32,7 @@ void Connect::start()
   c = new JClient( "mailmon", "test", "test", "jabber.cc" );
   c->set_log_hook();
   c->setTls( false );
-  c->setSasl( false );
+  c->setSasl( true );
   c->setDebug( true );
   c->connect();
   c->disconnect();

@@ -6,6 +6,8 @@
 #ifndef STORAGE_H__
 #define STORAGE_H__
 
+#include <mysql/mysql.h>
+
 #include <string>
 #include <list>
 
@@ -37,6 +39,8 @@ class Storage
      */
     bool store( Result& result );
 
+  private:
+    MYSQL mysql;
 };
 
 #endif // STORAGE_H__
