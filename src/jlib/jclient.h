@@ -54,7 +54,7 @@ class JThread;
  * @code
  * void Class::doIt()
  * {
- *   JClient* j = new JClient( "user", "resource", "password", "resource" );
+ *   JClient* j = new JClient( "user", "resource", "password", "server" );
  *   j->registerPresenceHandler( this );
  *   j->setVersion( "TestProg", "1.0" );
  *   j->setIdentity( "client", "bot" );

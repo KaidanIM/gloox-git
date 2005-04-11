@@ -403,10 +403,10 @@ beginfig(7)
   bh:=25;
   start:=0;
   pf:=150;
-  le:=100;
+  le:=80;
   % squares                                                            % labels
-  draw (pf*0,he)--(pf*0+le,he)--(pf*0+le,he+bh)--(pf*0,he+bh)--cycle;  label (btex Feeder etex,      (pf*0+le/2,he+bh/2));
-  draw (pf*1,he)--(pf*1+le,he)--(pf*1+le,he+bh)--(pf*1,he+bh)--cycle;  label (btex Client Lib etex,  (pf*1+le/2,he+bh/2));
+  draw (pf*0,he)--(pf*0+le,he)--(pf*0+le,he+bh)--(pf*0,he+bh)--cycle;  label (btex Application etex,  (pf*0+le/2,he+bh/2));
+  draw (pf*1,he)--(pf*1+le,he)--(pf*1+le,he+bh)--(pf*1,he+bh)--cycle;  label (btex XMPP Client Lib etex,  (pf*1+le/2,he+bh/2));
   draw (pf*2,he)--(pf*2+le,he)--(pf*2+le,he+bh)--(pf*2,he+bh)--cycle;  label (btex XMPP Server etex, (pf*2+le/2,he+bh/2));
 
   % lifelines (vertical dashed)
@@ -430,17 +430,20 @@ beginfig(7)
 
 endfig;
 
+% for the presentation
 u:=10;
+
+% justification for the XMPP Client Lib
 beginfig(8)
   % Worker
-  draw (8u,15u)--(14u,15u)--(14u,18u)--(8u,18u)--cycle;
-  label(btex Worker etex, (11u,16.5u));
-  drawarrow (11u,18u)--(17.5u,25u);
+  draw (8u,15u)--(16u,15u)--(16u,18u)--(8u,18u)--cycle;
+  label(btex Worker Library etex, (12u,16.5u));
+  drawarrow (12u,18u)--(17.5u,25u);
 
   % Feeder
-  draw (26u,15u)--(32u,15u)--(32u,18u)--(26u,18u)--cycle;
-  label(btex Feeder etex, (29u,16.5u));
-  drawarrow (29u,18u)--(22.5u,25u);
+  draw (24u,15u)--(32u,15u)--(32u,18u)--(24u,18u)--cycle;
+  label(btex Feeder Library etex, (28u,16.5u));
+  drawarrow (28u,18u)--(22.5u,25u);
 
   % XMPP Client Lib
   draw (15u,25u)--(25u,25u)--(25u,28u)--(15u,28u)--cycle;
@@ -448,16 +451,16 @@ beginfig(8)
 
 endfig;
 
-
+% presentation: Feeder in detail
 beginfig(9)
-  % Worker
+  % Feeder
   draw (26u,15u)--(32u,15u)--(32u,18u)--(26u,18u)--cycle;
   label(btex Feeder etex, (29u,16.5u));
   drawarrow (26u,17u)--(24u,17u);
   drawarrow (24u,16u)--(26u,16u);
   drawarrow (35u,17u)--(32u,17u) dashed evenly;
 
-  % Worker Library
+  % Feeder Library
   draw (16u,15u)--(24u,15u)--(24u,18u)--(16u,18u)--cycle;
   label(btex Feeder Library etex, (20u,16.5u));
   drawarrow (16u,17u)--(10u,17u);
@@ -467,7 +470,7 @@ beginfig(9)
   label(btex Result etex, (13u, 15u));
 endfig;
 
-
+% presentation: Worker in detail
 beginfig(10)
   % Worker
   draw (10u,15u)--(16u,15u)--(16u,18u)--(10u,18u)--cycle;
@@ -485,5 +488,26 @@ beginfig(10)
   label(btex Result etex, (29u, 15u));
 endfig;
 
+% inheritance diagram for JClient
+beginfig(11)
+  % Iksemel::Paser
+  draw (10u,15u)--(18u,15u)--(18u,16.5u)--(10u,16.5u)--cycle;
+  label(btex Iksemel::Parser etex, (14u,15.75u));
+
+  % Iksemel::Tree
+  draw (20u,15u)--(28u,15u)--(28u,16.5u)--(20u,16.5u)--cycle;
+  label(btex Iksemel::Tree etex, (24u,15.75u));
+
+  % Iksemel::Stream
+  draw (15u,10u)--(23u,10u)--(23u,11.5u)--(15u,11.5u)--cycle;
+  label(btex Iksemel::Stream etex, (19u,10.75u));
+  drawarrow (18u,11.5u)--(14u,15u);
+  drawarrow (20u,11.5u)--(24u,15u);
+
+  % JClient
+  draw (17u,5u)--(21u,5u)--(21u,6.5u)--(17u,6.5u)--cycle;
+  label(btex JClient etex, (19u,5.75u));
+  drawarrow (19u,6.5u)--(19u,10u);
+endfig;
 
 end

@@ -22,7 +22,7 @@
 
 #include "../jlib/jclient.h"
 #include "../jlib/connectionlistener.h"
-#include "../jlib/messagehandler.h"
+#include "../jlib/iqhandler.h"
 #include "../jlib/presencehandler.h"
 #include "pollhandler.h"
 
@@ -37,7 +37,7 @@ using namespace std;
  * This is the main class of the Feeder.
  * @author Jakob Schroeter <js@camaya.net>
  */
-class Feeder : public ConnectionListener, PresenceHandler, MessageHandler
+class Feeder : public ConnectionListener, PresenceHandler, IqHandler
 {
   public:
     /**
