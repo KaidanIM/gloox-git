@@ -1,10 +1,10 @@
 \section{Technical Background}% and Context}
 \paragraph{}
-The project is based on well-known and well-understood technologies. This section briefly introduces these core technologies.
+The project is based on a number of well-known and well-understood technologies. This section briefly introduces the most important of these core technologies.
 
 \subsection{Distributed Computing}
 \paragraph{}
-Basically, the term Distributed Computing describes a technology where more or less loosely connected machines, called nodes, work together on solving a problem. They do so by each dealing with a small fraction of the overall problem. This, of course, implies that it is possible to split the problem into smaller sub-problems that can be solved individually. There are lots of challenges out there that meet these requirements. Accordingly, there are many projects that make use of clusters to work on such a problem. Usually, a dedicated machine takes care of assigning tasks to the nodes. The processing of the task could then even happen in a disconnected mode. Upon completion of the computation the result is delivered back to the co-ordinating master.
+Basically, the term Distributed Computing describes technologies where more or less loosely connected machines, called nodes, work together on solving a problem. They do so by each dealing with a small fraction of the overall problem. This, of course, implies that it is possible to split the problem into smaller sub-problems that can be solved individually. Luckily, there are lots of challenges out there that meet these requirements. Accordingly, there are many projects that make use of clusters to work on such a problem. Usually, a dedicated machine takes care of assigning tasks to the nodes. The processing of the task could then even happen in a disconnected mode. Upon completion of the computation the result is delivered back to the co-ordinating master.
 
 \paragraph{}
 Software solutions used in this field are very problem specific in that they do not allow for adaption to any other task.
@@ -42,24 +42,24 @@ XML consists of elements, their attributes and character data. An element has an
 Tags can be nested infinitely and build up hierarchies as long as hierarchy levels are not mixed. In other words, it is not allowed to close an element after another one was openend but not closed. Figure \ref{fig:XMLexample} shows an example excerpt of a hypothetical (valid) XML document.
 
 \paragraph{}
-A relatively new feature in XML are namespaces. Since XML instances may contain elements from different vocabularies, namespaces are used to remove ambiguities and distinguish semantically between equally named elements. The special attribute \texttt{xmlns} denotes the namespace. For example, in Figure \ref{fig:XMLexample} the \texttt{<inner>} element belongs to the namespace \texttt{namespace}.
+A relatively new feature in XML are namespaces. Since XML instances may contain elements from different vocabularies, namespaces are used to remove ambiguities and distinguish semantically between equally nam\-ed elements. The special attribute \texttt{xmlns} denotes the namespace. For example, in Figure \ref{fig:XMLexample} the \texttt{<inner>} element belongs to the namespace \texttt{namespace}.
 
 \subsubsection{XML Parsers}
 \paragraph{}
-There are several ways to parse XML. Two of the more common ones are the Document Object Model (DOM) and SAX, respectively.
+There are several ways to parse XML. Two of the more common ones are the Document Object Model (DOM) and Serial Access (SAX), respectively.
 \paragraph{Document Object Model}
 The Document Object Model is used to parse XML if all the data between the XML root elements is available at parsing time. This is, for example, true for ordinary files stored in a file system. After parsing the file's contents, the XML is kept in memory in a tree-like structure. Usually, functions exist that allow for traversing the tree and looking for specific content.
 
-\paragraph{SAX}
+\paragraph{Serial Access}
 On the contrary, a SAX parser does not necessarily need to have the whole document in memory at once. It rather parses chunks of XML as they come in over, say, a network connection. Special hook funtions are called if specific XML elements fly by in the stream.
 
 
 \subsection{Extensible Message and Presence Protocol (XMPP)}
 \label{sec:xmpp}
 \paragraph{}
-The Extensible Message and Presence Protocol is developed in an Internet community since 1999\footnote{More on the history of Jabber and XMPP can be found on http://www.xmpp.org/\-history.html}. It is also known as Jabber, which also is the original name, and its primary purpose was Instant Messaging. With the formation of a dedicated XMPP Working Group within the Internet Engineering Task Force (IETF) the protocol became an Internet Standard in 2004. It is published by IETF as Request for Comments (RFC) memos 3920 and 3921.
+The Extensible Message and Presence Protocol is developed in an Internet community since 1999\footnote{More on the history of Jabber and XMPP can be found on \href{http://www.xmpp.org/history.html}{http://www.xmpp.org/history.html}}. It is also known as Jabber, which also is the original name, and its primary purpose was Instant Messaging. With the formation of a dedicated XMPP Working Group within the Internet Engineering Task Force (IETF) the protocol became an Internet Standard in 2004. It is published by IETF as Request for Comments (RFC) memos 3920 and 3921.
 \paragraph{}
-XMPP is based on XML in that the actual data exchanged between client and server is an XML stream. After a TCP/IP connection is established between client and server (or two servers), a stream opening tag is sent by both parties. Communication then happens by sending so-called stanzas to and fro. Closing the initial stream tag also closes the underlying TCP/IP connection.
+XMPP is based on XML in that the actual data exchanged between client and server is an XML stream. After a TCP/IP connection is established between client and server (or two servers), a stream opening tag is sent by both parties. Communication then happens by sending so-called stanzas to and fro. Closing the initial stream tag also causes the underlying TCP/IP connection to be closed.
 \paragraph{}
 A stanza in XMPP is exactly one element, consisting of its opening tag, any number of corresponding attributes, nested tags and character data, respectively, and the closing tag. Figure \ref{fig:streamExample} shows an example stream containing one stanza.
 
@@ -69,7 +69,9 @@ A stanza in XMPP is exactly one element, consisting of its opening tag, any numb
 <stream:stream 
       xmlns:stream='http://etherx.jabber.org/streams' 
       xmlns='jabber:client' to='jabber.cc' version='1.0'>
-  <presence from="sender@example.org" to="receiver@example.org">
+[...]
+  <presence from="sender@example.org"
+        to="receiver@example.org">
     <status>
       online
     </status>
@@ -81,10 +83,10 @@ A stanza in XMPP is exactly one element, consisting of its opening tag, any numb
 \end{figure}
 
 \paragraph{}
-Line 1 denotes that the following content complies with XML version 1.0, and is mandatory for any XML document. A stream can be seen as a special type of document. The stream is opened in line 2 and the opening tag of a \texttt{presence} stanza is sent in line 3. The stream is closed again in line 10.
+Line 1 denotes that the following content complies with XML version 1.0, and is mandatory for any XML document. A stream can be seen as a special type of document. The stream is opened in line 2 and the opening tag of a \texttt{presence} stanza is sent in line 3. The stream is closed again in line 10. In real XMPP, feature negotiation and authentication take place after the stream opening and before the stream can be used. This is ommitted in Figure \ref{fig:streamExample} (line 5).
 \paragraph{}
 In the Instant Messaging world, a widely-used feature of XMPP is the roster. Users can authorise other users to allow them to see their online presence. These authorised users are then (usually) added to the authorising users personal contact list. Upon connection of a user, their client sends the current presence status (e.g., 'online') to the server which then distributes it to authorised contacts in the user's roster.
 
 \subsubsection{Protocol Extensions}
 \paragraph{}
-RFCs 3920 and 3921 only describe the core functionality of XMPP, like authentication, as well as Instant Messaging-specific extensions, like the roster. By the time, the protocol has been extended by so-called Jabber Enhancement Proposals (JEP) to provide much more functionality than the core RFCs. A very interesting extension, though not used in this project, is \cite{jep0060} which describes a data push mechanism.
+RFCs 3920 and 3921 describe the core functionality of XMPP only, like authentication, as well as Instant Messaging-specific extensions, like the roster. By the time, the protocol has been extended by so-called Jabber Enhancement Proposals\footnote{A list of current JEPs can be found at \href{http://www.jabber.org/jeps/jeplist.php}{http://www.jabber.org/jeps/jeplist.php}} (JEPs) to provide much more functionality than the core RFCs. For example, a very interesting extension, though not used in this project, is Publish-Subscribe \cite{jep0060} which describes a data push mechanism.

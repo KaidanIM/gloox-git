@@ -49,3 +49,15 @@ clean:
 	rm -rf *.aux
 	rm -rf *.blg
 	rm -rf *.mpx
+	rm -rf *.backup
+	rm -rf *.toc
+	rm -rf *.vrb
+	rm -rf *.snm
+	rm -rf *.out
+	rm -rf *.nav
+	rm -rf *.vrb
+	rm -rf *~
+
+
+
+
