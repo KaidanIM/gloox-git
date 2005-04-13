@@ -510,4 +510,53 @@ beginfig(11)
   drawarrow (19u,6.5u)--(19u,10u);
 endfig;
 
+% inheritance diagram for Feeder
+beginfig(12)
+  % ConnectionListener
+  draw (9.5u,15u)--(18.5u,15u)--(18.5u,16.5u)--(9.5u,16.5u)--cycle;
+  label(btex ConnectionListener etex, (14u,15.75u));
+
+  % PresenceHandler
+  draw (20u,15u)--(28u,15u)--(28u,16.5u)--(20u,16.5u)--cycle;
+  label(btex PresenceHandler etex, (24u,15.75u));
+
+  % IqHandler
+  draw (31u,15u)--(37u,15u)--(37u,16.5u)--(31u,16.5u)--cycle;
+  label(btex IqHandler etex, (34u,15.75u));
+
+  % SubscriptionHandler
+  draw (39.25u,15u)--(48.75u,15u)--(48.75u,16.5u)--(39.25u,16.5u)--cycle;
+  label(btex SubscriptionHandler etex, (44u,15.75u));
+
+  % Feeder
+  draw (27u,5u)--(31u,5u)--(31u,6.5u)--(27u,6.5u)--cycle;
+  label(btex Feeder etex, (29u,5.75u));
+  drawarrow (28.25u,6.5u)--(14u,15u);
+  drawarrow (28.75u,6.5u)--(24u,15u);
+  drawarrow (29.25u,6.5u)--(34u,15u);
+  drawarrow (29.75u,6.5u)--(44u,15u);
+endfig;
+
+% inheritance diagram for Worker
+beginfig(13)
+  % ConnectionListener
+  draw (9.5u,15u)--(18.5u,15u)--(18.5u,16.5u)--(9.5u,16.5u)--cycle;
+  label(btex ConnectionListener etex, (14u,15.75u));
+
+  % IqHandler
+  draw (21u,15u)--(27u,15u)--(27u,16.5u)--(21u,16.5u)--cycle;
+  label(btex IqHandler etex, (24u,15.75u));
+
+  % SubscriptionHandler
+  draw (29.25u,15u)--(38.75u,15u)--(38.75u,16.5u)--(29.25u,16.5u)--cycle;
+  label(btex SubscriptionHandler etex, (34u,15.75u));
+
+  % Feeder
+  draw (21.5u,5u)--(26.5u,5u)--(26.5u,6.5u)--(21.5u,6.5u)--cycle;
+  label(btex Worker etex, (24u,5.75u));
+  drawarrow (23u,6.5u)--(14u,15u);
+  drawarrow (24u,6.5u)--(24u,15u);
+  drawarrow (25u,6.5u)--(34u,15u);
+endfig;
+
 end
