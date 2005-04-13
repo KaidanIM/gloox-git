@@ -37,17 +37,24 @@ As discussed in Section \ref{sec:addressing} and \ref{sec:feederlib}, the Feeder
 The design of XMPP and the Feeder Libraries allows for addition and removal, respectively, of nodes at run-time. This means that the size of the cluster is fully dynamic. Use cases include:
 \begin{itemize}
 \item A cluster distributed over the Internet. Similar to Seti@Home, users can connect to the cluster and contribute their machine's processor time at their will.
-\item In a university, school or company, machines could be added to the cluster when they are idle. As soon as a machine is needed for a different task, it is temporarily removed from the cluster. This could happen automated and without user intervention if the Worker process ran in the background all the time.
+\item In a university, school or company, machines could be added to a cluster when they are idle. As soon as a machine is needed for a different task, it is temporarily removed from the cluster. This could happen automated and without user intervention if the Worker process ran in the background all the time.
 \end{itemize}
 
-\subsubsection{Node Location}
+\subsubsection{Physical Node Location}
 \paragraph{}
-The distributability of XMPP servers and nodes as well as the use case from the previous section imply that there is no restriction on the distance between nodes and servers. Of course, greater distances add to the delay of transmissions. But the processing time of data packets is considered high enough to compensate for this.
+The distributability of XMPP servers and nodes as well as the use case from the previous section imply that there is no restriction on the physical distance between nodes and servers. Of course, greater distances add to the delay of transmissions. But the processing time of data packets is considered high enough to compensate for this.
 
 \subsection{Design Justification}
 \paragraph{}
--- for feeder <--> feeder library communication
+The combination of polling and pushing was done to reduce the Feeder's impact on the performance of the whole system and to improve the cluster's efficiency. Both constant polling and pushing might, on one hand side, influence the machine's performance negatively if the interval chosen is too low. On the other hand side, if the interval is too high, valuable processing time might get lost because Workers don't get new data to work on as soon as it is available, but only on interval boundaries. The same applies for Workers being available again. They also only get new data packets on interval boundaries instead of directly after their availability.
 
 \subsection{Disadvantages of XMPP}
 \paragraph{}
--- overhead of XML
+The system proposed in this project is limited to processing data that takes a relatively long time to deal with. The reasons are:
+\begin{itemize}
+\item XML adds an overhead to the wire communication that should not be neglected. The IQ stanza sent to the Workers containing the data (XXX: to be filled in) bytes in size. This is, per se, a huge frame and additionally might be much more than the actual payload.
+\item The system has two bottlenecks, the Feeder and the XMPP server, respectively.
+\end{itemize}
+
+\paragraph{}
+The bottom line is, that it is unlikely that this system copes well with data generated at high speed that takes a very short time to process, for example if the cluster was used to store such data in a database in a distributed manner. However, no performance tests have been coducted in the context of this project.
