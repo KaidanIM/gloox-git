@@ -17,26 +17,25 @@
 */
 
 
-#ifndef POLLHANDLER_H__
-#define POLLHANDLER_H__
+#ifndef DATAHANDLER_H__
+#define DATAHANDLER_H__
 
 
 /**
  * A virtual interface.
- * Derived classes can be registered as PollHandlers.
- * poll() will be called by the Feeder if it has workers available.
+ * Derived classes can be registered as DataHandlers.
+ * data() will be called by the Worker if it has Data available.
  * @author Jakob Schroeter <js@camaya.net>
  */
-class PollHandler
+class DataHandler
 {
   public:
     /**
-     * reimplment this to be able to provide data upon request.
-     * @return char* data
-     * @return NULL if no data is available
+     * reimplment this to receive incoming data.
+     * @param data The data received.
      */
-    virtual char* poll() {};
+    virtual void data( const char* data) {};
 
 };
 
-#endif // POLLHANDLER_H__
+#endif // DATAHANDLER_H__

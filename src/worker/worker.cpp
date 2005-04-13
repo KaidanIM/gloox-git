@@ -33,7 +33,7 @@ Worker::Worker( const string username, const string resource,
   c->setTls( false );
   c->setSasl( false );
   c->setDebug( debug );
-  c->registerMessageHandler( this );
+//   c->registerIqHandler( this );
   c->registerSubscriptionHandler( this );
   c->setVersion( "Worker", "0.1" );
   c->connect();
@@ -44,10 +44,20 @@ Worker::~Worker()
   
 }
 
-void Worker::handleMessage( iksid* from, iksubtype type, const char* msg )
+void Worker::handleIq( const char* xmlns, ikspak* pak )
 {
 }
 
 void Worker::handleSubscription( iksid* from, iksubtype type, const char* msg )
 {
+}
+
+void Worker::registerDataHandler( DataHandler* dh )
+{
+  m_dataHandler = dh;
+}
+
+void Worker::result( ResultCode code, const char* result )
+{
+  
 }
