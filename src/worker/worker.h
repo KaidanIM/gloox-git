@@ -36,7 +36,7 @@ using namespace std;
  * data from the Feeder.
  * @author Jakob Schroeter <js@camaya.net>
  */
-class Worker : public MessageHandler, SubscriptionHandler
+class Worker : public ConnectionListener, IqHandler, SubscriptionHandler
 {
   public:
     /**
@@ -66,7 +66,7 @@ class Worker : public MessageHandler, SubscriptionHandler
      * @param type The packets type
      * @param msg The actual message content
      */
-    virtual void handleMessage( iksid* from, iksubtype type, const char* msg );
+    virtual void handleIq( const char* xmlns, ikspak* pak );
 
     /**
      * reimplement this function if you want to be notified about 
@@ -77,8 +77,16 @@ class Worker : public MessageHandler, SubscriptionHandler
      */
     virtual void handleSubscription( iksid* from, iksubtype type, const char* msg );
 
+    /**
+     * Using this method you can register an object as data handler. This object gets
+     * data received from the Feeder.
+     * @param dh The object derived from DataHandler.
+     */
+    void registerDataHandler( DataHandler* dh );
+
   private:
     JClient* c;
+    DataHandler* m_dataHandler;
 
 };
 

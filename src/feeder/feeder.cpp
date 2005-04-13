@@ -26,6 +26,7 @@ using namespace std;
 Feeder::Feeder( const string username, const string resource,
                 const string password, const string server,
                 int port, bool debug )
+  : m_poll( true )
 {
   c = new JClient( username, resource, password, server, port );
   c->set_log_hook();
@@ -33,7 +34,7 @@ Feeder::Feeder( const string username, const string resource,
   c->setSasl( false );
   c->setDebug( debug );
   c->registerConnectionListener( this );
-  c->registerMessageHandler( this );
+//   c->registerIqHandler( this );
   c->setVersion( "Feeder", "0.1" );
   c->connect();
 }
@@ -73,7 +74,7 @@ void Feeder::handlePresence( iksid* from, iksubtype type, ikshowtype show, const
   }
 }
 
-void Feeder::handleMessage( iksid* from, iksubtype type, const char* msg )
+void Feeder::handleIq( const char* xmlns, ikspak* pak )
 {
   
 }

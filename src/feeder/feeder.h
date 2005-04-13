@@ -37,7 +37,7 @@ using namespace std;
  * This is the main class of the Feeder.
  * @author Jakob Schroeter <js@camaya.net>
  */
-class Feeder : public ConnectionListener, PresenceHandler, IqHandler
+class Feeder : public ConnectionListener, SubscriptionHandler, PresenceHandler, IqHandler
 {
   public:
     /**
@@ -78,7 +78,7 @@ class Feeder : public ConnectionListener, PresenceHandler, IqHandler
      * @param type The packets type
      * @param msg The actual message content
      */
-    virtual void handleMessage( iksid* from, iksubtype type, const char* msg );
+    virtual void handleIq( const char* xmlns, ikspak* pak );
 
     /**
      * called upon successful connection
@@ -93,6 +93,7 @@ class Feeder : public ConnectionListener, PresenceHandler, IqHandler
     /**
      * Using this method you can register an object as poll handler. This object is
      * polled for data to be sent to an available worker.
+     * @param ph The object derived from PollHandler.
      */
     void registerPollHandler( PollHandler* ph );
 
