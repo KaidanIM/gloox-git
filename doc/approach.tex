@@ -69,7 +69,7 @@ An addressable node can be either of the following:
 For the addressing, the resource part is optional under certain circumstances and an user is always reachable by addressing the bare (without resource part) Jabber ID. Even though an XMPP address looks a lot like an ordinary email address, the XMPP specification allows for more characters to be used in the local part, even whitespace is valid. The server part depends on domain naming rules valid in the Internet (at least if used there). This addressing scheme, including the range of valid characters in an XMPP address, is decribed in greater detail in RFC 3920: XMPP Core \cite{xmpp-core}.
 
 \subsubsection{Addressing in This Project}
-\label{sec:addr}
+\label{sec:addressing}
 \paragraph{}
 The design of Worker and Feeder Libraries does not impose any limit whatsoever on the addresses of Workers besides those already defined in RFC 3920. This means it is even possible to have a Worker use the same Jabber ID like a users Instant Messaging account, except for the resource part. An example: User Joe has got an account on server \texttt{example.org}. Their client adds a resource of \texttt{JoesChatClient}. The resulting JID, under which Joe is reachable for chatting, would be:
 \begin{center}
@@ -81,7 +81,7 @@ If Joe chose to have a Worker use the same address, the full JID would look like
 \end{center}
 Following this scheme, it is possible to run a whole cluster using only a single account. Each Worker would simply add a different resource part to the bare address to form its unique JID.
 \paragraph{}
-Further advantages of using XMPP are discussed in Section \ref{sec:discussion}.
+Further advantages of using XMPP are discussed in Section \ref{sec:extensibility}.
 
 \subsection{The XMPP Client Library}
 \label{sec:clientlib}
@@ -148,6 +148,7 @@ The function \texttt{connect()}, called in line 5 in Figure \ref{fig:usageExampl
 The following interaction with the XMPP server is completely event driven. This is why the example in Figure \ref{fig:usageExample} is not very useful as it is: An application using the Library like this will never now that anything happend to the XMPP connection. The solution is to use the event notification interfaces the Library offers.
 
 \subsection{Event Notification Interfaces}
+\label{sec:interfaces}
 \paragraph{}
 The client library offers a simple yet powerful public interface that enables programs to receive events from an XMPP server with approximately less than 10 additional lines of code. The supported events are:
 \begin{itemize}
@@ -234,6 +235,7 @@ The processing object has immediate knowledge about sender (\texttt{iksid* from}
 
 
 \subsection{The Feeder Library}
+\label{sec:feederlib}
 \paragraph{}
 The Feeder Library is separated from the Feeder -- like shown in Figure \ref{fig:feeder} -- to allow for re-use. The functionality the Feeder Library offers is completely independent from the format of the data that has to be sent over the wire and processed by the Worker. It makes direct use of the XMPP Client Library for the XMPP communication.
 
@@ -280,6 +282,7 @@ The actual poll happens by calling the \texttt{poll()} function:
 
 
 \subsection{The Worker Library}
+\label{sec:workerlib}
 \paragraph{}
 Like Feeder and Feeder Library, Worker and Worker Library are separated for easy re-use (Figure \ref{fig:worker}). Again, the Worker Library's implementation is independent from the data format received from the Feeder and passed to the Worker. Also, the algorithm used to process the data does not influence the Worker Library.
 

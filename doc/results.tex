@@ -1,12 +1,53 @@
 \section{Results and Discussion}
 \label{sec:discussion}
+
+\subsection{Implementation Status}
+
+\begin{table}[H]
+\begin{tabularx}{\linewidth}{lc}
+\toprule
+\textbf{Task} & \textbf{Status} \\
+\midrule
+\endhead
+Database           & finished \\
+XMPP Client Lib    & finished \\
+Worker             & nearly finished \\
+Feeder             & nearly finished \\
+Sample Application & started \\
+Statistics Viewer  & started \\
+Feeder Frontend    & started \\
+API Docs           & finished \\
+User Manuals       & started \\
+\bottomrule
+\end{tabularx}
+\caption{Implementation Status}
+\label{tab:impstatus}
+\end{table}
+
+
+\subsection{Extensibility}
+\label{sec:extensibility}
+
+\subsubsection{Load Balancing}
 \paragraph{}
+As discussed in Section \ref{sec:addressing} and \ref{sec:feederlib}, the Feeder Library stores the full JID for distinction between Workers. A very interesting outcome of this restriction-less design is the possibility to add more than one XMPP server to the cluster and thereby effectively create a load-balanced XMPP server cluster. The limit then becomes the memory of the machine running the Feeder -- it must store the addresses of all the Workers. But even the Feeder is -- sort of -- distributable. It is possible to have more than one Feeder running in an XMPP network.
 
-* finished components
+\subsubsection{Dynamic Cluster}
+\paragraph{}
+The design of XMPP and the Feeder Libraries allows for addition and removal, respectively, of nodes at run-time. This means that the size of the cluster is fully dynamic. Use cases include:
+\begin{itemize}
+\item A cluster distributed over the Internet. Similar to Seti@Home, users can connect to the cluster and contribute their machine's processor time at their will.
+\item In a university, school or company, machines could be added to the cluster when they are idle. As soon as a machine is needed for a different task, it is temporarily removed from the cluster. This could happen automated and without user intervention if the Worker process ran in the background all the time.
+\end{itemize}
 
-* extensibility
-Another very interesting outcome of this restriction-less design is the possibility to add more than one XMPP server to the cluster and thereby effectively create a load-balanced XMPP server cluster.
+\subsubsection{Node Location}
+\paragraph{}
+The distributability of XMPP servers and nodes as well as the use case from the previous section imply that there is no restriction on the distance between nodes and servers. Of course, greater distances add to the delay of transmissions. But the processing time of data packets is considered high enough to compensate for this.
 
-* why dynamic
+\subsection{Design Justification}
+\paragraph{}
+-- for feeder <--> feeder library communication
 
-* justification for feeder <--> feeder library communication
+\subsection{Disadvantages of XMPP}
+\paragraph{}
+-- overhead of XML
