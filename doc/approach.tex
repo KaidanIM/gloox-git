@@ -83,11 +83,7 @@ Following this scheme, it is possible to run a whole cluster using only a single
 \paragraph{}
 Further advantages of using XMPP are discussed in Section \ref{sec:discussion}.
 
-\subsection{Libraries}
-\paragraph{}
-This section gives an overview of the features of the various libraries that are part of and have been produced during this project.
-
-\subsubsection{The XMPP Client Library}
+\subsection{The XMPP Client Library}
 \label{sec:clientlib}
 \paragraph{}
 The XMPP Client Library consists of one main class and several helper classes. The main class, \texttt{JClient}, is derived from the stream handling class \texttt{Stream}, which in turn is derived from the XML parser interface \texttt{Parser} and an XML tree abstraction, \texttt{Tree}. The inheritance diagram for \texttt{JClient} is shown in Figure \ref{fig:inhjclient}.
@@ -151,7 +147,7 @@ The function \texttt{connect()}, called in line 5 in Figure \ref{fig:usageExampl
 \paragraph{}
 The following interaction with the XMPP server is completely event driven. This is why the example in Figure \ref{fig:usageExample} is not very useful as it is: An application using the Library like this will never now that anything happend to the XMPP connection. The solution is to use the event notification interfaces the Library offers.
 
-\subsubsection{Event Notification Interfaces}
+\subsection{Event Notification Interfaces}
 \paragraph{}
 The client library offers a simple yet powerful public interface that enables programs to receive events from an XMPP server with approximately less than 10 additional lines of code. The supported events are:
 \begin{itemize}
@@ -237,11 +233,76 @@ Upon an incoming Subscription stanza, \texttt{handleSubscription()} is called, w
 The processing object has immediate knowledge about sender (\texttt{iksid* from}), type (\texttt{iksubtype type}) and content (\texttt{const char *msg}) of the incoming message.
 
 
-\subsubsection{The Feeder Library}
+\subsection{The Feeder Library}
 \paragraph{}
+The Feeder Library is separated from the Feeder -- like shown in Figure \ref{fig:feeder} -- to allow for re-use. The functionality the Feeder Library offers is completely independent from the format of the data that has to be sent over the wire and processed by the Worker. It makes direct use of the XMPP Client Library for the XMPP communication.
 
-\subsubsection{The Worker Library}
 \paragraph{}
+The purpose of the Feeder Library is, on one hand side, to accept data packets from the Feeder and forward them to a Worker. On the other hand side, it receives result packets from the Workers, evaluates them, stores statistical information about the processed packet in a database and finally passes the result packet to the Feeder.
+
+\paragraph{}
+Aditionally, the Feeder Library is responsible for keeping track of available Workers. When a Worker connects to the XMPP server, it announces its availability to all other nodes that are listed in its roster -- to be exact, the XMPP server does so. Since the Feeder is on the roster of every Worker (this is a requirement), it gets notified about the newly available Worker. The addresses of all these Workers, together with their current status, are kept in a map. With every status change of a Worker this map is updated. A data packet arriving from the Feeder for distribution is sent to the first Worker available.
+
+\paragraph{}
+The inheritance diagram for the main class of the Feeder Library -- \texttt{Feeder} -- is shown in Figure \ref{fig:inhfeeder}.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics{fyp.12}
+\end{center}
+\caption{Inheritance Diagram for Class \texttt{Feeder}}
+\label{fig:inhfeeder}
+\end{figure}
+
+\texttt{Feeder} generally has to know about connection state changes so it inherits from \texttt{ConnectionListener}. Furthermore, to be able to authorise subscription requests from Workers it implements the \texttt{SubscriptionHandler} interface. Since data as well as result packets are wrapped into IQ stanzas, the \texttt{IqHandler} interface is necessary. Last but not least, \texttt{PresenceHandler} informs about state changes of the Workers.
+
+\paragraph{}
+The communication between Feeder and Feeder Library happens over a special interface following the following algorithm.
+
+\begin{enumerate}
+\item The Feeder Library starts by polling for data packets until the Feeder has no more data vailable.
+\item The Feeder starts pushing new data packets until all the available Workers are busy processing data.
+\item The Feeder Library starts polling -- see step 1.
+\end{enumerate}
+
+\paragraph{}
+It also would have been possible to use either of the methods exclusively, but for reasons of efficiency in the communication between Feeder and Feeder Library this approach was chosen. The justification is further discussed in Section \ref{sec:discussion}.
+
+\paragraph{}
+The Feeder has to implement the \texttt{PollHandler} interface and register the corresponding object by calling:
+\begin{flushleft}
+\texttt{void registerPollHandler( PollHandler* ph );}
+\end{flushleft}
+The actual poll happens by calling the \texttt{poll()} function:
+\begin{flushleft}
+\texttt{virtual char* poll() \{\};}
+\end{flushleft}
+
+
+\subsection{The Worker Library}
+\paragraph{}
+Like Feeder and Feeder Library, Worker and Worker Library are separated for easy re-use (Figure \ref{fig:worker}). Again, the Worker Library's implementation is independent from the data format received from the Feeder and passed to the Worker. Also, the algorithm used to process the data does not influence the Worker Library.
+
+\paragraph{}
+On startup, the Worker Library establishes a connection to the XMPP server and announces its availability to the Feeder. After that it just waits for a data packet to arrive. When such a packet is received, the XMPP status is immediately changed to \texttt{unavailable} to prevent further packets from being sent to this node. The packet is then passed to the Worker for processing. When the Worker finishes its processing it calls:
+\begin{flushleft}
+\texttt{void result( ResultCode code, const char* result );}
+\end{flushleft}
+The Worker Libary constructs a result packet and sends it off to the Feeder. After that, the status is changed back to \texttt{available} to let the Feeder update its map of Workers.
+
+\paragraph{}
+The inheritance diagram for the main class of the Worker Library -- \texttt{Worker} -- is shown in Figure \ref{fig:inhworker}.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics{fyp.13}
+\end{center}
+\caption{Inheritance Diagram for Class \texttt{Worker}}
+\label{fig:inhworker}
+\end{figure}
+
+\paragraph{}
+\texttt{Worker} generally has to know about connection state changes so it inherits from \texttt{ConnectionListener}. Furthermore, to be able to receive answers to its subscription requests it implements the \texttt{SubscriptionHandler} interface. Since data as well as result packets are wrapped into IQ stanzas, the \texttt{IqHandler} interface is necessary.
 
 
 \subsection{Example Programs}
