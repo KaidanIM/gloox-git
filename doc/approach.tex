@@ -284,10 +284,20 @@ The actual poll happens by calling the \texttt{poll()} function:
 \subsection{The Worker Library}
 \label{sec:workerlib}
 \paragraph{}
-Like Feeder and Feeder Library, Worker and Worker Library are separated for easy re-use (Figure \ref{fig:worker}). Again, the Worker Library's implementation is independent from the data format received from the Feeder and passed to the Worker. Also, the algorithm used to process the data does not influence the Worker Library.
+Like Feeder and Feeder Library, Worker and Worker Library are separated for easy re-use (Figure \ref{fig:worker}). Again, the Worker Library's implementation is independent from type and format of data received from the Feeder and passed to the Worker. Also, the algorithm used to process the data does not influence the Worker Library.
 
 \paragraph{}
-On startup, the Worker Library establishes a connection to the XMPP server and announces its availability to the Feeder. After that it just waits for a data packet to arrive. When such a packet is received, the XMPP status is immediately changed to \texttt{unavailable} to prevent further packets from being sent to this node. The packet is then passed to the Worker for processing. When the Worker finishes its processing it calls:
+The Worker Library offers an interface for the Worker to implement. An object derived from \texttt{DataHandler} has to be registered with the Library by calling:
+\begin{flushleft}
+\texttt{void registerDataHandler( DataHandler* dh );}
+\end{flushleft}
+A data packet is passed to the registered object by calling:
+\begin{flushleft}
+\texttt{virtual void data( const char* data ) \{\};}
+\end{flushleft}
+
+\paragraph{}
+On startup, the Worker Library establishes a connection to the XMPP server and announces its availability to the Feeder. After that it just waits for a data packet to arrive. When such a packet is received, the XMPP status is immediately changed to \texttt{unavailable} to prevent further packets from being sent to this node. The packet is then passed to the Worker for processing using the registered DataHandler. When the Worker finishes its processing it calls:
 \begin{flushleft}
 \texttt{void result( ResultCode code, const char* result );}
 \end{flushleft}
