@@ -237,7 +237,7 @@ The processing object has immediate knowledge about sender (\texttt{iksid* from}
 \subsection{The Feeder Library}
 \label{sec:feederlib}
 \paragraph{}
-The Feeder Library is separated from the Feeder -- like shown in Figure \ref{fig:feeder} -- to allow for re-use. The functionality the Feeder Library offers is completely independent from the format of the data that has to be sent over the wire and processed by the Worker. It makes direct use of the XMPP Client Library for the XMPP communication.
+The Feeder Library is separated from the Feeder -- like shown in Figure \ref{fig:feeder} -- to allow for re-use. The functionality the Feeder Library offers is completely independent from the format of the data that is sent over the wire and processed by the Worker. It makes direct use of the XMPP Client Library for the XMPP communication.
 
 \paragraph{}
 The purpose of the Feeder Library is, on one hand side, to accept data packets from the Feeder and forward them to a Worker. On the other hand side, it receives result packets from the Workers, evaluates them, stores statistical information about the processed packet in a database and finally passes the result packet to the Feeder.
