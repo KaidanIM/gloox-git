@@ -25,7 +25,9 @@
 
 
 JThread::JThread( JClient* parent )
-  : m_parent( parent ), m_cancel( false ), m_parser( m_parent->parser() )
+  : m_parent( parent ),
+    m_cancel( false ), m_over( false ),
+    m_parser( m_parent->parser() )
 {
 }
 
@@ -39,7 +41,7 @@ void JThread::run()
   int ret;
   while( ( m_parent->clientState() >= JClient::STATE_CONNECTED ) && !m_cancel ) {
     // check for data
-    ret = iks_recv( m_parser, 0 );
+    ret = iks_recv( m_parser, (m_over)?(0):(1) );
     // check for error
     if( ret != IKS_OK ) {
       switch( ret ) {
@@ -70,4 +72,9 @@ void JThread::cancel()
 {
   if( m_parent->debug() ) printf("canceling...\n");
   m_cancel = true;
+}
+
+void JThread::over()
+{
+  m_over = true;
 }

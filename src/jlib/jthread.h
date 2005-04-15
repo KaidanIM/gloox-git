@@ -56,8 +56,14 @@ class JThread : public Thread
      */
     void cancel();
 
+    /**
+     * call this function to indicate that the point of authentication has passed
+     */
+    void over();
+
   private:
     bool m_cancel;
+    bool m_over;
     JClient* m_parent;
     iksparser* m_parser;
 };

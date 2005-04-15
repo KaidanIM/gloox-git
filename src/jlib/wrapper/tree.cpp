@@ -27,48 +27,48 @@ Tree::Tree() {
   this->X = iks_new("");
 }
 
-Tree::Tree(iks *node) {
+Tree::Tree( iks *node ) {
   this->X = node;
 }
 
-Tree::Tree(ikstack *s) {
-  this->X = iks_new_within("", s);
+Tree::Tree( ikstack *s ) {
+  this->X = iks_new_within( "", s );
 }
 
-Tree::Tree(const std::string& name) {
-  this->X = iks_new(name.c_str());
+Tree::Tree( const std::string& name ) {
+  this->X = iks_new( name.c_str() );
 }
 
 Tree::~Tree() {
-  iks_delete(this->X);
+  iks_delete( this->X );
 }
 
-iks *Tree::tag(iks *node, const std::string& name) {
-  return iks_insert(node, name.c_str());
+iks *Tree::tag( iks *node, const std::string& name ) {
+  return iks_insert( node, name.c_str() );
 }
 
-iks *Tree::tag(const std::string& name) {
-  return this->tag(this->X, name);
+iks *Tree::tag( const std::string& name ) {
+  return this->tag( this->X, name );
 }
 
-iks *Tree::cdata(iks *node, const std::string& data) {
-  return iks_insert_cdata(node, data.c_str(), data.length());
+iks *Tree::cdata( iks *node, const std::string& data ) {
+  return iks_insert_cdata( node, data.c_str(), data.length() );
 }
 
-iks *Tree::cdata(const std::string& data) {
-  return this->cdata(this->X, data);
+iks *Tree::cdata( const std::string& data ) {
+  return this->cdata( this->X, data );
 }
 
-iks *Tree::cdata(const std::string& tag, const std::string& data) {
-  return this->cdata(this->tag(tag), data);
+iks *Tree::cdata( const std::string& tag, const std::string& data ) {
+  return this->cdata( this->tag(tag), data );
 }
 
-iks *Tree::attrib(iks *node, const std::string& name, const std::string& value) {
-  return iks_insert_attrib(node, name.c_str(), value.c_str());
+iks *Tree::attrib( iks *node, const std::string& name, const std::string& value ) {
+  return iks_insert_attrib( node, name.c_str(), value.c_str() );
 }
 
-iks *Tree::attrib(const std::string& name, const std::string& value) {
-  return this->attrib(this->X, name, value);
+iks *Tree::attrib( const std::string& name, const std::string& value)  {
+  return this->attrib( this->X, name, value );
 }
 
 iks *Tree::attrib(const std::string& tag, const std::string& name, const std::string& value) {

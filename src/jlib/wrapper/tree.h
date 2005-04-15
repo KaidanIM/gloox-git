@@ -30,28 +30,86 @@
 using namespace std;
 
 /**
- * documented in parser.h
+ * the namespace is documented in parser.h
  */
 namespace Iksemel
 {
   /**
-   * This class encapsulates a tree from Iksemel.
+   * This class encapsulates a XML tree from Iksemel.
    */
   class Tree
   {
     public:
+      /**
+       * Constructor.
+       * Creates an empty tree containing an empty element.
+       */
       Tree();
-      Tree( ikstack* );
-      Tree( iks* );
-      Tree( const std::string& );
+
+      /**
+       * Constructor.
+       * Creates a new element within the given iksstack.
+       * @param s The stack the root element will be bcreated in.
+       */
+      Tree( ikstack* s );
+
+      /**
+       * Constructor.
+       * Creates an empty tree and an initial elemnt from the given node.
+       * @param node The node to create the initial element from.
+       */
+      Tree( iks* node );
+
+      /**
+       * Constructor
+       * Creates an empty tree with an element with the given name.
+       * @param name The name of the element.
+       */
+      Tree( const std::string& name );
+
+      /**
+       * Destructor.
+       */
       ~Tree();
 
-      iks* tag( iks*, const std::string& );
-      iks* tag( const std::string& );
+      /**
+       * Inserts a new element into the given iks.
+       * @param node The existing node the new element will be placed in.
+       * @param name The name of the new element.
+       * @return A pointer to the newly created element.
+       * FIXME: static?
+       */
+      iks* tag( iks* node, const std::string& name );
 
-      iks* cdata( iks*, const std::string& );
-      iks* cdata( const std::string& );
-      iks* cdata( const std::string&, const std::string& );
+      /**
+       * Creates a new element within this tree.
+       * @param name The name of the new element.
+       * @return A pointer to the newly created element.
+       */
+      iks* tag( const std::string& name );
+
+      /**
+       * Inserts CDATA into the given node.
+       * @param node The node the CDATA will be inerted into.
+       * @param data The CDATA to insert.
+       * @return A pointer to the inserted CDATA.
+       */
+      iks* cdata( iks* node, const std::string& data );
+
+      /**
+       * Inserts CDATA into the tree's root element.
+       * @param data The CDATA to insert.
+       * @return A pointer to the inserted CDATA.
+       */
+      iks* cdata( const std::string& data );
+
+      /**
+       * Inserts a new node and adds CDATA to that node.
+       * @param tag The name of the new node.
+       * @param data The CDATA to insert into the new node.
+       * @return A pointer to the new CDATA.
+       */
+      iks* cdata( const std::string& tag, const std::string& data );
 
       iks* attrib( iks*, const std::string&, const std::string& );
       iks* attrib( const std::string&, const std::string& );
