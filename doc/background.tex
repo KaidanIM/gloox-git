@@ -1,19 +1,36 @@
-\section{Technical Background}% and Context}
+\section{Technical Background}
 \paragraph{}
 The project is based on a number of well-known and well-understood technologies. This section briefly introduces the most important of these core technologies.
 
 \subsection{Distributed Computing}
 \paragraph{}
-Basically, the term Distributed Computing describes technologies where more or less loosely connected machines, called nodes, work together on solving a problem. They do so by each dealing with a small fraction of the overall problem. This, of course, implies that it is possible to split the problem into smaller sub-problems that can be solved individually. Luckily, there are lots of challenges out there that meet these requirements. Accordingly, there are many projects that make use of clusters to work on such a problem. Usually, a dedicated machine takes care of assigning tasks to the nodes. The processing of the task could then even happen in a disconnected mode. Upon completion of the computation the result is delivered back to the co-ordinating master.
+Basically, the term Distributed Computing describes technologies where more or less loosely connected machines, called nodes, work together on solving a problem. They do so by each dealing with a small fraction of the overall problem. This, of course, implies that it is possible to split the problem into smaller sub-problems that can be solved individually. Luckily, there are lots of challenges out there that meet these requirements. Accordingly, there are many projects that make use of clusters to work on such a problem. Usually, a dedicated machine takes care of assigning tasks to the nodes. Upon completion of the computation the result is delivered back to the co-ordinating master.
+
+
+\subsubsection{Grid Computing}
+\paragraph{}
+A grid is a network of heterogenous machines, in contrast to a cluster, which is homogenous. That means that all kind of different platforms can become nodes of a grid. Grids can be distributed over the Internet or corporate or university networks. As a consequence, grids are higly dynamic because nodes can be added or removed at any time.
 
 \paragraph{}
-Software solutions used in this field are very problem specific in that they do not allow for adaption to any other task.
+Grids are often used to work on Grand Challenge Problems (GCP). According to \citeasnoun*{wikipedia006}, GCPs are unsolved problems and have at least the following characteristics:
+\begin{enumerate}
+\item "The problem is demonstrably hard to solve, requiring several orders-of-magnitude improvement in the capability required to solve it."
+\item "The problem can not be unsolvable. If it probably cannot be solved, then it can't be a Grand Challenge. Ideally, quantifiable measures that indicate progress toward a solution are also definable."
+\item "The solution to a Grand Challenge problem must have a significant economical and/or social impact."
+\end{enumerate}
+The following are examples of Grand Challenge Problems:
+\begin{itemize}
+\item Ecosystem Simulation
+\item Fluid Dynamics
+\item Molecular Biology
+\end{itemize}
 
 \paragraph{}
-Institutions where clusters could easily be deployed include schools, universities, corporate environments or laboratories. They usually have large numbers of computers available which are used only in the daytime and not at all at night. During those hours of less or no usage these machines can be turned into nodes of a cluster. Such a cluster would be rather static since the machines don't change their membership in the cluster. Another way to form a cluster is to deploy the Internet. Many more people and machines are reachable and can participate.
+Institutions where grids could easily be deployed include schools, universities, corporate environments or laboratories. They usually have large numbers of computers available which are used only in the daytime and not at all at night. During those hours of less or no usage these machines can be turned into nodes of a grid. A software monitoring the CPU utilisation could remove a node temporarily from the grid if the machine is used for different tasks.
 
 \paragraph{}
-A prominent example for the latter is the afore mentioned Seti@Home, short for Search for Extraterrestrial Intelligence, which tries to find patterns in noise recorded from space using radio telescopes. These patterns could give hints on other intelligent life forms in the universe.
+Another way to form a grid is to deploy the Internet. Many more people and machines are reachable and can participate. Probably the most prominent example for such a grid is Seti@Home \citeasnoun*{seti}, short for Search for Extraterrestrial Intelligence, which tries to find patterns in noise recorded from space using radio telescopes. These patterns could give hints on other intelligent life forms in the universe.
+
 
 \subsection{Extensible Markup Language (XML)}
 \paragraph{}
