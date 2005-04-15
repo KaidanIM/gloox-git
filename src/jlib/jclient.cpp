@@ -97,17 +97,17 @@ void JClient::on_stream( int type, iks* node )
               }
             } else {
               if ( m_streamFeatures & IKS_STREAM_SASL_MD5 )
-                start_sasl( IKS_SASL_DIGEST_MD5, (char *) username().c_str(),
-                            (char *) password().c_str() );
+                start_sasl( IKS_SASL_DIGEST_MD5, (char *) username().c_str(), (char *) password().c_str() );
               else if ( m_streamFeatures & IKS_STREAM_SASL_PLAIN )
-                start_sasl( IKS_SASL_PLAIN, (char *) username().c_str(),
-                            (char *) password().c_str() );
+                start_sasl( IKS_SASL_PLAIN, (char *) username().c_str(), (char *) password().c_str() );
             }
           }
         } else if ( strcmp ( "failure", iks_name ( node ) ) == 0 ) {
           if( m_debug ) printf("sasl authentication failed...\n");
+          m_state = STATE_AUTHENTICATION_FAILED;
         } else if ( strcmp ( "success", iks_name ( node ) ) == 0 ) {
           if( m_debug ) printf( "sasl initialisation successful...\n" );
+          m_state = STATE_AUTHENTICATED;
           m_authorized = true;
           header( server() );
         } else {
