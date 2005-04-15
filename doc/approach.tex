@@ -139,7 +139,7 @@ JClient::JClient( const std::string username,
 \end{figure}
 
 \paragraph{}
-Basically, a number of member variables are initialised. Most importantly, Transport Layer Security\footnote{Encryption of the communication channel.} (TLS) \cite{rfcXXX} and Simple Authentication and Security Layer\footnote{Secure Authentication even without encrypted communication channel.} (SASL) \cite{rfcYYY} are enabled (line 8). Additionally, but not shown in Figure \ref{fig:JClientConstructor}, some more XMPP features which the library supports, are enabled by the \texttt{init()} function. This includes Service Discovery\footnote{JEP-0030: Service Discovery defines methods to discover capabilities of other nodes in an XMPP network.} \cite{jep0030}.
+Basically, a number of member variables are initialised. Most importantly, Transport Layer Security\footnote{Encryption of the communication channel.} (TLS) \cite{rfc2246} and Simple Authentication and Security Layer\footnote{Secure Authentication even without encrypted communication channel.} (SASL) \cite{rfc2222} are enabled (line 8). Additionally, but not shown in Figure \ref{fig:JClientConstructor}, some more XMPP features which the library supports, are enabled by the \texttt{init()} function. This includes Service Discovery\footnote{JEP-0030: Service Discovery defines methods to discover capabilities of other nodes in an XMPP network.} \cite{jep0030}.
 
 \paragraph{}
 The function \texttt{connect()}, called in line 5 in Figure \ref{fig:usageExample}, establishes the connection to the XMPP server and creates a new thread that receives incoming TCP/IP packets and hands them to the XML parser of Iksemel.
