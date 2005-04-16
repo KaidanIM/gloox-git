@@ -349,6 +349,12 @@ class JClient : public Stream
     void registerIqHandler( IqHandler* ih, std::string xmlns );
 
     /**
+     * Registers @c ih as object that receives all Iq packet notifications.
+     * @param ih The object to receive Iq packet notifications.
+     */
+    void registerIqHandler( IqHandler* ih );
+
+    /**
      * Registers @c mh as object that receives Message packet notifications.
      * @param mh The object to receive Message packet notifications.
      */
@@ -374,10 +380,16 @@ class JClient : public Stream
     void removeConnectionListener( ConnectionListener* cl );
 
     /**
-     * Removes the hzandler for the given namespace from the list of Iq handlers.
+     * Removes the handler for the given namespace from the list of Iq handlers.
      * @param xmlns The namespace to remove from the list.
      */
-    void removeIqHandler( std::string mlns );
+    void removeIqHandler( std::string xmlns );
+
+    /**
+     * Removes the generic IQ handler from the list of generic IQ handlers.
+     * @param ih The iQHandler to remove.
+     */
+    void removeIqHandler( IqHandler* ih );
 
     /**
      * Removes the given object from the list of message handlers.
@@ -418,6 +430,7 @@ class JClient : public Stream
 
     typedef list<ConnectionListener*>     ConnectionListenerList;
     typedef map<std::string, IqHandler*>  IqHandlerMap;
+    typedef list<IqHandler*>              IqHandlerList;
     typedef list<MessageHandler*>         MessageHandlerList;
     typedef list<PresenceHandler*>        PresenceHandlerList;
     typedef list<SubscriptionHandler*>    SubscriptionHandlerList;
@@ -460,7 +473,8 @@ class JClient : public Stream
     state m_state;
 
     ConnectionListenerList  m_connectionListeners;
-    IqHandlerMap            m_iqHandlers;
+    IqHandlerMap            m_iqNSHandlers;
+    IqHandlerList           m_iqHandlers;
     MessageHandlerList      m_messageHandlers;
     PresenceHandlerList     m_presenceHandlers;
     SubscriptionHandlerList m_subscriptionHandlers;
