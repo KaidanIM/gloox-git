@@ -22,7 +22,8 @@
 
 
 Roster::Roster( JClient* parent )
-  : m_parent( parent ), m_rosterComplete( false )
+  : m_parent( parent ), m_rosterComplete( false ),
+  m_rosterListener( 0 )
 {
   m_parent->registerIqHandler( this, XMLNS_ROSTER );
   m_parent->registerPresenceHandler( this );
@@ -64,7 +65,9 @@ void Roster::handleIq( const char* xmlns, ikspak* pak )
         y = iks_next_tag( y );
       }
     }
-    m_rosterComplete = true;
+    if( m_rosterListener )
+      m_rosterListener->roster( m_roster );
+
     m_parent->sendPresence();
   }
 }
@@ -73,6 +76,9 @@ void Roster::handlePresence( iksid* from, iksubtype type, ikshowtype show, const
 {
   printf( "item %s is now %d\n", from->full, show );
   m_roster[from->full] = show;
+
+  if( m_rosterListener )
+    m_rosterListener->itemChanged( from->full, show );
 }
 
 void Roster::subscribe( const string& jid, const string& msg )
@@ -82,6 +88,53 @@ void Roster::subscribe( const string& jid, const string& msg )
     iks* x = iks_make_s10n( IKS_TYPE_SUBSCRIBE, jid.c_str(), msg.c_str() );
     m_parent->send( x );
   }
+}
+
+void Roster::handleSubscription( iksid* from, iksubtype type, const char* msg )
+{
+  switch( type )
+  {
+    case IKS_TYPE_SUBSCRIBE:
+      if( m_rosterListener )
+        if ( m_rosterListener->subscriptionRequest( from->full, msg ) )
+          {
+            iks* x = iks_make_s10n( IKS_TYPE_SUBSCRIBED, from->full, "ok" );
+            m_parent->send( x );
+          }
+      break;
+    case IKS_TYPE_SUBSCRIBED:
+      if( m_rosterListener )
+        m_rosterListener->itemAdded( from->full );
+      break;
+    case IKS_TYPE_UNSUBSCRIBE:
+    {
+      iks* y = iks_make_s10n( IKS_TYPE_UNSUBSCRIBE, from->full, "ok" );
+      m_parent->send( y );
+
+      y = iks_make_iq( IKS_TYPE_SET, XMLNS_ROSTER );
+      iks* z = iks_first_tag( y );
+      iks* a = iks_insert( z, "item" );
+      iks_insert_attrib( a, "jid", from->partial );
+      iks_insert_attrib( a, "subscription", "remove" );
+      m_parent->send( y );
+      break;
+    }
+    case IKS_TYPE_UNSUBSCRIBED:
+      if( m_rosterListener )
+        m_rosterListener->itemRemoved( from->full );
+      break;
+  }
+}
+
+void Roster::unsubscribe( const string& jid, const string& msg )
+{
+//   if( m_roster.find( jid ) )
+  {
+    iks* x = iks_make_s10n( IKS_TYPE_UNSUBSCRIBE, jid.c_str(), msg.c_str() );
+    m_parent->send( x );
+  }
+  if( m_rosterListener )
+    m_rosterListener->itemRemoved( jid );
 }
 
 void Roster::add( const string& jid, int status)

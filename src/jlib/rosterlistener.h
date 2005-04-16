@@ -55,6 +55,13 @@ class RosterListener
      * @param status The item's new status.
      */
     virtual void itemChanged( const string& jid, int status ) {};
+
+    /**
+     * This function is called when an entity wishes to subscribe to this entities presence.
+     * @param jid The item's address.
+     * @param msg The message sent along with the request.
+     */
+    virtual bool subscriptionRequest( const string& jid, const string& msg ) {};
 };
 
 #endif // ROSTERLISTENER_H__
