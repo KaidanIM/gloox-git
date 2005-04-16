@@ -26,12 +26,12 @@ class InfoHandler
     /**
      * This function is called whenever a connection has been successfully established.
      */
-    void connected() {};
+    virtual void connected() {};
 
     /**
      * This function is called whenever a connection has ended.
      */
-    void disconnected() {};
+    virtual void disconnected() {};
 
 };
 

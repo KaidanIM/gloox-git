@@ -64,6 +64,11 @@ class Worker : public ConnectionListener, IqHandler, SubscriptionHandler
     virtual ~Worker();
 
     /**
+     * Initiates the connection to the XMPP server.
+     */
+    void connect();
+
+    /**
      * reimplement this function if you want to be notified about 
      * incoming messages
      * @param from The sender's jid

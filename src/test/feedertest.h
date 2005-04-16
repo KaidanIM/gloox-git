@@ -7,6 +7,8 @@
 #ifndef FEEDERTEST_H__
 #define FEEDERTEST_H__
 
+#include "../feeder/infohandler.h"
+
 #include <string>
 using namespace std;
 
@@ -17,7 +19,7 @@ class Feeder;
  * @author Jakob Schroeter <js@camaya.net>
  */
 
-class FeederTest
+class FeederTest : public InfoHandlerFeeder
 {
 
   public:
@@ -35,6 +37,16 @@ class FeederTest
      * Start the programm with this function.
      */
     void start();
+
+    /**
+     * reimplemented from InfoHandlerFeeder
+     */
+    virtual void connected();
+
+    /**
+     * reimplemented from InfoHandlerFeeder
+     */
+    virtual void disconnected();
 
   private:
     Feeder* c;

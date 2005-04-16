@@ -29,5 +29,17 @@ FeederTest::~FeederTest()
 
 void FeederTest::start()
 {
-  c = new Feeder( "mailmon", "mail", "test", "jabber.cc" );
+  c = new Feeder( "js", "feeder", "mYP4ssw0rd", "camaya.net" );
+  c->registerInfoHandler( this );
+  c->connect();
+}
+
+void FeederTest::connected()
+{
+  printf(" connected\n" );
+}
+
+void FeederTest::disconnected()
+{
+  printf( "disconnected\n" );
 }

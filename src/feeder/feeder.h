@@ -63,6 +63,11 @@ class Feeder : public ConnectionListener, SubscriptionHandler, PresenceHandler, 
     virtual ~Feeder();
 
     /**
+     * Initiates the connection to the XMPP server.
+     */
+    void connect();
+
+    /**
      * Use this function to push data. If a Worker is available, data is pushed.
      * @param data is passed to it for processing
      * @return Returns false if no Worker is available. True otherwise.
