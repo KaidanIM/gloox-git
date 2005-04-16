@@ -322,6 +322,7 @@ class JClient : public Stream
     /**
      * Send the initial Presence. This can be done only once after
      * a connection is established.
+     * TODO: Enhance to allow for all presence types to be sent.
      */
     void sendPresence();
 
