@@ -174,12 +174,6 @@ class JClient : public Stream
      */
     int port()             { return m_port; };
 
-    /**
-     * Returns the current status of AutoPresence.
-     * @return The current AutoPresence status.
-     */
-    bool autoPresence()    { return m_autoPresence; };
-
     // FIXME: setters have to update each other, e.g. username, server, resource --> jid
     /**
      * Sets the username to use to connect to the XMPP server.
@@ -324,6 +318,12 @@ class JClient : public Stream
      * @param x The xml data.
      */
     void send( iks* x );
+
+    /**
+     * Send the initial Presence. This can be done only once after
+     * a connection is established.
+     */
+    void sendPresence();
 
     /**
      * Sends the given data to the given jid as a message.

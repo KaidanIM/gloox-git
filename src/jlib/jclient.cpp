@@ -31,7 +31,7 @@ JClient::JClient()
   : m_username( 0 ), m_resource( 0 ), m_password( 0 ),
   m_server( 0 ), m_port( 0 ), m_thread( 0 ),
   m_tls( true ), m_sasl( true ),
-  m_autoPresence( true ), m_manageRoster( true ),
+  m_autoPresence( false ), m_manageRoster( true ),
   m_handleDiscoInfo( true ), m_handleDiscoItems( true ),
   m_idCount( 0 ), m_roster( 0 )
 {
@@ -43,7 +43,7 @@ JClient::JClient( const std::string username, const std::string resource, const 
   : m_username( username ), m_resource( resource ), m_password( password ),
   m_server( server ), m_port( port ), m_thread( 0 ),
   m_tls( true ), m_sasl( true ),
-  m_autoPresence( true ), m_manageRoster( true ),
+  m_autoPresence( false ), m_manageRoster( true ),
   m_handleDiscoInfo( true ), m_handleDiscoItems( true ),
   m_idCount( 0 ), m_roster( 0 )
 {
@@ -313,6 +313,12 @@ void JClient::send( iks* x )
   iks_free( x );
 }
 
+void JClient::sendPresence()
+{
+  iks* x = iks_make_pres( IKS_SHOW_AVAILABLE, "online" );
+  send( x );
+}
+
 void JClient::send( const char* jid, const char* data )
 {
   iks* x = iks_make_msg( IKS_TYPE_NONE, jid, data );
@@ -405,6 +411,11 @@ void JClient::notifyOnConnect()
   {
     m_roster = new Roster( this );
     m_roster->fill();
+  }
+
+  if( m_autoPresence )
+  {
+    sendPresence();
   }
 
   ConnectionListenerList::const_iterator it = m_connectionListeners.begin();
@@ -514,12 +525,6 @@ void JClient::notifyMessageHandlers( iksid* from, iksubtype type, const char* ms
 void authHook( JClient* stream, ikspak* pak )
 {
   if( stream->debug() ) printf("authHook\n");
-  if( stream->autoPresence() )
-  {
-    iks* x = iks_make_pres( IKS_SHOW_AVAILABLE, "online" );
-    stream->send( x );
-  }
-
   stream->notifyOnConnect();
 }
 
