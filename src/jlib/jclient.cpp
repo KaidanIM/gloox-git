@@ -295,12 +295,6 @@ void JClient::connect()
     }
   }
 
-  if( m_manageRoster )
-  {
-    m_roster = new Roster( this );
-    m_roster->fill();
-  }
-
   m_thread->join();
 }
 
@@ -402,6 +396,12 @@ void JClient::removeConnectionListener( ConnectionListener* cl )
 
 void JClient::notifyOnConnect()
 {
+  if( m_manageRoster )
+  {
+    m_roster = new Roster( this );
+    m_roster->fill();
+  }
+
   ConnectionListenerList::const_iterator it = m_connectionListeners.begin();
   for( it; it != m_connectionListeners.end(); it++ ) {
     (*it)->onConnect();
