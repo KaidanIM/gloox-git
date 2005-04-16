@@ -42,7 +42,7 @@ FeederTest::~FeederTest()
 
 void FeederTest::start()
 {
-  c = new Feeder( "jline", "feeder", "jline", "camaya.net" );
+  c = new Feeder( "remon", "feeder", "remon", "camaya.net" );
   c->registerInfoHandler( this );
   c->connect();
 }

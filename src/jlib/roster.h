@@ -20,6 +20,7 @@
 #ifndef ROSTER_H__
 #define ROSTER_H__
 
+#include "presencehandler.h"
 #include "iqhandler.h"
 #include "jclient.h"
 
@@ -27,7 +28,7 @@
 #include <string>
 using namespace std;
 
-class Roster : public IqHandler
+class Roster : public IqHandler, PresenceHandler
 {
   public:
     typedef map<const string, int> RosterMap;
@@ -60,6 +61,11 @@ class Roster : public IqHandler
      * Reimplemented from IqHandler.
      */
     virtual void handleIq( const char* xmlns, ikspak* pak );
+
+    /**
+     * Reimplemented from PresenceHandler.
+     */
+    virtual void handlePresence( iksid* from, iksubtype type, ikshowtype show, const char* msg );
 
     /**
      * Use this function to subscribe to a new JID.

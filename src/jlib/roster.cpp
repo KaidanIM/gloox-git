@@ -24,6 +24,7 @@ Roster::Roster( JClient* parent )
   : m_parent( parent )
 {
   m_parent->registerIqHandler( this, XMLNS_ROSTER );
+  m_parent->registerPresenceHandler( this );
 }
 
 Roster::~Roster()
@@ -62,7 +63,14 @@ void Roster::handleIq( const char* xmlns, ikspak* pak )
         y = iks_next_tag( y );
       }
     }
+    m_parent->sendPresence();
   }
+}
+
+void Roster::handlePresence( iksid* from, iksubtype type, ikshowtype show, const char* msg )
+{
+  printf( "item %s is now %d\n", from->full, show );
+  m_roster[from->full] = show;
 }
 
 void Roster::add( const string& jid)

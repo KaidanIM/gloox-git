@@ -42,7 +42,7 @@ WorkerTest::~WorkerTest()
 
 void WorkerTest::start()
 {
-  c = new Worker( "jline", "worker01", "jline", "camaya.net" );
+  c = new Worker( "remon", "worker01", "remon", "camaya.net" );
   c->registerInfoHandler( this );
   c->connect();
 }
