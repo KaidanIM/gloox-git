@@ -20,13 +20,14 @@
 #ifndef ROSTER_H__
 #define ROSTER_H__
 
-#include "presencehandler.h"
-#include "iqhandler.h"
-#include "jclient.h"
-
 #include <map>
 #include <string>
 using namespace std;
+
+class JClient;
+class IqHandler;
+class RosterListener;
+class PresenceHandler;
 
 /**
  * A Jabber/XMPP Roster.
@@ -40,7 +41,7 @@ class Roster : public IqHandler, PresenceHandler
     /**
      * Constructor.
      * Creates an empty Roster.
-     * @param parent The @c JClient that is used for communication.
+     * @param parent The @c JClient which is used for communication.
      */
     Roster( JClient* parent );
 
@@ -74,14 +75,25 @@ class Roster : public IqHandler, PresenceHandler
     /**
      * Use this function to subscribe to a new JID.
      * @param jid The address to subscribe to.
+     * @param msg The reason sent along with the subscription request.
      */
     void subscribe( const string& jid, const string& msg );
+
+    /**
+     * Register @c rl as object that receives updates on roster operations.
+     * @param rl The object that receives roster updates.
+     */
+    void registerRosterListener( RosterListener* rl );
 
   private:
     void add( const string& jid, int status);
 
     RosterMap m_roster;
     JClient* m_parent;
+
+    RosterListener* m_rosterListener;
+
+    bool m_rosterComplete;
 
 };
 

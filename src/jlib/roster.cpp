@@ -17,11 +17,12 @@
 */
 
 
+#include "jclient.h"
 #include "roster.h"
 
 
 Roster::Roster( JClient* parent )
-  : m_parent( parent )
+  : m_parent( parent ), m_rosterComplete( false )
 {
   m_parent->registerIqHandler( this, XMLNS_ROSTER );
   m_parent->registerPresenceHandler( this );
@@ -63,6 +64,7 @@ void Roster::handleIq( const char* xmlns, ikspak* pak )
         y = iks_next_tag( y );
       }
     }
+    m_rosterComplete = true;
     m_parent->sendPresence();
   }
 }
@@ -75,11 +77,19 @@ void Roster::handlePresence( iksid* from, iksubtype type, ikshowtype show, const
 
 void Roster::subscribe( const string& jid, const string& msg )
 {
-  iks* x = iks_make_s10n( IKS_TYPE_SUBSCRIBE, jid.c_str(), msg.c_str() );
-  m_parent->send( x );
+//   if( m_roster.find( jid ) )
+  {
+    iks* x = iks_make_s10n( IKS_TYPE_SUBSCRIBE, jid.c_str(), msg.c_str() );
+    m_parent->send( x );
+  }
 }
 
 void Roster::add( const string& jid, int status)
 {
   m_roster[jid] = status;
+}
+
+void Roster::registerRosterListener( RosterListener* rl )
+{
+  m_rosterListener = rl;
 }
