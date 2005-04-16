@@ -20,6 +20,9 @@
 #ifndef COMMON_H__
 #define COMMON_H__
 
+#define XMLNS_IQ_DATA   "xmppgrid:data"
+#define XMLNS_IQ_RESULT "xmppgrid:result"
+
 /**
  * Describes the current connection status.
  */

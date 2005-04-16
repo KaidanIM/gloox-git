@@ -26,7 +26,8 @@ using namespace std;
 Feeder::Feeder( const string username, const string resource,
                 const string password, const string server,
                 int port, bool debug )
-  : m_poll( true )
+  : m_poll( true ), m_infoHandler( 0 ),
+  m_pollHandler( 0 )
 {
   c = new JClient( username, resource, password, server, port );
   c->set_log_hook();
@@ -34,7 +35,8 @@ Feeder::Feeder( const string username, const string resource,
   c->setSasl( false );
   c->setDebug( debug );
   c->registerConnectionListener( this );
-//   c->registerIqHandler( this );
+  c->registerIqHandler( this, XMLNS_IQ_DATA );
+  c->registerIqHandler( this, XMLNS_IQ_RESULT );
   c->setVersion( "Feeder", "0.1" );
   c->connect();
 }
@@ -76,15 +78,31 @@ void Feeder::handlePresence( iksid* from, iksubtype type, ikshowtype show, const
 
 void Feeder::handleIq( const char* xmlns, ikspak* pak )
 {
-  
+  if( strncmp( XMLNS_IQ_DATA, xmlns, strlen( XMLNS_IQ_DATA ) ) == 0 )
+  {
+    
+  }
+  else if( strncmp( XMLNS_IQ_RESULT, xmlns, strlen( XMLNS_IQ_RESULT ) ) == 0 )
+  {
+    
+  }
+  else
+    printf( "unhandled xmlns: %s\n", xmlns );
+}
+
+void Feeder::registerInfoHandler( InfoHandlerFeeder* ih )
+{
+  m_infoHandler = ih;
 }
 
 void Feeder::onConnect()
 {
-  
+  if( m_infoHandler )
+    m_infoHandler->connected();
 }
 
 void Feeder::onDisconnect()
 {
-  
+  if( m_infoHandler )
+    m_infoHandler->disconnected();
 }
