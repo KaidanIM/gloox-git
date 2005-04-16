@@ -121,14 +121,6 @@ int Stream::send(const std::string& xmlstr) {
 	return this->send(this->P, xmlstr);
 }
 
-void Stream::no_version(iksparser *prs, bool flag) {
-	iks_no_version(prs, flag);
-}
-
-void Stream::no_version(bool flag) {
-	this->no_version(this->P, flag);
-}
-
 int Stream::header(iksparser *prs, const std::string& to) {
 	return iks_send_header(prs, to.c_str());
 }

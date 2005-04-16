@@ -54,7 +54,6 @@ JClient::~JClient()
 
 void JClient::init()
 {
-  no_version( false );
   setFeature( "jabber:iq:version" );
   setFeature( "http://jabber.org/protocol/disco#info" );
   setFeature( "http://jabber.org/protocol/disco#items" );
