@@ -19,6 +19,8 @@
 
 #include "jclient.h"
 #include "jthread.h"
+#include "roster.h"
+
 
 #include <iostream>
 
@@ -31,7 +33,7 @@ JClient::JClient()
   m_tls( true ), m_sasl( true ),
   m_autoPresence( true ),
   m_handleDiscoInfo( true ), m_handleDiscoItems( true ),
-  m_idCount( 0 )
+  m_idCount( 0 ), m_manageRoster( true )
 {
   init();
 }
@@ -43,7 +45,7 @@ JClient::JClient( const std::string username, const std::string resource, const 
   m_tls( true ), m_sasl( true ),
   m_autoPresence( true ),
   m_handleDiscoInfo( true ), m_handleDiscoItems( true ),
-  m_idCount( 0 )
+  m_idCount( 0 ), m_manageRoster( true )
 {
   init();
 }
@@ -169,6 +171,11 @@ void JClient::disableDiscoItems()
   m_handleDiscoItems = false;
 }
 
+void JClient::disableRosterManagement()
+{
+  m_manageRoster = false;
+}
+
 void JClient::getDiscoInfo( const char* to )
 {
   std::string id = getID();
@@ -286,6 +293,12 @@ void JClient::connect()
     {
 //       createAccount();
     }
+  }
+
+  if( m_manageRoster )
+  {
+    m_roster = new Roster( this );
+    m_roster->fill();
   }
 
   m_thread->join();
