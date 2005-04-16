@@ -345,6 +345,11 @@ class JClient : public Stream
     void disconnect();
 
     /**
+     * This function gives access to the @c Roster object.
+     * @return A pointer to the Roster.
+     */
+    Roster* roster();
+    /**
      * Registers @c cl as object that receives connection notifications.
      * @param cl The object to receive connection notifications.
      */

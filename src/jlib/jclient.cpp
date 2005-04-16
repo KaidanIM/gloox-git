@@ -31,9 +31,9 @@ JClient::JClient()
   : m_username( 0 ), m_resource( 0 ), m_password( 0 ),
   m_server( 0 ), m_port( 0 ), m_thread( 0 ),
   m_tls( true ), m_sasl( true ),
-  m_autoPresence( true ),
+  m_autoPresence( true ), m_manageRoster( true )
   m_handleDiscoInfo( true ), m_handleDiscoItems( true ),
-  m_idCount( 0 ), m_manageRoster( true )
+  m_idCount( 0 ), m_roster( 0 )
 {
   init();
 }
@@ -43,9 +43,9 @@ JClient::JClient( const std::string username, const std::string resource, const 
   : m_username( username ), m_resource( resource ), m_password( password ),
   m_server( server ), m_port( port ), m_thread( 0 ),
   m_tls( true ), m_sasl( true ),
-  m_autoPresence( true ),
+  m_autoPresence( true ), m_manageRoster( true )
   m_handleDiscoInfo( true ), m_handleDiscoItems( true ),
-  m_idCount( 0 ), m_manageRoster( true )
+  m_idCount( 0 ), m_roster( 0 )
 {
   init();
 }
@@ -332,6 +332,11 @@ void JClient::setClientState( state s )
 iksparser* JClient::parser()
 {
   return this->P;
+}
+
+Roster* JClient::roster()
+{
+  return m_roster;
 }
 
 void JClient::registerPresenceHandler( PresenceHandler* ph )
