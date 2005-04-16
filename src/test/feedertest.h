@@ -48,6 +48,11 @@ class FeederTest : public InfoHandlerFeeder
      */
     virtual void disconnected();
 
+    /**
+     * reimplemented from InfoHandlerFeeder
+     */
+    virtual void rosterChanged( iksid* from, ikshowtype show );
+
   private:
     Feeder* c;
 };

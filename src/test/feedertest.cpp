@@ -43,3 +43,8 @@ void FeederTest::disconnected()
 {
   printf( "disconnected\n" );
 }
+
+void FeederTest::rosterChanged( iksid* from, ikshowtype show )
+{
+  printf( "someone special: %s: %d\n", from->full, show );
+}

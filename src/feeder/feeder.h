@@ -120,7 +120,7 @@ class Feeder : public ConnectionListener, SubscriptionHandler, PresenceHandler, 
     /**
      * Holds JID/status pairs.
      */
-    typedef map<const char*, char*> PresenceList;
+    typedef map<const char*, int> PresenceList;
 
   private:
     JClient* c;

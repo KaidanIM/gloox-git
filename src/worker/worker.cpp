@@ -52,6 +52,16 @@ void Worker::connect()
 
 void Worker::handleIq( const char* xmlns, ikspak* pak )
 {
+  if( iks_strncmp( XMLNS_IQ_DATA, xmlns, iks_strlen( XMLNS_IQ_DATA ) ) == 0 )
+  {
+    
+  }
+  else if( iks_strncmp( XMLNS_IQ_RESULT, xmlns, iks_strlen( XMLNS_IQ_RESULT ) ) == 0 )
+  {
+    
+  }
+  else
+    printf( "unhandled xmlns: %s\n", xmlns );
 }
 
 void Worker::handleSubscription( iksid* from, iksubtype type, const char* msg )
