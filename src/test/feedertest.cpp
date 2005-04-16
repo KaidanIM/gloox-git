@@ -29,14 +29,14 @@ FeederTest::~FeederTest()
 
 void FeederTest::start()
 {
-  c = new Feeder( "js", "feeder", "mYP4ssw0rd", "camaya.net" );
+  c = new Feeder( "jline", "feeder", "jline", "camaya.net" );
   c->registerInfoHandler( this );
   c->connect();
 }
 
 void FeederTest::connected()
 {
-  printf(" connected\n" );
+  printf( "connected\n" );
 }
 
 void FeederTest::disconnected()

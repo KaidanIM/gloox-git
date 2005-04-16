@@ -7,6 +7,8 @@
 #ifndef WORKERTEST_H__
 #define WORKERTEST_H__
 
+#include "../worker/infohandler.h"
+
 #include <string>
 using namespace std;
 
@@ -17,7 +19,7 @@ class Worker;
  * @author Jakob Schroeter <js@camaya.net>
  */
 
-class WorkerTest
+class WorkerTest : public InfoHandlerWorker
 {
 
   public:
@@ -35,6 +37,16 @@ class WorkerTest
      * Start the programm with this function.
      */
     void start();
+
+    /**
+     * reimplemented from InfoHandlerFeeder
+     */
+    virtual void connected();
+
+    /**
+     * reimplemented from InfoHandlerFeeder
+     */
+    virtual void disconnected();
 
   private:
     Worker* c;
