@@ -314,7 +314,7 @@ class JClient : public Stream
 
     /**
      * Sends the given xml via the established connection.
-     * @note @ref x is automatically free()'ed.
+     * @note x is automatically free()'ed.
      * @param x The xml data.
      */
     void send( iks* x );

@@ -22,6 +22,11 @@
 
 #include <iksemel.h>
 
+/**
+ * Vitual interface.
+ * This interface acts as a forwarder for other interfaces, e.g. ConnectionListener.
+ * It is an generic interface that can be enhanced for more special need.
+ */
 class InfoHandler
 {
   public:
