@@ -346,7 +346,7 @@ class JClient : public Stream
      * @param ih The object to receive Iq packet notifications.
      * @param xmlns The namespace the object handles.
      */
-    void registerIqHandler( IqHandler* ih, std::string xmlns );
+    void registerIqHandler( IqHandler* ih, const char* xmlns );
 
     /**
      * Registers @c ih as object that receives all Iq packet notifications.
@@ -383,7 +383,7 @@ class JClient : public Stream
      * Removes the handler for the given namespace from the list of Iq handlers.
      * @param xmlns The namespace to remove from the list.
      */
-    void removeIqHandler( std::string xmlns );
+    void removeIqHandler( const char* xmlns );
 
     /**
      * Removes the generic IQ handler from the list of generic IQ handlers.
@@ -429,7 +429,7 @@ class JClient : public Stream
     friend void iqHook(JClient* stream, ikspak* pak);
 
     typedef list<ConnectionListener*>     ConnectionListenerList;
-    typedef map<std::string, IqHandler*>  IqHandlerMap;
+    typedef map<const char*, IqHandler*>  IqHandlerMap;
     typedef list<IqHandler*>              IqHandlerList;
     typedef list<MessageHandler*>         MessageHandlerList;
     typedef list<PresenceHandler*>        PresenceHandlerList;
