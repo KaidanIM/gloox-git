@@ -68,7 +68,7 @@ void Feeder::registerPollHandler( PollHandler* ph )
 void Feeder::handlePresence( iksid* from, iksubtype type, ikshowtype show, const char* msg )
 {
   m_presence[from->full] = (char*) msg;
-  if ( ( strncmp( msg, "available", 9 ) == 0 ) && m_poll )
+  if ( ( iks_strncmp( msg, "available", 9 ) == 0 ) && m_poll )
   {
     char* data = m_pollHandler->poll();
     if ( data )
@@ -78,11 +78,11 @@ void Feeder::handlePresence( iksid* from, iksubtype type, ikshowtype show, const
 
 void Feeder::handleIq( const char* xmlns, ikspak* pak )
 {
-  if( strncmp( XMLNS_IQ_DATA, xmlns, strlen( XMLNS_IQ_DATA ) ) == 0 )
+  if( iks_strncmp( XMLNS_IQ_DATA, xmlns, iks_strlen( XMLNS_IQ_DATA ) ) == 0 )
   {
     
   }
-  else if( strncmp( XMLNS_IQ_RESULT, xmlns, strlen( XMLNS_IQ_RESULT ) ) == 0 )
+  else if( iks_strncmp( XMLNS_IQ_RESULT, xmlns, iks_strlen( XMLNS_IQ_RESULT ) ) == 0 )
   {
     
   }

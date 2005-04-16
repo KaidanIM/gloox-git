@@ -34,7 +34,8 @@ Worker::Worker( const string username, const string resource,
   c->setTls( false );
   c->setSasl( false );
   c->setDebug( debug );
-//   c->registerIqHandler( this );
+  c->registerIqHandler( this, XMLNS_IQ_DATA );
+  c->registerIqHandler( this, XMLNS_IQ_RESULT );
   c->registerSubscriptionHandler( this );
   c->setVersion( "Worker", "0.1" );
   c->connect();
