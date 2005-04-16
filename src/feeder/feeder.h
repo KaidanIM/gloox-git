@@ -84,10 +84,7 @@ class Feeder : public ConnectionListener, SubscriptionHandler, PresenceHandler, 
     virtual void handlePresence( iksid* from, iksubtype type, ikshowtype show, const char* msg );
 
     /**
-     * Called for incoming messages.
-     * @param from The sender's jid.
-     * @param type The packets type.
-     * @param msg The actual message content.
+     * Reimplemented from IqHandler.
      */
     virtual void handleIq( const char* xmlns, ikspak* pak );
 

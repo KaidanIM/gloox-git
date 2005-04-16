@@ -28,6 +28,10 @@
 #include <string>
 using namespace std;
 
+/**
+ * A Jabber/XMPP Roster.
+ * This class implements a roster. It takes care of changing presence, subscriptions, etc.
+ */
 class Roster : public IqHandler, PresenceHandler
 {
   public:
@@ -71,7 +75,7 @@ class Roster : public IqHandler, PresenceHandler
      * Use this function to subscribe to a new JID.
      * @param jid The address to subscribe to.
      */
-    void add( const string& jid );
+    void subscribe( const string& jid, const string& msg );
 
   private:
     void add( const string& jid, int status);

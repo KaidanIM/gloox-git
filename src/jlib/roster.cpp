@@ -73,9 +73,10 @@ void Roster::handlePresence( iksid* from, iksubtype type, ikshowtype show, const
   m_roster[from->full] = show;
 }
 
-void Roster::add( const string& jid)
+void Roster::subscribe( const string& jid, const string& msg )
 {
-  
+  iks* x = iks_make_s10n( IKS_TYPE_SUBSCRIBE, jid.c_str(), msg.c_str() );
+  m_parent->send( x );
 }
 
 void Roster::add( const string& jid, int status)
