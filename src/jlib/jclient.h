@@ -24,6 +24,7 @@
 #include "iqhandler.h"
 #include "messagehandler.h"
 #include "presencehandler.h"
+#include "rosterlistener.h"
 #include "subscriptionhandler.h"
 
 #include "wrapper/stream.h"
@@ -350,6 +351,7 @@ class JClient : public Stream
      * @return A pointer to the Roster.
      */
     Roster* roster();
+
     /**
      * Registers @c cl as object that receives connection notifications.
      * @param cl The object to receive connection notifications.
