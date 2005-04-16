@@ -33,7 +33,7 @@ Feeder::Feeder( const string username, const string resource,
   c->set_log_hook();
   c->setTls( false );
   c->setSasl( false );
-  c->setDebug( false /*debug*/ );
+  c->setDebug( debug );
   c->registerConnectionListener( this );
   c->registerIqHandler( this, XMLNS_IQ_DATA );
   c->registerIqHandler( this, XMLNS_IQ_RESULT );
