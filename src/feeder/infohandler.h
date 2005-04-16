@@ -24,7 +24,6 @@
 
 class InfoHandlerFeeder : public InfoHandler
 {
-  public:
 };
 
 #endif // INFOHANDLERFEEDER_H__

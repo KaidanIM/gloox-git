@@ -33,17 +33,21 @@ Feeder::Feeder( const string username, const string resource,
   c->set_log_hook();
   c->setTls( false );
   c->setSasl( false );
-  c->setDebug( debug );
+  c->setDebug( false /*debug*/ );
   c->registerConnectionListener( this );
   c->registerIqHandler( this, XMLNS_IQ_DATA );
   c->registerIqHandler( this, XMLNS_IQ_RESULT );
   c->setVersion( "Feeder", "0.1" );
-  c->connect();
 }
 
 Feeder::~Feeder()
 {
   
+}
+
+void Feeder::connect()
+{
+  c->connect();
 }
 
 bool Feeder::push( const char* data )
@@ -97,8 +101,12 @@ void Feeder::registerInfoHandler( InfoHandlerFeeder* ih )
 
 void Feeder::onConnect()
 {
+  printf("in onconnect\n");
   if( m_infoHandler )
+  {
+    printf("callingh conencted()\n");
     m_infoHandler->connected();
+  }
 }
 
 void Feeder::onDisconnect()

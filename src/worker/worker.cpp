@@ -38,12 +38,16 @@ Worker::Worker( const string username, const string resource,
   c->registerIqHandler( this, XMLNS_IQ_RESULT );
   c->registerSubscriptionHandler( this );
   c->setVersion( "Worker", "0.1" );
-  c->connect();
 }
 
 Worker::~Worker()
 {
   
+}
+
+void Worker::connect()
+{
+  c->connect();
 }
 
 void Worker::handleIq( const char* xmlns, ikspak* pak )
