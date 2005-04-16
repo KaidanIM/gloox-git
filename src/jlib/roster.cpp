@@ -23,7 +23,7 @@
 Roster::Roster( JClient* parent )
   : m_parent( parent )
 {
-  m_parent->registerIqHandler( this, "jabber:iq:roster" );
+  m_parent->registerIqHandler( this, XMLNS_ROSTER );
 }
 
 Roster::~Roster()
@@ -31,7 +31,7 @@ Roster::~Roster()
 
 }
 
-Roster::RosterMap /*map<const string, string>*/ Roster::listRoster()
+Roster::RosterMap Roster::listRoster()
 {
   return m_roster;
 }
@@ -47,7 +47,34 @@ void Roster::fill()
   m_parent->send( x );
 }
 
-void Roster::handleIq( const char* xmlns, ikspak* oak )
+void Roster::handleIq( const char* xmlns, ikspak* pak )
+{
+  if( pak->subtype == IKS_TYPE_RESULT )
+  {
+    if( iks_strncmp( xmlns, XMLNS_ROSTER, strlen( XMLNS_ROSTER ) ) == 0 )
+    {
+      printf( "roster arriving\n");
+      iks* y = iks_first_tag( iks_first_tag( pak->x ) );
+      while( y )
+      {
+        if( strcmp( iks_name( y ), "item" ) == 0 )
+        {
+          char* jid = iks_find_attrib( y, "jid" );
+          add( jid, IKS_TYPE_UNAVAILABLE );
+          printf( "received roster item: %s\n", jid );
+        }
+        y = iks_next_tag( y );
+      }
+    }
+  }
+}
+
+void Roster::add( const string& jid)
 {
   
+}
+
+void Roster::add( const string& jid, int status)
+{
+  m_roster[jid] = status;
 }

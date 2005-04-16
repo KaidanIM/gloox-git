@@ -30,6 +30,8 @@ using namespace std;
 class Roster : public IqHandler
 {
   public:
+    typedef map<const string, int> RosterMap;
+
     /**
      * Constructor.
      * Creates an empty Roster.
@@ -48,7 +50,6 @@ class Roster : public IqHandler
      */
     void fill();
 
-    typedef map<const string, string> RosterMap;
     /**
      * This function returns the roster.
      * @return Returns a map of JIDs with their current presence.
@@ -60,7 +61,15 @@ class Roster : public IqHandler
      */
     virtual void handleIq( const char* xmlns, ikspak* pak );
 
+    /**
+     * Use this function to subscribe to a new JID.
+     * @param jid The address to subscribe to.
+     */
+    void add( const string& jid );
+
   private:
+    void add( const string& jid, int status);
+
     RosterMap m_roster;
     JClient* m_parent;
 
