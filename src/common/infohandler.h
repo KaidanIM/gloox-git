@@ -20,6 +20,8 @@
 #ifndef INFOHANDLER_H__
 #define INFOHANDLER_H__
 
+#include <iksemel.h>
+
 class InfoHandler
 {
   public:
@@ -32,6 +34,13 @@ class InfoHandler
      * This function is called whenever a connection has ended.
      */
     virtual void disconnected() {};
+
+    /**
+     * This function is called upon incoming presence information.
+     * @param from The node that changed status.
+     * @param show The new status of the node.
+     */
+    virtual void rosterChanged( iksid* from, ikshowtype show ) {};
 
 };
 

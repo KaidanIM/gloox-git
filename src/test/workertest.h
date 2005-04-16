@@ -48,6 +48,11 @@ class WorkerTest : public InfoHandlerWorker
      */
     virtual void disconnected();
 
+    /**
+     * reimplemented from InfoHandlerWorker
+     */
+    virtual void rosterChanged( iksid* from, ikshowtype show );
+
   private:
     Worker* c;
 };

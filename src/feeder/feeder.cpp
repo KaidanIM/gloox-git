@@ -55,7 +55,7 @@ bool Feeder::push( const char* data )
   PresenceList::const_iterator it = m_presence.begin();
   for( it; it != m_presence.end(); ++it )
   {
-    if( (*it).second == "available" )
+    if( (*it).second == IKS_SHOW_AVAILABLE )
     {
       c->send( (*it).first, data );
       return true;
@@ -71,8 +71,10 @@ void Feeder::registerPollHandler( PollHandler* ph )
 
 void Feeder::handlePresence( iksid* from, iksubtype type, ikshowtype show, const char* msg )
 {
-  m_presence[from->full] = (char*) msg;
-  if ( ( iks_strncmp( msg, "available", 9 ) == 0 ) && m_poll )
+  if( m_infoHandler )
+    m_infoHandler->rosterChanged( from, show );
+  m_presence[from->full] = show;
+  if ( ( show == IKS_SHOW_AVAILABLE ) && m_poll )
   {
     char* data = m_pollHandler->poll();
     if ( data )

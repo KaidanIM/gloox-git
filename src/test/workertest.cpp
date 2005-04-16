@@ -43,3 +43,8 @@ void WorkerTest::disconnected()
 {
   printf( "disconnected\n" );
 }
+
+void WorkerTest::rosterChanged( iksid* from, ikshowtype show )
+{
+  printf( "someone special: %s: %d\n", from->full, show );
+}
