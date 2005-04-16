@@ -289,7 +289,7 @@ void JClient::connect()
     }
   }
 
-//   m_thread->join();
+  m_thread->join();
 }
 
 void JClient::disconnect()
