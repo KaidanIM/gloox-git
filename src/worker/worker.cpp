@@ -77,7 +77,7 @@ void Worker::handleSubscription( iksid* from, iksubtype type, const char* msg )
       if( iks_strncmp( m_feederJID, from->full, iks_strlen( m_feederJID ) ) == 0 )
       {
         iks* x = iks_make_s10n( IKS_TYPE_SUBSCRIBED, from->full, "ok" );
-        iks_insert_attrib( x, id, "sub01" );
+        iks_insert_attrib( x, "id", "sub01" );
         c->send( x );
       }
       break;
@@ -85,10 +85,12 @@ void Worker::handleSubscription( iksid* from, iksubtype type, const char* msg )
       printf( "new buddy: %s\n", from->full );
       break;
     case IKS_TYPE_UNSUBSCRIBE:
-      iks* x = iks_make_s10n( IKS_TYPE_SUBSCRIBED, from->full, "ok" );
-      iks_insert_attrib( x, id, "sub01" );
-      c->send( x );
-      break;
+      {
+        iks* y = iks_make_s10n( IKS_TYPE_SUBSCRIBED, from->full, "ok" );
+        iks_insert_attrib( y, "id", "sub02" );
+        c->send( y );
+        break;
+      }
     case IKS_TYPE_UNSUBSCRIBED:
       printf( "buddy removed: %s\n", from->full );
       break;

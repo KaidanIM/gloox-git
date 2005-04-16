@@ -39,6 +39,7 @@ using namespace std;
 using namespace Iksemel;
 
 class JThread;
+class Roster;
 
 /**
  * This class implements a Jabber Client.
@@ -80,6 +81,7 @@ class JClient : public Stream
     friend class JThread;
     /**
      * Describes the current connection status.
+     * TODO: Make this private?
      */
     enum state
     {
@@ -292,7 +294,7 @@ class JClient : public Stream
      * @param to The destination-JID of the query.
      * @return A list of capabilities.
      */
-    void JClient::getDiscoInfo( const char* to );
+    void getDiscoInfo( const char* to );
 
     /**
      * Queries the given JID for its items according to
@@ -300,7 +302,14 @@ class JClient : public Stream
      * @param to The destination-JID of the query.
      * @return A list of items.
      */
-    void JClient::getDiscoItems( const char* to );
+    void getDiscoItems( const char* to );
+
+    /**
+     * Disables the automatic roster management.
+     * You have to keep track of incoming presence yourself if
+     * you want to have a roster.
+     */
+    void disableRosterManagement();
 
     /**
      * Returns the current client state.
@@ -448,6 +457,7 @@ class JClient : public Stream
     void init();
 
     JThread* m_thread;
+    Roster* m_roster;
 
     iksid* m_self;
     iksfilter* m_filter;
@@ -469,6 +479,7 @@ class JClient : public Stream
     bool m_autoPresence;
     bool m_handleDiscoInfo;
     bool m_handleDiscoItems;
+    bool m_manageRoster;
     int m_port;
     state m_state;
 

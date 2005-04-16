@@ -113,6 +113,8 @@ class Worker : public ConnectionListener, IqHandler, SubscriptionHandler
     JClient* c;
     DataHandler* m_dataHandler;
     InfoHandlerWorker* m_infoHandler;
+    const char* m_feederJID;
+    bool m_working;
 
 };
 
