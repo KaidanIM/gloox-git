@@ -38,12 +38,8 @@ Roster::RosterMap Roster::listRoster()
 
 void Roster::fill()
 {
-  iks* x = iks_new( "iq" );
-  iks_insert_attrib( x, "from", m_parent->jid().c_str() );
-  iks_insert_attrib( x, "type", "get" );
+  iks* x = iks_make_iq( IKS_TYPE_GET, XMLNS_ROSTER );
   iks_insert_attrib( x, "id", "roster_get" );
-  iks* y = iks_insert( x, "query" );
-  iks_insert_attrib( y, "xmlns", "jabber:iq:roster" );
   m_parent->send( x );
 }
 
