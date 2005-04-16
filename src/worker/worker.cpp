@@ -27,6 +27,7 @@ using namespace std;
 Worker::Worker( const string username, const string resource,
                 const string password, const string server,
                 int port, bool debug )
+  : m_infoHandler( 0 ), m_dataHandler( 0 )
 {
   c = new JClient( username, resource, password, server, port );
   c->set_log_hook();
@@ -55,6 +56,11 @@ void Worker::handleSubscription( iksid* from, iksubtype type, const char* msg )
 void Worker::registerDataHandler( DataHandler* dh )
 {
   m_dataHandler = dh;
+}
+
+void Worker::registerInfoHandler( InfoHandlerWorker* ih )
+{
+  m_infoHandler = ih;
 }
 
 void Worker::result( ResultCode code, const char* result )

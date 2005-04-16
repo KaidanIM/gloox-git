@@ -20,11 +20,15 @@
 #ifndef FEEDER_H__
 #define FEEDER_H__
 
+#include "pollhandler.h"
+#include "infohandler.h"
+
 #include "../jlib/jclient.h"
 #include "../jlib/connectionlistener.h"
 #include "../jlib/iqhandler.h"
 #include "../jlib/presencehandler.h"
-#include "pollhandler.h"
+
+#include "../common/common.h"
 
 #include <iksemel.h>
 
@@ -41,11 +45,11 @@ class Feeder : public ConnectionListener, SubscriptionHandler, PresenceHandler, 
 {
   public:
     /**
-     * Constructor
-     * @param username The username/local part of the JID
-     * @param resource The resource part of the JID
-     * @param password The password to use for authentication
-     * @param server The jabber server's address or host name to connect to
+     * Constructor.
+     * @param username The username/local part of the JID.
+     * @param resource The resource part of the JID.
+     * @param password The password to use for authentication.
+     * @param server The jabber server's address or host name to connect to.
      * @param port The port to connect to. Default: 5222
      * @param debug Turn debug of the jabber client on. Default: true
      */
@@ -59,34 +63,36 @@ class Feeder : public ConnectionListener, SubscriptionHandler, PresenceHandler, 
     virtual ~Feeder();
 
     /**
-     * use this function to push data. If a worker is available, @param data is passed to it for processing
+     * Use this function to push data. If a Worker is available, data is pushed.
+     * @param data is passed to it for processing
+     * @return Returns false if no Worker is available. True otherwise.
      */
     bool push( const char* data );
 
     /**
-     * called for incoming presence notifications
-     * @param from The sender's jid
-     * @param type The presence type
-     * @param show The presence's status
-     * @param msg The status message
+     * Called for incoming presence notifications.
+     * @param from The sender's jid.
+     * @param type The presence type.
+     * @param show The presence's status.
+     * @param msg The status message.
      */
     virtual void handlePresence( iksid* from, iksubtype type, ikshowtype show, const char* msg );
 
     /**
-     * called for incoming messages
-     * @param from The sender's jid
-     * @param type The packets type
-     * @param msg The actual message content
+     * Called for incoming messages.
+     * @param from The sender's jid.
+     * @param type The packets type.
+     * @param msg The actual message content.
      */
     virtual void handleIq( const char* xmlns, ikspak* pak );
 
     /**
-     * called upon successful connection
+     * Called upon successful connection.
      */
     virtual void onConnect();
 
     /**
-     * called upon disconnection
+     * Called upon disconnection.
      */
     virtual void onDisconnect();
 
@@ -97,9 +103,17 @@ class Feeder : public ConnectionListener, SubscriptionHandler, PresenceHandler, 
      */
     void registerPollHandler( PollHandler* ph );
 
+    /**
+     * Using this method you can register an object as info handler. The methods
+     * reimplemented from get called on various events. See the documentation of 
+     * the InfoHandler interface for more information.
+     * @param ih The object derived from InfoHandlerFeeder.
+     */
+    void registerInfoHandler( InfoHandlerFeeder* ih );
+
   protected:
     /**
-     * Holds JID/status pairs
+     * Holds JID/status pairs.
      */
     typedef map<const char*, char*> PresenceList;
 
@@ -107,6 +121,7 @@ class Feeder : public ConnectionListener, SubscriptionHandler, PresenceHandler, 
     JClient* c;
     PresenceList m_presence;
     PollHandler* m_pollHandler;
+    InfoHandlerFeeder* m_infoHandler;
 
     bool m_poll;
 

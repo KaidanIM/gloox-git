@@ -21,12 +21,13 @@
 #define WORKER_H__
 
 #include "datahandler.h"
+#include "infohandler.h"
 
 #include "../jlib/messagehandler.h"
 #include "../jlib/subscriptionhandler.h"
 #include "../jlib/jclient.h"
 
-#include "../common.h"
+#include "../common/common.h"
 
 #include <string>
 
@@ -88,6 +89,14 @@ class Worker : public ConnectionListener, IqHandler, SubscriptionHandler
     void registerDataHandler( DataHandler* dh );
 
     /**
+     * Using this method you can register an object as info handler. The methods
+     * reimplemented from get called on various events. See the documentation of 
+     * the InfoHandler interface for more information.
+     * @param ih The object derived from InfoHandlerWorker.
+     */
+    void registerInfoHandler( InfoHandlerWorker* ih );
+
+    /**
      * Call this function when calculation is finished and a result shall
      * be sent to the Feeder.
      * @param code ResultCode indicating general success or failure of the processing
@@ -98,6 +107,7 @@ class Worker : public ConnectionListener, IqHandler, SubscriptionHandler
   private:
     JClient* c;
     DataHandler* m_dataHandler;
+    InfoHandlerWorker* m_infoHandler;
 
 };
 
