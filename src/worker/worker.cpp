@@ -38,6 +38,8 @@ Worker::Worker( const string username, const string resource,
   c->registerIqHandler( this, XMLNS_IQ_RESULT );
   c->registerSubscriptionHandler( this );
   c->setVersion( "Worker", "0.1" );
+  
+  m_feederJID = strdup( "jline@camaya.net/feeder" );
 }
 
 Worker::~Worker()
@@ -54,11 +56,14 @@ void Worker::handleIq( const char* xmlns, ikspak* pak )
 {
   if( iks_strncmp( XMLNS_IQ_DATA, xmlns, iks_strlen( XMLNS_IQ_DATA ) ) == 0 )
   {
-    
+    if( m_working )
+      printf( "got packet but also got work\n");
+    else
+      printf( "got packet, now working\n" );
   }
   else if( iks_strncmp( XMLNS_IQ_RESULT, xmlns, iks_strlen( XMLNS_IQ_RESULT ) ) == 0 )
   {
-    
+    printf( "got result but should not get one. came from %s\n", pak->from->full);
   }
   else
     printf( "unhandled xmlns: %s\n", xmlns );
@@ -66,6 +71,28 @@ void Worker::handleIq( const char* xmlns, ikspak* pak )
 
 void Worker::handleSubscription( iksid* from, iksubtype type, const char* msg )
 {
+  switch( type )
+  {
+    case IKS_TYPE_SUBSCRIBE:
+      if( iks_strncmp( m_feederJID, from->full, iks_strlen( m_feederJID ) ) == 0 )
+      {
+        iks* x = iks_make_s10n( IKS_TYPE_SUBSCRIBED, from->full, "ok" );
+        iks_insert_attrib( x, id, "sub01" );
+        c->send( x );
+      }
+      break;
+    case IKS_TYPE_SUBSCRIBED:
+      printf( "new buddy: %s\n", from->full );
+      break;
+    case IKS_TYPE_UNSUBSCRIBE:
+      iks* x = iks_make_s10n( IKS_TYPE_SUBSCRIBED, from->full, "ok" );
+      iks_insert_attrib( x, id, "sub01" );
+      c->send( x );
+      break;
+    case IKS_TYPE_UNSUBSCRIBED:
+      printf( "buddy removed: %s\n", from->full );
+      break;
+  }
 }
 
 void Worker::registerDataHandler( DataHandler* dh )
