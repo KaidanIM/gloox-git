@@ -20,6 +20,8 @@
 #ifndef ROSTER_H__
 #define ROSTER_H__
 
+#include "subscriptionhandler.h"
+
 #include <map>
 #include <string>
 using namespace std;
@@ -28,12 +30,13 @@ class JClient;
 class IqHandler;
 class RosterListener;
 class PresenceHandler;
+// class SubscriptionHandler;
 
 /**
  * A Jabber/XMPP Roster.
  * This class implements a roster. It takes care of changing presence, subscriptions, etc.
  */
-class Roster : public IqHandler, PresenceHandler
+class Roster : public IqHandler, PresenceHandler, SubscriptionHandler
 {
   public:
     typedef map<const string, int> RosterMap;
@@ -73,11 +76,23 @@ class Roster : public IqHandler, PresenceHandler
     virtual void handlePresence( iksid* from, iksubtype type, ikshowtype show, const char* msg );
 
     /**
+     * Reimplemented from SubscriptionHandler.
+     */
+    virtual void handleSubscription( iksid* from, iksubtype type, const char* msg );
+
+    /**
      * Use this function to subscribe to a new JID.
      * @param jid The address to subscribe to.
      * @param msg The reason sent along with the subscription request.
      */
     void subscribe( const string& jid, const string& msg );
+
+    /**
+     * Use this function to unsubscribe from a JID in the roster.
+     * @param jid The address to unsubscribe from.
+     * @param msg The reason sent along with the unsubscription request.
+     */
+    void unsubscribe( const string& jid, const string& msg );
 
     /**
      * Register @c rl as object that receives updates on roster operations.
