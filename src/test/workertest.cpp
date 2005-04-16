@@ -29,5 +29,17 @@ WorkerTest::~WorkerTest()
 
 void WorkerTest::start()
 {
-  c = new Worker( "mailmon", "mail", "test", "jabber.cc" );
+  c = new Worker( "jline", "worker01", "jline", "camaya.net" );
+  c->registerInfoHandler( this );
+  c->connect();
+}
+
+void WorkerTest::connected()
+{
+  printf( "connected\n" );
+}
+
+void WorkerTest::disconnected()
+{
+  printf( "disconnected\n" );
 }
