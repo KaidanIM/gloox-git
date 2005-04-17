@@ -62,9 +62,29 @@ class FeederTest : public InfoHandlerFeeder
     virtual void disconnected();
 
     /**
-     * reimplemented from InfoHandlerFeeder
+     * Reimplemented from InfoHandlerFeeder
      */
-    virtual void rosterChanged( iksid* from, ikshowtype show );
+    virtual void itemAdded( const string& jid );
+
+    /**
+     * Reimplemented from InfoHandlerFeeder
+     */
+    virtual void itemRemoved( const string& jid );
+
+    /**
+     * Reimplemented from InfoHandlerFeeder
+     */
+    virtual void roster( Roster::RosterMap roster );
+
+    /**
+     * Reimplemented from InfoHandlerFeeder
+     */
+    virtual void itemChanged( const string& jid, int status );
+
+    /**
+     * Reimplemented from InfoHandlerFeeder
+     */
+    virtual bool subscriptionRequest( const string& jid, const string& msg );
 
   private:
     Feeder* c;

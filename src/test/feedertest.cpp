@@ -57,7 +57,28 @@ void FeederTest::disconnected()
   printf( "disconnected\n" );
 }
 
-void FeederTest::rosterChanged( iksid* from, ikshowtype show )
+void FeederTest::itemAdded( const string& jid )
 {
-  printf( "someone special: %s: %d\n", from->full, show );
+  printf("buddy added: %s\n", jid.c_str());
+}
+
+void FeederTest::itemRemoved( const string& jid )
+{
+  printf("removed %s\n", jid.c_str());
+}
+
+void FeederTest::itemChanged( const string& jid, int status )
+{
+  printf("roster update: %s: %d\n", jid.c_str(), status);
+}
+
+bool FeederTest::subscriptionRequest( const string& jid, const string& msg )
+{
+  printf("subscribing %s, reason: %s\n", jid.c_str(), msg.c_str() );
+  return true;
+}
+
+void FeederTest::roster( Roster::RosterMap roster )
+{
+  printf("received roster. i am too stupid to display it right now\n");
 }

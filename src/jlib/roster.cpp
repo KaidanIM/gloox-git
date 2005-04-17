@@ -22,8 +22,7 @@
 
 
 Roster::Roster( JClient* parent )
-  : m_parent( parent ), m_rosterComplete( false ),
-  m_rosterListener( 0 )
+  : m_parent( parent ),  m_rosterListener( 0 )
 {
   m_parent->registerIqHandler( this, XMLNS_ROSTER );
   m_parent->registerPresenceHandler( this );
@@ -143,5 +142,8 @@ void Roster::add( const string& jid, int status)
 
 void Roster::registerRosterListener( RosterListener* rl )
 {
+  printf("registering\n");
+  if(rl) printf("not null\n");
   m_rosterListener = rl;
+  printf("registered\n");
 }

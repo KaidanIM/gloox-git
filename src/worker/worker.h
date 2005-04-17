@@ -23,8 +23,7 @@
 #include "datahandler.h"
 #include "infohandler.h"
 
-#include "../jlib/messagehandler.h"
-#include "../jlib/subscriptionhandler.h"
+#include "../jlib/rosterlistener.h"
 #include "../jlib/jclient.h"
 
 #include "../common/common.h"
@@ -40,7 +39,7 @@ using namespace std;
  * data from the Feeder.
  * @author Jakob Schroeter <js@camaya.net>
  */
-class Worker : public ConnectionListener, IqHandler, SubscriptionHandler
+class Worker : public ConnectionListener, IqHandler, RosterListener
 {
   public:
     /**

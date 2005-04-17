@@ -75,27 +75,27 @@ class Feeder : public ConnectionListener, IqHandler, RosterListener
     bool push( const char* data );
 
     /**
-     * Reimplemented from InfoHandlerFeeder
+     * Reimplemented from RosterListener
      */
     virtual void itemAdded( const string& jid );
 
     /**
-     * Reimplemented from InfoHandlerFeeder
+     * Reimplemented from RosterListener
      */
     virtual void itemRemoved( const string& jid );
 
     /**
-     * Reimplemented from InfoHandlerFeeder
+     * Reimplemented from RosterListener
      */
     virtual void roster( Roster::RosterMap roster );
 
     /**
-     * Reimplemented from InfoHandlerFeeder
+     * Reimplemented from RosterListener
      */
     virtual void itemChanged( const string& jid, int status );
 
     /**
-     * Reimplemented from InfoHandlerFeeder
+     * Reimplemented from RosterListener
      */
     virtual bool subscriptionRequest( const string& jid, const string& msg );
 
