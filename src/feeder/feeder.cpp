@@ -69,17 +69,44 @@ void Feeder::registerPollHandler( PollHandler* ph )
   m_pollHandler = ph;
 }
 
-void Feeder::handlePresence( iksid* from, iksubtype type, ikshowtype show, const char* msg )
+void Feeder::itemAdded( const string& jid )
 {
   if( m_infoHandler )
-    m_infoHandler->rosterChanged( from, show );
-  m_presence[from->full] = show;
-  if ( ( show == IKS_SHOW_AVAILABLE ) && m_poll )
+    m_infoHandler->itemAdded( jid );
+}
+
+void Feeder::itemRemoved( const string& jid )
+{
+  if( m_infoHandler )
+    m_infoHandler->itemRemoved( jid );
+}
+
+void Feeder::itemChanged( const string& jid, int status )
+{
+  if( m_infoHandler )
+    m_infoHandler->itemChanged( jid, status );
+
+  if ( ( status == IKS_SHOW_AVAILABLE ) && m_poll )
   {
     char* data = m_pollHandler->poll();
     if ( data )
-      c->send( from->full, data );
+      c->send( jid.c_str(), data );
+    else
+      m_poll = false;
   }
+}
+
+bool Feeder::subscriptionRequest( const string& jid, const string& msg )
+{
+  if( m_infoHandler )
+    return m_infoHandler->subscriptionRequest( jid, msg );
+  return true;
+}
+
+void Feeder::roster( Roster::RosterMap roster )
+{
+  if( m_infoHandler )
+    m_infoHandler->roster( roster );
 }
 
 void Feeder::handleIq( const char* xmlns, ikspak* pak )

@@ -20,12 +20,20 @@
 #ifndef INFOHANDLER_H__
 #define INFOHANDLER_H__
 
+#include "../jlib/subscriptionhandler.h"
+#include "../jlib/iqhandler.h"
+#include "../jlib/presencehandler.h"
+#include "../jlib/roster.h"
+
 #include <iksemel.h>
 
 /**
  * Vitual interface.
  * This interface acts as a forwarder for other interfaces, e.g. ConnectionListener.
  * It is an generic interface that can be enhanced for more special need.
+ * @todo Fix this. This is really copy'n'paste from different interfaces and ugly code
+ * duplication. Find a better solution.
+ * @author Jakob Schroeter <js@camaya.net>
  */
 class InfoHandler
 {
@@ -41,12 +49,39 @@ class InfoHandler
     virtual void disconnected() {};
 
     /**
-     * This function is called upon incoming presence information.
-     * @param from The node that changed status.
-     * @param show The new status of the node.
+     * Reimplement this function if you want to be notified about new items
+     * on the server-side roster.
+     * @param jid The new item's full address.
      */
-    virtual void rosterChanged( iksid* from, ikshowtype show ) {};
+    virtual void itemAdded( const string& jid ) {};
 
+    /**
+     * Reimplement this function if you want to be notified about items that
+     * were removed from the server-side roster.
+     * @param jid The removed item's full address.
+     */
+    virtual void itemRemoved( const string& jid ) {};
+
+    /**
+     * Reimplement this function if you want to receive the whole server-side roster
+     * on the initial roster push. The roster item status is probably wrong.
+     * @param roster The full roster.
+     */
+    virtual void roster( Roster::RosterMap roster ) {};
+
+    /**
+     * This function is called on every status change of an item in the roster.
+     * @param jid The item's address.
+     * @param status The item's new status.
+     */
+    virtual void itemChanged( const string& jid, int status ) {};
+
+    /**
+     * This function is called when an entity wishes to subscribe to this entities presence.
+     * @param jid The item's address.
+     * @param msg The message sent along with the request.
+     */
+    virtual bool subscriptionRequest( const string& jid, const string& msg ) {};
 };
 
 #endif // INFOHANDLER_H__

@@ -26,7 +26,7 @@
 #include "../jlib/jclient.h"
 #include "../jlib/connectionlistener.h"
 #include "../jlib/iqhandler.h"
-#include "../jlib/presencehandler.h"
+#include "../jlib/rosterlistener.h"
 
 #include "../common/common.h"
 
@@ -41,7 +41,7 @@ using namespace std;
  * This is the main class of the Feeder.
  * @author Jakob Schroeter <js@camaya.net>
  */
-class Feeder : public ConnectionListener, SubscriptionHandler, PresenceHandler, IqHandler
+class Feeder : public ConnectionListener, IqHandler, RosterListener
 {
   public:
     /**
@@ -75,13 +75,29 @@ class Feeder : public ConnectionListener, SubscriptionHandler, PresenceHandler, 
     bool push( const char* data );
 
     /**
-     * Called for incoming presence notifications.
-     * @param from The sender's jid.
-     * @param type The presence type.
-     * @param show The presence's status.
-     * @param msg The status message.
+     * Reimplemented from InfoHandlerFeeder
      */
-    virtual void handlePresence( iksid* from, iksubtype type, ikshowtype show, const char* msg );
+    virtual void itemAdded( const string& jid );
+
+    /**
+     * Reimplemented from InfoHandlerFeeder
+     */
+    virtual void itemRemoved( const string& jid );
+
+    /**
+     * Reimplemented from InfoHandlerFeeder
+     */
+    virtual void roster( Roster::RosterMap roster );
+
+    /**
+     * Reimplemented from InfoHandlerFeeder
+     */
+    virtual void itemChanged( const string& jid, int status );
+
+    /**
+     * Reimplemented from InfoHandlerFeeder
+     */
+    virtual bool subscriptionRequest( const string& jid, const string& msg );
 
     /**
      * Reimplemented from IqHandler.
