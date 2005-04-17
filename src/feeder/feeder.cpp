@@ -35,6 +35,7 @@ Feeder::Feeder( const string username, const string resource,
   c->setSasl( false );
   c->setDebug( debug );
   c->registerConnectionListener( this );
+  c->roster()->registerRosterListener( this );
   c->registerIqHandler( this, XMLNS_IQ_DATA );
   c->registerIqHandler( this, XMLNS_IQ_RESULT );
   c->setVersion( "Feeder", "0.1" );
@@ -130,10 +131,8 @@ void Feeder::registerInfoHandler( InfoHandlerFeeder* ih )
 
 void Feeder::onConnect()
 {
-  printf("in onconnect\n");
   if( m_infoHandler )
   {
-    printf("callingh conencted()\n");
     m_infoHandler->connected();
   }
 }

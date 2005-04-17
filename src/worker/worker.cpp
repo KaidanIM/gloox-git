@@ -36,9 +36,9 @@ Worker::Worker( const string username, const string resource,
   c->setDebug( debug );
   c->registerIqHandler( this, XMLNS_IQ_DATA );
   c->registerIqHandler( this, XMLNS_IQ_RESULT );
-  c->registerSubscriptionHandler( this );
+  c->roster()->registerRosterListener( this );
   c->setVersion( "Worker", "0.1" );
-  
+
   m_feederJID = strdup( "jline@camaya.net/feeder" );
 }
 

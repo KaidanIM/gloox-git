@@ -109,8 +109,6 @@ class Roster : public IqHandler, PresenceHandler, SubscriptionHandler
 
     RosterListener* m_rosterListener;
 
-    bool m_rosterComplete;
-
 };
 
 #endif // ROSTER_H__
