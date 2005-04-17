@@ -93,7 +93,7 @@ class Feeder : public ConnectionListener, IqHandler, RosterListener
     /**
      * Reimplemented from RosterListener
      */
-    virtual void itemChanged( const string& jid, int status );
+    virtual void itemChanged( const string& jid, int status, const char* msg );
 
     /**
      * Reimplemented from RosterListener

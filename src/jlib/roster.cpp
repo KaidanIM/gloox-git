@@ -77,7 +77,7 @@ void Roster::handlePresence( iksid* from, iksubtype type, ikshowtype show, const
   m_roster[from->full] = show;
 
   if( m_rosterListener )
-    m_rosterListener->itemChanged( from->full, show );
+    m_rosterListener->itemChanged( from->full, show, msg );
 }
 
 void Roster::subscribe( const string& jid, const string& msg )

@@ -34,7 +34,7 @@ Feeder::Feeder( const string& username, const string& resource,
   c->set_log_hook();
   c->setTls( false );
   c->setSasl( false );
-  c->setDebug( debug );
+  c->setDebug( false/*debug*/ );
   c->registerConnectionListener( this );
   c->roster()->registerRosterListener( this );
   c->registerIqHandler( this, XMLNS_IQ_DATA );
@@ -83,10 +83,10 @@ void Feeder::itemRemoved( const string& jid )
     m_infoHandler->itemRemoved( jid );
 }
 
-void Feeder::itemChanged( const string& jid, int status )
+void Feeder::itemChanged( const string& jid, int status, const char* msg )
 {
   if( m_infoHandler )
-    m_infoHandler->itemChanged( jid, status );
+    m_infoHandler->itemChanged( jid, status, msg );
 
   if ( ( status == IKS_SHOW_AVAILABLE ) && m_poll )
   {

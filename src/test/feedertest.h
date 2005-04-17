@@ -79,7 +79,7 @@ class FeederTest : public InfoHandlerFeeder
     /**
      * Reimplemented from InfoHandlerFeeder
      */
-    virtual void itemChanged( const string& jid, int status );
+    virtual void itemChanged( const string& jid, int status, const char* msg );
 
     /**
      * Reimplemented from InfoHandlerFeeder
