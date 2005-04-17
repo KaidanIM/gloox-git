@@ -23,8 +23,9 @@
 #include "datahandler.h"
 #include "infohandler.h"
 
+#include "../jlib/connectionlistener.h"
+#include "../jlib/iqhandler.h"
 #include "../jlib/rosterlistener.h"
-#include "../jlib/jclient.h"
 
 #include "../common/common.h"
 
@@ -32,6 +33,7 @@
 
 using namespace std;
 
+class JClient;
 
 /**
  * This class implements a Worker.

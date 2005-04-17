@@ -23,7 +23,8 @@
 #include "../jlib/subscriptionhandler.h"
 #include "../jlib/iqhandler.h"
 #include "../jlib/presencehandler.h"
-#include "../jlib/roster.h"
+/*#include "../jlib/roster.h"*/
+#include "../jlib/rosterhelper.h"
 
 #include <iksemel.h>
 
@@ -67,7 +68,7 @@ class InfoHandler
      * on the initial roster push. The roster item status is probably wrong.
      * @param roster The full roster.
      */
-    virtual void roster( Roster::RosterMap roster ) {};
+    virtual void roster( RosterHelper::RosterMap roster ) {};
 
     /**
      * This function is called on every status change of an item in the roster.

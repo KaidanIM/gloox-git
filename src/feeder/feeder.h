@@ -23,10 +23,10 @@
 #include "pollhandler.h"
 #include "infohandler.h"
 
-#include "../jlib/jclient.h"
 #include "../jlib/connectionlistener.h"
 #include "../jlib/iqhandler.h"
 #include "../jlib/rosterlistener.h"
+#include "../jlib/rosterhelper.h"
 
 #include "../common/common.h"
 
@@ -34,8 +34,9 @@
 
 #include <map>
 #include <string>
-
 using namespace std;
+
+class JClient;
 
 /**
  * This is the main class of the Feeder.
@@ -53,8 +54,8 @@ class Feeder : public ConnectionListener, IqHandler, RosterListener
      * @param port The port to connect to. Default: 5222
      * @param debug Turn debug of the jabber client on. Default: true
      */
-    Feeder( const string username, const string resource,
-            const string password, const string server,
+    Feeder( const string& username, const string& resource,
+            const string& password, const string& server,
             int port = 5222, bool debug = true );
 
     /**
@@ -87,7 +88,7 @@ class Feeder : public ConnectionListener, IqHandler, RosterListener
     /**
      * Reimplemented from RosterListener
      */
-    virtual void roster( Roster::RosterMap roster );
+    virtual void roster( RosterHelper::RosterMap roster );
 
     /**
      * Reimplemented from RosterListener

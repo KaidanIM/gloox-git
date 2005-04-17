@@ -21,6 +21,10 @@
 
 #include "worker.h"
 
+
+#include "../jlib/jclient.h"
+#include "../jlib/roster.h"
+
 using namespace std;
 
 

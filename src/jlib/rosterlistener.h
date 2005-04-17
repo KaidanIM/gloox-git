@@ -20,7 +20,7 @@
 #ifndef ROSTERLISTENER_H__
 #define ROSTERLISTENER_H__
 
-#include "roster.h"
+#include "rosterhelper.h"
 
 #include <string>
 using namespace std;
@@ -29,6 +29,7 @@ using namespace std;
  * A virtual interface.
  * A class implementing this interface and being registered as RosterListener with the Roster
  * object receives notifications about all the changes in the server-side roster.
+ * Only one RosterListener at a time per Roster is possible.
  * @author Jakob Schroeter <js@camaya.net>
  */
 class RosterListener
@@ -53,7 +54,7 @@ class RosterListener
      * on the initial roster push. The roster item status is probably wrong.
      * @param roster The full roster.
      */
-    virtual void roster( Roster::RosterMap roster ) {};
+    virtual void roster( RosterHelper::RosterMap roster ) {};
 
     /**
      * This function is called on every status change of an item in the roster.
@@ -68,6 +69,7 @@ class RosterListener
      * @param msg The message sent along with the request.
      */
     virtual bool subscriptionRequest( const string& jid, const string& msg ) {};
+
 };
 
 #endif // ROSTERLISTENER_H__

@@ -78,7 +78,7 @@ bool FeederTest::subscriptionRequest( const string& jid, const string& msg )
   return true;
 }
 
-void FeederTest::roster( Roster::RosterMap roster )
+void FeederTest::roster( RosterHelper::RosterMap roster )
 {
   printf("received roster. i am too stupid to display it right now\n");
 }
