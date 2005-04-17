@@ -25,6 +25,12 @@
 #include <string>
 using namespace std;
 
+/**
+ * A virtual interface.
+ * A class implementing this interface and being registered as RosterListener with the Roster
+ * object receives notifications about all the changes in the server-side roster.
+ * @author Jakob Schroeter <js@camaya.net>
+ */
 class RosterListener
 {
   public:
@@ -36,7 +42,7 @@ class RosterListener
     virtual void itemAdded( const string& jid ) {};
 
     /**
-     * Reimplement thsi function if you want to be notified about items that
+     * Reimplement this function if you want to be notified about items that
      * were removed from the server-side roster.
      * @param jid The removed item's full address.
      */

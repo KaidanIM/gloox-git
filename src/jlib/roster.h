@@ -35,6 +35,7 @@ class PresenceHandler;
 /**
  * A Jabber/XMPP Roster.
  * This class implements a roster. It takes care of changing presence, subscriptions, etc.
+ * @author Jakob Schroeter <js@camaya.net>
  */
 class Roster : public IqHandler, PresenceHandler, SubscriptionHandler
 {

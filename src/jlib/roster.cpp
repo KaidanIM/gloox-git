@@ -74,7 +74,6 @@ void Roster::handleIq( const char* xmlns, ikspak* pak )
 
 void Roster::handlePresence( iksid* from, iksubtype type, ikshowtype show, const char* msg )
 {
-  printf( "item %s is now %d\n", from->full, show );
   m_roster[from->full] = show;
 
   if( m_rosterListener )
