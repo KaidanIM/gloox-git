@@ -2,7 +2,7 @@
 ## Process this file with automake to produce Makefile.in
 ##
 
-CPPFLAGS = -g -fno-inline
+AM_CPPFLAGS = -g -fno-inline
 
 noinst_LTLIBRARIES = libwrapper.la
 
