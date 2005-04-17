@@ -46,6 +46,7 @@ src/jlib/Makefile
 src/jlib/wrapper/Makefile
 src/feeder/Makefile
 src/worker/Makefile
+src/frontend/Makefile
 src/test/Makefile
 ])
 AC_OUTPUT
