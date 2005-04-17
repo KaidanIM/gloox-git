@@ -75,7 +75,7 @@ class InfoHandler
      * @param jid The item's address.
      * @param status The item's new status.
      */
-    virtual void itemChanged( const string& jid, int status ) {};
+    virtual void itemChanged( const string& jid, int status, const char* msg ) {};
 
     /**
      * This function is called when an entity wishes to subscribe to this entities presence.
