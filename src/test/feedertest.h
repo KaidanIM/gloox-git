@@ -74,7 +74,7 @@ class FeederTest : public InfoHandlerFeeder
     /**
      * Reimplemented from InfoHandlerFeeder
      */
-    virtual void roster( Roster::RosterMap roster );
+    virtual void roster( RosterHelper::RosterMap roster );
 
     /**
      * Reimplemented from InfoHandlerFeeder

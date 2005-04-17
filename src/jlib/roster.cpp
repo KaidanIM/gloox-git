@@ -19,6 +19,7 @@
 
 #include "jclient.h"
 #include "roster.h"
+#include "rosterlistener.h"
 
 
 Roster::Roster( JClient* parent )
@@ -33,7 +34,7 @@ Roster::~Roster()
 
 }
 
-Roster::RosterMap Roster::listRoster()
+RosterHelper::RosterMap Roster::listRoster()
 {
   return m_roster;
 }
@@ -51,7 +52,7 @@ void Roster::handleIq( const char* xmlns, ikspak* pak )
   {
     if( iks_strncmp( xmlns, XMLNS_ROSTER, strlen( XMLNS_ROSTER ) ) == 0 )
     {
-      printf( "roster arriving\n");
+//       printf( "roster arriving\n");
       iks* y = iks_first_tag( iks_first_tag( pak->x ) );
       while( y )
       {
@@ -59,7 +60,7 @@ void Roster::handleIq( const char* xmlns, ikspak* pak )
         {
           char* jid = iks_find_attrib( y, "jid" );
           add( jid, IKS_TYPE_UNAVAILABLE );
-          printf( "received roster item: %s\n", jid );
+//           printf( "received roster item: %s\n", jid );
         }
         y = iks_next_tag( y );
       }
@@ -135,15 +136,12 @@ void Roster::unsubscribe( const string& jid, const string& msg )
     m_rosterListener->itemRemoved( jid );
 }
 
-void Roster::add( const string& jid, int status)
+void Roster::add( const string& jid, int status )
 {
   m_roster[jid] = status;
 }
 
 void Roster::registerRosterListener( RosterListener* rl )
 {
-  printf("registering\n");
-  if(rl) printf("not null\n");
-  m_rosterListener = rl;
-  printf("registered\n");
+   m_rosterListener = rl;
 }

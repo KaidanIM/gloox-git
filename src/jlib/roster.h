@@ -21,6 +21,8 @@
 #define ROSTER_H__
 
 #include "subscriptionhandler.h"
+#include "rosterhelper.h"
+#include "rosterlistener.h"
 
 #include <map>
 #include <string>
@@ -28,7 +30,7 @@ using namespace std;
 
 class JClient;
 class IqHandler;
-class RosterListener;
+// class RosterListener;
 class PresenceHandler;
 // class SubscriptionHandler;
 
@@ -40,8 +42,6 @@ class PresenceHandler;
 class Roster : public IqHandler, PresenceHandler, SubscriptionHandler
 {
   public:
-    typedef map<const string, int> RosterMap;
-
     /**
      * Constructor.
      * Creates an empty Roster.
@@ -64,7 +64,7 @@ class Roster : public IqHandler, PresenceHandler, SubscriptionHandler
      * This function returns the roster.
      * @return Returns a map of JIDs with their current presence.
      */
-    Roster::RosterMap listRoster();
+    RosterHelper::RosterMap listRoster();
 
     /**
      * Reimplemented from IqHandler.
@@ -104,10 +104,9 @@ class Roster : public IqHandler, PresenceHandler, SubscriptionHandler
   private:
     void add( const string& jid, int status);
 
-    RosterMap m_roster;
-    JClient* m_parent;
-
     RosterListener* m_rosterListener;
+    RosterHelper::RosterMap m_roster;
+    JClient* m_parent;
 
 };
 

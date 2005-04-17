@@ -61,6 +61,7 @@ void JClient::init()
   setFeature( XMLNS_DISCO_ITEMS );
   setVersion( "JLib", JLIB_VERSION );
   setIdentity( "client", "bot" );
+  m_roster = new Roster( this );
 }
 
 void JClient::on_stream( int type, iks* node )
@@ -174,6 +175,8 @@ void JClient::disableDiscoItems()
 void JClient::disableRosterManagement()
 {
   m_manageRoster = false;
+  delete m_roster;
+  m_roster = 0;
 }
 
 void JClient::getDiscoInfo( const char* to )
@@ -408,15 +411,10 @@ void JClient::removeConnectionListener( ConnectionListener* cl )
 void JClient::notifyOnConnect()
 {
   if( m_manageRoster )
-  {
-    m_roster = new Roster( this );
     m_roster->fill();
-  }
 
   if( m_autoPresence )
-  {
     sendPresence();
-  }
 
   ConnectionListenerList::const_iterator it = m_connectionListeners.begin();
   for( it; it != m_connectionListeners.end(); it++ ) {

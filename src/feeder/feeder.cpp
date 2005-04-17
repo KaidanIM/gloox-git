@@ -20,14 +20,15 @@
 
 #include "feeder.h"
 
+#include "../jlib/jclient.h"
+#include "../jlib/roster.h"
 using namespace std;
 
 
-Feeder::Feeder( const string username, const string resource,
-                const string password, const string server,
+Feeder::Feeder( const string& username, const string& resource,
+                const string& password, const string& server,
                 int port, bool debug )
-  : m_poll( true ), m_infoHandler( 0 ),
-  m_pollHandler( 0 )
+  : m_poll( true ), m_infoHandler( 0 ), m_pollHandler( 0 )
 {
   c = new JClient( username, resource, password, server, port );
   c->set_log_hook();
@@ -89,11 +90,14 @@ void Feeder::itemChanged( const string& jid, int status )
 
   if ( ( status == IKS_SHOW_AVAILABLE ) && m_poll )
   {
-    char* data = m_pollHandler->poll();
-    if ( data )
-      c->send( jid.c_str(), data );
-    else
-      m_poll = false;
+    if( m_pollHandler )
+    {
+      char* data = m_pollHandler->poll();
+      if ( data )
+        c->send( jid.c_str(), data );
+      else
+        m_poll = false;
+    }
   }
 }
 
@@ -104,7 +108,7 @@ bool Feeder::subscriptionRequest( const string& jid, const string& msg )
   return true;
 }
 
-void Feeder::roster( Roster::RosterMap roster )
+void Feeder::roster( RosterHelper::RosterMap roster )
 {
   if( m_infoHandler )
     m_infoHandler->roster( roster );
@@ -132,9 +136,7 @@ void Feeder::registerInfoHandler( InfoHandlerFeeder* ih )
 void Feeder::onConnect()
 {
   if( m_infoHandler )
-  {
     m_infoHandler->connected();
-  }
 }
 
 void Feeder::onDisconnect()
