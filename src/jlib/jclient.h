@@ -36,6 +36,8 @@
 #define XMLNS_DISCO_INFO  "http://jabber.org/protocol/disco#info"
 #define XMLNS_DISCO_ITEMS "http://jabber.org/protocol/disco#items"
 #define XMLNS_ROSTER      "jabber:iq:roster"
+#define XMLNS_VERSION     "jabber:iq:version"
+#define XMLNS_REGISTER    "jabber:iq:register"
 
 using namespace std;
 using namespace Iksemel;

@@ -56,9 +56,9 @@ JClient::~JClient()
 
 void JClient::init()
 {
-  setFeature( "jabber:iq:version" );
-  setFeature( "http://jabber.org/protocol/disco#info" );
-  setFeature( "http://jabber.org/protocol/disco#items" );
+  setFeature( XMLNS_VERSION );
+  setFeature( XMLNS_DISCO_INFO );
+  setFeature( XMLNS_DISCO_ITEMS );
   setVersion( "JLib", JLIB_VERSION );
   setIdentity( "client", "bot" );
 }
@@ -450,7 +450,7 @@ void JClient::notifySubscriptionHandlers( iksid* from, iksubtype type, const cha
 
 void JClient::notifyIqHandlers( const char* xmlns, ikspak* pak )
 {
-  if( iks_strncmp( xmlns, "jabber:iq:version", 17 ) == 0 )
+  if( iks_strncmp( xmlns, XMLNS_VERSION, iks_strlen( XMLNS_VERSION ) ) == 0 )
   {
     iks* x = iks_new( "iq" );
     iks_insert_attrib( x, "type", "result" );
@@ -458,14 +458,14 @@ void JClient::notifyIqHandlers( const char* xmlns, ikspak* pak )
     iks_insert_attrib( x, "from", jid().c_str() );
     iks_insert_attrib( x, "id", pak->id );
     iks* y = iks_insert( x, "query" );
-    iks_insert_attrib( y, "xmlns", "jabber:iq:version" );
+    iks_insert_attrib( y, "xmlns", XMLNS_VERSION );
     iks* z = iks_insert( y, "name" );
     iks_insert_cdata( z, m_versionName.c_str(), m_versionName.length() );
     z = iks_insert( y, "version" );
     iks_insert_cdata( z, m_versionVersion.c_str(), m_versionVersion.length() );
     send( x );
   }
-  else if( ( iks_strncmp( xmlns, "http://jabber.org/protocol/disco#info", 37 ) == 0 )
+  else if( ( iks_strncmp( xmlns, XMLNS_DISCO_INFO, iks_strlen( XMLNS_DISCO_INFO ) ) == 0 )
              && ( m_handleDiscoInfo ) )
   {
     iks* x = iks_new( "iq" );
@@ -474,7 +474,7 @@ void JClient::notifyIqHandlers( const char* xmlns, ikspak* pak )
     iks_insert_attrib( x, "to", pak->from->full );
     iks_insert_attrib( x, "from", jid().c_str() );
     iks* y = iks_insert( x, "query" );
-    iks_insert_attrib( y, "xmlns", "http://jabber.org/protocol/disco#info" );
+    iks_insert_attrib( y, "xmlns", XMLNS_DISCO_INFO );
     iks* i = iks_insert( y, "identity" );
     iks_insert_attrib( i, "category", m_identityCategory.c_str() );
     iks_insert_attrib( i, "type", m_identityType.c_str() );
@@ -488,7 +488,7 @@ void JClient::notifyIqHandlers( const char* xmlns, ikspak* pak )
     }
     send( x );
   }
-  else if( ( iks_strncmp( xmlns, "http://jabber.org/protocol/disco#items", 38 ) == 0 )
+  else if( ( iks_strncmp( xmlns, XMLNS_DISCO_ITEMS, iks_strlen( XMLNS_DISCO_ITEMS ) ) == 0 )
              && ( m_handleDiscoItems ) )
   {
     iks* x = iks_new( "iq" );
@@ -497,7 +497,7 @@ void JClient::notifyIqHandlers( const char* xmlns, ikspak* pak )
     iks_insert_attrib( x, "to", pak->from->full );
     iks_insert_attrib( x, "from", jid().c_str() );
     iks* y = iks_insert( x, "query" );
-    iks_insert_attrib( y, "xmlns", "http://jabber.org/protocol/disco#items" );
+    iks_insert_attrib( y, "xmlns", XMLNS_DISCO_ITEMS );
     send( x );
   }
   else
@@ -541,7 +541,7 @@ void registerHook( JClient* stream, ikspak* pak )
 //     iks_insert_attrib(x, "type", "set");
 //     iks_insert_attrib(x, "id", "reg");
 //     y = iks_insert(x, "query");
-//     iks_insert_attrib(y, "xmlns", "jabber:iq:register");
+//     iks_insert_attrib(y, "xmlns", XMLNS_REGISTER );
 //     iks_insert_cdata(iks_insert(y, "username"), id->user, strlen(id->user));
 //     iks_insert_cdata(iks_insert(y, "password"), config.jabberPwd, strlen(config.jabberPwd));
 //     iks_send(m_prs, x);
