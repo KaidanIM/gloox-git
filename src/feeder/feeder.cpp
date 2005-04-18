@@ -137,7 +137,15 @@ void Feeder::sendData( const string& jid )
 {
   const char* data = m_pollHandler->poll();
   if ( data )
-    c->send( jid.c_str(), data );
+  {
+    iks* x = iks_make_iq( IKS_TYPE_SET, XMLNS_IQ_DATA );
+    iks_insert_attrib( x, "from", c->jid().c_str() );
+    iks_insert_attrib( x, "to", jid.c_str() );
+    iks* y = iks_first_tag( x );
+    iks* z = iks_insert( y, "data" );
+    iks_insert_cdata( z, data, iks_strlen( data ) );
+    c->send( x );
+  }
   else
     m_poll = false;
 }
