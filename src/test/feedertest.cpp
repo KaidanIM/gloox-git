@@ -44,6 +44,7 @@ void FeederTest::start()
 {
   c = new Feeder( "remon", "feeder", "remon", "camaya.net" );
   c->registerInfoHandler( this );
+  c->registerPollHandler( this );
   c->connect();
 }
 
@@ -81,4 +82,14 @@ bool FeederTest::subscriptionRequest( const string& jid, const char* msg )
 void FeederTest::roster( RosterHelper::RosterMap roster )
 {
   printf( "received roster. i am too stupid to display it right now\n" );
+}
+
+char* FeederTest::poll()
+{
+  return strdup( "abcdefg" );
+}
+
+bool FeederTest::hasData()
+{
+  return true;
 }

@@ -32,7 +32,6 @@ class Worker;
  * A test program using the JClient class.
  * @author Jakob Schroeter <js@camaya.net>
  */
-
 class WorkerTest : public InfoHandlerWorker, DataHandler
 {
 
