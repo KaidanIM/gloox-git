@@ -63,6 +63,7 @@ bool Feeder::push( const char* data )
       return true;
     }
   }
+  m_poll = true;
   return false;
 }
 
