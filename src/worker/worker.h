@@ -46,8 +46,8 @@ class Worker : public ConnectionListener, IqHandler, RosterListener
   public:
     /**
      * Constructor
-     * Creates a new Worker, registers Message- and SubscriptionHandler and connects
-     * to the XMPP server.
+     * Creates a new Worker, registers IqHandler, ConnectionListener and
+     * RosterListener and connects to the XMPP server.
      * @param username The username/local part of the JID
      * @param resource The resource part of the JID
      * @param password The password to use for authentication

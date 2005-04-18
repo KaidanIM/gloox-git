@@ -47,6 +47,8 @@ class Feeder : public ConnectionListener, IqHandler, RosterListener
   public:
     /**
      * Constructor.
+     * Creates a new Feeder, registers IqHandler, ConnectionListener and
+     * RosterListener and connects to the XMPP server.
      * @param username The username/local part of the JID.
      * @param resource The resource part of the JID.
      * @param password The password to use for authentication.
