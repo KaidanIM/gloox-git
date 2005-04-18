@@ -21,7 +21,7 @@
 
 #include "worker.h"
 
-
+#include "../common/common.h"
 #include "../jlib/jclient.h"
 #include "../jlib/roster.h"
 
@@ -61,9 +61,22 @@ void Worker::handleIq( const char* xmlns, ikspak* pak )
   if( iks_strncmp( XMLNS_IQ_DATA, xmlns, iks_strlen( XMLNS_IQ_DATA ) ) == 0 )
   {
     if( m_working )
+    {
+      iks* x = iks_make_iq( IKS_TYPE_ERROR, XMLNS_IQ_DATA );
+      iks_insert_attrib( x, "from", c->jid().c_str() );
+      iks_insert_attrib( x, "to", pak->from->full );
+      c->send( x );
       printf( "got packet but also got work\n");
+    }
     else
+    {
       printf( "got packet, now working\n" );
+      iks* x = iks_make_pres( IKS_SHOW_AWAY, "busy" );
+      c->send( x );
+      if( m_dataHandler )
+        m_dataHandler->data( "packet" );
+      m_working = true;
+    }
   }
   else
     printf( "unhandled xmlns: %s\n", xmlns );
@@ -81,7 +94,11 @@ void Worker::registerInfoHandler( InfoHandlerWorker* ih )
 
 void Worker::result( ResultCode code, const char* result )
 {
-  
+  m_working = false;
+  iks* x = iks_make_iq( IKS_TYPE_RESULT, XMLNS_IQ_RESULT );
+  iks_insert_attrib( x, "from", c->jid().c_str() );
+  iks_insert_attrib( x, "to", m_feederJID.c_str() );
+  c->send( x );
 }
 
 bool Worker::subscriptionRequest( const string& jid, const char* msg )
