@@ -98,7 +98,7 @@ class Feeder : public ConnectionListener, IqHandler, RosterListener
     /**
      * Reimplemented from RosterListener
      */
-    virtual bool subscriptionRequest( const string& jid, const string& msg );
+    virtual bool subscriptionRequest( const string& jid, const char* msg );
 
     /**
      * Reimplemented from IqHandler.

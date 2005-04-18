@@ -1,5 +1,5 @@
 
-SUBDIRS = jlib feeder worker frontend test
+SUBDIRS = jlib feeder worker test
 
 apidox:
 	doxygen

@@ -82,7 +82,7 @@ class InfoHandler
      * @param jid The item's address.
      * @param msg The message sent along with the request.
      */
-    virtual bool subscriptionRequest( const string& jid, const string& msg ) {};
+    virtual bool subscriptionRequest( const string& jid, const char* msg ) {};
 };
 
 #endif // INFOHANDLER_H__
