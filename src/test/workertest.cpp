@@ -23,6 +23,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <unistd.h>
 
 int main(int argc, char *argv[])
 {
@@ -60,4 +61,6 @@ void WorkerTest::disconnected()
 void WorkerTest::data( const char* data)
 {
   printf( "received data: %s\n", data );
+  sleep( 5 );
+  c->result( RESULT_SUCCESS, "ok" );
 }
