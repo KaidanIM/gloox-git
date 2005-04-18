@@ -64,8 +64,6 @@ void Worker::handleIq( const char* xmlns, ikspak* pak )
 {
   if( iks_strncmp( XMLNS_IQ_DATA, xmlns, iks_strlen( XMLNS_IQ_DATA ) ) == 0 )
   {
-    if( m_working ) printf("working\n");
-    else printf("not working\n");
     if( m_working )
     {
       iks* x = iks_make_iq( IKS_TYPE_ERROR, XMLNS_IQ_DATA );
@@ -108,8 +106,6 @@ void Worker::registerInfoHandler( InfoHandlerWorker* ih )
 
 void Worker::result( ResultCode code, const char* result )
 {
-  if( m_working ) printf("working\n");
-  else printf("not working\n");
   m_working = false;
   printf( "no longer working\n" );
   iks* x = iks_make_iq( IKS_TYPE_SET, XMLNS_IQ_RESULT );
