@@ -65,6 +65,7 @@ namespace Iksemel
 
       int send( iksparser* , iks* );
       int send();
+      int send( iks* x );
 
       int send( iksparser* , const std::string& );
       int send( const std::string& );
