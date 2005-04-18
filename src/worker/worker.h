@@ -70,6 +70,12 @@ class Worker : public ConnectionListener, IqHandler, RosterListener
     void connect();
 
     /**
+     * Allows to set the address of the Feeder.
+     * @param jid The Feeder's Jabber ID.
+     */
+    void setFeeder( const string& jid );
+
+    /**
      * Reimplemented from IqHandler.
      */
     virtual void handleIq( const char* xmlns, ikspak* pak );
@@ -116,7 +122,7 @@ class Worker : public ConnectionListener, IqHandler, RosterListener
     JClient* c;
     DataHandler* m_dataHandler;
     InfoHandlerWorker* m_infoHandler;
-    string m_feederJID;
+    iksid* m_feederID;
     bool m_working;
 
 };

@@ -31,7 +31,8 @@ using namespace std;
 Worker::Worker( const string username, const string resource,
                 const string password, const string server,
                 int port, bool debug )
-  : m_infoHandler( 0 ), m_dataHandler( 0 )
+  : m_infoHandler( 0 ), m_dataHandler( 0 ), m_working( false ),
+  m_feederID( 0 )
 {
   c = new JClient( username, resource, password, server, port );
   c->set_log_hook();
@@ -42,13 +43,16 @@ Worker::Worker( const string username, const string resource,
   c->registerConnectionListener( this );
   c->roster()->registerRosterListener( this );
   c->setVersion( "Worker", "0.1" );
-
-  m_feederJID = strdup( "remon@camaya.net" );
 }
 
 Worker::~Worker()
 {
   
+}
+
+void Worker::setFeeder( const string& jid )
+{
+  m_feederID = iks_id_new( c->get_stack(), jid.c_str() );
 }
 
 void Worker::connect()
@@ -60,22 +64,32 @@ void Worker::handleIq( const char* xmlns, ikspak* pak )
 {
   if( iks_strncmp( XMLNS_IQ_DATA, xmlns, iks_strlen( XMLNS_IQ_DATA ) ) == 0 )
   {
+    if( m_working ) printf("working\n");
+    else printf("not working\n");
     if( m_working )
     {
       iks* x = iks_make_iq( IKS_TYPE_ERROR, XMLNS_IQ_DATA );
       iks_insert_attrib( x, "from", c->jid().c_str() );
       iks_insert_attrib( x, "to", pak->from->full );
+      iks_insert_attrib( x, "id", pak->id );
       c->send( x );
       printf( "got packet but also got work\n");
     }
     else
     {
+      m_working = true;
       printf( "got packet, now working\n" );
-      iks* x = iks_make_pres( IKS_SHOW_AWAY, "busy" );
+      iks* x = iks_make_iq( IKS_TYPE_RESULT, pak->ns );
+      iks_insert_attrib( x, "from", c->jid().c_str() );
+      iks_insert_attrib( x, "to", pak->from->full );
+      iks_insert_attrib( x, "id", pak->id );
       c->send( x );
+
+      x = iks_make_pres( IKS_SHOW_AWAY, "busy" );
+      c->send( x );
+
       if( m_dataHandler )
         m_dataHandler->data( "packet" );
-      m_working = true;
     }
   }
   else
@@ -94,16 +108,29 @@ void Worker::registerInfoHandler( InfoHandlerWorker* ih )
 
 void Worker::result( ResultCode code, const char* result )
 {
+  if( m_working ) printf("working\n");
+  else printf("not working\n");
   m_working = false;
-  iks* x = iks_make_iq( IKS_TYPE_RESULT, XMLNS_IQ_RESULT );
+  printf( "no longer working\n" );
+  iks* x = iks_make_iq( IKS_TYPE_SET, XMLNS_IQ_RESULT );
   iks_insert_attrib( x, "from", c->jid().c_str() );
-  iks_insert_attrib( x, "to", m_feederJID.c_str() );
+  iks_insert_attrib( x, "to", m_feederID->full );
+  iks_insert_attrib( x, "id", "result" );
+  iks* y = iks_first_tag( x );
+  iks* z = iks_insert( y, "result" );
+  char* r = (char*)malloc( sizeof( int ) );;
+  sprintf(r, "%d", code );
+  iks_insert_attrib( z, "result", r );
+  c->send( x );
+  free( r );
+
+  x = iks_make_pres( IKS_SHOW_AVAILABLE, "online" );
   c->send( x );
 }
 
 bool Worker::subscriptionRequest( const string& jid, const char* msg )
 {
-  if( jid == m_feederJID )
+  if( jid == m_feederID->partial )
     return true;
 
   return false;
@@ -111,7 +138,7 @@ bool Worker::subscriptionRequest( const string& jid, const char* msg )
 
 void Worker::onConnect()
 {
-  c->roster()->subscribe( m_feederJID );
+  c->roster()->subscribe( m_feederID->partial );
 
   if( m_infoHandler )
     m_infoHandler->connected();
