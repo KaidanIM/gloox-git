@@ -28,6 +28,8 @@
 int main( int argc, char *argv[] )
 {
   WorkerTest f;
+  f.setCmdLineArgs( argc, argv );
+
   f.start();
 
   return 0;
@@ -43,8 +45,13 @@ WorkerTest::~WorkerTest()
 
 void WorkerTest::start()
 {
+  if( m_feeder.empty() )
+    m_feeder = "remon@camaya.net/feeder";
+
   c = new Worker( "jline", "worker01", "jline", "camaya.net" );
   c->registerInfoHandler( this );
+  c->registerDataHandler( this );
+  c->setFeeder( m_feeder );
   c->connect();
 }
 
@@ -63,4 +70,30 @@ void WorkerTest::data( const char* data)
   printf( "received data: %s\n", data );
   sleep( 5 );
   c->result( RESULT_SUCCESS, "ok" );
+}
+
+void WorkerTest::setCmdLineArgs( int argc, char *argv[] )
+{
+  for (int i=0;i<argc;++i )
+  {
+    if ( argv[i][0] == '-' )
+      switch ( argv[i][1] )
+    {
+      case 'f':
+        if ( argv[++i] && argv[i][0] != '-' )
+        {
+          m_feeder = argv[i];
+        }
+        else
+        {
+          printf( "parameter -f requires a Jabber ID. using default.\n" );
+          m_feeder = "remon@camaya.net/feeder";
+        }
+        break;
+
+      case 'd':
+        m_debug = true;
+        break;
+    }
+  }
 }

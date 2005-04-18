@@ -47,6 +47,11 @@ class WorkerTest : public InfoHandlerWorker, DataHandler
     virtual ~WorkerTest();
 
     /**
+     * Sets the Commandline args.
+     */
+    void setCmdLineArgs( int argc, char *argv[] );
+
+    /**
      * Start the programm with this function.
      */
     void start();
@@ -68,6 +73,8 @@ class WorkerTest : public InfoHandlerWorker, DataHandler
 
   private:
     Worker* c;
+    bool m_debug;
+    string m_feeder;
 };
 
 #endif // FEEDERTEST_H__
