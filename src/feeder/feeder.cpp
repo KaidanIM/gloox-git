@@ -141,6 +141,7 @@ void Feeder::sendData( const string& jid )
     iks* x = iks_make_iq( IKS_TYPE_SET, XMLNS_IQ_DATA );
     iks_insert_attrib( x, "from", c->jid().c_str() );
     iks_insert_attrib( x, "to", jid.c_str() );
+    iks_insert_attrib( x, "id", "data" );
     iks* y = iks_first_tag( x );
     iks* z = iks_insert( y, "data" );
     iks_insert_cdata( z, data, iks_strlen( data ) );
@@ -154,7 +155,13 @@ void Feeder::handleIq( const char* xmlns, ikspak* pak )
 {
   if( iks_strncmp( XMLNS_IQ_RESULT, xmlns, iks_strlen( XMLNS_IQ_RESULT ) ) == 0 )
   {
-    // handle incoming result
+    printf( "received result: %s\n" );
+
+    iks* x = iks_make_iq( IKS_TYPE_RESULT, XMLNS_IQ_RESULT );
+    iks_insert_attrib( x, "from", c->jid().c_str() );
+    iks_insert_attrib( x, "to", pak->from->full );
+    iks_insert_attrib( x, "id", pak->id );
+    c->send( x );
   }
   else
     printf( "unhandled xmlns: %s\n", xmlns );
