@@ -105,31 +105,32 @@ void Feeder::roster( RosterHelper::RosterMap roster )
   if( m_infoHandler )
     m_infoHandler->roster( roster );
 
-  if( m_pollHandler && roster.size() )
-  {
-    int count = 0;
-    RosterHelper::RosterMap::const_iterator it = roster.begin();
-    while( m_pollHandler->hasData() )
-    {
-      if( (*it).second == IKS_SHOW_AVAILABLE )
-      {
-        ++count;
-        sendData( (*it).first );
-      }
+//   if( m_pollHandler && roster.size() )
+//   {
+//     int count = 0;
+//     RosterHelper::RosterMap::const_iterator it = roster.begin();
+//     while( m_pollHandler->hasData() )
+//     {
+//       if( (*it).second == IKS_SHOW_AVAILABLE )
+//       {
+//         ++count;
+//         sendData( (*it).first );
+//       }
+// 
+//       if( it == roster.end() )
+//         if( count )
+//         {
+//           it = roster.begin();
+//           count = 0;
+//         }
+//         else
+//           break;
+//       else
+//         ++it;
+//     }
+//     m_poll = false;
+//   }
 
-      if( it == roster.end() )
-        if( count )
-        {
-          it = roster.begin();
-          count = 0;
-        }
-        else
-          break;
-      else
-        ++it;
-    }
-    m_poll = false;
-  }
 }
 
 void Feeder::sendData( const string& jid )

@@ -21,6 +21,7 @@
 #define FEEDERTEST_H__
 
 #include "../feeder/infohandler.h"
+#include "../feeder/pollhandler.h"
 
 #include <string>
 using namespace std;
@@ -32,7 +33,7 @@ class Feeder;
  * @author Jakob Schroeter <js@camaya.net>
  */
 
-class FeederTest : public InfoHandlerFeeder
+class FeederTest : public InfoHandlerFeeder, PollHandler
 {
 
   public:
@@ -85,6 +86,16 @@ class FeederTest : public InfoHandlerFeeder
      * Reimplemented from InfoHandlerFeeder
      */
     virtual bool subscriptionRequest( const string& jid, const char* msg );
+
+    /**
+     * reimplmented from PollHandler
+     */
+    virtual char* poll();
+
+    /**
+     * reimplmented from PollHandler
+     */
+    virtual bool hasData();
 
   private:
     Feeder* c;
