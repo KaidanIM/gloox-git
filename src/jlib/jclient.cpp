@@ -325,7 +325,7 @@ void JClient::sendPresence()
 void JClient::send( const char* jid, const char* data )
 {
   iks* x = iks_make_msg( IKS_TYPE_NONE, jid, data );
-  Stream::send( this->P, x );
+  send( x );
 }
 
 JClient::state JClient::clientState()
