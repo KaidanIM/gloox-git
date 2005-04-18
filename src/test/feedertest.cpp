@@ -27,12 +27,14 @@
 int main(int argc, char *argv[])
 {
   FeederTest f;
+  f.setCmdLineArgs( argc, argv );
   f.start();
 
   return 0;
 }
 
 FeederTest::FeederTest()
+  : m_debug( false )
 {
 }
 
@@ -42,7 +44,7 @@ FeederTest::~FeederTest()
 
 void FeederTest::start()
 {
-  c = new Feeder( "remon", "feeder", "remon", "camaya.net" );
+  c = new Feeder( "remon", "feeder", "remon", "camaya.net", m_debug );
   c->registerInfoHandler( this );
   c->registerPollHandler( this );
   c->connect();
@@ -92,4 +94,18 @@ char* FeederTest::poll()
 bool FeederTest::hasData()
 {
   return true;
+}
+
+void FeederTest::setCmdLineArgs( int argc, char *argv[] )
+{
+  for (int i=0;i<argc;++i )
+  {
+    if ( argv[i][0] == '-' )
+      switch ( argv[i][1] )
+    {
+      case 'd':
+        m_debug = true;
+        break;
+    }
+  }
 }

@@ -51,12 +51,12 @@ class Feeder : public ConnectionListener, IqHandler, RosterListener
      * @param resource The resource part of the JID.
      * @param password The password to use for authentication.
      * @param server The jabber server's address or host name to connect to.
-     * @param port The port to connect to. Default: 5222
      * @param debug Turn debug of the jabber client on. Default: true
+     * @param port The port to connect to. Default: 5222
      */
     Feeder( const string& username, const string& resource,
             const string& password, const string& server,
-            int port = 5222, bool debug = true );
+            bool debug = true, int port = 5222 );
 
     /**
      * virtual Destructor
@@ -138,6 +138,7 @@ class Feeder : public ConnectionListener, IqHandler, RosterListener
     InfoHandlerFeeder* m_infoHandler;
 
     bool m_poll;
+    bool m_debug;
 
 };
 

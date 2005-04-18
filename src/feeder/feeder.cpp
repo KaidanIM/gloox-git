@@ -27,8 +27,9 @@ using namespace std;
 
 Feeder::Feeder( const string& username, const string& resource,
                 const string& password, const string& server,
-                int port, bool debug )
-  : m_poll( true ), m_infoHandler( 0 ), m_pollHandler( 0 )
+                bool debug, int port )
+  : m_poll( true ), m_infoHandler( 0 ), m_pollHandler( 0 ),
+  m_debug( debug )
 {
   c = new JClient( username, resource, password, server, port );
   c->set_log_hook();
@@ -155,7 +156,7 @@ void Feeder::handleIq( const char* xmlns, ikspak* pak )
 {
   if( iks_strncmp( XMLNS_IQ_RESULT, xmlns, iks_strlen( XMLNS_IQ_RESULT ) ) == 0 )
   {
-    printf( "received result: %s\n" );
+    if( m_debug ) printf( "received result: %s\n" );
 
     iks* x = iks_make_iq( IKS_TYPE_RESULT, XMLNS_IQ_RESULT );
     iks_insert_attrib( x, "from", c->jid().c_str() );
@@ -164,7 +165,7 @@ void Feeder::handleIq( const char* xmlns, ikspak* pak )
     c->send( x );
   }
   else
-    printf( "unhandled xmlns: %s\n", xmlns );
+    if( m_debug ) printf( "unhandled xmlns: %s\n", xmlns );
 }
 
 void Feeder::registerInfoHandler( InfoHandlerFeeder* ih )
