@@ -106,12 +106,12 @@ class Feeder : public ConnectionListener, IqHandler, RosterListener
     virtual void handleIq( const char* xmlns, ikspak* pak );
 
     /**
-     * Called upon successful connection.
+     * reimplemented from ConnectionListener.
      */
     virtual void onConnect();
 
     /**
-     * Called upon disconnection.
+     * reimplemented from ConnectionListener.
      */
     virtual void onDisconnect();
 
