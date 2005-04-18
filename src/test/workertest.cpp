@@ -42,7 +42,7 @@ WorkerTest::~WorkerTest()
 
 void WorkerTest::start()
 {
-  c = new Worker( "remon", "worker01", "remon", "camaya.net" );
+  c = new Worker( "jline", "worker01", "jline", "camaya.net" );
   c->registerInfoHandler( this );
   c->connect();
 }
@@ -57,7 +57,7 @@ void WorkerTest::disconnected()
   printf( "disconnected\n" );
 }
 
-void WorkerTest::rosterChanged( iksid* from, ikshowtype show )
+void WorkerTest::data( const char* data)
 {
-  printf( "someone special: %s: %d\n", from->full, show );
+  printf( "received data: %s\n", data );
 }
