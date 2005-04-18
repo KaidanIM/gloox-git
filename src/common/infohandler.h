@@ -40,7 +40,7 @@ class InfoHandler
 {
   public:
     /**
-     * This function is called whenever a connection has been successfully established.
+     * This function is called whenever a connection has been established successfully.
      */
     virtual void connected() {};
 
@@ -74,6 +74,7 @@ class InfoHandler
      * This function is called on every status change of an item in the roster.
      * @param jid The item's address.
      * @param status The item's new status.
+     * @param msg The status change message.
      */
     virtual void itemChanged( const string& jid, int status, const char* msg ) {};
 

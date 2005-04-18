@@ -60,6 +60,7 @@ class RosterListener
      * This function is called on every status change of an item in the roster.
      * @param jid The item's address.
      * @param status The item's new status.
+     * @param msg The status change message.
      */
     virtual void itemChanged( const string& jid, int status, const char* msg ) {};
 
