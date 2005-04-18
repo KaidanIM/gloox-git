@@ -86,7 +86,7 @@ class Roster : public IqHandler, PresenceHandler, SubscriptionHandler
      * @param jid The address to subscribe to.
      * @param msg The reason sent along with the subscription request.
      */
-    void subscribe( const string& jid, const string& msg );
+    void subscribe( const string& jid, const string& msg = "" );
 
     /**
      * Use this function to unsubscribe from a JID in the roster.
