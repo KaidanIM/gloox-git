@@ -39,11 +39,11 @@ Worker::Worker( const string username, const string resource,
   c->setSasl( false );
   c->setDebug( debug );
   c->registerIqHandler( this, XMLNS_IQ_DATA );
-  c->registerIqHandler( this, XMLNS_IQ_RESULT );
+  c->registerConnectionListener( this );
   c->roster()->registerRosterListener( this );
   c->setVersion( "Worker", "0.1" );
 
-  m_feederJID = strdup( "jline@camaya.net/feeder" );
+  m_feederJID = strdup( "remon@camaya.net" );
 }
 
 Worker::~Worker()
@@ -65,40 +65,8 @@ void Worker::handleIq( const char* xmlns, ikspak* pak )
     else
       printf( "got packet, now working\n" );
   }
-  else if( iks_strncmp( XMLNS_IQ_RESULT, xmlns, iks_strlen( XMLNS_IQ_RESULT ) ) == 0 )
-  {
-    printf( "got result but should not get one. came from %s\n", pak->from->full);
-  }
   else
     printf( "unhandled xmlns: %s\n", xmlns );
-}
-
-void Worker::handleSubscription( iksid* from, iksubtype type, const char* msg )
-{
-  switch( type )
-  {
-    case IKS_TYPE_SUBSCRIBE:
-      if( iks_strncmp( m_feederJID, from->full, iks_strlen( m_feederJID ) ) == 0 )
-      {
-        iks* x = iks_make_s10n( IKS_TYPE_SUBSCRIBED, from->full, "ok" );
-        iks_insert_attrib( x, "id", "sub01" );
-        c->send( x );
-      }
-      break;
-    case IKS_TYPE_SUBSCRIBED:
-      printf( "new buddy: %s\n", from->full );
-      break;
-    case IKS_TYPE_UNSUBSCRIBE:
-      {
-        iks* y = iks_make_s10n( IKS_TYPE_SUBSCRIBED, from->full, "ok" );
-        iks_insert_attrib( y, "id", "sub02" );
-        c->send( y );
-        break;
-      }
-    case IKS_TYPE_UNSUBSCRIBED:
-      printf( "buddy removed: %s\n", from->full );
-      break;
-  }
 }
 
 void Worker::registerDataHandler( DataHandler* dh )
@@ -114,4 +82,26 @@ void Worker::registerInfoHandler( InfoHandlerWorker* ih )
 void Worker::result( ResultCode code, const char* result )
 {
   
+}
+
+bool Worker::subscriptionRequest( const string& jid, const char* msg )
+{
+  if( jid == m_feederJID )
+    return true;
+
+  return false;
+}
+
+void Worker::onConnect()
+{
+  c->roster()->subscribe( m_feederJID );
+
+  if( m_infoHandler )
+    m_infoHandler->connected();
+}
+
+void Worker::onDisconnect()
+{
+  if( m_infoHandler )
+    m_infoHandler->disconnected();
 }
