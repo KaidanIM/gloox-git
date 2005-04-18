@@ -52,12 +52,12 @@ class Worker : public ConnectionListener, IqHandler, RosterListener
      * @param resource The resource part of the JID
      * @param password The password to use for authentication
      * @param server The jabber server's address or host name to connect to
-     * @param port The port to connect to. Default: 5222
      * @param debug Turn debug of the jabber client on. Default: true
+     * @param port The port to connect to. Default: 5222
      */
     Worker( const string username, const string resource,
             const string password, const string server,
-            int port = 5222, bool debug = true );
+            bool debug = true, int port = 5222 );
 
     /**
      * Destructor
@@ -123,7 +123,9 @@ class Worker : public ConnectionListener, IqHandler, RosterListener
     DataHandler* m_dataHandler;
     InfoHandlerWorker* m_infoHandler;
     iksid* m_feederID;
+
     bool m_working;
+    bool m_debug;
 
 };
 

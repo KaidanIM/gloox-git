@@ -97,8 +97,14 @@ class FeederTest : public InfoHandlerFeeder, PollHandler
      */
     virtual bool hasData();
 
+    /**
+     * Used to set command line arguments.
+     */
+    void setCmdLineArgs( int argc, char *argv[] );
+
   private:
     Feeder* c;
+    bool m_debug;
 };
 
 #endif // FEEDERTEST_H__

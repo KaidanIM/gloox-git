@@ -30,9 +30,9 @@ using namespace std;
 
 Worker::Worker( const string username, const string resource,
                 const string password, const string server,
-                int port, bool debug )
+                bool debug, int port )
   : m_infoHandler( 0 ), m_dataHandler( 0 ), m_working( false ),
-  m_feederID( 0 )
+  m_feederID( 0 ), m_debug( debug )
 {
   c = new JClient( username, resource, password, server, port );
   c->set_log_hook();
@@ -71,12 +71,12 @@ void Worker::handleIq( const char* xmlns, ikspak* pak )
       iks_insert_attrib( x, "to", pak->from->full );
       iks_insert_attrib( x, "id", pak->id );
       c->send( x );
-      printf( "got packet but also got work\n");
+      if( m_debug ) printf( "got packet but also got work\n");
     }
     else
     {
       m_working = true;
-      printf( "got packet, now working\n" );
+      if( m_debug ) printf( "got packet, now working\n" );
       iks* x = iks_make_iq( IKS_TYPE_RESULT, pak->ns );
       iks_insert_attrib( x, "from", c->jid().c_str() );
       iks_insert_attrib( x, "to", pak->from->full );
@@ -91,7 +91,7 @@ void Worker::handleIq( const char* xmlns, ikspak* pak )
     }
   }
   else
-    printf( "unhandled xmlns: %s\n", xmlns );
+    if( m_debug ) printf( "unhandled xmlns: %s\n", xmlns );
 }
 
 void Worker::registerDataHandler( DataHandler* dh )
@@ -107,7 +107,7 @@ void Worker::registerInfoHandler( InfoHandlerWorker* ih )
 void Worker::result( ResultCode code, const char* result )
 {
   m_working = false;
-  printf( "no longer working\n" );
+  if( m_debug ) printf( "work finished\n" );
   iks* x = iks_make_iq( IKS_TYPE_SET, XMLNS_IQ_RESULT );
   iks_insert_attrib( x, "from", c->jid().c_str() );
   iks_insert_attrib( x, "to", m_feederID->full );

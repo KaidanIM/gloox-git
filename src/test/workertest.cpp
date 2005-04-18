@@ -29,13 +29,13 @@ int main( int argc, char *argv[] )
 {
   WorkerTest f;
   f.setCmdLineArgs( argc, argv );
-
   f.start();
 
   return 0;
 }
 
 WorkerTest::WorkerTest()
+  : m_debug( false ) 
 {
 }
 
@@ -48,7 +48,7 @@ void WorkerTest::start()
   if( m_feeder.empty() )
     m_feeder = "remon@camaya.net/feeder";
 
-  c = new Worker( "jline", "worker01", "jline", "camaya.net" );
+  c = new Worker( "jline", "worker01", "jline", "camaya.net", m_debug );
   c->registerInfoHandler( this );
   c->registerDataHandler( this );
   c->setFeeder( m_feeder );
