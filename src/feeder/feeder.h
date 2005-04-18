@@ -130,15 +130,10 @@ class Feeder : public ConnectionListener, IqHandler, RosterListener
      */
     void registerInfoHandler( InfoHandlerFeeder* ih );
 
-  protected:
-    /**
-     * Holds JID/status pairs.
-     */
-    typedef map<const char*, int> PresenceList;
-
   private:
+    void sendData( const string& jid );
+
     JClient* c;
-    PresenceList m_presence;
     PollHandler* m_pollHandler;
     InfoHandlerFeeder* m_infoHandler;
 

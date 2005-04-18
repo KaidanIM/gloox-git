@@ -37,7 +37,6 @@ Feeder::Feeder( const string& username, const string& resource,
   c->setDebug( debug );
   c->registerConnectionListener( this );
   c->roster()->registerRosterListener( this );
-  c->registerIqHandler( this, XMLNS_IQ_DATA );
   c->registerIqHandler( this, XMLNS_IQ_RESULT );
   c->setVersion( "Feeder", "0.1" );
 }
@@ -54,12 +53,13 @@ void Feeder::connect()
 
 bool Feeder::push( const char* data )
 {
-  PresenceList::const_iterator it = m_presence.begin();
-  for( it; it != m_presence.end(); ++it )
+  RosterHelper::RosterMap roster = c->roster()->roster();
+  RosterHelper::RosterMap::const_iterator it = roster.begin();
+  for( it; it != roster.end(); it++ )
   {
     if( (*it).second == IKS_SHOW_AVAILABLE )
     {
-      c->send( (*it).first, data );
+      sendData( (*it).first );
       return true;
     }
   }
@@ -88,17 +88,8 @@ void Feeder::itemChanged( const string& jid, int status, const char* msg )
   if( m_infoHandler )
     m_infoHandler->itemChanged( jid, status, msg );
 
-  if ( ( status == IKS_SHOW_AVAILABLE ) && m_poll )
-  {
-    if( m_pollHandler )
-    {
-      char* data = m_pollHandler->poll();
-      if ( data )
-        c->send( jid.c_str(), data );
-      else
-        m_poll = false;
-    }
-  }
+  if ( ( status == IKS_SHOW_AVAILABLE ) && m_poll && m_pollHandler )
+    sendData( jid );
 }
 
 bool Feeder::subscriptionRequest( const string& jid, const char* msg )
@@ -112,17 +103,48 @@ void Feeder::roster( RosterHelper::RosterMap roster )
 {
   if( m_infoHandler )
     m_infoHandler->roster( roster );
+
+  if( m_pollHandler && roster.size() )
+  {
+    int count = 0;
+    RosterHelper::RosterMap::const_iterator it = roster.begin();
+    while( m_pollHandler->hasData() )
+    {
+      if( (*it).second == IKS_SHOW_AVAILABLE )
+      {
+        ++count;
+        sendData( (*it).first );
+      }
+
+      if( it == roster.end() )
+        if( count )
+        {
+          it = roster.begin();
+          count = 0;
+        }
+        else
+          break;
+      else
+        ++it;
+    }
+    m_poll = false;
+  }
+}
+
+void Feeder::sendData( const string& jid )
+{
+  const char* data = m_pollHandler->poll();
+  if ( data )
+    c->send( jid.c_str(), data );
+  else
+    m_poll = false;
 }
 
 void Feeder::handleIq( const char* xmlns, ikspak* pak )
 {
-  if( iks_strncmp( XMLNS_IQ_DATA, xmlns, iks_strlen( XMLNS_IQ_DATA ) ) == 0 )
+  if( iks_strncmp( XMLNS_IQ_RESULT, xmlns, iks_strlen( XMLNS_IQ_RESULT ) ) == 0 )
   {
-    
-  }
-  else if( iks_strncmp( XMLNS_IQ_RESULT, xmlns, iks_strlen( XMLNS_IQ_RESULT ) ) == 0 )
-  {
-    
+    // handle incoming result
   }
   else
     printf( "unhandled xmlns: %s\n", xmlns );
