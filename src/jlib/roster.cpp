@@ -35,7 +35,7 @@ Roster::~Roster()
 
 }
 
-RosterHelper::RosterMap Roster::listRoster()
+RosterHelper::RosterMap Roster::roster()
 {
   return m_roster;
 }

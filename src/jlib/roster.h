@@ -64,7 +64,7 @@ class Roster : public IqHandler, PresenceHandler, SubscriptionHandler
      * This function returns the roster.
      * @return Returns a map of JIDs with their current presence.
      */
-    RosterHelper::RosterMap listRoster();
+    RosterHelper::RosterMap roster();
 
     /**
      * Reimplemented from IqHandler.
