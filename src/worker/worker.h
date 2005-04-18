@@ -75,13 +75,14 @@ class Worker : public ConnectionListener, IqHandler, RosterListener
     virtual void handleIq( const char* xmlns, ikspak* pak );
 
     /**
-     * reimplement this function if you want to be notified about 
-     * incoming subscriptions
-     * @param from The sender's jid
-     * @param type The packet type
-     * @param msg The subscription message (reason)
+     * reimplemented from ConnectionListener.
      */
-    virtual void handleSubscription( iksid* from, iksubtype type, const char* msg );
+    virtual void onConnect();
+
+    /**
+     * reimplemented from ConnectionListener.
+     */
+    virtual void onDisconnect();
 
     /**
      * Using this method you can register an object as data handler. This object gets
@@ -106,11 +107,16 @@ class Worker : public ConnectionListener, IqHandler, RosterListener
      */
     void result( ResultCode code, const char* result );
 
+    /**
+     * Reimplemented from RosterListener
+     */
+    virtual bool subscriptionRequest( const string& jid, const char* msg );
+
   private:
     JClient* c;
     DataHandler* m_dataHandler;
     InfoHandlerWorker* m_infoHandler;
-    const char* m_feederJID;
+    string m_feederJID;
     bool m_working;
 
 };
