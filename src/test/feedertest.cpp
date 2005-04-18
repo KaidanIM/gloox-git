@@ -72,9 +72,9 @@ void FeederTest::itemChanged( const string& jid, int status, const char* msg )
   printf( "roster update: %s: %d: %s\n", jid.c_str(), status, msg );
 }
 
-bool FeederTest::subscriptionRequest( const string& jid, const string& msg )
+bool FeederTest::subscriptionRequest( const string& jid, const char* msg )
 {
-  printf( "subscribing %s, reason: %s\n", jid.c_str(), msg.c_str() );
+  printf( "subscribing %s, reason: %s\n", jid.c_str(), msg );
   return true;
 }
 

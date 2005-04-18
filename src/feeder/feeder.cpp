@@ -34,7 +34,7 @@ Feeder::Feeder( const string& username, const string& resource,
   c->set_log_hook();
   c->setTls( false );
   c->setSasl( false );
-  c->setDebug( false/*debug*/ );
+  c->setDebug( debug );
   c->registerConnectionListener( this );
   c->roster()->registerRosterListener( this );
   c->registerIqHandler( this, XMLNS_IQ_DATA );
@@ -101,7 +101,7 @@ void Feeder::itemChanged( const string& jid, int status, const char* msg )
   }
 }
 
-bool Feeder::subscriptionRequest( const string& jid, const string& msg )
+bool Feeder::subscriptionRequest( const string& jid, const char* msg )
 {
   if( m_infoHandler )
     return m_infoHandler->subscriptionRequest( jid, msg );

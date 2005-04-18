@@ -84,7 +84,7 @@ class FeederTest : public InfoHandlerFeeder
     /**
      * Reimplemented from InfoHandlerFeeder
      */
-    virtual bool subscriptionRequest( const string& jid, const string& msg );
+    virtual bool subscriptionRequest( const string& jid, const char* msg );
 
   private:
     Feeder* c;
