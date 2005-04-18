@@ -4,7 +4,7 @@ AC_PREREQ(2.50)
 AC_INIT
 AC_CONFIG_SRCDIR([configure.ac])
 dnl Every other copy of the package version number gets its value from here
-AM_INIT_AUTOMAKE(mailmon,0.1)
+AM_INIT_AUTOMAKE(xmppgrid,0.1)
 
 dnl create a config.h file (Automake will add -DHAVE_CONFIG_H)
 AM_CONFIG_HEADER(config.h)
@@ -29,6 +29,10 @@ PKG_CHECK_MODULES(IKSEMEL,iksemel >= 1.2,,exit)
 AC_SUBST(IKSEMEL_CFLAGS)
 AC_SUBST(IKSEMEL_LIBS)
 
+PKG_CHECK_MODULES(QT,qt-mt >= 3.3,,exit)
+AC_SUBST(QT_CFLAGS)
+AC_SUBST(QT_LIBS)
+
 dnl Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS(unistd.h strings.h errno.h)
@@ -46,7 +50,6 @@ src/jlib/Makefile
 src/jlib/wrapper/Makefile
 src/feeder/Makefile
 src/worker/Makefile
-src/frontend/Makefile
 src/test/Makefile
 ])
 AC_OUTPUT
