@@ -21,11 +21,13 @@
 #ifndef FRONTEND_H__
 #define FRONTEND_H__
 
+#include <qobject.h>
+
 /**
  * The main class of the Feeder Frontend.
  * @author Jakob Schroeter <js@camaya.net>
  */
-class Frontend
+class Frontend : public QObject
 {
   Q_OBJECT
 
