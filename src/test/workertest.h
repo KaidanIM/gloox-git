@@ -21,6 +21,7 @@
 #define WORKERTEST_H__
 
 #include "../worker/infohandler.h"
+#include "../worker/datahandler.h"
 
 #include <string>
 using namespace std;
@@ -32,7 +33,7 @@ class Worker;
  * @author Jakob Schroeter <js@camaya.net>
  */
 
-class WorkerTest : public InfoHandlerWorker
+class WorkerTest : public InfoHandlerWorker, DataHandler
 {
 
   public:
@@ -62,9 +63,9 @@ class WorkerTest : public InfoHandlerWorker
     virtual void disconnected();
 
     /**
-     * reimplemented from InfoHandlerWorker
+     * reimplemented from DataHandler
      */
-    virtual void rosterChanged( iksid* from, ikshowtype show );
+    virtual void data( const char* data);
 
   private:
     Worker* c;
