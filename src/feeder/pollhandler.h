@@ -37,6 +37,12 @@ class PollHandler
      */
     virtual char* poll() {};
 
+    /**
+     * reimplment this to be able to tell the requestor that data is available
+     * and can be fetched using @c poll().
+     * @return True if data is available. False otherwise.
+     */
+    virtual bool hasData() {};
 };
 
 #endif // POLLHANDLER_H__
