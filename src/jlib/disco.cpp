@@ -18,15 +18,29 @@
 
 
 #include "disco.h"
+#include "jclient.h"
 
 
 Disco::Disco( JClient* parent )
   : m_parent( parent )
 {
-
+  m_parent->registerIqHandler( this, XMLNS_DISCO_INFO );
+  m_parent->registerIqHandler( this, XMLNS_DISCO_ITEMS );
 }
 
 Disco::~Disco()
 {
 
+}
+
+void Disco::handleIq( const char* xmlns, ikspak* pak )
+{
+  if( iks_strncmp( XMLNS_DISCO_INFO, xmlns, iks_strlen( XMLNS_DISCO_INFO ) ) == 0 )
+  {
+    
+  }
+  else if( iks_strncmp( XMLNS_DISCO_ITEMS, xmlns, iks_strlen( XMLNS_DISCO_ITEMS ) ) == 0 )
+  {
+    
+  }
 }
