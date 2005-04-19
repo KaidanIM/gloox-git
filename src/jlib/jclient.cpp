@@ -28,8 +28,7 @@
 
 
 JClient::JClient()
-  : m_username( 0 ), m_resource( 0 ), m_password( 0 ),
-  m_server( 0 ), m_port( 0 ), m_thread( 0 ),
+  : m_port( XMPP_PORT ), m_thread( 0 ),
   m_tls( true ), m_sasl( true ),
   m_autoPresence( false ), m_manageRoster( true ),
   m_handleDiscoInfo( true ), m_handleDiscoItems( true ),
@@ -38,8 +37,23 @@ JClient::JClient()
   init();
 }
 
-JClient::JClient( const std::string username, const std::string resource, const std::string password,
-                  const std::string server, int port )
+JClient::JClient( const std::string& id, const std::string& password, int port )
+  : m_port( port ), m_password( password ), m_thread( 0 ),
+  m_tls( true ), m_sasl( true ),
+  m_autoPresence( false ), m_manageRoster( true ),
+  m_handleDiscoInfo( true ), m_handleDiscoItems( true ),
+  m_idCount( 0 ), m_roster( 0 )
+{
+  m_self = iks_id_new( get_stack(), id.c_str() );
+  m_username = m_self->user;
+  m_server = m_self->server;
+  m_resource = m_self->resource;
+  printf("u: %s, s: %s, r: %s, p: %s\n", m_username.c_str(),m_server.c_str(),m_resource.c_str(),m_password.c_str());
+  init();
+}
+
+JClient::JClient( const std::string& username, const std::string& password, const std::string& server,
+                  const std::string& resource, int port )
   : m_username( username ), m_resource( resource ), m_password( password ),
   m_server( server ), m_port( port ), m_thread( 0 ),
   m_tls( true ), m_sasl( true ),
@@ -274,7 +288,21 @@ void JClient::connect()
   int ret;
   if(ret = Stream::connect( m_server, m_port ) )
   {
-    if( m_debug ) printf("connection failure\n");
+    switch( ret )
+    {
+      case IKS_NET_NODNS:
+        printf( "host name lookup failure: %s\n", m_server.c_str() );
+        break;
+      case IKS_NET_NOSOCK:
+        printf( "cannot create socket\n" );
+        break;
+      case IKS_NET_NOCONN:
+        printf( "connection refused or no xml stream: %s:%d\n", m_server.c_str(), m_port );
+        break;
+      case IKS_NET_RWERR:
+        printf( "read/write error: %s\n", m_server.c_str() );
+        break;
+    }
     return;
   }
 

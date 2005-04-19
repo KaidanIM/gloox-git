@@ -39,6 +39,8 @@
 #define XMLNS_VERSION     "jabber:iq:version"
 #define XMLNS_REGISTER    "jabber:iq:register"
 
+#define XMPP_PORT         5222
+
 using namespace std;
 using namespace Iksemel;
 
@@ -109,15 +111,24 @@ class JClient : public Stream
     /**
      * Constructs a new JClient.
      * SASL and TLS are on by default.
+     * @param id A full Jabber ID used for connecting to the server.
+     * @param password The password used for authentication.
+     * @param port The port to connect to. Default: 5222
+     */
+    JClient( const std::string& id, const std::string& password, int port = XMPP_PORT );
+
+    /**
+     * Constructs a new JClient.
+     * SASL and TLS are on by default.
      * @param username The username/local part of the JID.
      * @param resource The resource part of the JID.
      * @param password The password to use for authentication.
      * @param server The jabber server's address or host name to connect to.
      * @param port The port to connect to. Default: 5222
      */
-    JClient( const std::string username, const std::string resource,
-             const std::string password, const std::string server,
-             int port = 5222 );
+    JClient( const std::string& username, const std::string& password,
+             const std::string& server, const std::string& resource,
+             int port = XMPP_PORT );
 
     /**
      * Destructor
