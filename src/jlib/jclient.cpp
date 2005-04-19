@@ -48,7 +48,6 @@ JClient::JClient( const std::string& id, const std::string& password, int port )
   m_username = m_self->user;
   m_server = m_self->server;
   m_resource = m_self->resource;
-  printf("u: %s, s: %s, r: %s, p: %s\n", m_username.c_str(),m_server.c_str(),m_resource.c_str(),m_password.c_str());
   init();
 }
 
