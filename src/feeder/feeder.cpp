@@ -25,13 +25,10 @@
 using namespace std;
 
 
-Feeder::Feeder( const string& username, const string& resource,
-                const string& password, const string& server,
-                bool debug, int port )
-  : m_poll( true ), m_infoHandler( 0 ), m_pollHandler( 0 ),
-  m_debug( debug )
+Feeder::Feeder( const string& id, const string& password, bool debug, int port )
+  : m_poll( true ), m_infoHandler( 0 ), m_pollHandler( 0 ), m_debug( debug )
 {
-  c = new JClient( username, resource, password, server, port );
+  c = new JClient( id, password, port );
   c->set_log_hook();
   c->setTls( false );
   c->setSasl( false );
@@ -40,6 +37,7 @@ Feeder::Feeder( const string& username, const string& resource,
   c->roster()->registerRosterListener( this );
   c->registerIqHandler( this, XMLNS_IQ_RESULT );
   c->setVersion( "Feeder", "0.1" );
+  c->setFeature( "xmppgrid:result" );
 }
 
 Feeder::~Feeder()

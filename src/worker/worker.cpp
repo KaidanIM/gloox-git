@@ -28,13 +28,11 @@
 using namespace std;
 
 
-Worker::Worker( const string username, const string resource,
-                const string password, const string server,
-                bool debug, int port )
+Worker::Worker( const string& id, const string& password, const bool debug, const int port )
   : m_infoHandler( 0 ), m_dataHandler( 0 ), m_working( false ),
   m_feederID( 0 ), m_debug( debug )
 {
-  c = new JClient( username, resource, password, server, port );
+  c = new JClient( id, password, port );
   c->set_log_hook();
   c->setTls( false );
   c->setSasl( false );
@@ -43,11 +41,11 @@ Worker::Worker( const string username, const string resource,
   c->registerConnectionListener( this );
   c->roster()->registerRosterListener( this );
   c->setVersion( "Worker", "0.1" );
+  c->setFeature( "xmppgrid:data" );
 }
 
 Worker::~Worker()
 {
-  
 }
 
 void Worker::setFeeder( const string& jid )

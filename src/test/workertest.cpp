@@ -28,14 +28,16 @@
 int main( int argc, char *argv[] )
 {
   WorkerTest f;
-  f.setCmdLineArgs( argc, argv );
-  f.start();
+  if( f.setCmdLineArgs( argc, argv ) )
+    f.start();
+  else
+    return 1;
 
   return 0;
 }
 
 WorkerTest::WorkerTest()
-  : m_debug( false ) 
+  : m_debug( false )
 {
 }
 
@@ -48,7 +50,13 @@ void WorkerTest::start()
   if( m_feeder.empty() )
     m_feeder = "remon@camaya.net/feeder";
 
-  c = new Worker( "jline", "worker01", "jline", "camaya.net", m_debug );
+  if( m_passwd.empty() )
+    m_passwd = "jline";
+
+  if( m_self.empty() )
+    m_self = "jline@camaya.net/worker";
+
+  c = new Worker( m_self, m_passwd, m_debug );
   c->registerInfoHandler( this );
   c->registerDataHandler( this );
   c->setFeeder( m_feeder );
@@ -72,7 +80,7 @@ void WorkerTest::data( const char* data)
   c->result( RESULT_SUCCESS, "ok" );
 }
 
-void WorkerTest::setCmdLineArgs( int argc, char *argv[] )
+bool WorkerTest::setCmdLineArgs( int argc, char *argv[] )
 {
   for (int i=0;i<argc;++i )
   {
@@ -86,14 +94,40 @@ void WorkerTest::setCmdLineArgs( int argc, char *argv[] )
         }
         else
         {
-          printf( "parameter -f requires a Jabber ID. using default.\n" );
-          m_feeder = "remon@camaya.net/feeder";
+          printf( "parameter -f requires a Jabber ID.\n" );
+          return false;
         }
         break;
 
       case 'd':
         m_debug = true;
         break;
+
+      case 's':
+        if ( argv[++i] && argv[i][0] != '-' )
+        {
+          m_self = argv[i];
+        }
+        else
+        {
+          printf( "parameter -s requires a Jabber ID.\n" );
+          return false;
+        }
+        break;
+
+      case 'p':
+        if ( argv[++i] && argv[i][0] != '-' )
+        {
+          m_passwd =  argv[i];
+        }
+        else
+        {
+          printf( "parameter -p requires a password.\n" );
+          return false;
+        }
+        break;
     }
   }
+
+  return true;
 }

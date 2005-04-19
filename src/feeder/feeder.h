@@ -49,19 +49,15 @@ class Feeder : public ConnectionListener, IqHandler, RosterListener
      * Constructor.
      * Creates a new Feeder, registers IqHandler, ConnectionListener and
      * RosterListener and connects to the XMPP server.
-     * @param username The username/local part of the JID.
-     * @param resource The resource part of the JID.
+     * @param id The full JID.
      * @param password The password to use for authentication.
-     * @param server The jabber server's address or host name to connect to.
      * @param debug Turn debug of the jabber client on. Default: true
      * @param port The port to connect to. Default: 5222
      */
-    Feeder( const string& username, const string& resource,
-            const string& password, const string& server,
-            bool debug = true, int port = 5222 );
+    Feeder( const string& id, const string& password, bool debug = true, int port = 5222 );
 
     /**
-     * virtual Destructor
+     * Virtual destructor.
      */
     virtual ~Feeder();
 

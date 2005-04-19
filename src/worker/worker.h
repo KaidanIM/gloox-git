@@ -39,6 +39,8 @@ class JClient;
  * This class implements a Worker.
  * You should reimplement the DataHandler interface to receive to-be-processed
  * data from the Feeder.
+ * The InfoHandlerWorker interface delivers additional information such as connection
+ * and roster status.
  * @author Jakob Schroeter <js@camaya.net>
  */
 class Worker : public ConnectionListener, IqHandler, RosterListener
@@ -48,16 +50,12 @@ class Worker : public ConnectionListener, IqHandler, RosterListener
      * Constructor
      * Creates a new Worker, registers IqHandler, ConnectionListener and
      * RosterListener and connects to the XMPP server.
-     * @param username The username/local part of the JID
-     * @param resource The resource part of the JID
-     * @param password The password to use for authentication
-     * @param server The jabber server's address or host name to connect to
+     * @param id The full JID.
+     * @param password The password to use for authentication.
      * @param debug Turn debug of the jabber client on. Default: true
      * @param port The port to connect to. Default: 5222
      */
-    Worker( const string username, const string resource,
-            const string password, const string server,
-            bool debug = true, int port = 5222 );
+    Worker( const string& id, const string& password, const bool debug = true, const int port = 5222 );
 
     /**
      * Destructor

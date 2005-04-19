@@ -27,8 +27,10 @@
 int main(int argc, char *argv[])
 {
   FeederTest f;
-  f.setCmdLineArgs( argc, argv );
-  f.start();
+  if( f.setCmdLineArgs( argc, argv ) )
+    f.start();
+  else
+    return 1;
 
   return 0;
 }
@@ -44,7 +46,13 @@ FeederTest::~FeederTest()
 
 void FeederTest::start()
 {
-  c = new Feeder( "remon", "feeder", "remon", "camaya.net", m_debug );
+  if( m_self.empty() )
+    m_self = "remon@camaya.net/feeder";
+
+  if( m_passwd.empty() )
+    m_passwd = "remon";
+
+  c = new Feeder( m_self, m_passwd, m_debug );
   c->registerInfoHandler( this );
   c->registerPollHandler( this );
   c->connect();
@@ -96,7 +104,7 @@ bool FeederTest::hasData()
   return true;
 }
 
-void FeederTest::setCmdLineArgs( int argc, char *argv[] )
+bool FeederTest::setCmdLineArgs( int argc, char *argv[] )
 {
   for (int i=0;i<argc;++i )
   {
@@ -105,6 +113,30 @@ void FeederTest::setCmdLineArgs( int argc, char *argv[] )
     {
       case 'd':
         m_debug = true;
+        break;
+
+      case 's':
+        if ( argv[++i] && argv[i][0] != '-' )
+        {
+          m_self = argv[i];
+        }
+        else
+        {
+          printf( "parameter -s requires a Jabber ID.\n" );
+          return false;
+        }
+        break;
+
+      case 'p':
+        if ( argv[++i] && argv[i][0] != '-' )
+        {
+          m_passwd =  argv[i];
+        }
+        else
+        {
+          printf( "parameter -p requires a password.\n" );
+          return false;
+        }
         break;
     }
   }
