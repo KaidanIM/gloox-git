@@ -21,14 +21,29 @@
 #ifndef DISCO_H__
 #define DISCO_H__
 
-#include "jclient.h"
+#include "iqhandler.h"
 
+class JClient;
 
-class Disco
+class Disco : public IqHandler
 {
   public:
+    /**
+     * Constructor.
+     * Creates a new Disco client that registers as IqHandler with @c JClient.
+     * @param parent The JClient used for XMPP communication
+     */
     Disco( JClient* parent );
-    ~Disco();
+
+    /**
+     * Virtual destructor.
+     */
+    virtual ~Disco();
+
+    /**
+     * reimplemented from IqHandler.
+     */
+    virtual void handleIq( const char* xmlns, ikspak* pak );
 
   private:
     JClient* m_parent;
