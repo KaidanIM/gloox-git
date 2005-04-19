@@ -51,7 +51,7 @@ class Storage
      * @param result The result to store.
      * @return @c true if storing was successfull, @c false if storing failed
      */
-    bool store( Result& result );
+    bool store( const Result& result );
 
   private:
     MYSQL mysql;

@@ -99,11 +99,16 @@ class FeederTest : public InfoHandlerFeeder, PollHandler
 
     /**
      * Used to set command line arguments.
+     * @param argc The number of command line arguments.
+     * @param argv The arguments.
+     * @return False if an error is encountered.
      */
-    void setCmdLineArgs( int argc, char *argv[] );
+    bool setCmdLineArgs( int argc, char *argv[] );
 
   private:
     Feeder* c;
+    string m_self;
+    string m_passwd;
     bool m_debug;
 };
 

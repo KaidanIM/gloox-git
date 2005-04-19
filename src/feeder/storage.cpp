@@ -35,7 +35,7 @@ Storage::~Storage()
 {
 }
 
-bool Storage::store( Result& result )
+bool Storage::store( const Result& result )
 {
 
 }
