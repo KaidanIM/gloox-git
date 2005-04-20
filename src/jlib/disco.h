@@ -28,6 +28,7 @@
 using namespace std;
 
 class JClient;
+class DiscoHandler;
 
 /**
  * This class implements JEP-0030 (Service Discovery).
@@ -81,6 +82,17 @@ class Disco : public IqHandler
     Disco::StringList getDiscoItems( const string& to );
 
     /**
+     * This function is a easy way to determine whether a given 
+     * entity supports a given feature or not.
+     * It does so by querying the entity for its supported features
+     * and comparing the wanted feature to the returned list.
+     * @param jid The JID to query.
+     * @param feature The feature in question.
+     * @return True if the entity supports the feature, false otherwise.
+     */
+    bool hasFeature( const string& jid, const string& feature );
+
+    /**
      * Sets the version of the host application using this library.
      * The library takes care of jabber:iq:version requests. These
      * IQ packets will not be forwarded to the IqHandlers.
@@ -100,11 +112,21 @@ class Disco : public IqHandler
      */
     void setIdentity( const string& category, const string& type );
 
+    /**
+     * Use this function to register an @ref DiscoHandler with the Disco
+     * object. The DiscoHandler will receive the results of disco queries.
+     * There can only be one registered DiscoHandler at a time.
+     * @param dh The DiscoHandler-derived object to register.
+     */
+    void registerDiscoHandler( DiscoHandler* dh );
+
     // reimplemented from IqHandler.
     virtual void handleIq( const char* xmlns, ikspak* pak );
 
   private:
     JClient* m_parent;
+
+    DiscoHandler* m_discoHandler;
 
     StringList m_features;
 
