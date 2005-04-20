@@ -169,15 +169,10 @@ void JClient::disableRoster()
   m_roster = 0;
 }
 
-void JClient::addQueryID( std::string jid, std::string id )
-{
-  m_queryIDs[id] = jid;
-}
-
 std::string JClient::getID()
 {
   char* tmp = (char*)malloc( strlen( "id" ) + sizeof( int ) );
-  tmp = strdup( "id%d" );
+  tmp = strdup( "uid%d" );
   sprintf( tmp, tmp, ++m_idCount );
   std::string str( tmp );
   free( tmp );

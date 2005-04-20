@@ -25,6 +25,7 @@
 
 #include <string>
 #include <list>
+#include <map>
 using namespace std;
 
 class JClient;
@@ -37,8 +38,6 @@ class DiscoHandler;
 class Disco : public IqHandler
 {
   public:
-    typedef list<string> StringList;
-
     /**
      * Constructor.
      * You should access the disco object through the @c JClient object.
@@ -71,7 +70,7 @@ class Disco : public IqHandler
      * @param to The destination-JID of the query.
      * @return A list of capabilities.
      */
-    Disco::StringList getDiscoInfo( const string& to );
+    void getDiscoInfo( const string& to );
 
     /**
      * Queries the given JID for its items according to
@@ -79,7 +78,7 @@ class Disco : public IqHandler
      * @param to The destination-JID of the query.
      * @return A list of items.
      */
-    Disco::StringList getDiscoItems( const string& to );
+    void getDiscoItems( const string& to );
 
     /**
      * This function is a easy way to determine whether a given 
@@ -124,11 +123,19 @@ class Disco : public IqHandler
     virtual void handleIq( const char* xmlns, ikspak* pak );
 
   private:
+    void addQueryID( const string& id, const string& to );
+    bool findID( const string& id, const string& from );
+
+
     JClient* m_parent;
+
+    typedef list<string>                  StringList; // necessary at all?
+    typedef map<std::string, std::string> StringMap;
 
     DiscoHandler* m_discoHandler;
 
     StringList m_features;
+    StringMap  m_queryIDs;
 
     string m_versionName;
     string m_versionVersion;
