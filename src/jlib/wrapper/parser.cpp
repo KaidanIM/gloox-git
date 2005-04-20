@@ -35,7 +35,7 @@ Parser::~Parser() {
 
 void Parser::init(iksparser *prs) {
   P = prs;
-    inited = true;
+  inited = true;
 }
 
 int Parser::parse(char *data, size_t len, int finish) {
