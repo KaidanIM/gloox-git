@@ -22,6 +22,8 @@
 
 #include "../jlib/jclient.h"
 #include "../jlib/roster.h"
+#include "../jlib/disco.h"
+
 using namespace std;
 
 
@@ -36,8 +38,8 @@ Feeder::Feeder( const string& id, const string& password, bool debug, int port )
   c->registerConnectionListener( this );
   c->roster()->registerRosterListener( this );
   c->registerIqHandler( this, XMLNS_IQ_RESULT );
-  c->setVersion( "Feeder", "0.1" );
-  c->setFeature( "xmppgrid:result" );
+  c->disco()->setVersion( "Feeder", "0.1" );
+  c->disco()->addFeature( "xmppgrid:result" );
 }
 
 Feeder::~Feeder()

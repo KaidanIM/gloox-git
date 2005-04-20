@@ -35,7 +35,7 @@ class PresenceHandler;
 // class SubscriptionHandler;
 
 /**
- * A Jabber/XMPP Roster.
+ * This class implements Jabber/XMPP roster handling in the jabber:iq:roster namespace.
  * This class implements a roster. It takes care of changing presence, subscriptions, etc.
  * @author Jakob Schroeter <js@camaya.net>
  */
@@ -67,21 +67,6 @@ class Roster : public IqHandler, PresenceHandler, SubscriptionHandler
     RosterHelper::RosterMap roster();
 
     /**
-     * Reimplemented from IqHandler.
-     */
-    virtual void handleIq( const char* xmlns, ikspak* pak );
-
-    /**
-     * Reimplemented from PresenceHandler.
-     */
-    virtual void handlePresence( iksid* from, iksubtype type, ikshowtype show, const char* msg );
-
-    /**
-     * Reimplemented from SubscriptionHandler.
-     */
-    virtual void handleSubscription( iksid* from, iksubtype type, const char* msg );
-
-    /**
      * Use this function to subscribe to a new JID.
      * @param jid The address to subscribe to.
      * @param msg The reason sent along with the subscription request.
@@ -100,6 +85,15 @@ class Roster : public IqHandler, PresenceHandler, SubscriptionHandler
      * @param rl The object that receives roster updates.
      */
     void registerRosterListener( RosterListener* rl );
+
+    // reimplemented from IqHandler.
+    virtual void handleIq( const char* xmlns, ikspak* pak );
+
+    // reimplemented from PresenceHandler.
+    virtual void handlePresence( iksid* from, iksubtype type, ikshowtype show, const char* msg );
+
+    // reimplemented from SubscriptionHandler.
+    virtual void handleSubscription( iksid* from, iksubtype type, const char* msg );
 
   private:
     void add( const string& jid, int status);

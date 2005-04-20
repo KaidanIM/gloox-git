@@ -329,7 +329,9 @@ class JClient : public Stream
 
     /**
      * Registers @c ih as object that receives all Iq packet notifications.
-     * @param ih The object to receive Iq packet notifications.
+     * Exists for edge cases.
+     * @param ih The object to receive Iq packet notifications.>
+     * @deprecated Use @c registerIqHandler( IqHandler* ih, const char* xmlns ) instead.
      */
     void registerIqHandler( IqHandler* ih );
 

@@ -24,6 +24,7 @@
 #include "../common/common.h"
 #include "../jlib/jclient.h"
 #include "../jlib/roster.h"
+#include "../jlib/disco.h"
 
 using namespace std;
 
@@ -40,8 +41,8 @@ Worker::Worker( const string& id, const string& password, const bool debug, cons
   c->registerIqHandler( this, XMLNS_IQ_DATA );
   c->registerConnectionListener( this );
   c->roster()->registerRosterListener( this );
-  c->setVersion( "Worker", "0.1" );
-  c->setFeature( "xmppgrid:data" );
+  c->disco()->setVersion( "Worker", "0.1" );
+  c->disco()->addFeature( "xmppgrid:data" );
 }
 
 Worker::~Worker()

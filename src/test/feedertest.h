@@ -53,57 +53,39 @@ class FeederTest : public InfoHandlerFeeder, PollHandler
     void start();
 
     /**
-     * reimplemented from InfoHandlerFeeder
-     */
-    virtual void connected();
-
-    /**
-     * reimplemented from InfoHandlerFeeder
-     */
-    virtual void disconnected();
-
-    /**
-     * Reimplemented from InfoHandlerFeeder
-     */
-    virtual void itemAdded( const string& jid );
-
-    /**
-     * Reimplemented from InfoHandlerFeeder
-     */
-    virtual void itemRemoved( const string& jid );
-
-    /**
-     * Reimplemented from InfoHandlerFeeder
-     */
-    virtual void roster( RosterHelper::RosterMap roster );
-
-    /**
-     * Reimplemented from InfoHandlerFeeder
-     */
-    virtual void itemChanged( const string& jid, int status, const char* msg );
-
-    /**
-     * Reimplemented from InfoHandlerFeeder
-     */
-    virtual bool subscriptionRequest( const string& jid, const char* msg );
-
-    /**
-     * reimplmented from PollHandler
-     */
-    virtual char* poll();
-
-    /**
-     * reimplmented from PollHandler
-     */
-    virtual bool hasData();
-
-    /**
      * Used to set command line arguments.
      * @param argc The number of command line arguments.
      * @param argv The arguments.
      * @return False if an error is encountered.
      */
     bool setCmdLineArgs( int argc, char *argv[] );
+
+    // reimplemented from InfoHandlerFeeder
+    virtual void connected();
+
+    // reimplemented from InfoHandlerFeeder
+    virtual void disconnected();
+
+    // reimplemented from InfoHandlerFeeder
+    virtual void itemAdded( const string& jid );
+
+    // reimplemented from InfoHandlerFeeder
+    virtual void itemRemoved( const string& jid );
+
+    // reimplemented from InfoHandlerFeeder
+    virtual void roster( RosterHelper::RosterMap roster );
+
+    // reimplemented from InfoHandlerFeeder
+    virtual void itemChanged( const string& jid, int status, const char* msg );
+
+    // reimplemented from InfoHandlerFeeder
+    virtual bool subscriptionRequest( const string& jid, const char* msg );
+
+    // reimplmented from PollHandler
+    virtual char* poll();
+
+    // reimplmented from PollHandler
+    virtual bool hasData();
 
   private:
     Feeder* c;

@@ -40,6 +40,7 @@ class Disco : public IqHandler
 
     /**
      * Constructor.
+     * You should access the disco object through the @c JClient object.
      * Creates a new Disco client that registers as IqHandler with @c JClient.
      * @param parent The JClient used for XMPP communication
      */
@@ -56,7 +57,7 @@ class Disco : public IqHandler
      * "http://jabber.org/protocol/disco#info" namespace.
      * These IQ packets will also be forwarded to the
      * application's IqHandler, if it listens to the disco#info namespace.
-     * You can call @ref disableDiscoInfo() to disable automatic disco#info
+     * You can call @ref disableDisco() to disable automatic disco
      * entirely. By default, disco(very) queries are handled by the library.
      * By default, all supported, not disabled features are announced.
      * @param feature A feature (namespace) the host app supports.
@@ -89,7 +90,7 @@ class Disco : public IqHandler
     void setVersion( const string& name, const string& version );
 
     /**
-     * Sets the identity of the this entity.
+     * Sets the identity of this entity.
      * The library uses this information to answer disco#info requests
      * with a correct identity.
      * JEP-0030 requires an entity to have at least one identity. See JEP-0030
@@ -99,9 +100,7 @@ class Disco : public IqHandler
      */
     void setIdentity( const string& category, const string& type );
 
-    /**
-     * reimplemented from IqHandler.
-     */
+    // reimplemented from IqHandler.
     virtual void handleIq( const char* xmlns, ikspak* pak );
 
   private:

@@ -59,19 +59,13 @@ class WorkerTest : public InfoHandlerWorker, DataHandler
      */
     void start();
 
-    /**
-     * reimplemented from InfoHandlerFeeder
-     */
+    // reimplemented from InfoHandlerFeeder
     virtual void connected();
 
-    /**
-     * reimplemented from InfoHandlerFeeder
-     */
+    // reimplemented from InfoHandlerFeeder
     virtual void disconnected();
 
-    /**
-     * reimplemented from DataHandler
-     */
+    // reimplemented from DataHandler
     virtual void data( const char* data);
 
   private:
