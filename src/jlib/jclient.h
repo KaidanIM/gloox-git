@@ -280,6 +280,13 @@ class JClient : public Stream
     StateEnum clientState();
 
     /**
+     * Creates a string. Thsi String is unique in the current instance and
+     * can be used as an id for queries.
+     * @return A unique string suitable for query IDs.
+     */
+    std::string getID();
+
+    /**
      * Sends the given xml via the established connection.
      * @note x is automatically free()'ed.
      * @param x The xml data.
@@ -426,7 +433,6 @@ class JClient : public Stream
     typedef list<MessageHandler*>         MessageHandlerList;
     typedef list<PresenceHandler*>        PresenceHandlerList;
     typedef list<SubscriptionHandler*>    SubscriptionHandlerList;
-    typedef map<std::string, std::string> StringMap;
 
     virtual void on_log( const char* data, size_t size, int is_incoming );
     virtual void on_stream( int type, iks* node );
@@ -434,8 +440,6 @@ class JClient : public Stream
     void setupFilter();
     void login( char* sid = 0L );
     void setClientState( StateEnum s );
-    void addQueryID( std::string jid, std::string id );
-    std::string getID();
     void init();
 
     JThread* m_thread;
@@ -467,7 +471,6 @@ class JClient : public Stream
     MessageHandlerList      m_messageHandlers;
     PresenceHandlerList     m_presenceHandlers;
     SubscriptionHandlerList m_subscriptionHandlers;
-    StringMap               m_queryIDs;
 
     int m_streamFeatures;
     int m_idCount;

@@ -97,7 +97,18 @@ void Disco::handleIq( const char* xmlns, ikspak* pak )
       break;
 
     case IKS_TYPE_RESULT:
-      
+      if( ( iks_strncmp( XMLNS_DISCO_INFO, xmlns, iks_strlen( XMLNS_DISCO_INFO ) ) == 0 )
+            &&  findID( pak->id, pak->from->full ) )
+      {
+       if( m_discoHandler )
+         m_discoHandler->discoInfoResult( pak->id, pak );
+      }
+      else if( ( iks_strncmp( XMLNS_DISCO_ITEMS, xmlns, iks_strlen( XMLNS_DISCO_ITEMS ) ) == 0 )
+                 &&  findID( pak->id, pak->from->full ) )
+      {
+        if( m_discoHandler )
+          m_discoHandler->discoItemsResult( pak->id, pak );
+      }
       break;
 
     case IKS_TYPE_ERROR:
@@ -111,26 +122,26 @@ void Disco::addFeature( const string& feature )
   m_features.push_back( feature );
 }
 
-Disco::StringList Disco::getDiscoInfo( const string& to )
+void Disco::getDiscoInfo( const string& to )
 {
-  std::string id = /*m_parent->getID()*/"test";
+  std::string id = m_parent->getID();
   iks* x = iks_make_iq( IKS_TYPE_GET, XMLNS_DISCO_INFO );
   iks_insert_attrib( x, "from", m_parent->jid().c_str() );
   iks_insert_attrib( x, "to", to.c_str() );
   iks_insert_attrib( x, "id", id.c_str() );
   m_parent->send( x );
-//   addQueryID( to, id );
+  addQueryID( to, id );
 }
 
-Disco::StringList Disco::getDiscoItems( const string& to )
+void Disco::getDiscoItems( const string& to )
 {
-  std::string id = /*m_parent->getID()*/"test";
+  std::string id = m_parent->getID();
   iks* x = iks_make_iq( IKS_TYPE_GET, XMLNS_DISCO_ITEMS );
   iks_insert_attrib( x, "from", m_parent->jid().c_str() );
   iks_insert_attrib( x, "to", to.c_str() );
   iks_insert_attrib( x, "id", id.c_str() );
   m_parent->send( x );
-//   addQueryID( to, id );
+  addQueryID( to, id );
 }
 
 void Disco::setVersion( const string& name, const string& version )
@@ -155,3 +166,20 @@ void Disco::registerDiscoHandler( DiscoHandler* dh )
 {
   m_discoHandler = dh;
 }
+
+void Disco::addQueryID( const string& id, const string& to )
+{
+  m_queryIDs[id] = to;
+}
+
+bool Disco::findID( const string& id, const string& from )
+{
+  StringMap::const_iterator it = m_queryIDs.find( id );
+  if( ( it != m_queryIDs.end() ) && ( (*it).second == from ) )
+  {
+    return true;
+    m_queryIDs.erase( id );
+  }
+  return false;
+}
+

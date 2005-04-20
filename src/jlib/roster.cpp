@@ -43,7 +43,7 @@ RosterHelper::RosterMap Roster::roster()
 void Roster::fill()
 {
   iks* x = iks_make_iq( IKS_TYPE_GET, XMLNS_ROSTER );
-  iks_insert_attrib( x, "id", "roster_get" );
+  iks_insert_attrib( x, "id", m_parent->getID().c_str() );
   m_parent->send( x );
 }
 
