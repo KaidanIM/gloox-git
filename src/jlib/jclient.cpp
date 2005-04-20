@@ -340,7 +340,7 @@ void JClient::disconnect()
 void JClient::send( iks* x )
 {
   Stream::send( this->P, x );
-  iks_free( x );
+  iks_delete( x );
 }
 
 void JClient::sendPresence()
@@ -547,13 +547,14 @@ void JClient::notifyMessageHandlers( iksid* from, iksubtype type, const char* ms
   }
 }
 
-void authHook( JClient* stream, ikspak* pak )
+int authHook( JClient* stream, ikspak* pak )
 {
   if( stream->debug() ) printf("authHook\n");
   stream->notifyOnConnect();
+  return IKS_FILTER_EAT;
 }
 
-void registerHook( JClient* stream, ikspak* pak )
+int registerHook( JClient* stream, ikspak* pak )
 {
   stream->setClientState( JClient::STATE_AUTHENTICATION_FAILED );
 //   if (config.autoreg)
@@ -578,39 +579,46 @@ void registerHook( JClient* stream, ikspak* pak )
 //     if( stream->debug() ) printf("jabber account does not exist and autoreg is false. exiting.\n");
 //     m_continue = 0;
 //   }
+  return IKS_FILTER_EAT;
 }
 
-void registeredHook( JClient* stream, ikspak* pak )
+int registeredHook( JClient* stream, ikspak* pak )
 {
   if( stream->debug() ) printf("registeredHook\n");
   stream->setClientState( JClient::STATE_AUTHENTICATED );
+  return IKS_FILTER_EAT;
 }
 
-void msgHook( JClient* stream, ikspak* pak )
+int msgHook( JClient* stream, ikspak* pak )
 {
   if( stream->debug() ) printf("msgHook\n");
   stream->notifyMessageHandlers( pak->from, pak->subtype, iks_find_cdata( pak->x, "body" ) );
+  return IKS_FILTER_EAT;
 }
 
-void iqHook( JClient* stream, ikspak* pak )
+int iqHook( JClient* stream, ikspak* pak )
 {
   if( stream->debug() ) printf("iqHook\n");
   stream->notifyIqHandlers( pak->ns, pak );
+  return IKS_FILTER_EAT;
 }
 
-void presenceHook( JClient* stream, ikspak* pak )
+int presenceHook( JClient* stream, ikspak* pak )
 {
   if( stream->debug() ) printf("presenceHook\n");
   stream->notifyPresenceHandlers( pak->from, pak->subtype, pak->show, iks_find_cdata( pak->x, "status" ) );
+  return IKS_FILTER_EAT;
 }
 
-void subscriptionHook( JClient* stream, ikspak* pak )
+int subscriptionHook( JClient* stream, ikspak* pak )
 {
   if( stream->debug() ) printf("subscriptionHook\n");
   stream->notifySubscriptionHandlers( pak->from, pak->subtype, iks_find_cdata( pak->x, "status" ) );
+  return IKS_FILTER_EAT;
 }
 
-void errorHook( JClient* stream, ikspak* pak )
+int errorHook( JClient* stream, ikspak* pak )
 {
   if( stream->debug() ) printf("errorHook\n");
+  return IKS_FILTER_EAT;
 }

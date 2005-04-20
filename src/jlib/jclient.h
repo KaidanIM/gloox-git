@@ -451,14 +451,14 @@ class JClient : public Stream
     iksparser* parser();
 
 
-    friend void authHook(JClient* stream, ikspak* pak);
-    friend void registerHook(JClient* stream, ikspak* pak);
-    friend void registeredHook(JClient* stream, ikspak* pak);
-    friend void errorHook(JClient* stream, ikspak* pak);
-    friend void presenceHook(JClient* stream, ikspak* pak);
-    friend void msgHook(JClient* stream, ikspak* pak);
-    friend void subscriptionHook(JClient* stream, ikspak* pak);
-    friend void iqHook(JClient* stream, ikspak* pak);
+    friend int authHook(JClient* stream, ikspak* pak);
+    friend int registerHook(JClient* stream, ikspak* pak);
+    friend int registeredHook(JClient* stream, ikspak* pak);
+    friend int errorHook(JClient* stream, ikspak* pak);
+    friend int presenceHook(JClient* stream, ikspak* pak);
+    friend int msgHook(JClient* stream, ikspak* pak);
+    friend int subscriptionHook(JClient* stream, ikspak* pak);
+    friend int iqHook(JClient* stream, ikspak* pak);
 
     typedef list<ConnectionListener*>     ConnectionListenerList;
     typedef map<const char*, IqHandler*>  IqHandlerMap;
