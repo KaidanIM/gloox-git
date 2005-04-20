@@ -20,7 +20,7 @@
 #include "jclient.h"
 #include "jthread.h"
 #include "roster.h"
-
+#include "disco.h"
 
 #include <iostream>
 
@@ -31,8 +31,8 @@ JClient::JClient()
   : m_port( XMPP_PORT ), m_thread( 0 ),
   m_tls( true ), m_sasl( true ),
   m_autoPresence( false ), m_manageRoster( true ),
-  m_handleDiscoInfo( true ), m_handleDiscoItems( true ),
-  m_idCount( 0 ), m_roster( 0 )
+  m_handleDisco( true ), m_idCount( 0 ), m_roster( 0 ),
+  m_disco( 0 )
 {
   init();
 }
@@ -41,8 +41,8 @@ JClient::JClient( const std::string& id, const std::string& password, int port )
   : m_port( port ), m_password( password ), m_thread( 0 ),
   m_tls( true ), m_sasl( true ),
   m_autoPresence( false ), m_manageRoster( true ),
-  m_handleDiscoInfo( true ), m_handleDiscoItems( true ),
-  m_idCount( 0 ), m_roster( 0 )
+  m_handleDisco( true ), m_idCount( 0 ), m_roster( 0 ),
+  m_disco( 0 )
 {
   m_self = iks_id_new( get_stack(), id.c_str() );
   m_username = m_self->user;
@@ -57,8 +57,8 @@ JClient::JClient( const std::string& username, const std::string& password, cons
   m_server( server ), m_port( port ), m_thread( 0 ),
   m_tls( true ), m_sasl( true ),
   m_autoPresence( false ), m_manageRoster( true ),
-  m_handleDiscoInfo( true ), m_handleDiscoItems( true ),
-  m_idCount( 0 ), m_roster( 0 )
+  m_handleDisco( true ), m_idCount( 0 ), m_roster( 0 ),
+  m_disco( 0 )
 {
   init();
 }
@@ -69,12 +69,10 @@ JClient::~JClient()
 
 void JClient::init()
 {
-  setFeature( XMLNS_VERSION );
-  setFeature( XMLNS_DISCO_INFO );
-  setFeature( XMLNS_DISCO_ITEMS );
-  setVersion( "JLib", JLIB_VERSION );
-  setIdentity( "client", "bot" );
   m_roster = new Roster( this );
+  m_disco = new Disco( this );
+  m_disco->setVersion( "JLib", JLIB_VERSION );
+  m_disco->setIdentity( "client", "bot" );
 }
 
 void JClient::on_stream( int type, iks* node )
@@ -157,61 +155,18 @@ void JClient::on_log( const char* data, size_t size, int is_incoming ) {
   }
 }
 
-void JClient::setVersion( const char* name, const char* version )
+void JClient::disableDisco()
 {
-  m_versionName = strdup( name );
-  m_versionVersion = strdup( version );
-}
-
-void JClient::setIdentity( const char* category, const char* type )
-{
-  m_identityCategory = strdup( category );
-  m_identityType = strdup( type );
-}
-
-void JClient::setFeature( const char* feature )
-{
-  m_discoCapabilities.push_back( strdup( feature ) );
-}
-
-void JClient::disableDiscoInfo()
-{
-  m_handleDiscoInfo = false;
-  m_discoCapabilities.clear();
-}
-
-void JClient::disableDiscoItems()
-{
-  m_handleDiscoItems = false;
-}
-
-void JClient::disableRosterManagement()
-{
-  m_manageRoster = false;
+  m_handleDisco = false;
   delete m_roster;
   m_roster = 0;
 }
 
-void JClient::getDiscoInfo( const char* to )
+void JClient::disableRoster()
 {
-  std::string id = getID();
-  iks* x = iks_make_iq( IKS_TYPE_GET, XMLNS_DISCO_INFO );
-  iks_insert_attrib( x, "from", jid().c_str() );
-  iks_insert_attrib( x, "to", to );
-  iks_insert_attrib( x, "id", id.c_str() );
-  send( x );
-  addQueryID( to, id );
-}
-
-void JClient::getDiscoItems( const char* to )
-{
-  std::string id = getID();
-  iks* x = iks_make_iq( IKS_TYPE_GET, XMLNS_DISCO_ITEMS );
-  iks_insert_attrib( x, "from", jid().c_str() );
-  iks_insert_attrib( x, "to", to );
-  iks_insert_attrib( x, "id", id.c_str() );
-  send( x );
-  addQueryID( to, id );
+  m_manageRoster = false;
+  delete m_roster;
+  m_roster = 0;
 }
 
 void JClient::addQueryID( std::string jid, std::string id )
@@ -375,6 +330,11 @@ Roster* JClient::roster()
   return m_roster;
 }
 
+Disco* JClient::disco()
+{
+  return m_disco;
+}
+
 void JClient::registerPresenceHandler( PresenceHandler* ph )
 {
   m_presenceHandlers.push_back( ph );
@@ -475,67 +435,15 @@ void JClient::notifySubscriptionHandlers( iksid* from, iksubtype type, const cha
 
 void JClient::notifyIqHandlers( const char* xmlns, ikspak* pak )
 {
-  if( iks_strncmp( xmlns, XMLNS_VERSION, iks_strlen( XMLNS_VERSION ) ) == 0 )
-  {
-    iks* x = iks_new( "iq" );
-    iks_insert_attrib( x, "type", "result" );
-    iks_insert_attrib( x, "to", pak->from->full );
-    iks_insert_attrib( x, "from", jid().c_str() );
-    iks_insert_attrib( x, "id", pak->id );
-    iks* y = iks_insert( x, "query" );
-    iks_insert_attrib( y, "xmlns", XMLNS_VERSION );
-    iks* z = iks_insert( y, "name" );
-    iks_insert_cdata( z, m_versionName.c_str(), m_versionName.length() );
-    z = iks_insert( y, "version" );
-    iks_insert_cdata( z, m_versionVersion.c_str(), m_versionVersion.length() );
-    send( x );
+  IqHandlerList::const_iterator it = m_iqHandlers.begin();
+  for( it; it != m_iqHandlers.end(); it++ ) {
+    (*it)->handleIq( xmlns, pak );
   }
-  else if( ( iks_strncmp( xmlns, XMLNS_DISCO_INFO, iks_strlen( XMLNS_DISCO_INFO ) ) == 0 )
-             && ( m_handleDiscoInfo ) )
-  {
-    iks* x = iks_new( "iq" );
-    iks_insert_attrib( x, "type", "result" );
-    iks_insert_attrib( x, "id", pak->id );
-    iks_insert_attrib( x, "to", pak->from->full );
-    iks_insert_attrib( x, "from", jid().c_str() );
-    iks* y = iks_insert( x, "query" );
-    iks_insert_attrib( y, "xmlns", XMLNS_DISCO_INFO );
-    iks* i = iks_insert( y, "identity" );
-    iks_insert_attrib( i, "category", m_identityCategory.c_str() );
-    iks_insert_attrib( i, "type", m_identityType.c_str() );
-    iks_insert_attrib( i, "name", m_versionName.c_str() );
 
-    CharList::const_iterator it = m_discoCapabilities.begin();
-    for( it; it != m_discoCapabilities.end(); ++it )
-    {
-      iks* z = iks_insert( y, "feature" );
-      iks_insert_attrib( z, "var", (*it) );
-    }
-    send( x );
-  }
-  else if( ( iks_strncmp( xmlns, XMLNS_DISCO_ITEMS, iks_strlen( XMLNS_DISCO_ITEMS ) ) == 0 )
-             && ( m_handleDiscoItems ) )
-  {
-    iks* x = iks_new( "iq" );
-    iks_insert_attrib( x, "type", "result" );
-    iks_insert_attrib( x, "id", pak->id );
-    iks_insert_attrib( x, "to", pak->from->full );
-    iks_insert_attrib( x, "from", jid().c_str() );
-    iks* y = iks_insert( x, "query" );
-    iks_insert_attrib( y, "xmlns", XMLNS_DISCO_ITEMS );
-    send( x );
-  }
-  else
-  {
-    IqHandlerList::const_iterator it = m_iqHandlers.begin();
-    for( it; it != m_iqHandlers.end(); it++ ) {
-      (*it)->handleIq( xmlns, pak );
-    }
-    IqHandlerMap::const_iterator it_ns = m_iqNSHandlers.begin();
-    for( it_ns; it_ns != m_iqNSHandlers.end(); it_ns++ ) {
-      if( iks_strncmp( (*it_ns).first, xmlns, iks_strlen( xmlns ) ) == 0 )
-        (*it_ns).second->handleIq( xmlns, pak );
-    }
+  IqHandlerMap::const_iterator it_ns = m_iqNSHandlers.begin();
+  for( it_ns; it_ns != m_iqNSHandlers.end(); it_ns++ ) {
+    if( iks_strncmp( (*it_ns).first, xmlns, iks_strlen( xmlns ) ) == 0 )
+      (*it_ns).second->handleIq( xmlns, pak );
   }
 }
 
