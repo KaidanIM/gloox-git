@@ -85,7 +85,10 @@ void Worker::handleIq( const char* xmlns, ikspak* pak )
       c->send( x );
 
       if( m_dataHandler )
-        m_dataHandler->data( "packet" );
+      {
+        char* t = iks_find_cdata( iks_find( pak->x, "query" ), "data" );
+        m_dataHandler->data( t );
+      }
     }
   }
   else
