@@ -310,12 +310,12 @@ void JClient::send( const char* jid, const char* data )
   send( x );
 }
 
-JClient::state JClient::clientState()
+JClient::StateEnum JClient::clientState()
 {
   return m_state;
 }
 
-void JClient::setClientState( state s )
+void JClient::setClientState( StateEnum s )
 {
   m_state = s;
 }
