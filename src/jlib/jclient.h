@@ -91,7 +91,7 @@ class JClient : public Stream
      * Describes the current connection status.
      * @todo Make this private?
      */
-    enum state
+    enum StateEnum
     {
       STATE_ERROR,                 /**< An error occured. The stream has been closed. */
       STATE_IO_ERROR,              /**< An I/O error occured. */
@@ -100,6 +100,17 @@ class JClient : public Stream
       STATE_CONNECTING,            /**< The client is currently trying to establish a connection. */
       STATE_CONNECTED,             /**< The client is conencted to the server but authentication is not yet complete. */
       STATE_AUTHENTICATED          /**< The client has successfully authenticated itself to the server. */
+    };
+
+    /**
+     * Describes the possible error conditions on XMPP level.
+     * @todo Add missing values.
+     */
+    enum ErrorEnum
+    {
+      FEATURE_NOT_IPLEMENTED,      /**< The requested fetaure is not availabale or implemented. */
+      ITEM_NOT_FOUND,              /**< The requested item does not exist. Privacy is a non-issue. */
+      SERVICE_UNAVAILABLE          /**< The requested protocol is not supported. Privacy is an issue. */
     };
 
     /**
@@ -266,7 +277,7 @@ class JClient : public Stream
      * Returns the current client state.
      * @return The current client state.
      */
-    state clientState();
+    StateEnum clientState();
 
     /**
      * Sends the given xml via the established connection.
@@ -422,7 +433,7 @@ class JClient : public Stream
 
     void setupFilter();
     void login( char* sid = 0L );
-    void setClientState( state s );
+    void setClientState( StateEnum s );
     void addQueryID( std::string jid, std::string id );
     std::string getID();
     void init();
@@ -448,7 +459,7 @@ class JClient : public Stream
     bool m_handleDisco;
     bool m_manageRoster;
     int m_port;
-    state m_state;
+    StateEnum m_state;
 
     ConnectionListenerList  m_connectionListeners;
     IqHandlerMap            m_iqNSHandlers;
