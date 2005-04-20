@@ -74,46 +74,6 @@ class Feeder : public ConnectionListener, IqHandler, RosterListener
     bool push( const char* data );
 
     /**
-     * Reimplemented from RosterListener
-     */
-    virtual void itemAdded( const string& jid );
-
-    /**
-     * Reimplemented from RosterListener
-     */
-    virtual void itemRemoved( const string& jid );
-
-    /**
-     * Reimplemented from RosterListener
-     */
-    virtual void roster( RosterHelper::RosterMap roster );
-
-    /**
-     * Reimplemented from RosterListener
-     */
-    virtual void itemChanged( const string& jid, int status, const char* msg );
-
-    /**
-     * Reimplemented from RosterListener
-     */
-    virtual bool subscriptionRequest( const string& jid, const char* msg );
-
-    /**
-     * Reimplemented from IqHandler.
-     */
-    virtual void handleIq( const char* xmlns, ikspak* pak );
-
-    /**
-     * reimplemented from ConnectionListener.
-     */
-    virtual void onConnect();
-
-    /**
-     * reimplemented from ConnectionListener.
-     */
-    virtual void onDisconnect();
-
-    /**
      * Using this method you can register an object as poll handler. This object is
      * polled for data to be sent to an available worker.
      * @param ph The object derived from PollHandler.
@@ -127,6 +87,30 @@ class Feeder : public ConnectionListener, IqHandler, RosterListener
      * @param ih The object derived from InfoHandlerFeeder.
      */
     void registerInfoHandler( InfoHandlerFeeder* ih );
+
+    // reimplemented from RosterListener
+    virtual void itemAdded( const string& jid );
+
+    // reimplemented from RosterListener
+    virtual void itemRemoved( const string& jid );
+
+    // reimplemented from RosterListener
+    virtual void roster( RosterHelper::RosterMap roster );
+
+    // reimplemented from RosterListener
+    virtual void itemChanged( const string& jid, int status, const char* msg );
+
+    // reimplemented from RosterListener
+    virtual bool subscriptionRequest( const string& jid, const char* msg );
+
+    // reimplemented from IqHandler.
+    virtual void handleIq( const char* xmlns, ikspak* pak );
+
+    // reimplemented from ConnectionListener.
+    virtual void onConnect();
+
+    // reimplemented from ConnectionListener.
+    virtual void onDisconnect();
 
   private:
     void sendData( const string& jid );

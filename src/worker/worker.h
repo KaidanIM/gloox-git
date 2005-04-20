@@ -74,21 +74,6 @@ class Worker : public ConnectionListener, IqHandler, RosterListener
     void setFeeder( const string& jid );
 
     /**
-     * Reimplemented from IqHandler.
-     */
-    virtual void handleIq( const char* xmlns, ikspak* pak );
-
-    /**
-     * reimplemented from ConnectionListener.
-     */
-    virtual void onConnect();
-
-    /**
-     * reimplemented from ConnectionListener.
-     */
-    virtual void onDisconnect();
-
-    /**
      * Using this method you can register an object as data handler. This object gets
      * data received from the Feeder.
      * @param dh The object derived from DataHandler.
@@ -111,10 +96,17 @@ class Worker : public ConnectionListener, IqHandler, RosterListener
      */
     void result( ResultCode code, const char* result );
 
-    /**
-     * Reimplemented from RosterListener
-     */
+    // reimplemented from RosterListener
     virtual bool subscriptionRequest( const string& jid, const char* msg );
+
+    // reimplemented from IqHandler.
+    virtual void handleIq( const char* xmlns, ikspak* pak );
+
+    // reimplemented from ConnectionListener.
+    virtual void onConnect();
+
+    // reimplemented from ConnectionListener.
+    virtual void onDisconnect();
 
   private:
     JClient* c;
