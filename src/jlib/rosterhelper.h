@@ -24,9 +24,8 @@
 using namespace std;
 /**
  * A virtual interface.
- * A class implementing this interface and being registered as RosterListener with the Roster
- * object receives notifications about all the changes in the server-side roster.
- * Only one RosterListener at a time per Roster is possible.
+ * This is a helper class only, holding the definition of @c RosterMap.
+ * @todo Fix this.
  * @author Jakob Schroeter <js@camaya.net>
  */
 class RosterHelper
