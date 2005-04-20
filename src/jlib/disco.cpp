@@ -18,11 +18,12 @@
 
 
 #include "disco.h"
+#include "discohandler.h"
 #include "jclient.h"
 
 
 Disco::Disco( JClient* parent )
-  : m_parent( parent )
+  : m_parent( parent ), m_discoHandler( 0 )
 {
   addFeature( XMLNS_VERSION );
   addFeature( XMLNS_DISCO_INFO );
@@ -144,3 +145,13 @@ void Disco::setIdentity( const string& category, const string& type )
   m_identityType = type;
 }
 
+bool Disco::hasFeature( const string& jid, const string& feature )
+{
+#warning FIXME implement properly
+  return false;
+}
+
+void Disco::registerDiscoHandler( DiscoHandler* dh )
+{
+  m_discoHandler = dh;
+}
