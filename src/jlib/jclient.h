@@ -46,6 +46,7 @@ using namespace Iksemel;
 
 class JThread;
 class Roster;
+class Disco;
 
 /**
  * This class implements a Jabber Client.
@@ -247,79 +248,19 @@ class JClient : public Stream
     void setAutoPresence( bool autoPresence ) { m_autoPresence = autoPresence; };
 
     /**
-     * Sets the version of the host application using this library.
-     * The library takes care of jabber:iq:version requests. These
-     * IQ packets will not be forwarded to the IqHandlers.
-     * @param name The name to be returned to inquireing clients.
-     * @param version The version to be returned to inquireing clients.
+     * Disables automatic handling of disco queries.
+     * There is currently no way to re-enable disco query-handling.
+     * @note This disables the browsing capabilities because
+     * both use the same @c Disco object.
      */
-    void setVersion( const char* name, const char* version );
-
-    /**
-     * Sets the identity of the this entity.
-     * The library uses this information to answer disco#info requests
-     * with a correct identity.
-     * JEP-0030 requires an entity to have at least one identity. See JEP-0030
-     * for more information on categories and types.
-     * @param category The entity category of thsi client. Default: client
-     * @param type The type of this entity. Default: bot
-     */
-    void setIdentity( const char* category, const char* type );
-
-    /**
-     * Adds a feature to the list of supported Jabber features.
-     * The list will be posted as an answer to IQ queries in the
-     * "http://jabber.org/protocol/disco#info" namespace.
-     * These IQ packets will not be forwarded but answered on the
-     * application's behalf, unless @ref disableDiscoInfo() is called. By
-     * default, disco(very) queries are handled by the library.
-     * By default, all supported, not disabled features are announced.
-     * @param feature A feature (namespace) the host app supports.
-     */
-    void setFeature( const char* feature );
-
-    /**
-     * Disables automatic handling of disco#info.
-     * All further disco#info IQ packets will be forwarded
-     * to the IqHandlers. This is independent of @ref disableDiscoItems().
-     * There is no way to re-enable disco#info-handling.
-     * @note This does @em not influence the browsing capabilities,
-     * but handling of incoming queries only.
-     */
-    void disableDiscoInfo();
-
-    /**
-     * Disables automatic handling of disco#items.
-     * All further disco#items IQ packets will be forwarded
-     * to the IqHandlers. This is independent of @ref disableDiscoInfo().
-     * There is no way to re-enable disco#item-handling.
-     * @note This does @em not influence the browsing capabilities,
-     * but handling of incoming queries only.
-     */
-    void disableDiscoItems();
-
-    /**
-     * Queries the given JID for general infomation according to
-     * JEP-0030 (Service Discovery).
-     * @param to The destination-JID of the query.
-     * @return A list of capabilities.
-     */
-    void getDiscoInfo( const char* to );
-
-    /**
-     * Queries the given JID for its items according to
-     * JEP-0030 (Service Discovery).
-     * @param to The destination-JID of the query.
-     * @return A list of items.
-     */
-    void getDiscoItems( const char* to );
+    void disableDisco();
 
     /**
      * Disables the automatic roster management.
      * You have to keep track of incoming presence yourself if
      * you want to have a roster.
      */
-    void disableRosterManagement();
+    void disableRoster();
 
     /**
      * Returns the current client state.
@@ -365,6 +306,12 @@ class JClient : public Stream
      * @return A pointer to the Roster.
      */
     Roster* roster();
+
+    /**
+     * This function gives access to the @c Disco object.
+     * @return A pointer to the Disco object.
+     */
+    Disco* disco();
 
     /**
      * Registers @c cl as object that receives connection notifications.
@@ -466,7 +413,6 @@ class JClient : public Stream
     typedef list<MessageHandler*>         MessageHandlerList;
     typedef list<PresenceHandler*>        PresenceHandlerList;
     typedef list<SubscriptionHandler*>    SubscriptionHandlerList;
-    typedef list<const char*>             CharList;
     typedef map<std::string, std::string> StringMap;
 
     virtual void on_log( const char* data, size_t size, int is_incoming );
@@ -481,6 +427,7 @@ class JClient : public Stream
 
     JThread* m_thread;
     Roster* m_roster;
+    Disco* m_disco;
 
     iksid* m_self;
     iksfilter* m_filter;
@@ -500,8 +447,7 @@ class JClient : public Stream
     bool m_tls;
     bool m_createAccount;
     bool m_autoPresence;
-    bool m_handleDiscoInfo;
-    bool m_handleDiscoItems;
+    bool m_handleDisco;
     bool m_manageRoster;
     int m_port;
     state m_state;
@@ -512,7 +458,6 @@ class JClient : public Stream
     MessageHandlerList      m_messageHandlers;
     PresenceHandlerList     m_presenceHandlers;
     SubscriptionHandlerList m_subscriptionHandlers;
-    CharList                m_discoCapabilities;
     StringMap               m_queryIDs;
 
     int m_streamFeatures;
