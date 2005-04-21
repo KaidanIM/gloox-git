@@ -125,7 +125,6 @@ class Disco : public IqHandler
     void addQueryID( const string& id, const string& to );
     bool findID( const string& id, const string& from );
 
-
     JClient* m_parent;
 
     typedef list<DiscoHandler*> DiscoHandlerList;
