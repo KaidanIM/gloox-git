@@ -106,7 +106,7 @@ void Worker::registerInfoHandler( InfoHandlerWorker* ih )
   m_infoHandler = ih;
 }
 
-void Worker::result( ResultCode code, const char* result )
+void Worker::result( ResultCode code, char* result )
 {
   m_working = false;
   if( m_debug ) printf( "work finished: %s\n", result );
@@ -122,6 +122,7 @@ void Worker::result( ResultCode code, const char* result )
   iks_insert_cdata( z, result, iks_strlen( result ) );
   c->send( x );
   free( r );
+  free( result );
 
   x = iks_make_pres( IKS_SHOW_AVAILABLE, "online" );
   c->send( x );
