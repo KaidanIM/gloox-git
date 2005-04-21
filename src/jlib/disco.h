@@ -114,7 +114,6 @@ class Disco : public IqHandler
     /**
      * Use this function to register an @ref DiscoHandler with the Disco
      * object. The DiscoHandler will receive the results of disco queries.
-     * There can only be one registered DiscoHandler at a time.
      * @param dh The DiscoHandler-derived object to register.
      */
     void registerDiscoHandler( DiscoHandler* dh );
@@ -129,11 +128,11 @@ class Disco : public IqHandler
 
     JClient* m_parent;
 
-    typedef list<string>                  StringList; // necessary at all?
-    typedef map<std::string, std::string> StringMap;
+    typedef list<DiscoHandler*> DiscoHandlerList;
+    typedef list<string>        StringList;
+    typedef map<string, string> StringMap;
 
-    DiscoHandler* m_discoHandler;
-
+    DiscoHandlerList m_discoHandler;
     StringList m_features;
     StringMap  m_queryIDs;
 

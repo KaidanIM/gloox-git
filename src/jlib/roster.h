@@ -23,6 +23,7 @@
 #include "subscriptionhandler.h"
 #include "rosterhelper.h"
 #include "rosterlistener.h"
+#include "discohandler.h"
 
 #include <map>
 #include <string>
@@ -32,14 +33,13 @@ class JClient;
 class IqHandler;
 // class RosterListener;
 class PresenceHandler;
-// class SubscriptionHandler;
 
 /**
  * This class implements Jabber/XMPP roster handling in the jabber:iq:roster namespace.
  * This class implements a roster. It takes care of changing presence, subscriptions, etc.
  * @author Jakob Schroeter <js@camaya.net>
  */
-class Roster : public IqHandler, PresenceHandler, SubscriptionHandler
+class Roster : public IqHandler, PresenceHandler, SubscriptionHandler, DiscoHandler
 {
   public:
     /**
@@ -95,9 +95,28 @@ class Roster : public IqHandler, PresenceHandler, SubscriptionHandler
     // reimplemented from SubscriptionHandler.
     virtual void handleSubscription( iksid* from, iksubtype type, const char* msg );
 
+    // reimplemented from DiscoHandler.
+    virtual void handleDiscoInfoResult( const string& id, const ikspak* pak );
+
   private:
+#warning TODO: implement as classes
+    struct Identity
+    {
+      string category;
+      string type;
+      string name;
+    };
+    struct ItemFeatures
+    {
+      list<Identity> identities;
+      list<const string> features;
+    };
+
+    typedef map<const string, ItemFeatures> FeatureMap;
+
     void add( const string& jid, int status);
 
+    FeatureMap m_featureMap;
     RosterListener* m_rosterListener;
     RosterHelper::RosterMap m_roster;
     JClient* m_parent;

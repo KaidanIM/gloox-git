@@ -19,6 +19,7 @@
 
 #include "jclient.h"
 #include "roster.h"
+#include "disco.h"
 #include "rosterlistener.h"
 
 
@@ -26,6 +27,7 @@ Roster::Roster( JClient* parent )
   : m_parent( parent ),  m_rosterListener( 0 )
 {
   m_parent->registerIqHandler( this, XMLNS_ROSTER );
+  m_parent->disco()->registerDiscoHandler( this );
   m_parent->registerPresenceHandler( this );
   m_parent->registerSubscriptionHandler( this );
 }
@@ -83,7 +85,7 @@ void Roster::handlePresence( iksid* from, iksubtype type, ikshowtype show, const
 
 void Roster::subscribe( const string& jid, const string& msg )
 {
-//   if( m_roster.find( jid ) )
+  if( m_roster.find( jid ) != m_roster.end() )
   {
     iks* x = iks_make_s10n( IKS_TYPE_SUBSCRIBE, jid.c_str(), msg.c_str() );
     m_parent->send( x );
@@ -134,6 +136,11 @@ void Roster::handleSubscription( iksid* from, iksubtype type, const char* msg )
       // this case never happens with jabberd2s7
       break;
   }
+}
+
+void Roster::handleDiscoInfoResult( const string& id, const ikspak* pak )
+{
+  
 }
 
 void Roster::unsubscribe( const string& jid, const string& msg )

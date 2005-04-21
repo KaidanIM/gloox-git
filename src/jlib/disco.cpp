@@ -23,7 +23,7 @@
 
 
 Disco::Disco( JClient* parent )
-  : m_parent( parent ), m_discoHandler( 0 )
+  : m_parent( parent )
 {
   addFeature( XMLNS_VERSION );
   addFeature( XMLNS_DISCO_INFO );
@@ -93,31 +93,40 @@ void Disco::handleIq( const char* xmlns, ikspak* pak )
       break;
 
     case IKS_TYPE_SET:
-      if( m_discoHandler )
-        m_discoHandler->discoSet( pak->id, pak );
+    {
+      DiscoHandlerList::const_iterator it = m_discoHandler.begin();
+      for( it; it != m_discoHandler.end(); it++ ) {
+        (*it)->handleDiscoSet( pak->id, pak );
+      }
       break;
+    }
 
     case IKS_TYPE_RESULT:
       if( ( iks_strncmp( XMLNS_DISCO_INFO, xmlns, iks_strlen( XMLNS_DISCO_INFO ) ) == 0 )
             &&  findID( pak->id, pak->from->full ) )
       {
-       if( m_discoHandler )
-         m_discoHandler->discoInfoResult( pak->id, pak );
+        DiscoHandlerList::const_iterator it = m_discoHandler.begin();
+        for( it; it != m_discoHandler.end(); it++ ) {
+          (*it)->handleDiscoInfoResult( pak->id, pak );
+        }
       }
       else if( ( iks_strncmp( XMLNS_DISCO_ITEMS, xmlns, iks_strlen( XMLNS_DISCO_ITEMS ) ) == 0 )
                  &&  findID( pak->id, pak->from->full ) )
       {
-        if( m_discoHandler )
-          m_discoHandler->discoItemsResult( pak->id, pak );
-      }
+        DiscoHandlerList::const_iterator it = m_discoHandler.begin();
+        for( it; it != m_discoHandler.end(); it++ ) {
+          (*it)->handleDiscoItemsResult( pak->id, pak );
+        }
+     }
       break;
 
     case IKS_TYPE_ERROR:
-      if( m_discoHandler )
-      {
-        iks* x = iks_child( iks_child( pak->x ) );
-        m_discoHandler->discoError( pak->id, iks_name( x ) );
+      iks* x = iks_child( iks_child( pak->x ) );
+      DiscoHandlerList::const_iterator it = m_discoHandler.begin();
+      for( it; it != m_discoHandler.end(); it++ ) {
+        (*it)->handleDiscoError( pak->id, iks_name( x ) );
       }
+      iks_delete( x );
       break;
   }
 }
@@ -169,7 +178,7 @@ bool Disco::hasFeature( const string& jid, const string& feature )
 
 void Disco::registerDiscoHandler( DiscoHandler* dh )
 {
-  m_discoHandler = dh;
+  m_discoHandler.push_back( dh );
 }
 
 void Disco::addQueryID( const string& id, const string& to )

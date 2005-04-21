@@ -113,6 +113,12 @@ class Feeder : public ConnectionListener, IqHandler, RosterListener
     virtual void onDisconnect();
 
   private:
+    struct workerInfo
+    {
+      string jid;
+      bool worker;
+    };
+
     void sendData( const string& jid );
 
     JClient* c;
