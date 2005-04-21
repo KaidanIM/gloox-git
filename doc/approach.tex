@@ -49,7 +49,7 @@ Formerly, it was only mentioned briefly that both Worker and Feeder are likely t
 \paragraph{}
 Both higher level libraries base their entire network-based communication on the XMPP Client Library. Receiving and sending data is completely transparent. The XMPP Client Library could be replaced by another library implementing any other means of communication without hassle.
 
-\subsection{Adressing of Workers}
+\subsection{Addressing of Workers}
 \paragraph{}
 The Feeder needs to be able to distinguish between different Workers in order to keep track of them and sending work data to a specific one. It does so by keeping a map of addresses of connected Workers and their respective current status.
 
@@ -116,7 +116,7 @@ void Class::doIt()
 \end{figure}
 
 \paragraph{}
-In this fictious function \texttt{Class::doIt()} a new \texttt{JClient} object is created and initialised with the account's credentials necessary for connecting to an XMPP server (lines 3 and 4). As a consequence, the constructor of \texttt{JClient} as shown in Figure \ref{fig:JClientConstructor} is called.
+In this fictitious function \texttt{Class::doIt()} a new \texttt{JClient} object is created and initialised with the account's credentials necessary for connecting to an XMPP server (lines 3 and 4). As a consequence, the constructor of \texttt{JClient} as shown in Figure \ref{fig:JClientConstructor} is called.
 
 \begin{figure}[H]
 \begin{listing}{1}
@@ -145,7 +145,7 @@ Basically, a number of member variables are initialised. Most importantly, Trans
 The function \texttt{connect()}, called in line 5 in Figure \ref{fig:usageExample}, establishes the connection to the XMPP server and creates a new thread that receives incoming TCP/IP packets and hands them to the XML parser of Iksemel.
 
 \paragraph{}
-The following interaction with the XMPP server is completely event driven. This is why the example in Figure \ref{fig:usageExample} is not very useful as it is: An application using the Library like this will never now that anything happend to the XMPP connection. The solution is to use the event notification interfaces the Library offers.
+The following interaction with the XMPP server is completely event driven. This is why the example in Figure \ref{fig:usageExample} is not very useful as it is: An application using the Library like this will never now that anything happened to the XMPP connection. The solution is to use the event notification interfaces the Library offers.
 
 \subsection{Event Notification Interfaces}
 \label{sec:interfaces}
@@ -223,7 +223,7 @@ Upon an incoming Presence stanza, \texttt{handlePresence()} is called, which has
 The processing object has immediate knowledge about sender (\texttt{iksid* from}), type (\texttt{iksubtype type}), display type (\texttt{ikshowtype show}) and content (\texttt{const char *msg}) of the incoming presence stanza.
 
 \paragraph{SubscriptionHandler}
-Subscription stanzas are a special case of Presence stanzas. However, their prupose is different from normal Presence, which is why they are handled separately. Subscription stanzas of different types are exchanged when client A wishes to add client B to its roster. By registering a \texttt{SubscriptionHandler}-derived object with the Library, a program will receive such incoming subscription stanzas for further processing. Registration happens by calling
+Subscription stanzas are a special case of Presence stanzas. However, their purpose is different from normal Presence, which is why they are handled separately. Subscription stanzas of different types are exchanged when client A wishes to add client B to its roster. By registering a \texttt{SubscriptionHandler}-derived object with the Library, a program will receive such incoming subscription stanzas for further processing. Registration happens by calling
 \begin{flushleft}
 \texttt{void registerSubscriptionHandler( SubscriptionHandler* mh );}
 \end{flushleft}
@@ -237,7 +237,7 @@ The processing object has immediate knowledge about sender (\texttt{iksid* from}
 \subsection{The Feeder Library}
 \label{sec:feederlib}
 \paragraph{}
-The Feeder Library is separated from the Feeder -- like shown in Figure \ref{fig:feeder} -- to allow for re-use. The functionality the Feeder Library offers is completely independent from the format of the data that is sent over the wire and processed by the Worker. It makes direct use of the XMPP Client Library for the XMPP communication.
+The Feeder Library is separated from the Feeder -- as shown in Figure \ref{fig:feeder} -- to allow for re-use. The functionality the Feeder Library offers is completely independent from the format of the data that is sent over the wire and processed by the Worker. It makes direct use of the XMPP Client Library for the XMPP communication.
 
 \paragraph{}
 The purpose of the Feeder Library is, on one hand side, to accept data packets from the Feeder and forward them to a Worker. On the other hand side, it receives result packets from the Workers, evaluates them, stores statistical information about the processed packet in a database and finally passes the result packet to the Feeder.
@@ -324,5 +324,5 @@ The inheritance diagram for the main class of the Worker Library -- \texttt{Work
 \subsection{Statistics Viewer}
 \paragraph{}
 
-\subsection{Feeder Frontend}
+\subsection{Feeder Front End}
 \paragraph{}
