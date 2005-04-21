@@ -69,8 +69,8 @@ JClient::~JClient()
 
 void JClient::init()
 {
-  m_roster = new Roster( this );
   m_disco = new Disco( this );
+  m_roster = new Roster( this );
   m_disco->setVersion( "JLib", JLIB_VERSION );
   m_disco->setIdentity( "client", "bot" );
 }
