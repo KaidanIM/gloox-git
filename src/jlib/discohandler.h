@@ -42,7 +42,7 @@ class DiscoHandler
      * @param pak The full packet.
      * @todo Replace the ikspak with decoded values.
      */
-    virtual void discoInfoResult( const string& id, const ikspak* pak ) {};
+    virtual void handleDiscoInfoResult( const string& id, const ikspak* pak ) {};
 
     /**
      * Reimplement this function if you want to be notified about the result
@@ -51,14 +51,14 @@ class DiscoHandler
      * @param pak The full packet.
      * @todo Replace the ikspak with decoded values.
      */
-    virtual void discoItemsResult( const string& id, const ikspak* pak ) {};
+    virtual void handleDiscoItemsResult( const string& id, const ikspak* pak ) {};
 
     /**
      * Reimplement this function to receive disco error notifications.
      * @param id The id of the result. Corresponds to the id of the sent query.
      * @param errno The type of the error as returned by the server.
      */
-    virtual void discoError( const string& id, const string& error ) {};
+    virtual void handleDiscoError( const string& id, const string& error ) {};
 
     /**
      * Reimplement this function to receive notifications about incoming IQ
@@ -67,7 +67,7 @@ class DiscoHandler
      * @param pak The full packet.
      * @todo Replace the ikspak with decoded values.
      */
-    virtual void discoSet( const string& id, const ikspak* pak ) {};
+    virtual void handleDiscoSet( const string& id, const ikspak* pak ) {};
 
 };
 

@@ -77,6 +77,8 @@ void Feeder::itemAdded( const string& jid )
 {
   if( m_infoHandler )
     m_infoHandler->itemAdded( jid );
+
+  c->disco()->getDiscoInfo( jid );
 }
 
 void Feeder::itemRemoved( const string& jid )
