@@ -112,7 +112,11 @@ void Disco::handleIq( const char* xmlns, ikspak* pak )
       break;
 
     case IKS_TYPE_ERROR:
-      
+      if( m_discoHandler )
+      {
+        iks* x = iks_child( iks_child( pak->x ) );
+        m_discoHandler->discoError( pak->id, iks_name( x ) );
+      }
       break;
   }
 }

@@ -58,7 +58,7 @@ class DiscoHandler
      * @param id The id of the result. Corresponds to the id of the sent query.
      * @param errno The type of the error as returned by the server.
      */
-    virtual void discoError( const string& id, const JClient::ErrorEnum errno ) {};
+    virtual void discoError( const string& id, const string& error ) {};
 
 };
 
