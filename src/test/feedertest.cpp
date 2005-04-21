@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
 }
 
 FeederTest::FeederTest()
-  : m_debug( false )
+  : m_debug( false ), m_data( 0 )
 {
 }
 
@@ -96,7 +96,9 @@ void FeederTest::roster( RosterHelper::RosterMap roster )
 
 char* FeederTest::poll()
 {
-  return strdup( "abcdefg" );
+  char* v = "0";
+  sprintf( v, "%d", ++m_data );
+  return v;
 }
 
 bool FeederTest::hasData()

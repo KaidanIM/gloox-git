@@ -91,6 +91,7 @@ class FeederTest : public InfoHandlerFeeder, PollHandler
     Feeder* c;
     string m_self;
     string m_passwd;
+    int m_data;
     bool m_debug;
 };
 
