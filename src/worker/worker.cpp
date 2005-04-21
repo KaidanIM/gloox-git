@@ -109,7 +109,7 @@ void Worker::registerInfoHandler( InfoHandlerWorker* ih )
 void Worker::result( ResultCode code, const char* result )
 {
   m_working = false;
-  if( m_debug ) printf( "work finished\n" );
+  if( m_debug ) printf( "work finished: %s\n", result );
   iks* x = iks_make_iq( IKS_TYPE_SET, XMLNS_IQ_RESULT );
   iks_insert_attrib( x, "from", c->jid().c_str() );
   iks_insert_attrib( x, "to", m_feederID->full );
@@ -119,6 +119,7 @@ void Worker::result( ResultCode code, const char* result )
   char* r = (char*)malloc( sizeof( int ) );;
   sprintf(r, "%d", code );
   iks_insert_attrib( z, "result", r );
+  iks_insert_cdata( z, result, iks_strlen( result ) );
   c->send( x );
   free( r );
 
