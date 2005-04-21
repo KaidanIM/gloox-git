@@ -70,13 +70,13 @@ class WorkerTest : public InfoHandlerWorker, DataHandler
     virtual void data( const char* data);
 
   private:
-    char* factorise( int num );
+    const char* factorise( int number );
 
     Worker* c;
 
-    typedef list<int> PrimeList;
+    typedef list<int> IntList;
 
-    PrimeList m_primes;
+    IntList m_primes;
     string m_self;
     string m_feeder;
     string m_passwd;

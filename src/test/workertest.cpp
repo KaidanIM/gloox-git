@@ -22,7 +22,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <math.h>
 #include <unistd.h>
 
 int main( int argc, char *argv[] )
@@ -48,6 +48,8 @@ WorkerTest::WorkerTest()
   m_primes.push_back(17);
   m_primes.push_back(19);
   m_primes.push_back(23);
+  m_primes.push_back(29);
+  m_primes.push_back(21);
 }
 
 WorkerTest::~WorkerTest()
@@ -89,9 +91,50 @@ void WorkerTest::data( const char* data)
   c->result( RESULT_SUCCESS, factorise( num ) );
 }
 
-char* WorkerTest::factorise( int num )
+const char* WorkerTest::factorise( int number )
 {
-  return strdup( "2,3" );
+  printf("factors: ");
+  int num = number;
+  list<int> result;
+  IntList::const_iterator it = m_primes.begin();
+  int rem = -1;
+  while( rem != 0 && num != 1 )
+  {
+//     printf("using prime number: %d\n", (*it));
+    int rem = num % (*it);
+    if( rem == 0 )
+    {
+      result.push_back( (*it) );
+      printf("%d,", (*it));
+      num = num / (*it);
+      it = m_primes.begin();
+//       printf("continueing with %d\n", num);
+    }
+    else
+    {
+      if( rem == 1 && (*it) > sqrt( num ) )
+      {
+        printf(" found new prime: %d\n", (*it) );
+        m_primes.push_back( (*it) );
+      }
+
+      ++it;
+      if( it == m_primes.end() )
+        break;
+    }
+  }
+  printf("\n");
+  string res_str;
+  char* tmp = (char*)malloc( sizeof( int ) );
+  it = result.begin();
+  for( it; it != result.end(); it++ )
+  {
+    sprintf(tmp,"%d",(*it));
+    res_str += tmp;
+    res_str += "*";
+  }
+  free(tmp);
+  return res_str.c_str();
 }
 
 bool WorkerTest::setCmdLineArgs( int argc, char *argv[] )
