@@ -100,20 +100,17 @@ void Roster::handleSubscription( iksid* from, iksubtype type, const char* msg )
       if( m_rosterListener )
       {
         if ( m_rosterListener->subscriptionRequest( string(from->full), msg ) )
-          {
-            iks* x = iks_make_s10n( IKS_TYPE_SUBSCRIBED, from->full, "ok" );
-            m_parent->send( x );
+        {
+          iks* x = iks_make_s10n( IKS_TYPE_SUBSCRIBED, from->full, "ok" );
+          m_parent->send( x );
 
-            x = iks_make_s10n( IKS_TYPE_SUBSCRIBE, from->full, "" );
-            m_parent->send( x );
-          }
-          // this should go into SUBSCRIBED (including a check for m_rosterListener)
-          // see comment there
-          m_rosterListener->itemAdded( from->full );
+          x = iks_make_s10n( IKS_TYPE_SUBSCRIBE, from->full, "" );
+          m_parent->send( x );
+        }
       }
       break;
     case IKS_TYPE_SUBSCRIBED:
-      // case never happens with jabberd2s7
+      m_rosterListener->itemAdded( from->full );
       break;
     case IKS_TYPE_UNSUBSCRIBE:
     {
@@ -126,20 +123,19 @@ void Roster::handleSubscription( iksid* from, iksubtype type, const char* msg )
       iks_insert_attrib( a, "jid", from->partial );
       iks_insert_attrib( a, "subscription", "remove" );
       m_parent->send( y );
-      // this really belongs into UNSUBSCRIBED
-      // see comment there
-      if( m_rosterListener )
-        m_rosterListener->itemRemoved( from->full );
       break;
     }
     case IKS_TYPE_UNSUBSCRIBED:
-      // this case never happens with jabberd2s7
+      if( m_rosterListener )
+        m_rosterListener->itemRemoved( from->full );
       break;
   }
 }
 
 void Roster::handleDiscoInfoResult( const string& id, const ikspak* pak )
 {
+  Identity ident;
+  
   
 }
 
