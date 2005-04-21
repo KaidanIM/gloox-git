@@ -93,7 +93,8 @@ void Disco::handleIq( const char* xmlns, ikspak* pak )
       break;
 
     case IKS_TYPE_SET:
-      
+      if( m_discoHandler )
+        m_discoHandler->discoSet( pak->id, pak );
       break;
 
     case IKS_TYPE_RESULT:
