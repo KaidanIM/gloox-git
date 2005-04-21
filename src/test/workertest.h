@@ -24,6 +24,7 @@
 #include "../worker/datahandler.h"
 
 #include <string>
+#include <list>
 using namespace std;
 
 class Worker;
@@ -59,7 +60,7 @@ class WorkerTest : public InfoHandlerWorker, DataHandler
      */
     void start();
 
-    // reimplemented from InfoHandlerFeeder
+   // reimplemented from InfoHandlerFeeder
     virtual void connected();
 
     // reimplemented from InfoHandlerFeeder
@@ -69,8 +70,13 @@ class WorkerTest : public InfoHandlerWorker, DataHandler
     virtual void data( const char* data);
 
   private:
+    char* factorise( int num );
+
     Worker* c;
 
+    typedef list<int> PrimeList;
+
+    PrimeList m_primes;
     string m_self;
     string m_feeder;
     string m_passwd;

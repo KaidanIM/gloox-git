@@ -22,6 +22,7 @@
 
 #include "../feeder/infohandler.h"
 #include "../feeder/pollhandler.h"
+#include "../feeder/resulthandler.h"
 
 #include <string>
 using namespace std;
@@ -33,7 +34,7 @@ class Feeder;
  * @author Jakob Schroeter <js@camaya.net>
  */
 
-class FeederTest : public InfoHandlerFeeder, PollHandler
+class FeederTest : public InfoHandlerFeeder, PollHandler, ResultHandler
 {
 
   public:
@@ -86,6 +87,9 @@ class FeederTest : public InfoHandlerFeeder, PollHandler
 
     // reimplmented from PollHandler
     virtual bool hasData();
+
+    // reimplmented from ResultHandler
+    virtual void handleResult( const string& result );
 
   private:
     Feeder* c;

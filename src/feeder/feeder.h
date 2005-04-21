@@ -22,6 +22,7 @@
 
 #include "pollhandler.h"
 #include "infohandler.h"
+#include "resulthandler.h"
 
 #include "../jlib/connectionlistener.h"
 #include "../jlib/iqhandler.h"
@@ -88,6 +89,12 @@ class Feeder : public ConnectionListener, IqHandler, RosterListener
      */
     void registerInfoHandler( InfoHandlerFeeder* ih );
 
+    /**
+     * Using this method you can register an object as ResultHandler.
+     * @param rh The object derived from ResultHandler.
+     */
+    void registerResultHandler( ResultHandler* rh );
+
     // reimplemented from RosterListener
     virtual void itemAdded( const string& jid );
 
@@ -124,6 +131,7 @@ class Feeder : public ConnectionListener, IqHandler, RosterListener
     JClient* c;
     PollHandler* m_pollHandler;
     InfoHandlerFeeder* m_infoHandler;
+    ResultHandler* m_resultHandler;
 
     bool m_poll;
     bool m_debug;

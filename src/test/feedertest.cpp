@@ -55,6 +55,7 @@ void FeederTest::start()
   c = new Feeder( m_self, m_passwd, m_debug );
   c->registerInfoHandler( this );
   c->registerPollHandler( this );
+  c->registerResultHandler( this );
   c->connect();
 }
 
@@ -96,9 +97,14 @@ void FeederTest::roster( RosterHelper::RosterMap roster )
 
 char* FeederTest::poll()
 {
-  char* v = "0";
-  sprintf( v, "%d", ++m_data );
-  return v;
+  char* tmp = (char*)malloc( sizeof( int ) );
+  sprintf( tmp, "%d", ++m_data );
+  return tmp;
+}
+
+void FeederTest::handleResult( const string& result )
+{
+  printf( "received result: %s\n", result.c_str() );
 }
 
 bool FeederTest::hasData()

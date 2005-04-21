@@ -77,8 +77,6 @@ void Feeder::itemAdded( const string& jid )
 {
   if( m_infoHandler )
     m_infoHandler->itemAdded( jid );
-
-  c->disco()->getDiscoInfo( jid );
 }
 
 void Feeder::itemRemoved( const string& jid )
@@ -92,7 +90,10 @@ void Feeder::itemChanged( const string& jid, int status, const char* msg )
   if( m_infoHandler )
     m_infoHandler->itemChanged( jid, status, msg );
 
-  if ( ( status == IKS_SHOW_AVAILABLE ) && m_poll && m_pollHandler )
+//   if( status == IKS_SHOW_AVAILABLE )
+//     c->disco()->getDiscoInfo( jid );
+
+  if( ( status == IKS_SHOW_AVAILABLE ) && m_poll && m_pollHandler )
     sendData( jid );
 }
 
@@ -111,7 +112,7 @@ void Feeder::roster( RosterHelper::RosterMap roster )
 
 void Feeder::sendData( const string& jid )
 {
-  const char* data = m_pollHandler->poll();
+  char* data = m_pollHandler->poll();
   if ( data )
   {
     iks* x = iks_make_iq( IKS_TYPE_SET, XMLNS_IQ_DATA );
@@ -122,6 +123,7 @@ void Feeder::sendData( const string& jid )
     iks* z = iks_insert( y, "data" );
     iks_insert_cdata( z, data, iks_strlen( data ) );
     c->send( x );
+    free( data );
   }
   else
     m_poll = false;
@@ -131,7 +133,12 @@ void Feeder::handleIq( const char* xmlns, ikspak* pak )
 {
   if( iks_strncmp( XMLNS_IQ_RESULT, xmlns, iks_strlen( XMLNS_IQ_RESULT ) ) == 0 )
   {
-    if( m_debug ) printf( "received result: %s\n" );
+    if( m_resultHandler )
+    {
+      char* data = iks_find_cdata( iks_child( pak->x ), "result" );
+      if( data )
+        m_resultHandler->handleResult( data );
+    }
 
     iks* x = iks_make_iq( IKS_TYPE_RESULT, XMLNS_IQ_RESULT );
     iks_insert_attrib( x, "from", c->jid().c_str() );
@@ -146,6 +153,11 @@ void Feeder::handleIq( const char* xmlns, ikspak* pak )
 void Feeder::registerInfoHandler( InfoHandlerFeeder* ih )
 {
   m_infoHandler = ih;
+}
+
+void Feeder::registerResultHandler( ResultHandler* rh )
+{
+  m_resultHandler = rh;
 }
 
 void Feeder::onConnect()

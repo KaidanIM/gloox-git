@@ -39,6 +39,15 @@ int main( int argc, char *argv[] )
 WorkerTest::WorkerTest()
   : m_debug( false )
 {
+  m_primes.push_back(2);
+  m_primes.push_back(3);
+  m_primes.push_back(5);
+  m_primes.push_back(7);
+  m_primes.push_back(11);
+  m_primes.push_back(13);
+  m_primes.push_back(17);
+  m_primes.push_back(19);
+  m_primes.push_back(23);
 }
 
 WorkerTest::~WorkerTest()
@@ -75,9 +84,14 @@ void WorkerTest::disconnected()
 
 void WorkerTest::data( const char* data)
 {
-  printf( "received data: %s\n", data );
-  sleep( 5 );
-  c->result( RESULT_SUCCESS, "ok" );
+  int num = atoi( data );
+  printf( "received data: %d\n", num );
+  c->result( RESULT_SUCCESS, factorise( num ) );
+}
+
+char* WorkerTest::factorise( int num )
+{
+  return strdup( "2,3" );
 }
 
 bool WorkerTest::setCmdLineArgs( int argc, char *argv[] )
