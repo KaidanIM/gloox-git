@@ -54,11 +54,20 @@ class DiscoHandler
     virtual void discoItemsResult( const string& id, const ikspak* pak ) {};
 
     /**
-     * Reimplement thsi function to receive disco error notifications.
+     * Reimplement this function to receive disco error notifications.
      * @param id The id of the result. Corresponds to the id of the sent query.
      * @param errno The type of the error as returned by the server.
      */
     virtual void discoError( const string& id, const string& error ) {};
+
+    /**
+     * Reimplement this function to receive notifications about incoming IQ
+     * packets in the disco namespace of type 'set'.
+     * @param id The id of the incoming query.
+     * @param pak The full packet.
+     * @todo Replace the ikspak with decoded values.
+     */
+    virtual void discoSet( const string& id, const ikspak* pak ) {};
 
 };
 
