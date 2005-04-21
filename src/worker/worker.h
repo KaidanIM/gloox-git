@@ -94,7 +94,7 @@ class Worker : public ConnectionListener, IqHandler, RosterListener
      * @param code ResultCode indicating general success or failure of the processing
      * @param result The result of the calculation.
      */
-    void result( ResultCode code, const char* result );
+    void result( ResultCode code, char* result );
 
     // reimplemented from RosterListener
     virtual bool subscriptionRequest( const string& jid, const char* msg );

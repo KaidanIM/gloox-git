@@ -70,7 +70,7 @@ class WorkerTest : public InfoHandlerWorker, DataHandler
     virtual void data( const char* data);
 
   private:
-    const char* factorise( int number );
+    char* factorise( int number );
 
     Worker* c;
 

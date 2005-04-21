@@ -87,15 +87,14 @@ void WorkerTest::disconnected()
 void WorkerTest::data( const char* data)
 {
   int num = atoi( data );
-  printf( "received data: %d\n", num );
+  printf( "prime factors for %d: ", num );
   c->result( RESULT_SUCCESS, factorise( num ) );
 }
 
-const char* WorkerTest::factorise( int number )
+char* WorkerTest::factorise( int number )
 {
-  printf("factors: ");
   int num = number;
-  list<int> result;
+  char* result = 0;
   IntList::const_iterator it = m_primes.begin();
   int rem = -1;
   while( rem != 0 && num != 1 )
@@ -104,37 +103,34 @@ const char* WorkerTest::factorise( int number )
     int rem = num % (*it);
     if( rem == 0 )
     {
-      result.push_back( (*it) );
-      printf("%d,", (*it));
+      if( !result )
+      {
+        result = (char*)realloc( result, sizeof( int ) );
+        sprintf( result, "%d", (*it) );
+      }
+      else
+      {
+        result = (char*)realloc( result, strlen( result ) + sizeof( char ) + sizeof( int ) );
+        sprintf( result, "%s*%d", result, (*it) );
+      }
       num = num / (*it);
       it = m_primes.begin();
-//       printf("continueing with %d\n", num);
     }
     else
     {
-      if( rem == 1 && (*it) > sqrt( num ) )
-      {
-        printf(" found new prime: %d\n", (*it) );
-        m_primes.push_back( (*it) );
-      }
-
       ++it;
       if( it == m_primes.end() )
         break;
     }
   }
-  printf("\n");
-  string res_str;
-  char* tmp = (char*)malloc( sizeof( int ) );
-  it = result.begin();
-  for( it; it != result.end(); it++ )
+  if( result )
+    printf( "%s\n", result );
+  else
   {
-    sprintf(tmp,"%d",(*it));
-    res_str += tmp;
-    res_str += "*";
+    m_primes.push_back( number );
+    printf( "none. %d is prime\n", number );
   }
-  free(tmp);
-  return res_str.c_str();
+  return result;
 }
 
 bool WorkerTest::setCmdLineArgs( int argc, char *argv[] )
