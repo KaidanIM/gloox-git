@@ -58,11 +58,27 @@ class RosterListener
 
     /**
      * This function is called on every status change of an item in the roster.
+     * @note Thsi function is not called for status changes from or to Unavailable. In these cases,
+     * @ref itemAvailable() and @ref itemUnavailable() are called, respectively.
      * @param jid The item's address.
      * @param status The item's new status.
      * @param msg The status change message.
      */
     virtual void itemChanged( const string& jid, int status, const char* msg ) {};
+
+    /**
+     * This function is called whenever a roster item comes online (is available).
+     * @param jid The item's address.
+     * @param msg The status change message.
+     */
+    virtual void itemAvailable( const string& jid, const char* msg ) {};
+
+    /**
+     * This function is called whenever a roster item goes offline (is unavailable).
+     * @param jid The item's address.
+     * @param msg The status change message.
+     */
+    virtual void itemUnavailable( const string& jid, const char* msg ) {};
 
     /**
      * This function is called when an entity wishes to subscribe to this entities presence.

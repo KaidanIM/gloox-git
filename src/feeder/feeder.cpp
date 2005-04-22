@@ -85,13 +85,15 @@ void Feeder::itemRemoved( const string& jid )
     m_infoHandler->itemRemoved( jid );
 }
 
+void Feeder::itemAvailable( const string& jid, const char* msg )
+{
+  c->disco()->getDiscoInfo( jid );
+}
+
 void Feeder::itemChanged( const string& jid, int status, const char* msg )
 {
   if( m_infoHandler )
     m_infoHandler->itemChanged( jid, status, msg );
-
-//   if( status == IKS_SHOW_AVAILABLE )
-//     c->disco()->getDiscoInfo( jid );
 
   if( ( status == IKS_SHOW_AVAILABLE ) && m_poll && m_pollHandler )
     sendData( jid );
@@ -146,8 +148,6 @@ void Feeder::handleIq( const char* xmlns, ikspak* pak )
     iks_insert_attrib( x, "id", pak->id );
     c->send( x );
   }
-  else
-    if( m_debug ) printf( "unhandled xmlns: %s\n", xmlns );
 }
 
 void Feeder::registerInfoHandler( InfoHandlerFeeder* ih )

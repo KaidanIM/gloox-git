@@ -95,7 +95,8 @@ void Disco::handleIq( const char* xmlns, ikspak* pak )
     case IKS_TYPE_SET:
     {
       DiscoHandlerList::const_iterator it = m_discoHandler.begin();
-      for( it; it != m_discoHandler.end(); it++ ) {
+      for( it; it != m_discoHandler.end(); it++ )
+      {
         (*it)->handleDiscoSet( pak->id, pak );
       }
       break;
@@ -106,7 +107,8 @@ void Disco::handleIq( const char* xmlns, ikspak* pak )
             &&  findID( pak->id, pak->from->full ) )
       {
         DiscoHandlerList::const_iterator it = m_discoHandler.begin();
-        for( it; it != m_discoHandler.end(); it++ ) {
+        for( it; it != m_discoHandler.end(); it++ )
+        {
           (*it)->handleDiscoInfoResult( pak->id, pak );
         }
       }
@@ -114,16 +116,18 @@ void Disco::handleIq( const char* xmlns, ikspak* pak )
                  &&  findID( pak->id, pak->from->full ) )
       {
         DiscoHandlerList::const_iterator it = m_discoHandler.begin();
-        for( it; it != m_discoHandler.end(); it++ ) {
+        for( it; it != m_discoHandler.end(); it++ )
+        {
           (*it)->handleDiscoItemsResult( pak->id, pak );
         }
-     }
+      }
       break;
 
     case IKS_TYPE_ERROR:
       iks* x = iks_child( iks_child( pak->x ) );
       DiscoHandlerList::const_iterator it = m_discoHandler.begin();
-      for( it; it != m_discoHandler.end(); it++ ) {
+      for( it; it != m_discoHandler.end(); it++ )
+      {
         (*it)->handleDiscoError( pak->id, iks_name( x ) );
       }
       iks_delete( x );
@@ -144,7 +148,7 @@ void Disco::getDiscoInfo( const string& to )
   iks_insert_attrib( x, "to", to.c_str() );
   iks_insert_attrib( x, "id", id.c_str() );
   m_parent->send( x );
-  addQueryID( to, id );
+  addQueryID( id, to );
 }
 
 void Disco::getDiscoItems( const string& to )
@@ -155,7 +159,7 @@ void Disco::getDiscoItems( const string& to )
   iks_insert_attrib( x, "to", to.c_str() );
   iks_insert_attrib( x, "id", id.c_str() );
   m_parent->send( x );
-  addQueryID( to, id );
+  addQueryID( id, to );
 }
 
 void Disco::setVersion( const string& name, const string& version )
@@ -191,8 +195,8 @@ bool Disco::findID( const string& id, const string& from )
   StringMap::const_iterator it = m_queryIDs.find( id );
   if( ( it != m_queryIDs.end() ) && ( (*it).second == from ) )
   {
-    return true;
     m_queryIDs.erase( id );
+    return true;
   }
   return false;
 }

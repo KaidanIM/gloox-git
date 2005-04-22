@@ -108,6 +108,9 @@ class Feeder : public ConnectionListener, IqHandler, RosterListener
     virtual void itemChanged( const string& jid, int status, const char* msg );
 
     // reimplemented from RosterListener
+    virtual void itemAvailable( const string& jid, const char* msg );
+
+    // reimplemented from RosterListener
     virtual bool subscriptionRequest( const string& jid, const char* msg );
 
     // reimplemented from IqHandler.

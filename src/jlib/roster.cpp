@@ -62,7 +62,7 @@ void Roster::handleIq( const char* xmlns, ikspak* pak )
         if( strcmp( iks_name( y ), "item" ) == 0 )
         {
           char* jid = iks_find_attrib( y, "jid" );
-          add( jid, IKS_TYPE_UNAVAILABLE );
+          add( jid, IKS_SHOW_UNAVAILABLE );
 //           printf( "received roster item: %s\n", jid );
         }
         y = iks_next_tag( y );
@@ -77,10 +77,16 @@ void Roster::handleIq( const char* xmlns, ikspak* pak )
 
 void Roster::handlePresence( iksid* from, iksubtype type, ikshowtype show, const char* msg )
 {
-  m_roster[from->full] = show;
-
   if( m_rosterListener )
-    m_rosterListener->itemChanged( from->full, show, msg );
+  {
+    if( m_roster[from->full] == IKS_SHOW_UNAVAILABLE )
+      m_rosterListener->itemAvailable( from->full, msg );
+    else if( show == IKS_SHOW_UNAVAILABLE )
+      m_rosterListener->itemUnavailable( from->full, msg );
+    else
+      m_rosterListener->itemChanged( from->full, show, msg );
+  }
+  m_roster[from->full] = show;
 }
 
 void Roster::subscribe( const string& jid, const string& msg )
@@ -136,7 +142,7 @@ void Roster::handleDiscoInfoResult( const string& id, const ikspak* pak )
 {
   Identity ident;
   
-  
+  printf("received disco result\n");
 }
 
 void Roster::unsubscribe( const string& jid, const string& msg )
