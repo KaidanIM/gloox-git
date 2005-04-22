@@ -409,6 +409,7 @@ class JClient : public Stream
     void removeSubscriptionHandler( SubscriptionHandler* sh );
 
   private:
+    void cleanUp();
     void notifyOnConnect();
     void notifyOnDisconnect();
     void notifyIqHandlers( const char* xmlns, ikspak* pak );
