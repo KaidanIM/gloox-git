@@ -439,7 +439,7 @@ class JClient : public Stream
     virtual void on_stream( int type, iks* node );
 
     void setupFilter();
-    void login( char* sid = 0L );
+    void login( const char* sid = 0L );
     void setClientState( StateEnum s );
     void init();
 
