@@ -188,7 +188,7 @@ std::string JClient::getID()
   return str;
 }
 
-void JClient::login( char* sid )
+void JClient::login( const char* sid )
 {
   if( m_debug ) printf("in login()\n");
 
