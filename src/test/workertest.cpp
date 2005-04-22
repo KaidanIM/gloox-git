@@ -64,7 +64,6 @@ WorkerTest::WorkerTest()
 
 WorkerTest::~WorkerTest()
 {
-  delete c;
 }
 
 void WorkerTest::start()
@@ -83,6 +82,7 @@ void WorkerTest::start()
   c->registerDataHandler( this );
   c->setFeeder( m_feeder );
   c->connect();
+  delete c;
 }
 
 void WorkerTest::connected()

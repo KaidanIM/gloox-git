@@ -45,7 +45,6 @@ Feeder::Feeder( const string& id, const string& password, bool debug, int port )
 
 Feeder::~Feeder()
 {
-  delete c;
 }
 
 void Feeder::connect()
@@ -56,6 +55,7 @@ void Feeder::connect()
 void Feeder::disconnect()
 {
   c->disconnect();
+  delete c;
 }
 
 bool Feeder::push( const char* data )

@@ -51,7 +51,6 @@ FeederTest::FeederTest()
 
 FeederTest::~FeederTest()
 {
-  delete c;
 }
 
 void FeederTest::start()
@@ -67,6 +66,7 @@ void FeederTest::start()
   c->registerPollHandler( this );
   c->registerResultHandler( this );
   c->connect();
+  delete c;
 }
 
 void FeederTest::connected()
