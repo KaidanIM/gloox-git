@@ -53,6 +53,11 @@ void Feeder::connect()
   c->connect();
 }
 
+void Feeder::disconnect()
+{
+  c->disconnect();
+}
+
 bool Feeder::push( const char* data )
 {
   RosterHelper::RosterMap roster = c->roster()->roster();

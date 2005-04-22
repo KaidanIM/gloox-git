@@ -40,9 +40,7 @@ void JThread::run()
   if( m_parent->debug() ) printf("thread run()ing\n");
   int ret;
   while( ( m_parent->clientState() >= JClient::STATE_CONNECTED ) && !m_cancel ) {
-    // check for data
-    ret = iks_recv( m_parser, (m_over)?(0):(1) );
-    // check for error
+    ret = iks_recv( m_parser, 0 );
     if( ret != IKS_OK ) {
       switch( ret ) {
         case IKS_HOOK:
@@ -63,7 +61,7 @@ void JThread::run()
           return;
       }
     }
-    // Allow an other thread to execute (cancel-point)
+    // Allow another thread to execute (cancel-point)
     sleep( 200 );
   }
 }

@@ -22,6 +22,7 @@
 #include "roster.h"
 #include "disco.h"
 
+#include <unistd.h>
 #include <iostream>
 
 #define JLIB_VERSION "0.1"
@@ -140,6 +141,7 @@ void JClient::on_stream( int type, iks* node )
       break;
   }
 //   if( m_debug ) printf("at the end of on_stream\n");
+  iks_delete( node );
 }
 
 
@@ -175,8 +177,7 @@ void JClient::disableRoster()
 std::string JClient::getID()
 {
   char* tmp = (char*)malloc( strlen( "id" ) + sizeof( int ) );
-  tmp = strdup( "uid%d" );
-  sprintf( tmp, tmp, ++m_idCount );
+  sprintf( tmp, "uid%d", ++m_idCount );
   std::string str( tmp );
   free( tmp );
   return str;
@@ -283,11 +284,12 @@ void JClient::connect()
 
 void JClient::disconnect()
 {
-  m_thread->cancel();
-  Stream::disconnect();
-  m_state = STATE_DISCONNECTED;
-  delete( m_thread );
-  m_thread = 0;
+  if( m_state != STATE_DISCONNECTED )
+  {
+    m_thread->cancel();
+    Stream::disconnect();
+    m_state = STATE_DISCONNECTED;
+  }
 }
 
 void JClient::send( iks* x )

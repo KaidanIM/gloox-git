@@ -22,17 +22,26 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/types.h>
+#include <signal.h>
 
+FeederTest f;
 
 int main(int argc, char *argv[])
 {
-  FeederTest f;
+  signal(SIGINT, sigHandler);
+
   if( f.setCmdLineArgs( argc, argv ) )
     f.start();
   else
     return 1;
 
   return 0;
+}
+
+void sigHandler( int /*signal*/ )
+{
+  f.c->disconnect();
 }
 
 FeederTest::FeederTest()
