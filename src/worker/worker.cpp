@@ -82,9 +82,6 @@ void Worker::handleIq( const char* xmlns, ikspak* pak )
       iks_insert_attrib( x, "id", pak->id );
       c->send( x );
 
-      x = iks_make_pres( IKS_SHOW_AWAY, "busy" );
-      c->send( x );
-
       if( m_dataHandler )
       {
         char* t = iks_find_cdata( iks_find( pak->x, "query" ), "data" );
@@ -123,9 +120,6 @@ void Worker::result( ResultCode code, char* result )
   c->send( x );
   free( r );
   free( result );
-
-  x = iks_make_pres( IKS_SHOW_AVAILABLE, "online" );
-  c->send( x );
 }
 
 bool Worker::subscriptionRequest( const string& jid, const char* msg )

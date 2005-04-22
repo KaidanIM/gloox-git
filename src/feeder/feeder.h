@@ -25,6 +25,7 @@
 #include "resulthandler.h"
 
 #include "../jlib/connectionlistener.h"
+#include "../jlib/discohandler.h"
 #include "../jlib/iqhandler.h"
 #include "../jlib/rosterlistener.h"
 #include "../jlib/rosterhelper.h"
@@ -43,7 +44,7 @@ class JClient;
  * This is the main class of the Feeder.
  * @author Jakob Schroeter <js@camaya.net>
  */
-class Feeder : public ConnectionListener, IqHandler, RosterListener
+class Feeder : public ConnectionListener, IqHandler, RosterListener, DiscoHandler
 {
   public:
     /**
@@ -94,6 +95,9 @@ class Feeder : public ConnectionListener, IqHandler, RosterListener
      * @param rh The object derived from ResultHandler.
      */
     void registerResultHandler( ResultHandler* rh );
+
+    // reimplemented from DiscoHandler.
+    virtual void handleDiscoInfoResult( const string& id, const ikspak* pak );
 
     // reimplemented from RosterListener
     virtual void itemAdded( const string& jid );

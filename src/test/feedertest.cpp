@@ -42,6 +42,7 @@ FeederTest::FeederTest()
 
 FeederTest::~FeederTest()
 {
+  delete c;
 }
 
 void FeederTest::start()

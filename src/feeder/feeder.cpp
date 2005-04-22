@@ -38,13 +38,14 @@ Feeder::Feeder( const string& id, const string& password, bool debug, int port )
   c->registerConnectionListener( this );
   c->roster()->registerRosterListener( this );
   c->registerIqHandler( this, XMLNS_IQ_RESULT );
+  c->disco()->registerDiscoHandler( this );
   c->disco()->setVersion( "Feeder", "0.1" );
   c->disco()->addFeature( "xmppgrid:result" );
 }
 
 Feeder::~Feeder()
 {
-  
+  delete c;
 }
 
 void Feeder::connect()
@@ -94,9 +95,6 @@ void Feeder::itemChanged( const string& jid, int status, const char* msg )
 {
   if( m_infoHandler )
     m_infoHandler->itemChanged( jid, status, msg );
-
-  if( ( status == IKS_SHOW_AVAILABLE ) && m_poll && m_pollHandler )
-    sendData( jid );
 }
 
 bool Feeder::subscriptionRequest( const string& jid, const char* msg )
@@ -129,6 +127,7 @@ void Feeder::sendData( const string& jid )
   }
   else
     m_poll = false;
+
 }
 
 void Feeder::handleIq( const char* xmlns, ikspak* pak )
@@ -147,7 +146,27 @@ void Feeder::handleIq( const char* xmlns, ikspak* pak )
     iks_insert_attrib( x, "to", pak->from->full );
     iks_insert_attrib( x, "id", pak->id );
     c->send( x );
+
+    if( m_poll && m_pollHandler )
+      sendData( pak->from->full );
   }
+}
+
+void Feeder::handleDiscoInfoResult( const string& id, const ikspak* pak )
+{
+  iks* y = iks_first_tag( iks_first_tag( pak->x ) );
+  while( y )
+  {
+    if( ( iks_strcmp( iks_name( y ), "feature" ) == 0 )
+          && ( iks_strncmp( XMLNS_IQ_DATA, iks_find_attrib( y, "var" ), iks_strlen( XMLNS_IQ_DATA ) ) == 0 ) )
+    {
+      printf( "%s supports xmppgrid:data\n", pak->from->full );
+      if( m_poll && m_pollHandler )
+        sendData( pak->from->full );
+    }
+    y = iks_next_tag( y );
+  }
+  iks_delete( y );
 }
 
 void Feeder::registerInfoHandler( InfoHandlerFeeder* ih )

@@ -54,6 +54,7 @@ WorkerTest::WorkerTest()
 
 WorkerTest::~WorkerTest()
 {
+  delete c;
 }
 
 void WorkerTest::start()
