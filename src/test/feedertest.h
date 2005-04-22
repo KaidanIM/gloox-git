@@ -68,18 +68,6 @@ class FeederTest : public InfoHandlerFeeder, PollHandler, ResultHandler
     virtual void disconnected();
 
     // reimplemented from InfoHandlerFeeder
-    virtual void itemAdded( const string& jid );
-
-    // reimplemented from InfoHandlerFeeder
-    virtual void itemRemoved( const string& jid );
-
-    // reimplemented from InfoHandlerFeeder
-    virtual void roster( RosterHelper::RosterMap roster );
-
-    // reimplemented from InfoHandlerFeeder
-    virtual void itemChanged( const string& jid, int status, const char* msg );
-
-    // reimplemented from InfoHandlerFeeder
     virtual bool subscriptionRequest( const string& jid, const char* msg );
 
     // reimplmented from PollHandler

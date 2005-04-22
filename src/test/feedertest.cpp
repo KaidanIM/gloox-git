@@ -69,30 +69,10 @@ void FeederTest::disconnected()
   printf( "disconnected\n" );
 }
 
-void FeederTest::itemAdded( const string& jid )
-{
-  printf( "buddy added: %s\n", jid.c_str() );
-}
-
-void FeederTest::itemRemoved( const string& jid )
-{
-  printf( "removed %s\n", jid.c_str() );
-}
-
-void FeederTest::itemChanged( const string& jid, int status, const char* msg )
-{
-  printf( "roster update: %s: %d: %s\n", jid.c_str(), status, msg );
-}
-
 bool FeederTest::subscriptionRequest( const string& jid, const char* msg )
 {
   printf( "subscribing %s, reason: %s\n", jid.c_str(), msg );
   return true;
-}
-
-void FeederTest::roster( RosterHelper::RosterMap roster )
-{
-  printf( "received roster. i am too stupid to display it right now\n" );
 }
 
 char* FeederTest::poll()
