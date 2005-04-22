@@ -78,6 +78,7 @@ void JClient::init()
 
 void JClient::cleanUp()
 {
+  iks_filter_delete( m_filter );
   delete m_disco;
   delete m_roster;
   delete m_thread;
@@ -353,7 +354,7 @@ void JClient::removePresenceHandler( PresenceHandler* ph )
 
 void JClient::registerIqHandler( IqHandler* ih, const char* xmlns )
 {
-  m_iqNSHandlers[strdup( xmlns )] = ih;
+  m_iqNSHandlers[xmlns] = ih;
 }
 
 void JClient::registerIqHandler( IqHandler* ih )

@@ -62,6 +62,7 @@ void Worker::connect()
 void Worker::disconnect()
 {
   c->disconnect();
+  delete c;
 }
 
 void Worker::handleIq( const char* xmlns, ikspak* pak )
