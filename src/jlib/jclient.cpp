@@ -66,9 +66,6 @@ JClient::JClient( const std::string& username, const std::string& password, cons
 
 JClient::~JClient()
 {
-  delete m_disco;
-  delete m_roster;
-  delete m_thread;
 }
 
 void JClient::init()
@@ -77,6 +74,13 @@ void JClient::init()
   m_roster = new Roster( this );
   m_disco->setVersion( "JLib", JLIB_VERSION );
   m_disco->setIdentity( "client", "bot" );
+}
+
+void JClient::cleanUp()
+{
+  delete m_disco;
+  delete m_roster;
+  delete m_thread;
 }
 
 void JClient::on_stream( int type, iks* node )
@@ -280,6 +284,8 @@ void JClient::connect()
   }
 
   m_thread->join();
+
+  cleanUp();
 }
 
 void JClient::disconnect()
