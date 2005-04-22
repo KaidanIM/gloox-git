@@ -27,7 +27,7 @@ Roster::Roster( JClient* parent )
   : m_parent( parent ),  m_rosterListener( 0 )
 {
   m_parent->registerIqHandler( this, XMLNS_ROSTER );
-  m_parent->disco()->registerDiscoHandler( this );
+//   m_parent->disco()->registerDiscoHandler( this );
   m_parent->registerPresenceHandler( this );
   m_parent->registerSubscriptionHandler( this );
 }
@@ -138,12 +138,12 @@ void Roster::handleSubscription( iksid* from, iksubtype type, const char* msg )
   }
 }
 
-void Roster::handleDiscoInfoResult( const string& id, const ikspak* pak )
-{
-  Identity ident;
-  
-  printf("received disco result\n");
-}
+// void Roster::handleDiscoInfoResult( const string& id, const ikspak* pak )
+// {
+//   Identity ident;
+//   
+// //   printf("received disco result\n");
+// }
 
 void Roster::unsubscribe( const string& jid, const string& msg )
 {

@@ -39,7 +39,7 @@ class PresenceHandler;
  * This class implements a roster. It takes care of changing presence, subscriptions, etc.
  * @author Jakob Schroeter <js@camaya.net>
  */
-class Roster : public IqHandler, PresenceHandler, SubscriptionHandler, DiscoHandler
+class Roster : public IqHandler, PresenceHandler, SubscriptionHandler/*, DiscoHandler*/
 {
   public:
     /**
@@ -95,8 +95,8 @@ class Roster : public IqHandler, PresenceHandler, SubscriptionHandler, DiscoHand
     // reimplemented from SubscriptionHandler.
     virtual void handleSubscription( iksid* from, iksubtype type, const char* msg );
 
-    // reimplemented from DiscoHandler.
-    virtual void handleDiscoInfoResult( const string& id, const ikspak* pak );
+//     // reimplemented from DiscoHandler.
+//     virtual void handleDiscoInfoResult( const string& id, const ikspak* pak );
 
   private:
 #warning TODO: implement as classes

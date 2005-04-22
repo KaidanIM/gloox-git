@@ -65,6 +65,9 @@ JClient::JClient( const std::string& username, const std::string& password, cons
 
 JClient::~JClient()
 {
+  delete m_disco;
+  delete m_roster;
+  delete m_thread;
 }
 
 void JClient::init()
