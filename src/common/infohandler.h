@@ -79,6 +79,20 @@ class InfoHandler
     virtual void itemChanged( const string& jid, int status, const char* msg ) {};
 
     /**
+     * This function is called whenever a roster item comes online (is available).
+     * @param jid The item's address.
+     * @param msg The status change message.
+     */
+    virtual void itemAvailable( const string& jid, const char* msg ) {};
+
+    /**
+     * This function is called whenever a roster item goes offline (is unavailable).
+     * @param jid The item's address.
+     * @param msg The status change message.
+     */
+    virtual void itemUnavailable( const string& jid, const char* msg ) {};
+
+    /**
      * This function is called when an entity wishes to subscribe to this entities presence.
      * @param jid The item's address.
      * @param msg The message sent along with the request.
