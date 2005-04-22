@@ -70,6 +70,8 @@ class WorkerTest : public InfoHandlerWorker, DataHandler
     virtual void data( const char* data);
 
   private:
+    friend void sigHandler( int /*signal*/ );
+
     char* factorise( int number );
 
     Worker* c;

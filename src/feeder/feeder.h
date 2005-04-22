@@ -69,6 +69,11 @@ class Feeder : public ConnectionListener, IqHandler, RosterListener, DiscoHandle
     void connect();
 
     /**
+     * Ends the connection gracefully.
+     */
+    void disconnect();
+
+    /**
      * Use this function to push data. If a Worker is available, data is pushed.
      * @param data is passed to it for processing
      * @return Returns false if no Worker is available. True otherwise.

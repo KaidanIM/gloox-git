@@ -59,6 +59,11 @@ void Worker::connect()
   c->connect();
 }
 
+void Worker::disconnect()
+{
+  c->disconnect();
+}
+
 void Worker::handleIq( const char* xmlns, ikspak* pak )
 {
   if( iks_strncmp( XMLNS_IQ_DATA, xmlns, iks_strlen( XMLNS_IQ_DATA ) ) == 0 )

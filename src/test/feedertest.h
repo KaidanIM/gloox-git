@@ -80,6 +80,8 @@ class FeederTest : public InfoHandlerFeeder, PollHandler, ResultHandler
     virtual void handleResult( const string& result );
 
   private:
+    friend void sigHandler( int /*signal*/ );
+
     Feeder* c;
     string m_self;
     string m_passwd;

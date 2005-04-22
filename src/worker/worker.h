@@ -68,6 +68,11 @@ class Worker : public ConnectionListener, IqHandler, RosterListener
     void connect();
 
     /**
+     * Ends the connection gracefully.
+     */
+    void disconnect();
+
+    /**
      * Allows to set the address of the Feeder.
      * @param jid The Feeder's Jabber ID.
      */
