@@ -45,7 +45,7 @@ void sigHandler( int /*signal*/ )
 }
 
 FeederTest::FeederTest()
-  : m_debug( false ), m_data( 0 )
+  : m_debug( false ), m_data( 1 )
 {
 }
 
@@ -87,9 +87,19 @@ bool FeederTest::subscriptionRequest( const string& jid, const char* msg )
 
 char* FeederTest::poll()
 {
-  char* tmp = (char*)malloc( sizeof( int ) );
-  sprintf( tmp, "%d", ++m_data );
-  return tmp;
+/*  if( m_data % 10 )
+  {
+*/
+    char* tmp = (char*)malloc( sizeof( int ) );
+    sprintf( tmp, "%d", ++m_data );
+    return tmp;
+//   }
+//   else
+//   {
+//     ++m_data;
+//     return 0;
+//   }
+
 }
 
 void FeederTest::handleResult( const string& result )
