@@ -2,7 +2,7 @@
 
 \subsection{Operating System}
 \paragraph{}
-The Operating System the development of this framework takes place on is a home-grown Linux system. During the development cycle it was made sure that the software compiles on other Linux boxes as well. However, compilation was tested neither on other UNIX boxes nor on the Microsoft Windows platform.
+The Operating System the development of this framework takes place on is a home-grown Linux system. During the development cycle it was made sure that the software compiles on other Linux boxes as well. Since the definition of grid includes the heterogenous component, it is important for the software to run on multiple Operating Systems. However, due to lack of access to different platforms, compilation was tested neither on other UNIX boxes nor on the Microsoft Windows platform.
 
 \subsection{Dependencies}
 \label{sec:depend}
@@ -10,7 +10,7 @@ The Operating System the development of this framework takes place on is a home-
 \subsubsection{Compile-Time Dependencies}
 \label{sec:compdepend}
 \paragraph{}
-The most important dependency is the Iksemel library, written by Gurer Ozen. Iksemel contains XML parsers (DOM as well as SAX) and offers many XMPP related functions. It was chosen as parsing library for this project due to its efficiency and simplicity of usage, the small size and its self-containment.
+The most important dependency is the Iksemel library, written by Gurer Ozen. Iksemel contains XML parsers (DOM as well as SAX) and offers many XMPP related low-level functions. It was chosen as parsing library for this project due to its efficiency and simplicity of usage, the small size and its self-containment.
 
 \paragraph{}
 Early versions of the XMPP Client Library developed in this project depended on the Iksemelmm library which is a C++ wrapper around Iksemel. To reduce the number of external dependencies, the most important parts (namely the class \texttt{Tree}, \texttt{Parser} and \texttt{Stream}) of it where added to the XMPP Client Library. They are discussed in Section \ref{sec:clientlib}.
@@ -23,7 +23,7 @@ The central workhorse, as far as the communication between Worker and Feeder is 
 The XMPP server is responsible for authenticating users and routing stanzas between clients in an XMPP/Jabber network. As mentioned in Section \ref{sec:xmpp}, it also distributes presence information to authorised contacts.
 
 \paragraph{Database}
-As a database backend, storing statistical information about the taskshanded out to the Workers, MySQL has been chosen because it is already in use on the machine acting as master in the development infrastructure. Since the storage mechanism is implemented in a modular way, it would be easy to add a PostgreSQL or file-based storage backend.
+As a database backend, storing statistical information about the tasks handed out to the Workers, MySQL has been chosen because it is already in use on the machine acting as master in the development infrastructure. Since the storage mechanism is implemented in a modular way, it would be easy to add a PostgreSQL or file-based storage backend.
 
 \paragraph{Webserver}
 The webserver running the Statistics Viewer is, in the development infrastructure, Apache httpd. Again, it is used because it already runs on the master machine. In a later production environment, Apache httpd is not necessarily required since PHP, which is used for the implementation of the Statistics Viewer, runs on a large range of webservers.
@@ -34,14 +34,14 @@ The webserver running the Statistics Viewer is, in the development infrastructur
 For software developers it is very important to have full control over source code they have written. This becomes more important with a higher number of developers involved in a single project. In such a case usually a Revision Control System (RCS) is used to keep track of code changes. But even for a one-person project a RCS has several advantages, including, but not limited to:
 
 \begin{itemize}
-\item backup, if revision control system is kept on a different machine
-\item history of modifications including log messages
-\item recovery of older versions
-\item branching and merging of changes
+\item Backup, if revision control system is kept on a different machine
+\item History of modifications including log messages
+\item Recovery of older versions
+\item Branching and merging of changes
 \end{itemize}
 
 \paragraph{}
-From the very first this project used a RCS called Subversion\footnote{Subversion lives at \href{http://subversion.tigris.org}{http://subversion.tigris.org}}. It has been choosen due to positive experience in earlier and current projects.
+From the very first this project used a RCS called Subversion\footnote{Subversion lives at \href{http://subversion.tigris.org}{http://subversion.tigris.org}}. It has been choosen due to positive experience in earlier and current projects and because the necessary infrastructure was already in place.
 
 \paragraph{}
 The Subversion repository for this project can be found at \\ \texttt{\href{http://svn.camaya.net/uni/fyp-lsbu/}{http://svn.camaya.net/uni/fyp-lsbu/}}. Only the most current version is accessible by means of HTTP. Older revisions can be accessed using an appropriate Subversion client. The repository hosts the complete source code and all the documentation written during the project's life-span.

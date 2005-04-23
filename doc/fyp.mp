@@ -436,29 +436,31 @@ u:=10;
 % justification for the XMPP Client Lib
 beginfig(8)
   % Worker
-  draw (8u,15u)--(16u,15u)--(16u,18u)--(8u,18u)--cycle;
-  label(btex Worker Library etex, (12u,16.5u));
-  drawarrow (12u,18u)--(17.5u,25u);
+  draw (8u,25u)--(16u,25u)--(16u,28u)--(8u,28u)--cycle;
+  label(btex Worker Library etex, (12u,26.5u));
+  drawarrow (12u,25u)--(17.5u,18u);
 
   % Feeder
-  draw (24u,15u)--(32u,15u)--(32u,18u)--(24u,18u)--cycle;
-  label(btex Feeder Library etex, (28u,16.5u));
-  drawarrow (28u,18u)--(22.5u,25u);
+  draw (24u,25u)--(32u,25u)--(32u,28u)--(24u,28u)--cycle;
+  label(btex Feeder Library etex, (28u,26.5u));
+  drawarrow (28u,25u)--(22.5u,18u);
 
   % XMPP Client Lib
-  draw (15u,25u)--(25u,25u)--(25u,28u)--(15u,28u)--cycle;
-  label(btex XMPP Client Lib etex, (20u,26.5u));
+  draw (15u,15u)--(25u,15u)--(25u,18u)--(15u,18u)--cycle;
+  label(btex XMPP Client Lib etex, (20u,16.5u));
 
 endfig;
 
 % presentation: Feeder in detail
 beginfig(9)
   % Feeder
-  draw (26u,15u)--(32u,15u)--(32u,18u)--(26u,18u)--cycle;
-  label(btex Feeder etex, (29u,16.5u));
+  draw (15.25u,14.25u)--(34.75u,14.25u)--(34.75u,18.75u)--(15.25u,18.75u)--cycle;
+  label.ulft(btex Feeder etex, (34.75u,18.75u));
+  draw (26u,15u)--(34u,15u)--(34u,18u)--(26u,18u)--cycle;
+  label(btex Data Gatherer etex, (30u,16.5u));
   drawarrow (26u,17u)--(24u,17u);
   drawarrow (24u,16u)--(26u,16u);
-  drawarrow (35u,17u)--(32u,17u) dashed evenly;
+  drawarrow (36u,17u)--(34u,17u) dashed evenly;
 
   % Feeder Library
   draw (16u,15u)--(24u,15u)--(24u,18u)--(16u,18u)--cycle;
@@ -473,8 +475,10 @@ endfig;
 % presentation: Worker in detail
 beginfig(10)
   % Worker
-  draw (10u,15u)--(16u,15u)--(16u,18u)--(10u,18u)--cycle;
-  label(btex Worker etex, (13u,16.5u));
+  draw (2.25u,14.25u)--(26.75u,14.25u)--(26.75u,18.75u)--(2.25u,18.75u)--cycle;
+  label.urt(btex Worker etex, (2.25u,18.75u));
+  draw (3u,15u)--(16u,15u)--(16u,18u)--(3u,18u)--cycle;
+  label(btex Algorithm Implementation etex, (9.5u,16.5u));
   drawarrow (18u,17u)--(16u,17u);
   drawarrow (16u,16u)--(18u,16u);
 
@@ -516,17 +520,17 @@ beginfig(12)
   draw (9.5u,15u)--(18.5u,15u)--(18.5u,16.5u)--(9.5u,16.5u)--cycle;
   label(btex ConnectionListener etex, (14u,15.75u));
 
-  % PresenceHandler
+  % DiscoHandler
   draw (20u,15u)--(28u,15u)--(28u,16.5u)--(20u,16.5u)--cycle;
-  label(btex PresenceHandler etex, (24u,15.75u));
+  label(btex DiscoHandler etex, (24u,15.75u));
 
   % IqHandler
   draw (31u,15u)--(37u,15u)--(37u,16.5u)--(31u,16.5u)--cycle;
   label(btex IqHandler etex, (34u,15.75u));
 
-  % SubscriptionHandler
-  draw (39.25u,15u)--(48.75u,15u)--(48.75u,16.5u)--(39.25u,16.5u)--cycle;
-  label(btex SubscriptionHandler etex, (44u,15.75u));
+  % RosterListener
+  draw (39.25u,15u)--(46.75u,15u)--(46.75u,16.5u)--(39.25u,16.5u)--cycle;
+  label(btex RosterListener etex, (43u,15.75u));
 
   % Feeder
   draw (27u,5u)--(31u,5u)--(31u,6.5u)--(27u,6.5u)--cycle;
@@ -534,7 +538,7 @@ beginfig(12)
   drawarrow (28.25u,6.5u)--(14u,15u);
   drawarrow (28.75u,6.5u)--(24u,15u);
   drawarrow (29.25u,6.5u)--(34u,15u);
-  drawarrow (29.75u,6.5u)--(44u,15u);
+  drawarrow (29.75u,6.5u)--(43u,15u);
 endfig;
 
 % inheritance diagram for Worker
@@ -547,9 +551,9 @@ beginfig(13)
   draw (21u,15u)--(27u,15u)--(27u,16.5u)--(21u,16.5u)--cycle;
   label(btex IqHandler etex, (24u,15.75u));
 
-  % SubscriptionHandler
+  % RosterListener
   draw (29.25u,15u)--(38.75u,15u)--(38.75u,16.5u)--(29.25u,16.5u)--cycle;
-  label(btex SubscriptionHandler etex, (34u,15.75u));
+  label(btex RosterListener etex, (34u,15.75u));
 
   % Feeder
   draw (21.5u,5u)--(26.5u,5u)--(26.5u,6.5u)--(21.5u,6.5u)--cycle;

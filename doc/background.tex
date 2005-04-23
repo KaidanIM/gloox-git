@@ -4,12 +4,12 @@ The project is based on a number of well-known and well-understood technologies.
 
 \subsection{Distributed Computing}
 \paragraph{}
-Basically, the term Distributed Computing describes technologies where more or less loosely connected machines, called nodes, work together on solving a problem. They do so by each dealing with a small fraction of the overall problem. This, of course, implies that it is possible to split the problem into smaller sub-problems that can be solved individually. Luckily, there are lots of challenges out there that meet these requirements. Accordingly, there are many projects that make use of clusters to work on such a problem. Usually, a dedicated machine takes care of assigning tasks to the nodes. Upon completion of the computation the result is delivered back to the co-ordinating master.
+Basically, the term Distributed Computing describes technologies where more or less loosely connected machines, called nodes, work together on solving a problem. They do so by each dealing with a small fraction of the overall problem. This, of course, implies that it is possible to split the problem into smaller sub-problems that can be solved individually. Luckily, there are lots of challenges out there that meet these requirements. Accordingly, there are many projects that make use of clusters or grids to work on such problems. Usually, a dedicated machine takes care of assigning tasks to the nodes. Upon completion of the computation the result is delivered back to the co-ordinating master.
 
 
 \subsubsection{Grid Computing}
 \paragraph{}
-A grid is a network of heterogenous machines, in contrast to a cluster, which is homogenous. That means that all kind of different platforms can become nodes of a grid. Grids can be distributed over the Internet or corporate or university networks. As a consequence, grids are higly dynamic because nodes can be added or removed at any time.
+A grid is a network of heterogenous machines, in contrast to a cluster, which is homogenous. That means that all kind of different platforms can become nodes of a grid. Grids can be distributed over the Internet, or corporate or university networks, respectively. As a consequence, grids are higly dynamic because nodes can be added or removed at any time.
 
 \paragraph{}
 Grids are often used to work on Grand Challenge Problems (GCP). According to \citeasnoun*{wikipedia006}, GCPs are unsolved problems and have at least the following characteristics:
@@ -18,7 +18,7 @@ Grids are often used to work on Grand Challenge Problems (GCP). According to \ci
 \item "The problem can not be unsolvable. If it probably cannot be solved, then it can't be a Grand Challenge. Ideally, quantifiable measures that indicate progress toward a solution are also definable."
 \item "The solution to a Grand Challenge problem must have a significant economical and/or social impact."
 \end{enumerate}
-The following are examples of Grand Challenge Problems:
+The following are areas of Grand Challenge Problems:
 \begin{itemize}
 \item Ecosystem Simulation
 \item Fluid Dynamics
@@ -29,12 +29,12 @@ The following are examples of Grand Challenge Problems:
 Institutions where grids could easily be deployed include schools, universities, corporate environments or laboratories. They usually have large numbers of computers available which are used only in the daytime and not at all at night. During those hours of less or no usage these machines can be turned into nodes of a grid. A software monitoring the CPU utilisation could remove a node temporarily from the grid if the machine is used for different tasks.
 
 \paragraph{}
-Another way to form a grid is to deploy the Internet. Many more people and machines are reachable and can participate. Probably the most prominent example for such a grid is Seti@Home \citeasnoun*{seti}, short for Search for Extraterrestrial Intelligence, which tries to find patterns in noise recorded from space using radio telescopes. These patterns could give hints on other intelligent life forms in the universe.
+Another way to form a grid is to deploy the Internet. Many more people and machines are reachable and can participate. Probably the most prominent example for such a grid is \citeasnoun*{seti}, short for Search for Extraterrestrial Intelligence, which tries to find patterns in noise recorded from space using radio telescopes. These patterns could give hints on other intelligent life forms in the universe.
 
 
 \subsection{Extensible Markup Language (XML)}
 \paragraph{}
-The Extensible Markup Language (XML) is an universal means to describe hierarchical data. It is human readable as well as easily machine parsable. It has been developed by the World Wide Web Consortium (W3C) and is a W3C standard. It is a subset of the Standard Generalized Markup Language (SGML).
+The Extensible Markup Language (XML) is an universal means to describe hierarchical data. It has been developed by the World Wide Web Consortium (W3C) and is a W3C standard. It is a subset of the Standard Generalized Markup Language (SGML). Compared to binary protocols, XML has the huge advantage of being easily human readable as well as machine parsable.
 
 \paragraph{}
 XML alone is not a programming language, neither is it a markup language per se. It rather is a ruleset that defines a way how to describe hierarchical data. A user of XML has to define specific rules for their specific kind of data on their own in a formal way. Such a formal description can, for example, be a Document Type Definition (DTD). It is not absolutely necessary to write down a DTD to use an XML-derived markup language. But, using such a formal description, software can validate a given document for its conformity.
@@ -56,7 +56,7 @@ XML consists of elements, their attributes and character data. An element has an
 \end{figure}
 
 \paragraph{}
-Tags can be nested infinitely and build up hierarchies as long as hierarchy levels are not mixed. In other words, it is not allowed to close an element after another one was openend but not closed. Figure \ref{fig:XMLexample} shows an example excerpt of a hypothetical (valid) XML document.
+Tags can be nested infinitely and build up hierarchies as long as hierarchy levels are not mixed. In other words, it is not allowed to close an element after another one was openend but not closed. Figure \ref{fig:XMLexample} shows an example excerpt of a hypothetical (well-formed) XML document.
 
 \paragraph{}
 A relatively new feature in XML are namespaces. Since XML instances may contain elements from different vocabularies, namespaces are used to remove ambiguities and distinguish semantically between equally nam\-ed elements. The special attribute \texttt{xmlns} denotes the namespace. For example, in Figure \ref{fig:XMLexample} the \texttt{<inner>} element belongs to the namespace \texttt{namespace}.
@@ -78,7 +78,7 @@ The Extensible Message and Presence Protocol is developed in an Internet communi
 \paragraph{}
 XMPP is based on XML in that the actual data exchanged between client and server is an XML stream. After a TCP/IP connection is established between client and server (or two servers), a stream opening tag is sent by both parties. Communication then happens by sending so-called stanzas to and fro. Closing the initial stream tag also causes the underlying TCP/IP connection to be closed.
 \paragraph{}
-A stanza in XMPP is exactly one element, consisting of its opening tag, any number of corresponding attributes, nested tags and character data, respectively, and the closing tag. Figure \ref{fig:streamExample} shows an example stream containing one stanza.
+A stanza in XMPP is exactly one element consisting of its opening tag, any number of corresponding attributes, nested tags and character data, respectively, and the closing tag. Figure \ref{fig:streamExample} shows an example stream containing one stanza.
 
 \begin{figure}[H]
 \begin{listing}{1}
@@ -102,8 +102,17 @@ A stanza in XMPP is exactly one element, consisting of its opening tag, any numb
 \paragraph{}
 Line 1 denotes that the following content complies with XML version 1.0, and is mandatory for any XML document. A stream can be seen as a special type of document. The stream is opened in line 2 and the opening tag of a \texttt{presence} stanza is sent in line 3. The stream is closed again in line 10. In real XMPP, feature negotiation and authentication take place after the stream opening and before the stream can be used. This is ommitted in Figure \ref{fig:streamExample} (line 5).
 \paragraph{}
-In the Instant Messaging world, a widely-used feature of XMPP is the roster. Users can authorise other users to allow them to see their online presence. These authorised users are then (usually) added to the authorising users personal contact list. Upon connection of a user, their client sends the current presence status (e.g., 'online') to the server which then distributes it to authorised contacts in the user's roster.
+In the Instant Messaging world, a widely-used feature of XMPP is the roster. Users can authorise other users to allow them to see their online presence. These authorised users are then (usually) added to the authorising user's personal contact list. Upon connection of a user, their client sends the current presence status (e.g., 'online') to the server which then distributes it to authorised contacts in the user's roster.
 
 \subsubsection{Protocol Extensions}
 \paragraph{}
-RFCs 3920 and 3921 describe the core functionality of XMPP only, such as authentication, as well as Instant Messaging-specific extensions, such as the roster. By the time, the protocol has been extended by so-called Jabber Enhancement Proposals\footnote{A list of current JEPs can be found at \href{http://www.jabber.org/jeps/jeplist.php}{http://www.jabber.org/jeps/jeplist.php}} (JEPs) to provide much more functionality than the core RFCs. For example, a very interesting extension, though not used in this project, is Publish-Subscribe \cite{jep0060} which describes a data push mechanism.
+RFCs 3920 and 3921 describe the core functionality of XMPP, such as authentication, as well as Instant Messaging-specific extensions, such as the roster. By the time, the protocol has been extended by so-called Jabber Enhancement Proposals\footnote{A list of current JEPs can be found at \href{http://www.jabber.org/jeps/jeplist.php}{http://www.jabber.org/jeps/jeplist.php}} (JEPs) to provide much more functionality than the core RFCs offer. For example, a very interesting extension, though not used in this project, is Publish-Subscribe \cite{jep0060} which describes a data push mechanism.
+
+\paragraph{}
+Publish-Subscribe (Pubsub) decribes a protocol for publishing arbitrary data. Interested entities in an XMPP network can subscribe to this data and receive a notification as soon as new content is published. The payload of this notification can contain either the data that has just been published or a link to its storage location.
+
+\paragraph{}
+Use cases for Pubsub include, for example, news distribution or stock ticker updates. By pushing the data from the publisher to the destination rather than having it poll for updates makes Pubsub an efficient distribution facility.
+
+\paragraph{}
+In an early stage of this project, it was taken into consideration to use Pubsub for distributing the data that has to be processed to the Workers. But Pubsub does not define a way to address a specific subscriber. Published data of some kind is always sent to all subscribers. This renders Pubsub useless for the current approach taken in this project.
