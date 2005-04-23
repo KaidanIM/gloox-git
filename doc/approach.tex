@@ -25,7 +25,7 @@ Feeder and Worker are each split in two main components. This is shown in Figure
 \end{figure}
 
 \paragraph{}
-The Feeder Library communicates with the XMPP Server and the Worker on behalf of the Feeder Application. Likewise does the Worker Library take care of the XMPP communication for the Worker.
+The Feeder Library communicates with the XMPP Server and the Worker on behalf of the Data Gatherer. Likewise does the Worker Library take care of the XMPP communication for the Algorithm Implementation. Data Gatherer as well as Algorithm Implementation know nothing about the wherefrom and whereabout of the data, respectively.
 
 \begin{figure}[H]
 \begin{center}
@@ -36,7 +36,7 @@ The Feeder Library communicates with the XMPP Server and the Worker on behalf of
 \end{figure}
 
 \paragraph{}
-Formerly, it was only mentioned briefly that both Worker and Feeder are likely to contain similar code which should be shared. Since the connectivity functionality is identical for both of the higher level components and is self-contained, it was decided to write a generic XMPP client library that can even be (and by the time of this writing is) used in other projects. Figure \ref{fig:justification} shows the collaboration of Feeder Library, Worker Library and XMPP Client Library.
+From the previous figures it is clear that both Worker and Feeder are likely to contain similar code which could be shared. Since the connectivity functionality is identical for both of the higher level components and is self-contained, it was decided to write a generic XMPP client library that can even be (and by the time of this writing is) used in other projects. Figure \ref{fig:justification} shows the collaboration of Feeder Library, Worker Library and XMPP Client Library.
 
 \begin{figure}[H]
 \begin{center}
@@ -66,9 +66,9 @@ An addressable node can be either of the following:
 \item[server] with  an address of the form: \texttt{\{server\}}
 \end{description}
 \paragraph{}
-For the addressing, the resource part is optional under certain circumstances and an user is always reachable by addressing the bare (without resource part) Jabber ID. Even though an XMPP address looks a lot like an ordinary email address, the XMPP specification allows for more characters to be used in the local part, even whitespace is valid. The server part depends on domain naming rules valid in the Internet (at least if used there). This addressing scheme, including the range of valid characters in an XMPP address, is decribed in greater detail in RFC 3920: XMPP Core \cite{xmpp-core}.
+For addressing, the resource part is optional under certain circumstances and an entity is always reachable by addressing the bare (without resource part) Jabber ID. Even though an XMPP address looks a lot like an ordinary email address, the XMPP specification allows for more characters to be used in the local part, even whitespace is valid. The server part depends on domain naming rules valid in the Internet. This addressing scheme, including the range of valid characters in an XMPP address, is decribed in greater detail in RFC 3920: XMPP Core \cite{xmpp-core}.
 
-\subsubsection{Addressing in XGrid}
+\subsubsection{Addressing in XMPPGrid}
 \label{sec:addressing}
 \paragraph{}
 The design of Worker and Feeder Libraries does not impose any limit whatsoever on the addresses of Workers besides those already defined in RFC 3920. This means it is even possible to have a Worker use the same Jabber ID like a users Instant Messaging account, except for the resource part. An example: User Joe has got an account on server \texttt{example.org}. Their client adds a resource of \texttt{JoesChatClient}. The resulting JID, under which Joe is reachable for chatting, would be:
@@ -97,7 +97,7 @@ The XMPP Client Library consists of one main class and several helper classes. T
 \end{figure}
 
 \paragraph{}
-The classes \texttt{Tree}, \texttt{Parser} and \texttt{Stream} were taken from the Iksemelmm\footnote{Originally written by Igor Goryachieff \texttt{<igor@jahber.org>}} library and modified slightly. They live in the \texttt{Iksemel} namespace and form an object-oriented wrapper interface to the Iksemel library. The build system creates a so-called convenience library from them which is then linked into the final XMPP Client Library.
+The classes \texttt{Tree}, \texttt{Parser} and \texttt{Stream} were taken from the Iksemelmm\footnote{Originally written by Igor Goryachieff \texttt{<igor@jahber.org>}} library and modified slightly. They live in the \texttt{Iksemel} namespace and form an object-oriented wrapper interface to the Iksemel library. The build system creates a so-called convenience library from them which is linked into the final XMPP Client Library.
 
 \paragraph{}
 The most simple example of using the XMPP Client Library would look like shown in Figure \ref{fig:usageExample}.
@@ -106,8 +106,8 @@ The most simple example of using the XMPP Client Library would look like shown i
 \begin{listing}{1}
 void Class::doIt()
 {
-  JClient* j = new JClient( "user", "resource",
-                            "password", "resource" );
+  JClient* j = new JClient( "user", "password",
+                            "server", "resource" );
   j->connect();
 }
 \end{listing}
@@ -116,20 +116,21 @@ void Class::doIt()
 \end{figure}
 
 \paragraph{}
-In this fictitious function \texttt{Class::doIt()} a new \texttt{JClient} object is created and initialised with the account's credentials necessary for connecting to an XMPP server (lines 3 and 4). As a consequence, the constructor of \texttt{JClient} as shown in Figure \ref{fig:JClientConstructor} is called.
+In this fictitious function \texttt{Class::doIt()} a new \texttt{JClient} object is created and initialised with the account's credentials necessary for connecting and authenticating to an XMPP server (lines 3 and 4). As a consequence, the constructor of \texttt{JClient} as shown in Figure \ref{fig:JClientConstructor} is called.
 
 \begin{figure}[H]
 \begin{listing}{1}
-JClient::JClient( const std::string username,
-                  const std::string resource,
-                  const std::string password,
-                  const std::string server, int port )
-  : m_username( username ), m_resource( resource ),
-    m_password( password ), m_server( server ),
-    m_port( port ), m_thread( 0 ),
-    m_tls( true ), m_sasl( true ),
-    m_autoPresence( true ), m_handleDiscoInfo( true ),
-    m_handleDiscoItems( true ), m_idCount( 0 )
+JClient::JClient( const std::string& username,
+                  const std::string& password,
+                  const std::string& server,
+                  const std::string& resource, int port )
+  : m_username( username ), m_password( password ),
+  m_server( server ), m_resource( resource ),
+  m_port( port ), m_thread( 0 ),
+  m_tls( true ), m_sasl( true ),
+  m_autoPresence( false ), m_manageRoster( true ),
+  m_handleDisco( true ), m_idCount( 0 ), m_roster( 0 ),
+  m_disco( 0 )
 {
   init();
 }
@@ -139,7 +140,7 @@ JClient::JClient( const std::string username,
 \end{figure}
 
 \paragraph{}
-Basically, a number of member variables are initialised. Most importantly, Transport Layer Security\footnote{Encryption of the communication channel.} (TLS) \cite{rfc2246} and Simple Authentication and Security Layer\footnote{Secure Authentication even without encrypted communication channel.} (SASL) \cite{rfc2222} are enabled (line 8). Additionally, but not shown in Figure \ref{fig:JClientConstructor}, some more XMPP features which the library supports, are enabled by the \texttt{init()} function. This includes Service Discovery\footnote{JEP-0030: Service Discovery defines methods to discover capabilities of other nodes in an XMPP network.} \cite{jep0030}.
+Basically, a number of member variables are initialised. Most importantly, Transport Layer Security\footnote{Encryption of the communication channel.} (TLS) \cite{rfc2246} and Simple Authentication and Security Layer\footnote{Secure Authentication even without encrypted communication channel.} (SASL) \cite{rfc2222} are enabled (line 8). Additionally, but not shown in Figure \ref{fig:JClientConstructor}, some more XMPP features which the library supports, are enabled by the \texttt{init()} function (line 13). This includes, for example, Service Discovery\footnote{JEP-0030: Service Discovery defines methods to discover capabilities of other nodes in an XMPP network.} \cite{jep0030} and Roster Management.
 
 \paragraph{}
 The function \texttt{connect()}, called in line 5 in Figure \ref{fig:usageExample}, establishes the connection to the XMPP server and creates a new thread that receives incoming TCP/IP packets and hands them to the XML parser of Iksemel.
@@ -154,12 +155,19 @@ The client library offers a simple yet powerful public interface that enables pr
 \begin{itemize}
 \item Established and canceled (also lost) connection
 \item Incoming messages
-\item Incoming IQ stanzas
+\item Incoming Info/Query (IQ) stanzas
 \item Incoming presence stanzas
 \item Incoming subscription stanzas
 \end{itemize}
 \paragraph{}
-Additionally, for IQ events a namespace filter can be utilised. With it, all the possible stanza types that XMPP Core supports are covered.
+With it, all the possible stanza types that XMPP Core supports are covered. A namespace filter can be utilised for IQ events. In addition to these, the library offers the following interfaces which in turn make heavy use of the previously named ones.
+\begin{itemize}
+\item Service Discovery
+\item Roster Management
+\end{itemize}
+\paragraph{}
+Both of these are built on IQ stanzas and use the namespace filtering mechanism mentioned above.
+
 
 \paragraph{}
 The event notification scheme used by the Client Library follows the so-called Observer Pattern \cite{wikipedia003}. An object interested in XMPP events needs to indicate this to the client library by registering with it as an appropriate event handler. When a stanza arrives from the server, the library calls a special function in every registered object. Figure \ref{fig:observer1} shows an example sequence of registering with the Client Library and being called back by it later on.
@@ -172,7 +180,7 @@ The event notification scheme used by the Client Library follows the so-called O
 \label{fig:observer1}
 \end{figure}
 \paragraph{}
-The following interfaces are available for use by an object. Each interface is defined in their own header file for inclusion by interested classes. The virtual function definded therein and listed here have to be reimplemented by the listener objects in order to actually receive the occuring events they listen for.
+The following interfaces are available for use by an object. Each interface is defined in their own header file for inclusion by interested classes. The virtual function definded therein and listed here have to be reimplemented by the listener objects in order to actually receive the occuring events they intend to listen for.
 
 \paragraph{ConnectionListener}
 To be notified about connection-related events, an object must be derived from \texttt{ConnectionListener}. It has to be added to the listener queue by calling
@@ -201,7 +209,7 @@ Upon an incoming Message stanza, \texttt{handleMessage()} is called, which has t
 The processing object has immediate knowledge of sender (\texttt{iksid* from}), type (\texttt{iksubtype type}) and content (\texttt{const char *msg}) of the incoming message.
 
 \paragraph{IqHandler}
-IQ stanzas usually contain control commands that are evaluated by the client software of a node and not shown to the user. By registering an \texttt{IqHandler}-derived object with the Library, a program will receive such incoming IQ stanzas for further processing. Registration happens by calling
+IQ stanzas usually contain control commands that are evaluated by the client software of an entity and not shown to the user. By registering an \texttt{IqHandler}-derived object with the Library, a program will receive such incoming IQ stanzas for further processing. Registration happens by calling
 \begin{flushleft}
 \texttt{void registerIqHandler( IqHandler* ih, std::string xmlns );}
 \end{flushleft}
@@ -212,7 +220,7 @@ Upon an incoming IQ stanza, \texttt{handleIq()} is called, which has the followi
 The processing object has immediate knowledge of the XML namespace (\texttt{const char* xmlns}) and, additionally, access to the complete packet's content by accessing \texttt{ikspak* pak}.
 
 \paragraph{PresenceHandler}
-Presence stanzas inform a node about the current status of a remote node. Presence stanzas are broadcasted when the status changes. By registering a \texttt{PresenceHandler}-derived object with the Library, a program will receive such incoming presence stanzas for further processing. Registration happens by calling
+Presence stanzas inform an entity about the current status of a remote entity. Presence stanzas are broadcasted when the status changes. By registering a \texttt{PresenceHandler}-derived object with the Library, a program will receive such incoming presence stanzas for further processing. Registration happens by calling
 \begin{flushleft}
 \texttt{void registerPresenceHandler( PresenceHandler* ph );}
 \end{flushleft}
@@ -237,13 +245,13 @@ The processing object has immediate knowledge about sender (\texttt{iksid* from}
 \subsection{The Feeder Library}
 \label{sec:feederlib}
 \paragraph{}
-The Feeder Library is separated from the Feeder -- as shown in Figure \ref{fig:feeder} -- to allow for re-use. The functionality the Feeder Library offers is completely independent from the format of the data that is sent over the wire and processed by the Worker. It makes direct use of the XMPP Client Library for the XMPP communication.
+The Feeder Library is separated from the Data Gatherer -- as shown in Figure \ref{fig:feeder} -- to allow for re-use. The functionality the Feeder Library offers is completely independent from the format of the data that is sent over the wire and processed by the Worker. It makes direct use of the XMPP Client Library for the XMPP communication.
 
 \paragraph{}
 The purpose of the Feeder Library is, on one hand side, to accept data packets from the Feeder and forward them to a Worker. On the other hand side, it receives result packets from the Workers, evaluates them, stores statistical information about the processed packet in a database and finally passes the result packet to the Feeder.
 
 \paragraph{}
-Aditionally, the Feeder Library is responsible for keeping track of available Workers. When a Worker connects to the XMPP server, it announces its availability to all other nodes that are listed in its roster -- to be exact, the XMPP server does so. Since the Feeder is on the roster of every Worker (this is a requirement), it gets notified about the newly available Worker. The addresses of all these Workers, together with their current status, are kept in a map. With every status change of a Worker this map is updated. A data packet arriving from the Feeder for distribution is sent to the first Worker available.
+Aditionally, the Feeder Library is responsible for keeping track of available Workers. When a Worker connects to the XMPP server, it announces its availability to all other entities that are listed in its roster -- to be exact, the XMPP server does so. Since the Feeder is on the roster of every Worker (this is a requirement), it gets notified about the newly available Worker. The addresses of all these Workers, together with their current status, are kept in a map. With every status change of a Worker this map is updated. A data packet arriving from the Feeder for distribution is sent to the first Worker available.
 
 \paragraph{}
 The inheritance diagram for the main class of the Feeder Library -- \texttt{Feeder} -- is shown in Figure \ref{fig:inhfeeder}.
@@ -256,22 +264,22 @@ The inheritance diagram for the main class of the Feeder Library -- \texttt{Feed
 \label{fig:inhfeeder}
 \end{figure}
 
-\texttt{Feeder} generally has to know about connection state changes so it inherits from \texttt{ConnectionListener}. Furthermore, to be able to authorise subscription requests from Workers it implements the \texttt{SubscriptionHandler} interface. Since data as well as result packets are wrapped into IQ stanzas, the \texttt{IqHandler} interface is necessary. Last but not least, \texttt{PresenceHandler} informs about state changes of the Workers.
+\texttt{Feeder} generally has to know about connection state changes so it inherits from \texttt{ConnectionListener}. Furthermore, to know about available Workers it implements the \texttt{RosterListener} interface. The Feeder determines via Service Discovery whether an entitiy listed on its roster is capable of processing data, which is why it implements the \texttt{DiscoHandler} interface. Last but not least, since data as well as result packets are wrapped into IQ stanzas, the \texttt{IqHandler} interface is necessary.
 
 \paragraph{}
-The communication between Feeder and Feeder Library happens over a special interface following the following algorithm.
+The communication between Data Gatherer and Feeder Library happens over a special interface following the following algorithm.
 
 \begin{enumerate}
-\item The Feeder Library starts by polling for data packets until the Feeder has no more data vailable.
-\item The Feeder starts pushing new data packets until all the available Workers are busy processing data.
+\item The Feeder Library starts by polling for data packets until the Data Gatherer has no more data available.
+\item As soon as data is available again, the Data Gatherer starts pushing data packets until all the available Workers are busy processing data.
 \item The Feeder Library starts polling -- see step 1.
 \end{enumerate}
 
 \paragraph{}
-It also would have been possible to use either of the methods exclusively, but for reasons of efficiency in the communication between Feeder and Feeder Library this approach was chosen. The justification is further discussed in Section \ref{sec:discussion}.
+It also would have been possible to use either of the methods exclusively, but for reasons of efficiency in the communication between Data Gatherer and Feeder Library this approach was chosen. The justification is further discussed in Section \ref{sec:designjustification}.
 
 \paragraph{}
-The Feeder has to implement the \texttt{PollHandler} interface and register the corresponding object by calling:
+The Data Gatherer has to implement the \texttt{PollHandler} interface and register the corresponding object by calling:
 \begin{flushleft}
 \texttt{void registerPollHandler( PollHandler* ph );}
 \end{flushleft}
@@ -284,10 +292,10 @@ The actual poll happens by calling the \texttt{poll()} function:
 \subsection{The Worker Library}
 \label{sec:workerlib}
 \paragraph{}
-Like Feeder and Feeder Library, Worker and Worker Library are separated for easy re-use (Figure \ref{fig:worker}). Again, the Worker Library's implementation is independent from type and format of data received from the Feeder and passed to the Worker. Also, the algorithm used to process the data does not influence the Worker Library.
+Like Data Gatherer and Feeder Library, Algorithm Implementation and Worker Library are separated for easy re-use (Figure \ref{fig:worker}). Again, the Worker Library's implementation is independent from type and format of data received from the Feeder and passed to the Algorithm Implementation. Also, the algorithm used to process the data does not influence the Worker Library.
 
 \paragraph{}
-The Worker Library offers an interface for the Worker to implement. An object derived from \texttt{DataHandler} has to be registered with the Library by calling:
+The Worker Library offers an interface for the Algorithm Implementation to implement. An object derived from \texttt{DataHandler} has to be registered with the Library by calling:
 \begin{flushleft}
 \texttt{void registerDataHandler( DataHandler* dh );}
 \end{flushleft}
@@ -297,11 +305,12 @@ A data packet is passed to the registered object by calling:
 \end{flushleft}
 
 \paragraph{}
-On startup, the Worker Library establishes a connection to the XMPP server and announces its availability to the Feeder. After that it just waits for a data packet to arrive. When such a packet is received, the XMPP status is immediately changed to \texttt{unavailable} to prevent further packets from being sent to this node. The packet is then passed to the Worker for processing using the registered DataHandler. When the Worker finishes its processing it calls:
+On startup, the Worker Library establishes a connection to the XMPP server and announces its availability to the Feeder. After that it just waits for a data packet to arrive. When such a packet is received, an acknowledgement is sent to prevent further packets from being sent to this node. The packet is then passed to the Algorithm Implementation for processing using the registered DataHandler. When the Algorithm finishes its processing it calls:
 \begin{flushleft}
 \texttt{void result( ResultCode code, const char* result );}
 \end{flushleft}
-The Worker Libary constructs a result packet and sends it off to the Feeder. After that, the status is changed back to \texttt{available} to let the Feeder update its map of Workers.
+\paragraph{}
+The Worker Libary constructs a result packet and sends it off to the Feeder.
 
 \paragraph{}
 The inheritance diagram for the main class of the Worker Library -- \texttt{Worker} -- is shown in Figure \ref{fig:inhworker}.
@@ -315,11 +324,19 @@ The inheritance diagram for the main class of the Worker Library -- \texttt{Work
 \end{figure}
 
 \paragraph{}
-\texttt{Worker} generally has to know about connection state changes so it inherits from \texttt{ConnectionListener}. Furthermore, to be able to receive answers to its subscription requests it implements the \texttt{SubscriptionHandler} interface. Since data as well as result packets are wrapped into IQ stanzas, the \texttt{IqHandler} interface is necessary.
+\texttt{Worker} generally has to know about connection state changes so it inherits from \texttt{ConnectionListener}. Furthermore, to know about the presence of a Feeder and to subscribe to it, the \texttt{RosterListener} interface is implemented. Since data as well as result packets are wrapped into IQ stanzas, the \texttt{IqHandler} interface is necessary.
 
 
 \subsection{Example Programs}
+\label{sec:samples}
 \paragraph{}
+A set of sample programs has been implemented that demonstrate the usage of the previously discussed libraries. Sample Feeder and Worker together find prime factors of positive integers.
+
+\paragraph{}
+The Feeder is simply a counter which is incremented with every \texttt{poll()}.
+
+\paragraph{}
+The Worker contains the implementation of the Direct Search Factorization algorithm. It tries to find prime factors by simply trying every possible (and reasonable) combination of primes.
 
 \subsection{Statistics Viewer}
 \paragraph{}

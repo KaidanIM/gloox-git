@@ -2,6 +2,17 @@
 \label{sec:discussion}
 
 \subsection{Implementation Status}
+\paragraph{}
+The software implementation proceeded a lot during the last months. However, two incidences delayed the overall project so that not all of the objectives could be finished in time.
+
+\paragraph{}
+The first problem occured when the XMPP Client Library was implemented. It turned out that it would be nearly impossible to connect the written C++ applications to the event driven interface of the Iksemel library. In the end, the solution was pretty straight-forward, but finding and finally solving the problem delayed the project by several weeks.
+
+\paragraph{}
+Secondly, the idea of a generic high-level XMPP client library became more and more fascinating the more the project advanced. The possibilities of XMPP are numerous and a re-usable foundation library offers a lot of value compared to the development time. Instead of "Finish It All", "Do It Right" became the goal of the programming work. The library had to be re-usable by any program wishing to utilise XMPP. Additionally, the programming interfaces had to be clear, easy to use and powerfull. The outcome is impressive in that it encapsulates a lot of XMPP knowledge which an application programmer doesn't have to have who wishes to use the library. The ultimate goal is to enable programmers to write software communicating via XMPP without any in-depth knowledge of the protocol. To a certain extent this is already possible.
+
+\paragraph{}
+Table \ref{tab:impstatus} gives on overview on the finished items. The software, as far as it's implemented to date, allows for writing fully functional Feeder and Worker components. Sample implementations as discussed in Section \ref{sec:samples} demonstrate this.
 
 \begin{table}[H]
 \begin{tabularx}{\linewidth}{lc}
@@ -9,15 +20,15 @@
 \textbf{Task} & \textbf{Status} \\
 \midrule
 \endhead
-Database           & finished \\
-XMPP Client Lib    & finished \\
-Worker             & almost finished \\
-Feeder             & almost finished \\
-Sample Application & almost finished \\
-Statistics Viewer  & almost finished \\
-Feeder Frontend    & started \\
-API Docs           & finished \\
-User Manuals       & started \\
+Database            & finished \\
+XMPP Client Lib     & finished \\
+Worker              & finished \\
+Feeder              & finished \\
+Sample Applications & finished \\
+Statistics Viewer   & started  \\
+Feeder Frontend     & started  \\
+API Docs            & finished \\
+User Manuals        & started  \\
 \bottomrule
 \end{tabularx}
 \caption{Implementation Status}
@@ -37,7 +48,7 @@ As discussed in Section \ref{sec:addressing} and \ref{sec:feederlib}, the Feeder
 The design of XMPP and the Feeder Libraries allows for addition and removal, respectively, of nodes at run-time. This means that the size of the cluster is fully dynamic. Use cases include:
 \begin{itemize}
 \item A grid distributed over the Internet. Similar to Seti@Home, users can connect to the cluster and contribute their machine's processor time at their will.
-\item In a university, school or company, machines could be added to a grid when they are idle. As soon as a machine is needed for a different task, it is temporarily removed from the cluster. This could happen automated and without user intervention if the Worker process ran in the background all the time and monitored the CPU utilisation of teh machine.
+\item In a university, school or company, machines could be added to a grid when they are idle. As soon as a machine is needed for a different task, it is temporarily removed from the cluster. This could happen automated and without user intervention if the Worker process ran in the background all the time and monitored the CPU utilisation of the machine.
 \end{itemize}
 
 \subsubsection{Physical Node Location}
@@ -45,16 +56,17 @@ The design of XMPP and the Feeder Libraries allows for addition and removal, res
 The distributability of XMPP servers and nodes as well as the use case from the previous section implies that there is no restriction on the physical distance between nodes and servers. Of course, greater distances add to the delay of transmissions. But the processing time of data packets is considered high enough to make this effect neglectable.
 
 \subsection{Design Justification}
+\label{sec:designjustification}
 \paragraph{}
-The combination of polling and pushing was done to reduce the Feeder's impact on the performance of the whole system and to improve the grid's efficiency. Both constant polling and pushing might, on one hand side, influence the machine's performance negatively if the interval chosen is too low. On the other hand side, if the interval is too high, valuable processing time might get lost because Workers don't get new data to work on as soon as it is available, but only on interval boundaries. The same applies for Workers being available again. They also only get new data packets on interval boundaries instead of directly after their availability.
+The combination of polling and pushing was chosen to reduce the Feeder's impact on the performance of the whole system and to improve the grid's efficiency. Both constant polling and pushing might, on one hand side, influence the machine's performance negatively if the interval chosen is too low. On the other hand side, if the interval is too high, valuable processing time might get lost because Workers don't get new data to work on as soon as it is available, but only on interval boundaries. The same applies for Workers being available again. They also only get new data packets on interval boundaries instead of directly after their availability.
 
 \subsection{Disadvantages of XMPP}
 \paragraph{}
-The system proposed in this project is limited to processing data that takes a relatively long time to deal with. The reasons are:
+The system proposed in this project can unfold its full power with data that takes a relatively long time to deal with. The reasons are:
 \begin{itemize}
-\item XML adds an overhead to the wire communication that should not be neglected. The IQ stanza sent to the Workers containing the data (XXX: to be filled in) bytes in size. This is, per se, a huge frame and additionally might be much more than the actual payload.
+\item XML adds an overhead to the wire communication that should not be neglected. The IQ stanza sent to the Workers containing the data is 117 bytes in size, excluding source and destination address. This is, per se, a huge frame and additionally might be much more than the actual payload.
 \item The system has two bottlenecks, the Feeder and the XMPP server, respectively.
 \end{itemize}
 
 \paragraph{}
-The bottom line is, that it is unlikely that this system copes well with data generated at high speed that takes a very short time to process, for example if the grid was used to store such data in a database in a distributed manner. However, no performance tests have been coducted in the context of this project as the system is not intended for such a use case.
+The bottom line is, that it is unlikely that this system copes well with data generated at high speed that takes a very short time to process, for example if the grid was used to store such data in a database in a distributed manner. However, no actual performance tests have been conducted in the context of this project as the system is not intended for such a use case in reality and aside from the provided examples.
