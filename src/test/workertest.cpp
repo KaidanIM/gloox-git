@@ -36,9 +36,27 @@ int main(int argc, char *argv[])
   if( f.setCmdLineArgs( argc, argv ) )
     f.start();
   else
+  {
+    f.usage();
     return 1;
+  }
 
   return 0;
+}
+
+void WorkerTest::usage()
+{
+  printf( "This is Worker v0.1 as handed in to LSBU on April 26 2005.\n" );
+  printf( "\n" );
+  printf( "Usage Information:\n" );
+  printf( "       workertest [-d] -j self -p password -f feeder\n" );
+  printf( "\n" );
+  printf( "-d       enable excessive debug output\n" );
+  printf( "-j       specify the full JID to use to connect\n" );
+  printf( "-p       the password to authenticate with\n" );
+  printf( "-f       the full JID of the Worker\n" );
+  printf( "\n" );
+  printf( "(c) 2004-2005 Jakob Schroeter\n" );
 }
 
 void sigHandler( int /*signal*/ )

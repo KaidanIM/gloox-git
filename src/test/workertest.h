@@ -56,6 +56,11 @@ class WorkerTest : public InfoHandlerWorker, DataHandler
     bool setCmdLineArgs( int argc, char *argv[] );
 
     /**
+     * Prints usage information.
+     */
+    void usage();
+
+    /**
      * Start the programm with this function.
      */
     void start();

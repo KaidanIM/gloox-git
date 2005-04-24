@@ -61,6 +61,11 @@ class FeederTest : public InfoHandlerFeeder, PollHandler, ResultHandler
      */
     bool setCmdLineArgs( int argc, char *argv[] );
 
+    /**
+     * Prints usage information.
+     */
+    void usage();
+
     // reimplemented from InfoHandlerFeeder
     virtual void connected();
 
