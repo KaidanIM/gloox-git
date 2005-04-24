@@ -37,7 +37,7 @@ Another way to form a grid is to deploy the Internet. Many more people and machi
 The Extensible Markup Language (XML) is an universal means to describe hierarchical data. It has been developed by the World Wide Web Consortium (W3C) and is a W3C standard. It is a subset of the Standard Generalized Markup Language (SGML). Compared to binary protocols, XML has the huge advantage of being easily human readable as well as machine parsable.
 
 \paragraph{}
-XML alone is not a programming language, neither is it a markup language per se. It rather is a ruleset that defines a way how to describe hierarchical data. A user of XML has to define specific rules for their specific kind of data on their own in a formal way. Such a formal description can, for example, be a Document Type Definition (DTD). It is not absolutely necessary to write down a DTD to use an XML-derived markup language. But, using such a formal description, software can validate a given document for its conformity.
+XML alone is not a programming language, neither is it a markup language per se. It rather is a ruleset that defines a way how to describe data. A user of XML has to define specific rules for their specific kind of data on their own in a formal way. Such a formal description can, for example, be a Document Type Definition (DTD). It is not absolutely necessary to write down a DTD to use an XML-derived markup language. But, using such a formal description, software can validate a given document for its conformity.
 
 \paragraph{}
 XML consists of elements, their attributes and character data. An element has an opening tag and a corresponding closing tag. A tag is a charcter string enclosed by \glqq{}<\grqq{} and \glqq{}>\grqq{}. A closing tag additionally has a slash \glqq{}/\grqq{} right after the first \glqq{}<\grqq{}. Attributes are placed as \texttt{Key="Value"} pairs inside a tag. Data is put between opening and closing tags.
@@ -106,13 +106,18 @@ In the Instant Messaging world, a widely-used feature of XMPP is the roster. Use
 
 \subsubsection{Protocol Extensions}
 \paragraph{}
-RFCs 3920 and 3921 describe the core functionality of XMPP, such as authentication, as well as Instant Messaging-specific extensions, such as the roster. By the time, the protocol has been extended by so-called Jabber Enhancement Proposals\footnote{A list of current JEPs can be found at \href{http://www.jabber.org/jeps/jeplist.php}{http://www.jabber.org/jeps/jeplist.php}} (JEPs) to provide much more functionality than the core RFCs offer. For example, a very interesting extension, though not used in this project, is Publish-Subscribe \cite{jep0060} which describes a data push mechanism.
+RFCs 3920 and 3921 describe the core functionality of XMPP, such as authentication, as well as Instant Messaging-specific extensions, such as the roster. By the time, the protocol has been extended by so-called Jabber Enhancement Proposals\footnote{A list of current JEPs can be found at \href{http://www.jabber.org/jeps/jeplist.shtml}{http://www.jabber.org/jeps/jeplist.shtml}} (JEPs) to provide much more functionality than the core RFCs offer.
 
-\paragraph{}
-Publish-Subscribe (Pubsub) decribes a protocol for publishing arbitrary data. Interested entities in an XMPP network can subscribe to this data and receive a notification as soon as new content is published. The payload of this notification can contain either the data that has just been published or a link to its storage location.
+\paragraph{Service Discovery}
+\label{sec:disco}
+Since a huge number of extensions have been defined for various things an XMPP entity could be able to do, it became necessary to define a way for an entity to discover whether a specific remote entity is capable of certain functionality. This protocol was called Service Discovery and is defined in JEP-0030 \cite{jep0030}. Basically, a client asks a remote address for its supported extensions. The reply contains a list of zero or more features the remote entity supports. Based on this reply, client software can, for example, explicitly enable or disable certain advanced features.
+
+\paragraph{Publish-Subscribe}
+Another very interesting extension, though not used in this project, is Publish-Subscribe (Pubsub) \cite{jep0060} which describes a data push mechanism. Pubsub is a protocol for publishing arbitrary data. Interested entities in an XMPP network can subscribe to this data and receive a notification as soon as new content is published. The payload of this notification can contain either the data that has just been published or a link to its storage location.
 
 \paragraph{}
 Use cases for Pubsub include, for example, news distribution or stock ticker updates. By pushing the data from the publisher to the destination rather than having it poll for updates makes Pubsub an efficient distribution facility.
 
 \paragraph{}
-In an early stage of this project, it was taken into consideration to use Pubsub for distributing the data that has to be processed to the Workers. But Pubsub does not define a way to address a specific subscriber. Published data of some kind is always sent to all subscribers. This renders Pubsub useless for the current approach taken in this project.
+In an early stage of this project, it was taken into consideration to use Pubsub for distributing the data that has to be processed to the Workers. But Pubsub does not define a way to address a specific subscriber. Published data of some kind is always sent to all subscribers of this kind of data. This renders Pubsub useless for the approach currently taken in this project.
+

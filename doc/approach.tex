@@ -140,7 +140,7 @@ JClient::JClient( const std::string& username,
 \end{figure}
 
 \paragraph{}
-Basically, a number of member variables are initialised. Most importantly, Transport Layer Security\footnote{Encryption of the communication channel.} (TLS) \cite{rfc2246} and Simple Authentication and Security Layer\footnote{Secure Authentication even without encrypted communication channel.} (SASL) \cite{rfc2222} are enabled (line 8). Additionally, but not shown in Figure \ref{fig:JClientConstructor}, some more XMPP features which the library supports, are enabled by the \texttt{init()} function (line 13). This includes, for example, Service Discovery\footnote{JEP-0030: Service Discovery defines methods to discover capabilities of other nodes in an XMPP network.} \cite{jep0030} and Roster Management.
+Basically, a number of member variables are initialised (lines 5 to 11). Most importantly, Transport Layer Security\footnote{Encryption of the communication channel.} (TLS) \cite{rfc2246} and Simple Authentication and Security Layer\footnote{Secure Authentication even without encrypted communication channel.} (SASL) \cite{rfc2222} are enabled (line 8). Additionally, but not shown in Figure \ref{fig:JClientConstructor}, some more XMPP features which the library supports, are enabled by the \texttt{init()} function (line 13). This includes, for example, Service Discovery and Roster Management.
 
 \paragraph{}
 The function \texttt{connect()}, called in line 5 in Figure \ref{fig:usageExample}, establishes the connection to the XMPP server and creates a new thread that receives incoming TCP/IP packets and hands them to the XML parser of Iksemel.
@@ -160,7 +160,7 @@ The client library offers a simple yet powerful public interface that enables pr
 \item Incoming subscription stanzas
 \end{itemize}
 \paragraph{}
-With it, all the possible stanza types that XMPP Core supports are covered. A namespace filter can be utilised for IQ events. In addition to these, the library offers the following interfaces which in turn make heavy use of the previously named ones.
+With it, all the possible stanza types that XMPP Core supports are covered. A namespace filter can be utilised for IQ events. In addition to these, the library offers the following interfaces which in turn make heavy use of the previously named ones:
 \begin{itemize}
 \item Service Discovery
 \item Roster Management
@@ -245,13 +245,13 @@ The processing object has immediate knowledge about sender (\texttt{iksid* from}
 \subsection{The Feeder Library}
 \label{sec:feederlib}
 \paragraph{}
-The Feeder Library is separated from the Data Gatherer -- as shown in Figure \ref{fig:feeder} -- to allow for re-use. The functionality the Feeder Library offers is completely independent from the format of the data that is sent over the wire and processed by the Worker. It makes direct use of the XMPP Client Library for the XMPP communication.
+The Feeder Library is separated from the Data Gatherer -- as shown in Figure \ref{fig:feeder} on Page \pageref{fig:feeder} -- to allow for re-use. The functionality the Feeder Library offers is completely independent from the format of the data that is sent over the wire and processed by the Worker. It makes direct use of the XMPP Client Library for the XMPP communication.
 
 \paragraph{}
 The purpose of the Feeder Library is, on one hand side, to accept data packets from the Feeder and forward them to a Worker. On the other hand side, it receives result packets from the Workers, evaluates them, stores statistical information about the processed packet in a database and finally passes the result packet to the Feeder.
 
 \paragraph{}
-Aditionally, the Feeder Library is responsible for keeping track of available Workers. When a Worker connects to the XMPP server, it announces its availability to all other entities that are listed in its roster -- to be exact, the XMPP server does so. Since the Feeder is on the roster of every Worker (this is a requirement), it gets notified about the newly available Worker. The addresses of all these Workers, together with their current status, are kept in a map. With every status change of a Worker this map is updated. A data packet arriving from the Feeder for distribution is sent to the first Worker available.
+Aditionally, the Feeder Library is responsible for keeping track of available Workers. When a Worker connects to the XMPP server, it announces its availability to all other entities that are listed in its roster -- to be exact, the XMPP server does so. Since the Feeder is on the roster of every Worker (this is a requirement), it gets notified about the newly available Worker. Using Service Discovery, the Feeder Library finds out whether a newly connected entity is capable of processing the data offered by the Data Gatherer, i.e. whether it is really a Worker and compatible. The addresses of all these Workers, together with their current status, are kept in a map. With every status change of a Worker this map is updated. A data packet arriving from the Feeder for distribution is sent to the first Worker available.
 
 \paragraph{}
 The inheritance diagram for the main class of the Feeder Library -- \texttt{Feeder} -- is shown in Figure \ref{fig:inhfeeder}.
@@ -292,7 +292,7 @@ The actual poll happens by calling the \texttt{poll()} function:
 \subsection{The Worker Library}
 \label{sec:workerlib}
 \paragraph{}
-Like Data Gatherer and Feeder Library, Algorithm Implementation and Worker Library are separated for easy re-use (Figure \ref{fig:worker}). Again, the Worker Library's implementation is independent from type and format of data received from the Feeder and passed to the Algorithm Implementation. Also, the algorithm used to process the data does not influence the Worker Library.
+Like Data Gatherer and Feeder Library, Algorithm Implementation and Worker Library are separated for easy re-use (Figure \ref{fig:worker} on Page \pageref{fig:worker}). Again, the Worker Library's implementation is independent from type and format of data received from the Feeder and passed to the Algorithm Implementation. Also, the algorithm used to process the data does not influence the Worker Library.
 
 \paragraph{}
 The Worker Library offers an interface for the Algorithm Implementation to implement. An object derived from \texttt{DataHandler} has to be registered with the Library by calling:
@@ -330,16 +330,26 @@ The inheritance diagram for the main class of the Worker Library -- \texttt{Work
 \subsection{Example Programs}
 \label{sec:samples}
 \paragraph{}
-A set of sample programs has been implemented that demonstrate the usage of the previously discussed libraries. Sample Feeder and Worker together find prime factors of positive integers.
+A set of sample programs has been implemented that demonstrates the usage of the previously discussed libraries. Sample Feeder and Worker together find prime factors of positive integers.
 
 \paragraph{}
 The Feeder is simply a counter which is incremented with every \texttt{poll()}.
 
 \paragraph{}
-The Worker contains the implementation of the Direct Search Factorization algorithm. It tries to find prime factors by simply trying every possible (and reasonable) combination of primes.
+The Worker contains the implementation of the Direct Search Factorization algorithm \cite{mathworld001,wikipedia007}. It tries to find prime factors by simply trying every possible (and reasonable) combination of primes.
+
 
 \subsection{Statistics Viewer}
 \paragraph{}
+The Statistics Viewer is a web-based (written in PHP\footnote{PHP has its homepage at href{http://php.net}{http://php.net}}) means to access the statistical data produced by the Feeder in a convenient and user friendly way. In contrast to the previously discussed components, the Statistics Viewer has not been finished.
+
 
 \subsection{Feeder Front End}
 \paragraph{}
+The Feeder Front End enables owners or operators of grids to access the Feeder and query it for its run-time parameters. Like the Statistics Viewer, the Feeder Front End has not been finished. It is supposed to use an extension to XMPP called Ad-hoc Commands which is defined in JEP-0050 \cite{jep0050}.
+
+\paragraph{}
+JEP-0050: Ad-hoc Commands offers users a way to execute commands on a remote entity. This does not mean the execution of arbitrary programs on the entity's machine, but usage of pre-defined commands within the entity. For example, a service could offer a command that restarts the service or shuts it down.
+
+\paragraph{}
+Similar to what the Worker Library does to announce its capability to process data, an entity offering ad-hoc commands and therefore implementing JEP-0050, announces this capability using Service Discovery (as described in Section \ref{sec:disco}).

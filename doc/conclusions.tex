@@ -1,14 +1,18 @@
 \section{Conclusions and Recommendations for Further Work}
 \paragraph{}
 
+\subsection{Conclusions}
+\paragraph{}
 
 
-\subsection{Further Work}
+
+\subsection{Recommendations for Further Work}
 \paragraph{}
 Possible further enhancements of the framework include:
-\begin{itemize}
-\item More applications using the framework.
-\item Redundancy - send packets to more than one Worker.
-\item Keep track of sent and received packets.
-\item More storage modules.
-\end{itemize}
+\begin{description}
+\item[Redundancy] The Feeder Library should send packets to more than one Worker. Incoming results should be compared and in case of differences either another Worker is asked to process the packet again, or if only one out of many Workers replies with an different result, the majority "wins".
+\item[Packet Tracking] The Feeder Library should keep track of sent data packets and re-send those which yield no result.
+\item[Encryption] If used in an area dealing with sensitive data, encryption should be used to prevent sniffing of data sent over the wire.
+\item[CPU monitor] Using a CPU monitor, a Worker could run on an ordinary desktop machine and use the CPU as long as no other tasks are pressing.
+\item[Build a Grid] Using this framework, a real grid could be set up that works on a real problem.
+\end{description}

@@ -6,13 +6,13 @@
 The software implementation proceeded a lot during the last months. However, two incidences delayed the overall project so that not all of the objectives could be finished in time.
 
 \paragraph{}
-The first problem occured when the XMPP Client Library was implemented. It turned out that it would be nearly impossible to connect the written C++ applications to the event driven interface of the Iksemel library. In the end, the solution was pretty straight-forward, but finding and finally solving the problem delayed the project by several weeks.
+The first problem occured when the XMPP Client Library was implemented. It turned out that it would be very hard and time consuming to connect the written C++ applications to the event driven interface of the Iksemel library. In the end, the solution was pretty straight-forward, but finding and finally solving the problem delayed the project by several weeks.
 
 \paragraph{}
-Secondly, the idea of a generic high-level XMPP client library became more and more fascinating the more the project advanced. The possibilities of XMPP are numerous and a re-usable foundation library offers a lot of value compared to the development time. Instead of "Finish It All", "Do It Right" became the goal of the programming work. The library had to be re-usable by any program wishing to utilise XMPP. Additionally, the programming interfaces had to be clear, easy to use and powerfull. The outcome is impressive in that it encapsulates a lot of XMPP knowledge which an application programmer doesn't have to have who wishes to use the library. The ultimate goal is to enable programmers to write software communicating via XMPP without any in-depth knowledge of the protocol. To a certain extent this is already possible.
+Secondly, the idea of a generic high-level XMPP client library became more and more fascinating the more the project advanced. The possibilities of XMPP are numerous and a properly written and re-usable foundation library offers a lot of value compared to the development time. Instead of "Finish It All", "Do It Right" became the goal of the programming work. The library had to be re-usable by any program wishing to utilise XMPP. Additionally, the programming interfaces had to be clear, easy to use and powerfull. The outcome achieves these requirements and indeed is impressive in that it encapsulates a lot of XMPP knowledge which an application programmer doesn't have to have who wishes to use the library. The ultimate goal is to enable programmers to write software communicating via XMPP without any in-depth knowledge of the protocol. To a certain degree this goal has been reached as well.
 
 \paragraph{}
-Table \ref{tab:impstatus} gives on overview on the finished items. The software, as far as it's implemented to date, allows for writing fully functional Feeder and Worker components. Sample implementations as discussed in Section \ref{sec:samples} demonstrate this.
+Table \ref{tab:impstatus} gives on overview on the finished items. The software, as far as it is implemented to date, allows for writing fully functional Feeder and Worker components. Sample implementations as discussed in Section \ref{sec:samples}, demonstrate this.
 
 \begin{table}[H]
 \begin{tabularx}{\linewidth}{lc}
@@ -25,15 +25,21 @@ XMPP Client Lib     & finished \\
 Worker              & finished \\
 Feeder              & finished \\
 Sample Applications & finished \\
-Statistics Viewer   & started  \\
+Statistics Viewer   & not started  \\
 Feeder Frontend     & started  \\
 API Docs            & finished \\
-User Manuals        & started  \\
+User Manuals        & not started  \\
 \bottomrule
 \end{tabularx}
 \caption{Implementation Status}
 \label{tab:impstatus}
 \end{table}
+
+
+\subsection{Testing}
+\label{sec:testing}
+\paragraph{}
+The development strategy used during this project is roughly related to evolutionary prototyping. A small prototype is extended with more and more ideas until the whole thing does what it's expected to do. Every stage is tested individually for correct implementation and conformance to used standards such as XMPP. Testing small changes, and fixing them as necessary, is easier than testing after huge changes. This is the reason why there is no dedicated testing period declared in the time planning.
 
 
 \subsection{Extensibility}
@@ -55,7 +61,7 @@ The design of XMPP and the Feeder Libraries allows for addition and removal, res
 \paragraph{}
 The distributability of XMPP servers and nodes as well as the use case from the previous section implies that there is no restriction on the physical distance between nodes and servers. Of course, greater distances add to the delay of transmissions. But the processing time of data packets is considered high enough to make this effect neglectable.
 
-\subsection{Design Justification}
+\subsection{Design Justification: Poll vs. Push}
 \label{sec:designjustification}
 \paragraph{}
 The combination of polling and pushing was chosen to reduce the Feeder's impact on the performance of the whole system and to improve the grid's efficiency. Both constant polling and pushing might, on one hand side, influence the machine's performance negatively if the interval chosen is too low. On the other hand side, if the interval is too high, valuable processing time might get lost because Workers don't get new data to work on as soon as it is available, but only on interval boundaries. The same applies for Workers being available again. They also only get new data packets on interval boundaries instead of directly after their availability.
@@ -69,4 +75,4 @@ The system proposed in this project can unfold its full power with data that tak
 \end{itemize}
 
 \paragraph{}
-The bottom line is, that it is unlikely that this system copes well with data generated at high speed that takes a very short time to process, for example if the grid was used to store such data in a database in a distributed manner. However, no actual performance tests have been conducted in the context of this project as the system is not intended for such a use case in reality and aside from the provided examples.
+The bottom line is, the implemented system is not very performant when used with data which only takes a short time to process. For example, prime factorization as implemented in the sample programs is very fast for small numbers. The overhead of XMPP is clearly visible here. However, no actual performance tests have been conducted in the context of this project as the system is not intended for such a use case in reality and aside from the provided examples.
