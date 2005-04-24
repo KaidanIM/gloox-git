@@ -1,41 +1,6 @@
 \section{Results and Discussion}
 \label{sec:discussion}
 
-\subsection{Implementation Status}
-\paragraph{}
-The software implementation proceeded a lot during the last months. However, two incidences delayed the overall project so that not all of the objectives could be finished in time.
-
-\paragraph{}
-The first problem occured when the XMPP Client Library was implemented. It turned out that it would be very hard and time consuming to connect the written C++ applications to the event driven interface of the Iksemel library. In the end, the solution was pretty straight-forward, but finding and finally solving the problem delayed the project by several weeks.
-
-\paragraph{}
-Secondly, the idea of a generic high-level XMPP client library became more and more fascinating the more the project advanced. The possibilities of XMPP are numerous and a properly written and re-usable foundation library offers a lot of value compared to the development time. Instead of "Finish It All", "Do It Right" became the goal of the programming work. The library had to be re-usable by any program wishing to utilise XMPP. Additionally, the programming interfaces had to be clear, easy to use and powerfull. The outcome achieves these requirements and indeed is impressive in that it encapsulates a lot of XMPP knowledge which an application programmer doesn't have to have who wishes to use the library. The ultimate goal is to enable programmers to write software communicating via XMPP without any in-depth knowledge of the protocol. To a certain degree this goal has been reached as well.
-
-\paragraph{}
-Table \ref{tab:impstatus} gives on overview on the finished items. The software, as far as it is implemented to date, allows for writing fully functional Feeder and Worker components. Sample implementations as discussed in Section \ref{sec:samples}, demonstrate this.
-
-\begin{table}[H]
-\begin{tabularx}{\linewidth}{lc}
-\toprule
-\textbf{Task} & \textbf{Status} \\
-\midrule
-\endhead
-Database            & finished \\
-XMPP Client Lib     & finished \\
-Worker              & finished \\
-Feeder              & finished \\
-Sample Applications & finished \\
-Statistics Viewer   & not started  \\
-Feeder Frontend     & started  \\
-API Docs            & finished \\
-User Manuals        & not started  \\
-\bottomrule
-\end{tabularx}
-\caption{Implementation Status}
-\label{tab:impstatus}
-\end{table}
-
-
 \subsection{Testing}
 \label{sec:testing}
 \paragraph{}

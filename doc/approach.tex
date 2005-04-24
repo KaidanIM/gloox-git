@@ -162,8 +162,8 @@ The client library offers a simple yet powerful public interface that enables pr
 \paragraph{}
 With it, all the possible stanza types that XMPP Core supports are covered. A namespace filter can be utilised for IQ events. In addition to these, the library offers the following interfaces which in turn make heavy use of the previously named ones:
 \begin{itemize}
-\item Service Discovery
 \item Roster Management
+\item Service Discovery
 \end{itemize}
 \paragraph{}
 Both of these are built on IQ stanzas and use the namespace filtering mechanism mentioned above.
@@ -241,6 +241,11 @@ Upon an incoming Subscription stanza, \texttt{handleSubscription()} is called, w
 \end{flushleft}
 The processing object has immediate knowledge about sender (\texttt{iksid* from}), type (\texttt{iksubtype type}) and content (\texttt{const char *msg}) of the incoming message.
 
+\paragraph{Additional XMPP Abtraction Interfaces}
+As mentioned above, the Library offers two additional interfaces which enable an application written against the XMPP Client Library to handle protocol extension in a abstracted way. On one hand side, the \texttt{Roster} class handles the contacts which are stored on the server-side contact list (the roster). It offers an extensive interface for roster management. The second interface is an abstraction of the Service Discovery extension. It is implemented in the \texttt{Disco} class.
+
+\paragraph{}
+Both of them use the \texttt{IqHandler} interface discussed above. They are written in a modular fashion and can serve as examples for further imlementations of protocol extensions.
 
 \subsection{The Feeder Library}
 \label{sec:feederlib}
