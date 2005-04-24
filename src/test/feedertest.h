@@ -82,7 +82,7 @@ class FeederTest : public InfoHandlerFeeder, PollHandler, ResultHandler
     virtual bool hasData();
 
     // reimplmented from ResultHandler
-    virtual void handleResult( const string& result );
+    virtual void handleResult( const string& result, char* data );
 
   private:
     friend void sigHandler( int /*signal*/ );

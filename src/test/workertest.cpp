@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
 
 void WorkerTest::usage()
 {
-  printf( "This is Worker v0.1 as handed in to LSBU on April 26 2005.\n" );
+  printf( "This is WorkerTest v0.1 as handed in to LSBU on April 26 2005.\n" );
   printf( "\n" );
   printf( "Usage Information:\n" );
   printf( "       workertest [-d] -j self -p password -f feeder\n" );
@@ -97,11 +97,11 @@ void WorkerTest::disconnected()
   printf( "disconnected\n" );
 }
 
-void WorkerTest::data( const char* data)
+void WorkerTest::data( const char* data, const string& id )
 {
   int num = atoi( data );
   printf( "prime factors for %d: ", num );
-  c->result( RESULT_SUCCESS, factorise( num ) );
+  c->result( RESULT_SUCCESS, factorise( num ), id );
 }
 
 char* WorkerTest::factorise( int number )
@@ -169,7 +169,7 @@ bool WorkerTest::setCmdLineArgs( int argc, char *argv[] )
         m_debug = true;
         break;
 
-      case 's':
+      case 'j':
         if ( argv[++i] && argv[i][0] != '-' )
         {
           m_self = argv[i];
@@ -191,6 +191,11 @@ bool WorkerTest::setCmdLineArgs( int argc, char *argv[] )
           printf( "parameter -p requires a password.\n" );
           return false;
         }
+        break;
+
+      default:
+        printf( "unrecognized parameter: %s\n", argv[i] );
+        return false;
         break;
     }
   }

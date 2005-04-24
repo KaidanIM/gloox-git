@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
 
 void FeederTest::usage()
 {
-  printf( "This is Feeder v0.1 as handed in to LSBU on April 26 2005.\n" );
+  printf( "This is FeederTest v0.1 as handed in to LSBU on April 26 2005.\n" );
   printf( "\n" );
   printf( "Usage Information:\n" );
   printf( "       feedertest [-d] -j self -p password -f feeder\n" );
@@ -119,9 +119,10 @@ char* FeederTest::poll()
 
 }
 
-void FeederTest::handleResult( const string& result )
+void FeederTest::handleResult( const string& result, char* data )
 {
-  printf( "received result: %s\n", result.c_str() );
+  printf( "result for %s: %s\n", data, result.c_str() );
+  free( data );
 }
 
 bool FeederTest::hasData()
@@ -163,6 +164,12 @@ bool FeederTest::setCmdLineArgs( int argc, char *argv[] )
           return false;
         }
         break;
+
+      default:
+        printf( "unrecognized parameter: %s\n", argv[i] );
+        return false;
+        break;
     }
   }
+  return true;
 }
