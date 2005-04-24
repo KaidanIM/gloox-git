@@ -97,9 +97,12 @@ class Worker : public ConnectionListener, IqHandler, RosterListener
      * Call this function when calculation is finished and a result shall
      * be sent to the Feeder.
      * @param code ResultCode indicating general success or failure of the processing
+     * @param id This is the ID of the @b incoming IQ stanza, which must also be used
+     * for the outgoing stanza. It is necessary to pass this along as it is used by
+     * the Feeder to track togetherness of sent and received data pckets.
      * @param result The result of the calculation.
      */
-    void result( ResultCode code, char* result );
+    void result( ResultCode code, char* result, const string& id );
 
     // reimplemented from RosterListener
     virtual bool subscriptionRequest( const string& jid, const char* msg );

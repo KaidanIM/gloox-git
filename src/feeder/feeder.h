@@ -132,14 +132,13 @@ class Feeder : public ConnectionListener, IqHandler, RosterListener, DiscoHandle
     virtual void onDisconnect();
 
   private:
-    struct workerInfo
-    {
-      string jid;
-      bool worker;
-    };
-
+    char* findData( const string& id );
+    void trackData( const string& id, char* data );
     void sendData( const string& jid );
 
+    typedef map<string, char*> TrackMap;
+
+    TrackMap m_tracker;
     JClient* c;
     PollHandler* m_pollHandler;
     InfoHandlerFeeder* m_infoHandler;

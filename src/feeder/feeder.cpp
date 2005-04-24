@@ -56,6 +56,15 @@ void Feeder::disconnect()
 {
   c->disconnect();
   delete c;
+
+  printf( "The following packets did not yield any results:\n" );
+  TrackMap::const_iterator it = m_tracker.begin();
+  for( it; it != m_tracker.end(); it++ )
+  {
+    printf( "id: %s, data: %s\n", (*it).first.c_str(), (*it).second );
+    free( (*it).second );
+  }
+  m_tracker.clear();
 }
 
 bool Feeder::push( const char* data )
@@ -117,33 +126,58 @@ void Feeder::roster( RosterHelper::RosterMap roster )
 
 void Feeder::sendData( const string& jid )
 {
-  char* data = m_pollHandler->poll();
+  char* data = 0;
+  if( m_pollHandler )
+    data = m_pollHandler->poll();
+
   if ( data )
   {
+    string id = c->getID();
     iks* x = iks_make_iq( IKS_TYPE_SET, XMLNS_IQ_DATA );
     iks_insert_attrib( x, "from", c->jid().c_str() );
     iks_insert_attrib( x, "to", jid.c_str() );
-    iks_insert_attrib( x, "id", "data" );
+    iks_insert_attrib( x, "id", id.c_str() );
     iks* y = iks_first_tag( x );
     iks* z = iks_insert( y, "data" );
     iks_insert_cdata( z, data, iks_strlen( data ) );
     c->send( x );
-    free( data );
+
+    trackData( id, data );
+//     free( data );
   }
   else
     m_poll = false;
 
 }
 
+void Feeder::trackData( const string& id, char* data )
+{
+  m_tracker[id] = data;
+}
+
+char* Feeder::findData( const string& id )
+{
+  TrackMap::const_iterator it = m_tracker.find( id );
+  if( it != m_tracker.end() )
+  {
+    char* tmp = (*it).second;
+    m_tracker.erase( id );
+    return tmp;
+  }
+
+  return 0;
+}
+
 void Feeder::handleIq( const char* xmlns, ikspak* pak )
 {
   if( iks_strncmp( XMLNS_IQ_RESULT, xmlns, iks_strlen( XMLNS_IQ_RESULT ) ) == 0 )
   {
-    if( m_resultHandler )
+    char* data = 0;
+    if( m_resultHandler && ( data = findData( pak->id ) ) )
     {
-      char* data = iks_find_cdata( iks_child( pak->x ), "result" );
-      if( data )
-        m_resultHandler->handleResult( data );
+      char* result = iks_find_cdata( iks_child( pak->x ), "result" );
+      if( result )
+        m_resultHandler->handleResult( result, data );
     }
 
     iks* x = iks_make_iq( IKS_TYPE_RESULT, XMLNS_IQ_RESULT );
