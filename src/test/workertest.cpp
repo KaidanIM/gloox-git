@@ -107,25 +107,20 @@ void WorkerTest::data( const char* data, const string& id )
 char* WorkerTest::factorise( int number )
 {
   int num = number;
-  char* result = 0;
+  char* result = (char*)calloc( 512, sizeof( char ) );
   IntList::const_iterator it = m_primes.begin();
   int rem = -1/*, sq = sqrt( number )*/;
-  while( ( rem != 0 ) && ( num != 1 ) && ( (*it) < number ) )
+  while( /*( rem != 0 ) && */( num != 1 ) && ( (*it) < number ) )
   {
 //     printf("using prime number: %d\n", (*it));
     int rem = num % (*it);
     if( rem == 0 )
     {
-      if( !result )
-      {
-        result = (char*)realloc( result, sizeof( int ) );
+      if( !strlen( result ) )
         sprintf( result, "%d", (*it) );
-      }
       else
-      {
-        result = (char*)realloc( result, strlen( result ) + sizeof( char ) + sizeof( int ) );
         sprintf( result, "%s*%d", result, (*it) );
-      }
+
       num = num / (*it);
       it = m_primes.begin();
     }
@@ -136,7 +131,7 @@ char* WorkerTest::factorise( int number )
         break;
     }
   }
-  if( result )
+  if( strlen( result ) )
     printf( "%s\n", result );
   else
   {
