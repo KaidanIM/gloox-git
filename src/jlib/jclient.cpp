@@ -294,6 +294,7 @@ void JClient::disconnect()
   if( m_state != STATE_DISCONNECTED )
   {
     m_thread->cancel();
+    sleep(1);
     Stream::disconnect();
     m_state = STATE_DISCONNECTED;
   }
