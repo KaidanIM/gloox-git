@@ -42,7 +42,7 @@ User Manuals        & not started  \\
 \paragraph{}
 Possible further enhancements of the framework include:
 \begin{description}
-\item[Redundancy] The Feeder Library should be able to send packets to more than one Worker. Incoming results should be compared and in case of differences either another Worker is asked to process the packet again, or if only one out of many Workers replies with an different result, the majority "wins".
+\item[Redundancy] The Feeder Library should be able to send data packets to more than one Worker. Incoming results should be compared and in case of differences either another Worker is asked to process the data again, or if only one out of many Workers replies with an different result, the majority "wins". This functionality could depend on a "trust level" established between Feeder and Workers.
 \item[Packet Tracking] The Feeder Library should keep track of sent data packets and re-send those which did not yield a result.
 \item[Encryption] If used in an area dealing with sensitive data, encryption should be used to prevent sniffing of data sent over the wire.
 \item[Stream Compression] With JEP-0138: Stream Compression \cite{jep0138}, a means is defined that allows for transparent compression of XMPP streams. If implemented, this would decrease bandwidth requirements for larger grids dramatically.
