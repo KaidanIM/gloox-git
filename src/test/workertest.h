@@ -72,7 +72,7 @@ class WorkerTest : public InfoHandlerWorker, DataHandler
     virtual void disconnected();
 
     // reimplemented from DataHandler
-    virtual void data( const char* data);
+    virtual void data( const char* data, const string& id );
 
   private:
     friend void sigHandler( int /*signal*/ );
