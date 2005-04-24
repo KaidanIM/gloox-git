@@ -20,6 +20,8 @@
 #ifndef DATAHANDLER_H__
 #define DATAHANDLER_H__
 
+#include <string>
+using namespace std;
 
 /**
  * A virtual interface.
@@ -33,8 +35,11 @@ class DataHandler
     /**
      * reimplment this to receive incoming data.
      * @param data The data received.
+     * @param id This is the ID of the IQ stanza. It is necessary to pass
+     * this along as it is used by the Feeder to track togetherness of sent and
+     * received dat aapckets.
      */
-    virtual void data( const char* data) {};
+    virtual void data( const char* data, const string& id ) {};
 
 };
 

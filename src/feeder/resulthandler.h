@@ -34,9 +34,11 @@ class ResultHandler
   public:
     /**
      * reimplment this to receive incoming results.
-     * @param data The result received.
+     * @param result The result received.
+     * @param data A pointer to the original data associated with the result.
+     * The ResultHandler must take care of free'ing the associated memory.
      */
-    virtual void handleResult( const string& result) {};
+    virtual void handleResult( const string& result, char* data ) {};
 
 };
 

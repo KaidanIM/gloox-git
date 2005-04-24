@@ -91,7 +91,7 @@ void Worker::handleIq( const char* xmlns, ikspak* pak )
       if( m_dataHandler )
       {
         char* t = iks_find_cdata( iks_find( pak->x, "query" ), "data" );
-        m_dataHandler->data( t );
+        m_dataHandler->data( t, pak->id );
       }
     }
   }
@@ -109,14 +109,14 @@ void Worker::registerInfoHandler( InfoHandlerWorker* ih )
   m_infoHandler = ih;
 }
 
-void Worker::result( ResultCode code, char* result )
+void Worker::result( ResultCode code, char* result, const string& id )
 {
   m_working = false;
   if( m_debug ) printf( "work finished: %s\n", result );
   iks* x = iks_make_iq( IKS_TYPE_SET, XMLNS_IQ_RESULT );
   iks_insert_attrib( x, "from", c->jid().c_str() );
   iks_insert_attrib( x, "to", m_feederID->full );
-  iks_insert_attrib( x, "id", "result" );
+  iks_insert_attrib( x, "id", id.c_str() );
   iks* y = iks_first_tag( x );
   iks* z = iks_insert( y, "result" );
   char* r = (char*)malloc( sizeof( int ) );;
