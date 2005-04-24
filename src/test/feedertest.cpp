@@ -34,9 +34,26 @@ int main(int argc, char *argv[])
   if( f.setCmdLineArgs( argc, argv ) )
     f.start();
   else
+  {
+    f.usage();
     return 1;
+  }
 
   return 0;
+}
+
+void FeederTest::usage()
+{
+  printf( "This is Feeder v0.1 as handed in to LSBU on April 26 2005.\n" );
+  printf( "\n" );
+  printf( "Usage Information:\n" );
+  printf( "       feedertest [-d] -j self -p password -f feeder\n" );
+  printf( "\n" );
+  printf( "-d       enable excessive debug output\n" );
+  printf( "-j       specify the full JID to use to connect\n" );
+  printf( "-p       the password to authenticate with\n" );
+  printf( "\n" );
+  printf( "(c) 2004-2005 Jakob Schroeter\n" );
 }
 
 void sigHandler( int /*signal*/ )
@@ -123,7 +140,7 @@ bool FeederTest::setCmdLineArgs( int argc, char *argv[] )
         m_debug = true;
         break;
 
-      case 's':
+      case 'j':
         if ( argv[++i] && argv[i][0] != '-' )
         {
           m_self = argv[i];
