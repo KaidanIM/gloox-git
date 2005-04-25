@@ -14,7 +14,7 @@ Except where noted otherwise, the programming language used is C++.
 \subsubsection{Compile-Time Dependencies}
 \label{sec:compdepend}
 \paragraph{}
-The most important dependency is the Iksemel library, written by Gurer Ozen. Iksemel contains XML parsers (DOM as well as SAX) and offers many XMPP related low-level functions. It was chosen as parsing library for this project due to its efficiency and simplicity of usage, the small size and its self-containment.
+The most important dependency is the Iksemel\footnote{Iksemel can be found on \href{http://iksemel.jabberstudio.org}{http://iksemel.jabberstudio.org}} library written by Gürer Özen. Iksemel contains XML parsers (DOM as well as SAX) and offers many XMPP related low-level functions. It was chosen as parsing library for this project due to its efficiency and simplicity of usage, the small size and its self-containment.
 
 \paragraph{}
 Early versions of the XMPP Client Library developed in this project depended on the Iksemelmm library which is a C++ wrapper around Iksemel. To reduce the number of external dependencies, the most important parts (namely the class \texttt{Tree}, \texttt{Parser} and \texttt{Stream}) of it where added to the XMPP Client Library. They are discussed in Section \ref{sec:clientlib}.

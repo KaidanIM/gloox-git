@@ -9,14 +9,14 @@ Basically, the term Distributed Computing describes technologies where more or l
 
 \subsubsection{Grid Computing}
 \paragraph{}
-A grid is a network of heterogenous machines, in contrast to a cluster, which is homogenous. That means that all kind of different platforms can become nodes of a grid. Grids can be distributed over the Internet, or corporate or university networks, respectively. As a consequence, grids are higly dynamic because nodes can be added or removed at any time.
+A grid is a network of heterogenous machines, in contrast to a cluster, which is homogenous. That means that all kind of different platforms can become nodes of a grid. Grids can be distributed over the Internet, or corporate or university networks, respectively. As a consequence, grids are highly dynamic because nodes can be added or removed at any time.
 
 \paragraph{}
 Grids are often used to work on Grand Challenge Problems (GCP). According to \citeasnoun*{wikipedia006}, GCPs are unsolved problems and have at least the following characteristics:
 \begin{enumerate}
-\item "The problem is demonstrably hard to solve, requiring several orders-of-magnitude improvement in the capability required to solve it."
-\item "The problem can not be unsolvable. If it probably cannot be solved, then it can't be a Grand Challenge. Ideally, quantifiable measures that indicate progress toward a solution are also definable."
-\item "The solution to a Grand Challenge problem must have a significant economical and/or social impact."
+\item \textit{"The problem is demonstrably hard to solve, requiring several orders-of-magnitude improvement in the capability required to solve it."}
+\item \textit{"The problem can not be unsolvable. If it probably cannot be solved, then it can't be a Grand Challenge. Ideally, quantifiable measures that indicate progress toward a solution are also definable."}
+\item \textit{"The solution to a Grand Challenge problem must have a significant economical and/or social impact."}
 \end{enumerate}
 The following are areas of Grand Challenge Problems:
 \begin{itemize}
@@ -85,7 +85,7 @@ A stanza in XMPP is exactly one element consisting of its opening tag, any numbe
 <?xml version='1.0'?>
 <stream:stream 
       xmlns:stream='http://etherx.jabber.org/streams' 
-      xmlns='jabber:client' to='jabber.cc' version='1.0'>
+      xmlns='jabber:client' to='example.org' version='1.0'>
 [...]
   <presence from="sender@example.org"
         to="receiver@example.org">
@@ -100,9 +100,9 @@ A stanza in XMPP is exactly one element consisting of its opening tag, any numbe
 \end{figure}
 
 \paragraph{}
-Line 1 denotes that the following content complies with XML version 1.0, and is mandatory for any XML document. A stream can be seen as a special type of document. The stream is opened in line 2 and the opening tag of a \texttt{presence} stanza is sent in line 3. The stream is closed again in line 10. In real XMPP, feature negotiation and authentication take place after the stream opening and before the stream can be used. This is ommitted in Figure \ref{fig:streamExample} (line 5).
+Line 1 denotes that the following content complies with XML version 1.0, and is mandatory for any XML document. A stream can be seen as a special type of document. The stream is opened in line 2 and the opening tag of a \texttt{presence} stanza is sent in line 3. The stream is closed again in line 10. In real XMPP, authentication and feature negotiation take place after the stream opening and before the stream can be used. This is ommitted in Figure \ref{fig:streamExample} (line 5).
 \paragraph{}
-In the Instant Messaging world, a widely-used feature of XMPP is the roster. Users can authorise other users to allow them to see their online presence. These authorised users are then (usually) added to the authorising user's personal contact list. Upon connection of a user, their client sends the current presence status (e.g., 'online') to the server which then distributes it to authorised contacts in the user's roster.
+In the Instant Messaging world, a widely-used feature of XMPP is the roster. Users can authorise other users to allow them to see their online presence. These authorised users are then added to the authorising user's personal contact list. Upon connection of a user, their client sends the current presence status (e.g., 'online') to the server which then distributes it to authorised contacts in the user's roster.
 
 \subsubsection{Protocol Extensions}
 \paragraph{}
@@ -112,12 +112,14 @@ RFCs 3920 and 3921 describe the core functionality of XMPP, such as authenticati
 \label{sec:disco}
 Since a huge number of extensions have been defined for various things an XMPP entity could be able to do, it became necessary to define a way for an entity to discover whether a specific remote entity is capable of certain functionality. This protocol was called Service Discovery and is defined in JEP-0030 \cite{jep0030}. Basically, a client asks a remote address for its supported extensions. The reply contains a list of zero or more features the remote entity supports. Based on this reply, client software can, for example, explicitly enable or disable certain advanced features.
 
+\paragraph{Ad-hoc Commands}
+JEP-0050: Ad-hoc Commands \cite{jep0050} offers users a way to execute commands on a remote entity. This does not mean the execution of arbitrary programs on the entity's machine, but usage of pre-defined commands within the entity. For example, a service could offer a command that restarts the service or shuts it down. An entity offering ad-hoc commands and therefore implementing JEP-0050, announces this capability using Service Discovery.
+
 \paragraph{Publish-Subscribe}
 Another very interesting extension, though not used in this project, is Publish-Subscribe (Pubsub) \cite{jep0060} which describes a data push mechanism. Pubsub is a protocol for publishing arbitrary data. Interested entities in an XMPP network can subscribe to this data and receive a notification as soon as new content is published. The payload of this notification can contain either the data that has just been published or a link to its storage location.
 
 \paragraph{}
-Use cases for Pubsub include, for example, news distribution or stock ticker updates. By pushing the data from the publisher to the destination rather than having it poll for updates makes Pubsub an efficient distribution facility.
+Use cases for Pubsub include, for example, news distribution or stock ticker updates. Pushing the data from the publisher to the consumer rather than having it poll for updates makes Pubsub an efficient distribution facility.
 
 \paragraph{}
-In an early stage of this project, it was taken into consideration to use Pubsub for distributing the data that has to be processed to the Workers. But Pubsub does not define a way to address a specific subscriber. Published data of some kind is always sent to all subscribers of this kind of data. This renders Pubsub useless for the approach currently taken in this project.
-
+In an early stage of this project, it was taken into consideration to use Pubsub for distributing data to the Workers. But Pubsub does not define a way to address a specific subscriber. Published data of some kind is always sent to all subscribers of this kind of data. This renders Pubsub useless for the approach currently taken in this project.

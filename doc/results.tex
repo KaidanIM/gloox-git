@@ -12,7 +12,7 @@ The development strategy used during this project is roughly related to evolutio
 
 \subsubsection{Load Balancing}
 \paragraph{}
-As discussed in Section \ref{sec:addressing} and \ref{sec:feederlib}, the Feeder Library stores the full JID for distinction between Workers. A very interesting outcome of this restriction-less design is the possibility to add more than one XMPP server to the grid and thereby effectively create a load-balanced XMPP server cluster. The limit then becomes the memory of the machine running the Feeder -- it must store the addresses of all the Workers. But even the Feeder is -- sort of -- distributable. It is possible to have more than one Feeder running in an XMPP network.
+As discussed in Section \ref{sec:addressing} and \ref{sec:feederlib}, the Feeder Library stores the full JID for distinction between Workers. A very interesting outcome of this restriction-less design is the possibility to add more than one XMPP server to the grid and thereby effectively create a load-balanced XMPP server cluster. The limit then becomes the memory of the machine running the Feeder -- it caches data and stores the addresses of all the Workers. But even the Feeder is -- sort of -- distributable. It is possible to have more than one Feeder running in an XMPP network.
 
 \subsubsection{Dynamic Grid}
 \paragraph{}
@@ -33,11 +33,11 @@ The combination of polling and pushing was chosen to reduce the Feeder's impact 
 
 \subsection{Disadvantages of XMPP}
 \paragraph{}
-The system proposed in this project can unfold its full power with data that takes a relatively long time to deal with. The reasons are:
+The system proposed in this project can unfold its full power with data that takes a relatively long time to deal with, such as \textit{"protein folding, financial modelling, earthquake simulation, climate/weather modelling etc"} \cite{wikipedia005}. The reasons are:
 \begin{itemize}
-\item XML adds an overhead to the wire communication that should not be neglected. The IQ stanza sent to the Workers containing the data is 117 bytes in size, excluding source and destination address. This is, per se, a huge frame and additionally might be much more than the actual payload.
+\item XML adds an overhead to the wire communication that should not be neglected. The IQ stanza sent to the Workers containing the data is 117 bytes in size, excluding payload, source and destination address. This is, per se, a huge frame and additionally might be much more than the actual payload.
 \item The system has two bottlenecks, the Feeder and the XMPP server, respectively.
 \end{itemize}
 
 \paragraph{}
-The bottom line is, the implemented system is not very performant when used with data which only takes a short time to process. For example, prime factorization as implemented in the sample programs is very fast for small numbers. The overhead of XMPP is clearly visible here. However, no actual performance tests have been conducted in the context of this project as the system is not intended for such a use case in reality and aside from the provided examples.
+The bottom line is, the implemented system is not very performant when used with data which only takes a short time to process. For example, prime factorisation as implemented in the sample programs is very fast for small numbers. The overhead of XMPP is clearly visible here. However, no actual performance tests have been conducted in the context of this project as the system is not intended for such a use case in reality and aside from the provided examples.
