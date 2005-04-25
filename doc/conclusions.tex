@@ -1,10 +1,8 @@
 \section{Conclusions and Recommendations for Further Work}
 
 \subsection{Conclusions}
-
-\subsubsection{Implementation Status}
 \paragraph{}
-The software implementation proceeded a lot during the last months. However, two incidences delayed the overall project so that not all of the objectives could be finished in time.
+The software implementation proceeded a lot during the last months. However, two incidences delayed the overall project significantly so that not all of the objectives could be finished in time.
 
 \paragraph{}
 The first problem occured when the XMPP Client Library was implemented. It turned out that it would be very hard and time consuming to connect the written C++ applications to the event driven interface of the Iksemel library. In the end, the solution was pretty straight-forward, but finding and finally solving the problem delayed the project by several weeks.
@@ -13,7 +11,7 @@ The first problem occured when the XMPP Client Library was implemented. It turne
 Secondly, the idea of a generic high-level XMPP client library became more and more fascinating the more the project advanced. The possibilities of XMPP are numerous and a properly written and re-usable foundation library offers a lot of value compared to the development time. Instead of "Finish It All", "Do It Right" became the goal of the programming work. The library had to be re-usable by any program wishing to utilise XMPP. Additionally, the programming interfaces had to be clear, easy to use and powerfull. The outcome achieves these requirements and indeed is impressive in that it encapsulates a lot of XMPP knowledge which an application programmer doesn't have to have who wishes to use the library. The ultimate goal is to enable programmers to write software communicating via XMPP without any in-depth knowledge of the protocol. To a certain degree this goal has been reached as well.
 
 \paragraph{}
-Table \ref{tab:impstatus} gives on overview on the finished items. The software, as far as it is implemented to date, allows for writing fully functional Feeder and Worker components. Sample implementations as discussed in Section \ref{sec:samples}, demonstrate this.
+Table \ref{tab:impstatus} gives on overview on the finished items. The XMPP Client Library allows for writing basic XMPP clients without deep knowledge of the protocol. Complex systems are also possible but require at least basic understanding of XMPP concepts and familiarity with XML. The higer-level libraries -- Feeder Library and Worker Library -- allow for writing fully functional Feeder and Worker components -- minus the database storage for statistics, which has not been implemented. Sample implementations as discussed in Section \ref{sec:samples}, demonstrate this.
 
 \begin{table}[H]
 \begin{tabularx}{\linewidth}{lc}
@@ -26,25 +24,30 @@ XMPP Client Lib     & finished \\
 Worker              & finished \\
 Feeder              & finished \\
 Sample Applications & finished \\
-Statistics Viewer   & not started  \\
-Feeder Frontend     & started  \\
-API Docs            & finished \\
-User Manuals        & not started  \\
+Statistics Viewer   & not started \\
+Feeder Front End    & not started \\
+API Documentation   & finished \\
+User Manuals        & not started \\
 \bottomrule
 \end{tabularx}
 \caption{Implementation Status}
 \label{tab:impstatus}
 \end{table}
 
+\paragraph{}
+The core parts as listed in Section \ref{sec:objectives}, have been completed. The API documentation for the libraries is complete since it is generated automatically from the source code. Statistics Viewer and Feeder Front End have not been finished.
 
 
 \subsection{Recommendations for Further Work}
 \paragraph{}
 Possible further enhancements of the framework include:
 \begin{description}
-\item[Redundancy] The Feeder Library should be able to send data packets to more than one Worker. Incoming results should be compared and in case of differences either another Worker is asked to process the data again, or if only one out of many Workers replies with an different result, the majority "wins". This functionality could depend on a "trust level" established between Feeder and Workers.
-\item[Encryption] If used in an area dealing with sensitive data, encryption should be used to prevent sniffing of data sent over the wire.
+\item[Missing Objectives] The objectives which were not met could be finished.
+\item[Standards Compliance] The Global Grid Forum\footnote{The Global Grid Forum's homepage is at \href{http://www.gridforum.org/}{http://www.gridforum.org/}.} defines standards for grids. It would be interesting to learn if it would be possible to make XMPPGrid conform to these standards. If possible, these standards could be implemented.
+\item[Redundancy] The Feeder Library should be able to send the same data packet to more than one Worker. Incoming results should be compared and in case of differences either another Worker is asked to process the data again, or if only one out of many Workers replies with an different result, the majority "wins". This functionality could depend on a "trust level" established between Feeder and Workers.
+\item[Encryption] If used in an area dealing with sensitive data, end-to-end encryption should be used to prevent sniffing of data sent over the wire. JEP-0027 \cite{jep0027} defines a way to encrypt message and presence stanzas. Something similar could be developed and implemented for IQ stanzas.
 \item[Stream Compression] With JEP-0138: Stream Compression \cite{jep0138}, a means is defined that allows for transparent compression of XMPP streams. If implemented, this would decrease bandwidth requirements for larger grids dramatically.
-\item[CPU monitor] Using a CPU monitor, a Worker could run on an ordinary desktop machine and use the CPU as long as no other tasks are pressing.
+\item[CPU Monitor] Using a CPU monitor, a Worker could run on an ordinary desktop machine and use the CPU as long as no other tasks are pressing. If programs the user interacts with require more processing time, the Worker could be removed from the grid temporarily.
+\item[Platform Independence] For a wider audience especially for Internet-based grids, platform independence is important. Porting XMPPGrid to other platforms could be a task in a continuative project.
 \item[Build a Grid] Using this framework, a real grid could be set up that works on a real problem.
 \end{description}

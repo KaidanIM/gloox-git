@@ -272,7 +272,7 @@ beginfig(3)
   drawObjective(21,  1,  7, 13, btex Interim Report etex,    0, 0);
   drawObjective(20,  5,  6, 13, btex Requirements etex,      0, 0);
   drawMilestone(19,  7, 15, 13, btex Design etex,            1, 0);
-  drawObjective(18,  8, 15, 13, btex XMPP Lib etex,          1, 0);
+  drawObjective(18,  8, 15, 13, btex XMPP Library etex,      1, 0);
   drawObjective(17, 15, 15, 13, btex Worker etex,            1, 0);
   drawObjective(16, 15, 15, 13, btex Feeder etex,            1, 0);
   drawObjective(15,  0,  0, 13, btex Sample Apps etex,       1, 0);
@@ -280,7 +280,7 @@ beginfig(3)
   drawObjective(13,  0,  0, 13, btex Statistics Viewer etex, 1, 0);
   drawObjective(12,  0,  0, 13, btex Feeder Frontend etex,   1, 1);
   drawMilestone(11,  8, 15, 13, btex Implementation etex,    1, 0);
-  drawObjective(10,  8, 15, 13, btex XMPP Lib etex,          1, 0);
+  drawObjective(10,  8, 15, 13, btex XMPP Library etex,      1, 0);
   drawObjective( 9,  0,  0, 13, btex Worker etex,            1, 0);
   drawObjective( 8,  0,  0, 13, btex Feeder etex,            1, 0);
   drawObjective( 7,  0,  0, 13, btex Sample Apps etex,       1, 0);
@@ -302,7 +302,7 @@ beginfig(4)
   drawObjective(21,  0,  0, 8, btex Interim Report etex,    0, 0);
   drawObjective(20,  0,  0, 8, btex Requirements etex,      0, 0);
   drawMilestone(19,  1,  6, 8, btex Design etex,            0, 1);
-  drawObjective(18,  1,  3, 8, btex XMPP Lib etex,          1, 0);
+  drawObjective(18,  1,  3, 8, btex XMPP Library etex,      1, 0);
   drawObjective(17,  1,  4, 8, btex Worker etex,            1, 0);
   drawObjective(16,  1,  4, 8, btex Feeder etex,            1, 0);
   drawObjective(15,  4,  5, 8, btex Sample Apps etex,       1, 0);
@@ -310,7 +310,7 @@ beginfig(4)
   drawObjective(13,  6,  6, 8, btex Statistics Viewer etex, 1, 0);
   drawObjective(12,  6,  6, 8, btex Feeder Frontend etex,   1, 1);
   drawMilestone(11,  1,  7, 8, btex Implementation etex,    0, 1);
-  drawObjective(10,  1,  4, 8, btex XMPP Lib etex,          1, 0);
+  drawObjective(10,  1,  4, 8, btex XMPP Library etex,      1, 0);
   drawObjective( 9,  3,  5, 8, btex Worker etex,            1, 0);
   drawObjective( 8,  3,  5, 8, btex Feeder etex,            1, 0);
   drawObjective( 7,  4,  7, 8, btex Sample Apps etex,       1, 0);
@@ -353,15 +353,15 @@ beginfig(5)
   drawObjective(13,  0,  0, 13, btex Statistics Viewer etex, 1, 0);
   drawObjective(12,  0,  0, 13, btex Feeder Frontend etex,   1, 1);
   drawMilestone(11,  8, 15, 13, btex Implementation etex,    1, 0);
-  drawObjective(10,  8, 15, 13, btex XMPP Lib etex,          1, 0);
+  drawObjective(10,  8, 15, 13, btex XMPP Library etex,      1, 0);
   drawObjective( 9,  0,  0, 13, btex Worker etex,            1, 0);
   drawObjective( 8,  0,  0, 13, btex Feeder etex,            1, 0);
   drawObjective( 7,  0,  0, 13, btex Sample Apps etex,       1, 0);
   drawObjective( 6,  0,  0, 13, btex Database etex,          1, 0);
   drawObjective( 5,  0,  0, 13, btex Statistis Viewer etex,  1, 0);
   drawObjective( 4,  0,  0, 13, btex Feeder Frontend etex,   1, 1);
-  drawMilestone( 3,  0,  0, 13, btex Documentation etex,     1, 0);
-  drawObjective( 2,  0,  0, 13, btex API Doc etex,           1, 0);
+  drawMilestone( 3,  8, 15, 13, btex Documentation etex,     1, 0);
+  drawObjective( 2,  8, 15, 13, btex API Doc etex,           1, 0);
   drawObjective( 1,  0,  0, 13, btex User Manuals etex,      1, 1);
   drawObjective( 0,  0,  0, 13, btex Final Report etex,      0, 0);
 
@@ -374,25 +374,25 @@ beginfig(6)
 
   drawObjective(21,  0,  0, 8, btex Interim Report etex,    0, 0);
   drawObjective(20,  0,  0, 8, btex Requirements etex,      0, 0);
-  drawMilestone(19,  1,  6, 8, btex Design etex,            0, 1);
-  drawObjective(18,  1,  3, 8, btex XMPP Lib etex,          1, 0);
-  drawObjective(17,  1,  4, 8, btex Worker etex,            1, 0);
-  drawObjective(16,  1,  4, 8, btex Feeder etex,            1, 0);
-  drawObjective(15,  4,  5, 8, btex Sample Apps etex,       1, 0);
+  drawMilestone(19,  1,  9, 8, btex Design etex,            0, 1);
+  drawObjective(18,  1,  8, 8, btex XMPP Library etex,      1, 0);
+  drawObjective(17,  1,  8, 8, btex Worker etex,            1, 0);
+  drawObjective(16,  1,  8, 8, btex Feeder etex,            1, 0);
+  drawObjective(15,  8,  9, 8, btex Sample Apps etex,       1, 0);
   drawObjective(14,  0,  0, 8, btex Database etex,          1, 0);
-  drawObjective(13,  6,  6, 8, btex Statistics Viewer etex, 1, 0);
-  drawObjective(12,  6,  6, 8, btex Feeder Frontend etex,   1, 1);
-  drawMilestone(11,  1,  7, 8, btex Implementation etex,    0, 1);
-  drawObjective(10,  1,  4, 8, btex XMPP Lib etex,          1, 0);
-  drawObjective( 9,  3,  5, 8, btex Worker etex,            1, 0);
-  drawObjective( 8,  3,  5, 8, btex Feeder etex,            1, 0);
-  drawObjective( 7,  4,  7, 8, btex Sample Apps etex,       1, 0);
-  drawObjective( 6,  5,  5, 8, btex Database etex,          1, 0);
-  drawObjective( 5,  6,  6, 8, btex Statistis Viewer etex,  1, 0);
-  drawObjective( 4,  7,  7, 8, btex Feeder Frontend etex,   1, 1);
-  drawMilestone( 3,  2,  7, 8, btex Documentation etex,     1, 1);
-  drawObjective( 2,  2,  5, 8, btex API Doc etex,           1, 0);
-  drawObjective( 1,  3,  7, 8, btex User Manuals etex,      1, 1);
+  drawObjective(13,  9,  9, 8, btex Statistics Viewer etex, 1, 0);
+  drawObjective(12,  9,  9, 8, btex Feeder Frontend etex,   1, 1);
+  drawMilestone(11,  1,  9, 8, btex Implementation etex,    0, 1);
+  drawObjective(10,  1,  9, 8, btex XMPP Library etex,      1, 0);
+  drawObjective( 9,  3,  8, 8, btex Worker etex,            1, 0);
+  drawObjective( 8,  3,  8, 8, btex Feeder etex,            1, 0);
+  drawObjective( 7,  8,  9, 8, btex Sample Apps etex,       1, 0);
+  drawObjective( 6,  9,  9, 8, btex Database etex,          1, 0);
+  drawObjective( 5,  0,  9, 8, btex Statistis Viewer etex,  1, 0);
+  drawObjective( 4,  0,  9, 8, btex Feeder Frontend etex,   1, 1);
+  drawMilestone( 3,  1,  9, 8, btex Documentation etex,     0, 1);
+  drawObjective( 2,  1,  9, 8, btex API Doc etex,           1, 0);
+  drawObjective( 1,  0,  0, 8, btex User Manuals etex,      1, 1);
   drawObjective( 0,  1,  9, 8, btex Final Report etex,      0, 0);
 endfig;
 
