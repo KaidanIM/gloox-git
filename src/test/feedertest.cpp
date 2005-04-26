@@ -47,7 +47,7 @@ void FeederTest::usage()
   printf( "This is FeederTest v0.1 as handed in to LSBU on April 26 2005.\n" );
   printf( "\n" );
   printf( "Usage Information:\n" );
-  printf( "       feedertest [-d] -j self -p password -f feeder\n" );
+  printf( "       feedertest [-d] -j self -p password\n" );
   printf( "\n" );
   printf( "-d       enable excessive debug output\n" );
   printf( "-j       specify the full JID to use to connect\n" );
