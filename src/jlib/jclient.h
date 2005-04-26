@@ -33,13 +33,14 @@
 #include <map>
 #include <string>
 
-#define XMLNS_DISCO_INFO  "http://jabber.org/protocol/disco#info"
-#define XMLNS_DISCO_ITEMS "http://jabber.org/protocol/disco#items"
-#define XMLNS_ROSTER      "jabber:iq:roster"
-#define XMLNS_VERSION     "jabber:iq:version"
-#define XMLNS_REGISTER    "jabber:iq:register"
+#define XMLNS_DISCO_INFO     "http://jabber.org/protocol/disco#info"
+#define XMLNS_DISCO_ITEMS    "http://jabber.org/protocol/disco#items"
+#define XMLNS_ADHOC_COMMANDS "http://jabber.org/protocol/commands"
+#define XMLNS_ROSTER         "jabber:iq:roster"
+#define XMLNS_VERSION        "jabber:iq:version"
+#define XMLNS_REGISTER       "jabber:iq:register"
 
-#define XMPP_PORT         5222
+#define XMPP_PORT            5222
 
 using namespace std;
 using namespace Iksemel;
@@ -47,6 +48,7 @@ using namespace Iksemel;
 class JThread;
 class Roster;
 class Disco;
+class Adhoc;
 
 /**
  * This class implements a Jabber Client.
@@ -446,6 +448,7 @@ class JClient : public Stream
     JThread* m_thread;
     Roster* m_roster;
     Disco* m_disco;
+    Adhoc* m_adhoc;
 
     iksid* m_self;
     iksfilter* m_filter;

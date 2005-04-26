@@ -22,6 +22,7 @@
 #define DISCO_H__
 
 #include "iqhandler.h"
+#include "nodehandler.h"
 
 #include <string>
 #include <list>
@@ -30,6 +31,7 @@ using namespace std;
 
 class JClient;
 class DiscoHandler;
+class DiscoItem;
 
 /**
  * This class implements JEP-0030 (Service Discovery).
@@ -40,7 +42,7 @@ class Disco : public IqHandler
   public:
     /**
      * Constructor.
-     * You should access the disco object through the @c JClient object.
+     * You should access the Disco object through the @c JClient object.
      * Creates a new Disco client that registers as IqHandler with @c JClient.
      * @param parent The JClient used for XMPP communication
      */
@@ -61,6 +63,8 @@ class Disco : public IqHandler
      * entirely. By default, disco(very) queries are handled by the library.
      * By default, all supported, not disabled features are announced.
      * @param feature A feature (namespace) the host app supports.
+     * @note Use this function non-queryable features. For nodes that shall
+     * answer to disco#info queries, use @c addNode().
      */
     void addFeature( const string& feature );
 
@@ -118,6 +122,16 @@ class Disco : public IqHandler
      */
     void registerDiscoHandler( DiscoHandler* dh );
 
+    /**
+     * Use this function to register an @ref NodeHandler with the Disco
+     * object. The NodeHandler will receive disco#items queries which are
+     * directed to the corresponding node registered for the handler.
+     * Only one handler per node is possible.
+     * @param nh The NodeHandler-derived object to register.
+     * @param node The node name to associate with this handler.
+     */
+    void registerNodeHandler( NodeHandler* nh, const string& node );
+
     // reimplemented from IqHandler.
     virtual void handleIq( const char* xmlns, ikspak* pak );
 
@@ -127,11 +141,15 @@ class Disco : public IqHandler
 
     JClient* m_parent;
 
-    typedef list<DiscoHandler*> DiscoHandlerList;
-    typedef list<string>        StringList;
-    typedef map<string, string> StringMap;
+    typedef list<DiscoHandler*>        DiscoHandlerList;
+    typedef map<string, NodeHandler*>  NodeHandlerMap;
+    typedef list<DiscoItem*>           ItemList;
+    typedef list<string>               StringList;
+    typedef map<string, string>        StringMap;
 
-    DiscoHandlerList m_discoHandler;
+    DiscoHandlerList m_discoHandlers;
+    NodeHandlerMap m_nodeHandlers;
+    ItemList m_items;
     StringList m_features;
     StringMap  m_queryIDs;
 

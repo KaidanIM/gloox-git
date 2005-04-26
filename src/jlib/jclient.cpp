@@ -21,6 +21,7 @@
 #include "jthread.h"
 #include "roster.h"
 #include "disco.h"
+#include "adhoc.h"
 
 #include <unistd.h>
 #include <iostream>
@@ -33,7 +34,7 @@ JClient::JClient()
   m_tls( true ), m_sasl( true ),
   m_autoPresence( false ), m_manageRoster( true ),
   m_handleDisco( true ), m_idCount( 0 ), m_roster( 0 ),
-  m_disco( 0 )
+  m_disco( 0 ), m_adhoc( 0 )
 {
   init();
 }
@@ -43,7 +44,7 @@ JClient::JClient( const std::string& id, const std::string& password, int port )
   m_tls( true ), m_sasl( true ),
   m_autoPresence( false ), m_manageRoster( true ),
   m_handleDisco( true ), m_idCount( 0 ), m_roster( 0 ),
-  m_disco( 0 )
+  m_disco( 0 ), m_adhoc( 0 )
 {
   m_self = iks_id_new( get_stack(), id.c_str() );
   m_username = m_self->user;
@@ -59,7 +60,7 @@ JClient::JClient( const std::string& username, const std::string& password, cons
   m_tls( true ), m_sasl( true ),
   m_autoPresence( false ), m_manageRoster( true ),
   m_handleDisco( true ), m_idCount( 0 ), m_roster( 0 ),
-  m_disco( 0 )
+  m_disco( 0 ), m_adhoc( 0 )
 {
   init();
 }
@@ -71,6 +72,7 @@ JClient::~JClient()
 void JClient::init()
 {
   m_disco = new Disco( this );
+  m_adhoc = new Adhoc( this );
   m_roster = new Roster( this );
   m_disco->setVersion( "JLib", JLIB_VERSION );
   m_disco->setIdentity( "client", "bot" );
@@ -80,6 +82,7 @@ void JClient::cleanUp()
 {
   iks_filter_delete( m_filter );
   delete m_disco;
+  delete m_adhoc;
   delete m_roster;
   delete m_thread;
 }

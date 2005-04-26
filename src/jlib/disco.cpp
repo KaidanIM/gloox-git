@@ -20,6 +20,7 @@
 #include "disco.h"
 #include "discohandler.h"
 #include "jclient.h"
+#include "nodehandler.h"
 
 
 Disco::Disco( JClient* parent )
@@ -66,16 +67,37 @@ void Disco::handleIq( const char* xmlns, ikspak* pak )
         iks_insert_attrib( x, "from", m_parent->jid().c_str() );
         iks* y = iks_insert( x, "query" );
         iks_insert_attrib( y, "xmlns", XMLNS_DISCO_INFO );
-        iks* i = iks_insert( y, "identity" );
-        iks_insert_attrib( i, "category", m_identityCategory.c_str() );
-        iks_insert_attrib( i, "type", m_identityType.c_str() );
-        iks_insert_attrib( i, "name", m_versionName.c_str() );
 
-        StringList::const_iterator it = m_features.begin();
-        for( it; it != m_features.end(); ++it )
+        char* node = iks_find_attrib( pak->query, "node" );
+        if( node )
         {
-          iks* z = iks_insert( y, "feature" );
-          iks_insert_attrib( z, "var", (*it).c_str() );
+          NodeHandlerMap::const_iterator it = m_nodeHandlers.find( node );
+          if( it != m_nodeHandlers.end() )
+          {
+            NodeHandler::IdentityMap identities = (*it).second->handleNodeIdentities( node );
+            NodeHandler::IdentityMap::const_iterator im = identities.begin();
+            for( im; im != identities.end(); im++ )
+            {
+              iks* i = iks_insert( y, "identity" );
+              iks_insert_attrib( i, "category", (*im).first.c_str() );
+              iks_insert_attrib( i, "type", (*im).second.c_str() );
+  //             iks_insert_attrib( i, "name", m_versionName.c_str() );
+            }
+          }
+        }
+        else
+        {
+          iks* i = iks_insert( y, "identity" );
+          iks_insert_attrib( i, "category", m_identityCategory.c_str() );
+          iks_insert_attrib( i, "type", m_identityType.c_str() );
+          iks_insert_attrib( i, "name", m_versionName.c_str() );
+
+          StringList::const_iterator it = m_features.begin();
+          for( it; it != m_features.end(); ++it )
+          {
+            iks* z = iks_insert( y, "feature" );
+            iks_insert_attrib( z, "var", (*it).c_str() );
+          }
         }
         m_parent->send( x );
       }
@@ -88,14 +110,50 @@ void Disco::handleIq( const char* xmlns, ikspak* pak )
         iks_insert_attrib( x, "from", m_parent->jid().c_str() );
         iks* y = iks_insert( x, "query" );
         iks_insert_attrib( y, "xmlns", XMLNS_DISCO_ITEMS );
+
+        NodeHandler::ItemMap items;
+        NodeHandlerMap::const_iterator it;
+        char* node = iks_find_attrib( pak->query, "node" );
+        if( node )
+        {
+          it = m_nodeHandlers.find( node );
+          if( it != m_nodeHandlers.end() )
+          {
+            items = (*it).second->handleNodeItems( node );
+          }
+        }
+        else
+        {
+          it = m_nodeHandlers.begin();
+          for( it; it != m_nodeHandlers.end(); it++ )
+          {
+            items = (*it).second->handleNodeItems();
+          }
+        }
+
+        if( items.size() )
+        {
+          NodeHandler::ItemMap::const_iterator it = items.begin();
+          for( it; it != items.end(); it++ )
+          {
+            if( !(*it).first.empty() && !(*it).second.empty() )
+            {
+              iks* z = iks_insert( y, "item" );
+              iks_insert_attrib( z, "jid", m_parent->jid().c_str() );
+              iks_insert_attrib( z, "node", (*it).first.c_str() );
+              iks_insert_attrib( z, "name", (*it).second.c_str() );
+            }
+          }
+        }
+
         m_parent->send( x );
       }
       break;
 
     case IKS_TYPE_SET:
     {
-      DiscoHandlerList::const_iterator it = m_discoHandler.begin();
-      for( it; it != m_discoHandler.end(); it++ )
+      DiscoHandlerList::const_iterator it = m_discoHandlers.begin();
+      for( it; it != m_discoHandlers.end(); it++ )
       {
         (*it)->handleDiscoSet( pak->id, pak );
       }
@@ -106,8 +164,8 @@ void Disco::handleIq( const char* xmlns, ikspak* pak )
       if( ( iks_strncmp( XMLNS_DISCO_INFO, xmlns, iks_strlen( XMLNS_DISCO_INFO ) ) == 0 )
             &&  findID( pak->id, pak->from->full ) )
       {
-        DiscoHandlerList::const_iterator it = m_discoHandler.begin();
-        for( it; it != m_discoHandler.end(); it++ )
+        DiscoHandlerList::const_iterator it = m_discoHandlers.begin();
+        for( it; it != m_discoHandlers.end(); it++ )
         {
           (*it)->handleDiscoInfoResult( pak->id, pak );
         }
@@ -115,8 +173,8 @@ void Disco::handleIq( const char* xmlns, ikspak* pak )
       else if( ( iks_strncmp( XMLNS_DISCO_ITEMS, xmlns, iks_strlen( XMLNS_DISCO_ITEMS ) ) == 0 )
                  &&  findID( pak->id, pak->from->full ) )
       {
-        DiscoHandlerList::const_iterator it = m_discoHandler.begin();
-        for( it; it != m_discoHandler.end(); it++ )
+        DiscoHandlerList::const_iterator it = m_discoHandlers.begin();
+        for( it; it != m_discoHandlers.end(); it++ )
         {
           (*it)->handleDiscoItemsResult( pak->id, pak );
         }
@@ -125,8 +183,8 @@ void Disco::handleIq( const char* xmlns, ikspak* pak )
 
     case IKS_TYPE_ERROR:
       iks* x = iks_child( iks_child( pak->x ) );
-      DiscoHandlerList::const_iterator it = m_discoHandler.begin();
-      for( it; it != m_discoHandler.end(); it++ )
+      DiscoHandlerList::const_iterator it = m_discoHandlers.begin();
+      for( it; it != m_discoHandlers.end(); it++ )
       {
         (*it)->handleDiscoError( pak->id, iks_name( x ) );
       }
@@ -182,7 +240,12 @@ bool Disco::hasFeature( const string& jid, const string& feature )
 
 void Disco::registerDiscoHandler( DiscoHandler* dh )
 {
-  m_discoHandler.push_back( dh );
+  m_discoHandlers.push_back( dh );
+}
+
+void Disco::registerNodeHandler( NodeHandler* nh, const string& node )
+{
+  m_nodeHandlers[node] = nh;
 }
 
 void Disco::addQueryID( const string& id, const string& to )
