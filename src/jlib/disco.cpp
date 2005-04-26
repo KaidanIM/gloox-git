@@ -45,13 +45,11 @@ void Disco::handleIq( const char* xmlns, ikspak* pak )
     case IKS_TYPE_GET:
       if( iks_strncmp( XMLNS_VERSION, xmlns, iks_strlen( XMLNS_VERSION ) ) == 0 )
       {
-        iks* x = iks_new( "iq" );
-        iks_insert_attrib( x, "type", "result" );
+        iks* x = iks_make_iq( IKS_TYPE_RESULT, XMLNS_VERSION );
+        iks_insert_attrib( x, "id", pak->id );
         iks_insert_attrib( x, "to", pak->from->full );
         iks_insert_attrib( x, "from", m_parent->jid().c_str() );
-        iks_insert_attrib( x, "id", pak->id );
-        iks* y = iks_insert( x, "query" );
-        iks_insert_attrib( y, "xmlns", XMLNS_VERSION );
+        iks* y = iks_find( x, "query" );
         iks* z = iks_insert( y, "name" );
         iks_insert_cdata( z, m_versionName.c_str(), m_versionName.length() );
         z = iks_insert( y, "version" );
@@ -60,13 +58,11 @@ void Disco::handleIq( const char* xmlns, ikspak* pak )
       }
       else if( iks_strncmp( XMLNS_DISCO_INFO, xmlns, iks_strlen( XMLNS_DISCO_INFO ) ) == 0 )
       {
-        iks* x = iks_new( "iq" );
-        iks_insert_attrib( x, "type", "result" );
+        iks* x = iks_make_iq( IKS_TYPE_RESULT, XMLNS_DISCO_INFO );
         iks_insert_attrib( x, "id", pak->id );
         iks_insert_attrib( x, "to", pak->from->full );
         iks_insert_attrib( x, "from", m_parent->jid().c_str() );
-        iks* y = iks_insert( x, "query" );
-        iks_insert_attrib( y, "xmlns", XMLNS_DISCO_INFO );
+        iks* y = iks_find( x, "query" );
 
         char* node = iks_find_attrib( pak->query, "node" );
         if( node )
@@ -103,13 +99,11 @@ void Disco::handleIq( const char* xmlns, ikspak* pak )
       }
       else if( iks_strncmp( XMLNS_DISCO_ITEMS, xmlns, iks_strlen( XMLNS_DISCO_ITEMS ) ) == 0 )
       {
-        iks* x = iks_new( "iq" );
-        iks_insert_attrib( x, "type", "result" );
+        iks* x = iks_make_iq( IKS_TYPE_RESULT, XMLNS_DISCO_ITEMS );
         iks_insert_attrib( x, "id", pak->id );
         iks_insert_attrib( x, "to", pak->from->full );
         iks_insert_attrib( x, "from", m_parent->jid().c_str() );
-        iks* y = iks_insert( x, "query" );
-        iks_insert_attrib( y, "xmlns", XMLNS_DISCO_ITEMS );
+        iks* y = iks_find( x, "query" );
 
         NodeHandler::ItemMap items;
         NodeHandlerMap::const_iterator it;
