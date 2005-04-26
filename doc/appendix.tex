@@ -5,13 +5,53 @@
 
 \section{Contents of the CD}
 \paragraph{}
-The enclosed CD contains a complete copy of the Subversion repository as of April 26 2005 in the \texttt{/fyp-lsbu} subdirectory. This includes the source code of all the software written during the project (in \texttt{/fyp-lsbu/src}) as well as the documentation in \LaTeX{} format (in \texttt{/fyp-lsbu/src}). Additionally, it contains the generated API documentation in the \texttt{/api} subdirectory.
+The enclosed CD contains a complete copy of the Subversion repository as of April 26 2005 in the \texttt{/fyp-lsbu} subdirectory. This includes the source code of all the software written during the project (in \texttt{/fyp-lsbu/src}) as well as the documentation in \LaTeX{} format (in \texttt{/fyp-lsbu/src}). Additionally, it contains the generated API documentation in the \texttt{/api} subdirectory and a copy of this report in PDF format in the root directory.
 
 \section{Installation Instructions}
-\subsection{}
-
-\section{Database Layout}
 \paragraph{}
+If all the dependencies listed in Section \ref{sec:depend} are fulfilled, compilation and installation are straight-forward. The following commands will build and install the software:
+\\ \texttt{./autogen.sh}
+\\ \texttt{./configure}
+\\ \texttt{cd src}
+\\ \texttt{make} \\
 
+and finally as superuser:
+\\ \texttt{make install} \\
 
-\section{Selected Source Code}
+\section{Usage Instructions}
+\paragraph{}
+After the installation, two programs are installed, called \texttt{feedertest} and \texttt{workertest}. These are the sample implementations discussed in Section \ref{sec:samples}. They accept the command line parameters listed in Table \ref{tab:cmdlineworker} and \ref{tab:cmdlinefeeder}, respectively.
+
+\begin{table}[H]
+\begin{tabularx}{\linewidth}{ll}
+\toprule
+\textbf{Switch} & \textbf{Description} \\
+\midrule
+\endhead
+-d & enable excessive debug output \\
+-j & specify the full JID to use to connect \\
+-p & the password to authenticate with \\
+-f & the full JID of the Feeder \\
+\bottomrule
+\end{tabularx}
+\caption{Command Line Parameters of WorkerTest}
+\label{tab:cmdlineworker}
+\end{table}
+
+\begin{table}[H]
+\begin{tabularx}{\linewidth}{ll}
+\toprule
+\textbf{Switch} & \textbf{Description} \\
+\midrule
+\endhead
+-d & enable excessive debug output \\
+-j & specify the full JID to use to connect \\
+-p & the password to authenticate with \\
+\bottomrule
+\end{tabularx}
+\caption{Command Line Parameters of FeederTest}
+\label{tab:cmdlinefeeder}
+\end{table}
+
+\paragraph{}
+For both, paramaters \texttt{-j} and \texttt{-p} are mandatory. The \texttt{workertest} program additionally needs to know the JID of the Feeder, which is passed using the \texttt{-f} switch.
