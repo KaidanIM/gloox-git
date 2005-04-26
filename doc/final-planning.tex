@@ -1,3 +1,7 @@
+\subsection{Final Schedule}
+\paragraph{}
+The following is the final schedule as of week 9, semester 2. It shows how time has been spent while working on the project. Reasons for delay and failure to meet some of the objectives have been given in Section \ref{sec:conclusions}.
+
 \begin{table}[H]
 \begin{tabularx}{\linewidth}{llcc}
 \toprule
@@ -5,22 +9,22 @@
 \midrule
 \endhead
 A & Requirements                       & --      & 2  \\
-B & Design::XMPP Client Lib            & A       & 6  \\
-C & Design::Worker                     & A       & 6  \\
-D & Design::Feeder                     & A       & 6  \\
+B & Design::XMPP Client Lib            & A       & 16 \\
+C & Design::Worker                     & A       & 7  \\
+D & Design::Feeder                     & A       & 7  \\
 E & Design::Sample Application         & A       & 2  \\
 F & Design::Database                   & A       & 1  \\
-G & Design::Statistics Viewer          & A       & 2  \\
-H & Design::Feeder Frontend            & A       & 2  \\
+G & Design::Statistics Viewer          & A       & 1  \\
+H & Design::Feeder Front End           & A       & 1  \\
 I & Implementation::Database           & F       & 1  \\
-J & Implementation::XMPP Client Lib    & B       & 7  \\
-K & Implementation::Worker             & C       & 7  \\
-L & Implementation::Feeder             & D, I    & 7  \\
-M & Implementation::Sample Application & E       & 9  \\
-N & Implementation::Statistics Viewer  & G, I    & 3  \\
-O & Implementation::Feeder Frontend    & H, L    & 3  \\
-P & Documentation::API Docs            & J, K, L & 5  \\
-Q & Documentation::User Manuals        & M, N, O & 11 \\
+J & Implementation::XMPP Client Lib    & B       & 17 \\
+K & Implementation::Worker             & C, J    & 6  \\
+L & Implementation::Feeder             & D, I, J & 6  \\
+M & Implementation::Sample Application & E, K, L & 2  \\
+N & Implementation::Statistics Viewer  & G, I    & 0  \\
+O & Implementation::Feeder Front End   & H, L    & 0  \\
+P & Documentation::API Docs            & J, K, L & 17 \\
+Q & Documentation::User Manuals        & M, N, O & 0  \\
 \bottomrule
 \end{tabularx}
 \caption{Final Action Plan}
@@ -42,20 +46,3 @@ Q & Documentation::User Manuals        & M, N, O & 11 \\
 \caption{Final Schedule $\cdot$ Semester 2}
 \label{fig:fin_gantt2}
 \end{figure}
-
-\begin{table}[H]
-\begin{tabularx}{\linewidth}{cX}
-\toprule
-\textbf{Milestone} & \textbf{Description} \\
-\midrule
-\endhead
-M1 & Interim Report finished by 9th November 2004 \\
-M2 & Requirements and Design finished by mid December 2004 \\
-M3 & Implementation of core (Worker and Feeder) libraries finished by end February 2005 \\
-M4 & Implementation of additional objectives (Feeder Frontend, Statistics Viewer) and documentation finished by mid of March 2005 \\
-M5 & Final Report finished by 26th April 2005 \\
-\bottomrule
-\end{tabularx}
-\caption{Milestones}
-\label{tab:fin_milestones}
-\end{table}
