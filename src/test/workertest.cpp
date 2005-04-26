@@ -54,7 +54,7 @@ void WorkerTest::usage()
   printf( "-d       enable excessive debug output\n" );
   printf( "-j       specify the full JID to use to connect\n" );
   printf( "-p       the password to authenticate with\n" );
-  printf( "-f       the full JID of the Worker\n" );
+  printf( "-f       the full JID of the Feeder\n" );
   printf( "\n" );
   printf( "(c) 2004-2005 Jakob Schroeter\n" );
 }
@@ -70,14 +70,11 @@ WorkerTest::~WorkerTest()
 
 void WorkerTest::start()
 {
-  if( m_feeder.empty() )
-    m_feeder = "remon@camaya.net/feeder";
-
-  if( m_passwd.empty() )
-    m_passwd = "jline";
-
-  if( m_self.empty() )
-    m_self = "jline@camaya.net/worker";
+  if( m_feeder.empty() || m_passwd.empty() || m_self.empty())
+  {
+    usage();
+    return;
+  }
 
   c = new Worker( m_self, m_passwd, m_debug );
   c->registerInfoHandler( this );

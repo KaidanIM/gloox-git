@@ -72,11 +72,11 @@ FeederTest::~FeederTest()
 
 void FeederTest::start()
 {
-  if( m_self.empty() )
-    m_self = "remon@camaya.net/feeder";
-
-  if( m_passwd.empty() )
-    m_passwd = "remon";
+  if( m_self.empty() || m_passwd.empty() )
+  {
+    usage();
+    return;
+  }
 
   c = new Feeder( m_self, m_passwd, m_debug );
   c->registerInfoHandler( this );
