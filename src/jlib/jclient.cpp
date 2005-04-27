@@ -346,6 +346,11 @@ Disco* JClient::disco()
   return m_disco;
 }
 
+Adhoc* JClient::adhoc()
+{
+  return m_adhoc;
+}
+
 void JClient::registerPresenceHandler( PresenceHandler* ph )
 {
   m_presenceHandlers.push_back( ph );

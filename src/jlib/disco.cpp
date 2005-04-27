@@ -20,7 +20,7 @@
 #include "disco.h"
 #include "discohandler.h"
 #include "jclient.h"
-#include "nodehandler.h"
+#include "disconodehandler.h"
 
 
 Disco::Disco( JClient* parent )
@@ -67,11 +67,11 @@ void Disco::handleIq( const char* xmlns, ikspak* pak )
         char* node = iks_find_attrib( pak->query, "node" );
         if( node )
         {
-          NodeHandlerMap::const_iterator it = m_nodeHandlers.find( node );
+          DiscoNodeHandlerMap::const_iterator it = m_nodeHandlers.find( node );
           if( it != m_nodeHandlers.end() )
           {
-            NodeHandler::IdentityMap identities = (*it).second->handleNodeIdentities( node );
-            NodeHandler::IdentityMap::const_iterator im = identities.begin();
+            DiscoNodeHandler::IdentityMap identities = (*it).second->handleDiscoNodeIdentities( node );
+            DiscoNodeHandler::IdentityMap::const_iterator im = identities.begin();
             for( im; im != identities.end(); im++ )
             {
               iks* i = iks_insert( y, "identity" );
@@ -105,15 +105,15 @@ void Disco::handleIq( const char* xmlns, ikspak* pak )
         iks_insert_attrib( x, "from", m_parent->jid().c_str() );
         iks* y = iks_find( x, "query" );
 
-        NodeHandler::ItemMap items;
-        NodeHandlerMap::const_iterator it;
+        DiscoNodeHandler::ItemMap items;
+        DiscoNodeHandlerMap::const_iterator it;
         char* node = iks_find_attrib( pak->query, "node" );
         if( node )
         {
           it = m_nodeHandlers.find( node );
           if( it != m_nodeHandlers.end() )
           {
-            items = (*it).second->handleNodeItems( node );
+            items = (*it).second->handleDiscoNodeItems( node );
           }
         }
         else
@@ -121,13 +121,13 @@ void Disco::handleIq( const char* xmlns, ikspak* pak )
           it = m_nodeHandlers.begin();
           for( it; it != m_nodeHandlers.end(); it++ )
           {
-            items = (*it).second->handleNodeItems();
+            items = (*it).second->handleDiscoNodeItems();
           }
         }
 
         if( items.size() )
         {
-          NodeHandler::ItemMap::const_iterator it = items.begin();
+          DiscoNodeHandler::ItemMap::const_iterator it = items.begin();
           for( it; it != items.end(); it++ )
           {
             if( !(*it).first.empty() && !(*it).second.empty() )
@@ -237,7 +237,7 @@ void Disco::registerDiscoHandler( DiscoHandler* dh )
   m_discoHandlers.push_back( dh );
 }
 
-void Disco::registerNodeHandler( NodeHandler* nh, const string& node )
+void Disco::registerNodeHandler( DiscoNodeHandler* nh, const string& node )
 {
   m_nodeHandlers[node] = nh;
 }

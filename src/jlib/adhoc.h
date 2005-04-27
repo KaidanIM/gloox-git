@@ -21,7 +21,8 @@
 #ifndef ADHOC_H__
 #define ADHOC_H__
 
-#include "nodehandler.h"
+#include "disconodehandler.h"
+#include "adhoccommandprovider.h"
 
 #include <string>
 #include <list>
@@ -34,7 +35,7 @@ class JClient;
  * This class implements JEP-0030 (Service Discovery).
  * 
  */
-class Adhoc : public NodeHandler
+class Adhoc : public DiscoNodeHandler
 {
   public:
     /**
@@ -51,28 +52,36 @@ class Adhoc : public NodeHandler
     virtual ~Adhoc();
 
     /**
-     * reimplemented from NodeHandler
+     * reimplemented from DiscoNodeHandler
      */
-    virtual FeatureList handleNodeFeatures( const char* node );
+    virtual FeatureList handleDiscoNodeFeatures( const char* node );
 
     /**
-     * reimplemented from NodeHandler
+     * reimplemented from DiscoNodeHandler
      */
-    virtual IdentityMap handleNodeIdentities( const char* node );
+    virtual IdentityMap handleDiscoNodeIdentities( const char* node );
 
     /**
-     * reimplemented from NodeHandler
+     * reimplemented from DiscoNodeHandler
      */
-    virtual ItemMap handleNodeItems( const char* node );
+    virtual ItemMap handleDiscoNodeItems( const char* node );
+
+    /**
+     * Using this function, you can register a AdhocCommandProvider -derived obejct as
+     * handler for a specific Ad-hoc Command as defined in JEP-0050.
+     * @param acp The obejct to register for the specified command.
+     * @param command The name of the command. Will be announced upon disco#items.
+     * @param name The natural-language name of the command. Will be announced upon disco#items.
+     */
+    void registerAdhocCommandProvider( AdhocCommandProvider* acp, const string& command, const string& name );
 
   private:
-    typedef map<string, NodeHandler::IdentityMap> NodeIdentityMap;
-    typedef map<string, NodeHandler::ItemMap>     NodeItemMap;
+    typedef map<const string, AdhocCommandProvider*>   AdhocCommandProviderMap;
 
     JClient* m_parent;
 
-    NodeIdentityMap m_identities;
-    NodeItemMap m_items;
+    AdhocCommandProviderMap m_adhocCommandProviders;
+    DiscoNodeHandler::ItemMap m_items;
 
 };
 

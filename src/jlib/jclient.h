@@ -334,6 +334,12 @@ class JClient : public Stream
     Disco* disco();
 
     /**
+     * This function gives access to the @c Adhoc object.
+     * @return A pointer to the Adhoc object.
+     */
+    Adhoc* adhoc();
+
+    /**
      * Registers @c cl as object that receives connection notifications.
      * @param cl The object to receive connection notifications.
      */
