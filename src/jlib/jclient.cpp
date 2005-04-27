@@ -366,14 +366,24 @@ void JClient::registerIqHandler( IqHandler* ih, const char* xmlns )
   m_iqNSHandlers[xmlns] = ih;
 }
 
+void JClient::registerIqFTHandler( IqHandler* ih, const char* tag )
+{
+  m_iqFTHandlers[tag] = ih;
+}
+
 void JClient::registerIqHandler( IqHandler* ih )
 {
   m_iqHandlers.push_back( ih );
 }
 
-void JClient::removeIqHandler( const char* xmlns )
+void JClient::removeIqNSHandler( const char* xmlns )
 {
   m_iqNSHandlers.erase( xmlns );
+}
+
+void JClient::removeIqFTHandler( const char* tag )
+{
+  m_iqFTHandlers.erase( tag );
 }
 
 void JClient::removeIqHandler( IqHandler* ih )
@@ -460,6 +470,13 @@ void JClient::notifyIqHandlers( const char* xmlns, ikspak* pak )
   for( it_ns; it_ns != m_iqNSHandlers.end(); it_ns++ ) {
     if( iks_strncmp( (*it_ns).first, xmlns, iks_strlen( xmlns ) ) == 0 )
       (*it_ns).second->handleIq( xmlns, pak );
+  }
+
+  char* tag = iks_name( iks_first_tag( pak->x ) );
+  IqHandlerMap::const_iterator it_ft = m_iqFTHandlers.begin();
+  for( it_ft; it_ft != m_iqFTHandlers.end(); it_ft++ ) {
+    if( iks_strncmp( (*it_ft).first, tag, iks_strlen( tag ) ) == 0 )
+      (*it_ft).second->handleIqTag( tag, pak );
   }
 }
 

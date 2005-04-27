@@ -42,6 +42,14 @@ class IqHandler
      * @param pak The complete packet for convenience
      */
     virtual void handleIq( const char* xmlns, ikspak* pak ) {};
+
+    /**
+     * Reimplement this function if you want to be notified about
+     * incoming IQs with a specific child tag.
+     * @param tag The sub tag's name of the IQ packet
+     * @param pak The complete packet for convenience
+     */
+    virtual void handleIqTag( const char* tag, ikspak* pak ) {};
 };
 
 #endif // IQHANDLER_H__

@@ -354,6 +354,14 @@ class JClient : public Stream
     void registerIqHandler( IqHandler* ih, const char* xmlns );
 
     /**
+     * Registers @c ih as object that receives Iq packet notifications for IQ packets
+     * containing a tag with name @c tag. Only one handler per tag is possible.
+     * @param ih The object to receive Iq packet notifications.
+     * @param tag The tag name the object handles.
+     */
+    void registerIqFTHandler( IqHandler* ih, const char* tag );
+
+    /**
      * Registers @c ih as object that receives all Iq packet notifications.
      * Exists for edge cases.
      * @param ih The object to receive Iq packet notifications.>
@@ -390,7 +398,13 @@ class JClient : public Stream
      * Removes the handler for the given namespace from the list of Iq handlers.
      * @param xmlns The namespace to remove from the list.
      */
-    void removeIqHandler( const char* xmlns );
+    void removeIqNSHandler( const char* xmlns );
+
+    /**
+     * Removes the handler for the given first_tag from the list of Iq handlers.
+     * @param xmlns The namespace to remove from the list.
+     */
+    void removeIqFTHandler( const char* tag );
 
     /**
      * Removes the generic IQ handler from the list of generic IQ handlers.
@@ -477,6 +491,7 @@ class JClient : public Stream
 
     ConnectionListenerList  m_connectionListeners;
     IqHandlerMap            m_iqNSHandlers;
+    IqHandlerMap            m_iqFTHandlers;
     IqHandlerList           m_iqHandlers;
     MessageHandlerList      m_messageHandlers;
     PresenceHandlerList     m_presenceHandlers;
