@@ -22,7 +22,7 @@
 #define DISCO_H__
 
 #include "iqhandler.h"
-#include "nodehandler.h"
+#include "disconodehandler.h"
 
 #include <string>
 #include <list>
@@ -130,7 +130,7 @@ class Disco : public IqHandler
      * @param nh The NodeHandler-derived object to register.
      * @param node The node name to associate with this handler.
      */
-    void registerNodeHandler( NodeHandler* nh, const string& node );
+    void registerNodeHandler( DiscoNodeHandler* nh, const string& node );
 
     // reimplemented from IqHandler.
     virtual void handleIq( const char* xmlns, ikspak* pak );
@@ -141,14 +141,14 @@ class Disco : public IqHandler
 
     JClient* m_parent;
 
-    typedef list<DiscoHandler*>        DiscoHandlerList;
-    typedef map<string, NodeHandler*>  NodeHandlerMap;
-    typedef list<DiscoItem*>           ItemList;
-    typedef list<string>               StringList;
-    typedef map<string, string>        StringMap;
+    typedef list<DiscoHandler*>             DiscoHandlerList;
+    typedef map<string, DiscoNodeHandler*>  DiscoNodeHandlerMap;
+    typedef list<DiscoItem*>                ItemList;
+    typedef list<string>                    StringList;
+    typedef map<string, string>             StringMap;
 
     DiscoHandlerList m_discoHandlers;
-    NodeHandlerMap m_nodeHandlers;
+    DiscoNodeHandlerMap m_nodeHandlers;
     ItemList m_items;
     StringList m_features;
     StringMap  m_queryIDs;

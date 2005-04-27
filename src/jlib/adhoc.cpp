@@ -27,19 +27,7 @@ Adhoc::Adhoc( JClient* parent )
   : m_parent( parent )
 {
   m_parent->disco()->addFeature( XMLNS_ADHOC_COMMANDS );
-
-  NodeHandler::IdentityMap ident;
-  ident["automation"] = "command-list";
-  m_identities[XMLNS_ADHOC_COMMANDS] = ident;
-  ident["automation"] = "command-node";
-  m_identities["config"] = ident;
-
   m_parent->disco()->registerNodeHandler( this, XMLNS_ADHOC_COMMANDS );
-  m_parent->disco()->registerNodeHandler( this, "config" );
-
-  NodeHandler::ItemMap item;
-  item["config"] = "Configure Service";
-  m_items[XMLNS_ADHOC_COMMANDS] = item;
 }
 
 Adhoc::~Adhoc()
@@ -47,29 +35,44 @@ Adhoc::~Adhoc()
 
 }
 
-NodeHandler::FeatureList Adhoc::handleNodeFeatures( const char* node )
+DiscoNodeHandler::FeatureList Adhoc::handleDiscoNodeFeatures( const char* node )
 {
-  NodeHandler::FeatureList features;
+  DiscoNodeHandler::FeatureList features;
   printf( "received feature request for node %s\n", node );
   return features;
 }
 
-NodeHandler::ItemMap Adhoc::handleNodeItems( const char* node )
+DiscoNodeHandler::ItemMap Adhoc::handleDiscoNodeItems( const char* node )
 {
   printf( "received items request for node %s\n", node );
-  if( node )
+  if( !node )
+    return m_items;
+  else if( iks_strncmp( XMLNS_ADHOC_COMMANDS, node, iks_strlen( XMLNS_ADHOC_COMMANDS ) ) == 0 )
   {
-    return m_items[node];
+    DiscoNodeHandler::ItemMap item;
+    item[XMLNS_ADHOC_COMMANDS] = "Ad-Hoc Commands";
+    return item;
   }
   else
   {
-    NodeHandler::ItemMap items;
-    items[XMLNS_ADHOC_COMMANDS] = "Ad-Hoc Commands";
-    return items;
+    DiscoNodeHandler::ItemMap item;
+    return item;
   }
 }
 
-NodeHandler::IdentityMap Adhoc::handleNodeIdentities( const char* node )
+DiscoNodeHandler::IdentityMap Adhoc::handleDiscoNodeIdentities( const char* node )
 {
-  return m_identities[node];
+  DiscoNodeHandler::IdentityMap ident;
+  if( iks_strncmp( XMLNS_ADHOC_COMMANDS, node, iks_strlen( XMLNS_ADHOC_COMMANDS ) ) == 0 )
+    ident["automation"] = "command-list";
+  else
+    ident["automation"] = "command-node";
+  return ident;
+}
+
+void Adhoc::registerAdhocCommandProvider( AdhocCommandProvider* acp, const string& command, const string& name )
+{
+  m_parent->disco()->registerNodeHandler( this, command );
+  m_adhocCommandProviders[command] = acp;
+  m_items[command] = name;
 }

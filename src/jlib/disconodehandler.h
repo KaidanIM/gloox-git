@@ -18,8 +18,8 @@
 
 
 
-#ifndef NODEHANDLER_H__
-#define NODEHANDLER_H__
+#ifndef DISCONODEHANDLER_H__
+#define DISCONODEHANDLER_H__
 
 #include <list>
 #include <map>
@@ -34,7 +34,7 @@ using namespace std;
  * respective handlers.
  * @author Jakob Schroeter <js@camaya.net>
  */
-class NodeHandler
+class DiscoNodeHandler
 {
   public:
     /**
@@ -55,22 +55,22 @@ class NodeHandler
     typedef map<string, string> IdentityMap;
 
     /**
-     * In addition to @c handleNodeIdentities, this function is used to gather
+     * In addition to @c handleDiscoNodeIdentities, this function is used to gather
      * more information on a specific node. It is called when a disco#info query
      * arrives with a node attribute that matches the one registered for this handler.
      * @param node The node this handler is supposed to handle.
      * @return A list of features supported by this node.
      */
-    virtual FeatureList handleNodeFeatures( const char* node ) {};
+    virtual FeatureList handleDiscoNodeFeatures( const char* node ) {};
 
     /**
-     * In addition to @c handleNodeFeatures, this function is used to gather
+     * In addition to @c handleDiscoNodeFeatures, this function is used to gather
      * more information on a specific node. It is called when a disco#info query
      * arrives with a node attribute that matches the one registered for this handler.
      * @param node The node this handler is supposed to handle.
      * @return A list of identities for this node.
      */
-    virtual IdentityMap handleNodeIdentities( const char* node ) {};
+    virtual IdentityMap handleDiscoNodeIdentities( const char* node ) {};
 
     /**
      * This function is used to gather more information on a specific node.
@@ -80,8 +80,8 @@ class NodeHandler
      * @param node The node this handler is supposed to handle.
      * @return A map of items supported by this node.
      */
-    virtual ItemMap handleNodeItems( const char* node = 0 ) {};
+    virtual ItemMap handleDiscoNodeItems( const char* node = 0 ) {};
 
 };
 
-#endif // NODEHANDLER_H__
+#endif // DISCONODEHANDLER_H__

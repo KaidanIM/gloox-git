@@ -23,6 +23,7 @@
 #include "../jlib/jclient.h"
 #include "../jlib/roster.h"
 #include "../jlib/disco.h"
+#include "../jlib/adhoc.h"
 
 using namespace std;
 
@@ -41,6 +42,8 @@ Feeder::Feeder( const string& id, const string& password, bool debug, int port )
   c->disco()->registerDiscoHandler( this );
   c->disco()->setVersion( "Feeder", "0.1" );
   c->disco()->addFeature( "xmppgrid:result" );
+  c->adhoc()->registerAdhocCommandProvider( this, "config", "Configure the Feeder" );
+  c->adhoc()->registerAdhocCommandProvider( this, "test", "Testcommand" );
 }
 
 Feeder::~Feeder()
@@ -228,4 +231,9 @@ void Feeder::onDisconnect()
 {
   if( m_infoHandler )
     m_infoHandler->disconnected();
+}
+
+void Feeder::handleAdhocCommand( const string& command )
+{
+  printf( "about to execute %s\n", command.c_str() );
 }

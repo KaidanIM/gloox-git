@@ -24,6 +24,7 @@
 #include "infohandler.h"
 #include "resulthandler.h"
 
+#include "../jlib/adhoccommandprovider.h"
 #include "../jlib/connectionlistener.h"
 #include "../jlib/discohandler.h"
 #include "../jlib/iqhandler.h"
@@ -44,7 +45,7 @@ class JClient;
  * This is the main class of the Feeder.
  * @author Jakob Schroeter <js@camaya.net>
  */
-class Feeder : public ConnectionListener, IqHandler, RosterListener, DiscoHandler
+class Feeder : public ConnectionListener, IqHandler, RosterListener, DiscoHandler, AdhocCommandProvider
 {
   public:
     /**
@@ -130,6 +131,9 @@ class Feeder : public ConnectionListener, IqHandler, RosterListener, DiscoHandle
 
     // reimplemented from ConnectionListener.
     virtual void onDisconnect();
+
+    // reimplemented from AdhocCommandProvider.
+    virtual void handleAdhocCommand( const string& command );
 
   private:
     char* findData( const string& id );
