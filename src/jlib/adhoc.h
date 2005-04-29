@@ -21,8 +21,9 @@
 #ifndef ADHOC_H__
 #define ADHOC_H__
 
-#include "disconodehandler.h"
 #include "adhoccommandprovider.h"
+#include "disconodehandler.h"
+#include "iqhandler.h"
 
 #include <string>
 #include <list>
@@ -35,7 +36,7 @@ class JClient;
  * This class implements JEP-0030 (Service Discovery).
  * 
  */
-class Adhoc : public DiscoNodeHandler
+class Adhoc : public DiscoNodeHandler, IqHandler
 {
   public:
     /**
@@ -51,20 +52,17 @@ class Adhoc : public DiscoNodeHandler
      */
     virtual ~Adhoc();
 
-    /**
-     * reimplemented from DiscoNodeHandler
-     */
+    // reimplemented from DiscoNodeHandler
     virtual FeatureList handleDiscoNodeFeatures( const char* node );
 
-    /**
-     * reimplemented from DiscoNodeHandler
-     */
+    // reimplemented from DiscoNodeHandler
     virtual IdentityMap handleDiscoNodeIdentities( const char* node );
 
-    /**
-     * reimplemented from DiscoNodeHandler
-     */
+    // reimplemented from DiscoNodeHandler
     virtual ItemMap handleDiscoNodeItems( const char* node );
+
+    // reimplemented from IqHandler
+    virtual void handleIqTag( const char* tag, ikspak* pak );
 
     /**
      * Using this function, you can register a AdhocCommandProvider -derived obejct as
@@ -76,7 +74,7 @@ class Adhoc : public DiscoNodeHandler
     void registerAdhocCommandProvider( AdhocCommandProvider* acp, const string& command, const string& name );
 
   private:
-    typedef map<const string, AdhocCommandProvider*>   AdhocCommandProviderMap;
+    typedef map<const string, AdhocCommandProvider*> AdhocCommandProviderMap;
 
     JClient* m_parent;
 

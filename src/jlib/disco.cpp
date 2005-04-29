@@ -31,6 +31,7 @@ Disco::Disco( JClient* parent )
   addFeature( XMLNS_DISCO_ITEMS );
   m_parent->registerIqHandler( this, XMLNS_DISCO_INFO );
   m_parent->registerIqHandler( this, XMLNS_DISCO_ITEMS );
+  m_parent->registerIqHandler( this, XMLNS_VERSION );
 }
 
 Disco::~Disco()
@@ -78,6 +79,13 @@ void Disco::handleIq( const char* xmlns, ikspak* pak )
               iks_insert_attrib( i, "category", (*im).first.c_str() );
               iks_insert_attrib( i, "type", (*im).second.c_str() );
   //             iks_insert_attrib( i, "name", m_versionName.c_str() );
+            }
+            DiscoNodeHandler::FeatureList features = (*it).second->handleDiscoNodeFeatures( node );
+            DiscoNodeHandler::FeatureList::const_iterator fi = features.begin();
+            for( fi; fi != features.end(); fi++ )
+            {
+              iks* i = iks_insert( y, "feature" );
+              iks_insert_attrib( i, "var", (*fi).c_str() );
             }
           }
         }

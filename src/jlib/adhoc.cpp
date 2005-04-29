@@ -26,6 +26,7 @@
 Adhoc::Adhoc( JClient* parent )
   : m_parent( parent )
 {
+  m_parent->registerIqFTHandler( this, "command" );
   m_parent->disco()->addFeature( XMLNS_ADHOC_COMMANDS );
   m_parent->disco()->registerNodeHandler( this, XMLNS_ADHOC_COMMANDS );
 }
@@ -38,20 +39,21 @@ Adhoc::~Adhoc()
 DiscoNodeHandler::FeatureList Adhoc::handleDiscoNodeFeatures( const char* node )
 {
   DiscoNodeHandler::FeatureList features;
-  printf( "received feature request for node %s\n", node );
+  features.push_back( XMLNS_ADHOC_COMMANDS );
   return features;
 }
 
 DiscoNodeHandler::ItemMap Adhoc::handleDiscoNodeItems( const char* node )
 {
-  printf( "received items request for node %s\n", node );
   if( !node )
-    return m_items;
-  else if( iks_strncmp( XMLNS_ADHOC_COMMANDS, node, iks_strlen( XMLNS_ADHOC_COMMANDS ) ) == 0 )
   {
     DiscoNodeHandler::ItemMap item;
     item[XMLNS_ADHOC_COMMANDS] = "Ad-Hoc Commands";
     return item;
+  }
+  else if( iks_strncmp( XMLNS_ADHOC_COMMANDS, node, iks_strlen( XMLNS_ADHOC_COMMANDS ) ) == 0 )
+  {
+    return m_items;
   }
   else
   {
@@ -68,6 +70,19 @@ DiscoNodeHandler::IdentityMap Adhoc::handleDiscoNodeIdentities( const char* node
   else
     ident["automation"] = "command-node";
   return ident;
+}
+
+void Adhoc::handleIqTag( const char* tag, ikspak* pak )
+{
+  iks* x = iks_first_tag( pak->x );
+  char* xmlns = iks_find_attrib( x, "xmlns" );
+  if( iks_strncmp( XMLNS_ADHOC_COMMANDS, xmlns, iks_strlen( XMLNS_ADHOC_COMMANDS ) ) == 0 )
+  {
+    char* node = iks_find_attrib( x, "node" );
+    AdhocCommandProviderMap::const_iterator it = m_adhocCommandProviders.find( node );
+    if( node && ( it != m_adhocCommandProviders.end() ) )
+      (*it).second->handleAdhocCommand( node, x );
+  }
 }
 
 void Adhoc::registerAdhocCommandProvider( AdhocCommandProvider* acp, const string& command, const string& name )
