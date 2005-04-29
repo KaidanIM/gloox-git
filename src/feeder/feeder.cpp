@@ -233,7 +233,7 @@ void Feeder::onDisconnect()
     m_infoHandler->disconnected();
 }
 
-void Feeder::handleAdhocCommand( const string& command )
+void Feeder::handleAdhocCommand( const string& command, const iks* x )
 {
   printf( "about to execute %s\n", command.c_str() );
 }

@@ -39,6 +39,9 @@
 #define XMLNS_ROSTER         "jabber:iq:roster"
 #define XMLNS_VERSION        "jabber:iq:version"
 #define XMLNS_REGISTER       "jabber:iq:register"
+#define XMLNS_PRIVATE_XML    "jabber:iq:private"
+#define XMLNS_BOOKMARKS      "storage:bookmarks"
+
 
 #define XMPP_PORT            5222
 

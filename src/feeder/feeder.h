@@ -133,7 +133,7 @@ class Feeder : public ConnectionListener, IqHandler, RosterListener, DiscoHandle
     virtual void onDisconnect();
 
     // reimplemented from AdhocCommandProvider.
-    virtual void handleAdhocCommand( const string& command );
+    virtual void handleAdhocCommand( const string& command, const iks* x );
 
   private:
     char* findData( const string& id );

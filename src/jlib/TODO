@@ -2,31 +2,35 @@ Todo
 ----
 
 - check if for and iterators can be replaced by find
-- introduce result handler
-- extract disco into separate class
 - config file
-- more command line support
 - use struct for version and identity info
 - char* --> std::string
 - JEP-0012 (Last Activity)
 - JEP-0013 (Flexible Offline Message Retrieval)
 - JEP-0047 (In-Band Bytestreams)
-- JEP-0048 (Bookmark Storage)
-- JEP-0049 (Private XML Storage)
 - JEP-0060 (Publish-Subscribe)
+- JEP-0114 (Jabber Component Protocol)
 - JEP-0118 (User Tune)
+- JEP-0126 (Invisibility)
 - JEP-0138 (Stream Compression)
-- JEP-0145 (Annotations)
+- JEP-0144 (Roster Item Exchange)
 
 
 In the pipe
 -----------
 
-- JEP-0030 (Service Discovery) - Client Side
-
+- JEP-0048 (Bookmark Storage)
+- JEP-0049 (Private XML Storage)
+- JEP-0145 (Annotations)
 
 Done
 ----
 
 - remove iksemelmm dependency
 - iq xmlns filter
+- introduce result handler
+- extract disco into separate class
+- more command line support
+- JEP-0030 (Service Discovery)
+- JEP-0050 (Ad-hoc Commands)
+- JEP-0092 (Software Version) 
