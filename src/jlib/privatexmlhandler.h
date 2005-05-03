@@ -36,8 +36,8 @@ class PrivateXMLHandler
 {
   public:
     /**
-     * Reimplement this function if you want to be notified about
-     * incoming IQs.
+     * Reimplement this function to receive the private XML that was requested earlier using
+     * @c PrivateXML::requestXML().
      * @param xmlns The XML namespace of the storage packet.
      * @param tag The tag of the storage packet.
      * @param pak The complete packet.
