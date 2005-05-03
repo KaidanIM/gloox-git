@@ -62,8 +62,9 @@ class PrivateXML : public IqHandler
      * Use this function to store private XML stored in the given namespace.
      * @param xml The XML to store. This is the complete tag including the unique namespace.
      * It is deleted after sending it.
+     * @param xmlns The is the namespace, again, in which the element @c is stored.
      */
-    void storeXML( iks* xml );
+    void storeXML( iks* xml, const string& xmlns );
 
     /**
      * Use this function to register an object that shall receive incoming Private XML packets.
@@ -86,8 +87,11 @@ class PrivateXML : public IqHandler
       PrivateXMLHandler* pxh;
     } HandlerStruct;
     typedef list<HandlerStruct*> PrivateXMLHandlers;
+    typedef map<string, string>  IDMap;
 
     PrivateXMLHandlers m_privateXMLHandlers;
+    IDMap m_storeIds;
+    IDMap m_requestIds;
 
 };
 
