@@ -44,12 +44,7 @@ AC_C_INLINE
 dnl Generating makefiles.
 AC_CONFIG_FILES([
 Makefile
-doc/Makefile
 src/Makefile
-src/jlib/Makefile
-src/jlib/wrapper/Makefile
-src/feeder/Makefile
-src/worker/Makefile
-src/test/Makefile
+src/wrapper/Makefile
 ])
 AC_OUTPUT
