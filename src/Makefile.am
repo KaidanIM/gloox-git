@@ -8,7 +8,7 @@ SUBDIRS = wrapper
 
 noinst_LTLIBRARIES = libclient.la
 
-libclient_la_SOURCES = jclient.cpp thread.cpp jthread.cpp result.cpp disco.cpp roster.cpp adhoc.cpp \
+libclient_la_SOURCES = jclient.cpp thread.cpp jthread.cpp disco.cpp roster.cpp adhoc.cpp \
 			privatexml.cpp
 
 libclient_la_LIBADD = ./wrapper/libwrapper.la $(IKSEMEL_LIBS)
