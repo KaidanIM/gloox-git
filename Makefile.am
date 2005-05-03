@@ -1,2 +1,5 @@
 
-SUBDIRS = src doc
+SUBDIRS = jlib feeder worker test
+
+apidox:
+	doxygen
