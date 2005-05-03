@@ -33,8 +33,8 @@ Feeder::Feeder( const string& id, const string& password, bool debug, int port )
 {
   c = new JClient( id, password, port );
   c->set_log_hook();
-  c->setTls( false );
-  c->setSasl( false );
+  c->setTls( true );
+  c->setSasl( true );
   c->setDebug( debug );
   c->registerConnectionListener( this );
   c->roster()->registerRosterListener( this );
