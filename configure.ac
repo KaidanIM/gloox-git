@@ -29,10 +29,6 @@ PKG_CHECK_MODULES(IKSEMEL,iksemel >= 1.2,,exit)
 AC_SUBST(IKSEMEL_CFLAGS)
 AC_SUBST(IKSEMEL_LIBS)
 
-PKG_CHECK_MODULES(QT,qt-mt >= 3.3,,exit)
-AC_SUBST(QT_CFLAGS)
-AC_SUBST(QT_LIBS)
-
 dnl Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS(unistd.h strings.h errno.h)
