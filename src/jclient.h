@@ -113,7 +113,7 @@ class JClient : public Stream
      */
     enum ErrorEnum
     {
-      FEATURE_NOT_IPLEMENTED,      /**< The requested fetaure is not availabale or implemented. */
+      FEATURE_NOT_IMPLEMENTED,      /**< The requested fetaure is not availabale or implemented. */
       ITEM_NOT_FOUND,              /**< The requested item does not exist. Privacy is a non-issue. */
       SERVICE_UNAVAILABLE          /**< The requested protocol is not supported. Privacy is an issue. */
     };
