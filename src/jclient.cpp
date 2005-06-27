@@ -26,7 +26,7 @@
 #include <unistd.h>
 #include <iostream>
 
-#define JLIB_VERSION "0.1"
+#define GLOOX_VERSION "0.1"
 
 
 JClient::JClient()
@@ -74,7 +74,7 @@ void JClient::init()
   m_disco = new Disco( this );
   m_adhoc = new Adhoc( this );
   m_roster = new Roster( this );
-  m_disco->setVersion( "JLib", JLIB_VERSION );
+  m_disco->setVersion( "based on gloox", GLOOX_VERSION );
   m_disco->setIdentity( "client", "bot" );
 }
 
@@ -503,7 +503,7 @@ int registerHook( JClient* stream, ikspak* pak )
 //     iks *x, *y;
 //     iksid* id;
 //     id = iks_id_new(m_stack, config.jabberID);
-// 
+//
 //     x = iks_new("iq");
 //     iks_insert_attrib(x, "type", "set");
 //     iks_insert_attrib(x, "id", "reg");

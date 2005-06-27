@@ -56,12 +56,13 @@ class Adhoc;
 /**
  * This class implements a Jabber Client.
  * It supports SASL (Authentication) as well as TLS (Encryption), which can be switched on/off separately.
- * It uses a thread to poll for new data arriving over the network which is then fed into the XML stream parser.
+ * It uses a thread to poll for new data arriving over the network which is then fed into the XML stream
+ * parser.
  *
- * To use, create a new JClient instance and feed it connection credentials, either in the Constructor or afterwards
- * using the setters. You should then register packet handlers implementing the corresponding
- * Interfaces (ConnectionListener, PresenceHandler, MessageHandler, IqHandler,
- * SubscriptionHandler), and call @ref connect() to establish the connection to the server.<br>
+ * To use, create a new JClient instance and feed it connection credentials, either in the Constructor or
+ * afterwards using the setters. You should then register packet handlers implementing the corresponding
+ * Interfaces (ConnectionListener, PresenceHandler, MessageHandler, IqHandler, SubscriptionHandler),
+ * and call @ref connect() to establish the connection to the server.<br>
  *
  * Usage example:
  * @code
@@ -83,7 +84,8 @@ class Adhoc;
  * For debugging purposes you might want to @ref setDebug() and set_log_hook(). <br>
  * By default, the library handles a few (incoming) IQ namespaces on the application's behalf. These include:
  * @li jabber:iq:roster is handled in that by default the server-side roster is fetched.
- * @li JEP-0092 (Software Version) If no version is specified, a name of "based on Jlib" with Jlib's current version is announced.
+ * @li JEP-0092 (Software Version) If no version is specified, a name of "based on gloox" with gloox's current
+ * version is announced.
  * @li JEP-0030 (Service Discovery) All supported/available services are announced. No items are returned.
  * @author Jakob Schroeter <js@camaya.net>
  */
