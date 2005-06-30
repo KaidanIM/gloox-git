@@ -213,13 +213,13 @@ class JClient : public Stream
      * Sets the username to use to connect to the XMPP server.
      * @param username The username to authenticate with.
      */
-    void setUsername( const std::string &username ) { m_username = username; };
+    void setUsername( const std::string &username );
 
     /**
      * Sets the resource to use to connect to the XMPP server.
      * @param resource The resource to use to log into the server.
      */
-    void setResource( const std::string &resource ) { m_resource = resource; };
+    void setResource( const std::string &resource );
 
     /**
      * Sets the password to use to connect to the XMPP server.
@@ -231,7 +231,7 @@ class JClient : public Stream
      * Sets the XMPP Cserver to connect to.
      * @param server The server to connect to. Either IP or fully qualified domain name.
      */
-    void setServer( const std::string &server ) { m_server = server;     };
+    void setServer( const std::string &server );
 
     /**
      * Switches debug output on/off. Default: off

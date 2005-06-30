@@ -22,6 +22,7 @@
 #include "roster.h"
 #include "disco.h"
 #include "adhoc.h"
+#include "prep.h"
 
 #include <unistd.h>
 #include <iostream>
@@ -85,6 +86,21 @@ void JClient::cleanUp()
   delete m_adhoc;
   delete m_roster;
   delete m_thread;
+}
+
+void JClient::setUsername( const std::string &username )
+{
+  m_username = Prep::nodeprep( username );
+}
+
+void JClient::setResource( const std::string &resource )
+{
+  m_resource = Prep::resourceprep( resource );
+}
+
+void JClient::setServer( const std::string &server )
+{
+  m_server = Prep::nameprep( server );
 }
 
 void JClient::on_stream( int type, iks* node )
