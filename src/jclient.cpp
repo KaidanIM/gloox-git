@@ -105,37 +105,50 @@ void JClient::on_stream( int type, iks* node )
         login( iks_find_attrib ( node, "id" ) );
       break;
       case IKS_NODE_NORMAL:     // first level child of stream
-        if ( strncmp( "stream:features", iks_name( node ), 15 ) == 0 ) {
+        if ( strncmp( "stream:features", iks_name( node ), 15 ) == 0 )
+        {
           m_streamFeatures = iks_stream_features( node );
-          if ( m_sasl ) {
+          if ( m_sasl )
+          {
             if ( m_tls && !is_secure() )
               break;
-            if ( m_authorized ) {
+            if ( m_authorized )
+            {
               iks* t;
-              if ( m_streamFeatures & IKS_STREAM_BIND ) {
+              if ( m_streamFeatures & IKS_STREAM_BIND )
+              {
                 send( iks_make_resource_bind( m_self ) );
               }
-              if ( m_streamFeatures & IKS_STREAM_SESSION ) {
+              if ( m_streamFeatures & IKS_STREAM_SESSION )
+              {
                 iks* x = iks_make_session();
                 iks_insert_attrib( x, "id", "auth" );
                 send( x );
               }
-            } else {
+            }
+            else
+            {
               if ( m_streamFeatures & IKS_STREAM_SASL_MD5 )
                 start_sasl( IKS_SASL_DIGEST_MD5, (char *) username().c_str(), (char *) password().c_str() );
               else if ( m_streamFeatures & IKS_STREAM_SASL_PLAIN )
                 start_sasl( IKS_SASL_PLAIN, (char *) username().c_str(), (char *) password().c_str() );
             }
           }
-        } else if ( strcmp ( "failure", iks_name ( node ) ) == 0 ) {
+        }
+        else if ( strcmp ( "failure", iks_name ( node ) ) == 0 )
+        {
           if( m_debug ) printf("sasl authentication failed...\n");
           m_state = STATE_AUTHENTICATION_FAILED;
-        } else if ( strcmp ( "success", iks_name ( node ) ) == 0 ) {
+        }
+        else if ( strcmp ( "success", iks_name ( node ) ) == 0 )
+        {
           if( m_debug ) printf( "sasl initialisation successful...\n" );
           m_state = STATE_AUTHENTICATED;
           m_authorized = true;
           header( server() );
-        } else {
+        }
+        else
+        {
           ikspak* pak;
           pak = iks_packet ( node );
           iks_filter_packet ( m_filter, pak );
