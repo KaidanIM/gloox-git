@@ -4,7 +4,7 @@ AC_PREREQ(2.50)
 AC_INIT
 AC_CONFIG_SRCDIR([configure.ac])
 dnl Every other copy of the package version number gets its value from here
-AM_INIT_AUTOMAKE(xmppgrid,0.1)
+AM_INIT_AUTOMAKE(gloox,0.1)
 
 dnl create a config.h file (Automake will add -DHAVE_CONFIG_H)
 AM_CONFIG_HEADER(config.h)
@@ -28,6 +28,27 @@ dnl Checks for libraries.
 PKG_CHECK_MODULES(IKSEMEL,iksemel >= 1.2,,exit)
 AC_SUBST(IKSEMEL_CFLAGS)
 AC_SUBST(IKSEMEL_LIBS)
+
+AC_ARG_WITH(libidn, AC_HELP_STRING([--with-libidn=[DIR]],
+      [Support IDN (needs GNU Libidn)]),
+      libidn=$withval, libidn=yes)
+if test "$libidn" != "no"; then
+  if test "$libidn" != "yes"; then
+    LDFLAGS="${LDFLAGS} -L$libidn/lib"
+    CPPFLAGS="${CPPFLAGS} -I$libidn/include"
+  fi
+  AC_CHECK_HEADER(idna.h,
+  AC_CHECK_LIB(idn, stringprep_check_version,
+           [libidn=yes LIBS="${LIBS} -lidn"], libidn=no),
+           libidn=no)
+fi
+if test "$libidn" != "no" ; then
+  AC_DEFINE(LIBIDN, 1, [Define to 1 if you want IDN support.])
+else
+  AC_MSG_WARN([Libidn not found])
+fi
+AC_MSG_CHECKING([if Libidn should be used])
+AC_MSG_RESULT($libidn)
 
 dnl Checks for header files.
 AC_HEADER_STDC
