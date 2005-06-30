@@ -37,8 +37,8 @@ std::string Prep::nodeprep( const std::string& node )
     strcpy( buf, p );
     free( p );
   }
-  int rc = stringprep(buf, JID_PORTION_SIZE, (Stringprep_profile_flags)0, stringprep_xmpp_nodeprep);
-  if (rc != STRINGPREP_OK)
+  int rc = stringprep( buf, JID_PORTION_SIZE, (Stringprep_profile_flags)0, stringprep_xmpp_nodeprep );
+  if ( rc != STRINGPREP_OK )
   {
     free( buf );
 #warning FIXME: really return node?
@@ -64,8 +64,8 @@ std::string Prep::nameprep( const std::string& domain )
     strcpy( buf, p );
     free( p );
   }
-  int rc = stringprep(buf, JID_PORTION_SIZE, (Stringprep_profile_flags)0, stringprep_nameprep);
-  if (rc != STRINGPREP_OK)
+  int rc = stringprep( buf, JID_PORTION_SIZE, (Stringprep_profile_flags)0, stringprep_nameprep);
+  if ( rc != STRINGPREP_OK )
   {
     free( buf );
 #warning FIXME: really return domain?
@@ -91,8 +91,8 @@ std::string Prep::resourceprep( const std::string& resource )
     strcpy( buf, p );
     free( p );
   }
-  int rc = stringprep(buf, JID_PORTION_SIZE, (Stringprep_profile_flags)0, stringprep_xmpp_resourceprep);
-  if (rc != STRINGPREP_OK)
+  int rc = stringprep( buf, JID_PORTION_SIZE, (Stringprep_profile_flags)0, stringprep_xmpp_resourceprep );
+  if ( rc != STRINGPREP_OK )
   {
     free( buf );
 #warning FIXME: really return resource?
