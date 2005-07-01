@@ -87,6 +87,8 @@ namespace Iksemel
       int start_sasl( iksparser* , enum ikssasltype, char* , char* );
       int start_sasl( enum ikssasltype, char* , char* );
 
+      iks* make_resource_bind(iksid *id);
+
       virtual void on_stream( int type, iks* node ) {};
       virtual void on_log( const char* data, size_t size, int is_incoming ) {};
 
