@@ -26,8 +26,9 @@ class Prep
 {
   public:
     static std::string nodeprep( const std::string& node );
-    static std::string nameprep( const std::string& name );
+    static std::string nameprep( const std::string& domain );
     static std::string resourceprep( const std::string& resource );
+    static std::string idna( const std::string& domain );
 };
 
 
