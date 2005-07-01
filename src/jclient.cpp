@@ -90,7 +90,7 @@ void JClient::cleanUp()
 
 std::string JClient::jid()
 {
-  if( server().empty )
+  if( server().empty() )
     return "";
   else if( username().empty() )
     if( resource().empty() )
@@ -134,7 +134,7 @@ void JClient::on_stream( int type, iks* node )
               iks* t;
               if ( m_streamFeatures & IKS_STREAM_BIND )
               {
-                send( iks_make_resource_bind( m_self ) );
+                send( make_resource_bind( m_self ) );
               }
               if ( m_streamFeatures & IKS_STREAM_SESSION )
               {
@@ -283,16 +283,16 @@ void JClient::connect()
     switch( ret )
     {
       case IKS_NET_NODNS:
-        printf( "host name lookup failure: %s\n", Prep::idna( m_server.c_str() ) );
+        printf( "host name lookup failure: %s\n", Prep::idna( m_server.c_str() ).c_str() );
         break;
       case IKS_NET_NOSOCK:
         printf( "cannot create socket\n" );
         break;
       case IKS_NET_NOCONN:
-        printf( "connection refused or no xml stream: %s:%d\n", Prep::idna( m_server.c_str() ), m_port );
+        printf( "connection refused or no xml stream: %s:%d\n", Prep::idna( m_server.c_str() ).c_str(), m_port );
         break;
       case IKS_NET_RWERR:
-        printf( "read/write error: %s\n", Prep::idna( m_server.c_str() ) );
+        printf( "read/write error: %s\n", Prep::idna( m_server.c_str() ).c_str() );
         break;
     }
     return;

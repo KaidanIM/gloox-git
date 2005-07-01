@@ -26,6 +26,7 @@
 #include "presencehandler.h"
 #include "rosterlistener.h"
 #include "subscriptionhandler.h"
+#include "prep.h"
 
 #include "wrapper/stream.h"
 
