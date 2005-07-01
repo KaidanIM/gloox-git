@@ -317,10 +317,12 @@ class JClient : public Stream
 
     /**
      * Connects to the XMPP server, authenticates and gets the whole thing running.
-     * Creates a new thread that receives arriving data and feeds the parser.
-     * @note This function currently blocks.
+     * Creates a new thread which receives arriving data and feeds the parser.
+     * @param blocking Determines whether connect() blocks. If all your program does
+     * is react to incoming events, you should be fine with the default, which is blocking
+     * behaviour.
      */
-    void connect();
+    void connect( bool blocking );
 
     /**
      * Disconnects from the server by ending the receiver thread.
@@ -488,10 +490,10 @@ class JClient : public Stream
     bool m_debug;
     bool m_sasl;
     bool m_tls;
-    bool m_createAccount;
     bool m_autoPresence;
     bool m_handleDisco;
     bool m_manageRoster;
+    bool m_blockingConnect;
     int m_port;
     StateEnum m_state;
 
