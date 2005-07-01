@@ -268,10 +268,12 @@ void JClient::setupFilter()
                       IKS_RULE_DONE );
 }
 
-void JClient::connect()
+void JClient::connect( bool blocking )
 {
   if( jid().empty() )
     return;
+
+  m_blockingConnect = blocking;
 
   m_self = iks_id_new( get_stack(), jid().c_str() );
   setupFilter();
@@ -312,15 +314,14 @@ void JClient::connect()
 
   if ( m_state == STATE_AUTHENTICATION_FAILED )
   {
-    if( m_createAccount )
-    {
-//       createAccount();
-    }
+    notifyOnDisconnect();
   }
 
-  m_thread->join();
-
-  cleanUp();
+  if( m_blockingConnect )
+  {
+    m_thread->join();
+    cleanUp();
+  }
 }
 
 void JClient::disconnect()
@@ -331,6 +332,12 @@ void JClient::disconnect()
     sleep(1);
     Stream::disconnect();
     m_state = STATE_DISCONNECTED;
+  }
+
+  if( !m_blockingConnect )
+  {
+    m_thread->join();
+    cleanUp();
   }
 }
 
@@ -537,28 +544,6 @@ int authHook( JClient* stream, ikspak* pak )
 int registerHook( JClient* stream, ikspak* pak )
 {
   stream->setClientState( JClient::STATE_AUTHENTICATION_FAILED );
-//   if (config.autoreg)
-//   {
-//     iks *x, *y;
-//     iksid* id;
-//     id = iks_id_new(m_stack, config.jabberID);
-//
-//     x = iks_new("iq");
-//     iks_insert_attrib(x, "type", "set");
-//     iks_insert_attrib(x, "id", "reg");
-//     y = iks_insert(x, "query");
-//     iks_insert_attrib(y, "xmlns", XMLNS_REGISTER );
-//     iks_insert_cdata(iks_insert(y, "username"), id->user, strlen(id->user));
-//     iks_insert_cdata(iks_insert(y, "password"), config.jabberPwd, strlen(config.jabberPwd));
-//     iks_send(m_prs, x);
-// //    iks_delete(y);
-//     iks_delete(x);
-//   }
-//   else
-//   {
-//     if( stream->debug() ) printf("jabber account does not exist and autoreg is false. exiting.\n");
-//     m_continue = 0;
-//   }
   return IKS_FILTER_EAT;
 }
 
