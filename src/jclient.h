@@ -158,13 +158,13 @@ class JClient : public Stream
      * Returns the current username.
      * @return The username used to connect.
      */
-    std::string username() { return m_username; };
+    std::string username() { return Prep::nodeprep( m_username ); };
 
     /**
      * Returns the current resource.
      * @return The resource used to connect.
      */
-    std::string resource() { return m_resource; };
+    std::string resource() { return Prep::resourceprep( m_resource ); };
 
     /**
      * Returns the current password.
@@ -176,13 +176,13 @@ class JClient : public Stream
      * Returns the current server.
      * @return The server used to connect.
      */
-    std::string server()   { return m_server; };
+    std::string server()   { return Prep::nameprep( m_server ); };
 
     /**
      * Returns the current complete jabber id.
      * @return The complete jabber id, composed of username, server and resource.
      */
-    std::string jid()      { return ( m_username + "@" + m_server + "/" + m_resource ); };
+    std::string jid();
 
     /**
      * Returns the current debug status.
@@ -213,13 +213,13 @@ class JClient : public Stream
      * Sets the username to use to connect to the XMPP server.
      * @param username The username to authenticate with.
      */
-    void setUsername( const std::string &username );
+    void setUsername( const std::string &username ) { m_username = username; };
 
     /**
      * Sets the resource to use to connect to the XMPP server.
      * @param resource The resource to use to log into the server.
      */
-    void setResource( const std::string &resource );
+    void setResource( const std::string &resource ) { m_resource = resource; };
 
     /**
      * Sets the password to use to connect to the XMPP server.
@@ -231,7 +231,7 @@ class JClient : public Stream
      * Sets the XMPP Cserver to connect to.
      * @param server The server to connect to. Either IP or fully qualified domain name.
      */
-    void setServer( const std::string &server );
+    void setServer( const std::string &server )     { m_server = server; };
 
     /**
      * Switches debug output on/off. Default: off

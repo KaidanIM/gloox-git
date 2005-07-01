@@ -88,19 +88,20 @@ void JClient::cleanUp()
   delete m_thread;
 }
 
-void JClient::setUsername( const std::string &username )
+std::string JClient::jid()
 {
-  m_username = Prep::nodeprep( username );
-}
-
-void JClient::setResource( const std::string &resource )
-{
-  m_resource = Prep::resourceprep( resource );
-}
-
-void JClient::setServer( const std::string &server )
-{
-  m_server = Prep::nameprep( server );
+  if( server().empty )
+    return "";
+  else if( username().empty() )
+    if( resource().empty() )
+      return server();
+    else
+      return ( server() + "/" + resource() );
+  else
+    if( resource().empty() )
+      return ( username() + "@" + server() );
+    else
+      return ( username() + "@" + server() + "/" + resource() );
 }
 
 void JClient::on_stream( int type, iks* node )
@@ -182,7 +183,8 @@ void JClient::on_stream( int type, iks* node )
 }
 
 
-void JClient::on_log( const char* data, size_t size, int is_incoming ) {
+void JClient::on_log( const char* data, size_t size, int is_incoming )
+{
   if( m_debug )
   {
     if ( is_secure() )
@@ -276,21 +278,21 @@ void JClient::connect()
 
   m_state = STATE_CONNECTING;
   int ret;
-  if(ret = Stream::connect( m_server, m_port ) )
+  if(ret = Stream::connect( Prep::idna( m_server ), m_port ) )
   {
     switch( ret )
     {
       case IKS_NET_NODNS:
-        printf( "host name lookup failure: %s\n", m_server.c_str() );
+        printf( "host name lookup failure: %s\n", Prep::idna( m_server.c_str() ) );
         break;
       case IKS_NET_NOSOCK:
         printf( "cannot create socket\n" );
         break;
       case IKS_NET_NOCONN:
-        printf( "connection refused or no xml stream: %s:%d\n", m_server.c_str(), m_port );
+        printf( "connection refused or no xml stream: %s:%d\n", Prep::idna( m_server.c_str() ), m_port );
         break;
       case IKS_NET_RWERR:
-        printf( "read/write error: %s\n", m_server.c_str() );
+        printf( "read/write error: %s\n", Prep::idna( m_server.c_str() ) );
         break;
     }
     return;
@@ -459,7 +461,8 @@ void JClient::notifyOnConnect()
     sendPresence();
 
   ConnectionListenerList::const_iterator it = m_connectionListeners.begin();
-  for( it; it != m_connectionListeners.end(); it++ ) {
+  for( it; it != m_connectionListeners.end(); it++ )
+  {
     (*it)->onConnect();
   }
 }
@@ -467,7 +470,8 @@ void JClient::notifyOnConnect()
 void JClient::notifyOnDisconnect()
 {
   ConnectionListenerList::const_iterator it = m_connectionListeners.begin();
-  for( it; it != m_connectionListeners.end(); it++ ) {
+  for( it; it != m_connectionListeners.end(); it++ )
+  {
     (*it)->onDisconnect();
   }
 }
@@ -475,7 +479,8 @@ void JClient::notifyOnDisconnect()
 void JClient::notifyPresenceHandlers( iksid* from, iksubtype type, ikshowtype show, const char* msg )
 {
   PresenceHandlerList::const_iterator it = m_presenceHandlers.begin();
-  for( it; it != m_presenceHandlers.end(); it++ ) {
+  for( it; it != m_presenceHandlers.end(); it++ )
+  {
     (*it)->handlePresence( from, type, show, msg );
   }
 }
@@ -483,7 +488,8 @@ void JClient::notifyPresenceHandlers( iksid* from, iksubtype type, ikshowtype sh
 void JClient::notifySubscriptionHandlers( iksid* from, iksubtype type, const char* msg )
 {
   SubscriptionHandlerList::const_iterator it = m_subscriptionHandlers.begin();
-  for( it; it != m_subscriptionHandlers.end(); it++ ) {
+  for( it; it != m_subscriptionHandlers.end(); it++ )
+  {
     (*it)->handleSubscription( from, type, msg );
   }
 }
@@ -491,19 +497,22 @@ void JClient::notifySubscriptionHandlers( iksid* from, iksubtype type, const cha
 void JClient::notifyIqHandlers( const char* xmlns, ikspak* pak )
 {
   IqHandlerList::const_iterator it = m_iqHandlers.begin();
-  for( it; it != m_iqHandlers.end(); it++ ) {
+  for( it; it != m_iqHandlers.end(); it++ )
+  {
     (*it)->handleIq( xmlns, pak );
   }
 
   IqHandlerMap::const_iterator it_ns = m_iqNSHandlers.begin();
-  for( it_ns; it_ns != m_iqNSHandlers.end(); it_ns++ ) {
+  for( it_ns; it_ns != m_iqNSHandlers.end(); it_ns++ )
+  {
     if( iks_strncmp( (*it_ns).first, xmlns, iks_strlen( xmlns ) ) == 0 )
       (*it_ns).second->handleIq( xmlns, pak );
   }
 
   char* tag = iks_name( iks_first_tag( pak->x ) );
   IqHandlerMap::const_iterator it_ft = m_iqFTHandlers.begin();
-  for( it_ft; it_ft != m_iqFTHandlers.end(); it_ft++ ) {
+  for( it_ft; it_ft != m_iqFTHandlers.end(); it_ft++ )
+  {
     if( iks_strncmp( (*it_ft).first, tag, iks_strlen( tag ) ) == 0 )
       (*it_ft).second->handleIqTag( tag, pak );
   }
@@ -512,7 +521,8 @@ void JClient::notifyIqHandlers( const char* xmlns, ikspak* pak )
 void JClient::notifyMessageHandlers( iksid* from, iksubtype type, const char* msg )
 {
   MessageHandlerList::const_iterator it = m_messageHandlers.begin();
-  for( it; it != m_messageHandlers.end(); it++ ) {
+  for( it; it != m_messageHandlers.end(); it++ )
+  {
     (*it)->handleMessage( from, type, msg );
   }
 }
