@@ -22,6 +22,7 @@
 #include "prep.h"
 
 #include <stringprep.h>
+#include <idna.h>
 
 #define JID_PORTION_SIZE 1023
 
@@ -37,6 +38,7 @@ std::string Prep::nodeprep( const std::string& node )
     strcpy( buf, p );
     free( p );
   }
+
   int rc = stringprep( buf, JID_PORTION_SIZE, (Stringprep_profile_flags)0, stringprep_xmpp_nodeprep );
   if ( rc != STRINGPREP_OK )
   {
@@ -64,6 +66,7 @@ std::string Prep::nameprep( const std::string& domain )
     strcpy( buf, p );
     free( p );
   }
+
   int rc = stringprep( buf, JID_PORTION_SIZE, (Stringprep_profile_flags)0, stringprep_nameprep);
   if ( rc != STRINGPREP_OK )
   {
@@ -91,6 +94,7 @@ std::string Prep::resourceprep( const std::string& resource )
     strcpy( buf, p );
     free( p );
   }
+
   int rc = stringprep( buf, JID_PORTION_SIZE, (Stringprep_profile_flags)0, stringprep_xmpp_resourceprep );
   if ( rc != STRINGPREP_OK )
   {
@@ -103,5 +107,34 @@ std::string Prep::resourceprep( const std::string& resource )
   return t;
 #else
   return resource;
+#endif
+}
+
+std::string Prep::idna( const std::string& domain )
+{
+#ifdef LIBIDN
+  char* p;
+  char* buf = (char*)calloc( JID_PORTION_SIZE, 1 );
+  buf = strndup( domain.c_str(), domain.length() );
+  p = stringprep_locale_to_utf8 (buf);
+  if ( p )
+  {
+    strcpy( buf, p );
+    free( p );
+  }
+
+  int rc = idna_to_ascii_8z(buf, &p, (Idna_flags)0);
+  if ( rc != IDNA_SUCCESS )
+  {
+    free( buf );
+#warning FIXME: really return domain?
+    return domain;
+  }
+  std::string t( p );
+  free( buf );
+  free( p );
+  return t;
+#else
+  return domain;
 #endif
 }
