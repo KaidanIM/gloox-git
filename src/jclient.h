@@ -362,6 +362,14 @@ class JClient : public Stream
     void registerIqHandler( IqHandler* ih, const char* xmlns );
 
     /**
+     * Registers @c ih as object that receives all Iq packet notifications.
+     * Exists for edge cases.
+     * @param ih The object to receive Iq packet notifications.>
+     * @deprecated Use @c registerIqHandler( IqHandler* ih, const char* xmlns ) instead.
+     */
+    void registerIqHandler( IqHandler* ih );
+
+    /**
      * Registers @c ih as object that receives Iq packet notifications for IQ packets
      * containing a tag with name @c tag. Only one handler per tag is possible.
      * @param ih The object to receive Iq packet notifications.
@@ -370,12 +378,13 @@ class JClient : public Stream
     void registerIqFTHandler( IqHandler* ih, const char* tag );
 
     /**
-     * Registers @c ih as object that receives all Iq packet notifications.
-     * Exists for edge cases.
-     * @param ih The object to receive Iq packet notifications.>
-     * @deprecated Use @c registerIqHandler( IqHandler* ih, const char* xmlns ) instead.
+     * Use this function to be notified of incoming IQ stanzas with the given value of the @b id
+     * attribute.
+     * Since IDs are supposed to be unique, this notification works only once.
+     * @param ih The IqHandler to receive notifications.
+     * @param id The id to track.
      */
-    void registerIqHandler( IqHandler* ih );
+    void trackID( IqHandler* ih, const char* id );
 
     /**
      * Registers @c mh as object that receives Message packet notifications.
@@ -394,7 +403,6 @@ class JClient : public Stream
      * @param sh The object to receive Subscription packet notifications.
      */
     void registerSubscriptionHandler( SubscriptionHandler* sh );
-
 
     /**
      * Removes the given object from the list of connection listeners.
@@ -500,6 +508,7 @@ class JClient : public Stream
     ConnectionListenerList  m_connectionListeners;
     IqHandlerMap            m_iqNSHandlers;
     IqHandlerMap            m_iqFTHandlers;
+    IqHandlerMap            m_iqIDHandlers;
     IqHandlerList           m_iqHandlers;
     MessageHandlerList      m_messageHandlers;
     PresenceHandlerList     m_presenceHandlers;
