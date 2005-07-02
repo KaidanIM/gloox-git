@@ -50,6 +50,19 @@ class IqHandler
      * @param pak The complete packet for convenience
      */
     virtual void handleIqTag( const char* tag, ikspak* pak ) {};
+
+    /**
+     * Reimplement this function if you want to be notified about
+     * incoming IQs with a specific value of the @c id attribute. You
+     * have to enable tracking of those IDs using @c JClient::trackID().
+     * This is usually useful for IDs that generate a positive reply, i.e.
+     * &lt;iq type='result' id='reg2'/&gt; where a namespace filter wouldn't
+     * work.
+     * @param id The ID that was trackked.
+     * @param pak 0 if the stanza was of type 'result', the complete packet
+     * for convenience if not.
+     */
+    virtual void handleIqID( const char* id, ikspak* pak ) {};
 };
 
 #endif // IQHANDLER_H__

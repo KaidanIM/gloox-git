@@ -409,6 +409,11 @@ void JClient::registerIqFTHandler( IqHandler* ih, const char* tag )
   m_iqFTHandlers[tag] = ih;
 }
 
+void JClient::trackID( IqHandler* ih, const char* id )
+{
+  m_iqIDHandlers[id] = ih;
+}
+
 void JClient::registerIqHandler( IqHandler* ih )
 {
   m_iqHandlers.push_back( ih );
@@ -514,6 +519,13 @@ void JClient::notifyIqHandlers( const char* xmlns, ikspak* pak )
   {
     if( iks_strncmp( (*it_ns).first, xmlns, iks_strlen( xmlns ) ) == 0 )
       (*it_ns).second->handleIq( xmlns, pak );
+  }
+
+  IqHandlerMap::const_iterator it_id = m_iqIDHandlers.begin();
+  for( it_id; it_id != m_iqIDHandlers.end(); it_ns++ )
+  {
+    if( iks_strncmp( (*it_id).first, pak->id, iks_strlen( (*it_id).first ) ) == 0 )
+      (*it_id).second->handleIqID( pak->id, pak );
   }
 
   char* tag = iks_name( iks_first_tag( pak->x ) );
