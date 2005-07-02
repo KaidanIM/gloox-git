@@ -525,7 +525,10 @@ void JClient::notifyIqHandlers( const char* xmlns, ikspak* pak )
   for( it_id; it_id != m_iqIDHandlers.end(); it_ns++ )
   {
     if( iks_strncmp( (*it_id).first, pak->id, iks_strlen( (*it_id).first ) ) == 0 )
+    {
       (*it_id).second->handleIqID( pak->id, pak );
+      m_iqIDHandlers.erase( pak->id );
+    }
   }
 
   char* tag = iks_name( iks_first_tag( pak->x ) );
