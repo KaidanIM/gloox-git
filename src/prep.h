@@ -22,14 +22,53 @@
 
 #include <string>
 
+/**
+ * This class offers static functions to stringprep the individual parts
+ * of a JID. You should not need to use these functions directly. All the
+ * necessary prepping is done for if you stick to the interfaces provided.
+ * If you write your own enhancements, check with the spec.
+ *
+ * @note These functions depend on an installed LibIDN at compile time of gloox. If
+ * LibIDN is not installed these functions return the string they are given
+ * without any modification.
+ * @author Jakob Schroeter <js@camaya.net>
+ * @since 0.2
+ */
 class Prep
 {
   public:
+    /**
+     * This function applies the Nodeprep profile of Stringprep to a string.
+     * @param node The string to apply the profile to.
+     * @return Returns the prepped string. In case of an error an empty string
+     * is returned.
+     */
     static std::string nodeprep( const std::string& node );
+
+    /**
+     * This function applies the Nameprep profile of Stringprep to a string.
+     * @param node The string to apply the profile to.
+     * @return Returns the prepped string. In case of an error an empty string
+     * is returned.
+     */
     static std::string nameprep( const std::string& domain );
+
+    /**
+     * This function applies the Resourceprep profile of Stringprep to a string.
+     * @param node The string to apply the profile to.
+     * @return Returns the prepped string. In case of an error an empty string
+     * is returned.
+     */
     static std::string resourceprep( const std::string& resource );
+
+    /**
+     * This function applies the idna() function to a string. I.e. it transform
+     * internationalized domain names into plain ASCII.
+     * @param node The string to convert.
+     * @return Returns the converted string. In case of an error an empty string
+     * is returned.
+     */
     static std::string idna( const std::string& domain );
 };
-
 
 #endif // PREP_H__
