@@ -21,6 +21,7 @@
 #define PREP_H__
 
 #include <string>
+using namespace std;
 
 /**
  * This class offers static functions to stringprep the individual parts
@@ -43,32 +44,32 @@ class Prep
      * @return Returns the prepped string. In case of an error an empty string
      * is returned.
      */
-    static std::string nodeprep( const std::string& node );
+    static string nodeprep( const string& node );
 
     /**
      * This function applies the Nameprep profile of Stringprep to a string.
-     * @param node The string to apply the profile to.
+     * @param domain The string to apply the profile to.
      * @return Returns the prepped string. In case of an error an empty string
      * is returned.
      */
-    static std::string nameprep( const std::string& domain );
+    static string nameprep( const string& domain );
 
     /**
      * This function applies the Resourceprep profile of Stringprep to a string.
-     * @param node The string to apply the profile to.
+     * @param resource The string to apply the profile to.
      * @return Returns the prepped string. In case of an error an empty string
      * is returned.
      */
-    static std::string resourceprep( const std::string& resource );
+    static string resourceprep( const string& resource );
 
     /**
      * This function applies the idna() function to a string. I.e. it transform
      * internationalized domain names into plain ASCII.
-     * @param node The string to convert.
+     * @param domain The string to convert.
      * @return Returns the converted string. In case of an error an empty string
      * is returned.
      */
-    static std::string idna( const std::string& domain );
+    static string idna( const string& domain );
 };
 
 #endif // PREP_H__

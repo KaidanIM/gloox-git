@@ -21,10 +21,6 @@
 
 #include "jclient.h"
 
-#include <string>
-using namespace std;
-
-
 Registration::Registration( JClient* parent )
   : m_parent( parent )
 {
@@ -52,12 +48,13 @@ void Registration::fetchRegistrationFields()
   m_parent->send( x );
 }
 
-void Registration::createAccount()
+void Registration::createAccount( int fields, fieldStruct values )
 {
   if( !m_parent )
     return;
 
   string id = m_parent->getID();
+  m_parent->trackID( this, id.c_str() );
 
   iks* x = iks_make_iq( IKS_TYPE_GET, XMLNS_REGISTER );
   iks_insert_attrib( x, "id", id.c_str() );
