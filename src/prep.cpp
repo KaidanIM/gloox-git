@@ -26,7 +26,7 @@
 
 #define JID_PORTION_SIZE 1023
 
-std::string Prep::nodeprep( const std::string& node )
+string Prep::nodeprep( const string& node )
 {
 #ifdef LIBIDN
   char* p;
@@ -43,10 +43,9 @@ std::string Prep::nodeprep( const std::string& node )
   if ( rc != STRINGPREP_OK )
   {
     free( buf );
-#warning FIXME: really return node?
-    return node;
+    return string();
   }
-  std::string t( buf );
+  string t( buf );
   free( buf );
   return t;
 #else
@@ -54,7 +53,7 @@ std::string Prep::nodeprep( const std::string& node )
 #endif
 }
 
-std::string Prep::nameprep( const std::string& domain )
+string Prep::nameprep( const string& domain )
 {
 #ifdef LIBIDN
   char* p;
@@ -71,10 +70,9 @@ std::string Prep::nameprep( const std::string& domain )
   if ( rc != STRINGPREP_OK )
   {
     free( buf );
-#warning FIXME: really return domain?
-    return domain;
+    return string();
   }
-  std::string t( buf );
+  string t( buf );
   free( buf );
   return t;
 #else
@@ -82,7 +80,7 @@ std::string Prep::nameprep( const std::string& domain )
 #endif
 }
 
-std::string Prep::resourceprep( const std::string& resource )
+string Prep::resourceprep( const string& resource )
 {
 #ifdef LIBIDN
   char* p;
@@ -99,10 +97,9 @@ std::string Prep::resourceprep( const std::string& resource )
   if ( rc != STRINGPREP_OK )
   {
     free( buf );
-#warning FIXME: really return resource?
-    return resource;
+    return string();
   }
-  std::string t( buf );
+  string t( buf );
   free( buf );
   return t;
 #else
@@ -110,7 +107,7 @@ std::string Prep::resourceprep( const std::string& resource )
 #endif
 }
 
-std::string Prep::idna( const std::string& domain )
+string Prep::idna( const string& domain )
 {
 #ifdef LIBIDN
   char* p;
@@ -127,10 +124,9 @@ std::string Prep::idna( const std::string& domain )
   if ( rc != IDNA_SUCCESS )
   {
     free( buf );
-#warning FIXME: really return domain?
-    return domain;
+    return string();
   }
-  std::string t( p );
+  string t( p );
   free( buf );
   free( p );
   return t;

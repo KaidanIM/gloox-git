@@ -23,10 +23,13 @@
 #include "iqhandler.h"
 #include "registrationhandler.h"
 
+#include <string>
+using namespace std;
+
 class JClient;
 
 /**
- * This class is an implementation of JEP-0077 In-Band Registration.
+ * This class is an implementation of JEP-0077 (In-Band Registration).
  * Usage is very straight-forward:<br>
  * Derive your object from @ref RegistrationHandler and implement the
  * virtual functions offered by that interface.
@@ -40,12 +43,58 @@ class JClient;
  */
 class Registration : public IqHandler
 {
-
   public:
+
+    /**
+     * Holds all the possible fields a server may require for registration according
+     * to Section 14.1, JEP-0077.
+     */
+    struct fieldStruct
+    {
+      string username;
+      string nick;
+      string password;
+      string name;
+      string first;
+      string last;
+      string email;
+      string address;
+      string city;
+      string state;
+      string zip;
+      string phone;
+      string url;
+      string date;
+      string misc;
+      string text;
+    };
+
+    enum fieldEnum
+    {
+      FIELD_USERNAME =     1,
+      FIELD_NICK     =     2,
+      FIELD_PASSWORD =     4,
+      FIELD_NAME     =     8,
+      FIELD_FIRST    =    16,
+      FIELD_LAST     =    32,
+      FIELD_EMAIL    =    64,
+      FIELD_ADDRESS  =   128,
+      FIELD_CITY     =   256,
+      FIELD_STATE    =   512,
+      FIELD_ZIP      =  1024,
+      FIELD_PHONE    =  2048,
+      FIELD_URL      =  4096,
+      FIELD_DATE     =  8192,
+      FIELD_MISC     = 16384,
+      FIELD_TEXT     = 32768
+    };
+
     /**
      * Constructor.
      * If no @c JClient is supplied, one is created. However, this can only be used
-     * for creating a new accopunt.
+     * for creating a new account. To change the account's password or to un-register
+     * an account, the JClient must be in a connected and authenticated state, i.e.
+     * STATE_AUTHENTICATED.
      * @param parent The JClient which is used to establish the connection.
      */
     Registration( JClient* parent = 0 );
@@ -56,16 +105,19 @@ class Registration : public IqHandler
     virtual ~Registration();
 
     /**
-     * Use this function to request the required registration fields from the server.
-     * The result of the query is returned to the object registered as RegistrationHandler.
+     * Use this function to request the registration fields the server requires.
+     * The required fields are returned asynchronously to the object registered as
+     * @ref RegistrationHandler by calling @ref RegistrationHandler::handleRegistrationFields().
      */
     void fetchRegistrationFields();
 
     /**
-     * Starts the interaction with the server to accomplish an in-band
-     * registration.
+     * Attempts to register an account with the given credentials.
+     * @note Use @ref fetchRegistrationFields to find out which fields the server requires.
+     * @param fields The fields which should be used to generate the registration request.
+     * @param values The strut contains the values which shall be used for the registration.
      */
-    void createAccount();
+    void createAccount( int fields, fieldStruct values );
 
     /**
      * Tells the server to remove the currently authenticated account from the server.
