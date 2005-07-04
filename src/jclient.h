@@ -418,7 +418,7 @@ class JClient : public Stream
 
     /**
      * Removes the handler for the given first_tag from the list of Iq handlers.
-     * @param xmlns The namespace to remove from the list.
+     * @param tag The tag to remove from the list.
      */
     void removeIqFTHandler( const char* tag );
 

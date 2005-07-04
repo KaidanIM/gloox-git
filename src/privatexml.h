@@ -33,7 +33,7 @@ class JClient;
 
 /**
  * This class implements JEP-0049 (Private XML Storage).
- * 
+ *
  */
 class PrivateXML : public IqHandler
 {
@@ -54,7 +54,8 @@ class PrivateXML : public IqHandler
 
     /**
      * Use this function to request the private XML stored in the given namespace.
-     * @param xmlns The namespace which should be retrieved.
+     * @param tag Child element of the query element used to identify the rrquested XML fragment.
+     * @param xmlns The namespace which qualifies the tag.
      */
     void requestXML( const string& tag, const string& xmlns );
 

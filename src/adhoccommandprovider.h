@@ -37,10 +37,11 @@ class AdhocCommandProvider
 {
   public:
     /**
-     * This function is called when an Ad-hoc Cammnd needs to be handled.
+     * This function is called when an Ad-hoc Command needs to be handled.
      * The callee is responsible for the whole command execution, i.e. session
      * handling etc.
      * @param command The name of the command to be executed.
+     * @param x The complete command.
      */
     virtual void handleAdhocCommand( const string& command, const iks* x ) {};
 

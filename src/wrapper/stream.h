@@ -29,9 +29,7 @@
 #include <iksemel.h>
 
 
-/**
- * documented in parser.h
- */
+/* documented in parser.h */
 namespace Iksemel
 {
   /**
@@ -84,8 +82,8 @@ namespace Iksemel
       bool is_secure( iksparser* );
       bool is_secure();
 
-      int start_sasl( iksparser* , enum ikssasltype, char* , char* );
-      int start_sasl( enum ikssasltype, char* , char* );
+      int start_sasl( iksparser* prs , enum ikssasltype type, char* username , char* pass );
+      int start_sasl( enum ikssasltype type, char* username, char* pass );
 
       iks* make_resource_bind(iksid *id);
 

@@ -56,9 +56,9 @@ class IqHandler
      * incoming IQs with a specific value of the @c id attribute. You
      * have to enable tracking of those IDs using @c JClient::trackID().
      * This is usually useful for IDs that generate a positive reply, i.e.
-     * &lt;iq type='result' id='reg2'/&gt; where a namespace filter wouldn't
+     * &lt;iq type='result' id='reg'/&gt; where a namespace filter wouldn't
      * work.
-     * @param id The ID that was trackked.
+     * @param id The ID that was tracked.
      * @param pak 0 if the stanza was of type 'result', the complete packet
      * for convenience if not.
      */
