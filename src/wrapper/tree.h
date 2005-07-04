@@ -29,9 +29,7 @@
 
 using namespace std;
 
-/**
- * the namespace is documented in parser.h
- */
+/* the namespace is documented in parser.h */
 namespace Iksemel
 {
   /**

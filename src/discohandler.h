@@ -56,7 +56,7 @@ class DiscoHandler
     /**
      * Reimplement this function to receive disco error notifications.
      * @param id The id of the result. Corresponds to the id of the sent query.
-     * @param errno The type of the error as returned by the server.
+     * @param error The type of the error as returned by the server.
      */
     virtual void handleDiscoError( const string& id, const string& error ) {};
 

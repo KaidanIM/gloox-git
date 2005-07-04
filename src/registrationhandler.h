@@ -27,7 +27,7 @@
 using namespace std;
 
 /**
- * A virtual interface.
+ * A virtual interface that receives events from an @ref Registration object.
  * Derived classes can be registered as RegistrationHandlers with an
  * Registration object. Incoming result for operations initiated through
  * the Registration object are forwarded to this handler.
@@ -38,12 +38,12 @@ class RegistrationHandler
 {
   public:
     /**
-     * Reimplement this function if you want to be notified about
-     * incoming IQs.
-     * @param xmlns The XML namespace of the IQ packet
-     * @param pak The complete packet for convenience
+     * Reimplement this function to receive results of the @ref Registration::fetchRegistrationFields()
+     * function.
+     * @param fields The OR'ed fields the server requires. From @ref Registration::fieldEnum.
+     * @param instructions Any additional information the server sends along.
      */
-    virtual void handleIq( const char* xmlns, ikspak* pak ) {};
+    virtual void handleRegistrationFields( int fields, string instructions ) {};
 };
 
 #endif // REGISTRATIONHANDLER_H__

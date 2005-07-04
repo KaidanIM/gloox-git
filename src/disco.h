@@ -35,7 +35,7 @@ class DiscoItem;
 
 /**
  * This class implements JEP-0030 (Service Discovery).
- * 
+ *
  */
 class Disco : public IqHandler
 {
@@ -59,7 +59,7 @@ class Disco : public IqHandler
      * "http://jabber.org/protocol/disco#info" namespace.
      * These IQ packets will also be forwarded to the
      * application's IqHandler, if it listens to the disco#info namespace.
-     * You can call @ref disableDisco() to disable automatic disco
+     * You can call @ref JClient::disableDisco() to disable automatic disco
      * entirely. By default, disco(very) queries are handled by the library.
      * By default, all supported, not disabled features are announced.
      * @param feature A feature (namespace) the host app supports.
@@ -85,7 +85,7 @@ class Disco : public IqHandler
     void getDiscoItems( const string& to );
 
     /**
-     * This function is a easy way to determine whether a given 
+     * This function is a easy way to determine whether a given
      * entity supports a given feature or not.
      * It does so by querying the entity for its supported features
      * and comparing the wanted feature to the returned list.
@@ -123,8 +123,8 @@ class Disco : public IqHandler
     void registerDiscoHandler( DiscoHandler* dh );
 
     /**
-     * Use this function to register an @ref NodeHandler with the Disco
-     * object. The NodeHandler will receive disco#items queries which are
+     * Use this function to register an @ref DiscoNodeHandler with the Disco
+     * object. The DiscoNodeHandler will receive disco#items queries which are
      * directed to the corresponding node registered for the handler.
      * Only one handler per node is possible.
      * @param nh The NodeHandler-derived object to register.

@@ -30,9 +30,9 @@ class JClient;
 
 /**
  * This class is an implementation of JEP-0077 (In-Band Registration).
- * Usage is very straight-forward:<br>
+ * Usage is very straight-forward.<br>
  * Derive your object from @ref RegistrationHandler and implement the
- * virtual functions offered by that interface.
+ * virtual functions offered by that interface. Then use it like this:
  * @code
  * Registration* r = new Registration( jclient );
  * r->registerRegistrationHandler( this );
@@ -91,7 +91,7 @@ class Registration : public IqHandler
 
     /**
      * Constructor.
-     * If no @c JClient is supplied, one is created. However, this can only be used
+     * If no @ref JClient is supplied, one is created. However, this can only be used
      * for creating a new account. To change the account's password or to un-register
      * an account, the JClient must be in a connected and authenticated state, i.e.
      * STATE_AUTHENTICATED.
@@ -112,10 +112,12 @@ class Registration : public IqHandler
     void fetchRegistrationFields();
 
     /**
-     * Attempts to register an account with the given credentials.
+     * Attempts to register an account with the given credentials. Only the fields OR'ed in
+     * @c fields will eb sent.
      * @note Use @ref fetchRegistrationFields to find out which fields the server requires.
      * @param fields The fields which should be used to generate the registration request.
-     * @param values The strut contains the values which shall be used for the registration.
+     * OR'ed @ref fieldEnum values.
+     * @param values The struct contains the values which shall be used for the registration.
      */
     void createAccount( int fields, fieldStruct values );
 
@@ -134,6 +136,12 @@ class Registration : public IqHandler
      * @param rh The RegistrationHandler to register.
      */
     void registerRegistrationHandler( RegistrationHandler* rh );
+
+    /**
+     * Un-registers the given RegistrationHandler.
+     * @param rh The RegistrationHandler to un-register.
+     */
+    void removeRegistrationHandler( RegistrationHandler* rh );
 
     /* reimplemented from IqHandler */
     virtual void handleIq( const char* xmlns, ikspak* pak );
