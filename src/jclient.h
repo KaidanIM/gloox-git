@@ -322,7 +322,7 @@ class JClient : public Stream
      * is react to incoming events, you should be fine with the default, which is blocking
      * behaviour.
      */
-    void connect( bool blocking );
+    void connect( bool blocking = true );
 
     /**
      * Disconnects from the server by ending the receiver thread.
