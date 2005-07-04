@@ -69,6 +69,9 @@ class Registration : public IqHandler
       string text;
     };
 
+    /**
+     * The possible fields of a JEP-0077 account registration.
+     */
     enum fieldEnum
     {
       FIELD_USERNAME =     1,
@@ -113,10 +116,10 @@ class Registration : public IqHandler
 
     /**
      * Attempts to register an account with the given credentials. Only the fields OR'ed in
-     * @c fields will eb sent.
-     * @note Use @ref fetchRegistrationFields to find out which fields the server requires.
-     * @param fields The fields which should be used to generate the registration request.
-     * OR'ed @ref fieldEnum values.
+     * @c fields will eb sent. This can only be called with an unauthenticated parent (@ref JClient).
+     * @note It is recommended to use @ref fetchRegistrationFields to find out which fields the
+     * server requires.
+     * @param fields The fields to use to generate the registration request. OR'ed @ref fieldEnum values.
      * @param values The struct contains the values which shall be used for the registration.
      */
     void createAccount( int fields, fieldStruct values );
@@ -142,6 +145,12 @@ class Registration : public IqHandler
      * @param rh The RegistrationHandler to un-register.
      */
     void removeRegistrationHandler( RegistrationHandler* rh );
+
+    /**
+     * Reset the internal state.
+     * @todo FIXME should not be necessary.
+     */
+    void clear();
 
     /* reimplemented from IqHandler */
     virtual void handleIq( const char* xmlns, ikspak* pak );

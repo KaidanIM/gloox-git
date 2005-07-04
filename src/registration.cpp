@@ -58,6 +58,41 @@ void Registration::createAccount( int fields, fieldStruct values )
 
   iks* x = iks_make_iq( IKS_TYPE_GET, XMLNS_REGISTER );
   iks_insert_attrib( x, "id", id.c_str() );
+
+  if( fields & FIELD_USERNAME )
+    iks_insert_cdata( iks_insert( iks_first_tag( x ), "username" ), values.username.c_str(), values.username.length() );
+  if( fields & FIELD_NICK )
+    iks_insert_cdata( iks_insert( iks_first_tag( x ), "nick" ), values.nick.c_str(), values.nick.length() );
+  if( fields & FIELD_PASSWORD )
+    iks_insert_cdata( iks_insert( iks_first_tag( x ), "password" ), values.password.c_str(), values.password.length() );
+  if( fields & FIELD_NAME )
+    iks_insert_cdata( iks_insert( iks_first_tag( x ), "name" ), values.name.c_str(), values.name.length() );
+  if( fields & FIELD_FIRST )
+    iks_insert_cdata( iks_insert( iks_first_tag( x ), "first" ), values.first.c_str(), values.first.length() );
+  if( fields & FIELD_LAST )
+    iks_insert_cdata( iks_insert( iks_first_tag( x ), "last" ), values.last.c_str(), values.last.length() );
+  if( fields & FIELD_EMAIL )
+    iks_insert_cdata( iks_insert( iks_first_tag( x ), "email" ), values.email.c_str(), values.email.length() );
+  if( fields & FIELD_ADDRESS )
+    iks_insert_cdata( iks_insert( iks_first_tag( x ), "address" ), values.address.c_str(), values.address.length() );
+  if( fields & FIELD_CITY )
+    iks_insert_cdata( iks_insert( iks_first_tag( x ), "city" ), values.city.c_str(), values.city.length() );
+  if( fields & FIELD_STATE )
+    iks_insert_cdata( iks_insert( iks_first_tag( x ), "state" ), values.state.c_str(), values.state.length() );
+  if( fields & FIELD_ZIP )
+    iks_insert_cdata( iks_insert( iks_first_tag( x ), "zip" ), values.zip.c_str(), values.zip.length() );
+  if( fields & FIELD_PHONE )
+    iks_insert_cdata( iks_insert( iks_first_tag( x ), "phone" ), values.phone.c_str(), values.phone.length() );
+  if( fields & FIELD_URL )
+    iks_insert_cdata( iks_insert( iks_first_tag( x ), "url" ), values.url.c_str(), values.url.length() );
+  if( fields & FIELD_DATE )
+    iks_insert_cdata( iks_insert( iks_first_tag( x ), "date" ), values.date.c_str(), values.date.length() );
+  if( fields & FIELD_MISC )
+    iks_insert_cdata( iks_insert( iks_first_tag( x ), "misc" ), values.misc.c_str(), values.misc.length() );
+  if( fields & FIELD_TEXT )
+    iks_insert_cdata( iks_insert( iks_first_tag( x ), "text" ), values.text.c_str(), values.text.length() );
+
+  m_parent->trackID( this, id.c_str() );
   m_parent->send( x );
 }
 
@@ -91,6 +126,13 @@ void Registration::handleIq( const char* xmlns, ikspak* pak )
   switch( pak->type )
   {
     case IKS_TYPE_RESULT:
+      if( iks_find( pak->query, "registered" ) )
+      {
+        if( m_registrationHandler )
+          m_registrationHandler->handleAlreadyRegistered();
+        break;
+      }
+
       iks* ft = iks_first_tag( pak->query );
       while( ( ft = iks_next_tag( pak->query ) ) != 0 )
       {
@@ -164,7 +206,9 @@ void Registration::handleIq( const char* xmlns, ikspak* pak )
         }
       }
 
-      m_registrationHandler->handleRegistrationFields( fields, instructions );
+      if( m_registrationHandler )
+        m_registrationHandler->handleRegistrationFields( fields, instructions );
+
       break;
     case IKS_TYPE_ERROR:
 
@@ -174,4 +218,11 @@ void Registration::handleIq( const char* xmlns, ikspak* pak )
 
 void Registration::handleIqID( const char* id, ikspak* pak )
 {
+  if( !pak->query )
+    m_registrationHandler->handleResult( RegistrationHandler::REGISTRATION_SUCCESS );
+}
+
+void Registration::clear()
+{
+
 }
