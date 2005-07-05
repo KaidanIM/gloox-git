@@ -159,8 +159,19 @@ class Registration : public IqHandler
     virtual void handleIqID( const char* id, ikspak* pak );
 
   private:
+    enum operationType
+    {
+      NO_OP_PENDING,
+      FIELDS_PENDING,
+      REGISTRATION_PENDING,
+      PASSWORD_PENDING,
+      UNREGISTER_PENDING
+    };
+
     JClient* m_parent;
     RegistrationHandler* m_registrationHandler;
+
+    int m_type;
 };
 
 #endif // REGISTRATION_H__
