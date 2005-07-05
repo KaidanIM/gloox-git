@@ -32,7 +32,7 @@ string Prep::nodeprep( const string& node )
   char* p;
   char* buf = (char*)calloc( JID_PORTION_SIZE, 1 );
   buf = strndup( node.c_str(), node.length() );
-  p = stringprep_locale_to_utf8 (buf);
+  p = stringprep_locale_to_utf8( buf );
   if ( p )
   {
     strcpy( buf, p );
@@ -59,7 +59,7 @@ string Prep::nameprep( const string& domain )
   char* p;
   char* buf = (char*)calloc( JID_PORTION_SIZE, 1 );
   buf = strndup( domain.c_str(), domain.length() );
-  p = stringprep_locale_to_utf8 (buf);
+  p = stringprep_locale_to_utf8( buf );
   if ( p )
   {
     strcpy( buf, p );
@@ -86,7 +86,7 @@ string Prep::resourceprep( const string& resource )
   char* p;
   char* buf = (char*)calloc( JID_PORTION_SIZE, 1 );
   buf = strndup( resource.c_str(), resource.length() );
-  p = stringprep_locale_to_utf8 (buf);
+  p = stringprep_locale_to_utf8( buf );
   if ( p )
   {
     strcpy( buf, p );
@@ -113,14 +113,14 @@ string Prep::idna( const string& domain )
   char* p;
   char* buf = (char*)calloc( JID_PORTION_SIZE, 1 );
   buf = strndup( domain.c_str(), domain.length() );
-  p = stringprep_locale_to_utf8 (buf);
+  p = stringprep_locale_to_utf8( buf );
   if ( p )
   {
     strcpy( buf, p );
     free( p );
   }
 
-  int rc = idna_to_ascii_8z(buf, &p, (Idna_flags)0);
+  int rc = idna_to_ascii_8z( buf, &p, (Idna_flags)0 );
   if ( rc != IDNA_SUCCESS )
   {
     free( buf );
