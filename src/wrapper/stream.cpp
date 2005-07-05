@@ -57,16 +57,16 @@ void Stream::set_log_hook() {
   iks_set_log_hook(this->P, (iksLogHook *) __on_log);
 }
 
-int Stream::connect(iksparser *prs, const std::string& server, int port) {
-  return iks_connect_tcp(prs, server.c_str(), port);
+int Stream::connect( iksparser *prs, const std::string& server, int port, const std::string& server_name ) {
+  return iks_connect_via( prs, server.c_str(), port, server_name.c_str() );
 }
 
-int Stream::connect(const std::string& server, int port) {
-  return this->connect(this->P, server, port);
+int Stream::connect( const std::string& server, int port, const std::string& server_name ) {
+  return this->connect( this->P, server, port, server_name );
 }
 
-int Stream::connect(const std::string& server) {
-  return this->connect(server, IKS_JABBER_PORT);
+int Stream::connect( const std::string& server, const std::string& server_name ) {
+  return this->connect( server, IKS_JABBER_PORT, server_name );
 }
 
 int Stream::connect(iksparser *prs, int fd) {

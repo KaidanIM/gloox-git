@@ -44,9 +44,9 @@ namespace Iksemel
 
       void set_log_hook();
 
-      int connect( iksparser* , const std::string&, int );
-      int connect( const std::string&, int );
-      int connect( const std::string& );
+      int connect( iksparser* , const std::string&, int, const std::string& );
+      int connect( const std::string&, int, const std::string& );
+      int connect( const std::string&, const std::string& );
 
       int connect( iksparser* , int );
       int connect( int );
