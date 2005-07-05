@@ -143,76 +143,78 @@ void Registration::handleIq( const char* xmlns, ikspak* pak )
         break;
       }
 
-      iks* ft = iks_first_tag( pak->query );
-      while( ( ft = iks_next_tag( pak->query ) ) != 0 )
       {
-        if( iks_strncmp( iks_name( ft ), "username", 8 ) == 0 )
+        iks* ft = iks_first_tag( pak->query );
+        while( ( ft = iks_next_tag( pak->query ) ) != 0 )
         {
-          fields &= FIELD_USERNAME;
-        }
-        else if( iks_strncmp( iks_name( ft ), "nick", 4 ) == 0 )
-        {
-          fields &= FIELD_NICK;
-        }
-        else if( iks_strncmp( iks_name( ft ), "password", 8 ) == 0 )
-        {
-          fields &= FIELD_PASSWORD;
-        }
-        else if( iks_strncmp( iks_name( ft ), "name", 4 ) == 0 )
-        {
-          fields &= FIELD_NAME;
-        }
-        else if( iks_strncmp( iks_name( ft ), "first", 5 ) == 0 )
-        {
-          fields &= FIELD_FIRST;
-        }
-        else if( iks_strncmp( iks_name( ft ), "last", 4 ) == 0 )
-        {
-          fields &= FIELD_LAST;
-        }
-        else if( iks_strncmp( iks_name( ft ), "email", 5 ) == 0 )
-        {
-          fields &= FIELD_EMAIL;
-        }
-        else if( iks_strncmp( iks_name( ft ), "address", 7 ) == 0 )
-        {
-          fields &= FIELD_ADDRESS;
-        }
-        else if( iks_strncmp( iks_name( ft ), "city", 4 ) == 0 )
-        {
-          fields &= FIELD_CITY;
-        }
-        else if( iks_strncmp( iks_name( ft ), "state", 5 ) == 0 )
-        {
-          fields &= FIELD_STATE;
-        }
-        else if( iks_strncmp( iks_name( ft ), "zip", 3 ) == 0 )
-        {
-          fields &= FIELD_ZIP;
-        }
-        else if( iks_strncmp( iks_name( ft ), "phone", 5 ) == 0 )
-        {
-          fields &= FIELD_PHONE;
-        }
-        else if( iks_strncmp( iks_name( ft ), "url", 3 ) == 0 )
-        {
-          fields &= FIELD_URL;
-        }
-        else if( iks_strncmp( iks_name( ft ), "date", 4 ) == 0 )
-        {
-          fields &= FIELD_DATE;
-        }
-        else if( iks_strncmp( iks_name( ft ), "misc", 4 ) == 0 )
-        {
-          fields &= FIELD_MISC;
-        }
-        else if( iks_strncmp( iks_name( ft ), "text", 4 ) == 0 )
-        {
-          fields &= FIELD_TEXT;
-        }
-        else if( iks_strncmp( iks_name( ft ), "instructions", 4 ) == 0 )
-        {
-          instructions = ( iks_cdata( ft ) )?( iks_cdata( ft ) ):( "" );
+          if( iks_strncmp( iks_name( ft ), "username", 8 ) == 0 )
+          {
+            fields &= FIELD_USERNAME;
+          }
+          else if( iks_strncmp( iks_name( ft ), "nick", 4 ) == 0 )
+          {
+            fields &= FIELD_NICK;
+          }
+          else if( iks_strncmp( iks_name( ft ), "password", 8 ) == 0 )
+          {
+            fields &= FIELD_PASSWORD;
+          }
+          else if( iks_strncmp( iks_name( ft ), "name", 4 ) == 0 )
+          {
+            fields &= FIELD_NAME;
+          }
+          else if( iks_strncmp( iks_name( ft ), "first", 5 ) == 0 )
+          {
+            fields &= FIELD_FIRST;
+          }
+          else if( iks_strncmp( iks_name( ft ), "last", 4 ) == 0 )
+          {
+            fields &= FIELD_LAST;
+          }
+          else if( iks_strncmp( iks_name( ft ), "email", 5 ) == 0 )
+          {
+            fields &= FIELD_EMAIL;
+          }
+          else if( iks_strncmp( iks_name( ft ), "address", 7 ) == 0 )
+          {
+            fields &= FIELD_ADDRESS;
+          }
+          else if( iks_strncmp( iks_name( ft ), "city", 4 ) == 0 )
+          {
+            fields &= FIELD_CITY;
+          }
+          else if( iks_strncmp( iks_name( ft ), "state", 5 ) == 0 )
+          {
+            fields &= FIELD_STATE;
+          }
+          else if( iks_strncmp( iks_name( ft ), "zip", 3 ) == 0 )
+          {
+            fields &= FIELD_ZIP;
+          }
+          else if( iks_strncmp( iks_name( ft ), "phone", 5 ) == 0 )
+          {
+            fields &= FIELD_PHONE;
+          }
+          else if( iks_strncmp( iks_name( ft ), "url", 3 ) == 0 )
+          {
+            fields &= FIELD_URL;
+          }
+          else if( iks_strncmp( iks_name( ft ), "date", 4 ) == 0 )
+          {
+            fields &= FIELD_DATE;
+          }
+          else if( iks_strncmp( iks_name( ft ), "misc", 4 ) == 0 )
+          {
+            fields &= FIELD_MISC;
+          }
+          else if( iks_strncmp( iks_name( ft ), "text", 4 ) == 0 )
+          {
+            fields &= FIELD_TEXT;
+          }
+          else if( iks_strncmp( iks_name( ft ), "instructions", 4 ) == 0 )
+          {
+            instructions = ( iks_cdata( ft ) )?( iks_cdata( ft ) ):( "" );
+          }
         }
       }
 
