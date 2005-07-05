@@ -4,8 +4,12 @@
 
 AM_CPPFLAGS = -g -fno-inline
 
-bin_PROGRAMS = libidn_test
+bin_PROGRAMS = libidn_test register_test
 
 libidn_test_SOURCES = libidn_test.cpp
-libidn_test_LDADD = ../libgloox.la -lpthread
+libidn_test_LDADD = -L/tmp/gloox/lib -lgloox -lpthread
 libidn_test_CFLAGS = $(CPPFLAGS)
+
+register_test_SOURCES = register_test.cpp
+register_test_LDADD = -L/tmp/gloox/lib -lgloox -lpthread
+register_test_CFLAGS = $(CPPFLAGS)
