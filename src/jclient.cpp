@@ -27,7 +27,7 @@
 #include <unistd.h>
 #include <iostream>
 
-#define GLOOX_VERSION "0.1"
+#define GLOOX_VERSION "0.1-svn"
 
 
 JClient::JClient()
@@ -47,10 +47,15 @@ JClient::JClient( const std::string& id, const std::string& password, int port )
   m_handleDisco( true ), m_idCount( 0 ), m_roster( 0 ),
   m_disco( 0 ), m_adhoc( 0 )
 {
+  printf("before m_self\n");
   m_self = iks_id_new( get_stack(), id.c_str() );
+  printf("before m_self\n");
   m_username = m_self->user;
+  printf("before m_self\n");
   m_server = m_self->server;
+  printf("before m_self\n");
   m_resource = m_self->resource;
+  printf("after m_self\n");
   init();
 }
 
@@ -112,68 +117,67 @@ void JClient::on_stream( int type, iks* node )
   switch (type)
   {
     case IKS_NODE_START:      // <stream:stream>
-      if ( m_tls && !is_secure() )
-      {
-        start_tls();
-        if( m_debug ) printf("after starttls\n");
-        break;
-      }
-      if ( !m_sasl )
-        login( iks_find_attrib ( node, "id" ) );
       break;
-      case IKS_NODE_NORMAL:     // first level child of stream
-        if ( strncmp( "stream:features", iks_name( node ), 15 ) == 0 )
+    case IKS_NODE_NORMAL:     // first level child of stream
+      if ( strncmp( "stream:features", iks_name( node ), 15 ) == 0 )
+      {
+        m_streamFeatures = iks_stream_features( node );
+        if ( m_sasl )
         {
-          m_streamFeatures = iks_stream_features( node );
-          if ( m_sasl )
+          if ( m_tls && !is_secure() )
           {
-            if ( m_tls && !is_secure() )
-              break;
-            if ( m_authorized )
+            start_tls();
+            if( m_debug ) printf("after starttls\n");
+            break;
+          }
+
+          if ( m_authorized )
+          {
+            iks* t;
+            if ( m_streamFeatures & IKS_STREAM_BIND )
             {
-              iks* t;
-              if ( m_streamFeatures & IKS_STREAM_BIND )
-              {
-                send( make_resource_bind( m_self ) );
-              }
-              if ( m_streamFeatures & IKS_STREAM_SESSION )
-              {
-                iks* x = iks_make_session();
-                iks_insert_attrib( x, "id", "auth" );
-                send( x );
-              }
+              send( make_resource_bind( m_self ) );
             }
-            else
+
+            if ( m_streamFeatures & IKS_STREAM_SESSION )
             {
-              if ( m_streamFeatures & IKS_STREAM_SASL_MD5 )
-                start_sasl( IKS_SASL_DIGEST_MD5, (char *) username().c_str(), (char *) password().c_str() );
-              else if ( m_streamFeatures & IKS_STREAM_SASL_PLAIN )
-                start_sasl( IKS_SASL_PLAIN, (char *) username().c_str(), (char *) password().c_str() );
+              iks* x = iks_make_session();
+              iks_insert_attrib( x, "id", "auth" );
+              send( x );
             }
           }
+          else if( !username().empty() || !password().empty() )
+          {
+            if ( m_streamFeatures & IKS_STREAM_SASL_MD5 )
+              start_sasl( IKS_SASL_DIGEST_MD5, (char *) username().c_str(), (char *) password().c_str() );
+            else if ( m_streamFeatures & IKS_STREAM_SASL_PLAIN )
+              start_sasl( IKS_SASL_PLAIN, (char *) username().c_str(), (char *) password().c_str() );
+          }
         }
-        else if ( strcmp ( "failure", iks_name ( node ) ) == 0 )
-        {
-          if( m_debug ) printf("sasl authentication failed...\n");
-          m_state = STATE_AUTHENTICATION_FAILED;
-        }
-        else if ( strcmp ( "success", iks_name ( node ) ) == 0 )
-        {
-          if( m_debug ) printf( "sasl initialisation successful...\n" );
-          m_state = STATE_AUTHENTICATED;
-          m_authorized = true;
-          header( server() );
-        }
-        else
-        {
-          ikspak* pak;
-          pak = iks_packet ( node );
-          iks_filter_packet ( m_filter, pak );
-        }
-        break;
+      }
+      else if ( strcmp ( "failure", iks_name ( node ) ) == 0 )
+      {
+        if( m_debug ) printf("sasl authentication failed...\n");
+        m_state = STATE_AUTHENTICATION_FAILED;
+      }
+      else if ( strcmp ( "success", iks_name ( node ) ) == 0 )
+      {
+        if( m_debug ) printf( "sasl initialisation successful...\n" );
+        m_state = STATE_AUTHENTICATED;
+        m_authorized = true;
+        header( server() );
+      }
+      else
+      {
+        ikspak* pak;
+        pak = iks_packet ( node );
+        iks_filter_packet ( m_filter, pak );
+      }
+      break;
     case IKS_NODE_ERROR:      // <stream:error>
-//       syslog(LOG_ERR, "stream error. quitting\n");
-//       logout();
+      m_state = STATE_ERROR;
+      if( m_debug ) printf( "stream error. quitting\n");
+      disconnect();
       break;
     case IKS_NODE_STOP:       // </stream:stream>
       break;
@@ -270,7 +274,7 @@ void JClient::setupFilter()
 
 void JClient::connect( bool blocking )
 {
-  if( jid().empty() )
+  if( server().empty() )
     return;
 
   m_blockingConnect = blocking;
