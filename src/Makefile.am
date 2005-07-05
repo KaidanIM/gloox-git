@@ -17,4 +17,4 @@ libgloox_la_CFLAGS = $(CPPFLAGS) $(IKSEMEL_CFLAGS)
 libglooxincludedir = $(includedir)/gloox
 libglooxinclude_HEADERS = jclient.h disco.h roster.h adhoc.h privatexml.h prep.h registration.h \
 			subscriptionhandler.h presencehandler.h iqhandler.h messagehandler.h \
-			connectionlistener.h
+			connectionlistener.h thread.h rosterlistener.h
