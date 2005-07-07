@@ -56,7 +56,6 @@ void JThread::run()
 
         default:
           if( m_parent->debug() ) printf("everything's alright\n");
-          m_parent->setClientState( JClient::STATE_IO_ERROR );
           m_parent->disconnect();
           return;
       }

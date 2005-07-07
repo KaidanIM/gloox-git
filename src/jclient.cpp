@@ -32,7 +32,7 @@
 
 JClient::JClient()
   : m_port( XMPP_PORT ), m_thread( 0 ),
-  m_tls( true ), m_sasl( true ),
+  m_tls( true ), m_sasl( true ), m_priority( -1 ),
   m_autoPresence( false ), m_manageRoster( true ),
   m_handleDisco( true ), m_idCount( 0 ), m_roster( 0 ),
   m_disco( 0 ), m_adhoc( 0 )
@@ -42,20 +42,15 @@ JClient::JClient()
 
 JClient::JClient( const std::string& id, const std::string& password, int port )
   : m_port( port ), m_password( password ), m_thread( 0 ),
-  m_tls( true ), m_sasl( true ),
+  m_tls( true ), m_sasl( true ), m_priority( -1 ),
   m_autoPresence( false ), m_manageRoster( true ),
   m_handleDisco( true ), m_idCount( 0 ), m_roster( 0 ),
   m_disco( 0 ), m_adhoc( 0 )
 {
-  printf("before m_self\n");
   m_self = iks_id_new( get_stack(), id.c_str() );
-  printf("before m_self\n");
   m_username = m_self->user;
-  printf("before m_self\n");
   m_server = m_self->server;
-  printf("before m_self\n");
   m_resource = m_self->resource;
-  printf("after m_self\n");
   init();
 }
 
@@ -63,7 +58,7 @@ JClient::JClient( const std::string& username, const std::string& password, cons
                   const std::string& resource, int port )
   : m_username( username ), m_resource( resource ), m_password( password ),
   m_server( server ), m_port( port ), m_thread( 0 ),
-  m_tls( true ), m_sasl( true ),
+  m_tls( true ), m_sasl( true ), m_priority( -1 ),
   m_autoPresence( false ), m_manageRoster( true ),
   m_handleDisco( true ), m_idCount( 0 ), m_roster( 0 ),
   m_disco( 0 ), m_adhoc( 0 )
@@ -111,6 +106,9 @@ std::string JClient::jid()
 
 void JClient::on_stream( int type, iks* node )
 {
+  if(!node)
+    return;
+
   if( m_debug ) printf("in on_stream\n");
   ikspak* pak = iks_packet( node );
 
@@ -122,18 +120,21 @@ void JClient::on_stream( int type, iks* node )
       if ( strncmp( "stream:features", iks_name( node ), 15 ) == 0 )
       {
         m_streamFeatures = iks_stream_features( node );
+
+        if ( m_tls && !is_secure() && ( m_streamFeatures & IKS_STREAM_STARTTLS ) )
+        {
+          start_tls();
+          if( m_debug ) printf("after starttls\n");
+          break;
+        }
+
         if ( m_sasl )
         {
-          if ( m_tls && !is_secure() )
-          {
-            start_tls();
-            if( m_debug ) printf("after starttls\n");
+          if( m_tls  && !is_secure() )
             break;
-          }
 
           if ( m_authorized )
           {
-            iks* t;
             if ( m_streamFeatures & IKS_STREAM_BIND )
             {
               send( make_resource_bind( m_self ) );
@@ -180,9 +181,10 @@ void JClient::on_stream( int type, iks* node )
       disconnect();
       break;
     case IKS_NODE_STOP:       // </stream:stream>
+      disconnect();
       break;
   }
-//   if( m_debug ) printf("at the end of on_stream\n");
+
   iks_delete( node );
 }
 
@@ -284,7 +286,7 @@ void JClient::connect( bool blocking )
 
   m_state = STATE_CONNECTING;
   int ret;
-  if(ret = Stream::connect( Prep::idna( m_server ), m_port ) )
+  if(ret = Stream::connect( Prep::idna( m_server ), m_port, server() ) )
   {
     switch( ret )
     {
@@ -309,16 +311,19 @@ void JClient::connect( bool blocking )
   m_thread = new JThread( this );
   m_thread->start();
 
-  while( m_state >= STATE_CONNECTED &&
-         m_state != STATE_AUTHENTICATED &&
-         m_state != STATE_AUTHENTICATION_FAILED )
+  if( !username().empty() && !password().empty() )
   {
-    JThread::sleep( 1000 );
-  }
+    while( m_state >= STATE_CONNECTED &&
+           m_state != STATE_AUTHENTICATED &&
+           m_state != STATE_AUTHENTICATION_FAILED )
+    {
+      JThread::sleep( 1000 );
+    }
 
-  if ( m_state == STATE_AUTHENTICATION_FAILED )
-  {
-    notifyOnDisconnect();
+    if ( m_state == STATE_AUTHENTICATION_FAILED )
+    {
+      notifyOnDisconnect();
+    }
   }
 
   if( m_blockingConnect )
@@ -332,16 +337,15 @@ void JClient::disconnect()
 {
   if( m_state != STATE_DISCONNECTED )
   {
-    m_thread->cancel();
-    sleep(1);
-    Stream::disconnect();
     m_state = STATE_DISCONNECTED;
-  }
+    m_thread->cancel();
+    Stream::disconnect();
 
-  if( !m_blockingConnect )
-  {
-    m_thread->join();
-    cleanUp();
+    if( !m_blockingConnect )
+    {
+      m_thread->join();
+      cleanUp();
+    }
   }
 }
 
@@ -353,7 +357,10 @@ void JClient::send( iks* x )
 
 void JClient::sendPresence()
 {
+  char prio[5];
+  sprintf( prio, "%d", m_priority );
   iks* x = iks_make_pres( IKS_SHOW_AVAILABLE, "online" );
+  iks_insert_cdata( iks_insert( x, "priority" ), prio, iks_strlen( prio ) );
   send( x );
 }
 

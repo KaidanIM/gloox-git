@@ -168,6 +168,12 @@ class JClient : public Stream
     std::string resource() { return Prep::resourceprep( m_resource ); };
 
     /**
+     * Returns the current priority.
+     * @return The priority of the current resource.
+     */
+    int priority() { return m_priority; };
+
+    /**
      * Returns the current password.
      * @return The password used to connect.
      */
@@ -221,6 +227,12 @@ class JClient : public Stream
      * @param resource The resource to use to log into the server.
      */
     void setResource( const std::string &resource ) { m_resource = resource; };
+
+    /**
+     * Sets the initial priority.
+     * @param priority The initial priority.
+     */
+    void setPriority( int priority ) { m_priority = priority; };
 
     /**
      * Sets the password to use to connect to the XMPP server.
@@ -502,6 +514,7 @@ class JClient : public Stream
     bool m_handleDisco;
     bool m_manageRoster;
     bool m_blockingConnect;
+    int m_priority;
     int m_port;
     StateEnum m_state;
 
