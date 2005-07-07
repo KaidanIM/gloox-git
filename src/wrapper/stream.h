@@ -68,9 +68,6 @@ namespace Iksemel
       int send( iksparser* , const std::string& );
       int send( const std::string& );
 
-      void no_version( iksparser* , bool );
-      void no_version( bool );
-
       int header( iksparser* , const std::string& );
       int header( const std::string& );
 
