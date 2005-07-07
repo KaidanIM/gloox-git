@@ -2,7 +2,6 @@ Todo
 ----
 
 - check if for and iterators can be replaced by find
-- config file
 - use struct for version and identity info
 - char* --> std::string
 - JEP-0012 (Last Activity)
@@ -19,13 +18,13 @@ Todo
 In the pipe
 -----------
 
-- JEP-0077 (In-Band Registration)
 - JEP-0048 (Bookmark Storage)
 - JEP-0145 (Annotations)
 
 Done
 ----
 
+- JEP-0077 (In-Band Registration)
 - remove iksemelmm dependency
 - iq xmlns filter
 - introduce result handler
@@ -34,4 +33,4 @@ Done
 - JEP-0030 (Service Discovery)
 - JEP-0049 (Private XML Storage)
 - JEP-0050 (Ad-hoc Commands)
-- JEP-0092 (Software Version) 
+- JEP-0092 (Software Version)

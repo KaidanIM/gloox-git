@@ -1,0 +1,14 @@
+
+v0.2  --  08 Jul 2005
+---------------------
+- JEP-0077 (In-Band Registration)
+- prepping of JIDs according to RFC 3920
+
+
+v0.1  --  04 May 2005
+---------------------
+* initial release with support for
+  - JEP-0030 (Service Discovery)
+  - JEP-0049 (Private XML Storage)
+  - JEP-0050 (Ad-hoc Commands) (incomplete)
+  - JEP-0092 (Software Version)
