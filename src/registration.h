@@ -94,13 +94,20 @@ class Registration : public IqHandler
 
     /**
      * Constructor.
-     * If no @ref JClient is supplied, one is created. However, this can only be used
-     * for creating a new account. To change the account's password or to un-register
-     * an account, the JClient must be in a connected and authenticated state, i.e.
-     * STATE_AUTHENTICATED.
-     * @param parent The JClient which is used to establish the connection.
+     * Use this constructor if you already have an established connection to a server. The
+     * JClient must be in a connected and authenticated state, i.e. STATE_AUTHENTICATED.
+     * A @c Registration object vcreated with this constructor can only be used to change
+     * the account's password or to un-register an account.
+     * @param parent The JClient which is used.
      */
-    Registration( JClient* parent = 0 );
+    Registration( JClient* parent );
+
+    /**
+     * Constructor.
+     * Use this constructor if you want to create a new account.
+     * @param server The server to connect to.
+     */
+    Registration( const string& server );
 
     /**
      * Destructor.
@@ -131,8 +138,9 @@ class Registration : public IqHandler
 
     /**
      * Tells the server to change the password for the current account.
+     * @param password The new password.
      */
-    void changePassword();
+    void changePassword( const string& password );
 
     /**
      * Registers the given @c rh as RegistrationHandler. Only one handler is possibel at a time.
@@ -146,12 +154,6 @@ class Registration : public IqHandler
      */
     void removeRegistrationHandler( RegistrationHandler* rh );
 
-    /**
-     * Reset the internal state.
-     * @todo FIXME should not be necessary.
-     */
-    void clear();
-
     /* reimplemented from IqHandler */
     virtual void handleIq( const char* xmlns, ikspak* pak );
 
@@ -159,19 +161,8 @@ class Registration : public IqHandler
     virtual void handleIqID( const char* id, ikspak* pak );
 
   private:
-    enum operationType
-    {
-      NO_OP_PENDING,
-      FIELDS_PENDING,
-      REGISTRATION_PENDING,
-      PASSWORD_PENDING,
-      UNREGISTER_PENDING
-    };
-
     JClient* m_parent;
     RegistrationHandler* m_registrationHandler;
-
-    int m_type;
 };
 
 #endif // REGISTRATION_H__

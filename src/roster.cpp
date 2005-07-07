@@ -59,7 +59,7 @@ void Roster::handleIq( const char* xmlns, ikspak* pak )
       iks* y = iks_first_tag( iks_first_tag( pak->x ) );
       while( y )
       {
-        if( strcmp( iks_name( y ), "item" ) == 0 )
+        if( strncmp( iks_name( y ), "item", 4 ) == 0 )
         {
           char* jid = iks_find_attrib( y, "jid" );
           add( jid, IKS_SHOW_UNAVAILABLE );
@@ -141,7 +141,7 @@ void Roster::handleSubscription( iksid* from, iksubtype type, const char* msg )
 // void Roster::handleDiscoInfoResult( const string& id, const ikspak* pak )
 // {
 //   Identity ident;
-//   
+//
 // //   printf("received disco result\n");
 // }
 

@@ -27,7 +27,7 @@
 #include <unistd.h>
 #include <iostream>
 
-#define GLOOX_VERSION "0.1-svn"
+#define GLOOX_VERSION "0.2"
 
 
 JClient::JClient()
@@ -154,14 +154,18 @@ void JClient::on_stream( int type, iks* node )
             else if ( m_streamFeatures & IKS_STREAM_SASL_PLAIN )
               start_sasl( IKS_SASL_PLAIN, (char *) username().c_str(), (char *) password().c_str() );
           }
+          else
+          {
+            notifyOnConnect();
+          }
         }
       }
-      else if ( strcmp ( "failure", iks_name ( node ) ) == 0 )
+      else if ( iks_strncmp( "failure", iks_name ( node ), 7 ) == 0 )
       {
         if( m_debug ) printf("sasl authentication failed...\n");
         m_state = STATE_AUTHENTICATION_FAILED;
       }
-      else if ( strcmp ( "success", iks_name ( node ) ) == 0 )
+      else if ( iks_strncmp( "success", iks_name ( node ), 7 ) == 0 )
       {
         if( m_debug ) printf( "sasl initialisation successful...\n" );
         m_state = STATE_AUTHENTICATED;
@@ -221,10 +225,9 @@ void JClient::disableRoster()
 
 std::string JClient::getID()
 {
-  char* tmp = (char*)malloc( strlen( "id" ) + sizeof( int ) );
-  sprintf( tmp, "uid%d", ++m_idCount );
+  char tmp[10];
+  sprintf( tmp, "uid%d\0", ++m_idCount );
   std::string str( tmp );
-  free( tmp );
   return str;
 }
 
@@ -256,10 +259,10 @@ void JClient::setupFilter()
                       IKS_RULE_SUBTYPE, IKS_TYPE_RESULT,
                       IKS_RULE_ID, "reg",
                       IKS_RULE_DONE );
-  iks_filter_add_rule( m_filter, (iksFilterHook*) errorHook, this,
-                      IKS_RULE_TYPE, IKS_PAK_IQ,
-                      IKS_RULE_SUBTYPE, IKS_TYPE_ERROR,
-                      IKS_RULE_DONE );
+//   iks_filter_add_rule( m_filter, (iksFilterHook*) errorHook, this,
+//                       IKS_RULE_TYPE, IKS_PAK_IQ,
+//                       IKS_RULE_SUBTYPE, IKS_TYPE_ERROR,
+//                       IKS_RULE_DONE );
   iks_filter_add_rule( m_filter, (iksFilterHook*) msgHook, this,
                       IKS_RULE_TYPE, IKS_PAK_MESSAGE,
                       IKS_RULE_DONE );
@@ -533,7 +536,7 @@ void JClient::notifyIqHandlers( const char* xmlns, ikspak* pak )
   }
 
   IqHandlerMap::const_iterator it_id = m_iqIDHandlers.begin();
-  for( it_id; it_id != m_iqIDHandlers.end(); it_ns++ )
+  for( it_id; it_id != m_iqIDHandlers.end(); it_id++ )
   {
     if( iks_strncmp( (*it_id).first, pak->id, iks_strlen( (*it_id).first ) ) == 0 )
     {

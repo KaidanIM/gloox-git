@@ -42,7 +42,7 @@ class RegistrationHandler
      */
     enum resultEnum
     {
-      REGISTRATION_SUCCESS,                 /*!< The last operation (account registration, account deletion or
+      REGISTRATION_SUCCESS = 0,             /*!< The last operation (account registration, account deletion or
                                              * password change) was successful. */
       REGISTRATION_NOT_ACCEPTABLE,          /*!< 406: Not all necessary information provided */
       REGISTRATION_CONFLICT,                /*!< 409: Username alreday exists. */
@@ -89,7 +89,7 @@ class RegistrationHandler
      * This funtion is called to notify about the result of an operation.
      * @param result The result of the last operation.
      */
-    virtual void handleResult( resultEnum result ) {};
+    virtual void handleRegistrationResult( resultEnum result ) {};
 };
 
 #endif // REGISTRATIONHANDLER_H__

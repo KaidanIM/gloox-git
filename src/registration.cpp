@@ -24,11 +24,15 @@
 Registration::Registration( JClient* parent )
   : m_parent( parent ), m_registrationHandler( 0 )
 {
-  if( !m_parent )
-  {
-    m_parent = new JClient();
-  }
+  if( m_parent )
+    m_parent->registerIqHandler( this, XMLNS_REGISTER );
+}
 
+Registration::Registration( const string& server )
+  : m_registrationHandler( 0 )
+{
+  m_parent = new JClient();
+  m_parent->setServer( server );
   m_parent->registerIqHandler( this, XMLNS_REGISTER );
 }
 
@@ -42,7 +46,6 @@ void Registration::fetchRegistrationFields()
     return;
 
   string id = m_parent->getID();
-  m_type = FIELDS_PENDING;
 
   iks* x = iks_make_iq( IKS_TYPE_GET, XMLNS_REGISTER );
   iks_insert_attrib( x, "id", id.c_str() );
@@ -56,9 +59,8 @@ void Registration::createAccount( int fields, fieldStruct values )
 
   string id = m_parent->getID();
   m_parent->trackID( this, id.c_str() );
-  m_type = REGISTRATION_PENDING;
 
-  iks* x = iks_make_iq( IKS_TYPE_GET, XMLNS_REGISTER );
+  iks* x = iks_make_iq( IKS_TYPE_SET, XMLNS_REGISTER );
   iks_insert_attrib( x, "id", id.c_str() );
 
   if( fields & FIELD_USERNAME )
@@ -100,20 +102,31 @@ void Registration::createAccount( int fields, fieldStruct values )
 
 void Registration::removeAccount()
 {
-  if( m_parent && ( m_parent->clientState() == JClient::STATE_AUTHENTICATED ) )
+  if( !m_parent || ( m_parent->clientState() != JClient::STATE_AUTHENTICATED ) )
     return;
 
-  m_type = UNREGISTER_PENDING;
-
+  string id = m_parent->getID();
+  iks* x = iks_make_iq( IKS_TYPE_SET, XMLNS_REGISTER );
+  iks_insert_attrib( x, "id", id.c_str() );
+  iks_insert_attrib( x, "from", m_parent->jid().c_str() );
+  iks_insert( iks_first_tag( x ), "remove" );
+  m_parent->trackID( this, id.c_str() );
+  m_parent->send( x );
 }
 
-void Registration::changePassword()
+void Registration::changePassword( const string& password )
 {
-  if( m_parent && ( m_parent->clientState() == JClient::STATE_AUTHENTICATED ) )
+  if( !m_parent || ( m_parent->clientState() != JClient::STATE_AUTHENTICATED ) )
     return;
 
-  m_type = PASSWORD_PENDING;
-
+  string id = m_parent->getID();
+  iks* x = iks_make_iq( IKS_TYPE_SET, XMLNS_REGISTER );
+  iks_insert_attrib( x, "id", id.c_str() );
+  iks_insert_attrib( x, "to", m_parent->server().c_str() );
+  iks_insert_cdata( iks_insert( iks_first_tag( x ), "username" ), m_parent()->username().c_str(), m_parent()->username().length() );
+  iks_insert_cdata( iks_insert( iks_first_tag( x ), "password" ), password.c_str(), password.length() );
+  m_parent->trackID( this, id.c_str() );
+  m_parent->send( x );
 }
 
 void Registration::registerRegistrationHandler( RegistrationHandler* rh )
@@ -131,8 +144,6 @@ void Registration::handleIq( const char* xmlns, ikspak* pak )
   int fields = 0;
   string instructions;
 
-  m_type = 0;
-
   switch( pak->subtype )
   {
     case IKS_TYPE_RESULT:
@@ -145,99 +156,114 @@ void Registration::handleIq( const char* xmlns, ikspak* pak )
 
       {
         iks* ft = iks_first_tag( pak->query );
-        while( ( ft = iks_next_tag( pak->query ) ) != 0 )
+        do
         {
           if( iks_strncmp( iks_name( ft ), "username", 8 ) == 0 )
           {
-            fields &= FIELD_USERNAME;
+            fields |= FIELD_USERNAME;
           }
           else if( iks_strncmp( iks_name( ft ), "nick", 4 ) == 0 )
           {
-            fields &= FIELD_NICK;
+            fields |= FIELD_NICK;
           }
           else if( iks_strncmp( iks_name( ft ), "password", 8 ) == 0 )
           {
-            fields &= FIELD_PASSWORD;
+            fields |= FIELD_PASSWORD;
           }
           else if( iks_strncmp( iks_name( ft ), "name", 4 ) == 0 )
           {
-            fields &= FIELD_NAME;
+            fields |= FIELD_NAME;
           }
           else if( iks_strncmp( iks_name( ft ), "first", 5 ) == 0 )
           {
-            fields &= FIELD_FIRST;
+            fields |= FIELD_FIRST;
           }
           else if( iks_strncmp( iks_name( ft ), "last", 4 ) == 0 )
           {
-            fields &= FIELD_LAST;
+            fields |= FIELD_LAST;
           }
           else if( iks_strncmp( iks_name( ft ), "email", 5 ) == 0 )
           {
-            fields &= FIELD_EMAIL;
+            fields |= FIELD_EMAIL;
           }
           else if( iks_strncmp( iks_name( ft ), "address", 7 ) == 0 )
           {
-            fields &= FIELD_ADDRESS;
+            fields |= FIELD_ADDRESS;
           }
           else if( iks_strncmp( iks_name( ft ), "city", 4 ) == 0 )
           {
-            fields &= FIELD_CITY;
+            fields |= FIELD_CITY;
           }
           else if( iks_strncmp( iks_name( ft ), "state", 5 ) == 0 )
           {
-            fields &= FIELD_STATE;
+            fields |= FIELD_STATE;
           }
           else if( iks_strncmp( iks_name( ft ), "zip", 3 ) == 0 )
           {
-            fields &= FIELD_ZIP;
+            fields |= FIELD_ZIP;
           }
           else if( iks_strncmp( iks_name( ft ), "phone", 5 ) == 0 )
           {
-            fields &= FIELD_PHONE;
+            fields |= FIELD_PHONE;
           }
           else if( iks_strncmp( iks_name( ft ), "url", 3 ) == 0 )
           {
-            fields &= FIELD_URL;
+            fields |= FIELD_URL;
           }
           else if( iks_strncmp( iks_name( ft ), "date", 4 ) == 0 )
           {
-            fields &= FIELD_DATE;
+            fields |= FIELD_DATE;
           }
           else if( iks_strncmp( iks_name( ft ), "misc", 4 ) == 0 )
           {
-            fields &= FIELD_MISC;
+            fields |= FIELD_MISC;
           }
           else if( iks_strncmp( iks_name( ft ), "text", 4 ) == 0 )
           {
-            fields &= FIELD_TEXT;
+            fields |= FIELD_TEXT;
           }
           else if( iks_strncmp( iks_name( ft ), "instructions", 4 ) == 0 )
           {
-            instructions = ( iks_cdata( ft ) )?( iks_cdata( ft ) ):( "" );
+            instructions = ( iks_cdata( iks_child( ft ) ) )?( iks_cdata( iks_child( ft ) ) ):( "" );
           }
-        }
+        } while( ( ft = iks_next_tag( ft ) ) != 0 );
       }
 
       if( m_registrationHandler )
         m_registrationHandler->handleRegistrationFields( fields, instructions );
 
       break;
-    case IKS_TYPE_ERROR:
 
+    case IKS_TYPE_ERROR:
+    {
+      iks* ft = iks_child( iks_find( pak->x, "error" ) );
+
+      if( !ft || !m_registrationHandler )
+        break;
+
+      if( iks_strncmp( iks_name( ft ), "conflict", 8 ) == 0 )
+        m_registrationHandler->handleRegistrationResult( RegistrationHandler::REGISTRATION_CONFLICT );
+      else if( iks_strncmp( iks_name( ft ), "not-acceptable", 15 ) == 0 )
+        m_registrationHandler->handleRegistrationResult( RegistrationHandler::REGISTRATION_NOT_ACCEPTABLE );
+      else if( iks_strncmp( iks_name( ft ), "bad-request", 11 ) == 0 )
+        m_registrationHandler->handleRegistrationResult( RegistrationHandler::REGISTRATION_BAD_REQUEST );
+      else if( iks_strncmp( iks_name( ft ), "forbidden", 9 ) == 0 )
+        m_registrationHandler->handleRegistrationResult( RegistrationHandler::REGISTRATION_FORBIDDEN );
+      else if( iks_strncmp( iks_name( ft ), "registration-required", 22) == 0 )
+        m_registrationHandler->handleRegistrationResult( RegistrationHandler::REGISTRATION_REGISTRATION_REQUIRED );
+      else if( iks_strncmp( iks_name( ft ), "unexpected-request", 19 ) == 0 )
+        m_registrationHandler->handleRegistrationResult( RegistrationHandler::REGISTRATION_UNEXPECTED_REQUEST );
+      else if( iks_strncmp( iks_name( ft ), "not-authorized", 15 ) == 0 )
+        m_registrationHandler->handleRegistrationResult( RegistrationHandler::REGISTRATION_NOT_AUTHORIZED );
+      else if( iks_strncmp( iks_name( ft ), "not-allowed", 12 ) == 0 )
+        m_registrationHandler->handleRegistrationResult( RegistrationHandler::REGISTRATION_NOT_ALLOWED );
       break;
+    }
   }
 }
 
 void Registration::handleIqID( const char* id, ikspak* pak )
 {
-  if( !pak->query )
-  {
-    m_registrationHandler->handleResult( RegistrationHandler::REGISTRATION_SUCCESS );
-    return;
-  }
-}
-
-void Registration::clear()
-{
-  m_type = NO_OP_PENDING;
+  if( !iks_first_tag( pak->x ) )
+    m_registrationHandler->handleRegistrationResult( RegistrationHandler::REGISTRATION_SUCCESS );
 }
