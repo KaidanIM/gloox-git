@@ -22,7 +22,6 @@ class RegTest : public RegistrationHandler, ConnectionListener
       j->setResource( "gloox" );
 //       j->setUsername( "hurkhurk" );
 //       j->setPassword( "hurkhurks" );
-      j->setTls( false );
       j->disableRoster();
       j->registerConnectionListener( this );
       j->setDebug( true );
@@ -32,6 +31,7 @@ class RegTest : public RegistrationHandler, ConnectionListener
       m_reg->registerRegistrationHandler( this );
 
       j->connect( true );
+      delete( j );
     }
 
     virtual void onConnect()
@@ -70,4 +70,5 @@ int main( int argc, char* argv[] )
 {
   RegTest *r = new RegTest();
   r->start();
+  delete( r );
 }
