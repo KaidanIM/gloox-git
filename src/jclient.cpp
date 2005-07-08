@@ -35,7 +35,7 @@ JClient::JClient()
   m_tls( true ), m_sasl( true ), m_priority( -1 ),
   m_autoPresence( false ), m_manageRoster( true ),
   m_handleDisco( true ), m_idCount( 0 ), m_roster( 0 ),
-  m_disco( 0 ), m_adhoc( 0 )
+  m_disco( 0 ), m_adhoc( 0 ), m_authorized( false )
 {
   init();
 }
@@ -45,7 +45,7 @@ JClient::JClient( const std::string& id, const std::string& password, int port )
   m_tls( true ), m_sasl( true ), m_priority( -1 ),
   m_autoPresence( false ), m_manageRoster( true ),
   m_handleDisco( true ), m_idCount( 0 ), m_roster( 0 ),
-  m_disco( 0 ), m_adhoc( 0 )
+  m_disco( 0 ), m_adhoc( 0 ), m_authorized( false )
 {
   m_self = iks_id_new( get_stack(), id.c_str() );
   m_username = m_self->user;
@@ -61,7 +61,7 @@ JClient::JClient( const std::string& username, const std::string& password, cons
   m_tls( true ), m_sasl( true ), m_priority( -1 ),
   m_autoPresence( false ), m_manageRoster( true ),
   m_handleDisco( true ), m_idCount( 0 ), m_roster( 0 ),
-  m_disco( 0 ), m_adhoc( 0 )
+  m_disco( 0 ), m_adhoc( 0 ), m_authorized( false )
 {
   init();
 }
@@ -149,10 +149,15 @@ void JClient::on_stream( int type, iks* node )
           }
           else if( !username().empty() || !password().empty() )
           {
+            char *user, *pwd;
+            user = strdup( username().c_str() );
+            pwd = strdup( password().c_str() );
             if ( m_streamFeatures & IKS_STREAM_SASL_MD5 )
-              start_sasl( IKS_SASL_DIGEST_MD5, (char *) username().c_str(), (char *) password().c_str() );
+              start_sasl( IKS_SASL_DIGEST_MD5, user, pwd );
             else if ( m_streamFeatures & IKS_STREAM_SASL_PLAIN )
-              start_sasl( IKS_SASL_PLAIN, (char *) username().c_str(), (char *) password().c_str() );
+              start_sasl( IKS_SASL_PLAIN, user, pwd );
+
+            printf("user: %s, pwd: %s\n", user, pwd);
           }
           else
           {
@@ -294,16 +299,16 @@ void JClient::connect( bool blocking )
     switch( ret )
     {
       case IKS_NET_NODNS:
-        printf( "host name lookup failure: %s\n", Prep::idna( m_server.c_str() ).c_str() );
+        printf( "host name lookup failure: %s\n", Prep::idna( m_server ).c_str() );
         break;
       case IKS_NET_NOSOCK:
         printf( "cannot create socket\n" );
         break;
       case IKS_NET_NOCONN:
-        printf( "connection refused or no xml stream: %s:%d\n", Prep::idna( m_server.c_str() ).c_str(), m_port );
+        printf( "connection refused or no xml stream: %s:%d\n", Prep::idna( m_server ).c_str(), m_port );
         break;
       case IKS_NET_RWERR:
-        printf( "read/write error: %s\n", Prep::idna( m_server.c_str() ).c_str() );
+        printf( "read/write error: %s\n", Prep::idna( m_server ).c_str() );
         break;
     }
     return;
