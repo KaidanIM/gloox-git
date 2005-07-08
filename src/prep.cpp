@@ -45,9 +45,9 @@ string Prep::nodeprep( const string& node )
     free( buf );
     return string();
   }
-  string t( buf );
+  string *t = new string( buf );
   free( buf );
-  return t;
+  return *t;
 #else
   return node;
 #endif
@@ -72,9 +72,9 @@ string Prep::nameprep( const string& domain )
     free( buf );
     return string();
   }
-  string t( buf );
+  string *t = new string( buf );
   free( buf );
-  return t;
+  return *t;
 #else
   return domain;
 #endif
@@ -99,9 +99,9 @@ string Prep::resourceprep( const string& resource )
     free( buf );
     return string();
   }
-  string t( buf );
+  string *t = new string( buf );
   free( buf );
-  return t;
+  return *t;
 #else
   return resource;
 #endif
@@ -126,10 +126,10 @@ string Prep::idna( const string& domain )
     free( buf );
     return string();
   }
-  string t( p );
+  string *t = new string( p );
   free( buf );
   free( p );
-  return t;
+  return *t;
 #else
   return domain;
 #endif
