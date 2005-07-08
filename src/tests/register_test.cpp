@@ -20,37 +20,29 @@ class RegTest : public RegistrationHandler, ConnectionListener
       j = new JClient();
       j->setServer( "jabber.cc" );
       j->setResource( "gloox" );
-      j->setUsername( "hurkhurk" );
-      j->setPassword( "hurkhurks" );
+//       j->setUsername( "hurkhurk" );
+//       j->setPassword( "hurkhurks" );
       j->setTls( false );
       j->disableRoster();
       j->registerConnectionListener( this );
       j->setDebug( true );
       j->set_log_hook();
 
-
       m_reg = new Registration( j );
       m_reg->registerRegistrationHandler( this );
 
-      bool block = true;
-      j->connect( block );
-
-      printf( "throttling\n");
-
-      while( !block )
-        sleep( 5 );
-
+      j->connect( true );
     }
 
     virtual void onConnect()
     {
-//       printf( "requesting reg fields\n" );
-//       m_reg->fetchRegistrationFields();
+      // requesting reg fields
+      m_reg->fetchRegistrationFields();
 
-//       printf("changing password\n");
-      m_reg->changePassword( "hurkhurk", "abssscdef" );
+      // changing password
+//       m_reg->changePassword( "hurkhurks" );
 
-//       printf("unregistering\n");
+      // unregistering
 //       m_reg->removeAccount();
     };
 
@@ -66,13 +58,12 @@ class RegTest : public RegistrationHandler, ConnectionListener
     virtual void handleRegistrationResult( resultEnum result )
     {
       printf( "result: %d\n", result );
-//       j->disconnect();
+      j->disconnect();
     };
 
   private:
     Registration *m_reg;
     JClient *j;
-
 };
 
 int main( int argc, char* argv[] )
