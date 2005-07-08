@@ -538,7 +538,7 @@ void JClient::notifyIqHandlers( const char* xmlns, ikspak* pak )
   IqHandlerMap::const_iterator it_id = m_iqIDHandlers.begin();
   for( it_id; it_id != m_iqIDHandlers.end(); it_id++ )
   {
-#warning FIXME: don't use the length of pak->id here!
+#warning FIXME: do not use the length of pak->id here!
     if( iks_strncmp( (*it_id).first, pak->id, iks_strlen( pak->id/*(*it_id).first*/ ) ) == 0 )
     {
       (*it_id).second->handleIqID( pak->id, pak );
