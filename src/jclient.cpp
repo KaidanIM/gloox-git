@@ -226,7 +226,7 @@ void JClient::disableRoster()
 std::string JClient::getID()
 {
   char tmp[10];
-  sprintf( tmp, "uid%d\0", ++m_idCount );
+  sprintf( tmp, "uid%d", ++m_idCount );
   std::string str( tmp );
   return str;
 }
@@ -538,7 +538,8 @@ void JClient::notifyIqHandlers( const char* xmlns, ikspak* pak )
   IqHandlerMap::const_iterator it_id = m_iqIDHandlers.begin();
   for( it_id; it_id != m_iqIDHandlers.end(); it_id++ )
   {
-    if( iks_strncmp( (*it_id).first, pak->id, iks_strlen( (*it_id).first ) ) == 0 )
+#warning FIXME: don't use the length of pak->id here!
+    if( iks_strncmp( (*it_id).first, pak->id, iks_strlen( pak->id/*(*it_id).first*/ ) ) == 0 )
     {
       (*it_id).second->handleIqID( pak->id, pak );
       m_iqIDHandlers.erase( pak->id );
