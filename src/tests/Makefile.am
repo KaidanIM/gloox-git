@@ -2,7 +2,7 @@
 ## Process this file with automake to produce Makefile.in
 ##
 
-AM_CPPFLAGS = -g -fno-inline
+AM_CPPFLAGS = -g3 -fno-inline
 
 bin_PROGRAMS = libidn_test register_test
 
