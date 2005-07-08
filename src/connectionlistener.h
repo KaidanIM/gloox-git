@@ -34,8 +34,9 @@ class ConnectionListener
   public:
     /**
      * Reimplement this function if you want to be notified about
-     * successful connections. It will be called after all authentication
-     * is finished. Depending on the setting of AutoPresence, a presence
+     * successful connections. It will be called either after all authentication
+     * is finished if username/password or after an established connection if no
+     * credentials were supplied. Depending on the setting of AutoPresence, a presence
      * stanza is sent or not.
      */
     virtual void onConnect() {};
