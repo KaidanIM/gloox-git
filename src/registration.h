@@ -34,10 +34,11 @@ class JClient;
  * Derive your object from @ref RegistrationHandler and implement the
  * virtual functions offered by that interface. Then use it like this:
  * @code
- * Registration* r = new Registration( jclient );
+ * Registration* r = new Registration( "example.org" );
  * r->registerRegistrationHandler( this );
  * r->createAccount( ... );
  * @endcode
+ * Check @c tests/register_test.cpp for an example.
  * @author Jakob Schroeter <js@camaya.net>
  * @since 0.2
  */
@@ -101,13 +102,6 @@ class Registration : public IqHandler
      * @param parent The JClient which is used.
      */
     Registration( JClient* parent );
-
-    /**
-     * Constructor.
-     * Use this constructor if you want to create a new account.
-     * @param server The server to connect to.
-     */
-    Registration( const string& server );
 
     /**
      * Destructor.

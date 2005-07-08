@@ -28,21 +28,13 @@ Registration::Registration( JClient* parent )
     m_parent->registerIqHandler( this, XMLNS_REGISTER );
 }
 
-Registration::Registration( const string& server )
-  : m_registrationHandler( 0 )
-{
-  m_parent = new JClient();
-  m_parent->setServer( server );
-  m_parent->registerIqHandler( this, XMLNS_REGISTER );
-}
-
 Registration::~Registration()
 {
 }
 
 void Registration::fetchRegistrationFields()
 {
-  if( !m_parent )
+  if( !m_parent || m_parent->clientState() != JClient::STATE_CONNECTED )
     return;
 
   string id = m_parent->getID();
@@ -58,8 +50,6 @@ void Registration::createAccount( int fields, fieldStruct values )
     return;
 
   string id = m_parent->getID();
-  m_parent->trackID( this, id.c_str() );
-
   iks* x = iks_make_iq( IKS_TYPE_SET, XMLNS_REGISTER );
   iks_insert_attrib( x, "id", id.c_str() );
 
@@ -123,7 +113,7 @@ void Registration::changePassword( const string& password )
   iks* x = iks_make_iq( IKS_TYPE_SET, XMLNS_REGISTER );
   iks_insert_attrib( x, "id", id.c_str() );
   iks_insert_attrib( x, "to", m_parent->server().c_str() );
-  iks_insert_cdata( iks_insert( iks_first_tag( x ), "username" ), m_parent()->username().c_str(), m_parent()->username().length() );
+  iks_insert_cdata( iks_insert( iks_first_tag( x ), "username" ), m_parent->username().c_str(), m_parent->username().length() );
   iks_insert_cdata( iks_insert( iks_first_tag( x ), "password" ), password.c_str(), password.length() );
   m_parent->trackID( this, id.c_str() );
   m_parent->send( x );
