@@ -37,7 +37,6 @@ JThread::~JThread()
 
 void JThread::run()
 {
-  if( m_parent->debug() ) printf("thread run()ing\n");
   int ret;
   while( ( m_parent->clientState() >= JClient::STATE_CONNECTED ) && !m_cancel ) {
     ret = iks_recv( m_parser, 0 );
@@ -90,7 +89,6 @@ void JThread::run()
 
 void JThread::cancel()
 {
-  if( m_parent->debug() ) printf("canceling...\n");
   m_cancel = true;
 }
 
