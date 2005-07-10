@@ -54,6 +54,29 @@ void JThread::run()
           m_parent->disconnect();
           return;
 
+        case IKS_NET_RWERR:
+          if( m_parent->debug() ) printf("read/write error\n");
+          m_parent->setClientState( JClient::STATE_IO_ERROR );
+          m_parent->disconnect();
+          return;
+
+        case IKS_NET_NOCONN:
+          if( m_parent->debug() ) printf("connection was closed\n");
+          m_parent->setClientState( JClient::STATE_DISCONNECTED );
+          return;
+
+        case IKS_BADXML:
+          if( m_parent->debug() ) printf("parse error\n");
+          m_parent->setClientState( JClient::STATE_DISCONNECTED );
+          m_parent->disconnect();
+          return;
+
+        case IKS_NOMEM:
+          if( m_parent->debug() ) printf("out of memory\n");
+          m_parent->setClientState( JClient::STATE_DISCONNECTED );
+          m_parent->disconnect();
+          return;
+
         default:
           if( m_parent->debug() ) printf("everything's alright\n");
           m_parent->disconnect();

@@ -31,7 +31,9 @@ class RegTest : public RegistrationHandler, ConnectionListener
       m_reg->registerRegistrationHandler( this );
 
       j->connect( true );
+
       delete( j );
+      delete( m_reg );
     }
 
     virtual void onConnect()
@@ -50,7 +52,7 @@ class RegTest : public RegistrationHandler, ConnectionListener
     {
       printf( "fields: %d\ninstructions: %s\n", fields, instructions.c_str() );
       Registration::fieldStruct vals;
-      vals.username = "hurkhurk";
+      vals.username = Prep::nodeprep( "hurkhurk" );
       vals.password = "hurkhurks";
       m_reg->createAccount( fields, vals );
     };
