@@ -149,15 +149,12 @@ void JClient::on_stream( int type, iks* node )
           }
           else if( !username().empty() || !password().empty() )
           {
-            char *user, *pwd;
-            user = strdup( username().c_str() );
-            pwd = strdup( password().c_str() );
+            std::string user = username();
+            std::string pwd = password();
             if ( m_streamFeatures & IKS_STREAM_SASL_MD5 )
-              start_sasl( IKS_SASL_DIGEST_MD5, user, pwd );
+              start_sasl( IKS_SASL_DIGEST_MD5, (char*)user.c_str(), (char*)pwd.c_str() );
             else if ( m_streamFeatures & IKS_STREAM_SASL_PLAIN )
-              start_sasl( IKS_SASL_PLAIN, user, pwd );
-
-            printf("user: %s, pwd: %s\n", user, pwd);
+              start_sasl( IKS_SASL_PLAIN, (char*)user.c_str(), (char*)pwd.c_str() );
           }
           else
           {
@@ -169,6 +166,7 @@ void JClient::on_stream( int type, iks* node )
       {
         if( m_debug ) printf("sasl authentication failed...\n");
         m_state = STATE_AUTHENTICATION_FAILED;
+        disconnect();
       }
       else if ( iks_strncmp( "success", iks_name ( node ), 7 ) == 0 )
       {
@@ -232,8 +230,7 @@ std::string JClient::getID()
 {
   char tmp[10];
   sprintf( tmp, "uid%d", ++m_idCount );
-  std::string str( tmp );
-  return str;
+  return ( tmp );
 }
 
 void JClient::login( const char* sid )
@@ -430,7 +427,7 @@ void JClient::registerIqFTHandler( IqHandler* ih, const char* tag )
 
 void JClient::trackID( IqHandler* ih, const char* id )
 {
-  m_iqIDHandlers[id] = ih;
+  m_iqIDHandlers[strdup(id)] = ih;
 }
 
 void JClient::registerIqHandler( IqHandler* ih )
@@ -543,8 +540,7 @@ void JClient::notifyIqHandlers( const char* xmlns, ikspak* pak )
   IqHandlerMap::const_iterator it_id = m_iqIDHandlers.begin();
   for( it_id; it_id != m_iqIDHandlers.end(); it_id++ )
   {
-#warning FIXME: do not use the length of pak->id here!
-    if( iks_strncmp( (*it_id).first, pak->id, iks_strlen( pak->id/*(*it_id).first*/ ) ) == 0 )
+    if( iks_strncmp( (*it_id).first, pak->id, iks_strlen( /*pak->id*/(*it_id).first ) ) == 0 )
     {
       (*it_id).second->handleIqID( pak->id, pak );
       m_iqIDHandlers.erase( pak->id );
