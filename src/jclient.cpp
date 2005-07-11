@@ -27,7 +27,7 @@
 #include <unistd.h>
 #include <iostream>
 
-#define GLOOX_VERSION "0.2"
+#define GLOOX_VERSION "0.2+svn"
 
 
 JClient::JClient()
