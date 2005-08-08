@@ -274,11 +274,13 @@ namespace gloox
         break;
 
       case IKS_TYPE_SUBSCRIBED:
+      {
         iks *x = iks_make_s10n( IKS_TYPE_SUBSCRIBE, from->partial, "ok" );
         m_parent->send( x );
 
         m_rosterListener->itemSubscribed( from->partial );
         break;
+      }
 
       case IKS_TYPE_UNSUBSCRIBE:
       {
