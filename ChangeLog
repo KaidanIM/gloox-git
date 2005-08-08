@@ -1,4 +1,26 @@
 
+v0.3  --  09 Aug 2005
+---------------------
+- use ID tracking whereever possible/feasible
+- privacy lists (RFC 3921)
+- wrapped everything in 'gloox' namespace
+- JEP-0048 (Bookmark Storage)
+- JEP-0145 (Annotations)
+- replaced IQ-Tag handler with better IQ-Namespace handler
+- removed generic (catch-all) IQ handler
+- JEP-0114 (Jabber Component Protocol)
+- unregister *Handlers and *Listeners on destruction (thanks to Ray Keung)
+- overhauled Private XML Storage
+- revision of JEP-0050 (Ad-hoc Commands)
+- revision of JEP-0030 (Service Discovery)
+- overhauled Roster management
+  - finished RosterItem class
+- JEP-0078 (Non-SASL Authentication)
+- SRV lookups (w/o sorting by weight/cost)
+- fix for JEP-0077 implementation to be compatible with ejabberd 0.9.1 which
+  sends registration values back in the result.
+
+
 v0.2  --  08 Jul 2005
 ---------------------
 - JEP-0077 (In-Band Registration)
@@ -10,5 +32,9 @@ v0.1  --  04 May 2005
 * initial release with support for
   - JEP-0030 (Service Discovery)
   - JEP-0049 (Private XML Storage)
-  - JEP-0050 (Ad-hoc Commands) (incomplete)
+  - JEP-0050 (Ad-hoc Commands) (providing commands to remote entities is implemented)
   - JEP-0092 (Software Version)
+- removed iksemelmm dependency
+- iq xmlns filter
+- introduced result handler
+- extracted disco into separate class

@@ -1,5 +1,6 @@
 /*
   Copyright (c) 2004-2005 by Jakob Schroeter <js@camaya.net>
+  This file is part of the gloox library. http://camaya.net/gloox
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -28,22 +29,27 @@
 #include <string>
 using namespace std;
 
-/**
- * A virtual interface.
- * Derived classes can be registered as Command Providers with the Adhoc object.
- * @author Jakob Schroeter <js@camaya.net>
- */
-class AdhocCommandProvider
+namespace gloox
 {
-  public:
-    /**
-     * This function is called when an Ad-hoc Command needs to be handled.
-     * The callee is responsible for the whole command execution, i.e. session
-     * handling etc.
-     * @param command The name of the command to be executed.
-     * @param x The complete command.
-     */
-    virtual void handleAdhocCommand( const string& command, const iks* x ) {};
+
+  /**
+   * A virtual interface.
+   * Derived classes can be registered as Command Providers with the Adhoc object.
+   * @author Jakob Schroeter <js@camaya.net>
+   */
+  class AdhocCommandProvider
+  {
+    public:
+      /**
+       * This function is called when an Ad-hoc Command needs to be handled.
+       * The callee is responsible for the whole command execution, i.e. session
+       * handling etc.
+       * @param command The name of the command to be executed.
+       * @param x The complete command.
+       */
+      virtual void handleAdhocCommand( const string& command, const iks* x ) {};
+
+  };
 
 };
 

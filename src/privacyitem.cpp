@@ -1,5 +1,6 @@
 /*
-  Copyright (c) 2004-2005 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2005 by Jakob Schroeter <js@camaya.net>
+  This file is part of the gloox library. http://camaya.net/gloox
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -17,24 +18,31 @@
 */
 
 
-#ifndef ROSTERHELPER_H__
-#define ROSTERHELPER_H__
 
-#include <map>
-using namespace std;
-/**
- * A virtual interface.
- * This is a helper class only, holding the definition of @c RosterMap.
- * @todo Fix this.
- * @author Jakob Schroeter <js@camaya.net>
- */
-class RosterHelper
+#include "privacyitem.h"
+
+namespace gloox
 {
-  public:
-    /**
-     * @todo Move this to a better location.
-     */
-    typedef map<const string, int> RosterMap;
-};
 
-#endif // ROSTERHELPER_H__
+  PrivacyItem::PrivacyItem( const ItemType type, const ItemAction action,
+                            const int packetType, const string& value )
+    : m_type( type ), m_action( action ), m_packetType( packetType ),
+    m_value( value )
+  {
+  }
+
+  PrivacyItem::~PrivacyItem()
+  {
+  }
+
+  bool PrivacyItem::operator==( PrivacyItem& item )
+  {
+    if( m_type == item.type()
+        && m_action == item.action()
+        && m_packetType == item.packetType()
+        && m_value == item.value() )
+      return true;
+    else
+      return false;
+  }
+};

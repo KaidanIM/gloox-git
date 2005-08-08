@@ -1,5 +1,6 @@
 /*
   Copyright (c) 2004-2005 by Jakob Schroeter <js@camaya.net>
+  This file is part of the gloox library. http://camaya.net/gloox
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -29,70 +30,86 @@
 #include <map>
 using namespace std;
 
-class JClient;
-
-/**
- * This class implements JEP-0049 (Private XML Storage).
- *
- */
-class PrivateXML : public IqHandler
+namespace gloox
 {
-  public:
-    /**
-     * Constructor.
-     * You should access the Adhoc object through the @c JClient object.
-     * This function creates a new Adhoc client that registers as IqHandler
-     * with @c JClient.
-     * @param parent The JClient used for XMPP communication
-     */
-    PrivateXML( JClient* parent );
 
-    /**
-     * Virtual destructor.
-     */
-    virtual ~PrivateXML();
+  class ClientBase;
 
-    /**
-     * Use this function to request the private XML stored in the given namespace.
-     * @param tag Child element of the query element used to identify the rrquested XML fragment.
-     * @param xmlns The namespace which qualifies the tag.
-     */
-    void requestXML( const string& tag, const string& xmlns );
+  /**
+   * This class implements JEP-0049 (Private XML Storage).
+   * @author Jakob Schroeter <js@camaya.net>
+   */
+  class PrivateXML : public IqHandler
+  {
+    public:
+      /**
+       * Constructor.
+       * This function creates a new PrivateXML client that registers as IqHandler
+       * with @c ClientBase.
+       * @param parent The ClientBase used for XMPP communication
+       */
+      PrivateXML( ClientBase *parent );
 
-    /**
-     * Use this function to store private XML stored in the given namespace.
-     * @param xml The XML to store. This is the complete tag including the unique namespace.
-     * It is deleted after sending it.
-     * @param xmlns The is the namespace, again, in which the element @c is stored.
-     */
-    void storeXML( iks* xml, const string& xmlns );
+      /**
+       * Virtual destructor.
+       */
+      virtual ~PrivateXML();
 
-    /**
-     * Use this function to register an object that shall receive incoming Private XML packets.
-     * @param pxh The handler to register.
-     * @param tag The tag to look for and associate with this handler.
-     * @param xmlns The namespace of the tag.
-     */
-    void registerPrivateXMLHandler( PrivateXMLHandler* pxh, const string& tag, const string& xmlns );
+      /**
+       * Use this function to request the private XML stored in the given namespace.
+       * @param tag Child element of the query element used to identify the rrquested XML fragment.
+       * @param xmlns The namespace which qualifies the tag.
+       */
+      void requestXML( const string& tag, const string& xmlns );
 
-    // reimplemented from IqHandler.
-    virtual void handleIq( const char* xmlns, ikspak* pak );
+      /**
+       * Use this function to store private XML stored in the given namespace.
+       * @param xml The XML to store. This is the complete tag including the unique namespace.
+       * It is deleted after sending it.
+       * @param xmlns The is the namespace, again, in which the element @c is stored.
+       */
+      void storeXML( iks *xml, const string& xmlns );
 
-  private:
-    JClient* m_parent;
+      /**
+       * Use this function to register an object that shall receive incoming Private XML packets.
+       * @param pxh The handler to register.
+       * @param tag The tag to look for and associate with this handler.
+       * @param xmlns The namespace of the tag.
+       */
+      void registerPrivateXMLHandler( PrivateXMLHandler *pxh, const string& tag, const string& xmlns );
 
-    typedef struct XMLHandlerStruct
-    {
-      const string* xmlns;
-      const string* tag;
-      PrivateXMLHandler* pxh;
-    } HandlerStruct;
-    typedef list<HandlerStruct*> PrivateXMLHandlers;
-    typedef map<string, string>  IDMap;
+      /**
+       * Use this function to un-register an PrivateXMLHandler.
+       * @param xmlns The namespace for which the handler shall be removed.
+       */
+      void removePrivateXMLHandler( const string& xmlns );
 
-    PrivateXMLHandlers m_privateXMLHandlers;
-    IDMap m_storeIds;
-    IDMap m_requestIds;
+      // reimplemented from IqHandler.
+      virtual void handleIq( const char *tag, const char *xmlns, ikspak *pak );
+
+      // reimplemented from IqHandler.
+      virtual void handleIqID( const char *id, ikspak *pak, int context );
+
+    protected:
+      ClientBase *m_parent;
+
+    private:
+      enum IdType
+      {
+        REQUEST_XML,
+        STORE_XML
+      };
+
+      struct XMLHandlerStruct
+      {
+        string xmlns;
+        string tag;
+        PrivateXMLHandler *pxh;
+      };
+      typedef map<string, XMLHandlerStruct> PrivateXMLHandlers;
+
+      PrivateXMLHandlers m_privateXMLHandlers;
+  };
 
 };
 

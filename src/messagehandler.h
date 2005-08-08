@@ -1,5 +1,6 @@
 /*
   Copyright (c) 2004-2005 by Jakob Schroeter <js@camaya.net>
+  This file is part of the gloox library. http://camaya.net/gloox
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -25,24 +26,28 @@
 
 using namespace std;
 
-
-/**
- * A virtual interface.
- * Derived classes can be registered as MessageHandlers with the JClient.
- * Upon an incoming Message packet @ref handleMessage() will be called.
- * @author Jakob Schroeter <js@camaya.net>
- */
-class MessageHandler
+namespace gloox
 {
-  public:
-    /**
-     * Reimplement this function if you want to be notified about
-     * incoming messages.
-     * @param from The sender's jid
-     * @param type The packets type
-     * @param msg The actual message body
-     */
-    virtual void handleMessage( iksid* from, iksubtype type, const char *msg ) {};
+
+  /**
+   * A virtual interface.
+   * Derived classes can be registered as MessageHandlers with the JClient.
+   * Upon an incoming Message packet @ref handleMessage() will be called.
+   * @author Jakob Schroeter <js@camaya.net>
+   */
+  class MessageHandler
+  {
+    public:
+      /**
+       * Reimplement this function if you want to be notified about
+       * incoming messages.
+       * @param from The sender's jid
+       * @param type The packets type
+       * @param msg The actual message body
+       */
+      virtual void handleMessage( iksid* from, iksubtype type, const char *msg ) {};
+  };
+
 };
 
 #endif // MESSAGEHANDLER_H__

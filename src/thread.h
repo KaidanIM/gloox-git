@@ -22,63 +22,72 @@
 
 #include <pthread.h>   /* Posix 1003.1c threads */
 
-/**
- * A generic thread class based on pthreads.
- * @author Jakob Schroeter <js@camaya.net>
- */
-class Thread
+namespace gloox
 {
-  public:
-    /**
-     * Constructor
-     */
-    Thread();
 
-    /**
-     * Destrcutor
-     */
-    virtual ~Thread();
+  /**
+   * A generic thread class based on pthreads.
+   * @author Jakob Schroeter <js@camaya.net>
+   */
+  class Thread
+  {
+    public:
+      /**
+       * Constructor
+       */
+      Thread();
 
-    /** Starts the Thread.
-     * This method must be called to start the Thread.
-     */
-    void start();
+      /**
+       * Destrcutor
+       */
+      virtual ~Thread();
 
-    /** Blocks until the Thread terminated.
-     * This method can be called to wait for termination of a Thread.
-     */
-    void join();
+      /**
+       * Starts the Thread.
+       * This method must be called to start the Thread.
+       */
+      void start();
 
-    /** Returns true if the calling Thread is this Thread.
-     */
-    bool isCurrent();
+      /**
+       * Blocks until the Thread terminated.
+       * This method can be called to wait for termination of a Thread.
+       */
+      void join();
 
-    /** Call this method to wait for a certain amount of time.
-     * \param msec Time to wait in microseconds
-     */
-    static void sleep( int msec );
+      /**
+       * Returns true if the calling Thread is this Thread.
+       */
+      bool isCurrent();
 
-    /** Get Current Thread ID.
-     * \return
-     *         Returns the Thread ID of the calling Thread.
-     */
-    static pthread_t self();
+      /**
+       * Call this method to wait for a certain amount of time.
+       * @param msec Time to wait in microseconds
+       */
+      static void sleep( int msec );
 
-    /** Abstract method which actually is the Thread.
-     * Override this method to implement a Thread. When calling start()
-     * this method is executed as a Thread.
-     */
-    virtual void run() = 0;
+      /**
+       * Get Current Thread ID.
+       * @return The Thread ID of the calling Thread.
+       */
+      static pthread_t self();
 
-  protected:
-    /**
-     * non class member called by the pthread
-     */
-    friend  void* thread_runner(void* arg);
+      /**
+       * Abstract method which actually is the Thread.
+       * Override this method to implement a Thread. When calling start()
+       * this method is executed as a Thread.
+       */
+      virtual void run() = 0;
 
-  private:
-    pthread_t m_thread;
+    protected:
+      /**
+       * non class member called by the pthread
+       */
+      friend  void* thread_runner(void* arg);
+
+    private:
+      pthread_t m_thread;
+  };
+
 };
-
 
 #endif // THREAD_H__

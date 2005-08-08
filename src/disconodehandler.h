@@ -1,5 +1,6 @@
 /*
   Copyright (c) 2004-2005 by Jakob Schroeter <js@camaya.net>
+  This file is part of the gloox library. http://camaya.net/gloox
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -26,61 +27,66 @@
 #include <string>
 using namespace std;
 
-/**
- * A virtual interface.
- * Derived classes can be registered as NodeHandlers for certain nodes
- * with the Disco object of JClient.
- * Incoming disco#info and disco#items queries are delegated to their
- * respective handlers.
- * @author Jakob Schroeter <js@camaya.net>
- */
-class DiscoNodeHandler
+namespace gloox
 {
-  public:
-    /**
-     * Holds a list of items. The first string is the item's node specifier,
-     * the second string is the items natural-language name.
-     */
-    typedef map<string, string> ItemMap;
 
-    /**
-     * Holds a list of features.
-     */
-    typedef list<string> FeatureList;
+  /**
+   * A virtual interface.
+   * Derived classes can be registered as NodeHandlers for certain nodes
+   * with the Disco object of JClient.
+   * Incoming disco#info and disco#items queries are delegated to their
+   * respective handlers.
+   * @author Jakob Schroeter <js@camaya.net>
+   */
+  class DiscoNodeHandler
+  {
+    public:
+      /**
+       * Holds a list of items. The first string is the item's node specifier,
+       * the second string is the items natural-language name.
+       */
+      typedef map<string, string> ItemMap;
 
-    /**
-     * Holds a list of identities for a given node. The first string is the
-     * category specifier, the second string is the type specifier.
-     */
-    typedef map<string, string> IdentityMap;
+      /**
+       * Holds a list of features.
+       */
+      typedef list<string> FeatureList;
 
-    /**
-     * In addition to @c handleDiscoNodeIdentities, this function is used to gather
-     * more information on a specific node. It is called when a disco#info query
-     * arrives with a node attribute that matches the one registered for this handler.
-     * @param node The node this handler is supposed to handle.
-     * @return A list of features supported by this node.
-     */
-    virtual FeatureList handleDiscoNodeFeatures( const char* node ) {};
+      /**
+       * Holds a list of identities for a given node. The first string is the
+       * category specifier, the second string is the type specifier.
+       */
+      typedef map<string, string> IdentityMap;
 
-    /**
-     * In addition to @c handleDiscoNodeFeatures, this function is used to gather
-     * more information on a specific node. It is called when a disco#info query
-     * arrives with a node attribute that matches the one registered for this handler.
-     * @param node The node this handler is supposed to handle.
-     * @return A list of identities for this node.
-     */
-    virtual IdentityMap handleDiscoNodeIdentities( const char* node ) {};
+      /**
+       * In addition to @c handleDiscoNodeIdentities, this function is used to gather
+       * more information on a specific node. It is called when a disco#info query
+       * arrives with a node attribute that matches the one registered for this handler.
+       * @param node The node this handler is supposed to handle.
+       * @return A list of features supported by this node.
+       */
+      virtual FeatureList handleDiscoNodeFeatures( const char *node ) {};
 
-    /**
-     * This function is used to gather more information on a specific node.
-     * It is called when a disco#items query arrives with a node attribute that
-     * matches the one registered for this handler. If node is 0, items for the
-     * root node (no node) shall be returned.
-     * @param node The node this handler is supposed to handle.
-     * @return A map of items supported by this node.
-     */
-    virtual ItemMap handleDiscoNodeItems( const char* node = 0 ) {};
+      /**
+       * In addition to @c handleDiscoNodeFeatures, this function is used to gather
+       * more information on a specific node. It is called when a disco#info query
+       * arrives with a node attribute that matches the one registered for this handler.
+       * @param node The node this handler is supposed to handle.
+       * @return A list of identities for this node.
+       */
+      virtual IdentityMap handleDiscoNodeIdentities( const char *node ) {};
+
+      /**
+       * This function is used to gather more information on a specific node.
+       * It is called when a disco#items query arrives with a node attribute that
+       * matches the one registered for this handler. If node is 0, items for the
+       * root node (no node) shall be returned.
+       * @param node The node this handler is supposed to handle.
+       * @return A map of items supported by this node.
+       */
+      virtual ItemMap handleDiscoNodeItems( const char *node = 0 ) {};
+
+  };
 
 };
 

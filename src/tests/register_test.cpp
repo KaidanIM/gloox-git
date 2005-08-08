@@ -2,6 +2,7 @@
 #include "../prep.h"
 #include "../connectionlistener.h"
 #include "../registration.h"
+using namespace gloox;
 
 #include <stdio.h>
 #include <locale.h>
@@ -18,10 +19,10 @@ class RegTest : public RegistrationHandler, ConnectionListener
       setlocale( LC_ALL, "" );
 
       j = new JClient();
-      j->setServer( "jabber.cc" );
+      j->setServer( "example.org" );
       j->setResource( "gloox" );
-//       j->setUsername( "hurkhurk" );
-//       j->setPassword( "hurkhurks" );
+      j->setUsername( "hurkhurk" );
+      j->setPassword( "hurkhurks" );
       j->disableRoster();
       j->registerConnectionListener( this );
       j->setDebug( true );
@@ -32,17 +33,17 @@ class RegTest : public RegistrationHandler, ConnectionListener
 
       j->connect( true );
 
-      delete( j );
       delete( m_reg );
+      delete( j );
     }
 
     virtual void onConnect()
     {
       // requesting reg fields
-      m_reg->fetchRegistrationFields();
+//       m_reg->fetchRegistrationFields();
 
       // changing password
-//       m_reg->changePassword( "hurkhurks" );
+      m_reg->changePassword( "hurkhurks" );
 
       // unregistering
 //       m_reg->removeAccount();

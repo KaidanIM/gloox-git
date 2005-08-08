@@ -39,7 +39,7 @@ namespace Iksemel
   {
     public:
       Stream();
-      Stream( char* );
+      Stream( const std::string& name_space );
       virtual ~Stream();
 
       void set_log_hook();
@@ -81,8 +81,6 @@ namespace Iksemel
 
       int start_sasl( iksparser* prs , enum ikssasltype type, char* username , char* pass );
       int start_sasl( enum ikssasltype type, char* username, char* pass );
-
-      iks* make_resource_bind(iksid *id);
 
       virtual void on_stream( int type, iks* node ) {};
       virtual void on_log( const char* data, size_t size, int is_incoming ) {};
