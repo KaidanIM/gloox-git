@@ -78,7 +78,7 @@ namespace gloox
 
   void BookmarkStorage::handlePrivateXML( const string& tag, const string& xmlns, ikspak* pak )
   {
-    iks *x = iks_first_tag( iks_first_tag( iks_first_tag( pak->x ) ) );
+    iks *x = iks_first_tag( iks_first_tag( pak->query ) );
 
     BookmarkHandler::BookmarkList bList;
     BookmarkHandler::ConferenceList cList;

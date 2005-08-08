@@ -51,6 +51,19 @@ class BookmarkStorageTest : public BookmarkHandler, ConnectionListener
     virtual void handleBookmarks( BookmarkList bList, ConferenceList cList )
     {
       printf( "received bookmarks...\n" );
+
+      BookmarkList::const_iterator it_b = bList.begin();
+      for( it_b; it_b != bList.end(); it_b++ )
+      {
+        printf( "url: %s, name: %s\n", (*it_b).url.c_str(), (*it_b).name.c_str() );
+      }
+      ConferenceList::const_iterator it_c = cList.begin();
+      for( it_c; it_c != cList.end(); it_c++ )
+      {
+        printf( "jid: %s, name: %s, nick: %s, pwd: %s\n", (*it_c).jid.c_str(), (*it_c).name.c_str(),
+                (*it_c).nick.c_str(), (*it_c).password.c_str() );
+      }
+
       BookmarkList mybList;
       ConferenceList mycList;
 

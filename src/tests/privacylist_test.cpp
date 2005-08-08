@@ -66,13 +66,25 @@ class PLTest : public PrivacyListHandler, ConnectionListener
                         PrivacyItem::PACKET_MESSAGE, "me@there.com" );
       l.push_back( item );
       p->store( "mnyList", l );
-      p->unsetDefault();
+//       p->unsetDefault();
 //       p->unsetActive();
+      p->requestList( "mnyList" );
     };
 
     virtual void handlePrivacyListResult( const string& id, resultEnum result )
     {
       printf( "result for id '%s': %d\n", id.c_str(), result );
+    };
+
+    virtual void handlePrivacyList( const string& name, PrivacyList& items )
+    {
+      printf( "received list: %s\n", name.c_str() );
+      PrivacyListHandler::PrivacyList::iterator it = items.begin();
+      for( it; it != items.end(); it++ )
+      {
+        printf( "item: type: %d, action: %d, packetType: %d, value: %s\n",
+                (*it).type(), (*it).action(), (*it).packetType(), (*it).value().c_str() );
+      }
     };
 
   private:

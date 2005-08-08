@@ -56,7 +56,7 @@ namespace gloox
       };
 
       /**
-       * A list of PrivacyItem's.
+       * A list of PrivacyItems.
        */
       typedef list<PrivacyItem> PrivacyList;
 
@@ -81,7 +81,7 @@ namespace gloox
        * @param name The name of the list.
        * @param items A list of PrivacyItem's.
        */
-      virtual void handlePrivacyList( const string& name, const PrivacyList& items ) {};
+      virtual void handlePrivacyList( const string& name, PrivacyList& items ) {};
 
       /**
        * Reimplement this function to be notified about new or changed lists.
@@ -90,7 +90,7 @@ namespace gloox
       virtual void handlePrivacyListChanged( const string& name ) {};
 
       /**
-       * Reimplement this function to receive results of requests etc.
+       * Reimplement this function to receive results of stores etc.
        * @param id The ID of the request, as returned by the initiating function.
        * @param result The result of an operation.
        */
