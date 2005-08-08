@@ -29,7 +29,6 @@
  * This namespace is used for the classes taken from Igor Goryachieff's Iksemelmm
  * wrapper around Iksemel. It was included for convenience reasons and to decrease
  * external dependencies of JLib.
- *
  */
 namespace Iksemel
 {

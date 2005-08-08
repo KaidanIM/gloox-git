@@ -1,5 +1,6 @@
 #include "../jclient.h"
 #include "../prep.h"
+using namespace gloox;
 
 #include <stdio.h>
 #include <locale.h>

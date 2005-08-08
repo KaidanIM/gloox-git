@@ -24,48 +24,51 @@
 
 #include <iksemel.h>
 
-class JClient;
-
-
-/**
- * This is the JClient-specific implementation of Thread.
- * @author Jakob Schroeter <js@camaya.net>
- */
-class JThread : public Thread
+namespace gloox
 {
-  public:
-    /**
-     * Constructor
-     * @param parent An initialised JClient instance.
-     */
-    JThread( JClient* parent );
 
-    /**
-     * Destructor
-     */
-    virtual ~JThread();
+  class ClientBase;
 
-    /**
-     * reimplemented from Thread
-     * contains the actual thread implementation
-     */
-    virtual void run();
+  /**
+   * This is the JClient-specific implementation of Thread.
+   * @author Jakob Schroeter <js@camaya.net>
+   */
+  class JThread : public Thread
+  {
+    public:
+      /**
+       * Constructor.
+       * @param parent An initialised JClient instance.
+       */
+      JThread( ClientBase* parent );
 
-    /**
-     * call this function to end the thread
-     */
-    void cancel();
+      /**
+       * Virtual destructor
+       */
+      virtual ~JThread();
 
-    /**
-     * call this function to indicate that the point of authentication has passed
-     */
-    void over();
+      /**
+       * Contains the actual thread implementation
+       */
+      virtual void run();
 
-  private:
-    bool m_cancel;
-    bool m_over;
-    JClient* m_parent;
-    iksparser* m_parser;
+      /**
+       * Call this function to end the thread
+       */
+      void cancel();
+
+      /**
+       * Call this function to indicate that the point of authentication has passed
+       */
+      void over();
+
+    private:
+      bool m_cancel;
+      bool m_over;
+      ClientBase* m_parent;
+      iksparser* m_parser;
+  };
+
 };
 
 #endif // JTHREAD_H__

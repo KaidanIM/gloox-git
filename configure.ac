@@ -29,6 +29,7 @@ PKG_CHECK_MODULES(IKSEMEL,iksemel >= 1.2,,exit)
 AC_SUBST(IKSEMEL_CFLAGS)
 AC_SUBST(IKSEMEL_LIBS)
 
+dnl Libidn
 AC_ARG_WITH(libidn, AC_HELP_STRING([--with-libidn=[DIR]],
       [Support IDN (needs GNU Libidn)]),
       libidn=$withval, libidn=yes)

@@ -45,8 +45,9 @@ Stream::Stream() {
   this->init(iks_stream_new(IKS_NS_CLIENT, this, (iksStreamHook *) __on_stream));
 }
 
-Stream::Stream(char *name_space) {
-  this->init(iks_stream_new(name_space, this, (iksStreamHook *) __on_stream));
+Stream::Stream( const std::string& name_space )
+{
+  this->init( iks_stream_new( strdup( name_space.c_str() ), this, (iksStreamHook *) __on_stream ) );
 }
 
 Stream::~Stream() {
@@ -162,19 +163,4 @@ int Stream::start_sasl(iksparser* prs, enum ikssasltype type, char *username, ch
 
 int Stream::start_sasl(enum ikssasltype type, char *username, char *pass) {
   return this->start_sasl(this->P, type, username, pass);
-}
-
-iks* Stream::make_resource_bind(iksid *id)
-{
-  iks *x, *y, *z;
-
-  x = iks_new("iq");
-  iks_insert_attrib(x, "type", "set");
-  y = iks_insert(x, "bind");
-  iks_insert_attrib(y, "xmlns", IKS_NS_XMPP_BIND);
-  if (id->resource && iks_strcmp(id->resource, "")) {
-    z = iks_insert(y, "resource");
-    iks_insert_cdata(z, id->resource, 0);
-  }
-  return x;
 }

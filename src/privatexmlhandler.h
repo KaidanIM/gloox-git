@@ -1,5 +1,6 @@
 /*
   Copyright (c) 2004-2005 by Jakob Schroeter <js@camaya.net>
+  This file is part of the gloox library. http://camaya.net/gloox
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -22,27 +23,32 @@
 #define PRIVATEXMLHANDLER_H__
 
 #include <iksemel.h>
-#include <string>
 
+#include <string>
 using namespace std;
 
-/**
- * A virtual interface.
- * Derived classes can be registered as PrivateXMLHandlers with the PrivateXML object.
- * Upon an incoming PrivateXML packet @ref handlePrivateXML() will be called.
- * @author Jakob Schroeter <js@camaya.net>
- */
-class PrivateXMLHandler
+namespace gloox
 {
-  public:
-    /**
-     * Reimplement this function to receive the private XML that was requested earlier using
-     * @c PrivateXML::requestXML().
-     * @param xmlns The XML namespace of the storage packet.
-     * @param tag The tag of the storage packet.
-     * @param pak The complete packet.
-     */
-    virtual void handlePrivateXML( const string& xmlns, const string& tag, ikspak* pak ) {};
+
+  /**
+   * A virtual interface.
+   * Derived classes can be registered as PrivateXMLHandlers with the PrivateXML object.
+   * Upon an incoming PrivateXML packet @ref handlePrivateXML() will be called.
+   * @author Jakob Schroeter <js@camaya.net>
+   */
+  class PrivateXMLHandler
+  {
+    public:
+      /**
+       * Reimplement this function to receive the private XML that was requested earlier using
+       * @c PrivateXML::requestXML().
+       * @param tag The tag of the storage packet.
+       * @param xmlns The XML namespace of the storage packet.
+       * @param pak The complete packet.
+       */
+      virtual void handlePrivateXML( const string& tag, const string& xmlns, ikspak* pak ) {};
+
+  };
 
 };
 

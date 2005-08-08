@@ -18,603 +18,377 @@
 
 
 #include "jclient.h"
-#include "jthread.h"
-#include "roster.h"
+#include "rostermanager.h"
 #include "disco.h"
-#include "adhoc.h"
-#include "prep.h"
+#include "nonsaslauth.h"
+
+#include <iksemel.h>
 
 #include <unistd.h>
 #include <iostream>
 
-#define GLOOX_VERSION "0.2+svn"
 
-
-JClient::JClient()
-  : m_port( XMPP_PORT ), m_thread( 0 ),
-  m_tls( true ), m_sasl( true ), m_priority( -1 ),
-  m_autoPresence( false ), m_manageRoster( true ),
-  m_handleDisco( true ), m_idCount( 0 ), m_roster( 0 ),
-  m_disco( 0 ), m_adhoc( 0 ), m_authorized( false )
+namespace gloox
 {
-  init();
-}
 
-JClient::JClient( const std::string& id, const std::string& password, int port )
-  : m_port( port ), m_password( password ), m_thread( 0 ),
-  m_tls( true ), m_sasl( true ), m_priority( -1 ),
-  m_autoPresence( false ), m_manageRoster( true ),
-  m_handleDisco( true ), m_idCount( 0 ), m_roster( 0 ),
-  m_disco( 0 ), m_adhoc( 0 ), m_authorized( false )
-{
-  m_self = iks_id_new( get_stack(), id.c_str() );
-  m_username = m_self->user;
-  m_server = m_self->server;
-  m_resource = m_self->resource;
-  init();
-}
-
-JClient::JClient( const std::string& username, const std::string& password, const std::string& server,
-                  const std::string& resource, int port )
-  : m_username( username ), m_resource( resource ), m_password( password ),
-  m_server( server ), m_port( port ), m_thread( 0 ),
-  m_tls( true ), m_sasl( true ), m_priority( -1 ),
-  m_autoPresence( false ), m_manageRoster( true ),
-  m_handleDisco( true ), m_idCount( 0 ), m_roster( 0 ),
-  m_disco( 0 ), m_adhoc( 0 ), m_authorized( false )
-{
-  init();
-}
-
-JClient::~JClient()
-{
-}
-
-void JClient::init()
-{
-  m_disco = new Disco( this );
-  m_adhoc = new Adhoc( this );
-  m_roster = new Roster( this );
-  m_disco->setVersion( "based on gloox", GLOOX_VERSION );
-  m_disco->setIdentity( "client", "bot" );
-}
-
-void JClient::cleanUp()
-{
-  iks_filter_delete( m_filter );
-  delete m_disco;
-  delete m_adhoc;
-  delete m_roster;
-  delete m_thread;
-}
-
-std::string JClient::jid()
-{
-  if( server().empty() )
-    return "";
-  else if( username().empty() )
-    if( resource().empty() )
-      return server();
-    else
-      return ( server() + "/" + resource() );
-  else
-    if( resource().empty() )
-      return ( username() + "@" + server() );
-    else
-      return ( username() + "@" + server() + "/" + resource() );
-}
-
-void JClient::on_stream( int type, iks* node )
-{
-  if(!node)
-    return;
-
-  if( m_debug ) printf("in on_stream\n");
-  ikspak* pak = iks_packet( node );
-
-  switch (type)
+  JClient::JClient()
+    : ClientBase( XMLNS_CLIENT ),
+    m_priority( -1 ),
+    m_autoPresence( false ), m_manageRoster( true ),
+    m_handleDisco( true ), m_rosterManager( 0 ),
+    m_disco( 0 ), m_authorized( false )
   {
-    case IKS_NODE_START:      // <stream:stream>
-      break;
-    case IKS_NODE_NORMAL:     // first level child of stream
-      if ( strncmp( "stream:features", iks_name( node ), 15 ) == 0 )
-      {
-        m_streamFeatures = iks_stream_features( node );
+    init();
+  }
 
-        if ( m_tls && !is_secure() && ( m_streamFeatures & IKS_STREAM_STARTTLS ) )
-        {
-          start_tls();
-          if( m_debug ) printf("after starttls\n");
-          break;
-        }
+  JClient::JClient( const std::string& id, const std::string& password, int port )
+    : ClientBase( XMLNS_CLIENT, password ),
+    m_priority( -1 ), m_autoPresence( false ), m_manageRoster( true ),
+    m_handleDisco( true ), m_rosterManager( 0 ),
+    m_disco( 0 ), m_authorized( false )
+  {
+    init();
+  }
 
-        if ( m_sasl )
-        {
-          if( m_tls  && !is_secure() )
-            break;
+  JClient::JClient( const std::string& username, const std::string& password,
+                    const std::string& server, const std::string& resource, int port )
+    : ClientBase( XMLNS_CLIENT, password, server ),
+    m_username( username ), m_resource( resource ),
+    m_priority( -1 ), m_autoPresence( false ), m_manageRoster( true ),
+    m_handleDisco( true ), m_rosterManager( 0 ),
+    m_disco( 0 ), m_authorized( false )
+  {
+    init();
+  }
 
-          if ( m_authorized )
-          {
-            if ( m_streamFeatures & IKS_STREAM_BIND )
-            {
-              send( make_resource_bind( m_self ) );
-            }
+  JClient::~JClient()
+  {
+  }
 
-            if ( m_streamFeatures & IKS_STREAM_SESSION )
-            {
-              iks* x = iks_make_session();
-              iks_insert_attrib( x, "id", "auth" );
-              send( x );
-            }
-          }
-          else if( !username().empty() || !password().empty() )
-          {
-            std::string user = username();
-            std::string pwd = password();
-            if ( m_streamFeatures & IKS_STREAM_SASL_MD5 )
-              start_sasl( IKS_SASL_DIGEST_MD5, (char*)user.c_str(), (char*)pwd.c_str() );
-            else if ( m_streamFeatures & IKS_STREAM_SASL_PLAIN )
-              start_sasl( IKS_SASL_PLAIN, (char*)user.c_str(), (char*)pwd.c_str() );
-          }
-          else
-          {
-            notifyOnConnect();
-          }
-        }
-      }
-      else if ( iks_strncmp( "failure", iks_name ( node ), 7 ) == 0 )
-      {
-        if( m_debug ) printf("sasl authentication failed...\n");
-        m_state = STATE_AUTHENTICATION_FAILED;
-        disconnect();
-      }
-      else if ( iks_strncmp( "success", iks_name ( node ), 7 ) == 0 )
-      {
-        if( m_debug ) printf( "sasl initialisation successful...\n" );
-        m_state = STATE_AUTHENTICATED;
-        m_authorized = true;
-        header( server() );
-      }
+  void JClient::init()
+  {
+    registerConnectionListener( this );
+
+    iks_filter_add_rule( m_filter, (iksFilterHook*) sessionHook, this,
+                        IKS_RULE_TYPE, IKS_PAK_IQ,
+                        IKS_RULE_SUBTYPE, IKS_TYPE_RESULT,
+                        IKS_RULE_ID, "session",
+                        IKS_RULE_DONE );
+    iks_filter_add_rule( m_filter, (iksFilterHook*) bindHook, this,
+                        IKS_RULE_TYPE, IKS_PAK_IQ,
+                        IKS_RULE_SUBTYPE, IKS_TYPE_RESULT,
+                        IKS_RULE_ID, "bind",
+                        IKS_RULE_DONE );
+
+    m_disco = new Disco( this );
+    m_rosterManager = new RosterManager( this );
+    m_disco->setVersion( "based on gloox", GLOOX_VERSION );
+    m_disco->setIdentity( "client", "bot" );
+  }
+
+  void JClient::cleanUp()
+  {
+    delete m_disco;
+    delete m_rosterManager;
+    ClientBase::cleanUp();
+  }
+
+  std::string JClient::jid()
+  {
+    if( server().empty() )
+      return "";
+    else if( username().empty() )
+      if( resource().empty() )
+        return server();
       else
-      {
-        ikspak* pak;
-        pak = iks_packet ( node );
-        iks_filter_packet ( m_filter, pak );
-      }
-      break;
-    case IKS_NODE_ERROR:      // <stream:error>
-      m_state = STATE_ERROR;
-      if( m_debug ) printf( "stream error. quitting\n");
-      disconnect();
-      break;
-    case IKS_NODE_STOP:       // </stream:stream>
-      disconnect();
-      break;
-  }
-
-  iks_delete( node );
-}
-
-
-void JClient::on_log( const char* data, size_t size, int is_incoming )
-{
-  if( m_debug )
-  {
-    if ( is_secure() )
-      cerr << "Sec";
-
-    if (is_incoming)
-      cerr << "RECV ";
+        return ( server() + "/" + resource() );
     else
-      cerr << "SEND ";
-
-    cerr << "[" << data << "]" << endl;
+      if( resource().empty() )
+        return ( username() + "@" + server() );
+      else
+        return ( username() + "@" + server() + "/" + resource() );
   }
-}
 
-void JClient::disableDisco()
-{
-  m_handleDisco = false;
-  delete m_roster;
-  m_roster = 0;
-}
-
-void JClient::disableRoster()
-{
-  m_manageRoster = false;
-  delete m_roster;
-  m_roster = 0;
-}
-
-std::string JClient::getID()
-{
-  char tmp[10];
-  sprintf( tmp, "uid%d", ++m_idCount );
-  return ( tmp );
-}
-
-void JClient::login( const char* sid )
-{
-  if( m_debug ) printf("in login()\n");
-
-  iks* x = iks_make_auth( m_self, password().c_str(), sid );
-  iks_insert_attrib( x, "id", "auth" );
-  send( x );
-}
-
-void JClient::setupFilter()
-{
-  m_filter = iks_filter_new();
-
-  iks_filter_add_rule( m_filter, (iksFilterHook*) authHook, this,
-                      IKS_RULE_TYPE, IKS_PAK_IQ,
-                      IKS_RULE_SUBTYPE, IKS_TYPE_RESULT,
-                      IKS_RULE_ID, "auth",
-                      IKS_RULE_DONE );
-  iks_filter_add_rule( m_filter, (iksFilterHook*) registerHook, this,
-                      IKS_RULE_TYPE, IKS_PAK_IQ,
-                      IKS_RULE_SUBTYPE, IKS_TYPE_ERROR,
-                      IKS_RULE_ID, "auth",
-                      IKS_RULE_DONE );
-  iks_filter_add_rule( m_filter, (iksFilterHook*) registeredHook, this,
-                      IKS_RULE_TYPE, IKS_PAK_IQ,
-                      IKS_RULE_SUBTYPE, IKS_TYPE_RESULT,
-                      IKS_RULE_ID, "reg",
-                      IKS_RULE_DONE );
-//   iks_filter_add_rule( m_filter, (iksFilterHook*) errorHook, this,
-//                       IKS_RULE_TYPE, IKS_PAK_IQ,
-//                       IKS_RULE_SUBTYPE, IKS_TYPE_ERROR,
-//                       IKS_RULE_DONE );
-  iks_filter_add_rule( m_filter, (iksFilterHook*) msgHook, this,
-                      IKS_RULE_TYPE, IKS_PAK_MESSAGE,
-                      IKS_RULE_DONE );
-  iks_filter_add_rule( m_filter, (iksFilterHook*) presenceHook, this,
-                      IKS_RULE_TYPE, IKS_PAK_PRESENCE,
-                      IKS_RULE_DONE );
-  iks_filter_add_rule( m_filter, (iksFilterHook*) subscriptionHook, this,
-                      IKS_RULE_TYPE, IKS_PAK_S10N,
-                      IKS_RULE_DONE );
-  iks_filter_add_rule( m_filter, (iksFilterHook*) iqHook, this,
-                      IKS_RULE_TYPE, IKS_PAK_IQ,
-                      IKS_RULE_DONE );
-}
-
-void JClient::connect( bool blocking )
-{
-  if( server().empty() )
-    return;
-
-  m_blockingConnect = blocking;
-
-  m_self = iks_id_new( get_stack(), jid().c_str() );
-  setupFilter();
-
-  m_state = STATE_CONNECTING;
-  int ret;
-  if(ret = Stream::connect( Prep::idna( m_server ), m_port, server() ) )
+  iksid* JClient::parsedJid()
   {
-    switch( ret )
+    return iks_id_new( get_stack(), jid().c_str() );
+  }
+
+  void JClient::on_stream( int type, iks* node )
+  {
+    if( !node )
+      return;
+
+    if( m_debug ) printf("in on_stream\n");
+    ikspak* pak = iks_packet( node );
+
+    switch( type )
     {
-      case IKS_NET_NODNS:
-        printf( "host name lookup failure: %s\n", Prep::idna( m_server ).c_str() );
+      case IKS_NODE_START:      // <stream:stream>
+        m_sid = iks_find_attrib( node, "id" );
         break;
-      case IKS_NET_NOSOCK:
-        printf( "cannot create socket\n" );
+      case IKS_NODE_NORMAL:     // first level child of stream
+        if( strncmp( "stream:features", iks_name( node ), 15 ) == 0 )
+        {
+          m_streamFeatures = getStreamFeatures( node );
+
+          if( tls() && !is_secure() && ( m_streamFeatures & STREAM_FEATURE_STARTTLS ) )
+          {
+            start_tls();
+            if( m_debug ) printf("after starttls\n");
+            break;
+          }
+
+          if( sasl() )
+          {
+            if( tls() && !sasl() && !is_secure() )
+              disconnect();
+
+            if( m_authorized )
+            {
+              if( m_streamFeatures & STREAM_FEATURE_BIND )
+              {
+                bindResource();
+              }
+            }
+            else if( !username().empty() || !password().empty() )
+            {
+              std::string user = username();
+              std::string pwd = password();
+              if( m_streamFeatures & STREAM_FEATURE_SASL_DIGESTMD5 )
+                start_sasl( IKS_SASL_DIGEST_MD5, (char*)user.c_str(), (char*)pwd.c_str() );
+
+              else if( is_secure() && ( m_streamFeatures & STREAM_FEATURE_SASL_PLAIN ) )
+                start_sasl( IKS_SASL_PLAIN, (char*)user.c_str(), (char*)pwd.c_str() );
+
+              else if( m_streamFeatures & STREAM_FEATURE_IQAUTH )
+                nonSaslLogin();
+
+              else
+              {
+                m_state = STATE_NO_SUPPORTED_AUTH;
+                disconnect();
+              }
+            }
+            else
+            {
+              notifyOnConnect();
+            }
+          }
+        }
+        else if( iks_strncmp( "failure", iks_name ( node ), 7 ) == 0 )
+        {
+          if( m_debug ) printf("sasl authentication failed...\n");
+          m_state = STATE_AUTHENTICATION_FAILED;
+          disconnect();
+        }
+        else if( iks_strncmp( "success", iks_name ( node ), 7 ) == 0 )
+        {
+          if( m_debug ) printf( "sasl initialisation successful...\n" );
+          m_state = STATE_AUTHENTICATED;
+          m_authorized = true;
+          header( server() );
+        }
+        else
+        {
+          iks_filter_packet ( m_filter, pak );
+        }
         break;
-      case IKS_NET_NOCONN:
-        printf( "connection refused or no xml stream: %s:%d\n", Prep::idna( m_server ).c_str(), m_port );
+      case IKS_NODE_ERROR:      // <stream:error>
+        m_state = STATE_ERROR;
+        if( m_debug ) printf( "stream error. quitting\n");
+        disconnect();
         break;
-      case IKS_NET_RWERR:
-        printf( "read/write error: %s\n", Prep::idna( m_server ).c_str() );
+      case IKS_NODE_STOP:       // </stream:stream>
+        disconnect();
         break;
     }
-    return;
+
+    iks_delete( node );
   }
 
-  m_state = STATE_CONNECTED;
-
-  m_thread = new JThread( this );
-  m_thread->start();
-
-  if( !username().empty() && !password().empty() )
+  int JClient::getStreamFeatures( iks *x )
   {
-    while( m_state >= STATE_CONNECTED &&
-           m_state != STATE_AUTHENTICATED &&
-           m_state != STATE_AUTHENTICATION_FAILED )
+    if( iks_strncmp( iks_name( x ), "stream:features", 15 ) != 0 )
+      return 0;
+
+    int features = 0;
+
+    for( x = iks_child( x ); x; x = iks_next_tag( x ) )
     {
-      JThread::sleep( 1000 );
+      if( !iks_strncmp( iks_name( x ), "starttls", 8 )
+                && !iks_strncmp( iks_find_attrib( x, "xmlns" ),
+                                XMLNS_STREAM_TLS, iks_strlen( XMLNS_STREAM_TLS ) ) )
+        features |= STREAM_FEATURE_STARTTLS;
+
+      else if( !iks_strncmp( iks_name( x ), "mechanisms", 10 )
+                && !iks_strncmp( iks_find_attrib( x, "xmlns" ),
+                                XMLNS_STREAM_SASL, iks_strlen( XMLNS_STREAM_SASL ) ) )
+        features |= getSaslMechs( iks_child( x ) );
+
+      else if( !iks_strncmp( iks_name( x ), "bind", 4 )
+                && !iks_strncmp( iks_find_attrib( x, "xmlns" ),
+                                XMLNS_STREAM_BIND, iks_strlen( XMLNS_STREAM_BIND ) ) )
+        features |= STREAM_FEATURE_BIND;
+
+      else if( !iks_strncmp( iks_name( x ), "session", 7 )
+                && !iks_strncmp( iks_find_attrib( x, "xmlns" ),
+                                XMLNS_STREAM_SESSION, iks_strlen( XMLNS_STREAM_SESSION ) ) )
+        features |= STREAM_FEATURE_SESSION;
+
+      else if( !iks_strncmp( iks_name( x ), "auth", 4 )
+                && !iks_strncmp( iks_find_attrib( x, "xmlns" ),
+                                XMLNS_STREAM_IQAUTH, iks_strlen( XMLNS_STREAM_IQAUTH ) ) )
+        features |= STREAM_FEATURE_IQAUTH;
+
+      else if( !iks_strncmp( iks_name( x ), "register", 8 )
+                && !iks_strncmp( iks_find_attrib( x, "xmlns" ),
+                                XMLNS_STREAM_IQREGISTER, iks_strlen( XMLNS_STREAM_IQREGISTER ) ) )
+        features |= STREAM_FEATURE_IQREGISTER;
     }
+    return features;
+  }
 
-    if ( m_state == STATE_AUTHENTICATION_FAILED )
+  int JClient::getSaslMechs( iks* x )
+  {
+    int mechs = 0;
+
+    while( x )
     {
-      notifyOnDisconnect();
+      if( !iks_strncmp( iks_cdata( iks_child( x ) ), "DIGEST-MD5", 10 ) )
+        mechs |= STREAM_FEATURE_SASL_DIGESTMD5;
+      else if( !iks_strncmp( iks_cdata( iks_child( x ) ), "PLAIN", 5 ) )
+        mechs |= STREAM_FEATURE_SASL_PLAIN;
+
+      x = iks_next_tag( x );
     }
+    return mechs;
   }
 
-  if( m_blockingConnect )
+  void JClient::bindResource()
   {
-    m_thread->join();
-    cleanUp();
+    iks *x = iks_new( "iq" );
+    iks_insert_attrib( x, "type", "set" );
+    iks_insert_attrib( x, "id", "bind" );
+    iks *y = iks_insert( x, "bind" );
+    iks_insert_attrib( y, "xmlns", XMLNS_STREAM_BIND );
+    if( !resource().empty() && resource().length() )
+      iks_insert_cdata( iks_insert( y, "resource" ), resource().c_str(), 0 );
+
+    send( x );
   }
-}
 
-void JClient::disconnect()
-{
-  if( m_state != STATE_DISCONNECTED )
+  void JClient::createSession()
   {
-    m_state = STATE_DISCONNECTED;
-    m_thread->cancel();
-    Stream::disconnect();
-
-    if( !m_blockingConnect )
+    if( m_streamFeatures & STREAM_FEATURE_SESSION )
     {
-      m_thread->join();
-      cleanUp();
-    }
-  }
-}
+      iks *x = iks_new( "iq" );
+      iks_insert_attrib( x, "type", "set" );
+      iks_insert_attrib( x, "id", "session" );
+      iks *y = iks_insert( x, "session" );
+      iks_insert_attrib( y, "xmlns", XMLNS_STREAM_SESSION );
 
-void JClient::send( iks* x )
-{
-  Stream::send( this->P, x );
-  iks_delete( x );
-}
-
-void JClient::sendPresence()
-{
-  char prio[5];
-  sprintf( prio, "%d", m_priority );
-  iks* x = iks_make_pres( IKS_SHOW_AVAILABLE, "online" );
-  iks_insert_cdata( iks_insert( x, "priority" ), prio, iks_strlen( prio ) );
-  send( x );
-}
-
-void JClient::send( const char* jid, const char* data )
-{
-  iks* x = iks_make_msg( IKS_TYPE_NONE, jid, data );
-  send( x );
-}
-
-JClient::StateEnum JClient::clientState()
-{
-  return m_state;
-}
-
-void JClient::setClientState( StateEnum s )
-{
-  m_state = s;
-}
-
-iksparser* JClient::parser()
-{
-  return this->P;
-}
-
-Roster* JClient::roster()
-{
-  return m_roster;
-}
-
-Disco* JClient::disco()
-{
-  return m_disco;
-}
-
-Adhoc* JClient::adhoc()
-{
-  return m_adhoc;
-}
-
-void JClient::registerPresenceHandler( PresenceHandler* ph )
-{
-  m_presenceHandlers.push_back( ph );
-}
-
-void JClient::removePresenceHandler( PresenceHandler* ph )
-{
-  m_presenceHandlers.remove( ph );
-}
-
-void JClient::registerIqHandler( IqHandler* ih, const char* xmlns )
-{
-  m_iqNSHandlers[xmlns] = ih;
-}
-
-void JClient::registerIqFTHandler( IqHandler* ih, const char* tag )
-{
-  m_iqFTHandlers[tag] = ih;
-}
-
-void JClient::trackID( IqHandler* ih, const char* id )
-{
-  m_iqIDHandlers[strdup(id)] = ih;
-}
-
-void JClient::registerIqHandler( IqHandler* ih )
-{
-  m_iqHandlers.push_back( ih );
-}
-
-void JClient::removeIqNSHandler( const char* xmlns )
-{
-  m_iqNSHandlers.erase( xmlns );
-}
-
-void JClient::removeIqFTHandler( const char* tag )
-{
-  m_iqFTHandlers.erase( tag );
-}
-
-void JClient::removeIqHandler( IqHandler* ih )
-{
-  m_iqHandlers.remove( ih );
-}
-
-void JClient::registerMessageHandler( MessageHandler* mh )
-{
-  m_messageHandlers.push_back( mh );
-}
-
-void JClient::removeMessageHandler( MessageHandler* mh )
-{
-  m_messageHandlers.remove( mh );
-}
-
-void JClient::registerSubscriptionHandler( SubscriptionHandler* sh )
-{
-  m_subscriptionHandlers.push_back( sh );
-}
-
-void JClient::removeSubscriptionHandler( SubscriptionHandler* sh )
-{
-  m_subscriptionHandlers.remove( sh );
-}
-
-void JClient::registerConnectionListener( ConnectionListener* cl )
-{
-  m_connectionListeners.push_back( cl );
-}
-
-void JClient::removeConnectionListener( ConnectionListener* cl )
-{
-  m_connectionListeners.remove( cl );
-}
-
-void JClient::notifyOnConnect()
-{
-  if( m_manageRoster )
-    m_roster->fill();
-
-  if( m_autoPresence )
-    sendPresence();
-
-  ConnectionListenerList::const_iterator it = m_connectionListeners.begin();
-  for( it; it != m_connectionListeners.end(); it++ )
-  {
-    (*it)->onConnect();
-  }
-}
-
-void JClient::notifyOnDisconnect()
-{
-  ConnectionListenerList::const_iterator it = m_connectionListeners.begin();
-  for( it; it != m_connectionListeners.end(); it++ )
-  {
-    (*it)->onDisconnect();
-  }
-}
-
-void JClient::notifyPresenceHandlers( iksid* from, iksubtype type, ikshowtype show, const char* msg )
-{
-  PresenceHandlerList::const_iterator it = m_presenceHandlers.begin();
-  for( it; it != m_presenceHandlers.end(); it++ )
-  {
-    (*it)->handlePresence( from, type, show, msg );
-  }
-}
-
-void JClient::notifySubscriptionHandlers( iksid* from, iksubtype type, const char* msg )
-{
-  SubscriptionHandlerList::const_iterator it = m_subscriptionHandlers.begin();
-  for( it; it != m_subscriptionHandlers.end(); it++ )
-  {
-    (*it)->handleSubscription( from, type, msg );
-  }
-}
-
-void JClient::notifyIqHandlers( const char* xmlns, ikspak* pak )
-{
-  IqHandlerList::const_iterator it = m_iqHandlers.begin();
-  for( it; it != m_iqHandlers.end(); it++ )
-  {
-    (*it)->handleIq( xmlns, pak );
-  }
-
-  IqHandlerMap::const_iterator it_ns = m_iqNSHandlers.begin();
-  for( it_ns; it_ns != m_iqNSHandlers.end(); it_ns++ )
-  {
-    if( iks_strncmp( (*it_ns).first, xmlns, iks_strlen( xmlns ) ) == 0 )
-      (*it_ns).second->handleIq( xmlns, pak );
-  }
-
-  IqHandlerMap::const_iterator it_id = m_iqIDHandlers.begin();
-  for( it_id; it_id != m_iqIDHandlers.end(); it_id++ )
-  {
-    if( iks_strncmp( (*it_id).first, pak->id, iks_strlen( /*pak->id*/(*it_id).first ) ) == 0 )
-    {
-      (*it_id).second->handleIqID( pak->id, pak );
-      m_iqIDHandlers.erase( pak->id );
+      send( x );
     }
   }
 
-  char* tag = iks_name( iks_first_tag( pak->x ) );
-  IqHandlerMap::const_iterator it_ft = m_iqFTHandlers.begin();
-  for( it_ft; it_ft != m_iqFTHandlers.end(); it_ft++ )
+  void JClient::disableDisco()
   {
-    if( iks_strncmp( (*it_ft).first, tag, iks_strlen( tag ) ) == 0 )
-      (*it_ft).second->handleIqTag( tag, pak );
+    m_handleDisco = false;
+    delete m_disco;
+    m_disco = 0;
   }
-}
 
-void JClient::notifyMessageHandlers( iksid* from, iksubtype type, const char* msg )
-{
-  MessageHandlerList::const_iterator it = m_messageHandlers.begin();
-  for( it; it != m_messageHandlers.end(); it++ )
+  void JClient::disableRoster()
   {
-    (*it)->handleMessage( from, type, msg );
+    m_manageRoster = false;
+    delete m_rosterManager;
+    m_rosterManager = 0;
   }
-}
 
-int authHook( JClient* stream, ikspak* pak )
-{
-  if( stream->debug() ) printf("authHook\n");
-  stream->notifyOnConnect();
-  return IKS_FILTER_EAT;
-}
+  void JClient::nonSaslLogin( const char* sid )
+  {
+    if( m_debug ) printf("in login()\n");
+    NonSaslAuth *auth = new NonSaslAuth( this, m_sid );
+    auth->doAuth();
+  }
 
-int registerHook( JClient* stream, ikspak* pak )
-{
-  stream->setClientState( JClient::STATE_AUTHENTICATION_FAILED );
-  return IKS_FILTER_EAT;
-}
+  void JClient::sendInitialPresence()
+  {
+    char prio[5];
+    sprintf( prio, "%d", m_priority );
+    iks* x = iks_make_pres( IKS_SHOW_AVAILABLE, "online" );
+    iks_insert_cdata( iks_insert( x, "priority" ), prio, iks_strlen( prio ) );
+    send( x );
+  }
 
-int registeredHook( JClient* stream, ikspak* pak )
-{
-  if( stream->debug() ) printf("registeredHook\n");
-  stream->setClientState( JClient::STATE_AUTHENTICATED );
-  return IKS_FILTER_EAT;
-}
+  void JClient::sendPresence( int priority, ikshowtype type, const std::string& msg )
+  {
+    if( priority < -128 )
+      priority = -128;
+    if( priority > 127 )
+      priority = 127;
 
-int msgHook( JClient* stream, ikspak* pak )
-{
-  if( stream->debug() ) printf("msgHook\n");
-  stream->notifyMessageHandlers( pak->from, pak->subtype, iks_find_cdata( pak->x, "body" ) );
-  return IKS_FILTER_EAT;
-}
+    char prio[5];
+    sprintf( prio, "%d", priority );
+    iks* x = iks_make_pres( type, msg.c_str() );
+    iks_insert_cdata( iks_insert( x, "priority" ), prio, iks_strlen( prio ) );
+    send( x );
+  }
 
-int iqHook( JClient* stream, ikspak* pak )
-{
-  if( stream->debug() ) printf("iqHook\n");
-  stream->notifyIqHandlers( pak->ns, pak );
-  return IKS_FILTER_EAT;
-}
+  void JClient::setInitialPriority( int priority )
+  {
+    if( priority < -128 )
+      priority = -128;
+    if( priority > 127 )
+      priority = 127;
 
-int presenceHook( JClient* stream, ikspak* pak )
-{
-  if( stream->debug() ) printf("presenceHook\n");
-  stream->notifyPresenceHandlers( pak->from, pak->subtype, pak->show, iks_find_cdata( pak->x, "status" ) );
-  return IKS_FILTER_EAT;
-}
+    m_priority = priority;
+  }
 
-int subscriptionHook( JClient* stream, ikspak* pak )
-{
-  if( stream->debug() ) printf("subscriptionHook\n");
-  stream->notifySubscriptionHandlers( pak->from, pak->subtype, iks_find_cdata( pak->x, "status" ) );
-  return IKS_FILTER_EAT;
-}
+  RosterManager* JClient::rosterManager()
+  {
+    return m_rosterManager;
+  }
 
-int errorHook( JClient* stream, ikspak* pak )
-{
-  if( stream->debug() ) printf("errorHook\n");
-  return IKS_FILTER_EAT;
-}
+  Disco* JClient::disco()
+  {
+    return m_disco;
+  }
+
+  void JClient::onConnect()
+  {
+    if( m_manageRoster )
+      m_rosterManager->fill();
+
+    if( m_autoPresence )
+      sendInitialPresence();
+  }
+
+  // FIXME!!!
+  bool notified = false;
+
+  int bindHook( JClient* stream, ikspak* pak )
+  {
+    if( stream->debug() ) printf("bindHook\n");
+    iks* x = iks_child( iks_child( pak->x ) );
+    if( iks_strncmp( iks_name( x ), "jid", 3 ) == 0 )
+    {
+      iksid* id = iks_id_new( stream->get_stack(), iks_cdata( iks_child( x ) ) );
+      stream->setResource( id->resource );
+    }
+
+    stream->createSession();
+
+    return IKS_FILTER_EAT;
+  }
+
+  int sessionHook( JClient* stream, ikspak* pak )
+  {
+    if( stream->debug() ) printf("sessionHook\n");
+    stream->notifyOnConnect();
+
+    return IKS_FILTER_EAT;
+  }
+
+};

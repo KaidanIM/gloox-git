@@ -1,16 +1,21 @@
 Todo
 ----
 
-- check if for and iterators can be replaced by find
-- use struct for version and identity info
+- introduce some 'randomness' for IDs
+- introduce return values for *Handlers to indicate whether following handlers should be invoked as well
+- add classes for common packet types
+- TLS certificate verification
+- sort SRV records by weight & cost
+- check whether for and iterators can be replaced by find
+- use struct/class(?) for version and identity info
 - char* --> std::string
 - JEP-0012 (Last Activity)
 - JEP-0013 (Flexible Offline Message Retrieval)
 - JEP-0047 (In-Band Bytestreams)
 - JEP-0060 (Publish-Subscribe)
-- JEP-0114 (Jabber Component Protocol)
 - JEP-0118 (User Tune)
 - JEP-0126 (Invisibility)
+- JEP-0136 (Message Archiving)
 - JEP-0138 (Stream Compression)
 - JEP-0144 (Roster Item Exchange)
 
@@ -18,19 +23,6 @@ Todo
 In the pipe
 -----------
 
-- JEP-0048 (Bookmark Storage)
-- JEP-0145 (Annotations)
-
-Done
-----
-
-- JEP-0077 (In-Band Registration)
-- remove iksemelmm dependency
-- iq xmlns filter
-- introduce result handler
-- extract disco into separate class
-- more command line support
-- JEP-0030 (Service Discovery)
-- JEP-0049 (Private XML Storage)
-- JEP-0050 (Ad-hoc Commands)
-- JEP-0092 (Software Version)
+- ensure all IQ stanzas (GET and SET only?) are answered with a RESULT
+- complete error handling for all protocols
+- remove #warnings
