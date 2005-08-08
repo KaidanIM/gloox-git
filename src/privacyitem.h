@@ -91,25 +91,25 @@ namespace gloox
        * Returns the item type.
        * @return The type of the item.
        */
-      ItemType type() { return m_type; };
+      const ItemType type() { return m_type; };
 
       /**
        * Returns the item's action.
        * @return The action of the item.
        */
-      ItemAction action() { return m_action; };
+      const ItemAction action() { return m_action; };
 
       /**
        * Returns the packet type the item affects.
        * @return An ORed list of affected packet types.
        */
-      int packetType() { return m_packetType; };
+      const int packetType() { return m_packetType; };
 
       /**
        * Returns the value of the item's 'value' attribute.
        * @return value The 'value' attribute's value.
        */
-      string value() { return m_value; };
+      const string value() { return m_value; };
 
       /**
        * Compares the current PrivacyItem with another one.

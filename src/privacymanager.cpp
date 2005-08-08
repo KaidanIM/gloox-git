@@ -177,7 +177,7 @@ namespace gloox
       }
 
       int pType = (*it).packetType();
-      if( !pType == 15 )
+      if( pType != 15 )
       {
         if( pType & PrivacyItem::PACKET_MESSAGE )
           iks_insert( item, "message" );
@@ -292,7 +292,7 @@ namespace gloox
             {
               PrivacyItem::ItemType type;
               PrivacyItem::ItemAction action;
-              int packetType;
+              int packetType = 0;
               string value;
 
               char *t = iks_find_attrib( x, "type" );
@@ -321,13 +321,13 @@ namespace gloox
               while( y )
               {
                 if( iks_strncmp( iks_name( y ), "iq", 2 ) == 0 )
-                  packetType &= PrivacyItem::PACKET_IQ;
+                  packetType |= PrivacyItem::PACKET_IQ;
                 else if( iks_strncmp( iks_name( y ), "presence-out", 12 ) == 0 )
-                  packetType &= PrivacyItem::PACKET_PRESENCE_OUT;
+                  packetType |= PrivacyItem::PACKET_PRESENCE_OUT;
                 else if( iks_strncmp( iks_name( y ), "presence-in", 11 ) == 0 )
-                  packetType &= PrivacyItem::PACKET_PRESENCE_IN;
+                  packetType |= PrivacyItem::PACKET_PRESENCE_IN;
                 else if( iks_strncmp( iks_name( y ), "message", 7 ) == 0 )
-                  packetType &= PrivacyItem::PACKET_MESSAGE;
+                  packetType |= PrivacyItem::PACKET_MESSAGE;
 
                 y = iks_next( y );
               }

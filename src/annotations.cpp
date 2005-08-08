@@ -66,18 +66,18 @@ namespace gloox
 
   void Annotations::handlePrivateXML( const string& tag, const string& xmlns, ikspak* pak )
   {
-    iks *x = iks_first_tag( iks_first_tag( iks_first_tag( pak->x ) ) );
+    iks *x = iks_first_tag( iks_first_tag( pak->query ) );
 
     AnnotationsHandler::AnnotationsList aList;
 
     while( x )
     {
-      if( iks_strncmp( iks_name( x ), "conference", 10 ) == 0 )
+      if( iks_strncmp( iks_name( x ), "note", 4 ) == 0 )
       {
         char *jid = iks_find_attrib( x, "jid" );
         char *mdate = iks_find_attrib( x, "mdate" );
         char *cdate = iks_find_attrib( x, "cdate" );
-        char *note = iks_cdata( x );
+        char *note = iks_cdata( iks_child( x ) );
 
         if( jid && note )
         {

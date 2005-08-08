@@ -48,9 +48,16 @@ class AnnotationsTest : public AnnotationsHandler, ConnectionListener
       a->requestAnnotations();
     };
 
-    virtual void handleAnnotations( AnnotationsList aList )
+    virtual void handleAnnotations( AnnotationsList &aList )
     {
       printf( "received notes...\n" );
+      AnnotationsList::const_iterator it = aList.begin();
+      for( it; it != aList.end(); it++ )
+      {
+        printf( "jid: %s, note: %s, cdate: %s, mdate: %s\n", (*it).jid.c_str(),
+                (*it).note.c_str(), (*it).cdate.c_str(), (*it).mdate.c_str() );
+      }
+
       AnnotationsList mybList;
 
       annotationsListItem bItem;
