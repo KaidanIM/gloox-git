@@ -42,8 +42,8 @@ namespace gloox
        * @param ns The namespace that qualifies the stream. Either @b jabber:component:accept or
        * @b jabber:component:connect.
        * @param server The server to connect to.
-       * @param component The components hostname.
-       * @param password The components password.
+       * @param component The component's hostname. FQDN.
+       * @param password The component's password.
        * @param port The port to connect to. Default: 5222
        */
       JComponent( const std::string& ns, const std::string& server,
