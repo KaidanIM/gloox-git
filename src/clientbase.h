@@ -64,7 +64,7 @@ using namespace std;
 
 #define XMPP_PORT            5222
 
-#define GLOOX_VERSION "0.3pre-svn"
+#define GLOOX_VERSION "0.3"
 
 /**
  * This is the namespace for the gloox library.
