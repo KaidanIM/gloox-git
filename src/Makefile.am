@@ -17,10 +17,14 @@ libgloox_la_LIBADD = ./wrapper/libwrapper.la $(IKSEMEL_LIBS) -lpthread -lresolv
 libgloox_la_CFLAGS = $(CPPFLAGS) $(IKSEMEL_CFLAGS)
 
 libglooxincludedir = $(includedir)/gloox
-libglooxinclude_HEADERS = adhoc.h                 jclient.h            registration.h \
-			adhoccommandprovider.h  jthread.h            registrationhandler.h \
-			connectionlistener.h    messagehandler.h     roster.h \
-			disco.h                 prep.h                \
-			discohandler.h          presencehandler.h    rosterlistener.h \
-			disconodehandler.h      privatexml.h         subscriptionhandler.h \
-			iqhandler.h             privatexmlhandler.h  thread.h
+libglooxinclude_HEADERS = adhoccommandprovider.h  dns.h                 privacymanager.h \
+			  adhoc.h                 iqhandler.h           privatexml.h \
+			  annotations.h           jclient.h             privatexmlhandler.h \
+			  annotationshandler.h    jcomponent.h          registration.h \
+			  bookmarkhandler.h       jthread.h             registrationhandler.h \
+			  bookmarkstorage.h       messagehandler.h      rosteritem.h \
+			  clientbase.h            nonsaslauth.h         rosterlistener.h \
+			  connectionlistener.h    prep.h                rostermanager.h \
+			  disco.h                 presencehandler.h     subscriptionhandler.h \
+			  discohandler.h          privacyitem.h         thread.h \
+			  disconodehandler.h      privacylisthandler.h
