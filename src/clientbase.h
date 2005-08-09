@@ -62,9 +62,7 @@ using namespace std;
 #define XMLNS_STREAM_IQAUTH     "http://jabber.org/features/iq-auth"
 #define XMLNS_STREAM_IQREGISTER "http://jabber.org/features/iq-register"
 
-#define XMPP_PORT            5222
-
-#define GLOOX_VERSION "0.3.1"
+#define GLOOX_VERSION "0.3.2"
 
 /**
  * This is the namespace for the gloox library.
@@ -118,8 +116,9 @@ namespace gloox
        * You should not need to use this class directly. Use @ref JClient or @ref JComponent instead.
        * @param ns The namespace which qualifies the stream. Either jabber:client or jabber:component:*
        * @param password The password to use for further authentication.
+       * @param port The port to connect to. The default of -1 means to look up the port via DNS SRV.
        */
-      ClientBase( const std::string& ns, const std::string& password );
+      ClientBase( const std::string& ns, const std::string& password, int port = -1 );
 
       /**
        * Constructs a new ClientBase.
@@ -127,10 +126,10 @@ namespace gloox
        * @param ns The namespace which qualifies the stream. Either jabber:client or jabber:component:*
        * @param password The password to use for further authentication.
        * @param server The server to connect to.
-       * @param port The port to connect to. Default: 5222
+       * @param port The port to connect to. The default of -1 means to look up the port via DNS SRV.
        */
       ClientBase( const std::string& ns, const std::string& password,
-                  const std::string& server, int port = XMPP_PORT );
+                  const std::string& server, int port = -1 );
 
       /**
        * Virtual destrcuctor.

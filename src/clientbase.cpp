@@ -28,15 +28,15 @@ namespace gloox
 
   ClientBase::ClientBase( const std::string& ns )
     : Stream( ns ),
-      m_port( XMPP_PORT ), m_thread( 0 ),
+      m_port( -1 ), m_thread( 0 ),
       m_tls( true ), m_sasl( true ), m_idCount( 0 )
   {
     init();
   }
 
-  ClientBase::ClientBase( const std::string& ns, const std::string& password )
+  ClientBase::ClientBase( const std::string& ns, const std::string& password, int port )
     : Stream( ns ),
-      m_password( password ), m_port( XMPP_PORT ), m_thread( 0 ),
+      m_password( password ), m_port( port ), m_thread( 0 ),
       m_tls( true ), m_sasl( true ), m_idCount( 0 )
   {
     init();

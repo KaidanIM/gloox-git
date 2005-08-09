@@ -44,10 +44,10 @@ namespace gloox
        * @param server The server to connect to.
        * @param component The component's hostname. FQDN.
        * @param password The component's password.
-       * @param port The port to connect to. Default: 5222
+     * @param port The port to connect to. The default of -1 means to look up the port via DNS SRV.
        */
       JComponent( const std::string& ns, const std::string& server,
-                  const std::string& component, const std::string& password, int port = XMPP_PORT );
+                  const std::string& component, const std::string& password, int port = -1 );
 
       /**
        * Virtual Destructor.
