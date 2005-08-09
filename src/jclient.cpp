@@ -47,6 +47,14 @@ namespace gloox
     m_handleDisco( true ), m_rosterManager( 0 ),
     m_disco( 0 ), m_authorized( false )
   {
+    iksid *tmp = iks_id_new( get_stack(), id.c_str() );
+    if( tmp->user )
+      m_username = tmp->user;
+    if( tmp->resource )
+      m_resource = tmp->resource;
+    if( tmp->server )
+      m_server = tmp->server;
+
     init();
   }
 
