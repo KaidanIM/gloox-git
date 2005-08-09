@@ -43,10 +43,10 @@ namespace gloox
        */
       struct annotationsListItem
       {
-        string jid;
-        string cdate;
-        string mdate;
-        string note;
+        string jid;            /**< The JID of the roster item this note is about */
+        string cdate;          /**< Creation date of this note. */
+        string mdate;          /**< Date of last modification of this note. */
+        string note;           /**< The note. */
       };
 
       /**
