@@ -44,8 +44,8 @@ namespace gloox
        */
       struct bookmarkListItem
       {
-        string name;
-        string url;
+        string name;             /**< A human readable name of the bookmark. */
+        string url;              /**< The URL of the bookmark. */
       };
 
       /**
@@ -53,10 +53,10 @@ namespace gloox
        */
       struct conferenceListItem
       {
-        string name;
-        string jid;
-        string nick;
-        string password;
+        string name;             /**< A human readable name of the conference room. */
+        string jid;              /**< The address of the room. */
+        string nick;             /**< The nick name to use in this room. */
+        string password;         /**< The password to use for a protected room. */
       };
 
       /**
