@@ -56,10 +56,10 @@ namespace gloox
     int fd;
     int ret;
 
-    if( m_parent->port() != XMPP_PORT )
-      fd = DNS::connect( m_parent->serverIdn(), m_parent->port() );
-    else
+    if( m_parent->port() == -1 )
       fd = DNS::connect( m_parent->serverIdn() );
+    else
+      fd = DNS::connect( m_parent->serverIdn(), m_parent->port() );
 
     if( fd <= 2 )
     {

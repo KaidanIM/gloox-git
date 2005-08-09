@@ -36,6 +36,7 @@
 #define SRV_SERVER  (RRFIXEDSZ+6)
 #define SRV_FIXEDSZ (RRFIXEDSZ+6)
 
+#define XMPP_PORT 5222
 
 namespace gloox
 {
@@ -147,8 +148,14 @@ namespace gloox
     StringMap::const_iterator it = hosts.begin();
     for( it; it != hosts.end(); it++ )
     {
-      printf( "trying: %s, port: %d\n", (*it).first.c_str(), (*it).second );
-      dest_addr.sin_port = htons( (*it).second );
+      int port;
+      if( (*it).second == 0 )
+        port = XMPP_PORT;
+      else
+        port = (*it).second;
+
+      printf( "trying: %s, port: %d\n", (*it).first.c_str(), port );
+      dest_addr.sin_port = htons( port );
       printf( "resolving %s... ", (*it).first.c_str() );
       if( ( h = gethostbyname( (*it).first.c_str() ) ) == 0 )
       {

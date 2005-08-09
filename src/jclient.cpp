@@ -42,7 +42,7 @@ namespace gloox
   }
 
   JClient::JClient( const std::string& id, const std::string& password, int port )
-    : ClientBase( XMLNS_CLIENT, password ),
+    : ClientBase( XMLNS_CLIENT, password, port ),
     m_priority( -1 ), m_autoPresence( false ), m_manageRoster( true ),
     m_handleDisco( true ), m_rosterManager( 0 ),
     m_disco( 0 ), m_authorized( false )
@@ -60,7 +60,7 @@ namespace gloox
 
   JClient::JClient( const std::string& username, const std::string& password,
                     const std::string& server, const std::string& resource, int port )
-    : ClientBase( XMLNS_CLIENT, password, server ),
+    : ClientBase( XMLNS_CLIENT, password, server, port ),
     m_username( username ), m_resource( resource ),
     m_priority( -1 ), m_autoPresence( false ), m_manageRoster( true ),
     m_handleDisco( true ), m_rosterManager( 0 ),

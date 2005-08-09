@@ -120,9 +120,9 @@ namespace gloox
        * records. The domain part of the JID is used as a fallback in case no SRV record is found.
        * @param id A full Jabber ID used for connecting to the server.
        * @param password The password used for authentication.
-       * @param port The port to connect to. Default: 5222
+       * @param port The port to connect to. The default of -1 means to look up the port via DNS SRV.
        */
-      JClient( const std::string& id, const std::string& password, int port = XMPP_PORT );
+      JClient( const std::string& id, const std::string& password, int port = -1 );
 
       /**
        * Constructs a new JClient.
@@ -133,11 +133,11 @@ namespace gloox
        * @param resource The resource part of the JID.
        * @param password The password to use for authentication.
        * @param server The jabber server's address or host name to connect to.
-       * @param port The port to connect to. Default: 5222
+       * @param port The port to connect to. The default of -1 means to look up the port via DNS SRV.
        */
       JClient( const std::string& username, const std::string& password,
               const std::string& server, const std::string& resource,
-              int port = XMPP_PORT );
+              int port = -1 );
 
       /**
        * Destructor.
