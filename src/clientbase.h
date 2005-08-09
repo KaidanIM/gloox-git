@@ -55,7 +55,7 @@ using namespace std;
 #define XMLNS_BOOKMARKS         "storage:bookmarks"
 #define XMLNS_ANNOTATIONS       "storage:rosternotes"
 
-#define XMLNS_STREAM_TLS        "urn:ietf:params:xml:ns:xmpp-starttls"
+#define XMLNS_STREAM_TLS        "urn:ietf:params:xml:ns:xmpp-tls"
 #define XMLNS_STREAM_SASL       "urn:ietf:params:xml:ns:xmpp-sasl"
 #define XMLNS_STREAM_BIND       "urn:ietf:params:xml:ns:xmpp-bind"
 #define XMLNS_STREAM_SESSION    "urn:ietf:params:xml:ns:xmpp-session"
