@@ -1,5 +1,11 @@
 
-v0.3  --  09 Aug 2005
+v0.3.1 -- 09 Aug 2005
+---------------------
+- documentation updates
+- fixed crash with bare JID in constructor of JClient
+
+
+v0.3  --  08 Aug 2005
 ---------------------
 - use ID tracking whereever possible/feasible
 - privacy lists (RFC 3921)
