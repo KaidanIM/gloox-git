@@ -31,19 +31,20 @@ namespace gloox
     : m_parent( parent ), m_sid( sid )
   {
     if( m_parent )
-      m_parent->registerIqHandler( this, XMLNS_STREAM_IQAUTH );
+      m_parent->registerIqHandler( this, XMLNS_AUTH );
   }
 
   NonSaslAuth::~NonSaslAuth()
   {
     if( m_parent )
-      m_parent->removeIqHandler( XMLNS_STREAM_IQAUTH );
+      m_parent->removeIqHandler( XMLNS_AUTH );
   }
 
   void NonSaslAuth::doAuth()
   {
     string id = m_parent->getID();
-    iks *x = iks_make_iq( IKS_TYPE_GET, XMLNS_STREAM_IQAUTH );
+    iks *x = iks_make_iq( IKS_TYPE_GET, XMLNS_AUTH );
+    iks_insert_attrib( x, "to", m_parent->server().c_str() );
     iks_insert_attrib( x, "id", id.c_str() );
     iks_insert_cdata( iks_insert( iks_first_tag( x ), "username" ),
                       m_parent->username().c_str(), m_parent->username().length() );

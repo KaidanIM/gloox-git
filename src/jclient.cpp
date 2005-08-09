@@ -159,7 +159,7 @@ namespace gloox
                 bindResource();
               }
             }
-            else if( !username().empty() || !password().empty() )
+            else if( !username().empty() && !password().empty() )
             {
               std::string user = username();
               std::string pwd = password();
@@ -222,38 +222,45 @@ namespace gloox
 
     int features = 0;
 
-    for( x = iks_child( x ); x; x = iks_next_tag( x ) )
+    iks *y = iks_first_tag( x );
+    while( y )
     {
-      if( !iks_strncmp( iks_name( x ), "starttls", 8 )
-                && !iks_strncmp( iks_find_attrib( x, "xmlns" ),
+      if( !iks_strncmp( iks_name( y ), "starttls", 8 )
+                && !iks_strncmp( iks_find_attrib( y, "xmlns" ),
                                 XMLNS_STREAM_TLS, iks_strlen( XMLNS_STREAM_TLS ) ) )
         features |= STREAM_FEATURE_STARTTLS;
 
-      else if( !iks_strncmp( iks_name( x ), "mechanisms", 10 )
-                && !iks_strncmp( iks_find_attrib( x, "xmlns" ),
+      else if( !iks_strncmp( iks_name( y ), "mechanisms", 10 )
+                && !iks_strncmp( iks_find_attrib( y, "xmlns" ),
                                 XMLNS_STREAM_SASL, iks_strlen( XMLNS_STREAM_SASL ) ) )
-        features |= getSaslMechs( iks_child( x ) );
+        features |= getSaslMechs( iks_child( y ) );
 
-      else if( !iks_strncmp( iks_name( x ), "bind", 4 )
-                && !iks_strncmp( iks_find_attrib( x, "xmlns" ),
+      else if( !iks_strncmp( iks_name( y ), "bind", 4 )
+                && !iks_strncmp( iks_find_attrib( y, "xmlns" ),
                                 XMLNS_STREAM_BIND, iks_strlen( XMLNS_STREAM_BIND ) ) )
         features |= STREAM_FEATURE_BIND;
 
-      else if( !iks_strncmp( iks_name( x ), "session", 7 )
-                && !iks_strncmp( iks_find_attrib( x, "xmlns" ),
+      else if( !iks_strncmp( iks_name( y ), "session", 7 )
+                && !iks_strncmp( iks_find_attrib( y, "xmlns" ),
                                 XMLNS_STREAM_SESSION, iks_strlen( XMLNS_STREAM_SESSION ) ) )
         features |= STREAM_FEATURE_SESSION;
 
-      else if( !iks_strncmp( iks_name( x ), "auth", 4 )
-                && !iks_strncmp( iks_find_attrib( x, "xmlns" ),
+      else if( !iks_strncmp( iks_name( y ), "auth", 4 )
+                && !iks_strncmp( iks_find_attrib( y, "xmlns" ),
                                 XMLNS_STREAM_IQAUTH, iks_strlen( XMLNS_STREAM_IQAUTH ) ) )
         features |= STREAM_FEATURE_IQAUTH;
 
-      else if( !iks_strncmp( iks_name( x ), "register", 8 )
-                && !iks_strncmp( iks_find_attrib( x, "xmlns" ),
+      else if( !iks_strncmp( iks_name( y ), "register", 8 )
+                && !iks_strncmp( iks_find_attrib( y, "xmlns" ),
                                 XMLNS_STREAM_IQREGISTER, iks_strlen( XMLNS_STREAM_IQREGISTER ) ) )
         features |= STREAM_FEATURE_IQREGISTER;
+
+      y = iks_next_tag( y );
     }
+
+    if( features == 0 )
+      features = STREAM_FEATURE_IQAUTH;
+
     return features;
   }
 
@@ -263,9 +270,9 @@ namespace gloox
 
     while( x )
     {
-      if( !iks_strncmp( iks_cdata( iks_child( x ) ), "DIGEST-MD5", 10 ) )
+      if( iks_strncmp( iks_cdata( iks_child( x ) ), "DIGEST-MD5", 10 ) == 0 )
         mechs |= STREAM_FEATURE_SASL_DIGESTMD5;
-      else if( !iks_strncmp( iks_cdata( iks_child( x ) ), "PLAIN", 5 ) )
+      else if( iks_strncmp( iks_cdata( iks_child( x ) ), "PLAIN", 5 ) == 0 )
         mechs |= STREAM_FEATURE_SASL_PLAIN;
 
       x = iks_next_tag( x );
