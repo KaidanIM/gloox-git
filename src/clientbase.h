@@ -62,7 +62,7 @@ using namespace std;
 #define XMLNS_STREAM_IQAUTH     "http://jabber.org/features/iq-auth"
 #define XMLNS_STREAM_IQREGISTER "http://jabber.org/features/iq-register"
 
-#define GLOOX_VERSION "0.3.2"
+#define GLOOX_VERSION "0.3.3"
 
 /**
  * This is the namespace for the gloox library.
@@ -386,9 +386,7 @@ namespace gloox
 
       ConnectionListenerList  m_connectionListeners;
       IqHandlerMap            m_iqNSHandlers;
-      IqHandlerMap            m_iqFTHandlers;
       IqTrackMap              m_iqIDHandlers;
-      IqHandlerList           m_iqHandlers;
       MessageHandlerList      m_messageHandlers;
       PresenceHandlerList     m_presenceHandlers;
       SubscriptionHandlerList m_subscriptionHandlers;
