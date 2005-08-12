@@ -34,6 +34,9 @@ namespace gloox
 
   string Prep::nodeprep( const string& node )
   {
+    if( node.empty() )
+      return node;
+
 #ifdef LIBIDN
   char* p;
   char buf[JID_PORTION_SIZE + 1];
@@ -60,6 +63,9 @@ namespace gloox
 
   string Prep::nameprep( const string& domain )
   {
+    if( domain.empty() )
+      return domain;
+
 #ifdef LIBIDN
     char* p;
     char buf[JID_PORTION_SIZE + 1];
@@ -86,6 +92,9 @@ namespace gloox
 
   string Prep::resourceprep( const string& resource )
   {
+    if( resource.empty() )
+      return resource;
+
 #ifdef LIBIDN
     char* p;
     char buf[JID_PORTION_SIZE + 1];
@@ -112,6 +121,9 @@ namespace gloox
 
   string Prep::idna( const string& domain )
   {
+    if( domain.empty() )
+      return domain;
+
 #ifdef LIBIDN
     char* p;
     char buf[JID_PORTION_SIZE + 1];
