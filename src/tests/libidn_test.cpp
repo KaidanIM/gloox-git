@@ -26,4 +26,6 @@ int main( int argc, char* argv[] )
   std::string tmp( "www.ümlaut.domain.org" );
   std::string tmp2 = Prep::idna( tmp );
   printf( "idna: www.ümlaut.domain.org %s\n", tmp2.c_str() );
+
+  delete( j );
 }

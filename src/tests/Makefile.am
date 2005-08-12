@@ -7,7 +7,7 @@ AM_CPPFLAGS = -g3 -fno-inline
 bin_PROGRAMS = libidn_test register_test disco_test adhoc_test roster_test privatexml_test component_test bookmarkstorage_test annotations_test privacylist_test
 
 libidn_test_SOURCES = libidn_test.cpp
-libidn_test_LDADD = ../libgloox.la -lpthread
+libidn_test_LDADD = -lgloox -lpthread
 libidn_test_CFLAGS = $(CPPFLAGS)
 
 register_test_SOURCES = register_test.cpp
