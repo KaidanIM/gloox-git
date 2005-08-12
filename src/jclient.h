@@ -33,6 +33,7 @@ namespace gloox
 
   class RosterManager;
   class Disco;
+  class NonSaslAuth;
   class ConnectionListener;
 
   /**
@@ -253,6 +254,7 @@ namespace gloox
 
       RosterManager* m_rosterManager;
       Disco* m_disco;
+      NonSaslAuth *m_auth;
 
       bool m_authorized;
       std::string m_username;
