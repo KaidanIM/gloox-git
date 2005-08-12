@@ -9,15 +9,7 @@ Todo
 - check whether for and iterators can be replaced by find
 - use struct/class(?) for version and identity info
 - char* --> std::string
-- JEP-0012 (Last Activity)
-- JEP-0013 (Flexible Offline Message Retrieval)
-- JEP-0047 (In-Band Bytestreams)
 - JEP-0060 (Publish-Subscribe)
-- JEP-0118 (User Tune)
-- JEP-0126 (Invisibility)
-- JEP-0136 (Message Archiving)
-- JEP-0138 (Stream Compression)
-- JEP-0144 (Roster Item Exchange)
 
 
 In the pipe
