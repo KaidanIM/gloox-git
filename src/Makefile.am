@@ -8,8 +8,8 @@ SUBDIRS = wrapper
 
 lib_LTLIBRARIES = libgloox.la
 
-libgloox_la_SOURCES = clientbase.cpp jclient.cpp jcomponent.cpp thread.cpp jthread.cpp \
-			disco.cpp adhoc.cpp privatexml.cpp prep.cpp registration.cpp dns.cpp \
+libgloox_la_SOURCES = thread.cpp jthread.cpp clientbase.cpp jclient.cpp jcomponent.cpp \
+			dns.cpp prep.cpp disco.cpp adhoc.cpp privatexml.cpp registration.cpp \
 			nonsaslauth.cpp rosteritem.cpp rostermanager.cpp privacyitem.cpp \
 			bookmarkstorage.cpp annotations.cpp privacymanager.cpp
 libgloox_la_LDFLAGS = -version-info 0:3:0 -no-undefined -no-allow-shlib-undefined
