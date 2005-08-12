@@ -63,11 +63,13 @@ namespace gloox
 
         if( iks_find( pak->query, "digest" ) && !m_sid.empty() )
         {
-          x = iks_make_auth( m_parent->parsedJid(), m_parent->password().c_str(), m_sid.c_str() );
+          //FIXME: write own 'iks_make'auth' to get rid of cast
+          x = iks_make_auth( (iksid*)m_parent->parsedJid(), m_parent->password().c_str(), m_sid.c_str() );
         }
         else if( iks_find( pak->query, "password" ) )
         {
-          x = iks_make_auth( m_parent->parsedJid(), m_parent->password().c_str(), NULL );
+          //FIXME: write own 'iks_make'auth' to get rid of cast
+          x = iks_make_auth( (iksid*)m_parent->parsedJid(), m_parent->password().c_str(), NULL );
         }
 
         string id = m_parent->getID();
