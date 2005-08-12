@@ -188,9 +188,9 @@ namespace gloox
 
   void ClientBase::trackID( IqHandler* ih, const std::string& id, int context )
   {
-    TrackStruct track;
-    track.ih = ih;
-    track.context = context;
+    TrackStruct *track;
+    track->ih = ih;
+    track->context = context;
     m_iqIDHandlers[id] = track;
   }
 
@@ -268,7 +268,7 @@ namespace gloox
   void ClientBase::notifyIqHandlers( const char* xmlns, ikspak* pak )
   {
     IqHandlerMap::const_iterator it_ns = m_iqNSHandlers.begin();
-    for( it_ns; it_ns != m_iqNSHandlers.end(); it_ns++ )
+    for( it_ns; it_ns != m_iqNSHandlers.end(); ++it_ns )
     {
       if( iks_strncmp( (*it_ns).first.c_str(), xmlns, (*it_ns).first.length() ) == 0 )
       {
@@ -278,11 +278,11 @@ namespace gloox
     }
 
     IqTrackMap::const_iterator it_id = m_iqIDHandlers.begin();
-    for( it_id; it_id != m_iqIDHandlers.end(); it_id++ )
+    for( it_id; it_id != m_iqIDHandlers.end(); ++it_id )
     {
       if( iks_strncmp( (*it_id).first.c_str(), pak->id, (*it_id).first.length() ) == 0 )
       {
-        (*it_id).second.ih->handleIqID( pak->id, pak, (*it_id).second.context );
+        (*it_id).second->ih->handleIqID( pak->id, pak, (*it_id).second->context );
         m_iqIDHandlers.erase( pak->id );
       }
     }
