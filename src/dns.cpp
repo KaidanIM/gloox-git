@@ -154,16 +154,17 @@ namespace gloox
       else
         port = (*it).second;
 
-      printf( "trying: %s, port: %d\n", (*it).first.c_str(), port );
       dest_addr.sin_port = htons( port );
-      printf( "resolving %s... ", (*it).first.c_str() );
       if( ( h = gethostbyname( (*it).first.c_str() ) ) == 0 )
       {
         ret = -DNS_COULD_NOT_RESOLVE;
         continue;
       }
 
-      printf( "to %s\n", inet_ntoa(*((struct in_addr *)h->h_addr)) );
+#ifdef DEBUG
+      printf( "resolved %s to: %s:%d", (*it).first.c_str(),
+              inet_ntoa( *((struct in_addr *)h->h_addr) ), port );
+#endif
 
       if( inet_aton( inet_ntoa(*((struct in_addr *)h->h_addr)), &(dest_addr.sin_addr) ) == 0 )
         continue;
@@ -193,7 +194,9 @@ namespace gloox
     if( ( h = gethostbyname( domain.c_str() ) ) == 0 )
       return -DNS_COULD_NOT_RESOLVE;
 
-    printf( "to %s\n", inet_ntoa(*((struct in_addr *)h->h_addr)) );
+#ifdef DEBUG
+    printf( "resolved %s to: %s\n", domain.c_str(), inet_ntoa(*((struct in_addr *)h->h_addr)) );
+#endif
 
     if( inet_aton( inet_ntoa(*((struct in_addr *)h->h_addr)), &(dest_addr.sin_addr) ) == 0 )
       return -DNS_COULD_NOT_RESOLVE;
