@@ -36,7 +36,7 @@ namespace gloox
     m_priority( -1 ),
     m_autoPresence( false ), m_manageRoster( true ),
     m_handleDisco( true ), m_rosterManager( 0 ),
-    m_disco( 0 ), m_authorized( false )
+    m_disco( 0 ), m_auth( 0 ), m_authorized( false )
   {
     init();
   }
@@ -45,7 +45,7 @@ namespace gloox
     : ClientBase( XMLNS_CLIENT, password, port ),
     m_priority( -1 ), m_autoPresence( false ), m_manageRoster( true ),
     m_handleDisco( true ), m_rosterManager( 0 ),
-    m_disco( 0 ), m_authorized( false )
+    m_disco( 0 ), m_auth( 0 ), m_authorized( false )
   {
     iksid *tmp = iks_id_new( get_stack(), id.c_str() );
     if( tmp->user )
@@ -64,7 +64,7 @@ namespace gloox
     m_username( username ), m_resource( resource ),
     m_priority( -1 ), m_autoPresence( false ), m_manageRoster( true ),
     m_handleDisco( true ), m_rosterManager( 0 ),
-    m_disco( 0 ), m_authorized( false )
+    m_disco( 0 ), m_auth( 0 ), m_authorized( false )
   {
     init();
   }
@@ -98,6 +98,7 @@ namespace gloox
   {
     delete m_disco;
     delete m_rosterManager;
+    delete m_auth;
     ClientBase::cleanUp();
   }
 
@@ -149,8 +150,8 @@ namespace gloox
 
           if( sasl() )
           {
-            if( tls() && !sasl() && !is_secure() )
-              disconnect();
+//             if( tls() && !sasl() && !is_secure() )
+//               disconnect();
 
             if( m_authorized )
             {
@@ -164,16 +165,20 @@ namespace gloox
               std::string user = username();
               std::string pwd = password();
               if( m_streamFeatures & STREAM_FEATURE_SASL_DIGESTMD5 )
+              {
                 start_sasl( IKS_SASL_DIGEST_MD5, (char*)user.c_str(), (char*)pwd.c_str() );
-
-              else if( is_secure() && ( m_streamFeatures & STREAM_FEATURE_SASL_PLAIN ) )
+              }
+              else if( m_streamFeatures & STREAM_FEATURE_SASL_PLAIN )
+              {
                 start_sasl( IKS_SASL_PLAIN, (char*)user.c_str(), (char*)pwd.c_str() );
-
+              }
               else if( m_streamFeatures & STREAM_FEATURE_IQAUTH )
+              {
                 nonSaslLogin();
-
+              }
               else
               {
+                if( m_debug ) printf( "the server doesn't support any auth mechanisms we know about\n" );
                 m_state = STATE_NO_SUPPORTED_AUTH;
                 disconnect();
               }
@@ -183,10 +188,20 @@ namespace gloox
               notifyOnConnect();
             }
           }
+          else if( m_streamFeatures & STREAM_FEATURE_IQAUTH )
+          {
+            nonSaslLogin();
+          }
+          else
+          {
+            if( m_debug ) printf( "the server doesn't support any auth mechanisms we know about\n" );
+            m_state = STATE_NO_SUPPORTED_AUTH;
+            disconnect();
+          }
         }
         else if( iks_strncmp( "failure", iks_name ( node ), 7 ) == 0 )
         {
-          if( m_debug ) printf("sasl authentication failed...\n");
+          if( m_debug ) printf( "sasl authentication failed...\n" );
           m_state = STATE_AUTHENTICATION_FAILED;
           disconnect();
         }
@@ -324,8 +339,8 @@ namespace gloox
   void JClient::nonSaslLogin( const char* sid )
   {
     if( m_debug ) printf("in login()\n");
-    NonSaslAuth *auth = new NonSaslAuth( this, m_sid );
-    auth->doAuth();
+    m_auth = new NonSaslAuth( this, m_sid );
+    m_auth->doAuth();
   }
 
   void JClient::sendInitialPresence()
