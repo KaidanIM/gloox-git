@@ -34,111 +34,105 @@ namespace gloox
 
   string Prep::nodeprep( const string& node )
   {
-  #ifdef LIBIDN
-    char* p;
-    char* buf = (char*)calloc( JID_PORTION_SIZE, 1 );
-    buf = strndup( node.c_str(), node.length() );
-    p = stringprep_locale_to_utf8( buf );
+#ifdef LIBIDN
+  char* p;
+  char buf[JID_PORTION_SIZE + 1];
+  memset( &buf, '\0', JID_PORTION_SIZE + 1 );
+  strncpy( buf, node.c_str(), node.length() );
+  p = stringprep_locale_to_utf8( buf );
     if ( p )
     {
-      strcpy( buf, p );
+      strncpy( buf, p, JID_PORTION_SIZE + 1 );
       free( p );
     }
 
-    int rc = stringprep( buf, JID_PORTION_SIZE, (Stringprep_profile_flags)0, stringprep_xmpp_nodeprep );
+    int rc = stringprep( (char*)&buf, JID_PORTION_SIZE,
+                         (Stringprep_profile_flags)0, stringprep_xmpp_nodeprep );
     if ( rc != STRINGPREP_OK )
     {
-      free( buf );
       return string();
     }
-    string *t = new string( buf );
-    free( buf );
-    return *t;
-  #else
+    return buf;
+#else
     return node;
-  #endif
+#endif
   }
 
   string Prep::nameprep( const string& domain )
   {
-  #ifdef LIBIDN
+#ifdef LIBIDN
     char* p;
-    char* buf = (char*)calloc( JID_PORTION_SIZE, 1 );
-    buf = strndup( domain.c_str(), domain.length() );
+    char buf[JID_PORTION_SIZE + 1];
+    memset( &buf, '\0', JID_PORTION_SIZE + 1 );
+    strncpy( buf, domain.c_str(), domain.length() );
     p = stringprep_locale_to_utf8( buf );
     if ( p )
     {
-      strcpy( buf, p );
+      strncpy( buf, p, JID_PORTION_SIZE + 1 );
       free( p );
     }
 
-    int rc = stringprep( buf, JID_PORTION_SIZE, (Stringprep_profile_flags)0, stringprep_nameprep);
+    int rc = stringprep( (char*)&buf, JID_PORTION_SIZE,
+                         (Stringprep_profile_flags)0, stringprep_nameprep );
     if ( rc != STRINGPREP_OK )
     {
-      free( buf );
       return string();
     }
-    string *t = new string( buf );
-    free( buf );
-    return *t;
-  #else
+    return buf;
+#else
     return domain;
-  #endif
+#endif
   }
 
   string Prep::resourceprep( const string& resource )
   {
-  #ifdef LIBIDN
+#ifdef LIBIDN
     char* p;
-    char* buf = (char*)calloc( JID_PORTION_SIZE, 1 );
-    buf = strndup( resource.c_str(), resource.length() );
+    char buf[JID_PORTION_SIZE + 1];
+    memset( &buf, '\0', JID_PORTION_SIZE + 1 );
+    strncpy( buf, resource.c_str(), resource.length() );
     p = stringprep_locale_to_utf8( buf );
     if ( p )
     {
-      strcpy( buf, p );
+      strncpy( buf, p, JID_PORTION_SIZE + 1 );
       free( p );
     }
 
-    int rc = stringprep( buf, JID_PORTION_SIZE, (Stringprep_profile_flags)0, stringprep_xmpp_resourceprep );
+    int rc = stringprep( (char*)&buf, JID_PORTION_SIZE,
+                          (Stringprep_profile_flags)0, stringprep_xmpp_resourceprep );
     if ( rc != STRINGPREP_OK )
     {
-      free( buf );
       return string();
     }
-    string *t = new string( buf );
-    free( buf );
-    return *t;
-  #else
+    return buf;
+#else
     return resource;
-  #endif
+#endif
   }
 
   string Prep::idna( const string& domain )
   {
-  #ifdef LIBIDN
+#ifdef LIBIDN
     char* p;
-    char* buf = (char*)calloc( JID_PORTION_SIZE, 1 );
-    buf = strndup( domain.c_str(), domain.length() );
+    char buf[JID_PORTION_SIZE + 1];
+    memset( &buf, '\0', JID_PORTION_SIZE + 1 );
+    strncpy( buf, domain.c_str(), domain.length() );
     p = stringprep_locale_to_utf8( buf );
     if ( p )
     {
-      strcpy( buf, p );
+      strncpy( buf, p, JID_PORTION_SIZE + 1 );
       free( p );
     }
 
-    int rc = idna_to_ascii_8z( buf, &p, (Idna_flags)0 );
+    int rc = idna_to_ascii_8z( (char*)&buf, &p, (Idna_flags)0 );
     if ( rc != IDNA_SUCCESS )
     {
-      free( buf );
       return string();
     }
-    string *t = new string( p );
-    free( buf );
-    free( p );
-    return *t;
-  #else
+    return p;
+#else
     return domain;
-  #endif
+#endif
   }
 
 };
