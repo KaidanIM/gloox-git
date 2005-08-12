@@ -149,31 +149,31 @@ namespace gloox
        * Returns the current prepped username.
        * @return The username used to connect.
        */
-      virtual std::string username() { return Prep::nodeprep( m_username ); };
+      virtual const std::string username() const { return Prep::nodeprep( m_username ); };
 
       /**
        * Returns the current prepped resource.
        * @return The resource used to connect.
        */
-      std::string resource() { return Prep::resourceprep( m_resource ); };
+      std::string const resource() const { return Prep::resourceprep( m_resource ); };
 
       /**
        * Returns the current priority.
        * @return The priority of the current resource.
        */
-      int priority() { return m_priority; };
+      int priority() const { return m_priority; };
 
       /**
        * Returns the current complete jabber id.
        * @return The complete jabber id, composed of username, server and resource.
        */
-      std::string jid();
+      const std::string jid() const;
 
       /**
        * Returns the current complete jabber id.
        * @return The complete jabber id, composed of username, server and resource.
        */
-      iksid* parsedJid();
+      const iksid* parsedJid() const;
 
       // FIXME: setters have to update each other, e.g. username, server, resource --> jid
       /**

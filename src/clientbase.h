@@ -154,19 +154,19 @@ namespace gloox
        * Reimplement this function to provide a username for connection purposes.
        * @return The username.
        */
-      virtual std::string username() {};
+      virtual const std::string username() const {};
 
       /**
        * Reimplement this function to provide a JID.
        * @return The JID.
        */
-      virtual std::string jid() {};
+      virtual const std::string jid() const {};
 
       /**
        * Returns the current client state.
        * @return The current client state.
        */
-      StateEnum state() { return m_state; };
+      const StateEnum state() const { return m_state; };
 
       /**
        * Switches usage of SASL on/off (if available). Default: on
@@ -202,7 +202,7 @@ namespace gloox
        * Returns the current debug status.
        * @return the current debug status.
        */
-      bool debug()           { return m_debug; };
+      bool debug() const { return m_debug; };
 
       /**
        * Switches debug output on/off. Default: off
@@ -211,55 +211,55 @@ namespace gloox
       void setDebug( bool debug ) { m_debug = debug; };
 
       /**
-       * Returns string which is used in the 'to' attribute of tzhe initial stream.
+       * Returns string which is used in the 'to' attribute of the initial stream opening tag.
        * This should be the server's hostname for the @b jabber:client namespace, and the
        * component's hostname for the jabber:component:* namespaces.
        * @return The host to name in the stream's 'to' attribute.
        */
-      virtual const std::string streamTo() { return server(); };
+      virtual const std::string streamTo() const { return server(); };
 
       /**
        * Returns the current prepped server.
        * @return The server used to connect.
        */
-      std::string server() { return Prep::nameprep( m_server ); };
+      const std::string server() const { return Prep::nameprep( m_server ); };
 
       /**
        * Returns the current server. IDNA rules are applied.
        * @return The server used to connect.
        */
-      std::string serverIdn() { return Prep::idna( m_server ); };
+      const std::string serverIdn() const { return Prep::idna( m_server ); };
 
       /**
        * Returns the current SASL status.
        * @return The current SASL status.
        */
-      bool sasl() { return m_sasl; };
+      bool sasl() const { return m_sasl; };
 
       /**
        * Returns the current TLS status.
        * @return The current TLS status.
        */
-      bool tls() { return m_tls; };
+      bool tls() const { return m_tls; };
 
       /**
        * Returns the current port.
        * @return The port used to connect.
        */
-      int port() { return m_port; };
+      int port() const { return m_port; };
 
       /**
        * Returns the current password.
        * @return The password used to connect.
        */
-      virtual std::string password() { return m_password; };
+      virtual const std::string password() const { return m_password; };
 
       /**
-       * Creates a string. Thsi String is unique in the current instance and
-       * can be used as an id for queries.
+       * Creates a string. This string is unique in the current instance and
+       * can be used as an ID for queries.
        * @return A unique string suitable for query IDs.
        */
-      std::string getID();
+      const std::string getID();
 
       /**
        * Sends the given xml via the established connection.
@@ -280,7 +280,7 @@ namespace gloox
        * @param ih The object to receive Iq packet notifications.
        * @param xmlns The namespace the object handles.
        */
-      void registerIqHandler( IqHandler* ih, const char* xmlns );
+      void registerIqHandler( IqHandler* ih, const std::string& xmlns );
 
       /**
        * Use this function to be notified of incoming IQ stanzas with the given value of the @b id
@@ -320,7 +320,7 @@ namespace gloox
        * Removes the handler for the given namespace from the list of Iq handlers.
        * @param xmlns The namespace to remove from the list.
        */
-      void removeIqHandler( const char* xmlns );
+      void removeIqHandler( const std::string& xmlns );
 
       /**
        * Removes the given object from the list of message handlers.
