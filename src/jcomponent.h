@@ -66,17 +66,23 @@ namespace gloox
        */
       virtual const std::string streamTo() { return Prep::nameprep( m_to ); };
 
+      // reimplemented from ClientBase
+      virtual const std::string username() const { return string(); };
+
+      // reimplemented from ClientBase
+      virtual const std::string password() const { return string(); };
+
       /**
        * Returns the JID of the component.
        * @return The components JID.
        */
-      virtual std::string jid() { return Prep::nameprep( m_to );; };
+      virtual const std::string jid() const { return Prep::nameprep( m_to ); };
 
       /**
        * Gives access to the component's Disco object.
        * @return A pointer to the Disco object.
        */
-      Disco* disco() { return m_disco; };
+      Disco* disco() const { return m_disco; };
 
     private:
       void login( const char *sid );
