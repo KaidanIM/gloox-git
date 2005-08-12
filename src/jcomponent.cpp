@@ -37,6 +37,7 @@ namespace gloox
 
   JComponent::~JComponent()
   {
+    delete m_disco;
   }
 
   void JComponent::on_stream( int type, iks* node )
