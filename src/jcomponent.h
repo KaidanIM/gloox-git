@@ -64,13 +64,13 @@ namespace gloox
        * Returns the hostname which should be put into the stream's 'to' attribute.
        * @return The host to name in the stream's 'to' attribute.
        */
-      virtual const std::string streamTo() { return m_to; };
+      virtual const std::string streamTo() { return Prep::nameprep( m_to ); };
 
       /**
        * Returns the JID of the component.
        * @return The components JID.
        */
-      virtual std::string jid() { return m_to; };
+      virtual std::string jid() { return Prep::nameprep( m_to );; };
 
       /**
        * Gives access to the component's Disco object.
