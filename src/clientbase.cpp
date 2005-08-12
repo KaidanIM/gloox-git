@@ -53,6 +53,8 @@ namespace gloox
 
   ClientBase::~ClientBase()
   {
+    iks_filter_delete( m_filter );
+    delete m_thread;
   }
 
   void ClientBase::init()
@@ -90,7 +92,6 @@ namespace gloox
     if( m_blockingConnect )
     {
       m_thread->join();
-      cleanUp();
     }
   }
 
@@ -105,7 +106,6 @@ namespace gloox
       if( !m_blockingConnect )
       {
         m_thread->join();
-        cleanUp();
       }
     }
   }
@@ -127,13 +127,6 @@ namespace gloox
   {
     return this->P;
   }
-
-  void ClientBase::cleanUp()
-  {
-    iks_filter_delete( m_filter );
-    delete m_thread;
-  }
-
 
   void ClientBase::setupFilter()
   {

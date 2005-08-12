@@ -345,7 +345,6 @@ namespace gloox
       void notifyOnDisconnect();
 
       void setupFilter();
-      virtual void cleanUp();
       void setState( gloox::StateEnum s ) { m_state = s; };
 
       volatile gloox::StateEnum m_state;
