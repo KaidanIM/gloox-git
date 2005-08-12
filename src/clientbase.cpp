@@ -110,11 +110,11 @@ namespace gloox
     }
   }
 
-  std::string ClientBase::getID()
+  const std::string ClientBase::getID()
   {
     char tmp[10];
     sprintf( tmp, "uid%d", ++m_idCount );
-    return ( tmp );
+    return tmp;
   }
 
   void ClientBase::send( iks* x )
@@ -174,7 +174,7 @@ namespace gloox
     m_presenceHandlers.remove( ph );
   }
 
-  void ClientBase::registerIqHandler( IqHandler* ih, const char* xmlns )
+  void ClientBase::registerIqHandler( IqHandler* ih, const std::string& xmlns )
   {
     m_iqNSHandlers[xmlns] = ih;
   }
@@ -187,7 +187,7 @@ namespace gloox
     m_iqIDHandlers[id] = track;
   }
 
-  void ClientBase::removeIqHandler( const char* xmlns )
+  void ClientBase::removeIqHandler( const std::string& xmlns )
   {
     m_iqNSHandlers.erase( xmlns );
   }

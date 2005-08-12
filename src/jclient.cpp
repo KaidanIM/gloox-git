@@ -97,7 +97,7 @@ namespace gloox
     m_disco->setIdentity( "client", "bot" );
   }
 
-  std::string JClient::jid()
+  const std::string JClient::jid() const
   {
     if( server().empty() )
       return "";
@@ -113,7 +113,7 @@ namespace gloox
         return ( username() + "@" + server() + "/" + resource() );
   }
 
-  iksid* JClient::parsedJid()
+  const iksid* JClient::parsedJid() const
   {
     return iks_id_new( get_stack(), jid().c_str() );
   }
