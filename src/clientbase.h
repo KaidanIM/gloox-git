@@ -348,7 +348,7 @@ namespace gloox
       virtual void cleanUp();
       void setState( gloox::StateEnum s ) { m_state = s; };
 
-      gloox::StateEnum m_state;
+      volatile gloox::StateEnum m_state;
       JThread* m_thread;
       iksfilter* m_filter;
 
@@ -376,13 +376,12 @@ namespace gloox
         int context;
       };
 
-      typedef list<ConnectionListener*>           ConnectionListenerList;
-      typedef map<const std::string, IqHandler*>  IqHandlerMap;
-      typedef map<const std::string, TrackStruct> IqTrackMap;
-      typedef list<IqHandler*>                    IqHandlerList;
-      typedef list<MessageHandler*>               MessageHandlerList;
-      typedef list<PresenceHandler*>              PresenceHandlerList;
-      typedef list<SubscriptionHandler*>          SubscriptionHandlerList;
+      typedef list<ConnectionListener*>            ConnectionListenerList;
+      typedef map<const std::string, IqHandler*>   IqHandlerMap;
+      typedef map<const std::string, TrackStruct*> IqTrackMap;
+      typedef list<MessageHandler*>                MessageHandlerList;
+      typedef list<PresenceHandler*>               PresenceHandlerList;
+      typedef list<SubscriptionHandler*>           SubscriptionHandlerList;
 
       ConnectionListenerList  m_connectionListeners;
       IqHandlerMap            m_iqNSHandlers;
