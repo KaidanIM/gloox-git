@@ -71,6 +71,9 @@ namespace gloox
 
   JClient::~JClient()
   {
+    delete m_disco;
+    delete m_rosterManager;
+    delete m_auth;
   }
 
   void JClient::init()
@@ -92,14 +95,6 @@ namespace gloox
     m_rosterManager = new RosterManager( this );
     m_disco->setVersion( "based on gloox", GLOOX_VERSION );
     m_disco->setIdentity( "client", "bot" );
-  }
-
-  void JClient::cleanUp()
-  {
-    delete m_disco;
-    delete m_rosterManager;
-    delete m_auth;
-    ClientBase::cleanUp();
   }
 
   std::string JClient::jid()

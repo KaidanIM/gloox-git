@@ -240,7 +240,6 @@ namespace gloox
       virtual void onConnect();
 
     private:
-      void cleanUp();
       int getStreamFeatures( iks* x );
       int getSaslMechs( iks* x );
       void sendInitialPresence();
