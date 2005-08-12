@@ -46,7 +46,7 @@ namespace gloox
        * This function applies the Nodeprep profile of Stringprep to a string.
        * @param node The string to apply the profile to.
        * @return Returns the prepped string. In case of an error an empty string
-       * is returned.
+     * is returned. If LibIDNis not available the string is returned unchanged.
        */
       static string nodeprep( const string& node );
 
@@ -54,7 +54,7 @@ namespace gloox
        * This function applies the Nameprep profile of Stringprep to a string.
        * @param domain The string to apply the profile to.
        * @return Returns the prepped string. In case of an error an empty string
-       * is returned.
+       * is returned. If LibIDNis not available the string is returned unchanged.
        */
       static string nameprep( const string& domain );
 
@@ -62,7 +62,7 @@ namespace gloox
        * This function applies the Resourceprep profile of Stringprep to a string.
        * @param resource The string to apply the profile to.
        * @return Returns the prepped string. In case of an error an empty string
-       * is returned.
+       * is returned. If LibIDNis not available the string is returned unchanged.
        */
       static string resourceprep( const string& resource );
 
@@ -71,7 +71,7 @@ namespace gloox
        * internationalized domain names into plain ASCII.
        * @param domain The string to convert.
        * @return Returns the converted string. In case of an error an empty string
-       * is returned.
+       * is returned. If LibIDNis not available the string is returned unchanged.
        */
       static string idna( const string& domain );
   };
