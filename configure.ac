@@ -44,12 +44,42 @@ if test "$libidn" != "no"; then
            libidn=no)
 fi
 if test "$libidn" != "no" ; then
-  AC_DEFINE(LIBIDN, 1, [Define to 1 if you want IDN support.])
+  AC_DEFINE(HAVE_LIBIDN, 1, [Define to 1 if you want IDN support.])
 else
   AC_MSG_WARN([Libidn not found])
 fi
 AC_MSG_CHECKING([if Libidn should be used])
 AC_MSG_RESULT($libidn)
+
+dnl GnuTLS
+AC_ARG_WITH(gnutls, AC_HELP_STRING([--with-gnutls=[DIR]],
+      [Support TLS (needs GnuTLS)]),
+      gnutls=$withval, gnutls=yes)
+if test "$gnutls" != "no"; then
+  if test "$gnutls" != "yes"; then
+    LDFLAGS="${LDFLAGS} -L$gnutls/lib"
+    CPPFLAGS="${CPPFLAGS} -L$gnutls/include"
+  fi
+  AC_CHECK_HEADER(gnutls/gnutls.h,
+  AC_CHECK_LIB(gnutls, gnutls_check_version,
+           [gnutls=yes LIBS=`libgnutls-config --libs`], gnutls=no),
+           gnutls=no)
+fi
+if test "$gnutls" != "no" ; then
+  AC_DEFINE(HAVE_GNUTLS, 1, [Define to 1 if you want TLS support.])
+else
+  AC_MSG_WARN([GnuTLS not found])
+fi
+AC_MSG_CHECKING([if GnuTLS should be used])
+AC_MSG_RESULT($gnutls)
+
+dnl Debug
+AC_ARG_WITH(debug, AC_HELP_STRING([--enable-debug=[yes|no]],
+      [Enable debug output. Default: yes]),
+      debug=$withval, debug=yes)
+if test "$debug" != "no" ; then
+  AC_DEFINE(DEBUG, 1, [Define to 1 if you want debug output.])
+fi
 
 dnl Checks for header files.
 AC_HEADER_STDC
