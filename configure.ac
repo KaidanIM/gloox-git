@@ -62,7 +62,7 @@ if test "$gnutls" != "no"; then
   fi
   AC_CHECK_HEADER(gnutls/gnutls.h,
   AC_CHECK_LIB(gnutls, gnutls_check_version,
-           [gnutls=yes LIBS=`libgnutls-config --libs`], gnutls=no),
+           [gnutls=yes LIBS="${LIBS} `libgnutls-config --libs`"], gnutls=no),
            gnutls=no)
 fi
 if test "$gnutls" != "no" ; then
