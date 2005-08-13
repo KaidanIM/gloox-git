@@ -22,7 +22,7 @@
 
 #include "prep.h"
 
-#ifdef LIBIDN
+#ifdef HAVE_LIBIDN
 #include <stringprep.h>
 #include <idna.h>
 #endif
@@ -37,7 +37,7 @@ namespace gloox
     if( node.empty() )
       return node;
 
-#ifdef LIBIDN
+#ifdef HAVE_LIBIDN
   char* p;
   char buf[JID_PORTION_SIZE + 1];
   memset( &buf, '\0', JID_PORTION_SIZE + 1 );
@@ -66,7 +66,7 @@ namespace gloox
     if( domain.empty() )
       return domain;
 
-#ifdef LIBIDN
+#ifdef HAVE_LIBIDN
     char* p;
     char buf[JID_PORTION_SIZE + 1];
     memset( &buf, '\0', JID_PORTION_SIZE + 1 );
@@ -95,7 +95,7 @@ namespace gloox
     if( resource.empty() )
       return resource;
 
-#ifdef LIBIDN
+#ifdef HAVE_LIBIDN
     char* p;
     char buf[JID_PORTION_SIZE + 1];
     memset( &buf, '\0', JID_PORTION_SIZE + 1 );
@@ -124,7 +124,7 @@ namespace gloox
     if( domain.empty() )
       return domain;
 
-#ifdef LIBIDN
+#ifdef HAVE_LIBIDN
     char* p;
     char buf[JID_PORTION_SIZE + 1];
     memset( &buf, '\0', JID_PORTION_SIZE + 1 );
