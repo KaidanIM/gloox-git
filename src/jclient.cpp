@@ -123,13 +123,17 @@ namespace gloox
     if( !node )
       return;
 
-    if( m_debug ) printf("in on_stream\n");
+#ifdef DEBUG
+    printf("in on_stream\n");
+#endif
     ikspak* pak = iks_packet( node );
 
     switch( type )
     {
       case IKS_NODE_START:      // <stream:stream>
-        m_sid = iks_find_attrib( node, "id" );
+        char *id = iks_find_attrib( node, "id" );
+        if( id )
+          m_sid = id;
         break;
       case IKS_NODE_NORMAL:     // first level child of stream
         if( strncmp( "stream:features", iks_name( node ), 15 ) == 0 )
@@ -139,7 +143,9 @@ namespace gloox
           if( tls() && !is_secure() && ( m_streamFeatures & STREAM_FEATURE_STARTTLS ) )
           {
             start_tls();
-            if( m_debug ) printf("after starttls\n");
+#ifdef DEBUG
+            printf("after starttls\n");
+#endif
             break;
           }
 
@@ -173,7 +179,9 @@ namespace gloox
               }
               else
               {
-                if( m_debug ) printf( "the server doesn't support any auth mechanisms we know about\n" );
+#ifdef DEBUG
+                printf( "the server doesn't support any auth mechanisms we know about\n" );
+#endif
                 m_state = STATE_NO_SUPPORTED_AUTH;
                 disconnect();
               }
@@ -189,20 +197,26 @@ namespace gloox
           }
           else
           {
-            if( m_debug ) printf( "the server doesn't support any auth mechanisms we know about\n" );
+#ifdef DEBUG
+            printf( "the server doesn't support any auth mechanisms we know about\n" );
+#endif
             m_state = STATE_NO_SUPPORTED_AUTH;
             disconnect();
           }
         }
         else if( iks_strncmp( "failure", iks_name ( node ), 7 ) == 0 )
         {
-          if( m_debug ) printf( "sasl authentication failed...\n" );
+#ifdef DEBUG
+          printf( "sasl authentication failed...\n" );
+#endif
           m_state = STATE_AUTHENTICATION_FAILED;
           disconnect();
         }
         else if( iks_strncmp( "success", iks_name ( node ), 7 ) == 0 )
         {
-          if( m_debug ) printf( "sasl initialisation successful...\n" );
+#ifdef DEBUG
+          printf( "sasl initialisation successful...\n" );
+#endif
           m_state = STATE_AUTHENTICATED;
           m_authorized = true;
           header( server() );
@@ -214,7 +228,9 @@ namespace gloox
         break;
       case IKS_NODE_ERROR:      // <stream:error>
         m_state = STATE_ERROR;
-        if( m_debug ) printf( "stream error. quitting\n");
+#ifdef DEBUG
+        printf( "stream error. quitting\n");
+#endif
         disconnect();
         break;
       case IKS_NODE_STOP:       // </stream:stream>
@@ -333,7 +349,6 @@ namespace gloox
 
   void JClient::nonSaslLogin( const char* sid )
   {
-    if( m_debug ) printf("in login()\n");
     m_auth = new NonSaslAuth( this, m_sid );
     m_auth->doAuth();
   }
@@ -395,7 +410,6 @@ namespace gloox
 
   int bindHook( JClient* stream, ikspak* pak )
   {
-    if( stream->debug() ) printf("bindHook\n");
     iks* x = iks_child( iks_child( pak->x ) );
     if( iks_strncmp( iks_name( x ), "jid", 3 ) == 0 )
     {
@@ -410,7 +424,6 @@ namespace gloox
 
   int sessionHook( JClient* stream, ikspak* pak )
   {
-    if( stream->debug() ) printf("sessionHook\n");
     stream->notifyOnConnect();
 
     return IKS_FILTER_EAT;
