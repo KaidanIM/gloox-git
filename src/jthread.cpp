@@ -19,6 +19,8 @@
 
 
 
+#include "config.h"
+
 #include "jthread.h"
 
 #include "clientbase.h"
@@ -40,6 +42,7 @@
 
 namespace gloox
 {
+
   JThread::JThread( ClientBase* parent )
     : m_parent( parent ),
       m_cancel( false ), m_over( false ),
@@ -63,6 +66,7 @@ namespace gloox
 
     if( fd <= 2 )
     {
+#ifdef DEBUG
       switch( fd )
       {
         case -DNS::DNS_COULD_NOT_CONNECT:
@@ -76,67 +80,86 @@ namespace gloox
           break;
       }
       printf( "connection error\n" );
+#endif
       m_parent->disconnect();
       return;
     }
-    printf( "created socket %d\n", fd );
 
     if( (ret = m_parent->Stream::connect( fd ) ) == IKS_NOMEM )
     {
+#ifdef DEBUG
       printf( "memory allocation error. exiting. %d\n", ret );
+#endif
       m_parent->disconnect();
       return;
     }
-    int t = m_parent->header( m_parent->streamTo() );
+    const string tmp = m_parent->streamTo();
+    m_parent->header( tmp );
 
     m_parent->setState( STATE_CONNECTED );
 
-    while( ( m_parent->state() >= STATE_CONNECTED ) && !m_cancel ) {
+    while( ( m_parent->state() >= STATE_CONNECTED ) && !m_cancel )
+    {
       ret = iks_recv( m_parser, 0 );
       if( ret != IKS_OK ) {
         switch( ret ) {
           case IKS_HOOK:
-            if( m_parent->debug() ) printf( "IKS_HOOK. what happened???\n" );
+#ifdef DEBUG
+            printf( "IKS_HOOK. what happened???\n" );
+#endif
             m_parent->disconnect();
             return;
 
           case IKS_NET_TLSFAIL:
-            if( m_parent->debug() ) printf( "tls failed\n" );
+#ifdef DEBUG
+            printf( "tls failed\n" );
+#endif
             m_parent->setState( STATE_TLS_FAILED );
             m_parent->disconnect();
             return;
 
           case IKS_NET_RWERR:
-            if( m_parent->debug() ) printf( "read/write error. connection was closed unexpectedly.\n" );
+#ifdef DEBUG
+            printf( "read/write error. connection was closed unexpectedly.\n" );
+#endif
             m_parent->setState( STATE_IO_ERROR );
             m_parent->disconnect();
             return;
 
           case IKS_NET_NOCONN:
-            if( m_parent->debug() ) printf( "connection was closed\n" );
+#ifdef DEBUG
+            printf( "connection was closed\n" );
+#endif
             m_parent->setState( STATE_DISCONNECTED );
             return;
 
           case IKS_BADXML:
-            if( m_parent->debug() ) printf( "parse error\n" );
+#ifdef DEBUG
+            printf( "parse error\n" );
+#endif
             m_parent->setState( STATE_PARSE_ERROR );
             m_parent->disconnect();
             return;
 
           case IKS_NOMEM:
-            if( m_parent->debug() ) printf( "out of memory\n" );
+#ifdef DEBUG
+            printf( "out of memory\n" );
+#endif
             m_parent->setState( STATE_OUT_OF_MEMORY );
             m_parent->disconnect();
             return;
 
           default:
-            if( m_parent->debug() ) printf( "something bad happend. I don't know what.\n" );
+#ifdef DEBUG
+            printf( "something bad happend. I don't know what.\n" );
+#endif
             m_parent->disconnect();
             return;
         }
       }
       sleep( 200 );
     }
+    pthread_exit( 0 );
   }
 
   void JThread::cancel()
