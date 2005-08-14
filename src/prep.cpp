@@ -37,6 +37,9 @@ namespace gloox
     if( node.empty() )
       return node;
 
+    if( node.length() > JID_PORTION_SIZE )
+      return string();
+
 #ifdef HAVE_LIBIDN
   char* p;
   char buf[JID_PORTION_SIZE + 1];
@@ -65,6 +68,9 @@ namespace gloox
   {
     if( domain.empty() )
       return domain;
+
+    if( domain.length() > JID_PORTION_SIZE )
+      return string();
 
 #ifdef HAVE_LIBIDN
     char* p;
@@ -95,6 +101,9 @@ namespace gloox
     if( resource.empty() )
       return resource;
 
+    if( resource.length() > JID_PORTION_SIZE )
+      return string();
+
 #ifdef HAVE_LIBIDN
     char* p;
     char buf[JID_PORTION_SIZE + 1];
@@ -123,6 +132,9 @@ namespace gloox
   {
     if( domain.empty() )
       return domain;
+
+    if( domain.length() > JID_PORTION_SIZE )
+      return string();
 
 #ifdef HAVE_LIBIDN
     char* p;
