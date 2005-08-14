@@ -74,14 +74,12 @@ namespace gloox
     if( !sid )
       return;
 
-    char *hash = (char*)malloc( 40 );
-    char *data = (char*)malloc( m_password.length() + strlen( sid ) + 1 );
-    data = strdup( sid );
-    strcat( data, strdup( m_password.c_str() ) );
-    iks_sha( data, hash );
+    std::string data = sid + m_password;
+    char *hash = (char*)calloc( 41, sizeof( char ) );
+    iks_sha( data.c_str(), hash );
 
     iks *x = iks_new( "handshake" );
-    iks_insert_cdata( x, hash, strlen( hash ) );
+    iks_insert_cdata( x, hash, iks_strlen( hash ) );
     send( x );
 
     free( hash );
