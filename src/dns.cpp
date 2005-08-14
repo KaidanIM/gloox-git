@@ -19,6 +19,8 @@
 
 
 
+#include "config.h"
+
 #include "dns.h"
 
 #include <netinet/in.h>
@@ -124,7 +126,7 @@ namespace gloox
       if( ns_name_ntop( srv[cnt] + SRV_SERVER, (char*)srvname, MAXDNAME ) < 0 )
         printf( "handle this error!\n" );
 
-      servers[strdup( (char*)srvname )] = ns_get16( srv[cnt] + SRV_PORT );
+      servers[(char*)srvname] = ns_get16( srv[cnt] + SRV_PORT );
     }
 
     return servers;
@@ -162,7 +164,7 @@ namespace gloox
       }
 
 #ifdef DEBUG
-      printf( "resolved %s to: %s:%d", (*it).first.c_str(),
+      printf( "resolved %s to: %s:%d\n", (*it).first.c_str(),
               inet_ntoa( *((struct in_addr *)h->h_addr) ), port );
 #endif
 
@@ -195,7 +197,7 @@ namespace gloox
       return -DNS_COULD_NOT_RESOLVE;
 
 #ifdef DEBUG
-    printf( "resolved %s to: %s\n", domain.c_str(), inet_ntoa(*((struct in_addr *)h->h_addr)) );
+    printf( "resolved %s to: %s\n", domain.c_str(), inet_ntoa( *((struct in_addr *)h->h_addr) ) );
 #endif
 
     if( inet_aton( inet_ntoa(*((struct in_addr *)h->h_addr)), &(dest_addr.sin_addr) ) == 0 )
