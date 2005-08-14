@@ -31,9 +31,6 @@ class RosterTest : public RosterListener, ConnectionListener
       j->disco()->setVersion( "rosterTest", GLOOX_VERSION );
       j->disco()->setIdentity( "client", "bot" );
 
-      j->setDebug( true );
-      j->set_log_hook();
-
       j->connect( true );
 
       delete( j );

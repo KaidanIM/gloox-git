@@ -32,9 +32,6 @@ class PrivateXMLTest : public PrivateXMLHandler, ConnectionListener
       j->disco()->setVersion( "privateXMLTest", GLOOX_VERSION );
       j->disco()->setIdentity( "client", "bot" );
 
-      j->setDebug( true );
-      j->set_log_hook();
-
       p = new PrivateXML( j );
       p->registerPrivateXMLHandler( this, "test", "http://camaya.net/jabber/test" );
 

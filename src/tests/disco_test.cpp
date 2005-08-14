@@ -30,9 +30,6 @@ class DiscoTest : public DiscoHandler, ConnectionListener
       j->disco()->setVersion( "discoTest", GLOOX_VERSION );
       j->disco()->setIdentity( "client", "bot" );
 
-      j->setDebug( true );
-      j->set_log_hook();
-
       j->connect( true );
 
       delete( j );
