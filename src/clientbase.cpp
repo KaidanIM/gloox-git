@@ -19,6 +19,8 @@
 
 
 
+#include "config.h"
+
 #include "clientbase.h"
 
 #include "jthread.h"
@@ -59,6 +61,9 @@ namespace gloox
 
   void ClientBase::init()
   {
+#ifdef DEBUG
+    set_log_hook();
+#endif
     setupFilter();
   }
 
@@ -148,20 +153,19 @@ namespace gloox
 
   void ClientBase::on_log( const char* data, size_t size, int is_incoming )
   {
-    if( m_debug )
-    {
-      if ( is_secure() )
-        printf( "Sec" );
+#ifdef DEBUG
+    if ( is_secure() )
+      printf( "Sec" );
 
-      if (is_incoming)
-        printf( "RECV " );
-      else
-        printf( "SEND " );
+    if (is_incoming)
+      printf( "RECV " );
+    else
+      printf( "SEND " );
 
-      printf( "[%s]", data );
-      if( strncmp( &data[size-1], "\n", 1 ) != 0 )
-        printf( "\n" );
-    }
+    printf( "[%s]", data );
+    if( strncmp( &data[size-1], "\n", 1 ) != 0 )
+      printf( "\n" );
+#endif
   }
 
   void ClientBase::registerPresenceHandler( PresenceHandler* ph )
@@ -181,9 +185,9 @@ namespace gloox
 
   void ClientBase::trackID( IqHandler* ih, const std::string& id, int context )
   {
-    TrackStruct *track;
-    track->ih = ih;
-    track->context = context;
+    TrackStruct track;
+    track.ih = ih;
+    track.context = context;
     m_iqIDHandlers[id] = track;
   }
 
@@ -273,7 +277,7 @@ namespace gloox
     IqTrackMap::iterator it_id = m_iqIDHandlers.find( pak->id );
     if( it_id != m_iqIDHandlers.end() )
     {
-      (*it_id).second->ih->handleIqID( pak->id, pak, (*it_id).second->context );
+      (*it_id).second.ih->handleIqID( pak->id, pak, (*it_id).second.context );
       m_iqIDHandlers.erase( it_id );
     }
   }
@@ -289,35 +293,25 @@ namespace gloox
 
   int msgHook( ClientBase* stream, ikspak* pak )
   {
-    if( stream->debug() ) printf("msgHook\n");
     stream->notifyMessageHandlers( pak->from, pak->subtype, iks_find_cdata( pak->x, "body" ) );
     return IKS_FILTER_EAT;
   }
 
   int iqHook( ClientBase* stream, ikspak* pak )
   {
-    if( stream->debug() ) printf("iqHook\n");
     stream->notifyIqHandlers( pak->ns, pak );
     return IKS_FILTER_EAT;
   }
 
   int presenceHook( ClientBase* stream, ikspak* pak )
   {
-    if( stream->debug() ) printf("presenceHook\n");
     stream->notifyPresenceHandlers( pak->from, pak->subtype, pak->show, iks_find_cdata( pak->x, "status" ) );
     return IKS_FILTER_EAT;
   }
 
   int subscriptionHook( ClientBase* stream, ikspak* pak )
   {
-    if( stream->debug() ) printf("subscriptionHook\n");
     stream->notifySubscriptionHandlers( pak->from, pak->subtype, iks_find_cdata( pak->x, "status" ) );
-    return IKS_FILTER_EAT;
-  }
-
-  int errorHook( ClientBase* stream, ikspak* pak )
-  {
-    if( stream->debug() ) printf("errorHook\n");
     return IKS_FILTER_EAT;
   }
 

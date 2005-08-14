@@ -199,18 +199,6 @@ namespace gloox
       void setPassword( const std::string &password ) { m_password = password; };
 
       /**
-       * Returns the current debug status.
-       * @return the current debug status.
-       */
-      bool debug() const { return m_debug; };
-
-      /**
-       * Switches debug output on/off. Default: off
-       * @param debug Whether to switch debug output on or off.
-       */
-      void setDebug( bool debug ) { m_debug = debug; };
-
-      /**
        * Returns string which is used in the 'to' attribute of the initial stream opening tag.
        * This should be the server's hostname for the @b jabber:client namespace, and the
        * component's hostname for the jabber:component:* namespaces.
@@ -355,7 +343,6 @@ namespace gloox
       std::string m_password;
       bool m_sasl;
       bool m_tls;
-      bool m_debug;
       int m_port;
 
     private:
@@ -377,7 +364,7 @@ namespace gloox
 
       typedef list<ConnectionListener*>            ConnectionListenerList;
       typedef map<const std::string, IqHandler*>   IqHandlerMap;
-      typedef map<const std::string, TrackStruct*> IqTrackMap;
+      typedef map<const std::string, TrackStruct> IqTrackMap;
       typedef list<MessageHandler*>                MessageHandlerList;
       typedef list<PresenceHandler*>               PresenceHandlerList;
       typedef list<SubscriptionHandler*>           SubscriptionHandlerList;
