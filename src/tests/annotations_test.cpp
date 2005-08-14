@@ -32,9 +32,6 @@ class AnnotationsTest : public AnnotationsHandler, ConnectionListener
       j->disco()->setVersion( "annotationsTest", GLOOX_VERSION );
       j->disco()->setIdentity( "client", "bot" );
 
-      j->setDebug( true );
-      j->set_log_hook();
-
       a = new Annotations( j );
       a->registerAnnotationsHandler( this );
 

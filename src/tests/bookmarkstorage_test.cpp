@@ -32,9 +32,6 @@ class BookmarkStorageTest : public BookmarkHandler, ConnectionListener
       j->disco()->setVersion( "pbookmarkTest", GLOOX_VERSION );
       j->disco()->setIdentity( "client", "bot" );
 
-      j->setDebug( true );
-      j->set_log_hook();
-
       b = new BookmarkStorage( j );
       b->registerBookmarkHandler( this );
 

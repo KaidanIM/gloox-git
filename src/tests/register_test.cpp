@@ -24,9 +24,8 @@ class RegTest : public RegistrationHandler, ConnectionListener
       j->setUsername( "hurkhurk" );
       j->setPassword( "hurkhurks" );
       j->disableRoster();
+      j->disableDisco();
       j->registerConnectionListener( this );
-      j->setDebug( true );
-      j->set_log_hook();
 
       m_reg = new Registration( j );
       m_reg->registerRegistrationHandler( this );

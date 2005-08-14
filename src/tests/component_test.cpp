@@ -24,8 +24,6 @@ class ComponentTest : public DiscoHandler, ConnectionListener
       j->disco()->setVersion( "componentTest", GLOOX_VERSION );
 
       j->registerConnectionListener( this );
-      j->setDebug( true );
-      j->set_log_hook();
 
       j->connect( true );
 

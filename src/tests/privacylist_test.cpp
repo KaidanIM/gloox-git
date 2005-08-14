@@ -32,9 +32,6 @@ class PLTest : public PrivacyListHandler, ConnectionListener
       j->disco()->setVersion( "PLTest", GLOOX_VERSION );
       j->disco()->setIdentity( "client", "bot" );
 
-      j->setDebug( true );
-      j->set_log_hook();
-
       p = new PrivacyManager( j );
       p->registerPrivacyListHandler( this );
 
