@@ -62,7 +62,7 @@ using namespace std;
 #define XMLNS_STREAM_IQAUTH     "http://jabber.org/features/iq-auth"
 #define XMLNS_STREAM_IQREGISTER "http://jabber.org/features/iq-register"
 
-#define GLOOX_VERSION "0.3.3"
+#define GLOOX_VERSION "0.4"
 
 /**
  * This is the namespace for the gloox library.
@@ -254,13 +254,13 @@ namespace gloox
        * @note x is automatically free()'ed.
        * @param x The xml data.
        */
-      void send( iks* x );
+      void send( iks *x );
 
       /**
        * Registers @c cl as object that receives connection notifications.
        * @param cl The object to receive connection notifications.
        */
-      void registerConnectionListener( ConnectionListener* cl );
+      void registerConnectionListener( ConnectionListener *cl );
 
       /**
        * Registers @c ih as object that receives Iq packet notifications for namespace
@@ -268,7 +268,7 @@ namespace gloox
        * @param ih The object to receive Iq packet notifications.
        * @param xmlns The namespace the object handles.
        */
-      void registerIqHandler( IqHandler* ih, const std::string& xmlns );
+      void registerIqHandler( IqHandler *ih, const std::string& xmlns );
 
       /**
        * Use this function to be notified of incoming IQ stanzas with the given value of the @b id
@@ -278,31 +278,31 @@ namespace gloox
        * @param id The id to track.
        * @param context A value that allows for restoring context.
        */
-      void trackID( IqHandler* ih, const std::string& id, int context );
+      void trackID( IqHandler *ih, const std::string& id, int context );
 
       /**
        * Registers @c mh as object that receives Message packet notifications.
        * @param mh The object to receive Message packet notifications.
        */
-      void registerMessageHandler( MessageHandler* mh );
+      void registerMessageHandler( MessageHandler *mh );
 
       /**
        * Registers @c ph as object that receives Presence packet notifications.
        * @param ph The object to receive Presence packet notifications.
        */
-      void registerPresenceHandler( PresenceHandler* ph );
+      void registerPresenceHandler( PresenceHandler *ph );
 
       /**
        * Registers @c sh as object that receives Subscription packet notifications.
        * @param sh The object to receive Subscription packet notifications.
        */
-      void registerSubscriptionHandler( SubscriptionHandler* sh );
+      void registerSubscriptionHandler( SubscriptionHandler *sh );
 
       /**
        * Removes the given object from the list of connection listeners.
        * @param cl The object to remove from the list.
        */
-      void removeConnectionListener( ConnectionListener* cl );
+      void removeConnectionListener( ConnectionListener *cl );
 
       /**
        * Removes the handler for the given namespace from the list of Iq handlers.
@@ -314,19 +314,19 @@ namespace gloox
        * Removes the given object from the list of message handlers.
        * @param mh The object to remove from the list.
        */
-      void removeMessageHandler( MessageHandler* mh );
+      void removeMessageHandler( MessageHandler *mh );
 
       /**
        * Removes the given object from the list of presence handlers.
        * @param ph The object to remove from the list.
        */
-      void removePresenceHandler( PresenceHandler* ph );
+      void removePresenceHandler( PresenceHandler *ph );
 
       /**
        * Removes the given object from the list of subscription handlers.
        * @param sh The object to remove from the list.
        */
-      void removeSubscriptionHandler( SubscriptionHandler* sh );
+      void removeSubscriptionHandler( SubscriptionHandler *sh );
 
     protected:
       void notifyOnConnect();
@@ -336,8 +336,8 @@ namespace gloox
       void setState( gloox::StateEnum s ) { m_state = s; };
 
       volatile gloox::StateEnum m_state;
-      JThread* m_thread;
-      iksfilter* m_filter;
+      JThread *m_thread;
+      iksfilter *m_filter;
 
       std::string m_server;
       std::string m_password;
@@ -346,15 +346,15 @@ namespace gloox
       int m_port;
 
     private:
-      void notifyIqHandlers( const char* xmlns, ikspak* pak );
-      void notifyMessageHandlers( iksid* from, iksubtype type, const char* msg );
-      void notifyPresenceHandlers( iksid* from, iksubtype type, ikshowtype show, const char* msg );
-      void notifySubscriptionHandlers( iksid* from, iksubtype type, const char* msg );
-      virtual void on_log( const char* data, size_t size, int is_incoming );
-      iksparser* parser();
+      void notifyIqHandlers( const char *xmlns, ikspak *pak );
+      void notifyMessageHandlers( iksid *from, iksubtype type, const char *msg );
+      void notifyPresenceHandlers( iksid *from, iksubtype type, ikshowtype show, const char *msg );
+      void notifySubscriptionHandlers( iksid *from, iksubtype type, const char *msg );
+      virtual void on_log( const char *data, size_t size, int is_incoming );
+      iksparser *parser();
       void init();
 
-      virtual void on_stream( int type, iks* node ) {};
+      virtual void on_stream( int type, iks *node ) {};
 
       struct TrackStruct
       {
@@ -379,10 +379,10 @@ namespace gloox
       bool m_blockingConnect;
       int m_idCount;
 
-      friend int presenceHook( ClientBase* stream, ikspak* pak );
-      friend int msgHook( ClientBase* stream, ikspak* pak );
-      friend int subscriptionHook( ClientBase* stream, ikspak* pak );
-      friend int iqHook( ClientBase* stream, ikspak* pak );
+      friend int presenceHook( ClientBase *stream, ikspak *pak );
+      friend int msgHook( ClientBase *stream, ikspak *pak );
+      friend int subscriptionHook( ClientBase *stream, ikspak *pak );
+      friend int iqHook( ClientBase *stream, ikspak *pak );
 
   };
 
