@@ -51,7 +51,7 @@ namespace gloox
     }
   }
 
-  void Disco::handleIq( const Stanza& stanza )
+  bool Disco::handleIq( const Stanza& stanza )
   {
     switch( stanza.subtype() )
     {
@@ -178,21 +178,26 @@ namespace gloox
           iq.addChild( query );
           m_parent->send( iq );
         }
+        return true;
         break;
 
       case IKS_TYPE_SET:
       {
+        bool res = false;
         DiscoHandlerList::const_iterator it = m_discoHandlers.begin();
         for( it; it != m_discoHandlers.end(); it++ )
         {
-          (*it)->handleDiscoSet( stanza.id(), stanza );
+          if( (*it)->handleDiscoSet( stanza.id(), stanza ) )
+            res = true;
         }
+        return res;
         break;
       }
     }
+    return false;
   }
 
-  void Disco::handleIqID( const Stanza& stanza, int context )
+  bool Disco::handleIqID( const Stanza& stanza, int context )
   {
     switch( stanza.subtype() )
     {
@@ -224,7 +229,7 @@ namespace gloox
       case IKS_TYPE_ERROR:
         Tag e = stanza.findChild( "error" );
         if( e.empty() )
-          return;
+          return false;
 
         DiscoHandlerList::const_iterator it = m_discoHandlers.begin();
         for( it; it != m_discoHandlers.end(); it++ )
@@ -233,6 +238,8 @@ namespace gloox
         }
         break;
     }
+
+    return false;
   }
 
   void Disco::addFeature( const std::string& feature )
