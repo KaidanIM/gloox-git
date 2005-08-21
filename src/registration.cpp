@@ -21,6 +21,7 @@
 #include "registration.h"
 
 #include "clientbase.h"
+#include "stanza.h"
 
 namespace gloox
 {
@@ -43,13 +44,17 @@ namespace gloox
     if( !m_parent || m_parent->state() != STATE_CONNECTED )
       return;
 
-    string id = m_parent->getID();
+    std::string id = m_parent->getID();
 
-    iks *x = iks_make_iq( IKS_TYPE_GET, XMLNS_REGISTER );
-    iks_insert_attrib( x, "id", id.c_str() );
+    Tag iq( "iq" );
+    iq.addAttrib( "type", "get" );
+    iq.addAttrib( "id", id );
+    Tag q( "query" );
+    q.addAttrib( "xmlns", XMLNS_REGISTER );
 
-    m_parent->trackID( this, id.c_str(), FETCH_REGISTRATION_FIELDS );
-    m_parent->send( x );
+    iq.addChild( q );
+    m_parent->trackID( this, id, FETCH_REGISTRATION_FIELDS );
+    m_parent->send( iq );
   }
 
   void Registration::createAccount( int fields, fieldStruct values )
@@ -57,53 +62,50 @@ namespace gloox
     if( !m_parent )
       return;
 
-    string id = m_parent->getID();
+    const std::string id = m_parent->getID();
 
-    iks *x = iks_make_iq( IKS_TYPE_SET, XMLNS_REGISTER );
-    iks_insert_attrib( x, "id", id.c_str() );
+    Tag iq( "iq" );
+    iq.addAttrib( "id", id );
+    iq.addAttrib( "type", "set" );
+    Tag q( "query" );
+    q.addAttrib( "xmlns", XMLNS_REGISTER );
 
     if( fields & FIELD_USERNAME )
-      iks_insert_cdata( iks_insert( iks_first_tag( x ), "username" ), values.username.c_str(),
-                        values.username.length() );
+      q.addChild( Tag( "username", values.username ) );
     if( fields & FIELD_NICK )
-      iks_insert_cdata( iks_insert( iks_first_tag( x ), "nick" ), values.nick.c_str(), values.nick.length() );
+      q.addChild( Tag( "nick", values.nick ) );
     if( fields & FIELD_PASSWORD )
-      iks_insert_cdata( iks_insert( iks_first_tag( x ), "password" ), values.password.c_str(),
-                        values.password.length() );
+      q.addChild( Tag( "password", values.password ) );
     if( fields & FIELD_NAME )
-      iks_insert_cdata( iks_insert( iks_first_tag( x ), "name" ), values.name.c_str(), values.name.length() );
+      q.addChild( Tag( "name", values.name ) );
     if( fields & FIELD_FIRST )
-      iks_insert_cdata( iks_insert( iks_first_tag( x ), "first" ), values.first.c_str(),
-                        values.first.length() );
+      q.addChild( Tag( "first", values.first ) );
     if( fields & FIELD_LAST )
-      iks_insert_cdata( iks_insert( iks_first_tag( x ), "last" ), values.last.c_str(), values.last.length() );
+      q.addChild( Tag( "last", values.last ) );
     if( fields & FIELD_EMAIL )
-      iks_insert_cdata( iks_insert( iks_first_tag( x ), "email" ), values.email.c_str(),
-                        values.email.length() );
+      q.addChild( Tag( "email", values.email ) );
     if( fields & FIELD_ADDRESS )
-      iks_insert_cdata( iks_insert( iks_first_tag( x ), "address" ), values.address.c_str(),
-                        values.address.length() );
+      q.addChild( Tag( "address", values.address ) );
     if( fields & FIELD_CITY )
-      iks_insert_cdata( iks_insert( iks_first_tag( x ), "city" ), values.city.c_str(), values.city.length() );
+      q.addChild( Tag( "city", values.city ) );
     if( fields & FIELD_STATE )
-      iks_insert_cdata( iks_insert( iks_first_tag( x ), "state" ), values.state.c_str(),
-                        values.state.length() );
+      q.addChild( Tag( "state", values.state ) );
     if( fields & FIELD_ZIP )
-      iks_insert_cdata( iks_insert( iks_first_tag( x ), "zip" ), values.zip.c_str(), values.zip.length() );
+      q.addChild( Tag( "zip", values.zip ) );
     if( fields & FIELD_PHONE )
-      iks_insert_cdata( iks_insert( iks_first_tag( x ), "phone" ), values.phone.c_str(),
-                        values.phone.length() );
+      q.addChild( Tag( "phone", values.phone ) );
     if( fields & FIELD_URL )
-      iks_insert_cdata( iks_insert( iks_first_tag( x ), "url" ), values.url.c_str(), values.url.length() );
+      q.addChild( Tag( "url", values.url ) );
     if( fields & FIELD_DATE )
-      iks_insert_cdata( iks_insert( iks_first_tag( x ), "date" ), values.date.c_str(), values.date.length() );
+      q.addChild( Tag( "date", values.date ) );
     if( fields & FIELD_MISC )
-      iks_insert_cdata( iks_insert( iks_first_tag( x ), "misc" ), values.misc.c_str(), values.misc.length() );
+      q.addChild( Tag( "misc", values.misc ) );
     if( fields & FIELD_TEXT )
-      iks_insert_cdata( iks_insert( iks_first_tag( x ), "text" ), values.text.c_str(), values.text.length() );
+      q.addChild( Tag( "text", values.text ) );
 
-    m_parent->trackID( this, id.c_str(), CREATE_ACCOUNT );
-    m_parent->send( x );
+    iq.addChild( q );
+    m_parent->trackID( this, id, CREATE_ACCOUNT );
+    m_parent->send( iq );
   }
 
   void Registration::removeAccount()
@@ -111,33 +113,40 @@ namespace gloox
     if( !m_parent || ( m_parent->state() != STATE_AUTHENTICATED ) )
       return;
 
-    string id = m_parent->getID();
+    const std::string id = m_parent->getID();
 
-    iks *x = iks_make_iq( IKS_TYPE_SET, XMLNS_REGISTER );
-    iks_insert_attrib( x, "id", id.c_str() );
-    iks_insert_attrib( x, "from", m_parent->jid().c_str() );
-    iks_insert( iks_first_tag( x ), "remove" );
+    Tag iq( "iq" );
+    iq.addAttrib( "type", "set" );
+    iq.addAttrib( "id", id );
+    iq.addAttrib( "from", m_parent->jid().full() );
+    Tag q( "query" );
+    q.addAttrib( "xmlns", XMLNS_REGISTER );
+    q.addChild( Tag( "remove" ) );
+    iq.addChild( q );
 
-    m_parent->trackID( this, id.c_str(), REMOVE_ACCOUNT );
-    m_parent->send( x );
+    m_parent->trackID( this, id, REMOVE_ACCOUNT );
+    m_parent->send( iq );
   }
 
-  void Registration::changePassword( const string& password )
+  void Registration::changePassword( const std::string& password )
   {
     if( !m_parent || ( m_parent->state() != STATE_AUTHENTICATED ) )
       return;
 
-    string id = m_parent->getID();
+    const std::string id = m_parent->getID();
 
-    iks *x = iks_make_iq( IKS_TYPE_SET, XMLNS_REGISTER );
-    iks_insert_attrib( x, "id", id.c_str() );
-    iks_insert_attrib( x, "to", m_parent->server().c_str() );
-    iks_insert_cdata( iks_insert( iks_first_tag( x ), "username" ), m_parent->username().c_str(),
-                      m_parent->username().length() );
-    iks_insert_cdata( iks_insert( iks_first_tag( x ), "password" ), password.c_str(), password.length() );
+    Tag iq( "iq" );
+    iq.addAttrib( "type", "set" );
+    iq.addAttrib( "id", id );
+    iq.addAttrib( "to", m_parent->server() );
+    Tag q( "query" );
+    q.addAttrib( "xmlns", XMLNS_REGISTER );
+    q.addChild( Tag( "username", m_parent->username() ) );
+    q.addChild( Tag( "password", password ) );
+    iq.addChild( q );
 
-    m_parent->trackID( this, id.c_str(), CHANGE_PASSWORD );
-    m_parent->send( x );
+    m_parent->trackID( this, id, CHANGE_PASSWORD );
+    m_parent->send( iq );
   }
 
   void Registration::registerRegistrationHandler( RegistrationHandler *rh )
@@ -150,133 +159,98 @@ namespace gloox
     m_registrationHandler = 0;
   }
 
-  void Registration::handleIq( const char *tag, const char *xmlns, ikspak *pak )
+  bool Registration::handleIq( const Stanza& stanza )
   {
-    if( pak->subtype == IKS_TYPE_ERROR)
+    if( stanza.subtype() == STANZA_IQ_ERROR )
     {
-      iks *ft = iks_child( iks_find( pak->x, "error" ) );
+      Tag e = stanza.findChild( "error" );
 
-      if( !ft || !m_registrationHandler )
-        return;
+      if( e.empty() || !m_registrationHandler )
+        return false;
 
-      if( iks_strncmp( iks_name( ft ), "conflict", 8 ) == 0 )
+      if( e.hasChild( "conflict" ) )
         m_registrationHandler->handleRegistrationResult( RegistrationHandler::REGISTRATION_CONFLICT );
-      else if( iks_strncmp( iks_name( ft ), "not-acceptable", 14 ) == 0 )
+      else if( e.hasChild( "not-acceptable" ) )
         m_registrationHandler->handleRegistrationResult( RegistrationHandler::REGISTRATION_NOT_ACCEPTABLE );
-      else if( iks_strncmp( iks_name( ft ), "bad-request", 11 ) == 0 )
+      else if( e.hasChild( "bad-request" ) )
         m_registrationHandler->handleRegistrationResult( RegistrationHandler::REGISTRATION_BAD_REQUEST );
-      else if( iks_strncmp( iks_name( ft ), "forbidden", 9 ) == 0 )
+      else if( e.hasChild( "forbidden" ) )
         m_registrationHandler->handleRegistrationResult( RegistrationHandler::REGISTRATION_FORBIDDEN );
-      else if( iks_strncmp( iks_name( ft ), "registration-required", 22) == 0 )
+      else if( e.hasChild( "registration-required" ) )
         m_registrationHandler->handleRegistrationResult(
             RegistrationHandler::REGISTRATION_REGISTRATION_REQUIRED );
-      else if( iks_strncmp( iks_name( ft ), "unexpected-request", 19 ) == 0 )
+      else if( e.hasChild( "unexpected-request" ) )
         m_registrationHandler->handleRegistrationResult(
             RegistrationHandler::REGISTRATION_UNEXPECTED_REQUEST );
-      else if( iks_strncmp( iks_name( ft ), "not-authorized", 14 ) == 0 )
+      else if( e.hasChild( "not-authorized" ) )
         m_registrationHandler->handleRegistrationResult( RegistrationHandler::REGISTRATION_NOT_AUTHORIZED );
-      else if( iks_strncmp( iks_name( ft ), "not-allowed", 11 ) == 0 )
+      else if( e.hasChild( "not-allowed" ) )
         m_registrationHandler->handleRegistrationResult( RegistrationHandler::REGISTRATION_NOT_ALLOWED );
     }
+    return false;
   }
 
-  void Registration::handleIqID( const char *id, ikspak *pak, int context )
+  bool Registration::handleIqID( const Stanza& stanza, int context )
   {
-    if( pak->subtype != IKS_TYPE_RESULT )
-      return;
+    if( stanza.subtype() != STANZA_IQ_RESULT )
+      return false;
 
     if( !m_registrationHandler )
-      return;
+      return false;
 
     switch( context )
     {
       case FETCH_REGISTRATION_FIELDS:
-        if( iks_find( pak->query, "registered" ) )
+      {
+        Tag q = stanza.findChild( "query" );
+
+        if( q.hasChild( "registered" ) )
         {
           m_registrationHandler->handleAlreadyRegistered();
           break;
         }
 
-        {
-          int fields = 0;
-          string instructions;
+        int fields = 0;
+        std::string instructions;
 
-          iks *ft = iks_first_tag( pak->query );
-          do
-          {
-            if( iks_strncmp( iks_name( ft ), "username", 8 ) == 0 )
-            {
-              fields |= FIELD_USERNAME;
-            }
-            else if( iks_strncmp( iks_name( ft ), "nick", 4 ) == 0 )
-            {
-              fields |= FIELD_NICK;
-            }
-            else if( iks_strncmp( iks_name( ft ), "password", 8 ) == 0 )
-            {
-              fields |= FIELD_PASSWORD;
-            }
-            else if( iks_strncmp( iks_name( ft ), "name", 4 ) == 0 )
-            {
-              fields |= FIELD_NAME;
-            }
-            else if( iks_strncmp( iks_name( ft ), "first", 5 ) == 0 )
-            {
-              fields |= FIELD_FIRST;
-            }
-            else if( iks_strncmp( iks_name( ft ), "last", 4 ) == 0 )
-            {
-              fields |= FIELD_LAST;
-            }
-            else if( iks_strncmp( iks_name( ft ), "email", 5 ) == 0 )
-            {
-              fields |= FIELD_EMAIL;
-            }
-            else if( iks_strncmp( iks_name( ft ), "address", 7 ) == 0 )
-            {
-              fields |= FIELD_ADDRESS;
-            }
-            else if( iks_strncmp( iks_name( ft ), "city", 4 ) == 0 )
-            {
-              fields |= FIELD_CITY;
-            }
-            else if( iks_strncmp( iks_name( ft ), "state", 5 ) == 0 )
-            {
-              fields |= FIELD_STATE;
-            }
-            else if( iks_strncmp( iks_name( ft ), "zip", 3 ) == 0 )
-            {
-              fields |= FIELD_ZIP;
-            }
-            else if( iks_strncmp( iks_name( ft ), "phone", 5 ) == 0 )
-            {
-              fields |= FIELD_PHONE;
-            }
-            else if( iks_strncmp( iks_name( ft ), "url", 3 ) == 0 )
-            {
-              fields |= FIELD_URL;
-            }
-            else if( iks_strncmp( iks_name( ft ), "date", 4 ) == 0 )
-            {
-              fields |= FIELD_DATE;
-            }
-            else if( iks_strncmp( iks_name( ft ), "misc", 4 ) == 0 )
-            {
-              fields |= FIELD_MISC;
-            }
-            else if( iks_strncmp( iks_name( ft ), "text", 4 ) == 0 )
-            {
-              fields |= FIELD_TEXT;
-            }
-            else if( iks_strncmp( iks_name( ft ), "instructions", 4 ) == 0 )
-            {
-              instructions = ( iks_cdata( iks_child( ft ) ) )?( iks_cdata( iks_child( ft ) ) ):( "" );
-            }
-          } while( ( ft = iks_next_tag( ft ) ) != 0 );
+        if( q.hasChild( "username" ) )
+          fields |= FIELD_USERNAME;
+        if( q.hasChild( "nick" ) )
+          fields |= FIELD_NICK;
+        if( q.hasChild( "password" ) )
+          fields |= FIELD_PASSWORD;
+        if( q.hasChild( "name" ) )
+          fields |= FIELD_NAME;
+        if( q.hasChild( "first" ) )
+          fields |= FIELD_FIRST;
+        if( q.hasChild( "last" ) )
+            fields |= FIELD_LAST;
+        if( q.hasChild( "email" ) )
+          fields |= FIELD_EMAIL;
+        if( q.hasChild( "address" ) )
+          fields |= FIELD_ADDRESS;
+        if( q.hasChild( "city" ) )
+          fields |= FIELD_CITY;
+        if( q.hasChild( "state" ) )
+          fields |= FIELD_STATE;
+        if( q.hasChild( "zip" ) )
+          fields |= FIELD_ZIP;
+        if( q.hasChild( "phone" ) )
+          fields |= FIELD_PHONE;
+        if( q.hasChild( "url" ) )
+          fields |= FIELD_URL;
+        if( q.hasChild( "date" ) )
+          fields |= FIELD_DATE;
+        if( q.hasChild( "misc" ) )
+          fields |= FIELD_MISC;
+        if( q.hasChild( "text" ) )
+          fields |= FIELD_TEXT;
+        if( q.hasChild( "instructions" ) )
+          instructions = q.findChild( "instructions" ).cdata();
 
-          m_registrationHandler->handleRegistrationFields( fields, instructions );
-        }
+        m_registrationHandler->handleRegistrationFields( fields, instructions );
         break;
+      }
 
       case CREATE_ACCOUNT:
         m_registrationHandler->handleRegistrationResult( RegistrationHandler::REGISTRATION_SUCCESS );
@@ -290,6 +264,7 @@ namespace gloox
         m_registrationHandler->handleRegistrationResult( RegistrationHandler::REGISTRATION_SUCCESS );
         break;
     }
+    return false;
   }
 
 };
