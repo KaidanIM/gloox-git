@@ -41,35 +41,35 @@ namespace gloox
        * Reimplement this function if you want to be notified about the result
        * of an disco#info query.
        * @param id The id of the result. Corresponds to the id of the sent query.
-       * @param pak The full packet.
-       * @todo Replace the ikspak with decoded values.
+       * @param stanza The full Stanza.
+       * @todo Replace the stanza with decoded values.
        */
-      virtual void handleDiscoInfoResult( const string& id, const ikspak* pak ) {};
+      virtual void handleDiscoInfoResult( const std::string& id, const Stanza& stanza ) {};
 
       /**
        * Reimplement this function if you want to be notified about the result
        * of an disco#items query.
        * @param id The id of the result. Corresponds to the id of the sent query.
-       * @param pak The full packet.
-       * @todo Replace the ikspak with decoded values.
+       * @param stanza The full Stanza.
+       * @todo Replace the stanza with decoded values.
        */
-      virtual void handleDiscoItemsResult( const string& id, const ikspak* pak ) {};
+      virtual void handleDiscoItemsResult( const std::string& id, const Stanza& stanza ) {};
 
       /**
        * Reimplement this function to receive disco error notifications.
        * @param id The id of the result. Corresponds to the id of the sent query.
        * @param error The type of the error as returned by the server.
        */
-      virtual void handleDiscoError( const string& id, const string& error ) {};
+      virtual void handleDiscoError( const std::string& id, const std::string& error ) {};
 
       /**
        * Reimplement this function to receive notifications about incoming IQ
        * stanzas of type 'set' in the disco namespace.
        * @param id The id of the incoming query.
-       * @param pak The full packet.
-       * @todo Replace the ikspak with decoded values.
+       * @param stanza The full Stanza.
+       * @todo Replace the stanza with decoded values.
        */
-      virtual void handleDiscoSet( const string& id, const ikspak* pak ) {};
+      virtual void handleDiscoSet( const std::string& id, const Stanza& stanza ) {};
 
   };
 
