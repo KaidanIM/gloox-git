@@ -23,10 +23,13 @@
 #define JCOMPONENT_H__
 
 #include "clientbase.h"
-#include "disco.h"
+
+#include <string>
 
 namespace gloox
 {
+
+  class Disco;
 
   /**
    * This is an implementation of a Component, using JEP-0114 (Jabber Component Protocol) to
@@ -44,7 +47,7 @@ namespace gloox
        * @param server The server to connect to.
        * @param component The component's hostname. FQDN.
        * @param password The component's password.
-     * @param port The port to connect to. The default of -1 means to look up the port via DNS SRV.
+       * @param port The port to connect to. The default of -1 means to look up the port via DNS SRV.
        */
       JComponent( const std::string& ns, const std::string& server,
                   const std::string& component, const std::string& password, int port = -1 );
@@ -60,17 +63,11 @@ namespace gloox
        */
       void setStreamTo( const std::string& to ) { m_to = to; };
 
-      /**
-       * Returns the hostname which should be put into the stream's 'to' attribute.
-       * @return The host to name in the stream's 'to' attribute.
-       */
-      virtual const std::string streamTo() { return Prep::nameprep( m_to ); };
+      // reimplemented from ClientBase
+      virtual const std::string username() const { return m_jid.username(); };
 
       // reimplemented from ClientBase
-      virtual const std::string username() const { return string(); };
-
-      // reimplemented from ClientBase
-      virtual const std::string password() const { return string(); };
+      virtual const std::string password() const { return ""; };
 
       /**
        * Returns the JID of the component.
@@ -84,13 +81,19 @@ namespace gloox
        */
       Disco* disco() const { return m_disco; };
 
-    private:
-      void login( const char *sid );
+    protected:
+      /**
+       * Returns the hostname which should be put into the stream's 'to' attribute.
+       * @return The host to name in the stream's 'to' attribute.
+       */
+      virtual const std::string streamTo() const { return Prep::nameprep( m_to ); };
 
-      virtual void on_stream( int type, iks* node );
+      virtual void handleStartNode();
+      virtual bool handleNormalNode( const Tag& tag );
+
+    private:
 
       Disco *m_disco;
-      const char* m_sid;
       std::string m_to;
   };
 
