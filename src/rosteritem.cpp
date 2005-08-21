@@ -21,12 +21,10 @@
 
 #include "rosteritem.h"
 
-#include <iksemel.h>
-
 namespace gloox
 {
 
-  RosterItem::RosterItem( const string& jid, const string& name )
+  RosterItem::RosterItem( const std::string& jid, const std::string& name )
     : m_jid( jid ), m_name( name ), m_changed( false ),
     m_directPresence( 0 ), m_status( 0 )
   {
@@ -36,7 +34,7 @@ namespace gloox
   {
   }
 
-  void RosterItem::setName( const string& name )
+  void RosterItem::setName( const std::string& name )
   {
     m_name = name;
     m_changed = true;
@@ -54,13 +52,13 @@ namespace gloox
     m_changed = true;
   }
 
-  void RosterItem::setStatusMsg( const string& msg )
+  void RosterItem::setStatusMsg( const std::string& msg )
   {
     m_statusMessage = msg;
     m_changed = true;
   }
 
-  void RosterItem::setSubscription( const string& subscription, bool ask )
+  void RosterItem::setSubscription( const std::string& subscription, bool ask )
   {
     if( subscription == "from" && !ask )
       m_subscription = S10N_FROM;
