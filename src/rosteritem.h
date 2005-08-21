@@ -21,13 +21,11 @@
 #ifndef ROSTERITEM_H__
 #define ROSTERITEM_H__
 
+#include "gloox.h"
+
 #include <string>
 #include <list>
-using namespace std;
 
-// stupid solution...
-// better: common header file with all the defines?
-#define XMLNS_ROSTER            "jabber:iq:roster"
 
 namespace gloox
 {
@@ -45,7 +43,7 @@ namespace gloox
       /**
        * A list of groups a contact belongs to.
        */
-      typedef list<string> GroupList;
+      typedef std::list<std::string> GroupList;
 
       /**
        * Describes possible subscribtion types according to RFC 3921, Section 9.
@@ -80,7 +78,7 @@ namespace gloox
        * @param jid The JID of the contact.
        * @param name The displayed name of the contact.
        */
-      RosterItem( const string& jid, const string& name = "" );
+      RosterItem( const std::string& jid, const std::string& name = "" );
 
       /**
        * Virtual Destructor.
@@ -91,20 +89,20 @@ namespace gloox
        * Sets the displayed name of a contact/roster item.
        * @param name The contact's new name.
        */
-      virtual void setName( const string& name );
+      virtual void setName( const std::string& name );
 
       /**
        * Retrieves the displayed name of a contact/roster item.
        * If none is set the JID is returned.
        * @return The contact's name.
        */
-      virtual const string name() { return m_name; };
+      virtual const std::string name() { return m_name; };
 
       /**
        * Returns the contact's JID.
        * @return The contact's JID.
        */
-      virtual const string jid() { return m_jid; };
+      virtual const std::string jid() { return m_jid; };
 
       /**
        * Sets the presence the remote contact sees for the local entity.
@@ -153,14 +151,14 @@ namespace gloox
        * Sets the current status message of the contact.
        * @param msg The current status message, i.e. from the presence info.
        */
-      virtual void setStatusMsg( const string& msg );
+      virtual void setStatusMsg( const std::string& msg );
 
       /**
        * Sets the current subscription status of the contact.
        * @param subscription The current subscription.
        * @param ask Whether a subscription request is pending.
        */
-      virtual void setSubscription( const string& subscription, bool ask );
+      virtual void setSubscription( const std::string& subscription, bool ask );
 
       /**
        * Removes the 'changed' flag from the item.
@@ -170,9 +168,9 @@ namespace gloox
     private:
       GroupList m_groups;
       SubscriptionEnum m_subscription;
-      string m_jid;
-      string m_name;
-      string m_statusMessage;
+      std::string m_jid;
+      std::string m_name;
+      std::string m_statusMessage;
       bool m_changed;
       int m_directPresence;
       int m_status;
