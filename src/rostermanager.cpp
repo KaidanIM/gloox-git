@@ -61,159 +61,117 @@ namespace gloox
     m_parent->send( x );
   }
 
-  void RosterManager::handleIq( const char *tag, const char *xmlns, ikspak *pak )
+  bool RosterManager::handleIq( const Stanza& stanza )
   {
-    if( pak->subtype == IKS_TYPE_RESULT ) // initial roster
+    if( stanza.subtype() == STANZA_IQ_RESULT ) // initial roster
     {
-      if( iks_strncmp( xmlns, XMLNS_ROSTER, strlen( XMLNS_ROSTER ) ) == 0 )
-      {
-        iks *y = iks_first_tag( iks_first_tag( pak->x ) );
-        while( y )
-        {
-          if( strncmp( iks_name( y ), "item", 4 ) == 0 )
-          {
-            char *jid = iks_find_attrib( y, "jid" );
-            add( jid );
-          }
-          y = iks_next_tag( y );
-        }
-      }
+      extractItems( stanza );
+
       if( m_rosterListener )
         m_rosterListener->roster( m_roster );
+
+      return true;
     }
-    else if( pak->subtype == IKS_TYPE_SET ) // roster item push
+    else if( stanza.subtype() == STANZA_IQ_SET ) // roster item push
     {
-      // handle roster pushes!
-      iks *item = iks_first_tag( pak->query );
-      while( item )
-      {
-        const char *jid = iks_find_attrib( item, "jid" );
-        if( !jid )
-        {
-          item = iks_next( item );
-          continue;
-        }
+      const std::string jid = extractItems( stanza );
 
-        const char *sub = iks_find_attrib( item, "subscription" );
-        if( iks_strncmp( sub, "remove", 6 ) == 0 )
-        {
-          if( m_roster.find( jid ) != m_roster.end() )
-          {
-            m_roster.erase( jid );
-            if( m_rosterListener )
-              m_rosterListener->itemRemoved( jid );
-          }
-          item = iks_next( item );
-          continue;
-        }
+      if( m_rosterListener )
+        m_rosterListener->itemAdded( jid );
 
-        const char *name = iks_find_attrib( item, "name" );
-        bool ask = (bool)iks_find_attrib( item, "ask" );
-        iks *group = iks_find( item, "group" );
-        RosterItem::GroupList groups;
-        while( group )
-        {
-          groups.push_back( iks_cdata( iks_child( group ) ) );
-          group = iks_next( group );
-        }
+      Tag iq( "iq" );
+      iq.addAttrib( "id", stanza.id() );
+      iq.addAttrib( "type", "result" );
+      m_parent->send( iq );
 
-        if( m_roster.find( jid ) == m_roster.end() )
-          m_roster[jid] = new RosterItem( jid );
-
-        m_roster[jid]->setGroups( groups );
-        if( name )
-          m_roster[jid]->setName( name );
-        if( sub )
-          m_roster[jid]->setSubscription( sub, ask );
-        m_roster[jid]->setSynchronized();
-
-        if( m_rosterListener )
-          m_rosterListener->itemAdded( jid );
-
-        item = iks_next( item );
-      }
-
-      iks *x = iks_new( "iq" );
-      iks_insert_attrib( x, "type", "result" );
-      iks_insert_attrib( x, "id", pak->id );
-      m_parent->send( x );
+      return true;
     }
+    return false;
   }
 
-  void RosterManager::handlePresence( iksid *from, iksubtype type, ikshowtype show, const char *msg )
+  void RosterManager::handlePresence( const Stanza& stanza )
   {
-    m_roster[from->full]->setStatus( show );
-    m_roster[from->full]->setStatusMsg( msg );
+    m_roster[stanza.from().bare()]->setStatus( stanza.show() );
+    m_roster[stanza.from().bare()]->setStatusMsg( stanza.status() );
 
     if( m_rosterListener )
     {
-      if( show == IKS_SHOW_AVAILABLE )
-        m_rosterListener->itemAvailable( (*m_roster[from->full]), msg );
-      else if( show == IKS_SHOW_UNAVAILABLE )
-        m_rosterListener->itemUnavailable( (*m_roster[from->full]), msg );
+      if( stanza.show() == PRESENCE_AVAILABLE )
+        m_rosterListener->itemAvailable( (*m_roster[stanza.from().bare()]), stanza.status() );
+      else if( stanza.show() == PRESENCE_UNAVAILABLE )
+        m_rosterListener->itemUnavailable( (*m_roster[stanza.from().bare()]), stanza.status() );
       else
-        m_rosterListener->itemChanged( (*m_roster[from->full]), show, msg );
+        m_rosterListener->itemChanged( (*m_roster[stanza.from().bare()]), stanza.show(), stanza.status() );
     }
   }
 
-  void RosterManager::subscribe( const string& jid, const string& name,
-                                RosterItem::GroupList& groups, const string& msg )
+  void RosterManager::subscribe( const std::string& jid, const std::string& name,
+                                 RosterItem::GroupList& groups/*, const std::string& msg*/ )
   {
     if( jid.empty() )
       return;
 
     add( jid, name, groups );
 
-    iks *x = iks_make_s10n( IKS_TYPE_SUBSCRIBE, jid.c_str(), msg.c_str() );
-    m_parent->send( x );
+    Tag s( "presence" );
+    s.addAttrib( "type", "subscribe" );
+    s.addAttrib( "to", jid );
+    m_parent->send( s );
   }
 
 
-  void RosterManager::add( const string& jid, const string& name, RosterItem::GroupList& groups )
+  void RosterManager::add( const std::string& jid, const std::string& name, RosterItem::GroupList& groups )
   {
     if( jid.empty() )
       return;
 
-    string id = m_parent->getID();
+    std::string id = m_parent->getID();
 
-    iks *x = iks_make_iq( IKS_TYPE_SET, XMLNS_ROSTER );
-    iks_insert_attrib( x, "id", id.c_str() );
-    iks *y = iks_first_tag( x );
-    iks *z = iks_insert( y, "item" );
-    iks_insert_attrib( z, "jid", jid.c_str() );
+    Tag iq( "iq" );
+    iq.addAttrib( "type", "set" );
+    iq.addAttrib( "id", id );
+    Tag q( "query" );
+    q.addAttrib( "xmlns", XMLNS_ROSTER );
+    Tag i( "item" );
+    i.addAttrib( "jid", jid );
     if( !name.empty() )
-      iks_insert_attrib( z, "name", name.c_str() );
+      i.addAttrib( "name", name );
 
     if( groups.size() != 0 )
     {
-      iks *g;
       RosterItem::GroupList::const_iterator it = groups.begin();
       for( it; it != groups.end(); it++ )
       {
-        g = iks_insert( z, "group" );
-        iks_insert_cdata( g, (*it).c_str(), (*it).length() );
+        Tag g( "group", (*it) );
+        i.addChild( g );
       }
     }
-    m_parent->send( x );
+    q.addChild( i );
+    iq.addChild( q );
+    m_parent->send( iq );
   }
 
-  void RosterManager::unsubscribe( const string& jid, const string& msg, bool remove )
+  void RosterManager::unsubscribe( const std::string& jid/*, const std::string& msg*/, bool remove )
   {
-    iks *x = iks_make_s10n( IKS_TYPE_UNSUBSCRIBE, jid.c_str(), msg.c_str() );
-    m_parent->send( x );
+    Tag s( "presence" );
+    s.addAttrib( "type", "unsubscribe" );
+    s.addAttrib( "to", jid );
+    m_parent->send( s );
 
     if( remove )
     {
-      string id = m_parent->getID();
+      std::string id = m_parent->getID();
 
-      iks *x = iks_make_iq( IKS_TYPE_SET, XMLNS_ROSTER );
-      iks_insert_attrib( x, "id", id.c_str() );
-      iks *y = iks_first_tag( x );
-      iks *z = iks_insert( y, "item" );
-      iks_insert_attrib( z, "jid", jid.c_str() );
-      iks_insert_attrib( z, "subscription", "remove" );
+      Tag iq( "iq" );
+      iq.addAttrib( "type", "set" );
+      iq.addAttrib( "id", id );
+      Tag q( "query" );
+      q.addAttrib( "xmlns", XMLNS_ROSTER );
+      Tag i( "item" );
+      i.addAttrib( "jid", jid );
+      i.addAttrib( "subscription", "remove" );
 
-      m_parent->send( x );
+      m_parent->send( iq );
     }
   }
 
@@ -224,80 +182,90 @@ namespace gloox
     {
       if( (*it).second->changed() )
       {
-        string id = m_parent->getID();
+        std::string id = m_parent->getID();
 
-        iks *x = iks_make_iq( IKS_TYPE_SET, XMLNS_ROSTER );
-        iks_insert_attrib( x, "id", id.c_str() );
-        iks *y = iks_first_tag( x );
-        iks *z = iks_insert( y, "item" );
-        iks_insert_attrib( z, "jid", (*it).second->jid().c_str() );
+        Tag iq( "iq" );
+        iq.addAttrib( "type", "set" );
+        iq.addAttrib( "id", id );
+        Tag q( "query" );
+        q.addAttrib( "xmlns", XMLNS_ROSTER );
+        Tag i( "item" );
+        i.addAttrib( "jid", (*it).second->jid() );
         if( !(*it).second->name().empty() )
-          iks_insert_attrib( z, "name", (*it).second->name().c_str() );
+          i.addAttrib( "name", (*it).second->name() );
 
         if( (*it).second->groups().size() != 0 )
         {
-          iks *g;
           RosterItem::GroupList::const_iterator g_it = (*it).second->groups().begin();
           for( g_it; g_it != (*it).second->groups().end(); g_it++ )
           {
-            g = iks_insert( z, "group" );
-            iks_insert_cdata( g, (*g_it).c_str(), (*g_it).length() );
+            Tag g( "group", (*g_it) );
+            i.addChild( g );
           }
         }
-        m_parent->send( x );
+        q.addChild( i );
+        iq.addChild( q );
+
+        m_parent->send( iq );
       }
     }
   }
 
-  void RosterManager::handleSubscription( iksid *from, iksubtype type, const char *msg )
+  void RosterManager::handleSubscription( const Stanza& stanza )
   {
     if( !m_rosterListener )
       return;
 
-    string message;
-    if( msg )
-      message = msg;
-
-    switch( type )
+    switch( stanza.subtype() )
     {
-      case IKS_TYPE_SUBSCRIBE:
-        if( m_rosterListener->subscriptionRequest( from->full, message ) )
+      case STANZA_S10N_SUBSCRIBE:
+        if( m_rosterListener->subscriptionRequest( stanza.from().bare() ) )
         {
-          iks *x = iks_make_s10n( IKS_TYPE_SUBSCRIBED, from->partial, "ok" );
-          m_parent->send( x );
+          Tag p( "presence" );
+          p.addAttrib( "type", "subscribed" );
+          p.addAttrib( "to", stanza.from().bare() );
+          m_parent->send( p );
         }
         else
         {
-          iks *x = iks_make_s10n( IKS_TYPE_UNSUBSCRIBED, from->partial, "ok" );
-          m_parent->send( x );
+          Tag p( "presence" );
+          p.addAttrib( "type", "unsubscribed" );
+          p.addAttrib( "to", stanza.from().bare() );
+          m_parent->send( p );
         }
         break;
 
-      case IKS_TYPE_SUBSCRIBED:
+      case STANZA_S10N_SUBSCRIBED:
       {
-        iks *x = iks_make_s10n( IKS_TYPE_SUBSCRIBE, from->partial, "ok" );
-        m_parent->send( x );
+        Tag p( "presence" );
+        p.addAttrib( "type", "subscribe" );
+        p.addAttrib( "to", stanza.from().bare() );
+        m_parent->send( p );
 
-        m_rosterListener->itemSubscribed( from->partial );
+        m_rosterListener->itemSubscribed( stanza.from().bare() );
         break;
       }
 
-      case IKS_TYPE_UNSUBSCRIBE:
+      case STANZA_S10N_UNSUBSCRIBE:
       {
-        iks *x = iks_make_s10n( IKS_TYPE_UNSUBSCRIBED, from->partial, "ok" );
-        m_parent->send( x );
+        Tag p( "presence" );
+        p.addAttrib( "type", "unsubscribed" );
+        p.addAttrib( "to", stanza.from().bare() );
+        m_parent->send( p );
 
-        if( m_rosterListener->unsubscriptionRequest( from->partial, message ) )
-          unsubscribe( from->partial, "", true );
+        if( m_rosterListener->unsubscriptionRequest( stanza.from().bare() ) )
+          unsubscribe( stanza.from().bare(), true );
         break;
       }
 
-      case IKS_TYPE_UNSUBSCRIBED:
+      case STANZA_S10N_UNSUBSCRIBED:
       {
-        iks *x = iks_make_s10n( IKS_TYPE_UNSUBSCRIBE, from->partial, "ok" );
-        m_parent->send( x );
+        Tag p( "presence" );
+        p.addAttrib( "type", "unsubscribe" );
+        p.addAttrib( "to", stanza.from().bare() );
+        m_parent->send( p );
 
-        m_rosterListener->itemUnsubscribed( from->partial );
+        m_rosterListener->itemUnsubscribed( stanza.from().bare() );
         break;
       }
     }
@@ -313,11 +281,60 @@ namespace gloox
     m_rosterListener = 0;
   }
 
-  void RosterManager::add( const string& jid )
+  const std::string RosterManager::extractItems( const Tag& tag )
   {
-    RosterItem *item = new RosterItem( jid );
-    item->setStatus( IKS_SHOW_UNAVAILABLE );
-    m_roster[jid] = item;
+    std::string jid;
+    Tag t = tag.findChild( "query" );
+    Tag::TagList l = t.children();
+    Tag::TagList::iterator it = l.begin();
+    for( it; it != l.end(); it++ )
+    {
+      if( (*it).name() == "item" )
+      {
+        jid = (*it).findAttribute( "jid" );
+        const std::string name = (*it).findAttribute( "name" );
+        const std::string ask = (*it).findAttribute( "ask" );
+        bool a = false;
+        if( !ask.empty() )
+          a = true;
+        const std::string sub = (*it).findAttribute( "subscription" );
+        RosterItem::SubscriptionEnum subs;
+        if( sub == "remove" )
+        {
+          if( m_roster.find( jid ) != m_roster.end() )
+          {
+            m_roster.erase( jid );
+            if( m_rosterListener )
+              m_rosterListener->itemRemoved( jid );
+          }
+          continue;
+        }
+
+        RosterItem::GroupList gl;
+        if( (*it).hasChild( "group" ) )
+        {
+          Tag::TagList g = (*it).children();
+          Tag::TagList::const_iterator it_g = g.begin();
+          for( it_g; it_g != g.end(); it_g++ )
+          {
+            gl.push_back( (*it_g).name() );
+          }
+        }
+        add( jid, name, gl, sub, a );
+      }
+    }
+    return jid;
+  }
+
+  void RosterManager::add( const std::string& jid, const std::string& name,
+                           RosterItem::GroupList& groups, const std::string& sub, bool ask )
+  {
+    if( m_roster.find( jid ) == m_roster.end() )
+      m_roster[jid] = new RosterItem( jid );
+
+    m_roster[jid]->setStatus( IKS_SHOW_UNAVAILABLE );
+    m_roster[jid]->setSubscription( sub, ask );
+    m_roster[jid]->setGroups( groups );
   }
 
 };
