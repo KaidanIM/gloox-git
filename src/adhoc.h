@@ -68,10 +68,10 @@ namespace gloox
       virtual ItemMap handleDiscoNodeItems( const std::string& node );
 
       // reimplemented from IqHandler
-      virtual void handleIq( const Stanza& stanza );
+      virtual bool handleIq( const Stanza& stanza );
 
       // reimplemented from IqHandler
-      virtual void handleIqID( const Stanza& stanza, int context );
+      virtual bool handleIqID( const Stanza& stanza, int context ) {};
 
       /**
        * Using this function, you can register a @ref AdhocCommandProvider -derived object as
