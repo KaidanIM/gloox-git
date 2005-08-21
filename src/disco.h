@@ -28,7 +28,6 @@
 #include <string>
 #include <list>
 #include <map>
-using namespace std;
 
 namespace gloox
 {
@@ -36,6 +35,7 @@ namespace gloox
   class ClientBase;
   class DiscoHandler;
   class DiscoItem;
+  class Stanza;
 
   /**
    * This class implements JEP-0030 (Service Discovery) and JEP-0092 (Software Version).
@@ -71,7 +71,7 @@ namespace gloox
        * @note Use this function for non-queryable features. For nodes that shall
        * answer to disco\#info queries, use addNode().
        */
-      void addFeature( const string& feature );
+      void addFeature( const std::string& feature );
 
       /**
        * Queries the given JID for general infomation according to
@@ -79,7 +79,7 @@ namespace gloox
        * To receive the results inherit from DiscoHandler and register with the Disco object.
        * @param to The destination-JID of the query.
        */
-      void getDiscoInfo( const string& to );
+      void getDiscoInfo( const std::string& to );
 
       /**
        * Queries the given JID for its items according to
@@ -87,7 +87,7 @@ namespace gloox
        * To receive the results inherit from DiscoHandler and register with the Disco object.
        * @param to The destination-JID of the query.
        */
-      void getDiscoItems( const string& to );
+      void getDiscoItems( const std::string& to );
 
       /**
        * Sets the version of the host application using this library.
@@ -96,7 +96,7 @@ namespace gloox
        * @param name The name to be returned to inquireing clients.
        * @param version The version to be returned to inquireing clients.
        */
-      void setVersion( const string& name, const string& version );
+      void setVersion( const std::string& name, const std::string& version );
 
       /**
        * Sets the identity of this entity.
@@ -107,7 +107,7 @@ namespace gloox
        * @param category The entity category of this client. Default: client
        * @param type The type of this entity. Default: bot
        */
-      void setIdentity( const string& category, const string& type );
+      void setIdentity( const std::string& category, const std::string& type );
 
       /**
        * Use this function to register an @ref DiscoHandler with the Disco
@@ -130,19 +130,19 @@ namespace gloox
        * @param nh The NodeHandler-derived object to register.
        * @param node The node name to associate with this handler.
        */
-      void registerNodeHandler( DiscoNodeHandler *nh, const string& node );
+      void registerNodeHandler( DiscoNodeHandler *nh, const std::string& node );
 
       /**
        * Removes the node handler.
        * @param node The node for which the handler shall be removed.
        */
-      void removeNodeHandler( const string& node );
+      void removeNodeHandler( const std::string& node );
 
       // reimplemented from IqHandler.
-      virtual void handleIq( const char *tag, const char *xmlns, ikspak *pak );
+      virtual void handleIq( const Stanza& stanza );
 
       // reimplemented from IqHandler.
-      virtual void handleIqID( const char *id, ikspak *pak, int context );
+      virtual void handleIqID( const Stanza& stanza, int context );
 
     private:
       enum IdType
@@ -153,11 +153,11 @@ namespace gloox
 
       ClientBase *m_parent;
 
-      typedef list<DiscoHandler*>             DiscoHandlerList;
-      typedef map<string, DiscoNodeHandler*>  DiscoNodeHandlerMap;
-      typedef list<DiscoItem*>                ItemList;
-      typedef list<string>                    StringList;
-      typedef map<string, string>             StringMap;
+      typedef std::list<DiscoHandler*>                  DiscoHandlerList;
+      typedef std::map<std::string, DiscoNodeHandler*>  DiscoNodeHandlerMap;
+      typedef std::list<DiscoItem*>                     ItemList;
+      typedef std::list<std::string>                    StringList;
+      typedef std::map<std::string, std::string>        StringMap;
 
       DiscoHandlerList m_discoHandlers;
       DiscoNodeHandlerMap m_nodeHandlers;
@@ -165,10 +165,10 @@ namespace gloox
       StringList m_features;
       StringMap  m_queryIDs;
 
-      string m_versionName;
-      string m_versionVersion;
-      string m_identityCategory;
-      string m_identityType;
+      std::string m_versionName;
+      std::string m_versionVersion;
+      std::string m_identityCategory;
+      std::string m_identityType;
 
   };
 
