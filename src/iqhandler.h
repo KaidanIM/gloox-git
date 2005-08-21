@@ -40,7 +40,7 @@ namespace gloox
        * Reimplement this function if you want to be notified about incoming IQs.
        * @param stanza The complete Stanza.
        * @return Indicates whether a request of type 'get' or 'set' has been handled. This includes
-       * the obligatory 'result' answer.
+       * the obligatory 'result' answer. If you return @b false, a 'error' will be sent.
        */
       virtual bool handleIq( const Stanza& stanza ) = 0;
 
@@ -54,7 +54,7 @@ namespace gloox
        * @param stanza The complete Stanza.
        * @param context A value to restore context, stored with @ref ClientBase::trackID().
        * @return Indicates whether a request of type 'get' or 'set' has been handled. This includes
-       * the obligatory 'result' answer.
+       * the obligatory 'result' answer. If you return @b false, a 'error' will be sent.
        */
       virtual bool handleIqID( const Stanza& stanza, int context ) = 0;
   };
