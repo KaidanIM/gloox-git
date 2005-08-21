@@ -62,10 +62,10 @@ namespace gloox
       void doAuth();
 
       // reimplemented from IqHandler
-      virtual void handleIq( const Stanza& stanza );
+      virtual bool handleIq( const Stanza& stanza );
 
       // reimplemented from IqHandler
-      virtual void handleIqID( const Stanza& stanza, int context );
+      virtual bool handleIqID( const Stanza& stanza, int context );
 
     private:
       enum NonSaslAuthType
