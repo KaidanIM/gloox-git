@@ -63,14 +63,40 @@ namespace gloox
        */
       virtual const JID& to() const { return m_to; };
 
-      virtual std::string id() const { return m_id; };
+      /**
+       * Returns the id of the stanza, if set.
+       * @return The ID of the stanza.
+       */
+      virtual const std::string id() const { return m_id; };
+
+      /**
+       * Returns the value of the xmlns attribute of the first child node.
+       * @return The namespace of the IQ stanza.
+       */
+      virtual const std::string xmlns() const { return m_xmlns; };
+
+      /**
+       * Returns the presence 'show' type of a presence stanza.
+       * @return The presence type of the sender.
+       */
+      virtual PresenceStatus show() const { return m_show; };
+
+      /**
+       * Returns the status text of a presence stanza.
+       * @return The status text set by the sender.
+       */
+      virtual const std::string status() const { return m_status; };
 
     private:
       StanzaType m_type;
       StanzaSubType m_subtype;
+      PresenceStatus m_show;
       JID m_from;
       JID m_to;
+      std::string m_xmlns;
       std::string m_id;
+      std::string m_status;
+      int m_priority;
   };
 
 };

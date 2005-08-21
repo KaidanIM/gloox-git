@@ -14,6 +14,7 @@ namespace gloox
 {
 
   Stanza::Stanza( const Tag& tag )
+    : m_show( PRESENCE_UNKNOWN )
   {
     m_name = tag.name();
     m_attribs = ( const_cast<Tag&>( tag ) ).attributes();
@@ -37,6 +38,10 @@ namespace gloox
         m_subtype = STANZA_IQ_ERROR;
       else
         m_subtype = STANZA_SUB_UNDEFINED;
+
+      Tag t = tag.findChildWithAttrib( "xmlns" );
+      if( !t.empty() )
+        m_xmlns = t.findAttribute( "xmlns" );
     }
     else if( m_name == "message" )
     {
@@ -80,6 +85,7 @@ namespace gloox
       {
         m_type = STANZA_PRESENCE;
         m_subtype = STANZA_PRES_UNAVAILABLE;
+        m_show = PRESENCE_UNAVAILABLE;
       }
       else if( tag.hasAttribute( "type", "probe" ) )
       {
@@ -106,6 +112,28 @@ namespace gloox
     {
       m_type = STANZA_UNDEFINED;
       m_subtype = STANZA_SUB_UNDEFINED;
+    }
+
+    if( m_type == STANZA_PRESENCE )
+    {
+      if( !hasChild( "show" ) )
+        m_show = PRESENCE_AVAILABLE;
+      else if( hasChildWithCData( "show", "chat" ) )
+        m_show = PRESENCE_CHAT;
+      else if( hasChildWithCData( "show", "away" ) )
+        m_show = PRESENCE_AWAY;
+      else if( hasChildWithCData( "show", "dnd" ) )
+        m_show = PRESENCE_DND;
+      else if( hasChildWithCData( "show", "xa" ) )
+        m_show = PRESENCE_XA;
+      else
+        m_show = PRESENCE_UNKNOWN;
+
+      if( hasChild( "status" ) )
+        m_status = findChild( "status" ).cdata();
+
+      if( hasChild( "priority" ) )
+        m_priority = atoi( findChild( "priority" ).cdata().c_str() );
     }
   }
 
