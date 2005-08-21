@@ -83,16 +83,20 @@ namespace gloox
     return ident;
   }
 
-  void Adhoc::handleIq( const Stanza& stanza )
+  bool Adhoc::handleIq( const Stanza& stanza )
   {
     if( stanza.hasChild( "command" ) )
     {
-      Tag n = stanza.findChildWithAttrib( "node" );
-      const std::string node = n.findAttribute( "node" );
+      Tag c = stanza.findChild( "command" );
+      const std::string node = c.findAttribute( "node" );
       AdhocCommandProviderMap::const_iterator it = m_adhocCommandProviders.find( node );
       if( !node.empty() && ( it != m_adhocCommandProviders.end() ) )
-        (*it).second->handleAdhocCommand( node, n );
+      {
+        (*it).second->handleAdhocCommand( node, c );
+        return true;
+      }
     }
+    return false;
   }
 
   void Adhoc::registerAdhocCommandProvider( AdhocCommandProvider *acp, const std::string& command,
