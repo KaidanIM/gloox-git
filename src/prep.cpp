@@ -22,6 +22,9 @@
 
 #include "prep.h"
 
+#include <string>
+using namespace std;
+
 #ifdef HAVE_LIBIDN
 #include <stringprep.h>
 #include <idna.h>
@@ -32,13 +35,13 @@
 namespace gloox
 {
 
-  string Prep::nodeprep( const string& node )
+  std::string Prep::nodeprep( const std::string& node )
   {
     if( node.empty() )
       return node;
 
     if( node.length() > JID_PORTION_SIZE )
-      return string();
+      return "";
 
 #ifdef HAVE_LIBIDN
   char* p;
@@ -56,7 +59,7 @@ namespace gloox
                          (Stringprep_profile_flags)0, stringprep_xmpp_nodeprep );
     if ( rc != STRINGPREP_OK )
     {
-      return string();
+      return "";
     }
     return buf;
 #else
@@ -64,13 +67,13 @@ namespace gloox
 #endif
   }
 
-  string Prep::nameprep( const string& domain )
+  std::string Prep::nameprep( const std::string& domain )
   {
     if( domain.empty() )
       return domain;
 
     if( domain.length() > JID_PORTION_SIZE )
-      return string();
+      return "";
 
 #ifdef HAVE_LIBIDN
     char* p;
@@ -88,7 +91,7 @@ namespace gloox
                          (Stringprep_profile_flags)0, stringprep_nameprep );
     if ( rc != STRINGPREP_OK )
     {
-      return string();
+      return "";
     }
     return buf;
 #else
@@ -96,13 +99,13 @@ namespace gloox
 #endif
   }
 
-  string Prep::resourceprep( const string& resource )
+  std::string Prep::resourceprep( const std::string& resource )
   {
     if( resource.empty() )
       return resource;
 
     if( resource.length() > JID_PORTION_SIZE )
-      return string();
+      return "";
 
 #ifdef HAVE_LIBIDN
     char* p;
@@ -120,7 +123,7 @@ namespace gloox
                           (Stringprep_profile_flags)0, stringprep_xmpp_resourceprep );
     if ( rc != STRINGPREP_OK )
     {
-      return string();
+      return "";
     }
     return buf;
 #else
@@ -128,13 +131,13 @@ namespace gloox
 #endif
   }
 
-  string Prep::idna( const string& domain )
+  std::string Prep::idna( const std::string& domain )
   {
     if( domain.empty() )
       return domain;
 
     if( domain.length() > JID_PORTION_SIZE )
-      return string();
+      return "";
 
 #ifdef HAVE_LIBIDN
     char* p;
@@ -151,7 +154,7 @@ namespace gloox
     int rc = idna_to_ascii_8z( (char*)&buf, &p, (Idna_flags)0 );
     if ( rc != IDNA_SUCCESS )
     {
-      return string();
+      return "";
     }
     return p;
 #else
