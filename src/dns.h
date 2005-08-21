@@ -50,7 +50,7 @@ namespace gloox
         DNS_COULD_NOT_RESOLVE           /**< The given domain name could not be resolved. */
       };
       /**
-       * A list of strings (used for server addresses) and ints (used for port numbers).
+       * A list of std::strings (used for server addresses) and ints (used for port numbers).
        */
       typedef map<string, int> StringMap;
 
@@ -62,7 +62,7 @@ namespace gloox
        * @return A list of weighted hostname/port pairs from SRV records, or A records if no SRV
        * records where found.
        */
-      static StringMap resolve( const string& service, const string& proto, const string& domain );
+      static StringMap resolve( const std::string& service, const std::string& proto, const std::string& domain );
 
       /**
        * This is a convenience funtion which uses @ref resolve() to resolve SRV records
@@ -71,7 +71,7 @@ namespace gloox
        * @return A list of weighted hostname/port pairs from SRV records, or A records if no SRV
        * records where found.
        */
-      static StringMap resolve( const string& domain );
+      static StringMap resolve( const std::string& domain );
 
       /**
        * This is a convenience function which uses @ref resolve() to get a list of hosts
@@ -79,7 +79,7 @@ namespace gloox
        * @param domain The domain to resolve SRV records for.
        * @return A file descriptor for the established connection.
        */
-      static int connect( const string& domain );
+      static int connect( const std::string& domain );
 
       /**
        * This is a convenience function which uses connects to the given host and port. No SRV
@@ -88,7 +88,7 @@ namespace gloox
        * @param port A custom port to connect to.
        * @return A file descriptor for the established connection.
        */
-      static int connect( const string& domain, int port );
+      static int connect( const std::string& domain, int port );
 
     private:
       typedef struct buf {

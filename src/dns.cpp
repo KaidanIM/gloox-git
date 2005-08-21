@@ -43,20 +43,21 @@
 namespace gloox
 {
 
-  DNS::StringMap DNS::resolve( const string& domain )
+  DNS::StringMap DNS::resolve( const std::string& domain )
   {
-    string service = "xmpp-client";
-    string proto = "tcp";
+    std::string service = "xmpp-client";
+    std::string proto = "tcp";
 
     return resolve( service, proto, domain );
   }
 
-  DNS::StringMap DNS::resolve( const string& service, const string& proto, const string& domain )
+  DNS::StringMap DNS::resolve( const std::string& service, const std::string& proto,
+                               const std::string& domain )
   {
     buf srvbuf;
     bool error = false;
 
-    string dname = "_" +  service + "._" + proto;
+    std::string dname = "_" +  service + "._" + proto;
 
     if( !domain.empty() )
       srvbuf.len = res_querydomain( dname.c_str(), (char*)domain.c_str(), C_IN, T_SRV, srvbuf.buf, PACKETSZ );
@@ -132,7 +133,7 @@ namespace gloox
     return servers;
   }
 
-  int DNS::connect( const string& domain )
+  int DNS::connect( const std::string& domain )
   {
     struct sockaddr_in dest_addr;
     dest_addr.sin_family = AF_INET;
@@ -164,8 +165,8 @@ namespace gloox
       }
 
 #ifdef DEBUG
-      printf( "resolved %s to: %s:%d\n", (*it).first.c_str(),
-              inet_ntoa( *((struct in_addr *)h->h_addr) ), port );
+      char *tmp = inet_ntoa( *((struct in_addr *)h->h_addr) );
+      printf( "resolved %s to: %s:%d\n", (*it).first.c_str(), tmp, port );
 #endif
 
       if( inet_aton( inet_ntoa(*((struct in_addr *)h->h_addr)), &(dest_addr.sin_addr) ) == 0 )
@@ -183,7 +184,7 @@ namespace gloox
     return -DNS_COULD_NOT_CONNECT;
   }
 
-  int DNS::connect( const string& domain, int port )
+  int DNS::connect( const std::string& domain, int port )
   {
     struct sockaddr_in dest_addr;
     dest_addr.sin_family = AF_INET;
