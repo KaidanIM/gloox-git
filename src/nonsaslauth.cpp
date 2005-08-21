@@ -74,11 +74,12 @@ namespace gloox
         Tag q = stanza.findChild( "query" );
         if( ( q.hasChild( "digest" ) ) && !m_sid.empty() )
         {
+          const std::string pwd = m_parent->password();
           char buf[41];
           iksha *sha;
           sha = iks_sha_new();
-          iks_sha_hash( sha, (const unsigned char*)sessionID.c_str(), sessionID.length(), 0 );
-          iks_sha_hash( sha, (const unsigned char*)password.c_str(), password.length(), 1 );
+          iks_sha_hash( sha, (const unsigned char*)m_sid.c_str(), m_sid.length(), 0 );
+          iks_sha_hash( sha, (const unsigned char*)pwd.c_str(), pwd.length(), 1 );
           iks_sha_print( sha, buf );
           iks_sha_delete( sha );
           Tag d( "digest", buf );
