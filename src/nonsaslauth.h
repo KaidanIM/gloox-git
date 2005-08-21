@@ -24,12 +24,13 @@
 #include "iqhandler.h"
 
 #include <string>
-using namespace std;
 
 namespace gloox
 {
 
   class JClient;
+  class Stanza;
+  class Tag;
 
   /**
    * This class is an implementation of JEP-0078 (Non-SASL Authentication).
@@ -47,7 +48,7 @@ namespace gloox
        * @param parent The @ref ClientBase which is used to authenticate.
        * @param sid The session ID given by the server with the stream opening tag.
        */
-      NonSaslAuth( JClient *parent, const string& sid );
+      NonSaslAuth( JClient *parent, const std::string& sid );
 
       /**
        * Virtual Destructor.
@@ -61,14 +62,23 @@ namespace gloox
       void doAuth();
 
       // reimplemented from IqHandler
-      virtual void handleIq( const char *tag, const char *xmlns, ikspak *pak );
+      virtual void handleIq( const Stanza& stanza );
 
       // reimplemented from IqHandler
-      virtual void handleIqID( const char *id, ikspak *pak, int context );
+      virtual void handleIqID( const Stanza& stanza, int context );
 
     private:
+      enum NonSaslAuthType
+      {
+        TYPE_DIGEST,
+        TYPE_PLAIN
+      };
+
+      const Tag createAuthTag( NonSaslAuthType type, const JID& jid,
+                               const std::string& password, const std::string& sid  );
+
       JClient *m_parent;
-      string m_sid;
+      std::string m_sid;
 
   };
 
