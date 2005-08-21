@@ -20,9 +20,7 @@
 
 #include "privatexml.h"
 #include "clientbase.h"
-
-#include <iksemel.h>
-
+#include "stanza.h"
 
 namespace gloox
 {
@@ -40,53 +38,64 @@ namespace gloox
       m_parent->removeIqHandler( XMLNS_PRIVATE_XML );
   }
 
-  void PrivateXML::requestXML( const string& tag, const string& xmlns )
+  void PrivateXML::requestXML( const std::string& tag, const std::string& xmlns )
   {
-    string id = m_parent->getID();
+    const std::string id = m_parent->getID();
 
-    iks *x = iks_make_iq( IKS_TYPE_GET, XMLNS_PRIVATE_XML );
-    iks_insert_attrib( x, "id", id.c_str() );
-    iks *y = iks_find( x, "query" );
-    iks *z = iks_insert( y, tag.c_str() );
-    iks_insert_attrib( z, "xmlns", xmlns.c_str() );
+    Tag iq( "iq" );
+    iq.addAttrib( "id", id );
+    iq.addAttrib( "type", "get" );
+    Tag query( "query" );
+    query.addAttrib( "xmlns", XMLNS_PRIVATE_XML );
+    Tag x( tag );
+    x.addAttrib( "xmlns", xmlns );
+    query.addChild( x );
+    iq.addChild( query );
 
     m_parent->trackID( this, id, REQUEST_XML );
-    m_parent->send( x );
+    m_parent->send( iq );
   }
 
-  void PrivateXML::storeXML( iks *xml, const string& xmlns )
+  void PrivateXML::storeXML( const Tag& tag, const std::string& xmlns )
   {
-    string id = m_parent->getID();
+    const std::string id = m_parent->getID();
 
-    iks *x = iks_make_iq( IKS_TYPE_SET, XMLNS_PRIVATE_XML );
-    iks_insert_attrib( x, "id", id.c_str() );
-    iks_insert_node( iks_child( x ), xml );
+    Tag iq( "iq" );
+    iq.addAttrib( "id", id );
+    iq.addAttrib( "type", "set" );
+    Tag query( "query" );
+    query.addAttrib( "xmlns", XMLNS_PRIVATE_XML );
+    query.addChild( tag );
+    iq.addChild( query );
 
     m_parent->trackID( this, id, STORE_XML );
-    m_parent->send( x );
+    m_parent->send( iq );
   }
 
-  void PrivateXML::handleIq( const char *tag, const char *xmlns, ikspak *pak )
+  bool PrivateXML::handleIq( const Stanza& stanza )
   {
+    return false;
   }
 
-  void PrivateXML::handleIqID( const char *id, ikspak *pak, int context )
+  bool PrivateXML::handleIqID( const Stanza& stanza, int context )
   {
-    if( pak->subtype == IKS_TYPE_RESULT )
+    if( stanza.subtype() == STANZA_IQ_RESULT )
     {
       switch( context )
       {
         case REQUEST_XML:
         {
-          char *tag = iks_name( iks_child( pak->query ) );
-          char *ns = iks_find_attrib( iks_child( pak->query ), "xmlns" );
-          PrivateXMLHandlers::const_iterator pi = m_privateXMLHandlers.begin();
-          for( pi; pi != m_privateXMLHandlers.end(); pi++ )
+          Tag q = stanza.findChild( "query" );
+          Tag::TagList l = q.children();
+          Tag::TagList::const_iterator it = l.begin();
+          if( it != l.end() )
           {
-            if( ( iks_strncmp( tag, (*pi).second.tag.c_str(), (*pi).second.tag.length() ) == 0 )
-                  && ( iks_strncmp( ns, (*pi).first.c_str(), (*pi).first.length() )  == 0 ) )
+            Tag tag = (*it);
+            const std::string xmlns = tag.findAttribute( "xmlns" );
+            PrivateXMLHandlers::const_iterator pi = m_privateXMLHandlers.find( xmlns );
+            if( ( pi != m_privateXMLHandlers.end() ) && ( tag.name() == (*pi).second.tag ) )
             {
-              (*pi).second.pxh->handlePrivateXML( tag, ns, pak );
+              (*pi).second.pxh->handlePrivateXML( tag.name(), xmlns, tag );
             }
           }
           break;
@@ -95,13 +104,19 @@ namespace gloox
         case STORE_XML:
           break;
       }
-    }
-    else if( pak->subtype == IKS_TYPE_ERROR )
-    {
-    }
-}
 
-  void PrivateXML::registerPrivateXMLHandler( PrivateXMLHandler *pxh, const string& tag, const string& xmlns )
+      return true;
+    }
+    else if( stanza.subtype() == STANZA_IQ_ERROR )
+    {
+      return false;
+    }
+
+    return false;
+  }
+
+  void PrivateXML::registerPrivateXMLHandler( PrivateXMLHandler *pxh, const std::string& tag,
+                                              const std::string& xmlns )
   {
     XMLHandlerStruct tmp;
     tmp.xmlns = xmlns;
@@ -110,7 +125,7 @@ namespace gloox
     m_privateXMLHandlers[xmlns] = tmp;
   }
 
-  void PrivateXML::removePrivateXMLHandler( const string& xmlns )
+  void PrivateXML::removePrivateXMLHandler( const std::string& xmlns )
   {
     m_privateXMLHandlers.erase( xmlns );
   }
