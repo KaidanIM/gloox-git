@@ -19,15 +19,16 @@
 
 
 #include "nonsaslauth.h"
-
 #include "jclient.h"
+
+#include <string>
 
 #include <iksemel.h>
 
 namespace gloox
 {
 
-  NonSaslAuth::NonSaslAuth( JClient *parent, const string& sid )
+  NonSaslAuth::NonSaslAuth( JClient *parent, const std::string& sid )
     : m_parent( parent ), m_sid( sid )
   {
     if( m_parent )
@@ -42,48 +43,63 @@ namespace gloox
 
   void NonSaslAuth::doAuth()
   {
-    string id = m_parent->getID();
-    iks *x = iks_make_iq( IKS_TYPE_GET, XMLNS_AUTH );
-    iks_insert_attrib( x, "to", m_parent->server().c_str() );
-    iks_insert_attrib( x, "id", id.c_str() );
-    iks_insert_cdata( iks_insert( iks_first_tag( x ), "username" ),
-                      m_parent->username().c_str(), m_parent->username().length() );
+    std::string id = m_parent->getID();
 
-    m_parent->send( x );
+    Tag iq( "iq" );
+    iq.addAttrib( "to", m_parent->server() );
+    iq.addAttrib( "id", id );
+    Tag q( "query" );
+    q.addAttrib( "xmlns", XMLNS_AUTH );
+    q.addChild( Tag( "username", m_parent->username() ) );
+    iq.addChild( q );
+
+    m_parent->send( iq );
   }
 
-  void NonSaslAuth::handleIq( const char *tag, const char *xmlns, ikspak *pak )
+  void NonSaslAuth::handleIq( const Stanza& stanza )
   {
-    bool digest = false;
-    switch( pak->subtype )
+    switch( stanza.subtype() )
     {
-      case IKS_TYPE_RESULT:
+      case STANZA_IQ_RESULT:
       {
-        iks *x;
+        Tag iq( "iq" );
+        std::string id = m_parent->getID();
+        iq.addAttrib( "id", id );
+        iq.addAttrib( "type", "set" );
+        Tag query( "query" );
+        query.addAttrib( "xmlns", XMLNS_AUTH );
+        Tag u( "username", m_parent->jid().username() );
+        query.addChild( u );
 
-        if( iks_find( pak->query, "digest" ) && !m_sid.empty() )
+        Tag q = stanza.findChild( "query" );
+        if( ( q.hasChild( "digest" ) ) && !m_sid.empty() )
         {
-          //FIXME: write own 'iks_make'auth' to get rid of cast
-          x = iks_make_auth( (iksid*)m_parent->parsedJid(), m_parent->password().c_str(), m_sid.c_str() );
+          char buf[41];
+          iksha *sha;
+          sha = iks_sha_new();
+          iks_sha_hash( sha, (const unsigned char*)sessionID.c_str(), sessionID.length(), 0 );
+          iks_sha_hash( sha, (const unsigned char*)password.c_str(), password.length(), 1 );
+          iks_sha_print( sha, buf );
+          iks_sha_delete( sha );
+          Tag d( "digest", buf );
+          query.addChild( d );
         }
-        else if( iks_find( pak->query, "password" ) )
+        else
         {
-          //FIXME: write own 'iks_make'auth' to get rid of cast
-          x = iks_make_auth( (iksid*)m_parent->parsedJid(), m_parent->password().c_str(), NULL );
+          Tag p( "password", m_parent->password() );
+          query.addChild( p );
         }
 
-        string id = m_parent->getID();
-        iks_insert_attrib( x, "id", id.c_str() );
-        m_parent->trackID( this, id.c_str(), 0 );
-        m_parent->send( x );
-
+        iq.addChild( query );
+        m_parent->trackID( this, id, 0 );
+        m_parent->send( iq );
         break;
       }
 
-      case IKS_TYPE_ERROR:
+      case STANZA_IQ_ERROR:
       {
         m_parent->setState( STATE_AUTHENTICATION_FAILED );
-  #warning FIXME: More detail?
+#warning FIXME: More detail necessary?
 
   //       iks *ft = iks_child( iks_find( pak->x, "error" ) );
   //
@@ -99,7 +115,7 @@ namespace gloox
     }
   }
 
-  void NonSaslAuth::handleIqID( const char *id, ikspak *pak, int context )
+  void NonSaslAuth::handleIqID( const Stanza& stanza, int context )
   {
     // this needs fixing! NonSaslAuth shouldn't be a friend of JClient.
     m_parent->setState( STATE_AUTHENTICATED );
