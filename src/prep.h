@@ -22,7 +22,6 @@
 #define PREP_H__
 
 #include <string>
-using namespace std;
 
 namespace gloox
 {
@@ -34,7 +33,7 @@ namespace gloox
    * If you write your own enhancements, check with the spec.
    *
    * @note These functions depend on an installed LibIDN at compile time of gloox. If
-   * LibIDN is not installed these functions return the string they are given
+   * LibIDN is not installed these functions return the std::string they are given
    * without any modification.
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.2
@@ -43,37 +42,37 @@ namespace gloox
   {
     public:
       /**
-       * This function applies the Nodeprep profile of Stringprep to a string.
-       * @param node The string to apply the profile to.
-       * @return Returns the prepped string. In case of an error an empty string
-     * is returned. If LibIDNis not available the string is returned unchanged.
+       * This function applies the Nodeprep profile of Stringprep to a std::string.
+       * @param node The std::string to apply the profile to.
+       * @return Returns the prepped std::string. In case of an error an empty std::string
+     * is returned. If LibIDNis not available the std::string is returned unchanged.
        */
-      static string nodeprep( const string& node );
+      static std::string nodeprep( const std::string& node );
 
       /**
-       * This function applies the Nameprep profile of Stringprep to a string.
-       * @param domain The string to apply the profile to.
-       * @return Returns the prepped string. In case of an error an empty string
-       * is returned. If LibIDNis not available the string is returned unchanged.
+       * This function applies the Nameprep profile of Stringprep to a std::string.
+       * @param domain The std::string to apply the profile to.
+       * @return Returns the prepped std::string. In case of an error an empty std::string
+       * is returned. If LibIDNis not available the std::string is returned unchanged.
        */
-      static string nameprep( const string& domain );
+      static std::string nameprep( const std::string& domain );
 
       /**
-       * This function applies the Resourceprep profile of Stringprep to a string.
-       * @param resource The string to apply the profile to.
-       * @return Returns the prepped string. In case of an error an empty string
-       * is returned. If LibIDNis not available the string is returned unchanged.
+       * This function applies the Resourceprep profile of Stringprep to a std::string.
+       * @param resource The std::string to apply the profile to.
+       * @return Returns the prepped std::string. In case of an error an empty std::string
+       * is returned. If LibIDNis not available the std::string is returned unchanged.
        */
-      static string resourceprep( const string& resource );
+      static std::string resourceprep( const std::string& resource );
 
       /**
-       * This function applies the idna() function to a string. I.e. it transform
+       * This function applies the idna() function to a std::string. I.e. it transform
        * internationalized domain names into plain ASCII.
-       * @param domain The string to convert.
-       * @return Returns the converted string. In case of an error an empty string
-       * is returned. If LibIDNis not available the string is returned unchanged.
+       * @param domain The std::string to convert.
+       * @return Returns the converted std::string. In case of an error an empty std::string
+       * is returned. If LibIDNis not available the std::string is returned unchanged.
        */
-      static string idna( const string& domain );
+      static std::string idna( const std::string& domain );
   };
 
 };
