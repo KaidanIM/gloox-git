@@ -22,148 +22,192 @@
 #include "config.h"
 
 #include "clientbase.h"
+#include "connection.h"
+#include "parser.h"
+#include "tag.h"
+#include "stanza.h"
 
-#include "jthread.h"
+#include <string>
+#include <map>
+#include <list>
+
 
 namespace gloox
 {
 
   ClientBase::ClientBase( const std::string& ns )
-    : Stream( ns ),
-      m_port( -1 ), m_thread( 0 ),
+    : m_namespace( ns ), m_port( -1 ),
+      m_connection( 0 ), m_parser( 0 ),
       m_tls( true ), m_sasl( true ), m_idCount( 0 )
   {
-    init();
   }
 
   ClientBase::ClientBase( const std::string& ns, const std::string& password, int port )
-    : Stream( ns ),
-      m_password( password ), m_port( port ), m_thread( 0 ),
+    : m_namespace( ns ), m_password( password ), m_port( port ),
+      m_connection( 0 ), m_parser( 0 ),
       m_tls( true ), m_sasl( true ), m_idCount( 0 )
   {
-    init();
   }
 
   ClientBase::ClientBase( const std::string& ns, const std::string& password,
                           const std::string& server, int port )
-    : Stream( ns ),
-      m_server( server ), m_port( port ), m_thread( 0 ), m_password( password ),
+    : m_namespace( ns ), m_password( password ), m_port( port ),
+      m_connection( 0 ), m_parser( 0 ),
       m_tls( true ), m_sasl( true ), m_idCount( 0 )
   {
-    init();
+    m_jid.setServer( server );
   }
 
   ClientBase::~ClientBase()
   {
-    iks_filter_delete( m_filter );
-    delete m_thread;
+    delete m_connection;
+    delete m_parser;
+    printf( "deleting Parser & Connection in ~ClientBase()\n" );
   }
 
-  void ClientBase::init()
+  bool ClientBase::connect()
   {
-#ifdef DEBUG
-    set_log_hook();
-#endif
-    setupFilter();
+    if( m_jid.server().empty() )
+      return false;
+
+    if( !m_parser )
+      m_parser = new Parser( this, m_namespace );
+
+    if( !m_connection )
+      m_connection = new Connection( m_parser, m_jid.server(), m_port );
+
+    int ret = m_connection->connect();
+    if( ret == STATE_CONNECTED )
+    {
+      header();
+      m_connection->receive();
+    }
+
+    return true;
   }
 
-  void ClientBase::connect( bool blocking )
+  void ClientBase::filter( int type, const Tag& tag )
   {
-    if( server().empty() )
+    if( tag.empty() )
       return;
 
-    m_blockingConnect = blocking;
+#ifdef DEBUG
+    log( tag, true );
+#endif
 
-    m_state = STATE_CONNECTING;
-
-    m_thread = new JThread( this );
-    m_thread->start();
-
-    if( !username().empty() && !password().empty() )
+    switch( type )
     {
-      while( m_state >= STATE_CONNECTED &&
-            m_state != STATE_AUTHENTICATED &&
-            m_state != STATE_AUTHENTICATION_FAILED )
-      {
-        JThread::sleep( 1000 );
-      }
+      case( IKS_NODE_START ):
+        m_sid = tag.findAttribute( "id" );
+        handleStartNode();
+        break;
+      case IKS_NODE_NORMAL:
+        if( !handleNormalNode( tag ) )
+        {
+          Stanza stanza( tag );
 
-      if ( m_state == STATE_AUTHENTICATION_FAILED )
-      {
-        notifyOnDisconnect();
-      }
-    }
-
-    if( m_blockingConnect )
-    {
-      m_thread->join();
+          switch( stanza.type() )
+          {
+            case STANZA_IQ:
+              notifyIqHandlers( stanza );
+              break;
+            case STANZA_PRESENCE:
+              notifyPresenceHandlers( stanza );
+              break;
+            case STANZA_S10N:
+              notifySubscriptionHandlers( stanza );
+              break;
+            case STANZA_MESSAGE:
+              notifyMessageHandlers( stanza );
+              break;
+          }
+        }
+        break;
+      case IKS_NODE_ERROR:
+#ifdef DEBUG
+        printf( "stream error received\n" );
+#endif
+        disconnect( STATE_ERROR );
+        break;
+      case IKS_NODE_STOP:
+#ifdef DEBUG
+        printf( "stream closed\n" );
+#endif
+        disconnect( STATE_DISCONNECTED );
+        break;
     }
   }
 
-  void ClientBase::disconnect()
+  void ClientBase::disconnect( ConnectionState reason )
   {
-    if( m_state != STATE_DISCONNECTED )
+    if( m_connection )
     {
-      m_state = STATE_DISCONNECTED;
-      m_thread->cancel();
-      Stream::disconnect();
-
-      if( !m_blockingConnect )
-      {
-        m_thread->join();
-      }
+      m_connection->setState( reason );
+      m_connection->disconnect();
     }
   }
 
-  const std::string ClientBase::getID()
+  void ClientBase::header()
   {
-    char tmp[10];
-    sprintf( tmp, "uid%d", ++m_idCount );
-    return tmp;
+    std::string xml = "<?xml version='1.0'?>";
+    xml += "<stream:stream to='" + streamTo()+  "' xmlns='" + m_namespace + "' ";
+    xml += "xmlns:stream='http://etherx.jabber.org/streams' ";
+    xml += "version='1.0'>";
+    send( xml );
   }
 
-  void ClientBase::send( iks* x )
+  void ClientBase::send( const Tag& tag )
   {
-    Stream::send( x );
+#ifdef DEBUG
+    log( tag, false );
+#endif
+    if( m_connection )
+      m_connection->send( tag.xml() );
+  }
+
+  void ClientBase::send( const std::string& xml )
+  {
+    if( m_connection )
+      m_connection->send( xml );
+  }
+
+  void ClientBase::send( iks *x )
+  {
+    printf( "Another user of send( iks *x )" );
+    char *str = iks_string( 0, x );
+    if( str )
+      m_connection->send( str );
+    iks_free( str );
     iks_delete( x );
   }
 
-  iksparser* ClientBase::parser()
-  {
-    return this->P;
+  ConnectionState ClientBase::state() const{
+    if( m_connection )
+      return m_connection->state();
+    else
+      return STATE_DISCONNECTED;
   }
 
-  void ClientBase::setupFilter()
+  void ClientBase::setState( ConnectionState state )
   {
-    m_filter = iks_filter_new();
-
-    iks_filter_add_rule( m_filter, (iksFilterHook*) msgHook, this,
-                        IKS_RULE_TYPE, IKS_PAK_MESSAGE,
-                        IKS_RULE_DONE );
-    iks_filter_add_rule( m_filter, (iksFilterHook*) presenceHook, this,
-                        IKS_RULE_TYPE, IKS_PAK_PRESENCE,
-                        IKS_RULE_DONE );
-    iks_filter_add_rule( m_filter, (iksFilterHook*) subscriptionHook, this,
-                        IKS_RULE_TYPE, IKS_PAK_S10N,
-                        IKS_RULE_DONE );
-    iks_filter_add_rule( m_filter, (iksFilterHook*) iqHook, this,
-                        IKS_RULE_TYPE, IKS_PAK_IQ,
-                        IKS_RULE_DONE );
+    if( m_connection )
+      m_connection->setState( state );
   }
 
-  void ClientBase::on_log( const char* data, size_t size, int is_incoming )
+  void ClientBase::log( const Tag& tag, bool incoming )
   {
 #ifdef DEBUG
-    if ( is_secure() )
+    if ( m_connection->isSecure() )
       printf( "Sec" );
 
-    if (is_incoming)
+    if( incoming )
       printf( "RECV " );
     else
       printf( "SEND " );
 
-    printf( "[%s]", data );
-    if( strncmp( &data[size-1], "\n", 1 ) != 0 )
+    const std::string data;
+    printf( "[%s]", data.c_str() );
+    if( data.substr(data.length()-1, 1 ) != "\n" )
       printf( "\n" );
 #endif
   }
@@ -244,75 +288,68 @@ namespace gloox
     }
   }
 
-  void ClientBase::notifyPresenceHandlers( iksid* from, iksubtype type, ikshowtype show, const char* msg )
+  void ClientBase::notifyOnResourceBindError( ConnectionListener::ResourceBindError error )
+  {
+    ConnectionListenerList::const_iterator it = m_connectionListeners.begin();
+    for( it; it != m_connectionListeners.end(); it++ )
+    {
+      (*it)->onResourceBindError( error );
+    }
+  }
+
+  void ClientBase::notifyOnSessionCreateError( ConnectionListener::SessionCreateError error )
+  {
+    ConnectionListenerList::const_iterator it = m_connectionListeners.begin();
+    for( it; it != m_connectionListeners.end(); it++ )
+    {
+      (*it)->onSessionCreateError( error );
+    }
+  }
+
+  void ClientBase::notifyPresenceHandlers( const Stanza& stanza )
   {
     PresenceHandlerList::const_iterator it = m_presenceHandlers.begin();
     for( it; it != m_presenceHandlers.end(); it++ )
     {
-      (*it)->handlePresence( from, type, show, msg );
+      (*it)->handlePresence( stanza );
     }
   }
 
-  void ClientBase::notifySubscriptionHandlers( iksid* from, iksubtype type, const char* msg )
+  void ClientBase::notifySubscriptionHandlers( const Stanza& stanza )
   {
     SubscriptionHandlerList::const_iterator it = m_subscriptionHandlers.begin();
     for( it; it != m_subscriptionHandlers.end(); it++ )
     {
-      (*it)->handleSubscription( from, type, msg );
+      (*it)->handleSubscription( stanza );
     }
   }
 
-  void ClientBase::notifyIqHandlers( const char* xmlns, ikspak* pak )
+  void ClientBase::notifyIqHandlers( const Stanza& stanza )
   {
     IqHandlerMap::const_iterator it_ns = m_iqNSHandlers.begin();
     for( it_ns; it_ns != m_iqNSHandlers.end(); it_ns++ )
     {
-      if( iks_strncmp( (*it_ns).first.c_str(), xmlns, (*it_ns).first.length() ) == 0 )
+      if( stanza.hasChildWithAttrib( "xmlns", (*it_ns).first ) )
       {
-        char* tag = iks_name( iks_first_tag( pak->x ) );
-        (*it_ns).second->handleIq( tag, xmlns, pak );
+        (*it_ns).second->handleIq( stanza );
       }
     }
 
-    IqTrackMap::iterator it_id = m_iqIDHandlers.find( pak->id );
+    IqTrackMap::iterator it_id = m_iqIDHandlers.find( stanza.id() );
     if( it_id != m_iqIDHandlers.end() )
     {
-      (*it_id).second.ih->handleIqID( pak->id, pak, (*it_id).second.context );
+      (*it_id).second.ih->handleIqID( stanza, (*it_id).second.context );
       m_iqIDHandlers.erase( it_id );
     }
   }
 
-  void ClientBase::notifyMessageHandlers( iksid* from, iksubtype type, const char* msg )
+  void ClientBase::notifyMessageHandlers( const Stanza& stanza )
   {
     MessageHandlerList::const_iterator it = m_messageHandlers.begin();
     for( it; it != m_messageHandlers.end(); it++ )
     {
-      (*it)->handleMessage( from, type, msg );
+      (*it)->handleMessage( stanza );
     }
-  }
-
-  int msgHook( ClientBase* stream, ikspak* pak )
-  {
-    stream->notifyMessageHandlers( pak->from, pak->subtype, iks_find_cdata( pak->x, "body" ) );
-    return IKS_FILTER_EAT;
-  }
-
-  int iqHook( ClientBase* stream, ikspak* pak )
-  {
-    stream->notifyIqHandlers( pak->ns, pak );
-    return IKS_FILTER_EAT;
-  }
-
-  int presenceHook( ClientBase* stream, ikspak* pak )
-  {
-    stream->notifyPresenceHandlers( pak->from, pak->subtype, pak->show, iks_find_cdata( pak->x, "status" ) );
-    return IKS_FILTER_EAT;
-  }
-
-  int subscriptionHook( ClientBase* stream, ikspak* pak )
-  {
-    stream->notifySubscriptionHandlers( pak->from, pak->subtype, iks_find_cdata( pak->x, "status" ) );
-    return IKS_FILTER_EAT;
   }
 
 };
