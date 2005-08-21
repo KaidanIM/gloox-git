@@ -44,9 +44,9 @@ namespace gloox
        * @c PrivateXML::requestXML().
        * @param tag The tag of the storage packet.
        * @param xmlns The XML namespace of the storage packet.
-       * @param pak The complete packet.
+       * @param tag The private xml.
        */
-      virtual void handlePrivateXML( const string& tag, const string& xmlns, ikspak* pak ) {};
+      virtual void handlePrivateXML( const std::string& tag, const std::string& xmlns, const Tag& t ) {};
 
   };
 

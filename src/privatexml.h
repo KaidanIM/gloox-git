@@ -28,12 +28,13 @@
 #include <string>
 #include <list>
 #include <map>
-using namespace std;
 
 namespace gloox
 {
 
   class ClientBase;
+  class Tag;
+  class Stanza;
 
   /**
    * This class implements JEP-0049 (Private XML Storage).
@@ -60,7 +61,7 @@ namespace gloox
        * @param tag Child element of the query element used to identify the rrquested XML fragment.
        * @param xmlns The namespace which qualifies the tag.
        */
-      void requestXML( const string& tag, const string& xmlns );
+      void requestXML( const std::string& tag, const std::string& xmlns );
 
       /**
        * Use this function to store private XML stored in the given namespace.
@@ -68,7 +69,7 @@ namespace gloox
        * It is deleted after sending it.
        * @param xmlns The is the namespace, again, in which the element @c is stored.
        */
-      void storeXML( iks *xml, const string& xmlns );
+      void storeXML( const Tag& tag, const std::string& xmlns );
 
       /**
        * Use this function to register an object that shall receive incoming Private XML packets.
@@ -76,19 +77,20 @@ namespace gloox
        * @param tag The tag to look for and associate with this handler.
        * @param xmlns The namespace of the tag.
        */
-      void registerPrivateXMLHandler( PrivateXMLHandler *pxh, const string& tag, const string& xmlns );
+      void registerPrivateXMLHandler( PrivateXMLHandler *pxh, const std::string& tag,
+                                      const std::string& xmlns );
 
       /**
        * Use this function to un-register an PrivateXMLHandler.
        * @param xmlns The namespace for which the handler shall be removed.
        */
-      void removePrivateXMLHandler( const string& xmlns );
+      void removePrivateXMLHandler( const std::string& xmlns );
 
       // reimplemented from IqHandler.
-      virtual void handleIq( const char *tag, const char *xmlns, ikspak *pak );
+      virtual bool handleIq( const Stanza& stanza );
 
       // reimplemented from IqHandler.
-      virtual void handleIqID( const char *id, ikspak *pak, int context );
+      virtual bool handleIqID( const Stanza& stanza, int context );
 
     protected:
       ClientBase *m_parent;
@@ -102,11 +104,11 @@ namespace gloox
 
       struct XMLHandlerStruct
       {
-        string xmlns;
-        string tag;
+        std::string xmlns;
+        std::string tag;
         PrivateXMLHandler *pxh;
       };
-      typedef map<string, XMLHandlerStruct> PrivateXMLHandlers;
+      typedef std::map<std::string, XMLHandlerStruct> PrivateXMLHandlers;
 
       PrivateXMLHandlers m_privateXMLHandlers;
   };
