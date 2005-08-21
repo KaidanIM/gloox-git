@@ -21,6 +21,9 @@
 #include "rostermanager.h"
 #include "disco.h"
 #include "nonsaslauth.h"
+#include "connection.h"
+#include "tag.h"
+#include "stanza.h"
 
 #include <iksemel.h>
 
@@ -36,7 +39,7 @@ namespace gloox
     m_priority( -1 ),
     m_autoPresence( false ), m_manageRoster( true ),
     m_handleDisco( true ), m_rosterManager( 0 ),
-    m_disco( 0 ), m_auth( 0 ), m_authorized( false )
+    m_disco( 0 ), m_auth( 0 ), m_authorized( false ), m_resourceBound( false )
   {
     init();
   }
@@ -45,15 +48,9 @@ namespace gloox
     : ClientBase( XMLNS_CLIENT, password, port ),
     m_priority( -1 ), m_autoPresence( false ), m_manageRoster( true ),
     m_handleDisco( true ), m_rosterManager( 0 ),
-    m_disco( 0 ), m_auth( 0 ), m_authorized( false )
+    m_disco( 0 ), m_auth( 0 ), m_authorized( false ), m_resourceBound( false )
   {
-    iksid *tmp = iks_id_new( get_stack(), id.c_str() );
-    if( tmp->user )
-      m_username = tmp->user;
-    if( tmp->resource )
-      m_resource = tmp->resource;
-    if( tmp->server )
-      m_server = tmp->server;
+    m_jid.setJID( id );
 
     init();
   }
@@ -64,13 +61,14 @@ namespace gloox
     m_username( username ), m_resource( resource ),
     m_priority( -1 ), m_autoPresence( false ), m_manageRoster( true ),
     m_handleDisco( true ), m_rosterManager( 0 ),
-    m_disco( 0 ), m_auth( 0 ), m_authorized( false )
+    m_disco( 0 ), m_auth( 0 ), m_authorized( false ), m_resourceBound( false )
   {
     init();
   }
 
   JClient::~JClient()
   {
+    printf( "deleting disco, rostermanager and auth in ~jclient()\n" );
     delete m_disco;
     delete m_rosterManager;
     delete m_auth;
@@ -80,119 +78,50 @@ namespace gloox
   {
     registerConnectionListener( this );
 
-    iks_filter_add_rule( m_filter, (iksFilterHook*) sessionHook, this,
-                        IKS_RULE_TYPE, IKS_PAK_IQ,
-                        IKS_RULE_SUBTYPE, IKS_TYPE_RESULT,
-                        IKS_RULE_ID, "session",
-                        IKS_RULE_DONE );
-    iks_filter_add_rule( m_filter, (iksFilterHook*) bindHook, this,
-                        IKS_RULE_TYPE, IKS_PAK_IQ,
-                        IKS_RULE_SUBTYPE, IKS_TYPE_RESULT,
-                        IKS_RULE_ID, "bind",
-                        IKS_RULE_DONE );
-
     m_disco = new Disco( this );
     m_rosterManager = new RosterManager( this );
     m_disco->setVersion( "based on gloox", GLOOX_VERSION );
     m_disco->setIdentity( "client", "bot" );
   }
 
-  const std::string JClient::jid() const
+  bool JClient::handleNormalNode( const Tag& tag )
   {
-    if( server().empty() )
-      return "";
-    else if( username().empty() )
-      if( resource().empty() )
-        return server();
-      else
-        return ( server() + "/" + resource() );
-    else
-      if( resource().empty() )
-        return ( username() + "@" + server() );
-      else
-        return ( username() + "@" + server() + "/" + resource() );
-  }
-
-  const iksid* JClient::parsedJid() const
-  {
-    return iks_id_new( get_stack(), jid().c_str() );
-  }
-
-  void JClient::on_stream( int type, iks* node )
-  {
-    if( !node )
-      return;
-
-#ifdef DEBUG
-    printf("in on_stream\n");
-#endif
-    ikspak* pak = iks_packet( node );
-
-    switch( type )
+    printf( "handleNormalNode in JClient\n" );
+    if( tag.name() == "stream:features" )
     {
-      case IKS_NODE_START:      // <stream:stream>
-        char *id = iks_find_attrib( node, "id" );
-        if( id )
-          m_sid = id;
-        break;
-      case IKS_NODE_NORMAL:     // first level child of stream
-        if( strncmp( "stream:features", iks_name( node ), 15 ) == 0 )
+      m_streamFeatures = getStreamFeatures( tag );
+      printf( "stream features: %d\n", m_streamFeatures );
+
+      if( tls() && !m_connection->isSecure() && ( m_streamFeatures & STREAM_FEATURE_STARTTLS ) )
+      {
+        m_connection->tlsHandshake();
+        return true;
+      }
+
+      if( sasl() )
+      {
+        if( m_authorized )
         {
-          m_streamFeatures = getStreamFeatures( node );
-
-          if( tls() && !is_secure() && ( m_streamFeatures & STREAM_FEATURE_STARTTLS ) )
+          if( m_streamFeatures & STREAM_FEATURE_BIND )
           {
-            start_tls();
-#ifdef DEBUG
-            printf("after starttls\n");
-#endif
-            break;
+            bindResource();
           }
-
-          if( sasl() )
+        }
+        else if( !username().empty() && !password().empty() )
+        {
+          std::string user = username();
+          std::string pwd = password();
+          if( m_streamFeatures & STREAM_FEATURE_SASL_DIGESTMD5 )
           {
-//             if( tls() && !sasl() && !is_secure() )
-//               disconnect();
-
-            if( m_authorized )
-            {
-              if( m_streamFeatures & STREAM_FEATURE_BIND )
-              {
-                bindResource();
-              }
-            }
-            else if( !username().empty() && !password().empty() )
-            {
-              std::string user = username();
-              std::string pwd = password();
-              if( m_streamFeatures & STREAM_FEATURE_SASL_DIGESTMD5 )
-              {
-                start_sasl( IKS_SASL_DIGEST_MD5, (char*)user.c_str(), (char*)pwd.c_str() );
-              }
-              else if( m_streamFeatures & STREAM_FEATURE_SASL_PLAIN )
-              {
-                start_sasl( IKS_SASL_PLAIN, (char*)user.c_str(), (char*)pwd.c_str() );
-              }
-              else if( m_streamFeatures & STREAM_FEATURE_IQAUTH )
-              {
-                nonSaslLogin();
-              }
-              else
-              {
-#ifdef DEBUG
-                printf( "the server doesn't support any auth mechanisms we know about\n" );
-#endif
-                m_state = STATE_NO_SUPPORTED_AUTH;
-                disconnect();
-              }
-            }
-            else
-            {
-              notifyOnConnect();
-            }
+            m_connection->startSASL( GLOOX_SASL_DIGEST_MD5, (char*)user.c_str(), (char*)pwd.c_str() );
+          }
+          else if( m_streamFeatures & STREAM_FEATURE_SASL_PLAIN )
+          {
+            m_connection->startSASL( GLOOX_SASL_PLAIN, (char*)user.c_str(), (char*)pwd.c_str() );
           }
           else if( m_streamFeatures & STREAM_FEATURE_IQAUTH )
           {
+            printf( "calling non-sasl login\n" );
             nonSaslLogin();
           }
           else
@@ -200,89 +129,82 @@ namespace gloox
 #ifdef DEBUG
             printf( "the server doesn't support any auth mechanisms we know about\n" );
 #endif
-            m_state = STATE_NO_SUPPORTED_AUTH;
-            disconnect();
+            disconnect( STATE_NO_SUPPORTED_AUTH );
           }
-        }
-        else if( iks_strncmp( "failure", iks_name ( node ), 7 ) == 0 )
-        {
-#ifdef DEBUG
-          printf( "sasl authentication failed...\n" );
-#endif
-          m_state = STATE_AUTHENTICATION_FAILED;
-          disconnect();
-        }
-        else if( iks_strncmp( "success", iks_name ( node ), 7 ) == 0 )
-        {
-#ifdef DEBUG
-          printf( "sasl initialisation successful...\n" );
-#endif
-          m_state = STATE_AUTHENTICATED;
-          m_authorized = true;
-          header( server() );
         }
         else
         {
-          iks_filter_packet ( m_filter, pak );
+          notifyOnConnect();
         }
-        break;
-      case IKS_NODE_ERROR:      // <stream:error>
-        m_state = STATE_ERROR;
+      }
+      else if( m_streamFeatures & STREAM_FEATURE_IQAUTH )
+      {
+        nonSaslLogin();
+      }
+      else
+      {
 #ifdef DEBUG
-        printf( "stream error. quitting\n");
+        printf( "the server doesn't support any auth mechanisms we know about\n" );
 #endif
-        disconnect();
-        break;
-      case IKS_NODE_STOP:       // </stream:stream>
-        disconnect();
-        break;
+        disconnect( STATE_NO_SUPPORTED_AUTH );
+      }
+    }
+    else if( tag.name() == "failure" )
+    {
+#ifdef DEBUG
+      printf( "sasl authentication failed...\n" );
+#endif
+      disconnect( STATE_AUTHENTICATION_FAILED );
+    }
+    else if( tag.name() == "success" )
+    {
+#ifdef DEBUG
+      printf( "sasl auth successful...\n" );
+#endif
+      setState( STATE_AUTHENTICATED );
+      m_authorized = true;
+      header();
+    }
+    else
+    {
+      if( ( tag.name() == "iq" ) && tag.hasAttribute( "id", "bind" ) )
+      {
+        processResourceBind( tag );
+      }
+      else if( ( tag.name() == "iq" ) && tag.hasAttribute( "id", "session" ) )
+        processCreateSession( tag );
+      else
+        return false;
     }
 
-    iks_delete( node );
+    return true;
   }
 
-  int JClient::getStreamFeatures( iks *x )
+  int JClient::getStreamFeatures( const Tag& tag )
   {
-    if( iks_strncmp( iks_name( x ), "stream:features", 15 ) != 0 )
+    if( tag.name() != "stream:features" )
       return 0;
 
     int features = 0;
 
-    iks *y = iks_first_tag( x );
-    while( y )
-    {
-      if( !iks_strncmp( iks_name( y ), "starttls", 8 )
-                && !iks_strncmp( iks_find_attrib( y, "xmlns" ),
-                                XMLNS_STREAM_TLS, iks_strlen( XMLNS_STREAM_TLS ) ) )
-        features |= STREAM_FEATURE_STARTTLS;
+    if( tag.hasChild( "starttls", "xmlns", XMLNS_STREAM_TLS ) )
+      features |= STREAM_FEATURE_STARTTLS;
 
-      else if( !iks_strncmp( iks_name( y ), "mechanisms", 10 )
-                && !iks_strncmp( iks_find_attrib( y, "xmlns" ),
-                                XMLNS_STREAM_SASL, iks_strlen( XMLNS_STREAM_SASL ) ) )
-        features |= getSaslMechs( iks_child( y ) );
+    if( tag.hasChild( "mechanisms", "xmlns", XMLNS_STREAM_SASL ) )
+      features |= getSaslMechs( tag.findChild( "mechanisms" ) );
 
-      else if( !iks_strncmp( iks_name( y ), "bind", 4 )
-                && !iks_strncmp( iks_find_attrib( y, "xmlns" ),
-                                XMLNS_STREAM_BIND, iks_strlen( XMLNS_STREAM_BIND ) ) )
-        features |= STREAM_FEATURE_BIND;
+    if( tag.hasChild( "bind", "xmlns", XMLNS_STREAM_BIND ) )
+      features |= STREAM_FEATURE_BIND;
 
-      else if( !iks_strncmp( iks_name( y ), "session", 7 )
-                && !iks_strncmp( iks_find_attrib( y, "xmlns" ),
-                                XMLNS_STREAM_SESSION, iks_strlen( XMLNS_STREAM_SESSION ) ) )
-        features |= STREAM_FEATURE_SESSION;
+    if( tag.hasChild( "session", "xmlns", XMLNS_STREAM_SESSION ) )
+      features |= STREAM_FEATURE_SESSION;
 
-      else if( !iks_strncmp( iks_name( y ), "auth", 4 )
-                && !iks_strncmp( iks_find_attrib( y, "xmlns" ),
-                                XMLNS_STREAM_IQAUTH, iks_strlen( XMLNS_STREAM_IQAUTH ) ) )
-        features |= STREAM_FEATURE_IQAUTH;
+    if( tag.hasChild( "auth", "xmlns", XMLNS_STREAM_IQAUTH ) )
+      features |= STREAM_FEATURE_IQAUTH;
 
-      else if( !iks_strncmp( iks_name( y ), "register", 8 )
-                && !iks_strncmp( iks_find_attrib( y, "xmlns" ),
-                                XMLNS_STREAM_IQREGISTER, iks_strlen( XMLNS_STREAM_IQREGISTER ) ) )
-        features |= STREAM_FEATURE_IQREGISTER;
+    if( tag.hasChild( "register", "xmlns", XMLNS_STREAM_IQREGISTER ) )
+      features |= STREAM_FEATURE_IQREGISTER;
 
-      y = iks_next_tag( y );
-    }
 
     if( features == 0 )
       features = STREAM_FEATURE_IQAUTH;
@@ -290,46 +212,125 @@ namespace gloox
     return features;
   }
 
-  int JClient::getSaslMechs( iks* x )
+  int JClient::getSaslMechs( const Tag& tag )
   {
     int mechs = 0;
 
-    while( x )
-    {
-      if( iks_strncmp( iks_cdata( iks_child( x ) ), "DIGEST-MD5", 10 ) == 0 )
-        mechs |= STREAM_FEATURE_SASL_DIGESTMD5;
-      else if( iks_strncmp( iks_cdata( iks_child( x ) ), "PLAIN", 5 ) == 0 )
+    if( tag.hasChildWithCData( "mechanism", "DIGEST-MD5" ) )
+      mechs |= STREAM_FEATURE_SASL_DIGESTMD5;
+
+    if( tag.hasChildWithCData( "mechanism", "PLAIN" ) )
         mechs |= STREAM_FEATURE_SASL_PLAIN;
 
-      x = iks_next_tag( x );
-    }
     return mechs;
   }
 
   void JClient::bindResource()
   {
-    iks *x = iks_new( "iq" );
-    iks_insert_attrib( x, "type", "set" );
-    iks_insert_attrib( x, "id", "bind" );
-    iks *y = iks_insert( x, "bind" );
-    iks_insert_attrib( y, "xmlns", XMLNS_STREAM_BIND );
-    if( !resource().empty() && resource().length() )
-      iks_insert_cdata( iks_insert( y, "resource" ), resource().c_str(), 0 );
+    if( !m_resourceBound )
+    {
+      Tag iq( "iq" );
+      iq.addAttrib( "type", "set" );
+      iq.addAttrib( "id", "bind" );
+      Tag b( "bind" );
+      b.addAttrib( "xmlns", XMLNS_STREAM_BIND );
+      if( !resource().empty() )
+      {
+        Tag r( "resource", resource() );
+        b.addChild( r );
+      }
+      iq.addChild( b );
 
-    send( x );
+      send( iq );
+    }
+  }
+
+  void JClient::processResourceBind( const Tag& tag )
+  {
+    Stanza stanza( tag );
+    switch( stanza.subtype() )
+    {
+      case STANZA_IQ_RESULT:
+      {
+        Tag bind = stanza.findChild( "bind" );
+        Tag jid = bind.findChild( "jid" );
+        m_jid.setJID( jid.cdata() );
+        m_resourceBound = true;
+
+        if( m_streamFeatures & STREAM_FEATURE_SESSION )
+          createSession();
+        else
+          notifyOnConnect();
+        break;
+      }
+      case STANZA_IQ_ERROR:
+      {
+        Tag error = stanza.findChild( "error" );
+        if( stanza.hasChild( "error", "type", "modify" )
+            && error.hasChild( "bad-request", "xmlns", XMLNS_XMPP_STANZAS ) )
+        {
+          notifyOnResourceBindError( ConnectionListener::RB_BAD_REQUEST );
+        }
+        else if( stanza.hasChild( "error", "type", "cancel" ) )
+        {
+          if( error.hasChild( "not-allowed", "xmlns", XMLNS_XMPP_STANZAS ) )
+            notifyOnResourceBindError( ConnectionListener::RB_NOT_ALLOWED );
+          else if( error.hasChild( "conflict", "xmlns", XMLNS_XMPP_STANZAS ) )
+            notifyOnResourceBindError( ConnectionListener::RB_CONFLICT );
+          else
+            notifyOnResourceBindError( ConnectionListener::RB_UNKNOWN_ERROR );
+        }
+        else
+          notifyOnResourceBindError( ConnectionListener::RB_UNKNOWN_ERROR );
+        break;
+      }
+    }
   }
 
   void JClient::createSession()
   {
-    if( m_streamFeatures & STREAM_FEATURE_SESSION )
-    {
-      iks *x = iks_new( "iq" );
-      iks_insert_attrib( x, "type", "set" );
-      iks_insert_attrib( x, "id", "session" );
-      iks *y = iks_insert( x, "session" );
-      iks_insert_attrib( y, "xmlns", XMLNS_STREAM_SESSION );
+    Tag iq( "iq" );
+    iq.addAttrib( "type", "set" );
+    iq.addAttrib( "id", "session" );
+    Tag s( "session" );
+    s.addAttrib( "xmlns", XMLNS_STREAM_SESSION );
+    iq.addChild( s );
 
-      send( x );
+    send( iq );
+  }
+
+  void JClient::processCreateSession( const Tag& tag )
+  {
+    Stanza stanza( tag );
+    switch( stanza.subtype() )
+    {
+      case STANZA_IQ_RESULT:
+      {
+        notifyOnConnect();
+        break;
+      }
+      case STANZA_IQ_ERROR:
+      {
+        Tag error = stanza.findChild( "error" );
+        if( stanza.hasChild( "error", "type", "wait" )
+            && error.hasChild( "internal-server-error", "xmlns", XMLNS_XMPP_STANZAS ) )
+        {
+          notifyOnSessionCreateError( ConnectionListener::SC_INTERNAL_SERVER_ERROR );
+        }
+        else if( stanza.hasChild( "error", "type", "auth" )
+                 && error.hasChild( "forbidden", "xmlns", XMLNS_XMPP_STANZAS ) )
+        {
+          notifyOnSessionCreateError( ConnectionListener::SC_FORBIDDEN );
+        }
+        else if( stanza.hasChild( "error", "type", "cancel" )
+                 && error.hasChild( "conflict", "xmlns", XMLNS_XMPP_STANZAS ) )
+        {
+          notifyOnSessionCreateError( ConnectionListener::SC_CONFLICT );
+        }
+        else
+          notifyOnSessionCreateError( ConnectionListener::SC_UNKNOWN_ERROR );
+        break;
+      }
     }
   }
 
@@ -355,26 +356,27 @@ namespace gloox
 
   void JClient::sendInitialPresence()
   {
-    char prio[5];
-    sprintf( prio, "%d", m_priority );
-    iks* x = iks_make_pres( IKS_SHOW_AVAILABLE, "online" );
-    iks_insert_cdata( iks_insert( x, "priority" ), prio, iks_strlen( prio ) );
-    send( x );
+    Tag p( "presence" );
+    char priority[5];
+    sprintf( priority, "%d", m_priority );
+    Tag prio( "priority", priority );
+    p.addChild( prio );
+    send( p );
   }
 
-  void JClient::sendPresence( int priority, ikshowtype type, const std::string& msg )
-  {
-    if( priority < -128 )
-      priority = -128;
-    if( priority > 127 )
-      priority = 127;
-
-    char prio[5];
-    sprintf( prio, "%d", priority );
-    iks* x = iks_make_pres( type, msg.c_str() );
-    iks_insert_cdata( iks_insert( x, "priority" ), prio, iks_strlen( prio ) );
-    send( x );
-  }
+//   void JClient::sendPresence( int priority, ikshowtype type, const std::string& msg )
+//   {
+//     if( priority < -128 )
+//       priority = -128;
+//     if( priority > 127 )
+//       priority = 127;
+//
+//     char prio[5];
+//     sprintf( prio, "%d", priority );
+//     iks* x = iks_make_pres( type, msg.c_str() );
+//     iks_insert_cdata( iks_insert( x, "priority" ), prio, iks_strlen( prio ) );
+//     send( x );
+//   }
 
   void JClient::setInitialPriority( int priority )
   {
@@ -403,30 +405,6 @@ namespace gloox
 
     if( m_autoPresence )
       sendInitialPresence();
-  }
-
-  // FIXME!!!
-  bool notified = false;
-
-  int bindHook( JClient* stream, ikspak* pak )
-  {
-    iks* x = iks_child( iks_child( pak->x ) );
-    if( iks_strncmp( iks_name( x ), "jid", 3 ) == 0 )
-    {
-      iksid* id = iks_id_new( stream->get_stack(), iks_cdata( iks_child( x ) ) );
-      stream->setResource( id->resource );
-    }
-
-    stream->createSession();
-
-    return IKS_FILTER_EAT;
-  }
-
-  int sessionHook( JClient* stream, ikspak* pak )
-  {
-    stream->notifyOnConnect();
-
-    return IKS_FILTER_EAT;
   }
 
 };

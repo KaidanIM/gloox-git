@@ -35,6 +35,7 @@ namespace gloox
   class Disco;
   class NonSaslAuth;
   class ConnectionListener;
+  class Tag;
 
   /**
    * This class implements a Jabber Client.
@@ -64,7 +65,6 @@ namespace gloox
    * }
    * @endcode
    *
-   * For debugging purposes you might want to @ref setDebug() and set_log_hook(). <br>
    * By default, the library handles a few (incoming) IQ namespaces on the application's behalf. These
    * include:
    * @li jabber:iq:roster: by default the server-side roster is fetched and handled. Use @ref rosterManager()
@@ -82,6 +82,7 @@ namespace gloox
     public:
 
       friend class NonSaslAuth;
+      friend class Parser;
 
       /**
        * Describes the possible error conditions on XMPP level.
@@ -146,16 +147,22 @@ namespace gloox
       virtual ~JClient();
 
       /**
+       * Use this function to @b re-try to bind a resource only in case you were notified about an
+       * error by means of ConnectionListener::onResourceBindError().
+       */
+      void bindResource();
+
+      /**
        * Returns the current prepped username.
        * @return The username used to connect.
        */
-      virtual const std::string username() const { return Prep::nodeprep( m_username ); };
+      virtual const std::string username() const { return Prep::nodeprep( m_jid.username() ); };
 
       /**
        * Returns the current prepped resource.
        * @return The resource used to connect.
        */
-      std::string const resource() const { return Prep::resourceprep( m_resource ); };
+      std::string const resource() const { return Prep::resourceprep( m_jid.resource() ); };
 
       /**
        * Returns the current priority.
@@ -164,29 +171,16 @@ namespace gloox
       int priority() const { return m_priority; };
 
       /**
-       * Returns the current complete jabber id.
-       * @return The complete jabber id, composed of username, server and resource.
-       */
-      const std::string jid() const;
-
-      /**
-       * Returns the current complete jabber id.
-       * @return The complete jabber id, composed of username, server and resource.
-       */
-      const iksid* parsedJid() const;
-
-      // FIXME: setters have to update each other, e.g. username, server, resource --> jid
-      /**
        * Sets the username to use to connect to the XMPP server.
        * @param username The username to authenticate with.
        */
-      void setUsername( const std::string &username ) { m_username = username; };
+      void setUsername( const std::string &username ) { m_jid.setUsername( username ); };
 
       /**
        * Sets the resource to use to connect to the XMPP server.
        * @param resource The resource to use to log into the server.
        */
-      void setResource( const std::string &resource ) { m_resource = resource; };
+      void setResource( const std::string &resource ) { m_jid.setResource( resource ); };
 
       /**
        * Set initial priority. Legal values: -128 <= priority <= 127
@@ -222,7 +216,7 @@ namespace gloox
        * a connection is established.
        * @todo Enhance to allow for all presence types to be sent.
        */
-      void sendPresence( int priority, ikshowtype type, const std::string& msg );
+//       void sendPresence( int priority, ikshowtype type, const std::string& msg );
 
       /**
        * This function gives access to the @c RosterManager object.
@@ -240,29 +234,29 @@ namespace gloox
       virtual void onConnect();
 
     private:
-      int getStreamFeatures( iks* x );
-      int getSaslMechs( iks* x );
+      virtual void handleStartNode() {};
+      virtual bool handleNormalNode( const Tag& tag );
+      int getStreamFeatures( const Tag& tag );
+      int getSaslMechs( const Tag& tag );
+      void processResourceBind( const Tag& tag );
+      void processCreateSession( const Tag& tag );
       void sendInitialPresence();
-      void bindResource();
       void createSession();
-
-      virtual void on_stream( int type, iks* node );
 
       void nonSaslLogin( const char* sid = 0L );
       void init();
 
       RosterManager* m_rosterManager;
-      Disco* m_disco;
       NonSaslAuth *m_auth;
+      Disco* m_disco;
 
       bool m_authorized;
       std::string m_username;
       std::string m_resource;
-      std::string m_jid;
-      std::string m_sid;
+      bool m_resourceBound;
       bool m_autoPresence;
-      bool m_handleDisco;
       bool m_manageRoster;
+      bool m_handleDisco;
       int m_priority;
 
       int m_streamFeatures;
