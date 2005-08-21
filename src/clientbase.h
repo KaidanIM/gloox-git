@@ -22,87 +22,41 @@
 #ifndef CLIENTBASE_H__
 #define CLIENTBASE_H__
 
+#include "gloox.h"
+
 #include "connectionlistener.h"
 #include "iqhandler.h"
 #include "messagehandler.h"
 #include "presencehandler.h"
 #include "rosterlistener.h"
 #include "subscriptionhandler.h"
-
 #include "prep.h"
+#include "jid.h"
 
-#include "wrapper/stream.h"
-using namespace Iksemel;
 
-#include <string>
-#include <map>
-#include <list>
-using namespace std;
-
-#define XMLNS_CLIENT            "jabber:client"
-#define XMLNS_COMPONENT_ACCEPT  "jabber:component:accept"
-#define XMLNS_COMPONENT_CONNECT "jabber:component:connect"
-
-#define XMLNS_DISCO_INFO        "http://jabber.org/protocol/disco#info"
-#define XMLNS_DISCO_ITEMS       "http://jabber.org/protocol/disco#items"
-#define XMLNS_ADHOC_COMMANDS    "http://jabber.org/protocol/commands"
-#define XMLNS_ROSTER            "jabber:iq:roster"
-#define XMLNS_VERSION           "jabber:iq:version"
-#define XMLNS_REGISTER          "jabber:iq:register"
-#define XMLNS_PRIVACY           "jabber:iq:privacy"
-#define XMLNS_AUTH              "jabber:iq:auth"
-#define XMLNS_PRIVATE_XML       "jabber:iq:private"
-#define XMLNS_BOOKMARKS         "storage:bookmarks"
-#define XMLNS_ANNOTATIONS       "storage:rosternotes"
-
-#define XMLNS_STREAM_TLS        "urn:ietf:params:xml:ns:xmpp-tls"
-#define XMLNS_STREAM_SASL       "urn:ietf:params:xml:ns:xmpp-sasl"
-#define XMLNS_STREAM_BIND       "urn:ietf:params:xml:ns:xmpp-bind"
-#define XMLNS_STREAM_SESSION    "urn:ietf:params:xml:ns:xmpp-session"
-#define XMLNS_STREAM_IQAUTH     "http://jabber.org/features/iq-auth"
-#define XMLNS_STREAM_IQREGISTER "http://jabber.org/features/iq-register"
-
-#define GLOOX_VERSION "0.4"
-
-/**
- * This is the namespace for the gloox library.
- */
 namespace gloox
 {
 
-  class JThread;
-
- /**
-  * This describes the possible states of a stream.
-  */
-  enum StateEnum
-  {
-    STATE_ERROR,                    /**< An error occured. The stream has been closed. */
-    STATE_IO_ERROR,                 /**< An I/O error occured. */
-    STATE_OUT_OF_MEMORY,            /**< Out of memory. Uhoh. */
-    STATE_TLS_FAILED,               /**< TLS negotiation failed. */
-    STATE_PARSE_ERROR,              /**< XML parse error. */
-    STATE_NO_SUPPORTED_AUTH,        /**< The auth mechanisms the server offers are not supported. */
-    STATE_AUTHENTICATION_FAILED,    /**< Authentication failed. Username/password wrong or account does
-                                     * not exist. */
-    STATE_DISCONNECTED,             /**< The client is in disconnected state. */
-    STATE_CONNECTING,               /**< The client is currently trying to establish a connection. */
-    STATE_CONNECTED,                /**< The client is connected to the server but authentication is not
-                                     * (yet) done. */
-    STATE_AUTHENTICATED             /**< The client has successfully authenticated itself to the server. */
-  };
-
+  class string;
+  class map;
+  class list;
+  class Connection;
+  class Packet;
+  class Tag;
+  class Stanza;
 
   /**
-   * THis is a common base class for a jabber client and a jabber component. It includes connection
+   * This is a common base class for a jabber client and a jabber component. It manages connection
    * establishing, authentication, filter registrationa and invocation.
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
    */
-  class ClientBase : public Stream
+  class ClientBase
   {
+
+    friend class Parser;
+
     public:
-      friend class JThread;
 
       /**
        * Constructs a new ClientBase.
@@ -137,18 +91,18 @@ namespace gloox
       virtual ~ClientBase();
 
       /**
-       * Connects to the XMPP server, authenticates and gets the whole thing running.
-       * Creates a new thread which receives arriving data and feeds the parser.
-       * @param blocking Determines whether connect() blocks. If all your program does
-       * is react to incoming events, you should be fine with the default, which is blocking
-       * behaviour.
+       * Initiates the connection to a server. This function blocks as long as a connection is
+       * established.
+       * @return @b False if prerequisits are not met (server not set), @b true otherwise.
        */
-      void connect( bool blocking = true );
+      bool connect();
 
       /**
-       * Disconnects from the server by ending the receiver thread.
+       * Disconnects from the server. A reason can be given which is broadcasted to
+       * ConnectionListeners.
+       * @param reason The reason for the disconnection.
        */
-      void disconnect();
+      void disconnect( ConnectionState reason );
 
       /**
        * Reimplement this function to provide a username for connection purposes.
@@ -157,16 +111,10 @@ namespace gloox
       virtual const std::string username() const {};
 
       /**
-       * Reimplement this function to provide a JID.
-       * @return The JID.
+       * Returns the current jabber id.
+       * @return The Jabber ID.
        */
-      virtual const std::string jid() const {};
-
-      /**
-       * Returns the current client state.
-       * @return The current client state.
-       */
-      const StateEnum state() const { return m_state; };
+      const JID& jid() const { return m_jid; };
 
       /**
        * Switches usage of SASL on/off (if available). Default: on
@@ -181,7 +129,8 @@ namespace gloox
       void setTls( bool tls ) { m_tls = tls; };
 
       /**
-       * Sets the port to connect to.
+       * Sets the port to connect to. This is not necessary if either the default port (5222) is used
+       * or SRV records exist which will be resolved.
        * @param port The port to connect to.
        */
       void setPort( int port ) { m_port = port; };
@@ -190,7 +139,7 @@ namespace gloox
        * Sets the XMPP server to connect to.
        * @param server The server to connect to. Either IP or fully qualified domain name.
        */
-      void setServer( const std::string &server ) { m_server = server; };
+      void setServer( const std::string &server ) { m_jid.setServer( server ); };
 
       /**
        * Sets the password to use to connect to the XMPP server.
@@ -199,24 +148,10 @@ namespace gloox
       void setPassword( const std::string &password ) { m_password = password; };
 
       /**
-       * Returns string which is used in the 'to' attribute of the initial stream opening tag.
-       * This should be the server's hostname for the @b jabber:client namespace, and the
-       * component's hostname for the jabber:component:* namespaces.
-       * @return The host to name in the stream's 'to' attribute.
-       */
-      virtual const std::string streamTo() const { return server(); };
-
-      /**
        * Returns the current prepped server.
        * @return The server used to connect.
        */
-      const std::string server() const { return Prep::nameprep( m_server ); };
-
-      /**
-       * Returns the current server. IDNA rules are applied.
-       * @return The server used to connect.
-       */
-      const std::string serverIdn() const { return Prep::idna( m_server ); };
+      const std::string server() const { return m_jid.server(); };
 
       /**
        * Returns the current SASL status.
@@ -243,18 +178,45 @@ namespace gloox
       virtual const std::string password() const { return m_password; };
 
       /**
-       * Creates a string. This string is unique in the current instance and
+       * Creates a std::string. This std::string is unique in the current instance and
        * can be used as an ID for queries.
-       * @return A unique string suitable for query IDs.
+       * @return A unique std::string suitable for query IDs.
+       * @deprecated
        */
-      const std::string getID();
+      const std::string getID() { printf( "don't use ClientBase's getID(), use Packet's instead!\n" ); return "abc"; };
+
+      /**
+       * Sends a given Tag over an steablished connection.
+       * @param tag The Tag to send.
+       */
+      void send( const Tag& tag );
+
+      /**
+       * Sends a given string over an established connection.
+       * @param xml The string to send.
+       */
+      void send( const std::string& xml );
 
       /**
        * Sends the given xml via the established connection.
        * @note x is automatically free()'ed.
        * @param x The xml data.
+       * @deprecated
        */
       void send( iks *x );
+
+      /**
+       * Returns the current connection state.
+       * @return The state of the connection.
+       */
+      ConnectionState state() const;
+
+      /**
+       * Sets the state of the connection. This can be used to indicate successful authentication.
+       * A parameter of 'STATE_DISCONNECTED' will not disconnect.
+       * @param state The new connection state.
+       */
+      void setState( ConnectionState state );
 
       /**
        * Registers @c cl as object that receives connection notifications.
@@ -329,32 +291,42 @@ namespace gloox
       void removeSubscriptionHandler( SubscriptionHandler *sh );
 
     protected:
+      void notifyOnResourceBindError( ConnectionListener::ResourceBindError error );
+      void notifyOnSessionCreateError( ConnectionListener::SessionCreateError error );
       void notifyOnConnect();
       void notifyOnDisconnect();
+      void header();
 
-      void setupFilter();
-      void setState( gloox::StateEnum s ) { m_state = s; };
+      /**
+       * Returns std::string which is used in the 'to' attribute of the initial stream opening tag.
+       * This should be the server's hostname for the @b jabber:client namespace, and the
+       * component's hostname for the jabber:component:* namespaces, respectively.
+       * @return The host to name in the stream's 'to' attribute. Defaults to the destination server.
+       */
+      virtual const std::string streamTo() const { return server(); };
 
-      volatile gloox::StateEnum m_state;
-      JThread *m_thread;
-      iksfilter *m_filter;
+      JID m_jid;
+      Connection *m_connection;
 
-      std::string m_server;
       std::string m_password;
+      std::string m_namespace;
+      std::string m_sid;
       bool m_sasl;
       bool m_tls;
       int m_port;
 
     private:
-      void notifyIqHandlers( const char *xmlns, ikspak *pak );
-      void notifyMessageHandlers( iksid *from, iksubtype type, const char *msg );
-      void notifyPresenceHandlers( iksid *from, iksubtype type, ikshowtype show, const char *msg );
-      void notifySubscriptionHandlers( iksid *from, iksubtype type, const char *msg );
-      virtual void on_log( const char *data, size_t size, int is_incoming );
-      iksparser *parser();
-      void init();
+      virtual void handleStartNode() = 0;
+      virtual bool handleNormalNode( const Tag& tag ) = 0;
+      Stanza createStanza( const Tag& tag );
+      void log( const Tag& tag, bool incoming );
 
-      virtual void on_stream( int type, iks *node ) {};
+      void notifyIqHandlers( const Stanza& stanza );
+      void notifyMessageHandlers( const Stanza& stanza );
+      void notifyPresenceHandlers( const Stanza& stanza );
+      void notifySubscriptionHandlers( const Stanza& stanza );
+      void filter( int type, const Tag& tag );
+      void logEvent( const char *data, size_t size, int is_incoming );
 
       struct TrackStruct
       {
@@ -362,12 +334,12 @@ namespace gloox
         int context;
       };
 
-      typedef list<ConnectionListener*>            ConnectionListenerList;
-      typedef map<const std::string, IqHandler*>   IqHandlerMap;
-      typedef map<const std::string, TrackStruct> IqTrackMap;
-      typedef list<MessageHandler*>                MessageHandlerList;
-      typedef list<PresenceHandler*>               PresenceHandlerList;
-      typedef list<SubscriptionHandler*>           SubscriptionHandlerList;
+      typedef std::list<ConnectionListener*>            ConnectionListenerList;
+      typedef std::map<const std::string, IqHandler*>   IqHandlerMap;
+      typedef std::map<const std::string, TrackStruct>  IqTrackMap;
+      typedef std::list<MessageHandler*>                MessageHandlerList;
+      typedef std::list<PresenceHandler*>               PresenceHandlerList;
+      typedef std::list<SubscriptionHandler*>           SubscriptionHandlerList;
 
       ConnectionListenerList  m_connectionListeners;
       IqHandlerMap            m_iqNSHandlers;
@@ -376,14 +348,17 @@ namespace gloox
       PresenceHandlerList     m_presenceHandlers;
       SubscriptionHandlerList m_subscriptionHandlers;
 
-      bool m_blockingConnect;
+      Parser *m_parser;
+
       int m_idCount;
 
-      friend int presenceHook( ClientBase *stream, ikspak *pak );
-      friend int msgHook( ClientBase *stream, ikspak *pak );
-      friend int subscriptionHook( ClientBase *stream, ikspak *pak );
-      friend int iqHook( ClientBase *stream, ikspak *pak );
-
+      friend int presenceHook( ClientBase *cb, ikspak *pak );
+      friend int msgHook( ClientBase *cb, ikspak *pak );
+      friend int subscriptionHook( ClientBase *cb, ikspak *pak );
+      friend int iqHook( ClientBase *cb, ikspak *pak );
+      friend int bindHook( ClientBase *cb, ikspak* pak );
+      friend int sessionHook( ClientBase *cb, ikspak* pak );
+      friend int logHook( ClientBase *cb, const char *data, size_t size, int is_incoming);
   };
 
 };
