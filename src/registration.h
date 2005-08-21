@@ -26,12 +26,12 @@
 
 #include <string>
 #include <map>
-using namespace std;
 
 namespace gloox
 {
 
   class ClientBase;
+  class Stanza;
 
   /**
    * This class is an implementation of JEP-0077 (In-Band Registration).
@@ -57,22 +57,22 @@ namespace gloox
        */
       struct fieldStruct
       {
-        string username;
-        string nick;
-        string password;
-        string name;
-        string first;
-        string last;
-        string email;
-        string address;
-        string city;
-        string state;
-        string zip;
-        string phone;
-        string url;
-        string date;
-        string misc;
-        string text;
+        std::string username;
+        std::string nick;
+        std::string password;
+        std::string name;
+        std::string first;
+        std::string last;
+        std::string email;
+        std::string address;
+        std::string city;
+        std::string state;
+        std::string zip;
+        std::string phone;
+        std::string url;
+        std::string date;
+        std::string misc;
+        std::string text;
       };
 
       /**
@@ -139,7 +139,7 @@ namespace gloox
        * Tells the server to change the password for the current account.
        * @param password The new password.
        */
-      void changePassword( const string& password );
+      void changePassword( const std::string& password );
 
       /**
        * Registers the given @c rh as RegistrationHandler. Only one handler is possibel at a time.
@@ -154,10 +154,10 @@ namespace gloox
       void removeRegistrationHandler( RegistrationHandler *rh );
 
       // reimplemented from IqHandler
-      virtual void handleIq( const char *tag, const char *xmlns, ikspak *pak );
+      virtual bool handleIq( const Stanza& stanza );
 
       // reimplemented from IqHandler
-      virtual void handleIqID( const char *id, ikspak *pak, int context );
+      virtual bool handleIqID( const Stanza& stanza, int context );
 
     private:
       enum IdType
