@@ -326,20 +326,34 @@ namespace gloox
 
   void ClientBase::notifyIqHandlers( const Stanza& stanza )
   {
+    bool res = false;
+
     IqHandlerMap::const_iterator it_ns = m_iqNSHandlers.begin();
     for( it_ns; it_ns != m_iqNSHandlers.end(); it_ns++ )
     {
       if( stanza.hasChildWithAttrib( "xmlns", (*it_ns).first ) )
       {
-        (*it_ns).second->handleIq( stanza );
+        if( (*it_ns).second->handleIq( stanza ) )
+          res = true;
       }
     }
 
     IqTrackMap::iterator it_id = m_iqIDHandlers.find( stanza.id() );
     if( it_id != m_iqIDHandlers.end() )
     {
-      (*it_id).second.ih->handleIqID( stanza, (*it_id).second.context );
+      if( (*it_id).second.ih->handleIqID( stanza, (*it_id).second.context ) )
+        res = true;
       m_iqIDHandlers.erase( it_id );
+    }
+
+    if( !res && ( stanza.type() == STANZA_IQ ) &&
+         ( ( stanza.subtype() == STANZA_IQ_GET ) || ( stanza.subtype() == STANZA_IQ_SET ) ) )
+    {
+      Tag iq( "iq" );
+      iq.addAttrib( "type", "result" );
+      iq.addAttrib( "id", stanza.id() );
+      iq.addAttrib( "to", stanza.from().full() );
+      send( iq );
     }
   }
 
