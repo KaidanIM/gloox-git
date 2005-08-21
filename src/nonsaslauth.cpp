@@ -48,6 +48,7 @@ namespace gloox
     Tag iq( "iq" );
     iq.addAttrib( "to", m_parent->server() );
     iq.addAttrib( "id", id );
+    iq.addAttrib( "type", "get" );
     Tag q( "query" );
     q.addAttrib( "xmlns", XMLNS_AUTH );
     q.addChild( Tag( "username", m_parent->username() ) );
@@ -56,7 +57,7 @@ namespace gloox
     m_parent->send( iq );
   }
 
-  void NonSaslAuth::handleIq( const Stanza& stanza )
+  bool NonSaslAuth::handleIq( const Stanza& stanza )
   {
     switch( stanza.subtype() )
     {
@@ -114,13 +115,15 @@ namespace gloox
         break;
       }
     }
+    return false;
   }
 
-  void NonSaslAuth::handleIqID( const Stanza& stanza, int context )
+  bool NonSaslAuth::handleIqID( const Stanza& stanza, int context )
   {
     // this needs fixing! NonSaslAuth shouldn't be a friend of JClient.
     m_parent->setState( STATE_AUTHENTICATED );
     m_parent->notifyOnConnect();
+    return false;
   }
 
 };
