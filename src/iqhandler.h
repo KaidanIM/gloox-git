@@ -22,10 +22,7 @@
 #ifndef IQHANDLER_H__
 #define IQHANDLER_H__
 
-#include <iksemel.h>
-#include <string>
-
-using namespace std;
+#include "stanza.h"
 
 namespace gloox
 {
@@ -41,13 +38,11 @@ namespace gloox
     public:
       /**
        * Reimplement this function if you want to be notified about incoming IQs.
-       * @param tag The tag name of the first tag below the &lt;iq&gt;. Usually 'query', but
-       * depends on the namespace (i.e. 'command' for the 'http://jabber.org/protocol/commands'
-       * namespace.
-       * @param xmlns The XML namespace of the IQ packet
-       * @param pak The complete packet for convenience
+       * @param stanza The complete Stanza.
+       * @return Indicates whether a request of type 'get' or 'set' has been handled. This includes
+       * the obligatory 'result' answer.
        */
-      virtual void handleIq( const char *tag, const char *xmlns, ikspak *pak ) {};
+      virtual bool handleIq( const Stanza& stanza ) = 0;
 
       /**
        * Reimplement this function if you want to be notified about
@@ -56,12 +51,12 @@ namespace gloox
        * This is usually useful for IDs that generate a positive reply, i.e.
        * &lt;iq type='result' id='reg'/&gt; where a namespace filter wouldn't
        * work.
-       * @param id The ID that was tracked.
-       * @param pak 0 if the stanza was of type 'result', the complete packet
-       * for convenience if not.
+       * @param stanza The complete Stanza.
        * @param context A value to restore context, stored with @ref ClientBase::trackID().
+       * @return Indicates whether a request of type 'get' or 'set' has been handled. This includes
+       * the obligatory 'result' answer.
        */
-      virtual void handleIqID( const char *id, ikspak *pak, int context ) {};
+      virtual bool handleIqID( const Stanza& stanza, int context ) = 0;
   };
 
 };
