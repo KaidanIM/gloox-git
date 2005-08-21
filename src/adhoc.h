@@ -29,13 +29,13 @@
 #include <string>
 #include <list>
 #include <map>
-using namespace std;
 
 namespace gloox
 {
 
   class ClientBase;
   class Disco;
+  class Stanza;
 
   /**
    * This class implements a provider for JEP-0050 (Ad-hoc Commands).
@@ -59,16 +59,19 @@ namespace gloox
       virtual ~Adhoc();
 
       // reimplemented from DiscoNodeHandler
-      virtual FeatureList handleDiscoNodeFeatures( const char *node );
+      virtual FeatureList handleDiscoNodeFeatures( const std::string& node );
 
       // reimplemented from DiscoNodeHandler
-      virtual IdentityMap handleDiscoNodeIdentities( const char *node );
+      virtual IdentityMap handleDiscoNodeIdentities( const std::string& node );
 
       // reimplemented from DiscoNodeHandler
-      virtual ItemMap handleDiscoNodeItems( const char *node );
+      virtual ItemMap handleDiscoNodeItems( const std::string& node );
 
       // reimplemented from IqHandler
-      virtual void handleIq( const char *tag, const char *xmlns, ikspak *pak );
+      virtual void handleIq( const Stanza& stanza );
+
+      // reimplemented from IqHandler
+      virtual void handleIqID( const Stanza& stanza, int context );
 
       /**
        * Using this function, you can register a @ref AdhocCommandProvider -derived object as
@@ -77,11 +80,11 @@ namespace gloox
        * @param command The name of the command. Will be announced in disco#items.
        * @param name The natural-language name of the command. Will be announced in disco#items.
        */
-      void registerAdhocCommandProvider( AdhocCommandProvider *acp, const string& command,
-                                         const string& name );
+      void registerAdhocCommandProvider( AdhocCommandProvider *acp, const std::string& command,
+                                         const std::string& name );
 
     private:
-      typedef map<const string, AdhocCommandProvider*> AdhocCommandProviderMap;
+      typedef std::map<const std::string, AdhocCommandProvider*> AdhocCommandProviderMap;
 
       ClientBase *m_parent;
       Disco *m_disco;
