@@ -21,6 +21,8 @@
 
 #include "jcomponent.h"
 
+#include "disco.h"
+#include "tag.h"
 
 namespace gloox
 {
@@ -28,61 +30,43 @@ namespace gloox
   JComponent::JComponent( const std::string& ns, const std::string& server,
                           const std::string& component, const std::string& password, int port )
     : ClientBase( ns, password, server, port ),
-    m_to( component ), m_disco( 0 )
+      m_to( component ), m_disco( 0 )
   {
-    m_disco = new Disco( this );
-    m_disco->setVersion( "based on gloox", GLOOX_VERSION );
-    m_disco->setIdentity( "component", "generic" );
+//     m_disco = new Disco( this );
+//     m_disco->setVersion( "based on gloox", GLOOX_VERSION );
+//     m_disco->setIdentity( "component", "generic" );
   }
 
   JComponent::~JComponent()
   {
-    delete m_disco;
+//     delete m_disco;
   }
 
-  void JComponent::on_stream( int type, iks* node )
+  void JComponent::handleStartNode()
   {
-    if( !node )
+    printf( "in handleStartNode\n" );
+    if( m_sid.empty() )
       return;
 
-    ikspak *pak = iks_packet( node );
-
-    switch( type )
-    {
-      case( IKS_NODE_START ):
-        login( iks_find_attrib( node, "id" ) );
-        break;
-      case IKS_NODE_NORMAL:
-        if( iks_strncmp( iks_name( node ), "handshake", 9 ) == 0 )
-          notifyOnConnect();
-        else
-          iks_filter_packet( m_filter, pak );
-        break;
-      case IKS_NODE_ERROR:
-        disconnect();
-        break;
-      case IKS_NODE_STOP:
-        disconnect();
-        break;
-    }
-
-    iks_delete( node );
-  }
-
-  void JComponent::login( const char* sid )
-  {
-    if( !sid )
-      return;
-
-    std::string data = sid + m_password;
+    const std::string data = m_sid + m_password;
     char *hash = (char*)calloc( 41, sizeof( char ) );
     iks_sha( data.c_str(), hash );
 
-    iks *x = iks_new( "handshake" );
-    iks_insert_cdata( x, hash, iks_strlen( hash ) );
-    send( x );
+    Tag h( "handshake", hash );
+    send( h );
 
     free( hash );
+  }
+
+  bool JComponent::handleNormalNode( const Tag& tag )
+  {
+    printf( "in handleNormalNode\n" );
+    if( tag.name() == "handshake" )
+      notifyOnConnect();
+    else
+      return false;
+
+    return true;
   }
 
 };
