@@ -47,22 +47,22 @@ namespace gloox
     }
   }
 
-  DiscoNodeHandler::FeatureList Adhoc::handleDiscoNodeFeatures( const char *node )
+  DiscoNodeHandler::FeatureList Adhoc::handleDiscoNodeFeatures( const std::string& node )
   {
     DiscoNodeHandler::FeatureList features;
     features.push_back( XMLNS_ADHOC_COMMANDS );
     return features;
   }
 
-  DiscoNodeHandler::ItemMap Adhoc::handleDiscoNodeItems( const char *node )
+  DiscoNodeHandler::ItemMap Adhoc::handleDiscoNodeItems( const std::string& node )
   {
-    if( !node )
+    if( node.empty() )
     {
       DiscoNodeHandler::ItemMap item;
       item[XMLNS_ADHOC_COMMANDS] = "Ad-Hoc Commands";
       return item;
     }
-    else if( iks_strncmp( XMLNS_ADHOC_COMMANDS, node, iks_strlen( XMLNS_ADHOC_COMMANDS ) ) == 0 )
+    else if( node == XMLNS_ADHOC_COMMANDS )
     {
       return m_items;
     }
@@ -73,30 +73,30 @@ namespace gloox
     }
   }
 
-  DiscoNodeHandler::IdentityMap Adhoc::handleDiscoNodeIdentities( const char *node )
+  DiscoNodeHandler::IdentityMap Adhoc::handleDiscoNodeIdentities( const std::string& node )
   {
     DiscoNodeHandler::IdentityMap ident;
-    if( iks_strncmp( XMLNS_ADHOC_COMMANDS, node, iks_strlen( XMLNS_ADHOC_COMMANDS ) ) == 0 )
+    if( node == XMLNS_ADHOC_COMMANDS )
       ident["automation"] = "command-list";
     else
       ident["automation"] = "command-node";
     return ident;
   }
 
-  void Adhoc::handleIq( const char *tag, const char *xmlns, ikspak *pak )
+  void Adhoc::handleIq( const Stanza& stanza )
   {
-    if( iks_strncmp( "command", tag, 7 ) == 0 )
+    if( stanza.hasChild( "command" ) )
     {
-      iks *x = iks_first_tag( pak->x );
-      char *node = iks_find_attrib( x, "node" );
+      Tag n = stanza.findChildWithAttrib( "node" );
+      const std::string node = n.findAttribute( "node" );
       AdhocCommandProviderMap::const_iterator it = m_adhocCommandProviders.find( node );
-      if( node && ( it != m_adhocCommandProviders.end() ) )
-        (*it).second->handleAdhocCommand( node, x );
+      if( !node.empty() && ( it != m_adhocCommandProviders.end() ) )
+        (*it).second->handleAdhocCommand( node, n );
     }
   }
 
-  void Adhoc::registerAdhocCommandProvider( AdhocCommandProvider *acp, const string& command,
-                                            const string& name )
+  void Adhoc::registerAdhocCommandProvider( AdhocCommandProvider *acp, const std::string& command,
+                                            const std::string& name )
   {
     m_disco->registerNodeHandler( this, command );
     m_adhocCommandProviders[command] = acp;

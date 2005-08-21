@@ -22,12 +22,11 @@
 #ifndef ADHOCCOMMANDPROVIDER_H__
 #define ADHOCCOMMANDPROVIDER_H__
 
-#include <iksemel.h>
+#include "tag.h"
 
 #include <list>
 #include <map>
 #include <string>
-using namespace std;
 
 namespace gloox
 {
@@ -45,9 +44,9 @@ namespace gloox
        * The callee is responsible for the whole command execution, i.e. session
        * handling etc.
        * @param command The name of the command to be executed.
-       * @param x The complete command.
+       * @param tag The complete command tag.
        */
-      virtual void handleAdhocCommand( const string& command, const iks* x ) {};
+      virtual void handleAdhocCommand( const std::string& command, const Tag& tag ) = 0;
 
   };
 
