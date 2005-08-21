@@ -27,7 +27,6 @@
 #include <map>
 #include <string>
 #include <list>
-using namespace std;
 
 namespace gloox
 {
@@ -35,6 +34,7 @@ namespace gloox
   class ClientBase;
   class IqHandler;
   class PresenceHandler;
+  class Stanza;
 
   /**
    * This class implements Jabber/XMPP roster handling in the @b jabber:iq:roster namespace.
@@ -50,7 +50,7 @@ namespace gloox
       /**
        * A list of RosterItems.
        */
-      typedef list<RosterItem> RosterItemList;
+      typedef std::list<RosterItem> RosterItemList;
 
       /**
        * Constructor.
@@ -84,8 +84,8 @@ namespace gloox
        * @param groups A list of groups the contact belongs to.
        * @param msg The reason of the subscription, sent along with the subscription request.
        */
-      void subscribe( const string& jid, const string& name,
-                      RosterItem::GroupList& groups, const string& msg = "" );
+      void subscribe( const std::string& jid, const std::string& name,
+                      RosterItem::GroupList& groups/*, const std::string& msg = ""*/ );
 
       /**
        * Synchronizes locally modified RosterItems back to the server.
@@ -99,7 +99,7 @@ namespace gloox
        * @param name The displayed name of the contact.
        * @param groups A list of groups the contact belongs to.
        */
-      void add( const string& jid, const string& name, RosterItem::GroupList& groups );
+      void add( const std::string& jid, const std::string& name, RosterItem::GroupList& groups );
 
       /**
        * Use this function to unsubscribe from a JID in the roster.
@@ -107,7 +107,7 @@ namespace gloox
        * @param msg The reason sent along with the unsubscription request.
        * @param remove Whether the contact should also be removed from the roster.
        */
-      void unsubscribe( const string& jid, const string& msg, bool remove );
+      void unsubscribe( const std::string& jid/*, const std::string& msg*/, bool remove );
 
       /**
        * Register @c rl as object that receives updates on roster operations.
@@ -122,16 +122,21 @@ namespace gloox
       void removeRosterListener();
 
       // reimplemented from IqHandler.
-      virtual void handleIq( const char *tag, const char *xmlns, ikspak *pak );
+      virtual bool handleIq( const Stanza& stanza );
+
+      // reimplemented from IqHandler.
+      virtual bool handleIqID( const Stanza& stanza, int context ) { return false; };
 
       // reimplemented from PresenceHandler.
-      virtual void handlePresence( iksid *from, iksubtype type, ikshowtype show, const char *msg );
+      virtual void handlePresence( const Stanza& stanza );
 
       // reimplemented from SubscriptionHandler.
-      virtual void handleSubscription( iksid *from, iksubtype type, const char *msg );
+      virtual void handleSubscription( const Stanza& stanza );
 
     private:
-      void add( const string& jid );
+      void add( const std::string& jid, const std::string& name,
+                RosterItem::GroupList& groups, const std::string& sub, bool ask );
+      const std::string extractItems( const Tag& tag );
 
       RosterListener *m_rosterListener;
       RosterListener::Roster m_roster;
