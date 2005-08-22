@@ -43,16 +43,16 @@ namespace gloox
        */
       struct annotationsListItem
       {
-        string jid;            /**< The JID of the roster item this note is about */
-        string cdate;          /**< Creation date of this note. */
-        string mdate;          /**< Date of last modification of this note. */
-        string note;           /**< The note. */
+        std::string jid;            /**< The JID of the roster item this note is about */
+        std::string cdate;          /**< Creation date of this note. */
+        std::string mdate;          /**< Date of last modification of this note. */
+        std::string note;           /**< The note. */
       };
 
       /**
        * A list of note items.
        */
-      typedef list<annotationsListItem> AnnotationsList;
+      typedef std::list<annotationsListItem> AnnotationsList;
 
       /**
        * This function is called when notes arrive from the server.
