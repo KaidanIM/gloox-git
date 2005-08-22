@@ -29,6 +29,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <time.h>
 
 #include <string>
 
@@ -40,7 +41,6 @@ namespace gloox
       m_cancel( false ), m_socket( 0 ), m_buf( 0 ), m_secure( false )
   {
     m_buf = (char*)calloc( BUFSIZE, sizeof( char ) );
-    printf( "new connection\n" );
   }
 
   Connection::~Connection()
@@ -88,10 +88,115 @@ namespace gloox
     }
     m_secure = true;
 
+//     unsigned int status;
+
+//     if( gnutls_certificate_verify_peers2( m_session, &status ) < 0 )
+//       error = true;
+//
+//     info.status = -1;
+//     if( status & GNUTLS_CERT_INVALID )
+//       info.status |= CERT_INVALID;
+//     if( status & GNUTLS_CERT_SIGNER_NOT_FOUND )
+//       info.status |= CERT_SIGNER_UNKNOWN;
+//     if( status & GNUTLS_CERT_REVOKED )
+//       info.status |= CERT_REVOKED;
+
+    bool error = false;
+    const gnutls_datum_t* certList;
+    unsigned int certListSize;
+
+    if( !error && ( ( certList = gnutls_certificate_get_peers( m_session, &certListSize ) ) == 0 ) )
+      error = true;
+
+    gnutls_x509_crt_t cert[certListSize];
+    for( int i=0; !error && ( i<certListSize ); ++i )
+    {
+      if( !error && ( gnutls_x509_crt_init( &cert[i] ) < 0 ) )
+        error = true;
+      if( !error && ( gnutls_x509_crt_import( cert[i], &certList[i], GNUTLS_X509_FMT_DER ) < 0 ) )
+        error = true;
+    }
+
+    if( ( gnutls_x509_crt_check_issuer( cert[certListSize-1], cert[certListSize-1] ) > 0 )
+         && certListSize > 0 )
+      certListSize--;
+
+    bool chain = true;
+    for( int i=1; !error && ( i<certListSize ); i++ )
+    {
+      chain = error = !verifyAgainst( cert[i-1], cert[i] );
+    }
+    if( !chain )
+      m_certInfo.status |= CERT_INVALID;
+    m_certInfo.chain = chain;
+
+    m_certInfo.chain = verifyAgainstCAs( cert[certListSize], 0 /*CAList*/, 0 /*CAListSize*/ );
+
+    int t = (int)gnutls_x509_crt_get_expiration_time( cert[0] );
+    if( t = -1 )
+      error = true;
+    else if( t < time( 0 ) )
+      m_certInfo.status |= CERT_EXPIRED;
+    m_certInfo.date_from = t;
+
+    t = (int)gnutls_x509_crt_get_activation_time( cert[0] );
+    if( t = -1 )
+      error = true;
+    else if( t > time( 0 ) )
+      m_certInfo.status |= CERT_NOT_ACTIVE;
+    m_certInfo.date_to = t;
+
+    char name[64];
+    size_t nameSize = sizeof( name );
+    gnutls_x509_crt_get_issuer_dn( cert[0], name, &nameSize );
+    m_certInfo.issuer = name;
+
+    nameSize = sizeof( name );
+    gnutls_x509_crt_get_dn( cert[0], name, &nameSize );
+    m_certInfo.server = name;
+
+    if( !gnutls_x509_crt_check_hostname( cert[0], m_server.c_str() ) )
+      m_certInfo.status |= CERT_WRONG_PEER;
+
+    for( int i=0; i<certListSize; i++ )
+      gnutls_x509_crt_deinit( cert[i] );
+
     return true;
 #else
     return false;
 #endif
+  }
+
+  bool Connection::verifyAgainst( gnutls_x509_crt_t cert, gnutls_x509_crt_t issuer )
+  {
+    unsigned int result;
+    gnutls_x509_crt_verify( cert, &issuer, 1, 0, &result );
+    if( result & GNUTLS_CERT_INVALID )
+      return false;
+
+    if( gnutls_x509_crt_get_expiration_time( cert ) < time( 0 ) )
+      return false;
+
+    if( gnutls_x509_crt_get_activation_time( cert ) > time( 0 ) )
+      return false;
+
+    return true;
+  }
+
+  bool Connection::verifyAgainstCAs( gnutls_x509_crt_t cert, gnutls_x509_crt_t *CAList, int CAListSize )
+  {
+    unsigned int result;
+    gnutls_x509_crt_verify( cert, CAList, CAListSize, GNUTLS_VERIFY_ALLOW_X509_V1_CA_CRT, &result );
+    if( result & GNUTLS_CERT_INVALID )
+      return false;
+
+    if( gnutls_x509_crt_get_expiration_time( cert ) < time( 0 ) )
+      return false;
+
+    if( gnutls_x509_crt_get_activation_time( cert ) > time( 0 ) )
+      return false;
+
+    return true;
   }
 
   void Connection::disconnect()

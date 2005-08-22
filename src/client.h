@@ -33,7 +33,6 @@ namespace gloox
   class RosterManager;
   class Disco;
   class NonSaslAuth;
-  class ConnectionListener;
   class Tag;
 
   /**
@@ -76,7 +75,7 @@ namespace gloox
    *
    * @author Jakob Schroeter <js@camaya.net>
    */
-  class Client : public ClientBase, ConnectionListener
+  class Client : public ClientBase
   {
     public:
 
@@ -218,12 +217,6 @@ namespace gloox
        */
       Disco* disco();
 
-      // reimplemented from ConnectionListener
-      virtual void onConnect();
-
-      // reimplemented from ConnectionListener
-      virtual void onDisconnect() {};
-
     private:
       enum StreamFeaturesEnum
       {
@@ -244,6 +237,7 @@ namespace gloox
       void processCreateSession( const Tag& tag );
       void sendInitialPresence();
       void createSession();
+      void connected();
 
       void nonSaslLogin();
       void init();

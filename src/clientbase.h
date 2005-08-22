@@ -284,6 +284,7 @@ namespace gloox
     protected:
       void notifyOnResourceBindError( ConnectionListener::ResourceBindError error );
       void notifyOnSessionCreateError( ConnectionListener::SessionCreateError error );
+      bool notifyOnTLSConnect( const CertInfo& info );
       void log( const std::string& xml, bool incoming );
       void notifyOnConnect();
       void notifyOnDisconnect();
