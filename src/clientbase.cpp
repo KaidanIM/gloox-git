@@ -157,6 +157,12 @@ namespace gloox
     send( xml );
   }
 
+  void Connection::startSASL( SaslMechanisms type, const std::string& username, const std::string& password )
+  {
+//     SASLPacket s( type, username, password );
+//     send( s.xml() );
+  }
+
   void ClientBase::send( const Tag& tag )
   {
 #ifdef DEBUG

@@ -197,12 +197,12 @@ namespace gloox
       void send( const std::string& xml );
 
       /**
-       * Sends the given xml via the established connection.
-       * @note x is automatically free()'ed.
-       * @param x The xml data.
-       * @deprecated
+       * Starts SASL authentication.
+       * @param type The SASL Mechanism to use.
+       * @param username The username to use for authentication.
+       * @param password The password to use for authentication.
        */
-      void send( iks *x );
+      void startSASL( SaslMechanisms type, const std::string& username, const std::string& password );
 
       /**
        * Returns the current connection state.
