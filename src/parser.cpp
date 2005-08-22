@@ -66,7 +66,7 @@ namespace gloox
 
   void Parser::streamEvent( int type, iks* node )
   {
-    if( m_parent )
+    if( m_parent && node )
     {
       Tag tag = convertFromIks( node );
       m_parent->filter( type, tag );
