@@ -69,7 +69,7 @@ namespace gloox
        * @param stanza The full Stanza.
        * @todo Replace the stanza with decoded values.
        */
-      virtual void handleDiscoSet( const std::string& id, const Stanza& stanza ) {};
+      virtual bool handleDiscoSet( const std::string& id, const Stanza& stanza ) { return false; };
 
   };
 
