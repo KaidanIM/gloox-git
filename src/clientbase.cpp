@@ -31,12 +31,13 @@
 #include <map>
 #include <list>
 
+#include <math.h>
 
 namespace gloox
 {
 
   ClientBase::ClientBase( const std::string& ns )
-    : m_namespace( ns ), m_port( -1 ),
+  : m_namespace( ns ), m_port( -1 ),
       m_connection( 0 ), m_parser( 0 ),
       m_tls( true ), m_sasl( true ), m_idCount( 0 )
   {
@@ -185,6 +186,13 @@ namespace gloox
   {
     if( m_connection )
       m_connection->setState( state );
+  }
+
+  const std::string ClientBase::getID()
+  {
+    char tmp[4+(int)log10(++m_idCount)+1];
+    sprintf( tmp, "uid%d", m_idCount );
+    return tmp;
   }
 
   void ClientBase::log( const std::string& xml, bool incoming )
