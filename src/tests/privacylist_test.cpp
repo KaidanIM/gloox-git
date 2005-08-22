@@ -35,7 +35,7 @@ class PLTest : public PrivacyListHandler, ConnectionListener
       p = new PrivacyManager( j );
       p->registerPrivacyListHandler( this );
 
-      j->connect( true );
+      j->connect();
 
       delete( j );
     };
@@ -45,7 +45,9 @@ class PLTest : public PrivacyListHandler, ConnectionListener
       p->requestListNames();
     };
 
-    virtual void handlePrivacyListNames( const string& active, const string& def,
+    virtual void onDisconnect() { printf( "disco_test: disconnected\n" ); };
+
+    virtual void handlePrivacyListNames( const std::string& active, const std::string& def,
                                          const PrivacyListHandler::StringList& lists )
     {
       printf( "received PL...\n" );
@@ -68,12 +70,12 @@ class PLTest : public PrivacyListHandler, ConnectionListener
       p->requestList( "mnyList" );
     };
 
-    virtual void handlePrivacyListResult( const string& id, resultEnum result )
+    virtual void handlePrivacyListResult( const std::string& id, resultEnum result )
     {
       printf( "result for id '%s': %d\n", id.c_str(), result );
     };
 
-    virtual void handlePrivacyList( const string& name, PrivacyList& items )
+    virtual void handlePrivacyList( const std::string& name, PrivacyList& items )
     {
       printf( "received list: %s\n", name.c_str() );
       PrivacyListHandler::PrivacyList::iterator it = items.begin();
@@ -82,6 +84,11 @@ class PLTest : public PrivacyListHandler, ConnectionListener
         printf( "item: type: %d, action: %d, packetType: %d, value: %s\n",
                 (*it).type(), (*it).action(), (*it).packetType(), (*it).value().c_str() );
       }
+    };
+
+    virtual void handlePrivacyListChanged( const std::string& name )
+    {
+      printf( "list changed: %s\n", name.c_str() );
     };
 
   private:

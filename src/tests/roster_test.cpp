@@ -31,7 +31,7 @@ class RosterTest : public RosterListener, ConnectionListener
       j->disco()->setVersion( "rosterTest", GLOOX_VERSION );
       j->disco()->setIdentity( "client", "bot" );
 
-      j->connect( true );
+      j->connect();
 
       delete( j );
     }
@@ -40,22 +40,24 @@ class RosterTest : public RosterListener, ConnectionListener
     {
     };
 
-    virtual void itemSubscribed( const string& jid )
+    virtual void onDisconnect() { printf( "disco_test: disconnected\n" ); };
+
+    virtual void itemSubscribed( const std::string& jid )
     {
       printf( "subscribed %s\n", jid.c_str() );
     }
 
-    virtual void itemAdded( const string& jid )
+    virtual void itemAdded( const std::string& jid )
     {
       printf( "added %s\n", jid.c_str() );
     }
 
-    virtual void itemUnsubscribed( const string& jid )
+    virtual void itemUnsubscribed( const std::string& jid )
     {
       printf( "unsubscribed %s\n", jid.c_str() );
     }
 
-    virtual void itemRemoved( const string& jid )
+    virtual void itemRemoved( const std::string& jid )
     {
       printf( "removed %s\n", jid.c_str() );
     }
@@ -63,20 +65,20 @@ class RosterTest : public RosterListener, ConnectionListener
     virtual void roster( Roster roster )
     {
       printf( "roster arriving\n" );
-      j->rosterManager()->unsubscribe( "js@example.org", "bye", true );
+      j->rosterManager()->unsubscribe( "js@example.org", true );
     }
 
-    virtual void itemChanged( RosterItem& item, int status, const string& msg )
+    virtual void itemChanged( RosterItem& item, int status, const std::string& msg )
     {
       printf( "item changed: %s\n", item.jid().c_str() );
     }
 
-    virtual void itemAvailable( RosterItem& item, const string& msg )
+    virtual void itemAvailable( RosterItem& item, const std::string& msg )
     {
       printf( "item online: %s\n", item.jid().c_str() );
     }
 
-    virtual bool subscriptionRequest( const string& jid, const string& msg )
+    virtual bool subscriptionRequest( const std::string& jid, const std::string& msg )
     {
       printf( "subscriprion: %s\n", jid.c_str() );
       return true;

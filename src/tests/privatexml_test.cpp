@@ -35,7 +35,7 @@ class PrivateXMLTest : public PrivateXMLHandler, ConnectionListener
       p = new PrivateXML( j );
       p->registerPrivateXMLHandler( this, "test", "http://camaya.net/jabber/test" );
 
-      j->connect( true );
+      j->connect();
 
       delete( j );
     }
@@ -45,13 +45,15 @@ class PrivateXMLTest : public PrivateXMLHandler, ConnectionListener
       p->requestXML( "test", "http://camaya.net/jabber/test" );
     };
 
-    virtual void handlePrivateXML( const string& tag, const string& xmlns, ikspak* pak )
+    virtual void onDisconnect() { printf( "disco_test: disconnected\n" ); };
+
+    virtual void handlePrivateXML( const std::string& tag, const std::string& xmlns, const Tag& xml )
     {
       printf( "received privatexml...\n" );
-      iks *x = iks_new( "test" );
-      iks_insert_attrib( x, "xmlns", "http://camaya.net/jabber/test" );
-      string id = j->getID();
-      iks_insert_cdata( iks_insert( x, "bla" ), id.c_str(), id.length() );
+      Tag x( "test" );
+      x.addAttrib( "xmlns", "http://camaya.net/jabber/test" );
+      std::string id = j->getID();
+      Tag b( "blah", id );
       p->storeXML( x, "http://camaya.net/jabber/test" );
     }
 

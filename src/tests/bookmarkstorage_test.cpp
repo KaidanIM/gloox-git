@@ -35,7 +35,7 @@ class BookmarkStorageTest : public BookmarkHandler, ConnectionListener
       b = new BookmarkStorage( j );
       b->registerBookmarkHandler( this );
 
-      j->connect( true );
+      j->connect();
 
       delete( j );
     };
@@ -44,6 +44,8 @@ class BookmarkStorageTest : public BookmarkHandler, ConnectionListener
     {
       b->requestBookmarks();
     };
+
+    virtual void onDisconnect() { printf( "disco_test: disconnected\n" ); };
 
     virtual void handleBookmarks( BookmarkList bList, ConferenceList cList )
     {
