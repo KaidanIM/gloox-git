@@ -74,9 +74,8 @@ namespace gloox
 
       /**
        * Call this function to start a TLS handshake over an established connection.
-       * @return Whether the handshake was successful.
        */
-      bool tlsHandshake();
+      void tlsHandshake();
 
       /**
        * Use this function to determine whether an esatblished connection is encrypted.
@@ -100,10 +99,6 @@ namespace gloox
     private:
       void cancel();
       void cleanup();
-
-#ifdef HAVE_GNUTLS
-      gnutls_session_t session;
-#endif
 
       static const int BUFSIZE = 1024;
       Parser *m_parser;
