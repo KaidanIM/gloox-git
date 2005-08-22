@@ -21,11 +21,7 @@
 #ifndef PRESENCEHANDLER_H__
 #define PRESENCEHANDLER_H__
 
-#include <iksemel.h>
-
-#include <string>
-using namespace std;
-
+#include "stanza.h"
 
 namespace gloox
 {
@@ -42,12 +38,9 @@ namespace gloox
       /**
        * Reimplement this function if you want to be updated on
        * incoming presence notifications.
-       * @param from The sender's jid
-       * @param type The presence type
-       * @param show The presence's status
-       * @param msg The status message
+       * @param stanza The complete stanza.
        */
-      virtual void handlePresence( iksid* from, iksubtype type, ikshowtype show, const char* msg ) {};
+      virtual void handlePresence( const Stanza& stanza ) = 0;
   };
 
 };
