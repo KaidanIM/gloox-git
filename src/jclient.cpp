@@ -16,6 +16,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 */
 
+#include "config.h"
 
 #include "jclient.h"
 #include "rostermanager.h"
@@ -109,19 +110,16 @@ namespace gloox
         }
         else if( !username().empty() && !password().empty() )
         {
-          std::string user = username();
-          std::string pwd = password();
           if( m_streamFeatures & STREAM_FEATURE_SASL_DIGESTMD5 )
           {
-            m_connection->startSASL( GLOOX_SASL_DIGEST_MD5, (char*)user.c_str(), (char*)pwd.c_str() );
+            m_connection->startSASL( GLOOX_SASL_DIGEST_MD5, username(), password() );
           }
           else if( m_streamFeatures & STREAM_FEATURE_SASL_PLAIN )
           {
-            m_connection->startSASL( GLOOX_SASL_PLAIN, (char*)user.c_str(), (char*)pwd.c_str() );
+            m_connection->startSASL( GLOOX_SASL_PLAIN, username(), password() );
           }
           else if( m_streamFeatures & STREAM_FEATURE_IQAUTH )
           {
-            printf( "calling non-sasl login\n" );
             nonSaslLogin();
           }
           else
