@@ -30,8 +30,6 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 
-#include <gnutls/gnutls.h>
-
 #include <string>
 
 namespace gloox
@@ -50,14 +48,50 @@ namespace gloox
     cleanup();
     free( m_buf );
     m_buf = 0;
-    printf( "~Connection(): connection deleted\n" );
   }
 
-  void Connection::tlsHandshake()
+  bool Connection::tlsHandshake()
   {
 #ifdef HAVE_GNUTLS
 
+    const int protocol_priority[] = { GNUTLS_TLS1, GNUTLS_SSL3, 0 };
+    const int kx_priority[] = { GNUTLS_KX_RSA, 0 };
+    const int cipher_priority[] = { GNUTLS_CIPHER_3DES_CBC, GNUTLS_CIPHER_ARCFOUR, 0 };
+    const int comp_priority[] = { GNUTLS_COMP_ZLIB, GNUTLS_COMP_NULL, 0 };
+    const int mac_priority[] = { GNUTLS_MAC_SHA, GNUTLS_MAC_MD5, 0 };
 
+    if( gnutls_global_init() != 0 )
+      return false;
+    printf( "after gnutls_global_init\n" );
+    if( gnutls_certificate_allocate_credentials( &m_credentials ) < 0 )
+      return false;
+    printf( "after gnutls_certificate_allocate_credentials\n" );
+    if( gnutls_init( &m_session, GNUTLS_CLIENT ) != 0 )
+    {
+      gnutls_certificate_free_credentials( m_credentials );
+      return false;
+    }
+    printf( "after gnutls_init\n" );
+    gnutls_protocol_set_priority( m_session, protocol_priority );
+    gnutls_cipher_set_priority( m_session, cipher_priority );
+    gnutls_compression_set_priority( m_session, comp_priority );
+    gnutls_kx_set_priority( m_session, kx_priority );
+    gnutls_mac_set_priority( m_session, mac_priority );
+    gnutls_credentials_set( m_session, GNUTLS_CRD_CERTIFICATE, m_credentials );
+
+    gnutls_transport_set_ptr( m_session, (gnutls_transport_ptr_t)m_socket );
+    if( gnutls_handshake( m_session ) != 0 )
+    {
+      gnutls_deinit( m_session );
+      gnutls_certificate_free_credentials( m_credentials );
+      return false;
+    }
+    printf( "after gnutls_handshake\n" );
+    m_secure = true;
+
+    return true;
+#else
+    return false;
 #endif
   }
 
@@ -81,7 +115,7 @@ namespace gloox
 #ifdef HAVE_GNUTLS
       if( m_secure )
       {
-//         size = gnutls_record_recv();
+        size = gnutls_record_recv( m_session, m_buf, BUFSIZE );
       }
       else
 #endif
@@ -119,11 +153,10 @@ namespace gloox
               break;
           }
 #endif
-        disconnect();
+        cleanup();
         }
       }
     }
-    m_secure = false;
   }
 
   void Connection::send( const std::string& data )
@@ -134,12 +167,17 @@ namespace gloox
     char *xml = strdup( data.c_str() );
     if( !xml )
       return;
+    int len = strlen( xml );
 
 #ifdef HAVE_GNUTLS
     if( m_secure )
     {
-//       if( gnutls_record_send( m_session, xml.c_str(), xml.length() ) < 0 )
-//         return IKS_NET_RWERR;
+      int ret;
+      do
+      {
+        ret = gnutls_record_send( m_session, xml, len );
+      }
+      while( ( ret == GNUTLS_E_AGAIN ) || ( ret == GNUTLS_E_INTERRUPTED ) );
     }
     else
 #endif
@@ -199,6 +237,17 @@ namespace gloox
       m_socket = 0;
     }
     m_state = STATE_DISCONNECTED;
+
+#ifdef HAVE_GNUTLS
+    if( m_secure )
+    {
+      gnutls_bye( m_session, GNUTLS_SHUT_RDWR );
+      gnutls_deinit( m_session );
+      gnutls_certificate_free_credentials( m_credentials );
+      gnutls_global_deinit();
+    }
+#endif
+    m_secure = false;
   }
 
 };
