@@ -19,8 +19,6 @@
 
 
 
-#include "config.h"
-
 #include "gloox.h"
 
 #include "connection.h"
@@ -32,8 +30,9 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 
+#include <gnutls/gnutls.h>
+
 #include <string>
-using namespace std;
 
 namespace gloox
 {
@@ -66,6 +65,27 @@ namespace gloox
   bool Connection::tlsHandshake()
   {
 #ifdef HAVE_GNUTLS
+    char buffer[MAX_BUF + 1];
+    gnutls_anon_client_credentials_t anoncred;
+    /* Need to enable anonymous KX specifically. */
+    const int kx_prio[] = { GNUTLS_KX_ANON_DH, 0 };
+
+    gnutls_global_init();
+
+    gnutls_anon_allocate_client_credentials(&anoncred);
+
+    /* Initialize TLS session
+    */
+    gnutls_init(&session, GNUTLS_CLIENT);
+
+    /* Use default priorities */
+    gnutls_set_default_priority(session);
+    gnutls_kx_set_priority (session, kx_prio);
+
+    /* put the anonymous credentials to the current session
+    */
+    gnutls_credentials_set(session, GNUTLS_CRD_ANON, anoncred);
+
 
   m_secure = true;
 #endif
@@ -161,12 +181,6 @@ namespace gloox
     }
 
     free( xml );
-  }
-
-  void Connection::startSASL( SaslMechanisms type, const std::string& username, const std::string& password )
-  {
-//     SASLPacket s( type, username, password );
-//     send( s.xml() );
   }
 
   int Connection::connect()

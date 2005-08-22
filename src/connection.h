@@ -20,6 +20,8 @@
 #ifndef CONNECTION_H__
 #define CONNECTION_H__
 
+#include "config.h"
+
 #include "gloox.h"
 
 #include <string>
@@ -54,12 +56,14 @@ namespace gloox
       int connect();
 
       /**
-       *
+       * Use this function to send a string of data over the wire. The function returns only after
+       * all data has been send.
+       * @param data The data to send.
        */
       void send( const std::string& data );
 
       /**
-       *
+       * Use this function to put the connection into 'receive mode'.
        */
       int receive();
 
@@ -75,28 +79,31 @@ namespace gloox
       bool tlsHandshake();
 
       /**
-       *
+       * Use this function to determine whether an esatblished connection is encrypted.
+       * @return @b True if the connection is encrypted, @b false otherwise.
        */
       bool isSecure() const { return m_secure; };
 
       /**
-       *
-       */
-      void startSASL( SaslMechanisms type, const std::string& username, const std::string& password );
-
-      /**
-       *
+       * Returns the current connection state.
+       * @return The state of the connection.
        */
       ConnectionState state() const { return m_state; };
 
       /**
-       *
+       * Sets the state of the connection. This can be used to indicate successful authentication.
+       * A parameter of 'STATE_DISCONNECTED' will not disconnect.
+       * @param state The new connection state.
        */
       void setState( ConnectionState state ) { m_state = state; };
 
     private:
       void cancel();
       void cleanup();
+
+#ifdef HAVE_GNUTLS
+      gnutls_session_t session;
+#endif
 
       static const int BUFSIZE = 1024;
       Parser *m_parser;
