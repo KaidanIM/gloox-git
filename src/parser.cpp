@@ -46,7 +46,6 @@ namespace gloox
 
   Parser::ParserState Parser::feed( const std::string& data )
   {
-    printf( "parser received: %s\n", data.c_str() );
     int res = iks_parse( m_parser, data.c_str(), data.length(), 0 );
     switch( res )
     {
