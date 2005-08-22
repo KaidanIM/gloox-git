@@ -19,16 +19,11 @@
 
 
 
-// #include "config.h"
-
 #include "gloox.h"
 
 #include "parser.h"
 #include "clientbase.h"
 #include "tag.h"
-
-using namespace std;
-
 
 namespace gloox
 {
