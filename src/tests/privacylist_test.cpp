@@ -1,4 +1,4 @@
-#include "../jclient.h"
+#include "../client.h"
 #include "../prep.h"
 #include "../connectionlistener.h"
 #include "../privacylisthandler.h"
@@ -20,7 +20,7 @@ class PLTest : public PrivacyListHandler, ConnectionListener
     {
       setlocale( LC_ALL, "" );
 
-      j = new JClient();
+      j = new Client();
       j->setServer( "example.org" );
       j->setResource( "gloox" );
       j->setUsername( "hurkhurk" );
@@ -92,7 +92,7 @@ class PLTest : public PrivacyListHandler, ConnectionListener
     };
 
   private:
-    JClient *j;
+    Client *j;
     PrivacyManager *p;
 };
 

@@ -21,8 +21,9 @@
 #ifndef DISCOHANDLER_H__
 #define DISCOHANDLER_H__
 
+#include "stanza.h"
+
 #include <string>
-using namespace std;
 
 namespace gloox
 {

@@ -1,4 +1,4 @@
-#include "../jcomponent.h"
+#include "../component.h"
 #include "../connectionlistener.h"
 #include "../discohandler.h"
 #include "../disco.h"
@@ -18,7 +18,7 @@ class ComponentTest : public DiscoHandler, ConnectionListener
     {
       setlocale( LC_ALL, "" );
 
-      j = new JComponent( XMLNS_COMPONENT_ACCEPT, "example.org",
+      j = new Component( XMLNS_COMPONENT_ACCEPT, "example.org",
                           "component.example.org", "secret", 5000 );
       j->setStreamTo( "component.example.org" );
 //       j->disco()->setVersion( "componentTest", GLOOX_VERSION );
@@ -41,7 +41,7 @@ class ComponentTest : public DiscoHandler, ConnectionListener
     virtual void onDisconnect() { printf( "component: disconnected\n" ); };
 
   private:
-    JComponent *j;
+    Component *j;
 };
 
 int main( int argc, char* argv[] )

@@ -27,7 +27,7 @@ namespace gloox
 
   /**
    * A virtual interface.
-   * Derived classes can be registered as IqHandlers with the JClient.
+   * Derived classes can be registered as IqHandlers with the Client.
    * Upon an incoming Subscription packet @ref handleSubscription() will be called.
    * @author Jakob Schroeter <js@camaya.net>
    */

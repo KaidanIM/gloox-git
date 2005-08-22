@@ -29,7 +29,7 @@ namespace gloox
 
   /**
    * A virtual interface.
-   * Derived classes can be registered as IqHandlers with the JClient.
+   * Derived classes can be registered as IqHandlers with the Client.
    * Upon an incoming IQ packet @ref handleIq() will be called.
    * @author Jakob Schroeter <js@camaya.net>
    */
@@ -47,7 +47,7 @@ namespace gloox
       /**
        * Reimplement this function if you want to be notified about
        * incoming IQs with a specific value of the @c id attribute. You
-       * have to enable tracking of those IDs using @c JClient::trackID().
+       * have to enable tracking of those IDs using @c Client::trackID().
        * This is usually useful for IDs that generate a positive reply, i.e.
        * &lt;iq type='result' id='reg'/&gt; where a namespace filter wouldn't
        * work.

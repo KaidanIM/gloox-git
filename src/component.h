@@ -19,8 +19,8 @@
 
 
 
-#ifndef JCOMPONENT_H__
-#define JCOMPONENT_H__
+#ifndef COMPONENT_H__
+#define COMPONENT_H__
 
 #include "clientbase.h"
 
@@ -37,7 +37,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
    */
-  class JComponent : public ClientBase
+  class Component : public ClientBase
   {
     public:
       /**
@@ -49,13 +49,13 @@ namespace gloox
        * @param password The component's password.
        * @param port The port to connect to. The default of -1 means to look up the port via DNS SRV.
        */
-      JComponent( const std::string& ns, const std::string& server,
+      Component( const std::string& ns, const std::string& server,
                   const std::string& component, const std::string& password, int port = -1 );
 
       /**
        * Virtual Destructor.
        */
-      virtual ~JComponent();
+      virtual ~Component();
 
       /**
        * Sets the components host name.
@@ -99,4 +99,4 @@ namespace gloox
 
 };
 
-#endif // JCOMPONENT_H__
+#endif // COMPONENT_H__

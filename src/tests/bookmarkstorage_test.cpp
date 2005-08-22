@@ -1,4 +1,4 @@
-#include "../jclient.h"
+#include "../client.h"
 #include "../prep.h"
 #include "../connectionlistener.h"
 #include "../bookmarkhandler.h"
@@ -20,7 +20,7 @@ class BookmarkStorageTest : public BookmarkHandler, ConnectionListener
     {
       setlocale( LC_ALL, "" );
 
-      j = new JClient();
+      j = new Client();
       j->setServer( "example.org" );
       j->setResource( "gloox" );
       j->setUsername( "hurkhurk" );
@@ -91,7 +91,7 @@ class BookmarkStorageTest : public BookmarkHandler, ConnectionListener
     };
 
   private:
-    JClient *j;
+    Client *j;
     BookmarkStorage *b;
 };
 

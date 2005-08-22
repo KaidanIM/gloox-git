@@ -47,8 +47,8 @@ namespace gloox
     public:
       /**
        * Constructor.
-       * Creates a new Disco client that registers as IqHandler with @c JClient.
-       * You should access the Disco object through the @c JClient object.
+       * Creates a new Disco client that registers as IqHandler with @c Client.
+       * You should access the Disco object through the @c Client object.
        * @param parent The ClientBase used for XMPP communication
        */
       Disco( ClientBase *parent );
@@ -64,7 +64,7 @@ namespace gloox
        * "http://jabber.org/protocol/disco#info" namespace.
        * These IQ packets will also be forwarded to the
        * application's IqHandler, if it listens to the disco\#info namespace.
-       * You can call JClient::disableDisco() to disable automatic disco
+       * You can call Client::disableDisco() to disable automatic disco
        * entirely. By default, disco(very) queries are handled by the library.
        * By default, all supported, not disabled features are announced.
        * @param feature A feature (namespace) the host app supports.

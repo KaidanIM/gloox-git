@@ -19,7 +19,7 @@
 
 
 #include "nonsaslauth.h"
-#include "jclient.h"
+#include "client.h"
 
 #include <string>
 
@@ -28,7 +28,7 @@
 namespace gloox
 {
 
-  NonSaslAuth::NonSaslAuth( JClient *parent, const std::string& sid )
+  NonSaslAuth::NonSaslAuth( Client *parent, const std::string& sid )
     : m_parent( parent ), m_sid( sid )
   {
     if( m_parent )
@@ -106,11 +106,11 @@ namespace gloox
   //       iks *ft = iks_child( iks_find( pak->x, "error" ) );
   //
   //       if( iks_strncmp( iks_name( ft ), "conflict", 8 ) == 0 )
-  //         m_parent->setClientState( JClient::STATE_AUTHENTICATION_FAILED );
+  //         m_parent->setClientState( Client::STATE_AUTHENTICATION_FAILED );
   //       else if( iks_strncmp( iks_name( ft ), "not-acceptable", 14 ) == 0 )
-  //         m_parent->setClientState( JClient::STATE_AUTHENTICATION_FAILED );
+  //         m_parent->setClientState( Client::STATE_AUTHENTICATION_FAILED );
   //       else if( iks_strncmp( iks_name( ft ), "not-authorized", 14 ) == 0 )
-  //         m_parent->setClientState( JClient::STATE_AUTHENTICATION_FAILED );
+  //         m_parent->setClientState( Client::STATE_AUTHENTICATION_FAILED );
 
         break;
       }
@@ -120,7 +120,7 @@ namespace gloox
 
   bool NonSaslAuth::handleIqID( const Stanza& stanza, int context )
   {
-    // this needs fixing! NonSaslAuth shouldn't be a friend of JClient.
+    // this needs fixing! NonSaslAuth shouldn't be a friend of Client.
     m_parent->setState( STATE_AUTHENTICATED );
     m_parent->notifyOnConnect();
     return false;

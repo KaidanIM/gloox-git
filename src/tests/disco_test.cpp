@@ -1,4 +1,4 @@
-#include "../jclient.h"
+#include "../client.h"
 #include "../prep.h"
 #include "../connectionlistener.h"
 #include "../discohandler.h"
@@ -20,7 +20,7 @@ class DiscoTest : public DiscoHandler, ConnectionListener
     {
       setlocale( LC_ALL, "" );
 
-      j = new JClient();
+      j = new Client();
       j->setServer( "example.org" );
       j->setResource( "gloox" );
       j->setUsername( "hurkhurk" );
@@ -55,7 +55,7 @@ class DiscoTest : public DiscoHandler, ConnectionListener
     }
 
   private:
-    JClient *j;
+    Client *j;
 };
 
 int main( int argc, char* argv[] )

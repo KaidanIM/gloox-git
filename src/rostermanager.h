@@ -55,7 +55,7 @@ namespace gloox
       /**
        * Constructor.
        * Creates a new RosterManager.
-       * @param parent The @c JClient which is used for communication.
+       * @param parent The @c Client which is used for communication.
        */
       RosterManager( ClientBase *parent );
 
