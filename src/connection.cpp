@@ -62,16 +62,16 @@ namespace gloox
 
     if( gnutls_global_init() != 0 )
       return false;
-    printf( "after gnutls_global_init\n" );
+
     if( gnutls_certificate_allocate_credentials( &m_credentials ) < 0 )
       return false;
-    printf( "after gnutls_certificate_allocate_credentials\n" );
+
     if( gnutls_init( &m_session, GNUTLS_CLIENT ) != 0 )
     {
       gnutls_certificate_free_credentials( m_credentials );
       return false;
     }
-    printf( "after gnutls_init\n" );
+
     gnutls_protocol_set_priority( m_session, protocol_priority );
     gnutls_cipher_set_priority( m_session, cipher_priority );
     gnutls_compression_set_priority( m_session, comp_priority );
@@ -86,7 +86,6 @@ namespace gloox
       gnutls_certificate_free_credentials( m_credentials );
       return false;
     }
-    printf( "after gnutls_handshake\n" );
     m_secure = true;
 
     return true;
