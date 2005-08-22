@@ -56,9 +56,13 @@ namespace gloox
 
   void RosterManager::fill()
   {
-    iks *x = iks_make_iq( IKS_TYPE_GET, XMLNS_ROSTER );
-    iks_insert_attrib( x, "id", m_parent->getID().c_str() );
-    m_parent->send( x );
+    Tag iq( "iq" );
+    iq.addAttrib( "type", "get" );
+    iq.addAttrib( "id", m_parent->getID() );
+    Tag q( "query" );
+    q.addAttrib( "xmlns", XMLNS_ROSTER );
+    iq.addChild( q );
+    m_parent->send( iq );
   }
 
   bool RosterManager::handleIq( const Stanza& stanza )
