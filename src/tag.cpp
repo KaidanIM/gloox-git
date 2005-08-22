@@ -97,7 +97,7 @@ namespace gloox
   bool Tag::hasAttribute( const std::string& name, const std::string& value ) const
   {
     if( name.empty() )
-      return false;
+      return true;
 
     AttributeList::const_iterator it = m_attribs.find( name );
     if( it != m_attribs.end() )
