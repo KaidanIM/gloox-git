@@ -32,7 +32,7 @@ namespace gloox
   /**
    * A virtual interface.
    * Derived classes can be registered as NodeHandlers for certain nodes
-   * with the Disco object of JClient.
+   * with the Disco object of Client.
    * Incoming disco#info and disco#items queries are delegated to their
    * respective handlers.
    * @author Jakob Schroeter <js@camaya.net>

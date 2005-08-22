@@ -1,4 +1,4 @@
-#include "../jclient.h"
+#include "../client.h"
 #include "../prep.h"
 #include "../connectionlistener.h"
 #include "../registration.h"
@@ -18,7 +18,7 @@ class RegTest : public RegistrationHandler, ConnectionListener
     {
       setlocale( LC_ALL, "" );
 
-      j = new JClient();
+      j = new Client();
       j->setServer( "example.org" );
       j->setResource( "gloox" );
       j->setUsername( "hurkhurk" );
@@ -67,7 +67,7 @@ class RegTest : public RegistrationHandler, ConnectionListener
 
   private:
     Registration *m_reg;
-    JClient *j;
+    Client *j;
 };
 
 int main( int argc, char* argv[] )

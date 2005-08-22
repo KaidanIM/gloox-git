@@ -101,7 +101,7 @@ namespace gloox
       /**
        * Constructor.
        * Use this constructor if you already have an established connection to a server. The
-       * JClient must be in a connected and authenticated state, i.e. STATE_AUTHENTICATED.
+       * Client must be in a connected and authenticated state, i.e. STATE_AUTHENTICATED.
        * A @c Registration object vcreated with this constructor can only be used to change
        * the account's password or to un-register an account.
        * @param parent The ClientBase which is used.
@@ -122,7 +122,7 @@ namespace gloox
 
       /**
        * Attempts to register an account with the given credentials. Only the fields OR'ed in
-       * @c fields will eb sent. This can only be called with an unauthenticated parent (@ref JClient).
+       * @c fields will eb sent. This can only be called with an unauthenticated parent (@ref Client).
        * @note It is recommended to use @ref fetchRegistrationFields to find out which fields the
        * server requires.
        * @param fields The fields to use to generate the registration request. OR'ed @ref fieldEnum values.

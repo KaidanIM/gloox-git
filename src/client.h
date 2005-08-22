@@ -18,15 +18,14 @@
 */
 
 
-#ifndef JCLIENT_H__
-#define JCLIENT_H__
+#ifndef CLIENT_H__
+#define CLIENT_H__
 
 #include "clientbase.h"
 
 #include "iqhandler.h"
 
 #include <string>
-using namespace std;
 
 namespace gloox
 {
@@ -43,7 +42,7 @@ namespace gloox
    * It uses a thread to poll for new data arriving over the network which is then fed into the XML stream
    * parser.
    *
-   * To use, create a new JClient instance and feed it connection credentials, either in the Constructor or
+   * To use, create a new Client instance and feed it connection credentials, either in the Constructor or
    * afterwards using the setters. You should then register packet handlers implementing the corresponding
    * Interfaces (ConnectionListener, PresenceHandler, MessageHandler, IqHandler, SubscriptionHandler),
    * and call @ref connect() to establish the connection to the server.<br>
@@ -52,7 +51,7 @@ namespace gloox
    * @code
    * void Class::doIt()
    * {
-   *   JClient* j = new JClient( "user", "resource", "password", "server" );
+   *   Client* j = new Client( "user", "resource", "password", "server" );
    *   j->registerPresenceHandler( this );
    *   j->setVersion( "TestProg", "1.0" );
    *   j->setIdentity( "client", "bot" );
@@ -77,7 +76,7 @@ namespace gloox
    *
    * @author Jakob Schroeter <js@camaya.net>
    */
-  class JClient : public ClientBase, ConnectionListener
+  class Client : public ClientBase, ConnectionListener
   {
     public:
 
@@ -108,15 +107,15 @@ namespace gloox
       };
 
       /**
-       * Constructs a new JClient.
+       * Constructs a new Client.
        * SASL and TLS are on by default. No further initialisations are made. Don't forget to
        * set  at least the server (and probably username, password and resource) using the corresponding
        * setters, else @ref connect() will do nothing.
        */
-      JClient();
+      Client();
 
       /**
-       * Constructs a new JClient.
+       * Constructs a new Client.
        * SASL and TLS are on by default.
        * The server address will be taken from the JID. The actual host will be resolved using SRV
        * records. The domain part of the JID is used as a fallback in case no SRV record is found.
@@ -124,10 +123,10 @@ namespace gloox
        * @param password The password used for authentication.
        * @param port The port to connect to. The default of -1 means to look up the port via DNS SRV.
        */
-      JClient( const std::string& id, const std::string& password, int port = -1 );
+      Client( const std::string& id, const std::string& password, int port = -1 );
 
       /**
-       * Constructs a new JClient.
+       * Constructs a new Client.
        * SASL and TLS are on by default.
        * The actual host will be resolved using SRV records. The server value is used as a fallback
        * in case no SRV record is found.
@@ -137,14 +136,14 @@ namespace gloox
        * @param server The jabber server's address or host name to connect to.
        * @param port The port to connect to. The default of -1 means to look up the port via DNS SRV.
        */
-      JClient( const std::string& username, const std::string& password,
+      Client( const std::string& username, const std::string& password,
               const std::string& server, const std::string& resource,
               int port = -1 );
 
       /**
        * Destructor.
        */
-      virtual ~JClient();
+      virtual ~Client();
 
       /**
        * Use this function to @b re-try to bind a resource only in case you were notified about an
@@ -264,10 +263,10 @@ namespace gloox
 
       int m_streamFeatures;
 
-      friend int sessionHook( JClient* stream, ikspak* pak );
-      friend int bindHook( JClient* stream, ikspak* pak );
+      friend int sessionHook( Client* stream, ikspak* pak );
+      friend int bindHook( Client* stream, ikspak* pak );
   };
 
 };
 
-#endif // JCLIENT_H__
+#endif // CLIENT_H__

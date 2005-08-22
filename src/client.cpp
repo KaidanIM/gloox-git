@@ -18,7 +18,7 @@
 
 #include "config.h"
 
-#include "jclient.h"
+#include "client.h"
 #include "rostermanager.h"
 #include "disco.h"
 #include "nonsaslauth.h"
@@ -35,7 +35,7 @@
 namespace gloox
 {
 
-  JClient::JClient()
+  Client::Client()
     : ClientBase( XMLNS_CLIENT ),
     m_priority( -1 ),
     m_autoPresence( false ), m_manageRoster( true ),
@@ -45,7 +45,7 @@ namespace gloox
     init();
   }
 
-  JClient::JClient( const std::string& id, const std::string& password, int port )
+  Client::Client( const std::string& id, const std::string& password, int port )
     : ClientBase( XMLNS_CLIENT, password, port ),
     m_priority( -1 ), m_autoPresence( false ), m_manageRoster( true ),
     m_handleDisco( true ), m_rosterManager( 0 ),
@@ -56,7 +56,7 @@ namespace gloox
     init();
   }
 
-  JClient::JClient( const std::string& username, const std::string& password,
+  Client::Client( const std::string& username, const std::string& password,
                     const std::string& server, const std::string& resource, int port )
     : ClientBase( XMLNS_CLIENT, password, server, port ),
     m_username( username ), m_resource( resource ),
@@ -67,15 +67,14 @@ namespace gloox
     init();
   }
 
-  JClient::~JClient()
+  Client::~Client()
   {
-    printf( "deleting disco, rostermanager and auth in ~jclient()\n" );
     delete m_disco;
     delete m_rosterManager;
     delete m_auth;
   }
 
-  void JClient::init()
+  void Client::init()
   {
     registerConnectionListener( this );
 
@@ -85,9 +84,8 @@ namespace gloox
     m_disco->setIdentity( "client", "bot" );
   }
 
-  bool JClient::handleNormalNode( const Tag& tag )
+  bool Client::handleNormalNode( const Tag& tag )
   {
-    printf( "handleNormalNode in JClient\n" );
     if( tag.name() == "stream:features" )
     {
       m_streamFeatures = getStreamFeatures( tag );
@@ -178,7 +176,7 @@ namespace gloox
     return true;
   }
 
-  int JClient::getStreamFeatures( const Tag& tag )
+  int Client::getStreamFeatures( const Tag& tag )
   {
     if( tag.name() != "stream:features" )
       return 0;
@@ -210,7 +208,7 @@ namespace gloox
     return features;
   }
 
-  int JClient::getSaslMechs( const Tag& tag )
+  int Client::getSaslMechs( const Tag& tag )
   {
     int mechs = 0;
 
@@ -223,7 +221,7 @@ namespace gloox
     return mechs;
   }
 
-  void JClient::bindResource()
+  void Client::bindResource()
   {
     if( !m_resourceBound )
     {
@@ -243,7 +241,7 @@ namespace gloox
     }
   }
 
-  void JClient::processResourceBind( const Tag& tag )
+  void Client::processResourceBind( const Tag& tag )
   {
     Stanza stanza( tag );
     switch( stanza.subtype() )
@@ -285,7 +283,7 @@ namespace gloox
     }
   }
 
-  void JClient::createSession()
+  void Client::createSession()
   {
     Tag iq( "iq" );
     iq.addAttrib( "type", "set" );
@@ -297,7 +295,7 @@ namespace gloox
     send( iq );
   }
 
-  void JClient::processCreateSession( const Tag& tag )
+  void Client::processCreateSession( const Tag& tag )
   {
     Stanza stanza( tag );
     switch( stanza.subtype() )
@@ -332,27 +330,27 @@ namespace gloox
     }
   }
 
-  void JClient::disableDisco()
+  void Client::disableDisco()
   {
     m_handleDisco = false;
     delete m_disco;
     m_disco = 0;
   }
 
-  void JClient::disableRoster()
+  void Client::disableRoster()
   {
     m_manageRoster = false;
     delete m_rosterManager;
     m_rosterManager = 0;
   }
 
-  void JClient::nonSaslLogin( const char* sid )
+  void Client::nonSaslLogin( const char* sid )
   {
     m_auth = new NonSaslAuth( this, m_sid );
     m_auth->doAuth();
   }
 
-  void JClient::sendInitialPresence()
+  void Client::sendInitialPresence()
   {
     Tag p( "presence" );
     char priority[5];
@@ -362,7 +360,7 @@ namespace gloox
     send( p );
   }
 
-//   void JClient::sendPresence( int priority, ikshowtype type, const std::string& msg )
+//   void Client::sendPresence( int priority, ikshowtype type, const std::string& msg )
 //   {
 //     if( priority < -128 )
 //       priority = -128;
@@ -376,7 +374,7 @@ namespace gloox
 //     send( x );
 //   }
 
-  void JClient::setInitialPriority( int priority )
+  void Client::setInitialPriority( int priority )
   {
     if( priority < -128 )
       priority = -128;
@@ -386,17 +384,17 @@ namespace gloox
     m_priority = priority;
   }
 
-  RosterManager* JClient::rosterManager()
+  RosterManager* Client::rosterManager()
   {
     return m_rosterManager;
   }
 
-  Disco* JClient::disco()
+  Disco* Client::disco()
   {
     return m_disco;
   }
 
-  void JClient::onConnect()
+  void Client::onConnect()
   {
     if( m_manageRoster )
       m_rosterManager->fill();

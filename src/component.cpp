@@ -19,7 +19,7 @@
 
 
 
-#include "jcomponent.h"
+#include "component.h"
 
 #include "disco.h"
 #include "tag.h"
@@ -27,7 +27,7 @@
 namespace gloox
 {
 
-  JComponent::JComponent( const std::string& ns, const std::string& server,
+  Component::Component( const std::string& ns, const std::string& server,
                           const std::string& component, const std::string& password, int port )
     : ClientBase( ns, password, server, port ),
       m_to( component ), m_disco( 0 )
@@ -37,12 +37,12 @@ namespace gloox
 //     m_disco->setIdentity( "component", "generic" );
   }
 
-  JComponent::~JComponent()
+  Component::~Component()
   {
 //     delete m_disco;
   }
 
-  void JComponent::handleStartNode()
+  void Component::handleStartNode()
   {
     printf( "in handleStartNode\n" );
     if( m_sid.empty() )
@@ -58,7 +58,7 @@ namespace gloox
     free( hash );
   }
 
-  bool JComponent::handleNormalNode( const Tag& tag )
+  bool Component::handleNormalNode( const Tag& tag )
   {
     printf( "in handleNormalNode\n" );
     if( tag.name() == "handshake" )

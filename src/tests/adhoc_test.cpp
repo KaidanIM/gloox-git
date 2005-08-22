@@ -1,4 +1,4 @@
-#include "../jclient.h"
+#include "../client.h"
 #include "../prep.h"
 #include "../connectionlistener.h"
 #include "../adhoccommandprovider.h"
@@ -21,7 +21,7 @@ class AdhocTest : public ConnectionListener, AdhocCommandProvider
     {
       setlocale( LC_ALL, "" );
 
-      j = new JClient();
+      j = new Client();
       j->setServer( "example.org" );
       j->setResource( "gloox" );
       j->setUsername( "hurkhurk" );
@@ -61,7 +61,7 @@ class AdhocTest : public ConnectionListener, AdhocCommandProvider
     virtual void onDisconnect() { printf( "disco_test: disconnected\n" ); };
 
   private:
-    JClient *j;
+    Client *j;
     Adhoc *a;
 };
 

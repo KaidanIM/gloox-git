@@ -1,4 +1,4 @@
-#include "../jclient.h"
+#include "../client.h"
 #include "../prep.h"
 #include "../connectionlistener.h"
 #include "../annotationshandler.h"
@@ -20,7 +20,7 @@ class AnnotationsTest : public AnnotationsHandler, ConnectionListener
     {
       setlocale( LC_ALL, "" );
 
-      j = new JClient();
+      j = new Client();
       j->setServer( "example.org" );
       j->setResource( "gloox" );
       j->setUsername( "hurkhurk" );
@@ -74,7 +74,7 @@ class AnnotationsTest : public AnnotationsHandler, ConnectionListener
     };
 
   private:
-    JClient *j;
+    Client *j;
     Annotations *a;
 };
 

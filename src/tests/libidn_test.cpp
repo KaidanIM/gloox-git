@@ -1,4 +1,4 @@
-#include "../jclient.h"
+#include "../client.h"
 #include "../prep.h"
 using namespace gloox;
 
@@ -10,7 +10,7 @@ int main( int argc, char* argv[] )
 {
   setlocale( LC_ALL, "" );
 
-  JClient *j = new JClient();
+  Client *j = new Client();
 
   j->setServer( "ümlaut.domain.org" );
   printf( "domain: %s\n", j->server().c_str() );

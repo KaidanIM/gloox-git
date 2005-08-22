@@ -46,8 +46,8 @@ namespace gloox
     public:
       /**
        * Constructor.
-       * You should access the Adhoc object through the @c JClient object.
-       * Creates a new Adhoc client that registers as IqHandler with @c JClient.
+       * You should access the Adhoc object through the @c Client object.
+       * Creates a new Adhoc client that registers as IqHandler with @c Client.
        * @param parent The ClientBase used for XMPP communication.
        * @param disco The Disco object used to announce available commands.
        */

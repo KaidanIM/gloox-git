@@ -21,7 +21,7 @@
 #include "adhoc.h"
 #include "disco.h"
 #include "discohandler.h"
-#include "jclient.h"
+#include "client.h"
 
 
 namespace gloox

@@ -60,14 +60,14 @@ namespace gloox
 
       /**
        * Constructs a new ClientBase.
-       * You should not need to use this class directly. Use JClient or JComponent instead.
+       * You should not need to use this class directly. Use Client or JComponent instead.
        * @param ns The namespace which qualifies the stream. Either jabber:client or jabber:component:*
        */
       ClientBase( const std::string& ns );
 
       /**
        * Constructs a new ClientBase.
-       * You should not need to use this class directly. Use @ref JClient or @ref JComponent instead.
+       * You should not need to use this class directly. Use @ref Client or @ref JComponent instead.
        * @param ns The namespace which qualifies the stream. Either jabber:client or jabber:component:*
        * @param password The password to use for further authentication.
        * @param port The port to connect to. The default of -1 means to look up the port via DNS SRV.
@@ -76,7 +76,7 @@ namespace gloox
 
       /**
        * Constructs a new ClientBase.
-       * You should not need to use this class directly. Use @ref JClient or @ref JComponent instead.
+       * You should not need to use this class directly. Use @ref Client or @ref JComponent instead.
        * @param ns The namespace which qualifies the stream. Either jabber:client or jabber:component:*
        * @param password The password to use for further authentication.
        * @param server The server to connect to.

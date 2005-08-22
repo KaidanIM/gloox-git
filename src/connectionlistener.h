@@ -28,7 +28,7 @@ namespace gloox
 
   /**
    * A virtual interface.
-   * Derived classes can be registered as ConnectionListeners with the JClient
+   * Derived classes can be registered as ConnectionListeners with the Client
    * @author Jakob Schroeter <js@camaya.net>
    */
   class ConnectionListener

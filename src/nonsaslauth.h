@@ -28,13 +28,13 @@
 namespace gloox
 {
 
-  class JClient;
+  class Client;
   class Stanza;
   class Tag;
 
   /**
    * This class is an implementation of JEP-0078 (Non-SASL Authentication).
-   * It is invoked by @ref JClient automatically if supported by the server and if SASL authentication
+   * It is invoked by @ref Client automatically if supported by the server and if SASL authentication
    * is not supported.
    * You should not need to use this class manually.
    * @author Jakob Schroeter <js@camaya.net>
@@ -48,7 +48,7 @@ namespace gloox
        * @param parent The @ref ClientBase which is used to authenticate.
        * @param sid The session ID given by the server with the stream opening tag.
        */
-      NonSaslAuth( JClient *parent, const std::string& sid );
+      NonSaslAuth( Client *parent, const std::string& sid );
 
       /**
        * Virtual Destructor.
@@ -77,7 +77,7 @@ namespace gloox
       const Tag createAuthTag( NonSaslAuthType type, const JID& jid,
                                const std::string& password, const std::string& sid  );
 
-      JClient *m_parent;
+      Client *m_parent;
       std::string m_sid;
 
   };
