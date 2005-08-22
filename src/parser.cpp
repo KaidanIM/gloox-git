@@ -79,16 +79,20 @@ namespace gloox
   {
     Tag tag( iks_name( x ) );
 
-    iks *y = iks_child( x );
+    iks *y = iks_attrib( x );
+    while( y )
+    {
+      tag.addAttrib( iks_name( y ), iks_cdata( y ) );
+      y = iks_next( y );
+    }
+
+    y = iks_child( x );
     while( y )
     {
       switch( iks_type( y ) )
       {
         case IKS_TAG:
           tag.addChild( convertFromIks( y ) );
-          break;
-        case IKS_ATTRIBUTE:
-          tag.addAttrib( iks_name( y ), iks_cdata( y ) );
           break;
         case IKS_CDATA:
           tag.setCData( iks_cdata( y ) );
