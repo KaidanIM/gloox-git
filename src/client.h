@@ -95,17 +95,6 @@ namespace gloox
         SERVICE_UNAVAILABLE           /**< The requested protocol is not supported. Privacy is an issue. */
       };
 
-      enum StreamFeaturesEnum
-      {
-        STREAM_FEATURE_BIND             =  1,  /**< The server supports resource binding. */
-        STREAM_FEATURE_SESSION          =  2,  /**< The server supports sessions. */
-        STREAM_FEATURE_SASL_DIGESTMD5   =  4,  /**< The server supports SASL mechanism Digest-MD5. */
-        STREAM_FEATURE_SASL_PLAIN       =  8,  /**< The server supports SASL mechanism Plain. */
-        STREAM_FEATURE_STARTTLS         = 16,  /**< The server supports &lt;startls&gt;. */
-        STREAM_FEATURE_IQREGISTER       = 32,  /**< The server supports JEP-0077 (In-Band Registration). */
-        STREAM_FEATURE_IQAUTH           = 64   /**< The server supports JEP-0078 (Non-SASL Authentication). */
-      };
-
       /**
        * Constructs a new Client.
        * SASL and TLS are on by default. No further initialisations are made. Don't forget to
@@ -236,6 +225,17 @@ namespace gloox
       virtual void onDisconnect() {};
 
     private:
+      enum StreamFeaturesEnum
+      {
+        STREAM_FEATURE_BIND             =  1,  /**< The server supports resource binding. */
+        STREAM_FEATURE_SESSION          =  2,  /**< The server supports sessions. */
+        STREAM_FEATURE_SASL_DIGESTMD5   =  4,  /**< The server supports SASL mechanism Digest-MD5. */
+        STREAM_FEATURE_SASL_PLAIN       =  8,  /**< The server supports SASL mechanism Plain. */
+        STREAM_FEATURE_STARTTLS         = 16,  /**< The server supports &lt;startls&gt;. */
+        STREAM_FEATURE_IQREGISTER       = 32,  /**< The server supports JEP-0077 (In-Band Registration). */
+        STREAM_FEATURE_IQAUTH           = 64   /**< The server supports JEP-0078 (Non-SASL Authentication). */
+      };
+
       virtual void handleStartNode() {};
       virtual bool handleNormalNode( const Tag& tag );
       int getStreamFeatures( const Tag& tag );
@@ -245,7 +245,7 @@ namespace gloox
       void sendInitialPresence();
       void createSession();
 
-      void nonSaslLogin( const char* sid = 0L );
+      void nonSaslLogin();
       void init();
 
       RosterManager* m_rosterManager;
