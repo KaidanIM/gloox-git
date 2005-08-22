@@ -25,7 +25,6 @@
 #include "privacylisthandler.h"
 
 #include <string>
-using namespace std;
 
 namespace gloox
 {
@@ -54,13 +53,13 @@ namespace gloox
       /**
        * Triggers the request of the privacy lists currently stored on the server.
        */
-      string requestListNames();
+      std::string requestListNames();
 
       /**
        * Triggers the retrieval of the named privacy lists.
        * @param name The name of the list to retrieve.
        */
-      string requestList( const string& name );
+      std::string requestList( const std::string& name );
 
       /**
        * Stores the given list on the server. If a list with the given name exists it is overwritten.
@@ -69,35 +68,35 @@ namespace gloox
        * @note If @c list is empty the privacy list with the given name will be removed
        * if it exists on the server. (Same as removeList().)
        */
-      string store( const string& name, PrivacyListHandler::PrivacyList& list );
+      std::string store( const std::string& name, PrivacyListHandler::PrivacyList& list );
 
       /**
        * Removes a list by its name.
        * @param name The name of the list to remove.
        */
-      string removeList( const string& name );
+      std::string removeList( const std::string& name );
 
       /**
        * Sets the named list as the default list, i.e. active by default after login.
        * @param name The name of the list to set as default.
        */
-      string setDefault( const string& name );
+      std::string setDefault( const std::string& name );
 
       /**
        * This function declines the use of any default list.
        */
-      string unsetDefault();
+      std::string unsetDefault();
 
       /**
        * Sets the named list as active, i.e. active for this session
        * @param name The name of the list to set active.
        */
-      string setActive( const string& name );
+      std::string setActive( const std::string& name );
 
       /**
        * This function declines the use of any active list.
        */
-      string unsetActive();
+      std::string unsetActive();
 
       /**
        * Use this function to register an object as PrivacyListHandler.
@@ -112,10 +111,10 @@ namespace gloox
       void removePrivacyListHandler();
 
       // reimplemented from IqHandler
-      virtual void handleIq( const char *tag, const char *xmlns, ikspak *pak );
+      virtual bool handleIq( const Stanza& stanza );
 
       // reimplemented from IqHandler
-      virtual void handleIqID( const char *id, ikspak *pak, int context );
+      virtual bool handleIqID( const Stanza& stanza, int context );
 
     private:
       enum IdType

@@ -38,141 +38,171 @@ namespace gloox
       m_parent->removeIqHandler( XMLNS_PRIVACY );
   }
 
-  string PrivacyManager::requestListNames()
+  std::string PrivacyManager::requestListNames()
   {
-    string id = m_parent->getID();
+    std::string id = m_parent->getID();
 
-    iks *x = iks_make_iq( IKS_TYPE_GET, XMLNS_PRIVACY );
-    iks_insert_attrib( x, "id", id.c_str() );
+    Tag iq( "iq" );
+    iq.addAttrib( "type", "get" );
+    iq.addAttrib( "id", id );
+    Tag q( "query" );
+    q.addAttrib( "xmlns", XMLNS_PRIVACY );
+    iq.addChild( q );
 
     m_parent->trackID( this, id, PL_REQUEST_NAMES );
-    m_parent->send( x );
+    m_parent->send( iq );
     return id;
   }
 
-  string PrivacyManager::requestList( const string& name )
+  std::string PrivacyManager::requestList( const std::string& name )
   {
-    string id = m_parent->getID();
+    std::string id = m_parent->getID();
 
-    iks *x = iks_make_iq( IKS_TYPE_GET, XMLNS_PRIVACY );
-    iks_insert_attrib( x, "id", id.c_str() );
-    iks *query = iks_first_tag( x );
-    iks *list = iks_insert( query, "list" );
-    iks_insert_attrib( list, "name", name.c_str() );
+    Tag iq( "iq" );
+    iq.addAttrib( "type", "get" );
+    iq.addAttrib( "id", id );
+    Tag q( "query" );
+    q.addAttrib( "xmlns", XMLNS_PRIVACY );
+    Tag l( "list" );
+    l.addAttrib( "name", name );
+    q.addChild( l );
+    iq.addChild( q );
 
     m_parent->trackID( this, id, PL_REQUEST_LIST );
-    m_parent->send( x );
+    m_parent->send( iq );
     return id;
   }
 
-  string PrivacyManager::removeList( const string& name )
+  std::string PrivacyManager::removeList( const std::string& name )
   {
-    string id = m_parent->getID();
+    std::string id = m_parent->getID();
 
-    iks *x = iks_make_iq( IKS_TYPE_SET, XMLNS_PRIVACY );
-    iks_insert_attrib( x, "id", id.c_str() );
-    iks *query = iks_first_tag( x );
-    iks *list = iks_insert( query, "list" );
-    iks_insert_attrib( list, "name", name.c_str() );
+    Tag iq( "iq" );
+    iq.addAttrib( "type", "set" );
+    iq.addAttrib( "id", id );
+    Tag q( "query" );
+    q.addAttrib( "xmlns", XMLNS_PRIVACY );
+    Tag l( "list" );
+    l.addAttrib( "name", name );
+    q.addChild( l );
+    iq.addChild( q );
 
     m_parent->trackID( this, id, PL_REMOVE );
-    m_parent->send( x );
+    m_parent->send( iq );
     return id;
   }
 
-  string PrivacyManager::setDefault( const string& name )
+  std::string PrivacyManager::setDefault( const std::string& name )
   {
-    string id = m_parent->getID();
+    std::string id = m_parent->getID();
 
-    iks *x = iks_make_iq( IKS_TYPE_SET, XMLNS_PRIVACY );
-    iks_insert_attrib( x, "id", id.c_str() );
-    iks *query = iks_first_tag( x );
-    iks *def = iks_insert( query, "default" );
-    iks_insert_attrib( def, "name", name.c_str() );
+    Tag iq( "iq" );
+    iq.addAttrib( "type", "set" );
+    iq.addAttrib( "id", id );
+    Tag q( "query" );
+    q.addAttrib( "xmlns", XMLNS_PRIVACY );
+    Tag d( "default" );
+    d.addAttrib( "name", name );
+    q.addChild( d );
+    iq.addChild( q );
 
     m_parent->trackID( this, id, PL_DEFAULT );
-    m_parent->send( x );
+    m_parent->send( iq );
     return id;
   }
 
-  string PrivacyManager::unsetDefault()
+  std::string PrivacyManager::unsetDefault()
   {
-    string id = m_parent->getID();
+    std::string id = m_parent->getID();
 
-    iks *x = iks_make_iq( IKS_TYPE_SET, XMLNS_PRIVACY );
-    iks_insert_attrib( x, "id", id.c_str() );
-    iks *query = iks_first_tag( x );
-    iks *def = iks_insert( query, "default" );
+    Tag iq( "iq" );
+    iq.addAttrib( "type", "set" );
+    iq.addAttrib( "id", id );
+    Tag q( "query" );
+    q.addAttrib( "xmlns", XMLNS_PRIVACY );
+    Tag d( "default" );
+    q.addChild( d );
+    iq.addChild( q );
 
     m_parent->trackID( this, id, PL_UNSET_DEFAULT );
-    m_parent->send( x );
+    m_parent->send( iq );
     return id;
   }
 
-  string PrivacyManager::setActive( const string& name )
+  std::string PrivacyManager::setActive( const std::string& name )
   {
-    string id = m_parent->getID();
+    std::string id = m_parent->getID();
 
-    iks *x = iks_make_iq( IKS_TYPE_SET, XMLNS_PRIVACY );
-    iks_insert_attrib( x, "id", id.c_str() );
-    iks *query = iks_first_tag( x );
-    iks *active = iks_insert( query, "active" );
-    iks_insert_attrib( active, "name", name.c_str() );
+    Tag iq( "iq" );
+    iq.addAttrib( "type", "set" );
+    iq.addAttrib( "id", id );
+    Tag q( "query" );
+    q.addAttrib( "xmlns", XMLNS_PRIVACY );
+    Tag a( "active" );
+    a.addAttrib( "name", name );
+    q.addChild( a );
+    iq.addChild( q );
 
     m_parent->trackID( this, id, PL_ACTIVATE );
-    m_parent->send( x );
+    m_parent->send( iq );
     return id;
   }
 
-  string PrivacyManager::unsetActive()
+  std::string PrivacyManager::unsetActive()
   {
-    string id = m_parent->getID();
+    std::string id = m_parent->getID();
 
-    iks *x = iks_make_iq( IKS_TYPE_SET, XMLNS_PRIVACY );
-    iks_insert_attrib( x, "id", id.c_str() );
-    iks *query = iks_first_tag( x );
-    iks *def = iks_insert( query, "active" );
+    Tag iq( "iq" );
+    iq.addAttrib( "type", "set" );
+    iq.addAttrib( "id", id );
+    Tag q( "query" );
+    q.addAttrib( "xmlns", XMLNS_PRIVACY );
+    Tag a( "active" );
+    q.addChild( a );
+    iq.addChild( q );
 
     m_parent->trackID( this, id, PL_UNSET_ACTIVATE );
-    m_parent->send( x );
+    m_parent->send( iq );
     return id;
   }
 
-  string PrivacyManager::store( const string& name, PrivacyListHandler::PrivacyList& list )
+  std::string PrivacyManager::store( const std::string& name, PrivacyListHandler::PrivacyList& list )
   {
-    string id = m_parent->getID();
+    std::string id = m_parent->getID();
 
-    iks *x = iks_make_iq( IKS_TYPE_SET, XMLNS_PRIVACY );
-    iks_insert_attrib( x, "id", id.c_str() );
-    iks *query = iks_first_tag( x );
-    iks *l = iks_insert( query, "list" );
-    iks_insert_attrib( l, "name", name.c_str() );
+    Tag iq( "iq" );
+    iq.addAttrib( "type", "set" );
+    iq.addAttrib( "id", id );
+    Tag q( "query" );
+    q.addAttrib( "xmlns", XMLNS_PRIVACY );
+    Tag l( "list" );
+    l.addAttrib( "name", name );
 
     int count = 0;
     PrivacyListHandler::PrivacyList::iterator it = list.begin();
     for( it; it != list.end(); it++ )
     {
-      iks *item = iks_insert( l, "item" );
+      Tag i( "item" );
       switch( (*it).type() )
       {
         case PrivacyItem::TYPE_JID:
-          iks_insert_attrib( item, "type", "jid" );
+          i.addAttrib( "type", "jid" );
           break;
         case PrivacyItem::TYPE_GROUP:
-          iks_insert_attrib( item, "type", "group" );
+          i.addAttrib( "type", "group" );
           break;
         case PrivacyItem::TYPE_SUBSCRIPTION:
-          iks_insert_attrib( item, "type", "subscription" );
+          i.addAttrib( "type", "subscription" );
           break;
       }
 
       switch( (*it).action() )
       {
         case PrivacyItem::ACTION_ALLOW:
-          iks_insert_attrib( item, "action", "allow" );
+          i.addAttrib( "action", "allow" );
           break;
         case PrivacyItem::ACTION_DENY:
-          iks_insert_attrib( item, "action", "deny" );
+          i.addAttrib( "action", "deny" );
           break;
       }
 
@@ -180,161 +210,151 @@ namespace gloox
       if( pType != 15 )
       {
         if( pType & PrivacyItem::PACKET_MESSAGE )
-          iks_insert( item, "message" );
+          i.addChild( Tag( "message" ) );
         if( pType & PrivacyItem::PACKET_PRESENCE_IN )
-          iks_insert( item, "presence-in" );
+          i.addChild( Tag( "presence-in" ) );
         if( pType & PrivacyItem::PACKET_PRESENCE_OUT )
-          iks_insert( item, "presence-out" );
+          i.addChild( Tag( "presence-out" ) );
         if( pType & PrivacyItem::PACKET_IQ )
-          iks_insert( item, "iq" );
+          i.addChild( Tag( "iq" ) );
       }
 
-      iks_insert_attrib( item, "value", (*it).value().c_str() );
+      i.addAttrib( "value", (*it).value() );
 
       char order[15];
       sprintf( order, "%d", ++count );
-      iks_insert_attrib( item, "order", order );
+      i.addAttrib( "order", order );
     }
 
+    q.addChild( l );
+    iq.addChild( q );
+
     m_parent->trackID( this, id, PL_STORE );
-    m_parent->send( x );
+    m_parent->send( iq );
     return id;
   }
 
-  void PrivacyManager::handleIq( const char *tag, const char *xmlns, ikspak *pak )
+  bool PrivacyManager::handleIq( const Stanza& stanza )
   {
-    if( pak->subtype != IKS_TYPE_SET || !m_privacyListHandler )
-      return;
+    if( stanza.subtype() != STANZA_IQ_SET || !m_privacyListHandler )
+      return false;
 
-    string name;
-
-    iks *x = iks_first_tag( pak->query );
-    if( iks_strncmp( iks_name( x ), "list", 4 ) == 0 )
+    Tag l = stanza.findChild( "query" ).findChild( "list" );
+    if( l.hasAttribute( "name" ) )
     {
-      char *n = iks_find_attrib( x, "name" );
-      if( n )
-      {
-        name = n;
-        m_privacyListHandler->handlePrivacyListChanged( name );
-      }
+      std::string name = l.findAttribute( "name" );
+      m_privacyListHandler->handlePrivacyListChanged( name );
+
+      Tag iq( "iq" );
+      iq.addAttrib( "type", "result" );
+      iq.addAttrib( "id", stanza.id() );
+      m_parent->send( iq );
+      return true;
     }
+
+    return false;
   }
 
-  void PrivacyManager::handleIqID( const char *id, ikspak *pak, int context )
+  bool PrivacyManager::handleIqID( const Stanza& stanza, int context )
   {
-    if( !m_privacyListHandler )
-      return;
+    if( stanza.subtype() != STANZA_IQ_RESULT || !m_privacyListHandler )
+      return false;
 
-    switch( pak->subtype )
+    switch( stanza.subtype() )
     {
-      case IKS_TYPE_RESULT:
+      case STANZA_IQ_RESULT:
         switch( context )
         {
           case PL_STORE:
-            m_privacyListHandler->handlePrivacyListResult( id,
+            m_privacyListHandler->handlePrivacyListResult( stanza.id(),
                 PrivacyListHandler::RESULT_STORE_SUCCESS );
             break;
           case PL_ACTIVATE:
-            m_privacyListHandler->handlePrivacyListResult( id,
+            m_privacyListHandler->handlePrivacyListResult( stanza.id(),
                 PrivacyListHandler::RESULT_ACTIVATE_SUCCESS );
             break;
           case PL_DEFAULT:
-            m_privacyListHandler->handlePrivacyListResult( id,
+            m_privacyListHandler->handlePrivacyListResult( stanza.id(),
                 PrivacyListHandler::RESULT_DEFAULT_SUCCESS );
             break;
           case PL_REMOVE:
-            m_privacyListHandler->handlePrivacyListResult( id,
+            m_privacyListHandler->handlePrivacyListResult( stanza.id(),
                 PrivacyListHandler::RESULT_REMOVE_SUCCESS );
             break;
           case PL_REQUEST_NAMES:
           {
             PrivacyListHandler::StringList lists;
-            string def;
-            string active;
-            iks *x = iks_first_tag( pak->query );
-            while( x )
+            std::string def;
+            std::string active;
+            Tag q = stanza.findChild( "query" );
+            Tag::TagList l = q.children();
+            Tag::TagList::const_iterator it = l.begin();
+            for( it; it != l.end(); it++ )
             {
-              if( iks_strncmp( iks_name( x ), "default", 7 ) == 0 )
+              if( (*it).name() == "default" )
+                def = (*it).findAttribute( "name" );
+              if( (*it).name() == "active" )
+                def = (*it).findAttribute( "name" );
+              if( (*it).name() == "list" )
               {
-                char *d = iks_find_attrib( x, "name" );
-                if( d )
-                  def = d;
+                const std::string name = (*it).findAttribute( "name" );
+                lists.push_back( name );
               }
-              if( iks_strncmp( iks_name( x ), "active", 6 ) == 0 )
-              {
-                char *a = iks_find_attrib( x, "name" );
-                if( a )
-                  active = a;
-              }
-              if( iks_strncmp( iks_name( x ), "list", 4 ) == 0 )
-              {
-                char *name = iks_find_attrib( x, "name" );
-                if( name )
-                  lists.push_back( name );
-              }
-              x = iks_next( x );
             }
+
             m_privacyListHandler->handlePrivacyListNames( def, active, lists );
             break;
           }
           case PL_REQUEST_LIST:
           {
             PrivacyListHandler::PrivacyList items;
-            string name;
 
-            iks *x = iks_first_tag( pak->query );
-            char *n = iks_find_attrib( x, "name" );
-            if( n )
-              name = n;
-
-            x = iks_first_tag( x );
-            while( x )
+            Tag list = stanza.findChild( "query" ).findChild( "list" );
+            const std::string name = list.name();
+            Tag::TagList l = list.children();
+            Tag::TagList::iterator it = l.begin();
+            for( it; it != l.end(); it++ )
             {
               PrivacyItem::ItemType type;
               PrivacyItem::ItemAction action;
               int packetType = 0;
-              string value;
 
-              char *t = iks_find_attrib( x, "type" );
-              if( iks_strncmp( t, "jid", 3 ) == 0 )
+              const std::string t = (*it).findAttribute( "type" );
+              if( t == "jid" )
                 type = PrivacyItem::TYPE_JID;
-              else if( iks_strncmp( t, "group", 5 ) == 0 )
+              else if( t == "group" )
                 type = PrivacyItem::TYPE_GROUP;
-              else if( iks_strncmp( t, "subscription", 12 ) == 0 )
+              else if( t == "subscription" )
                 type = PrivacyItem::TYPE_SUBSCRIPTION;
               else
                 type = PrivacyItem::TYPE_UNDEFINED;
 
-              char *a = iks_find_attrib( x, "action" );
-              if( iks_strncmp( a, "allow", 5 ) == 0 )
+              const std::string a = (*it).findAttribute( "action" );
+              if( a == "allow" )
                 action = PrivacyItem::ACTION_ALLOW;
-              else if( iks_strncmp( a, "deny", 4 ) == 0 )
+              else if( a == "deny" )
                 action = PrivacyItem::ACTION_DENY;
               else
                 action = PrivacyItem::ACTION_ALLOW;
 
-              char *v = iks_find_attrib( x, "value" );
-              if( v )
-                value = v;
+              std::string value = (*it).findAttribute( "value" );
 
-              iks *y = iks_first_tag( x );
-              while( y )
+              Tag::TagList c = (*it).children();
+              Tag::TagList::const_iterator it_c = c.begin();
+              for( it_c; it_c != c.end(); it_c++ )
               {
-                if( iks_strncmp( iks_name( y ), "iq", 2 ) == 0 )
+                if( (*it_c).name() == "iq" )
                   packetType |= PrivacyItem::PACKET_IQ;
-                else if( iks_strncmp( iks_name( y ), "presence-out", 12 ) == 0 )
+                else if( (*it_c).name() == "presence-out" )
                   packetType |= PrivacyItem::PACKET_PRESENCE_OUT;
-                else if( iks_strncmp( iks_name( y ), "presence-in", 11 ) == 0 )
+                else if( (*it_c).name() == "presence-in" )
                   packetType |= PrivacyItem::PACKET_PRESENCE_IN;
-                else if( iks_strncmp( iks_name( y ), "message", 7 ) == 0 )
+                else if( (*it_c).name() == "message" )
                   packetType |= PrivacyItem::PACKET_MESSAGE;
-
-                y = iks_next( y );
               }
 
               PrivacyItem item( type, action, packetType, value );
               items.push_back( item );
-              x = iks_next( x );
             }
             m_privacyListHandler->handlePrivacyList( name, items );
             break;
@@ -342,17 +362,20 @@ namespace gloox
         }
         break;
 
-      case IKS_TYPE_ERROR:
-        iks *error = iks_find( pak->x, "error" );
-        iks *name = iks_first_tag( error );
-        if( iks_strncmp( iks_name( name ), "conflict", 8 ) == 0 )
-          m_privacyListHandler->handlePrivacyListResult( id, PrivacyListHandler::RESULT_CONFLICT );
-        if( iks_strncmp( iks_name( name ), "item-not-found", 14 ) == 0 )
-          m_privacyListHandler->handlePrivacyListResult( id, PrivacyListHandler::RESULT_ITEM_NOT_FOUND );
-        if( iks_strncmp( iks_name( name ), "bad-request", 11 ) == 0 )
-          m_privacyListHandler->handlePrivacyListResult( id, PrivacyListHandler::RESULT_BAD_REQUEST );
+      case STANZA_IQ_ERROR:
+        Tag e = stanza.findChild( "error" );
+        if( e.hasChild( "conflict" ) )
+          m_privacyListHandler->handlePrivacyListResult( stanza.id(),
+            PrivacyListHandler::RESULT_CONFLICT );
+        else if( e.hasChild( "item-not-found" ) )
+          m_privacyListHandler->handlePrivacyListResult( stanza.id(),
+            PrivacyListHandler::RESULT_ITEM_NOT_FOUND );
+        else if( e.hasChild( "bad-request" ) )
+          m_privacyListHandler->handlePrivacyListResult( stanza.id(),
+            PrivacyListHandler::RESULT_BAD_REQUEST );
         break;
     }
+    return false;
   }
 
   void PrivacyManager::registerPrivacyListHandler( PrivacyListHandler *plh )

@@ -25,7 +25,6 @@
 
 #include <string>
 #include <list>
-using namespace std;
 
 namespace gloox
 {
@@ -58,12 +57,12 @@ namespace gloox
       /**
        * A list of PrivacyItems.
        */
-      typedef list<PrivacyItem> PrivacyList;
+      typedef std::list<PrivacyItem> PrivacyList;
 
       /**
        * A list of list names.
        */
-      typedef list<string> StringList;
+      typedef std::list<std::string> StringList;
 
       /**
        * Reimplement this function to retrieve the list of privacy list names after requesting it using
@@ -72,8 +71,8 @@ namespace gloox
        * @param def The name of the default list.
        * @param lists All the lists.
        */
-      virtual void handlePrivacyListNames( const string& active, const string& def,
-                                           const StringList& lists ) {};
+      virtual void handlePrivacyListNames( const std::string& active, const std::string& def,
+                                           const StringList& lists ) = 0;
 
       /**
        * Reimplement this function to retrieve the content of a privacy list after requesting it using
@@ -81,20 +80,20 @@ namespace gloox
        * @param name The name of the list.
        * @param items A list of PrivacyItem's.
        */
-      virtual void handlePrivacyList( const string& name, PrivacyList& items ) {};
+      virtual void handlePrivacyList( const std::string& name, PrivacyList& items ) = 0;
 
       /**
        * Reimplement this function to be notified about new or changed lists.
        * @param name The name of the new or changed list.
        */
-      virtual void handlePrivacyListChanged( const string& name ) {};
+      virtual void handlePrivacyListChanged( const std::string& name ) = 0;
 
       /**
        * Reimplement this function to receive results of stores etc.
        * @param id The ID of the request, as returned by the initiating function.
        * @param result The result of an operation.
        */
-      virtual void handlePrivacyListResult( const string& id, resultEnum result ) {};
+      virtual void handlePrivacyListResult( const std::string& id, resultEnum result ) = 0;
 
   };
 
