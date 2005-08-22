@@ -68,15 +68,6 @@ namespace gloox
       virtual bool handleIqID( const Stanza& stanza, int context );
 
     private:
-      enum NonSaslAuthType
-      {
-        TYPE_DIGEST,
-        TYPE_PLAIN
-      };
-
-      const Tag createAuthTag( NonSaslAuthType type, const JID& jid,
-                               const std::string& password, const std::string& sid  );
-
       Client *m_parent;
       std::string m_sid;
 

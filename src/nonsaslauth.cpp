@@ -71,6 +71,8 @@ namespace gloox
         query.addAttrib( "xmlns", XMLNS_AUTH );
         Tag u( "username", m_parent->jid().username() );
         query.addChild( u );
+        Tag r( "resource", m_parent->jid().resource() );
+        query.addChild( r );
 
         Tag q = stanza.findChild( "query" );
         if( ( q.hasChild( "digest" ) ) && !m_sid.empty() )
@@ -120,9 +122,17 @@ namespace gloox
 
   bool NonSaslAuth::handleIqID( const Stanza& stanza, int context )
   {
-    // this needs fixing! NonSaslAuth shouldn't be a friend of Client.
-    m_parent->setState( STATE_AUTHENTICATED );
-    m_parent->notifyOnConnect();
+    switch( stanza.subtype() )
+    {
+      case STANZA_IQ_ERROR:
+        m_parent->setState( STATE_AUTHENTICATION_FAILED );
+        break;
+      case STANZA_IQ_RESULT:
+        // this needs fixing! NonSaslAuth shouldn't be a friend of Client.
+        m_parent->setState( STATE_AUTHENTICATED );
+        m_parent->notifyOnConnect();
+      break;
+    }
     return false;
   }
 
