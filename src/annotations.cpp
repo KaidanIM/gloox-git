@@ -40,23 +40,23 @@ namespace gloox
 
   void Annotations::storeAnnotations( const AnnotationsHandler::AnnotationsList& aList )
   {
-    iks *storage = iks_new( "storage" );
-    iks_insert_attrib( storage, "xmlns", XMLNS_ANNOTATIONS );
+    Tag s( "storage" );
+    s.addAttrib( "xmlns", XMLNS_ANNOTATIONS );
 
     if( aList.size() )
     {
       AnnotationsHandler::AnnotationsList::const_iterator it = aList.begin();
       for( it; it != aList.end(); it++ )
       {
-        iks *item = iks_insert( storage, "note" );
-        iks_insert_attrib( item, "jid", (*it).jid.c_str() );
-        iks_insert_attrib( item, "cdate", (*it).cdate.c_str() );
-        iks_insert_attrib( item, "mdate", (*it).mdate.c_str() );
-        iks_insert_cdata( item, (*it).note.c_str(), (*it).note.length() );
+        Tag n( "note", (*it).note );
+        n.addAttrib( "jid", (*it).jid );
+        n.addAttrib( "cdate", (*it).cdate );
+        n.addAttrib( "mdate", (*it).mdate );
+        s.addChild( n );
       }
     }
 
-    storeXML( storage, XMLNS_ANNOTATIONS );
+    storeXML( s, XMLNS_ANNOTATIONS );
   }
 
   void Annotations::requestAnnotations()
@@ -64,34 +64,30 @@ namespace gloox
     requestXML( "storage", XMLNS_ANNOTATIONS );
   }
 
-  void Annotations::handlePrivateXML( const string& tag, const string& xmlns, ikspak* pak )
+  void Annotations::handlePrivateXML( const std::string& tag, const std::string& xmlns, const Tag& xml )
   {
-    iks *x = iks_first_tag( iks_first_tag( pak->query ) );
-
     AnnotationsHandler::AnnotationsList aList;
-
-    while( x )
+    const Tag::TagList l = const_cast<Tag&>(xml).children();
+    Tag::TagList::const_iterator it = l.begin();
+    for( it; it != l.end(); it++ )
     {
-      if( iks_strncmp( iks_name( x ), "note", 4 ) == 0 )
+      if( (*it).name() == "note" )
       {
-        char *jid = iks_find_attrib( x, "jid" );
-        char *mdate = iks_find_attrib( x, "mdate" );
-        char *cdate = iks_find_attrib( x, "cdate" );
-        char *note = iks_cdata( iks_child( x ) );
+        const std::string jid = (*it).findAttribute( "jid" );
+        const std::string mdate = (*it).findAttribute( "mdate" );
+        const std::string cdate = (*it).findAttribute( "cdate" );
+        const std::string note = (*it).cdata();
 
-        if( jid && note )
+        if( !jid.empty() && !note.empty() )
         {
           AnnotationsHandler::annotationsListItem item;
           item.jid = jid;
           item.note = note;
-          if( mdate )
-            item.mdate = mdate;
-          if( cdate )
-            item.cdate = cdate;
+          item.mdate = mdate;
+          item.cdate = cdate;
           aList.push_back( item );
         }
       }
-      x = iks_next( x );
     }
 
     if( m_annotationsHandler )
