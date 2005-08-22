@@ -78,21 +78,24 @@ namespace gloox
   const Tag Parser::convertFromIks( iks *x )
   {
     Tag tag( iks_name( x ) );
-    if( iks_cdata( x ) )
-      tag.setCData( iks_cdata( x ) );
 
-    iks *y = iks_attrib( x );
+    iks *y = iks_child( x );
     while( y )
     {
-      tag.addAttrib( iks_name( y ), iks_cdata( y ) );
+      switch( iks_type( y ) )
+      {
+        case IKS_TAG:
+          tag.addChild( convertFromIks( y ) );
+          break;
+        case IKS_ATTRIBUTE:
+          tag.addAttrib( iks_name( y ), iks_cdata( y ) );
+          break;
+        case IKS_CDATA:
+          if( iks_cdata_size( y ) )
+            tag.setCData( iks_cdata( y ) );
+          break;
+      }
       y = iks_next( y );
-    }
-
-    iks *z = iks_first_tag( x );
-    while( z )
-    {
-      tag.addChild( convertFromIks( z ) );
-      z = iks_next_tag( z );
     }
 
     return tag;
