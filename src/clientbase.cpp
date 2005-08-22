@@ -308,6 +308,15 @@ namespace gloox
     }
   }
 
+  bool ClientBase::notifyOnTLSConnect( const CertInfo& info )
+  {
+    ConnectionListenerList::const_iterator it = m_connectionListeners.begin();
+    for( it; it != m_connectionListeners.end(); it++ )
+    {
+      return (*it)->onTLSConnect( info );
+    }
+  }
+
   void ClientBase::notifyOnResourceBindError( ConnectionListener::ResourceBindError error )
   {
     ConnectionListenerList::const_iterator it = m_connectionListeners.begin();

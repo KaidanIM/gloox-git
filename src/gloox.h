@@ -21,6 +21,8 @@
 #ifndef GLOOX_H__
 #define GLOOX_H__
 
+#include <string>
+
 #define XMLNS_CLIENT            "jabber:client"
 #define XMLNS_COMPONENT_ACCEPT  "jabber:component:accept"
 #define XMLNS_COMPONENT_CONNECT "jabber:component:connect"
@@ -197,6 +199,38 @@ namespace gloox
     PRESENCE_XA,                    /**< The entity or resource is away for an extended period (xa =
                                      * "eXtended Away"). */
     PRESENCE_UNAVAILABLE,           /**< The entity or resource if offline. */
+  };
+
+  /**
+   * Describes the verification results of a certificate.
+   */
+  enum CertStatus
+  {
+    CERT_OK = 0,                    /**< The certificate is valid and trusted. */
+    CERT_INVALID,                   /**< The certificate is not trusted. */
+    CERT_SIGNER_UNKNOWN,            /**< The certificate hasn't got a known issuer. */
+    CERT_REVOKED,                   /**< The certificate has been revoked. */
+    CERT_EXPIRED,                   /**< The certificate has expired. */
+    CERT_NOT_ACTIVE,                /**< The certifiacte is not yet active. */
+    CERT_WRONG_PEER,                /**< The certificate has not been issued for the
+                                     * peer we're connected to. */
+  };
+
+  /**
+   * Describes the certificate presented by the peer.
+   */
+  struct CertInfo
+  {
+    int status;                     /**< Bitwise or'ed CertStatus. */
+    bool chain;                     /**< determines whether the cert chain verified ok. */
+    std::string issuer;             /**< The name of the issuing entity.*/
+    std::string server;             /**< The server the certificate has been issued for. */
+    int date_from;                  /**< The date from which onwards the certificate is valid. */
+    int date_to;                    /**< The date up to which the certificate is valid. */
+    std::string protocol;           /**< The encryption protocol used for the connection. */
+    std::string cipher;             /**< The cipher used for the connection. */
+    std::string mac;                /**< The MAC used for the connection. */
+    std::string compression;        /**< The compression used for the connection. */
   };
 
 };

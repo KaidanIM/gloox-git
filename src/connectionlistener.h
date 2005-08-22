@@ -54,7 +54,8 @@ namespace gloox
         SC_UNKNOWN_ERROR,                  /**< An unknown error occured. */
         SC_INTERNAL_SERVER_ERROR,          /**< Internal server error. */
         SC_FORBIDDEN,                      /**< Username or resource not allowed to create session. */
-        SC_CONFLICT                        /**< Server informs newly-requested session of resource conflict. */
+        SC_CONFLICT                        /**< Server informs newly-requested session of resource
+                                            * conflict. */
       };
 
       /**
@@ -82,6 +83,15 @@ namespace gloox
        * @param error Describes the error condition.
        */
       virtual void onSessionCreateError( SessionCreateError error ) {};
+
+      /**
+       * This function is called when the connection was TLS/SSL secured.
+       * @param info Comprehensive info on the certificate.
+       * @return @b True if cert credentials are accepted, @b false otherwise. If @b false is returned
+       * the connection is terminated.
+       */
+      virtual bool onTLSConnect( const CertInfo& info ) = 0;
+
   };
 
 };

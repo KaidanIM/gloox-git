@@ -76,8 +76,6 @@ namespace gloox
 
   void Client::init()
   {
-    registerConnectionListener( this );
-
     m_disco = new Disco( this );
     m_rosterManager = new RosterManager( this );
     m_disco->setVersion( "based on gloox", GLOOX_VERSION );
@@ -130,7 +128,7 @@ namespace gloox
         }
         else
         {
-          notifyOnConnect();
+          connected();
         }
       }
       else if( m_streamFeatures & STREAM_FEATURE_IQAUTH )
@@ -151,9 +149,13 @@ namespace gloox
       printf( "starting TLS handshake...\n" );
 #endif
       if( m_connection->tlsHandshake() )
+      {
         header();
+        if( !notifyOnTLSConnect( m_connection->fetchTLSInfo() ) )
+          disconnect( STATE_DISCONNECTED );
+      }
 #ifdef DEBUG
-        printf( "connection security is now %d\n", m_connection->isSecure() );
+      printf( "connection security is now %d\n", m_connection->isSecure() );
 #endif
     }
     else if( tag.name() == "failure" )
@@ -267,7 +269,7 @@ namespace gloox
         if( m_streamFeatures & STREAM_FEATURE_SESSION )
           createSession();
         else
-          notifyOnConnect();
+          connected();
         break;
       }
       case STANZA_IQ_ERROR:
@@ -313,7 +315,7 @@ namespace gloox
     {
       case STANZA_IQ_RESULT:
       {
-        notifyOnConnect();
+        connected();
         break;
       }
       case STANZA_IQ_ERROR:
@@ -405,8 +407,10 @@ namespace gloox
     return m_disco;
   }
 
-  void Client::onConnect()
+  void Client::connected()
   {
+    notifyOnConnect();
+
     if( m_manageRoster )
       m_rosterManager->fill();
 

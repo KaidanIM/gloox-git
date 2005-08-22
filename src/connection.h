@@ -27,6 +27,7 @@
 #include <string>
 
 #include <gnutls/gnutls.h>
+#include <gnutls/x509.h>
 
 namespace gloox
 {
@@ -98,11 +99,20 @@ namespace gloox
        */
       void setState( ConnectionState state ) { m_state = state; };
 
+      /**
+       * This function is used to retrieve certificate and connection info of a encrypted connection.
+       * @return Certificate information.
+       */
+      const CertInfo fetchTLSInfo() const { return m_certInfo; };
+
     private:
       void cancel();
       void cleanup();
 
 #ifdef HAVE_GNUTLS
+      bool verifyAgainstCAs( gnutls_x509_crt_t cert, gnutls_x509_crt_t *CAList, int CAListSize );
+      bool verifyAgainst( gnutls_x509_crt_t cert, gnutls_x509_crt_t issuer );
+
       gnutls_session_t m_session;
       gnutls_certificate_credentials m_credentials;
 #endif
@@ -110,6 +120,7 @@ namespace gloox
       static const int BUFSIZE = 1024;
       Parser *m_parser;
       ConnectionState m_state;
+      CertInfo m_certInfo;
 
       char *m_buf;
       std::string m_server;
