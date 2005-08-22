@@ -233,6 +233,9 @@ namespace gloox
       // reimplemented from ConnectionListener
       virtual void onConnect();
 
+      // reimplemented from ConnectionListener
+      virtual void onDisconnect() {};
+
     private:
       virtual void handleStartNode() {};
       virtual bool handleNormalNode( const Tag& tag );
