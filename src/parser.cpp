@@ -91,8 +91,7 @@ namespace gloox
           tag.addAttrib( iks_name( y ), iks_cdata( y ) );
           break;
         case IKS_CDATA:
-          if( iks_cdata_size( y ) )
-            tag.setCData( iks_cdata( y ) );
+          tag.setCData( iks_cdata( y ) );
           break;
       }
       y = iks_next( y );
