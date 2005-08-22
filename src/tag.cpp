@@ -57,7 +57,7 @@ namespace gloox
       TagList::const_iterator it_c = m_children.begin();
       for( it_c; it_c != m_children.end(); it_c++ )
       {
-        xml += (*it_c).second.xml();
+        xml += (*it_c).xml();
       }
       xml += "</" + m_name + ">";
     }
@@ -72,7 +72,7 @@ namespace gloox
 
   void Tag::addChild( const Tag& child )
   {
-    m_children[child.name()] = child;
+    m_children.push_back( child );
   }
 
   Tag::AttributeList& Tag::attributes()
@@ -108,30 +108,42 @@ namespace gloox
 
   const Tag Tag::findChild( const std::string& name ) const
   {
-    TagList::const_iterator it = m_children.find( name );
-    if( it != m_children.end() )
-      return (*it).second;
-    else
-      return Tag();
+    TagList::const_iterator it = m_children.begin();
+    for( it; it != m_children.end(); it++ )
+    {
+      if( (*it).name() == name )
+        return (*it);
+    }
+
+    return Tag();
   }
 
   bool Tag::hasChild( const std::string& name,
                       const std::string& attr, const std::string& value ) const
   {
-    TagList::const_iterator it = m_children.find( name );
-    if( it != m_children.end() )
-      return (*it).second.hasAttribute( attr, value );
-    else
-      return false;
+    TagList::const_iterator it = m_children.begin();
+    for( it; it != m_children.end(); it++ )
+    {
+      if( ( (*it).name() == name )
+              && (*it).hasAttribute( attr, value ) )
+        return true;
+    }
+
+    return false;
   }
 
   bool Tag::hasChildWithCData( const std::string& name, const std::string& cdata ) const
   {
-    TagList::const_iterator it = m_children.find( name );
-    if( it != m_children.end() )
-      return ( (*it).second.cdata() == cdata );
-    else
-      return false;
+    TagList::const_iterator it = m_children.begin();
+    for( it; it != m_children.end(); it++ )
+    {
+      if( ( (*it).name() == name ) && !cdata.empty() && ( (*it).cdata() == cdata ) )
+        return true;
+      else if( ( (*it).name() == name ) && cdata.empty() )
+        return true;
+    }
+
+    return false;
   }
 
   bool Tag::hasChildWithAttrib( const std::string& attr, const std::string& value ) const
@@ -139,11 +151,23 @@ namespace gloox
     TagList::const_iterator it = m_children.begin();
     for( it; it != m_children.end(); it++ )
     {
-      if( (*it).second.hasAttribute( attr, value ) )
+      if( (*it).hasAttribute( attr, value ) )
         return true;
     }
 
-      return false;
+    return false;
+  }
+
+  const Tag Tag::findChildWithAttrib( const std::string& attr, const std::string& value ) const
+  {
+    TagList::const_iterator it = m_children.begin();
+    for( it; it != m_children.end(); it++ )
+    {
+      if( (*it).hasAttribute( attr, value ) )
+        return (*it);
+    }
+
+    return Tag();
   }
 
 };

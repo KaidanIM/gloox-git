@@ -36,14 +36,14 @@ namespace gloox
   {
     public:
       /**
-       * A list of Attributes, indexed by name.
+       * A map of key/value pairs. Attributes.
        */
       typedef std::map<std::string, std::string> AttributeList;
 
       /**
-       * A list of Tags, indexed by name.
+       * A list of Tags.
        */
-      typedef std::map<std::string, Tag> TagList;
+      typedef std::list<Tag> TagList;
 
       /**
        * Creates an empty tag.
@@ -144,6 +144,15 @@ namespace gloox
        */
       virtual bool hasChild( const std::string& name,
                              const std::string& attr = "", const std::string& value = "" ) const;
+
+      /**
+       * This function checks whether the Tag has a child element which posesses a given attribute
+       * with an optional value. The name of the child element does not matter.
+       * @param attr The name of the attribute of the child element.
+       * @param value The value of the attribute of the child element.
+       * @return The child if found, an empty Tag otherwise.
+       */
+      const Tag findChildWithAttrib( const std::string& attr, const std::string& value = "" ) const;
 
       /**
        * This function checks whether the Tag has a child element which posesses a given attribute
