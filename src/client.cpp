@@ -91,9 +91,9 @@ namespace gloox
       m_streamFeatures = getStreamFeatures( tag );
       printf( "stream features: %d\n", m_streamFeatures );
 
-      if( tls() && !m_connection->isSecure() && ( m_streamFeatures & STREAM_FEATURE_STARTTLS ) )
+      if( tls() && hasTls() && !m_connection->isSecure() && ( m_streamFeatures & STREAM_FEATURE_STARTTLS ) )
       {
-        m_connection->tlsHandshake();
+        startTls();
         return true;
       }
 
@@ -110,11 +110,11 @@ namespace gloox
         {
           if( m_streamFeatures & STREAM_FEATURE_SASL_DIGESTMD5 )
           {
-            m_connection->startSASL( GLOOX_SASL_DIGEST_MD5, username(), password() );
+            startSASL( GLOOX_SASL_DIGEST_MD5 );
           }
           else if( m_streamFeatures & STREAM_FEATURE_SASL_PLAIN )
           {
-            m_connection->startSASL( GLOOX_SASL_PLAIN, username(), password() );
+            startSASL( GLOOX_SASL_PLAIN );
           }
           else if( m_streamFeatures & STREAM_FEATURE_IQAUTH )
           {
@@ -144,6 +144,13 @@ namespace gloox
 #endif
         disconnect( STATE_NO_SUPPORTED_AUTH );
       }
+    }
+    else if( ( tag.name() == "proceed" ) && tag.hasAttribute( "xmlns", XMLNS_STREAM_TLS ) )
+    {
+#ifdef DEBUG
+      printf( "starting TLS handshake...\n" );
+#endif
+      m_connection->tlsHandshake();
     }
     else if( tag.name() == "failure" )
     {

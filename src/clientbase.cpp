@@ -157,7 +157,23 @@ namespace gloox
     send( xml );
   }
 
-  void Connection::startSASL( SaslMechanisms type, const std::string& username, const std::string& password )
+  bool ClientBase::hasTls()
+  {
+#ifdef HAVE_GNUTLS
+    return true;
+#else
+    return false;
+#endif
+  }
+
+  void ClientBase::startTls()
+  {
+    Tag start( "starttls" );
+    start.addAttrib( "xmlns", XMLNS_STREAM_TLS );
+    send( start );
+  }
+
+  void ClientBase::startSASL( SaslMechanisms type )
   {
 //     SASLPacket s( type, username, password );
 //     send( s.xml() );

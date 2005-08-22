@@ -197,14 +197,6 @@ namespace gloox
       void send( const std::string& xml );
 
       /**
-       * Starts SASL authentication.
-       * @param type The SASL Mechanism to use.
-       * @param username The username to use for authentication.
-       * @param password The password to use for authentication.
-       */
-      void startSASL( SaslMechanisms type, const std::string& username, const std::string& password );
-
-      /**
        * Returns the current connection state.
        * @return The state of the connection.
        */
@@ -304,6 +296,22 @@ namespace gloox
        * @return The host to name in the stream's 'to' attribute. Defaults to the destination server.
        */
       virtual const std::string streamTo() const { return server(); };
+
+      /**
+       * Starts SASL authentication.
+       * @param type The SASL Mechanism to use.
+       */
+      void startSASL( SaslMechanisms type );
+
+      /**
+       * Use this function to start the TLS handshake procedure.
+       */
+      void startTls();
+
+      /**
+       * determines the availability of TLS.
+       */
+      bool hasTls();
 
       JID m_jid;
       Connection *m_connection;
