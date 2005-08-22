@@ -4,6 +4,7 @@
 #include "../adhoccommandprovider.h"
 #include "../disco.h"
 #include "../adhoc.h"
+#include "../tag.h"
 using namespace gloox;
 
 #include <stdio.h>
@@ -35,12 +36,12 @@ class AdhocTest : public ConnectionListener, AdhocCommandProvider
       a->registerAdhocCommandProvider( this, "config", "Configuration" );
       a->registerAdhocCommandProvider( this, "shutdown", "Shutdown" );
 
-      j->connect( true );
+      j->connect();
 
       delete( j );
     }
 
-    void handleAdhocCommand( const string& command, const iks* x )
+    void handleAdhocCommand( const std::string& command, const Tag& tag )
     {
       if( command == "helloworld" )
         printf( "Hello World!\n" );
@@ -49,13 +50,15 @@ class AdhocTest : public ConnectionListener, AdhocCommandProvider
       else if( command == "shutdown" )
       {
         printf( "shutting down\n" );
-        j->disconnect();
+        j->disconnect( STATE_DISCONNECTED );
       }
     }
 
     virtual void onConnect()
     {
     };
+
+    virtual void onDisconnect() { printf( "disco_test: disconnected\n" ); };
 
   private:
     JClient *j;

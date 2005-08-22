@@ -30,7 +30,7 @@ class RegTest : public RegistrationHandler, ConnectionListener
       m_reg = new Registration( j );
       m_reg->registerRegistrationHandler( this );
 
-      j->connect( true );
+      j->connect();
 
       delete( m_reg );
       delete( j );
@@ -48,7 +48,9 @@ class RegTest : public RegistrationHandler, ConnectionListener
 //       m_reg->removeAccount();
     };
 
-    virtual void handleRegistrationFields( int fields, string instructions )
+    virtual void onDisconnect() { printf( "disco_test: disconnected\n" ); };
+
+    virtual void handleRegistrationFields( int fields, std::string instructions )
     {
       printf( "fields: %d\ninstructions: %s\n", fields, instructions.c_str() );
       Registration::fieldStruct vals;
@@ -60,7 +62,7 @@ class RegTest : public RegistrationHandler, ConnectionListener
     virtual void handleRegistrationResult( resultEnum result )
     {
       printf( "result: %d\n", result );
-      j->disconnect();
+      j->disconnect( STATE_DISCONNECTED );
     };
 
   private:

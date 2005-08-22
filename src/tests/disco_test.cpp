@@ -3,6 +3,7 @@
 #include "../connectionlistener.h"
 #include "../discohandler.h"
 #include "../disco.h"
+#include "../stanza.h"
 using namespace gloox;
 
 #include <stdio.h>
@@ -30,7 +31,7 @@ class DiscoTest : public DiscoHandler, ConnectionListener
       j->disco()->setVersion( "discoTest", GLOOX_VERSION );
       j->disco()->setIdentity( "client", "bot" );
 
-      j->connect( true );
+      j->connect();
 
       delete( j );
     }
@@ -41,12 +42,14 @@ class DiscoTest : public DiscoHandler, ConnectionListener
       j->disco()->getDiscoItems( "hurkhurk@example.org/gloox" );
     };
 
-    virtual void handleDiscoInfoResult( const string& id, const ikspak* pak )
+    virtual void onDisconnect() { printf( "disco_test: disconnected\n" ); };
+
+    virtual void handleDiscoInfoResult( const std::string& id, const Stanza& stanza )
     {
       printf( "handleDiscoInfoResult}\n" );
     }
 
-    virtual void handleDiscoItemsResult( const string& id, const ikspak* pak )
+    virtual void handleDiscoItemsResult( const std::string& id, const Stanza& stanza )
     {
       printf( "handleDiscoItemsResult\n" );
     }

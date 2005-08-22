@@ -35,7 +35,7 @@ class AnnotationsTest : public AnnotationsHandler, ConnectionListener
       a = new Annotations( j );
       a->registerAnnotationsHandler( this );
 
-      j->connect( true );
+      j->connect();
 
       delete( j );
     };
@@ -44,6 +44,8 @@ class AnnotationsTest : public AnnotationsHandler, ConnectionListener
     {
       a->requestAnnotations();
     };
+
+    virtual void onDisconnect() { printf( "disco_test: disconnected\n" ); };
 
     virtual void handleAnnotations( AnnotationsList &aList )
     {
