@@ -28,10 +28,11 @@
 
 #include <string>
 #include <list>
-using namespace std;
 
 namespace gloox
 {
+
+  class Tag;
 
   /**
    * This is an implementation of JEP-0048 (Bookmark Storage).
@@ -59,7 +60,7 @@ namespace gloox
        * @param cList A list of conferences to store.
        */
       void storeBookmarks( const BookmarkHandler::BookmarkList& bList,
-                          const BookmarkHandler::ConferenceList& cList );
+                           const BookmarkHandler::ConferenceList& cList );
 
       /**
        * Use this function to initiate retrieval of bookmarks. Use registerBookmarkHandler()
@@ -79,7 +80,7 @@ namespace gloox
       void removeBookmarkHandler();
 
       // reimplemented from PrivateXMLHandler
-      virtual void handlePrivateXML( const string& tag, const string& xmlns, ikspak* pak );
+      virtual void handlePrivateXML( const std::string& tag, const std::string& xmlns, const Tag& xml );
 
     private:
       BookmarkHandler *m_bookmarkHandler;

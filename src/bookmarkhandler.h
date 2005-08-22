@@ -24,8 +24,6 @@
 
 #include <string>
 #include <list>
-using namespace std;
-
 
 namespace gloox
 {
@@ -44,8 +42,8 @@ namespace gloox
        */
       struct bookmarkListItem
       {
-        string name;             /**< A human readable name of the bookmark. */
-        string url;              /**< The URL of the bookmark. */
+        std::string name;             /**< A human readable name of the bookmark. */
+        std::string url;              /**< The URL of the bookmark. */
       };
 
       /**
@@ -53,21 +51,22 @@ namespace gloox
        */
       struct conferenceListItem
       {
-        string name;             /**< A human readable name of the conference room. */
-        string jid;              /**< The address of the room. */
-        string nick;             /**< The nick name to use in this room. */
-        string password;         /**< The password to use for a protected room. */
+        std::string name;             /**< A human readable name of the conference room. */
+        std::string jid;              /**< The address of the room. */
+        std::string nick;             /**< The nick name to use in this room. */
+        std::string password;         /**< The password to use for a protected room. */
+        bool autojoin;                /**< The conference shall be joined automatically on login. */
       };
 
       /**
        * A list of URL items.
        */
-      typedef list<bookmarkListItem> BookmarkList;
+      typedef std::list<bookmarkListItem> BookmarkList;
 
       /**
        * A list of conference items.
        */
-      typedef list<conferenceListItem> ConferenceList;
+      typedef std::list<conferenceListItem> ConferenceList;
 
       /**
        * This function is called when bookmarks arrive from the server.

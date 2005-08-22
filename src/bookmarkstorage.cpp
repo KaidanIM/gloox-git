@@ -41,17 +41,18 @@ namespace gloox
   void BookmarkStorage::storeBookmarks( const BookmarkHandler::BookmarkList& bList,
                                         const BookmarkHandler::ConferenceList& cList )
   {
-    iks *storage = iks_new( "storage" );
-    iks_insert_attrib( storage, "xmlns", XMLNS_BOOKMARKS );
+    Tag s( "storage" );
+    s.addAttrib( "xmlns", XMLNS_BOOKMARKS );
 
     if( bList.size() )
     {
       BookmarkHandler::BookmarkList::const_iterator it = bList.begin();
       for( it; it != bList.end(); it++ )
       {
-        iks *item = iks_insert( storage, "url" );
-        iks_insert_attrib( item, "name", (*it).name.c_str() );
-        iks_insert_attrib( item, "url", (*it).url.c_str() );
+        Tag i( "url" );
+        i.addAttrib( "name", (*it).name );
+        i.addAttrib( "url", (*it).url );
+        s.addChild( i );
       }
     }
 
@@ -60,15 +61,20 @@ namespace gloox
       BookmarkHandler::ConferenceList::const_iterator it = cList.begin();
       for( it; it != cList.end(); it++ )
       {
-        iks *item = iks_insert( storage, "conference" );
-        iks_insert_attrib( item, "name", (*it).name.c_str() );
-        iks_insert_attrib( item, "jid", (*it).jid.c_str() );
-        iks_insert_cdata( iks_insert( item, "nick" ), (*it).nick.c_str(), (*it).nick.length() );
-        iks_insert_cdata( iks_insert( item, "password" ), (*it).password.c_str(), (*it).password.length() );
+        Tag i( "conference" );
+        i.addAttrib( "name", (*it).name );
+        i.addAttrib( "jid", (*it).jid );
+        if( (*it).autojoin )
+          i.addAttrib( "autojoin", "true" );
+        Tag n( "nick", (*it).nick );
+        Tag p( "password", (*it).password );
+        i.addChild( n );
+        i.addChild( p );
+        s.addChild( i );
       }
     }
 
-    storeXML( storage, XMLNS_BOOKMARKS );
+    storeXML( s, XMLNS_BOOKMARKS );
   }
 
   void BookmarkStorage::requestBookmarks()
@@ -76,21 +82,20 @@ namespace gloox
     requestXML( "storage", XMLNS_BOOKMARKS );
   }
 
-  void BookmarkStorage::handlePrivateXML( const string& tag, const string& xmlns, ikspak* pak )
+  void BookmarkStorage::handlePrivateXML( const std::string& tag, const std::string& xmlns, const Tag& xml )
   {
-    iks *x = iks_first_tag( iks_first_tag( pak->query ) );
-
     BookmarkHandler::BookmarkList bList;
     BookmarkHandler::ConferenceList cList;
-
-    while( x )
+    const Tag::TagList l = const_cast<Tag&>(xml).children();
+    Tag::TagList::const_iterator it = l.begin();
+    for( it; it != l.end(); it++ )
     {
-      if( iks_strncmp( iks_name( x ), "url", 3 ) == 0 )
+      if( (*it).name() == "url" )
       {
-        char *url = iks_find_attrib( x, "url" );
-        char *name = iks_find_attrib( x, "name" );
+        const std::string url = (*it).findAttribute( "url" );
+        const std::string name = (*it).findAttribute( "name" );
 
-        if( url && name )
+        if( !url.empty() && !name.empty() )
         {
           BookmarkHandler::bookmarkListItem item;
           item.url = url;
@@ -98,26 +103,28 @@ namespace gloox
           bList.push_back( item );
         }
       }
-      else if( iks_strncmp( iks_name( x ), "conference", 10 ) == 0 )
+      else if( (*it).name() == "conference" )
       {
-        char *jid = iks_find_attrib( x, "jid" );
-        char *name = iks_find_attrib( x, "name" );
-        char *nick = iks_find_cdata( x, "nick" );
-        char *password = iks_find_cdata( x, "password" );
+        bool autojoin = false;
+        const std::string jid = (*it).findAttribute( "jid" );
+        const std::string name = (*it).findAttribute( "name" );
+        const std::string join = (*it).findAttribute( "autojoin" );
+        if( ( join == "true" ) || ( join == "1" ) )
+          autojoin = true;
+        const std::string nick = (*it).findChild( "nick" ).cdata();
+        const std::string pwd = (*it).findChild( "password" ).cdata();
 
-        if( jid && name )
+        if( !jid.empty() && !name.empty() )
         {
           BookmarkHandler::conferenceListItem item;
           item.jid = jid;
           item.name = name;
-          if( nick )
-            item.nick = nick;
-          if( password )
-            item.password = password;
+          item.nick = nick;
+          item.password = pwd;
+          item.autojoin = autojoin;
           cList.push_back( item );
         }
       }
-      x = iks_next( x );
     }
 
     if( m_bookmarkHandler )
