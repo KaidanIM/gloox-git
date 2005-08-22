@@ -28,10 +28,11 @@
 
 #include <string>
 #include <list>
-using namespace std;
 
 namespace gloox
 {
+
+  class Tag;
 
   /**
    * This is an implementation of JEP-0145 (Annotations).
@@ -77,7 +78,7 @@ namespace gloox
       void removeAnnotationsHandler();
 
       // reimplemented from PrivateXMLHandler
-      virtual void handlePrivateXML( const string& tag, const string& xmlns, ikspak* pak );
+      virtual void handlePrivateXML( const std::string& tag, const std::string& xmlns, const Tag& xml );
 
     private:
       AnnotationsHandler *m_annotationsHandler;
