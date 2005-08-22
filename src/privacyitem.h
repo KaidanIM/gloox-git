@@ -22,7 +22,6 @@
 #define PRIVACYITEM_H__
 
 #include <string>
-using namespace std;
 
 namespace gloox
 {
@@ -80,7 +79,7 @@ namespace gloox
        * @param value The value to check for and match.
        */
       PrivacyItem( const ItemType type = TYPE_UNDEFINED, const ItemAction action = ACTION_ALLOW,
-                   const int packetType = 0, const string& value = "" );
+                   const int packetType = 0, const std::string& value = "" );
 
       /**
        * Virtual destructor.
@@ -109,7 +108,7 @@ namespace gloox
        * Returns the value of the item's 'value' attribute.
        * @return value The 'value' attribute's value.
        */
-      const string value() { return m_value; };
+      const std::string value() { return m_value; };
 
       /**
        * Compares the current PrivacyItem with another one.
@@ -122,7 +121,7 @@ namespace gloox
       ItemType m_type;
       ItemAction m_action;
       int m_packetType;
-      string m_value;
+      std::string m_value;
   };
 
 };
