@@ -92,7 +92,7 @@ namespace gloox
       return;
 
 #ifdef DEBUG
-    log( tag, true );
+    log( tag.xml(), true );
 #endif
 
     switch( type )
@@ -159,7 +159,7 @@ namespace gloox
   void ClientBase::send( const Tag& tag )
   {
 #ifdef DEBUG
-    log( tag, false );
+    log( tag.xml(), false );
 #endif
     if( m_connection )
       m_connection->send( tag.xml() );
@@ -167,18 +167,11 @@ namespace gloox
 
   void ClientBase::send( const std::string& xml )
   {
+#ifdef DEBUG
+    log( xml, false );
+#endif
     if( m_connection )
       m_connection->send( xml );
-  }
-
-  void ClientBase::send( iks *x )
-  {
-    printf( "Another user of send( iks *x )" );
-    char *str = iks_string( 0, x );
-    if( str )
-      m_connection->send( str );
-    iks_free( str );
-    iks_delete( x );
   }
 
   ConnectionState ClientBase::state() const{
@@ -194,9 +187,8 @@ namespace gloox
       m_connection->setState( state );
   }
 
-  void ClientBase::log( const Tag& tag, bool incoming )
+  void ClientBase::log( const std::string& xml, bool incoming )
   {
-#ifdef DEBUG
     if ( m_connection->isSecure() )
       printf( "Sec" );
 
@@ -205,11 +197,9 @@ namespace gloox
     else
       printf( "SEND " );
 
-    const std::string data;
-    printf( "[%s]", data.c_str() );
-    if( data.substr(data.length()-1, 1 ) != "\n" )
+    printf( "[%s]", xml.c_str() );
+    if( xml.substr( xml.length()-2, 1 ) != "\n" )
       printf( "\n" );
-#endif
   }
 
   void ClientBase::registerPresenceHandler( PresenceHandler* ph )

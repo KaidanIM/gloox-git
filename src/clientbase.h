@@ -293,6 +293,7 @@ namespace gloox
     protected:
       void notifyOnResourceBindError( ConnectionListener::ResourceBindError error );
       void notifyOnSessionCreateError( ConnectionListener::SessionCreateError error );
+      void log( const std::string& xml, bool incoming );
       void notifyOnConnect();
       void notifyOnDisconnect();
       void header();
@@ -319,7 +320,6 @@ namespace gloox
       virtual void handleStartNode() = 0;
       virtual bool handleNormalNode( const Tag& tag ) = 0;
       Stanza createStanza( const Tag& tag );
-      void log( const Tag& tag, bool incoming );
 
       void notifyIqHandlers( const Stanza& stanza );
       void notifyMessageHandlers( const Stanza& stanza );

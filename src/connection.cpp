@@ -131,8 +131,6 @@ namespace gloox
 #endif
         disconnect();
         }
-        else
-          printf( "parser says, everything's alright\n" );
       }
     }
     m_secure = false;
@@ -146,8 +144,6 @@ namespace gloox
     char *xml = strdup( data.c_str() );
     if( !xml )
       return;
-
-    printf( "sending xml: %s, len: %d\n", xml, strlen( xml ) );
 
 #ifdef HAVE_GNUTLS
     if( m_secure )
