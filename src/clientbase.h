@@ -181,9 +181,8 @@ namespace gloox
        * Creates a std::string. This std::string is unique in the current instance and
        * can be used as an ID for queries.
        * @return A unique std::string suitable for query IDs.
-       * @deprecated
        */
-      const std::string getID() { printf( "don't use ClientBase's getID(), use Packet's instead!\n" ); return "abc"; };
+      const std::string getID();
 
       /**
        * Sends a given Tag over an steablished connection.
