@@ -21,10 +21,7 @@
 #ifndef MESSAGEHANDLER_H__
 #define MESSAGEHANDLER_H__
 
-#include <iksemel.h>
-#include <string>
-
-using namespace std;
+#include "stanza.h"
 
 namespace gloox
 {
@@ -41,11 +38,9 @@ namespace gloox
       /**
        * Reimplement this function if you want to be notified about
        * incoming messages.
-       * @param from The sender's jid
-       * @param type The packets type
-       * @param msg The actual message body
+       * @param stanza The complete Stanza.
        */
-      virtual void handleMessage( iksid* from, iksubtype type, const char *msg ) {};
+      virtual void handleMessage( const Stanza& stanza ) = 0;
   };
 
 };

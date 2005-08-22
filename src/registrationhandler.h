@@ -82,7 +82,7 @@ namespace gloox
        * @param fields The OR'ed fields the server requires. From @ref Registration::fieldEnum.
        * @param instructions Any additional information the server sends along.
        */
-      virtual void handleRegistrationFields( int fields, string instructions ) {};
+      virtual void handleRegistrationFields( int fields, std::string instructions ) {};
 
       /**
        * This function is called if @ref Registration::createAccount() was called on an authenticated

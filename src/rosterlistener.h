@@ -42,36 +42,37 @@ namespace gloox
     public:
       /**
        * A map of JID/RosterItem pairs.
+       * @todo Derive from JID.
        */
-      typedef map<const string, RosterItem*> Roster;
+      typedef map<const std::string, RosterItem*> Roster;
 
       /**
        * Reimplement this function if you want to be notified about new items
        * on the server-side roster (items subject to a so-called Roster Push).
        * @param jid The new item's full address.
        */
-      virtual void itemAdded( const string& jid ) {};
+      virtual void itemAdded( const std::string& jid ) {};
 
       /**
        * Reimplement this function if you want to be notified about items
        * which authorised subscription.
        * @param jid The authorising item's full address.
        */
-      virtual void itemSubscribed( const string& jid ) {};
+      virtual void itemSubscribed( const std::string& jid ) {};
 
       /**
        * Reimplement this function if you want to be notified about items that
        * were removed from the server-side roster.
        * @param jid The removed item's full address.
        */
-      virtual void itemRemoved( const string& jid ) {};
+      virtual void itemRemoved( const std::string& jid ) {};
 
       /**
        * Reimplement this function if you want to be notified about items which
        * removed subscription authorization.
        * @param jid The item's full address.
        */
-      virtual void itemUnsubscribed( const string& jid ) {};
+      virtual void itemUnsubscribed( const std::string& jid ) {};
 
       /**
        * Reimplement this function if you want to receive the whole server-side roster
@@ -89,21 +90,21 @@ namespace gloox
        * @param status The item's new status.
        * @param msg The status change message.
        */
-      virtual void itemChanged( RosterItem& item, int status, const string& msg ) {};
+      virtual void itemChanged( RosterItem& item, int status, const std::string& msg ) {};
 
       /**
        * This function is called whenever a roster item comes online (is available).
        * @param item The changed roster item.
        * @param msg The status change message.
        */
-      virtual void itemAvailable( RosterItem& item, const string& msg ) {};
+      virtual void itemAvailable( RosterItem& item, const std::string& msg ) {};
 
       /**
        * This function is called whenever a roster item goes offline (is unavailable).
        * @param item The roster item.
        * @param msg The status change message.
        */
-      virtual void itemUnavailable( RosterItem& item, const string& msg ) {};
+      virtual void itemUnavailable( RosterItem& item, const std::string& msg ) {};
 
       /**
        * This function is called when an entity wishes to subscribe to this entity's presence.
@@ -112,7 +113,7 @@ namespace gloox
        * @return Return @b true to allow subscription and subscribe to the remote entities
        * presence, @b false to ignore the request.
        */
-      virtual bool subscriptionRequest( const string& jid, const string& msg ) {};
+      virtual bool subscriptionRequest( const std::string& jid ) {};
 
       /**
        * This function is called when an entity unsubscribes from this entity's presence.
@@ -121,7 +122,7 @@ namespace gloox
        * @return Return @b true to unsubscribe from the remote entity and remove the entity
        * from the roster, @b false to ignore.
        */
-      virtual bool unsubscriptionRequest( const string& jid, const string& msg ) {};
+      virtual bool unsubscriptionRequest( const std::string& jid ) {};
 
   };
 

@@ -20,11 +20,7 @@
 #ifndef SUBSCRIPTIONHANDLER_H__
 #define SUBSCRIPTIONHANDLER_H__
 
-#include <iksemel.h>
-#include <string>
-
-using namespace std;
-
+#include "stanza.h"
 
 namespace gloox
 {
@@ -39,13 +35,11 @@ namespace gloox
   {
     public:
       /**
-       * Reimplement this function if you want to be notified about
-       * incoming subscriptions.
-       * @param from The sender's jid
-       * @param type The packet type
-       * @param msg The subscription message (reason)
+       * Reimplement this function if you want to be notified about incoming
+       * subscriptions/subscription requests.
+       * @param stanza The complete Stanza.
        */
-      virtual void handleSubscription( iksid* from, iksubtype type, const char *msg ) {};
+      virtual void handleSubscription( const Stanza& stanza ) = 0;
   };
 
 };
