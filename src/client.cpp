@@ -150,7 +150,11 @@ namespace gloox
 #ifdef DEBUG
       printf( "starting TLS handshake...\n" );
 #endif
-      m_connection->tlsHandshake();
+      if( m_connection->tlsHandshake() )
+        header();
+#ifdef DEBUG
+        printf( "connection security is now %d\n", m_connection->isSecure() );
+#endif
     }
     else if( tag.name() == "failure" )
     {
@@ -351,7 +355,7 @@ namespace gloox
     m_rosterManager = 0;
   }
 
-  void Client::nonSaslLogin( const char* sid )
+  void Client::nonSaslLogin()
   {
     m_auth = new NonSaslAuth( this, m_sid );
     m_auth->doAuth();

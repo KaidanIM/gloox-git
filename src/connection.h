@@ -26,6 +26,8 @@
 
 #include <string>
 
+#include <gnutls/gnutls.h>
+
 namespace gloox
 {
 
@@ -75,7 +77,7 @@ namespace gloox
       /**
        * Call this function to start a TLS handshake over an established connection.
        */
-      void tlsHandshake();
+      bool tlsHandshake();
 
       /**
        * Use this function to determine whether an esatblished connection is encrypted.
@@ -99,6 +101,11 @@ namespace gloox
     private:
       void cancel();
       void cleanup();
+
+#ifdef HAVE_GNUTLS
+      gnutls_session_t m_session;
+      gnutls_certificate_credentials m_credentials;
+#endif
 
       static const int BUFSIZE = 1024;
       Parser *m_parser;
