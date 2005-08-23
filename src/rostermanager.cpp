@@ -95,17 +95,21 @@ namespace gloox
 
   void RosterManager::handlePresence( const Stanza& stanza )
   {
-    m_roster[stanza.from().bare()]->setStatus( stanza.show() );
-    m_roster[stanza.from().bare()]->setStatusMsg( stanza.status() );
-
-    if( m_rosterListener )
+    RosterListener::Roster::iterator it = m_roster.find( stanza.from().bare() );
+    if( it != m_roster.end() )
     {
-      if( stanza.show() == PRESENCE_AVAILABLE )
-        m_rosterListener->itemAvailable( (*m_roster[stanza.from().bare()]), stanza.status() );
-      else if( stanza.show() == PRESENCE_UNAVAILABLE )
-        m_rosterListener->itemUnavailable( (*m_roster[stanza.from().bare()]), stanza.status() );
-      else
-        m_rosterListener->itemChanged( (*m_roster[stanza.from().bare()]), stanza.show(), stanza.status() );
+      (*it).second->setStatus( stanza.show() );
+      (*it).second->setStatusMsg( stanza.status() );
+
+      if( m_rosterListener )
+      {
+        if( stanza.show() == PRESENCE_AVAILABLE )
+          m_rosterListener->itemAvailable( (*(*it).second), stanza.status() );
+        else if( stanza.show() == PRESENCE_UNAVAILABLE )
+          m_rosterListener->itemUnavailable( (*(*it).second), stanza.status() );
+        else
+          m_rosterListener->itemChanged( (*(*it).second), stanza.show(), stanza.status() );
+      }
     }
   }
 
