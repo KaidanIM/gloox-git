@@ -32,18 +32,12 @@ namespace gloox
        * Creates a new Stanza from the given Tag.
        * @param tag The Tag to create the stanza from.
        */
-      Stanza( const Tag& tag );
+      Stanza( const Tag *tag );
 
       /**
        * Virtual destructor.
        */
       virtual ~Stanza() {};
-
-      /**
-       * Returns the stanza type.
-       * @return The type of the stanza.
-       */
-      virtual StanzaType type() const { return m_type; };
 
       /**
        * Returns the sub-type of the stanza.
@@ -88,7 +82,6 @@ namespace gloox
       virtual const std::string status() const { return m_status; };
 
     private:
-      StanzaType m_type;
       StanzaSubType m_subtype;
       PresenceStatus m_show;
       JID m_from;
