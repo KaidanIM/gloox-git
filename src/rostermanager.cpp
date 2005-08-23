@@ -56,18 +56,18 @@ namespace gloox
 
   void RosterManager::fill()
   {
-    Tag iq( "iq" );
-    iq.addAttrib( "type", "get" );
-    iq.addAttrib( "id", m_parent->getID() );
-    Tag q( "query" );
-    q.addAttrib( "xmlns", XMLNS_ROSTER );
-    iq.addChild( q );
+    Tag *iq = new Tag( "iq" );
+    iq->addAttrib( "type", "get" );
+    iq->addAttrib( "id", m_parent->getID() );
+    Tag *q = new Tag( "query" );
+    q->addAttrib( "xmlns", XMLNS_ROSTER );
+    iq->addChild( q );
     m_parent->send( iq );
   }
 
-  bool RosterManager::handleIq( const Stanza& stanza )
+  bool RosterManager::handleIq( Stanza *stanza )
   {
-    if( stanza.subtype() == STANZA_IQ_RESULT ) // initial roster
+    if( stanza->subtype() == STANZA_IQ_RESULT ) // initial roster
     {
       extractItems( stanza );
 
@@ -76,16 +76,16 @@ namespace gloox
 
       return true;
     }
-    else if( stanza.subtype() == STANZA_IQ_SET ) // roster item push
+    else if( stanza->subtype() == STANZA_IQ_SET ) // roster item push
     {
       const std::string jid = extractItems( stanza );
 
       if( m_rosterListener )
         m_rosterListener->itemAdded( jid );
 
-      Tag iq( "iq" );
-      iq.addAttrib( "id", stanza.id() );
-      iq.addAttrib( "type", "result" );
+      Tag *iq = new Tag( "iq" );
+      iq->addAttrib( "id", stanza->id() );
+      iq->addAttrib( "type", "result" );
       m_parent->send( iq );
 
       return true;
@@ -93,22 +93,22 @@ namespace gloox
     return false;
   }
 
-  void RosterManager::handlePresence( const Stanza& stanza )
+  void RosterManager::handlePresence( Stanza *stanza )
   {
-    RosterListener::Roster::iterator it = m_roster.find( stanza.from().bare() );
+    RosterListener::Roster::iterator it = m_roster.find( stanza->from().bare() );
     if( it != m_roster.end() )
     {
-      (*it).second->setStatus( stanza.show() );
-      (*it).second->setStatusMsg( stanza.status() );
+      (*it).second->setStatus( stanza->show() );
+      (*it).second->setStatusMsg( stanza->status() );
 
       if( m_rosterListener )
       {
-        if( stanza.show() == PRESENCE_AVAILABLE )
-          m_rosterListener->itemAvailable( (*(*it).second), stanza.status() );
-        else if( stanza.show() == PRESENCE_UNAVAILABLE )
-          m_rosterListener->itemUnavailable( (*(*it).second), stanza.status() );
+        if( stanza->show() == PRESENCE_AVAILABLE )
+          m_rosterListener->itemAvailable( (*(*it).second), stanza->status() );
+        else if( stanza->show() == PRESENCE_UNAVAILABLE )
+          m_rosterListener->itemUnavailable( (*(*it).second), stanza->status() );
         else
-          m_rosterListener->itemChanged( (*(*it).second), stanza.show(), stanza.status() );
+          m_rosterListener->itemChanged( (*(*it).second), stanza->show(), stanza->status() );
       }
     }
   }
@@ -121,9 +121,9 @@ namespace gloox
 
     add( jid, name, groups );
 
-    Tag s( "presence" );
-    s.addAttrib( "type", "subscribe" );
-    s.addAttrib( "to", jid );
+    Tag *s = new Tag( "presence" );
+    s->addAttrib( "type", "subscribe" );
+    s->addAttrib( "to", jid );
     m_parent->send( s );
   }
 
@@ -135,49 +135,49 @@ namespace gloox
 
     std::string id = m_parent->getID();
 
-    Tag iq( "iq" );
-    iq.addAttrib( "type", "set" );
-    iq.addAttrib( "id", id );
-    Tag q( "query" );
-    q.addAttrib( "xmlns", XMLNS_ROSTER );
-    Tag i( "item" );
-    i.addAttrib( "jid", jid );
+    Tag *iq = new Tag( "iq" );
+    iq->addAttrib( "type", "set" );
+    iq->addAttrib( "id", id );
+    Tag *q = new Tag( "query" );
+    q->addAttrib( "xmlns", XMLNS_ROSTER );
+    Tag *i = new Tag( "item" );
+    i->addAttrib( "jid", jid );
     if( !name.empty() )
-      i.addAttrib( "name", name );
+      i->addAttrib( "name", name );
 
     if( groups.size() != 0 )
     {
       RosterItem::GroupList::const_iterator it = groups.begin();
       for( it; it != groups.end(); it++ )
       {
-        Tag g( "group", (*it) );
-        i.addChild( g );
+        Tag *g = new Tag( "group", (*it) );
+        i->addChild( g );
       }
     }
-    q.addChild( i );
-    iq.addChild( q );
+    q->addChild( i );
+    iq->addChild( q );
     m_parent->send( iq );
   }
 
   void RosterManager::unsubscribe( const std::string& jid/*, const std::string& msg*/, bool remove )
   {
-    Tag s( "presence" );
-    s.addAttrib( "type", "unsubscribe" );
-    s.addAttrib( "to", jid );
+    Tag *s = new Tag( "presence" );
+    s->addAttrib( "type", "unsubscribe" );
+    s->addAttrib( "to", jid );
     m_parent->send( s );
 
     if( remove )
     {
       std::string id = m_parent->getID();
 
-      Tag iq( "iq" );
-      iq.addAttrib( "type", "set" );
-      iq.addAttrib( "id", id );
-      Tag q( "query" );
-      q.addAttrib( "xmlns", XMLNS_ROSTER );
-      Tag i( "item" );
-      i.addAttrib( "jid", jid );
-      i.addAttrib( "subscription", "remove" );
+      Tag *iq = new Tag( "iq" );
+      iq->addAttrib( "type", "set" );
+      iq->addAttrib( "id", id );
+      Tag *q = new Tag( "query" );
+      q->addAttrib( "xmlns", XMLNS_ROSTER );
+      Tag *i = new Tag( "item" );
+      i->addAttrib( "jid", jid );
+      i->addAttrib( "subscription", "remove" );
 
       m_parent->send( iq );
     }
@@ -192,88 +192,87 @@ namespace gloox
       {
         std::string id = m_parent->getID();
 
-        Tag iq( "iq" );
-        iq.addAttrib( "type", "set" );
-        iq.addAttrib( "id", id );
-        Tag q( "query" );
-        q.addAttrib( "xmlns", XMLNS_ROSTER );
-        Tag i( "item" );
-        i.addAttrib( "jid", (*it).second->jid() );
+        Tag *iq = new Tag( "iq" );
+        iq->addAttrib( "type", "set" );
+        iq->addAttrib( "id", id );
+        Tag *q = new Tag( "query" );
+        q->addAttrib( "xmlns", XMLNS_ROSTER );
+        Tag *i = new Tag( "item" );
+        i->addAttrib( "jid", (*it).second->jid() );
         if( !(*it).second->name().empty() )
-          i.addAttrib( "name", (*it).second->name() );
+          i->addAttrib( "name", (*it).second->name() );
 
         if( (*it).second->groups().size() != 0 )
         {
           RosterItem::GroupList::const_iterator g_it = (*it).second->groups().begin();
           for( g_it; g_it != (*it).second->groups().end(); g_it++ )
           {
-            Tag g( "group", (*g_it) );
-            i.addChild( g );
+            i->addChild( new Tag( "group", (*g_it) ) );
           }
         }
-        q.addChild( i );
-        iq.addChild( q );
+        q->addChild( i );
+        iq->addChild( q );
 
         m_parent->send( iq );
       }
     }
   }
 
-  void RosterManager::handleSubscription( const Stanza& stanza )
+  void RosterManager::handleSubscription( Stanza *stanza )
   {
     if( !m_rosterListener )
       return;
 
-    switch( stanza.subtype() )
+    switch( stanza->subtype() )
     {
       case STANZA_S10N_SUBSCRIBE:
-        if( m_rosterListener->subscriptionRequest( stanza.from().bare() ) )
+        if( m_rosterListener->subscriptionRequest( stanza->from().bare() ) )
         {
-          Tag p( "presence" );
-          p.addAttrib( "type", "subscribed" );
-          p.addAttrib( "to", stanza.from().bare() );
+          Tag *p = new Tag( "presence" );
+          p->addAttrib( "type", "subscribed" );
+          p->addAttrib( "to", stanza->from().bare() );
           m_parent->send( p );
         }
         else
         {
-          Tag p( "presence" );
-          p.addAttrib( "type", "unsubscribed" );
-          p.addAttrib( "to", stanza.from().bare() );
+          Tag *p = new Tag( "presence" );
+          p->addAttrib( "type", "unsubscribed" );
+          p->addAttrib( "to", stanza->from().bare() );
           m_parent->send( p );
         }
         break;
 
       case STANZA_S10N_SUBSCRIBED:
       {
-        Tag p( "presence" );
-        p.addAttrib( "type", "subscribe" );
-        p.addAttrib( "to", stanza.from().bare() );
+        Tag *p = new Tag( "presence" );
+        p->addAttrib( "type", "subscribe" );
+        p->addAttrib( "to", stanza->from().bare() );
         m_parent->send( p );
 
-        m_rosterListener->itemSubscribed( stanza.from().bare() );
+        m_rosterListener->itemSubscribed( stanza->from().bare() );
         break;
       }
 
       case STANZA_S10N_UNSUBSCRIBE:
       {
-        Tag p( "presence" );
-        p.addAttrib( "type", "unsubscribed" );
-        p.addAttrib( "to", stanza.from().bare() );
+        Tag *p = new Tag( "presence" );
+        p->addAttrib( "type", "unsubscribed" );
+        p->addAttrib( "to", stanza->from().bare() );
         m_parent->send( p );
 
-        if( m_rosterListener->unsubscriptionRequest( stanza.from().bare() ) )
-          unsubscribe( stanza.from().bare(), true );
+        if( m_rosterListener->unsubscriptionRequest( stanza->from().bare() ) )
+          unsubscribe( stanza->from().bare(), true );
         break;
       }
 
       case STANZA_S10N_UNSUBSCRIBED:
       {
-        Tag p( "presence" );
-        p.addAttrib( "type", "unsubscribe" );
-        p.addAttrib( "to", stanza.from().bare() );
+        Tag *p = new Tag( "presence" );
+        p->addAttrib( "type", "unsubscribe" );
+        p->addAttrib( "to", stanza->from().bare() );
         m_parent->send( p );
 
-        m_rosterListener->itemUnsubscribed( stanza.from().bare() );
+        m_rosterListener->itemUnsubscribed( stanza->from().bare() );
         break;
       }
     }
@@ -289,23 +288,23 @@ namespace gloox
     m_rosterListener = 0;
   }
 
-  const std::string RosterManager::extractItems( const Tag& tag )
+  const std::string RosterManager::extractItems( Tag *tag )
   {
     std::string jid;
-    Tag t = tag.findChild( "query" );
-    Tag::TagList l = t.children();
+    Tag *t = tag->findChild( "query" );
+    Tag::TagList l = t->children();
     Tag::TagList::iterator it = l.begin();
     for( it; it != l.end(); it++ )
     {
-      if( (*it).name() == "item" )
+      if( (*it)->name() == "item" )
       {
-        jid = (*it).findAttribute( "jid" );
-        const std::string name = (*it).findAttribute( "name" );
-        const std::string ask = (*it).findAttribute( "ask" );
+        jid = (*it)->findAttribute( "jid" );
+        const std::string name = (*it)->findAttribute( "name" );
+        const std::string ask = (*it)->findAttribute( "ask" );
         bool a = false;
         if( !ask.empty() )
           a = true;
-        const std::string sub = (*it).findAttribute( "subscription" );
+        const std::string sub = (*it)->findAttribute( "subscription" );
         RosterItem::SubscriptionEnum subs;
         if( sub == "remove" )
         {
@@ -319,13 +318,13 @@ namespace gloox
         }
 
         RosterItem::GroupList gl;
-        if( (*it).hasChild( "group" ) )
+        if( (*it)->hasChild( "group" ) )
         {
-          Tag::TagList g = (*it).children();
+          Tag::TagList g = (*it)->children();
           Tag::TagList::const_iterator it_g = g.begin();
           for( it_g; it_g != g.end(); it_g++ )
           {
-            gl.push_back( (*it_g).name() );
+            gl.push_back( (*it_g)->name() );
           }
         }
         add( jid, name, gl, sub, a );
