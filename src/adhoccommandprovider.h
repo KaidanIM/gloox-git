@@ -46,7 +46,7 @@ namespace gloox
        * @param command The name of the command to be executed.
        * @param tag The complete command tag.
        */
-      virtual void handleAdhocCommand( const std::string& command, const Tag& tag ) = 0;
+      virtual void handleAdhocCommand( const std::string& command, Tag *tag ) = 0;
 
   };
 
