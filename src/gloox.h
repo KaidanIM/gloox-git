@@ -22,6 +22,7 @@
 #define GLOOX_H__
 
 #include <string>
+#include <list>
 
 #define XMLNS_CLIENT            "jabber:client"
 #define XMLNS_COMPONENT_ACCEPT  "jabber:component:accept"
@@ -206,14 +207,15 @@ namespace gloox
    */
   enum CertStatus
   {
-    CERT_OK = 0,                    /**< The certificate is valid and trusted. */
-    CERT_INVALID,                   /**< The certificate is not trusted. */
-    CERT_SIGNER_UNKNOWN,            /**< The certificate hasn't got a known issuer. */
-    CERT_REVOKED,                   /**< The certificate has been revoked. */
-    CERT_EXPIRED,                   /**< The certificate has expired. */
-    CERT_NOT_ACTIVE,                /**< The certifiacte is not yet active. */
-    CERT_WRONG_PEER,                /**< The certificate has not been issued for the
+    CERT_OK              =  0,      /**< The certificate is valid and trusted. */
+    CERT_INVALID         =  1,      /**< The certificate is not trusted. */
+    CERT_SIGNER_UNKNOWN  =  2,      /**< The certificate hasn't got a known issuer. */
+    CERT_REVOKED         =  4,      /**< The certificate has been revoked. */
+    CERT_EXPIRED         =  8,      /**< The certificate has expired. */
+    CERT_NOT_ACTIVE      = 16,      /**< The certifiacte is not yet active. */
+    CERT_WRONG_PEER      = 32,      /**< The certificate has not been issued for the
                                      * peer we're connected to. */
+    CERT_SIGNER_NOT_CA   = 64,      /**< The signer is not a CA. */
   };
 
   /**
@@ -232,6 +234,11 @@ namespace gloox
     std::string mac;                /**< The MAC used for the connection. */
     std::string compression;        /**< The compression used for the connection. */
   };
+
+  /**
+   * A list of strings.
+   */
+  typedef std::list<std::string> StringList;
 
 };
 
