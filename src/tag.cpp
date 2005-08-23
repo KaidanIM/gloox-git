@@ -35,8 +35,9 @@ namespace gloox
     TagList::iterator it = m_children.begin();
     for( it; it != m_children.end(); it++ )
     {
-      m_children.erase( it );
+      delete( (*it) );
     }
+    m_children.clear();
   }
 
   const std::string Tag::xml() const
