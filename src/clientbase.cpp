@@ -88,19 +88,19 @@ namespace gloox
     return true;
   }
 
-  void ClientBase::filter( int type, const Tag& tag )
+  void ClientBase::filter( int type, const Tag *tag )
   {
-    if( tag.empty() )
+    if( tag->empty() )
       return;
 
 #ifdef DEBUG
-    log( tag.xml(), true );
+    log( tag->xml(), true );
 #endif
 
     switch( type )
     {
-      case( IKS_NODE_START ):
-        m_sid = tag.findAttribute( "id" );
+      case IKS_NODE_START:
+        m_sid = tag->findAttribute( "id" );
         handleStartNode();
         break;
       case IKS_NODE_NORMAL:
@@ -169,24 +169,58 @@ namespace gloox
 
   void ClientBase::startTls()
   {
-    Tag start( "starttls" );
-    start.addAttrib( "xmlns", XMLNS_STREAM_TLS );
+    Tag *start = new Tag( "starttls" );
+    start->addAttrib( "xmlns", XMLNS_STREAM_TLS );
     send( start );
   }
 
   void ClientBase::startSASL( SaslMechanisms type )
   {
-//     SASLPacket s( type, username, password );
-//     send( s.xml() );
+    Tag *a = new Tag( "auth" );
+    a->addAttrib( "xmlns", XMLNS_STREAM_SASL );
+
+    switch( type )
+    {
+      case SASL_DIGEST_MD5:
+        a->addAttrib( "mechanism", "DIGEST-MD5" );
+        break;
+      case SASL_PLAIN:
+        a->addAttrib( "mechanism", "PLAIN" );
+        int len = m_jid.username().length() + m_password.length() + 2;
+        char *tmp = (char*)iks_malloc( len + 80 );
+        char *result;
+        sprintf( tmp, "%c%s%c%s", 0, m_jid.username().c_str(), 0, m_password.c_str() );
+        result = iks_base64_encode( tmp, len );
+        a->setCData( result );
+        iks_free( result );
+        iks_free( tmp );
+        break;
+    }
+
+    send( a );
   }
 
-  void ClientBase::send( const Tag& tag )
+  void ClientBase::processSASLChallenge( const std::string& challenge )
+  {
+    printf( "in processSASLChallenge()" );
+    disconnect( STATE_DISCONNECTED );
+  }
+
+  void ClientBase::send( Tag *tag )
   {
 #ifdef DEBUG
-    log( tag.xml(), false );
+    log( tag->xml(), false );
 #endif
     if( m_connection )
-      m_connection->send( tag.xml() );
+      m_connection->send( tag->xml() );
+
+    if( tag->type() == STANZA_UNDEFINED )
+      delete( tag );
+    else
+    {
+      Stanza *s = dynamic_cast<Stanza*>( tag );
+      delete( s );
+    }
   }
 
   void ClientBase::send( const std::string& xml )
@@ -379,10 +413,10 @@ namespace gloox
     if( !res && ( stanza.type() == STANZA_IQ ) &&
          ( ( stanza.subtype() == STANZA_IQ_GET ) || ( stanza.subtype() == STANZA_IQ_SET ) ) )
     {
-      Tag iq( "iq" );
-      iq.addAttrib( "type", "error" );
-      iq.addAttrib( "id", stanza.id() );
-      iq.addAttrib( "to", stanza.from().full() );
+      Tag *iq = new Tag( "iq" );
+      iq->addAttrib( "type", "error" );
+      iq->addAttrib( "id", stanza.id() );
+      iq->addAttrib( "to", stanza.from().full() );
       send( iq );
     }
   }

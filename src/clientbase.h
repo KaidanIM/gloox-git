@@ -188,7 +188,7 @@ namespace gloox
        * Sends a given Tag over an steablished connection.
        * @param tag The Tag to send.
        */
-      void send( const Tag& tag );
+      void send( Tag *tag );
 
       /**
        * Sends a given string over an established connection.
@@ -306,10 +306,24 @@ namespace gloox
       virtual const std::string streamTo() const { return server(); };
 
       /**
+       * Describes the supported SASL Mechanisms.
+       */
+      enum SaslMechanisms
+      {
+        SASL_DIGEST_MD5,          /**< SASL Digest-MD5 according to RFC 2831. */
+        SASL_PLAIN,               /**< SASL PLAIN according to RFC 2595 Section 6. */
+      };
+
+      /**
        * Starts SASL authentication.
        * @param type The SASL Mechanism to use.
        */
       void startSASL( SaslMechanisms type );
+
+      /**
+       * Used to process incoming SASL challenge packets.
+       */
+      void processSASLChallenge( const std::string& challenge );
 
       /**
        * Use this function to start the TLS handshake procedure.
@@ -333,14 +347,14 @@ namespace gloox
 
     private:
       virtual void handleStartNode() = 0;
-      virtual bool handleNormalNode( const Tag& tag ) = 0;
-      Stanza createStanza( const Tag& tag );
+      virtual bool handleNormalNode( const Tag *tag ) = 0;
+      Stanza createStanza( const Tag *tag );
 
       void notifyIqHandlers( const Stanza& stanza );
       void notifyMessageHandlers( const Stanza& stanza );
       void notifyPresenceHandlers( const Stanza& stanza );
       void notifySubscriptionHandlers( const Stanza& stanza );
-      void filter( int type, const Tag& tag );
+      void filter( int type, const Tag *tag );
       void logEvent( const char *data, size_t size, int is_incoming );
 
       struct TrackStruct
@@ -368,13 +382,13 @@ namespace gloox
 
       int m_idCount;
 
-      friend int presenceHook( ClientBase *cb, ikspak *pak );
-      friend int msgHook( ClientBase *cb, ikspak *pak );
-      friend int subscriptionHook( ClientBase *cb, ikspak *pak );
-      friend int iqHook( ClientBase *cb, ikspak *pak );
-      friend int bindHook( ClientBase *cb, ikspak* pak );
-      friend int sessionHook( ClientBase *cb, ikspak* pak );
-      friend int logHook( ClientBase *cb, const char *data, size_t size, int is_incoming);
+//       friend int presenceHook( ClientBase *cb, ikspak *pak );
+//       friend int msgHook( ClientBase *cb, ikspak *pak );
+//       friend int subscriptionHook( ClientBase *cb, ikspak *pak );
+//       friend int iqHook( ClientBase *cb, ikspak *pak );
+//       friend int bindHook( ClientBase *cb, ikspak* pak );
+//       friend int sessionHook( ClientBase *cb, ikspak* pak );
+//       friend int logHook( ClientBase *cb, const char *data, size_t size, int is_incoming);
   };
 
 };

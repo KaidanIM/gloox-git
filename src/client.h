@@ -230,11 +230,11 @@ namespace gloox
       };
 
       virtual void handleStartNode() {};
-      virtual bool handleNormalNode( const Tag& tag );
-      int getStreamFeatures( const Tag& tag );
-      int getSaslMechs( const Tag& tag );
-      void processResourceBind( const Tag& tag );
-      void processCreateSession( const Tag& tag );
+      virtual bool handleNormalNode( Tag *tag );
+      int getStreamFeatures( Tag *tag );
+      int getSaslMechs( Tag *tag );
+      void processResourceBind( Tag *tag );
+      void processCreateSession( Tag *tag );
       void sendInitialPresence();
       void createSession();
       void connected();
