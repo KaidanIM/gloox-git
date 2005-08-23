@@ -62,10 +62,10 @@ namespace gloox
       void doAuth();
 
       // reimplemented from IqHandler
-      virtual bool handleIq( const Stanza& stanza );
+      virtual bool handleIq( Stanza *stanza );
 
       // reimplemented from IqHandler
-      virtual bool handleIqID( const Stanza& stanza, int context );
+      virtual bool handleIqID( Stanza *stanza, int context );
 
     private:
       Client *m_parent;
