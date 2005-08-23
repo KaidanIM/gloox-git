@@ -51,38 +51,38 @@ namespace gloox
     }
   }
 
-  bool Disco::handleIq( const Stanza& stanza )
+  bool Disco::handleIq( Stanza *stanza )
   {
-    switch( stanza.subtype() )
+    switch( stanza->subtype() )
     {
       case STANZA_IQ_GET:
-        if( stanza.xmlns() == XMLNS_VERSION )
+        if( stanza->xmlns() == XMLNS_VERSION )
         {
-          Tag iq( "iq" );
-          iq.addAttrib( "id", stanza.id() );
-          iq.addAttrib( "from", m_parent->jid().full() );
-          iq.addAttrib( "to", stanza.from().full() );
-          Tag query( "query" );
-          query.addAttrib( "xmlns", XMLNS_VERSION );
-          Tag name( "name", m_versionName );
-          Tag version( "version", m_versionVersion );
-          query.addChild( name );
-          query.addChild( version );
-          iq.addChild( query );
+          Tag *iq = new Tag( "iq" );
+          iq->addAttrib( "id", stanza->id() );
+          iq->addAttrib( "from", m_parent->jid().full() );
+          iq->addAttrib( "to", stanza->from().full() );
+          Tag *query = new Tag( "query" );
+          query->addAttrib( "xmlns", XMLNS_VERSION );
+          Tag *name = new Tag( "name", m_versionName );
+          Tag *version = new Tag( "version", m_versionVersion );
+          query->addChild( name );
+          query->addChild( version );
+          iq->addChild( query );
           m_parent->send( iq );
         }
-        else if( stanza.xmlns() == XMLNS_DISCO_INFO )
+        else if( stanza->xmlns() == XMLNS_DISCO_INFO )
         {
-          Tag iq( "iq" );
-          iq.addAttrib( "id", stanza.id() );
-          iq.addAttrib( "from", m_parent->jid().full() );
-          iq.addAttrib( "to", stanza.from().full() );
-          iq.addAttrib( "type", "result" );
-          Tag query( "query" );
-          query.addAttrib( "xmlns", XMLNS_DISCO_INFO );
+          Tag *iq = new Tag( "iq" );
+          iq->addAttrib( "id", stanza->id() );
+          iq->addAttrib( "from", m_parent->jid().full() );
+          iq->addAttrib( "to", stanza->from().full() );
+          iq->addAttrib( "type", "result" );
+          Tag *query = new Tag( "query" );
+          query->addAttrib( "xmlns", XMLNS_DISCO_INFO );
 
-          Tag q = stanza.findChild( "query" );
-          const std::string node = q.findAttribute( "node" );
+          Tag *q = stanza->findChild( "query" );
+          const std::string node = q->findAttribute( "node" );
           if( !node.empty() )
           {
             DiscoNodeHandlerMap::const_iterator it = m_nodeHandlers.find( node );
@@ -92,56 +92,56 @@ namespace gloox
               DiscoNodeHandler::IdentityMap::const_iterator im = identities.begin();
               for( im; im != identities.end(); im++ )
               {
-                Tag i( "identity" );
-                i.addAttrib( "category", (*im).first );
-                i.addAttrib( "type", (*im).second );
-                query.addChild( i );
+                Tag *i = new Tag( "identity" );
+                i->addAttrib( "category", (*im).first );
+                i->addAttrib( "type", (*im).second );
+                query->addChild( i );
     //             iks_insert_attrib( i, "name", m_versionName.c_str() );
               }
               DiscoNodeHandler::FeatureList features = (*it).second->handleDiscoNodeFeatures( node );
               DiscoNodeHandler::FeatureList::const_iterator fi = features.begin();
               for( fi; fi != features.end(); fi++ )
               {
-                Tag f( "feature" );
-                f.addAttrib( "var", (*fi) );
-                query.addChild( f );
+                Tag *f = new Tag( "feature" );
+                f->addAttrib( "var", (*fi) );
+                query->addChild( f );
               }
             }
           }
           else
           {
-            Tag i( "identity" );
-            i.addAttrib( "category", m_identityCategory );
-            i.addAttrib( "type", m_identityType );
-            i.addAttrib( "name", m_versionName );
-            query.addChild( i );
+            Tag *i = new Tag( "identity" );
+            i->addAttrib( "category", m_identityCategory );
+            i->addAttrib( "type", m_identityType );
+            i->addAttrib( "name", m_versionName );
+            query->addChild( i );
 
             StringList::const_iterator it = m_features.begin();
             for( it; it != m_features.end(); ++it )
             {
-              Tag f( "feature" );
-              f.addAttrib( "var", (*it).c_str() );
-              query.addChild( f );
+              Tag *f = new Tag( "feature" );
+              f->addAttrib( "var", (*it).c_str() );
+              query->addChild( f );
             }
           }
 
-          iq.addChild( query );
+          iq->addChild( query );
           m_parent->send( iq );
         }
-        else if( stanza.xmlns() == XMLNS_DISCO_ITEMS )
+        else if( stanza->xmlns() == XMLNS_DISCO_ITEMS )
         {
-          Tag iq( "iq" );
-          iq.addAttrib( "id", stanza.id() );
-          iq.addAttrib( "to", stanza.from().full() );
-          iq.addAttrib( "from", m_parent->jid().full() );
-          iq.addAttrib( "type", "result" );
-          Tag query( "query" );
-          query.addAttrib( "xmlns", XMLNS_DISCO_ITEMS );
+          Tag *iq = new Tag( "iq" );
+          iq->addAttrib( "id", stanza->id() );
+          iq->addAttrib( "to", stanza->from().full() );
+          iq->addAttrib( "from", m_parent->jid().full() );
+          iq->addAttrib( "type", "result" );
+          Tag *query = new Tag( "query" );
+          query->addAttrib( "xmlns", XMLNS_DISCO_ITEMS );
 
           DiscoNodeHandler::ItemMap items;
           DiscoNodeHandlerMap::const_iterator it;
-          Tag q = stanza.findChild( "query" );
-          const std::string node = q.findAttribute( "node" );
+          Tag *q = stanza->findChild( "query" );
+          const std::string node = q->findAttribute( "node" );
           if( !node.empty() )
           {
             it = m_nodeHandlers.find( node );
@@ -166,16 +166,16 @@ namespace gloox
             {
               if( !(*it).first.empty() && !(*it).second.empty() )
               {
-                Tag i( "item" );
-                i.addAttrib( "jid",  m_parent->jid().full() );
-                i.addAttrib( "node", (*it).first );
-                i.addAttrib( "name", (*it).second );
-                query.addChild( i );
+                Tag *i = new Tag( "item" );
+                i->addAttrib( "jid",  m_parent->jid().full() );
+                i->addAttrib( "node", (*it).first );
+                i->addAttrib( "name", (*it).second );
+                query->addChild( i );
               }
             }
           }
 
-          iq.addChild( query );
+          iq->addChild( query );
           m_parent->send( iq );
         }
         return true;
@@ -187,7 +187,7 @@ namespace gloox
         DiscoHandlerList::const_iterator it = m_discoHandlers.begin();
         for( it; it != m_discoHandlers.end(); it++ )
         {
-          if( (*it)->handleDiscoSet( stanza.id(), stanza ) )
+          if( (*it)->handleDiscoSet( stanza->id(), stanza ) )
             res = true;
         }
         return res;
@@ -197,9 +197,9 @@ namespace gloox
     return false;
   }
 
-  bool Disco::handleIqID( const Stanza& stanza, int context )
+  bool Disco::handleIqID( Stanza *stanza, int context )
   {
-    switch( stanza.subtype() )
+    switch( stanza->subtype() )
     {
       case IKS_TYPE_RESULT:
 
@@ -210,7 +210,7 @@ namespace gloox
             DiscoHandlerList::const_iterator it = m_discoHandlers.begin();
             for( it; it != m_discoHandlers.end(); it++ )
             {
-              (*it)->handleDiscoInfoResult( stanza.id(), stanza );
+              (*it)->handleDiscoInfoResult( stanza->id(), stanza );
             }
             break;
           }
@@ -219,7 +219,7 @@ namespace gloox
             DiscoHandlerList::const_iterator it = m_discoHandlers.begin();
             for( it; it != m_discoHandlers.end(); it++ )
             {
-              (*it)->handleDiscoItemsResult( stanza.id(), stanza );
+              (*it)->handleDiscoItemsResult( stanza->id(), stanza );
             }
             break;
           }
@@ -227,14 +227,14 @@ namespace gloox
         break;
 
       case IKS_TYPE_ERROR:
-        Tag e = stanza.findChild( "error" );
-        if( e.empty() )
+        Tag *e = stanza->findChild( "error" );
+        if( !e )
           return false;
 
         DiscoHandlerList::const_iterator it = m_discoHandlers.begin();
         for( it; it != m_discoHandlers.end(); it++ )
         {
-          (*it)->handleDiscoError( stanza.id(), e.name() );
+          (*it)->handleDiscoError( stanza->id(), e->name() );
         }
         break;
     }
@@ -251,14 +251,14 @@ namespace gloox
   {
     std::string id = m_parent->getID();
 
-    Tag iq( "iq" );
-    iq.addAttrib( "id", id );
-    iq.addAttrib( "to", to );
-    iq.addAttrib( "from", m_parent->jid().full() );
-    iq.addAttrib( "type", "get" );
-    Tag q( "query" );
-    q.addAttrib( "xmlns", XMLNS_DISCO_INFO );
-    iq.addChild( q );
+    Tag *iq = new Tag( "iq" );
+    iq->addAttrib( "id", id );
+    iq->addAttrib( "to", to );
+    iq->addAttrib( "from", m_parent->jid().full() );
+    iq->addAttrib( "type", "get" );
+    Tag *q = new Tag( "query" );
+    q->addAttrib( "xmlns", XMLNS_DISCO_INFO );
+    iq->addChild( q );
 
     m_parent->trackID( this, id, GET_DISCO_INFO );
     m_parent->send( iq );
@@ -268,14 +268,14 @@ namespace gloox
   {
     std::string id = m_parent->getID();
 
-    Tag iq( "iq" );
-    iq.addAttrib( "id", id );
-    iq.addAttrib( "to", to );
-    iq.addAttrib( "from", m_parent->jid().full() );
-    iq.addAttrib( "type", "get" );
-    Tag q( "query" );
-    q.addAttrib( "xmlns", XMLNS_DISCO_ITEMS );
-    iq.addChild( q );
+    Tag *iq = new Tag( "iq" );
+    iq->addAttrib( "id", id );
+    iq->addAttrib( "to", to );
+    iq->addAttrib( "from", m_parent->jid().full() );
+    iq->addAttrib( "type", "get" );
+    Tag *q = new Tag( "query" );
+    q->addAttrib( "xmlns", XMLNS_DISCO_ITEMS );
+    iq->addChild( q );
 
     m_parent->trackID( this, id, GET_DISCO_INFO );
     m_parent->send( iq );

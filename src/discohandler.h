@@ -45,7 +45,7 @@ namespace gloox
        * @param stanza The full Stanza.
        * @todo Replace the stanza with decoded values.
        */
-      virtual void handleDiscoInfoResult( const std::string& id, const Stanza& stanza ) {};
+      virtual void handleDiscoInfoResult( const std::string& id, Stanza *stanza ) {};
 
       /**
        * Reimplement this function if you want to be notified about the result
@@ -54,7 +54,7 @@ namespace gloox
        * @param stanza The full Stanza.
        * @todo Replace the stanza with decoded values.
        */
-      virtual void handleDiscoItemsResult( const std::string& id, const Stanza& stanza ) {};
+      virtual void handleDiscoItemsResult( const std::string& id, Stanza *stanza ) {};
 
       /**
        * Reimplement this function to receive disco error notifications.
@@ -70,7 +70,7 @@ namespace gloox
        * @param stanza The full Stanza.
        * @todo Replace the stanza with decoded values.
        */
-      virtual bool handleDiscoSet( const std::string& id, const Stanza& stanza ) { return false; };
+      virtual bool handleDiscoSet( const std::string& id, Stanza *stanza ) { return false; };
 
   };
 
