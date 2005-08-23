@@ -59,45 +59,11 @@ namespace gloox
     }
   }
 
-  void Parser::streamEvent( NodeType type, const Tag *tag )
+  void Parser::streamEvent( NodeType type, Tag *tag )
   {
     if( m_parent && tag )
-    {
-//       Tag tag = convertFromIks( node );
       m_parent->filter( type, tag );
-    }
-
-//     iks_delete( node );
   }
-
-//   const Tag Parser::convertFromIks( iks *x )
-//   {
-//     Tag tag( iks_name( x ) );
-//
-//     iks *y = iks_attrib( x );
-//     while( y )
-//     {
-//       tag.addAttrib( iks_name( y ), iks_cdata( y ) );
-//       y = iks_next( y );
-//     }
-//
-//     y = iks_child( x );
-//     while( y )
-//     {
-//       switch( iks_type( y ) )
-//       {
-//         case IKS_TAG:
-//           tag.addChild( convertFromIks( y ) );
-//           break;
-//         case IKS_CDATA:
-//           tag.setCData( iks_cdata( y ) );
-//           break;
-//       }
-//       y = iks_next( y );
-//     }
-//
-//     return tag;
-//   }
 
   int tagHook( Parser *parser, char *name, char **atts, int type )
   {

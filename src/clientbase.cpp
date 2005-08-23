@@ -88,7 +88,7 @@ namespace gloox
     return true;
   }
 
-  void ClientBase::filter( int type, const Tag *tag )
+  void ClientBase::filter( int type, Tag *tag )
   {
     if( tag->empty() )
       return;
@@ -106,9 +106,9 @@ namespace gloox
       case IKS_NODE_NORMAL:
         if( !handleNormalNode( tag ) )
         {
-          Stanza stanza( tag );
+          Stanza *stanza = new Stanza( tag );
 
-          switch( stanza.type() )
+          switch( stanza->type() )
           {
             case STANZA_IQ:
               notifyIqHandlers( stanza );
@@ -123,6 +123,7 @@ namespace gloox
               notifyMessageHandlers( stanza );
               break;
           }
+          delete( stanza );
         }
         break;
       case IKS_NODE_ERROR:
@@ -370,7 +371,7 @@ namespace gloox
     }
   }
 
-  void ClientBase::notifyPresenceHandlers( const Stanza& stanza )
+  void ClientBase::notifyPresenceHandlers( Stanza *stanza )
   {
     PresenceHandlerList::const_iterator it = m_presenceHandlers.begin();
     for( it; it != m_presenceHandlers.end(); it++ )
@@ -379,7 +380,7 @@ namespace gloox
     }
   }
 
-  void ClientBase::notifySubscriptionHandlers( const Stanza& stanza )
+  void ClientBase::notifySubscriptionHandlers( Stanza *stanza )
   {
     SubscriptionHandlerList::const_iterator it = m_subscriptionHandlers.begin();
     for( it; it != m_subscriptionHandlers.end(); it++ )
@@ -388,21 +389,21 @@ namespace gloox
     }
   }
 
-  void ClientBase::notifyIqHandlers( const Stanza& stanza )
+  void ClientBase::notifyIqHandlers( Stanza *stanza )
   {
     bool res = false;
 
     IqHandlerMap::const_iterator it_ns = m_iqNSHandlers.begin();
     for( it_ns; it_ns != m_iqNSHandlers.end(); it_ns++ )
     {
-      if( stanza.hasChildWithAttrib( "xmlns", (*it_ns).first ) )
+      if( stanza->hasChildWithAttrib( "xmlns", (*it_ns).first ) )
       {
         if( (*it_ns).second->handleIq( stanza ) )
           res = true;
       }
     }
 
-    IqTrackMap::iterator it_id = m_iqIDHandlers.find( stanza.id() );
+    IqTrackMap::iterator it_id = m_iqIDHandlers.find( stanza->id() );
     if( it_id != m_iqIDHandlers.end() )
     {
       if( (*it_id).second.ih->handleIqID( stanza, (*it_id).second.context ) )
@@ -410,18 +411,18 @@ namespace gloox
       m_iqIDHandlers.erase( it_id );
     }
 
-    if( !res && ( stanza.type() == STANZA_IQ ) &&
-         ( ( stanza.subtype() == STANZA_IQ_GET ) || ( stanza.subtype() == STANZA_IQ_SET ) ) )
+    if( !res && ( stanza->type() == STANZA_IQ ) &&
+         ( ( stanza->subtype() == STANZA_IQ_GET ) || ( stanza->subtype() == STANZA_IQ_SET ) ) )
     {
       Tag *iq = new Tag( "iq" );
       iq->addAttrib( "type", "error" );
-      iq->addAttrib( "id", stanza.id() );
-      iq->addAttrib( "to", stanza.from().full() );
+      iq->addAttrib( "id", stanza->id() );
+      iq->addAttrib( "to", stanza->from().full() );
       send( iq );
     }
   }
 
-  void ClientBase::notifyMessageHandlers( const Stanza& stanza )
+  void ClientBase::notifyMessageHandlers( Stanza *stanza )
   {
     MessageHandlerList::const_iterator it = m_messageHandlers.begin();
     for( it; it != m_messageHandlers.end(); it++ )

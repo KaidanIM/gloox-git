@@ -83,8 +83,7 @@ namespace gloox
       ParserState feed( const std::string& data );
 
     private:
-      void streamEvent( NodeType type, const Tag *tag );
-//       const Tag convertFromIks( iks *x );
+      void streamEvent( NodeType type, Tag *tag );
 
       iksparser *m_parser;
       ClientBase *m_parent;
