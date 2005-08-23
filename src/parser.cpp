@@ -29,9 +29,9 @@ namespace gloox
 {
 
   Parser::Parser( ClientBase *parent, const std::string& ns )
-    : m_parent( parent )
+    : m_parent( parent ), m_root( 0 ), m_current( 0 )
   {
-    m_parser = iks_stream_new( (char*)ns.c_str(), this, (iksStreamHook*)streamHook );
+    m_parser = iks_sax_new( this, (iksTagHook*)tagHook, (iksCDataHook*)cdataHook );
   }
 
   Parser::~Parser()
@@ -59,107 +59,91 @@ namespace gloox
     }
   }
 
-  void Parser::streamEvent( int type, iks* node )
+  void Parser::streamEvent( NodeType type, const Tag *tag )
   {
-    if( m_parent && node )
+    if( m_parent && tag )
     {
-      Tag tag = convertFromIks( node );
+//       Tag tag = convertFromIks( node );
       m_parent->filter( type, tag );
     }
 
-    iks_delete( node );
+//     iks_delete( node );
   }
 
-  const Tag Parser::convertFromIks( iks *x )
+//   const Tag Parser::convertFromIks( iks *x )
+//   {
+//     Tag tag( iks_name( x ) );
+//
+//     iks *y = iks_attrib( x );
+//     while( y )
+//     {
+//       tag.addAttrib( iks_name( y ), iks_cdata( y ) );
+//       y = iks_next( y );
+//     }
+//
+//     y = iks_child( x );
+//     while( y )
+//     {
+//       switch( iks_type( y ) )
+//       {
+//         case IKS_TAG:
+//           tag.addChild( convertFromIks( y ) );
+//           break;
+//         case IKS_CDATA:
+//           tag.setCData( iks_cdata( y ) );
+//           break;
+//       }
+//       y = iks_next( y );
+//     }
+//
+//     return tag;
+//   }
+
+  int tagHook( Parser *parser, char *name, char **atts, int type )
   {
-    Tag tag( iks_name( x ) );
-
-    iks *y = iks_attrib( x );
-    while( y )
+    switch( type )
     {
-      tag.addAttrib( iks_name( y ), iks_cdata( y ) );
-      y = iks_next( y );
-    }
-
-    y = iks_child( x );
-    while( y )
-    {
-      switch( iks_type( y ) )
-      {
-        case IKS_TAG:
-          tag.addChild( convertFromIks( y ) );
+      case IKS_OPEN:
+      case IKS_SINGLE:
+        Tag *tag = new Tag( name );
+        for(int i=0; atts[i]; )
+          tag->addAttrib( atts[++i], atts[++i] );
+        if( !parser->m_root )
+        {
+          parser->m_root = tag;
+          parser->m_current = parser->m_root;
+        }
+        else
+        {
+          parser->m_current->addChild( tag );
+          parser->m_current = tag;
+        }
+        if( type == IKS_OPEN )
           break;
-        case IKS_CDATA:
-          tag.setCData( iks_cdata( y ) );
-          break;
-      }
-      y = iks_next( y );
+      case IKS_CLOSE:
+        printf( "xml so far: %s\n", parser->m_root->xml().c_str() );
+        parser->m_current = tag->parent();
+        if( !parser->m_current )
+        {
+          Parser::NodeType t = Parser::NODE_STREAM_CHILD;
+          if( parser->m_root->name() == "stream:stream" )
+            t = Parser::NODE_STREAM_START;
+          else if( parser->m_root->name() == "stream:error" )
+            t = Parser::NODE_STREAM_ERROR;
+          printf( "tagHook: name: %s\n", name );
+          parser->streamEvent( t, parser->m_root );
+          delete( parser->m_root );
+          parser->m_root = 0;
+          parser->m_current = 0;
+        }
+        break;
     }
-
-    return tag;
-  }
-
-//   int msgHook( ClientBase *cb, ikspak* pak )
-//   {
-//     printf( "in msgHook\n" );
-//     if( cb )
-//       cb->notifyMessageHandlers( pak->from, pak->subtype, iks_find_cdata( pak->x, "body" ) );
-//     return IKS_FILTER_EAT;
-//   }
-//
-//   int iqHook( ClientBase *cb, ikspak* pak )
-//   {
-//     printf( "in iqHook\n" );
-//     if( cb )
-//       cb->notifyIqHandlers( pak->ns, pak );
-//     return IKS_FILTER_EAT;
-//   }
-//
-//   int presenceHook( ClientBase *cb, ikspak* pak )
-//   {
-//     printf( "in presenceHook\n" );
-//     if( cb )
-//       cb->notifyPresenceHandlers( pak->from, pak->subtype, pak->show,
-//                                       iks_find_cdata( pak->x, "status" ) );
-//     return IKS_FILTER_EAT;
-//   }
-//
-//   int subscriptionHook( ClientBase *cb, ikspak* pak )
-//   {
-//     printf( "in subscriptionHook\n" );
-//     if( cb )
-//       cb->notifySubscriptionHandlers( pak->from, pak->subtype, iks_find_cdata( pak->x, "status" ) );
-//     return IKS_FILTER_EAT;
-//   }
-//
-//   int bindHook( ClientBase *cb, ikspak* pak )
-//   {
-//     printf( "in Parser::bindHook\n" );
-// //    if( cb )
-// //      cb->notifySubscriptionHandlers( pak->from, pak->subtype, iks_find_cdata( pak->x, "status" ) );
-//     return IKS_FILTER_EAT;
-//   }
-//
-//   int sessionHook( ClientBase *cb, ikspak* pak )
-//   {
-//     printf( "in Parser::sessionHook\n" );//    if( cb )
-// //      cb->notifySubscriptionHandlers( pak->from, pak->subtype, iks_find_cdata( pak->x, "status" ) );
-//     return IKS_FILTER_EAT;
-//   }
-
-  int streamHook( Parser *parser, int type, iks *node )
-  {
-    printf( "in streamHook\n" );
-    parser->streamEvent( type, node );
     return IKS_OK;
   }
 
-//   int logHook( ClientBase *cb, const char *data, size_t size, int is_incoming )
-//   {
-//     printf( "in logHook\n" );
-//     if( cb )
-//       cb->logEvent( data, size, is_incoming );
-//     return IKS_OK;
-//   }
-
+  int cdataHook( Parser *parser, char *data, size_t len )
+  {
+    if( parser->m_current && data )
+      parser->m_current->setCData( data );
+  }
 };
