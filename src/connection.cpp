@@ -50,21 +50,25 @@ namespace gloox
     m_buf = 0;
   }
 
+#ifdef HAVE_GNUTLS
   bool Connection::tlsHandshake()
   {
-#ifdef HAVE_GNUTLS
-
     const int protocol_priority[] = { GNUTLS_TLS1, GNUTLS_SSL3, 0 };
-    const int kx_priority[] = { GNUTLS_KX_RSA, 0 };
-    const int cipher_priority[] = { GNUTLS_CIPHER_3DES_CBC, GNUTLS_CIPHER_ARCFOUR, 0 };
-    const int comp_priority[] = { GNUTLS_COMP_ZLIB, GNUTLS_COMP_NULL, 0 };
-    const int mac_priority[] = { GNUTLS_MAC_SHA, GNUTLS_MAC_MD5, 0 };
+    const int kx_priority[]       = { GNUTLS_KX_RSA, 0 };
+    const int cipher_priority[]   = { GNUTLS_CIPHER_AES_256_CBC, GNUTLS_CIPHER_AES_128_CBC,
+                                             GNUTLS_CIPHER_3DES_CBC, GNUTLS_CIPHER_ARCFOUR, 0 };
+    const int comp_priority[]     = { GNUTLS_COMP_ZLIB, GNUTLS_COMP_NULL, 0 };
+    const int mac_priority[]      = { GNUTLS_MAC_SHA, GNUTLS_MAC_MD5, 0 };
 
     if( gnutls_global_init() != 0 )
       return false;
 
     if( gnutls_certificate_allocate_credentials( &m_credentials ) < 0 )
       return false;
+
+    StringList::const_iterator it = m_cacerts.begin();
+    for( it; it != m_cacerts.end(); it++ )
+      gnutls_certificate_set_x509_trust_file( m_credentials, (*it).c_str(), GNUTLS_X509_FMT_PEM );
 
     if( gnutls_init( &m_session, GNUTLS_CLIENT ) != 0 )
     {
@@ -86,25 +90,27 @@ namespace gloox
       gnutls_certificate_free_credentials( m_credentials );
       return false;
     }
+    gnutls_certificate_free_ca_names( m_credentials );
+
     m_secure = true;
 
-//     unsigned int status;
-
-//     if( gnutls_certificate_verify_peers2( m_session, &status ) < 0 )
-//       error = true;
-//
-//     info.status = -1;
-//     if( status & GNUTLS_CERT_INVALID )
-//       info.status |= CERT_INVALID;
-//     if( status & GNUTLS_CERT_SIGNER_NOT_FOUND )
-//       info.status |= CERT_SIGNER_UNKNOWN;
-//     if( status & GNUTLS_CERT_REVOKED )
-//       info.status |= CERT_REVOKED;
-
+    unsigned int status;
     bool error = false;
+
+    if( gnutls_certificate_verify_peers2( m_session, &status ) < 0 )
+      error = true;
+
+    m_certInfo.status = 0;
+    if( status & GNUTLS_CERT_INVALID )
+      m_certInfo.status |= CERT_INVALID;
+    if( status & GNUTLS_CERT_SIGNER_NOT_FOUND )
+      m_certInfo.status |= CERT_SIGNER_UNKNOWN;
+    if( status & GNUTLS_CERT_REVOKED )
+      m_certInfo.status |= CERT_REVOKED;
+    if( status & GNUTLS_CERT_SIGNER_NOT_CA )
+      m_certInfo.status |= CERT_SIGNER_NOT_CA;
     const gnutls_datum_t* certList;
     unsigned int certListSize;
-
     if( !error && ( ( certList = gnutls_certificate_get_peers( m_session, &certListSize ) ) == 0 ) )
       error = true;
 
@@ -155,16 +161,35 @@ namespace gloox
     gnutls_x509_crt_get_dn( cert[0], name, &nameSize );
     m_certInfo.server = name;
 
+    const char* info;
+    info = gnutls_compression_get_name( gnutls_compression_get( m_session ) );
+    if( info )
+      m_certInfo.compression = info;
+
+    info = gnutls_mac_get_name( gnutls_mac_get( m_session ) );
+    if( info )
+      m_certInfo.mac = info;
+
+    info = gnutls_cipher_get_name( gnutls_cipher_get( m_session ) );
+    if( info )
+      m_certInfo.cipher = info;
+
+    info = gnutls_protocol_get_name( gnutls_protocol_get_version( m_session ) );
+    if( info )
+      m_certInfo.protocol = info;
+
     if( !gnutls_x509_crt_check_hostname( cert[0], m_server.c_str() ) )
       m_certInfo.status |= CERT_WRONG_PEER;
 
     for( int i=0; i<certListSize; i++ )
       gnutls_x509_crt_deinit( cert[i] );
 
+    printf( "status: %d\nissuer: %s\npeer: %s\nprotocol: %s\nmac: %s\ncipher: %s\ncompression: %s\ngnutls status: %d\n",
+            m_certInfo.status, m_certInfo.issuer.c_str(), m_certInfo.server.c_str(),
+            m_certInfo.protocol.c_str(), m_certInfo.mac.c_str(), m_certInfo.cipher.c_str(),
+            m_certInfo.compression.c_str(), status );
+
     return true;
-#else
-    return false;
-#endif
   }
 
   bool Connection::verifyAgainst( gnutls_x509_crt_t cert, gnutls_x509_crt_t issuer )
@@ -198,6 +223,7 @@ namespace gloox
 
     return true;
   }
+#endif
 
   void Connection::disconnect()
   {

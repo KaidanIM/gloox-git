@@ -281,6 +281,13 @@ namespace gloox
        */
       void removeSubscriptionHandler( SubscriptionHandler *sh );
 
+      /**
+       * Use this function to set a number of trusted root CA certificates. which shall be
+       * used to verify a servers certificate.
+       * @param cacerts A list of absolute paths to CA root certificate files in PEM format.
+       */
+      void setCACerts( const StringList& cacerts ) { m_cacerts = cacerts; };
+
     protected:
       void notifyOnResourceBindError( ConnectionListener::ResourceBindError error );
       void notifyOnSessionCreateError( ConnectionListener::SessionCreateError error );
@@ -355,6 +362,7 @@ namespace gloox
       MessageHandlerList      m_messageHandlers;
       PresenceHandlerList     m_presenceHandlers;
       SubscriptionHandlerList m_subscriptionHandlers;
+      StringList              m_cacerts;
 
       Parser *m_parser;
 
