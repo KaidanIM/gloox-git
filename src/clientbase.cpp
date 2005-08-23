@@ -88,9 +88,9 @@ namespace gloox
     return true;
   }
 
-  void ClientBase::filter( int type, Tag *tag )
+  void ClientBase::filter( NodeType type, Tag *tag )
   {
-    if( tag->empty() )
+    if( !tag )
       return;
 
 #ifdef DEBUG
@@ -99,11 +99,11 @@ namespace gloox
 
     switch( type )
     {
-      case IKS_NODE_START:
+      case NODE_STREAM_START:
         m_sid = tag->findAttribute( "id" );
         handleStartNode();
         break;
-      case IKS_NODE_NORMAL:
+      case NODE_STREAM_CHILD:
         if( !handleNormalNode( tag ) )
         {
           Stanza *stanza = new Stanza( tag );
@@ -126,13 +126,13 @@ namespace gloox
           delete( stanza );
         }
         break;
-      case IKS_NODE_ERROR:
+      case NODE_STREAM_ERROR:
 #ifdef DEBUG
         printf( "stream error received\n" );
 #endif
         disconnect( STATE_ERROR );
         break;
-      case IKS_NODE_STOP:
+      case NODE_STREAM_CLOSE:
 #ifdef DEBUG
         printf( "stream closed\n" );
 #endif
@@ -203,7 +203,7 @@ namespace gloox
 
   void ClientBase::processSASLChallenge( const std::string& challenge )
   {
-    printf( "in processSASLChallenge()" );
+    printf( "in processSASLChallenge()\n" );
     disconnect( STATE_DISCONNECTED );
   }
 
