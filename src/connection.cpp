@@ -184,11 +184,6 @@ namespace gloox
     for( int i=0; i<certListSize; i++ )
       gnutls_x509_crt_deinit( cert[i] );
 
-    printf( "status: %d\nissuer: %s\npeer: %s\nprotocol: %s\nmac: %s\ncipher: %s\ncompression: %s\ngnutls status: %d\n",
-            m_certInfo.status, m_certInfo.issuer.c_str(), m_certInfo.server.c_str(),
-            m_certInfo.protocol.c_str(), m_certInfo.mac.c_str(), m_certInfo.cipher.c_str(),
-            m_certInfo.compression.c_str(), status );
-
     return true;
   }
 
@@ -277,9 +272,6 @@ namespace gloox
               break;
             case Parser::PARSER_NOMEM:
               printf( "memory allocation error\n" );
-              break;
-            case Parser::PARSER_HOOK:
-              printf( "PARSER_HOOK (from IKS_HOOK). what does that mean?\n" );
               break;
           }
 #endif
