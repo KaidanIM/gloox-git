@@ -122,21 +122,21 @@ namespace gloox
       void removeRosterListener();
 
       // reimplemented from IqHandler.
-      virtual bool handleIq( const Stanza& stanza );
+      virtual bool handleIq( Stanza *stanza );
 
       // reimplemented from IqHandler.
-      virtual bool handleIqID( const Stanza& stanza, int context ) { return false; };
+      virtual bool handleIqID( Stanza *stanza, int context ) { return false; };
 
       // reimplemented from PresenceHandler.
-      virtual void handlePresence( const Stanza& stanza );
+      virtual void handlePresence( Stanza *stanza );
 
       // reimplemented from SubscriptionHandler.
-      virtual void handleSubscription( const Stanza& stanza );
+      virtual void handleSubscription( Stanza *stanza );
 
     private:
       void add( const std::string& jid, const std::string& name,
                 RosterItem::GroupList& groups, const std::string& sub, bool ask );
-      const std::string extractItems( const Tag& tag );
+      const std::string extractItems( Tag *tag );
 
       RosterListener *m_rosterListener;
       RosterListener::Roster m_roster;
