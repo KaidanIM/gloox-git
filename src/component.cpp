@@ -52,16 +52,16 @@ namespace gloox
     char *hash = (char*)calloc( 41, sizeof( char ) );
     iks_sha( data.c_str(), hash );
 
-    Tag h( "handshake", hash );
+    Tag *h = new Tag( "handshake", hash );
     send( h );
 
     free( hash );
   }
 
-  bool Component::handleNormalNode( const Tag& tag )
+  bool Component::handleNormalNode( const Tag *tag )
   {
     printf( "in handleNormalNode\n" );
-    if( tag.name() == "handshake" )
+    if( tag->name() == "handshake" )
       notifyOnConnect();
     else
       return false;
