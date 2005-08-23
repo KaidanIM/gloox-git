@@ -54,6 +54,17 @@ namespace gloox
       };
 
       /**
+       * Describes the possibel node types
+       */
+      enum NodeType
+      {
+        NODE_STREAM_START,             /**< The &lt;stream:stream&gt; tag. */
+        NODE_STREAM_ERROR,             /**< The &lt;stream:error&gt; tag. */
+        NODE_STREAM_CLOSE,             /**< The &lt;/stream:stream&gt; tag. */
+        NODE_STREAM_CHILD,             /**< Everything else. */
+      };
+
+      /**
        * Constructs a new Parser object.
        * @param parent The object to send incoming Tags to.
        * @param ns The parser's namespace. Legacy, libiksemel-related.
@@ -72,13 +83,16 @@ namespace gloox
       ParserState feed( const std::string& data );
 
     private:
-      void streamEvent( int type, iks* node );
-      const Tag convertFromIks( iks *x );
+      void streamEvent( NodeType type, const Tag *tag );
+//       const Tag convertFromIks( iks *x );
 
       iksparser *m_parser;
       ClientBase *m_parent;
+      Tag *m_current;
+      Tag *m_root;
 
-      friend int streamHook( Parser *parser, int type, iks *node );
+      friend int cdataHook( Parser *parser, char *data, size_t len );
+      friend int tagHook( Parser *parser, char *name, char **atts, int type );
   };
 
 };
