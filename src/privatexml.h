@@ -69,7 +69,7 @@ namespace gloox
        * It is deleted after sending it.
        * @param xmlns The is the namespace, again, in which the element @c is stored.
        */
-      void storeXML( const Tag& tag, const std::string& xmlns );
+      void storeXML( Tag *tag, const std::string& xmlns );
 
       /**
        * Use this function to register an object that shall receive incoming Private XML packets.
@@ -87,10 +87,10 @@ namespace gloox
       void removePrivateXMLHandler( const std::string& xmlns );
 
       // reimplemented from IqHandler.
-      virtual bool handleIq( const Stanza& stanza );
+      virtual bool handleIq( Stanza *stanza );
 
       // reimplemented from IqHandler.
-      virtual bool handleIqID( const Stanza& stanza, int context );
+      virtual bool handleIqID( Stanza *stanza, int context );
 
     protected:
       ClientBase *m_parent;

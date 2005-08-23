@@ -42,60 +42,60 @@ namespace gloox
   {
     const std::string id = m_parent->getID();
 
-    Tag iq( "iq" );
-    iq.addAttrib( "id", id );
-    iq.addAttrib( "type", "get" );
-    Tag query( "query" );
-    query.addAttrib( "xmlns", XMLNS_PRIVATE_XML );
-    Tag x( tag );
-    x.addAttrib( "xmlns", xmlns );
-    query.addChild( x );
-    iq.addChild( query );
+    Tag *iq = new Tag( "iq" );
+    iq->addAttrib( "id", id );
+    iq->addAttrib( "type", "get" );
+    Tag *query = new Tag( "query" );
+    query->addAttrib( "xmlns", XMLNS_PRIVATE_XML );
+    Tag *x = new Tag( tag );
+    x->addAttrib( "xmlns", xmlns );
+    query->addChild( x );
+    iq->addChild( query );
 
     m_parent->trackID( this, id, REQUEST_XML );
     m_parent->send( iq );
   }
 
-  void PrivateXML::storeXML( const Tag& tag, const std::string& xmlns )
+  void PrivateXML::storeXML( Tag *tag, const std::string& xmlns )
   {
     const std::string id = m_parent->getID();
 
-    Tag iq( "iq" );
-    iq.addAttrib( "id", id );
-    iq.addAttrib( "type", "set" );
-    Tag query( "query" );
-    query.addAttrib( "xmlns", XMLNS_PRIVATE_XML );
-    query.addChild( tag );
-    iq.addChild( query );
+    Tag *iq = new Tag( "iq" );
+    iq->addAttrib( "id", id );
+    iq->addAttrib( "type", "set" );
+    Tag *query = new Tag( "query" );
+    query->addAttrib( "xmlns", XMLNS_PRIVATE_XML );
+    query->addChild( tag );
+    iq->addChild( query );
 
     m_parent->trackID( this, id, STORE_XML );
     m_parent->send( iq );
   }
 
-  bool PrivateXML::handleIq( const Stanza& stanza )
+  bool PrivateXML::handleIq( Stanza *stanza )
   {
     return false;
   }
 
-  bool PrivateXML::handleIqID( const Stanza& stanza, int context )
+  bool PrivateXML::handleIqID( Stanza *stanza, int context )
   {
-    if( stanza.subtype() == STANZA_IQ_RESULT )
+    if( stanza->subtype() == STANZA_IQ_RESULT )
     {
       switch( context )
       {
         case REQUEST_XML:
         {
-          Tag q = stanza.findChild( "query" );
-          Tag::TagList l = q.children();
+          Tag *q = stanza->findChild( "query" );
+          Tag::TagList l = q->children();
           Tag::TagList::const_iterator it = l.begin();
           if( it != l.end() )
           {
-            Tag tag = (*it);
-            const std::string xmlns = tag.findAttribute( "xmlns" );
+            Tag *tag = (*it);
+            const std::string xmlns = tag->findAttribute( "xmlns" );
             PrivateXMLHandlers::const_iterator pi = m_privateXMLHandlers.find( xmlns );
-            if( ( pi != m_privateXMLHandlers.end() ) && ( tag.name() == (*pi).second.tag ) )
+            if( ( pi != m_privateXMLHandlers.end() ) && ( tag->name() == (*pi).second.tag ) )
             {
-              (*pi).second.pxh->handlePrivateXML( tag.name(), xmlns, tag );
+              (*pi).second.pxh->handlePrivateXML( tag->name(), xmlns, tag );
             }
           }
           break;
@@ -107,7 +107,7 @@ namespace gloox
 
       return true;
     }
-    else if( stanza.subtype() == STANZA_IQ_ERROR )
+    else if( stanza->subtype() == STANZA_IQ_ERROR )
     {
       return false;
     }
