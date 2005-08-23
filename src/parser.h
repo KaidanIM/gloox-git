@@ -50,18 +50,6 @@ namespace gloox
         PARSER_OK,                     /**< Everything's alright. */
         PARSER_NOMEM,                  /**< Memory allcation error. */
         PARSER_BADXML,                 /**< XML parse error. */
-        PARSER_HOOK                    /**< Unknown. */
-      };
-
-      /**
-       * Describes the possibel node types
-       */
-      enum NodeType
-      {
-        NODE_STREAM_START,             /**< The &lt;stream:stream&gt; tag. */
-        NODE_STREAM_ERROR,             /**< The &lt;stream:error&gt; tag. */
-        NODE_STREAM_CLOSE,             /**< The &lt;/stream:stream&gt; tag. */
-        NODE_STREAM_CHILD,             /**< Everything else. */
       };
 
       /**
@@ -83,7 +71,7 @@ namespace gloox
       ParserState feed( const std::string& data );
 
     private:
-      void streamEvent( NodeType type, Tag *tag );
+      void streamEvent( Tag *tag );
 
       iksparser *m_parser;
       ClientBase *m_parent;

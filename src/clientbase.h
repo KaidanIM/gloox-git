@@ -44,6 +44,8 @@ namespace gloox
   class Packet;
   class Tag;
   class Stanza;
+  class Parser;
+//   extern struct Parser::NodeType;
 
   /**
    * This is a common base class for a jabber client and a jabber component. It manages connection
@@ -346,6 +348,14 @@ namespace gloox
       int m_port;
 
     private:
+      enum NodeType
+      {
+        NODE_STREAM_START,             /**< The &lt;stream:stream&gt; tag. */
+        NODE_STREAM_ERROR,             /**< The &lt;stream:error&gt; tag. */
+        NODE_STREAM_CLOSE,             /**< The &lt;/stream:stream&gt; tag. */
+        NODE_STREAM_CHILD,             /**< Everything else. */
+      };
+
       virtual void handleStartNode() = 0;
       virtual bool handleNormalNode( Tag *tag ) = 0;
       Stanza createStanza( const Tag *tag );
@@ -354,7 +364,7 @@ namespace gloox
       void notifyMessageHandlers( Stanza *stanza );
       void notifyPresenceHandlers( Stanza *stanza );
       void notifySubscriptionHandlers( Stanza *stanza );
-      void filter( int type, Tag *tag );
+      void filter( NodeType type, Tag *tag );
       void logEvent( const char *data, size_t size, int is_incoming );
 
       struct TrackStruct

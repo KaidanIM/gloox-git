@@ -37,6 +37,7 @@ namespace gloox
   Parser::~Parser()
   {
     iks_parser_delete( m_parser );
+    delete( m_root );
   }
 
   Parser::ParserState Parser::feed( const std::string& data )
@@ -53,16 +54,21 @@ namespace gloox
       case IKS_BADXML:
         return PARSER_BADXML;
         break;
-      case IKS_HOOK:
-        return PARSER_HOOK;
-        break;
     }
   }
 
-  void Parser::streamEvent( NodeType type, Tag *tag )
+  void Parser::streamEvent( Tag *tag )
   {
     if( m_parent && tag )
+    {
+      ClientBase::NodeType type = ClientBase::NODE_STREAM_CHILD;
+      if( m_root->name() == "stream:stream" )
+        type = ClientBase::NODE_STREAM_START;
+      else if( m_root->name() == "stream:error" )
+        type = ClientBase::NODE_STREAM_ERROR;
+
       m_parent->filter( type, tag );
+    }
   }
 
   int tagHook( Parser *parser, char *name, char **atts, int type )
@@ -72,8 +78,11 @@ namespace gloox
       case IKS_OPEN:
       case IKS_SINGLE:
         Tag *tag = new Tag( name );
-        for(int i=0; atts[i]; )
-          tag->addAttrib( atts[++i], atts[++i] );
+        for(int i=0; atts && atts[i]; )
+        {
+          tag->addAttrib( atts[i], atts[i+1] );
+          i+=2;
+        }
         if( !parser->m_root )
         {
           parser->m_root = tag;
@@ -84,20 +93,20 @@ namespace gloox
           parser->m_current->addChild( tag );
           parser->m_current = tag;
         }
+        if( tag->name() == "stream:stream" )
+        {
+          parser->streamEvent( parser->m_root );
+          delete( parser->m_root );
+          parser->m_root = 0;
+          parser->m_current = 0;
+        }
         if( type == IKS_OPEN )
-          break;
+        break;
       case IKS_CLOSE:
-        printf( "xml so far: %s\n", parser->m_root->xml().c_str() );
-        parser->m_current = tag->parent();
+        parser->m_current = parser->m_current->parent();
         if( !parser->m_current )
         {
-          Parser::NodeType t = Parser::NODE_STREAM_CHILD;
-          if( parser->m_root->name() == "stream:stream" )
-            t = Parser::NODE_STREAM_START;
-          else if( parser->m_root->name() == "stream:error" )
-            t = Parser::NODE_STREAM_ERROR;
-          printf( "tagHook: name: %s\n", name );
-          parser->streamEvent( t, parser->m_root );
+          parser->streamEvent( parser->m_root );
           delete( parser->m_root );
           parser->m_root = 0;
           parser->m_current = 0;
@@ -110,6 +119,11 @@ namespace gloox
   int cdataHook( Parser *parser, char *data, size_t len )
   {
     if( parser->m_current && data )
-      parser->m_current->setCData( data );
+    {
+      std::string tmp = data;
+      parser->m_current->setCData( tmp.substr( 0, len ) );
+    }
+
+    return IKS_OK;
   }
 };
