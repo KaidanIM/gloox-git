@@ -283,7 +283,7 @@ namespace gloox
             break;
           case PL_REQUEST_NAMES:
           {
-            PrivacyListHandler::StringList lists;
+            StringList lists;
             std::string def;
             std::string active;
             Tag q = stanza.findChild( "query" );
