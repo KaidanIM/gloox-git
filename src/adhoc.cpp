@@ -83,12 +83,12 @@ namespace gloox
     return ident;
   }
 
-  bool Adhoc::handleIq( const Stanza& stanza )
+  bool Adhoc::handleIq( Stanza *stanza )
   {
-    if( stanza.hasChild( "command" ) )
+    if( stanza->hasChild( "command" ) )
     {
-      Tag c = stanza.findChild( "command" );
-      const std::string node = c.findAttribute( "node" );
+      Tag *c = stanza->findChild( "command" );
+      const std::string node = c->findAttribute( "node" );
       AdhocCommandProviderMap::const_iterator it = m_adhocCommandProviders.find( node );
       if( !node.empty() && ( it != m_adhocCommandProviders.end() ) )
       {
