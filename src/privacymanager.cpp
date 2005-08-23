@@ -22,6 +22,8 @@
 #include "privacymanager.h"
 #include "clientbase.h"
 
+#include <math.h>
+
 namespace gloox
 {
 
@@ -221,8 +223,8 @@ namespace gloox
 
       i->addAttrib( "value", (*it).value() );
 
-      char order[15];
-      sprintf( order, "%d", ++count );
+      char order[(int)log10(++count)+2];
+      sprintf( order, "%d", count );
       i->addAttrib( "order", order );
     }
 
