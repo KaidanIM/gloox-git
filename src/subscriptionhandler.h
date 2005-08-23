@@ -39,7 +39,7 @@ namespace gloox
        * subscriptions/subscription requests.
        * @param stanza The complete Stanza.
        */
-      virtual void handleSubscription( const Stanza& stanza ) = 0;
+      virtual void handleSubscription( Stanza *stanza ) = 0;
   };
 
 };
