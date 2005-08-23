@@ -45,37 +45,36 @@ namespace gloox
   {
     std::string id = m_parent->getID();
 
-    Tag iq( "iq" );
-    iq.addAttrib( "to", m_parent->server() );
-    iq.addAttrib( "id", id );
-    iq.addAttrib( "type", "get" );
-    Tag q( "query" );
-    q.addAttrib( "xmlns", XMLNS_AUTH );
-    q.addChild( Tag( "username", m_parent->username() ) );
-    iq.addChild( q );
+    Tag *iq = new Tag( "iq" );
+    iq->addAttrib( "to", m_parent->server() );
+    iq->addAttrib( "id", id );
+    iq->addAttrib( "type", "get" );
+    Tag *q = new Tag( "query" );
+    q->addAttrib( "xmlns", XMLNS_AUTH );
+    q->addChild( new Tag( "username", m_parent->username() ) );
+    iq->addChild( q );
 
     m_parent->send( iq );
   }
 
-  bool NonSaslAuth::handleIq( const Stanza& stanza )
+  bool NonSaslAuth::handleIq( Stanza *stanza )
   {
-    switch( stanza.subtype() )
+    switch( stanza->subtype() )
     {
       case STANZA_IQ_RESULT:
       {
-        Tag iq( "iq" );
         std::string id = m_parent->getID();
-        iq.addAttrib( "id", id );
-        iq.addAttrib( "type", "set" );
-        Tag query( "query" );
-        query.addAttrib( "xmlns", XMLNS_AUTH );
-        Tag u( "username", m_parent->jid().username() );
-        query.addChild( u );
-        Tag r( "resource", m_parent->jid().resource() );
-        query.addChild( r );
 
-        Tag q = stanza.findChild( "query" );
-        if( ( q.hasChild( "digest" ) ) && !m_sid.empty() )
+        Tag *iq = new Tag( "iq" );
+        iq->addAttrib( "id", id );
+        iq->addAttrib( "type", "set" );
+        Tag *query = new Tag( "query" );
+        query->addAttrib( "xmlns", XMLNS_AUTH );
+        query->addChild( new Tag( "username", m_parent->jid().username() ) );
+        query->addChild( new Tag( "resource", m_parent->jid().resource() ) );
+
+        Tag *q = stanza->findChild( "query" );
+        if( ( q->hasChild( "digest" ) ) && !m_sid.empty() )
         {
           const std::string pwd = m_parent->password();
           char buf[41];
@@ -85,16 +84,14 @@ namespace gloox
           iks_sha_hash( sha, (const unsigned char*)pwd.c_str(), pwd.length(), 1 );
           iks_sha_print( sha, buf );
           iks_sha_delete( sha );
-          Tag d( "digest", buf );
-          query.addChild( d );
+          query->addChild( new Tag( "digest", buf ) );
         }
         else
         {
-          Tag p( "password", m_parent->password() );
-          query.addChild( p );
+          query->addChild( new Tag( "password", m_parent->password() ) );
         }
 
-        iq.addChild( query );
+        iq->addChild( query );
         m_parent->trackID( this, id, 0 );
         m_parent->send( iq );
         break;
@@ -120,9 +117,9 @@ namespace gloox
     return false;
   }
 
-  bool NonSaslAuth::handleIqID( const Stanza& stanza, int context )
+  bool NonSaslAuth::handleIqID( Stanza *stanza, int context )
   {
-    switch( stanza.subtype() )
+    switch( stanza->subtype() )
     {
       case STANZA_IQ_ERROR:
         m_parent->setState( STATE_AUTHENTICATION_FAILED );
