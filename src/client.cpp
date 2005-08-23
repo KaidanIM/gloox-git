@@ -82,9 +82,9 @@ namespace gloox
     m_disco->setIdentity( "client", "bot" );
   }
 
-  bool Client::handleNormalNode( const Tag& tag )
+  bool Client::handleNormalNode( Tag *tag )
   {
-    if( tag.name() == "stream:features" )
+    if( tag->name() == "stream:features" )
     {
       m_streamFeatures = getStreamFeatures( tag );
       printf( "stream features: %d\n", m_streamFeatures );
@@ -110,11 +110,11 @@ namespace gloox
         {
           if( m_streamFeatures & STREAM_FEATURE_SASL_DIGESTMD5 )
           {
-            startSASL( GLOOX_SASL_DIGEST_MD5 );
+            startSASL( SASL_DIGEST_MD5 );
           }
           else if( m_streamFeatures & STREAM_FEATURE_SASL_PLAIN )
           {
-            startSASL( GLOOX_SASL_PLAIN );
+            startSASL( SASL_PLAIN );
           }
           else if( m_streamFeatures & STREAM_FEATURE_IQAUTH )
           {
@@ -146,7 +146,7 @@ namespace gloox
       }
     }
 #ifdef HAVE_GNUTLS
-    else if( ( tag.name() == "proceed" ) && tag.hasAttribute( "xmlns", XMLNS_STREAM_TLS ) )
+    else if( ( tag->name() == "proceed" ) && tag->hasAttribute( "xmlns", XMLNS_STREAM_TLS ) )
     {
 #ifdef DEBUG
       printf( "starting TLS handshake...\n" );
@@ -162,14 +162,21 @@ namespace gloox
 #endif
     }
 #endif
-    else if( tag.name() == "failure" )
+    else if( ( tag->name() == "challenge" ) && tag->hasAttribute( "xmlns", XMLNS_STREAM_SASL ) )
+    {
+#ifdef DEBUG
+      printf( "processing sasl challenge\n" );
+#endif
+      processSASLChallenge( tag->cdata() );
+    }
+    else if( tag->name() == "failure" )
     {
 #ifdef DEBUG
       printf( "sasl authentication failed...\n" );
 #endif
       disconnect( STATE_AUTHENTICATION_FAILED );
     }
-    else if( tag.name() == "success" )
+    else if( tag->name() == "success" )
     {
 #ifdef DEBUG
       printf( "sasl auth successful...\n" );
@@ -180,11 +187,11 @@ namespace gloox
     }
     else
     {
-      if( ( tag.name() == "iq" ) && tag.hasAttribute( "id", "bind" ) )
+      if( ( tag->name() == "iq" ) && tag->hasAttribute( "id", "bind" ) )
       {
         processResourceBind( tag );
       }
-      else if( ( tag.name() == "iq" ) && tag.hasAttribute( "id", "session" ) )
+      else if( ( tag->name() == "iq" ) && tag->hasAttribute( "id", "session" ) )
         processCreateSession( tag );
       else
         return false;
@@ -193,29 +200,29 @@ namespace gloox
     return true;
   }
 
-  int Client::getStreamFeatures( const Tag& tag )
+  int Client::getStreamFeatures( Tag *tag )
   {
-    if( tag.name() != "stream:features" )
+    if( tag->name() != "stream:features" )
       return 0;
 
     int features = 0;
 
-    if( tag.hasChild( "starttls", "xmlns", XMLNS_STREAM_TLS ) )
+    if( tag->hasChild( "starttls", "xmlns", XMLNS_STREAM_TLS ) )
       features |= STREAM_FEATURE_STARTTLS;
 
-    if( tag.hasChild( "mechanisms", "xmlns", XMLNS_STREAM_SASL ) )
-      features |= getSaslMechs( tag.findChild( "mechanisms" ) );
+    if( tag->hasChild( "mechanisms", "xmlns", XMLNS_STREAM_SASL ) )
+      features |= getSaslMechs( tag->findChild( "mechanisms" ) );
 
-    if( tag.hasChild( "bind", "xmlns", XMLNS_STREAM_BIND ) )
+    if( tag->hasChild( "bind", "xmlns", XMLNS_STREAM_BIND ) )
       features |= STREAM_FEATURE_BIND;
 
-    if( tag.hasChild( "session", "xmlns", XMLNS_STREAM_SESSION ) )
+    if( tag->hasChild( "session", "xmlns", XMLNS_STREAM_SESSION ) )
       features |= STREAM_FEATURE_SESSION;
 
-    if( tag.hasChild( "auth", "xmlns", XMLNS_STREAM_IQAUTH ) )
+    if( tag->hasChild( "auth", "xmlns", XMLNS_STREAM_IQAUTH ) )
       features |= STREAM_FEATURE_IQAUTH;
 
-    if( tag.hasChild( "register", "xmlns", XMLNS_STREAM_IQREGISTER ) )
+    if( tag->hasChild( "register", "xmlns", XMLNS_STREAM_IQREGISTER ) )
       features |= STREAM_FEATURE_IQREGISTER;
 
 
@@ -225,14 +232,14 @@ namespace gloox
     return features;
   }
 
-  int Client::getSaslMechs( const Tag& tag )
+  int Client::getSaslMechs( Tag *tag )
   {
     int mechs = 0;
 
-    if( tag.hasChildWithCData( "mechanism", "DIGEST-MD5" ) )
+    if( tag->hasChildWithCData( "mechanism", "DIGEST-MD5" ) )
       mechs |= STREAM_FEATURE_SASL_DIGESTMD5;
 
-    if( tag.hasChildWithCData( "mechanism", "PLAIN" ) )
+    if( tag->hasChildWithCData( "mechanism", "PLAIN" ) )
         mechs |= STREAM_FEATURE_SASL_PLAIN;
 
     return mechs;
@@ -242,32 +249,32 @@ namespace gloox
   {
     if( !m_resourceBound )
     {
-      Tag iq( "iq" );
-      iq.addAttrib( "type", "set" );
-      iq.addAttrib( "id", "bind" );
-      Tag b( "bind" );
-      b.addAttrib( "xmlns", XMLNS_STREAM_BIND );
+      Tag *iq = new Tag( "iq" );
+      iq->addAttrib( "type", "set" );
+      iq->addAttrib( "id", "bind" );
+      Tag *b = new Tag( "bind" );
+      b->addAttrib( "xmlns", XMLNS_STREAM_BIND );
       if( !resource().empty() )
       {
-        Tag r( "resource", resource() );
-        b.addChild( r );
+        Tag *r = new Tag( "resource", resource() );
+        b->addChild( r );
       }
-      iq.addChild( b );
+      iq->addChild( b );
 
       send( iq );
     }
   }
 
-  void Client::processResourceBind( const Tag& tag )
+  void Client::processResourceBind( Tag *tag )
   {
-    Stanza stanza( tag );
-    switch( stanza.subtype() )
+    Stanza *stanza= new Stanza( tag );
+    switch( stanza->subtype() )
     {
       case STANZA_IQ_RESULT:
       {
-        Tag bind = stanza.findChild( "bind" );
-        Tag jid = bind.findChild( "jid" );
-        m_jid.setJID( jid.cdata() );
+        Tag *bind = stanza->findChild( "bind" );
+        Tag *jid = bind->findChild( "jid" );
+        m_jid.setJID( jid->cdata() );
         m_resourceBound = true;
 
         if( m_streamFeatures & STREAM_FEATURE_SESSION )
@@ -278,17 +285,17 @@ namespace gloox
       }
       case STANZA_IQ_ERROR:
       {
-        Tag error = stanza.findChild( "error" );
-        if( stanza.hasChild( "error", "type", "modify" )
-            && error.hasChild( "bad-request", "xmlns", XMLNS_XMPP_STANZAS ) )
+        Tag *error = stanza->findChild( "error" );
+        if( stanza->hasChild( "error", "type", "modify" )
+            && error->hasChild( "bad-request", "xmlns", XMLNS_XMPP_STANZAS ) )
         {
           notifyOnResourceBindError( ConnectionListener::RB_BAD_REQUEST );
         }
-        else if( stanza.hasChild( "error", "type", "cancel" ) )
+        else if( stanza->hasChild( "error", "type", "cancel" ) )
         {
-          if( error.hasChild( "not-allowed", "xmlns", XMLNS_XMPP_STANZAS ) )
+          if( error->hasChild( "not-allowed", "xmlns", XMLNS_XMPP_STANZAS ) )
             notifyOnResourceBindError( ConnectionListener::RB_NOT_ALLOWED );
-          else if( error.hasChild( "conflict", "xmlns", XMLNS_XMPP_STANZAS ) )
+          else if( error->hasChild( "conflict", "xmlns", XMLNS_XMPP_STANZAS ) )
             notifyOnResourceBindError( ConnectionListener::RB_CONFLICT );
           else
             notifyOnResourceBindError( ConnectionListener::RB_UNKNOWN_ERROR );
@@ -302,20 +309,20 @@ namespace gloox
 
   void Client::createSession()
   {
-    Tag iq( "iq" );
-    iq.addAttrib( "type", "set" );
-    iq.addAttrib( "id", "session" );
-    Tag s( "session" );
-    s.addAttrib( "xmlns", XMLNS_STREAM_SESSION );
-    iq.addChild( s );
+    Tag *iq = new Tag( "iq" );
+    iq->addAttrib( "type", "set" );
+    iq->addAttrib( "id", "session" );
+    Tag *s = new Tag( "session" );
+    s->addAttrib( "xmlns", XMLNS_STREAM_SESSION );
+    iq->addChild( s );
 
     send( iq );
   }
 
-  void Client::processCreateSession( const Tag& tag )
+  void Client::processCreateSession( Tag *tag )
   {
-    Stanza stanza( tag );
-    switch( stanza.subtype() )
+    Stanza *stanza = new Stanza( tag );
+    switch( stanza->subtype() )
     {
       case STANZA_IQ_RESULT:
       {
@@ -324,19 +331,19 @@ namespace gloox
       }
       case STANZA_IQ_ERROR:
       {
-        Tag error = stanza.findChild( "error" );
-        if( stanza.hasChild( "error", "type", "wait" )
-            && error.hasChild( "internal-server-error", "xmlns", XMLNS_XMPP_STANZAS ) )
+        Tag *error = stanza->findChild( "error" );
+        if( stanza->hasChild( "error", "type", "wait" )
+            && error->hasChild( "internal-server-error", "xmlns", XMLNS_XMPP_STANZAS ) )
         {
           notifyOnSessionCreateError( ConnectionListener::SC_INTERNAL_SERVER_ERROR );
         }
-        else if( stanza.hasChild( "error", "type", "auth" )
-                 && error.hasChild( "forbidden", "xmlns", XMLNS_XMPP_STANZAS ) )
+        else if( stanza->hasChild( "error", "type", "auth" )
+                 && error->hasChild( "forbidden", "xmlns", XMLNS_XMPP_STANZAS ) )
         {
           notifyOnSessionCreateError( ConnectionListener::SC_FORBIDDEN );
         }
-        else if( stanza.hasChild( "error", "type", "cancel" )
-                 && error.hasChild( "conflict", "xmlns", XMLNS_XMPP_STANZAS ) )
+        else if( stanza->hasChild( "error", "type", "cancel" )
+                 && error->hasChild( "conflict", "xmlns", XMLNS_XMPP_STANZAS ) )
         {
           notifyOnSessionCreateError( ConnectionListener::SC_CONFLICT );
         }
@@ -369,11 +376,11 @@ namespace gloox
 
   void Client::sendInitialPresence()
   {
-    Tag p( "presence" );
+    Tag *p = new Tag( "presence" );
     char priority[5];
     sprintf( priority, "%d", m_priority );
-    Tag prio( "priority", priority );
-    p.addChild( prio );
+    Tag *prio= new Tag( "priority", priority );
+    p->addChild( prio );
     send( p );
   }
 
