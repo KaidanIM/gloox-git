@@ -58,7 +58,7 @@ namespace gloox
     free( hash );
   }
 
-  bool Component::handleNormalNode( const Tag *tag )
+  bool Component::handleNormalNode( Tag *tag )
   {
     printf( "in handleNormalNode\n" );
     if( tag->name() == "handshake" )
