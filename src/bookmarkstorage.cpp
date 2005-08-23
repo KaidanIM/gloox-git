@@ -41,18 +41,18 @@ namespace gloox
   void BookmarkStorage::storeBookmarks( const BookmarkHandler::BookmarkList& bList,
                                         const BookmarkHandler::ConferenceList& cList )
   {
-    Tag s( "storage" );
-    s.addAttrib( "xmlns", XMLNS_BOOKMARKS );
+    Tag *s = new Tag( "storage" );
+    s->addAttrib( "xmlns", XMLNS_BOOKMARKS );
 
     if( bList.size() )
     {
       BookmarkHandler::BookmarkList::const_iterator it = bList.begin();
       for( it; it != bList.end(); it++ )
       {
-        Tag i( "url" );
-        i.addAttrib( "name", (*it).name );
-        i.addAttrib( "url", (*it).url );
-        s.addChild( i );
+        Tag *i = new Tag( "url" );
+        i->addAttrib( "name", (*it).name );
+        i->addAttrib( "url", (*it).url );
+        s->addChild( i );
       }
     }
 
@@ -61,16 +61,14 @@ namespace gloox
       BookmarkHandler::ConferenceList::const_iterator it = cList.begin();
       for( it; it != cList.end(); it++ )
       {
-        Tag i( "conference" );
-        i.addAttrib( "name", (*it).name );
-        i.addAttrib( "jid", (*it).jid );
+        Tag *i = new Tag( "conference" );
+        i->addAttrib( "name", (*it).name );
+        i->addAttrib( "jid", (*it).jid );
         if( (*it).autojoin )
-          i.addAttrib( "autojoin", "true" );
-        Tag n( "nick", (*it).nick );
-        Tag p( "password", (*it).password );
-        i.addChild( n );
-        i.addChild( p );
-        s.addChild( i );
+          i->addAttrib( "autojoin", "true" );
+        i->addChild( new Tag( "nick", (*it).nick ) );
+        i->addChild( new Tag( "password", (*it).password ) );
+        s->addChild( i );
       }
     }
 
@@ -82,18 +80,18 @@ namespace gloox
     requestXML( "storage", XMLNS_BOOKMARKS );
   }
 
-  void BookmarkStorage::handlePrivateXML( const std::string& tag, const std::string& xmlns, const Tag& xml )
+  void BookmarkStorage::handlePrivateXML( const std::string& tag, const std::string& xmlns, Tag *xml )
   {
     BookmarkHandler::BookmarkList bList;
     BookmarkHandler::ConferenceList cList;
-    const Tag::TagList l = const_cast<Tag&>(xml).children();
+    const Tag::TagList l = xml->children();
     Tag::TagList::const_iterator it = l.begin();
     for( it; it != l.end(); it++ )
     {
-      if( (*it).name() == "url" )
+      if( (*it)->name() == "url" )
       {
-        const std::string url = (*it).findAttribute( "url" );
-        const std::string name = (*it).findAttribute( "name" );
+        const std::string url = (*it)->findAttribute( "url" );
+        const std::string name = (*it)->findAttribute( "name" );
 
         if( !url.empty() && !name.empty() )
         {
@@ -103,16 +101,16 @@ namespace gloox
           bList.push_back( item );
         }
       }
-      else if( (*it).name() == "conference" )
+      else if( (*it)->name() == "conference" )
       {
         bool autojoin = false;
-        const std::string jid = (*it).findAttribute( "jid" );
-        const std::string name = (*it).findAttribute( "name" );
-        const std::string join = (*it).findAttribute( "autojoin" );
+        const std::string jid = (*it)->findAttribute( "jid" );
+        const std::string name = (*it)->findAttribute( "name" );
+        const std::string join = (*it)->findAttribute( "autojoin" );
         if( ( join == "true" ) || ( join == "1" ) )
           autojoin = true;
-        const std::string nick = (*it).findChild( "nick" ).cdata();
-        const std::string pwd = (*it).findChild( "password" ).cdata();
+        const std::string nick = (*it)->findChild( "nick" )->cdata();
+        const std::string pwd = (*it)->findChild( "password" )->cdata();
 
         if( !jid.empty() && !name.empty() )
         {

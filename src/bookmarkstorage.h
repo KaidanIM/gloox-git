@@ -80,7 +80,7 @@ namespace gloox
       void removeBookmarkHandler();
 
       // reimplemented from PrivateXMLHandler
-      virtual void handlePrivateXML( const std::string& tag, const std::string& xmlns, const Tag& xml );
+      virtual void handlePrivateXML( const std::string& tag, const std::string& xmlns, Tag *xml );
 
     private:
       BookmarkHandler *m_bookmarkHandler;
