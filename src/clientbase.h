@@ -347,7 +347,7 @@ namespace gloox
 
     private:
       virtual void handleStartNode() = 0;
-      virtual bool handleNormalNode( const Tag *tag ) = 0;
+      virtual bool handleNormalNode( Tag *tag ) = 0;
       Stanza createStanza( const Tag *tag );
 
       void notifyIqHandlers( Stanza *stanza );
