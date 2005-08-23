@@ -40,19 +40,19 @@ namespace gloox
 
   void Annotations::storeAnnotations( const AnnotationsHandler::AnnotationsList& aList )
   {
-    Tag s( "storage" );
-    s.addAttrib( "xmlns", XMLNS_ANNOTATIONS );
+    Tag *s = new Tag( "storage" );
+    s->addAttrib( "xmlns", XMLNS_ANNOTATIONS );
 
     if( aList.size() )
     {
       AnnotationsHandler::AnnotationsList::const_iterator it = aList.begin();
       for( it; it != aList.end(); it++ )
       {
-        Tag n( "note", (*it).note );
-        n.addAttrib( "jid", (*it).jid );
-        n.addAttrib( "cdate", (*it).cdate );
-        n.addAttrib( "mdate", (*it).mdate );
-        s.addChild( n );
+        Tag *n = new Tag( "note", (*it).note );
+        n->addAttrib( "jid", (*it).jid );
+        n->addAttrib( "cdate", (*it).cdate );
+        n->addAttrib( "mdate", (*it).mdate );
+        s->addChild( n );
       }
     }
 
@@ -64,19 +64,19 @@ namespace gloox
     requestXML( "storage", XMLNS_ANNOTATIONS );
   }
 
-  void Annotations::handlePrivateXML( const std::string& tag, const std::string& xmlns, const Tag& xml )
+  void Annotations::handlePrivateXML( const std::string& tag, const std::string& xmlns, Tag *xml )
   {
     AnnotationsHandler::AnnotationsList aList;
-    const Tag::TagList l = const_cast<Tag&>(xml).children();
+    const Tag::TagList l = xml->children();
     Tag::TagList::const_iterator it = l.begin();
     for( it; it != l.end(); it++ )
     {
-      if( (*it).name() == "note" )
+      if( (*it)->name() == "note" )
       {
-        const std::string jid = (*it).findAttribute( "jid" );
-        const std::string mdate = (*it).findAttribute( "mdate" );
-        const std::string cdate = (*it).findAttribute( "cdate" );
-        const std::string note = (*it).cdata();
+        const std::string jid = (*it)->findAttribute( "jid" );
+        const std::string mdate = (*it)->findAttribute( "mdate" );
+        const std::string cdate = (*it)->findAttribute( "cdate" );
+        const std::string note = (*it)->cdata();
 
         if( !jid.empty() && !note.empty() )
         {

@@ -78,7 +78,7 @@ namespace gloox
       void removeAnnotationsHandler();
 
       // reimplemented from PrivateXMLHandler
-      virtual void handlePrivateXML( const std::string& tag, const std::string& xmlns, const Tag& xml );
+      virtual void handlePrivateXML( const std::string& tag, const std::string& xmlns, Tag *xml );
 
     private:
       AnnotationsHandler *m_annotationsHandler;
