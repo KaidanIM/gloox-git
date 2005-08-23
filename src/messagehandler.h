@@ -40,7 +40,7 @@ namespace gloox
        * incoming messages.
        * @param stanza The complete Stanza.
        */
-      virtual void handleMessage( const Stanza& stanza ) = 0;
+      virtual void handleMessage( Stanza *stanza ) = 0;
   };
 
 };

@@ -40,7 +40,7 @@ namespace gloox
        * incoming presence notifications.
        * @param stanza The complete stanza.
        */
-      virtual void handlePresence( const Stanza& stanza ) = 0;
+      virtual void handlePresence( Stanza *stanza ) = 0;
   };
 
 };
