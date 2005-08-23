@@ -46,7 +46,7 @@ namespace gloox
        * @param xmlns The XML namespace of the storage packet.
        * @param tag The private xml, i.e. the first child of the &lt;query&gt; tag.
        */
-      virtual void handlePrivateXML( const std::string& tag, const std::string& xmlns, const Tag& xml ) {};
+      virtual void handlePrivateXML( const std::string& tag, const std::string& xmlns, Tag *xml ) {};
 
   };
 
