@@ -20,6 +20,8 @@
 #ifndef TAG_H__
 #define TAG_H__
 
+#include "gloox.h"
+
 #include <string>
 #include <list>
 #include <map>
@@ -43,7 +45,7 @@ namespace gloox
       /**
        * A list of Tags.
        */
-      typedef std::list<Tag> TagList;
+      typedef std::list<Tag*> TagList;
 
       /**
        * Creates an empty tag.
@@ -80,7 +82,7 @@ namespace gloox
        * Use this function to add a child node to the tag.
        * @param child The node to be inserted.
        */
-      virtual void addChild( const Tag& child );
+      virtual void addChild( Tag *child );
 
       /**
        * Sets the XML character data for this Tag.
@@ -132,7 +134,7 @@ namespace gloox
        * @param name The name of the element to search for.
        * @return The found Tag, or an empty (invalid) Tag.
        */
-      virtual const Tag findChild( const std::string& name ) const;
+      virtual Tag* findChild( const std::string& name );
 
       /**
        * This function checks whether the Tag has a child element with a given name, and optionally
@@ -152,7 +154,7 @@ namespace gloox
        * @param value The value of the attribute of the child element.
        * @return The child if found, an empty Tag otherwise.
        */
-      const Tag findChildWithAttrib( const std::string& attr, const std::string& value = "" ) const;
+      virtual Tag* findChildWithAttrib( const std::string& attr, const std::string& value = "" );
 
       /**
        * This function checks whether the Tag has a child element which posesses a given attribute
@@ -178,11 +180,25 @@ namespace gloox
        */
       bool hasChildWithCData( const std::string& name, const std::string& cdata ) const;
 
+      /**
+       * Returns the tag's parent Tag.
+       * @return The Tag above the current Tag.
+       */
+      Tag* parent() { return m_parent; };
+
+      /**
+       * Returns the stanza type.
+       * @return The type of the stanza.
+       */
+      virtual StanzaType type() const { return m_type; };
+
     protected:
       std::string m_name;
       AttributeList m_attribs;
       std::string m_cdata;
       TagList m_children;
+      Tag *m_parent;
+      StanzaType m_type;
 
   };
 
