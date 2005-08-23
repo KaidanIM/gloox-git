@@ -26,8 +26,10 @@
 
 #include <string>
 
+#ifdef HAVE_GNUTLS
 #include <gnutls/gnutls.h>
 #include <gnutls/x509.h>
+#endif
 
 namespace gloox
 {
@@ -99,11 +101,20 @@ namespace gloox
        */
       void setState( ConnectionState state ) { m_state = state; };
 
+#ifdef HAVE_GNUTLS
+      /**
+       * Use this function to set a number of trusted root CA certificates. which shall be
+       * used to verify a servers certificate.
+       * @param cacerts A list of absolute paths to CA root certificate files in PEM format.
+       */
+      void setCACerts( const StringList& cacerts ) { m_cacerts = cacerts; };
+
       /**
        * This function is used to retrieve certificate and connection info of a encrypted connection.
        * @return Certificate information.
        */
-      const CertInfo fetchTLSInfo() const { return m_certInfo; };
+      const CertInfo& fetchTLSInfo() const { return m_certInfo; };
+#endif
 
     private:
       void cancel();
@@ -115,6 +126,8 @@ namespace gloox
 
       gnutls_session_t m_session;
       gnutls_certificate_credentials m_credentials;
+
+      StringList m_cacerts;
 #endif
 
       static const int BUFSIZE = 1024;

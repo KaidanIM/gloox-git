@@ -89,11 +89,13 @@ namespace gloox
       m_streamFeatures = getStreamFeatures( tag );
       printf( "stream features: %d\n", m_streamFeatures );
 
+#ifdef HAVE_GNUTLS
       if( tls() && hasTls() && !m_connection->isSecure() && ( m_streamFeatures & STREAM_FEATURE_STARTTLS ) )
       {
         startTls();
         return true;
       }
+#endif
 
       if( sasl() )
       {
@@ -143,6 +145,7 @@ namespace gloox
         disconnect( STATE_NO_SUPPORTED_AUTH );
       }
     }
+#ifdef HAVE_GNUTLS
     else if( ( tag.name() == "proceed" ) && tag.hasAttribute( "xmlns", XMLNS_STREAM_TLS ) )
     {
 #ifdef DEBUG
@@ -158,6 +161,7 @@ namespace gloox
       printf( "connection security is now %d\n", m_connection->isSecure() );
 #endif
     }
+#endif
     else if( tag.name() == "failure" )
     {
 #ifdef DEBUG

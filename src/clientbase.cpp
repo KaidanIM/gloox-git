@@ -77,6 +77,7 @@ namespace gloox
     if( !m_connection )
       m_connection = new Connection( m_parser, m_jid.server(), m_port );
 
+    m_connection->setCACerts( m_cacerts );
     int ret = m_connection->connect();
     if( ret == STATE_CONNECTED )
     {
