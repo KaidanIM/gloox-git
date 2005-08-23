@@ -80,32 +80,23 @@ namespace gloox
   };
 
   /**
-   *
-   */
-  enum SaslMechanisms
-  {
-    GLOOX_SASL_PLAIN,               /**< */
-    GLOOX_SASL_DIGEST_MD5           /**< */
-  };
-
-  /**
-   *
+   * Describes the possible stanza types.
    */
   enum StanzaType
   {
     STANZA_UNDEFINED,               /**< Undefined. */
-    STANZA_IQ,                      /**< */
-    STANZA_MESSAGE,                 /**< */
-    STANZA_S10N,                    /**< */
-    STANZA_PRESENCE,                /**< */
+    STANZA_IQ,                      /**< An Info/Query stanza. */
+    STANZA_MESSAGE,                 /**< A message stanza. */
+    STANZA_S10N,                    /**< A presence/subscription stanza. */
+    STANZA_PRESENCE,                /**< A presence stanza. */
   };
 
   /**
-   *
+   * Describes the possible stanza-sub-types.
    */
   enum StanzaSubType
   {
-    STANZA_SUB_UNDEFINED,               /**< Undefined. */
+    STANZA_SUB_UNDEFINED,           /**< Undefined. */
     STANZA_IQ_GET,                  /**< The stanza is a request for information or requirements. */
     STANZA_IQ_SET,                  /**<
                                      * The stanza provides required data, sets new values, or
