@@ -91,6 +91,12 @@ namespace gloox
       virtual void setCData( const std::string& cdata );
 
       /**
+       * Adds the string to the existing XML character data for this Tag.
+       * @param cdata The additional cdata.
+       */
+      virtual void addCData( const std::string& cdata );
+
+      /**
        * Use this function to retrieve the name of an element.
        * @return The name of the tag.
        */

@@ -47,6 +47,11 @@ namespace gloox
     m_cdata = escape( cdata );
   }
 
+  void Tag::addCData( const std::string& cdata )
+  {
+    m_cdata += escape( cdata );
+  }
+
   const std::string Tag::xml() const
   {
     std::string xml;
