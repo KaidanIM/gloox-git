@@ -75,6 +75,7 @@ namespace gloox
     {
       case IKS_OPEN:
       case IKS_SINGLE:
+      {
         Stanza *tag = new Stanza( name );
         for(int i=0; atts && atts[i]; )
         {
@@ -100,6 +101,7 @@ namespace gloox
         }
         if( type == IKS_OPEN )
         break;
+      }
       case IKS_CLOSE:
         if( iks_strncmp( name, "stream:stream", 13 ) == 0 )
         {
