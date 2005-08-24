@@ -66,6 +66,8 @@ namespace gloox
         i->addAttrib( "jid", (*it).jid );
         if( (*it).autojoin )
           i->addAttrib( "autojoin", "true" );
+        else
+          i->addAttrib( "autojoin", "false" );
         i->addChild( new Tag( "nick", (*it).nick ) );
         i->addChild( new Tag( "password", (*it).password ) );
         s->addChild( i );
