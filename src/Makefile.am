@@ -22,7 +22,7 @@ libglooxinclude_HEADERS = adhoccommandprovider.h  privacymanager.h \
 			  annotationshandler.h    component.h           registration.h \
 			  bookmarkhandler.h       registrationhandler.h jid.h \
 			  bookmarkstorage.h       messagehandler.h      rosteritem.h \
-			  clientbase.h            rosterlistener.h \
+			  clientbase.h            rosterlistener.h      taghandler.h \
 			  connectionlistener.h    rostermanager.h \
 			  disco.h                 presencehandler.h     subscriptionhandler.h \
 			  discohandler.h          privacyitem.h \
