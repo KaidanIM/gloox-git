@@ -4,6 +4,7 @@
 #include "../discohandler.h"
 #include "../disco.h"
 #include "../stanza.h"
+#include "../gloox.h"
 using namespace gloox;
 
 #include <stdio.h>
@@ -30,6 +31,9 @@ class DiscoTest : public DiscoHandler, ConnectionListener
       j->disco()->registerDiscoHandler( this );
       j->disco()->setVersion( "discoTest", GLOOX_VERSION );
       j->disco()->setIdentity( "client", "bot" );
+      StringList ca;
+      ca.push_back( "/patch/to/cacert.crt" );
+      j->setCACerts( ca );
 
       j->connect();
 
@@ -38,11 +42,18 @@ class DiscoTest : public DiscoHandler, ConnectionListener
 
     virtual void onConnect()
     {
-      j->disco()->getDiscoInfo( "hurkhurk@example.org/gloox" );
-      j->disco()->getDiscoItems( "hurkhurk@example.org/gloox" );
     };
 
     virtual void onDisconnect() { printf( "disco_test: disconnected\n" ); };
+
+    virtual bool onTLSConnect( const CertInfo& info )
+    {
+      printf( "status: %d\nissuer: %s\npeer: %s\nprotocol: %s\nmac: %s\ncipher: %s\ncompression: %s\n",
+              info.status, info.issuer.c_str(), info.server.c_str(),
+              info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
+              info.compression.c_str() );
+      return true;
+    };
 
     virtual void handleDiscoInfoResult( const std::string& id, const Stanza& stanza )
     {

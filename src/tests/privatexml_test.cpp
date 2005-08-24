@@ -37,6 +37,7 @@ class PrivateXMLTest : public PrivateXMLHandler, ConnectionListener
 
       j->connect();
 
+      delete( p );
       delete( j );
     }
 
@@ -47,13 +48,23 @@ class PrivateXMLTest : public PrivateXMLHandler, ConnectionListener
 
     virtual void onDisconnect() { printf( "disco_test: disconnected\n" ); };
 
-    virtual void handlePrivateXML( const std::string& tag, const std::string& xmlns, const Tag& xml )
+    virtual bool onTLSConnect( const CertInfo& info )
+    {
+      printf( "status: %d\nissuer: %s\npeer: %s\nprotocol: %s\nmac: %s\ncipher: %s\ncompression: %s\n",
+              info.status, info.issuer.c_str(), info.server.c_str(),
+              info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
+              info.compression.c_str() );
+      return true;
+    };
+
+    virtual void handlePrivateXML( const std::string& tag, const std::string& xmlns, Tag *xml )
     {
       printf( "received privatexml...\n" );
-      Tag x( "test" );
-      x.addAttrib( "xmlns", "http://camaya.net/jabber/test" );
+      Tag *x = new Tag( "test" );
+      x->addAttrib( "xmlns", "http://camaya.net/jabber/test" );
       std::string id = j->getID();
-      Tag b( "blah", id );
+      Tag *b = new Tag( "blah", id );
+      x->addChild( b );
       p->storeXML( x, "http://camaya.net/jabber/test" );
     }
 
