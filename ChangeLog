@@ -1,8 +1,23 @@
 
-
-v0.3.3 -- 14 Aug 2005
+v0.4 -- 24 Aug 2005
 ---------------------
 - fixed some memory leaks
+- renamed classes: JClient    --> Client
+                   JComponent --> Component
+- got rid of the Iksemelmm wrapper classes
+- added native Tag and Stanza classes
+- added a (dummy) Parser class which currently only converts from Iksemel
+  types to gloox native types
+- natively handle connection (send & recv), incl. TLS/SSL
+- added tag filter
+- fixed roster management (somehow everything but the jid in the initial
+  roster was ignored)
+- process resource binding response
+- process session creation response
+- added forgotten 'autojoin' attribute to bookmark storage
+- got rid of the thread
+- TLS/SSL certificate verification
+- changed license to GNU GPL
 
 
 v0.3.2 -- 09 Aug 2005
