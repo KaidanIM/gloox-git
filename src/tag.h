@@ -60,6 +60,15 @@ namespace gloox
       Tag( const std::string& name, const std::string& cdata = "" );
 
       /**
+       * Creates a new tag as a child tag of the given parent, with a given name (and
+       * XML character data, if given).
+       * @param parent The parent tag.
+       * @param name The name of the element.
+       * @param cdata The XML character data of the element.
+       */
+      Tag( Tag *parent, const std::string& name, const std::string& cdata = "" );
+
+      /**
        * Virtual destructor.
        */
       virtual ~Tag();
