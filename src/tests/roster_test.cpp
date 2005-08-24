@@ -42,6 +42,15 @@ class RosterTest : public RosterListener, ConnectionListener
 
     virtual void onDisconnect() { printf( "disco_test: disconnected\n" ); };
 
+    virtual bool onTLSConnect( const CertInfo& info )
+    {
+      printf( "status: %d\nissuer: %s\npeer: %s\nprotocol: %s\nmac: %s\ncipher: %s\ncompression: %s\n",
+              info.status, info.issuer.c_str(), info.server.c_str(),
+              info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
+              info.compression.c_str() );
+      return true;
+    };
+
     virtual void itemSubscribed( const std::string& jid )
     {
       printf( "subscribed %s\n", jid.c_str() );
@@ -62,9 +71,25 @@ class RosterTest : public RosterListener, ConnectionListener
       printf( "removed %s\n", jid.c_str() );
     }
 
-    virtual void roster( Roster roster )
+    virtual void itemUpdated( const std::string& jid )
     {
-      printf( "roster arriving\n" );
+      printf( "updated %s\n", jid.c_str() );
+    }
+
+    virtual void roster( Roster& roster )
+    {
+      printf( "roster arriving\nitems:\n" );
+      RosterListener::Roster::const_iterator it = roster.begin();
+      for( it; it != roster.end(); ++it )
+      {
+        printf( "jid: %s, name: %s, subscription: %d\n",
+                (*it).second->jid().c_str(), (*it).second->name().c_str(),
+                (*it).second->subscription() );
+        RosterItem::GroupList g = (*it).second->groups();
+        RosterItem::GroupList::const_iterator it_g = g.begin();
+        for( it_g; it_g != g.end(); ++it_g )
+          printf( "\tgroup: %s\n", (*it_g).c_str() );
+      }
       j->rosterManager()->unsubscribe( "js@example.org", true );
     }
 
@@ -78,9 +103,17 @@ class RosterTest : public RosterListener, ConnectionListener
       printf( "item online: %s\n", item.jid().c_str() );
     }
 
-    virtual bool subscriptionRequest( const std::string& jid, const std::string& msg )
+    virtual bool subscriptionRequest( const std::string& jid )
     {
-      printf( "subscriprion: %s\n", jid.c_str() );
+      printf( "subscription: %s\n", jid.c_str() );
+      RosterItem::GroupList groups;
+      j->rosterManager()->subscribe( jid, "", groups );
+      return true;
+    }
+
+    virtual bool unsubscriptionRequest( const std::string& jid )
+    {
+      printf( "unsubscription: %s\n", jid.c_str() );
       return true;
     }
 

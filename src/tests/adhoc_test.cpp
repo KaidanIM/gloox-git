@@ -41,7 +41,7 @@ class AdhocTest : public ConnectionListener, AdhocCommandProvider
       delete( j );
     }
 
-    void handleAdhocCommand( const std::string& command, const Tag& tag )
+    void handleAdhocCommand( const std::string& command, Tag *tag )
     {
       if( command == "helloworld" )
         printf( "Hello World!\n" );
@@ -50,7 +50,6 @@ class AdhocTest : public ConnectionListener, AdhocCommandProvider
       else if( command == "shutdown" )
       {
         printf( "shutting down\n" );
-        j->disconnect( STATE_DISCONNECTED );
       }
     }
 
@@ -59,6 +58,15 @@ class AdhocTest : public ConnectionListener, AdhocCommandProvider
     };
 
     virtual void onDisconnect() { printf( "disco_test: disconnected\n" ); };
+
+    virtual bool onTLSConnect( const CertInfo& info )
+    {
+      printf( "status: %d\nissuer: %s\npeer: %s\nprotocol: %s\nmac: %s\ncipher: %s\ncompression: %s\n",
+              info.status, info.issuer.c_str(), info.server.c_str(),
+              info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
+              info.compression.c_str() );
+      return true;
+    };
 
   private:
     Client *j;

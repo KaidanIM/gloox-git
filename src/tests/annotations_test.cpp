@@ -37,6 +37,7 @@ class AnnotationsTest : public AnnotationsHandler, ConnectionListener
 
       j->connect();
 
+      delete( a );
       delete( j );
     };
 
@@ -45,7 +46,16 @@ class AnnotationsTest : public AnnotationsHandler, ConnectionListener
       a->requestAnnotations();
     };
 
-    virtual void onDisconnect() { printf( "disco_test: disconnected\n" ); };
+    virtual void onDisconnect() { printf( "annotations_test: disconnected\n" ); };
+
+    virtual bool onTLSConnect( const CertInfo& info )
+    {
+      printf( "status: %d\nissuer: %s\npeer: %s\nprotocol: %s\nmac: %s\ncipher: %s\ncompression: %s\n",
+              info.status, info.issuer.c_str(), info.server.c_str(),
+              info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
+              info.compression.c_str() );
+      return true;
+    };
 
     virtual void handleAnnotations( AnnotationsList &aList )
     {

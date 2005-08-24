@@ -37,6 +37,7 @@ class BookmarkStorageTest : public BookmarkHandler, ConnectionListener
 
       j->connect();
 
+      delete( b );
       delete( j );
     };
 
@@ -46,6 +47,15 @@ class BookmarkStorageTest : public BookmarkHandler, ConnectionListener
     };
 
     virtual void onDisconnect() { printf( "disco_test: disconnected\n" ); };
+
+    virtual bool onTLSConnect( const CertInfo& info )
+    {
+      printf( "status: %d\nissuer: %s\npeer: %s\nprotocol: %s\nmac: %s\ncipher: %s\ncompression: %s\n",
+              info.status, info.issuer.c_str(), info.server.c_str(),
+              info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
+              info.compression.c_str() );
+      return true;
+    };
 
     virtual void handleBookmarks( BookmarkList bList, ConferenceList cList )
     {
@@ -79,12 +89,14 @@ class BookmarkStorageTest : public BookmarkHandler, ConnectionListener
       cItem.jid = "jdev@conference.jabber.org";
       cItem.name = "jabber development";
       cItem.nick = "myNick";
+      cItem.autojoin = false;
       mycList.push_back( cItem );
 
       cItem.jid = "jabberd@conference.jabber.org";
       cItem.name = "jabberd development";
       cItem.nick = "myOtherNick";
       cItem.password = "my password";
+      cItem.autojoin = true;
       mycList.push_back( cItem );
 
       b->storeBookmarks( mybList, mycList );

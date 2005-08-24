@@ -40,6 +40,15 @@ class ComponentTest : public DiscoHandler, ConnectionListener
 
     virtual void onDisconnect() { printf( "component: disconnected\n" ); };
 
+    virtual bool onTLSConnect( const CertInfo& info )
+    {
+      printf( "status: %d\nissuer: %s\npeer: %s\nprotocol: %s\nmac: %s\ncipher: %s\ncompression: %s\n",
+              info.status, info.issuer.c_str(), info.server.c_str(),
+              info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
+              info.compression.c_str() );
+      return true;
+    };
+
   private:
     Component *j;
 };

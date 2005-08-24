@@ -37,6 +37,7 @@ class PLTest : public PrivacyListHandler, ConnectionListener
 
       j->connect();
 
+      delete( p );
       delete( j );
     };
 
@@ -47,14 +48,23 @@ class PLTest : public PrivacyListHandler, ConnectionListener
 
     virtual void onDisconnect() { printf( "disco_test: disconnected\n" ); };
 
+    virtual bool onTLSConnect( const CertInfo& info )
+    {
+      printf( "status: %d\nissuer: %s\npeer: %s\nprotocol: %s\nmac: %s\ncipher: %s\ncompression: %s\n",
+              info.status, info.issuer.c_str(), info.server.c_str(),
+              info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
+              info.compression.c_str() );
+      return true;
+    };
+
     virtual void handlePrivacyListNames( const std::string& active, const std::string& def,
-                                         const PrivacyListHandler::StringList& lists )
+                                         const StringList& lists )
     {
       printf( "received PL...\n" );
       printf( "active list: %s\n", active.c_str() );
       printf( "default list: %s\n", def.c_str() );
       printf( "all lists:\n" );
-      PrivacyListHandler::StringList::const_iterator it = lists.begin();
+      StringList::const_iterator it = lists.begin();
       for( it; it != lists.end(); it++ )
       {
         printf( "%s\n", (*it).c_str() );
@@ -64,6 +74,9 @@ class PLTest : public PrivacyListHandler, ConnectionListener
       PrivacyItem item( PrivacyItem::TYPE_JID, PrivacyItem::ACTION_DENY,
                         PrivacyItem::PACKET_MESSAGE, "me@there.com" );
       l.push_back( item );
+      PrivacyItem item2( PrivacyItem::TYPE_JID, PrivacyItem::ACTION_ALLOW,
+                        PrivacyItem::PACKET_IQ, "me@example.org" );
+      l.push_back( item2 );
       p->store( "mnyList", l );
 //       p->unsetDefault();
 //       p->unsetActive();
