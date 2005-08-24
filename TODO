@@ -14,5 +14,6 @@ In the pipe
 -----------
 
 - complete error handling for all protocols
-- TLS certificate verification
 - add classes for common packet types
+- xml:lang for message, presence stanzas
+- a generic tag handler (for non-XMPP:Core elements)
