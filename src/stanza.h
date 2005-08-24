@@ -89,6 +89,24 @@ namespace gloox
       virtual const std::string status() const { return m_status; };
 
       /**
+       * Returns the message body of a message stanza.
+       * @return The message body of a message stanza. Empty for non-message stanzas.
+       */
+      virtual const std::string message() const { return m_message; };
+
+      /**
+       * Returns the subject of a message stanza.
+       * @return The subject of a message stanza. Empty for non-message stanzas.
+       */
+      virtual const std::string subject() const { return m_subject; };
+
+      /**
+       * Returns the thread ID of a message stanza.
+       * @return The thread ID of a message stanza. Empty for non-message stanzas.
+       */
+      virtual const std::string thread() const { return m_thread; };
+
+      /**
        * Use this function to parse the content of the Tag and determine type, etc.
        * of the Stanza. This feels kind of hackish...
        * You only need to call this if you are constructing a bare Stanza from scratch.
@@ -106,6 +124,9 @@ namespace gloox
       std::string m_xmlns;
       std::string m_id;
       std::string m_status;
+      std::string m_message;
+      std::string m_subject;
+      std::string m_thread;
       int m_priority;
   };
 

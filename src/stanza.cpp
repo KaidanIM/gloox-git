@@ -69,6 +69,16 @@ namespace gloox
         m_subtype = STANZA_MESSAGE_NORMAL;
       else
         m_subtype = STANZA_SUB_UNDEFINED;
+
+      Tag *t = findChild( "body" );
+      if( t )
+        m_message = t->cdata();
+      t = findChild( "subject" );
+      if( t )
+        m_subject = t->cdata();
+      t = findChild( "thread" );
+      if( t )
+        m_thread = t->cdata();
     }
     else if( m_name == "presence" )
     {
