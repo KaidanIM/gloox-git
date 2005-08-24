@@ -133,7 +133,7 @@ namespace gloox
     {
       std::string tmp;
       tmp.assign( data, len );
-      parser->m_current->setCData( tmp );
+      parser->m_current->addCData( tmp );
     }
 
     return IKS_OK;
