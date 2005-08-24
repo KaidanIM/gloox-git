@@ -163,12 +163,14 @@ namespace gloox
 #endif
   }
 
+#ifdef HAVE_GNUTLS
   void ClientBase::startTls()
   {
     Tag *start = new Tag( "starttls" );
     start->addAttrib( "xmlns", XMLNS_STREAM_TLS );
     send( start );
   }
+#endif
 
   void ClientBase::startSASL( SaslMechanisms type )
   {

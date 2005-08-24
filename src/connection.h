@@ -77,11 +77,6 @@ namespace gloox
       void disconnect();
 
       /**
-       * Call this function to start a TLS handshake over an established connection.
-       */
-      bool tlsHandshake();
-
-      /**
        * Use this function to determine whether an esatblished connection is encrypted.
        * @return @b True if the connection is encrypted, @b false otherwise.
        */
@@ -101,6 +96,11 @@ namespace gloox
       void setState( ConnectionState state ) { m_state = state; };
 
 #ifdef HAVE_GNUTLS
+      /**
+       * Call this function to start a TLS handshake over an established connection.
+       */
+      bool tlsHandshake();
+
       /**
        * Use this function to set a number of trusted root CA certificates. which shall be
        * used to verify a servers certificate.
