@@ -43,7 +43,7 @@
 namespace gloox
 {
 
-  DNS::StringMap DNS::resolve( const std::string& domain )
+  DNS::HostMap DNS::resolve( const std::string& domain )
   {
     std::string service = "xmpp-client";
     std::string proto = "tcp";
@@ -51,7 +51,7 @@ namespace gloox
     return resolve( service, proto, domain );
   }
 
-  DNS::StringMap DNS::resolve( const std::string& service, const std::string& proto,
+  DNS::HostMap DNS::resolve( const std::string& service, const std::string& proto,
                                const std::string& domain )
   {
     buf srvbuf;
@@ -102,7 +102,7 @@ namespace gloox
 
     if( error )
     {
-      StringMap server;
+      HostMap server;
       struct servent *servent;
 
       if( ( servent = getservbyname( service.c_str(), proto.c_str() ) ) == 0 )
@@ -119,7 +119,7 @@ namespace gloox
 
     // (q)sort here
 
-    StringMap servers;
+    HostMap servers;
     for( cnt=0; cnt<srvnum; cnt++ )
     {
       name srvname;
@@ -139,7 +139,7 @@ namespace gloox
     dest_addr.sin_family = AF_INET;
     struct hostent *h;
 
-    StringMap hosts = resolve( domain );
+    HostMap hosts = resolve( domain );
     if( hosts.size() == 0 )
       return -DNS_NO_HOSTS_FOUND;
 
@@ -148,7 +148,7 @@ namespace gloox
 
     int ret = 0;
 
-    StringMap::const_iterator it = hosts.begin();
+    HostMap::const_iterator it = hosts.begin();
     for( it; it != hosts.end(); it++ )
     {
       int port;
