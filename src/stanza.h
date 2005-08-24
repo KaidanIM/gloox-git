@@ -32,7 +32,14 @@ namespace gloox
        * Creates a new Stanza from the given Tag.
        * @param tag The Tag to create the stanza from.
        */
-      Stanza( const Tag *tag );
+      Stanza( Tag *tag );
+
+      /**
+       * Creates an ew Stanza with given name and optional CData.
+       * @param name The name of the root tag.
+       * @param cdata Initial XML caharcter data for the tag.
+       */
+      Stanza( const std::string& name, const std::string& cdata = "" );
 
       /**
        * Virtual destructor.
@@ -67,7 +74,7 @@ namespace gloox
        * Returns the value of the xmlns attribute of the first child node.
        * @return The namespace of the IQ stanza.
        */
-      virtual const std::string xmlns() const { return m_xmlns; };
+      virtual const std::string& xmlns() const { return m_xmlns; };
 
       /**
        * Returns the presence 'show' type of a presence stanza.
@@ -81,7 +88,17 @@ namespace gloox
        */
       virtual const std::string status() const { return m_status; };
 
+      /**
+       * Use this function to parse the content of the Tag and determine type, etc.
+       * of the Stanza. This feels kind of hackish...
+       * You only need to call this if you are constructing a bare Stanza from scratch.
+       * Stanzas provided by gloox are fully parsed.
+       */
+      void finalize() { init(); };
+
     private:
+      void init();
+
       StanzaSubType m_subtype;
       PresenceStatus m_show;
       JID m_from;
