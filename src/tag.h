@@ -88,7 +88,7 @@ namespace gloox
        * Sets the XML character data for this Tag.
        * @param cdata The new cdata.
        */
-      virtual void setCData( const std::string& cdata ) { m_cdata = cdata; };
+      virtual void setCData( const std::string& cdata );
 
       /**
        * Use this function to retrieve the name of an element.
@@ -100,7 +100,7 @@ namespace gloox
        * Use this function to retrieve the XML character data of an element.
        * @return The cdata the element contains.
        */
-      virtual std::string cdata() const { return m_cdata; };
+      virtual std::string cdata() const;
 
       /**
        * Use this function to manipulate the list of attributes.
@@ -193,6 +193,9 @@ namespace gloox
       virtual StanzaType type() const { return m_type; };
 
     protected:
+      const std::string escape( const std::string& what ) const;
+      const std::string relax( const std::string& what ) const;
+
       std::string m_name;
       AttributeList m_attribs;
       std::string m_cdata;
