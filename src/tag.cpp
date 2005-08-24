@@ -27,7 +27,7 @@ namespace gloox
   }
 
   Tag::Tag( const std::string& name, const std::string& cdata )
-    : m_name( name ), m_cdata( cdata ), m_parent( 0 ), m_type( STANZA_UNDEFINED )
+  : m_name( name ), m_cdata( escape( cdata ) ), m_parent( 0 ), m_type( STANZA_UNDEFINED )
   {
   }
 
@@ -40,6 +40,11 @@ namespace gloox
       (*it) = 0;
     }
     m_children.clear();
+  }
+
+  void Tag::setCData( const std::string& cdata )
+  {
+    m_cdata = escape( cdata );
   }
 
   const std::string Tag::xml() const
@@ -82,6 +87,11 @@ namespace gloox
   {
     m_children.push_back( child );
     child->m_parent = this;
+  }
+
+  std::string Tag::cdata() const
+  {
+    return relax( m_cdata );
   }
 
   Tag::AttributeList& Tag::attributes()
@@ -177,6 +187,54 @@ namespace gloox
     }
 
     return 0;
+  }
+
+  const std::string Tag::escape( const std::string& what ) const
+  {
+    std::string esc = what;
+    StringMap map;
+    map["&"] = "&amp;";
+    map["<"] = "&lt;";
+    map[">"] = "&gt;";
+    map["'"] = "&apos;";
+    map["\""] = "&quot;";
+
+    StringMap::const_iterator it = map.begin();
+    for( it; it != map.end(); ++it )
+    {
+      size_t lookHere = 0;
+      size_t foundHere;
+      while( ( foundHere = esc.find( (*it).first, lookHere ) ) != std::string::npos )
+      {
+        esc.replace( foundHere, (*it).first.size(), (*it).second );
+        lookHere = foundHere + (*it).second.size();
+      }
+    }
+    return esc;
+  }
+
+  const std::string Tag::relax( const std::string& what ) const
+  {
+    std::string esc = what;
+    StringMap map;
+    map["&"] = "&amp;";
+    map["<"] = "&lt;";
+    map[">"] = "&gt;";
+    map["'"] = "&apos;";
+    map["\""] = "&quot;";
+
+    StringMap::const_iterator it = map.begin();
+    for( it; it != map.end(); ++it )
+    {
+      size_t lookHere = 0;
+      size_t foundHere;
+      while( ( foundHere = esc.find( (*it).second, lookHere ) ) != std::string::npos )
+      {
+        esc.replace( foundHere, (*it).second.size(), (*it).first );
+        lookHere = foundHere + (*it).first.size();
+      }
+    }
+    return esc;
   }
 
 };
