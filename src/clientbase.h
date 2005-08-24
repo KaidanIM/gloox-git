@@ -357,14 +357,13 @@ namespace gloox
       };
 
       virtual void handleStartNode() = 0;
-      virtual bool handleNormalNode( Tag *tag ) = 0;
-      Stanza createStanza( const Tag *tag );
+      virtual bool handleNormalNode( Stanza *stanza ) = 0;
 
       void notifyIqHandlers( Stanza *stanza );
       void notifyMessageHandlers( Stanza *stanza );
       void notifyPresenceHandlers( Stanza *stanza );
       void notifySubscriptionHandlers( Stanza *stanza );
-      void filter( NodeType type, Tag *tag );
+      void filter( NodeType type, Stanza *stanza );
       void logEvent( const char *data, size_t size, int is_incoming );
 
       struct TrackStruct

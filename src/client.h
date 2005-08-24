@@ -33,7 +33,7 @@ namespace gloox
   class RosterManager;
   class Disco;
   class NonSaslAuth;
-  class Tag;
+  class Stanza;
 
   /**
    * This class implements a Jabber Client.
@@ -230,11 +230,11 @@ namespace gloox
       };
 
       virtual void handleStartNode() {};
-      virtual bool handleNormalNode( Tag *tag );
-      int getStreamFeatures( Tag *tag );
+      virtual bool handleNormalNode( Stanza *stanza );
+      int getStreamFeatures( Stanza *stanza );
       int getSaslMechs( Tag *tag );
-      void processResourceBind( Tag *tag );
-      void processCreateSession( Tag *tag );
+      void processResourceBind( Stanza *stanza );
+      void processCreateSession( Stanza *stanza );
       void sendInitialPresence();
       void createSession();
       void connected();
