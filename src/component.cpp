@@ -22,7 +22,7 @@
 #include "component.h"
 
 #include "disco.h"
-#include "tag.h"
+#include "stanza.h"
 
 namespace gloox
 {
@@ -58,10 +58,10 @@ namespace gloox
     free( hash );
   }
 
-  bool Component::handleNormalNode( Tag *tag )
+  bool Component::handleNormalNode( Stanza *stanza )
   {
     printf( "in handleNormalNode\n" );
-    if( tag->name() == "handshake" )
+    if( stanza->name() == "handshake" )
       notifyOnConnect();
     else
       return false;
