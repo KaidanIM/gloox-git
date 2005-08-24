@@ -123,6 +123,9 @@ namespace gloox
             case STANZA_MESSAGE:
               notifyMessageHandlers( stanza );
               break;
+            default:
+              notifyTagHandlers( stanza );
+              break;
           }
         }
         break;
@@ -366,22 +369,22 @@ namespace gloox
       printf( "\n" );
   }
 
-  void ClientBase::registerPresenceHandler( PresenceHandler* ph )
+  void ClientBase::registerPresenceHandler( PresenceHandler *ph )
   {
     m_presenceHandlers.push_back( ph );
   }
 
-  void ClientBase::removePresenceHandler( PresenceHandler* ph )
+  void ClientBase::removePresenceHandler( PresenceHandler *ph )
   {
     m_presenceHandlers.remove( ph );
   }
 
-  void ClientBase::registerIqHandler( IqHandler* ih, const std::string& xmlns )
+  void ClientBase::registerIqHandler( IqHandler *ih, const std::string& xmlns )
   {
     m_iqNSHandlers[xmlns] = ih;
   }
 
-  void ClientBase::trackID( IqHandler* ih, const std::string& id, int context )
+  void ClientBase::trackID( IqHandler *ih, const std::string& id, int context )
   {
     TrackStruct track;
     track.ih = ih;
@@ -394,34 +397,48 @@ namespace gloox
     m_iqNSHandlers.erase( xmlns );
   }
 
-  void ClientBase::registerMessageHandler( MessageHandler* mh )
+  void ClientBase::registerMessageHandler( MessageHandler *mh )
   {
     m_messageHandlers.push_back( mh );
   }
 
-  void ClientBase::removeMessageHandler( MessageHandler* mh )
+  void ClientBase::removeMessageHandler( MessageHandler *mh )
   {
     m_messageHandlers.remove( mh );
   }
 
-  void ClientBase::registerSubscriptionHandler( SubscriptionHandler* sh )
+  void ClientBase::registerSubscriptionHandler( SubscriptionHandler *sh )
   {
     m_subscriptionHandlers.push_back( sh );
   }
 
-  void ClientBase::removeSubscriptionHandler( SubscriptionHandler* sh )
+  void ClientBase::registerTagHandler( TagHandler *th, const std::string& tag, const std::string& xmlns )
+  {
+    TagHandlerStruct ths;
+    ths.tag = tag;
+    ths.xmlns = xmlns;
+    ths.th = th;
+    m_tagHandlers.push_back( ths );
+  }
+
+  void ClientBase::removeSubscriptionHandler( SubscriptionHandler *sh )
   {
     m_subscriptionHandlers.remove( sh );
   }
 
-  void ClientBase::registerConnectionListener( ConnectionListener* cl )
+  void ClientBase::registerConnectionListener( ConnectionListener *cl )
   {
     m_connectionListeners.push_back( cl );
   }
 
-  void ClientBase::removeConnectionListener( ConnectionListener* cl )
+  void ClientBase::removeTagHandler( TagHandler *th, const std::string& tag, const std::string& xmlns )
   {
-    m_connectionListeners.remove( cl );
+    TagHandlerList::iterator it = m_tagHandlers.begin();
+    for( it; it != m_tagHandlers.end(); ++it )
+    {
+      if( (*it).th == th && (*it).tag == tag && (*it).xmlns == xmlns )
+        m_tagHandlers.erase( it );
+    }
   }
 
   void ClientBase::notifyOnConnect()
@@ -526,6 +543,16 @@ namespace gloox
     for( it; it != m_messageHandlers.end(); it++ )
     {
       (*it)->handleMessage( stanza );
+    }
+  }
+
+  void ClientBase::notifyTagHandlers( Stanza *stanza )
+  {
+    TagHandlerList::const_iterator it = m_tagHandlers.begin();
+    for( it; it != m_tagHandlers.end(); it++ )
+    {
+      if( (*it).tag == stanza->name() && (*it).xmlns == stanza->xmlns() )
+        (*it).th->handleTag( stanza );
     }
   }
 
