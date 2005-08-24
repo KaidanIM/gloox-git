@@ -52,7 +52,7 @@ namespace gloox
       /**
        * A list of std::strings (used for server addresses) and ints (used for port numbers).
        */
-      typedef map<string, int> StringMap;
+      typedef map<string, int> HostMap;
 
       /**
        * This funtion resolves a service/protocol/domain tuple.
@@ -62,7 +62,8 @@ namespace gloox
        * @return A list of weighted hostname/port pairs from SRV records, or A records if no SRV
        * records where found.
        */
-      static StringMap resolve( const std::string& service, const std::string& proto, const std::string& domain );
+      static HostMap resolve( const std::string& service, const std::string& proto,
+                                const std::string& domain );
 
       /**
        * This is a convenience funtion which uses @ref resolve() to resolve SRV records
@@ -71,7 +72,7 @@ namespace gloox
        * @return A list of weighted hostname/port pairs from SRV records, or A records if no SRV
        * records where found.
        */
-      static StringMap resolve( const std::string& domain );
+      static HostMap resolve( const std::string& domain );
 
       /**
        * This is a convenience function which uses @ref resolve() to get a list of hosts
