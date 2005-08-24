@@ -47,6 +47,11 @@ namespace gloox
       m_parent->removePresenceHandler( this );
       m_parent->removeSubscriptionHandler( this );
     }
+
+    RosterListener::Roster::iterator it = m_roster.begin();
+    for( it; it != m_roster.end(); ++it )
+      delete( (*it).second );
+    m_roster.clear();
   }
 
   RosterListener::Roster* RosterManager::roster()
