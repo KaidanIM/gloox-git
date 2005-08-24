@@ -47,7 +47,7 @@ namespace gloox
       virtual ~BookmarkStorage();
 
       /**
-       * Use this function to store number of URLs and conference bookmarks on the server.
+       * Use this function to store a number of URL and conference bookmarks on the server.
        * Make sure you store the whole set of bookmarks, not a 'delta'.
        * @param bList A list of URLs to store.
        * @param cList A list of conferences to store.

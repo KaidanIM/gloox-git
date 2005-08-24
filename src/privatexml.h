@@ -38,7 +38,7 @@ namespace gloox
     public:
       /**
        * Constructor.
-       * This function creates a new PrivateXML client that registers as IqHandler
+       * Creates a new PrivateXML client that registers as IqHandler
        * with @c ClientBase.
        * @param parent The ClientBase used for XMPP communication
        */
@@ -51,7 +51,7 @@ namespace gloox
 
       /**
        * Use this function to request the private XML stored in the given namespace.
-       * @param tag Child element of the query element used to identify the rrquested XML fragment.
+       * @param tag Child element of the query element used to identify the requested XML fragment.
        * @param xmlns The namespace which qualifies the tag.
        */
       void requestXML( const std::string& tag, const std::string& xmlns );
@@ -60,7 +60,7 @@ namespace gloox
        * Use this function to store private XML stored in the given namespace.
        * @param xml The XML to store. This is the complete tag including the unique namespace.
        * It is deleted after sending it.
-       * @param xmlns The is the namespace, again, in which the element @c is stored.
+       * @param xmlns The namespace again, in which the element @c is stored.
        */
       void storeXML( Tag *tag, const std::string& xmlns );
 

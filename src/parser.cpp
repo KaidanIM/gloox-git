@@ -21,7 +21,7 @@
 namespace gloox
 {
 
-  Parser::Parser( ClientBase *parent, const std::string& ns )
+  Parser::Parser( ClientBase *parent )
     : m_parent( parent ), m_root( 0 ), m_current( 0 )
   {
     m_parser = iks_sax_new( this, (iksTagHook*)tagHook, (iksCDataHook*)cdataHook );

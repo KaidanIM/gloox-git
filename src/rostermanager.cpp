@@ -109,7 +109,7 @@ namespace gloox
   }
 
   void RosterManager::subscribe( const std::string& jid, const std::string& name,
-                                 RosterItem::GroupList& groups/*, const std::string& msg*/ )
+                                 StringList& groups/*, const std::string& msg*/ )
   {
     if( jid.empty() )
       return;
@@ -123,7 +123,7 @@ namespace gloox
   }
 
 
-  void RosterManager::add( const std::string& jid, const std::string& name, RosterItem::GroupList& groups )
+  void RosterManager::add( const std::string& jid, const std::string& name, StringList& groups )
   {
     if( jid.empty() )
       return;
@@ -142,7 +142,7 @@ namespace gloox
 
     if( groups.size() != 0 )
     {
-      RosterItem::GroupList::const_iterator it = groups.begin();
+      StringList::const_iterator it = groups.begin();
       for( it; it != groups.end(); it++ )
       {
         Tag *g = new Tag( "group", (*it) );
@@ -201,7 +201,7 @@ namespace gloox
 
         if( (*it).second->groups().size() != 0 )
         {
-          RosterItem::GroupList::const_iterator g_it = (*it).second->groups().begin();
+          StringList::const_iterator g_it = (*it).second->groups().begin();
           for( g_it; g_it != (*it).second->groups().end(); g_it++ )
           {
             i->addChild( new Tag( "group", (*g_it) ) );
@@ -294,7 +294,7 @@ namespace gloox
     {
       if( (*it)->name() == "item" )
       {
-        RosterItem::GroupList gl;
+        StringList gl;
         if( (*it)->hasChild( "group" ) )
         {
           Tag::TagList g = (*it)->children();
@@ -349,7 +349,7 @@ namespace gloox
   }
 
   void RosterManager::add( const std::string& jid, const std::string& name,
-                           RosterItem::GroupList& groups, const std::string& sub, bool ask )
+                           StringList& groups, const std::string& sub, bool ask )
   {
     if( m_roster.find( jid ) == m_roster.end() )
       m_roster[jid] = new RosterItem( jid );

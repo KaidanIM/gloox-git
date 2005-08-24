@@ -18,8 +18,6 @@
 #include <iksemel.h>
 
 #include <string>
-using namespace std;
-
 
 namespace gloox
 {
@@ -87,7 +85,7 @@ namespace gloox
        * This funtion is called to notify about the result of an operation.
        * @param result The result of the last operation.
        */
-      virtual void handleRegistrationResult( resultEnum result ) {};
+      virtual void handleRegistrationResult( resultEnum result ) = 0;
   };
 
 };

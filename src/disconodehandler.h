@@ -34,30 +34,13 @@ namespace gloox
   {
     public:
       /**
-       * Holds a list of items. The first std::string is the item's node specifier,
-       * the second std::string is the items natural-language name.
-       */
-      typedef std::map<std::string, std::string> ItemMap;
-
-      /**
-       * Holds a list of features.
-       */
-      typedef std::list<std::string> FeatureList;
-
-      /**
-       * Holds a list of identities for a given node. The first std::string is the
-       * category specifier, the second std::string is the type specifier.
-       */
-      typedef std::map<std::string, std::string> IdentityMap;
-
-      /**
        * In addition to @c handleDiscoNodeIdentities, this function is used to gather
        * more information on a specific node. It is called when a disco#info query
        * arrives with a node attribute that matches the one registered for this handler.
        * @param node The node this handler is supposed to handle.
        * @return A list of features supported by this node.
        */
-      virtual FeatureList handleDiscoNodeFeatures( const std::string& node ) {};
+      virtual StringList handleDiscoNodeFeatures( const std::string& node ) {};
 
       /**
        * In addition to @c handleDiscoNodeFeatures, this function is used to gather
@@ -66,9 +49,10 @@ namespace gloox
        * @param node The node this handler is supposed to handle.
        * @param name This parameter is currently used as additional return value.  Just fill in the
        * name of the node.
-       * @return A list of identities for this node.
+       * @return A map of identities for the given node. The first string is the
+       * category specifier, the second string is the type specifier.
        */
-      virtual IdentityMap handleDiscoNodeIdentities( const std::string& node, std::string& name ) {};
+      virtual StringMap handleDiscoNodeIdentities( const std::string& node, std::string& name ) {};
 
       /**
        * This function is used to gather more information on a specific node.
@@ -76,9 +60,10 @@ namespace gloox
        * matches the one registered for this handler. If node is empty, items for the
        * root node (no node) shall be returned.
        * @param node The node this handler is supposed to handle.
-       * @return A map of items supported by this node.
+       * @return A map of items supported by this node. The first string is the item's node
+       * specifier, the second string is the items natural-language name.
        */
-      virtual ItemMap handleDiscoNodeItems( const std::string& node = "" ) {};
+      virtual StringMap handleDiscoNodeItems( const std::string& node = "" ) {};
 
   };
 

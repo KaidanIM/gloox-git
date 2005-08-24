@@ -39,10 +39,9 @@ namespace gloox
   class Tag;
   class Stanza;
   class Parser;
-//   extern struct Parser::NodeType;
 
   /**
-   * This is a common base class for a jabber client and a jabber component. It manages connection
+   * This is the common base class for a jabber Client and a jabber Component. It manages connection
    * establishing, authentication, filter registrationa and invocation.
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
@@ -56,27 +55,29 @@ namespace gloox
 
       /**
        * Constructs a new ClientBase.
-       * You should not need to use this class directly. Use Client or JComponent instead.
+       * You should not need to use this class directly. Use Client or Component instead.
        * @param ns The namespace which qualifies the stream. Either jabber:client or jabber:component:*
        */
       ClientBase( const std::string& ns );
 
       /**
        * Constructs a new ClientBase.
-       * You should not need to use this class directly. Use @ref Client or @ref JComponent instead.
+       * You should not need to use this class directly. Use Client or Component instead.
        * @param ns The namespace which qualifies the stream. Either jabber:client or jabber:component:*
        * @param password The password to use for further authentication.
-       * @param port The port to connect to. The default of -1 means to look up the port via DNS SRV.
+       * @param port The port to connect to. The default of -1 means to look up the port via DNS SRV
+       * or to use a default port of 5222 as defined in XMPP: Core.
        */
       ClientBase( const std::string& ns, const std::string& password, int port = -1 );
 
       /**
        * Constructs a new ClientBase.
-       * You should not need to use this class directly. Use @ref Client or @ref JComponent instead.
+       * You should not need to use this class directly. Use Client or Component instead.
        * @param ns The namespace which qualifies the stream. Either jabber:client or jabber:component:*
        * @param password The password to use for further authentication.
        * @param server The server to connect to.
-       * @param port The port to connect to. The default of -1 means to look up the port via DNS SRV.
+       * @param port The port to connect to. The default of -1 means to look up the port via DNS SRV
+       * or to use a default port of 5222 as defined in XMPP: Core.
        */
       ClientBase( const std::string& ns, const std::string& password,
                   const std::string& server, int port = -1 );
@@ -104,7 +105,7 @@ namespace gloox
        * Reimplement this function to provide a username for connection purposes.
        * @return The username.
        */
-      virtual const std::string username() const {};
+      virtual const std::string username() const = 0;
 
       /**
        * Returns the current jabber id.
@@ -113,7 +114,7 @@ namespace gloox
       const JID& jid() const { return m_jid; };
 
       /**
-       * Switches usage of SASL on/off (if available). Default: on
+       * Switches usage of SASL on/off. Default: on
        * @param sasl Whether to switch SASL usage on or off.
        */
       void setSasl( bool sasl ) { m_sasl = sasl; };
@@ -174,14 +175,14 @@ namespace gloox
       virtual const std::string password() const { return m_password; };
 
       /**
-       * Creates a std::string. This std::string is unique in the current instance and
+       * Creates a string which is unique in the current instance and
        * can be used as an ID for queries.
-       * @return A unique std::string suitable for query IDs.
+       * @return A unique string suitable for query IDs.
        */
       const std::string getID();
 
       /**
-       * Sends a given Tag over an steablished connection.
+       * Sends a given Tag over an established connection.
        * @param tag The Tag to send.
        */
       void send( Tag *tag );
@@ -212,9 +213,9 @@ namespace gloox
       void registerConnectionListener( ConnectionListener *cl );
 
       /**
-       * Registers @c ih as object that receives Iq packet notifications for namespace
+       * Registers @c ih as object that receives Iq stanza notifications for namespace
        * @c xmlns. Only one handler per namespace is possible.
-       * @param ih The object to receive Iq packet notifications.
+       * @param ih The object to receive Iq stanza notifications.
        * @param xmlns The namespace the object handles.
        */
       void registerIqHandler( IqHandler *ih, const std::string& xmlns );
@@ -230,20 +231,20 @@ namespace gloox
       void trackID( IqHandler *ih, const std::string& id, int context );
 
       /**
-       * Registers @c mh as object that receives Message packet notifications.
-       * @param mh The object to receive Message packet notifications.
+       * Registers @c mh as object that receives Message stanza notifications.
+       * @param mh The object to receive Message stanza notifications.
        */
       void registerMessageHandler( MessageHandler *mh );
 
       /**
-       * Registers @c ph as object that receives Presence packet notifications.
-       * @param ph The object to receive Presence packet notifications.
+       * Registers @c ph as object that receives Presence stanza notifications.
+       * @param ph The object to receive Presence stanza notifications.
        */
       void registerPresenceHandler( PresenceHandler *ph );
 
       /**
-       * Registers @c sh as object that receives Subscription packet notifications.
-       * @param sh The object to receive Subscription packet notifications.
+       * Registers @c sh as object that receives Subscription stanza notifications.
+       * @param sh The object to receive Subscription stanza notifications.
        */
       void registerSubscriptionHandler( SubscriptionHandler *sh );
 
@@ -302,6 +303,12 @@ namespace gloox
       void setCACerts( const StringList& cacerts ) { m_cacerts = cacerts; };
 
     protected:
+      enum SaslMechanisms
+      {
+        SASL_DIGEST_MD5,          /**< SASL Digest-MD5 according to RFC 2831. */
+        SASL_PLAIN,               /**< SASL PLAIN according to RFC 2595 Section 6. */
+      };
+
       void notifyOnResourceBindError( ConnectionListener::ResourceBindError error );
       void notifyOnSessionCreateError( ConnectionListener::SessionCreateError error );
       bool notifyOnTLSConnect( const CertInfo& info );
@@ -309,44 +316,11 @@ namespace gloox
       void notifyOnConnect();
       void notifyOnDisconnect();
       void header();
-
-      /**
-       * Returns std::string which is used in the 'to' attribute of the initial stream opening tag.
-       * This should be the server's hostname for the @b jabber:client namespace, and the
-       * component's hostname for the jabber:component:* namespaces, respectively.
-       * @return The host to name in the stream's 'to' attribute. Defaults to the destination server.
-       */
-      virtual const std::string streamTo() const { return server(); };
-
-      /**
-       * Describes the supported SASL Mechanisms.
-       */
-      enum SaslMechanisms
-      {
-        SASL_DIGEST_MD5,          /**< SASL Digest-MD5 according to RFC 2831. */
-        SASL_PLAIN,               /**< SASL PLAIN according to RFC 2595 Section 6. */
-      };
-
-      /**
-       * Starts SASL authentication.
-       * @param type The SASL Mechanism to use.
-       */
       void startSASL( SaslMechanisms type );
-
-      /**
-       * Used to process incoming SASL challenge packets.
-       */
       void processSASLChallenge( const std::string& challenge );
-
-      /**
-       * Use this function to start the TLS handshake procedure.
-       */
       void startTls();
-
-      /**
-       * determines the availability of TLS.
-       */
       bool hasTls();
+      virtual const std::string streamTo() const { return server(); };
 
       JID m_jid;
       Connection *m_connection;

@@ -25,7 +25,7 @@ namespace gloox
   class Disco;
 
   /**
-   * This is an implementation of a Component, using JEP-0114 (Jabber Component Protocol) to
+   * This is an implementation of a basic Component, using JEP-0114 (Jabber Component Protocol) to
    * authenticate with a server.
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
@@ -57,16 +57,10 @@ namespace gloox
       void setStreamTo( const std::string& to ) { m_to = to; };
 
       // reimplemented from ClientBase
-      virtual const std::string username() const { return m_jid.username(); };
+      virtual const std::string username() const { return ""; };
 
       // reimplemented from ClientBase
       virtual const std::string password() const { return ""; };
-
-      /**
-       * Returns the JID of the component.
-       * @return The components JID.
-       */
-      virtual const std::string jid() const { return Prep::nameprep( m_to ); };
 
       /**
        * Gives access to the component's Disco object.
@@ -75,12 +69,7 @@ namespace gloox
       Disco* disco() const { return m_disco; };
 
     protected:
-      /**
-       * Returns the hostname which should be put into the stream's 'to' attribute.
-       * @return The host to name in the stream's 'to' attribute.
-       */
-      virtual const std::string streamTo() const { return Prep::nameprep( m_to ); };
-
+      virtual const std::string streamTo() const;
       virtual void handleStartNode();
       virtual bool handleNormalNode( Stanza *stanza );
 

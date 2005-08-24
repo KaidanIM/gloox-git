@@ -24,7 +24,7 @@ namespace gloox
 {
 
   /**
-   * An implementation of a roster item.
+   * An abstraction of a roster item.
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
    */
@@ -33,11 +33,6 @@ namespace gloox
     friend class RosterManager;
 
     public:
-      /**
-       * A list of groups a contact belongs to.
-       */
-      typedef std::list<std::string> GroupList;
-
       /**
        * Describes possible subscribtion types according to RFC 3921, Section 9.
        */
@@ -74,7 +69,7 @@ namespace gloox
       RosterItem( const std::string& jid, const std::string& name = "" );
 
       /**
-       * Virtual Destructor.
+       * Virtual destructor.
        */
       virtual ~RosterItem();
 
@@ -86,7 +81,6 @@ namespace gloox
 
       /**
        * Retrieves the displayed name of a contact/roster item.
-       * If none is set the JID is returned.
        * @return The contact's name.
        */
       virtual const std::string name() { return m_name; };
@@ -98,18 +92,6 @@ namespace gloox
       virtual const std::string jid() { return m_jid; };
 
       /**
-       * Sets the presence the remote contact sees for the local entity.
-       * @param presence The presence the remote entity sees.
-       */
-      virtual void setDirectPresence( const int presence );
-
-      /**
-       * Returns the presence the remote contact sees for the local entity.
-       * @return The presence the remote contact sees.
-       */
-      virtual const int directPresence() { return m_directPresence; };
-
-      /**
        * Returns the current subscription type between the remote and the local entity.
        * @return The subscription type.
        */
@@ -119,13 +101,13 @@ namespace gloox
        * Sets the groups this RosterItem belongs to.
        * @param groups The groups to set for this item.
        */
-      virtual void setGroups( const GroupList& groups );
+      virtual void setGroups( const StringList& groups );
 
       /**
        * Returns the groups this RosterItem belongs to.
        * @return The groups this item belongs to.
        */
-      virtual GroupList& groups() { return m_groups; };
+      virtual StringList& groups() { return m_groups; };
 
       /**
        * Whether the item has unsynchronized changes.
@@ -159,13 +141,12 @@ namespace gloox
       virtual void setSynchronized() { m_changed = false; };
 
     private:
-      GroupList m_groups;
+      StringList m_groups;
       SubscriptionEnum m_subscription;
       std::string m_jid;
       std::string m_name;
       std::string m_statusMessage;
       bool m_changed;
-      int m_directPresence;
       int m_status;
   };
 

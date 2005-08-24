@@ -18,7 +18,6 @@
 
 #include <string>
 #include <map>
-using namespace std;
 
 namespace gloox
 {
@@ -42,10 +41,11 @@ namespace gloox
         DNS_NO_HOSTS_FOUND,             /**< It was not possible to resolve SRV record. */
         DNS_COULD_NOT_RESOLVE           /**< The given domain name could not be resolved. */
       };
+
       /**
-       * A list of std::strings (used for server addresses) and ints (used for port numbers).
+       * A list of strings (used for server addresses) and ints (used for port numbers).
        */
-      typedef map<string, int> HostMap;
+      typedef std::map<std::string, int> HostMap;
 
       /**
        * This funtion resolves a service/protocol/domain tuple.

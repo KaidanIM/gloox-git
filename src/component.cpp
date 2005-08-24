@@ -16,6 +16,7 @@
 
 #include "disco.h"
 #include "stanza.h"
+#include "prep.h"
 
 namespace gloox
 {
@@ -25,19 +26,22 @@ namespace gloox
     : ClientBase( ns, password, server, port ),
       m_to( component ), m_disco( 0 )
   {
-//     m_disco = new Disco( this );
-//     m_disco->setVersion( "based on gloox", GLOOX_VERSION );
-//     m_disco->setIdentity( "component", "generic" );
+    m_jid.setServer( server );
+    m_disco = new Disco( this );
+    m_disco->setVersion( "based on gloox", GLOOX_VERSION );
+    m_disco->setIdentity( "component", "generic" );
   }
 
   Component::~Component()
   {
-//     delete m_disco;
+    delete m_disco;
   }
 
   void Component::handleStartNode()
   {
-    printf( "in handleStartNode\n" );
+    // hack
+    m_jid.setServer( m_to );
+
     if( m_sid.empty() )
       return;
 
@@ -53,7 +57,6 @@ namespace gloox
 
   bool Component::handleNormalNode( Stanza *stanza )
   {
-    printf( "in handleNormalNode\n" );
     if( stanza->name() == "handshake" )
       notifyOnConnect();
     else
@@ -61,5 +64,10 @@ namespace gloox
 
     return true;
   }
+
+  const std::string Component::streamTo() const
+  {
+    return Prep::nameprep( m_to );
+  };
 
 };

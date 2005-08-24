@@ -93,16 +93,12 @@ namespace gloox
 
       /**
        * Constructor.
-       * Use this constructor if you already have an established connection to a server. The
-       * Client must be in a connected and authenticated state, i.e. STATE_AUTHENTICATED.
-       * A @c Registration object vcreated with this constructor can only be used to change
-       * the account's password or to un-register an account.
-       * @param parent The ClientBase which is used.
+       * @param parent The ClientBase which is used for establishing a connection.
        */
       Registration( ClientBase *parent );
 
       /**
-       * Destructor.
+       * Virtual destructor.
        */
       virtual ~Registration();
 
@@ -115,7 +111,7 @@ namespace gloox
 
       /**
        * Attempts to register an account with the given credentials. Only the fields OR'ed in
-       * @c fields will eb sent. This can only be called with an unauthenticated parent (@ref Client).
+       * @c fields will be sent. This can only be called with an unauthenticated parent (@ref Client).
        * @note It is recommended to use @ref fetchRegistrationFields to find out which fields the
        * server requires.
        * @param fields The fields to use to generate the registration request. OR'ed @ref fieldEnum values.
@@ -135,7 +131,7 @@ namespace gloox
       void changePassword( const std::string& password );
 
       /**
-       * Registers the given @c rh as RegistrationHandler. Only one handler is possibel at a time.
+       * Registers the given @c rh as RegistrationHandler. Only one handler is possible at a time.
        * @param rh The RegistrationHandler to register.
        */
       void registerRegistrationHandler( RegistrationHandler *rh );

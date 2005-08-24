@@ -40,7 +40,12 @@ namespace gloox
   {
     public:
       /**
-       * Constructor.
+       * Constructs a new Connection object.
+       * You should not need to use thsi function directly.
+       * @param parser A parser to feed with incoming data.
+       * @param server A server to connect to.
+       * @param port The port to connect to. The default of -1 means that SRV records will be used
+       * to find out about the actual host:port.
        */
       Connection( Parser *parser, const std::string& server, int port = -1 );
 
@@ -50,9 +55,9 @@ namespace gloox
       virtual ~Connection();
 
       /**
-       * Contains the actual thread implementation
+       * Used to initiate the connection.
        */
-      int connect();
+      ConnectionState connect();
 
       /**
        * Use this function to send a string of data over the wire. The function returns only after

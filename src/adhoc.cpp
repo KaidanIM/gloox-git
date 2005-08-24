@@ -40,18 +40,18 @@ namespace gloox
     }
   }
 
-  DiscoNodeHandler::FeatureList Adhoc::handleDiscoNodeFeatures( const std::string& node )
+  StringList Adhoc::handleDiscoNodeFeatures( const std::string& node )
   {
-    DiscoNodeHandler::FeatureList features;
+    StringList features;
     features.push_back( XMLNS_ADHOC_COMMANDS );
     return features;
   }
 
-  DiscoNodeHandler::ItemMap Adhoc::handleDiscoNodeItems( const std::string& node )
+  StringMap Adhoc::handleDiscoNodeItems( const std::string& node )
   {
     if( node.empty() )
     {
-      DiscoNodeHandler::ItemMap item;
+      StringMap item;
       item[XMLNS_ADHOC_COMMANDS] = "Ad-Hoc Commands";
       return item;
     }
@@ -61,21 +61,21 @@ namespace gloox
     }
     else
     {
-      DiscoNodeHandler::ItemMap item;
+      StringMap item;
       return item;
     }
   }
 
-  DiscoNodeHandler::IdentityMap Adhoc::handleDiscoNodeIdentities( const std::string& node,
+  StringMap Adhoc::handleDiscoNodeIdentities( const std::string& node,
                                                                   std::string& name )
   {
-    DiscoNodeHandler::ItemMap::const_iterator it = m_items.find( node );
+    StringMap::const_iterator it = m_items.find( node );
     if( it != m_items.end() )
       name = (*it).second;
     else
       name = "Ad-Hoc Commands";
 
-    DiscoNodeHandler::IdentityMap ident;
+    StringMap ident;
     if( node == XMLNS_ADHOC_COMMANDS )
       ident["automation"] = "command-list";
     else

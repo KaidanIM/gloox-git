@@ -18,8 +18,7 @@ namespace gloox
 {
 
   RosterItem::RosterItem( const std::string& jid, const std::string& name )
-    : m_jid( jid ), m_name( name ), m_changed( false ),
-    m_directPresence( 0 ), m_status( 0 )
+    : m_jid( jid ), m_name( name ), m_changed( false ), m_status( 0 )
   {
   }
 
@@ -30,12 +29,6 @@ namespace gloox
   void RosterItem::setName( const std::string& name )
   {
     m_name = name;
-    m_changed = true;
-  }
-
-  void RosterItem::setDirectPresence( const int presence )
-  {
-    m_directPresence = presence;
     m_changed = true;
   }
 
@@ -69,7 +62,7 @@ namespace gloox
       m_subscription = S10N_BOTH;
   }
 
-  void RosterItem::setGroups( const GroupList& groups )
+  void RosterItem::setGroups( const StringList& groups )
   {
     m_groups = groups;
     m_changed = true;

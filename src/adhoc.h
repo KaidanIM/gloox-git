@@ -39,8 +39,7 @@ namespace gloox
     public:
       /**
        * Constructor.
-       * You should access the Adhoc object through the @c Client object.
-       * Creates a new Adhoc client that registers as IqHandler with @c Client.
+       * Creates a new Adhoc client that registers as IqHandler with a ClientBase.
        * @param parent The ClientBase used for XMPP communication.
        * @param disco The Disco object used to announce available commands.
        */
@@ -52,13 +51,13 @@ namespace gloox
       virtual ~Adhoc();
 
       // reimplemented from DiscoNodeHandler
-      virtual FeatureList handleDiscoNodeFeatures( const std::string& node );
+      virtual StringList handleDiscoNodeFeatures( const std::string& node );
 
       // reimplemented from DiscoNodeHandler
-      virtual IdentityMap handleDiscoNodeIdentities( const std::string& node, std::string& name );
+      virtual StringMap handleDiscoNodeIdentities( const std::string& node, std::string& name );
 
       // reimplemented from DiscoNodeHandler
-      virtual ItemMap handleDiscoNodeItems( const std::string& node );
+      virtual StringMap handleDiscoNodeItems( const std::string& node );
 
       // reimplemented from IqHandler
       virtual bool handleIq( Stanza *stanza );
@@ -67,10 +66,10 @@ namespace gloox
       virtual bool handleIqID( Stanza *stanza, int context ) {};
 
       /**
-       * Using this function, you can register a @ref AdhocCommandProvider -derived object as
+       * Using this function, you can register a AdhocCommandProvider -derived object as
        * handler for a specific Ad-hoc Command as defined in JEP-0050.
-       * @param acp The obejct to register for the specified command.
-       * @param command The name of the command. Will be announced in disco#items.
+       * @param acp The obejct to register as handler for the specified command.
+       * @param command The node name of the command. Will be announced in disco#items.
        * @param name The natural-language name of the command. Will be announced in disco#items.
        */
       void registerAdhocCommandProvider( AdhocCommandProvider *acp, const std::string& command,
@@ -83,7 +82,7 @@ namespace gloox
       Disco *m_disco;
 
       AdhocCommandProviderMap m_adhocCommandProviders;
-      DiscoNodeHandler::ItemMap m_items;
+      StringMap m_items;
 
   };
 

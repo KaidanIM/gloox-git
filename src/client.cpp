@@ -53,11 +53,14 @@ namespace gloox
   Client::Client( const std::string& username, const std::string& password,
                     const std::string& server, const std::string& resource, int port )
     : ClientBase( XMLNS_CLIENT, password, server, port ),
-    m_username( username ), m_resource( resource ),
     m_priority( -1 ), m_autoPresence( false ), m_manageRoster( true ),
     m_handleDisco( true ), m_rosterManager( 0 ),
     m_disco( 0 ), m_auth( 0 ), m_authorized( false ), m_resourceBound( false )
   {
+    m_jid.setUsername( username );
+    m_jid.setServer( server );
+    m_jid.setResource( resource );
+
     init();
   }
 
@@ -81,7 +84,6 @@ namespace gloox
     if( stanza->name() == "stream:features" )
     {
       m_streamFeatures = getStreamFeatures( stanza );
-      printf( "stream features: %d\n", m_streamFeatures );
 
 #ifdef HAVE_GNUTLS
       if( tls() && hasTls() && !m_connection->isSecure() && ( m_streamFeatures & STREAM_FEATURE_STARTTLS ) )
@@ -375,20 +377,6 @@ namespace gloox
     p->addChild( prio );
     send( p );
   }
-
-//   void Client::sendPresence( int priority, ikshowtype type, const std::string& msg )
-//   {
-//     if( priority < -128 )
-//       priority = -128;
-//     if( priority > 127 )
-//       priority = 127;
-//
-//     char prio[5];
-//     sprintf( prio, "%d", priority );
-//     iks* x = iks_make_pres( type, msg.c_str() );
-//     iks_insert_cdata( iks_insert( x, "priority" ), prio, iks_strlen( prio ) );
-//     send( x );
-//   }
 
   void Client::setInitialPriority( int priority )
   {
