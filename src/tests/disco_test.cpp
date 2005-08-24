@@ -32,7 +32,7 @@ class DiscoTest : public DiscoHandler, ConnectionListener
       j->disco()->setVersion( "discoTest", GLOOX_VERSION );
       j->disco()->setIdentity( "client", "bot" );
       StringList ca;
-      ca.push_back( "/patch/to/cacert.crt" );
+      ca.push_back( "/path/to/cacert.crt" );
       j->setCACerts( ca );
 
       j->connect();
