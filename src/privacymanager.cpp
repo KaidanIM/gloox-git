@@ -185,6 +185,7 @@ namespace gloox
     for( it; it != list.end(); it++ )
     {
       Tag *i = new Tag( "item" );
+      l->addChild( i );
       switch( (*it).type() )
       {
         case PrivacyItem::TYPE_JID:
