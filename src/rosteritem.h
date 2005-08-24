@@ -132,7 +132,7 @@ namespace gloox
        * Returns the groups this RosterItem belongs to.
        * @return The groups this item belongs to.
        */
-      virtual GroupList groups() { return m_groups; };
+      virtual GroupList& groups() { return m_groups; };
 
       /**
        * Whether the item has unsynchronized changes.

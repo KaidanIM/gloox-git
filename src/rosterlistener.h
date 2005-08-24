@@ -62,10 +62,17 @@ namespace gloox
 
       /**
        * Reimplement this function if you want to be notified about items that
-       * were removed from the server-side roster.
+       * were removed from the server-side roster (items subject to a so-called Roster Push).
        * @param jid The removed item's full address.
        */
       virtual void itemRemoved( const std::string& jid ) {};
+
+      /**
+       * Reimplement this function if you want to be notified about items that
+       * were modified on the server-side roster (items subject to a so-called Roster Push).
+       * @param jid The modified item's full address.
+       */
+      virtual void itemUpdated( const std::string& jid ) {};
 
       /**
        * Reimplement this function if you want to be notified about items which
@@ -80,7 +87,7 @@ namespace gloox
        * set to unavailable.
        * @param roster The full roster.
        */
-      virtual void roster( Roster roster ) {};
+      virtual void roster( Roster& roster ) {};
 
       /**
        * This function is called on every status change of an item in the roster.

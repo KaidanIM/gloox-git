@@ -136,7 +136,7 @@ namespace gloox
     private:
       void add( const std::string& jid, const std::string& name,
                 RosterItem::GroupList& groups, const std::string& sub, bool ask );
-      const std::string extractItems( Tag *tag );
+      void extractItems( Tag *tag, bool isPush );
 
       RosterListener *m_rosterListener;
       RosterListener::Roster m_roster;
