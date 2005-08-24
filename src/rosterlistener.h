@@ -18,13 +18,12 @@
 
 #include <string>
 #include <map>
-using namespace std;
 
 namespace gloox
 {
 
   /**
-   * A virtual interface.
+   * A virtual interface which can be reimplemented to receive roster updates.
    * A class implementing this interface and being registered as RosterListener with the Roster
    * object receives notifications about all the changes in the server-side roster.
    * Only one RosterListener per Roster at a time is possible.
@@ -37,7 +36,7 @@ namespace gloox
        * A map of JID/RosterItem pairs.
        * @todo Derive from JID.
        */
-      typedef map<const std::string, RosterItem*> Roster;
+      typedef std::map<const std::string, RosterItem*> Roster;
 
       /**
        * Reimplement this function if you want to be notified about new items
@@ -76,8 +75,7 @@ namespace gloox
 
       /**
        * Reimplement this function if you want to receive the whole server-side roster
-       * on the initial roster push. The roster item status is probably wrong, i.e.
-       * set to unavailable.
+       * on the initial roster push. The roster item status is set to unavailable.
        * @param roster The full roster.
        */
       virtual void roster( Roster& roster ) {};
@@ -109,7 +107,6 @@ namespace gloox
       /**
        * This function is called when an entity wishes to subscribe to this entity's presence.
        * @param jid The requesting item's address.
-       * @param msg The message sent along with the request.
        * @return Return @b true to allow subscription and subscribe to the remote entities
        * presence, @b false to ignore the request.
        */
@@ -118,7 +115,6 @@ namespace gloox
       /**
        * This function is called when an entity unsubscribes from this entity's presence.
        * @param jid The item's address.
-       * @param msg The message sent along with the unsubscription.
        * @return Return @b true to unsubscribe from the remote entity and remove the entity
        * from the roster, @b false to ignore.
        */

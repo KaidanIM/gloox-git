@@ -83,9 +83,9 @@ namespace gloox
             if( it != m_nodeHandlers.end() )
             {
               std::string name;
-              DiscoNodeHandler::IdentityMap identities =
+              StringMap identities =
                   (*it).second->handleDiscoNodeIdentities( node, name );
-              DiscoNodeHandler::IdentityMap::const_iterator im = identities.begin();
+              StringMap::const_iterator im = identities.begin();
               for( im; im != identities.end(); im++ )
               {
                 Tag *i = new Tag( "identity" );
@@ -94,8 +94,8 @@ namespace gloox
                 i->addAttrib( "name", name );
                 query->addChild( i );
               }
-              DiscoNodeHandler::FeatureList features = (*it).second->handleDiscoNodeFeatures( node );
-              DiscoNodeHandler::FeatureList::const_iterator fi = features.begin();
+              StringList features = (*it).second->handleDiscoNodeFeatures( node );
+              StringList::const_iterator fi = features.begin();
               for( fi; fi != features.end(); fi++ )
               {
                 Tag *f = new Tag( "feature" );
@@ -133,7 +133,7 @@ namespace gloox
           Tag *query = new Tag( "query" );
           query->addAttrib( "xmlns", XMLNS_DISCO_ITEMS );
 
-          DiscoNodeHandler::ItemMap items;
+          StringMap items;
           DiscoNodeHandlerMap::const_iterator it;
           Tag *q = stanza->findChild( "query" );
           const std::string node = q->findAttribute( "node" );
@@ -156,7 +156,7 @@ namespace gloox
 
           if( items.size() )
           {
-            DiscoNodeHandler::ItemMap::const_iterator it = items.begin();
+            StringMap::const_iterator it = items.begin();
             for( it; it != items.end(); it++ )
             {
               if( !(*it).first.empty() && !(*it).second.empty() )

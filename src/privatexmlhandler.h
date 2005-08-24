@@ -18,13 +18,12 @@
 #include <iksemel.h>
 
 #include <string>
-using namespace std;
 
 namespace gloox
 {
 
   /**
-   * A virtual interface.
+   * A virtual interface which can be reimplemented to receive data stored in private XML.
    * Derived classes can be registered as PrivateXMLHandlers with the PrivateXML object.
    * Upon an incoming PrivateXML packet @ref handlePrivateXML() will be called.
    * @author Jakob Schroeter <js@camaya.net>
@@ -37,7 +36,7 @@ namespace gloox
        * @c PrivateXML::requestXML().
        * @param tag The tag of the storage packet.
        * @param xmlns The XML namespace of the storage packet.
-       * @param tag The private xml, i.e. the first child of the &lt;query&gt; tag.
+       * @param xml The private xml, i.e. the first child of the &lt;query&gt; tag.
        */
       virtual void handlePrivateXML( const std::string& tag, const std::string& xmlns, Tag *xml ) {};
 

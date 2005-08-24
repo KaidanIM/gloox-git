@@ -25,7 +25,7 @@ namespace gloox
 {
 
   /**
-   * A virtual interface.
+   * A virtual interface for an Ad-hoc Command Provider according to JEP-0050.
    * Derived classes can be registered as Command Providers with the Adhoc object.
    * @author Jakob Schroeter <js@camaya.net>
    */

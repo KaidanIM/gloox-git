@@ -75,10 +75,8 @@ namespace gloox
        * @param jid The address to subscribe to.
        * @param name The displayed name of the contact.
        * @param groups A list of groups the contact belongs to.
-       * @param msg The reason of the subscription, sent along with the subscription request.
        */
-      void subscribe( const std::string& jid, const std::string& name,
-                      RosterItem::GroupList& groups/*, const std::string& msg = ""*/ );
+      void subscribe( const std::string& jid, const std::string& name, StringList& groups );
 
       /**
        * Synchronizes locally modified RosterItems back to the server.
@@ -92,15 +90,14 @@ namespace gloox
        * @param name The displayed name of the contact.
        * @param groups A list of groups the contact belongs to.
        */
-      void add( const std::string& jid, const std::string& name, RosterItem::GroupList& groups );
+      void add( const std::string& jid, const std::string& name, StringList& groups );
 
       /**
        * Use this function to unsubscribe from a JID in the roster.
        * @param jid The address to unsubscribe from.
-       * @param msg The reason sent along with the unsubscription request.
        * @param remove Whether the contact should also be removed from the roster.
        */
-      void unsubscribe( const std::string& jid/*, const std::string& msg*/, bool remove );
+      void unsubscribe( const std::string& jid, bool remove );
 
       /**
        * Register @c rl as object that receives updates on roster operations.
@@ -128,7 +125,7 @@ namespace gloox
 
     private:
       void add( const std::string& jid, const std::string& name,
-                RosterItem::GroupList& groups, const std::string& sub, bool ask );
+                StringList& groups, const std::string& sub, bool ask );
       void extractItems( Tag *tag, bool isPush );
 
       RosterListener *m_rosterListener;

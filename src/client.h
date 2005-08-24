@@ -31,8 +31,7 @@ namespace gloox
   /**
    * This class implements a Jabber Client.
    * It supports SASL (Authentication) as well as TLS (Encryption), which can be switched on/off separately.
-   * It uses a thread to poll for new data arriving over the network which is then fed into the XML stream
-   * parser.
+   * They are used if the server supports them.
    *
    * To use, create a new Client instance and feed it connection credentials, either in the Constructor or
    * afterwards using the setters. You should then register packet handlers implementing the corresponding
@@ -43,14 +42,16 @@ namespace gloox
    * @code
    * void Class::doIt()
    * {
-   *   Client* j = new Client( "user", "resource", "password", "server" );
+   *   Client* j = new Client( "user@server/resource", "password" );
    *   j->registerPresenceHandler( this );
    *   j->setVersion( "TestProg", "1.0" );
    *   j->setIdentity( "client", "bot" );
+   *   j->setAutoPresence( true );
+   *   j->setInitialPriority( 5 );
    *   j->connect();
    * }
    *
-   * virtual void Class::presenceHandler( iksid* from, iksubtype type, ikshowtype show, const char* msg )
+   * virtual void Class::presenceHandler( Stanza *stanza )
    * {
    *   // handle incoming presence packets here
    * }
@@ -65,6 +66,8 @@ namespace gloox
    * @li JEP-0030 (Service Discovery): All supported/available services are announced. No items are returned.
    * @note By default a priority of -1 is sent along with the initial presence. That means no message stanzas
    * will be received (from compliant servers). Use @ref setInitialPriority() to set a different value.
+   * Also, no initial presence is sent which is usually required for a client to show up as 'online'
+   * in their contact's contact list.
    *
    * @author Jakob Schroeter <js@camaya.net>
    */
@@ -91,7 +94,7 @@ namespace gloox
        * Constructs a new Client.
        * SASL and TLS are on by default. No further initialisations are made. Don't forget to
        * set  at least the server (and probably username, password and resource) using the corresponding
-       * setters, else @ref connect() will do nothing.
+       * setters, else @ref connect() will fail.
        */
       Client();
 
@@ -122,7 +125,7 @@ namespace gloox
               int port = -1 );
 
       /**
-       * Destructor.
+       * Virtual destructor.
        */
       virtual ~Client();
 
@@ -136,13 +139,13 @@ namespace gloox
        * Returns the current prepped username.
        * @return The username used to connect.
        */
-      virtual const std::string username() const { return Prep::nodeprep( m_jid.username() ); };
+      virtual const std::string username() const { return m_jid.username(); };
 
       /**
        * Returns the current prepped resource.
        * @return The resource used to connect.
        */
-      std::string const resource() const { return Prep::resourceprep( m_jid.resource() ); };
+      std::string const resource() const { return m_jid.resource(); };
 
       /**
        * Returns the current priority.
@@ -192,13 +195,6 @@ namespace gloox
       void disableRoster();
 
       /**
-       * Send the initial Presence. This can be done only once after
-       * a connection is established.
-       * @todo Enhance to allow for all presence types to be sent.
-       */
-//       void sendPresence( int priority, ikshowtype type, const std::string& msg );
-
-      /**
        * This function gives access to the @c RosterManager object.
        * @return A pointer to the RosterManager.
        */
@@ -240,8 +236,6 @@ namespace gloox
       Disco* m_disco;
 
       bool m_authorized;
-      std::string m_username;
-      std::string m_resource;
       bool m_resourceBound;
       bool m_autoPresence;
       bool m_manageRoster;
@@ -250,8 +244,6 @@ namespace gloox
 
       int m_streamFeatures;
 
-      friend int sessionHook( Client* stream, ikspak* pak );
-      friend int bindHook( Client* stream, ikspak* pak );
   };
 
 };

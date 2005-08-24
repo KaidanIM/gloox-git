@@ -16,7 +16,6 @@
 #include "prep.h"
 
 #include <string>
-using namespace std;
 
 #ifdef HAVE_LIBIDN
 #include <stringprep.h>

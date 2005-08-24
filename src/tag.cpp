@@ -57,7 +57,7 @@ namespace gloox
     xml = "<" + m_name;
     if( m_attribs.size() )
     {
-      AttributeList::const_iterator it_a = m_attribs.begin();
+      StringMap::const_iterator it_a = m_attribs.begin();
       for( it_a; it_a != m_attribs.end(); it_a++ )
       {
         xml += " " + (*it_a).first + "='" + (*it_a).second + "'";
@@ -98,7 +98,7 @@ namespace gloox
     return relax( m_cdata );
   }
 
-  Tag::AttributeList& Tag::attributes()
+  StringMap& Tag::attributes()
   {
     return m_attribs;
   }
@@ -110,7 +110,7 @@ namespace gloox
 
   const std::string Tag::findAttribute( const std::string& name ) const
   {
-    AttributeList::const_iterator it = m_attribs.find( name );
+    StringMap::const_iterator it = m_attribs.find( name );
     if( it != m_attribs.end() )
       return (*it).second;
     else
@@ -122,7 +122,7 @@ namespace gloox
     if( name.empty() )
       return true;
 
-    AttributeList::const_iterator it = m_attribs.find( name );
+    StringMap::const_iterator it = m_attribs.find( name );
     if( it != m_attribs.end() )
       return ( ( value.empty() )?( true ):( (*it).second == value ) );
     else

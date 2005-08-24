@@ -24,7 +24,6 @@ namespace gloox
   /**
    * This is an abstraction of a XMPP stanza.
    * You can create a new Stanza from an existing Tag (or another stanza).
-   * Or use the derived classes (Iq, Message, Presence, Subscription) or a Tag directly.
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.4
    */
@@ -34,14 +33,19 @@ namespace gloox
 
       /**
        * Creates a new Stanza from the given Tag.
+       * @note This creates a shallow copy, i.e. pointers to child tags are shared with the original
+       * Tag. You will ahve problems freeing the allocated memory.
        * @param tag The Tag to create the stanza from.
+       * @deprecated
        */
       Stanza( Tag *tag );
 
       /**
        * Creates an ew Stanza with given name and optional CData.
+       * This will probably be replaced with special subclasses fro IQ, Message, Subscription
+       * and Presenc e stanzas. Direct usage of Tags is encouraged.
        * @param name The name of the root tag.
-       * @param cdata Initial XML caharcter data for the tag.
+       * @param cdata Initial XML character data for the tag.
        */
       Stanza( const std::string& name, const std::string& cdata = "" );
 
@@ -115,6 +119,7 @@ namespace gloox
        * of the Stanza. This feels kind of hackish...
        * You only need to call this if you are constructing a bare Stanza from scratch.
        * Stanzas provided by gloox are fully parsed.
+       * @deprecated
        */
       void finalize() { init(); };
 

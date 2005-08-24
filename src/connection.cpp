@@ -220,12 +220,10 @@ namespace gloox
 
   int Connection::receive()
   {
-    printf( "in receive(). socket: %d\n", m_socket );
     if( !m_socket || !m_parser )
       return STATE_DISCONNECTED;
 
     int size;
-    printf( "starting loop\n" );
     while( !m_cancel )
     {
       // optimize(?): recv returns the size. set size+1 = \0
@@ -306,9 +304,8 @@ namespace gloox
     free( xml );
   }
 
-  int Connection::connect()
+  ConnectionState Connection::connect()
   {
-    printf( "in connect()\n" );
     if( m_socket && m_state >= STATE_CONNECTING )
       return m_state;
 

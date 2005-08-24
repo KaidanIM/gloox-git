@@ -48,9 +48,8 @@ namespace gloox
       /**
        * Constructs a new Parser object.
        * @param parent The object to send incoming Tags to.
-       * @param ns The parser's namespace. Legacy, libiksemel-related.
        */
-      Parser( ClientBase *parent, const std::string& ns );
+      Parser( ClientBase *parent );
 
       /**
        * Virtual destructor.
@@ -60,6 +59,7 @@ namespace gloox
       /**
        * Use this function to feed the parser with more XML.
        * @param data Raw xml to parse.
+       * @return The return value indicates success or failure of the parsing.
        */
       ParserState feed( const std::string& data );
 

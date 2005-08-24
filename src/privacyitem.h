@@ -20,7 +20,7 @@ namespace gloox
 {
 
   /**
-   * This is an implementation of an item in a privacy list, describing an allowed or forbidden
+   * This is an abstraction of a single item of a privacy list, describing an allowed or forbidden
    * action.
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
@@ -68,7 +68,7 @@ namespace gloox
        * Constructs a new privacy item.
        * @param type Action is based on matching JID, Group or Subscription.
        * @param action The action to carry out. (Deny or allow.)
-       * @param packetType Affected packet types. ORed ItemPacketType.
+       * @param packetType Affected packet types. Bit-wise OR'ed ItemPacketType.
        * @param value The value to check for and match.
        */
       PrivacyItem( const ItemType type = TYPE_UNDEFINED, const ItemAction action = ACTION_ALLOW,
@@ -93,7 +93,7 @@ namespace gloox
 
       /**
        * Returns the packet type the item affects.
-       * @return An ORed list of affected packet types.
+       * @return An OR'ed list of affected packet types.
        */
       const int packetType() { return m_packetType; };
 

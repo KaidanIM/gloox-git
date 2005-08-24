@@ -58,7 +58,6 @@ namespace gloox
   {
     delete m_connection;
     delete m_parser;
-    printf( "deleting Parser & Connection in ~ClientBase()\n" );
   }
 
   bool ClientBase::connect()
@@ -67,7 +66,7 @@ namespace gloox
       return false;
 
     if( !m_parser )
-      m_parser = new Parser( this, m_namespace );
+      m_parser = new Parser( this );
 
     if( !m_connection )
       m_connection = new Connection( m_parser, m_jid.server(), m_port );
@@ -287,7 +286,6 @@ namespace gloox
       response += response_value;
       response += ",charset=utf-8";
       response_coded = iks_base64_encode( response.c_str(), response.length() );
-      printf( "calculated response: %s\n", response.c_str() );
 
       t = new Tag( "response", response_coded );
 

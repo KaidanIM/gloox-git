@@ -20,7 +20,7 @@
 namespace gloox
 {
   /**
-   * An implementation of a JID.
+   * An abstraction of a JID.
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.4
    */
@@ -51,13 +51,13 @@ namespace gloox
       void setJID( const std::string& jid );
 
       /**
-       * Returns the full JID (user@host/resource).
+       * Returns the full (prepped) JID (user@host/resource).
        * @return The full JID.
        */
       std::string full() const;
 
       /**
-       * Returns the bare JID (user@host).
+       * Returns the bare (prepped) JID (user@host).
        * @return The bare JID.
        */
       std::string bare() const;
@@ -81,7 +81,7 @@ namespace gloox
       void setResource( const std::string& resource );
 
       /**
-       * Returns the username.
+       * Returns the prepped username.
        * @return The current username.
        */
       std::string username() const { return m_username; };
@@ -99,7 +99,7 @@ namespace gloox
       std::string serverRaw() const { return m_serverRaw; };
 
       /**
-       * Returns the resource.
+       * Returns the prepped resource.
        * @return The current resource.
        */
       std::string resource() const { return m_resource; };

@@ -15,8 +15,6 @@
 
 #include "prep.h"
 
-using namespace std;
-
 namespace gloox
 {
 

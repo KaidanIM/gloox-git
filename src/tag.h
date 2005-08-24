@@ -32,11 +32,6 @@ namespace gloox
   {
     public:
       /**
-       * A map of key/value pairs. Attributes.
-       */
-      typedef std::map<std::string, std::string> AttributeList;
-
-      /**
        * A list of Tags.
        */
       typedef std::list<Tag*> TagList;
@@ -115,7 +110,7 @@ namespace gloox
        * Use this function to manipulate the list of attributes.
        * @return A reference to the list of attributes.
        */
-      virtual AttributeList& attributes();
+      virtual StringMap& attributes();
 
       /**
        * Use this function to manipulate the list of child elements.
@@ -206,7 +201,7 @@ namespace gloox
       const std::string relax( const std::string& what ) const;
 
       std::string m_name;
-      AttributeList m_attribs;
+      StringMap m_attribs;
       std::string m_cdata;
       TagList m_children;
       Tag *m_parent;
