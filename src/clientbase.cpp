@@ -27,6 +27,8 @@
 #include "tag.h"
 #include "stanza.h"
 
+#include <iksemel.h>
+
 #include <string>
 #include <map>
 #include <list>
@@ -88,26 +90,25 @@ namespace gloox
     return true;
   }
 
-  void ClientBase::filter( NodeType type, Tag *tag )
+  void ClientBase::filter( NodeType type, Stanza *stanza )
   {
-    if( !tag )
-      return;
+//     if( !stanza )
+//       return;
 
 #ifdef DEBUG
-    log( tag->xml(), true );
+    if( stanza )
+      log( stanza->xml(), true );
 #endif
 
     switch( type )
     {
       case NODE_STREAM_START:
-        m_sid = tag->findAttribute( "id" );
+        m_sid = stanza->findAttribute( "id" );
         handleStartNode();
         break;
       case NODE_STREAM_CHILD:
-        if( !handleNormalNode( tag ) )
+        if( !handleNormalNode( stanza ) )
         {
-          Stanza *stanza = new Stanza( tag );
-
           switch( stanza->type() )
           {
             case STANZA_IQ:
@@ -123,7 +124,6 @@ namespace gloox
               notifyMessageHandlers( stanza );
               break;
           }
-          delete( stanza );
         }
         break;
       case NODE_STREAM_ERROR:
@@ -203,8 +203,106 @@ namespace gloox
 
   void ClientBase::processSASLChallenge( const std::string& challenge )
   {
-    printf( "in processSASLChallenge()\n" );
-    disconnect( STATE_DISCONNECTED );
+    const int CNONCE_LEN = 4;
+    Tag *t;
+    std::string decoded, nonce, realm, response;
+    char *b = iks_base64_decode( challenge.c_str() );
+    if( b )
+      decoded = b;
+    else
+      return;
+
+    if( decoded.substr( 0, 7 ) == "rspauth" )
+    {
+      t = new Tag( "response" );
+    }
+    else
+    {
+      char cnonce[CNONCE_LEN*8 + 1];
+      unsigned char a1_h[16];
+      char a1[33], a2[33], response_value[33];
+      char *response_coded;
+      iksmd5 *md5;
+      int i;
+
+      int r_pos = decoded.find( "realm=" );
+      if( r_pos != std::string::npos )
+      {
+        int r_end = decoded.find( "\"", r_pos + 7 );
+        realm = decoded.substr( r_pos + 7, r_end - (r_pos + 7 ) );
+      }
+      else
+        realm = m_jid.server();
+
+      int n_pos = decoded.find( "nonce=" );
+      if( n_pos != std::string::npos )
+      {
+        int n_end = decoded.find( "\"", n_pos + 7 );
+        while( decoded.substr( n_end-1, 1 ) == "\\" )
+          n_end = decoded.find( "\"", n_end + 1 );
+        nonce = decoded.substr( n_pos + 7, n_end - ( n_pos + 7 ) );
+      }
+      else
+      {
+        iks_free( b );
+        return;
+      }
+
+      for( i=0; i<CNONCE_LEN; ++i )
+        sprintf( cnonce + i*8, "%08x", rand() );
+
+      md5 = iks_md5_new();
+      iks_md5_hash( md5, (const unsigned char*)m_jid.username().c_str(), m_jid.username().length(), 0 );
+      iks_md5_hash( md5, (const unsigned char*)":", 1, 0 );
+      iks_md5_hash( md5, (const unsigned char*)realm.c_str(), realm.length(), 0 );
+      iks_md5_hash( md5, (const unsigned char*)":", 1, 0 );
+      iks_md5_hash( md5, (const unsigned char*)m_password.c_str(), m_password.length(), 1 );
+      iks_md5_digest( md5, a1_h );
+      iks_md5_reset( md5 );
+      iks_md5_hash( md5, a1_h, 16, 0 );
+      iks_md5_hash( md5, (const unsigned char*)":", 1, 0 );
+      iks_md5_hash( md5, (const unsigned char*)nonce.c_str(), nonce.length(), 0 );
+      iks_md5_hash( md5, (const unsigned char*)":", 1, 0 );
+      iks_md5_hash( md5, (const unsigned char*)cnonce, iks_strlen( cnonce ), 1 );
+      iks_md5_print( md5, a1 );
+      iks_md5_reset( md5 );
+      iks_md5_hash( md5, (const unsigned char*)"AUTHENTICATE:xmpp/", 18, 0 );
+      iks_md5_hash( md5, (const unsigned char*)m_jid.server().c_str(), m_jid.server().length(), 1 );
+      iks_md5_print( md5, a2 );
+      iks_md5_reset( md5 );
+      iks_md5_hash( md5, (const unsigned char*)a1, 32, 0 );
+      iks_md5_hash( md5, (const unsigned char*)":", 1, 0 );
+      iks_md5_hash( md5, (const unsigned char*)nonce.c_str(), nonce.length(), 0 );
+      iks_md5_hash( md5, (const unsigned char*)":00000001:", 10, 0 );
+      iks_md5_hash( md5, (const unsigned char*)cnonce, iks_strlen( cnonce ), 0 );
+      iks_md5_hash( md5, (const unsigned char*)":auth:", 6, 0 );
+      iks_md5_hash( md5, (const unsigned char*)a2, 32, 1 );
+      iks_md5_print( md5, response_value );
+      iks_md5_delete( md5 );
+
+      i = m_jid.username().length() + realm.length() +
+          nonce.length() + m_jid.server().length() +
+          CNONCE_LEN*8 + 136;
+
+      std::string response = "username=\"" + m_jid.username() + "\",realm=\"" + realm;
+      response += "\",nonce=\""+ nonce + "\",cnonce=\"";
+      response += cnonce;
+      response += "\",nc=00000001,qop=auth,digest-uri=\"xmpp/" + m_jid.server() + "\",response=";
+      response += response_value;
+      response += ",charset=utf-8";
+      response_coded = iks_base64_encode( response.c_str(), response.length() );
+      printf( "calculated response: %s\n", response.c_str() );
+
+      t = new Tag( "response", response_coded );
+
+      iks_free( response_coded );
+    }
+    t->addAttrib( "xmlns", XMLNS_STREAM_SASL );
+    send( t );
+    iks_free( b );
+
+
+//     disconnect( STATE_DISCONNECTED );
   }
 
   void ClientBase::send( Tag *tag )

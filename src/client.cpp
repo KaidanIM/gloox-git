@@ -82,11 +82,11 @@ namespace gloox
     m_disco->setIdentity( "client", "bot" );
   }
 
-  bool Client::handleNormalNode( Tag *tag )
+  bool Client::handleNormalNode( Stanza *stanza )
   {
-    if( tag->name() == "stream:features" )
+    if( stanza->name() == "stream:features" )
     {
-      m_streamFeatures = getStreamFeatures( tag );
+      m_streamFeatures = getStreamFeatures( stanza );
       printf( "stream features: %d\n", m_streamFeatures );
 
 #ifdef HAVE_GNUTLS
@@ -146,7 +146,7 @@ namespace gloox
       }
     }
 #ifdef HAVE_GNUTLS
-    else if( ( tag->name() == "proceed" ) && tag->hasAttribute( "xmlns", XMLNS_STREAM_TLS ) )
+    else if( ( stanza->name() == "proceed" ) && stanza->hasAttribute( "xmlns", XMLNS_STREAM_TLS ) )
     {
 #ifdef DEBUG
       printf( "starting TLS handshake...\n" );
@@ -162,21 +162,21 @@ namespace gloox
 #endif
     }
 #endif
-    else if( ( tag->name() == "challenge" ) && tag->hasAttribute( "xmlns", XMLNS_STREAM_SASL ) )
+    else if( ( stanza->name() == "challenge" ) && stanza->hasAttribute( "xmlns", XMLNS_STREAM_SASL ) )
     {
 #ifdef DEBUG
       printf( "processing sasl challenge\n" );
 #endif
-      processSASLChallenge( tag->cdata() );
+      processSASLChallenge( stanza->cdata() );
     }
-    else if( tag->name() == "failure" )
+    else if( stanza->name() == "failure" )
     {
 #ifdef DEBUG
       printf( "sasl authentication failed...\n" );
 #endif
       disconnect( STATE_AUTHENTICATION_FAILED );
     }
-    else if( tag->name() == "success" )
+    else if( stanza->name() == "success" )
     {
 #ifdef DEBUG
       printf( "sasl auth successful...\n" );
@@ -187,12 +187,12 @@ namespace gloox
     }
     else
     {
-      if( ( tag->name() == "iq" ) && tag->hasAttribute( "id", "bind" ) )
+      if( ( stanza->name() == "iq" ) && stanza->hasAttribute( "id", "bind" ) )
       {
-        processResourceBind( tag );
+        processResourceBind( stanza );
       }
-      else if( ( tag->name() == "iq" ) && tag->hasAttribute( "id", "session" ) )
-        processCreateSession( tag );
+      else if( ( stanza->name() == "iq" ) && stanza->hasAttribute( "id", "session" ) )
+        processCreateSession( stanza );
       else
         return false;
     }
@@ -200,29 +200,29 @@ namespace gloox
     return true;
   }
 
-  int Client::getStreamFeatures( Tag *tag )
+  int Client::getStreamFeatures( Stanza *stanza )
   {
-    if( tag->name() != "stream:features" )
+    if( stanza->name() != "stream:features" )
       return 0;
 
     int features = 0;
 
-    if( tag->hasChild( "starttls", "xmlns", XMLNS_STREAM_TLS ) )
+    if( stanza->hasChild( "starttls", "xmlns", XMLNS_STREAM_TLS ) )
       features |= STREAM_FEATURE_STARTTLS;
 
-    if( tag->hasChild( "mechanisms", "xmlns", XMLNS_STREAM_SASL ) )
-      features |= getSaslMechs( tag->findChild( "mechanisms" ) );
+    if( stanza->hasChild( "mechanisms", "xmlns", XMLNS_STREAM_SASL ) )
+      features |= getSaslMechs( stanza->findChild( "mechanisms" ) );
 
-    if( tag->hasChild( "bind", "xmlns", XMLNS_STREAM_BIND ) )
+    if( stanza->hasChild( "bind", "xmlns", XMLNS_STREAM_BIND ) )
       features |= STREAM_FEATURE_BIND;
 
-    if( tag->hasChild( "session", "xmlns", XMLNS_STREAM_SESSION ) )
+    if( stanza->hasChild( "session", "xmlns", XMLNS_STREAM_SESSION ) )
       features |= STREAM_FEATURE_SESSION;
 
-    if( tag->hasChild( "auth", "xmlns", XMLNS_STREAM_IQAUTH ) )
+    if( stanza->hasChild( "auth", "xmlns", XMLNS_STREAM_IQAUTH ) )
       features |= STREAM_FEATURE_IQAUTH;
 
-    if( tag->hasChild( "register", "xmlns", XMLNS_STREAM_IQREGISTER ) )
+    if( stanza->hasChild( "register", "xmlns", XMLNS_STREAM_IQREGISTER ) )
       features |= STREAM_FEATURE_IQREGISTER;
 
 
@@ -265,9 +265,8 @@ namespace gloox
     }
   }
 
-  void Client::processResourceBind( Tag *tag )
+  void Client::processResourceBind( Stanza *stanza )
   {
-    Stanza *stanza= new Stanza( tag );
     switch( stanza->subtype() )
     {
       case STANZA_IQ_RESULT:
@@ -319,9 +318,8 @@ namespace gloox
     send( iq );
   }
 
-  void Client::processCreateSession( Tag *tag )
+  void Client::processCreateSession( Stanza *stanza )
   {
-    Stanza *stanza = new Stanza( tag );
     switch( stanza->subtype() )
     {
       case STANZA_IQ_RESULT:
