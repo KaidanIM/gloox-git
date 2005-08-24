@@ -23,7 +23,7 @@
 
 #include "parser.h"
 #include "clientbase.h"
-#include "tag.h"
+#include "stanza.h"
 
 namespace gloox
 {
@@ -57,9 +57,9 @@ namespace gloox
     }
   }
 
-  void Parser::streamEvent( Tag *tag )
+  void Parser::streamEvent( Stanza *stanza )
   {
-    if( m_parent && tag )
+    if( m_parent && stanza )
     {
       ClientBase::NodeType type = ClientBase::NODE_STREAM_CHILD;
       if( m_root->name() == "stream:stream" )
@@ -67,17 +67,22 @@ namespace gloox
       else if( m_root->name() == "stream:error" )
         type = ClientBase::NODE_STREAM_ERROR;
 
-      m_parent->filter( type, tag );
+      m_parent->filter( type, stanza );
     }
+    else if( !stanza )
+      m_parent->filter( ClientBase::NODE_STREAM_CLOSE, 0 );
   }
 
   int tagHook( Parser *parser, char *name, char **atts, int type )
   {
+    if( !name )
+      return IKS_OK;
+
     switch( type )
     {
       case IKS_OPEN:
       case IKS_SINGLE:
-        Tag *tag = new Tag( name );
+        Stanza *tag = new Stanza( name );
         for(int i=0; atts && atts[i]; )
         {
           tag->addAttrib( atts[i], atts[i+1] );
@@ -103,9 +108,15 @@ namespace gloox
         if( type == IKS_OPEN )
         break;
       case IKS_CLOSE:
-        parser->m_current = parser->m_current->parent();
+        if( iks_strncmp( name, "stream:stream", 13 ) == 0 )
+        {
+          parser->streamEvent( 0 );
+          break;
+        }
+        parser->m_current = dynamic_cast<Stanza*>( parser->m_current->parent() );
         if( !parser->m_current )
         {
+          parser->m_root->finalize();
           parser->streamEvent( parser->m_root );
           delete( parser->m_root );
           parser->m_root = 0;

@@ -32,7 +32,7 @@ namespace gloox
 {
 
   class ClientBase;
-  class Tag;
+  class Stanza;
 
   /**
    * This class is an abstraction of libiksemel's XML parser.
@@ -71,12 +71,12 @@ namespace gloox
       ParserState feed( const std::string& data );
 
     private:
-      void streamEvent( Tag *tag );
+      void streamEvent( Stanza *stanza );
 
       iksparser *m_parser;
       ClientBase *m_parent;
-      Tag *m_current;
-      Tag *m_root;
+      Stanza *m_current;
+      Stanza *m_root;
 
       friend int cdataHook( Parser *parser, char *data, size_t len );
       friend int tagHook( Parser *parser, char *name, char **atts, int type );
