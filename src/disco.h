@@ -22,6 +22,8 @@
 #ifndef DISCO_H__
 #define DISCO_H__
 
+#include "gloox.h"
+
 #include "iqhandler.h"
 #include "disconodehandler.h"
 
@@ -156,7 +158,6 @@ namespace gloox
       typedef std::list<DiscoHandler*>                  DiscoHandlerList;
       typedef std::map<std::string, DiscoNodeHandler*>  DiscoNodeHandlerMap;
       typedef std::list<DiscoItem*>                     ItemList;
-      typedef std::map<std::string, std::string>        StringMap;
 
       DiscoHandlerList m_discoHandlers;
       DiscoNodeHandlerMap m_nodeHandlers;

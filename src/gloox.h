@@ -23,6 +23,7 @@
 
 #include <string>
 #include <list>
+#include <map>
 
 #define XMLNS_CLIENT            "jabber:client"
 #define XMLNS_COMPONENT_ACCEPT  "jabber:component:accept"
@@ -230,6 +231,11 @@ namespace gloox
    * A list of strings.
    */
   typedef std::list<std::string> StringList;
+
+  /**
+   * A map of strings.
+   */
+  typedef std::map<std::string, std::string> StringMap;
 
 };
 
