@@ -30,6 +30,7 @@
 #include "presencehandler.h"
 #include "rosterlistener.h"
 #include "subscriptionhandler.h"
+#include "taghandler.h"
 #include "prep.h"
 #include "jid.h"
 
@@ -254,6 +255,15 @@ namespace gloox
       void registerSubscriptionHandler( SubscriptionHandler *sh );
 
       /**
+       * Registers @c th as object that receives incoming packts with a given root tag
+       * qualified by the given namespace.
+       * @param th The object to receive Subscription packet notifications.
+       * @param tag The element's name.
+       * @param xmlns The element's namespace.
+       */
+      void registerTagHandler( TagHandler *th, const std::string& tag, const std::string& xmlns );
+
+      /**
        * Removes the given object from the list of connection listeners.
        * @param cl The object to remove from the list.
        */
@@ -282,6 +292,14 @@ namespace gloox
        * @param sh The object to remove from the list.
        */
       void removeSubscriptionHandler( SubscriptionHandler *sh );
+
+      /**
+       * Removes the given object from the list of tag handlers for the given element and namespace.
+       * @param th The object to remove from the list.
+       * @param tag The element to remove the handler for.
+       * @param xmlns The namespace qualifying the element.
+       */
+      void removeTagHandler( TagHandler *th, const std::string& tag, const std::string& xmlns );
 
       /**
        * Use this function to set a number of trusted root CA certificates. which shall be
@@ -363,6 +381,7 @@ namespace gloox
       void notifyMessageHandlers( Stanza *stanza );
       void notifyPresenceHandlers( Stanza *stanza );
       void notifySubscriptionHandlers( Stanza *stanza );
+      void notifyTagHandlers( Stanza *stanza );
       void filter( NodeType type, Stanza *stanza );
       void logEvent( const char *data, size_t size, int is_incoming );
 
@@ -372,12 +391,20 @@ namespace gloox
         int context;
       };
 
+      struct TagHandlerStruct
+      {
+        TagHandler *th;
+        std::string xmlns;
+        std::string tag;
+      };
+
       typedef std::list<ConnectionListener*>            ConnectionListenerList;
       typedef std::map<const std::string, IqHandler*>   IqHandlerMap;
       typedef std::map<const std::string, TrackStruct>  IqTrackMap;
       typedef std::list<MessageHandler*>                MessageHandlerList;
       typedef std::list<PresenceHandler*>               PresenceHandlerList;
       typedef std::list<SubscriptionHandler*>           SubscriptionHandlerList;
+      typedef std::list<TagHandlerStruct>               TagHandlerList;
 
       ConnectionListenerList  m_connectionListeners;
       IqHandlerMap            m_iqNSHandlers;
@@ -385,19 +412,13 @@ namespace gloox
       MessageHandlerList      m_messageHandlers;
       PresenceHandlerList     m_presenceHandlers;
       SubscriptionHandlerList m_subscriptionHandlers;
+      TagHandlerList          m_tagHandlers;
       StringList              m_cacerts;
 
       Parser *m_parser;
 
       int m_idCount;
 
-//       friend int presenceHook( ClientBase *cb, ikspak *pak );
-//       friend int msgHook( ClientBase *cb, ikspak *pak );
-//       friend int subscriptionHook( ClientBase *cb, ikspak *pak );
-//       friend int iqHook( ClientBase *cb, ikspak *pak );
-//       friend int bindHook( ClientBase *cb, ikspak* pak );
-//       friend int sessionHook( ClientBase *cb, ikspak* pak );
-//       friend int logHook( ClientBase *cb, const char *data, size_t size, int is_incoming);
   };
 
 };
