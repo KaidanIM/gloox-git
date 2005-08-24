@@ -62,7 +62,7 @@ namespace gloox
       virtual FeatureList handleDiscoNodeFeatures( const std::string& node );
 
       // reimplemented from DiscoNodeHandler
-      virtual IdentityMap handleDiscoNodeIdentities( const std::string& node );
+      virtual IdentityMap handleDiscoNodeIdentities( const std::string& node, std::string& name );
 
       // reimplemented from DiscoNodeHandler
       virtual ItemMap handleDiscoNodeItems( const std::string& node );
