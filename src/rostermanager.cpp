@@ -178,6 +178,8 @@ namespace gloox
       Tag *i = new Tag( "item" );
       i->addAttrib( "jid", jid );
       i->addAttrib( "subscription", "remove" );
+      q->addChild( i );
+      iq->addChild( q );
 
       m_parent->send( iq );
     }
