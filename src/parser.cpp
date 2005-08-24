@@ -129,10 +129,11 @@ namespace gloox
 
   int cdataHook( Parser *parser, char *data, size_t len )
   {
-    if( parser->m_current && data )
+    if( parser->m_current && data && len )
     {
-      std::string tmp = data;
-      parser->m_current->setCData( tmp.substr( 0, len ) );
+      std::string tmp;
+      tmp.assign( data, len );
+      parser->m_current->setCData( tmp );
     }
 
     return IKS_OK;
