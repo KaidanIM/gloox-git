@@ -31,6 +31,11 @@ namespace gloox
   {
   }
 
+  Tag::Tag( Tag *parent, const std::string& name, const std::string& cdata )
+  : m_parent( parent ), m_name( name ), m_cdata( escape( cdata ) ), m_type( STANZA_UNDEFINED )
+  {
+  }
+
   Tag::~Tag()
   {
     TagList::iterator it = m_children.begin();
