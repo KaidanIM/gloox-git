@@ -74,7 +74,7 @@ namespace gloox
   {
     if( stanza->subtype() == STANZA_IQ_RESULT ) // initial roster
     {
-      extractItems( stanza );
+      extractItems( stanza, false );
 
       if( m_rosterListener )
         m_rosterListener->roster( m_roster );
@@ -83,10 +83,7 @@ namespace gloox
     }
     else if( stanza->subtype() == STANZA_IQ_SET ) // roster item push
     {
-      const std::string jid = extractItems( stanza );
-
-      if( m_rosterListener )
-        m_rosterListener->itemAdded( jid );
+      extractItems( stanza, true );
 
       Tag *iq = new Tag( "iq" );
       iq->addAttrib( "id", stanza->id() );
@@ -295,9 +292,8 @@ namespace gloox
     m_rosterListener = 0;
   }
 
-  const std::string RosterManager::extractItems( Tag *tag )
+  void RosterManager::extractItems( Tag *tag, bool isPush )
   {
-    std::string jid;
     Tag *t = tag->findChild( "query" );
     Tag::TagList l = t->children();
     Tag::TagList::iterator it = l.begin();
@@ -305,25 +301,6 @@ namespace gloox
     {
       if( (*it)->name() == "item" )
       {
-        jid = (*it)->findAttribute( "jid" );
-        const std::string name = (*it)->findAttribute( "name" );
-        const std::string ask = (*it)->findAttribute( "ask" );
-        bool a = false;
-        if( !ask.empty() )
-          a = true;
-        const std::string sub = (*it)->findAttribute( "subscription" );
-        RosterItem::SubscriptionEnum subs;
-        if( sub == "remove" )
-        {
-          if( m_roster.find( jid ) != m_roster.end() )
-          {
-            m_roster.erase( jid );
-            if( m_rosterListener )
-              m_rosterListener->itemRemoved( jid );
-          }
-          continue;
-        }
-
         RosterItem::GroupList gl;
         if( (*it)->hasChild( "group" ) )
         {
@@ -334,10 +311,48 @@ namespace gloox
             gl.push_back( (*it_g)->name() );
           }
         }
-        add( jid, name, gl, sub, a );
+
+        const std::string jid = (*it)->findAttribute( "jid" );
+        RosterListener::Roster::iterator it_d = m_roster.find( jid );
+        if( it_d != m_roster.end() )
+        {
+          (*it_d).second->setName( (*it)->findAttribute( "name" ) );
+          const std::string sub = (*it)->findAttribute( "subscription" );
+          if( sub == "remove" )
+          {
+            delete( (*it_d).second );
+            m_roster.erase( it_d );
+            if( m_rosterListener )
+              m_rosterListener->itemRemoved( jid );
+            continue;
+          }
+          const std::string ask = (*it)->findAttribute( "ask" );
+          bool a = false;
+          if( !ask.empty() )
+            a = true;
+          (*it_d).second->setSubscription( sub, a );
+          (*it_d).second->setGroups( gl );
+
+          if( m_rosterListener )
+            m_rosterListener->itemUpdated( jid );
+        }
+        else
+        {
+          const std::string sub = (*it)->findAttribute( "subscription" );
+          if( sub == "remove" )
+            continue;
+          const std::string name = (*it)->findAttribute( "name" );
+          const std::string ask = (*it)->findAttribute( "ask" );
+          bool a = false;
+          if( !ask.empty() )
+            a = true;
+
+          add( jid, name, gl, sub, a );
+          if( isPush && m_rosterListener )
+            m_rosterListener->itemAdded( jid );
+        }
       }
     }
-    return jid;
   }
 
   void RosterManager::add( const std::string& jid, const std::string& name,
