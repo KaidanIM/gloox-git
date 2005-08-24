@@ -22,6 +22,7 @@
 namespace gloox
 {
   Tag::Tag()
+  : m_parent( 0 ), m_type( STANZA_UNDEFINED )
   {
   }
 
@@ -36,6 +37,7 @@ namespace gloox
     for( it; it != m_children.end(); it++ )
     {
       delete( (*it) );
+      (*it) = 0;
     }
     m_children.clear();
   }
