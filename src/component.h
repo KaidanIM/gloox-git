@@ -89,7 +89,7 @@ namespace gloox
       virtual const std::string streamTo() const { return Prep::nameprep( m_to ); };
 
       virtual void handleStartNode();
-      virtual bool handleNormalNode( Tag *tag );
+      virtual bool handleNormalNode( Stanza *stanza );
 
     private:
 
