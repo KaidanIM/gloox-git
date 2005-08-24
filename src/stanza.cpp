@@ -96,7 +96,6 @@ namespace gloox
       {
         m_type = STANZA_PRESENCE;
         m_subtype = STANZA_PRES_UNAVAILABLE;
-        m_show = PRESENCE_UNAVAILABLE;
       }
       else if( hasAttribute( "type", "probe" ) )
       {
@@ -137,6 +136,8 @@ namespace gloox
         m_show = PRESENCE_DND;
       else if( hasChildWithCData( "show", "xa" ) )
         m_show = PRESENCE_XA;
+      else if( hasAttribute( "type", "unavailable" ) )
+        m_show = PRESENCE_UNAVAILABLE;
       else
         m_show = PRESENCE_UNKNOWN;
 
