@@ -21,7 +21,7 @@ class ComponentTest : public DiscoHandler, ConnectionListener
       j = new Component( XMLNS_COMPONENT_ACCEPT, "example.org",
                           "component.example.org", "secret", 5000 );
       j->setStreamTo( "component.example.org" );
-//       j->disco()->setVersion( "componentTest", GLOOX_VERSION );
+      j->disco()->setVersion( "componentTest", GLOOX_VERSION );
 
       j->registerConnectionListener( this );
 
@@ -35,7 +35,7 @@ class ComponentTest : public DiscoHandler, ConnectionListener
       printf( "connected -- disconnecting...\n" );
 //       iks *x = iks_new( "presence" );
 //       j->send( x );
-      j->disconnect( STATE_DISCONNECTED );
+//       j->disconnect( STATE_DISCONNECTED );
     };
 
     virtual void onDisconnect() { printf( "component: disconnected\n" ); };
