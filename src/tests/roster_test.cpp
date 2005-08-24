@@ -85,8 +85,8 @@ class RosterTest : public RosterListener, ConnectionListener
         printf( "jid: %s, name: %s, subscription: %d\n",
                 (*it).second->jid().c_str(), (*it).second->name().c_str(),
                 (*it).second->subscription() );
-        RosterItem::GroupList g = (*it).second->groups();
-        RosterItem::GroupList::const_iterator it_g = g.begin();
+        StringList g = (*it).second->groups();
+        StringList::const_iterator it_g = g.begin();
         for( it_g; it_g != g.end(); ++it_g )
           printf( "\tgroup: %s\n", (*it_g).c_str() );
       }
@@ -106,7 +106,7 @@ class RosterTest : public RosterListener, ConnectionListener
     virtual bool subscriptionRequest( const std::string& jid )
     {
       printf( "subscription: %s\n", jid.c_str() );
-      RosterItem::GroupList groups;
+      StringList groups;
       j->rosterManager()->subscribe( jid, "", groups );
       return true;
     }
