@@ -15,5 +15,11 @@ In the pipe
 
 - complete error handling for all protocols
 - add classes for common packet types
-- xml:lang for message, presence stanzas
+- xml:lang support (core sec. 4.4, 9.1.5)
 - a generic tag handler (for non-XMPP:Core elements)
+- IQ error handling in Annotations class
+- xmpp version support (core sec. 4.4.1)
+- stream errors (core sec. 4.7)
+- sasl errors (core sec. 6.4)
+- stanza errors (core 9.3)
+- utf-8
