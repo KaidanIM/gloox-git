@@ -79,6 +79,7 @@ namespace gloox
           iq->addAttrib( "to", stanza->from().full() );
           iq->addAttrib( "type", "result" );
           Tag *query = new Tag( "query" );
+          iq->addChild( query );
           query->addAttrib( "xmlns", XMLNS_DISCO_INFO );
 
           Tag *q = stanza->findChild( "query" );
@@ -88,15 +89,17 @@ namespace gloox
             DiscoNodeHandlerMap::const_iterator it = m_nodeHandlers.find( node );
             if( it != m_nodeHandlers.end() )
             {
-              DiscoNodeHandler::IdentityMap identities = (*it).second->handleDiscoNodeIdentities( node );
+              std::string name;
+              DiscoNodeHandler::IdentityMap identities =
+                  (*it).second->handleDiscoNodeIdentities( node, name );
               DiscoNodeHandler::IdentityMap::const_iterator im = identities.begin();
               for( im; im != identities.end(); im++ )
               {
                 Tag *i = new Tag( "identity" );
                 i->addAttrib( "category", (*im).first );
                 i->addAttrib( "type", (*im).second );
+                i->addAttrib( "name", name );
                 query->addChild( i );
-    //             iks_insert_attrib( i, "name", m_versionName.c_str() );
               }
               DiscoNodeHandler::FeatureList features = (*it).second->handleDiscoNodeFeatures( node );
               DiscoNodeHandler::FeatureList::const_iterator fi = features.begin();
@@ -125,7 +128,6 @@ namespace gloox
             }
           }
 
-          iq->addChild( query );
           m_parent->send( iq );
         }
         else if( stanza->xmlns() == XMLNS_DISCO_ITEMS )

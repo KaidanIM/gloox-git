@@ -71,9 +71,11 @@ namespace gloox
        * more information on a specific node. It is called when a disco#info query
        * arrives with a node attribute that matches the one registered for this handler.
        * @param node The node this handler is supposed to handle.
+       * @param name This parameter is currently used as additional return value.  Just fill in the
+       * name of the node.
        * @return A list of identities for this node.
        */
-      virtual IdentityMap handleDiscoNodeIdentities( const std::string& node ) {};
+      virtual IdentityMap handleDiscoNodeIdentities( const std::string& node, std::string& name ) {};
 
       /**
        * This function is used to gather more information on a specific node.
