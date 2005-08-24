@@ -73,8 +73,15 @@ namespace gloox
     }
   }
 
-  DiscoNodeHandler::IdentityMap Adhoc::handleDiscoNodeIdentities( const std::string& node )
+  DiscoNodeHandler::IdentityMap Adhoc::handleDiscoNodeIdentities( const std::string& node,
+                                                                  std::string& name )
   {
+    DiscoNodeHandler::ItemMap::const_iterator it = m_items.find( node );
+    if( it != m_items.end() )
+      name = (*it).second;
+    else
+      name = "Ad-Hoc Commands";
+
     DiscoNodeHandler::IdentityMap ident;
     if( node == XMLNS_ADHOC_COMMANDS )
       ident["automation"] = "command-list";
