@@ -58,7 +58,7 @@ namespace gloox
 
       /**
        * Use this function to store private XML stored in the given namespace.
-       * @param xml The XML to store. This is the complete tag including the unique namespace.
+       * @param tag The XML to store. This is the complete tag including the unique namespace.
        * It is deleted after sending it.
        * @param xmlns The namespace again, in which the element @c is stored.
        */
