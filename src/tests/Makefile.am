@@ -4,7 +4,7 @@
 
 AM_CPPFLAGS = -g3 -fno-inline
 
-bin_PROGRAMS = libidn_test register_test disco_test adhoc_test roster_test privatexml_test component_test bookmarkstorage_test annotations_test privacylist_test message_test
+bin_PROGRAMS = register_test disco_test adhoc_test roster_test privatexml_test component_test bookmarkstorage_test annotations_test privacylist_test message_test
 
 register_test_SOURCES = register_test.cpp
 register_test_LDADD = -lgloox
