@@ -43,7 +43,7 @@
 #define XMLNS_STREAM_IQAUTH     "http://jabber.org/features/iq-auth"
 #define XMLNS_STREAM_IQREGISTER "http://jabber.org/features/iq-register"
 
-#define GLOOX_VERSION "0.4"
+#define GLOOX_VERSION "0.4.1"
 
 /**
  * The namespace for the gloox library.
