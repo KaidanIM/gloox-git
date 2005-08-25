@@ -201,6 +201,20 @@ namespace gloox
       void setState( ConnectionState state );
 
       /**
+       * Retrieves the value of the xml:lang attribute of the initial stream.
+       * Default is 'en', i.e. if not changed by a call to @ref setXmlLang().
+       */
+      const std::string& xmlLang() const { return m_xmllang; };
+
+      /**
+       * Sets the value for the xml:lang attribute of the initial stream.
+       * @param xmllang The language identifier for the stream. It must conform to
+       * section 2.12 of the XML specification and RFC 3066.
+       * Default is 'en'.
+       */
+      void setXmlLang( const std::string& xmllang ) { m_xmllang = xmllang; };
+
+      /**
        * Registers @c cl as object that receives connection notifications.
        * @param cl The object to receive connection notifications.
        */
@@ -321,6 +335,7 @@ namespace gloox
 
       std::string m_password;
       std::string m_namespace;
+      std::string m_xmllang;
       std::string m_server;
       std::string m_sid;
       bool m_sasl;
