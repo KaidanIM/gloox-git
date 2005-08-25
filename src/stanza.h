@@ -91,28 +91,49 @@ namespace gloox
       virtual PresenceStatus show() const { return m_show; };
 
       /**
-       * Returns the status text of a presence stanza.
+       * Returns the status text of a presence stanza for the given language if available.
+       * If the requested language is not available, the default status text (without a xml:lang
+       * attribute) will be returned.
+       * @param lang The language identifier for the desired language. It must conform to
+       * section 2.12 of the XML specification and RFC 3066. If empty, the default body
+       * will be returned, if any.
        * @return The status text set by the sender.
        */
-      virtual const std::string status() const { return m_status; };
+      virtual const std::string status( const std::string& lang = "" ) const { return m_status; };
 
       /**
-       * Returns the message body of a message stanza.
-       * @return The message body of a message stanza. Empty for non-message stanzas.
+       * Returns the body of a message stanza for the given language if available.
+       * If the requested language is not available, the default body (without a xml:lang
+       * attribute) will be returned.
+       * @param lang The language identifier for the desired language. It must conform to
+       * section 2.12 of the XML specification and RFC 3066. If empty, the default body
+       * will be returned, if any.
+       * @return The body of a message stanza. Empty for non-message stanzas.
        */
-      virtual const std::string message() const { return m_message; };
+      virtual const std::string body( const std::string& lang = "" ) const;
 
       /**
-       * Returns the subject of a message stanza.
+       * Returns the subject of a message stanza for the given language if available.
+       * If the requested language is not available, the default subject (without a xml:lang
+       * attribute) will be returned.
+       * @param lang The language identifier for the desired language. It must conform to
+       * section 2.12 of the XML specification and RFC 3066. If empty, the default subject
+       * will be returned, if any.
        * @return The subject of a message stanza. Empty for non-message stanzas.
        */
-      virtual const std::string subject() const { return m_subject; };
+      virtual const std::string subject( const std::string& lang = "" ) const;
 
       /**
        * Returns the thread ID of a message stanza.
        * @return The thread ID of a message stanza. Empty for non-message stanzas.
        */
       virtual const std::string thread() const { return m_thread; };
+
+      /**
+       * Retrieves the value of the xml:lang attribute of this stanza.
+       * Default is 'en'.
+       */
+      const std::string& xmlLang() const { return m_xmllang; };
 
       /**
        * Use this function to parse the content of the Tag and determine type, etc.
@@ -128,14 +149,15 @@ namespace gloox
 
       StanzaSubType m_subtype;
       PresenceStatus m_show;
+      StringMap m_body;
+      StringMap m_subject;
+      StringMap m_status;
       JID m_from;
       JID m_to;
       std::string m_xmlns;
       std::string m_id;
-      std::string m_status;
-      std::string m_message;
-      std::string m_subject;
       std::string m_thread;
+      std::string m_xmllang;
       int m_priority;
   };
 

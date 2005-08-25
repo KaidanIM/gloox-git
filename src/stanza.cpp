@@ -18,13 +18,13 @@ namespace gloox
 {
 
   Stanza::Stanza( const std::string& name, const std::string& cdata )
-  : Tag( name, cdata )
+  : Tag( name, cdata ), m_xmllang( "default" )
   {
   }
 
   Stanza::Stanza( Tag *tag )
     : Tag( tag->name() ),
-      m_show( PRESENCE_UNKNOWN )
+      m_show( PRESENCE_UNKNOWN ), m_xmllang( "en" )
   {
     m_name = tag->name();
     m_attribs = tag->attributes();
@@ -74,15 +74,29 @@ namespace gloox
       else
         m_subtype = STANZA_SUB_UNDEFINED;
 
-      Tag *t = findChild( "body" );
-      if( t )
-        m_message = t->cdata();
-      t = findChild( "subject" );
-      if( t )
-        m_subject = t->cdata();
-      t = findChild( "thread" );
-      if( t )
-        m_thread = t->cdata();
+      TagList& c = children();
+      TagList::const_iterator it = c.begin();
+      for( it; it != c.end(); ++it )
+      {
+        if( (*it)->name() == "body" )
+        {
+          const std::string lang = (*it)->findAttribute( "xml:lang" );
+          if( !lang.empty() )
+            m_body[lang] = (*it)->cdata();
+          else
+            m_body["default"] = (*it)->cdata();
+        }
+        else if( (*it)->name() == "subject" )
+        {
+          const std::string lang = (*it)->findAttribute( "xml:lang" );
+          if( !lang.empty() )
+            m_subject[lang] = (*it)->cdata();
+          else
+            m_subject["default"] = (*it)->cdata();
+        }
+        else if( (*it)->name() == "thread" )
+          m_thread = (*it)->cdata();
+      }
     }
     else if( m_name == "presence" )
     {
@@ -155,12 +169,55 @@ namespace gloox
       else
         m_show = PRESENCE_UNKNOWN;
 
-      if( hasChild( "status" ) )
-        m_status = findChild( "status" )->cdata();
+      TagList& c = children();
+      TagList::const_iterator it = c.begin();
+      for( it; it != c.end(); ++it )
+      {
+        if( (*it)->name() == "status" )
+        {
+          const std::string lang = (*it)->findAttribute( "xml:lang" );
+          if( !lang.empty() )
+            m_status[lang] = (*it)->cdata();
+          else
+            m_status["default"] = (*it)->cdata();
+        }
+      }
 
       if( hasChild( "priority" ) )
         m_priority = atoi( findChild( "priority" )->cdata().c_str() );
     }
+
+    m_xmllang = findAttribute( "xml:lang" );
+  }
+
+  const std::string Stanza::body( const std::string& lang ) const
+  {
+    const std::string l = ( lang.empty() )?( "default" ):( lang );
+    StringMap::const_iterator it = m_body.find( l );
+    if( it != m_body.end() )
+      return (*it).second;
+    else
+      return "";
+  }
+
+  const std::string Stanza::subject( const std::string& lang ) const
+  {
+    const std::string l = ( lang.empty() )?( "default" ):( lang );
+    StringMap::const_iterator it = m_subject.find( l );
+    if( it != m_subject.end() )
+      return (*it).second;
+    else
+      return "";
+  }
+
+  const std::string Stanza::status( const std::string& lang ) const
+  {
+    const std::string l = ( lang.empty() )?( "default" ):( lang );
+    StringMap::const_iterator it = m_status.find( l );
+    if( it != m_status.end() )
+      return (*it).second;
+    else
+      return "";
   }
 
 };
