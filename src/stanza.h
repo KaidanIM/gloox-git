@@ -99,7 +99,7 @@ namespace gloox
        * will be returned, if any.
        * @return The status text set by the sender.
        */
-      virtual const std::string status( const std::string& lang = "" ) const { return m_status; };
+      virtual const std::string status( const std::string& lang = "" ) const;
 
       /**
        * Returns the body of a message stanza for the given language if available.
