@@ -16,14 +16,14 @@ libgloox_la_LIBADD = $(IKSEMEL_LIBS) -lm -lresolv
 libgloox_la_CFLAGS = $(CPPFLAGS) $(IKSEMEL_CFLAGS)
 
 libglooxincludedir = $(includedir)/gloox
-libglooxinclude_HEADERS = adhoccommandprovider.h  privacymanager.h \
+libglooxinclude_HEADERS = adhoccommandprovider.h  privacymanager.h      tag.h \
 			  adhoc.h                 iqhandler.h           privatexml.h \
 			  annotations.h           client.h              privatexmlhandler.h \
 			  annotationshandler.h    component.h           registration.h \
 			  bookmarkhandler.h       registrationhandler.h jid.h \
 			  bookmarkstorage.h       messagehandler.h      rosteritem.h \
 			  clientbase.h            rosterlistener.h      taghandler.h \
-			  connectionlistener.h    rostermanager.h \
+			  connectionlistener.h    rostermanager.h       gloox.h\
 			  disco.h                 presencehandler.h     subscriptionhandler.h \
-			  discohandler.h          privacyitem.h \
+			  discohandler.h          privacyitem.h         stanza.h\
 			  disconodehandler.h      privacylisthandler.h
