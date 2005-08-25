@@ -29,8 +29,8 @@
 namespace gloox
 {
 
-  Client::Client()
-    : ClientBase( XMLNS_CLIENT ),
+  Client::Client( const std::string& server )
+    : ClientBase( XMLNS_CLIENT, server ),
     m_priority( -1 ),
     m_autoPresence( false ), m_manageRoster( true ),
     m_handleDisco( true ), m_rosterManager( 0 ),
@@ -39,14 +39,14 @@ namespace gloox
     init();
   }
 
-  Client::Client( const std::string& id, const std::string& password, int port )
-    : ClientBase( XMLNS_CLIENT, password, port ),
+  Client::Client( const JID& jid, const std::string& password, int port )
+    : ClientBase( XMLNS_CLIENT, password, "", port ),
     m_priority( -1 ), m_autoPresence( false ), m_manageRoster( true ),
     m_handleDisco( true ), m_rosterManager( 0 ),
     m_disco( 0 ), m_auth( 0 ), m_authorized( false ), m_resourceBound( false )
   {
-    m_jid.setJID( id );
-
+    m_jid = jid;
+    m_server = m_jid.serverRaw();
     init();
   }
 
@@ -223,7 +223,7 @@ namespace gloox
 
 
     if( features == 0 )
-      features = STREAM_FEATURE_IQAUTH;
+      features = STREAM_FEATURE_SASL_PLAIN;
 
     return features;
   }

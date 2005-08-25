@@ -31,15 +31,8 @@
 namespace gloox
 {
 
-  ClientBase::ClientBase( const std::string& ns )
-  : m_namespace( ns ), m_port( -1 ),
-      m_connection( 0 ), m_parser( 0 ),
-      m_tls( true ), m_sasl( true ), m_idCount( 0 )
-  {
-  }
-
-  ClientBase::ClientBase( const std::string& ns, const std::string& password, int port )
-    : m_namespace( ns ), m_password( password ), m_port( port ),
+  ClientBase::ClientBase( const std::string& ns, const std::string& server, int port )
+    : m_namespace( ns ), m_server( server ), m_port( port ),
       m_connection( 0 ), m_parser( 0 ),
       m_tls( true ), m_sasl( true ), m_idCount( 0 )
   {
@@ -47,11 +40,10 @@ namespace gloox
 
   ClientBase::ClientBase( const std::string& ns, const std::string& password,
                           const std::string& server, int port )
-    : m_namespace( ns ), m_password( password ), m_port( port ),
+    : m_namespace( ns ), m_password( password ), m_server( server ), m_port( port ),
       m_connection( 0 ), m_parser( 0 ),
       m_tls( true ), m_sasl( true ), m_idCount( 0 )
   {
-    m_jid.setServer( server );
   }
 
   ClientBase::~ClientBase()
@@ -62,14 +54,14 @@ namespace gloox
 
   bool ClientBase::connect()
   {
-    if( m_jid.server().empty() )
+    if( m_server.empty() )
       return false;
 
     if( !m_parser )
       m_parser = new Parser( this );
 
     if( !m_connection )
-      m_connection = new Connection( m_parser, m_jid.server(), m_port );
+      m_connection = new Connection( m_parser, m_server, m_port );
 
     m_connection->setCACerts( m_cacerts );
     int ret = m_connection->connect();
@@ -188,7 +180,9 @@ namespace gloox
         char *tmp = (char*)iks_malloc( len + 80 );
         char *result;
         sprintf( tmp, "%c%s%c%s", 0, m_jid.username().c_str(), 0, m_password.c_str() );
+        printf( "result: %s\n", tmp );
         result = iks_base64_encode( tmp, len );
+
         a->setCData( result );
         iks_free( result );
         iks_free( tmp );
@@ -297,8 +291,6 @@ namespace gloox
     send( t );
     iks_free( b );
 
-
-//     disconnect( STATE_DISCONNECTED );
   }
 
   void ClientBase::send( Tag *tag )
