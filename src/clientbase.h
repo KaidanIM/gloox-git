@@ -57,18 +57,11 @@ namespace gloox
        * Constructs a new ClientBase.
        * You should not need to use this class directly. Use Client or Component instead.
        * @param ns The namespace which qualifies the stream. Either jabber:client or jabber:component:*
-       */
-      ClientBase( const std::string& ns );
-
-      /**
-       * Constructs a new ClientBase.
-       * You should not need to use this class directly. Use Client or Component instead.
-       * @param ns The namespace which qualifies the stream. Either jabber:client or jabber:component:*
-       * @param password The password to use for further authentication.
+       * @param server The server to connect to.
        * @param port The port to connect to. The default of -1 means to look up the port via DNS SRV
        * or to use a default port of 5222 as defined in XMPP: Core.
        */
-      ClientBase( const std::string& ns, const std::string& password, int port = -1 );
+      ClientBase( const std::string& ns, const std::string& server, int port = -1 );
 
       /**
        * Constructs a new ClientBase.
@@ -136,7 +129,7 @@ namespace gloox
        * Sets the XMPP server to connect to.
        * @param server The server to connect to. Either IP or fully qualified domain name.
        */
-      void setServer( const std::string &server ) { m_jid.setServer( server ); };
+      void setServer( const std::string &server ) { m_server = server; };
 
       /**
        * Sets the password to use to connect to the XMPP server.
@@ -148,7 +141,7 @@ namespace gloox
        * Returns the current prepped server.
        * @return The server used to connect.
        */
-      const std::string server() const { return m_jid.server(); };
+      const std::string server() const { return m_server; };
 
       /**
        * Returns the current SASL status.
@@ -163,7 +156,8 @@ namespace gloox
       bool tls() const { return m_tls; };
 
       /**
-       * Returns the current port.
+       * Returns the port. The default of -1 means that the actual port will be looked up using
+       * SRV records, or the XMPP default port of 5222 will be used.
        * @return The port used to connect.
        */
       int port() const { return m_port; };
@@ -327,6 +321,7 @@ namespace gloox
 
       std::string m_password;
       std::string m_namespace;
+      std::string m_server;
       std::string m_sid;
       bool m_sasl;
       bool m_tls;

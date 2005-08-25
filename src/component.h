@@ -40,10 +40,10 @@ namespace gloox
        * @param server The server to connect to.
        * @param component The component's hostname. FQDN.
        * @param password The component's password.
-       * @param port The port to connect to. The default of -1 means to look up the port via DNS SRV.
+       * @param port The port to connect to. The default of 5347 is the default port of the router in jabberd2.
        */
       Component( const std::string& ns, const std::string& server,
-                  const std::string& component, const std::string& password, int port = -1 );
+                 const std::string& component, const std::string& password, int port = 5347 );
 
       /**
        * Virtual Destructor.

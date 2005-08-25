@@ -91,23 +91,24 @@ namespace gloox
       };
 
       /**
-       * Constructs a new Client.
-       * SASL and TLS are on by default. No further initialisations are made. Don't forget to
-       * set  at least the server (and probably username, password and resource) using the corresponding
-       * setters, else @ref connect() will fail.
+       * Constructs a new Client which can be used for account registration.
+       * SASL and TLS are on by default. The port will be determined by looking up SRV records.
+       * Alternatively, you can set it be calling @ref setPort().
+       * @param server The server to connect to.
        */
-      Client();
+      Client( const std::string& server );
 
       /**
        * Constructs a new Client.
-       * SASL and TLS are on by default.
+       * SASL and TLS are on by default. This should be the default constructor for most use cases.
        * The server address will be taken from the JID. The actual host will be resolved using SRV
-       * records. The domain part of the JID is used as a fallback in case no SRV record is found.
-       * @param id A full Jabber ID used for connecting to the server.
+       * records. The domain part of the JID is used as a fallback in case no SRV record is found, or
+       * you can set the server address separately by calling @ref setServer().
+       * @param jid A full Jabber ID used for connecting to the server.
        * @param password The password used for authentication.
        * @param port The port to connect to. The default of -1 means to look up the port via DNS SRV.
        */
-      Client( const std::string& id, const std::string& password, int port = -1 );
+      Client( const JID& jid, const std::string& password, int port = -1 );
 
       /**
        * Constructs a new Client.
@@ -117,7 +118,8 @@ namespace gloox
        * @param username The username/local part of the JID.
        * @param resource The resource part of the JID.
        * @param password The password to use for authentication.
-       * @param server The jabber server's address or host name to connect to.
+       * @param server The Jabber ID'S server part and the host name to connect to. If those are different
+       * for your setup, use the second constructor instead.
        * @param port The port to connect to. The default of -1 means to look up the port via DNS SRV.
        */
       Client( const std::string& username, const std::string& password,
