@@ -33,7 +33,7 @@ namespace gloox
 
   ClientBase::ClientBase( const std::string& ns, const std::string& server, int port )
     : m_namespace( ns ), m_server( server ), m_port( port ),
-      m_connection( 0 ), m_parser( 0 ),
+  m_connection( 0 ), m_parser( 0 ), m_xmllang( "en" ),
       m_tls( true ), m_sasl( true ), m_idCount( 0 )
   {
   }
@@ -41,7 +41,7 @@ namespace gloox
   ClientBase::ClientBase( const std::string& ns, const std::string& password,
                           const std::string& server, int port )
     : m_namespace( ns ), m_password( password ), m_server( server ), m_port( port ),
-      m_connection( 0 ), m_parser( 0 ),
+      m_connection( 0 ), m_parser( 0 ), m_xmllang( "en" ),
       m_tls( true ), m_sasl( true ), m_idCount( 0 )
   {
   }
@@ -141,7 +141,7 @@ namespace gloox
   {
     std::string xml = "<?xml version='1.0'?>";
     xml += "<stream:stream to='" + streamTo()+  "' xmlns='" + m_namespace + "' ";
-    xml += "xmlns:stream='http://etherx.jabber.org/streams' ";
+    xml += "xmlns:stream='http://etherx.jabber.org/streams' xml:lang='" + m_xmllang + "' ";
     xml += "version='1.0'>";
     send( xml );
   }
