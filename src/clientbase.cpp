@@ -140,7 +140,7 @@ namespace gloox
   void ClientBase::header()
   {
     std::string xml = "<?xml version='1.0'?>";
-    xml += "<stream:stream to='" + streamTo()+  "' xmlns='" + m_namespace + "' ";
+    xml += "<stream:stream to='" + m_jid.server()+  "' xmlns='" + m_namespace + "' ";
     xml += "xmlns:stream='http://etherx.jabber.org/streams' xml:lang='" + m_xmllang + "' ";
     xml += "version='1.0'>";
     send( xml );

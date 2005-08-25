@@ -328,7 +328,6 @@ namespace gloox
       void processSASLChallenge( const std::string& challenge );
       void startTls();
       bool hasTls();
-      virtual const std::string streamTo() const { return server(); };
 
       JID m_jid;
       Connection *m_connection;

@@ -223,7 +223,7 @@ namespace gloox
 
 
     if( features == 0 )
-      features = STREAM_FEATURE_SASL_PLAIN;
+      features = STREAM_FEATURE_IQAUTH;
 
     return features;
   }

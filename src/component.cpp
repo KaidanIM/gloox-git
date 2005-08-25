@@ -62,9 +62,4 @@ namespace gloox
     return true;
   }
 
-  const std::string Component::streamTo() const
-  {
-    return Prep::nameprep( m_to );
-  };
-
 };

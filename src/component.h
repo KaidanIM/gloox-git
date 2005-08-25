@@ -50,12 +50,6 @@ namespace gloox
        */
       virtual ~Component();
 
-      /**
-       * Sets the components host name.
-       * @param to The components host name.
-       */
-      void setStreamTo( const std::string& to ) { m_to = to; };
-
       // reimplemented from ClientBase
       virtual const std::string username() const { return ""; };
 
@@ -69,7 +63,6 @@ namespace gloox
       Disco* disco() const { return m_disco; };
 
     protected:
-      virtual const std::string streamTo() const;
       virtual void handleStartNode();
       virtual bool handleNormalNode( Stanza *stanza );
 
