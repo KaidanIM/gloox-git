@@ -51,13 +51,13 @@ namespace gloox
       void setJID( const std::string& jid );
 
       /**
-       * Returns the full (prepped) JID (user@host/resource).
+       * Returns the full (prepped) JID (user\@host/resource).
        * @return The full JID.
        */
       std::string full() const;
 
       /**
-       * Returns the bare (prepped) JID (user@host).
+       * Returns the bare (prepped) JID (user\@host).
        * @return The bare JID.
        */
       std::string bare() const;

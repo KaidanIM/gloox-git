@@ -120,7 +120,7 @@ namespace gloox
 
       /**
        * This function can be used to retrieve the value of a Tag's attribute.
-       * @param The name of the attribute to look for.
+       * @param name The name of the attribute to look for.
        * @return The value of the attribute if found, an empty string otherwise.
        */
       virtual const std::string findAttribute( const std::string& name ) const;
