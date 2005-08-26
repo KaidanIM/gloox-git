@@ -20,11 +20,8 @@ class PrivateXMLTest : public PrivateXMLHandler, ConnectionListener
     {
       setlocale( LC_ALL, "" );
 
-      j = new Client();
-      j->setServer( "example.org" );
-      j->setResource( "gloox" );
-      j->setUsername( "hurkhurk" );
-      j->setPassword( "hurkhurks" );
+      JID jid( "hurkhurk@example.org/gloox" );
+      j = new Client( jid, "hurkhurks" );
       j->setAutoPresence( true );
       j->setInitialPriority( 5 );
 
@@ -46,7 +43,7 @@ class PrivateXMLTest : public PrivateXMLHandler, ConnectionListener
       p->requestXML( "test", "http://camaya.net/jabber/test" );
     };
 
-    virtual void onDisconnect() { printf( "disco_test: disconnected\n" ); };
+    virtual void onDisconnect( ConnectionError e ) { printf( "disco_test: disconnected\n" ); };
 
     virtual bool onTLSConnect( const CertInfo& info )
     {

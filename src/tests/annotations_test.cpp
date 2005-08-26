@@ -20,11 +20,8 @@ class AnnotationsTest : public AnnotationsHandler, ConnectionListener
     {
       setlocale( LC_ALL, "" );
 
-      j = new Client();
-      j->setServer( "example.org" );
-      j->setResource( "gloox" );
-      j->setUsername( "hurkhurk" );
-      j->setPassword( "hurkhurks" );
+      JID jid( "hurkhurk@example.org/gloox" );
+      j = new Client( jid, "hurkhurks" );
       j->setAutoPresence( true );
       j->setInitialPriority( 5 );
 
@@ -46,7 +43,7 @@ class AnnotationsTest : public AnnotationsHandler, ConnectionListener
       a->requestAnnotations();
     };
 
-    virtual void onDisconnect() { printf( "annotations_test: disconnected\n" ); };
+    virtual void onDisconnect( ConnectionError e ) { printf( "annotations_test: disconnected\n" ); };
 
     virtual bool onTLSConnect( const CertInfo& info )
     {

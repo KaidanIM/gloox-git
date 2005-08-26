@@ -20,16 +20,13 @@ class BookmarkStorageTest : public BookmarkHandler, ConnectionListener
     {
       setlocale( LC_ALL, "" );
 
-      j = new Client();
-      j->setServer( "example.org" );
-      j->setResource( "gloox" );
-      j->setUsername( "hurkhurk" );
-      j->setPassword( "hurkhurks" );
+      JID jid( "hurkhurk@example.org/gloox" );
+      j = new Client( jid, "hurkhurks" );
       j->setAutoPresence( true );
       j->setInitialPriority( 5 );
 
       j->registerConnectionListener(this );
-      j->disco()->setVersion( "pbookmarkTest", GLOOX_VERSION );
+      j->disco()->setVersion( "bookmarkTest", GLOOX_VERSION );
       j->disco()->setIdentity( "client", "bot" );
 
       b = new BookmarkStorage( j );
@@ -46,7 +43,7 @@ class BookmarkStorageTest : public BookmarkHandler, ConnectionListener
       b->requestBookmarks();
     };
 
-    virtual void onDisconnect() { printf( "disco_test: disconnected\n" ); };
+    virtual void onDisconnect( ConnectionError e ) { printf( "disco_test: disconnected\n" ); };
 
     virtual bool onTLSConnect( const CertInfo& info )
     {

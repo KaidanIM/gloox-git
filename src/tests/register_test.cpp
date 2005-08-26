@@ -18,11 +18,8 @@ class RegTest : public RegistrationHandler, ConnectionListener
     {
       setlocale( LC_ALL, "" );
 
-      j = new Client();
-      j->setServer( "example.org" );
-      j->setResource( "gloox" );
-      j->setUsername( "hurkhurk" );
-      j->setPassword( "hurkhurks" );
+      JID jid( "hurkhurk@example.org/gloox" );
+      j = new Client( jid, "hurkhurks" );
       j->disableRoster();
       j->disableDisco();
       j->registerConnectionListener( this );
@@ -48,7 +45,7 @@ class RegTest : public RegistrationHandler, ConnectionListener
 //       m_reg->removeAccount();
     };
 
-    virtual void onDisconnect() { printf( "disco_test: disconnected\n" ); };
+    virtual void onDisconnect( ConnectionError e ) { printf( "disco_test: disconnected\n" ); };
 
     virtual bool onTLSConnect( const CertInfo& info )
     {
@@ -71,7 +68,7 @@ class RegTest : public RegistrationHandler, ConnectionListener
     virtual void handleRegistrationResult( resultEnum result )
     {
       printf( "result: %d\n", result );
-      j->disconnect( STATE_DISCONNECTED );
+      j->disconnect();
     };
 
   private:

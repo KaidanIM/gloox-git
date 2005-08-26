@@ -21,11 +21,8 @@ class DiscoTest : public DiscoHandler, ConnectionListener
     {
       setlocale( LC_ALL, "" );
 
-      j = new Client();
-      j->setServer( "example.org" );
-      j->setResource( "gloox" );
-      j->setUsername( "hurkhurk" );
-      j->setPassword( "hurkhurks" );
+      JID jid( "hurkhurk@example.org/gloox" );
+      j = new Client( jid, "hurkhurks" );
       j->disableRoster();
       j->registerConnectionListener( this );
       j->disco()->registerDiscoHandler( this );
@@ -44,7 +41,7 @@ class DiscoTest : public DiscoHandler, ConnectionListener
     {
     };
 
-    virtual void onDisconnect() { printf( "disco_test: disconnected\n" ); };
+    virtual void onDisconnect( ConnectionError e ) { printf( "disco_test: disconnected\n" ); };
 
     virtual bool onTLSConnect( const CertInfo& info )
     {
