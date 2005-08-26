@@ -88,11 +88,9 @@ namespace gloox
       bool connect();
 
       /**
-       * Disconnects from the server. A reason can be given which is broadcasted to
-       * ConnectionListeners.
-       * @param reason The reason for the disconnection.
+       * Disconnects from the server.
        */
-      void disconnect( ConnectionState reason );
+      void disconnect();
 
       /**
        * Reimplement this function to provide a username for connection purposes.
@@ -188,17 +186,16 @@ namespace gloox
       void send( const std::string& xml );
 
       /**
-       * Returns the current connection state.
-       * @return The state of the connection.
+       * Returns whether authentication has taken place and was successful.
+       * @return @b True if authentication has been carried out @b and was successful, @b false otherwise.
        */
-      ConnectionState state() const;
+      bool authed() const { return m_authed; };
 
       /**
-       * Sets the state of the connection. This can be used to indicate successful authentication.
-       * A parameter of 'STATE_DISCONNECTED' will not disconnect.
-       * @param state The new connection state.
+       * Returns the current connection status.
+       * @return The status of the connection.
        */
-      void setState( ConnectionState state );
+      ConnectionState state() const;
 
       /**
        * Retrieves the value of the xml:lang attribute of the initial stream.
@@ -310,6 +307,12 @@ namespace gloox
        */
       void setCACerts( const StringList& cacerts ) { m_cacerts = cacerts; };
 
+      /**
+       * Use this function to retrieve the type of the stream error after it occurs and you received a
+       * ConnectionError of type CONN_STREAM_ERROR from the ConnectionListener.
+       */
+      StreamError streamError() const { return m_streamError; };
+
     protected:
       enum SaslMechanisms
       {
@@ -322,8 +325,10 @@ namespace gloox
       bool notifyOnTLSConnect( const CertInfo& info );
       void log( const std::string& xml, bool incoming );
       void notifyOnConnect();
-      void notifyOnDisconnect();
+      void disconnect( ConnectionError reason );
       void header();
+      void setAuthed( bool authed ) { m_authed = authed; };
+
       void startSASL( SaslMechanisms type );
       void processSASLChallenge( const std::string& challenge );
       void startTls();
@@ -352,12 +357,15 @@ namespace gloox
 
       virtual void handleStartNode() = 0;
       virtual bool handleNormalNode( Stanza *stanza ) = 0;
+      void handleStreamVersion( const std::string& version );
+      void handleStreamError( Stanza *stanza );
 
       void notifyIqHandlers( Stanza *stanza );
       void notifyMessageHandlers( Stanza *stanza );
       void notifyPresenceHandlers( Stanza *stanza );
       void notifySubscriptionHandlers( Stanza *stanza );
       void notifyTagHandlers( Stanza *stanza );
+      void notifyOnDisconnect( ConnectionError e );
       void filter( NodeType type, Stanza *stanza );
       void logEvent( const char *data, size_t size, int is_incoming );
 
@@ -393,6 +401,8 @@ namespace gloox
 
       Parser *m_parser;
 
+      StreamError m_streamError;
+      bool m_authed;
       int m_idCount;
 
   };

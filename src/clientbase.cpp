@@ -33,16 +33,16 @@ namespace gloox
 
   ClientBase::ClientBase( const std::string& ns, const std::string& server, int port )
     : m_namespace( ns ), m_server( server ), m_port( port ),
-  m_connection( 0 ), m_parser( 0 ), m_xmllang( "en" ),
-      m_tls( true ), m_sasl( true ), m_idCount( 0 )
+      m_connection( 0 ), m_parser( 0 ), m_xmllang( "en" ), m_authed( false ),
+      m_tls( true ), m_sasl( true ), m_idCount( 0 ), m_streamError( ERROR_UNDEFINED )
   {
   }
 
   ClientBase::ClientBase( const std::string& ns, const std::string& password,
                           const std::string& server, int port )
     : m_namespace( ns ), m_password( password ), m_server( server ), m_port( port ),
-      m_connection( 0 ), m_parser( 0 ), m_xmllang( "en" ),
-      m_tls( true ), m_sasl( true ), m_idCount( 0 )
+      m_connection( 0 ), m_parser( 0 ), m_xmllang( "en" ), m_authed( false ),
+      m_tls( true ), m_sasl( true ), m_idCount( 0 ), m_streamError( ERROR_UNDEFINED )
   {
   }
 
@@ -68,7 +68,8 @@ namespace gloox
     if( ret == STATE_CONNECTED )
     {
       header();
-      m_connection->receive();
+      ConnectionError e = m_connection->receive();
+      notifyOnDisconnect( e );
     }
 
     return true;
@@ -76,9 +77,6 @@ namespace gloox
 
   void ClientBase::filter( NodeType type, Stanza *stanza )
   {
-//     if( !stanza )
-//       return;
-
 #ifdef DEBUG
     if( stanza )
       log( stanza->xml(), true );
@@ -87,6 +85,7 @@ namespace gloox
     switch( type )
     {
       case NODE_STREAM_START:
+        handleStreamVersion( stanza->findAttribute( "version" ) );
         m_sid = stanza->findAttribute( "id" );
         handleStartNode();
         break;
@@ -114,26 +113,29 @@ namespace gloox
         }
         break;
       case NODE_STREAM_ERROR:
-#ifdef DEBUG
-        printf( "stream error received\n" );
-#endif
-        disconnect( STATE_ERROR );
+        handleStreamError( stanza );
         break;
       case NODE_STREAM_CLOSE:
 #ifdef DEBUG
         printf( "stream closed\n" );
 #endif
-        disconnect( STATE_DISCONNECTED );
+        disconnect( CONN_STREAM_CLOSED );
         break;
     }
   }
 
-  void ClientBase::disconnect( ConnectionState reason )
+  void ClientBase::disconnect()
+  {
+    disconnect( CONN_USER_DISCONNECTED );
+  }
+
+  void ClientBase::disconnect( ConnectionError reason )
   {
     if( m_connection )
     {
-      m_connection->setState( reason );
-      m_connection->disconnect();
+      if( reason == CONN_USER_DISCONNECTED )
+        m_streamError = ERROR_UNDEFINED;
+      m_connection->disconnect( reason );
     }
   }
 
@@ -142,7 +144,11 @@ namespace gloox
     std::string xml = "<?xml version='1.0'?>";
     xml += "<stream:stream to='" + m_jid.server()+  "' xmlns='" + m_namespace + "' ";
     xml += "xmlns:stream='http://etherx.jabber.org/streams' xml:lang='" + m_xmllang + "' ";
-    xml += "version='1.0'>";
+    xml += "version='";
+    xml += XMPP_STREAM_VERSION_MAJOR;
+    xml += ".";
+    xml += XMPP_STREAM_VERSION_MINOR;
+    xml += "'>";
     send( xml );
   }
 
@@ -180,7 +186,6 @@ namespace gloox
         char *tmp = (char*)iks_malloc( len + 80 );
         char *result;
         sprintf( tmp, "%c%s%c%s", 0, m_jid.username().c_str(), 0, m_password.c_str() );
-        printf( "result: %s\n", tmp );
         result = iks_base64_encode( tmp, len );
 
         a->setCData( result );
@@ -326,17 +331,85 @@ namespace gloox
       return STATE_DISCONNECTED;
   }
 
-  void ClientBase::setState( ConnectionState state )
-  {
-    if( m_connection )
-      m_connection->setState( state );
-  }
-
   const std::string ClientBase::getID()
   {
     char tmp[4+(int)log10(++m_idCount)+1];
     sprintf( tmp, "uid%d", m_idCount );
     return tmp;
+  }
+
+  void ClientBase::handleStreamVersion( const std::string& version )
+  {
+    int major = 0;
+    int minor = 0;
+    int myMajor = atoi( XMPP_STREAM_VERSION_MAJOR );
+    int myMinor = atoi( XMPP_STREAM_VERSION_MINOR );
+
+    int dot = version.find( "." );
+    if( !version.empty() && dot && dot != std::string::npos )
+    {
+      major = atoi( version.substr( 0, dot ).c_str() );
+      minor = atoi( version.substr( dot ).c_str() );
+    }
+
+    if( myMajor < major )
+      disconnect( CONN_STREAM_ERROR );
+  }
+
+  void ClientBase::handleStreamError( Stanza *stanza )
+  {
+    if( stanza->hasChild( "bad-format" ) )
+      m_streamError = ERROR_BAD_FORMAT;
+    else if( stanza->hasChild( "bad-namespace-prefix" ) )
+      m_streamError = ERROR_BAD_NAMESPACE_PREFIX;
+    else if( stanza->hasChild( "conflict" ) )
+      m_streamError = ERROR_CONFLICT;
+    else if( stanza->hasChild( "connection-timeout" ) )
+      m_streamError = ERROR_CONNECTION_TIMEOUT;
+    else if( stanza->hasChild( "host-gone" ) )
+      m_streamError = ERROR_HOST_GONE;
+    else if( stanza->hasChild( "host-unknown" ) )
+      m_streamError = ERROR_HOST_UNKNOWN;
+    else if( stanza->hasChild( "improper-addressing" ) )
+      m_streamError = ERROR_IMPROPER_ADDRESSING;
+    else if( stanza->hasChild( "internal-server-error" ) )
+      m_streamError = ERROR_INTERNAL_SERVER_ERROR;
+    else if( stanza->hasChild( "invalid-from" ) )
+      m_streamError = ERROR_INVALID_FROM;
+    else if( stanza->hasChild( "invalid-id" ) )
+      m_streamError = ERROR_INVALID_ID;
+    else if( stanza->hasChild( "invalid-namespace" ) )
+      m_streamError = ERROR_INVALID_NAMESPACE;
+    else if( stanza->hasChild( "invalid-xml" ) )
+      m_streamError = ERROR_INVALID_XML;
+    else if( stanza->hasChild( "not-authorized" ) )
+      m_streamError = ERROR_NOT_AUTHORIZED;
+    else if( stanza->hasChild( "policy-violation" ) )
+      m_streamError = ERROR_POLICY_VIOLATION;
+    else if( stanza->hasChild( "remote-connection-failed" ) )
+      m_streamError = ERROR_REMOTE_CONNECTION_FAILED;
+    else if( stanza->hasChild( "resource-constraint" ) )
+      m_streamError = ERROR_RESOURCE_CONSTRAINT;
+    else if( stanza->hasChild( "restricted-xml" ) )
+      m_streamError = ERROR_RESTRICTED_XML;
+    else if( stanza->hasChild( "see-other-host" ) )
+      m_streamError = ERROR_SEE_OTHER_HOST;
+    else if( stanza->hasChild( "system-shutdown" ) )
+      m_streamError = ERROR_SYSTEM_SHUTDOWN;
+    else if( stanza->hasChild( "undefined-condition" ) )
+      m_streamError = ERROR_UNDEFINED_CONDITION;
+    else if( stanza->hasChild( "unsupported-encoding" ) )
+      m_streamError = ERROR_UNSUPPORTED_ENCODING;
+    else if( stanza->hasChild( "unsupported-stanza-type" ) )
+      m_streamError = ERROR_UNSUPPORTED_STANZA_TYPE;
+    else if( stanza->hasChild( "unsupported-version" ) )
+      m_streamError = ERROR_UNSUPPORTED_VERSION;
+    else if( stanza->hasChild( "xml-not-well-formed" ) )
+      m_streamError = ERROR_XML_NOT_WELL_FORMED;
+    else
+      m_streamError = ERROR_UNDEFINED;
+
+    disconnect( CONN_STREAM_ERROR );
   }
 
   void ClientBase::log( const std::string& xml, bool incoming )
@@ -435,12 +508,12 @@ namespace gloox
     }
   }
 
-  void ClientBase::notifyOnDisconnect()
+  void ClientBase::notifyOnDisconnect( ConnectionError e )
   {
     ConnectionListenerList::const_iterator it = m_connectionListeners.begin();
     for( it; it != m_connectionListeners.end(); it++ )
     {
-      (*it)->onDisconnect();
+      (*it)->onDisconnect( e );
     }
   }
 

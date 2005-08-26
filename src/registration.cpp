@@ -103,7 +103,7 @@ namespace gloox
 
   void Registration::removeAccount()
   {
-    if( !m_parent || ( m_parent->state() != STATE_AUTHENTICATED ) )
+    if( !m_parent || !m_parent->authed() )
       return;
 
     const std::string id = m_parent->getID();
@@ -123,7 +123,7 @@ namespace gloox
 
   void Registration::changePassword( const std::string& password )
   {
-    if( !m_parent || ( m_parent->state() != STATE_AUTHENTICATED ) )
+    if( !m_parent || !m_parent->authed() )
       return;
 
     const std::string id = m_parent->getID();

@@ -92,7 +92,7 @@ namespace gloox
 
       case STANZA_IQ_ERROR:
       {
-        m_parent->setState( STATE_AUTHENTICATION_FAILED );
+        m_parent->setAuthed( false );
 #warning FIXME: More detail necessary?
 
   //       iks *ft = iks_child( iks_find( pak->x, "error" ) );
@@ -115,11 +115,10 @@ namespace gloox
     switch( stanza->subtype() )
     {
       case STANZA_IQ_ERROR:
-        m_parent->setState( STATE_AUTHENTICATION_FAILED );
+        m_parent->setAuthed( false );
         break;
       case STANZA_IQ_RESULT:
-        // this needs fixing! NonSaslAuth shouldn't be a friend of Client.
-        m_parent->setState( STATE_AUTHENTICATED );
+        m_parent->setAuthed( true );
         m_parent->notifyOnConnect();
       break;
     }

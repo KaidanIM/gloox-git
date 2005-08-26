@@ -62,7 +62,7 @@ namespace gloox
       /**
        * This function notifies about disconnection.
        */
-      virtual void onDisconnect() = 0;
+      virtual void onDisconnect( ConnectionError e ) = 0;
 
       /**
        * This function is called (by a Client object) if an error occurs while trying to bind a resource.

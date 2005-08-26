@@ -31,7 +31,7 @@ namespace gloox
 
   Connection::Connection( Parser *parser, const std::string& server, int port )
     : m_parser( parser ), m_server( Prep::idna( server ) ), m_port( port ),
-      m_cancel( false ), m_socket( 0 ), m_buf( 0 ), m_secure( false )
+      m_cancel( true ), m_socket( 0 ), m_buf( 0 ), m_secure( false )
   {
     m_buf = (char*)calloc( BUFSIZE, sizeof( char ) );
   }
@@ -213,16 +213,18 @@ namespace gloox
   }
 #endif
 
-  void Connection::disconnect()
+  void Connection::disconnect( ConnectionError e )
   {
+    m_disconnect = e;
     m_cancel = true;
   }
 
-  int Connection::receive()
+  ConnectionError Connection::receive()
   {
     if( !m_socket || !m_parser )
-      return STATE_DISCONNECTED;
+      return CONN_IO_ERROR;
 
+    m_cancel = false;
     int size;
     while( !m_cancel )
     {
@@ -242,12 +244,12 @@ namespace gloox
       if( size < 0 )
       {
         // error
-        return STATE_ERROR;
+        return CONN_IO_ERROR;
       }
       else if( size == 0 )
       {
         // connection closed
-        return STATE_DISCONNECTED;
+        return CONN_USER_DISCONNECTED;
       }
       else
       {
@@ -255,6 +257,7 @@ namespace gloox
         Parser::ParserState ret = m_parser->feed( m_buf );
         if( ret != Parser::PARSER_OK )
         {
+          cleanup();
 #ifdef DEBUG
           switch( ret )
           {
@@ -266,10 +269,12 @@ namespace gloox
               break;
           }
 #endif
-        cleanup();
+          return CONN_IO_ERROR;
         }
       }
     }
+
+    return m_disconnect;
   }
 
   void Connection::send( const std::string& data )
@@ -349,6 +354,7 @@ namespace gloox
       m_socket = 0;
     }
     m_state = STATE_DISCONNECTED;
+    m_disconnect = CONN_OK;
 
 #ifdef HAVE_GNUTLS
     if( m_secure )
@@ -360,6 +366,7 @@ namespace gloox
     }
 #endif
     m_secure = false;
+    m_cancel = true;
   }
 
 };
