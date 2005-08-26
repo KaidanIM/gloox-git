@@ -58,7 +58,7 @@ AC_ARG_WITH(gnutls, AC_HELP_STRING([--with-gnutls=[DIR]],
 if test "$gnutls" != "no"; then
   if test "$gnutls" != "yes"; then
     LDFLAGS="${LDFLAGS} -L$gnutls/lib"
-    CPPFLAGS="${CPPFLAGS} -L$gnutls/include"
+    CPPFLAGS="${CPPFLAGS} -I$gnutls/include"
   fi
   AC_CHECK_HEADER(gnutls/gnutls.h,
   AC_CHECK_LIB(gnutls, gnutls_check_version,
