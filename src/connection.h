@@ -68,13 +68,16 @@ namespace gloox
 
       /**
        * Use this function to put the connection into 'receive mode'.
+       * @return Returns a value describing the disconnection reason.
        */
-      int receive();
+      ConnectionError receive();
 
       /**
        * Disconnects an established connection. NOOP if no active connection exists.
+       * param e A ConnectionError decribing why the connection is terminated. Well, its not really an
+       * error here, but...
        */
-      void disconnect();
+      void disconnect( ConnectionError e );
 
       /**
        * Use this function to determine whether an esatblished connection is encrypted.
@@ -87,13 +90,6 @@ namespace gloox
        * @return The state of the connection.
        */
       ConnectionState state() const { return m_state; };
-
-      /**
-       * Sets the state of the connection. This can be used to indicate successful authentication.
-       * A parameter of 'STATE_DISCONNECTED' will not disconnect.
-       * @param state The new connection state.
-       */
-      void setState( ConnectionState state ) { m_state = state; };
 
 #ifdef HAVE_GNUTLS
       /**
@@ -133,6 +129,7 @@ namespace gloox
       Parser *m_parser;
       ConnectionState m_state;
       CertInfo m_certInfo;
+      ConnectionError m_disconnect;
 
       char *m_buf;
       std::string m_server;

@@ -121,7 +121,7 @@ namespace gloox
 #ifdef DEBUG
             printf( "the server doesn't support any auth mechanisms we know about\n" );
 #endif
-            disconnect( STATE_NO_SUPPORTED_AUTH );
+            disconnect( CONN_NO_SUPPORTED_AUTH );
           }
         }
         else
@@ -138,7 +138,7 @@ namespace gloox
 #ifdef DEBUG
         printf( "the server doesn't support any auth mechanisms we know about\n" );
 #endif
-        disconnect( STATE_NO_SUPPORTED_AUTH );
+        disconnect( CONN_NO_SUPPORTED_AUTH );
       }
     }
 #ifdef HAVE_GNUTLS
@@ -151,7 +151,7 @@ namespace gloox
       {
         header();
         if( !notifyOnTLSConnect( m_connection->fetchTLSInfo() ) )
-          disconnect( STATE_DISCONNECTED );
+          disconnect( CONN_TLS_FAILED );
       }
 #ifdef DEBUG
       printf( "connection security is now %d\n", m_connection->isSecure() );
@@ -170,14 +170,14 @@ namespace gloox
 #ifdef DEBUG
       printf( "sasl authentication failed...\n" );
 #endif
-      disconnect( STATE_AUTHENTICATION_FAILED );
+      disconnect( CONN_AUTHENTICATION_FAILED );
     }
     else if( stanza->name() == "success" )
     {
 #ifdef DEBUG
       printf( "sasl auth successful...\n" );
 #endif
-      setState( STATE_AUTHENTICATED );
+      setAuthed( true );
       m_authorized = true;
       header();
     }

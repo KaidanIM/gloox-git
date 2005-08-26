@@ -43,7 +43,9 @@
 #define XMLNS_STREAM_IQAUTH     "http://jabber.org/features/iq-auth"
 #define XMLNS_STREAM_IQREGISTER "http://jabber.org/features/iq-register"
 
-#define GLOOX_VERSION "0.4"
+#define XMPP_STREAM_VERSION_MAJOR  "1"
+#define XMPP_STREAM_VERSION_MINOR  "0"
+#define GLOOX_VERSION              "0.5"
 
 /**
  * The namespace for the gloox library.
@@ -58,19 +60,108 @@ namespace gloox
    */
   enum ConnectionState
   {
-    STATE_ERROR,                    /**< An error occured. The stream has been closed. */
-    STATE_IO_ERROR,                 /**< An I/O error occured. */
-    STATE_OUT_OF_MEMORY,            /**< Out of memory. Uhoh. */
-    STATE_TLS_FAILED,               /**< TLS negotiation failed. */
-    STATE_PARSE_ERROR,              /**< XML parse error. */
-    STATE_NO_SUPPORTED_AUTH,        /**< The auth mechanisms the server offers are not supported. */
-    STATE_AUTHENTICATION_FAILED,    /**< Authentication failed. Username/password wrong or account does
-                                     * not exist. */
     STATE_DISCONNECTED,             /**< The client is in disconnected state. */
     STATE_CONNECTING,               /**< The client is currently trying to establish a connection. */
     STATE_CONNECTED,                /**< The client is connected to the server but authentication is not
                                      * (yet) done. */
-    STATE_AUTHENTICATED             /**< The client has successfully authenticated itself to the server. */
+  };
+
+  /**
+   * This describes connection error conditions.
+   */
+  enum ConnectionError
+  {
+    CONN_OK,                       /**< Not really an error. Everything went just fine. */
+    CONN_STREAM_ERROR,             /**< An stream error occured. The stream has been closed. */
+    CONN_STREAM_CLOSED,            /**< The stream has been closed graciously. */
+    CONN_IO_ERROR,                 /**< An I/O error occured. */
+    CONN_OUT_OF_MEMORY,            /**< Out of memory. Uhoh. */
+    CONN_NO_SUPPORTED_AUTH,        /**< The auth mechanisms the server offers are not supported. */
+    CONN_TLS_FAILED,               /**< The server's certificate could not be verified. */
+    CONN_AUTHENTICATION_FAILED,    /**< Authentication failed. Username/password wrong or account does
+                                     * not exist. */
+    CONN_USER_DISCONNECTED,        /**< The user (or higher-level protocol) requested a disconnecct. */
+  };
+
+  /**
+   * This decribes stream error conditions as defined in RFC 3920 Sec. 4.7.3.
+   */
+  enum StreamError
+  {
+    ERROR_UNDEFINED,                /**< An undefined/unknown error occured. Also used if a diconnect was
+                                     * user-initiated. Also set before and during a established connection
+                                    (where obviously no error occured). */
+    ERROR_BAD_FORMAT,               /**< The entity has sent XML that cannot be processed;
+                                     * this error MAY be used instead of the more specific XML-related
+                                     * errors, such as &lt;bad-namespace-prefix/&gt;, &lt;invalid-xml/&gt;,
+                                     * &lt;restricted-xml/&gt;, &lt;unsupported-encoding/&gt;, and
+                                     * &lt;xml-not-well-formed/&gt;, although the more specific errors are
+                                     * preferred. */
+    ERROR_BAD_NAMESPACE_PREFIX,     /**< The entity has sent a namespace prefix that is unsupported, or has
+                                     * sent no namespace prefix on an element that requires such a prefix
+                                     * (see XML Namespace Names and Prefixes (Section 11.2)). */
+    ERROR_CONFLICT,                 /**< The server is closing the active stream for this entity because a
+                                     * new stream has been initiated that conflicts with the existing
+                                     * stream. */
+    ERROR_CONNECTION_TIMEOUT,       /**< The entity has not generated any traffic over the stream for some
+                                     * period of time (configurable according to a local service policy).*/
+    ERROR_HOST_GONE,                /**< the value of the 'to' attribute provided by the initiating entity
+                                     * in the stream header corresponds to a hostname that is no longer
+                                     * hosted by the server.*/
+    ERROR_HOST_UNKNOWN,             /**< The value of the 'to' attribute provided by the initiating entity
+                                     * in the stream header does not correspond to a hostname that is hosted
+                                     * by the server. */
+    ERROR_IMPROPER_ADDRESSING,      /**< A stanza sent between two servers lacks a 'to' or 'from' attribute
+                                     * (or the attribute has no value). */
+    ERROR_INTERNAL_SERVER_ERROR,    /**< the server has experienced a misconfiguration or an
+                                     * otherwise-undefined internal error that prevents it from servicing the
+                                     * stream. */
+    ERROR_INVALID_FROM,             /**< The JID or hostname provided in a 'from' address does not match an
+                                     * authorized JID or validated domain negotiated between servers via SASL
+                                     * or dialback, or between a client and a server via authentication and
+                                     * resource binding.*/
+    ERROR_INVALID_ID,               /**< The stream ID or dialback ID is invalid or does not match an ID
+                                     * previously provided. */
+    ERROR_INVALID_NAMESPACE,        /**< The streams namespace name is something other than
+                                     * "http://etherx.jabber.org/streams" or the dialback namespace name is
+                                     * something other than "jabber:server:dialback" (see XML Namespace Names
+                                     * and Prefixes (Section 11.2)). */
+    ERROR_INVALID_XML,              /**< The entity has sent invalid XML over the stream to a server that
+                                     * performs validation (see Validation (Section 11.3)). */
+    ERROR_NOT_AUTHORIZED,           /**< The entity has attempted to send data before the stream has been
+                                     * authenticated, or otherwise is not authorized to perform an action
+                                     * related to stream negotiation; the receiving entity MUST NOT process
+                                     * the offending stanza before sending the stream error. */
+    ERROR_POLICY_VIOLATION,         /**< The entity has violated some local service policy; the server MAY
+                                     * choose to specify the policy in the &lt;text/&gt;  element or an
+                                     * application-specific condition element. */
+    ERROR_REMOTE_CONNECTION_FAILED, /**< The server is unable to properly connect to a remote entity that is
+                                     * required for authentication or authorization. */
+    ERROR_RESOURCE_CONSTRAINT,      /**< the server lacks the system resources necessary to service the
+                                     * stream. */
+    ERROR_RESTRICTED_XML,           /**< The entity has attempted to send restricted XML features such as a
+                                     * comment, processing instruction, DTD, entity reference, or unescaped
+                                     * character (see Restrictions (Section 11.1)). */
+    ERROR_SEE_OTHER_HOST,           /**< The server will not provide service to the initiating entity but is
+                                     * redirecting traffic to another host; the server SHOULD specify the
+                                     * alternate hostname or IP address (which MUST be a valid domain
+                                     * identifier) as the XML character data of the &lt;see-other-host/&gt;
+                                     * element. */
+    ERROR_SYSTEM_SHUTDOWN,          /**< The server is being shut down and all active streams are being
+                                     * closed. */
+    ERROR_UNDEFINED_CONDITION,      /**< The error condition is not one of those defined by the other
+                                     * conditions in this list; this error condition SHOULD be used only in
+                                     * conjunction with an application-specific condition. */
+    ERROR_UNSUPPORTED_ENCODING,     /**< The initiating entity has encoded the stream in an encoding that is
+                                     * not supported by the server (see Character Encoding (Section 11.5)). */
+    ERROR_UNSUPPORTED_STANZA_TYPE,  /**< The initiating entity has sent a first-level child of the stream
+                                     * that is not supported by the server. */
+    ERROR_UNSUPPORTED_VERSION,      /**< The value of the 'version' attribute provided by the initiating
+                                     * entity in the stream header specifies a version of XMPP that is not
+                                     * supported by the server; the server MAY specify the version(s) it
+                                     * supports in the &lt;text/&gt; element. */
+    ERROR_XML_NOT_WELL_FORMED,      /**< The initiating entity has sent XML that is not well-formed as
+                                     * defined by [XML]. */
   };
 
   /**
