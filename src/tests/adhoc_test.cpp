@@ -21,11 +21,8 @@ class AdhocTest : public ConnectionListener, AdhocCommandProvider
     {
       setlocale( LC_ALL, "" );
 
-      j = new Client();
-      j->setServer( "example.org" );
-      j->setResource( "gloox" );
-      j->setUsername( "hurkhurk" );
-      j->setPassword( "hurkhurks" );
+      JID jid( "hurkhurk@example.org/gloox" );
+      j = new Client( jid, "hurkhurks" );
       j->disableRoster();
       j->registerConnectionListener( this );
       j->disco()->setVersion( "adhocTest", GLOOX_VERSION );
@@ -57,7 +54,7 @@ class AdhocTest : public ConnectionListener, AdhocCommandProvider
     {
     };
 
-    virtual void onDisconnect() { printf( "disco_test: disconnected\n" ); };
+    virtual void onDisconnect( ConnectionError e ) { printf( "disco_test: disconnected\n" ); };
 
     virtual bool onTLSConnect( const CertInfo& info )
     {

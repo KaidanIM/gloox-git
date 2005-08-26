@@ -20,11 +20,8 @@ class RosterTest : public RosterListener, ConnectionListener
     {
       setlocale( LC_ALL, "" );
 
-      j = new Client();
-      j->setServer( "example.org" );
-      j->setResource( "gloox" );
-      j->setUsername( "hurkhurk" );
-      j->setPassword( "hurkhurks" );
+      JID jid( "hurkhurk@example.org/gloox" );
+      j = new Client( jid, "hurkhurks" );
       j->setAutoPresence( true );
       j->setInitialPriority( 5 );
       j->rosterManager()->registerRosterListener( this );
@@ -40,7 +37,7 @@ class RosterTest : public RosterListener, ConnectionListener
     {
     };
 
-    virtual void onDisconnect() { printf( "disco_test: disconnected\n" ); };
+    virtual void onDisconnect( ConnectionError e ) { printf( "disco_test: disconnected\n" ); };
 
     virtual bool onTLSConnect( const CertInfo& info )
     {

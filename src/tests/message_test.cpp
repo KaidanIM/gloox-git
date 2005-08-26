@@ -1,5 +1,6 @@
 #include "../client.h"
 #include "../messagehandler.h"
+#include "../connectionlistener.h"
 #include "../discohandler.h"
 #include "../disco.h"
 #include "../stanza.h"
@@ -10,7 +11,7 @@ using namespace gloox;
 #include <locale.h>
 #include <string>
 
-class DiscoTest : public DiscoHandler, MessageHandler
+class DiscoTest : public DiscoHandler, MessageHandler, ConnectionListener
 {
   public:
     DiscoTest() {};
@@ -20,13 +21,12 @@ class DiscoTest : public DiscoHandler, MessageHandler
     {
       setlocale( LC_ALL, "" );
 
-      j = new Client();
-      j->setServer( "example.org" );
-      j->setResource( "gloox" );
-      j->setUsername( "hurkhurk" );
-      j->setPassword( "hurkhurks" );
+      JID jid( "kolpenator@gmail.com/gloox" );
+      j = new Client( jid, "kolper" );
+      j->setServer( "talk.google.com" );
       j->setAutoPresence( true );
       j->setInitialPriority( 5 );
+      j->registerConnectionListener( this );
       j->registerMessageHandler( this );
       j->disco()->registerDiscoHandler( this );
       j->disco()->setVersion( "messageTest", GLOOX_VERSION );
@@ -44,7 +44,7 @@ class DiscoTest : public DiscoHandler, MessageHandler
     {
     };
 
-    virtual void onDisconnect() { printf( "message_test: disconnected\n" ); };
+    virtual void onDisconnect( ConnectionError e ) { printf( "message_test: disconnected: %d\n", e ); };
 
     virtual bool onTLSConnect( const CertInfo& info )
     {
@@ -68,12 +68,12 @@ class DiscoTest : public DiscoHandler, MessageHandler
     virtual void handleMessage( Stanza *stanza )
     {
       printf( "type: %d, subject: %s, message: %s, thread id: %s\n", stanza->subtype(),
-              stanza->subject().c_str(), stanza->message().c_str(), stanza->thread().c_str() );
+              stanza->subject().c_str(), stanza->body().c_str(), stanza->thread().c_str() );
       Tag *m = new Tag( "message" );
       m->addAttrib( "from", j->jid().full() );
       m->addAttrib( "to", stanza->from().full() );
       m->addAttrib( "type", "chat" );
-      Tag *b = new Tag( "body", "You said:\n> " + stanza->message() + "\nI like that statement." );
+      Tag *b = new Tag( "body", "You said:\n> " + stanza->body() + "\nI like that statement." );
       m->addChild( b );
       if( !stanza->subject().empty() )
       {
