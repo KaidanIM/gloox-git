@@ -21,9 +21,8 @@ class DiscoTest : public DiscoHandler, MessageHandler, ConnectionListener
     {
       setlocale( LC_ALL, "" );
 
-      JID jid( "kolpenator@gmail.com/gloox" );
-      j = new Client( jid, "kolper" );
-      j->setServer( "talk.google.com" );
+      JID jid( "hurhurk@jabber.cc/gloox" );
+      j = new Client( jid, "h" );
       j->setAutoPresence( true );
       j->setInitialPriority( 5 );
       j->registerConnectionListener( this );
@@ -44,7 +43,12 @@ class DiscoTest : public DiscoHandler, MessageHandler, ConnectionListener
     {
     };
 
-    virtual void onDisconnect( ConnectionError e ) { printf( "message_test: disconnected: %d\n", e ); };
+    virtual void onDisconnect( ConnectionError e )
+    {
+      printf( "message_test: disconnected: %d\n", e );
+      if( e == CONN_AUTHENTICATION_FAILED )
+        printf( "auth failed. reason: %d\n", j->authError() );
+    };
 
     virtual bool onTLSConnect( const CertInfo& info )
     {
