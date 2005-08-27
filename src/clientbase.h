@@ -268,7 +268,7 @@ namespace gloox
       /**
        * Registers @c lh as object that receives all XML sent back and forth on the connection.
        * Suitable for logging to a file, etc.
-       * @param sh The object to receive Subscription stanza notifications.
+       * @param lh The object to receive exchanged data.
        */
       void registerLogHandler( LogHandler *lh );
 
