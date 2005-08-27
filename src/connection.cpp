@@ -22,6 +22,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <sys/select.h>
 #include <time.h>
 
 #include <string>
@@ -219,59 +220,83 @@ namespace gloox
     m_cancel = true;
   }
 
+  ConnectionError Connection::recv( int timeout )
+  {
+    fd_set fds;
+    struct timeval tv;
+
+    FD_ZERO( &fds );
+    FD_SET( m_socket, &fds );
+
+    tv.tv_sec = timeout;
+    tv.tv_usec = 0;
+
+    if( select( m_socket + 1, &fds, 0, 0, timeout == -1 ? 0 : &tv ) < 0 )
+      return CONN_IO_ERROR;
+
+    if( !FD_ISSET( m_socket, &fds ) )
+      return CONN_IO_ERROR;
+
+    // optimize(?): recv returns the size. set size+1 = \0
+    memset( m_buf, '\0', BUFSIZE );
+    int size;
+#ifdef HAVE_GNUTLS
+    if( m_secure )
+    {
+      size = gnutls_record_recv( m_session, m_buf, BUFSIZE );
+    }
+    else
+#endif
+    {
+      size = ::recv( m_socket, m_buf, BUFSIZE - 1, 0 );
+    }
+
+    if( size < 0 )
+    {
+      // error
+      return CONN_IO_ERROR;
+    }
+    else if( size == 0 )
+    {
+      // connection closed
+      return CONN_USER_DISCONNECTED;
+    }
+    else
+    {
+      // data received
+      Parser::ParserState ret = m_parser->feed( m_buf );
+      if( ret != Parser::PARSER_OK )
+      {
+        cleanup();
+#ifdef DEBUG
+        switch( ret )
+        {
+          case Parser::PARSER_BADXML:
+            printf( "XML parse error\n" );
+            break;
+          case Parser::PARSER_NOMEM:
+            printf( "memory allocation error\n" );
+            break;
+        }
+#endif
+        return CONN_IO_ERROR;
+      }
+    }
+
+    return CONN_OK;
+  }
+
   ConnectionError Connection::receive()
   {
     if( !m_socket || !m_parser )
       return CONN_IO_ERROR;
 
     m_cancel = false;
-    int size;
     while( !m_cancel )
     {
-      // optimize(?): recv returns the size. set size+1 = \0
-      memset( m_buf, '\0', BUFSIZE );
-#ifdef HAVE_GNUTLS
-      if( m_secure )
-      {
-        size = gnutls_record_recv( m_session, m_buf, BUFSIZE );
-      }
-      else
-#endif
-      {
-        size = recv( m_socket, m_buf, BUFSIZE - 1, 0 );
-      }
-
-      if( size < 0 )
-      {
-        // error
-        return CONN_IO_ERROR;
-      }
-      else if( size == 0 )
-      {
-        // connection closed
-        return CONN_USER_DISCONNECTED;
-      }
-      else
-      {
-        // data received
-        Parser::ParserState ret = m_parser->feed( m_buf );
-        if( ret != Parser::PARSER_OK )
-        {
-          cleanup();
-#ifdef DEBUG
-          switch( ret )
-          {
-            case Parser::PARSER_BADXML:
-              printf( "XML parse error\n" );
-              break;
-            case Parser::PARSER_NOMEM:
-              printf( "memory allocation error\n" );
-              break;
-          }
-#endif
-          return CONN_IO_ERROR;
-        }
-      }
+      ConnectionError r = recv();
+      if( r != CONN_OK )
+        return r;
     }
 
     return m_disconnect;

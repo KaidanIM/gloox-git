@@ -56,8 +56,16 @@ namespace gloox
 
       /**
        * Used to initiate the connection.
+       * @return Returns the connection state.
        */
       ConnectionState connect();
+
+      /**
+       * Use this periodically to receive data from the socket and to feed the parser.
+       * @param timeout The timeout to use for select. Default means blocking.
+       * @return The state of the connection.
+       */
+      ConnectionError recv( int timeout = -1 );
 
       /**
        * Use this function to send a string of data over the wire. The function returns only after

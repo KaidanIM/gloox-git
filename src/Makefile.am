@@ -26,4 +26,4 @@ libglooxinclude_HEADERS = adhoccommandprovider.h  privacymanager.h      tag.h \
 			  connectionlistener.h    rostermanager.h       gloox.h\
 			  disco.h                 presencehandler.h     subscriptionhandler.h \
 			  discohandler.h          privacyitem.h         stanza.h\
-			  disconodehandler.h      privacylisthandler.h
+			  disconodehandler.h      privacylisthandler.h  loghandler.h

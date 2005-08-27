@@ -23,6 +23,7 @@
 #include "presencehandler.h"
 #include "rosterlistener.h"
 #include "subscriptionhandler.h"
+#include "loghandler.h"
 #include "taghandler.h"
 #include "prep.h"
 #include "jid.h"
@@ -83,9 +84,21 @@ namespace gloox
       /**
        * Initiates the connection to a server. This function blocks as long as a connection is
        * established.
+       * You can have the connection block 'til the end of the connection, or you can have it return
+       * immediately. If you choose the latter, its your responsibility to call @ref recv() every now
+       * and then to actually receive data from the socket and to feed the parser.
+       * @param block @b True for blocking, @b false for non-blocking connect. Defaults to @b true.
        * @return @b False if prerequisits are not met (server not set), @b true otherwise.
        */
-      bool connect();
+      bool connect( bool block = true );
+
+      /**
+       * Use this periodically to receive data from the socket and to feed the parser. You need to use
+       * this only if you chose to connect in non-blocking mode.
+       * @param timeout The timeout to use for select. Default of -1 means blocking until data was available.
+       * @return The state of the connection.
+       */
+      ConnectionError recv( int timeout = -1 );
 
       /**
        * Disconnects from the server.
@@ -254,6 +267,13 @@ namespace gloox
       void registerSubscriptionHandler( SubscriptionHandler *sh );
 
       /**
+       * Registers @c lh as object that receives all XML sent back and forth on the connection.
+       * Suitable for logging to a file, etc.
+       * @param sh The object to receive Subscription stanza notifications.
+       */
+      void registerLogHandler( LogHandler *lh );
+
+      /**
        * Registers @c th as object that receives incoming packts with a given root tag
        * qualified by the given namespace.
        * @param th The object to receive Subscription packet notifications.
@@ -299,6 +319,12 @@ namespace gloox
        * @param xmlns The namespace qualifying the element.
        */
       void removeTagHandler( TagHandler *th, const std::string& tag, const std::string& xmlns );
+
+      /**
+       * Removes the given object from the list of log handlers.
+       * @param lh The object to remove from the list.
+       */
+      void removeLogHandler( LogHandler *lh );
 
       /**
        * Use this function to set a number of trusted root CA certificates. which shall be
@@ -384,6 +410,7 @@ namespace gloox
       void notifyPresenceHandlers( Stanza *stanza );
       void notifySubscriptionHandlers( Stanza *stanza );
       void notifyTagHandlers( Stanza *stanza );
+      void notifyLogHandlers( const std::string& xml, bool incoming );
       void notifyOnDisconnect( ConnectionError e );
       void filter( NodeType type, Stanza *stanza );
       void logEvent( const char *data, size_t size, int is_incoming );
@@ -407,6 +434,7 @@ namespace gloox
       typedef std::list<MessageHandler*>                MessageHandlerList;
       typedef std::list<PresenceHandler*>               PresenceHandlerList;
       typedef std::list<SubscriptionHandler*>           SubscriptionHandlerList;
+      typedef std::list<LogHandler*>                    LogHandlerList;
       typedef std::list<TagHandlerStruct>               TagHandlerList;
 
       ConnectionListenerList  m_connectionListeners;
@@ -415,6 +443,7 @@ namespace gloox
       MessageHandlerList      m_messageHandlers;
       PresenceHandlerList     m_presenceHandlers;
       SubscriptionHandlerList m_subscriptionHandlers;
+      LogHandlerList          m_logHandlers;
       TagHandlerList          m_tagHandlers;
       StringList              m_cacerts;
 
