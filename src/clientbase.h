@@ -314,6 +314,17 @@ namespace gloox
       StreamError streamError() const { return m_streamError; };
 
       /**
+       * Returns the text of a stream error for the given language if available.
+       * If the requested language is not available, the default text (without a xml:lang
+       * attribute) will be returned.
+       * @param lang The language identifier for the desired language. It must conform to
+       * section 2.12 of the XML specification and RFC 3066. If empty, the default body
+       * will be returned, if any.
+       * @return The describing text of a stream error. Empty if no stream error occured.
+       */
+      const std::string streamErrorText( const std::string& lang = "default" ) const;
+
+      /**
        * Use this function to retrieve the type of the authentication error after it occurs and you
        * received a ConnectionError of type CONN_AUTHENTICATION_FAILED from the ConnectionListener.
        */
@@ -409,8 +420,9 @@ namespace gloox
 
       Parser *m_parser;
 
-      StreamError m_streamError;
       AuthenticationError m_authError;
+      StreamError m_streamError;
+      StringMap m_streamErrorText;
       bool m_authed;
       int m_idCount;
 

@@ -427,7 +427,30 @@ namespace gloox
     else
       m_streamError = ERROR_UNDEFINED;
 
+    Tag::TagList& c = stanza->children();
+    Tag::TagList::const_iterator it = c.begin();
+    for( it; it != c.end(); ++it )
+    {
+      if( (*it)->name() == "text" )
+      {
+        const std::string lang = (*it)->findAttribute( "xml:lang" );
+        if( !lang.empty() )
+          m_streamErrorText[lang] = (*it)->cdata();
+        else
+          m_streamErrorText["default"] = (*it)->cdata();
+      }
+    }
+
     disconnect( CONN_STREAM_ERROR );
+  }
+
+  const std::string ClientBase::streamErrorText( const std::string& lang ) const
+  {
+    StringMap::const_iterator it = m_streamErrorText.find( lang );
+    if( it != m_streamErrorText.end() )
+      return (*it).second;
+    else
+      return "";
   }
 
   void ClientBase::log( const std::string& xml, bool incoming )
