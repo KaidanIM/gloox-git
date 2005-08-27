@@ -1,9 +1,8 @@
-#include "../client.h"
-#include "../prep.h"
-#include "../connectionlistener.h"
-#include "../discohandler.h"
-#include "../disco.h"
-#include "../rostermanager.h"
+#include "gloox/client.h"
+#include "gloox/connectionlistener.h"
+#include "gloox/discohandler.h"
+#include "gloox/disco.h"
+#include "gloox/rostermanager.h"
 using namespace gloox;
 
 #include <stdio.h>

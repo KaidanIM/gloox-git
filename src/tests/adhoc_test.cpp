@@ -1,10 +1,9 @@
-#include "../client.h"
-#include "../prep.h"
-#include "../connectionlistener.h"
-#include "../adhoccommandprovider.h"
-#include "../disco.h"
-#include "../adhoc.h"
-#include "../tag.h"
+#include "gloox/client.h"
+#include "gloox/connectionlistener.h"
+#include "gloox/adhoccommandprovider.h"
+#include "gloox/disco.h"
+#include "gloox/adhoc.h"
+#include "gloox/tag.h"
 using namespace gloox;
 
 #include <stdio.h>
