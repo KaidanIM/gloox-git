@@ -151,10 +151,13 @@ namespace gloox
       {
         if( !notifyOnTLSConnect( m_connection->fetchTLSInfo() ) )
           disconnect( CONN_TLS_FAILED );
+        else
+        {
 #ifdef DEBUG
-        printf( "connection security is now %d\n", m_connection->isSecure() );
+          printf( "connection security is now %d\n", m_connection->isSecure() );
 #endif
-        header();
+          header();
+        }
       }
     }
     else if( ( stanza->name() == "failure" ) && stanza->hasAttribute( "xmlns", XMLNS_STREAM_TLS ) )
