@@ -1,7 +1,6 @@
-#include "../client.h"
-#include "../prep.h"
-#include "../connectionlistener.h"
-#include "../registration.h"
+#include "gloox/client.h"
+#include "gloox/connectionlistener.h"
+#include "gloox/registration.h"
 using namespace gloox;
 
 #include <stdio.h>
@@ -60,7 +59,7 @@ class RegTest : public RegistrationHandler, ConnectionListener
     {
       printf( "fields: %d\ninstructions: %s\n", fields, instructions.c_str() );
       Registration::fieldStruct vals;
-      vals.username = Prep::nodeprep( "hurkhurk" );
+      vals.username = "hurkhurk";
       vals.password = "hurkhurks";
       m_reg->createAccount( fields, vals );
     };
