@@ -1,6 +1,22 @@
+v0.5 -- 27 Aug 2005
+-------------------
+- xml:lang for initial stream
+- xml:lang support for subject, body and status of message and presence stanzas, respectively
+- added ability to specify a server to connect to which is different from the JID's domain part
+- xmpp version check
+- recognition of all stream errors as defined in RFC 3920, including xml:lang of the text element
+- recognition of all SASL/Non-SASL error conditions as defined in RFC 3920 and JEP-0078
+- added a LogHandler for external (non-tty) logging (thanks to Konstantin Klyagin)
+- re-introduction of non-blocking connect (thanks to Konstantin Klyagin)
 
-v0.4 -- 24 Aug 2005
+
+v0.4.1 -- 25 Aug 2005
 ---------------------
+- install missing header files (gloox.h, tag.h, stanza.h)
+
+
+v0.4 -- 25 Aug 2005
+-------------------
 - fixed some memory leaks
 - renamed classes: JClient    --> Client
                    JComponent --> Component
@@ -9,7 +25,7 @@ v0.4 -- 24 Aug 2005
 - added a (dummy) Parser class which currently only converts from Iksemel
   types to gloox native types
 - natively handle connection (send & recv), incl. TLS/SSL
-- added tag filter
+- a generic tag handler (for non-XMPP:Core elements)
 - fixed roster management (somehow everything but the jid in the initial
   roster was ignored)
 - process resource binding response
