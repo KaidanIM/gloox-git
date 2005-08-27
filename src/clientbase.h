@@ -25,7 +25,6 @@
 #include "subscriptionhandler.h"
 #include "loghandler.h"
 #include "taghandler.h"
-#include "prep.h"
 #include "jid.h"
 
 
