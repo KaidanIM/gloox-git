@@ -149,13 +149,20 @@ namespace gloox
 #endif
       if( m_connection->tlsHandshake() )
       {
-        header();
         if( !notifyOnTLSConnect( m_connection->fetchTLSInfo() ) )
           disconnect( CONN_TLS_FAILED );
+        header();
       }
 #ifdef DEBUG
       printf( "connection security is now %d\n", m_connection->isSecure() );
 #endif
+    }
+    else if( ( stanza->name() == "failure" ) && stanza->hasAttribute( "xmlns", XMLNS_STREAM_TLS ) )
+    {
+#ifdef DEBUG
+      printf( "tls handshake failed...\n" );
+#endif
+      disconnect( CONN_TLS_FAILED );
     }
 #endif
     else if( ( stanza->name() == "challenge" ) && stanza->hasAttribute( "xmlns", XMLNS_STREAM_SASL ) )
@@ -165,7 +172,7 @@ namespace gloox
 #endif
       processSASLChallenge( stanza->cdata() );
     }
-    else if( stanza->name() == "failure" )
+    else if( ( stanza->name() == "failure" ) && stanza->hasAttribute( "xmlns", XMLNS_STREAM_SASL ) )
     {
 #ifdef DEBUG
       printf( "sasl authentication failed...\n" );
