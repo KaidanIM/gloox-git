@@ -192,8 +192,7 @@ namespace gloox
 
   const std::string Stanza::body( const std::string& lang ) const
   {
-    const std::string l = ( lang.empty() )?( "default" ):( lang );
-    StringMap::const_iterator it = m_body.find( l );
+    StringMap::const_iterator it = m_body.find( lang );
     if( it != m_body.end() )
       return (*it).second;
     else
@@ -202,8 +201,7 @@ namespace gloox
 
   const std::string Stanza::subject( const std::string& lang ) const
   {
-    const std::string l = ( lang.empty() )?( "default" ):( lang );
-    StringMap::const_iterator it = m_subject.find( l );
+    StringMap::const_iterator it = m_subject.find( lang );
     if( it != m_subject.end() )
       return (*it).second;
     else
@@ -212,8 +210,7 @@ namespace gloox
 
   const std::string Stanza::status( const std::string& lang ) const
   {
-    const std::string l = ( lang.empty() )?( "default" ):( lang );
-    StringMap::const_iterator it = m_status.find( l );
+    StringMap::const_iterator it = m_status.find( lang );
     if( it != m_status.end() )
       return (*it).second;
     else
