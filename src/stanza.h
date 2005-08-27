@@ -124,6 +124,17 @@ namespace gloox
       virtual const std::string subject( const std::string& lang = "default" ) const;
 
       /**
+       * Returns the text of a error stanza for the given language if available.
+       * If the requested language is not available, the default text (without a xml:lang
+       * attribute) will be returned.
+       * @param lang The language identifier for the desired language. It must conform to
+       * section 2.12 of the XML specification and RFC 3066. If empty, the default subject
+       * will be returned, if any.
+       * @return The text of an error stanza. Empty for non-error stanzas.
+       */
+      virtual const std::string errorText( const std::string& lang = "default" ) const;
+
+      /**
        * Returns the thread ID of a message stanza.
        * @return The thread ID of a message stanza. Empty for non-message stanzas.
        */
@@ -149,6 +160,9 @@ namespace gloox
 
       StanzaSubType m_subtype;
       PresenceStatus m_show;
+      StanzaError m_stanzaError;
+      StanzaErrorType m_stanzaErrorType;
+      StringMap m_errorText;
       StringMap m_body;
       StringMap m_subject;
       StringMap m_status;
