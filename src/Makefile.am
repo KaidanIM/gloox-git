@@ -11,7 +11,7 @@ libgloox_la_SOURCES = jid.cpp parser.cpp connection.cpp clientbase.cpp tag.cpp s
 			disco.cpp adhoc.cpp privatexml.cpp registration.cpp \
 			nonsaslauth.cpp rosteritem.cpp rostermanager.cpp privacyitem.cpp \
 			bookmarkstorage.cpp annotations.cpp privacymanager.cpp
-libgloox_la_LDFLAGS = -version-info 0:3:0 -no-undefined -no-allow-shlib-undefined
+libgloox_la_LDFLAGS = -version-info 0:5:0 -no-undefined -no-allow-shlib-undefined
 libgloox_la_LIBADD = $(IKSEMEL_LIBS) -lm -lresolv
 libgloox_la_CFLAGS = $(CPPFLAGS) $(IKSEMEL_CFLAGS)
 
