@@ -99,7 +99,7 @@ namespace gloox
        * will be returned, if any.
        * @return The status text set by the sender.
        */
-      virtual const std::string status( const std::string& lang = "" ) const;
+      virtual const std::string status( const std::string& lang = "default" ) const;
 
       /**
        * Returns the body of a message stanza for the given language if available.
@@ -110,7 +110,7 @@ namespace gloox
        * will be returned, if any.
        * @return The body of a message stanza. Empty for non-message stanzas.
        */
-      virtual const std::string body( const std::string& lang = "" ) const;
+      virtual const std::string body( const std::string& lang = "default" ) const;
 
       /**
        * Returns the subject of a message stanza for the given language if available.
@@ -121,7 +121,7 @@ namespace gloox
        * will be returned, if any.
        * @return The subject of a message stanza. Empty for non-message stanzas.
        */
-      virtual const std::string subject( const std::string& lang = "" ) const;
+      virtual const std::string subject( const std::string& lang = "default" ) const;
 
       /**
        * Returns the thread ID of a message stanza.
