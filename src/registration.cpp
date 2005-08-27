@@ -15,6 +15,7 @@
 
 #include "clientbase.h"
 #include "stanza.h"
+#include "prep.h"
 
 namespace gloox
 {
@@ -64,7 +65,7 @@ namespace gloox
     q->addAttrib( "xmlns", XMLNS_REGISTER );
 
     if( fields & FIELD_USERNAME )
-      q->addChild( new Tag( "username", values.username ) );
+      q->addChild( new Tag( "username", Prep::nodeprep( values.username ) ) );
     if( fields & FIELD_NICK )
       q->addChild( new Tag( "nick", values.nick ) );
     if( fields & FIELD_PASSWORD )
