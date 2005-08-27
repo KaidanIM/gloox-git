@@ -15,5 +15,5 @@ In the pipe
 - complete error handling for all protocols
 - add classes for common packet types
 - IQ error handling in Annotations class
-- stanza errors (core 9.3)
+- application specific error conditions in stream and stanza errors
 - utf-8(?)

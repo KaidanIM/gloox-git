@@ -8,6 +8,7 @@ v0.5 -- 27 Aug 2005
 - recognition of all SASL/Non-SASL error conditions as defined in RFC 3920 and JEP-0078
 - added a LogHandler for external (non-tty) logging (thanks to Konstantin Klyagin)
 - re-introduction of non-blocking connect (thanks to Konstantin Klyagin)
+- recognition of all stanza errors as defined in RFC 3920, including xml:lang of the text element
 
 
 v0.4.1 -- 25 Aug 2005
