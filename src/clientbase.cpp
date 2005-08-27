@@ -52,7 +52,12 @@ namespace gloox
     delete m_parser;
   }
 
-  bool ClientBase::connect()
+  ConnectionError ClientBase::recv( int timeout )
+  {
+    return m_connection->recv( timeout );
+  }
+
+  bool ClientBase::connect( bool block )
   {
     if( m_server.empty() )
       return false;
@@ -68,8 +73,11 @@ namespace gloox
     if( ret == STATE_CONNECTED )
     {
       header();
-      ConnectionError e = m_connection->receive();
-      notifyOnDisconnect( e );
+      if( block )
+      {
+        ConnectionError e = m_connection->receive();
+        notifyOnDisconnect( e );
+      }
     }
 
     return true;
@@ -77,10 +85,8 @@ namespace gloox
 
   void ClientBase::filter( NodeType type, Stanza *stanza )
   {
-#ifdef DEBUG
     if( stanza )
       log( stanza->xml(), true );
-#endif
 
     switch( type )
     {
@@ -318,11 +324,7 @@ namespace gloox
 
   void ClientBase::send( Tag *tag )
   {
-#ifdef DEBUG
-    log( tag->xml(), false );
-#endif
-    if( m_connection )
-      m_connection->send( tag->xml() );
+    send( tag->xml() );
 
     if( tag->type() == STANZA_UNDEFINED )
       delete( tag );
@@ -335,9 +337,8 @@ namespace gloox
 
   void ClientBase::send( const std::string& xml )
   {
-#ifdef DEBUG
     log( xml, false );
-#endif
+
     if( m_connection )
       m_connection->send( xml );
   }
@@ -455,6 +456,7 @@ namespace gloox
 
   void ClientBase::log( const std::string& xml, bool incoming )
   {
+#ifdef DEBUG
     if ( m_connection->isSecure() )
       printf( "Sec" );
 
@@ -466,6 +468,8 @@ namespace gloox
     printf( "[%s]", xml.c_str() );
     if( xml.substr( xml.length()-2, 1 ) != "\n" )
       printf( "\n" );
+#endif
+    notifyLogHandlers( xml, incoming );
   }
 
   void ClientBase::registerPresenceHandler( PresenceHandler *ph )
@@ -476,6 +480,16 @@ namespace gloox
   void ClientBase::removePresenceHandler( PresenceHandler *ph )
   {
     m_presenceHandlers.remove( ph );
+  }
+
+  void ClientBase::registerLogHandler( LogHandler *lh )
+  {
+    m_logHandlers.push_back( lh );
+  }
+
+  void ClientBase::removeLogHandler( LogHandler *lh )
+  {
+    m_logHandlers.remove( lh );
   }
 
   void ClientBase::registerIqHandler( IqHandler *ih, const std::string& xmlns )
@@ -642,6 +656,15 @@ namespace gloox
     for( it; it != m_messageHandlers.end(); it++ )
     {
       (*it)->handleMessage( stanza );
+    }
+  }
+
+  void ClientBase::notifyLogHandlers( const std::string& xml, bool incoming )
+  {
+    LogHandlerList::const_iterator it = m_logHandlers.begin();
+    for( it; it != m_logHandlers.end(); it++ )
+    {
+      (*it)->handleLog( xml, incoming );
     }
   }
 
