@@ -55,12 +55,18 @@ namespace gloox
       void doAuth();
 
       // reimplemented from IqHandler
-      virtual bool handleIq( Stanza *stanza );
+      virtual bool handleIq( Stanza *stanza ) { return false; };
 
       // reimplemented from IqHandler
       virtual bool handleIqID( Stanza *stanza, int context );
 
     private:
+      enum NonSaslAuthTrack
+      {
+        TRACK_REQUEST_AUTH_FIELDS,
+        TRACK_SEND_AUTH,
+      };
+
       Client *m_parent;
       std::string m_sid;
 
