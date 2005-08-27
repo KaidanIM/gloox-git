@@ -23,6 +23,7 @@ class RosterTest : public RosterListener, ConnectionListener
       j = new Client( jid, "hurkhurks" );
       j->setAutoPresence( true );
       j->setInitialPriority( 5 );
+      j->registerConnectionListener( this );
       j->rosterManager()->registerRosterListener( this );
       j->disco()->setVersion( "rosterTest", GLOOX_VERSION );
       j->disco()->setIdentity( "client", "bot" );
