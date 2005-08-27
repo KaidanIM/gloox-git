@@ -313,6 +313,12 @@ namespace gloox
        */
       StreamError streamError() const { return m_streamError; };
 
+      /**
+       * Use this function to retrieve the type of the authentication error after it occurs and you
+       * received a ConnectionError of type CONN_AUTHENTICATION_FAILED from the ConnectionListener.
+       */
+      AuthenticationError authError() const { return m_authError; };
+
     protected:
       enum SaslMechanisms
       {
@@ -328,9 +334,11 @@ namespace gloox
       void disconnect( ConnectionError reason );
       void header();
       void setAuthed( bool authed ) { m_authed = authed; };
+      void setAuthFailure( AuthenticationError e ) { m_authError = e; };
 
       void startSASL( SaslMechanisms type );
       void processSASLChallenge( const std::string& challenge );
+      void processSASLError( Stanza *stanza );
       void startTls();
       bool hasTls();
 
@@ -402,6 +410,7 @@ namespace gloox
       Parser *m_parser;
 
       StreamError m_streamError;
+      AuthenticationError m_authError;
       bool m_authed;
       int m_idCount;
 

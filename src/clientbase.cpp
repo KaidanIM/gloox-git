@@ -298,6 +298,24 @@ namespace gloox
 
   }
 
+  void ClientBase::processSASLError( Stanza *stanza )
+  {
+    if( stanza->hasChild( "aborted" ) )
+      m_authError = SASL_ABORTED;
+    else if( stanza->hasChild( "incorrect-encoding" ) )
+      m_authError = SASL_INCORRECT_ENCODING;
+    else if( stanza->hasChild( "invalid-authzid" ) )
+      m_authError = SASL_INVALID_AUTHZID;
+    else if( stanza->hasChild( "invalid-mechanism" ) )
+      m_authError = SASL_INVALID_MECHANISM;
+    else if( stanza->hasChild( "mechanism-too-weak" ) )
+      m_authError = SASL_MECHANISM_TOO_WEAK;
+    else if( stanza->hasChild( "not-authorized" ) )
+      m_authError = SASL_NOT_AUTHORIZED;
+    else if( stanza->hasChild( "temporary-auth-failure" ) )
+      m_authError = SASL_TEMPORARY_AUTH_FAILURE;
+  }
+
   void ClientBase::send( Tag *tag )
   {
 #ifdef DEBUG
