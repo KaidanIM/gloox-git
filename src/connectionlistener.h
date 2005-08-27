@@ -60,7 +60,13 @@ namespace gloox
       virtual void onConnect() = 0;
 
       /**
-       * This function notifies about disconnection.
+       * This function notifies about disconnection and its reason.
+       * If @b e indicates a stream error, you can use @ref ClientBase::streamError() to find out
+       * what exactly went wrong, and @ref ClientBase::streamErrorText() to retrieve any explaining text
+       * sent along with the error.
+       * If @b e indicates an authentication error, you can use @ref ClientBase::authError() to get a finer
+       * grained reason.
+       * @param e The reason for the disconnection.
        */
       virtual void onDisconnect( ConnectionError e ) = 0;
 
