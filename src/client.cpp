@@ -170,6 +170,7 @@ namespace gloox
 #ifdef DEBUG
       printf( "sasl authentication failed...\n" );
 #endif
+      processSASLError( stanza );
       disconnect( CONN_AUTHENTICATION_FAILED );
     }
     else if( stanza->name() == "success" )

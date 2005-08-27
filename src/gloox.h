@@ -312,6 +312,43 @@ namespace gloox
   };
 
   /**
+   * Describes the defined SASL error conditions.
+   */
+  enum AuthenticationError
+  {
+    SASL_ABORTED,                   /**< The receiving entity acknowledges an &lt;abort/&gt; element sent
+                                     * by the initiating entity; sent in reply to the &lt;abort/&gt;
+                                     * element. */
+    SASL_INCORRECT_ENCODING,        /**< The data provided by the initiating entity could not be processed
+                                     * because the [BASE64] encoding is incorrect (e.g., because the encoding
+                                     * does not adhere to the definition in Section 3 of [BASE64]); sent in
+                                     * reply to a &lt;response/&gt; element or an &lt;auth/&gt; element with
+                                     * initial response data. */
+    SASL_INVALID_AUTHZID,           /**< The authzid provided by the initiating entity is invalid, either
+                                     * because it is incorrectly formatted or because the initiating entity
+                                     * does not have permissions to authorize that ID; sent in reply to a
+                                     * &lt;response/&gt; element or an &lt;auth/&gt; element with initial
+                                     * response data.*/
+    SASL_INVALID_MECHANISM,         /**< The initiating entity did not provide a mechanism or requested a
+                                     * mechanism that is not supported by the receiving entity; sent in reply
+                                     * to an &lt;auth/&gt; element. */
+    SASL_MECHANISM_TOO_WEAK,        /**< The mechanism requested by the initiating entity is weaker than
+                                     * server policy permits for that initiating entity; sent in reply to a
+                                     * &lt;response/&gt; element or an &lt;auth/&gt; element with initial
+                                     * response data. */
+    SASL_NOT_AUTHORIZED,            /**< The authentication failed because the initiating entity did not
+                                     * provide valid credentials (this includes but is not limited to the
+                                     * case of an unknown username); sent in reply to a &lt;response/&gt;
+                                     * element or an &lt;auth/&gt; element with initial response data. */
+    SASL_TEMPORARY_AUTH_FAILURE,    /**< The authentication failed because of a temporary error condition
+                                     * within the receiving entity; sent in reply to an &lt;auth/&gt; element
+                                     * or &lt;response/&gt; element. */
+    NONSASL_CONFLICT,               /**< JEP-0078: Resource Conflict */
+    NONSASL_NOT_ACCEPTABLE,         /**< JEP-0078: Required Information Not Provided */
+    NONSASL_NOT_AUTHORIZED,         /**< JEP-0078: Incorrect Credentials */
+  };
+
+  /**
    * A list of strings.
    */
   typedef std::list<std::string> StringList;
