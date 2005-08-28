@@ -55,12 +55,15 @@ namespace gloox
           iq->addAttrib( "id", stanza->id() );
           iq->addAttrib( "from", m_parent->jid().full() );
           iq->addAttrib( "to", stanza->from().full() );
+          iq->addAttrib( "type", "result" );
           Tag *query = new Tag( "query" );
           query->addAttrib( "xmlns", XMLNS_VERSION );
           Tag *name = new Tag( "name", m_versionName );
           Tag *version = new Tag( "version", m_versionVersion );
+          Tag *os = new Tag( "os", m_versionOs );
           query->addChild( name );
           query->addChild( version );
+          query->addChild( os );
           iq->addChild( query );
           m_parent->send( iq );
         }
@@ -276,10 +279,11 @@ namespace gloox
     m_parent->send( iq );
   }
 
-  void Disco::setVersion( const std::string& name, const std::string& version )
+  void Disco::setVersion( const std::string& name, const std::string& version, const std::string& os )
   {
     m_versionName = name;
     m_versionVersion = version;
+    m_versionOs = os;
   }
 
   void Disco::setIdentity( const std::string& category, const std::string& type )

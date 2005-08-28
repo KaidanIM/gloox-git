@@ -90,8 +90,9 @@ namespace gloox
        * IQ packets will not be forwarded to the IqHandlers.
        * @param name The name to be returned to inquireing clients.
        * @param version The version to be returned to inquireing clients.
+       * @param os The operating system to announce. Default: don't include.
        */
-      void setVersion( const std::string& name, const std::string& version );
+      void setVersion( const std::string& name, const std::string& version, const std::string& os = "" );
 
       /**
        * Sets the identity of this entity.
@@ -160,6 +161,7 @@ namespace gloox
 
       std::string m_versionName;
       std::string m_versionVersion;
+      std::string m_versionOs;
       std::string m_identityCategory;
       std::string m_identityType;
 
