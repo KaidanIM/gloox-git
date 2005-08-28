@@ -388,6 +388,7 @@ namespace gloox
       std::string m_xmllang;
       std::string m_server;
       std::string m_sid;
+      bool m_authed;
       bool m_sasl;
       bool m_tls;
       int m_port;
@@ -453,7 +454,6 @@ namespace gloox
       AuthenticationError m_authError;
       StreamError m_streamError;
       StringMap m_streamErrorText;
-      bool m_authed;
       int m_idCount;
 
   };

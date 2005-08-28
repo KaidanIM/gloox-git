@@ -130,7 +130,7 @@ namespace gloox
         }
         else
         {
-          connected( false );
+          connected();
         }
       }
       else if( m_streamFeatures & STREAM_FEATURE_IQAUTH )
@@ -254,6 +254,9 @@ namespace gloox
     if( tag->hasChildWithCData( "mechanism", "PLAIN" ) )
         mechs |= STREAM_FEATURE_SASL_PLAIN;
 
+    if( tag->hasChildWithCData( "mechanism", "ANONYMOUS" ) )
+      mechs |= STREAM_FEATURE_SASL_ANONYMOUS;
+
     return mechs;
   }
 
@@ -291,7 +294,7 @@ namespace gloox
         if( m_streamFeatures & STREAM_FEATURE_SESSION )
           createSession();
         else
-          connected( true );
+          connected();
         break;
       }
       case STANZA_IQ_ERROR:
@@ -336,7 +339,7 @@ namespace gloox
     {
       case STANZA_IQ_RESULT:
       {
-        connected( true );
+        connected();
         break;
       }
       case STANZA_IQ_ERROR:
