@@ -39,7 +39,7 @@ namespace gloox
     std::string id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
-    iq->addAttrib( "to", m_parent->server() );
+    iq->addAttrib( "to", m_parent->jid().server() );
     iq->addAttrib( "id", id );
     iq->addAttrib( "type", "get" );
     Tag *q = new Tag( "query" );
