@@ -182,6 +182,15 @@ namespace gloox
       void setAutoPresence( bool autoPresence ) { m_autoPresence = autoPresence; };
 
       /**
+       * This is a temporary hack to allow login to google talk. You must set this to true
+       * to avoid SASL PLAIN login, which fails. Google talk does not announce availability
+       * of non-SASL auth which is why it has to be enabled explicitely.
+       * @param force Whether to force non-SASL auth. Default @b true.
+       * @deprecated
+       */
+      void setForceNonSasl( bool force = true ) { m_forceNonSasl = force; };
+
+      /**
        * Disables automatic handling of disco queries.
        * There is currently no way to re-enable disco query-handling.
        * @note This disables the browsing capabilities because
@@ -242,6 +251,7 @@ namespace gloox
       bool m_autoPresence;
       bool m_manageRoster;
       bool m_handleDisco;
+      bool m_forceNonSasl;
       int m_priority;
 
       int m_streamFeatures;
