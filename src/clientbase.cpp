@@ -643,7 +643,7 @@ namespace gloox
          ( ( stanza->subtype() == STANZA_IQ_GET ) || ( stanza->subtype() == STANZA_IQ_SET ) ) )
     {
       Tag *iq = new Tag( "iq" );
-      iq->addAttrib( "type", "error" );
+      iq->addAttrib( "type", "result" );
       iq->addAttrib( "id", stanza->id() );
       iq->addAttrib( "to", stanza->from().full() );
       send( iq );
