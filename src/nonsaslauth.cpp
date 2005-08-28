@@ -112,7 +112,7 @@ namespace gloox
           }
           case TRACK_SEND_AUTH:
             m_parent->setAuthed( true );
-            m_parent->notifyOnConnect();
+            m_parent->connected();
             break;
         }
         break;
