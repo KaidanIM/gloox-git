@@ -87,7 +87,6 @@ class RosterTest : public RosterListener, ConnectionListener
         for( it_g; it_g != g.end(); ++it_g )
           printf( "\tgroup: %s\n", (*it_g).c_str() );
       }
-      j->rosterManager()->unsubscribe( "js@example.org", true );
     }
 
     virtual void itemChanged( RosterItem& item, int status, const std::string& msg )
@@ -99,6 +98,11 @@ class RosterTest : public RosterListener, ConnectionListener
     {
       printf( "item online: %s\n", item.jid().c_str() );
     }
+
+    virtual void itemUnavailable( RosterItem& item, const std::string& msg )
+    {
+      printf( "item offline: %s\n", item.jid().c_str() );
+    };
 
     virtual bool subscriptionRequest( const std::string& jid )
     {
