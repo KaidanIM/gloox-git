@@ -33,7 +33,7 @@ namespace gloox
     : ClientBase( XMLNS_CLIENT, server ),
     m_priority( -1 ),
     m_autoPresence( false ), m_manageRoster( true ),
-    m_handleDisco( true ), m_rosterManager( 0 ),
+    m_handleDisco( true ), m_rosterManager( 0 ), m_forceNonSasl( false ),
     m_disco( 0 ), m_auth( 0 ), m_authorized( false ), m_resourceBound( false )
   {
     init();
@@ -42,7 +42,7 @@ namespace gloox
   Client::Client( const JID& jid, const std::string& password, int port )
     : ClientBase( XMLNS_CLIENT, password, "", port ),
     m_priority( -1 ), m_autoPresence( false ), m_manageRoster( true ),
-    m_handleDisco( true ), m_rosterManager( 0 ),
+    m_handleDisco( true ), m_rosterManager( 0 ), m_forceNonSasl( false ),
     m_disco( 0 ), m_auth( 0 ), m_authorized( false ), m_resourceBound( false )
   {
     m_jid = jid;
@@ -54,7 +54,7 @@ namespace gloox
                     const std::string& server, const std::string& resource, int port )
     : ClientBase( XMLNS_CLIENT, password, server, port ),
     m_priority( -1 ), m_autoPresence( false ), m_manageRoster( true ),
-    m_handleDisco( true ), m_rosterManager( 0 ),
+    m_handleDisco( true ), m_rosterManager( 0 ), m_forceNonSasl( false ),
     m_disco( 0 ), m_auth( 0 ), m_authorized( false ), m_resourceBound( false )
   {
     m_jid.setUsername( username );
@@ -104,15 +104,15 @@ namespace gloox
         }
         else if( !username().empty() && !password().empty() )
         {
-          if( m_streamFeatures & STREAM_FEATURE_SASL_DIGESTMD5 )
+          if( m_streamFeatures & STREAM_FEATURE_SASL_DIGESTMD5 && !m_forceNonSasl )
           {
             startSASL( SASL_DIGEST_MD5 );
           }
-          else if( m_streamFeatures & STREAM_FEATURE_SASL_PLAIN )
+          else if( m_streamFeatures & STREAM_FEATURE_SASL_PLAIN && !m_forceNonSasl )
           {
             startSASL( SASL_PLAIN );
           }
-          else if( m_streamFeatures & STREAM_FEATURE_IQAUTH )
+          else if( m_streamFeatures & STREAM_FEATURE_IQAUTH || m_forceNonSasl )
           {
             nonSaslLogin();
           }
