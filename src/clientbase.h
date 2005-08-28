@@ -360,6 +360,8 @@ namespace gloox
       {
         SASL_DIGEST_MD5,          /**< SASL Digest-MD5 according to RFC 2831. */
         SASL_PLAIN,               /**< SASL PLAIN according to RFC 2595 Section 6. */
+        SASL_ANONYMOUS,           /**< SASL ANONYMOUS according to draft-ietf-sasl-anon-05.txt/
+                                   * RFC 2245 Section 6. */
       };
 
       void notifyOnResourceBindError( ConnectionListener::ResourceBindError error );

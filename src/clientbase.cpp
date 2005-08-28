@@ -198,6 +198,10 @@ namespace gloox
         iks_free( result );
         iks_free( tmp );
         break;
+      case SASL_ANONYMOUS:
+        a->addAttrib( "mechanism", "ANONYMOUS" );
+        a->setCData( getID() );
+        break;
     }
 
     send( a );
