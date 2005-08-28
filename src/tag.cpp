@@ -66,8 +66,6 @@ namespace gloox
 
     if( m_cdata.empty() && !m_children.size() )
       xml += "/>";
-    else if( !m_cdata.empty() )
-      xml += ">" + m_cdata + "</" + m_name + ">";
     else if( m_children.size() )
     {
       xml += ">";
@@ -78,13 +76,16 @@ namespace gloox
       }
       xml += "</" + m_name + ">";
     }
+    else if( !m_cdata.empty() )
+      xml += ">" + m_cdata + "</" + m_name + ">";
 
     return xml;
   }
 
   void Tag::addAttrib( const std::string& name, const std::string& value )
   {
-    m_attribs[name] = value;
+    if( !value.empty() )
+      m_attribs[name] = value;
   }
 
   void Tag::addChild( Tag *child )
