@@ -1,3 +1,4 @@
+
 v0.5 -- 27 Aug 2005
 -------------------
 - xml:lang for initial stream
@@ -9,6 +10,12 @@ v0.5 -- 27 Aug 2005
 - added a LogHandler for external (non-tty) logging (thanks to Konstantin Klyagin)
 - re-introduction of non-blocking connect (thanks to Konstantin Klyagin)
 - recognition of all stanza errors as defined in RFC 3920, including xml:lang of the text element
+- only include non-empty attributes
+- prefer child elements over cdata when returning a tag's xml, prevents empty log if whitespace was sent
+- correctly detect availability presence
+- take autoPresence etc. into account when doing non-SASL auth
+- in the JEP-0092 (Software Version) implementation: OS support, create a valid 'result' type of packet
+- ability to force non-SASL auth even if not announced
 
 
 v0.4.1 -- 25 Aug 2005
