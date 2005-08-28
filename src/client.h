@@ -220,13 +220,15 @@ namespace gloox
     private:
       enum StreamFeaturesEnum
       {
-        STREAM_FEATURE_BIND             =  1,  /**< The server supports resource binding. */
-        STREAM_FEATURE_SESSION          =  2,  /**< The server supports sessions. */
-        STREAM_FEATURE_SASL_DIGESTMD5   =  4,  /**< The server supports SASL mechanism Digest-MD5. */
-        STREAM_FEATURE_SASL_PLAIN       =  8,  /**< The server supports SASL mechanism Plain. */
-        STREAM_FEATURE_STARTTLS         = 16,  /**< The server supports &lt;startls&gt;. */
-        STREAM_FEATURE_IQREGISTER       = 32,  /**< The server supports JEP-0077 (In-Band Registration). */
-        STREAM_FEATURE_IQAUTH           = 64   /**< The server supports JEP-0078 (Non-SASL Authentication). */
+        STREAM_FEATURE_BIND             =   1, /**< The server supports resource binding. */
+        STREAM_FEATURE_SESSION          =   2, /**< The server supports sessions. */
+        STREAM_FEATURE_SASL_DIGESTMD5   =   4, /**< The server supports SASL DIGEST-MD5 mechanism. */
+        STREAM_FEATURE_SASL_PLAIN       =   8, /**< The server supports SASL PLAIN mechanism. */
+        STREAM_FEATURE_SASL_ANONYMOUS   =  16, /**< The server supports SASL ANONYMOUS mechanism. */
+        STREAM_FEATURE_STARTTLS         =  32, /**< The server supports &lt;startls&gt;. */
+        STREAM_FEATURE_IQREGISTER       =  64, /**< The server supports JEP-0077 (In-Band Registration). */
+        STREAM_FEATURE_IQAUTH           = 128, /**< The server supports JEP-0078 (Non-SASL Authentication). */
+        STREAM_FEATURE_ACK              = 256, /**< The server supports JEPAck (experimental). */
       };
 
       virtual void handleStartNode() {};
@@ -246,7 +248,6 @@ namespace gloox
       NonSaslAuth *m_auth;
       Disco* m_disco;
 
-      bool m_authorized;
       bool m_resourceBound;
       bool m_autoPresence;
       bool m_manageRoster;

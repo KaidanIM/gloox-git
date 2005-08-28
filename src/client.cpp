@@ -34,7 +34,7 @@ namespace gloox
     m_priority( -1 ),
     m_autoPresence( false ), m_manageRoster( true ),
     m_handleDisco( true ), m_rosterManager( 0 ), m_forceNonSasl( false ),
-    m_disco( 0 ), m_auth( 0 ), m_authorized( false ), m_resourceBound( false )
+    m_disco( 0 ), m_auth( 0 ), m_resourceBound( false )
   {
     init();
   }
@@ -43,7 +43,7 @@ namespace gloox
     : ClientBase( XMLNS_CLIENT, password, "", port ),
     m_priority( -1 ), m_autoPresence( false ), m_manageRoster( true ),
     m_handleDisco( true ), m_rosterManager( 0 ), m_forceNonSasl( false ),
-    m_disco( 0 ), m_auth( 0 ), m_authorized( false ), m_resourceBound( false )
+    m_disco( 0 ), m_auth( 0 ), m_resourceBound( false )
   {
     m_jid = jid;
     m_server = m_jid.serverRaw();
@@ -55,7 +55,7 @@ namespace gloox
     : ClientBase( XMLNS_CLIENT, password, server, port ),
     m_priority( -1 ), m_autoPresence( false ), m_manageRoster( true ),
     m_handleDisco( true ), m_rosterManager( 0 ), m_forceNonSasl( false ),
-    m_disco( 0 ), m_auth( 0 ), m_authorized( false ), m_resourceBound( false )
+    m_disco( 0 ), m_auth( 0 ), m_resourceBound( false )
   {
     m_jid.setUsername( username );
     m_jid.setServer( server );
@@ -95,7 +95,7 @@ namespace gloox
 
       if( sasl() )
       {
-        if( m_authorized )
+        if( m_authed )
         {
           if( m_streamFeatures & STREAM_FEATURE_BIND )
           {
@@ -124,9 +124,13 @@ namespace gloox
             disconnect( CONN_NO_SUPPORTED_AUTH );
           }
         }
+        else if( m_streamFeatures & STREAM_FEATURE_SASL_ANONYMOUS )
+        {
+          startSASL( SASL_ANONYMOUS );
+        }
         else
         {
-          connected();
+          connected( false );
         }
       }
       else if( m_streamFeatures & STREAM_FEATURE_IQAUTH )
@@ -189,7 +193,6 @@ namespace gloox
       printf( "sasl auth successful...\n" );
 #endif
       setAuthed( true );
-      m_authorized = true;
       header();
     }
     else
@@ -232,6 +235,8 @@ namespace gloox
     if( stanza->hasChild( "register", "xmlns", XMLNS_STREAM_IQREGISTER ) )
       features |= STREAM_FEATURE_IQREGISTER;
 
+    if( stanza->hasChild( "ack", "xmlns", XMLNS_STREAM_ACK ) )
+      features |= STREAM_FEATURE_ACK;
 
     if( features == 0 )
       features = STREAM_FEATURE_IQAUTH;
@@ -286,7 +291,7 @@ namespace gloox
         if( m_streamFeatures & STREAM_FEATURE_SESSION )
           createSession();
         else
-          connected();
+          connected( true );
         break;
       }
       case STANZA_IQ_ERROR:
@@ -331,7 +336,7 @@ namespace gloox
     {
       case STANZA_IQ_RESULT:
       {
-        connected();
+        connected( true );
         break;
       }
       case STANZA_IQ_ERROR:
@@ -411,13 +416,16 @@ namespace gloox
 
   void Client::connected()
   {
+    if( m_authed )
+    {
+      if( m_manageRoster )
+        m_rosterManager->fill();
+
+      if( m_autoPresence )
+        sendInitialPresence();
+    }
+
     notifyOnConnect();
-
-    if( m_manageRoster )
-      m_rosterManager->fill();
-
-    if( m_autoPresence )
-      sendInitialPresence();
   }
 
 };
