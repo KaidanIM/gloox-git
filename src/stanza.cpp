@@ -154,7 +154,7 @@ namespace gloox
 
     if( m_type == STANZA_PRESENCE )
     {
-      if( !hasChild( "show" ) )
+      if( !hasAttribute( "type" ) )
         m_show = PRESENCE_AVAILABLE;
       else if( hasChildWithCData( "show", "chat" ) )
         m_show = PRESENCE_CHAT;
