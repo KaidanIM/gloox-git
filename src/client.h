@@ -217,6 +217,9 @@ namespace gloox
        */
       Disco* disco();
 
+    protected:
+      void nonSaslLogin();
+
     private:
       enum StreamFeaturesEnum
       {
@@ -241,7 +244,6 @@ namespace gloox
       void createSession();
       void connected();
 
-      void nonSaslLogin();
       void init();
 
       RosterManager* m_rosterManager;
