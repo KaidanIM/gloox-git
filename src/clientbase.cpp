@@ -81,8 +81,10 @@ namespace gloox
         notifyOnDisconnect( e );
       }
     }
-
-    return true;
+    else
+    {
+      return false;
+    }
   }
 
   void ClientBase::filter( NodeType type, Stanza *stanza )

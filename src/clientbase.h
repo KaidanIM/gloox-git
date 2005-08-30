@@ -87,7 +87,8 @@ namespace gloox
        * immediately. If you choose the latter, its your responsibility to call @ref recv() every now
        * and then to actually receive data from the socket and to feed the parser.
        * @param block @b True for blocking, @b false for non-blocking connect. Defaults to @b true.
-       * @return @b False if prerequisits are not met (server not set), @b true otherwise.
+       * @return @b False if prerequisits are not met (server not set) or if the connection was refused,
+       * @b true otherwise.
        */
       bool connect( bool block = true );
 
@@ -114,7 +115,7 @@ namespace gloox
        * Returns the current jabber id.
        * @return The Jabber ID.
        */
-      const JID& jid() const { return m_jid; };
+      JID& jid() { return m_jid; };
 
       /**
        * Switches usage of SASL on/off. Default: on
