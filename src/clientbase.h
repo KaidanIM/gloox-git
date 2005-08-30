@@ -350,6 +350,21 @@ namespace gloox
       const std::string streamErrorText( const std::string& lang = "default" ) const;
 
       /**
+       * In case the defined-condition element of an stream error contains XML character data you can
+       * use this function to retrieve it. RFC 3920 only defines one condition (see-other-host)where
+       * this is possible.
+       * @return The cdata of the stream error's text element (only for see-other-host).
+       */
+      const std::string streamErrorCData() const { return m_streamErrorCData; };
+
+      /**
+       * This function can be used to retrieve the application-specific error condition of a stream error.
+       * @return The application-specific error element of a stream error. 0 if no respective element was
+       * found or no error occured.
+       */
+      Tag* streamErrorAppCondition() { return m_streamErrorAppCondition; };
+
+      /**
        * Use this function to retrieve the type of the authentication error after it occurs and you
        * received a ConnectionError of type CONN_AUTHENTICATION_FAILED from the ConnectionListener.
        */
@@ -454,6 +469,8 @@ namespace gloox
       AuthenticationError m_authError;
       StreamError m_streamError;
       StringMap m_streamErrorText;
+      std::string m_streamErrorCData;
+      Tag *m_streamErrorAppCondition;
       int m_idCount;
 
   };

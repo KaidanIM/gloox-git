@@ -34,7 +34,8 @@ namespace gloox
   ClientBase::ClientBase( const std::string& ns, const std::string& server, int port )
     : m_namespace( ns ), m_server( server ), m_port( port ),
       m_connection( 0 ), m_parser( 0 ), m_xmllang( "en" ), m_authed( false ),
-      m_tls( true ), m_sasl( true ), m_idCount( 0 ), m_streamError( ERROR_UNDEFINED )
+      m_tls( true ), m_sasl( true ), m_idCount( 0 ), m_streamError( ERROR_UNDEFINED ),
+      m_streamErrorAppCondition( 0 )
   {
   }
 
@@ -42,7 +43,8 @@ namespace gloox
                           const std::string& server, int port )
     : m_namespace( ns ), m_password( password ), m_server( server ), m_port( port ),
       m_connection( 0 ), m_parser( 0 ), m_xmllang( "en" ), m_authed( false ),
-      m_tls( true ), m_sasl( true ), m_idCount( 0 ), m_streamError( ERROR_UNDEFINED )
+      m_tls( true ), m_sasl( true ), m_idCount( 0 ), m_streamError( ERROR_UNDEFINED ),
+      m_streamErrorAppCondition( 0 )
   {
   }
 
@@ -381,62 +383,64 @@ namespace gloox
 
   void ClientBase::handleStreamError( Stanza *stanza )
   {
-    if( stanza->hasChild( "bad-format" ) )
-      m_streamError = ERROR_BAD_FORMAT;
-    else if( stanza->hasChild( "bad-namespace-prefix" ) )
-      m_streamError = ERROR_BAD_NAMESPACE_PREFIX;
-    else if( stanza->hasChild( "conflict" ) )
-      m_streamError = ERROR_CONFLICT;
-    else if( stanza->hasChild( "connection-timeout" ) )
-      m_streamError = ERROR_CONNECTION_TIMEOUT;
-    else if( stanza->hasChild( "host-gone" ) )
-      m_streamError = ERROR_HOST_GONE;
-    else if( stanza->hasChild( "host-unknown" ) )
-      m_streamError = ERROR_HOST_UNKNOWN;
-    else if( stanza->hasChild( "improper-addressing" ) )
-      m_streamError = ERROR_IMPROPER_ADDRESSING;
-    else if( stanza->hasChild( "internal-server-error" ) )
-      m_streamError = ERROR_INTERNAL_SERVER_ERROR;
-    else if( stanza->hasChild( "invalid-from" ) )
-      m_streamError = ERROR_INVALID_FROM;
-    else if( stanza->hasChild( "invalid-id" ) )
-      m_streamError = ERROR_INVALID_ID;
-    else if( stanza->hasChild( "invalid-namespace" ) )
-      m_streamError = ERROR_INVALID_NAMESPACE;
-    else if( stanza->hasChild( "invalid-xml" ) )
-      m_streamError = ERROR_INVALID_XML;
-    else if( stanza->hasChild( "not-authorized" ) )
-      m_streamError = ERROR_NOT_AUTHORIZED;
-    else if( stanza->hasChild( "policy-violation" ) )
-      m_streamError = ERROR_POLICY_VIOLATION;
-    else if( stanza->hasChild( "remote-connection-failed" ) )
-      m_streamError = ERROR_REMOTE_CONNECTION_FAILED;
-    else if( stanza->hasChild( "resource-constraint" ) )
-      m_streamError = ERROR_RESOURCE_CONSTRAINT;
-    else if( stanza->hasChild( "restricted-xml" ) )
-      m_streamError = ERROR_RESTRICTED_XML;
-    else if( stanza->hasChild( "see-other-host" ) )
-      m_streamError = ERROR_SEE_OTHER_HOST;
-    else if( stanza->hasChild( "system-shutdown" ) )
-      m_streamError = ERROR_SYSTEM_SHUTDOWN;
-    else if( stanza->hasChild( "undefined-condition" ) )
-      m_streamError = ERROR_UNDEFINED_CONDITION;
-    else if( stanza->hasChild( "unsupported-encoding" ) )
-      m_streamError = ERROR_UNSUPPORTED_ENCODING;
-    else if( stanza->hasChild( "unsupported-stanza-type" ) )
-      m_streamError = ERROR_UNSUPPORTED_STANZA_TYPE;
-    else if( stanza->hasChild( "unsupported-version" ) )
-      m_streamError = ERROR_UNSUPPORTED_VERSION;
-    else if( stanza->hasChild( "xml-not-well-formed" ) )
-      m_streamError = ERROR_XML_NOT_WELL_FORMED;
-    else
-      m_streamError = ERROR_UNDEFINED;
-
     Tag::TagList& c = stanza->children();
     Tag::TagList::const_iterator it = c.begin();
     for( it; it != c.end(); ++it )
     {
-      if( (*it)->name() == "text" )
+      if( (*it)->name() == "bad-format" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
+        m_streamError = ERROR_BAD_FORMAT;
+      else if( (*it)->name() == "bad-namespace-prefix" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
+        m_streamError = ERROR_BAD_NAMESPACE_PREFIX;
+      else if( (*it)->name() == "conflict" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
+        m_streamError = ERROR_CONFLICT;
+      else if( (*it)->name() == "connection-timeout" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
+        m_streamError = ERROR_CONNECTION_TIMEOUT;
+      else if( (*it)->name() == "host-gone" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
+        m_streamError = ERROR_HOST_GONE;
+      else if( (*it)->name() == "host-unknown" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
+        m_streamError = ERROR_HOST_UNKNOWN;
+      else if( (*it)->name() == "improper-addressing" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
+        m_streamError = ERROR_IMPROPER_ADDRESSING;
+      else if( (*it)->name() == "internal-server-error" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
+        m_streamError = ERROR_INTERNAL_SERVER_ERROR;
+      else if( (*it)->name() == "invalid-from" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
+        m_streamError = ERROR_INVALID_FROM;
+      else if( (*it)->name() == "invalid-id" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
+        m_streamError = ERROR_INVALID_ID;
+      else if( (*it)->name() == "invalid-namespace" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
+        m_streamError = ERROR_INVALID_NAMESPACE;
+      else if( (*it)->name() == "invalid-xml" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
+        m_streamError = ERROR_INVALID_XML;
+      else if( (*it)->name() == "not-authorized" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
+        m_streamError = ERROR_NOT_AUTHORIZED;
+      else if( (*it)->name() == "policy-violation" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
+        m_streamError = ERROR_POLICY_VIOLATION;
+      else if( (*it)->name() == "remote-connection-failed" &&
+                 (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
+        m_streamError = ERROR_REMOTE_CONNECTION_FAILED;
+      else if( (*it)->name() == "resource-constraint" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
+        m_streamError = ERROR_RESOURCE_CONSTRAINT;
+      else if( (*it)->name() == "restricted-xml" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
+        m_streamError = ERROR_RESTRICTED_XML;
+      else if( (*it)->name() == "see-other-host" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
+      {
+        m_streamError = ERROR_SEE_OTHER_HOST;
+        m_streamErrorCData = stanza->findChild( "see-other-host" )->cdata();
+      }
+      else if( (*it)->name() == "system-shutdown" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
+        m_streamError = ERROR_SYSTEM_SHUTDOWN;
+      else if( (*it)->name() == "undefined-condition" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
+        m_streamError = ERROR_UNDEFINED_CONDITION;
+      else if( (*it)->name() == "unsupported-encoding" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
+        m_streamError = ERROR_UNSUPPORTED_ENCODING;
+      else if( (*it)->name() == "unsupported-stanza-type" &&
+                 (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
+        m_streamError = ERROR_UNSUPPORTED_STANZA_TYPE;
+      else if( (*it)->name() == "unsupported-version" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
+        m_streamError = ERROR_UNSUPPORTED_VERSION;
+      else if( (*it)->name() == "xml-not-well-formed" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
+        m_streamError = ERROR_XML_NOT_WELL_FORMED;
+      else if( (*it)->name() == "text" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
       {
         const std::string lang = (*it)->findAttribute( "xml:lang" );
         if( !lang.empty() )
@@ -444,6 +448,8 @@ namespace gloox
         else
           m_streamErrorText["default"] = (*it)->cdata();
       }
+      else
+        m_streamErrorAppCondition = (*it);
     }
 
     disconnect( CONN_STREAM_ERROR );
