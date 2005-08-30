@@ -114,6 +114,8 @@ namespace gloox
       /**
        * Returns the current jabber id.
        * @return The Jabber ID.
+       * @note I you change the server part of the JID, the server of the connection is not synced.
+       * You have to do that manually using @ref setServer().
        */
       JID& jid() { return m_jid; };
 
@@ -139,6 +141,8 @@ namespace gloox
       /**
        * Sets the XMPP server to connect to.
        * @param server The server to connect to. Either IP or fully qualified domain name.
+       * @note If you change the server, the server part of the JID is not synced. You have to do that
+       * manually using @ref jid() and @ref JID::setServer().
        */
       void setServer( const std::string &server ) { m_server = server; };
 
