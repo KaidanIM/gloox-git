@@ -69,7 +69,6 @@ namespace gloox
     private:
 
       Disco *m_disco;
-      std::string m_to;
   };
 
 };
