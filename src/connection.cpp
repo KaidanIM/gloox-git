@@ -235,7 +235,7 @@ namespace gloox
       return CONN_IO_ERROR;
 
     if( !FD_ISSET( m_socket, &fds ) )
-      return CONN_IO_ERROR;
+      return CONN_OK;
 
     // optimize(?): recv returns the size. set size+1 = \0
     memset( m_buf, '\0', BUFSIZE );
