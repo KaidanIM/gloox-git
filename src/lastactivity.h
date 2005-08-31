@@ -16,7 +16,6 @@
 
 #include "iqhandler.h"
 #include "discohandler.h"
-#include "loghandler.h"
 
 #include <time.h>
 
@@ -33,7 +32,7 @@ namespace gloox
    * LastActivity can be used to query remote entities about their last activity time as well
    * as answer incoming last-activity-queries.
    */
-  class LastActivity : public IqHandler, DiscoHandler, LogHandler
+  class LastActivity : public IqHandler, DiscoHandler
   {
     public:
       /**
@@ -65,14 +64,17 @@ namespace gloox
        */
       void removeLastActivityHandler() { m_lastActivityHandler = 0; };
 
+      /**
+       * Use this function to reset the idle timer. By default the number of seconds since the
+       * instantiation will be used.
+       */
+      void resetIdleTimer();
+
       // reimplemented from IqHandler
       virtual bool handleIqID( Stanza *stanza, int context );
 
       // reimplemented from IqHandler
       virtual bool handleIq( Stanza *stanza );
-
-      // reimplemented from LogHandler
-      virtual void handleLog( const std::string& xml, bool incoming );
 
     private:
       LastActivityHandler *m_lastActivityHandler;
