@@ -135,6 +135,12 @@ namespace gloox
       virtual const std::string errorText( const std::string& lang = "default" ) const;
 
       /**
+       * Returnes the stanza error condition, if any.
+       * @return The stanza error condition.
+       */
+      virtual StanzaError error() const { return m_stanzaError; };
+
+      /**
        * Returns the thread ID of a message stanza.
        * @return The thread ID of a message stanza. Empty for non-message stanzas.
        */
