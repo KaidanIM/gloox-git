@@ -79,18 +79,6 @@ namespace gloox
       friend class Parser;
 
       /**
-       * Describes the possible error conditions on XMPP level.
-       * @todo Add missing values.
-       */
-      enum ErrorEnum
-      {
-        FEATURE_NOT_IMPLEMENTED,      /**< The requested feature is either not availabale or not
-                                       * implemented. */
-        ITEM_NOT_FOUND,               /**< The requested item does not exist. Privacy is a non-issue. */
-        SERVICE_UNAVAILABLE           /**< The requested protocol is not supported. Privacy is an issue. */
-      };
-
-      /**
        * Constructs a new Client which can be used for account registration.
        * SASL and TLS are on by default. The port will be determined by looking up SRV records.
        * Alternatively, you can set it be calling @ref setPort().
