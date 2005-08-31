@@ -169,6 +169,12 @@ namespace gloox
       else
         m_show = PRESENCE_UNKNOWN;
 
+      if( hasChild( "priority" ) )
+        m_priority = atoi( findChild( "priority" )->cdata().c_str() );
+    }
+
+    if( m_type == STANZA_PRESENCE || m_type == STANZA_S10N )
+    {
       TagList& c = children();
       TagList::const_iterator it = c.begin();
       for( it; it != c.end(); ++it )
@@ -182,9 +188,6 @@ namespace gloox
             m_status["default"] = (*it)->cdata();
         }
       }
-
-      if( hasChild( "priority" ) )
-        m_priority = atoi( findChild( "priority" )->cdata().c_str() );
     }
 
     m_xmllang = findAttribute( "xml:lang" );
