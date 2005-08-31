@@ -18,7 +18,7 @@ namespace gloox
 {
 
   Stanza::Stanza( const std::string& name, const std::string& cdata )
-  : Tag( name, cdata ), m_xmllang( "default" )
+  : Tag( name, cdata ), m_xmllang( "default" ), m_stanzaError( ST_ERROR_UNDEFINED )
   {
   }
 
