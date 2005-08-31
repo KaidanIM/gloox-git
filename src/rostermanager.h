@@ -75,8 +75,10 @@ namespace gloox
        * @param jid The address to subscribe to.
        * @param name The displayed name of the contact.
        * @param groups A list of groups the contact belongs to.
+       * @param msg A message sent along with the request.
        */
-      void subscribe( const std::string& jid, const std::string& name, StringList& groups );
+      void subscribe( const std::string& jid, const std::string& name, StringList& groups,
+                      const std::string& msg );
 
       /**
        * Synchronizes locally modified RosterItems back to the server.
@@ -95,9 +97,10 @@ namespace gloox
       /**
        * Use this function to unsubscribe from a JID in the roster.
        * @param jid The address to unsubscribe from.
+       * @param msg A message to send along with the request.
        * @param remove Whether the contact should also be removed from the roster.
        */
-      void unsubscribe( const std::string& jid, bool remove );
+      void unsubscribe( const std::string& jid, const std::string& msg, bool remove );
 
       /**
        * Register @c rl as object that receives updates on roster operations.
