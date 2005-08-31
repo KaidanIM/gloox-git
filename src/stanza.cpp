@@ -189,7 +189,7 @@ namespace gloox
 
     m_xmllang = findAttribute( "xml:lang" );
 
-    if( hasAttribute( "type", "error" ) )
+    if( hasAttribute( "type", "error" ) && hasChild( "error" ) )
     {
       Tag *e = findChild( "error" );
 
