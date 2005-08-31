@@ -95,7 +95,9 @@ namespace gloox
     switch( type )
     {
       case NODE_STREAM_START:
-        handleStreamVersion( stanza->findAttribute( "version" ) );
+        if( !checkStreamVersion( stanza->findAttribute( "version" ) ) )
+          disconnect( CONN_STREAM_ERROR );
+
         m_sid = stanza->findAttribute( "id" );
         handleStartNode();
         break;
@@ -365,7 +367,7 @@ namespace gloox
     return tmp;
   }
 
-  void ClientBase::handleStreamVersion( const std::string& version )
+  bool ClientBase::checkStreamVersion( const std::string& version )
   {
     int major = 0;
     int minor = 0;
@@ -380,7 +382,9 @@ namespace gloox
     }
 
     if( myMajor < major )
-      disconnect( CONN_STREAM_ERROR );
+      return false;
+    else
+      return true;
   }
 
   void ClientBase::handleStreamError( Stanza *stanza )

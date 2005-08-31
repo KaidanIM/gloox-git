@@ -393,6 +393,7 @@ namespace gloox
       void header();
       void setAuthed( bool authed ) { m_authed = authed; };
       void setAuthFailure( AuthenticationError e ) { m_authError = e; };
+      virtual bool checkStreamVersion( const std::string& version );
 
       void startSASL( SaslMechanisms type );
       void processSASLChallenge( const std::string& challenge );
@@ -424,7 +425,6 @@ namespace gloox
 
       virtual void handleStartNode() = 0;
       virtual bool handleNormalNode( Stanza *stanza ) = 0;
-      void handleStreamVersion( const std::string& version );
       void handleStreamError( Stanza *stanza );
 
       void notifyIqHandlers( Stanza *stanza );
