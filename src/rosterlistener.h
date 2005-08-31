@@ -107,18 +107,20 @@ namespace gloox
       /**
        * This function is called when an entity wishes to subscribe to this entity's presence.
        * @param jid The requesting item's address.
+       * @param msg A message sent along with the request.
        * @return Return @b true to allow subscription and subscribe to the remote entities
        * presence, @b false to ignore the request.
        */
-      virtual bool subscriptionRequest( const std::string& jid ) {};
+      virtual bool subscriptionRequest( const std::string& jid, const std::string& msg ) {};
 
       /**
        * This function is called when an entity unsubscribes from this entity's presence.
        * @param jid The item's address.
+       * @param msg A message sent along with the request.
        * @return Return @b true to unsubscribe from the remote entity and remove the entity
        * from the roster, @b false to ignore.
        */
-      virtual bool unsubscriptionRequest( const std::string& jid ) {};
+      virtual bool unsubscriptionRequest( const std::string& jid, const std::string& msg ) {};
 
   };
 

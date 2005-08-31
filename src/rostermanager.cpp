@@ -109,7 +109,7 @@ namespace gloox
   }
 
   void RosterManager::subscribe( const std::string& jid, const std::string& name,
-                                 StringList& groups/*, const std::string& msg*/ )
+                                 StringList& groups, const std::string& msg )
   {
     if( jid.empty() )
       return;
@@ -119,6 +119,9 @@ namespace gloox
     Tag *s = new Tag( "presence" );
     s->addAttrib( "type", "subscribe" );
     s->addAttrib( "to", jid );
+    if( !msg.empty() )
+      Tag *status = new Tag( s, "status", msg );
+
     m_parent->send( s );
   }
 
@@ -154,11 +157,14 @@ namespace gloox
     m_parent->send( iq );
   }
 
-  void RosterManager::unsubscribe( const std::string& jid/*, const std::string& msg*/, bool remove )
+  void RosterManager::unsubscribe( const std::string& jid, const std::string& msg, bool remove )
   {
     Tag *s = new Tag( "presence" );
     s->addAttrib( "type", "unsubscribe" );
     s->addAttrib( "to", jid );
+    if( !msg.empty() )
+      Tag *status = new Tag( s, "status", msg );
+
     m_parent->send( s );
 
     if( remove )
@@ -223,7 +229,7 @@ namespace gloox
     switch( stanza->subtype() )
     {
       case STANZA_S10N_SUBSCRIBE:
-        if( m_rosterListener->subscriptionRequest( stanza->from().bare() ) )
+        if( m_rosterListener->subscriptionRequest( stanza->from().bare(), stanza->status() ) )
         {
           Tag *p = new Tag( "presence" );
           p->addAttrib( "type", "subscribed" );
@@ -257,8 +263,8 @@ namespace gloox
         p->addAttrib( "to", stanza->from().bare() );
         m_parent->send( p );
 
-        if( m_rosterListener->unsubscriptionRequest( stanza->from().bare() ) )
-          unsubscribe( stanza->from().bare(), true );
+        if( m_rosterListener->unsubscriptionRequest( stanza->from().bare(), stanza->status() ) )
+          unsubscribe( stanza->from().bare(), "", true );
         break;
       }
 
