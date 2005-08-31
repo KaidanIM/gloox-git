@@ -1,5 +1,15 @@
 
-v0.5 -- 27 Aug 2005
+v0.6 -- xx yyy 2005
+-------------------
+- more namespace checking
+- extraction of application-specific error condition element of stream errors
+- JEP-0012 (Last Activity)
+- a couple of small fixes from Konstantin Klyagin
+- made checkStreamVersion() a protected virtual
+
+
+
+v0.5 -- 28 Aug 2005
 -------------------
 - xml:lang for initial stream
 - xml:lang support for subject, body and status of message and presence stanzas, respectively
@@ -15,7 +25,7 @@ v0.5 -- 27 Aug 2005
 - correctly detect availability presence
 - take autoPresence etc. into account when doing non-SASL auth
 - in the JEP-0092 (Software Version) implementation: OS support, create a valid 'result' type of packet
-- ability to force non-SASL auth even if not announced
+
 
 
 v0.4.1 -- 25 Aug 2005
