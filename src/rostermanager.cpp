@@ -119,6 +119,7 @@ namespace gloox
     Tag *s = new Tag( "presence" );
     s->addAttrib( "type", "subscribe" );
     s->addAttrib( "to", jid );
+    s->addAttrib( "from", m_parent->jid().full() );
     if( !msg.empty() )
       Tag *status = new Tag( s, "status", msg );
 
