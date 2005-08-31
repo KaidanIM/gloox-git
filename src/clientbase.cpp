@@ -70,7 +70,9 @@ namespace gloox
     if( !m_connection )
       m_connection = new Connection( m_parser, m_server, m_port );
 
+#ifdef HAVE_GNUTLS
     m_connection->setCACerts( m_cacerts );
+#endif
     int ret = m_connection->connect();
     if( ret == STATE_CONNECTED )
     {
