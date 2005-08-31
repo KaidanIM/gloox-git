@@ -1,0 +1,88 @@
+/*
+  Copyright (c) 2005 by Jakob Schroeter <js@camaya.net>
+  This file is part of the gloox library. http://camaya.net/gloox
+
+  This software is distributed under a license. The full license
+  agreement can be found in the file LICENSE in this distribution.
+  This software may not be copied, modified, sold or distributed
+  other than expressed in the named license agreement.
+
+  This software is distributed without any warrenty.
+*/
+
+
+#ifndef LASTACTIVITY_H__
+#define LASTACTIVITY_H__
+
+#include "iqhandler.h"
+#include "discohandler.h"
+#include "loghandler.h"
+
+#include <time.h>
+
+namespace gloox
+{
+
+  class JID;
+  class ClientBase;
+  class Disco;
+  class LastActivityHandler;
+
+  /**
+   * This is an implementation of JEP-0012 (Last Activity) for both clients and components.
+   * LastActivity can be used to query remote entities about their last activity time as well
+   * as answer incoming last-activity-queries.
+   */
+  class LastActivity : public IqHandler, DiscoHandler, LogHandler
+  {
+    public:
+      /**
+       * Constructs a new LastActivity object.
+       *
+       */
+      LastActivity( ClientBase *parent, Disco *disco );
+
+      /**
+       * Virtual destructor.
+       */
+      virtual ~LastActivity();
+
+      /**
+       * Queries the given JID for their last activity. The result can be received by reimplementing
+       * @ref LastActivityHandler::handleLastActivity().
+       */
+      void query( const JID& jid );
+
+      /**
+       * Use this function to register an object as handler for incoming results of Last-Activity queries.
+       * Only one handler is possible at a time.
+       * @param lah The object to register as handler.
+       */
+      void registerLastActivityHandler( LastActivityHandler *lah ) { m_lastActivityHandler = lah; };
+
+      /**
+       * Use this function to un-register the set LastActivityHandler.
+       */
+      void removeLastActivityHandler() { m_lastActivityHandler = 0; };
+
+      // reimplemented from IqHandler
+      virtual bool handleIqID( Stanza *stanza, int context );
+
+      // reimplemented from IqHandler
+      virtual bool handleIq( Stanza *stanza );
+
+      // reimplemented from LogHandler
+      virtual void handleLog( const std::string& xml, bool incoming );
+
+    private:
+      LastActivityHandler *m_lastActivityHandler;
+      ClientBase *m_parent;
+      Disco *m_disco;
+
+      time_t m_active;
+
+  };
+
+};
+
+#endif // LASTACTIVITY_H__

@@ -10,7 +10,7 @@ libgloox_la_SOURCES = jid.cpp parser.cpp connection.cpp clientbase.cpp tag.cpp s
 			dns.cpp prep.cpp client.cpp component.cpp \
 			disco.cpp adhoc.cpp privatexml.cpp registration.cpp \
 			nonsaslauth.cpp rosteritem.cpp rostermanager.cpp privacyitem.cpp \
-			bookmarkstorage.cpp annotations.cpp privacymanager.cpp
+			bookmarkstorage.cpp annotations.cpp privacymanager.cpp lastactivity.cpp
 libgloox_la_LDFLAGS = -version-info 0:5:0 -no-undefined -no-allow-shlib-undefined
 libgloox_la_LIBADD = $(IKSEMEL_LIBS) -lm -lresolv
 libgloox_la_CFLAGS = $(CPPFLAGS) $(IKSEMEL_CFLAGS)
@@ -26,4 +26,5 @@ libglooxinclude_HEADERS = adhoccommandprovider.h  privacymanager.h      tag.h \
 			  connectionlistener.h    rostermanager.h       gloox.h\
 			  disco.h                 presencehandler.h     subscriptionhandler.h \
 			  discohandler.h          privacyitem.h         stanza.h\
-			  disconodehandler.h      privacylisthandler.h  loghandler.h
+			  disconodehandler.h      privacylisthandler.h  loghandler.h \
+			  lastactivity.h
