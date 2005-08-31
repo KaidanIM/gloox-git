@@ -24,9 +24,10 @@ namespace gloox
 {
 
   LastActivity::LastActivity( ClientBase *parent, Disco *disco )
-  : m_active( 0 ), m_parent( parent ), m_disco( disco ), m_lastActivityHandler( 0 )
+    : m_parent( parent ), m_disco( disco ), m_lastActivityHandler( 0 )
   {
     m_disco->addFeature( XMLNS_LAST );
+    m_active = time( 0 );
   }
 
   LastActivity::~LastActivity()
@@ -110,7 +111,7 @@ namespace gloox
     return false;
   }
 
-  void LastActivity::handleLog( const std::string& xml, bool incoming )
+  void LastActivity::resetIdleTimer()
   {
     m_active = time( 0 );
   }
