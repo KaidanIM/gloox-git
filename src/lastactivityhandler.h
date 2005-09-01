@@ -18,18 +18,24 @@ namespace gloox
 {
 
   /**
-   *
+   * This is an virtual interface that, once reimplemented, allows to receive the
+   * results of Last-Activity-queries to other entities.
    */
   class LastActivityHandler
   {
     public:
       /**
-       *
+       * This function is called when a positive result of a query arrives.
+       * @param jid The JID of the queried contact.
+       * @param seconds The idle time or time of last presence of the contact. (Depends
+       * on the JID, check the spec.)
        */
       virtual void handleLastActivityResult( const JID& jid, int seconds ) = 0;
 
       /**
-       *
+       * This function is called when an error is returned by the queried antity.
+       * @param jid The queried entity's address.
+       * @param error The reported error.
        */
       virtual void handleLastActivityError( const JID& jid, StanzaError error ) = 0;
 

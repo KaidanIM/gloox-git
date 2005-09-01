@@ -35,7 +35,7 @@ namespace gloox
     : m_namespace( ns ), m_server( server ), m_port( port ),
       m_connection( 0 ), m_parser( 0 ), m_xmllang( "en" ), m_authed( false ),
       m_tls( true ), m_sasl( true ), m_idCount( 0 ), m_streamError( ERROR_UNDEFINED ),
-      m_streamErrorAppCondition( 0 )
+      m_streamErrorAppCondition( 0 ), m_authError( AUTH_ERROR_UNDEFINED )
   {
   }
 
@@ -44,7 +44,7 @@ namespace gloox
     : m_namespace( ns ), m_password( password ), m_server( server ), m_port( port ),
       m_connection( 0 ), m_parser( 0 ), m_xmllang( "en" ), m_authed( false ),
       m_tls( true ), m_sasl( true ), m_idCount( 0 ), m_streamError( ERROR_UNDEFINED ),
-      m_streamErrorAppCondition( 0 )
+      m_streamErrorAppCondition( 0 ), m_authError( AUTH_ERROR_UNDEFINED )
   {
   }
 
