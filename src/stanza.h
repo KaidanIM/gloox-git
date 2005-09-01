@@ -141,6 +141,13 @@ namespace gloox
       virtual StanzaError error() const { return m_stanzaError; };
 
       /**
+       * This function can be used to retrieve the application-specific error condition of a stanza error.
+       * @return The application-specific error element of a stanza error. 0 if no respective element was
+       * found or no error occured.
+       */
+      Tag* errorAppCondition() { return m_stanzaErrorAppCondition; };
+
+      /**
        * Returns the thread ID of a message stanza.
        * @return The thread ID of a message stanza. Empty for non-message stanzas.
        */

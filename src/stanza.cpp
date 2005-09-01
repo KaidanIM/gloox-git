@@ -18,13 +18,15 @@ namespace gloox
 {
 
   Stanza::Stanza( const std::string& name, const std::string& cdata )
-  : Tag( name, cdata ), m_xmllang( "default" ), m_stanzaError( ST_ERROR_UNDEFINED )
+    : Tag( name, cdata ), m_xmllang( "default" ), m_stanzaError( ST_ERROR_UNDEFINED ),
+      m_stanzaErrorAppCondition( 0 )
   {
   }
 
   Stanza::Stanza( Tag *tag )
     : Tag( tag->name() ),
-      m_show( PRESENCE_UNKNOWN ), m_xmllang( "en" )
+      m_show( PRESENCE_UNKNOWN ), m_xmllang( "en" ),
+      m_stanzaErrorAppCondition( 0 )
   {
     m_name = tag->name();
     m_attribs = tag->attributes();
