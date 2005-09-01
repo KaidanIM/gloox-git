@@ -48,7 +48,8 @@ namespace gloox
 
       /**
        * Queries the given JID for their last activity. The result can be received by reimplementing
-       * @ref LastActivityHandler::handleLastActivity().
+       * @ref LastActivityHandler::handleLastActivityResult() and
+       * @ref LastActivityHandler::handleLastActivityError().
        */
       void query( const JID& jid );
 
