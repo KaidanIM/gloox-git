@@ -59,12 +59,12 @@
  * }
  * @endcode
  *
- * Now, everytime a presence stanza (not subscription stanza) is received, @ref handlePresence() is called
+ * Now, everytime a presence stanza (not subscription stanza) is received, handlePresence() is called
  * with the current stanza as argument. You can then use the extensive getters of the Stanza class to
  * extract stanza data.
  *
  * This works similar for all the other event handlers.
- * Another example, this time using the connection event handler (class @ref ConnectionListener):
+ * Another example, this time using the connection event handler (class @ref gloox::ConnectionListener):
  * @code
  * class MyClass : public ConnectionListener
  * {
@@ -87,10 +87,10 @@
  * @endcode
  *
  * @note The ConnectionListener interface is a peculiarity. You MUST re-implement
- * @ref gloox::ConnectionListsner::onTLSConnect() if you want to be able to connect successfully to TLS/SSL
+ * @ref gloox::ConnectionListener::onTLSConnect() if you want to be able to connect successfully to TLS/SSL
  * enabled servers. Even though gloox tries to verify the server's certificate it does not automatically
  * trust a server. The client programmer and/or user must decide whether to trust a server or not. This trust
- * is expressed by the return value of @ref onTLSConnect(). @b False means you don't trust the
+ * is expressed by the return value of onTLSConnect(). @b False means you don't trust the
  * server/certificate and as a consequence the connection is dropped immediately.
  *
  * @section comp_sec Components
