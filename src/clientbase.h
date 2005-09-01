@@ -372,6 +372,7 @@ namespace gloox
       /**
        * Use this function to retrieve the type of the authentication error after it occurs and you
        * received a ConnectionError of type CONN_AUTHENTICATION_FAILED from the ConnectionListener.
+       * @return The type of the authentication, if any, AUTH_ERROR_UNDEFINED otherwise.
        */
       AuthenticationError authError() const { return m_authError; };
 
