@@ -162,6 +162,7 @@ namespace gloox
   {
     Tag *s = new Tag( "presence" );
     s->addAttrib( "type", "unsubscribe" );
+    s->addAttrib( "from", m_parent->jid().bare() );
     s->addAttrib( "to", jid );
     if( !msg.empty() )
       Tag *status = new Tag( s, "status", msg );
@@ -234,6 +235,7 @@ namespace gloox
         {
           Tag *p = new Tag( "presence" );
           p->addAttrib( "type", "subscribed" );
+          p->addAttrib( "from", m_parent->jid().bare() );
           p->addAttrib( "to", stanza->from().bare() );
           m_parent->send( p );
         }
@@ -241,6 +243,7 @@ namespace gloox
         {
           Tag *p = new Tag( "presence" );
           p->addAttrib( "type", "unsubscribed" );
+          p->addAttrib( "from", m_parent->jid().bare() );
           p->addAttrib( "to", stanza->from().bare() );
           m_parent->send( p );
         }
@@ -248,10 +251,11 @@ namespace gloox
 
       case STANZA_S10N_SUBSCRIBED:
       {
-        Tag *p = new Tag( "presence" );
-        p->addAttrib( "type", "subscribe" );
-        p->addAttrib( "to", stanza->from().bare() );
-        m_parent->send( p );
+//         Tag *p = new Tag( "presence" );
+//         p->addAttrib( "type", "subscribe" );
+//         p->addAttrib( "from", m_parent->jid().bare() );
+//         p->addAttrib( "to", stanza->from().bare() );
+//         m_parent->send( p );
 
         m_rosterListener->itemSubscribed( stanza->from().bare() );
         break;
@@ -261,6 +265,7 @@ namespace gloox
       {
         Tag *p = new Tag( "presence" );
         p->addAttrib( "type", "unsubscribed" );
+        p->addAttrib( "from", m_parent->jid().bare() );
         p->addAttrib( "to", stanza->from().bare() );
         m_parent->send( p );
 
@@ -271,10 +276,11 @@ namespace gloox
 
       case STANZA_S10N_UNSUBSCRIBED:
       {
-        Tag *p = new Tag( "presence" );
-        p->addAttrib( "type", "unsubscribe" );
-        p->addAttrib( "to", stanza->from().bare() );
-        m_parent->send( p );
+//         Tag *p = new Tag( "presence" );
+//         p->addAttrib( "type", "unsubscribe" );
+//         p->addAttrib( "from", m_parent->jid().bare() );
+//         p->addAttrib( "to", stanza->from().bare() );
+//         m_parent->send( p );
 
         m_rosterListener->itemUnsubscribed( stanza->from().bare() );
         break;
