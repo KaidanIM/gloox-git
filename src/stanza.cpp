@@ -207,54 +207,73 @@ namespace gloox
       else if( e->hasAttribute( "type", "wait" ) )
         m_stanzaErrorType = ST_TYPE_WAIT;
 
-      if( e->hasChild( "bad-request", "xmlns", XMLNS_XMPP_STANZAS ) )
-        m_stanzaError = ST_ERROR_BAD_REQUEST;
-      else if( e->hasChild( "conflict", "xmlns", XMLNS_XMPP_STANZAS ) )
-        m_stanzaError = ST_ERROR_CONFLICT;
-      else if( e->hasChild( "feature-not-implemented", "xmlns", XMLNS_XMPP_STANZAS ) )
-        m_stanzaError = ST_ERROR_FEATURE_NOT_IMPLEMENTED;
-      else if( e->hasChild( "forbidden", "xmlns", XMLNS_XMPP_STANZAS ) )
-        m_stanzaError = ST_ERROR_FORBIDDEN;
-      else if( e->hasChild( "gone", "xmlns", XMLNS_XMPP_STANZAS ) )
-        m_stanzaError = ST_ERROR_GONE;
-      else if( e->hasChild( "internal-server-error", "xmlns", XMLNS_XMPP_STANZAS ) )
-        m_stanzaError = ST_ERROR_INTERNAL_SERVER_ERROR;
-      else if( e->hasChild( "item-not-found", "xmlns", XMLNS_XMPP_STANZAS ) )
-        m_stanzaError = ST_ERROR_ITEM_NOT_FOUND;
-      else if( e->hasChild( "jid-malformed", "xmlns", XMLNS_XMPP_STANZAS ) )
-        m_stanzaError = ST_ERROR_JID_MALFORMED;
-      else if( e->hasChild( "not-acceptable", "xmlns", XMLNS_XMPP_STANZAS ) )
-        m_stanzaError = ST_ERROR_NOT_ACCEPTABLE;
-      else if( e->hasChild( "not-allowed", "xmlns", XMLNS_XMPP_STANZAS ) )
-        m_stanzaError = ST_ERROR_NOT_ALLOWED;
-      else if( e->hasChild( "not-authorized", "xmlns", XMLNS_XMPP_STANZAS ) )
-        m_stanzaError = ST_ERROR_NOT_AUTHORIZED;
-      else if( e->hasChild( "recipient-unavailable", "xmlns", XMLNS_XMPP_STANZAS ) )
-        m_stanzaError = ST_ERROR_RECIPIENT_UNAVAILABLE;
-      else if( e->hasChild( "redirect", "xmlns", XMLNS_XMPP_STANZAS ) )
-        m_stanzaError = ST_ERROR_REDIRECT;
-      else if( e->hasChild( "registration-required", "xmlns", XMLNS_XMPP_STANZAS ) )
-        m_stanzaError = ST_ERROR_REGISTRATION_REQUIRED;
-      else if( e->hasChild( "remote-server-not-found", "xmlns", XMLNS_XMPP_STANZAS ) )
-        m_stanzaError = ST_ERROR_REMOTE_SERVER_NOT_FOUND;
-      else if( e->hasChild( "remote-server-timeout", "xmlns", XMLNS_XMPP_STANZAS ) )
-        m_stanzaError = ST_ERROR_REMOTE_SERVER_TIMEOUT;
-      else if( e->hasChild( "resource-constraint", "xmlns", XMLNS_XMPP_STANZAS ) )
-        m_stanzaError = ST_ERROR_RESOURCE_CONSTRAINT;
-      else if( e->hasChild( "service-unavailable", "xmlns", XMLNS_XMPP_STANZAS ) )
-        m_stanzaError = ST_ERROR_SERVICE_UNAVAILABLE;
-      else if( e->hasChild( "subscription-required", "xmlns", XMLNS_XMPP_STANZAS ) )
-        m_stanzaError = ST_ERROR_SUBSCRIBTION_REQUIRED;
-      else if( e->hasChild( "undefined-condition", "xmlns", XMLNS_XMPP_STANZAS ) )
-        m_stanzaError = ST_ERROR_UNDEFINED_CONDITION;
-      else if( e->hasChild( "unexpected-request", "xmlns", XMLNS_XMPP_STANZAS ) )
-        m_stanzaError = ST_ERROR_UNEXPECTED_REQUEST;
-
       TagList& c = e->children();
       TagList::const_iterator it = c.begin();
       for( it; it != c.end(); ++it )
       {
-        if( (*it)->name() == "text" )
+        if( (*it)->name() == "bad-request" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
+          m_stanzaError = ST_ERROR_BAD_REQUEST;
+        else if( (*it)->name() == "conflict"
+                   && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
+          m_stanzaError = ST_ERROR_CONFLICT;
+        else if( (*it)->name() == "feature-not-implemented"
+                   && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
+          m_stanzaError = ST_ERROR_FEATURE_NOT_IMPLEMENTED;
+        else if( (*it)->name() == "forbidden"
+                   && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
+          m_stanzaError = ST_ERROR_FORBIDDEN;
+        else if( (*it)->name() == "gone"
+                   && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
+          m_stanzaError = ST_ERROR_GONE;
+        else if( (*it)->name() == "internal-server-error"
+                   && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
+          m_stanzaError = ST_ERROR_INTERNAL_SERVER_ERROR;
+        else if( (*it)->name() == "item-not-found"
+                   && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
+          m_stanzaError = ST_ERROR_ITEM_NOT_FOUND;
+        else if( (*it)->name() == "jid-malformed"
+                   && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
+          m_stanzaError = ST_ERROR_JID_MALFORMED;
+        else if( (*it)->name() == "not-acceptable"
+                   && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
+          m_stanzaError = ST_ERROR_NOT_ACCEPTABLE;
+        else if( (*it)->name() == "not-allowed"
+                   && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
+          m_stanzaError = ST_ERROR_NOT_ALLOWED;
+        else if( (*it)->name() == "not-authorized"
+                   && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
+          m_stanzaError = ST_ERROR_NOT_AUTHORIZED;
+        else if( (*it)->name() == "recipient-unavailable"
+                   && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
+          m_stanzaError = ST_ERROR_RECIPIENT_UNAVAILABLE;
+        else if( (*it)->name() == "redirect"
+                   && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
+          m_stanzaError = ST_ERROR_REDIRECT;
+        else if( (*it)->name() == "registration-required"
+                   && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
+          m_stanzaError = ST_ERROR_REGISTRATION_REQUIRED;
+        else if( (*it)->name() == "remote-server-not-found"
+                   && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
+          m_stanzaError = ST_ERROR_REMOTE_SERVER_NOT_FOUND;
+        else if( (*it)->name() == "remote-server-timeout"
+                   && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
+          m_stanzaError = ST_ERROR_REMOTE_SERVER_TIMEOUT;
+        else if( (*it)->name() == "resource-constraint"
+                   && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
+          m_stanzaError = ST_ERROR_RESOURCE_CONSTRAINT;
+        else if( (*it)->name() == "service-unavailable"
+                   && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
+          m_stanzaError = ST_ERROR_SERVICE_UNAVAILABLE;
+        else if( (*it)->name() == "subscription-required"
+                   && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
+          m_stanzaError = ST_ERROR_SUBSCRIBTION_REQUIRED;
+        else if( (*it)->name() == "undefined-condition"
+                   && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
+          m_stanzaError = ST_ERROR_UNDEFINED_CONDITION;
+        else if( (*it)->name() == "unexpected-request"
+                   && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
+          m_stanzaError = ST_ERROR_UNEXPECTED_REQUEST;
+        else if( (*it)->name() == "text" )
         {
           const std::string lang = (*it)->findAttribute( "xml:lang" );
           if( !lang.empty() )
@@ -262,8 +281,9 @@ namespace gloox
           else
             m_errorText["default"] = (*it)->cdata();
         }
+        else
+          m_stanzaErrorAppCondition = (*it);
       }
-
     }
   }
 
