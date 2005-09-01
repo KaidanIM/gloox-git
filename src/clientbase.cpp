@@ -195,6 +195,7 @@ namespace gloox
         a->addAttrib( "mechanism", "DIGEST-MD5" );
         break;
       case SASL_PLAIN:
+      {
         a->addAttrib( "mechanism", "PLAIN" );
         int len = m_jid.username().length() + m_password.length() + 2;
         char *tmp = (char*)iks_malloc( len + 80 );
@@ -206,6 +207,7 @@ namespace gloox
         iks_free( result );
         iks_free( tmp );
         break;
+      }
       case SASL_ANONYMOUS:
         a->addAttrib( "mechanism", "ANONYMOUS" );
         a->setCData( getID() );
