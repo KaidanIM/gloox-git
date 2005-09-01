@@ -168,6 +168,7 @@ namespace gloox
       PresenceStatus m_show;
       StanzaError m_stanzaError;
       StanzaErrorType m_stanzaErrorType;
+      Tag *m_stanzaErrorAppCondition;
       StringMap m_errorText;
       StringMap m_body;
       StringMap m_subject;
