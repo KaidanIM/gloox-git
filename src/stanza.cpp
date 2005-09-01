@@ -25,7 +25,7 @@ namespace gloox
 
   Stanza::Stanza( Tag *tag )
     : Tag( tag->name() ),
-      m_show( PRESENCE_UNKNOWN ), m_xmllang( "en" ),
+      m_show( PRESENCE_UNKNOWN ), m_xmllang( "default" ),
       m_stanzaErrorAppCondition( 0 )
   {
     m_name = tag->name();
