@@ -60,7 +60,7 @@ namespace gloox
        * Gives access to the component's Disco object.
        * @return A pointer to the Disco object.
        */
-      Disco* disco() { return m_disco; };
+      Disco* disco() const { return m_disco; };
 
     protected:
       virtual void handleStartNode();
