@@ -32,7 +32,8 @@ namespace gloox
 
   Connection::Connection( Parser *parser, const std::string& server, int port )
     : m_parser( parser ), m_server( Prep::idna( server ) ), m_port( port ),
-      m_cancel( true ), m_socket( 0 ), m_buf( 0 ), m_secure( false )
+      m_cancel( true ), m_socket( 0 ), m_buf( 0 ), m_secure( false ),
+      m_compression( false )
   {
     m_buf = (char*)calloc( BUFSIZE, sizeof( char ) );
   }
@@ -42,6 +43,9 @@ namespace gloox
     cleanup();
     free( m_buf );
     m_buf = 0;
+#ifdef HAVE_ZLIB
+    setCompression( false );
+#endif
   }
 
 #ifdef HAVE_GNUTLS
@@ -214,6 +218,94 @@ namespace gloox
   }
 #endif
 
+#ifdef HAVE_ZLIB
+  bool Connection::setCompression( bool compression )
+  {
+    int ret = Z_OK;
+
+    if( !m_compression && compression )
+    {
+      m_zdeflate.zalloc = Z_NULL;
+      m_zdeflate.zfree = Z_NULL;
+      m_zdeflate.opaque = Z_NULL;
+      ret = deflateInit( &m_zdeflate, Z_DEFAULT_COMPRESSION );
+
+      if( ret == Z_OK )
+      {
+        m_zinflate.zalloc = Z_NULL;
+        m_zinflate.zfree = Z_NULL;
+        m_zinflate.opaque = Z_NULL;
+        ret = inflateInit( &m_zinflate );
+      }
+    }
+    else if( m_compression && !compression )
+    {
+      deflateEnd( &m_zdeflate );
+      inflateEnd( &m_zinflate );
+    }
+
+    if( ret == Z_OK )
+    {
+      m_compression = compression;
+      return true;
+    }
+    else
+    {
+      m_compression = false;
+      return false;
+    }
+  }
+
+  std::string Connection::compress( const std::string& data )
+  {
+    int CHUNK = data.length() + ( data.length() / 100 ) + 13;
+    Bytef out[CHUNK];
+    const char *in = data.c_str();
+
+    m_zdeflate.avail_in = data.length();
+    m_zdeflate.next_in = (Bytef*)in;
+
+    int ret;
+    std::string tmp, result;
+    do {
+      m_zdeflate.avail_out = CHUNK;
+      m_zdeflate.next_out = (Bytef*)&out;
+
+      ret = deflate( &m_zdeflate, Z_FINISH );
+      tmp.assign( (char*)out, CHUNK - m_zdeflate.avail_out ) ;
+      result += tmp;
+    } while( ret == Z_OK );
+
+    return result;
+  }
+
+  std::string Connection::decompress( const std::string& data )
+  {
+    if( data.empty() )
+      return "";
+
+    int CHUNK = data.length() * 10;
+    char out[CHUNK];
+    const char *in = data.c_str();
+
+    m_zinflate.avail_in = data.length();
+    m_zinflate.next_in = (Bytef*)in;
+
+    int ret;
+    std::string result, tmp;
+    do {
+      m_zinflate.avail_out = CHUNK;
+      m_zinflate.next_out = (Bytef*)out;
+
+      ret = inflate( &m_zinflate, Z_FINISH );
+      tmp.assign( out, CHUNK - m_zinflate.avail_out );
+      result += tmp;
+    } while( m_zinflate.avail_out == 0 );
+
+    return result;
+  }
+#endif
+
   void Connection::disconnect( ConnectionError e )
   {
     m_disconnect = e;
@@ -307,7 +399,18 @@ namespace gloox
     if( data.empty() )
       return;
 
-    char *xml = strdup( data.c_str() );
+//     setCompression( true );
+    char *xml;
+//     if( m_compression )
+      /*xml =*/ std::string comp = compress( data );
+                std::string decomp = decompress( comp );
+                if( decomp == comp )
+                  printf( "!!!!!!!!!!!!!!!!!!!OK!!!!!!!!!!!!!!!!!!!!\n" );
+                else
+                  printf( "NOT ok!!!!!!!!!!!!!!!!!!: %s\n", decomp.c_str() );
+//     else
+      xml = strdup( data.c_str() );
+
     if( !xml )
       return;
     int len = strlen( xml );
