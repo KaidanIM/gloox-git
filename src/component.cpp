@@ -18,6 +18,8 @@
 #include "stanza.h"
 #include "prep.h"
 
+#include <iksemel.h>
+
 namespace gloox
 {
 
