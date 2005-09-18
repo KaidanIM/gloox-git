@@ -15,8 +15,6 @@
 #ifndef PRIVATEXMLHANDLER_H__
 #define PRIVATEXMLHANDLER_H__
 
-#include <iksemel.h>
-
 #include <string>
 
 namespace gloox

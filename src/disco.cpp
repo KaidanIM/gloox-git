@@ -179,7 +179,7 @@ namespace gloox
         return true;
         break;
 
-      case IKS_TYPE_SET:
+      case STANZA_IQ_SET:
       {
         bool res = false;
         DiscoHandlerList::const_iterator it = m_discoHandlers.begin();
@@ -199,7 +199,7 @@ namespace gloox
   {
     switch( stanza->subtype() )
     {
-      case IKS_TYPE_RESULT:
+      case STANZA_IQ_RESULT:
 
         switch( context )
         {
@@ -224,7 +224,7 @@ namespace gloox
         }
         break;
 
-      case IKS_TYPE_ERROR:
+      case STANZA_IQ_ERROR:
         Tag *e = stanza->findChild( "error" );
         if( !e )
           return false;

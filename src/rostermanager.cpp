@@ -367,7 +367,7 @@ namespace gloox
     if( m_roster.find( jid ) == m_roster.end() )
       m_roster[jid] = new RosterItem( jid );
 
-    m_roster[jid]->setStatus( IKS_SHOW_UNAVAILABLE );
+    m_roster[jid]->setStatus( STANZA_PRES_UNAVAILABLE );
     m_roster[jid]->setSubscription( sub, ask );
     m_roster[jid]->setGroups( groups );
   }
