@@ -1,8 +1,8 @@
-#include "gloox/client.h"
-#include "gloox/connectionlistener.h"
-#include "gloox/discohandler.h"
-#include "gloox/disco.h"
-#include "gloox/privatexml.h"
+#include "../client.h"
+#include "../connectionlistener.h"
+#include "../discohandler.h"
+#include "../disco.h"
+#include "../privatexml.h"
 using namespace gloox;
 
 #include <stdio.h>
@@ -62,7 +62,11 @@ class PrivateXMLTest : public PrivateXMLHandler, ConnectionListener
       Tag *b = new Tag( "blah", id );
       x->addChild( b );
       p->storeXML( x, "http://camaya.net/jabber/test" );
-    }
+    };
+
+    virtual void handlePrivateXMLResult( const std::string uid, PrivateXMLResult result )
+    {
+    };
 
   private:
     Client *j;

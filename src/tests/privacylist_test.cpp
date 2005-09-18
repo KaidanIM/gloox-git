@@ -1,8 +1,8 @@
-#include "gloox/client.h"
-#include "gloox/connectionlistener.h"
-#include "gloox/privacylisthandler.h"
-#include "gloox/disco.h"
-#include "gloox/privacymanager.h"
+#include "../client.h"
+#include "../connectionlistener.h"
+#include "../privacylisthandler.h"
+#include "../disco.h"
+#include "../privacymanager.h"
 using namespace gloox;
 
 #include <stdio.h>
