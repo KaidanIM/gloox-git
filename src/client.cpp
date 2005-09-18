@@ -20,8 +20,6 @@
 #include "tag.h"
 #include "stanza.h"
 
-#include <iksemel.h>
-
 #include <unistd.h>
 #include <iostream>
 
