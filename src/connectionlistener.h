@@ -14,8 +14,6 @@
 #ifndef CONNECTIONLISTENER_H__
 #define CONNECTIONLISTENER_H__
 
-#include <iksemel.h>
-
 namespace gloox
 {
 
