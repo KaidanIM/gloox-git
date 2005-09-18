@@ -53,16 +53,18 @@ namespace gloox
        * Use this function to request the private XML stored in the given namespace.
        * @param tag Child element of the query element used to identify the requested XML fragment.
        * @param xmlns The namespace which qualifies the tag.
+       * @return The ID of the sent query.
        */
-      void requestXML( const std::string& tag, const std::string& xmlns );
+      std::string requestXML( const std::string& tag, const std::string& xmlns );
 
       /**
        * Use this function to store private XML stored in the given namespace.
        * @param tag The XML to store. This is the complete tag including the unique namespace.
        * It is deleted after sending it.
        * @param xmlns The namespace again, in which the element @c is stored.
+       * @return The ID of the sent query.
        */
-      void storeXML( Tag *tag, const std::string& xmlns );
+      std::string storeXML( Tag *tag, const std::string& xmlns );
 
       /**
        * Use this function to register an object that shall receive incoming Private XML packets.

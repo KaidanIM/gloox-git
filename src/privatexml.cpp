@@ -33,7 +33,7 @@ namespace gloox
     m_privateXMLHandlers.clear();
   }
 
-  void PrivateXML::requestXML( const std::string& tag, const std::string& xmlns )
+  std::string PrivateXML::requestXML( const std::string& tag, const std::string& xmlns )
   {
     const std::string id = m_parent->getID();
 
@@ -49,9 +49,11 @@ namespace gloox
 
     m_parent->trackID( this, id, REQUEST_XML );
     m_parent->send( iq );
+
+    return id;
   }
 
-  void PrivateXML::storeXML( Tag *tag, const std::string& xmlns )
+  std::string PrivateXML::storeXML( Tag *tag, const std::string& xmlns )
   {
     const std::string id = m_parent->getID();
 
@@ -65,6 +67,8 @@ namespace gloox
 
     m_parent->trackID( this, id, STORE_XML );
     m_parent->send( iq );
+
+    return id;
   }
 
   bool PrivateXML::handleIq( Stanza *stanza )
@@ -74,39 +78,72 @@ namespace gloox
 
   bool PrivateXML::handleIqID( Stanza *stanza, int context )
   {
-    if( stanza->subtype() == STANZA_IQ_RESULT )
+    Tag *q = stanza->findChild( "query" );
+    Tag::TagList l = q->children();
+    Tag::TagList::const_iterator it = l.begin();
+    if( it != l.end() )
     {
-      switch( context )
+      Tag *tag = (*it);
+      const std::string xmlns = tag->findAttribute( "xmlns" );
+
+      switch( stanza->subtype() )
       {
-        case REQUEST_XML:
+        case STANZA_IQ_RESULT:
         {
-          Tag *q = stanza->findChild( "query" );
-          Tag::TagList l = q->children();
-          Tag::TagList::const_iterator it = l.begin();
-          if( it != l.end() )
+          switch( context )
           {
-            Tag *tag = (*it);
-            const std::string xmlns = tag->findAttribute( "xmlns" );
-            PrivateXMLHandlers::const_iterator pi = m_privateXMLHandlers.find( xmlns );
-            if( ( pi != m_privateXMLHandlers.end() ) && ( tag->name() == (*pi).second.tag ) )
+            case REQUEST_XML:
             {
-              (*pi).second.pxh->handlePrivateXML( tag->name(), xmlns, tag );
+              PrivateXMLHandlers::const_iterator pi = m_privateXMLHandlers.find( xmlns );
+              if( ( pi != m_privateXMLHandlers.end() ) && ( tag->name() == (*pi).second.tag ) )
+              {
+                (*pi).second.pxh->handlePrivateXML( tag->name(), xmlns, tag );
+              }
+              break;
+            }
+
+            case STORE_XML:
+            {
+              PrivateXMLHandlers::const_iterator pi = m_privateXMLHandlers.find( xmlns );
+              if( ( pi != m_privateXMLHandlers.end() ) && ( tag->name() == (*pi).second.tag ) )
+              {
+                (*pi).second.pxh->handlePrivateXMLResult( stanza->id(), PrivateXMLHandler::PXML_STORE_OK );
+              }
+              break;
+            }
+          }
+          return true;
+          break;
+        }
+        case STANZA_IQ_ERROR:
+        {
+          switch( context )
+          {
+            case REQUEST_XML:
+            {
+              PrivateXMLHandlers::const_iterator pi = m_privateXMLHandlers.find( xmlns );
+              if( ( pi != m_privateXMLHandlers.end() ) && ( tag->name() == (*pi).second.tag ) )
+              {
+                (*pi).second.pxh->handlePrivateXMLResult( stanza->id(),
+                                                          PrivateXMLHandler::PXML_REQUEST_ERROR );
+              }
+              break;
+            }
+
+            case STORE_XML:
+            {
+              PrivateXMLHandlers::const_iterator pi = m_privateXMLHandlers.find( xmlns );
+              if( ( pi != m_privateXMLHandlers.end() ) && ( tag->name() == (*pi).second.tag ) )
+              {
+                (*pi).second.pxh->handlePrivateXMLResult( stanza->id(), PrivateXMLHandler::PXML_STORE_ERROR );
+              }
+              break;
             }
           }
           break;
         }
-
-        case STORE_XML:
-          break;
       }
-
-      return true;
     }
-    else if( stanza->subtype() == STANZA_IQ_ERROR )
-    {
-      return false;
-    }
-
     return false;
   }
 
