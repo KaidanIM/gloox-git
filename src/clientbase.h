@@ -194,13 +194,7 @@ namespace gloox
        * Sends a given Tag over an established connection.
        * @param tag The Tag to send.
        */
-      void send( Tag *tag );
-
-      /**
-       * Sends a given string over an established connection.
-       * @param xml The string to send.
-       */
-      void send( const std::string& xml );
+      virtual void send( Tag *tag );
 
       /**
        * Returns whether authentication has taken place and was successful.
@@ -437,6 +431,7 @@ namespace gloox
       void notifyOnDisconnect( ConnectionError e );
       void filter( NodeType type, Stanza *stanza );
       void logEvent( const char *data, size_t size, int is_incoming );
+      void send( const std::string& xml );
 
       struct TrackStruct
       {
