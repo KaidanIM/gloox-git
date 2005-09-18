@@ -110,7 +110,16 @@ namespace gloox
        * @param compression Whether to enable or disable stream compression.
        * @return Returns @b true if compression was successfully enabled, @b false otherwise.
        */
-       bool setCompression( bool compression );
+       void setCompression( bool compression );
+
+      /**
+       * In case Zlib is available, this function is used to init or de-init stream compression
+       * as defined in JEP-0138. You must call this before enabling compression using setCompression().
+       * @param compression Whether to init (@b true) or de-init (@b false) stream compression.
+       * @return Returns @b true if compression was successfully initialized/de-initialized,
+       * @b false otherwise.
+       */
+       bool initCompression( bool init );
 #endif
 
 #ifdef HAVE_GNUTLS
@@ -164,10 +173,12 @@ namespace gloox
       std::string m_server;
       int m_port;
       int m_socket;
+      int m_compCount;
+      int m_dataCount;
       bool m_cancel;
       bool m_secure;
       bool m_compression;
-
+      bool m_compInited;
   };
 
 };

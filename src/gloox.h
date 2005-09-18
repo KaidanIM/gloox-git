@@ -196,6 +196,7 @@
 #define XMLNS_DISCO_INFO        "http://jabber.org/protocol/disco#info"
 #define XMLNS_DISCO_ITEMS       "http://jabber.org/protocol/disco#items"
 #define XMLNS_ADHOC_COMMANDS    "http://jabber.org/protocol/commands"
+#define XMLNS_COMPRESSION       "http://jabber.org/protocol/compress"
 #define XMLNS_ROSTER            "jabber:iq:roster"
 #define XMLNS_VERSION           "jabber:iq:version"
 #define XMLNS_REGISTER          "jabber:iq:register"
@@ -216,6 +217,7 @@
 #define XMLNS_STREAM_IQAUTH     "http://jabber.org/features/iq-auth"
 #define XMLNS_STREAM_IQREGISTER "http://jabber.org/features/iq-register"
 #define XMLNS_STREAM_ACK        "http://jabber.org/features/ack"
+#define XMLNS_STREAM_COMPRESS   "http://jabber.org/features/compress"
 
 #define XMPP_STREAM_VERSION_MAJOR  "1"
 #define XMPP_STREAM_VERSION_MINOR  "0"

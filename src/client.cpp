@@ -91,6 +91,14 @@ namespace gloox
       }
 #endif
 
+#ifdef HAVE_ZLIB
+      if( m_connection->initCompression( true ) && ( m_streamFeatures & STREAM_FEATURE_COMPRESS_ZLIB ) )
+      {
+        negotiateCompression( STREAM_FEATURE_COMPRESS_ZLIB );
+        return true;
+      }
+#endif
+
       if( sasl() )
       {
         if( m_authed )
@@ -170,6 +178,23 @@ namespace gloox
       disconnect( CONN_TLS_FAILED );
     }
 #endif
+#ifdef HAVE_ZLIB
+    else if( ( stanza->name() == "failure" ) && stanza->hasAttribute( "xmlns", XMLNS_STREAM_COMPRESS ) )
+    {
+#ifdef DEBUG
+      printf( "stream compression init failed...\n" );
+#endif
+      disconnect( CONN_TLS_FAILED );
+}
+    else if( ( stanza->name() == "compressed" ) && stanza->hasAttribute( "xmlns", XMLNS_STREAM_COMPRESS ) )
+    {
+#ifdef DEBUG
+      printf( "stream compression inited...\n" );
+#endif
+      m_connection->setCompression( true );
+      header();
+    }
+#endif
     else if( ( stanza->name() == "challenge" ) && stanza->hasAttribute( "xmlns", XMLNS_STREAM_SASL ) )
     {
 #ifdef DEBUG
@@ -236,6 +261,9 @@ namespace gloox
     if( stanza->hasChild( "ack", "xmlns", XMLNS_STREAM_ACK ) )
       features |= STREAM_FEATURE_ACK;
 
+    if( stanza->hasChild( "compression", "xmlns", XMLNS_STREAM_COMPRESS ) )
+      features |= getCompressionMethods( stanza->findChild( "compression" ) );
+
     if( features == 0 )
       features = STREAM_FEATURE_IQAUTH;
 
@@ -256,6 +284,16 @@ namespace gloox
       mechs |= STREAM_FEATURE_SASL_ANONYMOUS;
 
     return mechs;
+  }
+
+  int Client::getCompressionMethods( Tag *tag )
+  {
+    int meths = 0;
+
+    if( tag->hasChildWithCData( "method", "zlib" ) )
+      meths |= STREAM_FEATURE_COMPRESS_ZLIB;
+
+    return meths;
   }
 
   void Client::bindResource()
@@ -363,6 +401,23 @@ namespace gloox
         break;
       }
     }
+  }
+
+  void Client::negotiateCompression( StreamFeaturesEnum method )
+  {
+    Tag *t = new Tag( "compress" );
+    t->addAttrib( "xmlns", XMLNS_COMPRESSION );
+
+    switch( method )
+    {
+      case STREAM_FEATURE_COMPRESS_ZLIB:
+      {
+        Tag *m = new Tag( t, "method", "zlib" );
+        break;
+      }
+    }
+
+    send( t );
   }
 
   void Client::disableDisco()

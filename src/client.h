@@ -216,20 +216,23 @@ namespace gloox
         STREAM_FEATURE_SASL_DIGESTMD5   =   4, /**< The server supports SASL DIGEST-MD5 mechanism. */
         STREAM_FEATURE_SASL_PLAIN       =   8, /**< The server supports SASL PLAIN mechanism. */
         STREAM_FEATURE_SASL_ANONYMOUS   =  16, /**< The server supports SASL ANONYMOUS mechanism. */
-        STREAM_FEATURE_STARTTLS         =  32, /**< The server supports &lt;startls&gt;. */
+        STREAM_FEATURE_STARTTLS         =  32, /**< The server supports &lt;starttls&gt;. */
         STREAM_FEATURE_IQREGISTER       =  64, /**< The server supports JEP-0077 (In-Band Registration). */
         STREAM_FEATURE_IQAUTH           = 128, /**< The server supports JEP-0078 (Non-SASL Authentication). */
         STREAM_FEATURE_ACK              = 256, /**< The server supports JEPAck (experimental). */
+        STREAM_FEATURE_COMPRESS_ZLIB    = 512, /**< The server supports JEP-0138 (Stream Compression) (Zlib)*/
       };
 
       virtual void handleStartNode() {};
       virtual bool handleNormalNode( Stanza *stanza );
       int getStreamFeatures( Stanza *stanza );
       int getSaslMechs( Tag *tag );
+      int getCompressionMethods( Tag *tag );
       void processResourceBind( Stanza *stanza );
       void processCreateSession( Stanza *stanza );
       void sendInitialPresence();
       void createSession();
+      void negotiateCompression( StreamFeaturesEnum method );
       void connected();
 
       void init();
