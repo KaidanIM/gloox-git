@@ -4,7 +4,7 @@ AC_PREREQ(2.50)
 AC_INIT
 AC_CONFIG_SRCDIR([configure.ac])
 dnl Every other copy of the package version number gets its value from here
-AM_INIT_AUTOMAKE(gloox,0.1)
+AM_INIT_AUTOMAKE(gloox,0.7)
 
 dnl create a config.h file (Automake will add -DHAVE_CONFIG_H)
 AM_CONFIG_HEADER(config.h)
@@ -72,6 +72,28 @@ else
 fi
 AC_MSG_CHECKING([if GnuTLS should be used])
 AC_MSG_RESULT($gnutls)
+
+dnl Zlib
+AC_ARG_WITH(zlib, AC_HELP_STRING([--with-zlib=[DIR]],
+      [Support Stream Compression (needs Zlib)]),
+      zlib=$withval, zlib=yes)
+if test "$zlib" != "no"; then
+  if test "$zlib" != "yes"; then
+    LDFLAGS="${LDFLAGS} -L$zlib/lib"
+    CPPFLAGS="${CPPFLAGS} -I$zlib/include"
+  fi
+  AC_CHECK_HEADER(zlib.h,
+  AC_CHECK_LIB(z, zlibVersion,
+           [zlib=yes LIBS="${LIBS} -lz"], zlib=no),
+           zlib=no)
+fi
+if test "$zlib" != "no" ; then
+  AC_DEFINE(HAVE_ZLIB, 1, [Define to 1 if you want Stream Compression support.])
+else
+  AC_MSG_WARN([Zlib not found])
+fi
+AC_MSG_CHECKING([if Zlib should be used])
+AC_MSG_RESULT($zlib)
 
 dnl Debug
 AC_ARG_WITH(debug, AC_HELP_STRING([--enable-debug=[yes|no]],
