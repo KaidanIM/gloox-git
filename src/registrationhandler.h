@@ -15,8 +15,6 @@
 #ifndef REGISTRATIONHANDLER_H__
 #define REGISTRATIONHANDLER_H__
 
-#include <iksemel.h>
-
 #include <string>
 
 namespace gloox
