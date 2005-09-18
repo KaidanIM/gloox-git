@@ -25,6 +25,10 @@
 #include <gnutls/x509.h>
 #endif
 
+#ifdef HAVE_ZLIB
+#include <zlib.h>
+#endif
+
 namespace gloox
 {
 
@@ -99,6 +103,16 @@ namespace gloox
        */
       ConnectionState state() const { return m_state; };
 
+#ifdef HAVE_ZLIB
+      /**
+       * In case Zlib is available, this function can be used to enable stream compression
+       * as defined in JEP-0138.
+       * @param compression Whether to enable or disable stream compression.
+       * @return Returns @b true if compression was successfully enabled, @b false otherwise.
+       */
+       bool setCompression( bool compression );
+#endif
+
 #ifdef HAVE_GNUTLS
       /**
        * Call this function to start a TLS handshake over an established connection.
@@ -123,6 +137,13 @@ namespace gloox
       void cancel();
       void cleanup();
 
+#ifdef HAVE_ZLIB
+      std::string compress( const std::string& data );
+      std::string decompress( const std::string& data );
+      z_stream m_zdeflate;
+      z_stream m_zinflate;
+#endif
+
 #ifdef HAVE_GNUTLS
       bool verifyAgainstCAs( gnutls_x509_crt_t cert, gnutls_x509_crt_t *CAList, int CAListSize );
       bool verifyAgainst( gnutls_x509_crt_t cert, gnutls_x509_crt_t issuer );
@@ -145,6 +166,7 @@ namespace gloox
       int m_socket;
       bool m_cancel;
       bool m_secure;
+      bool m_compression;
 
   };
 
