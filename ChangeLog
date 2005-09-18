@@ -1,12 +1,27 @@
+v0.7 -- xx Sep 2005
+-------------------
+- made void send( const std::string& ) private
+- made void send( Tag* ) virtual
+- JEP-0138 (Stream Compression)
 
-v0.6 -- xx yyy 2005
+
+v0.6.1 -- 18 Sep 2005
+-------------------
+- fixed Makefile.ams for make distcheck
+- removal of unused iksemel types and includes
+
+
+v0.6 -- 02 Sep 2005
 -------------------
 - more namespace checking
-- extraction of application-specific error condition element of stream errors
-- JEP-0012 (Last Activity)
-- a couple of small fixes from Konstantin Klyagin
+- extraction of application-specific error condition element of stream & stanza errors
+- SASL Anonymous mechanism
+- JEP-0012 (Last Activity) (experimental)
+- fixes for a couple of small problems reported by Konstantin Klyagin
 - made checkStreamVersion() a protected virtual
-
+- extensive doc update: mainpage
+- added 'from' attribute to presence stanzas (seems necessary under some circumstances, reported by Johan Bondeson)
+- disabled sending of ack'ing 'subscribe'/'unsubscribe' in response to 'subscribed'/'unsubscribed' due to problems with jabberd2
 
 
 v0.5 -- 28 Aug 2005
@@ -25,7 +40,6 @@ v0.5 -- 28 Aug 2005
 - correctly detect availability presence
 - take autoPresence etc. into account when doing non-SASL auth
 - in the JEP-0092 (Software Version) implementation: OS support, create a valid 'result' type of packet
-
 
 
 v0.4.1 -- 25 Aug 2005
