@@ -25,9 +25,17 @@ AM_PROG_LIBTOOL
 
 dnl Checks for libraries.
 
-PKG_CHECK_MODULES(IKSEMEL,iksemel >= 1.2,,exit)
-AC_SUBST(IKSEMEL_CFLAGS)
-AC_SUBST(IKSEMEL_LIBS)
+dnl Iksemel
+AC_CHECK_HEADER(iksemel.h,
+AC_CHECK_LIB(iksemel, iks_has_tls,
+         [libiksemel=yes LIBS="${LIBS} -liksemel"], libiksemel=no),
+         libiksemel=no)
+if test "$libiksemel" == "no" ; then
+  AC_MSG_ERROR([Libiksemel not found])
+fi
+AC_MSG_CHECKING([if Libiksemel is present])
+AC_MSG_RESULT($libiksemel)
+
 
 dnl Libidn
 AC_ARG_WITH(libidn, AC_HELP_STRING([--with-libidn=[DIR]],
