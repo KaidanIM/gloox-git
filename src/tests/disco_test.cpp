@@ -1,9 +1,9 @@
-#include "gloox/client.h"
-#include "gloox/connectionlistener.h"
-#include "gloox/discohandler.h"
-#include "gloox/disco.h"
-#include "gloox/stanza.h"
-#include "gloox/gloox.h"
+#include "../client.h"
+#include "../connectionlistener.h"
+#include "../discohandler.h"
+#include "../disco.h"
+#include "../stanza.h"
+#include "../gloox.h"
 using namespace gloox;
 
 #include <stdio.h>

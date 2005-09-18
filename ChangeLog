@@ -1,5 +1,10 @@
 
-v0.6 -- xx yyy 2005
+v0.6.1 -- 18 Sep 2005
+-------------------
+- fixed Makefile.ams for make distcheck
+
+
+v0.6 -- 02 Sep 2005
 -------------------
 - more namespace checking
 - extraction of application-specific error condition element of stream errors

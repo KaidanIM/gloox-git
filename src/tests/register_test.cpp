@@ -1,6 +1,6 @@
-#include "gloox/client.h"
-#include "gloox/connectionlistener.h"
-#include "gloox/registration.h"
+#include "../client.h"
+#include "../connectionlistener.h"
+#include "../registration.h"
 using namespace gloox;
 
 #include <stdio.h>

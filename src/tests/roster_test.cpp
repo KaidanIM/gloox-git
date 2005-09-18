@@ -1,8 +1,8 @@
-#include "gloox/client.h"
-#include "gloox/connectionlistener.h"
-#include "gloox/discohandler.h"
-#include "gloox/disco.h"
-#include "gloox/rostermanager.h"
+#include "../client.h"
+#include "../connectionlistener.h"
+#include "../discohandler.h"
+#include "../disco.h"
+#include "../rostermanager.h"
 using namespace gloox;
 
 #include <stdio.h>
@@ -108,7 +108,7 @@ class RosterTest : public RosterListener, ConnectionListener
     {
       printf( "subscription: %s\n", jid.c_str() );
       StringList groups;
-      j->rosterManager()->subscribe( jid, "", groups );
+      j->rosterManager()->subscribe( jid, "", groups, "" );
       return true;
     }
 

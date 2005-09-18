@@ -1,7 +1,7 @@
-#include "gloox/component.h"
-#include "gloox/connectionlistener.h"
-#include "gloox/discohandler.h"
-#include "gloox/disco.h"
+#include "../component.h"
+#include "../connectionlistener.h"
+#include "../discohandler.h"
+#include "../disco.h"
 using namespace gloox;
 
 #include <stdio.h>
