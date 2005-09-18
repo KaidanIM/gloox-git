@@ -2,6 +2,8 @@
 ## Process this file with automake to produce Makefile.in
 ##
 
+SUBDIRS = . tests
+
 AM_CPPFLAGS = -g3 -fno-inline
 
 lib_LTLIBRARIES = libgloox.la
@@ -11,8 +13,8 @@ libgloox_la_SOURCES = jid.cpp parser.cpp connection.cpp clientbase.cpp tag.cpp s
 			disco.cpp adhoc.cpp privatexml.cpp registration.cpp \
 			nonsaslauth.cpp rosteritem.cpp rostermanager.cpp privacyitem.cpp \
 			bookmarkstorage.cpp annotations.cpp privacymanager.cpp lastactivity.cpp
-libgloox_la_LDFLAGS = -version-info 0:5:0 -no-undefined -no-allow-shlib-undefined
-libgloox_la_LIBADD = $(IKSEMEL_LIBS) -lm -lresolv
+libgloox_la_LDFLAGS = -version-info 0:7:0 -no-undefined -no-allow-shlib-undefined
+libgloox_la_LIBADD = $(IKSEMEL_LIBS) -lm -lresolv -lz
 libgloox_la_CFLAGS = $(CPPFLAGS) $(IKSEMEL_CFLAGS)
 
 libglooxincludedir = $(includedir)/gloox
@@ -27,4 +29,6 @@ libglooxinclude_HEADERS = adhoccommandprovider.h  privacymanager.h      tag.h \
 			  disco.h                 presencehandler.h     subscriptionhandler.h \
 			  discohandler.h          privacyitem.h         stanza.h\
 			  disconodehandler.h      privacylisthandler.h  loghandler.h \
-			  lastactivity.h
+			  lastactivity.h          lastactivityhandler.h
+
+noinst_HEADERS = prep.h parser.h connection.h dns.h nonsaslauth.h
