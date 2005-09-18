@@ -3,7 +3,7 @@ v0.7 -- xx Sep 2005
 - made void send( const std::string& ) private
 - made void send( Tag* ) virtual
 - JEP-0138 (Stream Compression)
-
+- removed pkg-config dependency (in check for iksemel)
 
 v0.6.1 -- 18 Sep 2005
 -------------------
