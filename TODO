@@ -5,8 +5,7 @@ Todo
 - introduce some 'randomness' for IDs
 - introduce return values for *Handlers to indicate whether following handlers should be invoked as well
 - sort SRV records by weight & cost
-- check whether for and iterators can be replaced by find
-- use struct/class(?) for version and identity info
+- thread-safety
 
 
 In the pipe
@@ -14,5 +13,6 @@ In the pipe
 
 - complete error handling for all protocols
 - add classes for common packet types
-- IQ error handling in Annotations class
-- application specific error conditions in stanza errors
+- finish IQ error handling in PrivateXML class
+- JEP-0138 (Stream Compression)
+- windows port
