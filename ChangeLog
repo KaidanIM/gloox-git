@@ -2,6 +2,7 @@
 v0.6.1 -- 18 Sep 2005
 -------------------
 - fixed Makefile.ams for make distcheck
+- removal of unused iksemel types and includes
 
 
 v0.6 -- 02 Sep 2005
