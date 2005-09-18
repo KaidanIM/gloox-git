@@ -4,7 +4,7 @@
 
 AM_CPPFLAGS = -g3 -fno-inline
 
-noinst_PROGRAMS = register_test disco_test adhoc_test roster_test privatexml_test component_test bookmarkstorage_test annotations_test privacylist_test message_test
+noinst_PROGRAMS = register_test disco_test adhoc_test roster_test privatexml_test component_test bookmarkstorage_test annotations_test privacylist_test message_test zlib_test
 
 register_test_SOURCES = register_test.cpp
 register_test_LDADD = ../libgloox.la
@@ -45,3 +45,7 @@ privacylist_test_CFLAGS = $(CPPFLAGS)
 message_test_SOURCES = message_test.cpp
 message_test_LDADD = ../libgloox.la
 message_test_CFLAGS = $(CPPFLAGS)
+
+zlib_test_SOURCES = zlib_test.cpp
+zlib_test_LDADD = -lz
+zlib_test_CFLAGS = $(CPPFLAGS)
