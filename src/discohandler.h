@@ -32,36 +32,35 @@ namespace gloox
       /**
        * Reimplement this function if you want to be notified about the result
        * of an disco#info query.
-       * @param id The id of the result. Corresponds to the id of the sent query.
        * @param stanza The full Stanza.
+       * @param context A context identifier.
        * @todo Replace the stanza with decoded values.
        */
-      virtual void handleDiscoInfoResult( Stanza *stanza ) {};
+      virtual void handleDiscoInfoResult( Stanza *stanza, int context ) {};
 
       /**
        * Reimplement this function if you want to be notified about the result
        * of an disco#items query.
-       * @param id The id of the result. Corresponds to the id of the sent query.
        * @param stanza The full Stanza.
+       * @param context A context identifier.
        * @todo Replace the stanza with decoded values.
        */
-      virtual void handleDiscoItemsResult( Stanza *stanza ) {};
+      virtual void handleDiscoItemsResult( Stanza *stanza, int context ) {};
 
       /**
        * Reimplement this function to receive disco error notifications.
-       * @param error The type of the error as returned by the server.
        * @param stanza The full Stanza.
+       * @param context A context identifier.
        */
-      virtual void handleDiscoError( StanzaError error, Stanza *stanza ) {};
+      virtual void handleDiscoError( Stanza *stanza, int context ) {};
 
       /**
        * Reimplement this function to receive notifications about incoming IQ
        * stanzas of type 'set' in the disco namespace.
-       * @param id The id of the incoming query.
        * @param stanza The full Stanza.
        * @todo Replace the stanza with decoded values.
        */
-      virtual bool handleDiscoSet( const std::string& id, Stanza *stanza ) { return false; };
+      virtual bool handleDiscoSet( Stanza *stanza ) { return false; };
 
   };
 
