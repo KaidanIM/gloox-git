@@ -40,7 +40,7 @@ namespace gloox
        * @param node The node this handler is supposed to handle.
        * @return A list of features supported by this node.
        */
-      virtual StringList handleDiscoNodeFeatures( const std::string& node ) {};
+      virtual StringList handleDiscoNodeFeatures( const std::string& node ) = 0;
 
       /**
        * In addition to @c handleDiscoNodeFeatures, this function is used to gather
@@ -52,7 +52,7 @@ namespace gloox
        * @return A map of identities for the given node. The first string is the
        * category specifier, the second string is the type specifier.
        */
-      virtual StringMap handleDiscoNodeIdentities( const std::string& node, std::string& name ) {};
+      virtual StringMap handleDiscoNodeIdentities( const std::string& node, std::string& name ) = 0;
 
       /**
        * This function is used to gather more information on a specific node.
@@ -63,7 +63,7 @@ namespace gloox
        * @return A map of items supported by this node. The first string is the item's node
        * specifier, the second string is the items natural-language name.
        */
-      virtual StringMap handleDiscoNodeItems( const std::string& node = "" ) {};
+      virtual StringMap handleDiscoNodeItems( const std::string& node = "" ) = 0;
 
   };
 
