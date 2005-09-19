@@ -196,10 +196,10 @@ namespace gloox
           switch( context )
           {
             case GET_DISCO_INFO:
-              (*it).second->handleDiscoInfoResult( stanza->id(), stanza );
+              (*it).second->handleDiscoInfoResult( stanza );
               break;
             case GET_DISCO_ITEMS:
-              (*it).second->handleDiscoItemsResult( stanza->id(), stanza );
+              (*it).second->handleDiscoItemsResult( stanza );
               break;
            }
         break;
