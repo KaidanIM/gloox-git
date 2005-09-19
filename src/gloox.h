@@ -197,6 +197,7 @@
 #define XMLNS_DISCO_ITEMS       "http://jabber.org/protocol/disco#items"
 #define XMLNS_ADHOC_COMMANDS    "http://jabber.org/protocol/commands"
 #define XMLNS_COMPRESSION       "http://jabber.org/protocol/compress"
+#define XMLNS_OFFLINE           "http://jabber.org/protocol/offline"
 #define XMLNS_ROSTER            "jabber:iq:roster"
 #define XMLNS_VERSION           "jabber:iq:version"
 #define XMLNS_REGISTER          "jabber:iq:register"
