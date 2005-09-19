@@ -22,10 +22,8 @@ namespace gloox
 {
 
   /**
-   * A virtual interface.
-   * A class implementing this interface and being registered as DiscoHandler with the Disco
-   * object receives the results of sent disco queries.
-   * Only one DiscoHandler at a time per Disco object is possible.
+   * A virtual interface that enables objects to receive Service Discovery (JEP-0030) events.
+   * A class implementing this interface can receives the results of sent disco queries.
    * @author Jakob Schroeter <js@camaya.net>
    */
   class DiscoHandler
@@ -51,10 +49,10 @@ namespace gloox
 
       /**
        * Reimplement this function to receive disco error notifications.
-       * @param id The id of the result. Corresponds to the id of the sent query.
        * @param error The type of the error as returned by the server.
+       * @param stanza The full Stanza.
        */
-      virtual void handleDiscoError( const std::string& id, const std::string& error ) {};
+      virtual void handleDiscoError( StanzaError error, Stanza *stanza ) {};
 
       /**
        * Reimplement this function to receive notifications about incoming IQ

@@ -187,44 +187,27 @@ namespace gloox
 
   bool Disco::handleIqID( Stanza *stanza, int context )
   {
-    switch( stanza->subtype() )
+    DiscoHandlerMap::const_iterator it = m_track.find( stanza->id() );
+    if( it != m_track.end() )
     {
-      case STANZA_IQ_RESULT:
-
-        switch( context )
-        {
-          case GET_DISCO_INFO:
+      switch( stanza->subtype() )
+      {
+        case STANZA_IQ_RESULT:
+          switch( context )
           {
-            DiscoHandlerList::const_iterator it = m_discoHandlers.begin();
-            for( it; it != m_discoHandlers.end(); it++ )
-            {
-              (*it)->handleDiscoInfoResult( stanza->id(), stanza );
-            }
-            break;
-          }
-          case GET_DISCO_ITEMS:
-          {
-            DiscoHandlerList::const_iterator it = m_discoHandlers.begin();
-            for( it; it != m_discoHandlers.end(); it++ )
-            {
-              (*it)->handleDiscoItemsResult( stanza->id(), stanza );
-            }
-            break;
-          }
-        }
+            case GET_DISCO_INFO:
+              (*it).second->handleDiscoInfoResult( stanza->id(), stanza );
+              break;
+            case GET_DISCO_ITEMS:
+              (*it).second->handleDiscoItemsResult( stanza->id(), stanza );
+              break;
+           }
         break;
 
-      case STANZA_IQ_ERROR:
-        Tag *e = stanza->findChild( "error" );
-        if( !e )
-          return false;
-
-        DiscoHandlerList::const_iterator it = m_discoHandlers.begin();
-        for( it; it != m_discoHandlers.end(); it++ )
-        {
-          (*it)->handleDiscoError( stanza->id(), e->name() );
-        }
-        break;
+        case STANZA_IQ_ERROR:
+          (*it).second->handleDiscoError( stanza->error(), stanza );
+          break;
+      }
     }
 
     return false;
@@ -235,7 +218,7 @@ namespace gloox
     m_features.push_back( feature );
   }
 
-  void Disco::getDiscoInfo( const std::string& to )
+  void Disco::getDiscoInfo( const std::string& to, DiscoHandler *dh )
   {
     std::string id = m_parent->getID();
 
@@ -247,11 +230,12 @@ namespace gloox
     Tag *q = new Tag( iq, "query" );
     q->addAttrib( "xmlns", XMLNS_DISCO_INFO );
 
+    m_track[id] = dh;
     m_parent->trackID( this, id, GET_DISCO_INFO );
     m_parent->send( iq );
   }
 
-  void Disco::getDiscoItems( const std::string& to )
+  void Disco::getDiscoItems( const std::string& to, DiscoHandler *dh )
   {
     std::string id = m_parent->getID();
 
@@ -263,6 +247,7 @@ namespace gloox
     Tag *q = new Tag( iq, "query" );
     q->addAttrib( "xmlns", XMLNS_DISCO_ITEMS );
 
+    m_track[id] = dh;
     m_parent->trackID( this, id, GET_DISCO_INFO );
     m_parent->send( iq );
   }
