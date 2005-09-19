@@ -73,10 +73,11 @@ namespace gloox
        * JEP-0030 (Service Discovery).
        * To receive the results inherit from DiscoHandler and register with the Disco object.
        * @param to The destination-JID of the query.
+       * @param node An optional node to query. Not inserted if empty.
        * @param dh The DiscoHandler to notify about results.
        * @param context A context identifier.
        */
-      void getDiscoInfo( const std::string& to, DiscoHandler *dh, int context );
+      void getDiscoInfo( const std::string& to, const std::string& node, DiscoHandler *dh, int context );
 
       /**
        * Queries the given JID for its items according to

@@ -218,7 +218,7 @@ namespace gloox
     m_features.push_back( feature );
   }
 
-  void Disco::getDiscoInfo( const std::string& to, DiscoHandler *dh, int context )
+  void Disco::getDiscoInfo( const std::string& to, const std::string& node, DiscoHandler *dh, int context )
   {
     std::string id = m_parent->getID();
 
@@ -229,6 +229,8 @@ namespace gloox
     iq->addAttrib( "type", "get" );
     Tag *q = new Tag( iq, "query" );
     q->addAttrib( "xmlns", XMLNS_DISCO_INFO );
+    if( !node.empty() )
+      q->addAttrib( "node", node );
 
     DiscoHandlerContext ct;
     ct.dh = dh;
