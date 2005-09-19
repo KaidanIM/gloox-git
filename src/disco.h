@@ -73,16 +73,18 @@ namespace gloox
        * JEP-0030 (Service Discovery).
        * To receive the results inherit from DiscoHandler and register with the Disco object.
        * @param to The destination-JID of the query.
+       * @param dh The DiscoHandler to notify about results.
        */
-      void getDiscoInfo( const std::string& to );
+      void getDiscoInfo( const std::string& to, DiscoHandler *dh );
 
       /**
        * Queries the given JID for its items according to
        * JEP-0030 (Service Discovery).
        * To receive the results inherit from DiscoHandler and register with the Disco object.
        * @param to The destination-JID of the query.
+       * @param dh The DiscoHandler to notify about results.
        */
-      void getDiscoItems( const std::string& to );
+      void getDiscoItems( const std::string& to, DiscoHandler *dh );
 
       /**
        * Sets the version of the host application using this library.
@@ -107,7 +109,8 @@ namespace gloox
 
       /**
        * Use this function to register an @ref DiscoHandler with the Disco
-       * object. The DiscoHandler will receive the results of disco queries.
+       * object. This is only necessary if you want to receive Disco-set requests. Else
+       * a one-time registration happens when calling getDiscoInfo() and getDiscoItems(), respectively.
        * @param dh The DiscoHandler-derived object to register.
        */
       void registerDiscoHandler( DiscoHandler *dh );
@@ -151,10 +154,12 @@ namespace gloox
 
       typedef std::list<DiscoHandler*>                  DiscoHandlerList;
       typedef std::map<std::string, DiscoNodeHandler*>  DiscoNodeHandlerMap;
+      typedef std::map<std::string, DiscoHandler*>      DiscoHandlerMap;
       typedef std::list<DiscoItem*>                     ItemList;
 
       DiscoHandlerList m_discoHandlers;
       DiscoNodeHandlerMap m_nodeHandlers;
+      DiscoHandlerMap m_track;
       ItemList m_items;
       StringList m_features;
       StringMap  m_queryIDs;
