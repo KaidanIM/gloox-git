@@ -206,6 +206,7 @@
 #define XMLNS_PRIVATE_XML       "jabber:iq:private"
 #define XMLNS_ROSTER            "jabber:iq:roster"
 #define XMLNS_LAST              "jabber:iq:last"
+#define XMLNS_DATA_FORMS        "jabber:x:data"
 #define XMLNS_BOOKMARKS         "storage:bookmarks"
 #define XMLNS_ANNOTATIONS       "storage:rosternotes"
 
