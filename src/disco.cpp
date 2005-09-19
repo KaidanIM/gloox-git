@@ -56,15 +56,12 @@ namespace gloox
           iq->addAttrib( "from", m_parent->jid().full() );
           iq->addAttrib( "to", stanza->from().full() );
           iq->addAttrib( "type", "result" );
-          Tag *query = new Tag( "query" );
+          Tag *query = new Tag( iq, "query" );
           query->addAttrib( "xmlns", XMLNS_VERSION );
-          Tag *name = new Tag( "name", m_versionName );
-          Tag *version = new Tag( "version", m_versionVersion );
-          Tag *os = new Tag( "os", m_versionOs );
-          query->addChild( name );
-          query->addChild( version );
-          query->addChild( os );
-          iq->addChild( query );
+          Tag *name = new Tag( query, "name", m_versionName );
+          Tag *version = new Tag( query, "version", m_versionVersion );
+          Tag *os = new Tag( query, "os", m_versionOs );
+
           m_parent->send( iq );
         }
         else if( stanza->xmlns() == XMLNS_DISCO_INFO )
@@ -74,8 +71,7 @@ namespace gloox
           iq->addAttrib( "from", m_parent->jid().full() );
           iq->addAttrib( "to", stanza->from().full() );
           iq->addAttrib( "type", "result" );
-          Tag *query = new Tag( "query" );
-          iq->addChild( query );
+          Tag *query = new Tag( iq, "query" );
           query->addAttrib( "xmlns", XMLNS_DISCO_INFO );
 
           Tag *q = stanza->findChild( "query" );
@@ -91,36 +87,32 @@ namespace gloox
               StringMap::const_iterator im = identities.begin();
               for( im; im != identities.end(); im++ )
               {
-                Tag *i = new Tag( "identity" );
+                Tag *i = new Tag( query, "identity" );
                 i->addAttrib( "category", (*im).first );
                 i->addAttrib( "type", (*im).second );
                 i->addAttrib( "name", name );
-                query->addChild( i );
               }
               StringList features = (*it).second->handleDiscoNodeFeatures( node );
               StringList::const_iterator fi = features.begin();
               for( fi; fi != features.end(); fi++ )
               {
-                Tag *f = new Tag( "feature" );
+                Tag *f = new Tag( query, "feature" );
                 f->addAttrib( "var", (*fi) );
-                query->addChild( f );
               }
             }
           }
           else
           {
-            Tag *i = new Tag( "identity" );
+            Tag *i = new Tag( query, "identity" );
             i->addAttrib( "category", m_identityCategory );
             i->addAttrib( "type", m_identityType );
             i->addAttrib( "name", m_versionName );
-            query->addChild( i );
 
             StringList::const_iterator it = m_features.begin();
             for( it; it != m_features.end(); ++it )
             {
-              Tag *f = new Tag( "feature" );
+              Tag *f = new Tag( query, "feature" );
               f->addAttrib( "var", (*it).c_str() );
-              query->addChild( f );
             }
           }
 
@@ -133,7 +125,7 @@ namespace gloox
           iq->addAttrib( "to", stanza->from().full() );
           iq->addAttrib( "from", m_parent->jid().full() );
           iq->addAttrib( "type", "result" );
-          Tag *query = new Tag( "query" );
+          Tag *query = new Tag( iq, "query" );
           query->addAttrib( "xmlns", XMLNS_DISCO_ITEMS );
 
           StringMap items;
@@ -164,16 +156,14 @@ namespace gloox
             {
               if( !(*it).first.empty() && !(*it).second.empty() )
               {
-                Tag *i = new Tag( "item" );
+                Tag *i = new Tag( query, "item" );
                 i->addAttrib( "jid",  m_parent->jid().full() );
                 i->addAttrib( "node", (*it).first );
                 i->addAttrib( "name", (*it).second );
-                query->addChild( i );
               }
             }
           }
 
-          iq->addChild( query );
           m_parent->send( iq );
         }
         return true;
@@ -254,9 +244,8 @@ namespace gloox
     iq->addAttrib( "to", to );
     iq->addAttrib( "from", m_parent->jid().full() );
     iq->addAttrib( "type", "get" );
-    Tag *q = new Tag( "query" );
+    Tag *q = new Tag( iq, "query" );
     q->addAttrib( "xmlns", XMLNS_DISCO_INFO );
-    iq->addChild( q );
 
     m_parent->trackID( this, id, GET_DISCO_INFO );
     m_parent->send( iq );
@@ -271,9 +260,8 @@ namespace gloox
     iq->addAttrib( "to", to );
     iq->addAttrib( "from", m_parent->jid().full() );
     iq->addAttrib( "type", "get" );
-    Tag *q = new Tag( "query" );
+    Tag *q = new Tag( iq, "query" );
     q->addAttrib( "xmlns", XMLNS_DISCO_ITEMS );
-    iq->addChild( q );
 
     m_parent->trackID( this, id, GET_DISCO_INFO );
     m_parent->send( iq );
