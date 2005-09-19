@@ -74,8 +74,9 @@ namespace gloox
        * To receive the results inherit from DiscoHandler and register with the Disco object.
        * @param to The destination-JID of the query.
        * @param dh The DiscoHandler to notify about results.
+       * @param context A context identifier.
        */
-      void getDiscoInfo( const std::string& to, DiscoHandler *dh );
+      void getDiscoInfo( const std::string& to, DiscoHandler *dh, int context );
 
       /**
        * Queries the given JID for its items according to
@@ -83,8 +84,9 @@ namespace gloox
        * To receive the results inherit from DiscoHandler and register with the Disco object.
        * @param to The destination-JID of the query.
        * @param dh The DiscoHandler to notify about results.
+       * @param context A context identifier.
        */
-      void getDiscoItems( const std::string& to, DiscoHandler *dh );
+      void getDiscoItems( const std::string& to, DiscoHandler *dh, int context );
 
       /**
        * Sets the version of the host application using this library.
@@ -150,12 +152,18 @@ namespace gloox
         GET_DISCO_ITEMS
       };
 
+      struct DiscoHandlerContext
+      {
+        DiscoHandler *dh;
+        int context;
+      };
+
       ClientBase *m_parent;
 
-      typedef std::list<DiscoHandler*>                  DiscoHandlerList;
-      typedef std::map<std::string, DiscoNodeHandler*>  DiscoNodeHandlerMap;
-      typedef std::map<std::string, DiscoHandler*>      DiscoHandlerMap;
-      typedef std::list<DiscoItem*>                     ItemList;
+      typedef std::list<DiscoHandler*>                   DiscoHandlerList;
+      typedef std::map<std::string, DiscoNodeHandler*>   DiscoNodeHandlerMap;
+      typedef std::map<std::string, DiscoHandlerContext> DiscoHandlerMap;
+      typedef std::list<DiscoItem*>                      ItemList;
 
       DiscoHandlerList m_discoHandlers;
       DiscoNodeHandlerMap m_nodeHandlers;

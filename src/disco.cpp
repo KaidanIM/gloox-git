@@ -175,7 +175,7 @@ namespace gloox
         DiscoHandlerList::const_iterator it = m_discoHandlers.begin();
         for( it; it != m_discoHandlers.end(); it++ )
         {
-          if( (*it)->handleDiscoSet( stanza->id(), stanza ) )
+          if( (*it)->handleDiscoSet( stanza ) )
             res = true;
         }
         return res;
@@ -196,16 +196,16 @@ namespace gloox
           switch( context )
           {
             case GET_DISCO_INFO:
-              (*it).second->handleDiscoInfoResult( stanza );
+              (*it).second.dh->handleDiscoInfoResult( stanza, (*it).second.context );
               break;
             case GET_DISCO_ITEMS:
-              (*it).second->handleDiscoItemsResult( stanza );
+              (*it).second.dh->handleDiscoItemsResult( stanza, (*it).second.context );
               break;
            }
         break;
 
         case STANZA_IQ_ERROR:
-          (*it).second->handleDiscoError( stanza->error(), stanza );
+          (*it).second.dh->handleDiscoError( stanza, (*it).second.context );
           break;
       }
     }
@@ -218,7 +218,7 @@ namespace gloox
     m_features.push_back( feature );
   }
 
-  void Disco::getDiscoInfo( const std::string& to, DiscoHandler *dh )
+  void Disco::getDiscoInfo( const std::string& to, DiscoHandler *dh, int context )
   {
     std::string id = m_parent->getID();
 
@@ -230,12 +230,15 @@ namespace gloox
     Tag *q = new Tag( iq, "query" );
     q->addAttrib( "xmlns", XMLNS_DISCO_INFO );
 
-    m_track[id] = dh;
+    DiscoHandlerContext ct;
+    ct.dh = dh;
+    ct.context = context;
+    m_track[id] = ct;
     m_parent->trackID( this, id, GET_DISCO_INFO );
     m_parent->send( iq );
   }
 
-  void Disco::getDiscoItems( const std::string& to, DiscoHandler *dh )
+  void Disco::getDiscoItems( const std::string& to, DiscoHandler *dh, int context )
   {
     std::string id = m_parent->getID();
 
@@ -247,7 +250,10 @@ namespace gloox
     Tag *q = new Tag( iq, "query" );
     q->addAttrib( "xmlns", XMLNS_DISCO_ITEMS );
 
-    m_track[id] = dh;
+    DiscoHandlerContext ct;
+    ct.dh = dh;
+    ct.context = context;
+    m_track[id] = ct;
     m_parent->trackID( this, id, GET_DISCO_INFO );
     m_parent->send( iq );
   }
