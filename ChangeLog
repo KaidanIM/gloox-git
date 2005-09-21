@@ -1,8 +1,9 @@
 
-v0.6.1 -- 18 Sep 2005
+v0.6.1 -- 21 Sep 2005
 -------------------
 - fixed Makefile.ams for make distcheck
 - removal of unused iksemel types and includes
+- Tag constructor: parent must know about its new child
 
 
 v0.6 -- 02 Sep 2005
