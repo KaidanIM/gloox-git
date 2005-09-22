@@ -92,7 +92,7 @@ namespace gloox
 #endif
 
 #ifdef HAVE_ZLIB
-      if( m_connection->initCompression( true ) && ( m_streamFeatures & STREAM_FEATURE_COMPRESS_ZLIB ) )
+      if( ( m_streamFeatures & STREAM_FEATURE_COMPRESS_ZLIB ) && m_connection->initCompression( true ) )
       {
         negotiateCompression( STREAM_FEATURE_COMPRESS_ZLIB );
         return true;
