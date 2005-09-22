@@ -4,7 +4,10 @@
 
 SUBDIRS = src
 
-EXTRA_DIST = LICENSE Doxyfile
+EXTRA_DIST = LICENSE Doxyfile gloox.pc.in
+
+pkgconfigdir=$(libdir)/pkgconfig
+pkgconfig_DATA = gloox.pc
 
 apidox:
 	doxygen

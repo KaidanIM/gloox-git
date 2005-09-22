@@ -16,3 +16,4 @@ In the pipe
 - add classes for common packet types
 - IQ error handling in Annotations class
 - application specific error conditions in stanza errors
+

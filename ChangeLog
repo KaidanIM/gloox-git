@@ -1,4 +1,9 @@
 
+v0.6.2 -- 23 Sep 2005
+-------------------
+- added pkg-config file
+
+
 v0.6.1 -- 22 Sep 2005
 -------------------
 - fixed Makefile.ams for make distcheck
