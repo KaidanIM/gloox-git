@@ -217,8 +217,9 @@ namespace gloox
 
       i->addAttrib( "value", (*it).value() );
 
-      char order[(int)log10(++count)+2];
+      char *order = new char[(int)log10(++count)+2];
       sprintf( order, "%d", count );
+      delete[] order;
       i->addAttrib( "order", order );
     }
 
