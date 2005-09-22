@@ -1,11 +1,12 @@
 
-v0.6.1 -- 21 Sep 2005
+v0.6.1 -- 22 Sep 2005
 -------------------
 - fixed Makefile.ams for make distcheck
-- removed of unused iksemel types and includes
+- removed unused iksemel types and includes
 - made void ClientBase::send( const std::string& ) private
 - made void ClientBase::send( Tag* ) virtual
 - Tag constructor: parent must know about its new child
+- avoid non-constant array sizes in getID() et al.
 
 
 v0.6 -- 02 Sep 2005

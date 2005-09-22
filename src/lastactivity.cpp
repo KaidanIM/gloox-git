@@ -56,8 +56,9 @@ namespace gloox
       case STANZA_IQ_GET:
       {
         time_t now = time( 0 );
-        char tmp[4+(int)log10( (int)(now - m_active) )+1];
+        char *tmp = new char[4+(int)log10( (int)(now - m_active) )+1];
         sprintf( tmp, "%d", m_active );
+        delete[] tmp;
 
         Tag *t = new Tag( "iq" );
         t->addAttrib( "type", "result" );
