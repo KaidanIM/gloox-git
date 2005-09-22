@@ -366,9 +366,11 @@ namespace gloox
 
   const std::string ClientBase::getID()
   {
-    char tmp[4+(int)log10(++m_idCount)+1];
+    char *tmp = new char[4+(int)log10(++m_idCount)+1];
     sprintf( tmp, "uid%d", m_idCount );
-    return tmp;
+    std::string ret = tmp;
+    delete[] tmp;
+    return ret;
   }
 
   bool ClientBase::checkStreamVersion( const std::string& version )
