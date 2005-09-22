@@ -122,6 +122,7 @@ AC_C_INLINE
 dnl Generating makefiles.
 AC_CONFIG_FILES([
 Makefile
+gloox.pc
 src/Makefile
 src/tests/Makefile
 ])
