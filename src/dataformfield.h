@@ -85,7 +85,7 @@ namespace gloox
       /**
        *
        */
-      void addOptions( const StringMap& options );
+      void setOptions( const StringMap& options ) { m_options = options; };
 
       /**
        *
