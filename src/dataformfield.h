@@ -15,13 +15,13 @@
 #define DATAFORMFIELD_H__
 
 #include "gloox.h"
-#include "tag.h"
 
 #include <string>
 
 namespace gloox
 {
 
+  class Tag;
   /**
    * An abstraction of a single field in a JEP-0004 Data Form.
    * @author Jakob Schroeter <js@camaya.net>
@@ -60,6 +60,8 @@ namespace gloox
                                      * word of text, which may be shown in an interface. This field type is
                                      * the default and MUST be assumed if an entity receives a field type it
                                      * does not understand.*/
+        FIELD_TYPE_INVALID,         /**< The field is invalid. Only possible if the field was created from
+                                     * a Tag not correctly describing a Data Form Field. */
       };
 
       /**
@@ -69,6 +71,12 @@ namespace gloox
       DataFormField( DataFormFieldType type = FIELD_TYPE_TEXT_SINGLE );
 
       /**
+       * Constructs a new Data Form Field from an existing tag that describes a field.
+       * @param tag The tag to parse.
+       */
+      DataFormField( Tag *tag );
+
+      /**
        * Virtual destructor.
        */
       virtual ~DataFormField();
@@ -76,7 +84,8 @@ namespace gloox
       /**
        * Use this function to create a Tag representation of the form field. This is usually called by
        * DataForm.
-       * @return A Tag hierarchically describing the form field.
+       * @return A Tag hierarchically describing the form field, or NULL if the field is invalid (i.e. created
+       * from a Tag not correctly describing a Data Form Field).
        */
       Tag* tag() const;
 

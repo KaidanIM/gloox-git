@@ -23,13 +23,50 @@ namespace gloox
   {
   }
 
+  DataForm::DataForm( Tag *tag )
+    : m_type( FORM_TYPE_INVALID )
+  {
+    if( !tag->hasAttribute( "xmlns", XMLNS_DATA_FORMS ) || tag->name() != "x" )
+      return;
+
+    if( tag->hasAttribute( "type", "form" ) )
+      m_type == FORM_TYPE_FORM;
+    else if( tag->hasAttribute( "type", "submit" ) )
+      m_type == FORM_TYPE_SUBMIT;
+    else if( tag->hasAttribute( "type", "cancel" ) )
+      m_type == FORM_TYPE_CANCEL;
+    else if( tag->hasAttribute( "type", "result" ) )
+      m_type == FORM_TYPE_RESULT;
+    else
+      return;
+
+    Tag::TagList l = tag->children();
+    Tag::TagList::const_iterator it = l.begin();
+    for( it; it != l.end(); ++it )
+    {
+      if( (*it)->name() == "title" )
+        m_title = (*it)->cdata();
+      else if( (*it)->name() == "instructions" )
+        m_instructions = (*it)->cdata();
+      else if( (*it)->name() == "field" )
+      {
+        DataFormField f( (*it) );
+        m_fields.push_back( f );
+      }
+    }
+  }
+
   DataForm::~DataForm()
   {
   }
 
   Tag* DataForm::tag()
   {
+    if( m_type == FORM_TYPE_INVALID )
+      return 0;
+
     Tag *x = new Tag( "x" );
+    x->addAttrib( "xmlns", XMLNS_DATA_FORMS );
     if( !m_title.empty() )
       x->addChild( new Tag( "title", m_title ) );
     if( !m_instructions.empty() )
