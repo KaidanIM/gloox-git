@@ -18,9 +18,8 @@
 namespace gloox
 {
 
-  DataForm::DataForm( DataFormType type, const std::string& element, const std::string& title,
-                      const std::string& instructions )
-    : m_type( type ), m_element( element ), m_title( title ), m_instructions( instructions )
+  DataForm::DataForm( DataFormType type, const std::string& title, const std::string& instructions )
+    : m_type( type ), m_title( title ), m_instructions( instructions )
   {
   }
 
@@ -30,7 +29,7 @@ namespace gloox
 
   Tag* DataForm::tag()
   {
-    Tag *x = new Tag( m_element );
+    Tag *x = new Tag( "x" );
     if( !m_title.empty() )
       x->addChild( new Tag( "title", m_title ) );
     if( !m_instructions.empty() )
@@ -39,7 +38,7 @@ namespace gloox
     FieldList::const_iterator it = m_fields.begin();
     for( it; it != m_fields.end(); ++it )
     {
-      x->addChild( (*it)->tag() );
+      x->addChild( (*it).tag() );
     }
 
     switch( m_type )

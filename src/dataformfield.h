@@ -63,7 +63,8 @@ namespace gloox
       };
 
       /**
-       *
+       * Constructs a new Data Form Field.
+       * @param type The type of the field. Default: text-single.
        */
       DataFormField( DataFormFieldType type = FIELD_TYPE_TEXT_SINGLE );
 
@@ -73,62 +74,76 @@ namespace gloox
       virtual ~DataFormField();
 
       /**
-       *
+       * Use this function to create a Tag representation of the form field. This is usually called by
+       * DataForm.
+       * @return A Tag hierarchically describing the form field.
        */
-      Tag* tag();
+      Tag* tag() const;
 
       /**
-       *
+       * Use this function to retrieve the optional values of a field.
+       * @return The options of a field.
        */
       StringMap& options() { return m_options; };
 
       /**
-       *
+       * Use this function to set the optional values of a field.
+       * @param options The optional values of a list* or *multi type of field.
        */
       void setOptions( const StringMap& options ) { m_options = options; };
 
       /**
-       *
+       * Use this function to determine whether or not this field is required.
+       * @return Whether or not this field is required.
        */
       bool required() const { return m_required; };
 
       /**
-       *
+       * Use this field to set this field to be required.
+       * @param required Whether or not this field is required.
        */
       void setRequired( bool required ) { m_required = required; };
 
       /**
-       *
+       * Use this function to retrieve the name of the field (the content of the 'var' attribute).
+       * @return The name of the field.
        */
-      const std::string& fieldName() const { return m_fieldName; };
+      const std::string& name() const { return m_name; };
 
       /**
-       *
+       * Sets the name of the field.
+       * @param name The new name of the field.
+       * @note Fields of type other than 'fixed' SHOULD have a name.
        */
-      void setFieldName( const std::string& fieldName ) { m_fieldName = fieldName; };
+      void setFieldName( const std::string& name ) { m_name = name; };
 
       /**
-       *
+       * Use this function to retrieve the type of this field.
+       * @return The type of this field.
        */
       DataFormFieldType type() const { return m_type; };
 
       /**
-       *
+       * Use this function to retrieve the describing label of this field.
+       * @return The describing label of this field.
        */
       const std::string& label() const { return m_label; };
 
       /**
-       *
+       * Use this function to set the describing label of this field.
+       * @param label The describing label of thsi field.
        */
       void setLabel( const std::string& label ) { m_label = label; };
 
       /**
-       *
+       * Use this function to retrieve the value of this field.
+       * @return The value of this field.
        */
       const std::string& value() const { return m_value; };
 
       /**
-       *
+       * Use this function to set the value of this field.
+       * @param value The new value of this field.
        */
       void setValue( const std::string& value ) { m_value = value; };
 
@@ -138,7 +153,7 @@ namespace gloox
       std::string m_value;
       std::string m_desc;
       std::string m_label;
-      std::string m_fieldName;
+      std::string m_name;
       DataFormFieldType m_type;
       bool m_required;
   };
