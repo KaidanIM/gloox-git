@@ -100,7 +100,7 @@ namespace gloox
 
     private:
       FieldList m_fields;
-      DataFormType m_formType;
+      DataFormType m_type;
       std::string m_element;
       std::string m_title;
       std::string m_instructions;
