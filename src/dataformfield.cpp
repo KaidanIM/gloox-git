@@ -11,19 +11,36 @@
 */
 
 #include "dataformfield.h"
+#include "tag.h"
 
 namespace gloox
 {
 
   DataFormField::DataFormField( DataFormFieldType type )
-  : m_type( type ), m_required( false )
+    : m_type( type ), m_required( false )
   {
+  }
 
+  DataFormField::DataFormField( Tag *tag )
+    : m_type( FIELD_TYPE_INVALID ), m_required( false )
+  {
+    Tag::TagList l = tag->children();
+    Tag::TagList::const_iterator it = l.begin();
+    for( it; it != l.end(); ++it )
+    {
+      if( (*it)->name() == "desc" )
+        m_desc = (*it)->cdata();
+      else if( (*it)->name() == "required" )
+        m_required = true;
+      else if( (*it)->name() == "value" )
+        m_value = (*it)->cdata();
+      else if( (*it)->name() == "option" )
+        m_options[(*it)->findAttribute( "label" )] = (*it)->findChild( "value" )->cdata();
+    }
   }
 
   DataFormField::~DataFormField()
   {
-
   }
 
   Tag* DataFormField::tag() const

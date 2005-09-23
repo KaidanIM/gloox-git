@@ -28,6 +28,8 @@ namespace gloox
    * An abstarction of a JEP-0004 Data Form.
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.7
+   * @note This implementation lacks support for Section 3.4 of JEP-0004 (Multiple Items in Form Results),
+   * i.e. the &lt;reported&gt; and &lt;item&gt; elements.
    */
   class DataForm
   {
@@ -45,6 +47,8 @@ namespace gloox
                                      * forms-processing entity. */
         FORM_TYPE_RESULT,           /**< The forms-processing entity is returning data (e.g., search results)
                                      * to the forms-submitting entity, or the data is a generic data set. */
+        FORM_TYPE_INVALID,          /**< The form is invalid. Only possible if the form was created from an
+                                     * Tag which doesn't correctly describe a Data Form. */
       };
 
       /**
@@ -62,13 +66,20 @@ namespace gloox
       DataForm( DataFormType type, const std::string& title = "", const std::string& instructions = "" );
 
       /**
+       * Constructs a new DataForm from an existing Tag/XML representation.
+       * @param tag The existing form to parse.
+       */
+      DataForm( Tag *tag );
+
+      /**
        * Virtual destructor.
        */
       virtual ~DataForm();
 
       /**
        * Use this function to create a Tag representation of the form.
-       * @return A Tag hierarchically describing the form.
+       * @return A Tag hierarchically describing the form, or NULL if the form is invalid (i.e.
+       * created from a Tag not correctly describing a Data Form).
        */
       Tag* tag();
 
