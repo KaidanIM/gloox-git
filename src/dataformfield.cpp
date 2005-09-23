@@ -16,7 +16,7 @@ namespace gloox
 {
 
   DataFormField::DataFormField( DataFormFieldType type )
-  : m_type( type )
+  : m_type( type ), m_required( false )
   {
 
   }
@@ -26,10 +26,10 @@ namespace gloox
 
   }
 
-  Tag* DataFormField::tag()
+  Tag* DataFormField::tag() const
   {
     Tag *field = new Tag( "field" );
-    field->addAttrib( "var", m_fieldName );
+    field->addAttrib( "var", m_name );
     field->addAttrib( "label", m_label );
     if( m_required )
       field->addChild( new Tag( "required" ) );
