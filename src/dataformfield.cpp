@@ -26,19 +26,9 @@ namespace gloox
 
   }
 
-  void DataFormField::addOptions( const StringMap& options )
-  {
-    StringMap::const_iterator it = options.begin();
-    for( it; it != options.end(); ++it )
-    {
-      m_options[(*it).first] = (*it).second;
-    }
-  }
-
   Tag* DataFormField::tag()
   {
     Tag *field = new Tag( "field" );
-    field->addAttrib( "xmlns", XMLNS_DATA_FORMS );
     field->addAttrib( "var", m_fieldName );
     field->addAttrib( "label", m_label );
     if( m_required )
@@ -81,6 +71,26 @@ namespace gloox
         field->addAttrib( "type", "text-single" );
         break;
     }
+
+    if( ( m_type == FIELD_TYPE_LIST_SINGLE ) || ( m_type == FIELD_TYPE_LIST_MULTI ) )
+    {
+      StringMap::const_iterator it = m_options.begin();
+      for( it; it != m_options.end(); ++it )
+      {
+        Tag *option = new Tag( field, "option" );
+        option->addAttrib( "label", (*it).first );
+        option->addChild( new Tag( "value", (*it).second ) );
+      }
+    }
+    else if( m_type == FIELD_TYPE_BOOLEAN )
+    {
+      if( m_value.empty() || m_value == "false" || m_value == "0" )
+        field->addChild( new Tag( "value", "0" ) );
+      else
+        field->addChild( new Tag( "value", "1" ) );
+    }
+    else if( !m_value.empty() )
+      field->addChild( new Tag( "value", m_value ) );
   }
 
 };
