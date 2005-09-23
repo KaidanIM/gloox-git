@@ -45,6 +45,9 @@ namespace gloox
 
   Tag* DataFormField::tag() const
   {
+    if( m_type == FIELD_TYPE_INVALID )
+      return 0;
+
     Tag *field = new Tag( "field" );
     field->addAttrib( "var", m_name );
     field->addAttrib( "label", m_label );
