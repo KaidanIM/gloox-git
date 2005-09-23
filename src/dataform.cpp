@@ -20,7 +20,7 @@ namespace gloox
 
   DataForm::DataForm( DataFormType type, const std::string& element, const std::string& title,
                       const std::string& instructions )
-    : m_formType( type ), m_element( element ), m_title( title ), m_instructions( instructions )
+    : m_type( type ), m_element( element ), m_title( title ), m_instructions( instructions )
   {
   }
 
