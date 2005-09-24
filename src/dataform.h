@@ -84,6 +84,21 @@ namespace gloox
       Tag* tag();
 
       /**
+       * Use this function to check whether  this form contains a field with the given name.
+       * @param field The name of the field (the content of the 'var' attribute).
+       * @return Whether or not the form contains the named field.
+       */
+      bool hasField( const std::string& field );
+
+      /**
+       * Use this function to fetch a copy of a field of the form. If no such field exists, an empty
+       * (invalid) field is returned.
+       * @param field The name of the field (the content of the 'var' attribute).
+       * @return A copy of the field with the given name if it exists, an empty (invalid) field otherwise.
+       */
+      DataFormField field( const std::string& field );
+
+      /**
        * Use this function to retrieve the title of the form.
        * @return The title of the form.
        */
