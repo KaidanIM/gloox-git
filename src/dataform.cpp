@@ -97,4 +97,28 @@ namespace gloox
     return x;
   }
 
+  bool DataForm::hasField( const std::string& field )
+  {
+    FieldList::const_iterator it = m_fields.begin();
+    for( it; it != m_fields.end(); ++it )
+    {
+      if( (*it).name() == field )
+        return true;
+    }
+
+    return false;
+  }
+
+  DataFormField DataForm::field( const std::string& field )
+  {
+    FieldList::const_iterator it = m_fields.begin();
+    for( it; it != m_fields.end(); ++it )
+    {
+      if( (*it).name() == field )
+        return (*it);
+    }
+
+    return DataFormField();
+  }
+
 };
