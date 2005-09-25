@@ -174,7 +174,9 @@ namespace gloox
       int m_port;
       int m_socket;
       int m_compCount;
-      int m_dataCount;
+      int m_decompCount;
+      int m_dataOutCount;
+      int m_dataInCount;
       bool m_cancel;
       bool m_secure;
       bool m_compression;
