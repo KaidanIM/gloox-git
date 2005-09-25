@@ -113,9 +113,9 @@ namespace gloox
        void setCompression( bool compression );
 
       /**
-       * In case Zlib is available, this function is used to init or de-init stream compression
-       * as defined in JEP-0138. You must call this before enabling compression using setCompression().
-       * @param compression Whether to init (@b true) or de-init (@b false) stream compression.
+       * In case Zlib is available, this function is used to init or de-init stream compression. You must
+       * call this before enabling compression using setCompression().
+       * @param init Whether to init (@b true) or de-init (@b false) stream compression.
        * @return Returns @b true if compression was successfully initialized/de-initialized,
        * @b false otherwise.
        */
