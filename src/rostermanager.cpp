@@ -21,7 +21,7 @@
 namespace gloox
 {
 
-  RosterManager::RosterManager( ClientBase *parent )
+  RosterManager::RosterManager( ClientBase *parent, bool self )
     : m_parent( parent ), m_rosterListener( 0 )
   {
     if( m_parent )
@@ -29,6 +29,12 @@ namespace gloox
       m_parent->registerIqHandler( this, XMLNS_ROSTER );
       m_parent->registerPresenceHandler( this );
       m_parent->registerSubscriptionHandler( this );
+
+      if( self )
+      {
+        RosterItem *i = new RosterItem( m_parent->jid().bare() );
+        m_roster[m_parent->jid().bare()] = i;
+      }
     }
   }
 
