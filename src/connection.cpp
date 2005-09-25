@@ -33,7 +33,8 @@ namespace gloox
   Connection::Connection( Parser *parser, const std::string& server, int port )
     : m_parser( parser ), m_server( Prep::idna( server ) ), m_port( port ),
       m_cancel( true ), m_socket( 0 ), m_buf( 0 ), m_secure( false ),
-      m_compression( false ), m_dataCount( 0 ), m_compCount( 0 ), m_compInited( false )
+      m_compression( false ), m_dataInCount( 0 ), m_compCount( 0 ), m_compInited( false ),
+      m_dataOutCount( 0 ), m_decompCount( 0 )
   {
     m_buf = (char*)calloc( BUFSIZE, sizeof( char ) );
   }
@@ -276,9 +277,8 @@ namespace gloox
     result.assign( (char*)out, CHUNK );
 
     m_compCount += result.length();
-    m_dataCount += data.length();
+    m_dataOutCount += data.length();
 
-    printf( "compressed: %d\n", ret );
     return result;
   }
 
@@ -286,7 +286,7 @@ namespace gloox
   {
     if( data.empty() )
       return "";
-    printf( "data not empty\n" );
+
     int CHUNK = data.length() * 10;
     char out[CHUNK];
     const char *in = data.c_str();
@@ -304,7 +304,9 @@ namespace gloox
       tmp.assign( out, CHUNK - m_zinflate.avail_out );
       result += tmp;
     } while( m_zinflate.avail_out == 0 );
-    printf( "decompressed: %d, [%s]\n", ret, result.c_str() );
+
+    m_decompCount += result.length();
+    m_dataInCount += data.length();
 
     return result;
   }
@@ -359,8 +361,15 @@ namespace gloox
     }
     else
     {
-      // data received
-      Parser::ParserState ret = m_parser->feed( m_buf );
+      std::string buf;
+#ifdef HAVE_ZLIB
+      if( m_compression )
+        buf = decompress( m_buf );
+      else
+#endif
+        buf = m_buf;
+
+      Parser::ParserState ret = m_parser->feed( buf );
       if( ret != Parser::PARSER_OK )
       {
         cleanup();
@@ -403,18 +412,12 @@ namespace gloox
     if( data.empty() )
       return;
 
-    initCompression( true );
-    setCompression( true );
     char *xml;
-//     if( m_compression )
-      /*xml =*/ std::string comp = compress( data );
-                std::string decomp = decompress( comp );
-                if( decomp == data )
-                  printf( "stats: uncompressed: %d, compressed: %d, ratio: %d\n", m_dataCount, m_compCount,
-                          (m_compCount/m_dataCount)*100 );
-                else
-                  printf( "NOT ok!!!!!!!!!!!!!!!!!!: [%s]\n", decomp.c_str() );
-//     else
+#ifdef HAVE_ZLIB
+    if( m_compression )
+      xml = strdup( compress( data ).c_str() );
+    else
+#endif
       xml = strdup( data.c_str() );
 
     if( !xml )
