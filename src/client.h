@@ -60,15 +60,16 @@ namespace gloox
    *
    * By default, the library handles a few (incoming) IQ namespaces on the application's behalf. These
    * include:
-   * @li jabber:iq:roster: by default the server-side roster is fetched and handled. Use @ref rosterManager()
-   * and @ref RosterManager to interact with the Roster.
+   * @li jabber:iq:roster: by default the server-side roster is fetched and handled. Use
+   * @ref rosterManager() and @ref RosterManager to interact with the Roster.
    * @li JEP-0092 (Software Version): If no version is specified, a name of "based on gloox" with
    * gloox's current version is announced.
-   * @li JEP-0030 (Service Discovery): All supported/available services are announced. No items are returned.
-   * @note By default a priority of -1 is sent along with the initial presence. That means no message stanzas
-   * will be received (from compliant servers). Use @ref setInitialPriority() to set a different value.
-   * Also, no initial presence is sent which is usually required for a client to show up as 'online'
-   * in their contact's contact list.
+   * @li JEP-0030 (Service Discovery): All supported/available services are announced. No items are
+   * returned.
+   * @note By default a priority of -1 is sent along with the initial presence. That means no message
+   * stanzas will be received (from compliant servers). Use @ref setInitialPriority() to set a different
+   * value. Also, no initial presence is sent which is usually required for a client to show up as
+   * 'online' in their contact's contact list.
    *
    * @author Jakob Schroeter <js@camaya.net>
    */
@@ -218,10 +219,13 @@ namespace gloox
         STREAM_FEATURE_SASL_PLAIN       =   8, /**< The server supports SASL PLAIN mechanism. */
         STREAM_FEATURE_SASL_ANONYMOUS   =  16, /**< The server supports SASL ANONYMOUS mechanism. */
         STREAM_FEATURE_STARTTLS         =  32, /**< The server supports &lt;starttls&gt;. */
-        STREAM_FEATURE_IQREGISTER       =  64, /**< The server supports JEP-0077 (In-Band Registration). */
-        STREAM_FEATURE_IQAUTH           = 128, /**< The server supports JEP-0078 (Non-SASL Authentication). */
+        STREAM_FEATURE_IQREGISTER       =  64, /**< The server supports JEP-0077 (In-Band
+                                                * Registration). */
+        STREAM_FEATURE_IQAUTH           = 128, /**< The server supports JEP-0078 (Non-SASL
+                                                * Authentication). */
         STREAM_FEATURE_ACK              = 256, /**< The server supports JEPAck (experimental). */
-        STREAM_FEATURE_COMPRESS_ZLIB    = 512, /**< The server supports JEP-0138 (Stream Compression) (Zlib)*/
+        STREAM_FEATURE_COMPRESS_ZLIB    = 512, /**< The server supports JEP-0138 (Stream
+                                                * Compression) (Zlib)*/
       };
 
       virtual void handleStartNode() {};
