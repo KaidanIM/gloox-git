@@ -42,6 +42,7 @@ namespace gloox
 
   /**
    * @brief This is the common base class for a jabber Client and a jabber Component.
+   *
    * It manages connection establishing, authentication, filter registrationa and invocation.
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3

@@ -21,6 +21,7 @@ namespace gloox
 
   /**
    * @brief A virtual interface which can be reimplemented to receive incoming subscription stanzas.
+   *
    * Derived classes can be registered as SubscriptionHandlers with the Client.
    * Upon an incoming Subscription packet @ref handleSubscription() will be called.
    * @author Jakob Schroeter <js@camaya.net>

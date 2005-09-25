@@ -19,6 +19,7 @@ namespace gloox
 
   /**
    * @brief Derived classes can be registered as ConnectionListeners with the Client.
+   *
    * @author Jakob Schroeter <js@camaya.net>
    */
   class ConnectionListener

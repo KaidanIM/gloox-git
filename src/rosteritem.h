@@ -25,6 +25,7 @@ namespace gloox
 
   /**
    * @brief An abstraction of a roster item.
+   *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
    */

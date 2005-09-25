@@ -20,6 +20,7 @@ namespace gloox
   /**
    * @brief Implementation of this virtual interface allows for retrieval of offline messages following
    * JEP-0030.
+   *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.7
    */

@@ -24,6 +24,7 @@ namespace gloox
 
   /**
    * @brief A virtual interface that allows to retrieve Privacy Lists.
+   *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
    */

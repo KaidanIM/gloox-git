@@ -26,6 +26,7 @@ namespace gloox
 
   /**
    * @brief This is an implementation of a basic jabber Component.
+   *
    * It's using JEP-0114 (Jabber Component Protocol) to authenticate with a server.
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3

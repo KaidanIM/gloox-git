@@ -22,6 +22,7 @@ namespace gloox
 
   /**
    * @brief A virtual interface which can be reimplemented to store and receive private XML data.
+   *
    * Derived classes can be registered as PrivateXMLHandlers with the PrivateXML object.
    * Upon an incoming PrivateXML packet @ref handlePrivateXML() will be called.
    * @author Jakob Schroeter <js@camaya.net>

@@ -34,6 +34,7 @@ namespace gloox
 
   /**
    * @brief This class implements JEP-0030 (Service Discovery) and JEP-0092 (Software Version).
+   *
    * Please see @ref Adhoc or @ref FlexibleOffline for an implementation that uses this class.
    * @author Jakob Schroeter <js@camaya.net>
    */
