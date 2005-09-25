@@ -72,7 +72,7 @@ namespace gloox
   void Client::init()
   {
     m_disco = new Disco( this );
-    m_rosterManager = new RosterManager( this );
+    m_rosterManager = new RosterManager( this, true );
     m_disco->setVersion( "based on gloox", GLOOX_VERSION );
     m_disco->setIdentity( "client", "bot" );
   }
