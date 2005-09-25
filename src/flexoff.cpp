@@ -165,7 +165,8 @@ namespace gloox
         switch( stanza->subtype() )
         {
           case STANZA_IQ_RESULT:
-            m_flexibleOfflineHandler->handleFlexibleOfflineResult( FlexibleOfflineResult );
+            m_flexibleOfflineHandler->handleFlexibleOfflineResult(
+                FlexibleOfflineHandler::FOMR_REQUEST_SUCCESS );
             break;
           case STANZA_IQ_ERROR:
             break;
@@ -175,6 +176,8 @@ namespace gloox
         switch( stanza->subtype() )
         {
           case STANZA_IQ_RESULT:
+            m_flexibleOfflineHandler->handleFlexibleOfflineResult(
+                FlexibleOfflineHandler::FOMR_REMOVE_SUCCESS );
             break;
           case STANZA_IQ_ERROR:
             break;
