@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2004-2005 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2005 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -132,19 +132,53 @@ namespace gloox
 
   void FlexibleOffline::handleDiscoItemsResult( Stanza *stanza, int context )
   {
-    if( context == FO_REQUEST_HEADERS )
+    if( context == FO_REQUEST_HEADERS && m_flexibleOfflineHandler )
     {
-
+      Tag *q = stanza->findChild( "query" );
+      if( q->hasAttribute( "xmlns", XMLNS_DISCO_ITEMS ) && q->hasAttribute( "node", XMLNS_OFFLINE ) )
+      {
+        StringMap m;
+        Tag::TagList l = q->children();
+        Tag::TagList::const_iterator it = l.begin();
+        for( it; it != l.end(); ++it )
+        {
+          m[(*it)->findAttribute( "node" )] = (*it)->findAttribute( "name" );
+        }
+        m_flexibleOfflineHandler->handleFlexibleOfflineMessageHeaders( m );
+      }
     }
+  }
+
+  void FlexibleOffline::handleDiscoError( Stanza *stanza, int context )
+  {
+
   }
 
   bool FlexibleOffline::handleIqID( Stanza *stanza, int context )
   {
+    if( !m_flexibleOfflineHandler )
+      return false;
+
     switch( context )
     {
       case FO_REQUEST_MSGS:
+        switch( stanza->subtype() )
+        {
+          case STANZA_IQ_RESULT:
+            m_flexibleOfflineHandler->handleFlexibleOfflineResult( FlexibleOfflineResult );
+            break;
+          case STANZA_IQ_ERROR:
+            break;
+        }
         break;
       case FO_REMOVE_MSGS:
+        switch( stanza->subtype() )
+        {
+          case STANZA_IQ_RESULT:
+            break;
+          case STANZA_IQ_ERROR:
+            break;
+        }
         break;
     }
   }
