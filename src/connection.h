@@ -37,6 +37,7 @@ namespace gloox
 
   /**
    * @brief This is an implementation of a TLS-aware connection handler.
+   *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.4
    */

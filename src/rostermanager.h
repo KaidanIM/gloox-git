@@ -31,6 +31,7 @@ namespace gloox
 
   /**
    * @brief This class implements Jabber/XMPP roster handling in the @b jabber:iq:roster namespace.
+   *
    * It takes care of changing presence, subscriptions, etc.
    * You can modify any number of RosterItems within the Roster at any time. These changes must be
    * synchronized with the server by calling @ref synchronize(). Note that incoming Roster pushes

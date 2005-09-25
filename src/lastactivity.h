@@ -29,6 +29,7 @@ namespace gloox
 
   /**
    * @brief This is an implementation of JEP-0012 (Last Activity) for both clients and components.
+   *
    * LastActivity can be used to query remote entities about their last activity time as well
    * as answer incoming last-activity-queries.
    * @author Jakob Schroeter <js@camaya.net>

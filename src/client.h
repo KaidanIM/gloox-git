@@ -30,6 +30,7 @@ namespace gloox
 
   /**
    * @brief This class implements a Jabber Client.
+   *
    * It supports SASL (Authentication) as well as TLS (Encryption), which can be switched on/off
    * separately. They are used automatically if the server supports them.
    *

@@ -20,6 +20,7 @@ namespace gloox
   /**
    * @brief This is an virtual interface that, once reimplemented, allows to receive the
    * results of Last-Activity-queries to other entities.
+   *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.6
    */

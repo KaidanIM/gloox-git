@@ -21,6 +21,7 @@ namespace gloox
 
   /**
    * @brief A virtual interface which can be reimplemented to receive incoming message stanzas.
+   *
    * Derived classes can be registered as MessageHandlers with the Client.
    * Upon an incoming Message packet @ref handleMessage() will be called.
    * @author Jakob Schroeter <js@camaya.net>

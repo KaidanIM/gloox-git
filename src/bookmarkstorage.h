@@ -29,6 +29,7 @@ namespace gloox
 
   /**
    * @brief This is an implementation of JEP-0048 (Bookmark Storage).
+   *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
    */
