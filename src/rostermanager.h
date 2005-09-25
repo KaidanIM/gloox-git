@@ -48,9 +48,10 @@ namespace gloox
       /**
        * Constructor.
        * Creates a new RosterManager.
-       * @param parent The @c Client which is used for communication.
+       * @param parent The @ref Client which is used for communication.
+       * @param self Whether to automatically include a self-contact in the roster. Default: false.
        */
-      RosterManager( ClientBase *parent );
+      RosterManager( ClientBase *parent, bool self = false );
 
       /**
        * Virtual destructor.
