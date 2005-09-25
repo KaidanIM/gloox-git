@@ -15,13 +15,13 @@
  * @section intro_sec Introduction
  *
  * The design of gloox follows the so-called observer pattern, which basically means that everything is
- * event-driven. There are two ways you can connect to the Jabber/XMPP network using gloox, either as client
- * or as component. A third way, as server, is not supported by gloox, even though it might be possible to
- * get something going.
+ * event-driven. There are two ways you can connect to the Jabber/XMPP network using gloox, either as
+ * client or as component. A third way, as server, is not supported by gloox, even though it might be
+ * possible to get something going.
  *
- * @note The XMPP specification (Section 11.5 of RFC 3290) requires that only UTF-8 is used as encoding for
- * any traffic sent over the wire. Since gloox cannot know which encoding is used in any given input, it is
- * a requirement that any input to gloox is valid UTF-8.
+ * @note The XMPP specification (Section 11.5 of RFC 3290) requires that only UTF-8 is used as encoding
+ * for any traffic sent over the wire. Since gloox cannot know which encoding is used in any given input,
+ * it is a requirement that any input to gloox is valid UTF-8.
  *
  * @section handlers_sec Event Handlers
  *
@@ -30,8 +30,9 @@
  * JEP-implementations. Additionally, a log handler, a generic tag handler and a handler for connection
  * events are available.
  *
- * Basically these handlers are virtual interfaces from which you derive a class and implement a few virtual
- * functions. Then you register such an object with the respective protocol implementation. A short example:
+ * Basically these handlers are virtual interfaces from which you derive a class and implement a few
+ * virtual functions. Then you register such an object with the respective protocol implementation. A
+ * short example:
  * @code
  * class MyClass : public PresenceHandler
  * {
@@ -87,11 +88,11 @@
  * @endcode
  *
  * @note The ConnectionListener interface is a peculiarity. You MUST re-implement
- * @ref gloox::ConnectionListener::onTLSConnect() if you want to be able to connect successfully to TLS/SSL
- * enabled servers. Even though gloox tries to verify the server's certificate it does not automatically
- * trust a server. The client programmer and/or user must decide whether to trust a server or not. This trust
- * is expressed by the return value of onTLSConnect(). @b False means you don't trust the
- * server/certificate and as a consequence the connection is dropped immediately.
+ * @ref gloox::ConnectionListener::onTLSConnect() if you want to be able to connect successfully to
+ * TLS/SSL enabled servers. Even though gloox tries to verify the server's certificate it does not
+ * automatically trust a server. The client programmer and/or user must decide whether to trust a server
+ * or not. This trust is expressed by the return value of onTLSConnect(). @b False means you don't trust
+ * the server/certificate and as a consequence the connection is dropped immediately.
  *
  * @section comp_sec Components
  *
@@ -99,8 +100,8 @@
  * to the actual server software, but can have similar privileges. Components use a protocol described in
  * JEP-0114 to connect and authenticate to a server.
  *
- * The @ref gloox::Component class supports this protocol and can be used to create a new Jabber component.
- * Its as simple as:
+ * The @ref gloox::Component class supports this protocol and can be used to create a new Jabber
+ * component. Its as simple as:
  * @code
  * Component *comp = new Component( ... );
  * comp->connect();
@@ -108,9 +109,9 @@
  *
  * @section client_sec Clients
  *
- * A client can be and end-user's chat client or a bot or similar entities not tied to a particular server.
- * The @ref gloox::Client class implements the necessary functionality to connect to an XMPP server. Usage
- * is, again, pretty simple:
+ * A client can be and end-user's chat client or a bot or similar entities not tied to a particular
+ * server. The @ref gloox::Client class implements the necessary functionality to connect to an XMPP
+ * server. Usage is, again, pretty simple:
  * @code
  * class MyClass : public ConnectionListener, PresenceHandler
  * {
@@ -152,16 +153,17 @@
  *
  * RFC 3921 defines the protocol to manage one's contact list (roster). In gloox, the @ref
  * gloox::RosterManager class implements this functionality. A few easy-to-use functions are available to
- * subscribe to or unsubscribe from the presence of remote entities. It is also possible to add a contact to
- * a roster without actually subscribing to the contacts presence. Additionally, the interface @ref
+ * subscribe to or unsubscribe from the presence of remote entities. It is also possible to add a contact
+ * to a roster without actually subscribing to the contacts presence. Additionally, the interface @ref
  * gloox::RosterListener offers many callbacks for various roster-related events.
  *
  * @section privacy_sec Privacy Lists
  *
  * Also defined in RFC 3921: Privacy Lists. Privacy Lists can be used to explicitely block or allow
- * sending of stanzas from and to contacts, respectively. You can define rules based on JID, stanza type, etc.
- * Needless to say that gloox implements Privacy Lists as well. ;) The @ref gloox::PrivacyManager class and
- * the @ref gloox::PrivacyListHandler virtual interface allow for full flexibility in Privacy List handling.
+ * sending of stanzas from and to contacts, respectively. You can define rules based on JID, stanza type,
+ * etc. Needless to say that gloox implements Privacy Lists as well. ;) The @ref gloox::PrivacyManager
+ * class and the @ref gloox::PrivacyListHandler virtual interface allow for full flexibility in Privacy
+ * List handling.
  *
  * @code
  * PrivacyManager *p = new PrivacyManager( ... );
@@ -178,8 +180,8 @@
  *
  * @section jeps_sec Protocol Enhancements
  *
- * The Jabber Software Foundation has published a number of extensions to the core protocols, called Jabber
- * Enhancement Proposals (JEPs). A couple of these JEPs are implemented in gloox.
+ * The Jabber Software Foundation has published a number of extensions to the core protocols, called
+ * Jabber Enhancement Proposals (JEPs). A couple of these JEPs are implemented in gloox.
  */
 
 #ifndef GLOOX_H__

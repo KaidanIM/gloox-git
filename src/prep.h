@@ -20,8 +20,8 @@ namespace gloox
 {
 
   /**
-   * This class offers static functions to stringprep the individual parts
-   * of a JID. You should not need to use these functions directly. All the
+   * @brief This class offers static functions to stringprep the individual parts of a JID.
+   * You should not need to use these functions directly. All the
    * necessary prepping is done for if you stick to the interfaces provided.
    * If you write your own enhancements, check with the spec.
    *

@@ -31,7 +31,7 @@ namespace gloox
   class Stanza;
 
   /**
-   * This class implements a provider for JEP-0050 (Ad-hoc Commands).
+   * @brief This class implements a provider for JEP-0050 (Ad-hoc Commands).
    * @author Jakob Schroeter <js@camaya.net>
    */
   class Adhoc : public DiscoNodeHandler, IqHandler

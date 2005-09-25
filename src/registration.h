@@ -27,7 +27,7 @@ namespace gloox
   class Stanza;
 
   /**
-   * This class is an implementation of JEP-0077 (In-Band Registration).
+   * @brief This class is an implementation of JEP-0077 (In-Band Registration).
    * Usage is very straight-forward.<br>
    * Derive your object from @ref RegistrationHandler and implement the
    * virtual functions offered by that interface. Then use it like this:

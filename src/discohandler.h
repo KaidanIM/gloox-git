@@ -22,7 +22,7 @@ namespace gloox
 {
 
   /**
-   * A virtual interface that enables objects to receive Service Discovery (JEP-0030) events.
+   * @brief A virtual interface that enables objects to receive Service Discovery (JEP-0030) events.
    * A class implementing this interface can receives the results of sent disco queries.
    * @author Jakob Schroeter <js@camaya.net>
    */

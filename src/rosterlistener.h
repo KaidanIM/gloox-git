@@ -23,7 +23,7 @@ namespace gloox
 {
 
   /**
-   * A virtual interface which can be reimplemented to receive roster updates.
+   * @brief A virtual interface which can be reimplemented to receive roster updates.
    * A class implementing this interface and being registered as RosterListener with the Roster
    * object receives notifications about all the changes in the server-side roster.
    * Only one RosterListener per Roster at a time is possible.

@@ -22,7 +22,7 @@ namespace gloox
 {
 
   /**
-   * A virtual interface which can be reimplemented to receive bookmarks with help of a
+   * @brief A virtual interface which can be reimplemented to receive bookmarks with help of a
    * BookmarkStorage object.
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
