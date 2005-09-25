@@ -28,7 +28,7 @@ namespace gloox
   class Tag;
 
   /**
-   * This is an implementation of JEP-0145 (Annotations).
+   * @brief This is an implementation of JEP-0145 (Annotations).
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
    */

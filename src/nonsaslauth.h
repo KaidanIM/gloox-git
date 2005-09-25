@@ -26,7 +26,7 @@ namespace gloox
   class Tag;
 
   /**
-   * This class is an implementation of JEP-0078 (Non-SASL Authentication).
+   * @brief This class is an implementation of JEP-0078 (Non-SASL Authentication).
    * It is invoked by @ref Client automatically if supported by the server and if SASL authentication
    * is not supported.
    * You should not need to use this class manually.

@@ -21,7 +21,7 @@ namespace gloox
 {
 
   /**
-   * A virtual interface which can be reimplemented to receive presence stanzas.
+   * @brief A virtual interface which can be reimplemented to receive presence stanzas.
    * Derived classes can be registered as PresenceHandlers with the Client.
    * Upon an incoming Presence packet @ref handlePresence() will be called.
    * @author Jakob Schroeter <js@camaya.net>

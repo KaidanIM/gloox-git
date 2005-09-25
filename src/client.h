@@ -29,9 +29,9 @@ namespace gloox
   class Stanza;
 
   /**
-   * This class implements a Jabber Client.
-   * It supports SASL (Authentication) as well as TLS (Encryption), which can be switched on/off separately.
-   * They are used if the server supports them.
+   * @brief This class implements a Jabber Client.
+   * It supports SASL (Authentication) as well as TLS (Encryption), which can be switched on/off
+   * separately. They are used automatically if the server supports them.
    *
    * To use, create a new Client instance and feed it connection credentials, either in the Constructor or
    * afterwards using the setters. You should then register packet handlers implementing the corresponding

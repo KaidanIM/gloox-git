@@ -23,7 +23,7 @@ namespace gloox
 {
 
   /**
-   * This class holds a number of static functions used for DNS related stuff.
+   * @brief This class holds a number of static functions used for DNS related stuff.
    * You should not need to use these functions directly.
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3

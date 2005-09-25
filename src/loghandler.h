@@ -21,9 +21,9 @@ namespace gloox
 {
 
   /**
-   * A virtual interface which can be reimplemented to receive data sent and received over
+   * @brief A virtual interface which can be reimplemented to receive data sent and received over
    * the network.
-   * Upon an incoming packet @ref handleLog() will be called.
+   * Upon an incoming packet @ref handleLog() is be called.
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.5
    */

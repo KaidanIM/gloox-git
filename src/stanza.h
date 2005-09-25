@@ -22,7 +22,7 @@ namespace gloox
 {
 
   /**
-   * This is an abstraction of a XMPP stanza.
+   * @brief This is an abstraction of a XMPP stanza.
    * You can create a new Stanza from an existing Tag (or another stanza).
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.4

@@ -20,7 +20,7 @@
 namespace gloox
 {
   /**
-   * An abstraction of a JID.
+   * @brief An abstraction of a JID.
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.4
    */

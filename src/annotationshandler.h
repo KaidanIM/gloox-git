@@ -22,7 +22,7 @@ namespace gloox
 {
 
   /**
-   * A virtual interface which can be reimplemented to receive notes with help of
+   * @brief A virtual interface which can be reimplemented to receive notes with help of
    * the Annotations object.
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3

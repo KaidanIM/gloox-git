@@ -31,8 +31,10 @@ namespace gloox
        */
       enum FlexibleOfflineResult
       {
-        FOMR_FORBIDDEN,             /**< The requester is a JID other than an authorized resource of the user.
-                                     * Something wnet serieously wrong */
+        FOMR_REMOVE_SUCCESS,        /**< Message(s) were removed successfully. */
+        FOMR_REQUEST_SUCCESS,       /**< Message(s) were fetched successfully. */
+        FOMR_FORBIDDEN,             /**< The requester is a JID other than an authorized resource of the
+                                     * user. Something wnet serieously wrong */
         FOMR_ITEM_NOT_FOUND,        /**< The requested node (message ID) does not exist. */
       };
 

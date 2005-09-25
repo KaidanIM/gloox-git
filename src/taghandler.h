@@ -20,7 +20,7 @@ namespace gloox
 {
 
   /**
-   * A virtual interface which can be reimplemented to receive non-XMPP Core stanzas.
+   * @brief A virtual interface which can be reimplemented to receive non-XMPP Core stanzas.
    * Derived classes can be registered as TagHandlers with the Client.
    * A TagHandler can handle arbitrary elements not defined by RFC 3920, XMPP: Core.
    * @author Jakob Schroeter <js@camaya.net>

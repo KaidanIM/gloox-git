@@ -25,7 +25,7 @@ namespace gloox
   class ClientBase;
 
   /**
-   * This class implements a manager for privacy lists as defined in section 10 of RFC 3921.
+   * @brief This class implements a manager for privacy lists as defined in section 10 of RFC 3921.
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
    */

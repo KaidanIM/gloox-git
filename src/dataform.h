@@ -25,7 +25,7 @@ namespace gloox
   class Tag;
 
   /**
-   * An abstraction of a JEP-0004 Data Form.
+   * @brief An abstraction of a JEP-0004 Data Form.
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.7
    * @note This implementation lacks support for Section 3.4 of JEP-0004 (Multiple Items in Form Results),

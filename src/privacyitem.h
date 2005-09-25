@@ -20,8 +20,8 @@ namespace gloox
 {
 
   /**
-   * This is an abstraction of a single item of a privacy list, describing an allowed or forbidden
-   * action.
+   * @brief This is an abstraction of a single item of a privacy list, describing an allowed or
+   * forbidden action.
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
    */

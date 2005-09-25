@@ -28,7 +28,7 @@ namespace gloox
   class Stanza;
 
   /**
-   * This class is an abstraction of libiksemel's XML parser.
+   * @brief This class is an abstraction of libiksemel's XML parser.
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.4
    */

@@ -23,7 +23,7 @@ namespace gloox
 
   class Tag;
   /**
-   * An abstraction of a single field in a JEP-0004 Data Form.
+   * @brief An abstraction of a single field in a JEP-0004 Data Form.
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.7
    */

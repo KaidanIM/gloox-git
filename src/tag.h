@@ -24,7 +24,7 @@ namespace gloox
 {
 
   /**
-   * This is an abstraction of an XML element.
+   * @brief This is an abstraction of an XML element.
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.4
    */

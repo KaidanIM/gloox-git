@@ -24,7 +24,7 @@ namespace gloox
 {
 
   /**
-   * An implementation of JEP-0013 (Flexible Offline Message Retrieval).
+   * @brief An implementation of JEP-0013 (Flexible Offline Message Retrieval).
    * Use the FlexibleOfflineHandler to receive results.
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.7
