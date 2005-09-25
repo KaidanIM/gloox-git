@@ -38,31 +38,31 @@ namespace gloox
        */
       enum SubscriptionEnum
       {
-        S10N_NONE,            /**< contact and user are not subscribed to each other, and
-                               * neither has requested a subscription from the other */
-        S10N_NONE_OUT,        /**< contact and user are not subscribed to each other, and
+        S10N_NONE,            /**< Contact and user are not subscribed to each other, and
+                               * neither has requested a subscription from the other. */
+        S10N_NONE_OUT,        /**< Contact and user are not subscribed to each other, and
                                * user has sent contact a subscription request but contact
-                               * has not replied yet */
-        S10N_NONE_IN,         /**< contact and user are not subscribed to each other, and
+                               * has not replied yet. */
+        S10N_NONE_IN,         /**< Contact and user are not subscribed to each other, and
                                * contact has sent user a subscription request but user has
                                * not replied yet (note: contact's server SHOULD NOT push or
                                * deliver roster items in this state, but instead SHOULD wait
-                               * until contact has approved subscription request from user) */
-        S10N_NONE_OUT_IN,     /**< contact and user are not subscribed to each other, contact
+                               * until contact has approved subscription request from user). */
+        S10N_NONE_OUT_IN,     /**< Contact and user are not subscribed to each other, contact
                                * has sent user a subscription request but user has not replied
                                * yet, and user has sent contact a subscription request but
-                               * contact has not replied yet */
-        S10N_TO,              /**< user is subscribed to contact (one-way) */
-        S10N_TO_IN,           /**< user is subscribed to contact, and contact has sent user a
-                               * subscription request but user has not replied yet */
-        S10N_FROM,            /**< contact is subscribed to user (one-way) */
-        S10N_FROM_OUT,        /**< contact is subscribed to user, and user has sent contact a
-                               * subscription request but contact has not replied yet */
-        S10N_BOTH             /**< user and contact are subscribed to each other (two-way) */
+                               * contact has not replied yet. */
+        S10N_TO,              /**< User is subscribed to contact (one-way). */
+        S10N_TO_IN,           /**< User is subscribed to contact, and contact has sent user a
+                               * subscription request but user has not replied yet. */
+        S10N_FROM,            /**< Contact is subscribed to user (one-way). */
+        S10N_FROM_OUT,        /**< Contact is subscribed to user, and user has sent contact a
+                               * subscription request but contact has not replied yet. */
+        S10N_BOTH             /**< User and contact are subscribed to each other (two-way). */
       };
 
       /**
-       * Constructor
+       * Constructs a new item of the roster.
        * @param jid The JID of the contact.
        * @param name The displayed name of the contact.
        */
@@ -83,19 +83,19 @@ namespace gloox
        * Retrieves the displayed name of a contact/roster item.
        * @return The contact's name.
        */
-      virtual const std::string name() { return m_name; };
+      virtual const std::string name() const { return m_name; };
 
       /**
        * Returns the contact's JID.
        * @return The contact's JID.
        */
-      virtual const std::string jid() { return m_jid; };
+      virtual const std::string jid() const { return m_jid; };
 
       /**
        * Returns the current subscription type between the remote and the local entity.
        * @return The subscription type.
        */
-      virtual SubscriptionEnum subscription() { return m_subscription; };
+      virtual SubscriptionEnum subscription() const { return m_subscription; };
 
       /**
        * Sets the groups this RosterItem belongs to.
@@ -110,17 +110,23 @@ namespace gloox
       virtual StringList& groups() { return m_groups; };
 
       /**
+       * Returns the contact's status.
+       * @return The status of the contact.
+       */
+      virtual PresenceStatus status() const { return m_status; };
+
+      /**
        * Whether the item has unsynchronized changes.
        * @return @b True if the item has unsynchronized changes, @b false otherwise.
        */
-      virtual bool changed() { return m_changed; };
+      virtual bool changed() const { return m_changed; };
 
     protected:
       /**
        * Sets the current status of the contact.
        * @param status The current status, i.e. presence info.
        */
-      virtual void setStatus( int status );
+      virtual void setStatus( PresenceStatus status );
 
       /**
        * Sets the current status message of the contact.
@@ -143,11 +149,11 @@ namespace gloox
     private:
       StringList m_groups;
       SubscriptionEnum m_subscription;
+      PresenceStatus m_status;
       std::string m_jid;
       std::string m_name;
       std::string m_statusMessage;
       bool m_changed;
-      int m_status;
   };
 
 };

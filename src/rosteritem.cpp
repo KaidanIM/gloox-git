@@ -18,7 +18,7 @@ namespace gloox
 {
 
   RosterItem::RosterItem( const std::string& jid, const std::string& name )
-    : m_jid( jid ), m_name( name ), m_changed( false ), m_status( 0 )
+    : m_jid( jid ), m_name( name ), m_changed( false ), m_status( PRESENCE_UNKNOWN )
   {
   }
 
@@ -32,7 +32,7 @@ namespace gloox
     m_changed = true;
   }
 
-  void RosterItem::setStatus( int status )
+  void RosterItem::setStatus( PresenceStatus status )
   {
     m_status = status;
     m_changed = true;
