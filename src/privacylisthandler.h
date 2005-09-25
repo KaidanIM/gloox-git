@@ -36,15 +36,16 @@ namespace gloox
        */
       enum resultEnum
       {
-        RESULT_STORE_SUCCESS,
-        RESULT_ACTIVATE_SUCCESS,
-        RESULT_DEFAULT_SUCCESS,
-        RESULT_REMOVE_SUCCESS,
-        RESULT_REQUEST_NAMES_SUCCESS,
-        RESULT_REQUEST_LIST_SUCCESS,
-        RESULT_CONFLICT,
-        RESULT_ITEM_NOT_FOUND,
-        RESULT_BAD_REQUEST
+        RESULT_STORE_SUCCESS,         /**< Storing was successful. */
+        RESULT_ACTIVATE_SUCCESS,      /**< Activation was successful. */
+        RESULT_DEFAULT_SUCCESS,       /**< Setting the default list was successful. */
+        RESULT_REMOVE_SUCCESS,        /**< Removing a list was successful. */
+        RESULT_REQUEST_NAMES_SUCCESS, /**< Requesting the list names was successful. */
+        RESULT_REQUEST_LIST_SUCCESS,  /**< The list was requested successfully. */
+        RESULT_CONFLICT,              /**< A conflict occurred when activating a list or setting the default
+                                       * list. */
+        RESULT_ITEM_NOT_FOUND,        /**< The requested list does not exist. */
+        RESULT_BAD_REQUEST            /**< Bad request. */
       };
 
       /**
