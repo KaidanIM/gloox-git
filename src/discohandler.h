@@ -52,6 +52,7 @@ namespace gloox
        * Reimplement this function to receive disco error notifications.
        * @param stanza The full Stanza.
        * @param context A context identifier.
+       * @todo Replace the stanza with decoded values.
        */
       virtual void handleDiscoError( Stanza *stanza, int context ) {};
 
