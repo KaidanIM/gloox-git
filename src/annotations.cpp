@@ -23,12 +23,10 @@ namespace gloox
     : PrivateXML( parent ),
     m_annotationsHandler( 0 )
   {
-    registerPrivateXMLHandler( this, "storage", XMLNS_ANNOTATIONS );
   }
 
   Annotations::~Annotations()
   {
-    removePrivateXMLHandler( XMLNS_ANNOTATIONS );
   }
 
   void Annotations::storeAnnotations( const AnnotationsHandler::AnnotationsList& aList )
@@ -49,15 +47,15 @@ namespace gloox
       }
     }
 
-    storeXML( s, XMLNS_ANNOTATIONS );
+    storeXML( s, this );
   }
 
   void Annotations::requestAnnotations()
   {
-    requestXML( "storage", XMLNS_ANNOTATIONS );
+    requestXML( "storage", XMLNS_ANNOTATIONS, this );
   }
 
-  void Annotations::handlePrivateXML( const std::string& tag, const std::string& xmlns, Tag *xml )
+  void Annotations::handlePrivateXML( const std::string& tag, Tag *xml )
   {
     AnnotationsHandler::AnnotationsList aList;
     const Tag::TagList l = xml->children();

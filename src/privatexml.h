@@ -54,33 +54,19 @@ namespace gloox
        * Use this function to request the private XML stored in the given namespace.
        * @param tag Child element of the query element used to identify the requested XML fragment.
        * @param xmlns The namespace which qualifies the tag.
+       * @param pxh The handler to receive the result.
        * @return The ID of the sent query.
        */
-      std::string requestXML( const std::string& tag, const std::string& xmlns );
+      std::string requestXML( const std::string& tag, const std::string& xmlns, PrivateXMLHandler *pxh );
 
       /**
        * Use this function to store private XML stored in the given namespace.
        * @param tag The XML to store. This is the complete tag including the unique namespace.
-       * It is deleted after sending it.
-       * @param xmlns The namespace again, in which the element @c is stored.
+       * It is deleted automatically after sending it.
+       * @param pxh The handler to receive the result.
        * @return The ID of the sent query.
        */
-      std::string storeXML( Tag *tag, const std::string& xmlns );
-
-      /**
-       * Use this function to register an object that shall receive incoming Private XML packets.
-       * @param pxh The handler to register.
-       * @param tag The tag to look for and associate with this handler.
-       * @param xmlns The namespace of the tag.
-       */
-      void registerPrivateXMLHandler( PrivateXMLHandler *pxh, const std::string& tag,
-                                      const std::string& xmlns );
-
-      /**
-       * Use this function to un-register an PrivateXMLHandler.
-       * @param xmlns The namespace for which the handler shall be removed.
-       */
-      void removePrivateXMLHandler( const std::string& xmlns );
+      std::string storeXML( Tag *tag, PrivateXMLHandler *pxh );
 
       // reimplemented from IqHandler.
       virtual bool handleIq( Stanza *stanza );
@@ -98,15 +84,9 @@ namespace gloox
         STORE_XML
       };
 
-      struct XMLHandlerStruct
-      {
-        std::string xmlns;
-        std::string tag;
-        PrivateXMLHandler *pxh;
-      };
-      typedef std::map<std::string, XMLHandlerStruct> PrivateXMLHandlers;
+      typedef std::map<std::string, PrivateXMLHandler*> TrackMap;
 
-      PrivateXMLHandlers m_privateXMLHandlers;
+      TrackMap m_track;
   };
 
 };

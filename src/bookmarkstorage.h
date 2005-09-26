@@ -74,7 +74,7 @@ namespace gloox
       void removeBookmarkHandler();
 
       // reimplemented from PrivateXMLHandler
-      virtual void handlePrivateXML( const std::string& tag, const std::string& xmlns, Tag *xml );
+      virtual void handlePrivateXML( const std::string& tag, Tag *xml );
 
       // reimplemented from PrivateXMLHandler
       virtual void handlePrivateXMLResult( const std::string uid, PrivateXMLResult result ) {};
