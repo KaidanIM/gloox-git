@@ -91,8 +91,11 @@ namespace gloox
 
   void Tag::addChild( Tag *child )
   {
-    m_children.push_back( child );
-    child->m_parent = this;
+    if( child )
+    {
+      m_children.push_back( child );
+      child->m_parent = this;
+    }
   }
 
   std::string Tag::cdata() const
