@@ -59,7 +59,7 @@ namespace gloox
        * Call @ref FlexibleOffline::fetchHeaders() to trigger the check.
        * @param headers A map of ID/sender pairs describing the offline messages.
        */
-      virtual void handleFlexibleOfflineMessageHeaders( StringMap headers ) = 0;
+      virtual void handleFlexibleOfflineMessageHeaders( StringMap& headers ) = 0;
 
       /**
        * This function is called to indicate the result of a fetch or delete instruction.
