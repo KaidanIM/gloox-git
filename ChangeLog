@@ -1,15 +1,34 @@
-v0.7 -- xx Sep 2005
+
+v0.7 -- xx Oct 2005
 -------------------
+- JEP-0004 (Data Forms)
+- JEP-0013 (Flexible Offline Message Retrieval)
 - JEP-0138 (Stream Compression)
 - removed pkg-config dependency (in check for iksemel)
+- fixed pkg-config file (include dir and all libs)
+- RosterItem: added status(); made setStatus() take a PresenceStatus
+- RosterManager: added self-contact
+- Disco: no need to register the handler to receive query results (still necessary for 'set's
+- PrivateXML: no need to register the handler to store or receive private XML
+- added IQ error handling in PrivateXML class
+- *experimental* port to MinGW, includes a Bloodshed Dev-C++ project file; SRV lookups do not work.
+
+- added classes for common packet types
 
 
-v0.6.1 -- 18 Sep 2005
+v0.6.2 -- 23 Sep 2005
+-------------------
+- pkgconfig file
+
+
+v0.6.1 -- 22 Sep 2005
 -------------------
 - fixed Makefile.ams for make distcheck
-- removal of unused iksemel types and includes
-- made void send( const std::string& ) private
-- made void send( Tag* ) virtual
+- removed unused iksemel types and includes
+- made void ClientBase::send( const std::string& ) private
+- made void ClientBase::send( Tag* ) virtual
+- Tag constructor: parent must know about its new child
+- avoid non-constant array sizes in getID() et al.
 
 
 v0.6 -- 02 Sep 2005

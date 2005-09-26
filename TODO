@@ -6,13 +6,14 @@ Todo
 - introduce return values for *Handlers to indicate whether following handlers should be invoked as well
 - sort SRV records by weight & cost
 - thread-safety
+- windows port
 
 
 In the pipe
 -----------
 
-- complete error handling for all protocols
-- add classes for common packet types
-- finish IQ error handling in PrivateXML class
-- JEP-0138 (Stream Compression)
-- windows port
+- RosterManager: support self-contact
+Data Forms:
+- honour multiple lines (in text-multi fields et al.)
+- 'reported' and 'item' elements
+
