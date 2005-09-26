@@ -20,14 +20,14 @@ namespace gloox
   FlexibleOffline::FlexibleOffline( ClientBase *parent, Disco *disco )
   : m_parent( parent ), m_disco( disco )
   {
-    if( m_disco )
-      m_disco->registerDiscoHandler( this );
+//     if( m_disco )
+//       m_disco->registerDiscoHandler( this );
   }
 
   FlexibleOffline::~FlexibleOffline()
   {
-    if( m_disco )
-      m_disco->removeDiscoHandler( this );
+//     if( m_disco )
+//       m_disco->removeDiscoHandler( this );
   }
 
   void FlexibleOffline::checkSupport()
@@ -77,7 +77,7 @@ namespace gloox
     Tag *iq = new Tag( "iq" );
     iq->addAttrib( "type", "get" );
     iq->addAttrib( "id", id );
-    Tag *o = new Tag( "offline" );
+    Tag *o = new Tag( iq, "offline" );
     o->addAttrib( "xmlns", XMLNS_OFFLINE );
 
     if( msgs.size() == 0 )
