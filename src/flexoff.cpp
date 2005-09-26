@@ -169,6 +169,21 @@ namespace gloox
                 FlexibleOfflineHandler::FOMR_REQUEST_SUCCESS );
             break;
           case STANZA_IQ_ERROR:
+            switch( stanza->error() )
+            {
+              case ST_ERROR_FORBIDDEN:
+                m_flexibleOfflineHandler->handleFlexibleOfflineResult(
+                    FlexibleOfflineHandler::FOMR_FORBIDDEN );
+                break;
+              case ST_ERROR_ITEM_NOT_FOUND:
+                m_flexibleOfflineHandler->handleFlexibleOfflineResult(
+                    FlexibleOfflineHandler::FOMR_ITEM_NOT_FOUND );
+                break;
+              default:
+                m_flexibleOfflineHandler->handleFlexibleOfflineResult(
+                    FlexibleOfflineHandler::FOMR_UNKNOWN_ERROR );
+                break;
+            }
             break;
         }
         break;
@@ -180,6 +195,21 @@ namespace gloox
                 FlexibleOfflineHandler::FOMR_REMOVE_SUCCESS );
             break;
           case STANZA_IQ_ERROR:
+            switch( stanza->error() )
+            {
+              case ST_ERROR_FORBIDDEN:
+                m_flexibleOfflineHandler->handleFlexibleOfflineResult(
+                    FlexibleOfflineHandler::FOMR_FORBIDDEN );
+                break;
+              case ST_ERROR_ITEM_NOT_FOUND:
+                m_flexibleOfflineHandler->handleFlexibleOfflineResult(
+                    FlexibleOfflineHandler::FOMR_ITEM_NOT_FOUND );
+                break;
+              default:
+                m_flexibleOfflineHandler->handleFlexibleOfflineResult(
+                    FlexibleOfflineHandler::FOMR_UNKNOWN_ERROR );
+                break;
+            }
             break;
         }
         break;

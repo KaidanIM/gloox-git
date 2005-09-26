@@ -37,6 +37,7 @@ namespace gloox
         FOMR_FORBIDDEN,             /**< The requester is a JID other than an authorized resource of the
                                      * user. Something wnet serieously wrong */
         FOMR_ITEM_NOT_FOUND,        /**< The requested node (message ID) does not exist. */
+        FOMR_UNKNOWN_ERROR,         /**< An error occurred which is not specified in JEP-0013. */
       };
 
       /**
