@@ -17,14 +17,10 @@
 #ifdef WIN32
 #include <windows.h>
 #include <windns.h>
-#ifdef MAXDNAME
-#warning MAXDNAME already defined!!!!!!!!!!!!!!!!!!!!!!!
-#else
+#ifndef MAXDNAME
 #define MAXDNAME 1025
 #endif
-#ifdef PACKETSZ
-#warning PACKETSZ already defined!!!!!!!!!!!!!!!!!!!!!!!
-#else
+#ifndef PACKETSZ
 #define PACKETSZ 512
 #endif
 #else
