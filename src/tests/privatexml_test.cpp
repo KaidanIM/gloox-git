@@ -29,7 +29,6 @@ class PrivateXMLTest : public PrivateXMLHandler, ConnectionListener
       j->disco()->setIdentity( "client", "bot" );
 
       p = new PrivateXML( j );
-      p->registerPrivateXMLHandler( this, "test", "http://camaya.net/jabber/test" );
 
       j->connect();
 
@@ -39,7 +38,7 @@ class PrivateXMLTest : public PrivateXMLHandler, ConnectionListener
 
     virtual void onConnect()
     {
-      p->requestXML( "test", "http://camaya.net/jabber/test" );
+      p->requestXML( "test", "http://camaya.net/jabber/test", this );
     };
 
     virtual void onDisconnect( ConnectionError e ) { printf( "disco_test: disconnected\n" ); };
@@ -53,7 +52,7 @@ class PrivateXMLTest : public PrivateXMLHandler, ConnectionListener
       return true;
     };
 
-    virtual void handlePrivateXML( const std::string& tag, const std::string& xmlns, Tag *xml )
+    virtual void handlePrivateXML( const std::string& tag, Tag *xml )
     {
       printf( "received privatexml...\n" );
       Tag *x = new Tag( "test" );
@@ -61,7 +60,7 @@ class PrivateXMLTest : public PrivateXMLHandler, ConnectionListener
       std::string id = j->getID();
       Tag *b = new Tag( "blah", id );
       x->addChild( b );
-      p->storeXML( x, "http://camaya.net/jabber/test" );
+      p->storeXML( x, this );
     };
 
     virtual void handlePrivateXMLResult( const std::string uid, PrivateXMLResult result )
