@@ -23,12 +23,10 @@ namespace gloox
     : PrivateXML( parent ),
     m_bookmarkHandler( 0 )
   {
-    registerPrivateXMLHandler( this, "storage", XMLNS_BOOKMARKS );
   }
 
   BookmarkStorage::~BookmarkStorage()
   {
-    removePrivateXMLHandler( XMLNS_BOOKMARKS );
   }
 
   void BookmarkStorage::storeBookmarks( const BookmarkHandler::BookmarkList& bList,
@@ -67,15 +65,15 @@ namespace gloox
       }
     }
 
-    storeXML( s, XMLNS_BOOKMARKS );
+    storeXML( s, this );
   }
 
   void BookmarkStorage::requestBookmarks()
   {
-    requestXML( "storage", XMLNS_BOOKMARKS );
+    requestXML( "storage", XMLNS_BOOKMARKS, this );
   }
 
-  void BookmarkStorage::handlePrivateXML( const std::string& tag, const std::string& xmlns, Tag *xml )
+  void BookmarkStorage::handlePrivateXML( const std::string& tag, Tag *xml )
   {
     BookmarkHandler::BookmarkList bList;
     BookmarkHandler::ConferenceList cList;

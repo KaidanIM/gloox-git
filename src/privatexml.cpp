@@ -30,10 +30,10 @@ namespace gloox
     if( m_parent )
       m_parent->removeIqHandler( XMLNS_PRIVATE_XML );
 
-    m_privateXMLHandlers.clear();
   }
 
-  std::string PrivateXML::requestXML( const std::string& tag, const std::string& xmlns )
+  std::string PrivateXML::requestXML( const std::string& tag, const std::string& xmlns,
+                                      PrivateXMLHandler *pxh )
   {
     const std::string id = m_parent->getID();
 
@@ -47,13 +47,14 @@ namespace gloox
     query->addChild( x );
     iq->addChild( query );
 
+    m_track[id] = pxh;
     m_parent->trackID( this, id, REQUEST_XML );
     m_parent->send( iq );
 
     return id;
   }
 
-  std::string PrivateXML::storeXML( Tag *tag, const std::string& xmlns )
+  std::string PrivateXML::storeXML( Tag *tag, PrivateXMLHandler *pxh )
   {
     const std::string id = m_parent->getID();
 
@@ -65,6 +66,7 @@ namespace gloox
     query->addChild( tag );
     iq->addChild( query );
 
+    m_track[id] = pxh;
     m_parent->trackID( this, id, STORE_XML );
     m_parent->send( iq );
 
@@ -78,14 +80,9 @@ namespace gloox
 
   bool PrivateXML::handleIqID( Stanza *stanza, int context )
   {
-    Tag *q = stanza->findChild( "query" );
-    Tag::TagList l = q->children();
-    Tag::TagList::const_iterator it = l.begin();
-    if( it != l.end() )
+    TrackMap::iterator t = m_track.find( stanza->id() );
+    if( t != m_track.end() )
     {
-      Tag *tag = (*it);
-      const std::string xmlns = tag->findAttribute( "xmlns" );
-
       switch( stanza->subtype() )
       {
         case STANZA_IQ_RESULT:
@@ -94,21 +91,22 @@ namespace gloox
           {
             case REQUEST_XML:
             {
-              PrivateXMLHandlers::const_iterator pi = m_privateXMLHandlers.find( xmlns );
-              if( ( pi != m_privateXMLHandlers.end() ) && ( tag->name() == (*pi).second.tag ) )
+              Tag *q = stanza->findChild( "query" );
+              if( q )
               {
-                (*pi).second.pxh->handlePrivateXML( tag->name(), xmlns, tag );
+                Tag::TagList l = q->children();
+                Tag::TagList::const_iterator it = l.begin();
+                if( it != l.end() )
+                {
+                  (*t).second->handlePrivateXML( (*it)->name(), (*it) );
+                }
               }
               break;
             }
 
             case STORE_XML:
             {
-              PrivateXMLHandlers::const_iterator pi = m_privateXMLHandlers.find( xmlns );
-              if( ( pi != m_privateXMLHandlers.end() ) && ( tag->name() == (*pi).second.tag ) )
-              {
-                (*pi).second.pxh->handlePrivateXMLResult( stanza->id(), PrivateXMLHandler::PXML_STORE_OK );
-              }
+              (*t).second->handlePrivateXMLResult( stanza->id(), PrivateXMLHandler::PXML_STORE_OK );
               break;
             }
           }
@@ -121,45 +119,23 @@ namespace gloox
           {
             case REQUEST_XML:
             {
-              PrivateXMLHandlers::const_iterator pi = m_privateXMLHandlers.find( xmlns );
-              if( ( pi != m_privateXMLHandlers.end() ) && ( tag->name() == (*pi).second.tag ) )
-              {
-                (*pi).second.pxh->handlePrivateXMLResult( stanza->id(),
-                                                          PrivateXMLHandler::PXML_REQUEST_ERROR );
-              }
+              (*t).second->handlePrivateXMLResult( stanza->id(), PrivateXMLHandler::PXML_REQUEST_ERROR );
               break;
             }
 
             case STORE_XML:
             {
-              PrivateXMLHandlers::const_iterator pi = m_privateXMLHandlers.find( xmlns );
-              if( ( pi != m_privateXMLHandlers.end() ) && ( tag->name() == (*pi).second.tag ) )
-              {
-                (*pi).second.pxh->handlePrivateXMLResult( stanza->id(), PrivateXMLHandler::PXML_STORE_ERROR );
-              }
+              (*t).second->handlePrivateXMLResult( stanza->id(), PrivateXMLHandler::PXML_STORE_ERROR );
               break;
             }
           }
           break;
         }
       }
+
+      m_track.erase( t );
     }
     return false;
-  }
-
-  void PrivateXML::registerPrivateXMLHandler( PrivateXMLHandler *pxh, const std::string& tag,
-                                              const std::string& xmlns )
-  {
-    XMLHandlerStruct tmp;
-    tmp.xmlns = xmlns;
-    tmp.tag = tag;
-    tmp.pxh = pxh;
-    m_privateXMLHandlers[xmlns] = tmp;
-  }
-
-  void PrivateXML::removePrivateXMLHandler( const std::string& xmlns )
-  {
-    m_privateXMLHandlers.erase( xmlns );
   }
 
 };
