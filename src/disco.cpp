@@ -258,7 +258,7 @@ namespace gloox
     ct.dh = dh;
     ct.context = context;
     m_track[id] = ct;
-    m_parent->trackID( this, id, GET_DISCO_INFO );
+    m_parent->trackID( this, id, GET_DISCO_ITEMS );
     m_parent->send( iq );
   }
 
