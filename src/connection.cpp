@@ -19,10 +19,15 @@
 #include "prep.h"
 #include "parser.h"
 
-#include <unistd.h>
+#ifdef WIN32
+#include <winsock.h>
+#else
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/select.h>
+#endif
+
+#include <unistd.h>
 #include <time.h>
 
 #include <string>
@@ -440,7 +445,11 @@ namespace gloox
       int num = 0;
       int len = strlen( xml );
       while( num < len )
+#ifdef WIN32
+        num += ::send( m_socket, (xml+num), len - num, 0 );
+#else
         num += ::send( m_socket, (void*)(xml+num), len - num, 0 );
+#endif
     }
 
     free( xml );

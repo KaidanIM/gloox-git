@@ -14,7 +14,7 @@
 #ifndef CONNECTION_H__
 #define CONNECTION_H__
 
-#include "config.h"
+// #include "config.h"
 
 #include "gloox.h"
 

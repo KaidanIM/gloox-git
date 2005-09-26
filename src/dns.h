@@ -14,7 +14,24 @@
 #ifndef DNS_H__
 #define DNS_H__
 
+#ifdef WIN32
+#include <windows.h>
+#include <windns.h>
+#ifdef MAXDNAME
+#warning MAXDNAME already defined!!!!!!!!!!!!!!!!!!!!!!!
+#else
+#define MAXDNAME 1025
+#endif
+#ifdef PACKETSZ
+#warning PACKETSZ already defined!!!!!!!!!!!!!!!!!!!!!!!
+#else
+#define PACKETSZ 512
+#endif
+#else
+#ifdef HAVE_ARPA_NAMESER_H
 #include <arpa/nameser.h>
+#endif
+#endif
 
 #include <string>
 #include <map>
