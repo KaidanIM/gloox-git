@@ -12,18 +12,23 @@
 
 
 
-#include "config.h"
+//#include "config.h"
 
 #include "dns.h"
 
+#include <sys/types.h>
+
+#ifndef WIN32
 #include <netinet/in.h>
 #include <resolv.h>
-#include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/un.h>
 #include <netdb.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
+#else
+#include <winsock.h>
+#endif
 
 #define SRV_COST    (RRFIXEDSZ+0)
 #define SRV_WEIGHT  (RRFIXEDSZ+2)
@@ -36,6 +41,7 @@
 namespace gloox
 {
 
+#ifndef WIN32
   DNS::HostMap DNS::resolve( const std::string& domain )
   {
     std::string service = "xmpp-client";
@@ -176,6 +182,12 @@ namespace gloox
 
     return -DNS_COULD_NOT_CONNECT;
   }
+#else
+  int DNS::connect( const std::string& domain )
+  {
+    DNS::connect( domain, XMPP_PORT );
+  }
+#endif
 
   int DNS::connect( const std::string& domain, int port )
   {
@@ -194,14 +206,20 @@ namespace gloox
     printf( "resolved %s to: %s\n", domain.c_str(), inet_ntoa( *((struct in_addr *)h->h_addr) ) );
 #endif
 
+#ifdef WIN32
+		dest_addr.sin_addr.s_addr = inet_addr( inet_ntoa(*((struct in_addr *)h->h_addr)) );
+#else
     if( inet_aton( inet_ntoa(*((struct in_addr *)h->h_addr)), &(dest_addr.sin_addr) ) == 0 )
       return -DNS_COULD_NOT_RESOLVE;
+#endif
 
     memset( &(dest_addr.sin_zero), '\0', 8 );
     if( ::connect( fd, (struct sockaddr *)&dest_addr, sizeof( struct sockaddr ) ) == 0 )
       return fd;
 
+#ifndef WIN32
     close( fd );
+#endif
     return -DNS_COULD_NOT_CONNECT;
   }
 

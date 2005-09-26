@@ -12,7 +12,7 @@
 
 
 
-#include "config.h"
+//#include "config.h"
 
 #include "clientbase.h"
 #include "connection.h"
