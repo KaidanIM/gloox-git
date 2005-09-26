@@ -211,6 +211,7 @@
 #define XMLNS_DATA_FORMS        "jabber:x:data"
 #define XMLNS_BOOKMARKS         "storage:bookmarks"
 #define XMLNS_ANNOTATIONS       "storage:rosternotes"
+#define XMLNS_ROSTER_DELIMITER  "roster:delimiter"
 
 #define XMLNS_XMPP_STREAM       "urn:ietf:params:xml:ns:xmpp-streams"
 #define XMLNS_XMPP_STANZAS      "urn:ietf:params:xml:ns:xmpp-stanzas"
