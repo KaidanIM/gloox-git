@@ -16,13 +16,14 @@
 #include "disco.h"
 #include "rosteritem.h"
 #include "rosterlistener.h"
+#include "privatexml.h"
 
 
 namespace gloox
 {
 
   RosterManager::RosterManager( ClientBase *parent, bool self )
-    : m_parent( parent ), m_rosterListener( 0 )
+    : m_parent( parent ), m_rosterListener( 0 ), m_delimiterFetched( false )
   {
     if( m_parent )
     {
@@ -35,6 +36,8 @@ namespace gloox
         RosterItem *i = new RosterItem( m_parent->jid().bare() );
         m_roster[m_parent->jid().bare()] = i;
       }
+
+      m_privateXML = new PrivateXML( m_parent );
     }
   }
 
@@ -60,6 +63,12 @@ namespace gloox
 
   void RosterManager::fill()
   {
+    if( !m_delimiterFetched )
+    {
+      m_privateXML->requestXML( "roster", XMLNS_ROSTER_DELIMITER, this );
+      return;
+    }
+
     Tag *iq = new Tag( "iq" );
     iq->addAttrib( "type", "get" );
     iq->addAttrib( "id", m_parent->getID() );
@@ -376,6 +385,29 @@ namespace gloox
     m_roster[jid]->setStatus( PRESENCE_UNAVAILABLE );
     m_roster[jid]->setSubscription( sub, ask );
     m_roster[jid]->setGroups( groups );
+  }
+
+  void RosterManager::setDelimiter( const std::string& delimiter )
+  {
+    m_delimiter = delimiter;
+    Tag *t = new Tag( "roster", m_delimiter );
+    t->addAttrib( "xmlns", XMLNS_ROSTER_DELIMITER );
+    m_privateXML->storeXML( t, this );
+  }
+
+  void RosterManager::handlePrivateXML( const std::string& tag, Tag *xml )
+  {
+    m_delimiterFetched = true;
+    m_delimiter = xml->cdata();
+    if( m_delimiter.empty() )
+      setDelimiter( "::" );
+    fill();
+  }
+
+  void RosterManager::handlePrivateXMLResult( const std::string uid, PrivateXMLResult result )
+  {
+    if( result == PrivateXMLHandler::PXML_REQUEST_ERROR )
+      fill();
   }
 
 };

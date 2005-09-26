@@ -16,6 +16,7 @@
 
 #include "subscriptionhandler.h"
 #include "rosterlistener.h"
+#include "privatexmlhandler.h"
 
 #include <map>
 #include <string>
@@ -28,6 +29,7 @@ namespace gloox
   class IqHandler;
   class PresenceHandler;
   class Stanza;
+  class PrivateXML;
 
   /**
    * @brief This class implements Jabber/XMPP roster handling in the @b jabber:iq:roster namespace.
@@ -36,16 +38,12 @@ namespace gloox
    * You can modify any number of RosterItems within the Roster at any time. These changes must be
    * synchronized with the server by calling @ref synchronize(). Note that incoming Roster pushes
    * initiated by other resources may overwrite changed values.
+   * Additionally, JEP-0083 (Nested Roster Groups) is implemented herein.
    * @author Jakob Schroeter <js@camaya.net>
    */
-  class RosterManager : public IqHandler, PresenceHandler, SubscriptionHandler
+  class RosterManager : public IqHandler, PresenceHandler, SubscriptionHandler, PrivateXMLHandler
   {
     public:
-      /**
-       * A list of RosterItems.
-       */
-      typedef std::list<RosterItem> RosterItemList;
-
       /**
        * Creates a new RosterManager.
        * @param parent The @ref Client which is used for communication.
@@ -104,6 +102,16 @@ namespace gloox
       void unsubscribe( const std::string& jid, const std::string& msg, bool remove );
 
       /**
+       *
+       */
+      const std::string& delimiter() const { return m_delimiter; };
+
+      /**
+       *
+       */
+      void setDelimiter( const std::string& delimiter );
+
+      /**
        * Register @c rl as object that receives updates on roster operations.
        * @param rl The object that receives roster updates.
        */
@@ -127,6 +135,12 @@ namespace gloox
       // reimplemented from SubscriptionHandler.
       virtual void handleSubscription( Stanza *stanza );
 
+      // reimplemented from PrivateXMLHandler
+      virtual void handlePrivateXML( const std::string& tag, Tag *xml );
+
+      // reimplemented from PrivateXMLHandler
+      virtual void handlePrivateXMLResult( const std::string uid, PrivateXMLResult result );
+
     private:
       void add( const std::string& jid, const std::string& name,
                 StringList& groups, const std::string& sub, bool ask );
@@ -135,6 +149,10 @@ namespace gloox
       RosterListener *m_rosterListener;
       RosterListener::Roster m_roster;
       ClientBase *m_parent;
+      PrivateXML *m_privateXML;
+
+      std::string m_delimiter;
+      bool m_delimiterFetched;
 
   };
 
