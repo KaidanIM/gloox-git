@@ -30,13 +30,13 @@ namespace gloox
       return;
 
     if( tag->hasAttribute( "type", "form" ) )
-      m_type == FORM_TYPE_FORM;
+      m_type = FORM_TYPE_FORM;
     else if( tag->hasAttribute( "type", "submit" ) )
-      m_type == FORM_TYPE_SUBMIT;
+      m_type = FORM_TYPE_SUBMIT;
     else if( tag->hasAttribute( "type", "cancel" ) )
-      m_type == FORM_TYPE_CANCEL;
+      m_type = FORM_TYPE_CANCEL;
     else if( tag->hasAttribute( "type", "result" ) )
-      m_type == FORM_TYPE_RESULT;
+      m_type = FORM_TYPE_RESULT;
     else
       return;
 
