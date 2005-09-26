@@ -51,7 +51,7 @@ namespace gloox
     Tag *iq = new Tag( "iq" );
     iq->addAttrib( "type", "get" );
     iq->addAttrib( "id", id );
-    Tag *o = new Tag( "offline" );
+    Tag *o = new Tag( iq, "offline" );
     o->addAttrib( "xmlns", XMLNS_OFFLINE );
 
     if( msgs.size() == 0 )
@@ -135,7 +135,7 @@ namespace gloox
     if( context == FO_REQUEST_HEADERS && m_flexibleOfflineHandler )
     {
       Tag *q = stanza->findChild( "query" );
-      if( q->hasAttribute( "xmlns", XMLNS_DISCO_ITEMS ) && q->hasAttribute( "node", XMLNS_OFFLINE ) )
+      if( q && q->hasAttribute( "xmlns", XMLNS_DISCO_ITEMS ) && q->hasAttribute( "node", XMLNS_OFFLINE ) )
       {
         StringMap m;
         Tag::TagList l = q->children();
