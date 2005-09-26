@@ -37,6 +37,33 @@ namespace gloox
       else if( (*it)->name() == "option" )
         m_options[(*it)->findAttribute( "label" )] = (*it)->findChild( "value" )->cdata();
     }
+
+    if( tag->hasAttribute( "type", "boolean" ) )
+      m_type = FIELD_TYPE_BOOLEAN;
+    else if( tag->hasAttribute( "type", "fixed" ) )
+      m_type = FIELD_TYPE_FIXED;
+    else if( tag->hasAttribute( "type", "hidden" ) )
+      m_type = FIELD_TYPE_HIDDEN;
+    else if( tag->hasAttribute( "type", "jid-multi" ) )
+      m_type = FIELD_TYPE_JID_MULTI;
+    else if( tag->hasAttribute( "type", "jid-single" ) )
+      m_type = FIELD_TYPE_JID_SINGLE;
+    else if( tag->hasAttribute( "type", "list-multi" ) )
+      m_type = FIELD_TYPE_LIST_MULTI;
+    else if( tag->hasAttribute( "type", "list-single" ) )
+      m_type = FIELD_TYPE_LIST_SINGLE;
+    else if( tag->hasAttribute( "type", "text-multi" ) )
+      m_type = FIELD_TYPE_TEXT_MULTI;
+    else if( tag->hasAttribute( "type", "text-private" ) )
+      m_type = FIELD_TYPE_TEXT_PRIVATE;
+    else if( tag->hasAttribute( "type", "text-single" ) )
+      m_type = FIELD_TYPE_TEXT_SINGLE;
+
+    if( tag->hasAttribute( "var" ) )
+      m_name = tag->findAttribute( "var" );
+
+    if( tag->hasAttribute( "label" ) )
+      m_label = tag->findAttribute( "label" );
   }
 
   DataFormField::~DataFormField()
@@ -111,6 +138,8 @@ namespace gloox
     }
     else if( !m_value.empty() )
       field->addChild( new Tag( "value", m_value ) );
+
+    return field;
   }
 
 };
