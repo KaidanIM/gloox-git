@@ -11,7 +11,9 @@
 */
 
 
-//#include "config.h"
+#ifndef WIN32
+#include "config.h"
+#endif
 
 #include "prep.h"
 

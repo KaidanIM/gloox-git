@@ -113,7 +113,7 @@ fi
 
 dnl Checks for header files.
 AC_HEADER_STDC
-AC_CHECK_HEADERS(unistd.h strings.h errno.h)
+AC_CHECK_HEADERS(unistd.h strings.h errno.h arpa/nameser.h)
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST

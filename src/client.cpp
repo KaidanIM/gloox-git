@@ -10,7 +10,9 @@
   This software is distributed without any warrenty.
 */
 
-//#include "config.h"
+#ifndef WIN32
+#include "config.h"
+#endif
 
 #include "client.h"
 #include "rostermanager.h"
