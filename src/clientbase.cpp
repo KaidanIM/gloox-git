@@ -12,7 +12,9 @@
 
 
 
-//#include "config.h"
+#ifndef WIN32
+#include "config.h"
+#endif
 
 #include "clientbase.h"
 #include "connection.h"
