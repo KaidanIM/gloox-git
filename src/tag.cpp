@@ -246,4 +246,18 @@ namespace gloox
     return esc;
   }
 
+  Tag* Tag::clone()
+  {
+    Tag *t = new Tag( name(), cdata() );
+    t->m_attribs = m_attribs;
+
+    Tag::TagList::const_iterator it = m_children.begin();
+    for( it; it != m_children.end(); ++it )
+    {
+      t->addChild( (*it)->clone() );
+    }
+
+    return t;
+  }
+
 };
