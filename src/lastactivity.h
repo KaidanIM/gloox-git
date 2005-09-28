@@ -15,7 +15,6 @@
 #define LASTACTIVITY_H__
 
 #include "iqhandler.h"
-#include "discohandler.h"
 
 #include <time.h>
 
@@ -35,7 +34,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.6
    */
-  class LastActivity : public IqHandler, DiscoHandler
+  class LastActivity : public IqHandler
   {
     public:
       /**
@@ -64,7 +63,7 @@ namespace gloox
       void registerLastActivityHandler( LastActivityHandler *lah ) { m_lastActivityHandler = lah; };
 
       /**
-       * Use this function to un-register the set LastActivityHandler.
+       * Use this function to un-register the LastActivityHandler set earlier.
        */
       void removeLastActivityHandler() { m_lastActivityHandler = 0; };
 
