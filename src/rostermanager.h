@@ -102,12 +102,16 @@ namespace gloox
       void unsubscribe( const std::string& jid, const std::string& msg, bool remove );
 
       /**
-       *
+       * Use this function to retrieve the delimiter of Nested Roster Groups (JEP-0083).
+       * @return The group delimiter.
+       * @since 0.7
        */
       const std::string& delimiter() const { return m_delimiter; };
 
       /**
-       *
+       * Use this function to set the group delimiter (JEP-0083).
+       * @param delimiter The group delimiter.
+       * @since 0.7
        */
       void setDelimiter( const std::string& delimiter );
 
