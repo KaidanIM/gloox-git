@@ -20,3 +20,7 @@ missing
 aclocal.m4
 install-sh
 *~
+gloox.pc
+*.gz
+*.bz2
+
