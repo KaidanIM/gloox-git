@@ -1,0 +1,5 @@
+Building on Win32 is experimental and correct functionality is untested.
+
+You need:
+- MinGW http://mingw.org
+- Bloodshed Dev-C++ http://bloodshed.org
