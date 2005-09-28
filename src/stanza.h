@@ -172,6 +172,7 @@ namespace gloox
       /**
        * This function creates a deep copy of this Stanza.
        * @return An independent copy of the stanza.
+       * @since 0.7
        */
       virtual Stanza* clone();
 
