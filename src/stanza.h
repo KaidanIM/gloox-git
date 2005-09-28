@@ -169,6 +169,12 @@ namespace gloox
        */
       void finalize() { init(); };
 
+      /**
+       * This function creates a deep copy of this Stanza.
+       * @return An independent copy of the stanza.
+       */
+      virtual Stanza* clone();
+
     private:
       void init();
 

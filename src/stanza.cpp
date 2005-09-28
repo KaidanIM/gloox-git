@@ -325,4 +325,28 @@ namespace gloox
       return "";
   }
 
+  Stanza* Stanza::clone()
+  {
+    Stanza *s = static_cast<Stanza*>( Tag::clone() );
+
+    s->m_stanzaErrorAppCondition = m_stanzaErrorAppCondition->clone();
+    s->m_subtype = m_subtype;
+    s->m_show = m_show;
+    s->m_stanzaError = m_stanzaError;
+    s->m_stanzaErrorType = m_stanzaErrorType;
+    s->m_errorText = m_errorText;
+    s->m_body = m_body;
+    s->m_subject = m_subject;
+    s->m_status = m_status;
+    s->m_from = m_from;
+    s->m_to = m_to;
+    s->m_xmllang = m_xmllang;
+    s->m_xmlns = m_xmlns;
+    s->m_id = m_id;
+    s->m_thread = m_thread;
+    s->m_priority = m_priority;
+
+    return s;
+  }
+
 };

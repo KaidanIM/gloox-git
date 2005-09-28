@@ -197,6 +197,12 @@ namespace gloox
        */
       virtual StanzaType type() const { return m_type; };
 
+      /**
+       * This function creates a deep copy of this Tag.
+       * @return An independent copy of the Tag.
+       */
+      virtual Tag* clone();
+
     protected:
       const std::string escape( const std::string& what ) const;
       const std::string relax( const std::string& what ) const;
