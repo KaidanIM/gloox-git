@@ -1,5 +1,14 @@
 Building on Win32 is experimental and correct functionality is untested.
 
 You need:
-- MinGW http://mingw.org
-- Bloodshed Dev-C++ http://bloodshed.org
+- MinGW (http://mingw.org)
+
+Optional:
+- Bloodshed Dev-C++ (http://www.bloodshed.net/devcpp.html)
+
+A project file for Bloodshed Dev-C++ is included (gloox.dev)
+
+- Edit config.h.win to suit your needs.
+- Add additional libs you have available to the project.
+- build
+
