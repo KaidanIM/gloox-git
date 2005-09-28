@@ -340,6 +340,9 @@ namespace gloox
 
   void ClientBase::send( Tag *tag )
   {
+    if( !tag )
+      return;
+
     send( tag->xml() );
 
     if( tag->type() == STANZA_UNDEFINED )
