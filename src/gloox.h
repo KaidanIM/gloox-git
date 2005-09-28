@@ -229,7 +229,8 @@
 #define GLOOX_VERSION              "0.6"
 
 /**
- * The namespace for the gloox library.
+ * @brief The namespace for the gloox library.
+ *
  * @author Jakob Schroeter <js@camaya.net>
  * @since 0.3
  */
