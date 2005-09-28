@@ -200,6 +200,7 @@ namespace gloox
       /**
        * This function creates a deep copy of this Tag.
        * @return An independent copy of the Tag.
+       * @since 0.7
        */
       virtual Tag* clone();
 
