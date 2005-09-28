@@ -17,16 +17,22 @@
 #ifdef WIN32
 #include <windows.h>
 #include <windns.h>
-#ifndef MAXDNAME
-#define MAXDNAME 1025
 #endif
-#ifndef PACKETSZ
-#define PACKETSZ 512
-#endif
-#else
+
 #ifdef HAVE_ARPA_NAMESER_H
 #include <arpa/nameser.h>
 #endif
+
+#ifdef __APPLE__
+#include <arpa/nameser_compat.h>
+#endif
+
+#ifndef NS_MAXDNAME
+#define NS_MAXDNAME 1025
+#endif
+
+#ifndef NS_PACKETSZ
+#define NS_PACKETSZ 512
 #endif
 
 #include <string>
@@ -100,10 +106,10 @@ namespace gloox
 
     private:
       typedef struct buf {
-        unsigned char buf[PACKETSZ];
+        unsigned char buf[NS_PACKETSZ];
         int len;
       };
-      typedef unsigned char name [MAXDNAME];
+      typedef unsigned char name [NS_MAXDNAME];
   };
 
 };
