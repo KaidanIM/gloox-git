@@ -11,7 +11,7 @@
 */
 
 
-#ifndef WIN32
+#ifndef _WIN32
 #include "config.h"
 #endif
 
@@ -19,7 +19,7 @@
 
 #include <sys/types.h>
 
-#ifndef WIN32
+#ifndef _WIN32
 #include <netinet/in.h>
 #include <resolv.h>
 #include <sys/socket.h>
@@ -50,7 +50,7 @@
 namespace gloox
 {
 
-#ifndef WIN32
+#ifndef _WIN32
   DNS::HostMap DNS::resolve( const std::string& domain )
   {
     std::string service = "xmpp-client";
@@ -216,7 +216,7 @@ namespace gloox
     printf( "resolved %s to: %s\n", domain.c_str(), inet_ntoa( *((struct in_addr *)h->h_addr) ) );
 #endif
 
-#ifdef WIN32
+#ifdef _WIN32
 		dest_addr.sin_addr.s_addr = inet_addr( inet_ntoa(*((struct in_addr *)h->h_addr)) );
 #else
     if( inet_aton( inet_ntoa(*((struct in_addr *)h->h_addr)), &(dest_addr.sin_addr) ) == 0 )
@@ -227,8 +227,10 @@ namespace gloox
     if( ::connect( fd, (struct sockaddr *)&dest_addr, sizeof( struct sockaddr ) ) == 0 )
       return fd;
 
-#ifndef WIN32
+#ifndef _WIN32
     close( fd );
+#else
+    closesocket( fd );
 #endif
     return -DNS_COULD_NOT_CONNECT;
   }

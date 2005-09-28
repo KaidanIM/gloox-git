@@ -14,7 +14,7 @@
 #ifndef CONNECTION_H__
 #define CONNECTION_H__
 
-#ifndef WIN32
+#ifndef _WIN32
 #include "config.h"
 #endif
 

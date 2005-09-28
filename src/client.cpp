@@ -10,7 +10,7 @@
   This software is distributed without any warrenty.
 */
 
-#ifndef WIN32
+#ifndef _WIN32
 #include "config.h"
 #endif
 

@@ -14,7 +14,7 @@
 #ifndef DNS_H__
 #define DNS_H__
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #include <windns.h>
 #endif
