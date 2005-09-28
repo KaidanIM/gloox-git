@@ -47,8 +47,10 @@ namespace gloox
        * and Presenc e stanzas. Direct usage of Tags is encouraged.
        * @param name The name of the root tag.
        * @param cdata Initial XML character data for the tag.
+       * @param xmllang The value of the xmllang attribute. The stanza's primary language.
        */
-      Stanza( const std::string& name, const std::string& cdata = "" );
+      Stanza( const std::string& name, const std::string& cdata = "",
+              const std::string& xmllang = "default" );
 
       /**
        * Virtual destructor.
@@ -176,7 +178,7 @@ namespace gloox
        */
       virtual Stanza* clone();
 
-    private:
+    protected:
       void init();
 
       StanzaSubType m_subtype;
