@@ -1,0 +1,12 @@
+/**
+ * Uncomment whichever lib you have installed.
+ */
+
+/* */
+// #define HAVE_ZLIB 1
+
+/* */
+// #define HAVE_GNUTLS 1
+
+/* */
+// #define HAVE_LIBIDN 1
