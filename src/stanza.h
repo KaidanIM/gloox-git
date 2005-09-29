@@ -35,16 +35,15 @@ namespace gloox
       /**
        * Creates a new Stanza from the given Tag.
        * @note This creates a shallow copy, i.e. pointers to child tags are shared with the original
-       * Tag. You will ahve problems freeing the allocated memory.
+       * Tag. You will have problems freeing the allocated memory. Use @ref clone() to create a deep
+       * copy.
        * @param tag The Tag to create the stanza from.
        * @deprecated
        */
       Stanza( Tag *tag );
 
       /**
-       * Creates an ew Stanza with given name and optional CData.
-       * This will probably be replaced with special subclasses fro IQ, Message, Subscription
-       * and Presenc e stanzas. Direct usage of Tags is encouraged.
+       * Creates a new Stanza with given name and optional CData.
        * @param name The name of the root tag.
        * @param cdata Initial XML character data for the tag.
        * @param xmllang The value of the xmllang attribute. The stanza's primary language.
@@ -177,6 +176,60 @@ namespace gloox
        * @since 0.7
        */
       virtual Stanza* clone();
+
+      /**
+       * Creates a new IQ stanza.
+       * @param to The receiver of the stanza.
+       * @param id An ID for the stanza. Best is to use ClientBase::getID() as input.
+       * @param subtype The IQ type. Only STANZA_IQ_* types are valid.
+       * @param xmlns If this is non-empty, a child element named 'query' will be included, with this
+       * value as value of the 'xmlns' attribute.
+       * @param tag If this if not NULL, and xmlns is not empty, this Tag will be included as child tag of
+       * the 'query' element.
+       * @since 0.7
+       */
+      static Stanza* createIqStanza( const JID& to, const std::string& id,
+                                     StanzaSubType subtype = STANZA_IQ_GET,
+                                     const std::string& xmlns = "", Tag* tag = 0 );
+
+      /**
+       * Creates a new presence stanza.
+       * @param to The receiver of the stanza.
+       * @param msg An optional message.
+       * @param status The status.
+       * @param xmllang The status's language.
+       * @since 0.7
+       */
+      static Stanza* createPresenceStanza( const JID& to, const std::string& msg = "",
+                                           PresenceStatus status = PRESENCE_AVAILABLE,
+                                           const std::string& xmllang = "" );
+
+      /**
+       * Creates a new message stanza.
+       * @param to The receiver of the message.
+       * @param body The message's body.
+       * @param subtype The message type. Only STANZA_MESSAGE_* types are vaild.
+       * @param subject The message's subject.
+       * @param thread The message's conversation thread id.
+       * @param xmllang The message's language.
+       * @since 0.7
+       */
+      static Stanza* createMessageStanza( const JID& to, const std::string& body,
+                                          StanzaSubType subtype = STANZA_MESSAGE_CHAT,
+                                          const std::string& subject = "", const std::string& thread = "",
+                                          std::string& xmllang = "" );
+
+      /**
+       * Creates a new subscription stanza.
+       * @param to The recipient of the subscription stanza.
+       * @param msg An optional message.
+       * @param subtype The subscription type. Only STANZA_S10N_* types are vaild.
+       * @param xmllang The message's language.
+       * @since 0.7
+       */
+      static Stanza* createSubscriptionStanza( const JID& to, const std::string& msg = "",
+                                               StanzaSubType subtype = STANZA_S10N_SUBSCRIBE,
+                                               const std::string& xmllang = "" );
 
     protected:
       void init();

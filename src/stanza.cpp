@@ -334,4 +334,154 @@ namespace gloox
     return s;
   }
 
+  Stanza* Stanza::createIqStanza( const JID& to, const std::string& id,
+                          StanzaSubType subtype, const std::string& xmlns, Tag* tag )
+  {
+    Stanza *s = new Stanza( "iq" );
+    switch( subtype )
+    {
+      case STANZA_IQ_ERROR:
+        s->addAttrib( "type", "error" );
+        break;
+      case STANZA_IQ_SET:
+        s->addAttrib( "type", "set" );
+        break;
+      case STANZA_IQ_RESULT:
+        s->addAttrib( "type", "result" );
+        break;
+      case STANZA_IQ_GET:
+      default:
+        s->addAttrib( "type", "get" );
+        break;
+    }
+
+    if( !xmlns.empty() )
+    {
+      Tag *q = new Tag( s, "query" );
+      q->addAttrib( "xmlns", xmlns );
+      if( tag )
+        q->addChild( tag );
+    }
+    s->addAttrib( "to", to.full() );
+    s->addAttrib( "id", id );
+
+    s->finalize();
+
+    return s;
+  }
+
+  Stanza* Stanza::createPresenceStanza( const JID& to, const std::string& msg,
+                                 PresenceStatus status, const std::string& xmllang )
+  {
+    Stanza *s = new Stanza( "presence" );
+    switch( status )
+    {
+      case PRESENCE_UNAVAILABLE:
+        s->addAttrib( "type", "unavailable" );
+        break;
+      case PRESENCE_CHAT:
+        s->addChild( new Tag( "show", "chat" ) );
+        break;
+      case PRESENCE_AWAY:
+        s->addChild( new Tag( "show", "away" ) );
+        break;
+      case PRESENCE_DND:
+        s->addChild( new Tag( "show", "dnd" ) );
+        break;
+      case PRESENCE_XA:
+        s->addChild( new Tag( "show", "xa" ) );
+      default:
+        break;
+    }
+
+    s->addAttrib( "to", to.full() );
+    if( !msg.empty() )
+    {
+      Tag *t = new Tag( s, "status", msg );
+      t->addAttrib( "xml:lang", xmllang );
+    }
+
+    s->finalize();
+
+    return s;
+  }
+
+  Stanza* Stanza::createMessageStanza( const JID& to, const std::string& body,
+                               StanzaSubType subtype, const std::string& subject,
+                               const std::string& thread, std::string& xmllang )
+  {
+    Stanza *s = new Stanza( "message" );
+    switch( subtype )
+    {
+      case STANZA_MESSAGE_ERROR:
+        s->addAttrib( "type", "error" );
+        break;
+      case STANZA_MESSAGE_NORMAL:
+        s->addAttrib( "type", "normal" );
+        break;
+      case STANZA_MESSAGE_HEADLINE:
+        s->addAttrib( "type", "headline" );
+        break;
+      case STANZA_MESSAGE_GROUPCHAT:
+        s->addAttrib( "type", "groupchat" );
+        break;
+      case STANZA_MESSAGE_CHAT:
+      default:
+        s->addAttrib( "type", "chat" );
+        break;
+    }
+
+    s->addAttrib( "to", to.full() );
+
+    if( !body.empty() )
+    {
+      Tag *b = new Tag( s, "body", body );
+      b->addAttrib( "xml:lang", xmllang );
+    }
+    if( !subject.empty() )
+    {
+      Tag *s = new Tag( s, "subject", subject );
+      s->addAttrib( "xml:lang", xmllang );
+    }
+    if( !thread.empty() )
+      new Tag( s, "thread", thread );
+
+    s->finalize();
+
+    return s;
+  }
+
+  Stanza* Stanza::createSubscriptionStanza( const JID& to, const std::string& msg,
+                                    StanzaSubType subtype, const std::string& xmllang )
+  {
+    Stanza *s = new Stanza( "presence" );
+    switch( subtype )
+    {
+      case STANZA_S10N_SUBSCRIBED:
+        s->addAttrib( "type", "subscribed" );
+        break;
+      case STANZA_S10N_UNSUBSCRIBE:
+        s->addAttrib( "type", "unsubscribe" );
+        break;
+      case STANZA_S10N_UNSUBSCRIBED:
+        s->addAttrib( "type", "unsubscribed" );
+        break;
+      case STANZA_S10N_SUBSCRIBE:
+      default:
+        s->addAttrib( "type", "subscribe" );
+        break;
+    }
+
+    s->addAttrib( "to", to.full() );
+    if( !msg.empty() )
+    {
+      Tag *t = new Tag( s, "status", msg );
+      t->addAttrib( "xml:lang", xmllang );
+    }
+
+    s->finalize();
+
+    return s;
+  }
+
 };
