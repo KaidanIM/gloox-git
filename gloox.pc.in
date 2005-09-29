@@ -7,4 +7,4 @@ Name: gloox
 Description: A high-level XMPP/Jabber library for C++
 Version: @VERSION@
 Libs: -L${libdir} -lgloox @LIBS@
-Cflags: -I${includedir}/gloox @CFLAGS@
+Cflags: -I${includedir} @CFLAGS@
