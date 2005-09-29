@@ -123,6 +123,7 @@ dnl Generating makefiles.
 AC_CONFIG_FILES([
 Makefile
 gloox.pc
+gloox-config
 src/Makefile
 src/tests/Makefile
 ])
