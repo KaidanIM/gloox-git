@@ -16,6 +16,18 @@
 
 #include <arpa/nameser.h>
 
+#ifdef __APPLE__
+#include <arpa/nameser_compat.h>
+#endif
+
+#ifndef NS_MAXDNAME
+#define NS_MAXDNAME 1025
+#endif
+
+#ifndef NS_PACKETSZ
+#define NS_PACKETSZ 512
+#endif
+
 #include <string>
 #include <map>
 
@@ -86,10 +98,10 @@ namespace gloox
 
     private:
       typedef struct buf {
-        unsigned char buf[PACKETSZ];
+        unsigned char buf[NS_PACKETSZ];
         int len;
       };
-      typedef unsigned char name [MAXDNAME];
+      typedef unsigned char name [NS_MAXDNAME];
   };
 
 };

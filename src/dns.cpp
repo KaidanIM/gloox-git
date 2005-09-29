@@ -31,6 +31,14 @@
 #define SRV_SERVER  (RRFIXEDSZ+6)
 #define SRV_FIXEDSZ (RRFIXEDSZ+6)
 
+#ifndef T_SRV
+#define T_SRV 33
+#endif
+
+#ifndef C_IN
+#define C_IN 1
+#endif
+
 #define XMPP_PORT 5222
 
 namespace gloox
@@ -53,17 +61,17 @@ namespace gloox
     std::string dname = "_" +  service + "._" + proto;
 
     if( !domain.empty() )
-      srvbuf.len = res_querydomain( dname.c_str(), (char*)domain.c_str(), C_IN, T_SRV, srvbuf.buf, PACKETSZ );
+      srvbuf.len = res_querydomain( dname.c_str(), (char*)domain.c_str(), C_IN, T_SRV, srvbuf.buf, NS_PACKETSZ );
     else
-      srvbuf.len = res_query( dname.c_str(), C_IN, T_SRV, srvbuf.buf, PACKETSZ );
+      srvbuf.len = res_query( dname.c_str(), C_IN, T_SRV, srvbuf.buf, NS_PACKETSZ );
 
     if( srvbuf.len < 0 )
       error = true;
 
     HEADER* hdr = (HEADER*)srvbuf.buf;
-    unsigned char* here = srvbuf.buf + HFIXEDSZ;
+    unsigned char* here = srvbuf.buf + NS_HFIXEDSZ;
 
-    if( ( hdr->tc ) || ( srvbuf.len < HFIXEDSZ ) )
+    if( ( hdr->tc ) || ( srvbuf.len < NS_HFIXEDSZ ) )
       error = true;
 
     if( hdr->rcode >= 1 && hdr->rcode <= 5 )
@@ -72,17 +80,17 @@ namespace gloox
     if( ntohs( hdr->ancount ) == 0 )
       error = true;
 
-    if( ntohs( hdr->ancount ) > PACKETSZ )
+    if( ntohs( hdr->ancount ) > NS_PACKETSZ )
       error = true;
 
     int cnt;
     for( cnt = ntohs( hdr->qdcount ); cnt>0; cnt-- )
     {
       int strlen = dn_skipname( here, srvbuf.buf + srvbuf.len );
-      here += strlen + QFIXEDSZ;
+      here += strlen + NS_QFIXEDSZ;
     }
 
-    unsigned char *srv[PACKETSZ];
+    unsigned char *srv[NS_PACKETSZ];
     int srvnum = 0;
     for( cnt = ntohs( hdr->ancount ); cnt>0; cnt-- )
     {
@@ -117,7 +125,7 @@ namespace gloox
     {
       name srvname;
 
-      if( ns_name_ntop( srv[cnt] + SRV_SERVER, (char*)srvname, MAXDNAME ) < 0 )
+      if( ns_name_ntop( srv[cnt] + SRV_SERVER, (char*)srvname, NS_MAXDNAME ) < 0 )
         printf( "handle this error!\n" );
 
       servers[(char*)srvname] = ns_get16( srv[cnt] + SRV_PORT );
