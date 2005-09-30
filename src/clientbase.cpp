@@ -60,7 +60,10 @@ namespace gloox
 
   ConnectionError ClientBase::recv( int timeout )
   {
-    return m_connection->recv( timeout );
+    ConnectionError e = m_connection->recv( timeout );
+    if( e != CONN_OK )
+      notifyOnDisconnect( e );
+    return e;
   }
 
   bool ClientBase::connect( bool block )

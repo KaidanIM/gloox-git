@@ -325,6 +325,12 @@ namespace gloox
 
   ConnectionError Connection::recv( int timeout )
   {
+    if( m_cancel )
+    {
+      cleanup();
+      return CONN_USER_DISCONNECTED;
+    }
+
     fd_set fds;
     struct timeval tv;
 
@@ -401,7 +407,6 @@ namespace gloox
     if( !m_socket || !m_parser )
       return CONN_IO_ERROR;
 
-    m_cancel = false;
     while( !m_cancel )
     {
       ConnectionError r = recv();
@@ -489,6 +494,7 @@ namespace gloox
     else
       m_state = STATE_CONNECTED;
 
+    m_cancel = false;
     return m_state;
   }
 
