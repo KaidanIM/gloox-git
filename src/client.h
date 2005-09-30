@@ -242,9 +242,9 @@ namespace gloox
 
       void init();
 
-      RosterManager* m_rosterManager;
+      RosterManager *m_rosterManager;
       NonSaslAuth *m_auth;
-      Disco* m_disco;
+      Disco *m_disco;
 
       bool m_resourceBound;
       bool m_autoPresence;
