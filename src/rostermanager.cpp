@@ -399,8 +399,6 @@ namespace gloox
   {
     m_delimiterFetched = true;
     m_delimiter = xml->cdata();
-    if( m_delimiter.empty() )
-      setDelimiter( "::" );
     fill();
   }
 
