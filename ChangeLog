@@ -1,11 +1,16 @@
 
+v0.6.3 -- 30 Sep 2005
+---------------------
+- include fixes for MacOS X
+
+
 v0.6.2 -- 23 Sep 2005
--------------------
+---------------------
 - added pkg-config file
 
 
 v0.6.1 -- 22 Sep 2005
--------------------
+---------------------
 - fixed Makefile.ams for make distcheck
 - removed unused iksemel types and includes
 - made void ClientBase::send( const std::string& ) private
