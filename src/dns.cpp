@@ -12,7 +12,7 @@
 
 
 #ifdef _WIN32
-#include "config.h.win"
+#include "../config.h.win"
 #else
 #include "config.h"
 #endif
@@ -30,7 +30,7 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #else
-#include <winsock.h>
+#include <winsock2.h>
 #endif
 
 #define SRV_COST    (RRFIXEDSZ+0)

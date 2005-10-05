@@ -11,7 +11,7 @@
 */
 
 #ifdef _WIN32
-#include "config.h.win"
+#include "../config.h.win"
 #else
 #include "config.h"
 #endif
