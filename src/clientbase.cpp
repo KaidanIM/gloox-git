@@ -104,12 +104,23 @@ namespace gloox
     switch( type )
     {
       case NODE_STREAM_START:
-        if( !checkStreamVersion( stanza->findAttribute( "version" ) ) )
-          disconnect( CONN_STREAM_ERROR );
+      {
+        const std::string version = stanza->findAttribute( "version" );
+        if( !version.empty() )
+        {
+          if( !checkStreamVersion( version ) )
+            disconnect( CONN_STREAM_ERROR );
+        }
+        else
+        {
+          printf( "This server is not XMPP-compliant (it does not send a 'version' attribute). Plase try another one.\n" );
+              disconnect( CONN_STREAM_ERROR );
+        }
 
         m_sid = stanza->findAttribute( "id" );
         handleStartNode();
         break;
+      }
       case NODE_STREAM_CHILD:
         if( !handleNormalNode( stanza ) )
         {
