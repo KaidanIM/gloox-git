@@ -62,7 +62,7 @@ namespace gloox
   }
 
   DNS::HostMap DNS::resolve( const std::string& service, const std::string& proto,
-                               const std::string& domain )
+                             const std::string& domain )
   {
     buf srvbuf;
     bool error = false;
