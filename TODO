@@ -6,13 +6,12 @@ Todo
 - introduce return values for *Handlers to indicate whether following handlers should be invoked as well
 - sort SRV records by weight & cost
 - thread-safety
-- windows port
 
 
 In the pipe
 -----------
 
-- RosterManager: support self-contact
+- windows port
 Data Forms:
 - honour multiple lines (in text-multi fields et al.)
 - 'reported' and 'item' elements

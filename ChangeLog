@@ -1,19 +1,24 @@
 
-v0.7 -- xx Oct 2005
+v0.7 -- 05 Oct 2005
 -------------------
 - JEP-0004 (Data Forms)
 - JEP-0013 (Flexible Offline Message Retrieval)
+- JEP-0083 (Nested Roster Groups)
 - JEP-0138 (Stream Compression)
 - removed pkg-config dependency (in check for iksemel)
-- fixed pkg-config file (include dir and all libs)
+- fixed pkg-config file (all libs)
 - RosterItem: added status(); made setStatus() take a PresenceStatus
-- RosterManager: added self-contact
-- Disco: no need to register the handler to receive query results (still necessary for 'set's
+- RosterManager: added self-contact (optional; hard-wired in Client for now)
+- Disco: no need to register the handler to receive query results (still necessary for 'set's)
 - PrivateXML: no need to register the handler to store or receive private XML
 - added IQ error handling in PrivateXML class
-- *experimental* port to MinGW, includes a Bloodshed Dev-C++ project file; SRV lookups do not work.
-
-- added classes for common packet types
+- *experimental* port to MinGW; includes a Bloodshed Dev-C++ project file; SRV lookups do not work; untested. See README.win32 for more information.
+- some MacOS X #include fixes
+- added Tag::clone() and Stanza::clone()
+- added static functions to Stanza to create common packet types (IQ, Message, Presence, Subscription)
+- gloox-config script
+- call onDisconnect() in non-blocking connect() mode
+- added debug notice about remote server not being XMPP compliant
 
 
 v0.6.2 -- 23 Sep 2005
