@@ -33,12 +33,12 @@ namespace gloox
     public:
 
       /**
-       * Creates a new Stanza from the given Tag.
-       * @note This creates a shallow copy, i.e. pointers to child tags are shared with the original
-       * Tag. You will have problems freeing the allocated memory. Use @ref clone() to create a deep
-       * copy.
-       * @param tag The Tag to create the stanza from.
-       * @deprecated
+       * Creates a new Stanza from a deep copy of the given Tag.
+       * @param tag The Tag to create the Stanza from.
+       * @since 0.7
+       * @note While the signature of this constructor in 0.7 is the the same as in older versions,
+       * semantics have changed. The copy created by this constructor is no longer a shallow one. You have to
+       * make sure the copy is deleted properly.
        */
       Stanza( Tag *tag );
 

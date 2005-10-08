@@ -24,15 +24,18 @@ namespace gloox
   }
 
   Stanza::Stanza( Tag *tag )
-    : Tag( tag->name() ),
+    : Tag( tag->name(), tag->cdata() ),
       m_show( PRESENCE_UNKNOWN ), m_xmllang( "default" ),
       m_stanzaErrorAppCondition( 0 )
   {
-    m_name = tag->name();
     m_attribs = tag->attributes();
-    m_cdata = tag->cdata();
-    m_children = tag->children();
-//     m_parent = tag->parent();
+    Tag::TagList l = tag->children();
+    Tag::TagList::const_iterator it = l.begin();
+    for( it; it != l.end(); ++it )
+    {
+      addChild( (*it)->clone() );
+    }
+
     init();
   }
 
@@ -327,10 +330,7 @@ namespace gloox
 
   Stanza* Stanza::clone()
   {
-    Stanza *s = static_cast<Stanza*>( Tag::clone() );
-
-    s->init();
-
+    Stanza *s = new Stanza( this );
     return s;
   }
 
