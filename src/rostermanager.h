@@ -17,6 +17,8 @@
 #include "subscriptionhandler.h"
 #include "rosterlistener.h"
 #include "privatexmlhandler.h"
+#include "iqhandler.h"
+#include "presencehandler.h"
 
 #include <map>
 #include <string>
@@ -26,8 +28,6 @@ namespace gloox
 {
 
   class ClientBase;
-  class IqHandler;
-  class PresenceHandler;
   class Stanza;
   class PrivateXML;
 
