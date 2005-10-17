@@ -18,15 +18,14 @@ namespace gloox
 {
 
   Stanza::Stanza( const std::string& name, const std::string& cdata, const std::string& xmllang )
-    : Tag( name, cdata ), m_xmllang( xmllang ), m_stanzaError( ST_ERROR_UNDEFINED ),
-      m_stanzaErrorAppCondition( 0 )
+  : Tag( name, cdata ), m_show( PRESENCE_UNKNOWN ), m_xmllang( xmllang ),
+      m_stanzaError( ST_ERROR_UNDEFINED ), m_stanzaErrorAppCondition( 0 )
   {
   }
 
   Stanza::Stanza( Tag *tag )
-    : Tag( tag->name(), tag->cdata() ),
-      m_show( PRESENCE_UNKNOWN ), m_xmllang( "default" ),
-      m_stanzaErrorAppCondition( 0 )
+    : Tag( tag->name(), tag->cdata() ), m_show( PRESENCE_UNKNOWN ), m_xmllang( "default" ),
+      m_stanzaError( ST_ERROR_UNDEFINED ), m_stanzaErrorAppCondition( 0 )
   {
     m_attribs = tag->attributes();
     Tag::TagList l = tag->children();
@@ -161,7 +160,8 @@ namespace gloox
     {
       if( !hasAttribute( "type" ) )
         m_show = PRESENCE_AVAILABLE;
-      else if( hasChildWithCData( "show", "chat" ) )
+
+      if( hasChildWithCData( "show", "chat" ) )
         m_show = PRESENCE_CHAT;
       else if( hasChildWithCData( "show", "away" ) )
         m_show = PRESENCE_AWAY;
@@ -171,8 +171,6 @@ namespace gloox
         m_show = PRESENCE_XA;
       else if( hasAttribute( "type", "unavailable" ) )
         m_show = PRESENCE_UNAVAILABLE;
-      else
-        m_show = PRESENCE_UNKNOWN;
 
       if( hasChild( "priority" ) )
         m_priority = atoi( findChild( "priority" )->cdata().c_str() );
