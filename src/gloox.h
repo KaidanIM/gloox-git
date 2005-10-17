@@ -149,6 +149,9 @@
  * }
  * @endcode
  *
+ * @note gloox does not (and will not) support the style of connection which is usually used on port 5223,
+ * i.e. SSL encryption *before* any XML is sent, because its a legacy method and not standard XMPP.
+ *
  * @section roster_sec Roster Management
  *
  * RFC 3921 defines the protocol to manage one's contact list (roster). In gloox, the @ref
@@ -226,7 +229,7 @@
 
 #define XMPP_STREAM_VERSION_MAJOR  "1"
 #define XMPP_STREAM_VERSION_MINOR  "0"
-#define GLOOX_VERSION              "0.7-pre1"
+#define GLOOX_VERSION              "0.7-pre2"
 
 /**
  * @brief The namespace for the gloox library.
