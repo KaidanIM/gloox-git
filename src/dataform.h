@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2004-2005 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2005 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -14,6 +14,7 @@
 #ifndef DATAFORM_H__
 #define DATAFORM_H__
 
+#include "dataformbase.h"
 #include "dataformfield.h"
 
 #include <string>
@@ -32,7 +33,7 @@ namespace gloox
    * @note This implementation lacks support for Section 3.4 of JEP-0004 (Multiple Items in Form Results),
    * i.e. the &lt;reported&gt; and &lt;item&gt; elements.
    */
-  class DataForm
+  class DataForm : public DataFormBase
   {
     public:
       /**
@@ -53,14 +54,9 @@ namespace gloox
       };
 
       /**
-       * A list of Data Form Fields.
-       */
-      typedef std::list<DataFormField> FieldList;
-
-      /**
-       * Contsructs a new, empty form.
+       * Constructs a new, empty form.
        * @param type The form type.
-       * @param title The natural-language title of the form. Should not contain newlines (\n, \r).
+       * @param title The natural-language title of the form. Should not contain newlines (\\n, \\r).
        * @param instructions Natural-language instructions for filling out the form. Should not contain
        * newlines (\\n, \\r).
        */
@@ -83,21 +79,6 @@ namespace gloox
        * created from a Tag not correctly describing a Data Form).
        */
       Tag* tag();
-
-      /**
-       * Use this function to check whether  this form contains a field with the given name.
-       * @param field The name of the field (the content of the 'var' attribute).
-       * @return Whether or not the form contains the named field.
-       */
-      bool hasField( const std::string& field );
-
-      /**
-       * Use this function to fetch a copy of a field of the form. If no such field exists, an empty
-       * (invalid) field is returned.
-       * @param field The name of the field (the content of the 'var' attribute).
-       * @return A copy of the field with the given name if it exists, an empty (invalid) field otherwise.
-       */
-      DataFormField field( const std::string& field );
 
       /**
        * Use this function to retrieve the title of the form.
@@ -125,21 +106,7 @@ namespace gloox
        */
       void setInstructions( const std::string& instructions ) { m_instructions = instructions; };
 
-      /**
-       * Use this function to set the fields the form contains.
-       * @param fields The list of fields.
-       * @note Any previously set fields will be deleted. Always set all fields, not a delta.
-       */
-      void setFields( FieldList& fields ) { m_fields = fields; };
-
-      /**
-       * Use this function to retrieve the list of fields of a form.
-       * @return The list of fields the form contains.
-       */
-      FieldList& fields() { return m_fields; };
-
     private:
-      FieldList m_fields;
       DataFormType m_type;
       std::string m_title;
       std::string m_instructions;

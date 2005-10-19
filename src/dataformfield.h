@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2004-2005 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2005 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -31,6 +31,7 @@ namespace gloox
   class DataFormField
   {
     public:
+
       /**
        * Describes the possible type of a Data Form Field.
        */
@@ -40,7 +41,7 @@ namespace gloox
                                      * between two options. The default value is "false". */
         FIELD_TYPE_FIXED,           /**< The field is intended for data description (e.g., human-readable text
                                      * such as "section" headers) rather than data gathering or provision. The
-                                     * &lt;value/&gt; child SHOULD NOT contain newlines (the \n and \r
+                                     * &lt;value/&gt; child SHOULD NOT contain newlines (the \\n and \\r
                                      * characters); instead an application SHOULD generate multiple fixed
                                      * fields, each with one &lt;value/&gt; child. */
         FIELD_TYPE_HIDDEN,          /**< The field is not shown to the entity providing information, but
@@ -83,18 +84,24 @@ namespace gloox
       virtual ~DataFormField();
 
       /**
-       * Use this function to create a Tag representation of the form field. This is usually called by
-       * DataForm.
-       * @return A Tag hierarchically describing the form field, or NULL if the field is invalid (i.e. created
-       * from a Tag not correctly describing a Data Form Field).
-       */
-      Tag* tag() const;
-
-      /**
        * Use this function to retrieve the optional values of a field.
        * @return The options of a field.
        */
       StringMap& options() { return m_options; };
+
+      /**
+       * Use this function to create a Tag representation of the form field. This is usually called by
+       * DataForm.
+       * @return A Tag hierarchically describing the form field, or NULL if the field is invalid (i.e.
+       * created from a Tag not correctly describing a Data Form Field).
+       */
+      virtual Tag* tag() const;
+
+      /**
+       * Use this function to retrieve the name of the field (the content of the 'var' attribute).
+       * @return The name of the field.
+       */
+      virtual const std::string& name() const { return m_name; };
 
       /**
        * Use this function to set the optional values of a field.
@@ -115,17 +122,11 @@ namespace gloox
       void setRequired( bool required ) { m_required = required; };
 
       /**
-       * Use this function to retrieve the name of the field (the content of the 'var' attribute).
-       * @return The name of the field.
-       */
-      const std::string& name() const { return m_name; };
-
-      /**
        * Sets the name of the field.
        * @param name The new name of the field.
        * @note Fields of type other than 'fixed' SHOULD have a name.
        */
-      void setFieldName( const std::string& name ) { m_name = name; };
+      void setName( const std::string& name ) { m_name = name; };
 
       /**
        * Use this function to retrieve the type of this field.
@@ -160,10 +161,10 @@ namespace gloox
     private:
       StringMap m_options;
 
+      std::string m_name;
       std::string m_value;
       std::string m_desc;
       std::string m_label;
-      std::string m_name;
       DataFormFieldType m_type;
       bool m_required;
   };
