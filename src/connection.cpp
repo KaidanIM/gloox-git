@@ -357,7 +357,11 @@ namespace gloox
     else
 #endif
     {
+#ifdef SKYOS
+      size = ::recv( m_socket, (unsigned char*)m_buf, BUFSIZE - 1, 0 );
+#else
       size = ::recv( m_socket, m_buf, BUFSIZE - 1, 0 );
+#endif
     }
 
     if( size < 0 )
@@ -450,10 +454,10 @@ namespace gloox
       int num = 0;
       int len = strlen( xml );
       while( num < len )
-#ifdef _WIN32
-        num += ::send( m_socket, (xml+num), len - num, 0 );
+#ifdef SKYOS
+        num += ::send( m_socket, (unsigned char*)(xml+num), len - num, 0 );
 #else
-        num += ::send( m_socket, (void*)(xml+num), len - num, 0 );
+        num += ::send( m_socket, (xml+num), len - num, 0 );
 #endif
     }
 
