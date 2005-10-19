@@ -109,7 +109,7 @@
  *
  * @section client_sec Clients
  *
- * A client can be and end-user's chat client or a bot or similar entities not tied to a particular
+ * A client can be an end-user's chat client, a bot, or a similar entity not tied to a particular
  * server. The @ref gloox::Client class implements the necessary functionality to connect to an XMPP
  * server. Usage is, again, pretty simple:
  * @code
@@ -138,6 +138,7 @@
  * {
  *   // connection established, auth done (see API docs for exceptions)
  * }
+ *
  * bool MyClass::onTLSConnect( const CertInfo& info )
  * {
  *   // examine certificate info
@@ -150,7 +151,7 @@
  * @endcode
  *
  * @note gloox does not (and will not) support the style of connection which is usually used on port 5223,
- * i.e. SSL encryption *before* any XML is sent, because its a legacy method and not standard XMPP.
+ * i.e. SSL encryption before any XML is sent, because its a legacy method and not standard XMPP.
  *
  * @section roster_sec Roster Management
  *
@@ -162,7 +163,7 @@
  *
  * @section privacy_sec Privacy Lists
  *
- * Also defined in RFC 3921: Privacy Lists. Privacy Lists can be used to explicitely block or allow
+ * Also defined in RFC 3921: Privacy Lists. A Privacy List can be used to explicitely block or allow
  * sending of stanzas from and to contacts, respectively. You can define rules based on JID, stanza type,
  * etc. Needless to say that gloox implements Privacy Lists as well. ;) The @ref gloox::PrivacyManager
  * class and the @ref gloox::PrivacyListHandler virtual interface allow for full flexibility in Privacy
@@ -175,9 +176,11 @@
  * PrivacyItem item( PrivacyItem::TYPE_JID, PrivacyItem::ACTION_DENY,
  *                   PrivacyItem::PACKET_MESSAGE, "me@there.com" );
  * list.push_back( item );
+ *
  * PrivacyItem item2( PrivacyItem::TYPE_JID, PrivacyItem::ACTION_ALLOW,
  *                    PrivacyItem::PACKET_IQ, "me@example.org" );
  * list.push_back( item2 );
+ *
  * p->store( "myList", list );
  * @endcode
  *
