@@ -78,20 +78,20 @@ namespace gloox
 
       /**
        * Use this function to send a string of data over the wire. The function returns only after
-       * all data has been send.
+       * all data has been sent.
        * @param data The data to send.
        */
       void send( const std::string& data );
 
       /**
        * Use this function to put the connection into 'receive mode'.
-       * @return Returns a value describing the disconnection reason.
+       * @return Returns a value indicating the disconnection reason.
        */
       ConnectionError receive();
 
       /**
        * Disconnects an established connection. NOOP if no active connection exists.
-       * param e A ConnectionError decribing why the connection is terminated. Well, its not really an
+       * @param e A ConnectionError decribing why the connection is terminated. Well, its not really an
        * error here, but...
        */
       void disconnect( ConnectionError e );
