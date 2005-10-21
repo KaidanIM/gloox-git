@@ -108,6 +108,14 @@ namespace gloox
        */
       ConnectionState state() const { return m_state; };
 
+      /**
+       * Gives access to the raw file descriptor of a connection. Use it wisely. Especially, you should not
+       * ::recv() any data from it. There is no way to feed that back into the parser. You can select() it
+       * and use Connection::recv( -1 ) to fetch the data.
+       * @return The file descriptor of the active connection, or 0 if no connection is established.
+       */
+      int getFileDescriptor() const { return m_socket; };
+
 #ifdef HAVE_ZLIB
       /**
        * In case Zlib is available, this function can be used to enable stream compression

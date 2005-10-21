@@ -224,6 +224,14 @@ namespace gloox
       void setXmlLang( const std::string& xmllang ) { m_xmllang = xmllang; };
 
       /**
+       * Gives access to the raw file descriptor of the current connection. Use it wisely. Especially,
+       * you should not ::recv() any data from it. There is no way to feed that back into the parser. You
+       * can select() it and use Connection::recv( -1 ) to fetch the data.
+       * @return The file descriptor of the active connection, or 0 if no connection is established.
+       */
+      int getFileDescriptor() const;
+
+      /**
        * Registers @c cl as object that receives connection notifications.
        * @param cl The object to receive connection notifications.
        */

@@ -515,6 +515,14 @@ namespace gloox
     notifyLogHandlers( xml, incoming );
   }
 
+  int ClientBase::getFileDescriptor() const
+  {
+    if( m_connection )
+      return m_connection->getFileDescriptor();
+    else
+      return 0;
+  }
+
   void ClientBase::registerPresenceHandler( PresenceHandler *ph )
   {
     m_presenceHandlers.push_back( ph );
