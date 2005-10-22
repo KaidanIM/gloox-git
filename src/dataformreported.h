@@ -11,8 +11,8 @@
 */
 
 
-#ifndef DATAFORMRESULT_H__
-#define DATAFORMRESULT_H__
+#ifndef DATAFORMREPORTED_H__
+#define DATAFORMREPORTED_H__
 
 #include "dataformfield.h"
 #include "dataformbase.h"
@@ -21,7 +21,7 @@ namespace gloox
 {
 
   /**
-   * @brief An abstraction of an &lt;result&gt; element in a JEP-0004 Data Form of type result.
+   * @brief An abstraction of an &lt;reported&gt; element in a JEP-0004 Data Form of type result.
    *
    * There are some constraints regarding usage of this element you should be aware of. Check JEP-0004
    * section 3.4. This class does not enforce correct usage at this point.
@@ -29,21 +29,21 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.7
    */
-  class DataFormResult : public DataFormBase, DataFormField
+  class DataFormReported : public DataFormBase, DataFormField
   {
     public:
       /**
-       *
+       * Creates an empty 'reported' element you can add fields to.
        */
-      DataFormItem() {};
+      DataFormReported() : DataFormField( FIELD_TYPE_REPORTED ) {};
 
       /**
        * Virtual destructor.
        */
-      virtual ~DataFormItem() {};
+      virtual ~DataFormReported() {};
 
   };
 
 }
 
-#endif // DATAFORMRESULT_H__
+#endif // DATAFORMREPORTED_H__

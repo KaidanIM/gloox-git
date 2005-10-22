@@ -32,6 +32,6 @@ libglooxinclude_HEADERS = adhoccommandprovider.h  privacymanager.h      tag.h \
 			  disconodehandler.h      privacylisthandler.h  loghandler.h \
 			  lastactivity.h          lastactivityhandler.h flexoff.h \
 			  flexoffhandler.h        dataform.h            dataformfield.h \
-			  dataformitem.h          dataformbase.h        dataformresult.h
+			  dataformitem.h          dataformbase.h        dataformreported.h
 
 noinst_HEADERS = prep.h parser.h connection.h dns.h nonsaslauth.h
