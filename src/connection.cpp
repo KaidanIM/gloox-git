@@ -118,7 +118,7 @@ namespace gloox
     if( !error && ( ( certList = gnutls_certificate_get_peers( m_session, &certListSize ) ) == 0 ) )
       error = true;
 
-    gnutls_x509_crt_t *cert = new gnutls_x509_crt_t[certListSize];
+    gnutls_x509_crt_t *cert = new gnutls_x509_crt_t[certListSize+1];
     for( unsigned int i=0; !error && ( i<certListSize ); ++i )
     {
       if( !error && ( gnutls_x509_crt_init( &cert[i] ) < 0 ) )
