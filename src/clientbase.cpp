@@ -605,7 +605,7 @@ namespace gloox
   void ClientBase::notifyOnConnect()
   {
     ConnectionListenerList::const_iterator it = m_connectionListeners.begin();
-    for( ; it != m_connectionListeners.end(); it++ )
+    for( ; it != m_connectionListeners.end(); ++it )
     {
       (*it)->onConnect();
     }
@@ -614,7 +614,7 @@ namespace gloox
   void ClientBase::notifyOnDisconnect( ConnectionError e )
   {
     ConnectionListenerList::const_iterator it = m_connectionListeners.begin();
-    for( ; it != m_connectionListeners.end(); it++ )
+    for( ; it != m_connectionListeners.end(); ++it )
     {
       (*it)->onDisconnect( e );
     }
@@ -623,7 +623,7 @@ namespace gloox
   bool ClientBase::notifyOnTLSConnect( const CertInfo& info )
   {
     ConnectionListenerList::const_iterator it = m_connectionListeners.begin();
-    for( ; it != m_connectionListeners.end(); it++ )
+    for( ; it != m_connectionListeners.end(); ++it )
     {
       return (*it)->onTLSConnect( info );
     }
@@ -634,7 +634,7 @@ namespace gloox
   void ClientBase::notifyOnResourceBindError( ConnectionListener::ResourceBindError error )
   {
     ConnectionListenerList::const_iterator it = m_connectionListeners.begin();
-    for( ; it != m_connectionListeners.end(); it++ )
+    for( ; it != m_connectionListeners.end(); ++it )
     {
       (*it)->onResourceBindError( error );
     }
@@ -643,7 +643,7 @@ namespace gloox
   void ClientBase::notifyOnSessionCreateError( ConnectionListener::SessionCreateError error )
   {
     ConnectionListenerList::const_iterator it = m_connectionListeners.begin();
-    for( ; it != m_connectionListeners.end(); it++ )
+    for( ; it != m_connectionListeners.end(); ++it )
     {
       (*it)->onSessionCreateError( error );
     }
@@ -652,7 +652,7 @@ namespace gloox
   void ClientBase::notifyPresenceHandlers( Stanza *stanza )
   {
     PresenceHandlerList::const_iterator it = m_presenceHandlers.begin();
-    for( ; it != m_presenceHandlers.end(); it++ )
+    for( ; it != m_presenceHandlers.end(); ++it )
     {
       (*it)->handlePresence( stanza );
     }
@@ -661,7 +661,7 @@ namespace gloox
   void ClientBase::notifySubscriptionHandlers( Stanza *stanza )
   {
     SubscriptionHandlerList::const_iterator it = m_subscriptionHandlers.begin();
-    for( ; it != m_subscriptionHandlers.end(); it++ )
+    for( ; it != m_subscriptionHandlers.end(); ++it )
     {
       (*it)->handleSubscription( stanza );
     }
@@ -671,12 +671,12 @@ namespace gloox
   {
     bool res = false;
 
-    IqHandlerMap::const_iterator it_ns = m_iqNSHandlers.begin();
-    for( ; it_ns != m_iqNSHandlers.end(); it_ns++ )
+    IqHandlerMap::const_iterator it = m_iqNSHandlers.begin();
+    for( ; it != m_iqNSHandlers.end(); ++it )
     {
-      if( stanza->hasChildWithAttrib( "xmlns", (*it_ns).first ) )
+      if( stanza->hasChildWithAttrib( "xmlns", (*it).first ) )
       {
-        if( (*it_ns).second->handleIq( stanza ) )
+        if( (*it).second->handleIq( stanza ) )
           res = true;
       }
     }
@@ -703,7 +703,7 @@ namespace gloox
   void ClientBase::notifyMessageHandlers( Stanza *stanza )
   {
     MessageHandlerList::const_iterator it = m_messageHandlers.begin();
-    for( ; it != m_messageHandlers.end(); it++ )
+    for( ; it != m_messageHandlers.end(); ++it )
     {
       (*it)->handleMessage( stanza );
     }
@@ -712,7 +712,7 @@ namespace gloox
   void ClientBase::notifyLogHandlers( const std::string& xml, bool incoming )
   {
     LogHandlerList::const_iterator it = m_logHandlers.begin();
-    for( ; it != m_logHandlers.end(); it++ )
+    for( ; it != m_logHandlers.end(); ++it )
     {
       (*it)->handleLog( xml, incoming );
     }
@@ -721,7 +721,7 @@ namespace gloox
   void ClientBase::notifyTagHandlers( Stanza *stanza )
   {
     TagHandlerList::const_iterator it = m_tagHandlers.begin();
-    for( ; it != m_tagHandlers.end(); it++ )
+    for( ; it != m_tagHandlers.end(); ++it )
     {
       if( (*it).tag == stanza->name() && (*it).xmlns == stanza->xmlns() )
         (*it).th->handleTag( stanza );

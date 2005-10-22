@@ -37,7 +37,7 @@ namespace gloox
     if( aList.size() )
     {
       AnnotationsHandler::AnnotationsList::const_iterator it = aList.begin();
-      for( ; it != aList.end(); it++ )
+      for( ; it != aList.end(); ++it )
       {
         Tag *n = new Tag( "note", (*it).note );
         n->addAttrib( "jid", (*it).jid );
@@ -60,7 +60,7 @@ namespace gloox
     AnnotationsHandler::AnnotationsList aList;
     const Tag::TagList l = xml->children();
     Tag::TagList::const_iterator it = l.begin();
-    for( ; it != l.end(); it++ )
+    for( ; it != l.end(); ++it )
     {
       if( (*it)->name() == "note" )
       {

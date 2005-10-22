@@ -131,7 +131,7 @@ namespace gloox
     // (q)sort here
 
     HostMap servers;
-    for( cnt=0; cnt<srvnum; cnt++ )
+    for( cnt=0; cnt<srvnum; ++cnt )
     {
       name srvname;
 
@@ -160,7 +160,7 @@ namespace gloox
     int ret = 0;
 
     HostMap::const_iterator it = hosts.begin();
-    for( ; it != hosts.end(); it++ )
+    for( ; it != hosts.end(); ++it )
     {
       int port;
       if( (*it).second == 0 )

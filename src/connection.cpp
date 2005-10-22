@@ -72,7 +72,7 @@ namespace gloox
       return false;
 
     StringList::const_iterator it = m_cacerts.begin();
-    for( ; it != m_cacerts.end(); it++ )
+    for( ; it != m_cacerts.end(); ++it )
       gnutls_certificate_set_x509_trust_file( m_credentials, (*it).c_str(), GNUTLS_X509_FMT_PEM );
 
     if( gnutls_init( &m_session, GNUTLS_CLIENT ) != 0 )
@@ -133,7 +133,7 @@ namespace gloox
       certListSize--;
 
     bool chain = true;
-    for( unsigned int i=1; !error && ( i<certListSize ); i++ )
+    for( unsigned int i=1; !error && ( i<certListSize ); ++i )
     {
       chain = error = !verifyAgainst( cert[i-1], cert[i] );
     }
@@ -186,7 +186,7 @@ namespace gloox
     if( !gnutls_x509_crt_check_hostname( cert[0], m_server.c_str() ) )
       m_certInfo.status |= CERT_WRONG_PEER;
 
-    for( unsigned int i=0; i<certListSize; i++ )
+    for( unsigned int i=0; i<certListSize; ++i )
       gnutls_x509_crt_deinit( cert[i] );
 
     return true;
