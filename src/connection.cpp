@@ -232,24 +232,13 @@ namespace gloox
 
     if( init )
     {
-      m_zdeflate.zalloc = Z_NULL;
-      m_zdeflate.zfree = Z_NULL;
-      m_zdeflate.opaque = Z_NULL;
-      ret = deflateInit( &m_zdeflate, Z_DEFAULT_COMPRESSION );
-
-      if( ret == Z_OK )
-      {
-        m_zinflate.zalloc = Z_NULL;
-        m_zinflate.zfree = Z_NULL;
-        m_zinflate.opaque = Z_NULL;
-        ret = inflateInit( &m_zinflate );
-      }
+      m_zinflate.zalloc = Z_NULL;
+      m_zinflate.zfree = Z_NULL;
+      m_zinflate.opaque = Z_NULL;
+      ret = inflateInit( &m_zinflate );
     }
     else if( m_compInited && !init )
-    {
-      deflateEnd( &m_zdeflate );
       inflateEnd( &m_zinflate );
-    }
 
     if( ret == Z_OK )
     {

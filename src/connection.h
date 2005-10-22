@@ -162,7 +162,6 @@ namespace gloox
 #ifdef HAVE_ZLIB
       std::string compress( const std::string& data );
       std::string decompress( const std::string& data );
-      z_stream m_zdeflate;
       z_stream m_zinflate;
 #endif
 
