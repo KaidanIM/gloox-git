@@ -54,6 +54,9 @@ namespace gloox
     for( ; it != m_roster.end(); ++it )
       delete( (*it).second );
     m_roster.clear();
+
+    if( m_privateXML )
+      delete m_privateXML;
   }
 
   RosterListener::Roster* RosterManager::roster()
