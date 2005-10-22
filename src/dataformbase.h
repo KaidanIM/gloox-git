@@ -34,7 +34,7 @@ namespace gloox
   {
     public:
       /**
-       *
+       * Creates a new DataFormBase.
        */
       DataFormBase();
 

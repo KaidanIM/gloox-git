@@ -33,9 +33,9 @@ namespace gloox
   {
     public:
       /**
-       *
+       * Creates an empty 'item' element you can add fields to.
        */
-      DataFormItem();
+      DataFormItem() : DataFormField( FIELD_TYPE_ITEM );
 
       /**
        * Virtual destructor.
