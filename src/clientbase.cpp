@@ -29,8 +29,7 @@
 #include <string>
 #include <map>
 #include <list>
-
-#include <math.h>
+#include <sstream>
 
 namespace gloox
 {
@@ -388,11 +387,9 @@ namespace gloox
 
   const std::string ClientBase::getID()
   {
-    char *tmp = new char[4+(int)log10(++m_idCount)+1];
-    sprintf( tmp, "uid%d", m_idCount );
-    std::string ret = tmp;
-    delete[] tmp;
-    return ret;
+    std::ostringstream oss;
+    oss << ++m_idCount;
+    return std::string( "uid" ) + oss.str();
   }
 
   bool ClientBase::checkStreamVersion( const std::string& version )
