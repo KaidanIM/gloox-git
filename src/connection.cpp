@@ -271,48 +271,49 @@ namespace gloox
 
   std::string Connection::compress( const std::string& data )
   {
-//     if( data.empty() )
-//       return "";
-//
-//     int CHUNK = data.length() + ( data.length() / 100 ) + 13;
-//     Bytef out[CHUNK];
-//     const char *in = data.c_str();
+    if( data.empty() )
+      return "";
 
-//     int ret = ::compress( out, (uLongf*)&CHUNK, (Bytef*)in, data.length() );
+    int CHUNK = data.length() + ( data.length() / 100 ) + 13;
+    Bytef *out = new Bytef[CHUNK];
+    const char *in = data.c_str();
+
+    ::compress( out, (uLongf*)CHUNK, (Bytef*)in, data.length() );
     std::string result;
-//     result.assign( (char*)out, CHUNK );
-
-//     m_compCount += result.length();
-//     m_dataOutCount += data.length();
+    result.assign( (char*)out, CHUNK );
+    m_compCount += result.length();
+    m_dataOutCount += data.length();
+    delete[] out;
 
     return result;
   }
 
   std::string Connection::decompress( const std::string& data )
   {
-//     if( data.empty() )
-//       return "";
-//
-//     int CHUNK = data.length() * 10;
-//     char out[CHUNK];
-//     const char *in = data.c_str();
-//
-//     m_zinflate.avail_in = data.length();
-//     m_zinflate.next_in = (Bytef*)in;
+    if( data.empty() )
+      return "";
 
-//     int ret;
+    int CHUNK = data.length() * 10;
+    char *out = new char[CHUNK];
+    const char *in = data.c_str();
+
+    m_zinflate.avail_in = data.length();
+    m_zinflate.next_in = (Bytef*)in;
+
+    int ret;
     std::string result, tmp;
-//     do {
-//       m_zinflate.avail_out = CHUNK;
-//       m_zinflate.next_out = (Bytef*)out;
+    do {
+      m_zinflate.avail_out = CHUNK;
+      m_zinflate.next_out = (Bytef*)out;
 
-//       ret = inflate( &m_zinflate, Z_FINISH );
-//       tmp.assign( out, CHUNK - m_zinflate.avail_out );
-//       result += tmp;
-//     } while( m_zinflate.avail_out == 0 );
+      ret = inflate( &m_zinflate, Z_FINISH );
+      tmp.assign( out, CHUNK - m_zinflate.avail_out );
+      result += tmp;
+    } while( m_zinflate.avail_out == 0 );
 
-//     m_decompCount += result.length();
-//     m_dataInCount += data.length();
+    m_decompCount += result.length();
+    m_dataInCount += data.length();
+    delete[] out;
 
     return result;
   }
