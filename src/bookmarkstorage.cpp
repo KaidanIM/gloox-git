@@ -38,7 +38,7 @@ namespace gloox
     if( bList.size() )
     {
       BookmarkHandler::BookmarkList::const_iterator it = bList.begin();
-      for( ; it != bList.end(); it++ )
+      for( ; it != bList.end(); ++it )
       {
         Tag *i = new Tag( "url" );
         i->addAttrib( "name", (*it).name );
@@ -50,7 +50,7 @@ namespace gloox
     if( cList.size() )
     {
       BookmarkHandler::ConferenceList::const_iterator it = cList.begin();
-      for( ; it != cList.end(); it++ )
+      for( ; it != cList.end(); ++it )
       {
         Tag *i = new Tag( "conference" );
         i->addAttrib( "name", (*it).name );
@@ -79,7 +79,7 @@ namespace gloox
     BookmarkHandler::ConferenceList cList;
     const Tag::TagList l = xml->children();
     Tag::TagList::const_iterator it = l.begin();
-    for( ; it != l.end(); it++ )
+    for( ; it != l.end(); ++it )
     {
       if( (*it)->name() == "url" )
       {
