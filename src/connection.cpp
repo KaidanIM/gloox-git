@@ -31,7 +31,6 @@
 #include <time.h>
 
 #include <string>
-#include <vector>
 
 namespace gloox
 {
@@ -119,7 +118,7 @@ namespace gloox
     if( !error && ( ( certList = gnutls_certificate_get_peers( m_session, &certListSize ) ) == 0 ) )
       error = true;
 
-    std::vector<gnutls_x509_crt_t> cert;
+    gnutls_x509_crt_t *cert = new gnutls_x509_crt_t[certListSize];
     for( unsigned int i=0; !error && ( i<certListSize ); ++i )
     {
       if( !error && ( gnutls_x509_crt_init( &cert[i] ) < 0 ) )
@@ -188,6 +187,8 @@ namespace gloox
 
     for( unsigned int i=0; i<certListSize; ++i )
       gnutls_x509_crt_deinit( cert[i] );
+
+    delete[] cert;
 
     return true;
   }
@@ -401,7 +402,7 @@ namespace gloox
 
   ConnectionError Connection::receive()
   {
-    if( m_socket != -1 || !m_parser )
+    if( m_socket == -1 || !m_parser )
       return CONN_IO_ERROR;
 
     while( !m_cancel )
