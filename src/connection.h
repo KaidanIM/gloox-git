@@ -14,7 +14,7 @@
 #ifndef CONNECTION_H__
 #define CONNECTION_H__
 
-#ifdef _WIN32
+#ifdef WIN32
 #include "../config.h.win"
 #else
 #include "config.h"
@@ -196,6 +196,6 @@ namespace gloox
       bool m_compInited;
   };
 
-};
+}
 
 #endif // CONNECTION_H__

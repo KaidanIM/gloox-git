@@ -24,7 +24,7 @@ namespace gloox
 {
 
   LastActivity::LastActivity( ClientBase *parent, Disco *disco )
-    : m_parent( parent ), m_disco( disco ), m_lastActivityHandler( 0 )
+    : m_lastActivityHandler( 0 ), m_parent( parent ), m_disco( disco )
   {
     m_disco->addFeature( XMLNS_LAST );
     m_active = time( 0 );
@@ -57,7 +57,7 @@ namespace gloox
       {
         time_t now = time( 0 );
         char *tmp = new char[4+(int)log10( (int)(now - m_active) )+1];
-        sprintf( tmp, "%d", m_active );
+        sprintf( tmp, "%d", (int)m_active );
         delete[] tmp;
 
         Tag *t = new Tag( "iq" );
@@ -84,12 +84,15 @@ namespace gloox
         f->addAttrib( "xmlns", XMLNS_XMPP_STANZAS );
         break;
       }
+
+      default:
+        break;
     }
 
     return true;
   }
 
-  bool LastActivity::handleIqID( Stanza *stanza, int context )
+  bool LastActivity::handleIqID( Stanza *stanza, int /*context*/ )
   {
     if( !m_lastActivityHandler )
       return false;
@@ -107,6 +110,8 @@ namespace gloox
       case STANZA_IQ_ERROR:
         m_lastActivityHandler->handleLastActivityError( stanza->from(), stanza->error() );
         break;
+      default:
+        break;
     }
 
     return false;
@@ -117,4 +122,4 @@ namespace gloox
     m_active = time( 0 );
   }
 
-};
+}

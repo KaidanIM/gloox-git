@@ -58,9 +58,9 @@ namespace gloox
           iq->addAttrib( "type", "result" );
           Tag *query = new Tag( iq, "query" );
           query->addAttrib( "xmlns", XMLNS_VERSION );
-          Tag *name = new Tag( query, "name", m_versionName );
-          Tag *version = new Tag( query, "version", m_versionVersion );
-          Tag *os = new Tag( query, "os", m_versionOs );
+          new Tag( query, "name", m_versionName );
+          new Tag( query, "version", m_versionVersion );
+          new Tag( query, "os", m_versionOs );
 
           m_parent->send( iq );
         }
@@ -85,7 +85,7 @@ namespace gloox
               StringMap identities =
                   (*it).second->handleDiscoNodeIdentities( node, name );
               StringMap::const_iterator im = identities.begin();
-              for( im; im != identities.end(); im++ )
+              for( ; im != identities.end(); im++ )
               {
                 Tag *i = new Tag( query, "identity" );
                 i->addAttrib( "category", (*im).first );
@@ -94,7 +94,7 @@ namespace gloox
               }
               StringList features = (*it).second->handleDiscoNodeFeatures( node );
               StringList::const_iterator fi = features.begin();
-              for( fi; fi != features.end(); fi++ )
+              for( ; fi != features.end(); fi++ )
               {
                 Tag *f = new Tag( query, "feature" );
                 f->addAttrib( "var", (*fi) );
@@ -109,7 +109,7 @@ namespace gloox
             i->addAttrib( "name", m_versionName );
 
             StringList::const_iterator it = m_features.begin();
-            for( it; it != m_features.end(); ++it )
+            for( ; it != m_features.end(); ++it )
             {
               Tag *f = new Tag( query, "feature" );
               f->addAttrib( "var", (*it).c_str() );
@@ -143,7 +143,7 @@ namespace gloox
           else
           {
             it = m_nodeHandlers.begin();
-            for( it; it != m_nodeHandlers.end(); it++ )
+            for( ; it != m_nodeHandlers.end(); it++ )
             {
               items = (*it).second->handleDiscoNodeItems( "" );
             }
@@ -152,7 +152,7 @@ namespace gloox
           if( items.size() )
           {
             StringMap::const_iterator it = items.begin();
-            for( it; it != items.end(); it++ )
+            for( ; it != items.end(); it++ )
             {
               if( !(*it).first.empty() && !(*it).second.empty() )
               {
@@ -173,7 +173,7 @@ namespace gloox
       {
         bool res = false;
         DiscoHandlerList::const_iterator it = m_discoHandlers.begin();
-        for( it; it != m_discoHandlers.end(); it++ )
+        for( ; it != m_discoHandlers.end(); it++ )
         {
           if( (*it)->handleDiscoSet( stanza ) )
             res = true;
@@ -181,6 +181,9 @@ namespace gloox
         return res;
         break;
       }
+
+      default:
+        break;
     }
     return false;
   }
@@ -206,6 +209,9 @@ namespace gloox
 
         case STANZA_IQ_ERROR:
           (*it).second.dh->handleDiscoError( stanza, (*it).second.context );
+          break;
+
+        default:
           break;
       }
     }
@@ -295,4 +301,4 @@ namespace gloox
     m_nodeHandlers.erase( node );
   }
 
-};
+}

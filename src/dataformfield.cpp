@@ -26,7 +26,7 @@ namespace gloox
   {
     Tag::TagList l = tag->children();
     Tag::TagList::const_iterator it = l.begin();
-    for( it; it != l.end(); ++it )
+    for( ; it != l.end(); ++it )
     {
       if( (*it)->name() == "desc" )
         m_desc = (*it)->cdata();
@@ -117,12 +117,14 @@ namespace gloox
       case FIELD_TYPE_TEXT_SINGLE:
         field->addAttrib( "type", "text-single" );
         break;
+      default:
+        break;
     }
 
     if( ( m_type == FIELD_TYPE_LIST_SINGLE ) || ( m_type == FIELD_TYPE_LIST_MULTI ) )
     {
       StringMap::const_iterator it = m_options.begin();
-      for( it; it != m_options.end(); ++it )
+      for( ; it != m_options.end(); ++it )
       {
         Tag *option = new Tag( field, "option" );
         option->addAttrib( "label", (*it).first );
@@ -142,4 +144,4 @@ namespace gloox
     return field;
   }
 
-};
+}

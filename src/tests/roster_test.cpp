@@ -13,7 +13,7 @@ class RosterTest : public RosterListener, ConnectionListener
 {
   public:
     RosterTest() {};
-    ~RosterTest() {};
+    virtual ~RosterTest() {};
 
     void start()
     {
@@ -37,7 +37,7 @@ class RosterTest : public RosterListener, ConnectionListener
     {
     };
 
-    virtual void onDisconnect( ConnectionError e ) { printf( "disco_test: disconnected\n" ); };
+    virtual void onDisconnect( ConnectionError /*e*/ ) { printf( "disco_test: disconnected\n" ); };
 
     virtual bool onTLSConnect( const CertInfo& info )
     {
@@ -77,34 +77,34 @@ class RosterTest : public RosterListener, ConnectionListener
     {
       printf( "roster arriving\nitems:\n" );
       RosterListener::Roster::const_iterator it = roster.begin();
-      for( it; it != roster.end(); ++it )
+      for( ; it != roster.end(); ++it )
       {
         printf( "jid: %s, name: %s, subscription: %d\n",
                 (*it).second->jid().c_str(), (*it).second->name().c_str(),
                 (*it).second->subscription() );
         StringList g = (*it).second->groups();
         StringList::const_iterator it_g = g.begin();
-        for( it_g; it_g != g.end(); ++it_g )
+        for( ; it_g != g.end(); ++it_g )
           printf( "\tgroup: %s\n", (*it_g).c_str() );
       }
     }
 
-    virtual void itemChanged( RosterItem& item, int status, const std::string& msg )
+    virtual void itemChanged( RosterItem& item, int /*status*/, const std::string& /*msg*/ )
     {
       printf( "item changed: %s\n", item.jid().c_str() );
     }
 
-    virtual void itemAvailable( RosterItem& item, const std::string& msg )
+    virtual void itemAvailable( RosterItem& item, const std::string& /*msg*/ )
     {
       printf( "item online: %s\n", item.jid().c_str() );
     }
 
-    virtual void itemUnavailable( RosterItem& item, const std::string& msg )
+    virtual void itemUnavailable( RosterItem& item, const std::string& /*msg*/ )
     {
       printf( "item offline: %s\n", item.jid().c_str() );
     };
 
-    virtual bool subscriptionRequest( const std::string& jid )
+    virtual bool subscriptionRequest( const std::string& jid, const std::string& /*msg*/ )
     {
       printf( "subscription: %s\n", jid.c_str() );
       StringList groups;
@@ -112,7 +112,7 @@ class RosterTest : public RosterListener, ConnectionListener
       return true;
     }
 
-    virtual bool unsubscriptionRequest( const std::string& jid )
+    virtual bool unsubscriptionRequest( const std::string& jid, const std::string& /*msg*/ )
     {
       printf( "unsubscription: %s\n", jid.c_str() );
       return true;
@@ -122,7 +122,7 @@ class RosterTest : public RosterListener, ConnectionListener
     Client *j;
 };
 
-int main( int argc, char* argv[] )
+int main( int /*argc*/, char* /*argv[]*/ )
 {
   RosterTest *r = new RosterTest();
   r->start();

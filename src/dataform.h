@@ -49,7 +49,7 @@ namespace gloox
                                      * forms-processing entity. */
         FORM_TYPE_RESULT,           /**< The forms-processing entity is returning data (e.g., search results)
                                      * to the forms-submitting entity, or the data is a generic data set. */
-        FORM_TYPE_INVALID,          /**< The form is invalid. Only possible if the form was created from an
+        FORM_TYPE_INVALID           /**< The form is invalid. Only possible if the form was created from an
                                      * Tag which doesn't correctly describe a Data Form. */
       };
 
@@ -112,6 +112,6 @@ namespace gloox
       std::string m_instructions;
   };
 
-};
+}
 
 #endif // DATAFORM_H__

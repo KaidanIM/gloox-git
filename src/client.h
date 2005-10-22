@@ -224,7 +224,7 @@ namespace gloox
         STREAM_FEATURE_IQAUTH           = 128, /**< The server supports JEP-0078 (Non-SASL
                                                 * Authentication). */
         STREAM_FEATURE_ACK              = 256, /**< The server supports JEPAck (experimental). */
-        STREAM_FEATURE_COMPRESS_ZLIB    = 512, /**< The server supports JEP-0138 (Stream
+        STREAM_FEATURE_COMPRESS_ZLIB    = 512  /**< The server supports JEP-0138 (Stream
                                                 * Compression) (Zlib)*/
       };
 
@@ -248,15 +248,15 @@ namespace gloox
 
       bool m_resourceBound;
       bool m_autoPresence;
+      bool m_forceNonSasl;
       bool m_manageRoster;
       bool m_handleDisco;
-      bool m_forceNonSasl;
-      int m_priority;
 
       int m_streamFeatures;
+      int m_priority;
 
   };
 
-};
+}
 
 #endif // CLIENT_H__

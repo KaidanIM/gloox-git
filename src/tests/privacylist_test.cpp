@@ -13,7 +13,7 @@ class PLTest : public PrivacyListHandler, ConnectionListener
 {
   public:
     PLTest() {};
-    ~PLTest() {};
+    virtual ~PLTest() {};
 
     void start()
     {
@@ -42,7 +42,7 @@ class PLTest : public PrivacyListHandler, ConnectionListener
       p->requestListNames();
     };
 
-    virtual void onDisconnect( ConnectionError e ) { printf( "disco_test: disconnected\n" ); };
+    virtual void onDisconnect( ConnectionError /*e*/ ) { printf( "disco_test: disconnected\n" ); };
 
     virtual bool onTLSConnect( const CertInfo& info )
     {
@@ -61,7 +61,7 @@ class PLTest : public PrivacyListHandler, ConnectionListener
       printf( "default list: %s\n", def.c_str() );
       printf( "all lists:\n" );
       StringList::const_iterator it = lists.begin();
-      for( it; it != lists.end(); it++ )
+      for( ; it != lists.end(); it++ )
       {
         printf( "%s\n", (*it).c_str() );
       }
@@ -88,7 +88,7 @@ class PLTest : public PrivacyListHandler, ConnectionListener
     {
       printf( "received list: %s\n", name.c_str() );
       PrivacyListHandler::PrivacyList::iterator it = items.begin();
-      for( it; it != items.end(); it++ )
+      for( ; it != items.end(); it++ )
       {
         printf( "item: type: %d, action: %d, packetType: %d, value: %s\n",
                 (*it).type(), (*it).action(), (*it).packetType(), (*it).value().c_str() );
@@ -105,7 +105,7 @@ class PLTest : public PrivacyListHandler, ConnectionListener
     PrivacyManager *p;
 };
 
-int main( int argc, char* argv[] )
+int main( int /*argc*/, char* /*argv[]*/ )
 {
   PLTest *t = new PLTest();
   t->start();

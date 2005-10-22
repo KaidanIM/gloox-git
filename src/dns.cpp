@@ -11,7 +11,7 @@
 */
 
 
-#ifdef _WIN32
+#ifdef WIN32
 #include "../config.h.win"
 #else
 #include "config.h"
@@ -21,7 +21,7 @@
 
 #include <sys/types.h>
 
-#ifndef _WIN32
+#ifndef WIN32
 #include <netinet/in.h>
 #include <resolv.h>
 #include <sys/socket.h>
@@ -52,7 +52,7 @@
 namespace gloox
 {
 
-#ifndef _WIN32
+#ifndef WIN32
   DNS::HostMap DNS::resolve( const std::string& domain )
   {
     std::string service = "xmpp-client";
@@ -160,7 +160,7 @@ namespace gloox
     int ret = 0;
 
     HostMap::const_iterator it = hosts.begin();
-    for( it; it != hosts.end(); it++ )
+    for( ; it != hosts.end(); it++ )
     {
       int port;
       if( (*it).second == 0 )
@@ -218,7 +218,7 @@ namespace gloox
     printf( "resolved %s to: %s\n", domain.c_str(), inet_ntoa( *((struct in_addr *)h->h_addr) ) );
 #endif
 
-#ifdef _WIN32
+#ifdef WIN32
 		dest_addr.sin_addr.s_addr = inet_addr( inet_ntoa(*((struct in_addr *)h->h_addr)) );
 #else
     if( inet_aton( inet_ntoa(*((struct in_addr *)h->h_addr)), &(dest_addr.sin_addr) ) == 0 )
@@ -229,7 +229,7 @@ namespace gloox
     if( ::connect( fd, (struct sockaddr *)&dest_addr, sizeof( struct sockaddr ) ) == 0 )
       return fd;
 
-#ifndef _WIN32
+#ifndef WIN32
     close( fd );
 #else
     closesocket( fd );
@@ -237,4 +237,4 @@ namespace gloox
     return -DNS_COULD_NOT_CONNECT;
   }
 
-};
+}

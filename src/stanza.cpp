@@ -18,19 +18,21 @@ namespace gloox
 {
 
   Stanza::Stanza( const std::string& name, const std::string& cdata, const std::string& xmllang )
-  : Tag( name, cdata ), m_show( PRESENCE_UNKNOWN ), m_xmllang( xmllang ),
-      m_stanzaError( ST_ERROR_UNDEFINED ), m_stanzaErrorAppCondition( 0 )
+    : Tag( name, cdata ), m_show( PRESENCE_UNKNOWN ),
+      m_stanzaError( ST_ERROR_UNDEFINED ), m_stanzaErrorAppCondition( 0 ),
+      m_xmllang( xmllang )
   {
   }
 
   Stanza::Stanza( Tag *tag )
-    : Tag( tag->name(), tag->cdata() ), m_show( PRESENCE_UNKNOWN ), m_xmllang( "default" ),
-      m_stanzaError( ST_ERROR_UNDEFINED ), m_stanzaErrorAppCondition( 0 )
+    : Tag( tag->name(), tag->cdata() ), m_show( PRESENCE_UNKNOWN ),
+      m_stanzaError( ST_ERROR_UNDEFINED ), m_stanzaErrorAppCondition( 0 ),
+      m_xmllang( "default" )
   {
     m_attribs = tag->attributes();
     Tag::TagList l = tag->children();
     Tag::TagList::const_iterator it = l.begin();
-    for( it; it != l.end(); ++it )
+    for( ; it != l.end(); ++it )
     {
       addChild( (*it)->clone() );
     }
@@ -80,7 +82,7 @@ namespace gloox
 
       TagList& c = children();
       TagList::const_iterator it = c.begin();
-      for( it; it != c.end(); ++it )
+      for( ; it != c.end(); ++it )
       {
         if( (*it)->name() == "body" )
         {
@@ -180,7 +182,7 @@ namespace gloox
     {
       TagList& c = children();
       TagList::const_iterator it = c.begin();
-      for( it; it != c.end(); ++it )
+      for( ; it != c.end(); ++it )
       {
         if( (*it)->name() == "status" )
         {
@@ -212,7 +214,7 @@ namespace gloox
 
       TagList& c = e->children();
       TagList::const_iterator it = c.begin();
-      for( it; it != c.end(); ++it )
+      for( ; it != c.end(); ++it )
       {
         if( (*it)->name() == "bad-request" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
           m_stanzaError = ST_ERROR_BAD_REQUEST;
@@ -438,8 +440,8 @@ namespace gloox
     }
     if( !subject.empty() )
     {
-      Tag *s = new Tag( s, "subject", subject );
-      s->addAttrib( "xml:lang", xmllang );
+      Tag *su = new Tag( s, "subject", subject );
+      su->addAttrib( "xml:lang", xmllang );
     }
     if( !thread.empty() )
       new Tag( s, "thread", thread );
@@ -482,4 +484,4 @@ namespace gloox
     return s;
   }
 
-};
+}

@@ -24,7 +24,7 @@ namespace gloox
   bool DataFormBase::hasField( const std::string& field )
   {
     FieldList::const_iterator it = m_fields.begin();
-    for( it; it != m_fields.end(); ++it )
+    for( ; it != m_fields.end(); ++it )
     {
       if( (*it).name() == field )
         return true;
@@ -36,7 +36,7 @@ namespace gloox
   DataFormField DataFormBase::field( const std::string& field )
   {
     FieldList::const_iterator it = m_fields.begin();
-    for( it; it != m_fields.end(); ++it )
+    for( ; it != m_fields.end(); ++it )
     {
       if( (*it).name() == field )
         return (*it);

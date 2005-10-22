@@ -51,9 +51,9 @@ namespace gloox
        * This function is called when notes arrive from the server.
        * @param aList A list of notes.
        */
-      virtual void handleAnnotations( AnnotationsList &aList ) {};
+      virtual void handleAnnotations( AnnotationsList &aList ) = 0;
   };
 
-};
+}
 
 #endif // ANNOTATIONSHANDLER_H__

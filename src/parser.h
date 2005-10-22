@@ -43,7 +43,7 @@ namespace gloox
       {
         PARSER_OK,                     /**< Everything's alright. */
         PARSER_NOMEM,                  /**< Memory allcation error. */
-        PARSER_BADXML,                 /**< XML parse error. */
+        PARSER_BADXML                  /**< XML parse error. */
       };
 
       /**
@@ -76,6 +76,6 @@ namespace gloox
       friend int tagHook( Parser *parser, char *name, char **atts, int type );
   };
 
-};
+}
 
 #endif // PARSER_H__

@@ -14,7 +14,7 @@
 #ifndef DNS_H__
 #define DNS_H__
 
-#ifdef _WIN32
+#ifdef WIN32
 #include <windows.h>
 #include <windns.h>
 #endif
@@ -112,6 +112,6 @@ namespace gloox
       typedef unsigned char name [NS_MAXDNAME];
   };
 
-};
+}
 
 #endif // DNS_H__

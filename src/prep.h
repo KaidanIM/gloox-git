@@ -69,6 +69,6 @@ namespace gloox
       static std::string idna( const std::string& domain );
   };
 
-};
+}
 
 #endif // PREP_H__

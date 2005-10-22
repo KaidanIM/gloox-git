@@ -44,42 +44,42 @@ namespace gloox
        * on the server-side roster (items subject to a so-called Roster Push).
        * @param jid The new item's full address.
        */
-      virtual void itemAdded( const std::string& jid ) {};
+      virtual void itemAdded( const std::string& jid ) = 0;
 
       /**
        * Reimplement this function if you want to be notified about items
        * which authorised subscription.
        * @param jid The authorising item's full address.
        */
-      virtual void itemSubscribed( const std::string& jid ) {};
+      virtual void itemSubscribed( const std::string& jid ) = 0;
 
       /**
        * Reimplement this function if you want to be notified about items that
        * were removed from the server-side roster (items subject to a so-called Roster Push).
        * @param jid The removed item's full address.
        */
-      virtual void itemRemoved( const std::string& jid ) {};
+      virtual void itemRemoved( const std::string& jid ) = 0;
 
       /**
        * Reimplement this function if you want to be notified about items that
        * were modified on the server-side roster (items subject to a so-called Roster Push).
        * @param jid The modified item's full address.
        */
-      virtual void itemUpdated( const std::string& jid ) {};
+      virtual void itemUpdated( const std::string& jid ) = 0;
 
       /**
        * Reimplement this function if you want to be notified about items which
        * removed subscription authorization.
        * @param jid The item's full address.
        */
-      virtual void itemUnsubscribed( const std::string& jid ) {};
+      virtual void itemUnsubscribed( const std::string& jid ) = 0;
 
       /**
        * Reimplement this function if you want to receive the whole server-side roster
        * on the initial roster push. The roster item status is set to unavailable.
        * @param roster The full roster.
        */
-      virtual void roster( Roster& roster ) {};
+      virtual void roster( Roster& roster ) = 0;
 
       /**
        * This function is called on every status change of an item in the roster.
@@ -89,21 +89,21 @@ namespace gloox
        * @param status The item's new status.
        * @param msg The status change message.
        */
-      virtual void itemChanged( RosterItem& item, int status, const std::string& msg ) {};
+      virtual void itemChanged( RosterItem& item, int status, const std::string& msg ) = 0;
 
       /**
        * This function is called whenever a roster item comes online (is available).
        * @param item The changed roster item.
        * @param msg The status change message.
        */
-      virtual void itemAvailable( RosterItem& item, const std::string& msg ) {};
+      virtual void itemAvailable( RosterItem& item, const std::string& msg ) = 0;
 
       /**
        * This function is called whenever a roster item goes offline (is unavailable).
        * @param item The roster item.
        * @param msg The status change message.
        */
-      virtual void itemUnavailable( RosterItem& item, const std::string& msg ) {};
+      virtual void itemUnavailable( RosterItem& item, const std::string& msg ) = 0;
 
       /**
        * This function is called when an entity wishes to subscribe to this entity's presence.
@@ -112,7 +112,7 @@ namespace gloox
        * @return Return @b true to allow subscription and subscribe to the remote entities
        * presence, @b false to ignore the request.
        */
-      virtual bool subscriptionRequest( const std::string& jid, const std::string& msg ) {};
+      virtual bool subscriptionRequest( const std::string& jid, const std::string& msg ) = 0;
 
       /**
        * This function is called when an entity unsubscribes from this entity's presence.
@@ -121,10 +121,10 @@ namespace gloox
        * @return Return @b true to unsubscribe from the remote entity and remove the entity
        * from the roster, @b false to ignore.
        */
-      virtual bool unsubscriptionRequest( const std::string& jid, const std::string& msg ) {};
+      virtual bool unsubscriptionRequest( const std::string& jid, const std::string& msg ) = 0;
 
   };
 
-};
+}
 
 #endif // ROSTERLISTENER_H__

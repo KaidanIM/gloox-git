@@ -217,6 +217,6 @@ namespace gloox
 
   };
 
-};
+}
 
 #endif // TAG_H__

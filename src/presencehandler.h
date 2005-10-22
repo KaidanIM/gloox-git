@@ -38,6 +38,6 @@ namespace gloox
       virtual void handlePresence( Stanza *stanza ) = 0;
   };
 
-};
+}
 
 #endif // PRESENCEHANDLER_H__

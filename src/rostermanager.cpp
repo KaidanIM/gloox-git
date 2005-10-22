@@ -23,7 +23,7 @@ namespace gloox
 {
 
   RosterManager::RosterManager( ClientBase *parent, bool self )
-    : m_parent( parent ), m_rosterListener( 0 ), m_delimiterFetched( false )
+  : m_rosterListener( 0 ), m_parent( parent ), m_privateXML( 0 ), m_delimiterFetched( false )
   {
     if( m_parent )
     {
@@ -51,7 +51,7 @@ namespace gloox
     }
 
     RosterListener::Roster::iterator it = m_roster.begin();
-    for( it; it != m_roster.end(); ++it )
+    for( ; it != m_roster.end(); ++it )
       delete( (*it).second );
     m_roster.clear();
   }
@@ -136,7 +136,7 @@ namespace gloox
     s->addAttrib( "to", jid );
     s->addAttrib( "from", m_parent->jid().full() );
     if( !msg.empty() )
-      Tag *status = new Tag( s, "status", msg );
+      new Tag( s, "status", msg );
 
     m_parent->send( s );
   }
@@ -162,7 +162,7 @@ namespace gloox
     if( groups.size() != 0 )
     {
       StringList::const_iterator it = groups.begin();
-      for( it; it != groups.end(); it++ )
+      for( ; it != groups.end(); it++ )
       {
         Tag *g = new Tag( "group", (*it) );
         i->addChild( g );
@@ -180,7 +180,7 @@ namespace gloox
     s->addAttrib( "from", m_parent->jid().bare() );
     s->addAttrib( "to", jid );
     if( !msg.empty() )
-      Tag *status = new Tag( s, "status", msg );
+      new Tag( s, "status", msg );
 
     m_parent->send( s );
 
@@ -206,7 +206,7 @@ namespace gloox
   void RosterManager::synchronize()
   {
     RosterListener::Roster::const_iterator it = m_roster.begin();
-    for( it; it != m_roster.end(); it++ )
+    for( ; it != m_roster.end(); it++ )
     {
       if( (*it).second->changed() )
       {
@@ -225,7 +225,7 @@ namespace gloox
         if( (*it).second->groups().size() != 0 )
         {
           StringList::const_iterator g_it = (*it).second->groups().begin();
-          for( g_it; g_it != (*it).second->groups().end(); g_it++ )
+          for( ; g_it != (*it).second->groups().end(); g_it++ )
           {
             i->addChild( new Tag( "group", (*g_it) ) );
           }
@@ -300,6 +300,9 @@ namespace gloox
         m_rosterListener->itemUnsubscribed( stanza->from().bare() );
         break;
       }
+
+      default:
+        break;
     }
   }
 
@@ -318,7 +321,7 @@ namespace gloox
     Tag *t = tag->findChild( "query" );
     Tag::TagList l = t->children();
     Tag::TagList::iterator it = l.begin();
-    for( it; it != l.end(); it++ )
+    for( ; it != l.end(); it++ )
     {
       if( (*it)->name() == "item" )
       {
@@ -327,7 +330,7 @@ namespace gloox
         {
           Tag::TagList g = (*it)->children();
           Tag::TagList::const_iterator it_g = g.begin();
-          for( it_g; it_g != g.end(); it_g++ )
+          for( ; it_g != g.end(); it_g++ )
           {
             gl.push_back( (*it_g)->name() );
           }
@@ -376,7 +379,7 @@ namespace gloox
     }
   }
 
-  void RosterManager::add( const std::string& jid, const std::string& name,
+  void RosterManager::add( const std::string& jid, const std::string& /*name*/,
                            StringList& groups, const std::string& sub, bool ask )
   {
     if( m_roster.find( jid ) == m_roster.end() )
@@ -395,17 +398,17 @@ namespace gloox
     m_privateXML->storeXML( t, this );
   }
 
-  void RosterManager::handlePrivateXML( const std::string& tag, Tag *xml )
+  void RosterManager::handlePrivateXML( const std::string& /*tag*/, Tag *xml )
   {
     m_delimiterFetched = true;
     m_delimiter = xml->cdata();
     fill();
   }
 
-  void RosterManager::handlePrivateXMLResult( const std::string uid, PrivateXMLResult result )
+  void RosterManager::handlePrivateXMLResult( const std::string /*uid*/, PrivateXMLResult result )
   {
     if( result == PrivateXMLHandler::PXML_REQUEST_ERROR )
       fill();
   }
 
-};
+}

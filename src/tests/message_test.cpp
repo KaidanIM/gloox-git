@@ -16,7 +16,7 @@ class DiscoTest : public DiscoHandler, MessageHandler, ConnectionListener
 {
   public:
     DiscoTest() {};
-    ~DiscoTest() {};
+    virtual ~DiscoTest() {};
 
     void start()
     {
@@ -25,11 +25,12 @@ class DiscoTest : public DiscoHandler, MessageHandler, ConnectionListener
       JID jid( "hurkhurk@example.org/gloox" );
       j = new Client( jid, "hurkhurks" );
       j->setAutoPresence( true );
-      j->setInitialPriority( 5 );
+      j->setInitialPriority( -1 );
+      j->setForceNonSasl( true );
       j->registerConnectionListener( this );
       j->registerMessageHandler( this );
       j->disco()->registerDiscoHandler( this );
-      j->disco()->setVersion( "messageTest", GLOOX_VERSION );
+      j->disco()->setVersion( "messageTest", GLOOX_VERSION, "Linux" );
       j->disco()->setIdentity( "client", "bot" );
       StringList ca;
       ca.push_back( "/path/to/cacert.crt" );
@@ -60,14 +61,19 @@ class DiscoTest : public DiscoHandler, MessageHandler, ConnectionListener
       return true;
     };
 
-    virtual void handleDiscoInfoResult( const std::string& id, const Stanza& stanza )
+    virtual void handleDiscoInfoResult( Stanza */*stanza*/, int /*context*/ )
     {
       printf( "handleDiscoInfoResult}\n" );
     }
 
-    virtual void handleDiscoItemsResult( const std::string& id, const Stanza& stanza )
+    virtual void handleDiscoItemsResult( Stanza */*stanza*/, int /*context*/ )
     {
       printf( "handleDiscoItemsResult\n" );
+    }
+
+    virtual void handleDiscoError( Stanza */*stanza*/, int /*context*/ )
+    {
+      printf( "handleDiscoError\n" );
     }
 
     virtual void handleMessage( Stanza *stanza )
@@ -92,7 +98,7 @@ class DiscoTest : public DiscoHandler, MessageHandler, ConnectionListener
     Client *j;
 };
 
-int main( int argc, char* argv[] )
+int main( int /*argc*/, char* /*argv[]*/ )
 {
   DiscoTest *r = new DiscoTest();
   r->start();

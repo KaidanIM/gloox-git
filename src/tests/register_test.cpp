@@ -11,7 +11,7 @@ class RegTest : public RegistrationHandler, ConnectionListener
 {
   public:
     RegTest() {};
-    ~RegTest() {};
+    virtual ~RegTest() {};
 
     void start()
     {
@@ -34,17 +34,17 @@ class RegTest : public RegistrationHandler, ConnectionListener
 
     virtual void onConnect()
     {
-      // requesting reg fields
-//       m_reg->fetchRegistrationFields();
+//       requesting reg fields
+//      m_reg->fetchRegistrationFields();
 
       // changing password
-      m_reg->changePassword( "hurkhurks" );
+       m_reg->changePassword( "hurkhurks" );
 
       // unregistering
 //       m_reg->removeAccount();
     };
 
-    virtual void onDisconnect( ConnectionError e ) { printf( "disco_test: disconnected\n" ); };
+    virtual void onDisconnect( ConnectionError /*e*/ ) { printf( "register_test: disconnected\n" ); };
 
     virtual bool onTLSConnect( const CertInfo& info )
     {
@@ -70,12 +70,17 @@ class RegTest : public RegistrationHandler, ConnectionListener
       j->disconnect();
     };
 
+    virtual void handleAlreadyRegistered()
+    {
+      printf( "the account already exists.\n" );
+    };
+
   private:
     Registration *m_reg;
     Client *j;
 };
 
-int main( int argc, char* argv[] )
+int main( int /*argc*/, char* /*argv*/[] )
 {
   RegTest *r = new RegTest();
   r->start();

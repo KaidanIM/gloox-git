@@ -37,6 +37,6 @@ namespace gloox
       virtual void handleSubscription( Stanza *stanza ) = 0;
   };
 
-};
+}
 
 #endif // SUBSCRIPTIONHANDLER_H__

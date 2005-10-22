@@ -37,7 +37,7 @@ namespace gloox
       {
         PXML_STORE_OK,              /**< Storing was successful. */
         PXML_STORE_ERROR,           /**< An error occurred while storing data in Private XML. */
-        PXML_REQUEST_ERROR,         /**< An error occurred while requesting Private XML. */
+        PXML_REQUEST_ERROR          /**< An error occurred while requesting Private XML. */
       };
 
       /**
@@ -58,6 +58,6 @@ namespace gloox
       virtual void handlePrivateXMLResult( const std::string uid, PrivateXMLResult result ) = 0;
   };
 
-};
+}
 
 #endif // PRIVATEXMLHANDLER_H__

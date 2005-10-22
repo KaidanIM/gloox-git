@@ -42,7 +42,7 @@ namespace gloox
 
     Tag::TagList l = tag->children();
     Tag::TagList::const_iterator it = l.begin();
-    for( it; it != l.end(); ++it )
+    for( ; it != l.end(); ++it )
     {
       if( (*it)->name() == "title" )
         m_title = (*it)->cdata();
@@ -73,7 +73,7 @@ namespace gloox
       x->addChild( new Tag( "instructions", m_instructions ) );
 
     FieldList::const_iterator it = m_fields.begin();
-    for( it; it != m_fields.end(); ++it )
+    for( ; it != m_fields.end(); ++it )
     {
       x->addChild( (*it).tag() );
     }
@@ -92,9 +92,11 @@ namespace gloox
       case FORM_TYPE_RESULT:
         x->addAttrib( "type", "result" );
         break;
+      default:
+        break;
     }
 
     return x;
   }
 
-};
+}

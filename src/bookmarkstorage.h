@@ -77,12 +77,12 @@ namespace gloox
       virtual void handlePrivateXML( const std::string& tag, Tag *xml );
 
       // reimplemented from PrivateXMLHandler
-      virtual void handlePrivateXMLResult( const std::string uid, PrivateXMLResult result ) {};
+      virtual void handlePrivateXMLResult( const std::string /*uid*/, PrivateXMLResult /*result*/ ) {};
 
     private:
       BookmarkHandler *m_bookmarkHandler;
   };
 
-};
+}
 
 #endif // BOOKMARKSTORAGE_H__

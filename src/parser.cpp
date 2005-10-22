@@ -22,7 +22,7 @@ namespace gloox
 {
 
   Parser::Parser( ClientBase *parent )
-    : m_parent( parent ), m_root( 0 ), m_current( 0 )
+    : m_parent( parent ), m_current( 0 ), m_root( 0 )
   {
     m_parser = iks_sax_new( this, (iksTagHook*)tagHook, (iksCDataHook*)cdataHook );
   }
@@ -38,14 +38,15 @@ namespace gloox
     int res = iks_parse( m_parser, data.c_str(), data.length(), 0 );
     switch( res )
     {
-      case IKS_OK:
-        return PARSER_OK;
-        break;
       case IKS_NOMEM:
         return PARSER_NOMEM;
         break;
       case IKS_BADXML:
         return PARSER_BADXML;
+        break;
+      case IKS_OK:
+      default:
+        return PARSER_OK;
         break;
     }
   }
@@ -133,4 +134,5 @@ namespace gloox
 
     return IKS_OK;
   }
-};
+
+}

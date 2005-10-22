@@ -175,7 +175,7 @@ namespace gloox
 
     int count = 0;
     PrivacyListHandler::PrivacyList::iterator it = list.begin();
-    for( it; it != list.end(); it++ )
+    for( ; it != list.end(); it++ )
     {
       Tag *i = new Tag( "item" );
       l->addChild( i );
@@ -189,6 +189,8 @@ namespace gloox
           break;
         case PrivacyItem::TYPE_SUBSCRIPTION:
           i->addAttrib( "type", "subscription" );
+          break;
+        default:
           break;
       }
 
@@ -286,7 +288,7 @@ namespace gloox
             Tag *q = stanza->findChild( "query" );
             Tag::TagList l = q->children();
             Tag::TagList::const_iterator it = l.begin();
-            for( it; it != l.end(); it++ )
+            for( ; it != l.end(); it++ )
             {
               if( (*it)->name() == "default" )
                 def = (*it)->findAttribute( "name" );
@@ -310,7 +312,7 @@ namespace gloox
             const std::string name = list->name();
             Tag::TagList l = list->children();
             Tag::TagList::iterator it = l.begin();
-            for( it; it != l.end(); it++ )
+            for( ; it != l.end(); it++ )
             {
               PrivacyItem::ItemType type;
               PrivacyItem::ItemAction action;
@@ -338,7 +340,7 @@ namespace gloox
 
               Tag::TagList c = (*it)->children();
               Tag::TagList::const_iterator it_c = c.begin();
-              for( it_c; it_c != c.end(); it_c++ )
+              for( ; it_c != c.end(); it_c++ )
               {
                 if( (*it_c)->name() == "iq" )
                   packetType |= PrivacyItem::PACKET_IQ;
@@ -371,6 +373,9 @@ namespace gloox
           m_privacyListHandler->handlePrivacyListResult( stanza->id(),
             PrivacyListHandler::RESULT_BAD_REQUEST );
         break;
+
+      default:
+        break;
     }
     return false;
   }
@@ -385,4 +390,4 @@ namespace gloox
     m_privacyListHandler = 0;
   }
 
-};
+}

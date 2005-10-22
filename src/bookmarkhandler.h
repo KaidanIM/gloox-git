@@ -67,9 +67,9 @@ namespace gloox
        * @param bList A list of URL bookmarks.
        * @param cList A list of conference bookmarks.
        */
-      virtual void handleBookmarks( BookmarkList bList, ConferenceList cList ) {};
+      virtual void handleBookmarks( BookmarkList bList, ConferenceList cList ) = 0;
   };
 
-};
+}
 
 #endif // BOOKMARKHANDLER_H__

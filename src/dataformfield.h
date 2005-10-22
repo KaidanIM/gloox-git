@@ -62,7 +62,7 @@ namespace gloox
                                      * word of text, which may be shown in an interface. This field type is
                                      * the default and MUST be assumed if an entity receives a field type it
                                      * does not understand.*/
-        FIELD_TYPE_INVALID,         /**< The field is invalid. Only possible if the field was created from
+        FIELD_TYPE_INVALID          /**< The field is invalid. Only possible if the field was created from
                                      * a Tag not correctly describing a Data Form Field. */
       };
 
@@ -169,6 +169,6 @@ namespace gloox
       bool m_required;
   };
 
-};
+}
 
 #endif // DATAFORMFIELD_H__

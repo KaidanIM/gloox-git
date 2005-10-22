@@ -12,7 +12,7 @@
 
 
 
-#ifdef _WIN32
+#ifdef WIN32
 #include "../config.h.win"
 #else
 #include "config.h"
@@ -36,19 +36,19 @@ namespace gloox
 {
 
   ClientBase::ClientBase( const std::string& ns, const std::string& server, int port )
-    : m_namespace( ns ), m_server( server ), m_port( port ),
-      m_connection( 0 ), m_parser( 0 ), m_xmllang( "en" ), m_authed( false ),
-      m_tls( true ), m_sasl( true ), m_idCount( 0 ), m_streamError( ERROR_UNDEFINED ),
-      m_streamErrorAppCondition( 0 ), m_authError( AUTH_ERROR_UNDEFINED )
+    : m_connection( 0 ), m_namespace( ns ), m_xmllang( "en" ), m_server( server ),
+      m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ), m_parser( 0 ),
+      m_authError( AUTH_ERROR_UNDEFINED ), m_streamError( ERROR_UNDEFINED ),
+      m_streamErrorAppCondition( 0 ), m_idCount( 0 )
   {
   }
 
   ClientBase::ClientBase( const std::string& ns, const std::string& password,
                           const std::string& server, int port )
-    : m_namespace( ns ), m_password( password ), m_server( server ), m_port( port ),
-      m_connection( 0 ), m_parser( 0 ), m_xmllang( "en" ), m_authed( false ),
-      m_tls( true ), m_sasl( true ), m_idCount( 0 ), m_streamError( ERROR_UNDEFINED ),
-      m_streamErrorAppCondition( 0 ), m_authError( AUTH_ERROR_UNDEFINED )
+    : m_connection( 0 ), m_namespace( ns ), m_password( password ), m_xmllang( "en" ), m_server( server ),
+      m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ), m_parser( 0 ),
+      m_authError( AUTH_ERROR_UNDEFINED ), m_streamError( ERROR_UNDEFINED ),
+      m_streamErrorAppCondition( 0 ), m_idCount( 0 )
   {
   }
 
@@ -88,12 +88,13 @@ namespace gloox
       {
         ConnectionError e = m_connection->receive();
         notifyOnDisconnect( e );
+        return false;
       }
+      else
+        return true;
     }
     else
-    {
       return false;
-    }
   }
 
   void ClientBase::filter( NodeType type, Stanza *stanza )
@@ -259,19 +260,19 @@ namespace gloox
       iksmd5 *md5;
       int i;
 
-      int r_pos = decoded.find( "realm=" );
+      unsigned int r_pos = decoded.find( "realm=" );
       if( r_pos != std::string::npos )
       {
-        int r_end = decoded.find( "\"", r_pos + 7 );
+        unsigned int r_end = decoded.find( "\"", r_pos + 7 );
         realm = decoded.substr( r_pos + 7, r_end - (r_pos + 7 ) );
       }
       else
         realm = m_jid.server();
 
-      int n_pos = decoded.find( "nonce=" );
+      unsigned int n_pos = decoded.find( "nonce=" );
       if( n_pos != std::string::npos )
       {
-        int n_end = decoded.find( "\"", n_pos + 7 );
+        unsigned int n_end = decoded.find( "\"", n_pos + 7 );
         while( decoded.substr( n_end-1, 1 ) == "\\" )
           n_end = decoded.find( "\"", n_end + 1 );
         nonce = decoded.substr( n_pos + 7, n_end - ( n_pos + 7 ) );
@@ -399,9 +400,8 @@ namespace gloox
     int major = 0;
     int minor = 0;
     int myMajor = atoi( XMPP_STREAM_VERSION_MAJOR );
-    int myMinor = atoi( XMPP_STREAM_VERSION_MINOR );
 
-    int dot = version.find( "." );
+    unsigned int dot = version.find( "." );
     if( !version.empty() && dot && dot != std::string::npos )
     {
       major = atoi( version.substr( 0, dot ).c_str() );
@@ -418,7 +418,7 @@ namespace gloox
   {
     Tag::TagList& c = stanza->children();
     Tag::TagList::const_iterator it = c.begin();
-    for( it; it != c.end(); ++it )
+    for( ; it != c.end(); ++it )
     {
       if( (*it)->name() == "bad-format" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
         m_streamError = ERROR_BAD_FORMAT;
@@ -598,7 +598,7 @@ namespace gloox
   void ClientBase::removeTagHandler( TagHandler *th, const std::string& tag, const std::string& xmlns )
   {
     TagHandlerList::iterator it = m_tagHandlers.begin();
-    for( it; it != m_tagHandlers.end(); ++it )
+    for( ; it != m_tagHandlers.end(); ++it )
     {
       if( (*it).th == th && (*it).tag == tag && (*it).xmlns == xmlns )
         m_tagHandlers.erase( it );
@@ -608,7 +608,7 @@ namespace gloox
   void ClientBase::notifyOnConnect()
   {
     ConnectionListenerList::const_iterator it = m_connectionListeners.begin();
-    for( it; it != m_connectionListeners.end(); it++ )
+    for( ; it != m_connectionListeners.end(); it++ )
     {
       (*it)->onConnect();
     }
@@ -617,7 +617,7 @@ namespace gloox
   void ClientBase::notifyOnDisconnect( ConnectionError e )
   {
     ConnectionListenerList::const_iterator it = m_connectionListeners.begin();
-    for( it; it != m_connectionListeners.end(); it++ )
+    for( ; it != m_connectionListeners.end(); it++ )
     {
       (*it)->onDisconnect( e );
     }
@@ -626,16 +626,18 @@ namespace gloox
   bool ClientBase::notifyOnTLSConnect( const CertInfo& info )
   {
     ConnectionListenerList::const_iterator it = m_connectionListeners.begin();
-    for( it; it != m_connectionListeners.end(); it++ )
+    for( ; it != m_connectionListeners.end(); it++ )
     {
       return (*it)->onTLSConnect( info );
     }
+
+    return false;
   }
 
   void ClientBase::notifyOnResourceBindError( ConnectionListener::ResourceBindError error )
   {
     ConnectionListenerList::const_iterator it = m_connectionListeners.begin();
-    for( it; it != m_connectionListeners.end(); it++ )
+    for( ; it != m_connectionListeners.end(); it++ )
     {
       (*it)->onResourceBindError( error );
     }
@@ -644,7 +646,7 @@ namespace gloox
   void ClientBase::notifyOnSessionCreateError( ConnectionListener::SessionCreateError error )
   {
     ConnectionListenerList::const_iterator it = m_connectionListeners.begin();
-    for( it; it != m_connectionListeners.end(); it++ )
+    for( ; it != m_connectionListeners.end(); it++ )
     {
       (*it)->onSessionCreateError( error );
     }
@@ -653,7 +655,7 @@ namespace gloox
   void ClientBase::notifyPresenceHandlers( Stanza *stanza )
   {
     PresenceHandlerList::const_iterator it = m_presenceHandlers.begin();
-    for( it; it != m_presenceHandlers.end(); it++ )
+    for( ; it != m_presenceHandlers.end(); it++ )
     {
       (*it)->handlePresence( stanza );
     }
@@ -662,7 +664,7 @@ namespace gloox
   void ClientBase::notifySubscriptionHandlers( Stanza *stanza )
   {
     SubscriptionHandlerList::const_iterator it = m_subscriptionHandlers.begin();
-    for( it; it != m_subscriptionHandlers.end(); it++ )
+    for( ; it != m_subscriptionHandlers.end(); it++ )
     {
       (*it)->handleSubscription( stanza );
     }
@@ -673,7 +675,7 @@ namespace gloox
     bool res = false;
 
     IqHandlerMap::const_iterator it_ns = m_iqNSHandlers.begin();
-    for( it_ns; it_ns != m_iqNSHandlers.end(); it_ns++ )
+    for( ; it_ns != m_iqNSHandlers.end(); it_ns++ )
     {
       if( stanza->hasChildWithAttrib( "xmlns", (*it_ns).first ) )
       {
@@ -704,7 +706,7 @@ namespace gloox
   void ClientBase::notifyMessageHandlers( Stanza *stanza )
   {
     MessageHandlerList::const_iterator it = m_messageHandlers.begin();
-    for( it; it != m_messageHandlers.end(); it++ )
+    for( ; it != m_messageHandlers.end(); it++ )
     {
       (*it)->handleMessage( stanza );
     }
@@ -713,7 +715,7 @@ namespace gloox
   void ClientBase::notifyLogHandlers( const std::string& xml, bool incoming )
   {
     LogHandlerList::const_iterator it = m_logHandlers.begin();
-    for( it; it != m_logHandlers.end(); it++ )
+    for( ; it != m_logHandlers.end(); it++ )
     {
       (*it)->handleLog( xml, incoming );
     }
@@ -722,11 +724,11 @@ namespace gloox
   void ClientBase::notifyTagHandlers( Stanza *stanza )
   {
     TagHandlerList::const_iterator it = m_tagHandlers.begin();
-    for( it; it != m_tagHandlers.end(); it++ )
+    for( ; it != m_tagHandlers.end(); it++ )
     {
       if( (*it).tag == stanza->name() && (*it).xmlns == stanza->xmlns() )
         (*it).th->handleTag( stanza );
     }
   }
 
-};
+}

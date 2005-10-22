@@ -64,4 +64,4 @@ namespace gloox
     return true;
   }
 
-};
+}

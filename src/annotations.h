@@ -75,12 +75,12 @@ namespace gloox
       virtual void handlePrivateXML( const std::string& tag, Tag *xml );
 
       // reimplemented from PrivateXMLHandler
-      virtual void handlePrivateXMLResult( const std::string uid, PrivateXMLResult result ) {};
+      virtual void handlePrivateXMLResult( const std::string /*uid*/, PrivateXMLResult /*result*/ ) {};
 
     private:
       AnnotationsHandler *m_annotationsHandler;
   };
 
-};
+}
 
 #endif // ANNOTATIONS_H__
