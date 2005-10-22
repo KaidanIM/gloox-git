@@ -72,6 +72,6 @@ namespace gloox
       Disco *m_disco;
   };
 
-};
+}
 
 #endif // COMPONENT_H__

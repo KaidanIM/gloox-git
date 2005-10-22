@@ -36,6 +36,6 @@ namespace gloox
        virtual void handleTag( Stanza *stanza ) = 0;
   };
 
-};
+}
 
 #endif // TAGHANDLER_H__

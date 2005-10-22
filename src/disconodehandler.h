@@ -65,6 +65,6 @@ namespace gloox
 
   };
 
-};
+}
 
 #endif // DISCONODEHANDLER_H__

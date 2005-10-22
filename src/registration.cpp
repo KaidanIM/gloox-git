@@ -148,7 +148,7 @@ namespace gloox
     m_registrationHandler = rh;
   }
 
-  void Registration::removeRegistrationHandler( RegistrationHandler *rh )
+  void Registration::removeRegistrationHandler()
   {
     m_registrationHandler = 0;
   }
@@ -261,4 +261,4 @@ namespace gloox
     return false;
   }
 
-};
+}

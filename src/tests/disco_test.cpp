@@ -14,13 +14,13 @@ class DiscoTest : public DiscoHandler, ConnectionListener
 {
   public:
     DiscoTest() {};
-    ~DiscoTest() {};
+    virtual ~DiscoTest() {};
 
     void start()
     {
       setlocale( LC_ALL, "" );
 
-      JID jid( "hurkhurk@example.org/gloox" );
+      JID jid( "hurhurk@example.org/gloox" );
       j = new Client( jid, "hurkhurks" );
       j->disableRoster();
       j->registerConnectionListener( this );
@@ -51,21 +51,26 @@ class DiscoTest : public DiscoHandler, ConnectionListener
       return true;
     };
 
-    virtual void handleDiscoInfoResult( const std::string& id, const Stanza& stanza )
+    virtual void handleDiscoInfoResult( Stanza */*stanza*/, int /*context*/ )
     {
       printf( "handleDiscoInfoResult}\n" );
     }
 
-    virtual void handleDiscoItemsResult( const std::string& id, const Stanza& stanza )
+    virtual void handleDiscoItemsResult( Stanza */*stanza*/, int /*context*/ )
     {
       printf( "handleDiscoItemsResult\n" );
+    }
+
+    virtual void handleDiscoError( Stanza */*stanza*/, int /*context*/ )
+    {
+      printf( "handleDiscoError\n" );
     }
 
   private:
     Client *j;
 };
 
-int main( int argc, char* argv[] )
+int main( int /*argc*/, char* /*argv[]*/ )
 {
   DiscoTest *r = new DiscoTest();
   r->start();

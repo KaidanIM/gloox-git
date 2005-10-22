@@ -37,7 +37,7 @@ namespace gloox
         FOMR_FORBIDDEN,             /**< The requester is a JID other than an authorized resource of the
                                      * user. Something wnet serieously wrong */
         FOMR_ITEM_NOT_FOUND,        /**< The requested node (message ID) does not exist. */
-        FOMR_UNKNOWN_ERROR,         /**< An error occurred which is not specified in JEP-0013. */
+        FOMR_UNKNOWN_ERROR          /**< An error occurred which is not specified in JEP-0013. */
       };
 
       /**
@@ -45,14 +45,14 @@ namespace gloox
        * Call @ref FlexibleOffline::checkSupport() to trigger the check.
        * @param support Whether the server support JEP-0013 or not.
        */
-      virtual void handleFlexibleOfflineSupport( bool support ) {};
+      virtual void handleFlexibleOfflineSupport( bool support ) = 0;
 
       /**
        * This function is called to announce the number of available offline messages.
        * Call @ref FlexibleOffline::getMsgCount() to trigger the check.
        * @param num The number of stored offline messages.
        */
-      virtual void handleFlexibleOfflineMsgNum( int num ) {};
+      virtual void handleFlexibleOfflineMsgNum( int num ) = 0;
 
       /**
        * This function is called when the offline message headers arrive.
@@ -68,6 +68,6 @@ namespace gloox
       virtual void handleFlexibleOfflineResult( FlexibleOfflineResult result ) = 0;
   };
 
-};
+}
 
 #endif // FLEXOFFHANDLER_H__

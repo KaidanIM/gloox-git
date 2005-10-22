@@ -13,7 +13,7 @@ class AnnotationsTest : public AnnotationsHandler, ConnectionListener
 {
   public:
     AnnotationsTest() {};
-    ~AnnotationsTest() {};
+    virtual ~AnnotationsTest() {};
 
     void start()
     {
@@ -42,7 +42,7 @@ class AnnotationsTest : public AnnotationsHandler, ConnectionListener
       a->requestAnnotations();
     };
 
-    virtual void onDisconnect( ConnectionError e ) { printf( "annotations_test: disconnected\n" ); };
+    virtual void onDisconnect( ConnectionError /*e*/ ) { printf( "annotations_test: disconnected\n" ); };
 
     virtual bool onTLSConnect( const CertInfo& info )
     {
@@ -57,7 +57,7 @@ class AnnotationsTest : public AnnotationsHandler, ConnectionListener
     {
       printf( "received notes...\n" );
       AnnotationsList::const_iterator it = aList.begin();
-      for( it; it != aList.end(); it++ )
+      for( ; it != aList.end(); it++ )
       {
         printf( "jid: %s, note: %s, cdate: %s, mdate: %s\n", (*it).jid.c_str(),
                 (*it).note.c_str(), (*it).cdate.c_str(), (*it).mdate.c_str() );
@@ -84,7 +84,7 @@ class AnnotationsTest : public AnnotationsHandler, ConnectionListener
     Annotations *a;
 };
 
-int main( int argc, char* argv[] )
+int main( int /*argc*/, char* /*argv[]*/ )
 {
   AnnotationsTest *t = new AnnotationsTest();
   t->start();

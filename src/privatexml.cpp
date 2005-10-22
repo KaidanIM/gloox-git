@@ -73,11 +73,6 @@ namespace gloox
     return id;
   }
 
-  bool PrivateXML::handleIq( Stanza *stanza )
-  {
-    return false;
-  }
-
   bool PrivateXML::handleIqID( Stanza *stanza, int context )
   {
     TrackMap::iterator t = m_track.find( stanza->id() );
@@ -131,6 +126,8 @@ namespace gloox
           }
           break;
         }
+        default:
+          break;
       }
 
       m_track.erase( t );
@@ -138,4 +135,4 @@ namespace gloox
     return false;
   }
 
-};
+}

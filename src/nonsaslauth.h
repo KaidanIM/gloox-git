@@ -56,7 +56,7 @@ namespace gloox
       void doAuth();
 
       // reimplemented from IqHandler
-      virtual bool handleIq( Stanza *stanza ) { return false; };
+      virtual bool handleIq( Stanza */*stanza*/ ) { return false; };
 
       // reimplemented from IqHandler
       virtual bool handleIqID( Stanza *stanza, int context );
@@ -65,7 +65,7 @@ namespace gloox
       enum NonSaslAuthTrack
       {
         TRACK_REQUEST_AUTH_FIELDS,
-        TRACK_SEND_AUTH,
+        TRACK_SEND_AUTH
       };
 
       Client *m_parent;
@@ -73,6 +73,6 @@ namespace gloox
 
   };
 
-};
+}
 
 #endif // NONSASLAUTH_H__

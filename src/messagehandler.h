@@ -37,6 +37,6 @@ namespace gloox
       virtual void handleMessage( Stanza *stanza ) = 0;
   };
 
-};
+}
 
 #endif // MESSAGEHANDLER_H__

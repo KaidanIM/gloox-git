@@ -124,6 +124,6 @@ namespace gloox
       std::string m_serverRaw;
   };
 
-};
+}
 
 #endif // JID_H__

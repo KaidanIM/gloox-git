@@ -44,6 +44,6 @@ namespace gloox
 
   };
 
-};
+}
 
 #endif // LASTACTIVITYHANDLER_H__

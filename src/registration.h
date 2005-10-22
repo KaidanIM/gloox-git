@@ -138,10 +138,9 @@ namespace gloox
       void registerRegistrationHandler( RegistrationHandler *rh );
 
       /**
-       * Un-registers the given RegistrationHandler.
-       * @param rh The RegistrationHandler to un-register.
+       * Un-registers the current RegistrationHandler.
        */
-      void removeRegistrationHandler( RegistrationHandler *rh );
+      void removeRegistrationHandler();
 
       // reimplemented from IqHandler
       virtual bool handleIq( Stanza *stanza );
@@ -162,6 +161,6 @@ namespace gloox
       RegistrationHandler *m_registrationHandler;
   };
 
-};
+}
 
 #endif // REGISTRATION_H__

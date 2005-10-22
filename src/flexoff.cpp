@@ -55,7 +55,7 @@ namespace gloox
     else
     {
       StringList::const_iterator it = msgs.begin();
-      for( it; it != msgs.end(); ++it )
+      for( ; it != msgs.end(); ++it )
       {
         Tag *i = new Tag( o, "item" );
         i->addAttrib( "action", "view" );
@@ -81,7 +81,7 @@ namespace gloox
     else
     {
       StringList::const_iterator it = msgs.begin();
-      for( it; it != msgs.end(); ++it )
+      for( ; it != msgs.end(); ++it )
       {
         Tag *i = new Tag( o, "item" );
         i->addAttrib( "action", "remove" );
@@ -136,7 +136,7 @@ namespace gloox
         StringMap m;
         Tag::TagList l = q->children();
         Tag::TagList::const_iterator it = l.begin();
-        for( it; it != l.end(); ++it )
+        for( ; it != l.end(); ++it )
         {
           m[(*it)->findAttribute( "node" )] = (*it)->findAttribute( "name" );
         }
@@ -145,9 +145,8 @@ namespace gloox
     }
   }
 
-  void FlexibleOffline::handleDiscoError( Stanza *stanza, int context )
+  void FlexibleOffline::handleDiscoError( Stanza */*stanza*/, int /*context*/ )
   {
-
   }
 
   bool FlexibleOffline::handleIqID( Stanza *stanza, int context )
@@ -181,6 +180,8 @@ namespace gloox
                 break;
             }
             break;
+          default:
+            break;
         }
         break;
       case FO_REMOVE_MSGS:
@@ -207,9 +208,13 @@ namespace gloox
                 break;
             }
             break;
+          default:
+            break;
         }
         break;
     }
+
+    return false;
   }
 
-};
+}

@@ -128,6 +128,6 @@ namespace gloox
       PrivacyListHandler *m_privacyListHandler;
   };
 
-};
+}
 
 #endif // PRIVACYMANAGER_H__

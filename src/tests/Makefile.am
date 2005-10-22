@@ -2,9 +2,9 @@
 ## Process this file with automake to produce Makefile.in
 ##
 
-AM_CPPFLAGS = -g3 -fno-inline
+AM_CPPFLAGS = -g3 -fno-inline -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare -Wpointer-arith -Wswitch -Wno-long-long -Wno-unknown-pragmas -Wconversion
 
-noinst_PROGRAMS = register_test disco_test adhoc_test roster_test privatexml_test component_test bookmarkstorage_test annotations_test privacylist_test message_test zlib_test
+noinst_PROGRAMS = register_test disco_test adhoc_test roster_test privatexml_test component_test bookmarkstorage_test annotations_test privacylist_test message_test flexoff_test
 
 register_test_SOURCES = register_test.cpp
 register_test_LDADD = ../libgloox.la
@@ -46,6 +46,7 @@ message_test_SOURCES = message_test.cpp
 message_test_LDADD = ../libgloox.la
 message_test_CFLAGS = $(CPPFLAGS)
 
-zlib_test_SOURCES = zlib_test.cpp
-zlib_test_LDADD = -lz
-zlib_test_CFLAGS = $(CPPFLAGS)
+flexoff_test_SOURCES = flexoff_test.cpp
+flexoff_test_LDADD = ../libgloox.la
+flexoff_test_CFLAGS = $(CPPFLAGS)
+

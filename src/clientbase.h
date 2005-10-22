@@ -384,7 +384,7 @@ namespace gloox
       {
         SASL_DIGEST_MD5,          /**< SASL Digest-MD5 according to RFC 2831. */
         SASL_PLAIN,               /**< SASL PLAIN according to RFC 2595 Section 6. */
-        SASL_ANONYMOUS,           /**< SASL ANONYMOUS according to draft-ietf-sasl-anon-05.txt/
+        SASL_ANONYMOUS            /**< SASL ANONYMOUS according to draft-ietf-sasl-anon-05.txt/
                                    * RFC 2245 Section 6. */
       };
 
@@ -408,8 +408,8 @@ namespace gloox
       JID m_jid;
       Connection *m_connection;
 
-      std::string m_password;
       std::string m_namespace;
+      std::string m_password;
       std::string m_xmllang;
       std::string m_server;
       std::string m_sid;
@@ -424,7 +424,7 @@ namespace gloox
         NODE_STREAM_START,             /**< The &lt;stream:stream&gt; tag. */
         NODE_STREAM_ERROR,             /**< The &lt;stream:error&gt; tag. */
         NODE_STREAM_CLOSE,             /**< The &lt;/stream:stream&gt; tag. */
-        NODE_STREAM_CHILD,             /**< Everything else. */
+        NODE_STREAM_CHILD              /**< Everything else. */
       };
 
       virtual void handleStartNode() = 0;
@@ -485,6 +485,6 @@ namespace gloox
 
   };
 
-};
+}
 
 #endif // CLIENTBASE_H__

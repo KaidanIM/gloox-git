@@ -40,6 +40,6 @@ namespace gloox
       virtual void handleLog( const std::string& xml, bool incoming ) = 0;
   };
 
-};
+}
 
 #endif // PRESENCEHANDLER_H__

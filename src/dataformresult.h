@@ -44,6 +44,6 @@ namespace gloox
 
   };
 
-};
+}
 
 #endif // DATAFORMRESULT_H__

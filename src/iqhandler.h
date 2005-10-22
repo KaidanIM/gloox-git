@@ -53,6 +53,6 @@ namespace gloox
       virtual bool handleIqID( Stanza *stanza, int context ) = 0;
   };
 
-};
+}
 
 #endif // IQHANDLER_H__

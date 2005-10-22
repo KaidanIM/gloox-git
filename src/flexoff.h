@@ -106,7 +106,7 @@ namespace gloox
       virtual bool handleIqID( Stanza *stanza, int context );
 
       // reimplemented from IqHandler
-      virtual bool handleIq( Stanza *stanza ) { return false; };
+      virtual bool handleIq( Stanza */*stanza*/ ) { return false; };
 
     private:
       enum FOContext
@@ -115,7 +115,7 @@ namespace gloox
         FO_REQUEST_NUM,
         FO_REQUEST_HEADERS,
         FO_REQUEST_MSGS,
-        FO_REMOVE_MSGS,
+        FO_REMOVE_MSGS
       };
 
       ClientBase *m_parent;
@@ -123,6 +123,6 @@ namespace gloox
       FlexibleOfflineHandler *m_flexibleOfflineHandler;
   };
 
-};
+}
 
 #endif // FLEXOFF_H__

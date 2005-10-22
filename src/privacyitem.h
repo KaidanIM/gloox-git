@@ -62,7 +62,7 @@ namespace gloox
         PACKET_PRESENCE_IN    =  2,  /**< The item blocks incoming presence stanzas. */
         PACKET_PRESENCE_OUT   =  4,  /**< The item blocks outgoing presence stanzas. */
         PACKET_IQ             =  8,  /**< The item blocks IQ stanzas. */
-        PACKET_ALL            = 15,  /**< The item blocks all of these stanza types. */
+        PACKET_ALL            = 15   /**< The item blocks all of these stanza types. */
       };
 
       /**
@@ -118,6 +118,6 @@ namespace gloox
       std::string m_value;
   };
 
-};
+}
 
 #endif // PRIVACYITEM_H__

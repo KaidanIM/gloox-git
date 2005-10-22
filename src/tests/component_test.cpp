@@ -12,7 +12,7 @@ class ComponentTest : public DiscoHandler, ConnectionListener
 {
   public:
     ComponentTest() {};
-    ~ComponentTest() {};
+    virtual ~ComponentTest() {};
 
     void start()
     {
@@ -37,7 +37,7 @@ class ComponentTest : public DiscoHandler, ConnectionListener
 //       j->disconnect( STATE_DISCONNECTED );
     };
 
-    virtual void onDisconnect( ConnectionError e ) { printf( "component: disconnected\n" ); };
+    virtual void onDisconnect( ConnectionError /*e*/ ) { printf( "component: disconnected\n" ); };
 
     virtual bool onTLSConnect( const CertInfo& info )
     {
@@ -48,11 +48,26 @@ class ComponentTest : public DiscoHandler, ConnectionListener
       return true;
     };
 
+    virtual void handleDiscoInfoResult( Stanza */*stanza*/, int /*context*/ )
+    {
+      printf( "handleDiscoInfoResult}\n" );
+    }
+
+    virtual void handleDiscoItemsResult( Stanza */*stanza*/, int /*context*/ )
+    {
+      printf( "handleDiscoItemsResult\n" );
+    }
+
+    virtual void handleDiscoError( Stanza */*stanza*/, int /*context*/ )
+    {
+      printf( "handleDiscoError\n" );
+    }
+
   private:
     Component *j;
 };
 
-int main( int argc, char* argv[] )
+int main( int /*argc*/, char* /*argv[]*/ )
 {
   ComponentTest *r = new ComponentTest();
   r->start();

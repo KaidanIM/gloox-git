@@ -44,6 +44,6 @@ namespace gloox
 
   };
 
-};
+}
 
 #endif // ADHOCCOMMANDPROVIDER_H__

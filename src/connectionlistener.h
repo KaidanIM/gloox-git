@@ -72,14 +72,14 @@ namespace gloox
        * This function is called (by a Client object) if an error occurs while trying to bind a resource.
        * @param error Describes the error condition.
        */
-      virtual void onResourceBindError( ResourceBindError error ) {};
+      virtual void onResourceBindError( ResourceBindError /*error*/ ) {};
 
       /**
        * This function is called (by a Client object) if an error occurs while trying to establish
        * a session.
        * @param error Describes the error condition.
        */
-      virtual void onSessionCreateError( SessionCreateError error ) {};
+      virtual void onSessionCreateError( SessionCreateError /*error*/ ) {};
 
       /**
        * This function is called when the connection was TLS/SSL secured.
@@ -91,6 +91,6 @@ namespace gloox
 
   };
 
-};
+}
 
 #endif // CONNECTIONLISTENER_H__

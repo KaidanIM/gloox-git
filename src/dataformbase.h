@@ -80,6 +80,7 @@ namespace gloox
       FieldList m_fields;
 
   };
-};
+
+}
 
 #endif // DATAFORMBASE_H__

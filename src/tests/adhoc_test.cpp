@@ -14,7 +14,7 @@ class AdhocTest : public ConnectionListener, AdhocCommandProvider
 {
   public:
     AdhocTest() {};
-    ~AdhocTest() {};
+    virtual ~AdhocTest() {};
 
     void start()
     {
@@ -37,7 +37,7 @@ class AdhocTest : public ConnectionListener, AdhocCommandProvider
       delete( j );
     }
 
-    void handleAdhocCommand( const std::string& command, Tag *tag )
+    void handleAdhocCommand( const std::string& command, Tag */*tag*/ )
     {
       if( command == "helloworld" )
         printf( "Hello World!\n" );
@@ -53,7 +53,7 @@ class AdhocTest : public ConnectionListener, AdhocCommandProvider
     {
     };
 
-    virtual void onDisconnect( ConnectionError e ) { printf( "disco_test: disconnected\n" ); };
+    virtual void onDisconnect( ConnectionError /*e*/ ) { printf( "disco_test: disconnected\n" ); };
 
     virtual bool onTLSConnect( const CertInfo& info )
     {
@@ -69,7 +69,7 @@ class AdhocTest : public ConnectionListener, AdhocCommandProvider
     Adhoc *a;
 };
 
-int main( int argc, char* argv[] )
+int main( int /*argc*/, char* /*argv[]*/ )
 {
   AdhocTest *r = new AdhocTest();
   r->start();

@@ -19,7 +19,7 @@
 #include "prep.h"
 #include "parser.h"
 
-#ifdef _WIN32
+#ifdef WIN32
 #include <winsock.h>
 #else
 #include <sys/types.h>
@@ -31,15 +31,16 @@
 #include <time.h>
 
 #include <string>
+#include <vector>
 
 namespace gloox
 {
 
   Connection::Connection( Parser *parser, const std::string& server, int port )
-    : m_parser( parser ), m_server( Prep::idna( server ) ), m_port( port ),
-      m_cancel( true ), m_socket( 0 ), m_buf( 0 ), m_secure( false ),
-      m_compression( false ), m_dataInCount( 0 ), m_compCount( 0 ), m_compInited( false ),
-      m_dataOutCount( 0 ), m_decompCount( 0 )
+    : m_parser( parser ), m_buf( 0 ), m_server( Prep::idna( server ) ), m_port( port ),
+      m_socket( -1 ), m_compCount( 0 ), m_decompCount( 0 ), m_dataOutCount( 0 ),
+      m_dataInCount( 0 ), m_cancel( true ), m_secure( false ), m_compression( false ),
+      m_compInited( false )
   {
     m_buf = (char*)calloc( BUFSIZE, sizeof( char ) );
   }
@@ -71,7 +72,7 @@ namespace gloox
       return false;
 
     StringList::const_iterator it = m_cacerts.begin();
-    for( it; it != m_cacerts.end(); it++ )
+    for( ; it != m_cacerts.end(); it++ )
       gnutls_certificate_set_x509_trust_file( m_credentials, (*it).c_str(), GNUTLS_X509_FMT_PEM );
 
     if( gnutls_init( &m_session, GNUTLS_CLIENT ) != 0 )
@@ -113,13 +114,13 @@ namespace gloox
       m_certInfo.status |= CERT_REVOKED;
     if( status & GNUTLS_CERT_SIGNER_NOT_CA )
       m_certInfo.status |= CERT_SIGNER_NOT_CA;
-    const gnutls_datum_t* certList;
+    const gnutls_datum_t* certList = 0;
     unsigned int certListSize;
     if( !error && ( ( certList = gnutls_certificate_get_peers( m_session, &certListSize ) ) == 0 ) )
       error = true;
 
-    gnutls_x509_crt_t cert[certListSize];
-    for( int i=0; !error && ( i<certListSize ); ++i )
+    std::vector<gnutls_x509_crt_t> cert;
+    for( unsigned int i=0; !error && ( i<certListSize ); ++i )
     {
       if( !error && ( gnutls_x509_crt_init( &cert[i] ) < 0 ) )
         error = true;
@@ -132,7 +133,7 @@ namespace gloox
       certListSize--;
 
     bool chain = true;
-    for( int i=1; !error && ( i<certListSize ); i++ )
+    for( unsigned int i=1; !error && ( i<certListSize ); i++ )
     {
       chain = error = !verifyAgainst( cert[i-1], cert[i] );
     }
@@ -185,7 +186,7 @@ namespace gloox
     if( !gnutls_x509_crt_check_hostname( cert[0], m_server.c_str() ) )
       m_certInfo.status |= CERT_WRONG_PEER;
 
-    for( int i=0; i<certListSize; i++ )
+    for( unsigned int i=0; i<certListSize; i++ )
       gnutls_x509_crt_deinit( cert[i] );
 
     return true;
@@ -270,48 +271,48 @@ namespace gloox
 
   std::string Connection::compress( const std::string& data )
   {
-    if( data.empty() )
-      return "";
+//     if( data.empty() )
+//       return "";
+//
+//     int CHUNK = data.length() + ( data.length() / 100 ) + 13;
+//     Bytef out[CHUNK];
+//     const char *in = data.c_str();
 
-    int CHUNK = data.length() + ( data.length() / 100 ) + 13;
-    Bytef out[CHUNK];
-    const char *in = data.c_str();
-
-    int ret = ::compress( out, (uLongf*)&CHUNK, (Bytef*)in, data.length() );
+//     int ret = ::compress( out, (uLongf*)&CHUNK, (Bytef*)in, data.length() );
     std::string result;
-    result.assign( (char*)out, CHUNK );
+//     result.assign( (char*)out, CHUNK );
 
-    m_compCount += result.length();
-    m_dataOutCount += data.length();
+//     m_compCount += result.length();
+//     m_dataOutCount += data.length();
 
     return result;
   }
 
   std::string Connection::decompress( const std::string& data )
   {
-    if( data.empty() )
-      return "";
+//     if( data.empty() )
+//       return "";
+//
+//     int CHUNK = data.length() * 10;
+//     char out[CHUNK];
+//     const char *in = data.c_str();
+//
+//     m_zinflate.avail_in = data.length();
+//     m_zinflate.next_in = (Bytef*)in;
 
-    int CHUNK = data.length() * 10;
-    char out[CHUNK];
-    const char *in = data.c_str();
-
-    m_zinflate.avail_in = data.length();
-    m_zinflate.next_in = (Bytef*)in;
-
-    int ret;
+//     int ret;
     std::string result, tmp;
-    do {
-      m_zinflate.avail_out = CHUNK;
-      m_zinflate.next_out = (Bytef*)out;
+//     do {
+//       m_zinflate.avail_out = CHUNK;
+//       m_zinflate.next_out = (Bytef*)out;
 
-      ret = inflate( &m_zinflate, Z_FINISH );
-      tmp.assign( out, CHUNK - m_zinflate.avail_out );
-      result += tmp;
-    } while( m_zinflate.avail_out == 0 );
+//       ret = inflate( &m_zinflate, Z_FINISH );
+//       tmp.assign( out, CHUNK - m_zinflate.avail_out );
+//       result += tmp;
+//     } while( m_zinflate.avail_out == 0 );
 
-    m_decompCount += result.length();
-    m_dataInCount += data.length();
+//     m_decompCount += result.length();
+//     m_dataInCount += data.length();
 
     return result;
   }
@@ -397,6 +398,8 @@ namespace gloox
           case Parser::PARSER_NOMEM:
             printf( "memory allocation error\n" );
             break;
+          default:
+            break;
         }
 #endif
         return CONN_IO_ERROR;
@@ -408,7 +411,7 @@ namespace gloox
 
   ConnectionError Connection::receive()
   {
-    if( !m_socket || !m_parser )
+    if( m_socket != -1 || !m_parser )
       return CONN_IO_ERROR;
 
     while( !m_cancel )
@@ -466,7 +469,7 @@ namespace gloox
 
   ConnectionState Connection::connect()
   {
-    if( m_socket && m_state >= STATE_CONNECTING )
+    if( m_socket != -1 && m_state >= STATE_CONNECTING )
       return m_state;
 
     m_state = STATE_CONNECTING;
@@ -476,7 +479,7 @@ namespace gloox
     else
       m_socket = DNS::connect( m_server, m_port );
 
-    if( m_socket <= 2 )
+    if( m_socket < 0 )
     {
 #ifdef DEBUG
       switch( m_socket )
@@ -504,10 +507,10 @@ namespace gloox
 
   void Connection::cleanup()
   {
-    if( m_socket )
+    if( m_socket != -1 )
     {
       close( m_socket );
-      m_socket = 0;
+      m_socket = -1;
     }
     m_state = STATE_DISCONNECTED;
     m_disconnect = CONN_OK;
@@ -525,4 +528,4 @@ namespace gloox
     m_cancel = true;
   }
 
-};
+}

@@ -38,7 +38,7 @@ namespace gloox
     if( bList.size() )
     {
       BookmarkHandler::BookmarkList::const_iterator it = bList.begin();
-      for( it; it != bList.end(); it++ )
+      for( ; it != bList.end(); it++ )
       {
         Tag *i = new Tag( "url" );
         i->addAttrib( "name", (*it).name );
@@ -50,7 +50,7 @@ namespace gloox
     if( cList.size() )
     {
       BookmarkHandler::ConferenceList::const_iterator it = cList.begin();
-      for( it; it != cList.end(); it++ )
+      for( ; it != cList.end(); it++ )
       {
         Tag *i = new Tag( "conference" );
         i->addAttrib( "name", (*it).name );
@@ -73,13 +73,13 @@ namespace gloox
     requestXML( "storage", XMLNS_BOOKMARKS, this );
   }
 
-  void BookmarkStorage::handlePrivateXML( const std::string& tag, Tag *xml )
+  void BookmarkStorage::handlePrivateXML( const std::string& /*tag*/, Tag *xml )
   {
     BookmarkHandler::BookmarkList bList;
     BookmarkHandler::ConferenceList cList;
     const Tag::TagList l = xml->children();
     Tag::TagList::const_iterator it = l.begin();
-    for( it; it != l.end(); it++ )
+    for( ; it != l.end(); it++ )
     {
       if( (*it)->name() == "url" )
       {
@@ -132,4 +132,4 @@ namespace gloox
     m_bookmarkHandler = 0;
   }
 
-};
+}

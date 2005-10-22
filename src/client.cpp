@@ -10,7 +10,7 @@
   This software is distributed without any warrenty.
 */
 
-#ifdef _WIN32
+#ifdef WIN32
 #include "../config.h.win"
 #else
 #include "config.h"
@@ -33,19 +33,20 @@ namespace gloox
 
   Client::Client( const std::string& server )
     : ClientBase( XMLNS_CLIENT, server ),
-    m_priority( -1 ),
-    m_autoPresence( false ), m_manageRoster( true ),
-    m_handleDisco( true ), m_rosterManager( 0 ), m_forceNonSasl( false ),
-    m_disco( 0 ), m_auth( 0 ), m_resourceBound( false )
+      m_rosterManager( 0 ), m_auth( 0 ), m_disco( 0 ),
+      m_resourceBound( false ), m_autoPresence( false ), m_forceNonSasl( false ),
+      m_manageRoster( true ), m_handleDisco( true ),
+      m_streamFeatures( 0 ), m_priority( -1 )
   {
     init();
   }
 
   Client::Client( const JID& jid, const std::string& password, int port )
     : ClientBase( XMLNS_CLIENT, password, "", port ),
-    m_priority( -1 ), m_autoPresence( false ), m_manageRoster( true ),
-    m_handleDisco( true ), m_rosterManager( 0 ), m_forceNonSasl( false ),
-    m_disco( 0 ), m_auth( 0 ), m_resourceBound( false )
+      m_rosterManager( 0 ), m_auth( 0 ), m_disco( 0 ),
+      m_resourceBound( false ), m_autoPresence( false ), m_forceNonSasl( false ),
+      m_manageRoster( true ), m_handleDisco( true ),
+      m_streamFeatures( 0 ), m_priority( -1 )
   {
     m_jid = jid;
     m_server = m_jid.serverRaw();
@@ -55,9 +56,10 @@ namespace gloox
   Client::Client( const std::string& username, const std::string& password,
                     const std::string& server, const std::string& resource, int port )
     : ClientBase( XMLNS_CLIENT, password, server, port ),
-    m_priority( -1 ), m_autoPresence( false ), m_manageRoster( true ),
-    m_handleDisco( true ), m_rosterManager( 0 ), m_forceNonSasl( false ),
-    m_disco( 0 ), m_auth( 0 ), m_resourceBound( false )
+      m_rosterManager( 0 ), m_auth( 0 ), m_disco( 0 ),
+      m_resourceBound( false ), m_autoPresence( false ), m_forceNonSasl( false ),
+      m_manageRoster( true ), m_handleDisco( true ),
+      m_streamFeatures( 0 ), m_priority( -1 )
   {
     m_jid.setUsername( username );
     m_jid.setServer( server );
@@ -358,6 +360,8 @@ namespace gloox
           notifyOnResourceBindError( ConnectionListener::RB_UNKNOWN_ERROR );
         break;
       }
+      default:
+        break;
     }
   }
 
@@ -404,6 +408,8 @@ namespace gloox
           notifyOnSessionCreateError( ConnectionListener::SC_UNKNOWN_ERROR );
         break;
       }
+      default:
+        break;
     }
   }
 
@@ -412,14 +418,8 @@ namespace gloox
     Tag *t = new Tag( "compress" );
     t->addAttrib( "xmlns", XMLNS_COMPRESSION );
 
-    switch( method )
-    {
-      case STREAM_FEATURE_COMPRESS_ZLIB:
-      {
-        Tag *m = new Tag( t, "method", "zlib" );
-        break;
-      }
-    }
+    if( method == STREAM_FEATURE_COMPRESS_ZLIB )
+      new Tag( t, "method", "zlib" );
 
     send( t );
   }
@@ -488,4 +488,4 @@ namespace gloox
     notifyOnConnect();
   }
 
-};
+}

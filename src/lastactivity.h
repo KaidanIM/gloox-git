@@ -88,6 +88,6 @@ namespace gloox
 
   };
 
-};
+}
 
 #endif // LASTACTIVITY_H__

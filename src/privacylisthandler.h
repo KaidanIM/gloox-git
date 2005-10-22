@@ -87,6 +87,6 @@ namespace gloox
 
   };
 
-};
+}
 
 #endif // PRIVACYLISTHANDLER_H__

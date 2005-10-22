@@ -116,8 +116,11 @@ namespace gloox
             break;
         }
         break;
+
+      default:
+        break;
     }
     return false;
   }
 
-};
+}

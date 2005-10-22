@@ -64,7 +64,7 @@ namespace gloox
       virtual bool handleIq( Stanza *stanza );
 
       // reimplemented from IqHandler
-      virtual bool handleIqID( Stanza *stanza, int context ) { return false; };
+      virtual bool handleIqID( Stanza */*stanza*/, int /*context*/ ) { return false; };
 
       /**
        * Using this function, you can register a AdhocCommandProvider -derived object as
@@ -87,6 +87,6 @@ namespace gloox
 
   };
 
-};
+}
 
 #endif // ADHOC_H__

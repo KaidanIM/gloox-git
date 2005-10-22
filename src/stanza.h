@@ -252,6 +252,6 @@ namespace gloox
       int m_priority;
   };
 
-};
+}
 
 #endif // STANZA_H__

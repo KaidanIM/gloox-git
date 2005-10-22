@@ -13,7 +13,7 @@ class PrivateXMLTest : public PrivateXMLHandler, ConnectionListener
 {
   public:
     PrivateXMLTest() {};
-    ~PrivateXMLTest() {};
+    virtual ~PrivateXMLTest() {};
 
     void start()
     {
@@ -41,7 +41,7 @@ class PrivateXMLTest : public PrivateXMLHandler, ConnectionListener
       p->requestXML( "test", "http://camaya.net/jabber/test", this );
     };
 
-    virtual void onDisconnect( ConnectionError e ) { printf( "disco_test: disconnected\n" ); };
+    virtual void onDisconnect( ConnectionError /*e*/ ) { printf( "disco_test: disconnected\n" ); };
 
     virtual bool onTLSConnect( const CertInfo& info )
     {
@@ -52,7 +52,7 @@ class PrivateXMLTest : public PrivateXMLHandler, ConnectionListener
       return true;
     };
 
-    virtual void handlePrivateXML( const std::string& tag, Tag *xml )
+    virtual void handlePrivateXML( const std::string& /*tag*/, Tag */*xml*/ )
     {
       printf( "received privatexml...\n" );
       Tag *x = new Tag( "test" );
@@ -63,7 +63,7 @@ class PrivateXMLTest : public PrivateXMLHandler, ConnectionListener
       p->storeXML( x, this );
     };
 
-    virtual void handlePrivateXMLResult( const std::string uid, PrivateXMLResult result )
+    virtual void handlePrivateXMLResult( const std::string /*uid*/, PrivateXMLResult /*result*/ )
     {
     };
 
@@ -72,7 +72,7 @@ class PrivateXMLTest : public PrivateXMLHandler, ConnectionListener
     PrivateXML *p;
 };
 
-int main( int argc, char* argv[] )
+int main( int /*argc*/, char* /*argv[]*/ )
 {
   PrivateXMLTest *r = new PrivateXMLTest();
   r->start();

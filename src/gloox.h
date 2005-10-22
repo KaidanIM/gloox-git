@@ -250,7 +250,7 @@ namespace gloox
   {
     STATE_DISCONNECTED,             /**< The client is in disconnected state. */
     STATE_CONNECTING,               /**< The client is currently trying to establish a connection. */
-    STATE_CONNECTED,                /**< The client is connected to the server but authentication is not
+    STATE_CONNECTED                 /**< The client is connected to the server but authentication is not
                                      * (yet) done. */
   };
 
@@ -268,7 +268,7 @@ namespace gloox
     CONN_TLS_FAILED,               /**< The server's certificate could not be verified. */
     CONN_AUTHENTICATION_FAILED,    /**< Authentication failed. Username/password wrong or account does
                                      * not exist. */
-    CONN_USER_DISCONNECTED,        /**< The user (or higher-level protocol) requested a disconnecct. */
+    CONN_USER_DISCONNECTED         /**< The user (or higher-level protocol) requested a disconnecct. */
   };
 
   /**
@@ -348,7 +348,7 @@ namespace gloox
                                      * entity in the stream header specifies a version of XMPP that is not
                                      * supported by the server; the server MAY specify the version(s) it
                                      * supports in the &lt;text/&gt; element. */
-    ERROR_XML_NOT_WELL_FORMED,      /**< The initiating entity has sent XML that is not well-formed as
+    ERROR_XML_NOT_WELL_FORMED       /**< The initiating entity has sent XML that is not well-formed as
                                      * defined by [XML]. */
   };
 
@@ -361,7 +361,7 @@ namespace gloox
     STANZA_IQ,                      /**< An Info/Query stanza. */
     STANZA_MESSAGE,                 /**< A message stanza. */
     STANZA_S10N,                    /**< A presence/subscription stanza. */
-    STANZA_PRESENCE,                /**< A presence stanza. */
+    STANZA_PRESENCE                 /**< A presence stanza. */
   };
 
   /**
@@ -460,7 +460,7 @@ namespace gloox
     ST_TYPE_CONTINUE,                 /**< Proceed (the condition was only a warning). */
     ST_TYPE_MODIFY,                   /**< Retry after changing the data sent. */
     ST_TYPE_AUTH,                     /**< Retry after providing credentials. */
-    ST_TYPE_WAIT,                     /**< Retry after waiting (the error is temporary). */
+    ST_TYPE_WAIT                      /**< Retry after waiting (the error is temporary). */
   };
 
   /**
@@ -538,7 +538,7 @@ namespace gloox
                                      * conditions in this list; any error type may be associated with this
                                      * condition, and it SHOULD be used only in conjunction with an
                                      * application-specific condition. */
-    ST_ERROR_UNEXPECTED_REQUEST,    /**< The recipient or server understood the request but was not expecting
+    ST_ERROR_UNEXPECTED_REQUEST     /**< The recipient or server understood the request but was not expecting
                                      * it at this time (e.g., the request was out of order); the associated
                                      * error type SHOULD be "wait". */
   };
@@ -555,7 +555,7 @@ namespace gloox
     PRESENCE_DND,                   /**< The entity or resource is busy (dnd = "Do Not Disturb"). */
     PRESENCE_XA,                    /**< The entity or resource is away for an extended period (xa =
                                      * "eXtended Away"). */
-    PRESENCE_UNAVAILABLE,           /**< The entity or resource if offline. */
+    PRESENCE_UNAVAILABLE            /**< The entity or resource if offline. */
   };
 
   /**
@@ -571,7 +571,7 @@ namespace gloox
     CERT_NOT_ACTIVE      = 16,      /**< The certifiacte is not yet active. */
     CERT_WRONG_PEER      = 32,      /**< The certificate has not been issued for the
                                      * peer we're connected to. */
-    CERT_SIGNER_NOT_CA   = 64,      /**< The signer is not a CA. */
+    CERT_SIGNER_NOT_CA   = 64       /**< The signer is not a CA. */
   };
 
   /**
@@ -626,7 +626,7 @@ namespace gloox
                                      * or &lt;response/&gt; element. */
     NONSASL_CONFLICT,               /**< JEP-0078: Resource Conflict */
     NONSASL_NOT_ACCEPTABLE,         /**< JEP-0078: Required Information Not Provided */
-    NONSASL_NOT_AUTHORIZED,         /**< JEP-0078: Incorrect Credentials */
+    NONSASL_NOT_AUTHORIZED          /**< JEP-0078: Incorrect Credentials */
   };
 
   /**
@@ -639,6 +639,6 @@ namespace gloox
    */
   typedef std::map<std::string, std::string> StringMap;
 
-};
+}
 
 #endif // GLOOX_H__

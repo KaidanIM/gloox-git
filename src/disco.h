@@ -183,6 +183,6 @@ namespace gloox
 
   };
 
-};
+}
 
 #endif // DISCO_H__

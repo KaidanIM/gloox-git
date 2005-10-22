@@ -151,12 +151,12 @@ namespace gloox
       StringList m_groups;
       SubscriptionEnum m_subscription;
       PresenceStatus m_status;
-      std::string m_jid;
-      std::string m_name;
       std::string m_statusMessage;
+      std::string m_name;
+      std::string m_jid;
       bool m_changed;
   };
 
-};
+}
 
 #endif // ROSTERITEM_H__
