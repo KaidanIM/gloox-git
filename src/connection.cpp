@@ -143,14 +143,14 @@ namespace gloox
     m_certInfo.chain = verifyAgainstCAs( cert[certListSize], 0 /*CAList*/, 0 /*CAListSize*/ );
 
     int t = (int)gnutls_x509_crt_get_expiration_time( cert[0] );
-    if( t = -1 )
+    if( t == -1 )
       error = true;
     else if( t < time( 0 ) )
       m_certInfo.status |= CERT_EXPIRED;
     m_certInfo.date_from = t;
 
     t = (int)gnutls_x509_crt_get_activation_time( cert[0] );
-    if( t = -1 )
+    if( t == -1 )
       error = true;
     else if( t > time( 0 ) )
       m_certInfo.status |= CERT_NOT_ACTIVE;
