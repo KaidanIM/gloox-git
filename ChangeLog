@@ -1,10 +1,10 @@
 
-v0.7 -- 05 Oct 2005
+v0.7 -- xx Oct 2005
 -------------------
-- JEP-0004 (Data Forms)
-- JEP-0013 (Flexible Offline Message Retrieval)
-- JEP-0083 (Nested Roster Groups)
-- JEP-0138 (Stream Compression)
+- JEP-0004 (Data Forms) (incomplete)
+- JEP-0013 (Flexible Offline Message Retrieval) (complete)
+- JEP-0083 (Nested Roster Groups) (complete)
+- JEP-0138 (Stream Compression) (experimental)
 - removed pkg-config dependency (in check for iksemel)
 - fixed pkg-config file (all libs)
 - RosterItem: added status(); made setStatus() take a PresenceStatus
@@ -19,15 +19,29 @@ v0.7 -- 05 Oct 2005
 - gloox-config script
 - call onDisconnect() in non-blocking connect() mode
 - added debug notice about remote server not being XMPP compliant
+- added an API docs notice about unsupported legacy SSL connections to port 5223
+- fixed a presence related bug in Stanza, where presence always was reported as 'available' (thanks to
+Luis Cidoncha)
+- made code ISO C++ compliant (-pedantic et al.)
+- various API doc fixes
+- many more virtuals in the handler interfaces instead of empty functions
+- export raw file descriptor
+- got rid of libm(ath) dependency (by using ostringstream)
+- always use pre-increment instead of post-increment in for-loops
+
+
+v0.6.3 -- 15 Sep 2005
+---------------------
+- include fixes for MacOS X
 
 
 v0.6.2 -- 23 Sep 2005
--------------------
+---------------------
 - pkgconfig file
 
 
 v0.6.1 -- 22 Sep 2005
--------------------
+---------------------
 - fixed Makefile.ams for make distcheck
 - removed unused iksemel types and includes
 - made void ClientBase::send( const std::string& ) private
