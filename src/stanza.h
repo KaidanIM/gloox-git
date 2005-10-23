@@ -217,7 +217,7 @@ namespace gloox
       static Stanza* createMessageStanza( const JID& to, const std::string& body,
                                           StanzaSubType subtype = STANZA_MESSAGE_CHAT,
                                           const std::string& subject = "", const std::string& thread = "",
-                                          std::string& xmllang = "" );
+                                          const std::string& xmllang = "" );
 
       /**
        * Creates a new subscription stanza.

@@ -408,7 +408,7 @@ namespace gloox
 
   Stanza* Stanza::createMessageStanza( const JID& to, const std::string& body,
                                StanzaSubType subtype, const std::string& subject,
-                               const std::string& thread, std::string& xmllang )
+                               const std::string& thread, const std::string& xmllang )
   {
     Stanza *s = new Stanza( "message" );
     switch( subtype )
