@@ -362,6 +362,7 @@ namespace gloox
         break;
 
       case STANZA_IQ_ERROR:
+      {
         Tag *e = stanza->findChild( "error" );
         if( e->hasChild( "conflict" ) )
           m_privacyListHandler->handlePrivacyListResult( stanza->id(),
@@ -373,6 +374,7 @@ namespace gloox
           m_privacyListHandler->handlePrivacyListResult( stanza->id(),
             PrivacyListHandler::RESULT_BAD_REQUEST );
         break;
+      }
 
       default:
         break;

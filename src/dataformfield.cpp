@@ -55,7 +55,7 @@ namespace gloox
         m_required = true;
       else if( (*it)->name() == "value" )
       {
-        if( m_type = FIELD_TYPE_TEXT_MULTI )
+        if( m_type == FIELD_TYPE_TEXT_MULTI )
           m_values.push_back( (*it)->cdata() );
         else
           m_value = (*it)->cdata();
