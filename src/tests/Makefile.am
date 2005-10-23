@@ -2,7 +2,7 @@
 ## Process this file with automake to produce Makefile.in
 ##
 
-AM_CPPFLAGS = -g3 -fno-inline -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare -Wpointer-arith -Wswitch -Wno-long-long -Wunknown-pragmas -Wconversion -Wundef
+AM_CPPFLAGS = -g3 -fno-inline -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare -Wpointer-arith -Wswitch -Wunknown-pragmas -Wconversion -Wundef
 
 noinst_PROGRAMS = register_test disco_test adhoc_test roster_test privatexml_test component_test bookmarkstorage_test annotations_test privacylist_test message_test flexoff_test
 
