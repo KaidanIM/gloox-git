@@ -19,7 +19,7 @@
  * client or as component. A third way, as server, is not supported by gloox, even though it might be
  * possible to get something going.
  *
- * @note The XMPP specification (Section 11.5 of RFC 3290) requires that only UTF-8 is used as encoding
+ * @note Section 11.5 of the XMPP specification (RFC 3290) requires that only UTF-8 is used as encoding
  * for any traffic sent over the wire. Since gloox cannot know which encoding is used in any given input,
  * it is a requirement that any input to gloox is valid UTF-8.
  *
@@ -161,6 +161,9 @@
  * to a roster without actually subscribing to the contacts presence. Additionally, the interface @ref
  * gloox::RosterListener offers many callbacks for various roster-related events.
  *
+ * If you create a Client-object as shown above, you also get a RosterManager for free.
+ * gloox::Client::rosterManager() returns a pointer to the object.
+ *
  * @section privacy_sec Privacy Lists
  *
  * Also defined in RFC 3921: Privacy Lists. A Privacy List can be used to explicitely block or allow
@@ -267,7 +270,7 @@ namespace gloox
     CONN_NO_SUPPORTED_AUTH,        /**< The auth mechanisms the server offers are not supported. */
     CONN_TLS_FAILED,               /**< The server's certificate could not be verified. */
     CONN_AUTHENTICATION_FAILED,    /**< Authentication failed. Username/password wrong or account does
-                                     * not exist. */
+                                    * not exist. */
     CONN_USER_DISCONNECTED         /**< The user (or higher-level protocol) requested a disconnecct. */
   };
 
@@ -278,7 +281,7 @@ namespace gloox
   {
     ERROR_UNDEFINED,                /**< An undefined/unknown error occured. Also used if a diconnect was
                                      * user-initiated. Also set before and during a established connection
-                                    (where obviously no error occured). */
+                                     * (where obviously no error occured). */
     ERROR_BAD_FORMAT,               /**< The entity has sent XML that cannot be processed;
                                      * this error MAY be used instead of the more specific XML-related
                                      * errors, such as &lt;bad-namespace-prefix/&gt;, &lt;invalid-xml/&gt;,
