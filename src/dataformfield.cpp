@@ -24,20 +24,6 @@ namespace gloox
   DataFormField::DataFormField( Tag *tag )
     : m_type( FIELD_TYPE_INVALID ), m_required( false )
   {
-    Tag::TagList l = tag->children();
-    Tag::TagList::const_iterator it = l.begin();
-    for( ; it != l.end(); ++it )
-    {
-      if( (*it)->name() == "desc" )
-        m_desc = (*it)->cdata();
-      else if( (*it)->name() == "required" )
-        m_required = true;
-      else if( (*it)->name() == "value" )
-        m_value = (*it)->cdata();
-      else if( (*it)->name() == "option" )
-        m_options[(*it)->findAttribute( "label" )] = (*it)->findChild( "value" )->cdata();
-    }
-
     if( tag->hasAttribute( "type", "boolean" ) )
       m_type = FIELD_TYPE_BOOLEAN;
     else if( tag->hasAttribute( "type", "fixed" ) )
@@ -58,6 +44,25 @@ namespace gloox
       m_type = FIELD_TYPE_TEXT_PRIVATE;
     else if( tag->hasAttribute( "type", "text-single" ) )
       m_type = FIELD_TYPE_TEXT_SINGLE;
+
+    Tag::TagList l = tag->children();
+    Tag::TagList::const_iterator it = l.begin();
+    for( ; it != l.end(); ++it )
+    {
+      if( (*it)->name() == "desc" )
+        m_desc = (*it)->cdata();
+      else if( (*it)->name() == "required" )
+        m_required = true;
+      else if( (*it)->name() == "value" )
+      {
+        if( m_type = FIELD_TYPE_TEXT_MULTI )
+          m_values.push_back( (*it)->cdata() );
+        else
+          m_value = (*it)->cdata();
+      }
+      else if( (*it)->name() == "option" )
+        m_options[(*it)->findAttribute( "label" )] = (*it)->findChild( "value" )->cdata();
+    }
 
     if( tag->hasAttribute( "var" ) )
       m_name = tag->findAttribute( "var" );
@@ -82,8 +87,6 @@ namespace gloox
       field->addChild( new Tag( "required" ) );
     if( !m_desc.empty() )
       field->addChild( new Tag( "desc", m_desc ) );
-    if( !m_value.empty() )
-      field->addChild( new Tag( "value", m_value ) );
 
     switch( m_type )
     {
@@ -137,6 +140,14 @@ namespace gloox
         field->addChild( new Tag( "value", "0" ) );
       else
         field->addChild( new Tag( "value", "1" ) );
+    }
+    else if( m_type == FIELD_TYPE_TEXT_MULTI )
+    {
+      StringList::const_iterator it = m_values.begin();
+      for( ; it != m_values.end() ; ++it )
+      {
+        field->addChild( new Tag( "value", (*it) ) );
+      }
     }
     else if( !m_value.empty() )
       field->addChild( new Tag( "value", m_value ) );

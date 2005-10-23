@@ -54,11 +54,11 @@ namespace gloox
       /**
        * Constructs a new, empty form.
        * @param type The form type.
-       * @param title The natural-language title of the form. Should not contain newlines (\\n, \\r).
        * @param instructions Natural-language instructions for filling out the form. Should not contain
        * newlines (\\n, \\r).
+       * @param title The natural-language title of the form. Should not contain newlines (\\n, \\r).
        */
-      DataForm( DataFormType type, const std::string& title = "", const std::string& instructions = "" );
+      DataForm( DataFormType type, const StringList& instructions, const std::string& title = "" );
 
       /**
        * Constructs a new DataForm from an existing Tag/XML representation.
@@ -95,19 +95,22 @@ namespace gloox
        * Retrieves the natural-language instructions for the form.
        * @return The fill-in instructions for the form.
        */
-      const std::string& instructions() const { return m_instructions; };
+      const StringList& instructions() const { return m_instructions; };
 
       /**
        * Use this function to set natural-language instructions for the form.
        * @param instructions The instructions for the form.
-       * @note The instructions should not contain newlines (\\n, \\r).
+       * @note The instructions should not contain newlines (\\n, \\r). Instead, every line should be an
+       * element of the StringMap. This allows for platform dependent newline handling on the target
+       * platform.
        */
-      void setInstructions( const std::string& instructions ) { m_instructions = instructions; };
+      void setInstructions( const StringList& instructions ) { m_instructions = instructions; };
 
     private:
+      StringList m_instructions;
+
       DataFormType m_type;
       std::string m_title;
-      std::string m_instructions;
   };
 
 }
