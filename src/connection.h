@@ -50,7 +50,7 @@ namespace gloox
     public:
       /**
        * Constructs a new Connection object.
-       * You should not need to use thsi function directly.
+       * You should not need to use this function directly.
        * @param parser A parser to feed with incoming data.
        * @param server A server to connect to.
        * @param port The port to connect to. The default of -1 means that SRV records will be used
