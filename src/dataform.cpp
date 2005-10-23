@@ -18,8 +18,8 @@
 namespace gloox
 {
 
-  DataForm::DataForm( DataFormType type, const std::string& title, const std::string& instructions )
-    : m_type( type ), m_title( title ), m_instructions( instructions )
+  DataForm::DataForm( DataFormType type, const StringList& instructions, const std::string& title )
+    : m_instructions( instructions ), m_type( type ), m_title( title )
   {
   }
 
@@ -47,7 +47,7 @@ namespace gloox
       if( (*it)->name() == "title" )
         m_title = (*it)->cdata();
       else if( (*it)->name() == "instructions" )
-        m_instructions = (*it)->cdata();
+        m_instructions.push_back( (*it)->cdata() );
       else if( (*it)->name() == "field" )
       {
         DataFormField f( (*it) );
@@ -69,8 +69,12 @@ namespace gloox
     x->addAttrib( "xmlns", XMLNS_DATA_FORMS );
     if( !m_title.empty() )
       x->addChild( new Tag( "title", m_title ) );
-    if( !m_instructions.empty() )
-      x->addChild( new Tag( "instructions", m_instructions ) );
+
+    StringList::const_iterator it_i = m_instructions.begin();
+    for( ; it_i != m_instructions.end(); ++it_i )
+    {
+      x->addChild( new Tag( "instructions", (*it_i) ) );
+    }
 
     FieldList::const_iterator it = m_fields.begin();
     for( ; it != m_fields.end(); ++it )

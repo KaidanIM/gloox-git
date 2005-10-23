@@ -110,6 +110,14 @@ namespace gloox
       virtual const std::string& name() const { return m_name; };
 
       /**
+       * Sets the name (the content of the 'var' attribute) of the field. The name identifies the
+       * field uniquely in the form.
+       * @param name The new name of the field.
+       * @note Fields of type other than 'fixed' MUST have a name, if it is 'fixed', it MAY.
+       */
+      void setName( const std::string& name ) { m_name = name; };
+
+      /**
        * Use this function to set the optional values of a field.
        * @param options The optional values of a list* or *multi type of field.
        */
@@ -128,13 +136,6 @@ namespace gloox
       void setRequired( bool required ) { m_required = required; };
 
       /**
-       * Sets the name of the field.
-       * @param name The new name of the field.
-       * @note Fields of type other than 'fixed' SHOULD have a name.
-       */
-      void setName( const std::string& name ) { m_name = name; };
-
-      /**
        * Use this function to retrieve the type of this field.
        * @return The type of this field.
        */
@@ -148,7 +149,7 @@ namespace gloox
 
       /**
        * Use this function to set the describing label of this field.
-       * @param label The describing label of thsi field.
+       * @param label The describing label of this field.
        */
       void setLabel( const std::string& label ) { m_label = label; };
 
@@ -164,13 +165,27 @@ namespace gloox
        */
       void setValue( const std::string& value ) { m_value = value; };
 
+      /**
+       * Use this function to retrieve the values of this field, if its of type 'text-multi'.
+       * @return The value of this field.
+       */
+      const StringList& values() const { return m_values; };
+
+      /**
+       * Use this function to set multiple values of this field, if it is of type 'text-multi'. If its not,
+       * use @ref setValue() instead.
+       * @param value The new values of this field.
+       */
+      void setValues( const StringList& values ) { m_values = values; };
+
     private:
       StringMap m_options;
+      StringList m_values;
 
       std::string m_name;
-      std::string m_value;
       std::string m_desc;
       std::string m_label;
+      std::string m_value;
       DataFormFieldType m_type;
       bool m_required;
   };
