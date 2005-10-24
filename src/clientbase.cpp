@@ -592,6 +592,11 @@ namespace gloox
     m_connectionListeners.push_back( cl );
   }
 
+  void ClientBase::removeConnectionListener( ConnectionListener *cl )
+  {
+    m_connectionListeners.remove( cl );
+  }
+
   void ClientBase::removeTagHandler( TagHandler *th, const std::string& tag, const std::string& xmlns )
   {
     TagHandlerList::iterator it = m_tagHandlers.begin();
