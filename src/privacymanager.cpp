@@ -15,7 +15,7 @@
 #include "privacymanager.h"
 #include "clientbase.h"
 
-#include <math.h>
+#include <sstream>
 
 namespace gloox
 {
@@ -219,10 +219,9 @@ namespace gloox
 
       i->addAttrib( "value", (*it).value() );
 
-      char *order = new char[(int)log10(++count)+2];
-      sprintf( order, "%d", count );
-      delete[] order;
-      i->addAttrib( "order", order );
+      std::ostringstream oss;
+      oss << ++count;
+      i->addAttrib( "order", oss.str() );
     }
 
     q->addChild( l );
