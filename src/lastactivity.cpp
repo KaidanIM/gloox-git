@@ -18,7 +18,7 @@
 #include "client.h"
 #include "lastactivityhandler.h"
 
-#include <math.h>
+#include <sstream>
 
 namespace gloox
 {
@@ -56,16 +56,15 @@ namespace gloox
       case STANZA_IQ_GET:
       {
         time_t now = time( 0 );
-        char *tmp = new char[4+(int)log10( (int)(now - m_active) )+1];
-        sprintf( tmp, "%d", (int)m_active );
-        delete[] tmp;
 
         Tag *t = new Tag( "iq" );
         t->addAttrib( "type", "result" );
         t->addAttrib( "id", stanza->id() );
         t->addAttrib( "to", stanza->from().full() );
         Tag *q = new Tag( t, "query" );
-        q->addAttrib( "seconds", tmp );
+        std::ostringstream oss;
+        oss << (int)(now - m_active);
+        q->addAttrib( "seconds", oss.str() );
         q->addAttrib( "xmlns", XMLNS_LAST );
 
         m_parent->send( t);
