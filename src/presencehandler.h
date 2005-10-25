@@ -27,7 +27,7 @@ namespace gloox
    * Upon an incoming Presence packet @ref handlePresence() will be called.
    * @author Jakob Schroeter <js@camaya.net>
    */
-  class PresenceHandler
+  class GLOOX_EXPORT PresenceHandler
   {
     public:
       /**

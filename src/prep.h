@@ -14,6 +14,8 @@
 #ifndef PREP_H__
 #define PREP_H__
 
+#include "export.h"
+
 #include <string>
 
 namespace gloox
@@ -32,7 +34,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.2
    */
-  class Prep
+  class GLOOX_EXPORT Prep
   {
     public:
       /**

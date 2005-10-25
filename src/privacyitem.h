@@ -14,6 +14,8 @@
 #ifndef PRIVACYITEM_H__
 #define PRIVACYITEM_H__
 
+#include "export.h"
+
 #include <string>
 
 namespace gloox
@@ -26,7 +28,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
    */
-  class PrivacyItem
+  class GLOOX_EXPORT PrivacyItem
   {
     public:
 

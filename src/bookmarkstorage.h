@@ -15,6 +15,8 @@
 #ifndef BOOKMARKSTORAGE_H__
 #define BOOKMARKSTORAGE_H__
 
+#include "export.h"
+
 #include "bookmarkhandler.h"
 #include "privatexml.h"
 #include "privatexmlhandler.h"
@@ -33,7 +35,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
    */
-  class BookmarkStorage : public PrivateXML, PrivateXMLHandler
+  class GLOOX_EXPORT BookmarkStorage : public PrivateXML, PrivateXMLHandler
   {
     public:
       /**

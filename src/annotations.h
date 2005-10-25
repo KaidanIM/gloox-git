@@ -15,6 +15,8 @@
 #ifndef ANNOTATIONS_H__
 #define ANNOTATIONS_H__
 
+#include "export.h"
+
 #include "annotationshandler.h"
 #include "privatexml.h"
 #include "privatexmlhandler.h"
@@ -33,7 +35,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
    */
-  class Annotations : public PrivateXML, PrivateXMLHandler
+  class GLOOX_EXPORT Annotations : public PrivateXML, PrivateXMLHandler
   {
     public:
       /**

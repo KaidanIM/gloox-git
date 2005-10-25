@@ -29,7 +29,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.4
    */
-  class Tag
+  class GLOOX_EXPORT Tag
   {
     public:
       /**

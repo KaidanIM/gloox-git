@@ -24,7 +24,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.7
    */
-  class FlexibleOfflineHandler
+  class GLOOX_EXPORT FlexibleOfflineHandler
   {
     public:
       /**

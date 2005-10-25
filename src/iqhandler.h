@@ -27,7 +27,7 @@ namespace gloox
    * Upon an incoming IQ packet @ref handleIq() will be called.
    * @author Jakob Schroeter <js@camaya.net>
    */
-  class IqHandler
+  class GLOOX_EXPORT IqHandler
   {
     public:
       /**

@@ -29,7 +29,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.2
    */
-  class RegistrationHandler
+  class GLOOX_EXPORT RegistrationHandler
   {
     public:
       /**

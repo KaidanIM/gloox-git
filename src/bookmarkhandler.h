@@ -28,7 +28,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
    */
-  class BookmarkHandler
+  class GLOOX_EXPORT BookmarkHandler
   {
     public:
       /**

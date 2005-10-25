@@ -31,7 +31,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.7
    */
-  class DataForm : public DataFormBase
+  class GLOOX_EXPORT DataForm : public DataFormBase
   {
     public:
       /**

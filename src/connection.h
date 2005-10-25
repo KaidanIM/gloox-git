@@ -45,7 +45,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.4
    */
-  class Connection
+  class GLOOX_EXPORT Connection
   {
     public:
       /**

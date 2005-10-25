@@ -30,7 +30,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.7
    */
-  class FlexibleOffline : public DiscoHandler, IqHandler
+  class GLOOX_EXPORT FlexibleOffline : public DiscoHandler, IqHandler
   {
     public:
       /**

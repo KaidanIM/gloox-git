@@ -15,6 +15,8 @@
 #ifndef ANNOTATIONSHANDLER_H__
 #define ANNOTATIONSHANDLER_H__
 
+#include "export.h"
+
 #include <string>
 #include <list>
 
@@ -28,7 +30,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
    */
-  class AnnotationsHandler
+  class GLOOX_EXPORT AnnotationsHandler
   {
     public:
       /**

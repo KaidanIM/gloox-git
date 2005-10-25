@@ -41,7 +41,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.2
    */
-  class Registration : public IqHandler
+  class GLOOX_EXPORT Registration : public IqHandler
   {
     public:
 

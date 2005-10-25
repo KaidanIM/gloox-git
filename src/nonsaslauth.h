@@ -34,7 +34,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
    */
-  class NonSaslAuth : public IqHandler
+  class GLOOX_EXPORT NonSaslAuth : public IqHandler
   {
     public:
       /**

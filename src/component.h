@@ -31,7 +31,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
    */
-  class Component : public ClientBase
+  class GLOOX_EXPORT Component : public ClientBase
   {
     public:
       /**
