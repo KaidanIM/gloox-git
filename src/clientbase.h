@@ -226,11 +226,10 @@ namespace gloox
       /**
        * Gives access to the raw file descriptor of the current connection. Use it wisely. Especially,
        * you should not ::recv() any data from it. There is no way to feed that back into the parser. You
-       * can select() it and use Connection::recv( -1 ) to fetch the data. If you're using poll(), don't
-       * forget to poll on POLLIN @b and POLLOUT.
-       * @return The file descriptor of the active connection, or 0 if no connection is established.
+       * can select() it and use Connection::recv( -1 ) to fetch the data.
+       * @return The file descriptor of the active connection, or -1 if no connection is established.
        */
-      int getFileDescriptor() const;
+      int fileDescriptor() const;
 
       /**
        * Registers @c cl as object that receives connection notifications.

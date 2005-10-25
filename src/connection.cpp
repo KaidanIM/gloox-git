@@ -39,7 +39,7 @@ namespace gloox
     : m_parser( parser ), m_buf( 0 ), m_server( Prep::idna( server ) ), m_port( port ),
       m_socket( -1 ), m_compCount( 0 ), m_decompCount( 0 ), m_dataOutCount( 0 ),
       m_dataInCount( 0 ), m_cancel( true ), m_secure( false ), m_compression( false ),
-      m_compInited( false )
+      m_fdRequested( false ), m_compInited( false )
   {
     m_buf = (char*)calloc( BUFSIZE, sizeof( char ) );
   }
@@ -313,6 +313,15 @@ namespace gloox
   {
     m_disconnect = e;
     m_cancel = true;
+
+    if( m_fdRequested )
+      cleanup();
+  }
+
+  int Connection::fileDescriptor()
+  {
+    m_fdRequested = true;
+    return m_socket;
   }
 
   ConnectionError Connection::recv( int timeout )
@@ -323,20 +332,23 @@ namespace gloox
       return CONN_USER_DISCONNECTED;
     }
 
-    fd_set fds;
-    struct timeval tv;
+    if( !m_fdRequested )
+    {
+      fd_set fds;
+      struct timeval tv;
 
-    FD_ZERO( &fds );
-    FD_SET( m_socket, &fds );
+      FD_ZERO( &fds );
+      FD_SET( m_socket, &fds );
 
-    tv.tv_sec = timeout;
-    tv.tv_usec = 0;
+      tv.tv_sec = timeout;
+      tv.tv_usec = 0;
 
-    if( select( m_socket + 1, &fds, 0, 0, timeout == -1 ? 0 : &tv ) < 0 )
-      return CONN_IO_ERROR;
+      if( select( m_socket + 1, &fds, 0, 0, timeout == -1 ? 0 : &tv ) < 0 )
+        return CONN_IO_ERROR;
 
-    if( !FD_ISSET( m_socket, &fds ) )
-      return CONN_OK;
+      if( !FD_ISSET( m_socket, &fds ) )
+        return CONN_OK;
+    }
 
     // optimize(?): recv returns the size. set size+1 = \0
     memset( m_buf, '\0', BUFSIZE );
@@ -517,6 +529,7 @@ namespace gloox
 #endif
     m_secure = false;
     m_cancel = true;
+    m_fdRequested = false;
   }
 
 }
