@@ -110,11 +110,11 @@ namespace gloox
 
       /**
        * Gives access to the raw file descriptor of a connection. Use it wisely. Especially, you should not
-       * ::recv() any data from it. There is no way to feed that back into the parser. You can select() it
-       * and use Connection::recv( -1 ) to fetch the data.
-       * @return The file descriptor of the active connection, or 0 if no connection is established.
+       * ::recv() any data from it. There is no way to feed that back into the parser. You can
+       * select()/poll() it and use Connection::recv( -1 ) to fetch the data.
+       * @return The file descriptor of the active connection, or -1 if no connection is established.
        */
-      int getFileDescriptor() const { return m_socket; };
+      int fileDescriptor();
 
 #ifdef HAVE_ZLIB
       /**
@@ -192,6 +192,7 @@ namespace gloox
       bool m_cancel;
       bool m_secure;
       bool m_compression;
+      bool m_fdRequested;
       bool m_compInited;
   };
 
