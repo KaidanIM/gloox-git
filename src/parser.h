@@ -33,7 +33,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.4
    */
-  class Parser
+  class GLOOX_EXPORT Parser
   {
     public:
       /**

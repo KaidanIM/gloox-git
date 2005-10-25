@@ -47,7 +47,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
    */
-  class ClientBase
+  class GLOOX_EXPORT ClientBase
   {
 
     friend class Parser;
@@ -287,7 +287,8 @@ namespace gloox
        * @param tag The element's name.
        * @param xmlns The element's namespace.
        */
-      void registerTagHandler( TagHandler *th, const std::string& tag, const std::string& xmlns );
+      void registerTagHandler( TagHandler *th, const std::string& tag,
+                                                const std::string& xmlns );
 
       /**
        * Removes the given object from the list of connection listeners.
@@ -325,7 +326,8 @@ namespace gloox
        * @param tag The element to remove the handler for.
        * @param xmlns The namespace qualifying the element.
        */
-      void removeTagHandler( TagHandler *th, const std::string& tag, const std::string& xmlns );
+      void removeTagHandler( TagHandler *th, const std::string& tag,
+                                              const std::string& xmlns );
 
       /**
        * Removes the given object from the list of log handlers.

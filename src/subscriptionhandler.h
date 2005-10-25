@@ -26,7 +26,7 @@ namespace gloox
    * Upon an incoming Subscription packet @ref handleSubscription() will be called.
    * @author Jakob Schroeter <js@camaya.net>
    */
-  class SubscriptionHandler
+  class GLOOX_EXPORT SubscriptionHandler
   {
     public:
       /**

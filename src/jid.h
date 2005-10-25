@@ -15,6 +15,8 @@
 #ifndef JID_H__
 #define JID_H__
 
+#include "export.h"
+
 #include <string>
 
 namespace gloox
@@ -25,7 +27,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.4
    */
-  class JID
+  class GLOOX_EXPORT JID
   {
     public:
 

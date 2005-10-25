@@ -30,7 +30,7 @@ namespace gloox
    * Derived classes can be registered as Command Providers with the Adhoc object.
    * @author Jakob Schroeter <js@camaya.net>
    */
-  class AdhocCommandProvider
+  class GLOOX_EXPORT AdhocCommandProvider
   {
     public:
       /**

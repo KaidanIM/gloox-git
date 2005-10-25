@@ -26,11 +26,11 @@ namespace gloox
    * A TagHandler can handle arbitrary elements not defined by RFC 3920, XMPP: Core.
    * @author Jakob Schroeter <js@camaya.net>
    */
-  class TagHandler
+  class GLOOX_EXPORT TagHandler
   {
      public:
        /**
-        * This function is called when an registered XML element arrives.
+        * This function is called when a registered XML element arrives.
         * @param stanza The complete Stanza.
         */
        virtual void handleTag( Stanza *stanza ) = 0;

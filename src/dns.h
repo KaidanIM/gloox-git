@@ -14,6 +14,8 @@
 #ifndef DNS_H__
 #define DNS_H__
 
+#include "export.h"
+
 #ifdef WIN32
 #include <windows.h>
 #include <windns.h>
@@ -48,7 +50,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
    */
-  class DNS
+  class GLOOX_EXPORT DNS
   {
     public:
 
