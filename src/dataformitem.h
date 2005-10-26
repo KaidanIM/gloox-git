@@ -35,12 +35,12 @@ namespace gloox
       /**
        * Creates an empty 'item' element you can add fields to.
        */
-      DataFormItem() : DataFormField( FIELD_TYPE_ITEM );
+      DataFormItem() : DataFormField( FIELD_TYPE_ITEM ) {};
 
       /**
        * Virtual destructor.
        */
-      virtual ~DataFormItem();
+      virtual ~DataFormItem() {};
 
   };
 
