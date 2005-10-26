@@ -103,6 +103,9 @@ fi
 AC_MSG_CHECKING([if Zlib should be used])
 AC_MSG_RESULT($zlib)
 
+dnl libresolv
+AC_CHECK_LIB(resolv, read, [res=yes LIBS="${LIBS} -lresolv"], res=no)
+
 dnl Debug
 AC_ARG_WITH(debug, AC_HELP_STRING([--enable-debug=[yes|no]],
       [Enable debug output. Default: yes]),
