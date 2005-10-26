@@ -16,7 +16,7 @@
 
 #include "export.h"
 
-#ifdef WIN32
+#ifdef __MINGW32__
 #include <windows.h>
 #include <windns.h>
 #endif
