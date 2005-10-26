@@ -15,7 +15,7 @@ libgloox_la_SOURCES = jid.cpp parser.cpp connection.cpp clientbase.cpp tag.cpp s
 			bookmarkstorage.cpp annotations.cpp privacymanager.cpp lastactivity.cpp \
 			flexoff.cpp dataform.cpp dataformfield.cpp dataformbase.cpp
 libgloox_la_LDFLAGS = -version-info 0:7:0 -no-undefined -no-allow-shlib-undefined
-libgloox_la_LIBADD = -lresolv
+libgloox_la_LIBADD =
 libgloox_la_CFLAGS = $(CPPFLAGS) $(IKSEMEL_CFLAGS)
 
 libglooxincludedir = $(includedir)/gloox
