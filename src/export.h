@@ -11,8 +11,8 @@
 */
 
 
-#ifndef GLOOX_EXPORT_H__
-#define GLOOX_EXPORT_H__
+#ifndef GLOOX_MACROS_H__
+#define GLOOX_MACROS_H__
 
 #ifdef WIN32
 #define GLOOX_EXPORT __declspec( dllexport )
@@ -20,4 +20,14 @@
 #define GLOOX_EXPORT
 #endif
 
-#endif // GLOOX_EXPORT_H__
+
+#if __GNUC__ - 0 > 3 || ( __GNUC__ - 0 == 3 && __GNUC_MINOR__ - 0 >= 2 )
+#define GLOOX_DEPRECATED __attribute__ ( (deprecated) )
+#elif defined( _MSC_VER ) && ( _MSC_VER >= 1300 )
+#define GLOOX_DEPRECATED __declspec( deprecated )
+#else
+#define GLOOX_DEPRECATED
+#endif
+
+
+#endif // GLOOX_MACROS_H__
