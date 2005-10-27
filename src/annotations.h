@@ -15,7 +15,7 @@
 #ifndef ANNOTATIONS_H__
 #define ANNOTATIONS_H__
 
-#include "export.h"
+#include "macros.h"
 
 #include "annotationshandler.h"
 #include "privatexml.h"

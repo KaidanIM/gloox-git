@@ -14,7 +14,7 @@
 #ifndef PREP_H__
 #define PREP_H__
 
-#include "export.h"
+#include "macros.h"
 
 #include <string>
 

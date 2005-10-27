@@ -14,7 +14,7 @@
 #ifndef PRIVACYITEM_H__
 #define PRIVACYITEM_H__
 
-#include "export.h"
+#include "macros.h"
 
 #include <string>
 

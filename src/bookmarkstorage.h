@@ -15,7 +15,7 @@
 #ifndef BOOKMARKSTORAGE_H__
 #define BOOKMARKSTORAGE_H__
 
-#include "export.h"
+#include "macros.h"
 
 #include "bookmarkhandler.h"
 #include "privatexml.h"

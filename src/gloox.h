@@ -196,7 +196,7 @@
 #ifndef GLOOX_H__
 #define GLOOX_H__
 
-#include "export.h"
+#include "macros.h"
 
 #include <string>
 #include <list>
