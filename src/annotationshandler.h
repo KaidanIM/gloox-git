@@ -15,7 +15,7 @@
 #ifndef ANNOTATIONSHANDLER_H__
 #define ANNOTATIONSHANDLER_H__
 
-#include "export.h"
+#include "macros.h"
 
 #include <string>
 #include <list>

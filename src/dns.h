@@ -14,7 +14,7 @@
 #ifndef DNS_H__
 #define DNS_H__
 
-#include "export.h"
+#include "macros.h"
 
 #ifdef __MINGW32__
 #include <windows.h>

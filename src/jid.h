@@ -15,7 +15,7 @@
 #ifndef JID_H__
 #define JID_H__
 
-#include "export.h"
+#include "macros.h"
 
 #include <string>
 
