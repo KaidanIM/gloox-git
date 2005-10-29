@@ -45,6 +45,10 @@
 #define C_IN 1
 #endif
 
+#ifndef INVALID_SOCKET
+#define INVALID_SOCKET -1
+#endif
+
 #define XMPP_PORT 5222
 
 namespace gloox
@@ -202,20 +206,34 @@ namespace gloox
   }
 #endif
 
-#ifndef _MSC_VER
   int DNS::connect( const std::string& domain, int port )
   {
+#ifdef WIN32
+    WSADATA wsaData;
+    if( WSAStartup( MAKEWORD( 1, 1 ), &wsaData ) != 0 )
+      return -DNS_COULD_NOT_RESOLVE;
+#endif
+
     struct protoent* prot;
     if( ( prot = getprotobyname( "tcp" ) ) == 0)
+    {
+      cleanup();
       return -DNS_COULD_NOT_RESOLVE;
+    }
 
     int fd;
     if( ( fd = socket( PF_INET, SOCK_STREAM, prot->p_proto ) ) == -1)
+    {
+      cleanup();
       return -DNS_COULD_NOT_CONNECT;
+    }
 
     struct hostent *h;
     if( ( h = gethostbyname( domain.c_str() ) ) == 0 )
+    {
+      cleanup();
       return -DNS_COULD_NOT_RESOLVE;
+    }
 
 #ifdef DEBUG
     printf( "resolved %s to: %s\n", domain.c_str(), inet_ntoa( *((struct in_addr *)h->h_addr) ) );
@@ -224,6 +242,8 @@ namespace gloox
     struct sockaddr_in target;
     target.sin_family = AF_INET;
     target.sin_port = htons( port );
+//     target.sin_addr = *( (struct in_addr *)*h->h_addr_list );
+
 #ifndef SKYOS
     if( inet_aton( inet_ntoa(*((struct in_addr *)h->h_addr)), &(target.sin_addr) ) == 0 )
       return -DNS_COULD_NOT_RESOLVE;
@@ -235,45 +255,19 @@ namespace gloox
     if( ::connect( fd, (struct sockaddr *)&target, sizeof( struct sockaddr ) ) == 0 )
       return fd;
 
+#ifndef WIN32
     close( fd );
+#else
+    closesocket( fd );
+    cleanup();
+#endif
     return -DNS_COULD_NOT_CONNECT;
   }
 
-#else
-
-  int DNS::connect( const std::string& domain, int port )
+  void DNS::cleanup()
   {
-    WSADATA wsaData;
-    if( WSAStartup( MAKEWORD( 1, 1 ), &wsaData ) != 0 )
-      return -DNS_COULD_NOT_RESOLVE;
-
-    struct hostent* h;
-    h = gethostbyname( domain );
-    if( !h )
-    {
-      WSACleanup();
-      return -DNS_COULD_NOT_RESOLVE;
-    }
-
-    SOCKET fd;
-    if( ( fd = socket( AF_INET, SOCK_STREAM, IPPROTO_TCP ) ) == INVALID_SOCKET )
-    {
-      WSACleanup();
-      return -DNS_COULD_NOT_RESOLVE;
-    }
-
-    SOCKADDR_IN target;
-    target.sin_family = AF_INET;
-    target.sin_addr = *( (LPIN_ADDR)*h->h_addr_list );
-    target.sin_port = htons( port );
-
-    if( ::connect( fd, (LPSOCKADDR)&target, sizeof( struct sockaddr ) ) != SOCKET_ERROR )
-      return fd;
-
-    closesocket( fd );
+#ifdef WIN32
     WSACleanup();
-    return -DNS_COULD_NOT_RESOLVE;
-  }
 #endif
-
+  }
 }

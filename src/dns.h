@@ -107,6 +107,8 @@ namespace gloox
       static int connect( const std::string& domain, int port );
 
     private:
+      static void cleanup();
+
       typedef struct buf {
         unsigned char buf[NS_PACKETSZ];
         int len;
