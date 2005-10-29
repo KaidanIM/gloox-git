@@ -144,19 +144,22 @@ namespace gloox
 
   int DNS::connect( const std::string& domain )
   {
-    struct sockaddr_in target;
-    target.sin_family = AF_INET;
-    struct hostent *h;
-
     HostMap hosts = resolve( domain );
     if( hosts.size() == 0 )
       return -DNS_NO_HOSTS_FOUND;
 
-    struct protoent* prot = getprotobyname( "tcp" );
-    int fd = socket( PF_INET, SOCK_STREAM, prot->p_proto );
+    struct protoent* prot;
+    if( ( prot = getprotobyname( "tcp" ) ) == 0)
+      return -DNS_COULD_NOT_RESOLVE;
 
+    int fd;
+    if( ( fd = socket( PF_INET, SOCK_STREAM, prot->p_proto ) ) == -1 )
+      return -DNS_COULD_NOT_RESOLVE;
+
+    struct hostent *h;
+    struct sockaddr_in target;
+    target.sin_family = AF_INET;
     int ret = 0;
-
     HostMap::const_iterator it = hosts.begin();
     for( ; it != hosts.end(); ++it )
     {
