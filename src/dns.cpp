@@ -247,9 +247,9 @@ namespace gloox
     if( WSAStartup( MAKEWORD( 1, 1 ), &wsaData ) != 0 )
       return -DNS_COULD_NOT_RESOLVE;
 
-    LPHOSTENT hostEntry;
-    hostEntry = gethostbyname( domain );
-    if( !hostEntry )
+    struct hostent* h;
+    h = gethostbyname( domain );
+    if( !h )
     {
       WSACleanup();
       return -DNS_COULD_NOT_RESOLVE;
@@ -264,7 +264,7 @@ namespace gloox
 
     SOCKADDR_IN target;
     target.sin_family = AF_INET;
-    target.sin_addr = *( (LPIN_ADDR)*hostEntry->h_addr_list );
+    target.sin_addr = *( (LPIN_ADDR)*h->h_addr_list );
     target.sin_port = htons( port );
 
     if( ::connect( fd, (LPSOCKADDR)&target, sizeof( struct sockaddr ) ) != SOCKET_ERROR )
