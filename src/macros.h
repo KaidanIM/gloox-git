@@ -14,6 +14,7 @@
 #ifndef GLOOX_MACROS_H__
 #define GLOOX_MACROS_H__
 
+
 #ifdef WIN32
 #define GLOOX_EXPORT __declspec( dllexport )
 #else

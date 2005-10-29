@@ -50,7 +50,7 @@
 namespace gloox
 {
 
-#ifndef SKYOS
+#if !defined( SKYOS ) && !defined( WIN32 )
   DNS::HostMap DNS::resolve( const std::string& domain )
   {
     std::string service = "xmpp-client";
@@ -65,7 +65,7 @@ namespace gloox
     buf srvbuf;
     bool error = false;
 
-    std::string dname = "_" +  service + "._" + proto;
+    const std::string dname = "_" +  service + "._" + proto;
 
     if( !domain.empty() )
       srvbuf.len = res_querydomain( dname.c_str(), (char*)domain.c_str(),
@@ -144,8 +144,8 @@ namespace gloox
 
   int DNS::connect( const std::string& domain )
   {
-    struct sockaddr_in dest_addr;
-    dest_addr.sin_family = AF_INET;
+    struct sockaddr_in target;
+    target.sin_family = AF_INET;
     struct hostent *h;
 
     HostMap hosts = resolve( domain );
@@ -166,7 +166,7 @@ namespace gloox
       else
         port = (*it).second;
 
-      dest_addr.sin_port = htons( port );
+      target.sin_port = htons( port );
       if( ( h = gethostbyname( (*it).first.c_str() ) ) == 0 )
       {
         ret = -DNS_COULD_NOT_RESOLVE;
@@ -178,11 +178,11 @@ namespace gloox
       printf( "resolved %s to: %s:%d\n", (*it).first.c_str(), tmp, port );
 #endif
 
-      if( inet_aton( inet_ntoa(*((struct in_addr *)h->h_addr)), &(dest_addr.sin_addr) ) == 0 )
+      if( inet_aton( inet_ntoa(*((struct in_addr *)h->h_addr)), &(target.sin_addr) ) == 0 )
         continue;
 
-      memset( &(dest_addr.sin_zero), '\0', 8 );
-      if( ::connect( fd, (struct sockaddr *)&dest_addr, sizeof( struct sockaddr ) ) == 0 )
+      memset( &(target.sin_zero), '\0', 8 );
+      if( ::connect( fd, (struct sockaddr *)&target, sizeof( struct sockaddr ) ) == 0 )
         return fd;
 
       close( fd );
@@ -199,16 +199,17 @@ namespace gloox
   }
 #endif
 
+#ifndef _MSC_VER
   int DNS::connect( const std::string& domain, int port )
   {
-    struct sockaddr_in dest_addr;
-    dest_addr.sin_family = AF_INET;
+    struct sockaddr_in target;
+    target.sin_family = AF_INET;
     struct hostent *h;
 
     struct protoent* prot = getprotobyname( "tcp" );
     int fd = socket( PF_INET, SOCK_STREAM, prot->p_proto );
 
-    dest_addr.sin_port = htons( port );
+    target.sin_port = htons( port );
     if( ( h = gethostbyname( domain.c_str() ) ) == 0 )
       return -DNS_COULD_NOT_RESOLVE;
 
@@ -216,19 +217,61 @@ namespace gloox
     printf( "resolved %s to: %s\n", domain.c_str(), inet_ntoa( *((struct in_addr *)h->h_addr) ) );
 #endif
 
-#ifdef SKYOS
-    dest_addr.sin_addr.s_addr = inet_addr( inet_ntoa(*((struct in_addr *)h->h_addr)) );
-#else
-    if( inet_aton( inet_ntoa(*((struct in_addr *)h->h_addr)), &(dest_addr.sin_addr) ) == 0 )
+#ifndef SKYOS
+    if( inet_aton( inet_ntoa(*((struct in_addr *)h->h_addr)), &(target.sin_addr) ) == 0 )
       return -DNS_COULD_NOT_RESOLVE;
+#else
+    target.sin_addr.s_addr = inet_addr( inet_ntoa(*((struct in_addr *)h->h_addr)) );
 #endif
 
-    memset( &(dest_addr.sin_zero), '\0', 8 );
-    if( ::connect( fd, (struct sockaddr *)&dest_addr, sizeof( struct sockaddr ) ) == 0 )
+    memset( &(target.sin_zero), '\0', 8 );
+    if( ::connect( fd, (struct sockaddr *)&target, sizeof( struct sockaddr ) ) == 0 )
       return fd;
 
     close( fd );
     return -DNS_COULD_NOT_CONNECT;
   }
+
+#else
+
+  int DNS::connect( const std::string& domain, int port )
+  {
+    WORD sockVersion;
+    WSADATA wsaData;
+    int nret;
+
+    sockVersion = MAKEWORD( 1, 1 );
+    WSAStartup( sockVersion, &wsaData );
+
+    LPHOSTENT hostEntry;
+    hostEntry = gethostbyname( domain );
+
+    if( !hostEntry )
+    {
+      WSACleanup();
+      return -DNS_COULD_NOT_RESOLVE;
+    }
+
+    SOCKET sock;
+    sock = socket( AF_INET, SOCK_STREAM, IPPROTO_TCP );
+
+    if ( sock == INVALID_SOCKET )
+    {
+      WSACleanup();
+      return -DNS_COULD_NOT_RESOLVE;
+    }
+
+    SOCKADDR_IN target;
+    target.sin_family = AF_INET;
+    target.sin_addr = *( (LPIN_ADDR)*hostEntry->h_addr_list );
+    target.sin_port = htons( port );
+
+    if( ::connect( sock, (LPSOCKADDR)&target, sizeof( struct sockaddr ) ) != SOCKET_ERROR )
+      return sock;
+
+    WSACleanup();
+    return -DNS_COULD_NOT_RESOLVE;
+  }
+#endif
 
 }
