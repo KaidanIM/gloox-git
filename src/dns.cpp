@@ -202,14 +202,15 @@ namespace gloox
 #ifndef _MSC_VER
   int DNS::connect( const std::string& domain, int port )
   {
-    struct sockaddr_in target;
-    target.sin_family = AF_INET;
+    struct protoent* prot;
+    if( ( prot = getprotobyname( "tcp" ) ) == 0)
+      return -DNS_COULD_NOT_RESOLVE;
+
+    int fd;
+    if( ( fd = socket( PF_INET, SOCK_STREAM, prot->p_proto ) ) == -1)
+      return -DNS_COULD_NOT_CONNECT;
+
     struct hostent *h;
-
-    struct protoent* prot = getprotobyname( "tcp" );
-    int fd = socket( PF_INET, SOCK_STREAM, prot->p_proto );
-
-    target.sin_port = htons( port );
     if( ( h = gethostbyname( domain.c_str() ) ) == 0 )
       return -DNS_COULD_NOT_RESOLVE;
 
@@ -217,6 +218,9 @@ namespace gloox
     printf( "resolved %s to: %s\n", domain.c_str(), inet_ntoa( *((struct in_addr *)h->h_addr) ) );
 #endif
 
+    struct sockaddr_in target;
+    target.sin_family = AF_INET;
+    target.sin_port = htons( port );
 #ifndef SKYOS
     if( inet_aton( inet_ntoa(*((struct in_addr *)h->h_addr)), &(target.sin_addr) ) == 0 )
       return -DNS_COULD_NOT_RESOLVE;
@@ -236,26 +240,20 @@ namespace gloox
 
   int DNS::connect( const std::string& domain, int port )
   {
-    WORD sockVersion;
     WSADATA wsaData;
-    int nret;
-
-    sockVersion = MAKEWORD( 1, 1 );
-    WSAStartup( sockVersion, &wsaData );
+    if( WSAStartup( MAKEWORD( 1, 1 ), &wsaData ) != 0 )
+      return -DNS_COULD_NOT_RESOLVE;
 
     LPHOSTENT hostEntry;
     hostEntry = gethostbyname( domain );
-
     if( !hostEntry )
     {
       WSACleanup();
       return -DNS_COULD_NOT_RESOLVE;
     }
 
-    SOCKET sock;
-    sock = socket( AF_INET, SOCK_STREAM, IPPROTO_TCP );
-
-    if ( sock == INVALID_SOCKET )
+    SOCKET fd;
+    if( ( fd = socket( AF_INET, SOCK_STREAM, IPPROTO_TCP ) ) == INVALID_SOCKET )
     {
       WSACleanup();
       return -DNS_COULD_NOT_RESOLVE;
@@ -266,9 +264,10 @@ namespace gloox
     target.sin_addr = *( (LPIN_ADDR)*hostEntry->h_addr_list );
     target.sin_port = htons( port );
 
-    if( ::connect( sock, (LPSOCKADDR)&target, sizeof( struct sockaddr ) ) != SOCKET_ERROR )
-      return sock;
+    if( ::connect( fd, (LPSOCKADDR)&target, sizeof( struct sockaddr ) ) != SOCKET_ERROR )
+      return fd;
 
+    closesocket( fd );
     WSACleanup();
     return -DNS_COULD_NOT_RESOLVE;
   }
