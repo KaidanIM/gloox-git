@@ -14,6 +14,9 @@
 #ifndef GLOOX_MACROS_H__
 #define GLOOX_MACROS_H__
 
+#ifdef WIN32
+#pragma warning( disable:4251 )
+#endif
 
 #ifdef WIN32
 #define GLOOX_EXPORT __declspec( dllexport )

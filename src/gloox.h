@@ -202,6 +202,12 @@
 #include <list>
 #include <map>
 
+#ifdef WIN32
+#define GLOOX_DLL_EXPORT __declspec( dllexport )
+#else
+#define GLOOX_DLL_EXPORT
+#endif
+
 #define XMLNS_CLIENT            "jabber:client"
 #define XMLNS_COMPONENT_ACCEPT  "jabber:component:accept"
 #define XMLNS_COMPONENT_CONNECT "jabber:component:connect"

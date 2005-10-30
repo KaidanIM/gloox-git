@@ -24,9 +24,12 @@
 #include "tag.h"
 #include "stanza.h"
 
+#ifndef WIN32
 #include <unistd.h>
-#include <iostream>
+#endif
 
+#include <iostream>
+#include <sstream>
 
 namespace gloox
 {
@@ -447,9 +450,9 @@ namespace gloox
   void Client::sendInitialPresence()
   {
     Tag *p = new Tag( "presence" );
-    char priority[5];
-    sprintf( priority, "%d", m_priority );
-    Tag *prio= new Tag( "priority", priority );
+	std::ostringstream oss;
+	oss << m_priority;
+    Tag *prio= new Tag( "priority", oss.str() );
     p->addChild( prio );
     send( p );
   }

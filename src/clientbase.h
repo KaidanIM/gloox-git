@@ -480,7 +480,7 @@ namespace gloox
 
       AuthenticationError m_authError;
       StreamError m_streamError;
-      StringMap m_streamErrorText;
+	  StringMap m_streamErrorText;
       std::string m_streamErrorCData;
       Tag *m_streamErrorAppCondition;
       int m_idCount;

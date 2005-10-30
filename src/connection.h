@@ -175,7 +175,6 @@ namespace gloox
       StringList m_cacerts;
 #endif
 
-      static const int BUFSIZE = 1024;
       Parser *m_parser;
       ConnectionState m_state;
       CertInfo m_certInfo;

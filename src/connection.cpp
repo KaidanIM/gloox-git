@@ -19,21 +19,27 @@
 #include "prep.h"
 #include "parser.h"
 
-#ifdef WIN32
+#ifdef __MINGW32__
 #include <winsock.h>
-#else
+#endif
+
+#ifndef WIN32
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/select.h>
+#include <unistd.h>
+#else
+#include <winsock.h>
 #endif
 
-#include <unistd.h>
 #include <time.h>
 
 #include <string>
 
 namespace gloox
 {
+
+  static const int BUFSIZE = 1024;
 
   Connection::Connection( Parser *parser, const std::string& server, int port )
     : m_parser( parser ), m_buf( 0 ), m_server( Prep::idna( server ) ), m_port( port ),
@@ -512,7 +518,11 @@ namespace gloox
   {
     if( m_socket != -1 )
     {
+#ifdef WIN32
+      closesocket( m_socket );
+#else
       close( m_socket );
+#endif
       m_socket = -1;
     }
     m_state = STATE_DISCONNECTED;
