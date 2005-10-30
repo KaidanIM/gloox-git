@@ -29,6 +29,8 @@
 #include <netdb.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
+#else
+#include <winsock.h>
 #endif
 
 #define SRV_COST    (RRFIXEDSZ+0)
@@ -66,7 +68,7 @@ namespace gloox
   DNS::HostMap DNS::resolve( const std::string& service, const std::string& proto,
                              const std::string& domain )
   {
-    buf srvbuf;
+    buffer srvbuf;
     bool error = false;
 
     const std::string dname = "_" +  service + "._" + proto;
@@ -202,7 +204,7 @@ namespace gloox
 #else
   int DNS::connect( const std::string& domain )
   {
-    DNS::connect( domain, XMPP_PORT );
+    return DNS::connect( domain, XMPP_PORT );
   }
 #endif
 
@@ -244,7 +246,7 @@ namespace gloox
     target.sin_port = htons( port );
 //     target.sin_addr = *( (struct in_addr *)*h->h_addr_list );
 
-#ifndef SKYOS
+#if !defined( SKYOS ) && !defined( WIN32 )
     if( inet_aton( inet_ntoa(*((struct in_addr *)h->h_addr)), &(target.sin_addr) ) == 0 )
       return -DNS_COULD_NOT_RESOLVE;
 #else

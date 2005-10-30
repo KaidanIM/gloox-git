@@ -109,7 +109,8 @@ namespace gloox
     private:
       static void cleanup();
 
-      typedef struct buf {
+      typedef struct buffer
+      {
         unsigned char buf[NS_PACKETSZ];
         int len;
       };
