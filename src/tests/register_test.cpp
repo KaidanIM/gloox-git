@@ -85,4 +85,5 @@ int main( int /*argc*/, char* /*argv*/[] )
   RegTest *r = new RegTest();
   r->start();
   delete( r );
+  return 0;
 }

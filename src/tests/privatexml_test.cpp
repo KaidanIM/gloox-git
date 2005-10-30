@@ -77,4 +77,5 @@ int main( int /*argc*/, char* /*argv[]*/ )
   PrivateXMLTest *r = new PrivateXMLTest();
   r->start();
   delete( r );
+  return 0;
 }

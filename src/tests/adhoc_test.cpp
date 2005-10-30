@@ -74,4 +74,5 @@ int main( int /*argc*/, char* /*argv[]*/ )
   AdhocTest *r = new AdhocTest();
   r->start();
   delete( r );
+  return 0;
 }

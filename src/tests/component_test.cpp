@@ -72,4 +72,5 @@ int main( int /*argc*/, char* /*argv[]*/ )
   ComponentTest *r = new ComponentTest();
   r->start();
   delete( r );
+  return 0;
 }

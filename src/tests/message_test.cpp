@@ -103,4 +103,5 @@ int main( int /*argc*/, char* /*argv[]*/ )
   r->start();
   delete( r );
   return 0;
+  return 0;
 }

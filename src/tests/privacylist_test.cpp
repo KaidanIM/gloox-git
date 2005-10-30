@@ -110,4 +110,5 @@ int main( int /*argc*/, char* /*argv[]*/ )
   PLTest *t = new PLTest();
   t->start();
   delete( t );
+  return 0;
 }

@@ -89,4 +89,5 @@ int main( int /*argc*/, char* /*argv[]*/ )
   AnnotationsTest *t = new AnnotationsTest();
   t->start();
   delete( t );
+  return 0;
 }
