@@ -106,7 +106,7 @@ namespace gloox
       virtual bool handleIqID( Stanza *stanza, int context );
 
       // reimplemented from IqHandler
-      virtual bool handleIq( Stanza */*stanza*/ ) { return false; };
+      virtual bool handleIq( Stanza * /*stanza*/ ) { return false; };
 
     private:
       enum FOContext

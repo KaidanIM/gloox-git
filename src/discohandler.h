@@ -63,7 +63,7 @@ namespace gloox
        * @return Returns whether the stanza was handled and answered.
        * @todo Replace the stanza with decoded values.
        */
-      virtual bool handleDiscoSet( Stanza */*stanza*/ ) { return false; };
+      virtual bool handleDiscoSet( Stanza * /*stanza*/ ) { return false; };
 
   };
 
