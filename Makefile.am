@@ -4,7 +4,7 @@
 
 SUBDIRS = src
 
-EXTRA_DIST = LICENSE Doxyfile gloox.pc.in
+EXTRA_DIST = LICENSE Doxyfile gloox.pc.in gloox.dev gloox.dsp README.win32
 
 pkgconfigdir=$(libdir)/pkgconfig
 pkgconfig_DATA = gloox.pc

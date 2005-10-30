@@ -12,7 +12,7 @@ v0.7 -- xx Oct 2005
 - Disco: no need to register the handler to receive query results (still necessary for 'set's)
 - PrivateXML: no need to register the handler to store or receive private XML
 - added IQ error handling in PrivateXML class
-- *experimental* port to MinGW; includes a Bloodshed Dev-C++ project file; SRV lookups do not work; untested. See README.win32 for more information.
+- *experimental* port to Win; compiles on MingW and MSVC6; SRV lookups do not work; untested. See README.win32 for more information.
 - some MacOS X #include fixes
 - added Tag::clone() and Stanza::clone()
 - added static functions to Stanza to create common packet types (IQ, Message, Presence, Subscription)
@@ -28,11 +28,15 @@ Luis Cidoncha)
 - export raw file descriptor
 - got rid of libm(ath) dependency (by using ostringstream)
 - always use pre-increment instead of post-increment in for-loops
+- export classes on w32
+- let configure check for libresolv
+- don't use resolver functions on SkyOS for now
+- made ClientBase::streamErrorAppCondition() const
 
 
 v0.6.3 -- 15 Sep 2005
 ---------------------
-- include fixes for MacOS X
+- #include fixes for MacOS X
 
 
 v0.6.2 -- 23 Sep 2005

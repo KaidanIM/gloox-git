@@ -372,7 +372,7 @@ namespace gloox
        * @return The application-specific error element of a stream error. 0 if no respective element was
        * found or no error occured.
        */
-      Tag* streamErrorAppCondition() { return m_streamErrorAppCondition; };
+      const Tag* streamErrorAppCondition() const { return m_streamErrorAppCondition; };
 
       /**
        * Use this function to retrieve the type of the authentication error after it occurs and you

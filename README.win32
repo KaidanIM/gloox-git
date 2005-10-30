@@ -1,14 +1,41 @@
 Building on Win32 is experimental and correct functionality is untested.
 
-You need:
+gloox compiles on
 - MinGW (http://mingw.org)
-
-Optional:
-- Bloodshed Dev-C++ (http://www.bloodshed.net/devcpp.html)
+- MSVC 6
+No other compilers have been tested.
 
 A project file for Bloodshed Dev-C++ is included (gloox.dev)
+A project file for MSVC 6 is included (gloox.dsp)
 
 - Edit config.h.win to suit your needs.
 - Add additional libs you have available to the project.
+
+Dependencies
+------------
+iksemel in MSVC:
+- add the following lines to iksemel/include/common.h
+
+#ifdef WIN32
+#include <stdarg.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <string.h>
+#endif
+
+- create a new project for a static library
+- add iksemel's source files and headers
+- add winsock (wsock32.lib or ws2_32.lib) to the list of used libs
 - build
 
+
+Building gloox on MSVC
+----------------------
+- use the included project file
+- correct the path to iksemel.lib (the path used in the project file starts with c:\iksemel\)
+- add the path to iksemel's header files (or at least iksemel.h)
+- build
+
+
+Remember, this port is still completely untested.
+Please contact me if it does not work AND you know how to fix it.
