@@ -328,7 +328,7 @@ namespace gloox
       return "";
   }
 
-  Stanza* Stanza::clone()
+  Stanza* Stanza::clone( bool )
   {
     Stanza *s = new Stanza( this );
     return s;

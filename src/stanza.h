@@ -175,7 +175,7 @@ namespace gloox
        * @return An independent copy of the stanza.
        * @since 0.7
        */
-      virtual Stanza* clone();
+      virtual Stanza* clone( bool = true );
 
       /**
        * Creates a new IQ stanza.
