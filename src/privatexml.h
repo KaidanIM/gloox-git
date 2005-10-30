@@ -69,7 +69,7 @@ namespace gloox
       std::string storeXML( Tag *tag, PrivateXMLHandler *pxh );
 
       // reimplemented from IqHandler.
-      virtual bool handleIq( Stanza */*stanza*/ ) { return false; };
+      virtual bool handleIq( Stanza * /*stanza*/ ) { return false; };
 
       // reimplemented from IqHandler.
       virtual bool handleIqID( Stanza *stanza, int context );

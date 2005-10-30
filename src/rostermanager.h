@@ -132,7 +132,7 @@ namespace gloox
       virtual bool handleIq( Stanza *stanza );
 
       // reimplemented from IqHandler.
-      virtual bool handleIqID( Stanza */*stanza*/, int /*context*/ ) { return false; };
+      virtual bool handleIqID( Stanza * /*stanza*/, int /*context*/ ) { return false; };
 
       // reimplemented from PresenceHandler.
       virtual void handlePresence( Stanza *stanza );

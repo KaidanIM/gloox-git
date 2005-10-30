@@ -145,7 +145,7 @@ namespace gloox
     }
   }
 
-  void FlexibleOffline::handleDiscoError( Stanza */*stanza*/, int /*context*/ )
+  void FlexibleOffline::handleDiscoError( Stanza * /*stanza*/, int /*context*/ )
   {
   }
 
