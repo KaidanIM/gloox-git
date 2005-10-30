@@ -26,7 +26,6 @@ class DiscoTest : public DiscoHandler, MessageHandler, ConnectionListener
       j = new Client( jid, "hurkhurks" );
       j->setAutoPresence( true );
       j->setInitialPriority( -1 );
-      j->setForceNonSasl( true );
       j->registerConnectionListener( this );
       j->registerMessageHandler( this );
       j->disco()->registerDiscoHandler( this );

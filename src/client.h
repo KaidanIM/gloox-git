@@ -178,7 +178,7 @@ namespace gloox
        * @param force Whether to force non-SASL auth. Default @b true.
        * @deprecated
        */
-      void setForceNonSasl( bool force = true ) { m_forceNonSasl = force; };
+      GLOOX_DEPRECATED void setForceNonSasl( bool force = true ) { m_forceNonSasl = force; };
 
       /**
        * Disables automatic handling of disco queries.
