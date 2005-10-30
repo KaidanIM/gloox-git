@@ -127,4 +127,5 @@ int main( int /*argc*/, char* /*argv[]*/ )
   RosterTest *r = new RosterTest();
   r->start();
   delete( r );
+  return 0;
 }

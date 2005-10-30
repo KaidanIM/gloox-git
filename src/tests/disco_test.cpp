@@ -75,4 +75,5 @@ int main( int /*argc*/, char* /*argv[]*/ )
   DiscoTest *r = new DiscoTest();
   r->start();
   delete( r );
+  return 0;
 }
