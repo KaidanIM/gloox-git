@@ -16,6 +16,7 @@
 
 #ifdef WIN32
 #pragma warning( disable:4251 )
+#pragma warning( disable:4786 )
 #endif
 
 #ifdef WIN32

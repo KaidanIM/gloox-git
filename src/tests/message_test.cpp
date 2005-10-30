@@ -60,17 +60,17 @@ class DiscoTest : public DiscoHandler, MessageHandler, ConnectionListener
       return true;
     };
 
-    virtual void handleDiscoInfoResult( Stanza */*stanza*/, int /*context*/ )
+    virtual void handleDiscoInfoResult( Stanza * /*stanza*/, int /*context*/ )
     {
       printf( "handleDiscoInfoResult}\n" );
     }
 
-    virtual void handleDiscoItemsResult( Stanza */*stanza*/, int /*context*/ )
+    virtual void handleDiscoItemsResult( Stanza * /*stanza*/, int /*context*/ )
     {
       printf( "handleDiscoItemsResult\n" );
     }
 
-    virtual void handleDiscoError( Stanza */*stanza*/, int /*context*/ )
+    virtual void handleDiscoError( Stanza * /*stanza*/, int /*context*/ )
     {
       printf( "handleDiscoError\n" );
     }
@@ -102,4 +102,5 @@ int main( int /*argc*/, char* /*argv[]*/ )
   DiscoTest *r = new DiscoTest();
   r->start();
   delete( r );
+  return 0;
 }
