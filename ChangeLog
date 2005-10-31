@@ -32,6 +32,7 @@ Luis Cidoncha)
 - let configure check for libresolv
 - don't use resolver functions on SkyOS for now
 - made ClientBase::streamErrorAppCondition() const
+- added ClientBase::removeConnectionListener()
 
 
 v0.6.3 -- 15 Sep 2005
