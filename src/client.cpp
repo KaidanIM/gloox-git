@@ -219,7 +219,7 @@ namespace gloox
       processSASLError( stanza );
       disconnect( CONN_AUTHENTICATION_FAILED );
     }
-    else if( stanza->name() == "success" )
+    else if( ( stanza->name() == "success" ) && stanza->hasAttribute( "xmlns", XMLNS_STREAM_SASL ) )
     {
 #ifdef DEBUG
       printf( "sasl auth successful...\n" );
