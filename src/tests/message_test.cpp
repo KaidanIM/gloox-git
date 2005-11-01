@@ -25,7 +25,7 @@ class DiscoTest : public DiscoHandler, MessageHandler, ConnectionListener
       JID jid( "hurkhurk@example.org/gloox" );
       j = new Client( jid, "hurkhurks" );
       j->setAutoPresence( true );
-      j->setInitialPriority( -1 );
+      j->setInitialPriority( 5 );
       j->registerConnectionListener( this );
       j->registerMessageHandler( this );
       j->disco()->registerDiscoHandler( this );
