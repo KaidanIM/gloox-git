@@ -33,7 +33,7 @@ Building Iksemel in MSVC
 
 - create a new project for a static library
 - add Iksemel's source files and headers
-- add winsock (wsock32.lib or ws2_32.lib) to the list of used libs
+- add winsock (wsock32.lib or ws2_32.lib) to the list of used libs for the linker
 - build
 
 

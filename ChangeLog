@@ -1,5 +1,5 @@
 
-v0.7 -- xx Oct 2005
+v0.7 -- 02 Nov 2005
 -------------------
 - JEP-0004 (Data Forms) (complete, experimental)
 - JEP-0013 (Flexible Offline Message Retrieval) (complete)
@@ -30,9 +30,10 @@ Luis Cidoncha)
 - always use pre-increment instead of post-increment in for-loops
 - export classes on w32
 - let configure check for libresolv
-- don't use resolver functions on SkyOS for now
+- don't use resolver functions on SkyOS for now (thanks to Peter Speybrouck & Robert Szeleney)
 - made ClientBase::streamErrorAppCondition() const
 - added ClientBase::removeConnectionListener()
+- namespace checking for SASL success
 
 
 v0.6.3 -- 15 Sep 2005
