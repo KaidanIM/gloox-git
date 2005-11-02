@@ -12,7 +12,7 @@ v0.7 -- 02 Nov 2005
 - Disco: no need to register the handler to receive query results (still necessary for 'set's)
 - PrivateXML: no need to register the handler to store or receive private XML
 - added IQ error handling in PrivateXML class
-- *experimental* port to Win; compiles on MingW and MSVC6; SRV lookups do not work; untested. See README.win32 for more information.
+- port to Win32; SRV lookups do not work. See README.win32 for more information.
 - some MacOS X #include fixes
 - added Tag::clone() and Stanza::clone()
 - added static functions to Stanza to create common packet types (IQ, Message, Presence, Subscription)
