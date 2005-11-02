@@ -272,7 +272,7 @@ namespace gloox
 
     int CHUNK = data.length() + ( data.length() / 100 ) + 13;
     Bytef *out = new Bytef[CHUNK];
-    const char *in = data.c_str();
+    char *in = const_cast<char*>( data.c_str() );
 
     ::compress( out, (uLongf*)CHUNK, (Bytef*)in, data.length() );
     std::string result;
@@ -291,7 +291,7 @@ namespace gloox
 
     int CHUNK = data.length() * 10;
     char *out = new char[CHUNK];
-    const char *in = data.c_str();
+    char *in = const_cast<char*>( data.c_str() );
 
     m_zinflate.avail_in = data.length();
     m_zinflate.next_in = (Bytef*)in;

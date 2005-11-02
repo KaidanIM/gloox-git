@@ -74,7 +74,7 @@ namespace gloox
     const std::string dname = "_" +  service + "._" + proto;
 
     if( !domain.empty() )
-      srvbuf.len = res_querydomain( dname.c_str(), (char*)domain.c_str(),
+      srvbuf.len = res_querydomain( dname.c_str(), const_cast<char*>( domain.c_str() ),
                                     C_IN, T_SRV, srvbuf.buf, NS_PACKETSZ );
     else
       srvbuf.len = res_query( dname.c_str(), C_IN, T_SRV, srvbuf.buf, NS_PACKETSZ );
