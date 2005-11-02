@@ -56,7 +56,12 @@
 namespace gloox
 {
 
-#if !defined( SKYOS ) && !defined( WIN32 )
+#if defined( SKYOS ) || defined( WIN32 ) || ( defined( __NetBSD__ ) && ( __NetBSD_Version__ < 300000000 ) )
+  int DNS::connect( const std::string& domain )
+  {
+    return DNS::connect( domain, XMPP_PORT );
+  }
+#else
   DNS::HostMap DNS::resolve( const std::string& domain )
   {
     std::string service = "xmpp-client";
@@ -200,11 +205,6 @@ namespace gloox
       return ret;
 
     return -DNS_COULD_NOT_CONNECT;
-  }
-#else
-  int DNS::connect( const std::string& domain )
-  {
-    return DNS::connect( domain, XMPP_PORT );
   }
 #endif
 
