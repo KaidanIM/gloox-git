@@ -335,7 +335,7 @@ namespace gloox
           Tag::TagList::const_iterator it_g = g.begin();
           for( ; it_g != g.end(); ++it_g )
           {
-            gl.push_back( (*it_g)->name() );
+            gl.push_back( (*it_g)->cdata() );
           }
         }
 
