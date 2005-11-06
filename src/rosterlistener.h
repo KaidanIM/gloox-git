@@ -43,7 +43,8 @@ namespace gloox
        * Reimplement this function if you want to be notified about new items
        * on the server-side roster (items subject to a so-called Roster Push).
        * This function will be called regardless who added the item, either this
-       * resource or another.
+       * resource or another. However, it will not be called for JIDs presence is
+       * received from without them being on the roster.
        * @param jid The new item's full address.
        */
       virtual void itemAdded( const std::string& jid ) = 0;
@@ -85,7 +86,10 @@ namespace gloox
 
       /**
        * Reimplement this function if you want to receive the whole server-side roster
-       * on the initial roster push. The roster item status is set to unavailable.
+       * on the initial roster push. After successful authentication, RosterManager asks the
+       * server for the full server-side roster. Invocation of this method announces its arrival.
+       * Roster item status is set to 'unavailable' until incoming presence info updates it. A full
+       * roster push only happens once per connection.
        * @param roster The full roster.
        */
       virtual void roster( Roster& roster ) = 0;
@@ -99,7 +103,7 @@ namespace gloox
        * @param status The item's new status.
        * @param msg The status change message.
        */
-      virtual void itemChanged( RosterItem& item, int status, const std::string& msg ) = 0;
+      virtual void presenceUpdated( RosterItem& item, int status, const std::string& msg ) = 0;
 
       /**
        * This function is called whenever a roster item comes online (is available).
@@ -121,7 +125,7 @@ namespace gloox
        * This function is called when an entity wishes to subscribe to this entity's presence.
        * @param jid The requesting item's address.
        * @param msg A message sent along with the request.
-       * @return Return @b true to allow subscription and subscribe to the remote entities
+       * @return Return @b true to allow subscription and subscribe to the remote entity's
        * presence, @b false to ignore the request.
        */
       virtual bool subscriptionRequest( const std::string& jid, const std::string& msg ) = 0;
@@ -130,8 +134,7 @@ namespace gloox
        * This function is called when an entity unsubscribes from this entity's presence.
        * @param jid The item's address.
        * @param msg A message sent along with the request.
-       * @return Return @b true to unsubscribe from the remote entity and remove the entity
-       * from the roster, @b false to ignore.
+       * @return Return @b true to unsubscribe from the remote entity, @b false to ignore.
        */
       virtual bool unsubscriptionRequest( const std::string& jid, const std::string& msg ) = 0;
 
