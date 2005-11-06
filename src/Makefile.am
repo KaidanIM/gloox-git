@@ -4,7 +4,7 @@
 
 SUBDIRS = . tests
 
-AM_CPPFLAGS = -g3 -fno-inline -Wall -pedantic -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare -Wpointer-arith -Wswitch -Wunknown-pragmas -Wconversion -Wundef -Wcast-qual
+AM_CPPFLAGS = -Wall -pedantic -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare -Wpointer-arith -Wswitch -Wunknown-pragmas -Wconversion -Wundef -Wcast-qual
 
 lib_LTLIBRARIES = libgloox.la
 
