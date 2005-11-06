@@ -111,13 +111,20 @@ namespace gloox
     RosterListener::Roster::iterator it = m_roster.find( stanza->from().bare() );
     if( it != m_roster.end() )
     {
+      PresenceStatus oldStat = (*it).second->status();
+
       (*it).second->setStatus( stanza->show() );
       (*it).second->setStatusMsg( stanza->status() );
 
       if( m_rosterListener )
       {
         if( stanza->show() == PRESENCE_AVAILABLE )
-          m_rosterListener->itemAvailable( (*(*it).second), stanza->status() );
+        {
+          if( oldStat == PRESENCE_UNAVAILABLE )
+            m_rosterListener->itemAvailable( (*(*it).second), stanza->status() );
+          else
+            m_rosterListener->itemChanged( (*(*it).second), stanza->show(), stanza->status() );
+        }
         else if( stanza->show() == PRESENCE_UNAVAILABLE )
           m_rosterListener->itemUnavailable( (*(*it).second), stanza->status() );
         else
