@@ -1,4 +1,10 @@
 
+v0.7.1 -- xx yy 2005
+--------------------
+- ported to NetBSD 2.1
+- RosterManager: use the group's name, not 'group' (thanks to Maciej Paszta)
+
+
 v0.7 -- 02 Nov 2005
 -------------------
 - JEP-0004 (Data Forms) (complete, experimental)
