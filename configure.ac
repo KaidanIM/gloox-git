@@ -4,7 +4,7 @@ AC_PREREQ(2.50)
 AC_INIT
 AC_CONFIG_SRCDIR([configure.ac])
 dnl Every other copy of the package version number gets its value from here
-AM_INIT_AUTOMAKE(gloox,0.7)
+AM_INIT_AUTOMAKE(gloox,0.8-pre1)
 
 dnl create a config.h file (Automake will add -DHAVE_CONFIG_H)
 AM_CONFIG_HEADER(config.h)
@@ -61,7 +61,7 @@ AC_MSG_RESULT($libidn)
 
 dnl GnuTLS
 AC_ARG_WITH(gnutls, AC_HELP_STRING([--with-gnutls=[DIR]],
-      [Support TLS (needs GnuTLS)]),
+      [Support Stream Encryption (needs GnuTLS)]),
       gnutls=$withval, gnutls=yes)
 if test "$gnutls" != "no"; then
   if test "$gnutls" != "yes"; then
@@ -107,12 +107,15 @@ dnl libresolv
 AC_CHECK_LIB(resolv, read, [res=yes LIBS="${LIBS} -lresolv"], res=no)
 
 dnl Debug
-AC_ARG_WITH(debug, AC_HELP_STRING([--enable-debug=[yes|no]],
-      [Enable debug output. Default: yes]),
-      debug=$withval, debug=yes)
-if test "$debug" != "no" ; then
-  AC_DEFINE(DEBUG, 1, [Define to 1 if you want debug output.])
+debug="no"
+AC_ARG_ENABLE( debug,
+               [  --enable-debug          turn on debugging [default=no]],
+               [debug="yes"] )
+if test "x$debug" = "xyes"; then
+      CPPFLAGS="$CPPFLAGS -g3 -fno-inline -DDEBUG"
 fi
+AC_MSG_CHECKING([whether to enable debug])
+AC_MSG_RESULT($debug)
 
 dnl Checks for header files.
 AC_HEADER_STDC
