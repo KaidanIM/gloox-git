@@ -42,6 +42,8 @@ namespace gloox
       /**
        * Reimplement this function if you want to be notified about new items
        * on the server-side roster (items subject to a so-called Roster Push).
+       * This function will be called regardless who added the item, either this
+       * resource or another.
        * @param jid The new item's full address.
        */
       virtual void itemAdded( const std::string& jid ) = 0;
@@ -56,6 +58,8 @@ namespace gloox
       /**
        * Reimplement this function if you want to be notified about items that
        * were removed from the server-side roster (items subject to a so-called Roster Push).
+       * This function will be called regardless who deleted the item, either this resource or
+       * another.
        * @param jid The removed item's full address.
        */
       virtual void itemRemoved( const std::string& jid ) = 0;
@@ -63,6 +67,11 @@ namespace gloox
       /**
        * Reimplement this function if you want to be notified about items that
        * were modified on the server-side roster (items subject to a so-called Roster Push).
+       * A roster push is initiated if a second resource of this JID modifies an item stored on the
+       * server-side contact list. This can include modifying the item's name, its groups, or the
+       * subscription status. These changes are pushed by the server to @b all connected resources.
+       * This is why this function will be called if you modify a roster item locally and synchronize
+       * it with teh server.
        * @param jid The modified item's full address.
        */
       virtual void itemUpdated( const std::string& jid ) = 0;
@@ -83,8 +92,9 @@ namespace gloox
 
       /**
        * This function is called on every status change of an item in the roster.
-       * @note This function is not called for status changes from or to Unavailable. In these cases,
-       * @ref itemAvailable() and @ref itemUnavailable() are called, respectively.
+       * @note This function is not called for status changes from or to Unavailable.
+       * In these cases, @ref itemAvailable() and @ref itemUnavailable() are called,
+       * respectively.
        * @param item The roster item.
        * @param status The item's new status.
        * @param msg The status change message.
@@ -93,6 +103,8 @@ namespace gloox
 
       /**
        * This function is called whenever a roster item comes online (is available).
+       * However, it will not be called for status changes form Away (or any other
+       * status which is not Unavailable) to Available.
        * @param item The changed roster item.
        * @param msg The status change message.
        */
