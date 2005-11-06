@@ -123,13 +123,18 @@ namespace gloox
           if( oldStat == PRESENCE_UNAVAILABLE )
             m_rosterListener->itemAvailable( (*(*it).second), stanza->status() );
           else
-            m_rosterListener->itemChanged( (*(*it).second), stanza->show(), stanza->status() );
+            m_rosterListener->presenceUpdated( (*(*it).second), stanza->show(), stanza->status() );
         }
         else if( stanza->show() == PRESENCE_UNAVAILABLE )
           m_rosterListener->itemUnavailable( (*(*it).second), stanza->status() );
         else
-          m_rosterListener->itemChanged( (*(*it).second), stanza->show(), stanza->status() );
+          m_rosterListener->presenceUpdated( (*(*it).second), stanza->show(), stanza->status() );
       }
+    }
+    else
+    {
+      if( m_rosterListener )
+        m_rosterListener->nonrosterPresenceReceived( stanza->from().bare() );
     }
   }
 

@@ -138,6 +138,13 @@ namespace gloox
        */
       virtual bool unsubscriptionRequest( const std::string& jid, const std::string& msg ) = 0;
 
+      /**
+       * This function is called whenever presence from an entity is received which is not in
+       * the roster.
+       * @param jid The entity's JID.
+       */
+      virtual void nonrosterPresenceReceived( const std::string& jid ) = 0;
+
   };
 
 }

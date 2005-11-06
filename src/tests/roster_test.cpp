@@ -89,7 +89,7 @@ class RosterTest : public RosterListener, ConnectionListener
       }
     }
 
-    virtual void itemChanged( RosterItem& item, int /*status*/, const std::string& /*msg*/ )
+    virtual void presenceUpdated( RosterItem& item, int /*status*/, const std::string& /*msg*/ )
     {
       printf( "item changed: %s\n", item.jid().c_str() );
     }
@@ -116,6 +116,11 @@ class RosterTest : public RosterListener, ConnectionListener
     {
       printf( "unsubscription: %s\n", jid.c_str() );
       return true;
+    }
+
+    virtual void nonrosterPresenceReceived( const std::string& jid )
+    {
+      printf( "received presence from entity not in the roster: %s\n", jid.c_str() );
     }
 
   private:
