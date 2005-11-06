@@ -1,0 +1,142 @@
+#include "../client.h"
+#include "../messagehandler.h"
+#include "../connectionlistener.h"
+#include "../discohandler.h"
+#include "../disco.h"
+#include "../stanza.h"
+#include "../gloox.h"
+#include "../lastactivity.h"
+#include "../flexoff.h"
+#include "../flexoffhandler.h"
+using namespace gloox;
+
+#include <stdio.h>
+#include <locale.h>
+#include <string>
+
+class DiscoTest : public DiscoHandler, MessageHandler, ConnectionListener, FlexibleOfflineHandler
+{
+  public:
+    DiscoTest() {};
+    virtual ~DiscoTest() {};
+
+    void start()
+    {
+      setlocale( LC_ALL, "" );
+
+      JID jid( "hurkhurk@example.org/gloox" );
+      j = new Client( jid, "hurkhurks" );
+      j->setAutoPresence( false );
+      j->registerConnectionListener( this );
+      j->registerMessageHandler( this );
+      j->disco()->registerDiscoHandler( this );
+      j->disco()->setVersion( "messageTest", GLOOX_VERSION, "Linux" );
+      j->disco()->setIdentity( "client", "bot" );
+      StringList ca;
+      ca.push_back( "/path/to/cacert.crt" );
+      j->setCACerts( ca );
+
+      f = new FlexibleOffline( j, j->disco() );
+      f->registerFlexibleOfflineHandler( this );
+
+      j->connect();
+
+      delete( j );
+    }
+
+    virtual void onConnect()
+    {
+      f->checkSupport();
+    };
+
+    virtual void onDisconnect( ConnectionError e )
+    {
+      printf( "message_test: disconnected: %d\n", e );
+      if( e == CONN_AUTHENTICATION_FAILED )
+        printf( "auth failed. reason: %d\n", j->authError() );
+    };
+
+    virtual bool onTLSConnect( const CertInfo& info )
+    {
+      printf( "status: %d\nissuer: %s\npeer: %s\nprotocol: %s\nmac: %s\ncipher: %s\ncompression: %s\n",
+              info.status, info.issuer.c_str(), info.server.c_str(),
+              info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
+              info.compression.c_str() );
+      return true;
+    };
+
+    virtual void handleDiscoInfoResult( Stanza */*stanza*/, int /*context*/ )
+    {
+      printf( "handleDiscoInfoResult}\n" );
+    }
+
+    virtual void handleDiscoItemsResult( Stanza */*stanza*/, int /*context*/ )
+    {
+      printf( "handleDiscoItemsResult\n" );
+    }
+
+    virtual void handleDiscoError( Stanza */*stanza*/, int /*context*/ )
+    {
+      printf( "handleDiscoError\n" );
+    }
+
+    virtual void handleMessage( Stanza *stanza )
+    {
+      printf( "type: %d, subject: %s, message: %s, thread id: %s\n", stanza->subtype(),
+              stanza->subject().c_str(), stanza->body().c_str(), stanza->thread().c_str() );
+      Tag *m = new Tag( "message" );
+      m->addAttrib( "from", j->jid().full() );
+      m->addAttrib( "to", stanza->from().full() );
+      m->addAttrib( "type", "chat" );
+      Tag *b = new Tag( "body", "You said:\n> " + stanza->body() + "\nI like that statement." );
+      m->addChild( b );
+      if( !stanza->subject().empty() )
+      {
+        Tag *s = new Tag( "subject", "Re:" +  stanza->subject() );
+        m->addChild( s );
+      }
+      j->send( m );
+    }
+
+    virtual void handleFlexibleOfflineSupport( bool support )
+    {
+      if( support )
+      {
+        printf( "FlexOff: supported\n" );
+        f->getMsgCount();
+      }
+    }
+
+    virtual void handleFlexibleOfflineMsgNum( int num )
+    {
+      printf( "FlexOff messgaes: %d\n", num );
+      f->fetchHeaders();
+    }
+
+    virtual void handleFlexibleOfflineMessageHeaders( StringMap& headers )
+    {
+      printf( "FlexOff: %d headers received.\n", headers.size() );
+      StringList l;
+      l.push_back( "Fdd" );
+      l.push_back( (*(headers.begin())).first );
+      f->fetchMessages( l );
+      f->removeMessages( l );
+    }
+
+    virtual void handleFlexibleOfflineResult( FlexibleOfflineResult result )
+    {
+      printf( "FlexOff: result: %d\n", result );
+    }
+
+  private:
+    Client *j;
+    FlexibleOffline *f;
+};
+
+int main( int /*argc*/, char* /*argv[]*/ )
+{
+  DiscoTest *r = new DiscoTest();
+  r->start();
+  delete( r );
+  return 0;
+}

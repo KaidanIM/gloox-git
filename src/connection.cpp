@@ -448,12 +448,12 @@ namespace gloox
 
     if( !xml )
       return;
-    int len = strlen( xml );
 
 #ifdef HAVE_GNUTLS
     if( m_secure )
     {
       int ret;
+      int len = strlen( xml );
       do
       {
         ret = gnutls_record_send( m_session, xml, len );
