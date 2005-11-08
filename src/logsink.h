@@ -18,6 +18,7 @@
 #include "loghandler.h"
 
 #include <string>
+#include <fstream>
 
 namespace gloox
 {
@@ -45,7 +46,7 @@ namespace gloox
       /**
        *
        */
-      void log( LogHandler::LogIdentifier identifier, const std::string& message );
+      void log( LogLevel level, LogIdentifier identifier, const std::string& message );
 
       /**
        * Registers @c lh as object that receives all debug messages of the specified type.
@@ -61,12 +62,29 @@ namespace gloox
        */
       void removeLogHandler( LogHandler *lh );
 
+      /**
+       * You can log to a file by setting its file name here. Subsequent calls will close the old
+       * log file and open the new one.
+       * @param level The LogLevel. A given level includes all levels of higer importance.
+       * @param identifiers Bitwise ORed LogIdentifiers.
+       * @param file The log file's name.
+       * @param append @b New log messages will be appended if @b true, the file will be truncated otherwise.
+       * @deprecated
+       */
+      GLOOX_DEPRECATED void setFile( LogLevel level, int identifiers,
+                                     const std::string& file, bool append = true );
+
     private:
       LogSink();
       LogSink( const LogSink& copy ) {};
 
       typedef std::map<LogHandler*, int> LogHandlerMap;
       LogHandlerMap m_logHandlers;
+
+      std::string m_file;
+      std::ofstream m_ofile;
+      LogLevel m_level;
+      int m_fileFilter;
 
   };
 

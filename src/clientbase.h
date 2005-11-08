@@ -274,13 +274,6 @@ namespace gloox
       void registerSubscriptionHandler( SubscriptionHandler *sh );
 
       /**
-       * Registers @c lh as object that receives all XML sent back and forth on the connection.
-       * Suitable for logging to a file, etc.
-       * @param lh The object to receive exchanged data.
-       */
-      void registerLogHandler( LogHandler *lh );
-
-      /**
        * Registers @c th as object that receives incoming packts with a given root tag
        * qualified by the given namespace.
        * @param th The object to receive Subscription packet notifications.
@@ -328,12 +321,6 @@ namespace gloox
        */
       void removeTagHandler( TagHandler *th, const std::string& tag,
                                               const std::string& xmlns );
-
-      /**
-       * Removes the given object from the list of log handlers.
-       * @param lh The object to remove from the list.
-       */
-      void removeLogHandler( LogHandler *lh );
 
       /**
        * Use this function to set a number of trusted root CA certificates. which shall be
@@ -393,7 +380,6 @@ namespace gloox
       void notifyOnResourceBindError( ConnectionListener::ResourceBindError error );
       void notifyOnSessionCreateError( ConnectionListener::SessionCreateError error );
       bool notifyOnTLSConnect( const CertInfo& info );
-      void log( const std::string& xml, bool incoming );
       void notifyOnConnect();
       void disconnect( ConnectionError reason );
       void header();
@@ -438,7 +424,6 @@ namespace gloox
       void notifyPresenceHandlers( Stanza *stanza );
       void notifySubscriptionHandlers( Stanza *stanza );
       void notifyTagHandlers( Stanza *stanza );
-      void notifyLogHandlers( const std::string& xml, bool incoming );
       void notifyOnDisconnect( ConnectionError e );
       void filter( NodeType type, Stanza *stanza );
       void logEvent( const char *data, size_t size, int is_incoming );
@@ -463,7 +448,6 @@ namespace gloox
       typedef std::list<MessageHandler*>                MessageHandlerList;
       typedef std::list<PresenceHandler*>               PresenceHandlerList;
       typedef std::list<SubscriptionHandler*>           SubscriptionHandlerList;
-      typedef std::list<LogHandler*>                    LogHandlerList;
       typedef std::list<TagHandlerStruct>               TagHandlerList;
 
       ConnectionListenerList  m_connectionListeners;
@@ -472,7 +456,6 @@ namespace gloox
       MessageHandlerList      m_messageHandlers;
       PresenceHandlerList     m_presenceHandlers;
       SubscriptionHandlerList m_subscriptionHandlers;
-      LogHandlerList          m_logHandlers;
       TagHandlerList          m_tagHandlers;
       StringList              m_cacerts;
 

@@ -641,6 +641,33 @@ namespace gloox
   };
 
   /**
+   * Identifies log sources.
+   */
+  enum LogIdentifier
+  {
+    LOG_CLASS_PARSER       =     1, /**< Log messages from Parser. */
+    LOG_CLASS_CONNECTION   =     2, /**< Log messages from Connection. */
+    LOG_CLASS_CLIENT       =     4, /**< Log messages from Client. */
+    LOG_CLASS_CLIENTBASE   =     8, /**< Log messages from ClientBase. */
+    LOG_CLASS_COMPONENT    =    16, /**< Log messages from Component. */
+    LOG_CLASS_DNS          =    32, /**< Log messages from DNS. */
+    LOG_ALL_CLASSES        =  8191, /**< All log messages from all the classes. */
+    LOG_XML_INCOMING       = 16384, /**< Incoming XML. */
+    LOG_XML_OUTGOING       = 32768, /**< Outgoing XML. */
+    LOG_ALL                = 65535  /**< All log sources. */
+  };
+
+  /**
+   * Describes a log's severity.
+   */
+  enum LogLevel
+  {
+    LOG_DEBUG              = 0,     /**< Debug messages. */
+    LOG_WARNING,                    /**< Non-crititcal warning messages. */
+    LOG_ERROR                       /**< Critical, unrecoverable errors. */
+  };
+
+  /**
    * A list of strings.
    */
   typedef std::list<std::string> StringList;

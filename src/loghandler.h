@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2004-2005 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2005 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -15,14 +15,15 @@
 #ifndef LOGHANDLER_H__
 #define LOGHANDLER_H__
 
+#include "gloox.h"
+
 #include <string>
 
 namespace gloox
 {
 
   /**
-   * @brief A virtual interface which can be reimplemented to receive data sent and received over
-   * the network.
+   * @brief A virtual interface which can be reimplemented to receive debug messages.
    *
    * Upon an incoming packet @ref handleLog() is be called.
    * @author Jakob Schroeter <js@camaya.net>
@@ -34,12 +35,13 @@ namespace gloox
       /**
        * Reimplement this function if you want to receive the chunks of the conversation
        * between gloox and server.
-       * @param xml The sent or received XML.
-       * @param incoming @b True if the string was received, @b false if it was sent.
+       * @param level The log message's severity.
+       * @param identifier The log message's origin.
+       * @param message The log message.
        */
-      virtual void handleLog( const std::string& xml, bool incoming ) = 0;
+      virtual void handleLog( LogLevel level, LogIdentifier identifier, const std::string& message ) = 0;
   };
 
 }
 
-#endif // PRESENCEHANDLER_H__
+#endif // LOGHANDLER_H__

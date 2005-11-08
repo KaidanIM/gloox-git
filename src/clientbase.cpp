@@ -20,6 +20,7 @@
 
 #include "clientbase.h"
 #include "connection.h"
+#include "logsink.h"
 #include "parser.h"
 #include "tag.h"
 #include "stanza.h"
@@ -99,7 +100,7 @@ namespace gloox
   void ClientBase::filter( NodeType type, Stanza *stanza )
   {
     if( stanza )
-      log( stanza->xml(), true );
+      LogSink::instance().log( LOG_DEBUG, LOG_XML_INCOMING, stanza->xml() );
 
     switch( type )
     {
@@ -148,9 +149,7 @@ namespace gloox
         handleStreamError( stanza );
         break;
       case NODE_STREAM_CLOSE:
-#ifdef DEBUG
-        printf( "stream closed\n" );
-#endif
+        LogSink::instance().log( LOG_DEBUG, LOG_CLASS_CLIENTBASE, "stream closed" );
         disconnect( CONN_STREAM_CLOSED );
         break;
     }
@@ -372,7 +371,7 @@ namespace gloox
 
   void ClientBase::send( const std::string& xml )
   {
-    log( xml, false );
+    LogSink::instance().log(LOG_DEBUG, LOG_XML_OUTGOING, xml );
 
     if( m_connection )
       m_connection->send( xml );
@@ -494,24 +493,6 @@ namespace gloox
       return "";
   }
 
-  void ClientBase::log( const std::string& xml, bool incoming )
-  {
-#ifdef DEBUG
-    if ( m_connection->isSecure() )
-      printf( "Sec" );
-
-    if( incoming )
-      printf( "RECV " );
-    else
-      printf( "SEND " );
-
-    printf( "[%s]", xml.c_str() );
-    if( xml.substr( xml.length()-2, 1 ) != "\n" )
-      printf( "\n" );
-#endif
-    notifyLogHandlers( xml, incoming );
-  }
-
   int ClientBase::fileDescriptor() const
   {
     if( m_connection )
@@ -528,16 +509,6 @@ namespace gloox
   void ClientBase::removePresenceHandler( PresenceHandler *ph )
   {
     m_presenceHandlers.remove( ph );
-  }
-
-  void ClientBase::registerLogHandler( LogHandler *lh )
-  {
-    m_logHandlers.push_back( lh );
-  }
-
-  void ClientBase::removeLogHandler( LogHandler *lh )
-  {
-    m_logHandlers.remove( lh );
   }
 
   void ClientBase::registerIqHandler( IqHandler *ih, const std::string& xmlns )
@@ -711,15 +682,6 @@ namespace gloox
     for( ; it != m_messageHandlers.end(); ++it )
     {
       (*it)->handleMessage( stanza );
-    }
-  }
-
-  void ClientBase::notifyLogHandlers( const std::string& xml, bool incoming )
-  {
-    LogHandlerList::const_iterator it = m_logHandlers.begin();
-    for( ; it != m_logHandlers.end(); ++it )
-    {
-      (*it)->handleLog( xml, incoming );
     }
   }
 

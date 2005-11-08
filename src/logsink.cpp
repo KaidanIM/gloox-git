@@ -18,6 +18,7 @@ namespace gloox
 {
 
   LogSink::LogSink()
+  : m_fileFilter( 0 ), m_level( LOG_ERROR )
   {
   }
 
@@ -31,14 +32,31 @@ namespace gloox
     return sink;
   }
 
-  void LogSink::log( LogHandler::LogIdentifier identifier, const std::string& message )
+  void LogSink::log( LogLevel level, LogIdentifier identifier, const std::string& message )
   {
     LogHandlerMap::const_iterator it = m_logHandlers.begin();
     for( ; it != m_logHandlers.end(); ++it )
     {
       if( (*it).second & identifier )
-        (*it).first->handleLog( identifier, message );
+        (*it).first->handleLog( level, identifier, message );
     }
+
+    if( ( level >= m_level ) && ( m_fileFilter & identifier ) && !m_file.empty() )
+      m_ofile << identifier << ": " << message << std::endl;
+
+    // tmp
+    printf( "%d: %s", identifier, message.c_str() );
+  }
+
+  void LogSink::setFile( LogLevel level, int identifiers, const std::string& file, bool append )
+  {
+    if( !m_file.empty() )
+      m_ofile.close();
+
+    m_ofile.open( file.c_str(), (append)?(std::ios::out|std::ios::trunc):(std::ios::out|std::ios::app) );
+    m_file = file;
+    m_fileFilter = identifiers;
+    m_level = level;
   }
 
   void LogSink::registerLogHandler( int identifiers, LogHandler *lh )

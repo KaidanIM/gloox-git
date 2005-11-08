@@ -13,7 +13,7 @@ libgloox_la_SOURCES = jid.cpp parser.cpp connection.cpp clientbase.cpp tag.cpp s
 			disco.cpp adhoc.cpp privatexml.cpp registration.cpp \
 			nonsaslauth.cpp rosteritem.cpp rostermanager.cpp privacyitem.cpp \
 			bookmarkstorage.cpp annotations.cpp privacymanager.cpp lastactivity.cpp \
-			flexoff.cpp dataform.cpp dataformfield.cpp dataformbase.cpp
+			flexoff.cpp dataform.cpp dataformfield.cpp dataformbase.cpp logsink.cpp
 libgloox_la_LDFLAGS = -version-info 0:7:0 -no-undefined -no-allow-shlib-undefined
 libgloox_la_LIBADD =
 libgloox_la_CFLAGS = $(CPPFLAGS) $(IKSEMEL_CFLAGS)
@@ -33,6 +33,6 @@ libglooxinclude_HEADERS = adhoccommandprovider.h  privacymanager.h      tag.h \
 			  lastactivity.h          lastactivityhandler.h flexoff.h \
 			  flexoffhandler.h        dataform.h            dataformfield.h \
 			  dataformitem.h          dataformbase.h        dataformreported.h \
-			  macros.h
+			  macros.h                logsink.h
 
 noinst_HEADERS = prep.h parser.h connection.h dns.h nonsaslauth.h

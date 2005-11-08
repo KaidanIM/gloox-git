@@ -18,6 +18,7 @@
 #endif
 
 #include "dns.h"
+#include "logsink.h"
 
 #include <sys/types.h>
 
@@ -32,6 +33,8 @@
 #else
 #include <winsock.h>
 #endif
+
+#include <sstream>
 
 #define SRV_COST    (RRFIXEDSZ+0)
 #define SRV_WEIGHT  (RRFIXEDSZ+2)
@@ -187,10 +190,10 @@ namespace gloox
         continue;
       }
 
-#ifdef DEBUG
       char *tmp = inet_ntoa( *((struct in_addr *)h->h_addr) );
-      printf( "resolved %s to: %s:%d\n", (*it).first.c_str(), tmp, port );
-#endif
+      std::ostringstream oss;
+      oss << "resolved " << (*it).first.c_str() <<  " to: " << tmp << ":" << port;
+      LogSink::instance().log( LOG_DEBUG, LOG_CLASS_DNS, oss.str() );
 
       if( inet_aton( inet_ntoa(*((struct in_addr *)h->h_addr)), &(target.sin_addr) ) == 0 )
         continue;
@@ -237,9 +240,9 @@ namespace gloox
       return -DNS_COULD_NOT_RESOLVE;
     }
 
-#ifdef DEBUG
-    printf( "resolved %s to: %s\n", domain.c_str(), inet_ntoa( *((struct in_addr *)h->h_addr) ) );
-#endif
+    std::ostringstream oss;
+    oss << "resolved " << domain.c_str() << " to: " << inet_ntoa( *((struct in_addr *)h->h_addr) );
+    LogSink::instance().log( LOG_DEBUG, LOG_CLASS_DNS, oss.str() );
 
     struct sockaddr_in target;
     target.sin_family = AF_INET;
