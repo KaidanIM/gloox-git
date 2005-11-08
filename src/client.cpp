@@ -19,6 +19,7 @@
 #include "client.h"
 #include "rostermanager.h"
 #include "disco.h"
+#include "logsink.h"
 #include "nonsaslauth.h"
 #include "connection.h"
 #include "tag.h"
@@ -133,9 +134,8 @@ namespace gloox
           }
           else
           {
-#ifdef DEBUG
-            printf( "the server doesn't support any auth mechanisms we know about\n" );
-#endif
+            LogSink::instance().log( LOG_ERROR, LOG_CLASS_CLIENT,
+                                     "the server doesn't support any auth mechanisms we know about" );
             disconnect( CONN_NO_SUPPORTED_AUTH );
           }
         }
@@ -154,76 +154,72 @@ namespace gloox
       }
       else
       {
-#ifdef DEBUG
-        printf( "the server doesn't support any auth mechanisms we know about\n" );
-#endif
+        LogSink::instance().log( LOG_ERROR, LOG_CLASS_CLIENT,
+                                 "the server doesn't support any auth mechanisms we know about" );
         disconnect( CONN_NO_SUPPORTED_AUTH );
       }
     }
 #ifdef HAVE_GNUTLS
     else if( ( stanza->name() == "proceed" ) && stanza->hasAttribute( "xmlns", XMLNS_STREAM_TLS ) )
     {
-#ifdef DEBUG
-      printf( "starting TLS handshake...\n" );
-#endif
+      LogSink::instance().log( LOG_DEBUG, LOG_CLASS_CLIENT, "starting TLS handshake..." );
+
       if( m_connection->tlsHandshake() )
       {
         if( !notifyOnTLSConnect( m_connection->fetchTLSInfo() ) )
           disconnect( CONN_TLS_FAILED );
         else
         {
-#ifdef DEBUG
-          printf( "connection security is now %d\n", m_connection->isSecure() );
-#endif
+          std::ostringstream oss;
+          if( m_connection->isSecure() )
+          {
+            oss << "connection encryption active";
+            LogSink::instance().log( LOG_DEBUG, LOG_CLASS_CLIENT, oss.str() );
+          }
+          else
+          {
+            oss << "connection not encrypted!";
+            LogSink::instance().log( LOG_WARNING, LOG_CLASS_CLIENT, oss.str() );
+          }
+
           header();
         }
       }
     }
     else if( ( stanza->name() == "failure" ) && stanza->hasAttribute( "xmlns", XMLNS_STREAM_TLS ) )
     {
-#ifdef DEBUG
-      printf( "tls handshake failed...\n" );
-#endif
+      LogSink::instance().log( LOG_ERROR, LOG_CLASS_CLIENT, "TLS handshake failed!" );
       disconnect( CONN_TLS_FAILED );
     }
 #endif
 #ifdef HAVE_ZLIB
     else if( ( stanza->name() == "failure" ) && stanza->hasAttribute( "xmlns", XMLNS_STREAM_COMPRESS ) )
     {
-#ifdef DEBUG
-      printf( "stream compression init failed...\n" );
-#endif
+      LogSink::instance().log( LOG_ERROR, LOG_CLASS_CLIENT, "stream compression init failed!" );
+
       disconnect( CONN_TLS_FAILED );
 }
     else if( ( stanza->name() == "compressed" ) && stanza->hasAttribute( "xmlns", XMLNS_STREAM_COMPRESS ) )
     {
-#ifdef DEBUG
-      printf( "stream compression inited...\n" );
-#endif
+      LogSink::instance().log( LOG_DEBUG, LOG_CLASS_CLIENT, "stream compression inited" );
       m_connection->setCompression( true );
       header();
     }
 #endif
     else if( ( stanza->name() == "challenge" ) && stanza->hasAttribute( "xmlns", XMLNS_STREAM_SASL ) )
     {
-#ifdef DEBUG
-      printf( "processing sasl challenge\n" );
-#endif
+      LogSink::instance().log( LOG_DEBUG, LOG_CLASS_CLIENT, "processing sasl challenge" );
       processSASLChallenge( stanza->cdata() );
     }
     else if( ( stanza->name() == "failure" ) && stanza->hasAttribute( "xmlns", XMLNS_STREAM_SASL ) )
     {
-#ifdef DEBUG
-      printf( "sasl authentication failed...\n" );
-#endif
+      LogSink::instance().log( LOG_ERROR, LOG_CLASS_CLIENT, "sasl authentication failed!" );
       processSASLError( stanza );
       disconnect( CONN_AUTHENTICATION_FAILED );
     }
     else if( ( stanza->name() == "success" ) && stanza->hasAttribute( "xmlns", XMLNS_STREAM_SASL ) )
     {
-#ifdef DEBUG
-      printf( "sasl auth successful...\n" );
-#endif
+      LogSink::instance().log( LOG_DEBUG, LOG_CLASS_CLIENT, "sasl auth successful" );
       setAuthed( true );
       header();
     }

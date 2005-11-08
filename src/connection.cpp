@@ -16,6 +16,7 @@
 
 #include "connection.h"
 #include "dns.h"
+#include "logsink.h"
 #include "prep.h"
 #include "parser.h"
 
@@ -398,19 +399,17 @@ namespace gloox
       if( ret != Parser::PARSER_OK )
       {
         cleanup();
-#ifdef DEBUG
         switch( ret )
         {
           case Parser::PARSER_BADXML:
-            printf( "XML parse error\n" );
+            LogSink::instance().log( LOG_ERROR, LOG_CLASS_CONNECTION, "XML parse error" );
             break;
           case Parser::PARSER_NOMEM:
-            printf( "memory allocation error\n" );
+            LogSink::instance().log( LOG_ERROR, LOG_CLASS_CONNECTION, "memory allocation error" );
             break;
           default:
             break;
         }
-#endif
         return CONN_IO_ERROR;
       }
     }
@@ -490,21 +489,18 @@ namespace gloox
 
     if( m_socket < 0 )
     {
-#ifdef DEBUG
       switch( m_socket )
       {
         case -DNS::DNS_COULD_NOT_CONNECT:
-          printf( "could not connect\n" );
+          LogSink::instance().log( LOG_ERROR, LOG_CLASS_CONNECTION, "connection error: could not connect" );
           break;
         case -DNS::DNS_NO_HOSTS_FOUND:
-          printf( "no hosts found\n" );
+          LogSink::instance().log( LOG_ERROR, LOG_CLASS_CONNECTION, "connection error: no hosts found" );
           break;
         case -DNS::DNS_COULD_NOT_RESOLVE:
-          printf( "could not resolve\n" );
+          LogSink::instance().log( LOG_ERROR, LOG_CLASS_CONNECTION, "connection error: could not resolve" );
           break;
       }
-      printf( "connection error\n" );
-#endif
       cleanup();
     }
     else
