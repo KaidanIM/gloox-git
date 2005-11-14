@@ -335,7 +335,7 @@ namespace gloox
   }
 
   Stanza* Stanza::createIqStanza( const JID& to, const std::string& id,
-                          StanzaSubType subtype, const std::string& xmlns, Tag* tag )
+                                  StanzaSubType subtype, const std::string& xmlns, Tag* tag )
   {
     Stanza *s = new Stanza( "iq" );
     switch( subtype )
@@ -371,7 +371,7 @@ namespace gloox
   }
 
   Stanza* Stanza::createPresenceStanza( const JID& to, const std::string& msg,
-                                 PresenceStatus status, const std::string& xmllang )
+                                        PresenceStatus status, const std::string& xmllang )
   {
     Stanza *s = new Stanza( "presence" );
     switch( status )
@@ -407,8 +407,8 @@ namespace gloox
   }
 
   Stanza* Stanza::createMessageStanza( const JID& to, const std::string& body,
-                               StanzaSubType subtype, const std::string& subject,
-                               const std::string& thread, const std::string& xmllang )
+                                       StanzaSubType subtype, const std::string& subject,
+                                       const std::string& thread, const std::string& xmllang )
   {
     Stanza *s = new Stanza( "message" );
     switch( subtype )
@@ -452,7 +452,7 @@ namespace gloox
   }
 
   Stanza* Stanza::createSubscriptionStanza( const JID& to, const std::string& msg,
-                                    StanzaSubType subtype, const std::string& xmllang )
+                                            StanzaSubType subtype, const std::string& xmllang )
   {
     Stanza *s = new Stanza( "presence" );
     switch( subtype )
