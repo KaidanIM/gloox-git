@@ -5,11 +5,16 @@ Todo
 - introduce some 'randomness' for IDs
 - introduce return values for *Handlers to indicate whether following handlers should be invoked as well
 - sort SRV records by weight & cost
-- thread-safety
-- derive RosterItem from JID
+- get rid of iksemel (and don't introduce another hard requirement)
 
 
 In the pipe
 -----------
 
-- look into the XMPP SASL error report by Ralph Meijer on jdev on 24 Oct 2005 23:04:25
+- JEP-0022
+- thread-safety
+- derive RosterItem from JID
++ 'can do SRV' function
+- revamp Roster*
++ glooxVersion()
+- revamp debugging
