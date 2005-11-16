@@ -59,7 +59,7 @@
 namespace gloox
 {
 
-#if defined( SKYOS ) || defined( WIN32 ) || ( defined( __NetBSD__ ) && ( __NetBSD_Version__ < 300000000 ) )
+#if defined( SKYOS ) || defined( WIN32 ) || ( defined( __NetBSD__ ) && ( __NetBSD_Version__ < 300000000 ) ) || defined( __UCLIBC__ )
   int DNS::connect( const std::string& domain )
   {
     return DNS::connect( domain, XMPP_PORT );
