@@ -69,10 +69,8 @@ namespace gloox
        * @param identifiers Bitwise ORed LogIdentifiers.
        * @param file The log file's name.
        * @param append @b New log messages will be appended if @b true, the file will be truncated otherwise.
-       * @deprecated
        */
-      GLOOX_DEPRECATED void setFile( LogLevel level, int identifiers,
-                                     const std::string& file, bool append = true );
+      void setFile( LogLevel level, int identifiers, const std::string& file, bool append = true );
 
     private:
       LogSink();
