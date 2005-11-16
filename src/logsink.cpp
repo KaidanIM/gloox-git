@@ -18,7 +18,7 @@ namespace gloox
 {
 
   LogSink::LogSink()
-  : m_fileFilter( 0 ), m_level( LOG_ERROR )
+    : m_level( LOG_ERROR ), m_fileFilter( 0 )
   {
   }
 
@@ -42,10 +42,7 @@ namespace gloox
     }
 
     if( ( level >= m_level ) && ( m_fileFilter & identifier ) && !m_file.empty() )
-      m_ofile << identifier << ": " << message << std::endl;
-
-    // tmp
-    printf( "%d: %s", identifier, message.c_str() );
+      m_ofile << level << "::" << identifier << ": " << message << std::endl;
   }
 
   void LogSink::setFile( LogLevel level, int identifiers, const std::string& file, bool append )
@@ -53,7 +50,7 @@ namespace gloox
     if( !m_file.empty() )
       m_ofile.close();
 
-    m_ofile.open( file.c_str(), (append)?(std::ios::out|std::ios::trunc):(std::ios::out|std::ios::app) );
+    m_ofile.open( file.c_str(), (append)?(std::ios::out|std::ios::app):(std::ios::out|std::ios::trunc) );
     m_file = file;
     m_fileFilter = identifiers;
     m_level = level;
