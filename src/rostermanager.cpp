@@ -389,11 +389,11 @@ namespace gloox
     }
   }
 
-  void RosterManager::add( const std::string& jid, const std::string& /*name*/,
+  void RosterManager::add( const std::string& jid, const std::string& name,
                            StringList& groups, const std::string& sub, bool ask )
   {
     if( m_roster.find( jid ) == m_roster.end() )
-      m_roster[jid] = new RosterItem( jid );
+      m_roster[jid] = new RosterItem( jid, name );
 
     m_roster[jid]->setStatus( PRESENCE_UNAVAILABLE );
     m_roster[jid]->setSubscription( sub, ask );

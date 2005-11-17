@@ -394,7 +394,9 @@ namespace gloox
         break;
     }
 
-    s->addAttrib( "to", to.full() );
+    if( !to.empty() )
+      s->addAttrib( "to", to.full() );
+
     if( !msg.empty() )
     {
       Tag *t = new Tag( s, "status", msg );
