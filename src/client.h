@@ -81,9 +81,9 @@ namespace gloox
       friend class Parser;
 
       /**
-       * Constructs a new Client which can be used for account registration.
+       * Constructs a new Client which can be used for account registration only.
        * SASL and TLS are on by default. The port will be determined by looking up SRV records.
-       * Alternatively, you can set it be calling @ref setPort().
+       * Alternatively, you can set the port explicitly by calling @ref setPort().
        * @param server The server to connect to.
        */
       Client( const std::string& server );
@@ -251,6 +251,7 @@ namespace gloox
       bool m_forceNonSasl;
       bool m_manageRoster;
       bool m_handleDisco;
+      bool m_doAuth;
 
       int m_streamFeatures;
       int m_priority;
