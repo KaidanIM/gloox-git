@@ -398,10 +398,9 @@ namespace gloox
                            StringList& groups, const std::string& sub, bool ask )
   {
     if( m_roster.find( jid ) == m_roster.end() )
-      m_roster[jid] = new RosterItem( jid );
+      m_roster[jid] = new RosterItem( jid, name );
 
     m_roster[jid]->setStatus( PRESENCE_UNAVAILABLE );
-    m_roster[jid]->setName( name );
     m_roster[jid]->setSubscription( sub, ask );
     m_roster[jid]->setGroups( groups );
   }
