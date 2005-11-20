@@ -39,11 +39,11 @@ namespace gloox
     const std::string id = m_parent->getID();
 
     Tag *t = new Tag( "iq" );
-    t->addAttrib( "type", "get" );
-    t->addAttrib( "id", id );
-    t->addAttrib( "to", jid.full() );
+    t->addAttribute( "type", "get" );
+    t->addAttribute( "id", id );
+    t->addAttribute( "to", jid.full() );
     Tag *q = new Tag( t, "query" );
-    q->addAttrib( "xmlns", XMLNS_LAST );
+    q->addAttribute( "xmlns", XMLNS_LAST );
 
     m_parent->trackID( this, id, 0 );
     m_parent->send( t );
@@ -58,14 +58,14 @@ namespace gloox
         time_t now = time( 0 );
 
         Tag *t = new Tag( "iq" );
-        t->addAttrib( "type", "result" );
-        t->addAttrib( "id", stanza->id() );
-        t->addAttrib( "to", stanza->from().full() );
+        t->addAttribute( "type", "result" );
+        t->addAttribute( "id", stanza->id() );
+        t->addAttribute( "to", stanza->from().full() );
         Tag *q = new Tag( t, "query" );
         std::ostringstream oss;
         oss << (int)(now - m_active);
-        q->addAttrib( "seconds", oss.str() );
-        q->addAttrib( "xmlns", XMLNS_LAST );
+        q->addAttribute( "seconds", oss.str() );
+        q->addAttribute( "xmlns", XMLNS_LAST );
 
         m_parent->send( t);
         break;
@@ -74,13 +74,13 @@ namespace gloox
       case STANZA_IQ_SET:
       {
         Tag *t = new Tag( "iq" );
-        t->addAttrib( "id", stanza->id() );
-        t->addAttrib( "to", stanza->from().full() );
-        t->addAttrib( "type", "error" );
+        t->addAttribute( "id", stanza->id() );
+        t->addAttribute( "to", stanza->from().full() );
+        t->addAttribute( "type", "error" );
         Tag *e = new Tag( t, "error" );
-        e->addAttrib( "type", "cancel" );
+        e->addAttribute( "type", "cancel" );
         Tag *f = new Tag( e, "feature-not-implemented" );
-        f->addAttrib( "xmlns", XMLNS_XMPP_STANZAS );
+        f->addAttribute( "xmlns", XMLNS_XMPP_STANZAS );
         break;
       }
 

@@ -38,12 +38,12 @@ namespace gloox
     const std::string id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
-    iq->addAttrib( "id", id );
-    iq->addAttrib( "type", "get" );
+    iq->addAttribute( "id", id );
+    iq->addAttribute( "type", "get" );
     Tag *query = new Tag( iq, "query" );
-    query->addAttrib( "xmlns", XMLNS_PRIVATE_XML );
+    query->addAttribute( "xmlns", XMLNS_PRIVATE_XML );
     Tag *x = new Tag( query, tag );
-    x->addAttrib( "xmlns", xmlns );
+    x->addAttribute( "xmlns", xmlns );
 
     m_track[id] = pxh;
     m_parent->trackID( this, id, REQUEST_XML );
@@ -57,10 +57,10 @@ namespace gloox
     const std::string id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
-    iq->addAttrib( "id", id );
-    iq->addAttrib( "type", "set" );
+    iq->addAttribute( "id", id );
+    iq->addAttribute( "type", "set" );
     Tag *query = new Tag( iq, "query" );
-    query->addAttrib( "xmlns", XMLNS_PRIVATE_XML );
+    query->addAttribute( "xmlns", XMLNS_PRIVATE_XML );
     query->addChild( tag );
 
     m_track[id] = pxh;

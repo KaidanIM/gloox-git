@@ -75,7 +75,7 @@ namespace gloox
        * @param name The name of the attribute.
        * @param value The value of the attribute.
        */
-      virtual void addAttrib( const std::string& name, const std::string& value );
+      virtual void addAttribute( const std::string& name, const std::string& value );
 
       /**
        * Use this function to add a child node to the tag.

@@ -41,10 +41,10 @@ namespace gloox
     std::string id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
-    iq->addAttrib( "type", "get" );
-    iq->addAttrib( "id", id );
+    iq->addAttribute( "type", "get" );
+    iq->addAttribute( "id", id );
     Tag *q = new Tag( iq, "query" );
-    q->addAttrib( "xmlns", XMLNS_REGISTER );
+    q->addAttribute( "xmlns", XMLNS_REGISTER );
 
     m_parent->trackID( this, id, FETCH_REGISTRATION_FIELDS );
     m_parent->send( iq );
@@ -58,10 +58,10 @@ namespace gloox
     const std::string id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
-    iq->addAttrib( "id", id );
-    iq->addAttrib( "type", "set" );
+    iq->addAttribute( "id", id );
+    iq->addAttribute( "type", "set" );
     Tag *q = new Tag( iq, "query" );
-    q->addAttrib( "xmlns", XMLNS_REGISTER );
+    q->addAttribute( "xmlns", XMLNS_REGISTER );
 
     if( fields & FIELD_USERNAME )
       q->addChild( new Tag( "username", Prep::nodeprep( values.username ) ) );
@@ -108,11 +108,11 @@ namespace gloox
     const std::string id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
-    iq->addAttrib( "type", "set" );
-    iq->addAttrib( "id", id );
-    iq->addAttrib( "from", m_parent->jid().full() );
+    iq->addAttribute( "type", "set" );
+    iq->addAttribute( "id", id );
+    iq->addAttribute( "from", m_parent->jid().full() );
     Tag *q = new Tag( iq, "query" );
-    q->addAttrib( "xmlns", XMLNS_REGISTER );
+    q->addAttribute( "xmlns", XMLNS_REGISTER );
     q->addChild( new Tag( "remove" ) );
 
     m_parent->trackID( this, id, REMOVE_ACCOUNT );
@@ -127,11 +127,11 @@ namespace gloox
     const std::string id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
-    iq->addAttrib( "type", "set" );
-    iq->addAttrib( "id", id );
-    iq->addAttrib( "to", m_parent->server() );
+    iq->addAttribute( "type", "set" );
+    iq->addAttribute( "id", id );
+    iq->addAttribute( "to", m_parent->server() );
     Tag *q = new Tag( iq, "query" );
-    q->addAttrib( "xmlns", XMLNS_REGISTER );
+    q->addAttribute( "xmlns", XMLNS_REGISTER );
     q->addChild( new Tag( "username", m_parent->username() ) );
     q->addChild( new Tag( "password", password ) );
 

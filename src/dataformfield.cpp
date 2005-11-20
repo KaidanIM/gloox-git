@@ -81,8 +81,8 @@ namespace gloox
       return 0;
 
     Tag *field = new Tag( "field" );
-    field->addAttrib( "var", m_name );
-    field->addAttrib( "label", m_label );
+    field->addAttribute( "var", m_name );
+    field->addAttribute( "label", m_label );
     if( m_required )
       field->addChild( new Tag( "required" ) );
     if( !m_desc.empty() )
@@ -91,34 +91,34 @@ namespace gloox
     switch( m_type )
     {
       case FIELD_TYPE_BOOLEAN:
-        field->addAttrib( "type", "boolean" );
+        field->addAttribute( "type", "boolean" );
         break;
       case FIELD_TYPE_FIXED:
-        field->addAttrib( "type", "fixed" );
+        field->addAttribute( "type", "fixed" );
         break;
       case FIELD_TYPE_HIDDEN:
-        field->addAttrib( "type", "hidden" );
+        field->addAttribute( "type", "hidden" );
         break;
       case FIELD_TYPE_JID_MULTI:
-        field->addAttrib( "type", "jid-multi" );
+        field->addAttribute( "type", "jid-multi" );
         break;
       case FIELD_TYPE_JID_SINGLE:
-        field->addAttrib( "type", "jid-single" );
+        field->addAttribute( "type", "jid-single" );
         break;
       case FIELD_TYPE_LIST_MULTI:
-        field->addAttrib( "type", "list-multi" );
+        field->addAttribute( "type", "list-multi" );
         break;
       case FIELD_TYPE_LIST_SINGLE:
-        field->addAttrib( "type", "list-single" );
+        field->addAttribute( "type", "list-single" );
         break;
       case FIELD_TYPE_TEXT_MULTI:
-        field->addAttrib( "type", "text-multi" );
+        field->addAttribute( "type", "text-multi" );
         break;
       case FIELD_TYPE_TEXT_PRIVATE:
-        field->addAttrib( "type", "text-private" );
+        field->addAttribute( "type", "text-private" );
         break;
       case FIELD_TYPE_TEXT_SINGLE:
-        field->addAttrib( "type", "text-single" );
+        field->addAttribute( "type", "text-single" );
         break;
       default:
         break;
@@ -130,7 +130,7 @@ namespace gloox
       for( ; it != m_options.end(); ++it )
       {
         Tag *option = new Tag( field, "option" );
-        option->addAttrib( "label", (*it).first );
+        option->addAttribute( "label", (*it).first );
         option->addChild( new Tag( "value", (*it).second ) );
       }
     }

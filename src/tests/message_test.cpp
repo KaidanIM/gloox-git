@@ -80,9 +80,9 @@ class DiscoTest : public DiscoHandler, MessageHandler, ConnectionListener
       printf( "type: %d, subject: %s, message: %s, thread id: %s\n", stanza->subtype(),
               stanza->subject().c_str(), stanza->body().c_str(), stanza->thread().c_str() );
       Tag *m = new Tag( "message" );
-      m->addAttrib( "from", j->jid().full() );
-      m->addAttrib( "to", stanza->from().full() );
-      m->addAttrib( "type", "chat" );
+      m->addAttribute( "from", j->jid().full() );
+      m->addAttribute( "to", stanza->from().full() );
+      m->addAttribute( "type", "chat" );
       Tag *b = new Tag( "body", "You said:\n> " + stanza->body() + "\nI like that statement." );
       m->addChild( b );
       if( !stanza->subject().empty() )

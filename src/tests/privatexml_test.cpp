@@ -56,7 +56,7 @@ class PrivateXMLTest : public PrivateXMLHandler, ConnectionListener
     {
       printf( "received privatexml...\n" );
       Tag *x = new Tag( "test" );
-      x->addAttrib( "xmlns", "http://camaya.net/jabber/test" );
+      x->addAttribute( "xmlns", "http://camaya.net/jabber/test" );
       std::string id = j->getID();
       Tag *b = new Tag( "blah", id );
       x->addChild( b );

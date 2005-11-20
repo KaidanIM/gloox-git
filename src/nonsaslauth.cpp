@@ -39,11 +39,11 @@ namespace gloox
     std::string id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
-    iq->addAttrib( "to", m_parent->jid().server() );
-    iq->addAttrib( "id", id );
-    iq->addAttrib( "type", "get" );
+    iq->addAttribute( "to", m_parent->jid().server() );
+    iq->addAttribute( "id", id );
+    iq->addAttribute( "type", "get" );
     Tag *q = new Tag( iq, "query" );
-    q->addAttrib( "xmlns", XMLNS_AUTH );
+    q->addAttribute( "xmlns", XMLNS_AUTH );
     q->addChild( new Tag( "username", m_parent->username() ) );
 
     m_parent->trackID( this, id, TRACK_REQUEST_AUTH_FIELDS );
@@ -79,10 +79,10 @@ namespace gloox
             std::string id = m_parent->getID();
 
             Tag *iq = new Tag( "iq" );
-            iq->addAttrib( "id", id );
-            iq->addAttrib( "type", "set" );
+            iq->addAttribute( "id", id );
+            iq->addAttribute( "type", "set" );
             Tag *query = new Tag( iq, "query" );
-            query->addAttrib( "xmlns", XMLNS_AUTH );
+            query->addAttribute( "xmlns", XMLNS_AUTH );
             query->addChild( new Tag( "username", m_parent->jid().username() ) );
             query->addChild( new Tag( "resource", m_parent->jid().resource() ) );
 

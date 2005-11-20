@@ -32,7 +32,7 @@ namespace gloox
   void Annotations::storeAnnotations( const AnnotationsHandler::AnnotationsList& aList )
   {
     Tag *s = new Tag( "storage" );
-    s->addAttrib( "xmlns", XMLNS_ANNOTATIONS );
+    s->addAttribute( "xmlns", XMLNS_ANNOTATIONS );
 
     if( aList.size() )
     {
@@ -40,9 +40,9 @@ namespace gloox
       for( ; it != aList.end(); ++it )
       {
         Tag *n = new Tag( s, "note", (*it).note );
-        n->addAttrib( "jid", (*it).jid );
-        n->addAttrib( "cdate", (*it).cdate );
-        n->addAttrib( "mdate", (*it).mdate );
+        n->addAttribute( "jid", (*it).jid );
+        n->addAttribute( "cdate", (*it).cdate );
+        n->addAttribute( "mdate", (*it).mdate );
       }
     }
 
