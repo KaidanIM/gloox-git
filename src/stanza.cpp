@@ -341,29 +341,29 @@ namespace gloox
     switch( subtype )
     {
       case STANZA_IQ_ERROR:
-        s->addAttrib( "type", "error" );
+        s->addAttribute( "type", "error" );
         break;
       case STANZA_IQ_SET:
-        s->addAttrib( "type", "set" );
+        s->addAttribute( "type", "set" );
         break;
       case STANZA_IQ_RESULT:
-        s->addAttrib( "type", "result" );
+        s->addAttribute( "type", "result" );
         break;
       case STANZA_IQ_GET:
       default:
-        s->addAttrib( "type", "get" );
+        s->addAttribute( "type", "get" );
         break;
     }
 
     if( !xmlns.empty() )
     {
       Tag *q = new Tag( s, "query" );
-      q->addAttrib( "xmlns", xmlns );
+      q->addAttribute( "xmlns", xmlns );
       if( tag )
         q->addChild( tag );
     }
-    s->addAttrib( "to", to.full() );
-    s->addAttrib( "id", id );
+    s->addAttribute( "to", to.full() );
+    s->addAttribute( "id", id );
 
     s->finalize();
 
@@ -377,7 +377,7 @@ namespace gloox
     switch( status )
     {
       case PRESENCE_UNAVAILABLE:
-        s->addAttrib( "type", "unavailable" );
+        s->addAttribute( "type", "unavailable" );
         break;
       case PRESENCE_CHAT:
         s->addChild( new Tag( "show", "chat" ) );
@@ -395,12 +395,12 @@ namespace gloox
     }
 
     if( !to.empty() )
-      s->addAttrib( "to", to.full() );
+      s->addAttribute( "to", to.full() );
 
     if( !msg.empty() )
     {
       Tag *t = new Tag( s, "status", msg );
-      t->addAttrib( "xml:lang", xmllang );
+      t->addAttribute( "xml:lang", xmllang );
     }
 
     s->finalize();
@@ -416,34 +416,34 @@ namespace gloox
     switch( subtype )
     {
       case STANZA_MESSAGE_ERROR:
-        s->addAttrib( "type", "error" );
+        s->addAttribute( "type", "error" );
         break;
       case STANZA_MESSAGE_NORMAL:
-        s->addAttrib( "type", "normal" );
+        s->addAttribute( "type", "normal" );
         break;
       case STANZA_MESSAGE_HEADLINE:
-        s->addAttrib( "type", "headline" );
+        s->addAttribute( "type", "headline" );
         break;
       case STANZA_MESSAGE_GROUPCHAT:
-        s->addAttrib( "type", "groupchat" );
+        s->addAttribute( "type", "groupchat" );
         break;
       case STANZA_MESSAGE_CHAT:
       default:
-        s->addAttrib( "type", "chat" );
+        s->addAttribute( "type", "chat" );
         break;
     }
 
-    s->addAttrib( "to", to.full() );
+    s->addAttribute( "to", to.full() );
 
     if( !body.empty() )
     {
       Tag *b = new Tag( s, "body", body );
-      b->addAttrib( "xml:lang", xmllang );
+      b->addAttribute( "xml:lang", xmllang );
     }
     if( !subject.empty() )
     {
       Tag *su = new Tag( s, "subject", subject );
-      su->addAttrib( "xml:lang", xmllang );
+      su->addAttribute( "xml:lang", xmllang );
     }
     if( !thread.empty() )
       new Tag( s, "thread", thread );
@@ -460,25 +460,25 @@ namespace gloox
     switch( subtype )
     {
       case STANZA_S10N_SUBSCRIBED:
-        s->addAttrib( "type", "subscribed" );
+        s->addAttribute( "type", "subscribed" );
         break;
       case STANZA_S10N_UNSUBSCRIBE:
-        s->addAttrib( "type", "unsubscribe" );
+        s->addAttribute( "type", "unsubscribe" );
         break;
       case STANZA_S10N_UNSUBSCRIBED:
-        s->addAttrib( "type", "unsubscribed" );
+        s->addAttribute( "type", "unsubscribed" );
         break;
       case STANZA_S10N_SUBSCRIBE:
       default:
-        s->addAttrib( "type", "subscribe" );
+        s->addAttribute( "type", "subscribe" );
         break;
     }
 
-    s->addAttrib( "to", to.full() );
+    s->addAttribute( "to", to.full() );
     if( !msg.empty() )
     {
       Tag *t = new Tag( s, "status", msg );
-      t->addAttrib( "xml:lang", xmllang );
+      t->addAttribute( "xml:lang", xmllang );
     }
 
     s->finalize();

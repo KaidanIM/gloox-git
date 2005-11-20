@@ -33,7 +33,7 @@ namespace gloox
                                         const BookmarkHandler::ConferenceList& cList )
   {
     Tag *s = new Tag( "storage" );
-    s->addAttrib( "xmlns", XMLNS_BOOKMARKS );
+    s->addAttribute( "xmlns", XMLNS_BOOKMARKS );
 
     if( bList.size() )
     {
@@ -41,8 +41,8 @@ namespace gloox
       for( ; it != bList.end(); ++it )
       {
         Tag *i = new Tag( s, "url" );
-        i->addAttrib( "name", (*it).name );
-        i->addAttrib( "url", (*it).url );
+        i->addAttribute( "name", (*it).name );
+        i->addAttribute( "url", (*it).url );
       }
     }
 
@@ -52,12 +52,12 @@ namespace gloox
       for( ; it != cList.end(); ++it )
       {
         Tag *i = new Tag( s, "conference" );
-        i->addAttrib( "name", (*it).name );
-        i->addAttrib( "jid", (*it).jid );
+        i->addAttribute( "name", (*it).name );
+        i->addAttribute( "jid", (*it).jid );
         if( (*it).autojoin )
-          i->addAttrib( "autojoin", "true" );
+          i->addAttribute( "autojoin", "true" );
         else
-          i->addAttrib( "autojoin", "false" );
+          i->addAttribute( "autojoin", "false" );
 
         i->addChild( new Tag( "nick", (*it).nick ) );
         i->addChild( new Tag( "password", (*it).password ) );

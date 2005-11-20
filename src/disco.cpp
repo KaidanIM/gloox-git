@@ -52,12 +52,12 @@ namespace gloox
         if( stanza->xmlns() == XMLNS_VERSION )
         {
           Tag *iq = new Tag( "iq" );
-          iq->addAttrib( "id", stanza->id() );
-          iq->addAttrib( "from", m_parent->jid().full() );
-          iq->addAttrib( "to", stanza->from().full() );
-          iq->addAttrib( "type", "result" );
+          iq->addAttribute( "id", stanza->id() );
+          iq->addAttribute( "from", m_parent->jid().full() );
+          iq->addAttribute( "to", stanza->from().full() );
+          iq->addAttribute( "type", "result" );
           Tag *query = new Tag( iq, "query" );
-          query->addAttrib( "xmlns", XMLNS_VERSION );
+          query->addAttribute( "xmlns", XMLNS_VERSION );
           new Tag( query, "name", m_versionName );
           new Tag( query, "version", m_versionVersion );
           new Tag( query, "os", m_versionOs );
@@ -67,12 +67,12 @@ namespace gloox
         else if( stanza->xmlns() == XMLNS_DISCO_INFO )
         {
           Tag *iq = new Tag( "iq" );
-          iq->addAttrib( "id", stanza->id() );
-          iq->addAttrib( "from", m_parent->jid().full() );
-          iq->addAttrib( "to", stanza->from().full() );
-          iq->addAttrib( "type", "result" );
+          iq->addAttribute( "id", stanza->id() );
+          iq->addAttribute( "from", m_parent->jid().full() );
+          iq->addAttribute( "to", stanza->from().full() );
+          iq->addAttribute( "type", "result" );
           Tag *query = new Tag( iq, "query" );
-          query->addAttrib( "xmlns", XMLNS_DISCO_INFO );
+          query->addAttribute( "xmlns", XMLNS_DISCO_INFO );
 
           Tag *q = stanza->findChild( "query" );
           const std::string node = q->findAttribute( "node" );
@@ -88,31 +88,31 @@ namespace gloox
               for( ; im != identities.end(); ++im )
               {
                 Tag *i = new Tag( query, "identity" );
-                i->addAttrib( "category", (*im).first );
-                i->addAttrib( "type", (*im).second );
-                i->addAttrib( "name", name );
+                i->addAttribute( "category", (*im).first );
+                i->addAttribute( "type", (*im).second );
+                i->addAttribute( "name", name );
               }
               StringList features = (*it).second->handleDiscoNodeFeatures( node );
               StringList::const_iterator fi = features.begin();
               for( ; fi != features.end(); ++fi )
               {
                 Tag *f = new Tag( query, "feature" );
-                f->addAttrib( "var", (*fi) );
+                f->addAttribute( "var", (*fi) );
               }
             }
           }
           else
           {
             Tag *i = new Tag( query, "identity" );
-            i->addAttrib( "category", m_identityCategory );
-            i->addAttrib( "type", m_identityType );
-            i->addAttrib( "name", m_versionName );
+            i->addAttribute( "category", m_identityCategory );
+            i->addAttribute( "type", m_identityType );
+            i->addAttribute( "name", m_versionName );
 
             StringList::const_iterator it = m_features.begin();
             for( ; it != m_features.end(); ++it )
             {
               Tag *f = new Tag( query, "feature" );
-              f->addAttrib( "var", (*it).c_str() );
+              f->addAttribute( "var", (*it).c_str() );
             }
           }
 
@@ -121,12 +121,12 @@ namespace gloox
         else if( stanza->xmlns() == XMLNS_DISCO_ITEMS )
         {
           Tag *iq = new Tag( "iq" );
-          iq->addAttrib( "id", stanza->id() );
-          iq->addAttrib( "to", stanza->from().full() );
-          iq->addAttrib( "from", m_parent->jid().full() );
-          iq->addAttrib( "type", "result" );
+          iq->addAttribute( "id", stanza->id() );
+          iq->addAttribute( "to", stanza->from().full() );
+          iq->addAttribute( "from", m_parent->jid().full() );
+          iq->addAttribute( "type", "result" );
           Tag *query = new Tag( iq, "query" );
-          query->addAttrib( "xmlns", XMLNS_DISCO_ITEMS );
+          query->addAttribute( "xmlns", XMLNS_DISCO_ITEMS );
 
           StringMap items;
           DiscoNodeHandlerMap::const_iterator it;
@@ -157,9 +157,9 @@ namespace gloox
               if( !(*it).first.empty() && !(*it).second.empty() )
               {
                 Tag *i = new Tag( query, "item" );
-                i->addAttrib( "jid",  m_parent->jid().full() );
-                i->addAttrib( "node", (*it).first );
-                i->addAttrib( "name", (*it).second );
+                i->addAttribute( "jid",  m_parent->jid().full() );
+                i->addAttribute( "node", (*it).first );
+                i->addAttribute( "name", (*it).second );
               }
             }
           }
@@ -229,14 +229,14 @@ namespace gloox
     std::string id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
-    iq->addAttrib( "id", id );
-    iq->addAttrib( "to", to );
-    iq->addAttrib( "from", m_parent->jid().full() );
-    iq->addAttrib( "type", "get" );
+    iq->addAttribute( "id", id );
+    iq->addAttribute( "to", to );
+    iq->addAttribute( "from", m_parent->jid().full() );
+    iq->addAttribute( "type", "get" );
     Tag *q = new Tag( iq, "query" );
-    q->addAttrib( "xmlns", XMLNS_DISCO_INFO );
+    q->addAttribute( "xmlns", XMLNS_DISCO_INFO );
     if( !node.empty() )
-      q->addAttrib( "node", node );
+      q->addAttribute( "node", node );
 
     DiscoHandlerContext ct;
     ct.dh = dh;
@@ -251,14 +251,14 @@ namespace gloox
     std::string id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
-    iq->addAttrib( "id", id );
-    iq->addAttrib( "to", to );
-    iq->addAttrib( "from", m_parent->jid().full() );
-    iq->addAttrib( "type", "get" );
+    iq->addAttribute( "id", id );
+    iq->addAttribute( "to", to );
+    iq->addAttribute( "from", m_parent->jid().full() );
+    iq->addAttribute( "type", "get" );
     Tag *q = new Tag( iq, "query" );
-    q->addAttrib( "xmlns", XMLNS_DISCO_ITEMS );
+    q->addAttribute( "xmlns", XMLNS_DISCO_ITEMS );
     if( !node.empty() )
-      q->addAttrib( "node", node );
+      q->addAttribute( "node", node );
 
     DiscoHandlerContext ct;
     ct.dh = dh;

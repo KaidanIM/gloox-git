@@ -73,10 +73,10 @@ namespace gloox
     }
 
     Tag *iq = new Tag( "iq" );
-    iq->addAttrib( "type", "get" );
-    iq->addAttrib( "id", m_parent->getID() );
+    iq->addAttribute( "type", "get" );
+    iq->addAttribute( "id", m_parent->getID() );
     Tag *q = new Tag( iq, "query" );
-    q->addAttrib( "xmlns", XMLNS_ROSTER );
+    q->addAttribute( "xmlns", XMLNS_ROSTER );
     m_parent->send( iq );
   }
 
@@ -96,8 +96,8 @@ namespace gloox
       extractItems( stanza, true );
 
       Tag *iq = new Tag( "iq" );
-      iq->addAttrib( "id", stanza->id() );
-      iq->addAttrib( "type", "result" );
+      iq->addAttribute( "id", stanza->id() );
+      iq->addAttribute( "type", "result" );
       m_parent->send( iq );
 
       return true;
@@ -144,9 +144,9 @@ namespace gloox
     add( jid, name, groups );
 
     Tag *s = new Tag( "presence" );
-    s->addAttrib( "type", "subscribe" );
-    s->addAttrib( "to", jid );
-    s->addAttrib( "from", m_parent->jid().full() );
+    s->addAttribute( "type", "subscribe" );
+    s->addAttribute( "to", jid );
+    s->addAttribute( "from", m_parent->jid().full() );
     if( !msg.empty() )
       new Tag( s, "status", msg );
 
@@ -162,14 +162,14 @@ namespace gloox
     std::string id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
-    iq->addAttrib( "type", "set" );
-    iq->addAttrib( "id", id );
+    iq->addAttribute( "type", "set" );
+    iq->addAttribute( "id", id );
     Tag *q = new Tag( iq, "query" );
-    q->addAttrib( "xmlns", XMLNS_ROSTER );
+    q->addAttribute( "xmlns", XMLNS_ROSTER );
     Tag *i = new Tag( q, "item" );
-    i->addAttrib( "jid", jid );
+    i->addAttribute( "jid", jid );
     if( !name.empty() )
-      i->addAttrib( "name", name );
+      i->addAttribute( "name", name );
 
     if( groups.size() != 0 )
     {
@@ -184,9 +184,9 @@ namespace gloox
   void RosterManager::unsubscribe( const std::string& jid, const std::string& msg, bool remove )
   {
     Tag *s = new Tag( "presence" );
-    s->addAttrib( "type", "unsubscribe" );
-    s->addAttrib( "from", m_parent->jid().bare() );
-    s->addAttrib( "to", jid );
+    s->addAttribute( "type", "unsubscribe" );
+    s->addAttribute( "from", m_parent->jid().bare() );
+    s->addAttribute( "to", jid );
     if( !msg.empty() )
       new Tag( s, "status", msg );
 
@@ -197,13 +197,13 @@ namespace gloox
       std::string id = m_parent->getID();
 
       Tag *iq = new Tag( "iq" );
-      iq->addAttrib( "type", "set" );
-      iq->addAttrib( "id", id );
+      iq->addAttribute( "type", "set" );
+      iq->addAttribute( "id", id );
       Tag *q = new Tag( iq, "query" );
-      q->addAttrib( "xmlns", XMLNS_ROSTER );
+      q->addAttribute( "xmlns", XMLNS_ROSTER );
       Tag *i = new Tag( q, "item" );
-      i->addAttrib( "jid", jid );
-      i->addAttrib( "subscription", "remove" );
+      i->addAttribute( "jid", jid );
+      i->addAttribute( "subscription", "remove" );
 
       m_parent->send( iq );
     }
@@ -219,14 +219,14 @@ namespace gloox
         std::string id = m_parent->getID();
 
         Tag *iq = new Tag( "iq" );
-        iq->addAttrib( "type", "set" );
-        iq->addAttrib( "id", id );
+        iq->addAttribute( "type", "set" );
+        iq->addAttribute( "id", id );
         Tag *q = new Tag( iq, "query" );
-        q->addAttrib( "xmlns", XMLNS_ROSTER );
+        q->addAttribute( "xmlns", XMLNS_ROSTER );
         Tag *i = new Tag( q, "item" );
-        i->addAttrib( "jid", (*it).second->jid() );
+        i->addAttribute( "jid", (*it).second->jid() );
         if( !(*it).second->name().empty() )
-          i->addAttrib( "name", (*it).second->name() );
+          i->addAttribute( "name", (*it).second->name() );
 
         if( (*it).second->groups().size() != 0 )
         {
@@ -253,17 +253,17 @@ namespace gloox
         if( m_rosterListener->subscriptionRequest( stanza->from().bare(), stanza->status() ) )
         {
           Tag *p = new Tag( "presence" );
-          p->addAttrib( "type", "subscribed" );
-          p->addAttrib( "from", m_parent->jid().bare() );
-          p->addAttrib( "to", stanza->from().bare() );
+          p->addAttribute( "type", "subscribed" );
+          p->addAttribute( "from", m_parent->jid().bare() );
+          p->addAttribute( "to", stanza->from().bare() );
           m_parent->send( p );
         }
         else
         {
           Tag *p = new Tag( "presence" );
-          p->addAttrib( "type", "unsubscribed" );
-          p->addAttrib( "from", m_parent->jid().bare() );
-          p->addAttrib( "to", stanza->from().bare() );
+          p->addAttribute( "type", "unsubscribed" );
+          p->addAttribute( "from", m_parent->jid().bare() );
+          p->addAttribute( "to", stanza->from().bare() );
           m_parent->send( p );
         }
         break;
@@ -271,9 +271,9 @@ namespace gloox
       case STANZA_S10N_SUBSCRIBED:
       {
 //         Tag *p = new Tag( "presence" );
-//         p->addAttrib( "type", "subscribe" );
-//         p->addAttrib( "from", m_parent->jid().bare() );
-//         p->addAttrib( "to", stanza->from().bare() );
+//         p->addAttribute( "type", "subscribe" );
+//         p->addAttribute( "from", m_parent->jid().bare() );
+//         p->addAttribute( "to", stanza->from().bare() );
 //         m_parent->send( p );
 
         m_rosterListener->itemSubscribed( stanza->from().bare() );
@@ -283,9 +283,9 @@ namespace gloox
       case STANZA_S10N_UNSUBSCRIBE:
       {
         Tag *p = new Tag( "presence" );
-        p->addAttrib( "type", "unsubscribed" );
-        p->addAttrib( "from", m_parent->jid().bare() );
-        p->addAttrib( "to", stanza->from().bare() );
+        p->addAttribute( "type", "unsubscribed" );
+        p->addAttribute( "from", m_parent->jid().bare() );
+        p->addAttribute( "to", stanza->from().bare() );
         m_parent->send( p );
 
         if( m_rosterListener->unsubscriptionRequest( stanza->from().bare(), stanza->status() ) )
@@ -296,9 +296,9 @@ namespace gloox
       case STANZA_S10N_UNSUBSCRIBED:
       {
 //         Tag *p = new Tag( "presence" );
-//         p->addAttrib( "type", "unsubscribe" );
-//         p->addAttrib( "from", m_parent->jid().bare() );
-//         p->addAttrib( "to", stanza->from().bare() );
+//         p->addAttribute( "type", "unsubscribe" );
+//         p->addAttribute( "from", m_parent->jid().bare() );
+//         p->addAttribute( "to", stanza->from().bare() );
 //         m_parent->send( p );
 
         m_rosterListener->itemUnsubscribed( stanza->from().bare() );
@@ -398,7 +398,7 @@ namespace gloox
   {
     m_delimiter = delimiter;
     Tag *t = new Tag( "roster", m_delimiter );
-    t->addAttrib( "xmlns", XMLNS_ROSTER_DELIMITER );
+    t->addAttribute( "xmlns", XMLNS_ROSTER_DELIMITER );
     m_privateXML->storeXML( t, this );
   }
 

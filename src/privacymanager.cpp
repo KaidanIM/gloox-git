@@ -38,10 +38,10 @@ namespace gloox
     std::string id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
-    iq->addAttrib( "type", "get" );
-    iq->addAttrib( "id", id );
+    iq->addAttribute( "type", "get" );
+    iq->addAttribute( "id", id );
     Tag *q = new Tag( iq, "query" );
-    q->addAttrib( "xmlns", XMLNS_PRIVACY );
+    q->addAttribute( "xmlns", XMLNS_PRIVACY );
 
     m_parent->trackID( this, id, PL_REQUEST_NAMES );
     m_parent->send( iq );
@@ -53,12 +53,12 @@ namespace gloox
     std::string id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
-    iq->addAttrib( "type", "get" );
-    iq->addAttrib( "id", id );
+    iq->addAttribute( "type", "get" );
+    iq->addAttribute( "id", id );
     Tag *q = new Tag( iq, "query" );
-    q->addAttrib( "xmlns", XMLNS_PRIVACY );
+    q->addAttribute( "xmlns", XMLNS_PRIVACY );
     Tag *l = new Tag( q, "list" );
-    l->addAttrib( "name", name );
+    l->addAttribute( "name", name );
 
     m_parent->trackID( this, id, PL_REQUEST_LIST );
     m_parent->send( iq );
@@ -70,12 +70,12 @@ namespace gloox
     std::string id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
-    iq->addAttrib( "type", "set" );
-    iq->addAttrib( "id", id );
+    iq->addAttribute( "type", "set" );
+    iq->addAttribute( "id", id );
     Tag *q = new Tag( iq, "query" );
-    q->addAttrib( "xmlns", XMLNS_PRIVACY );
+    q->addAttribute( "xmlns", XMLNS_PRIVACY );
     Tag *l = new Tag( q, "list" );
-    l->addAttrib( "name", name );
+    l->addAttribute( "name", name );
 
     m_parent->trackID( this, id, PL_REMOVE );
     m_parent->send( iq );
@@ -87,12 +87,12 @@ namespace gloox
     std::string id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
-    iq->addAttrib( "type", "set" );
-    iq->addAttrib( "id", id );
+    iq->addAttribute( "type", "set" );
+    iq->addAttribute( "id", id );
     Tag *q = new Tag( iq, "query" );
-    q->addAttrib( "xmlns", XMLNS_PRIVACY );
+    q->addAttribute( "xmlns", XMLNS_PRIVACY );
     Tag *d = new Tag( q, "default" );
-    d->addAttrib( "name", name );
+    d->addAttribute( "name", name );
 
     m_parent->trackID( this, id, PL_DEFAULT );
     m_parent->send( iq );
@@ -104,11 +104,11 @@ namespace gloox
     std::string id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
-    iq->addAttrib( "type", "set" );
-    iq->addAttrib( "id", id );
+    iq->addAttribute( "type", "set" );
+    iq->addAttribute( "id", id );
     Tag *q = new Tag( iq, "query" );
-    q->addAttrib( "xmlns", XMLNS_PRIVACY );
-    Tag *d = new Tag( q, "default" );
+    q->addAttribute( "xmlns", XMLNS_PRIVACY );
+    new Tag( q, "default" );
 
     m_parent->trackID( this, id, PL_UNSET_DEFAULT );
     m_parent->send( iq );
@@ -120,12 +120,12 @@ namespace gloox
     std::string id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
-    iq->addAttrib( "type", "set" );
-    iq->addAttrib( "id", id );
+    iq->addAttribute( "type", "set" );
+    iq->addAttribute( "id", id );
     Tag *q = new Tag( iq, "query" );
-    q->addAttrib( "xmlns", XMLNS_PRIVACY );
+    q->addAttribute( "xmlns", XMLNS_PRIVACY );
     Tag *a = new Tag( q, "active" );
-    a->addAttrib( "name", name );
+    a->addAttribute( "name", name );
 
     m_parent->trackID( this, id, PL_ACTIVATE );
     m_parent->send( iq );
@@ -137,11 +137,11 @@ namespace gloox
     std::string id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
-    iq->addAttrib( "type", "set" );
-    iq->addAttrib( "id", id );
+    iq->addAttribute( "type", "set" );
+    iq->addAttribute( "id", id );
     Tag *q = new Tag( iq, "query" );
-    q->addAttrib( "xmlns", XMLNS_PRIVACY );
-    Tag *a = new Tag( q, "active" );
+    q->addAttribute( "xmlns", XMLNS_PRIVACY );
+    new Tag( q, "active" );
 
     m_parent->trackID( this, id, PL_UNSET_ACTIVATE );
     m_parent->send( iq );
@@ -153,12 +153,12 @@ namespace gloox
     std::string id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
-    iq->addAttrib( "type", "set" );
-    iq->addAttrib( "id", id );
+    iq->addAttribute( "type", "set" );
+    iq->addAttribute( "id", id );
     Tag *q = new Tag( iq, "query" );
-    q->addAttrib( "xmlns", XMLNS_PRIVACY );
+    q->addAttribute( "xmlns", XMLNS_PRIVACY );
     Tag *l = new Tag( q, "list" );
-    l->addAttrib( "name", name );
+    l->addAttribute( "name", name );
 
     int count = 0;
     PrivacyListHandler::PrivacyList::iterator it = list.begin();
@@ -169,13 +169,13 @@ namespace gloox
       switch( (*it).type() )
       {
         case PrivacyItem::TYPE_JID:
-          i->addAttrib( "type", "jid" );
+          i->addAttribute( "type", "jid" );
           break;
         case PrivacyItem::TYPE_GROUP:
-          i->addAttrib( "type", "group" );
+          i->addAttribute( "type", "group" );
           break;
         case PrivacyItem::TYPE_SUBSCRIPTION:
-          i->addAttrib( "type", "subscription" );
+          i->addAttribute( "type", "subscription" );
           break;
         default:
           break;
@@ -184,10 +184,10 @@ namespace gloox
       switch( (*it).action() )
       {
         case PrivacyItem::ACTION_ALLOW:
-          i->addAttrib( "action", "allow" );
+          i->addAttribute( "action", "allow" );
           break;
         case PrivacyItem::ACTION_DENY:
-          i->addAttrib( "action", "deny" );
+          i->addAttribute( "action", "deny" );
           break;
       }
 
@@ -204,11 +204,11 @@ namespace gloox
           i->addChild( new Tag( "iq" ) );
       }
 
-      i->addAttrib( "value", (*it).value() );
+      i->addAttribute( "value", (*it).value() );
 
       std::ostringstream oss;
       oss << ++count;
-      i->addAttrib( "order", oss.str() );
+      i->addAttribute( "order", oss.str() );
     }
 
     m_parent->trackID( this, id, PL_STORE );
@@ -228,8 +228,8 @@ namespace gloox
       m_privacyListHandler->handlePrivacyListChanged( name );
 
       Tag *iq = new Tag( "iq" );
-      iq->addAttrib( "type", "result" );
-      iq->addAttrib( "id", stanza->id() );
+      iq->addAttribute( "type", "result" );
+      iq->addAttribute( "id", stanza->id() );
       m_parent->send( iq );
       return true;
     }

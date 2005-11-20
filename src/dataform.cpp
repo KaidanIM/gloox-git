@@ -66,7 +66,7 @@ namespace gloox
       return 0;
 
     Tag *x = new Tag( "x" );
-    x->addAttrib( "xmlns", XMLNS_DATA_FORMS );
+    x->addAttribute( "xmlns", XMLNS_DATA_FORMS );
     if( !m_title.empty() )
       x->addChild( new Tag( "title", m_title ) );
 
@@ -85,16 +85,16 @@ namespace gloox
     switch( m_type )
     {
       case FORM_TYPE_FORM:
-        x->addAttrib( "type", "form" );
+        x->addAttribute( "type", "form" );
         break;
       case FORM_TYPE_SUBMIT:
-        x->addAttrib( "type", "submit" );
+        x->addAttribute( "type", "submit" );
         break;
       case FORM_TYPE_CANCEL:
-        x->addAttrib( "type", "cancel" );
+        x->addAttribute( "type", "cancel" );
         break;
       case FORM_TYPE_RESULT:
-        x->addAttrib( "type", "result" );
+        x->addAttribute( "type", "result" );
         break;
       default:
         break;

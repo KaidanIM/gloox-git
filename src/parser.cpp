@@ -80,7 +80,7 @@ namespace gloox
         Stanza *tag = new Stanza( name );
         for(int i=0; atts && atts[i]; )
         {
-          tag->addAttrib( atts[i], atts[i+1] );
+          tag->addAttribute( atts[i], atts[i+1] );
           i+=2;
         }
         if( !parser->m_root )

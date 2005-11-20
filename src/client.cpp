@@ -307,10 +307,10 @@ namespace gloox
     if( !m_resourceBound )
     {
       Tag *iq = new Tag( "iq" );
-      iq->addAttrib( "type", "set" );
-      iq->addAttrib( "id", "bind" );
+      iq->addAttribute( "type", "set" );
+      iq->addAttribute( "id", "bind" );
       Tag *b = new Tag( iq, "bind" );
-      b->addAttrib( "xmlns", XMLNS_STREAM_BIND );
+      b->addAttribute( "xmlns", XMLNS_STREAM_BIND );
       if( !resource().empty() )
         b->addChild( new Tag( "resource", resource() ) );
 
@@ -364,10 +364,10 @@ namespace gloox
   void Client::createSession()
   {
     Tag *iq = new Tag( "iq" );
-    iq->addAttrib( "type", "set" );
-    iq->addAttrib( "id", "session" );
+    iq->addAttribute( "type", "set" );
+    iq->addAttribute( "id", "session" );
     Tag *s = new Tag( iq, "session" );
-    s->addAttrib( "xmlns", XMLNS_STREAM_SESSION );
+    s->addAttribute( "xmlns", XMLNS_STREAM_SESSION );
 
     send( iq );
   }
@@ -411,7 +411,7 @@ namespace gloox
   void Client::negotiateCompression( StreamFeaturesEnum method )
   {
     Tag *t = new Tag( "compress" );
-    t->addAttrib( "xmlns", XMLNS_COMPRESSION );
+    t->addAttribute( "xmlns", XMLNS_COMPRESSION );
 
     if( method == STREAM_FEATURE_COMPRESS_ZLIB )
       new Tag( t, "method", "zlib" );

@@ -196,7 +196,7 @@ namespace gloox
   void ClientBase::startTls()
   {
     Tag *start = new Tag( "starttls" );
-    start->addAttrib( "xmlns", XMLNS_STREAM_TLS );
+    start->addAttribute( "xmlns", XMLNS_STREAM_TLS );
     send( start );
   }
 #endif
@@ -204,16 +204,16 @@ namespace gloox
   void ClientBase::startSASL( SaslMechanisms type )
   {
     Tag *a = new Tag( "auth" );
-    a->addAttrib( "xmlns", XMLNS_STREAM_SASL );
+    a->addAttribute( "xmlns", XMLNS_STREAM_SASL );
 
     switch( type )
     {
       case SASL_DIGEST_MD5:
-        a->addAttrib( "mechanism", "DIGEST-MD5" );
+        a->addAttribute( "mechanism", "DIGEST-MD5" );
         break;
       case SASL_PLAIN:
       {
-        a->addAttrib( "mechanism", "PLAIN" );
+        a->addAttribute( "mechanism", "PLAIN" );
         int len = m_jid.username().length() + m_password.length() + 2;
         char *tmp = (char*)iks_malloc( len + 80 );
         char *result;
@@ -226,7 +226,7 @@ namespace gloox
         break;
       }
       case SASL_ANONYMOUS:
-        a->addAttrib( "mechanism", "ANONYMOUS" );
+        a->addAttribute( "mechanism", "ANONYMOUS" );
         a->setCData( getID() );
         break;
     }
@@ -329,7 +329,7 @@ namespace gloox
 
       iks_free( response_coded );
     }
-    t->addAttrib( "xmlns", XMLNS_STREAM_SASL );
+    t->addAttribute( "xmlns", XMLNS_STREAM_SASL );
     send( t );
     iks_free( b );
 
@@ -669,9 +669,9 @@ namespace gloox
          ( ( stanza->subtype() == STANZA_IQ_GET ) || ( stanza->subtype() == STANZA_IQ_SET ) ) )
     {
       Tag *iq = new Tag( "iq" );
-      iq->addAttrib( "type", "result" );
-      iq->addAttrib( "id", stanza->id() );
-      iq->addAttrib( "to", stanza->from().full() );
+      iq->addAttribute( "type", "result" );
+      iq->addAttribute( "id", stanza->id() );
+      iq->addAttribute( "to", stanza->from().full() );
       send( iq );
     }
   }

@@ -45,10 +45,10 @@ namespace gloox
   {
     const std::string id = m_parent->getID();
     Tag *iq = new Tag( "iq" );
-    iq->addAttrib( "type", "get" );
-    iq->addAttrib( "id", id );
+    iq->addAttribute( "type", "get" );
+    iq->addAttribute( "id", id );
     Tag *o = new Tag( iq, "offline" );
-    o->addAttrib( "xmlns", XMLNS_OFFLINE );
+    o->addAttribute( "xmlns", XMLNS_OFFLINE );
 
     if( msgs.size() == 0 )
       o->addChild( new Tag( "fetch" ) );
@@ -58,8 +58,8 @@ namespace gloox
       for( ; it != msgs.end(); ++it )
       {
         Tag *i = new Tag( o, "item" );
-        i->addAttrib( "action", "view" );
-        i->addAttrib( "node", (*it) );
+        i->addAttribute( "action", "view" );
+        i->addAttribute( "node", (*it) );
       }
     }
 
@@ -71,10 +71,10 @@ namespace gloox
   {
     const std::string id = m_parent->getID();
     Tag *iq = new Tag( "iq" );
-    iq->addAttrib( "type", "get" );
-    iq->addAttrib( "id", id );
+    iq->addAttribute( "type", "get" );
+    iq->addAttribute( "id", id );
     Tag *o = new Tag( iq, "offline" );
-    o->addAttrib( "xmlns", XMLNS_OFFLINE );
+    o->addAttribute( "xmlns", XMLNS_OFFLINE );
 
     if( msgs.size() == 0 )
       o->addChild( new Tag( "purge" ) );
@@ -84,8 +84,8 @@ namespace gloox
       for( ; it != msgs.end(); ++it )
       {
         Tag *i = new Tag( o, "item" );
-        i->addAttrib( "action", "remove" );
-        i->addAttrib( "node", (*it) );
+        i->addAttribute( "action", "remove" );
+        i->addAttribute( "node", (*it) );
       }
     }
 

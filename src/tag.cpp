@@ -83,7 +83,7 @@ namespace gloox
     return xml;
   }
 
-  void Tag::addAttrib( const std::string& name, const std::string& value )
+  void Tag::addAttribute( const std::string& name, const std::string& value )
   {
     if( !value.empty() )
       m_attribs[name] = value;
