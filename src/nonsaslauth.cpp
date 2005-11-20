@@ -42,10 +42,9 @@ namespace gloox
     iq->addAttrib( "to", m_parent->jid().server() );
     iq->addAttrib( "id", id );
     iq->addAttrib( "type", "get" );
-    Tag *q = new Tag( "query" );
+    Tag *q = new Tag( iq, "query" );
     q->addAttrib( "xmlns", XMLNS_AUTH );
     q->addChild( new Tag( "username", m_parent->username() ) );
-    iq->addChild( q );
 
     m_parent->trackID( this, id, TRACK_REQUEST_AUTH_FIELDS );
     m_parent->send( iq );
@@ -82,7 +81,7 @@ namespace gloox
             Tag *iq = new Tag( "iq" );
             iq->addAttrib( "id", id );
             iq->addAttrib( "type", "set" );
-            Tag *query = new Tag( "query" );
+            Tag *query = new Tag( iq, "query" );
             query->addAttrib( "xmlns", XMLNS_AUTH );
             query->addChild( new Tag( "username", m_parent->jid().username() ) );
             query->addChild( new Tag( "resource", m_parent->jid().resource() ) );
@@ -105,7 +104,6 @@ namespace gloox
               query->addChild( new Tag( "password", m_parent->password() ) );
             }
 
-            iq->addChild( query );
             m_parent->trackID( this, id, TRACK_SEND_AUTH );
             m_parent->send( iq );
             break;
