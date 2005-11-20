@@ -33,7 +33,7 @@ namespace gloox
   {
     public:
       /**
-       *
+       * Virtual destructor.
        */
       virtual ~LogSink();
 
