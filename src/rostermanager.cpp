@@ -102,11 +102,15 @@ namespace gloox
 
       return true;
     }
+
     return false;
   }
 
   void RosterManager::handlePresence( Stanza *stanza )
   {
+    if( !m_rosterListener )
+      return;
+
     RosterListener::Roster::iterator it = m_roster.find( stanza->from().bare() );
     if( it != m_roster.end() )
     {
@@ -115,26 +119,20 @@ namespace gloox
       (*it).second->setStatus( stanza->show() );
       (*it).second->setStatusMsg( stanza->status() );
 
-      if( m_rosterListener )
+      if( stanza->show() == PRESENCE_AVAILABLE )
       {
-        if( stanza->show() == PRESENCE_AVAILABLE )
-        {
-          if( oldStat == PRESENCE_UNAVAILABLE )
-            m_rosterListener->itemAvailable( (*(*it).second), stanza->status() );
-          else
-            m_rosterListener->presenceUpdated( (*(*it).second), stanza->show(), stanza->status() );
-        }
-        else if( stanza->show() == PRESENCE_UNAVAILABLE )
-          m_rosterListener->itemUnavailable( (*(*it).second), stanza->status() );
+        if( oldStat == PRESENCE_UNAVAILABLE )
+          m_rosterListener->itemAvailable( (*(*it).second), stanza->status() );
         else
           m_rosterListener->presenceUpdated( (*(*it).second), stanza->show(), stanza->status() );
       }
+      else if( stanza->show() == PRESENCE_UNAVAILABLE )
+        m_rosterListener->itemUnavailable( (*(*it).second), stanza->status() );
+      else
+        m_rosterListener->presenceUpdated( (*(*it).second), stanza->show(), stanza->status() );
     }
     else
-    {
-      if( m_rosterListener )
-        m_rosterListener->nonrosterPresenceReceived( stanza->from().bare() );
-    }
+      m_rosterListener->nonrosterPresenceReceived( stanza->from().full() );
   }
 
   void RosterManager::subscribe( const std::string& jid, const std::string& name,
