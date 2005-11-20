@@ -312,7 +312,7 @@ namespace gloox
       Tag *b = new Tag( iq, "bind" );
       b->addAttribute( "xmlns", XMLNS_STREAM_BIND );
       if( !resource().empty() )
-        b->addChild( new Tag( "resource", resource() ) );
+        new Tag( b, "resource", resource() );
 
       send( iq );
     }
@@ -444,7 +444,8 @@ namespace gloox
     Tag *p = new Tag( "presence" );
     std::ostringstream oss;
     oss << m_priority;
-    p->addChild( new Tag( "priority", oss.str() ) );
+    new Tag( p, "priority", oss.str() );
+
     send( p );
   }
 

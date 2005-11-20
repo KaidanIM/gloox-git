@@ -380,16 +380,16 @@ namespace gloox
         s->addAttribute( "type", "unavailable" );
         break;
       case PRESENCE_CHAT:
-        s->addChild( new Tag( "show", "chat" ) );
+        new Tag( s, "show", "chat" );
         break;
       case PRESENCE_AWAY:
-        s->addChild( new Tag( "show", "away" ) );
+        new Tag( s, "show", "away" );
         break;
       case PRESENCE_DND:
-        s->addChild( new Tag( "show", "dnd" ) );
+        new Tag( s, "show", "dnd" );
         break;
       case PRESENCE_XA:
-        s->addChild( new Tag( "show", "xa" ) );
+        new Tag( s, "show", "xa" );
       default:
         break;
     }

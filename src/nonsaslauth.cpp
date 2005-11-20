@@ -44,7 +44,7 @@ namespace gloox
     iq->addAttribute( "type", "get" );
     Tag *q = new Tag( iq, "query" );
     q->addAttribute( "xmlns", XMLNS_AUTH );
-    q->addChild( new Tag( "username", m_parent->username() ) );
+    new Tag( q, "username", m_parent->username() );
 
     m_parent->trackID( this, id, TRACK_REQUEST_AUTH_FIELDS );
     m_parent->send( iq );
@@ -83,8 +83,8 @@ namespace gloox
             iq->addAttribute( "type", "set" );
             Tag *query = new Tag( iq, "query" );
             query->addAttribute( "xmlns", XMLNS_AUTH );
-            query->addChild( new Tag( "username", m_parent->jid().username() ) );
-            query->addChild( new Tag( "resource", m_parent->jid().resource() ) );
+            new Tag( query, "username", m_parent->jid().username() );
+            new Tag( query, "resource", m_parent->jid().resource() );
 
             Tag *q = stanza->findChild( "query" );
             if( ( q->hasChild( "digest" ) ) && !m_sid.empty() )
@@ -97,11 +97,11 @@ namespace gloox
               iks_sha_hash( sha, (const unsigned char*)pwd.c_str(), pwd.length(), 1 );
               iks_sha_print( sha, buf );
               iks_sha_delete( sha );
-              query->addChild( new Tag( "digest", buf ) );
+              new Tag( query, "digest", buf );
             }
             else
             {
-              query->addChild( new Tag( "password", m_parent->password() ) );
+              new Tag( query, "password", m_parent->password() );
             }
 
             m_parent->trackID( this, id, TRACK_SEND_AUTH );

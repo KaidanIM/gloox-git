@@ -64,37 +64,37 @@ namespace gloox
     q->addAttribute( "xmlns", XMLNS_REGISTER );
 
     if( fields & FIELD_USERNAME )
-      q->addChild( new Tag( "username", Prep::nodeprep( values.username ) ) );
+      new Tag( q, "username", Prep::nodeprep( values.username ) );
     if( fields & FIELD_NICK )
-      q->addChild( new Tag( "nick", values.nick ) );
+      new Tag( q, "nick", values.nick );
     if( fields & FIELD_PASSWORD )
-      q->addChild( new Tag( "password", values.password ) );
+      new Tag( q, "password", values.password );
     if( fields & FIELD_NAME )
-      q->addChild( new Tag( "name", values.name ) );
+      new Tag( q, "name", values.name );
     if( fields & FIELD_FIRST )
-      q->addChild( new Tag( "first", values.first ) );
+      new Tag( q, "first", values.first );
     if( fields & FIELD_LAST )
-      q->addChild( new Tag( "last", values.last ) );
+      new Tag( q, "last", values.last );
     if( fields & FIELD_EMAIL )
-      q->addChild( new Tag( "email", values.email ) );
+      new Tag( q, "email", values.email );
     if( fields & FIELD_ADDRESS )
-      q->addChild( new Tag( "address", values.address ) );
+      new Tag( q, "address", values.address );
     if( fields & FIELD_CITY )
-      q->addChild( new Tag( "city", values.city ) );
+      new Tag( q, "city", values.city );
     if( fields & FIELD_STATE )
-      q->addChild( new Tag( "state", values.state ) );
+      new Tag( q, "state", values.state );
     if( fields & FIELD_ZIP )
-      q->addChild( new Tag( "zip", values.zip ) );
+      new Tag( q, "zip", values.zip );
     if( fields & FIELD_PHONE )
-      q->addChild( new Tag( "phone", values.phone ) );
+      new Tag( q, "phone", values.phone );
     if( fields & FIELD_URL )
-      q->addChild( new Tag( "url", values.url ) );
+      new Tag( q, "url", values.url );
     if( fields & FIELD_DATE )
-      q->addChild( new Tag( "date", values.date ) );
+      new Tag( q, "date", values.date );
     if( fields & FIELD_MISC )
-      q->addChild( new Tag( "misc", values.misc ) );
+      new Tag( q, "misc", values.misc );
     if( fields & FIELD_TEXT )
-      q->addChild( new Tag( "text", values.text ) );
+      new Tag( q, "text", values.text );
 
     m_parent->trackID( this, id, CREATE_ACCOUNT );
     m_parent->send( iq );
@@ -113,7 +113,7 @@ namespace gloox
     iq->addAttribute( "from", m_parent->jid().full() );
     Tag *q = new Tag( iq, "query" );
     q->addAttribute( "xmlns", XMLNS_REGISTER );
-    q->addChild( new Tag( "remove" ) );
+    new Tag( q, "remove" );
 
     m_parent->trackID( this, id, REMOVE_ACCOUNT );
     m_parent->send( iq );
@@ -132,8 +132,8 @@ namespace gloox
     iq->addAttribute( "to", m_parent->server() );
     Tag *q = new Tag( iq, "query" );
     q->addAttribute( "xmlns", XMLNS_REGISTER );
-    q->addChild( new Tag( "username", m_parent->username() ) );
-    q->addChild( new Tag( "password", password ) );
+    new Tag( q, "username", m_parent->username() );
+    new Tag( q, "password", password );
 
     m_parent->trackID( this, id, CHANGE_PASSWORD );
     m_parent->send( iq );
