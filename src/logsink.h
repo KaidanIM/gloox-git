@@ -54,10 +54,10 @@ namespace gloox
       /**
        * Registers @c lh as object that receives all debug messages of the specified type.
        * Suitable for logging to a file, etc.
-       * @param identifiers ORed identifiers the LogHandler wants to be informed about.
+       * @param areas Bit-wise ORed LogAreas the LogHandler wants to be informed about.
        * @param lh The object to receive exchanged data.
        */
-      void registerLogHandler( int identifiers, LogHandler *lh );
+      void registerLogHandler( int areas, LogHandler *lh );
 
       /**
        * Removes the given object from the list of log handlers.
@@ -71,9 +71,10 @@ namespace gloox
        * @param level The LogLevel. A given level includes all levels of higer importance.
        * @param areas Bitwise ORed LogAreas.
        * @param file The log file's name.
-       * @param append @b New log messages will be appended if @b true, the file will be truncated otherwise.
+       * @param append New log messages will be appended if @b true, the file will be truncated otherwise.
+       * @deprecated You're encouraged to use the LogHandler to write log messages to a file.
        */
-      void setFile( LogLevel level, int areas, const std::string& file, bool append = true );
+      GLOOX_DEPRECATED void setFile( LogLevel level, int areas, const std::string& file, bool append = true );
 
     private:
       LogSink();
