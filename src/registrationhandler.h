@@ -62,8 +62,9 @@ namespace gloox
                                                * Password change: The host is an instant messaging server and
                                                * the IQ set does not contain a 'from' address because the
                                                * entity is not registered with the server. */
-        REGISTRATION_NOT_ALLOWED              /*!< Password change: The server or service does not allow
+        REGISTRATION_NOT_ALLOWED,             /*!< Password change: The server or service does not allow
                                                * password changes. */
+        UNKNOWN_ERROR                         /**< An unknown error condition occured. */
       };
 
       /**

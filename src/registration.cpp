@@ -158,24 +158,26 @@ namespace gloox
       if( e->empty() || !m_registrationHandler )
         return false;
 
-      if( e->hasChild( "conflict" ) )
+      if( e->hasChild( "conflict" ) || e->hasAttribute( "code", "409" ) )
         m_registrationHandler->handleRegistrationResult( RegistrationHandler::REGISTRATION_CONFLICT );
-      else if( e->hasChild( "not-acceptable" ) )
+      else if( e->hasChild( "not-acceptable" ) || e->hasAttribute( "code", "406" ) )
         m_registrationHandler->handleRegistrationResult( RegistrationHandler::REGISTRATION_NOT_ACCEPTABLE );
-      else if( e->hasChild( "bad-request" ) )
+      else if( e->hasChild( "bad-request" ) || e->hasAttribute( "code", "400" ) )
         m_registrationHandler->handleRegistrationResult( RegistrationHandler::REGISTRATION_BAD_REQUEST );
-      else if( e->hasChild( "forbidden" ) )
+      else if( e->hasChild( "forbidden" ) || e->hasAttribute( "code", "403" ) )
         m_registrationHandler->handleRegistrationResult( RegistrationHandler::REGISTRATION_FORBIDDEN );
-      else if( e->hasChild( "registration-required" ) )
+      else if( e->hasChild( "registration-required" ) || e->hasAttribute( "code", "407" ) )
         m_registrationHandler->handleRegistrationResult(
             RegistrationHandler::REGISTRATION_REGISTRATION_REQUIRED );
-      else if( e->hasChild( "unexpected-request" ) )
+      else if( e->hasChild( "unexpected-request" ) || e->hasAttribute( "code", "400" ) )
         m_registrationHandler->handleRegistrationResult(
             RegistrationHandler::REGISTRATION_UNEXPECTED_REQUEST );
-      else if( e->hasChild( "not-authorized" ) )
+      else if( e->hasChild( "not-authorized" ) || e->hasAttribute( "code", "401" ) )
         m_registrationHandler->handleRegistrationResult( RegistrationHandler::REGISTRATION_NOT_AUTHORIZED );
-      else if( e->hasChild( "not-allowed" ) )
+      else if( e->hasChild( "not-allowed" ) || e->hasAttribute( "code", "405" ) )
         m_registrationHandler->handleRegistrationResult( RegistrationHandler::REGISTRATION_NOT_ALLOWED );
+      else
+        m_registrationHandler->handleRegistrationResult( RegistrationHandler::UNKNOWN_ERROR );
     }
     return false;
   }
