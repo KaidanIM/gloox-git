@@ -390,6 +390,7 @@ namespace gloox
         break;
       case PRESENCE_XA:
         new Tag( s, "show", "xa" );
+        break;
       default:
         break;
     }
