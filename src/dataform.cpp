@@ -68,13 +68,11 @@ namespace gloox
     Tag *x = new Tag( "x" );
     x->addAttribute( "xmlns", XMLNS_DATA_FORMS );
     if( !m_title.empty() )
-      x->addChild( new Tag( "title", m_title ) );
+      new Tag( x, "title", m_title );
 
     StringList::const_iterator it_i = m_instructions.begin();
     for( ; it_i != m_instructions.end(); ++it_i )
-    {
-      x->addChild( new Tag( "instructions", (*it_i) ) );
-    }
+      new Tag( x, "instructions", (*it_i) );
 
     FieldList::const_iterator it = m_fields.begin();
     for( ; it != m_fields.end(); ++it )

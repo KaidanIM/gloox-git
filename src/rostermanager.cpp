@@ -175,7 +175,7 @@ namespace gloox
     {
       StringList::const_iterator it = groups.begin();
       for( ; it != groups.end(); ++it )
-        i->addChild( new Tag( "group", (*it) ) );
+        new Tag( i, "group", (*it) );
     }
 
     m_parent->send( iq );
@@ -232,9 +232,7 @@ namespace gloox
         {
           StringList::const_iterator g_it = (*it).second->groups().begin();
           for( ; g_it != (*it).second->groups().end(); ++g_it )
-          {
-            i->addChild( new Tag( "group", (*g_it) ) );
-          }
+            new Tag( i, "group", (*g_it) );
         }
 
         m_parent->send( iq );

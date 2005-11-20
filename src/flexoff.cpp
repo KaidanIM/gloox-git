@@ -51,7 +51,7 @@ namespace gloox
     o->addAttribute( "xmlns", XMLNS_OFFLINE );
 
     if( msgs.size() == 0 )
-      o->addChild( new Tag( "fetch" ) );
+      new Tag( o, "fetch" );
     else
     {
       StringList::const_iterator it = msgs.begin();
@@ -77,7 +77,7 @@ namespace gloox
     o->addAttribute( "xmlns", XMLNS_OFFLINE );
 
     if( msgs.size() == 0 )
-      o->addChild( new Tag( "purge" ) );
+      new Tag( o, "purge" );
     else
     {
       StringList::const_iterator it = msgs.begin();

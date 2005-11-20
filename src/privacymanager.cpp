@@ -195,13 +195,13 @@ namespace gloox
       if( pType != 15 )
       {
         if( pType & PrivacyItem::PACKET_MESSAGE )
-          i->addChild( new Tag( "message" ) );
+          new Tag( i, "message" );
         if( pType & PrivacyItem::PACKET_PRESENCE_IN )
-          i->addChild( new Tag( "presence-in" ) );
+          new Tag( i, "presence-in" );
         if( pType & PrivacyItem::PACKET_PRESENCE_OUT )
-          i->addChild( new Tag( "presence-out" ) );
+          new Tag( i, "presence-out" );
         if( pType & PrivacyItem::PACKET_IQ )
-          i->addChild( new Tag( "iq" ) );
+          new Tag( i, "iq" );
       }
 
       i->addAttribute( "value", (*it).value() );

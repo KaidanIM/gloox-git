@@ -84,9 +84,10 @@ namespace gloox
     field->addAttribute( "var", m_name );
     field->addAttribute( "label", m_label );
     if( m_required )
-      field->addChild( new Tag( "required" ) );
+      new Tag( field, "required" );
+
     if( !m_desc.empty() )
-      field->addChild( new Tag( "desc", m_desc ) );
+      new Tag( field, "desc", m_desc );
 
     switch( m_type )
     {
@@ -131,26 +132,24 @@ namespace gloox
       {
         Tag *option = new Tag( field, "option" );
         option->addAttribute( "label", (*it).first );
-        option->addChild( new Tag( "value", (*it).second ) );
+        new Tag( option, "value", (*it).second );
       }
     }
     else if( m_type == FIELD_TYPE_BOOLEAN )
     {
       if( m_value.empty() || m_value == "false" || m_value == "0" )
-        field->addChild( new Tag( "value", "0" ) );
+        new Tag( field, "value", "0" );
       else
-        field->addChild( new Tag( "value", "1" ) );
+        new Tag( field, "value", "1" );
     }
     else if( m_type == FIELD_TYPE_TEXT_MULTI )
     {
       StringList::const_iterator it = m_values.begin();
       for( ; it != m_values.end() ; ++it )
-      {
-        field->addChild( new Tag( "value", (*it) ) );
-      }
+        new Tag( field, "value", (*it) );
     }
     else if( !m_value.empty() )
-      field->addChild( new Tag( "value", m_value ) );
+      new Tag( field, "value", m_value );
 
     return field;
   }

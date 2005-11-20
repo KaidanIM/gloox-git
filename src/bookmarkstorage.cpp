@@ -59,8 +59,8 @@ namespace gloox
         else
           i->addAttribute( "autojoin", "false" );
 
-        i->addChild( new Tag( "nick", (*it).nick ) );
-        i->addChild( new Tag( "password", (*it).password ) );
+        new Tag( i, "nick", (*it).nick );
+        new Tag( i, "password", (*it).password );
       }
     }
 
