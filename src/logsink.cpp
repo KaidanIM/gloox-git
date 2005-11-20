@@ -32,7 +32,7 @@ namespace gloox
     return sink;
   }
 
-  void LogSink::log( LogLevel level, LogIdentifier identifier, const std::string& message )
+  void LogSink::log( LogLevel level, LogArea identifier, const std::string& message )
   {
     LogHandlerMap::const_iterator it = m_logHandlers.begin();
     for( ; it != m_logHandlers.end(); ++it )

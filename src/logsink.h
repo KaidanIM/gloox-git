@@ -44,9 +44,12 @@ namespace gloox
       static LogSink& instance();
 
       /**
-       *
+       * Use this function to log a message with given LogLevel and LogIdentifier.
+       * @param level The severity of the logged event.
+       * @param area The part of the program/library the message comes from.
+       * @param message The actual log message.
        */
-      void log( LogLevel level, LogIdentifier identifier, const std::string& message );
+      void log( LogLevel level, LogArea area, const std::string& message );
 
       /**
        * Registers @c lh as object that receives all debug messages of the specified type.
@@ -66,11 +69,11 @@ namespace gloox
        * You can log to a file by setting its file name here. Subsequent calls will close the old
        * log file and open the new one.
        * @param level The LogLevel. A given level includes all levels of higer importance.
-       * @param identifiers Bitwise ORed LogIdentifiers.
+       * @param areas Bitwise ORed LogAreas.
        * @param file The log file's name.
        * @param append @b New log messages will be appended if @b true, the file will be truncated otherwise.
        */
-      void setFile( LogLevel level, int identifiers, const std::string& file, bool append = true );
+      void setFile( LogLevel level, int areas, const std::string& file, bool append = true );
 
     private:
       LogSink();
@@ -87,4 +90,5 @@ namespace gloox
   };
 
 }
+
 #endif // LOGSINK_H__
