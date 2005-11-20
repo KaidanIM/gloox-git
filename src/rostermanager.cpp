@@ -75,9 +75,8 @@ namespace gloox
     Tag *iq = new Tag( "iq" );
     iq->addAttrib( "type", "get" );
     iq->addAttrib( "id", m_parent->getID() );
-    Tag *q = new Tag( "query" );
+    Tag *q = new Tag( iq, "query" );
     q->addAttrib( "xmlns", XMLNS_ROSTER );
-    iq->addChild( q );
     m_parent->send( iq );
   }
 
@@ -167,9 +166,9 @@ namespace gloox
     Tag *iq = new Tag( "iq" );
     iq->addAttrib( "type", "set" );
     iq->addAttrib( "id", id );
-    Tag *q = new Tag( "query" );
+    Tag *q = new Tag( iq, "query" );
     q->addAttrib( "xmlns", XMLNS_ROSTER );
-    Tag *i = new Tag( "item" );
+    Tag *i = new Tag( q, "item" );
     i->addAttrib( "jid", jid );
     if( !name.empty() )
       i->addAttrib( "name", name );
@@ -178,13 +177,9 @@ namespace gloox
     {
       StringList::const_iterator it = groups.begin();
       for( ; it != groups.end(); ++it )
-      {
-        Tag *g = new Tag( "group", (*it) );
-        i->addChild( g );
-      }
+        i->addChild( new Tag( "group", (*it) ) );
     }
-    q->addChild( i );
-    iq->addChild( q );
+
     m_parent->send( iq );
   }
 
@@ -206,13 +201,11 @@ namespace gloox
       Tag *iq = new Tag( "iq" );
       iq->addAttrib( "type", "set" );
       iq->addAttrib( "id", id );
-      Tag *q = new Tag( "query" );
+      Tag *q = new Tag( iq, "query" );
       q->addAttrib( "xmlns", XMLNS_ROSTER );
-      Tag *i = new Tag( "item" );
+      Tag *i = new Tag( q, "item" );
       i->addAttrib( "jid", jid );
       i->addAttrib( "subscription", "remove" );
-      q->addChild( i );
-      iq->addChild( q );
 
       m_parent->send( iq );
     }
@@ -230,9 +223,9 @@ namespace gloox
         Tag *iq = new Tag( "iq" );
         iq->addAttrib( "type", "set" );
         iq->addAttrib( "id", id );
-        Tag *q = new Tag( "query" );
+        Tag *q = new Tag( iq, "query" );
         q->addAttrib( "xmlns", XMLNS_ROSTER );
-        Tag *i = new Tag( "item" );
+        Tag *i = new Tag( q, "item" );
         i->addAttrib( "jid", (*it).second->jid() );
         if( !(*it).second->name().empty() )
           i->addAttrib( "name", (*it).second->name() );
@@ -245,8 +238,6 @@ namespace gloox
             i->addChild( new Tag( "group", (*g_it) ) );
           }
         }
-        q->addChild( i );
-        iq->addChild( q );
 
         m_parent->send( iq );
       }

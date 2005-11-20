@@ -40,12 +40,10 @@ namespace gloox
     Tag *iq = new Tag( "iq" );
     iq->addAttrib( "id", id );
     iq->addAttrib( "type", "get" );
-    Tag *query = new Tag( "query" );
+    Tag *query = new Tag( iq, "query" );
     query->addAttrib( "xmlns", XMLNS_PRIVATE_XML );
-    Tag *x = new Tag( tag );
+    Tag *x = new Tag( query, tag );
     x->addAttrib( "xmlns", xmlns );
-    query->addChild( x );
-    iq->addChild( query );
 
     m_track[id] = pxh;
     m_parent->trackID( this, id, REQUEST_XML );
@@ -61,10 +59,9 @@ namespace gloox
     Tag *iq = new Tag( "iq" );
     iq->addAttrib( "id", id );
     iq->addAttrib( "type", "set" );
-    Tag *query = new Tag( "query" );
+    Tag *query = new Tag( iq, "query" );
     query->addAttrib( "xmlns", XMLNS_PRIVATE_XML );
     query->addChild( tag );
-    iq->addChild( query );
 
     m_track[id] = pxh;
     m_parent->trackID( this, id, STORE_XML );

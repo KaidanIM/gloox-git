@@ -309,14 +309,10 @@ namespace gloox
       Tag *iq = new Tag( "iq" );
       iq->addAttrib( "type", "set" );
       iq->addAttrib( "id", "bind" );
-      Tag *b = new Tag( "bind" );
+      Tag *b = new Tag( iq, "bind" );
       b->addAttrib( "xmlns", XMLNS_STREAM_BIND );
       if( !resource().empty() )
-      {
-        Tag *r = new Tag( "resource", resource() );
-        b->addChild( r );
-      }
-      iq->addChild( b );
+        b->addChild( new Tag( "resource", resource() ) );
 
       send( iq );
     }
@@ -370,9 +366,8 @@ namespace gloox
     Tag *iq = new Tag( "iq" );
     iq->addAttrib( "type", "set" );
     iq->addAttrib( "id", "session" );
-    Tag *s = new Tag( "session" );
+    Tag *s = new Tag( iq, "session" );
     s->addAttrib( "xmlns", XMLNS_STREAM_SESSION );
-    iq->addChild( s );
 
     send( iq );
   }
@@ -447,10 +442,9 @@ namespace gloox
   void Client::sendInitialPresence()
   {
     Tag *p = new Tag( "presence" );
-	std::ostringstream oss;
-	oss << m_priority;
-    Tag *prio= new Tag( "priority", oss.str() );
-    p->addChild( prio );
+    std::ostringstream oss;
+    oss << m_priority;
+    p->addChild( new Tag( "priority", oss.str() ) );
     send( p );
   }
 

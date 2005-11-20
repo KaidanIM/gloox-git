@@ -39,11 +39,10 @@ namespace gloox
       AnnotationsHandler::AnnotationsList::const_iterator it = aList.begin();
       for( ; it != aList.end(); ++it )
       {
-        Tag *n = new Tag( "note", (*it).note );
+        Tag *n = new Tag( s, "note", (*it).note );
         n->addAttrib( "jid", (*it).jid );
         n->addAttrib( "cdate", (*it).cdate );
         n->addAttrib( "mdate", (*it).mdate );
-        s->addChild( n );
       }
     }
 

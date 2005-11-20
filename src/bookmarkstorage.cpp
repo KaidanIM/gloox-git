@@ -40,10 +40,9 @@ namespace gloox
       BookmarkHandler::BookmarkList::const_iterator it = bList.begin();
       for( ; it != bList.end(); ++it )
       {
-        Tag *i = new Tag( "url" );
+        Tag *i = new Tag( s, "url" );
         i->addAttrib( "name", (*it).name );
         i->addAttrib( "url", (*it).url );
-        s->addChild( i );
       }
     }
 
@@ -52,16 +51,16 @@ namespace gloox
       BookmarkHandler::ConferenceList::const_iterator it = cList.begin();
       for( ; it != cList.end(); ++it )
       {
-        Tag *i = new Tag( "conference" );
+        Tag *i = new Tag( s, "conference" );
         i->addAttrib( "name", (*it).name );
         i->addAttrib( "jid", (*it).jid );
         if( (*it).autojoin )
           i->addAttrib( "autojoin", "true" );
         else
           i->addAttrib( "autojoin", "false" );
+
         i->addChild( new Tag( "nick", (*it).nick ) );
         i->addChild( new Tag( "password", (*it).password ) );
-        s->addChild( i );
       }
     }
 

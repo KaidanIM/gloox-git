@@ -40,9 +40,8 @@ namespace gloox
     Tag *iq = new Tag( "iq" );
     iq->addAttrib( "type", "get" );
     iq->addAttrib( "id", id );
-    Tag *q = new Tag( "query" );
+    Tag *q = new Tag( iq, "query" );
     q->addAttrib( "xmlns", XMLNS_PRIVACY );
-    iq->addChild( q );
 
     m_parent->trackID( this, id, PL_REQUEST_NAMES );
     m_parent->send( iq );
@@ -56,12 +55,10 @@ namespace gloox
     Tag *iq = new Tag( "iq" );
     iq->addAttrib( "type", "get" );
     iq->addAttrib( "id", id );
-    Tag *q = new Tag( "query" );
+    Tag *q = new Tag( iq, "query" );
     q->addAttrib( "xmlns", XMLNS_PRIVACY );
-    Tag *l = new Tag( "list" );
+    Tag *l = new Tag( q, "list" );
     l->addAttrib( "name", name );
-    q->addChild( l );
-    iq->addChild( q );
 
     m_parent->trackID( this, id, PL_REQUEST_LIST );
     m_parent->send( iq );
@@ -75,12 +72,10 @@ namespace gloox
     Tag *iq = new Tag( "iq" );
     iq->addAttrib( "type", "set" );
     iq->addAttrib( "id", id );
-    Tag *q = new Tag( "query" );
+    Tag *q = new Tag( iq, "query" );
     q->addAttrib( "xmlns", XMLNS_PRIVACY );
-    Tag *l = new Tag( "list" );
+    Tag *l = new Tag( q, "list" );
     l->addAttrib( "name", name );
-    q->addChild( l );
-    iq->addChild( q );
 
     m_parent->trackID( this, id, PL_REMOVE );
     m_parent->send( iq );
@@ -94,12 +89,10 @@ namespace gloox
     Tag *iq = new Tag( "iq" );
     iq->addAttrib( "type", "set" );
     iq->addAttrib( "id", id );
-    Tag *q = new Tag( "query" );
+    Tag *q = new Tag( iq, "query" );
     q->addAttrib( "xmlns", XMLNS_PRIVACY );
-    Tag *d = new Tag( "default" );
+    Tag *d = new Tag( q, "default" );
     d->addAttrib( "name", name );
-    q->addChild( d );
-    iq->addChild( q );
 
     m_parent->trackID( this, id, PL_DEFAULT );
     m_parent->send( iq );
@@ -113,11 +106,9 @@ namespace gloox
     Tag *iq = new Tag( "iq" );
     iq->addAttrib( "type", "set" );
     iq->addAttrib( "id", id );
-    Tag *q = new Tag( "query" );
+    Tag *q = new Tag( iq, "query" );
     q->addAttrib( "xmlns", XMLNS_PRIVACY );
-    Tag *d = new Tag( "default" );
-    q->addChild( d );
-    iq->addChild( q );
+    Tag *d = new Tag( q, "default" );
 
     m_parent->trackID( this, id, PL_UNSET_DEFAULT );
     m_parent->send( iq );
@@ -131,12 +122,10 @@ namespace gloox
     Tag *iq = new Tag( "iq" );
     iq->addAttrib( "type", "set" );
     iq->addAttrib( "id", id );
-    Tag *q = new Tag( "query" );
+    Tag *q = new Tag( iq, "query" );
     q->addAttrib( "xmlns", XMLNS_PRIVACY );
-    Tag *a = new Tag( "active" );
+    Tag *a = new Tag( q, "active" );
     a->addAttrib( "name", name );
-    q->addChild( a );
-    iq->addChild( q );
 
     m_parent->trackID( this, id, PL_ACTIVATE );
     m_parent->send( iq );
@@ -150,11 +139,9 @@ namespace gloox
     Tag *iq = new Tag( "iq" );
     iq->addAttrib( "type", "set" );
     iq->addAttrib( "id", id );
-    Tag *q = new Tag( "query" );
+    Tag *q = new Tag( iq, "query" );
     q->addAttrib( "xmlns", XMLNS_PRIVACY );
-    Tag *a = new Tag( "active" );
-    q->addChild( a );
-    iq->addChild( q );
+    Tag *a = new Tag( q, "active" );
 
     m_parent->trackID( this, id, PL_UNSET_ACTIVATE );
     m_parent->send( iq );
@@ -168,17 +155,17 @@ namespace gloox
     Tag *iq = new Tag( "iq" );
     iq->addAttrib( "type", "set" );
     iq->addAttrib( "id", id );
-    Tag *q = new Tag( "query" );
+    Tag *q = new Tag( iq, "query" );
     q->addAttrib( "xmlns", XMLNS_PRIVACY );
-    Tag *l = new Tag( "list" );
+    Tag *l = new Tag( q, "list" );
     l->addAttrib( "name", name );
 
     int count = 0;
     PrivacyListHandler::PrivacyList::iterator it = list.begin();
     for( ; it != list.end(); ++it )
     {
-      Tag *i = new Tag( "item" );
-      l->addChild( i );
+      Tag *i = new Tag( l, "item" );
+
       switch( (*it).type() )
       {
         case PrivacyItem::TYPE_JID:
@@ -223,9 +210,6 @@ namespace gloox
       oss << ++count;
       i->addAttrib( "order", oss.str() );
     }
-
-    q->addChild( l );
-    iq->addChild( q );
 
     m_parent->trackID( this, id, PL_STORE );
     m_parent->send( iq );
