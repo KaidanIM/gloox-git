@@ -43,10 +43,9 @@ namespace gloox
     Tag *iq = new Tag( "iq" );
     iq->addAttrib( "type", "get" );
     iq->addAttrib( "id", id );
-    Tag *q = new Tag( "query" );
+    Tag *q = new Tag( iq, "query" );
     q->addAttrib( "xmlns", XMLNS_REGISTER );
 
-    iq->addChild( q );
     m_parent->trackID( this, id, FETCH_REGISTRATION_FIELDS );
     m_parent->send( iq );
   }
@@ -61,7 +60,7 @@ namespace gloox
     Tag *iq = new Tag( "iq" );
     iq->addAttrib( "id", id );
     iq->addAttrib( "type", "set" );
-    Tag *q = new Tag( "query" );
+    Tag *q = new Tag( iq, "query" );
     q->addAttrib( "xmlns", XMLNS_REGISTER );
 
     if( fields & FIELD_USERNAME )
@@ -97,7 +96,6 @@ namespace gloox
     if( fields & FIELD_TEXT )
       q->addChild( new Tag( "text", values.text ) );
 
-    iq->addChild( q );
     m_parent->trackID( this, id, CREATE_ACCOUNT );
     m_parent->send( iq );
   }
@@ -113,10 +111,9 @@ namespace gloox
     iq->addAttrib( "type", "set" );
     iq->addAttrib( "id", id );
     iq->addAttrib( "from", m_parent->jid().full() );
-    Tag *q = new Tag( "query" );
+    Tag *q = new Tag( iq, "query" );
     q->addAttrib( "xmlns", XMLNS_REGISTER );
     q->addChild( new Tag( "remove" ) );
-    iq->addChild( q );
 
     m_parent->trackID( this, id, REMOVE_ACCOUNT );
     m_parent->send( iq );
@@ -133,11 +130,10 @@ namespace gloox
     iq->addAttrib( "type", "set" );
     iq->addAttrib( "id", id );
     iq->addAttrib( "to", m_parent->server() );
-    Tag *q = new Tag( "query" );
+    Tag *q = new Tag( iq, "query" );
     q->addAttrib( "xmlns", XMLNS_REGISTER );
     q->addChild( new Tag( "username", m_parent->username() ) );
     q->addChild( new Tag( "password", password ) );
-    iq->addChild( q );
 
     m_parent->trackID( this, id, CHANGE_PASSWORD );
     m_parent->send( iq );
