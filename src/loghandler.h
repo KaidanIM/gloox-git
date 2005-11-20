@@ -39,7 +39,7 @@ namespace gloox
        * @param identifier The log message's origin.
        * @param message The log message.
        */
-      virtual void handleLog( LogLevel level, LogIdentifier identifier, const std::string& message ) = 0;
+      virtual void handleLog( LogLevel level, LogArea identifier, const std::string& message ) = 0;
   };
 
 }
