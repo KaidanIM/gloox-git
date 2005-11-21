@@ -220,14 +220,14 @@ namespace gloox
 #endif
 
     struct protoent* prot;
-    if( ( prot = getprotobyname( "tcp" ) ) == 0)
+    if( ( prot = getprotobyname( "tcp" ) ) == 0 )
     {
       cleanup();
       return -DNS_COULD_NOT_RESOLVE;
     }
 
     int fd;
-    if( ( fd = socket( PF_INET, SOCK_STREAM, prot->p_proto ) ) == -1)
+    if( ( fd = socket( PF_INET, SOCK_STREAM, prot->p_proto ) ) == -1 )
     {
       cleanup();
       return -DNS_COULD_NOT_CONNECT;
@@ -240,21 +240,23 @@ namespace gloox
       return -DNS_COULD_NOT_RESOLVE;
     }
 
-    std::ostringstream oss;
-    oss << "resolved " << domain.c_str() << " to: " << inet_ntoa( *((struct in_addr *)h->h_addr) );
-    LogSink::instance().log( LOG_DEBUG, LOG_CLASS_DNS, oss.str() );
-
     struct sockaddr_in target;
     target.sin_family = AF_INET;
     target.sin_port = htons( port );
-//     target.sin_addr = *( (struct in_addr *)*h->h_addr_list );
 
-#if !defined( SKYOS ) && !defined( WIN32 )
-    if( inet_aton( inet_ntoa(*((struct in_addr *)h->h_addr)), &(target.sin_addr) ) == 0 )
+    if( h->h_length != sizeof( struct in_addr ) )
+    {
+      cleanup();
       return -DNS_COULD_NOT_RESOLVE;
-#else
-    target.sin_addr.s_addr = inet_addr( inet_ntoa(*((struct in_addr *)h->h_addr)) );
-#endif
+    }
+    else
+    {
+      memcpy( &target.sin_addr, h->h_addr, sizeof( struct in_addr ) );
+    }
+
+    std::ostringstream oss;
+    oss << "resolved " << domain.c_str() << " to: " << (char*)&target.sin_addr;
+    LogSink::instance().log( LOG_DEBUG, LOG_CLASS_DNS, oss.str() );
 
     memset( &(target.sin_zero), '\0', 8 );
     if( ::connect( fd, (struct sockaddr *)&target, sizeof( struct sockaddr ) ) == 0 )
