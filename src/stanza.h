@@ -104,6 +104,15 @@ namespace gloox
       virtual const std::string status( const std::string& lang = "default" ) const;
 
       /**
+       * Returns the remote entity resource's presence priority if the stanza is a presence stanza.
+       * If the stanza is not a presence stanza or if no priority information was included, a value
+       * below -128 is returned, which is an illegal value for the priority. Legal range is between
+       * -128 and +127.
+       * @return The priority information contained in the stanza, if any, or a value below -128.
+       */
+      virtual int priority() const { return m_priority; };
+
+      /**
        * Returns the body of a message stanza for the given language if available.
        * If the requested language is not available, the default body (without a xml:lang
        * attribute) will be returned.

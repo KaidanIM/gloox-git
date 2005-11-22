@@ -20,7 +20,7 @@ namespace gloox
   Stanza::Stanza( const std::string& name, const std::string& cdata, const std::string& xmllang )
     : Tag( name, cdata ), m_show( PRESENCE_UNKNOWN ),
       m_stanzaError( ST_ERROR_UNDEFINED ), m_stanzaErrorAppCondition( 0 ),
-      m_xmllang( xmllang )
+      m_xmllang( xmllang ), m_priority( -300 )
   {
   }
 
