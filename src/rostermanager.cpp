@@ -114,25 +114,29 @@ namespace gloox
     RosterListener::Roster::iterator it = m_roster.find( stanza->from().bare() );
     if( it != m_roster.end() )
     {
-      PresenceStatus oldStat = (*it).second->status();
+      bool online = (*it).second->online();
 
-      (*it).second->setStatus( stanza->show() );
-      (*it).second->setStatusMsg( stanza->status() );
+      (*it).second->setStatus( stanza->from().resource(), stanza->show() );
+      (*it).second->setStatusMsg( stanza->from().resource(), stanza->status() );
+      (*it).second->setPriority( stanza->from().resource(), stanza->priority() );
 
       if( stanza->show() == PRESENCE_AVAILABLE )
       {
-        if( oldStat == PRESENCE_UNAVAILABLE )
+        if( !online )
           m_rosterListener->itemAvailable( (*(*it).second), stanza->status() );
         else
           m_rosterListener->presenceUpdated( (*(*it).second), stanza->show(), stanza->status() );
       }
       else if( stanza->show() == PRESENCE_UNAVAILABLE )
+      {
+        (*it).second->removeResource( stanza->from().resource() );
         m_rosterListener->itemUnavailable( (*(*it).second), stanza->status() );
+      }
       else
         m_rosterListener->presenceUpdated( (*(*it).second), stanza->show(), stanza->status() );
     }
     else
-      m_rosterListener->nonrosterPresenceReceived( stanza->from().full() );
+      m_rosterListener->nonrosterPresenceReceived( stanza->from() );
   }
 
   void RosterManager::subscribe( const std::string& jid, const std::string& name,
@@ -387,7 +391,6 @@ namespace gloox
     if( m_roster.find( jid ) == m_roster.end() )
       m_roster[jid] = new RosterItem( jid, name );
 
-    m_roster[jid]->setStatus( PRESENCE_UNAVAILABLE );
     m_roster[jid]->setSubscription( sub, ask );
     m_roster[jid]->setGroups( groups );
   }

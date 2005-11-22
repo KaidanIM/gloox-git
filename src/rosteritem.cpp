@@ -18,7 +18,7 @@ namespace gloox
 {
 
   RosterItem::RosterItem( const std::string& jid, const std::string& name )
-    : m_status( PRESENCE_UNKNOWN ), m_name( name ), m_jid( jid ), m_changed( false )
+    : m_name( name ), m_jid( jid ), m_changed( false )
   {
   }
 
@@ -32,16 +32,40 @@ namespace gloox
     m_changed = true;
   }
 
-  void RosterItem::setStatus( PresenceStatus status )
+  void RosterItem::setStatus( const std::string& resource, PresenceStatus status )
   {
-    m_status = status;
-    m_changed = true;
+    ResourceMap::iterator it = m_resources.find( resource );
+    if( it != m_resources.end() )
+    {
+      ResourceStruct rs = { 0, "", status };
+      m_resources[resource] = rs;
+    }
+    else
+      m_resources[resource].status = status;
   }
 
-  void RosterItem::setStatusMsg( const std::string& msg )
+  void RosterItem::setStatusMsg( const std::string& resource, const std::string& msg )
   {
-    m_statusMessage = msg;
-    m_changed = true;
+    ResourceMap::iterator it = m_resources.find( resource );
+    if( it != m_resources.end() )
+    {
+      ResourceStruct rs = { 0, msg, PRESENCE_UNAVAILABLE };
+      m_resources[resource] = rs;
+    }
+    else
+      m_resources[resource].message = msg;
+  }
+
+  void RosterItem::setPriority( const std::string& resource, int priority )
+  {
+    ResourceMap::iterator it = m_resources.find( resource );
+    if( it != m_resources.end() )
+    {
+      ResourceStruct rs = { priority, "", PRESENCE_UNAVAILABLE };
+      m_resources[resource] = rs;
+    }
+    else
+      m_resources[resource].priority = priority;
   }
 
   void RosterItem::setSubscription( const std::string& subscription, bool ask )
@@ -66,6 +90,13 @@ namespace gloox
   {
     m_groups = groups;
     m_changed = true;
+  }
+
+  void RosterItem::removeResource( const std::string& resource )
+  {
+    ResourceMap::iterator it = m_resources.find( resource );
+    if( it != m_resources.end() )
+      m_resources.erase( it );
   }
 
 }

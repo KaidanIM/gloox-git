@@ -92,7 +92,7 @@ namespace gloox
        * roster push only happens once per connection.
        * @param roster The full roster.
        */
-      virtual void roster( Roster& roster ) = 0;
+      virtual void roster( const Roster& roster ) = 0;
 
       /**
        * This function is called on every status change of an item in the roster.
@@ -103,7 +103,7 @@ namespace gloox
        * @param status The item's new status.
        * @param msg The status change message.
        */
-      virtual void presenceUpdated( RosterItem& item, int status, const std::string& msg ) = 0;
+      virtual void presenceUpdated( const RosterItem& item, int status, const std::string& msg ) = 0;
 
       /**
        * This function is called whenever a roster item comes online (is available).
@@ -112,14 +112,14 @@ namespace gloox
        * @param item The changed roster item.
        * @param msg The status change message.
        */
-      virtual void itemAvailable( RosterItem& item, const std::string& msg ) = 0;
+      virtual void itemAvailable( const RosterItem& item, const std::string& msg ) = 0;
 
       /**
        * This function is called whenever a roster item goes offline (is unavailable).
        * @param item The roster item.
        * @param msg The status change message.
        */
-      virtual void itemUnavailable( RosterItem& item, const std::string& msg ) = 0;
+      virtual void itemUnavailable( const RosterItem& item, const std::string& msg ) = 0;
 
       /**
        * This function is called when an entity wishes to subscribe to this entity's presence.
@@ -141,9 +141,9 @@ namespace gloox
       /**
        * This function is called whenever presence from an entity is received which is not in
        * the roster.
-       * @param jid The entity's JID.
+       * @param jid The entity's full JID.
        */
-      virtual void nonrosterPresenceReceived( const std::string& jid ) = 0;
+      virtual void nonrosterPresenceReceived( const JID& jid ) = 0;
 
   };
 
