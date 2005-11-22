@@ -36,10 +36,10 @@ namespace gloox
        * Reimplement this function if you want to receive the chunks of the conversation
        * between gloox and server.
        * @param level The log message's severity.
-       * @param identifier The log message's origin.
+       * @param area The log message's origin.
        * @param message The log message.
        */
-      virtual void handleLog( LogLevel level, LogArea identifier, const std::string& message ) = 0;
+      virtual void handleLog( LogLevel level, LogArea area, const std::string& message ) = 0;
   };
 
 }
