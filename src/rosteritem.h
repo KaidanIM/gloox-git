@@ -35,6 +35,21 @@ namespace gloox
 
     public:
       /**
+       * Holds resource attributes.
+       */
+      struct ResourceStruct
+      {
+        int priority;               /**< The resource's priority. */
+        std::string message;        /**< The resource's status message, if any. */
+        PresenceStatus status;      /**< The resource's status. */
+      };
+
+      /**
+       * A list of resources for the given JID.
+       */
+      typedef std::map<std::string, ResourceStruct> ResourceMap;
+
+      /**
        * Describes possible subscribtion types according to RFC 3921, Section 9.
        */
       enum SubscriptionEnum
@@ -84,13 +99,13 @@ namespace gloox
        * Retrieves the displayed name of a contact/roster item.
        * @return The contact's name.
        */
-      virtual const std::string name() const { return m_name; };
+      virtual const std::string& name() const { return m_name; };
 
       /**
-       * Returns the contact's JID.
-       * @return The contact's JID.
+       * Returns the contact's bare JID.
+       * @return The contact's bare JID.
        */
-      virtual const std::string jid() const { return m_jid; };
+      virtual const std::string& jid() const { return m_jid; };
 
       /**
        * Returns the current subscription type between the remote and the local entity.
@@ -108,13 +123,7 @@ namespace gloox
        * Returns the groups this RosterItem belongs to.
        * @return The groups this item belongs to.
        */
-      virtual StringList& groups() { return m_groups; };
-
-      /**
-       * Returns the contact's status.
-       * @return The status of the contact.
-       */
-      virtual PresenceStatus status() const { return m_status; };
+      virtual const StringList& groups() { return m_groups; };
 
       /**
        * Whether the item has unsynchronized changes.
@@ -122,18 +131,39 @@ namespace gloox
        */
       virtual bool changed() const { return m_changed; };
 
-    protected:
       /**
-       * Sets the current status of the contact.
-       * @param status The current status, i.e. presence info.
+       * Indicates whether this item has at least one resource online (in any state).
+       * @return @b True if at least one resource is online, @b false otherwise.
        */
-      virtual void setStatus( PresenceStatus status );
+      virtual bool online() const { return m_resources.size(); };
 
       /**
-       * Sets the current status message of the contact.
+       * Returns the contact's resources.
+       * @return The contact's resources.
+       */
+      virtual const ResourceMap& resources() const { return m_resources; };
+
+    protected:
+      /**
+       * Sets the current status of the resource.
+       * @param resource The resource to set the status for.
+       * @param status The current status, i.e. presence info.
+       */
+      virtual void setStatus( const std::string& resource, PresenceStatus status );
+
+      /**
+       * Sets the current status message of the resource.
+       * @param resource The resource to set the status message for.
        * @param msg The current status message, i.e. from the presence info.
        */
-      virtual void setStatusMsg( const std::string& msg );
+      virtual void setStatusMsg( const std::string& resource, const std::string& msg );
+
+      /**
+       * Sets the current priority of the resource.
+       * @param resource The resource to set the status message for.
+       * @param msg The current status message, i.e. from the presence info.
+       */
+      virtual void setPriority( const std::string& resource, int priority );
 
       /**
        * Sets the current subscription status of the contact.
@@ -147,11 +177,16 @@ namespace gloox
        */
       virtual void setSynchronized() { m_changed = false; };
 
+      /**
+       * This function is called to remove subsequent resources from a RosterItem.
+       * @param resource The resource to remove.
+       */
+      virtual void removeResource( const std::string& resource );
+
     private:
       StringList m_groups;
+      ResourceMap m_resources;
       SubscriptionEnum m_subscription;
-      PresenceStatus m_status;
-      std::string m_statusMessage;
       std::string m_name;
       std::string m_jid;
       bool m_changed;
