@@ -34,8 +34,7 @@ namespace gloox
 
   void RosterItem::setStatus( const std::string& resource, PresenceStatus status )
   {
-    ResourceMap::iterator it = m_resources.find( resource );
-    if( it != m_resources.end() )
+    if( m_resources.find( resource ) == m_resources.end() )
     {
       ResourceStruct rs = { 0, "", status };
       m_resources[resource] = rs;
@@ -46,8 +45,7 @@ namespace gloox
 
   void RosterItem::setStatusMsg( const std::string& resource, const std::string& msg )
   {
-    ResourceMap::iterator it = m_resources.find( resource );
-    if( it != m_resources.end() )
+    if( m_resources.find( resource ) == m_resources.end() )
     {
       ResourceStruct rs = { 0, msg, PRESENCE_UNAVAILABLE };
       m_resources[resource] = rs;
@@ -58,8 +56,7 @@ namespace gloox
 
   void RosterItem::setPriority( const std::string& resource, int priority )
   {
-    ResourceMap::iterator it = m_resources.find( resource );
-    if( it != m_resources.end() )
+    if( m_resources.find( resource ) == m_resources.end() )
     {
       ResourceStruct rs = { priority, "", PRESENCE_UNAVAILABLE };
       m_resources[resource] = rs;
