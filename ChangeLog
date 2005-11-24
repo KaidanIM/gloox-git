@@ -1,5 +1,5 @@
 
-v0.7.1 -- xx yy 2005
+v0.7.1 -- 24 Nov 2005
 --------------------
 - ported to NetBSD 2.1
 - RosterManager: use the group's name, not 'group' (thanks to Maciej Paszta)
