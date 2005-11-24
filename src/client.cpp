@@ -38,9 +38,10 @@ namespace gloox
     : ClientBase( XMLNS_CLIENT, server ),
       m_rosterManager( 0 ), m_auth( 0 ), m_disco( 0 ),
       m_resourceBound( false ), m_autoPresence( false ), m_forceNonSasl( false ),
-      m_manageRoster( true ), m_handleDisco( true ),
+      m_manageRoster( true ), m_handleDisco( true ), m_doAuth( false ),
       m_streamFeatures( 0 ), m_priority( -1 )
   {
+    m_jid.setServer( server );
     init();
   }
 
@@ -48,7 +49,7 @@ namespace gloox
     : ClientBase( XMLNS_CLIENT, password, "", port ),
       m_rosterManager( 0 ), m_auth( 0 ), m_disco( 0 ),
       m_resourceBound( false ), m_autoPresence( false ), m_forceNonSasl( false ),
-      m_manageRoster( true ), m_handleDisco( true ),
+      m_manageRoster( true ), m_handleDisco( true ), m_doAuth( true ),
       m_streamFeatures( 0 ), m_priority( -1 )
   {
     m_jid = jid;
@@ -61,7 +62,7 @@ namespace gloox
     : ClientBase( XMLNS_CLIENT, password, server, port ),
       m_rosterManager( 0 ), m_auth( 0 ), m_disco( 0 ),
       m_resourceBound( false ), m_autoPresence( false ), m_forceNonSasl( false ),
-      m_manageRoster( true ), m_handleDisco( true ),
+      m_manageRoster( true ), m_handleDisco( true ), m_doAuth( true ),
       m_streamFeatures( 0 ), m_priority( -1 )
   {
     m_jid.setUsername( username );
@@ -117,7 +118,7 @@ namespace gloox
             bindResource();
           }
         }
-        else if( !username().empty() && !password().empty() )
+        else if( m_doAuth && !username().empty() && !password().empty() )
         {
           if( m_streamFeatures & STREAM_FEATURE_SASL_DIGESTMD5 && !m_forceNonSasl )
           {
@@ -139,7 +140,7 @@ namespace gloox
             disconnect( CONN_NO_SUPPORTED_AUTH );
           }
         }
-        else if( m_streamFeatures & STREAM_FEATURE_SASL_ANONYMOUS )
+        else if( m_doAuth && m_streamFeatures & STREAM_FEATURE_SASL_ANONYMOUS )
         {
           startSASL( SASL_ANONYMOUS );
         }
