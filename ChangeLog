@@ -5,7 +5,9 @@ v0.7.1 -- xx yy 2005
 - RosterManager: use the group's name, not 'group' (thanks to Maciej Paszta)
 - RosterManager: update/set an item's name
 - include config.h.win in distribution
-- allow presence broadcasting in Stanza::createPresenceStanza()
+- Stanza: allow presence broadcasting in createPresenceStanza()
+- Client: allow registration with server which supports SASL ANONYMOUS
+- Client: init m_jid::server for registration
 
 
 v0.7 -- 02 Nov 2005
