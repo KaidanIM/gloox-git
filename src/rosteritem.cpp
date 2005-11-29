@@ -36,7 +36,10 @@ namespace gloox
   {
     if( m_resources.find( resource ) == m_resources.end() )
     {
-      ResourceStruct rs = { 0, "", status };
+      ResourceStruct rs;
+	  rs.priority = 0;
+	  rs.message = "";
+	  rs.status = status;
       m_resources[resource] = rs;
     }
     else
@@ -47,7 +50,10 @@ namespace gloox
   {
     if( m_resources.find( resource ) == m_resources.end() )
     {
-      ResourceStruct rs = { 0, msg, PRESENCE_UNAVAILABLE };
+      ResourceStruct rs;
+	  rs.priority = 0;
+	  rs.message = msg;
+	  rs.status = PRESENCE_UNAVAILABLE;
       m_resources[resource] = rs;
     }
     else
@@ -58,7 +64,10 @@ namespace gloox
   {
     if( m_resources.find( resource ) == m_resources.end() )
     {
-      ResourceStruct rs = { priority, "", PRESENCE_UNAVAILABLE };
+      ResourceStruct rs;
+	  rs.priority = priority;
+	  rs.message = "";
+	  rs.status = PRESENCE_UNAVAILABLE;
       m_resources[resource] = rs;
     }
     else
