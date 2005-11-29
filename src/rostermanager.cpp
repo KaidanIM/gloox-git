@@ -417,6 +417,7 @@ namespace gloox
 
   void RosterManager::handlePrivateXMLResult( const std::string /*uid*/, PrivateXMLResult result )
   {
+    m_delimiterFetched = true;
     if( result == PrivateXMLHandler::PXML_REQUEST_ERROR )
       fill();
   }

@@ -113,8 +113,8 @@ namespace gloox
         }
         else
         {
-          printf( "This server is not XMPP-compliant (it does not send a 'version' attribute). Plase try another one.\n" );
-              disconnect( CONN_STREAM_ERROR );
+          printf( "This server is not XMPP-compliant (it does not send a 'version' attribute). Please try another one.\n" );
+          disconnect( CONN_STREAM_ERROR );
         }
 
         m_sid = stanza->findAttribute( "id" );
