@@ -135,7 +135,7 @@ namespace gloox
        * Indicates whether this item has at least one resource online (in any state).
        * @return @b True if at least one resource is online, @b false otherwise.
        */
-      virtual bool online() const { return m_resources.size(); };
+      virtual bool online() const;
 
       /**
        * Returns the contact's resources.

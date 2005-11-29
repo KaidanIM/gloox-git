@@ -96,4 +96,11 @@ namespace gloox
       m_resources.erase( it );
   }
 
+  bool RosterItem::online() const
+  {
+    if( m_resources.size() )
+      return true;
+    else
+      return false;
+  }
 }
