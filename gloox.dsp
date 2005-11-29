@@ -7,19 +7,19 @@
 CFG=gloox - Win32 Debug
 !MESSAGE Dies ist kein gültiges Makefile. Zum Erstellen dieses Projekts mit NMAKE
 !MESSAGE verwenden Sie den Befehl "Makefile exportieren" und führen Sie den Befehl
-!MESSAGE
+!MESSAGE 
 !MESSAGE NMAKE /f "gloox.mak".
-!MESSAGE
+!MESSAGE 
 !MESSAGE Sie können beim Ausführen von NMAKE eine Konfiguration angeben
 !MESSAGE durch Definieren des Makros CFG in der Befehlszeile. Zum Beispiel:
-!MESSAGE
+!MESSAGE 
 !MESSAGE NMAKE /f "gloox.mak" CFG="gloox - Win32 Debug"
-!MESSAGE
+!MESSAGE 
 !MESSAGE Für die Konfiguration stehen zur Auswahl:
-!MESSAGE
+!MESSAGE 
 !MESSAGE "gloox - Win32 Release" (basierend auf  "Win32 (x86) Dynamic-Link Library")
 !MESSAGE "gloox - Win32 Debug" (basierend auf  "Win32 (x86) Dynamic-Link Library")
-!MESSAGE
+!MESSAGE 
 
 # Begin Project
 # PROP AllowPerConfigDependencies 0
@@ -81,7 +81,7 @@ LINK32=link.exe
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib wsock32.lib iksemel.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
 # SUBTRACT LINK32 /pdb:none
 
-!ENDIF
+!ENDIF 
 
 # Begin Target
 
@@ -149,6 +149,10 @@ SOURCE=.\src\jid.cpp
 # Begin Source File
 
 SOURCE=.\src\lastactivity.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\logsink.cpp
 # End Source File
 # Begin Source File
 
@@ -309,6 +313,10 @@ SOURCE=.\src\lastactivityhandler.h
 # Begin Source File
 
 SOURCE=.\src\loghandler.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\logsink.h
 # End Source File
 # Begin Source File
 
