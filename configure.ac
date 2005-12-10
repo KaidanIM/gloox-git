@@ -4,7 +4,7 @@ AC_PREREQ(2.50)
 AC_INIT
 AC_CONFIG_SRCDIR([configure.ac])
 dnl Every other copy of the package version number gets its value from here
-AM_INIT_AUTOMAKE(gloox,0.7.2)
+AM_INIT_AUTOMAKE(gloox,0.7.3)
 
 dnl create a config.h file (Automake will add -DHAVE_CONFIG_H)
 AM_CONFIG_HEADER(config.h)
@@ -74,12 +74,36 @@ if test "$gnutls" != "no"; then
            gnutls=no)
 fi
 if test "$gnutls" != "no" ; then
-  AC_DEFINE(HAVE_GNUTLS, 1, [Define to 1 if you want TLS support.])
+  AC_DEFINE(HAVE_GNUTLS, 1, [Define to 1 if you want TLS support (GnuTLS). Undefine HAVE_OPENSSL.])
 else
   AC_MSG_WARN([GnuTLS not found])
 fi
 AC_MSG_CHECKING([if GnuTLS should be used])
 AC_MSG_RESULT($gnutls)
+
+dnl OpenSSL
+if test "$gnutls" == "no"; then
+  AC_ARG_WITH(openssl, AC_HELP_STRING([--with-openssl=[DIR]],
+        [Support Stream Encryption (needs OpenSSL)]),
+        openssl=$withval, openssl=yes)
+  if test "$openssl" != "no"; then
+    if test "$openssl" != "yes"; then
+      LDFLAGS="${LDFLAGS} -L$openssl/lib"
+      CPPFLAGS="${CPPFLAGS} -I$openssl/include"
+    fi
+    AC_CHECK_HEADER(openssl/ssl.h,
+    AC_CHECK_LIB(ssl, SSL_library_init,
+            [openssl=yes LIBS="${LIBS} -lssl -lcrypto"], openssl=no),
+            openssl=no)
+  fi
+  if test "$openssl" != "no" ; then
+    AC_DEFINE(HAVE_OPENSSL, 1, [Define to 1 if you want TLS support (OpenSSL).])
+  else
+    AC_MSG_WARN([OpenSSL not found])
+  fi
+  AC_MSG_CHECKING([if OpenSSL should be used])
+  AC_MSG_RESULT($openssl)
+fi
 
 dnl Zlib
 AC_ARG_WITH(zlib, AC_HELP_STRING([--with-zlib=[DIR]],

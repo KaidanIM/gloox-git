@@ -93,7 +93,7 @@ namespace gloox
     {
       m_streamFeatures = getStreamFeatures( stanza );
 
-#ifdef HAVE_GNUTLS
+#ifdef HAVE_TLS
       if( tls() && hasTls() && !m_connection->isSecure() && ( m_streamFeatures & STREAM_FEATURE_STARTTLS ) )
       {
         startTls();
@@ -161,7 +161,7 @@ namespace gloox
         disconnect( CONN_NO_SUPPORTED_AUTH );
       }
     }
-#ifdef HAVE_GNUTLS
+#ifdef HAVE_TLS
     else if( ( stanza->name() == "proceed" ) && stanza->hasAttribute( "xmlns", XMLNS_STREAM_TLS ) )
     {
 #ifdef DEBUG
@@ -179,6 +179,8 @@ namespace gloox
           header();
         }
       }
+      else
+        disconnect( CONN_TLS_FAILED );
     }
     else if( ( stanza->name() == "failure" ) && stanza->hasAttribute( "xmlns", XMLNS_STREAM_TLS ) )
     {

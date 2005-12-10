@@ -15,22 +15,28 @@
 #define CONNECTION_H__
 
 #ifdef WIN32
-#include "../config.h.win"
+# include "../config.h.win"
 #else
-#include "config.h"
+# include "config.h"
 #endif
 
 #include "gloox.h"
 
 #include <string>
 
-#ifdef HAVE_GNUTLS
-#include <gnutls/gnutls.h>
-#include <gnutls/x509.h>
+#if defined( HAVE_OPENSSL )
+# define USE_OPENSSL
+# include <openssl/ssl.h>
+# define HAVE_TLS
+#elif defined( HAVE_GNUTLS )
+# define USE_GNUTLS
+# include <gnutls/gnutls.h>
+# include <gnutls/x509.h>
+# define HAVE_TLS
 #endif
 
 #ifdef HAVE_ZLIB
-#include <zlib.h>
+# include <zlib.h>
 #endif
 
 namespace gloox
@@ -135,7 +141,7 @@ namespace gloox
        bool initCompression( bool init );
 #endif
 
-#ifdef HAVE_GNUTLS
+#ifdef HAVE_TLS
       /**
        * Call this function to start a TLS handshake over an established connection.
        */
@@ -165,15 +171,19 @@ namespace gloox
       z_stream m_zinflate;
 #endif
 
-#ifdef HAVE_GNUTLS
+#if defined( USE_GNUTLS )
+
       bool verifyAgainstCAs( gnutls_x509_crt_t cert, gnutls_x509_crt_t *CAList, int CAListSize );
       bool verifyAgainst( gnutls_x509_crt_t cert, gnutls_x509_crt_t issuer );
 
       gnutls_session_t m_session;
       gnutls_certificate_credentials m_credentials;
 
-      StringList m_cacerts;
+#elif defined( USE_OPENSSL )
+      SSL *m_ssl;
 #endif
+
+      StringList m_cacerts;
 
       Parser *m_parser;
       ConnectionState m_state;

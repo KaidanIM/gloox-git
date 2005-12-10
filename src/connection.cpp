@@ -30,6 +30,7 @@
 #include <unistd.h>
 #else
 #include <winsock.h>
+#define strcasecmp stricmp
 #endif
 
 #include <time.h>
@@ -60,15 +61,76 @@ namespace gloox
 #endif
   }
 
-#ifdef HAVE_GNUTLS
+#if defined( USE_OPENSSL )
   bool Connection::tlsHandshake()
   {
-    const int protocol_priority[] = { GNUTLS_TLS1, GNUTLS_SSL3, 0 };
-    const int kx_priority[]       = { GNUTLS_KX_RSA, 0 };
-    const int cipher_priority[]   = { GNUTLS_CIPHER_AES_256_CBC, GNUTLS_CIPHER_AES_128_CBC,
+    SSL_library_init();
+    SSL_CTX *sslCTX = SSL_CTX_new( TLSv1_client_method() );
+    if( !sslCTX )
+      return false;
+
+    if( !SSL_CTX_set_cipher_list( sslCTX, "HIGH:MEDIUM:AES:@STRENGTH" ) )
+      return false;
+
+    StringList::const_iterator it = m_cacerts.begin();
+    for( ; it != m_cacerts.end(); ++it )
+      SSL_CTX_load_verify_locations( sslCTX, (*it).c_str(), NULL );
+
+    m_ssl = SSL_new( sslCTX );
+    SSL_set_connect_state( m_ssl );
+
+    BIO *socketBio = BIO_new_socket( m_socket, BIO_NOCLOSE );
+    if( !socketBio )
+      return false;
+
+    SSL_set_bio( m_ssl, socketBio, socketBio );
+    SSL_set_mode( m_ssl, SSL_MODE_AUTO_RETRY );
+
+    if( !SSL_connect( m_ssl ) )
+      return false;
+
+    m_secure = true;
+
+    int res = SSL_get_verify_result( m_ssl );
+    if( res != X509_V_OK )
+      m_certInfo.status = CERT_INVALID;
+    else
+      m_certInfo.status = CERT_OK;
+
+    X509 *peer;
+    peer = SSL_get_peer_certificate( m_ssl );
+    if( peer )
+    {
+      char peer_CN[256];
+      X509_NAME_get_text_by_NID( X509_get_issuer_name( peer ), NID_commonName, peer_CN, sizeof( peer_CN ) );
+      m_certInfo.issuer = peer_CN;
+      X509_NAME_get_text_by_NID( X509_get_subject_name( peer ), NID_commonName, peer_CN, sizeof( peer_CN ) );
+      m_certInfo.server = peer_CN;
+      if( strcasecmp( peer_CN, m_server.c_str() ) )
+        m_certInfo.status |= CERT_WRONG_PEER;
+    }
+
+    const char *tmp;
+    tmp = SSL_get_cipher_name( m_ssl );
+    if( tmp )
+      m_certInfo.cipher = tmp;
+
+    tmp = SSL_get_cipher_version( m_ssl );
+    if( tmp )
+      m_certInfo.protocol = tmp;
+
+    return true;
+  }
+
+#elif defined( USE_GNUTLS )
+  bool Connection::tlsHandshake()
+  {
+    const int protocolPriority[] = { GNUTLS_TLS1, GNUTLS_SSL3, 0 };
+    const int kxPriority[]       = { GNUTLS_KX_RSA, 0 };
+    const int cipherPriority[]   = { GNUTLS_CIPHER_AES_256_CBC, GNUTLS_CIPHER_AES_128_CBC,
                                              GNUTLS_CIPHER_3DES_CBC, GNUTLS_CIPHER_ARCFOUR, 0 };
-    const int comp_priority[]     = { GNUTLS_COMP_ZLIB, GNUTLS_COMP_NULL, 0 };
-    const int mac_priority[]      = { GNUTLS_MAC_SHA, GNUTLS_MAC_MD5, 0 };
+    const int compPriority[]     = { GNUTLS_COMP_ZLIB, GNUTLS_COMP_NULL, 0 };
+    const int macPriority[]      = { GNUTLS_MAC_SHA, GNUTLS_MAC_MD5, 0 };
 
     if( gnutls_global_init() != 0 )
       return false;
@@ -86,11 +148,11 @@ namespace gloox
       return false;
     }
 
-    gnutls_protocol_set_priority( m_session, protocol_priority );
-    gnutls_cipher_set_priority( m_session, cipher_priority );
-    gnutls_compression_set_priority( m_session, comp_priority );
-    gnutls_kx_set_priority( m_session, kx_priority );
-    gnutls_mac_set_priority( m_session, mac_priority );
+    gnutls_protocol_set_priority( m_session, protocolPriority );
+    gnutls_cipher_set_priority( m_session, cipherPriority );
+    gnutls_compression_set_priority( m_session, compPriority );
+    gnutls_kx_set_priority( m_session, kxPriority );
+    gnutls_mac_set_priority( m_session, macPriority );
     gnutls_credentials_set( m_session, GNUTLS_CRD_CERTIFICATE, m_credentials );
 
     gnutls_transport_set_ptr( m_session, (gnutls_transport_ptr_t)m_socket );
@@ -359,10 +421,16 @@ namespace gloox
     // optimize(?): recv returns the size. set size+1 = \0
     memset( m_buf, '\0', BUFSIZE );
     int size;
-#ifdef HAVE_GNUTLS
+#if defined( USE_GNUTLS )
     if( m_secure )
     {
       size = gnutls_record_recv( m_session, m_buf, BUFSIZE );
+    }
+    else
+#elif defined( USE_OPENSSL )
+    if( m_secure )
+    {
+      size = SSL_read( m_ssl, m_buf, BUFSIZE );
     }
     else
 #endif
@@ -449,7 +517,7 @@ namespace gloox
     if( !xml )
       return;
 
-#ifdef HAVE_GNUTLS
+#if defined( USE_GNUTLS )
     if( m_secure )
     {
       int ret;
@@ -459,6 +527,14 @@ namespace gloox
         ret = gnutls_record_send( m_session, xml, len );
       }
       while( ( ret == GNUTLS_E_AGAIN ) || ( ret == GNUTLS_E_INTERRUPTED ) );
+    }
+    else
+#elif defined( USE_OPENSSL )
+    if( m_secure )
+    {
+      int ret;
+      int len = strlen( xml );
+      ret = SSL_write( m_ssl, xml, len );
     }
     else
 #endif
@@ -528,13 +604,19 @@ namespace gloox
     m_state = STATE_DISCONNECTED;
     m_disconnect = CONN_OK;
 
-#ifdef HAVE_GNUTLS
+#if defined( USE_GNUTLS )
     if( m_secure )
     {
       gnutls_bye( m_session, GNUTLS_SHUT_RDWR );
       gnutls_deinit( m_session );
       gnutls_certificate_free_credentials( m_credentials );
       gnutls_global_deinit();
+    }
+#elif defined( USE_OPENSSL )
+    if( m_secure )
+    {
+      SSL_shutdown( m_ssl );
+      SSL_free( m_ssl );
     }
 #endif
     m_secure = false;

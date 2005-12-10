@@ -1,4 +1,9 @@
 
+v0.7.3 -- 10 Dec 2005
+--------------------
+- added optional OpenSSL support
+
+
 v0.7.2 -- 06 Dec 2005
 --------------------
 - RosterManager: fixed a problem with servers not supporting private XML storage
