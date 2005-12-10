@@ -77,7 +77,7 @@ namespace gloox
     if( !m_connection )
       m_connection = new Connection( m_parser, m_server, m_port );
 
-#ifdef HAVE_GNUTLS
+#ifdef HAVE_TLS
     m_connection->setCACerts( m_cacerts );
 #endif
     int ret = m_connection->connect();
@@ -185,14 +185,14 @@ namespace gloox
 
   bool ClientBase::hasTls()
   {
-#ifdef HAVE_GNUTLS
+#ifdef HAVE_TLS
     return true;
 #else
     return false;
 #endif
   }
 
-#ifdef HAVE_GNUTLS
+#ifdef HAVE_TLS
   void ClientBase::startTls()
   {
     Tag *start = new Tag( "starttls" );
