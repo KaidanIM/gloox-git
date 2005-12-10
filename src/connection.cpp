@@ -65,8 +65,6 @@ namespace gloox
 #if defined( USE_OPENSSL )
   bool Connection::tlsHandshake()
   {
-    printf( "in openssl  handshale\n" );
-
     SSL_library_init();
     SSL_CTX *sslCTX = SSL_CTX_new( TLSv1_client_method() );
     if( !sslCTX )
@@ -75,19 +73,12 @@ namespace gloox
     if( !SSL_CTX_set_cipher_list( sslCTX, "HIGH:MEDIUM:AES:@STRENGTH" ) )
       return false;
 
-
-    printf( "in openssl  after SSL_CTX_new\n" );
-
     StringList::const_iterator it = m_cacerts.begin();
     for( ; it != m_cacerts.end(); ++it )
       SSL_CTX_load_verify_locations( sslCTX, (*it).c_str(), NULL );
 
-    printf( "in openssl  after SSL_CTX_load_verify_locations\n" );
-
     m_ssl = SSL_new( sslCTX );
     SSL_set_connect_state( m_ssl );
-
-    printf( "in openssl  after SSL_set_connect_state\n" );
 
     BIO *socketBio = BIO_new_socket( m_socket, BIO_NOCLOSE );
     if( !socketBio )
@@ -99,23 +90,7 @@ namespace gloox
     if( !SSL_connect( m_ssl ) )
       return false;
 
-    printf( "in openssl  before return\n" );
-
     m_secure = true;
-
-    //    int status;                     /**< Bitwise or'ed CertStatus or CERT_OK. */
-    //    bool chain;                     /**< Determines whether the cert chain verified ok. */
-    //    std::string issuer;             /**< The name of the issuing entity.*/
-    //    std::string server;             /**< The server the certificate has been issued for. */
-    //    int date_from;                  /**< The date from which onwards the certificate is valid. */
-    //    int date_to;                    /**< The date up to which the certificate is valid. */
-    //    std::string protocol;           /**< The encryption protocol used for the connection. */
-    //    std::string cipher;             /**< The cipher used for the connection. */
-    //    std::string mac;                /**< The MAC used for the connection. */
-    //    std::string compression;        /**< The compression used for the connection. */
-
-//     m_certInfo
-
 
     int res = SSL_get_verify_result( m_ssl );
     if( res != X509_V_OK )
@@ -145,9 +120,9 @@ namespace gloox
     if( tmp )
       m_certInfo.protocol = tmp;
 
-
     return true;
   }
+
 #elif defined( USE_GNUTLS )
   bool Connection::tlsHandshake()
   {
