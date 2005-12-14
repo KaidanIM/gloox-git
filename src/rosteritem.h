@@ -117,6 +117,12 @@ namespace gloox
       virtual PresenceStatus status() const { return m_status; };
 
       /**
+       * Returns the contact's status message.
+       * @return The contact's status message.
+       */
+      virtual const std::string statusMsg() const { return m_statusMessage; };
+
+      /**
        * Whether the item has unsynchronized changes.
        * @return @b True if the item has unsynchronized changes, @b false otherwise.
        */
