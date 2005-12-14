@@ -65,9 +65,9 @@ namespace gloox
           if( t->hasChild( "conflict" ) || t->hasAttribute( "code", "409" ) )
             m_parent->setAuthFailure( NONSASL_CONFLICT );
           else if( t->hasChild( "not-acceptable" ) || t->hasAttribute( "code", "406" ) )
-            m_parent->setAuthFailure( NONSASL_NOT_AUTHORIZED );
-          else if( t->hasChild( "not-authorized" ) || t->hasAttribute( "code", "401" ) )
             m_parent->setAuthFailure( NONSASL_NOT_ACCEPTABLE );
+          else if( t->hasChild( "not-authorized" ) || t->hasAttribute( "code", "401" ) )
+            m_parent->setAuthFailure( NONSASL_NOT_AUTHORIZED );
         }
         break;
       }

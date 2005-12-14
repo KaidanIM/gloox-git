@@ -397,8 +397,9 @@ namespace gloox
   {
     if( m_cancel )
     {
+      ConnectionError e = m_disconnect;
       cleanup();
-      return CONN_USER_DISCONNECTED;
+      return e;
     }
 
     if( !m_fdRequested )
