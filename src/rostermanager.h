@@ -103,6 +103,14 @@ namespace gloox
       void unsubscribe( const std::string& jid, const std::string& msg, bool remove );
 
       /**
+       * Use this function to acknowledge a subscription request if you requested asynchronous
+       * subscription request handling.
+       * @param to The JID to authorize/decline.
+       * @param ack Whether to authorize or decline the contact's request.
+       */
+      void ackSubscriptionRequest( const JID& to, bool ack );
+
+      /**
        * Use this function to retrieve the delimiter of Nested Roster Groups (JEP-0083).
        * @return The group delimiter.
        * @since 0.7
@@ -118,9 +126,14 @@ namespace gloox
 
       /**
        * Register @c rl as object that receives updates on roster operations.
+       * For GUI applications it may be necessary to display a dialog or whatever to
+       * the user without blocking. If you want that, use asynchronous subscription
+       * requests. If you want to answer an request right away, make it synchronous.
        * @param rl The object that receives roster updates.
+       * @param blockingSubscribeReq Indicates whether (Un)SubscriptionRequests shall
+       * be handled synchronous (@b true) or asynchronous (@b false). Default: synchronous.
        */
-      void registerRosterListener( RosterListener *rl );
+      void registerRosterListener( RosterListener *rl, bool syncSubscribeReq = true );
 
       /**
        * Complementary function to @ref registerRosterListener. Removes the current RosterListener.
@@ -158,6 +171,7 @@ namespace gloox
 
       std::string m_delimiter;
       bool m_delimiterFetched;
+      bool m_syncSubscribeReq;
 
   };
 

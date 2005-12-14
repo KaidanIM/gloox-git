@@ -23,7 +23,8 @@ namespace gloox
 {
 
   RosterManager::RosterManager( ClientBase *parent, bool self )
-  : m_rosterListener( 0 ), m_parent( parent ), m_privateXML( 0 ), m_delimiterFetched( false )
+  : m_rosterListener( 0 ), m_parent( parent ), m_privateXML( 0 ), m_delimiterFetched( false ),
+    m_syncSubscribeReq( false )
   {
     if( m_parent )
     {
@@ -136,7 +137,14 @@ namespace gloox
         m_rosterListener->presenceUpdated( (*(*it).second), stanza->show(), stanza->status() );
     }
     else
+    {
+      StringList sl;
+      add( stanza->from().bare(), std::string(), sl, "none", false );
+      m_roster[stanza->from().bare()]->setStatus( stanza->from().resource(), stanza->show() );
+      m_roster[stanza->from().bare()]->setStatusMsg( stanza->from().resource(), stanza->status() );
+      m_roster[stanza->from().bare()]->setPriority( stanza->from().resource(), stanza->priority() );
       m_rosterListener->nonrosterPresenceReceived( stanza->from() );
+    }
   }
 
   void RosterManager::subscribe( const std::string& jid, const std::string& name,
@@ -244,6 +252,26 @@ namespace gloox
     }
   }
 
+  void RosterManager::ackSubscriptionRequest( const JID& to, bool ack )
+  {
+    if( ack )
+    {
+      Tag *p = new Tag( "presence" );
+      p->addAttribute( "type", "subscribed" );
+      p->addAttribute( "from", m_parent->jid().bare() );
+      p->addAttribute( "to", to.bare() );
+      m_parent->send( p );
+    }
+    else
+    {
+      Tag *p = new Tag( "presence" );
+      p->addAttribute( "type", "unsubscribed" );
+      p->addAttribute( "from", m_parent->jid().bare() );
+      p->addAttribute( "to", to.bare() );
+      m_parent->send( p );
+    }
+  }
+
   void RosterManager::handleSubscription( Stanza *stanza )
   {
     if( !m_rosterListener )
@@ -252,21 +280,10 @@ namespace gloox
     switch( stanza->subtype() )
     {
       case STANZA_S10N_SUBSCRIBE:
-        if( m_rosterListener->subscriptionRequest( stanza->from().bare(), stanza->status() ) )
+        bool answer = m_rosterListener->subscriptionRequest( stanza->from().bare(), stanza->status() );
+        if( m_syncSubscribeReq )
         {
-          Tag *p = new Tag( "presence" );
-          p->addAttribute( "type", "subscribed" );
-          p->addAttribute( "from", m_parent->jid().bare() );
-          p->addAttribute( "to", stanza->from().bare() );
-          m_parent->send( p );
-        }
-        else
-        {
-          Tag *p = new Tag( "presence" );
-          p->addAttribute( "type", "unsubscribed" );
-          p->addAttribute( "from", m_parent->jid().bare() );
-          p->addAttribute( "to", stanza->from().bare() );
-          m_parent->send( p );
+          ackSubscriptionRequest( stanza->from(), answer );
         }
         break;
 
@@ -290,7 +307,8 @@ namespace gloox
         p->addAttribute( "to", stanza->from().bare() );
         m_parent->send( p );
 
-        if( m_rosterListener->unsubscriptionRequest( stanza->from().bare(), stanza->status() ) )
+        bool answer = m_rosterListener->unsubscriptionRequest( stanza->from().bare(), stanza->status() );
+        if( m_syncSubscribeReq && answer )
           unsubscribe( stanza->from().bare(), "", true );
         break;
       }
@@ -312,13 +330,15 @@ namespace gloox
     }
   }
 
-  void RosterManager::registerRosterListener( RosterListener *rl )
+  void RosterManager::registerRosterListener( RosterListener *rl, bool syncSubscribeReq )
   {
+    m_syncSubscribeReq = syncSubscribeReq;
     m_rosterListener = rl;
   }
 
   void RosterManager::removeRosterListener()
   {
+    m_syncSubscribeReq = false;
     m_rosterListener = 0;
   }
 
