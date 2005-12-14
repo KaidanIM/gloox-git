@@ -7,6 +7,7 @@ v0.7.4 -- 15 Dec 2005
 - Connection: return correct disconnect reason if non-SASL auth fails in non-blocking connect mode
 - RosterManager: handle 'early presence' correctly
 - when using OpenSSL: imply: no cert == invalid cert
+- RosterItem: added statusMsg()
 
 
 v0.7.3 -- 10 Dec 2005
