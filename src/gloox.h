@@ -243,7 +243,7 @@
 
 #define XMPP_STREAM_VERSION_MAJOR  "1"
 #define XMPP_STREAM_VERSION_MINOR  "0"
-#define GLOOX_VERSION              "0.7.3"
+#define GLOOX_VERSION              "0.7.4"
 
 /**
  * @brief The namespace for the gloox library.

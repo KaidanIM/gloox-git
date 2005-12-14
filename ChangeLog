@@ -1,4 +1,14 @@
 
+v0.7.4 -- 15 Dec 2005
+--------------------
+- RosterListener: add asynchronous subscription request notification
+- LastActivity: Fix bug were stanza was not sent
+- NonSaslAuth: don't confuse auth failure reason
+- Connection: return correct disconnect reason if non-SASL auth fails in non-blocking connect mode
+- RosterManager: handle 'early presence' correctly
+- when using OpenSSL: imply: no cert == invalid cert
+
+
 v0.7.3 -- 10 Dec 2005
 --------------------
 - added optional OpenSSL support
