@@ -109,6 +109,10 @@ namespace gloox
       if( strcasecmp( peer_CN, m_server.c_str() ) )
         m_certInfo.status |= CERT_WRONG_PEER;
     }
+    else
+    {
+      m_certInfo.status = CERT_INVALID;
+    }
 
     const char *tmp;
     tmp = SSL_get_cipher_name( m_ssl );
@@ -396,8 +400,9 @@ namespace gloox
   {
     if( m_cancel )
     {
+      ConnectionError e = m_disconnect;
       cleanup();
-      return CONN_USER_DISCONNECTED;
+      return e;
     }
 
     if( !m_fdRequested )

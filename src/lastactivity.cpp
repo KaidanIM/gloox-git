@@ -67,7 +67,7 @@ namespace gloox
         q->addAttrib( "seconds", oss.str() );
         q->addAttrib( "xmlns", XMLNS_LAST );
 
-        m_parent->send( t);
+        m_parent->send( t );
         break;
       }
 
@@ -81,6 +81,8 @@ namespace gloox
         e->addAttrib( "type", "cancel" );
         Tag *f = new Tag( e, "feature-not-implemented" );
         f->addAttrib( "xmlns", XMLNS_XMPP_STANZAS );
+
+        m_parent->send( t );
         break;
       }
 
