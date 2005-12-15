@@ -280,13 +280,14 @@ namespace gloox
     switch( stanza->subtype() )
     {
       case STANZA_S10N_SUBSCRIBE:
+      {
         bool answer = m_rosterListener->subscriptionRequest( stanza->from().bare(), stanza->status() );
         if( m_syncSubscribeReq )
         {
           ackSubscriptionRequest( stanza->from(), answer );
         }
         break;
-
+      }
       case STANZA_S10N_SUBSCRIBED:
       {
 //         Tag *p = new Tag( "presence" );
