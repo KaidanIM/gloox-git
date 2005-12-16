@@ -44,7 +44,7 @@ namespace gloox
        * on the server-side roster (items subject to a so-called Roster Push).
        * This function will be called regardless who added the item, either this
        * resource or another. However, it will not be called for JIDs for which
-       * presence is received from without them being on the roster.
+       * presence is received without them being on the roster.
        * @param jid The new item's full address.
        */
       virtual void itemAdded( const std::string& jid ) = 0;
@@ -124,7 +124,7 @@ namespace gloox
       /**
        * This function is called when an entity wishes to subscribe to this entity's presence.
        * If the handler is registered as a asynchronous handler for subscription requests,
-       * the return value of this function is ignored. In async mode, you should use
+       * the return value of this function is ignored. In this case you should use
        * RosterManager::ackSubscriptionRequest() to answer the request.
        * @param jid The requesting item's address.
        * @param msg A message sent along with the request.
@@ -136,7 +136,7 @@ namespace gloox
       /**
        * This function is called when an entity unsubscribes from this entity's presence.
        * If the handler is registered as a asynchronous handler for subscription requests,
-       * the return value of this function is ignored. In async mode, you should use
+       * the return value of this function is ignored. In this case you should use
        * RosterManager::unsubscribe() if you want to unsubscribe yourself from the contct's
        * presence and to remove the contact from the roster.
        * @param jid The item's address.
