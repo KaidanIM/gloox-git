@@ -226,6 +226,7 @@
 #define XMLNS_ROSTER            "jabber:iq:roster"
 #define XMLNS_LAST              "jabber:iq:last"
 #define XMLNS_DATA_FORMS        "jabber:x:data"
+#define XMLNS_X_EVENT           "jabber:x:event"
 #define XMLNS_BOOKMARKS         "storage:bookmarks"
 #define XMLNS_ANNOTATIONS       "storage:rosternotes"
 #define XMLNS_ROSTER_DELIMITER  "roster:delimiter"
