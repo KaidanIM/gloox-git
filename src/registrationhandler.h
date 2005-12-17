@@ -7,7 +7,7 @@
   This software may not be copied, modified, sold or distributed
   other than expressed in the named license agreement.
 
-  This software is distributed without any warrenty.
+  This software is distributed without any warranty.
 */
 
 
