@@ -35,9 +35,9 @@ namespace gloox
    * on its own.
    *
    * MessageSession adds an abstraction to a chat conversation. A MessageSession is responsible for
-   * communicating with exactly one (full) JID. It is extensible by arbitrary decorators and is,
-   * for instance, able to offer GPG encryption/decryption of messages sent through it (using a
-   * decorator written for that purpose).
+   * communicating with exactly one (full) JID. It is extensible by arbitrary decorators which,
+   * for instance, offer Message Events support for messages sent through it. Message Events are
+   * implemented in the MessageEventDecorator.
    *
    * You can still use the old MessageHandler in parallel, but messages will not be relayed to both
    * the generic MessageHandler and a MessageSession established for the sender's JID. The MessageSession
@@ -51,7 +51,7 @@ namespace gloox
     public:
       /**
        * Constructs a new MessageSession for the given JID.
-       * It is recommended to supply a full JID, in other words, it should have an resource.
+       * It is recommended to supply a full JID, in other words, it should have set a resource.
        * No resource can lead to unexpected behavior. A thread ID is generated and sent along
        * with every message sent through this session.
        * @param parent The ClientBase to use for communication.
