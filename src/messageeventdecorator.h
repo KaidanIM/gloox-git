@@ -30,7 +30,9 @@ namespace gloox
    * Usage:
    * @code
    * MessageSession *msgSess = new MessageSession( clntBase );
-   * msgSess = new MessageEventDecorator( msgSess );
+   * int defaultEvents = MESSAGE_EVENT_OFFLINE | MESSAGE_EVENT_DELIVERED
+   *             | MESSAGE_EVENT_DISPLAYED | MESSAGE_EVENT_COMPOSING
+   * msgSess = new MessageEventDecorator( msgSess, defaultEvents );
    * @endcode
    * And use it like you would use a MessageSession.
    *
@@ -51,7 +53,7 @@ namespace gloox
        * MessageSession.
        * @param ms The MessageSession to decorate.
        * @param defaultEvents Bit-wise ORed MessageEventType's which shall be requested
-       * for every message sent.
+       * for every message sent. Default: none.
        */
       MessageEventDecorator( MessageSession *ms, int defaultEvents = 0 );
 
@@ -109,6 +111,7 @@ namespace gloox
       int m_defaultEvents;
 
   };
+
 }
 
 #endif // MESSAGEVENTDECORATOR
