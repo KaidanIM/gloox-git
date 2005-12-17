@@ -29,7 +29,7 @@ namespace gloox
   class Stanza;
 
   /**
-   * @brief This class implements a Jabber Client.
+   * @brief This class implements a basic Jabber Client.
    *
    * It supports SASL (Authentication) as well as TLS (Encryption), which can be switched on/off
    * separately. They are used automatically if the server supports them.
@@ -39,7 +39,7 @@ namespace gloox
    * Interfaces (ConnectionListener, PresenceHandler, MessageHandler, IqHandler, SubscriptionHandler),
    * and call @ref connect() to establish the connection to the server.<br>
    *
-   * Usage example:
+   * Simple usage example:
    * @code
    * void Class::doIt()
    * {
@@ -57,6 +57,8 @@ namespace gloox
    *   // handle incoming presence packets here
    * }
    * @endcode
+   *
+   * However, you can skip the presence handling stuff if you make use of the RosterManager.
    *
    * By default, the library handles a few (incoming) IQ namespaces on the application's behalf. These
    * include:

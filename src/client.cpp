@@ -199,9 +199,8 @@ namespace gloox
     else if( ( stanza->name() == "failure" ) && stanza->hasAttribute( "xmlns", XMLNS_STREAM_COMPRESS ) )
     {
       LogSink::instance().log( LOG_ERROR, LOG_CLASS_CLIENT, "stream compression init failed!" );
-
       disconnect( CONN_TLS_FAILED );
-}
+    }
     else if( ( stanza->name() == "compressed" ) && stanza->hasAttribute( "xmlns", XMLNS_STREAM_COMPRESS ) )
     {
       LogSink::instance().log( LOG_DEBUG, LOG_CLASS_CLIENT, "stream compression inited" );
