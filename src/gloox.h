@@ -670,6 +670,20 @@ namespace gloox
   };
 
   /**
+   * The possible Message Events according to JEP-0022.
+   */
+  enum MessageEventType
+  {
+    MESSAGE_EVENT_CANCEL    = 0, /**< Cancels the 'Composing' event. */
+    MESSAGE_EVENT_OFFLINE   = 1, /**< Indicates that the message has been stored offline by the
+                                  * intended recipient's server. */
+    MESSAGE_EVENT_DELIVERED = 2, /**< Indicates that the message has been delivered to the
+                                  * recipient. */
+    MESSAGE_EVENT_DISPLAYED = 4, /**< Indicates that the message has been displayed */
+    MESSAGE_EVENT_COMPOSING = 8  /**< Indicates that a reply is being composed. */
+  };
+
+  /**
    * A list of strings.
    */
   typedef std::list<std::string> StringList;
