@@ -17,8 +17,9 @@
 namespace gloox
 {
 
-  MessageEventDecorator::MessageEventDecorator( MessageSession *ms )
-  : SessionDecorator( ms ), m_parent( ms ), m_events( 0 )
+  MessageEventDecorator::MessageEventDecorator( MessageSession *ms, int defaultEvents )
+    : SessionDecorator( ms ), m_parent( ms ), m_messageEventHandler( 0 ), m_requestedEvents( 0 ),
+      m_defaultEvents( defaultEvents )
   {
   }
 
@@ -28,41 +29,40 @@ namespace gloox
 
   void MessageEventDecorator::handleMessage( Stanza *stanza )
   {
-    if( !m_messageEventHandler )
-      return;
-
-    if( stanza->hasChild( "x", "xmlns", XMLNS_X_EVENT ) )
+    if( ( m_messageEventHandler ) && stanza->hasChild( "x", "xmlns", XMLNS_X_EVENT ) )
     {
       if( stanza->body().empty() )
       {
         Tag *x = stanza->findChild( "x" );
         if( x->hasChild( "offline" ) )
-          m_messageEventHandler->handleOfflineEvent( stanza->from() );
+          m_messageEventHandler->handleMessageEvent( stanza->from(), MESSAGE_EVENT_OFFLINE );
         else if( x->hasChild( "delivered" ) )
-          m_messageEventHandler->handleDeliveredEvent( stanza->from() );
+          m_messageEventHandler->handleMessageEvent( stanza->from(), MESSAGE_EVENT_DELIVERED );
         else if( x->hasChild( "displayed" ) )
-          m_messageEventHandler->handleDisplayedEvent( stanza->from() );
+          m_messageEventHandler->handleMessageEvent( stanza->from(), MESSAGE_EVENT_DISPLAYED );
         else if( x->hasChild( "composing" ) )
-          m_messageEventHandler->handleComposingEvent( stanza->from() );
+          m_messageEventHandler->handleMessageEvent( stanza->from(), MESSAGE_EVENT_COMPOSING );
+        else
+          m_messageEventHandler->handleMessageEvent( stanza->from(), MESSAGE_EVENT_CANCEL );
       }
       else
       {
-        m_events = 0;
+        m_requestedEvents = 0;
         Tag *x = stanza->findChild( "x" );
         if( x->hasChild( "offline" ) )
-          m_events |= MESSAGE_EVENT_OFFLINE;
+          m_requestedEvents |= MESSAGE_EVENT_OFFLINE;
         if( x->hasChild( "delivered" ) )
-          m_events |= MESSAGE_EVENT_DELIVERED;
+          m_requestedEvents |= MESSAGE_EVENT_DELIVERED;
         if( x->hasChild( "displayed" ) )
-          m_events |= MESSAGE_EVENT_DISPLAYED;
+          m_requestedEvents |= MESSAGE_EVENT_DISPLAYED;
         if( x->hasChild( "composing" ) )
-          m_events |= MESSAGE_EVENT_COMPOSING;
+          m_requestedEvents |= MESSAGE_EVENT_COMPOSING;
       }
     }
     else
     {
-      m_events = 0;
-      m_lastID = "";
+      m_requestedEvents = 0;
+      m_lastID.clear();
     }
 
     m_parent->handleMessage( stanza );
@@ -70,29 +70,34 @@ namespace gloox
 
   void MessageEventDecorator::raiseEvent( MessageEventType event )
   {
-    Tag *m = new Tag( "message" );
-    m->addAttribute( "to", m_parent->target().full() );
-    Tag *x = new Tag( m, "x" );
-    x->addAttribute( "xmlns", XMLNS_X_EVENT );
-    new Tag( x, "id", m_lastID );
-
-    switch( event )
+    if( event & m_requestedEvents )
     {
-      case MESSAGE_EVENT_OFFLINE:
-        new Tag( x, "offline" );
-        break;
-      case MESSAGE_EVENT_DELIVERED:
-        new Tag( x, "delivered" );
-        break;
-      case MESSAGE_EVENT_DISPLAYED:
-        new Tag( x, "displayed" );
-        break;
-      case MESSAGE_EVENT_COMPOSING:
-        new Tag( x, "composing" );
-        break;
-    }
+      Tag *m = new Tag( "message" );
+      m->addAttribute( "to", m_parent->target().full() );
+      Tag *x = new Tag( m, "x" );
+      x->addAttribute( "xmlns", XMLNS_X_EVENT );
+      new Tag( x, "id", m_lastID );
 
-    send( m );
+      switch( event )
+      {
+        case MESSAGE_EVENT_OFFLINE:
+          new Tag( x, "offline" );
+          break;
+        case MESSAGE_EVENT_DELIVERED:
+          new Tag( x, "delivered" );
+          break;
+        case MESSAGE_EVENT_DISPLAYED:
+          new Tag( x, "displayed" );
+          break;
+        case MESSAGE_EVENT_COMPOSING:
+          new Tag( x, "composing" );
+          break;
+        case MESSAGE_EVENT_CANCEL:
+          break;
+      }
+
+      send( m );
+    }
   }
 
   void MessageEventDecorator::send( Tag *tag )

@@ -55,7 +55,6 @@ namespace gloox
        * No resource can lead to unexpected behavior.
        * @param parent The ClientBase to use for communication.
        * @param JID The remote contact's full JID.
-       * @param mh The MessageHandler to receive incoming messages from jid.
        */
       MessageSession( ClientBase *parent, const JID& jid );
 
