@@ -96,7 +96,8 @@ namespace gloox
       /**
        * Use this periodically to receive data from the socket and to feed the parser. You need to use
        * this only if you chose to connect in non-blocking mode.
-       * @param timeout The timeout to use for select. Default of -1 means blocking until data was available.
+       * @param timeout The timeout to use for select. Default of -1 means blocking until data was
+       * available.
        * @return The state of the connection.
        */
       ConnectionError recv( int timeout = -1 );
@@ -262,6 +263,15 @@ namespace gloox
       void registerMessageHandler( MessageHandler *mh );
 
       /**
+       * Registers @c mh as object that receives Message stanza notifications for the given JID.
+       * Only one message handler per (full) JID is possible.
+       * You should not need to use this functionality directly. Instead use a MessageSession.
+       * @param jid Messages from this full JID will be sent to the given MessageHandler.
+       * @param mh The object to receive Message stanza notifications.
+       */
+      void registerMessageHandler( const std::string& jid,  MessageHandler *mh );
+
+      /**
        * Registers @c ph as object that receives Presence stanza notifications.
        * @param ph The object to receive Presence stanza notifications.
        */
@@ -300,6 +310,12 @@ namespace gloox
        * @param mh The object to remove from the list.
        */
       void removeMessageHandler( MessageHandler *mh );
+
+      /**
+       * Removes the message handler for the given JID.
+       * @param jid The JID for which listening shall end.
+       */
+      void removeMessageHandler( const std::string& jid );
 
       /**
        * Removes the given object from the list of presence handlers.
@@ -442,17 +458,19 @@ namespace gloox
         std::string tag;
       };
 
-      typedef std::list<ConnectionListener*>            ConnectionListenerList;
-      typedef std::map<const std::string, IqHandler*>   IqHandlerMap;
-      typedef std::map<const std::string, TrackStruct>  IqTrackMap;
-      typedef std::list<MessageHandler*>                MessageHandlerList;
-      typedef std::list<PresenceHandler*>               PresenceHandlerList;
-      typedef std::list<SubscriptionHandler*>           SubscriptionHandlerList;
-      typedef std::list<TagHandlerStruct>               TagHandlerList;
+      typedef std::list<ConnectionListener*>                ConnectionListenerList;
+      typedef std::map<const std::string, IqHandler*>       IqHandlerMap;
+      typedef std::map<const std::string, TrackStruct>      IqTrackMap;
+      typedef std::map<const std::string, MessageHandler*>  MessageHandlerMap;
+      typedef std::list<MessageHandler*>                    MessageHandlerList;
+      typedef std::list<PresenceHandler*>                   PresenceHandlerList;
+      typedef std::list<SubscriptionHandler*>               SubscriptionHandlerList;
+      typedef std::list<TagHandlerStruct>                   TagHandlerList;
 
       ConnectionListenerList  m_connectionListeners;
       IqHandlerMap            m_iqNSHandlers;
       IqTrackMap              m_iqIDHandlers;
+      MessageHandlerMap       m_messageJidHandlers;
       MessageHandlerList      m_messageHandlers;
       PresenceHandlerList     m_presenceHandlers;
       SubscriptionHandlerList m_subscriptionHandlers;
@@ -463,7 +481,7 @@ namespace gloox
 
       AuthenticationError m_authError;
       StreamError m_streamError;
-	  StringMap m_streamErrorText;
+      StringMap m_streamErrorText;
       std::string m_streamErrorCData;
       Tag *m_streamErrorAppCondition;
       int m_idCount;
