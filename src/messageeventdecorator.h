@@ -34,6 +34,11 @@ namespace gloox
    * @endcode
    * And use it like you would use a MessageSession.
    *
+   * This implementation of Message Events is fully transparent to the user of the class.
+   * If the remote entity does not request message events, MessageEventDecorator will not send
+   * any, even if the user requests it. (This is required by the protocol specifiaction.)
+   * Therefore, it does no harm to always use the MessageEventDecorator.
+   *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.8
    */
