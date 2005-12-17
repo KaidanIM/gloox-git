@@ -527,8 +527,8 @@ namespace gloox
     ST_ERROR_REDIRECT,              /**< The recipient or server is redirecting requests for this information
                                      * to another entity, usually temporarily (the error stanza SHOULD
                                      * contain the alternate address, which MUST be a valid JID, in the XML
-                                     * character data of the <redirect/> element); the associated error type
-                                     * SHOULD be "modify". */
+                                     * character data of the &lt;redirect/&gt; element); the associated
+                                     * error type SHOULD be "modify". */
     ST_ERROR_REGISTRATION_REQUIRED, /**< The requesting entity is not authorized to access the requested
                                      * service because registration is required; the associated error type
                                      * SHOULD be "auth". */

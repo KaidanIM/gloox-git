@@ -130,7 +130,7 @@ namespace gloox
        * the user without blocking. If you want that, use asynchronous subscription
        * requests. If you want to answer an request right away, make it synchronous.
        * @param rl The object that receives roster updates.
-       * @param blockingSubscribeReq Indicates whether (Un)SubscriptionRequests shall
+       * @param syncSubscribeReq Indicates whether (Un)SubscriptionRequests shall
        * be handled synchronous (@b true) or asynchronous (@b false). Default: synchronous.
        */
       void registerRosterListener( RosterListener *rl, bool syncSubscribeReq = true );
@@ -145,7 +145,7 @@ namespace gloox
       virtual bool handleIq( Stanza *stanza );
 
       // reimplemented from IqHandler.
-      virtual bool handleIqID( Stanza * /*stanza*/, int /*context*/ ) { return false; };
+      virtual bool handleIqID( Stanza *stanza, int context );
 
       // reimplemented from PresenceHandler.
       virtual void handlePresence( Stanza *stanza );
@@ -157,7 +157,7 @@ namespace gloox
       virtual void handlePrivateXML( const std::string& tag, Tag *xml );
 
       // reimplemented from PrivateXMLHandler
-      virtual void handlePrivateXMLResult( const std::string uid, PrivateXMLResult result );
+      virtual void handlePrivateXMLResult( const std::string& uid, PrivateXMLResult result );
 
     private:
       void add( const std::string& jid, const std::string& name,

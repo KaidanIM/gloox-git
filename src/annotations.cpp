@@ -84,6 +84,10 @@ namespace gloox
       m_annotationsHandler->handleAnnotations( aList );
   }
 
+  void Annotations::handlePrivateXMLResult( const std::string& /*uid*/, PrivateXMLResult /*result*/ )
+  {
+  }
+
   void Annotations::registerAnnotationsHandler( AnnotationsHandler *ah )
   {
     m_annotationsHandler = ah;

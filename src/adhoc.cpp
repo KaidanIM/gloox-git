@@ -36,6 +36,9 @@ namespace gloox
     if( m_parent )
     {
       m_parent->removeIqHandler( XMLNS_ADHOC_COMMANDS );
+    }
+    if( m_disco )
+    {
       m_disco->removeNodeHandler( XMLNS_ADHOC_COMMANDS );
     }
   }
@@ -96,6 +99,11 @@ namespace gloox
         return true;
       }
     }
+    return false;
+  }
+
+  bool Adhoc::handleIqID( Stanza */*stanza*/, int /*context*/ )
+  {
     return false;
   }
 

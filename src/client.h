@@ -208,6 +208,9 @@ namespace gloox
       Disco* disco();
 
     protected:
+      /**
+       * Initiates non-SASL login.
+       */
       void nonSaslLogin();
 
     private:

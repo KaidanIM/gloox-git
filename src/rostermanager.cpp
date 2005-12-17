@@ -107,6 +107,11 @@ namespace gloox
     return false;
   }
 
+  bool RosterManager::handleIqID( Stanza * /*stanza*/, int /*context*/ )
+  {
+    return false;
+  }
+
   void RosterManager::handlePresence( Stanza *stanza )
   {
     if( !m_rosterListener )
@@ -424,7 +429,7 @@ namespace gloox
     fill();
   }
 
-  void RosterManager::handlePrivateXMLResult( const std::string /*uid*/, PrivateXMLResult result )
+  void RosterManager::handlePrivateXMLResult( const std::string& /*uid*/, PrivateXMLResult result )
   {
     m_delimiterFetched = true;
     if( result == PrivateXMLHandler::PXML_REQUEST_ERROR )

@@ -174,7 +174,7 @@ namespace gloox
       /**
        * Use this function to set multiple values of this field, if it is of type 'text-multi'. If its not,
        * use @ref setValue() instead.
-       * @param value The new values of this field.
+       * @param values The new values of this field.
        */
       void setValues( const StringList& values ) { m_values = values; };
 

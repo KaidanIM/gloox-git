@@ -132,4 +132,9 @@ namespace gloox
     return false;
   }
 
+  bool PrivateXML::handleIq( Stanza * /*stanza*/ )
+  {
+    return false;
+  }
+
 }

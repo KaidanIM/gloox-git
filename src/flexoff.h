@@ -93,20 +93,30 @@ namespace gloox
        */
       void removeFlexibleOfflineHandler();
 
-      // reimplemented from DiscoHandler
+      /**
+       * @copydoc DiscoHandler::handleDiscoInfoResult()
+       */
       virtual void handleDiscoInfoResult( Stanza *stanza, int context );
 
-      // reimplemented from DiscoHandler
-      virtual void handleDiscoItemsResult( Stanza *stanza, int contex );
+      /**
+       * @copydoc DiscoHandler::handleDiscoItemsResult()
+       */
+      virtual void handleDiscoItemsResult( Stanza *stanza, int context );
 
-      // reimplemented from DiscoHandler
+      /**
+       * @copydoc DiscoHandler::handleDiscoError()
+       */
       virtual void handleDiscoError( Stanza *stanza, int context );
 
-      // reimplemented from IqHandler
+      /**
+       * @copydoc IqHandler::handleIqID()
+       */
       virtual bool handleIqID( Stanza *stanza, int context );
 
-      // reimplemented from IqHandler
-      virtual bool handleIq( Stanza * /*stanza*/ ) { return false; };
+      /**
+       * @copydoc IqHandler::handleIq
+       */
+      virtual bool handleIq( Stanza *stanza );
 
     private:
       enum FOContext
