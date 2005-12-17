@@ -25,6 +25,8 @@ namespace gloox
   {
     if( m_parent )
       m_parent->registerMessageHandler( m_target.full(), this );
+
+    m_thread = "gloox" + m_parent->getID();
   }
 
   MessageSession::~MessageSession()
@@ -44,6 +46,7 @@ namespace gloox
   void MessageSession::send( Tag *tag )
   {
     tag->addAttribute( "from", m_parent->jid().full() );
+    new Tag( tag, "thread", m_thread );
     m_parent->send( tag );
   }
 

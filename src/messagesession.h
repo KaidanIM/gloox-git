@@ -35,8 +35,9 @@ namespace gloox
    * on its own.
    *
    * MessageSession adds an abstraction to a chat conversation. A MessageSession is responsible for
-   * communicating with exactly one (full) JID. It is extensible and will, for instance, be able to
-   * offer GPG encryption/decryption of messages sent through it.
+   * communicating with exactly one (full) JID. It is extensible by arbitrary decorators and is,
+   * for instance, able to offer GPG encryption/decryption of messages sent through it (using a
+   * decorator written for that purpose).
    *
    * You can still use the old MessageHandler in parallel, but messages will not be relayed to both
    * the generic MessageHandler and a MessageSession established for the sender's JID. The MessageSession
@@ -49,10 +50,10 @@ namespace gloox
   {
     public:
       /**
-       * Constructs a new MessageSession for the given JID. The MessageHandler
-       * will receive messages sent by this JID.
+       * Constructs a new MessageSession for the given JID.
        * It is recommended to supply a full JID, in other words, it should have an resource.
-       * No resource can lead to unexpected behavior.
+       * No resource can lead to unexpected behavior. A thread ID is generated and sent along
+       * with every message sent through this session.
        * @param parent The ClientBase to use for communication.
        * @param JID The remote contact's full JID.
        */
@@ -83,6 +84,13 @@ namespace gloox
        */
       const JID& target() const { return m_target; };
 
+      /**
+       * By default, a thread ID is sent with every message to identify
+       * messages belonging together.
+       * @returns The thread ID for this session.
+       */
+      const std::string& threadID() const { return m_thread; };
+
       // reimplemented from Session
       virtual void send( Tag *Tag );
 
@@ -93,6 +101,7 @@ namespace gloox
       ClientBase *m_parent;
       JID m_target;
       MessageHandler *m_messageHandler;
+      std::string m_thread;
 
   };
 
