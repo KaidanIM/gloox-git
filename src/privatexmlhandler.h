@@ -55,7 +55,7 @@ namespace gloox
        * @param result The result of the operation.
        * @since 0.7
        */
-      virtual void handlePrivateXMLResult( const std::string uid, PrivateXMLResult result ) = 0;
+      virtual void handlePrivateXMLResult( const std::string& uid, PrivateXMLResult result ) = 0;
   };
 
 }

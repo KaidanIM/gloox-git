@@ -217,4 +217,9 @@ namespace gloox
     return false;
   }
 
+  bool FlexibleOffline::handleIq( Stanza * /*stanza*/ )
+  {
+    return false;
+  }
+
 }

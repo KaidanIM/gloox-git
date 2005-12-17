@@ -121,4 +121,9 @@ namespace gloox
     return false;
   }
 
+  bool NonSaslAuth::handleIq( Stanza * /*stanza*/ )
+  {
+    return false;
+  }
+
 }

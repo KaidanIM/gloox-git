@@ -55,7 +55,7 @@ namespace gloox
        * No resource can lead to unexpected behavior. A thread ID is generated and sent along
        * with every message sent through this session.
        * @param parent The ClientBase to use for communication.
-       * @param JID The remote contact's full JID.
+       * @param jid The remote contact's full JID.
        */
       MessageSession( ClientBase *parent, const JID& jid );
 
@@ -92,7 +92,7 @@ namespace gloox
       const std::string& threadID() const { return m_thread; };
 
       // reimplemented from Session
-      virtual void send( Tag *Tag );
+      virtual void send( Tag *tag );
 
       // reimplemented from MessageHandler
       virtual void handleMessage( Stanza *stanza );

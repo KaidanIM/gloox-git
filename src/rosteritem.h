@@ -161,7 +161,7 @@ namespace gloox
       /**
        * Sets the current priority of the resource.
        * @param resource The resource to set the status message for.
-       * @param msg The current status message, i.e. from the presence info.
+       * @param priority The resource's priority, i.e. from the presence info.
        */
       virtual void setPriority( const std::string& resource, int priority );
 

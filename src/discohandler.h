@@ -60,10 +60,10 @@ namespace gloox
        * Reimplement this function to receive notifications about incoming IQ
        * stanzas of type 'set' in the disco namespace.
        * @param stanza The full Stanza.
-       * @return Returns whether the stanza was handled and answered.
+       * @return Returns @b true if the stanza was handled and answered, @b false otherwise.
        * @todo Replace the stanza with decoded values.
        */
-      virtual bool handleDiscoSet( Stanza * /*stanza*/ ) { return false; };
+      virtual bool handleDiscoSet( Stanza *stanza ) { (void) stanza; return false; };
 
   };
 

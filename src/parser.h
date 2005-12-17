@@ -72,7 +72,21 @@ namespace gloox
       Stanza *m_current;
       Stanza *m_root;
 
+      /**
+       * Called by iksemel's parser with cdata for the current node.
+       * @param parser The current Parser.
+       * @param data The cdata.
+       * @param len The length of the data.
+       */
       friend int cdataHook( Parser *parser, char *data, size_t len );
+
+      /**
+       * Called by iksemel's parser for every new element.
+       * @param parser The current Parser.
+       * @param name The element's name.
+       * @param atts The element's list of attributes.
+       * @param type The type of the element.
+       */
       friend int tagHook( Parser *parser, char *name, char **atts, int type );
   };
 

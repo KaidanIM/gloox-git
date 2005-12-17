@@ -121,6 +121,10 @@ namespace gloox
       m_bookmarkHandler->handleBookmarks( bList, cList );
   }
 
+  void BookmarkStorage::handlePrivateXMLResult( const std::string& /*uid*/, PrivateXMLResult /*result*/ )
+  {
+  }
+
   void BookmarkStorage::registerBookmarkHandler( BookmarkHandler *bmh )
   {
     m_bookmarkHandler = bmh;
