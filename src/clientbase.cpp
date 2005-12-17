@@ -529,9 +529,21 @@ namespace gloox
     m_iqNSHandlers.erase( xmlns );
   }
 
+  void ClientBase::registerMessageHandler( const std::string& jid, MessageHandler *mh )
+  {
+    m_messageJidHandlers[jid] = mh;
+  }
+
   void ClientBase::registerMessageHandler( MessageHandler *mh )
   {
     m_messageHandlers.push_back( mh );
+  }
+
+  void ClientBase::removeMessageHandler( const std::string& jid )
+  {
+    MessageHandlerMap::iterator it = m_messageJidHandlers.find( jid );
+    if( it != m_messageJidHandlers.end() )
+      m_messageJidHandlers.erase( it );
   }
 
   void ClientBase::removeMessageHandler( MessageHandler *mh )
@@ -678,6 +690,13 @@ namespace gloox
 
   void ClientBase::notifyMessageHandlers( Stanza *stanza )
   {
+    MessageHandlerMap::const_iterator it1 = m_messageJidHandlers.find( stanza->from().full() );
+    if( it1 != m_messageJidHandlers.end() )
+    {
+      (*it1).second->handleMessage( stanza );
+      return;
+    }
+
     MessageHandlerList::const_iterator it = m_messageHandlers.begin();
     for( ; it != m_messageHandlers.end(); ++it )
     {
