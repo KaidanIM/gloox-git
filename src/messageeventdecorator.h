@@ -112,6 +112,7 @@ namespace gloox
       MessageSession *m_parent;
       MessageEventHandler *m_messageEventHandler;
       std::string m_lastID;
+      int m_events;
 
   };
 }

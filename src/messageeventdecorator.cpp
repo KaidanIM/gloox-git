@@ -18,7 +18,7 @@ namespace gloox
 {
 
   MessageEventDecorator::MessageEventDecorator( MessageSession *ms )
-    : SessionDecorator( ms ), m_parent( ms )
+  : SessionDecorator( ms ), m_parent( ms ), m_events( 0 )
   {
   }
 
@@ -47,17 +47,22 @@ namespace gloox
       }
       else
       {
-        int events = 0;
+        m_events = 0;
         Tag *x = stanza->findChild( "x" );
         if( x->hasChild( "offline" ) )
-          events |= MESSAGE_EVENT_OFFLINE;
-        else if( x->hasChild( "delivered" ) )
-          events |= MESSAGE_EVENT_DELIVERED;
-        else if( x->hasChild( "displayed" ) )
-          events |= MESSAGE_EVENT_DISPLAYED;
-        else if( x->hasChild( "composing" ) )
-          events |= MESSAGE_EVENT_COMPOSING;
+          m_events |= MESSAGE_EVENT_OFFLINE;
+        if( x->hasChild( "delivered" ) )
+          m_events |= MESSAGE_EVENT_DELIVERED;
+        if( x->hasChild( "displayed" ) )
+          m_events |= MESSAGE_EVENT_DISPLAYED;
+        if( x->hasChild( "composing" ) )
+          m_events |= MESSAGE_EVENT_COMPOSING;
       }
+    }
+    else
+    {
+      m_events = 0;
+      m_lastID = "";
     }
 
     m_parent->handleMessage( stanza );
