@@ -41,26 +41,14 @@ namespace gloox
   {
     public:
       /**
-       * The possible Message Events according to JEP-0022.
-       */
-      enum MessageEventType
-      {
-        MESSAGE_EVENT_OFFLINE   = 1, /**< Indicates that the message has been stored offline by the
-                                      * intended recipient's server. */
-        MESSAGE_EVENT_DELIVERED = 2, /**< Indicates that the message has been delivered to the
-                                      * recipient. */
-        MESSAGE_EVENT_DISPLAYED = 4, /**< Indicates that the message has been displayed */
-        MESSAGE_EVENT_COMPOSING = 8  /**< Indicates that the recipient is composing a reply to a
-                                      * message. */
-      };
-
-      /**
        * Contstructs a new Message Event decorator for a MessageSession.
        * You should use the newly created decorator and forget about the old
        * MessageSession.
        * @param ms The MessageSession to decorate.
+       * @param defaultEvents Bit-wise ORed MessageEventType's which shall be requested
+       * for every message sent.
        */
-      MessageEventDecorator( MessageSession *ms );
+      MessageEventDecorator( MessageSession *ms, int defaultEvents = 0 );
 
       /**
        * Virtual destructor.
@@ -70,7 +58,7 @@ namespace gloox
       /**
        * Use this function to raise an event as defined in JEP-0022.
        * @note The Spec states that Message Events shall not be sent to an entity
-       * which did not request them. Reasonable effort istaken in this function to
+       * which did not request them. Reasonable effort is taken in this function to
        * avoid spurious event sending. You should be safe to call this even if Message
        * Events were not requested by the remote entity.
        * @param event The event to raise.
@@ -112,7 +100,8 @@ namespace gloox
       MessageSession *m_parent;
       MessageEventHandler *m_messageEventHandler;
       std::string m_lastID;
-      int m_events;
+      int m_requestedEvents;
+      int m_defaultEvents;
 
   };
 }

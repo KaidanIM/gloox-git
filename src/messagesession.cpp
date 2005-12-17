@@ -23,12 +23,14 @@ namespace gloox
   MessageSession::MessageSession( ClientBase *parent, const JID& jid )
     : m_parent( parent ), m_target( jid ), m_messageHandler( 0 )
   {
-    m_parent->registerMessageHandler( m_target.full(), this );
+    if( m_parent )
+      m_parent->registerMessageHandler( m_target.full(), this );
   }
 
   MessageSession::~MessageSession()
   {
-    m_parent->removeMessageHandler( m_target.full() );
+    if( m_parent )
+      m_parent->removeMessageHandler( m_target.full() );
   }
 
   void MessageSession::handleMessage( Stanza *stanza )

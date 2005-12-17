@@ -14,10 +14,10 @@
 #ifndef MESSAGEEVENTHANDLER_H__
 #define MESSAGEEVENTHANDLER_H__
 
-#include "jid.h"
-
 namespace gloox
 {
+
+  class JID;
 
   /**
    * @brief A virtual interface that enables an object to be notified about
@@ -30,32 +30,12 @@ namespace gloox
   {
     public:
       /**
-       * Notifies the MessageEventHandler that the message sent lastly has
-       * been stored in offline storage for later delivery.
+       * Notifies the MessageEventHandler that an event has been raised by the remote
+       * contact.
        * @param from The originator of the Event.
+       * @param event The Event which has been raised.
        */
-      virtual void handleOfflineEvent( const JID& from ) = 0;
-
-      /**
-       * Notifies the MessageEventHandler that the message sent lastly
-       * has been delivered to the recipients client.
-       * @param from The originator of the Event.
-       */
-      virtual void handleDeliveredEvent( const JID& from ) = 0;
-
-      /**
-       * Notifies the MessageEventHandler that the message sent lastly has
-       * been displayed by the recipients client.
-       * @param from The originator of the Event.
-       */
-      virtual void handleDisplayedEvent( const JID& from) = 0;
-
-      /**
-       * Notifies the MessageEventHandler that the receiver of message the
-       * last message is composing a reply.
-       * @param from The originator of the Event.
-       */
-      virtual void handleComposingEvent( const JID& from ) = 0;
+      virtual void handleMessageEvent( const JID& from, MessageEventType event ) = 0;
 
   };
 
