@@ -342,19 +342,19 @@ namespace gloox
         if( stanza->hasChild( "error", "type", "modify" )
             && error->hasChild( "bad-request", "xmlns", XMLNS_XMPP_STANZAS ) )
         {
-          notifyOnResourceBindError( ConnectionListener::RB_BAD_REQUEST );
+          notifyOnResourceBindError( RB_BAD_REQUEST );
         }
         else if( stanza->hasChild( "error", "type", "cancel" ) )
         {
           if( error->hasChild( "not-allowed", "xmlns", XMLNS_XMPP_STANZAS ) )
-            notifyOnResourceBindError( ConnectionListener::RB_NOT_ALLOWED );
+            notifyOnResourceBindError( RB_NOT_ALLOWED );
           else if( error->hasChild( "conflict", "xmlns", XMLNS_XMPP_STANZAS ) )
-            notifyOnResourceBindError( ConnectionListener::RB_CONFLICT );
+            notifyOnResourceBindError( RB_CONFLICT );
           else
-            notifyOnResourceBindError( ConnectionListener::RB_UNKNOWN_ERROR );
+            notifyOnResourceBindError( RB_UNKNOWN_ERROR );
         }
         else
-          notifyOnResourceBindError( ConnectionListener::RB_UNKNOWN_ERROR );
+          notifyOnResourceBindError( RB_UNKNOWN_ERROR );
         break;
       }
       default:
@@ -388,20 +388,20 @@ namespace gloox
         if( stanza->hasChild( "error", "type", "wait" )
             && error->hasChild( "internal-server-error", "xmlns", XMLNS_XMPP_STANZAS ) )
         {
-          notifyOnSessionCreateError( ConnectionListener::SC_INTERNAL_SERVER_ERROR );
+          notifyOnSessionCreateError( SC_INTERNAL_SERVER_ERROR );
         }
         else if( stanza->hasChild( "error", "type", "auth" )
                  && error->hasChild( "forbidden", "xmlns", XMLNS_XMPP_STANZAS ) )
         {
-          notifyOnSessionCreateError( ConnectionListener::SC_FORBIDDEN );
+          notifyOnSessionCreateError( SC_FORBIDDEN );
         }
         else if( stanza->hasChild( "error", "type", "cancel" )
                  && error->hasChild( "conflict", "xmlns", XMLNS_XMPP_STANZAS ) )
         {
-          notifyOnSessionCreateError( ConnectionListener::SC_CONFLICT );
+          notifyOnSessionCreateError( SC_CONFLICT );
         }
         else
-          notifyOnSessionCreateError( ConnectionListener::SC_UNKNOWN_ERROR );
+          notifyOnSessionCreateError( SC_UNKNOWN_ERROR );
         break;
       }
       default:
