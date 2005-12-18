@@ -7,7 +7,7 @@
   This software may not be copied, modified, sold or distributed
   other than expressed in the named license agreement.
 
-  This software is distributed without any warrenty.
+  This software is distributed without any warranty.
 */
 
 
@@ -35,19 +35,64 @@ namespace gloox
 
     public:
       /**
-       * Holds resource attributes.
+       * @brief Holds resource attributes.
+       *
+       * @author Jakob Schroeter <js@caaya.net>
+       * @since 0.8
        */
-      struct ResourceStruct
+      class Resource
       {
-        int priority;               /**< The resource's priority. */
-        std::string message;        /**< The resource's status message, if any. */
-        PresenceStatus status;      /**< The resource's status. */
+
+        friend class RosterItem;
+
+        public:
+          /**
+           * Constructor.
+           * @param priority The resource's priority.
+           * @param msg The resource's status message.
+           * @param status The resource's presence status.
+           */
+          Resource( int priority, const std::string& msg, PresenceStatus status )
+            : m_priority( priority ), m_message( msg ), m_status( status ) {}
+
+          /**
+           * Virtual destrcutor.
+           */
+          virtual ~Resource() {};
+
+          /**
+           * Lets you fetch the resource's priority.
+           * @return The resource's priority.
+           */
+          int priority() const { return m_priority; };
+
+          /**
+           * Lets you fetch the resource's status message.
+           * @return The resource's status message.
+           */
+          const std::string& message() const { return m_message; };
+
+          /**
+           * Lets you fetch the resource's presence status.
+           * @return The resource's presence status.
+           */
+          PresenceStatus status() const { return m_status; };
+
+        private:
+          void setPriority( int priority ) { m_priority = priority; };
+          void setMessage( std::string message ) { m_message = message; };
+          void setStatus( PresenceStatus status ) { m_status = status; };
+
+          int m_priority;
+          std::string m_message;
+          PresenceStatus m_status;
+
       };
 
       /**
        * A list of resources for the given JID.
        */
-      typedef std::map<std::string, ResourceStruct> ResourceMap;
+      typedef std::map<std::string, Resource*> ResourceMap;
 
       /**
        * Describes possible subscribtion types according to RFC 3921, Section 9.
