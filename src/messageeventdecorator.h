@@ -31,7 +31,7 @@ namespace gloox
    * @code
    * MessageSession *msgSess = new MessageSession( clntBase );
    * int defaultEvents = MESSAGE_EVENT_OFFLINE | MESSAGE_EVENT_DELIVERED
-   *             | MESSAGE_EVENT_DISPLAYED | MESSAGE_EVENT_COMPOSING
+   *                     | MESSAGE_EVENT_DISPLAYED | MESSAGE_EVENT_COMPOSING
    * msgSess = new MessageEventDecorator( msgSess, defaultEvents );
    * @endcode
    * And use it like you would use a MessageSession.
@@ -67,7 +67,9 @@ namespace gloox
        * @note The Spec states that Message Events shall not be sent to an entity
        * which did not request them. Reasonable effort is taken in this function to
        * avoid spurious event sending. You should be safe to call this even if Message
-       * Events were not requested by the remote entity.
+       * Events were not requested by the remote entity. However,
+       * calling raiseEvent( MESSAGE_EVENT_COMPOSING ) for every keystroke still is
+       * discouraged. ;)
        * @param event The event to raise.
        */
       void raiseEvent( MessageEventType event );
@@ -109,6 +111,7 @@ namespace gloox
       std::string m_lastID;
       int m_requestedEvents;
       int m_defaultEvents;
+      MessageEventType m_lastSent;
 
   };
 
