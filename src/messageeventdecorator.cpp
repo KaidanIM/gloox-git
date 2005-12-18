@@ -19,7 +19,7 @@ namespace gloox
 
   MessageEventDecorator::MessageEventDecorator( MessageSession *ms, int defaultEvents )
     : SessionDecorator( ms ), m_parent( ms ), m_messageEventHandler( 0 ), m_requestedEvents( 0 ),
-      m_defaultEvents( defaultEvents )
+      m_defaultEvents( defaultEvents ), m_lastSent( MESSAGE_EVENT_CANCEL )
   {
   }
 
@@ -70,7 +70,7 @@ namespace gloox
 
   void MessageEventDecorator::raiseEvent( MessageEventType event )
   {
-    if( event & m_requestedEvents )
+    if( ( m_requestedEvents & event ) || ( m_requestedEvents && ( event == MESSAGE_EVENT_CANCEL ) ) )
     {
       Tag *m = new Tag( "message" );
       m->addAttribute( "to", m_parent->target().full() );
@@ -82,26 +82,52 @@ namespace gloox
       {
         case MESSAGE_EVENT_OFFLINE:
           new Tag( x, "offline" );
+          m_requestedEvents ^= event;
+          m_lastSent = MESSAGE_EVENT_OFFLINE;
           break;
         case MESSAGE_EVENT_DELIVERED:
           new Tag( x, "delivered" );
+          m_requestedEvents ^= event;
+          m_lastSent = MESSAGE_EVENT_DELIVERED;
           break;
         case MESSAGE_EVENT_DISPLAYED:
           new Tag( x, "displayed" );
+          m_requestedEvents ^= event;
+          m_lastSent = MESSAGE_EVENT_DISPLAYED;
           break;
         case MESSAGE_EVENT_COMPOSING:
-          new Tag( x, "composing" );
+          if( m_lastSent != MESSAGE_EVENT_COMPOSING )
+          {
+            new Tag( x, "composing" );
+            m_lastSent = MESSAGE_EVENT_COMPOSING;
+          }
           break;
         case MESSAGE_EVENT_CANCEL:
+          m_lastSent = MESSAGE_EVENT_CANCEL;
           break;
       }
 
-      send( m );
+      m_parent->send( m );
     }
   }
 
   void MessageEventDecorator::send( Tag *tag )
   {
+    if( m_defaultEvents != 0 )
+    {
+      Tag *x = new Tag( tag, "x" );
+      x->addAttribute( "xmlns", XMLNS_X_EVENT );
+
+      if( m_defaultEvents & MESSAGE_EVENT_OFFLINE )
+        new Tag( x, "offline" );
+      if( m_defaultEvents & MESSAGE_EVENT_DELIVERED )
+        new Tag( x, "delivered" );
+      if( m_defaultEvents & MESSAGE_EVENT_DISPLAYED )
+        new Tag( x, "displayed" );
+      if( m_defaultEvents & MESSAGE_EVENT_COMPOSING )
+        new Tag( x, "composing" );
+    }
+
     m_parent->send( tag );
   }
 
