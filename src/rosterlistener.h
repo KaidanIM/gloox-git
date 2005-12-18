@@ -35,7 +35,6 @@ namespace gloox
     public:
       /**
        * A map of JID/RosterItem pairs.
-       * @todo Derive from JID.
        */
       typedef std::map<const std::string, RosterItem*> Roster;
 
