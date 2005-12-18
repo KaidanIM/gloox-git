@@ -16,17 +16,7 @@
 #define CLIENTBASE_H__
 
 #include "gloox.h"
-
-#include "connectionlistener.h"
-#include "iqhandler.h"
-#include "messagehandler.h"
-#include "presencehandler.h"
-#include "rosterlistener.h"
-#include "subscriptionhandler.h"
-#include "loghandler.h"
-#include "taghandler.h"
 #include "jid.h"
-
 
 namespace gloox
 {
@@ -39,6 +29,15 @@ namespace gloox
   class Tag;
   class Stanza;
   class Parser;
+  class MessageSessionHandler;
+  class ConnectionListener;
+  class IqHandler;
+  class MessageHandler;
+  class PresenceHandler;
+//   class RosterListener;
+  class SubscriptionHandler;
+//   class LogHandler;
+  class TagHandler;
 
   /**
    * @brief This is the common base class for a jabber Client and a jabber Component.
@@ -346,6 +345,29 @@ namespace gloox
       void setCACerts( const StringList& cacerts ) { m_cacerts = cacerts; };
 
       /**
+       * Use this function to turn the Auto-MessageSession feature on or off.
+       * If this is enabled, a MessageSession will be created for every incoming
+       * message stanza if there is no MessageHandler registered for the originating JID.
+       * If you disable automatic MessageSession creation, the MessageSessionHandler will
+       * be cleared. You have to set it anew the next time you want to enable it. You cannot
+       * enable this feature without a valid MessageSessionHandler.
+       * @note If you enable this feature, the registered MessageSessionHandler will provide you
+       * with a basic MessageSession. You can then decorate this MessageSession using various
+       * Add-ons (e.g., Message Events (JEP-0022) by means of MessageEventDecorator). Also, to make
+       * the MessageSession fully functional, you should register a MessageHandler with it which
+       * will receive subsequent message from the session. The decorators you apply to the
+       * MessageSession may require the initial Stanza, due to which the MessageSession was
+       * created, to build up some internal state (for example, MessageEventDecorator does need
+       * the first message). Therefore you should, @b after you decorated your new MessageSession
+       * but @b before you register your MessageHandler with it, pass the Stanza you receive from your
+       * MessageSessionHandler to the MessageSession's handleMessage() function.
+       *
+       * @param autoMS Whether to enable automatic MessageSession creation.
+       * @param msh The MessageSessionHandler that will receive the newly created MessageSession.
+       */
+      void setAutoMessageSession( bool autoMS, MessageSessionHandler *msh = 0 );
+
+      /**
        * Use this function to retrieve the type of the stream error after it occurs and you received a
        * ConnectionError of type CONN_STREAM_ERROR from the ConnectionListener.
        */
@@ -393,8 +415,8 @@ namespace gloox
                                    * RFC 2245 Section 6. */
       };
 
-      void notifyOnResourceBindError( ConnectionListener::ResourceBindError error );
-      void notifyOnSessionCreateError( ConnectionListener::SessionCreateError error );
+      void notifyOnResourceBindError( ResourceBindError error );
+      void notifyOnSessionCreateError( SessionCreateError error );
       bool notifyOnTLSConnect( const CertInfo& info );
       void notifyOnConnect();
       void disconnect( ConnectionError reason );
@@ -476,6 +498,7 @@ namespace gloox
       SubscriptionHandlerList m_subscriptionHandlers;
       TagHandlerList          m_tagHandlers;
       StringList              m_cacerts;
+      MessageSessionHandler  *m_messageSessionHandler;
 
       Parser *m_parser;
 
@@ -485,6 +508,7 @@ namespace gloox
       std::string m_streamErrorCData;
       Tag *m_streamErrorAppCondition;
       int m_idCount;
+      bool m_autoMessageSession;
 
   };
 
