@@ -360,7 +360,9 @@ namespace gloox
        * created, to build up some internal state (for example, MessageEventDecorator does need
        * the first message). Therefore you should, @b after you decorated your new MessageSession
        * but @b before you register your MessageHandler with it, pass the Stanza you receive from your
-       * MessageSessionHandler to the MessageSession's handleMessage() function.
+       * MessageSessionHandler to the MessageSession's handleMessage() function. This will hopefully
+       * be fixed in a future version.
+       * @todo Fix necessity to feed teh first stanza back into a decorated MessageSession.
        *
        * @param autoMS Whether to enable automatic MessageSession creation.
        * @param msh The MessageSessionHandler that will receive the newly created MessageSession.
