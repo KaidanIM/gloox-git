@@ -7,7 +7,7 @@
   This software may not be copied, modified, sold or distributed
   other than expressed in the named license agreement.
 
-  This software is distributed without any warrenty.
+  This software is distributed without any warranty.
 */
 
 
@@ -36,42 +36,30 @@ namespace gloox
   {
     if( m_resources.find( resource ) == m_resources.end() )
     {
-      ResourceStruct rs;
-      rs.priority = 0;
-      rs.message = "";
-      rs.status = status;
-      m_resources[resource] = rs;
+      m_resources[resource] = new Resource( 0, std::string(),  status );
     }
     else
-      m_resources[resource].status = status;
+      m_resources[resource]->setStatus( status );
   }
 
   void RosterItem::setStatusMsg( const std::string& resource, const std::string& msg )
   {
     if( m_resources.find( resource ) == m_resources.end() )
     {
-      ResourceStruct rs;
-      rs.priority = 0;
-      rs.message = msg;
-      rs.status = PRESENCE_UNAVAILABLE;
-      m_resources[resource] = rs;
+      m_resources[resource] = new Resource( 0, msg, PRESENCE_UNAVAILABLE );
     }
     else
-      m_resources[resource].message = msg;
+      m_resources[resource]->setMessage( msg );
   }
 
   void RosterItem::setPriority( const std::string& resource, int priority )
   {
     if( m_resources.find( resource ) == m_resources.end() )
     {
-      ResourceStruct rs;
-      rs.priority = priority;
-      rs.message = "";
-      rs.status = PRESENCE_UNAVAILABLE;
-      m_resources[resource] = rs;
+      m_resources[resource] = new Resource( priority, std::string(), PRESENCE_UNAVAILABLE );
     }
     else
-      m_resources[resource].priority = priority;
+      m_resources[resource]->setPriority( priority );
   }
 
   void RosterItem::setSubscription( const std::string& subscription, bool ask )
@@ -102,7 +90,10 @@ namespace gloox
   {
     ResourceMap::iterator it = m_resources.find( resource );
     if( it != m_resources.end() )
+    {
+      delete (*it).second;
       m_resources.erase( it );
+    }
   }
 
   bool RosterItem::online() const
