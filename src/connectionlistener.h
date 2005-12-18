@@ -25,30 +25,6 @@ namespace gloox
   class GLOOX_EXPORT ConnectionListener
   {
     public:
-
-      /**
-       * Describes the possible error conditions for resource binding.
-       */
-      enum ResourceBindError
-      {
-        RB_UNKNOWN_ERROR,                  /**< An unknown error occured. */
-        RB_BAD_REQUEST,                    /**< Resource identifier cannot be processed. */
-        RB_NOT_ALLOWED,                    /**< Client is not allowed to bind a resource. */
-        RB_CONFLICT                        /**< Resource identifier is in use. */
-      };
-
-      /**
-       * Describes the possible error conditions for session establishemnt.
-       */
-      enum SessionCreateError
-      {
-        SC_UNKNOWN_ERROR,                  /**< An unknown error occured. */
-        SC_INTERNAL_SERVER_ERROR,          /**< Internal server error. */
-        SC_FORBIDDEN,                      /**< Username or resource not allowed to create session. */
-        SC_CONFLICT                        /**< Server informs newly-requested session of resource
-                                            * conflict. */
-      };
-
       /**
        * This function notifies about successful connections. It will be called either after all
        * authentication is finished if username/password were supplied, or after a connection has
