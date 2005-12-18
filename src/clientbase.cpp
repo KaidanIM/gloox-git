@@ -21,9 +21,19 @@
 #include "clientbase.h"
 #include "connection.h"
 #include "logsink.h"
+#include "messagesessionhandler.h"
 #include "parser.h"
 #include "tag.h"
 #include "stanza.h"
+#include "connectionlistener.h"
+#include "iqhandler.h"
+#include "messagehandler.h"
+#include "presencehandler.h"
+#include "rosterlistener.h"
+#include "subscriptionhandler.h"
+#include "loghandler.h"
+#include "taghandler.h"
+#include "jid.h"
 
 #include <iksemel.h>
 
@@ -37,18 +47,20 @@ namespace gloox
 
   ClientBase::ClientBase( const std::string& ns, const std::string& server, int port )
     : m_connection( 0 ), m_namespace( ns ), m_xmllang( "en" ), m_server( server ),
-      m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ), m_parser( 0 ),
+      m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ),
+      m_messageSessionHandler( 0 ), m_parser( 0 ),
       m_authError( AUTH_ERROR_UNDEFINED ), m_streamError( ERROR_UNDEFINED ),
-      m_streamErrorAppCondition( 0 ), m_idCount( 0 )
+      m_streamErrorAppCondition( 0 ), m_idCount( 0 ), m_autoMessageSession( false )
   {
   }
 
   ClientBase::ClientBase( const std::string& ns, const std::string& password,
                           const std::string& server, int port )
     : m_connection( 0 ), m_namespace( ns ), m_password( password ), m_xmllang( "en" ), m_server( server ),
-      m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ), m_parser( 0 ),
+      m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ),
+      m_messageSessionHandler( 0 ), m_parser( 0 ),
       m_authError( AUTH_ERROR_UNDEFINED ), m_streamError( ERROR_UNDEFINED ),
-      m_streamErrorAppCondition( 0 ), m_idCount( 0 )
+      m_streamErrorAppCondition( 0 ), m_idCount( 0 ), m_autoMessageSession( false )
   {
   }
 
@@ -493,6 +505,23 @@ namespace gloox
       return "";
   }
 
+  void ClientBase::setAutoMessageSession( bool autoMS, MessageSessionHandler *msh )
+  {
+    if( autoMS )
+    {
+      if( !msh )
+        return;
+
+      m_messageSessionHandler = msh;
+      m_autoMessageSession = true;
+    }
+    else
+    {
+      m_autoMessageSession = false;
+      m_messageSessionHandler = 0;
+    }
+  }
+
   int ClientBase::fileDescriptor() const
   {
     if( m_connection )
@@ -619,7 +648,7 @@ namespace gloox
     return false;
   }
 
-  void ClientBase::notifyOnResourceBindError( ConnectionListener::ResourceBindError error )
+  void ClientBase::notifyOnResourceBindError( ResourceBindError error )
   {
     ConnectionListenerList::const_iterator it = m_connectionListeners.begin();
     for( ; it != m_connectionListeners.end(); ++it )
@@ -628,7 +657,7 @@ namespace gloox
     }
   }
 
-  void ClientBase::notifyOnSessionCreateError( ConnectionListener::SessionCreateError error )
+  void ClientBase::notifyOnSessionCreateError( SessionCreateError error )
   {
     ConnectionListenerList::const_iterator it = m_connectionListeners.begin();
     for( ; it != m_connectionListeners.end(); ++it )
@@ -694,6 +723,13 @@ namespace gloox
     if( it1 != m_messageJidHandlers.end() )
     {
       (*it1).second->handleMessage( stanza );
+      return;
+    }
+
+    if( m_autoMessageSession && m_messageSessionHandler )
+    {
+      MessageSession *session = new MessageSession( this, stanza->from() );
+      m_messageSessionHandler->handleMessageSession( session, stanza );
       return;
     }
 
