@@ -29,6 +29,7 @@ namespace gloox
    * MessageSession yet.
    *
    * @author Jakob Schroeter <js@camaya.net>
+   * @since 0.8
    */
   class GLOOX_EXPORT MessageSessionHandler
   {
