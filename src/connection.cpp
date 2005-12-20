@@ -341,7 +341,7 @@ namespace gloox
     Bytef *out = new Bytef[CHUNK];
     char *in = const_cast<char*>( data.c_str() );
 
-    ::compress( out, (uLongf*)CHUNK, (Bytef*)in, data.length() );
+    ::compress( out, (uLongf*)&CHUNK, (Bytef*)in, data.length() );
     std::string result;
     result.assign( (char*)out, CHUNK );
     m_compCount += result.length();
