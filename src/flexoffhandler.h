@@ -41,6 +41,11 @@ namespace gloox
       };
 
       /**
+       * Virtual Destructor.
+       */
+      virtual ~FlexibleOfflineHandler() {};
+
+      /**
        * This function is called to indicate whether the server supports JEP-0013 or not.
        * Call @ref FlexibleOffline::checkSupport() to trigger the check.
        * @param support Whether the server support JEP-0013 or not.

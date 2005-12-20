@@ -33,6 +33,11 @@ namespace gloox
   {
     public:
       /**
+       * Virtual Destructor.
+       */
+      virtual ~LogHandler() {};
+
+      /**
        * Reimplement this function if you want to receive the chunks of the conversation
        * between gloox and server.
        * @param level The log message's severity.

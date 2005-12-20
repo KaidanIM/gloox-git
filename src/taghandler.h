@@ -29,6 +29,11 @@ namespace gloox
   class GLOOX_EXPORT TagHandler
   {
      public:
+      /**
+       * Virtual Destructor.
+       */
+       virtual ~TagHandler() {};
+
        /**
         * This function is called when a registered XML element arrives.
         * @param stanza The complete Stanza.

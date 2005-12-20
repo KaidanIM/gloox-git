@@ -41,6 +41,11 @@ namespace gloox
       };
 
       /**
+       * Virtual Destructor.
+       */
+      virtual ~PrivateXMLHandler() {};
+
+      /**
        * Reimplement this function to receive the private XML that was requested earlier using
        * @c PrivateXML::requestXML().
        * @param tag The tag of the storage packet.
