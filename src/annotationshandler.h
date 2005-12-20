@@ -50,6 +50,11 @@ namespace gloox
       typedef std::list<annotationsListItem> AnnotationsList;
 
       /**
+       * Virtual destructor.
+       */
+      virtual ~AnnotationsHandler() {};
+
+      /**
        * This function is called when notes arrive from the server.
        * @param aList A list of notes.
        */

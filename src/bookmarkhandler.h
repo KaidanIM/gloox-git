@@ -63,6 +63,11 @@ namespace gloox
       typedef std::list<conferenceListItem> ConferenceList;
 
       /**
+       * Virtual Destructor.
+       */
+      virtual ~BookmarkHandler() {};
+
+      /**
        * This function is called when bookmarks arrive from the server.
        * @param bList A list of URL bookmarks.
        * @param cList A list of conference bookmarks.

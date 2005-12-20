@@ -30,6 +30,11 @@ namespace gloox
   {
     public:
       /**
+       * Virtual Destructor.
+       */
+      virtual ~MessageEventHandler() {};
+
+      /**
        * Notifies the MessageEventHandler that an event has been raised by the remote
        * contact.
        * @param from The originator of the Event.

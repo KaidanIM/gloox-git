@@ -30,6 +30,11 @@ namespace gloox
   {
     public:
       /**
+       * Virtual Destructor.
+       */
+      virtual ~MessageHandler() {};
+
+      /**
        * Reimplement this function if you want to be notified about
        * incoming messages.
        * @param stanza The complete Stanza.

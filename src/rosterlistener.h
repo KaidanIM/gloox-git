@@ -39,6 +39,11 @@ namespace gloox
       typedef std::map<const std::string, RosterItem*> Roster;
 
       /**
+       * Virtual Destructor.
+       */
+      virtual ~RosterListener() {};
+
+      /**
        * Reimplement this function if you want to be notified about new items
        * on the server-side roster (items subject to a so-called Roster Push).
        * This function will be called regardless who added the item, either this

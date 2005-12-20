@@ -32,6 +32,11 @@ namespace gloox
   {
     public:
       /**
+       * Virtual Destructor.
+       */
+      virtual ~DiscoNodeHandler() {};
+
+      /**
        * In addition to @c handleDiscoNodeIdentities, this function is used to gather
        * more information on a specific node. It is called when a disco#info query
        * arrives with a node attribute that matches the one registered for this handler.

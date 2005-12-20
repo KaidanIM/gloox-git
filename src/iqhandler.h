@@ -31,6 +31,11 @@ namespace gloox
   {
     public:
       /**
+       * Virtual Destructor.
+       */
+      virtual ~IqHandler() {};
+
+      /**
        * Reimplement this function if you want to be notified about incoming IQs.
        * @param stanza The complete Stanza.
        * @return Indicates whether a request of type 'get' or 'set' has been handled. This includes
