@@ -107,6 +107,8 @@ namespace gloox
       static int connect( const std::string& domain, int port );
 
     private:
+      static HostMap defaultHostMap( const std::string& service, const std::string& proto,
+                                   const std::string& domain );
       static void cleanup();
 
       typedef struct buffer

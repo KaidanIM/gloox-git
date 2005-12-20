@@ -88,7 +88,7 @@ namespace gloox
       srvbuf.len = res_query( dname.c_str(), C_IN, T_SRV, srvbuf.buf, NS_PACKETSZ );
 
     if( srvbuf.len < 0 )
-      error = true;
+      return defaultHostMap( service, proto, domain );
 
     HEADER* hdr = (HEADER*)srvbuf.buf;
     unsigned char* here = srvbuf.buf + NS_HFIXEDSZ;
@@ -125,19 +125,7 @@ namespace gloox
 
     if( error )
     {
-      HostMap server;
-      struct servent *servent;
-
-      if( ( servent = getservbyname( service.c_str(), proto.c_str() ) ) == 0 )
-      {
-        server[domain] = 0;
-        return server;
-      }
-
-      if( !domain.empty() )
-        server[domain] = ntohs( servent->s_port );
-
-      return server;
+      return defaultHostMap( service, proto, domain );
     }
 
     // (q)sort here
@@ -154,6 +142,24 @@ namespace gloox
     }
 
     return servers;
+  }
+
+  DNS::HostMap DNS::defaultHostMap( const std::string& service, const std::string& proto,
+                               const std::string& domain )
+  {
+    HostMap server;
+    struct servent *servent;
+
+    if( ( servent = getservbyname( service.c_str(), proto.c_str() ) ) == 0 )
+    {
+      server[domain] = 0;
+      return server;
+    }
+
+    if( !domain.empty() )
+      server[domain] = ntohs( servent->s_port );
+
+    return server;
   }
 
   int DNS::connect( const std::string& domain )
