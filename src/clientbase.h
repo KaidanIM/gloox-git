@@ -351,18 +351,18 @@ namespace gloox
        * If you disable automatic MessageSession creation, the MessageSessionHandler will
        * be cleared. You have to set it anew the next time you want to enable it. You cannot
        * enable this feature without a valid MessageSessionHandler.
-       * @note If you enable this feature, the registered MessageSessionHandler will provide you
+       * @attention If you enable this feature, the registered MessageSessionHandler will provide you
        * with a basic MessageSession. You can then decorate this MessageSession using various
        * Add-ons (e.g., Message Events (JEP-0022) by means of MessageEventDecorator). Also, to make
        * the MessageSession fully functional, you should register a MessageHandler with it which
-       * will receive subsequent message from the session. The decorators you apply to the
+       * will receive subsequent messages from the session. The decorators you apply to the
        * MessageSession may require the initial Stanza, due to which the MessageSession was
        * created, to build up some internal state (for example, MessageEventDecorator does need
        * the first message). Therefore you should, @b after you decorated your new MessageSession
        * but @b before you register your MessageHandler with it, pass the Stanza you receive from your
        * MessageSessionHandler to the MessageSession's handleMessage() function. This will hopefully
        * be fixed in a future version.
-       * @todo Fix necessity to feed teh first stanza back into a decorated MessageSession.
+       * @todo Fix necessity to feed the first stanza back into a decorated MessageSession.
        *
        * @param autoMS Whether to enable automatic MessageSession creation.
        * @param msh The MessageSessionHandler that will receive the newly created MessageSession.
