@@ -15,6 +15,7 @@
 #define DNS_H__
 
 #include "macros.h"
+#include "logsink.h"
 
 #ifdef __MINGW32__
 #include <windows.h>
@@ -95,7 +96,7 @@ namespace gloox
        * @param domain The domain to resolve SRV records for.
        * @return A file descriptor for the established connection.
        */
-      static int connect( const std::string& domain );
+      static int connect( const std::string& domain, const LogSink& logInstance );
 
       /**
        * This is a convenience function which uses connects to the given host and port. No SRV
@@ -104,7 +105,7 @@ namespace gloox
        * @param port A custom port to connect to.
        * @return A file descriptor for the established connection.
        */
-      static int connect( const std::string& domain, int port );
+      static int connect( const std::string& domain, int port, const LogSink& logInstance );
 
     private:
       static HostMap defaultHostMap( const std::string& service, const std::string& proto,

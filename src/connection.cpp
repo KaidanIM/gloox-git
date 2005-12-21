@@ -43,8 +43,9 @@ namespace gloox
 
   static const int BUFSIZE = 1024;
 
-  Connection::Connection( Parser *parser, const std::string& server, int port )
-    : m_parser( parser ), m_buf( 0 ), m_server( Prep::idna( server ) ), m_port( port ),
+  Connection::Connection( Parser *parser, const LogSink& logInstance, const std::string& server, int port )
+    : m_parser( parser ), m_logInstance( logInstance ), m_buf( 0 ),
+      m_server( Prep::idna( server ) ), m_port( port ),
       m_socket( -1 ), m_compCount( 0 ), m_decompCount( 0 ), m_dataOutCount( 0 ),
       m_dataInCount( 0 ), m_cancel( true ), m_secure( false ), m_compression( false ),
       m_fdRequested( false ), m_compInited( false )
@@ -475,10 +476,10 @@ namespace gloox
         switch( ret )
         {
           case Parser::PARSER_BADXML:
-            LogSink::instance().log( LOG_ERROR, LOG_CLASS_CONNECTION, "XML parse error" );
+            m_logInstance.log( LOG_ERROR, LOG_CLASS_CONNECTION, "XML parse error" );
             break;
           case Parser::PARSER_NOMEM:
-            LogSink::instance().log( LOG_ERROR, LOG_CLASS_CONNECTION, "memory allocation error" );
+            m_logInstance.log( LOG_ERROR, LOG_CLASS_CONNECTION, "memory allocation error" );
             break;
           default:
             break;
@@ -564,22 +565,22 @@ namespace gloox
     m_state = STATE_CONNECTING;
 
     if( m_port == -1 )
-      m_socket = DNS::connect( m_server );
+      m_socket = DNS::connect( m_server, m_logInstance );
     else
-      m_socket = DNS::connect( m_server, m_port );
+      m_socket = DNS::connect( m_server, m_port, m_logInstance );
 
     if( m_socket < 0 )
     {
       switch( m_socket )
       {
         case -DNS::DNS_COULD_NOT_CONNECT:
-          LogSink::instance().log( LOG_ERROR, LOG_CLASS_CONNECTION, "connection error: could not connect" );
+          m_logInstance.log( LOG_ERROR, LOG_CLASS_CONNECTION, "connection error: could not connect" );
           break;
         case -DNS::DNS_NO_HOSTS_FOUND:
-          LogSink::instance().log( LOG_ERROR, LOG_CLASS_CONNECTION, "connection error: no hosts found" );
+          m_logInstance.log( LOG_ERROR, LOG_CLASS_CONNECTION, "connection error: no hosts found" );
           break;
         case -DNS::DNS_COULD_NOT_RESOLVE:
-          LogSink::instance().log( LOG_ERROR, LOG_CLASS_CONNECTION, "connection error: could not resolve" );
+          m_logInstance.log( LOG_ERROR, LOG_CLASS_CONNECTION, "connection error: could not resolve" );
           break;
       }
       cleanup();

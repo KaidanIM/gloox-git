@@ -33,15 +33,14 @@ namespace gloox
   {
     public:
       /**
+       * Constructor.
+       */
+      LogSink();
+
+      /**
        * Virtual destructor.
        */
       virtual ~LogSink();
-
-      /**
-       * Use this method to get a reference to the Log object.
-       * @return A reference to the Log object.
-       */
-      static LogSink& instance();
 
       /**
        * Use this function to log a message with given LogLevel and LogIdentifier.
@@ -49,7 +48,7 @@ namespace gloox
        * @param area The part of the program/library the message comes from.
        * @param message The actual log message.
        */
-      void log( LogLevel level, LogArea area, const std::string& message );
+      void log( LogLevel level, LogArea area, const std::string& message ) const;
 
       /**
        * Registers @c lh as object that receives all debug messages of the specified type.
@@ -66,17 +65,6 @@ namespace gloox
        */
       void removeLogHandler( LogHandler *lh );
 
-      /**
-       * You can log to a file by setting its file name here. Subsequent calls will close the old
-       * log file and open the new one.
-       * @param level The LogLevel. A given level includes all levels of higer importance.
-       * @param areas Bitwise ORed LogAreas.
-       * @param file The log file's name.
-       * @param append New log messages will be appended if @b true, the file will be truncated otherwise.
-       * @deprecated You're encouraged to use the LogHandler to write log messages to a file.
-       */
-      GLOOX_DEPRECATED void setFile( LogLevel level, int areas, const std::string& file, bool append = true );
-
     private:
       struct LogInfo
       {
@@ -84,14 +72,11 @@ namespace gloox
         int areas;
       };
 
-      LogSink();
       LogSink( const LogSink& copy ) {};
 
       typedef std::map<LogHandler*, LogInfo> LogHandlerMap;
       LogHandlerMap m_logHandlers;
 
-      std::string m_file;
-      std::ofstream m_ofile;
       LogLevel m_level;
       int m_fileFilter;
 

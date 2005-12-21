@@ -21,6 +21,7 @@
 #endif
 
 #include "gloox.h"
+#include "logsink.h"
 
 #include <string>
 
@@ -62,7 +63,7 @@ namespace gloox
        * @param port The port to connect to. The default of -1 means that SRV records will be used
        * to find out about the actual host:port.
        */
-      Connection( Parser *parser, const std::string& server, int port = -1 );
+      Connection( Parser *parser, const LogSink& logInstance, const std::string& server, int port = -1 );
 
       /**
        * Virtual destructor
@@ -189,6 +190,7 @@ namespace gloox
       ConnectionState m_state;
       CertInfo m_certInfo;
       ConnectionError m_disconnect;
+      const LogSink& m_logInstance;
 
       char *m_buf;
       std::string m_server;
