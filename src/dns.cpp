@@ -18,7 +18,6 @@
 #endif
 
 #include "dns.h"
-#include "logsink.h"
 
 #include <sys/types.h>
 
@@ -60,9 +59,9 @@ namespace gloox
 {
 
 #if defined( SKYOS ) || defined( WIN32 ) || ( defined( __NetBSD__ ) && ( __NetBSD_Version__ < 300000000 ) ) || defined( __UCLIBC__ )
-  int DNS::connect( const std::string& domain )
+  int DNS::connect( const std::string& domain, const LogSink& logInstance )
   {
-    return DNS::connect( domain, XMPP_PORT );
+    return DNS::connect( domain, XMPP_PORT, logInstance );
   }
 #else
   DNS::HostMap DNS::resolve( const std::string& domain )
@@ -162,7 +161,7 @@ namespace gloox
     return server;
   }
 
-  int DNS::connect( const std::string& domain )
+  int DNS::connect( const std::string& domain, const LogSink& logInstance )
   {
     HostMap hosts = resolve( domain );
     if( hosts.size() == 0 )
@@ -199,7 +198,7 @@ namespace gloox
       char *tmp = inet_ntoa( *((struct in_addr *)h->h_addr) );
       std::ostringstream oss;
       oss << "resolved " << (*it).first.c_str() <<  " to: " << tmp << ":" << port;
-      LogSink::instance().log( LOG_DEBUG, LOG_CLASS_DNS, oss.str() );
+      logInstance.log( LOG_DEBUG, LOG_CLASS_DNS, oss.str() );
 
       if( inet_aton( inet_ntoa(*((struct in_addr *)h->h_addr)), &(target.sin_addr) ) == 0 )
         continue;
@@ -217,7 +216,7 @@ namespace gloox
   }
 #endif
 
-  int DNS::connect( const std::string& domain, int port )
+  int DNS::connect( const std::string& domain, int port, const LogSink& logInstance )
   {
 #ifdef WIN32
     WSADATA wsaData;
@@ -262,7 +261,7 @@ namespace gloox
 
     std::ostringstream oss;
     oss << "resolved " << domain.c_str() << " to: " << (char*)&target.sin_addr;
-    LogSink::instance().log( LOG_DEBUG, LOG_CLASS_DNS, oss.str() );
+    logInstance.log( LOG_DEBUG, LOG_CLASS_DNS, oss.str() );
 
     memset( &(target.sin_zero), '\0', 8 );
     if( ::connect( fd, (struct sockaddr *)&target, sizeof( struct sockaddr ) ) == 0 )

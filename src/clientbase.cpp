@@ -20,7 +20,6 @@
 
 #include "clientbase.h"
 #include "connection.h"
-#include "logsink.h"
 #include "messagesessionhandler.h"
 #include "parser.h"
 #include "tag.h"
@@ -87,7 +86,7 @@ namespace gloox
       m_parser = new Parser( this );
 
     if( !m_connection )
-      m_connection = new Connection( m_parser, m_server, m_port );
+      m_connection = new Connection( m_parser, m_logInstance, m_server, m_port );
 
 #ifdef HAVE_TLS
     m_connection->setCACerts( m_cacerts );
@@ -112,7 +111,7 @@ namespace gloox
   void ClientBase::filter( NodeType type, Stanza *stanza )
   {
     if( stanza )
-      LogSink::instance().log( LOG_DEBUG, LOG_XML_INCOMING, stanza->xml() );
+      logInstance().log( LOG_DEBUG, LOG_XML_INCOMING, stanza->xml() );
 
     switch( type )
     {
@@ -161,7 +160,7 @@ namespace gloox
         handleStreamError( stanza );
         break;
       case NODE_STREAM_CLOSE:
-        LogSink::instance().log( LOG_DEBUG, LOG_CLASS_CLIENTBASE, "stream closed" );
+        logInstance().log( LOG_DEBUG, LOG_CLASS_CLIENTBASE, "stream closed" );
         disconnect( CONN_STREAM_CLOSED );
         break;
     }
@@ -383,7 +382,7 @@ namespace gloox
 
   void ClientBase::send( const std::string& xml )
   {
-    LogSink::instance().log(LOG_DEBUG, LOG_XML_OUTGOING, xml );
+    logInstance().log(LOG_DEBUG, LOG_XML_OUTGOING, xml );
 
     if( m_connection )
       m_connection->send( xml );
@@ -420,6 +419,11 @@ namespace gloox
       return false;
     else
       return true;
+  }
+
+  LogSink& ClientBase::logInstance()
+  {
+    return m_logInstance;
   }
 
   void ClientBase::handleStreamError( Stanza *stanza )
