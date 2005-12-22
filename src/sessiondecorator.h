@@ -29,7 +29,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.8
    */
-  class SessionDecorator : public Session
+  class GLOOX_EXPORT SessionDecorator : public Session
   {
     public:
       /**
