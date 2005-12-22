@@ -536,40 +536,49 @@ namespace gloox
 
   void ClientBase::registerPresenceHandler( PresenceHandler *ph )
   {
-    m_presenceHandlers.push_back( ph );
+    if( ph )
+      m_presenceHandlers.push_back( ph );
   }
 
   void ClientBase::removePresenceHandler( PresenceHandler *ph )
   {
-    m_presenceHandlers.remove( ph );
+    if( ph )
+      m_presenceHandlers.remove( ph );
   }
 
   void ClientBase::registerIqHandler( IqHandler *ih, const std::string& xmlns )
   {
-    m_iqNSHandlers[xmlns] = ih;
+    if( ih && !xmlns.empty() )
+      m_iqNSHandlers[xmlns] = ih;
   }
 
   void ClientBase::trackID( IqHandler *ih, const std::string& id, int context )
   {
-    TrackStruct track;
-    track.ih = ih;
-    track.context = context;
-    m_iqIDHandlers[id] = track;
+    if( ih && !id.empty() )
+    {
+      TrackStruct track;
+      track.ih = ih;
+      track.context = context;
+      m_iqIDHandlers[id] = track;
+    }
   }
 
   void ClientBase::removeIqHandler( const std::string& xmlns )
   {
-    m_iqNSHandlers.erase( xmlns );
+    if( !xmlns.empty() )
+      m_iqNSHandlers.erase( xmlns );
   }
 
   void ClientBase::registerMessageHandler( const std::string& jid, MessageHandler *mh )
   {
-    m_messageJidHandlers[jid] = mh;
+    if( mh && !jid.empty() )
+      m_messageJidHandlers[jid] = mh;
   }
 
   void ClientBase::registerMessageHandler( MessageHandler *mh )
   {
-    m_messageHandlers.push_back( mh );
+    if( mh )
+      m_messageHandlers.push_back( mh );
   }
 
   void ClientBase::removeMessageHandler( const std::string& jid )
@@ -581,45 +590,56 @@ namespace gloox
 
   void ClientBase::removeMessageHandler( MessageHandler *mh )
   {
-    m_messageHandlers.remove( mh );
+    if( mh )
+      m_messageHandlers.remove( mh );
   }
 
   void ClientBase::registerSubscriptionHandler( SubscriptionHandler *sh )
   {
-    m_subscriptionHandlers.push_back( sh );
+    if( sh )
+      m_subscriptionHandlers.push_back( sh );
   }
 
   void ClientBase::registerTagHandler( TagHandler *th, const std::string& tag, const std::string& xmlns )
   {
-    TagHandlerStruct ths;
-    ths.tag = tag;
-    ths.xmlns = xmlns;
-    ths.th = th;
-    m_tagHandlers.push_back( ths );
+    if( th && !tag.empty() )
+    {
+      TagHandlerStruct ths;
+      ths.tag = tag;
+      ths.xmlns = xmlns;
+      ths.th = th;
+      m_tagHandlers.push_back( ths );
+    }
   }
 
   void ClientBase::removeSubscriptionHandler( SubscriptionHandler *sh )
   {
-    m_subscriptionHandlers.remove( sh );
+    if( sh )
+      m_subscriptionHandlers.remove( sh );
   }
 
   void ClientBase::registerConnectionListener( ConnectionListener *cl )
   {
-    m_connectionListeners.push_back( cl );
+    if( cl )
+      m_connectionListeners.push_back( cl );
   }
 
   void ClientBase::removeConnectionListener( ConnectionListener *cl )
   {
-    m_connectionListeners.remove( cl );
+    if( cl )
+      m_connectionListeners.remove( cl );
   }
 
   void ClientBase::removeTagHandler( TagHandler *th, const std::string& tag, const std::string& xmlns )
   {
-    TagHandlerList::iterator it = m_tagHandlers.begin();
-    for( ; it != m_tagHandlers.end(); ++it )
+    if( th )
     {
-      if( (*it).th == th && (*it).tag == tag && (*it).xmlns == xmlns )
-        m_tagHandlers.erase( it );
+      TagHandlerList::iterator it = m_tagHandlers.begin();
+      for( ; it != m_tagHandlers.end(); ++it )
+      {
+        if( (*it).th == th && (*it).tag == tag && (*it).xmlns == xmlns )
+          m_tagHandlers.erase( it );
+      }
     }
   }
 
