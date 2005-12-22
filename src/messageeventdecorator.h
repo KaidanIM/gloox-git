@@ -53,9 +53,11 @@ namespace gloox
        * MessageSession.
        * @param ms The MessageSession to decorate.
        * @param defaultEvents Bit-wise ORed MessageEventType's which shall be requested
-       * for every message sent. Default: none.
+       * for every message sent. Default: all.
        */
-      MessageEventDecorator( MessageSession *ms, int defaultEvents = 0 );
+      MessageEventDecorator( MessageSession *ms,
+                             int defaultEvents = MESSAGE_EVENT_OFFLINE | MESSAGE_EVENT_CANCEL
+                                               | MESSAGE_EVENT_DISPLAYED | MESSAGE_EVENT_COMPOSING );
 
       /**
        * Virtual destructor.
