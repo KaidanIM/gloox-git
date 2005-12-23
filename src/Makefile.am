@@ -38,6 +38,6 @@ libglooxinclude_HEADERS = adhoccommandprovider.h  privacymanager.h        tag.h 
                             dataformitem.h        dataformbase.h          dataformreported.h \
                             macros.h              logsink.h               messagesession.h \
                             messageeventhandler.h messageeventdecorator.h messagesessionhandler.h \
-                            session.h             sessiondecorator.h
+                            session.h             sessiondecorator.h      messagesessionbase.h
 
 noinst_HEADERS = prep.h parser.h connection.h dns.h nonsaslauth.h

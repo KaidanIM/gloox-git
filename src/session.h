@@ -15,6 +15,7 @@
 #ifndef SESSION_H__
 #define SESSION_H__
 
+#include "macros.h"
 
 namespace gloox
 {
@@ -27,7 +28,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.8
    */
-  class Session
+  class GLOOX_EXPORT Session
   {
     public:
       /**

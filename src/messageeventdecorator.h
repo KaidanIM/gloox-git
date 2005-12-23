@@ -44,7 +44,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.8
    */
-  class GLOOX_EXPORT MessageEventDecorator : public SessionDecorator, MessageHandler
+  class GLOOX_EXPORT MessageEventDecorator : public SessionDecorator, public MessageSessionBase
   {
     public:
       /**
@@ -55,8 +55,8 @@ namespace gloox
        * @param defaultEvents Bit-wise ORed MessageEventType's which shall be requested
        * for every message sent. Default: all.
        */
-      MessageEventDecorator( MessageSession *ms,
-                             int defaultEvents = MESSAGE_EVENT_OFFLINE | MESSAGE_EVENT_CANCEL
+      MessageEventDecorator( MessageSessionBase *ms,
+                             int defaultEvents = MESSAGE_EVENT_OFFLINE | MESSAGE_EVENT_DELIVERED
                                                | MESSAGE_EVENT_DISPLAYED | MESSAGE_EVENT_COMPOSING );
 
       /**

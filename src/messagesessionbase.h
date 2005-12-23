@@ -11,12 +11,13 @@
 */
 
 
-#ifndef SESSIONDECORATOR_H__
-#define SESSIONDECORATOR_H__
+#ifndef MESSAGESESSIONBASE_H__
+#define MESSAGESESSIONBASE_H__
 
-#include "macros.h"
-
+#include "messagehandler.h"
 #include "session.h"
+
+#include <string>
 
 namespace gloox
 {
@@ -24,30 +25,34 @@ namespace gloox
   class Tag;
 
   /**
-   * @brief An abstract base class for Session decorators.
+   * @brief The base of an abstraction of a message session between any two entities.
    *
    * You should not need to use this class directly.
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.8
    */
-  class GLOOX_EXPORT SessionDecorator : public Session
+  class GLOOX_EXPORT MessageSessionBase : public Session, public MessageHandler
   {
     public:
       /**
-       * Creates a new SessionDecorator.
-       * @param session The parent session to decorate.
+       * Constructs a new MessageSession.
        */
-      SessionDecorator( Session *session ) : m_parent( session ) {};
+      MessageSessionBase() {};
+
+      /**
+       * Virtual destructor.
+       */
+      virtual ~MessageSessionBase() {};
 
       // reimplemented from Session
-      virtual void send( Tag *tag ) { m_parent->send( tag ); };
+      virtual void send( Tag *tag ) = 0;
 
-    private:
-      Session *m_parent;
+      // reimplemented from MessageHandler
+      virtual void handleMessage( Stanza *stanza ) = 0;
 
   };
 
 }
 
-#endif // SESSIONDECORATOR_H__
+#endif // MESSAGESESSIONBASE_H__

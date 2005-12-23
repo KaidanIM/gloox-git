@@ -15,7 +15,7 @@
 #define MESSAGESESSION_H__
 
 #include "messagehandler.h"
-#include "session.h"
+#include "messagesessionbase.h"
 #include "jid.h"
 
 #include <string>
@@ -46,7 +46,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.8
    */
-  class GLOOX_EXPORT MessageSession : public Session, MessageHandler
+  class GLOOX_EXPORT MessageSession : public MessageSessionBase
   {
     public:
       /**
