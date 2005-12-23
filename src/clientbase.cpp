@@ -33,6 +33,7 @@
 #include "loghandler.h"
 #include "taghandler.h"
 #include "jid.h"
+#include "messageeventdecorator.h"
 
 #include <iksemel.h>
 
@@ -49,7 +50,8 @@ namespace gloox
       m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ),
       m_messageSessionHandler( 0 ), m_parser( 0 ),
       m_authError( AUTH_ERROR_UNDEFINED ), m_streamError( ERROR_UNDEFINED ),
-      m_streamErrorAppCondition( 0 ), m_idCount( 0 ), m_autoMessageSession( false )
+      m_streamErrorAppCondition( 0 ), m_idCount( 0 ), m_autoMessageSessionDecorators( 0 ),
+      m_autoMessageSession( false )
   {
   }
 
@@ -59,7 +61,8 @@ namespace gloox
       m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ),
       m_messageSessionHandler( 0 ), m_parser( 0 ),
       m_authError( AUTH_ERROR_UNDEFINED ), m_streamError( ERROR_UNDEFINED ),
-      m_streamErrorAppCondition( 0 ), m_idCount( 0 ), m_autoMessageSession( false )
+      m_streamErrorAppCondition( 0 ), m_idCount( 0 ), m_autoMessageSessionDecorators( 0 ),
+      m_autoMessageSession( false )
   {
   }
 
@@ -509,7 +512,7 @@ namespace gloox
       return "";
   }
 
-  void ClientBase::setAutoMessageSession( bool autoMS, MessageSessionHandler *msh )
+  void ClientBase::setAutoMessageSession( bool autoMS, MessageSessionHandler *msh, int decorators )
   {
     if( autoMS )
     {
@@ -518,11 +521,13 @@ namespace gloox
 
       m_messageSessionHandler = msh;
       m_autoMessageSession = true;
+      m_autoMessageSessionDecorators = decorators;
     }
     else
     {
       m_autoMessageSession = false;
       m_messageSessionHandler = 0;
+      m_autoMessageSessionDecorators = 0;
     }
   }
 
@@ -752,7 +757,11 @@ namespace gloox
 
     if( m_autoMessageSession && m_messageSessionHandler )
     {
-      MessageSession *session = new MessageSession( this, stanza->from() );
+      MessageSessionBase *session = new MessageSession( this, stanza->from() );
+
+      if( m_autoMessageSessionDecorators & DECO_MESSAGE_EVENTS )
+        session = new MessageEventDecorator( session, 0 );
+
       m_messageSessionHandler->handleMessageSession( session, stanza );
       return;
     }
