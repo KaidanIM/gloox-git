@@ -53,6 +53,14 @@ namespace gloox
     friend class Parser;
 
     public:
+      /**
+       * A list of MessageSession decorators. You can bit-wise OR them together and supply the result
+       * to ClientBase::setAutoMessageSession().
+       */
+      enum MessageSessionDecorators
+      {
+        DECO_MESSAGE_EVENTS    =  1 /**< Implements JEP-0022 (Message Events) */
+      };
 
       /**
        * Constructs a new ClientBase.
@@ -355,8 +363,10 @@ namespace gloox
        *
        * @param autoMS Whether to enable automatic MessageSession creation.
        * @param msh The MessageSessionHandler that will receive the newly created MessageSession.
+       * @param decorators Bit-wise ORed list of MessageSessionDecorators you want to have applied
+       * by default to the newly created MessageSession.
        */
-      void setAutoMessageSession( bool autoMS, MessageSessionHandler *msh = 0 );
+      void setAutoMessageSession( bool autoMS, MessageSessionHandler *msh, int decorators );
 
       /**
        * Returns the LogSink instance for this ClientBase and all related objects.
@@ -506,6 +516,7 @@ namespace gloox
       std::string m_streamErrorCData;
       Tag *m_streamErrorAppCondition;
       int m_idCount;
+      int m_autoMessageSessionDecorators;
       bool m_autoMessageSession;
 
   };

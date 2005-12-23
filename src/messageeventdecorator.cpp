@@ -17,10 +17,11 @@
 namespace gloox
 {
 
-  MessageEventDecorator::MessageEventDecorator( MessageSession *ms, int defaultEvents )
-    : SessionDecorator( ms ), m_parent( ms ), m_messageEventHandler( 0 ), m_requestedEvents( 0 ),
+  MessageEventDecorator::MessageEventDecorator( MessageSessionBase *ms, int defaultEvents )
+    : SessionDecorator( ms ), /*m_parent( ms ), */m_messageEventHandler( 0 ), m_requestedEvents( 0 ),
       m_defaultEvents( defaultEvents ), m_lastSent( MESSAGE_EVENT_CANCEL )
   {
+    m_parent = dynamic_cast<MessageSession*>( ms );
   }
 
   MessageEventDecorator::~MessageEventDecorator()
@@ -70,7 +71,8 @@ namespace gloox
 
   void MessageEventDecorator::raiseEvent( MessageEventType event )
   {
-    if( ( m_requestedEvents & event ) || ( m_requestedEvents && ( event == MESSAGE_EVENT_CANCEL ) ) )
+    if( ( m_requestedEvents & event ) ||
+          ( ( m_lastSent == MESSAGE_EVENT_COMPOSING ) && ( event == MESSAGE_EVENT_CANCEL ) ) )
     {
       Tag *m = new Tag( "message" );
       m->addAttribute( "to", m_parent->target().full() );
@@ -83,29 +85,26 @@ namespace gloox
         case MESSAGE_EVENT_OFFLINE:
           new Tag( x, "offline" );
           m_requestedEvents ^= event;
-          m_lastSent = MESSAGE_EVENT_OFFLINE;
           break;
         case MESSAGE_EVENT_DELIVERED:
           new Tag( x, "delivered" );
           m_requestedEvents ^= event;
-          m_lastSent = MESSAGE_EVENT_DELIVERED;
           break;
         case MESSAGE_EVENT_DISPLAYED:
           new Tag( x, "displayed" );
           m_requestedEvents ^= event;
-          m_lastSent = MESSAGE_EVENT_DISPLAYED;
           break;
         case MESSAGE_EVENT_COMPOSING:
           if( m_lastSent != MESSAGE_EVENT_COMPOSING )
           {
             new Tag( x, "composing" );
-            m_lastSent = MESSAGE_EVENT_COMPOSING;
           }
           break;
         case MESSAGE_EVENT_CANCEL:
-          m_lastSent = MESSAGE_EVENT_CANCEL;
           break;
       }
+
+      m_lastSent = event;
 
       m_parent->send( m );
     }

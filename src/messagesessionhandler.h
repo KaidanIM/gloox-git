@@ -15,7 +15,7 @@
 #define MESSAGESESSIONHANDLER_H__
 
 #include "stanza.h"
-#include "messagesession.h"
+#include "messagesessionbase.h"
 
 namespace gloox
 {
@@ -46,7 +46,7 @@ namespace gloox
        * @param session The new MessageSession.
        * @param stanza The complete Stanza.
        */
-      virtual void handleMessageSession( MessageSession *session, Stanza *stanza ) = 0;
+      virtual void handleMessageSession( MessageSessionBase *session, Stanza *stanza ) = 0;
   };
 
 }
