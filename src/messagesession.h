@@ -131,7 +131,7 @@ namespace gloox
        * discouraged. ;)
        * @param event The event to raise.
        */
-      void raiseEvent( MessageEventType event );
+      void raiseMessageEvent( MessageEventType event );
 
       // reimplemented from MessageHandler
       virtual void handleMessage( Stanza *stanza );
