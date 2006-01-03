@@ -66,7 +66,7 @@ namespace gloox
     }
   }
 
-  void MessageEventFilter::raiseEvent( MessageEventType event )
+  void MessageEventFilter::raiseMessageEvent( MessageEventType event )
   {
     if( ( m_requestedEvents & event ) ||
           ( ( m_lastSent == MESSAGE_EVENT_COMPOSING ) && ( event == MESSAGE_EVENT_CANCEL ) ) )

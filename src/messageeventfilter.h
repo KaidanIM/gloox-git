@@ -63,7 +63,7 @@ namespace gloox
        * discouraged. ;)
        * @param event The event to raise.
        */
-      void raiseEvent( MessageEventType event );
+      void raiseMessageEvent( MessageEventType event );
 
       /**
        * The MessageEventHandler registered here will receive Message Events according
@@ -91,7 +91,8 @@ namespace gloox
       void removeMessageHandler();
 
       /**
-       *
+       * Adds Message Event request tags to the given Tag.
+       * @param tag The tag to decorate.
        */
       virtual void decorate( Tag *tag );
 

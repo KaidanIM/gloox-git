@@ -72,11 +72,11 @@ namespace gloox
     m_parent->send( tag );
   }
 
-  void MessageSession::raiseEvent( MessageEventType event )
+  void MessageSession::raiseMessageEvent( MessageEventType event )
   {
     if( m_eventFilter )
     {
-      m_eventFilter->raiseEvent( event );
+      m_eventFilter->raiseMessageEvent( event );
     }
   }
 
