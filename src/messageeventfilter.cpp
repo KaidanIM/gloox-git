@@ -125,16 +125,6 @@ namespace gloox
     }
   }
 
-  void MessageEventFilter::registerMessageHandler( MessageHandler *mh )
-  {
-    m_parent->registerMessageHandler( mh );
-  }
-
-  void MessageEventFilter::removeMessageHandler()
-  {
-    m_parent->removeMessageHandler();
-  }
-
   void MessageEventFilter::registerMessageEventHandler( MessageEventHandler *meh )
   {
     m_messageEventHandler = meh;

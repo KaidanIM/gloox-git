@@ -26,6 +26,8 @@ namespace gloox
   class Tag;
   class MessageEventFilter;
   class MessageEventHandler;
+  class ChatStateFilter;
+  class ChatStateHandler;
 
   /**
    * @brief An abstraction of a message session between any two entities.
@@ -106,6 +108,20 @@ namespace gloox
       void removeMessageEventHandler();
 
       /**
+       * The ChatStateHandler registered here will receive Chat States according
+       * to JEP-0085.
+       * @param csh The ChatStateHandler to register.
+       */
+      void registerChatStateHandler( ChatStateHandler *csh );
+
+      /**
+       * This function clears the internal pointer to the ChatStateHandler.
+       * Chat States will not be delivered anymore after calling this function until another
+       * ChatStateHandler is registered.
+       */
+      void removeChatStateHandler();
+
+      /**
        * A wrapper around ClientBase::send(). You should @b not use this function to send a
        * chat message because the Tag is not prepared accordingly (neither Thread ID nor Message
        * Event requests are added).
@@ -133,12 +149,25 @@ namespace gloox
        */
       void raiseMessageEvent( MessageEventType event );
 
+      /**
+       * Use this function to set a chat state as defined in JEP-0085.
+       * @note The Spec states that Chat States shall not be sent to an entity
+       * which did not request them. Reasonable effort is taken in this function to
+       * avoid spurious state sending. You should be safe to call this even if Message
+       * Events were not requested by the remote entity. However,
+       * calling setChatState( CHAT_STATE_COMPOSING ) for every keystroke still is
+       * discouraged. ;)
+       * @param state The state to set.
+       */
+      void setChatState( ChatStateType state );
+
       // reimplemented from MessageHandler
       virtual void handleMessage( Stanza *stanza );
 
     private:
       ClientBase *m_parent;
       MessageEventFilter *m_eventFilter;
+      ChatStateFilter *m_stateFilter;
       JID m_target;
       MessageHandler *m_messageHandler;
       std::string m_thread;

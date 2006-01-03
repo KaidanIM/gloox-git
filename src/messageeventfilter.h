@@ -38,8 +38,6 @@ namespace gloox
     public:
       /**
        * Contstructs a new Message Event filter for a MessageSession.
-       * You should use the newly created decorator and forget about the old
-       * MessageSession.
        * @param parent The MessageSession to decorate.
        * @param defaultEvents Bit-wise ORed MessageEventType's which shall be requested
        * for every message sent. Default: all.
@@ -59,7 +57,7 @@ namespace gloox
        * which did not request them. Reasonable effort is taken in this function to
        * avoid spurious event sending. You should be safe to call this even if Message
        * Events were not requested by the remote entity. However,
-       * calling raiseEvent( MESSAGE_EVENT_COMPOSING ) for every keystroke still is
+       * calling raiseMessageEvent( MESSAGE_EVENT_COMPOSING ) for every keystroke still is
        * discouraged. ;)
        * @param event The event to raise.
        */
@@ -78,17 +76,6 @@ namespace gloox
        * MessageEventHandler is registered.
        */
       void removeMessageEventHandler();
-
-      /**
-       * @copydoc MessageSession::registerMessageHandler().
-       * @param mh The MessageHandler to register.
-       */
-      void registerMessageHandler( MessageHandler *mh );
-
-      /**
-       * @copydoc MessageSession::removeMessageHandler().
-       */
-      void removeMessageHandler();
 
       /**
        * Adds Message Event request tags to the given Tag.
