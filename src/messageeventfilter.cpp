@@ -29,7 +29,6 @@ namespace gloox
 
   void MessageEventFilter::handleMessage( Stanza *stanza )
   {
-    printf( "mef: got mesage\n");
     if( ( m_messageEventHandler ) && stanza->hasChild( "x", "xmlns", XMLNS_X_EVENT ) )
     {
       if( stanza->body().empty() )
@@ -128,7 +127,6 @@ namespace gloox
 
   void MessageEventFilter::registerMessageHandler( MessageHandler *mh )
   {
-    printf( "registering mh 1\n");
     m_parent->registerMessageHandler( mh );
   }
 

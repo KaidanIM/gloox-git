@@ -41,22 +41,10 @@ namespace gloox
   void MessageSession::handleMessage( Stanza *stanza )
   {
     if( m_eventFilter )
-    {
-      printf( "filtering\n");
       m_eventFilter->handleMessage( stanza );
-    }
 
-    if( !m_messageHandler )
-    {
-      printf( "returning, !mh\n");
+    if( !m_messageHandler || stanza->body().empty() )
       return;
-    }
-
-    if( stanza->body().empty() )
-    {
-      printf( "returning, empty body\n");
-      return;
-    }
     else
       m_messageHandler->handleMessage( stanza );
   }
@@ -88,14 +76,12 @@ namespace gloox
   {
     if( m_eventFilter )
     {
-      printf( "raising event %d\n", event );
       m_eventFilter->raiseEvent( event );
     }
   }
 
   void MessageSession::registerMessageHandler( MessageHandler *mh )
   {
-    printf( "registering mh\n");
     m_messageHandler = mh;
   }
 
