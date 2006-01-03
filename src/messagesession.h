@@ -15,7 +15,6 @@
 #define MESSAGESESSION_H__
 
 #include "messagehandler.h"
-#include "messagesessionbase.h"
 #include "jid.h"
 
 #include <string>
@@ -25,6 +24,8 @@ namespace gloox
 
   class ClientBase;
   class Tag;
+  class MessageEventFilter;
+  class MessageEventHandler;
 
   /**
    * @brief An abstraction of a message session between any two entities.
@@ -46,7 +47,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.8
    */
-  class GLOOX_EXPORT MessageSession : public MessageSessionBase
+  class GLOOX_EXPORT MessageSession : public MessageHandler
   {
     public:
       /**
@@ -63,14 +64,6 @@ namespace gloox
        * Virtual destructor.
        */
       virtual ~MessageSession();
-
-      /**
-       * Use this function to associate a MessageHandler with this MessageSession.
-       * The MessageHandler will receive all messages sent from this MessageSession's
-       * remote contact.
-       * @param mh The MessageHandler to register.
-       */
-      void registerMessageHandler( MessageHandler *mh );
 
       /**
        * This function clears the internal pointer to the MessageHandler and therefore
@@ -91,14 +84,57 @@ namespace gloox
        */
       const std::string& threadID() const { return m_thread; };
 
-      // reimplemented from Session
+      /**
+       * Use this function to associate a MessageHandler with this MessageSession.
+       * The MessageHandler will receive all messages sent from this MessageSession's
+       * remote contact.
+       * @param mh The MessageHandler to register.
+       */
+      virtual void registerMessageHandler( MessageHandler *mh );
+
+       /**
+       * The MessageEventHandler registered here will receive Message Events according
+       * to JEP-0022.
+       * @param meh The MessageEventHandler to register.
+        */
+      void registerMessageEventHandler( MessageEventHandler *meh );
+
+      /**
+       * This function clears the internal pointer to the MessageEventHandler.
+       * Message Events will not be delivered anymore after calling this function until another
+       * MessageEventHandler is registered.
+       */
+      void removeMessageEventHandler();
+
+      /**
+       * A wrapper around ClientBase::send().
+       * @param tag A Tag to send.
+       */
       virtual void send( Tag *tag );
+
+      /**
+       * A convenience function
+       */
+      void send( const std::string& message, const std::string& subject );
+
+      /**
+       * Use this function to raise an event as defined in JEP-0022.
+       * @note The Spec states that Message Events shall not be sent to an entity
+       * which did not request them. Reasonable effort is taken in this function to
+       * avoid spurious event sending. You should be safe to call this even if Message
+       * Events were not requested by the remote entity. However,
+       * calling raiseEvent( MESSAGE_EVENT_COMPOSING ) for every keystroke still is
+       * discouraged. ;)
+       * @param event The event to raise.
+       */
+      void raiseEvent( MessageEventType event );
 
       // reimplemented from MessageHandler
       virtual void handleMessage( Stanza *stanza );
 
     private:
       ClientBase *m_parent;
+      MessageEventFilter *m_eventFilter;
       JID m_target;
       MessageHandler *m_messageHandler;
       std::string m_thread;

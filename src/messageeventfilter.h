@@ -11,10 +11,9 @@
 */
 
 
-#ifndef MESSAGEVENTDECORATOR
-#define MESSAGEVENTDECORATOR
+#ifndef MESSAGEVENTFILTER_H__
+#define MESSAGEVENTFILTER_H__
 
-#include "sessiondecorator.h"
 #include "messagesession.h"
 #include "messagehandler.h"
 
@@ -27,42 +26,32 @@ namespace gloox
   /**
    * @brief This class adds Message Event (JEP-0022) support to a MessageSession.
    *
-   * Usage:
-   * @code
-   * MessageSession *msgSess = new MessageSession( clntBase );
-   * int defaultEvents = MESSAGE_EVENT_OFFLINE | MESSAGE_EVENT_DELIVERED
-   *                     | MESSAGE_EVENT_DISPLAYED | MESSAGE_EVENT_COMPOSING
-   * msgSess = new MessageEventDecorator( msgSess, defaultEvents );
-   * @endcode
-   * And use it like you would use a MessageSession.
-   *
    * This implementation of Message Events is fully transparent to the user of the class.
-   * If the remote entity does not request message events, MessageEventDecorator will not send
-   * any, even if the user requests it. (This is required by the protocol specifiaction.)
-   * Therefore, it does no harm to always use the MessageEventDecorator.
+   * If the remote entity does not request message events, MessageEventFilter will not send
+   * any, even if the user requests it. (This is required by the protocol specification.)
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.8
    */
-  class GLOOX_EXPORT MessageEventDecorator : public SessionDecorator, public MessageSessionBase
+  class MessageEventFilter
   {
     public:
       /**
-       * Contstructs a new Message Event decorator for a MessageSession.
+       * Contstructs a new Message Event filter for a MessageSession.
        * You should use the newly created decorator and forget about the old
        * MessageSession.
-       * @param ms The MessageSession to decorate.
+       * @param parent The MessageSession to decorate.
        * @param defaultEvents Bit-wise ORed MessageEventType's which shall be requested
        * for every message sent. Default: all.
        */
-      MessageEventDecorator( MessageSessionBase *ms,
+      MessageEventFilter( MessageSession *parent,
                              int defaultEvents = MESSAGE_EVENT_OFFLINE | MESSAGE_EVENT_DELIVERED
                                                | MESSAGE_EVENT_DISPLAYED | MESSAGE_EVENT_COMPOSING );
 
       /**
        * Virtual destructor.
        */
-      virtual ~MessageEventDecorator();
+      virtual ~MessageEventFilter();
 
       /**
        * Use this function to raise an event as defined in JEP-0022.
@@ -101,8 +90,10 @@ namespace gloox
        */
       void removeMessageHandler();
 
-      // reimplemented from Session
-      virtual void send( Tag *tag );
+      /**
+       *
+       */
+      virtual void decorate( Tag *tag );
 
       // reimplemented from MessageHandler
       virtual void handleMessage( Stanza *stanza );
@@ -119,4 +110,4 @@ namespace gloox
 
 }
 
-#endif // MESSAGEVENTDECORATOR
+#endif // MESSAGEVENTFILTER_H__
