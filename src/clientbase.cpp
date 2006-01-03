@@ -33,7 +33,6 @@
 #include "loghandler.h"
 #include "taghandler.h"
 #include "jid.h"
-#include "messageeventdecorator.h"
 
 #include <iksemel.h>
 
@@ -242,6 +241,9 @@ namespace gloox
       case SASL_ANONYMOUS:
         a->addAttribute( "mechanism", "ANONYMOUS" );
         a->setCData( getID() );
+        break;
+      case SASL_EXTERNAL:
+        a->addAttribute( "mechanism", "EXTERNAL" );
         break;
     }
 
@@ -757,12 +759,9 @@ namespace gloox
 
     if( m_autoMessageSession && m_messageSessionHandler )
     {
-      MessageSessionBase *session = new MessageSession( this, stanza->from() );
-
-      if( m_autoMessageSessionDecorators & DECO_MESSAGE_EVENTS )
-        session = new MessageEventDecorator( session, 0 );
-
-      m_messageSessionHandler->handleMessageSession( session, stanza );
+      MessageSession *session = new MessageSession( this, stanza->from() );
+      m_messageSessionHandler->handleMessageSession( session );
+      notifyMessageHandlers( stanza );
       return;
     }
 

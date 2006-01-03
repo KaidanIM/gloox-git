@@ -347,11 +347,18 @@ namespace gloox
                                               const std::string& xmlns );
 
       /**
-       * Use this function to set a number of trusted root CA certificates. which shall be
+       * Use this function to set a number of trusted root CA certificates which shall be
        * used to verify a servers certificate.
        * @param cacerts A list of absolute paths to CA root certificate files in PEM format.
        */
       void setCACerts( const StringList& cacerts ) { m_cacerts = cacerts; };
+
+      /**
+       * Use this function to set a client certificate which will be presented to the server.
+       * The server then can use it for the SASL EXTERNAL mechanism.
+       * @param clientCert The filename of the client certificate.
+       */
+      void setClientCert( const std::string& clientCert ) { m_clientCert = clientCert; };
 
       /**
        * Use this function to turn the Auto-MessageSession feature on or off.
@@ -418,8 +425,9 @@ namespace gloox
       {
         SASL_DIGEST_MD5,          /**< SASL Digest-MD5 according to RFC 2831. */
         SASL_PLAIN,               /**< SASL PLAIN according to RFC 2595 Section 6. */
-        SASL_ANONYMOUS            /**< SASL ANONYMOUS according to draft-ietf-sasl-anon-05.txt/
+        SASL_ANONYMOUS,           /**< SASL ANONYMOUS according to draft-ietf-sasl-anon-05.txt/
                                    * RFC 2245 Section 6. */
+        SASL_EXTERNAL             /**< SASL EXTERNAL according to RFC 2222 Section 7.4. */
       };
 
       void notifyOnResourceBindError( ResourceBindError error );
@@ -441,6 +449,7 @@ namespace gloox
       JID m_jid;
       Connection *m_connection;
 
+      std::string m_clientCert;
       std::string m_namespace;
       std::string m_password;
       std::string m_xmllang;

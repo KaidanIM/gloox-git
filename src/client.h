@@ -218,19 +218,22 @@ namespace gloox
     private:
       enum StreamFeaturesEnum
       {
-        STREAM_FEATURE_BIND             =   1, /**< The server supports resource binding. */
-        STREAM_FEATURE_SESSION          =   2, /**< The server supports sessions. */
-        STREAM_FEATURE_SASL_DIGESTMD5   =   4, /**< The server supports SASL DIGEST-MD5 mechanism. */
-        STREAM_FEATURE_SASL_PLAIN       =   8, /**< The server supports SASL PLAIN mechanism. */
-        STREAM_FEATURE_SASL_ANONYMOUS   =  16, /**< The server supports SASL ANONYMOUS mechanism. */
-        STREAM_FEATURE_STARTTLS         =  32, /**< The server supports &lt;starttls&gt;. */
-        STREAM_FEATURE_IQREGISTER       =  64, /**< The server supports JEP-0077 (In-Band
-                                                * Registration). */
-        STREAM_FEATURE_IQAUTH           = 128, /**< The server supports JEP-0078 (Non-SASL
-                                                * Authentication). */
-        STREAM_FEATURE_ACK              = 256, /**< The server supports JEPAck (experimental). */
-        STREAM_FEATURE_COMPRESS_ZLIB    = 512  /**< The server supports JEP-0138 (Stream
-                                                * Compression) (Zlib)*/
+        STREAM_FEATURE_BIND             =    1, /**< The server supports resource binding. */
+        STREAM_FEATURE_SESSION          =    2, /**< The server supports sessions. */
+        STREAM_FEATURE_SASL_DIGESTMD5   =    4, /**< The server supports SASL DIGEST-MD5 mechanism. */
+        STREAM_FEATURE_SASL_PLAIN       =    8, /**< The server supports SASL PLAIN mechanism. */
+        STREAM_FEATURE_SASL_ANONYMOUS   =   16, /**< The server supports SASL ANONYMOUS mechanism. */
+        STREAM_FEATURE_SASL_EXTERNAL    =   32, /**< The server supports SASL EXTERNAL mechanism. */
+        STREAM_FEATURE_STARTTLS         =   64, /**< The server supports &lt;starttls&gt;. */
+        STREAM_FEATURE_IQREGISTER       =  128, /**< The server supports JEP-0077 (In-Band
+                                                 * Registration). */
+        STREAM_FEATURE_IQAUTH           =  256, /**< The server supports JEP-0078 (Non-SASL
+                                                 * Authentication). */
+        STREAM_FEATURE_ACK              =  512, /**< The server supports JEPAck (experimental). */
+        STREAM_FEATURE_COMPRESS_ZLIB    = 1024, /**< The server supports JEP-0138 (Stream
+                                                 * Compression) (Zlib)*/
+        STREAM_FEATURE_COMPRESS_DCLZ    = 2048  /**< The server supports JEP-0138 (Stream
+                                                 * Compression) (LZW/DCLZ)*/
       };
 
       virtual void handleStartNode() {};
