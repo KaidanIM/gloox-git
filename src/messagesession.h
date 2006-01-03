@@ -36,9 +36,8 @@ namespace gloox
    * on its own.
    *
    * MessageSession adds an abstraction to a chat conversation. A MessageSession is responsible for
-   * communicating with exactly one (full) JID. It is extensible by arbitrary decorators which,
-   * for instance, offer Message Events support for messages sent through it. Message Events are
-   * implemented in the MessageEventDecorator.
+   * communicating with exactly one (full) JID. It can be extended by add-ons which,
+   * for instance, offer Message Events support for messages sent through it.
    *
    * You can still use the old MessageHandler in parallel, but messages will not be relayed to both
    * the generic MessageHandler and a MessageSession established for the sender's JID. The MessageSession
@@ -52,7 +51,7 @@ namespace gloox
     public:
       /**
        * Constructs a new MessageSession for the given JID.
-       * It is recommended to supply a full JID, in other words, it should have set a resource.
+       * It is recommended to supply a full JID, in other words, it should have a resource set.
        * No resource can lead to unexpected behavior. A thread ID is generated and sent along
        * with every message sent through this session.
        * @param parent The ClientBase to use for communication.
@@ -72,7 +71,7 @@ namespace gloox
       void removeMessageHandler();
 
       /**
-       * Use this function to find out where is this session pointed at.
+       * Use this function to find out where is this session points at.
        * @return The receipient's JID.
        */
       const JID& target() const { return m_target; };
@@ -107,13 +106,18 @@ namespace gloox
       void removeMessageEventHandler();
 
       /**
-       * A wrapper around ClientBase::send().
+       * A wrapper around ClientBase::send(). You should @b not use this function to send a
+       * chat message because the Tag is not prepared accordingly (neither Thread ID nor Message
+       * Event requests are added).
        * @param tag A Tag to send.
        */
       virtual void send( Tag *tag );
 
       /**
-       * A convenience function
+       * A convenience function to quickly send a message (optionally with subject). This is
+       * the preferred way to send a message from a MessageSession.
+       * @param message The message to send.
+       * @param The optional subject to send.
        */
       void send( const std::string& message, const std::string& subject );
 
