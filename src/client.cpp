@@ -140,6 +140,10 @@ namespace gloox
             disconnect( CONN_NO_SUPPORTED_AUTH );
           }
         }
+        else if( m_doAuth && !m_clientCert.empty() && m_streamFeatures & STREAM_FEATURE_SASL_EXTERNAL )
+        {
+          startSASL( SASL_EXTERNAL );
+        }
         else if( m_doAuth && m_streamFeatures & STREAM_FEATURE_SASL_ANONYMOUS )
         {
           startSASL( SASL_ANONYMOUS );
@@ -232,7 +236,9 @@ namespace gloox
         processResourceBind( stanza );
       }
       else if( ( stanza->name() == "iq" ) && stanza->hasAttribute( "id", "session" ) )
+      {
         processCreateSession( stanza );
+      }
       else
         return false;
     }
@@ -290,6 +296,9 @@ namespace gloox
     if( tag->hasChildWithCData( "mechanism", "ANONYMOUS" ) )
       mechs |= STREAM_FEATURE_SASL_ANONYMOUS;
 
+    if( tag->hasChildWithCData( "mechanism", "EXTERNAL" ) )
+      mechs |= STREAM_FEATURE_SASL_EXTERNAL;
+
     return mechs;
   }
 
@@ -299,6 +308,9 @@ namespace gloox
 
     if( tag->hasChildWithCData( "method", "zlib" ) )
       meths |= STREAM_FEATURE_COMPRESS_ZLIB;
+
+    if( tag->hasChildWithCData( "method", "lzw" ) )
+      meths |= STREAM_FEATURE_COMPRESS_DCLZ;
 
     return meths;
   }
