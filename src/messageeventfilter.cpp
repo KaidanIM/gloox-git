@@ -11,25 +11,25 @@
 */
 
 
-#include "messageeventdecorator.h"
+#include "messageeventfilter.h"
 #include "messageeventhandler.h"
 
 namespace gloox
 {
 
-  MessageEventDecorator::MessageEventDecorator( MessageSessionBase *ms, int defaultEvents )
-    : SessionDecorator( ms ), /*m_parent( ms ), */m_messageEventHandler( 0 ), m_requestedEvents( 0 ),
+  MessageEventFilter::MessageEventFilter( MessageSession *parent, int defaultEvents )
+    : m_parent( parent ), m_messageEventHandler( 0 ), m_requestedEvents( 0 ),
       m_defaultEvents( defaultEvents ), m_lastSent( MESSAGE_EVENT_CANCEL )
   {
-    m_parent = dynamic_cast<MessageSession*>( ms );
   }
 
-  MessageEventDecorator::~MessageEventDecorator()
+  MessageEventFilter::~MessageEventFilter()
   {
   }
 
-  void MessageEventDecorator::handleMessage( Stanza *stanza )
+  void MessageEventFilter::handleMessage( Stanza *stanza )
   {
+    printf( "mef: got mesage\n");
     if( ( m_messageEventHandler ) && stanza->hasChild( "x", "xmlns", XMLNS_X_EVENT ) )
     {
       if( stanza->body().empty() )
@@ -65,11 +65,9 @@ namespace gloox
       m_requestedEvents = 0;
       m_lastID.clear();
     }
-
-    m_parent->handleMessage( stanza );
   }
 
-  void MessageEventDecorator::raiseEvent( MessageEventType event )
+  void MessageEventFilter::raiseEvent( MessageEventType event )
   {
     if( ( m_requestedEvents & event ) ||
           ( ( m_lastSent == MESSAGE_EVENT_COMPOSING ) && ( event == MESSAGE_EVENT_CANCEL ) ) )
@@ -110,7 +108,7 @@ namespace gloox
     }
   }
 
-  void MessageEventDecorator::send( Tag *tag )
+  void MessageEventFilter::decorate( Tag *tag )
   {
     if( m_defaultEvents != 0 )
     {
@@ -126,26 +124,25 @@ namespace gloox
       if( m_defaultEvents & MESSAGE_EVENT_COMPOSING )
         new Tag( x, "composing" );
     }
-
-    m_parent->send( tag );
   }
 
-  void MessageEventDecorator::registerMessageHandler( MessageHandler *meh )
+  void MessageEventFilter::registerMessageHandler( MessageHandler *mh )
   {
-    m_parent->registerMessageHandler( meh );
+    printf( "registering mh 1\n");
+    m_parent->registerMessageHandler( mh );
   }
 
-  void MessageEventDecorator::removeMessageHandler()
+  void MessageEventFilter::removeMessageHandler()
   {
     m_parent->removeMessageHandler();
   }
 
-  void MessageEventDecorator::registerMessageEventHandler( MessageEventHandler *meh )
+  void MessageEventFilter::registerMessageEventHandler( MessageEventHandler *meh )
   {
     m_messageEventHandler = meh;
   }
 
-  void MessageEventDecorator::removeMessageEventHandler()
+  void MessageEventFilter::removeMessageEventHandler()
   {
     m_messageEventHandler = 0;
   }
