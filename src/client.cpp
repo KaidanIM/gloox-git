@@ -108,6 +108,11 @@ namespace gloox
         negotiateCompression( STREAM_FEATURE_COMPRESS_ZLIB );
         return true;
       }
+//       if( ( m_streamFeatures & STREAM_FEATURE_COMPRESS_DCLZ ) && m_connection->initCompression( true ) )
+//       {
+//         negotiateCompression( STREAM_FEATURE_COMPRESS_DCLZ );
+//         return true;
+//       }
 #endif
 
       if( sasl() )
@@ -291,7 +296,7 @@ namespace gloox
       mechs |= STREAM_FEATURE_SASL_DIGESTMD5;
 
     if( tag->hasChildWithCData( "mechanism", "PLAIN" ) )
-        mechs |= STREAM_FEATURE_SASL_PLAIN;
+      mechs |= STREAM_FEATURE_SASL_PLAIN;
 
     if( tag->hasChildWithCData( "mechanism", "ANONYMOUS" ) )
       mechs |= STREAM_FEATURE_SASL_ANONYMOUS;
@@ -428,6 +433,9 @@ namespace gloox
 
     if( method == STREAM_FEATURE_COMPRESS_ZLIB )
       new Tag( t, "method", "zlib" );
+
+    if( method == STREAM_FEATURE_COMPRESS_DCLZ )
+      new Tag( t, "method", "lzw" );
 
     send( t );
   }

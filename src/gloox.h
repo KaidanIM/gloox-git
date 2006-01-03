@@ -217,6 +217,7 @@
 #define XMLNS_ADHOC_COMMANDS    "http://jabber.org/protocol/commands"
 #define XMLNS_COMPRESSION       "http://jabber.org/protocol/compress"
 #define XMLNS_OFFLINE           "http://jabber.org/protocol/offline"
+#define XMLNS_CHAT_STATES       "http://jabber.org/protocol/chatstates"
 #define XMLNS_ROSTER            "jabber:iq:roster"
 #define XMLNS_VERSION           "jabber:iq:version"
 #define XMLNS_REGISTER          "jabber:iq:register"
@@ -681,6 +682,19 @@ namespace gloox
                                   * recipient. */
     MESSAGE_EVENT_DISPLAYED = 4, /**< Indicates that the message has been displayed */
     MESSAGE_EVENT_COMPOSING = 8  /**< Indicates that a reply is being composed. */
+  };
+
+  /**
+   * The possible Chat States according to JEP-0085.
+   */
+  enum ChatStateType
+  {
+    CHAT_STATE_ACTIVE         =  1, /**< User is actively participating in the chat session. */
+    CHAT_STATE_COMPOSING      =  2, /**< User is composing a message. */
+    CHAT_STATE_PAUSED         =  4, /**< User had been composing but now has stopped. */
+    CHAT_STATE_INACTIVE       =  8, /**< User has not been actively participating in the chat session. */
+    CHAT_STATE_GONE           = 16  /**< User has effectively ended their participation in the chat
+                                     * session. */
   };
 
   /**

@@ -15,14 +15,18 @@
 
 #include "messageeventhandler.h"
 #include "messageeventfilter.h"
+#include "chatstatefilter.h"
+#include "chatstatehandler.h"
 #include "clientbase.h"
+#include "client.h"
+#include "disco.h"
 #include "tag.h"
 
 namespace gloox
 {
 
   MessageSession::MessageSession( ClientBase *parent, const JID& jid )
-  : m_parent( parent ), m_eventFilter( 0 ), m_target( jid ), m_messageHandler( 0 )
+    : m_parent( parent ), m_eventFilter( 0 ), m_stateFilter( 0 ), m_target( jid ), m_messageHandler( 0 )
   {
     if( m_parent )
       m_parent->registerMessageHandler( m_target.full(), this );
@@ -30,6 +34,12 @@ namespace gloox
     m_thread = "gloox" + m_parent->getID();
 
     m_eventFilter = new MessageEventFilter( this );
+    m_stateFilter = new ChatStateFilter( this );
+
+    Client *c = dynamic_cast<Client *>( m_parent );
+    if( c )
+      c->disco()->addFeature( XMLNS_CHAT_STATES );
+
   }
 
   MessageSession::~MessageSession()
@@ -42,6 +52,8 @@ namespace gloox
   {
     if( m_eventFilter )
       m_eventFilter->handleMessage( stanza );
+    if( m_stateFilter )
+      m_stateFilter->handleMessage( stanza );
 
     if( !m_messageHandler || stanza->body().empty() )
       return;
@@ -64,6 +76,9 @@ namespace gloox
     if( m_eventFilter )
       m_eventFilter->decorate( m );
 
+    if( m_stateFilter )
+      m_stateFilter->decorate( m );
+
     m_parent->send( m );
   }
 
@@ -77,6 +92,14 @@ namespace gloox
     if( m_eventFilter )
     {
       m_eventFilter->raiseMessageEvent( event );
+    }
+  }
+
+  void MessageSession::setChatState( ChatStateType state )
+  {
+    if( m_stateFilter )
+    {
+      m_stateFilter->setChatState( state );
     }
   }
 
@@ -101,4 +124,17 @@ namespace gloox
     if( m_eventFilter )
       m_eventFilter->removeMessageEventHandler();
   }
+
+  void MessageSession::registerChatStateHandler( ChatStateHandler *csh )
+  {
+    if( m_stateFilter )
+      m_stateFilter->registerChatStateHandler( csh );
+  }
+
+  void MessageSession::removeChatStateHandler()
+  {
+    if( m_stateFilter )
+      m_stateFilter->removeChatStateHandler();
+  }
+
 }
