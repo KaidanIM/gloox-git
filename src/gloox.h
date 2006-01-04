@@ -224,12 +224,6 @@
 #include <list>
 #include <map>
 
-#ifdef WIN32
-#define GLOOX_DLL_EXPORT __declspec( dllexport )
-#else
-#define GLOOX_DLL_EXPORT
-#endif
-
 /**
  * @brief The namespace for the gloox library.
  *
