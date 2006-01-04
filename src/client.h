@@ -71,7 +71,8 @@ namespace gloox
    * @note By default a priority of -1 is sent along with the initial presence. That means no message
    * stanzas will be received (from compliant servers). Use @ref setInitialPriority() to set a different
    * value. Also, no initial presence is sent which is usually required for a client to show up as
-   * 'online' in their contact's contact list.
+   * 'online' in their contact's contact list. Use setAutoPresence() to enable automatic sending of
+   * initial presence.
    *
    * @author Jakob Schroeter <js@camaya.net>
    */

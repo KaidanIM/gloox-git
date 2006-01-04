@@ -90,7 +90,7 @@
  * @note The ConnectionListener interface is a peculiarity. You MUST re-implement
  * @ref gloox::ConnectionListener::onTLSConnect() if you want to be able to connect successfully to
  * TLS/SSL enabled servers. Even though gloox tries to verify the server's certificate it does not
- * automatically trust a server. The client programmer and/or user must decide whether to trust a server
+ * automatically trust a server. The client programmer and/or user have to decide whether to trust a server
  * or not. This trust is expressed by the return value of onTLSConnect(). @b False means you don't trust
  * the server/certificate and as a consequence the connection is dropped immediately.
  *
@@ -150,12 +150,34 @@
  * }
  * @endcode
  *
- * @note gloox does not (and will not) support the style of connection which is usually used on port 5223,
- * i.e. SSL encryption before any XML is sent, because its a legacy method and not standard XMPP.
+ * @note gloox does not (and will not) support the style of connection which is usually used on port
+ * 5223, i.e. SSL encryption before any XML is sent, because its a legacy method and not standard XMPP.
+ *
+ * @note Client::connect() by default blocks until the connection ends (either Client::disconnect()
+ * is called or the server closes the connection).
+ *
+ * @section block_conn_sub Blocking vs. Non-blocking Connections
+ *
+ * For some kind of bots a blocking connection (the default behaviour) is ideal. All the bot does is
+ * react to events coming from the server. However, for end user clients or anything with a GUI this
+ * is far from perfect.
+ *
+ * In these cases non-blocking connections can be used. If gloox::ClientBase::connect( false ) is
+ * called, the function returnes immediately after the connection has been established. It is then
+ * the resposibility of the programmer to initiate receiving of data from the socket.
+ *
+ * The easiest way is to call gloox::ClientBase::recv() periodically with the desired timeout
+ * (in seconds) as parameter. The default value of -1 means the call blocks until any data was
+ * received, which is then parsed automatically.
+ *
+ * As an alternative to periodic polling you can use gloox::ClientBase::fileDescriptor() to get a hold
+ * of the raw file descriptor used for the connection. You can then use select() on it and use
+ * gloox::ClientBase::recv() when select indicates that data is available. You should @b not recv()
+ * any data from the file descriptor directly as there is no way to feed that back into the parser.
  *
  * @section roster_sec Roster Management
  *
- * RFC 3921 defines the protocol to manage one's contact list (roster). In gloox, the @ref
+ * Among others, RFC 3921 defines the protocol to manage one's contact list (roster). In gloox, the @ref
  * gloox::RosterManager class implements this functionality. A few easy-to-use functions are available to
  * subscribe to or unsubscribe from the presence of remote entities. It is also possible to add a contact
  * to a roster without actually subscribing to the contacts presence. Additionally, the interface @ref
