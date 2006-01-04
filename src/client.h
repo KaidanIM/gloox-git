@@ -41,7 +41,9 @@ namespace gloox
    *
    * Simple usage example:
    * @code
-   * void Class::doIt()
+   * using namespace gloox;
+   *
+   * void TestProg::doIt()
    * {
    *   Client* j = new Client( "user@server/resource", "password" );
    *   j->registerPresenceHandler( this );
@@ -52,7 +54,7 @@ namespace gloox
    *   j->connect();
    * }
    *
-   * virtual void Class::presenceHandler( Stanza *stanza )
+   * virtual void TestProg::presenceHandler( Stanza *stanza )
    * {
    *   // handle incoming presence packets here
    * }
