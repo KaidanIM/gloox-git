@@ -230,45 +230,6 @@
 #define GLOOX_DLL_EXPORT
 #endif
 
-#define XMLNS_CLIENT            "jabber:client"
-#define XMLNS_COMPONENT_ACCEPT  "jabber:component:accept"
-#define XMLNS_COMPONENT_CONNECT "jabber:component:connect"
-
-#define XMLNS_DISCO_INFO        "http://jabber.org/protocol/disco#info"
-#define XMLNS_DISCO_ITEMS       "http://jabber.org/protocol/disco#items"
-#define XMLNS_ADHOC_COMMANDS    "http://jabber.org/protocol/commands"
-#define XMLNS_COMPRESSION       "http://jabber.org/protocol/compress"
-#define XMLNS_OFFLINE           "http://jabber.org/protocol/offline"
-#define XMLNS_CHAT_STATES       "http://jabber.org/protocol/chatstates"
-#define XMLNS_ROSTER            "jabber:iq:roster"
-#define XMLNS_VERSION           "jabber:iq:version"
-#define XMLNS_REGISTER          "jabber:iq:register"
-#define XMLNS_PRIVACY           "jabber:iq:privacy"
-#define XMLNS_AUTH              "jabber:iq:auth"
-#define XMLNS_PRIVATE_XML       "jabber:iq:private"
-#define XMLNS_ROSTER            "jabber:iq:roster"
-#define XMLNS_LAST              "jabber:iq:last"
-#define XMLNS_DATA_FORMS        "jabber:x:data"
-#define XMLNS_X_EVENT           "jabber:x:event"
-#define XMLNS_BOOKMARKS         "storage:bookmarks"
-#define XMLNS_ANNOTATIONS       "storage:rosternotes"
-#define XMLNS_ROSTER_DELIMITER  "roster:delimiter"
-
-#define XMLNS_XMPP_STREAM       "urn:ietf:params:xml:ns:xmpp-streams"
-#define XMLNS_XMPP_STANZAS      "urn:ietf:params:xml:ns:xmpp-stanzas"
-#define XMLNS_STREAM_TLS        "urn:ietf:params:xml:ns:xmpp-tls"
-#define XMLNS_STREAM_SASL       "urn:ietf:params:xml:ns:xmpp-sasl"
-#define XMLNS_STREAM_BIND       "urn:ietf:params:xml:ns:xmpp-bind"
-#define XMLNS_STREAM_SESSION    "urn:ietf:params:xml:ns:xmpp-session"
-#define XMLNS_STREAM_IQAUTH     "http://jabber.org/features/iq-auth"
-#define XMLNS_STREAM_IQREGISTER "http://jabber.org/features/iq-register"
-#define XMLNS_STREAM_ACK        "http://jabber.org/features/ack"
-#define XMLNS_STREAM_COMPRESS   "http://jabber.org/features/compress"
-
-#define XMPP_STREAM_VERSION_MAJOR  "1"
-#define XMPP_STREAM_VERSION_MINOR  "0"
-#define GLOOX_VERSION              "0.8-pre1"
-
 /**
  * @brief The namespace for the gloox library.
  *
@@ -277,6 +238,44 @@
  */
 namespace gloox
 {
+
+  const std::string XMLNS_CLIENT            = "jabber:client";
+  const std::string XMLNS_COMPONENT_ACCEPT  = "jabber:component:accept";
+  const std::string XMLNS_COMPONENT_CONNECT = "jabber:component:connect";
+
+  const std::string XMLNS_DISCO_INFO        = "http://jabber.org/protocol/disco#info";
+  const std::string XMLNS_DISCO_ITEMS       = "http://jabber.org/protocol/disco#items";
+  const std::string XMLNS_ADHOC_COMMANDS    = "http://jabber.org/protocol/commands";
+  const std::string XMLNS_COMPRESSION       = "http://jabber.org/protocol/compress";
+  const std::string XMLNS_OFFLINE           = "http://jabber.org/protocol/offline";
+  const std::string XMLNS_CHAT_STATES       = "http://jabber.org/protocol/chatstates";
+  const std::string XMLNS_ROSTER            = "jabber:iq:roster";
+  const std::string XMLNS_VERSION           = "jabber:iq:version";
+  const std::string XMLNS_REGISTER          = "jabber:iq:register";
+  const std::string XMLNS_PRIVACY           = "jabber:iq:privacy";
+  const std::string XMLNS_AUTH              = "jabber:iq:auth";
+  const std::string XMLNS_PRIVATE_XML       = "jabber:iq:private";
+  const std::string XMLNS_LAST              = "jabber:iq:last";
+  const std::string XMLNS_DATA_FORMS        = "jabber:x:data";
+  const std::string XMLNS_X_EVENT           = "jabber:x:event";
+  const std::string XMLNS_BOOKMARKS         = "storage:bookmarks";
+  const std::string XMLNS_ANNOTATIONS       = "storage:rosternotes";
+  const std::string XMLNS_ROSTER_DELIMITER  = "roster:delimiter";
+
+  const std::string XMLNS_XMPP_STREAM       = "urn:ietf:params:xml:ns:xmpp-streams";
+  const std::string XMLNS_XMPP_STANZAS      = "urn:ietf:params:xml:ns:xmpp-stanzas";
+  const std::string XMLNS_STREAM_TLS        = "urn:ietf:params:xml:ns:xmpp-tls";
+  const std::string XMLNS_STREAM_SASL       = "urn:ietf:params:xml:ns:xmpp-sasl";
+  const std::string XMLNS_STREAM_BIND       = "urn:ietf:params:xml:ns:xmpp-bind";
+  const std::string XMLNS_STREAM_SESSION    = "urn:ietf:params:xml:ns:xmpp-session";
+  const std::string XMLNS_STREAM_IQAUTH     = "http://jabber.org/features/iq-auth";
+  const std::string XMLNS_STREAM_IQREGISTER = "http://jabber.org/features/iq-register";
+  const std::string XMLNS_STREAM_ACK        = "http://jabber.org/features/ack";
+  const std::string XMLNS_STREAM_COMPRESS   = "http://jabber.org/features/compress";
+
+  const int XMPP_STREAM_VERSION_MAJOR          = 1;
+  const int XMPP_STREAM_VERSION_MINOR          = 0;
+  const std::string GLOOX_VERSION              = "0.8-pre1";
 
   /**
    * This describes the possible states of a stream.
@@ -303,7 +302,8 @@ namespace gloox
     CONN_TLS_FAILED,               /**< The server's certificate could not be verified. */
     CONN_AUTHENTICATION_FAILED,    /**< Authentication failed. Username/password wrong or account does
                                     * not exist. */
-    CONN_USER_DISCONNECTED         /**< The user (or higher-level protocol) requested a disconnecct. */
+    CONN_USER_DISCONNECTED,        /**< The user (or higher-level protocol) requested a disconnecct. */
+    CONN_NOT_CONNECTED             /**< There is no active connection. */
   };
 
   /**
