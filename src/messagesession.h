@@ -133,7 +133,7 @@ namespace gloox
        * A convenience function to quickly send a message (optionally with subject). This is
        * the preferred way to send a message from a MessageSession.
        * @param message The message to send.
-       * @param The optional subject to send.
+       * @param subject The optional subject to send.
        */
       void send( const std::string& message, const std::string& subject );
 
