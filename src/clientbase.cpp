@@ -185,15 +185,16 @@ namespace gloox
 
   void ClientBase::header()
   {
-    std::string xml = "<?xml version='1.0' ?>";
-    xml += "<stream:stream to='" + m_jid.server()+ "' xmlns='" + m_namespace + "' ";
-    xml += "xmlns:stream='http://etherx.jabber.org/streams'  xml:lang='" + m_xmllang + "' ";
-    xml += "version='";
-    xml += XMPP_STREAM_VERSION_MAJOR;
-    xml += ".";
-    xml += XMPP_STREAM_VERSION_MINOR;
-    xml += "'>";
-    send( xml );
+    std::ostringstream oss;
+    oss << "<?xml version='1.0' ?>";
+    oss << "<stream:stream to='" + m_jid.server()+ "' xmlns='" + m_namespace + "' ";
+    oss << "xmlns:stream='http://etherx.jabber.org/streams'  xml:lang='" + m_xmllang + "' ";
+    oss << "version='";
+    oss << XMPP_STREAM_VERSION_MAJOR;
+    oss << ".";
+    oss << XMPP_STREAM_VERSION_MINOR;
+    oss << "'>";
+    send( oss.str() );
   }
 
   bool ClientBase::hasTls()
@@ -411,7 +412,7 @@ namespace gloox
   {
     int major = 0;
     int minor = 0;
-    int myMajor = atoi( XMPP_STREAM_VERSION_MAJOR );
+    int myMajor = XMPP_STREAM_VERSION_MAJOR;
 
     unsigned int dot = version.find( "." );
     if( !version.empty() && dot && dot != std::string::npos )
