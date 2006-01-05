@@ -98,7 +98,7 @@ namespace gloox
     }
   }
 
-  std::string Tag::cdata() const
+  const std::string Tag::cdata() const
   {
     return relax( m_cdata );
   }
@@ -119,7 +119,7 @@ namespace gloox
     if( it != m_attribs.end() )
       return (*it).second;
     else
-      return "";
+      return std::string();
   }
 
   bool Tag::hasAttribute( const std::string& name, const std::string& value ) const
