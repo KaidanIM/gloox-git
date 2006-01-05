@@ -264,8 +264,8 @@ namespace gloox
     else
       p->addAttrib( "type", "unsubscribed" );
 
-    p->addAttribute( "from", m_parent->jid().bare() );
-    p->addAttribute( "to", to.bare() );
+    p->addAttrib( "from", m_parent->jid().bare() );
+    p->addAttrib( "to", to.bare() );
     m_parent->send( p );
 }
 
