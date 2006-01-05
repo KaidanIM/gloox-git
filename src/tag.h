@@ -99,13 +99,13 @@ namespace gloox
        * Use this function to retrieve the name of an element.
        * @return The name of the tag.
        */
-      virtual std::string name() const { return m_name; };
+      virtual const std::string& name() const { return m_name; };
 
       /**
        * Use this function to retrieve the XML character data of an element.
        * @return The cdata the element contains.
        */
-      virtual std::string cdata() const;
+      virtual const std::string cdata() const;
 
       /**
        * Use this function to manipulate the list of attributes.
