@@ -205,7 +205,7 @@ namespace gloox
     }
 #endif
 #ifdef HAVE_ZLIB
-    else if( ( stanza->name() == "failure" ) && stanza->hasAttribute( "xmlns", XMLNS_STREAM_COMPRESS ) )
+    else if( ( stanza->name() == "failure" ) && stanza->hasAttribute( "xmlns", XMLNS_COMPRESSION ) )
     {
       logInstance().log( LOG_ERROR, LOG_CLASS_CLIENT, "stream compression init failed!" );
       disconnect( CONN_TLS_FAILED );
