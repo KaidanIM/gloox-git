@@ -29,7 +29,7 @@ namespace gloox
   class Stanza;
 
   /**
-   * @brief This class implements a Jabber Client.
+   * @brief This class implements a basic Jabber Client.
    *
    * It supports SASL (Authentication) as well as TLS (Encryption), which can be switched on/off
    * separately. They are used automatically if the server supports them.
@@ -39,9 +39,11 @@ namespace gloox
    * Interfaces (ConnectionListener, PresenceHandler, MessageHandler, IqHandler, SubscriptionHandler),
    * and call @ref connect() to establish the connection to the server.<br>
    *
-   * Usage example:
+   * Simple usage example:
    * @code
-   * void Class::doIt()
+   * using namespace gloox;
+   *
+   * void TestProg::doIt()
    * {
    *   Client* j = new Client( "user@server/resource", "password" );
    *   j->registerPresenceHandler( this );
@@ -52,11 +54,13 @@ namespace gloox
    *   j->connect();
    * }
    *
-   * virtual void Class::presenceHandler( Stanza *stanza )
+   * virtual void TestProg::presenceHandler( Stanza *stanza )
    * {
    *   // handle incoming presence packets here
    * }
    * @endcode
+   *
+   * However, you can skip the presence handling stuff if you make use of the RosterManager.
    *
    * By default, the library handles a few (incoming) IQ namespaces on the application's behalf. These
    * include:
@@ -69,7 +73,8 @@ namespace gloox
    * @note By default a priority of -1 is sent along with the initial presence. That means no message
    * stanzas will be received (from compliant servers). Use @ref setInitialPriority() to set a different
    * value. Also, no initial presence is sent which is usually required for a client to show up as
-   * 'online' in their contact's contact list.
+   * 'online' in their contact's contact list. Use setAutoPresence() to enable automatic sending of
+   * initial presence.
    *
    * @author Jakob Schroeter <js@camaya.net>
    */

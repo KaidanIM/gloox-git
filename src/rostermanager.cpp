@@ -258,23 +258,16 @@ namespace gloox
 
   void RosterManager::ackSubscriptionRequest( const JID& to, bool ack )
   {
+    Tag *p = new Tag( "presence" );
     if( ack )
-    {
-      Tag *p = new Tag( "presence" );
       p->addAttrib( "type", "subscribed" );
-      p->addAttrib( "from", m_parent->jid().bare() );
-      p->addAttrib( "to", to.bare() );
-      m_parent->send( p );
-    }
     else
-    {
-      Tag *p = new Tag( "presence" );
       p->addAttrib( "type", "unsubscribed" );
-      p->addAttrib( "from", m_parent->jid().bare() );
-      p->addAttrib( "to", to.bare() );
-      m_parent->send( p );
-    }
-  }
+
+    p->addAttribute( "from", m_parent->jid().bare() );
+    p->addAttribute( "to", to.bare() );
+    m_parent->send( p );
+}
 
   void RosterManager::handleSubscription( Stanza *stanza )
   {

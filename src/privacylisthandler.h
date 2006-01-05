@@ -55,6 +55,11 @@ namespace gloox
       typedef std::list<PrivacyItem> PrivacyList;
 
       /**
+       * Virtual Destructor.
+       */
+      virtual ~PrivacyListHandler() {};
+
+      /**
        * Reimplement this function to retrieve the list of privacy list names after requesting it using
        * PrivacyManager::requestListNames().
        * @param active The name of the active list.

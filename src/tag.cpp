@@ -198,18 +198,11 @@ namespace gloox
     return 0;
   }
 
-  const std::string Tag::escape( const std::string& what ) const
+  const std::string Tag::replace( const std::string& what, const Duo& duo ) const
   {
     std::string esc = what;
-    StringMap map;
-    map["&"] = "&amp;";
-    map["<"] = "&lt;";
-    map[">"] = "&gt;";
-    map["'"] = "&apos;";
-    map["\""] = "&quot;";
-
-    StringMap::const_iterator it = map.begin();
-    for( ; it != map.end(); ++it )
+    Duo::const_iterator it = duo.begin();
+    for( ; it != duo.end(); ++it )
     {
       size_t lookHere = 0;
       size_t foundHere;
@@ -222,28 +215,28 @@ namespace gloox
     return esc;
   }
 
+  const std::string Tag::escape( const std::string& what ) const
+  {
+    Duo d;
+    d.push_back( duo( "&", "&amp;" ) );
+    d.push_back( duo( "<", "&lt;" ) );
+    d.push_back( duo( ">", "&gt;" ) );
+    d.push_back( duo( "'", "&apos;" ) );
+    d.push_back( duo( "\"", "&quot;" ) );
+
+    return replace( what, d );
+  }
+
   const std::string Tag::relax( const std::string& what ) const
   {
-    std::string esc = what;
-    StringMap map;
-    map["&"] = "&amp;";
-    map["<"] = "&lt;";
-    map[">"] = "&gt;";
-    map["'"] = "&apos;";
-    map["\""] = "&quot;";
+    Duo d;
+    d.push_back( duo( "&lt;", "<" ) );
+    d.push_back( duo( "&gt;", ">" ) );
+    d.push_back( duo( "&apos;", "'" ) );
+    d.push_back( duo( "&quot;", "\"" ) );
+    d.push_back( duo( "&amp;", "&" ) );
 
-    StringMap::const_iterator it = map.begin();
-    for( ; it != map.end(); ++it )
-    {
-      size_t lookHere = 0;
-      size_t foundHere;
-      while( ( foundHere = esc.find( (*it).second, lookHere ) ) != std::string::npos )
-      {
-        esc.replace( foundHere, (*it).second.size(), (*it).first );
-        lookHere = foundHere + (*it).first.size();
-      }
-    }
-    return esc;
+    return replace( what, d );
   }
 
   Tag* Tag::clone()

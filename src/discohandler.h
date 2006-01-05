@@ -31,6 +31,11 @@ namespace gloox
   {
     public:
       /**
+       * Virtual Destructor.
+       */
+      virtual ~DiscoHandler() {};
+
+      /**
        * Reimplement this function if you want to be notified about the result
        * of an disco#info query.
        * @param stanza The full Stanza.

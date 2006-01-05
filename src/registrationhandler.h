@@ -67,6 +67,11 @@ namespace gloox
       };
 
       /**
+       * Virtual Destructor.
+       */
+      virtual ~RegistrationHandler() {};
+
+      /**
        * Reimplement this function to receive results of the @ref Registration::fetchRegistrationFields()
        * function.
        * @param fields The OR'ed fields the server requires. From @ref Registration::fieldEnum.

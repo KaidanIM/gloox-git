@@ -191,14 +191,14 @@ namespace gloox
     }
 #endif
 #ifdef HAVE_ZLIB
-    else if( ( stanza->name() == "failure" ) && stanza->hasAttribute( "xmlns", XMLNS_STREAM_COMPRESS ) )
+    else if( ( stanza->name() == "failure" ) && stanza->hasAttribute( "xmlns", XMLNS_COMPRESSION ) )
     {
 #ifdef DEBUG
       printf( "stream compression init failed...\n" );
 #endif
       disconnect( CONN_TLS_FAILED );
 }
-    else if( ( stanza->name() == "compressed" ) && stanza->hasAttribute( "xmlns", XMLNS_STREAM_COMPRESS ) )
+    else if( ( stanza->name() == "compressed" ) && stanza->hasAttribute( "xmlns", XMLNS_COMPRESSION ) )
     {
 #ifdef DEBUG
       printf( "stream compression inited...\n" );

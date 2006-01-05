@@ -205,15 +205,25 @@ namespace gloox
       virtual Tag* clone();
 
     protected:
-      const std::string escape( const std::string& what ) const;
-      const std::string relax( const std::string& what ) const;
-
       std::string m_name;
       StringMap m_attribs;
       std::string m_cdata;
       TagList m_children;
       Tag *m_parent;
       StanzaType m_type;
+
+    private:
+      struct duo
+      {
+        duo( std::string f, std::string s ) : first( f), second( s ) {};
+        std::string first;
+        std::string second;
+      };
+      typedef std::list<duo> Duo;
+
+      const std::string escape( const std::string& what ) const;
+      const std::string relax( const std::string& what ) const;
+      const std::string replace( const std::string& what, const Duo& duo ) const;
 
   };
 

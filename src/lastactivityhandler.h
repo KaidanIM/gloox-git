@@ -28,6 +28,11 @@ namespace gloox
   {
     public:
       /**
+       * Virtual Destructor.
+       */
+      virtual ~LastActivityHandler() {};
+
+      /**
        * This function is called when a positive result of a query arrives.
        * @param jid The JID of the queried contact.
        * @param seconds The idle time or time of last presence of the contact. (Depends

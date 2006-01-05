@@ -31,6 +31,11 @@ namespace gloox
   {
     public:
       /**
+       * Virtual Destructor.
+       */
+      virtual ~PresenceHandler() {};
+
+      /**
        * Reimplement this function if you want to be updated on
        * incoming presence notifications.
        * @param stanza The complete stanza.

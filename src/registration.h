@@ -29,14 +29,26 @@ namespace gloox
   /**
    * @brief This class is an implementation of JEP-0077 (In-Band Registration).
    *
-   * Usage is very straight-forward.<br>
    * Derive your object from @ref RegistrationHandler and implement the
    * virtual functions offered by that interface. Then use it like this:
    * @code
-   * Registration* r = new Registration( "example.org" );
+   * Client *c = new Client( "example.org" );
+   * c->disableRoster(); // not needed
+   * c->disableDisco(); // not needed
+   *
+   * Registration* r = new Registration( c );
    * r->registerRegistrationHandler( this );
-   * r->createAccount( ... );
+   * r->fetchRegistrationFields();
+   *
+   * c->connect();
    * @endcode
+   * In RegistrationHandler::handleRegistrationFields() you should check which information the server
+   * requires to open a new account. You might not always get away with just username and password.
+   * Then call createAccount() with a filled-in fieldStruct and an @c int representing the bit-wise ORed
+   * fields you want to have included in the registration attempt. For your convenience you can use the
+   * 'fields' argument of handleRegistrationFields(). ;) It's your responsibility to make sure at
+   * least those fields the server requested are filled in.
+   *
    * Check @c tests/register_test.cpp for an example.
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.2

@@ -50,6 +50,11 @@ namespace gloox
       };
 
       /**
+       * Virtual Destructor.
+       */
+      virtual ~ConnectionListener() {};
+
+      /**
        * This function notifies about successful connections. It will be called either after all
        * authentication is finished if username/password were supplied, or after a connection has
        * been established if no credentials were supplied. Depending on the setting of AutoPresence,
