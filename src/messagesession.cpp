@@ -20,6 +20,7 @@
 #include "clientbase.h"
 #include "client.h"
 #include "disco.h"
+#include "stanza.h"
 #include "tag.h"
 
 namespace gloox
@@ -51,9 +52,9 @@ namespace gloox
   void MessageSession::handleMessage( Stanza *stanza )
   {
     if( m_eventFilter )
-      m_eventFilter->handleMessage( stanza );
+      m_eventFilter->filter( stanza );
     if( m_stateFilter )
-      m_stateFilter->handleMessage( stanza );
+      m_stateFilter->filter( stanza );
 
     if( !m_messageHandler || stanza->body().empty() )
       return;

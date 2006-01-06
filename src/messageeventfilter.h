@@ -14,14 +14,15 @@
 #ifndef MESSAGEVENTFILTER_H__
 #define MESSAGEVENTFILTER_H__
 
-#include "messagesession.h"
-#include "messagehandler.h"
+#include "messagefilter.h"
+#include "gloox.h"
 
 namespace gloox
 {
 
   class Tag;
   class MessageEventHandler;
+  class MessageSession;
 
   /**
    * @brief This class adds Message Event (JEP-0022) support to a MessageSession.
@@ -33,7 +34,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.8
    */
-  class MessageEventFilter
+  class MessageEventFilter : public MessageFilter
   {
     public:
       /**
@@ -77,17 +78,13 @@ namespace gloox
        */
       void removeMessageEventHandler();
 
-      /**
-       * Adds Message Event request tags to the given Tag.
-       * @param tag The tag to decorate.
-       */
+      // reimplemented from MessageFilter
       virtual void decorate( Tag *tag );
 
-      // reimplemented from MessageHandler
-      virtual void handleMessage( Stanza *stanza );
+      // reimplemented from MessageFilter
+      virtual void filter( Stanza *stanza );
 
     private:
-      MessageSession *m_parent;
       MessageEventHandler *m_messageEventHandler;
       std::string m_lastID;
       int m_requestedEvents;
