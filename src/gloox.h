@@ -12,6 +12,18 @@
 
 /*! @mainpage gloox API Documentation
  *
+ * @section contents Contents
+ * @ref intro_sec <br>
+ * @ref handlers_sec <br>
+ * @ref comp_sec <br>
+ * @ref client_sec <br>
+ * @ref block_conn_sec <br>
+ * @ref roster_sec <br>
+ * @ref privacy_sec <br>
+ * @ref auth_sec <br>
+ * @ref jeps_sec <br>
+ * <br>
+ *
  * @section intro_sec Introduction
  *
  * The design of gloox follows the so-called observer pattern, which basically means that everything is
@@ -65,7 +77,8 @@
  * extract stanza data.
  *
  * This works similar for all the other event handlers.
- * Another example, this time using the connection event handler (class @ref gloox::ConnectionListener):
+ * Another example, this time using the connection event handler (class @link gloox::ConnectionListener
+ * ConnectionListener @endlink):
  * @code
  * class MyClass : public ConnectionListener
  * {
@@ -88,11 +101,12 @@
  * @endcode
  *
  * @note The ConnectionListener interface is a peculiarity. You MUST re-implement
- * @ref gloox::ConnectionListener::onTLSConnect() if you want to be able to connect successfully to
- * TLS/SSL enabled servers. Even though gloox tries to verify the server's certificate it does not
- * automatically trust a server. The client programmer and/or user have to decide whether to trust a server
- * or not. This trust is expressed by the return value of onTLSConnect(). @b False means you don't trust
- * the server/certificate and as a consequence the connection is dropped immediately.
+ * @link gloox::ConnectionListener::onTLSConnect() ConnectionListener::onTLSConnect() @endlink if
+ * you want to be able to connect successfully to TLS/SSL enabled servers. Even though gloox tries
+ * to verify the server's certificate it does not automatically trust a server. The client programmer
+ * and/or user have to decide whether to trust a server or not. This trust is expressed by the return
+ * value of onTLSConnect(). @b False means you don't trust the server/certificate and as a consequence
+ * the connection is dropped immediately.
  *
  * @section comp_sec Components
  *
@@ -100,8 +114,8 @@
  * to the actual server software, but can have similar privileges. Components use a protocol described in
  * JEP-0114 to connect and authenticate to a server.
  *
- * The @ref gloox::Component class supports this protocol and can be used to create a new Jabber
- * component. Its as simple as:
+ * The @link gloox::Component Component @endlink class supports this protocol and can be used to create
+ * a new Jabber component. It's as simple as:
  * @code
  * Component *comp = new Component( ... );
  * comp->connect();
@@ -110,8 +124,8 @@
  * @section client_sec Clients
  *
  * A client can be an end-user's chat client, a bot, or a similar entity not tied to a particular
- * server. The @ref gloox::Client class implements the necessary functionality to connect to an XMPP
- * server. Usage is, again, pretty simple:
+ * server. The @link gloox::Client Client @endlink class implements the necessary functionality to
+ * connect to an XMPP server. Usage is, again, pretty simple:
  * @code
  * class MyClass : public ConnectionListener, PresenceHandler
  * {
@@ -151,48 +165,55 @@
  * @endcode
  *
  * @note gloox does not (and will not) support the style of connection which is usually used on port
- * 5223, i.e. SSL encryption before any XML is sent, because its a legacy method and not standard XMPP.
+ * 5223, i.e. SSL encryption before any XML is sent, because it's a legacy method and not standard XMPP.
  *
- * @note Client::connect() by default blocks until the connection ends (either Client::disconnect()
- * is called or the server closes the connection).
+ * @note @link gloox::Client::connect() Client::connect() @endlink by default blocks until the
+ * connection ends (either @link gloox::Client::disconnect() Client::disconnect() @endlink is called
+ * or the server closes the connection).
  *
- * @section block_conn_sub Blocking vs. Non-blocking Connections
+ * @section block_conn_sec Blocking vs. Non-blocking Connections
  *
  * For some kind of bots a blocking connection (the default behaviour) is ideal. All the bot does is
  * react to events coming from the server. However, for end user clients or anything with a GUI this
  * is far from perfect.
  *
- * In these cases non-blocking connections can be used. If gloox::ClientBase::connect( false ) is
+ * In these cases non-blocking connections can be used. If
+ * @link gloox::ClientBase::connect() ClientBase::connect( false ) @endlink is
  * called, the function returnes immediately after the connection has been established. It is then
  * the resposibility of the programmer to initiate receiving of data from the socket.
  *
- * The easiest way is to call gloox::ClientBase::recv() periodically with the desired timeout
- * (in seconds) as parameter. The default value of -1 means the call blocks until any data was
- * received, which is then parsed automatically.
+ * The easiest way is to call @link gloox::ClientBase::recv() ClientBase::recv() @endlink
+ * periodically with the desired timeout (in seconds) as parameter. The default value of -1
+ * means the call blocks until any data was received, which is then parsed automatically.
  *
- * As an alternative to periodic polling you can use gloox::ClientBase::fileDescriptor() to get a hold
+ * As an alternative to periodic polling you can use
+ * @link gloox::ClientBase::fileDescriptor() ClientBase::fileDescriptor() @endlink to get a hold
  * of the raw file descriptor used for the connection. You can then use select() on it and use
- * gloox::ClientBase::recv() when select indicates that data is available. You should @b not recv()
- * any data from the file descriptor directly as there is no way to feed that back into the parser.
+ * @link gloox::ClientBase::recv() ClientBase::recv() @endlink when select indicates that data is
+ * available. You should @b not recv() any data from the file descriptor directly as there is no
+ * way to feed that back into the parser.
  *
  * @section roster_sec Roster Management
  *
- * Among others, RFC 3921 defines the protocol to manage one's contact list (roster). In gloox, the @ref
- * gloox::RosterManager class implements this functionality. A few easy-to-use functions are available to
- * subscribe to or unsubscribe from the presence of remote entities. It is also possible to add a contact
- * to a roster without actually subscribing to the contacts presence. Additionally, the interface @ref
- * gloox::RosterListener offers many callbacks for various roster-related events.
+ * Among others, RFC 3921 defines the protocol to manage one's contact list (roster). In gloox, the
+ * @link gloox::RosterManager RosterManager @endlink class implements this functionality. A few
+ * easy-to-use functions are available to subscribe to or unsubscribe from the presence of remote
+ * entities. It is also possible to add a contact to a roster without actually subscribing to the
+ * contacts presence. Additionally, the interface @link gloox::RosterListener RosterListener @endlink
+ * offers many callbacks for various roster-related events.
  *
- * If you create a Client-object as shown above, you also get a RosterManager for free.
- * gloox::Client::rosterManager() returns a pointer to the object.
+ * If you create a Client object as shown above, you also get a RosterManager for free.
+ * @link gloox::Client::rosterManager() Client::rosterManager() @endlink returns a pointer to the
+ * object.
  *
  * @section privacy_sec Privacy Lists
  *
  * Also defined in RFC 3921: Privacy Lists. A Privacy List can be used to explicitely block or allow
  * sending of stanzas from and to contacts, respectively. You can define rules based on JID, stanza type,
- * etc. Needless to say that gloox implements Privacy Lists as well. ;) The @ref gloox::PrivacyManager
- * class and the @ref gloox::PrivacyListHandler virtual interface allow for full flexibility in Privacy
- * List handling.
+ * etc. Needless to say that gloox implements Privacy Lists as well. ;) The
+ * @link gloox::PrivacyManager PrivacyManager @endlink class and the
+ * @link gloox::PrivacyListHandler PrivacyListHandler @endlink virtual interface allow for full
+ * flexibility in Privacy List handling.
  *
  * @code
  * PrivacyManager *p = new PrivacyManager( ... );
@@ -208,6 +229,11 @@
  *
  * p->store( "myList", list );
  * @endcode
+ *
+ * @section auth_sec Authentication
+ *
+ * gloox supports old-style IQ-based authentication defined in JEP-0078 as well as several SASL mechanisms.
+ * See the documentation of the @link gloox::Client Client @endlink class for more information.
  *
  * @section jeps_sec Protocol Enhancements
  *
@@ -267,9 +293,9 @@ namespace gloox
   const std::string XMLNS_STREAM_ACK        = "http://jabber.org/features/ack";
   const std::string XMLNS_STREAM_COMPRESS   = "http://jabber.org/features/compress";
 
-  const int XMPP_STREAM_VERSION_MAJOR          = 1;
-  const int XMPP_STREAM_VERSION_MINOR          = 0;
-  const std::string GLOOX_VERSION              = "0.8-pre1";
+  const int XMPP_STREAM_VERSION_MAJOR       = 1;
+  const int XMPP_STREAM_VERSION_MINOR       = 0;
+  const std::string GLOOX_VERSION           = "0.8-pre1";
 
   /**
    * This describes the possible states of a stream.
@@ -292,7 +318,8 @@ namespace gloox
     CONN_STREAM_CLOSED,            /**< The stream has been closed graciously. */
     CONN_IO_ERROR,                 /**< An I/O error occured. */
     CONN_OUT_OF_MEMORY,            /**< Out of memory. Uhoh. */
-    CONN_NO_SUPPORTED_AUTH,        /**< The auth mechanisms the server offers are not supported. */
+    CONN_NO_SUPPORTED_AUTH,        /**< The auth mechanisms the server offers are not supported
+                                    * or the server offered no auth mechanisms at all. */
     CONN_TLS_FAILED,               /**< The server's certificate could not be verified. */
     CONN_AUTHENTICATION_FAILED,    /**< Authentication failed. Username/password wrong or account does
                                     * not exist. */

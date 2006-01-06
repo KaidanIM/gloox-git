@@ -15,7 +15,6 @@
 #define CLIENT_H__
 
 #include "clientbase.h"
-
 #include "iqhandler.h"
 
 #include <string>
@@ -31,13 +30,17 @@ namespace gloox
   /**
    * @brief This class implements a basic Jabber Client.
    *
-   * It supports SASL (Authentication) as well as TLS (Encryption), which can be switched on/off
-   * separately. They are used automatically if the server supports them.
+   * It supports @ref sasl_auth as well as TLS (Encryption), which can be
+   * switched on/off separately. They are used automatically if the server supports them.
    *
    * To use, create a new Client instance and feed it connection credentials, either in the Constructor or
    * afterwards using the setters. You should then register packet handlers implementing the corresponding
    * Interfaces (ConnectionListener, PresenceHandler, MessageHandler, IqHandler, SubscriptionHandler),
    * and call @ref connect() to establish the connection to the server.<br>
+   *
+   * @note While the MessageHandler interface is still available (and will be in future versions)
+   * it is now recommended to use the new @link gloox::MessageSession MessageSession @endlink for any
+   * serious messaging.
    *
    * Simple usage example:
    * @code
@@ -75,6 +78,23 @@ namespace gloox
    * value. Also, no initial presence is sent which is usually required for a client to show up as
    * 'online' in their contact's contact list. Use setAutoPresence() to enable automatic sending of
    * initial presence.
+   *
+   * @section sasl_auth SASL Authentication
+   *
+   * Besides the simple, IQ-based authentication (JEP-0078), gloox supports several SASL (Simple
+   * Authentication and Security Layer, RFC 2222) authentication mechanisms.
+   * @li DIGEST-MD5: This mechanism is preferred over all other mechanisms if username and password are
+   * provided to the Client instance. It is secure even without TLS encryption.
+   * @li PLAIN: This mechanism is used if DIGEST-MD5 is not available. It is @b not secure without
+   * encryption.
+   * @li ANONYMOUS This mechanism is used if neither username nor password are set. The server generates
+   * random, temporary username and resource and may restrict available services.
+   * @li EXTERNAL This mechanism is currently only available if a client certificate and private key
+   * are provided. The server tries to figure out who the client is by external means -- for instance,
+   * using the provided certificate or even the IP address. (The restriction to certificate/key
+   * availability is likely to be lifted in the future.)
+   *
+   * Of course, all these mechanisms are not tried unless the server offers them.
    *
    * @author Jakob Schroeter <js@camaya.net>
    */
@@ -128,6 +148,7 @@ namespace gloox
       /**
        * Use this function to @b re-try to bind a resource only in case you were notified about an
        * error by means of ConnectionListener::onResourceBindError().
+       * You may (or should) use setResource() before.
        */
       void bindResource();
 
