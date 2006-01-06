@@ -15,6 +15,7 @@
 #define ROSTERITEM_H__
 
 #include "gloox.h"
+#include "jid.h"
 
 #include <string>
 #include <list>
@@ -26,6 +27,9 @@ namespace gloox
   /**
    * @brief An abstraction of a roster item.
    *
+   * For each RosterItem all resources that are available (online in some way) are stored in
+   * a ResourceMap. This map is accessible using the resources() function.
+   *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
    */
@@ -36,6 +40,8 @@ namespace gloox
     public:
       /**
        * @brief Holds resource attributes.
+       *
+       * This holds the information of one single resource of a contact that is online.
        *
        * @author Jakob Schroeter <js@caaya.net>
        * @since 0.8
@@ -127,7 +133,7 @@ namespace gloox
        * @param jid The JID of the contact.
        * @param name The displayed name of the contact.
        */
-      RosterItem( const std::string& jid, const std::string& name = "" );
+      RosterItem( const JID& jid, const std::string& name = "" );
 
       /**
        * Virtual destructor.
