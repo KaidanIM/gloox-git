@@ -14,6 +14,7 @@
 #ifndef CHATSTATEFILTER_H__
 #define CHATSTATEFILTER_H__
 
+#include "messagefilter.h"
 #include "gloox.h"
 
 namespace gloox
@@ -25,7 +26,7 @@ namespace gloox
   class Stanza;
 
   /**
-   * @brief This class adds Chat State (JEP-0085) support to a MessageSession.
+   * @brief This class adds Chat State Notifications (JEP-0085) support to a MessageSession.
    *
    * This implementation of Chat States is fully transparent to the user of the class.
    * If the remote entity does not request chat states, ChatStateFilter will not send
@@ -34,7 +35,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.8
    */
-  class ChatStateFilter
+  class ChatStateFilter : public MessageFilter
   {
     public:
       /**
@@ -76,17 +77,13 @@ namespace gloox
        */
       void removeChatStateHandler();
 
-      /**
-       * Adds Chat State request tags to the given Tag.
-       * @param tag The tag to decorate.
-       */
+      // reimplemented from MessageFilter
       virtual void decorate( Tag *tag );
 
-      // reimplemented from MessageHandler
-      virtual void handleMessage( Stanza *stanza );
+      // reimplemented from MessageFilter
+      virtual void filter( Stanza *stanza );
 
     private:
-      MessageSession *m_parent;
       ChatStateHandler *m_chatStateHandler;
       ChatStateType m_lastSent;
       bool m_enableChatStates;

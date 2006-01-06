@@ -13,12 +13,14 @@
 
 #include "messageeventfilter.h"
 #include "messageeventhandler.h"
+#include "messagesession.h"
+#include "stanza.h"
 
 namespace gloox
 {
 
   MessageEventFilter::MessageEventFilter( MessageSession *parent, int defaultEvents )
-    : m_parent( parent ), m_messageEventHandler( 0 ), m_requestedEvents( 0 ),
+    : MessageFilter( parent ), m_messageEventHandler( 0 ), m_requestedEvents( 0 ),
       m_defaultEvents( defaultEvents ), m_lastSent( MESSAGE_EVENT_CANCEL )
   {
   }
@@ -27,7 +29,7 @@ namespace gloox
   {
   }
 
-  void MessageEventFilter::handleMessage( Stanza *stanza )
+  void MessageEventFilter::filter( Stanza *stanza )
   {
     if( ( m_messageEventHandler ) && stanza->hasChild( "x", "xmlns", XMLNS_X_EVENT ) )
     {
