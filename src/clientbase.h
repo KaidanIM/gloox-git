@@ -450,6 +450,7 @@ namespace gloox
       Connection *m_connection;
 
       std::string m_clientCert;
+      std::string m_clientKey;
       std::string m_namespace;
       std::string m_password;
       std::string m_xmllang;

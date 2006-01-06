@@ -145,7 +145,8 @@ namespace gloox
             disconnect( CONN_NO_SUPPORTED_AUTH );
           }
         }
-        else if( m_doAuth && !m_clientCert.empty() && m_streamFeatures & STREAM_FEATURE_SASL_EXTERNAL )
+        else if( m_doAuth && !m_clientCert.empty() && !m_clientKey.empty()
+                 && m_streamFeatures & STREAM_FEATURE_SASL_EXTERNAL )
         {
           startSASL( SASL_EXTERNAL );
         }
