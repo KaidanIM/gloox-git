@@ -40,4 +40,4 @@ libglooxinclude_HEADERS = adhoccommandprovider.h  privacymanager.h        tag.h 
                             messageeventhandler.h messagesessionhandler.h chatstatehandler.h
 
 noinst_HEADERS = prep.h parser.h connection.h dns.h nonsaslauth.h messageeventfilter.h \
-                   chatstatefilter.h
+                   chatstatefilter.h messagefilter.h
