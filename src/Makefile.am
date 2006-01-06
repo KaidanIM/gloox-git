@@ -37,7 +37,7 @@ libglooxinclude_HEADERS = adhoccommandprovider.h  privacymanager.h        tag.h 
                             flexoffhandler.h      dataform.h              dataformfield.h \
                             dataformitem.h        dataformbase.h          dataformreported.h \
                             macros.h              logsink.h               messagesession.h \
-                            messageeventhandler.h messagesessionhandler.h
+                            messageeventhandler.h messagesessionhandler.h chatstatehandler.h
 
 noinst_HEADERS = prep.h parser.h connection.h dns.h nonsaslauth.h messageeventfilter.h \
                    chatstatefilter.h
