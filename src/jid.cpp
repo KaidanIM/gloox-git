@@ -36,8 +36,8 @@ namespace gloox
     if( jid.empty() )
       return;
 
-    unsigned int at = jid.find( "@", 0 );
-    unsigned int slash = jid.find( "/", 0 );
+    size_t at = jid.find( "@", 0 );
+    size_t slash = jid.find( "/", 0 );
 
     if( ( at == std::string::npos ) && ( slash == std::string::npos ) )
     {
@@ -108,7 +108,7 @@ namespace gloox
       return m_username + "@" + m_server;
   }
 
-  int JID::operator==( const JID& right )
+  int JID::operator==( const JID& right ) const
   {
     return ( ( m_resource == right.m_resource )
         && ( m_server == right.m_server )

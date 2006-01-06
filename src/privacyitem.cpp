@@ -28,7 +28,7 @@ namespace gloox
   {
   }
 
-  bool PrivacyItem::operator==( PrivacyItem& item )
+  bool PrivacyItem::operator==( PrivacyItem& item ) const
   {
     if( m_type == item.type()
         && m_action == item.action()

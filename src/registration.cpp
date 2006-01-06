@@ -50,7 +50,7 @@ namespace gloox
     m_parent->send( iq );
   }
 
-  void Registration::createAccount( int fields, fieldStruct values )
+  void Registration::createAccount( int fields, const fieldStruct& values )
   {
     if( !m_parent )
       return;

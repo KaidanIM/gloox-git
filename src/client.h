@@ -118,8 +118,7 @@ namespace gloox
        * @param port The port to connect to. The default of -1 means to look up the port via DNS SRV.
        */
       Client( const std::string& username, const std::string& password,
-              const std::string& server, const std::string& resource,
-              int port = -1 );
+              const std::string& server, const std::string& resource, int port = -1 );
 
       /**
        * Virtual destructor.
