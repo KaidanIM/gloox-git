@@ -203,7 +203,7 @@ namespace gloox
       if( inet_aton( inet_ntoa(*((struct in_addr *)h->h_addr)), &(target.sin_addr) ) == 0 )
         continue;
 
-      memset( &(target.sin_zero), '\0', 8 );
+      memset( target.sin_zero, '\0', 8 );
       if( ::connect( fd, (struct sockaddr *)&target, sizeof( struct sockaddr ) ) == 0 )
         return fd;
 
@@ -263,7 +263,7 @@ namespace gloox
     oss << "resolved " << domain.c_str() << " to: " << (char*)&target.sin_addr;
     logInstance.log( LOG_DEBUG, LOG_CLASS_DNS, oss.str() );
 
-    memset( &(target.sin_zero), '\0', 8 );
+    memset( target.sin_zero, '\0', 8 );
     if( ::connect( fd, (struct sockaddr *)&target, sizeof( struct sockaddr ) ) == 0 )
       return fd;
 

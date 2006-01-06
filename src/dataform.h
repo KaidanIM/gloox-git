@@ -15,7 +15,6 @@
 #define DATAFORM_H__
 
 #include "dataformbase.h"
-#include "dataformfield.h"
 
 #include <string>
 #include <list>

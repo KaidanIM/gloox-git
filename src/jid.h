@@ -117,7 +117,7 @@ namespace gloox
        * Compares two JIDs.
        * @param right The second JID.
        */
-      int operator==( const JID& right );
+      int operator==( const JID& right ) const;
 
     private:
       std::string m_resource;

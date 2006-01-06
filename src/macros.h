@@ -26,7 +26,7 @@
 #endif
 
 
-#if __GNUC__ - 0 > 3 || ( __GNUC__ - 0 == 3 && __GNUC_MINOR__ - 0 >= 2 )
+#if defined( __GNUC__ ) && ( __GNUC__ - 0 > 3 || ( __GNUC__ - 0 == 3 && __GNUC_MINOR__ - 0 >= 2 ) )
 #define GLOOX_DEPRECATED __attribute__ ( (deprecated) )
 #elif defined( _MSC_VER ) && ( _MSC_VER >= 1300 )
 #define GLOOX_DEPRECATED __declspec( deprecated )

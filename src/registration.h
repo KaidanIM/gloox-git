@@ -130,7 +130,7 @@ namespace gloox
        * @param fields The fields to use to generate the registration request. OR'ed @ref fieldEnum values.
        * @param values The struct contains the values which shall be used for the registration.
        */
-      void createAccount( int fields, fieldStruct values );
+      void createAccount( int fields, const fieldStruct& values );
 
       /**
        * Tells the server to remove the currently authenticated account from the server.

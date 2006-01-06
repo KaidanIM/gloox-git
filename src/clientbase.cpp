@@ -127,7 +127,8 @@ namespace gloox
         }
         else
         {
-          printf( "This server is not XMPP-compliant (it does not send a 'version' attribute). Please try another one.\n" );
+          logInstance().log( LOG_DEBUG, LOG_CLASS_CLIENTBASE, "This server is not XMPP-compliant"
+              " (it does not send a 'version' attribute). Please try another one.\n" );
           disconnect( CONN_STREAM_ERROR );
         }
 
@@ -228,11 +229,11 @@ namespace gloox
       case SASL_PLAIN:
       {
         a->addAttribute( "mechanism", "PLAIN" );
-        int len = m_jid.username().length() + m_password.length() + 2;
+        size_t len = m_jid.username().length() + m_password.length() + 2;
         char *tmp = (char*)iks_malloc( len + 80 );
         char *result;
         sprintf( tmp, "%c%s%c%s", 0, m_jid.username().c_str(), 0, m_password.c_str() );
-        result = iks_base64_encode( tmp, len );
+        result = iks_base64_encode( tmp, (int)len );
 
         a->setCData( result );
         iks_free( result );
@@ -275,19 +276,19 @@ namespace gloox
       iksmd5 *md5;
       int i;
 
-      unsigned int r_pos = decoded.find( "realm=" );
+      size_t r_pos = decoded.find( "realm=" );
       if( r_pos != std::string::npos )
       {
-        unsigned int r_end = decoded.find( "\"", r_pos + 7 );
+        size_t r_end = decoded.find( "\"", r_pos + 7 );
         realm = decoded.substr( r_pos + 7, r_end - (r_pos + 7 ) );
       }
       else
         realm = m_jid.server();
 
-      unsigned int n_pos = decoded.find( "nonce=" );
+      size_t n_pos = decoded.find( "nonce=" );
       if( n_pos != std::string::npos )
       {
-        unsigned int n_end = decoded.find( "\"", n_pos + 7 );
+        size_t n_end = decoded.find( "\"", n_pos + 7 );
         while( decoded.substr( n_end-1, 1 ) == "\\" )
           n_end = decoded.find( "\"", n_end + 1 );
         nonce = decoded.substr( n_pos + 7, n_end - ( n_pos + 7 ) );
@@ -340,7 +341,7 @@ namespace gloox
       response += "\",nc=00000001,qop=auth,digest-uri=\"xmpp/" + m_jid.server() + "\",response=";
       response += response_value;
       response += ",charset=utf-8";
-      response_coded = iks_base64_encode( response.c_str(), response.length() );
+      response_coded = iks_base64_encode( response.c_str(), (int)response.length() );
 
       t = new Tag( "response", response_coded );
 
@@ -414,7 +415,7 @@ namespace gloox
     int minor = 0;
     int myMajor = XMPP_STREAM_VERSION_MAJOR;
 
-    unsigned int dot = version.find( "." );
+    size_t dot = version.find( "." );
     if( !version.empty() && dot && dot != std::string::npos )
     {
       major = atoi( version.substr( 0, dot ).c_str() );
@@ -674,10 +675,11 @@ namespace gloox
     ConnectionListenerList::const_iterator it = m_connectionListeners.begin();
     for( ; it != m_connectionListeners.end(); ++it )
     {
-      return (*it)->onTLSConnect( info );
+      if( !(*it)->onTLSConnect( info ) )
+        return false;
     }
 
-    return false;
+    return true;
   }
 
   void ClientBase::notifyOnResourceBindError( ResourceBindError error )
