@@ -58,7 +58,7 @@
 namespace gloox
 {
 
-#if defined( SKYOS ) || defined( WIN32 ) || ( defined( __NetBSD__ ) && ( __NetBSD_Version__ < 300000000 ) ) || defined( __UCLIBC__ )
+#ifndef HAVE_RES_QUERYDOMAIN
   int DNS::connect( const std::string& domain, const LogSink& logInstance )
   {
     logInstance.log( LOG_DEBUG, LOG_CLASS_DNS, "note: gloox does not support SRV records on this platform." );
@@ -262,7 +262,7 @@ namespace gloox
     }
 
     std::ostringstream oss;
-    oss << "resolved " << domain.c_str() << " to: " << (char*)&target.sin_addr;
+    oss << "resolved " << domain.c_str() << " to: " << inet_ntoa( target.sin_addr );
     logInstance.log( LOG_DEBUG, LOG_CLASS_DNS, oss.str() );
 
     memset( target.sin_zero, '\0', 8 );
