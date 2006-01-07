@@ -104,6 +104,10 @@ SOURCE=.\src\bookmarkstorage.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\chatstatefilter.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\client.cpp
 # End Source File
 # Begin Source File
@@ -153,6 +157,14 @@ SOURCE=.\src\lastactivity.cpp
 # Begin Source File
 
 SOURCE=.\src\logsink.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\messageeventfilter.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\messagesession.cpp
 # End Source File
 # Begin Source File
 
@@ -225,6 +237,14 @@ SOURCE=.\src\bookmarkhandler.h
 # Begin Source File
 
 SOURCE=.\src\bookmarkstorage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\chatstatefilter.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\chatstatehandler.h
 # End Source File
 # Begin Source File
 
@@ -324,7 +344,27 @@ SOURCE=.\src\macros.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\messageeventfilter.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\messageeventhandler.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\messagefilter.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\messagehandler.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\messagesession.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\messagesessionhandler.h
 # End Source File
 # Begin Source File
 
