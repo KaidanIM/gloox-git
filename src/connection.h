@@ -63,7 +63,8 @@ namespace gloox
        * @param port The port to connect to. The default of -1 means that SRV records will be used
        * to find out about the actual host:port.
        */
-      Connection( Parser *parser, const LogSink& logInstance, const std::string& server, int port = -1 );
+      Connection( Parser *parser, const LogSink& logInstance, const std::string& server,
+                  int port = -1 );
 
       /**
        * Virtual destructor
@@ -149,7 +150,7 @@ namespace gloox
       bool tlsHandshake();
 
       /**
-       * Use this function to set a number of trusted root CA certificates. which shall be
+       * Use this function to set a number of trusted root CA certificates which shall be
        * used to verify a servers certificate.
        * @param cacerts A list of absolute paths to CA root certificate files in PEM format.
        */
@@ -160,6 +161,19 @@ namespace gloox
        * @return Certificate information.
        */
       const CertInfo& fetchTLSInfo() const { return m_certInfo; };
+
+      /**
+       * Use this function to set the user's certificate and private key. The certificate will
+       * be presented to the server upon request and can be used for SASL EXTERNAL authentication.
+       * The user's certificate file should be a bundle of more than one certificate in PEM format.
+       * The first one in the file should be the user's certificate, each cert following that one
+       * should have signed the previous one.
+       * @note These certificates are not necessarily the same as those used to verify the server's
+       * certificate.
+       * @param privateKey The absolute path to the user's private key in PEM format.
+       * @param certs A path to a certificate bundle in PEM format.
+       */
+      void setClientCert( const std::string& clientKey, const std::string& clientCerts );
 #endif
 
     private:
@@ -170,6 +184,7 @@ namespace gloox
       std::string compress( const std::string& data );
       std::string decompress( const std::string& data );
       z_stream m_zinflate;
+      z_stream m_zdeflate;
 #endif
 
 #if defined( USE_GNUTLS )
@@ -185,6 +200,8 @@ namespace gloox
 #endif
 
       StringList m_cacerts;
+      std::string m_clientKey;
+      std::string m_clientCerts;
 
       Parser *m_parser;
       ConnectionState m_state;
@@ -194,6 +211,7 @@ namespace gloox
 
       char *m_buf;
       std::string m_server;
+      std::string m_inflateBuffer;
       int m_port;
       int m_socket;
       int m_compCount;
