@@ -354,11 +354,17 @@ namespace gloox
       void setCACerts( const StringList& cacerts ) { m_cacerts = cacerts; };
 
       /**
-       * Use this function to set a client certificate which will be presented to the server.
-       * The server then can use it for the SASL EXTERNAL mechanism.
-       * @param clientCert The filename of the client certificate.
+       * Use this function to set the user's certificate and private key. The certificate will
+       * be presented to the server upon request and can be used for SASL EXTERNAL authentication.
+       * The user's certificate file should be a bundle of more than one certificate in PEM format.
+       * The first one in the file should be the user's certificate, each cert following that one
+       * should have signed the previous one.
+       * @note These certificates are not necessarily the same as those used to verify the server's
+       * certificate.
+       * @param privateKey The absolute path to the user's private key in PEM format.
+       * @param certs A path to a certificate bundle in PEM format.
        */
-      void setClientCert( const std::string& clientCert ) { m_clientCert = clientCert; };
+      void setClientCert( const std::string& clientKey, const std::string& clientCerts );
 
       /**
        * Use this function to turn the Auto-MessageSession feature on or off.
@@ -370,10 +376,8 @@ namespace gloox
        *
        * @param autoMS Whether to enable automatic MessageSession creation.
        * @param msh The MessageSessionHandler that will receive the newly created MessageSession.
-       * @param decorators Bit-wise ORed list of MessageSessionDecorators you want to have applied
-       * by default to the newly created MessageSession.
        */
-      void setAutoMessageSession( bool autoMS, MessageSessionHandler *msh, int decorators );
+      void setAutoMessageSession( bool autoMS, MessageSessionHandler *msh );
 
       /**
        * Returns the LogSink instance for this ClientBase and all related objects.
@@ -449,7 +453,7 @@ namespace gloox
       JID m_jid;
       Connection *m_connection;
 
-      std::string m_clientCert;
+      std::string m_clientCerts;
       std::string m_clientKey;
       std::string m_namespace;
       std::string m_password;
