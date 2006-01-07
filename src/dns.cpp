@@ -91,8 +91,7 @@ namespace gloox
     if( srvbuf.len < 0 )
       return defaultHostMap( service, proto, domain );
 
-    HEADER* hdr = (HEADER*)malloc( sizeof(HEADER) );
-    memcpy( hdr, srvbuf.buf, srvbuf.len );
+    HEADER* hdr = (HEADER*)srvbuf.buf;
     unsigned char* here = srvbuf.buf + NS_HFIXEDSZ;
 
     if( ( hdr->tc ) || ( srvbuf.len < NS_HFIXEDSZ ) )
@@ -198,7 +197,9 @@ namespace gloox
         continue;
       }
 
-      char *tmp = inet_ntoa( *((struct in_addr *)h->h_addr) );
+      in_addr *addr = (in_addr*)malloc( sizeof( in_addr ) );
+      memcpy( addr, ((struct in_addr *)h->h_addr), sizeof( in_addr ) );
+      char *tmp = inet_ntoa( *addr );
       std::ostringstream oss;
       oss << "resolved " << (*it).first.c_str() <<  " to: " << tmp << ":" << port;
       logInstance.log( LOG_DEBUG, LOG_CLASS_DNS, oss.str() );
