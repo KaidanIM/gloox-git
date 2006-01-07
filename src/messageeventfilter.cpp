@@ -64,7 +64,7 @@ namespace gloox
     else
     {
       m_requestedEvents = 0;
-      m_lastID.clear();
+      m_lastID = "";
     }
   }
 
