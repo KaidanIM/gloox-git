@@ -92,6 +92,8 @@ namespace gloox
 
 #ifdef HAVE_TLS
     m_connection->setCACerts( m_cacerts );
+    if( !m_clientKey.empty() && !m_clientCerts.empty() )
+      m_connection->setClientCert( m_clientKey, m_clientCerts );
 #endif
     int ret = m_connection->connect();
     if( ret == STATE_CONNECTED )
@@ -214,6 +216,12 @@ namespace gloox
     start->addAttribute( "xmlns", XMLNS_STREAM_TLS );
     send( start );
   }
+
+  void ClientBase::setClientCert( const std::string& clientKey, const std::string& clientCerts )
+  {
+    m_clientKey = clientKey;
+    m_clientCerts = clientCerts;
+  }
 #endif
 
   void ClientBase::startSASL( SaslMechanisms type )
@@ -245,8 +253,15 @@ namespace gloox
         a->setCData( getID() );
         break;
       case SASL_EXTERNAL:
+      {
         a->addAttribute( "mechanism", "EXTERNAL" );
+        char *tmp = (char*)iks_malloc( m_jid.bare().length() );
+        char *result;
+        sprintf( tmp, "%s", m_jid.bare().c_str() );
+        result = iks_base64_encode( tmp, (int)m_jid.bare().length() );
+        a->setCData( result );
         break;
+      }
     }
 
     send( a );
@@ -516,7 +531,7 @@ namespace gloox
       return "";
   }
 
-  void ClientBase::setAutoMessageSession( bool autoMS, MessageSessionHandler *msh, int decorators )
+  void ClientBase::setAutoMessageSession( bool autoMS, MessageSessionHandler *msh )
   {
     if( autoMS )
     {
@@ -525,13 +540,11 @@ namespace gloox
 
       m_messageSessionHandler = msh;
       m_autoMessageSession = true;
-      m_autoMessageSessionDecorators = decorators;
     }
     else
     {
       m_autoMessageSession = false;
       m_messageSessionHandler = 0;
-      m_autoMessageSessionDecorators = 0;
     }
   }
 
