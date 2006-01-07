@@ -135,22 +135,25 @@ else
   AC_CHECK_LIB(resolv, res_querydomain)
   if test "x-$ac_cv_lib_resolv_res_querydomain" = "x-yes" ; then
     have_res_querydomain=yes
+    AC_DEFINE(HAVE_RES_QUERYDOMAIN)
   else
     AC_CHECK_LIB(bind, res_querydomain)
     if test "x-$ac_cv_lib_bind_res_querydomain" = "x-yes" ; then
       have_res_querydomain=yes
+      AC_DEFINE(HAVE_RES_QUERYDOMAIN)
     else
       AC_MSG_CHECKING([for res_querydomain in -lresolv (alternate version)])
       save_libs="$LIBS"
       LIBS="-lresolv $LIBS"
-      AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <resolv.h>]],
-                     [[res_querydomain(0,0,0,0,0,0)]])],
-                     [AC_MSG_RESULT(yes) have_res_querydomain=yes],
-                     [AC_MSG_RESULT(no) LIBS="$save_libs"])
+      AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <resolv.h>]], [[res_querydomain(0,0,0,0,0,0)]])],
+                     [AC_MSG_RESULT(yes)
+                      AC_DEFINE(HAVE_RES_QUERYDOMAIN)
+                      have_res_querydomain=yes],
+                     [AC_MSG_RESULT(no)
+                     LIBS="$save_libs"])
     fi
   fi
 fi
-
 
 dnl Debug
 debug="no"
