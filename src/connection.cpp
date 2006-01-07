@@ -43,9 +43,10 @@ namespace gloox
 
   static const int BUFSIZE = 1024;
 
-  Connection::Connection( Parser *parser, const LogSink& logInstance, const std::string& server, int port )
-    : m_parser( parser ), m_logInstance( logInstance ), m_buf( 0 ),
-      m_server( Prep::idna( server ) ), m_port( port ),
+  Connection::Connection( Parser *parser, const LogSink& logInstance, const std::string& server,
+                          int port )
+  : m_parser( parser ), m_state ( STATE_DISCONNECTED ), m_disconnect ( CONN_OK ),
+      m_logInstance( logInstance ), m_buf( 0 ), m_server( Prep::idna( server ) ), m_port( port ),
       m_socket( -1 ), m_compCount( 0 ), m_decompCount( 0 ), m_dataOutCount( 0 ),
       m_dataInCount( 0 ), m_cancel( true ), m_secure( false ), m_compression( false ),
       m_fdRequested( false ), m_compInited( false )
@@ -63,6 +64,14 @@ namespace gloox
 #endif
   }
 
+#ifdef HAVE_TLS
+  void Connection::setClientCert( const std::string& clientKey, const std::string& clientCerts )
+  {
+    m_clientKey = clientKey;
+    m_clientCerts = clientCerts;
+  }
+#endif
+
 #if defined( USE_OPENSSL )
   bool Connection::tlsHandshake()
   {
@@ -77,6 +86,12 @@ namespace gloox
     StringList::const_iterator it = m_cacerts.begin();
     for( ; it != m_cacerts.end(); ++it )
       SSL_CTX_load_verify_locations( sslCTX, (*it).c_str(), NULL );
+
+    if( !m_clientKey.empty() && !m_clientCerts.empty() )
+    {
+      SSL_CTX_use_certificate_chain_file( sslCTX, m_clientCerts.c_str() );
+      SSL_CTX_use_PrivateKey_file( sslCTX, m_clientKey.c_str(), SSL_FILETYPE_PEM );
+    }
 
     m_ssl = SSL_new( sslCTX );
     SSL_set_connect_state( m_ssl );
@@ -147,6 +162,12 @@ namespace gloox
     StringList::const_iterator it = m_cacerts.begin();
     for( ; it != m_cacerts.end(); ++it )
       gnutls_certificate_set_x509_trust_file( m_credentials, (*it).c_str(), GNUTLS_X509_FMT_PEM );
+
+    if( !m_privateKey.empty() && !m_privateCert.empty() )
+    {
+      gnutls_certificate_set_x509_key_file( m_credentials, m_clientKey.c_str(),
+                                            m_clientCerts.c_str(), GNUTLS_X509_FMT_PEM );
+    }
 
     if( gnutls_init( &m_session, GNUTLS_CLIENT ) != 0 )
     {
@@ -310,10 +331,23 @@ namespace gloox
       m_zinflate.zalloc = Z_NULL;
       m_zinflate.zfree = Z_NULL;
       m_zinflate.opaque = Z_NULL;
+      m_zinflate.avail_in = 0;
+      m_zinflate.next_in = Z_NULL;
       ret = inflateInit( &m_zinflate );
+
+      if( ret == Z_OK )
+      {
+        m_zdeflate.zalloc = Z_NULL;
+        m_zdeflate.zfree = Z_NULL;
+        m_zdeflate.opaque = Z_NULL;
+        ret = deflateInit( &m_zdeflate, Z_BEST_COMPRESSION/*Z_DEFAULT_COMPRESSION*/ );
+      }
     }
     else if( m_compInited && !init )
+    {
       inflateEnd( &m_zinflate );
+      deflateEnd( &m_zdeflate );
+    }
 
     if( ret == Z_OK )
     {
@@ -342,6 +376,21 @@ namespace gloox
     Bytef *out = new Bytef[CHUNK];
     char *in = const_cast<char*>( data.c_str() );
 
+    m_zdeflate.avail_in = data.length();
+    m_zdeflate.next_in = (Bytef*)in;
+
+//     int ret;
+//     std::string result, tmp;
+//     do {
+//       m_zdeflate.avail_out = CHUNK;
+//       m_zdeflate.next_out = (Bytef*)out;
+//
+//       ret = deflate( &m_zdeflate, Z_SYNC_FLUSH );
+//       printf( "deflate returns: %d\n", ret );
+//       tmp.assign( (char*)out, CHUNK - m_zdeflate.avail_out );
+//       result += tmp;
+//     } while( m_zdeflate.avail_out == 0 );
+
     ::compress( out, (uLongf*)&CHUNK, (Bytef*)in, data.length() );
     std::string result;
     result.assign( (char*)out, CHUNK );
@@ -349,36 +398,57 @@ namespace gloox
     m_dataOutCount += data.length();
     delete[] out;
 
+//     printf( "about to send RAW data (%d), uncompressed: '%s' (%d)\n", result.length(), data.c_str(), data.length() );
     return result;
   }
 
   std::string Connection::decompress( const std::string& data )
   {
-    if( data.empty() )
-      return "";
+//     if( data.empty() )
+//       return "";
 
-    int CHUNK = data.length() * 10;
+    m_inflateBuffer += data;
+
+    int CHUNK = /*m_inflateBuffer.length() **/ 50;
     char *out = new char[CHUNK];
-    char *in = const_cast<char*>( data.c_str() );
+    char *in = const_cast<char*>( m_inflateBuffer.c_str() );
 
-    m_zinflate.avail_in = data.length();
+    m_zinflate.avail_in = m_inflateBuffer.length();
     m_zinflate.next_in = (Bytef*)in;
 
-    int ret;
+    int ret = 0;
     std::string result, tmp;
-    do {
+    do
+    {
       m_zinflate.avail_out = CHUNK;
       m_zinflate.next_out = (Bytef*)out;
 
-      ret = inflate( &m_zinflate, Z_FINISH );
+      printf( "av_in: %d, ne_in: %c, av_out: %d\n",
+              m_zinflate.avail_in, m_zinflate.next_in,
+              m_zinflate.avail_out );
+
+      ret = inflate( &m_zinflate, Z_SYNC_FLUSH );
       tmp.assign( out, CHUNK - m_zinflate.avail_out );
+      printf( "inflate: %d, produced: %s\n", ret, tmp.c_str() );
       result += tmp;
-    } while( m_zinflate.avail_out == 0 );
+    } while( m_zinflate.avail_out == 0 && ret == Z_OK );
+
+//     if( result.empty() || ret < 0 )
+//     {
+//       printf( "raw data received, error: %s, recv: %s\n", m_zinflate.msg, data.c_str() );
+//       inflateReset( &m_zinflate );
+//       return "";
+//     }
+
+//     } while( m_zinflate.avail_out == 0 );
 
     m_decompCount += result.length();
-    m_dataInCount += data.length();
+    m_dataInCount += m_inflateBuffer.length();
     delete[] out;
 
+    printf( "received RAW data (%d) uncompressed to: '%s' (%d)\n", m_inflateBuffer.length(),
+            result.c_str(), result.length() );
+    m_inflateBuffer.clear();
     return result;
   }
 #endif
@@ -406,6 +476,9 @@ namespace gloox
       cleanup();
       return e;
     }
+
+    if( m_socket == -1 )
+      return CONN_NOT_CONNECTED;
 
     if( !m_fdRequested )
     {
@@ -469,7 +542,9 @@ namespace gloox
 #endif
         buf = m_buf;
 
+      printf( "about to feed parser with data\n" );
       Parser::ParserState ret = m_parser->feed( buf );
+      printf( "parser returned %d\n", ret );
       if( ret != Parser::PARSER_OK )
       {
         cleanup();
@@ -494,7 +569,7 @@ namespace gloox
   ConnectionError Connection::receive()
   {
     if( m_socket == -1 || !m_parser )
-      return CONN_IO_ERROR;
+      return CONN_NOT_CONNECTED;
 
     while( !m_cancel )
     {
@@ -508,7 +583,7 @@ namespace gloox
 
   void Connection::send( const std::string& data )
   {
-    if( data.empty() )
+    if( data.empty() || ( m_socket == -1 ) )
       return;
 
     char *xml;
@@ -526,7 +601,7 @@ namespace gloox
     if( m_secure )
     {
       int ret;
-      int len = strlen( xml );
+      size_t len = strlen( xml );
       do
       {
         ret = gnutls_record_send( m_session, xml, len );
@@ -538,14 +613,14 @@ namespace gloox
     if( m_secure )
     {
       int ret;
-      int len = strlen( xml );
+      size_t len = strlen( xml );
       ret = SSL_write( m_ssl, xml, len );
     }
     else
 #endif
     {
-      int num = 0;
-      int len = strlen( xml );
+      size_t num = 0;
+      size_t len = strlen( xml );
       while( num < len )
 #ifdef SKYOS
         num += ::send( m_socket, (unsigned char*)(xml+num), len - num, 0 );
