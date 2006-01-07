@@ -183,6 +183,34 @@ else
   fi
 fi
 
+dnl check for res_query in libc, libbind and libresolv
+AC_CHECK_FUNCS(res_query)
+if test "x-$ac_cv_func_res_query" = "x-yes" ; then
+  have_res_query=yes
+else
+  AC_CHECK_LIB(resolv, res_query)
+  if test "x-$ac_cv_lib_resolv_res_query" = "x-yes" ; then
+    have_res_query=yes
+    AC_DEFINE(HAVE_RES_QUERY)
+  else
+    AC_CHECK_LIB(bind, res_query)
+    if test "x-$ac_cv_lib_bind_res_query" = "x-yes" ; then
+      have_res_query=yes
+      AC_DEFINE(HAVE_RES_QUERY)
+    else
+      AC_MSG_CHECKING([for res_query in -lresolv (alternate version)])
+      save_libs="$LIBS"
+      LIBS="-lresolv $LIBS"
+      AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <resolv.h>]], [[res_query(0,0)]])],
+                     [AC_MSG_RESULT(yes)
+                      AC_DEFINE(HAVE_RES_QUERY)
+                      have_res_query=yes],
+                     [AC_MSG_RESULT(no)
+                     LIBS="$save_libs"])
+    fi
+  fi
+fi
+
 dnl Debug
 debug="no"
 AC_ARG_ENABLE( debug,

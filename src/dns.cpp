@@ -58,7 +58,7 @@
 namespace gloox
 {
 
-#if !defined( HAVE_RES_QUERYDOMAIN ) || !defined( HAVE_DN_SKIPNAME )
+#if !defined( HAVE_RES_QUERYDOMAIN ) || !defined( HAVE_DN_SKIPNAME ) || !defined( HAVE_RES_QUERY )
   int DNS::connect( const std::string& domain, const LogSink& logInstance )
   {
     logInstance.log( LOG_DEBUG, LOG_CLASS_DNS, "note: gloox does not support SRV records on this platform." );
