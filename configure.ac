@@ -127,8 +127,30 @@ fi
 AC_MSG_CHECKING([if Zlib should be used])
 AC_MSG_RESULT($zlib)
 
-dnl libresolv
-AC_CHECK_LIB(resolv, read, [res=yes LIBS="${LIBS} -lresolv"], res=no)
+dnl check for res_querydomain in libc, libbind and libresolv
+AC_CHECK_FUNCS(res_querydomain)
+if test "x-$ac_cv_func_res_querydomain" = "x-yes" ; then
+  have_res_querydomain=yes
+else
+  AC_CHECK_LIB(resolv, res_querydomain)
+  if test "x-$ac_cv_lib_resolv_res_querydomain" = "x-yes" ; then
+    have_res_querydomain=yes
+  else
+    AC_CHECK_LIB(bind, res_querydomain)
+    if test "x-$ac_cv_lib_bind_res_querydomain" = "x-yes" ; then
+      have_res_querydomain=yes
+    else
+      AC_MSG_CHECKING([for res_querydomain in -lresolv (alternate version)])
+      save_libs="$LIBS"
+      LIBS="-lresolv $LIBS"
+      AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <resolv.h>]],
+                     [[res_querydomain(0,0,0,0,0,0)]])],
+                     [AC_MSG_RESULT(yes) have_res_querydomain=yes],
+                     [AC_MSG_RESULT(no) LIBS="$save_libs"])
+    fi
+  fi
+fi
+
 
 dnl Debug
 debug="no"
