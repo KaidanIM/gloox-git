@@ -107,7 +107,7 @@ namespace gloox
       error = true;
 
     int cnt;
-    for( cnt = ntohs( hdr->qdcount ); cnt>0; cnt-- )
+    for( cnt = ntohs( hdr->qdcount ); cnt>0; --cnt )
     {
       int strlen = dn_skipname( here, srvbuf.buf + srvbuf.len );
       here += strlen + NS_QFIXEDSZ;
@@ -115,7 +115,7 @@ namespace gloox
 
     unsigned char *srv[NS_PACKETSZ];
     int srvnum = 0;
-    for( cnt = ntohs( hdr->ancount ); cnt>0; cnt-- )
+    for( cnt = ntohs( hdr->ancount ); cnt>0; --cnt )
     {
       int strlen = dn_skipname( here, srvbuf.buf + srvbuf.len );
       here += strlen;
