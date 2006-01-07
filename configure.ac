@@ -155,6 +155,34 @@ else
   fi
 fi
 
+dnl check for dn_skipname in libc, libbind and libresolv
+AC_CHECK_FUNCS(dn_skipname)
+if test "x-$ac_cv_func_dn_skipname" = "x-yes" ; then
+  have_dn_skipname=yes
+else
+  AC_CHECK_LIB(resolv, dn_skipname)
+  if test "x-$ac_cv_lib_resolv_dn_skipname" = "x-yes" ; then
+    have_dn_skipname=yes
+    AC_DEFINE(HAVE_DN_SKIPNAME)
+  else
+    AC_CHECK_LIB(bind, dn_skipname)
+    if test "x-$ac_cv_lib_bind_dn_skipname" = "x-yes" ; then
+      have_dn_skipname=yes
+      AC_DEFINE(HAVE_DN_SKIPNAME)
+    else
+      AC_MSG_CHECKING([for dn_skipname in -lresolv (alternate version)])
+      save_libs="$LIBS"
+      LIBS="-lresolv $LIBS"
+      AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <resolv.h>]], [[dn_skipname(0,0)]])],
+                     [AC_MSG_RESULT(yes)
+                      AC_DEFINE(HAVE_DN_SKIPNAME)
+                      have_dn_skipname=yes],
+                     [AC_MSG_RESULT(no)
+                     LIBS="$save_libs"])
+    fi
+  fi
+fi
+
 dnl Debug
 debug="no"
 AC_ARG_ENABLE( debug,
@@ -169,6 +197,7 @@ AC_MSG_RESULT($debug)
 dnl Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS(unistd.h strings.h errno.h arpa/nameser.h)
+AC_CHECK_FUNCS(ns_get16 __ns_get6)
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
