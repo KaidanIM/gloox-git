@@ -198,13 +198,13 @@ namespace gloox
       }
 
       in_addr *addr = (in_addr*)malloc( sizeof( in_addr ) );
-      memcpy( addr, ((struct in_addr *)h->h_addr), sizeof( in_addr ) );
+      memcpy( addr, h->h_addr, sizeof( in_addr ) );
       char *tmp = inet_ntoa( *addr );
       std::ostringstream oss;
       oss << "resolved " << (*it).first.c_str() <<  " to: " << tmp << ":" << port;
       logInstance.log( LOG_DEBUG, LOG_CLASS_DNS, oss.str() );
 
-      if( inet_aton( inet_ntoa(*((struct in_addr *)h->h_addr)), &(target.sin_addr) ) == 0 )
+      if( inet_aton( tmp, &(target.sin_addr) ) == 0 )
         continue;
 
       memset( target.sin_zero, '\0', 8 );
