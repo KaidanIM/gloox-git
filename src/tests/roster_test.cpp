@@ -3,13 +3,15 @@
 #include "../discohandler.h"
 #include "../disco.h"
 #include "../rostermanager.h"
+#include "../loghandler.h"
+#include "../logsink.h"
 using namespace gloox;
 
 #include <stdio.h>
 #include <locale.h>
 #include <string>
 
-class RosterTest : public RosterListener, ConnectionListener
+class RosterTest : public RosterListener, ConnectionListener, LogHandler
 {
   public:
     RosterTest() {};
@@ -22,11 +24,13 @@ class RosterTest : public RosterListener, ConnectionListener
       JID jid( "hurkhurk@example.org/gloox" );
       j = new Client( jid, "hurkhurks" );
       j->setAutoPresence( true );
-      j->setInitialPriority( 5 );
+      j->setInitialPriority( 4 );
       j->registerConnectionListener( this );
       j->rosterManager()->registerRosterListener( this );
       j->disco()->setVersion( "rosterTest", GLOOX_VERSION );
       j->disco()->setIdentity( "client", "bot" );
+
+      j->logInstance().registerLogHandler( LOG_DEBUG, LOG_ALL, this );
 
       j->connect();
 
@@ -73,7 +77,7 @@ class RosterTest : public RosterListener, ConnectionListener
       printf( "updated %s\n", jid.c_str() );
     }
 
-    virtual void roster( Roster& roster )
+    virtual void roster( const Roster& roster )
     {
       printf( "roster arriving\nitems:\n" );
       RosterListener::Roster::const_iterator it = roster.begin();
@@ -89,17 +93,17 @@ class RosterTest : public RosterListener, ConnectionListener
       }
     }
 
-    virtual void presenceUpdated( RosterItem& item, int /*status*/, const std::string& /*msg*/ )
+    virtual void presenceUpdated( const RosterItem& item, int /*status*/, const std::string& /*msg*/ )
     {
       printf( "item changed: %s\n", item.jid().c_str() );
     }
 
-    virtual void itemAvailable( RosterItem& item, const std::string& /*msg*/ )
+    virtual void itemAvailable( const RosterItem& item, const std::string& /*msg*/ )
     {
       printf( "item online: %s\n", item.jid().c_str() );
     }
 
-    virtual void itemUnavailable( RosterItem& item, const std::string& /*msg*/ )
+    virtual void itemUnavailable( const RosterItem& item, const std::string& /*msg*/ )
     {
       printf( "item offline: %s\n", item.jid().c_str() );
     };
@@ -118,10 +122,15 @@ class RosterTest : public RosterListener, ConnectionListener
       return true;
     }
 
-    virtual void nonrosterPresenceReceived( const std::string& jid )
+    virtual void nonrosterPresenceReceived( const JID& jid )
     {
-      printf( "received presence from entity not in the roster: %s\n", jid.c_str() );
+      printf( "received presence from entity not in the roster: %s\n", jid.full().c_str() );
     }
+
+    virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
+    {
+      printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
+    };
 
   private:
     Client *j;
