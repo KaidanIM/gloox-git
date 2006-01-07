@@ -63,7 +63,7 @@ class PrivateXMLTest : public PrivateXMLHandler, ConnectionListener
       p->storeXML( x, this );
     };
 
-    virtual void handlePrivateXMLResult( const std::string /*uid*/, PrivateXMLResult /*result*/ )
+    virtual void handlePrivateXMLResult( const std::string& /*uid*/, PrivateXMLResult /*result*/ )
     {
     };
 
