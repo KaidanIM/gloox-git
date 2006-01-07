@@ -69,8 +69,7 @@ namespace gloox
     }
   }
 
-  StringMap Adhoc::handleDiscoNodeIdentities( const std::string& node,
-                                                                  std::string& name )
+  StringMap Adhoc::handleDiscoNodeIdentities( const std::string& node, std::string& name )
   {
     StringMap::const_iterator it = m_items.find( node );
     if( it != m_items.end() )
@@ -102,7 +101,7 @@ namespace gloox
     return false;
   }
 
-  bool Adhoc::handleIqID( Stanza */*stanza*/, int /*context*/ )
+  bool Adhoc::handleIqID( Stanza * /*stanza*/, int /*context*/ )
   {
     return false;
   }
