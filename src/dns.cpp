@@ -61,7 +61,7 @@ namespace gloox
 #if defined( SKYOS ) || defined( WIN32 ) || ( defined( __NetBSD__ ) && ( __NetBSD_Version__ < 300000000 ) ) || defined( __UCLIBC__ )
   int DNS::connect( const std::string& domain, const LogSink& logInstance )
   {
-    logInstance.log( LOG_DEBUG, LOG_CLASS_DNS, "gloox does not support SRV records on this platform." );
+    logInstance.log( LOG_DEBUG, LOG_CLASS_DNS, "note: gloox does not support SRV records on this platform." );
 
     return DNS::connect( domain, XMPP_PORT, logInstance );
   }
