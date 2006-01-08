@@ -85,7 +85,7 @@ namespace gloox
 
   void Tag::addAttribute( const std::string& name, const std::string& value )
   {
-    if( !value.empty() )
+    if( !name.empty() && !value.empty() )
       m_attribs[name] = value;
   }
 
@@ -149,6 +149,9 @@ namespace gloox
   bool Tag::hasChild( const std::string& name,
                       const std::string& attr, const std::string& value ) const
   {
+    if( name.empty() )
+      return false;
+
     TagList::const_iterator it = m_children.begin();
     for( ; it != m_children.end(); ++it )
     {
@@ -205,7 +208,7 @@ namespace gloox
     for( ; it != duo.end(); ++it )
     {
       size_t lookHere = 0;
-      size_t foundHere;
+      size_t foundHere = 0;
       while( ( foundHere = esc.find( (*it).first, lookHere ) ) != std::string::npos )
       {
         esc.replace( foundHere, (*it).first.size(), (*it).second );

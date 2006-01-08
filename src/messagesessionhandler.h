@@ -43,6 +43,9 @@ namespace gloox
        * @note Make sure to read the note in ClientBase::setAutoMessageSession()
        * regarding the feeding of decorators.
        *
+       * @note After receiving a MessageSession your object is the owner and is responsible
+       * for the destruction of the session.
+       *
        * @param session The new MessageSession.
        */
       virtual void handleMessageSession( MessageSession *session ) = 0;

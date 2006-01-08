@@ -47,6 +47,9 @@ namespace gloox
   {
     if( m_parent )
       m_parent->removeMessageHandler( m_target.full() );
+
+    delete m_stateFilter;
+    delete m_eventFilter;
   }
 
   void MessageSession::handleMessage( Stanza *stanza )
