@@ -1,22 +1,28 @@
 #include "../client.h"
-#include "../messagehandler.h"
+#include "../messagesessionhandler.h"
+#include "../messageeventhandler.h"
+#include "../chatstatehandler.h"
 #include "../connectionlistener.h"
 #include "../discohandler.h"
 #include "../disco.h"
 #include "../stanza.h"
 #include "../gloox.h"
 #include "../lastactivity.h"
+#include "../loghandler.h"
+#include "../logsink.h"
 using namespace gloox;
 
 #include <stdio.h>
 #include <locale.h>
 #include <string>
 
-class DiscoTest : public DiscoHandler, MessageHandler, ConnectionListener
+class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListener, LogHandler,
+                    MessageEventHandler, MessageHandler, ChatStateHandler
 {
   public:
-    DiscoTest() {};
-    virtual ~DiscoTest() {};
+    MessageTest() : m_session( 0 ) {};
+
+    virtual ~MessageTest() {};
 
     void start()
     {
@@ -25,9 +31,9 @@ class DiscoTest : public DiscoHandler, MessageHandler, ConnectionListener
       JID jid( "hurkhurk@example.org/gloox" );
       j = new Client( jid, "hurkhurks" );
       j->setAutoPresence( true );
-      j->setInitialPriority( 5 );
+      j->setInitialPriority( 4 );
       j->registerConnectionListener( this );
-      j->registerMessageHandler( this );
+      j->setAutoMessageSession( true, this );
       j->disco()->registerDiscoHandler( this );
       j->disco()->setVersion( "messageTest", GLOOX_VERSION, "Linux" );
       j->disco()->setIdentity( "client", "bot" );
@@ -35,8 +41,23 @@ class DiscoTest : public DiscoHandler, MessageHandler, ConnectionListener
       ca.push_back( "/path/to/cacert.crt" );
       j->setCACerts( ca );
 
-      j->connect();
+      j->logInstance().registerLogHandler( LOG_DEBUG, LOG_ALL, this );
 
+      if( j->connect(false) )
+      {
+        ConnectionError ce = CONN_OK;
+        while( ce == CONN_OK )
+        {
+          ce = j->recv();
+        }
+        printf( "ce: %d\n", ce );
+      }
+
+      // cleanup
+      m_session->removeMessageHandler();
+      m_session->removeMessageEventHandler();
+      m_session->removeChatStateHandler();
+      delete( m_session );
       delete( j );
     }
 
@@ -79,27 +100,54 @@ class DiscoTest : public DiscoHandler, MessageHandler, ConnectionListener
     {
       printf( "type: %d, subject: %s, message: %s, thread id: %s\n", stanza->subtype(),
               stanza->subject().c_str(), stanza->body().c_str(), stanza->thread().c_str() );
-      Tag *m = new Tag( "message" );
-      m->addAttribute( "from", j->jid().full() );
-      m->addAttribute( "to", stanza->from().full() );
-      m->addAttribute( "type", "chat" );
-      Tag *b = new Tag( "body", "You said:\n> " + stanza->body() + "\nI like that statement." );
-      m->addChild( b );
+
+      std::string msg = "You said:\n> " + stanza->body() + "\nI like that statement.";
+      std::string sub;
       if( !stanza->subject().empty() )
-      {
-        Tag *s = new Tag( "subject", "Re:" +  stanza->subject() );
-        m->addChild( s );
-      }
-      j->send( m );
+        sub = "Re: " +  stanza->subject();
+
+      m_session->raiseMessageEvent( MESSAGE_EVENT_DISPLAYED );
+      sleep( 1 );
+      m_session->raiseMessageEvent( MESSAGE_EVENT_COMPOSING );
+      sleep( 2 );
+      m_session->send( msg, sub );
+
+      if( stanza->body() == "quit" )
+        j->disconnect();
     }
+
+    virtual void handleMessageEvent( const JID& from, MessageEventType event )
+    {
+      printf( "received event: %d from: %s\n", event, from.full().c_str() );
+    }
+
+    virtual void handleChatState( const JID& from, ChatStateType state )
+    {
+      printf( "received state: %d from: %s\n", state, from.full().c_str() );
+    }
+
+    virtual void handleMessageSession( MessageSession *session )
+    {
+      m_session = session;
+      printf( "got new session\n");
+      m_session->registerMessageHandler( this );
+      m_session->registerMessageEventHandler( this );
+      m_session->registerChatStateHandler( this );
+    }
+
+    virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
+    {
+      printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
+    };
 
   private:
     Client *j;
+    MessageSession *m_session;
 };
 
 int main( int /*argc*/, char* /*argv[]*/ )
 {
-  DiscoTest *r = new DiscoTest();
+  MessageTest *r = new MessageTest();
   r->start();
   delete( r );
   return 0;
