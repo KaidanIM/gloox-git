@@ -533,11 +533,8 @@ namespace gloox
 
   void ClientBase::setAutoMessageSession( bool autoMS, MessageSessionHandler *msh )
   {
-    if( autoMS )
+    if( autoMS && msh )
     {
-      if( !msh )
-        return;
-
       m_messageSessionHandler = msh;
       m_autoMessageSession = true;
     }

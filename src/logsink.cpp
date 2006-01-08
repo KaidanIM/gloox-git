@@ -31,7 +31,7 @@ namespace gloox
     LogHandlerMap::const_iterator it = m_logHandlers.begin();
     for( ; it != m_logHandlers.end(); ++it )
     {
-      if( ( (*it).second.level <= level ) && ( (*it).second.areas & area ) )
+      if( (*it).first && ( (*it).second.level <= level ) && ( (*it).second.areas & area ) )
         (*it).first->handleLog( level, area, message );
     }
   }

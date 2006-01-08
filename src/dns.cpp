@@ -200,6 +200,7 @@ namespace gloox
       in_addr *addr = (in_addr*)malloc( sizeof( in_addr ) );
       memcpy( addr, h->h_addr, sizeof( in_addr ) );
       char *tmp = inet_ntoa( *addr );
+      free( addr );
       std::ostringstream oss;
       oss << "resolved " << (*it).first.c_str() <<  " to: " << tmp << ":" << port;
       logInstance.log( LOG_DEBUG, LOG_CLASS_DNS, oss.str() );

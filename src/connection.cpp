@@ -500,7 +500,7 @@ namespace gloox
 
     // optimize(?): recv returns the size. set size+1 = \0
     memset( m_buf, '\0', BUFSIZE );
-    int size;
+    int size = 0;
 #if defined( USE_GNUTLS )
     if( m_secure )
     {
