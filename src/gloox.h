@@ -21,6 +21,7 @@
  * @ref roster_sec <br>
  * @ref privacy_sec <br>
  * @ref auth_sec <br>
+ * @ref msg_sec <br>
  * @ref jeps_sec <br>
  * <br>
  *
@@ -234,6 +235,11 @@
  *
  * gloox supports old-style IQ-based authentication defined in JEP-0078 as well as several SASL mechanisms.
  * See the documentation of the @link gloox::Client Client @endlink class for more information.
+ *
+ * @section msg_sec Messaging
+ *
+ * For Messaging it is recommended to use the MessageSession interface. See
+ * @link gloox::MessageSession MessageSession @endlink for more details.
  *
  * @section jeps_sec Protocol Enhancements
  *
