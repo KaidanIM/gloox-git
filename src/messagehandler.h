@@ -22,8 +22,12 @@ namespace gloox
   /**
    * @brief A virtual interface which can be reimplemented to receive incoming message stanzas.
    *
-   * Derived classes can be registered as MessageHandlers with the Client.
-   * Upon an incoming Message packet @ref handleMessage() will be called.
+   * Derived classes can be registered as MessageHandlers with a ClientBase or MessageSession instance.
+   * Upon an incoming Message packet @ref handleMessage() will be called. If registered with a
+   * ClientBase this happens for every incoming message, regardless of the sender. With a MessageSession
+   * the registered handler will receive all messages originating from the Session's contact. See
+   * MessageSession for more details.
+   *
    * @author Jakob Schroeter <js@camaya.net>
    */
   class GLOOX_EXPORT MessageHandler
