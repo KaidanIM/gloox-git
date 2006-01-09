@@ -84,12 +84,12 @@ namespace gloox
    * @code
    * virtual void MyClass::handleMessageEvent( const JID& from, MessageEventType event )
    * {
-   *   [...]
+   *   // display contact's Message Event
    * }
    *
    * virtual void MyClass::handleChatState( const JID& from, ChatStateType state )
    * {
-   *   [...]
+   *   // display contact's Chat State
    * }
    * @endcode
    *
