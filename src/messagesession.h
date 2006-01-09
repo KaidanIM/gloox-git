@@ -38,12 +38,60 @@ namespace gloox
    * on its own.
    *
    * MessageSession adds an abstraction to a chat conversation. A MessageSession is responsible for
-   * communicating with exactly one (full) JID. It can be extended by add-ons which,
-   * for instance, offer Message Events support for messages sent through it.
+   * communicating with exactly one (full) JID. By default it offers Message Events and Chat State
+   * Notifications support for messages sent through it.
    *
    * You can still use the old MessageHandler in parallel, but messages will not be relayed to both
    * the generic MessageHandler and a MessageSession established for the sender's JID. The MessageSession
    * takes precedence.
+   *
+   * Using MessageSessions has the following adavantages over the old plain MessageHandler:
+   * @li automatic creation of MessageSessions
+   * @li filtering by JID
+   * @li automatic handling of threading
+   * @li simpler sending of messages
+   * @li support for Message Events and Chat State Notifications
+   *
+   * Usage:<br>
+   * Derive an object from MessageSessionHandler and reimplement handleMessageSession() to store your
+   * shiny new sessions somewhere, or to create a new chat window, or whatever. Register your
+   * object with a ClientBase instance using setAutoMessageSession(). In code:
+   * @code
+   * void MyClass::myFunc()
+   * {
+   *   JID jid( "abc@example.org/gloox" );
+   *   j = new Client( jid, "password" );
+   *   [...]
+   *   j->setAutoMessageSession( true, this );
+   * }
+   * @endcode
+   * MyClass is a MessageSessionHandler here.
+   *
+   * MyClass is MessageHandler, MessageEventHandler and ChatStateHandler, too. The handlers
+   * are registered with the session to receive the respective events.
+   * @code
+   * virtual void MyClass::handleMessageSession( MessageSession *session )
+   * {
+   *   m_session = session;
+   *   m_session->registerMessageHandler( this );
+   *   m_session->registerMessageEventHandler( this );
+   *   m_session->registerChatStateHandler( this );
+   * }
+   * @endcode
+   *
+   * MessageEventHandler::handleMessageEvent() and ChatStateHandler::handleChatState() are called
+   * for incoming Message Events and Chat States, respectively.
+   * @code
+   * virtual void MyClass::handleMessageEvent( const JID& from, MessageEventType event )
+   * {
+   *   [...]
+   * }
+   *
+   * virtual void MyClass::handleChatState( const JID& from, ChatStateType state )
+   * {
+   *   [...]
+   * }
+   * @endcode
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.8
