@@ -236,9 +236,10 @@
  * gloox supports old-style IQ-based authentication defined in JEP-0078 as well as several SASL mechanisms.
  * See the documentation of the @link gloox::Client Client @endlink class for more information.
  *
- * @section msg_sec Messaging
+ * @section msg_sec Sending and Receiving of Chat Messages
  *
- * For Messaging it is recommended to use the MessageSession interface. See
+ * For Messaging it is recommended to use the MessageSession interface. It handles sending and receiving
+ * of messages as well as message events and chat states (such as typing notification, etc.). See
  * @link gloox::MessageSession MessageSession @endlink for more details.
  *
  * @section jeps_sec Protocol Enhancements

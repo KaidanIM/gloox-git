@@ -93,11 +93,39 @@ namespace gloox
    * }
    * @endcode
    *
+   * To let the chat partner now that the user is typing a message or has closed the chat window, use
+   * raiseMessageEvent() and setChatState(), respectively. For example:
+   * @code
+   * // user is typing a message
+   * m_session->raiseMessageEvent( MESSAGE_EVENT_COMPOSING );
+   *
+   * // acknowledge receiving of a message
+   * m_session->raiseMessageEvent( MESSAGE_EVENT_DELIVERED );
+   *
+   * // user is not actively paying attention to the chat
+   * m_session->setChatState( CHAT_STATE_INACTIVE );
+   *
+   * // user has closed the chat window
+   * m_session->setChatState( CHAT_STATE_GONE );
+   * @endcode
+   *
+   * To send a message to the chat partner of the session, use
+   * @ref send( const std::string& message, const std::string& subject ). You don't have to care about
+   * receipient, thread id, etc., they are added automatically.
+   *
+   * @code
+   * m_session->send( "Hello World!", "No Subject" );
+   * @endcode
+   *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.8
    */
   class GLOOX_EXPORT MessageSession : public MessageHandler
   {
+
+    friend class MessageEventFilter;
+    friend class ChatStateFilter;
+
     public:
       /**
        * Constructs a new MessageSession for the given JID.
@@ -173,14 +201,6 @@ namespace gloox
       void removeChatStateHandler();
 
       /**
-       * A wrapper around ClientBase::send(). You should @b not use this function to send a
-       * chat message because the Tag is not prepared accordingly (neither Thread ID nor Message
-       * Event requests are added).
-       * @param tag A Tag to send.
-       */
-      virtual void send( Tag *tag );
-
-      /**
        * A convenience function to quickly send a message (optionally with subject). This is
        * the preferred way to send a message from a MessageSession.
        * @param message The message to send.
@@ -214,6 +234,16 @@ namespace gloox
 
       // reimplemented from MessageHandler
       virtual void handleMessage( Stanza *stanza );
+
+    protected:
+
+      /**
+      * A wrapper around ClientBase::send(). You should @b not use this function to send a
+      * chat message because the Tag is not prepared accordingly (neither Thread ID nor Message
+      * Event requests are added).
+      * @param tag A Tag to send.
+      */
+      virtual void send( Tag *tag );
 
     private:
       ClientBase *m_parent;

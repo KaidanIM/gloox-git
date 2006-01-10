@@ -23,9 +23,10 @@ namespace gloox
 {
 
   /**
-   * @brief A virtual interface which can be reimplemented to receive debug messages.
+   * @brief A virtual interface which can be reimplemented to receive debug and log messages.
    *
-   * Upon an incoming packet @ref handleLog() is be called.
+   * @ref handleLog() is called for log messages.
+   *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.5
    */
