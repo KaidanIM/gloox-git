@@ -33,6 +33,39 @@ namespace gloox
   /**
    * @brief This class implements a provider for JEP-0050 (Ad-hoc Commands).
    *
+   * The current, not complete, implementation is probably best suited for fire-and-forget
+   * type of commands. Any additional feature, like multiple stages, etc., would have to be
+   * added separately.
+   *
+   * Use this class as follows:
+   * Create a class that will handle command execution requests and derive it from
+   * AdhocCommandProvider. Instantiate an Adhoc object and register that class with it using
+   * registerAdhocCommandProvider(). The additional parameters to that method are the internal
+   * name of the command as used in the code, and the public name of the command as it
+   * will be shown to an end user:
+   * @code
+   * MyClass::someFunc()
+   * {
+   *   Adhoc *m_adhoc = new Adhoc( m_client, m_client->disco() );
+   *
+   *   // this might be a bot monitoring a weather station, for example
+   *   m_adhoc->registerAdhocCommandProvider( this, "getTemp", "Retrieve current temperature" );
+   *   m_adhoc->registerAdhocCommandProvider( this, "getPressure", Retrieve current air pressure" );
+   *   [...]
+   * }
+   * @endcode
+   * In this example, MyClass is AdhocCommandProvider-derived so it is obviously the command handler, too.
+   *
+   * And that's about it you can do with the Adhoc class. Of course you can have a AdhocCommandProvider
+   * handle more than one command, just register it with the Adhoc object for every desired command,
+   * like shown above.
+   *
+   * What the Adhoc object does when you install a new command is tell the supplied Disco object
+   * to advertise these commands to clients using the 'Service Discovery' protocol to learn about
+   * this implementations features. These clients can then call and execute the command. Of course you
+   * are free to implement access restrictions to not let anyone mess with your bot, for example.
+   * However, the commands offered using Service Discovery are publically visible in any case.
+   *
    * @author Jakob Schroeter <js@camaya.net>
    */
   class GLOOX_EXPORT Adhoc : public DiscoNodeHandler, IqHandler
