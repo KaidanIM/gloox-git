@@ -20,6 +20,8 @@
 namespace gloox
 {
 
+  class DataForm;
+
   /**
    * @brief A virtual interface that receives events from an @ref Registration object.
    *
@@ -91,6 +93,13 @@ namespace gloox
        * @param result The result of the last operation.
        */
       virtual void handleRegistrationResult( resultEnum result ) = 0;
+
+      /**
+       * This function is called additionally to @ref handleRegistrationFields() if the server
+       * supplied a data form together with legacy registration fields.
+       * @param form The DataForm conataining registration information.
+       */
+      virtual void handleDataForm( const DataForm &form ) = 0;
   };
 
 }

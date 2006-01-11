@@ -100,6 +100,16 @@ namespace gloox
     m_parent->send( iq );
   }
 
+  void Registration::createAccount( const DataForm& form )
+  {
+    const Tag *tmp = form.tag();
+    if( tmp )
+    {
+      Tag *c = tmp->clone();
+      m_parent->send( c );
+    }
+  }
+
   void Registration::removeAccount()
   {
     if( !m_parent || !m_parent->authed() )
@@ -200,6 +210,12 @@ namespace gloox
         {
           m_registrationHandler->handleAlreadyRegistered();
           break;
+        }
+
+        if( q->hasChild( "x", "xmlns", XMLNS_DATA_FORMS ) )
+        {
+          DataForm form( q->findChild( "x", "xmlns", XMLNS_DATA_FORMS ) );
+          m_registrationHandler->handleDataForm( form );
         }
 
         int fields = 0;
