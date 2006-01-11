@@ -16,6 +16,7 @@
 
 #include "iqhandler.h"
 #include "registrationhandler.h"
+#include "dataform.h"
 
 #include <string>
 #include <map>
@@ -131,6 +132,15 @@ namespace gloox
        * @param values The struct contains the values which shall be used for the registration.
        */
       void createAccount( int fields, const fieldStruct& values );
+
+      /**
+       * Attempts to register an account with the given credentials. This can only be called with an
+       * unauthenticated parent (@ref Client).
+       * @note According to JEP-0077, if the server sends both old-style fields and data form,
+       * implementations SHOULD prefer data forms.
+       * @param form The DataForm containing the registration credentials.
+       */
+      void createAccount( const DataForm& form );
 
       /**
        * Tells the server to remove the currently authenticated account from the server.
