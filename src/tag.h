@@ -137,9 +137,20 @@ namespace gloox
       /**
        * This function finds and returns an element within the child elements of the current tag.
        * @param name The name of the element to search for.
-       * @return The found Tag, or an empty (invalid) Tag.
+       * @return The found Tag, or an empty Tag.
        */
       virtual Tag* findChild( const std::string& name );
+
+      /**
+       * This function finds and returns an element within the child elements of the current tag, that
+       * has a certain attribute with a certain value.
+       * @param name The name of the element to search for.
+       * @param attr The name of the attribute of the child element.
+       * @param value The value of the attribute of the child element.
+       * @return The found Tag, or an empty Tag.
+       */
+      virtual Tag* findChild( const std::string& name, const std::string& attr,
+                              const std::string& value = "" );
 
       /**
        * This function checks whether the Tag has a child element with a given name, and optionally
@@ -202,7 +213,7 @@ namespace gloox
        * @return An independent copy of the Tag.
        * @since 0.7
        */
-      virtual Tag* clone();
+      virtual Tag* clone() const;
 
     protected:
       std::string m_name;

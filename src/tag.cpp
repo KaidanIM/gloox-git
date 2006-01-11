@@ -143,7 +143,20 @@ namespace gloox
         return (*it);
     }
 
-    return 0;
+    return new Tag;
+  }
+
+  Tag* Tag::findChild( const std::string& name, const std::string& attr,
+                       const std::string& value )
+  {
+    TagList::const_iterator it = m_children.begin();
+    for( ; it != m_children.end(); ++it )
+    {
+      if( ( (*it)->name() == name ) && (*it)->hasAttribute( attr, value ) )
+        return (*it);
+    }
+
+    return new Tag;
   }
 
   bool Tag::hasChild( const std::string& name,
@@ -198,7 +211,7 @@ namespace gloox
         return (*it);
     }
 
-    return 0;
+    return new Tag;
   }
 
   const std::string Tag::replace( const std::string& what, const Duo& duo ) const
@@ -242,7 +255,7 @@ namespace gloox
     return replace( what, d );
   }
 
-  Tag* Tag::clone()
+  Tag* Tag::clone() const
   {
     Tag *t = new Tag( name(), cdata() );
     t->m_attribs = m_attribs;
