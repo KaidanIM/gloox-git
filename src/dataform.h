@@ -75,7 +75,7 @@ namespace gloox
        * @return A Tag hierarchically describing the form, or NULL if the form is invalid (i.e.
        * created from a Tag not correctly describing a Data Form).
        */
-      Tag* tag();
+      const Tag* tag() const;
 
       /**
        * Use this function to retrieve the title of the form.

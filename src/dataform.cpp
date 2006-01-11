@@ -60,7 +60,7 @@ namespace gloox
   {
   }
 
-  Tag* DataForm::tag()
+  const Tag* DataForm::tag() const
   {
     if( m_type == FORM_TYPE_INVALID )
       return 0;
