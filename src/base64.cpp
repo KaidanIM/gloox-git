@@ -32,14 +32,12 @@ namespace gloox
       c = input[i];
       c = ( c >> 2 ) & 0x3f;
       encoded.append( 1, alphabet64[c] );
-      printf( "ENCODED bit 1: %s\n", encoded.c_str() );
 
       c = input[i];
       c = ( c << 4 ) & 0x3f;
       if( ++i < length )
         c |= ( ( input[i] >> 4 ) & 0x0f );
       encoded.append( 1, alphabet64[c] );
-      printf( "ENCODED bit 2: %s\n", encoded.c_str() );
 
       if( i < length )
       {
@@ -48,13 +46,11 @@ namespace gloox
         if( ++i < length )
           c |= ( input[i] >> 6 ) & 0x03;
         encoded.append( 1, alphabet64[c] );
-        printf( "ENCODED bit 3: %s\n", encoded.c_str() );
       }
       else
       {
         ++i;
         encoded.append( pad );
-        printf( "ENCODED bit 3 (pad): %s\n", encoded.c_str() );
       }
 
       if( i < length )
@@ -62,23 +58,28 @@ namespace gloox
         c = input[i];
         c = c & 0x3f;
         encoded.append( 1, alphabet64[c] );
-        printf( "ENCODED bit 4: %s\n", encoded.c_str() );
       }
       else
       {
         encoded.append( pad );
-        printf( "ENCODED bit 4(pad): %s\n", encoded.c_str() );
       }
     }
 
-    printf( "ENCODED XYZXYZ: %s\n", encoded.c_str() );
     return encoded;
   }
 
   const std::string Base64::decode64( const std::string& input )
   {
+    size_t length = input.length();
+    char c;
+    std::string decoded;
 
-    return ""/*decoded*/;
+    for( size_t i = 0; i < length; ++i )
+    {
+
+    }
+
+    return decoded;
   }
 
 }
