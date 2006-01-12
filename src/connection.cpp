@@ -163,7 +163,7 @@ namespace gloox
     for( ; it != m_cacerts.end(); ++it )
       gnutls_certificate_set_x509_trust_file( m_credentials, (*it).c_str(), GNUTLS_X509_FMT_PEM );
 
-    if( !m_privateKey.empty() && !m_privateCert.empty() )
+    if( !m_clientKey.empty() && !m_clientCerts.empty() )
     {
       gnutls_certificate_set_x509_key_file( m_credentials, m_clientKey.c_str(),
                                             m_clientCerts.c_str(), GNUTLS_X509_FMT_PEM );
@@ -379,21 +379,21 @@ namespace gloox
     m_zdeflate.avail_in = data.length();
     m_zdeflate.next_in = (Bytef*)in;
 
-//     int ret;
-//     std::string result, tmp;
-//     do {
-//       m_zdeflate.avail_out = CHUNK;
-//       m_zdeflate.next_out = (Bytef*)out;
-//
-//       ret = deflate( &m_zdeflate, Z_SYNC_FLUSH );
-//       printf( "deflate returns: %d\n", ret );
-//       tmp.assign( (char*)out, CHUNK - m_zdeflate.avail_out );
-//       result += tmp;
-//     } while( m_zdeflate.avail_out == 0 );
+    int ret;
+    std::string result, tmp;
+    do {
+      m_zdeflate.avail_out = CHUNK;
+      m_zdeflate.next_out = (Bytef*)out;
 
-    ::compress( out, (uLongf*)&CHUNK, (Bytef*)in, data.length() );
-    std::string result;
-    result.assign( (char*)out, CHUNK );
+      ret = deflate( &m_zdeflate, Z_SYNC_FLUSH );
+      printf( "deflate returns: %d\n", ret );
+      tmp.assign( (char*)out, CHUNK - m_zdeflate.avail_out );
+      result += tmp;
+    } while( m_zdeflate.avail_out == 0 );
+
+//     ::compress( out, (uLongf*)&CHUNK, (Bytef*)in, data.length() );
+//     std::string result;
+//     result.assign( (char*)out, CHUNK );
     m_compCount += result.length();
     m_dataOutCount += data.length();
     delete[] out;
@@ -416,7 +416,7 @@ namespace gloox
     m_zinflate.avail_in = m_inflateBuffer.length();
     m_zinflate.next_in = (Bytef*)in;
 
-    int ret = 0;
+    int ret = Z_OK;
     std::string result, tmp;
     do
     {
@@ -431,7 +431,7 @@ namespace gloox
       tmp.assign( out, CHUNK - m_zinflate.avail_out );
       printf( "inflate: %d, produced: %s\n", ret, tmp.c_str() );
       result += tmp;
-    } while( m_zinflate.avail_out == 0 && ret == Z_OK );
+    } while( m_zinflate.avail_out == 0 );
 
 //     if( result.empty() || ret < 0 )
 //     {
@@ -542,9 +542,7 @@ namespace gloox
 #endif
         buf = m_buf;
 
-      printf( "about to feed parser with data\n" );
       Parser::ParserState ret = m_parser->feed( buf );
-      printf( "parser returned %d\n", ret );
       if( ret != Parser::PARSER_OK )
       {
         cleanup();
@@ -669,18 +667,6 @@ namespace gloox
 
   void Connection::cleanup()
   {
-    if( m_socket != -1 )
-    {
-#ifdef WIN32
-      closesocket( m_socket );
-#else
-      close( m_socket );
-#endif
-      m_socket = -1;
-    }
-    m_state = STATE_DISCONNECTED;
-    m_disconnect = CONN_OK;
-
 #if defined( USE_GNUTLS )
     if( m_secure )
     {
@@ -696,6 +682,19 @@ namespace gloox
       SSL_free( m_ssl );
     }
 #endif
+
+    if( m_socket != -1 )
+    {
+#ifdef WIN32
+      closesocket( m_socket );
+#else
+      close( m_socket );
+#endif
+      m_socket = -1;
+    }
+    m_state = STATE_DISCONNECTED;
+    m_disconnect = CONN_OK;
+
     m_secure = false;
     m_cancel = true;
     m_fdRequested = false;
