@@ -14,6 +14,8 @@
 #ifndef BASE64_H__
 #define BASE64_H__
 
+#include "macros.h"
+
 #include <string>
 
 namespace gloox
@@ -25,7 +27,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.8
    */
-  class Base64
+  class GLOOX_EXPORT Base64
   {
 
     public:
