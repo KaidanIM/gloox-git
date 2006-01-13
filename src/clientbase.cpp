@@ -33,6 +33,7 @@
 #include "loghandler.h"
 #include "taghandler.h"
 #include "jid.h"
+#include "base64.h"
 
 #include <iksemel.h>
 
@@ -238,14 +239,12 @@ namespace gloox
       {
         a->addAttribute( "mechanism", "PLAIN" );
         size_t len = m_jid.username().length() + m_password.length() + 2;
-        char *tmp = (char*)iks_malloc( len + 80 );
-        char *result;
+        char *tmp = (char*)malloc( len + 80 );
         sprintf( tmp, "%c%s%c%s", 0, m_jid.username().c_str(), 0, m_password.c_str() );
-        result = iks_base64_encode( tmp, (int)len );
-
-        a->setCData( result );
-        iks_free( result );
-        iks_free( tmp );
+        std::string dec;
+        dec.assign( tmp, len );
+        a->setCData( Base64::encode64( dec ) );
+        free( tmp );
         break;
       }
       case SASL_ANONYMOUS:
@@ -253,15 +252,9 @@ namespace gloox
         a->setCData( getID() );
         break;
       case SASL_EXTERNAL:
-      {
         a->addAttribute( "mechanism", "EXTERNAL" );
-        char *tmp = (char*)iks_malloc( m_jid.bare().length() );
-        char *result;
-        sprintf( tmp, "%s", m_jid.bare().c_str() );
-        result = iks_base64_encode( tmp, (int)m_jid.bare().length() );
-        a->setCData( result );
+        a->setCData( Base64::encode64( m_jid.bare() ) );
         break;
-      }
     }
 
     send( a );
@@ -272,11 +265,7 @@ namespace gloox
     const int CNONCE_LEN = 4;
     Tag *t;
     std::string decoded, nonce, realm, response;
-    char *b = iks_base64_decode( challenge.c_str() );
-    if( b )
-      decoded = b;
-    else
-      return;
+    decoded = Base64::decode64( challenge.c_str() );
 
     if( decoded.substr( 0, 7 ) == "rspauth" )
     {
@@ -287,7 +276,6 @@ namespace gloox
       char cnonce[CNONCE_LEN*8 + 1];
       unsigned char a1_h[16];
       char a1[33], a2[33], response_value[33];
-      char *response_coded;
       iksmd5 *md5;
       int i;
 
@@ -310,7 +298,6 @@ namespace gloox
       }
       else
       {
-        iks_free( b );
         return;
       }
 
@@ -356,15 +343,11 @@ namespace gloox
       response += "\",nc=00000001,qop=auth,digest-uri=\"xmpp/" + m_jid.server() + "\",response=";
       response += response_value;
       response += ",charset=utf-8";
-      response_coded = iks_base64_encode( response.c_str(), (int)response.length() );
 
-      t = new Tag( "response", response_coded );
-
-      iks_free( response_coded );
+      t = new Tag( "response", Base64::encode64( response ) );
     }
     t->addAttribute( "xmlns", XMLNS_STREAM_SASL );
     send( t );
-    iks_free( b );
 
   }
 
