@@ -436,4 +436,13 @@ namespace gloox
       fill();
   }
 
+  RosterItem* RosterManager::getRosterItem( const JID& jid )
+  {
+    RosterListener::Roster::const_iterator it = m_roster.find( jid.bare() );
+    if( it != m_roster.end() )
+      return (*it).second;
+    else
+      return 0;
+  }
+
 }

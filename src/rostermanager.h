@@ -136,6 +136,11 @@ namespace gloox
       void registerRosterListener( RosterListener *rl, bool syncSubscribeReq = true );
 
       /**
+       *
+       */
+      RosterItem* getRosterItem( const JID& jid );
+
+      /**
        * Complementary function to @ref registerRosterListener. Removes the current RosterListener.
        * Roster events will not be delivered anywhere.
        */
