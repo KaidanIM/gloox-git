@@ -133,7 +133,7 @@ namespace gloox
       if( m_defaultEvents & MESSAGE_EVENT_COMPOSING )
         new Tag( x, "composing" );
     }
-    m_lastSent = 0;
+    m_lastSent = MESSAGE_EVENT_CANCEL;
   }
 
   void MessageEventFilter::registerMessageEventHandler( MessageEventHandler *meh )
