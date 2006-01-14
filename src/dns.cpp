@@ -61,7 +61,8 @@ namespace gloox
 #if !defined( HAVE_RES_QUERYDOMAIN ) || !defined( HAVE_DN_SKIPNAME ) || !defined( HAVE_RES_QUERY )
   int DNS::connect( const std::string& domain, const LogSink& logInstance )
   {
-    logInstance.log( LOG_DEBUG, LOG_CLASS_DNS, "note: gloox does not support SRV records on this platform." );
+    logInstance.log( GLOOX_LOG_DEBUG, LOG_CLASS_DNS,
+                     "note: gloox does not support SRV records on this platform." );
 
     return DNS::connect( domain, XMPP_PORT, logInstance );
   }
@@ -203,7 +204,7 @@ namespace gloox
       free( addr );
       std::ostringstream oss;
       oss << "resolved " << (*it).first.c_str() <<  " to: " << tmp << ":" << port;
-      logInstance.log( LOG_DEBUG, LOG_CLASS_DNS, oss.str() );
+      logInstance.log( GLOOX_LOG_DEBUG, LOG_CLASS_DNS, oss.str() );
 
       if( inet_aton( tmp, &(target.sin_addr) ) == 0 )
         continue;
@@ -266,7 +267,7 @@ namespace gloox
 
     std::ostringstream oss;
     oss << "resolved " << domain.c_str() << " to: " << inet_ntoa( target.sin_addr );
-    logInstance.log( LOG_DEBUG, LOG_CLASS_DNS, oss.str() );
+    logInstance.log( GLOOX_LOG_DEBUG, LOG_CLASS_DNS, oss.str() );
 
     memset( target.sin_zero, '\0', 8 );
     if( ::connect( fd, (struct sockaddr *)&target, sizeof( struct sockaddr ) ) == 0 )
