@@ -77,7 +77,6 @@ namespace gloox
       typedef std::map<LogHandler*, LogInfo> LogHandlerMap;
       LogHandlerMap m_logHandlers;
 
-      LogLevel m_level;
       int m_fileFilter;
 
   };

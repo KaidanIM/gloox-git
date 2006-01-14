@@ -549,10 +549,10 @@ namespace gloox
         switch( ret )
         {
           case Parser::PARSER_BADXML:
-            m_logInstance.log( LOG_ERROR, LOG_CLASS_CONNECTION, "XML parse error" );
+            m_logInstance.log( GLOOX_LOG_ERROR, LOG_CLASS_CONNECTION, "XML parse error" );
             break;
           case Parser::PARSER_NOMEM:
-            m_logInstance.log( LOG_ERROR, LOG_CLASS_CONNECTION, "memory allocation error" );
+            m_logInstance.log( GLOOX_LOG_ERROR, LOG_CLASS_CONNECTION, "memory allocation error" );
             break;
           default:
             break;
@@ -647,13 +647,13 @@ namespace gloox
       switch( m_socket )
       {
         case -DNS::DNS_COULD_NOT_CONNECT:
-          m_logInstance.log( LOG_ERROR, LOG_CLASS_CONNECTION, "connection error: could not connect" );
+          m_logInstance.log( GLOOX_LOG_ERROR, LOG_CLASS_CONNECTION, "connection error: could not connect" );
           break;
         case -DNS::DNS_NO_HOSTS_FOUND:
-          m_logInstance.log( LOG_ERROR, LOG_CLASS_CONNECTION, "connection error: no hosts found" );
+          m_logInstance.log( GLOOX_LOG_ERROR, LOG_CLASS_CONNECTION, "connection error: no hosts found" );
           break;
         case -DNS::DNS_COULD_NOT_RESOLVE:
-          m_logInstance.log( LOG_ERROR, LOG_CLASS_CONNECTION, "connection error: could not resolve" );
+          m_logInstance.log( GLOOX_LOG_ERROR, LOG_CLASS_CONNECTION, "connection error: could not resolve" );
           break;
       }
       cleanup();

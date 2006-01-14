@@ -18,7 +18,7 @@ namespace gloox
 {
 
   LogSink::LogSink()
-    : m_level( LOG_ERROR ), m_fileFilter( 0 )
+    : m_fileFilter( 0 )
   {
   }
 

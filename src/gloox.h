@@ -712,12 +712,14 @@ namespace gloox
 
   /**
    * Describes a log message's severity.
+   * The prefix GLOOX_ is used to avoid conflicts with some #defines
+   * from some #included header file.
    */
   enum LogLevel
   {
-    LOG_DEBUG             = 0,      /**< Debug messages. */
-    LOG_WARNING,                    /**< Non-crititcal warning messages. */
-    LOG_ERROR                       /**< Critical, unrecoverable errors. */
+    GLOOX_LOG_DEBUG,                      /**< Debug messages. */
+    GLOOX_LOG_WARNING,                    /**< Non-crititcal warning messages. */
+    GLOOX_LOG_ERROR                       /**< Critical, unrecoverable errors. */
   };
 
   /**
