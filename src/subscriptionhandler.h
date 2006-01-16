@@ -30,6 +30,11 @@ namespace gloox
   {
     public:
       /**
+       * Virtual destructor.
+       */
+      virtual ~SubscriptionHandler() {};
+
+      /**
        * Reimplement this function if you want to be notified about incoming
        * subscriptions/subscription requests.
        * @param stanza The complete Stanza.
