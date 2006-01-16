@@ -2,7 +2,7 @@
 ## Process this file with automake to produce Makefile.in
 ##
 
-AM_CPPFLAGS = -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare -Wpointer-arith -Wswitch -Wunknown-pragmas -Wconversion -Wundef -Wcast-qual
+AM_CPPFLAGS = -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare -Wpointer-arith -Wswitch -Wunknown-pragmas -Wconversion -Wundef -Wcast-qual -ansi
 
 noinst_PROGRAMS = register_test disco_test adhoc_test roster_test privatexml_test component_test bookmarkstorage_test annotations_test privacylist_test message_test flexoff_test
 
@@ -49,4 +49,3 @@ message_test_CFLAGS = $(CPPFLAGS)
 flexoff_test_SOURCES = flexoff_test.cpp
 flexoff_test_LDADD = ../libgloox.la
 flexoff_test_CFLAGS = $(CPPFLAGS)
-

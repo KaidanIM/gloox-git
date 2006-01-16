@@ -14,11 +14,11 @@ using namespace gloox;
 #include <locale.h>
 #include <string>
 
-class DiscoTest : public DiscoHandler, MessageHandler, ConnectionListener, FlexibleOfflineHandler
+class FlexOffTest : public DiscoHandler, MessageHandler, ConnectionListener, FlexibleOfflineHandler
 {
   public:
-    DiscoTest() {};
-    virtual ~DiscoTest() {};
+    FlexOffTest() {};
+    virtual ~FlexOffTest() {};
 
     void start()
     {
@@ -98,6 +98,10 @@ class DiscoTest : public DiscoHandler, MessageHandler, ConnectionListener, Flexi
       j->send( m );
     }
 
+    virtual void handleMessage( const std::string& jid, Stanza *stanza )
+    {
+    }
+
     virtual void handleFlexibleOfflineSupport( bool support )
     {
       if( support )
@@ -135,7 +139,7 @@ class DiscoTest : public DiscoHandler, MessageHandler, ConnectionListener, Flexi
 
 int main( int /*argc*/, char* /*argv[]*/ )
 {
-  DiscoTest *r = new DiscoTest();
+  FlexOffTest *r = new FlexOffTest();
   r->start();
   delete( r );
   return 0;

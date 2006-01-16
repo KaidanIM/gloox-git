@@ -4,13 +4,14 @@
 #include "../disco.h"
 #include "../stanza.h"
 #include "../gloox.h"
+#include "../loghandler.h"
 using namespace gloox;
 
 #include <stdio.h>
 #include <locale.h>
 #include <string>
 
-class DiscoTest : public DiscoHandler, ConnectionListener
+class DiscoTest : public DiscoHandler, ConnectionListener, LogHandler
 {
   public:
     DiscoTest() {};
@@ -20,7 +21,7 @@ class DiscoTest : public DiscoHandler, ConnectionListener
     {
       setlocale( LC_ALL, "" );
 
-      JID jid( "hurhurk@example.org/gloox" );
+      JID jid( "hurkhurk@example.org/gloox" );
       j = new Client( jid, "hurkhurks" );
       j->disableRoster();
       j->registerConnectionListener( this );
@@ -30,6 +31,7 @@ class DiscoTest : public DiscoHandler, ConnectionListener
       StringList ca;
       ca.push_back( "/path/to/cacert.crt" );
       j->setCACerts( ca );
+      j->logInstance().registerLogHandler( GLOOX_LOG_DEBUG, LOG_ALL, this );
 
       j->connect();
 
@@ -65,6 +67,11 @@ class DiscoTest : public DiscoHandler, ConnectionListener
     {
       printf( "handleDiscoError\n" );
     }
+
+    virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
+    {
+      printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
+    };
 
   private:
     Client *j;

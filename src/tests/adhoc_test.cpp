@@ -10,6 +10,7 @@ using namespace gloox;
 #include <locale.h>
 #include <string>
 
+
 class AdhocTest : public ConnectionListener, AdhocCommandProvider
 {
   public:
@@ -71,8 +72,29 @@ class AdhocTest : public ConnectionListener, AdhocCommandProvider
 
 int main( int /*argc*/, char* /*argv[]*/ )
 {
-  AdhocTest *r = new AdhocTest();
-  r->start();
-  delete( r );
+  AdhocTest *b = new AdhocTest();
+  b->start();
+  delete( b );
   return 0;
 }
+
+/**
+ * @page adhoc_example AdHoc Example
+ * @dontinclude adhoc_test.cpp
+ * We need several classes from the gloox package:
+ * @until gloox
+ * and few others:
+ * @until string
+ * AdhocTest is derived from ConnectionListener and AdhocCommandProvider.
+ * @skipline class
+ * @until ~AdhocTest
+ * In start() a new Client is created.
+ * @skipline start
+ * @until delete
+ * @line }
+ * Finally you can start and use the bot.
+ * @skip main
+ * @until start
+ * start() returns when the bot is finished, so it's safe to delete it.
+ * @until };
+ */
