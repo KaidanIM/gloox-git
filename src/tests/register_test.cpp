@@ -1,13 +1,15 @@
 #include "../client.h"
 #include "../connectionlistener.h"
 #include "../registration.h"
+#include "../logsink.h"
+#include "../loghandler.h"
 using namespace gloox;
 
 #include <stdio.h>
 #include <locale.h>
 #include <string>
 
-class RegTest : public RegistrationHandler, ConnectionListener
+class RegTest : public RegistrationHandler, ConnectionListener, LogHandler
 {
   public:
     RegTest() {};
@@ -26,6 +28,8 @@ class RegTest : public RegistrationHandler, ConnectionListener
       m_reg = new Registration( j );
       m_reg->registerRegistrationHandler( this );
 
+      j->logInstance().registerLogHandler( GLOOX_LOG_DEBUG, LOG_ALL, this );
+
       j->connect();
 
       delete( m_reg );
@@ -35,16 +39,16 @@ class RegTest : public RegistrationHandler, ConnectionListener
     virtual void onConnect()
     {
 //       requesting reg fields
-//      m_reg->fetchRegistrationFields();
+     m_reg->fetchRegistrationFields();
 
       // changing password
-       m_reg->changePassword( "hurkhurks" );
+//        m_reg->changePassword( "test" );
 
       // unregistering
 //       m_reg->removeAccount();
     };
 
-    virtual void onDisconnect( ConnectionError /*e*/ ) { printf( "register_test: disconnected\n" ); };
+    virtual void onDisconnect( ConnectionError e ) { printf( "register_test: disconnected: %d\n", e ); };
 
     virtual bool onTLSConnect( const CertInfo& info )
     {
@@ -78,6 +82,11 @@ class RegTest : public RegistrationHandler, ConnectionListener
     virtual void handleDataForm( const DataForm& /*form*/ )
     {
       printf( "datForm received\n" );
+    };
+
+    virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
+    {
+      printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
     };
 
   private:

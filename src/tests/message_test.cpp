@@ -30,6 +30,7 @@ class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListen
 
       JID jid( "hurkhurk@example.org/gloox" );
       j = new Client( jid, "hurkhurks" );
+      j = new Client( jid, "abc" );
       j->setAutoPresence( true );
       j->setInitialPriority( 4 );
       j->registerConnectionListener( this );
@@ -41,7 +42,7 @@ class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListen
       ca.push_back( "/path/to/cacert.crt" );
       j->setCACerts( ca );
 
-      j->logInstance().registerLogHandler( LOG_DEBUG, LOG_ALL, this );
+      j->logInstance().registerLogHandler( GLOOX_LOG_DEBUG, LOG_ALL, this );
 
       if( j->connect(false) )
       {
@@ -54,15 +55,19 @@ class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListen
       }
 
       // cleanup
-      m_session->removeMessageHandler();
-      m_session->removeMessageEventHandler();
-      m_session->removeChatStateHandler();
-      delete( m_session );
+      if( m_session )
+      {
+        m_session->removeMessageHandler();
+        m_session->removeMessageEventHandler();
+        m_session->removeChatStateHandler();
+        delete( m_session );
+      }
       delete( j );
     }
 
     virtual void onConnect()
     {
+      printf( "connected!!!\n" );
     };
 
     virtual void onDisconnect( ConnectionError e )
