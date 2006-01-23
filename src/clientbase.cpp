@@ -123,12 +123,7 @@ namespace gloox
       case NODE_STREAM_START:
       {
         const std::string version = stanza->findAttribute( "version" );
-        if( !version.empty() )
-        {
-          if( !checkStreamVersion( version ) )
-            disconnect( CONN_STREAM_ERROR );
-        }
-        else
+        if( !checkStreamVersion( version ) )
         {
           logInstance().log( GLOOX_LOG_DEBUG, LOG_CLASS_CLIENTBASE, "This server is not XMPP-compliant"
               " (it does not send a 'version' attribute). Please try another one.\n" );
@@ -409,6 +404,9 @@ namespace gloox
 
   bool ClientBase::checkStreamVersion( const std::string& version )
   {
+    if( version.empty() )
+      return false;
+
     int major = 0;
     int minor = 0;
     int myMajor = XMPP_STREAM_VERSION_MAJOR;
