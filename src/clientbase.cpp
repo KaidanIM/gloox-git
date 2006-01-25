@@ -116,7 +116,7 @@ namespace gloox
   void ClientBase::filter( NodeType type, Stanza *stanza )
   {
     if( stanza )
-      logInstance().log( GLOOX_LOG_DEBUG, LOG_XML_INCOMING, stanza->xml() );
+      logInstance().log( LL_DEBUG, LA_XML_INCOMING, stanza->xml() );
 
     switch( type )
     {
@@ -125,8 +125,8 @@ namespace gloox
         const std::string version = stanza->findAttribute( "version" );
         if( !checkStreamVersion( version ) )
         {
-          logInstance().log( GLOOX_LOG_DEBUG, LOG_CLASS_CLIENTBASE, "This server is not XMPP-compliant"
-              " (it does not send a 'version' attribute). Please try another one.\n" );
+          logInstance().log( LL_DEBUG, LA_CLASS_CLIENTBASE, "This server is not XMPP-compliant"
+              " (it does not send a 'version' attribute). Please fix it or try another one.\n" );
           disconnect( CONN_STREAM_ERROR );
         }
 
@@ -161,7 +161,7 @@ namespace gloox
         handleStreamError( stanza );
         break;
       case NODE_STREAM_CLOSE:
-        logInstance().log( GLOOX_LOG_DEBUG, LOG_CLASS_CLIENTBASE, "stream closed" );
+        logInstance().log( LL_DEBUG, LA_CLASS_CLIENTBASE, "stream closed" );
         disconnect( CONN_STREAM_CLOSED );
         break;
     }
@@ -382,7 +382,7 @@ namespace gloox
 
   void ClientBase::send( const std::string& xml )
   {
-    logInstance().log( GLOOX_LOG_DEBUG, LOG_XML_OUTGOING, xml );
+    logInstance().log( LL_DEBUG, LA_XML_OUTGOING, xml );
 
     if( m_connection )
       m_connection->send( xml );

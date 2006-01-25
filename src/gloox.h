@@ -697,17 +697,17 @@ namespace gloox
    */
   enum LogArea
   {
-    LOG_CLASS_PARSER     = 0x00001, /**< Log messages from Parser. */
-    LOG_CLASS_CONNECTION = 0x00002, /**< Log messages from Connection. */
-    LOG_CLASS_CLIENT     = 0x00004, /**< Log messages from Client. */
-    LOG_CLASS_CLIENTBASE = 0x00008, /**< Log messages from ClientBase. */
-    LOG_CLASS_COMPONENT  = 0x00010, /**< Log messages from Component. */
-    LOG_CLASS_DNS        = 0x00020, /**< Log messages from DNS. */
-    LOG_ALL_CLASSES      = 0x01FFF, /**< All log messages from all the classes. */
-    LOG_XML_INCOMING     = 0x02000, /**< Incoming XML. */
-    LOG_XML_OUTGOING     = 0x04000, /**< Outgoing XML. */
-    LOG_USER             = 0x80000, /**< User-defined sources. */
-    LOG_ALL              = 0xFFFFF  /**< All log sources. */
+    LA_CLASS_PARSER     = 0x00001, /**< Log messages from Parser. */
+    LA_CLASS_CONNECTION = 0x00002, /**< Log messages from Connection. */
+    LA_CLASS_CLIENT     = 0x00004, /**< Log messages from Client. */
+    LA_CLASS_CLIENTBASE = 0x00008, /**< Log messages from ClientBase. */
+    LA_CLASS_COMPONENT  = 0x00010, /**< Log messages from Component. */
+    LA_CLASS_DNS        = 0x00020, /**< Log messages from DNS. */
+    LA_ALL_CLASSES      = 0x01FFF, /**< All log messages from all the classes. */
+    LA_XML_INCOMING     = 0x02000, /**< Incoming XML. */
+    LA_XML_OUTGOING     = 0x04000, /**< Outgoing XML. */
+    LA_USER             = 0x80000, /**< User-defined sources. */
+    LA_ALL              = 0xFFFFF  /**< All log sources. */
   };
 
   /**
@@ -717,9 +717,9 @@ namespace gloox
    */
   enum LogLevel
   {
-    GLOOX_LOG_DEBUG,                      /**< Debug messages. */
-    GLOOX_LOG_WARNING,                    /**< Non-crititcal warning messages. */
-    GLOOX_LOG_ERROR                       /**< Critical, unrecoverable errors. */
+    LL_DEBUG,                      /**< Debug messages. */
+    LL_WARNING,                    /**< Non-crititcal warning messages. */
+    LL_ERROR                       /**< Critical, unrecoverable errors. */
   };
 
   /**
