@@ -30,7 +30,7 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler
       j->disco()->setVersion( "rosterTest", GLOOX_VERSION );
       j->disco()->setIdentity( "client", "bot" );
 
-      j->logInstance().registerLogHandler( GLOOX_LOG_DEBUG, LOG_ALL, this );
+      j->logInstance().registerLogHandler( LL_DEBUG, LA_ALL, this );
 
       j->connect();
 

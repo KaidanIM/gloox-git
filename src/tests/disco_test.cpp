@@ -31,7 +31,7 @@ class DiscoTest : public DiscoHandler, ConnectionListener, LogHandler
       StringList ca;
       ca.push_back( "/path/to/cacert.crt" );
       j->setCACerts( ca );
-      j->logInstance().registerLogHandler( GLOOX_LOG_DEBUG, LOG_ALL, this );
+      j->logInstance().registerLogHandler( LL_DEBUG, LA_ALL, this );
 
       j->connect();
 
