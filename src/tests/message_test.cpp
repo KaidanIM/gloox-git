@@ -30,7 +30,6 @@ class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListen
 
       JID jid( "hurkhurk@example.org/gloox" );
       j = new Client( jid, "hurkhurks" );
-      j = new Client( jid, "abc" );
       j->setAutoPresence( true );
       j->setInitialPriority( 4 );
       j->registerConnectionListener( this );
@@ -42,7 +41,7 @@ class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListen
       ca.push_back( "/path/to/cacert.crt" );
       j->setCACerts( ca );
 
-      j->logInstance().registerLogHandler( GLOOX_LOG_DEBUG, LOG_ALL, this );
+      j->logInstance().registerLogHandler( GLOOX_LL_DEBUG, LA_ALL, this );
 
       if( j->connect(false) )
       {

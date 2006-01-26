@@ -1,5 +1,6 @@
 #include "../component.h"
 #include "../connectionlistener.h"
+#include "../loghandler.h"
 #include "../discohandler.h"
 #include "../disco.h"
 using namespace gloox;
@@ -8,7 +9,7 @@ using namespace gloox;
 #include <locale.h>
 #include <string>
 
-class ComponentTest : public DiscoHandler, ConnectionListener
+class ComponentTest : public DiscoHandler, ConnectionListener, LogHandler
 {
   public:
     ComponentTest() {};
@@ -19,10 +20,11 @@ class ComponentTest : public DiscoHandler, ConnectionListener
       setlocale( LC_ALL, "" );
 
       j = new Component( XMLNS_COMPONENT_ACCEPT, "example.org",
-                          "component.example.org", "secret", 5000 );
+                         "component.example.org", "secret", 5000 );
       j->disco()->setVersion( "componentTest", GLOOX_VERSION );
 
       j->registerConnectionListener( this );
+      j->logInstance().registerLogHandler( LL_DEBUG, LA_ALL, this );
 
       j->connect();
 
@@ -32,8 +34,6 @@ class ComponentTest : public DiscoHandler, ConnectionListener
     virtual void onConnect()
     {
       printf( "connected -- disconnecting...\n" );
-//       iks *x = iks_new( "presence" );
-//       j->send( x );
 //       j->disconnect( STATE_DISCONNECTED );
     };
 
@@ -62,6 +62,11 @@ class ComponentTest : public DiscoHandler, ConnectionListener
     {
       printf( "handleDiscoError\n" );
     }
+
+    virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
+    {
+      printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
+    };
 
   private:
     Component *j;
