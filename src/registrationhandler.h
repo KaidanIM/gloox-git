@@ -31,7 +31,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.2
    */
-  class GLOOX_EXPORT RegistrationHandler
+  class GLOOX_API RegistrationHandler
   {
     public:
       /**

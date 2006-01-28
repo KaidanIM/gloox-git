@@ -27,7 +27,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.4
    */
-  class GLOOX_EXPORT JID
+  class GLOOX_API JID
   {
     public:
 

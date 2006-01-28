@@ -27,7 +27,7 @@ namespace gloox
    * Upon an incoming PrivateXML packet @ref handlePrivateXML() will be called.
    * @author Jakob Schroeter <js@camaya.net>
    */
-  class GLOOX_EXPORT PrivateXMLHandler
+  class GLOOX_API PrivateXMLHandler
   {
     public:
       /**

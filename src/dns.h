@@ -51,7 +51,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
    */
-  class GLOOX_EXPORT DNS
+  class GLOOX_API DNS
   {
     public:
 

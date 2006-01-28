@@ -34,7 +34,7 @@ namespace gloox
    *
    * @author Jakob Schroeter <js@camaya.net>
    */
-  class GLOOX_EXPORT PrivateXML : public IqHandler
+  class GLOOX_API PrivateXML : public IqHandler
   {
     public:
       /**

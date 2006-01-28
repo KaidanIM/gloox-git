@@ -98,7 +98,7 @@ namespace gloox
    *
    * @author Jakob Schroeter <js@camaya.net>
    */
-  class GLOOX_EXPORT Client : public ClientBase
+  class GLOOX_API Client : public ClientBase
   {
     public:
 

@@ -26,7 +26,7 @@ namespace gloox
    * A TagHandler can handle arbitrary elements not defined by RFC 3920, XMPP: Core.
    * @author Jakob Schroeter <js@camaya.net>
    */
-  class GLOOX_EXPORT TagHandler
+  class GLOOX_API TagHandler
   {
      public:
       /**

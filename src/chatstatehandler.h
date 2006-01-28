@@ -26,7 +26,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.8
    */
-  class GLOOX_EXPORT ChatStateHandler
+  class GLOOX_API ChatStateHandler
   {
     public:
       /**
