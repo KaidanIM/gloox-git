@@ -20,7 +20,7 @@
 #endif
 
 #ifdef WIN32
-#  ifdef GLOOX_APIS
+#  ifdef GLOOX_EXPORTS
 #    define GLOOX_API __declspec( dllexport )
 #  else
 #    ifdef GLOOX_IMPORTS
