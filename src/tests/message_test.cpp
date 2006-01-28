@@ -41,12 +41,12 @@ class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListen
       ca.push_back( "/path/to/cacert.crt" );
       j->setCACerts( ca );
 
-      j->logInstance().registerLogHandler( GLOOX_LL_DEBUG, LA_ALL, this );
+      j->logInstance().registerLogHandler( LogLevelDebug, LogAreaAll, this );
 
       if( j->connect(false) )
       {
-        ConnectionError ce = CONN_OK;
-        while( ce == CONN_OK )
+        ConnectionError ce = ConnNoError;
+        while( ce == ConnNoError )
         {
           ce = j->recv();
         }
@@ -72,7 +72,7 @@ class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListen
     virtual void onDisconnect( ConnectionError e )
     {
       printf( "message_test: disconnected: %d\n", e );
-      if( e == CONN_AUTHENTICATION_FAILED )
+      if( e == ConnAuthenticationFailed )
         printf( "auth failed. reason: %d\n", j->authError() );
     };
 
@@ -110,9 +110,9 @@ class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListen
       if( !stanza->subject().empty() )
         sub = "Re: " +  stanza->subject();
 
-      m_session->raiseMessageEvent( MESSAGE_EVENT_DISPLAYED );
+      m_session->raiseMessageEvent( MessageEventDisplayed );
       sleep( 1 );
-      m_session->raiseMessageEvent( MESSAGE_EVENT_COMPOSING );
+      m_session->raiseMessageEvent( MessageEventComposing );
       sleep( 2 );
       m_session->send( msg, sub );
 

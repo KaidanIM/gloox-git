@@ -49,7 +49,7 @@ namespace gloox
     : m_connection( 0 ), m_namespace( ns ), m_xmllang( "en" ), m_server( server ),
       m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ),
       m_messageSessionHandler( 0 ), m_parser( 0 ),
-      m_authError( AUTH_ERROR_UNDEFINED ), m_streamError( ERROR_UNDEFINED ),
+      m_authError( AuthErrorUndefined ), m_streamError( StreamErrorUndefined ),
       m_streamErrorAppCondition( 0 ), m_idCount( 0 ), m_autoMessageSessionDecorators( 0 ),
       m_autoMessageSession( false )
   {
@@ -60,7 +60,7 @@ namespace gloox
     : m_connection( 0 ), m_namespace( ns ), m_password( password ), m_xmllang( "en" ), m_server( server ),
       m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ),
       m_messageSessionHandler( 0 ), m_parser( 0 ),
-      m_authError( AUTH_ERROR_UNDEFINED ), m_streamError( ERROR_UNDEFINED ),
+      m_authError( AuthErrorUndefined ), m_streamError( StreamErrorUndefined ),
       m_streamErrorAppCondition( 0 ), m_idCount( 0 ), m_autoMessageSessionDecorators( 0 ),
       m_autoMessageSession( false )
   {
@@ -75,7 +75,7 @@ namespace gloox
   ConnectionError ClientBase::recv( int timeout )
   {
     ConnectionError e = m_connection->recv( timeout );
-    if( e != CONN_OK )
+    if( e != ConnNoError )
       notifyOnDisconnect( e );
     return e;
   }
@@ -97,7 +97,7 @@ namespace gloox
       m_connection->setClientCert( m_clientKey, m_clientCerts );
 #endif
     int ret = m_connection->connect();
-    if( ret == STATE_CONNECTED )
+    if( ret == StateConnected )
     {
       header();
       if( block )
@@ -116,7 +116,7 @@ namespace gloox
   void ClientBase::filter( NodeType type, Stanza *stanza )
   {
     if( stanza )
-      logInstance().log( LL_DEBUG, LA_XML_INCOMING, stanza->xml() );
+      logInstance().log( LogLevelDebug, LogAreaXmlIncoming, stanza->xml() );
 
     switch( type )
     {
@@ -125,9 +125,9 @@ namespace gloox
         const std::string version = stanza->findAttribute( "version" );
         if( !checkStreamVersion( version ) )
         {
-          logInstance().log( LL_DEBUG, LA_CLASS_CLIENTBASE, "This server is not XMPP-compliant"
+          logInstance().log( LogLevelDebug, LogAreaClassClientbase, "This server is not XMPP-compliant"
               " (it does not send a 'version' attribute). Please fix it or try another one.\n" );
-          disconnect( CONN_STREAM_ERROR );
+          disconnect( ConnStreamError );
         }
 
         m_sid = stanza->findAttribute( "id" );
@@ -139,16 +139,16 @@ namespace gloox
         {
           switch( stanza->type() )
           {
-            case STANZA_IQ:
+            case StanzaIq:
               notifyIqHandlers( stanza );
               break;
-            case STANZA_PRESENCE:
+            case StanzaPresence:
               notifyPresenceHandlers( stanza );
               break;
-            case STANZA_S10N:
+            case StanzaS10n:
               notifySubscriptionHandlers( stanza );
               break;
-            case STANZA_MESSAGE:
+            case StanzaMessage:
               notifyMessageHandlers( stanza );
               break;
             default:
@@ -161,23 +161,23 @@ namespace gloox
         handleStreamError( stanza );
         break;
       case NODE_STREAM_CLOSE:
-        logInstance().log( LL_DEBUG, LA_CLASS_CLIENTBASE, "stream closed" );
-        disconnect( CONN_STREAM_CLOSED );
+        logInstance().log( LogLevelDebug, LogAreaClassClientbase, "stream closed" );
+        disconnect( ConnStreamClosed );
         break;
     }
   }
 
   void ClientBase::disconnect()
   {
-    disconnect( CONN_USER_DISCONNECTED );
+    disconnect( ConnUserDisconnected );
   }
 
   void ClientBase::disconnect( ConnectionError reason )
   {
     if( m_connection )
     {
-      if( reason == CONN_USER_DISCONNECTED )
-        m_streamError = ERROR_UNDEFINED;
+      if( reason == ConnUserDisconnected )
+        m_streamError = StreamErrorUndefined;
       m_connection->disconnect( reason );
     }
   }
@@ -227,10 +227,10 @@ namespace gloox
 
     switch( type )
     {
-      case SASL_DIGEST_MD5:
+      case SaslDigestMd5:
         a->addAttribute( "mechanism", "DIGEST-MD5" );
         break;
-      case SASL_PLAIN:
+      case SaslPlain:
       {
         a->addAttribute( "mechanism", "PLAIN" );
         size_t len = m_jid.username().length() + m_password.length() + 2;
@@ -242,11 +242,11 @@ namespace gloox
         free( tmp );
         break;
       }
-      case SASL_ANONYMOUS:
+      case SaslAnonymous:
         a->addAttribute( "mechanism", "ANONYMOUS" );
         a->setCData( getID() );
         break;
-      case SASL_EXTERNAL:
+      case SaslExternal:
         a->addAttribute( "mechanism", "EXTERNAL" );
         a->setCData( Base64::encode64( m_jid.bare() ) );
         break;
@@ -349,19 +349,19 @@ namespace gloox
   void ClientBase::processSASLError( Stanza *stanza )
   {
     if( stanza->hasChild( "aborted" ) )
-      m_authError = SASL_ABORTED;
+      m_authError = SaslAborted;
     else if( stanza->hasChild( "incorrect-encoding" ) )
-      m_authError = SASL_INCORRECT_ENCODING;
+      m_authError = SaslIncorrectEncoding;
     else if( stanza->hasChild( "invalid-authzid" ) )
-      m_authError = SASL_INVALID_AUTHZID;
+      m_authError = SaslInvalidAuthzid;
     else if( stanza->hasChild( "invalid-mechanism" ) )
-      m_authError = SASL_INVALID_MECHANISM;
+      m_authError = SaslInvalidMechanism;
     else if( stanza->hasChild( "mechanism-too-weak" ) )
-      m_authError = SASL_MECHANISM_TOO_WEAK;
+      m_authError = SaslMechanismTooWeak;
     else if( stanza->hasChild( "not-authorized" ) )
-      m_authError = SASL_NOT_AUTHORIZED;
+      m_authError = SaslNotAuthorized;
     else if( stanza->hasChild( "temporary-auth-failure" ) )
-      m_authError = SASL_TEMPORARY_AUTH_FAILURE;
+      m_authError = SaslTemporaryAuthFailure;
   }
 
   void ClientBase::send( Tag *tag )
@@ -371,7 +371,7 @@ namespace gloox
 
     send( tag->xml() );
 
-    if( tag->type() == STANZA_UNDEFINED )
+    if( tag->type() == StanzaUndefined )
       delete( tag );
     else
     {
@@ -382,7 +382,7 @@ namespace gloox
 
   void ClientBase::send( const std::string& xml )
   {
-    logInstance().log( LL_DEBUG, LA_XML_OUTGOING, xml );
+    logInstance().log( LogLevelDebug, LogAreaXmlOutgoing, xml );
 
     if( m_connection )
       m_connection->send( xml );
@@ -392,7 +392,7 @@ namespace gloox
     if( m_connection )
       return m_connection->state();
     else
-      return STATE_DISCONNECTED;
+      return StateDisconnected;
   }
 
   const std::string ClientBase::getID()
@@ -436,58 +436,58 @@ namespace gloox
     for( ; it != c.end(); ++it )
     {
       if( (*it)->name() == "bad-format" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
-        m_streamError = ERROR_BAD_FORMAT;
+        m_streamError = StreamErrorBadFormat;
       else if( (*it)->name() == "bad-namespace-prefix" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
-        m_streamError = ERROR_BAD_NAMESPACE_PREFIX;
+        m_streamError = StreamErrorBadNamespacePrefix;
       else if( (*it)->name() == "conflict" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
-        m_streamError = ERROR_CONFLICT;
+        m_streamError = StreamErrorConflict;
       else if( (*it)->name() == "connection-timeout" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
-        m_streamError = ERROR_CONNECTION_TIMEOUT;
+        m_streamError = StreamErrorConnectionTimeout;
       else if( (*it)->name() == "host-gone" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
-        m_streamError = ERROR_HOST_GONE;
+        m_streamError = StreamErrorHostGone;
       else if( (*it)->name() == "host-unknown" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
-        m_streamError = ERROR_HOST_UNKNOWN;
+        m_streamError = StreamErrorHostUnknown;
       else if( (*it)->name() == "improper-addressing" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
-        m_streamError = ERROR_IMPROPER_ADDRESSING;
+        m_streamError = StreamErrorImproperAddressing;
       else if( (*it)->name() == "internal-server-error" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
-        m_streamError = ERROR_INTERNAL_SERVER_ERROR;
+        m_streamError = StreamErrorInternalServerError;
       else if( (*it)->name() == "invalid-from" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
-        m_streamError = ERROR_INVALID_FROM;
+        m_streamError = StreamErrorInvalidFrom;
       else if( (*it)->name() == "invalid-id" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
-        m_streamError = ERROR_INVALID_ID;
+        m_streamError = StreamErrorInvalidId;
       else if( (*it)->name() == "invalid-namespace" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
-        m_streamError = ERROR_INVALID_NAMESPACE;
+        m_streamError = StreamErrorInvalidNamespace;
       else if( (*it)->name() == "invalid-xml" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
-        m_streamError = ERROR_INVALID_XML;
+        m_streamError = StreamErrorInvalidXml;
       else if( (*it)->name() == "not-authorized" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
-        m_streamError = ERROR_NOT_AUTHORIZED;
+        m_streamError = StreamErrorNotAuthorized;
       else if( (*it)->name() == "policy-violation" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
-        m_streamError = ERROR_POLICY_VIOLATION;
+        m_streamError = StreamErrorPolicyViolation;
       else if( (*it)->name() == "remote-connection-failed" &&
                  (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
-        m_streamError = ERROR_REMOTE_CONNECTION_FAILED;
+        m_streamError = StreamErrorRemoteConnectionFailed;
       else if( (*it)->name() == "resource-constraint" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
-        m_streamError = ERROR_RESOURCE_CONSTRAINT;
+        m_streamError = StreamErrorResourceConstraint;
       else if( (*it)->name() == "restricted-xml" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
-        m_streamError = ERROR_RESTRICTED_XML;
+        m_streamError = StreamErrorRestrictedXml;
       else if( (*it)->name() == "see-other-host" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
       {
-        m_streamError = ERROR_SEE_OTHER_HOST;
+        m_streamError = StreamErrorSeeOtherHost;
         m_streamErrorCData = stanza->findChild( "see-other-host" )->cdata();
       }
       else if( (*it)->name() == "system-shutdown" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
-        m_streamError = ERROR_SYSTEM_SHUTDOWN;
+        m_streamError = StreamErrorSystemShutdown;
       else if( (*it)->name() == "undefined-condition" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
-        m_streamError = ERROR_UNDEFINED_CONDITION;
+        m_streamError = StreamErrorUndefinedCondition;
       else if( (*it)->name() == "unsupported-encoding" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
-        m_streamError = ERROR_UNSUPPORTED_ENCODING;
+        m_streamError = StreamErrorUnsupportedEncoding;
       else if( (*it)->name() == "unsupported-stanza-type" &&
                  (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
-        m_streamError = ERROR_UNSUPPORTED_STANZA_TYPE;
+        m_streamError = StreamErrorUnsupportedStanzaType;
       else if( (*it)->name() == "unsupported-version" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
-        m_streamError = ERROR_UNSUPPORTED_VERSION;
+        m_streamError = StreamErrorUnsupportedVersion;
       else if( (*it)->name() == "xml-not-well-formed" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
-        m_streamError = ERROR_XML_NOT_WELL_FORMED;
+        m_streamError = StreamErrorXmlNotWellFormed;
       else if( (*it)->name() == "text" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
       {
         const std::string lang = (*it)->findAttribute( "xml:lang" );
@@ -500,7 +500,7 @@ namespace gloox
         m_streamErrorAppCondition = (*it);
     }
 
-    disconnect( CONN_STREAM_ERROR );
+    disconnect( ConnStreamError );
   }
 
   const std::string ClientBase::streamErrorText( const std::string& lang ) const
@@ -731,8 +731,8 @@ namespace gloox
       m_iqIDHandlers.erase( it_id );
     }
 
-    if( !res && ( stanza->type() == STANZA_IQ ) &&
-         ( ( stanza->subtype() == STANZA_IQ_GET ) || ( stanza->subtype() == STANZA_IQ_SET ) ) )
+    if( !res && ( stanza->type() == StanzaIq ) &&
+         ( ( stanza->subtype() == StanzaIqGet ) || ( stanza->subtype() == StanzaIqSet ) ) )
     {
       Tag *iq = new Tag( "iq" );
       iq->addAttribute( "type", "result" );

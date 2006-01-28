@@ -128,11 +128,11 @@ namespace gloox
         {
           if( m_streamFeatures & STREAM_FEATURE_SASL_DIGESTMD5 && !m_forceNonSasl )
           {
-            startSASL( SASL_DIGEST_MD5 );
+            startSASL( SaslDigestMd5 );
           }
           else if( m_streamFeatures & STREAM_FEATURE_SASL_PLAIN && !m_forceNonSasl )
           {
-            startSASL( SASL_PLAIN );
+            startSASL( SaslPlain );
           }
           else if( m_streamFeatures & STREAM_FEATURE_IQAUTH || m_forceNonSasl )
           {
@@ -140,19 +140,19 @@ namespace gloox
           }
           else
           {
-            logInstance().log( LL_ERROR, LA_CLASS_CLIENT,
+            logInstance().log( LogLevelError, LogAreaClassClient,
                                      "the server doesn't support any auth mechanisms we know about" );
-            disconnect( CONN_NO_SUPPORTED_AUTH );
+            disconnect( ConnNoSupportedAuth );
           }
         }
         else if( m_doAuth && !m_clientCerts.empty() && !m_clientKey.empty()
                  && m_streamFeatures & STREAM_FEATURE_SASL_EXTERNAL )
         {
-          startSASL( SASL_EXTERNAL );
+          startSASL( SaslExternal );
         }
         else if( m_doAuth && m_streamFeatures & STREAM_FEATURE_SASL_ANONYMOUS )
         {
-          startSASL( SASL_ANONYMOUS );
+          startSASL( SaslAnonymous );
         }
         else
         {
@@ -165,73 +165,73 @@ namespace gloox
       }
       else
       {
-        logInstance().log( LL_ERROR, LA_CLASS_CLIENT,
+        logInstance().log( LogLevelError, LogAreaClassClient,
                                  "the server doesn't support any auth mechanisms we know about" );
-        disconnect( CONN_NO_SUPPORTED_AUTH );
+        disconnect( ConnNoSupportedAuth );
       }
     }
 #ifdef HAVE_TLS
     else if( ( stanza->name() == "proceed" ) && stanza->hasAttribute( "xmlns", XMLNS_STREAM_TLS ) )
     {
-      logInstance().log( LL_DEBUG, LA_CLASS_CLIENT, "starting TLS handshake..." );
+      logInstance().log( LogLevelDebug, LogAreaClassClient, "starting TLS handshake..." );
 
       if( m_connection->tlsHandshake() )
       {
         if( !notifyOnTLSConnect( m_connection->fetchTLSInfo() ) )
-          disconnect( CONN_TLS_FAILED );
+          disconnect( ConnTlsFailed );
         else
         {
           std::ostringstream oss;
           if( m_connection->isSecure() )
           {
             oss << "connection encryption active";
-            logInstance().log( LL_DEBUG, LA_CLASS_CLIENT, oss.str() );
+            logInstance().log( LogLevelDebug, LogAreaClassClient, oss.str() );
           }
           else
           {
             oss << "connection not encrypted!";
-            logInstance().log( LL_WARNING, LA_CLASS_CLIENT, oss.str() );
+            logInstance().log( LogLevelWarning, LogAreaClassClient, oss.str() );
           }
 
           header();
         }
       }
       else
-        disconnect( CONN_TLS_FAILED );
+        disconnect( ConnTlsFailed );
     }
     else if( ( stanza->name() == "failure" ) && stanza->hasAttribute( "xmlns", XMLNS_STREAM_TLS ) )
     {
-      logInstance().log( LL_ERROR, LA_CLASS_CLIENT, "TLS handshake failed!" );
-      disconnect( CONN_TLS_FAILED );
+      logInstance().log( LogLevelError, LogAreaClassClient, "TLS handshake failed!" );
+      disconnect( ConnTlsFailed );
     }
 #endif
 #ifdef HAVE_ZLIB
     else if( ( stanza->name() == "failure" ) && stanza->hasAttribute( "xmlns", XMLNS_COMPRESSION ) )
     {
-      logInstance().log( LL_ERROR, LA_CLASS_CLIENT, "stream compression init failed!" );
-      disconnect( CONN_TLS_FAILED );
+      logInstance().log( LogLevelError, LogAreaClassClient, "stream compression init failed!" );
+      disconnect( ConnTlsFailed );
     }
     else if( ( stanza->name() == "compressed" ) && stanza->hasAttribute( "xmlns", XMLNS_COMPRESSION ) )
     {
-      logInstance().log( LL_DEBUG, LA_CLASS_CLIENT, "stream compression inited" );
+      logInstance().log( LogLevelDebug, LogAreaClassClient, "stream compression inited" );
       m_connection->setCompression( true );
       header();
     }
 #endif
     else if( ( stanza->name() == "challenge" ) && stanza->hasAttribute( "xmlns", XMLNS_STREAM_SASL ) )
     {
-      logInstance().log( LL_DEBUG, LA_CLASS_CLIENT, "processing sasl challenge" );
+      logInstance().log( LogLevelDebug, LogAreaClassClient, "processing sasl challenge" );
       processSASLChallenge( stanza->cdata() );
     }
     else if( ( stanza->name() == "failure" ) && stanza->hasAttribute( "xmlns", XMLNS_STREAM_SASL ) )
     {
-      logInstance().log( LL_ERROR, LA_CLASS_CLIENT, "sasl authentication failed!" );
+      logInstance().log( LogLevelError, LogAreaClassClient, "sasl authentication failed!" );
       processSASLError( stanza );
-      disconnect( CONN_AUTHENTICATION_FAILED );
+      disconnect( ConnAuthenticationFailed );
     }
     else if( ( stanza->name() == "success" ) && stanza->hasAttribute( "xmlns", XMLNS_STREAM_SASL ) )
     {
-      logInstance().log( LL_DEBUG, LA_CLASS_CLIENT, "sasl auth successful" );
+      logInstance().log( LogLevelDebug, LogAreaClassClient, "sasl auth successful" );
       setAuthed( true );
       header();
     }
@@ -341,7 +341,7 @@ namespace gloox
   {
     switch( stanza->subtype() )
     {
-      case STANZA_IQ_RESULT:
+      case StanzaIqResult:
       {
         Tag *bind = stanza->findChild( "bind" );
         Tag *jid = bind->findChild( "jid" );
@@ -354,25 +354,25 @@ namespace gloox
           connected();
         break;
       }
-      case STANZA_IQ_ERROR:
+      case StanzaIqError:
       {
         Tag *error = stanza->findChild( "error" );
         if( stanza->hasChild( "error", "type", "modify" )
             && error->hasChild( "bad-request", "xmlns", XMLNS_XMPP_STANZAS ) )
         {
-          notifyOnResourceBindError( RB_BAD_REQUEST );
+          notifyOnResourceBindError( RbErrorBadRequest );
         }
         else if( stanza->hasChild( "error", "type", "cancel" ) )
         {
           if( error->hasChild( "not-allowed", "xmlns", XMLNS_XMPP_STANZAS ) )
-            notifyOnResourceBindError( RB_NOT_ALLOWED );
+            notifyOnResourceBindError( RbErrorNotAllowed );
           else if( error->hasChild( "conflict", "xmlns", XMLNS_XMPP_STANZAS ) )
-            notifyOnResourceBindError( RB_CONFLICT );
+            notifyOnResourceBindError( RbErrorConflict );
           else
-            notifyOnResourceBindError( RB_UNKNOWN_ERROR );
+            notifyOnResourceBindError( RbErrorUnknownError );
         }
         else
-          notifyOnResourceBindError( RB_UNKNOWN_ERROR );
+          notifyOnResourceBindError( RbErrorUnknownError );
         break;
       }
       default:
@@ -395,31 +395,31 @@ namespace gloox
   {
     switch( stanza->subtype() )
     {
-      case STANZA_IQ_RESULT:
+      case StanzaIqResult:
       {
         connected();
         break;
       }
-      case STANZA_IQ_ERROR:
+      case StanzaIqError:
       {
         Tag *error = stanza->findChild( "error" );
         if( stanza->hasChild( "error", "type", "wait" )
             && error->hasChild( "internal-server-error", "xmlns", XMLNS_XMPP_STANZAS ) )
         {
-          notifyOnSessionCreateError( SC_INTERNAL_SERVER_ERROR );
+          notifyOnSessionCreateError( ScErrorInternalServerError );
         }
         else if( stanza->hasChild( "error", "type", "auth" )
                  && error->hasChild( "forbidden", "xmlns", XMLNS_XMPP_STANZAS ) )
         {
-          notifyOnSessionCreateError( SC_FORBIDDEN );
+          notifyOnSessionCreateError( ScErrorForbidden );
         }
         else if( stanza->hasChild( "error", "type", "cancel" )
                  && error->hasChild( "conflict", "xmlns", XMLNS_XMPP_STANZAS ) )
         {
-          notifyOnSessionCreateError( SC_CONFLICT );
+          notifyOnSessionCreateError( ScErrorConflict );
         }
         else
-          notifyOnSessionCreateError( SC_UNKNOWN_ERROR );
+          notifyOnSessionCreateError( ScErrorUnknownError );
         break;
       }
       default:

@@ -53,7 +53,7 @@ namespace gloox
   {
     switch( stanza->subtype() )
     {
-      case STANZA_IQ_GET:
+      case StanzaIqGet:
       {
         time_t now = time( 0 );
 
@@ -71,7 +71,7 @@ namespace gloox
         break;
       }
 
-      case STANZA_IQ_SET:
+      case StanzaIqSet:
       {
         Tag *t = new Tag( "iq" );
         t->addAttribute( "id", stanza->id() );
@@ -105,10 +105,10 @@ namespace gloox
 
     switch( stanza->subtype() )
     {
-      case STANZA_IQ_RESULT:
+      case StanzaIqResult:
         m_lastActivityHandler->handleLastActivityResult( stanza->from(), secs );
         break;
-      case STANZA_IQ_ERROR:
+      case StanzaIqError:
         m_lastActivityHandler->handleLastActivityError( stanza->from(), stanza->error() );
         break;
       default:

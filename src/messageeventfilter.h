@@ -44,8 +44,8 @@ namespace gloox
        * for every message sent. Default: all.
        */
       MessageEventFilter( MessageSession *parent,
-                             int defaultEvents = MESSAGE_EVENT_OFFLINE | MESSAGE_EVENT_DELIVERED
-                                               | MESSAGE_EVENT_DISPLAYED | MESSAGE_EVENT_COMPOSING );
+                             int defaultEvents = MessageEventOffline | MessageEventDelivered
+                                               | MessageEventDisplayed | MessageEventComposing );
 
       /**
        * Virtual destructor.

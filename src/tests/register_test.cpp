@@ -28,7 +28,7 @@ class RegTest : public RegistrationHandler, ConnectionListener, LogHandler
       m_reg = new Registration( j );
       m_reg->registerRegistrationHandler( this );
 
-      j->logInstance().registerLogHandler( LL_DEBUG, LA_ALL, this );
+      j->logInstance().registerLogHandler( LogLevelDebug, LogAreaAll, this );
 
       j->connect();
 

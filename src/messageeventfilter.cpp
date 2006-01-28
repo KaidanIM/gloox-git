@@ -21,7 +21,7 @@ namespace gloox
 
   MessageEventFilter::MessageEventFilter( MessageSession *parent, int defaultEvents )
     : MessageFilter( parent ), m_messageEventHandler( 0 ), m_requestedEvents( 0 ),
-      m_defaultEvents( defaultEvents ), m_lastSent( MESSAGE_EVENT_CANCEL )
+      m_defaultEvents( defaultEvents ), m_lastSent( MessageEventCancel )
   {
   }
 
@@ -37,28 +37,28 @@ namespace gloox
       {
         Tag *x = stanza->findChild( "x" );
         if( x->hasChild( "offline" ) )
-          m_messageEventHandler->handleMessageEvent( stanza->from(), MESSAGE_EVENT_OFFLINE );
+          m_messageEventHandler->handleMessageEvent( stanza->from(), MessageEventOffline );
         else if( x->hasChild( "delivered" ) )
-          m_messageEventHandler->handleMessageEvent( stanza->from(), MESSAGE_EVENT_DELIVERED );
+          m_messageEventHandler->handleMessageEvent( stanza->from(), MessageEventDelivered );
         else if( x->hasChild( "displayed" ) )
-          m_messageEventHandler->handleMessageEvent( stanza->from(), MESSAGE_EVENT_DISPLAYED );
+          m_messageEventHandler->handleMessageEvent( stanza->from(), MessageEventDisplayed );
         else if( x->hasChild( "composing" ) )
-          m_messageEventHandler->handleMessageEvent( stanza->from(), MESSAGE_EVENT_COMPOSING );
+          m_messageEventHandler->handleMessageEvent( stanza->from(), MessageEventComposing );
         else
-          m_messageEventHandler->handleMessageEvent( stanza->from(), MESSAGE_EVENT_CANCEL );
+          m_messageEventHandler->handleMessageEvent( stanza->from(), MessageEventCancel );
       }
       else
       {
         m_requestedEvents = 0;
         Tag *x = stanza->findChild( "x" );
         if( x->hasChild( "offline" ) )
-          m_requestedEvents |= MESSAGE_EVENT_OFFLINE;
+          m_requestedEvents |= MessageEventOffline;
         if( x->hasChild( "delivered" ) )
-          m_requestedEvents |= MESSAGE_EVENT_DELIVERED;
+          m_requestedEvents |= MessageEventDelivered;
         if( x->hasChild( "displayed" ) )
-          m_requestedEvents |= MESSAGE_EVENT_DISPLAYED;
+          m_requestedEvents |= MessageEventDisplayed;
         if( x->hasChild( "composing" ) )
-          m_requestedEvents |= MESSAGE_EVENT_COMPOSING;
+          m_requestedEvents |= MessageEventComposing;
       }
     }
     else
@@ -71,7 +71,7 @@ namespace gloox
   void MessageEventFilter::raiseMessageEvent( MessageEventType event )
   {
     if( ( m_requestedEvents & event ) ||
-          ( ( m_lastSent == MESSAGE_EVENT_COMPOSING ) && ( event == MESSAGE_EVENT_CANCEL ) ) )
+          ( ( m_lastSent == MessageEventComposing ) && ( event == MessageEventCancel ) ) )
     {
       Tag *m = new Tag( "message" );
       m->addAttribute( "to", m_parent->target().full() );
@@ -82,29 +82,29 @@ namespace gloox
       bool used = false;
       switch( event )
       {
-        case MESSAGE_EVENT_OFFLINE:
+        case MessageEventOffline:
           new Tag( x, "offline" );
           m_requestedEvents ^= event;
           used = true;
           break;
-        case MESSAGE_EVENT_DELIVERED:
+        case MessageEventDelivered:
           new Tag( x, "delivered" );
           m_requestedEvents ^= event;
           used = true;
           break;
-        case MESSAGE_EVENT_DISPLAYED:
+        case MessageEventDisplayed:
           new Tag( x, "displayed" );
           m_requestedEvents ^= event;
           used = true;
           break;
-        case MESSAGE_EVENT_COMPOSING:
-          if( m_lastSent != MESSAGE_EVENT_COMPOSING )
+        case MessageEventComposing:
+          if( m_lastSent != MessageEventComposing )
           {
             new Tag( x, "composing" );
             used = true;
           }
           break;
-        case MESSAGE_EVENT_CANCEL:
+        case MessageEventCancel:
           break;
       }
 
@@ -124,16 +124,16 @@ namespace gloox
       Tag *x = new Tag( tag, "x" );
       x->addAttribute( "xmlns", XMLNS_X_EVENT );
 
-      if( m_defaultEvents & MESSAGE_EVENT_OFFLINE )
+      if( m_defaultEvents & MessageEventOffline )
         new Tag( x, "offline" );
-      if( m_defaultEvents & MESSAGE_EVENT_DELIVERED )
+      if( m_defaultEvents & MessageEventDelivered )
         new Tag( x, "delivered" );
-      if( m_defaultEvents & MESSAGE_EVENT_DISPLAYED )
+      if( m_defaultEvents & MessageEventDisplayed )
         new Tag( x, "displayed" );
-      if( m_defaultEvents & MESSAGE_EVENT_COMPOSING )
+      if( m_defaultEvents & MessageEventComposing )
         new Tag( x, "composing" );
     }
-    m_lastSent = MESSAGE_EVENT_CANCEL;
+    m_lastSent = MessageEventCancel;
   }
 
   void MessageEventFilter::registerMessageEventHandler( MessageEventHandler *meh )
