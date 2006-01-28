@@ -159,18 +159,18 @@ namespace gloox
       case FO_REQUEST_MSGS:
         switch( stanza->subtype() )
         {
-          case STANZA_IQ_RESULT:
+          case StanzaIqResult:
             m_flexibleOfflineHandler->handleFlexibleOfflineResult(
                 FlexibleOfflineHandler::FOMR_REQUEST_SUCCESS );
             break;
-          case STANZA_IQ_ERROR:
+          case StanzaIqError:
             switch( stanza->error() )
             {
-              case ST_ERROR_FORBIDDEN:
+              case StanzaErrorForbidden:
                 m_flexibleOfflineHandler->handleFlexibleOfflineResult(
                     FlexibleOfflineHandler::FOMR_FORBIDDEN );
                 break;
-              case ST_ERROR_ITEM_NOT_FOUND:
+              case StanzaErrorItemNotFound:
                 m_flexibleOfflineHandler->handleFlexibleOfflineResult(
                     FlexibleOfflineHandler::FOMR_ITEM_NOT_FOUND );
                 break;
@@ -187,18 +187,18 @@ namespace gloox
       case FO_REMOVE_MSGS:
         switch( stanza->subtype() )
         {
-          case STANZA_IQ_RESULT:
+          case StanzaIqResult:
             m_flexibleOfflineHandler->handleFlexibleOfflineResult(
                 FlexibleOfflineHandler::FOMR_REMOVE_SUCCESS );
             break;
-          case STANZA_IQ_ERROR:
+          case StanzaIqError:
             switch( stanza->error() )
             {
-              case ST_ERROR_FORBIDDEN:
+              case StanzaErrorForbidden:
                 m_flexibleOfflineHandler->handleFlexibleOfflineResult(
                     FlexibleOfflineHandler::FOMR_FORBIDDEN );
                 break;
-              case ST_ERROR_ITEM_NOT_FOUND:
+              case StanzaErrorItemNotFound:
                 m_flexibleOfflineHandler->handleFlexibleOfflineResult(
                     FlexibleOfflineHandler::FOMR_ITEM_NOT_FOUND );
                 break;

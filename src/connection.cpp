@@ -45,7 +45,7 @@ namespace gloox
 
   Connection::Connection( Parser *parser, const LogSink& logInstance, const std::string& server,
                           int port )
-  : m_parser( parser ), m_state ( STATE_DISCONNECTED ), m_disconnect ( CONN_OK ),
+  : m_parser( parser ), m_state ( StateDisconnected ), m_disconnect ( ConnNoError ),
       m_logInstance( logInstance ), m_buf( 0 ), m_server( Prep::idna( server ) ), m_port( port ),
       m_socket( -1 ), m_compCount( 0 ), m_decompCount( 0 ), m_dataOutCount( 0 ),
       m_dataInCount( 0 ), m_cancel( true ), m_secure( false ), m_compression( false ),
@@ -110,9 +110,9 @@ namespace gloox
 
     int res = SSL_get_verify_result( m_ssl );
     if( res != X509_V_OK )
-      m_certInfo.status = CERT_INVALID;
+      m_certInfo.status = CertInvalid;
     else
-      m_certInfo.status = CERT_OK;
+      m_certInfo.status = CertOk;
 
     X509 *peer;
     peer = SSL_get_peer_certificate( m_ssl );
@@ -124,11 +124,11 @@ namespace gloox
       X509_NAME_get_text_by_NID( X509_get_subject_name( peer ), NID_commonName, peer_CN, sizeof( peer_CN ) );
       m_certInfo.server = peer_CN;
       if( strcasecmp( peer_CN, m_server.c_str() ) )
-        m_certInfo.status |= CERT_WRONG_PEER;
+        m_certInfo.status |= CertWrongPeer;
     }
     else
     {
-      m_certInfo.status = CERT_INVALID;
+      m_certInfo.status = CertInvalid;
     }
 
     const char *tmp;
@@ -478,7 +478,7 @@ namespace gloox
     }
 
     if( m_socket == -1 )
-      return CONN_NOT_CONNECTED;
+      return ConnNotConnected;
 
     if( !m_fdRequested )
     {
@@ -492,10 +492,10 @@ namespace gloox
       tv.tv_usec = 0;
 
       if( select( m_socket + 1, &fds, 0, 0, timeout == -1 ? 0 : &tv ) < 0 )
-        return CONN_IO_ERROR;
+        return ConnIoError;
 
       if( !FD_ISSET( m_socket, &fds ) )
-        return CONN_OK;
+        return ConnNoError;
     }
 
     // optimize(?): recv returns the size. set size+1 = \0
@@ -525,12 +525,12 @@ namespace gloox
     if( size < 0 )
     {
       // error
-      return CONN_IO_ERROR;
+      return ConnIoError;
     }
     else if( size == 0 )
     {
       // connection closed
-      return CONN_USER_DISCONNECTED;
+      return ConnUserDisconnected;
     }
     else
     {
@@ -549,30 +549,30 @@ namespace gloox
         switch( ret )
         {
           case Parser::PARSER_BADXML:
-            m_logInstance.log( LL_ERROR, LA_CLASS_CONNECTION, "XML parse error" );
+            m_logInstance.log( LogLevelError, LogAreaClassConnection, "XML parse error" );
             break;
           case Parser::PARSER_NOMEM:
-            m_logInstance.log( LL_ERROR, LA_CLASS_CONNECTION, "memory allocation error" );
+            m_logInstance.log( LogLevelError, LogAreaClassConnection, "memory allocation error" );
             break;
           default:
             break;
         }
-        return CONN_IO_ERROR;
+        return ConnIoError;
       }
     }
 
-    return CONN_OK;
+    return ConnNoError;
   }
 
   ConnectionError Connection::receive()
   {
     if( m_socket == -1 || !m_parser )
-      return CONN_NOT_CONNECTED;
+      return ConnNotConnected;
 
     while( !m_cancel )
     {
       ConnectionError r = recv();
-      if( r != CONN_OK )
+      if( r != ConnNoError )
         return r;
     }
 
@@ -632,10 +632,10 @@ namespace gloox
 
   ConnectionState Connection::connect()
   {
-    if( m_socket != -1 && m_state >= STATE_CONNECTING )
+    if( m_socket != -1 && m_state >= StateConnecting )
       return m_state;
 
-    m_state = STATE_CONNECTING;
+    m_state = StateConnecting;
 
     if( m_port == -1 )
       m_socket = DNS::connect( m_server, m_logInstance );
@@ -647,19 +647,19 @@ namespace gloox
       switch( m_socket )
       {
         case -DNS::DNS_COULD_NOT_CONNECT:
-          m_logInstance.log( LL_ERROR, LA_CLASS_CONNECTION, "connection error: could not connect" );
+          m_logInstance.log( LogLevelError, LogAreaClassConnection, "connection error: could not connect" );
           break;
         case -DNS::DNS_NO_HOSTS_FOUND:
-          m_logInstance.log( LL_ERROR, LA_CLASS_CONNECTION, "connection error: no hosts found" );
+          m_logInstance.log( LogLevelError, LogAreaClassConnection, "connection error: no hosts found" );
           break;
         case -DNS::DNS_COULD_NOT_RESOLVE:
-          m_logInstance.log( LL_ERROR, LA_CLASS_CONNECTION, "connection error: could not resolve" );
+          m_logInstance.log( LogLevelError, LogAreaClassConnection, "connection error: could not resolve" );
           break;
       }
       cleanup();
     }
     else
-      m_state = STATE_CONNECTED;
+      m_state = StateConnected;
 
     m_cancel = false;
     return m_state;
@@ -692,8 +692,8 @@ namespace gloox
 #endif
       m_socket = -1;
     }
-    m_state = STATE_DISCONNECTED;
-    m_disconnect = CONN_OK;
+    m_state = StateDisconnected;
+    m_disconnect = ConnNoError;
 
     m_secure = false;
     m_cancel = true;

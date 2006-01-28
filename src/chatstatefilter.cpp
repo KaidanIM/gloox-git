@@ -21,7 +21,7 @@ namespace gloox
 {
 
   ChatStateFilter::ChatStateFilter( MessageSession *parent )
-  : MessageFilter( parent ), m_chatStateHandler( 0 ), m_lastSent( CHAT_STATE_GONE ),
+  : MessageFilter( parent ), m_chatStateHandler( 0 ), m_lastSent( ChatStateGone ),
       m_enableChatStates( true )
   {
   }
@@ -37,15 +37,15 @@ namespace gloox
       if( stanza->body().empty() )
       {
         if( stanza->hasChild( "active" ) )
-          m_chatStateHandler->handleChatState( stanza->from(), CHAT_STATE_ACTIVE );
+          m_chatStateHandler->handleChatState( stanza->from(), ChatStateActive );
         else if( stanza->hasChild( "composing" ) )
-          m_chatStateHandler->handleChatState( stanza->from(), CHAT_STATE_COMPOSING );
+          m_chatStateHandler->handleChatState( stanza->from(), ChatStateComposing );
         else if( stanza->hasChild( "paused" ) )
-          m_chatStateHandler->handleChatState( stanza->from(), CHAT_STATE_PAUSED );
+          m_chatStateHandler->handleChatState( stanza->from(), ChatStatePaused );
         else if( stanza->hasChild( "inactive" ) )
-          m_chatStateHandler->handleChatState( stanza->from(), CHAT_STATE_INACTIVE );
+          m_chatStateHandler->handleChatState( stanza->from(), ChatStateInactive );
         else if( stanza->hasChild( "gone" ) )
-          m_chatStateHandler->handleChatState( stanza->from(), CHAT_STATE_GONE );
+          m_chatStateHandler->handleChatState( stanza->from(), ChatStateGone );
         else
           m_enableChatStates = false;
       }
@@ -78,23 +78,23 @@ namespace gloox
     Tag *s = 0;
     switch( state )
     {
-      case CHAT_STATE_ACTIVE:
+      case ChatStateActive:
         s = new Tag( m, "active" );
         s->addAttribute( "xmlns", XMLNS_CHAT_STATES );
         break;
-      case CHAT_STATE_COMPOSING:
+      case ChatStateComposing:
         s = new Tag( m, "composing" );
         s->addAttribute( "xmlns", XMLNS_CHAT_STATES );
         break;
-      case CHAT_STATE_PAUSED:
+      case ChatStatePaused:
         s = new Tag( m, "paused" );
         s->addAttribute( "xmlns", XMLNS_CHAT_STATES );
         break;
-      case CHAT_STATE_INACTIVE:
+      case ChatStateInactive:
         s = new Tag( m, "inactive" );
         s->addAttribute( "xmlns", XMLNS_CHAT_STATES );
         break;
-      case CHAT_STATE_GONE:
+      case ChatStateGone:
         s = new Tag( m, "gone" );
         s->addAttribute( "xmlns", XMLNS_CHAT_STATES );
         break;

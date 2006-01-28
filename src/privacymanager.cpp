@@ -218,7 +218,7 @@ namespace gloox
 
   bool PrivacyManager::handleIq( Stanza *stanza )
   {
-    if( stanza->subtype() != STANZA_IQ_SET || !m_privacyListHandler )
+    if( stanza->subtype() != StanzaIqSet || !m_privacyListHandler )
       return false;
 
     Tag *l = stanza->findChild( "query" )->findChild( "list" );
@@ -239,12 +239,12 @@ namespace gloox
 
   bool PrivacyManager::handleIqID( Stanza *stanza, int context )
   {
-    if( stanza->subtype() != STANZA_IQ_RESULT || !m_privacyListHandler )
+    if( stanza->subtype() != StanzaIqResult || !m_privacyListHandler )
       return false;
 
     switch( stanza->subtype() )
     {
-      case STANZA_IQ_RESULT:
+      case StanzaIqResult:
         switch( context )
         {
           case PL_STORE:
@@ -344,7 +344,7 @@ namespace gloox
         }
         break;
 
-      case STANZA_IQ_ERROR:
+      case StanzaIqError:
       {
         Tag *e = stanza->findChild( "error" );
         if( e->hasChild( "conflict" ) )

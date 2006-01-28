@@ -77,7 +77,7 @@ namespace gloox
     {
       switch( stanza->subtype() )
       {
-        case STANZA_IQ_RESULT:
+        case StanzaIqResult:
         {
           switch( context )
           {
@@ -105,7 +105,7 @@ namespace gloox
           return true;
           break;
         }
-        case STANZA_IQ_ERROR:
+        case StanzaIqError:
         {
           switch( context )
           {

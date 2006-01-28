@@ -54,24 +54,24 @@ namespace gloox
   {
     switch( stanza->subtype() )
     {
-      case STANZA_IQ_ERROR:
+      case StanzaIqError:
       {
         m_parent->setAuthed( false );
-        m_parent->disconnect( CONN_AUTHENTICATION_FAILED );
+        m_parent->disconnect( ConnAuthenticationFailed );
 
         Tag *t = stanza->findChild( "error" );
         if( t )
         {
           if( t->hasChild( "conflict" ) || t->hasAttribute( "code", "409" ) )
-            m_parent->setAuthFailure( NONSASL_CONFLICT );
+            m_parent->setAuthFailure( NonSaslConflict );
           else if( t->hasChild( "not-acceptable" ) || t->hasAttribute( "code", "406" ) )
-            m_parent->setAuthFailure( NONSASL_NOT_ACCEPTABLE );
+            m_parent->setAuthFailure( NonSaslNotAcceptable );
           else if( t->hasChild( "not-authorized" ) || t->hasAttribute( "code", "401" ) )
-            m_parent->setAuthFailure( NONSASL_NOT_AUTHORIZED );
+            m_parent->setAuthFailure( NonSaslNotAuthorized );
         }
         break;
       }
-      case STANZA_IQ_RESULT:
+      case StanzaIqResult:
         switch( context )
         {
           case TRACK_REQUEST_AUTH_FIELDS:

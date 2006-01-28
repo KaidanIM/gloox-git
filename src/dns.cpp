@@ -204,7 +204,7 @@ namespace gloox
       free( addr );
       std::ostringstream oss;
       oss << "resolved " << (*it).first.c_str() <<  " to: " << tmp << ":" << port;
-      logInstance.log( LL_DEBUG, LA_CLASS_DNS, oss.str() );
+      logInstance.log( LogLevelDebug, LogAreaClassDns, oss.str() );
 
       if( inet_aton( tmp, &(target.sin_addr) ) == 0 )
         continue;
@@ -267,7 +267,7 @@ namespace gloox
 
     std::ostringstream oss;
     oss << "resolved " << domain.c_str() << " to: " << inet_ntoa( target.sin_addr );
-    logInstance.log( LL_DEBUG, LA_CLASS_DNS, oss.str() );
+    logInstance.log( LogLevelDebug, LogAreaClassDns, oss.str() );
 
     memset( target.sin_zero, '\0', 8 );
     if( ::connect( fd, (struct sockaddr *)&target, sizeof( struct sockaddr ) ) == 0 )

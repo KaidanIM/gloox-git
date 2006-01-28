@@ -309,9 +309,9 @@ namespace gloox
    */
   enum ConnectionState
   {
-    STATE_DISCONNECTED,             /**< The client is in disconnected state. */
-    STATE_CONNECTING,               /**< The client is currently trying to establish a connection. */
-    STATE_CONNECTED                 /**< The client is connected to the server but authentication is not
+    StateDisconnected,              /**< The client is in disconnected state. */
+    StateConnecting,                /**< The client is currently trying to establish a connection. */
+    StateConnected                  /**< The client is connected to the server but authentication is not
                                      * (yet) done. */
   };
 
@@ -320,18 +320,18 @@ namespace gloox
    */
   enum ConnectionError
   {
-    CONN_OK,                       /**< Not really an error. Everything went just fine. */
-    CONN_STREAM_ERROR,             /**< An stream error occured. The stream has been closed. */
-    CONN_STREAM_CLOSED,            /**< The stream has been closed graciously. */
-    CONN_IO_ERROR,                 /**< An I/O error occured. */
-    CONN_OUT_OF_MEMORY,            /**< Out of memory. Uhoh. */
-    CONN_NO_SUPPORTED_AUTH,        /**< The auth mechanisms the server offers are not supported
-                                    * or the server offered no auth mechanisms at all. */
-    CONN_TLS_FAILED,               /**< The server's certificate could not be verified. */
-    CONN_AUTHENTICATION_FAILED,    /**< Authentication failed. Username/password wrong or account does
-                                    * not exist. */
-    CONN_USER_DISCONNECTED,        /**< The user (or higher-level protocol) requested a disconnecct. */
-    CONN_NOT_CONNECTED             /**< There is no active connection. */
+    ConnNoError,                    /**< Not really an error. Everything went just fine. */
+    ConnStreamError,                /**< A stream error occured. The stream has been closed. */
+    ConnStreamClosed,               /**< The stream has been closed graciously. */
+    ConnIoError,                    /**< An I/O error occured. */
+    ConnOutOfMemory,                /**< Out of memory. Uhoh. */
+    ConnNoSupportedAuth,            /**< The auth mechanisms the server offers are not supported
+                                     * or the server offered no auth mechanisms at all. */
+    ConnTlsFailed,                  /**< The server's certificate could not be verified. */
+    ConnAuthenticationFailed,       /**< Authentication failed. Username/password wrong or account does
+                                     * not exist. */
+    ConnUserDisconnected,           /**< The user (or higher-level protocol) requested a disconnect. */
+    ConnNotConnected                /**< There is no active connection. */
   };
 
   /**
@@ -339,79 +339,79 @@ namespace gloox
    */
   enum StreamError
   {
-    ERROR_UNDEFINED,                /**< An undefined/unknown error occured. Also used if a diconnect was
+    StreamErrorUndefined,           /**< An undefined/unknown error occured. Also used if a diconnect was
                                      * user-initiated. Also set before and during a established connection
                                      * (where obviously no error occured). */
-    ERROR_BAD_FORMAT,               /**< The entity has sent XML that cannot be processed;
+    StreamErrorBadFormat,           /**< The entity has sent XML that cannot be processed;
                                      * this error MAY be used instead of the more specific XML-related
                                      * errors, such as &lt;bad-namespace-prefix/&gt;, &lt;invalid-xml/&gt;,
                                      * &lt;restricted-xml/&gt;, &lt;unsupported-encoding/&gt;, and
                                      * &lt;xml-not-well-formed/&gt;, although the more specific errors are
                                      * preferred. */
-    ERROR_BAD_NAMESPACE_PREFIX,     /**< The entity has sent a namespace prefix that is unsupported, or has
+    StreamErrorBadNamespacePrefix,  /**< The entity has sent a namespace prefix that is unsupported, or has
                                      * sent no namespace prefix on an element that requires such a prefix
                                      * (see XML Namespace Names and Prefixes (Section 11.2)). */
-    ERROR_CONFLICT,                 /**< The server is closing the active stream for this entity because a
+    StreamErrorConflict,            /**< The server is closing the active stream for this entity because a
                                      * new stream has been initiated that conflicts with the existing
                                      * stream. */
-    ERROR_CONNECTION_TIMEOUT,       /**< The entity has not generated any traffic over the stream for some
+    StreamErrorConnectionTimeout,   /**< The entity has not generated any traffic over the stream for some
                                      * period of time (configurable according to a local service policy).*/
-    ERROR_HOST_GONE,                /**< the value of the 'to' attribute provided by the initiating entity
+    StreamErrorHostGone,            /**< the value of the 'to' attribute provided by the initiating entity
                                      * in the stream header corresponds to a hostname that is no longer
                                      * hosted by the server.*/
-    ERROR_HOST_UNKNOWN,             /**< The value of the 'to' attribute provided by the initiating entity
+    StreamErrorHostUnknown,         /**< The value of the 'to' attribute provided by the initiating entity
                                      * in the stream header does not correspond to a hostname that is hosted
                                      * by the server. */
-    ERROR_IMPROPER_ADDRESSING,      /**< A stanza sent between two servers lacks a 'to' or 'from' attribute
+    StreamErrorImproperAddressing,  /**< A stanza sent between two servers lacks a 'to' or 'from' attribute
                                      * (or the attribute has no value). */
-    ERROR_INTERNAL_SERVER_ERROR,    /**< the server has experienced a misconfiguration or an
+    StreamErrorInternalServerError, /**< the server has experienced a misconfiguration or an
                                      * otherwise-undefined internal error that prevents it from servicing the
                                      * stream. */
-    ERROR_INVALID_FROM,             /**< The JID or hostname provided in a 'from' address does not match an
+    StreamErrorInvalidFrom,         /**< The JID or hostname provided in a 'from' address does not match an
                                      * authorized JID or validated domain negotiated between servers via SASL
                                      * or dialback, or between a client and a server via authentication and
                                      * resource binding.*/
-    ERROR_INVALID_ID,               /**< The stream ID or dialback ID is invalid or does not match an ID
+    StreamErrorInvalidId,           /**< The stream ID or dialback ID is invalid or does not match an ID
                                      * previously provided. */
-    ERROR_INVALID_NAMESPACE,        /**< The streams namespace name is something other than
+    StreamErrorInvalidNamespace,    /**< The streams namespace name is something other than
                                      * "http://etherx.jabber.org/streams" or the dialback namespace name is
                                      * something other than "jabber:server:dialback" (see XML Namespace Names
                                      * and Prefixes (Section 11.2)). */
-    ERROR_INVALID_XML,              /**< The entity has sent invalid XML over the stream to a server that
+    StreamErrorInvalidXml,          /**< The entity has sent invalid XML over the stream to a server that
                                      * performs validation (see Validation (Section 11.3)). */
-    ERROR_NOT_AUTHORIZED,           /**< The entity has attempted to send data before the stream has been
+    StreamErrorNotAuthorized,       /**< The entity has attempted to send data before the stream has been
                                      * authenticated, or otherwise is not authorized to perform an action
                                      * related to stream negotiation; the receiving entity MUST NOT process
                                      * the offending stanza before sending the stream error. */
-    ERROR_POLICY_VIOLATION,         /**< The entity has violated some local service policy; the server MAY
+    StreamErrorPolicyViolation,     /**< The entity has violated some local service policy; the server MAY
                                      * choose to specify the policy in the &lt;text/&gt;  element or an
                                      * application-specific condition element. */
-    ERROR_REMOTE_CONNECTION_FAILED, /**< The server is unable to properly connect to a remote entity that is
+    StreamErrorRemoteConnectionFailed,/**< The server is unable to properly connect to a remote entity that is
                                      * required for authentication or authorization. */
-    ERROR_RESOURCE_CONSTRAINT,      /**< the server lacks the system resources necessary to service the
+    StreamErrorResourceConstraint,  /**< the server lacks the system resources necessary to service the
                                      * stream. */
-    ERROR_RESTRICTED_XML,           /**< The entity has attempted to send restricted XML features such as a
+    StreamErrorRestrictedXml,       /**< The entity has attempted to send restricted XML features such as a
                                      * comment, processing instruction, DTD, entity reference, or unescaped
                                      * character (see Restrictions (Section 11.1)). */
-    ERROR_SEE_OTHER_HOST,           /**< The server will not provide service to the initiating entity but is
+    StreamErrorSeeOtherHost,        /**< The server will not provide service to the initiating entity but is
                                      * redirecting traffic to another host; the server SHOULD specify the
                                      * alternate hostname or IP address (which MUST be a valid domain
                                      * identifier) as the XML character data of the &lt;see-other-host/&gt;
                                      * element. */
-    ERROR_SYSTEM_SHUTDOWN,          /**< The server is being shut down and all active streams are being
+    StreamErrorSystemShutdown,      /**< The server is being shut down and all active streams are being
                                      * closed. */
-    ERROR_UNDEFINED_CONDITION,      /**< The error condition is not one of those defined by the other
+    StreamErrorUndefinedCondition,  /**< The error condition is not one of those defined by the other
                                      * conditions in this list; this error condition SHOULD be used only in
                                      * conjunction with an application-specific condition. */
-    ERROR_UNSUPPORTED_ENCODING,     /**< The initiating entity has encoded the stream in an encoding that is
+    StreamErrorUnsupportedEncoding, /**< The initiating entity has encoded the stream in an encoding that is
                                      * not supported by the server (see Character Encoding (Section 11.5)). */
-    ERROR_UNSUPPORTED_STANZA_TYPE,  /**< The initiating entity has sent a first-level child of the stream
+    StreamErrorUnsupportedStanzaType,/**< The initiating entity has sent a first-level child of the stream
                                      * that is not supported by the server. */
-    ERROR_UNSUPPORTED_VERSION,      /**< The value of the 'version' attribute provided by the initiating
+    StreamErrorUnsupportedVersion,  /**< The value of the 'version' attribute provided by the initiating
                                      * entity in the stream header specifies a version of XMPP that is not
                                      * supported by the server; the server MAY specify the version(s) it
                                      * supports in the &lt;text/&gt; element. */
-    ERROR_XML_NOT_WELL_FORMED       /**< The initiating entity has sent XML that is not well-formed as
+    StreamErrorXmlNotWellFormed     /**< The initiating entity has sent XML that is not well-formed as
                                      * defined by [XML]. */
   };
 
@@ -420,11 +420,11 @@ namespace gloox
    */
   enum StanzaType
   {
-    STANZA_UNDEFINED,               /**< Undefined. */
-    STANZA_IQ,                      /**< An Info/Query stanza. */
-    STANZA_MESSAGE,                 /**< A message stanza. */
-    STANZA_S10N,                    /**< A presence/subscription stanza. */
-    STANZA_PRESENCE                 /**< A presence stanza. */
+    StanzaUndefined,               /**< Undefined. */
+    StanzaIq,                       /**< An Info/Query stanza. */
+    StanzaMessage,                  /**< A message stanza. */
+    StanzaS10n,                     /**< A presence/subscription stanza. */
+    StanzaPresence                  /**< A presence stanza. */
   };
 
   /**
@@ -432,63 +432,63 @@ namespace gloox
    */
   enum StanzaSubType
   {
-    STANZA_SUB_UNDEFINED,           /**< Undefined. */
-    STANZA_IQ_GET,                  /**< The stanza is a request for information or requirements. */
-    STANZA_IQ_SET,                  /**<
+    StanzaSubUndefined,             /**< Undefined. */
+    StanzaIqGet,                    /**< The stanza is a request for information or requirements. */
+    StanzaIqSet,                    /**<
                                      * The stanza provides required data, sets new values, or
                                      * replaces existing values.
                                      */
-    STANZA_IQ_RESULT,               /**< The stanza is a response to a successful get or set request. */
-    STANZA_IQ_ERROR,                /**<
+    StanzaIqResult,                 /**< The stanza is a response to a successful get or set request. */
+    StanzaIqError,                  /**<
                                      * An error has occurred regarding processing or
                                      * delivery of a previously-sent get or set (see Stanza Errors
                                      * (Section 9.3)).
                                      */
-    STANZA_PRES_UNAVAILABLE,        /**<
+    StanzaPresenceUnavailable,      /**<
                                      * Signals that the entity is no longer available for
                                      * communication.
                                      */
-    STANZA_PRES_AVAILABLE,          /**<
+    StanzaPresenceAvailable,        /**<
                                      * Signals to the server that the sender is online and available
                                      * for communication.
                                      */
-    STANZA_PRES_PROBE,              /**<
+    StanzaPresenceProbe,            /**<
                                      * A request for an entity's current presence; SHOULD be
                                      * generated only by a server on behalf of a user.
                                      */
-    STANZA_PRES_ERROR,              /**<
+    StanzaPresenceError,            /**<
                                      * An error has occurred regarding processing or delivery of
                                      * a previously-sent presence stanza.
                                      */
-    STANZA_S10N_SUBSCRIBE,          /**<
+    StanzaS10nSubscribe,            /**<
                                      * The sender wishes to subscribe to the recipient's
                                      * presence.
                                      */
-    STANZA_S10N_SUBSCRIBED,         /**<
+    StanzaS10nSubscribed,           /**<
                                      * The sender has allowed the recipient to receive
                                      * their presence.
                                      */
-    STANZA_S10N_UNSUBSCRIBE,        /**<
+    StanzaS10nUnsubscribe,          /**<
                                      * The sender is unsubscribing from another entity's
                                      * presence.
                                      */
-    STANZA_S10N_UNSUBSCRIBED,       /**<
+    StanzaS10nUnsubscribed,         /**<
                                      * The subscription request has been denied or a
                                      * previously-granted subscription has been cancelled.
                                      */
-    STANZA_MESSAGE_CHAT,            /**<
+    StanzaMessageChat,              /**<
                                      * The message is sent in the context of a one-to-one chat
                                      * conversation.  A compliant client SHOULD present the message in an
                                      * interface enabling one-to-one chat between the two parties,
                                      * including an appropriate conversation history.
                                      */
-    STANZA_MESSAGE_ERROR,           /**<
+    StanzaMessageError,             /**<
                                      * An error has occurred related to a previous message sent
                                      * by the sender (for details regarding stanza error syntax, refer to
                                      * [XMPP-CORE]).  A compliant client SHOULD present an appropriate
                                      * interface informing the sender of the nature of the error.
                                      */
-    STANZA_MESSAGE_GROUPCHAT,       /**<
+    StanzaMessageGroupchat,         /**<
                                      * The message is sent in the context of a multi-user
                                      * chat environment (similar to that of [IRC]).  A compliant client
                                      * SHOULD present the message in an interface enabling many-to-many
@@ -496,7 +496,7 @@ namespace gloox
                                      * chatroom and an appropriate conversation history.  Full definition
                                      * of XMPP-based groupchat protocols is out of scope for this memo.
                                      */
-    STANZA_MESSAGE_HEADLINE,        /**<
+    StanzaMessageHeadline,          /**<
                                      * The message is probably generated by an automated
                                      * service that delivers or broadcasts content (news, sports, market
                                      * information, RSS feeds, etc.).  No reply to the message is
@@ -505,7 +505,7 @@ namespace gloox
                                      * standalone messages, chat sessions, or groupchat sessions (e.g.,
                                      * by not providing the recipient with the ability to reply).
                                      */
-    STANZA_MESSAGE_NORMAL           /**<
+    StanzaMessageNormal             /**<
                                      * The message is a single message that is sent outside the
                                      * context of a one-to-one conversation or groupchat, and to which it
                                      * is expected that the recipient will reply.  A compliant client
@@ -519,11 +519,11 @@ namespace gloox
    */
   enum StanzaErrorType
   {
-    ST_TYPE_CANCEL,                   /**< Do not retry (the error is unrecoverable). */
-    ST_TYPE_CONTINUE,                 /**< Proceed (the condition was only a warning). */
-    ST_TYPE_MODIFY,                   /**< Retry after changing the data sent. */
-    ST_TYPE_AUTH,                     /**< Retry after providing credentials. */
-    ST_TYPE_WAIT                      /**< Retry after waiting (the error is temporary). */
+    StanzaErrorTypeCancel,                /**< Do not retry (the error is unrecoverable). */
+    StanzaErrorTypeContinue,              /**< Proceed (the condition was only a warning). */
+    StanzaErrorTypeModify,                 /**< Retry after changing the data sent. */
+    StanzaErrorTypeAuth,                   /**< Retry after providing credentials. */
+    StanzaErrorTypeWait                    /**< Retry after waiting (the error is temporary). */
   };
 
   /**
@@ -531,77 +531,77 @@ namespace gloox
    */
   enum StanzaError
   {
-    ST_ERROR_UNDEFINED = 0,         /**< No stanza error occured. */
-    ST_ERROR_BAD_REQUEST,           /**< The sender has sent XML that is malformed or that cannot be
+    StanzaErrorUndefined = 0,       /**< No stanza error occured. */
+    StanzaErrorBadRequest,          /**< The sender has sent XML that is malformed or that cannot be
                                      * processed (e.g., an IQ stanza that includes an unrecognized value
                                      * of the 'type' attribute); the associated error type SHOULD be
                                      * "modify". */
-    ST_ERROR_CONFLICT,              /**< Access cannot be granted because an existing resource or session
+    StanzaErrorConflict,            /**< Access cannot be granted because an existing resource or session
                                      * exists with the same name or address; the associated error type
                                      * SHOULD be "cancel". */
-    ST_ERROR_FEATURE_NOT_IMPLEMENTED,/**< The feature requested is not implemented by the recipient or server
+    StanzaErrorFeatureNotImplemented,/**< The feature requested is not implemented by the recipient or server
                                      * and therefore cannot be processed; the associated error type SHOULD be
                                      * "cancel". */
-    ST_ERROR_FORBIDDEN,             /**< The requesting entity does not possess the required permissions to
+    StanzaErrorForbidden,             /**< The requesting entity does not possess the required permissions to
                                      * perform the action; the associated error type SHOULD be "auth". */
-    ST_ERROR_GONE,                  /**< The recipient or server can no longer be contacted at this address
+    StanzaErrorGone,                  /**< The recipient or server can no longer be contacted at this address
                                      * (the error stanza MAY contain a new address in the XML character data
                                      * of the &lt;gone/&gt; element); the associated error type SHOULD be
                                      * "modify". */
-    ST_ERROR_INTERNAL_SERVER_ERROR, /**< The server could not process the stanza because of a
+    StanzaErrorInternalServerError, /**< The server could not process the stanza because of a
                                      * misconfiguration or an otherwise-undefined internal server error; the
                                      * associated error type SHOULD be "wait". */
-    ST_ERROR_ITEM_NOT_FOUND,        /**< The addressed JID or item requested cannot be found; the associated
+    StanzaErrorItemNotFound,        /**< The addressed JID or item requested cannot be found; the associated
                                      * error type SHOULD be "cancel". */
-    ST_ERROR_JID_MALFORMED,         /**< The sending entity has provided or communicated an XMPP address
+    StanzaErrorJidMalformed,        /**< The sending entity has provided or communicated an XMPP address
                                      * (e.g., a value of the 'to' attribute) or aspect thereof (e.g., a
                                      * resource identifier) that does not adhere to the syntax defined in
                                      * Addressing Scheme (Section 3); the associated error type SHOULD be
                                      * "modify". */
-    ST_ERROR_NOT_ACCEPTABLE,        /**< The recipient or server understands the request but is refusing to
+    StanzaErrorNotAcceptable,       /**< The recipient or server understands the request but is refusing to
                                      * process it because it does not meet criteria defined by the recipient
                                      * or server (e.g., a local policy regarding acceptable words in
                                      * messages); the associated error type SHOULD be "modify". */
-    ST_ERROR_NOT_ALLOWED,           /**< The recipient or server does not allow any entity to perform the
+    StanzaErrorNotAllowed,          /**< The recipient or server does not allow any entity to perform the
                                      * action; the associated error type SHOULD be "cancel". */
-    ST_ERROR_NOT_AUTHORIZED,        /**< The sender must provide proper credentials before being allowed to
+    StanzaErrorNotAuthorized,       /**< The sender must provide proper credentials before being allowed to
                                      * perform the action, or has provided improper credentials; the
                                      * associated error type SHOULD be "auth". */
-    ST_ERROR_PAYMENT_REQUIRED,      /**< The requesting entity is not authorized to access the requested
+    StanzaErrorPaymentRequired,     /**< The requesting entity is not authorized to access the requested
                                      * service because payment is required; the associated error type SHOULD
                                      * be "auth". */
-    ST_ERROR_RECIPIENT_UNAVAILABLE, /**< The intended recipient is temporarily unavailable; the associated
+    StanzaErrorRecipientUnavailable,/**< The intended recipient is temporarily unavailable; the associated
                                      * error type SHOULD be "wait" (note: an application MUST NOT return this
                                      * error if doing so would provide information about the intended
                                      * recipient's network availability to an entity that is not authorized
                                      * to know such information). */
-    ST_ERROR_REDIRECT,              /**< The recipient or server is redirecting requests for this information
+    StanzaErrorRedirect,            /**< The recipient or server is redirecting requests for this information
                                      * to another entity, usually temporarily (the error stanza SHOULD
                                      * contain the alternate address, which MUST be a valid JID, in the XML
                                      * character data of the &lt;redirect/&gt; element); the associated
                                      * error type SHOULD be "modify". */
-    ST_ERROR_REGISTRATION_REQUIRED, /**< The requesting entity is not authorized to access the requested
+    StanzaErrorRegistrationRequired,/**< The requesting entity is not authorized to access the requested
                                      * service because registration is required; the associated error type
                                      * SHOULD be "auth". */
-    ST_ERROR_REMOTE_SERVER_NOT_FOUND,/**< A remote server or service specified as part or all of the JID of
+    StanzaErrorRemoteServerNotFound,/**< A remote server or service specified as part or all of the JID of
                                      * the intended recipient does not exist; the associated error type
                                      * SHOULD be "cancel". */
-    ST_ERROR_REMOTE_SERVER_TIMEOUT, /**< A remote server or service specified as part or all of the JID of
+    StanzaErrorRemoteServerTimeout, /**< A remote server or service specified as part or all of the JID of
                                      * the intended recipient (or required to fulfill a request) could not be
                                      * contacted within a reasonable amount of time; the associated error
                                      * type SHOULD be "wait". */
-    ST_ERROR_RESOURCE_CONSTRAINT,   /**< The server or recipient lacks the system resources necessary to
+    StanzaErrorResourceConstraint,  /**< The server or recipient lacks the system resources necessary to
                                      * service the request; the associated error type SHOULD be "wait". */
-    ST_ERROR_SERVICE_UNAVAILABLE,   /**< The server or recipient does not currently provide the requested
+    StanzaErrorServiceUnavailable,  /**< The server or recipient does not currently provide the requested
                                      * service; the associated error type SHOULD be "cancel". */
-    ST_ERROR_SUBSCRIBTION_REQUIRED, /**< The requesting entity is not authorized to access the requested
+    StanzaErrorSubscribtionRequired,/**< The requesting entity is not authorized to access the requested
                                      * service because a subscription is required; the associated error type
                                      * SHOULD be "auth". */
-    ST_ERROR_UNDEFINED_CONDITION,   /**< The error condition is not one of those defined by the other
+    StanzaErrorUndefinedCondition,  /**< The error condition is not one of those defined by the other
                                      * conditions in this list; any error type may be associated with this
                                      * condition, and it SHOULD be used only in conjunction with an
                                      * application-specific condition. */
-    ST_ERROR_UNEXPECTED_REQUEST     /**< The recipient or server understood the request but was not expecting
+    StanzaErrorUnexpectedRequest    /**< The recipient or server understood the request but was not expecting
                                      * it at this time (e.g., the request was out of order); the associated
                                      * error type SHOULD be "wait". */
   };
@@ -609,16 +609,16 @@ namespace gloox
   /**
    * Describes the possible 'available presence' types.
    */
-  enum PresenceStatus
+  enum Presence
   {
-    PRESENCE_UNKNOWN,               /**< Unknown status. */
-    PRESENCE_AVAILABLE,             /**< The entity or resource is online and available. */
-    PRESENCE_CHAT,                  /**< The entity or resource is actively interested in chatting. */
-    PRESENCE_AWAY,                  /**< The entity or resource is temporarily away. */
-    PRESENCE_DND,                   /**< The entity or resource is busy (dnd = "Do Not Disturb"). */
-    PRESENCE_XA,                    /**< The entity or resource is away for an extended period (xa =
+    PresenceUnknown,               /**< Unknown status. */
+    PresenceAvailable,             /**< The entity or resource is online and available. */
+    PresenceChat,                  /**< The entity or resource is actively interested in chatting. */
+    PresenceAway,                  /**< The entity or resource is temporarily away. */
+    PresenceDnd,                   /**< The entity or resource is busy (dnd = "Do Not Disturb"). */
+    PresenceXa,                    /**< The entity or resource is away for an extended period (xa =
                                      * "eXtended Away"). */
-    PRESENCE_UNAVAILABLE            /**< The entity or resource if offline. */
+    PresenceUnavailable            /**< The entity or resource if offline. */
   };
 
   /**
@@ -626,15 +626,15 @@ namespace gloox
    */
   enum CertStatus
   {
-    CERT_OK              =  0,      /**< The certificate is valid and trusted. */
-    CERT_INVALID         =  1,      /**< The certificate is not trusted. */
-    CERT_SIGNER_UNKNOWN  =  2,      /**< The certificate hasn't got a known issuer. */
-    CERT_REVOKED         =  4,      /**< The certificate has been revoked. */
-    CERT_EXPIRED         =  8,      /**< The certificate has expired. */
-    CERT_NOT_ACTIVE      = 16,      /**< The certifiacte is not yet active. */
-    CERT_WRONG_PEER      = 32,      /**< The certificate has not been issued for the
+    CertOk               =  0,      /**< The certificate is valid and trusted. */
+    CertInvalid          =  1,      /**< The certificate is not trusted. */
+    CertSignerUnknown    =  2,      /**< The certificate hasn't got a known issuer. */
+    CertRevoked          =  4,      /**< The certificate has been revoked. */
+    CertExpired          =  8,      /**< The certificate has expired. */
+    CertNotActive        = 16,      /**< The certifiacte is not yet active. */
+    CertWrongPeer        = 32,      /**< The certificate has not been issued for the
                                      * peer we're connected to. */
-    CERT_SIGNER_NOT_CA   = 64       /**< The signer is not a CA. */
+    CertSignerNotCa      = 64       /**< The signer is not a CA. */
   };
 
   /**
@@ -642,7 +642,7 @@ namespace gloox
    */
   struct CertInfo
   {
-    int status;                     /**< Bitwise or'ed CertStatus or CERT_OK. */
+    int status;                     /**< Bitwise or'ed CertStatus or CertOK. */
     bool chain;                     /**< Determines whether the cert chain verified ok. */
     std::string issuer;             /**< The name of the issuing entity.*/
     std::string server;             /**< The server the certificate has been issued for. */
@@ -659,37 +659,37 @@ namespace gloox
    */
   enum AuthenticationError
   {
-    AUTH_ERROR_UNDEFINED,           /**< No error occurred, or error condition is unknown. */
-    SASL_ABORTED,                   /**< The receiving entity acknowledges an &lt;abort/&gt; element sent
+    AuthErrorUndefined,             /**< No error occurred, or error condition is unknown. */
+    SaslAborted,                    /**< The receiving entity acknowledges an &lt;abort/&gt; element sent
                                      * by the initiating entity; sent in reply to the &lt;abort/&gt;
                                      * element. */
-    SASL_INCORRECT_ENCODING,        /**< The data provided by the initiating entity could not be processed
+    SaslIncorrectEncoding,          /**< The data provided by the initiating entity could not be processed
                                      * because the [BASE64] encoding is incorrect (e.g., because the encoding
                                      * does not adhere to the definition in Section 3 of [BASE64]); sent in
                                      * reply to a &lt;response/&gt; element or an &lt;auth/&gt; element with
                                      * initial response data. */
-    SASL_INVALID_AUTHZID,           /**< The authzid provided by the initiating entity is invalid, either
+    SaslInvalidAuthzid,             /**< The authzid provided by the initiating entity is invalid, either
                                      * because it is incorrectly formatted or because the initiating entity
                                      * does not have permissions to authorize that ID; sent in reply to a
                                      * &lt;response/&gt; element or an &lt;auth/&gt; element with initial
                                      * response data.*/
-    SASL_INVALID_MECHANISM,         /**< The initiating entity did not provide a mechanism or requested a
+    SaslInvalidMechanism,           /**< The initiating entity did not provide a mechanism or requested a
                                      * mechanism that is not supported by the receiving entity; sent in reply
                                      * to an &lt;auth/&gt; element. */
-    SASL_MECHANISM_TOO_WEAK,        /**< The mechanism requested by the initiating entity is weaker than
+    SaslMechanismTooWeak,           /**< The mechanism requested by the initiating entity is weaker than
                                      * server policy permits for that initiating entity; sent in reply to a
                                      * &lt;response/&gt; element or an &lt;auth/&gt; element with initial
                                      * response data. */
-    SASL_NOT_AUTHORIZED,            /**< The authentication failed because the initiating entity did not
+    SaslNotAuthorized,              /**< The authentication failed because the initiating entity did not
                                      * provide valid credentials (this includes but is not limited to the
                                      * case of an unknown username); sent in reply to a &lt;response/&gt;
                                      * element or an &lt;auth/&gt; element with initial response data. */
-    SASL_TEMPORARY_AUTH_FAILURE,    /**< The authentication failed because of a temporary error condition
+    SaslTemporaryAuthFailure,       /**< The authentication failed because of a temporary error condition
                                      * within the receiving entity; sent in reply to an &lt;auth/&gt; element
                                      * or &lt;response/&gt; element. */
-    NONSASL_CONFLICT,               /**< JEP-0078: Resource Conflict */
-    NONSASL_NOT_ACCEPTABLE,         /**< JEP-0078: Required Information Not Provided */
-    NONSASL_NOT_AUTHORIZED          /**< JEP-0078: Incorrect Credentials */
+    NonSaslConflict,                /**< JEP-0078: Resource Conflict */
+    NonSaslNotAcceptable,           /**< JEP-0078: Required Information Not Provided */
+    NonSaslNotAuthorized            /**< JEP-0078: Incorrect Credentials */
   };
 
   /**
@@ -697,17 +697,17 @@ namespace gloox
    */
   enum LogArea
   {
-    LA_CLASS_PARSER     = 0x00001, /**< Log messages from Parser. */
-    LA_CLASS_CONNECTION = 0x00002, /**< Log messages from Connection. */
-    LA_CLASS_CLIENT     = 0x00004, /**< Log messages from Client. */
-    LA_CLASS_CLIENTBASE = 0x00008, /**< Log messages from ClientBase. */
-    LA_CLASS_COMPONENT  = 0x00010, /**< Log messages from Component. */
-    LA_CLASS_DNS        = 0x00020, /**< Log messages from DNS. */
-    LA_ALL_CLASSES      = 0x01FFF, /**< All log messages from all the classes. */
-    LA_XML_INCOMING     = 0x02000, /**< Incoming XML. */
-    LA_XML_OUTGOING     = 0x04000, /**< Outgoing XML. */
-    LA_USER             = 0x80000, /**< User-defined sources. */
-    LA_ALL              = 0xFFFFF  /**< All log sources. */
+    LogAreaClassParser     = 0x00001, /**< Log messages from Parser. */
+    LogAreaClassConnection = 0x00002, /**< Log messages from Connection. */
+    LogAreaClassClient     = 0x00004, /**< Log messages from Client. */
+    LogAreaClassClientbase = 0x00008, /**< Log messages from ClientBase. */
+    LogAreaClassComponent  = 0x00010, /**< Log messages from Component. */
+    LogAreaClassDns        = 0x00020, /**< Log messages from DNS. */
+    LogAreaAllClasses      = 0x01FFF, /**< All log messages from all the classes. */
+    LogAreaXmlIncoming     = 0x02000, /**< Incoming XML. */
+    LogAreaXmlOutgoing     = 0x04000, /**< Outgoing XML. */
+    LogAreaUser            = 0x80000, /**< User-defined sources. */
+    LogAreaAll             = 0xFFFFF  /**< All log sources. */
   };
 
   /**
@@ -717,9 +717,9 @@ namespace gloox
    */
   enum LogLevel
   {
-    LL_DEBUG,                      /**< Debug messages. */
-    LL_WARNING,                    /**< Non-crititcal warning messages. */
-    LL_ERROR                       /**< Critical, unrecoverable errors. */
+    LogLevelDebug,                  /**< Debug messages. */
+    LogLevelWarning,                /**< Non-crititcal warning messages. */
+    LogLevelError                   /**< Critical, unrecoverable errors. */
   };
 
   /**
@@ -727,13 +727,13 @@ namespace gloox
    */
   enum MessageEventType
   {
-    MESSAGE_EVENT_CANCEL    = 0, /**< Cancels the 'Composing' event. */
-    MESSAGE_EVENT_OFFLINE   = 1, /**< Indicates that the message has been stored offline by the
-                                  * intended recipient's server. */
-    MESSAGE_EVENT_DELIVERED = 2, /**< Indicates that the message has been delivered to the
-                                  * recipient. */
-    MESSAGE_EVENT_DISPLAYED = 4, /**< Indicates that the message has been displayed */
-    MESSAGE_EVENT_COMPOSING = 8  /**< Indicates that a reply is being composed. */
+    MessageEventCancel    = 0,      /**< Cancels the 'Composing' event. */
+    MessageEventOffline   = 1,      /**< Indicates that the message has been stored offline by the
+                                     * intended recipient's server. */
+    MessageEventDelivered = 2,      /**< Indicates that the message has been delivered to the
+                                     * recipient. */
+    MessageEventDisplayed = 4,      /**< Indicates that the message has been displayed */
+    MessageEventComposing = 8       /**< Indicates that a reply is being composed. */
   };
 
   /**
@@ -741,11 +741,11 @@ namespace gloox
    */
   enum ChatStateType
   {
-    CHAT_STATE_ACTIVE         =  1, /**< User is actively participating in the chat session. */
-    CHAT_STATE_COMPOSING      =  2, /**< User is composing a message. */
-    CHAT_STATE_PAUSED         =  4, /**< User had been composing but now has stopped. */
-    CHAT_STATE_INACTIVE       =  8, /**< User has not been actively participating in the chat session. */
-    CHAT_STATE_GONE           = 16  /**< User has effectively ended their participation in the chat
+    ChatStateActive       =  1,     /**< User is actively participating in the chat session. */
+    ChatStateComposing    =  2,     /**< User is composing a message. */
+    ChatStatePaused       =  4,     /**< User had been composing but now has stopped. */
+    ChatStateInactive     =  8,     /**< User has not been actively participating in the chat session. */
+    ChatStateGone         = 16      /**< User has effectively ended their participation in the chat
                                      * session. */
   };
 
@@ -754,10 +754,10 @@ namespace gloox
    */
   enum ResourceBindError
   {
-    RB_UNKNOWN_ERROR,                  /**< An unknown error occured. */
-    RB_BAD_REQUEST,                    /**< Resource identifier cannot be processed. */
-    RB_NOT_ALLOWED,                    /**< Client is not allowed to bind a resource. */
-    RB_CONFLICT                        /**< Resource identifier is in use. */
+    RbErrorUnknownError,            /**< An unknown error occured. */
+    RbErrorBadRequest,              /**< Resource identifier cannot be processed. */
+    RbErrorNotAllowed,              /**< Client is not allowed to bind a resource. */
+    RbErrorConflict                 /**< Resource identifier is in use. */
   };
 
   /**
@@ -765,10 +765,10 @@ namespace gloox
    */
   enum SessionCreateError
   {
-    SC_UNKNOWN_ERROR,                  /**< An unknown error occured. */
-    SC_INTERNAL_SERVER_ERROR,          /**< Internal server error. */
-    SC_FORBIDDEN,                      /**< Username or resource not allowed to create session. */
-    SC_CONFLICT                        /**< Server informs newly-requested session of resource
+    ScErrorUnknownError,                  /**< An unknown error occured. */
+    ScErrorInternalServerError,          /**< Internal server error. */
+    ScErrorForbidden,                      /**< Username or resource not allowed to create session. */
+    ScErrorConflict                        /**< Server informs newly-requested session of resource
                                         * conflict. */
   };
 

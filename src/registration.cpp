@@ -35,7 +35,7 @@ namespace gloox
 
   void Registration::fetchRegistrationFields()
   {
-    if( !m_parent || m_parent->state() != STATE_CONNECTED )
+    if( !m_parent || m_parent->state() != StateConnected )
       return;
 
     std::string id = m_parent->getID();
@@ -161,7 +161,7 @@ namespace gloox
 
   bool Registration::handleIq( Stanza *stanza )
   {
-    if( stanza->subtype() == STANZA_IQ_ERROR )
+    if( stanza->subtype() == StanzaIqError )
     {
       Tag *e = stanza->findChild( "error" );
 
@@ -194,7 +194,7 @@ namespace gloox
 
   bool Registration::handleIqID( Stanza *stanza, int context )
   {
-    if( stanza->subtype() != STANZA_IQ_RESULT )
+    if( stanza->subtype() != StanzaIqResult )
       return false;
 
     if( !m_registrationHandler )

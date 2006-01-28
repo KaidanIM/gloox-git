@@ -90,7 +90,7 @@ namespace gloox
        * Returns the presence 'show' type of a presence stanza.
        * @return The presence type of the sender.
        */
-      virtual PresenceStatus show() const { return m_show; };
+      virtual Presence show() const { return m_show; };
 
       /**
        * Returns the status text of a presence stanza for the given language if available.
@@ -198,7 +198,7 @@ namespace gloox
        * @since 0.7
        */
       static Stanza* createIqStanza( const JID& to, const std::string& id,
-                                     StanzaSubType subtype = STANZA_IQ_GET,
+                                     StanzaSubType subtype = StanzaIqGet,
                                      const std::string& xmlns = "", Tag* tag = 0 );
 
       /**
@@ -210,7 +210,7 @@ namespace gloox
        * @since 0.7
        */
       static Stanza* createPresenceStanza( const JID& to, const std::string& msg = "",
-                                           PresenceStatus status = PRESENCE_AVAILABLE,
+                                           Presence status = PresenceAvailable,
                                            const std::string& xmllang = "" );
 
       /**
@@ -224,7 +224,7 @@ namespace gloox
        * @since 0.7
        */
       static Stanza* createMessageStanza( const JID& to, const std::string& body,
-                                          StanzaSubType subtype = STANZA_MESSAGE_CHAT,
+                                          StanzaSubType subtype = StanzaMessageChat,
                                           const std::string& subject = "", const std::string& thread = "",
                                           const std::string& xmllang = "" );
 
@@ -237,14 +237,14 @@ namespace gloox
        * @since 0.7
        */
       static Stanza* createSubscriptionStanza( const JID& to, const std::string& msg = "",
-                                               StanzaSubType subtype = STANZA_S10N_SUBSCRIBE,
+                                               StanzaSubType subtype = StanzaS10nSubscribe,
                                                const std::string& xmllang = "" );
 
     protected:
       void init();
 
       StanzaSubType m_subtype;
-      PresenceStatus m_show;
+      Presence m_show;
       StanzaError m_stanzaError;
       StanzaErrorType m_stanzaErrorType;
       Tag *m_stanzaErrorAppCondition;

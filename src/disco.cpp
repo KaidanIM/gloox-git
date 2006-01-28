@@ -48,7 +48,7 @@ namespace gloox
   {
     switch( stanza->subtype() )
     {
-      case STANZA_IQ_GET:
+      case StanzaIqGet:
         if( stanza->xmlns() == XMLNS_VERSION )
         {
           Tag *iq = new Tag( "iq" );
@@ -169,7 +169,7 @@ namespace gloox
         return true;
         break;
 
-      case STANZA_IQ_SET:
+      case StanzaIqSet:
       {
         bool res = false;
         DiscoHandlerList::const_iterator it = m_discoHandlers.begin();
@@ -195,7 +195,7 @@ namespace gloox
     {
       switch( stanza->subtype() )
       {
-        case STANZA_IQ_RESULT:
+        case StanzaIqResult:
           switch( context )
           {
             case GET_DISCO_INFO:
@@ -207,7 +207,7 @@ namespace gloox
            }
         break;
 
-        case STANZA_IQ_ERROR:
+        case StanzaIqError:
           (*it).second.dh->handleDiscoError( stanza, (*it).second.context );
           break;
 

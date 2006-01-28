@@ -427,11 +427,11 @@ namespace gloox
     protected:
       enum SaslMechanisms
       {
-        SASL_DIGEST_MD5,          /**< SASL Digest-MD5 according to RFC 2831. */
-        SASL_PLAIN,               /**< SASL PLAIN according to RFC 2595 Section 6. */
-        SASL_ANONYMOUS,           /**< SASL ANONYMOUS according to draft-ietf-sasl-anon-05.txt/
+        SaslDigestMd5,          /**< SASL Digest-MD5 according to RFC 2831. */
+        SaslPlain,               /**< SASL PLAIN according to RFC 2595 Section 6. */
+        SaslAnonymous,           /**< SASL ANONYMOUS according to draft-ietf-sasl-anon-05.txt/
                                    * RFC 2245 Section 6. */
-        SASL_EXTERNAL             /**< SASL EXTERNAL according to RFC 2222 Section 7.4. */
+        SaslExternal             /**< SASL EXTERNAL according to RFC 2222 Section 7.4. */
       };
 
       void notifyOnResourceBindError( ResourceBindError error );

@@ -83,7 +83,7 @@ namespace gloox
 
   bool RosterManager::handleIq( Stanza *stanza )
   {
-    if( stanza->subtype() == STANZA_IQ_RESULT ) // initial roster
+    if( stanza->subtype() == StanzaIqResult ) // initial roster
     {
       extractItems( stanza, false );
 
@@ -92,7 +92,7 @@ namespace gloox
 
       return true;
     }
-    else if( stanza->subtype() == STANZA_IQ_SET ) // roster item push
+    else if( stanza->subtype() == StanzaIqSet ) // roster item push
     {
       extractItems( stanza, true );
 
@@ -126,14 +126,14 @@ namespace gloox
       (*it).second->setStatusMsg( stanza->from().resource(), stanza->status() );
       (*it).second->setPriority( stanza->from().resource(), stanza->priority() );
 
-      if( stanza->show() == PRESENCE_AVAILABLE )
+      if( stanza->show() == PresenceAvailable )
       {
         if( !online )
           m_rosterListener->itemAvailable( (*(*it).second), stanza->status() );
         else
           m_rosterListener->presenceUpdated( (*(*it).second), stanza->show(), stanza->status() );
       }
-      else if( stanza->show() == PRESENCE_UNAVAILABLE )
+      else if( stanza->show() == PresenceUnavailable )
       {
         (*it).second->removeResource( stanza->from().resource() );
         m_rosterListener->itemUnavailable( (*(*it).second), stanza->status() );
@@ -277,7 +277,7 @@ namespace gloox
 
     switch( stanza->subtype() )
     {
-      case STANZA_S10N_SUBSCRIBE:
+      case StanzaS10nSubscribe:
       {
         bool answer = m_rosterListener->subscriptionRequest( stanza->from().bare(), stanza->status() );
         if( m_syncSubscribeReq )
@@ -286,7 +286,7 @@ namespace gloox
         }
         break;
       }
-      case STANZA_S10N_SUBSCRIBED:
+      case StanzaS10nSubscribed:
       {
 //         Tag *p = new Tag( "presence" );
 //         p->addAttribute( "type", "subscribe" );
@@ -298,7 +298,7 @@ namespace gloox
         break;
       }
 
-      case STANZA_S10N_UNSUBSCRIBE:
+      case StanzaS10nUnsubscribe:
       {
         Tag *p = new Tag( "presence" );
         p->addAttribute( "type", "unsubscribed" );
@@ -312,7 +312,7 @@ namespace gloox
         break;
       }
 
-      case STANZA_S10N_UNSUBSCRIBED:
+      case StanzaS10nUnsubscribed:
       {
 //         Tag *p = new Tag( "presence" );
 //         p->addAttribute( "type", "unsubscribe" );

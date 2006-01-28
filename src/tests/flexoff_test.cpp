@@ -52,7 +52,7 @@ class FlexOffTest : public DiscoHandler, MessageHandler, ConnectionListener, Fle
     virtual void onDisconnect( ConnectionError e )
     {
       printf( "message_test: disconnected: %d\n", e );
-      if( e == CONN_AUTHENTICATION_FAILED )
+      if( e == ConnAuthenticationFailed )
         printf( "auth failed. reason: %d\n", j->authError() );
     };
 

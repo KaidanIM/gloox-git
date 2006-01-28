@@ -18,15 +18,15 @@ namespace gloox
 {
 
   Stanza::Stanza( const std::string& name, const std::string& cdata, const std::string& xmllang )
-    : Tag( name, cdata ), m_show( PRESENCE_UNKNOWN ),
-      m_stanzaError( ST_ERROR_UNDEFINED ), m_stanzaErrorAppCondition( 0 ),
+    : Tag( name, cdata ), m_show( PresenceUnknown ),
+      m_stanzaError( StanzaErrorUndefined ), m_stanzaErrorAppCondition( 0 ),
       m_xmllang( xmllang ), m_priority( -300 )
   {
   }
 
   Stanza::Stanza( Tag *tag )
-    : Tag( tag->name(), tag->cdata() ), m_show( PRESENCE_UNKNOWN ),
-      m_stanzaError( ST_ERROR_UNDEFINED ), m_stanzaErrorAppCondition( 0 ),
+    : Tag( tag->name(), tag->cdata() ), m_show( PresenceUnknown ),
+      m_stanzaError( StanzaErrorUndefined ), m_stanzaErrorAppCondition( 0 ),
       m_xmllang( "default" )
   {
     m_attribs = tag->attributes();
@@ -48,17 +48,17 @@ namespace gloox
 
     if( m_name == "iq" )
     {
-      m_type = STANZA_IQ;
+      m_type = StanzaIq;
       if( hasAttribute( "type", "get" ) )
-        m_subtype = STANZA_IQ_GET;
+        m_subtype = StanzaIqGet;
       else if( hasAttribute( "type", "set" ) )
-        m_subtype = STANZA_IQ_SET;
+        m_subtype = StanzaIqSet;
       else if( hasAttribute( "type", "result" ) )
-        m_subtype = STANZA_IQ_RESULT;
+        m_subtype = StanzaIqResult;
       else if( hasAttribute( "type", "error" ) )
-        m_subtype = STANZA_IQ_ERROR;
+        m_subtype = StanzaIqError;
       else
-        m_subtype = STANZA_SUB_UNDEFINED;
+        m_subtype = StanzaSubUndefined;
 
       Tag *t = findChildWithAttrib( "xmlns" );
       if( t )
@@ -66,19 +66,19 @@ namespace gloox
     }
     else if( m_name == "message" )
     {
-      m_type = STANZA_MESSAGE;
+      m_type = StanzaMessage;
       if( hasAttribute( "type", "chat" ) )
-        m_subtype = STANZA_MESSAGE_CHAT;
+        m_subtype = StanzaMessageChat;
       else if( hasAttribute( "type", "error" ) )
-        m_subtype = STANZA_MESSAGE_ERROR;
+        m_subtype = StanzaMessageError;
       else if( hasAttribute( "type", "headline" ) )
-        m_subtype = STANZA_MESSAGE_HEADLINE;
+        m_subtype = StanzaMessageHeadline;
       else if( hasAttribute( "type", "groupchat" ) )
-        m_subtype = STANZA_MESSAGE_GROUPCHAT;
+        m_subtype = StanzaMessageGroupchat;
       else if( hasAttribute( "type", "normal" ) )
-        m_subtype = STANZA_MESSAGE_NORMAL;
+        m_subtype = StanzaMessageNormal;
       else
-        m_subtype = STANZA_SUB_UNDEFINED;
+        m_subtype = StanzaSubUndefined;
 
       TagList& c = children();
       TagList::const_iterator it = c.begin();
@@ -108,77 +108,77 @@ namespace gloox
     {
       if( hasAttribute( "type", "subscribe" ) )
       {
-        m_type = STANZA_S10N;
-        m_subtype = STANZA_S10N_SUBSCRIBE;
+        m_type = StanzaS10n;
+        m_subtype = StanzaS10nSubscribe;
       }
       else if( hasAttribute( "type", "subscribed" ) )
       {
-        m_type = STANZA_S10N;
-        m_subtype = STANZA_S10N_SUBSCRIBED;
+        m_type = StanzaS10n;
+        m_subtype = StanzaS10nSubscribed;
       }
       else if( hasAttribute( "type", "unsubscribe" ) )
       {
-        m_type = STANZA_S10N;
-        m_subtype = STANZA_S10N_UNSUBSCRIBE;
+        m_type = StanzaS10n;
+        m_subtype = StanzaS10nUnsubscribe;
       }
       else if( hasAttribute( "type", "unsubscribed" ) )
       {
-        m_type = STANZA_S10N;
-        m_subtype = STANZA_S10N_UNSUBSCRIBED;
+        m_type = StanzaS10n;
+        m_subtype = StanzaS10nUnsubscribed;
       }
       else if( hasAttribute( "type", "unavailable" ) )
       {
-        m_type = STANZA_PRESENCE;
-        m_subtype = STANZA_PRES_UNAVAILABLE;
+        m_type = StanzaPresence;
+        m_subtype = StanzaPresenceUnavailable;
       }
       else if( hasAttribute( "type", "probe" ) )
       {
-        m_type = STANZA_PRESENCE;
-        m_subtype = STANZA_PRES_PROBE;
+        m_type = StanzaPresence;
+        m_subtype = StanzaPresenceProbe;
       }
       else if( hasAttribute( "type", "error" ) )
       {
-        m_type = STANZA_PRESENCE;
-        m_subtype = STANZA_PRES_ERROR;
+        m_type = StanzaPresence;
+        m_subtype = StanzaPresenceError;
       }
       else if( !hasAttribute( "type" ) )
       {
-        m_type = STANZA_PRESENCE;
-        m_subtype = STANZA_PRES_AVAILABLE;
+        m_type = StanzaPresence;
+        m_subtype = StanzaPresenceAvailable;
       }
       else
       {
-        m_type = STANZA_PRESENCE;
-        m_subtype = STANZA_SUB_UNDEFINED;
+        m_type = StanzaPresence;
+        m_subtype = StanzaSubUndefined;
       }
     }
     else
     {
-      m_type = STANZA_UNDEFINED;
-      m_subtype = STANZA_SUB_UNDEFINED;
+      m_type = StanzaUndefined;
+      m_subtype = StanzaSubUndefined;
     }
 
-    if( m_type == STANZA_PRESENCE )
+    if( m_type == StanzaPresence )
     {
       if( !hasAttribute( "type" ) )
-        m_show = PRESENCE_AVAILABLE;
+        m_show = PresenceAvailable;
 
       if( hasChildWithCData( "show", "chat" ) )
-        m_show = PRESENCE_CHAT;
+        m_show = PresenceChat;
       else if( hasChildWithCData( "show", "away" ) )
-        m_show = PRESENCE_AWAY;
+        m_show = PresenceAway;
       else if( hasChildWithCData( "show", "dnd" ) )
-        m_show = PRESENCE_DND;
+        m_show = PresenceDnd;
       else if( hasChildWithCData( "show", "xa" ) )
-        m_show = PRESENCE_XA;
+        m_show = PresenceXa;
       else if( hasAttribute( "type", "unavailable" ) )
-        m_show = PRESENCE_UNAVAILABLE;
+        m_show = PresenceUnavailable;
 
       if( hasChild( "priority" ) )
         m_priority = atoi( findChild( "priority" )->cdata().c_str() );
     }
 
-    if( m_type == STANZA_PRESENCE || m_type == STANZA_S10N )
+    if( m_type == StanzaPresence || m_type == StanzaS10n )
     {
       TagList& c = children();
       TagList::const_iterator it = c.begin();
@@ -202,82 +202,82 @@ namespace gloox
       Tag *e = findChild( "error" );
 
       if( e->hasAttribute( "type", "cancel" ) )
-        m_stanzaErrorType = ST_TYPE_CANCEL;
+        m_stanzaErrorType = StanzaErrorTypeCancel;
       else if( e->hasAttribute( "type", "continue" ) )
-        m_stanzaErrorType = ST_TYPE_CONTINUE;
+        m_stanzaErrorType = StanzaErrorTypeContinue;
       else if( e->hasAttribute( "type", "modify" ) )
-        m_stanzaErrorType = ST_TYPE_MODIFY;
+        m_stanzaErrorType = StanzaErrorTypeModify;
       else if( e->hasAttribute( "type", "auth" ) )
-        m_stanzaErrorType = ST_TYPE_AUTH;
+        m_stanzaErrorType = StanzaErrorTypeAuth;
       else if( e->hasAttribute( "type", "wait" ) )
-        m_stanzaErrorType = ST_TYPE_WAIT;
+        m_stanzaErrorType = StanzaErrorTypeWait;
 
       TagList& c = e->children();
       TagList::const_iterator it = c.begin();
       for( ; it != c.end(); ++it )
       {
         if( (*it)->name() == "bad-request" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
-          m_stanzaError = ST_ERROR_BAD_REQUEST;
+          m_stanzaError = StanzaErrorBadRequest;
         else if( (*it)->name() == "conflict"
                    && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
-          m_stanzaError = ST_ERROR_CONFLICT;
+          m_stanzaError = StanzaErrorConflict;
         else if( (*it)->name() == "feature-not-implemented"
                    && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
-          m_stanzaError = ST_ERROR_FEATURE_NOT_IMPLEMENTED;
+          m_stanzaError = StanzaErrorFeatureNotImplemented;
         else if( (*it)->name() == "forbidden"
                    && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
-          m_stanzaError = ST_ERROR_FORBIDDEN;
+          m_stanzaError = StanzaErrorForbidden;
         else if( (*it)->name() == "gone"
                    && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
-          m_stanzaError = ST_ERROR_GONE;
+          m_stanzaError = StanzaErrorGone;
         else if( (*it)->name() == "internal-server-error"
                    && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
-          m_stanzaError = ST_ERROR_INTERNAL_SERVER_ERROR;
+          m_stanzaError = StanzaErrorInternalServerError;
         else if( (*it)->name() == "item-not-found"
                    && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
-          m_stanzaError = ST_ERROR_ITEM_NOT_FOUND;
+          m_stanzaError = StanzaErrorItemNotFound;
         else if( (*it)->name() == "jid-malformed"
                    && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
-          m_stanzaError = ST_ERROR_JID_MALFORMED;
+          m_stanzaError = StanzaErrorJidMalformed;
         else if( (*it)->name() == "not-acceptable"
                    && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
-          m_stanzaError = ST_ERROR_NOT_ACCEPTABLE;
+          m_stanzaError = StanzaErrorNotAcceptable;
         else if( (*it)->name() == "not-allowed"
                    && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
-          m_stanzaError = ST_ERROR_NOT_ALLOWED;
+          m_stanzaError = StanzaErrorNotAllowed;
         else if( (*it)->name() == "not-authorized"
                    && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
-          m_stanzaError = ST_ERROR_NOT_AUTHORIZED;
+          m_stanzaError = StanzaErrorNotAuthorized;
         else if( (*it)->name() == "recipient-unavailable"
                    && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
-          m_stanzaError = ST_ERROR_RECIPIENT_UNAVAILABLE;
+          m_stanzaError = StanzaErrorRecipientUnavailable;
         else if( (*it)->name() == "redirect"
                    && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
-          m_stanzaError = ST_ERROR_REDIRECT;
+          m_stanzaError = StanzaErrorRedirect;
         else if( (*it)->name() == "registration-required"
                    && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
-          m_stanzaError = ST_ERROR_REGISTRATION_REQUIRED;
+          m_stanzaError = StanzaErrorRegistrationRequired;
         else if( (*it)->name() == "remote-server-not-found"
                    && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
-          m_stanzaError = ST_ERROR_REMOTE_SERVER_NOT_FOUND;
+          m_stanzaError = StanzaErrorRemoteServerNotFound;
         else if( (*it)->name() == "remote-server-timeout"
                    && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
-          m_stanzaError = ST_ERROR_REMOTE_SERVER_TIMEOUT;
+          m_stanzaError = StanzaErrorRemoteServerTimeout;
         else if( (*it)->name() == "resource-constraint"
                    && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
-          m_stanzaError = ST_ERROR_RESOURCE_CONSTRAINT;
+          m_stanzaError = StanzaErrorResourceConstraint;
         else if( (*it)->name() == "service-unavailable"
                    && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
-          m_stanzaError = ST_ERROR_SERVICE_UNAVAILABLE;
+          m_stanzaError = StanzaErrorServiceUnavailable;
         else if( (*it)->name() == "subscription-required"
                    && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
-          m_stanzaError = ST_ERROR_SUBSCRIBTION_REQUIRED;
+          m_stanzaError = StanzaErrorSubscribtionRequired;
         else if( (*it)->name() == "undefined-condition"
                    && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
-          m_stanzaError = ST_ERROR_UNDEFINED_CONDITION;
+          m_stanzaError = StanzaErrorUndefinedCondition;
         else if( (*it)->name() == "unexpected-request"
                    && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
-          m_stanzaError = ST_ERROR_UNEXPECTED_REQUEST;
+          m_stanzaError = StanzaErrorUnexpectedRequest;
         else if( (*it)->name() == "text" )
         {
           const std::string lang = (*it)->findAttribute( "xml:lang" );
@@ -340,16 +340,16 @@ namespace gloox
     Stanza *s = new Stanza( "iq" );
     switch( subtype )
     {
-      case STANZA_IQ_ERROR:
+      case StanzaIqError:
         s->addAttribute( "type", "error" );
         break;
-      case STANZA_IQ_SET:
+      case StanzaIqSet:
         s->addAttribute( "type", "set" );
         break;
-      case STANZA_IQ_RESULT:
+      case StanzaIqResult:
         s->addAttribute( "type", "result" );
         break;
-      case STANZA_IQ_GET:
+      case StanzaIqGet:
       default:
         s->addAttribute( "type", "get" );
         break;
@@ -371,24 +371,24 @@ namespace gloox
   }
 
   Stanza* Stanza::createPresenceStanza( const JID& to, const std::string& msg,
-                                        PresenceStatus status, const std::string& xmllang )
+                                        Presence status, const std::string& xmllang )
   {
     Stanza *s = new Stanza( "presence" );
     switch( status )
     {
-      case PRESENCE_UNAVAILABLE:
+      case PresenceUnavailable:
         s->addAttribute( "type", "unavailable" );
         break;
-      case PRESENCE_CHAT:
+      case PresenceChat:
         new Tag( s, "show", "chat" );
         break;
-      case PRESENCE_AWAY:
+      case PresenceAway:
         new Tag( s, "show", "away" );
         break;
-      case PRESENCE_DND:
+      case PresenceDnd:
         new Tag( s, "show", "dnd" );
         break;
-      case PRESENCE_XA:
+      case PresenceXa:
         new Tag( s, "show", "xa" );
         break;
       default:
@@ -416,19 +416,19 @@ namespace gloox
     Stanza *s = new Stanza( "message" );
     switch( subtype )
     {
-      case STANZA_MESSAGE_ERROR:
+      case StanzaMessageError:
         s->addAttribute( "type", "error" );
         break;
-      case STANZA_MESSAGE_NORMAL:
+      case StanzaMessageNormal:
         s->addAttribute( "type", "normal" );
         break;
-      case STANZA_MESSAGE_HEADLINE:
+      case StanzaMessageHeadline:
         s->addAttribute( "type", "headline" );
         break;
-      case STANZA_MESSAGE_GROUPCHAT:
+      case StanzaMessageGroupchat:
         s->addAttribute( "type", "groupchat" );
         break;
-      case STANZA_MESSAGE_CHAT:
+      case StanzaMessageChat:
       default:
         s->addAttribute( "type", "chat" );
         break;
@@ -460,16 +460,16 @@ namespace gloox
     Stanza *s = new Stanza( "presence" );
     switch( subtype )
     {
-      case STANZA_S10N_SUBSCRIBED:
+      case StanzaS10nSubscribed:
         s->addAttribute( "type", "subscribed" );
         break;
-      case STANZA_S10N_UNSUBSCRIBE:
+      case StanzaS10nUnsubscribe:
         s->addAttribute( "type", "unsubscribe" );
         break;
-      case STANZA_S10N_UNSUBSCRIBED:
+      case StanzaS10nUnsubscribed:
         s->addAttribute( "type", "unsubscribed" );
         break;
-      case STANZA_S10N_SUBSCRIBE:
+      case StanzaS10nSubscribe:
       default:
         s->addAttribute( "type", "subscribe" );
         break;
