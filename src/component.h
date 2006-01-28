@@ -66,7 +66,7 @@ namespace gloox
     protected:
       virtual void handleStartNode();
       virtual bool handleNormalNode( Stanza *stanza );
-      virtual bool checkStreamVersion( const std::string& version ) { return true; };
+      virtual bool checkStreamVersion( const std::string& /*version*/ ) { return true; };
 
     private:
 
