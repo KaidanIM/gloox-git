@@ -201,13 +201,13 @@ namespace gloox
 
     m_certInfo.status = 0;
     if( status & GNUTLS_CERT_INVALID )
-      m_certInfo.status |= CERT_INVALID;
+      m_certInfo.status |= CertInvalid;
     if( status & GNUTLS_CERT_SIGNER_NOT_FOUND )
-      m_certInfo.status |= CERT_SIGNER_UNKNOWN;
+      m_certInfo.status |= CertSignerUnknown;
     if( status & GNUTLS_CERT_REVOKED )
-      m_certInfo.status |= CERT_REVOKED;
+      m_certInfo.status |= CertRevoked;
     if( status & GNUTLS_CERT_SIGNER_NOT_CA )
-      m_certInfo.status |= CERT_SIGNER_NOT_CA;
+      m_certInfo.status |= CertSignerNotCa;
     const gnutls_datum_t* certList = 0;
     unsigned int certListSize;
     if( !error && ( ( certList = gnutls_certificate_get_peers( m_session, &certListSize ) ) == 0 ) )
@@ -232,7 +232,7 @@ namespace gloox
       chain = error = !verifyAgainst( cert[i-1], cert[i] );
     }
     if( !chain )
-      m_certInfo.status |= CERT_INVALID;
+      m_certInfo.status |= CertInvalid;
     m_certInfo.chain = chain;
 
     m_certInfo.chain = verifyAgainstCAs( cert[certListSize], 0 /*CAList*/, 0 /*CAListSize*/ );
@@ -241,14 +241,14 @@ namespace gloox
     if( t == -1 )
       error = true;
     else if( t < time( 0 ) )
-      m_certInfo.status |= CERT_EXPIRED;
+      m_certInfo.status |= CertExpired;
     m_certInfo.date_from = t;
 
     t = (int)gnutls_x509_crt_get_activation_time( cert[0] );
     if( t == -1 )
       error = true;
     else if( t > time( 0 ) )
-      m_certInfo.status |= CERT_NOT_ACTIVE;
+      m_certInfo.status |= CertNotActive;
     m_certInfo.date_to = t;
 
     char name[64];
@@ -278,7 +278,7 @@ namespace gloox
       m_certInfo.protocol = info;
 
     if( !gnutls_x509_crt_check_hostname( cert[0], m_server.c_str() ) )
-      m_certInfo.status |= CERT_WRONG_PEER;
+      m_certInfo.status |= CertWrongPeer;
 
     for( unsigned int i=0; i<certListSize; ++i )
       gnutls_x509_crt_deinit( cert[i] );
