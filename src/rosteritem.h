@@ -33,7 +33,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
    */
-  class GLOOX_EXPORT RosterItem
+  class GLOOX_API RosterItem
   {
     friend class RosterManager;
 

@@ -120,7 +120,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.8
    */
-  class GLOOX_EXPORT MessageSession : public MessageHandler
+  class GLOOX_API MessageSession : public MessageHandler
   {
 
     friend class MessageEventFilter;

@@ -28,7 +28,7 @@ namespace gloox
    * Incoming disco#info and disco#items queries are delegated to their respective handlers.
    * @author Jakob Schroeter <js@camaya.net>
    */
-  class GLOOX_EXPORT DiscoNodeHandler
+  class GLOOX_API DiscoNodeHandler
   {
     public:
       /**

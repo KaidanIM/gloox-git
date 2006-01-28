@@ -34,7 +34,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.2
    */
-  class GLOOX_EXPORT Prep
+  class GLOOX_API Prep
   {
     public:
       /**

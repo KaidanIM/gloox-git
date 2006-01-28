@@ -30,7 +30,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
    */
-  class GLOOX_EXPORT PrivacyManager : public IqHandler
+  class GLOOX_API PrivacyManager : public IqHandler
   {
     public:
       /**

@@ -28,7 +28,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
    */
-  class GLOOX_EXPORT PrivacyItem
+  class GLOOX_API PrivacyItem
   {
     public:
 

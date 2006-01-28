@@ -27,7 +27,7 @@ namespace gloox
    * A class implementing this interface can receives the results of sent disco queries.
    * @author Jakob Schroeter <js@camaya.net>
    */
-  class GLOOX_EXPORT DiscoHandler
+  class GLOOX_API DiscoHandler
   {
     public:
       /**

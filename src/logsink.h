@@ -29,7 +29,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.8
    */
-  class GLOOX_EXPORT LogSink
+  class GLOOX_API LogSink
   {
     public:
       /**
