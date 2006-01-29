@@ -32,14 +32,14 @@ namespace gloox
 
     public:
       /**
-       * Encodes the input according to RFC 3548.
+       * Base64-encodes the input according to RFC 3548.
        * @param input The data to encode.
        * @return The encoded string.
        */
       static const std::string encode64( const std::string& input );
 
       /**
-       * Decodes the input according to RFC 3548.
+       * Base64-decodes the input according to RFC 3548.
        * @param input The encoded data.
        * @return The decoded data.
        */
