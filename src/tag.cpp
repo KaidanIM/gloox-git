@@ -85,7 +85,7 @@ namespace gloox
 
   void Tag::addAttrib( const std::string& name, const std::string& value )
   {
-    if( !value.empty() )
+    if( !name.empty() && !value.empty() )
       m_attribs[name] = value;
   }
 
@@ -98,7 +98,7 @@ namespace gloox
     }
   }
 
-  std::string Tag::cdata() const
+  const std::string Tag::cdata() const
   {
     return relax( m_cdata );
   }
@@ -119,7 +119,7 @@ namespace gloox
     if( it != m_attribs.end() )
       return (*it).second;
     else
-      return "";
+      return std::string();
   }
 
   bool Tag::hasAttribute( const std::string& name, const std::string& value ) const
@@ -143,12 +143,28 @@ namespace gloox
         return (*it);
     }
 
-    return 0;
+    return new Tag;
+  }
+
+  Tag* Tag::findChild( const std::string& name, const std::string& attr,
+                       const std::string& value )
+  {
+    TagList::const_iterator it = m_children.begin();
+    for( ; it != m_children.end(); ++it )
+    {
+      if( ( (*it)->name() == name ) && (*it)->hasAttribute( attr, value ) )
+        return (*it);
+    }
+
+    return new Tag;
   }
 
   bool Tag::hasChild( const std::string& name,
                       const std::string& attr, const std::string& value ) const
   {
+    if( name.empty() )
+      return false;
+
     TagList::const_iterator it = m_children.begin();
     for( ; it != m_children.end(); ++it )
     {
@@ -195,7 +211,7 @@ namespace gloox
         return (*it);
     }
 
-    return 0;
+    return new Tag;
   }
 
   const std::string Tag::replace( const std::string& what, const Duo& duo ) const
@@ -205,7 +221,7 @@ namespace gloox
     for( ; it != duo.end(); ++it )
     {
       size_t lookHere = 0;
-      size_t foundHere;
+      size_t foundHere = 0;
       while( ( foundHere = esc.find( (*it).first, lookHere ) ) != std::string::npos )
       {
         esc.replace( foundHere, (*it).first.size(), (*it).second );
@@ -239,7 +255,7 @@ namespace gloox
     return replace( what, d );
   }
 
-  Tag* Tag::clone()
+  Tag* Tag::clone() const
   {
     Tag *t = new Tag( name(), cdata() );
     t->m_attribs = m_attribs;

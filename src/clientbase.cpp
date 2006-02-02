@@ -1,235 +1,230 @@
-/*
-  Copyright (c) 2005 by Jakob Schroeter <js@camaya.net>
-  This file is part of the gloox library. http://camaya.net/gloox
+	/*
+	  Copyright (c) 2005 by Jakob Schroeter <js@camaya.net>
+	  This file is part of the gloox library. http://camaya.net/gloox
 
-  This software is distributed under a license. The full license
-  agreement can be found in the file LICENSE in this distribution.
-  This software may not be copied, modified, sold or distributed
-  other than expressed in the named license agreement.
+	  This software is distributed under a license. The full license
+	  agreement can be found in the file LICENSE in this distribution.
+	  This software may not be copied, modified, sold or distributed
+	  other than expressed in the named license agreement.
 
-  This software is distributed without any warranty.
-*/
+	  This software is distributed without any warranty.
+	*/
 
 
 
-#ifdef WIN32
-#include "../config.h.win"
-#else
-#include "config.h"
-#endif
+	#ifdef WIN32
+	#include "../config.h.win"
+	#else
+	#include "config.h"
+	#endif
 
-#include "clientbase.h"
-#include "connection.h"
-#include "parser.h"
-#include "tag.h"
-#include "stanza.h"
+	#include "clientbase.h"
+	#include "connection.h"
+	#include "parser.h"
+	#include "tag.h"
+	#include "stanza.h"
+	#include "base64.h"
 
-#include <iksemel.h>
+	#include <iksemel.h>
 
-#include <string>
-#include <map>
-#include <list>
-#include <sstream>
+	#include <string>
+	#include <map>
+	#include <list>
+	#include <sstream>
 
-namespace gloox
-{
+	namespace gloox
+	{
 
-  ClientBase::ClientBase( const std::string& ns, const std::string& server, int port )
-    : m_connection( 0 ), m_namespace( ns ), m_xmllang( "en" ), m_server( server ),
-      m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ), m_parser( 0 ),
-      m_authError( AUTH_ERROR_UNDEFINED ), m_streamError( ERROR_UNDEFINED ),
-      m_streamErrorAppCondition( 0 ), m_idCount( 0 )
-  {
-  }
+	  ClientBase::ClientBase( const std::string& ns, const std::string& server, int port )
+	    : m_connection( 0 ), m_namespace( ns ), m_xmllang( "en" ), m_server( server ),
+	      m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ), m_parser( 0 ),
+	      m_authError( AUTH_ERROR_UNDEFINED ), m_streamError( ERROR_UNDEFINED ),
+	      m_streamErrorAppCondition( 0 ), m_idCount( 0 )
+	  {
+	  }
 
-  ClientBase::ClientBase( const std::string& ns, const std::string& password,
-                          const std::string& server, int port )
-    : m_connection( 0 ), m_namespace( ns ), m_password( password ), m_xmllang( "en" ), m_server( server ),
-      m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ), m_parser( 0 ),
-      m_authError( AUTH_ERROR_UNDEFINED ), m_streamError( ERROR_UNDEFINED ),
-      m_streamErrorAppCondition( 0 ), m_idCount( 0 )
-  {
-  }
+	  ClientBase::ClientBase( const std::string& ns, const std::string& password,
+				  const std::string& server, int port )
+	    : m_connection( 0 ), m_namespace( ns ), m_password( password ), m_xmllang( "en" ), m_server( server ),
+	      m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ), m_parser( 0 ),
+	      m_authError( AUTH_ERROR_UNDEFINED ), m_streamError( ERROR_UNDEFINED ),
+	      m_streamErrorAppCondition( 0 ), m_idCount( 0 )
+	  {
+	  }
 
-  ClientBase::~ClientBase()
-  {
-    delete m_connection;
-    delete m_parser;
-  }
+	  ClientBase::~ClientBase()
+	  {
+	    delete m_connection;
+	    delete m_parser;
+	  }
 
-  ConnectionError ClientBase::recv( int timeout )
-  {
-    ConnectionError e = m_connection->recv( timeout );
-    if( e != CONN_OK )
-      notifyOnDisconnect( e );
-    return e;
-  }
+	  ConnectionError ClientBase::recv( int timeout )
+	  {
+	    ConnectionError e = m_connection->recv( timeout );
+	    if( e != CONN_OK )
+	      notifyOnDisconnect( e );
+	    return e;
+	  }
 
-  bool ClientBase::connect( bool block )
-  {
-    if( m_server.empty() )
-      return false;
+	  bool ClientBase::connect( bool block )
+	  {
+	    if( m_server.empty() )
+	      return false;
 
-    if( !m_parser )
-      m_parser = new Parser( this );
+	    if( !m_parser )
+	      m_parser = new Parser( this );
 
-    if( !m_connection )
-      m_connection = new Connection( m_parser, m_server, m_port );
+	    if( !m_connection )
+	      m_connection = new Connection( m_parser, m_server, m_port );
 
-#ifdef HAVE_TLS
-    m_connection->setCACerts( m_cacerts );
-#endif
-    int ret = m_connection->connect();
-    if( ret == STATE_CONNECTED )
-    {
-      header();
-      if( block )
-      {
-        ConnectionError e = m_connection->receive();
-        notifyOnDisconnect( e );
-        return false;
-      }
-      else
-        return true;
-    }
-    else
-      return false;
-  }
+	#ifdef HAVE_TLS
+	    m_connection->setCACerts( m_cacerts );
+	#endif
+	    int ret = m_connection->connect();
+	    if( ret == STATE_CONNECTED )
+	    {
+	      header();
+	      if( block )
+	      {
+		ConnectionError e = m_connection->receive();
+		notifyOnDisconnect( e );
+		return false;
+	      }
+	      else
+		return true;
+	    }
+	    else
+	      return false;
+	  }
 
-  void ClientBase::filter( NodeType type, Stanza *stanza )
-  {
-    if( stanza )
-      log( stanza->xml(), true );
+	  void ClientBase::filter( NodeType type, Stanza *stanza )
+	  {
+	    if( stanza )
+	      log( stanza->xml(), true );
 
-    switch( type )
-    {
-      case NODE_STREAM_START:
-      {
-        const std::string version = stanza->findAttribute( "version" );
-        if( !version.empty() )
-        {
-          if( !checkStreamVersion( version ) )
-            disconnect( CONN_STREAM_ERROR );
-        }
-        else
-        {
-          printf( "This server is not XMPP-compliant (it does not send a 'version' attribute). Please try another one.\n" );
-          disconnect( CONN_STREAM_ERROR );
-        }
+	    switch( type )
+	    {
+	      case NODE_STREAM_START:
+	      {
+		const std::string version = stanza->findAttribute( "version" );
+		if( !checkStreamVersion( version ) )
+		{
+		  printf( "This server is not XMPP-compliant"
+		      " (it does not send a 'version' attribute). Please try another one.\n" );
+		  disconnect( CONN_STREAM_ERROR );
+		}
 
-        m_sid = stanza->findAttribute( "id" );
-        handleStartNode();
-        break;
-      }
-      case NODE_STREAM_CHILD:
-        if( !handleNormalNode( stanza ) )
-        {
-          switch( stanza->type() )
-          {
-            case STANZA_IQ:
-              notifyIqHandlers( stanza );
-              break;
-            case STANZA_PRESENCE:
-              notifyPresenceHandlers( stanza );
-              break;
-            case STANZA_S10N:
-              notifySubscriptionHandlers( stanza );
-              break;
-            case STANZA_MESSAGE:
-              notifyMessageHandlers( stanza );
-              break;
-            default:
-              notifyTagHandlers( stanza );
-              break;
-          }
-        }
-        break;
-      case NODE_STREAM_ERROR:
-        handleStreamError( stanza );
-        break;
-      case NODE_STREAM_CLOSE:
-#ifdef DEBUG
-        printf( "stream closed\n" );
-#endif
-        disconnect( CONN_STREAM_CLOSED );
-        break;
-    }
-  }
+		m_sid = stanza->findAttribute( "id" );
+		handleStartNode();
+		break;
+	      }
+	      case NODE_STREAM_CHILD:
+		if( !handleNormalNode( stanza ) )
+		{
+		  switch( stanza->type() )
+		  {
+		    case STANZA_IQ:
+		      notifyIqHandlers( stanza );
+		      break;
+		    case STANZA_PRESENCE:
+		      notifyPresenceHandlers( stanza );
+		      break;
+		    case STANZA_S10N:
+		      notifySubscriptionHandlers( stanza );
+		      break;
+		    case STANZA_MESSAGE:
+		      notifyMessageHandlers( stanza );
+		      break;
+		    default:
+		      notifyTagHandlers( stanza );
+		      break;
+		  }
+		}
+		break;
+	      case NODE_STREAM_ERROR:
+		handleStreamError( stanza );
+		break;
+	      case NODE_STREAM_CLOSE:
+	#ifdef DEBUG
+		printf( "stream closed\n" );
+	#endif
+		disconnect( CONN_STREAM_CLOSED );
+		break;
+	    }
+	  }
 
-  void ClientBase::disconnect()
-  {
-    disconnect( CONN_USER_DISCONNECTED );
-  }
+	  void ClientBase::disconnect()
+	  {
+	    disconnect( CONN_USER_DISCONNECTED );
+	  }
 
-  void ClientBase::disconnect( ConnectionError reason )
-  {
-    if( m_connection )
-    {
-      if( reason == CONN_USER_DISCONNECTED )
-        m_streamError = ERROR_UNDEFINED;
-      m_connection->disconnect( reason );
-    }
-  }
+	  void ClientBase::disconnect( ConnectionError reason )
+	  {
+	    if( m_connection )
+	    {
+	      if( reason == CONN_USER_DISCONNECTED )
+		m_streamError = ERROR_UNDEFINED;
+	      m_connection->disconnect( reason );
+	    }
+	  }
 
-  void ClientBase::header()
-  {
-    std::string xml = "<?xml version='1.0' ?>";
-    xml += "<stream:stream to='" + m_jid.server()+ "' xmlns='" + m_namespace + "' ";
-    xml += "xmlns:stream='http://etherx.jabber.org/streams'  xml:lang='" + m_xmllang + "' ";
-    xml += "version='";
-    xml += XMPP_STREAM_VERSION_MAJOR;
-    xml += ".";
-    xml += XMPP_STREAM_VERSION_MINOR;
-    xml += "'>";
-    send( xml );
-  }
+	  void ClientBase::header()
+	  {
+	    std::string xml = "<?xml version='1.0' ?>";
+	    xml += "<stream:stream to='" + m_jid.server()+ "' xmlns='" + m_namespace + "' ";
+	    xml += "xmlns:stream='http://etherx.jabber.org/streams'  xml:lang='" + m_xmllang + "' ";
+	    xml += "version='";
+	    xml += XMPP_STREAM_VERSION_MAJOR;
+	    xml += ".";
+	    xml += XMPP_STREAM_VERSION_MINOR;
+	    xml += "'>";
+	    send( xml );
+	  }
 
-  bool ClientBase::hasTls()
-  {
-#ifdef HAVE_TLS
-    return true;
-#else
-    return false;
-#endif
-  }
+	  bool ClientBase::hasTls()
+	  {
+	#ifdef HAVE_TLS
+	    return true;
+	#else
+	    return false;
+	#endif
+	  }
 
-#ifdef HAVE_TLS
-  void ClientBase::startTls()
-  {
-    Tag *start = new Tag( "starttls" );
-    start->addAttrib( "xmlns", XMLNS_STREAM_TLS );
-    send( start );
-  }
-#endif
+	#ifdef HAVE_TLS
+	  void ClientBase::startTls()
+	  {
+	    Tag *start = new Tag( "starttls" );
+	    start->addAttrib( "xmlns", XMLNS_STREAM_TLS );
+	    send( start );
+	  }
+	#endif
 
-  void ClientBase::startSASL( SaslMechanisms type )
-  {
-    Tag *a = new Tag( "auth" );
-    a->addAttrib( "xmlns", XMLNS_STREAM_SASL );
+	  void ClientBase::startSASL( SaslMechanisms type )
+	  {
+	    Tag *a = new Tag( "auth" );
+	    a->addAttrib( "xmlns", XMLNS_STREAM_SASL );
 
-    switch( type )
-    {
-      case SASL_DIGEST_MD5:
-        a->addAttrib( "mechanism", "DIGEST-MD5" );
-        break;
-      case SASL_PLAIN:
-      {
-        a->addAttrib( "mechanism", "PLAIN" );
-        int len = m_jid.username().length() + m_password.length() + 2;
-        char *tmp = (char*)iks_malloc( len + 80 );
-        char *result;
-        sprintf( tmp, "%c%s%c%s", 0, m_jid.username().c_str(), 0, m_password.c_str() );
-        result = iks_base64_encode( tmp, len );
-
-        a->setCData( result );
-        iks_free( result );
-        iks_free( tmp );
-        break;
-      }
-      case SASL_ANONYMOUS:
-        a->addAttrib( "mechanism", "ANONYMOUS" );
-        a->setCData( getID() );
-        break;
+	    switch( type )
+	    {
+	      case SASL_DIGEST_MD5:
+		a->addAttrib( "mechanism", "DIGEST-MD5" );
+		break;
+	      case SASL_PLAIN:
+	      {
+		a->addAttrib( "mechanism", "PLAIN" );
+		size_t len = m_jid.username().length() + m_password.length() + 2;
+		char *tmp = (char*)malloc( len + 80 );
+		sprintf( tmp, "%c%s%c%s", 0, m_jid.username().c_str(), 0, m_password.c_str() );
+		std::string dec;
+		dec.assign( tmp, len );
+		a->setCData( Base64::encode64( dec ) );
+		free( tmp );
+		break;
+	      }
+	      case SASL_ANONYMOUS:
+		a->addAttrib( "mechanism", "ANONYMOUS" );
+		a->setCData( getID() );
+		break;
     }
 
     send( a );
@@ -240,11 +235,7 @@ namespace gloox
     const int CNONCE_LEN = 4;
     Tag *t;
     std::string decoded, nonce, realm, response;
-    char *b = iks_base64_decode( challenge.c_str() );
-    if( b )
-      decoded = b;
-    else
-      return;
+    decoded = Base64::decode64( challenge.c_str() );
 
     if( decoded.substr( 0, 7 ) == "rspauth" )
     {
@@ -255,30 +246,28 @@ namespace gloox
       char cnonce[CNONCE_LEN*8 + 1];
       unsigned char a1_h[16];
       char a1[33], a2[33], response_value[33];
-      char *response_coded;
       iksmd5 *md5;
       int i;
 
-      unsigned int r_pos = decoded.find( "realm=" );
+      size_t r_pos = decoded.find( "realm=" );
       if( r_pos != std::string::npos )
       {
-        unsigned int r_end = decoded.find( "\"", r_pos + 7 );
+        size_t r_end = decoded.find( "\"", r_pos + 7 );
         realm = decoded.substr( r_pos + 7, r_end - (r_pos + 7 ) );
       }
       else
         realm = m_jid.server();
 
-      unsigned int n_pos = decoded.find( "nonce=" );
+      size_t n_pos = decoded.find( "nonce=" );
       if( n_pos != std::string::npos )
       {
-        unsigned int n_end = decoded.find( "\"", n_pos + 7 );
+        size_t n_end = decoded.find( "\"", n_pos + 7 );
         while( decoded.substr( n_end-1, 1 ) == "\\" )
           n_end = decoded.find( "\"", n_end + 1 );
         nonce = decoded.substr( n_pos + 7, n_end - ( n_pos + 7 ) );
       }
       else
       {
-        iks_free( b );
         return;
       }
 
@@ -324,15 +313,11 @@ namespace gloox
       response += "\",nc=00000001,qop=auth,digest-uri=\"xmpp/" + m_jid.server() + "\",response=";
       response += response_value;
       response += ",charset=utf-8";
-      response_coded = iks_base64_encode( response.c_str(), response.length() );
 
-      t = new Tag( "response", response_coded );
-
-      iks_free( response_coded );
+      t = new Tag( "response", Base64::encode64( response ) );
     }
     t->addAttrib( "xmlns", XMLNS_STREAM_SASL );
     send( t );
-    iks_free( b );
 
   }
 
@@ -394,11 +379,14 @@ namespace gloox
 
   bool ClientBase::checkStreamVersion( const std::string& version )
   {
+    if( version.empty() )
+      return false;
+
     int major = 0;
     int minor = 0;
     int myMajor = atoi( XMPP_STREAM_VERSION_MAJOR );
 
-    unsigned int dot = version.find( "." );
+    size_t dot = version.find( "." );
     if( !version.empty() && dot && dot != std::string::npos )
     {
       major = atoi( version.substr( 0, dot ).c_str() );
@@ -649,10 +637,11 @@ namespace gloox
     ConnectionListenerList::const_iterator it = m_connectionListeners.begin();
     for( ; it != m_connectionListeners.end(); ++it )
     {
-      return (*it)->onTLSConnect( info );
+      if( !(*it)->onTLSConnect( info ) )
+        return false;
     }
 
-    return false;
+    return true;
   }
 
   void ClientBase::notifyOnResourceBindError( ConnectionListener::ResourceBindError error )

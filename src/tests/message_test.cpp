@@ -22,7 +22,7 @@ class DiscoTest : public DiscoHandler, MessageHandler, ConnectionListener
     {
       setlocale( LC_ALL, "" );
 
-      JID jid( "hurkhurk@example.org/gloox" );
+      JID jid( "hurkhurk@jabber.cc/gloox" );
       j = new Client( jid, "hurkhurks" );
       j->setAutoPresence( true );
       j->setInitialPriority( 5 );

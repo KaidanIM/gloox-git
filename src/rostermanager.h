@@ -41,7 +41,7 @@ namespace gloox
    * Additionally, JEP-0083 (Nested Roster Groups) is implemented herein.
    * @author Jakob Schroeter <js@camaya.net>
    */
-   class GLOOX_EXPORT RosterManager : public IqHandler, PresenceHandler, SubscriptionHandler,
+   class GLOOX_API RosterManager : public IqHandler, PresenceHandler, SubscriptionHandler,
                                       PrivateXMLHandler
   {
     public:

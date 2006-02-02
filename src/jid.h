@@ -27,7 +27,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.4
    */
-  class GLOOX_EXPORT JID
+  class GLOOX_API JID
   {
     public:
 
@@ -117,7 +117,7 @@ namespace gloox
        * Compares two JIDs.
        * @param right The second JID.
        */
-      int operator==( const JID& right );
+      int operator==( const JID& right ) const;
 
     private:
       std::string m_resource;

@@ -29,7 +29,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.4
    */
-  class GLOOX_EXPORT Tag
+  class GLOOX_API Tag
   {
     public:
       /**
@@ -99,13 +99,13 @@ namespace gloox
        * Use this function to retrieve the name of an element.
        * @return The name of the tag.
        */
-      virtual std::string name() const { return m_name; };
+      virtual const std::string& name() const { return m_name; };
 
       /**
        * Use this function to retrieve the XML character data of an element.
        * @return The cdata the element contains.
        */
-      virtual std::string cdata() const;
+      virtual const std::string cdata() const;
 
       /**
        * Use this function to manipulate the list of attributes.
@@ -137,9 +137,20 @@ namespace gloox
       /**
        * This function finds and returns an element within the child elements of the current tag.
        * @param name The name of the element to search for.
-       * @return The found Tag, or an empty (invalid) Tag.
+       * @return The found Tag, or an empty Tag.
        */
       virtual Tag* findChild( const std::string& name );
+
+      /**
+       * This function finds and returns an element within the child elements of the current tag, that
+       * has a certain attribute with a certain value.
+       * @param name The name of the element to search for.
+       * @param attr The name of the attribute of the child element.
+       * @param value The value of the attribute of the child element.
+       * @return The found Tag, or an empty Tag.
+       */
+      virtual Tag* findChild( const std::string& name, const std::string& attr,
+                              const std::string& value = "" );
 
       /**
        * This function checks whether the Tag has a child element with a given name, and optionally
@@ -202,7 +213,7 @@ namespace gloox
        * @return An independent copy of the Tag.
        * @since 0.7
        */
-      virtual Tag* clone();
+      virtual Tag* clone() const;
 
     protected:
       std::string m_name;

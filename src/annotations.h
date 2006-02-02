@@ -35,7 +35,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
    */
-  class GLOOX_EXPORT Annotations : public PrivateXML, PrivateXMLHandler
+  class GLOOX_API Annotations : public PrivateXML, PrivateXMLHandler
   {
     public:
       /**

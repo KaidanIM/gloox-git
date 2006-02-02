@@ -22,7 +22,7 @@ namespace gloox
    *
    * @author Jakob Schroeter <js@camaya.net>
    */
-  class GLOOX_EXPORT ConnectionListener
+  class GLOOX_API ConnectionListener
   {
     public:
 

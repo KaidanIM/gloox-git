@@ -48,7 +48,7 @@ namespace gloox
       m_dataInCount( 0 ), m_cancel( true ), m_secure( false ), m_compression( false ),
       m_fdRequested( false ), m_compInited( false )
   {
-    m_buf = (char*)calloc( BUFSIZE, sizeof( char ) );
+    m_buf = (char*)calloc( BUFSIZE + 1, sizeof( char ) );
   }
 
   Connection::~Connection()
@@ -424,8 +424,8 @@ namespace gloox
     }
 
     // optimize(?): recv returns the size. set size+1 = \0
-    memset( m_buf, '\0', BUFSIZE );
-    int size;
+    memset( m_buf, '\0', BUFSIZE + 1 );
+    int size = 0;
 #if defined( USE_GNUTLS )
     if( m_secure )
     {
@@ -441,9 +441,9 @@ namespace gloox
 #endif
     {
 #ifdef SKYOS
-      size = ::recv( m_socket, (unsigned char*)m_buf, BUFSIZE - 1, 0 );
+      size = ::recv( m_socket, (unsigned char*)m_buf, BUFSIZE, 0 );
 #else
-      size = ::recv( m_socket, m_buf, BUFSIZE - 1, 0 );
+      size = ::recv( m_socket, m_buf, BUFSIZE, 0 );
 #endif
     }
 
@@ -465,7 +465,9 @@ namespace gloox
         buf = decompress( m_buf );
       else
 #endif
-        buf = m_buf;
+      {
+        buf.assign( m_buf, strlen( m_buf ) );
+      }
 
       Parser::ParserState ret = m_parser->feed( buf );
       if( ret != Parser::PARSER_OK )

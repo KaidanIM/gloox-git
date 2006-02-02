@@ -28,7 +28,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.4
    */
-  class GLOOX_EXPORT Stanza : public Tag
+  class GLOOX_API Stanza : public Tag
   {
     public:
 

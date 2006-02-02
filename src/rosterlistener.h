@@ -30,7 +30,7 @@ namespace gloox
    * Only one RosterListener per Roster at a time is possible.
    * @author Jakob Schroeter <js@camaya.net>
    */
-  class GLOOX_EXPORT RosterListener
+  class GLOOX_API RosterListener
   {
     public:
       /**

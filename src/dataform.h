@@ -15,7 +15,6 @@
 #define DATAFORM_H__
 
 #include "dataformbase.h"
-#include "dataformfield.h"
 
 #include <string>
 #include <list>
@@ -31,7 +30,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.7
    */
-  class GLOOX_EXPORT DataForm : public DataFormBase
+  class GLOOX_API DataForm : public DataFormBase
   {
     public:
       /**
@@ -76,7 +75,7 @@ namespace gloox
        * @return A Tag hierarchically describing the form, or NULL if the form is invalid (i.e.
        * created from a Tag not correctly describing a Data Form).
        */
-      Tag* tag();
+      const Tag* tag() const;
 
       /**
        * Use this function to retrieve the title of the form.

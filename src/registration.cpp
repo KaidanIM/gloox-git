@@ -51,7 +51,7 @@ namespace gloox
     m_parent->send( iq );
   }
 
-  void Registration::createAccount( int fields, fieldStruct values )
+  void Registration::createAccount( int fields, const fieldStruct& values )
   {
     if( !m_parent )
       return;
@@ -100,6 +100,16 @@ namespace gloox
     iq->addChild( q );
     m_parent->trackID( this, id, CREATE_ACCOUNT );
     m_parent->send( iq );
+  }
+
+  void Registration::createAccount( const DataForm& form )
+  {
+    const Tag *tmp = form.tag();
+    if( tmp )
+    {
+      Tag *c = tmp->clone();
+      m_parent->send( c );
+    }
   }
 
   void Registration::removeAccount()
@@ -202,6 +212,12 @@ namespace gloox
         {
           m_registrationHandler->handleAlreadyRegistered();
           break;
+        }
+
+        if( q->hasChild( "x", "xmlns", XMLNS_DATA_FORMS ) )
+        {
+          DataForm form( q->findChild( "x", "xmlns", XMLNS_DATA_FORMS ) );
+          m_registrationHandler->handleDataForm( form );
         }
 
         int fields = 0;

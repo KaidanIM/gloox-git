@@ -26,7 +26,7 @@ namespace gloox
    * Upon an incoming Message packet @ref handleMessage() will be called.
    * @author Jakob Schroeter <js@camaya.net>
    */
-  class GLOOX_EXPORT MessageHandler
+  class GLOOX_API MessageHandler
   {
     public:
       /**

@@ -28,7 +28,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.5
    */
-  class GLOOX_EXPORT LogHandler
+  class GLOOX_API LogHandler
   {
     public:
       /**

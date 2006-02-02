@@ -26,9 +26,14 @@ namespace gloox
    * Upon an incoming Subscription packet @ref handleSubscription() will be called.
    * @author Jakob Schroeter <js@camaya.net>
    */
-  class GLOOX_EXPORT SubscriptionHandler
+  class GLOOX_API SubscriptionHandler
   {
     public:
+      /**
+       * Virtual destructor.
+       */
+      virtual ~SubscriptionHandler() {};
+
       /**
        * Reimplement this function if you want to be notified about incoming
        * subscriptions/subscription requests.

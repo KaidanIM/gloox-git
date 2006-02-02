@@ -56,7 +56,7 @@
 namespace gloox
 {
 
-#if defined( SKYOS ) || defined( WIN32 ) || ( defined( __NetBSD__ ) && ( __NetBSD_Version__ < 300000000 ) )
+#if !defined( HAVE_RES_QUERYDOMAIN ) || !defined( HAVE_DN_SKIPNAME ) || !defined( HAVE_RES_QUERY )
   int DNS::connect( const std::string& domain )
   {
     return DNS::connect( domain, XMPP_PORT );
@@ -194,14 +194,16 @@ namespace gloox
       }
 
 #ifdef DEBUG
-      char *tmp = inet_ntoa( *((struct in_addr *)h->h_addr) );
+      in_addr *addr = (in_addr*)malloc( sizeof( in_addr ) );
+      memcpy( addr, h->h_addr, sizeof( in_addr ) );
+      char *tmp = inet_ntoa( *addr );
       printf( "resolved %s to: %s:%d\n", (*it).first.c_str(), tmp, port );
 #endif
 
-      if( inet_aton( inet_ntoa(*((struct in_addr *)h->h_addr)), &(target.sin_addr) ) == 0 )
+      if( inet_aton( tmp, &(target.sin_addr) ) == 0 )
         continue;
 
-      memset( &(target.sin_zero), '\0', 8 );
+      memset( target.sin_zero, '\0', 8 );
       if( ::connect( fd, (struct sockaddr *)&target, sizeof( struct sockaddr ) ) == 0 )
         return fd;
 
@@ -259,7 +261,7 @@ namespace gloox
     target.sin_addr.s_addr = inet_addr( inet_ntoa(*((struct in_addr *)h->h_addr)) );
 #endif
 
-    memset( &(target.sin_zero), '\0', 8 );
+    memset( target.sin_zero, '\0', 8 );
     if( ::connect( fd, (struct sockaddr *)&target, sizeof( struct sockaddr ) ) == 0 )
       return fd;
 
@@ -279,3 +281,4 @@ namespace gloox
 #endif
   }
 }
+

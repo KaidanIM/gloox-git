@@ -75,6 +75,11 @@ class RegTest : public RegistrationHandler, ConnectionListener
       printf( "the account already exists.\n" );
     };
 
+    virtual void handleDataForm( const DataForm& /*form*/ )
+    {
+      printf( "datForm received\n" );
+    };
+
   private:
     Registration *m_reg;
     Client *j;

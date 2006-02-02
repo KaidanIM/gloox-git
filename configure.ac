@@ -4,7 +4,7 @@ AC_PREREQ(2.50)
 AC_INIT
 AC_CONFIG_SRCDIR([configure.ac])
 dnl Every other copy of the package version number gets its value from here
-AM_INIT_AUTOMAKE(gloox,0.7.5)
+AM_INIT_AUTOMAKE(gloox,0.7.6)
 
 dnl create a config.h file (Automake will add -DHAVE_CONFIG_H)
 AM_CONFIG_HEADER(config.h)
@@ -127,8 +127,89 @@ fi
 AC_MSG_CHECKING([if Zlib should be used])
 AC_MSG_RESULT($zlib)
 
-dnl libresolv
-AC_CHECK_LIB(resolv, read, [res=yes LIBS="${LIBS} -lresolv"], res=no)
+dnl check for res_querydomain in libc, libbind and libresolv
+AC_CHECK_FUNCS(res_querydomain)
+if test "x-$ac_cv_func_res_querydomain" = "x-yes" ; then
+  have_res_querydomain=yes
+else
+  AC_CHECK_LIB(resolv, res_querydomain)
+  if test "x-$ac_cv_lib_resolv_res_querydomain" = "x-yes" ; then
+    have_res_querydomain=yes
+    AC_DEFINE(HAVE_RES_QUERYDOMAIN)
+  else
+    AC_CHECK_LIB(bind, res_querydomain)
+    if test "x-$ac_cv_lib_bind_res_querydomain" = "x-yes" ; then
+      have_res_querydomain=yes
+      AC_DEFINE(HAVE_RES_QUERYDOMAIN)
+    else
+      AC_MSG_CHECKING([for res_querydomain in -lresolv (alternate version)])
+      save_libs="$LIBS"
+      LIBS="-lresolv $LIBS"
+      AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <resolv.h>]], [[res_querydomain(0,0,0,0,0,0)]])],
+                     [AC_MSG_RESULT(yes)
+                      AC_DEFINE(HAVE_RES_QUERYDOMAIN)
+                      have_res_querydomain=yes],
+                     [AC_MSG_RESULT(no)
+                     LIBS="$save_libs"])
+    fi
+  fi
+fi
+
+dnl check for dn_skipname in libc, libbind and libresolv
+AC_CHECK_FUNCS(dn_skipname)
+if test "x-$ac_cv_func_dn_skipname" = "x-yes" ; then
+  have_dn_skipname=yes
+else
+  AC_CHECK_LIB(resolv, dn_skipname)
+  if test "x-$ac_cv_lib_resolv_dn_skipname" = "x-yes" ; then
+    have_dn_skipname=yes
+    AC_DEFINE(HAVE_DN_SKIPNAME)
+  else
+    AC_CHECK_LIB(bind, dn_skipname)
+    if test "x-$ac_cv_lib_bind_dn_skipname" = "x-yes" ; then
+      have_dn_skipname=yes
+      AC_DEFINE(HAVE_DN_SKIPNAME)
+    else
+      AC_MSG_CHECKING([for dn_skipname in -lresolv (alternate version)])
+      save_libs="$LIBS"
+      LIBS="-lresolv $LIBS"
+      AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <resolv.h>]], [[dn_skipname(0,0)]])],
+                     [AC_MSG_RESULT(yes)
+                      AC_DEFINE(HAVE_DN_SKIPNAME)
+                      have_dn_skipname=yes],
+                     [AC_MSG_RESULT(no)
+                     LIBS="$save_libs"])
+    fi
+  fi
+fi
+
+dnl check for res_query in libc, libbind and libresolv
+AC_CHECK_FUNCS(res_query)
+if test "x-$ac_cv_func_res_query" = "x-yes" ; then
+  have_res_query=yes
+else
+  AC_CHECK_LIB(resolv, res_query)
+  if test "x-$ac_cv_lib_resolv_res_query" = "x-yes" ; then
+    have_res_query=yes
+    AC_DEFINE(HAVE_RES_QUERY)
+  else
+    AC_CHECK_LIB(bind, res_query)
+    if test "x-$ac_cv_lib_bind_res_query" = "x-yes" ; then
+      have_res_query=yes
+      AC_DEFINE(HAVE_RES_QUERY)
+    else
+      AC_MSG_CHECKING([for res_query in -lresolv (alternate version)])
+      save_libs="$LIBS"
+      LIBS="-lresolv $LIBS"
+      AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <resolv.h>]], [[res_query(0,0)]])],
+                     [AC_MSG_RESULT(yes)
+                      AC_DEFINE(HAVE_RES_QUERY)
+                      have_res_query=yes],
+                     [AC_MSG_RESULT(no)
+                     LIBS="$save_libs"])
+    fi
+  fi
+fi
 
 dnl Debug
 AC_ARG_WITH(debug, AC_HELP_STRING([--enable-debug=[yes|no]],
@@ -141,6 +222,7 @@ fi
 dnl Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS(unistd.h strings.h errno.h arpa/nameser.h)
+AC_CHECK_FUNCS(ns_get16 __ns_get6)
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST

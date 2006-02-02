@@ -28,7 +28,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.7
    */
-  class GLOOX_EXPORT DataFormField
+  class GLOOX_API DataFormField
   {
     public:
 

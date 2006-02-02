@@ -43,7 +43,7 @@ privacylist_test_LDADD = ../libgloox.la
 privacylist_test_CFLAGS = $(CPPFLAGS)
 
 message_test_SOURCES = message_test.cpp
-message_test_LDADD = ../libgloox.la
+message_test_LDADD = -lgloox
 message_test_CFLAGS = $(CPPFLAGS)
 
 flexoff_test_SOURCES = flexoff_test.cpp
