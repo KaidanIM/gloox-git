@@ -24,7 +24,7 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler
       JID jid( "hurkhurk@example.org/gloox" );
       j = new Client( jid, "hurkhurks" );
       j->setAutoPresence( true );
-      j->setInitialPriority( 4 );
+      j->setInitialPriority( 3 );
       j->registerConnectionListener( this );
       j->rosterManager()->registerRosterListener( this );
       j->disco()->setVersion( "rosterTest", GLOOX_VERSION );
