@@ -127,6 +127,12 @@ namespace gloox
     friend class ChatStateFilter;
 
     public:
+      enum MessageSessionFilter
+      {
+        FilterMessageEvents    = 1,  /**< Message Events (JEP-0022) */
+        FilterChatStates       = 2   /**< Chat State Notifications (JEP-0085) */
+      };
+
       /**
        * Constructs a new MessageSession for the given JID.
        * It is recommended to supply a full JID, in other words, it should have a resource set.
@@ -232,6 +238,17 @@ namespace gloox
        */
       void setChatState( ChatStateType state );
 
+      /**
+       * Use this function to (re-)enable/disable certain MessageSessionFilter's that were
+       * disabled/enabled previously.
+       * By default, all filters are enabled.
+       * @param filters Bit-wise ORed MessageSessionFilter. State of filters not included here
+       * will not be touched.
+       * @param enable If @b true, @c filters will be enabled, if @b false, @c filters will be
+       * disabled.
+       */
+      void setFilter( int filters, bool enable );
+
       // reimplemented from MessageHandler
       virtual void handleMessage( Stanza *stanza );
 
@@ -252,6 +269,8 @@ namespace gloox
       JID m_target;
       MessageHandler *m_messageHandler;
       std::string m_thread;
+      bool m_enableMessageEvents;
+      bool m_enableChatStates;
 
   };
 

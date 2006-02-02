@@ -27,7 +27,8 @@ namespace gloox
 {
 
   MessageSession::MessageSession( ClientBase *parent, const JID& jid )
-    : m_parent( parent ), m_eventFilter( 0 ), m_stateFilter( 0 ), m_target( jid ), m_messageHandler( 0 )
+    : m_parent( parent ), m_eventFilter( 0 ), m_stateFilter( 0 ), m_target( jid ),
+      m_messageHandler( 0 ), m_enableMessageEvents( true ), m_enableChatStates( true )
   {
     if( m_parent )
       m_parent->registerMessageHandler( m_target.full(), this );
@@ -54,9 +55,9 @@ namespace gloox
 
   void MessageSession::handleMessage( Stanza *stanza )
   {
-    if( m_eventFilter )
+    if( m_enableMessageEvents && m_eventFilter )
       m_eventFilter->filter( stanza );
-    if( m_stateFilter )
+    if( m_enableChatStates && m_stateFilter )
       m_stateFilter->filter( stanza );
 
     if( !m_messageHandler || stanza->body().empty() )
@@ -89,6 +90,25 @@ namespace gloox
   void MessageSession::send( Tag *tag )
   {
     m_parent->send( tag );
+  }
+
+  void MessageSession::setFilter( int filters, bool enable )
+  {
+    if( filters & FilterMessageEvents )
+    {
+      if( enable )
+        m_enableMessageEvents = true;
+      else
+        m_enableMessageEvents = false;
+    }
+
+    if( filters & FilterChatStates )
+    {
+      if( enable )
+        m_enableChatStates = true;
+      else
+        m_enableChatStates = false;
+    }
   }
 
   void MessageSession::raiseMessageEvent( MessageEventType event )
