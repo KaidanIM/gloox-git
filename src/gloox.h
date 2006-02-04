@@ -784,4 +784,9 @@ namespace gloox
 
 }
 
+extern "C"
+{
+  const char* gloox_version();
+}
+
 #endif // GLOOX_H__
