@@ -43,7 +43,7 @@ namespace gloox
   /**
    * @brief This is the common base class for a jabber Client and a jabber Component.
    *
-   * It manages connection establishing, authentication, filter registrationa and invocation.
+   * It manages connection establishing, authentication, filter registration and invocation.
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
    */
@@ -53,15 +53,6 @@ namespace gloox
     friend class Parser;
 
     public:
-      /**
-       * A list of MessageSession decorators. You can bit-wise OR them together and supply the result
-       * to ClientBase::setAutoMessageSession().
-       */
-      enum MessageSessionDecorators
-      {
-        DECO_MESSAGE_EVENTS    =  1 /**< Implements JEP-0022 (Message Events) */
-      };
-
       /**
        * Constructs a new ClientBase.
        * You should not need to use this class directly. Use Client or Component instead.
