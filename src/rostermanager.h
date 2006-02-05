@@ -128,7 +128,7 @@ namespace gloox
        * Register @c rl as object that receives updates on roster operations.
        * For GUI applications it may be necessary to display a dialog or whatever to
        * the user without blocking. If you want that, use asynchronous subscription
-       * requests. If you want to answer an request right away, make it synchronous.
+       * requests. If you want to answer a request right away, make it synchronous.
        * @param rl The object that receives roster updates.
        * @param syncSubscribeReq Indicates whether (Un)SubscriptionRequests shall
        * be handled synchronous (@b true) or asynchronous (@b false). Default: synchronous.
