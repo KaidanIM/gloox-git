@@ -21,7 +21,7 @@
 namespace gloox
 {
 
-  class Client;
+  class BareClient;
   class Stanza;
   class Tag;
 
@@ -42,7 +42,7 @@ namespace gloox
        * @param parent The @ref ClientBase which is used to authenticate.
        * @param sid The session ID given by the server with the stream opening tag.
        */
-      NonSaslAuth( Client *parent, const std::string& sid );
+      NonSaslAuth( BareClient *parent, const std::string& sid );
 
       /**
        * Virtual Destructor.
@@ -68,7 +68,7 @@ namespace gloox
         TRACK_SEND_AUTH
       };
 
-      Client *m_parent;
+      BareClient *m_parent;
       std::string m_sid;
 
   };

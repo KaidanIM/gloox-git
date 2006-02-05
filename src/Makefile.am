@@ -10,12 +10,12 @@ AM_CPPFLAGS = -Wall -pedantic -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare
 lib_LTLIBRARIES = libgloox.la
 
 libgloox_la_SOURCES = jid.cpp parser.cpp connection.cpp clientbase.cpp tag.cpp stanza.cpp logsink.cpp \
-                        dns.cpp prep.cpp base64.cpp client.cpp component.cpp \
+                        dns.cpp prep.cpp base64.cpp client.cpp bareclient.cpp component.cpp \
                         disco.cpp adhoc.cpp privatexml.cpp registration.cpp \
                         nonsaslauth.cpp rosteritem.cpp rostermanager.cpp privacyitem.cpp \
                         bookmarkstorage.cpp annotations.cpp privacymanager.cpp lastactivity.cpp \
                         flexoff.cpp dataform.cpp dataformfield.cpp dataformbase.cpp messagesession.cpp \
-                        messageeventfilter.cpp chatstatefilter.cpp
+                        messageeventfilter.cpp chatstatefilter.cpp main.cpp
 
 libgloox_la_LDFLAGS = -version-info 0:8:0 -no-undefined -no-allow-shlib-undefined
 libgloox_la_LIBADD =
@@ -37,7 +37,8 @@ libglooxinclude_HEADERS = adhoccommandprovider.h  privacymanager.h        tag.h 
                             flexoffhandler.h      dataform.h              dataformfield.h \
                             dataformitem.h        dataformbase.h          dataformreported.h \
                             macros.h              logsink.h               messagesession.h \
-                            messageeventhandler.h messagesessionhandler.h chatstatehandler.h
+                            messageeventhandler.h messagesessionhandler.h chatstatehandler.h \
+                            bareclient.h
 
 noinst_HEADERS = prep.h parser.h connection.h dns.h nonsaslauth.h messageeventfilter.h \
                    chatstatefilter.h messagefilter.h base64.h
