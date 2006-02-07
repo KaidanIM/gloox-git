@@ -41,7 +41,7 @@ namespace gloox
   {
     std::string encoded;
     char c;
-    std::string::size_type length = input.length();
+    const std::string::size_type length = input.length();
 
     encoded.reserve( length * 2 );
 
@@ -85,7 +85,7 @@ namespace gloox
   const std::string Base64::decode64( const std::string& input )
   {
     char c, d;
-    std::string::size_type length = input.length();
+    const std::string::size_type length = input.length();
     std::string decoded;
 
     decoded.reserve( length );
