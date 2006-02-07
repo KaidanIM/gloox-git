@@ -91,9 +91,16 @@ if test "$gnutls" == "no"; then
       LDFLAGS="${LDFLAGS} -L$openssl/lib"
       CPPFLAGS="${CPPFLAGS} -I$openssl/include"
     fi
+dnl OpenSSL on MinGW requires additional Windows libraries to compile
+    case "$host_os" in
+      *mingw*)
+         SSL_LIBS="-lcrypto -lwsock32 -lgdi32";;
+      *)
+         SSL_LIBS="-lcrypto";;
+    esac
     AC_CHECK_HEADER(openssl/ssl.h,
     AC_CHECK_LIB(ssl, SSL_library_init,
-            [openssl=yes LIBS="${LIBS} -lssl -lcrypto"], openssl=no),
+            [openssl=yes LIBS="${LIBS} -lssl ${SSL_LIBS}"], openssl=no),
             openssl=no)
   fi
   if test "$openssl" != "no" ; then
