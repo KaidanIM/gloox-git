@@ -11,7 +11,9 @@ v0.7.6 -- 07 Feb 2006
 - workaround for iksemel's base64 bug
   SASL Plain with GTalk and SASL Digest-MD5 with Wildfire now possible
 - XMPP version requirement relaxed for Components
-- added __declspec( dllimport ) on win32
+- added __declspec( dllimport ) on win32 (thanks to Low Weng Liong)
+- fixed OpenSSL lib dependency on MinGW (thanks to Low Weng Liong)
+- 'ported' to Syllable
 
 
 v0.7.5 -- 05 Jan 2006
