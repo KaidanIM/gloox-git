@@ -2,7 +2,7 @@
 ## Process this file with automake to produce Makefile.in
 ##
 
-AM_CPPFLAGS = -g3 -fno-inline -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare -Wpointer-arith -Wswitch -Wunknown-pragmas -Wconversion -Wundef
+AM_CPPFLAGS = -DGLOOX_IMPORTS -g3 -fno-inline -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare -Wpointer-arith -Wswitch -Wunknown-pragmas -Wconversion -Wundef
 
 noinst_PROGRAMS = register_test disco_test adhoc_test roster_test privatexml_test component_test bookmarkstorage_test annotations_test privacylist_test message_test flexoff_test
 
@@ -43,7 +43,7 @@ privacylist_test_LDADD = ../libgloox.la
 privacylist_test_CFLAGS = $(CPPFLAGS)
 
 message_test_SOURCES = message_test.cpp
-message_test_LDADD = -lgloox
+message_test_LDADD = ../libgloox.la
 message_test_CFLAGS = $(CPPFLAGS)
 
 flexoff_test_SOURCES = flexoff_test.cpp
