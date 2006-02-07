@@ -17,7 +17,7 @@ namespace gloox
 {
 
   const std::string Base64::alphabet64( "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/" );
-  static const char pad = '=';
+  const char Base64::pad = '=';
 
   const std::string::size_type np = std::string::npos;
   const std::string::size_type Base64::table64[] =

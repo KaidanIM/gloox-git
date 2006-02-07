@@ -48,6 +48,7 @@ namespace gloox
     private:
       static const std::string alphabet64;
       static const std::string::size_type table64[];
+      static const char pad;
   };
 
 }
