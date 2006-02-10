@@ -1,4 +1,9 @@
 
+v0.7.6.1 -- 10 Feb 2006
+-----------------------
+- fixed OpenSSL check on MinGW
+
+
 v0.7.6 -- 07 Feb 2006
 --------------------
 - fixed alignment issues on ARM
