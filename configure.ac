@@ -98,10 +98,12 @@ dnl OpenSSL on MinGW requires additional Windows libraries to compile
       *)
          SSL_LIBS="-lcrypto";;
     esac
+    LIBS_TMP=${LIBS}
+    LIBS="${LIBS} -lssl ${SSL_LIBS}"
     AC_CHECK_HEADER(openssl/ssl.h,
     AC_CHECK_LIB(ssl, SSL_library_init,
-            [openssl=yes LIBS="${LIBS} -lssl ${SSL_LIBS}"], openssl=no),
-            openssl=no)
+            [openssl=yes], openssl=no),
+            [openssl=no LIBS=${TMP_LIBS}])
   fi
   if test "$openssl" != "no" ; then
     AC_DEFINE(HAVE_OPENSSL, 1, [Define to 1 if you want TLS support (OpenSSL).])
