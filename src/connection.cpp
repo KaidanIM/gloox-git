@@ -14,6 +14,7 @@
 
 #include "gloox.h"
 
+#include "compression.h"
 #include "connection.h"
 #include "dns.h"
 #include "logsink.h"
@@ -45,11 +46,10 @@ namespace gloox
 
   Connection::Connection( Parser *parser, const LogSink& logInstance, const std::string& server,
                           int port )
-  : m_parser( parser ), m_state ( StateDisconnected ), m_disconnect ( ConnNoError ),
-      m_logInstance( logInstance ), m_buf( 0 ), m_server( Prep::idna( server ) ), m_port( port ),
-      m_socket( -1 ), m_compCount( 0 ), m_decompCount( 0 ), m_dataOutCount( 0 ),
-      m_dataInCount( 0 ), m_cancel( true ), m_secure( false ), m_compression( false ),
-      m_fdRequested( false ), m_compInited( false )
+    : m_parser( parser ), m_state ( StateDisconnected ), m_disconnect ( ConnNoError ),
+      m_logInstance( logInstance ), m_compression( 0 ), m_buf( 0 ),
+      m_server( Prep::idna( server ) ), m_port( port ), m_socket( -1 ), m_cancel( true ),
+      m_secure( false ), m_fdRequested( false ), m_compInited( false )
   {
     m_buf = (char*)calloc( BUFSIZE + 1, sizeof( char ) );
   }
@@ -59,9 +59,6 @@ namespace gloox
     cleanup();
     free( m_buf );
     m_buf = 0;
-#ifdef HAVE_ZLIB
-    initCompression( false );
-#endif
   }
 
 #ifdef HAVE_TLS
@@ -321,138 +318,6 @@ namespace gloox
   }
 #endif
 
-#ifdef HAVE_ZLIB
-  bool Connection::initCompression( bool init )
-  {
-    int ret = Z_OK;
-
-    if( init )
-    {
-      m_zinflate.zalloc = Z_NULL;
-      m_zinflate.zfree = Z_NULL;
-      m_zinflate.opaque = Z_NULL;
-      m_zinflate.avail_in = 0;
-      m_zinflate.next_in = Z_NULL;
-      ret = inflateInit( &m_zinflate );
-
-      if( ret == Z_OK )
-      {
-        m_zdeflate.zalloc = Z_NULL;
-        m_zdeflate.zfree = Z_NULL;
-        m_zdeflate.opaque = Z_NULL;
-        ret = deflateInit( &m_zdeflate, Z_BEST_COMPRESSION/*Z_DEFAULT_COMPRESSION*/ );
-      }
-    }
-    else if( m_compInited && !init )
-    {
-      inflateEnd( &m_zinflate );
-      deflateEnd( &m_zdeflate );
-    }
-
-    if( ret == Z_OK )
-    {
-      m_compInited = init;
-      return true;
-    }
-    else
-    {
-      m_compInited = false;
-      return false;
-    }
-  }
-
-  void Connection::setCompression( bool compression )
-  {
-    if( m_compInited )
-      m_compression = compression;
-  }
-
-  std::string Connection::compress( const std::string& data )
-  {
-    if( data.empty() )
-      return "";
-
-    int CHUNK = data.length() + ( data.length() / 100 ) + 13;
-    Bytef *out = new Bytef[CHUNK];
-    char *in = const_cast<char*>( data.c_str() );
-
-    m_zdeflate.avail_in = data.length();
-    m_zdeflate.next_in = (Bytef*)in;
-
-    int ret;
-    std::string result, tmp;
-    do {
-      m_zdeflate.avail_out = CHUNK;
-      m_zdeflate.next_out = (Bytef*)out;
-
-      ret = deflate( &m_zdeflate, Z_SYNC_FLUSH );
-      printf( "deflate returns: %d\n", ret );
-      tmp.assign( (char*)out, CHUNK - m_zdeflate.avail_out );
-      result += tmp;
-    } while( m_zdeflate.avail_out == 0 );
-
-//     ::compress( out, (uLongf*)&CHUNK, (Bytef*)in, data.length() );
-//     std::string result;
-//     result.assign( (char*)out, CHUNK );
-    m_compCount += result.length();
-    m_dataOutCount += data.length();
-    delete[] out;
-
-//     printf( "about to send RAW data (%d), uncompressed: '%s' (%d)\n", result.length(), data.c_str(), data.length() );
-    return result;
-  }
-
-  std::string Connection::decompress( const std::string& data )
-  {
-//     if( data.empty() )
-//       return "";
-
-    m_inflateBuffer += data;
-
-    int CHUNK = /*m_inflateBuffer.length() **/ 50;
-    char *out = new char[CHUNK];
-    char *in = const_cast<char*>( m_inflateBuffer.c_str() );
-
-    m_zinflate.avail_in = m_inflateBuffer.length();
-    m_zinflate.next_in = (Bytef*)in;
-
-    int ret = Z_OK;
-    std::string result, tmp;
-    do
-    {
-      m_zinflate.avail_out = CHUNK;
-      m_zinflate.next_out = (Bytef*)out;
-
-      printf( "av_in: %d, ne_in: %c, av_out: %d\n",
-              m_zinflate.avail_in, m_zinflate.next_in,
-              m_zinflate.avail_out );
-
-      ret = inflate( &m_zinflate, Z_SYNC_FLUSH );
-      tmp.assign( out, CHUNK - m_zinflate.avail_out );
-      printf( "inflate: %d, produced: %s\n", ret, tmp.c_str() );
-      result += tmp;
-    } while( m_zinflate.avail_out == 0 );
-
-//     if( result.empty() || ret < 0 )
-//     {
-//       printf( "raw data received, error: %s, recv: %s\n", m_zinflate.msg, data.c_str() );
-//       inflateReset( &m_zinflate );
-//       return "";
-//     }
-
-//     } while( m_zinflate.avail_out == 0 );
-
-    m_decompCount += result.length();
-    m_dataInCount += m_inflateBuffer.length();
-    delete[] out;
-
-    printf( "received RAW data (%d) uncompressed to: '%s' (%d)\n", m_inflateBuffer.length(),
-            result.c_str(), result.length() );
-    m_inflateBuffer.clear();
-    return result;
-  }
-#endif
-
   void Connection::disconnect( ConnectionError e )
   {
     m_disconnect = e;
@@ -535,14 +400,10 @@ namespace gloox
     else
     {
       std::string buf;
-#ifdef HAVE_ZLIB
       if( m_compression )
-        buf = decompress( m_buf );
+        buf = m_compression->decompress( m_buf );
       else
-#endif
-      {
         buf.assign( m_buf, strlen( m_buf ) );
-      }
 
       Parser::ParserState ret = m_parser->feed( buf );
       if( ret != Parser::PARSER_OK )
@@ -587,11 +448,9 @@ namespace gloox
       return;
 
     char *xml;
-#ifdef HAVE_ZLIB
     if( m_compression )
-      xml = strdup( compress( data ).c_str() );
+      xml = strdup( m_compression->compress( data ).c_str() );
     else
-#endif
       xml = strdup( data.c_str() );
 
     if( !xml )

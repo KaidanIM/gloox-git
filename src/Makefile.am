@@ -15,7 +15,7 @@ libgloox_la_SOURCES = jid.cpp parser.cpp connection.cpp clientbase.cpp tag.cpp s
                         nonsaslauth.cpp rosteritem.cpp rostermanager.cpp privacyitem.cpp \
                         bookmarkstorage.cpp annotations.cpp privacymanager.cpp lastactivity.cpp \
                         flexoff.cpp dataform.cpp dataformfield.cpp dataformbase.cpp messagesession.cpp \
-                        messageeventfilter.cpp chatstatefilter.cpp main.cpp
+                        messageeventfilter.cpp chatstatefilter.cpp main.cpp compression.cpp
 
 libgloox_la_LDFLAGS = -version-info 0:8:0 -no-undefined -no-allow-shlib-undefined
 libgloox_la_LIBADD =
@@ -41,4 +41,4 @@ libglooxinclude_HEADERS = adhoccommandprovider.h  privacymanager.h        tag.h 
                             bareclient.h
 
 noinst_HEADERS = prep.h parser.h connection.h dns.h nonsaslauth.h messageeventfilter.h \
-                   chatstatefilter.h messagefilter.h base64.h
+                   chatstatefilter.h messagefilter.h base64.h compression.h
