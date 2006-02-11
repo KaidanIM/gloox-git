@@ -89,7 +89,7 @@ namespace gloox
    * encryption.
    * @li ANONYMOUS This mechanism is used if neither username nor password are set. The server generates
    * random, temporary username and resource and may restrict available services.
-   * @li EXTERNAL This mechanism is currently only available if a client certificate and private key
+   * @li EXTERNAL This mechanism is currently only available if client certificate and private key
    * are provided. The server tries to figure out who the client is by external means -- for instance,
    * using the provided certificate or even the IP address. (The restriction to certificate/key
    * availability is likely to be lifted in the future.)
@@ -250,6 +250,7 @@ namespace gloox
       void createSession();
       void negotiateCompression( StreamFeature method );
       void connected();
+      virtual void rosterFilled();
 
       void init();
 
