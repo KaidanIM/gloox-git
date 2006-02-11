@@ -90,6 +90,8 @@ namespace gloox
       if( m_rosterListener )
         m_rosterListener->roster( m_roster );
 
+      m_parent->rosterFilled();
+
       return true;
     }
     else if( stanza->subtype() == StanzaIqSet ) // roster item push
@@ -144,7 +146,7 @@ namespace gloox
     else
     {
       StringList sl;
-      add( stanza->from().bare(), std::string(), sl, "none", false );
+      add( stanza->from().bare(), "", sl, "none", false );
       m_roster[stanza->from().bare()]->setStatus( stanza->from().resource(), stanza->show() );
       m_roster[stanza->from().bare()]->setStatusMsg( stanza->from().resource(), stanza->status() );
       m_roster[stanza->from().bare()]->setPriority( stanza->from().resource(), stanza->priority() );

@@ -499,12 +499,17 @@ namespace gloox
     {
       if( m_manageRoster )
         m_rosterManager->fill();
-
-      if( m_autoPresence )
-        sendInitialPresence();
+      else
+        rosterFilled();
     }
 
     notifyOnConnect();
+  }
+
+  void Client::rosterFilled()
+  {
+    if( m_autoPresence )
+      sendInitialPresence();
   }
 
 }
