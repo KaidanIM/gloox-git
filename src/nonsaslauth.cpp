@@ -12,7 +12,7 @@
 
 
 #include "nonsaslauth.h"
-#include "bareclient.h"
+#include "client.h"
 
 #include <string>
 
@@ -21,7 +21,7 @@
 namespace gloox
 {
 
-  NonSaslAuth::NonSaslAuth( BareClient *parent, const std::string& sid )
+  NonSaslAuth::NonSaslAuth( Client *parent, const std::string& sid )
     : m_parent( parent ), m_sid( sid )
   {
     if( m_parent )
