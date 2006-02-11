@@ -16,7 +16,6 @@
 
 #include "macros.h"
 #include "clientbase.h"
-#include "nonsaslauth.h"
 
 
 namespace gloox
