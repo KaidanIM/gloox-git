@@ -36,13 +36,10 @@
 # define HAVE_TLS
 #endif
 
-#ifdef HAVE_ZLIB
-# include <zlib.h>
-#endif
-
 namespace gloox
 {
 
+  class Compression;
   class Packet;
   class Parser;
 
@@ -180,13 +177,6 @@ namespace gloox
       void cancel();
       void cleanup();
 
-#ifdef HAVE_ZLIB
-      std::string compress( const std::string& data );
-      std::string decompress( const std::string& data );
-      z_stream m_zinflate;
-      z_stream m_zdeflate;
-#endif
-
 #if defined( USE_GNUTLS )
 
       bool verifyAgainstCAs( gnutls_x509_crt_t cert, gnutls_x509_crt_t *CAList, int CAListSize );
@@ -208,19 +198,14 @@ namespace gloox
       CertInfo m_certInfo;
       ConnectionError m_disconnect;
       const LogSink& m_logInstance;
+      Compression *m_compression;
 
       char *m_buf;
       std::string m_server;
-      std::string m_inflateBuffer;
       int m_port;
       int m_socket;
-      int m_compCount;
-      int m_decompCount;
-      int m_dataOutCount;
-      int m_dataInCount;
       bool m_cancel;
       bool m_secure;
-      bool m_compression;
       bool m_fdRequested;
       bool m_compInited;
   };
