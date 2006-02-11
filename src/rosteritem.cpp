@@ -18,7 +18,7 @@ namespace gloox
 {
 
   RosterItem::RosterItem( const JID& jid, const std::string& name )
-    : m_name( name ), m_jid( jid.bare() ), m_changed( false )
+    : m_subscription( S10N_NONE ), m_name( name ), m_jid( jid.bare() ), m_changed( false )
   {
   }
 
