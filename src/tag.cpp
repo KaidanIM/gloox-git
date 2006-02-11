@@ -119,7 +119,7 @@ namespace gloox
     if( it != m_attribs.end() )
       return (*it).second;
     else
-      return std::string();
+      return "";
   }
 
   bool Tag::hasAttribute( const std::string& name, const std::string& value ) const
@@ -143,7 +143,7 @@ namespace gloox
         return (*it);
     }
 
-    return new Tag;
+    return 0;
   }
 
   Tag* Tag::findChild( const std::string& name, const std::string& attr,
@@ -156,7 +156,7 @@ namespace gloox
         return (*it);
     }
 
-    return new Tag;
+    return 0;
   }
 
   bool Tag::hasChild( const std::string& name,
@@ -211,7 +211,7 @@ namespace gloox
         return (*it);
     }
 
-    return new Tag;
+    return 0;
   }
 
   const std::string Tag::replace( const std::string& what, const Duo& duo ) const
