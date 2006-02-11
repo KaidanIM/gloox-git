@@ -13,6 +13,7 @@
 
 
 #include "bareclient.h"
+#include "nonsaslauth.h"
 
 #include <string>
 #include <sstream>
