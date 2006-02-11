@@ -335,6 +335,29 @@ namespace gloox
   };
 
   /**
+   * Supported Stream Features.
+   */
+  enum StreamFeature
+  {
+    StreamFeatureBind             =    1, /**< The server supports resource binding. */
+    StreamFeatureSession          =    2, /**< The server supports sessions. */
+    StreamFeatureSaslDigestMd5    =    4, /**< The server supports SASL DIGEST-MD5 mechanism. */
+    StreamFeatureSaslPlain        =    8, /**< The server supports SASL PLAIN mechanism. */
+    StreamFeatureSaslAnonymous    =   16, /**< The server supports SASL ANONYMOUS mechanism. */
+    StreamFeatureSaslExternal     =   32, /**< The server supports SASL EXTERNAL mechanism. */
+    StreamFeatureStartTls         =   64, /**< The server supports &lt;starttls&gt;. */
+    StreamFeatureIqRegister       =  128, /**< The server supports JEP-0077 (In-Band
+                                           * Registration). */
+    StreamFeatureIqAuth           =  256, /**< The server supports JEP-0078 (Non-SASL
+                                           * Authentication). */
+    StreamFeatureAck              =  512, /**< The server supports JEPAck (experimental). */
+    StreamFeatureCompressZlib     = 1024, /**< The server supports JEP-0138 (Stream
+                                           * Compression) (Zlib)*/
+    StreamFeatureCompressDclz     = 2048  /**< The server supports JEP-0138 (Stream
+                                           * Compression) (LZW/DCLZ)*/
+  };
+
+  /**
    * This decribes stream error conditions as defined in RFC 3920 Sec. 4.7.3.
    */
   enum StreamError

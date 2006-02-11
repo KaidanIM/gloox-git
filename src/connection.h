@@ -123,21 +123,19 @@ namespace gloox
 
 #ifdef HAVE_ZLIB
       /**
-       * In case Zlib is available, this function can be used to enable stream compression
-       * as defined in JEP-0138.
-       * @param compression Whether to enable or disable stream compression.
-       * @return Returns @b true if compression was successfully enabled, @b false otherwise.
-       */
-       void setCompression( bool compression );
-
-      /**
-       * In case Zlib is available, this function is used to init or de-init stream compression. You must
+       * This function is used to init or de-init stream compression. You must
        * call this before enabling compression using setCompression().
-       * @param init Whether to init (@b true) or de-init (@b false) stream compression.
+       * @param method The desired stream compression method (e.g. zlib, lzw, ...)
        * @return Returns @b true if compression was successfully initialized/de-initialized,
        * @b false otherwise.
        */
-       bool initCompression( bool init );
+      bool initCompression( StreamFeature method );
+
+      /**
+       * This function is used to enable stream compression as defined in JEP-0138.
+       * It is necessary because when compression is negotiated it is not enabled at once.
+       */
+      void enableCompression();
 #endif
 
 #ifdef HAVE_TLS
@@ -207,7 +205,7 @@ namespace gloox
       bool m_cancel;
       bool m_secure;
       bool m_fdRequested;
-      bool m_compInited;
+      bool m_enableCompression;
   };
 
 }

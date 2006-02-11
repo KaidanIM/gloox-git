@@ -14,7 +14,7 @@
 #ifndef CLIENT_H__
 #define CLIENT_H__
 
-#include "bareclient.h"
+#include "clientbase.h"
 #include "iqhandler.h"
 
 #include <string>
@@ -24,10 +24,11 @@ namespace gloox
 
   class RosterManager;
   class Disco;
+  class NonSaslAuth;
   class Stanza;
 
   /**
-   * @brief This class implements a full-featured Jabber Client.
+   * @brief This class implements a basic Jabber Client.
    *
    * It supports @ref sasl_auth as well as TLS (Encryption), which can be
    * switched on/off separately. They are used automatically if the server supports them.
@@ -97,10 +98,11 @@ namespace gloox
    *
    * @author Jakob Schroeter <js@camaya.net>
    */
-  class GLOOX_API Client : public BareClient
+  class GLOOX_API Client : public ClientBase
   {
     public:
 
+      friend class NonSaslAuth;
       friend class Parser;
 
       /**
@@ -144,6 +146,66 @@ namespace gloox
       virtual ~Client();
 
       /**
+       * Use this function to @b re-try to bind a resource only in case you were notified about an
+       * error by means of ConnectionListener::onResourceBindError().
+       * You may (or should) use setResource() before.
+       */
+      void bindResource();
+
+      /**
+       * Returns the current prepped username.
+       * @return The username used to connect.
+       */
+      virtual const std::string username() const { return m_jid.username(); };
+
+      /**
+       * Returns the current prepped resource.
+       * @return The resource used to connect.
+       */
+      std::string const resource() const { return m_jid.resource(); };
+
+      /**
+       * Returns the current priority.
+       * @return The priority of the current resource.
+       */
+      int priority() const { return m_priority; };
+
+      /**
+       * Sets the username to use to connect to the XMPP server.
+       * @param username The username to authenticate with.
+       */
+      void setUsername( const std::string &username ) { m_jid.setUsername( username ); };
+
+      /**
+       * Sets the resource to use to connect to the XMPP server.
+       * @param resource The resource to use to log into the server.
+       */
+      void setResource( const std::string &resource ) { m_jid.setResource( resource ); };
+
+      /**
+       * Set initial priority. Legal values: -128 <= priority <= 127
+       * @param priority The initial priority value.
+       */
+      void setInitialPriority( int priority );
+
+      /**
+       * Enables/disables the automatic sending of a presence packet
+       * upon successful authentication @em before the ConnectionListeners
+       * are notified. Default: off
+       * @param autoPresence Whether to switch AutoPresence on or off.
+       */
+      void setAutoPresence( bool autoPresence ) { m_autoPresence = autoPresence; };
+
+      /**
+       * This is a temporary hack to allow login to google talk. You must set this to true
+       * to avoid SASL PLAIN login, which fails. Google talk does not announce availability
+       * of non-SASL auth which is why it has to be enabled explicitely.
+       * @param force Whether to force non-SASL auth. Default @b true.
+       * @deprecated
+       */
+      GLOOX_DEPRECATED void setForceNonSasl( bool force = true ) { m_forceNonSasl = force; };
+
+      /**
        * Disables automatic handling of disco queries.
        * There is currently no way to re-enable disco query-handling.
        * @note This disables the browsing capabilities because
@@ -172,18 +234,38 @@ namespace gloox
 
     protected:
       /**
-       * Called by ???
+       * Initiates non-SASL login.
        */
-      virtual void connected();
+      void nonSaslLogin();
 
     private:
+      virtual void handleStartNode() {};
+      virtual bool handleNormalNode( Stanza *stanza );
+      int getStreamFeatures( Stanza *stanza );
+      int getSaslMechs( Tag *tag );
+      int getCompressionMethods( Tag *tag );
+      void processResourceBind( Stanza *stanza );
+      void processCreateSession( Stanza *stanza );
+      void sendInitialPresence();
+      void createSession();
+      void negotiateCompression( StreamFeature method );
+      void connected();
+
       void init();
 
       RosterManager *m_rosterManager;
+      NonSaslAuth *m_auth;
       Disco *m_disco;
 
+      bool m_resourceBound;
+      bool m_autoPresence;
+      bool m_forceNonSasl;
       bool m_manageRoster;
       bool m_handleDisco;
+      bool m_doAuth;
+
+      int m_streamFeatures;
+      int m_priority;
 
   };
 

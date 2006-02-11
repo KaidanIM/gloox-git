@@ -15,6 +15,8 @@
 #ifndef COMPRESSION_H__
 #define COMPRESSION_H__
 
+#include "gloox.h"
+
 #ifdef WIN32
 # include "../config.h.win"
 #else
@@ -40,8 +42,9 @@ namespace gloox
     public:
       /**
        * Contructor.
+       * @param method The desired compression method.
        */
-      Compression();
+      Compression( StreamFeature method );
 
       /**
        * Virtual Destructor.
@@ -53,26 +56,70 @@ namespace gloox
        * @param data The original (uncompressed) data.
        * @return The compressed data.
        */
-      virtual const std::string compress( const std::string& data );
+      virtual const std::string compress( const std::string& data ) = 0;
 
       /**
        * Decompresses the given chunk of data.
        * @param data The compressed data.
        * @return The decompressed data.
        */
-      virtual const std::string decompress( const std::string& data );
+      virtual const std::string decompress( const std::string& data ) = 0;
 
-    private:
-      z_stream m_zinflate;
-      z_stream m_zdeflate;
-
+    protected:
+      bool m_valid;
+      StreamFeature m_method;
       std::string m_inflateBuffer;
       int m_compCount;
       int m_decompCount;
       int m_dataOutCount;
       int m_dataInCount;
 
+      z_stream m_zinflate;
+      z_stream m_zdeflate;
+
   };
+
+  /**
+   * Implements Zlib compression.
+   *
+   * @author Jakob Schroeter <js@camaya.net>
+   * @since 0.8
+   */
+  class CompressionZlib : public Compression
+  {
+    public:
+      /**
+       * Constructor.
+       */
+      CompressionZlib();
+
+      /**
+       * Virtual Destructor.
+       */
+      virtual ~CompressionZlib();
+
+      // reimplemented from Compression
+      virtual const std::string compress( const std::string& data ) = 0;
+
+      // reimplemented from Compression
+      virtual const std::string decompress( const std::string& data ) = 0;
+
+    private:
+//       z_stream m_zinflate;
+//       z_stream m_zdeflate;
+
+  };
+
+  /**
+   * Implements LZW compression.
+   *
+   * @author Jakob Schroeter <js@camaya.net>
+   * @since 0.8
+   */
+//   class CompressionLZW : public Compression
+//   {
+
+//   };
 
 }
 

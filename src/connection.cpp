@@ -49,7 +49,7 @@ namespace gloox
     : m_parser( parser ), m_state ( StateDisconnected ), m_disconnect ( ConnNoError ),
       m_logInstance( logInstance ), m_compression( 0 ), m_buf( 0 ),
       m_server( Prep::idna( server ) ), m_port( port ), m_socket( -1 ), m_cancel( true ),
-      m_secure( false ), m_fdRequested( false ), m_compInited( false )
+      m_secure( false ), m_fdRequested( false ), m_enableCompression( false )
   {
     m_buf = (char*)calloc( BUFSIZE + 1, sizeof( char ) );
   }
@@ -318,6 +318,24 @@ namespace gloox
   }
 #endif
 
+#ifdef HAVE_ZLIB
+  bool Connection::initCompression( StreamFeature method )
+  {
+//     delete m_compression;
+//     m_compression = 0;
+//     m_compression = new Compression( method );
+    return true;
+  }
+
+  void Connection::enableCompression()
+  {
+//     if( !m_compression )
+//       return;
+
+//     m_enableCompression = true;
+  }
+#endif
+
   void Connection::disconnect( ConnectionError e )
   {
     m_disconnect = e;
@@ -400,9 +418,9 @@ namespace gloox
     else
     {
       std::string buf;
-      if( m_compression )
-        buf = m_compression->decompress( m_buf );
-      else
+//       if( m_compression && m_enableCompression )
+//         buf = m_compression->decompress( m_buf );
+//       else
         buf.assign( m_buf, strlen( m_buf ) );
 
       Parser::ParserState ret = m_parser->feed( buf );
@@ -448,9 +466,9 @@ namespace gloox
       return;
 
     char *xml;
-    if( m_compression )
-      xml = strdup( m_compression->compress( data ).c_str() );
-    else
+//     if( m_compression && m_enableCompression )
+//       xml = strdup( m_compression->compress( data ).c_str() );
+//     else
       xml = strdup( data.c_str() );
 
     if( !xml )

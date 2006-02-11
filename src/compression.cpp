@@ -14,27 +14,46 @@
 
 #include "compression.h"
 
-
 namespace gloox
 {
 
-  Compression::Compression()
-    : m_compCount( 0 ), m_decompCount( 0 ), m_dataOutCount( 0 ), m_dataInCount( 0 )
+  Compression::Compression( StreamFeature method )
+    : m_valid( false ), m_method( method ), m_compCount( 0 ), m_decompCount( 0 ), m_dataOutCount( 0 ),
+      m_dataInCount( 0 )
   {
-    int ret = Z_OK;
-    m_zinflate.zalloc = Z_NULL;
-    m_zinflate.zfree = Z_NULL;
-    m_zinflate.opaque = Z_NULL;
-    m_zinflate.avail_in = 0;
-    m_zinflate.next_in = Z_NULL;
-    ret = inflateInit( &m_zinflate );
-
-    if( ret == Z_OK )
+// #ifdef HAVE_ZLIB
+    switch( method )
     {
-      m_zdeflate.zalloc = Z_NULL;
-      m_zdeflate.zfree = Z_NULL;
-      m_zdeflate.opaque = Z_NULL;
-      ret = deflateInit( &m_zdeflate, Z_BEST_COMPRESSION/*Z_DEFAULT_COMPRESSION*/ );
+      case StreamFeatureCompressZlib:
+      {
+        int ret = Z_OK;
+        m_zinflate.zalloc = Z_NULL;
+        m_zinflate.zfree = Z_NULL;
+        m_zinflate.opaque = Z_NULL;
+        m_zinflate.avail_in = 0;
+        m_zinflate.next_in = Z_NULL;
+        ret = inflateInit( &m_zinflate );
+
+        if( ret == Z_OK )
+        {
+          m_zdeflate.zalloc = Z_NULL;
+          m_zdeflate.zfree = Z_NULL;
+          m_zdeflate.opaque = Z_NULL;
+          m_zinflate.avail_in = 0;
+          m_zinflate.next_in = Z_NULL;
+          ret = deflateInit( &m_zdeflate, Z_BEST_COMPRESSION/*Z_DEFAULT_COMPRESSION*/ );
+
+          if( ret == Z_OK )
+            m_valid = true;
+        }
+        break;
+      }
+      case StreamFeatureCompressDclz:
+      {
+        break;
+      }
+      default:
+        break;
     }
   }
 
@@ -46,6 +65,9 @@ namespace gloox
 
   const std::string Compression::compress( const std::string& data )
   {
+    if( !m_valid )
+      return data;
+
     if( data.empty() )
       return "";
 
@@ -81,6 +103,9 @@ namespace gloox
 
   const std::string Compression::decompress( const std::string& data )
   {
+    if( !m_valid )
+      return data;
+
 //     if( data.empty() )
 //       return "";
 
