@@ -53,7 +53,7 @@ class BookmarkStorageTest : public BookmarkHandler, ConnectionListener
       return true;
     };
 
-    virtual void handleBookmarks( BookmarkList bList, ConferenceList cList )
+    virtual void handleBookmarks( const BookmarkList &bList, const ConferenceList &cList )
     {
       printf( "received bookmarks...\n" );
 

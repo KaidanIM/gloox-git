@@ -53,7 +53,7 @@ class AnnotationsTest : public AnnotationsHandler, ConnectionListener
       return true;
     };
 
-    virtual void handleAnnotations( AnnotationsList &aList )
+    virtual void handleAnnotations( const AnnotationsList &aList )
     {
       printf( "received notes...\n" );
       AnnotationsList::const_iterator it = aList.begin();
