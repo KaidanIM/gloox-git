@@ -32,6 +32,62 @@ namespace gloox
   /**
    * @brief This is an implementation of JEP-0145 (Annotations).
    *
+   * You can use this class to store arbitrary notes about a roster item on the server
+   * (and to retrieve them later on).
+   * To retrieve all stored annotations for the current user's roster you have to create
+   * a class which inherits from AnnotationsHandler. This handler receives retrieved notes.
+   *
+   * @code
+   * class MyClass : public AnnotationsHandler
+   * {
+   *   public:
+   *     // ...
+   *     void myFuncRetrieve();
+   *     void myFuncStore();
+   *     void handleAnnotations( const AnnotationsList &aList );
+   *
+   *   private:
+   *     Annotations *m_notes;
+   *     AnnotationsList m_list;
+   * };
+   *
+   * void MyClass::myFuncRetrieve()
+   * {
+   *   [...]
+   *   m_notes = new Annotations( m_client );
+   *   m_notes->requestAnnotations();
+   * }
+   *
+   * void MyClass::handleAnnotations( const AnnotationsList &aList )
+   * {
+   *   m_list = aList;
+   * }
+   * @endcode
+   *
+   * To store an additional note you have to fetch the currently stored notes first,
+   * add your new note to the list of notes, and transfer them all together back to the
+   * server. This protocol does not support storage of 'deltas', that is, when saving
+   * notes all previously saved notes are overwritten.
+   *
+   * @code
+   * void MyClass::myFuncStore()
+   * {
+   *   annotationsListItem item;
+   *   item.jid = "me@example.com";
+   *   item.cdate = "2006-02-04T15:23:21Z";
+   *   item.note = "some guy at example.com";
+   *   m_list.push_back( item );
+   *
+   *   item.jid = "abc@def.com";
+   *   item.cdate = "2006-01-24T15:23:21Z";
+   *   item.mdate = "2006-02-04T05:11:46Z";
+   *   item.note = "some other guy";
+   *   m_list.push_back( item );
+   *
+   *   m_notes->storeAnnotations( m_list );
+   * }
+   * @endcode
+   *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
    */

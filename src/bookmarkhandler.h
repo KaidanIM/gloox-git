@@ -72,7 +72,7 @@ namespace gloox
        * @param bList A list of URL bookmarks.
        * @param cList A list of conference bookmarks.
        */
-      virtual void handleBookmarks( BookmarkList bList, ConferenceList cList ) = 0;
+      virtual void handleBookmarks( const BookmarkList &bList, const ConferenceList &cList ) = 0;
   };
 
 }
