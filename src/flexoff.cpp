@@ -18,7 +18,7 @@ namespace gloox
 {
 
   FlexibleOffline::FlexibleOffline( ClientBase *parent, Disco *disco )
-  : m_parent( parent ), m_disco( disco )
+    : m_parent( parent ), m_disco( disco ), m_flexibleOfflineHandler( 0 )
   {
   }
 

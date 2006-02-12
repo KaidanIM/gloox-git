@@ -21,7 +21,7 @@ namespace gloox
 
   BookmarkStorage::BookmarkStorage( ClientBase *parent )
     : PrivateXML( parent ),
-    m_bookmarkHandler( 0 )
+      m_bookmarkHandler( 0 )
   {
   }
 

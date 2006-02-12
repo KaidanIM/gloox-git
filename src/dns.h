@@ -109,7 +109,7 @@ namespace gloox
 
     private:
       static HostMap defaultHostMap( const std::string& service, const std::string& proto,
-                                   const std::string& domain );
+                                     const std::string& domain );
       static void cleanup();
 
       typedef struct buffer
@@ -117,7 +117,7 @@ namespace gloox
         unsigned char buf[NS_PACKETSZ];
         int len;
       };
-      typedef unsigned char name [NS_MAXDNAME];
+      typedef unsigned char name[NS_MAXDNAME];
   };
 
 }

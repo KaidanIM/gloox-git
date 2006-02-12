@@ -21,7 +21,7 @@ namespace gloox
 
   Annotations::Annotations( ClientBase *parent )
     : PrivateXML( parent ),
-    m_annotationsHandler( 0 )
+      m_annotationsHandler( 0 )
   {
   }
 

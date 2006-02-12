@@ -21,6 +21,10 @@ namespace gloox
   {
   }
 
+  DataFormBase::~DataFormBase()
+  {
+  }
+
   bool DataFormBase::hasField( const std::string& field )
   {
     FieldList::const_iterator it = m_fields.begin();

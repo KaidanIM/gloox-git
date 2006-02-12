@@ -20,7 +20,7 @@ namespace gloox
   PrivacyItem::PrivacyItem( const ItemType type, const ItemAction action,
                             const int packetType, const std::string& value )
     : m_type( type ), m_action( action ), m_packetType( packetType ),
-    m_value( value )
+      m_value( value )
   {
   }
 

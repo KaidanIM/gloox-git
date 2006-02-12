@@ -23,8 +23,8 @@ namespace gloox
 {
 
   RosterManager::RosterManager( ClientBase *parent, bool self )
-  : m_rosterListener( 0 ), m_parent( parent ), m_privateXML( 0 ), m_delimiterFetched( false ),
-    m_syncSubscribeReq( false )
+    : m_rosterListener( 0 ), m_parent( parent ), m_privateXML( 0 ),
+      m_delimiterFetched( false ), m_syncSubscribeReq( false )
   {
     if( m_parent )
     {

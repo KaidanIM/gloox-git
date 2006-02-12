@@ -41,7 +41,7 @@ namespace gloox
       /**
        * Virtual destructor.
        */
-      virtual ~DataFormBase() {};
+      virtual ~DataFormBase();
 
       /**
        * A list of JEP-0004 Data Form Fields.

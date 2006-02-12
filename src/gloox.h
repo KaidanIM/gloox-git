@@ -542,11 +542,12 @@ namespace gloox
    */
   enum StanzaErrorType
   {
-    StanzaErrorTypeCancel,                /**< Do not retry (the error is unrecoverable). */
-    StanzaErrorTypeContinue,              /**< Proceed (the condition was only a warning). */
-    StanzaErrorTypeModify,                 /**< Retry after changing the data sent. */
-    StanzaErrorTypeAuth,                   /**< Retry after providing credentials. */
-    StanzaErrorTypeWait                    /**< Retry after waiting (the error is temporary). */
+    StanzaErrorTypeUndefined,       /**< No error. */
+    StanzaErrorTypeCancel,          /**< Do not retry (the error is unrecoverable). */
+    StanzaErrorTypeContinue,        /**< Proceed (the condition was only a warning). */
+    StanzaErrorTypeModify,          /**< Retry after changing the data sent. */
+    StanzaErrorTypeAuth,            /**< Retry after providing credentials. */
+    StanzaErrorTypeWait             /**< Retry after waiting (the error is temporary). */
   };
 
   /**
@@ -565,9 +566,9 @@ namespace gloox
     StanzaErrorFeatureNotImplemented,/**< The feature requested is not implemented by the recipient or server
                                      * and therefore cannot be processed; the associated error type SHOULD be
                                      * "cancel". */
-    StanzaErrorForbidden,             /**< The requesting entity does not possess the required permissions to
+    StanzaErrorForbidden,           /**< The requesting entity does not possess the required permissions to
                                      * perform the action; the associated error type SHOULD be "auth". */
-    StanzaErrorGone,                  /**< The recipient or server can no longer be contacted at this address
+    StanzaErrorGone,                /**< The recipient or server can no longer be contacted at this address
                                      * (the error stanza MAY contain a new address in the XML character data
                                      * of the &lt;gone/&gt; element); the associated error type SHOULD be
                                      * "modify". */
@@ -634,14 +635,14 @@ namespace gloox
    */
   enum Presence
   {
-    PresenceUnknown,               /**< Unknown status. */
-    PresenceAvailable,             /**< The entity or resource is online and available. */
-    PresenceChat,                  /**< The entity or resource is actively interested in chatting. */
-    PresenceAway,                  /**< The entity or resource is temporarily away. */
-    PresenceDnd,                   /**< The entity or resource is busy (dnd = "Do Not Disturb"). */
-    PresenceXa,                    /**< The entity or resource is away for an extended period (xa =
+    PresenceUnknown,                /**< Unknown status. */
+    PresenceAvailable,              /**< The entity or resource is online and available. */
+    PresenceChat,                   /**< The entity or resource is actively interested in chatting. */
+    PresenceAway,                   /**< The entity or resource is temporarily away. */
+    PresenceDnd,                    /**< The entity or resource is busy (dnd = "Do Not Disturb"). */
+    PresenceXa,                     /**< The entity or resource is away for an extended period (xa =
                                      * "eXtended Away"). */
-    PresenceUnavailable            /**< The entity or resource if offline. */
+    PresenceUnavailable             /**< The entity or resource if offline. */
   };
 
   /**

@@ -16,17 +16,17 @@
 namespace gloox
 {
   Tag::Tag()
-  : m_parent( 0 ), m_type( StanzaUndefined )
+    : m_parent( 0 ), m_type( StanzaUndefined )
   {
   }
 
   Tag::Tag( const std::string& name, const std::string& cdata )
-  : m_name( name ), m_cdata( escape( cdata ) ), m_parent( 0 ), m_type( StanzaUndefined )
+    : m_name( name ), m_cdata( escape( cdata ) ), m_parent( 0 ), m_type( StanzaUndefined )
   {
   }
 
   Tag::Tag( Tag *parent, const std::string& name, const std::string& cdata )
-  : m_name( name ), m_cdata( escape( cdata ) ), m_parent( parent ), m_type( StanzaUndefined )
+    : m_name( name ), m_cdata( escape( cdata ) ), m_parent( parent ), m_type( StanzaUndefined )
   {
     m_parent->addChild( this );
   }

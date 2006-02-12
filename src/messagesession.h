@@ -253,7 +253,6 @@ namespace gloox
       virtual void handleMessage( Stanza *stanza );
 
     protected:
-
       /**
       * A wrapper around ClientBase::send(). You should @b not use this function to send a
       * chat message because the Tag is not prepared accordingly (neither Thread ID nor Message

@@ -69,6 +69,7 @@ namespace gloox
       virtual bool checkStreamVersion( const std::string& /*version*/ ) { return true; };
 
     private:
+      // reimplemented from ClientBase
       virtual void rosterFilled() {};
 
       Disco *m_disco;
