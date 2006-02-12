@@ -62,7 +62,7 @@ namespace gloox
    *
    * What the Adhoc object does when you install a new command is tell the supplied Disco object
    * to advertise these commands to clients using the 'Service Discovery' protocol to learn about
-   * this implementations features. These clients can then call and execute the command. Of course you
+   * this implementation's features. These clients can then call and execute the command. Of course you
    * are free to implement access restrictions to not let anyone mess with your bot, for example.
    * However, the commands offered using Service Discovery are publically visible in any case.
    *

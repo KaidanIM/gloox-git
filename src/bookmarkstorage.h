@@ -32,6 +32,65 @@ namespace gloox
   /**
    * @brief This is an implementation of JEP-0048 (Bookmark Storage).
    *
+   * You can use this class to store bookmarks to multi-user chat rooms or ordinary URLs
+   * on the server (and to retrieve them later on).
+   * To retrieve all stored bookmarks for the current user you have to create a class which
+   * inherits from BookmarkHandler. This handler receives retrieved bookmarks.
+   *
+   * @code
+   * class MyClass : public BookmarkHandler
+   * {
+   *   public:
+   *     // ...
+   *     void myFuncRetrieve();
+   *     void myFuncStore();
+   *     void handleBookmarks( const BookmarkList &bList, const ConferenceList &cList );
+   *
+   *   private:
+   *     BookmarkStorage *m_bs;
+   *     BookmarkList m_bList;
+   *     ConferenceList m_cList;
+   * };
+   *
+   * void MyClass::myFuncRetrieve()
+   * {
+   *   m_bs = new BookmarkStorage( m_client );
+   *   m_bs->requestBookmarks();
+   * }
+   *
+   * void MyClass::handleBookmarks( const BookmarkList &bList, const ConferenceList &cList )
+   * {
+   *   m_bList = bList;
+   *   m_cList = cList;
+   * }
+   * @endcode
+   *
+   *
+   * To store additional bookmarks you have to fetch the currently stored ones first,
+   * add your new bookmark to the list, and transfer them all together back to the
+   * server. This protocol does not support storage of 'deltas', that is, when saving
+   * bookmarks all previously saved bookmarks are overwritten.
+   *
+   * @code
+   * void MyClass::myFuncStore()
+   * {
+   *   bookmarkListItem bi;
+   *   bi.url = "http://www.jabber.org";
+   *   bi.name = "my favourite IM protocol";
+   *   m_bList.push_back( bi );
+   *
+   *   conferenceListItem ci
+   *   ci.name = "jabber/xmpp development room";
+   *   ci.jid = "jdev@conference.jabber.org";
+   *   ci.nick = "myNick";
+   *   ci.password = "";
+   *   ci.autojoin = true;
+   *   m_cList.push_back( ci );
+   *
+   *   m_bs->storeBookmarks( m_bList, m_cList );
+   * }
+   * @endcode
+   *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
    */
