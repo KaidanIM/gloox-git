@@ -17,7 +17,7 @@ libgloox_la_SOURCES = jid.cpp parser.cpp connection.cpp clientbase.cpp tag.cpp s
                         flexoff.cpp dataform.cpp dataformfield.cpp dataformbase.cpp messagesession.cpp \
                         messageeventfilter.cpp chatstatefilter.cpp main.cpp compression.cpp
 
-libgloox_la_LDFLAGS = -version-info 0:8:0 -no-undefined -no-allow-shlib-undefined
+libgloox_la_LDFLAGS = -version-info 2:0:0 -no-undefined -no-allow-shlib-undefined
 libgloox_la_LIBADD =
 libgloox_la_CFLAGS = $(CPPFLAGS) $(IKSEMEL_CFLAGS)
 
