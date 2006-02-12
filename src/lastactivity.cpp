@@ -24,10 +24,11 @@ namespace gloox
 {
 
   LastActivity::LastActivity( ClientBase *parent, Disco *disco )
-    : m_lastActivityHandler( 0 ), m_parent( parent ), m_disco( disco )
+    : m_lastActivityHandler( 0 ), m_parent( parent ), m_disco( disco ),
+      m_active( time ( 0 ) )
   {
-    m_disco->addFeature( XMLNS_LAST );
-    m_active = time( 0 );
+    if( m_disco )
+      m_disco->addFeature( XMLNS_LAST );
   }
 
   LastActivity::~LastActivity()

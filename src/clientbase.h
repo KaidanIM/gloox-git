@@ -523,7 +523,6 @@ namespace gloox
       std::string m_streamErrorCData;
       Tag *m_streamErrorAppCondition;
       int m_idCount;
-      int m_autoMessageSessionDecorators;
       bool m_autoMessageSession;
 
   };

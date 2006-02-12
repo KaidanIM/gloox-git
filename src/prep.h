@@ -31,6 +31,7 @@ namespace gloox
    * @note These functions depend on an installed LibIDN at compile time of gloox. If
    * LibIDN is not installed these functions return the string they are given
    * without any modification.
+   *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.2
    */

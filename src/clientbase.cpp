@@ -50,8 +50,7 @@ namespace gloox
       m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ),
       m_messageSessionHandler( 0 ), m_parser( 0 ),
       m_authError( AuthErrorUndefined ), m_streamError( StreamErrorUndefined ),
-      m_streamErrorAppCondition( 0 ), m_idCount( 0 ), m_autoMessageSessionDecorators( 0 ),
-      m_autoMessageSession( false )
+      m_streamErrorAppCondition( 0 ), m_idCount( 0 ), m_autoMessageSession( false )
   {
   }
 
@@ -61,8 +60,7 @@ namespace gloox
       m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ),
       m_messageSessionHandler( 0 ), m_parser( 0 ),
       m_authError( AuthErrorUndefined ), m_streamError( StreamErrorUndefined ),
-      m_streamErrorAppCondition( 0 ), m_idCount( 0 ), m_autoMessageSessionDecorators( 0 ),
-      m_autoMessageSession( false )
+      m_streamErrorAppCondition( 0 ), m_idCount( 0 ), m_autoMessageSession( false )
   {
   }
 

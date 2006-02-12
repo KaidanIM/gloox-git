@@ -52,6 +52,9 @@ namespace gloox
       m_secure( false ), m_fdRequested( false ), m_enableCompression( false )
   {
     m_buf = (char*)calloc( BUFSIZE + 1, sizeof( char ) );
+#ifdef USE_OPENSSL
+    m_ssl = 0;
+#endif
   }
 
   Connection::~Connection()
