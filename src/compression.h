@@ -79,48 +79,6 @@ namespace gloox
 
   };
 
-  /**
-   * Implements Zlib compression.
-   *
-   * @author Jakob Schroeter <js@camaya.net>
-   * @since 0.8
-   */
-  class CompressionZlib : public Compression
-  {
-    public:
-      /**
-       * Constructor.
-       */
-      CompressionZlib();
-
-      /**
-       * Virtual Destructor.
-       */
-      virtual ~CompressionZlib();
-
-      // reimplemented from Compression
-      virtual const std::string compress( const std::string& data ) = 0;
-
-      // reimplemented from Compression
-      virtual const std::string decompress( const std::string& data ) = 0;
-
-    private:
-//       z_stream m_zinflate;
-//       z_stream m_zdeflate;
-
-  };
-
-  /**
-   * Implements LZW compression.
-   *
-   * @author Jakob Schroeter <js@camaya.net>
-   * @since 0.8
-   */
-//   class CompressionLZW : public Compression
-//   {
-
-//   };
-
 }
 
 #endif // COMPRESSION_H__

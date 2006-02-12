@@ -21,11 +21,11 @@ namespace gloox
     : m_valid( false ), m_method( method ), m_compCount( 0 ), m_decompCount( 0 ), m_dataOutCount( 0 ),
       m_dataInCount( 0 )
   {
-// #ifdef HAVE_ZLIB
     switch( method )
     {
       case StreamFeatureCompressZlib:
       {
+#ifdef HAVE_ZLIB
         int ret = Z_OK;
         m_zinflate.zalloc = Z_NULL;
         m_zinflate.zfree = Z_NULL;
@@ -46,10 +46,14 @@ namespace gloox
           if( ret == Z_OK )
             m_valid = true;
         }
+#endif
         break;
       }
       case StreamFeatureCompressDclz:
       {
+#ifdef HAVE_LZW
+        // add lzw initialisation
+#endif
         break;
       }
       default:
@@ -59,8 +63,13 @@ namespace gloox
 
   Compression::~Compression()
   {
+#ifdef HAVE_ZLIB
     inflateEnd( &m_zinflate );
     deflateEnd( &m_zdeflate );
+#endif
+#ifdef HAVE_LZW
+    // add lzw destruction
+#endif
   }
 
   const std::string Compression::compress( const std::string& data )
@@ -71,6 +80,7 @@ namespace gloox
     if( data.empty() )
       return "";
 
+#ifdef HAVE_ZLIB
     int CHUNK = data.length() + ( data.length() / 100 ) + 13;
     Bytef *out = new Bytef[CHUNK];
     char *in = const_cast<char*>( data.c_str() );
@@ -99,6 +109,9 @@ namespace gloox
 
 //     printf( "about to send RAW data (%d), uncompressed: '%s' (%d)\n", result.length(), data.c_str(), data.length() );
     return result;
+#else
+    return data;
+#endif
   }
 
   const std::string Compression::decompress( const std::string& data )
@@ -108,7 +121,7 @@ namespace gloox
 
 //     if( data.empty() )
 //       return "";
-
+#ifdef HAVE_ZLIB
     m_inflateBuffer += data;
 
     int CHUNK = /*m_inflateBuffer.length() **/ 50;
@@ -152,6 +165,9 @@ namespace gloox
             result.c_str(), result.length() );
     m_inflateBuffer.clear();
     return result;
+#else
+    return data;
+#endif
   }
 
 }
