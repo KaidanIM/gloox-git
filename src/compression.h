@@ -74,8 +74,10 @@ namespace gloox
       int m_dataOutCount;
       int m_dataInCount;
 
+#ifdef HAVE_ZLIB
       z_stream m_zinflate;
       z_stream m_zdeflate;
+#endif
 
   };
 
