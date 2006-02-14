@@ -98,7 +98,7 @@ class FlexOffTest : public DiscoHandler, MessageHandler, ConnectionListener, Fle
       j->send( m );
     }
 
-    virtual void handleMessage( const std::string& jid, Stanza *stanza )
+    virtual void handleMessage( const std::string& /*jid*/, Stanza * /*stanza*/ )
     {
     }
 
