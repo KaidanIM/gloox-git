@@ -34,8 +34,8 @@ namespace gloox
    * virtual functions offered by that interface. Then use it like this:
    * @code
    * Client *c = new Client( "example.org" );
-   * c->disableRoster(); // not needed
-   * c->disableDisco(); // not needed
+   * c->disableRoster(); // a roster is not necessary for registration
+   * c->disableDisco(); // the disco client is not necessary for registration
    *
    * Registration* r = new Registration( c );
    * r->registerRegistrationHandler( this );
@@ -51,6 +51,7 @@ namespace gloox
    * least those fields the server requested are filled in.
    *
    * Check @c tests/register_test.cpp for an example.
+   *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.2
    */
