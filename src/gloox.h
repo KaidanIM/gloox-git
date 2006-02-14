@@ -444,7 +444,7 @@ namespace gloox
    */
   enum StanzaType
   {
-    StanzaUndefined,               /**< Undefined. */
+    StanzaUndefined,                /**< Undefined. */
     StanzaIq,                       /**< An Info/Query stanza. */
     StanzaMessage,                  /**< A message stanza. */
     StanzaS10n,                     /**< A presence/subscription stanza. */
@@ -790,11 +790,11 @@ namespace gloox
    */
   enum SessionCreateError
   {
-    ScErrorUnknownError,                  /**< An unknown error occured. */
-    ScErrorInternalServerError,          /**< Internal server error. */
-    ScErrorForbidden,                      /**< Username or resource not allowed to create session. */
-    ScErrorConflict                        /**< Server informs newly-requested session of resource
-                                        * conflict. */
+    ScErrorUnknownError,            /**< An unknown error occured. */
+    ScErrorInternalServerError,     /**< Internal server error. */
+    ScErrorForbidden,               /**< Username or resource not allowed to create session. */
+    ScErrorConflict                 /**< Server informs newly-requested session of resource
+                                     * conflict. */
   };
 
   /**
