@@ -737,8 +737,6 @@ namespace gloox
 
   /**
    * Describes a log message's severity.
-   * The prefix GLOOX_ is used to avoid conflicts with some #defines
-   * from some #included header file.
    */
   enum LogLevel
   {
