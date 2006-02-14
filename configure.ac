@@ -220,6 +220,38 @@ else
   fi
 fi
 
+dnl check for STLport
+AC_DEFUN([STLPORT_CHECK],
+[AC_CACHE_CHECK([STLport is usable], ac_cv_stlport,
+[
+  tmp_cpp_flags="$CPPFLAGS"
+  tmp_libs="$LIBS"
+  CPPFLAGS="-I${ac_stlport_path}/stlport $CPPFLAGS -pthread"
+  LIBS="-L${ac_stlport_path}/lib -Wl,-rpath=${ac_stlport_path}/lib -lstlport $LIBS"
+  AC_TRY_RUN(
+  [#include <cstdio>
+  int main()
+{
+#ifdef STLPORT
+    return 0;
+#else
+    return 1;
+#endif
+}],
+  ac_cv_stlport=yes,
+  ac_cv_stlport=no)
+  CPPFLAGS="$tmp_cpp_flags"
+  LIBS="$tmp_libs"
+])
+  if test $ac_cv_stlport = yes; then
+    CPPFLAGS="-I${ac_stlport_path}/stlport $CPPFLAGS -pthread"
+    LIBS="-L${ac_stlport_path}/lib -Wl,-rpath=${ac_stlport_path}/lib -lstlport $LIBS"
+  fi
+])
+AC_ARG_WITH(stlport,[  --with-stlport=@<:@DIR@:>@          use STLport installed in DIR (default: not used)],
+                      [ac_stlport_path=$withval STLPORT_CHECK],
+                      [ac_cv_stlport=no])
+
 dnl Debug
 debug="no"
 AC_ARG_ENABLE( debug,

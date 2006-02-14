@@ -6,15 +6,14 @@ Todo
 - introduce return values for *Handlers to indicate whether following handlers should be invoked as well
 - sort SRV records by weight & cost
 - get rid of iksemel (and don't introduce another hard requirement)
+- unify error recognition
+- thread safety
+- list of filters in messagesession
+- look into IPV6 support
 
 
 In the pipe
 -----------
 
-- JEP-0022
-- thread-safety
-- derive RosterItem from JID
-+ 'can do SRV' function
-- revamp Roster*
-+ glooxVersion()
-- revamp debugging
+- doc for every class
+- allow immediate re-connection (reset clientbase/client/component/connection)

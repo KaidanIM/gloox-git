@@ -1,14 +1,87 @@
 
-v0.8 -- xx yyy 2005
+v0.8 -- xx Feb 2006
 -------------------
-- 'ported' to NetBSD 2.1
-- 'ported' to Linux on Intel XScale (gumstix in this case)
-- RosterManager: use group's name, not literal 'group' (thanks to Maciej Paszta)
+- added an extensible message session abstraction (called MessageSession)
+- added automatic MessageSession creation facilities upon incoming messages
+- JEP-0022 (Message Events)
+- JEP-0085 (Chat State Notifications)
+- 'ported' to Linux on Arm (Intel XScale on gumstix in this case)
+- RosterManager: returning true from RosterListener::unsubscriptionRequest()
+  makes the RosterManager no longer remove the item from the roster. It is
+  unsubscribed from only. Use unsubscribe( jid, msg, true ) to remove it manually.
+- RosterListener: renamed itemChanged() --> presenceUpdated()
+- RosterListener: added nonrosterPresenceReceived()
+- revamped logging system, introducing per-ClientBase log instance
+- Tag: renamed addAttrib() --> addAttribute()
+- RosterItem & RosterListener: more const & return values and parameters
+- RosterItem: support for multiple resources, introducing RosterItem::Resource
+- Stanza: added 'int priority()'
+- SASL EXTERNAL and support for client key/cert
+- RosterManager: added RosterItem* getRosterItem( const JID& jid )
+- added extern "C" const char* gloox_version()
+- Tag: made findChild(...) return 0 instead of new Tag (reverted change from 0.7.6)
+
+
+v0.7.6.1 -- 10 Feb 2006
+-----------------------
+- fixed OpenSSL check on MinGW
+
+
+v0.7.6 -- 07 Feb 2006
+--------------------
+- fixed alignment issues on ARM
+- more const'ness where possible (thanks to Marc Rousseau)
+- configure checks for res_querydomain et.al.
+- doc updates
+- Tag: added findChild( name, attr, value )
+- Tag: made findChild(...) return new Tag instead of 0
+- DataForm (JEP-0004) awareness for Registration class
+- workaround for iksemel's base64 bug
+  SASL Plain with GTalk and SASL Digest-MD5 with Wildfire now possible
+- XMPP version requirement relaxed for Components
+- added __declspec( dllimport ) on win32 (thanks to Low Weng Liong)
+- fixed OpenSSL lib dependency on MinGW (thanks to Low Weng Liong)
+- 'ported' to Syllable
+
+
+v0.7.5 -- 05 Jan 2006
+--------------------
+- fixed a crash occuring if no DNS servers could be reached
+- added virtual destructors to *Handlers
+- fixed &quot; bug
+- various documentation updates
+
+
+v0.7.4 -- 15 Dec 2005
+--------------------
+- RosterListener: added asynchronous subscription request notification
+- LastActivity: fixed bug were stanza was not sent
+- NonSaslAuth: don't confuse auth failure reason
+- Connection: return correct disconnect reason if non-SASL auth fails in non-blocking connect mode
+- RosterManager: handle 'early presence' correctly
+- when using OpenSSL: imply: no cert == invalid cert
+- RosterItem: added statusMsg()
+
+
+v0.7.3 -- 10 Dec 2005
+--------------------
+- added optional OpenSSL support
+
+
+v0.7.2 -- 06 Dec 2005
+--------------------
+- RosterManager: fixed a problem with servers not supporting private XML storage
+
+
+v0.7.1 -- 24 Nov 2005
+--------------------
+- ported to NetBSD 2.1
+- RosterManager: use the group's name, not 'group' (thanks to Maciej Paszta)
 - RosterManager: update/set an item's name
-- RosterManager: returning true from RosterListener::unsubscriptionRequest() makes the RosterManager no longer remove the item from the roster. It is unsubscribed from only. You have to remove it manually.
-- RosterListener: renamed itemChanged to presenceUpdated
-- revamped logging system
-- allow presence broadcasting in Stanza::createPresenceStanza()
+- include config.h.win in distribution
+- Stanza: allow presence broadcasting in createPresenceStanza()
+- Client: allow registration with server which supports SASL ANONYMOUS
+- Client: init m_jid::server for registration
 
 
 v0.7 -- 02 Nov 2005
