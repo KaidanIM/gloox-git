@@ -48,11 +48,11 @@ namespace gloox
    * Using MessageSessions has the following advantages over the old plain MessageHandler:
    * @li automatic creation of MessageSessions
    * @li filtering by JID
-   * @li automatic handling of threading (XMPP threads)
+   * @li automatic handling of threading (XMPP message threads, that is)
    * @li simpler sending of messages
    * @li support for Message Events and Chat State Notifications
    *
-   * Usage:<br>
+   * @b Usage:<br>
    * Derive an object from MessageSessionHandler and reimplement handleMessageSession() to store your
    * shiny new sessions somewhere, or to create a new chat window, or whatever. Register your
    * object with a ClientBase instance using setAutoMessageSession(). In code:
