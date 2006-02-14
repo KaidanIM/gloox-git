@@ -218,6 +218,20 @@ namespace gloox
           m_registrationHandler->handleDataForm( form );
         }
 
+        if( q->hasChild( "x", "xmlns", XMLNS_X_OOB ) )
+        {
+          Tag *x = q->findChild( "x", "xmlns", XMLNS_X_OOB );
+          std::string url;
+          if( x->hasChild( "url" ) )
+            url = x->findChild( "url" )->cdata();
+
+          std::string desc;
+          if( x->hasChild( "url" ) )
+            url = x->findChild( "url" )->cdata();
+
+          m_registrationHandler->handleOOB( url, desc );
+        }
+
         int fields = 0;
         std::string instructions;
 

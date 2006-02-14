@@ -101,6 +101,16 @@ namespace gloox
        * @param form The DataForm conataining registration information.
        */
       virtual void handleDataForm( const DataForm &form ) = 0;
+
+      /**
+       * This function is called if the server does not offer in-band registration
+       * but wants to refer the user to an external URL.
+       * @param url The external URL where registration is possible (or where more information
+       * can be found).
+       * @param desc Some descriptive text.
+       */
+      virtual void handleOOB( const std::string& url, const std::string& desc ) = 0;
+
   };
 
 }

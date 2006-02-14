@@ -84,6 +84,11 @@ class RegTest : public RegistrationHandler, ConnectionListener, LogHandler
       printf( "datForm received\n" );
     };
 
+    virtual void handleOOB( const std::string& url, const std::string& desc )
+    {
+      printf( "OOB registration requested. %s: %s\n", desc.c_str(), url.c_str() );
+    }
+
     virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
     {
       printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
