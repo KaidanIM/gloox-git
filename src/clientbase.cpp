@@ -72,6 +72,9 @@ namespace gloox
 
   ConnectionError ClientBase::recv( int timeout )
   {
+    if( !m_connection || m_connection->state() == StateDisconnected )
+      return ConnNotConnected;
+
     ConnectionError e = m_connection->recv( timeout );
     if( e != ConnNoError )
       notifyOnDisconnect( e );
@@ -94,6 +97,7 @@ namespace gloox
     if( !m_clientKey.empty() && !m_clientCerts.empty() )
       m_connection->setClientCert( m_clientKey, m_clientCerts );
 #endif
+
     int ret = m_connection->connect();
     if( ret == StateConnected )
     {
@@ -657,6 +661,8 @@ namespace gloox
     {
       (*it)->onDisconnect( e );
     }
+
+    cleanup();
   }
 
   bool ClientBase::notifyOnTLSConnect( const CertInfo& info )
@@ -772,6 +778,11 @@ namespace gloox
       if( (*it).tag == stanza->name() && (*it).xmlns == stanza->xmlns() )
         (*it).th->handleTag( stanza );
     }
+  }
+
+  void ClientBase::cleanup()
+  {
+
   }
 
 }
