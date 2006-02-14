@@ -95,19 +95,14 @@ namespace gloox
       m_zdeflate.next_out = (Bytef*)out;
 
       ret = deflate( &m_zdeflate, Z_SYNC_FLUSH );
-      printf( "deflate returns: %d\n", ret );
       tmp.assign( (char*)out, CHUNK - m_zdeflate.avail_out );
       result += tmp;
     } while( m_zdeflate.avail_out == 0 );
 
-//     ::compress( out, (uLongf*)&CHUNK, (Bytef*)in, data.length() );
-//     std::string result;
-//     result.assign( (char*)out, CHUNK );
     m_compCount += result.length();
     m_dataOutCount += data.length();
     delete[] out;
 
-//     printf( "about to send RAW data (%d), uncompressed: '%s' (%d)\n", result.length(), data.c_str(), data.length() );
     return result;
 #else
     return data;
@@ -119,12 +114,13 @@ namespace gloox
     if( !m_valid )
       return data;
 
-//     if( data.empty() )
-//       return "";
+    if( data.empty() )
+      return "";
+
 #ifdef HAVE_ZLIB
     m_inflateBuffer += data;
 
-    int CHUNK = /*m_inflateBuffer.length() **/ 50;
+    int CHUNK = 50;
     char *out = new char[CHUNK];
     char *in = const_cast<char*>( m_inflateBuffer.c_str() );
 
@@ -138,31 +134,15 @@ namespace gloox
       m_zinflate.avail_out = CHUNK;
       m_zinflate.next_out = (Bytef*)out;
 
-      printf( "av_in: %d, ne_in: %c, av_out: %d\n",
-              m_zinflate.avail_in, m_zinflate.next_in,
-              m_zinflate.avail_out );
-
       ret = inflate( &m_zinflate, Z_SYNC_FLUSH );
       tmp.assign( out, CHUNK - m_zinflate.avail_out );
-      printf( "inflate: %d, produced: %s\n", ret, tmp.c_str() );
       result += tmp;
     } while( m_zinflate.avail_out == 0 );
-
-//     if( result.empty() || ret < 0 )
-//     {
-//       printf( "raw data received, error: %s, recv: %s\n", m_zinflate.msg, data.c_str() );
-//       inflateReset( &m_zinflate );
-//       return "";
-//     }
-
-//     } while( m_zinflate.avail_out == 0 );
 
     m_decompCount += result.length();
     m_dataInCount += m_inflateBuffer.length();
     delete[] out;
 
-    printf( "received RAW data (%d) uncompressed to: '%s' (%d)\n", m_inflateBuffer.length(),
-            result.c_str(), result.length() );
     m_inflateBuffer.clear();
     return result;
 #else

@@ -56,14 +56,14 @@ namespace gloox
        * @param data The original (uncompressed) data.
        * @return The compressed data.
        */
-      virtual const std::string compress( const std::string& data ) = 0;
+      virtual const std::string compress( const std::string& data );
 
       /**
        * Decompresses the given chunk of data.
        * @param data The compressed data.
        * @return The decompressed data.
        */
-      virtual const std::string decompress( const std::string& data ) = 0;
+      virtual const std::string decompress( const std::string& data );
 
     protected:
       bool m_valid;
