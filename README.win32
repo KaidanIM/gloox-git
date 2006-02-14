@@ -13,6 +13,7 @@ Project files for Bloodshed Dev-C++ (gloox.dev) and MSVC 6 (gloox.dsp) are inclu
 
 Note: SRV resolving is disabled on Windows until I find a way to actually do this on that platform.
 
+
 Building gloox in MinGW
 -----------------------
 gloox should build out of the box on MinGW if you have Iksemel installed.
@@ -43,4 +44,6 @@ Building gloox on MSVC
 - correct the path to iksemel.lib
 - add the path to iksemel's header files (or at least iksemel.h)
 - don't forget to switch 'include RTTI information' on
+- to receive any debug output you should use the LogSink facilities (this is not win32-specific)
 - build
+- if you get C4541 warnings, you forgot RTTI ;)
