@@ -50,7 +50,7 @@ namespace gloox
    *
    *   // this might be a bot monitoring a weather station, for example
    *   m_adhoc->registerAdhocCommandProvider( this, "getTemp", "Retrieve current temperature" );
-   *   m_adhoc->registerAdhocCommandProvider( this, "getPressure", Retrieve current air pressure" );
+   *   m_adhoc->registerAdhocCommandProvider( this, "getPressure", "Retrieve current air pressure" );
    *   [...]
    * }
    * @endcode
