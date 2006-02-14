@@ -245,7 +245,8 @@
  * @section jeps_sec Protocol Enhancements
  *
  * The Jabber Software Foundation has published a number of extensions to the core protocols, called
- * Jabber Enhancement Proposals (JEPs). A couple of these JEPs are implemented in gloox.
+ * Jabber Enhancement Proposals (JEPs). A couple of these JEPs are implemented in gloox. Browse these
+ * pages for more information.
  */
 
 #ifndef GLOOX_H__
