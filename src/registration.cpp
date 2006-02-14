@@ -212,9 +212,9 @@ namespace gloox
           break;
         }
 
-        if( q->hasChild( "x", "xmlns", XMLNS_DATA_FORMS ) )
+        if( q->hasChild( "x", "xmlns", XMLNS_X_DATA ) )
         {
-          DataForm form( q->findChild( "x", "xmlns", XMLNS_DATA_FORMS ) );
+          DataForm form( q->findChild( "x", "xmlns", XMLNS_X_DATA ) );
           m_registrationHandler->handleDataForm( form );
         }
 

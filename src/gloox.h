@@ -283,8 +283,9 @@ namespace gloox
   const std::string XMLNS_AUTH              = "jabber:iq:auth";
   const std::string XMLNS_PRIVATE_XML       = "jabber:iq:private";
   const std::string XMLNS_LAST              = "jabber:iq:last";
-  const std::string XMLNS_DATA_FORMS        = "jabber:x:data";
+  const std::string XMLNS_X_DATA            = "jabber:x:data";
   const std::string XMLNS_X_EVENT           = "jabber:x:event";
+  const std::string XMLNS_X_OOB             = "jabber:x:oob";
   const std::string XMLNS_BOOKMARKS         = "storage:bookmarks";
   const std::string XMLNS_ANNOTATIONS       = "storage:rosternotes";
   const std::string XMLNS_ROSTER_DELIMITER  = "roster:delimiter";
