@@ -471,23 +471,20 @@ namespace gloox
     if( data.empty() || ( m_socket == -1 ) )
       return;
 
-    char *xml;
+    std::string xml;
     if( m_compression && m_enableCompression )
-      xml = strdup( m_compression->compress( data ).c_str() );
+      xml = m_compression->compress( data );
     else
-      xml = strdup( data.c_str() );
-
-    if( !xml )
-      return;
+      xml = data;
 
 #if defined( USE_GNUTLS )
     if( m_secure )
     {
       int ret;
-      size_t len = strlen( xml );
+      size_t len = xml.length();
       do
       {
-        ret = gnutls_record_send( m_session, xml, len );
+        ret = gnutls_record_send( m_session, xml.c_str(), len );
       }
       while( ( ret == GNUTLS_E_AGAIN ) || ( ret == GNUTLS_E_INTERRUPTED ) );
     }
@@ -496,23 +493,23 @@ namespace gloox
     if( m_secure )
     {
       int ret;
-      size_t len = strlen( xml );
-      ret = SSL_write( m_ssl, xml, len );
+      size_t len = xml.length();
+      ret = SSL_write( m_ssl, xml.c_str(), len );
     }
     else
 #endif
     {
       size_t num = 0;
-      size_t len = strlen( xml );
+      size_t len = xml.length();
       while( num < len )
+      {
 #ifdef SKYOS
-        num += ::send( m_socket, (unsigned char*)(xml+num), len - num, 0 );
+        num += ::send( m_socket, (unsigned char*)(xml.c_str()+num), len - num, 0 );
 #else
-        num += ::send( m_socket, (xml+num), len - num, 0 );
+        num += ::send( m_socket, (xml.c_str()+num), len - num, 0 );
 #endif
+      }
     }
-
-    free( xml );
   }
 
   ConnectionState Connection::connect()
