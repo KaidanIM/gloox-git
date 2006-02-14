@@ -45,10 +45,10 @@ namespace gloox
    * the generic MessageHandler and a MessageSession established for the sender's JID. The MessageSession
    * takes precedence.
    *
-   * Using MessageSessions has the following adavantages over the old plain MessageHandler:
+   * Using MessageSessions has the following advantages over the old plain MessageHandler:
    * @li automatic creation of MessageSessions
    * @li filtering by JID
-   * @li automatic handling of threading
+   * @li automatic handling of threading (XMPP threads)
    * @li simpler sending of messages
    * @li support for Message Events and Chat State Notifications
    *
