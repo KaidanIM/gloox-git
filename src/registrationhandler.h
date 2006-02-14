@@ -26,8 +26,9 @@ namespace gloox
    * @brief A virtual interface that receives events from an @ref Registration object.
    *
    * Derived classes can be registered as RegistrationHandlers with an
-   * Registration object. Incoming result for operations initiated through
+   * Registration object. Incoming results for operations initiated through
    * the Registration object are forwarded to this handler.
+   *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.2
    */
