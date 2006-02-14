@@ -15,6 +15,7 @@
 #ifndef CLIENTBASE_H__
 #define CLIENTBASE_H__
 
+#include "macros.h"
 #include "gloox.h"
 #include "jid.h"
 #include "logsink.h"
