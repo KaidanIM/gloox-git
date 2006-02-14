@@ -1,6 +1,6 @@
 
-v0.8 -- xx Feb 2006
--------------------
+v0.8-pre1 -- 14 Feb 2006
+------------------------
 - added an extensible message session abstraction (called MessageSession)
 - added automatic MessageSession creation facilities upon incoming messages
 - JEP-0022 (Message Events)
