@@ -797,6 +797,15 @@ namespace gloox
   };
 
   /**
+   * Currently implemented message session filters.
+   */
+  enum MessageSessionFilter
+  {
+    FilterMessageEvents    = 1,     /**< Message Events (JEP-0022) */
+    FilterChatStates       = 2      /**< Chat State Notifications (JEP-0085) */
+  };
+
+  /**
    * A list of strings.
    */
   typedef std::list<std::string> StringList;

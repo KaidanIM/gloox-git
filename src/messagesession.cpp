@@ -28,7 +28,7 @@ namespace gloox
 
   MessageSession::MessageSession( ClientBase *parent, const JID& jid )
     : m_parent( parent ), m_eventFilter( 0 ), m_stateFilter( 0 ), m_target( jid ),
-      m_messageHandler( 0 ), m_enableMessageEvents( true ), m_enableChatStates( true )
+      m_messageHandler( 0 ), m_enableMessageEvents( false ), m_enableChatStates( false )
   {
     if( m_parent )
       m_parent->registerMessageHandler( m_target.full(), this );

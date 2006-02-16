@@ -117,6 +117,8 @@ namespace gloox
    * m_session->send( "Hello World!", "No Subject" );
    * @endcode
    *
+   * Use setFilter() to enable/disable embedded filters.
+   *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.8
    */
@@ -127,12 +129,6 @@ namespace gloox
     friend class ChatStateFilter;
 
     public:
-      enum MessageSessionFilter
-      {
-        FilterMessageEvents    = 1,  /**< Message Events (JEP-0022) */
-        FilterChatStates       = 2   /**< Chat State Notifications (JEP-0085) */
-      };
-
       /**
        * Constructs a new MessageSession for the given JID.
        * It is recommended to supply a full JID, in other words, it should have a resource set.
