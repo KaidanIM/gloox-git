@@ -81,6 +81,7 @@ namespace gloox
        * Use this function to add a new attribute to the tag. Tha value is an @c int here.
        * @param name The name of the attribute.
        * @param value The value of the attribute.
+       * @since 0.8
        */
       virtual void addAttribute( const std::string& name, int value );
 
@@ -144,7 +145,7 @@ namespace gloox
       /**
        * This function finds and returns an element within the child elements of the current tag.
        * @param name The name of the element to search for.
-       * @return The found Tag, or an empty Tag.
+       * @return The found Tag, or NUL.
        */
       virtual Tag* findChild( const std::string& name );
 
@@ -154,7 +155,7 @@ namespace gloox
        * @param name The name of the element to search for.
        * @param attr The name of the attribute of the child element.
        * @param value The value of the attribute of the child element.
-       * @return The found Tag, or an empty Tag.
+       * @return The found Tag, or NUL.
        */
       virtual Tag* findChild( const std::string& name, const std::string& attr,
                               const std::string& value = "" );
@@ -165,7 +166,7 @@ namespace gloox
        * @param name The name of the child element.
        * @param attr The name of the attribute of the child element.
        * @param value The value of the attribute of the child element.
-       * @return @b True if the given child element exists, @ false otherwise.
+       * @return @b True if the given child element exists, @b false otherwise.
        */
       virtual bool hasChild( const std::string& name,
                              const std::string& attr = "", const std::string& value = "" ) const;
@@ -175,7 +176,7 @@ namespace gloox
        * with an optional value. The name of the child element does not matter.
        * @param attr The name of the attribute of the child element.
        * @param value The value of the attribute of the child element.
-       * @return The child if found, an empty Tag otherwise.
+       * @return The child if found, NUL otherwise.
        */
       virtual Tag* findChildWithAttrib( const std::string& attr, const std::string& value = "" );
 
@@ -184,7 +185,7 @@ namespace gloox
        * with an optional value. The name of the child element does not matter.
        * @param attr The name of the attribute of the child element.
        * @param value The value of the attribute of the child element.
-       * @return @b True if any such child element exists, @ false otherwise.
+       * @return @b True if any such child element exists, @b false otherwise.
        */
       virtual bool hasChildWithAttrib( const std::string& attr, const std::string& value = "" ) const;
 
@@ -205,7 +206,7 @@ namespace gloox
 
       /**
        * Returns the tag's parent Tag.
-       * @return The Tag above the current Tag.
+       * @return The Tag above the current Tag. May be @b 0.
        */
       Tag* parent() { return m_parent; };
 
