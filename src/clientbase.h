@@ -370,10 +370,8 @@ namespace gloox
        * enable this feature without a valid MessageSessionHandler.
        * @param autoMS Whether to enable automatic MessageSession creation.
        * @param msh The MessageSessionHandler that will receive the newly created MessageSession.
-       * @param filters Bit-wise ORed MessageSessionFilter that will be enabled by default in
-       * newly created MessageSessions. All filters default to 'off'.
        */
-      void setAutoMessageSession( bool autoMS, MessageSessionHandler *msh, int filters );
+      void setAutoMessageSession( bool autoMS, MessageSessionHandler *msh );
 
       /**
        * Returns the LogSink instance for this ClientBase and all related objects.
@@ -528,7 +526,6 @@ namespace gloox
       std::string m_streamErrorCData;
       Tag *m_streamErrorAppCondition;
       int m_idCount;
-      int m_messageSessionFilters;
       bool m_autoMessageSession;
 
   };

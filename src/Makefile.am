@@ -22,22 +22,23 @@ libgloox_la_LIBADD =
 libgloox_la_CFLAGS = $(CPPFLAGS) $(IKSEMEL_CFLAGS)
 
 libglooxincludedir = $(includedir)/gloox
-libglooxinclude_HEADERS = adhoccommandprovider.h  privacymanager.h        tag.h \
-                            adhoc.h               iqhandler.h             privatexml.h \
-                            annotations.h         client.h                privatexmlhandler.h \
-                            annotationshandler.h  component.h             registration.h \
-                            bookmarkhandler.h     registrationhandler.h   jid.h \
-                            bookmarkstorage.h     messagehandler.h        rosteritem.h \
-                            clientbase.h          rosterlistener.h        taghandler.h \
-                            connectionlistener.h  rostermanager.h         gloox.h\
-                            disco.h               presencehandler.h       subscriptionhandler.h \
-                            discohandler.h        privacyitem.h           stanza.h\
-                            disconodehandler.h    privacylisthandler.h    loghandler.h \
-                            lastactivity.h        lastactivityhandler.h   flexoff.h \
-                            flexoffhandler.h      dataform.h              dataformfield.h \
-                            dataformitem.h        dataformbase.h          dataformreported.h \
-                            macros.h              logsink.h               messagesession.h \
-                            messageeventhandler.h messagesessionhandler.h chatstatehandler.h
+libglooxinclude_HEADERS = adhoccommandprovider.h    privacymanager.h        tag.h \
+                            adhoc.h                 iqhandler.h             privatexml.h \
+                            annotations.h           client.h                privatexmlhandler.h \
+                            annotationshandler.h    component.h             registration.h \
+                            bookmarkhandler.h       registrationhandler.h   jid.h \
+                            bookmarkstorage.h       messagehandler.h        rosteritem.h \
+                            clientbase.h            rosterlistener.h        taghandler.h \
+                            connectionlistener.h    rostermanager.h         gloox.h\
+                            disco.h                 presencehandler.h       subscriptionhandler.h \
+                            discohandler.h          privacyitem.h           stanza.h\
+                            disconodehandler.h      privacylisthandler.h    loghandler.h \
+                            lastactivity.h          lastactivityhandler.h   flexoff.h \
+                            flexoffhandler.h        dataform.h              dataformfield.h \
+                            dataformitem.h          dataformbase.h          dataformreported.h \
+                            macros.h                logsink.h               messagesession.h \
+                            messageeventhandler.h   messagesessionhandler.h chatstatehandler.h \
+                            chatstatefilter.h       messageeventfilter.h
 
-noinst_HEADERS = prep.h parser.h connection.h dns.h nonsaslauth.h messageeventfilter.h \
-                   chatstatefilter.h messagefilter.h base64.h compression.h
+noinst_HEADERS = prep.h parser.h connection.h dns.h nonsaslauth.h messagefilter.h \
+                   base64.h compression.h
