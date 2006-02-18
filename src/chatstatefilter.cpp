@@ -15,7 +15,6 @@
 #include "chatstatehandler.h"
 #include "messageeventhandler.h"
 #include "messagesession.h"
-#include "disco.h"
 
 namespace gloox
 {

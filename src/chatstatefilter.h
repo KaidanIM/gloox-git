@@ -20,7 +20,6 @@
 namespace gloox
 {
 
-  class Disco;
   class Tag;
   class ChatStateHandler;
   class MessageSession;
