@@ -124,6 +124,7 @@ namespace gloox
 
     friend class MessageEventFilter;
     friend class ChatStateFilter;
+    friend class InBandBytestream;
 
     public:
       /**
@@ -209,13 +210,9 @@ namespace gloox
 
       MessageFilterList m_messageFilterList;
       ClientBase *m_parent;
-      MessageEventFilter *m_eventFilter;
-      ChatStateFilter *m_stateFilter;
       JID m_target;
       MessageHandler *m_messageHandler;
       std::string m_thread;
-      bool m_enableMessageEvents;
-      bool m_enableChatStates;
 
   };
 
