@@ -34,7 +34,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.8
    */
-  class MessageEventFilter : public MessageFilter
+  class GLOOX_API MessageEventFilter : public MessageFilter
   {
     public:
       /**

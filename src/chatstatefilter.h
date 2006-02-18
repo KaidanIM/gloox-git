@@ -32,22 +32,19 @@ namespace gloox
    * This implementation of Chat States is fully transparent to the user of the class.
    * If the remote entity does not request chat states, ChatStateFilter will not send
    * any, even if the user requests it. (This is required by the protocol specification.)
+   * You should annouce this capability by use of Disco (associated namespace is XMLNS_CHAT_STATES).
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.8
    */
-  class ChatStateFilter : public MessageFilter
+  class GLOOX_API ChatStateFilter : public MessageFilter
   {
     public:
       /**
        * Contstructs a new Chat State filter for a MessageSession.
        * @param parent The MessageSession to decorate.
-       * @param disco A Disco object that is used to announce availability
-       * of Chat State Notification to other clients. If @b 0 no
-       * announcement will occur. However, you can announce this when
-       * setting up the Client to have it announced as early as possible.
        */
-      ChatStateFilter( MessageSession *parent, Disco *disco );
+      ChatStateFilter( MessageSession *parent );
 
       /**
        * Virtual destructor.
