@@ -50,8 +50,7 @@ namespace gloox
       m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ),
       m_messageSessionHandler( 0 ), m_parser( 0 ),
       m_authError( AuthErrorUndefined ), m_streamError( StreamErrorUndefined ),
-      m_streamErrorAppCondition( 0 ), m_idCount( 0 ), m_messageSessionFilters( 0 ),
-      m_autoMessageSession( false )
+      m_streamErrorAppCondition( 0 ), m_idCount( 0 ), m_autoMessageSession( false )
   {
   }
 
@@ -61,8 +60,7 @@ namespace gloox
       m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ),
       m_messageSessionHandler( 0 ), m_parser( 0 ),
       m_authError( AuthErrorUndefined ), m_streamError( StreamErrorUndefined ),
-      m_streamErrorAppCondition( 0 ), m_idCount( 0 ), m_messageSessionFilters( 0 ),
-      m_autoMessageSession( false )
+      m_streamErrorAppCondition( 0 ), m_idCount( 0 ), m_autoMessageSession( false )
   {
   }
 
@@ -516,10 +514,8 @@ namespace gloox
       return "";
   }
 
-  void ClientBase::setAutoMessageSession( bool autoMS, MessageSessionHandler *msh, int filters )
+  void ClientBase::setAutoMessageSession( bool autoMS, MessageSessionHandler *msh )
   {
-    m_messageSessionFilters = filters;
-
     if( autoMS && msh )
     {
       m_messageSessionHandler = msh;
@@ -762,7 +758,6 @@ namespace gloox
     if( m_autoMessageSession && m_messageSessionHandler )
     {
       MessageSession *session = new MessageSession( this, stanza->from() );
-      session->setFilter( m_messageSessionFilters, true );
       m_messageSessionHandler->handleMessageSession( session );
       notifyMessageHandlers( stanza );
       return;

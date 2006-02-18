@@ -24,10 +24,7 @@ namespace gloox
 
   class ClientBase;
   class Tag;
-  class MessageEventFilter;
-  class MessageEventHandler;
-  class ChatStateFilter;
-  class ChatStateHandler;
+  class MessageFilter;
 
   /**
    * @brief An abstraction of a message session between any two entities.
@@ -174,34 +171,6 @@ namespace gloox
        */
       virtual void registerMessageHandler( MessageHandler *mh );
 
-       /**
-       * The MessageEventHandler registered here will receive Message Events according
-       * to JEP-0022.
-       * @param meh The MessageEventHandler to register.
-        */
-      void registerMessageEventHandler( MessageEventHandler *meh );
-
-      /**
-       * This function clears the internal pointer to the MessageEventHandler.
-       * Message Events will not be delivered anymore after calling this function until another
-       * MessageEventHandler is registered.
-       */
-      void removeMessageEventHandler();
-
-      /**
-       * The ChatStateHandler registered here will receive Chat States according
-       * to JEP-0085.
-       * @param csh The ChatStateHandler to register.
-       */
-      void registerChatStateHandler( ChatStateHandler *csh );
-
-      /**
-       * This function clears the internal pointer to the ChatStateHandler.
-       * Chat States will not be delivered anymore after calling this function until another
-       * ChatStateHandler is registered.
-       */
-      void removeChatStateHandler();
-
       /**
        * A convenience function to quickly send a message (optionally with subject). This is
        * the preferred way to send a message from a MessageSession.
@@ -211,39 +180,17 @@ namespace gloox
       void send( const std::string& message, const std::string& subject );
 
       /**
-       * Use this function to raise an event as defined in JEP-0022.
-       * @note The Spec states that Message Events shall not be sent to an entity
-       * which did not request them. Reasonable effort is taken in this function to
-       * avoid spurious event sending. You should be safe to call this even if Message
-       * Events were not requested by the remote entity. However,
-       * calling raiseEvent( MESSAGE_EVENT_COMPOSING ) for every keystroke still is
-       * discouraged. ;)
-       * @param event The event to raise.
+       * Use this function to hook a new MessageFilter into a MessageSession.
+       * The filter will be able to read and/or modify a message stanza's content.
+       * @param mf The MessageFilter to add.
        */
-      void raiseMessageEvent( MessageEventType event );
+      void registerMessageFilter( MessageFilter *mf );
 
       /**
-       * Use this function to set a chat state as defined in JEP-0085.
-       * @note The Spec states that Chat States shall not be sent to an entity
-       * which did not request them. Reasonable effort is taken in this function to
-       * avoid spurious state sending. You should be safe to call this even if Message
-       * Events were not requested by the remote entity. However,
-       * calling setChatState( CHAT_STATE_COMPOSING ) for every keystroke still is
-       * discouraged. ;)
-       * @param state The state to set.
+       * Use this function to remove a MessageFilter from the MessageSession.
+       * @param mf The MessageFilter to remove.
        */
-      void setChatState( ChatStateType state );
-
-      /**
-       * Use this function to (re-)enable/disable certain MessageSessionFilter's that were
-       * disabled/enabled previously.
-       * By default, all filters are enabled.
-       * @param filters Bit-wise ORed MessageSessionFilter. State of filters not included here
-       * will not be touched.
-       * @param enable If @b true, @c filters will be enabled, if @b false, @c filters will be
-       * disabled.
-       */
-      void setFilter( int filters, bool enable );
+      void removeMessageFilter( MessageFilter *mf );
 
       // reimplemented from MessageHandler
       virtual void handleMessage( Stanza *stanza );
@@ -258,6 +205,9 @@ namespace gloox
       virtual void send( Tag *tag );
 
     private:
+      typedef std::list<MessageFilter*> MessageFilterList;
+
+      MessageFilterList m_messageFilterList;
       ClientBase *m_parent;
       MessageEventFilter *m_eventFilter;
       ChatStateFilter *m_stateFilter;

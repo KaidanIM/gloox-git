@@ -13,10 +13,7 @@
 
 #include "messagesession.h"
 
-#include "messageeventhandler.h"
-#include "messageeventfilter.h"
-#include "chatstatefilter.h"
-#include "chatstatehandler.h"
+#include "messagefilter.h"
 #include "clientbase.h"
 #include "client.h"
 #include "disco.h"
@@ -27,38 +24,31 @@ namespace gloox
 {
 
   MessageSession::MessageSession( ClientBase *parent, const JID& jid )
-    : m_parent( parent ), m_eventFilter( 0 ), m_stateFilter( 0 ), m_target( jid ),
-      m_messageHandler( 0 ), m_enableMessageEvents( false ), m_enableChatStates( false )
+    : m_parent( parent ), m_target( jid ), m_messageHandler( 0 )
   {
     if( m_parent )
       m_parent->registerMessageHandler( m_target.full(), this );
 
     m_thread = "gloox" + m_parent->getID();
 
-    m_eventFilter = new MessageEventFilter( this );
-    m_stateFilter = new ChatStateFilter( this );
-
-    Client *c = dynamic_cast<Client *>( m_parent );
-    if( c )
-      c->disco()->addFeature( XMLNS_CHAT_STATES );
-
+//     Client *c = dynamic_cast<Client*>( m_parent );
+//     if( c )
+//       c->disco()->addFeature( XMLNS_CHAT_STATES );
   }
 
   MessageSession::~MessageSession()
   {
     if( m_parent )
       m_parent->removeMessageHandler( m_target.full() );
-
-    delete m_stateFilter;
-    delete m_eventFilter;
   }
 
   void MessageSession::handleMessage( Stanza *stanza )
   {
-    if( m_enableMessageEvents && m_eventFilter )
-      m_eventFilter->filter( stanza );
-    if( m_enableChatStates && m_stateFilter )
-      m_stateFilter->filter( stanza );
+    MessageFilterList::const_iterator it = m_messageFilterList.begin();
+    for( ; it != m_messageFilterList.end(); ++it )
+    {
+      (*it)->filter( stanza );
+    }
 
     if( !m_messageHandler || stanza->body().empty() )
       return;
@@ -78,11 +68,11 @@ namespace gloox
     m->addAttribute( "to", m_target.full() );
     new Tag( m, "thread", m_thread );
 
-    if( m_eventFilter )
-      m_eventFilter->decorate( m );
-
-    if( m_stateFilter )
-      m_stateFilter->decorate( m );
+    MessageFilterList::const_iterator it = m_messageFilterList.begin();
+    for( ; it != m_messageFilterList.end(); ++it )
+    {
+      (*it)->decorate( m );
+    }
 
     m_parent->send( m );
   }
@@ -90,41 +80,6 @@ namespace gloox
   void MessageSession::send( Tag *tag )
   {
     m_parent->send( tag );
-  }
-
-  void MessageSession::setFilter( int filters, bool enable )
-  {
-    if( filters & FilterMessageEvents )
-    {
-      if( enable )
-        m_enableMessageEvents = true;
-      else
-        m_enableMessageEvents = false;
-    }
-
-    if( filters & FilterChatStates )
-    {
-      if( enable )
-        m_enableChatStates = true;
-      else
-        m_enableChatStates = false;
-    }
-  }
-
-  void MessageSession::raiseMessageEvent( MessageEventType event )
-  {
-    if( m_eventFilter )
-    {
-      m_eventFilter->raiseMessageEvent( event );
-    }
-  }
-
-  void MessageSession::setChatState( ChatStateType state )
-  {
-    if( m_stateFilter )
-    {
-      m_stateFilter->setChatState( state );
-    }
   }
 
   void MessageSession::registerMessageHandler( MessageHandler *mh )
@@ -137,28 +92,14 @@ namespace gloox
     m_messageHandler = 0;
   }
 
-  void MessageSession::registerMessageEventHandler( MessageEventHandler *meh )
+  void MessageSession::registerMessageFilter( MessageFilter *mf )
   {
-    if( m_eventFilter )
-      m_eventFilter->registerMessageEventHandler( meh );
+    m_messageFilterList.push_back( mf );
   }
 
-  void MessageSession::removeMessageEventHandler()
+  void MessageSession::removeMessageFilter( MessageFilter *mf )
   {
-    if( m_eventFilter )
-      m_eventFilter->removeMessageEventHandler();
-  }
-
-  void MessageSession::registerChatStateHandler( ChatStateHandler *csh )
-  {
-    if( m_stateFilter )
-      m_stateFilter->registerChatStateHandler( csh );
-  }
-
-  void MessageSession::removeChatStateHandler()
-  {
-    if( m_stateFilter )
-      m_stateFilter->removeChatStateHandler();
+    m_messageFilterList.remove( mf );
   }
 
 }
