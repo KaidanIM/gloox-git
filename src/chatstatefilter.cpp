@@ -15,15 +15,17 @@
 #include "chatstatehandler.h"
 #include "messageeventhandler.h"
 #include "messagesession.h"
-// #include "tag.h"
+#include "disco.h"
 
 namespace gloox
 {
 
-  ChatStateFilter::ChatStateFilter( MessageSession *parent )
+  ChatStateFilter::ChatStateFilter( MessageSession *parent, Disco *disco )
   : MessageFilter( parent ), m_chatStateHandler( 0 ), m_lastSent( ChatStateGone ),
       m_enableChatStates( true )
   {
+    if( disco )
+      disco->addFeature( XMLNS_CHAT_STATES );
   }
 
   ChatStateFilter::~ChatStateFilter()
