@@ -277,6 +277,8 @@ namespace gloox
   const std::string XMLNS_COMPRESSION       = "http://jabber.org/protocol/compress";
   const std::string XMLNS_OFFLINE           = "http://jabber.org/protocol/offline";
   const std::string XMLNS_CHAT_STATES       = "http://jabber.org/protocol/chatstates";
+  const std::string XMLNS_AMP               = "http://jabber.org/protocol/amp";
+  const std::string XMLNS_IBB               = "http://jabber.org/protocol/ibb";
   const std::string XMLNS_ROSTER            = "jabber:iq:roster";
   const std::string XMLNS_VERSION           = "jabber:iq:version";
   const std::string XMLNS_REGISTER          = "jabber:iq:register";
