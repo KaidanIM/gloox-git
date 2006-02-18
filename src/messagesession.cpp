@@ -30,10 +30,6 @@ namespace gloox
       m_parent->registerMessageHandler( m_target.full(), this );
 
     m_thread = "gloox" + m_parent->getID();
-
-//     Client *c = dynamic_cast<Client*>( m_parent );
-//     if( c )
-//       c->disco()->addFeature( XMLNS_CHAT_STATES );
   }
 
   MessageSession::~MessageSession()

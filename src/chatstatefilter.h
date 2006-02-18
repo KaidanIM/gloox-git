@@ -20,6 +20,7 @@
 namespace gloox
 {
 
+  class Disco;
   class Tag;
   class ChatStateHandler;
   class MessageSession;
@@ -41,10 +42,11 @@ namespace gloox
       /**
        * Contstructs a new Chat State filter for a MessageSession.
        * @param parent The MessageSession to decorate.
-       * @param defaultEvents Bit-wise ORed ChatStateType's which shall be requested
-       * for every message sent. Default: all.
+       * @param disco A disco object that is used to announce availability
+       * of Chat State Notification to other clients. If @b 0 no
+       * announcement will occur.
        */
-      ChatStateFilter( MessageSession *parent );
+      ChatStateFilter( MessageSession *parent, Disco *disco );
 
       /**
        * Virtual destructor.
