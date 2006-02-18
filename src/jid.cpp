@@ -115,4 +115,9 @@ namespace gloox
         && ( m_username == right.m_username ) );
   }
 
+  int JID::operator!=( const JID& right ) const
+  {
+    return !( *this == right );
+  }
+
 }
