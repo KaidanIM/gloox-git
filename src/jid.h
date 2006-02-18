@@ -119,6 +119,12 @@ namespace gloox
        */
       int operator==( const JID& right ) const;
 
+      /**
+       * Compares two JIDs.
+       * @param right The second JID.
+       */
+      int operator!=( const JID& right ) const;
+
     private:
       std::string m_resource;
       std::string m_username;
