@@ -78,6 +78,13 @@ namespace gloox
       virtual void addAttribute( const std::string& name, const std::string& value );
 
       /**
+       * Use this function to add a new attribute to the tag. Tha value is an @c int here.
+       * @param name The name of the attribute.
+       * @param value The value of the attribute.
+       */
+      virtual void addAttribute( const std::string& name, int value );
+
+      /**
        * Use this function to add a child node to the tag.
        * @param child The node to be inserted.
        */
