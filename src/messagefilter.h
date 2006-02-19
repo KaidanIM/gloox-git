@@ -14,10 +14,11 @@
 #ifndef MESSAGEFILTER_H__
 #define MESSAGEFILTER_H__
 
+#include "messagesession.h"
+
 namespace gloox
 {
 
-  class MessageSession;
   class Stanza;
   class Tag;
 
@@ -41,12 +42,37 @@ namespace gloox
       /**
        * Constructor.
        */
-      MessageFilter( MessageSession *parent ) : m_parent( parent ) {};
+      MessageFilter( MessageSession *parent ) : m_parent( 0 )
+      {
+        attachTo( parent );
+      };
 
       /**
        * Virtual Destructor.
        */
-      virtual ~MessageFilter() {};
+      virtual ~MessageFilter()
+      {
+        if( m_parent )
+          m_parent->removeMessageFilter( this );
+      };
+
+      /**
+       * Attaches this MessageFilter to the given MessageSession and hooks it into
+       * the session's filter chain.
+       * If this filter was attached to a different MessageSession before, it is
+       * unregistered there prior to registering it with the new session.
+       * @param session The MessageSession to hook into.
+       */
+      virtual void attachTo( MessageSession *session )
+      {
+        if( m_parent )
+          m_parent->removeMessageFilter( this );
+
+        if( session )
+          m_parent->registerMessageFilter( this );
+
+        m_parent = session;
+      };
 
       /**
        * This function receives a message right before it is sent out (there may be other filters
