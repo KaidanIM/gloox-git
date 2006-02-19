@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2005 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2006 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -11,73 +11,129 @@
 */
 
 
-#ifndef INBANDBYTESTREAM_H__
-#define INBANDBYTESTREAM_H__
+#include "inbandbytestream.h"
+#include "inbandbytestreamdatahandler.h"
+#include "messagesession.h"
+#include "disco.h"
+#include "clientbase.h"
+#include "base64.h"
 
-
-#include "messagefilter.h"
-#include "gloox.h"
+#include <sstream>
 
 namespace gloox
 {
 
-  class ClientBase;
-  class InBandBytestreamHandler;
-
-  /**
-   * @brief An implementation of JEP-0047 (In-Band Bytestreams).
-   *
-   * One instance of this class handles one byte stream. You can attach as many InBandBytestream
-   * objects to a MessageSession as you like.
-   *
-   * @author Jakob Schroeter <js@camaya.net>
-   * @since 0.8
-   */
-  class GLOOX_API InBandBytestream : public MessageFilter
+  InBandBytestream::InBandBytestream( MessageSession *session, ClientBase *clientbase )
+    : MessageFilter( session ), m_clientbase( clientbase ), m_inbandBytestreamDataHandler( 0 ),
+      m_blockSize( 4096 ), m_sequence( 0 ), m_lastChunkReceived( 0 ), m_open( false )
   {
-    public:
-      /**
-       *
-       */
-      InBandBytestream( MessageSession *session, ClientBase *clientbase );
+  }
 
-      /**
-       * Virtual destructor.
-       */
-      virtual ~InBandBytestream();
+  InBandBytestream::~InBandBytestream()
+  {
+    if( m_open)
+      close();
+  }
 
-      /**
-       * Use this function to register an object that will receive any notifications from
-       * the InBandBytestream instance. Only one InBandBytestreamHandler can be registered
-       * at any one time.
-       * @param ibbh The InBandBytestreamHandler derived object to receive notifications.
-       */
-      void registerInBandBytestreamHandler( InBandBytestreamHandler *ibbh );
+  void InBandBytestream::decorate( Tag * /*tag*/ )
+  {
+  }
 
-      /**
-       * Removes the registered InBandBytestreamHandler.
-       */
-      void removeInBandBytestreamHandler();
+  void InBandBytestream::filter( Stanza *stanza )
+  {
+    if( !m_inbandBytestreamDataHandler )
+      return;
 
-      /**
-       * Sets the desired block-size. Default: 4096
-       * @param blockSize The desired block-size.
-       */
-      void setBlockSize( int blockSize ) { m_blockSize = blockSize; };
+    Tag *data = 0;
+    if( ( data = stanza->findChild( "data", "xmlns", XMLNS_IBB ) ) == 0 )
+      return;
 
-      // reimplemented from MessageFilter
-      virtual void decorate( Tag *tag );
+    const std::string sid = data->findAttribute( "sid" );
+    if( sid.empty() || sid != m_sid )
+      return;
 
-      // reimplemented from MessageFilter
-      virtual void filter( Stanza *stanza );
+    const std::string seq = data->findAttribute( "seq" );
+    if( seq.empty() )
+    {
+      m_open = false;
+      return;
+    }
 
-    private:
-      MessageSession *m_parent;
-      ClientBase *m_clientbase;
-      InBandBytestreamHandler *m_inbandBytestreamHandler;
-      int m_blockSize;
-  };
+    std::stringstream str;
+    int sequence = 0;
+    str << seq;
+    str >> sequence;
+    if( m_lastChunkReceived + 1 != sequence )
+    {
+      m_open = false;
+      return;
+    }
+    m_lastChunkReceived = sequence;
+
+    if( !data->cdata().length() )
+    {
+      m_open = false;
+      return;
+    }
+
+    m_inbandBytestreamDataHandler->handleInBandData( Base64::decode64( data->cdata() ), sid );
+  }
+
+  bool InBandBytestream::sendBlock( const std::string& data )
+  {
+    if( !m_open || !m_parent || !m_clientbase || data.length() > m_blockSize )
+      return false;
+
+    Tag *m = new Tag( "message" );
+    m->addAttribute( "to", m_parent->target().full() );
+    m->addAttribute( "id", m_clientbase->getID() );
+    Tag *d = new Tag( m, "data", Base64::encode64( data ) );
+    d->addAttribute( "sid", m_sid );
+    d->addAttribute( "seq", ++m_sequence );
+
+    // FIXME: hard-coded AMP
+    Tag *a = new Tag( "amp" );
+    a->addAttribute( "xmlns", XMLNS_AMP );
+    Tag *r = new Tag( a, "rule" );
+    r->addAttribute( "condition", "deliver-at" );
+    r->addAttribute( "value", "stored" );
+    r->addAttribute( "action", "error" );
+    r = new Tag( a, "rule" );
+    r->addAttribute( "condition", "match-resource" );
+    r->addAttribute( "value", "exact" );
+    r->addAttribute( "action", "error" );
+
+    m_parent->send( m );
+    return true;
+  }
+
+  void InBandBytestream::close()
+  {
+    if( !m_parent )
+      return;
+
+    const std::string id = m_clientbase->getID();
+    Tag *iq = new Tag( "iq" );
+    iq->addAttribute( "type", "set" );
+    iq->addAttribute( "to", m_parent->target().full() );
+    iq->addAttribute( "id", id );
+    Tag *c = new Tag( iq, "close" );
+    c->addAttribute( "sid", m_sid );
+    c->addAttribute( "xmlns", XMLNS_IBB );
+
+//     m_clientbase->trackID( this, id, IBB_CLOSE_STREAM );
+    m_clientbase->send( iq );
+
+  }
+
+  void InBandBytestream::registerInBandBytestreamDataHandler( InBandBytestreamDataHandler *ibbdh )
+  {
+    m_inbandBytestreamDataHandler = ibbdh;
+  }
+
+  void InBandBytestream::removeInBandBytestreamDataHandler()
+  {
+    m_inbandBytestreamDataHandler = 0;
+  }
 
 }
-
-#endif // INBANDBYTESTREAM_H__
