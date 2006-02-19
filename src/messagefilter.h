@@ -41,20 +41,14 @@ namespace gloox
     public:
       /**
        * Constructor.
+       * @param parent The MessageSession to attach to.
        */
-      MessageFilter( MessageSession *parent ) : m_parent( 0 )
-      {
-        attachTo( parent );
-      };
+      MessageFilter( MessageSession *parent );
 
       /**
        * Virtual Destructor.
        */
-      virtual ~MessageFilter()
-      {
-        if( m_parent )
-          m_parent->removeMessageFilter( this );
-      };
+      virtual ~MessageFilter();
 
       /**
        * Attaches this MessageFilter to the given MessageSession and hooks it into
@@ -63,16 +57,7 @@ namespace gloox
        * unregistered there prior to registering it with the new session.
        * @param session The MessageSession to hook into.
        */
-      virtual void attachTo( MessageSession *session )
-      {
-        if( m_parent )
-          m_parent->removeMessageFilter( this );
-
-        if( session )
-          m_parent->registerMessageFilter( this );
-
-        m_parent = session;
-      };
+      virtual void attachTo( MessageSession *session );
 
       /**
        * This function receives a message right before it is sent out (there may be other filters
