@@ -28,7 +28,9 @@ namespace gloox
    * A class implementing this interface and being registered as RosterListener with the Roster
    * object receives notifications about all the changes in the server-side roster.
    * Only one RosterListener per Roster at a time is possible.
+   *
    * @author Jakob Schroeter <js@camaya.net>
+   * @since 0.3
    */
   class GLOOX_API RosterListener
   {

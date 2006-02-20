@@ -39,10 +39,12 @@ namespace gloox
    * synchronized with the server by calling @ref synchronize(). Note that incoming Roster pushes
    * initiated by other resources may overwrite changed values.
    * Additionally, JEP-0083 (Nested Roster Groups) is implemented herein.
+   *
    * @author Jakob Schroeter <js@camaya.net>
+   * @since 0.3
    */
    class GLOOX_API RosterManager : public IqHandler, PresenceHandler, SubscriptionHandler,
-                                      PrivateXMLHandler
+                                          PrivateXMLHandler
   {
     public:
       /**
