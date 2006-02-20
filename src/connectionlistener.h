@@ -14,6 +14,8 @@
 #ifndef CONNECTIONLISTENER_H__
 #define CONNECTIONLISTENER_H__
 
+#include "gloox.h"
+
 namespace gloox
 {
 
