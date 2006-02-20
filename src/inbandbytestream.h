@@ -25,7 +25,7 @@ namespace gloox
   class InBandBytestreamDataHandler;
 
   /**
-   * @brief An implementation of JEP-0047 (In-Band Bytestreams).
+   * @brief An implementation of a single In-Band Bytestream (JEP-0047).
    *
    * One instance of this class handles one byte stream. You can attach as many InBandBytestream
    * objects to a MessageSession as you like.
@@ -51,12 +51,14 @@ namespace gloox
       virtual ~InBandBytestream();
 
       /**
-       *
+       * Returns whether the bytestream is open, that is, accpeted by both parties.
+       * @return Whether the bytestream is open or not.
        */
       bool open() const { return m_open; };
 
       /**
-       *
+       * This function closes the bytestream and notifies the remote party
+       * of this.
        */
       void close();
 
