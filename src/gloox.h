@@ -277,6 +277,8 @@ namespace gloox
   const std::string XMLNS_COMPRESSION       = "http://jabber.org/protocol/compress";
   const std::string XMLNS_OFFLINE           = "http://jabber.org/protocol/offline";
   const std::string XMLNS_CHAT_STATES       = "http://jabber.org/protocol/chatstates";
+  const std::string XMLNS_AMP               = "http://jabber.org/protocol/amp";
+  const std::string XMLNS_IBB               = "http://jabber.org/protocol/ibb";
   const std::string XMLNS_ROSTER            = "jabber:iq:roster";
   const std::string XMLNS_VERSION           = "jabber:iq:version";
   const std::string XMLNS_REGISTER          = "jabber:iq:register";
@@ -304,7 +306,7 @@ namespace gloox
 
   const int XMPP_STREAM_VERSION_MAJOR       = 1;
   const int XMPP_STREAM_VERSION_MINOR       = 0;
-  const std::string GLOOX_VERSION           = "0.8-pre1";
+  const std::string GLOOX_VERSION           = "0.8-pre2";
 
   /**
    * This describes the possible states of a stream.
@@ -794,6 +796,15 @@ namespace gloox
     ScErrorForbidden,               /**< Username or resource not allowed to create session. */
     ScErrorConflict                 /**< Server informs newly-requested session of resource
                                      * conflict. */
+  };
+
+  /**
+   * Currently implemented message session filters.
+   */
+  enum MessageSessionFilter
+  {
+    FilterMessageEvents    = 1,     /**< Message Events (JEP-0022) */
+    FilterChatStates       = 2      /**< Chat State Notifications (JEP-0085) */
   };
 
   /**

@@ -368,7 +368,6 @@ namespace gloox
        * If you disable automatic MessageSession creation, the MessageSessionHandler will
        * be cleared. You have to set it anew the next time you want to enable it. You cannot
        * enable this feature without a valid MessageSessionHandler.
-       *
        * @param autoMS Whether to enable automatic MessageSession creation.
        * @param msh The MessageSessionHandler that will receive the newly created MessageSession.
        */

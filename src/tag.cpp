@@ -13,6 +13,8 @@
 
 #include "tag.h"
 
+#include <sstream>
+
 namespace gloox
 {
   Tag::Tag()
@@ -87,6 +89,16 @@ namespace gloox
   {
     if( !name.empty() && !value.empty() )
       m_attribs[name] = value;
+  }
+
+  void Tag::addAttribute( const std::string& name, int value )
+  {
+    if( !name.empty() )
+    {
+      std::ostringstream oss;
+      oss << value;
+      m_attribs[name] = oss.str();
+    }
   }
 
   void Tag::addChild( Tag *child )

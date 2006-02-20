@@ -33,7 +33,7 @@ class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListen
       j->setAutoPresence( true );
       j->setInitialPriority( 4 );
       j->registerConnectionListener( this );
-      j->setAutoMessageSession( true, this );
+      j->setAutoMessageSession( true, this, FilterMessageEvents & FilterChatStates );
       j->disco()->registerDiscoHandler( this );
       j->disco()->setVersion( "messageTest", GLOOX_VERSION, "Linux" );
       j->disco()->setIdentity( "client", "bot" );
