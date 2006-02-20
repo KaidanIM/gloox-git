@@ -25,9 +25,10 @@ namespace gloox
 
   /**
    * @brief An InBandBytestreamManager listens for incoming In-Band Bytestream
-   * requests from remote entities. Upon an incoming request it notifies
-   * a registered InBandBytestreamHandler. The return value of the handler
-   * determines whether the stream shall be accepted or not.
+   * requests from remote entities.
+   *
+   * Upon an incoming request it notifies a registered InBandBytestreamHandler. The
+   * return value of the handler determines whether the stream shall be accepted or not.
    *
    * @note You should have only one InBandBytestreamManager per Client/ClientBase lying around.
    *
@@ -38,7 +39,9 @@ namespace gloox
   {
     public:
       /**
-       *
+       * Constructs a new InBandBytestreamManager.
+       * @param parent The ClientBase to use for sending data.
+       * @param disco The Disco object to announce the IBB feature with.
        */
       InBandBytestreamManager( ClientBase *parent, Disco *disco );
 
