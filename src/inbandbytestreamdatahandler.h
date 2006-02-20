@@ -21,6 +21,15 @@
 namespace gloox
 {
 
+  /**
+   * @brief A virtual interface that allows implementors to receive data
+   * sent over a In-Band Bytestream as defined in JEP-0047.
+   *
+   * An InBandBytestreamDataHandler is registered with an InBandBytestream.
+   *
+   * @author Jakob Schroeter <js@camaya.net>
+   * @since 0.8
+   */
   class GLOOX_API InBandBytestreamDataHandler
   {
     public:
@@ -30,19 +39,18 @@ namespace gloox
       virtual ~InBandBytestreamDataHandler() {};
 
       /**
-       *
+       * Reimplement this function to receive data which is sent over the bytestream.
+       * @param data The actual stream payload. Not base64 encoded.
+       * @param sid The stream's ID.
        */
       virtual void handleInBandData( const std::string& data, const std::string& sid ) = 0;
 
       /**
-       *
+       * Notifies about an error occuring when opening a stream.
+       * @param sid The stream's ID.
+       * @todo Actually return errors.
        */
       virtual void handleInBandError( const std::string& sid ) = 0;
-
-      /**
-       *
-       */
-      virtual bool handleInBandRequest( const std::string& sid ) = 0;
 
   };
 
