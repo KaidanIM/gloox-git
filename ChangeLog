@@ -1,4 +1,12 @@
 
+v0.8-pre2 -- 21 Feb 2006
+------------------------
+- In-Band Bytestreams (JEP-0047)
+- Tag: added addAttribute( const std::string, int )
+- revamped MessageSession to accept external MessageFilters
+- Disco: added const StringList& festures()
+
+
 v0.8-pre1 -- 14 Feb 2006
 ------------------------
 - added an extensible message session abstraction (called MessageSession)
