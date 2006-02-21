@@ -124,6 +124,10 @@ SOURCE=.\src\component.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\compression.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\connection.cpp
 # End Source File
 # Begin Source File
@@ -152,6 +156,14 @@ SOURCE=.\src\flexoff.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\inbandbytestream.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\inbandbytestreammanager.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\jid.cpp
 # End Source File
 # Begin Source File
@@ -165,6 +177,10 @@ SOURCE=.\src\logsink.cpp
 # Begin Source File
 
 SOURCE=.\src\messageeventfilter.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\messagefilter.cpp
 # End Source File
 # Begin Source File
 
@@ -268,10 +284,6 @@ SOURCE=.\src\component.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\compression.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\src\compression.h
 # End Source File
 # Begin Source File
@@ -329,6 +341,22 @@ SOURCE=.\src\flexoffhandler.h
 # Begin Source File
 
 SOURCE=.\src\gloox.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\inbandbytestream.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\inbandbytestreamdatahandler.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\inbandbytestreamhandler.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\inbandbytestreammanager.h
 # End Source File
 # Begin Source File
 
