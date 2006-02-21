@@ -146,12 +146,6 @@ namespace gloox
       virtual ~MessageSession();
 
       /**
-       * This function clears the internal pointer to the MessageHandler and therefore
-       * disables message delivery.
-       */
-      void removeMessageHandler();
-
-      /**
        * Use this function to find out where is this session points at.
        * @return The receipient's JID.
        */
@@ -170,7 +164,13 @@ namespace gloox
        * remote contact.
        * @param mh The MessageHandler to register.
        */
-      virtual void registerMessageHandler( MessageHandler *mh );
+      void registerMessageHandler( MessageHandler *mh );
+
+      /**
+       * This function clears the internal pointer to the MessageHandler and therefore
+       * disables message delivery.
+       */
+      void removeMessageHandler();
 
       /**
        * A convenience function to quickly send a message (optionally with subject). This is

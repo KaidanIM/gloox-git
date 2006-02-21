@@ -25,13 +25,13 @@ namespace gloox
 
   InBandBytestream::InBandBytestream( MessageSession *session, ClientBase *clientbase )
     : MessageFilter( session ), m_clientbase( clientbase ), m_inbandBytestreamDataHandler( 0 ),
-      m_blockSize( 4096 ), m_sequence( 0 ), m_lastChunkReceived( 0 ), m_open( false )
+      m_blockSize( 4096 ), m_sequence( 0 ), m_lastChunkReceived( -1 ), m_open( true )
   {
   }
 
   InBandBytestream::~InBandBytestream()
   {
-    if( m_open)
+    if( m_open )
       close();
   }
 
@@ -41,7 +41,7 @@ namespace gloox
 
   void InBandBytestream::filter( Stanza *stanza )
   {
-    if( !m_inbandBytestreamDataHandler )
+    if( !m_inbandBytestreamDataHandler || !m_open )
       return;
 
     Tag *data = 0;
@@ -63,6 +63,7 @@ namespace gloox
     int sequence = 0;
     str << seq;
     str >> sequence;
+
     if( m_lastChunkReceived + 1 != sequence )
     {
       m_open = false;
@@ -92,7 +93,7 @@ namespace gloox
     d->addAttribute( "seq", ++m_sequence );
 
     // FIXME: hard-coded AMP
-    Tag *a = new Tag( "amp" );
+    Tag *a = new Tag( m, "amp" );
     a->addAttribute( "xmlns", XMLNS_AMP );
     Tag *r = new Tag( a, "rule" );
     r->addAttribute( "condition", "deliver-at" );
@@ -103,7 +104,7 @@ namespace gloox
     r->addAttribute( "value", "exact" );
     r->addAttribute( "action", "error" );
 
-    m_parent->send( m );
+    m_clientbase->send( m );
     return true;
   }
 

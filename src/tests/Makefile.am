@@ -4,7 +4,7 @@
 
 AM_CPPFLAGS = -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare -Wpointer-arith -Wswitch -Wunknown-pragmas -Wconversion -Wundef -Wcast-qual -ansi
 
-noinst_PROGRAMS = register_test disco_test adhoc_test roster_test privatexml_test component_test bookmarkstorage_test annotations_test privacylist_test message_test flexoff_test
+noinst_PROGRAMS = register_test disco_test adhoc_test roster_test privatexml_test component_test bookmarkstorage_test annotations_test privacylist_test message_test flexoff_test ibb_test
 
 register_test_SOURCES = register_test.cpp
 register_test_LDADD = ../libgloox.la
@@ -49,3 +49,7 @@ message_test_CFLAGS = $(CPPFLAGS)
 flexoff_test_SOURCES = flexoff_test.cpp
 flexoff_test_LDADD = ../libgloox.la
 flexoff_test_CFLAGS = $(CPPFLAGS)
+
+ibb_test_SOURCES = ibb_test.cpp
+ibb_test_LDADD = ../libgloox.la
+ibb_test_CFLAGS = $(CPPFLAGS)

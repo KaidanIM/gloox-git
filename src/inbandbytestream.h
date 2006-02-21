@@ -100,6 +100,12 @@ namespace gloox
        */
       void setBlockSize( int blockSize ) { m_blockSize = blockSize; };
 
+      /**
+       * Lets you retieve this bytestreams block-size.
+       * @return The bytestream's block-size.
+       */
+      int blockSize() const { return m_blockSize; };
+
       // reimplemented from MessageFilter
       virtual void decorate( Tag *tag );
 
@@ -107,7 +113,6 @@ namespace gloox
       virtual void filter( Stanza *stanza );
 
     private:
-      MessageSession *m_parent;
       ClientBase *m_clientbase;
       InBandBytestreamDataHandler *m_inbandBytestreamDataHandler;
       std::string m_sid;

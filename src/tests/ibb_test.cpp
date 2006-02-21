@@ -12,19 +12,25 @@
 #include "../lastactivity.h"
 #include "../loghandler.h"
 #include "../logsink.h"
+#include "../inbandbytestream.h"
+#include "../inbandbytestreammanager.h"
+#include "../inbandbytestreamhandler.h"
+#include "../inbandbytestreamdatahandler.h"
 using namespace gloox;
 
 #include <stdio.h>
 #include <locale.h>
 #include <string>
 
-class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListener, LogHandler,
-                    MessageEventHandler, MessageHandler, ChatStateHandler
+class IBBTest : public DiscoHandler, MessageSessionHandler, ConnectionListener, LogHandler,
+                    MessageEventHandler, MessageHandler, ChatStateHandler, InBandBytestreamHandler,
+                    InBandBytestreamDataHandler
 {
   public:
-    MessageTest() : m_session( 0 ), m_messageEventFilter( 0 ), m_chatStateFilter( 0 ) {};
+    IBBTest() : m_session( 0 ), m_messageEventFilter( 0 ), m_chatStateFilter( 0 ),
+    m_ibbManager( 0 ), m_ibb( 0 ), c( 0 ), m_send( false ) {};
 
-    virtual ~MessageTest() {};
+    virtual ~IBBTest() {};
 
     void start()
     {
@@ -39,10 +45,14 @@ class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListen
       j->disco()->registerDiscoHandler( this );
       j->disco()->setVersion( "messageTest", GLOOX_VERSION, "Linux" );
       j->disco()->setIdentity( "client", "bot" );
+      j->disco()->addFeature( XMLNS_IBB );
       j->disco()->addFeature( XMLNS_CHAT_STATES );
       StringList ca;
       ca.push_back( "/path/to/cacert.crt" );
       j->setCACerts( ca );
+
+      m_ibbManager = new InBandBytestreamManager( j, j->disco() );
+      m_ibbManager->registerInBandBytestreamHandler( this );
 
       j->logInstance().registerLogHandler( LogLevelDebug, LogAreaAll, this );
 
@@ -52,6 +62,14 @@ class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListen
         while( ce == ConnNoError )
         {
           ce = j->recv();
+          if( m_send )
+          {
+            m_ibb->sendBlock( "some data!\n" );
+            printf( "sending\n" );
+            ++c;
+            if( c == 10 )
+              m_send = false;
+          }
         }
         printf( "ce: %d\n", ce );
       }
@@ -151,16 +169,54 @@ class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListen
       printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
     };
 
+    virtual bool handleIncomingInBandBytestream( const JID& from, InBandBytestream *ibb )
+    {
+      m_ibb = ibb;
+      if( !m_session )
+        m_session = new MessageSession( j, from );
+      else
+        printf( "already have a session\n" );
+      m_ibb->attachTo( m_session );
+      m_ibb->registerInBandBytestreamDataHandler( this );
+      m_send = true;
+      return true;
+    };
+
+    virtual bool handleOutgoingInBandBytestream( const JID& /*to*/, InBandBytestream * /*ibb*/ )
+    {
+      printf( "unused\n" );
+      return false;
+    };
+
+    virtual void handleInBandBytestreamError()
+    {
+      printf( "unused\n" );
+    };
+
+    virtual void handleInBandData( const std::string& data, const std::string& sid )
+    {
+      printf( "incoming data from stream %s: %s\n", sid.c_str(), data.c_str() );
+    };
+
+    virtual void handleInBandError( const std::string& /*sid*/ )
+    {
+      printf( "unused\n" );
+    };
+
   private:
     Client *j;
     MessageSession *m_session;
     MessageEventFilter *m_messageEventFilter;
     ChatStateFilter *m_chatStateFilter;
+    InBandBytestreamManager *m_ibbManager;
+    InBandBytestream *m_ibb;
+    int c;
+    bool m_send;
 };
 
 int main( int /*argc*/, char* /*argv[]*/ )
 {
-  MessageTest *r = new MessageTest();
+  IBBTest *r = new IBBTest();
   r->start();
   delete( r );
   return 0;

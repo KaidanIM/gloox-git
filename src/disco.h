@@ -66,9 +66,15 @@ namespace gloox
        * By default, all supported, not disabled features are announced.
        * @param feature A feature (namespace) the host app supports.
        * @note Use this function for non-queryable features. For nodes that shall
-       * answer to disco\#info queries, use addNode().
+       * answer to disco\#info queries, use registerNodeHandler().
        */
       void addFeature( const std::string& feature );
+
+      /**
+       * Lets you retrieve the features this Disco instance supports.
+       * @return A list of disco items.
+       */
+      const StringList& features() const { return m_features; };
 
       /**
        * Queries the given JID for general infomation according to

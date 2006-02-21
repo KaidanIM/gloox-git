@@ -8,13 +8,16 @@
 #include "../lastactivity.h"
 #include "../flexoff.h"
 #include "../flexoffhandler.h"
+#include "../loghandler.h"
+#include "../logsink.h"
 using namespace gloox;
 
 #include <stdio.h>
 #include <locale.h>
 #include <string>
 
-class FlexOffTest : public DiscoHandler, MessageHandler, ConnectionListener, FlexibleOfflineHandler
+class FlexOffTest : public DiscoHandler, MessageHandler, ConnectionListener, FlexibleOfflineHandler,
+                           LogHandler
 {
   public:
     FlexOffTest() {};
@@ -38,6 +41,8 @@ class FlexOffTest : public DiscoHandler, MessageHandler, ConnectionListener, Fle
 
       f = new FlexibleOffline( j, j->disco() );
       f->registerFlexibleOfflineHandler( this );
+
+      j->logInstance().registerLogHandler( LogLevelDebug, LogAreaAll, this );
 
       j->connect();
 
@@ -109,6 +114,11 @@ class FlexOffTest : public DiscoHandler, MessageHandler, ConnectionListener, Fle
         printf( "FlexOff: supported\n" );
         f->getMsgCount();
       }
+      else
+      {
+        printf( "FlexOff: not supported\n" );
+        j->disconnect();
+      }
     }
 
     virtual void handleFlexibleOfflineMsgNum( int num )
@@ -131,6 +141,11 @@ class FlexOffTest : public DiscoHandler, MessageHandler, ConnectionListener, Fle
     {
       printf( "FlexOff: result: %d\n", result );
     }
+
+    virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
+    {
+      printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
+    };
 
   private:
     Client *j;
