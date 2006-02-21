@@ -46,6 +46,8 @@ namespace gloox
        * @param to The remote initiator of the bytestream request.
        * @param ibb The bytestream.
        * @return @b True to accept the byte stream, @b false to reject.
+       * @note You should @b not send any data over this bytestream from within this function.
+       * The bytestream will only be accepted after this function returned.
        */
       virtual bool handleIncomingInBandBytestream( const JID& from, InBandBytestream *ibb ) = 0;
 

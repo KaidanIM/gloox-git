@@ -73,14 +73,6 @@ namespace gloox
       {
         delete ibb;
         Tag *iq = new Tag( "iq" );
-        iq->addAttribute( "type", "result" );
-        iq->addAttribute( "to", stanza->from().full() );
-        iq->addAttribute( "id", stanza->id() );
-        m_parent->send( iq );
-      }
-      else
-      {
-        Tag *iq = new Tag( "iq" );
         iq->addAttribute( "type", "error" );
         iq->addAttribute( "to", stanza->from().full() );
         iq->addAttribute( "id", stanza->id() );
@@ -89,6 +81,14 @@ namespace gloox
         e->addAttribute( "type", "cancel" );
         Tag *f = new Tag( e, "feature-not-implemented" );
         f->addAttribute( "xmlns", XMLNS_XMPP_STANZAS );
+        m_parent->send( iq );
+      }
+      else
+      {
+        Tag *iq = new Tag( "iq" );
+        iq->addAttribute( "type", "result" );
+        iq->addAttribute( "to", stanza->from().full() );
+        iq->addAttribute( "id", stanza->id() );
         m_parent->send( iq );
       }
     }
