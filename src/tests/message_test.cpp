@@ -1,7 +1,9 @@
 #include "../client.h"
 #include "../messagesessionhandler.h"
 #include "../messageeventhandler.h"
+#include "../messageeventfilter.h"
 #include "../chatstatehandler.h"
+#include "../chatstatefilter.h"
 #include "../connectionlistener.h"
 #include "../discohandler.h"
 #include "../disco.h"
@@ -20,7 +22,7 @@ class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListen
                     MessageEventHandler, MessageHandler, ChatStateHandler
 {
   public:
-    MessageTest() : m_session( 0 ) {};
+    MessageTest() : m_session( 0 ), m_messageEventFilter( 0 ), m_chatStateFilter( 0 ) {};
 
     virtual ~MessageTest() {};
 
@@ -33,10 +35,11 @@ class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListen
       j->setAutoPresence( true );
       j->setInitialPriority( 4 );
       j->registerConnectionListener( this );
-      j->setAutoMessageSession( true, this, FilterMessageEvents & FilterChatStates );
+      j->setAutoMessageSession( true, this );
       j->disco()->registerDiscoHandler( this );
       j->disco()->setVersion( "messageTest", GLOOX_VERSION, "Linux" );
       j->disco()->setIdentity( "client", "bot" );
+      j->disco()->addFeature( XMLNS_CHAT_STATES );
       StringList ca;
       ca.push_back( "/path/to/cacert.crt" );
       j->setCACerts( ca );
@@ -57,9 +60,9 @@ class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListen
       if( m_session )
       {
         m_session->removeMessageHandler();
-        m_session->removeMessageEventHandler();
-        m_session->removeChatStateHandler();
-        delete( m_session );
+        delete m_chatStateFilter;
+        delete m_messageEventFilter;
+        delete m_session;
       }
       delete( j );
     }
@@ -110,9 +113,10 @@ class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListen
       if( !stanza->subject().empty() )
         sub = "Re: " +  stanza->subject();
 
-      m_session->raiseMessageEvent( MessageEventDisplayed );
+      m_messageEventFilter->raiseMessageEvent( MessageEventDisplayed );
       sleep( 1 );
-      m_session->raiseMessageEvent( MessageEventComposing );
+      m_messageEventFilter->raiseMessageEvent( MessageEventComposing );
+      m_chatStateFilter->setChatState( ChatStateComposing );
       sleep( 2 );
       m_session->send( msg, sub );
 
@@ -132,11 +136,14 @@ class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListen
 
     virtual void handleMessageSession( MessageSession *session )
     {
+      // this will leak if you talk to this bot from more than one full JID.
       m_session = session;
       printf( "got new session\n");
       m_session->registerMessageHandler( this );
-      m_session->registerMessageEventHandler( this );
-      m_session->registerChatStateHandler( this );
+      m_messageEventFilter = new MessageEventFilter( m_session );
+      m_messageEventFilter->registerMessageEventHandler( this );
+      m_chatStateFilter = new ChatStateFilter( m_session );
+      m_chatStateFilter->registerChatStateHandler( this );
     }
 
     virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
@@ -147,6 +154,8 @@ class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListen
   private:
     Client *j;
     MessageSession *m_session;
+    MessageEventFilter *m_messageEventFilter;
+    ChatStateFilter *m_chatStateFilter;
 };
 
 int main( int /*argc*/, char* /*argv[]*/ )
