@@ -20,7 +20,8 @@ namespace gloox
   MessageFilter::MessageFilter( MessageSession *parent )
     : m_parent( 0 )
   {
-    attachTo( parent );
+    if( parent )
+      attachTo( parent );
   }
 
   MessageFilter::~MessageFilter()
