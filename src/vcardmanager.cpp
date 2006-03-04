@@ -38,11 +38,11 @@ namespace gloox
 
   void VCardManager::fetchVCard( const JID& jid, VCardHandler *vch )
   {
-    if( !m_parent )
+    if( !m_parent || !vch )
       return;
 
     TrackMap::const_iterator it = m_trackMap.find( jid.bare() );
-    if( it == m_trackMap.end() )
+    if( it != m_trackMap.end() )
       return;
 
     const std::string id = m_parent->getID();
@@ -54,7 +54,7 @@ namespace gloox
     v->addAttribute( "xmlns", XMLNS_VCARD_TEMP );
 
     m_parent->trackID( this, id, VCardHandler::FetchVCard );
-    m_trackMap[jid.bare()] = vch;
+    m_trackMap[id] = vch;
     m_parent->send( iq );
   }
 
@@ -70,7 +70,7 @@ namespace gloox
     iq->addChild( vcard->tag() );
 
     m_parent->trackID( this, id, VCardHandler::StoreVCard );
-    m_trackMap[m_parent->jid().bare()] = vch;
+    m_trackMap[id] = vch;
     m_parent->send( iq );
   }
 
@@ -81,7 +81,7 @@ namespace gloox
 
   bool VCardManager::handleIqID( Stanza *stanza, int context )
   {
-    TrackMap::const_iterator it = m_trackMap.find( stanza->from().bare() );
+    TrackMap::const_iterator it = m_trackMap.find( stanza->id() );
     if( it != m_trackMap.end() )
     {
       switch( stanza->subtype() )
@@ -92,10 +92,10 @@ namespace gloox
           {
             case VCardHandler::FetchVCard:
             {
-              Tag *v = stanza->findChild( "vCard", XMLNS_VCARD_TEMP );
+              Tag *v = stanza->findChild( "vCard", "xmlns", XMLNS_VCARD_TEMP );
               if( v )
               {
-                (*it).second->handleVCard( new VCard( v ) );
+                (*it).second->handleVCard( stanza->from(), new VCard( v ) );
               }
               break;
             }
