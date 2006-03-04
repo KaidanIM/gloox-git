@@ -38,7 +38,7 @@ namespace gloox
        * Notifies the ChatStateHandler that a different chat state has been set by the remote
        * contact.
        * @param from The originator of the Event.
-       * @param event The chat state which has been set.
+       * @param state The chat state set by the remote entity.
        */
       virtual void handleChatState( const JID& from, ChatStateType state ) = 0;
 
