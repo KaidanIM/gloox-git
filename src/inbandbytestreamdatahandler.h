@@ -48,11 +48,13 @@ namespace gloox
       virtual void handleInBandData( const std::string& data, const std::string& sid ) = 0;
 
       /**
-       * Notifies about an error occuring when opening a stream.
+       * Notifies about an error occuring while using a bytestream.
+       * When this handler is called, the stream has already been closed.
        * @param sid The stream's ID.
-       * @todo Actually return errors.
+       * @param remote The remote entity.
+       * @param se The error.
        */
-      virtual void handleInBandError( const std::string& sid ) = 0;
+      virtual void handleInBandError( const std::string& sid, const JID& remote, StanzaError se ) = 0;
 
   };
 

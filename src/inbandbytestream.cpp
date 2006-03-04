@@ -44,6 +44,12 @@ namespace gloox
     if( !m_inbandBytestreamDataHandler || !m_open )
       return;
 
+    if( stanza->subtype() == StanzaMessageError )
+    {
+      m_inbandBytestreamDataHandler->handleInBandError( m_sid, stanza->from(), stanza->error() );
+      m_open = false;
+    }
+
     Tag *data = 0;
     if( ( data = stanza->findChild( "data", "xmlns", XMLNS_IBB ) ) == 0 )
       return;
