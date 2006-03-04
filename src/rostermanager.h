@@ -127,6 +127,12 @@ namespace gloox
       void setDelimiter( const std::string& delimiter );
 
       /**
+       * Lets you retrieve the RosterItem that belongs to the given JID.
+       * @param jid The JID to return the RosterItem for.
+       */
+      RosterItem* getRosterItem( const JID& jid );
+
+      /**
        * Register @c rl as object that receives updates on roster operations.
        * For GUI applications it may be necessary to display a dialog or whatever to
        * the user without blocking. If you want that, use asynchronous subscription
@@ -136,11 +142,6 @@ namespace gloox
        * be handled synchronous (@b true) or asynchronous (@b false). Default: synchronous.
        */
       void registerRosterListener( RosterListener *rl, bool syncSubscribeReq = true );
-
-      /**
-       *
-       */
-      RosterItem* getRosterItem( const JID& jid );
 
       /**
        * Complementary function to @ref registerRosterListener. Removes the current RosterListener.

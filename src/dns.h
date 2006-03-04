@@ -94,6 +94,7 @@ namespace gloox
        * This is a convenience function which uses @ref resolve() to get a list of hosts
        * and connects to one of them.
        * @param domain The domain to resolve SRV records for.
+       * @param logInstance A LogSink to use for logging.
        * @return A file descriptor for the established connection.
        */
       static int connect( const std::string& domain, const LogSink& logInstance );
@@ -103,6 +104,7 @@ namespace gloox
        * records are resolved. Use this function for special setups.
        * @param domain The domain to connect to.
        * @param port A custom port to connect to.
+       * @param logInstance A LogSink to use for logging.
        * @return A file descriptor for the established connection.
        */
       static int connect( const std::string& domain, int port, const LogSink& logInstance );

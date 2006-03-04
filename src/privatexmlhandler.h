@@ -56,7 +56,7 @@ namespace gloox
 
       /**
        * This function is called to notify about the result of a 'store' or 'request' operation
-       * (successful requests are announced by means of @ref handlePrivateXML()).
+       * (successful requests are announced by means of handlePrivateXML()).
        * @param uid The ID of the query.
        * @param result The result of the operation.
        * @since 0.7
