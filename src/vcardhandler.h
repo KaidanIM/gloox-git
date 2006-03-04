@@ -17,6 +17,8 @@
 namespace gloox
 {
 
+  class VCard;
+
   /**
    * @brief A virtual interface that helps requesting Jabber VCards.
    *
@@ -43,9 +45,10 @@ namespace gloox
       /**
        * This function is called when a VCard has been successfully fetched.
        * The VCardHandler becomes owner of the VCard object and is responsible for deleting it.
+       * @param jid The JID to which this VCard belongs.
        * @param vcard The fetched VCard.
        */
-      virtual void handleVCard( const VCard *vcard ) = 0;
+      virtual void handleVCard( const JID& jid, const VCard *vcard ) = 0;
 
       /**
        * This function is called to indicate a successful VCArd store operation
