@@ -13,64 +13,92 @@
 
 #include "vcard.h"
 #include "tag.h"
+#include "base64.h"
 
 namespace gloox
 {
 
   VCard::VCard()
-    : m_N( false )
+    : m_N( false ), m_PHOTO( false ), m_LOGO( false )
   {
   }
 
   VCard::VCard( Tag *vcard )
-    : m_N( false )
+    : m_N( false ), m_PHOTO( false ), m_LOGO( false )
   {
-    if( vcard->hasChild( "FN" ) )
-      m_formattedName = vcard->findChild( "FN" )->cdata();
+    checkField( vcard, "FN", m_formattedName );
+    checkField( vcard, "NICKNAME", m_nickname );
+    checkField( vcard, "URL", m_url );
+    checkField( vcard, "BDAY", m_bday );
+    checkField( vcard, "JABBERID", m_jabberid );
+    checkField( vcard, "TITLE", m_title );
+    checkField( vcard, "ROLE", m_role );
+    checkField( vcard, "NOTE", m_note );
+    checkField( vcard, "DESC", m_desc );
+    checkField( vcard, "MAILER", m_mailer );
+    checkField( vcard, "TZ", m_tz );
+    checkField( vcard, "PRODID", m_prodid );
+    checkField( vcard, "REV", m_rev );
+    checkField( vcard, "SORT-STRING", m_sortstring );
+    checkField( vcard, "UID", m_uid );
 
-    Tag *n = vcard->findChild( "N" );
-    if( n )
+    Tag *t = vcard->findChild( "N" );
+    if( t )
     {
       m_N = true;
-      if( n->hasChild( "FAMILY" ) )
-        m_family = n->findChild( "FAMILY" )->cdata();
-      if( n->hasChild( "GIVEN" ) )
-        m_family = n->findChild( "GIVEN" )->cdata();
-      if( n->hasChild( "MIDDLE" ) )
-        m_family = n->findChild( "MIDDLE" )->cdata();
-      if( n->hasChild( "PREFIX" ) )
-        m_family = n->findChild( "PREFIX" )->cdata();
-      if( n->hasChild( "SUFFIX" ) )
-        m_family = n->findChild( "SUFFIX" )->cdata();
+      if( t->hasChild( "FAMILY" ) )
+        m_family = t->findChild( "FAMILY" )->cdata();
+      if( t->hasChild( "GIVEN" ) )
+        m_family = t->findChild( "GIVEN" )->cdata();
+      if( t->hasChild( "MIDDLE" ) )
+        m_family = t->findChild( "MIDDLE" )->cdata();
+      if( t->hasChild( "PREFIX" ) )
+        m_family = t->findChild( "PREFIX" )->cdata();
+      if( t->hasChild( "SUFFIX" ) )
+        m_family = t->findChild( "SUFFIX" )->cdata();
     }
 
-    if( vcard->hasChild( "NICKNAME" ) )
-      m_nickname = vcard->findChild( "NICKNAME" )->cdata();
+    t = vcard->findChild( "PHOTO" );
+    if( t )
+    {
+      if( t->hasChild( "EXTVAL" ) )
+      {
+        m_photoext = t->findChild( "EXTVAL" )->cdata();
+        m_PHOTO = true;
+      }
+      else if( t->hasChild( "TYPE" ) && t->hasChild( "BINVAL" ) )
+      {
+        m_phototype = t->findChild( "TYPE" )->cdata();
+        m_photobin = Base64::decode64( t->findChild( "BINVAL" )->cdata() );
+        m_PHOTO = true;
+      }
+    }
 
-    if( vcard->hasChild( "URL" ) )
-      m_url = vcard->findChild( "URL" )->cdata();
-
-    if( vcard->hasChild( "BDAY" ) )
-      m_bday = vcard->findChild( "BDAY" )->cdata();
-
-    if( vcard->hasChild( "JABBERID" ) )
-      m_jabberid = vcard->findChild( "JABBERID" )->cdata();
-
-    if( vcard->hasChild( "TITLE" ) )
-      m_title = vcard->findChild( "TITLE" )->cdata();
-
-    if( vcard->hasChild( "ROLE" ) )
-      m_role = vcard->findChild( "ROLE" )->cdata();
-
-    if( vcard->hasChild( "NOTE" ) )
-      m_note = vcard->findChild( "NOTE" )->cdata();
-
-    if( vcard->hasChild( "DESC" ) )
-      m_desc = vcard->findChild( "DESC" )->cdata();
-
+    t = vcard->findChild( "LOGO" );
+    if( t )
+    {
+      if( t->hasChild( "EXTVAL" ) )
+      {
+        m_logoext = t->findChild( "EXTVAL" )->cdata();
+        m_LOGO = true;
+      }
+      else if( t->hasChild( "TYPE" ) && t->hasChild( "BINVAL" ) )
+      {
+        m_logotype = t->findChild( "TYPE" )->cdata();
+        m_logobin = Base64::decode64( t->findChild( "BINVAL" )->cdata() );
+        m_LOGO = true;
+      }
+    }
   }
+
   VCard::~VCard()
   {
+  }
+
+  void VCard::checkField( Tag *vcard, const std::string& field, std::string& var )
+  {
+    if( vcard->hasChild( field ) )
+      var = vcard->findChild( field )->cdata();
   }
 
   void VCard::setName( const std::string& family, const std::string& given, const std::string& middle,
@@ -84,13 +112,65 @@ namespace gloox
     m_N = true;
   }
 
+  void VCard::setPhoto( const std::string& extval )
+  {
+    if( !extval.empty() )
+    {
+      m_photoext = extval;
+      m_PHOTO = true;
+    }
+  }
+
+  void VCard::setPhoto( const std::string& type, const std::string& binval )
+  {
+    if( !type.empty() && !binval.empty() )
+    {
+      m_phototype = type;
+      m_photobin = Base64::encode64( binval );
+      m_PHOTO = true;
+    }
+  }
+
+  void VCard::setLogo( const std::string& extval )
+  {
+    if( !extval.empty() )
+    {
+      m_logoext = extval;
+      m_LOGO = true;
+    }
+  }
+
+  void VCard::setLogo( const std::string& type, const std::string& binval )
+  {
+    if( !type.empty() && !binval.empty() )
+    {
+      m_logotype = type;
+      m_logobin = Base64::encode64( binval );
+      m_LOGO = true;
+    }
+  }
+
   Tag* VCard::tag() const
   {
     Tag *v = new Tag( "vcard" );
     v->addAttribute( "xmlns", XMLNS_VCARD_TEMP );
     v->addAttribute( "version", "3.0" );
-    if( !m_formattedName.empty() )
-      new Tag( v, "FN", m_formattedName );
+
+    insertField( v, "FN", m_formattedName );
+    insertField( v, "NICKNAME", m_nickname );
+    insertField( v, "URL", m_url );
+    insertField( v, "BDAY", m_bday );
+    insertField( v, "JABBERID", m_jabberid );
+    insertField( v, "TITLE", m_title );
+    insertField( v, "ROLE", m_role );
+    insertField( v, "NOTE", m_note );
+    insertField( v, "DESC", m_desc );
+    insertField( v, "MAILER", m_mailer );
+    insertField( v, "TZ", m_tz );
+    insertField( v, "REV", m_rev );
+    insertField( v, "SORT_STRING", m_sortstring );
+    insertField( v, "UID", m_uid );
+
     if( m_N )
     {
       Tag *n = new Tag( v, "N" );
@@ -106,31 +186,41 @@ namespace gloox
         new Tag( n, "SUFFIX", m_suffix );
     }
 
-    if( !m_nickname.empty() )
-      new Tag( v, "NICKNAME", m_nickname );
+    if( m_PHOTO )
+    {
+      Tag *p = new Tag( v, "PHOTO" );
+      if( !m_photoext.empty() )
+      {
+        new Tag( p, "EXTVAL", m_photoext );
+      }
+      else if( !m_phototype.empty() && !m_photobin.empty() )
+      {
+        new Tag( p, "TYPE", m_phototype );
+        new Tag( p, "BINVAL", m_photobin );
+      }
+    }
 
-    if( !m_url.empty() )
-      new Tag( v, "URL", m_url );
-
-    if( !m_bday.empty() )
-      new Tag( v, "BDAY", m_bday );
-
-    if( !m_jabberid.empty() )
-      new Tag( v, "JABBERID", m_jabberid );
-
-    if( !m_title.empty() )
-      new Tag( v, "TITLE", m_title );
-
-    if( !m_role.empty() )
-      new Tag( v, "ROLE", m_role );
-
-    if( !m_note.empty() )
-      new Tag( v, "NOTE", m_note );
-
-    if( !m_desc.empty() )
-      new Tag( v, "DESC", m_desc );
+    if( m_LOGO )
+    {
+      Tag *l = new Tag( v, "LOGO" );
+      if( !m_logoext.empty() )
+      {
+        new Tag( l, "EXTVAL", m_logoext );
+      }
+      else if( !m_logotype.empty() && !m_logobin.empty() )
+      {
+        new Tag( l, "TYPE", m_logotype );
+        new Tag( l, "BINVAL", m_logobin );
+      }
+    }
 
     return v;
+  }
+
+  void VCard::insertField( Tag *vcard, const std::string& field, const std::string& var ) const
+  {
+    if( !var.empty() )
+      new Tag( vcard, field, var );
   }
 
 }

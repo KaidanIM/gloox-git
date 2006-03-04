@@ -102,7 +102,60 @@ namespace gloox
        */
       void setDesc( const std::string& desc ) { m_desc = desc; };
 
+      /**
+       *
+       */
+      void setMailer( const std::string& mailer ) { m_mailer = mailer; };
+
+      /**
+       *
+       */
+      void setRev( const std::string& rev ) { m_rev = rev; };
+
+      /**
+       *
+       */
+      void setUid( const std::string& uid ) { m_uid = uid; };
+
+      /**
+       *
+       */
+      void setTz( const std::string& tz ) { m_tz = tz; };
+
+      /**
+       *
+       */
+      void setProdid( const std::string& prodid ) { m_prodid = prodid; };
+
+      /**
+       *
+       */
+      void setSortstring( const std::string& sortstring ) { m_sortstring = sortstring; };
+
+      /**
+       *
+       */
+      void setPhoto( const std::string& extval );
+
+      /**
+       *
+       */
+      void setPhoto( const std::string& type, const std::string& binval );
+
+      /**
+       *
+       */
+      void setLogo( const std::string& extval );
+
+      /**
+       *
+       */
+      void setLogo( const std::string& type, const std::string& binval );
+
     private:
+      void checkField( Tag *vcard, const std::string& field, std::string& var );
+      void insertField( Tag *vcard, const std::string& field, const std::string& var ) const;
+
       std::string m_formattedName;
       std::string m_family;
       std::string m_given;
@@ -117,8 +170,22 @@ namespace gloox
       std::string m_role;
       std::string m_note;
       std::string m_desc;
+      std::string m_phototype;
+      std::string m_photobin;
+      std::string m_photoext;
+      std::string m_logotype;
+      std::string m_logobin;
+      std::string m_logoext;
+      std::string m_mailer;
+      std::string m_tz;
+      std::string m_prodid;
+      std::string m_rev;
+      std::string m_sortstring;
+      std::string m_uid;
 
       bool m_N;
+      bool m_PHOTO;
+      bool m_LOGO;
   };
 
 }
