@@ -26,7 +26,7 @@ namespace gloox
   VCard::VCard( Tag *vcard )
     : m_N( false ), m_PHOTO( false ), m_LOGO( false )
   {
-    checkField( vcard, "FN", m_formattedName );
+    checkField( vcard, "FN", m_formattedname );
     checkField( vcard, "NICKNAME", m_nickname );
     checkField( vcard, "URL", m_url );
     checkField( vcard, "BDAY", m_bday );
@@ -156,7 +156,7 @@ namespace gloox
     v->addAttribute( "xmlns", XMLNS_VCARD_TEMP );
     v->addAttribute( "version", "3.0" );
 
-    insertField( v, "FN", m_formattedName );
+    insertField( v, "FN", m_formattedname );
     insertField( v, "NICKNAME", m_nickname );
     insertField( v, "URL", m_url );
     insertField( v, "BDAY", m_bday );
