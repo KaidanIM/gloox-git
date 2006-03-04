@@ -5,7 +5,6 @@
 #include "../chatstatehandler.h"
 #include "../chatstatefilter.h"
 #include "../connectionlistener.h"
-#include "../discohandler.h"
 #include "../disco.h"
 #include "../stanza.h"
 #include "../gloox.h"
@@ -22,7 +21,7 @@ using namespace gloox;
 #include <locale.h>
 #include <string>
 
-class IBBTest : public DiscoHandler, MessageSessionHandler, ConnectionListener, LogHandler,
+class IBBTest : public MessageSessionHandler, ConnectionListener, LogHandler,
                     MessageEventHandler, MessageHandler, ChatStateHandler, InBandBytestreamHandler,
                     InBandBytestreamDataHandler
 {
@@ -45,7 +44,6 @@ class IBBTest : public DiscoHandler, MessageSessionHandler, ConnectionListener, 
       j->disco()->registerDiscoHandler( this );
       j->disco()->setVersion( "messageTest", GLOOX_VERSION, "Linux" );
       j->disco()->setIdentity( "client", "bot" );
-      j->disco()->addFeature( XMLNS_IBB );
       j->disco()->addFeature( XMLNS_CHAT_STATES );
       StringList ca;
       ca.push_back( "/path/to/cacert.crt" );
@@ -105,21 +103,6 @@ class IBBTest : public DiscoHandler, MessageSessionHandler, ConnectionListener, 
               info.compression.c_str() );
       return true;
     };
-
-    virtual void handleDiscoInfoResult( Stanza * /*stanza*/, int /*context*/ )
-    {
-      printf( "handleDiscoInfoResult}\n" );
-    }
-
-    virtual void handleDiscoItemsResult( Stanza * /*stanza*/, int /*context*/ )
-    {
-      printf( "handleDiscoItemsResult\n" );
-    }
-
-    virtual void handleDiscoError( Stanza * /*stanza*/, int /*context*/ )
-    {
-      printf( "handleDiscoError\n" );
-    }
 
     virtual void handleMessage( Stanza *stanza )
     {
