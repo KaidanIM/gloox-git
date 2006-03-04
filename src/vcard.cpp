@@ -102,7 +102,7 @@ namespace gloox
   }
 
   void VCard::setName( const std::string& family, const std::string& given, const std::string& middle,
-                  const std::string& prefix, const std::string& suffix )
+                       const std::string& prefix, const std::string& suffix )
   {
     m_family = family;
     m_given = given;
