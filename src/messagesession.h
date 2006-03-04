@@ -29,25 +29,25 @@ namespace gloox
   /**
    * @brief An abstraction of a message session between any two entities.
    *
-   * This is an alternative interface to XMPP messaging. The original interface, using the simple
+   * This is an alternative interface to raw, old-style messaging. The original interface, using the simple
    * MessageHandler-derived interface, is based on an all-or-nothing approach. Once registered with
    * ClientBase, a handler receives all message stanzas sent to this client and has to do any filtering
    * on its own.
    *
    * MessageSession adds an abstraction to a chat conversation. A MessageSession is responsible for
-   * communicating with exactly one (full) JID. By default it offers Message Events and Chat State
-   * Notifications support for messages sent through it.
+   * communicating with exactly one (full) JID. It is extensible with so-called MessageFilters, which can
+   * provide additional features such as Message Events, Chat State Notifications or In-Band Bytestreams.
    *
    * You can still use the old MessageHandler in parallel, but messages will not be relayed to both
    * the generic MessageHandler and a MessageSession established for the sender's JID. The MessageSession
    * takes precedence.
    *
-   * Using MessageSessions has the following advantages over the old plain MessageHandler:
+   * Using MessageSessions has the following advantages over the plain old MessageHandler:
    * @li automatic creation of MessageSessions
    * @li filtering by JID
    * @li automatic handling of threading (XMPP message threads, that is)
    * @li simpler sending of messages
-   * @li support for Message Events and Chat State Notifications
+   * @li support for MessageFilters.
    *
    * @b Usage:<br>
    * Derive an object from MessageSessionHandler and reimplement handleMessageSession() to store your
@@ -64,15 +64,21 @@ namespace gloox
    * @endcode
    * MyClass is a MessageSessionHandler here.
    *
-   * MyClass is MessageHandler, MessageEventHandler and ChatStateHandler, too. The handlers
-   * are registered with the session to receive the respective events.
+   * In this example, MyClass needs to be MessageHandler, MessageEventHandler and
+   * ChatStateHandler, too. The handlers are registered with the session to receive the
+   * respective events.
    * @code
    * virtual void MyClass::handleMessageSession( MessageSession *session )
    * {
+   *   // this leaks heavily if there was an earlier session
    *   m_session = session;
    *   m_session->registerMessageHandler( this );
-   *   m_session->registerMessageEventHandler( this );
-   *   m_session->registerChatStateHandler( this );
+   *
+   *   // the following is optional
+   *   m_messageEventFilter = new MessageEventFilter( m_session );
+   *   m_messageEventFilter->registerMessageEventHandler( this );
+   *   m_chatStateFilter = new ChatStateFilter( m_session );
+   *   m_chatStateFilter->registerChatStateHandler( this );
    * }
    * @endcode
    *
@@ -94,16 +100,16 @@ namespace gloox
    * raiseMessageEvent() and setChatState(), respectively. For example:
    * @code
    * // user is typing a message
-   * m_session->raiseMessageEvent( MESSAGE_EVENT_COMPOSING );
+   * m_messageEventFilter->raiseMessageEvent( MESSAGE_EVENT_COMPOSING );
    *
    * // acknowledge receiving of a message
-   * m_session->raiseMessageEvent( MESSAGE_EVENT_DELIVERED );
+   * m_messageEventFilter->raiseMessageEvent( MESSAGE_EVENT_DELIVERED );
    *
    * // user is not actively paying attention to the chat
-   * m_session->setChatState( CHAT_STATE_INACTIVE );
+   * m_chatStateFilter->setChatState( CHAT_STATE_INACTIVE );
    *
    * // user has closed the chat window
-   * m_session->setChatState( CHAT_STATE_GONE );
+   * m_chatStateFilter->setChatState( CHAT_STATE_GONE );
    * @endcode
    *
    * To send a message to the chat partner of the session, use
@@ -114,7 +120,7 @@ namespace gloox
    * m_session->send( "Hello World!", "No Subject" );
    * @endcode
    *
-   * Use setFilter() to enable/disable embedded filters.
+   * See InBandBytestreamManager for a detailed description on how to implement In-Band Bytestreams.
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.8
