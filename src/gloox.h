@@ -23,6 +23,7 @@
  * @ref auth_sec <br>
  * @ref msg_sec <br>
  * @ref jeps_sec <br>
+ * @ref filetransfer_sec <br>
  * <br>
  *
  * @section intro_sec Introduction
@@ -247,6 +248,12 @@
  * The Jabber Software Foundation has published a number of extensions to the core protocols, called
  * Jabber Enhancement Proposals (JEPs). A couple of these JEPs are implemented in gloox. Browse these
  * pages for more information.
+ *
+ * @section filetransfer_sec File Transfer
+ *
+ * For file transfer there is currently an implementation of JEP-0047 (In-Band Bytestreams). No other
+ * file transfer protocols are currently supported. See
+ * @link gloox::InBandBytestreamManager InBandBytestreamManager @endlink for a starting point.
  */
 
 #ifndef GLOOX_H__
@@ -306,7 +313,7 @@ namespace gloox
 
   const int XMPP_STREAM_VERSION_MAJOR       = 1;
   const int XMPP_STREAM_VERSION_MINOR       = 0;
-  const std::string GLOOX_VERSION           = "0.8-pre2";
+  const std::string GLOOX_VERSION           = "0.9-pre1";
 
   /**
    * This describes the possible states of a stream.

@@ -27,6 +27,8 @@ namespace gloox
    *
    * An InBandBytestreamDataHandler is registered with an InBandBytestream.
    *
+   * See InBandBytestreamManager for a detailed description on how to implement In-Band Bytestreams.
+   *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.8
    */

@@ -30,6 +30,8 @@ namespace gloox
    * One instance of this class handles one byte stream. You can attach as many InBandBytestream
    * objects to a MessageSession as you like.
    *
+   * See InBandBytestreamManager for a detailed description on how to implement In-Band Bytestreams.
+   *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.8
    */
@@ -66,7 +68,7 @@ namespace gloox
        * Use this function to register an object that will receive any notifications from
        * the InBandBytestream instance. Only one InBandBytestreamDataHandler can be registered
        * at any one time.
-       * @param ibbdh The InBandBytestreamDataHandler derived object to receive notifications.
+       * @param ibbdh The InBandBytestreamDataHandler-derived object to receive notifications.
        */
       void registerInBandBytestreamDataHandler( InBandBytestreamDataHandler *ibbdh );
 
@@ -80,7 +82,7 @@ namespace gloox
        * The negotiated block size is enforced. If the block is larger, nothing is sent
        * and @b false is returned. If the stream is not open or has been closed again
        * (by the remote entity or locally), nothing is sent and @b false is returned.
-       * This function does the base64 encoding for you.
+       * This function does the necessary base64 encoding for you.
        * @param data The block of data to send.
        * @return @b True if the data has been sent (no guarantee of receipt), @b false
        * in case of an error.
@@ -88,20 +90,24 @@ namespace gloox
       bool sendBlock( const std::string& data );
 
       /**
-       * Sets the stream's stream id. This should not be changed manually once the stream has
-       * been negotiated.
+       * Sets the stream's stream id. In general, you should not need to use this function. Also,
+       * this should not be changed manually once the stream has been negotiated.
        * @param sid The new stream id.
        */
       void setSid( const std::string& sid ) { m_sid = sid; };
 
       /**
        * Sets the default block-size. Default: 4096
+       *
+       * In general, you should not need to use this function. Also,
+       * this should not be changed manually once the stream has been negotiated.
+       *
        * @param blockSize The default block-size in byte.
        */
       void setBlockSize( int blockSize ) { m_blockSize = blockSize; };
 
       /**
-       * Lets you retieve this bytestreams block-size.
+       * Lets you retrieve this bytestreams block-size.
        * @return The bytestream's block-size.
        */
       int blockSize() const { return m_blockSize; };
