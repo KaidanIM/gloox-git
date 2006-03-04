@@ -64,10 +64,12 @@ namespace gloox
       virtual bool handleOutgoingInBandBytestream( const JID& to, InBandBytestream *ibb ) = 0;
 
       /**
-       * Notifies the handler of errors.
-       * @todo actually return errors.
+       * Notifies the handler of errors occuring when a bytestream was requested.
+       * For example, if the remote entity does not implement IBB.
+       * @param remote The remote entity's JID which relates to the error.
+       * @param se The error.
        */
-      virtual void handleInBandBytestreamError() = 0;
+      virtual void handleInBandBytestreamError( const JID& remote, StanzaError se ) = 0;
 
   };
 

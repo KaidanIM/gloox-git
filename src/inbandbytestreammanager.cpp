@@ -124,8 +124,7 @@ namespace gloox
             break;
           }
           case StanzaIqError:
-            m_inbandBytestreamHandler->handleInBandBytestreamError();
-//             m_open = false;
+            m_inbandBytestreamHandler->handleInBandBytestreamError( stanza->from(), stanza->error() );
             break;
           default:
             break;
