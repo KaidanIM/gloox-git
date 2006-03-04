@@ -1,0 +1,64 @@
+/*
+  Copyright (c) 2006 by Jakob Schroeter <js@camaya.net>
+  This file is part of the gloox library. http://camaya.net/gloox
+
+  This software is distributed under a license. The full license
+  agreement can be found in the file LICENSE in this distribution.
+  This software may not be copied, modified, sold or distributed
+  other than expressed in the named license agreement.
+
+  This software is distributed without any warranty.
+*/
+
+
+#ifndef VCARDHANDLER_H__
+#define VCARDHANDLER_H__
+
+namespace gloox
+{
+
+  /**
+   * @brief A virtual interface that helps requesting Jabber VCards.
+   *
+   * @author Jakob Schroeter <js@camaya.net>
+   * @since 0.8
+   */
+  class GLOOX_API VCardHandler
+  {
+    public:
+      /**
+       * Describes possible operation contexts.
+       */
+      enum VCardContext
+      {
+        FetchVCard,                 /**< Operation involves fetching a VCard. */
+        StoreVCard                  /**< Operation involves storing a VCard. */
+      };
+
+      /**
+       * Virtual destructor.
+       */
+      virtual ~VCardHandler() {};
+
+      /**
+       * This function is called when a VCard has been successfully fetched.
+       * The VCardHandler becomes owner of the VCard object and is responsible for deleting it.
+       * @param vcard The fetched VCard.
+       */
+      virtual void handleVCard( const VCard *vcard ) = 0;
+
+      /**
+       * This function is called to indicate a successful VCArd store operation
+       * or any error that occurs.
+       * @param context The operation which yielded the result.
+       * @param jid The JID involved.
+       * @param se The error, if any. If equal to @c StanzaErrorUndefined no error occured.
+       */
+      virtual void handleVCardResult( VCardContext context, const JID& jid,
+                                      StanzaError se = StanzaErrorUndefined  ) = 0;
+
+  };
+
+}
+
+#endif // VCARDHANDLER_H__
