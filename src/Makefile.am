@@ -41,7 +41,6 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             messageeventhandler.h     messagesessionhandler.h chatstatehandler.h \
                             chatstatefilter.h         messageeventfilter.h    inbandbytestream.h \
                             inbandbytestreamhandler.h inbandbytestreamdatahandler.h \
-                            inbandbytestreammanager.h
+                            inbandbytestreammanager.h messagefilter.h
 
-noinst_HEADERS = prep.h parser.h connection.h dns.h nonsaslauth.h messagefilter.h \
-                   base64.h compression.h
+noinst_HEADERS = prep.h parser.h connection.h dns.h nonsaslauth.h base64.h compression.h
