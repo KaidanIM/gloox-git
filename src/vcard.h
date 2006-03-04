@@ -55,7 +55,7 @@ namespace gloox
       /**
        *
        */
-      void setFormattedName( const std::string& name ) { m_formattedName = name; };
+      void setFormattedname( const std::string& name ) { m_formattedname = name; };
 
       /**
        *
@@ -156,7 +156,7 @@ namespace gloox
       void checkField( Tag *vcard, const std::string& field, std::string& var );
       void insertField( Tag *vcard, const std::string& field, const std::string& var ) const;
 
-      std::string m_formattedName;
+      std::string m_formattedname;
       std::string m_family;
       std::string m_given;
       std::string m_middle;
