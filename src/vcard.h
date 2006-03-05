@@ -31,6 +31,48 @@ namespace gloox
   {
     public:
       /**
+       * Addressing type indicators.
+       * @note @c AddrTypeDom and @c AddrTypeIntl are mutually exclusive. If both are present,
+       * @c AddrTypeDom takes precendence.
+       * @note Also note that not all adress types are applicable everywhere. For example,
+       * @c AddrTypeIsdn does not make sense for a postal address. Check JEP-0054
+       * for details.
+       */
+      enum AddressType
+      {
+        AddrTypeHome   =      1,    /**< */
+        AddrTypeWork   =      2,    /**< */
+        AddrTypePref   =      4,    /**< */
+        AddrTypeX400   =      8,    /**< */
+        AddrTypeInet   =     16,    /**< */
+        AddrTypeParcel =     32,    /**< */
+        AddrTypePostal =     64,    /**< */
+        AddrTypeDom    =    128,    /**< */
+        AddrTypeIntl   =    256,    /**< */
+        AddrTypeVoice  =    512,    /**< */
+        AddrTypeFax    =   1024,    /**< */
+        AddrTypePager  =   2048,    /**< */
+        AddrTypeMsg    =   4096,    /**< */
+        AddrTypeCell   =   8192,    /**< */
+        AddrTypeVideo  =  16384,    /**< */
+        AddrTypeBbs    =  32768,    /**< */
+        AddrTypeModem  =  65536,    /**< */
+        AddrTypeIsdn   = 131072,    /**< */
+        AddrTypePcs    = 262144     /**< */
+      };
+
+      /**
+       * Classifies the VCard.
+       */
+      enum VCardClassification
+      {
+        ClassNone         = 0,      /**< */
+        ClassPublic       = 1,      /**< */
+        ClassPrivate      = 2,      /**< */
+        ClassConfidential = 4       /**< */
+      };
+
+      /**
        * Constructor.
        */
       VCard();
@@ -152,9 +194,97 @@ namespace gloox
        */
       void setLogo( const std::string& type, const std::string& binval );
 
+      /**
+       *
+       */
+      void addEmail( const std::string& userid, int type );
+
+      /**
+       *
+       */
+      void addAddress( const std::string& pobox, const std::string& extadd,
+                       const std::string& street, const std::string& locality,
+                       const std::string& region, const std::string& pcode,
+                       const std::string& ctry, int type );
+
+      /**
+       *
+       */
+      void addTelephone( const std::string& number, int type );
+
+      /**
+       *
+       */
+      void setGeo( const std::string& lat, const std::string& lon );
+
+      /**
+       *
+       */
+      void setOrganization( const std::string& orgname, const StringList& orgunits );
+
+      /**
+       *
+       */
+      void setClass( VCardClassification vclass ) { m_class = vclass; };
+
     private:
       void checkField( Tag *vcard, const std::string& field, std::string& var );
       void insertField( Tag *vcard, const std::string& field, const std::string& var ) const;
+      void insertField( Tag *vcard, const std::string& field, bool var ) const;
+
+      struct Email
+      {
+        std::string userid;
+        bool home;
+        bool work;
+        bool internet;
+        bool pref;
+        bool x400;
+      };
+      typedef std::list<Email> EmailList;
+      EmailList m_emailList;
+
+      struct Telephone
+      {
+        std::string number;
+        bool home;
+        bool work;
+        bool voice;
+        bool fax;
+        bool pager;
+        bool msg;
+        bool cell;
+        bool video;
+        bool bbs;
+        bool modem;
+        bool isdn;
+        bool pcs;
+        bool pref;
+      };
+      typedef std::list<Telephone> TelephoneList;
+      TelephoneList m_telephoneList;
+
+      struct Address
+      {
+        std::string pobox;
+        std::string extadd;
+        std::string street;
+        std::string locality;
+        std::string region;
+        std::string pcode;
+        std::string ctry;
+        bool home;
+        bool work;
+        bool postal;
+        bool parcel;
+        bool pref;
+        bool dom;
+        bool intl;
+      };
+      typedef std::list<Address> AddressList;
+      AddressList m_addressList;
+
+      StringList m_orgunits;
 
       std::string m_formattedname;
       std::string m_family;
@@ -182,6 +312,11 @@ namespace gloox
       std::string m_rev;
       std::string m_sortstring;
       std::string m_uid;
+      std::string m_geolat;
+      std::string m_geolon;
+      std::string m_orgname;
+
+      VCardClassification m_class;
 
       bool m_N;
       bool m_PHOTO;
