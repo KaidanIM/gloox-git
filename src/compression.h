@@ -37,7 +37,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.8
    */
-  class Compression
+  class GLOOX_API Compression
   {
     public:
       /**

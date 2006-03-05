@@ -46,7 +46,7 @@ namespace gloox
        * @author Jakob Schroeter <js@caaya.net>
        * @since 0.8
        */
-      class Resource
+      class GLOOX_API Resource
       {
 
         friend class RosterItem;

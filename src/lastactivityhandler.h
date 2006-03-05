@@ -24,7 +24,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.6
    */
-  class LastActivityHandler
+  class GLOOX_API LastActivityHandler
   {
     public:
       /**
