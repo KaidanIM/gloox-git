@@ -34,7 +34,7 @@ class VCardTest : public ConnectionListener, LogHandler, VCardHandler
       StringList ca;
       ca.push_back( "/path/to/cacert.crt" );
       j->setCACerts( ca );
-      j->logInstance().registerLogHandler( LogLevelDebug, LogAreaAll, this );
+//       j->logInstance().registerLogHandler( LogLevelDebug, LogAreaAll, this );
       m_vManager = new VCardManager( j, j->disco() );
 
       j->connect();
@@ -89,8 +89,13 @@ class VCardTest : public ConnectionListener, LogHandler, VCardHandler
         j->disconnect();
       else if( m_count == 1 )
       {
-        JID jid( "stpeter@jabber.org" );
-        m_vManager->fetchVCard( jid, this );
+        VCard *v = new VCard();
+        v->setFormattedname( "Hurk the Hurk" );
+        v->setNickname( "hurkhurk" );
+        v->setName( "Simpson", "Bart", "", "Mr.", "jr." );
+        v->addAddress( "pobox", "app. 2", "street", "Springfield", "region", "123", "USA", VCard::AddrTypeHome );
+        m_vManager->storeVCard( v, this );
+        printf( "setting vcard: %s\n", v->tag()->xml().c_str() );
       }
       else
       {
@@ -103,11 +108,6 @@ class VCardTest : public ConnectionListener, LogHandler, VCardHandler
                                     StanzaError se = StanzaErrorUndefined  )
     {
       printf( "vcard result: context: %d, jid: %s, error: %d\n", context, jid.full().c_str(), se );
-      VCard *v = new VCard();
-      v->setFormattedName( "Hurk the Hurk" );
-      v->setNickname( "hurkhurk" );
-      v->setName( "Simpson", "Bart", "", "", "" );
-      m_vManager->storeVCard( v, this );
       m_vManager->fetchVCard( jid, this );
     }
 
