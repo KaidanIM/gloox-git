@@ -1,6 +1,7 @@
 
-v0.8-pre3 -- xx Mar 2006
+v0.8-pre3 -- 05 Mar 2006
 ------------------------
+- JEP-0054 (vcard-temp)
 - finished In-Band Bytestream implementation and docs
 - doc updates and fixes
 
