@@ -16,7 +16,8 @@ libgloox_la_SOURCES = jid.cpp parser.cpp connection.cpp clientbase.cpp tag.cpp s
                         bookmarkstorage.cpp annotations.cpp privacymanager.cpp lastactivity.cpp \
                         flexoff.cpp dataform.cpp dataformfield.cpp dataformbase.cpp messagesession.cpp \
                         messageeventfilter.cpp chatstatefilter.cpp main.cpp compression.cpp \
-                        inbandbytestream.cpp inbandbytestreammanager.cpp messagefilter.cpp
+                        inbandbytestream.cpp inbandbytestreammanager.cpp messagefilter.cpp vcard.cpp \
+                        vcardmanager.cpp
 
 libgloox_la_LDFLAGS = -version-info 2:0:0 -no-undefined -no-allow-shlib-undefined
 libgloox_la_LIBADD =
@@ -41,7 +42,7 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             messageeventhandler.h     messagesessionhandler.h chatstatehandler.h \
                             chatstatefilter.h         messageeventfilter.h    inbandbytestream.h \
                             inbandbytestreamhandler.h inbandbytestreamdatahandler.h \
-                            inbandbytestreammanager.h
+                            inbandbytestreammanager.h messagefilter.h         vcard.h \
+                            vcardmanager.h            vcardhandler.h
 
-noinst_HEADERS = prep.h parser.h connection.h dns.h nonsaslauth.h messagefilter.h \
-                   base64.h compression.h
+noinst_HEADERS = prep.h parser.h connection.h dns.h nonsaslauth.h base64.h compression.h

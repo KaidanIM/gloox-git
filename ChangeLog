@@ -1,4 +1,10 @@
 
+v0.8-pre3 -- xx Mar 2006
+------------------------
+- finished In-Band Bytestream implementation and docs
+- doc updates and fixes
+
+
 v0.8-pre2 -- 21 Feb 2006
 ------------------------
 - In-Band Bytestreams (JEP-0047)

@@ -25,6 +25,8 @@ namespace gloox
    * @brief A virtual interface that allows to receive new incoming In-Band Bytestream requests
    * from remote entities.
    *
+   * See InBandBytestreamManager for a detailed description on how to implement In-Band Bytestreams.
+   *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.8
    */
@@ -40,10 +42,10 @@ namespace gloox
        * Notifies the implementor of a new incoming IBB request.
        * Attach the IBB to a MessageSession using InBandBytestream::attachTo().
        * If the return value is @b true the bytestream holds as accepted and the
-       * InBandBytestreamHandler becomes the owner of the InBandBytestream. If @b false
-       * is returned, the InBandBytestream is deleted by the InBandBytestreamManager and
-       * the bytestream request will be declined.
-       * @param to The remote initiator of the bytestream request.
+       * InBandBytestreamHandler becomes the owner of the InBandBytestream object. If
+       * @b false is returned, the InBandBytestream is deleted by the InBandBytestreamManager
+       * and the bytestream request will be declined.
+       * @param from The remote initiator of the bytestream request.
        * @param ibb The bytestream.
        * @return @b True to accept the byte stream, @b false to reject.
        * @note You should @b not send any data over this bytestream from within this function.
@@ -52,19 +54,22 @@ namespace gloox
       virtual bool handleIncomingInBandBytestream( const JID& from, InBandBytestream *ibb ) = 0;
 
       /**
-       * The In-Band Bytestream is already attached to the MessageSession provided to
-       * InBandBytestreamManager::createInBandBytestream() earlier.
-       * Also, the stream has been accepted by the remote entity and is ready to send data.
+       * Notifies the implementor of successful establishing of an outcoming IBB request.
+       * Attach the IBB to a MessageSession using InBandBytestream::attachTo().
+       * The stream has been accepted by the remote entity and is ready to send data.
+       * The InBandBytestreamHandler becomes the owner of the InBandBytestream object.
        * @param to The remote entity's JID.
        * @param ibb The new bytestream.
        */
       virtual bool handleOutgoingInBandBytestream( const JID& to, InBandBytestream *ibb ) = 0;
 
       /**
-       * Notifies the implementor in case of an error.
-       * @todo actually return errors.
+       * Notifies the handler of errors occuring when a bytestream was requested.
+       * For example, if the remote entity does not implement IBB.
+       * @param remote The remote entity's JID which relates to the error.
+       * @param se The error.
        */
-      virtual void handleInBandBytestreamError() = 0;
+      virtual void handleInBandBytestreamError( const JID& remote, StanzaError se ) = 0;
 
   };
 

@@ -356,8 +356,8 @@ namespace gloox
        * should have signed the previous one.
        * @note These certificates are not necessarily the same as those used to verify the server's
        * certificate.
-       * @param privateKey The absolute path to the user's private key in PEM format.
-       * @param certs A path to a certificate bundle in PEM format.
+       * @param clientKey The absolute path to the user's private key in PEM format.
+       * @param clientCerts A path to a certificate bundle in PEM format.
        */
       void setClientCert( const std::string& clientKey, const std::string& clientCerts );
 
