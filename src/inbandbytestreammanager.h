@@ -153,7 +153,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.8
    */
-  class InBandBytestreamManager : public IqHandler
+  class GLOOX_API InBandBytestreamManager : public IqHandler
   {
     public:
       /**
