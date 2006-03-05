@@ -246,8 +246,29 @@
  * @section jeps_sec Protocol Enhancements
  *
  * The Jabber Software Foundation has published a number of extensions to the core protocols, called
- * Jabber Enhancement Proposals (JEPs). A couple of these JEPs are implemented in gloox. Browse these
- * pages for more information.
+ * Jabber Enhancement Proposals (JEPs). A couple of these JEPs are implemented in gloox:
+ *
+ * @li JEP-0004 @link gloox::DataForm Data Forms @endlink
+ * @li JEP-0012 @link gloox::LastActivity  Last Activity @endlink
+ * @li JEP-0013 @link gloox::FlexibleOffline Flexible Offline Message Retrieval @endlink
+ * @li JEP-0022 Message Events (see @link gloox::MessageSession MessageSession @endlink for examples)
+ * @li JEP-0030 @link gloox::Disco Service Discovery @endlink
+ * @li JEP-0047 @link gloox::InBandBytestreamManager In-Band Bytestreams @endlink
+ * @li JEP-0048 @link gloox::BookmarkStorage Bookmark Storage @endlink
+ * @li JEP-0049 @link gloox::PrivateXML Private XML Storage @endlink
+ * @li JEP-0050 @link gloox::Adhoc Ad-hoc Commands @endlink
+ * @li JEP-0054 @link gloox::VCardManager vcard-temp @endlink
+ * @li JEP-0077 @link gloox::Registration In-Band Registration @endlink
+ * @li JEP-0078 Non-SASL Authentication (automatically used if the server does not support SASL)
+ * @li JEP-0083 Nested Roster Groups (automatically used if supported by the server. see
+ * @link gloox::RosterManager::delimiter() RosterManager @endlink)
+ * @li JEP-0085 Chat State Notifications (see @link gloox::MessageSession MessageSession @endlink for
+ * examples)
+ * @li JEP-0092 Software Version (integrated into @link gloox::Disco Service Discovery @endlink)
+ * @li JEP-0114 @link gloox::Component Jabber Component Protocol @endlink
+ * @li JEP-0138 Stream Compression (used automatically if gloox is compiled with zlib and if the server
+ * supports it)
+ * @li JEP-0145 @link gloox::Annotations Annotations @endlink
  *
  * @section filetransfer_sec File Transfer
  *
