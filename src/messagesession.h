@@ -120,6 +120,17 @@ namespace gloox
    * m_session->send( "Hello World!", "No Subject" );
    * @endcode
    *
+   * To initiate a new chat session, all you have to do is create a new MessageSession and register
+   * a MessageHandler with it:
+   * @code
+   * MessageSession* MyClass::newSession( const JID& to )
+   * {
+   *   MessageSession *session = new MessageSession( m_client, to );
+   *   session->registerMessageHandler( this );
+   *   return session;
+   * }
+   * @endcode
+   *
    * See InBandBytestreamManager for a detailed description on how to implement In-Band Bytestreams.
    *
    * @author Jakob Schroeter <js@camaya.net>
