@@ -60,7 +60,7 @@ namespace gloox
 
   void VCardManager::storeVCard( const VCard *vcard, VCardHandler *vch )
   {
-    if( !m_parent )
+    if( !m_parent || !vch )
       return;
 
     const std::string id = m_parent->getID();
