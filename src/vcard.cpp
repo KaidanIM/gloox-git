@@ -19,12 +19,14 @@ namespace gloox
 {
 
   VCard::VCard()
-    : m_N( false ), m_PHOTO( false ), m_LOGO( false )
+    : m_prodid( "gloox" + GLOOX_VERSION ),
+      m_N( false ), m_PHOTO( false ), m_LOGO( false )
   {
   }
 
   VCard::VCard( Tag *vcard )
-    : m_N( false ), m_PHOTO( false ), m_LOGO( false )
+    : m_prodid( "gloox" + GLOOX_VERSION ),
+      m_N( false ), m_PHOTO( false ), m_LOGO( false )
   {
     checkField( vcard, "FN", m_formattedname );
     checkField( vcard, "NICKNAME", m_nickname );
@@ -49,28 +51,28 @@ namespace gloox
       {
         m_N = true;
         if( (*it)->hasChild( "FAMILY" ) )
-          m_family = (*it)->findChild( "FAMILY" )->cdata();
+          m_name.family = (*it)->findChild( "FAMILY" )->cdata();
         if( (*it)->hasChild( "GIVEN" ) )
-          m_family = (*it)->findChild( "GIVEN" )->cdata();
+          m_name.given = (*it)->findChild( "GIVEN" )->cdata();
         if( (*it)->hasChild( "MIDDLE" ) )
-          m_family = (*it)->findChild( "MIDDLE" )->cdata();
+          m_name.middle = (*it)->findChild( "MIDDLE" )->cdata();
         if( (*it)->hasChild( "PREFIX" ) )
-          m_family = (*it)->findChild( "PREFIX" )->cdata();
+          m_name.prefix = (*it)->findChild( "PREFIX" )->cdata();
         if( (*it)->hasChild( "SUFFIX" ) )
-          m_family = (*it)->findChild( "SUFFIX" )->cdata();
+          m_name.suffix = (*it)->findChild( "SUFFIX" )->cdata();
       }
 
       if( (*it)->name() == "PHOTO" )
       {
         if( (*it)->hasChild( "EXTVAL" ) )
         {
-          m_photoext = (*it)->findChild( "EXTVAL" )->cdata();
+          m_photo.extval = (*it)->findChild( "EXTVAL" )->cdata();
           m_PHOTO = true;
         }
         else if( (*it)->hasChild( "TYPE" ) && (*it)->hasChild( "BINVAL" ) )
         {
-          m_phototype = (*it)->findChild( "TYPE" )->cdata();
-          m_photobin = Base64::decode64( (*it)->findChild( "BINVAL" )->cdata() );
+          m_photo.type = (*it)->findChild( "TYPE" )->cdata();
+          m_photo.binval = Base64::decode64( (*it)->findChild( "BINVAL" )->cdata() );
           m_PHOTO = true;
         }
       }
@@ -79,13 +81,13 @@ namespace gloox
       {
         if( (*it)->hasChild( "EXTVAL" ) )
         {
-          m_logoext = (*it)->findChild( "EXTVAL" )->cdata();
+          m_logo.extval = (*it)->findChild( "EXTVAL" )->cdata();
           m_LOGO = true;
         }
         else if( (*it)->hasChild( "TYPE" ) && (*it)->hasChild( "BINVAL" ) )
         {
-          m_logotype = (*it)->findChild( "TYPE" )->cdata();
-          m_logobin = Base64::decode64( (*it)->findChild( "BINVAL" )->cdata() );
+          m_logo.type = (*it)->findChild( "TYPE" )->cdata();
+          m_logo.binval = Base64::decode64( (*it)->findChild( "BINVAL" )->cdata() );
           m_LOGO = true;
         }
       }
@@ -148,9 +150,9 @@ namespace gloox
         for( ; ito != (*it)->children().end(); ++ito )
         {
           if( (*ito)->name() == "ORGNAME" )
-            m_orgname = (*ito)->cdata();
+            m_org.name = (*ito)->cdata();
           else if( (*ito)->name() == "ORGUNIT" )
-            m_orgunits.push_back( (*ito)->cdata() );
+            m_org.units.push_back( (*ito)->cdata() );
         }
       }
 
@@ -181,11 +183,11 @@ namespace gloox
   void VCard::setName( const std::string& family, const std::string& given, const std::string& middle,
                        const std::string& prefix, const std::string& suffix )
   {
-    m_family = family;
-    m_given = given;
-    m_middle = middle;
-    m_prefix = prefix;
-    m_suffix = suffix;
+    m_name.family = family;
+    m_name.given = given;
+    m_name.middle = middle;
+    m_name.prefix = prefix;
+    m_name.suffix = suffix;
     m_N = true;
   }
 
@@ -193,7 +195,7 @@ namespace gloox
   {
     if( !extval.empty() )
     {
-      m_photoext = extval;
+      m_photo.extval= extval;
       m_PHOTO = true;
     }
   }
@@ -202,8 +204,8 @@ namespace gloox
   {
     if( !type.empty() && !binval.empty() )
     {
-      m_phototype = type;
-      m_photobin = Base64::encode64( binval );
+      m_photo.type = type;
+      m_photo.binval = Base64::encode64( binval );
       m_PHOTO = true;
     }
   }
@@ -212,7 +214,17 @@ namespace gloox
   {
     if( !extval.empty() )
     {
-      m_logoext = extval;
+      m_logo.extval = extval;
+      m_LOGO = true;
+    }
+  }
+
+  void VCard::setLogo( const std::string& type, const std::string& binval )
+  {
+    if( !type.empty() && !binval.empty() )
+    {
+      m_logo.type = type;
+      m_logo.binval = Base64::encode64( binval );
       m_LOGO = true;
     }
   }
@@ -285,22 +297,12 @@ namespace gloox
     m_telephoneList.push_back( item );
   }
 
-  void VCard::setLogo( const std::string& type, const std::string& binval )
-  {
-    if( !type.empty() && !binval.empty() )
-    {
-      m_logotype = type;
-      m_logobin = Base64::encode64( binval );
-      m_LOGO = true;
-    }
-  }
-
   void VCard::setGeo( const std::string& lat, const std::string& lon )
   {
     if( !lat.empty() && !lon.empty() )
     {
-      m_geolat = lat;
-      m_geolon = lon;
+      m_geo.latitude = lat;
+      m_geo.longitude = lon;
     }
   }
 
@@ -308,8 +310,8 @@ namespace gloox
   {
     if( !orgname.empty() )
     {
-      m_orgname = orgname;
-      m_orgunits = orgunits;
+      m_org.name = orgname;
+      m_org.units = orgunits;
     }
   }
 
@@ -337,38 +339,38 @@ namespace gloox
     if( m_N )
     {
       Tag *n = new Tag( v, "N" );
-      insertField( n, "FAMILY", m_family );
-      insertField( n, "GIVEN", m_given );
-      insertField( n, "MIDDLE", m_middle );
-      insertField( n, "PREFIX", m_prefix );
-      insertField( n, "SUFFIX", m_suffix );
+      insertField( n, "FAMILY", m_name.family );
+      insertField( n, "GIVEN", m_name.given );
+      insertField( n, "MIDDLE", m_name.middle );
+      insertField( n, "PREFIX", m_name.prefix );
+      insertField( n, "SUFFIX", m_name.suffix );
     }
 
     if( m_PHOTO )
     {
       Tag *p = new Tag( v, "PHOTO" );
-      if( !m_photoext.empty() )
+      if( !m_photo.extval.empty() )
       {
-        new Tag( p, "EXTVAL", m_photoext );
+        new Tag( p, "EXTVAL", m_photo.extval );
       }
-      else if( !m_phototype.empty() && !m_photobin.empty() )
+      else if( !m_photo.type.empty() && !m_photo.binval.empty() )
       {
-        new Tag( p, "TYPE", m_phototype );
-        new Tag( p, "BINVAL", m_photobin );
+        new Tag( p, "TYPE", m_photo.type );
+        new Tag( p, "BINVAL", m_photo.binval );
       }
     }
 
     if( m_LOGO )
     {
       Tag *l = new Tag( v, "LOGO" );
-      if( !m_logoext.empty() )
+      if( !m_logo.extval.empty() )
       {
-        new Tag( l, "EXTVAL", m_logoext );
+        new Tag( l, "EXTVAL", m_logo.extval );
       }
-      else if( !m_logotype.empty() && !m_logobin.empty() )
+      else if( !m_logo.type.empty() && !m_logo.binval.empty() )
       {
-        new Tag( l, "TYPE", m_logotype );
-        new Tag( l, "BINVAL", m_logobin );
+        new Tag( l, "TYPE", m_logo.type );
+        new Tag( l, "BINVAL", m_logo.binval );
       }
     }
 
@@ -426,19 +428,19 @@ namespace gloox
       insertField( t, "PREF", (*itt).pref );
     }
 
-    if( !m_geolat.empty() && !m_geolon.empty() )
+    if( !m_geo.latitude.empty() && !m_geo.longitude.empty() )
     {
       Tag *g = new Tag( v, "GEO" );
-      new Tag( g, "LAT", m_geolat );
-      new Tag( g, "LON", m_geolon );
+      new Tag( g, "LAT", m_geo.latitude );
+      new Tag( g, "LON", m_geo.longitude );
     }
 
-    if( !m_orgname.empty() )
+    if( !m_org.name.empty() )
     {
       Tag *o = new Tag( v, "ORG" );
-      new Tag( o, "ORGNAME", m_orgname );
-      StringList::const_iterator ito = m_orgunits.begin();
-      for( ; ito != m_orgunits.end(); ++ito )
+      new Tag( o, "ORGNAME", m_org.name );
+      StringList::const_iterator ito = m_org.units.begin();
+      for( ; ito != m_org.units.end(); ++ito )
         new Tag( o, "ORGUNITS", (*ito) );
     }
 

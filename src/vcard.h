@@ -62,6 +62,18 @@ namespace gloox
       };
 
       /**
+       * A full name.
+       */
+      struct Name
+      {
+        std::string family;
+        std::string given;
+        std::string middle;
+        std::string prefix;
+        std::string suffix;
+      };
+
+      /**
        * Classifies the VCard.
        */
       enum VCardClassification
@@ -71,6 +83,104 @@ namespace gloox
         ClassPrivate      = 2,      /**< */
         ClassConfidential = 4       /**< */
       };
+
+      /**
+       * Describes an email field.
+       */
+      struct Email
+      {
+        std::string userid;
+        bool home;
+        bool work;
+        bool internet;
+        bool pref;
+        bool x400;
+      };
+
+      /**
+       * Al list of email fields.
+       */
+      typedef std::list<Email> EmailList;
+
+      /**
+       * Describes a telephone number entry.
+       */
+      struct Telephone
+      {
+        std::string number;
+        bool home;
+        bool work;
+        bool voice;
+        bool fax;
+        bool pager;
+        bool msg;
+        bool cell;
+        bool video;
+        bool bbs;
+        bool modem;
+        bool isdn;
+        bool pcs;
+        bool pref;
+      };
+
+      /**
+       * A list of telephone entries.
+       */
+      typedef std::list<Telephone> TelephoneList;
+
+      /**
+       * Describes an address entry.
+       */
+      struct Address
+      {
+        std::string pobox;
+        std::string extadd;
+        std::string street;
+        std::string locality;
+        std::string region;
+        std::string pcode;
+        std::string ctry;
+        bool home;
+        bool work;
+        bool postal;
+        bool parcel;
+        bool pref;
+        bool dom;
+        bool intl;
+      };
+
+      /**
+       * Describes geo information.
+       */
+      struct Geo
+      {
+        std::string latitude;
+        std::string longitude;
+      };
+
+      /**
+       * Describes organization information.
+       */
+      struct Org
+      {
+        std::string name;
+        StringList units;
+      };
+
+      /**
+       * Describes photo/logo information.
+       */
+      struct Photo
+      {
+        std::string extval;
+        std::string binval;
+        std::string type;
+      };
+
+      /**
+       * A list of address entries.
+       */
+      typedef std::list<Address> AddressList;
 
       /**
        * Constructor.
@@ -95,112 +205,264 @@ namespace gloox
       Tag* tag() const;
 
       /**
-       *
+       * Sets the formatted name.
+       * @param name The formatted name.
        */
       void setFormattedname( const std::string& name ) { m_formattedname = name; };
 
       /**
-       *
+       * Returns the formatted name.
+       * @return The formatted name.
+       */
+      const std::string& formattedname() const { return m_formattedname; };
+
+      /**
+       * Sets the individual name parts. Unused parts can be left empty.
+       * @param family The family name.
+       * @param given The given name.
+       * @param middle The middle name(s)
+       * @param prefix A name prefix.
+       * @param suffix A name suffix.
        */
       void setName( const std::string& family, const std::string& given, const std::string& middle,
                     const std::string& prefix, const std::string& suffix );
+
       /**
-       *
+       * Returns a full name.
+       * @return A full name.
+       */
+      const Name& name() const { return m_name; };
+
+      /**
+       * Sets a nickname.
+       * @param nickname The nickname.
        */
       void setNickname( const std::string& nickname ) { m_nickname = nickname; };
 
       /**
-       *
+       * Returns the nickname.
+       * @return The nickname.
+       */
+      const std::string& nickname() const { return m_nickname; };
+
+      /**
+       * Sets a URL (homepage, etc.).
+       * @param url The URL.
        */
       void setUrl( const std::string& url ) { m_url = url; };
 
       /**
-       *
+       * Returns the url.
+       * @return The url.
+       */
+      const std::string& url() const { return m_url; };
+
+      /**
+       * Sets the birthday.
+       * @param bday The birthday, ISO 8601 formatted.
        */
       void setBday( const std::string& bday ) { m_bday = bday; };
 
       /**
-       *
+       * Returns the birthday.
+       * @return The birthday.
+       */
+      const std::string& bday() const { return m_bday; };
+
+      /**
+       * Sets a Jabber ID.
+       * @param jabberid The (bare) Jabber ID (node\@host).
        */
       void setJabberid( const std::string& jabberid ) { m_jabberid = jabberid; };
 
       /**
-       *
+       * Returns the Jabber ID.
+       * @return The Jabber ID.
+       */
+      const std::string& jabberid() const { return m_jabberid; };
+
+      /**
+       * Sets the person's title.
+       * @param title The title.
        */
       void setTitle( const std::string& title ) { m_title = title; };
 
       /**
-       *
+       * Returns the title.
+       * @return The title.
+       */
+      const std::string& title() const { return m_title; };
+
+      /**
+       * Sets the person's role.
+       * @param role The role.
        */
       void setRole( const std::string& role ) { m_role = role; };
 
       /**
-       *
+       * Returns the role.
+       * @return The role.
+       */
+      const std::string& role() const { return m_role; };
+
+      /**
+       * Sets a "Commentary note".
+       * @param note The note.
        */
       void setNote( const std::string& note ) { m_note = note; };
 
       /**
-       *
+       * Returns the note.
+       * @return The note.
+       */
+      const std::string& note() const { return m_note; };
+
+      /**
+       * Sets a "free-form descriptive text".
+       * @param desc The descriptive text.
        */
       void setDesc( const std::string& desc ) { m_desc = desc; };
 
       /**
-       *
+       * Returns the "free-form descriptive text".
+       * @return The descriptive text.
+       */
+      const std::string& desc() const { return m_desc; };
+
+      /**
+       * Sets the "Mailer (e.g., Mail User Agent Type) property".
+       * @param mailer The mailer.
        */
       void setMailer( const std::string& mailer ) { m_mailer = mailer; };
 
       /**
-       *
+       * Returns the mailer.
+       * @return The mailer.
+       */
+      const std::string& mailer() const { return m_mailer; };
+
+      /**
+       * Sets the "Last revised property. The value must be an ISO 8601 formatted UTC date/time."
+       * @param rev The date of the last revision.
        */
       void setRev( const std::string& rev ) { m_rev = rev; };
 
       /**
-       *
+       * Returns the date of the last revision.
+       * @return The date of the last revision.
+       */
+      const std::string& rev() const { return m_rev; };
+
+      /**
+       * Sets the "Unique identifier property."
+       * @param uid The unique identifier.
        */
       void setUid( const std::string& uid ) { m_uid = uid; };
 
       /**
-       *
+       * Returns the unique identifier.
+       * @return The unique identifier.
+       */
+      const std::string& uid() const { return m_uid; };
+
+      /**
+       * Sets the "Time zone's Standard Time UTC offset. Value must be an ISO 8601
+       * formatted UTC offset.
+       * @param tz The timezone offset.
        */
       void setTz( const std::string& tz ) { m_tz = tz; };
 
       /**
-       *
+       * Returns the timezone offset.
+       * @return The timezone offset.
+       */
+      const std::string& tz() const { return m_tz; };
+
+      /**
+       * Sets the "Identifier of product that generated the vCard property."
+       * @param prodid The product identifier.
        */
       void setProdid( const std::string& prodid ) { m_prodid = prodid; };
 
       /**
-       *
+       * Returns the product identifier.
+       * @return The product identifier.
+       */
+      const std::string& prodid() const { return m_prodid; };
+
+      /**
+       * Sets the "Sort string property."
+       * @param sortstring The sort string.
        */
       void setSortstring( const std::string& sortstring ) { m_sortstring = sortstring; };
 
       /**
-       *
+       * Returns the sort string.
+       * @return The sort string.
+       */
+      const std::string& sortstring() const { return m_sortstring; };
+
+      /**
+       * Sets a URI to a photo.
+       * @param extval The URI to the photo.
        */
       void setPhoto( const std::string& extval );
 
       /**
-       *
+       * Sets the photo directly.
+       * @param type Format type parameter.
+       * @param binval The binary photo data.
        */
       void setPhoto( const std::string& type, const std::string& binval );
 
       /**
-       *
+       * Returns photo information.
+       * @return Info about the photo.
+       */
+      const Photo& photo() const { return m_photo; };
+
+      /**
+       * Sets a URI to a organization logo.
+       * @param extval The URI to the logo.
        */
       void setLogo( const std::string& extval );
 
       /**
-       *
+       * Sets the organization logo directly.
+       * @param type Format type parameter.
+       * @param binval The binary logo data.
        */
       void setLogo( const std::string& type, const std::string& binval );
 
       /**
-       *
+       * Returns logo information.
+       * @return Info about the logo.
+       */
+      const Photo& logo() const { return m_logo; };
+
+      /**
+       * Adds an email address.
+       * @param userid The email address.
+       * @param type Bit-wise ORed @c AddressType.
        */
       void addEmail( const std::string& userid, int type );
 
       /**
-       *
+       * Returns a list of email addresses.
+       * @return A list of email addresses.
+       */
+      const EmailList& emailAddresses() const { return m_emailList; };
+
+      /**
+       * Adds an address.
+       * @param pobox A PO Box.
+       * @param extadd Some extra field.
+       * @param street The street.
+       * @param locality The village, city, etc.
+       * @param region The region.
+       * @param pcode The post code.
+       * @param ctry The country.
+       * @param type Bit-wise ORed @c AddressType.
        */
       void addAddress( const std::string& pobox, const std::string& extadd,
                        const std::string& street, const std::string& locality,
@@ -208,90 +470,81 @@ namespace gloox
                        const std::string& ctry, int type );
 
       /**
-       *
+       * Returns a list of addresses.
+       * @return A list of addresses.
+       */
+      const AddressList& addresses() const { return m_addressList; };
+
+      /**
+       * Adds a telephone number.
+       * @param number The telephone number.
+       * @param type Bit-wise ORed @c AddressType.
        */
       void addTelephone( const std::string& number, int type );
 
       /**
-       *
+       * Returns a list of telephone numbers.
+       * @return A list of telephone numbers.
+       */
+      const TelephoneList& telephone() const { return m_telephoneList; };
+
+      /**
+       * Sets "Geographical position. Values are the decimal degrees of
+       * Latitude and Longitude. The value should be specified to six decimal places."
+       * @param lat The latitude.
+       * @param lon The longitude.
        */
       void setGeo( const std::string& lat, const std::string& lon );
 
       /**
-       *
+       * Returns geo location information.
+       * @return Info about the geo location.
+       */
+      const Geo& geo() const { return m_geo; };
+
+      /**
+       * Sets "Organizational name and units property."
+       * @param orgname The organization's name.
+       * @param orgunits A list of organizational units.
        */
       void setOrganization( const std::string& orgname, const StringList& orgunits );
 
       /**
-       *
+       * Returns organization information.
+       * @return Info about the organization.
+       */
+      const Org& org() const { return m_org; };
+
+      /**
+       * Sets the "Privacy classification property."
+       * @param vclass The classification value.
        */
       void setClass( VCardClassification vclass ) { m_class = vclass; };
+
+      /**
+       * Returns information about classification.
+       * @return Info about the classification.
+       */
+      VCardClassification classification() const { return m_class; };
+
 
     private:
       void checkField( Tag *vcard, const std::string& field, std::string& var );
       void insertField( Tag *vcard, const std::string& field, const std::string& var ) const;
       void insertField( Tag *vcard, const std::string& field, bool var ) const;
 
-      struct Email
-      {
-        std::string userid;
-        bool home;
-        bool work;
-        bool internet;
-        bool pref;
-        bool x400;
-      };
-      typedef std::list<Email> EmailList;
+
       EmailList m_emailList;
-
-      struct Telephone
-      {
-        std::string number;
-        bool home;
-        bool work;
-        bool voice;
-        bool fax;
-        bool pager;
-        bool msg;
-        bool cell;
-        bool video;
-        bool bbs;
-        bool modem;
-        bool isdn;
-        bool pcs;
-        bool pref;
-      };
-      typedef std::list<Telephone> TelephoneList;
       TelephoneList m_telephoneList;
-
-      struct Address
-      {
-        std::string pobox;
-        std::string extadd;
-        std::string street;
-        std::string locality;
-        std::string region;
-        std::string pcode;
-        std::string ctry;
-        bool home;
-        bool work;
-        bool postal;
-        bool parcel;
-        bool pref;
-        bool dom;
-        bool intl;
-      };
-      typedef std::list<Address> AddressList;
       AddressList m_addressList;
 
-      StringList m_orgunits;
+      Name m_name;
+      Geo m_geo;
+      Org m_org;
+      Photo m_photo;
+      Photo m_logo;
 
       std::string m_formattedname;
-      std::string m_family;
-      std::string m_given;
-      std::string m_middle;
-      std::string m_prefix;
-      std::string m_suffix;
       std::string m_nickname;
       std::string m_url;
       std::string m_bday;
@@ -300,21 +553,12 @@ namespace gloox
       std::string m_role;
       std::string m_note;
       std::string m_desc;
-      std::string m_phototype;
-      std::string m_photobin;
-      std::string m_photoext;
-      std::string m_logotype;
-      std::string m_logobin;
-      std::string m_logoext;
       std::string m_mailer;
       std::string m_tz;
       std::string m_prodid;
       std::string m_rev;
       std::string m_sortstring;
       std::string m_uid;
-      std::string m_geolat;
-      std::string m_geolon;
-      std::string m_orgname;
 
       VCardClassification m_class;
 
