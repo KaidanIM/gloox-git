@@ -24,6 +24,9 @@ namespace gloox
   /**
    * @brief A VCard abstraction.
    *
+   * See @link gloox::VCardManager VCardManager @endlink for info on how to
+   * fetch VCards.
+   *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.8
    */
@@ -224,8 +227,8 @@ namespace gloox
        * @param prefix A name prefix.
        * @param suffix A name suffix.
        */
-      void setName( const std::string& family, const std::string& given, const std::string& middle,
-                    const std::string& prefix, const std::string& suffix );
+      void setName( const std::string& family, const std::string& given, const std::string& middle = "",
+                    const std::string& prefix = "", const std::string& suffix = "" );
 
       /**
        * Returns a full name.

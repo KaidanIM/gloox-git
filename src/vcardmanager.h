@@ -31,6 +31,65 @@ namespace gloox
    *
    * You need only one VCardManager per Client/ClientBase.
    *
+   * @section sec_fetch Fetching a VCard
+   *
+   * Create a VCardManager and have a VCardHandler ready. The simple call fetchVCard()
+   * and wait for the result.
+   * @code
+   * class MyClass : public VCardHandler
+   * {
+   *   public:
+   *     MyClass()
+   *     {
+   *       m_myClass = new MyClass();
+   *       m_vcardManager = new VCardManager( m_client, m_client->disco() );
+   *     };
+   *
+   *   ...
+   *
+   *     void fetchVCard( const JID& jid )
+   *     {
+   *       m_vcardManager->fetchVCard( jid, this );
+   *     };
+   *
+   *     virtual void handleVCard( const JID& jid, const VCard *vcard );
+   *     {
+   *       printf( "received vcard\n" );
+   *     };
+   *
+   *     virtual void handleVCardResult( VCardContext context, const JID& jid,
+   *                                     StanzaError se )
+   *     {
+   *       printf( "vcard operation result received\n" );
+   *     };
+   *
+   *   ...
+   *
+   *   private:
+   *     VCardManager *m_vcardManager;
+   * };
+   * @endcode
+   *
+   * @section sec_store Storing one's own VCard
+   *
+   * Similar to the above, you need a VCardManager and a VCardHandler. Then construct
+   * your VCard and call storeVCard().
+   * @code
+   *     void storeMyVCard()
+   *     {
+   *       VCard *v = new VCard();
+   *       v->setFormattedname( "Me" );
+   *       v->setNickname( "Myself" );
+   *       ...
+   *       m_vcardManager->storeVCard( v, this );
+   *     };
+   * @endcode
+   *
+   * This implementation supports more than one address, email address and telephone number.
+   *
+   * @note Currently, this implementation lacks support for the following fields:
+   * LABEL, AGENT, CATEGORIES, SOUND, KEY
+   *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.8
    */
