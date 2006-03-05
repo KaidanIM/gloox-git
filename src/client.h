@@ -50,8 +50,8 @@ namespace gloox
    * {
    *   Client* j = new Client( "user@server/resource", "password" );
    *   j->registerPresenceHandler( this );
-   *   j->setVersion( "TestProg", "1.0" );
-   *   j->setIdentity( "client", "bot" );
+   *   j->disco()->setVersion( "TestProg", "1.0" );
+   *   j->disco()->setIdentity( "client", "bot" );
    *   j->setAutoPresence( true );
    *   j->setInitialPriority( 5 );
    *   j->connect();
