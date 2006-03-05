@@ -547,6 +547,8 @@ namespace gloox
       Photo m_photo;
       Photo m_logo;
 
+      VCardClassification m_class;
+
       std::string m_formattedname;
       std::string m_nickname;
       std::string m_url;
@@ -562,8 +564,6 @@ namespace gloox
       std::string m_rev;
       std::string m_sortstring;
       std::string m_uid;
-
-      VCardClassification m_class;
 
       bool m_N;
       bool m_PHOTO;
