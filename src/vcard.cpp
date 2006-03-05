@@ -20,13 +20,15 @@ namespace gloox
 
   VCard::VCard()
     : m_prodid( "gloox" + GLOOX_VERSION ),
-      m_N( false ), m_PHOTO( false ), m_LOGO( false )
+      m_N( false ), m_PHOTO( false ), m_LOGO( false ),
+      m_class( ClassNone )
   {
   }
 
   VCard::VCard( Tag *vcard )
     : m_prodid( "gloox" + GLOOX_VERSION ),
-      m_N( false ), m_PHOTO( false ), m_LOGO( false )
+      m_N( false ), m_PHOTO( false ), m_LOGO( false ),
+      m_class( ClassNone )
   {
     checkField( vcard, "FN", m_formattedname );
     checkField( vcard, "NICKNAME", m_nickname );
