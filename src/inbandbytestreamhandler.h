@@ -61,7 +61,7 @@ namespace gloox
        * @param to The remote entity's JID.
        * @param ibb The new bytestream.
        */
-      virtual bool handleOutgoingInBandBytestream( const JID& to, InBandBytestream *ibb ) = 0;
+      virtual void handleOutgoingInBandBytestream( const JID& to, InBandBytestream *ibb ) = 0;
 
       /**
        * Notifies the handler of errors occuring when a bytestream was requested.
