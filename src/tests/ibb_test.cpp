@@ -164,10 +164,9 @@ class IBBTest : public MessageSessionHandler, ConnectionListener, LogHandler,
       return true;
     };
 
-    virtual bool handleOutgoingInBandBytestream( const JID& /*to*/, InBandBytestream * /*ibb*/ )
+    virtual void handleOutgoingInBandBytestream( const JID& /*to*/, InBandBytestream * /*ibb*/ )
     {
       printf( "unused\n" );
-      return false;
     };
 
     virtual void handleInBandBytestreamError( const JID& /*remote*/, StanzaError /*se*/ )
