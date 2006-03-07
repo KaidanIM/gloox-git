@@ -184,6 +184,11 @@ class IBBTest : public MessageSessionHandler, ConnectionListener, LogHandler,
       printf( "unused\n" );
     };
 
+    virtual void handleInBandClose( const std::string& /*sid*/, const JID& /*from*/ )
+    {
+      printf( "bytestream closed\n" );
+    };
+
   private:
     Client *j;
     MessageSession *m_session;

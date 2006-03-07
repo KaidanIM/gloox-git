@@ -42,6 +42,9 @@ namespace gloox
 
       /**
        * Reimplement this function to receive data which is sent over the bytestream.
+       * The data received here is (probably) only a single chunk of the complete data (depending
+       * on the amount of data you want to send).
+       * In any case, its size is at maximum equal to the bytestream's negotiated blocksize.
        * @param data The actual stream payload. Not base64 encoded.
        * @param sid The stream's ID.
        */
@@ -49,12 +52,20 @@ namespace gloox
 
       /**
        * Notifies about an error occuring while using a bytestream.
-       * When this handler is called, the stream has already been closed.
+       * When this handler is called the stream has already been closed.
        * @param sid The stream's ID.
        * @param remote The remote entity.
        * @param se The error.
        */
       virtual void handleInBandError( const std::string& sid, const JID& remote, StanzaError se ) = 0;
+
+      /**
+       * Notifies the handler that the bytestream for the given JID has been closed by
+       * the peer.
+       * @param sid The closed bytestream's ID.
+       * @param jid The remote entity's JID which closed the bytestream.
+       */
+      virtual void handleInBandClose( const std::string& sid, const JID& from ) = 0;
 
   };
 

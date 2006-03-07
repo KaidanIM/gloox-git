@@ -37,45 +37,19 @@ namespace gloox
    */
   class GLOOX_API InBandBytestream : public MessageFilter
   {
-    public:
-      /**
-       * Constructs a new InBandBytestream object.
-       * @param session The MessageSession that is used for data exchange with the remote
-       * entity.
-       * @param clientbase The ClientBase object that is used for establishing the
-       * bytestream.
-       */
-      InBandBytestream( MessageSession *session, ClientBase *clientbase );
+    friend class InBandBytestreamManager;
 
+    public:
       /**
        * Virtual destructor.
        */
       virtual ~InBandBytestream();
 
       /**
-       * Returns whether the bytestream is open, that is, accpeted by both parties.
+       * Returns whether the bytestream is open, that is, accepted by both parties.
        * @return Whether the bytestream is open or not.
        */
-      bool open() const { return m_open; };
-
-      /**
-       * This function closes the bytestream and notifies the remote party
-       * of this.
-       */
-      void close();
-
-      /**
-       * Use this function to register an object that will receive any notifications from
-       * the InBandBytestream instance. Only one InBandBytestreamDataHandler can be registered
-       * at any one time.
-       * @param ibbdh The InBandBytestreamDataHandler-derived object to receive notifications.
-       */
-      void registerInBandBytestreamDataHandler( InBandBytestreamDataHandler *ibbdh );
-
-      /**
-       * Removes the registered InBandBytestreamDataHandler.
-       */
-      void removeInBandBytestreamDataHandler();
+      bool isOpen() const { return m_open; };
 
       /**
        * Use this function to send a chunk of data over an open byte stream.
@@ -90,27 +64,29 @@ namespace gloox
       bool sendBlock( const std::string& data );
 
       /**
-       * Sets the stream's stream id. In general, you should not need to use this function. Also,
-       * this should not be changed manually once the stream has been negotiated.
-       * @param sid The new stream id.
+       * Lets you retrieve the stream's ID.
+       * @return The stream's ID.
        */
-      void setSid( const std::string& sid ) { m_sid = sid; };
+      const std::string& sid() const { return m_sid; };
 
       /**
-       * Sets the default block-size. Default: 4096
-       *
-       * In general, you should not need to use this function. Also,
-       * this should not be changed manually once the stream has been negotiated.
-       *
-       * @param blockSize The default block-size in byte.
-       */
-      void setBlockSize( int blockSize ) { m_blockSize = blockSize; };
-
-      /**
-       * Lets you retrieve this bytestreams block-size.
+       * Lets you retrieve this bytestream's block-size.
        * @return The bytestream's block-size.
        */
       int blockSize() const { return m_blockSize; };
+
+      /**
+       * Use this function to register an object that will receive any notifications from
+       * the InBandBytestream instance. Only one InBandBytestreamDataHandler can be registered
+       * at any one time.
+       * @param ibbdh The InBandBytestreamDataHandler-derived object to receive notifications.
+       */
+      void registerInBandBytestreamDataHandler( InBandBytestreamDataHandler *ibbdh );
+
+      /**
+       * Removes the registered InBandBytestreamDataHandler.
+       */
+      void removeInBandBytestreamDataHandler();
 
       // reimplemented from MessageFilter
       virtual void decorate( Tag *tag );
@@ -119,7 +95,14 @@ namespace gloox
       virtual void filter( Stanza *stanza );
 
     private:
+      InBandBytestream( MessageSession *session, ClientBase *clientbase );
+      void setBlockSize( int blockSize ) { m_blockSize = blockSize; };
+      void close();
+      void closed();
+      void setSid( const std::string& sid ) { m_sid = sid; };
+
       ClientBase *m_clientbase;
+      InBandBytestreamManager *m_manager;
       InBandBytestreamDataHandler *m_inbandBytestreamDataHandler;
       std::string m_sid;
       std::string::size_type m_blockSize;

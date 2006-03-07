@@ -22,6 +22,7 @@ namespace gloox
 {
 
   class InBandBytestreamHandler;
+  class InBandBytestream;
 
   /**
    * @brief An InBandBytestreamManager dispatches In-Band Bytestreams.
@@ -58,7 +59,9 @@ namespace gloox
    *
    * After the bytestream has been negotiated with the peer,
    * InBandBytestreamHandler::handleOutgoingInBandBytestream() is called. Here you should
-   * attach the bytestream to a MessageSession associated with the remote entity.
+   * attach the bytestream to a MessageSession associated with the remote entity. This is
+   * necessary because for the actual data exchange message stanzas are used and the
+   * MessageSession class offers a convenient interface to filter these out.
    * In this example, there is a map of JID/MessageSession pairs and a map of
    * JID/InBandBytestreams.
    * @code
@@ -79,10 +82,12 @@ namespace gloox
    *   m_ibbs[to.full()] = ibb;
    * }
    * @endcode
+   * If you want to receive data from the bytestream (In-Band Bytestreams can be bi-directional),
+   * you have to register a InBandBytestreamDataHandler here, similar to the folowing example.
    *
    * When sending data you should make sure you never try to send a block larger than the
-   * negotiated blocksize (which defaults to 4096 bytes). If a block is larger it will not
-   * be sent.
+   * negotiated blocksize (which defaults to 4096 bytes). If a block is larger than this it will
+   * not be sent.
    *
    * @section recv_ibb Receiving a bytestream
    *
@@ -94,7 +99,7 @@ namespace gloox
    * @link InBandBytestreamHandler::handleIncomingInBandBytestream() handleIncomingInBandBytestream() @endlink.
    * The return value of the handler determines whether the stream shall be accepted or not.
    * @code
-   * void MyClass::handleIncomingInBandBytestream( const JID& from, InBandBytestream *ibb )
+   * bool MyClass::handleIncomingInBandBytestream( const JID& from, InBandBytestream *ibb )
    * {
    *   // Check whether you want to accept the bytestream
    *
@@ -170,12 +175,10 @@ namespace gloox
 
       /**
        * This function initiates opening of a bytestream with the MessageSession's remote entity.
-       * Data can only be sent over an open stream. Use open() to find out what the stream's
+       * Data can only be sent over an open stream. Use isOpen() to find out what the stream's
        * current state is. However, successful opening/initiation will be announced by means of the
-       * InBandBytestreamHandler interface. Only one byte stream per JID can be initiated at once,
-       * however, once a byte stream has been accepted (or declined), another one can be opened for
-       * that JID immediately. There is no such restriction for multiple bytestreams to different
-       * JIDs.
+       * InBandBytestreamHandler interface. Multiple bytestreams (even per JID) can be initiated
+       * without waiting for success.
        * @param to The recipient of the requested bytestream.
        * @return @b False in case of an error, @b true otherwise. A return value of @b true does
        * @b not indicate that the bytestream has been opened. This is announced by means of the
@@ -194,6 +197,14 @@ namespace gloox
        * @return The currently set block-size.
        */
       int blockSize() const { return m_blockSize; };
+
+      /**
+       * To get rid of a bytestream (i.e., close and delete it), call this function. You
+       * should not use the bytestream any more.
+       * The remote entity will be notified about the closing of the stream.
+       * @param ibb The bytestream to dispose. It will be deleted here.
+       */
+      void dispose( InBandBytestream *ibb );
 
       /**
        * Use this function to register an object that will receive new incoming bytestream requests
@@ -217,9 +228,12 @@ namespace gloox
     private:
       enum IBBActionType
       {
-        IBB_OPEN_STREAM,
-        IBB_CLOSE_STREAM
+        IBBOpenStream,
+        IBBCloseStream
       };
+
+      typedef std::map<std::string, InBandBytestream*> IBBMap;
+      IBBMap m_ibbMap;
 
       ClientBase *m_parent;
       InBandBytestreamHandler *m_inbandBytestreamHandler;
