@@ -1,4 +1,13 @@
 
+v0.8-pre4 -- 07 Mar 2006
+------------------------
+- simplified and fixed use of IBB (a IBBHandler can be supplied with every
+  requestIBB(). no need anymore to register a handler to init an IBB)
+- removed limit of one stream init per full JID at any one time
+- doc updates and fixes
+- attept to fix undefined references to iksemel functions on some platforms
+
+
 v0.8-pre3 -- 05 Mar 2006
 ------------------------
 - JEP-0054 (vcard-temp)
