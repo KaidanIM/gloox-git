@@ -42,9 +42,9 @@ namespace gloox
     }
   }
 
-  bool InBandBytestreamManager::requestInBandBytestream( const JID& to )
+  bool InBandBytestreamManager::requestInBandBytestream( const JID& to, InBandBytestreamHandler *ibbh )
   {
-    if( !m_parent )
+    if( !m_parent || !ibbh )
       return false;
 
     const std::string sid = m_parent->getID();
@@ -58,7 +58,10 @@ namespace gloox
     o->addAttribute( "block-size", m_blockSize );
     o->addAttribute( "xmlns", XMLNS_IBB );
 
-    m_trackMap[id] = sid;
+    TrackItem item;
+    item.sid = sid;
+    item.ibbh = ibbh;
+    m_trackMap[id] = item;
     m_parent->trackID( this, id, IBBOpenStream );
     m_parent->send( iq );
 
@@ -120,35 +123,34 @@ namespace gloox
 
   bool InBandBytestreamManager::handleIqID( Stanza *stanza, int context )
   {
-    if( !m_inbandBytestreamHandler )
-      return false;
-
     switch( context )
     {
       case IBBOpenStream:
-        switch( stanza->subtype() )
+      {
+        TrackMap::iterator it = m_trackMap.find( stanza->id() );
+        if( it != m_trackMap.end() )
         {
-          case StanzaIqResult:
+          switch( stanza->subtype() )
           {
-            StringMap::iterator it = m_trackMap.find( stanza->id() );
-            if( it != m_trackMap.end() )
+            case StanzaIqResult:
             {
               InBandBytestream *ibb = new InBandBytestream( 0, m_parent );
-              ibb->setSid( (*it).second );
+              ibb->setSid( (*it).second.sid );
               ibb->setBlockSize( m_blockSize );
               m_ibbMap[(*it).first] = ibb;
               m_trackMap.erase( it );
-              m_inbandBytestreamHandler->handleOutgoingInBandBytestream( stanza->from(), ibb );
+              (*it).second.ibbh->handleOutgoingInBandBytestream( stanza->from(), ibb );
+              break;
             }
-            break;
+            case StanzaIqError:
+              (*it).second.ibbh->handleInBandBytestreamError( stanza->from(), stanza->error() );
+              break;
+            default:
+              break;
           }
-          case StanzaIqError:
-            m_inbandBytestreamHandler->handleInBandBytestreamError( stanza->from(), stanza->error() );
-            break;
-          default:
-            break;
         }
         break;
+      }
       default:
         break;
     }
