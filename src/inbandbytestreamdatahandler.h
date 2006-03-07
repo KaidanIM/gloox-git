@@ -63,7 +63,7 @@ namespace gloox
        * Notifies the handler that the bytestream for the given JID has been closed by
        * the peer.
        * @param sid The closed bytestream's ID.
-       * @param jid The remote entity's JID which closed the bytestream.
+       * @param from The remote entity's JID which closed the bytestream.
        */
       virtual void handleInBandClose( const std::string& sid, const JID& from ) = 0;
 

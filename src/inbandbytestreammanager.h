@@ -42,25 +42,24 @@ namespace gloox
    * };
    * @endcode
    *
-   * Create a new InBandBytestreamManager, register an InBandBytestreamHandler (MyClass in this
-   * example) and request a new bytestream:
+   * Create a new InBandBytestreamManager and request a new bytestream:
    * @code
    * MyClass::MyClass()
    * {
    *   m_ibbManager = new InBandBytestreamManager( m_client, m_client->disco() );
-   *   m_ibbManager->registerInBandBytestreamHandler( this );
    * }
    *
    * void MyClass::myFunc()
    * {
-   *   m_ibbManager->requestInBandBytestream( "entity@server/resource" );
+   *   JID jid( "entity@server/resource" );
+   *   m_ibbManager->requestInBandBytestream( jid, this );
    * }
    * @endcode
    *
    * After the bytestream has been negotiated with the peer,
    * InBandBytestreamHandler::handleOutgoingInBandBytestream() is called. Here you should
    * attach the bytestream to a MessageSession associated with the remote entity. This is
-   * necessary because for the actual data exchange message stanzas are used and the
+   * necessary since message stanzas are used for the actual data exchange and the
    * MessageSession class offers a convenient interface to filter these out.
    * In this example, there is a map of JID/MessageSession pairs and a map of
    * JID/InBandBytestreams.
@@ -92,7 +91,10 @@ namespace gloox
    * @section recv_ibb Receiving a bytestream
    *
    * To receive a bytestream you need a InBandBytestreamManager, too, and you have to
-   * register an InBandBytestreamHandler similar to the example above.
+   * register an InBandBytestreamHandler which will receive the incoming bytestreams.
+   * @code
+   *   m_ibbManager->registerInBandBytestreamHandler( this );
+   * @endcode
    *
    * Upon an incoming request the InBandBytestreamManager notifies the registered
    * InBandBytestreamHandler by calling
@@ -102,6 +104,9 @@ namespace gloox
    * bool MyClass::handleIncomingInBandBytestream( const JID& from, InBandBytestream *ibb )
    * {
    *   // Check whether you want to accept the bytestream
+   *
+   *   // add an InBandBytestreamDataHandler
+   *   ibb->registerInBandBytestreamDataHandler( this );
    *
    *   // The rest of this function probaly looks similar to the implementation of
    *   // handleOutgoingInBandBytestream() above.
@@ -113,12 +118,14 @@ namespace gloox
    * }
    * @endcode
    *
+   * @section send_ibb Sending data
+   *
    * To actually send data, you should utilise some kind of mainloop integration that allows
-   * to call a function periodically. It is important to remember that:
+   * to call a function periodically. It is important to remember the following:
    * @li chunks of data passed to InBandBytestream::sendBlock() may not exceed the negotiated block-size
    * @li neither InBandBytestreamManager nor InBandBytestream will ask for data to send.
    *
-   * The following is an example for a primitive mainloop integration:
+   * The following is an example of a primitive mainloop integration:
    * @code
    * void MyClass::mainloop()
    * {
@@ -146,6 +153,15 @@ namespace gloox
    *     (*it).second->sendBlock( "some data" );
    *   }
    * }
+   * @endcode
+   *
+   * @section del_ibb Getting rid of bytestreams
+   *
+   * When you're done with a bytestream you can get rid of it by calling the dispose() function. The
+   * bytestream will be recycled and you should no longer use it.
+   * @code
+   *   m_ibbManager->dispose( ibb );
+   *   ibb = 0;
    * @endcode
    *
    * @note You should have only one InBandBytestreamManager per Client/ClientBase lying around.
@@ -180,11 +196,12 @@ namespace gloox
        * InBandBytestreamHandler interface. Multiple bytestreams (even per JID) can be initiated
        * without waiting for success.
        * @param to The recipient of the requested bytestream.
+       * @param ibbh The InBandBytestreamHandler to send the new bytestream to.
        * @return @b False in case of an error, @b true otherwise. A return value of @b true does
        * @b not indicate that the bytestream has been opened. This is announced by means of the
        * InBandBytestreamHandler.
        */
-      bool requestInBandBytestream( const JID& to );
+      bool requestInBandBytestream( const JID& to, InBandBytestreamHandler *ibbh );
 
       /**
        * Sets the default block-size. Default: 4096
@@ -207,9 +224,9 @@ namespace gloox
       void dispose( InBandBytestream *ibb );
 
       /**
-       * Use this function to register an object that will receive new incoming bytestream requests
-       * as well as requested outgoing bytestreams from the InBandBytestreamManager. Only one
-       * InBandBytestreamHandler can be registered at any one time.
+       * Use this function to register an object that will receive new @b incoming bytestream
+       * requests from the InBandBytestreamManager. Only one InBandBytestreamHandler can be
+       * registered at any one time.
        * @param ibbh The InBandBytestreamHandler derived object to receive notifications.
        */
       void registerInBandBytestreamHandler( InBandBytestreamHandler *ibbh );
@@ -235,10 +252,17 @@ namespace gloox
       typedef std::map<std::string, InBandBytestream*> IBBMap;
       IBBMap m_ibbMap;
 
+      struct TrackItem
+      {
+        std::string sid;
+        InBandBytestreamHandler *ibbh;
+      };
+      typedef std::map<std::string, TrackItem> TrackMap;
+
       ClientBase *m_parent;
       InBandBytestreamHandler *m_inbandBytestreamHandler;
       int m_blockSize;
-      StringMap m_trackMap;
+      TrackMap m_trackMap;
 
   };
 
