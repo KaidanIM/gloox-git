@@ -9,53 +9,53 @@ noinst_PROGRAMS = register_test disco_test adhoc_test roster_test privatexml_tes
                   ibb_test vcard_test
 
 register_test_SOURCES = register_test.cpp
-register_test_LDADD = ../libgloox.la
+register_test_LDADD = ../libgloox.la $(LDFLAGS)
 register_test_CFLAGS = $(CPPFLAGS)
 
 disco_test_SOURCES = disco_test.cpp
-disco_test_LDADD = ../libgloox.la
+disco_test_LDADD = ../libgloox.la $(LDFLAGS)
 disco_test_CFLAGS = $(CPPFLAGS)
 
 adhoc_test_SOURCES = adhoc_test.cpp
-adhoc_test_LDADD = ../libgloox.la
+adhoc_test_LDADD = ../libgloox.la $(LDFLAGS)
 adhoc_test_CFLAGS = $(CPPFLAGS)
 
 roster_test_SOURCES = roster_test.cpp
-roster_test_LDADD = ../libgloox.la
+roster_test_LDADD = ../libgloox.la $(LDFLAGS)
 roster_test_CFLAGS = $(CPPFLAGS)
 
 privatexml_test_SOURCES = privatexml_test.cpp
-privatexml_test_LDADD = ../libgloox.la
+privatexml_test_LDADD = ../libgloox.la $(LDFLAGS)
 privatexml_test_CFLAGS = $(CPPFLAGS)
 
 component_test_SOURCES = component_test.cpp
-component_test_LDADD = ../libgloox.la
+component_test_LDADD = ../libgloox.la $(LDFLAGS)
 component_test_CFLAGS = $(CPPFLAGS)
 
 bookmarkstorage_test_SOURCES = bookmarkstorage_test.cpp
-bookmarkstorage_test_LDADD = ../libgloox.la
+bookmarkstorage_test_LDADD = ../libgloox.la $(LDFLAGS)
 bookmarkstorage_test_CFLAGS = $(CPPFLAGS)
 
 annotations_test_SOURCES = annotations_test.cpp
-annotations_test_LDADD = ../libgloox.la
+annotations_test_LDADD = ../libgloox.la $(LDFLAGS)
 annotations_test_CFLAGS = $(CPPFLAGS)
 
 privacylist_test_SOURCES = privacylist_test.cpp
-privacylist_test_LDADD = ../libgloox.la
+privacylist_test_LDADD = ../libgloox.la $(LDFLAGS)
 privacylist_test_CFLAGS = $(CPPFLAGS)
 
 message_test_SOURCES = message_test.cpp
-message_test_LDADD = ../libgloox.la
+message_test_LDADD = ../libgloox.la $(LDFLAGS)
 message_test_CFLAGS = $(CPPFLAGS)
 
 flexoff_test_SOURCES = flexoff_test.cpp
-flexoff_test_LDADD = ../libgloox.la
+flexoff_test_LDADD = ../libgloox.la $(LDFLAGS)
 flexoff_test_CFLAGS = $(CPPFLAGS)
 
 ibb_test_SOURCES = ibb_test.cpp
-ibb_test_LDADD = ../libgloox.la
+ibb_test_LDADD = ../libgloox.la $(LDFLAGS)
 ibb_test_CFLAGS = $(CPPFLAGS)
 
 vcard_test_SOURCES = vcard_test.cpp
-vcard_test_LDADD = ../libgloox.la
+vcard_test_LDADD = ../libgloox.la $(LDFLAGS)
 vcard_test_CFLAGS = $(CPPFLAGS)
