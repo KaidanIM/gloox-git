@@ -32,6 +32,9 @@
 #include <unistd.h>
 #else
 #include <winsock.h>
+#endif
+
+#if defined( _MSC_VER ) && ( _MSC_VER >= 1300 )
 #define strcasecmp stricmp
 #endif
 
