@@ -24,8 +24,9 @@ namespace gloox
 {
 
   InBandBytestream::InBandBytestream( MessageSession *session, ClientBase *clientbase )
-    : MessageFilter( session ), m_clientbase( clientbase ), m_inbandBytestreamDataHandler( 0 ),
-      m_blockSize( 4096 ), m_sequence( 0 ), m_lastChunkReceived( -1 ), m_open( true )
+    : MessageFilter( session ), m_clientbase( clientbase ),
+      m_inbandBytestreamDataHandler( 0 ), m_blockSize( 4096 ), m_sequence( 0 ),
+      m_lastChunkReceived( -1 ), m_open( true )
   {
   }
 
@@ -33,6 +34,9 @@ namespace gloox
   {
     if( m_open )
       close();
+
+    if( m_parent )
+      m_parent->removeMessageFilter( this );
   }
 
   void InBandBytestream::decorate( Tag * /*tag*/ )
@@ -114,8 +118,18 @@ namespace gloox
     return true;
   }
 
+  void InBandBytestream::closed()
+  {
+    if( m_inbandBytestreamDataHandler )
+      m_inbandBytestreamDataHandler->handleInBandClose( m_sid, m_parent->target() );
+
+    close();
+  }
+
   void InBandBytestream::close()
   {
+    m_open = false;
+
     if( !m_parent )
       return;
 
@@ -128,9 +142,7 @@ namespace gloox
     c->addAttribute( "sid", m_sid );
     c->addAttribute( "xmlns", XMLNS_IBB );
 
-//     m_clientbase->trackID( this, id, IBB_CLOSE_STREAM );
     m_clientbase->send( iq );
-
   }
 
   void InBandBytestream::registerInBandBytestreamDataHandler( InBandBytestreamDataHandler *ibbdh )
