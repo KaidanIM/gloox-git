@@ -33,7 +33,7 @@ namespace gloox
    *
    * @section sec_fetch Fetching a VCard
    *
-   * Create a VCardManager and have a VCardHandler ready. The simple call fetchVCard()
+   * Create a VCardManager and have a VCardHandler ready. Then simply call fetchVCard()
    * and wait for the result.
    * @code
    * class MyClass : public VCardHandler

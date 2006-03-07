@@ -85,6 +85,8 @@ class IBBTest : public MessageSessionHandler, ConnectionListener, LogHandler,
     virtual void onConnect()
     {
       printf( "connected!!!\n" );
+      JID jid( "you@example.org/res" );
+      m_ibbManager->requestInBandBytestream( jid, this );
     };
 
     virtual void onDisconnect( ConnectionError e )
@@ -164,10 +166,17 @@ class IBBTest : public MessageSessionHandler, ConnectionListener, LogHandler,
       return true;
     };
 
-    virtual bool handleOutgoingInBandBytestream( const JID& /*to*/, InBandBytestream * /*ibb*/ )
+    virtual void handleOutgoingInBandBytestream( const JID& to, InBandBytestream *ibb )
     {
-      printf( "unused\n" );
-      return false;
+      printf( "got requested ibb\n" );
+      m_ibb = ibb;
+      if( !m_session )
+        m_session = new MessageSession( j, to );
+      else
+        printf( "already have a session\n" );
+      m_ibb->attachTo( m_session );
+      m_ibb->registerInBandBytestreamDataHandler( this );
+      m_send = true;
     };
 
     virtual void handleInBandBytestreamError( const JID& /*remote*/, StanzaError /*se*/ )
@@ -183,6 +192,11 @@ class IBBTest : public MessageSessionHandler, ConnectionListener, LogHandler,
     virtual void handleInBandError( const std::string& /*sid*/, const JID& /*remote*/, StanzaError /*se*/ )
     {
       printf( "unused\n" );
+    };
+
+    virtual void handleInBandClose( const std::string& /*sid*/, const JID& /*from*/ )
+    {
+      printf( "bytestream closed\n" );
     };
 
   private:

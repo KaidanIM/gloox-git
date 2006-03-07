@@ -31,14 +31,20 @@ namespace gloox
 
   InBandBytestreamManager::~InBandBytestreamManager()
   {
+    if( m_parent )
+      m_parent->removeIqHandler( XMLNS_IBB );
+
+    IBBMap::iterator it = m_ibbMap.begin();
+    for( ; it != m_ibbMap.end(); ++it )
+    {
+      delete (*it).second;
+      m_ibbMap.erase( it );
+    }
   }
 
-  bool InBandBytestreamManager::requestInBandBytestream( const JID& to )
+  bool InBandBytestreamManager::requestInBandBytestream( const JID& to, InBandBytestreamHandler *ibbh )
   {
-    if( !m_parent )
-      return false;
-
-    if( m_trackMap.find( to.full() ) != m_trackMap.end() )
+    if( !m_parent || !ibbh )
       return false;
 
     const std::string sid = m_parent->getID();
@@ -52,8 +58,11 @@ namespace gloox
     o->addAttribute( "block-size", m_blockSize );
     o->addAttribute( "xmlns", XMLNS_IBB );
 
-    m_trackMap[to.full()] = sid;
-    m_parent->trackID( this, id, IBB_OPEN_STREAM );
+    TrackItem item;
+    item.sid = sid;
+    item.ibbh = ibbh;
+    m_trackMap[id] = item;
+    m_parent->trackID( this, id, IBBOpenStream );
     m_parent->send( iq );
 
     return true;
@@ -66,7 +75,8 @@ namespace gloox
           ( ( o = stanza->findChild( "open", "xmlns", XMLNS_IBB ) ) != 0 ) )
     {
       InBandBytestream *ibb = new InBandBytestream( 0, m_parent );
-      ibb->setSid( o->findAttribute( "sid" ) );
+      const std::string sid = o->findAttribute( "sid" );
+      ibb->setSid( sid );
 
       if( !m_inbandBytestreamHandler ||
            !m_inbandBytestreamHandler->handleIncomingInBandBytestream( stanza->from(), ibb ) )
@@ -85,11 +95,22 @@ namespace gloox
       }
       else
       {
+        m_ibbMap[sid] = ibb;
         Tag *iq = new Tag( "iq" );
         iq->addAttribute( "type", "result" );
         iq->addAttribute( "to", stanza->from().full() );
         iq->addAttribute( "id", stanza->id() );
         m_parent->send( iq );
+      }
+    }
+    else if( ( stanza->subtype() == StanzaIqSet ) &&
+               ( ( o = stanza->findChild( "close", "xmlns", XMLNS_IBB ) ) != 0 ) &&
+               o->hasAttribute( "sid" ) )
+    {
+      IBBMap::iterator it = m_ibbMap.find( o->findAttribute( "sid" ) );
+      if( it != m_ibbMap.end() )
+      {
+        (*it).second->closed();
       }
     }
     else
@@ -102,40 +123,49 @@ namespace gloox
 
   bool InBandBytestreamManager::handleIqID( Stanza *stanza, int context )
   {
-    if( !m_inbandBytestreamHandler )
-      return false;
-
     switch( context )
     {
-      case IBB_OPEN_STREAM:
-        switch( stanza->subtype() )
+      case IBBOpenStream:
+      {
+        TrackMap::iterator it = m_trackMap.find( stanza->id() );
+        if( it != m_trackMap.end() )
         {
-          case StanzaIqResult:
+          switch( stanza->subtype() )
           {
-            StringMap::iterator it = m_trackMap.find( stanza->from().full() );
-            if( it != m_trackMap.end() )
+            case StanzaIqResult:
             {
               InBandBytestream *ibb = new InBandBytestream( 0, m_parent );
-              ibb->setSid( (*it).second );
-              m_trackMap.erase( it );
+              ibb->setSid( (*it).second.sid );
               ibb->setBlockSize( m_blockSize );
-              m_inbandBytestreamHandler->handleOutgoingInBandBytestream( stanza->from(), ibb );
+              m_ibbMap[(*it).first] = ibb;
+              m_trackMap.erase( it );
+              (*it).second.ibbh->handleOutgoingInBandBytestream( stanza->from(), ibb );
+              break;
             }
-            break;
+            case StanzaIqError:
+              (*it).second.ibbh->handleInBandBytestreamError( stanza->from(), stanza->error() );
+              break;
+            default:
+              break;
           }
-          case StanzaIqError:
-            m_inbandBytestreamHandler->handleInBandBytestreamError( stanza->from(), stanza->error() );
-            break;
-          default:
-            break;
         }
         break;
-      case IBB_CLOSE_STREAM:
-        // ignore
+      }
+      default:
         break;
     }
 
     return false;
+  }
+
+  void InBandBytestreamManager::dispose( InBandBytestream *ibb )
+  {
+    IBBMap::iterator it = m_ibbMap.find( ibb->sid() );
+    if( it != m_ibbMap.end() )
+    {
+      delete ibb;
+      m_ibbMap.erase( it );
+    }
   }
 
   void InBandBytestreamManager::registerInBandBytestreamHandler( InBandBytestreamHandler *ibbh )

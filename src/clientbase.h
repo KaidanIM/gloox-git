@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2005 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2005-2006 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -97,8 +97,8 @@ namespace gloox
       /**
        * Use this periodically to receive data from the socket and to feed the parser. You need to use
        * this only if you chose to connect in non-blocking mode.
-       * @param timeout The timeout to use for select. Default of -1 means blocking until data was
-       * available.
+       * @param timeout The timeout in seconds to use for select. Default of -1 means blocking
+       * until data was available.
        * @return The state of the connection.
        */
       ConnectionError recv( int timeout = -1 );
