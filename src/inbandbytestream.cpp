@@ -25,7 +25,7 @@ namespace gloox
 
   InBandBytestream::InBandBytestream( MessageSession *session, ClientBase *clientbase )
     : MessageFilter( session ), m_clientbase( clientbase ),
-      m_inbandBytestreamDataHandler( 0 ), m_blockSize( 4096 ), m_sequence( 0 ),
+      m_inbandBytestreamDataHandler( 0 ), m_blockSize( 4096 ), m_sequence( -1 ),
       m_lastChunkReceived( -1 ), m_open( true )
   {
   }
@@ -101,6 +101,7 @@ namespace gloox
     Tag *d = new Tag( m, "data", Base64::encode64( data ) );
     d->addAttribute( "sid", m_sid );
     d->addAttribute( "seq", ++m_sequence );
+    d->addAttribute( "xmlns", XMLNS_IBB );
 
     // FIXME: hard-coded AMP
     Tag *a = new Tag( m, "amp" );
