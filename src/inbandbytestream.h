@@ -98,8 +98,8 @@ namespace gloox
     private:
       InBandBytestream( MessageSession *session, ClientBase *clientbase );
       void setBlockSize( int blockSize ) { m_blockSize = blockSize; };
-      void close();
-      void closed();
+      void close();  // locally
+      void closed(); // by remote entity
       void setSid( const std::string& sid ) { m_sid = sid; };
 
       ClientBase *m_clientbase;
