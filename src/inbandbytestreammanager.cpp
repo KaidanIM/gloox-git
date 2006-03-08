@@ -168,7 +168,7 @@ namespace gloox
       return true;
     }
 
-    return false
+    return false;
   }
 
   void InBandBytestreamManager::registerInBandBytestreamHandler( InBandBytestreamHandler *ibbh )
