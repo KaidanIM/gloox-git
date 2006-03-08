@@ -221,7 +221,7 @@ namespace gloox
        * The remote entity will be notified about the closing of the stream.
        * @param ibb The bytestream to dispose. It will be deleted here.
        */
-      void dispose( InBandBytestream *ibb );
+      bool dispose( InBandBytestream *ibb );
 
       /**
        * Use this function to register an object that will receive new @b incoming bytestream
