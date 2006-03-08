@@ -137,7 +137,7 @@ namespace gloox
               InBandBytestream *ibb = new InBandBytestream( 0, m_parent );
               ibb->setSid( (*it).second.sid );
               ibb->setBlockSize( m_blockSize );
-              m_ibbMap[(*it).first] = ibb;
+              m_ibbMap[(*it).second.sid] = ibb;
               m_trackMap.erase( it );
               (*it).second.ibbh->handleOutgoingInBandBytestream( stanza->from(), ibb );
               break;
@@ -158,14 +158,17 @@ namespace gloox
     return false;
   }
 
-  void InBandBytestreamManager::dispose( InBandBytestream *ibb )
+  bool InBandBytestreamManager::dispose( InBandBytestream *ibb )
   {
     IBBMap::iterator it = m_ibbMap.find( ibb->sid() );
     if( it != m_ibbMap.end() )
     {
       delete ibb;
       m_ibbMap.erase( it );
+      return true;
     }
+
+    return false
   }
 
   void InBandBytestreamManager::registerInBandBytestreamHandler( InBandBytestreamHandler *ibbh )
