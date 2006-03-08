@@ -124,7 +124,18 @@ namespace gloox
     if( m_inbandBytestreamDataHandler )
       m_inbandBytestreamDataHandler->handleInBandClose( m_sid, m_parent->target() );
 
-    close();
+    m_open = false;
+
+    if( !m_parent )
+      return;
+
+    const std::string id = m_clientbase->getID();
+    Tag *iq = new Tag( "iq" );
+    iq->addAttribute( "type", "result" );
+    iq->addAttribute( "to", m_parent->target().full() );
+    iq->addAttribute( "id", id );
+
+    m_clientbase->send( iq );
   }
 
   void InBandBytestream::close()
