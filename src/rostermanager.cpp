@@ -24,7 +24,7 @@ namespace gloox
 
   RosterManager::RosterManager( ClientBase *parent, bool self )
     : m_rosterListener( 0 ), m_parent( parent ), m_privateXML( 0 ),
-      m_delimiterFetched( false ), m_syncSubscribeReq( false )
+      m_syncSubscribeReq( false )
   {
     if( m_parent )
     {
@@ -67,11 +67,7 @@ namespace gloox
 
   void RosterManager::fill()
   {
-    if( !m_delimiterFetched )
-    {
-      m_privateXML->requestXML( "roster", XMLNS_ROSTER_DELIMITER, this );
-      return;
-    }
+    m_privateXML->requestXML( "roster", XMLNS_ROSTER_DELIMITER, this );
 
     Tag *iq = new Tag( "iq" );
     iq->addAttribute( "type", "get" );
@@ -426,16 +422,11 @@ namespace gloox
 
   void RosterManager::handlePrivateXML( const std::string& /*tag*/, Tag *xml )
   {
-    m_delimiterFetched = true;
     m_delimiter = xml->cdata();
-    fill();
   }
 
-  void RosterManager::handlePrivateXMLResult( const std::string& /*uid*/, PrivateXMLResult result )
+  void RosterManager::handlePrivateXMLResult( const std::string& /*uid*/, PrivateXMLResult /*result*/ )
   {
-    m_delimiterFetched = true;
-    if( result == PrivateXMLHandler::PXML_REQUEST_ERROR )
-      fill();
   }
 
   RosterItem* RosterManager::getRosterItem( const JID& jid )
