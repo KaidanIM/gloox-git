@@ -178,7 +178,6 @@ namespace gloox
       PrivateXML *m_privateXML;
 
       std::string m_delimiter;
-      bool m_delimiterFetched;
       bool m_syncSubscribeReq;
 
   };
