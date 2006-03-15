@@ -357,7 +357,7 @@ namespace gloox
     return m_socket;
   }
 
-  ConnectionError Connection::recv( int timeout )
+  ConnectionError Connection::recv( int sec, unsigned int usec )
   {
     if( m_cancel )
     {
@@ -373,14 +373,13 @@ namespace gloox
     {
       fd_set fds;
       struct timeval tv;
+      tv.tv_sec = sec;
+      tv.tv_usec = usec;
 
       FD_ZERO( &fds );
       FD_SET( m_socket, &fds );
 
-      tv.tv_sec = timeout;
-      tv.tv_usec = 0;
-
-      if( select( m_socket + 1, &fds, 0, 0, timeout == -1 ? 0 : &tv ) < 0 )
+      if( select( m_socket + 1, &fds, 0, 0, sec == -1 ? 0 : &tv ) < 0 )
         return ConnIoError;
 
       if( !FD_ISSET( m_socket, &fds ) )

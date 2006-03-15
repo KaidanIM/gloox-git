@@ -70,14 +70,15 @@ namespace gloox
     delete m_parser;
   }
 
-  ConnectionError ClientBase::recv( int timeout )
+  ConnectionError ClientBase::recv( int sec, unsigned int usec )
   {
     if( !m_connection || m_connection->state() == StateDisconnected )
       return ConnNotConnected;
 
-    ConnectionError e = m_connection->recv( timeout );
+    ConnectionError e = m_connection->recv( sec, usec );
     if( e != ConnNoError )
       notifyOnDisconnect( e );
+
     return e;
   }
 
