@@ -77,10 +77,11 @@ namespace gloox
 
       /**
        * Use this periodically to receive data from the socket and to feed the parser.
-       * @param timeout The timeout to use for select. Default means blocking.
+       * @param sec The timeout to use for select in seconds. Default means blocking.
+       * @param usec An (additional) timeout in microseconds. Added to the @c sec parameter.
        * @return The state of the connection.
        */
-      ConnectionError recv( int timeout = -1 );
+      ConnectionError recv( int sec = -1, unsigned int usec = 0 );
 
       /**
        * Use this function to send a string of data over the wire. The function returns only after
