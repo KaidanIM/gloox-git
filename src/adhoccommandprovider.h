@@ -16,6 +16,7 @@
 #define ADHOCCOMMANDPROVIDER_H__
 
 #include "tag.h"
+#include "jid.h"
 
 #include <list>
 #include <map>
@@ -44,8 +45,9 @@ namespace gloox
        * handling etc.
        * @param command The name of the command to be executed.
        * @param tag The complete command tag.
+       * @param from The sender of the command request.
        */
-      virtual void handleAdhocCommand( const std::string& command, Tag *tag ) = 0;
+      virtual void handleAdhocCommand( const std::string& command, Tag *tag, const JID& from ) = 0;
 
   };
 
