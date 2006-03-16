@@ -38,15 +38,15 @@ class AdhocTest : public ConnectionListener, AdhocCommandProvider
       delete( j );
     }
 
-    void handleAdhocCommand( const std::string& command, Tag */*tag*/ )
+    void handleAdhocCommand( const std::string& command, Tag */*tag*/, const JID& from )
     {
       if( command == "helloworld" )
-        printf( "Hello World!\n" );
+        printf( "Hello World!, by %s\n", from.full().c_str() );
       else if( command == "config" )
-        printf( "configuration called\n" );
+        printf( "configuration command called by %s\n", from.full().c_str() );
       else if( command == "shutdown" )
       {
-        printf( "shutting down\n" );
+        printf( "shutting down, by %s\n", from.full().c_str() );
       }
     }
 
