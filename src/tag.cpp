@@ -38,7 +38,7 @@ namespace gloox
     TagList::iterator it = m_children.begin();
     for( ; it != m_children.end(); ++it )
     {
-      delete( (*it) );
+      delete (*it);
       (*it) = 0;
     }
     m_children.clear();

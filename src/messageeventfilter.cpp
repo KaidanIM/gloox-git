@@ -113,7 +113,7 @@ namespace gloox
       if( used )
         m_parent->send( m );
       else
-        delete( m );
+        delete m;
     }
   }
 

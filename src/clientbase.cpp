@@ -375,11 +375,11 @@ namespace gloox
     send( tag->xml() );
 
     if( tag->type() == StanzaUndefined )
-      delete( tag );
+      delete tag;
     else
     {
       Stanza *s = dynamic_cast<Stanza*>( tag );
-      delete( s );
+      delete s;
     }
   }
 

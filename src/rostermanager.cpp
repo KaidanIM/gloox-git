@@ -53,7 +53,7 @@ namespace gloox
 
     RosterListener::Roster::iterator it = m_roster.begin();
     for( ; it != m_roster.end(); ++it )
-      delete( (*it).second );
+      delete (*it).second;
     m_roster.clear();
 
     if( m_privateXML )
@@ -367,7 +367,7 @@ namespace gloox
           const std::string sub = (*it)->findAttribute( "subscription" );
           if( sub == "remove" )
           {
-            delete( (*it_d).second );
+            delete (*it_d).second;
             m_roster.erase( it_d );
             if( m_rosterListener )
               m_rosterListener->itemRemoved( jid );
