@@ -39,7 +39,8 @@ namespace gloox
    *
    * Use this class as follows:
    * Create a class that will handle command execution requests and derive it from
-   * AdhocCommandProvider. Instantiate an Adhoc object and register that class with it using
+   * AdhocCommandProvider. Instantiate an Adhoc object and register your
+   * AdhocCommandProvider-derived object with the Adhoc object using
    * registerAdhocCommandProvider(). The additional parameters to that method are the internal
    * name of the command as used in the code, and the public name of the command as it
    * will be shown to an end user:
