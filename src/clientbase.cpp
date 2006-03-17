@@ -170,11 +170,6 @@ namespace gloox
     }
   }
 
-  void ClientBase::disconnect()
-  {
-    disconnect( ConnUserDisconnected );
-  }
-
   void ClientBase::disconnect( ConnectionError reason )
   {
     if( m_connection )

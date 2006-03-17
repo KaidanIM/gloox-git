@@ -63,10 +63,16 @@ namespace gloox
        */
       Disco* disco() const { return m_disco; };
 
+      /**
+       * Disconnects from the server.
+       */
+      void disconnect();
+
     protected:
       virtual void handleStartNode();
       virtual bool handleNormalNode( Stanza *stanza );
       virtual bool checkStreamVersion( const std::string& /*version*/ ) { return true; };
+      virtual void disconnect( ConnectionError reason );
 
     private:
       // reimplemented from ClientBase
