@@ -153,6 +153,21 @@ namespace gloox
       };
 
       /**
+       * Describes an address label.
+       */
+      struct Label
+      {
+        StringList lines;
+        bool home;
+        bool work;
+        bool postal;
+        bool parcel;
+        bool pref;
+        bool dom;
+        bool intl;
+      };
+
+      /**
        * Describes geo information.
        */
       struct Geo
@@ -184,6 +199,11 @@ namespace gloox
        * A list of address entries.
        */
       typedef std::list<Address> AddressList;
+
+      /**
+       * A list of address labels.
+       */
+      typedef std::list<Label> LabelList;
 
       /**
        * Constructor.
@@ -473,10 +493,23 @@ namespace gloox
                        const std::string& ctry, int type );
 
       /**
+       * Adds an address label.
+       * @param lines A list of address label lines.
+       * @param type Bit-wise ORed @c AddressType.
+       */
+      void addLabel( const StringList& lines, int type );
+
+      /**
        * Returns a list of addresses.
        * @return A list of addresses.
        */
       const AddressList& addresses() const { return m_addressList; };
+
+      /**
+       * Returns a list of address labels.
+       * @return A list of address labels.
+       */
+      const LabelList& labels() const { return m_labelList; };
 
       /**
        * Adds a telephone number.
@@ -540,6 +573,7 @@ namespace gloox
       EmailList m_emailList;
       TelephoneList m_telephoneList;
       AddressList m_addressList;
+      LabelList m_labelList;
 
       Name m_name;
       Geo m_geo;
