@@ -204,6 +204,7 @@ namespace gloox
       std::string m_server;
       int m_port;
       int m_socket;
+      const int m_bufsize;
       bool m_cancel;
       bool m_secure;
       bool m_fdRequested;
