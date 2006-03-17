@@ -420,34 +420,32 @@ namespace gloox
       // connection closed
       return ConnUserDisconnected;
     }
-    else
-    {
-      std::string buf;
-      if( m_compression && m_enableCompression )
-      {
-        buf.assign( m_buf, size );
-        buf = m_compression->decompress( buf );
-      }
-      else
-        buf.assign( m_buf, strlen( m_buf ) );
 
-      Parser::ParserState ret = m_parser->feed( buf );
-      if( ret != Parser::PARSER_OK )
+    std::string buf;
+    if( m_compression && m_enableCompression )
+    {
+      buf.assign( m_buf, size );
+      buf = m_compression->decompress( buf );
+    }
+    else
+      buf.assign( m_buf, strlen( m_buf ) );
+
+    Parser::ParserState ret = m_parser->feed( buf );
+    if( ret != Parser::PARSER_OK )
+    {
+      cleanup();
+      switch( ret )
       {
-        cleanup();
-        switch( ret )
-        {
-          case Parser::PARSER_BADXML:
-            m_logInstance.log( LogLevelError, LogAreaClassConnection, "XML parse error" );
-            break;
-          case Parser::PARSER_NOMEM:
-            m_logInstance.log( LogLevelError, LogAreaClassConnection, "memory allocation error" );
-            break;
-          default:
-            break;
-        }
-        return ConnIoError;
+        case Parser::PARSER_BADXML:
+          m_logInstance.log( LogLevelError, LogAreaClassConnection, "XML parse error" );
+          break;
+        case Parser::PARSER_NOMEM:
+          m_logInstance.log( LogLevelError, LogAreaClassConnection, "memory allocation error" );
+          break;
+        default:
+          break;
       }
+      return ConnIoError;
     }
 
     return ConnNoError;
