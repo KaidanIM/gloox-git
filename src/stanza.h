@@ -185,13 +185,13 @@ namespace gloox
        * @return An independent copy of the stanza.
        * @since 0.7
        */
-      virtual Stanza* clone( bool = true );
+      virtual Stanza* clone();
 
       /**
        * Creates a new IQ stanza.
        * @param to The receiver of the stanza.
        * @param id An ID for the stanza. Best is to use ClientBase::getID() as input.
-       * @param subtype The IQ type. Only STANZA_IQ_* types are valid.
+       * @param subtype The IQ type. Only StanzaIq* types are valid.
        * @param xmlns If this is non-empty, a child element named 'query' will be included, with this
        * value as value of the 'xmlns' attribute.
        * @param tag If this if not NULL, and xmlns is not empty, this Tag will be included as child tag of
@@ -204,10 +204,12 @@ namespace gloox
 
       /**
        * Creates a new presence stanza.
+       * @c to can be an empty JID. This makes the created stanza a broadcast stanza sent to all
+       * contacts in the roster.
        * @param to The receiver of the stanza.
        * @param msg An optional message.
        * @param status The status.
-       * @param xmllang The status's language.
+       * @param xmllang The status message's language.
        * @since 0.7
        */
       static Stanza* createPresenceStanza( const JID& to, const std::string& msg = "",
@@ -218,7 +220,7 @@ namespace gloox
        * Creates a new message stanza.
        * @param to The receiver of the message.
        * @param body The message's body.
-       * @param subtype The message type. Only STANZA_MESSAGE_* types are vaild.
+       * @param subtype The message type. Only StanzaMessage* types are valid.
        * @param subject The message's subject.
        * @param thread The message's conversation thread id.
        * @param xmllang The message's language.
@@ -233,7 +235,7 @@ namespace gloox
        * Creates a new subscription stanza.
        * @param to The recipient of the subscription stanza.
        * @param msg An optional message.
-       * @param subtype The subscription type. Only STANZA_S10N_* types are vaild.
+       * @param subtype The subscription type. Only StanzaS10n* types are vaild.
        * @param xmllang The message's language.
        * @since 0.7
        */
