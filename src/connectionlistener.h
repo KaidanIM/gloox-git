@@ -22,6 +22,10 @@ namespace gloox
   /**
    * @brief Derived classes can be registered as ConnectionListeners with the Client.
    *
+   * This interface is mandatory to implement if a connection is to be made TLS-encrypted.
+   * In onTLSConnect(), the server's certificate information needs to be checked, and @b true
+   * returned if the certificate is to be accepted.
+   *
    * @author Jakob Schroeter <js@camaya.net>
    */
   class GLOOX_API ConnectionListener
