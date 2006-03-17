@@ -44,7 +44,7 @@ namespace gloox
   class Parser;
 
   /**
-   * @brief This is an implementation of a TLS-aware connection handler.
+   * @brief This is an implementation of a TLS- and Stream Compression-aware connection handler.
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.4
