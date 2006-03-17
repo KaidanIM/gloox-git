@@ -232,6 +232,11 @@ namespace gloox
        */
       Disco* disco();
 
+      /**
+       * Disconnects from the server.
+       */
+      void disconnect();
+
     protected:
       /**
        * Initiates non-SASL login.
@@ -241,6 +246,7 @@ namespace gloox
     private:
       virtual void handleStartNode() {};
       virtual bool handleNormalNode( Stanza *stanza );
+      virtual void disconnect( ConnectionError reason );
       int getStreamFeatures( Stanza *stanza );
       int getSaslMechs( Tag *tag );
       int getCompressionMethods( Tag *tag );

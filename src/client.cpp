@@ -512,4 +512,17 @@ namespace gloox
       sendInitialPresence();
   }
 
+  void Client::disconnect()
+  {
+    disconnect( ConnUserDisconnected );
+  }
+
+  void Client::disconnect( ConnectionError reason )
+  {
+    m_resourceBound = false;
+    m_authed = false;
+    m_streamFeatures = 0;
+    ClientBase::disconnect( reason );
+  }
+
 }

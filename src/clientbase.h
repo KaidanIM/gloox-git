@@ -105,11 +105,6 @@ namespace gloox
       ConnectionError recv( int sec = -1, unsigned int usec = 0 );
 
       /**
-       * Disconnects from the server.
-       */
-      void disconnect();
-
-      /**
        * Reimplement this function to provide a username for connection purposes.
        * @return The username.
        */
@@ -433,7 +428,7 @@ namespace gloox
       void notifyOnSessionCreateError( SessionCreateError error );
       bool notifyOnTLSConnect( const CertInfo& info );
       void notifyOnConnect();
-      void disconnect( ConnectionError reason );
+      virtual void disconnect( ConnectionError reason );
       void header();
       void setAuthed( bool authed ) { m_authed = authed; };
       void setAuthFailure( AuthenticationError e ) { m_authError = e; };
