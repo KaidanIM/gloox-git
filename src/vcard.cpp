@@ -124,6 +124,25 @@ namespace gloox
         m_addressList.push_back( item );
       }
 
+      if( (*it)->name() == "LABEL" )
+      {
+        Label item;
+        Tag::TagList::const_iterator it2 = (*it)->children().begin();
+        for( ; it2 != (*it)->children().end(); ++it2 )
+        {
+          if( (*it2)->name() == "LINE" )
+            item.lines.push_back( (*it)->cdata() );
+          item.postal = ( (*it2)->name() == "POSTAL" )?( true ):( false );
+          item.parcel = ( (*it2)->name() == "PARCEL" )?( true ):( false );
+          item.work = ( (*it2)->name() == "WORK" )?( true ):( false );
+          item.home = ( (*it2)->name() == "HOME" )?( true ):( false );
+          item.pref = ( (*it2)->name() == "PREF" )?( true ):( false );
+          item.dom = ( (*it2)->name() == "DOM" )?( true ):( false );
+          item.intl = ( !item.dom && (*it2)->name() == "INTL" )?( true ):( false );
+        }
+        m_labelList.push_back( item );
+      }
+
       if( (*it)->name() == "TEL" && (*it)->hasChild( "NUMBER" ) )
       {
         Telephone item;
@@ -267,10 +286,27 @@ namespace gloox
     item.parcel = ( type & AddrTypeParcel )?( true ):( false );
     item.postal = ( type & AddrTypePostal )?( true ):( false );
     item.dom = ( type & AddrTypeDom )?( true ):( false );
-    item.intl = ( !item.dom && type & AddrTypeDom )?( true ):( false );
+    item.intl = ( !item.dom && type & AddrTypeIntl )?( true ):( false );
     item.pref = ( type & AddrTypePref )?( true ):( false );
 
     m_addressList.push_back( item );
+  }
+
+  void VCard::addLabel( const StringList& lines, int type )
+  {
+    if( !lines.size() )
+      return;
+
+    Label item;
+    item.lines = lines;
+    item.work = ( type & AddrTypeWork )?( true ):( false );
+    item.home = ( type & AddrTypeHome )?( true ):( false );
+    item.parcel = ( type & AddrTypeParcel )?( true ):( false );
+    item.pref = ( type & AddrTypePref )?( true ):( false );
+    item.dom = ( type & AddrTypeDom )?( true ):( false );
+    item.intl = ( !item.dom && type & AddrTypeIntl )?( true ):( false );
+
+    m_labelList.push_back( item );
   }
 
   void VCard::addTelephone( const std::string& number, int type )
