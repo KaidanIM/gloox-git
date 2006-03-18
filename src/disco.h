@@ -35,7 +35,8 @@ namespace gloox
   /**
    * @brief This class implements JEP-0030 (Service Discovery) and JEP-0092 (Software Version).
    *
-   * Please see @ref Adhoc or @ref FlexibleOffline for implementations that use this class.
+   * Client and Component will automatically instantiate a Disco obejct. It can be used to
+   * announce special features of your client, or its version, or...
    *
    * @author Jakob Schroeter <js@camaya.net>
    */
