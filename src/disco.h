@@ -41,20 +41,10 @@ namespace gloox
    */
   class GLOOX_API Disco : public IqHandler
   {
+    friend class Client;
+    friend class Component;
+
     public:
-      /**
-       * Constructor.
-       * Creates a new Disco client that registers as IqHandler with @c Client.
-       * You should access the Disco object through the @c Client object.
-       * @param parent The ClientBase used for XMPP communication
-       */
-      Disco( ClientBase *parent );
-
-      /**
-       * Virtual destructor.
-       */
-      virtual ~Disco();
-
       /**
        * Adds a feature to the list of supported Jabber features.
        * The list will be posted as an answer to IQ queries in the
@@ -156,6 +146,9 @@ namespace gloox
       virtual bool handleIqID( Stanza *stanza, int context );
 
     private:
+      Disco( ClientBase *parent );
+      virtual ~Disco();
+
       enum IdType
       {
         GET_DISCO_INFO,
