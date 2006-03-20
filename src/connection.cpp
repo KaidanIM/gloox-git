@@ -344,7 +344,6 @@ namespace gloox
   {
     if( m_socket != -1 && m_state >= StateConnecting )
     {
-      printf( "returning m_state %d\n", m_state );
       return m_state;
     }
 
@@ -435,7 +434,6 @@ namespace gloox
     if( m_secure )
     {
       size = SSL_read( m_ssl, m_buf, m_bufsize );
-      printf( "SSL_read returned buffer of size %d: %s\n", size, m_buf );
     }
     else
 #endif
@@ -577,7 +575,6 @@ namespace gloox
 #endif
       m_socket = -1;
     }
-    printf( "cleanup()\n" );
     m_state = StateDisconnected;
     m_disconnect = ConnNoError;
     m_enableCompression = false;
