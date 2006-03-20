@@ -49,7 +49,7 @@ namespace gloox
                           int port )
     : m_parser( parser ), m_state ( StateDisconnected ), m_disconnect ( ConnNoError ),
       m_logInstance( logInstance ), m_compression( 0 ), m_buf( 0 ),
-      m_server( Prep::idna( server ) ), m_port( port ), m_socket( -1 ), m_bufsize( 1024 ),
+      m_server( Prep::idna( server ) ), m_port( port ), m_socket( -1 ), m_bufsize( 17000 ),
       m_cancel( true ), m_secure( false ), m_fdRequested( false ), m_enableCompression( false )
   {
     m_buf = (char*)calloc( m_bufsize + 1, sizeof( char ) );
