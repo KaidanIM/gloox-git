@@ -75,10 +75,8 @@ namespace gloox
         m_subtype = StanzaMessageHeadline;
       else if( hasAttribute( "type", "groupchat" ) )
         m_subtype = StanzaMessageGroupchat;
-      else if( hasAttribute( "type", "normal" ) )
-        m_subtype = StanzaMessageNormal;
       else
-        m_subtype = StanzaSubUndefined;
+        m_subtype = StanzaMessageNormal;
 
       TagList& c = children();
       TagList::const_iterator it = c.begin();
