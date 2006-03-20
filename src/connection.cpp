@@ -32,6 +32,9 @@
 #include <unistd.h>
 #else
 #include <winsock.h>
+#endif
+
+#if defined( _MSC_VER ) && ( _MSC_VER >= 1300 )
 #define strcasecmp stricmp
 #endif
 
@@ -42,16 +45,14 @@
 namespace gloox
 {
 
-  static const int BUFSIZE = 1024;
-
   Connection::Connection( Parser *parser, const LogSink& logInstance, const std::string& server,
                           int port )
     : m_parser( parser ), m_state ( StateDisconnected ), m_disconnect ( ConnNoError ),
       m_logInstance( logInstance ), m_compression( 0 ), m_buf( 0 ),
-      m_server( Prep::idna( server ) ), m_port( port ), m_socket( -1 ), m_cancel( true ),
-      m_secure( false ), m_fdRequested( false ), m_enableCompression( false )
+      m_server( Prep::idna( server ) ), m_port( port ), m_socket( -1 ), m_bufsize( 17000 ),
+      m_cancel( true ), m_secure( false ), m_fdRequested( false ), m_enableCompression( false )
   {
-    m_buf = (char*)calloc( BUFSIZE + 1, sizeof( char ) );
+    m_buf = (char*)calloc( m_bufsize + 1, sizeof( char ) );
 #ifdef USE_OPENSSL
     m_ssl = 0;
 #endif
@@ -339,6 +340,44 @@ namespace gloox
   }
 #endif
 
+  ConnectionState Connection::connect()
+  {
+    if( m_socket != -1 && m_state >= StateConnecting )
+    {
+      printf( "returning m_state %d\n", m_state );
+      return m_state;
+    }
+
+    m_state = StateConnecting;
+
+    if( m_port == -1 )
+      m_socket = DNS::connect( m_server, m_logInstance );
+    else
+      m_socket = DNS::connect( m_server, m_port, m_logInstance );
+
+    if( m_socket < 0 )
+    {
+      switch( m_socket )
+      {
+        case -DNS::DNS_COULD_NOT_CONNECT:
+          m_logInstance.log( LogLevelError, LogAreaClassConnection, "connection error: could not connect" );
+          break;
+        case -DNS::DNS_NO_HOSTS_FOUND:
+          m_logInstance.log( LogLevelError, LogAreaClassConnection, "connection error: no hosts found" );
+          break;
+        case -DNS::DNS_COULD_NOT_RESOLVE:
+          m_logInstance.log( LogLevelError, LogAreaClassConnection, "connection error: could not resolve" );
+          break;
+      }
+      cleanup();
+    }
+    else
+      m_state = StateConnected;
+
+    m_cancel = false;
+    return m_state;
+  }
+
   void Connection::disconnect( ConnectionError e )
   {
     m_disconnect = e;
@@ -385,26 +424,27 @@ namespace gloox
     }
 
     // optimize(?): recv returns the size. set size+1 = \0
-    memset( m_buf, '\0', BUFSIZE + 1 );
+    memset( m_buf, '\0', m_bufsize + 1 );
     int size = 0;
 #if defined( USE_GNUTLS )
     if( m_secure )
     {
-      size = gnutls_record_recv( m_session, m_buf, BUFSIZE );
+      size = gnutls_record_recv( m_session, m_buf, m_bufsize );
     }
     else
 #elif defined( USE_OPENSSL )
     if( m_secure )
     {
-      size = SSL_read( m_ssl, m_buf, BUFSIZE );
+      size = SSL_read( m_ssl, m_buf, m_bufsize );
+      printf( "SSL_read returned buffer of size %d: %s\n", size, m_buf );
     }
     else
 #endif
     {
 #ifdef SKYOS
-      size = ::recv( m_socket, (unsigned char*)m_buf, BUFSIZE, 0 );
+      size = ::recv( m_socket, (unsigned char*)m_buf, m_bufsize, 0 );
 #else
-      size = ::recv( m_socket, m_buf, BUFSIZE, 0 );
+      size = ::recv( m_socket, m_buf, m_bufsize, 0 );
 #endif
     }
 
@@ -462,6 +502,7 @@ namespace gloox
       if( r != ConnNoError )
         return r;
     }
+    cleanup();
 
     return m_disconnect;
   }
@@ -512,41 +553,6 @@ namespace gloox
     }
   }
 
-  ConnectionState Connection::connect()
-  {
-    if( m_socket != -1 && m_state >= StateConnecting )
-      return m_state;
-
-    m_state = StateConnecting;
-
-    if( m_port == -1 )
-      m_socket = DNS::connect( m_server, m_logInstance );
-    else
-      m_socket = DNS::connect( m_server, m_port, m_logInstance );
-
-    if( m_socket < 0 )
-    {
-      switch( m_socket )
-      {
-        case -DNS::DNS_COULD_NOT_CONNECT:
-          m_logInstance.log( LogLevelError, LogAreaClassConnection, "connection error: could not connect" );
-          break;
-        case -DNS::DNS_NO_HOSTS_FOUND:
-          m_logInstance.log( LogLevelError, LogAreaClassConnection, "connection error: no hosts found" );
-          break;
-        case -DNS::DNS_COULD_NOT_RESOLVE:
-          m_logInstance.log( LogLevelError, LogAreaClassConnection, "connection error: could not resolve" );
-          break;
-      }
-      cleanup();
-    }
-    else
-      m_state = StateConnected;
-
-    m_cancel = false;
-    return m_state;
-  }
-
   void Connection::cleanup()
   {
 #if defined( USE_GNUTLS )
@@ -574,9 +580,10 @@ namespace gloox
 #endif
       m_socket = -1;
     }
+    printf( "cleanup()\n" );
     m_state = StateDisconnected;
     m_disconnect = ConnNoError;
-
+    m_enableCompression = false;
     m_secure = false;
     m_cancel = true;
     m_fdRequested = false;

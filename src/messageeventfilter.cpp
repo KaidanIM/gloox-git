@@ -61,7 +61,7 @@ namespace gloox
           m_requestedEvents |= MessageEventComposing;
       }
     }
-    else
+    else if( stanza->body().empty() )
     {
       m_requestedEvents = 0;
       m_lastID = "";
@@ -70,8 +70,7 @@ namespace gloox
 
   void MessageEventFilter::raiseMessageEvent( MessageEventType event )
   {
-    if( ( m_requestedEvents & event ) ||
-          ( ( m_lastSent == MessageEventComposing ) && ( event == MessageEventCancel ) ) )
+    if( ( m_requestedEvents & event ) || ( event == MessageEventCancel ) )
     {
       Tag *m = new Tag( "message" );
       m->addAttribute( "to", m_parent->target().full() );
@@ -113,7 +112,7 @@ namespace gloox
       if( used )
         m_parent->send( m );
       else
-        delete( m );
+        delete m;
     }
   }
 

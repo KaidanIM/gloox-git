@@ -64,4 +64,13 @@ namespace gloox
     return true;
   }
 
+  void Component::disconnect()
+  {
+    disconnect( ConnUserDisconnected );
+  }
+
+  void Component::disconnect( ConnectionError reason )
+  {
+    ClientBase::disconnect( reason );
+  }
 }

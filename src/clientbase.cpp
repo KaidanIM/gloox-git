@@ -169,11 +169,6 @@ namespace gloox
     }
   }
 
-  void ClientBase::disconnect()
-  {
-    disconnect( ConnUserDisconnected );
-  }
-
   void ClientBase::disconnect( ConnectionError reason )
   {
     if( m_connection )
@@ -374,11 +369,11 @@ namespace gloox
     send( tag->xml() );
 
     if( tag->type() == StanzaUndefined )
-      delete( tag );
+      delete tag;
     else
     {
       Stanza *s = dynamic_cast<Stanza*>( tag );
-      delete( s );
+      delete s;
     }
   }
 

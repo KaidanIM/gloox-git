@@ -41,7 +41,8 @@ namespace gloox
        * @param server The server to connect to.
        * @param component The component's hostname. FQDN.
        * @param password The component's password.
-       * @param port The port to connect to. The default of 5347 is the default port of the router in jabberd2.
+       * @param port The port to connect to. The default of 5347 is the default port of the router
+       * in jabberd2.
        */
       Component( const std::string& ns, const std::string& server,
                  const std::string& component, const std::string& password, int port = 5347 );
@@ -63,10 +64,16 @@ namespace gloox
        */
       Disco* disco() const { return m_disco; };
 
+      /**
+       * Disconnects from the server.
+       */
+      void disconnect();
+
     protected:
       virtual void handleStartNode();
       virtual bool handleNormalNode( Stanza *stanza );
       virtual bool checkStreamVersion( const std::string& /*version*/ ) { return true; };
+      virtual void disconnect( ConnectionError reason );
 
     private:
       // reimplemented from ClientBase

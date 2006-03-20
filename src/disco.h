@@ -35,26 +35,17 @@ namespace gloox
   /**
    * @brief This class implements JEP-0030 (Service Discovery) and JEP-0092 (Software Version).
    *
-   * Please see @ref Adhoc or @ref FlexibleOffline for implementations that use this class.
+   * Client and Component will automatically instantiate a Disco obejct. It can be used to
+   * announce special features of your client, or its version, or...
    *
    * @author Jakob Schroeter <js@camaya.net>
    */
   class GLOOX_API Disco : public IqHandler
   {
+    friend class Client;
+    friend class Component;
+
     public:
-      /**
-       * Constructor.
-       * Creates a new Disco client that registers as IqHandler with @c Client.
-       * You should access the Disco object through the @c Client object.
-       * @param parent The ClientBase used for XMPP communication
-       */
-      Disco( ClientBase *parent );
-
-      /**
-       * Virtual destructor.
-       */
-      virtual ~Disco();
-
       /**
        * Adds a feature to the list of supported Jabber features.
        * The list will be posted as an answer to IQ queries in the
@@ -156,6 +147,9 @@ namespace gloox
       virtual bool handleIqID( Stanza *stanza, int context );
 
     private:
+      Disco( ClientBase *parent );
+      virtual ~Disco();
+
       enum IdType
       {
         GET_DISCO_INFO,

@@ -30,7 +30,7 @@ namespace gloox
   Parser::~Parser()
   {
     iks_parser_delete( m_parser );
-    delete( m_root );
+    delete m_root;
   }
 
   Parser::ParserState Parser::feed( const std::string& data )
@@ -96,7 +96,7 @@ namespace gloox
         if( tag->name() == "stream:stream" )
         {
           parser->streamEvent( parser->m_root );
-          delete( parser->m_root );
+          delete parser->m_root;
           parser->m_root = 0;
           parser->m_current = 0;
         }
@@ -114,7 +114,7 @@ namespace gloox
         {
           parser->m_root->finalize();
           parser->streamEvent( parser->m_root );
-          delete( parser->m_root );
+          delete parser->m_root;
           parser->m_root = 0;
           parser->m_current = 0;
         }

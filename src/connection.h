@@ -44,7 +44,7 @@ namespace gloox
   class Parser;
 
   /**
-   * @brief This is an implementation of a TLS-aware connection handler.
+   * @brief This is an implementation of a TLS- and Stream Compression-aware connection handler.
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.4
@@ -203,6 +203,7 @@ namespace gloox
       std::string m_server;
       int m_port;
       int m_socket;
+      const int m_bufsize;
       bool m_cancel;
       bool m_secure;
       bool m_fdRequested;
