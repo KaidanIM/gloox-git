@@ -4,6 +4,7 @@ v0.8-rc1 -- 20 Mar 2006
 - work-around for wrong use of OpenSSL
 - doc updates and fixes
 - allow for re-connect() after disconnect()
+- default to 'normal' type of message stanza (as required by RFC 3921)
 
 
 v0.8-pre4 -- 07 Mar 2006
