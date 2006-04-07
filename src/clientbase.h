@@ -229,7 +229,7 @@ namespace gloox
        * can use select() on it and use Connection::recv( -1 ) to fetch the data.
        * @return The file descriptor of the active connection, or -1 if no connection is established.
        */
-      int fileDescriptor() const;
+      int fileDescriptor();
 
       /**
        * Registers @c cl as object that receives connection notifications.
@@ -523,6 +523,7 @@ namespace gloox
       Tag *m_streamErrorAppCondition;
       int m_idCount;
       bool m_autoMessageSession;
+      bool m_fdRequested;
 
   };
 
