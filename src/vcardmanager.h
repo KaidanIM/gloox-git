@@ -72,6 +72,9 @@ namespace gloox
    *
    * @section sec_store Storing one's own VCard
    *
+   * @note Some, if not many, servers do not implement support for all the fields specified
+   * in JEP-0054. Therefore it is possible that you cannot retrieve fields you stored previously.
+   *
    * Similar to the above, you need a VCardManager and a VCardHandler. Then construct
    * your VCard and call storeVCard().
    * @code
@@ -85,10 +88,10 @@ namespace gloox
    *     };
    * @endcode
    *
-   * This implementation supports more than one address, email address and telephone number.
+   * This implementation supports more than one address, address label, email address and telephone number.
    *
    * @note Currently, this implementation lacks support for the following fields:
-   * LABEL, AGENT, CATEGORIES, SOUND, KEY
+   * AGENT, CATEGORIES, SOUND, KEY
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.8
