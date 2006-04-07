@@ -59,7 +59,7 @@ namespace gloox
            * @param status The resource's presence status.
            */
           Resource( int priority, const std::string& msg, Presence status )
-            : m_priority( priority ), m_message( msg ), m_status( status ) {}
+            : m_priority( priority ), m_message( msg ), m_status( status ) {};
 
           /**
            * Virtual destrcutor.
