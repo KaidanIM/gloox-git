@@ -90,6 +90,10 @@ namespace gloox
       friend int tagHook( Parser *parser, char *name, char **atts, int type );
   };
 
+  int cdataHook( Parser *parser, char *data, size_t len );
+
+  int tagHook( Parser *parser, char *name, char **atts, int type );
+
 }
 
 #endif // PARSER_H__
