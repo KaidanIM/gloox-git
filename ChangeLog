@@ -1,4 +1,4 @@
-v0.8 -- 07 Apr 2006
+v0.8 -- 08 Apr 2006
 -------------------
 - added an extensible message session abstraction
 - added automatic MessageSession creation facilities upon incoming messages
@@ -16,6 +16,7 @@ v0.8 -- 07 Apr 2006
 - Tag: renamed addAttrib() --> addAttribute()
 - RosterItem & RosterListener: more const & return values and parameters
 - RosterItem: support for multiple resources, introducing RosterItem::Resource
+- renamed enum members from ALL_UPPER_CASE to MixedCase
 - Stanza: added 'int priority()'
 - SASL EXTERNAL and support for client key/cert
 - RosterManager: added RosterItem* getRosterItem( const JID& jid )
