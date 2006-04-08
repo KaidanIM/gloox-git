@@ -175,6 +175,12 @@ namespace gloox
         }
       }
 
+      if( (*it)->name() == "GEO" )
+      {
+        checkField( (*it), "LON", m_geo.longitude );
+        checkField( (*it), "LAT", m_geo.latitude );
+      }
+
       if( (*it)->name() == "CLASS" )
       {
         if( (*it)->hasChild( "PRIVATE" ) )
