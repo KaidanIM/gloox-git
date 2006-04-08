@@ -1,41 +1,10 @@
-v0.8-rc1 -- 20 Mar 2006
-------------------------
-- fixed MessageEventFilter to properly send events
-- work-around for wrong use of OpenSSL
-- doc updates and fixes
-- allow for re-connect() after disconnect()
-- default to 'normal' type of message stanza (as required by RFC 3921)
-
-
-v0.8-pre4 -- 07 Mar 2006
-------------------------
-- simplified and fixed use of IBB (a IBBHandler can be supplied with every
-  requestIBB(). no need anymore to register a handler to initiate an IBB)
-- removed limit of one stream init per full JID at any one time
-- doc updates and fixes
-- attempt to fix undefined references to iksemel functions on some platforms
-
-
-v0.8-pre3 -- 05 Mar 2006
-------------------------
-- JEP-0054 (vcard-temp)
-- finished In-Band Bytestream implementation and docs
-- doc updates and fixes
-
-
-v0.8-pre2 -- 21 Feb 2006
-------------------------
-- In-Band Bytestreams (JEP-0047)
-- Tag: added addAttribute( const std::string, int )
-- revamped MessageSession to accept external MessageFilters
-- Disco: added const StringList& festures()
-
-
-v0.8-pre1 -- 14 Feb 2006
-------------------------
-- added an extensible message session abstraction (called MessageSession)
+v0.8 -- 07 Apr 2006
+-------------------
+- added an extensible message session abstraction
 - added automatic MessageSession creation facilities upon incoming messages
 - JEP-0022 (Message Events)
+- JEP-0047 (In-Band Bytestreams)
+- JEP-0054 (vcard-temp)
 - JEP-0085 (Chat State Notifications)
 - 'ported' to Linux on Arm (Intel XScale on gumstix in this case)
 - RosterManager: returning true from RosterListener::unsubscriptionRequest()
@@ -52,6 +21,12 @@ v0.8-pre1 -- 14 Feb 2006
 - RosterManager: added RosterItem* getRosterItem( const JID& jid )
 - added extern "C" const char* gloox_version()
 - Tag: made findChild(...) return 0 instead of new Tag (reverted change from 0.7.6)
+- Tag: added addAttribute( const std::string, int )
+- revamped MessageSession to accept external MessageFilters
+- Disco: added const StringList& features()
+- allow for immediate re-connect() after disconnect()
+- fixed compilation with gcc 4.1
+- semi fixed missing onDisconnect() call if file descriptor has been fetched and stream error occured
 
 
 v0.7.6.1 -- 10 Feb 2006

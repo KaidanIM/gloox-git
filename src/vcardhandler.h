@@ -22,7 +22,7 @@ namespace gloox
   /**
    * @brief A virtual interface that helps requesting Jabber VCards.
    *
-   * Derive from thsi interface and register with the VCardManager.
+   * Derive from this interface and register with the VCardManager.
    * See @link gloox::VCardManager VCardManager @endlink for info on how to
    * fetch VCards.
    *

@@ -50,7 +50,8 @@ namespace gloox
       m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ),
       m_messageSessionHandler( 0 ), m_parser( 0 ),
       m_authError( AuthErrorUndefined ), m_streamError( StreamErrorUndefined ),
-      m_streamErrorAppCondition( 0 ), m_idCount( 0 ), m_autoMessageSession( false )
+      m_streamErrorAppCondition( 0 ), m_idCount( 0 ), m_autoMessageSession( false ),
+      m_fdRequested( false )
   {
   }
 
@@ -60,7 +61,8 @@ namespace gloox
       m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ),
       m_messageSessionHandler( 0 ), m_parser( 0 ),
       m_authError( AuthErrorUndefined ), m_streamError( StreamErrorUndefined ),
-      m_streamErrorAppCondition( 0 ), m_idCount( 0 ), m_autoMessageSession( false )
+      m_streamErrorAppCondition( 0 ), m_idCount( 0 ), m_autoMessageSession( false ),
+      m_fdRequested( false )
   {
   }
 
@@ -161,6 +163,9 @@ namespace gloox
         break;
       case NODE_STREAM_ERROR:
         handleStreamError( stanza );
+        disconnect( ConnStreamError );
+        if( m_fdRequested )
+          notifyOnDisconnect( ConnStreamError );
         break;
       case NODE_STREAM_CLOSE:
         logInstance().log( LogLevelDebug, LogAreaClassClientbase, "stream closed" );
@@ -496,8 +501,6 @@ namespace gloox
       else
         m_streamErrorAppCondition = (*it);
     }
-
-    disconnect( ConnStreamError );
   }
 
   const std::string ClientBase::streamErrorText( const std::string& lang ) const
@@ -523,10 +526,13 @@ namespace gloox
     }
   }
 
-  int ClientBase::fileDescriptor() const
+  int ClientBase::fileDescriptor()
   {
     if( m_connection )
+    {
+      m_fdRequested = true;
       return m_connection->fileDescriptor();
+    }
     else
       return -1;
   }
