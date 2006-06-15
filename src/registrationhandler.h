@@ -40,34 +40,37 @@ namespace gloox
        */
       enum resultEnum
       {
-        REGISTRATION_SUCCESS = 0,             /*!< The last operation (account registration, account
-                                               * deletion or password change) was successful. */
-        REGISTRATION_NOT_ACCEPTABLE,          /*!< 406: Not all necessary information provided */
-        REGISTRATION_CONFLICT,                /*!< 409: Username alreday exists. */
-        REGISTRATION_NOT_AUTHORIZED,          /*!< Account removal: Unregistered entity waits too long
-                                               * before authentication or performs tasks other than
-                                               * authentication after registration.<br>
-                                               * Password change: The server or service does not consider
-                                               * the channel safe enough to enable a password change. */
-        REGISTRATION_BAD_REQUEST,             /*!< Account removal: The &lt;remove/&gt; element was not the
-                                               * only child element of the &lt;query/&gt; element. Should not
-                                               * happen when only gloox functions are being used.<br>
-                                               * Password change: The password change request does not
-                                               * contain complete information (both &lt;username/&gt; and
-                                               * &lt;password/&gt; are required). */
-        REGISTRATION_FORBIDDEN,               /*!< Account removal: The sender does not have sufficient
-                                               * permissions to cancel the registration. */
-        REGISTRATION_REGISTRATION_REQUIRED,   /*!< Account removal: The entity sending the remove request was
-                                               * not previously registered. */
-        REGISTRATION_UNEXPECTED_REQUEST,      /*!< Account removal: The host is an instant messaging server
-                                               * and the IQ get does not contain a 'from' address because the
-                                               * entity is not registered with the server.<br>
-                                               * Password change: The host is an instant messaging server and
-                                               * the IQ set does not contain a 'from' address because the
-                                               * entity is not registered with the server. */
-        REGISTRATION_NOT_ALLOWED,             /*!< Password change: The server or service does not allow
-                                               * password changes. */
-        UNKNOWN_ERROR                         /**< An unknown error condition occured. */
+        REGISTRATION_SUCCESS = 0,          /*!< The last operation (account registration, account
+                                            * deletion or password change) was successful. */
+        REGISTRATION_NOT_ACCEPTABLE,       /*!< 406: Not all necessary information provided */
+        REGISTRATION_CONFLICT,             /*!< 409: Username alreday exists. */
+        REGISTRATION_NOT_AUTHORIZED,       /*!< Account removal: Unregistered entity waits too long
+                                            * before authentication or performs tasks other than
+                                            * authentication after registration.<br>
+                                            * Password change: The server or service does not consider
+                                            * the channel safe enough to enable a password change. */
+        REGISTRATION_BAD_REQUEST,          /*!< Account removal: The &lt;remove/&gt; element was not
+                                            * the only child element of the &lt;query/&gt; element.
+                                            * Should not happen when only gloox functions are being
+                                            * used.<br>
+                                            * Password change: The password change request does not
+                                            * contain complete information (both &lt;username/&gt; and
+                                            * &lt;password/&gt; are required). */
+        REGISTRATION_FORBIDDEN,            /*!< Account removal: The sender does not have sufficient
+                                            * permissions to cancel the registration. */
+        REGISTRATION_REGISTRATION_REQUIRED,/*!< Account removal: The entity sending the remove
+                                            * request was not previously registered. */
+        REGISTRATION_UNEXPECTED_REQUEST,   /*!< Account removal: The host is an instant messaging
+                                            * server and the IQ get does not contain a 'from'
+                                            * address because the entity is not registered with
+                                            * the server.<br>
+                                            * Password change: The host is an instant messaging
+                                            * server and the IQ set does not contain a 'from'
+                                            * address because the entity is not registered with
+                                            * the server. */
+        REGISTRATION_NOT_ALLOWED,          /*!< Password change: The server or service does not allow
+                                            * password changes. */
+        UNKNOWN_ERROR                      /*!< An unknown error condition occured. */
       };
 
       /**
@@ -76,40 +79,46 @@ namespace gloox
       virtual ~RegistrationHandler() {};
 
       /**
-       * Reimplement this function to receive results of the @ref Registration::fetchRegistrationFields()
-       * function.
+       * Reimplement this function to receive results of the
+       * @ref Registration::fetchRegistrationFields() function.
+       * @param from The server or service the registration fields came from.
        * @param fields The OR'ed fields the server requires. From @ref Registration::fieldEnum.
        * @param instructions Any additional information the server sends along.
        */
-      virtual void handleRegistrationFields( int fields, std::string instructions ) = 0;
+      virtual void handleRegistrationFields( const JID& from, int fields,
+                                             std::string instructions ) = 0;
 
       /**
        * This function is called if @ref Registration::createAccount() was called on an authenticated
        * stream and the server lets us know about this.
        */
-      virtual void handleAlreadyRegistered() = 0;
+      virtual void handleAlreadyRegistered( const JID& from ) = 0;
 
       /**
        * This funtion is called to notify about the result of an operation.
+       * @param from The server or service the result came from.
        * @param result The result of the last operation.
        */
-      virtual void handleRegistrationResult( resultEnum result ) = 0;
+      virtual void handleRegistrationResult( const JID& from, resultEnum result ) = 0;
 
       /**
        * This function is called additionally to @ref handleRegistrationFields() if the server
        * supplied a data form together with legacy registration fields.
+       * @param from The server or service the data form came from.
        * @param form The DataForm conataining registration information.
        */
-      virtual void handleDataForm( const DataForm &form ) = 0;
+      virtual void handleDataForm( const JID& from, const DataForm &form ) = 0;
 
       /**
        * This function is called if the server does not offer in-band registration
        * but wants to refer the user to an external URL.
+       * @param from The server or service the referal came from.
        * @param url The external URL where registration is possible (or where more information
        * can be found).
        * @param desc Some descriptive text.
        */
-      virtual void handleOOB( const std::string& url, const std::string& desc ) = 0;
+      virtual void handleOOB( const JID& from, const std::string& url,
+                              const std::string& desc ) = 0;
 
   };
 
