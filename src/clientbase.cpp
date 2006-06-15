@@ -374,13 +374,11 @@ namespace gloox
 
     send( tag->xml() );
 
-    if( tag->type() == StanzaUndefined )
-      delete tag;
-    else
-    {
-      Stanza *s = dynamic_cast<Stanza*>( tag );
+    Stanza *s = dynamic_cast<Stanza*>( tag );
+    if( s )
       delete s;
-    }
+    else
+      delete tag;
   }
 
   void ClientBase::send( const std::string& xml )
