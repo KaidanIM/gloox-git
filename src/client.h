@@ -197,7 +197,7 @@ namespace gloox
       void setAutoPresence( bool autoPresence ) { m_autoPresence = autoPresence; };
 
       /**
-       * This is a temporary hack to force Non-SASL login. You should not need to use it. 
+       * This is a temporary hack to enforce Non-SASL login. You should not need to use it.
        * @param force Whether to force non-SASL auth. Default @b true.
        * @deprecated
        */
