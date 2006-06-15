@@ -20,8 +20,8 @@
 namespace gloox
 {
 
-  Registration::Registration( ClientBase *parent )
-    : m_parent( parent ), m_registrationHandler( 0 )
+  Registration::Registration( ClientBase *parent, const JID& to )
+    : m_parent( parent ), m_to( to ), m_registrationHandler( 0 )
   {
     if( m_parent )
       m_parent->registerIqHandler( this, XMLNS_REGISTER );
@@ -41,6 +41,8 @@ namespace gloox
     std::string id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
+    if( !m_to.empty() )
+      iq->addAttribute( "to", m_to.full() );
     iq->addAttribute( "type", "get" );
     iq->addAttribute( "id", id );
     Tag *q = new Tag( iq, "query" );
@@ -58,6 +60,8 @@ namespace gloox
     const std::string id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
+    if( !m_to.empty() )
+      iq->addAttribute( "to", m_to.full() );
     iq->addAttribute( "id", id );
     iq->addAttribute( "type", "set" );
     Tag *q = new Tag( iq, "query" );
@@ -118,6 +122,8 @@ namespace gloox
     const std::string id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
+    if( !m_to.empty() )
+      iq->addAttribute( "to", m_to.full() );
     iq->addAttribute( "type", "set" );
     iq->addAttribute( "id", id );
     iq->addAttribute( "from", m_parent->jid().full() );
@@ -129,7 +135,7 @@ namespace gloox
     m_parent->send( iq );
   }
 
-  void Registration::changePassword( const std::string& password )
+  void Registration::changePassword( const std::string& username, const std::string& password )
   {
     if( !m_parent || !m_parent->authed() )
       return;
@@ -137,12 +143,13 @@ namespace gloox
     const std::string id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
+    if( !m_to.empty() )
+      iq->addAttribute( "to", m_to.full() );
     iq->addAttribute( "type", "set" );
     iq->addAttribute( "id", id );
-    iq->addAttribute( "to", m_parent->server() );
     Tag *q = new Tag( iq, "query" );
     q->addAttribute( "xmlns", XMLNS_REGISTER );
-    new Tag( q, "username", m_parent->username() );
+    new Tag( q, "username", username );
     new Tag( q, "password", password );
 
     m_parent->trackID( this, id, CHANGE_PASSWORD );
@@ -169,25 +176,32 @@ namespace gloox
         return false;
 
       if( e->hasChild( "conflict" ) || e->hasAttribute( "code", "409" ) )
-        m_registrationHandler->handleRegistrationResult( RegistrationHandler::REGISTRATION_CONFLICT );
+        m_registrationHandler->handleRegistrationResult( stanza->from(),
+            RegistrationHandler::REGISTRATION_CONFLICT );
       else if( e->hasChild( "not-acceptable" ) || e->hasAttribute( "code", "406" ) )
-        m_registrationHandler->handleRegistrationResult( RegistrationHandler::REGISTRATION_NOT_ACCEPTABLE );
+        m_registrationHandler->handleRegistrationResult( stanza->from(),
+            RegistrationHandler::REGISTRATION_NOT_ACCEPTABLE );
       else if( e->hasChild( "bad-request" ) || e->hasAttribute( "code", "400" ) )
-        m_registrationHandler->handleRegistrationResult( RegistrationHandler::REGISTRATION_BAD_REQUEST );
+        m_registrationHandler->handleRegistrationResult( stanza->from(),
+            RegistrationHandler::REGISTRATION_BAD_REQUEST );
       else if( e->hasChild( "forbidden" ) || e->hasAttribute( "code", "403" ) )
-        m_registrationHandler->handleRegistrationResult( RegistrationHandler::REGISTRATION_FORBIDDEN );
+        m_registrationHandler->handleRegistrationResult( stanza->from(),
+            RegistrationHandler::REGISTRATION_FORBIDDEN );
       else if( e->hasChild( "registration-required" ) || e->hasAttribute( "code", "407" ) )
-        m_registrationHandler->handleRegistrationResult(
+        m_registrationHandler->handleRegistrationResult( stanza->from(),
             RegistrationHandler::REGISTRATION_REGISTRATION_REQUIRED );
       else if( e->hasChild( "unexpected-request" ) || e->hasAttribute( "code", "400" ) )
-        m_registrationHandler->handleRegistrationResult(
+        m_registrationHandler->handleRegistrationResult( stanza->from(),
             RegistrationHandler::REGISTRATION_UNEXPECTED_REQUEST );
       else if( e->hasChild( "not-authorized" ) || e->hasAttribute( "code", "401" ) )
-        m_registrationHandler->handleRegistrationResult( RegistrationHandler::REGISTRATION_NOT_AUTHORIZED );
+        m_registrationHandler->handleRegistrationResult( stanza->from(),
+            RegistrationHandler::REGISTRATION_NOT_AUTHORIZED );
       else if( e->hasChild( "not-allowed" ) || e->hasAttribute( "code", "405" ) )
-        m_registrationHandler->handleRegistrationResult( RegistrationHandler::REGISTRATION_NOT_ALLOWED );
+        m_registrationHandler->handleRegistrationResult( stanza->from(),
+            RegistrationHandler::REGISTRATION_NOT_ALLOWED );
       else
-        m_registrationHandler->handleRegistrationResult( RegistrationHandler::UNKNOWN_ERROR );
+        m_registrationHandler->handleRegistrationResult( stanza->from(),
+          RegistrationHandler::UNKNOWN_ERROR );
     }
     return false;
   }
@@ -208,14 +222,14 @@ namespace gloox
 
         if( q->hasChild( "registered" ) )
         {
-          m_registrationHandler->handleAlreadyRegistered();
+          m_registrationHandler->handleAlreadyRegistered( stanza->from() );
           break;
         }
 
         if( q->hasChild( "x", "xmlns", XMLNS_X_DATA ) )
         {
           DataForm form( q->findChild( "x", "xmlns", XMLNS_X_DATA ) );
-          m_registrationHandler->handleDataForm( form );
+          m_registrationHandler->handleDataForm( stanza->from(), form );
         }
 
         if( q->hasChild( "x", "xmlns", XMLNS_X_OOB ) )
@@ -229,7 +243,7 @@ namespace gloox
           if( x->hasChild( "url" ) )
             url = x->findChild( "url" )->cdata();
 
-          m_registrationHandler->handleOOB( url, desc );
+          m_registrationHandler->handleOOB( stanza->from(), url, desc );
         }
 
         int fields = 0;
@@ -270,20 +284,23 @@ namespace gloox
         if( q->hasChild( "instructions" ) )
           instructions = q->findChild( "instructions" )->cdata();
 
-        m_registrationHandler->handleRegistrationFields( fields, instructions );
+        m_registrationHandler->handleRegistrationFields( stanza->from(), fields, instructions );
         break;
       }
 
       case CREATE_ACCOUNT:
-        m_registrationHandler->handleRegistrationResult( RegistrationHandler::REGISTRATION_SUCCESS );
+        m_registrationHandler->handleRegistrationResult( stanza->from(),
+            RegistrationHandler::REGISTRATION_SUCCESS );
         break;
 
       case CHANGE_PASSWORD:
-        m_registrationHandler->handleRegistrationResult( RegistrationHandler::REGISTRATION_SUCCESS );
+        m_registrationHandler->handleRegistrationResult( stanza->from(),
+            RegistrationHandler::REGISTRATION_SUCCESS );
         break;
 
       case REMOVE_ACCOUNT:
-        m_registrationHandler->handleRegistrationResult( RegistrationHandler::REGISTRATION_SUCCESS );
+        m_registrationHandler->handleRegistrationResult( stanza->from(),
+            RegistrationHandler::REGISTRATION_SUCCESS );
         break;
     }
     return false;
