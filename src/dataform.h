@@ -27,6 +27,8 @@ namespace gloox
   /**
    * @brief An abstraction of a JEP-0004 Data Form.
    *
+   *
+   *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.7
    */
@@ -38,16 +40,16 @@ namespace gloox
        */
       enum DataFormType
       {
-        FORM_TYPE_FORM,             /**< The forms-processing entity is asking the forms-submitting entity to
-                                     * complete a form. */
-        FORM_TYPE_SUBMIT,           /**< The forms-submitting entity is submitting data to the
-                                     * forms-processing entity. */
-        FORM_TYPE_CANCEL,           /**< The forms-submitting entity has cancelled submission of data to the
-                                     * forms-processing entity. */
-        FORM_TYPE_RESULT,           /**< The forms-processing entity is returning data (e.g., search results)
-                                     * to the forms-submitting entity, or the data is a generic data set. */
-        FORM_TYPE_INVALID           /**< The form is invalid. Only possible if the form was created from an
-                                     * Tag which doesn't correctly describe a Data Form. */
+        FORM_TYPE_FORM,        /**< The forms-processing entity is asking the forms-submitting entity to
+                                * complete a form. */
+        FORM_TYPE_SUBMIT,      /**< The forms-submitting entity is submitting data to the
+                                * forms-processing entity. */
+        FORM_TYPE_CANCEL,      /**< The forms-submitting entity has cancelled submission of data to the
+                                * forms-processing entity. */
+        FORM_TYPE_RESULT,      /**< The forms-processing entity is returning data (e.g., search results)
+                                * to the forms-submitting entity, or the data is a generic data set. */
+        FORM_TYPE_INVALID      /**< The form is invalid. Only possible if the form was created from an
+                                * Tag which doesn't correctly describe a Data Form. */
       };
 
       /**
