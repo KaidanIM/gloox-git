@@ -50,7 +50,7 @@ namespace gloox
         m_instructions.push_back( (*it)->cdata() );
       else if( (*it)->name() == "field" )
       {
-        DataFormField f( (*it) );
+        DataFormField *f = new DataFormField( (*it) );
         m_fields.push_back( f );
       }
     }
@@ -77,7 +77,7 @@ namespace gloox
     FieldList::const_iterator it = m_fields.begin();
     for( ; it != m_fields.end(); ++it )
     {
-      x->addChild( (*it).tag() );
+      x->addChild( (*it)->tag() );
     }
 
     switch( m_type )
