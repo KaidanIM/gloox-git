@@ -119,7 +119,7 @@ namespace gloox
         int num = -1;
         DataForm f( stanza->findChild( "query" )->findChild( "x" ) );
         if( f.hasField( "number_of_messages" ) )
-          num = atoi( f.field( "number_of_messages" ).value().c_str() );
+          num = atoi( f.field( "number_of_messages" )->value().c_str() );
 
         m_flexibleOfflineHandler->handleFlexibleOfflineMsgNum( num );
         break;
