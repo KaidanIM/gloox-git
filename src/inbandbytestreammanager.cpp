@@ -20,7 +20,8 @@ namespace gloox
 {
 
   InBandBytestreamManager::InBandBytestreamManager( ClientBase *parent, Disco *disco )
-    : m_parent( parent ), m_inbandBytestreamHandler( 0 ), m_blockSize( 4096 )
+    : m_parent( parent ), m_inbandBytestreamHandler( 0 ), m_syncInbandBytestreams( true ),
+      m_blockSize( 4096 )
   {
     if( m_parent )
       m_parent->registerIqHandler( this, XMLNS_IBB );
@@ -78,29 +79,26 @@ namespace gloox
       const std::string sid = o->findAttribute( "sid" );
       ibb->setSid( sid );
 
-      if( !m_inbandBytestreamHandler ||
-           !m_inbandBytestreamHandler->handleIncomingInBandBytestream( stanza->from(), ibb ) )
+      if( !m_inbandBytestreamHandler )
+        rejectInBandBytestream( ibb, stanza->from(), stanza->id() );
+
+      if( !m_syncInbandBytestreams )
       {
-        delete ibb;
-        Tag *iq = new Tag( "iq" );
-        iq->addAttribute( "type", "error" );
-        iq->addAttribute( "to", stanza->from().full() );
-        iq->addAttribute( "id", stanza->id() );
-        Tag *e = new Tag( iq, "error" );
-        e->addAttribute( "code", "501" );
-        e->addAttribute( "type", "cancel" );
-        Tag *f = new Tag( e, "feature-not-implemented" );
-        f->addAttribute( "xmlns", XMLNS_XMPP_STANZAS );
-        m_parent->send( iq );
+        AsyncIBBItem item;
+        item.ibb = ibb;
+        item.from = stanza->from();
+        item.id = stanza->id();
+        m_asyncTrackMap[sid] = item;
       }
-      else
+
+      bool t = m_inbandBytestreamHandler->handleIncomingInBandBytestream( stanza->from(), ibb );
+      if( m_syncInbandBytestreams && t )
       {
-        m_ibbMap[sid] = ibb;
-        Tag *iq = new Tag( "iq" );
-        iq->addAttribute( "type", "result" );
-        iq->addAttribute( "to", stanza->from().full() );
-        iq->addAttribute( "id", stanza->id() );
-        m_parent->send( iq );
+        acceptInBandBytestream( ibb, stanza->from(), stanza->id() );
+      }
+      else if( m_syncInbandBytestreams && !t )
+      {
+        rejectInBandBytestream( ibb, stanza->from(), stanza->id() );
       }
     }
     else if( ( stanza->subtype() == StanzaIqSet ) &&
@@ -119,6 +117,59 @@ namespace gloox
     }
 
     return true;
+  }
+
+  void InBandBytestreamManager::acceptInBandBytestream( InBandBytestream *ibb )
+  {
+    if( m_syncInbandBytestreams )
+      return;
+
+    AsyncTrackMap::iterator it = m_asyncTrackMap.find( ibb->sid() );
+    if( it != m_asyncTrackMap.end() )
+    {
+      acceptInBandBytestream( ibb, (*it).second.from, (*it).second.id );
+      m_asyncTrackMap.erase( it );
+    }
+  }
+
+  void InBandBytestreamManager::rejectInBandBytestream( InBandBytestream *ibb )
+  {
+    if( m_syncInbandBytestreams )
+      return;
+
+    AsyncTrackMap::iterator it = m_asyncTrackMap.find( ibb->sid() );
+    if( it != m_asyncTrackMap.end() )
+    {
+      rejectInBandBytestream( ibb, (*it).second.from, (*it).second.id );
+      m_asyncTrackMap.erase( it );
+    }
+  }
+
+  void InBandBytestreamManager::acceptInBandBytestream( InBandBytestream *ibb,
+      const JID& from, const std::string& id )
+  {
+    m_ibbMap[ibb->sid()] = ibb;
+    Tag *iq = new Tag( "iq" );
+    iq->addAttribute( "type", "result" );
+    iq->addAttribute( "to", from.full() );
+    iq->addAttribute( "id", id );
+    m_parent->send( iq );
+  }
+
+  void InBandBytestreamManager::rejectInBandBytestream( InBandBytestream *ibb,
+      const JID& from, const std::string& id )
+  {
+    delete ibb;
+    Tag *iq = new Tag( "iq" );
+    iq->addAttribute( "type", "error" );
+    iq->addAttribute( "to", from.full() );
+    iq->addAttribute( "id", id );
+    Tag *e = new Tag( iq, "error" );
+    e->addAttribute( "code", "501" );
+    e->addAttribute( "type", "cancel" );
+    Tag *f = new Tag( e, "feature-not-implemented" );
+    f->addAttribute( "xmlns", XMLNS_XMPP_STANZAS );
+    m_parent->send( iq );
   }
 
   bool InBandBytestreamManager::handleIqID( Stanza *stanza, int context )
@@ -171,9 +222,11 @@ namespace gloox
     return false;
   }
 
-  void InBandBytestreamManager::registerInBandBytestreamHandler( InBandBytestreamHandler *ibbh )
+  void InBandBytestreamManager::registerInBandBytestreamHandler( InBandBytestreamHandler *ibbh,
+      bool sync )
   {
     m_inbandBytestreamHandler = ibbh;
+    m_syncInbandBytestreams = sync;
   }
 
   void InBandBytestreamManager::removeInBandBytestreamHandler()
