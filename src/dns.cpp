@@ -32,6 +32,7 @@
 #include <arpa/inet.h>
 #else
 #include <winsock.h>
+#include <windns.h>
 #endif
 
 #include <sstream>
@@ -59,7 +60,42 @@
 namespace gloox
 {
 
-#if !defined( HAVE_RES_QUERYDOMAIN ) || !defined( HAVE_DN_SKIPNAME ) || !defined( HAVE_RES_QUERY )
+#if defined( WIN32 )
+  int DNS::connect( const std::string& domain, const LogSink& logInstance )
+  {
+    DNS_RECORD *pRecords;
+
+    std::string dname = "_xmpp-client._tcp." + domain;
+
+    DNS_RECORD *pRecord;
+    if( DnsQuery( dname.c_str(), DNS_TYPE_SRV, DNS_QUERY_STANDARD, NULL, &pRecord, NULL ) == ERROR_SUCCESS )
+    {
+      DNS_RECORD *pRec = pRecord;
+      do
+      {
+        if( pRec->wType == DNS_TYPE_SRV )
+        {
+          unsigned short port = pRec->Data.SRV.wPort;
+          dname = pRec->Data.SRV.pNameTarget;
+          std::ostringstream oss;
+          oss << "SRV: " << dname.c_str() << ":" << port;
+          logInstance.log( LogLevelDebug, LogAreaClassDns, oss.str() );
+          int fd = DNS::connect( dname, port, logInstance );
+          if( fd > 0 )
+          {
+            DnsRecordListFree( pRecord, DnsFreeRecordList );
+            return fd;
+          }
+        }
+        pRec = pRec->pNext;
+      } while( pRec != NULL );
+      DnsRecordListFree( pRecord, DnsFreeRecordList );
+    }
+    logInstance.log( LogLevelDebug, LogAreaClassDns, "No usable SRV records found" );
+
+    return DNS::connect( domain, XMPP_PORT, logInstance );
+  }
+#elif !defined( HAVE_RES_QUERYDOMAIN ) || !defined( HAVE_DN_SKIPNAME ) || !defined( HAVE_RES_QUERY )
   int DNS::connect( const std::string& domain, const LogSink& logInstance )
   {
     logInstance.log( LogLevelWarning, LogAreaClassDns,
