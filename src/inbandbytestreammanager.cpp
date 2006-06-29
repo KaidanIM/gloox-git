@@ -189,8 +189,9 @@ namespace gloox
               ibb->setSid( (*it).second.sid );
               ibb->setBlockSize( m_blockSize );
               m_ibbMap[(*it).second.sid] = ibb;
+              InBandBytestreamHandler *t = (*it).second.ibbh;
               m_trackMap.erase( it );
-              (*it).second.ibbh->handleOutgoingInBandBytestream( stanza->from(), ibb );
+              t->handleOutgoingInBandBytestream( stanza->from(), ibb );
               break;
             }
             case StanzaIqError:
