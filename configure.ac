@@ -23,6 +23,26 @@ AC_PROG_CXX
 AC_PROG_RANLIB
 AM_PROG_LIBTOOL
 
+dnl
+dnl extra paths
+dnl
+
+AC_ARG_WITH(extra_include_path, AC_HELP_STRING([--with-extra-include-path],
+                                           [use additional include paths]),
+            extra_include_path=$withval)
+split_includes="`echo $extra_include_path | sed -e 's/:/ /g'`"
+for incpath in $split_includes ; do
+    CPPFLAGS="-I$incpath $CPPFLAGS"
+done
+
+AC_ARG_WITH(extra_library_path, AC_HELP_STRING([--with-extra-library-path],
+                                               [use additional library paths]),
+            extra_library_path=$withval)
+split_libs="`echo $extra_library_path | sed -e 's/:/ /g'`"
+for libpath in $split_libs ; do
+    LDFLAGS="-L$libpath $LDFLAGS"
+done
+
 dnl Checks for libraries.
 
 dnl Iksemel
@@ -106,7 +126,7 @@ dnl OpenSSL on MinGW requires additional Windows libraries to compile
             [openssl=no LIBS=${TMP_LIBS}])
   fi
   if test "$openssl" != "no" ; then
-    AC_DEFINE(HAVE_OPENSSL, 1, [Define to 1 if you want TLS support (OpenSSL).])
+    AC_DEFINE(HAVE_OPENSSL, 1, [Define to 1 if you want TLS support (OpenSSL). Undefine HAVE_GNUTLS.])
   else
     AC_MSG_WARN([OpenSSL not found])
   fi
