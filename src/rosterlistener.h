@@ -113,19 +113,23 @@ namespace gloox
 
       /**
        * This function is called whenever a roster item comes online (is available).
-       * However, it will not be called for status changes form Away (or any other
+       * However, it will not be called for status changes from Away (or any other
        * status which is not Unavailable) to Available.
        * @param item The changed roster item.
        * @param msg The status change message.
+       * @param from The full JID that became available.
        */
-      virtual void itemAvailable( const RosterItem& item, const std::string& msg ) = 0;
+      virtual void itemAvailable( const RosterItem& item, const std::string& msg,
+                                  const JID& from ) = 0;
 
       /**
        * This function is called whenever a roster item goes offline (is unavailable).
        * @param item The roster item.
        * @param msg The status change message.
+       * @param from The full JID that became unavailable.
        */
-      virtual void itemUnavailable( const RosterItem& item, const std::string& msg ) = 0;
+      virtual void itemUnavailable( const RosterItem& item, const std::string& msg,
+                                    const JID& from ) = 0;
 
       /**
        * This function is called when an entity wishes to subscribe to this entity's presence.

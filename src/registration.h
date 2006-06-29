@@ -17,6 +17,7 @@
 #include "iqhandler.h"
 #include "registrationhandler.h"
 #include "dataform.h"
+#include "jid.h"
 
 #include <string>
 #include <map>
@@ -33,22 +34,31 @@ namespace gloox
    * Derive your object from @ref RegistrationHandler and implement the
    * virtual functions offered by that interface. Then use it like this:
    * @code
-   * Client *c = new Client( "example.org" );
-   * c->disableRoster(); // a roster is not necessary for registration
-   * c->disableDisco(); // the disco client is not necessary for registration
+   * void MyClass::myFunc()
+   * {
+   *   m_client = new Client( "example.org" );
+   *   m_client->disableRoster(); // a roster is not necessary for registration
+   *   m_client->disableDisco(); // the disco client is not necessary for registration
+   *   m_client->registerConnectionListener( this );
    *
-   * Registration* r = new Registration( c );
-   * r->registerRegistrationHandler( this );
-   * r->fetchRegistrationFields();
+   *   m_reg = new Registration( c );
+   *   m_reg->registerRegistrationHandler( this );
    *
-   * c->connect();
+   *   m_client->connect();
+   * }
+   *
+   * void MyClass::onConnect()
+   * {
+   *   m_reg->fetchRegistrationFields();
+   * }
    * @endcode
+   *
    * In RegistrationHandler::handleRegistrationFields() you should check which information the server
    * requires to open a new account. You might not always get away with just username and password.
-   * Then call createAccount() with a filled-in fieldStruct and an @c int representing the bit-wise ORed
-   * fields you want to have included in the registration attempt. For your convenience you can use the
-   * 'fields' argument of handleRegistrationFields(). ;) It's your responsibility to make sure at
-   * least those fields the server requested are filled in.
+   * Then call createAccount() with a filled-in fieldStruct and an @c int representing the bit-wise
+   * ORed fields you want to have included in the registration attempt. For your convenience you can
+   * use the 'fields' argument of handleRegistrationFields(). ;) It's your responsibility to make
+   * sure at least those fields the server requested are filled in.
    *
    * Check @c tests/register_test.cpp for an example.
    *
@@ -109,8 +119,10 @@ namespace gloox
       /**
        * Constructor.
        * @param parent The ClientBase which is used for establishing a connection.
+       * @param to The server or service to authenticate with. If empty the currently connected
+       * server will be used.
        */
-      Registration( ClientBase *parent );
+      Registration( ClientBase *parent, const JID& to );
 
       /**
        * Virtual destructor.
@@ -129,7 +141,8 @@ namespace gloox
        * @c fields will be sent. This can only be called with an unauthenticated parent (@ref Client).
        * @note It is recommended to use @ref fetchRegistrationFields to find out which fields the
        * server requires.
-       * @param fields The fields to use to generate the registration request. OR'ed @ref fieldEnum values.
+       * @param fields The fields to use to generate the registration request. OR'ed
+       * @ref fieldEnum values.
        * @param values The struct contains the values which shall be used for the registration.
        */
       void createAccount( int fields, const fieldStruct& values );
@@ -151,8 +164,10 @@ namespace gloox
       /**
        * Tells the server to change the password for the current account.
        * @param password The new password.
+       * @param username The username to change the password for. You might want to use
+       * Client::username() to get the current prepped username.
        */
-      void changePassword( const std::string& password );
+      void changePassword( const std::string& username, const std::string& password );
 
       /**
        * Registers the given @c rh as RegistrationHandler. Only one handler is possible at a time.
@@ -181,6 +196,7 @@ namespace gloox
       };
 
       ClientBase *m_parent;
+      const JID m_to;
       RegistrationHandler *m_registrationHandler;
   };
 

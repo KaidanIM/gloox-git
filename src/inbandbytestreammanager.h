@@ -224,12 +224,36 @@ namespace gloox
       bool dispose( InBandBytestream *ibb );
 
       /**
+       * When using asynchronous InBandBytestream notifications (if you used
+       * registerInBandBytestreamHandler() with a second argument of @b true) you have to
+       * call either this function or rejectInBandBytestream() after receiving an InBandBytestream
+       * from the InBandBytestreamHandler. Else the initiator will never know whether the
+       * request was actually received.
+       * @param ibb The InBandBytestream (as received from InBandBytestreamHandler) to accept.
+       * @since 0.8.1
+       */
+      void acceptInBandBytestream( InBandBytestream *ibb );
+
+      /**
+       * When using asynchronous InBandBytestream notifications (if you used
+       * registerInBandBytestreamHandler() with a second argument of @b true) you have to
+       * call either this function or acceptInBandBytestream() after receiving an InBandBytestream
+       * from the InBandBytestreamHandler. Else the initiator will never know whether the
+       * request was actually received.
+       * @param ibb The InBandBytestream (as received from InBandBytestreamHandler) to reject.
+       * @since 0.8.1
+       */
+      void rejectInBandBytestream( InBandBytestream *ibb );
+
+      /**
        * Use this function to register an object that will receive new @b incoming bytestream
        * requests from the InBandBytestreamManager. Only one InBandBytestreamHandler can be
        * registered at any one time.
        * @param ibbh The InBandBytestreamHandler derived object to receive notifications.
+       * @param sync Whether incoming bytestrams shall be announced syncronously.
+       * Default: true (syncronous)
        */
-      void registerInBandBytestreamHandler( InBandBytestreamHandler *ibbh );
+      void registerInBandBytestreamHandler( InBandBytestreamHandler *ibbh, bool sync = true );
 
       /**
        * Removes the registered InBandBytestreamHandler.
@@ -243,6 +267,9 @@ namespace gloox
       virtual bool handleIqID( Stanza *stanza, int context );
 
     private:
+      void acceptInBandBytestream( InBandBytestream *ibb, const JID& from, const std::string& id );
+      void rejectInBandBytestream( InBandBytestream *ibb, const JID& from, const std::string& id );
+
       enum IBBActionType
       {
         IBBOpenStream,
@@ -258,11 +285,21 @@ namespace gloox
         InBandBytestreamHandler *ibbh;
       };
       typedef std::map<std::string, TrackItem> TrackMap;
+      TrackMap m_trackMap;
+
+      struct AsyncIBBItem
+      {
+        InBandBytestream *ibb;
+        JID from;
+        std::string id;
+      };
+      typedef std::map<std::string, AsyncIBBItem> AsyncTrackMap;
+      AsyncTrackMap m_asyncTrackMap;
 
       ClientBase *m_parent;
       InBandBytestreamHandler *m_inbandBytestreamHandler;
+      bool m_syncInbandBytestreams;
       int m_blockSize;
-      TrackMap m_trackMap;
 
   };
 
