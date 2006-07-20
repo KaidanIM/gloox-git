@@ -125,6 +125,12 @@ namespace gloox
       Registration( ClientBase *parent, const JID& to );
 
       /**
+       * Constructor. Registration will be attempted with the ClientBase's connected host.
+       * @param parent The ClientBase which is used for establishing a connection.
+       */
+      Registration( ClientBase *parent );
+
+      /**
        * Virtual destructor.
        */
       virtual ~Registration();
