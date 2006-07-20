@@ -21,8 +21,8 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler
     {
       setlocale( LC_ALL, "" );
 
-      JID jid( "hurkhurk@example.org/gloox" );
-      j = new Client( jid, "hurkhurks" );
+      JID jid( "remon@camaya.net/gloox" );
+      j = new Client( jid, "remon" );
       j->setAutoPresence( true );
       j->setInitialPriority( 3 );
       j->registerConnectionListener( this );
@@ -98,16 +98,16 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler
       printf( "item changed: %s\n", item.jid().c_str() );
     }
 
-    virtual void itemAvailable( const RosterItem& item, const std::string& /*msg*/,
+    virtual void itemAvailable( const RosterItem& /*item*/, const std::string& /*msg*/,
                                                         const JID& from )
     {
-      printf( "item online: %s\n", item.jid().c_str() );
+      printf( "item online: %s\n", from.full().c_str() );
     }
 
-    virtual void itemUnavailable( const RosterItem& item, const std::string& /*msg*/,
+    virtual void itemUnavailable( const RosterItem& /*item*/, const std::string& /*msg*/,
                                                           const JID& from )
     {
-      printf( "item offline: %s\n", item.jid().c_str() );
+      printf( "item offline: %s\n", from.full().c_str() );
     };
 
     virtual bool subscriptionRequest( const std::string& jid, const std::string& /*msg*/ )
