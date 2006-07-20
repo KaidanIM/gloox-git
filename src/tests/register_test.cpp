@@ -25,7 +25,7 @@ class RegTest : public RegistrationHandler, ConnectionListener, LogHandler
       j->disableDisco();
       j->registerConnectionListener( this );
 
-      m_reg = new Registration( j );
+      m_reg = new Registration( j, j->server() );
       m_reg->registerRegistrationHandler( this );
 
       j->logInstance().registerLogHandler( LogLevelDebug, LogAreaAll, this );
@@ -59,7 +59,7 @@ class RegTest : public RegistrationHandler, ConnectionListener, LogHandler
       return true;
     };
 
-    virtual void handleRegistrationFields( int fields, std::string instructions )
+    virtual void handleRegistrationFields( const JID& /*from*/, int fields, std::string instructions )
     {
       printf( "fields: %d\ninstructions: %s\n", fields, instructions.c_str() );
       Registration::fieldStruct vals;
@@ -68,23 +68,23 @@ class RegTest : public RegistrationHandler, ConnectionListener, LogHandler
       m_reg->createAccount( fields, vals );
     };
 
-    virtual void handleRegistrationResult( resultEnum result )
+    virtual void handleRegistrationResult( const JID& /*from*/, resultEnum result )
     {
       printf( "result: %d\n", result );
       j->disconnect();
     };
 
-    virtual void handleAlreadyRegistered()
+    virtual void handleAlreadyRegistered( const JID& /*from*/ )
     {
       printf( "the account already exists.\n" );
     };
 
-    virtual void handleDataForm( const DataForm& /*form*/ )
+    virtual void handleDataForm( const JID& /*from*/, const DataForm& /*form*/ )
     {
       printf( "datForm received\n" );
     };
 
-    virtual void handleOOB( const std::string& url, const std::string& desc )
+    virtual void handleOOB( const JID& /*from*/, const std::string& url, const std::string& desc )
     {
       printf( "OOB registration requested. %s: %s\n", desc.c_str(), url.c_str() );
     }
