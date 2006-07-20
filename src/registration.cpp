@@ -27,6 +27,13 @@ namespace gloox
       m_parent->registerIqHandler( this, XMLNS_REGISTER );
   }
 
+  Registration::Registration( ClientBase *parent )
+  : m_parent( parent ), m_registrationHandler( 0 )
+  {
+    if( m_parent )
+      m_parent->registerIqHandler( this, XMLNS_REGISTER );
+  }
+
   Registration::~Registration()
   {
     if( m_parent )
