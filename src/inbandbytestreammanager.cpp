@@ -109,6 +109,13 @@ namespace gloox
       if( it != m_ibbMap.end() )
       {
         (*it).second->closed();
+
+        Tag *iq = new Tag( "iq" );
+        iq->addAttribute( "type", "result" );
+        iq->addAttribute( "to", stanza->from().full() );
+        iq->addAttribute( "id", stanza->id() );
+
+        m_parent->send( iq );
       }
     }
     else
