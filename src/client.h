@@ -174,7 +174,7 @@ namespace gloox
        * Sets the username to use to connect to the XMPP server.
        * @param username The username to authenticate with.
        */
-      void setUsername( const std::string &username ) { m_jid.setUsername( username ); };
+      void setUsername( const std::string &username );
 
       /**
        * Sets the resource to use to connect to the XMPP server.
