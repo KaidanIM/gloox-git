@@ -98,12 +98,14 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler
       printf( "item changed: %s\n", item.jid().c_str() );
     }
 
-    virtual void itemAvailable( const RosterItem& item, const std::string& /*msg*/ )
+    virtual void itemAvailable( const RosterItem& item, const std::string& /*msg*/,
+                                                        const JID& from )
     {
       printf( "item online: %s\n", item.jid().c_str() );
     }
 
-    virtual void itemUnavailable( const RosterItem& item, const std::string& /*msg*/ )
+    virtual void itemUnavailable( const RosterItem& item, const std::string& /*msg*/,
+                                                          const JID& from )
     {
       printf( "item offline: %s\n", item.jid().c_str() );
     };
