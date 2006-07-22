@@ -1,13 +1,14 @@
 v0.8.1 -- 22 Jul 2006
 ---------------------
-- Registration: allow registration with services
+- Registration: allow registration with services (*)
 - async inbandbytestreams ack
 - fixed memory leak in RosterItem
-- RosterListener: announce un/available resource in itemUn/Available()
+- RosterListener: announce un/available resource in itemUn/Available() (*)
 - RosterManager: don't sync self contact to server
 - PrivacyManager: give a privacy list a proper name (thanks to Chris Bond)
 - InBandBytestreams: ack closing with correct ID
-- Adhoc: provide requesting entities JID in the callback
+- Adhoc: provide requesting entities JID in the callback (*)
+(*) these changes render 0.8.1 binary incompatible compared to 0.8
 
 
 v0.8 -- 08 Apr 2006
