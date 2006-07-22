@@ -8,7 +8,7 @@ v0.8.1 -- 22 Jul 2006
 - PrivacyManager: give a privacy list a proper name (thanks to Chris Bond)
 - InBandBytestreams: ack closing with correct ID
 - Adhoc: provide requesting entities JID in the callback (*)
-(*) these changes render 0.8.1 binary incompatible compared to 0.8
+(*) these changes render 0.8.1 source incompatible compared to 0.8
 
 
 v0.8 -- 08 Apr 2006
