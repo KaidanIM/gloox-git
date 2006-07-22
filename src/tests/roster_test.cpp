@@ -21,8 +21,8 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler
     {
       setlocale( LC_ALL, "" );
 
-      JID jid( "remon@camaya.net/gloox" );
-      j = new Client( jid, "remon" );
+      JID jid( "hurkhurk@example.org" );
+      j = new Client( jid, "hurkhurks" );
       j->setAutoPresence( true );
       j->setInitialPriority( 3 );
       j->registerConnectionListener( this );
