@@ -26,8 +26,22 @@ namespace gloox
   DataForm::DataForm( Tag *tag )
     : m_type( FORM_TYPE_INVALID )
   {
-    if( !tag->hasAttribute( "xmlns", XMLNS_X_DATA ) || tag->name() != "x" )
-      return;
+    parse( tag );
+  }
+
+  DataForm::DataForm()
+    : m_type( FORM_TYPE_INVALID )
+  {
+  }
+
+  DataForm::~DataForm()
+  {
+  }
+
+  bool DataForm::parse( Tag *tag )
+  {
+    if( !tag && !tag->hasAttribute( "xmlns", XMLNS_X_DATA ) || tag->name() != "x" )
+      return false;
 
     if( tag->hasAttribute( "type", "form" ) )
       m_type = FORM_TYPE_FORM;
@@ -38,7 +52,7 @@ namespace gloox
     else if( tag->hasAttribute( "type", "result" ) )
       m_type = FORM_TYPE_RESULT;
     else
-      return;
+      return false;
 
     Tag::TagList l = tag->children();
     Tag::TagList::const_iterator it = l.begin();
@@ -54,10 +68,8 @@ namespace gloox
         m_fields.push_back( f );
       }
     }
-  }
 
-  DataForm::~DataForm()
-  {
+    return true;
   }
 
   const Tag* DataForm::tag() const
