@@ -34,8 +34,8 @@
 #include <winsock.h>
 #endif
 
-#if defined( _MSC_VER ) && ( _MSC_VER >= 1300 )
-#define strcasecmp stricmp
+#ifdef USE_WINTLS
+# include <schannel.h>
 #endif
 
 #include <time.h>
@@ -46,7 +46,7 @@ namespace gloox
 {
 
   Connection::Connection( Parser *parser, const LogSink& logInstance, const std::string& server,
-                          int port )
+                          unsigned short port )
     : m_parser( parser ), m_state ( StateDisconnected ), m_disconnect ( ConnNoError ),
       m_logInstance( logInstance ), m_compression( 0 ), m_buf( 0 ),
       m_server( Prep::idna( server ) ), m_port( port ), m_socket( -1 ), m_bufsize( 17000 ),
@@ -63,6 +63,7 @@ namespace gloox
     cleanup();
     free( m_buf );
     m_buf = 0;
+    m_parser = 0;
   }
 
 #ifdef HAVE_TLS
@@ -142,6 +143,30 @@ namespace gloox
       m_certInfo.protocol = tmp;
 
     return true;
+  }
+
+  inline bool Connection::tls_send(const void *data, size_t len)
+  {
+    int ret;
+    int len = strlen( data );
+    ret = SSL_write( m_ssl, data, len );
+    return true;
+  }
+
+  inline int Connection::tls_recv(void *data, size_t len)
+  {
+    return SSL_read( m_ssl, data, len );
+  }
+
+  inline bool Connection::tls_dataAvailable()
+  {
+    return SSL_pending( m_ssl );
+  }
+
+  inline void Connection::tls_cleanup()
+  {
+    SSL_shutdown( m_ssl );
+    SSL_free( m_ssl );
   }
 
 #elif defined( USE_GNUTLS )
@@ -320,6 +345,77 @@ namespace gloox
 
     return true;
   }
+
+  inline bool Connection::tls_send(const void *data, size_t len)
+  {
+    int ret;
+    do
+    {
+      ret = gnutls_record_send( m_session, data, len );
+    }
+    while( ( ret == GNUTLS_E_AGAIN ) || ( ret == GNUTLS_E_INTERRUPTED ) );
+    return true;
+  }
+
+  inline int Connection::tls_recv(void *data, size_t len)
+  {
+    return gnutls_record_recv( m_session, data, len );
+  }
+
+  inline bool Connection::tls_dataAvailable()
+  {
+    return false;
+  }
+
+  inline void Connection::tls_cleanup()
+  {
+    gnutls_bye( m_session, GNUTLS_SHUT_RDWR );
+    gnutls_deinit( m_session );
+    gnutls_certificate_free_credentials( m_credentials );
+    gnutls_global_deinit();
+  }
+
+#elif defined( USE_WINTLS )
+  bool Connection::tlsHandshake()
+  {
+      if( m_wintls.handshake( m_socket, m_server.c_str ()) == true )
+      {
+        m_wintls.GetCertInfo( &m_certInfo );
+
+        if( _strcmpi( m_certInfo.server.c_str(), m_server.c_str() ) )
+          m_certInfo.status |= CertWrongPeer;
+
+        m_secure = true;
+        return true;
+      }
+      return false;
+  }
+
+  inline bool Connection::tls_send(const void *data, size_t len)
+  {
+      return m_wintls.send( data, len );
+  }
+
+  inline int Connection::tls_recv(void *data, size_t len)
+  {
+      int ret = m_wintls.recv( data, len );
+      if( ret == SOCKET_ERROR )
+      {
+        disconnect( ConnIoError );
+      }
+      return ret;
+  }
+
+  inline bool Connection::tls_dataAvailable()
+  {
+      return m_wintls.dataAvailable();
+  }
+
+  inline void Connection::tls_cleanup()
+  {
+      m_wintls.bye( SCHANNEL_SHUTDOWN );
+      m_wintls.cleanup();
+  }
 #endif
 
 #ifdef HAVE_ZLIB
@@ -349,7 +445,7 @@ namespace gloox
 
     m_state = StateConnecting;
 
-    if( m_port == -1 )
+    if( m_port == ( unsigned short ) -1 )
       m_socket = DNS::connect( m_server, m_logInstance );
     else
       m_socket = DNS::connect( m_server, m_port, m_logInstance );
@@ -392,7 +488,32 @@ namespace gloox
     return m_socket;
   }
 
-  ConnectionError Connection::recv( int sec, unsigned int usec )
+  bool Connection::dataAvailable( int timeout )
+  {
+#ifdef HAVE_TLS
+    if( tls_dataAvailable() )
+    {
+        return true;
+    }
+#endif
+
+    fd_set fds;
+    struct timeval tv;
+
+    FD_ZERO( &fds );
+    FD_SET( m_socket, &fds );
+
+    tv.tv_sec = timeout / 1000;
+    tv.tv_usec = timeout % 1000;
+
+    if( select( m_socket + 1, &fds, 0, 0, timeout == -1 ? 0 : &tv ) >= 0 )
+    {
+      return FD_ISSET( m_socket, &fds ) ? true : false;
+    }
+    return false;
+  }
+
+  ConnectionError Connection::recv( int timeout )
   {
     if( m_cancel )
     {
@@ -404,36 +525,18 @@ namespace gloox
     if( m_socket == -1 )
       return ConnNotConnected;
 
-    if( !m_fdRequested )
+    if( !m_fdRequested && !dataAvailable( timeout ) )
     {
-      fd_set fds;
-      struct timeval tv;
-      tv.tv_sec = sec;
-      tv.tv_usec = usec;
-
-      FD_ZERO( &fds );
-      FD_SET( m_socket, &fds );
-
-      if( select( m_socket + 1, &fds, 0, 0, sec == -1 ? 0 : &tv ) < 0 )
-        return ConnIoError;
-
-      if( !FD_ISSET( m_socket, &fds ) )
         return ConnNoError;
     }
 
     // optimize(?): recv returns the size. set size+1 = \0
     memset( m_buf, '\0', m_bufsize + 1 );
     int size = 0;
-#if defined( USE_GNUTLS )
+#ifdef HAVE_TLS
     if( m_secure )
     {
-      size = gnutls_record_recv( m_session, m_buf, m_bufsize );
-    }
-    else
-#elif defined( USE_OPENSSL )
-    if( m_secure )
-    {
-      size = SSL_read( m_ssl, m_buf, m_bufsize );
+      size = tls_recv( m_buf, m_bufsize );
     }
     else
 #endif
@@ -478,6 +581,7 @@ namespace gloox
           m_logInstance.log( LogLevelError, LogAreaClassConnection, "memory allocation error" );
           break;
         default:
+          m_logInstance.log( LogLevelError, LogAreaClassConnection, "unexpected error" );
           break;
       }
       return ConnIoError;
@@ -502,10 +606,10 @@ namespace gloox
     return m_disconnect;
   }
 
-  void Connection::send( const std::string& data )
+  bool Connection::send( const std::string& data )
   {
     if( data.empty() || ( m_socket == -1 ) )
-      return;
+      return false;
 
     std::string xml;
     if( m_compression && m_enableCompression )
@@ -513,24 +617,12 @@ namespace gloox
     else
       xml = data;
 
-#if defined( USE_GNUTLS )
+#ifdef HAVE_TLS
     if( m_secure )
     {
-      int ret;
       size_t len = xml.length();
-      do
-      {
-        ret = gnutls_record_send( m_session, xml.c_str(), len );
-      }
-      while( ( ret == GNUTLS_E_AGAIN ) || ( ret == GNUTLS_E_INTERRUPTED ) );
-    }
-    else
-#elif defined( USE_OPENSSL )
-    if( m_secure )
-    {
-      int ret;
-      size_t len = xml.length();
-      ret = SSL_write( m_ssl, xml.c_str(), len );
+      if ( tls_send( xml.c_str (), len ) == false )
+        return false;
     }
     else
 #endif
@@ -540,29 +632,26 @@ namespace gloox
       while( num < len )
       {
 #ifdef SKYOS
-        num += ::send( m_socket, (unsigned char*)(xml.c_str()+num), len - num, 0 );
+        int sent = ::send( m_socket, (unsigned char*)(xml.c_str()+num), len - num, 0 );
 #else
-        num += ::send( m_socket, (xml.c_str()+num), len - num, 0 );
+        int sent = ::send( m_socket, (xml.c_str()+num), len - num, 0 );
 #endif
+        if ( sent == -1 )
+          return false;
+
+        num += sent;
       }
     }
+
+    return true;
   }
 
   void Connection::cleanup()
   {
-#if defined( USE_GNUTLS )
+#ifdef HAVE_TLS
     if( m_secure )
     {
-      gnutls_bye( m_session, GNUTLS_SHUT_RDWR );
-      gnutls_deinit( m_session );
-      gnutls_certificate_free_credentials( m_credentials );
-      gnutls_global_deinit();
-    }
-#elif defined( USE_OPENSSL )
-    if( m_secure )
-    {
-      SSL_shutdown( m_ssl );
-      SSL_free( m_ssl );
+        tls_cleanup();
     }
 #endif
 

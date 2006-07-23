@@ -34,6 +34,10 @@
 # include <gnutls/gnutls.h>
 # include <gnutls/x509.h>
 # define HAVE_TLS
+#elif defined( HAVE_WINTLS )
+# define USE_WINTLS
+# include "wintls.h"
+# define HAVE_TLS
 #endif
 
 namespace gloox
@@ -62,7 +66,7 @@ namespace gloox
        * to find out about the actual host:port.
        */
       Connection( Parser *parser, const LogSink& logInstance, const std::string& server,
-                  int port = -1 );
+                  unsigned short port = -1 );
 
       /**
        * Virtual destructor
@@ -77,18 +81,17 @@ namespace gloox
 
       /**
        * Use this periodically to receive data from the socket and to feed the parser.
-       * @param sec The timeout to use for select in seconds. Default means blocking.
-       * @param usec An (additional) timeout in microseconds. Added to the @c sec parameter.
+       * @param timeout The timeout to use for select in microseconds. Default of -1 means blocking.
        * @return The state of the connection.
        */
-      ConnectionError recv( int sec = -1, unsigned int usec = 0 );
+      ConnectionError recv( int timeout = -1 );
 
       /**
        * Use this function to send a string of data over the wire. The function returns only after
        * all data has been sent.
        * @param data The data to send.
        */
-      void send( const std::string& data );
+      bool send( const std::string& data );
 
       /**
        * Use this function to put the connection into 'receive mode'.
@@ -174,8 +177,18 @@ namespace gloox
 #endif
 
     private:
+      Connection &operator = ( const Connection & );
+      bool dataAvailable( int timeout = -1 );
+
       void cancel();
       void cleanup();
+
+#ifdef HAVE_TLS
+      bool tls_send(const void *data, size_t len);
+      int tls_recv(void *data, size_t len);
+      bool tls_dataAvailable();
+      void tls_cleanup();
+#endif
 
 #if defined( USE_GNUTLS )
 
@@ -187,6 +200,9 @@ namespace gloox
 
 #elif defined( USE_OPENSSL )
       SSL *m_ssl;
+#elif defined( USE_WINTLS )
+      WinTLS m_wintls;
+      PCredHandle m_credentials;
 #endif
 
       StringList m_cacerts;
@@ -202,7 +218,7 @@ namespace gloox
 
       char *m_buf;
       std::string m_server;
-      int m_port;
+      unsigned short m_port;
       int m_socket;
       const int m_bufsize;
       bool m_cancel;
