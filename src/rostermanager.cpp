@@ -116,6 +116,26 @@ namespace gloox
     if( !m_rosterListener )
       return;
 
+    StringList caps;
+    Tag::TagList l = stanza->children();
+    Tag::TagList::iterator it_c = l.begin();
+    for( ; it_c != l.end(); ++it_c )
+    {
+      if( (*it_c)->name() == "c" )
+      {
+        std::string cap;
+        cap.append ( (*it_c)->findAttribute ( "node" ).c_str() );
+        cap.append ( "#" );
+        cap.append ( (*it_c)->findAttribute ( "ver" ).c_str() );
+        if( (*it_c)->findAttribute ( "ext" ).size ())
+        {
+          cap.append ( "#" );
+          cap.append ( (*it_c)->findAttribute ( "ext" ).c_str() );
+        }
+        caps.push_back( cap );
+      }
+    }
+
     RosterListener::Roster::iterator it = m_roster.find( stanza->from().bare() );
     if( it != m_roster.end() )
     {
@@ -124,6 +144,7 @@ namespace gloox
       (*it).second->setStatus( stanza->from().resource(), stanza->show() );
       (*it).second->setStatusMsg( stanza->from().resource(), stanza->status() );
       (*it).second->setPriority( stanza->from().resource(), stanza->priority() );
+      (*it).second->setCaps ( caps );
 
       if( stanza->show() == PresenceAvailable )
       {
@@ -143,7 +164,7 @@ namespace gloox
     else
     {
       StringList sl;
-      add( stanza->from().bare(), "", sl, "none", false );
+      add( stanza->from().bare(), "", sl, caps, "none", false );
       m_roster[stanza->from().bare()]->setStatus( stanza->from().resource(), stanza->show() );
       m_roster[stanza->from().bare()]->setStatusMsg( stanza->from().resource(), stanza->status() );
       m_roster[stanza->from().bare()]->setPriority( stanza->from().resource(), stanza->priority() );
@@ -360,8 +381,8 @@ namespace gloox
           }
         }
 
-        const std::string jid = (*it)->findAttribute( "jid" );
-        RosterListener::Roster::iterator it_d = m_roster.find( jid );
+        const JID jid = (*it)->findAttribute( "jid" );
+        RosterListener::Roster::iterator it_d = m_roster.find( jid.bare() );
         if( it_d != m_roster.end() )
         {
           (*it_d).second->setName( (*it)->findAttribute( "name" ) );
@@ -371,7 +392,7 @@ namespace gloox
             delete (*it_d).second;
             m_roster.erase( it_d );
             if( m_rosterListener )
-              m_rosterListener->itemRemoved( jid );
+              m_rosterListener->itemRemoved( jid.bare() );
             continue;
           }
           const std::string ask = (*it)->findAttribute( "ask" );
@@ -383,7 +404,7 @@ namespace gloox
           (*it_d).second->setSynchronized();
 
           if( isPush && m_rosterListener )
-            m_rosterListener->itemUpdated( jid );
+            m_rosterListener->itemUpdated( jid.bare() );
         }
         else
         {
@@ -396,22 +417,25 @@ namespace gloox
           if( !ask.empty() )
             a = true;
 
-          add( jid, name, gl, sub, a );
+          StringList caps;
+          add( jid.bare(), name, gl, caps, sub, a );
           if( isPush && m_rosterListener )
-            m_rosterListener->itemAdded( jid );
+            m_rosterListener->itemAdded( jid.bare() );
         }
       }
     }
   }
 
   void RosterManager::add( const std::string& jid, const std::string& name,
-                           StringList& groups, const std::string& sub, bool ask )
+                           StringList& groups, StringList& caps,
+                           const std::string& sub, bool ask )
   {
     if( m_roster.find( jid ) == m_roster.end() )
       m_roster[jid] = new RosterItem( jid, name );
 
     m_roster[jid]->setSubscription( sub, ask );
     m_roster[jid]->setGroups( groups );
+    m_roster[jid]->setCaps( caps );
     m_roster[jid]->setSynchronized();
   }
 
