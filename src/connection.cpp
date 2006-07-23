@@ -378,43 +378,43 @@ namespace gloox
 #elif defined( USE_WINTLS )
   bool Connection::tlsHandshake()
   {
-      if( m_wintls.handshake( m_socket, m_server.c_str ()) == true )
-      {
-        m_wintls.GetCertInfo( &m_certInfo );
+    if( m_wintls.handshake( m_socket, m_server.c_str ()) == true )
+    {
+      m_wintls.GetCertInfo( &m_certInfo );
 
-        if( _strcmpi( m_certInfo.server.c_str(), m_server.c_str() ) )
-          m_certInfo.status |= CertWrongPeer;
+      if( _strcmpi( m_certInfo.server.c_str(), m_server.c_str() ) )
+        m_certInfo.status |= CertWrongPeer;
 
-        m_secure = true;
-        return true;
-      }
-      return false;
+      m_secure = true;
+      return true;
+    }
+    return false;
   }
 
   inline bool Connection::tls_send(const void *data, size_t len)
   {
-      return m_wintls.send( data, len );
+    return m_wintls.send( data, len );
   }
 
   inline int Connection::tls_recv(void *data, size_t len)
   {
-      int ret = m_wintls.recv( data, len );
-      if( ret == SOCKET_ERROR )
-      {
-        disconnect( ConnIoError );
-      }
-      return ret;
+    int ret = m_wintls.recv( data, len );
+    if( ret == SOCKET_ERROR )
+    {
+      disconnect( ConnIoError );
+    }
+    return ret;
   }
 
   inline bool Connection::tls_dataAvailable()
   {
-      return m_wintls.dataAvailable();
+    return m_wintls.dataAvailable();
   }
 
   inline void Connection::tls_cleanup()
   {
-      m_wintls.bye( SCHANNEL_SHUTDOWN );
-      m_wintls.cleanup();
+    m_wintls.bye( SCHANNEL_SHUTDOWN );
+    m_wintls.cleanup();
   }
 #endif
 
