@@ -48,6 +48,7 @@ namespace gloox
    * @brief This class holds a number of static functions used for DNS related stuff.
    *
    * You should not need to use these functions directly.
+   *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
    */
@@ -79,7 +80,7 @@ namespace gloox
        * records where found.
        */
       static HostMap resolve( const std::string& service, const std::string& proto,
-                                const std::string& domain );
+                              const std::string& domain );
 
       /**
        * This is a convenience funtion which uses @ref resolve() to resolve SRV records
@@ -107,7 +108,7 @@ namespace gloox
        * @param logInstance A LogSink to use for logging.
        * @return A file descriptor for the established connection.
        */
-      static int connect( const std::string& domain, int port, const LogSink& logInstance );
+      static int connect( const std::string& domain, unsigend short port, const LogSink& logInstance );
 
     private:
       static HostMap defaultHostMap( const std::string& service, const std::string& proto,

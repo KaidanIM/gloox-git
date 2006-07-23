@@ -60,7 +60,7 @@
 namespace gloox
 {
 
-#if defined( WIN32 )
+#ifdef WIN32
   int DNS::connect( const std::string& domain, const LogSink& logInstance )
   {
     DNS_RECORD *pRecords;
@@ -222,7 +222,7 @@ namespace gloox
     HostMap::const_iterator it = hosts.begin();
     for( ; it != hosts.end(); ++it )
     {
-      int port;
+      unsigned short port;
       if( (*it).second == 0 )
         port = XMPP_PORT;
       else
@@ -259,7 +259,7 @@ namespace gloox
   }
 #endif
 
-  int DNS::connect( const std::string& domain, int port, const LogSink& logInstance )
+  int DNS::connect( const std::string& domain, unsigned short port, const LogSink& logInstance )
   {
 #ifdef WIN32
     WSADATA wsaData;
