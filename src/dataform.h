@@ -68,6 +68,11 @@ namespace gloox
       DataForm( Tag *tag );
 
       /**
+       * Constructs an empty DataForm.
+       */
+      DataForm();
+
+      /**
        * Virtual destructor.
        */
       virtual ~DataForm();
@@ -106,6 +111,14 @@ namespace gloox
        * platform.
        */
       void setInstructions( const StringList& instructions ) { m_instructions = instructions; };
+
+      /**
+       * Parses the given Tag and creates an appropriate DataForm representation.
+       * @param tag The Tag to parse.
+       * @return @b True on success, @b false otherwise.
+       * @since 0.9
+       */
+      bool parse( Tag *tag );
 
     private:
       StringList m_instructions;

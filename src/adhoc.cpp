@@ -12,6 +12,8 @@
 
 
 #include "adhoc.h"
+#include "adhochandler.h"
+#include "adhoccommandprovider.h"
 #include "disco.h"
 #include "discohandler.h"
 #include "client.h"
@@ -87,6 +89,9 @@ namespace gloox
 
   bool Adhoc::handleIq( Stanza *stanza )
   {
+    if( stanza->subtype() != StanzaIqSet )
+      return false;
+
     if( stanza->hasChild( "command" ) )
     {
       Tag *c = stanza->findChild( "command" );
@@ -98,11 +103,77 @@ namespace gloox
         return true;
       }
     }
+
     return false;
   }
 
-  bool Adhoc::handleIqID( Stanza * /*stanza*/, int /*context*/ )
+  bool Adhoc::handleIqID( Stanza * stanza, int context )
   {
+    if( context != ExecuteAdhocCommand || stanza->subtype() != StanzaIqResult )
+      return false;
+
+    AdhocTrackMap::iterator it = m_adhocTrackMap.begin();
+    for( ; it != m_adhocTrackMap.end(); ++it )
+    {
+      if( (*it).second.context == context && (*it).second.remote == stanza->from() )
+      {
+        Tag *c = stanza->findChild( "command", "xmlns", XMLNS_ADHOC_COMMANDS );
+        if( c )
+        {
+          const std::string command = c->findAttribute( "node" );
+          const std::string id = c->findAttribute( "sessionid" );
+          Tag *a = c->findChild( "actions" );
+          int actions = ActionCancel;
+          Adhoc::AdhocExecuteActions def = ActionCancel;
+          if( a )
+          {
+            if( a->hasChild( "prev" ) )
+              actions |= ActionPrevious;
+            if( a->hasChild( "next" ) )
+              actions |= ActionNext;
+            if( a->hasChild( "complete" ) )
+              actions |= ActionComplete;
+            const std::string d = a->findAttribute( "execute" );
+            if( d == "next" )
+              def = ActionNext;
+            else if( d == "prev" )
+              def = ActionPrevious;
+            else if( d == "complete" )
+              def = ActionComplete;
+          }
+          Tag *n = c->findChild( "note" );
+          std::string note;
+          AdhocNoteType type = AdhocNoteInfo;
+          if( n )
+          {
+            note = n->cdata();
+            if( n->hasAttribute( "type", "warn" ) )
+              type = AdhocNoteWarn;
+            else if( n->hasAttribute( "type", "error" ) )
+              type = AdhocNoteError;
+          }
+          const std::string s = c->findAttribute( "status" );
+          AdhocCommandStatus status = AdhocCommandStatusUnknown;
+          if( s == "executing" )
+            status = AdhocCommandExecuting;
+          else if( s == "completed" )
+            status = AdhocCommandCompleted;
+          else if( s == "canceled" )
+            status = AdhocCommandCanceled;
+          DataForm form;
+          Tag *x = c->findChild( "x", "xmlns", XMLNS_X_DATA );
+          if( x )
+            form.parse( x );
+
+          (*it).second.ah->handleExecutionResult( stanza->from(), command, status, id, form,
+                                                  actions, def, note, type );
+        }
+
+        m_adhocTrackMap.erase( it );
+        return true;
+      }
+    }
+
     return false;
   }
 
@@ -112,6 +183,118 @@ namespace gloox
     m_disco->registerNodeHandler( this, command );
     m_adhocCommandProviders[command] = acp;
     m_items[command] = name;
+  }
+
+  void Adhoc::handleDiscoInfoResult( Stanza *stanza, int context )
+  {
+    if( context != CheckAdhocSupport )
+      return;
+
+    AdhocTrackMap::iterator it = m_adhocTrackMap.begin();
+    for( ; it != m_adhocTrackMap.end(); ++it )
+    {
+      if( (*it).second.context == context && (*it).second.remote == stanza->from() )
+      {
+        Tag *q = stanza->findChild( "query", "xmlns", XMLNS_DISCO_INFO );
+        if( q && q->hasChild( "feature", "var", XMLNS_ADHOC_COMMANDS ) )
+          (*it).second.ah->handleCheckSupport( (*it).second.remote, true );
+        else if( q )
+          (*it).second.ah->handleCheckSupport( (*it).second.remote, false );
+
+        m_adhocTrackMap.erase( it );
+        break;
+      }
+    }
+  }
+
+  void Adhoc::handleDiscoItemsResult( Stanza *stanza, int context )
+  {
+    if( context != FetchAdhocCommands )
+      return;
+
+    AdhocTrackMap::iterator it = m_adhocTrackMap.begin();
+    for( ; it != m_adhocTrackMap.end(); ++it )
+    {
+      if( (*it).second.context == context && (*it).second.remote == stanza->from() )
+      {
+        Tag *q = stanza->findChild( "query", "xmlns", XMLNS_DISCO_ITEMS );
+        if( q )
+        {
+          StringMap commands;
+          const Tag::TagList &l = q->children();
+          Tag::TagList::const_iterator itt = l.begin();
+          for( ; itt != l.end(); ++itt )
+          {
+            const std::string name = (*itt)->findAttribute( "name" );
+            const std::string node = (*itt)->findAttribute( "node" );
+            if( (*itt)->name() == "item" && !name.empty() && !node.empty() )
+            {
+              commands[node] = name;
+            }
+          }
+          (*it).second.ah->handleGetCommands( (*it).second.remote, commands );
+        }
+
+        m_adhocTrackMap.erase( it );
+        break;
+      }
+    }
+  }
+
+  void Adhoc::handleDiscoError( Stanza *stanza, int context )
+  {
+#warning TODO: handle disco errors!!!
+  }
+
+  void Adhoc::checkSupport( const JID& remote, AdhocHandler *ah )
+  {
+    if( remote.empty() || !ah )
+      return;
+
+    TrackStruct track;
+    track.remote = remote;
+    track.context = CheckAdhocSupport;
+    track.ah = ah;
+    m_adhocTrackMap[m_parent->getID()] = track;
+    m_disco->getDiscoInfo( remote, "", this, CheckAdhocSupport );
+  }
+
+  void Adhoc::getCommands( const JID& remote, AdhocHandler *ah )
+  {
+    if( remote.empty() || !ah )
+      return;
+
+    TrackStruct track;
+    track.remote = remote;
+    track.context = FetchAdhocCommands;
+    track.ah = ah;
+    m_adhocTrackMap[m_parent->getID()] = track;
+    m_disco->getDiscoItems( remote, XMLNS_ADHOC_COMMANDS, this, FetchAdhocCommands );
+  }
+
+  void Adhoc::execute( const JID& remote, const std::string& command, AdhocHandler *ah )
+  {
+    if( remote.empty() || command.empty() || !ah )
+      return;
+
+    const std::string id = m_parent->getID();
+    Tag *iq = new Tag( "iq" );
+    iq->addAttribute( "type", "set" );
+    iq->addAttribute( "to", remote.full() );
+    iq->addAttribute( "id", id );
+    Tag *c = new Tag( iq, "command" );
+    c->addAttribute( "xmlns", XMLNS_ADHOC_COMMANDS );
+    c->addAttribute( "node", command );
+    c->addAttribute( "action", "execute" );
+
+    TrackStruct track;
+    track.remote = remote;
+    track.context = ExecuteAdhocCommand;
+    track.ah = ah;
+    m_adhocTrackMap[id] = track;
+
+    m_parent->trackID( this, id, ExecuteAdhocCommand );
+    m_parent->send( iq );
   }
 
 }

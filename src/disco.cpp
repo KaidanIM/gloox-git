@@ -224,13 +224,13 @@ namespace gloox
     m_features.push_back( feature );
   }
 
-  void Disco::getDiscoInfo( const std::string& to, const std::string& node, DiscoHandler *dh, int context )
+  void Disco::getDiscoInfo( const JID& to, const std::string& node, DiscoHandler *dh, int context )
   {
     std::string id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
     iq->addAttribute( "id", id );
-    iq->addAttribute( "to", to );
+    iq->addAttribute( "to", to.full() );
     iq->addAttribute( "from", m_parent->jid().full() );
     iq->addAttribute( "type", "get" );
     Tag *q = new Tag( iq, "query" );
@@ -246,13 +246,13 @@ namespace gloox
     m_parent->send( iq );
   }
 
-  void Disco::getDiscoItems( const std::string& to, const std::string& node, DiscoHandler *dh, int context )
+  void Disco::getDiscoItems( const JID& to, const std::string& node, DiscoHandler *dh, int context )
   {
     std::string id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
     iq->addAttribute( "id", id );
-    iq->addAttribute( "to", to );
+    iq->addAttribute( "to", to.full() );
     iq->addAttribute( "from", m_parent->jid().full() );
     iq->addAttribute( "type", "get" );
     Tag *q = new Tag( iq, "query" );
