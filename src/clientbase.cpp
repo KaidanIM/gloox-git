@@ -72,12 +72,12 @@ namespace gloox
     delete m_parser;
   }
 
-  ConnectionError ClientBase::recv( int sec, unsigned int usec )
+  ConnectionError ClientBase::recv( int timeout )
   {
     if( !m_connection || m_connection->state() == StateDisconnected )
       return ConnNotConnected;
 
-    ConnectionError e = m_connection->recv( sec, usec );
+    ConnectionError e = m_connection->recv( timeout );
     if( e != ConnNoError )
       notifyOnDisconnect( e );
 
@@ -380,11 +380,17 @@ namespace gloox
   {
     logInstance().log( LogLevelDebug, LogAreaXmlOutgoing, xml );
 
-    if( m_connection )
-      m_connection->send( xml );
+     if( m_connection && m_connection->state() != StateDisconnected )
+     {
+       if( m_connection->send( xml ) == false )
+       {
+         disconnect( ConnStreamError );
+       }
+     }
   }
 
-  ConnectionState ClientBase::state() const{
+  ConnectionState ClientBase::state() const
+  {
     if( m_connection )
       return m_connection->state();
     else
