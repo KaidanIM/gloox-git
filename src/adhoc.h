@@ -26,6 +26,7 @@
 namespace gloox
 {
 
+  class DataForm;
   class ClientBase;
   class Disco;
   class Stanza;
@@ -93,6 +94,7 @@ namespace gloox
        */
       enum AdhocExecuteActions
       {
+        ActionDefault    =  0,      /**< The default action is being executed. */
         ActionPrevious   =  1,      /**< Request previous page. */
         ActionNext       =  2,      /**< Request next page. */
         ActionComplete   =  4,      /**< Complete or finish the execution. */
@@ -176,11 +178,21 @@ namespace gloox
 
       /**
        * Executes the given command on the given remote entity.
+       * For initial execution requests, only the first three parameters are required. For
+       * subsequent requests (of a multiple stages request) at least @b sessionid and
+       * @b form should be provided (depending on the command being executed, of course).
        * @param remote The remote entity's JID.
        * @param command The command to execute.
        * @param ah The object handling the result of this request.
+       * @param sessionid The sessionid identifying the command currenly being executed. Must be
+       * empty on first request.
+       * @param form A DataForm containing the result of a previous response. Must be left empty
+       * on first request.
+       * @param action The action to take, e.g. navigatte o the previous 'screen'.
        */
-      void execute( const JID& remote, const std::string& command, AdhocHandler *ah );
+      void execute( const JID& remote, const std::string& command, AdhocHandler *ah,
+                    const std::string& sessionid = "", DataForm *form = 0,
+                    AdhocExecuteActions action = ActionDefault );
 
     private:
       typedef std::map<const std::string, AdhocCommandProvider*> AdhocCommandProviderMap;

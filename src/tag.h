@@ -86,10 +86,17 @@ namespace gloox
       virtual void addAttribute( const std::string& name, int value );
 
       /**
-       * Use this function to add a child node to the tag.
+       * Use this function to add a child node to the tag. The Tag will be owned by Tag.
        * @param child The node to be inserted.
        */
       virtual void addChild( Tag *child );
+
+      /**
+       * Use this function to add a child node to the tag. The Tag will be copied.
+       * @param child The node to be inserted.
+       * @since 0.9
+       */
+      virtual void addChild( const Tag *child );
 
       /**
        * Sets the XML character data for this Tag.

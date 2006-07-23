@@ -110,6 +110,16 @@ namespace gloox
     }
   }
 
+  void Tag::addChild( const Tag *child )
+  {
+    if( child )
+    {
+      Tag *t = child->clone();
+      m_children.push_back( t );
+      t->m_parent = this;
+    }
+  }
+
   const std::string Tag::cdata() const
   {
     return relax( m_cdata );
