@@ -275,7 +275,6 @@ namespace gloox
       unsigned char a1_h[16];
       char a1[33], a2[33], response_value[33];
       iksmd5 *md5;
-      int i;
 
       size_t r_pos = decoded.find( "realm=" );
       if( r_pos != std::string::npos )
@@ -299,8 +298,8 @@ namespace gloox
         return;
       }
 
-      for( i=0; i<CNONCE_LEN; ++i )
-        sprintf( cnonce + i*8, "%08x", rand() );
+      for( int i = 0; i < CNONCE_LEN; ++i )
+        sprintf( cnonce + i * 8, "%08x", rand() );
 
       md5 = iks_md5_new();
       iks_md5_hash( md5, (const unsigned char*)m_jid.username().c_str(), m_jid.username().length(), 0 );
@@ -330,10 +329,6 @@ namespace gloox
       iks_md5_hash( md5, (const unsigned char*)a2, 32, 1 );
       iks_md5_print( md5, response_value );
       iks_md5_delete( md5 );
-
-      i = m_jid.username().length() + realm.length() +
-          nonce.length() + m_jid.server().length() +
-          CNONCE_LEN*8 + 136;
 
       std::string response = "username=\"" + m_jid.username() + "\",realm=\"" + realm;
       response += "\",nonce=\""+ nonce + "\",cnonce=\"";
