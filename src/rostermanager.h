@@ -169,7 +169,7 @@ namespace gloox
 
     private:
       void add( const std::string& jid, const std::string& name,
-                StringList& groups, const std::string& sub, bool ask );
+                StringList& groups, StringList& groups, const std::string& sub, bool ask );
       void extractItems( Tag *tag, bool isPush );
 
       RosterListener *m_rosterListener;

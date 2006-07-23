@@ -174,7 +174,7 @@ namespace gloox
        * Returns the groups this RosterItem belongs to.
        * @return The groups this item belongs to.
        */
-      virtual const StringList& groups() { return m_groups; };
+      virtual const StringList& groups() const { return m_groups; };
 
       /**
        * Whether the item has unsynchronized changes.
@@ -193,6 +193,16 @@ namespace gloox
        * @return The contact's resources.
        */
       virtual const ResourceMap& resources() const { return m_resources; };
+
+      /**
+       *
+       */
+      virtual void setCaps( const StringList& caps ) { m_caps = caps; };
+
+      /**
+       *
+       */
+      virtual const StringList& caps() const { return m_caps; };
 
     protected:
       /**
@@ -240,6 +250,7 @@ namespace gloox
       SubscriptionEnum m_subscription;
       std::string m_name;
       std::string m_jid;
+      StringList m_caps;
       bool m_changed;
   };
 
