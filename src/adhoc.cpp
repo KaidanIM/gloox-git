@@ -17,6 +17,7 @@
 #include "disco.h"
 #include "discohandler.h"
 #include "client.h"
+#include "dataform.h"
 
 
 namespace gloox
@@ -272,7 +273,9 @@ namespace gloox
     m_disco->getDiscoItems( remote, XMLNS_ADHOC_COMMANDS, this, FetchAdhocCommands );
   }
 
-  void Adhoc::execute( const JID& remote, const std::string& command, AdhocHandler *ah )
+  void Adhoc::execute( const JID& remote, const std::string& command, AdhocHandler *ah,
+                       const std::string& sessionid, DataForm *form,
+                       AdhocExecuteActions action )
   {
     if( remote.empty() || command.empty() || !ah )
       return;
@@ -286,6 +289,30 @@ namespace gloox
     c->addAttribute( "xmlns", XMLNS_ADHOC_COMMANDS );
     c->addAttribute( "node", command );
     c->addAttribute( "action", "execute" );
+    if( !sessionid.empty() )
+      c->addAttribute( "sessionid", sessionid );
+    if( action != ActionDefault )
+    {
+      switch( action )
+      {
+        case ActionPrevious:
+          c->addAttribute( "action", "prev" );
+          break;
+        case ActionNext:
+          c->addAttribute( "action", "next" );
+          break;
+        case ActionCancel:
+          c->addAttribute( "action", "cancel" );
+          break;
+        case ActionComplete:
+          c->addAttribute( "action", "complete" );
+          break;
+        default:
+          break;
+      }
+    }
+    if( form )
+      c->addChild( form->tag() );
 
     TrackStruct track;
     track.remote = remote;
