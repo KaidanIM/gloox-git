@@ -105,7 +105,7 @@ namespace gloox
        * This function is called additionally to @ref handleRegistrationFields() if the server
        * supplied a data form together with legacy registration fields.
        * @param from The server or service the data form came from.
-       * @param form The DataForm conataining registration information.
+       * @param form The DataForm containing registration information.
        */
       virtual void handleDataForm( const JID& from, const DataForm &form ) = 0;
 
@@ -115,7 +115,7 @@ namespace gloox
        * @param from The server or service the referal came from.
        * @param url The external URL where registration is possible (or where more information
        * can be found).
-       * @param desc Some descriptive text.
+       * @param desc Some descriptive text, if supplied.
        */
       virtual void handleOOB( const JID& from, const std::string& url,
                               const std::string& desc ) = 0;
