@@ -26,7 +26,7 @@ namespace gloox
   DataForm::DataForm( Tag *tag )
     : m_type( FORM_TYPE_INVALID )
   {
-    if( !tag->hasAttribute( "xmlns", XMLNS_X_DATA ) || tag->name() != "x" )
+    if( !tag || !tag->hasAttribute( "xmlns", XMLNS_X_DATA ) || tag->name() != "x" )
       return;
 
     if( tag->hasAttribute( "type", "form" ) )
