@@ -308,6 +308,7 @@ namespace gloox
   const std::string XMLNS_CHAT_STATES       = "http://jabber.org/protocol/chatstates";
   const std::string XMLNS_AMP               = "http://jabber.org/protocol/amp";
   const std::string XMLNS_IBB               = "http://jabber.org/protocol/ibb";
+  const std::string XMLNS_FEATURE_NEG       = "http://jabber.org/protocol/feature-neg";
   const std::string XMLNS_CHATNEG           = "http://jabber.org/protocol/chatneg";
   const std::string XMLNS_XHTML_IM          = "http://jabber.org/protocol/xhtml-im";
   const std::string XMLNS_ROSTER            = "jabber:iq:roster";
