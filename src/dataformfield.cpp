@@ -22,28 +22,28 @@ namespace gloox
   }
 
   DataFormField::DataFormField( Tag *tag )
-    : m_type( FIELD_TYPE_INVALID ), m_required( false )
+    : m_type( FieldTypeInvalid ), m_required( false )
   {
     if( tag->hasAttribute( "type", "boolean" ) )
-      m_type = FIELD_TYPE_BOOLEAN;
+      m_type = FieldTypeBoolean;
     else if( tag->hasAttribute( "type", "fixed" ) )
-      m_type = FIELD_TYPE_FIXED;
+      m_type = FieldTypeFixed;
     else if( tag->hasAttribute( "type", "hidden" ) )
-      m_type = FIELD_TYPE_HIDDEN;
+      m_type = FieldTypeHidden;
     else if( tag->hasAttribute( "type", "jid-multi" ) )
-      m_type = FIELD_TYPE_JID_MULTI;
+      m_type = FieldTypeJidMulti;
     else if( tag->hasAttribute( "type", "jid-single" ) )
-      m_type = FIELD_TYPE_JID_SINGLE;
+      m_type = FieldTypeJidSingle;
     else if( tag->hasAttribute( "type", "list-multi" ) )
-      m_type = FIELD_TYPE_LIST_MULTI;
+      m_type = FieldTypeListMulti;
     else if( tag->hasAttribute( "type", "list-single" ) )
-      m_type = FIELD_TYPE_LIST_SINGLE;
+      m_type = FieldTypeListSingle;
     else if( tag->hasAttribute( "type", "text-multi" ) )
-      m_type = FIELD_TYPE_TEXT_MULTI;
+      m_type = FieldTypeTextMulti;
     else if( tag->hasAttribute( "type", "text-private" ) )
-      m_type = FIELD_TYPE_TEXT_PRIVATE;
+      m_type = FieldTypeTextPrivate;
     else if( tag->hasAttribute( "type", "text-single" ) )
-      m_type = FIELD_TYPE_TEXT_SINGLE;
+      m_type = FieldTypeTextSingle;
 
     Tag::TagList l = tag->children();
     Tag::TagList::const_iterator it = l.begin();
@@ -55,7 +55,7 @@ namespace gloox
         m_required = true;
       else if( (*it)->name() == "value" )
       {
-        if( m_type == FIELD_TYPE_TEXT_MULTI )
+        if( m_type == FieldTypeTextMulti )
           m_values.push_back( (*it)->cdata() );
         else
           m_value = (*it)->cdata();
@@ -77,7 +77,7 @@ namespace gloox
 
   Tag* DataFormField::tag() const
   {
-    if( m_type == FIELD_TYPE_INVALID )
+    if( m_type == FieldTypeInvalid )
       return 0;
 
     Tag *field = new Tag( "field" );
@@ -91,41 +91,41 @@ namespace gloox
 
     switch( m_type )
     {
-      case FIELD_TYPE_BOOLEAN:
+      case FieldTypeBoolean:
         field->addAttribute( "type", "boolean" );
         break;
-      case FIELD_TYPE_FIXED:
+      case FieldTypeFixed:
         field->addAttribute( "type", "fixed" );
         break;
-      case FIELD_TYPE_HIDDEN:
+      case FieldTypeHidden:
         field->addAttribute( "type", "hidden" );
         break;
-      case FIELD_TYPE_JID_MULTI:
+      case FieldTypeJidMulti:
         field->addAttribute( "type", "jid-multi" );
         break;
-      case FIELD_TYPE_JID_SINGLE:
+      case FieldTypeJidSingle:
         field->addAttribute( "type", "jid-single" );
         break;
-      case FIELD_TYPE_LIST_MULTI:
+      case FieldTypeListMulti:
         field->addAttribute( "type", "list-multi" );
         break;
-      case FIELD_TYPE_LIST_SINGLE:
+      case FieldTypeListSingle:
         field->addAttribute( "type", "list-single" );
         break;
-      case FIELD_TYPE_TEXT_MULTI:
+      case FieldTypeTextMulti:
         field->addAttribute( "type", "text-multi" );
         break;
-      case FIELD_TYPE_TEXT_PRIVATE:
+      case FieldTypeTextPrivate:
         field->addAttribute( "type", "text-private" );
         break;
-      case FIELD_TYPE_TEXT_SINGLE:
+      case FieldTypeTextSingle:
         field->addAttribute( "type", "text-single" );
         break;
       default:
         break;
     }
 
-    if( ( m_type == FIELD_TYPE_LIST_SINGLE ) || ( m_type == FIELD_TYPE_LIST_MULTI ) )
+    if( ( m_type == FieldTypeListSingle ) || ( m_type == FieldTypeListMulti ) )
     {
       StringMap::const_iterator it = m_options.begin();
       for( ; it != m_options.end(); ++it )
@@ -135,14 +135,14 @@ namespace gloox
         new Tag( option, "value", (*it).second );
       }
     }
-    else if( m_type == FIELD_TYPE_BOOLEAN )
+    else if( m_type == FieldTypeBoolean )
     {
       if( m_value.empty() || m_value == "false" || m_value == "0" )
         new Tag( field, "value", "0" );
       else
         new Tag( field, "value", "1" );
     }
-    else if( m_type == FIELD_TYPE_TEXT_MULTI )
+    else if( m_type == FieldTypeTextMulti )
     {
       StringList::const_iterator it = m_values.begin();
       for( ; it != m_values.end() ; ++it )

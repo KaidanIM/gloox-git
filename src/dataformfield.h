@@ -37,38 +37,38 @@ namespace gloox
        */
       enum DataFormFieldType
       {
-        FIELD_TYPE_BOOLEAN,         /**< The field enables an entity to gather or provide an either-or choice
+        FieldTypeBoolean,           /**< The field enables an entity to gather or provide an either-or choice
                                      * between two options. The default value is "false". */
-        FIELD_TYPE_FIXED,           /**< The field is intended for data description (e.g., human-readable text
+        FieldTypeFixed,             /**< The field is intended for data description (e.g., human-readable text
                                      * such as "section" headers) rather than data gathering or provision. The
                                      * &lt;value/&gt; child SHOULD NOT contain newlines (the \\n and \\r
                                      * characters); instead an application SHOULD generate multiple fixed
                                      * fields, each with one &lt;value/&gt; child. */
-        FIELD_TYPE_HIDDEN,          /**< The field is not shown to the entity providing information, but
+        FieldTypeHidden,            /**< The field is not shown to the entity providing information, but
                                      * instead is returned with the form. */
-        FIELD_TYPE_JID_MULTI,       /**< The field enables an entity to gather or provide multiple Jabber
+        FieldTypeJidMulti,          /**< The field enables an entity to gather or provide multiple Jabber
                                      * IDs.*/
-        FIELD_TYPE_JID_SINGLE,      /**< The field enables an entity to gather or provide a single Jabber
+        FieldTypeJidSingle,         /**< The field enables an entity to gather or provide a single Jabber
                                      * ID.*/
-        FIELD_TYPE_LIST_MULTI,      /**< The field enables an entity to gather or provide one or more options
+        FieldTypeListMulti,         /**< The field enables an entity to gather or provide one or more options
                                      * from among many. */
-        FIELD_TYPE_LIST_SINGLE,     /**< The field enables an entity to gather or provide one option from
+        FieldTypeListSingle,        /**< The field enables an entity to gather or provide one option from
                                      * among many. */
-        FIELD_TYPE_TEXT_MULTI,      /**< The field enables an entity to gather or provide multiple lines of
+        FieldTypeTextMulti,         /**< The field enables an entity to gather or provide multiple lines of
                                      * text. */
-        FIELD_TYPE_TEXT_PRIVATE,    /**< The field enables an entity to gather or provide a single line or
+        FieldTypeTextPrivate,       /**< The field enables an entity to gather or provide a single line or
                                      * word of text, which shall be obscured in an interface (e.g., *****). */
-        FIELD_TYPE_TEXT_SINGLE,     /**< The field enables an entity to gather or provide a single line or
+        FieldTypeTextSingle,        /**< The field enables an entity to gather or provide a single line or
                                      * word of text, which may be shown in an interface. This field type is
                                      * the default and MUST be assumed if an entity receives a field type it
                                      * does not understand.*/
-        FIELD_TYPE_ITEM,            /**< The field really is an element of type 'item' which allows for
+        FieldTypeItem,              /**< The field really is an element of type 'item' which allows for
                                      * addition of sub-fields. See the explanantion in JEP-0004 (Data Forms)
                                      * Section 3.4 for more information */
-        FIELD_TYPE_REPORTED,        /**< The field really is an element of type 'reported' which allows for
+        FieldTypeReported,          /**< The field really is an element of type 'reported' which allows for
                                      * addition of sub-fields. See the explanantion in JEP-0004 (Data Forms)
                                      * Section 3.4 for more information */
-        FIELD_TYPE_INVALID          /**< The field is invalid. Only possible if the field was created from
+        FieldTypeInvalid            /**< The field is invalid. Only possible if the field was created from
                                      * a Tag not correctly describing a Data Form Field. */
       };
 
@@ -76,7 +76,7 @@ namespace gloox
        * Constructs a new Data Form Field.
        * @param type The type of the field. Default: text-single.
        */
-      DataFormField( DataFormFieldType type = FIELD_TYPE_TEXT_SINGLE );
+      DataFormField( DataFormFieldType type = FieldTypeTextSingle );
 
       /**
        * Constructs a new Data Form Field from an existing tag that describes a field.

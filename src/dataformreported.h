@@ -35,7 +35,7 @@ namespace gloox
       /**
        * Creates an empty 'reported' element you can add fields to.
        */
-      DataFormReported() : DataFormField( FIELD_TYPE_REPORTED ) {};
+      DataFormReported() : DataFormField( FieldTypeReported ) {};
 
       /**
        * Virtual destructor.
