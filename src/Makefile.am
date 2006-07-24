@@ -2,7 +2,7 @@
 ## Process this file with automake to produce Makefile.in
 ##
 
-SUBDIRS = . tests
+SUBDIRS = . tests examples
 
 AM_CPPFLAGS = -Wall -pedantic -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare -Wpointer-arith \
                 -Wswitch -Wunknown-pragmas -Wconversion -Wundef -Wcast-qual -ansi
