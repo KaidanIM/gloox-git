@@ -22,7 +22,6 @@ class RegTest : public RegistrationHandler, ConnectionListener, LogHandler
       JID jid( "hurkhurk@example.org/gloox" );
       j = new Client( jid, "hurkhurks" );
       j->disableRoster();
-      j->disableDisco();
       j->registerConnectionListener( this );
 
       m_reg = new Registration( j, j->server() );
