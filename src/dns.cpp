@@ -47,6 +47,11 @@
 #define T_SRV 33
 #endif
 
+// mingw
+#ifndef DNS_TYPE_SRV
+# define DNS_TYPE_SRV 33
+#endif
+
 #ifndef C_IN
 #define C_IN 1
 #endif
