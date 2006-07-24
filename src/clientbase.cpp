@@ -20,6 +20,7 @@
 
 #include "clientbase.h"
 #include "connection.h"
+#include "disco.h"
 #include "messagesessionhandler.h"
 #include "parser.h"
 #include "tag.h"
@@ -46,30 +47,41 @@ namespace gloox
 {
 
   ClientBase::ClientBase( const std::string& ns, const std::string& server, int port )
-    : m_connection( 0 ), m_namespace( ns ), m_xmllang( "en" ), m_server( server ),
+    : m_connection( 0 ), m_disco( 0 ), m_namespace( ns ),
+      m_xmllang( "en" ), m_server( server ),
       m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ),
       m_messageSessionHandler( 0 ), m_parser( 0 ),
       m_authError( AuthErrorUndefined ), m_streamError( StreamErrorUndefined ),
       m_streamErrorAppCondition( 0 ), m_idCount( 0 ), m_autoMessageSession( false ),
       m_fdRequested( false )
   {
+    init();
   }
 
   ClientBase::ClientBase( const std::string& ns, const std::string& password,
                           const std::string& server, int port )
-    : m_connection( 0 ), m_namespace( ns ), m_password( password ), m_xmllang( "en" ), m_server( server ),
+    : m_connection( 0 ), m_disco( 0 ), m_namespace( ns ), m_password( password ),
+      m_xmllang( "en" ), m_server( server ),
       m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ),
       m_messageSessionHandler( 0 ), m_parser( 0 ),
       m_authError( AuthErrorUndefined ), m_streamError( StreamErrorUndefined ),
       m_streamErrorAppCondition( 0 ), m_idCount( 0 ), m_autoMessageSession( false ),
       m_fdRequested( false )
   {
+    init();
+  }
+
+  void ClientBase::init()
+  {
+    m_disco = new Disco( this );
+    m_disco->setVersion( "based on gloox", GLOOX_VERSION );
   }
 
   ClientBase::~ClientBase()
   {
     delete m_connection;
     delete m_parser;
+    delete m_disco;
   }
 
   ConnectionError ClientBase::recv( int timeout )

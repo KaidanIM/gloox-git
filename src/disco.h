@@ -42,8 +42,7 @@ namespace gloox
    */
   class GLOOX_API Disco : public IqHandler
   {
-    friend class Client;
-    friend class Component;
+    friend class ClientBase;
 
     public:
       /**

@@ -23,7 +23,6 @@ namespace gloox
 {
 
   class RosterManager;
-  class Disco;
   class NonSaslAuth;
   class Stanza;
 
@@ -204,14 +203,6 @@ namespace gloox
       GLOOX_DEPRECATED void setForceNonSasl( bool force = true ) { m_forceNonSasl = force; };
 
       /**
-       * Disables automatic handling of disco queries.
-       * There is currently no way to re-enable disco query-handling.
-       * @note This disables the browsing capabilities because
-       * both use the same @c Disco object.
-       */
-      void disableDisco();
-
-      /**
        * Disables the automatic roster management.
        * You have to keep track of incoming presence yourself if
        * you want to have a roster.
@@ -223,12 +214,6 @@ namespace gloox
        * @return A pointer to the RosterManager.
        */
       RosterManager* rosterManager();
-
-      /**
-       * This function gives access to the @c Disco object.
-       * @return A pointer to the Disco object.
-       */
-      Disco* disco();
 
       /**
        * Disconnects from the server.
@@ -266,7 +251,6 @@ namespace gloox
       bool m_autoPresence;
       bool m_forceNonSasl;
       bool m_manageRoster;
-      bool m_handleDisco;
       bool m_doAuth;
 
       int m_streamFeatures;

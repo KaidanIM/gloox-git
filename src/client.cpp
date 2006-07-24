@@ -39,7 +39,7 @@ namespace gloox
     : ClientBase( XMLNS_CLIENT, server ),
       m_rosterManager( 0 ), m_auth( 0 ), m_disco( 0 ),
       m_resourceBound( false ), m_autoPresence( false ), m_forceNonSasl( false ),
-      m_manageRoster( true ), m_handleDisco( true ), m_doAuth( false ),
+      m_manageRoster( true ), m_doAuth( false ),
       m_streamFeatures( 0 ), m_priority( -1 )
   {
     m_jid.setServer( server );
@@ -48,9 +48,9 @@ namespace gloox
 
   Client::Client( const JID& jid, const std::string& password, int port )
     : ClientBase( XMLNS_CLIENT, password, "", port ),
-      m_rosterManager( 0 ), m_auth( 0 ), m_disco( 0 ),
+      m_rosterManager( 0 ), m_auth( 0 ),
       m_resourceBound( false ), m_autoPresence( false ), m_forceNonSasl( false ),
-      m_manageRoster( true ), m_handleDisco( true ), m_doAuth( true ),
+      m_manageRoster( true ), m_doAuth( true ),
       m_streamFeatures( 0 ), m_priority( -1 )
   {
     m_jid = jid;
@@ -61,9 +61,9 @@ namespace gloox
   Client::Client( const std::string& username, const std::string& password,
                   const std::string& server, const std::string& resource, int port )
     : ClientBase( XMLNS_CLIENT, password, server, port ),
-      m_rosterManager( 0 ), m_auth( 0 ), m_disco( 0 ),
+      m_rosterManager( 0 ), m_auth( 0 ),
       m_resourceBound( false ), m_autoPresence( false ), m_forceNonSasl( false ),
-      m_manageRoster( true ), m_handleDisco( true ), m_doAuth( true ),
+      m_manageRoster( true ), m_doAuth( true ),
       m_streamFeatures( 0 ), m_priority( -1 )
   {
     m_jid.setUsername( username );
@@ -75,16 +75,13 @@ namespace gloox
 
   Client::~Client()
   {
-    delete m_disco;
     delete m_rosterManager;
     delete m_auth;
   }
 
   void Client::init()
   {
-    m_disco = new Disco( this );
     m_rosterManager = new RosterManager( this, true );
-    m_disco->setVersion( "based on gloox", GLOOX_VERSION );
     m_disco->setIdentity( "client", "bot" );
   }
 
@@ -449,13 +446,6 @@ namespace gloox
     send( t );
   }
 
-  void Client::disableDisco()
-  {
-    m_handleDisco = false;
-    delete m_disco;
-    m_disco = 0;
-  }
-
   void Client::disableRoster()
   {
     m_manageRoster = false;
@@ -492,11 +482,6 @@ namespace gloox
   RosterManager* Client::rosterManager()
   {
     return m_rosterManager;
-  }
-
-  Disco* Client::disco()
-  {
-    return m_disco;
   }
 
   void Client::connected()

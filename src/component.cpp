@@ -25,18 +25,14 @@ namespace gloox
 
   Component::Component( const std::string& ns, const std::string& server,
                         const std::string& component, const std::string& password, int port )
-    : ClientBase( ns, password, server, port ),
-      m_disco( 0 )
+    : ClientBase( ns, password, server, port )
   {
     m_jid.setServer( component );
-    m_disco = new Disco( this );
-    m_disco->setVersion( "based on gloox", GLOOX_VERSION );
     m_disco->setIdentity( "component", "generic" );
   }
 
   Component::~Component()
   {
-    delete m_disco;
   }
 
   void Component::handleStartNode()

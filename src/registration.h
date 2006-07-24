@@ -38,7 +38,6 @@ namespace gloox
    * {
    *   m_client = new Client( "example.org" );
    *   m_client->disableRoster(); // a roster is not necessary for registration
-   *   m_client->disableDisco(); // the disco client is not necessary for registration
    *   m_client->registerConnectionListener( this );
    *
    *   m_reg = new Registration( c );
