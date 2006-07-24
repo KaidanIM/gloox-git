@@ -22,8 +22,6 @@
 namespace gloox
 {
 
-  class Disco;
-
   /**
    * @brief This is an implementation of a basic jabber Component.
    *
@@ -59,12 +57,6 @@ namespace gloox
       virtual const std::string password() const { return ""; };
 
       /**
-       * Gives access to the component's Disco object.
-       * @return A pointer to the Disco object.
-       */
-      Disco* disco() const { return m_disco; };
-
-      /**
        * Disconnects from the server.
        */
       void disconnect();
@@ -79,7 +71,6 @@ namespace gloox
       // reimplemented from ClientBase
       virtual void rosterFilled() {};
 
-      Disco *m_disco;
   };
 
 }

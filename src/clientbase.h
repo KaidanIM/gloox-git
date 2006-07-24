@@ -27,6 +27,7 @@ namespace gloox
   class map;
   class list;
   class Connection;
+  class Disco;
   class Packet;
   class Tag;
   class Stanza;
@@ -180,6 +181,12 @@ namespace gloox
        * @return The password used to connect.
        */
       virtual const std::string password() const { return m_password; };
+
+      /**
+       * This function gives access to the @c Disco object.
+       * @return A pointer to the Disco object.
+       */
+      virtual Disco* disco() const { return m_disco; };
 
       /**
        * Creates a string which is unique in the current instance and
@@ -441,6 +448,7 @@ namespace gloox
 
       JID m_jid;
       Connection *m_connection;
+      Disco *m_disco;
 
       std::string m_clientCerts;
       std::string m_clientKey;
@@ -467,6 +475,7 @@ namespace gloox
       virtual bool handleNormalNode( Stanza *stanza ) = 0;
       virtual void rosterFilled() = 0;
       virtual void cleanup();
+      void init();
       void handleStreamError( Stanza *stanza );
 
       void notifyIqHandlers( Stanza *stanza );
