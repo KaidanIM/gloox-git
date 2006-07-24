@@ -118,7 +118,9 @@ namespace gloox
       void setName( const std::string& name ) { m_name = name; };
 
       /**
-       * Use this function to set the optional values of the field.
+       * Use this function to set the optional values of the field. The key of the map
+       * will be used as the label of the option, while the value will be used as ... the
+       * value. ;)
        * @param options The optional values of a list* or *multi type of field.
        */
       void setOptions( const StringMap& options ) { m_options = options; };
