@@ -40,7 +40,7 @@ namespace gloox
 
   bool DataForm::parse( Tag *tag )
   {
-    if( !tag && !tag->hasAttribute( "xmlns", XMLNS_X_DATA ) || tag->name() != "x" )
+    if( !tag || !tag->hasAttribute( "xmlns", XMLNS_X_DATA ) || tag->name() != "x" )
       return false;
 
     if( tag->hasAttribute( "type", "form" ) )
