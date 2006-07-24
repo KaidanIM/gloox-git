@@ -364,7 +364,7 @@ namespace gloox
 
   inline bool Connection::tls_dataAvailable()
   {
-    return gnutls_record_check_pending( m_session );
+    return false; // gnutls_check_pending( m_session );
   }
 
   inline void Connection::tls_cleanup()
