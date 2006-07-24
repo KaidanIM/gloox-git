@@ -24,13 +24,13 @@ namespace gloox
   }
 
   DataForm::DataForm( Tag *tag )
-    : m_type( FORM_TYPE_INVALID )
+    : m_type( FormTypeInvalid )
   {
     parse( tag );
   }
 
   DataForm::DataForm()
-    : m_type( FORM_TYPE_INVALID )
+  : m_type( FormTypeInvalid )
   {
   }
 
@@ -44,13 +44,13 @@ namespace gloox
       return false;
 
     if( tag->hasAttribute( "type", "form" ) )
-      m_type = FORM_TYPE_FORM;
+      m_type = FormTypeForm;
     else if( tag->hasAttribute( "type", "submit" ) )
-      m_type = FORM_TYPE_SUBMIT;
+      m_type = FormTypeSubmit;
     else if( tag->hasAttribute( "type", "cancel" ) )
-      m_type = FORM_TYPE_CANCEL;
+      m_type = FormTypeCancel;
     else if( tag->hasAttribute( "type", "result" ) )
-      m_type = FORM_TYPE_RESULT;
+      m_type = FormTypeResult;
     else
       return false;
 
@@ -74,7 +74,7 @@ namespace gloox
 
   const Tag* DataForm::tag() const
   {
-    if( m_type == FORM_TYPE_INVALID )
+    if( m_type == FormTypeInvalid )
       return 0;
 
     Tag *x = new Tag( "x" );
@@ -94,16 +94,16 @@ namespace gloox
 
     switch( m_type )
     {
-      case FORM_TYPE_FORM:
+      case FormTypeForm:
         x->addAttribute( "type", "form" );
         break;
-      case FORM_TYPE_SUBMIT:
+      case FormTypeSubmit:
         x->addAttribute( "type", "submit" );
         break;
-      case FORM_TYPE_CANCEL:
+      case FormTypeCancel:
         x->addAttribute( "type", "cancel" );
         break;
-      case FORM_TYPE_RESULT:
+      case FormTypeResult:
         x->addAttribute( "type", "result" );
         break;
       default:

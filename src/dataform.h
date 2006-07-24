@@ -40,16 +40,16 @@ namespace gloox
        */
       enum DataFormType
       {
-        FORM_TYPE_FORM,        /**< The forms-processing entity is asking the forms-submitting entity to
-                                * complete a form. */
-        FORM_TYPE_SUBMIT,      /**< The forms-submitting entity is submitting data to the
-                                * forms-processing entity. */
-        FORM_TYPE_CANCEL,      /**< The forms-submitting entity has cancelled submission of data to the
-                                * forms-processing entity. */
-        FORM_TYPE_RESULT,      /**< The forms-processing entity is returning data (e.g., search results)
-                                * to the forms-submitting entity, or the data is a generic data set. */
-        FORM_TYPE_INVALID      /**< The form is invalid. Only possible if the form was created from an
-                                * Tag which doesn't correctly describe a Data Form. */
+        FormTypeForm,        /**< The forms-processing entity is asking the forms-submitting entity to
+                              * complete a form. */
+        FormTypeSubmit,      /**< The forms-submitting entity is submitting data to the
+                              * forms-processing entity. */
+        FormTypeCancel,      /**< The forms-submitting entity has cancelled submission of data to the
+                              * forms-processing entity. */
+        FormTypeResult,      /**< The forms-processing entity is returning data (e.g., search results)
+                              * to the forms-submitting entity, or the data is a generic data set. */
+        FormTypeInvalid      /**< The form is invalid. Only possible if the form was created from an
+                              * Tag which doesn't correctly describe a Data Form. */
       };
 
       /**
@@ -111,6 +111,12 @@ namespace gloox
        * platform.
        */
       void setInstructions( const StringList& instructions ) { m_instructions = instructions; };
+
+      /**
+       * Returns the form's type.
+       * @return The form's type.
+       */
+      DataForm::DataFormType type() const { return m_type; };
 
       /**
        * Parses the given Tag and creates an appropriate DataForm representation.
