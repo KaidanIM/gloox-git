@@ -138,7 +138,7 @@ namespace gloox
 
       /**
        * This function is used to enable stream compression as defined in JEP-0138.
-       * It is necessary because when compression is negotiated it is not enabled at once.
+       * It is necessary because when compression is negotiated it is not enabled instantly.
        */
       void enableCompression();
 #endif
