@@ -37,7 +37,7 @@ namespace gloox
 
   Client::Client( const std::string& server )
     : ClientBase( XMLNS_CLIENT, server ),
-      m_rosterManager( 0 ), m_auth( 0 ), m_disco( 0 ),
+      m_rosterManager( 0 ), m_auth( 0 ),
       m_resourceBound( false ), m_autoPresence( false ), m_forceNonSasl( false ),
       m_manageRoster( true ), m_doAuth( false ),
       m_streamFeatures( 0 ), m_priority( -1 )
