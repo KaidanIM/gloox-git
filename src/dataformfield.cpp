@@ -24,6 +24,9 @@ namespace gloox
   DataFormField::DataFormField( Tag *tag )
     : m_type( FieldTypeInvalid ), m_required( false )
   {
+    if( !tag )
+      return;
+
     if( tag->hasAttribute( "type", "boolean" ) )
       m_type = FieldTypeBoolean;
     else if( tag->hasAttribute( "type", "fixed" ) )
