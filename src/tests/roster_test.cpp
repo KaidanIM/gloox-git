@@ -5,13 +5,14 @@
 #include "../rostermanager.h"
 #include "../loghandler.h"
 #include "../logsink.h"
+#include "../messagehandler.h"
 using namespace gloox;
 
 #include <stdio.h>
 #include <locale.h>
 #include <string>
 
-class RosterTest : public RosterListener, ConnectionListener, LogHandler
+class RosterTest : public RosterListener, ConnectionListener, LogHandler, MessageHandler
 {
   public:
     RosterTest() {};
@@ -26,6 +27,7 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler
       j->setAutoPresence( true );
       j->setInitialPriority( 3 );
       j->registerConnectionListener( this );
+      j->registerMessageHandler( this );
       j->rosterManager()->registerRosterListener( this );
       j->disco()->setVersion( "rosterTest", GLOOX_VERSION );
       j->disco()->setIdentity( "client", "bot" );
@@ -41,7 +43,7 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler
     {
     };
 
-    virtual void onDisconnect( ConnectionError /*e*/ ) { printf( "disco_test: disconnected\n" ); };
+    virtual void onDisconnect( ConnectionError e ) { printf( "disco_test: disconnected: %d\n", e ); };
 
     virtual bool onTLSConnect( const CertInfo& info )
     {
@@ -50,6 +52,16 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler
               info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
               info.compression.c_str() );
       return true;
+    };
+
+    virtual void onResourceBindError( ResourceBindError error )
+    {
+      printf( "onResourceBindError: %d\n", error );
+    };
+
+    virtual void onSessionCreateError( SessionCreateError error )
+    {
+      printf( "onSessionCreateError: %d\n", error );
     };
 
     virtual void itemSubscribed( const std::string& jid )
@@ -90,6 +102,9 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler
         StringList::const_iterator it_g = g.begin();
         for( ; it_g != g.end(); ++it_g )
           printf( "\tgroup: %s\n", (*it_g).c_str() );
+        RosterItem::ResourceMap::const_iterator rit = (*it).second->resources().begin();
+        for( ; rit != (*it).second->resources().end(); ++rit )
+          printf( "resource: %s\n", (*rit).first.c_str() );
       }
     }
 
@@ -98,12 +113,14 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler
       printf( "item changed: %s\n", item.jid().c_str() );
     }
 
-    virtual void itemAvailable( const RosterItem& item, const std::string& /*msg*/ )
+    virtual void itemAvailable( const RosterItem& item, const std::string& /*msg*/,
+                                const JID& from )
     {
       printf( "item online: %s\n", item.jid().c_str() );
     }
 
-    virtual void itemUnavailable( const RosterItem& item, const std::string& /*msg*/ )
+    virtual void itemUnavailable( const RosterItem& item, const std::string& /*msg*/,
+                                  const JID& from )
     {
       printf( "item offline: %s\n", item.jid().c_str() );
     };
@@ -130,6 +147,14 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler
     virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
     {
       printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
+    };
+
+    virtual void handleMessage( Stanza *stanza )
+    {
+      if( stanza->body() == "quit" )
+        j->disconnect();
+      else
+        printf( "msg: %s\n", stanza->body().c_str() );
     };
 
   private:
