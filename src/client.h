@@ -245,7 +245,6 @@ namespace gloox
 
       RosterManager *m_rosterManager;
       NonSaslAuth *m_auth;
-      Disco *m_disco;
 
       bool m_resourceBound;
       bool m_autoPresence;
