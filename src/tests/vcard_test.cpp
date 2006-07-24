@@ -85,6 +85,12 @@ class VCardTest : public ConnectionListener, LogHandler, VCardHandler
     {
       ++m_count;
       printf( "received vcard for %s: %s, %d\n", jid.full().c_str(), vcard->tag()->xml().c_str(), m_count );
+      VCard::AddressList::const_iterator it = vcard->addresses().begin();
+      for( ; it != vcard->addresses().end(); ++it )
+      {
+        printf( "address: %s\n", (*it).street.c_str() );
+      }
+
       if( m_count > 2 )
         j->disconnect();
       else if( m_count == 1 )
