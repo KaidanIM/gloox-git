@@ -35,7 +35,7 @@ namespace gloox
   /**
    * @brief This class implements JEP-0030 (Service Discovery) and JEP-0092 (Software Version).
    *
-   * Client and Component will automatically instantiate a Disco obejct. It can be used to
+   * Client and Component will automatically instantiate a Disco object. It can be used to
    * announce special features of your client, or its version, or...
    *
    * @author Jakob Schroeter <js@camaya.net>
