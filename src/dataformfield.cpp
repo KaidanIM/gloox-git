@@ -48,6 +48,12 @@ namespace gloox
     else if( tag->hasAttribute( "type", "text-single" ) )
       m_type = FieldTypeTextSingle;
 
+    if( tag->hasAttribute( "var" ) )
+      m_name = tag->findAttribute( "var" );
+
+    if( tag->hasAttribute( "label" ) )
+      m_label = tag->findAttribute( "label" );
+
     Tag::TagList l = tag->children();
     Tag::TagList::const_iterator it = l.begin();
     for( ; it != l.end(); ++it )
@@ -58,7 +64,7 @@ namespace gloox
         m_required = true;
       else if( (*it)->name() == "value" )
       {
-        if( m_type == FieldTypeTextMulti )
+        if( m_type == FieldTypeTextMulti || m_type == FieldTypeListMulti )
           m_values.push_back( (*it)->cdata() );
         else
           m_value = (*it)->cdata();
@@ -67,11 +73,6 @@ namespace gloox
         m_options[(*it)->findAttribute( "label" )] = (*it)->findChild( "value" )->cdata();
     }
 
-    if( tag->hasAttribute( "var" ) )
-      m_name = tag->findAttribute( "var" );
-
-    if( tag->hasAttribute( "label" ) )
-      m_label = tag->findAttribute( "label" );
   }
 
   DataFormField::~DataFormField()
@@ -137,6 +138,10 @@ namespace gloox
         option->addAttribute( "label", (*it).first );
         new Tag( option, "value", (*it).second );
       }
+
+      StringList::const_iterator itv = m_values.begin();
+      for( ; itv != m_values.end() ; ++itv )
+        new Tag( field, "value", (*itv) );
     }
     else if( m_type == FieldTypeBoolean )
     {
@@ -144,12 +149,6 @@ namespace gloox
         new Tag( field, "value", "0" );
       else
         new Tag( field, "value", "1" );
-    }
-    else if( m_type == FieldTypeTextMulti )
-    {
-      StringList::const_iterator it = m_values.begin();
-      for( ; it != m_values.end() ; ++it )
-        new Tag( field, "value", (*it) );
     }
     else if( !m_value.empty() )
       new Tag( field, "value", m_value );
