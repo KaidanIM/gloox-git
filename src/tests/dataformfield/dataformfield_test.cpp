@@ -143,37 +143,137 @@ int main( int /*argc*/, char* /*argv[]*/ )
   name = "parse Tag 1";
   t = new Tag( "field");
   t->addAttribute( "type", "fixed" );
-  new Tag( "value", "abc" );
+  new Tag( t, "value", "abc" );
   f = new DataFormField( t );
-  delete t;
-  if( f->tag() != t )
+  if( f->tag()->xml() != t->xml() )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
+    printf( "f->tag(): %s\n", f->tag()->xml().c_str() );
+    printf( "       t: %s\n", t->xml().c_str() );
   }
   delete f;
+  delete t;
   f = 0;
 
+  // -------
+  t = new Tag( "field");
+  t->addAttribute( "type", "list-multi" );
+  t->addAttribute( "label", "blabla label" );
+  t->addAttribute( "var", "features" );
+  Tag *o = new Tag( t, "option" );
+  o->addAttribute( "label", "lock" );
+  new Tag( o, "value", "lock" );
+  o = new Tag( t, "option" );
+  o->addAttribute( "label", "stock" );
+  new Tag( o, "value", "stock" );
+  o = new Tag( t, "option" );
+  o->addAttribute( "label", "smoking barrel" );
+  new Tag( o, "value", "smoking barrel" );
+  new Tag( t, "value", "lock" );
+  new Tag( t, "value", "stock" );
+  f = new DataFormField( t );
+  Tag *r = f->tag();
+  name = "parse Tag 2.1";
+  if( r->name() != "field" || !r->hasAttribute( "type", "list-multi" ) )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+    printf( "f->tag(): %s\n", f->tag()->xml().c_str() );
+    printf( "       t: %s\n", t->xml().c_str() );
+  }
 
+  name = "parse Tag 2.2";
+  if( !r->hasAttribute( "label", "blabla label" ) || !r->hasAttribute( "var", "features" ) )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+    printf( "f->tag(): %s\n", f->tag()->xml().c_str() );
+    printf( "       t: %s\n", t->xml().c_str() );
+  }
 
+  name = "parse Tag 2.3";
+  if( !r->hasChild( "option" ) || !r->findChild( "option" )->hasAttribute( "label", "lock" ) )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+    printf( "f->tag(): %s\n", f->tag()->xml().c_str() );
+    printf( "       t: %s\n", t->xml().c_str() );
+  }
 
+  name = "parse Tag 2.4";
+  if( !r->hasChild( "option", "label", "stock" ) )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+    printf( "f->tag(): %s\n", f->tag()->xml().c_str() );
+    printf( "       t: %s\n", t->xml().c_str() );
+  }
 
+  name = "parse Tag 2.5";
+  if( !r->hasChild( "option", "label", "smoking barrel" ) )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+    printf( "f->tag(): %s\n", f->tag()->xml().c_str() );
+    printf( "       t: %s\n", t->xml().c_str() );
+  }
 
+  name = "parse Tag 2.6";
+  if( !r->findChild( "option" )->findChild( "value" ) )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+    printf( "f->tag(): %s\n", f->tag()->xml().c_str() );
+    printf( "       t: %s\n", t->xml().c_str() );
+  }
 
+  name = "parse Tag 2.7";
+  if( r->findChild( "option" )->findChild( "value" )->cdata() != "lock" )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+    printf( "f->tag(): %s\n", f->tag()->xml().c_str() );
+    printf( "       t: %s\n", t->xml().c_str() );
+  }
 
+  name = "parse Tag 2.8";
+  Tag::TagList l = r->children();
+  Tag::TagList::const_iterator it = l.begin();
+  for( ; it != l.end(); ++it )
+  {
+    if( (*it)->name() == "option" && ( !(*it)->hasChildWithCData( "value", "lock" ) &&
+          !(*it)->hasChildWithCData( "value", "stock" ) &&
+          !(*it)->hasChildWithCData( "value", "smoking barrel" ) ) )
+    {
+      ++fail;
+      printf( "test '%s' failed\n", name.c_str() );
+      printf( "f->tag(): %s\n", f->tag()->xml().c_str() );
+      printf( "       t: %s\n", t->xml().c_str() );
+    }
+  }
 
-
-
+  name = "parse Tag 2.9";
+  if( !r->hasChildWithCData( "value", "lock" ) || !r->hasChildWithCData( "value", "stock" ) )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+    printf( "f->tag(): %s\n", f->tag()->xml().c_str() );
+    printf( "       t: %s\n", t->xml().c_str() );
+  }
+  delete f;
+  delete t;
+  f = 0;
 
 
   if( fail == 0 )
   {
-    printf( "All tests passed\n" );
+    printf( "DataFormField: all tests passed\n" );
     return 0;
   }
   else
   {
-    printf( "%d test(s) failed\n", fail );
+    printf( "DataFormField: %d test(s) failed\n", fail );
     return 1;
   }
 
