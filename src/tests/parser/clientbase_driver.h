@@ -5,6 +5,7 @@
 namespace gloox
 {
   class Stanza;
+  class Parser;
 
   class ClientBase
   {
@@ -23,6 +24,12 @@ namespace gloox
 
       void filter( NodeType type, Stanza *stanza );
 
+      void setTest( Parser *parser, int num );
+      bool getLastResult();
+
+    private:
+      bool m_result;
+      int m_testNum;
   };
 
 }
