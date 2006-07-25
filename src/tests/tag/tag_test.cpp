@@ -12,9 +12,19 @@ int main( int /*argc*/, char* /*argv[]*/ )
   Tag *t;
 
   // -------
-  name = "empty tag";
+  name = "undefined tag";
   t = new Tag();
   if( t->type() != StanzaUndefined )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+  delete t;
+  t = 0;
+
+  name = "empty tag";
+  t = new Tag( "test" );
+  if( t->name() != "test" )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );

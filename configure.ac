@@ -298,6 +298,10 @@ Makefile
 gloox.pc
 gloox-config
 src/Makefile
+src/examples/Makefile
 src/tests/Makefile
+src/tests/dataform/Makefile
+src/tests/dataformfield/Makefile
+src/tests/tag/Makefile
 ])
 AC_OUTPUT
