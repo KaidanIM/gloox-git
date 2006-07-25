@@ -70,7 +70,11 @@ namespace gloox
           m_value = (*it)->cdata();
       }
       else if( (*it)->name() == "option" )
-        m_options[(*it)->findAttribute( "label" )] = (*it)->findChild( "value" )->cdata();
+      {
+        Tag *v = (*it)->findChild( "value" );
+        if( v )
+          m_options[(*it)->findAttribute( "label" )] = v->cdata();
+      }
     }
 
   }
@@ -129,7 +133,7 @@ namespace gloox
         break;
     }
 
-    if( ( m_type == FieldTypeListSingle ) || ( m_type == FieldTypeListMulti ) )
+    if( m_type == FieldTypeListSingle || m_type == FieldTypeListMulti )
     {
       StringMap::const_iterator it = m_options.begin();
       for( ; it != m_options.end(); ++it )
@@ -138,10 +142,6 @@ namespace gloox
         option->addAttribute( "label", (*it).first );
         new Tag( option, "value", (*it).second );
       }
-
-      StringList::const_iterator itv = m_values.begin();
-      for( ; itv != m_values.end() ; ++itv )
-        new Tag( field, "value", (*itv) );
     }
     else if( m_type == FieldTypeBoolean )
     {
@@ -150,7 +150,15 @@ namespace gloox
       else
         new Tag( field, "value", "1" );
     }
-    else if( !m_value.empty() )
+
+    if( m_type == FieldTypeTextMulti || m_type == FieldTypeListMulti )
+    {
+      StringList::const_iterator it = m_values.begin();
+      for( ; it != m_values.end() ; ++it )
+        new Tag( field, "value", (*it) );
+    }
+
+    if( !m_value.empty() )
       new Tag( field, "value", m_value );
 
     return field;
