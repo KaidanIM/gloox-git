@@ -131,12 +131,12 @@ int main( int /*argc*/, char* /*argv[]*/ )
 
   if( fail == 0 )
   {
-    printf( "All tests passed\n" );
+    printf( "DataForm: All tests passed\n" );
     return 0;
   }
   else
   {
-    printf( "%d test(s) failed\n", fail );
+    printf( "DataForm: %d test(s) failed\n", fail );
     return 1;
   }
 

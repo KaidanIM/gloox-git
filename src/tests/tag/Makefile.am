@@ -4,9 +4,9 @@
 
 AM_CPPFLAGS = -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare -Wpointer-arith -Wswitch -Wunknown-pragmas -Wconversion -Wundef -Wcast-qual -ansi
 
-noinst_PROGRAMS = dataformfield_test
+noinst_PROGRAMS = tag_test
 
-dataformfield_test_SOURCES = dataformfield_test.cpp
-dataformfield_test_LDADD = ../../libgloox.la
-dataformfield_test_CFLAGS = $(CPPFLAGS)
+tag_test_SOURCES = tag_test.cpp
+tag_test_LDADD = ../../libgloox.la
+tag_test_CFLAGS = $(CPPFLAGS)
 
