@@ -150,15 +150,16 @@ namespace gloox
       virtual bool hasAttribute( const std::string& name, const std::string& value = "" ) const;
 
       /**
-       * This function finds and returns an element within the child elements of the current tag.
+       * This function finds and returns the @b first element within the child elements of the current tag
+       * that has a matching tag name.
        * @param name The name of the element to search for.
        * @return The found Tag, or NUL.
        */
       virtual Tag* findChild( const std::string& name );
 
       /**
-       * This function finds and returns an element within the child elements of the current tag, that
-       * has a certain attribute with a certain value.
+       * This function finds and returns the @b first element within the child elements of the current tag,
+       * that has a certan naem, and a certain attribute with a certain value.
        * @param name The name of the element to search for.
        * @param attr The name of the attribute of the child element.
        * @param value The value of the attribute of the child element.
@@ -175,8 +176,8 @@ namespace gloox
        * @param value The value of the attribute of the child element.
        * @return @b True if the given child element exists, @b false otherwise.
        */
-      virtual bool hasChild( const std::string& name,
-                             const std::string& attr = "", const std::string& value = "" ) const;
+      virtual bool hasChild( const std::string& name, const std::string& attr = "",
+                             const std::string& value = "" ) const;
 
       /**
        * This function checks whether the Tag has a child element which posesses a given attribute
