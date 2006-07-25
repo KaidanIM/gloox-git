@@ -46,3 +46,6 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             vcardmanager.h            vcardhandler.h          adhochandler.h
 
 noinst_HEADERS = prep.h parser.h connection.h dns.h nonsaslauth.h base64.h compression.h
+
+test:
+	make -C tests test
