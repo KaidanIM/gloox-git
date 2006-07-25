@@ -1,4 +1,5 @@
 #include "parser.h"
+#include "clientbase.h"
 using namespace gloox;
 
 #include <stdio.h>
@@ -9,30 +10,60 @@ int main( int /*argc*/, char* /*argv[]*/ )
 {
   int fail = 0;
   std::string name;
-  Parser *p = 0;
+  ClientBase *c = new ClientBase();
+  Parser *p = new Parser( c );
+
 
   // -------
   name = "undefined tag";
-//   t = new Tag();
-//   if( t->type() != StanzaUndefined )
+  c->setTest( p, 1 );
+  if( !c->getLastResult() )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
   }
+
+  // -------
+  name = "undefined tag";
+  c->setTest( p, 2 );
+  if( !c->getLastResult() )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+
+  // -------
+  name = "undefined tag";
+  c->setTest( p, 3 );
+  if( !c->getLastResult() )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+
+  // -------
+  name = "undefined tag";
+  c->setTest( p, 4 );
+  if( !c->getLastResult() )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+
+
+
+
   delete p;
   p = 0;
 
-
-
-
   if( fail == 0 )
   {
-    printf( "Tag: all tests passed\n" );
+    printf( "Parser: all tests passed\n" );
     return 0;
   }
   else
   {
-    printf( "Tag: %d test(s) failed\n", fail );
+    printf( "Parser: %d test(s) failed\n", fail );
     return 1;
   }
 
