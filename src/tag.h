@@ -152,7 +152,7 @@ namespace gloox
 
       /**
        * This function finds and returns the @b first element within the child elements of the current tag,
-       * that has a certan naem, and a certain attribute with a certain value.
+       * that has a certan name, and a certain attribute with a certain value.
        * @param name The name of the element to search for.
        * @param attr The name of the attribute of the child element.
        * @param value The value of the attribute of the child element.

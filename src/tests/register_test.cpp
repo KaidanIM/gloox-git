@@ -25,7 +25,7 @@ class RegTest : public RegistrationHandler, ConnectionListener, LogHandler
       j->disableDisco();
       j->registerConnectionListener( this );
 
-      m_reg = new Registration( j, j->server() );
+      m_reg = new Registration( j );
       m_reg->registerRegistrationHandler( this );
 
       j->logInstance().registerLogHandler( LogLevelDebug, LogAreaAll, this );

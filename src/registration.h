@@ -119,7 +119,7 @@ namespace gloox
       /**
        * Constructor.
        * @param parent The ClientBase which is used for establishing a connection.
-       * @param to The server or service to authenticate with. If empty the currently connected
+       * @param to The server or service to register with. If empty the currently connected
        * server will be used.
        */
       Registration( ClientBase *parent, const JID& to );
