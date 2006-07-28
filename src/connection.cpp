@@ -496,7 +496,7 @@ namespace gloox
 
     while( !m_cancel )
     {
-      ConnectionError r = recv( 1 );
+      ConnectionError r = recv();
       if( r != ConnNoError )
         return r;
     }

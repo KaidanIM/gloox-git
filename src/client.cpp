@@ -88,12 +88,6 @@ namespace gloox
     m_disco->setIdentity( "client", "bot" );
   }
 
-  void Client::setUsername( const std::string &username )
-  {
-    m_jid.setUsername( username );
-    m_doAuth = true;
-  }
-
   bool Client::handleNormalNode( Stanza *stanza )
   {
     if( stanza->name() == "stream:features" )

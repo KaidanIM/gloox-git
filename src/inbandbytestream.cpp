@@ -128,6 +128,14 @@ namespace gloox
 
     if( !m_parent )
       return;
+
+    const std::string id = m_clientbase->getID();
+    Tag *iq = new Tag( "iq" );
+    iq->addAttribute( "type", "result" );
+    iq->addAttribute( "to", m_parent->target().full() );
+    iq->addAttribute( "id", id );
+
+    m_clientbase->send( iq );
   }
 
   void InBandBytestream::close()

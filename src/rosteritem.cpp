@@ -24,12 +24,6 @@ namespace gloox
 
   RosterItem::~RosterItem()
   {
-    ResourceMap::iterator it = m_resources.begin();
-    for( ; it != m_resources.end(); ++it )
-    {
-      delete (*it).second;
-      (*it).second = 0;
-    }
   }
 
   void RosterItem::setName( const std::string& name )

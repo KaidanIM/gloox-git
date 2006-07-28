@@ -174,7 +174,7 @@ namespace gloox
        * Sets the username to use to connect to the XMPP server.
        * @param username The username to authenticate with.
        */
-      void setUsername( const std::string &username );
+      void setUsername( const std::string &username ) { m_jid.setUsername( username ); };
 
       /**
        * Sets the resource to use to connect to the XMPP server.
@@ -197,7 +197,7 @@ namespace gloox
       void setAutoPresence( bool autoPresence ) { m_autoPresence = autoPresence; };
 
       /**
-       * This is a temporary hack to enforce Non-SASL login. You should not need to use it.
+       * This is a temporary hack to force Non-SASL login. You should not need to use it. 
        * @param force Whether to force non-SASL auth. Default @b true.
        * @deprecated
        */
