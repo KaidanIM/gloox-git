@@ -33,22 +33,31 @@ namespace gloox
    * Derive your object from @ref RegistrationHandler and implement the
    * virtual functions offered by that interface. Then use it like this:
    * @code
-   * Client *c = new Client( "example.org" );
-   * c->disableRoster(); // a roster is not necessary for registration
-   * c->disableDisco(); // the disco client is not necessary for registration
+   * void MyClass::myFunc()
+   * {
+   *   m_client = new Client( "example.org" );
+   *   m_client->disableRoster(); // a roster is not necessary for registration
+   *   m_client->disableDisco(); // the disco client is not necessary for registration
+   *   m_client->registerConnectionListener( this );
    *
-   * Registration* r = new Registration( c );
-   * r->registerRegistrationHandler( this );
-   * r->fetchRegistrationFields();
+   *   m_reg = new Registration( c );
+   *   m_reg->registerRegistrationHandler( this );
    *
-   * c->connect();
+   *   m_client->connect();
+   * }
+   *
+   * void MyClass::onConnect()
+   * {
+   *   m_reg->fetchRegistrationFields();
+   * }
    * @endcode
+   *
    * In RegistrationHandler::handleRegistrationFields() you should check which information the server
    * requires to open a new account. You might not always get away with just username and password.
-   * Then call createAccount() with a filled-in fieldStruct and an @c int representing the bit-wise ORed
-   * fields you want to have included in the registration attempt. For your convenience you can use the
-   * 'fields' argument of handleRegistrationFields(). ;) It's your responsibility to make sure at
-   * least those fields the server requested are filled in.
+   * Then call createAccount() with a filled-in fieldStruct and an @c int representing the bit-wise
+   * ORed fields you want to have included in the registration attempt. For your convenience you can
+   * use the 'fields' argument of handleRegistrationFields(). ;) It's your responsibility to make
+   * sure at least those fields the server requested are filled in.
    *
    * Check @c tests/register_test.cpp for an example.
    *

@@ -35,6 +35,7 @@ namespace gloox
       if( self )
       {
         RosterItem *i = new RosterItem( m_parent->jid().bare() );
+        i->setSynchronized();
         m_roster[m_parent->jid().bare()] = i;
       }
 
@@ -379,8 +380,9 @@ namespace gloox
             a = true;
           (*it_d).second->setSubscription( sub, a );
           (*it_d).second->setGroups( gl );
+          (*it_d).second->setSynchronized();
 
-          if( m_rosterListener )
+          if( isPush && m_rosterListener )
             m_rosterListener->itemUpdated( jid );
         }
         else
@@ -410,6 +412,7 @@ namespace gloox
 
     m_roster[jid]->setSubscription( sub, ask );
     m_roster[jid]->setGroups( groups );
+    m_roster[jid]->setSynchronized();
   }
 
   void RosterManager::setDelimiter( const std::string& delimiter )

@@ -272,8 +272,9 @@
  *
  * @section filetransfer_sec File Transfer
  *
- * For file transfer there is currently an implementation of JEP-0047 (In-Band Bytestreams). No other
- * file transfer protocols are currently supported. See
+ * For file transfer there is currently an implementation of JEP-0047 (In-Band Bytestreams). However,
+ * this protocol is probably not suited for offering file transfer to end-users. No other file
+ * transfer protocols are currently supported. See
  * @link gloox::InBandBytestreamManager InBandBytestreamManager @endlink for a starting point.
  */
 
@@ -307,6 +308,8 @@ namespace gloox
   const std::string XMLNS_CHAT_STATES       = "http://jabber.org/protocol/chatstates";
   const std::string XMLNS_AMP               = "http://jabber.org/protocol/amp";
   const std::string XMLNS_IBB               = "http://jabber.org/protocol/ibb";
+  const std::string XMLNS_CHATNEG           = "http://jabber.org/protocol/chatneg";
+  const std::string XMLNS_XHTML_IM          = "http://jabber.org/protocol/xhtml-im";
   const std::string XMLNS_ROSTER            = "jabber:iq:roster";
   const std::string XMLNS_VERSION           = "jabber:iq:version";
   const std::string XMLNS_REGISTER          = "jabber:iq:register";
@@ -335,7 +338,7 @@ namespace gloox
 
   const int XMPP_STREAM_VERSION_MAJOR       = 1;
   const int XMPP_STREAM_VERSION_MINOR       = 0;
-  const std::string GLOOX_VERSION           = "0.8";
+  const std::string GLOOX_VERSION           = "0.8.1";
 
   /**
    * This describes the possible states of a stream.

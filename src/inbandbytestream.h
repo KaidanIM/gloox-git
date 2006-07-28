@@ -74,7 +74,7 @@ namespace gloox
        * Lets you retrieve this bytestream's block-size.
        * @return The bytestream's block-size.
        */
-      int blockSize() const { return m_blockSize; };
+      int blockSize() const { return (int)m_blockSize; };
 
       /**
        * Use this function to register an object that will receive any notifications from

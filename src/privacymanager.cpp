@@ -292,7 +292,7 @@ namespace gloox
             PrivacyListHandler::PrivacyList items;
 
             Tag *list = stanza->findChild( "query" )->findChild( "list" );
-            const std::string name = list->name();
+            const std::string name = list->findAttribute( "name" );
             Tag::TagList l = list->children();
             Tag::TagList::iterator it = l.begin();
             for( ; it != l.end(); ++it )

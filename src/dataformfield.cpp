@@ -24,6 +24,9 @@ namespace gloox
   DataFormField::DataFormField( Tag *tag )
     : m_type( FIELD_TYPE_INVALID ), m_required( false )
   {
+    if( !tag )
+      return;
+
     if( tag->hasAttribute( "type", "boolean" ) )
       m_type = FIELD_TYPE_BOOLEAN;
     else if( tag->hasAttribute( "type", "fixed" ) )
@@ -45,6 +48,12 @@ namespace gloox
     else if( tag->hasAttribute( "type", "text-single" ) )
       m_type = FIELD_TYPE_TEXT_SINGLE;
 
+    if( tag->hasAttribute( "var" ) )
+      m_name = tag->findAttribute( "var" );
+
+    if( tag->hasAttribute( "label" ) )
+      m_label = tag->findAttribute( "label" );
+
     Tag::TagList l = tag->children();
     Tag::TagList::const_iterator it = l.begin();
     for( ; it != l.end(); ++it )
@@ -55,20 +64,19 @@ namespace gloox
         m_required = true;
       else if( (*it)->name() == "value" )
       {
-        if( m_type == FIELD_TYPE_TEXT_MULTI )
+        if( m_type == FIELD_TYPE_TEXT_MULTI || m_type == FIELD_TYPE_LIST_MULTI )
           m_values.push_back( (*it)->cdata() );
         else
           m_value = (*it)->cdata();
       }
       else if( (*it)->name() == "option" )
-        m_options[(*it)->findAttribute( "label" )] = (*it)->findChild( "value" )->cdata();
+      {
+        Tag *v = (*it)->findChild( "value" );
+        if( v )
+          m_options[(*it)->findAttribute( "label" )] = v->cdata();
+      }
     }
 
-    if( tag->hasAttribute( "var" ) )
-      m_name = tag->findAttribute( "var" );
-
-    if( tag->hasAttribute( "label" ) )
-      m_label = tag->findAttribute( "label" );
   }
 
   DataFormField::~DataFormField()
@@ -125,7 +133,7 @@ namespace gloox
         break;
     }
 
-    if( ( m_type == FIELD_TYPE_LIST_SINGLE ) || ( m_type == FIELD_TYPE_LIST_MULTI ) )
+    if( m_type == FIELD_TYPE_LIST_SINGLE || m_type == FIELD_TYPE_LIST_MULTI )
     {
       StringMap::const_iterator it = m_options.begin();
       for( ; it != m_options.end(); ++it )
@@ -142,13 +150,15 @@ namespace gloox
       else
         new Tag( field, "value", "1" );
     }
-    else if( m_type == FIELD_TYPE_TEXT_MULTI )
+    
+    if( m_type == FIELD_TYPE_TEXT_MULTI || m_type == FIELD_TYPE_LIST_MULTI )
     {
       StringList::const_iterator it = m_values.begin();
       for( ; it != m_values.end() ; ++it )
         new Tag( field, "value", (*it) );
     }
-    else if( !m_value.empty() )
+
+    if( !m_value.empty() )
       new Tag( field, "value", m_value );
 
     return field;
