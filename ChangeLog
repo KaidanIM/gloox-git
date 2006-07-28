@@ -9,6 +9,7 @@ v0.8.1 -- 22 Jul 2006
 - InBandBytestreams: ack closing with correct ID
 - Adhoc: provide requesting entities JID in the callback (*)
 - DataForm: fixed few minor field handling bugs
+- Client: allow lazy username provisioning
 (*) these changes render 0.8.1 source incompatible compared to 0.8
 
 
