@@ -1,3 +1,14 @@
+v0.8.1 -- 28 Jul 2006
+---------------------
+- async inbandbytestreams ack
+- fixed memory leak in RosterItem
+- RosterManager: don't sync self contact to server
+- PrivacyManager: give a privacy list a proper name (thanks to Chris Bond)
+- InBandBytestreams: ack closing with correct ID
+- DataForm: fixed few minor field handling bugs
+- Client: allow lazy username provisioning
+
+
 v0.8 -- 08 Apr 2006
 -------------------
 - added an extensible message session abstraction

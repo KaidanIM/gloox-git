@@ -4,7 +4,7 @@ AC_PREREQ(2.50)
 AC_INIT
 AC_CONFIG_SRCDIR([configure.ac])
 dnl Every other copy of the package version number gets its value from here
-AM_INIT_AUTOMAKE(gloox,0.8)
+AM_INIT_AUTOMAKE(gloox,0.8.1)
 
 dnl create a config.h file (Automake will add -DHAVE_CONFIG_H)
 AM_CONFIG_HEADER(config.h)
@@ -22,6 +22,26 @@ AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_RANLIB
 AM_PROG_LIBTOOL
+
+dnl
+dnl extra paths
+dnl
+
+AC_ARG_WITH(extra_include_path, AC_HELP_STRING([--with-extra-include-path],
+                                           [use additional include paths]),
+            extra_include_path=$withval)
+split_includes="`echo $extra_include_path | sed -e 's/:/ /g'`"
+for incpath in $split_includes ; do
+    CPPFLAGS="-I$incpath $CPPFLAGS"
+done
+
+AC_ARG_WITH(extra_library_path, AC_HELP_STRING([--with-extra-library-path],
+                                               [use additional library paths]),
+            extra_library_path=$withval)
+split_libs="`echo $extra_library_path | sed -e 's/:/ /g'`"
+for libpath in $split_libs ; do
+    LDFLAGS="-L$libpath $LDFLAGS"
+done
 
 dnl Checks for libraries.
 
