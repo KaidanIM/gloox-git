@@ -121,13 +121,10 @@ namespace gloox
 
   void InBandBytestream::closed()
   {
-    if( m_inbandBytestreamDataHandler )
-      m_inbandBytestreamDataHandler->handleInBandClose( m_sid, m_parent->target() );
-
     m_open = false;
 
-    if( !m_parent )
-      return;
+    if( m_inbandBytestreamDataHandler )
+      m_inbandBytestreamDataHandler->handleInBandClose( m_sid, m_parent->target() );
   }
 
   void InBandBytestream::close()

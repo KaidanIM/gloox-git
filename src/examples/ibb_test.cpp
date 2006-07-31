@@ -48,7 +48,7 @@ class IBBTest : public MessageSessionHandler, ConnectionListener, LogHandler,
       ca.push_back( "/path/to/cacert.crt" );
       j->setCACerts( ca );
 
-      m_ibbManager = new InBandBytestreamManager( j, j->disco() );
+      m_ibbManager = new InBandBytestreamManager( j );
       m_ibbManager->registerInBandBytestreamHandler( this );
 
       j->logInstance().registerLogHandler( LogLevelDebug, LogAreaAll, this );

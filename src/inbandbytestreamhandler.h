@@ -41,12 +41,12 @@ namespace gloox
       /**
        * Notifies the implementor of a new incoming IBB request.
        * Attach the IBB to a MessageSession using InBandBytestream::attachTo().<br>
-       * For synchronous InBandBytestreamHandler:<br>
+       * For @b synchronous InBandBytestreamHandler:<br>
        * If the return value is @b true the bytestream holds as accepted and the
        * InBandBytestreamHandler becomes the owner of the InBandBytestream object. If
        * @b false is returned, the InBandBytestream is deleted by the InBandBytestreamManager
        * and the bytestream request will be declined.<br>
-       * For asynchronous InBandBytestreamHandler:<br>
+       * For @b asynchronous InBandBytestreamHandler:<br>
        * The return value is ignored. You have to call either
        * InBandBytestreamManager::acceptInBandBytestream() or
        * InBandBytestreamManager::rejectInBandBytestream(), respectively.

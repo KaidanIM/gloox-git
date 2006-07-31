@@ -21,7 +21,6 @@ namespace gloox
 {
 
   class ClientBase;
-  class Disco;
   class VCard;
   class VCardHandler;
 
@@ -42,7 +41,7 @@ namespace gloox
    *     MyClass()
    *     {
    *       m_myClass = new MyClass();
-   *       m_vcardManager = new VCardManager( m_client, m_client->disco() );
+   *       m_vcardManager = new VCardManager( m_client );
    *     };
    *
    *   ...
@@ -101,8 +100,9 @@ namespace gloox
     public:
       /**
        * Constructor.
+       * @param parent The ClientBase object to use for communication.
        */
-      VCardManager( ClientBase *parent, Disco *disco );
+      VCardManager( ClientBase *parent );
 
       /**
        * Virtual destructor.

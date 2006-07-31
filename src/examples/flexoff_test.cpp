@@ -39,7 +39,7 @@ class FlexOffTest : public DiscoHandler, MessageHandler, ConnectionListener, Fle
       ca.push_back( "/path/to/cacert.crt" );
       j->setCACerts( ca );
 
-      f = new FlexibleOffline( j, j->disco() );
+      f = new FlexibleOffline( j );
       f->registerFlexibleOfflineHandler( this );
 
       j->logInstance().registerLogHandler( LogLevelDebug, LogAreaAll, this );

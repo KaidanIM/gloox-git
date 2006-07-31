@@ -15,7 +15,6 @@
 #define FLEXOFF_H__
 
 #include "clientbase.h"
-#include "disco.h"
 #include "discohandler.h"
 #include "flexoffhandler.h"
 #include "iqhandler.h"
@@ -27,6 +26,7 @@ namespace gloox
    * @brief An implementation of JEP-0013 (Flexible Offline Message Retrieval).
    *
    * Use the FlexibleOfflineHandler to receive results.
+   *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.7
    */
@@ -36,9 +36,8 @@ namespace gloox
       /**
        * Creates a new FlexibleOffline object that manages retrieval of offline messages.
        * @param parent The ClientBase to use for communication.
-       * @param disco The disco object to use.
        */
-      FlexibleOffline( ClientBase *parent, Disco *disco );
+      FlexibleOffline( ClientBase *parent );
 
       /**
        * Virtual Destructor.
@@ -119,7 +118,6 @@ namespace gloox
       };
 
       ClientBase *m_parent;
-      Disco *m_disco;
       FlexibleOfflineHandler *m_flexibleOfflineHandler;
   };
 

@@ -15,19 +15,20 @@
 #include "inbandbytestreamhandler.h"
 #include "inbandbytestream.h"
 #include "clientbase.h"
+#include "disco.h"
 
 namespace gloox
 {
 
-  InBandBytestreamManager::InBandBytestreamManager( ClientBase *parent, Disco *disco )
+  InBandBytestreamManager::InBandBytestreamManager( ClientBase *parent )
     : m_parent( parent ), m_inbandBytestreamHandler( 0 ), m_syncInbandBytestreams( true ),
       m_blockSize( 4096 )
   {
     if( m_parent )
+    {
       m_parent->registerIqHandler( this, XMLNS_IBB );
-
-    if( disco )
-      disco->addFeature( XMLNS_IBB );
+      m_parent->disco()->addFeature( XMLNS_IBB );
+    }
   }
 
   InBandBytestreamManager::~InBandBytestreamManager()

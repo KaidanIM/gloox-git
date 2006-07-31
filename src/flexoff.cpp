@@ -13,12 +13,13 @@
 
 #include "flexoff.h"
 #include "dataform.h"
+#include "disco.h"
 
 namespace gloox
 {
 
-  FlexibleOffline::FlexibleOffline( ClientBase *parent, Disco *disco )
-    : m_parent( parent ), m_disco( disco ), m_flexibleOfflineHandler( 0 )
+  FlexibleOffline::FlexibleOffline( ClientBase *parent )
+    : m_parent( parent ), m_flexibleOfflineHandler( 0 )
   {
   }
 
@@ -28,17 +29,17 @@ namespace gloox
 
   void FlexibleOffline::checkSupport()
   {
-    m_disco->getDiscoInfo( m_parent->jid().server(), "", this, FO_CHECK_SUPPORT );
+    m_parent->disco()->getDiscoInfo( m_parent->jid().server(), "", this, FO_CHECK_SUPPORT );
   }
 
   void FlexibleOffline::getMsgCount()
   {
-    m_disco->getDiscoInfo( m_parent->jid().server(), XMLNS_OFFLINE, this, FO_REQUEST_NUM );
+    m_parent->disco()->getDiscoInfo( m_parent->jid().server(), XMLNS_OFFLINE, this, FO_REQUEST_NUM );
   }
 
   void FlexibleOffline::fetchHeaders()
   {
-    m_disco->getDiscoItems( m_parent->jid().server(), XMLNS_OFFLINE, this, FO_REQUEST_HEADERS );
+    m_parent->disco()->getDiscoItems( m_parent->jid().server(), XMLNS_OFFLINE, this, FO_REQUEST_HEADERS );
   }
 
   void FlexibleOffline::fetchMessages( const StringList& msgs )

@@ -23,14 +23,14 @@
 namespace gloox
 {
 
-  Adhoc::Adhoc( ClientBase *parent, Disco *disco )
-    : m_parent( parent ), m_disco( disco )
+  Adhoc::Adhoc( ClientBase *parent )
+    : m_parent( parent )
   {
-    if( m_parent && m_disco )
+    if( m_parent )
     {
       m_parent->registerIqHandler( this, XMLNS_ADHOC_COMMANDS );
-      m_disco->addFeature( XMLNS_ADHOC_COMMANDS );
-      m_disco->registerNodeHandler( this, XMLNS_ADHOC_COMMANDS );
+      m_parent->disco()->addFeature( XMLNS_ADHOC_COMMANDS );
+      m_parent->disco()->registerNodeHandler( this, XMLNS_ADHOC_COMMANDS );
     }
   }
 
@@ -39,10 +39,7 @@ namespace gloox
     if( m_parent )
     {
       m_parent->removeIqHandler( XMLNS_ADHOC_COMMANDS );
-    }
-    if( m_disco )
-    {
-      m_disco->removeNodeHandler( XMLNS_ADHOC_COMMANDS );
+      m_parent->disco()->removeNodeHandler( XMLNS_ADHOC_COMMANDS );
     }
   }
 
@@ -181,7 +178,7 @@ namespace gloox
   void Adhoc::registerAdhocCommandProvider( AdhocCommandProvider *acp, const std::string& command,
                                             const std::string& name )
   {
-    m_disco->registerNodeHandler( this, command );
+    m_parent->disco()->registerNodeHandler( this, command );
     m_adhocCommandProviders[command] = acp;
     m_items[command] = name;
   }
@@ -257,7 +254,7 @@ namespace gloox
     track.context = CheckAdhocSupport;
     track.ah = ah;
     m_adhocTrackMap[m_parent->getID()] = track;
-    m_disco->getDiscoInfo( remote, "", this, CheckAdhocSupport );
+    m_parent->disco()->getDiscoInfo( remote, "", this, CheckAdhocSupport );
   }
 
   void Adhoc::getCommands( const JID& remote, AdhocHandler *ah )
@@ -270,7 +267,7 @@ namespace gloox
     track.context = FetchAdhocCommands;
     track.ah = ah;
     m_adhocTrackMap[m_parent->getID()] = track;
-    m_disco->getDiscoItems( remote, XMLNS_ADHOC_COMMANDS, this, FetchAdhocCommands );
+    m_parent->disco()->getDiscoItems( remote, XMLNS_ADHOC_COMMANDS, this, FetchAdhocCommands );
   }
 
   void Adhoc::execute( const JID& remote, const std::string& command, AdhocHandler *ah,

@@ -15,7 +15,6 @@
 #define INBANDBYTESTREAMMANAGER_H__
 
 #include "iqhandler.h"
-#include "disco.h"
 #include "jid.h"
 
 namespace gloox
@@ -23,6 +22,7 @@ namespace gloox
 
   class InBandBytestreamHandler;
   class InBandBytestream;
+  class ClientBase;
 
   /**
    * @brief An InBandBytestreamManager dispatches In-Band Bytestreams.
@@ -46,7 +46,7 @@ namespace gloox
    * @code
    * MyClass::MyClass()
    * {
-   *   m_ibbManager = new InBandBytestreamManager( m_client, m_client->disco() );
+   *   m_ibbManager = new InBandBytestreamManager( m_client );
    * }
    *
    * void MyClass::myFunc()
@@ -180,9 +180,8 @@ namespace gloox
       /**
        * Constructs a new InBandBytestreamManager.
        * @param parent The ClientBase to use for sending data.
-       * @param disco The Disco object to announce the IBB feature with.
        */
-      InBandBytestreamManager( ClientBase *parent, Disco *disco );
+      InBandBytestreamManager( ClientBase *parent );
 
       /**
        * Virtual destructor.

@@ -28,7 +28,7 @@ class AdhocTest : public ConnectionListener, AdhocCommandProvider
       j->disco()->setVersion( "adhocTest", GLOOX_VERSION );
       j->disco()->setIdentity( "client", "bot" );
 
-      a = new Adhoc( j, j->disco() );
+      a = new Adhoc( j );
       a->registerAdhocCommandProvider( this, "helloworld", "Hello World!" );
       a->registerAdhocCommandProvider( this, "config", "Configuration" );
       a->registerAdhocCommandProvider( this, "shutdown", "Shutdown" );
