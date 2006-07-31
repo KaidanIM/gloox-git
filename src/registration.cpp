@@ -23,12 +23,16 @@ namespace gloox
   Registration::Registration( ClientBase *parent, const JID& to )
     : m_parent( parent ), m_to( to ), m_registrationHandler( 0 )
   {
-    if( m_parent )
-      m_parent->registerIqHandler( this, XMLNS_REGISTER );
+    init();
   }
 
   Registration::Registration( ClientBase *parent )
   : m_parent( parent ), m_registrationHandler( 0 )
+  {
+    init();
+  }
+
+  void Registration::init()
   {
     if( m_parent )
       m_parent->registerIqHandler( this, XMLNS_REGISTER );

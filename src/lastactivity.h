@@ -23,7 +23,6 @@ namespace gloox
 
   class JID;
   class ClientBase;
-  class Disco;
   class LastActivityHandler;
 
   /**
@@ -31,6 +30,7 @@ namespace gloox
    *
    * LastActivity can be used to query remote entities about their last activity time as well
    * as answer incoming last-activity-queries.
+   *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.6
    */
@@ -39,9 +39,9 @@ namespace gloox
     public:
       /**
        * Constructs a new LastActivity object.
-       *
+       * @param parent The ClientBase object to use for communication.
        */
-      LastActivity( ClientBase *parent, Disco *disco );
+      LastActivity( ClientBase *parent );
 
       /**
        * Virtual destructor.
@@ -82,7 +82,6 @@ namespace gloox
     private:
       LastActivityHandler *m_lastActivityHandler;
       ClientBase *m_parent;
-      Disco *m_disco;
 
       time_t m_active;
 

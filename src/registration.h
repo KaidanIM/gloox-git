@@ -200,6 +200,8 @@ namespace gloox
         CHANGE_PASSWORD
       };
 
+      void init();
+
       ClientBase *m_parent;
       const JID m_to;
       RegistrationHandler *m_registrationHandler;

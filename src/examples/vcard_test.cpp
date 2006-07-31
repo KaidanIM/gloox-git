@@ -35,7 +35,7 @@ class VCardTest : public ConnectionListener, LogHandler, VCardHandler
       ca.push_back( "/path/to/cacert.crt" );
       j->setCACerts( ca );
 //       j->logInstance().registerLogHandler( LogLevelDebug, LogAreaAll, this );
-      m_vManager = new VCardManager( j, j->disco() );
+      m_vManager = new VCardManager( j );
 
       j->connect();
 

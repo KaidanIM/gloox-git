@@ -145,15 +145,14 @@ namespace gloox
     return true;
   }
 
-  inline bool Connection::tls_send(const void *data, size_t len)
+  inline bool Connection::tls_send( const void *data, size_t len )
   {
     int ret;
-    int len = strlen( data );
     ret = SSL_write( m_ssl, data, len );
     return true;
   }
 
-  inline int Connection::tls_recv(void *data, size_t len)
+  inline int Connection::tls_recv( void *data, size_t len )
   {
     return SSL_read( m_ssl, data, len );
   }

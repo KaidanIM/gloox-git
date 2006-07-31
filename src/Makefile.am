@@ -31,9 +31,9 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             bookmarkhandler.h         registrationhandler.h   jid.h \
                             bookmarkstorage.h         messagehandler.h        rosteritem.h \
                             clientbase.h              rosterlistener.h        taghandler.h \
-                            connectionlistener.h      rostermanager.h         gloox.h\
+                            connectionlistener.h      rostermanager.h         gloox.h \
                             disco.h                   presencehandler.h       subscriptionhandler.h \
-                            discohandler.h            privacyitem.h           stanza.h\
+                            discohandler.h            privacyitem.h           stanza.h \
                             disconodehandler.h        privacylisthandler.h    loghandler.h \
                             lastactivity.h            lastactivityhandler.h   flexoff.h \
                             flexoffhandler.h          dataform.h              dataformfield.h \

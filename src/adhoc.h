@@ -28,7 +28,6 @@ namespace gloox
 
   class DataForm;
   class ClientBase;
-  class Disco;
   class Stanza;
   class AdhocHandler;
   class AdhocCommandProvider;
@@ -50,7 +49,7 @@ namespace gloox
    * @code
    * MyClass::someFunc()
    * {
-   *   Adhoc *m_adhoc = new Adhoc( m_client, m_client->disco() );
+   *   Adhoc *m_adhoc = new Adhoc( m_client );
    *
    *   // this might be a bot monitoring a weather station, for example
    *   m_adhoc->registerAdhocCommandProvider( this, "getTemp", "Retrieve current temperature" );
@@ -120,7 +119,7 @@ namespace gloox
        * @param parent The ClientBase used for XMPP communication.
        * @param disco The Disco object used to announce available commands.
        */
-      Adhoc( ClientBase *parent, Disco *disco );
+      Adhoc( ClientBase *parent );
 
       /**
        * Virtual destructor.
@@ -215,7 +214,6 @@ namespace gloox
       AdhocTrackMap m_adhocTrackMap;
 
       ClientBase *m_parent;
-      Disco *m_disco;
 
       StringMap m_items;
 

@@ -20,14 +20,14 @@
 namespace gloox
 {
 
-  VCardManager::VCardManager( ClientBase *parent, Disco *disco )
+  VCardManager::VCardManager( ClientBase *parent )
     : m_parent( parent )
   {
     if( m_parent )
+    {
       m_parent->registerIqHandler( this, XMLNS_VCARD_TEMP );
-
-    if( disco )
-      disco->addFeature( XMLNS_VCARD_TEMP );
+      m_parent->disco()->addFeature( XMLNS_VCARD_TEMP );
+    }
   }
 
   VCardManager::~VCardManager()
