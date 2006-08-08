@@ -18,6 +18,10 @@ using namespace gloox;
 #include <locale.h>
 #include <string>
 
+#ifdef WIN32
+#include <windows.h>
+#endif
+
 class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListener, LogHandler,
                     MessageEventHandler, MessageHandler, ChatStateHandler
 {
@@ -114,14 +118,14 @@ class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListen
         sub = "Re: " +  stanza->subject();
 
       m_messageEventFilter->raiseMessageEvent( MessageEventDisplayed );
-#if (defined WIN32 ) || ( defined SKYOS )
+#if defined( WIN32 ) || defined( SKYOS )
       Sleep( 1000 );
 #else
       sleep( 1 );
 #endif
       m_messageEventFilter->raiseMessageEvent( MessageEventComposing );
       m_chatStateFilter->setChatState( ChatStateComposing );
-#if (defined WIN32 ) || ( defined SKYOS )
+#if defined( WIN32 ) || defined( SKYOS )
       Sleep( 2000 );
 #else
       sleep( 2 );
