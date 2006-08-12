@@ -68,8 +68,6 @@ namespace gloox
 #ifdef WIN32
   int DNS::connect( const std::string& domain, const LogSink& logInstance )
   {
-    DNS_RECORD *pRecords;
-
     std::string dname = "_xmpp-client._tcp." + domain;
 
     DNS_RECORD *pRecord;
