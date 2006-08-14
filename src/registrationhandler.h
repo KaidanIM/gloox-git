@@ -38,7 +38,7 @@ namespace gloox
       /**
        * Possible results of a JEP-0077 operation.
        */
-      enum resultEnum
+      enum ResultEnum
       {
         REGISTRATION_SUCCESS = 0,          /*!< The last operation (account registration, account
                                             * deletion or password change) was successful. */
@@ -99,7 +99,7 @@ namespace gloox
        * @param from The server or service the result came from.
        * @param result The result of the last operation.
        */
-      virtual void handleRegistrationResult( const JID& from, resultEnum result ) = 0;
+      virtual void handleRegistrationResult( const JID& from, ResultEnum result ) = 0;
 
       /**
        * This function is called additionally to @ref handleRegistrationFields() if the server

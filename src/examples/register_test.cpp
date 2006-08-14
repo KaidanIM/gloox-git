@@ -67,7 +67,7 @@ class RegTest : public RegistrationHandler, ConnectionListener, LogHandler
       m_reg->createAccount( fields, vals );
     };
 
-    virtual void handleRegistrationResult( const JID& /*from*/, resultEnum result )
+    virtual void handleRegistrationResult( const JID& /*from*/, ResultEnum result )
     {
       printf( "result: %d\n", result );
       j->disconnect();
