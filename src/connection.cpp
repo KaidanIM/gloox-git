@@ -34,7 +34,7 @@
 #include <winsock.h>
 #endif
 
-#if defined( _MSC_VER ) && ( _MSC_VER >= 1300 )
+#ifdef WIN32
 #define strcasecmp stricmp
 #endif
 
@@ -412,8 +412,8 @@ namespace gloox
       FD_ZERO( &fds );
       FD_SET( m_socket, &fds );
 
-      tv.tv_sec = timeout;
-      tv.tv_usec = 0;
+      tv.tv_sec = timeout / 1000;
+      tv.tv_usec = timeout % 1000;
 
       if( select( m_socket + 1, &fds, 0, 0, timeout == -1 ? 0 : &tv ) < 0 )
         return ConnIoError;
