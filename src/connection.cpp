@@ -381,6 +381,8 @@ namespace gloox
 
     SCHANNEL_CRED schannelCred;
     memset( &schannelCred, 0, sizeof( schannelCred ) );
+    memset( &m_credentials, 0, sizeof( m_credentials ) );
+    memset( &m_context, 0, sizeof( m_context ) );
 
     schannelCred.dwVersion = SCHANNEL_CRED_VERSION;
     schannelCred.cSupportedAlgs = 0; // FIXME
