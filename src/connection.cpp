@@ -425,18 +425,23 @@ namespace gloox
           printf( "7\n" );
       }
     }
+
+    return false;
   }
 
   inline bool Connection::tls_send(const void *data, size_t len)
   {
+    return false;
   }
 
   inline int Connection::tls_recv(void *data, size_t len)
   {
+    return 0;
   }
 
   inline bool Connection::tls_dataAvailable()
   {
+    return false;
   }
 
   inline void Connection::tls_cleanup()
