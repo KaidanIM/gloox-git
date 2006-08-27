@@ -159,7 +159,7 @@ namespace gloox
 
   inline bool Connection::tls_dataAvailable()
   {
-    return SSL_pending( m_ssl );
+    return false; // SSL_pending( m_ssl );
   }
 
   inline void Connection::tls_cleanup()
@@ -377,43 +377,66 @@ namespace gloox
 #elif defined( USE_WINTLS )
   bool Connection::tlsHandshake()
   {
-    if( m_wintls.handshake( m_socket, m_server.c_str ()) == true )
+    SCHANNEL_CRED credentials;
+    credentials.dwVersion = SCHANNEL_CRED_VERSION;
+    credentials.cSupportedAlgs = 0; // FIXME
+    credentials.grbitEnabledProtocols = SP_PROT_TLS1_CLIENT;
+    credentials.dwMinimumCipherStrength = 0; // FIXME
+    credentials.dwMaximumCipherStrength = 0; // FIXME
+    credentials.dwSessionLifespan = 0;
+    credentials.dwFlags = 0; // FIXME
+
+    SecHandle secHandle;
+    TimeStamp timeStamp;
+    SECURITY_STATUS ret;
+    ret = AcquireCredentialsHandle( NULL, UNISP_NAME, SECPKG_CRED_INBOUND, NULL, &credentials, NULL,
+                                    NULL, secHandle, timeStamp );
+    if( ret == SEC_E_OK )
     {
-      m_wintls.GetCertInfo( &m_certInfo );
-
-      if( _strcmpi( m_certInfo.server.c_str(), m_server.c_str() ) )
-        m_certInfo.status |= CertWrongPeer;
-
-      m_secure = true;
-      return true;
+      printf( "AcquireCredentialsHandle OK\n" );
     }
-    return false;
+    else
+    {
+      switch( ret )
+      {
+        case SEC_E_INSUFFICIENT_MEMORY:
+          printf( "1\n" );
+          break;
+        case SEC_E_INTERNAL_ERROR:
+          printf( "2\n" );
+          break;
+        case SEC_E_NO_CREDENTIALS:
+          printf( "3\n" );
+          break;
+        case SEC_E_NOT_OWNER:
+          printf( "4\n" );
+          break;
+        case SEC_E_SECPKG_NOT_FOUND:
+          printf( "5\n" );
+          break;
+        case SEC_E_UNKNOWN_CREDENTIALS:
+          printf( "6\n" );
+          break;
+        default:
+          printf( "7\n" );
+      }
+    }
   }
 
   inline bool Connection::tls_send(const void *data, size_t len)
   {
-    return m_wintls.send( data, len );
   }
 
   inline int Connection::tls_recv(void *data, size_t len)
   {
-    int ret = m_wintls.recv( data, len );
-    if( ret == SOCKET_ERROR )
-    {
-      disconnect( ConnIoError );
-    }
-    return ret;
   }
 
   inline bool Connection::tls_dataAvailable()
   {
-    return m_wintls.dataAvailable();
   }
 
   inline void Connection::tls_cleanup()
   {
-    m_wintls.bye( SCHANNEL_SHUTDOWN );
-    m_wintls.cleanup();
   }
 #endif
 
