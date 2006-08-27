@@ -159,7 +159,7 @@ namespace gloox
 
   inline bool Connection::tls_dataAvailable()
   {
-    return false; // SSL_pending( m_ssl );
+    return false; // SSL_pending( m_ssl ); // FIXME: crashes
   }
 
   inline void Connection::tls_cleanup()
@@ -363,7 +363,7 @@ namespace gloox
 
   inline bool Connection::tls_dataAvailable()
   {
-    return false; // gnutls_check_pending( m_session );
+    return false; // gnutls_check_pending( m_session ); // FIXME: crashes
   }
 
   inline void Connection::tls_cleanup()
@@ -379,60 +379,148 @@ namespace gloox
   {
     SecurityFunctionTable m_SecurityFunc;
 
-    SCHANNEL_CRED credentials;
-    ZeroMemory( &credentials, sizeof( SCHANNEL_CRED ) );
+    SCHANNEL_CRED schannelCred;
+    memset( &schannelCred, 0, sizeof( schannelCred ) );
 
-    credentials.dwVersion = SCHANNEL_CRED_VERSION;
-    credentials.cSupportedAlgs = 0; // FIXME
-    credentials.grbitEnabledProtocols = SP_PROT_TLS1_CLIENT;
+    schannelCred.dwVersion = SCHANNEL_CRED_VERSION;
+    schannelCred.cSupportedAlgs = 0; // FIXME
+    schannelCred.grbitEnabledProtocols = SP_PROT_TLS1_CLIENT;
     #ifdef MSVC
-    credentials.dwMinimumCipherStrength = 0; // FIXME
-    credentials.dwMaximumCipherStrength = 0; // FIXME
+    schannelCred.dwMinimumCipherStrength = 0; // FIXME
+    schannelCred.dwMaximumCipherStrength = 0; // FIXME
     #else
-    credentials.dwMinimumCypherStrength = 0; // FIXME
-    credentials.dwMaximumCypherStrength = 0; // FIXME
+    schannelCred.dwMinimumCypherStrength = 0; // FIXME
+    schannelCred.dwMaximumCypherStrength = 0; // FIXME
     #endif
-    credentials.dwSessionLifespan = 0;
-    credentials.dwFlags = 0; // FIXME
+    schannelCred.dwSessionLifespan = 0;
+    schannelCred.dwFlags = 0; // FIXME
 
-    SecHandle secHandle;
     TimeStamp timeStamp;
     SECURITY_STATUS ret;
     ret = AcquireCredentialsHandle( NULL, UNISP_NAME, SECPKG_CRED_OUTBOUND,
-                                                   NULL, &credentials, NULL,
-                                                   NULL, &secHandle, &timeStamp );
-    if( ret == SEC_E_OK )
+                                    NULL, &schannelCred, NULL,
+                                    NULL, &m_credentials, &timeStamp );
+    if( ret != SEC_E_OK )
+      return false;
+
+    int m_sspiFlags = ISC_REQ_ALLOCATE_MEMORY | ISC_REQ_CONFIDENTIALITY | ISC_REQ_INTEGRITY
+                      | ISC_REQ_MUTUAL_AUTH | ISC_REQ_REPLAY_DETECT | ISC_REQ_SEQUENCE_DETECT
+                      | ISC_REQ_STREAM;
+
+    int bufLen = 0;
+    void* buf = sayHello( bufLen );
+    if( !buf )
+      return false;
+
+    SecBufferDesc outBufferDesc, inBufferDesc;
+    SecBuffer outBuffers[1], inBuffers[2];
+
+    outBuffers[0].BufferType = SECBUFFER_TOKEN;
+    outBuffers[0].pvBuffer = NULL;
+    outBuffers[0].cbBuffer = 0;
+
+    outBufferDesc.ulVersion = SECBUFFER_VERSION;
+    outBufferDesc.cBuffers = 1;
+    outBufferDesc.pBuffers = outBuffers;
+
+    inBuffers[0].BufferType = SECBUFFER_TOKEN;
+    inBuffers[0].pvBuffer = buf;
+    inBuffers[0].cbBuffer = bufLen;
+
+    inBuffers[1].BufferType = SECBUFFER_EMPTY;
+    inBuffers[1].pvBuffer = NULL;
+    inBuffers[1].cbBuffer = 0;
+
+    inBufferDesc.ulVersion = SECBUFFER_VERSION;
+    inBufferDesc.cBuffers = 2;
+    inBufferDesc.pBuffers = inBuffers;
+
+
+    int sspiFlagsOut;
+    ret = InitializeSecurityContextA( &m_credentials, m_context, m_server.c_str(), m_sspiFlags, 0, 0,
+                                       &inBufferDesc, 0, NULL, &outBufferDesc, &sspiFlagsOut, &timeStamp );
+    if( ret == SEC_E_OK || ret == SEC_I_CONTINUE_NEEDED )
     {
-      printf( "AcquireCredentialsHandle OK\n" );
+      void *buf = malloc( outBuffers[0].cbBuffer );
+      if( !buf )
+        return false;
+
+      memcpy( buf, outBuffers[0].pvBuffer, outBuffers[0].cbBuffer );
+      FreeContextBuffer( outBuffers[0].pvBuffer );
+      outBuffers[0].pvBuffer = 0;
     }
-    else
+
+    switch( ret )
     {
-      switch( ret )
-      {
-        case SEC_E_INSUFFICIENT_MEMORY:
-          printf( "1\n" );
-          break;
-        case SEC_E_INTERNAL_ERROR:
-          printf( "2\n" );
-          break;
-        case SEC_E_NO_CREDENTIALS:
-          printf( "3\n" );
-          break;
-        case SEC_E_NOT_OWNER:
-          printf( "4\n" );
-          break;
-        case SEC_E_SECPKG_NOT_FOUND:
-          printf( "5\n" );
-          break;
-        case SEC_E_UNKNOWN_CREDENTIALS:
-          printf( "6\n" );
-          break;
-        default:
-          printf( "7\n" );
-      }
+      case SEC_E_INCOMPLETE_MESSAGE:
+        printf( "11\n" );
+        break;
+      case SEC_I_COMPLETE_AND_CONTINUE:
+        printf( "21\n" );
+        break;
+      case SEC_I_COMPLETE_NEEDED:
+        printf( "31\n" );
+        break;
+      case SEC_I_INCOMPLETE_CREDENTIALS:
+        printf( "41\n" );
+        break;
+      default:
+        printf( "51\n" );
     }
 
     return false;
+  }
+
+  void* Connection::sayHello( int &bufLen )
+  {
+    void* buf = 0;
+
+    SecBufferDesc outBufferDesc;
+    SecBuffer outBuffers[1];
+
+    outBuffers[0].BufferType = SECBUFFER_TOKEN;
+    outBuffers[0].pvBuffer = NULL;
+    outBuffers[0].cbBuffer = 0;
+
+    outBufferDesc.ulVersion = SECBUFFER_VERSION;
+    outBufferDesc.cBuffers = 1;
+    outBufferDesc.pBuffers = outBuffers;
+
+    TimeStamp timeStamp;
+    SECURITY_STATUS ret;
+    int sspiFlagsOut;
+    ret = InitializeSecurityContextA( &m_credentials, NULL, m_server.c_str(), m_sspiFlags, 0, 0,
+                                       NULL, 0, &m_context, &outBufferDesc, &sspiFlagsOut, &timeStamp );
+    if( ret == SEC_I_CONTINUE_NEEDED )
+    {
+      *bufLen = outBuffers[0].cbBuffer;
+      buf = malloc( *bufLen );
+      if( !buf )
+        return 0;
+
+      memcpy( buf, outBuffers[0].pvBuffer, *bufLen );
+      FreeContextBuffer( outBuffers[0].pvBuffer );
+    }
+
+    switch( ret )
+    {
+      case SEC_E_INCOMPLETE_MESSAGE:
+        printf( "1\n" );
+        break;
+      case SEC_I_COMPLETE_AND_CONTINUE:
+        printf( "2\n" );
+        break;
+      case SEC_I_COMPLETE_NEEDED:
+        printf( "3\n" );
+        break;
+      case SEC_I_INCOMPLETE_CREDENTIALS:
+        printf( "4\n" );
+        break;
+      default:
+        printf( "5\n" );
+    }
+
+   return buf;
   }
 
   inline bool Connection::tls_send(const void *data, size_t len)
