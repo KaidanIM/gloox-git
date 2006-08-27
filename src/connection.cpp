@@ -399,11 +399,14 @@ namespace gloox
 
     TimeStamp timeStamp;
     SECURITY_STATUS ret;
-    ret = AcquireCredentialsHandle( NULL, UNISP_NAME, SECPKG_CRED_OUTBOUND,
-                                    NULL, &schannelCred, NULL,
-                                    NULL, &m_credentials, &timeStamp );
+    ret = AcquireCredentialsHandleA( NULL, UNISP_NAME_A, SECPKG_CRED_OUTBOUND,
+                                     NULL, &schannelCred, NULL,
+                                     NULL, &m_credentials, &timeStamp );
     if( ret != SEC_E_OK )
+    {
+      printf( "AcquireCredentialsHandleA failed\n" );
       return false;
+    }
 
     int m_sspiFlags = ISC_REQ_ALLOCATE_MEMORY | ISC_REQ_CONFIDENTIALITY | ISC_REQ_INTEGRITY
                       | ISC_REQ_MUTUAL_AUTH | ISC_REQ_REPLAY_DETECT | ISC_REQ_SEQUENCE_DETECT
@@ -442,8 +445,9 @@ namespace gloox
 
 
     long unsigned int sspiFlagsOut;
-    ret = InitializeSecurityContextA( &m_credentials, &m_context, NULL, m_sspiFlags, 0, 0,
-                                       &inBufferDesc, 0, NULL, &outBufferDesc, &sspiFlagsOut, &timeStamp );
+    ret = InitializeSecurityContextA( &m_credentials, &m_context, NULL, m_sspiFlags, 0,
+                                      SECURITY_NATIVE_DREP, &inBufferDesc, 0, NULL,
+                                      &outBufferDesc, &sspiFlagsOut, &timeStamp );
     if( ret == SEC_E_OK || ret == SEC_I_CONTINUE_NEEDED )
     {
       void *buf = malloc( outBuffers[0].cbBuffer );
@@ -497,8 +501,9 @@ namespace gloox
     TimeStamp timeStamp;
     SECURITY_STATUS ret;
     long unsigned int sspiFlagsOut;
-    ret = InitializeSecurityContextA( &m_credentials, NULL, NULL, m_sspiFlags, 0, 0,
-                                       NULL, 0, &m_context, &outBufferDesc, &sspiFlagsOut, &timeStamp );
+    ret = InitializeSecurityContextA( &m_credentials, NULL, NULL, m_sspiFlags, 0,
+                                      SECURITY_NATIVE_DREP, NULL, 0, &m_context,
+                                      &outBufferDesc, &sspiFlagsOut, &timeStamp );
     if( ret == SEC_I_CONTINUE_NEEDED )
     {
       printf( "OK: Continue needed: " );

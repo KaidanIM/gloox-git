@@ -36,9 +36,10 @@
 # define HAVE_TLS
 #elif defined( HAVE_WINTLS )
 # define USE_WINTLS
-//# include "wintls.h"
+#define SECURITY_WIN32
 #include <windows.h>
 #include <security.h>
+#include <sspi.h>
 # define HAVE_TLS
 #endif
 
