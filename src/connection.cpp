@@ -380,21 +380,27 @@ namespace gloox
     SecurityFunctionTable m_SecurityFunc;
 
     SCHANNEL_CRED credentials;
-    ZeroMemory( credentials, sizeof( SCHANNEL_CRED ) );
+    ZeroMemory( &credentials, sizeof( SCHANNEL_CRED ) );
 
     credentials.dwVersion = SCHANNEL_CRED_VERSION;
     credentials.cSupportedAlgs = 0; // FIXME
     credentials.grbitEnabledProtocols = SP_PROT_TLS1_CLIENT;
+    #ifdef MSVC
     credentials.dwMinimumCipherStrength = 0; // FIXME
     credentials.dwMaximumCipherStrength = 0; // FIXME
+    #else
+    credentials.dwMinimumCypherStrength = 0; // FIXME
+    credentials.dwMaximumCypherStrength = 0; // FIXME
+    #endif
     credentials.dwSessionLifespan = 0;
     credentials.dwFlags = 0; // FIXME
 
     SecHandle secHandle;
     TimeStamp timeStamp;
     SECURITY_STATUS ret;
-    ret = m_SecurityFunc.AcquireCredentialsHandle( NULL, UNISP_NAME, SECPKG_CRED_INBOUND, NULL, &credentials, NULL,
-                                    NULL, secHandle, timeStamp );
+    ret = AcquireCredentialsHandle( NULL, UNISP_NAME, SECPKG_CRED_OUTBOUND,
+                                                   NULL, &credentials, NULL,
+                                                   NULL, &secHandle, &timeStamp );
     if( ret == SEC_E_OK )
     {
       printf( "AcquireCredentialsHandle OK\n" );
