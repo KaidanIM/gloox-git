@@ -6,7 +6,11 @@ AM_CPPFLAGS = -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare
 
 noinst_PROGRAMS = register_test disco_test adhoc_test roster_test privatexml_test component_test \
                   bookmarkstorage_test annotations_test privacylist_test message_test flexoff_test \
-                  ibb_test vcard_test
+                  ibb_test vcard_test client_test
+
+client_test_SOURCES = client_test.cpp
+client_test_LDADD = -lgloox $(LDFLAGS)
+client_test_CFLAGS = $(CPPFLAGS)
 
 register_test_SOURCES = register_test.cpp
 register_test_LDADD = ../libgloox.la $(LDFLAGS)
