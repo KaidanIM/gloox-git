@@ -36,7 +36,9 @@
 # define HAVE_TLS
 #elif defined( HAVE_WINTLS )
 # define USE_WINTLS
-# include "wintls.h"
+//# include "wintls.h"
+#include <windows.h>
+#include <security.h>
 # define HAVE_TLS
 #endif
 
@@ -201,8 +203,8 @@ namespace gloox
 #elif defined( USE_OPENSSL )
       SSL *m_ssl;
 #elif defined( USE_WINTLS )
-      WinTLS m_wintls;
-      PCredHandle m_credentials;
+//      WinTLS m_wintls;
+//      PCredHandle m_credentials;
 #endif
 
       StringList m_cacerts;
