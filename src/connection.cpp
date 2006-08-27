@@ -34,10 +34,6 @@
 #include <winsock.h>
 #endif
 
-#ifdef WIN32
-#define strcasecmp stricmp
-#endif
-
 #include <time.h>
 
 #include <string>
@@ -124,7 +120,11 @@ namespace gloox
       m_certInfo.issuer = peer_CN;
       X509_NAME_get_text_by_NID( X509_get_subject_name( peer ), NID_commonName, peer_CN, sizeof( peer_CN ) );
       m_certInfo.server = peer_CN;
-      if( strcasecmp( peer_CN, m_server.c_str() ) )
+      std::string p;
+      p.assign( peer_CN );
+      int (*pf)( int ) = tolower;
+      transform( p.begin(), p.end(), p.begin(), pf );
+      if( p != m_server )
         m_certInfo.status |= CertWrongPeer;
     }
     else
