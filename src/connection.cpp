@@ -377,7 +377,11 @@ namespace gloox
 #elif defined( USE_WINTLS )
   bool Connection::tlsHandshake()
   {
+    SecurityFunctionTable m_SecurityFunc;
+
     SCHANNEL_CRED credentials;
+    ZeroMemory( credentials, sizeof( SCHANNEL_CRED ) );
+
     credentials.dwVersion = SCHANNEL_CRED_VERSION;
     credentials.cSupportedAlgs = 0; // FIXME
     credentials.grbitEnabledProtocols = SP_PROT_TLS1_CLIENT;
@@ -389,7 +393,7 @@ namespace gloox
     SecHandle secHandle;
     TimeStamp timeStamp;
     SECURITY_STATUS ret;
-    ret = AcquireCredentialsHandle( NULL, UNISP_NAME, SECPKG_CRED_INBOUND, NULL, &credentials, NULL,
+    ret = m_SecurityFunc.AcquireCredentialsHandle( NULL, UNISP_NAME, SECPKG_CRED_INBOUND, NULL, &credentials, NULL,
                                     NULL, secHandle, timeStamp );
     if( ret == SEC_E_OK )
     {
