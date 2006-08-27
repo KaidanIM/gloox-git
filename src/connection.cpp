@@ -410,7 +410,10 @@ namespace gloox
     int bufLen = 0;
     void* buf = sayHello( bufLen );
     if( !buf )
+    {
+      printf( "sayHello returned empty buffer\n" );
       return false;
+    }
 
     SecBufferDesc outBufferDesc, inBufferDesc;
     SecBuffer outBuffers[1], inBuffers[2];
@@ -436,14 +439,17 @@ namespace gloox
     inBufferDesc.pBuffers = inBuffers;
 
 
-    int sspiFlagsOut;
-    ret = InitializeSecurityContextA( &m_credentials, m_context, m_server.c_str(), m_sspiFlags, 0, 0,
+    long unsigned int sspiFlagsOut;
+    ret = InitializeSecurityContextA( &m_credentials, &m_context, NULL, m_sspiFlags, 0, 0,
                                        &inBufferDesc, 0, NULL, &outBufferDesc, &sspiFlagsOut, &timeStamp );
     if( ret == SEC_E_OK || ret == SEC_I_CONTINUE_NEEDED )
     {
       void *buf = malloc( outBuffers[0].cbBuffer );
       if( !buf )
+      {
+        printf( "malloc failed\n ");
         return false;
+      }
 
       memcpy( buf, outBuffers[0].pvBuffer, outBuffers[0].cbBuffer );
       FreeContextBuffer( outBuffers[0].pvBuffer );
@@ -488,17 +494,18 @@ namespace gloox
 
     TimeStamp timeStamp;
     SECURITY_STATUS ret;
-    int sspiFlagsOut;
-    ret = InitializeSecurityContextA( &m_credentials, NULL, m_server.c_str(), m_sspiFlags, 0, 0,
+    long unsigned int sspiFlagsOut;
+    ret = InitializeSecurityContextA( &m_credentials, NULL, NULL, m_sspiFlags, 0, 0,
                                        NULL, 0, &m_context, &outBufferDesc, &sspiFlagsOut, &timeStamp );
     if( ret == SEC_I_CONTINUE_NEEDED )
     {
-      *bufLen = outBuffers[0].cbBuffer;
-      buf = malloc( *bufLen );
+      printf( "OK: Continue needed: " );
+      bufLen = outBuffers[0].cbBuffer;
+      buf = malloc( bufLen );
       if( !buf )
         return 0;
 
-      memcpy( buf, outBuffers[0].pvBuffer, *bufLen );
+      memcpy( buf, outBuffers[0].pvBuffer, bufLen );
       FreeContextBuffer( outBuffers[0].pvBuffer );
     }
 
@@ -516,8 +523,11 @@ namespace gloox
       case SEC_I_INCOMPLETE_CREDENTIALS:
         printf( "4\n" );
         break;
-      default:
+      case SEC_E_OK:
         printf( "5\n" );
+        break;
+      default:
+        printf( "6: %ld\n", ret );
     }
 
    return buf;
