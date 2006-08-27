@@ -205,7 +205,7 @@ namespace gloox
 #elif defined( USE_WINTLS )
 //      WinTLS m_wintls;
       CredHandle m_credentials;
-      CtxHandle m_context;
+      CtxtHandle m_context;
       int m_sspiFlags;
       void* sayHello( int &bufLen );
 #endif
