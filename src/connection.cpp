@@ -433,9 +433,9 @@ namespace gloox
       return false;
     }
 
-    int m_sspiFlags = ISC_REQ_ALLOCATE_MEMORY | ISC_REQ_CONFIDENTIALITY | ISC_REQ_INTEGRITY
+    int m_sspiFlags = ISC_REQ_ALLOCATE_MEMORY | ISC_REQ_CONFIDENTIALITY | ISC_REQ_EXTENDED_ERROR
                       | ISC_REQ_MUTUAL_AUTH | ISC_REQ_REPLAY_DETECT | ISC_REQ_SEQUENCE_DETECT
-                      | ISC_REQ_STREAM | ISC_REQ_MANUAL_CRED_VALIDATION;
+                      | ISC_REQ_STREAM;
 
     int bufLen = 0;
     void* buf = sayHello( bufLen );
@@ -529,7 +529,7 @@ namespace gloox
     ret = m_securityFunc->InitializeSecurityContextA( &m_credentials, NULL, NULL, m_sspiFlags, 0,
                                       SECURITY_NATIVE_DREP, NULL, 0, &m_context,
                                       &outBufferDesc, &sspiFlagsOut, &timeStamp );
-    if( ret == SEC_I_CONTINUE_NEEDED )
+    if( ret == SEC_I_CONTINUE_NEEDED && outBuffers[0].cbBuffer != 0 && outBuffers[0].pvBuffer != NULL )
     {
       printf( "OK: Continue needed: " );
       bufLen = outBuffers[0].cbBuffer;
