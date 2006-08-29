@@ -194,7 +194,6 @@ namespace gloox
 #endif
 
 #if defined( USE_GNUTLS )
-
       bool verifyAgainstCAs( gnutls_x509_crt_t cert, gnutls_x509_crt_t *CAList, int CAListSize );
       bool verifyAgainst( gnutls_x509_crt_t cert, gnutls_x509_crt_t issuer );
 
@@ -204,7 +203,8 @@ namespace gloox
 #elif defined( USE_OPENSSL )
       SSL *m_ssl;
 #elif defined( USE_WINTLS )
-      void* sayHello( int &bufLen );
+      bool handshakeLoop();
+
       SecurityFunctionTableA *m_securityFunc;
       CredHandle m_credentials;
       CtxtHandle m_context;
