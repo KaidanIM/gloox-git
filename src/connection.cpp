@@ -437,79 +437,7 @@ namespace gloox
                       | ISC_REQ_MUTUAL_AUTH | ISC_REQ_REPLAY_DETECT | ISC_REQ_SEQUENCE_DETECT
                       | ISC_REQ_STREAM;
 
-    int bufLen = 0;
-    void* buf = sayHello( bufLen );
-    if( !buf )
-    {
-      printf( "sayHello returned empty buffer\n" );
-      return false;
-    }
 
-    SecBufferDesc outBufferDesc, inBufferDesc;
-    SecBuffer outBuffers[1], inBuffers[2];
-
-    outBuffers[0].BufferType = SECBUFFER_TOKEN;
-    outBuffers[0].pvBuffer = NULL;
-    outBuffers[0].cbBuffer = 0;
-
-    outBufferDesc.ulVersion = SECBUFFER_VERSION;
-    outBufferDesc.cBuffers = 1;
-    outBufferDesc.pBuffers = outBuffers;
-
-    inBuffers[0].BufferType = SECBUFFER_TOKEN;
-    inBuffers[0].pvBuffer = buf;
-    inBuffers[0].cbBuffer = bufLen;
-
-    inBuffers[1].BufferType = SECBUFFER_EMPTY;
-    inBuffers[1].pvBuffer = NULL;
-    inBuffers[1].cbBuffer = 0;
-
-    inBufferDesc.ulVersion = SECBUFFER_VERSION;
-    inBufferDesc.cBuffers = 2;
-    inBufferDesc.pBuffers = inBuffers;
-
-
-    long unsigned int sspiFlagsOut;
-    ret = m_securityFunc->InitializeSecurityContextA( &m_credentials, &m_context, NULL, m_sspiFlags, 0,
-                                      SECURITY_NATIVE_DREP, &inBufferDesc, 0, NULL,
-                                      &outBufferDesc, &sspiFlagsOut, &timeStamp );
-    if( ret == SEC_E_OK || ret == SEC_I_CONTINUE_NEEDED )
-    {
-      void *buf = malloc( outBuffers[0].cbBuffer );
-      if( !buf )
-      {
-        printf( "malloc failed\n ");
-        return false;
-      }
-
-      memcpy( buf, outBuffers[0].pvBuffer, outBuffers[0].cbBuffer );
-      m_securityFunc->FreeContextBuffer( outBuffers[0].pvBuffer );
-      outBuffers[0].pvBuffer = 0;
-    }
-
-    switch( ret )
-    {
-      case SEC_E_INCOMPLETE_MESSAGE:
-        printf( "11\n" );
-        break;
-      case SEC_I_COMPLETE_AND_CONTINUE:
-        printf( "21\n" );
-        break;
-      case SEC_I_COMPLETE_NEEDED:
-        printf( "31\n" );
-        break;
-      case SEC_I_INCOMPLETE_CREDENTIALS:
-        printf( "41\n" );
-        break;
-      default:
-        printf( "51\n" );
-    }
-
-    return false;
-  }
-
-  void* Connection::sayHello( int &bufLen )
-  {
     void* buf = 0;
 
     SecBufferDesc outBufferDesc;
@@ -527,42 +455,160 @@ namespace gloox
     SECURITY_STATUS ret;
     long unsigned int sspiFlagsOut;
     ret = m_securityFunc->InitializeSecurityContextA( &m_credentials, NULL, NULL, m_sspiFlags, 0,
-                                      SECURITY_NATIVE_DREP, NULL, 0, &m_context,
-                                      &outBufferDesc, &sspiFlagsOut, &timeStamp );
+        SECURITY_NATIVE_DREP, NULL, 0, &m_context,
+        &outBufferDesc, &sspiFlagsOut, &timeStamp );
     if( ret == SEC_I_CONTINUE_NEEDED && outBuffers[0].cbBuffer != 0 && outBuffers[0].pvBuffer != NULL )
     {
       printf( "OK: Continue needed: " );
-      bufLen = outBuffers[0].cbBuffer;
-      buf = malloc( bufLen );
-      if( !buf )
-        return 0;
 
-      memcpy( buf, outBuffers[0].pvBuffer, bufLen );
+      int ret = ::send( m_socket, outBuffers[0].pvBuffer, outBuffers[0].cbBuffer, 0 );
+      if( ret == SOCKET_ERROR || ret == 0 )
+      {
+        m_securityFunc->FreeContextBuffer( outBuffers[0].pvBuffer );
+        m_securityFunc->DeleteSecurityContext( &m_context );
+        return false;
+      }
+
       m_securityFunc->FreeContextBuffer( outBuffers[0].pvBuffer );
+      outBuffers[0].pvBuffer = NULL;
     }
 
-    switch( ret )
+    if( !handshakeLoop() )
     {
-      case SEC_E_INCOMPLETE_MESSAGE:
-        printf( "1\n" );
-        break;
-      case SEC_I_COMPLETE_AND_CONTINUE:
-        printf( "2\n" );
-        break;
-      case SEC_I_COMPLETE_NEEDED:
-        printf( "3\n" );
-        break;
-      case SEC_I_INCOMPLETE_CREDENTIALS:
-        printf( "4\n" );
-        break;
-      case SEC_E_OK:
-        printf( "5\n" );
-        break;
-      default:
-        printf( "6: %ld\n", ret );
+      printf( "handshakeLoop failed\n" );
+      return false;
     }
 
-   return buf;
+    return /*true*/false;
+  }
+
+  bool Connection::handshakeLoop()
+  {
+    const int bufsize = 65536;
+    unsigned char *buf = (unsigned char*)malloc( bufsize );
+    if( !buf )
+      return false;
+
+    int bufFilled = 0;
+    int dataRecv = 0;
+    bool doRead = true;
+
+    SecBufferDesc outBufferDesc, inBufferDesc;
+    SecBuffer outBuffers[1], inBuffers[2];
+
+    SECURITY_STATUS ret = SEC_I_CONTINUE_NEEDED;
+
+    while( ret == SEC_I_CONTINUE_NEEDED ||
+           ret == SEC_E_INCOMPLETE_MESSAGE ||
+           ret == SEC_I_INCOMPLETE_CREDENTIALS )
+    {
+
+      if( doRead )
+      {
+        dataRecv = recv( m_socket, buf + bufFilled, bufsize - bufFilled, 0 );
+
+        if( dataRecv == SOCKET_ERROR || dataRecv == 0 )
+        {
+          break;
+        }
+
+        printf( "%d bytes handshake data received\n", dataRecv );
+
+        bufFilled += dataRecv;
+      }
+      else
+      {
+        doRead = true;
+      }
+
+      outBuffers[0].BufferType = SECBUFFER_TOKEN;
+      outBuffers[0].pvBuffer = NULL;
+      outBuffers[0].cbBuffer = 0;
+
+      outBufferDesc.ulVersion = SECBUFFER_VERSION;
+      outBufferDesc.cBuffers = 1;
+      outBufferDesc.pBuffers = outBuffers;
+
+      inBuffers[0].BufferType = SECBUFFER_TOKEN;
+      inBuffers[0].pvBuffer = buf;
+      inBuffers[0].cbBuffer = bufFilled;
+
+      inBuffers[1].BufferType = SECBUFFER_EMPTY;
+      inBuffers[1].pvBuffer = NULL;
+      inBuffers[1].cbBuffer = 0;
+
+      inBufferDesc.ulVersion = SECBUFFER_VERSION;
+      inBufferDesc.cBuffers = 2;
+      inBufferDesc.pBuffers = inBuffers;
+
+      printf( "buffers inited, calling InitializeSecurityContextA\n" );
+      long unsigned int sspiFlagsOut;
+      ret = m_securityFunc->InitializeSecurityContextA( &m_credentials, &m_context, NULL,
+                                                        m_sspiFlags, 0,
+                                                        SECURITY_NATIVE_DREP, &inBufferDesc, 0, NULL,
+                                                        &outBufferDesc, &sspiFlagsOut, &timeStamp );
+      if( ret == SEC_E_OK || ret == SEC_I_CONTINUE_NEEDED ||
+          ( FAILED( ret ) && sspiFlagsOut & ISC_RET_EXTENDED_ERROR ) )
+      {
+        if( outBuffers[0].cbBuffer != 0 && outBuffers[0].pvBuffer != NULL )
+        {
+          printf( "ISCA returned, buffers not empty\n" );
+          dataRecv = send( m_socket, outBuffers[0].pvBuffer, outBuffers[0].cbBuffer, 0  );
+          if( dataRecv == SOCKET_ERROR || dataRecv == 0 )
+          {
+            m_securityFunc->FreeContextBuffer( outBuffers[0].pvBuffer );
+            m_securityFunc->DeleteSecurityContext( m_context );
+            free buf;
+            printf( "coudl not send bufer to server, exiting\n" );
+            return false;
+          }
+
+          m_securityFunc->FreeContextBuffer( outBuffers[0].pvBuffer );
+          outBuffers[0].pvBuffer = NULL;
+        }
+      }
+
+      if( ret == SEC_E_INCOMPLETE_MESSAGE )
+        continue;
+
+      if( ret == SEC_E_OK )
+      {
+        printf( "handshake successful\n" );
+        break;
+      }
+
+      if( FAILED( ret ) )
+        break;
+
+      if( ret == SEC_I_INCOMPLETE_CREDENTIALS )
+      {
+        ret = SEC_I_CONTINUE_NEEDED;
+        continue;
+      }
+
+      if( inBuffers[1].BufferType == SECBUFFER_EXTRA )
+      {
+        printf("some xtra mem in inbuf\n" );
+        MoveMemory( buf, buf + ( bufFilled - inBuffers[1].cbBuffer ),
+                   inBuffers[1].cbBuffer );
+
+        bufFilled = inBuffers[1].cbBuffer;
+      }
+      else
+      {
+        bufFilled = 0;
+      }
+    }
+
+    if( FAILED( ret ) )
+      m_securityFunc->DeleteSecurityContext( m_context );
+
+    free( buf );
+
+    if( ret == SEC_E_OK )
+      return true;
+
+    return false;
   }
 
   inline bool Connection::tls_send(const void *data, size_t len)
@@ -582,6 +628,7 @@ namespace gloox
 
   inline void Connection::tls_cleanup()
   {
+    m_securityFunc->DeleteSecurityContext( m_context );
   }
 #endif
 
