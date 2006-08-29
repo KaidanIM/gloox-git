@@ -437,9 +437,6 @@ namespace gloox
                       | ISC_REQ_MUTUAL_AUTH | ISC_REQ_REPLAY_DETECT | ISC_REQ_SEQUENCE_DETECT
                       | ISC_REQ_STREAM;
 
-
-    void* buf = 0;
-
     SecBufferDesc outBufferDesc;
     SecBuffer outBuffers[1];
 
