@@ -205,6 +205,7 @@ namespace gloox
       SSL *m_ssl;
 #elif defined( USE_WINTLS )
 //      WinTLS m_wintls;
+      SecurityFunctionTableA *m_securityFunc;
       CredHandle m_credentials;
       CtxtHandle m_context;
       int m_sspiFlags;
