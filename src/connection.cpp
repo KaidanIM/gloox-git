@@ -448,8 +448,6 @@ namespace gloox
     outBufferDesc.cBuffers = 1;
     outBufferDesc.pBuffers = outBuffers;
 
-    TimeStamp timeStamp;
-    SECURITY_STATUS ret;
     long unsigned int sspiFlagsOut;
     ret = m_securityFunc->InitializeSecurityContextA( &m_credentials, NULL, NULL, m_sspiFlags, 0,
         SECURITY_NATIVE_DREP, NULL, 0, &m_context,
@@ -458,7 +456,7 @@ namespace gloox
     {
       printf( "OK: Continue needed: " );
 
-      int ret = ::send( m_socket, outBuffers[0].pvBuffer, outBuffers[0].cbBuffer, 0 );
+      int ret = ::send( m_socket, (const char*)outBuffers[0].pvBuffer, outBuffers[0].cbBuffer, 0 );
       if( ret == SOCKET_ERROR || ret == 0 )
       {
         m_securityFunc->FreeContextBuffer( outBuffers[0].pvBuffer );
@@ -482,7 +480,7 @@ namespace gloox
   bool Connection::handshakeLoop()
   {
     const int bufsize = 65536;
-    unsigned char *buf = (unsigned char*)malloc( bufsize );
+    char *buf = (char*)malloc( bufsize );
     if( !buf )
       return false;
 
@@ -502,7 +500,7 @@ namespace gloox
 
       if( doRead )
       {
-        dataRecv = recv( m_socket, buf + bufFilled, bufsize - bufFilled, 0 );
+        dataRecv = ::recv( m_socket, buf + bufFilled, bufsize - bufFilled, 0 );
 
         if( dataRecv == SOCKET_ERROR || dataRecv == 0 )
         {
@@ -540,6 +538,7 @@ namespace gloox
 
       printf( "buffers inited, calling InitializeSecurityContextA\n" );
       long unsigned int sspiFlagsOut;
+      TimeStamp timeStamp;
       ret = m_securityFunc->InitializeSecurityContextA( &m_credentials, &m_context, NULL,
                                                         m_sspiFlags, 0,
                                                         SECURITY_NATIVE_DREP, &inBufferDesc, 0, NULL,
@@ -550,12 +549,12 @@ namespace gloox
         if( outBuffers[0].cbBuffer != 0 && outBuffers[0].pvBuffer != NULL )
         {
           printf( "ISCA returned, buffers not empty\n" );
-          dataRecv = send( m_socket, outBuffers[0].pvBuffer, outBuffers[0].cbBuffer, 0  );
+          dataRecv = ::send( m_socket, (const char*)outBuffers[0].pvBuffer, outBuffers[0].cbBuffer, 0  );
           if( dataRecv == SOCKET_ERROR || dataRecv == 0 )
           {
-            m_securityFunc->FreeContextBuffer( outBuffers[0].pvBuffer );
-            m_securityFunc->DeleteSecurityContext( m_context );
-            free buf;
+            m_securityFunc->FreeContextBuffer( &outBuffers[0].pvBuffer );
+            m_securityFunc->DeleteSecurityContext( &m_context );
+            free( buf );
             printf( "coudl not send bufer to server, exiting\n" );
             return false;
           }
@@ -579,6 +578,7 @@ namespace gloox
 
       if( ret == SEC_I_INCOMPLETE_CREDENTIALS )
       {
+        printf( "server requested client credentials\n" );
         ret = SEC_I_CONTINUE_NEEDED;
         continue;
       }
@@ -598,7 +598,7 @@ namespace gloox
     }
 
     if( FAILED( ret ) )
-      m_securityFunc->DeleteSecurityContext( m_context );
+      m_securityFunc->DeleteSecurityContext( &m_context );
 
     free( buf );
 
@@ -625,7 +625,7 @@ namespace gloox
 
   inline void Connection::tls_cleanup()
   {
-    m_securityFunc->DeleteSecurityContext( m_context );
+    m_securityFunc->DeleteSecurityContext( &m_context );
   }
 #endif
 
