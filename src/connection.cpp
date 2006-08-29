@@ -483,7 +483,7 @@ namespace gloox
       }
 
       memcpy( buf, outBuffers[0].pvBuffer, outBuffers[0].cbBuffer );
-      FreeContextBuffer( outBuffers[0].pvBuffer );
+      m_securityFunc->FreeContextBuffer( outBuffers[0].pvBuffer );
       outBuffers[0].pvBuffer = 0;
     }
 
@@ -538,7 +538,7 @@ namespace gloox
         return 0;
 
       memcpy( buf, outBuffers[0].pvBuffer, bufLen );
-      FreeContextBuffer( outBuffers[0].pvBuffer );
+      m_securityFunc->FreeContextBuffer( outBuffers[0].pvBuffer );
     }
 
     switch( ret )
