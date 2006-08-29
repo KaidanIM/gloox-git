@@ -381,9 +381,27 @@ namespace gloox
 #elif defined( USE_WINTLS )
   bool Connection::tlsHandshake()
   {
-    m_securityFunc = InitSecurityInterfaceA();
-    if( !m_securityFunc )
+    INIT_SECURITY_INTERFACE pInitSecurityInterface;
+
+    m_lib = LoadLibrary( "secur32.dll" );
+    if( m_lib == NULL )
       return false;
+
+    pInitSecurityInterface = (INIT_SECURITY_INTERFACE)GetProcAddress( m_lib, "InitSecurityInterfaceA" );
+    if( pInitSecurityInterface == NULL )
+    {
+      FreeLibrary( m_lib );
+      m_lib = 0;
+      return false;
+    }
+
+    m_securityFunc = pInitSecurityInterface();
+    if( !m_securityFunc )
+    {
+      FreeLibrary( m_lib );
+      m_lib = 0;
+      return false;
+    }
 
     SCHANNEL_CRED schannelCred;
     memset( &schannelCred, 0, sizeof( schannelCred ) );

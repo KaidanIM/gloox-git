@@ -204,12 +204,12 @@ namespace gloox
 #elif defined( USE_OPENSSL )
       SSL *m_ssl;
 #elif defined( USE_WINTLS )
-//      WinTLS m_wintls;
+      void* sayHello( int &bufLen );
       SecurityFunctionTableA *m_securityFunc;
       CredHandle m_credentials;
       CtxtHandle m_context;
       int m_sspiFlags;
-      void* sayHello( int &bufLen );
+      HWMODULE m_lib;
 #endif
 
       StringList m_cacerts;
