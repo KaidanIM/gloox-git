@@ -381,7 +381,9 @@ namespace gloox
 #elif defined( USE_WINTLS )
   bool Connection::tlsHandshake()
   {
-    SecurityFunctionTable m_SecurityFunc;
+    m_securityFunc = InitSecurityInterfaceA();
+    if( !m_securityFunc )
+      return false;
 
     SCHANNEL_CRED schannelCred;
     memset( &schannelCred, 0, sizeof( schannelCred ) );
@@ -389,8 +391,8 @@ namespace gloox
     memset( &m_context, 0, sizeof( m_context ) );
 
     schannelCred.dwVersion = SCHANNEL_CRED_VERSION;
-    schannelCred.cSupportedAlgs = 0; // FIXME
     schannelCred.grbitEnabledProtocols = SP_PROT_TLS1_CLIENT;
+    schannelCred.cSupportedAlgs = 0; // FIXME
     #ifdef MSVC
     schannelCred.dwMinimumCipherStrength = 0; // FIXME
     schannelCred.dwMaximumCipherStrength = 0; // FIXME
@@ -399,11 +401,12 @@ namespace gloox
     schannelCred.dwMaximumCypherStrength = 0; // FIXME
     #endif
     schannelCred.dwSessionLifespan = 0;
-    schannelCred.dwFlags = 0; // FIXME
+    schannelCred.dwFlags = SCH_CRED_NO_SERVERNAME_CHECK | SCH_CRED_NO_DEFAULT_CREDS |
+                           SCH_CRED_MANUAL_CRED_VALIDATION; // FIXME check
 
     TimeStamp timeStamp;
     SECURITY_STATUS ret;
-    ret = AcquireCredentialsHandleA( NULL, UNISP_NAME_A, SECPKG_CRED_OUTBOUND,
+    ret = m_securityFunc->AcquireCredentialsHandleA( NULL, UNISP_NAME_A, SECPKG_CRED_OUTBOUND,
                                      NULL, &schannelCred, NULL,
                                      NULL, &m_credentials, &timeStamp );
     if( ret != SEC_E_OK )
@@ -449,7 +452,7 @@ namespace gloox
 
 
     long unsigned int sspiFlagsOut;
-    ret = InitializeSecurityContextA( &m_credentials, &m_context, NULL, m_sspiFlags, 0,
+    ret = m_securityFunc->InitializeSecurityContextA( &m_credentials, &m_context, NULL, m_sspiFlags, 0,
                                       SECURITY_NATIVE_DREP, &inBufferDesc, 0, NULL,
                                       &outBufferDesc, &sspiFlagsOut, &timeStamp );
     if( ret == SEC_E_OK || ret == SEC_I_CONTINUE_NEEDED )
@@ -505,7 +508,7 @@ namespace gloox
     TimeStamp timeStamp;
     SECURITY_STATUS ret;
     long unsigned int sspiFlagsOut;
-    ret = InitializeSecurityContextA( &m_credentials, NULL, NULL, m_sspiFlags, 0,
+    ret = m_securityFunc->InitializeSecurityContextA( &m_credentials, NULL, NULL, m_sspiFlags, 0,
                                       SECURITY_NATIVE_DREP, NULL, 0, &m_context,
                                       &outBufferDesc, &sspiFlagsOut, &timeStamp );
     if( ret == SEC_I_CONTINUE_NEEDED )
