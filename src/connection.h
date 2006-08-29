@@ -209,7 +209,7 @@ namespace gloox
       CredHandle m_credentials;
       CtxtHandle m_context;
       int m_sspiFlags;
-      HWMODULE m_lib;
+      HMODULE m_lib;
 #endif
 
       StringList m_cacerts;
