@@ -213,6 +213,7 @@ namespace gloox
 
       char *m_ioBuffer;
       int m_sspiFlags;
+      int m_messageOffset;
 #endif
 
       StringList m_cacerts;
