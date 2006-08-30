@@ -765,7 +765,7 @@ namespace gloox
     SECURITY_STATUS ret;
     SecBuffer *dataBuffer = 0;
     SecBuffer *extraBuffer = 0;
-    m_iBuffer = 0;
+//     m_iBuffer = 0;
 
     int maxLength = m_streamSizes.cbHeader + m_streamSizes.cbMaximumMessage + m_streamSizes.cbTrailer;
 
