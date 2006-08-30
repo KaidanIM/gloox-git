@@ -491,7 +491,7 @@ namespace gloox
     if( !m_oBuffer )
       return false;
 
-    m_bufferOffset = m_iBuffer;
+    m_bufferOffset = 0;
     m_messageOffset = m_oBuffer + m_streamSizes.cbHeader;
 
     SecPkgContext_Authority streamAuthority;
@@ -709,9 +709,6 @@ namespace gloox
       return false;
 
     SECURITY_STATUS ret;
-    SecBuffer *dataBuffer;
-    SecBuffer *extraBuffer;
-    SecBuffer extraBuffer;
 
     m_buffers[0].BufferType = SECBUFFER_STREAM_HEADER;
     m_buffers[0].pvBuffer = m_oBuffer;
@@ -754,7 +751,7 @@ namespace gloox
 
       int t = ::send( m_socket, m_oBuffer,
                       m_buffers[0].cbBuffer + m_buffers[1].cbBuffer + m_buffers[2].cbBuffer, 0 );
-      if( t == SOCKET_ERROR || cbData == 0 )
+      if( t == SOCKET_ERROR || t == 0 )
       {
         return false;
       }
@@ -770,7 +767,7 @@ namespace gloox
     SecBuffer *extraBuffer = 0;
     m_iBuffer = 0;
 
-    int maxLength = m_streamSizes.cbHeader  m_streamSizes.cbMaximumMessage + m_streamSizes.cbTrailer;
+    int maxLength = m_streamSizes.cbHeader + m_streamSizes.cbMaximumMessage + m_streamSizes.cbTrailer;
 
     int t = ::recv( m_socket, m_iBuffer + m_bufferOffset, maxLength - m_bufferOffset, 0 );
     if( t == SOCKET_ERROR )
@@ -790,17 +787,17 @@ namespace gloox
 
     m_message.ulVersion = SECBUFFER_VERSION;
     m_message.cBuffers = 4;
-    m_message.pBuffers = m_uffers;
+    m_message.pBuffers = m_buffers;
 
     ret = m_securityFunc->DecryptMessage( &m_context, &m_message, 0, NULL );
 
     if( ret == SEC_E_INCOMPLETE_MESSAGE )
       return 0;
 
-    if( ret == SEC_I_CONTEXT_EXPIRED )
-      return 0;
+//    if( ret == SEC_I_CONTEXT_EXPIRED )
+//      return 0;
 
-    if( ret != SEC_E_OK && ret != SEC_I_RENEGOTIATE && ret != SEC_I_CONTEXT_EXPIRED )
+    if( ret != SEC_E_OK && ret != SEC_I_RENEGOTIATE )
       return false;
 
     for( int i = 1; i < 4; ++i )
@@ -817,15 +814,15 @@ namespace gloox
 
     if( dataBuffer )
     {
-      if( dataBuffer.cbBuffer > len )
+      if( dataBuffer->cbBuffer > len )
       {
         printf( "uhoh! buffer too small! FIXME!!!!\n" );
-        memcpy( data, dataBuffer.pvBuffer, len );
+        memcpy( data, dataBuffer->pvBuffer, len );
       }
       else
       {
-        memcpy( data, dataBuffer.pvBuffer, dataBuffer.cbBuffer );
-        return dataBuffer.cbBuffer;
+        memcpy( data, dataBuffer->pvBuffer, dataBuffer->cbBuffer );
+        return dataBuffer->cbBuffer;
       }
     }
 

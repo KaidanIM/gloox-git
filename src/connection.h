@@ -218,6 +218,7 @@ namespace gloox
       char *m_iBuffer;
       char *m_oBuffer;
       int m_bufferSize;
+      int m_bufferOffset;
       int m_sspiFlags;
 #endif
 
