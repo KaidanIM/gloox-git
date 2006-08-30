@@ -818,6 +818,7 @@ namespace gloox
       {
         printf( "uhoh! buffer too small! FIXME!!!!\n" );
         memcpy( data, dataBuffer->pvBuffer, len );
+        return len;
       }
       else
       {
