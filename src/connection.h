@@ -211,9 +211,9 @@ namespace gloox
       SecPkgContext_StreamSizes m_streamSizes;
       HMODULE m_lib;
 
+      char *m_messageOffset;
       char *m_ioBuffer;
       int m_sspiFlags;
-      int m_messageOffset;
 #endif
 
       StringList m_cacerts;
