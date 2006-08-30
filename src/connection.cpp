@@ -794,6 +794,8 @@ namespace gloox
     if( ret == SEC_E_INCOMPLETE_MESSAGE )
       return 0;
 
+    m_bufferOffset = 0;
+
 //    if( ret == SEC_I_CONTEXT_EXPIRED )
 //      return 0;
 
