@@ -350,7 +350,7 @@ namespace gloox
     return true;
   }
 
-  inline bool Connection::tls_send(const void *data, size_t len)
+  inline bool Connection::tls_send( const void *data, size_t len )
   {
     int ret;
     do
@@ -361,7 +361,7 @@ namespace gloox
     return true;
   }
 
-  inline int Connection::tls_recv(void *data, size_t len)
+  inline int Connection::tls_recv( void *data, size_t len )
   {
     return gnutls_record_recv( m_session, data, len );
   }
@@ -483,11 +483,16 @@ namespace gloox
     }
 
     int maxSize = m_streamSizes.cbHeader + m_streamSizes.cbMaximumMessage + m_streamSizes.cbTrailer;
-    m_ioBuffer = (char*)malloc( maxSize );
-    if( !m_ioBuffer )
+    m_iBuffer = (char*)malloc( maxSize );
+    if( !m_iBuffer )
       return false;
 
-    m_messageOffset = m_ioBuffer + m_streamSizes.cbHeader;
+    m_oBuffer = (char*)malloc( maxSize );
+    if( !m_oBuffer )
+      return false;
+
+    m_bufferOffset = m_iBuffer;
+    m_messageOffset = m_oBuffer + m_streamSizes.cbHeader;
 
     SecPkgContext_Authority streamAuthority;
     ret = m_securityFunc->QueryContextAttributes( &m_context, SECPKG_ATTR_AUTHORITY, &streamAuthority );
@@ -558,6 +563,8 @@ namespace gloox
 
       oss << " " << streamInfo.dwHashStrength;
       m_certInfo.mac = oss.str();
+
+      m_certInfo.compression = "unknown";
     }
 
     m_secure = true;
@@ -696,13 +703,132 @@ namespace gloox
     return false;
   }
 
-  inline bool Connection::tls_send(const void *data, size_t len)
+  inline bool Connection::tls_send( const void *data, size_t len )
   {
-    return false;
+    if( len <= 0 )
+      return false;
+
+    SECURITY_STATUS ret;
+    SecBuffer *dataBuffer;
+    SecBuffer *extraBuffer;
+    SecBuffer extraBuffer;
+
+    m_buffers[0].BufferType = SECBUFFER_STREAM_HEADER;
+    m_buffers[0].pvBuffer = m_oBuffer;
+    m_buffers[0].cbBuffer = m_streamSizes.cbHeader;
+
+    m_buffers[1].BufferType = SECBUFFER_DATA;
+    m_buffers[1].pvBuffer = m_messageOffset;
+
+    m_buffers[2].BufferType = SECBUFFER_STREAM_TRAILER;
+    m_buffers[2].cbBuffer = m_streamSizes.cbTrailer;
+
+    m_buffers[3].BufferType = SECBUFFER_EMPTY;
+    m_buffers[3].pvBuffer = NULL;
+    m_buffers[3].cbBuffer = 0;
+
+    m_message.ulVersion = SECBUFFER_VERSION;
+    m_message.cBuffers = 4;
+    m_message.pBuffers = m_buffers;
+
+    while( len > 0 )
+    {
+      if( m_streamSizes.cbMaximumMessage < len )
+      {
+        memcpy( m_messageOffset, data, m_streamSizes.cbMaximumMessage );
+        len -= m_streamSizes.cbMaximumMessage;
+        m_buffers[1].cbBuffer = m_streamSizes.cbMaximumMessage;
+        m_buffers[2].pvBuffer = m_messageOffset + m_streamSizes.cbMaximumMessage;
+      }
+      else
+      {
+        memcpy( m_messageOffset, data, len );
+        m_buffers[1].cbBuffer = len;
+        m_buffers[2].pvBuffer = m_messageOffset + len;
+        len = 0;
+      }
+
+      ret = m_securityFunc->EncryptMessage( &m_context, 0, &m_message, 0 );
+      if( ret != SEC_E_OK )
+        return false;
+
+      int t = ::send( m_socket, m_oBuffer,
+                      m_buffers[0].cbBuffer + m_buffers[1].cbBuffer + m_buffers[2].cbBuffer, 0 );
+      if( t == SOCKET_ERROR || cbData == 0 )
+      {
+        return false;
+      }
+    }
+
+    return true;
   }
 
-  inline int Connection::tls_recv(void *data, size_t len)
+  inline int Connection::tls_recv( void *data, size_t len )
   {
+    SECURITY_STATUS ret;
+    SecBuffer *dataBuffer = 0;
+    SecBuffer *extraBuffer = 0;
+    m_iBuffer = 0;
+
+    int maxLength = m_streamSizes.cbHeader  m_streamSizes.cbMaximumMessage + m_streamSizes.cbTrailer;
+
+    int t = ::recv( m_socket, m_iBuffer + m_bufferOffset, maxLength - m_bufferOffset, 0 );
+    if( t == SOCKET_ERROR )
+      return 0;
+    else if( t == 0 )
+      return 0;
+    else
+      m_bufferOffset += t;
+
+    m_buffers[0].BufferType = SECBUFFER_DATA;
+    m_buffers[0].pvBuffer = m_iBuffer;
+    m_buffers[0].cbBuffer = m_bufferOffset;
+
+    m_buffers[1].BufferType = SECBUFFER_EMPTY;
+    m_buffers[2].BufferType = SECBUFFER_EMPTY;
+    m_buffers[3].BufferType = SECBUFFER_EMPTY;
+
+    m_message.ulVersion = SECBUFFER_VERSION;
+    m_message.cBuffers = 4;
+    m_message.pBuffers = m_uffers;
+
+    ret = m_securityFunc->DecryptMessage( &m_context, &m_message, 0, NULL );
+
+    if( ret == SEC_E_INCOMPLETE_MESSAGE )
+      return 0;
+
+    if( ret == SEC_I_CONTEXT_EXPIRED )
+      return 0;
+
+    if( ret != SEC_E_OK && ret != SEC_I_RENEGOTIATE && ret != SEC_I_CONTEXT_EXPIRED )
+      return false;
+
+    for( int i = 1; i < 4; ++i )
+    {
+      if( dataBuffer == 0 && m_buffers[i].BufferType == SECBUFFER_DATA )
+      {
+        dataBuffer = &m_buffers[i];
+      }
+      if( extraBuffer == 0 && m_buffers[i].BufferType == SECBUFFER_EXTRA )
+      {
+        extraBuffer = &m_buffers[i];
+      }
+    }
+
+    if( dataBuffer )
+    {
+      if( dataBuffer.cbBuffer > len )
+      {
+        printf( "uhoh! buffer too small! FIXME!!!!\n" );
+        memcpy( data, dataBuffer.pvBuffer, len );
+      }
+      else
+      {
+        memcpy( data, dataBuffer.pvBuffer, dataBuffer.cbBuffer );
+        return dataBuffer.cbBuffer;
+      }
+    }
+
     return 0;
   }
 
@@ -920,7 +1046,7 @@ namespace gloox
     if( m_secure )
     {
       size_t len = xml.length();
-      if ( tls_send( xml.c_str (), len ) == false )
+      if( tls_send( xml.c_str (), len ) == false )
         return false;
     }
     else
