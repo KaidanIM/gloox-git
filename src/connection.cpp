@@ -41,6 +41,7 @@
 #include <time.h>
 
 #include <string>
+#include <sstream>
 
 namespace gloox
 {
@@ -474,7 +475,7 @@ namespace gloox
       return false;
     }
 
-    ret = m_securityFunc->QueryContextAttributes( m_context, SECPKG_ATTR_STREAM_SIZES, &m_streamSizes );
+    ret = m_securityFunc->QueryContextAttributes( &m_context, SECPKG_ATTR_STREAM_SIZES, &m_streamSizes );
     if( ret != SEC_E_OK )
     {
       printf( "could not read stream attribs (sizes)\n" );
@@ -489,7 +490,7 @@ namespace gloox
     m_messageOffset = m_ioBuffer + m_streamSizes.cbHeader;
 
     SecPkgContext_Authority streamAuthority;
-    ret = m_securityFunc->QueryContextAttributes( m_context, SECPKG_ATTR_AUTHORITY, &streamAuthority );
+    ret = m_securityFunc->QueryContextAttributes( &m_context, SECPKG_ATTR_AUTHORITY, &streamAuthority );
     if( ret != SEC_E_OK )
     {
       printf( "could not read stream attribs (sizes)\n" );
@@ -501,7 +502,7 @@ namespace gloox
     }
 
     SecPkgContext_ConnectionInfo streamInfo;
-    ret = m_securityFunc->QueryContextAttributes( m_context, SECPKG_ATTR_AUTHORITY, &streamInfo );
+    ret = m_securityFunc->QueryContextAttributes( &m_context, SECPKG_ATTR_CONNECTION_INFO, &streamInfo );
     if( ret != SEC_E_OK )
     {
       printf( "could not read stream attribs (sizes)\n" );
@@ -510,7 +511,7 @@ namespace gloox
     else
     {
       if( streamInfo.dwProtocol == SP_PROT_TLS1_CLIENT )
-        m_certInfo.protocol = "TLS 1.0" );
+        m_certInfo.protocol = "TLS 1.0";
       else
         m_certInfo.protocol = "unknown";
 
@@ -557,18 +558,6 @@ namespace gloox
 
       oss << " " << streamInfo.dwHashStrength;
       m_certInfo.mac = oss.str();
-    }
-
-    SecPkgContext_ConnectionInfo streamInfo;
-    ret = m_securityFunc->QueryContextAttributes( m_context, SECPKG_ATTR_AUTHORITY, &streamInfo );
-    if( ret != SEC_E_OK )
-    {
-      printf( "could not read stream attribs (sizes)\n" );
-      return false;
-    }
-    else
-    {
-      //
     }
 
     m_secure = true;
