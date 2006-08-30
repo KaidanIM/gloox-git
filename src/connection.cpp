@@ -411,13 +411,13 @@ namespace gloox
     schannelCred.dwVersion = SCHANNEL_CRED_VERSION;
     schannelCred.grbitEnabledProtocols = SP_PROT_TLS1_CLIENT;
     schannelCred.cSupportedAlgs = 0; // FIXME
-    #ifdef MSVC
+#ifdef MSVC
     schannelCred.dwMinimumCipherStrength = 0; // FIXME
     schannelCred.dwMaximumCipherStrength = 0; // FIXME
-    #else
+#else
     schannelCred.dwMinimumCypherStrength = 0; // FIXME
     schannelCred.dwMaximumCypherStrength = 0; // FIXME
-    #endif
+#endif
     schannelCred.dwSessionLifespan = 0;
     schannelCred.dwFlags = SCH_CRED_NO_SERVERNAME_CHECK | SCH_CRED_NO_DEFAULT_CREDS |
                            SCH_CRED_MANUAL_CRED_VALIDATION; // FIXME check
@@ -474,7 +474,106 @@ namespace gloox
       return false;
     }
 
-    return /*true*/false;
+    ret = m_securityFunc->QueryContextAttributes( m_context, SECPKG_ATTR_STREAM_SIZES, &m_streamSizes );
+    if( ret != SEC_E_OK )
+    {
+      printf( "could not read stream attribs (sizes)\n" );
+      return false;
+    }
+
+    int maxSize = m_streamSizes.cbHeader + m_streamSizes.cbMaximumMessage + m_streamSizes.cbTrailer;
+    m_ioBuffer = (char*)malloc( maxSize );
+    if( !m_ioBuffer )
+      return false;
+
+    m_messageOffset = m_ioBuffer + m_streamSizes.cbHeader;
+
+    SecPkgContext_Authority streamAuthority;
+    ret = m_securityFunc->QueryContextAttributes( m_context, SECPKG_ATTR_AUTHORITY, &streamAuthority );
+    if( ret != SEC_E_OK )
+    {
+      printf( "could not read stream attribs (sizes)\n" );
+      return false;
+    }
+    else
+    {
+      m_certInfo.issuer.assign( streamAuthority.sAuthorityName );
+    }
+
+    SecPkgContext_ConnectionInfo streamInfo;
+    ret = m_securityFunc->QueryContextAttributes( m_context, SECPKG_ATTR_AUTHORITY, &streamInfo );
+    if( ret != SEC_E_OK )
+    {
+      printf( "could not read stream attribs (sizes)\n" );
+      return false;
+    }
+    else
+    {
+      if( streamInfo.dwProtocol == SP_PROT_TLS1_CLIENT )
+        m_certInfo.protocol = "TLS 1.0" );
+      else
+        m_certInfo.protocol = "unknown";
+
+      std::ostringstream oss;
+      switch( streamInfo.aiCipher )
+      {
+        case CALG_3DES:
+          oss << "3DES";
+          break;
+        case CALG_AES_128:
+          oss << "AES";
+          break;
+        case CALG_AES_256:
+          oss << "AES";
+          break;
+        case CALG_DES:
+          oss << "DES";
+          break;
+        case CALG_RC2:
+          oss << "RC2";
+          break;
+        case CALG_RC4:
+          oss << "RC4";
+          break;
+        default:
+          oss << "unknown";
+      }
+
+      oss << " " << streamInfo.dwCipherStrength;
+      m_certInfo.cipher = oss.str();
+      oss.str( "" );
+
+      switch( streamInfo.aiHash  )
+      {
+        case CALG_MD5:
+          oss << "MD5";
+          break;
+        case CALG_SHA:
+          oss << "SHA";
+          break;
+        default:
+          oss << "unknown";
+      }
+
+      oss << " " << streamInfo.dwHashStrength;
+      m_certInfo.mac = oss.str();
+    }
+
+    SecPkgContext_ConnectionInfo streamInfo;
+    ret = m_securityFunc->QueryContextAttributes( m_context, SECPKG_ATTR_AUTHORITY, &streamInfo );
+    if( ret != SEC_E_OK )
+    {
+      printf( "could not read stream attribs (sizes)\n" );
+      return false;
+    }
+    else
+    {
+      //
+    }
+
+    m_secure = true;
+
+    return true;
   }
 
   bool Connection::handshakeLoop()
