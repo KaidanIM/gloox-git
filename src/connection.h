@@ -208,8 +208,10 @@ namespace gloox
       SecurityFunctionTableA *m_securityFunc;
       CredHandle m_credentials;
       CtxtHandle m_context;
-      SecBufferDesc m_message;
-      SecBuffer m_buffers[4];
+      SecBufferDesc m_imessage;
+      SecBufferDesc m_omessage;
+      SecBuffer m_ibuffers[4];
+      SecBuffer m_obuffers[4];
       SecBuffer *extraBuffer;
       SecPkgContext_StreamSizes m_streamSizes;
       HMODULE m_lib;

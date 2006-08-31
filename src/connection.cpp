@@ -706,27 +706,27 @@ namespace gloox
   inline bool Connection::tls_send( const void *data, size_t len )
   {
     if( len <= 0 )
-      return false;
+      return true;
 
     SECURITY_STATUS ret;
 
-    m_buffers[0].BufferType = SECBUFFER_STREAM_HEADER;
-    m_buffers[0].pvBuffer = m_oBuffer;
-    m_buffers[0].cbBuffer = m_streamSizes.cbHeader;
+    m_obuffers[0].BufferType = SECBUFFER_STREAM_HEADER;
+    m_obuffers[0].pvBuffer = m_oBuffer;
+    m_obuffers[0].cbBuffer = m_streamSizes.cbHeader;
 
-    m_buffers[1].BufferType = SECBUFFER_DATA;
-    m_buffers[1].pvBuffer = m_messageOffset;
+    m_obuffers[1].BufferType = SECBUFFER_DATA;
+    m_obuffers[1].pvBuffer = m_messageOffset;
 
-    m_buffers[2].BufferType = SECBUFFER_STREAM_TRAILER;
-    m_buffers[2].cbBuffer = m_streamSizes.cbTrailer;
+    m_obuffers[2].BufferType = SECBUFFER_STREAM_TRAILER;
+    m_obuffers[2].cbBuffer = m_streamSizes.cbTrailer;
 
-    m_buffers[3].BufferType = SECBUFFER_EMPTY;
-    m_buffers[3].pvBuffer = NULL;
-    m_buffers[3].cbBuffer = 0;
+    m_obuffers[3].BufferType = SECBUFFER_EMPTY;
+    m_obuffers[3].pvBuffer = NULL;
+    m_obuffers[3].cbBuffer = 0;
 
-    m_message.ulVersion = SECBUFFER_VERSION;
-    m_message.cBuffers = 4;
-    m_message.pBuffers = m_buffers;
+    m_omessage.ulVersion = SECBUFFER_VERSION;
+    m_omessage.cBuffers = 4;
+    m_omessage.pBuffers = m_buffers;
 
     while( len > 0 )
     {
@@ -734,23 +734,23 @@ namespace gloox
       {
         memcpy( m_messageOffset, data, m_streamSizes.cbMaximumMessage );
         len -= m_streamSizes.cbMaximumMessage;
-        m_buffers[1].cbBuffer = m_streamSizes.cbMaximumMessage;
-        m_buffers[2].pvBuffer = m_messageOffset + m_streamSizes.cbMaximumMessage;
+        m_obuffers[1].cbBuffer = m_streamSizes.cbMaximumMessage;
+        m_obuffers[2].pvBuffer = m_messageOffset + m_streamSizes.cbMaximumMessage;
       }
       else
       {
         memcpy( m_messageOffset, data, len );
-        m_buffers[1].cbBuffer = len;
-        m_buffers[2].pvBuffer = m_messageOffset + len;
+        m_obuffers[1].cbBuffer = len;
+        m_obuffers[2].pvBuffer = m_messageOffset + len;
         len = 0;
       }
 
-      ret = m_securityFunc->EncryptMessage( &m_context, 0, &m_message, 0 );
+      ret = m_securityFunc->EncryptMessage( &m_context, 0, &m_omessage, 0 );
       if( ret != SEC_E_OK )
         return false;
 
       int t = ::send( m_socket, m_oBuffer,
-                      m_buffers[0].cbBuffer + m_buffers[1].cbBuffer + m_buffers[2].cbBuffer, 0 );
+                      m_obuffers[0].cbBuffer + m_obuffers[1].cbBuffer + m_obuffers[2].cbBuffer, 0 );
       if( t == SOCKET_ERROR || t == 0 )
       {
         return false;
@@ -776,19 +776,19 @@ namespace gloox
     else
       m_bufferOffset += t;
 
-    m_buffers[0].BufferType = SECBUFFER_DATA;
-    m_buffers[0].pvBuffer = m_iBuffer;
-    m_buffers[0].cbBuffer = m_bufferOffset;
+    m_ibuffers[0].BufferType = SECBUFFER_DATA;
+    m_ibuffers[0].pvBuffer = m_iBuffer;
+    m_ibuffers[0].cbBuffer = m_bufferOffset;
 
-    m_buffers[1].BufferType = SECBUFFER_EMPTY;
-    m_buffers[2].BufferType = SECBUFFER_EMPTY;
-    m_buffers[3].BufferType = SECBUFFER_EMPTY;
+    m_ibuffers[1].BufferType = SECBUFFER_EMPTY;
+    m_ibuffers[2].BufferType = SECBUFFER_EMPTY;
+    m_ibuffers[3].BufferType = SECBUFFER_EMPTY;
 
-    m_message.ulVersion = SECBUFFER_VERSION;
-    m_message.cBuffers = 4;
-    m_message.pBuffers = m_buffers;
+    m_imessage.ulVersion = SECBUFFER_VERSION;
+    m_imessage.cBuffers = 4;
+    m_imessage.pBuffers = m_buffers;
 
-    ret = m_securityFunc->DecryptMessage( &m_context, &m_message, 0, NULL );
+    ret = m_securityFunc->DecryptMessage( &m_context, &m_imessage, 0, NULL );
 
     if( ret == SEC_E_INCOMPLETE_MESSAGE )
       return 0;
@@ -805,11 +805,11 @@ namespace gloox
     {
       if( dataBuffer == 0 && m_buffers[i].BufferType == SECBUFFER_DATA )
       {
-        dataBuffer = &m_buffers[i];
+        dataBuffer = &m_ibuffers[i];
       }
       if( m_extraBuffer == 0 && m_buffers[i].BufferType == SECBUFFER_EXTRA )
       {
-        m_extraBuffer = &m_buffers[i];
+        m_extraBuffer = &m_ibuffers[i];
       }
     }
 
