@@ -210,6 +210,7 @@ namespace gloox
       CtxtHandle m_context;
       SecBufferDesc m_message;
       SecBuffer m_buffers[4];
+      SecBuffer *extraBuffer;
       SecPkgContext_StreamSizes m_streamSizes;
       HMODULE m_lib;
 
