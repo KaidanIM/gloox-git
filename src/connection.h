@@ -187,8 +187,8 @@ namespace gloox
       void cleanup();
 
 #ifdef HAVE_TLS
-      bool tls_send(const void *data, size_t len);
-      int tls_recv(void *data, size_t len);
+      bool tls_send( const void *data, size_t len );
+      int tls_recv( void *data, size_t len );
       bool tls_dataAvailable();
       void tls_cleanup();
 #endif
