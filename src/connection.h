@@ -34,6 +34,13 @@
 # include <gnutls/gnutls.h>
 # include <gnutls/x509.h>
 # define HAVE_TLS
+#elif defined( HAVE_WINTLS )
+# define USE_WINTLS
+#define SECURITY_WIN32
+#include <windows.h>
+#include <security.h>
+#include <sspi.h>
+# define HAVE_TLS
 #endif
 
 namespace gloox
@@ -62,7 +69,7 @@ namespace gloox
        * to find out about the actual host:port.
        */
       Connection( Parser *parser, const LogSink& logInstance, const std::string& server,
-                  int port = -1 );
+                  unsigned short port = -1 );
 
       /**
        * Virtual destructor
@@ -77,7 +84,7 @@ namespace gloox
 
       /**
        * Use this periodically to receive data from the socket and to feed the parser.
-       * @param timeout The timeout to use for select. Default means blocking.
+       * @param timeout The timeout to use for select in microseconds. Default of -1 means blocking.
        * @return The state of the connection.
        */
       ConnectionError recv( int timeout = -1 );
@@ -87,7 +94,7 @@ namespace gloox
        * all data has been sent.
        * @param data The data to send.
        */
-      void send( const std::string& data );
+      bool send( const std::string& data );
 
       /**
        * Use this function to put the connection into 'receive mode'.
@@ -134,7 +141,7 @@ namespace gloox
 
       /**
        * This function is used to enable stream compression as defined in JEP-0138.
-       * It is necessary because when compression is negotiated it is not enabled at once.
+       * It is necessary because when compression is negotiated it is not enabled instantly.
        */
       void enableCompression();
 #endif
@@ -173,11 +180,20 @@ namespace gloox
 #endif
 
     private:
+      Connection &operator = ( const Connection & );
+      bool dataAvailable( int timeout = -1 );
+
       void cancel();
       void cleanup();
 
-#if defined( USE_GNUTLS )
+#ifdef HAVE_TLS
+      bool tls_send( const void *data, size_t len );
+      int tls_recv( void *data, size_t len );
+      bool tls_dataAvailable();
+      void tls_cleanup();
+#endif
 
+#if defined( USE_GNUTLS )
       bool verifyAgainstCAs( gnutls_x509_crt_t cert, gnutls_x509_crt_t *CAList, int CAListSize );
       bool verifyAgainst( gnutls_x509_crt_t cert, gnutls_x509_crt_t issuer );
 
@@ -186,6 +202,25 @@ namespace gloox
 
 #elif defined( USE_OPENSSL )
       SSL *m_ssl;
+#elif defined( USE_WINTLS )
+      bool handshakeLoop();
+
+      SecurityFunctionTableA *m_securityFunc;
+      CredHandle m_credentials;
+      CtxtHandle m_context;
+      SecBufferDesc m_message;
+      SecBuffer m_buffers[4];
+      SecBuffer *extraBuffer;
+      SecPkgContext_StreamSizes m_streamSizes;
+      HMODULE m_lib;
+
+      char *m_messageOffset;
+      char *bufferOffset;
+      char *m_iBuffer;
+      char *m_oBuffer;
+      int m_bufferSize;
+      int m_bufferOffset;
+      int m_sspiFlags;
 #endif
 
       StringList m_cacerts;
@@ -201,7 +236,7 @@ namespace gloox
 
       char *m_buf;
       std::string m_server;
-      int m_port;
+      unsigned short m_port;
       int m_socket;
       const int m_bufsize;
       bool m_cancel;
