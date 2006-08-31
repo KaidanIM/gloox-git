@@ -1065,7 +1065,7 @@ namespace gloox
 #else
         int sent = ::send( m_socket, (xml.c_str()+num), len - num, 0 );
 #endif
-        if ( sent == -1 )
+        if( sent == -1 )
           return false;
 
         num += sent;
@@ -1080,7 +1080,7 @@ namespace gloox
 #ifdef HAVE_TLS
     if( m_secure )
     {
-        tls_cleanup();
+      tls_cleanup();
     }
 #endif
 
