@@ -764,8 +764,7 @@ namespace gloox
   {
     SECURITY_STATUS ret;
     SecBuffer *dataBuffer = 0;
-    SecBuffer *extraBuffer = 0;
-//     m_iBuffer = 0;
+    m_extraBuffer = 0;
 
     int maxLength = m_streamSizes.cbHeader + m_streamSizes.cbMaximumMessage + m_streamSizes.cbTrailer;
 
@@ -808,9 +807,9 @@ namespace gloox
       {
         dataBuffer = &m_buffers[i];
       }
-      if( extraBuffer == 0 && m_buffers[i].BufferType == SECBUFFER_EXTRA )
+      if( m_extraBuffer == 0 && m_buffers[i].BufferType == SECBUFFER_EXTRA )
       {
-        extraBuffer = &m_buffers[i];
+        m_extraBuffer = &m_buffers[i];
       }
     }
 
@@ -827,6 +826,11 @@ namespace gloox
         memcpy( data, dataBuffer->pvBuffer, dataBuffer->cbBuffer );
         return dataBuffer->cbBuffer;
       }
+    }
+
+    if( ret == SEC_I_RENEGOTIATE )
+    {
+      ret = handshakeLoop();
     }
 
     return 0;
