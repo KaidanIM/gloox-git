@@ -809,7 +809,9 @@ namespace gloox
       }
       if( m_extraBuffer == 0 && m_ibuffers[i].BufferType == SECBUFFER_EXTRA )
       {
-        m_extraBuffer = &m_ibuffers[i];
+//         m_extraBuffer = &m_ibuffers[i];
+        memcpy( m_iBuffer, &m_ibuffers[i].pvBuffer, m_ibuffers[i].cbBuffer );
+        m_bufferOffset = m_ibuffers[i].cbBuffer;
       }
     }
 
