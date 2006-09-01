@@ -726,7 +726,7 @@ namespace gloox
 
     m_omessage.ulVersion = SECBUFFER_VERSION;
     m_omessage.cBuffers = 4;
-    m_omessage.pBuffers = m_buffers;
+    m_omessage.pBuffers = m_obuffers;
 
     while( len > 0 )
     {
@@ -786,7 +786,7 @@ namespace gloox
 
     m_imessage.ulVersion = SECBUFFER_VERSION;
     m_imessage.cBuffers = 4;
-    m_imessage.pBuffers = m_buffers;
+    m_imessage.pBuffers = m_ibuffers;
 
     ret = m_securityFunc->DecryptMessage( &m_context, &m_imessage, 0, NULL );
 
@@ -803,11 +803,11 @@ namespace gloox
 
     for( int i = 1; i < 4; ++i )
     {
-      if( dataBuffer == 0 && m_buffers[i].BufferType == SECBUFFER_DATA )
+      if( dataBuffer == 0 && m_ibuffers[i].BufferType == SECBUFFER_DATA )
       {
         dataBuffer = &m_ibuffers[i];
       }
-      if( m_extraBuffer == 0 && m_buffers[i].BufferType == SECBUFFER_EXTRA )
+      if( m_extraBuffer == 0 && m_ibuffers[i].BufferType == SECBUFFER_EXTRA )
       {
         m_extraBuffer = &m_ibuffers[i];
       }
