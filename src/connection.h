@@ -217,7 +217,6 @@ namespace gloox
       HMODULE m_lib;
 
       char *m_messageOffset;
-      char *bufferOffset;
       char *m_iBuffer;
       char *m_oBuffer;
       int m_bufferSize;
