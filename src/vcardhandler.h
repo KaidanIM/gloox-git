@@ -55,7 +55,7 @@ namespace gloox
       virtual void handleVCard( const JID& jid, VCard *vcard ) = 0;
 
       /**
-       * This function is called to indicate a successful VCArd store operation
+       * This function is called to indicate the result of a VCard store operation
        * or any error that occurs.
        * @param context The operation which yielded the result.
        * @param jid The JID involved.
