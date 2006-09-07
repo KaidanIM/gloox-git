@@ -202,7 +202,8 @@ else
       AC_MSG_CHECKING([for dn_skipname in -lresolv (alternate version)])
       save_libs="$LIBS"
       LIBS="-lresolv $LIBS"
-      AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <resolv.h>]], [[dn_skipname(0,0)]])],
+      AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <netinet/in.h>
+ #include <resolv.h>]], [[dn_skipname(0,0)]])],
                      [AC_MSG_RESULT(yes)
                       AC_DEFINE(HAVE_DN_SKIPNAME)
                       have_dn_skipname=yes],
