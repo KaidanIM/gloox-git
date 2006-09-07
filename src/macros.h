@@ -14,7 +14,7 @@
 #ifndef GLOOX_MACROS_H__
 #define GLOOX_MACROS_H__
 
-#ifdef WIN32
+#ifdef MSVC
 #pragma warning( disable:4251 )
 #pragma warning( disable:4786 )
 #endif
