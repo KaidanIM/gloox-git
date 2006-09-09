@@ -81,16 +81,17 @@ AC_MSG_RESULT($libidn)
 
 dnl GnuTLS
 AC_ARG_WITH(gnutls, AC_HELP_STRING([--with-gnutls=[DIR]],
-      [Support Stream Encryption (needs GnuTLS)]),
+      [Support Stream Encryption using GnuTLS]),
       gnutls=$withval, gnutls=yes)
 if test "$gnutls" != "no"; then
   if test "$gnutls" != "yes"; then
     LDFLAGS="${LDFLAGS} -L$gnutls/lib"
     CPPFLAGS="${CPPFLAGS} -I$gnutls/include"
+    gnutls_path="$gnutls/bin/"
   fi
   AC_CHECK_HEADER(gnutls/gnutls.h,
   AC_CHECK_LIB(gnutls, gnutls_check_version,
-           [gnutls=yes LIBS="${LIBS} `libgnutls-config --libs`"], gnutls=no),
+           [gnutls=yes LIBS="${LIBS} `${gnutls_path}libgnutls-config --libs`"], gnutls=no),
            gnutls=no)
 fi
 if test "$gnutls" != "no" ; then
@@ -104,7 +105,7 @@ AC_MSG_RESULT($gnutls)
 dnl OpenSSL
 if test "$gnutls" == "no"; then
   AC_ARG_WITH(openssl, AC_HELP_STRING([--with-openssl=[DIR]],
-        [Support Stream Encryption (needs OpenSSL)]),
+        [Support Stream Encryption using OpenSSL]),
         openssl=$withval, openssl=yes)
   if test "$openssl" != "no"; then
     if test "$openssl" != "yes"; then
