@@ -202,7 +202,8 @@ else
       AC_MSG_CHECKING([for dn_skipname in -lresolv (alternate version)])
       save_libs="$LIBS"
       LIBS="-lresolv $LIBS"
-      AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <resolv.h>]], [[dn_skipname(0,0)]])],
+      AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <netinet/in.h>
+ #include <resolv.h>]], [[dn_skipname(0,0)]])],
                      [AC_MSG_RESULT(yes)
                       AC_DEFINE(HAVE_DN_SKIPNAME)
                       have_dn_skipname=yes],
@@ -239,6 +240,19 @@ else
     fi
   fi
 fi
+
+
+#  AC_SEARCH_LIBS(res_query,resolv bind,,
+#                 AC_SEARCH_LIBS(__res_query,resolv bind,,have_resolver=no))
+#  AC_SEARCH_LIBS(dn_expand,resolv bind,,
+#                 AC_SEARCH_LIBS(__dn_expand,resolv bind,,have_resolver=no))
+#  AC_SEARCH_LIBS(dn_skipname,resolv bind,,
+#                 AC_SEARCH_LIBS(__dn_skipname,resolv bind,,have_resolver=no))
+#  AC_SEARCH_LIBS(res_querydomain,resolv bind,,
+#                 AC_SEARCH_LIBS(__res_querydomain,resolv bind,,have_resolver=no))
+#  AC_SEARCH_LIBS(ns_get16,resolv bind,,
+#                 AC_SEARCH_LIBS(__ns_get16,resolv bind,,have_resolver=no))
+
 
 dnl check for STLport
 AC_DEFUN([STLPORT_CHECK],
@@ -286,11 +300,18 @@ AC_MSG_RESULT($debug)
 dnl Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS(unistd.h strings.h errno.h arpa/nameser.h)
-AC_CHECK_FUNCS(ns_get16 __ns_get6)
+AC_CHECK_FUNCS(ns_get16 __ns_get16)
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
 AC_C_INLINE
+
+case "$host_os" in
+  *mingw*)
+     LIBS="-lwsock32 -lgdi32 -liksemel";;
+  *)
+     ;;
+esac
 
 dnl Generating makefiles.
 AC_CONFIG_FILES([
@@ -302,6 +323,7 @@ src/examples/Makefile
 src/tests/Makefile
 src/tests/dataform/Makefile
 src/tests/dataformfield/Makefile
+src/tests/parser/Makefile
 src/tests/tag/Makefile
 ])
 AC_OUTPUT
