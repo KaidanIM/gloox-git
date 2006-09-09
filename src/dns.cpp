@@ -22,14 +22,15 @@
 #include <sys/types.h>
 
 #ifndef WIN32
-#include <netinet/in.h>
+#include <arpa/nameser.h>
 #include <resolv.h>
+#include <netdb.h>
+#include <arpa/inet.h>
+#include <netinet/in.h>
 #include <sys/socket.h>
 #include <sys/un.h>
-#include <netdb.h>
 #include <unistd.h>
 #include <sys/socket.h>
-#include <arpa/inet.h>
 #else
 #include <winsock.h>
 #endif
