@@ -116,10 +116,18 @@ class IBBTest : public MessageSessionHandler, ConnectionListener, LogHandler,
         sub = "Re: " +  stanza->subject();
 
       m_messageEventFilter->raiseMessageEvent( MessageEventDisplayed );
+#if defined( WIN32 ) || defined( SKYOS )
+      Sleep( 1000 );
+#else
       sleep( 1 );
+#endif
       m_messageEventFilter->raiseMessageEvent( MessageEventComposing );
       m_chatStateFilter->setChatState( ChatStateComposing );
+#if defined( WIN32 ) || defined( SKYOS )
+      Sleep( 2000 );
+#else
       sleep( 2 );
+#endif
       m_session->send( msg, sub );
 
       if( stanza->body() == "quit" )
