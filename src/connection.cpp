@@ -481,7 +481,7 @@ namespace gloox
       printf( "could not read stream attribs (sizes)\n" );
       return false;
     }
-
+printf( "maximumMessage: %ld\n", m_streamSizes.cbMaximumMessage );
     int maxSize = m_streamSizes.cbHeader + m_streamSizes.cbMaximumMessage + m_streamSizes.cbTrailer;
     m_iBuffer = (char*)malloc( maxSize );
     if( !m_iBuffer )
@@ -669,7 +669,10 @@ namespace gloox
       }
 
       if( FAILED( ret ) )
+      {
+        printf( "ISC failed: %ld\n", ret );
         break;
+      }
 
       if( ret == SEC_I_INCOMPLETE_CREDENTIALS )
       {
@@ -747,12 +750,16 @@ namespace gloox
 
       ret = m_securityFunc->EncryptMessage( &m_context, 0, &m_omessage, 0 );
       if( ret != SEC_E_OK )
+      {
+        printf( "encryptmessage failed %ld\n", ret );
         return false;
+      }
 
       int t = ::send( m_socket, m_oBuffer,
                       m_obuffers[0].cbBuffer + m_obuffers[1].cbBuffer + m_obuffers[2].cbBuffer, 0 );
       if( t == SOCKET_ERROR || t == 0 )
       {
+        printf( "could not send: %d\n", WSAGetLastError() );
         return false;
       }
     }
@@ -764,78 +771,103 @@ namespace gloox
   {
     SECURITY_STATUS ret;
     SecBuffer *dataBuffer = 0;
-    m_extraBuffer = 0;
+    int readable = 0;
 
     int maxLength = m_streamSizes.cbHeader + m_streamSizes.cbMaximumMessage + m_streamSizes.cbTrailer;
 
+    printf( "bufferOffset is %d\n", m_bufferOffset );
+
     int t = ::recv( m_socket, m_iBuffer + m_bufferOffset, maxLength - m_bufferOffset, 0 );
     if( t == SOCKET_ERROR )
+    {
+      printf( "got SocketError\n" );
       return 0;
+    }
     else if( t == 0 )
+    {
+      printf( "got connection close\n" );
       return 0;
+    }
     else
       m_bufferOffset += t;
 
-    m_ibuffers[0].BufferType = SECBUFFER_DATA;
-    m_ibuffers[0].pvBuffer = m_iBuffer;
-    m_ibuffers[0].cbBuffer = m_bufferOffset;
-
-    m_ibuffers[1].BufferType = SECBUFFER_EMPTY;
-    m_ibuffers[2].BufferType = SECBUFFER_EMPTY;
-    m_ibuffers[3].BufferType = SECBUFFER_EMPTY;
-
-    m_imessage.ulVersion = SECBUFFER_VERSION;
-    m_imessage.cBuffers = 4;
-    m_imessage.pBuffers = m_ibuffers;
-
-    ret = m_securityFunc->DecryptMessage( &m_context, &m_imessage, 0, NULL );
-
-    if( ret == SEC_E_INCOMPLETE_MESSAGE )
-      return 0;
-
-    m_bufferOffset = 0;
-
-//    if( ret == SEC_I_CONTEXT_EXPIRED )
-//      return 0;
-
-    if( ret != SEC_E_OK && ret != SEC_I_RENEGOTIATE )
-      return false;
-
-    for( int i = 1; i < 4; ++i )
+    while( m_bufferOffset )
     {
-      if( dataBuffer == 0 && m_ibuffers[i].BufferType == SECBUFFER_DATA )
+      printf( "continuing with bufferOffset: %d\n", m_bufferOffset );
+
+      m_ibuffers[0].pvBuffer = m_iBuffer;
+      m_ibuffers[0].cbBuffer = m_bufferOffset;
+      m_ibuffers[0].BufferType = SECBUFFER_DATA;
+
+      m_ibuffers[1].BufferType = SECBUFFER_EMPTY;
+      m_ibuffers[2].BufferType = SECBUFFER_EMPTY;
+      m_ibuffers[3].BufferType = SECBUFFER_EMPTY;
+
+      m_imessage.ulVersion = SECBUFFER_VERSION;
+      m_imessage.cBuffers = 4;
+      m_imessage.pBuffers = m_ibuffers;
+
+      ret = m_securityFunc->DecryptMessage( &m_context, &m_imessage, 0, NULL );
+
+      if( ret == SEC_E_INCOMPLETE_MESSAGE )
       {
-        dataBuffer = &m_ibuffers[i];
+        printf( "recv'ed incomplete message\n" );
+        return readable;
       }
-      if( m_extraBuffer == 0 && m_ibuffers[i].BufferType == SECBUFFER_EXTRA )
+
+
+  //    if( ret == SEC_I_CONTEXT_EXPIRED )
+  //      return 0;
+
+      if( ret != SEC_E_OK && ret != SEC_I_RENEGOTIATE )
       {
-//         m_extraBuffer = &m_ibuffers[i];
-        memcpy( m_iBuffer, &m_ibuffers[i].pvBuffer, m_ibuffers[i].cbBuffer );
-        m_bufferOffset = m_ibuffers[i].cbBuffer;
+        printf( "DecryptMessage returned %ld\n", ret );
+        printf( "GetLastError(): %ld\n", GetLastError() );
+        printf( "input buffer length: %d, read in this run: %d\n", m_bufferOffset, t );
+        return false;
+      }
+
+      m_bufferOffset = 0;
+
+      for( int i = 1; i < 4; ++i )
+      {
+        if( dataBuffer == 0 && m_ibuffers[i].BufferType == SECBUFFER_DATA )
+        {
+          dataBuffer = &m_ibuffers[i];
+        }
+        if( m_bufferOffset == 0 && m_ibuffers[i].BufferType == SECBUFFER_EXTRA )
+        {
+  //         m_extraBuffer = &m_ibuffers[i];
+  printf( "git exetra buffer, size %ld\n", m_ibuffers[i].cbBuffer );
+//          memcpy( m_iBuffer, m_ibuffers[i].pvBuffer, m_ibuffers[i].cbBuffer );
+//          m_bufferOffset = m_ibuffers[i].cbBuffer;
+        }
+      }
+
+      if( dataBuffer )
+      {
+        if( dataBuffer->cbBuffer > len )
+        {
+          printf( "uhoh! buffer too small! FIXME!!!!\n" );
+          memcpy( data, dataBuffer->pvBuffer, len );
+          return len;
+        }
+        else
+        {
+          memcpy( data, dataBuffer->pvBuffer, dataBuffer->cbBuffer );
+          readable += dataBuffer->cbBuffer;
+          printf( "recvbuffer (%d): %s\n", readable, data );
+        }
+      }
+
+      if( ret == SEC_I_RENEGOTIATE )
+      {
+        printf( "server requested reneg\n" );
+        ret = handshakeLoop();
       }
     }
 
-    if( dataBuffer )
-    {
-      if( dataBuffer->cbBuffer > len )
-      {
-        printf( "uhoh! buffer too small! FIXME!!!!\n" );
-        memcpy( data, dataBuffer->pvBuffer, len );
-        return len;
-      }
-      else
-      {
-        memcpy( data, dataBuffer->pvBuffer, dataBuffer->cbBuffer );
-        return dataBuffer->cbBuffer;
-      }
-    }
-
-    if( ret == SEC_I_RENEGOTIATE )
-    {
-      ret = handshakeLoop();
-    }
-
-    return 0;
+    return readable;
   }
 
   inline bool Connection::tls_dataAvailable()
@@ -991,13 +1023,9 @@ namespace gloox
     }
 
     std::string buf;
+    buf.assign( m_buf, size );
     if( m_compression && m_enableCompression )
-    {
-      buf.assign( m_buf, size );
       buf = m_compression->decompress( buf );
-    }
-    else
-      buf.assign( m_buf, strlen( m_buf ) );
 
     Parser::ParserState ret = m_parser->feed( buf );
     if( ret != Parser::PARSER_OK )
@@ -1015,6 +1043,7 @@ namespace gloox
           m_logInstance.log( LogLevelError, LogAreaClassConnection, "unexpected error" );
           break;
       }
+      //printf( "buffer data: %s\n", buf.c_str() );
       return ConnIoError;
     }
 
