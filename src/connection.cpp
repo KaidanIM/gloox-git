@@ -848,7 +848,6 @@ printf( "maximumMessage: %ld\n", m_streamSizes.cbMaximumMessage );
       {
         if( dataBuffer->cbBuffer > len )
         {
-          printf( "uhoh! buffer too small! FIXME!!!!\n" );
           memcpy( data, dataBuffer->pvBuffer, len );
           return len;
         }
