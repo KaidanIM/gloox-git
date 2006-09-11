@@ -4,6 +4,7 @@ v0.8.2 -- xx yyy 2006
 - look for libgnutls-config in specified path, if given
 - fixed compilation on SkyOS
 - maybe-fixed resolver on HPUX
+- **experimental** native TLS support on win32
 
 
 v0.8.1 -- 28 Jul 2006
