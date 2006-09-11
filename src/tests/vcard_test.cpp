@@ -81,7 +81,7 @@ class VCardTest : public ConnectionListener, LogHandler, VCardHandler
       printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
     };
 
-    virtual void handleVCard( const JID& jid, VCard *vcard )
+    virtual void handleVCard( const JID& jid, const VCard *vcard )
     {
       ++m_count;
       printf( "received vcard for %s: %s, %d\n", jid.full().c_str(), vcard->tag()->xml().c_str(), m_count );

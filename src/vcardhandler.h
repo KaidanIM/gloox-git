@@ -52,7 +52,7 @@ namespace gloox
        * @param jid The JID to which this VCard belongs.
        * @param vcard The fetched VCard.
        */
-      virtual void handleVCard( const JID& jid, VCard *vcard ) = 0;
+      virtual void handleVCard( const JID& jid, const VCard *vcard ) = 0;
 
       /**
        * This function is called to indicate the result of a VCard store operation
