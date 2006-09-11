@@ -1,4 +1,4 @@
-v0.8.2 -- xx yyy 2006
+v0.8.2 -- 11 Sep 2006
 ---------------------
 - find dn_skipname on Mac OS X (thanks to Geoff Schmidt)
 - look for libgnutls-config in specified path, if given
