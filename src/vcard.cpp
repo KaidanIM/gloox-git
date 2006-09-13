@@ -323,7 +323,7 @@ namespace gloox
 
   Tag* VCard::tag() const
   {
-    Tag *v = new Tag( "vcard" );
+    Tag *v = new Tag( "vCard" );
     v->addAttribute( "xmlns", XMLNS_VCARD_TEMP );
     v->addAttribute( "version", "3.0" );
 
