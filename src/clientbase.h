@@ -238,6 +238,11 @@ namespace gloox
       int fileDescriptor();
 
       /**
+       * Sends a whitespace ping to the server.
+       */
+      void ping();
+
+      /**
        * Registers @c cl as object that receives connection notifications.
        * @param cl The object to receive connection notifications.
        */
@@ -341,7 +346,7 @@ namespace gloox
        * @param xmlns The namespace qualifying the element.
        */
       void removeTagHandler( TagHandler *th, const std::string& tag,
-                                              const std::string& xmlns );
+                                             const std::string& xmlns );
 
       /**
        * Use this function to set a number of trusted root CA certificates which shall be
