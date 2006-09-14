@@ -1,3 +1,9 @@
+v0.8.3 -- 14 Sep 2006
+---------------------
+- ClientBase: added whitespace ping()
+- VCard: fixed typo (vcard --> vCard)
+
+
 v0.8.2 -- 11 Sep 2006
 ---------------------
 - find dn_skipname on Mac OS X (thanks to Geoff Schmidt)
