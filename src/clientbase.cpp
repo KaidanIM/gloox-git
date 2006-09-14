@@ -397,6 +397,11 @@ namespace gloox
       return StateDisconnected;
   }
 
+  void ClientBase::ping()
+  {
+    send( " " );
+  }
+
   const std::string ClientBase::getID()
   {
     std::ostringstream oss;
