@@ -63,7 +63,7 @@ namespace gloox
       static std::string resourceprep( const std::string& resource );
 
       /**
-       * This function applies the idna() function to a string. I.e. it transform
+       * This function applies the idna() function to a string. I.e. it transforms
        * internationalized domain names into plain ASCII.
        * @param domain The string to convert.
        * @return Returns the converted string. In case of an error an empty string
