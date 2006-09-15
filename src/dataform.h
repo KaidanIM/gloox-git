@@ -115,6 +115,7 @@ namespace gloox
       /**
        * Returns the form's type.
        * @return The form's type.
+       * @since 0.9
        */
       DataForm::DataFormType type() const { return m_type; };
 

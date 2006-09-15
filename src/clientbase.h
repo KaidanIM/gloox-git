@@ -239,6 +239,7 @@ namespace gloox
 
       /**
        * Sends a whitespace ping to the server.
+       * @since 0.8.3
        */
       void ping();
 
