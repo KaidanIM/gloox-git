@@ -111,21 +111,24 @@ namespace gloox
       virtual const std::string username() const = 0;
 
       /**
-       * Returns the current jabber id.
-       * @return The Jabber ID.
-       * @note I you change the server part of the JID, the server of the connection is not synced.
+       * Returns the current Jabber ID. If an authentication ID has been set (using setAuthzid())
+       * this authzid is returned.
+       * @return A reference to the Jabber ID.
+       * @note If you change the server part of the JID, the server of the connection is not synced.
        * You have to do that manually using @ref setServer().
        */
-      JID& jid() { return m_jid; };
+      JID& jid();
 
       /**
-       * Switches usage of SASL on/off. Default: on
+       * Switches usage of SASL on/off. Default: on. SASL should only be disabled if there are
+       * problems with using it.
        * @param sasl Whether to switch SASL usage on or off.
        */
       void setSasl( bool sasl ) { m_sasl = sasl; };
 
       /**
-       * Switches usage of TLS on/off (if available). Default: on
+       * Switches usage of TLS on/off (if available). Default: on. TLS should only be disabled if
+       * there are problems with using it.
        * @param tls Whether to switch TLS usage on or off.
        */
       void setTls( bool tls ) { m_tls = tls; };
@@ -242,6 +245,14 @@ namespace gloox
        * @since 0.8.3
        */
       void ping();
+
+      /**
+       * Use this function to set an authorization ID (authzid). Provided the server supports it
+       * and the user has sufficient rights, they could then authenticate as bob@example.net but
+       * act as alice@example.net.
+       * @param authzid The JID to authorize as. Only the bare JID is used.
+       */
+      void setAuthzid( const JID& authzid ) { m_authzid = authzid; };
 
       /**
        * Registers @c cl as object that receives connection notifications.
@@ -429,11 +440,11 @@ namespace gloox
     protected:
       enum SaslMechanisms
       {
-        SaslDigestMd5,          /**< SASL Digest-MD5 according to RFC 2831. */
-        SaslPlain,               /**< SASL PLAIN according to RFC 2595 Section 6. */
-        SaslAnonymous,           /**< SASL ANONYMOUS according to draft-ietf-sasl-anon-05.txt/
-                                   * RFC 2245 Section 6. */
-        SaslExternal             /**< SASL EXTERNAL according to RFC 2222 Section 7.4. */
+        SaslDigestMd5,              /**< SASL Digest-MD5 according to RFC 2831. */
+        SaslPlain,                  /**< SASL PLAIN according to RFC 2595 Section 6. */
+        SaslAnonymous,              /**< SASL ANONYMOUS according to draft-ietf-sasl-anon-05.txt/
+                                     * RFC 2245 Section 6. */
+        SaslExternal                /**< SASL EXTERNAL according to RFC 2222 Section 7.4. */
       };
 
       void notifyOnResourceBindError( ResourceBindError error );
@@ -453,6 +464,7 @@ namespace gloox
       bool hasTls();
 
       JID m_jid;
+      JID m_authzid;
       Connection *m_connection;
       Disco *m_disco;
 
