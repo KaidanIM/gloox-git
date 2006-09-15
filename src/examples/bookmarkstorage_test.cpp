@@ -21,7 +21,6 @@ class BookmarkStorageTest : public BookmarkHandler, ConnectionListener
 
       JID jid( "hurkhurk@example.org/gloox" );
       j = new Client( jid, "hurkhurks" );
-      j->setAutoPresence( true );
       j->setInitialPriority( 5 );
 
       j->registerConnectionListener(this );

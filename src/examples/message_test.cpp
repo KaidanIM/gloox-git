@@ -36,7 +36,6 @@ class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListen
 
       JID jid( "hurkhurk@example.org/gloox" );
       j = new Client( jid, "hurkhurks" );
-      j->setAutoPresence( true );
       j->setInitialPriority( 4 );
       j->registerConnectionListener( this );
       j->setAutoMessageSession( true, this );

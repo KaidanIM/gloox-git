@@ -24,7 +24,6 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler, Messag
 
       JID jid( "hurkhurk@example.org/gloox" );
       j = new Client( jid, "hurkhurks" );
-      j->setAutoPresence( true );
       j->setInitialPriority( 3 );
       j->registerConnectionListener( this );
       j->registerMessageHandler( this );

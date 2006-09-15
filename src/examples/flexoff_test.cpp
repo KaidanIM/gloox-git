@@ -29,7 +29,6 @@ class FlexOffTest : public DiscoHandler, MessageHandler, ConnectionListener, Fle
 
       JID jid( "hurkhurk@example.org/gloox" );
       j = new Client( jid, "hurkhurks" );
-      j->setAutoPresence( false );
       j->registerConnectionListener( this );
       j->registerMessageHandler( this );
       j->disco()->registerDiscoHandler( this );
