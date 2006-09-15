@@ -44,6 +44,32 @@ namespace gloox
     m_children.clear();
   }
 
+  bool Tag::operator==( const Tag &right ) const
+  {
+#warning operator== is incomplete WHAT'S MISSING?
+    if( m_name != right.m_name )
+      return false;
+
+    if( m_attribs != right.m_attribs )
+      return false;
+
+    if( m_children.empty() ^ right.m_children.empty() )
+      return false;
+
+    if( m_children.size() != right.m_children.size() )
+      return false;
+
+    return true;
+  }
+
+  bool Tag::operator!=( const Tag &right ) const
+  {
+    if( *this == right )
+      return false;
+
+    return true;
+  }
+
   void Tag::setCData( const std::string& cdata )
   {
     m_cdata = escape( cdata );

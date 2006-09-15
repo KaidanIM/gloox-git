@@ -231,6 +231,18 @@ namespace gloox
        */
       virtual Tag* clone() const;
 
+      /**
+       * Checks two Tags for equality.
+       * @param right The Tag to check against the current Tag.
+       */
+      bool operator==( const Tag &right ) const;
+
+      /**
+       * Checks two Tags for inequality.
+       * @param right The Tag to check against the current Tag.
+       */
+      bool operator!=( const Tag &right ) const;
+
     protected:
       std::string m_name;
       StringMap m_attribs;
