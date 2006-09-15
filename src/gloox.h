@@ -679,7 +679,7 @@ namespace gloox
     PresenceDnd,                    /**< The entity or resource is busy (dnd = "Do Not Disturb"). */
     PresenceXa,                     /**< The entity or resource is away for an extended period (xa =
                                      * "eXtended Away"). */
-    PresenceUnavailable             /**< The entity or resource if offline. */
+    PresenceUnavailable             /**< The entity or resource is offline. */
   };
 
   /**
