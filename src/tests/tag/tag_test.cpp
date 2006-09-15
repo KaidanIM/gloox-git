@@ -33,6 +33,77 @@ int main( int /*argc*/, char* /*argv[]*/ )
   t = 0;
 
 
+  //-------
+  name = "clone test 1";
+  t = new Tag( "hallo" );
+  Tag *c = t->clone();
+  if( *t != *c )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+  delete t;
+  delete c;
+  t = 0;
+  c = 0;
+
+  //-------
+  name = "clone test 2";
+  t = new Tag( "hello" );
+  t->addAttribute( "test", "bacd" );
+  t->addChild( new Tag( "hello" ) );
+  c = t->clone();
+  if( *t != *c )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+  delete t;
+  delete c;
+  t = 0;
+  c = 0;
+
+  //-------
+  name = "clone test 3";
+  t = new Tag( "hello" );
+  t->addAttribute( "test", "bacd" );
+  t->addChild( new Tag( "hello" ) );
+  c = new Tag();
+  if( *t == *c )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+  delete t;
+  delete c;
+  t = 0;
+  c = 0;
+
+  //-------
+  name = "clone test 4";
+  t = new Tag( "hello" );
+  t->addAttribute( "test", "bacd" );
+  t->addChild( new Tag( "hello" ) );
+  c = new Tag( "test" );
+  c->addAttribute( "me", "help" );
+  c->addChild( new Tag( "yes" ) );
+
+  if( *t == *c )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+  delete t;
+  delete c;
+  t = 0;
+  c = 0;
+
+
+
+
+
+
+
 
   if( fail == 0 )
   {
