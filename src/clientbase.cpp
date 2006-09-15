@@ -248,9 +248,21 @@ namespace gloox
       case SaslPlain:
       {
         a->addAttribute( "mechanism", "PLAIN" );
-        size_t len = m_jid.username().length() + m_password.length() + 2;
+
+        size_t len = 0;
+        if( m_authzid.empty() )
+          len = m_jid.username().length() + m_password.length() + 2;
+        else
+          len = m_authzid.bare().length() + m_jid.username().length() + m_password.length() + 2;
+
         char *tmp = (char*)malloc( len + 80 );
-        sprintf( tmp, "%c%s%c%s", 0, m_jid.username().c_str(), 0, m_password.c_str() );
+
+        if( m_authzid.empty() )
+          sprintf( tmp, "%c%s%c%s", 0, m_jid.username().c_str(), 0, m_password.c_str() );
+        else
+          sprintf( tmp, "%s%c%s%c%s", m_authzid.bare().c_str(), 0, m_jid.username().c_str(), 0,
+                   m_password.c_str() );
+
         std::string dec;
         dec.assign( tmp, len );
         a->setCData( Base64::encode64( dec ) );
@@ -263,7 +275,10 @@ namespace gloox
         break;
       case SaslExternal:
         a->addAttribute( "mechanism", "EXTERNAL" );
-        a->setCData( Base64::encode64( m_jid.bare() ) );
+        if( m_authzid.empty() )
+          a->setCData( Base64::encode64( m_jid.bare() ) );
+        else
+          a->setCData( Base64::encode64( m_authzid.bare() ) );
         break;
     }
 
@@ -349,11 +364,13 @@ namespace gloox
       response += response_value;
       response += ",charset=utf-8";
 
+      if( !m_authzid.empty() )
+        response += ",authzid=" + m_authzid.bare();
+
       t = new Tag( "response", Base64::encode64( response ) );
     }
     t->addAttribute( "xmlns", XMLNS_STREAM_SASL );
     send( t );
-
   }
 
   void ClientBase::processSASLError( Stanza *stanza )
@@ -372,6 +389,14 @@ namespace gloox
       m_authError = SaslNotAuthorized;
     else if( stanza->hasChild( "temporary-auth-failure" ) )
       m_authError = SaslTemporaryAuthFailure;
+  }
+
+  JID& ClientBase::jid()
+  {
+    if( m_authzid.empty() )
+      return m_jid;
+    else
+      return m_authzid;
   }
 
   void ClientBase::send( Tag *tag )
