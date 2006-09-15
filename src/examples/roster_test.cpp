@@ -64,29 +64,29 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler, Messag
       printf( "onSessionCreateError: %d\n", error );
     };
 
-    virtual void itemSubscribed( const std::string& jid )
+    virtual void itemSubscribed( const JID& jid )
     {
-      printf( "subscribed %s\n", jid.c_str() );
+      printf( "subscribed %s\n", jid.bare().c_str() );
     }
 
-    virtual void itemAdded( const std::string& jid )
+    virtual void itemAdded( const JID& jid )
     {
-      printf( "added %s\n", jid.c_str() );
+      printf( "added %s\n", jid.bare().c_str() );
     }
 
-    virtual void itemUnsubscribed( const std::string& jid )
+    virtual void itemUnsubscribed( const JID& jid )
     {
-      printf( "unsubscribed %s\n", jid.c_str() );
+      printf( "unsubscribed %s\n", jid.bare().c_str() );
     }
 
-    virtual void itemRemoved( const std::string& jid )
+    virtual void itemRemoved( const JID& jid )
     {
-      printf( "removed %s\n", jid.c_str() );
+      printf( "removed %s\n", jid.bare().c_str() );
     }
 
-    virtual void itemUpdated( const std::string& jid )
+    virtual void itemUpdated( const JID& jid )
     {
-      printf( "updated %s\n", jid.c_str() );
+      printf( "updated %s\n", jid.bare().c_str() );
     }
 
     virtual void roster( const Roster& roster )
@@ -125,17 +125,18 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler, Messag
       printf( "item offline: %s\n", item.jid().c_str() );
     };
 
-    virtual bool subscriptionRequest( const std::string& jid, const std::string& /*msg*/ )
+    virtual bool subscriptionRequest( const JID& jid, const std::string& /*msg*/ )
     {
-      printf( "subscription: %s\n", jid.c_str() );
+      printf( "subscription: %s\n", jid.bare().c_str() );
       StringList groups;
-      j->rosterManager()->subscribe( jid, "", groups, "" );
+      JID id( jid );
+      j->rosterManager()->subscribe( id, "", groups, "" );
       return true;
     }
 
-    virtual bool unsubscriptionRequest( const std::string& jid, const std::string& /*msg*/ )
+    virtual bool unsubscriptionRequest( const JID& jid, const std::string& /*msg*/ )
     {
-      printf( "unsubscription: %s\n", jid.c_str() );
+      printf( "unsubscription: %s\n", jid.bare().c_str() );
       return true;
     }
 
