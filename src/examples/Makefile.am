@@ -21,7 +21,7 @@ adhoc_test_LDADD = ../libgloox.la $(LDFLAGS)
 adhoc_test_CFLAGS = $(CPPFLAGS)
 
 roster_test_SOURCES = roster_test.cpp
-roster_test_LDADD = -lgloox $(LDFLAGS)
+roster_test_LDADD = ../libgloox.la $(LDFLAGS)
 roster_test_CFLAGS = $(CPPFLAGS)
 
 privatexml_test_SOURCES = privatexml_test.cpp
@@ -69,5 +69,5 @@ md5_test_LDADD =
 md5_test_CFLAGS = $(CPPFLAGS)
 
 negotiate_test_SOURCES = negotiate_test.cpp
-negotiate_test_LDADD = -lgloox $(LDFLAGS)
+negotiate_test_LDADD = ../libgloox.la $(LDFLAGS)
 negotiate_test_CFLAGS = $(CPPFLAGS)
