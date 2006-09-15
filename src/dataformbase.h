@@ -76,6 +76,13 @@ namespace gloox
        */
       virtual void setFields( FieldList& fields ) { m_fields = fields; };
 
+      /**
+       * Use this function to add a single field to the list of existing fields.
+       * @param field The field to add.
+       * @since 0.9
+       */
+      virtual void addField( DataFormField *field ) { m_fields.push_back( field ); };
+
     protected:
       FieldList m_fields;
 
