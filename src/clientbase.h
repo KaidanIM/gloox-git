@@ -201,7 +201,8 @@ namespace gloox
       /**
        * Sends a given Tag over an established connection.
        * The ClientBase object becomes the owner of this Tag and will delete it after sending it.
-       * You should not rely on the existance of the Tag after it's been sent.
+       * You should not rely on the existance of the Tag after it's been sent. If you still need
+       * it after sending it, use Tag::clone() to create a deep copy.
        * @param tag The Tag to send.
        */
       virtual void send( Tag *tag );
@@ -251,6 +252,7 @@ namespace gloox
        * and the user has sufficient rights, they could then authenticate as bob@example.net but
        * act as alice@example.net.
        * @param authzid The JID to authorize as. Only the bare JID is used.
+       * @since 0.9
        */
       void setAuthzid( const JID& authzid ) { m_authzid = authzid; };
 
@@ -291,7 +293,7 @@ namespace gloox
        * @param jid Messages from this full JID will be sent to the given MessageHandler.
        * @param mh The object to receive Message stanza notifications.
        */
-      void registerMessageHandler( const std::string& jid,  MessageHandler *mh );
+      void registerMessageHandler( const std::string& jid, MessageHandler *mh );
 
       /**
        * Registers @c ph as object that receives Presence stanza notifications.
@@ -313,7 +315,7 @@ namespace gloox
        * @param xmlns The element's namespace.
        */
       void registerTagHandler( TagHandler *th, const std::string& tag,
-                                                const std::string& xmlns );
+                                               const std::string& xmlns );
 
       /**
        * Removes the given object from the list of connection listeners.
