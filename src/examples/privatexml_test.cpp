@@ -21,7 +21,6 @@ class PrivateXMLTest : public PrivateXMLHandler, ConnectionListener
 
       JID jid( "hurkhurk@example.org/gloox" );
       j = new Client( jid, "hurkhurks" );
-      j->setInitialPriority( 5 );
 
       j->registerConnectionListener(this );
       j->disco()->setVersion( "privateXMLTest", GLOOX_VERSION );

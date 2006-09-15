@@ -37,7 +37,6 @@ class IBBTest : public MessageSessionHandler, ConnectionListener, LogHandler,
 
       JID jid( "hurkhurk@example.org/gloox" );
       j = new Client( jid, "hurkhurks" );
-      j->setInitialPriority( 4 );
       j->registerConnectionListener( this );
       j->setAutoMessageSession( true, this );
       j->disco()->setVersion( "messageTest", GLOOX_VERSION, "Linux" );
