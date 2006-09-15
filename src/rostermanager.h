@@ -79,7 +79,7 @@ namespace gloox
        * @param groups A list of groups the contact belongs to.
        * @param msg A message sent along with the request.
        */
-      void subscribe( const std::string& jid, const std::string& name, StringList& groups,
+      void subscribe( const JID& jid, const std::string& name, StringList& groups,
                       const std::string& msg );
 
       /**
@@ -94,7 +94,7 @@ namespace gloox
        * @param name The displayed name of the contact.
        * @param groups A list of groups the contact belongs to.
        */
-      void add( const std::string& jid, const std::string& name, StringList& groups );
+      void add( const JID& jid, const std::string& name, StringList& groups );
 
       /**
        * Use this function to unsubscribe from a JID in the roster.
@@ -102,7 +102,7 @@ namespace gloox
        * @param msg A message to send along with the request.
        * @param remove Whether the contact should also be removed from the roster.
        */
-      void unsubscribe( const std::string& jid, const std::string& msg, bool remove );
+      void unsubscribe( const JID& jid, const std::string& msg, bool remove );
 
       /**
        * Use this function to acknowledge a subscription request if you requested asynchronous

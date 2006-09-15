@@ -172,7 +172,7 @@ namespace gloox
     }
   }
 
-  void RosterManager::subscribe( const std::string& jid, const std::string& name,
+  void RosterManager::subscribe( const JID& jid, const std::string& name,
                                  StringList& groups, const std::string& msg )
   {
     if( jid.empty() )
@@ -182,7 +182,7 @@ namespace gloox
 
     Tag *s = new Tag( "presence" );
     s->addAttribute( "type", "subscribe" );
-    s->addAttribute( "to", jid );
+    s->addAttribute( "to", jid.bare() );
     s->addAttribute( "from", m_parent->jid().full() );
     if( !msg.empty() )
       new Tag( s, "status", msg );
@@ -191,7 +191,7 @@ namespace gloox
   }
 
 
-  void RosterManager::add( const std::string& jid, const std::string& name, StringList& groups )
+  void RosterManager::add( const JID& jid, const std::string& name, StringList& groups )
   {
     if( jid.empty() )
       return;
@@ -204,7 +204,7 @@ namespace gloox
     Tag *q = new Tag( iq, "query" );
     q->addAttribute( "xmlns", XMLNS_ROSTER );
     Tag *i = new Tag( q, "item" );
-    i->addAttribute( "jid", jid );
+    i->addAttribute( "jid", jid.bare() );
     if( !name.empty() )
       i->addAttribute( "name", name );
 
@@ -218,12 +218,12 @@ namespace gloox
     m_parent->send( iq );
   }
 
-  void RosterManager::unsubscribe( const std::string& jid, const std::string& msg, bool remove )
+  void RosterManager::unsubscribe( const JID& jid, const std::string& msg, bool remove )
   {
     Tag *s = new Tag( "presence" );
     s->addAttribute( "type", "unsubscribe" );
     s->addAttribute( "from", m_parent->jid().bare() );
-    s->addAttribute( "to", jid );
+    s->addAttribute( "to", jid.bare() );
     if( !msg.empty() )
       new Tag( s, "status", msg );
 
@@ -239,7 +239,7 @@ namespace gloox
       Tag *q = new Tag( iq, "query" );
       q->addAttribute( "xmlns", XMLNS_ROSTER );
       Tag *i = new Tag( q, "item" );
-      i->addAttribute( "jid", jid );
+      i->addAttribute( "jid", jid.bare() );
       i->addAttribute( "subscription", "remove" );
 
       m_parent->send( iq );
@@ -299,7 +299,7 @@ namespace gloox
     {
       case StanzaS10nSubscribe:
       {
-        bool answer = m_rosterListener->subscriptionRequest( stanza->from().bare(), stanza->status() );
+        bool answer = m_rosterListener->subscriptionRequest( stanza->from(), stanza->status() );
         if( m_syncSubscribeReq )
         {
           ackSubscriptionRequest( stanza->from(), answer );
@@ -314,7 +314,7 @@ namespace gloox
 //         p->addAttribute( "to", stanza->from().bare() );
 //         m_parent->send( p );
 
-        m_rosterListener->itemSubscribed( stanza->from().bare() );
+        m_rosterListener->itemSubscribed( stanza->from() );
         break;
       }
 
@@ -326,7 +326,7 @@ namespace gloox
         p->addAttribute( "to", stanza->from().bare() );
         m_parent->send( p );
 
-        bool answer = m_rosterListener->unsubscriptionRequest( stanza->from().bare(), stanza->status() );
+        bool answer = m_rosterListener->unsubscriptionRequest( stanza->from(), stanza->status() );
         if( m_syncSubscribeReq && answer )
           unsubscribe( stanza->from().bare(), "", true );
         break;
@@ -340,7 +340,7 @@ namespace gloox
 //         p->addAttribute( "to", stanza->from().bare() );
 //         m_parent->send( p );
 
-        m_rosterListener->itemUnsubscribed( stanza->from().bare() );
+        m_rosterListener->itemUnsubscribed( stanza->from() );
         break;
       }
 
@@ -392,7 +392,7 @@ namespace gloox
             delete (*it_d).second;
             m_roster.erase( it_d );
             if( m_rosterListener )
-              m_rosterListener->itemRemoved( jid.bare() );
+              m_rosterListener->itemRemoved( jid );
             continue;
           }
           const std::string ask = (*it)->findAttribute( "ask" );
@@ -404,7 +404,7 @@ namespace gloox
           (*it_d).second->setSynchronized();
 
           if( isPush && m_rosterListener )
-            m_rosterListener->itemUpdated( jid.bare() );
+            m_rosterListener->itemUpdated( jid );
         }
         else
         {
@@ -420,7 +420,7 @@ namespace gloox
           StringList caps;
           add( jid.bare(), name, gl, caps, sub, a );
           if( isPush && m_rosterListener )
-            m_rosterListener->itemAdded( jid.bare() );
+            m_rosterListener->itemAdded( jid );
         }
       }
     }
