@@ -21,7 +21,6 @@ class PLTest : public PrivacyListHandler, ConnectionListener
 
       JID jid( "hurkhurk@example.org/gloox" );
       j = new Client( jid, "hurkhurks" );
-      j->setInitialPriority( 5 );
 
       j->registerConnectionListener(this );
       j->disco()->setVersion( "PLTest", GLOOX_VERSION );
