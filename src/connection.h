@@ -36,10 +36,10 @@
 # define HAVE_TLS
 #elif defined( HAVE_WINTLS )
 # define USE_WINTLS
-#define SECURITY_WIN32
-#include <windows.h>
-#include <security.h>
-#include <sspi.h>
+# define SECURITY_WIN32
+# include <windows.h>
+# include <security.h>
+# include <sspi.h>
 # define HAVE_TLS
 #endif
 
@@ -212,7 +212,6 @@ namespace gloox
       SecBufferDesc m_omessage;
       SecBuffer m_ibuffers[4];
       SecBuffer m_obuffers[4];
-      SecBuffer *extraBuffer;
       SecPkgContext_StreamSizes m_streamSizes;
       HMODULE m_lib;
 
