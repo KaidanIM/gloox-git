@@ -38,9 +38,9 @@ namespace gloox
   Client::Client( const std::string& server )
     : ClientBase( XMLNS_CLIENT, server ),
       m_rosterManager( 0 ), m_auth( 0 ),
-      m_resourceBound( false ), m_autoPresence( false ), m_forceNonSasl( false ),
+      m_presence( PresenceAvailable ), m_resourceBound( false ), m_forceNonSasl( false ),
       m_manageRoster( true ), m_doAuth( false ),
-      m_streamFeatures( 0 ), m_priority( -1 )
+      m_streamFeatures( 0 ), m_priority( 0 )
   {
     m_jid.setServer( server );
     init();
@@ -49,9 +49,9 @@ namespace gloox
   Client::Client( const JID& jid, const std::string& password, int port )
     : ClientBase( XMLNS_CLIENT, password, "", port ),
       m_rosterManager( 0 ), m_auth( 0 ),
-      m_resourceBound( false ), m_autoPresence( false ), m_forceNonSasl( false ),
+      m_presence( PresenceAvailable ), m_resourceBound( false ), m_forceNonSasl( false ),
       m_manageRoster( true ), m_doAuth( true ),
-      m_streamFeatures( 0 ), m_priority( -1 )
+      m_streamFeatures( 0 ), m_priority( 0 )
   {
     m_jid = jid;
     m_server = m_jid.serverRaw();
@@ -62,9 +62,9 @@ namespace gloox
                   const std::string& server, const std::string& resource, int port )
     : ClientBase( XMLNS_CLIENT, password, server, port ),
       m_rosterManager( 0 ), m_auth( 0 ),
-      m_resourceBound( false ), m_autoPresence( false ), m_forceNonSasl( false ),
+      m_presence( PresenceAvailable ), m_resourceBound( false ), m_forceNonSasl( false ),
       m_manageRoster( true ), m_doAuth( true ),
-      m_streamFeatures( 0 ), m_priority( -1 )
+      m_streamFeatures( 0 ), m_priority( 0 )
   {
     m_jid.setUsername( username );
     m_jid.setServer( server );
@@ -446,6 +446,19 @@ namespace gloox
     send( t );
   }
 
+  void Client::setPresence( Presence presence, int priority, const std::string& msg )
+  {
+    m_presence = presence;
+    m_presenceMsg = msg;
+
+    if( priority < -128 )
+      m_priority = -128;
+    if( priority > 127 )
+      m_priority = 127;
+    else
+      m_priority = priority;
+  }
+
   void Client::disableRoster()
   {
     m_manageRoster = false;
@@ -461,22 +474,17 @@ namespace gloox
 
   void Client::sendInitialPresence()
   {
-    Tag *p = new Tag( "presence" );
-    std::ostringstream oss;
-    oss << m_priority;
-    new Tag( p, "priority", oss.str() );
+    if( m_presence != PresenceUnknown &&
+        m_presence != PresenceUnavailable )
+    {
+      JID jid;
+      Stanza *p = Stanza::createPresenceStanza( jid, m_presenceMsg, m_presence );
+      std::ostringstream oss;
+      oss << m_priority;
+      new Tag( p, "priority", oss.str() );
 
-    send( p );
-  }
-
-  void Client::setInitialPriority( int priority )
-  {
-    if( priority < -128 )
-      priority = -128;
-    if( priority > 127 )
-      priority = 127;
-
-    m_priority = priority;
+      send( p );
+    }
   }
 
   RosterManager* Client::rosterManager()
@@ -499,8 +507,7 @@ namespace gloox
 
   void Client::rosterFilled()
   {
-    if( m_autoPresence )
-      sendInitialPresence();
+    sendInitialPresence();
   }
 
   void Client::disconnect()

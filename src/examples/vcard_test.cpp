@@ -27,7 +27,6 @@ class VCardTest : public ConnectionListener, LogHandler, VCardHandler
       j = new Client( jid, "hurkhurks" );
       j->disableRoster();
       j->setInitialPriority( 4 );
-      j->setAutoPresence( true );
       j->registerConnectionListener( this );
       j->disco()->setVersion( "discoTest", GLOOX_VERSION, "linux" );
       j->disco()->setIdentity( "client", "bot" );

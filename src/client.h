@@ -51,8 +51,6 @@ namespace gloox
    *   j->registerPresenceHandler( this );
    *   j->disco()->setVersion( "TestProg", "1.0" );
    *   j->disco()->setIdentity( "client", "bot" );
-   *   j->setAutoPresence( true );
-   *   j->setInitialPriority( 5 );
    *   j->connect();
    * }
    *
@@ -72,11 +70,10 @@ namespace gloox
    * gloox's current version is announced.
    * @li JEP-0030 (Service Discovery): All supported/available services are announced. No items are
    * returned.
-   * @note By default a priority of -1 is sent along with the initial presence. That means no message
-   * stanzas will be received (from compliant servers). Use @ref setInitialPriority() to set a different
-   * value. Also, no initial presence is sent which is usually required for a client to show up as
-   * 'online' in their contact's contact list. Use setAutoPresence() to enable automatic sending of
-   * initial presence.
+   * @note As of gloox 0.9, by default a priority of 0 is sent along with the initial presence.
+   * @note As of gloox 0.9, initial presence is automatically sent. Presence: available, Priority: 0.
+   * To disable sending of initial Presence use setPresence() with a value of PresenceUnavailable
+   * prior to connecting.
    *
    * @section sasl_auth SASL Authentication
    *
@@ -182,18 +179,17 @@ namespace gloox
       void setResource( const std::string &resource ) { m_jid.setResource( resource ); };
 
       /**
-       * Set initial priority. Legal values: -128 <= priority <= 127
-       * @param priority The initial priority value.
+       * Use this function to set the entity's presence.
+       * If used prior to establishing a connection, the set values will be sent with
+       * the initial presence stanza.
+       * If used while a connection already si established a repective presence stanza will be
+       * sent out immediately.
+       * @param presence The Presence value to set.
+       * @param priority An optional priority value. Legal values: -128 <= priority <= 127
+       * @param msg An optional message describing the presence state.
+       * @since 0.9
        */
-      void setInitialPriority( int priority );
-
-      /**
-       * Enables/disables the automatic sending of a presence packet
-       * upon successful authentication @em before the ConnectionListeners
-       * are notified. Default: off
-       * @param autoPresence Whether to switch AutoPresence on or off.
-       */
-      void setAutoPresence( bool autoPresence ) { m_autoPresence = autoPresence; };
+      void setPresence( Presence presence, int priority = 0, const std::string& msg = "" );
 
       /**
        * This is a temporary hack to enforce Non-SASL login. You should not need to use it.
@@ -246,8 +242,10 @@ namespace gloox
       RosterManager *m_rosterManager;
       NonSaslAuth *m_auth;
 
+      Presence m_presence;
+      std::string m_presenceMsg;
+
       bool m_resourceBound;
-      bool m_autoPresence;
       bool m_forceNonSasl;
       bool m_manageRoster;
       bool m_doAuth;
