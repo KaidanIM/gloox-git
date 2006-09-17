@@ -74,7 +74,7 @@ namespace gloox
    *
    * @author Jakob Schroeter <js@camaya.net>
    */
-  class GLOOX_API Adhoc : public DiscoNodeHandler, DiscoHandler, IqHandler
+  class GLOOX_API Adhoc : public DiscoNodeHandler, public DiscoHandler, public IqHandler
   {
     public:
       /**
