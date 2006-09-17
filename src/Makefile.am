@@ -19,7 +19,7 @@ libgloox_la_SOURCES = jid.cpp parser.cpp connection.cpp clientbase.cpp tag.cpp s
                         inbandbytestream.cpp inbandbytestreammanager.cpp messagefilter.cpp vcard.cpp \
                         vcardmanager.cpp
 
-libgloox_la_LDFLAGS = -version-info 3:0:0 -no-undefined -no-allow-shlib-undefined
+libgloox_la_LDFLAGS = -version-info 4:0:0 -no-undefined -no-allow-shlib-undefined
 libgloox_la_LIBADD =
 libgloox_la_CFLAGS = $(CPPFLAGS) $(IKSEMEL_CFLAGS)
 libgloox_la_LIBS = -liksemel
