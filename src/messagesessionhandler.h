@@ -35,6 +35,11 @@ namespace gloox
   {
     public:
       /**
+       * Virtual Destructor.
+       */
+      virtual ~MessageSessionHandler() {};
+
+      /**
        * Reimplement this function if you want to be notified about
        * incoming messages by means of automatically created MessageSessions.
        * You receive ownership of the supplied session (@b not the stanza) and
