@@ -29,7 +29,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.7
    */
-  class GLOOX_API DataFormReported : public DataFormBase, DataFormField
+  class GLOOX_API DataFormReported : public DataFormBase, public DataFormField
   {
     public:
       /**

@@ -43,8 +43,8 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
    */
-   class GLOOX_API RosterManager : public IqHandler, PresenceHandler, SubscriptionHandler,
-                                          PrivateXMLHandler
+   class GLOOX_API RosterManager : public IqHandler, public PresenceHandler, public SubscriptionHandler,
+                                   public PrivateXMLHandler
   {
     public:
       /**
