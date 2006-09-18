@@ -1,11 +1,16 @@
-v0.8.3 -- 14 Sep 2006
----------------------
+v0.8.4-sic -- 18 Sep 2006
+-------------------------
+- compile fix for Mac OS X (thanks to Geoff Schmidt)
+
+
+v0.8.3-sic -- 14 Sep 2006
+-------------------------
 - ClientBase: added whitespace ping()
 - VCard: fixed typo (vcard --> vCard)
 
 
-v0.8.2 -- 11 Sep 2006
----------------------
+v0.8.2-sic -- 11 Sep 2006
+-------------------------
 - find dn_skipname on Mac OS X (thanks to Geoff Schmidt)
 - look for libgnutls-config in specified path, if given
 - VCardHandler: return non-const VCard (*)
@@ -14,8 +19,8 @@ v0.8.2 -- 11 Sep 2006
 - **experimental** native TLS support on win32
 (*) these changes render 0.8.2 source incompatible compared to 0.8
 
-v0.8.1 -- 28 Jul 2006
----------------------
+v0.8.1-sic -- 28 Jul 2006
+-------------------------
 - Registration: allow registration with services (*)
 - async inbandbytestreams ack
 - fixed memory leak in RosterItem
