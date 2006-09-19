@@ -224,6 +224,18 @@ namespace gloox
     m_features.push_back( feature );
   }
 
+  void Disco::removeFeature( const std::string& feature )
+  {
+    StringList::iterator it = m_features.begin();
+    while( it != m_features.end() )
+    {
+      StringList::iterator t = it;
+      ++it;
+      if( (*t) == feature )
+        m_features.erase( t );
+    }
+  }
+
   void Disco::getDiscoInfo( const JID& to, const std::string& node, DiscoHandler *dh, int context )
   {
     std::string id = m_parent->getID();
