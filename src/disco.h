@@ -61,6 +61,13 @@ namespace gloox
       void addFeature( const std::string& feature );
 
       /**
+       * Removes the given feature from the list of advertised client features.
+       * @param feature The feature to remove.
+       * @since 0.9
+       */
+      void removeFeature( const std::string& feature );
+
+      /**
        * Lets you retrieve the features this Disco instance supports.
        * @return A list of disco items.
        */
