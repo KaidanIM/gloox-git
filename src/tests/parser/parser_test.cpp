@@ -15,7 +15,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
 
 
   // -------
-  name = "undefined tag";
+  name = "simple: <tag/>";
   c->setTest( p, 1 );
   if( !c->getLastResult() )
   {
@@ -24,7 +24,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
   }
 
   // -------
-  name = "undefined tag";
+  name = "simple child: <tag><child/></tag>";
   c->setTest( p, 2 );
   if( !c->getLastResult() )
   {
@@ -33,7 +33,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
   }
 
   // -------
-  name = "undefined tag";
+  name = "attribute: <tag attr='val'><child/></tag>";
   c->setTest( p, 3 );
   if( !c->getLastResult() )
   {
@@ -42,8 +42,17 @@ int main( int /*argc*/, char* /*argv[]*/ )
   }
 
   // -------
-  name = "undefined tag";
+  name = "attribute in child: <tag><child attr='val'/></tag>";
   c->setTest( p, 4 );
+  if( !c->getLastResult() )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+
+  // -------
+  name = "cdata: <tag>cdata</tag>";
+  c->setTest( p, 5 );
   if( !c->getLastResult() )
   {
     ++fail;
