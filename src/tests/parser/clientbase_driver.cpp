@@ -20,28 +20,45 @@ namespace gloox
     switch( m_testNum )
     {
       case 1:
-        if( stanza->name() == "tag" )
-          m_result = true;
+        if( stanza->name() != "tag" )
+          return;
         break;
       case 2:
-        if( stanza->name() == "tag" )
-          m_result = true;
+        if( stanza->name() != "tag" )
+          return;
+        if( !stanza->hasChild( "child" ) )
+          return;
         break;
       case 3:
-        if( stanza->name() == "tag" )
-          m_result = true;
+        if( stanza->name() != "tag" )
+          return;
+        if( !stanza->hasAttribute( "attr", "val" ) )
+          return;
+        if( !stanza->hasChild( "child" ) )
+          return;
         break;
       case 4:
-        if( stanza->name() == "tag" )
-          m_result = true;
+        if( stanza->name() != "tag" )
+          return;
+        if( !stanza->hasChild( "child" ) )
+          return;
+        {
+          Tag *c = stanza->findChild( "child" );
+          if( !c->hasAttribute( "attr", "val" ) )
+            return;
+        }
         break;
       case 5:
-        if( stanza->name() == "tag" )
-          m_result = true;
+        if( stanza->name() != "tag" )
+          return;
+        if( stanza->cdata() != "cdata" )
+          return;
         break;
       default:
         break;
     }
+
+    m_result = true;
   }
 
   void ClientBase::setTest( Parser *parser, int num )
@@ -53,16 +70,16 @@ namespace gloox
         parser->feed( "<tag/>" );
         break;
       case 2:
-        parser->feed( "<tag/>" );
+        parser->feed( "<tag><child/></tag>" );
         break;
       case 3:
-        parser->feed( "<tag/>" );
+        parser->feed( "<tag attr='val'><child/></tag>" );
         break;
       case 4:
-        parser->feed( "<tag/>" );
+        parser->feed( "<tag><child attr='val'/></tag>" );
         break;
       case 5:
-        parser->feed( "<tag/>" );
+        parser->feed( "<tag>cdata</tag>" );
         break;
       default:
         break;
