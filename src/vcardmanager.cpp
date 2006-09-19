@@ -33,7 +33,10 @@ namespace gloox
   VCardManager::~VCardManager()
   {
     if( m_parent )
+    {
+      m_parent->disco()->removeFeature( XMLNS_VCARD_TEMP );
       m_parent->removeIqHandler( XMLNS_VCARD_TEMP );
+    }
   }
 
   void VCardManager::fetchVCard( const JID& jid, VCardHandler *vch )

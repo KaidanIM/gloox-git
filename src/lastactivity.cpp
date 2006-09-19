@@ -33,6 +33,8 @@ namespace gloox
 
   LastActivity::~LastActivity()
   {
+    if( m_parent )
+      m_parent->disco()->removeFeature( XMLNS_LAST );
   }
 
   void LastActivity::query( const JID& jid )
