@@ -34,7 +34,10 @@ namespace gloox
   InBandBytestreamManager::~InBandBytestreamManager()
   {
     if( m_parent )
+    {
+      m_parent->disco()->removeFeature( XMLNS_IBB );
       m_parent->removeIqHandler( XMLNS_IBB );
+    }
 
     IBBMap::iterator it = m_ibbMap.begin();
     for( ; it != m_ibbMap.end(); ++it )
