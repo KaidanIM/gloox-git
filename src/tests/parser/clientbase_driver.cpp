@@ -55,6 +55,7 @@ namespace gloox
           return;
         break;
       default:
+        m_result = false;
         break;
     }
 
