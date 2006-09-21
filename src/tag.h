@@ -43,7 +43,7 @@ namespace gloox
       Tag();
 
       /**
-       * Creates a new tag with agiven name (and XML character data, if given).
+       * Creates a new tag with a given name (and XML character data, if given).
        * @param name The name of the element.
        * @param cdata The XML character data of the element.
        */
@@ -84,6 +84,13 @@ namespace gloox
        * @since 0.8
        */
       virtual void addAttribute( const std::string& name, int value );
+
+      /**
+       * Sets the given attributes. Any existing attributes are lost.
+       * @param attributes The attributes to set.
+       * @since 0.9
+       */
+      virtual void setAttributes( const StringMap& attributes ) { m_attribs = attributes; };
 
       /**
        * Use this function to add a child node to the tag. The Tag will be owned by Tag.
