@@ -145,7 +145,8 @@ int main( int /*argc*/, char* /*argv[]*/ )
   t->addAttribute( "type", "fixed" );
   new Tag( t, "value", "abc" );
   f = new DataFormField( t );
-  if( f->tag()->xml() != t->xml() )
+  Tag *ft = f->tag();
+  if( ft->xml() != t->xml() )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
@@ -154,6 +155,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
   }
   delete f;
   delete t;
+  delete ft;
   f = 0;
 
   // -------
@@ -263,6 +265,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
   }
   delete f;
   delete t;
+  delete r;
   f = 0;
 
 

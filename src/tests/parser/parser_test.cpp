@@ -250,6 +250,8 @@ int main( int /*argc*/, char* /*argv[]*/ )
 
   delete p;
   p = 0;
+  delete c;
+  c = 0;
 
   if( fail == 0 )
   {
