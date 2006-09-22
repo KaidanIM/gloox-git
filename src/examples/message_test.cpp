@@ -34,8 +34,8 @@ class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListen
     {
       setlocale( LC_ALL, "" );
 
-      JID jid( "hurkhurk@example.org/gloox" );
-      j = new Client( jid, "hurkhurks" );
+      JID jid( "js@camaya.net/gloox" );
+      j = new Client( jid, "mYP4ssw0rd" );
       j->registerConnectionListener( this );
       j->setAutoMessageSession( true, this );
       j->disco()->registerDiscoHandler( this );

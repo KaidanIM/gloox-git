@@ -35,13 +35,13 @@
 #include "taghandler.h"
 #include "jid.h"
 #include "base64.h"
-
-#include <iksemel.h>
+#include "md5.h"
 
 #include <string>
 #include <map>
 #include <list>
 #include <sstream>
+#include <iomanip>
 
 namespace gloox
 {
@@ -287,7 +287,6 @@ namespace gloox
 
   void ClientBase::processSASLChallenge( const std::string& challenge )
   {
-    const int CNONCE_LEN = 4;
     Tag *t;
     std::string decoded, nonce, realm, response;
     decoded = Base64::decode64( challenge.c_str() );
@@ -298,11 +297,6 @@ namespace gloox
     }
     else
     {
-      char cnonce[CNONCE_LEN*8 + 1];
-      unsigned char a1_h[16];
-      char a1[33], a2[33], response_value[33];
-      iksmd5 *md5;
-
       size_t r_pos = decoded.find( "realm=" );
       if( r_pos != std::string::npos )
       {
@@ -325,41 +319,45 @@ namespace gloox
         return;
       }
 
-      for( int i = 0; i < CNONCE_LEN; ++i )
-        sprintf( cnonce + i * 8, "%08x", rand() );
+      std::ostringstream cnonce;
+      for( int i = 0; i < 4; ++i )
+        cnonce << std::hex << std::setw( 8 ) << std::setfill( '0' ) << rand();
 
-      md5 = iks_md5_new();
-      iks_md5_hash( md5, (const unsigned char*)m_jid.username().c_str(), m_jid.username().length(), 0 );
-      iks_md5_hash( md5, (const unsigned char*)":", 1, 0 );
-      iks_md5_hash( md5, (const unsigned char*)realm.c_str(), realm.length(), 0 );
-      iks_md5_hash( md5, (const unsigned char*)":", 1, 0 );
-      iks_md5_hash( md5, (const unsigned char*)m_password.c_str(), m_password.length(), 1 );
-      iks_md5_digest( md5, a1_h );
-      iks_md5_reset( md5 );
-      iks_md5_hash( md5, a1_h, 16, 0 );
-      iks_md5_hash( md5, (const unsigned char*)":", 1, 0 );
-      iks_md5_hash( md5, (const unsigned char*)nonce.c_str(), nonce.length(), 0 );
-      iks_md5_hash( md5, (const unsigned char*)":", 1, 0 );
-      iks_md5_hash( md5, (const unsigned char*)cnonce, iks_strlen( cnonce ), 1 );
-      iks_md5_print( md5, a1 );
-      iks_md5_reset( md5 );
-      iks_md5_hash( md5, (const unsigned char*)"AUTHENTICATE:xmpp/", 18, 0 );
-      iks_md5_hash( md5, (const unsigned char*)m_jid.server().c_str(), m_jid.server().length(), 1 );
-      iks_md5_print( md5, a2 );
-      iks_md5_reset( md5 );
-      iks_md5_hash( md5, (const unsigned char*)a1, 32, 0 );
-      iks_md5_hash( md5, (const unsigned char*)":", 1, 0 );
-      iks_md5_hash( md5, (const unsigned char*)nonce.c_str(), nonce.length(), 0 );
-      iks_md5_hash( md5, (const unsigned char*)":00000001:", 10, 0 );
-      iks_md5_hash( md5, (const unsigned char*)cnonce, iks_strlen( cnonce ), 0 );
-      iks_md5_hash( md5, (const unsigned char*)":auth:", 6, 0 );
-      iks_md5_hash( md5, (const unsigned char*)a2, 32, 1 );
-      iks_md5_print( md5, response_value );
-      iks_md5_delete( md5 );
+      std::string a1;
+      std::string a2;
+      std::string a1_h;
+      std::string response_value;
+      MD5 md5;
+      md5.feed( m_jid.username(), false );
+      md5.feed( ":", false );
+      md5.feed( realm, false );
+      md5.feed( ":", false );
+      md5.feed( m_password, true );
+      a1_h = md5.hash();
+      md5.reset();
+      md5.feed( a1_h, false );
+      md5.feed( ":", false );
+      md5.feed( nonce, false );
+      md5.feed( ":", false );
+      md5.feed( cnonce.str(), true );
+      a1  = md5.pretty();
+      md5.reset();
+      md5.feed( "AUTHENTICATE:xmpp/", false );
+      md5.feed( m_jid.server(), true );
+      a2 = md5.pretty();
+      md5.reset();
+      md5.feed( a1, false );
+      md5.feed( ":", false );
+      md5.feed( nonce, false );
+      md5.feed( ":00000001:", false );
+      md5.feed( cnonce.str(), false );
+      md5.feed( ":auth:", false );
+      md5.feed( a2, true );
+      response_value = md5.pretty();
 
       std::string response = "username=\"" + m_jid.username() + "\",realm=\"" + realm;
       response += "\",nonce=\""+ nonce + "\",cnonce=\"";
-      response += cnonce;
+      response += cnonce.str();
       response += "\",nc=00000001,qop=auth,digest-uri=\"xmpp/" + m_jid.server() + "\",response=";
       response += response_value;
       response += ",charset=utf-8";
