@@ -2,6 +2,9 @@
 #ifndef CLIENTBASE_DRIVER_H__
 #define CLIENTBASE_DRIVER_H__
 
+#include "stanza.h"
+#include "parser.h"
+
 namespace gloox
 {
   class Stanza;
@@ -24,12 +27,11 @@ namespace gloox
 
       void filter( NodeType type, Stanza *stanza );
 
-      void setTest( Parser *parser, int num );
-      bool getLastResult();
+      Parser::ParserState setTest( Parser *parser, const std::string& str );
+      Stanza* getLastResult();
 
     private:
-      bool m_result;
-      int m_testNum;
+      Stanza *m_tag;
   };
 
 }
