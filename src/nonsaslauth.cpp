@@ -13,10 +13,9 @@
 
 #include "nonsaslauth.h"
 #include "client.h"
+#include "sha.h"
 
 #include <string>
-
-#include <iksemel.h>
 
 namespace gloox
 {
@@ -89,15 +88,10 @@ namespace gloox
             Tag *q = stanza->findChild( "query" );
             if( ( q->hasChild( "digest" ) ) && !m_sid.empty() )
             {
-              const std::string pwd = m_parent->password();
-              char buf[41];
-              iksha *sha;
-              sha = iks_sha_new();
-              iks_sha_hash( sha, (const unsigned char*)m_sid.c_str(), m_sid.length(), 0 );
-              iks_sha_hash( sha, (const unsigned char*)pwd.c_str(), pwd.length(), 1 );
-              iks_sha_print( sha, buf );
-              iks_sha_delete( sha );
-              new Tag( query, "digest", buf );
+              SHA sha;
+              sha.feed( m_sid, false );
+              sha.feed( m_parent->password(), true );
+              new Tag( query, "digest", sha.pretty() );
             }
             else
             {
