@@ -22,33 +22,408 @@ namespace gloox
 {
 
   Parser::Parser( ClientBase *parent )
-    : m_parent( parent ), m_current( 0 ), m_root( 0 )
+    : m_parent( parent ), m_current( 0 ), m_root( 0 ), m_state( INITIAL ),
+      m_preamble( 0 )
   {
-    m_parser = iks_sax_new( this, (iksTagHook*)tagHook, (iksCDataHook*)cdataHook );
   }
 
   Parser::~Parser()
   {
-    iks_parser_delete( m_parser );
     delete m_root;
   }
 
   Parser::ParserState Parser::feed( const std::string& data )
   {
-    int res = iks_parse( m_parser, data.c_str(), data.length(), 0 );
-    switch( res )
+    std::string::const_iterator it = data.begin();
+    for( ; it != data.end(); ++it )
     {
-      case IKS_NOMEM:
-        return PARSER_NOMEM;
-        break;
-      case IKS_BADXML:
+      unsigned char c = (*it);
+//       printf( "found char:   %c, ", c );
+
+      if( !isValid( c ) )
+      {
+        cleanup();
         return PARSER_BADXML;
-        break;
-      case IKS_OK:
-      default:
-        return PARSER_OK;
-        break;
+      }
+
+      switch( m_state )
+      {
+        case INITIAL:
+          m_tag = "";
+          if( isWhitespace( c ) )
+            break;
+
+          switch( c )
+          {
+            case '<':
+              m_state = TAG_OPENING;
+              break;
+            case '>':
+            default:
+              cleanup();
+              return PARSER_BADXML;
+              break;
+          }
+          break;
+        case TAG_OPENING:               // opening '<' has been found before
+          if( isWhitespace( c ) )
+            break;
+
+          switch( c )
+          {
+            case '<':
+            case '>':
+              cleanup();
+              return PARSER_BADXML;
+              break;
+            case '/':
+              m_state = TAG_CLOSING_SLASH;
+              break;
+            case '?':
+              m_state = TAG_NAME_COLLECT;
+              m_preamble = 1;
+              break;
+            default:
+              m_tag += c;
+              m_state = TAG_NAME_COLLECT;
+              break;
+          }
+          break;
+        case TAG_NAME_COLLECT:          // we're collecting the tag's name, we have at least one octet already
+          if( isWhitespace( c ) )
+          {
+            m_state = TAG_NAME_COMPLETE;
+            break;
+          }
+
+          switch( c )
+          {
+            case '<':
+            case '?':
+              cleanup();
+              return PARSER_BADXML;
+              break;
+            case '/':
+              m_state = TAG_OPENING_SLASH;
+              break;
+            case '>':
+              addTag();
+              m_state = TAG_INSIDE;
+              break;
+            default:
+              m_tag += c;
+              break;
+          }
+          break;
+        case TAG_INSIDE:                // we're inside a tag, expecting a child tag or cdata
+          m_tag = "";
+          switch( c )
+          {
+            case '<':
+              addCData();
+              m_state = TAG_OPENING;
+              break;
+            case '>':
+              cleanup();
+              return PARSER_BADXML;
+              break;
+            default:
+              m_cdata += c;
+              break;
+          }
+          break;
+        case TAG_OPENING_SLASH:         // a slash in an opening tag has been found, initing close of the tag
+          if( isWhitespace( c ) )
+            break;
+
+          if( c == '>' )
+          {
+            addTag();
+            if( !closeTag() )
+            {
+              cleanup();
+              return PARSER_BADXML;
+            }
+
+            m_state = INITIAL;
+          }
+          else
+          {
+            cleanup();
+            return PARSER_BADXML;
+          }
+          break;
+        case TAG_CLOSING_SLASH:         // we have found the '/' of a closing tag
+          if( isWhitespace( c ) )
+            break;
+
+          switch( c )
+          {
+            case '>':
+            case '<':
+            case '/':
+              cleanup();
+              return PARSER_BADXML;
+              break;
+            default:
+              m_tag += c;
+              m_state = TAG_CLOSING;
+              break;
+          }
+          break;
+        case TAG_CLOSING:               // we're collecting the name of a closing tag
+          switch( c )
+          {
+            case '<':
+            case '/':
+              cleanup();
+              return PARSER_BADXML;
+              break;
+            case '>':
+              if( !closeTag() )
+              {
+                cleanup();
+                return PARSER_BADXML;
+              }
+
+              m_state = INITIAL;
+              break;
+            default:
+              m_tag += c;
+              break;
+          }
+          break;
+        case TAG_NAME_COMPLETE:        // a tag name is complete, expect tag close or attribs
+          if( isWhitespace( c ) )
+            break;
+
+          switch( c )
+          {
+            case '<':
+              cleanup();
+              return PARSER_BADXML;
+              break;
+            case '/':
+              m_state = TAG_OPENING_SLASH;
+              break;
+            case '>':
+              if( m_preamble == 1 )
+              {
+                cleanup();
+                return PARSER_BADXML;
+              }
+              m_state = TAG_INSIDE;
+              addTag();
+              break;
+            case '?':
+              if( m_preamble == 1 )
+                m_preamble = 2;
+              else
+              {
+                cleanup();
+                return PARSER_BADXML;
+              }
+              break;
+            default:
+              m_attrib += c;
+              m_state = TAG_ATTR;
+              break;
+          }
+          break;
+        case TAG_ATTR:                  // we're collecting the name of an attribute, we have at least 1 octet
+          if( isWhitespace( c ) )
+          {
+            m_state = TAG_ATTR_COMPLETE;
+            break;
+          }
+
+          switch( c )
+          {
+            case '<':
+            case '/':
+            case '>':
+              cleanup();
+              return PARSER_BADXML;
+              break;
+            case '=':
+              m_state = TAG_ATTR_EQUAL;
+              break;
+            default:
+              m_attrib += c;
+          }
+          break;
+        case TAG_ATTR_COMPLETE:         // we're expecting an equals sign or ws or the attrib value
+          if( isWhitespace( c ) )
+            break;
+
+          switch( c )
+          {
+            case '=':
+              m_state = TAG_ATTR_EQUAL;
+              break;
+            case '<':
+            case '/':
+            case '>':
+            default:
+              cleanup();
+              return PARSER_BADXML;
+              break;
+          }
+          break;
+        case TAG_ATTR_EQUAL:            // we have found a equals sign
+          if( isWhitespace( c ) )
+            break;
+
+          switch( c )
+          {
+            case '\'':
+            case '"':
+              m_state = TAG_VALUE;
+              break;
+            case '=':
+            case '<':
+            case '>':
+            default:
+              cleanup();
+              return PARSER_BADXML;
+              break;
+          }
+          break;
+        case TAG_VALUE:                 // we're expecting value data
+          switch( c )
+          {
+            case '<':
+            case '>':
+              cleanup();
+              return PARSER_BADXML;
+              break;
+            case '\'':
+            case '"':
+              addAttribute();
+              m_state = TAG_NAME_COMPLETE;
+              break;
+            default:
+              m_value += c;
+          }
+          break;
+        default:
+//           printf( "default action!?\n" );
+          break;
+      }
+//       printf( "parser state: %d\n", m_state );
     }
+
+    return PARSER_OK;
+  }
+
+  void Parser::addTag()
+  {
+    if( !m_root )
+    {
+//       printf( "created Stanza named %s, ", m_tag.c_str() );
+      m_root = new Stanza( m_tag );
+      m_current = (Tag*)m_root;
+    }
+    else
+    {
+//       printf( "created Tag named %s, ", m_tag.c_str() );
+      m_current = new Tag( m_current, m_tag );
+    }
+
+    if( m_attribs.size() )
+    {
+      m_current->setAttributes( m_attribs );
+//       printf( "added %d attributes, ", m_attribs.size() );
+      m_attribs.clear();
+    }
+
+    if( m_tag == "stream:stream" )
+    {
+      streamEvent( m_root );
+      cleanup();
+    }
+//     else
+//       printf( "%s, ", m_root->xml().c_str() );
+
+    if( m_tag == "xml" && m_preamble == 2 )
+      cleanup();
+  }
+
+  void Parser::addAttribute()
+  {
+//     printf( "adding attribute: %s='%s', ", m_attrib.c_str(), m_value.c_str() );
+    m_attribs[m_attrib] = m_value;
+    m_attrib = "";
+    m_value = "";
+//     printf( "added, " );
+  }
+
+  void Parser::addCData()
+  {
+    if( m_current )
+    {
+      m_current->addCData( m_cdata );
+//       printf( "added cdata %s, ", m_cdata.c_str() );
+      m_cdata = "";
+    }
+  }
+
+  bool Parser::closeTag()
+  {
+//     printf( "about to close, " );
+
+    if( !m_current )
+      return false;
+//     else
+//       printf( "m_current: %s, ", m_current->name().c_str() );
+
+    if( m_current->name() != m_tag )
+    {
+//       printf( "m_tag: %s, ", m_tag.c_str() );
+      return false;
+    }
+
+    if( m_current->parent() )
+      m_current = m_current->parent();
+    else
+    {
+//       printf( "pushing upstream, " );
+      m_root->finalize();
+      streamEvent( m_root );
+      cleanup();
+    }
+
+    return true;
+  }
+
+  void Parser::cleanup()
+  {
+    delete m_root;
+    m_root = 0;
+    m_current = 0;
+    m_cdata = "";
+    m_tag = "";
+    m_attrib = "";
+    m_value = "";
+    m_attribs.clear();
+    m_state = INITIAL;
+    m_preamble = 0;
+  }
+
+  bool Parser::isValid( unsigned char& c )
+  {
+    if( c != 0xc0 || c != 0xc1 || c < 0xf5 )
+      return true;
+
+    return false;
+  }
+
+  bool Parser::isWhitespace( unsigned char& c )
+  {
+    if( c == 0x09 || c == 0x0a || c == 0x0d || c == 0x20 )
+      return true;
+
+    return false;
   }
 
   void Parser::streamEvent( Stanza *stanza )
@@ -56,83 +431,15 @@ namespace gloox
     if( m_parent && stanza )
     {
       ClientBase::NodeType type = ClientBase::NODE_STREAM_CHILD;
-      if( m_root->name() == "stream:stream" )
+      if( stanza->name() == "stream:stream" )
         type = ClientBase::NODE_STREAM_START;
-      else if( m_root->name() == "stream:error" )
+      else if( stanza->name() == "stream:error" )
         type = ClientBase::NODE_STREAM_ERROR;
 
       m_parent->filter( type, stanza );
     }
     else if( !stanza )
       m_parent->filter( ClientBase::NODE_STREAM_CLOSE, 0 );
-  }
-
-  int tagHook( Parser *parser, char *name, char **atts, int type )
-  {
-    if( !name )
-      return IKS_OK;
-
-    switch( type )
-    {
-      case IKS_OPEN:
-      case IKS_SINGLE:
-      {
-        Stanza *tag = new Stanza( name );
-        for(int i=0; atts && atts[i]; )
-        {
-          tag->addAttribute( atts[i], atts[i+1] );
-          i+=2;
-        }
-        if( !parser->m_root )
-        {
-          parser->m_root = tag;
-          parser->m_current = parser->m_root;
-        }
-        else
-        {
-          parser->m_current->addChild( tag );
-          parser->m_current = tag;
-        }
-        if( tag->name() == "stream:stream" )
-        {
-          parser->streamEvent( parser->m_root );
-          delete parser->m_root;
-          parser->m_root = 0;
-          parser->m_current = 0;
-        }
-        if( type == IKS_OPEN )
-        break;
-      }
-      case IKS_CLOSE:
-        if( iks_strncmp( name, "stream:stream", 13 ) == 0 )
-        {
-          parser->streamEvent( 0 );
-          break;
-        }
-        parser->m_current = dynamic_cast<Stanza*>( parser->m_current->parent() );
-        if( !parser->m_current )
-        {
-          parser->m_root->finalize();
-          parser->streamEvent( parser->m_root );
-          delete parser->m_root;
-          parser->m_root = 0;
-          parser->m_current = 0;
-        }
-        break;
-    }
-    return IKS_OK;
-  }
-
-  int cdataHook( Parser *parser, char *data, size_t len )
-  {
-    if( parser->m_current && data && len )
-    {
-      std::string tmp;
-      tmp.assign( data, len );
-      parser->m_current->addCData( tmp );
-    }
-
-    return IKS_OK;
   }
 
 }

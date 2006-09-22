@@ -17,8 +17,6 @@
 
 #include "gloox.h"
 
-#include <iksemel.h>
-
 #include <string>
 
 namespace gloox
@@ -26,6 +24,7 @@ namespace gloox
 
   class ClientBase;
   class Stanza;
+  class Tag;
 
   /**
    * @brief This class is an abstraction of libiksemel's XML parser.
@@ -65,34 +64,47 @@ namespace gloox
       ParserState feed( const std::string& data );
 
     private:
+      void addTag();
+      void addAttribute();
+      void addCData();
+      bool closeTag();
+      void cleanup();
+      bool isWhitespace( unsigned char& c );
+      bool isValid( unsigned char& c );
       void streamEvent( Stanza *stanza );
 
-      iksparser *m_parser;
+      enum ParserInternalState
+      {
+        INITIAL,
+        TAG_OPENING,
+        TAG_OPENING_SLASH,
+        TAG_OPENING_LT,
+        TAG_INSIDE,
+        TAG_NAME_COLLECT,
+        TAG_NAME_COMPLETE,
+        TAG_ATTR,
+        TAG_ATTR_COMPLETE,
+        TAG_ATTR_EQUAL,
+        TAG_CLOSING,
+        TAG_CLOSING_SLASH,
+        TAG_VALUE_APOS,
+        TAG_VALUE,
+        TAG_PREAMBLE
+      };
+
       ClientBase *m_parent;
-      Stanza *m_current;
+      Tag *m_current;
       Stanza *m_root;
 
-      /**
-       * Called by iksemel's parser with cdata for the current node.
-       * @param parser The current Parser.
-       * @param data The cdata.
-       * @param len The length of the data.
-       */
-      friend int cdataHook( Parser *parser, char *data, size_t len );
+      ParserInternalState m_state;
+      StringMap m_attribs;
+      std::string m_tag;
+      std::string m_cdata;
+      std::string m_attrib;
+      std::string m_value;
+      int m_preamble;
 
-      /**
-       * Called by iksemel's parser for every new element.
-       * @param parser The current Parser.
-       * @param name The element's name.
-       * @param atts The element's list of attributes.
-       * @param type The type of the element.
-       */
-      friend int tagHook( Parser *parser, char *name, char **atts, int type );
   };
-
-  int cdataHook( Parser *parser, char *data, size_t len );
-
-  int tagHook( Parser *parser, char *name, char **atts, int type );
 
 }
 
