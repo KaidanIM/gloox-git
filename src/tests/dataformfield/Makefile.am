@@ -6,7 +6,7 @@ AM_CPPFLAGS = -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare
 
 noinst_PROGRAMS = dataformfield_test
 
-dataformfield_test_SOURCES = dataformfield_test.cpp
-dataformfield_test_LDADD = ../../libgloox.la
+dataformfield_test_SOURCES = dataformfield_test.cpp ../../tag.cpp ../../dataformfield.cpp
+dataformfield_test_LDADD =
 dataformfield_test_CFLAGS = $(CPPFLAGS)
 
