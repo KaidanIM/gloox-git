@@ -35,12 +35,20 @@ namespace gloox
       /**
        * Creates an empty 'item' element you can add fields to.
        */
-      DataFormItem() : DataFormField( FieldTypeItem ) {};
+      DataFormItem();
+
+      /**
+       * Creates a 'item' element and fills it with the 'field' elements contained in the given Tag.
+       * The Tag's root element must be a 'item' element. Its child element should be 'field' elements.
+       * @param tag The tag to read the 'field' elements from.
+       * @since 0.8.5
+       */
+      DataFormItem( Tag *tag );
 
       /**
        * Virtual destructor.
        */
-      virtual ~DataFormItem() {};
+      virtual ~DataFormItem();
 
   };
 

@@ -20,6 +20,8 @@
 namespace gloox
 {
 
+  class Tag;
+
   /**
    * @brief An abstraction of an &lt;reported&gt; element in a JEP-0004 Data Form of type result.
    *
@@ -35,12 +37,20 @@ namespace gloox
       /**
        * Creates an empty 'reported' element you can add fields to.
        */
-      DataFormReported() : DataFormField( FieldTypeReported ) {};
+      DataFormReported();
+
+      /**
+       * Creates a 'reported' element and fills it with the 'field' elements contained in the given Tag.
+       * The Tag's root element must be a 'reported' element. Its child element should be 'field' elements.
+       * @param tag The tag to read the 'field' elements from.
+       * @since 0.8.5
+       */
+      DataFormReported( Tag* tag );
 
       /**
        * Virtual destructor.
        */
-      virtual ~DataFormReported() {};
+      virtual ~DataFormReported();
 
   };
 
