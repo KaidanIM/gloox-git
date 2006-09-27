@@ -29,18 +29,26 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.7
    */
-  class GLOOX_API DataFormItem : public DataFormBase, DataFormField
+  class GLOOX_API DataFormItem : public DataFormBase, public DataFormField
   {
     public:
       /**
        * Creates an empty 'item' element you can add fields to.
        */
-      DataFormItem() : DataFormField( FIELD_TYPE_ITEM ) {};
+      DataFormItem();
+
+      /**
+       * Creates a 'item' element and fills it with the 'field' elements contained in the given Tag.
+       * The Tag's root element must be a 'item' element. Its child element should be 'field' elements.
+       * @param tag The tag to read the 'field' elements from.
+       * @since 0.8.5
+       */
+      DataFormItem( Tag *tag );
 
       /**
        * Virtual destructor.
        */
-      virtual ~DataFormItem() {};
+      virtual ~DataFormItem();
 
   };
 

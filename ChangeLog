@@ -1,3 +1,9 @@
+v0.8.5-sic -- 27 Sep 2006
+-------------------------
+- JEP-0055 (Jabber Search)
+- DataForm::tag() returns non-const Tag
+
+
 v0.8.4-sic -- 18 Sep 2006
 -------------------------
 - compile fix for Mac OS X (thanks to Geoff Schmidt)

@@ -74,8 +74,9 @@ namespace gloox
        * Use this function to create a Tag representation of the form.
        * @return A Tag hierarchically describing the form, or NULL if the form is invalid (i.e.
        * created from a Tag not correctly describing a Data Form).
+       * @note The caller is responsible for deleting the Tag.
        */
-      const Tag* tag() const;
+      Tag* tag() const;
 
       /**
        * Use this function to retrieve the title of the form.

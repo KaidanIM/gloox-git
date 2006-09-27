@@ -317,6 +317,7 @@ namespace gloox
   const std::string XMLNS_AUTH              = "jabber:iq:auth";
   const std::string XMLNS_PRIVATE_XML       = "jabber:iq:private";
   const std::string XMLNS_LAST              = "jabber:iq:last";
+  const std::string XMLNS_SEARCH            = "jabber:iq:search";
   const std::string XMLNS_X_DATA            = "jabber:x:data";
   const std::string XMLNS_X_EVENT           = "jabber:x:event";
   const std::string XMLNS_X_OOB             = "jabber:x:oob";
@@ -338,7 +339,7 @@ namespace gloox
 
   const int XMPP_STREAM_VERSION_MAJOR       = 1;
   const int XMPP_STREAM_VERSION_MINOR       = 0;
-  const std::string GLOOX_VERSION           = "0.8.4-sic";
+  const std::string GLOOX_VERSION           = "0.8.5-sic";
 
   /**
    * This describes the possible states of a stream.

@@ -13,6 +13,8 @@
 
 #include "dataform.h"
 #include "dataformfield.h"
+#include "dataformreported.h"
+#include "dataformitem.h"
 #include "tag.h"
 
 namespace gloox
@@ -53,6 +55,16 @@ namespace gloox
         DataFormField f( (*it) );
         m_fields.push_back( f );
       }
+      else if( (*it)->name() == "reported" )
+      {
+        DataFormReported r( (*it) );
+        m_fields.push_back( r );
+      }
+      else if( (*it)->name() == "item" )
+      {
+        DataFormItem r( (*it) );
+        m_fields.push_back( r );
+      }
     }
   }
 
@@ -60,7 +72,7 @@ namespace gloox
   {
   }
 
-  const Tag* DataForm::tag() const
+  Tag* DataForm::tag() const
   {
     if( m_type == FORM_TYPE_INVALID )
       return 0;
