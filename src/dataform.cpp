@@ -25,6 +25,11 @@ namespace gloox
   {
   }
 
+  DataForm::DataForm( DataFormType type )
+    : m_type( type )
+  {
+  }
+
   DataForm::DataForm( Tag *tag )
     : m_type( FormTypeInvalid )
   {
