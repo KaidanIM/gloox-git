@@ -4,6 +4,7 @@ v0.8.5-sic -- 27 Sep 2006
 - DataForm::tag() returns non-const Tag
 - enable DataForm to parse <reproted> and <item> elements
 - DataFormBase: FieldList holds pointers to DataFormFields now
+- DataForm: added simplified ctor
 
 
 v0.8.4-sic -- 18 Sep 2006
