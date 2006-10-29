@@ -19,12 +19,12 @@ namespace gloox
 {
 
   DataFormItem::DataFormItem()
-    : DataFormField( FIELD_TYPE_REPORTED )
+    : DataFormField( FIELD_TYPE_ITEM )
   {
   }
 
   DataFormItem::DataFormItem( Tag* tag )
-    : DataFormField( FIELD_TYPE_REPORTED )
+    : DataFormField( FIELD_TYPE_ITEM )
   {
     if( tag->name() != "item" )
       return;
@@ -40,6 +40,17 @@ namespace gloox
 
   DataFormItem::~DataFormItem()
   {
+  }
+
+  Tag* DataFormItem::tag()
+  {
+    Tag *i = new Tag ( "item" );
+    DataFormBase::FieldList::const_iterator it = m_fields.begin();
+    for( ; it != m_fields.end(); ++it )
+    {
+      i->addChild( (*it)->tag() );
+    }
+    return i;
   }
 
 }

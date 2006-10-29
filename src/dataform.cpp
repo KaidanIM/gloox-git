@@ -94,7 +94,29 @@ namespace gloox
     FieldList::const_iterator it = m_fields.begin();
     for( ; it != m_fields.end(); ++it )
     {
-      x->addChild( (*it)->tag() );
+      DataFormField *f = dynamic_cast<DataFormField*>( (*it) );
+      if( f )
+      {
+        x->addChild( f->tag() );
+        delete f;
+        continue;
+      }
+
+      DataFormItem *i = dynamic_cast<DataFormItem*>( (*it) );
+      if( i )
+      {
+        x->addChild( i->tag() );
+        delete i;
+        continue;
+      }
+
+      DataFormReported *r = dynamic_cast<DataFormReported*>( (*it) );
+      if( r )
+      {
+        x->addChild( r->tag() );
+        delete r;
+        continue;
+      }
     }
 
     switch( m_type )

@@ -11,6 +11,7 @@
 */
 
 #include "dataformfield.h"
+#include "dataformbase.h"
 #include "tag.h"
 
 namespace gloox
@@ -89,13 +90,6 @@ namespace gloox
       return 0;
 
     Tag *field = new Tag( "field" );
-    field->addAttribute( "var", m_name );
-    field->addAttribute( "label", m_label );
-    if( m_required )
-      new Tag( field, "required" );
-
-    if( !m_desc.empty() )
-      new Tag( field, "desc", m_desc );
 
     switch( m_type )
     {
@@ -132,6 +126,14 @@ namespace gloox
       default:
         break;
     }
+
+    field->addAttribute( "var", m_name );
+    field->addAttribute( "label", m_label );
+    if( m_required )
+      new Tag( field, "required" );
+
+    if( !m_desc.empty() )
+      new Tag( field, "desc", m_desc );
 
     if( m_type == FIELD_TYPE_LIST_SINGLE || m_type == FIELD_TYPE_LIST_MULTI )
     {
