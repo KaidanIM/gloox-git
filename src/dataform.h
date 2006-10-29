@@ -62,6 +62,13 @@ namespace gloox
       DataForm( DataFormType type, const StringList& instructions, const std::string& title = "" );
 
       /**
+       * Constructs a new, empty form without any instructions or title set. Probably best suited for
+       * result forms.
+       * @param type The form type.
+       */
+      DataForm( DataFormType type );
+
+      /**
        * Constructs a new DataForm from an existing Tag/XML representation.
        * @param tag The existing form to parse.
        */
