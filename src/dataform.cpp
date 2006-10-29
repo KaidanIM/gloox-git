@@ -118,13 +118,6 @@ namespace gloox
     FieldList::const_iterator it = m_fields.begin();
     for( ; it != m_fields.end(); ++it )
     {
-      DataFormField *f = dynamic_cast<DataFormField*>( (*it) );
-      if( f )
-      {
-        x->addChild( f->tag() );
-        continue;
-      }
-
       DataFormItem *i = dynamic_cast<DataFormItem*>( (*it) );
       if( i )
       {
@@ -138,6 +131,8 @@ namespace gloox
         x->addChild( r->tag() );
         continue;
       }
+
+      x->addChild( (*it)->tag() );
     }
 
     switch( m_type )
