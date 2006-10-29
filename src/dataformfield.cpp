@@ -150,7 +150,7 @@ namespace gloox
       else
         new Tag( field, "value", "1" );
     }
-    
+
     if( m_type == FIELD_TYPE_TEXT_MULTI || m_type == FIELD_TYPE_LIST_MULTI )
     {
       StringList::const_iterator it = m_values.begin();

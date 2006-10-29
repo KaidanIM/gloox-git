@@ -46,7 +46,7 @@ namespace gloox
       /**
        * A list of JEP-0004 Data Form Fields.
        */
-      typedef std::list<DataFormField> FieldList;
+      typedef std::list<DataFormField*> FieldList;
 
       /**
        * Use this function to check whether  this form contains a field with the given name.
@@ -59,9 +59,9 @@ namespace gloox
        * Use this function to fetch a copy of a field of the form. If no such field exists, an empty
        * (invalid) field is returned.
        * @param field The name of the field (the content of the 'var' attribute).
-       * @return A copy of the field with the given name if it exists, an empty (invalid) field otherwise.
+       * @return A copy of the field with the given name if it exists, 0 otherwise.
        */
-      DataFormField field( const std::string& field );
+      DataFormField* field( const std::string& field );
 
       /**
        * Use this function to retrieve the list of fields of a form.
