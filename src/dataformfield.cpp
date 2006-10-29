@@ -48,6 +48,8 @@ namespace gloox
       m_type = FIELD_TYPE_TEXT_PRIVATE;
     else if( tag->hasAttribute( "type", "text-single" ) )
       m_type = FIELD_TYPE_TEXT_SINGLE;
+    else if( !tag->hasAttribute( "type" ) )
+      m_type = FIELD_TYPE_NONE;
 
     if( tag->hasAttribute( "var" ) )
       m_name = tag->findAttribute( "var" );
