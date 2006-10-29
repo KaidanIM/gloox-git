@@ -75,30 +75,6 @@ namespace gloox
 
   DataForm::~DataForm()
   {
-    FieldList::const_iterator it = m_fields.begin();
-    for( ; it != m_fields.end(); ++it )
-    {
-      DataFormField *f = dynamic_cast<DataFormField*>( (*it) );
-      if( f )
-      {
-        delete f;
-        continue;
-      }
-
-      DataFormItem *i = dynamic_cast<DataFormItem*>( (*it) );
-      if( i )
-      {
-        delete i;
-        continue;
-      }
-
-      DataFormReported *r = dynamic_cast<DataFormReported*>( (*it) );
-      if( r )
-      {
-        delete r;
-        continue;
-      }
-    }
   }
 
   Tag* DataForm::tag() const
