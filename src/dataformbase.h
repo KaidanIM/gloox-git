@@ -59,7 +59,7 @@ namespace gloox
        * Use this function to fetch a pointer to a field of the form. If no such field exists,
        * 0 is returned.
        * @param field The name of the field (the content of the 'var' attribute).
-       * @return A copy of the field with the given name if it exists, an 0 otherwise.
+       * @return A copy of the field with the given name if it exists, 0 otherwise.
        */
       DataFormField* field( const std::string& field );
 
