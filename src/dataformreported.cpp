@@ -33,7 +33,7 @@ namespace gloox
     Tag::TagList::const_iterator it = l.begin();
     for( ; it != l.end(); ++it )
     {
-      DataFormField f( (*it) );
+      DataFormField *f = new DataFormField( (*it) );
       m_fields.push_back( f );
     }
   }
