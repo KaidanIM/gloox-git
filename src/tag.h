@@ -152,14 +152,14 @@ namespace gloox
 
       /**
        * This function finds and returns the @b first element within the child elements of the current tag,
-       * that has a certan name, and a certain attribute with a certain value.
+       * that has a certain name, and a certain attribute with a certain value.
        * @param name The name of the element to search for.
        * @param attr The name of the attribute of the child element.
        * @param value The value of the attribute of the child element.
        * @return The found Tag, or NUL.
        */
       virtual Tag* findChild( const std::string& name, const std::string& attr,
-                              const std::string& value = "" );
+                               const std::string& value = "" );
 
       /**
        * This function checks whether the Tag has a child element with a given name, and optionally
