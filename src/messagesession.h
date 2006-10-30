@@ -195,7 +195,7 @@ namespace gloox
        * @param message The message to send.
        * @param subject The optional subject to send.
        */
-      void send( const std::string& message, const std::string& subject );
+      void send( const std::string& message, const std::string& subject = "" );
 
       /**
        * Use this function to hook a new MessageFilter into a MessageSession.
