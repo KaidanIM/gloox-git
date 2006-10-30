@@ -5,6 +5,7 @@ v0.8.5-sic -- 27 Sep 2006
 - enable DataForm to parse <reproted> and <item> elements
 - DataFormBase: FieldList holds pointers to DataFormFields now
 - DataForm: added simplified ctor
+- MessageSession::send(): added default for subject param (empty)
 
 
 v0.8.4-sic -- 18 Sep 2006
