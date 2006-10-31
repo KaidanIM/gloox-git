@@ -6,6 +6,8 @@ v0.8.5-sic -- 27 Sep 2006
 - DataFormBase: FieldList holds pointers to DataFormFields now
 - DataForm: added simplified ctor
 - MessageSession::send(): added default for subject param (empty)
+- MessageSession: allow start of conversation with bare JID and allow 'upgrade'
+  to full JID when reply comes in
 
 
 v0.8.4-sic -- 18 Sep 2006
