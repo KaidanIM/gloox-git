@@ -271,8 +271,10 @@ namespace gloox
        * You should not need to use this functionality directly. Instead use a MessageSession.
        * @param jid Messages from this full JID will be sent to the given MessageHandler.
        * @param mh The object to receive Message stanza notifications.
+       * @param wantUpgrade Indicates whether the registered MessageSession wants upgrades
+       * from bare JID to full JID.
        */
-      void registerMessageHandler( const std::string& jid,  MessageHandler *mh );
+      void registerMessageHandler( const std::string& jid, MessageHandler *mh, bool wantUpgrade );
 
       /**
        * Registers @c ph as object that receives Presence stanza notifications.
@@ -497,10 +499,17 @@ namespace gloox
         std::string tag;
       };
 
+      struct JidHandlerStruct
+      {
+        MessageHandler *mh;
+        bool wantUpgrade;
+      };
+
       typedef std::list<ConnectionListener*>                ConnectionListenerList;
       typedef std::map<const std::string, IqHandler*>       IqHandlerMap;
       typedef std::map<const std::string, TrackStruct>      IqTrackMap;
       typedef std::map<const std::string, MessageHandler*>  MessageHandlerMap;
+      typedef std::map<const std::string, JidHandlerStruct> MessageJidHandlerMap;
       typedef std::list<MessageHandler*>                    MessageHandlerList;
       typedef std::list<PresenceHandler*>                   PresenceHandlerList;
       typedef std::list<SubscriptionHandler*>               SubscriptionHandlerList;
@@ -509,7 +518,7 @@ namespace gloox
       ConnectionListenerList  m_connectionListeners;
       IqHandlerMap            m_iqNSHandlers;
       IqTrackMap              m_iqIDHandlers;
-      MessageHandlerMap       m_messageJidHandlers;
+      MessageJidHandlerMap    m_messageJidHandlers;
       MessageHandlerList      m_messageHandlers;
       PresenceHandlerList     m_presenceHandlers;
       SubscriptionHandlerList m_subscriptionHandlers;
