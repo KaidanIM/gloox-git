@@ -2,7 +2,7 @@ v0.8.5-sic -- 27 Sep 2006
 -------------------------
 - JEP-0055 (Jabber Search)
 - DataForm::tag() returns non-const Tag
-- enable DataForm to parse <reproted> and <item> elements
+- enable DataForm to parse <reported> and <item> elements
 - DataFormBase: FieldList holds pointers to DataFormFields now
 - DataForm: added simplified ctor
 - MessageSession::send(): added default for subject param (empty)
