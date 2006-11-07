@@ -113,6 +113,9 @@ namespace gloox
 
   void RosterManager::handlePresence( Stanza *stanza )
   {
+    if( stanza->subtype() == StanzaPresenceError )
+      return;
+
     RosterListener::Roster::iterator it = m_roster.find( stanza->from().bare() );
     if( it != m_roster.end() )
     {
