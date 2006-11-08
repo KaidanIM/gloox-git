@@ -16,13 +16,13 @@
 	echo "  (Note that 'autoheader' is part of the 'autoconf' package)"
 	echo
 	exit 1
-}	
+}
 
 (libtool --version) < /dev/null > /dev/null 2>&1 || {
 	echo
 	echo "Error: You must have 'libtool' installed on your system in order"
 	echo "  to generate a configure script."
-	echo 
+	echo
 	exit 1
 }
 
@@ -32,7 +32,7 @@
 	echo "  to generate a configure script."
 	echo
 	exit 1
-}	
+}
 
 (aclocal --version) < /dev/null > /dev/null 2>&1 || {
 	echo
@@ -61,7 +61,7 @@ automake --add-missing --gnu --include-deps
 echo "Running autoconf..."
 autoconf
 
-echo 
+echo
 echo "Done!"
 echo "Now run $srcdir/configure in order to create Makefiles."
 echo
