@@ -384,10 +384,12 @@ namespace gloox
 
   void ClientBase::send( const std::string& xml )
   {
-    logInstance().log( LogLevelDebug, LogAreaXmlOutgoing, xml );
+    if( m_connection && m_connection->state() == StateConnected )
+    {
+      logInstance().log( LogLevelDebug, LogAreaXmlOutgoing, xml );
 
-    if( m_connection )
       m_connection->send( xml );
+    }
   }
 
   ConnectionState ClientBase::state() const{
