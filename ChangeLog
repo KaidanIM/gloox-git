@@ -1,4 +1,4 @@
-v0.8.5-sic -- 31 Oct 2006
+v0.8.5-sic -- 09 Nov 2006
 -------------------------
 - JEP-0055 (Jabber Search)
 - DataForm::tag() returns non-const Tag
@@ -8,7 +8,7 @@ v0.8.5-sic -- 31 Oct 2006
 - MessageSession::send(): added default for subject param (empty)
 - MessageSession: allow conversation started with bare JID to 'upgrade'
   to full JID when reply comes in
-- keep Roster up-to-date even if no RosterListener is registered
+- RosterManager: keep Roster up-to-date even if no RosterListener is registered
 - ClientBase: only log stanzas if actually sent
 - ClientBase: more correct return value on disconnect
 
