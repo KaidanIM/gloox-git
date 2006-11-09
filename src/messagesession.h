@@ -150,9 +150,15 @@ namespace gloox
        * No resource can lead to unexpected behavior. A thread ID is generated and sent along
        * with every message sent through this session.
        * @param parent The ClientBase to use for communication.
-       * @param jid The remote contact's full JID.
+       * @param jid The remote contact's full JID. If you don't know the full JID (this is probably the
+       * most common case) but still want replies from the full JID to be matches to this MessageSession,
+       * set the @b wantUpgrade parameter to true (or leave it untouched).
+       * @param wantUpgrade This flag indicates whether gloox should try to match an incoming message
+       * from a full JID to this MessageSession. If unsure, use the default. You probably only want to use
+       * a non-default value if this MessageSession is supposed to talk directly to a server or component
+       * JID that has no resource. This 'upgrade' will only happen once.
        */
-      MessageSession( ClientBase *parent, const JID& jid );
+      MessageSession( ClientBase *parent, const JID& jid, bool wantUpgrade = true );
 
       /**
        * Virtual destructor.
@@ -195,7 +201,7 @@ namespace gloox
        * @param message The message to send.
        * @param subject The optional subject to send.
        */
-      void send( const std::string& message, const std::string& subject );
+      void send( const std::string& message, const std::string& subject = "" );
 
       /**
        * Use this function to hook a new MessageFilter into a MessageSession.
@@ -223,6 +229,8 @@ namespace gloox
       virtual void send( Tag *tag );
 
     private:
+      void setResource( const std::string& resource );
+
       typedef std::list<MessageFilter*> MessageFilterList;
 
       MessageFilterList m_messageFilterList;
@@ -230,6 +238,7 @@ namespace gloox
       JID m_target;
       MessageHandler *m_messageHandler;
       std::string m_thread;
+      bool m_wantUpgrade;
 
   };
 

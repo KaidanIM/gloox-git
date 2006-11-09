@@ -68,8 +68,10 @@ namespace gloox
         FieldTypeReported,          /**< The field really is an element of type 'reported' which allows for
                                      * addition of sub-fields. See the explanantion in JEP-0004 (Data Forms)
                                      * Section 3.4 for more information */
-        FieldTypeInvalid            /**< The field is invalid. Only possible if the field was created from
+        FieldTypeInvalid,           /**< The field is invalid. Only possible if the field was created from
                                      * a Tag not correctly describing a Data Form Field. */
+        FieldTypeNone               /**< The field is child of either a &lt;reported&gt; or &lt;item&gt;
+                                     * element. Do not use. */
       };
 
       /**

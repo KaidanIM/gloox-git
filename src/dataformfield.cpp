@@ -11,6 +11,7 @@
 */
 
 #include "dataformfield.h"
+#include "dataformbase.h"
 #include "tag.h"
 
 namespace gloox
@@ -47,6 +48,8 @@ namespace gloox
       m_type = FieldTypeTextPrivate;
     else if( tag->hasAttribute( "type", "text-single" ) )
       m_type = FieldTypeTextSingle;
+    else if( !tag->hasAttribute( "type" ) )
+      m_type = FieldTypeNone;
 
     if( tag->hasAttribute( "var" ) )
       m_name = tag->findAttribute( "var" );
@@ -89,13 +92,6 @@ namespace gloox
       return 0;
 
     Tag *field = new Tag( "field" );
-    field->addAttribute( "var", m_name );
-    field->addAttribute( "label", m_label );
-    if( m_required )
-      new Tag( field, "required" );
-
-    if( !m_desc.empty() )
-      new Tag( field, "desc", m_desc );
 
     switch( m_type )
     {
@@ -132,6 +128,14 @@ namespace gloox
       default:
         break;
     }
+
+    field->addAttribute( "var", m_name );
+    field->addAttribute( "label", m_label );
+    if( m_required )
+      new Tag( field, "required" );
+
+    if( !m_desc.empty() )
+      new Tag( field, "desc", m_desc );
 
     if( m_type == FieldTypeListSingle || m_type == FieldTypeListMulti )
     {
