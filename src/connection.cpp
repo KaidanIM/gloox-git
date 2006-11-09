@@ -1058,11 +1058,14 @@ printf( "maximumMessage: %ld\n", m_streamSizes.cbMaximumMessage );
     {
       ConnectionError r = recv( 1 );
       if( r != ConnNoError )
+      {
         return r;
+      }
     }
+    ConnectionError e = m_disconnect;
     cleanup();
 
-    return m_disconnect;
+    return e;
   }
 
   bool Connection::send( const std::string& data )
