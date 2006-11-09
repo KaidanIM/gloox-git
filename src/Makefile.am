@@ -43,13 +43,8 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             chatstatefilter.h         messageeventfilter.h    inbandbytestream.h \
                             inbandbytestreamhandler.h inbandbytestreamdatahandler.h \
                             inbandbytestreammanager.h messagefilter.h         vcard.h \
-<<<<<<< .working
                             vcardmanager.h            vcardhandler.h          adhochandler.h \
                             search.h  searchhandler.h
-=======
-                            vcardmanager.h            vcardhandler.h          search.h \
-                            searchhandler.h
->>>>>>> .merge-right.r1511
 
 noinst_HEADERS = prep.h parser.h connection.h dns.h nonsaslauth.h base64.h compression.h md5.h sha.h
 
