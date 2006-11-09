@@ -52,6 +52,9 @@ namespace gloox
        */
       virtual ~DataFormReported();
 
+      // reimplemented from DataFormField
+      virtual Tag* tag();
+
   };
 
 }

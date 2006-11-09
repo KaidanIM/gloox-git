@@ -417,15 +417,15 @@ namespace gloox
 
   void ClientBase::send( const std::string& xml )
   {
-    logInstance().log( LogLevelDebug, LogAreaXmlOutgoing, xml );
+    if( m_connection && m_connection->state() == StateConnected )
+    {
+      if( m_connection->send( xml ) == false )
+      {
+        disconnect( ConnStreamError );
+      }
 
-     if( m_connection && m_connection->state() != StateDisconnected )
-     {
-       if( m_connection->send( xml ) == false )
-       {
-         disconnect( ConnStreamError );
-       }
-     }
+      logInstance().log( LogLevelDebug, LogAreaXmlOutgoing, xml );
+    }
   }
 
   ConnectionState ClientBase::state() const
@@ -616,10 +616,15 @@ namespace gloox
       m_iqNSHandlers.erase( xmlns );
   }
 
-  void ClientBase::registerMessageHandler( const std::string& jid, MessageHandler *mh )
+  void ClientBase::registerMessageHandler( const std::string& jid, MessageHandler *mh, bool wantUpgrade )
   {
     if( mh && !jid.empty() )
-      m_messageJidHandlers[jid] = mh;
+    {
+      JidHandlerStruct jhs;
+      jhs.mh = mh;
+      jhs.wantUpgrade = wantUpgrade;
+      m_messageJidHandlers[jid] = jhs;
+    }
   }
 
   void ClientBase::registerMessageHandler( MessageHandler *mh )
@@ -630,7 +635,7 @@ namespace gloox
 
   void ClientBase::removeMessageHandler( const std::string& jid )
   {
-    MessageHandlerMap::iterator it = m_messageJidHandlers.find( jid );
+    MessageJidHandlerMap::iterator it = m_messageJidHandlers.find( jid );
     if( it != m_messageJidHandlers.end() )
       m_messageJidHandlers.erase( it );
   }
@@ -793,15 +798,25 @@ namespace gloox
 
   void ClientBase::notifyMessageHandlers( Stanza *stanza )
   {
-    MessageHandlerMap::const_iterator it1 = m_messageJidHandlers.find( stanza->from().full() );
+    MessageJidHandlerMap::const_iterator it1 = m_messageJidHandlers.find( stanza->from().full() );
     if( it1 != m_messageJidHandlers.end() )
     {
-      (*it1).second->handleMessage( stanza );
+      (*it1).second.mh->handleMessage( stanza );
       return;
     }
 
     if( m_autoMessageSession && m_messageSessionHandler )
     {
+      it1 = m_messageJidHandlers.begin();
+      for( ; it1 != m_messageJidHandlers.end(); ++it1 )
+      {
+        if( (*it1).first == stanza->from().bare() )
+        {
+          (*it1).second.mh->handleMessage( stanza );
+          return;
+        }
+      }
+
       MessageSession *session = new MessageSession( this, stanza->from() );
       m_messageSessionHandler->handleMessageSession( session );
       notifyMessageHandlers( stanza );
