@@ -44,7 +44,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.8.5
    */
-  class Search : public DiscoHandler, public IqHandler
+  class Search : public IqHandler
   {
 
     public:
