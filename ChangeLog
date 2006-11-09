@@ -9,6 +9,8 @@ v0.8.5-sic -- 31 Oct 2006
 - MessageSession: allow conversation started with bare JID to 'upgrade'
   to full JID when reply comes in
 - keep Roster up-to-date even if no RosterListener is registered
+- ClientBase: only log stanzas if actually sent
+- ClientBase: more correct return value on disconnect
 
 
 v0.8.4-sic -- 18 Sep 2006
