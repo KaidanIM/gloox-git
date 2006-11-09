@@ -98,7 +98,7 @@ namespace gloox
 
   bool Search::handleIqID( Stanza *stanza, int context )
   {
-    TrackMap::const_iterator it = m_track.find( stanza->id() );
+    TrackMap::iterator it = m_track.find( stanza->id() );
     if( it != m_track.end() )
     {
       switch( stanza->subtype() )
@@ -182,6 +182,8 @@ namespace gloox
         default:
           break;
       }
+
+      m_track.erase( it );
     }
 
     return false;
