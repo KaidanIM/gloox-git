@@ -113,7 +113,7 @@ namespace gloox
 
   void RosterManager::handlePresence( Stanza *stanza )
   {
-    if( !m_rosterListener )
+    if( stanza->subtype() == StanzaPresenceError )
       return;
 
     RosterListener::Roster::iterator it = m_roster.find( stanza->from().bare() );
@@ -125,7 +125,7 @@ namespace gloox
       (*it).second->setStatusMsg( stanza->from().resource(), stanza->status() );
       (*it).second->setPriority( stanza->from().resource(), stanza->priority() );
 
-      if( stanza->show() == PresenceAvailable )
+      if( m_rosterListener && stanza->show() == PresenceAvailable )
       {
         if( !online )
           m_rosterListener->itemAvailable( (*(*it).second), stanza->status() );
@@ -135,10 +135,12 @@ namespace gloox
       else if( stanza->show() == PresenceUnavailable )
       {
         (*it).second->removeResource( stanza->from().resource() );
-        m_rosterListener->itemUnavailable( (*(*it).second), stanza->status() );
+        if( m_rosterListener )
+          m_rosterListener->itemUnavailable( (*(*it).second), stanza->status(), stanza->from() );
       }
       else
-        m_rosterListener->presenceUpdated( (*(*it).second), stanza->show(), stanza->status() );
+        if( m_rosterListener )
+          m_rosterListener->presenceUpdated( (*(*it).second), stanza->show(), stanza->status() );
     }
     else
     {
@@ -147,7 +149,8 @@ namespace gloox
       m_roster[stanza->from().bare()]->setStatus( stanza->from().resource(), stanza->show() );
       m_roster[stanza->from().bare()]->setStatusMsg( stanza->from().resource(), stanza->status() );
       m_roster[stanza->from().bare()]->setPriority( stanza->from().resource(), stanza->priority() );
-      m_rosterListener->nonrosterPresenceReceived( stanza->from() );
+      if( m_rosterListener )
+        m_rosterListener->nonrosterPresenceReceived( stanza->from() );
     }
   }
 
