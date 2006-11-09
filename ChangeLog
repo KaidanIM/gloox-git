@@ -1,6 +1,6 @@
-v0.8.5 -- 18 Sep 2006
+v0.8.5 -- 09 Nov 2006
 ---------------------
-- keep Roster up-to-date even if no RosterListener is registered
+- RosterManager: keep Roster up-to-date even if no RosterListener is registered
 - ClientBase: only log stanzas if actually sent
 - ClientBase: more correct return value on disconnect
 

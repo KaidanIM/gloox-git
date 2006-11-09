@@ -136,7 +136,7 @@ namespace gloox
       {
         (*it).second->removeResource( stanza->from().resource() );
         if( m_rosterListener )
-          m_rosterListener->itemUnavailable( (*(*it).second), stanza->status(), stanza->from() );
+          m_rosterListener->itemUnavailable( (*(*it).second), stanza->status() );
       }
       else
         if( m_rosterListener )
