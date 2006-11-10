@@ -1,4 +1,4 @@
-v0.8.5-sic -- 09 Nov 2006
+v0.8.5-sic -- 10 Nov 2006
 -------------------------
 - JEP-0055 (Jabber Search)
 - DataForm::tag() returns non-const Tag
