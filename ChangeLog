@@ -1,4 +1,4 @@
-v0.8.5 -- 09 Nov 2006
+v0.8.5 -- 10 Nov 2006
 ---------------------
 - RosterManager: keep Roster up-to-date even if no RosterListener is registered
 - ClientBase: only log stanzas if actually sent
