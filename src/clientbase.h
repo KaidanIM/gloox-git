@@ -404,7 +404,7 @@ namespace gloox
 
       /**
        * Use this function to retrieve the type of the stream error after it occurs and you received a
-       * ConnectionError of type CONN_STREAM_ERROR from the ConnectionListener.
+       * ConnectionError of type @b ConnStreamError from the ConnectionListener.
        */
       StreamError streamError() const { return m_streamError; };
 
@@ -436,8 +436,8 @@ namespace gloox
 
       /**
        * Use this function to retrieve the type of the authentication error after it occurs and you
-       * received a ConnectionError of type CONN_AUTHENTICATION_FAILED from the ConnectionListener.
-       * @return The type of the authentication, if any, AUTH_ERROR_UNDEFINED otherwise.
+       * received a ConnectionError of type @b ConnAuthenticationFailed from the ConnectionListener.
+       * @return The type of the authentication, if any, @b AuthErrorUndefined otherwise.
        */
       AuthenticationError authError() const { return m_authError; };
 
