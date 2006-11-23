@@ -182,7 +182,7 @@ namespace gloox
        * Use this function to set the entity's presence.
        * If used prior to establishing a connection, the set values will be sent with
        * the initial presence stanza.
-       * If used while a connection already si established a repective presence stanza will be
+       * If used while a connection already is established a repective presence stanza will be
        * sent out immediately.
        * @param presence The Presence value to set.
        * @param priority An optional priority value. Legal values: -128 <= priority <= 127
@@ -231,7 +231,7 @@ namespace gloox
       int getCompressionMethods( Tag *tag );
       void processResourceBind( Stanza *stanza );
       void processCreateSession( Stanza *stanza );
-      void sendInitialPresence();
+      void sendPresence();
       void createSession();
       void negotiateCompression( StreamFeature method );
       void connected();

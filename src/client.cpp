@@ -457,6 +457,9 @@ namespace gloox
       m_priority = 127;
     else
       m_priority = priority;
+
+    if( m_connection->state() == StateConnected )
+      sendPresence();
   }
 
   void Client::disableRoster()
@@ -472,7 +475,7 @@ namespace gloox
     m_auth->doAuth();
   }
 
-  void Client::sendInitialPresence()
+  void Client::sendPresence()
   {
     if( m_presence != PresenceUnknown &&
         m_presence != PresenceUnavailable )
@@ -507,7 +510,7 @@ namespace gloox
 
   void Client::rosterFilled()
   {
-    sendInitialPresence();
+    sendPresence();
   }
 
   void Client::disconnect()
