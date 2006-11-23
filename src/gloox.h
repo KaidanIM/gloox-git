@@ -359,15 +359,16 @@ namespace gloox
   enum ConnectionError
   {
     ConnNoError,                    /**< Not really an error. Everything went just fine. */
-    ConnStreamError,                /**< A stream error occured. The stream has been closed. */
-    ConnStreamClosed,               /**< The stream has been closed graciously. */
+    ConnStreamError,                /**< A stream error occured. The stream has been closed.
+                                     * Use ClientBase::streamError() to find the reason. */
+    ConnStreamClosed,               /**< The stream has been closed (by the server). */
     ConnIoError,                    /**< An I/O error occured. */
     ConnOutOfMemory,                /**< Out of memory. Uhoh. */
     ConnNoSupportedAuth,            /**< The auth mechanisms the server offers are not supported
                                      * or the server offered no auth mechanisms at all. */
     ConnTlsFailed,                  /**< The server's certificate could not be verified. */
     ConnAuthenticationFailed,       /**< Authentication failed. Username/password wrong or account does
-                                     * not exist. */
+                                     * not exist. Use ClientBase::authError() to find the reason. */
     ConnUserDisconnected,           /**< The user (or higher-level protocol) requested a disconnect. */
     ConnNotConnected                /**< There is no active connection. */
   };
