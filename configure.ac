@@ -22,6 +22,11 @@ AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_RANLIB
 AM_PROG_LIBTOOL
+AC_PROG_LIBTOOL
+AM_PATH_PYTHON(2.3)
+AC_PROG_SWIG(1.3.21)
+SWIG_ENABLE_CXX
+SWIG_PYTHON
 
 dnl
 dnl extra paths
@@ -44,18 +49,6 @@ for libpath in $split_libs ; do
 done
 
 dnl Checks for libraries.
-
-dnl Iksemel
-AC_CHECK_HEADER(iksemel.h,
-AC_CHECK_LIB(iksemel, iks_has_tls,
-         [libiksemel=yes LIBS="${LIBS} -liksemel"], libiksemel=no),
-         libiksemel=no)
-if test "$libiksemel" == "no" ; then
-  AC_MSG_ERROR([Libiksemel not found])
-fi
-AC_MSG_CHECKING([if Libiksemel is present])
-AC_MSG_RESULT($libiksemel)
-
 
 dnl Libidn
 AC_ARG_WITH(libidn, AC_HELP_STRING([--with-libidn=[DIR]],
@@ -308,7 +301,7 @@ AC_C_INLINE
 
 case "$host_os" in
   *mingw*)
-     LIBS="-lwsock32 -lgdi32 -liksemel";;
+     LIBS="-lwsock32 -lgdi32";;
   *)
      ;;
 esac
@@ -323,7 +316,12 @@ src/examples/Makefile
 src/tests/Makefile
 src/tests/dataform/Makefile
 src/tests/dataformfield/Makefile
+src/tests/md5/Makefile
 src/tests/parser/Makefile
+src/tests/sha/Makefile
 src/tests/tag/Makefile
+bindings/Makefile
+bindings/python/Makefile
+bindings/java/Makefile
 ])
 AC_OUTPUT
