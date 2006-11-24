@@ -190,7 +190,7 @@ namespace gloox
 
   bool Disco::handleIqID( Stanza *stanza, int context )
   {
-    DiscoHandlerMap::const_iterator it = m_track.find( stanza->id() );
+    DiscoHandlerMap::iterator it = m_track.find( stanza->id() );
     if( it != m_track.end() )
     {
       switch( stanza->subtype() )
@@ -214,6 +214,8 @@ namespace gloox
         default:
           break;
       }
+
+      m_track.erase( it );
     }
 
     return false;
