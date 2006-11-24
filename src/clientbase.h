@@ -455,6 +455,12 @@ namespace gloox
        */
       AuthenticationError authError() const { return m_authError; };
 
+      /**
+       * Returns a StatisticsStruct containing byte and stanza counts for the current
+       * active connection.
+       */
+      StatisticsStruct getStatistics();
+
     protected:
       enum SaslMechanisms
       {
