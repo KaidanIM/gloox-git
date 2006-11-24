@@ -46,8 +46,10 @@ namespace gloox
        * Creates a new tag with a given name (and XML character data, if given).
        * @param name The name of the element.
        * @param cdata The XML character data of the element.
+       * @param incoming Indicates whether tag names, attributes, attribute values, and cdata shall
+       * be escaped (false, default) or not (true).
        */
-      Tag( const std::string& name, const std::string& cdata = "" );
+      Tag( const std::string& name, const std::string& cdata = "", bool incoming = false );
 
       /**
        * Creates a new tag as a child tag of the given parent, with a given name (and
@@ -55,8 +57,10 @@ namespace gloox
        * @param parent The parent tag.
        * @param name The name of the element.
        * @param cdata The XML character data of the element.
+       * @param incoming Indicates whether tag names, attributes, attribute values, and cdata shall
+       * be escaped (false, default) or not (true).
        */
-      Tag( Tag *parent, const std::string& name, const std::string& cdata = "" );
+      Tag( Tag *parent, const std::string& name, const std::string& cdata = "", bool incoming = false );
 
       /**
        * Virtual destructor.
@@ -257,6 +261,7 @@ namespace gloox
       TagList m_children;
       Tag *m_parent;
       StanzaType m_type;
+      bool m_incoming;
 
     private:
       struct duo

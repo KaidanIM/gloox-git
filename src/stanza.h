@@ -48,9 +48,11 @@ namespace gloox
        * @param name The name of the root tag.
        * @param cdata Initial XML character data for the tag.
        * @param xmllang The value of the xmllang attribute. The stanza's primary language.
+       * @param incoming Indicates whether tag names, attributes, attribute values, and cdata shall
+       * be escaped (false, default) or not (true).
        */
       Stanza( const std::string& name, const std::string& cdata = "",
-              const std::string& xmllang = "default" );
+              const std::string& xmllang = "default", bool incoming = false );
 
       /**
        * Virtual destructor.
