@@ -78,8 +78,10 @@ namespace gloox
 
     m_stats.totalBytesSent = 0;
     m_stats.totalBytesReceived = 0;
-    m_stats.bytesCompressedSent = 0;
-    m_stats.bytesCompressedReceived = 0;
+    m_stats.compressedBytesSent = 0;
+    m_stats.compressedBytesReceived = 0;
+    m_stats.uncompressedBytesSent = 0;
+    m_stats.uncompressedBytesReceived = 0;
     m_stats.totalStanzasSent = 0;
     m_stats.totalStanzasReceived = 0;
     m_stats.iqStanzasSent = 0;
@@ -460,6 +462,15 @@ namespace gloox
 
       logInstance().log( LogLevelDebug, LogAreaXmlOutgoing, xml );
     }
+  }
+
+  StatisticsStruct ClientBase::getStatistics()
+  {
+    if( m_connection )
+      m_connection->getStatistics( m_stats.totalBytesReceived, m_stats.totalBytesSent,
+                                   m_stats.compressedBytesReceived, m_stats.compressedBytesSent,
+                                   m_stats.uncompressedBytesReceived, m_stats.uncompressedBytesSent );
+    return m_stats;
   }
 
   ConnectionState ClientBase::state() const
