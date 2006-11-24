@@ -19,6 +19,7 @@
 #include "gloox.h"
 #include "jid.h"
 #include "logsink.h"
+#include "statisticshandler.h"
 
 namespace gloox
 {
@@ -37,7 +38,7 @@ namespace gloox
   class IqHandler;
   class MessageHandler;
   class PresenceHandler;
-//   class RosterListener;
+//   class StatisticsHandler;
   class SubscriptionHandler;
 //   class LogHandler;
   class TagHandler;
@@ -320,6 +321,14 @@ namespace gloox
                                                const std::string& xmlns );
 
       /**
+       * Registers @c sh as object that receives up-to-date connection statistics each time
+       * a Stanza is received or sent. Alternatively, you can use getStatistics() manually.
+       * Only one StatisticsHandler per ClientBase at a time is possible.
+       * @param sh The StatisticsHandler to register.
+       */
+      void registerStatisticsHandler( StatisticsHandler *sh );
+
+      /**
        * Removes the given object from the list of connection listeners.
        * @param cl The object to remove from the list.
        */
@@ -363,6 +372,11 @@ namespace gloox
        */
       void removeTagHandler( TagHandler *th, const std::string& tag,
                                              const std::string& xmlns );
+
+      /**
+       * Removes the current StatisticsHandler.
+       */
+      void removeStatisticsHandler();
 
       /**
        * Use this function to set a number of trusted root CA certificates which shall be
@@ -549,6 +563,7 @@ namespace gloox
       TagHandlerList          m_tagHandlers;
       StringList              m_cacerts;
       MessageSessionHandler  *m_messageSessionHandler;
+      StatisticsHandler      *m_statisticsHandler;
 
       Parser *m_parser;
       LogSink m_logInstance;
@@ -558,6 +573,9 @@ namespace gloox
       StringMap m_streamErrorText;
       std::string m_streamErrorCData;
       Tag *m_streamErrorAppCondition;
+
+      StatisticsStruct m_stats;
+
       int m_idCount;
       bool m_autoMessageSession;
       bool m_fdRequested;

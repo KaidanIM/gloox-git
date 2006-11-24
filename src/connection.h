@@ -129,6 +129,22 @@ namespace gloox
        */
       int fileDescriptor();
 
+      /**
+       * Returns current connection statistics.
+       * @param totalIn The total number of bytes received.
+       * @param totalOut The total number of bytes sent.
+       * @param compressedIn If compression is used, the total number of bytes received before
+       * decompression was applied.
+       * @param compressedOut If compression is used, the total number of bytes sent after
+       * compression was applied.
+       * @param uncompressedIn If compression is used, the total number of bytes received after
+       * decompression was applied.
+       * @param uncompressedOut If compression is used, the total number of bytes sent before
+       * compression was applied.
+       */
+      void getStatistics( int &totalIn, int &totalOut, int &compressedIn, int &compressedOut,
+                          int &uncompressedIn, int &uncompressedOut );
+
 #ifdef HAVE_ZLIB
       /**
        * This function is used to init or de-init stream compression. You must
@@ -187,10 +203,10 @@ namespace gloox
       void cleanup();
 
 #ifdef HAVE_TLS
-      bool tls_send( const void *data, size_t len );
-      int tls_recv( void *data, size_t len );
-      bool tls_dataAvailable();
-      void tls_cleanup();
+      bool tlsSend( const void *data, size_t len );
+      int tlsRecv( void *data, size_t len );
+      bool tlsDataAvailable();
+      void tlsCleanup();
 #endif
 
 #if defined( USE_GNUTLS )
@@ -238,6 +254,10 @@ namespace gloox
       std::string m_server;
       unsigned short m_port;
       int m_socket;
+      int m_compressedBytesIn[2]; // 0: decompressed, 1: compressed
+      int m_compressedBytesOut[2];
+      int m_totalBytesIn;
+      int m_totalBytesOut;
       const int m_bufsize;
       bool m_cancel;
       bool m_secure;

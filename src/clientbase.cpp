@@ -75,6 +75,21 @@ namespace gloox
   {
     m_disco = new Disco( this );
     m_disco->setVersion( "based on gloox", GLOOX_VERSION );
+
+    m_stats.totalBytesSent = 0;
+    m_stats.totalBytesReceived = 0;
+    m_stats.bytesCompressedSent = 0;
+    m_stats.bytesCompressedReceived = 0;
+    m_stats.totalStanzasSent = 0;
+    m_stats.totalStanzasReceived = 0;
+    m_stats.iqStanzasSent = 0;
+    m_stats.iqStanzasReceived = 0;
+    m_stats.messageStanzasSent = 0;
+    m_stats.messageStanzasReceived = 0;
+    m_stats.s10nStanzasSent = 0;
+    m_stats.s10nStanzasReceived = 0;
+    m_stats.presenceStanzasSent = 0;
+    m_stats.presenceStanzasReceived = 0;
   }
 
   ClientBase::~ClientBase()
@@ -408,6 +423,25 @@ namespace gloox
 
     send( tag->xml() );
 
+    switch( tag->type() )
+    {
+      case StanzaIq:
+        ++m_stats.iqStanzasSent;
+        break;
+      case StanzaMessage:
+        ++m_stats.messageStanzasSent;
+        break;
+      case StanzaS10n:
+        ++m_stats.s10nStanzasSent;
+        break;
+      case StanzaPresence:
+        ++m_stats.presenceStanzasSent;
+        break;
+      default:
+        break;
+    }
+    ++m_stats.totalStanzasSent;
+
     Stanza *s = dynamic_cast<Stanza*>( tag );
     if( s )
       delete s;
@@ -420,9 +454,9 @@ namespace gloox
     if( m_connection && m_connection->state() == StateConnected )
     {
       if( m_connection->send( xml ) == false )
-      {
         disconnect( ConnStreamError );
-      }
+      else
+        m_stats.totalBytesSent += xml.length();
 
       logInstance().log( LogLevelDebug, LogAreaXmlOutgoing, xml );
     }
@@ -662,6 +696,17 @@ namespace gloox
       ths.th = th;
       m_tagHandlers.push_back( ths );
     }
+  }
+
+  void ClientBase::registerStatisticsHandler( StatisticsHandler *sh )
+  {
+    if( sh )
+      m_statisticsHandler = sh;
+  }
+
+  void ClientBase::removeStatisticsHandler()
+  {
+    m_statisticsHandler = 0;
   }
 
   void ClientBase::removeSubscriptionHandler( SubscriptionHandler *sh )
