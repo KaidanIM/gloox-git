@@ -21,7 +21,7 @@ libgloox_la_SOURCES = jid.cpp parser.cpp connection.cpp clientbase.cpp tag.cpp s
 
 libgloox_la_LDFLAGS = -version-info 6:0:0 -no-undefined -no-allow-shlib-undefined
 libgloox_la_LIBADD =
-libgloox_la_CFLAGS = $(CPPFLAGS) $(IKSEMEL_CFLAGS)
+libgloox_la_CFLAGS = $(CPPFLAGS)
 
 libglooxincludedir = $(includedir)/gloox
 libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        tag.h \
