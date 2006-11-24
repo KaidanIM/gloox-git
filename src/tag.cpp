@@ -18,17 +18,21 @@
 namespace gloox
 {
   Tag::Tag()
-    : m_parent( 0 ), m_type( StanzaUndefined )
+    : m_parent( 0 ), m_type( StanzaUndefined ), m_incoming( false )
   {
   }
 
-  Tag::Tag( const std::string& name, const std::string& cdata )
-    : m_name( name ), m_cdata( escape( cdata ) ), m_parent( 0 ), m_type( StanzaUndefined )
+  Tag::Tag( const std::string& name, const std::string& cdata, bool incoming )
+    : m_name( incoming ? relax( name ) : name ),
+      m_cdata( incoming ? relax( cdata ) : cdata ),
+      m_parent( 0 ), m_type( StanzaUndefined ), m_incoming( incoming )
   {
   }
 
-  Tag::Tag( Tag *parent, const std::string& name, const std::string& cdata )
-    : m_name( name ), m_cdata( escape( cdata ) ), m_parent( parent ), m_type( StanzaUndefined )
+  Tag::Tag( Tag *parent, const std::string& name, const std::string& cdata, bool incoming )
+    : m_name( incoming ? relax( name ) : name ),
+      m_cdata( incoming ? relax( cdata ) : cdata ),
+      m_parent( parent ), m_type( StanzaUndefined ), m_incoming( incoming )
   {
     m_parent->addChild( this );
   }
@@ -42,6 +46,7 @@ namespace gloox
       (*it) = 0;
     }
     m_children.clear();
+    m_parent = 0;
   }
 
   bool Tag::operator==( const Tag &right ) const
@@ -72,24 +77,24 @@ namespace gloox
 
   void Tag::setCData( const std::string& cdata )
   {
-    m_cdata = escape( cdata );
+    m_cdata = m_incoming ? relax( cdata ) : cdata;
   }
 
   void Tag::addCData( const std::string& cdata )
   {
-    m_cdata += escape( cdata );
+    m_cdata += m_incoming ? relax( cdata ) : cdata;
   }
 
   const std::string Tag::xml() const
   {
     std::string xml;
-    xml = "<" + m_name;
+    xml = "<" + escape( m_name );
     if( m_attribs.size() )
     {
       StringMap::const_iterator it_a = m_attribs.begin();
       for( ; it_a != m_attribs.end(); ++it_a )
       {
-        xml += " " + (*it_a).first + "='" + (*it_a).second + "'";
+        xml += " " + escape( (*it_a).first ) + "='" + escape( (*it_a).second ) + "'";
       }
     }
 
@@ -103,10 +108,10 @@ namespace gloox
       {
         xml += (*it_c)->xml();
       }
-      xml += "</" + m_name + ">";
+      xml += "</" + escape( m_name ) + ">";
     }
     else if( !m_cdata.empty() )
-      xml += ">" + m_cdata + "</" + m_name + ">";
+      xml += ">" + escape( m_cdata ) + "</" + escape( m_name ) + ">";
 
     return xml;
   }
@@ -114,7 +119,7 @@ namespace gloox
   void Tag::addAttribute( const std::string& name, const std::string& value )
   {
     if( !name.empty() && !value.empty() )
-      m_attribs[name] = value;
+      m_attribs[m_incoming ? relax( name ) : name] = m_incoming ? relax( value ) : value;
   }
 
   void Tag::addAttribute( const std::string& name, int value )
@@ -123,7 +128,7 @@ namespace gloox
     {
       std::ostringstream oss;
       oss << value;
-      m_attribs[name] = oss.str();
+      m_attribs[m_incoming ? relax( name ) : name] = oss.str();
     }
   }
 
@@ -148,7 +153,7 @@ namespace gloox
 
   const std::string Tag::cdata() const
   {
-    return relax( m_cdata );
+    return m_cdata;
   }
 
   StringMap& Tag::attributes()
@@ -294,6 +299,22 @@ namespace gloox
   const std::string Tag::relax( const std::string& what ) const
   {
     Duo d;
+    d.push_back( duo( "&#60;", "<" ) );
+    d.push_back( duo( "&#62;", ">" ) );
+    d.push_back( duo( "&#39;", "'" ) );
+    d.push_back( duo( "&#34;", "\"" ) );
+    d.push_back( duo( "&#x3c;", "<" ) );
+    d.push_back( duo( "&#x3e;", ">" ) );
+    d.push_back( duo( "&#x3C;", "<" ) );
+    d.push_back( duo( "&#x3E;", ">" ) );
+    d.push_back( duo( "&#x27;", "'" ) );
+    d.push_back( duo( "&#x22;", "\"" ) );
+    d.push_back( duo( "&#X3c;", "<" ) );
+    d.push_back( duo( "&#X3e;", ">" ) );
+    d.push_back( duo( "&#X3C;", "<" ) );
+    d.push_back( duo( "&#X3E;", ">" ) );
+    d.push_back( duo( "&#X27;", "'" ) );
+    d.push_back( duo( "&#X22;", "\"" ) );
     d.push_back( duo( "&lt;", "<" ) );
     d.push_back( duo( "&gt;", ">" ) );
     d.push_back( duo( "&apos;", "'" ) );

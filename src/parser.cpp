@@ -321,13 +321,13 @@ namespace gloox
     if( !m_root )
     {
 //       printf( "created Stanza named %s, ", m_tag.c_str() );
-      m_root = new Stanza( m_tag );
+      m_root = new Stanza( m_tag, "", "default", true );
       m_current = (Tag*)m_root;
     }
     else
     {
 //       printf( "created Tag named %s, ", m_tag.c_str() );
-      m_current = new Tag( m_current, m_tag );
+      m_current = new Tag( m_current, m_tag, "", true );
     }
 
     if( m_attribs.size() )
@@ -362,7 +362,7 @@ namespace gloox
   {
     if( m_current )
     {
-      m_current->addCData( m_cdata );
+      m_current->setCData( m_cdata );
 //       printf( "added cdata %s, ", m_cdata.c_str() );
       m_cdata = "";
     }
