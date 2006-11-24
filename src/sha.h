@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2005-2006 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2006 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -10,55 +10,61 @@
   This software is distributed without any warranty.
 */
 
-
 #ifndef SHA_H__
 #define SHA_H__
-
-#include "gloox.h"
-
-#include <iksemel.h>
 
 #include <string>
 
 namespace gloox
 {
-
-  /**
-   * @brief An implementation of the SHA Message-Digest Algorithm (RFC 1321)
-   *
-   * @author Jakob Schroeter <js@camaya.net>
-   * @since 0.8
-   */
-  class GLOOX_API SHA
+  class SHA
   {
+
     public:
       /**
-       * Contructs a new SHA state object.
+       *
        */
       SHA();
 
       /**
-       * Virtual destructor.
+       * Virtual Destructor.
        */
       virtual ~SHA();
 
       /**
-       * Feeds the algorithm.
-       */
-      void feed( const std::string& text, bool finalize );
-
-      /**
-       * Returns a prettyfied (hex) version of the hash.
-       */
-      const std::string pretty();
-
-      /**
-       * Resets the SHA object.
+       *
        */
       void reset();
 
+      /**
+       *
+       */
+      void finalize();
+
+      /**
+       * Returns the message digest
+       */
+      const std::string hex();
+
+      /**
+       * Provide input to SHA1
+       */
+      void feed( const unsigned char *message_array, unsigned length );
+      void feed( const std::string& data );
+
     private:
-      iksha *m_sha;
+      void process();
+      void pad();
+      inline unsigned shift( int bits, unsigned word );
+      void init();
+
+      unsigned H[5];
+      unsigned Length_Low;
+      unsigned Length_High;
+      unsigned char Message_Block[64];
+      int Message_Block_Index;
+      bool m_finished;
+      bool m_corrupted;
 
   };
 

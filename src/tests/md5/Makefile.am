@@ -9,4 +9,3 @@ noinst_PROGRAMS = md5_test
 md5_test_SOURCES = md5_test.cpp ../../md5.cpp
 md5_test_LDADD =
 md5_test_CFLAGS = $(CPPFLAGS)
-
