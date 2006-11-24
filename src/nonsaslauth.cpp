@@ -89,9 +89,10 @@ namespace gloox
             if( ( q->hasChild( "digest" ) ) && !m_sid.empty() )
             {
               SHA sha;
-              sha.feed( m_sid, false );
-              sha.feed( m_parent->password(), true );
-              new Tag( query, "digest", sha.pretty() );
+              sha.feed( m_sid );
+              sha.feed( m_parent->password() );
+              sha.finalize();
+              new Tag( query, "digest", sha.hex() );
             }
             else
             {

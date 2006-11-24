@@ -17,8 +17,7 @@
 #include "disco.h"
 #include "stanza.h"
 #include "prep.h"
-
-#include <iksemel.h>
+#include "sha.h"
 
 namespace gloox
 {
@@ -41,13 +40,12 @@ namespace gloox
       return;
 
     const std::string data = m_sid + m_password;
-    char *hash = (char*)calloc( 41, sizeof( char ) );
-    iks_sha( data.c_str(), hash );
+    SHA sha;
+    sha.feed( data );
+    sha.finalize();
 
-    Tag *h = new Tag( "handshake", hash );
+    Tag *h = new Tag( "handshake", sha.hex() );
     send( h );
-
-    free( hash );
   }
 
   bool Component::handleNormalNode( Stanza *stanza )
