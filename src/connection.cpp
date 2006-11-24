@@ -50,10 +50,17 @@ namespace gloox
                           unsigned short port )
     : m_parser( parser ), m_state ( StateDisconnected ), m_disconnect ( ConnNoError ),
       m_logInstance( logInstance ), m_compression( 0 ), m_buf( 0 ),
-      m_server( Prep::idna( server ) ), m_port( port ), m_socket( -1 ), m_bufsize( 17000 ),
-      m_cancel( true ), m_secure( false ), m_fdRequested( false ), m_enableCompression( false )
+      m_server( Prep::idna( server ) ), m_port( port ), m_socket( -1 ),
+      m_totalBytesIn( 0 ), m_totalBytesOut( 0 ),
+      m_bufsize( 17000 ), m_cancel( true ), m_secure( false ), m_fdRequested( false ),
+      m_enableCompression( false )
   {
     m_buf = (char*)calloc( m_bufsize + 1, sizeof( char ) );
+    m_compressedBytesIn[0] = 0;
+    m_compressedBytesIn[1] = 0;
+    m_compressedBytesOut[0] = 0;
+    m_compressedBytesOut[1] = 0;
+
 #ifdef USE_OPENSSL
     m_ssl = 0;
 #endif
@@ -150,24 +157,24 @@ namespace gloox
     return true;
   }
 
-  inline bool Connection::tls_send( const void *data, size_t len )
+  inline bool Connection::tlsSend( const void *data, size_t len )
   {
     int ret;
     ret = SSL_write( m_ssl, data, len );
     return true;
   }
 
-  inline int Connection::tls_recv( void *data, size_t len )
+  inline int Connection::tlsRecv( void *data, size_t len )
   {
     return SSL_read( m_ssl, data, len );
   }
 
-  inline bool Connection::tls_dataAvailable()
+  inline bool Connection::tlsDataAvailable()
   {
     return false; // SSL_pending( m_ssl ); // FIXME: crashes
   }
 
-  inline void Connection::tls_cleanup()
+  inline void Connection::tlsCleanup()
   {
     SSL_shutdown( m_ssl );
     SSL_free( m_ssl );
@@ -350,7 +357,7 @@ namespace gloox
     return true;
   }
 
-  inline bool Connection::tls_send( const void *data, size_t len )
+  inline bool Connection::tlsSend( const void *data, size_t len )
   {
     int ret;
     do
@@ -361,17 +368,17 @@ namespace gloox
     return true;
   }
 
-  inline int Connection::tls_recv( void *data, size_t len )
+  inline int Connection::tlsRecv( void *data, size_t len )
   {
     return gnutls_record_recv( m_session, data, len );
   }
 
-  inline bool Connection::tls_dataAvailable()
+  inline bool Connection::tlsDataAvailable()
   {
     return false; // gnutls_check_pending( m_session ); // FIXME: crashes
   }
 
-  inline void Connection::tls_cleanup()
+  inline void Connection::tlsCleanup()
   {
     gnutls_bye( m_session, GNUTLS_SHUT_RDWR );
     gnutls_deinit( m_session );
@@ -706,7 +713,7 @@ printf( "maximumMessage: %ld\n", m_streamSizes.cbMaximumMessage );
     return false;
   }
 
-  inline bool Connection::tls_send( const void *data, size_t len )
+  inline bool Connection::tlsSend( const void *data, size_t len )
   {
     if( len <= 0 )
       return true;
@@ -767,7 +774,7 @@ printf( "maximumMessage: %ld\n", m_streamSizes.cbMaximumMessage );
     return true;
   }
 
-  inline int Connection::tls_recv( void *data, size_t len )
+  inline int Connection::tlsRecv( void *data, size_t len )
   {
     SECURITY_STATUS ret;
     SecBuffer *dataBuffer = 0;
@@ -869,12 +876,12 @@ printf( "maximumMessage: %ld\n", m_streamSizes.cbMaximumMessage );
     return readable;
   }
 
-  inline bool Connection::tls_dataAvailable()
+  inline bool Connection::tlsDataAvailable()
   {
     return false;
   }
 
-  inline void Connection::tls_cleanup()
+  inline void Connection::tlsCleanup()
   {
     m_securityFunc->DeleteSecurityContext( &m_context );
   }
@@ -953,7 +960,7 @@ printf( "maximumMessage: %ld\n", m_streamSizes.cbMaximumMessage );
   bool Connection::dataAvailable( int timeout )
   {
 #ifdef HAVE_TLS
-    if( tls_dataAvailable() )
+    if( tlsDataAvailable() )
     {
         return true;
     }
@@ -998,7 +1005,7 @@ printf( "maximumMessage: %ld\n", m_streamSizes.cbMaximumMessage );
 #ifdef HAVE_TLS
     if( m_secure )
     {
-      size = tls_recv( m_buf, m_bufsize );
+      size = tlsRecv( m_buf, m_bufsize );
     }
     else
 #endif
@@ -1024,7 +1031,12 @@ printf( "maximumMessage: %ld\n", m_streamSizes.cbMaximumMessage );
     std::string buf;
     buf.assign( m_buf, size );
     if( m_compression && m_enableCompression )
+    {
       buf = m_compression->decompress( buf );
+      m_compressedBytesIn[0] += buf.length();
+      m_compressedBytesIn[1] += size;
+    }
+    m_totalBytesIn += buf.length();
 
     Parser::ParserState ret = m_parser->feed( buf );
     if( ret != Parser::PARSER_OK )
@@ -1075,15 +1087,21 @@ printf( "maximumMessage: %ld\n", m_streamSizes.cbMaximumMessage );
 
     std::string xml;
     if( m_compression && m_enableCompression )
+    {
       xml = m_compression->compress( data );
+      m_compressedBytesOut[0] += data.length();
+      m_compressedBytesOut[1] += xml.length();
+    }
     else
       xml = data;
+
+    m_totalBytesOut += xml.length();
 
 #ifdef HAVE_TLS
     if( m_secure )
     {
       size_t len = xml.length();
-      if( tls_send( xml.c_str (), len ) == false )
+      if( tlsSend( xml.c_str (), len ) == false )
         return false;
     }
     else
@@ -1108,12 +1126,24 @@ printf( "maximumMessage: %ld\n", m_streamSizes.cbMaximumMessage );
     return true;
   }
 
+  void Connection::getStatistics( int &totalIn, int &totalOut,
+                                  int &compressedIn, int &compressedOut,
+                                  int &uncompressedIn, int &uncompressedOut )
+  {
+    totalIn = m_totalBytesIn;
+    totalOut = m_totalBytesOut;
+    compressedIn = m_compressedBytesIn[1];
+    compressedOut = m_compressedBytesOut[1];
+    uncompressedIn = m_compressedBytesIn[0];
+    uncompressedOut = m_compressedBytesOut[0];
+  }
+
   void Connection::cleanup()
   {
 #ifdef HAVE_TLS
     if( m_secure )
     {
-      tls_cleanup();
+      tlsCleanup();
     }
 #endif
 
@@ -1132,6 +1162,12 @@ printf( "maximumMessage: %ld\n", m_streamSizes.cbMaximumMessage );
     m_secure = false;
     m_cancel = true;
     m_fdRequested = false;
+    m_compressedBytesIn[0] = 0;
+    m_compressedBytesIn[1] = 0;
+    m_compressedBytesOut[0] = 0;
+    m_compressedBytesOut[1] = 0;
+    m_totalBytesIn = 0;
+    m_totalBytesOut = 0;
   }
 
 }
