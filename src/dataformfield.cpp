@@ -48,7 +48,7 @@ namespace gloox
       m_type = FieldTypeTextPrivate;
     else if( tag->hasAttribute( "type", "text-single" ) )
       m_type = FieldTypeTextSingle;
-    else if( !tag->hasAttribute( "type" ) )
+    else if( !tag->hasAttribute( "type" ) && !tag->name().empty() )
       m_type = FieldTypeNone;
 
     if( tag->hasAttribute( "var" ) )
