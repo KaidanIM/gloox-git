@@ -202,6 +202,9 @@ namespace gloox
         disconnect( ConnStreamClosed );
         break;
     }
+
+    if( m_statisticsHandler )
+      m_statisticsHandler->handleStatistics( getStatistics() );
   }
 
   void ClientBase::disconnect( ConnectionError reason )
@@ -449,6 +452,9 @@ namespace gloox
       delete s;
     else
       delete tag;
+
+    if( m_statisticsHandler )
+      m_statisticsHandler->handleStatistics( getStatistics() );
   }
 
   void ClientBase::send( const std::string& xml )
