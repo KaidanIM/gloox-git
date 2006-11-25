@@ -59,11 +59,11 @@ namespace gloox
     Tag *q = new Tag( iq, "query" );
     q->addAttribute( "xmlns", XMLNS_REGISTER );
 
-    m_parent->trackID( this, id, FETCH_REGISTRATION_FIELDS );
+    m_parent->trackID( this, id, FetchRegistrationFields );
     m_parent->send( iq );
   }
 
-  void Registration::createAccount( int fields, const fieldStruct& values )
+  void Registration::createAccount( int fields, const RegistrationFields& values )
   {
     if( !m_parent )
       return;
@@ -78,40 +78,40 @@ namespace gloox
     Tag *q = new Tag( iq, "query" );
     q->addAttribute( "xmlns", XMLNS_REGISTER );
 
-    if( fields & FIELD_USERNAME )
+    if( fields & FieldUsername )
       new Tag( q, "username", Prep::nodeprep( values.username ) );
-    if( fields & FIELD_NICK )
+    if( fields & FieldNick )
       new Tag( q, "nick", values.nick );
-    if( fields & FIELD_PASSWORD )
+    if( fields & FieldPassword )
       new Tag( q, "password", values.password );
-    if( fields & FIELD_NAME )
+    if( fields & FieldName )
       new Tag( q, "name", values.name );
-    if( fields & FIELD_FIRST )
+    if( fields & FieldFirst )
       new Tag( q, "first", values.first );
-    if( fields & FIELD_LAST )
+    if( fields & FieldLast )
       new Tag( q, "last", values.last );
-    if( fields & FIELD_EMAIL )
+    if( fields & FieldEmail )
       new Tag( q, "email", values.email );
-    if( fields & FIELD_ADDRESS )
+    if( fields & FieldAddress )
       new Tag( q, "address", values.address );
-    if( fields & FIELD_CITY )
+    if( fields & FieldCity )
       new Tag( q, "city", values.city );
-    if( fields & FIELD_STATE )
+    if( fields & FieldState )
       new Tag( q, "state", values.state );
-    if( fields & FIELD_ZIP )
+    if( fields & FieldZip )
       new Tag( q, "zip", values.zip );
-    if( fields & FIELD_PHONE )
+    if( fields & FieldPhone )
       new Tag( q, "phone", values.phone );
-    if( fields & FIELD_URL )
+    if( fields & FieldUrl )
       new Tag( q, "url", values.url );
-    if( fields & FIELD_DATE )
+    if( fields & FieldDate )
       new Tag( q, "date", values.date );
-    if( fields & FIELD_MISC )
+    if( fields & FieldMisc )
       new Tag( q, "misc", values.misc );
-    if( fields & FIELD_TEXT )
+    if( fields & FieldText )
       new Tag( q, "text", values.text );
 
-    m_parent->trackID( this, id, CREATE_ACCOUNT );
+    m_parent->trackID( this, id, CreateAccount );
     m_parent->send( iq );
   }
 
@@ -142,7 +142,7 @@ namespace gloox
     q->addAttribute( "xmlns", XMLNS_REGISTER );
     new Tag( q, "remove" );
 
-    m_parent->trackID( this, id, REMOVE_ACCOUNT );
+    m_parent->trackID( this, id, RemoveAccount );
     m_parent->send( iq );
   }
 
@@ -163,7 +163,7 @@ namespace gloox
     new Tag( q, "username", username );
     new Tag( q, "password", password );
 
-    m_parent->trackID( this, id, CHANGE_PASSWORD );
+    m_parent->trackID( this, id, ChangePassword );
     m_parent->send( iq );
   }
 
@@ -187,32 +187,23 @@ namespace gloox
         return false;
 
       if( e->hasChild( "conflict" ) || e->hasAttribute( "code", "409" ) )
-        m_registrationHandler->handleRegistrationResult( stanza->from(),
-            RegistrationHandler::REGISTRATION_CONFLICT );
+        m_registrationHandler->handleRegistrationResult( stanza->from(), RegistrationConflict );
       else if( e->hasChild( "not-acceptable" ) || e->hasAttribute( "code", "406" ) )
-        m_registrationHandler->handleRegistrationResult( stanza->from(),
-            RegistrationHandler::REGISTRATION_NOT_ACCEPTABLE );
+        m_registrationHandler->handleRegistrationResult( stanza->from(), RegistrationNotAcceptable );
       else if( e->hasChild( "bad-request" ) || e->hasAttribute( "code", "400" ) )
-        m_registrationHandler->handleRegistrationResult( stanza->from(),
-            RegistrationHandler::REGISTRATION_BAD_REQUEST );
+        m_registrationHandler->handleRegistrationResult( stanza->from(), RegistrationBadRequest );
       else if( e->hasChild( "forbidden" ) || e->hasAttribute( "code", "403" ) )
-        m_registrationHandler->handleRegistrationResult( stanza->from(),
-            RegistrationHandler::REGISTRATION_FORBIDDEN );
+        m_registrationHandler->handleRegistrationResult( stanza->from(), RegistrationForbidden );
       else if( e->hasChild( "registration-required" ) || e->hasAttribute( "code", "407" ) )
-        m_registrationHandler->handleRegistrationResult( stanza->from(),
-            RegistrationHandler::REGISTRATION_REGISTRATION_REQUIRED );
+        m_registrationHandler->handleRegistrationResult( stanza->from(), RegistrationRequired );
       else if( e->hasChild( "unexpected-request" ) || e->hasAttribute( "code", "400" ) )
-        m_registrationHandler->handleRegistrationResult( stanza->from(),
-            RegistrationHandler::REGISTRATION_UNEXPECTED_REQUEST );
+        m_registrationHandler->handleRegistrationResult( stanza->from(), RegistrationUnexpectedRequest );
       else if( e->hasChild( "not-authorized" ) || e->hasAttribute( "code", "401" ) )
-        m_registrationHandler->handleRegistrationResult( stanza->from(),
-            RegistrationHandler::REGISTRATION_NOT_AUTHORIZED );
+        m_registrationHandler->handleRegistrationResult( stanza->from(), RegistrationNotAuthorized );
       else if( e->hasChild( "not-allowed" ) || e->hasAttribute( "code", "405" ) )
-        m_registrationHandler->handleRegistrationResult( stanza->from(),
-            RegistrationHandler::REGISTRATION_NOT_ALLOWED );
+        m_registrationHandler->handleRegistrationResult( stanza->from(), RegistrationNotAllowed );
       else
-        m_registrationHandler->handleRegistrationResult( stanza->from(),
-          RegistrationHandler::UNKNOWN_ERROR );
+        m_registrationHandler->handleRegistrationResult( stanza->from(), RegistrationUnknownError );
     }
     return false;
   }
@@ -227,7 +218,7 @@ namespace gloox
 
     switch( context )
     {
-      case FETCH_REGISTRATION_FIELDS:
+      case FetchRegistrationFields:
       {
         Tag *q = stanza->findChild( "query" );
 
@@ -261,37 +252,37 @@ namespace gloox
         std::string instructions;
 
         if( q->hasChild( "username" ) )
-          fields |= FIELD_USERNAME;
+          fields |= FieldUsername;
         if( q->hasChild( "nick" ) )
-          fields |= FIELD_NICK;
+          fields |= FieldNick;
         if( q->hasChild( "password" ) )
-          fields |= FIELD_PASSWORD;
+          fields |= FieldPassword;
         if( q->hasChild( "name" ) )
-          fields |= FIELD_NAME;
+          fields |= FieldName;
         if( q->hasChild( "first" ) )
-          fields |= FIELD_FIRST;
+          fields |= FieldFirst;
         if( q->hasChild( "last" ) )
-            fields |= FIELD_LAST;
+            fields |= FieldLast;
         if( q->hasChild( "email" ) )
-          fields |= FIELD_EMAIL;
+          fields |= FieldEmail;
         if( q->hasChild( "address" ) )
-          fields |= FIELD_ADDRESS;
+          fields |= FieldAddress;
         if( q->hasChild( "city" ) )
-          fields |= FIELD_CITY;
+          fields |= FieldCity;
         if( q->hasChild( "state" ) )
-          fields |= FIELD_STATE;
+          fields |= FieldState;
         if( q->hasChild( "zip" ) )
-          fields |= FIELD_ZIP;
+          fields |= FieldZip;
         if( q->hasChild( "phone" ) )
-          fields |= FIELD_PHONE;
+          fields |= FieldPhone;
         if( q->hasChild( "url" ) )
-          fields |= FIELD_URL;
+          fields |= FieldUrl;
         if( q->hasChild( "date" ) )
-          fields |= FIELD_DATE;
+          fields |= FieldDate;
         if( q->hasChild( "misc" ) )
-          fields |= FIELD_MISC;
+          fields |= FieldMisc;
         if( q->hasChild( "text" ) )
-          fields |= FIELD_TEXT;
+          fields |= FieldText;
         if( q->hasChild( "instructions" ) )
           instructions = q->findChild( "instructions" )->cdata();
 
@@ -299,19 +290,16 @@ namespace gloox
         break;
       }
 
-      case CREATE_ACCOUNT:
-        m_registrationHandler->handleRegistrationResult( stanza->from(),
-            RegistrationHandler::REGISTRATION_SUCCESS );
+      case CreateAccount:
+        m_registrationHandler->handleRegistrationResult( stanza->from(), RegistrationSuccess );
         break;
 
-      case CHANGE_PASSWORD:
-        m_registrationHandler->handleRegistrationResult( stanza->from(),
-            RegistrationHandler::REGISTRATION_SUCCESS );
+      case ChangePassword:
+        m_registrationHandler->handleRegistrationResult( stanza->from(), RegistrationSuccess );
         break;
 
-      case REMOVE_ACCOUNT:
-        m_registrationHandler->handleRegistrationResult( stanza->from(),
-            RegistrationHandler::REGISTRATION_SUCCESS );
+      case RemoveAccount:
+        m_registrationHandler->handleRegistrationResult( stanza->from(), RegistrationSuccess );
         break;
     }
     return false;

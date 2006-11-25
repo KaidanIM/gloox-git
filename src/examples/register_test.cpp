@@ -61,13 +61,13 @@ class RegTest : public RegistrationHandler, ConnectionListener, LogHandler
     virtual void handleRegistrationFields( const JID& /*from*/, int fields, std::string instructions )
     {
       printf( "fields: %d\ninstructions: %s\n", fields, instructions.c_str() );
-      Registration::fieldStruct vals;
+      RegistrationFields vals;
       vals.username = "hurkhurk";
       vals.password = "hurkhurks";
       m_reg->createAccount( fields, vals );
     };
 
-    virtual void handleRegistrationResult( const JID& /*from*/, ResultEnum result )
+    virtual void handleRegistrationResult( const JID& /*from*/, RegistrationResult result )
     {
       printf( "result: %d\n", result );
       j->disconnect();
