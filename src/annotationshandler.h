@@ -24,6 +24,22 @@ namespace gloox
 {
 
   /**
+   * This describes a single note item.
+   */
+  struct AnnotationsListItem
+  {
+    std::string jid;                /**< The JID of the roster item this note is about */
+    std::string cdate;              /**< Creation date of this note. */
+    std::string mdate;              /**< Date of last modification of this note. */
+    std::string note;               /**< The note. */
+  };
+
+  /**
+   * A list of note items.
+   */
+  typedef std::list<AnnotationsListItem> AnnotationsList;
+
+  /**
    * @brief A virtual interface which can be reimplemented to receive notes with help of
    * the Annotations object.
    *
@@ -33,22 +49,6 @@ namespace gloox
   class GLOOX_API AnnotationsHandler
   {
     public:
-      /**
-       * This describes a single note item.
-       */
-      struct annotationsListItem
-      {
-        std::string jid;            /**< The JID of the roster item this note is about */
-        std::string cdate;          /**< Creation date of this note. */
-        std::string mdate;          /**< Date of last modification of this note. */
-        std::string note;           /**< The note. */
-      };
-
-      /**
-       * A list of note items.
-       */
-      typedef std::list<annotationsListItem> AnnotationsList;
-
       /**
        * Virtual destructor.
        */

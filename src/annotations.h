@@ -110,7 +110,7 @@ namespace gloox
        * Make sure you store the whole set of annotations, not a 'delta'.
        * @param aList A list of notes to store.
        */
-      void storeAnnotations( const AnnotationsHandler::AnnotationsList& aList );
+      void storeAnnotations( const AnnotationsList& aList );
 
       /**
        * Use this function to initiate retrieval of annotations. Use registerAnnotationsHandler()

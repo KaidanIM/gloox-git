@@ -29,14 +29,14 @@ namespace gloox
   {
   }
 
-  void Annotations::storeAnnotations( const AnnotationsHandler::AnnotationsList& aList )
+  void Annotations::storeAnnotations( const AnnotationsList& aList )
   {
     Tag *s = new Tag( "storage" );
     s->addAttribute( "xmlns", XMLNS_ANNOTATIONS );
 
     if( aList.size() )
     {
-      AnnotationsHandler::AnnotationsList::const_iterator it = aList.begin();
+      AnnotationsList::const_iterator it = aList.begin();
       for( ; it != aList.end(); ++it )
       {
         Tag *n = new Tag( s, "note", (*it).note );
@@ -56,7 +56,7 @@ namespace gloox
 
   void Annotations::handlePrivateXML( const std::string& /*tag*/, Tag *xml )
   {
-    AnnotationsHandler::AnnotationsList aList;
+    AnnotationsList aList;
     const Tag::TagList l = xml->children();
     Tag::TagList::const_iterator it = l.begin();
     for( ; it != l.end(); ++it )
@@ -70,7 +70,7 @@ namespace gloox
 
         if( !jid.empty() && !note.empty() )
         {
-          AnnotationsHandler::annotationsListItem item;
+          AnnotationsListItem item;
           item.jid = jid;
           item.note = note;
           item.mdate = mdate;

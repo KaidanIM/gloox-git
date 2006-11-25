@@ -29,15 +29,14 @@ namespace gloox
   {
   }
 
-  void BookmarkStorage::storeBookmarks( const BookmarkHandler::BookmarkList& bList,
-                                        const BookmarkHandler::ConferenceList& cList )
+  void BookmarkStorage::storeBookmarks( const BookmarkList& bList, const ConferenceList& cList )
   {
     Tag *s = new Tag( "storage" );
     s->addAttribute( "xmlns", XMLNS_BOOKMARKS );
 
     if( bList.size() )
     {
-      BookmarkHandler::BookmarkList::const_iterator it = bList.begin();
+      BookmarkList::const_iterator it = bList.begin();
       for( ; it != bList.end(); ++it )
       {
         Tag *i = new Tag( s, "url" );
@@ -48,7 +47,7 @@ namespace gloox
 
     if( cList.size() )
     {
-      BookmarkHandler::ConferenceList::const_iterator it = cList.begin();
+      ConferenceList::const_iterator it = cList.begin();
       for( ; it != cList.end(); ++it )
       {
         Tag *i = new Tag( s, "conference" );
@@ -74,8 +73,8 @@ namespace gloox
 
   void BookmarkStorage::handlePrivateXML( const std::string& /*tag*/, Tag *xml )
   {
-    BookmarkHandler::BookmarkList bList;
-    BookmarkHandler::ConferenceList cList;
+    BookmarkList bList;
+    ConferenceList cList;
     const Tag::TagList l = xml->children();
     Tag::TagList::const_iterator it = l.begin();
     for( ; it != l.end(); ++it )
@@ -87,7 +86,7 @@ namespace gloox
 
         if( !url.empty() && !name.empty() )
         {
-          BookmarkHandler::bookmarkListItem item;
+          BookmarkListItem item;
           item.url = url;
           item.name = name;
           bList.push_back( item );
@@ -106,7 +105,7 @@ namespace gloox
 
         if( !jid.empty() && !name.empty() )
         {
-          BookmarkHandler::conferenceListItem item;
+          ConferenceListItem item;
           item.jid = jid;
           item.name = name;
           item.nick = nick;
