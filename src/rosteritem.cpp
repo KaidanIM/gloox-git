@@ -18,7 +18,7 @@ namespace gloox
 {
 
   RosterItem::RosterItem( const JID& jid, const std::string& name )
-    : m_subscription( S10N_NONE ), m_name( name ), m_jid( jid.bare() ), m_changed( false )
+    : m_subscription( S10nNone ), m_name( name ), m_jid( jid.bare() ), m_changed( false )
   {
   }
 
@@ -71,19 +71,19 @@ namespace gloox
   void RosterItem::setSubscription( const std::string& subscription, bool ask )
   {
     if( subscription == "from" && !ask )
-      m_subscription = S10N_FROM;
+      m_subscription = S10nFrom;
     else if( subscription == "from" && ask )
-      m_subscription = S10N_FROM_OUT;
+      m_subscription = S10nFromOut;
     else if( subscription == "to" && !ask )
-      m_subscription = S10N_TO;
+      m_subscription = S10nTo;
     else if( subscription == "to" && ask )
-      m_subscription = S10N_TO_IN;
+      m_subscription = S10nToIn;
     else if( subscription == "none" && !ask )
-      m_subscription = S10N_NONE;
+      m_subscription = S10nNone;
     else if( subscription == "none" && ask )
-      m_subscription = S10N_NONE_OUT;
+      m_subscription = S10nNoneOut;
     else if( subscription == "both" )
-      m_subscription = S10N_BOTH;
+      m_subscription = S10nBoth;
   }
 
   void RosterItem::setGroups( const StringList& groups )
