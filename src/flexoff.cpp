@@ -161,23 +161,19 @@ namespace gloox
         switch( stanza->subtype() )
         {
           case StanzaIqResult:
-            m_flexibleOfflineHandler->handleFlexibleOfflineResult(
-                FlexibleOfflineHandler::FOMR_REQUEST_SUCCESS );
+            m_flexibleOfflineHandler->handleFlexibleOfflineResult( FomrRequestSuccess );
             break;
           case StanzaIqError:
             switch( stanza->error() )
             {
               case StanzaErrorForbidden:
-                m_flexibleOfflineHandler->handleFlexibleOfflineResult(
-                    FlexibleOfflineHandler::FOMR_FORBIDDEN );
+                m_flexibleOfflineHandler->handleFlexibleOfflineResult( FomrForbidden );
                 break;
               case StanzaErrorItemNotFound:
-                m_flexibleOfflineHandler->handleFlexibleOfflineResult(
-                    FlexibleOfflineHandler::FOMR_ITEM_NOT_FOUND );
+                m_flexibleOfflineHandler->handleFlexibleOfflineResult( FomrItemNotFound );
                 break;
               default:
-                m_flexibleOfflineHandler->handleFlexibleOfflineResult(
-                    FlexibleOfflineHandler::FOMR_UNKNOWN_ERROR );
+                m_flexibleOfflineHandler->handleFlexibleOfflineResult( FomrUnknownError );
                 break;
             }
             break;
@@ -189,23 +185,19 @@ namespace gloox
         switch( stanza->subtype() )
         {
           case StanzaIqResult:
-            m_flexibleOfflineHandler->handleFlexibleOfflineResult(
-                FlexibleOfflineHandler::FOMR_REMOVE_SUCCESS );
+            m_flexibleOfflineHandler->handleFlexibleOfflineResult( FomrRemoveSuccess );
             break;
           case StanzaIqError:
             switch( stanza->error() )
             {
               case StanzaErrorForbidden:
-                m_flexibleOfflineHandler->handleFlexibleOfflineResult(
-                    FlexibleOfflineHandler::FOMR_FORBIDDEN );
+                m_flexibleOfflineHandler->handleFlexibleOfflineResult( FomrForbidden );
                 break;
               case StanzaErrorItemNotFound:
-                m_flexibleOfflineHandler->handleFlexibleOfflineResult(
-                    FlexibleOfflineHandler::FOMR_ITEM_NOT_FOUND );
+                m_flexibleOfflineHandler->handleFlexibleOfflineResult( FomrItemNotFound );
                 break;
               default:
-                m_flexibleOfflineHandler->handleFlexibleOfflineResult(
-                    FlexibleOfflineHandler::FOMR_UNKNOWN_ERROR );
+                m_flexibleOfflineHandler->handleFlexibleOfflineResult( FomrUnknownError );
                 break;
             }
             break;
