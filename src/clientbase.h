@@ -237,7 +237,7 @@ namespace gloox
       /**
        * Gives access to the raw file descriptor of the current connection. Use it wisely. Especially,
        * you should not ::recv() any data from it. There is no way to feed that back into the parser. You
-       * can use select() on it and use Connection::recv( -1 ) to fetch the data.
+       * can use select() on it and use recv( -1 ) to fetch the data.
        * @return The file descriptor of the active connection, or -1 if no connection is established.
        */
       int fileDescriptor();
