@@ -10,3 +10,4 @@ parser_test_SOURCES = parser_test.cpp ../../parser.cpp tag.cpp stanza.cpp jid.cp
 parser_test_LDADD =
 parser_test_CFLAGS = $(CPPFLAGS)
 
+noinst_HEADERS = parser.h clientbase.h
