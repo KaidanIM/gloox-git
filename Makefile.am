@@ -2,7 +2,7 @@
 ## Process this file with automake to produce Makefile.in
 ##
 
-SUBDIRS = src bindings
+SUBDIRS = src
 
 EXTRA_DIST = LICENSE Doxyfile gloox.pc.in gloox.dev gloox.dsp README README.win32 INSTALL config.h.win
 

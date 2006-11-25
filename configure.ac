@@ -320,8 +320,5 @@ src/tests/md5/Makefile
 src/tests/parser/Makefile
 src/tests/sha/Makefile
 src/tests/tag/Makefile
-bindings/Makefile
-bindings/python/Makefile
-bindings/java/Makefile
 ])
 AC_OUTPUT
