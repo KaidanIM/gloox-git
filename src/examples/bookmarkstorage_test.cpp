@@ -70,7 +70,7 @@ class BookmarkStorageTest : public BookmarkHandler, ConnectionListener
       BookmarkList mybList;
       ConferenceList mycList;
 
-      bookmarkListItem bItem;
+      BookmarkListItem bItem;
       bItem.url = "http://camaya.net/gloox";
       bItem.name = "gloox";
       mybList.push_back( bItem );
@@ -79,7 +79,7 @@ class BookmarkStorageTest : public BookmarkHandler, ConnectionListener
       bItem.name = "public jabber services";
       mybList.push_back( bItem );
 
-      conferenceListItem cItem;
+      ConferenceListItem cItem;
       cItem.jid = "jdev@conference.jabber.org";
       cItem.name = "jabber development";
       cItem.nick = "myNick";

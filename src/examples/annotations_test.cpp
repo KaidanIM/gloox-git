@@ -63,7 +63,7 @@ class AnnotationsTest : public AnnotationsHandler, ConnectionListener
 
       AnnotationsList mybList;
 
-      annotationsListItem bItem;
+      AnnotationsListItem bItem;
       bItem.jid = "romeo@montague.org";
       bItem.note = "my lover & friend. 2 > 3";
       mybList.push_back( bItem );

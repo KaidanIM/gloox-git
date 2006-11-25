@@ -22,6 +22,37 @@ namespace gloox
 {
 
   /**
+   * This describes a single bookmarked URL item.
+   */
+  struct BookmarkListItem
+  {
+    std::string name;             /**< A human readable name of the bookmark. */
+    std::string url;              /**< The URL of the bookmark. */
+  };
+
+  /**
+   * This describes a single bookmarked conference item.
+   */
+  struct ConferenceListItem
+  {
+    std::string name;             /**< A human readable name of the conference room. */
+    std::string jid;              /**< The address of the room. */
+    std::string nick;             /**< The nick name to use in this room. */
+    std::string password;         /**< The password to use for a protected room. */
+    bool autojoin;                /**< The conference shall be joined automatically on login. */
+  };
+
+  /**
+   * A list of URL items.
+   */
+  typedef std::list<BookmarkListItem> BookmarkList;
+
+  /**
+   * A list of conference items.
+   */
+  typedef std::list<ConferenceListItem> ConferenceList;
+
+  /**
    * @brief A virtual interface which can be reimplemented to receive bookmarks with help of a
    * BookmarkStorage object.
    *
@@ -31,37 +62,6 @@ namespace gloox
   class GLOOX_API BookmarkHandler
   {
     public:
-      /**
-       * This describes a single bookmarked URL item.
-       */
-      struct bookmarkListItem
-      {
-        std::string name;             /**< A human readable name of the bookmark. */
-        std::string url;              /**< The URL of the bookmark. */
-      };
-
-      /**
-       * This describes a single bookmarked conference item.
-       */
-      struct conferenceListItem
-      {
-        std::string name;             /**< A human readable name of the conference room. */
-        std::string jid;              /**< The address of the room. */
-        std::string nick;             /**< The nick name to use in this room. */
-        std::string password;         /**< The password to use for a protected room. */
-        bool autojoin;                /**< The conference shall be joined automatically on login. */
-      };
-
-      /**
-       * A list of URL items.
-       */
-      typedef std::list<bookmarkListItem> BookmarkList;
-
-      /**
-       * A list of conference items.
-       */
-      typedef std::list<conferenceListItem> ConferenceList;
-
       /**
        * Virtual Destructor.
        */

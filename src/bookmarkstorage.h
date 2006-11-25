@@ -74,7 +74,7 @@ namespace gloox
    * @code
    * void MyClass::myFuncStore()
    * {
-   *   bookmarkListItem bi;
+   *   BookmarkListItem bi;
    *   bi.url = "http://www.jabber.org";
    *   bi.name = "my favourite IM protocol";
    *   m_bList.push_back( bi );
@@ -114,8 +114,7 @@ namespace gloox
        * @param bList A list of URLs to store.
        * @param cList A list of conferences to store.
        */
-      void storeBookmarks( const BookmarkHandler::BookmarkList& bList,
-                           const BookmarkHandler::ConferenceList& cList );
+      void storeBookmarks( const BookmarkList& bList, const ConferenceList& cList );
 
       /**
        * Use this function to initiate retrieval of bookmarks. Use registerBookmarkHandler()
