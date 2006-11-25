@@ -18,6 +18,19 @@ namespace gloox
 {
 
   /**
+   * Describes the possible results of a message retrieval or deletion request.
+   */
+  enum FlexibleOfflineResult
+  {
+    FomrRemoveSuccess,           /**< Message(s) were removed successfully. */
+    FomrRequestSuccess,          /**< Message(s) were fetched successfully. */
+    FomrForbidden,               /**< The requester is a JID other than an authorized resource of the
+                                  * user. Something wnet serieously wrong */
+    FomrItemNotFound,            /**< The requested node (message ID) does not exist. */
+    FomrUnknownError             /**< An error occurred which is not specified in JEP-0013. */
+  };
+
+  /**
    * @brief Implementation of this virtual interface allows for retrieval of offline messages following
    * JEP-0030.
    *
@@ -27,19 +40,6 @@ namespace gloox
   class GLOOX_API FlexibleOfflineHandler
   {
     public:
-      /**
-       * Describes the possible results of a message retrieval or deletion request.
-       */
-      enum FlexibleOfflineResult
-      {
-        FOMR_REMOVE_SUCCESS,        /**< Message(s) were removed successfully. */
-        FOMR_REQUEST_SUCCESS,       /**< Message(s) were fetched successfully. */
-        FOMR_FORBIDDEN,             /**< The requester is a JID other than an authorized resource of the
-                                     * user. Something wnet serieously wrong */
-        FOMR_ITEM_NOT_FOUND,        /**< The requested node (message ID) does not exist. */
-        FOMR_UNKNOWN_ERROR          /**< An error occurred which is not specified in JEP-0013. */
-      };
-
       /**
        * Virtual Destructor.
        */
@@ -68,9 +68,9 @@ namespace gloox
 
       /**
        * This function is called to indicate the result of a fetch or delete instruction.
-       * @param result The result of the operation.
+       * @param foResult The result of the operation.
        */
-      virtual void handleFlexibleOfflineResult( FlexibleOfflineResult result ) = 0;
+      virtual void handleFlexibleOfflineResult( FlexibleOfflineResult foResult ) = 0;
   };
 
 }
