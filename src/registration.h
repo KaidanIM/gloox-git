@@ -29,6 +29,30 @@ namespace gloox
   class Stanza;
 
   /**
+   * Holds all the possible fields a server may require for registration according
+   * to Section 14.1, JEP-0077.
+   */
+  struct RegistrationFields
+  {
+    std::string username;
+    std::string nick;
+    std::string password;
+    std::string name;
+    std::string first;
+    std::string last;
+    std::string email;
+    std::string address;
+    std::string city;
+    std::string state;
+    std::string zip;
+    std::string phone;
+    std::string url;
+    std::string date;
+    std::string misc;
+    std::string text;
+  };
+
+  /**
    * @brief This class is an implementation of JEP-0077 (In-Band Registration).
    *
    * Derive your object from @ref RegistrationHandler and implement the
@@ -54,7 +78,7 @@ namespace gloox
    *
    * In RegistrationHandler::handleRegistrationFields() you should check which information the server
    * requires to open a new account. You might not always get away with just username and password.
-   * Then call createAccount() with a filled-in fieldStruct and an @c int representing the bit-wise
+   * Then call createAccount() with a filled-in RegistrationFields and an @c int representing the bit-wise
    * ORed fields you want to have included in the registration attempt. For your convenience you can
    * use the 'fields' argument of handleRegistrationFields(). ;) It's your responsibility to make
    * sure at least those fields the server requested are filled in.
@@ -69,50 +93,26 @@ namespace gloox
     public:
 
       /**
-       * Holds all the possible fields a server may require for registration according
-       * to Section 14.1, JEP-0077.
-       */
-      struct fieldStruct
-      {
-        std::string username;
-        std::string nick;
-        std::string password;
-        std::string name;
-        std::string first;
-        std::string last;
-        std::string email;
-        std::string address;
-        std::string city;
-        std::string state;
-        std::string zip;
-        std::string phone;
-        std::string url;
-        std::string date;
-        std::string misc;
-        std::string text;
-      };
-
-      /**
        * The possible fields of a JEP-0077 account registration.
        */
       enum fieldEnum
       {
-        FIELD_USERNAME =     1,
-        FIELD_NICK     =     2,
-        FIELD_PASSWORD =     4,
-        FIELD_NAME     =     8,
-        FIELD_FIRST    =    16,
-        FIELD_LAST     =    32,
-        FIELD_EMAIL    =    64,
-        FIELD_ADDRESS  =   128,
-        FIELD_CITY     =   256,
-        FIELD_STATE    =   512,
-        FIELD_ZIP      =  1024,
-        FIELD_PHONE    =  2048,
-        FIELD_URL      =  4096,
-        FIELD_DATE     =  8192,
-        FIELD_MISC     = 16384,
-        FIELD_TEXT     = 32768
+        FieldUsername  =     1,
+        FieldNick      =     2,
+        FieldPassword  =     4,
+        FieldName      =     8,
+        FieldFirst     =    16,
+        FieldLast      =    32,
+        FieldEmail     =    64,
+        FieldAddress   =   128,
+        FieldCity      =   256,
+        FieldState     =   512,
+        FieldZip       =  1024,
+        FieldPhone     =  2048,
+        FieldUrl       =  4096,
+        FieldDate      =  8192,
+        FieldMisc      = 16384,
+        FieldText      = 32768
       };
 
       /**
@@ -150,7 +150,7 @@ namespace gloox
        * @ref fieldEnum values.
        * @param values The struct contains the values which shall be used for the registration.
        */
-      void createAccount( int fields, const fieldStruct& values );
+      void createAccount( int fields, const RegistrationFields& values );
 
       /**
        * Attempts to register an account with the given credentials. This can only be called with an
@@ -194,10 +194,10 @@ namespace gloox
     private:
       enum IdType
       {
-        FETCH_REGISTRATION_FIELDS,
-        CREATE_ACCOUNT,
-        REMOVE_ACCOUNT,
-        CHANGE_PASSWORD
+        FetchRegistrationFields,
+        CreateAccount,
+        RemoveAccount,
+        ChangePassword
       };
 
       void init();

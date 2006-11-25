@@ -23,6 +23,44 @@ namespace gloox
   class DataForm;
 
   /**
+   * Possible results of a JEP-0077 operation.
+   */
+  enum RegistrationResult
+  {
+    RegistrationSuccess = 0,           /**< The last operation (account registration, account
+                                        * deletion or password change) was successful. */
+    RegistrationNotAcceptable,         /**< 406: Not all necessary information provided */
+    RegistrationConflict,              /**< 409: Username alreday exists. */
+    RegistrationNotAuthorized,         /**< Account removal: Unregistered entity waits too long
+                                        * before authentication or performs tasks other than
+                                        * authentication after registration.<br>
+                                        * Password change: The server or service does not consider
+                                        * the channel safe enough to enable a password change. */
+    RegistrationBadRequest,            /**< Account removal: The &lt;remove/&gt; element was not
+                                        * the only child element of the &lt;query/&gt; element.
+                                        * Should not happen when only gloox functions are being
+                                        * used.<br>
+                                        * Password change: The password change request does not
+                                        * contain complete information (both &lt;username/&gt; and
+                                        * &lt;password/&gt; are required). */
+    RegistrationForbidden,             /**< Account removal: The sender does not have sufficient
+                                        * permissions to cancel the registration. */
+    RegistrationRequired,              /**< Account removal: The entity sending the remove
+                                        * request was not previously registered. */
+    RegistrationUnexpectedRequest,     /**< Account removal: The host is an instant messaging
+                                        * server and the IQ get does not contain a 'from'
+                                        * address because the entity is not registered with
+                                        * the server.<br>
+                                        * Password change: The host is an instant messaging
+                                        * server and the IQ set does not contain a 'from'
+                                        * address because the entity is not registered with
+                                        * the server. */
+    RegistrationNotAllowed,            /**< Password change: The server or service does not allow
+                                        * password changes. */
+    RegistrationUnknownError           /**< An unknown error condition occured. */
+  };
+
+  /**
    * @brief A virtual interface that receives events from an @ref Registration object.
    *
    * Derived classes can be registered as RegistrationHandlers with an
@@ -35,44 +73,6 @@ namespace gloox
   class GLOOX_API RegistrationHandler
   {
     public:
-      /**
-       * Possible results of a JEP-0077 operation.
-       */
-      enum ResultEnum
-      {
-        REGISTRATION_SUCCESS = 0,          /*!< The last operation (account registration, account
-                                            * deletion or password change) was successful. */
-        REGISTRATION_NOT_ACCEPTABLE,       /*!< 406: Not all necessary information provided */
-        REGISTRATION_CONFLICT,             /*!< 409: Username alreday exists. */
-        REGISTRATION_NOT_AUTHORIZED,       /*!< Account removal: Unregistered entity waits too long
-                                            * before authentication or performs tasks other than
-                                            * authentication after registration.<br>
-                                            * Password change: The server or service does not consider
-                                            * the channel safe enough to enable a password change. */
-        REGISTRATION_BAD_REQUEST,          /*!< Account removal: The &lt;remove/&gt; element was not
-                                            * the only child element of the &lt;query/&gt; element.
-                                            * Should not happen when only gloox functions are being
-                                            * used.<br>
-                                            * Password change: The password change request does not
-                                            * contain complete information (both &lt;username/&gt; and
-                                            * &lt;password/&gt; are required). */
-        REGISTRATION_FORBIDDEN,            /*!< Account removal: The sender does not have sufficient
-                                            * permissions to cancel the registration. */
-        REGISTRATION_REGISTRATION_REQUIRED,/*!< Account removal: The entity sending the remove
-                                            * request was not previously registered. */
-        REGISTRATION_UNEXPECTED_REQUEST,   /*!< Account removal: The host is an instant messaging
-                                            * server and the IQ get does not contain a 'from'
-                                            * address because the entity is not registered with
-                                            * the server.<br>
-                                            * Password change: The host is an instant messaging
-                                            * server and the IQ set does not contain a 'from'
-                                            * address because the entity is not registered with
-                                            * the server. */
-        REGISTRATION_NOT_ALLOWED,          /*!< Password change: The server or service does not allow
-                                            * password changes. */
-        UNKNOWN_ERROR                      /*!< An unknown error condition occured. */
-      };
-
       /**
        * Virtual Destructor.
        */
@@ -99,7 +99,7 @@ namespace gloox
        * @param from The server or service the result came from.
        * @param result The result of the last operation.
        */
-      virtual void handleRegistrationResult( const JID& from, ResultEnum result ) = 0;
+      virtual void handleRegistrationResult( const JID& from, RegistrationResult regResult ) = 0;
 
       /**
        * This function is called additionally to @ref handleRegistrationFields() if the server
