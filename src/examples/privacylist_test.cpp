@@ -77,9 +77,9 @@ class PLTest : public PrivacyListHandler, ConnectionListener
       p->requestList( "mnyList" );
     };
 
-    virtual void handlePrivacyListResult( const std::string& id, resultEnum result )
+    virtual void handlePrivacyListResult( const std::string& id, PrivacyListResult plResult )
     {
-      printf( "result for id '%s': %d\n", id.c_str(), result );
+      printf( "result for id '%s': %d\n", id.c_str(), plResult );
     };
 
     virtual void handlePrivacyList( const std::string& name, PrivacyList& items )
