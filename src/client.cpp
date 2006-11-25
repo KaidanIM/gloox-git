@@ -458,7 +458,7 @@ namespace gloox
     else
       m_priority = priority;
 
-    if( m_connection->state() == StateConnected )
+    if( m_connection && m_connection->state() == StateConnected )
       sendPresence();
   }
 
