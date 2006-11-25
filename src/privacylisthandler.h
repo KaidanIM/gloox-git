@@ -23,6 +23,23 @@ namespace gloox
 {
 
   /**
+    * The possible results of an operation on a privacy list.
+    */
+  enum PrivacyListResult
+  {
+    ResultStoreSuccess,         /**< Storing was successful. */
+    ResultActivateSuccess,      /**< Activation was successful. */
+    ResultDefaultSuccess,       /**< Setting the default list was successful. */
+    ResultRemoveSuccess,        /**< Removing a list was successful. */
+    ResultRequestNamesSuccess, /**< Requesting the list names was successful. */
+    ResultRequestListSuccess,  /**< The list was requested successfully. */
+    ResultConflict,              /**< A conflict occurred when activating a list or setting the default
+                                    * list. */
+    ResultItemNotFound,        /**< The requested list does not exist. */
+    ResultBadRequest            /**< Bad request. */
+  };
+
+  /**
    * @brief A virtual interface that allows to retrieve Privacy Lists.
    *
    * @author Jakob Schroeter <js@camaya.net>
@@ -31,23 +48,6 @@ namespace gloox
   class GLOOX_API PrivacyListHandler
   {
     public:
-
-      /**
-       * The possible results of an operation on a privacy list.
-       */
-      enum resultEnum
-      {
-        RESULT_STORE_SUCCESS,         /**< Storing was successful. */
-        RESULT_ACTIVATE_SUCCESS,      /**< Activation was successful. */
-        RESULT_DEFAULT_SUCCESS,       /**< Setting the default list was successful. */
-        RESULT_REMOVE_SUCCESS,        /**< Removing a list was successful. */
-        RESULT_REQUEST_NAMES_SUCCESS, /**< Requesting the list names was successful. */
-        RESULT_REQUEST_LIST_SUCCESS,  /**< The list was requested successfully. */
-        RESULT_CONFLICT,              /**< A conflict occurred when activating a list or setting the default
-                                       * list. */
-        RESULT_ITEM_NOT_FOUND,        /**< The requested list does not exist. */
-        RESULT_BAD_REQUEST            /**< Bad request. */
-      };
 
       /**
        * A list of PrivacyItems.
@@ -88,7 +88,7 @@ namespace gloox
        * @param id The ID of the request, as returned by the initiating function.
        * @param result The result of an operation.
        */
-      virtual void handlePrivacyListResult( const std::string& id, resultEnum result ) = 0;
+      virtual void handlePrivacyListResult( const std::string& id, PrivacyListResult plResult ) = 0;
 
   };
 

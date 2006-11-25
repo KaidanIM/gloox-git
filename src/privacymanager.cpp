@@ -43,7 +43,7 @@ namespace gloox
     Tag *q = new Tag( iq, "query" );
     q->addAttribute( "xmlns", XMLNS_PRIVACY );
 
-    m_parent->trackID( this, id, PL_REQUEST_NAMES );
+    m_parent->trackID( this, id, PLRequestNames );
     m_parent->send( iq );
     return id;
   }
@@ -60,7 +60,7 @@ namespace gloox
     Tag *l = new Tag( q, "list" );
     l->addAttribute( "name", name );
 
-    m_parent->trackID( this, id, PL_REQUEST_LIST );
+    m_parent->trackID( this, id, PLRequestList );
     m_parent->send( iq );
     return id;
   }
@@ -77,7 +77,7 @@ namespace gloox
     Tag *l = new Tag( q, "list" );
     l->addAttribute( "name", name );
 
-    m_parent->trackID( this, id, PL_REMOVE );
+    m_parent->trackID( this, id, PLRemove );
     m_parent->send( iq );
     return id;
   }
@@ -94,7 +94,7 @@ namespace gloox
     Tag *d = new Tag( q, "default" );
     d->addAttribute( "name", name );
 
-    m_parent->trackID( this, id, PL_DEFAULT );
+    m_parent->trackID( this, id, PLDefault );
     m_parent->send( iq );
     return id;
   }
@@ -110,7 +110,7 @@ namespace gloox
     q->addAttribute( "xmlns", XMLNS_PRIVACY );
     new Tag( q, "default" );
 
-    m_parent->trackID( this, id, PL_UNSET_DEFAULT );
+    m_parent->trackID( this, id, PLUnsetDefault );
     m_parent->send( iq );
     return id;
   }
@@ -127,7 +127,7 @@ namespace gloox
     Tag *a = new Tag( q, "active" );
     a->addAttribute( "name", name );
 
-    m_parent->trackID( this, id, PL_ACTIVATE );
+    m_parent->trackID( this, id, PLActivate );
     m_parent->send( iq );
     return id;
   }
@@ -143,7 +143,7 @@ namespace gloox
     q->addAttribute( "xmlns", XMLNS_PRIVACY );
     new Tag( q, "active" );
 
-    m_parent->trackID( this, id, PL_UNSET_ACTIVATE );
+    m_parent->trackID( this, id, PLUnsetActivate );
     m_parent->send( iq );
     return id;
   }
@@ -211,7 +211,7 @@ namespace gloox
       i->addAttribute( "order", oss.str() );
     }
 
-    m_parent->trackID( this, id, PL_STORE );
+    m_parent->trackID( this, id, PLStore );
     m_parent->send( iq );
     return id;
   }
@@ -247,23 +247,19 @@ namespace gloox
       case StanzaIqResult:
         switch( context )
         {
-          case PL_STORE:
-            m_privacyListHandler->handlePrivacyListResult( stanza->id(),
-                PrivacyListHandler::RESULT_STORE_SUCCESS );
+          case PLStore:
+            m_privacyListHandler->handlePrivacyListResult( stanza->id(), ResultStoreSuccess );
             break;
-          case PL_ACTIVATE:
-            m_privacyListHandler->handlePrivacyListResult( stanza->id(),
-                PrivacyListHandler::RESULT_ACTIVATE_SUCCESS );
+          case PLActivate:
+            m_privacyListHandler->handlePrivacyListResult( stanza->id(), ResultActivateSuccess );
             break;
-          case PL_DEFAULT:
-            m_privacyListHandler->handlePrivacyListResult( stanza->id(),
-                PrivacyListHandler::RESULT_DEFAULT_SUCCESS );
+          case PLDefault:
+            m_privacyListHandler->handlePrivacyListResult( stanza->id(), ResultDefaultSuccess );
             break;
-          case PL_REMOVE:
-            m_privacyListHandler->handlePrivacyListResult( stanza->id(),
-                PrivacyListHandler::RESULT_REMOVE_SUCCESS );
+          case PLRemove:
+            m_privacyListHandler->handlePrivacyListResult( stanza->id(), ResultRemoveSuccess );
             break;
-          case PL_REQUEST_NAMES:
+          case PLRequestNames:
           {
             StringList lists;
             std::string def;
@@ -287,7 +283,7 @@ namespace gloox
             m_privacyListHandler->handlePrivacyListNames( def, active, lists );
             break;
           }
-          case PL_REQUEST_LIST:
+          case PLRequestList:
           {
             PrivacyListHandler::PrivacyList items;
 
@@ -348,14 +344,11 @@ namespace gloox
       {
         Tag *e = stanza->findChild( "error" );
         if( e->hasChild( "conflict" ) )
-          m_privacyListHandler->handlePrivacyListResult( stanza->id(),
-            PrivacyListHandler::RESULT_CONFLICT );
+          m_privacyListHandler->handlePrivacyListResult( stanza->id(), ResultConflict );
         else if( e->hasChild( "item-not-found" ) )
-          m_privacyListHandler->handlePrivacyListResult( stanza->id(),
-            PrivacyListHandler::RESULT_ITEM_NOT_FOUND );
+          m_privacyListHandler->handlePrivacyListResult( stanza->id(), ResultItemNotFound );
         else if( e->hasChild( "bad-request" ) )
-          m_privacyListHandler->handlePrivacyListResult( stanza->id(),
-            PrivacyListHandler::RESULT_BAD_REQUEST );
+          m_privacyListHandler->handlePrivacyListResult( stanza->id(), ResultBadRequest );
         break;
       }
 

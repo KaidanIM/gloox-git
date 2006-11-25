@@ -114,14 +114,14 @@ namespace gloox
     private:
       enum IdType
       {
-        PL_REQUEST_NAMES,
-        PL_REQUEST_LIST,
-        PL_ACTIVATE,
-        PL_DEFAULT,
-        PL_UNSET_ACTIVATE,
-        PL_UNSET_DEFAULT,
-        PL_REMOVE,
-        PL_STORE
+        PLRequestNames,
+        PLRequestList,
+        PLActivate,
+        PLDefault,
+        PLUnsetActivate,
+        PLUnsetDefault,
+        PLRemove,
+        PLStore
       };
 
       ClientBase *m_parent;
