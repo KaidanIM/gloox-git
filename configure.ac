@@ -1,10 +1,9 @@
 dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.50)
-AC_INIT
+AC_INIT([gloox], [0.9-pre1], [js@camaya.net])
 AC_CONFIG_SRCDIR([configure.ac])
-dnl Every other copy of the package version number gets its value from here
-AM_INIT_AUTOMAKE(gloox,0.9-pre1)
+AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 
 dnl create a config.h file (Automake will add -DHAVE_CONFIG_H)
 AM_CONFIG_HEADER(config.h)
@@ -23,10 +22,6 @@ AC_PROG_CXX
 AC_PROG_RANLIB
 AM_PROG_LIBTOOL
 AC_PROG_LIBTOOL
-AM_PATH_PYTHON(2.3)
-AC_PROG_SWIG(1.3.21)
-SWIG_ENABLE_CXX
-SWIG_PYTHON
 
 dnl
 dnl extra paths
