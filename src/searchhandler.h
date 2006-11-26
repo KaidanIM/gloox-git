@@ -74,7 +74,8 @@ namespace gloox
        * @param fields Bit-wise ORed SearchFieldEnum values.
        * @param instructions Plain-text instructions for the end user.
        */
-      virtual void handleSearchFields( const JID& directory, int fields, const std::string& instructions ) = 0;
+      virtual void handleSearchFields( const JID& directory, int fields,
+                                       const std::string& instructions ) = 0;
 
       /**
        * This function is called to announce the searchable fields a directory supports. It is the result
