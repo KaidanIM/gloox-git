@@ -35,7 +35,7 @@ namespace gloox
   /**
    * @brief This class implements JEP-0030 (Service Discovery) and JEP-0092 (Software Version).
    *
-   * Client and Component will automatically instantiate a Disco object. It can be used to
+   * ClientBase will automatically instantiate a Disco object. It can be used to
    * announce special features of your client, or its version, or...
    *
    * @author Jakob Schroeter <js@camaya.net>
@@ -50,13 +50,12 @@ namespace gloox
        * The list will be posted as an answer to IQ queries in the
        * "http://jabber.org/protocol/disco#info" namespace.
        * These IQ packets will also be forwarded to the
-       * application's IqHandler, if it listens to the disco\#info namespace.
-       * You can call Client::disableDisco() to disable automatic disco
-       * entirely. By default, disco(very) queries are handled by the library.
+       * application's IqHandler, if it listens to the @c disco\#info namespace.
+       * By default, disco(very) queries are handled by the library.
        * By default, all supported, not disabled features are announced.
        * @param feature A feature (namespace) the host app supports.
        * @note Use this function for non-queryable features. For nodes that shall
-       * answer to disco\#info queries, use registerNodeHandler().
+       * answer to @c disco\#info queries, use registerNodeHandler().
        */
       void addFeature( const std::string& feature );
 
