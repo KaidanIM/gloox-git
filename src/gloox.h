@@ -327,6 +327,9 @@ namespace gloox
   const std::string XMLNS_ANNOTATIONS       = "storage:rosternotes";
   const std::string XMLNS_ROSTER_DELIMITER  = "roster:delimiter";
 
+  const std::string XMLNS_MUC               = "http://jabber.org/protocol/muc";
+  const std::string XMLNS_MUC_USER          = "http://jabber.org/protocol/muc#user";
+
   const std::string XMLNS_XMPP_STREAM       = "urn:ietf:params:xml:ns:xmpp-streams";
   const std::string XMLNS_XMPP_STANZAS      = "urn:ietf:params:xml:ns:xmpp-stanzas";
   const std::string XMLNS_STREAM_TLS        = "urn:ietf:params:xml:ns:xmpp-tls";
@@ -840,6 +843,27 @@ namespace gloox
   {
     FilterMessageEvents    = 1,     /**< Message Events (JEP-0022) */
     FilterChatStates       = 2      /**< Chat State Notifications (JEP-0085) */
+  };
+
+  /**
+   * Possible MUC room affiliations.
+   */
+  enum MUCRoomAffiliation
+  {
+    AffiliationNone,                /**< */
+    AffiliationOwner,               /**< */
+    AffiliationAdmin,               /**< */
+    AffiliationMember               /**< */
+  };
+
+  /**
+   * Possible MUC room roles.
+   */
+  enum MUCRoomRole
+  {
+    RoleModerator,                  /**< */
+    RoleParticipant,                /**< */
+    RoleVisitor                     /**< */
   };
 
   /**
