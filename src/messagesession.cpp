@@ -27,9 +27,11 @@ namespace gloox
     : m_parent( parent ), m_target( jid ), m_messageHandler( 0 ), m_wantUpgrade( wantUpgrade )
   {
     if( m_parent )
+    {
       m_parent->registerMessageHandler( m_target.full(), this, wantUpgrade );
 
-    m_thread = "gloox" + m_parent->getID();
+      m_thread = "gloox" + m_parent->getID();
+    }
   }
 
   MessageSession::~MessageSession()
@@ -49,9 +51,7 @@ namespace gloox
       (*it)->filter( stanza );
     }
 
-    if( !m_messageHandler || stanza->body().empty() )
-      return;
-    else
+    if( m_messageHandler )
       m_messageHandler->handleMessage( stanza );
   }
 
@@ -67,11 +67,7 @@ namespace gloox
     m->addAttribute( "to", m_target.full() );
     new Tag( m, "thread", m_thread );
 
-    MessageFilterList::const_iterator it = m_messageFilterList.begin();
-    for( ; it != m_messageFilterList.end(); ++it )
-    {
-      (*it)->decorate( m );
-    }
+    decorate( m );
 
     m_parent->send( m );
   }
@@ -79,6 +75,15 @@ namespace gloox
   void MessageSession::send( Tag *tag )
   {
     m_parent->send( tag );
+  }
+
+  void MessageSession::decorate( Tag *tag )
+  {
+    MessageFilterList::const_iterator it = m_messageFilterList.begin();
+    for( ; it != m_messageFilterList.end(); ++it )
+    {
+      (*it)->decorate( tag );
+    }
   }
 
   void MessageSession::setResource( const std::string& resource )
