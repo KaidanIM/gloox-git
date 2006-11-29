@@ -867,18 +867,15 @@ namespace gloox
       return;
     }
 
+    it1 = m_messageJidHandlers.find( stanza->from().bare() );
+    if( it1 != m_messageJidHandlers.end() )
+    {
+      (*it1).second.mh->handleMessage( stanza );
+      return;
+    }
+
     if( m_autoMessageSession && m_messageSessionHandler )
     {
-      it1 = m_messageJidHandlers.begin();
-      for( ; it1 != m_messageJidHandlers.end(); ++it1 )
-      {
-        if( (*it1).first == stanza->from().bare() )
-        {
-          (*it1).second.mh->handleMessage( stanza );
-          return;
-        }
-      }
-
       MessageSession *session = new MessageSession( this, stanza->from() );
       m_messageSessionHandler->handleMessageSession( session );
       notifyMessageHandlers( stanza );
