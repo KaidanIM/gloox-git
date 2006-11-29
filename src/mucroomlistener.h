@@ -19,6 +19,7 @@ namespace gloox
 {
 
   class JID;
+  class MUCRoom;
 
   /**
    * Describes a participant in a MUC room.
@@ -54,7 +55,36 @@ namespace gloox
       /**
        *
        */
-      virtual void handleParticipantPresence( const MUCRoomParticipant participant, Presence presence ) = 0;
+      virtual void handleMUCParticipantPresence( MUCRoom *room, const MUCRoomParticipant participant,
+                                              Presence presence ) = 0;
+
+      /**
+       *
+       */
+      virtual void handleMUCMessage( MUCRoom *room, const std::string& nick,
+                                     const std::string& message, bool history,
+                                     const std::string& when ) = 0;
+
+      /**
+       *
+       * @note With some MUC services the nick may be empty when a room is first entered.
+       */
+      virtual void handleMUCSubject( MUCRoom *room, const std::string& nick,
+                                     const std::string& message ) = 0;
+
+      /**
+       *
+       * @note Only the following error conditions are specified for MUC:
+       * @li @b Not @b Authorized: Password required.
+       * @li @b Forbidden: Access denied, user is banned.
+       * @li @b Item @b Not @b Found: The room does not exist.
+       * @li @b Not @b Allowed: Room creation is restricted.
+       * @li @b Not @b Acceptable: Room nicks are locked down.
+       * @li @b Registration @b Required: User is not on the member list.
+       * @li @b Conflict: Desired room nickname is in use or registered by another user.
+       * @li @b Service @b Unavailable: Maximum number of users has been reached.
+       */
+      virtual void handleMUCError( MUCRoom *room, StanzaError error ) = 0;
 
   };
 
