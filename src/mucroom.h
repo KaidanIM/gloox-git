@@ -17,6 +17,8 @@
 
 #include "discohandler.h"
 #include "presencehandler.h"
+#include "iqhandler.h"
+#include "messagehandler.h"
 #include "mucroomlistener.h"
 #include "jid.h"
 
@@ -24,6 +26,7 @@ namespace gloox
 {
 
   class ClientBase;
+  class MUCMessageSession;
   class Stanza;
 
   /**
@@ -31,7 +34,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
-  class MUCRoom : public DiscoHandler, PresenceHandler
+  class MUCRoom : public DiscoHandler, PresenceHandler, IqHandler, MessageHandler
   {
     public:
       /**
@@ -49,6 +52,11 @@ namespace gloox
       virtual ~MUCRoom();
 
       /**
+       *
+       */
+      void setPassword( const std::string& password ) { m_password = password; };
+
+      /**
        * Join this room.
        */
       void join();
@@ -56,7 +64,48 @@ namespace gloox
       /**
        * Leave this room.
        */
-      void leave();
+      void leave( const std::string& msg = "" );
+
+      /**
+       *
+       */
+      void send( const std::string& message );
+
+      /**
+       * Sets the subject of the room to the given string.
+       * @param
+       */
+      void setSubject( const std::string& subject );
+
+      /**
+       *
+       */
+      MUCRoomAffiliation affiliation() const { return m_affiliation; };
+
+      /**
+       *
+       */
+      MUCRoomRole role() const { return m_role; };
+
+      /**
+       *
+       */
+      MUCRoomType type() const { return m_type; };
+
+      /**
+       *
+       */
+      bool publicLogging() const { return m_flags & FlagPublicLogging; };
+
+      /**
+       *
+       */
+      bool passwordProtected() const { return m_flags & FlagPasswordProtected; };
+
+      /**
+       *
+       */
+//       void setUnique( bool unique );
 
       // reimplemented from DiscoHandler
       virtual void handleDiscoInfoResult( Stanza *stanza, int context );
@@ -70,15 +119,44 @@ namespace gloox
       // reimplemented from PresenceHandler
       virtual void handlePresence( Stanza *stanza );
 
+      // reimplemented from MessageHandler
+      virtual void handleMessage( Stanza *stanza );
+
+      // reimplemented from IqHandler
+      virtual bool handleIq( Stanza *stanza ) { return false; };
+
+      // reimplemented from IqHandler
+      virtual bool handleIqID( Stanza *stanza, int context );
+
     private:
+      bool handleIqGet( Stanza *stanza, int context );
+      bool handleIqSet( Stanza *stanza, int context );
+      bool handleIqResult( Stanza *stanza, int context );
+      bool handleIqError( Stanza *stanza, int context );
+
+      enum TrackEnum
+      {
+        RequestUniqueName
+      };
+
       ClientBase *m_parent;
       JID m_nick;
       MUCRoomListener *m_roomListener;
+      MUCMessageSession *m_session;
 
       typedef std::list<MUCRoomParticipant> ParticipantList;
       ParticipantList m_participants;
 
+      std::string m_password;
+
+      MUCRoomAffiliation m_affiliation;
+      MUCRoomRole m_role;
+      MUCRoomType m_type;
+
+      int m_flags;
+      bool m_configChanged;
       bool m_joined;
+      bool m_unique;
 
   };
 
