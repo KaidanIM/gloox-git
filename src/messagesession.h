@@ -157,6 +157,8 @@ namespace gloox
        * from a full JID to this MessageSession. If unsure, use the default. You probably only want to use
        * a non-default value if this MessageSession is supposed to talk directly to a server or component
        * JID that has no resource. This 'upgrade' will only happen once.
+       * @note As of version 0.9, a MessageSession doesn't silently discard message stanzas with empty
+       * &lt;body&gt; element anymore.
        */
       MessageSession( ClientBase *parent, const JID& jid, bool wantUpgrade = true );
 
@@ -201,7 +203,7 @@ namespace gloox
        * @param message The message to send.
        * @param subject The optional subject to send.
        */
-      void send( const std::string& message, const std::string& subject = "" );
+      virtual void send( const std::string& message, const std::string& subject = "" );
 
       /**
        * Use this function to hook a new MessageFilter into a MessageSession.
@@ -228,14 +230,18 @@ namespace gloox
       */
       virtual void send( Tag *tag );
 
+    protected:
+      void decorate( Tag *tag );
+
+      ClientBase *m_parent;
+      JID m_target;
+
     private:
       void setResource( const std::string& resource );
 
       typedef std::list<MessageFilter*> MessageFilterList;
 
       MessageFilterList m_messageFilterList;
-      ClientBase *m_parent;
-      JID m_target;
       MessageHandler *m_messageHandler;
       std::string m_thread;
       bool m_wantUpgrade;
