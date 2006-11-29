@@ -322,6 +322,7 @@ namespace gloox
   const std::string XMLNS_X_DATA            = "jabber:x:data";
   const std::string XMLNS_X_EVENT           = "jabber:x:event";
   const std::string XMLNS_X_OOB             = "jabber:x:oob";
+  const std::string XMLNS_X_DELAY           = "jabber:x:delay";
   const std::string XMLNS_VCARD_TEMP        = "vcard-temp";
   const std::string XMLNS_BOOKMARKS         = "storage:bookmarks";
   const std::string XMLNS_ANNOTATIONS       = "storage:rosternotes";
@@ -329,6 +330,8 @@ namespace gloox
 
   const std::string XMLNS_MUC               = "http://jabber.org/protocol/muc";
   const std::string XMLNS_MUC_USER          = "http://jabber.org/protocol/muc#user";
+  const std::string XMLNS_MUC_ADMIN         = "http://jabber.org/protocol/muc#admin";
+  const std::string XMLNS_MUC_UNIQUE        = "http://jabber.org/protocol/muc#unique";
 
   const std::string XMLNS_XMPP_STREAM       = "urn:ietf:params:xml:ns:xmpp-streams";
   const std::string XMLNS_XMPP_STANZAS      = "urn:ietf:params:xml:ns:xmpp-stanzas";
@@ -861,9 +864,39 @@ namespace gloox
    */
   enum MUCRoomRole
   {
+    RoleNone,                       /**< */
     RoleModerator,                  /**< */
     RoleParticipant,                /**< */
     RoleVisitor                     /**< */
+  };
+
+  /**
+   *
+   */
+  enum MUCRoomType
+  {
+    TypeUnknown,                    /**< */
+    TypeNonAnonymous,               /**< */
+    TypeSemiAnonymous,              /**< */
+    TypeFullyAnonymous              /**< */
+  };
+
+  /**
+   *
+   */
+  enum MUCRoomFlag
+  {
+    FlagPasswordProtected    = 1,   /**< */
+    FlagPublicLogging        = 2    /**< */
+  };
+
+  /**
+   *
+   */
+  enum MUCUserFlags
+  {
+    UserSelf         = 1,           /**< */
+    UserNickModified = 2            /**< */
   };
 
   /**
