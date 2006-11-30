@@ -194,8 +194,6 @@ namespace gloox
       case NODE_STREAM_ERROR:
         handleStreamError( stanza );
         disconnect( ConnStreamError );
-        if( m_fdRequested )
-          notifyOnDisconnect( ConnStreamError );
         break;
       case NODE_STREAM_CLOSE:
         logInstance().log( LogLevelDebug, LogAreaClassClientbase, "stream closed" );
@@ -211,6 +209,8 @@ namespace gloox
   {
     if( m_connection )
     {
+      if( reason != ConnStreamError )
+       send ( "</stream:stream>" );
       if( reason == ConnUserDisconnected )
         m_streamError = StreamErrorUndefined;
       m_connection->disconnect( reason );
