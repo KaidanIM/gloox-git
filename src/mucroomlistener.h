@@ -70,7 +70,7 @@ namespace gloox
        * @note With some MUC services the nick may be empty when a room is first entered.
        */
       virtual void handleMUCSubject( MUCRoom *room, const std::string& nick,
-                                     const std::string& message ) = 0;
+                                     const std::string& subject ) = 0;
 
       /**
        *
