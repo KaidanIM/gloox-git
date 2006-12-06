@@ -235,6 +235,7 @@ namespace gloox
 
       ClientBase *m_parent;
       JID m_target;
+      MessageHandler *m_messageHandler;
 
     private:
       void setResource( const std::string& resource );
@@ -242,7 +243,6 @@ namespace gloox
       typedef std::list<MessageFilter*> MessageFilterList;
 
       MessageFilterList m_messageFilterList;
-      MessageHandler *m_messageHandler;
       std::string m_thread;
       bool m_wantUpgrade;
 
