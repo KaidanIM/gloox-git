@@ -105,20 +105,22 @@ namespace gloox
 
   void MUCRoom::handlePresence( Stanza *stanza )
   {
+    if( stanza->from().bare() != m_nick.bare() )
+      return;
+
     if( !m_roomListener )
       return;
 
     if( stanza->subtype() == StanzaPresenceError )
     {
-       m_joined = false;
-       m_roomListener->handleMUCError( this, stanza->error() );
+      m_joined = false;
+      m_roomListener->handleMUCError( this, stanza->error() );
     }
     else
     {
       Tag *t;
       if( m_roomListener && ( t = stanza->findChild( "x", "xmlns", XMLNS_MUC_USER ) ) != 0 )
       {
-        Presence presence = stanza->show();
         MUCRoomParticipant party;
         party.self = false;
         party.nick = new JID( stanza->from() );
@@ -140,8 +142,10 @@ namespace gloox
             party.role = RoleModerator;
           else if( role == "participant" )
             party.role = RoleParticipant;
-          else
+          else if( role == "visitor" )
             party.role = RoleVisitor;
+          else
+            party.role = RoleNone;
         }
 
         Tag::TagList l = stanza->children();
@@ -175,7 +179,7 @@ namespace gloox
 
         m_participants.push_back( party );
 
-        m_roomListener->handleMUCParticipantPresence( this, party, presence );
+        m_roomListener->handleMUCParticipantPresence( this, party, stanza->show() );
       }
     }
   }
