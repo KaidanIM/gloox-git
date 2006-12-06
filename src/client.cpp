@@ -220,7 +220,7 @@ namespace gloox
     else if( ( stanza->name() == "failure" ) && stanza->hasAttribute( "xmlns", XMLNS_COMPRESSION ) )
     {
       logInstance().log( LogLevelError, LogAreaClassClient, "stream compression init failed!" );
-      disconnect( ConnCommpressionFailed );
+      disconnect( ConnCompressionFailed );
     }
     else if( ( stanza->name() == "compressed" ) && stanza->hasAttribute( "xmlns", XMLNS_COMPRESSION ) )
     {

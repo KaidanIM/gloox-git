@@ -582,6 +582,8 @@ namespace gloox
 
       StatisticsStruct m_stats;
 
+      ConnectionState m_state;
+
       int m_idCount;
       bool m_autoMessageSession;
       bool m_fdRequested;

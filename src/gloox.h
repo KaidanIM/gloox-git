@@ -355,8 +355,9 @@ namespace gloox
   {
     StateDisconnected,              /**< The client is in disconnected state. */
     StateConnecting,                /**< The client is currently trying to establish a connection. */
-    StateConnected                  /**< The client is connected to the server but authentication is not
+    StateConnected,                 /**< The client is connected to the server but authentication is not
                                      * (yet) done. */
+    StateAuthenticated              /**< Authentication is done. */
   };
 
   /**

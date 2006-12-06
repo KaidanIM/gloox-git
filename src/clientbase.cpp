@@ -52,8 +52,8 @@ namespace gloox
       m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ),
       m_messageSessionHandler( 0 ), m_statisticsHandler( 0 ), m_parser( 0 ),
       m_authError( AuthErrorUndefined ), m_streamError( StreamErrorUndefined ),
-      m_streamErrorAppCondition( 0 ), m_idCount( 0 ), m_autoMessageSession( false ),
-      m_fdRequested( false )
+      m_streamErrorAppCondition( 0 ), m_state( StateDisconnected ), m_idCount( 0 ),
+      m_autoMessageSession( false ), m_fdRequested( false )
   {
     init();
   }
@@ -65,8 +65,8 @@ namespace gloox
       m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ),
       m_messageSessionHandler( 0 ), m_statisticsHandler( 0 ), m_parser( 0 ),
       m_authError( AuthErrorUndefined ), m_streamError( StreamErrorUndefined ),
-      m_streamErrorAppCondition( 0 ), m_idCount( 0 ), m_autoMessageSession( false ),
-      m_fdRequested( false )
+      m_streamErrorAppCondition( 0 ), m_state( StateDisconnected ), m_idCount( 0 ),
+      m_autoMessageSession( false ), m_fdRequested( false )
   {
     init();
   }
@@ -459,7 +459,7 @@ namespace gloox
 
   void ClientBase::send( const std::string& xml )
   {
-    if( m_connection && m_connection->state() == StateConnected )
+    if( m_connection && m_state == StateAuthenticated )
     {
       if( m_connection->send( xml ) == false )
         disconnect( ConnStreamError );
@@ -481,7 +481,9 @@ namespace gloox
 
   ConnectionState ClientBase::state() const
   {
-    if( m_connection )
+    if( m_state == StateAuthenticated )
+      return m_state;
+    else if( m_connection )
       return m_connection->state();
     else
       return StateDisconnected;
