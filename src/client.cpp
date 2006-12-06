@@ -183,7 +183,10 @@ namespace gloox
       if( m_connection->tlsHandshake() )
       {
         if( !notifyOnTLSConnect( m_connection->fetchTLSInfo() ) )
+        {
+          logInstance().log( LogLevelError, LogAreaClassClient, "Server's certificate rejected!" );
           disconnect( ConnTlsFailed );
+        }
         else
         {
           std::ostringstream oss;
@@ -202,11 +205,14 @@ namespace gloox
         }
       }
       else
+      {
+        logInstance().log( LogLevelError, LogAreaClassClient, "TLS handshake failed (local)!" );
         disconnect( ConnTlsFailed );
+      }
     }
     else if( ( stanza->name() == "failure" ) && stanza->hasAttribute( "xmlns", XMLNS_STREAM_TLS ) )
     {
-      logInstance().log( LogLevelError, LogAreaClassClient, "TLS handshake failed!" );
+      logInstance().log( LogLevelError, LogAreaClassClient, "TLS handshake failed (server-side)!" );
       disconnect( ConnTlsFailed );
     }
 #endif
@@ -214,7 +220,7 @@ namespace gloox
     else if( ( stanza->name() == "failure" ) && stanza->hasAttribute( "xmlns", XMLNS_COMPRESSION ) )
     {
       logInstance().log( LogLevelError, LogAreaClassClient, "stream compression init failed!" );
-      disconnect( ConnTlsFailed );
+      disconnect( ConnCommpressionFailed );
     }
     else if( ( stanza->name() == "compressed" ) && stanza->hasAttribute( "xmlns", XMLNS_COMPRESSION ) )
     {
