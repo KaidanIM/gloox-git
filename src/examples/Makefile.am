@@ -6,7 +6,7 @@ AM_CPPFLAGS = -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare
 
 noinst_PROGRAMS = register_test disco_test adhoc_test roster_test privatexml_test component_test \
                   bookmarkstorage_test annotations_test privacylist_test message_test flexoff_test \
-                  ibb_test vcard_test reset_test negotiate_test
+                  ibb_test vcard_test reset_test muc_example
 
 register_test_SOURCES = register_test.cpp
 register_test_LDADD = ../libgloox.la $(LDFLAGS)
@@ -64,6 +64,7 @@ reset_test_SOURCES = reset_test.cpp
 reset_test_LDADD = ../libgloox.la $(LDFLAGS)
 reset_test_CFLAGS = $(CPPFLAGS)
 
-negotiate_test_SOURCES = negotiate_test.cpp
-negotiate_test_LDADD = ../libgloox.la $(LDFLAGS)
-negotiate_test_CFLAGS = $(CPPFLAGS)
+muc_example_SOURCES = muc_example.cpp
+muc_example_LDADD = ../libgloox.la $(LDFLAGS)
+muc_example_CFLAGS = $(CPPFLAGS)
+
