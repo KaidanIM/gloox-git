@@ -49,6 +49,9 @@ namespace gloox
        */
       virtual void setSubject( const std::string& subject );
 
+      // reimplemented from MessageSession
+      virtual void handleMessage( Stanza *stanza );
+
   };
 
 }

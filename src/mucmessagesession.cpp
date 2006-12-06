@@ -26,6 +26,12 @@ namespace gloox
   {
   }
 
+  void MUCMessageSession::handleMessage( Stanza *stanza )
+  {
+    if( m_messageHandler )
+      m_messageHandler->handleMessage( stanza );
+  }
+
   void MUCMessageSession::send( const std::string& message )
   {
     Tag *m = new Tag( "message" );
