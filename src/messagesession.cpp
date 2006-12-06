@@ -51,7 +51,7 @@ namespace gloox
       (*it)->filter( stanza );
     }
 
-    if( m_messageHandler )
+    if( m_messageHandler && !stanza->body().empty() )
       m_messageHandler->handleMessage( stanza );
   }
 
