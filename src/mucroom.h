@@ -34,7 +34,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
-  class MUCRoom : public DiscoHandler, PresenceHandler, IqHandler, MessageHandler
+  class MUCRoom : private DiscoHandler, private PresenceHandler, private IqHandler, private MessageHandler
   {
     public:
       /**
@@ -43,6 +43,7 @@ namespace gloox
        * @param parent The ClientBase object to use for the communication.
        * @param nick The room's name and service plus the desired nickname in the form
        * room@service/nick.
+       * @param mrl The MUCRoomListener that will listen to room events.
        */
       MUCRoom( ClientBase *parent, const JID& nick, MUCRoomListener *mrl );
 
@@ -106,6 +107,11 @@ namespace gloox
        *
        */
 //       void setUnique( bool unique );
+
+      /**
+       *
+       */
+      void registerMUCRoomListener( MUCRoomListener *mrl ) { m_roomListener = mrl; };
 
       // reimplemented from DiscoHandler
       virtual void handleDiscoInfoResult( Stanza *stanza, int context );
