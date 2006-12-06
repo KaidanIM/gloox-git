@@ -372,7 +372,9 @@ namespace gloox
     ConnOutOfMemory,                /**< Out of memory. Uhoh. */
     ConnNoSupportedAuth,            /**< The auth mechanisms the server offers are not supported
                                      * or the server offered no auth mechanisms at all. */
-    ConnTlsFailed,                  /**< The server's certificate could not be verified. */
+    ConnTlsFailed,                  /**< The server's certificate could not be verified or the TLS
+                                     * handshake did not complete successfully. */
+    ConnCompressionFailed,          /**< Initializing compression failed. */
     ConnAuthenticationFailed,       /**< Authentication failed. Username/password wrong or account does
                                      * not exist. Use ClientBase::authError() to find the reason. */
     ConnUserDisconnected,           /**< The user (or higher-level protocol) requested a disconnect. */
