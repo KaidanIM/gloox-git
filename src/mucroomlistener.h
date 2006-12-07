@@ -56,10 +56,11 @@ namespace gloox
        *
        */
       virtual void handleMUCParticipantPresence( MUCRoom *room, const MUCRoomParticipant participant,
-                                              Presence presence ) = 0;
+                                                 Presence presence ) = 0;
 
       /**
        *
+       * @note With some MUC services the nick may be empty for history items.
        */
       virtual void handleMUCMessage( MUCRoom *room, const std::string& nick,
                                      const std::string& message, bool history,
@@ -74,7 +75,7 @@ namespace gloox
 
       /**
        *
-       * @note Only the following error conditions are specified for MUC:
+       * @note The following error conditions are specified for MUC:
        * @li @b Not @b Authorized: Password required.
        * @li @b Forbidden: Access denied, user is banned.
        * @li @b Item @b Not @b Found: The room does not exist.
@@ -83,6 +84,8 @@ namespace gloox
        * @li @b Registration @b Required: User is not on the member list.
        * @li @b Conflict: Desired room nickname is in use or registered by another user.
        * @li @b Service @b Unavailable: Maximum number of users has been reached.
+       *
+       * Other errors may probably appear, depending on the service implementation.
        */
       virtual void handleMUCError( MUCRoom *room, StanzaError error ) = 0;
 
