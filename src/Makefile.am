@@ -46,9 +46,10 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             inbandbytestreammanager.h messagefilter.h         vcard.h \
                             vcardmanager.h            vcardhandler.h          adhochandler.h \
                             search.h  searchhandler.h statisticshandler.h     resource.h \
-                            mucroom.h mucroomlistener.h mucmessagesession.h
+                            mucroom.h mucroomlistener.h
 
-noinst_HEADERS = prep.h parser.h connection.h dns.h nonsaslauth.h base64.h compression.h md5.h sha.h
+noinst_HEADERS = prep.h parser.h connection.h dns.h nonsaslauth.h base64.h compression.h md5.h sha.h \
+		mucmessagesession.h
 
 test:
 	make -C tests test

@@ -4,6 +4,7 @@
 #include "../mucroom.h"
 #include "../disco.h"
 #include "../stanza.h"
+#include "../dataform.h"
 #include "../gloox.h"
 #include "../lastactivity.h"
 #include "../loghandler.h"
@@ -60,6 +61,8 @@ class MessageTest : public ConnectionListener, LogHandler, MUCRoomListener
     {
       printf( "connected!!!\n" );
       m_room->join();
+      m_room->getRoomInfo();
+      m_room->getRoomItems();
     };
 
     virtual void onDisconnect( ConnectionError e )
@@ -83,7 +86,7 @@ class MessageTest : public ConnectionListener, LogHandler, MUCRoomListener
       printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
     };
 
-    virtual void handleMUCParticipantPresence( MUCRoom *room, const MUCRoomParticipant participant,
+    virtual void handleMUCParticipantPresence( MUCRoom * /*room*/, const MUCRoomParticipant participant,
                                             Presence presence )
     {
       if( presence == PresenceAvailable )
@@ -94,15 +97,15 @@ class MessageTest : public ConnectionListener, LogHandler, MUCRoomListener
         printf( "Presence is %d of %s\n", presence, participant.nick->resource().c_str() );
     };
 
-    virtual void handleMUCMessage( MUCRoom *room, const std::string& nick, const std::string& message,
-                                   bool history, const std::string& when )
+    virtual void handleMUCMessage( MUCRoom * /*room*/, const std::string& nick, const std::string& message,
+                                   bool history, const std::string& /*when*/ )
     {
       printf( "%s said: '%s' (history: %s)\n", nick.c_str(), message.c_str(), history ? "yes" : "no" );
       if( nick != "glooxmuctest" && !history )
         m_room->send( message + " yourself" );
     };
 
-    virtual void handleMUCSubject( MUCRoom *room, const std::string& nick, const std::string& subject )
+    virtual void handleMUCSubject( MUCRoom * /*room*/, const std::string& nick, const std::string& subject )
     {
       if( nick.empty() )
         printf( "Subject: %s\n", subject.c_str() );
@@ -110,11 +113,25 @@ class MessageTest : public ConnectionListener, LogHandler, MUCRoomListener
         printf( "%s has set the subject to: '%s'\n", nick.c_str(), subject.c_str() );
     };
 
-    virtual void handleMUCError( MUCRoom *room, StanzaError error )
+    virtual void handleMUCError( MUCRoom * /*room*/, StanzaError error )
     {
       printf( "!!!!!!!!got an error: %d", error );
     };
 
+    virtual void handleMUCInfo( MUCRoom * /*room*/, int features, const std::string& name,
+                                    const DataForm *infoForm )
+    {
+      printf( "features: %d, name: %s, form xml: %s\n", features, name.c_str(), infoForm->tag()->xml().c_str() );
+    };
+
+    virtual void handleMUCItems( MUCRoom * /*room*/, const StringMap& items )
+    {
+      StringMap::const_iterator it = items.begin();
+      for( ; it != items.end(); ++it )
+      {
+        printf( "%s -- %s is an item here\n", (*it).first.c_str(), (*it).second.c_str() );
+      }
+    };
 
   private:
     Client *j;

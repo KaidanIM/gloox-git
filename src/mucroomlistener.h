@@ -20,6 +20,7 @@ namespace gloox
 
   class JID;
   class MUCRoom;
+  class DataForm;
 
   /**
    * Describes a participant in a MUC room.
@@ -88,6 +89,20 @@ namespace gloox
        * Other errors may probably appear, depending on the service implementation.
        */
       virtual void handleMUCError( MUCRoom *room, StanzaError error ) = 0;
+
+      /**
+       *
+       * @param infoForm A DataForm containing extended room information. Maybe 0 if the service
+       * doesn't support extended room information. See Section 15.5 of XEP-0045 for defined
+       * field types.
+       */
+      virtual void handleMUCInfo( MUCRoom *room, int features, const std::string& name,
+                                      const DataForm *infoForm ) = 0;
+
+      /**
+       *
+       */
+      virtual void handleMUCItems( MUCRoom *room, const StringMap& items ) = 0;
 
   };
 

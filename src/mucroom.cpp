@@ -14,6 +14,7 @@
 
 #include "mucroom.h"
 #include "clientbase.h"
+#include "dataform.h"
 #include "stanza.h"
 #include "disco.h"
 #include "mucroomlistener.h"
@@ -24,7 +25,8 @@ namespace gloox
 
   MUCRoom::MUCRoom( ClientBase *parent, const JID& nick, MUCRoomListener *mrl )
     : m_parent( parent ), m_nick( nick ), m_roomListener( mrl ), m_affiliation( AffiliationNone ),
-      m_role( RoleNone ), m_type( TypeUnknown ), m_flags( 0 ), m_joined( false ), m_unique( false )
+      m_role( RoleNone ), m_type( TypeUnknown ), m_features( 0 ), m_flags( 0 ),
+      m_joined( false ), m_unique( false )
   {
 #warning TODO: discover reserved room nickname: http://www.xmpp.org/extensions/xep-0045.html#reservednick
     // here or in join()
@@ -102,6 +104,24 @@ namespace gloox
 //     m_parent->trackID( this, id, RequestUniqueName );
 //     m_parent->send( iq );
 //   }
+
+  void MUCRoom::getRoomInfo()
+  {
+    if( m_parent )
+    {
+      JID j( m_nick.bare() );
+      m_parent->disco()->getDiscoInfo( j, "", this, GetRoomInfo );
+    }
+  }
+
+  void MUCRoom::getRoomItems()
+  {
+    if( m_parent )
+    {
+      JID j( m_nick.bare() );
+      m_parent->disco()->getDiscoItems( j, "", this, GetRoomItems );
+    }
+  }
 
   void MUCRoom::handlePresence( Stanza *stanza )
   {
@@ -295,14 +315,108 @@ namespace gloox
 
   void MUCRoom::handleDiscoInfoResult( Stanza *stanza, int context )
   {
+    switch( context )
+    {
+      case GetRoomInfo:
+      {
+        int oldfeatures = m_features;
+        m_features = 0;
+        if( oldfeatures & FlagPublicLogging )
+          m_features |= FlagPublicLogging;
+
+        std::string name;
+        DataForm *df = 0;
+        Tag *q = stanza->findChild( "query" );
+        if( q )
+        {
+          Tag::TagList l = q->children();
+          Tag::TagList::const_iterator it = l.begin();
+          for( ; it != l.end(); ++it )
+          {
+            if( (*it)->name() == "feature" )
+            {
+              if( (*it)->findAttribute( "var" ) == "muc_hidden" )
+                m_features |= FlagHidden;
+              else if( (*it)->findAttribute( "var" ) == "muc_membersonly" )
+                m_features |= FlagMembersOnly;
+              else if( (*it)->findAttribute( "var" ) == "muc_moderated" )
+                m_features |= FlagModerated;
+              else if( (*it)->findAttribute( "var" ) == "muc_nonanonymous" )
+                m_features |= FlagNonAnonymous;
+              else if( (*it)->findAttribute( "var" ) == "muc_open" )
+                m_features |= FlagOpen;
+              else if( (*it)->findAttribute( "var" ) == "muc_passwordprotected" )
+                m_features |= FlagPasswordProtected;
+              else if( (*it)->findAttribute( "var" ) == "muc_persistent" )
+                m_features |= FlagPersistent;
+              else if( (*it)->findAttribute( "var" ) == "muc_public" )
+                m_features |= FlagPublic;
+              else if( (*it)->findAttribute( "var" ) == "muc_semianonymous" )
+                m_features |= FlagSemiAnonymous;
+              else if( (*it)->findAttribute( "var" ) == "muc_temporary" )
+                m_features |= FlagTemporary;
+              else if( (*it)->findAttribute( "var" ) == "muc_unmoderated" )
+                m_features |= FlagUnmoderated;
+              else if( (*it)->findAttribute( "var" ) == "muc_unsecured" )
+                m_features |= FlagUnsecured;
+            }
+            else if( (*it)->name() == "identity" )
+            {
+              name = (*it)->findAttribute( "name" );
+            }
+            else if( (*it)->name() == "x" && (*it)->hasAttribute( "xmlns", XMLNS_X_DATA ) )
+            {
+              df = new DataForm( (*it) );
+            }
+          }
+        }
+        if( m_roomListener )
+          m_roomListener->handleMUCInfo( this, m_features, name, df );
+        break;
+      }
+      default:
+        break;
+    }
   }
 
   void MUCRoom::handleDiscoItemsResult( Stanza *stanza, int context )
   {
+    switch( context )
+    {
+      case GetRoomItems:
+      {
+        Tag *q = stanza->findChild( "query" );
+        if( q )
+        {
+          StringMap items;
+          Tag::TagList l = q->children();
+          Tag::TagList::const_iterator it = l.begin();
+          for( ; it != l.end(); ++it )
+          {
+            if( (*it)->name() == "item" && (*it)->hasAttribute( "jid" ) )
+            {
+              items[(*it)->findAttribute( "name" )] = (*it)->findAttribute( "jid" );
+            }
+          }
+          if( m_roomListener )
+            m_roomListener->handleMUCItems( this, items );
+        }
+        break;
+      }
+      default:
+        break;
+    }
   }
 
   void MUCRoom::handleDiscoError( Stanza *stanza, int context )
   {
+    switch( context )
+    {
+      case GetRoomInfo:
+        break;
+      default:
+        break;
+    }
   }
 
 }
