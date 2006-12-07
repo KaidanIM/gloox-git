@@ -242,6 +242,7 @@ namespace gloox
 
   bool MUCRoom::handleIqID( Stanza *stanza, int context )
   {
+#warning FIXME: use local tracking, delete iterator here
     switch( stanza->subtype() )
     {
       case StanzaIqGet:

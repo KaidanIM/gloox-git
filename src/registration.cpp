@@ -183,7 +183,7 @@ namespace gloox
     {
       Tag *e = stanza->findChild( "error" );
 
-      if( e->empty() || !m_registrationHandler )
+      if( !e || !m_registrationHandler )
         return false;
 
       if( e->hasChild( "conflict" ) || e->hasAttribute( "code", "409" ) )

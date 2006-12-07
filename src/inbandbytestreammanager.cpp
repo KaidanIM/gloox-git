@@ -211,6 +211,7 @@ namespace gloox
             default:
               break;
           }
+          m_trackMap.erase( it );
         }
         break;
       }
