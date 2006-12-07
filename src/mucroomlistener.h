@@ -101,6 +101,8 @@ namespace gloox
 
       /**
        *
+       * @param items A map of room participants. The key is the name, the value is the occupant's
+       * room JID. The map may be empty if such info is private.
        */
       virtual void handleMUCItems( MUCRoom *room, const StringMap& items ) = 0;
 
