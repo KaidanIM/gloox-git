@@ -21,7 +21,8 @@ namespace gloox
 
   MessageEventFilter::MessageEventFilter( MessageSession *parent, int defaultEvents )
     : MessageFilter( parent ), m_messageEventHandler( 0 ), m_requestedEvents( 0 ),
-      m_defaultEvents( defaultEvents ), m_lastSent( MessageEventCancel )
+      m_defaultEvents( defaultEvents ), m_lastSent( MessageEventCancel ),
+      m_disable( false )
   {
   }
 
@@ -31,6 +32,17 @@ namespace gloox
 
   void MessageEventFilter::filter( Stanza *stanza )
   {
+    if( m_disable )
+      return;
+
+    if( stanza->subtype() == StanzaMessageError )
+    {
+      if( stanza->error() == StanzaErrorFeatureNotImplemented )
+        m_disable = true;
+
+      return;
+    }
+
     if( ( m_messageEventHandler ) && stanza->hasChild( "x", "xmlns", XMLNS_X_EVENT ) )
     {
       if( stanza->body().empty() )
@@ -70,6 +82,9 @@ namespace gloox
 
   void MessageEventFilter::raiseMessageEvent( MessageEventType event )
   {
+    if( m_disable )
+      return;
+
     if( ( m_requestedEvents & event ) || ( event == MessageEventCancel ) )
     {
       Tag *m = new Tag( "message" );
@@ -118,6 +133,9 @@ namespace gloox
 
   void MessageEventFilter::decorate( Tag *tag )
   {
+    if( m_disable )
+      return;
+
     if( m_defaultEvents != 0 )
     {
       Tag *x = new Tag( tag, "x" );

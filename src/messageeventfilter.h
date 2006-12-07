@@ -90,6 +90,7 @@ namespace gloox
       int m_requestedEvents;
       int m_defaultEvents;
       MessageEventType m_lastSent;
+      bool m_disable;
 
   };
 
