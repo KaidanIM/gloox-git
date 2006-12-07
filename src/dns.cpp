@@ -34,6 +34,9 @@
 #include <unistd.h>
 #else
 #include <winsock.h>
+#endif
+
+#ifdef HAVE_WINDNS_H
 #include <windns.h>
 #endif
 
@@ -67,7 +70,7 @@
 namespace gloox
 {
 
-#ifdef WIN32
+#if defined ( WIN32 ) && defined( HAVE_WINDNS_H )
   int DNS::connect( const std::string& domain, const LogSink& logInstance )
   {
     std::string dname = "_xmpp-client._tcp." + domain;
