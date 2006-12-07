@@ -111,6 +111,16 @@ namespace gloox
       /**
        *
        */
+      void getRoomInfo();
+
+      /**
+       *
+       */
+      void getRoomItems();
+
+      /**
+       *
+       */
       void registerMUCRoomListener( MUCRoomListener *mrl ) { m_roomListener = mrl; };
 
       // reimplemented from DiscoHandler
@@ -142,7 +152,9 @@ namespace gloox
 
       enum TrackEnum
       {
-        RequestUniqueName
+        RequestUniqueName,
+        GetRoomInfo,
+        GetRoomItems
       };
 
       ClientBase *m_parent;
@@ -159,6 +171,7 @@ namespace gloox
       MUCRoomRole m_role;
       MUCRoomType m_type;
 
+      int m_features;
       int m_flags;
       bool m_configChanged;
       bool m_joined;

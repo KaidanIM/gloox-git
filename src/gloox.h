@@ -332,6 +332,8 @@ namespace gloox
   const std::string XMLNS_MUC_USER          = "http://jabber.org/protocol/muc#user";
   const std::string XMLNS_MUC_ADMIN         = "http://jabber.org/protocol/muc#admin";
   const std::string XMLNS_MUC_UNIQUE        = "http://jabber.org/protocol/muc#unique";
+  const std::string XMLNS_MUC_OWNER         = "http://jabber.org/protocol/muc#owner";
+  const std::string XMLNS_MUC_ROOMINFO      = "http://jabber.org/protocol/muc#roominfo";
 
   const std::string XMLNS_XMPP_STREAM       = "urn:ietf:params:xml:ns:xmpp-streams";
   const std::string XMLNS_XMPP_STANZAS      = "urn:ietf:params:xml:ns:xmpp-stanzas";
@@ -895,14 +897,25 @@ namespace gloox
    */
   enum MUCRoomFlag
   {
-    FlagPasswordProtected    = 1,   /**< */
-    FlagPublicLogging        = 2    /**< */
+    FlagPasswordProtected  =    1,  /**< Password-protected room.*/
+    FlagPublicLogging      =    2,  /**< Room conversation is publicly logged. */
+    FlagHidden             =    4,  /**< Hidden room. */
+    FlagMembersOnly        =    8,  /**< Members-only room. */
+    FlagModerated          =   16,  /**< Moderated room. */
+    FlagNonAnonymous       =   32,  /**< Non-anonymous room. */
+    FlagOpen               =   64,  /**< Open room. */
+    FlagPersistent         =  128,  /**< Persistent room .*/
+    FlagPublic             =  256,  /**< Public room. */
+    FlagSemiAnonymous      =  512,  /**< Semi-anonymous room. */
+    FlagTemporary          = 1024,  /**< Temporary room. */
+    FlagUnmoderated        = 2048,  /**< Unmoderated room. */
+    FlagUnsecured          = 4096   /**< Unsecured room. */
   };
 
   /**
    *
    */
-  enum MUCUserFlags
+  enum MUCUserFlag
   {
     UserSelf         = 1,           /**< */
     UserNickModified = 2            /**< */
