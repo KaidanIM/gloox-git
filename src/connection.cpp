@@ -905,13 +905,8 @@ printf( "maximumMessage: %ld\n", m_streamSizes.cbMaximumMessage );
   }
 #endif
 
-  ConnectionState Connection::connect()
+  ConnectionError Connection::connect()
   {
-    if( m_socket != -1 && m_state >= StateConnecting )
-    {
-      return m_state;
-    }
-
     m_state = StateConnecting;
 
     if( m_port == ( unsigned short ) -1 )
@@ -923,23 +918,22 @@ printf( "maximumMessage: %ld\n", m_streamSizes.cbMaximumMessage );
     {
       switch( m_socket )
       {
-        case -DNS::DNS_COULD_NOT_CONNECT:
+        case -ConnConnectionRefused:
           m_logInstance.log( LogLevelError, LogAreaClassConnection, m_server + ": connection refused" );
           break;
-        case -DNS::DNS_NO_HOSTS_FOUND:
-          m_logInstance.log( LogLevelError, LogAreaClassConnection, "connection error: no hosts found" );
-          break;
-        case -DNS::DNS_COULD_NOT_RESOLVE:
-          m_logInstance.log( LogLevelError, LogAreaClassConnection, "connection error: could not resolve" );
+        case -ConnDnsError:
+          m_logInstance.log( LogLevelError, LogAreaClassConnection, m_server + ": host not found" );
           break;
       }
+      ConnectionError e = (ConnectionError)-m_socket;
       cleanup();
+      return e;
     }
     else
       m_state = StateConnected;
 
     m_cancel = false;
-    return m_state;
+    return ConnNoError;
   }
 
   void Connection::disconnect( ConnectionError e )

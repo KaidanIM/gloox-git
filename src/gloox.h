@@ -370,12 +370,17 @@ namespace gloox
                                      * Use ClientBase::streamError() to find the reason. */
     ConnStreamClosed,               /**< The stream has been closed (by the server). */
     ConnIoError,                    /**< An I/O error occured. */
+    ConnConnectionRefused,          /**< The connection was refused by the server (on the socket level).
+                                     * @since 0.9 */
+    ConnDnsError,                   /**< Resolving the server's hostname failed.
+                                     * @since 0.9 */
     ConnOutOfMemory,                /**< Out of memory. Uhoh. */
     ConnNoSupportedAuth,            /**< The auth mechanisms the server offers are not supported
                                      * or the server offered no auth mechanisms at all. */
     ConnTlsFailed,                  /**< The server's certificate could not be verified or the TLS
                                      * handshake did not complete successfully. */
-    ConnCompressionFailed,          /**< Initializing compression failed. */
+    ConnCompressionFailed,          /**< Negotiating/initializing compression failed.
+                                     * @since 0.9 */
     ConnAuthenticationFailed,       /**< Authentication failed. Username/password wrong or account does
                                      * not exist. Use ClientBase::authError() to find the reason. */
     ConnUserDisconnected,           /**< The user (or higher-level protocol) requested a disconnect. */

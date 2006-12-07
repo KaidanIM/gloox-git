@@ -93,6 +93,8 @@ namespace gloox
        * @param block @b True for blocking, @b false for non-blocking connect. Defaults to @b true.
        * @return @b False if prerequisits are not met (server not set) or if the connection was refused,
        * @b true otherwise.
+       * @note Since 0.9 @link ConnectionListener::onDisconnect() onDisconnect() @endlink is called
+       * in addition to a return value of @b false.
        */
       bool connect( bool block = true );
 

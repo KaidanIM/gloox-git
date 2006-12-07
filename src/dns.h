@@ -57,16 +57,6 @@ namespace gloox
     public:
 
       /**
-       * Possible errors occuring while resolving and connecting.
-       */
-      enum DNSError
-      {
-        DNS_COULD_NOT_CONNECT = 1,      /**< None of the resolved hosts could be contacted. */
-        DNS_NO_HOSTS_FOUND,             /**< It was not possible to resolve SRV record. */
-        DNS_COULD_NOT_RESOLVE           /**< The given domain name could not be resolved. */
-      };
-
-      /**
        * A list of strings (used for server addresses) and ints (used for port numbers).
        */
       typedef std::map<std::string, int> HostMap;
