@@ -28,7 +28,9 @@ namespace gloox
       m_role( RoleNone ), m_type( TypeUnknown ), m_features( 0 ), m_flags( 0 ),
       m_joined( false ), m_unique( false )
   {
+#ifndef _MSC_VER
 #warning TODO: discover reserved room nickname: http://www.xmpp.org/extensions/xep-0045.html#reservednick
+#endif
     // here or in join()
     if( m_parent )
       m_parent->registerPresenceHandler( this );
@@ -54,7 +56,9 @@ namespace gloox
     x->addAttribute( "xmlns", XMLNS_MUC );
     if( !m_password.empty() )
       new Tag( x, "password",  m_password );
+#ifndef _MSC_VER
 #warning TODO: add history
+#endif
     if( m_parent )
       m_parent->send( s );
 
@@ -262,7 +266,9 @@ namespace gloox
 
   bool MUCRoom::handleIqID( Stanza *stanza, int context )
   {
+#ifndef _MSC_VER
 #warning FIXME: use local tracking, delete iterator here
+#endif
     switch( stanza->subtype() )
     {
       case StanzaIqGet:

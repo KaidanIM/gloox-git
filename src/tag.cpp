@@ -51,7 +51,9 @@ namespace gloox
 
   bool Tag::operator==( const Tag &right ) const
   {
+#ifndef _MSC_VER
 #warning operator== is incomplete WHAT'S MISSING?
+#endif
     if( m_name != right.m_name )
       return false;
 
