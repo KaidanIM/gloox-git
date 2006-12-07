@@ -924,7 +924,7 @@ printf( "maximumMessage: %ld\n", m_streamSizes.cbMaximumMessage );
       switch( m_socket )
       {
         case -DNS::DNS_COULD_NOT_CONNECT:
-          m_logInstance.log( LogLevelError, LogAreaClassConnection, "connection error: could not connect" );
+          m_logInstance.log( LogLevelError, LogAreaClassConnection, m_server + ": connection refused" );
           break;
         case -DNS::DNS_NO_HOSTS_FOUND:
           m_logInstance.log( LogLevelError, LogAreaClassConnection, "connection error: no hosts found" );
