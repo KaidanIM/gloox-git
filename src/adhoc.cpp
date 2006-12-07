@@ -242,7 +242,9 @@ namespace gloox
 
   void Adhoc::handleDiscoError( Stanza *stanza, int context )
   {
+#ifndef _MSC_VER
 #warning TODO: handle disco errors!!!
+#endif
   }
 
   void Adhoc::checkSupport( const JID& remote, AdhocHandler *ah )
