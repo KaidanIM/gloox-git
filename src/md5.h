@@ -50,12 +50,14 @@
 #ifndef MD5_H__
 #define MD5_H__
 
+#include "macros.h"
+
 #include <string>
 
 namespace gloox
 {
 
-  class MD5
+  class GLOOX_API MD5
   {
     public:
       /**

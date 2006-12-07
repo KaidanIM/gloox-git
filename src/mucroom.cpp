@@ -410,10 +410,20 @@ namespace gloox
 
   void MUCRoom::handleDiscoError( Stanza *stanza, int context )
   {
+    if( !m_roomListener )
+      return;
+
     switch( context )
     {
       case GetRoomInfo:
+        m_roomListener->handleMUCInfo( this, 0, "", 0 );
         break;
+      case GetRoomItems:
+      {
+        StringMap items;
+        m_roomListener->handleMUCItems( this, items );
+        break;
+      }
       default:
         break;
     }

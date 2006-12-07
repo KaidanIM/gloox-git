@@ -44,7 +44,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.8.5
    */
-  class Search : public IqHandler
+  class GLOOX_API Search : public IqHandler
   {
 
     public:

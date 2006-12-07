@@ -45,7 +45,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
-  class MUCRoomListener
+  class GLOOX_API MUCRoomListener
   {
     public:
       /**

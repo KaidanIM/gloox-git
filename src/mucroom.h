@@ -34,7 +34,8 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
-  class MUCRoom : private DiscoHandler, private PresenceHandler, private IqHandler, private MessageHandler
+  class GLOOX_API MUCRoom : private DiscoHandler, private PresenceHandler,
+                            private IqHandler, private MessageHandler
   {
     public:
       /**
