@@ -80,7 +80,7 @@ namespace gloox
        * Used to initiate the connection.
        * @return Returns the connection state.
        */
-      ConnectionState connect();
+      ConnectionError connect();
 
       /**
        * Use this periodically to receive data from the socket and to feed the parser.

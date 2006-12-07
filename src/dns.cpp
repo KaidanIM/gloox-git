@@ -17,6 +17,7 @@
 #include "config.h"
 #endif
 
+#include "gloox.h"
 #include "dns.h"
 
 #include <sys/types.h>
@@ -209,15 +210,15 @@ namespace gloox
   {
     HostMap hosts = resolve( domain );
     if( hosts.size() == 0 )
-      return -DNS_NO_HOSTS_FOUND;
+      return -ConnDnsError;
 
     struct protoent* prot;
     if( ( prot = getprotobyname( "tcp" ) ) == 0)
-      return -DNS_COULD_NOT_RESOLVE;
+      return -ConnDnsError;
 
     int fd;
     if( ( fd = socket( PF_INET, SOCK_STREAM, prot->p_proto ) ) == -1 )
-      return -DNS_COULD_NOT_RESOLVE;
+      return -ConnDnsError;
 
     struct hostent *h;
     struct sockaddr_in target;
@@ -235,7 +236,7 @@ namespace gloox
       target.sin_port = htons( port );
       if( ( h = gethostbyname( (*it).first.c_str() ) ) == 0 )
       {
-        ret = -DNS_COULD_NOT_RESOLVE;
+        ret = -ConnDnsError;
         continue;
       }
 
@@ -259,7 +260,7 @@ namespace gloox
     if( ret )
       return ret;
 
-    return -DNS_COULD_NOT_CONNECT;
+    return -ConnConnectionRefused;
   }
 #endif
 
@@ -268,28 +269,28 @@ namespace gloox
 #ifdef WIN32
     WSADATA wsaData;
     if( WSAStartup( MAKEWORD( 1, 1 ), &wsaData ) != 0 )
-      return -DNS_COULD_NOT_RESOLVE;
+      return -ConnDnsError;
 #endif
 
     struct protoent* prot;
     if( ( prot = getprotobyname( "tcp" ) ) == 0 )
     {
       cleanup();
-      return -DNS_COULD_NOT_RESOLVE;
+      return -ConnDnsError;
     }
 
     int fd;
     if( ( fd = socket( PF_INET, SOCK_STREAM, prot->p_proto ) ) == -1 )
     {
       cleanup();
-      return -DNS_COULD_NOT_CONNECT;
+      return -ConnConnectionRefused;
     }
 
     struct hostent *h;
     if( ( h = gethostbyname( domain.c_str() ) ) == 0 )
     {
       cleanup();
-      return -DNS_COULD_NOT_RESOLVE;
+      return -ConnDnsError;
     }
 
     struct sockaddr_in target;
@@ -299,7 +300,7 @@ namespace gloox
     if( h->h_length != sizeof( struct in_addr ) )
     {
       cleanup();
-      return -DNS_COULD_NOT_RESOLVE;
+      return -ConnDnsError;
     }
     else
     {
@@ -320,7 +321,7 @@ namespace gloox
     closesocket( fd );
     cleanup();
 #endif
-    return -DNS_COULD_NOT_CONNECT;
+    return -ConnConnectionRefused;
   }
 
   void DNS::cleanup()

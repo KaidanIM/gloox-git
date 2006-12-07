@@ -130,8 +130,11 @@ namespace gloox
       m_connection->setClientCert( m_clientKey, m_clientCerts );
 #endif
 
-    int ret = m_connection->connect();
-    if( ret == StateConnected )
+    if( m_connection->state() >= StateConnecting )
+      return true;
+
+    ConnectionError ret = m_connection->connect();
+    if( ret == ConnNoError )
     {
       header();
       if( block )
@@ -144,7 +147,10 @@ namespace gloox
         return true;
     }
     else
+    {
+      notifyOnDisconnect( ret );
       return false;
+    }
   }
 
   void ClientBase::filter( NodeType type, Stanza *stanza )
