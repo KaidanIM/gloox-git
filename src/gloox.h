@@ -600,6 +600,7 @@ namespace gloox
 
   /**
    * Describes the defined stanza error conditions of RFC 3920.
+   * Used by, eg., Stanza::error().
    */
   enum StanzaError
   {
