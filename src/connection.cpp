@@ -419,7 +419,7 @@ namespace gloox
     schannelCred.dwVersion = SCHANNEL_CRED_VERSION;
     schannelCred.grbitEnabledProtocols = SP_PROT_TLS1_CLIENT;
     schannelCred.cSupportedAlgs = 0; // FIXME
-#ifdef MSVC
+#ifdef _MSC_VER
     schannelCred.dwMinimumCipherStrength = 0; // FIXME
     schannelCred.dwMaximumCipherStrength = 0; // FIXME
 #else
