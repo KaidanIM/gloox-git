@@ -26,7 +26,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
-  class MUCMessageSession : public MessageSession
+  class GLOOX_API MUCMessageSession : public MessageSession
   {
     public:
       /**

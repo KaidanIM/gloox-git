@@ -13,11 +13,13 @@
 #ifndef SHA_H__
 #define SHA_H__
 
+#include "macros.h"
+
 #include <string>
 
 namespace gloox
 {
-  class SHA
+  class GLOOX_API SHA
   {
 
     public:
