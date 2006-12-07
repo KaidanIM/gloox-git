@@ -102,6 +102,7 @@ namespace gloox
               break;
             }
           }
+          m_track.erase( t );
           return true;
           break;
         }
@@ -129,6 +130,7 @@ namespace gloox
 
       m_track.erase( t );
     }
+
     return false;
   }
 

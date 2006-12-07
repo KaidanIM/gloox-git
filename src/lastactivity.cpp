@@ -101,16 +101,23 @@ namespace gloox
     if( !m_lastActivityHandler )
       return false;
 
-    int secs = 0;
-    const std::string seconds = stanza->findChild( "query" )->findAttribute( "seconds" );
-    if( !seconds.empty() )
-      secs = atoi( seconds.c_str() );
-
     switch( stanza->subtype() )
     {
       case StanzaIqResult:
-        m_lastActivityHandler->handleLastActivityResult( stanza->from(), secs );
+      {
+        int secs = 0;
+        Tag *q = stanza->findChild( "query" );
+        if( q )
+        {
+          const std::string seconds = q->findAttribute( "seconds" );
+          if( !seconds.empty() )
+          {
+            secs = atoi( seconds.c_str() );
+            m_lastActivityHandler->handleLastActivityResult( stanza->from(), secs );
+          }
+        }
         break;
+      }
       case StanzaIqError:
         m_lastActivityHandler->handleLastActivityError( stanza->from(), stanza->error() );
         break;
