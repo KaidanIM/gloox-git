@@ -16,40 +16,30 @@
 #define PARSER_H__
 
 #include "gloox.h"
+#include "parserhandler.h"
 
 #include <string>
 
 namespace gloox
 {
 
-  class ClientBase;
   class Stanza;
   class Tag;
 
   /**
-   * @brief This class is an abstraction of libiksemel's XML parser.
+   * @brief This class implemenats an XML parser.
    *
    * @author Jakob Schroeter <js@camaya.net>
-   * @since 0.4
+   * @since 0.9
    */
   class GLOOX_API Parser
   {
     public:
       /**
-       * Describes the return values of the parser.
-       */
-      enum ParserState
-      {
-        PARSER_OK,                     /**< Everything's alright. */
-        PARSER_NOMEM,                  /**< Memory allcation error. */
-        PARSER_BADXML                  /**< XML parse error. */
-      };
-
-      /**
        * Constructs a new Parser object.
        * @param parent The object to send incoming Tags to.
        */
-      Parser( ClientBase *parent );
+      Parser( ParserHandler *ph );
 
       /**
        * Virtual destructor.
@@ -59,9 +49,9 @@ namespace gloox
       /**
        * Use this function to feed the parser with more XML.
        * @param data Raw xml to parse.
-       * @return The return value indicates success or failure of the parsing.
+       * @return Returns @b true if parsing was successful, @b false otherwise.
        */
-      ParserState feed( const std::string& data );
+      bool feed( const std::string& data );
 
     private:
       void addTag();
@@ -75,24 +65,24 @@ namespace gloox
 
       enum ParserInternalState
       {
-        INITIAL,
-        TAG_OPENING,
-        TAG_OPENING_SLASH,
-        TAG_OPENING_LT,
-        TAG_INSIDE,
-        TAG_NAME_COLLECT,
-        TAG_NAME_COMPLETE,
-        TAG_ATTR,
-        TAG_ATTR_COMPLETE,
-        TAG_ATTR_EQUAL,
-        TAG_CLOSING,
-        TAG_CLOSING_SLASH,
-        TAG_VALUE_APOS,
-        TAG_VALUE,
-        TAG_PREAMBLE
+        Initial,
+        TagOpening,
+        TagOpeningSlash,
+        TagOpeningLt,
+        TagInside,
+        TagNameCollect,
+        TagNameComplete,
+        TagAttribute,
+        TagAttributeComplete,
+        TagAttributeEqual,
+        TagClosing,
+        TagClosingSlash,
+        TagValueApos,
+        TagValue,
+        TagPreamble
       };
 
-      ClientBase *m_parent;
+      ParserHandler *m_parserHandler;
       Tag *m_current;
       Stanza *m_root;
 

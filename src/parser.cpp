@@ -21,8 +21,8 @@
 namespace gloox
 {
 
-  Parser::Parser( ClientBase *parent )
-    : m_parent( parent ), m_current( 0 ), m_root( 0 ), m_state( INITIAL ),
+  Parser::Parser( ParserHandler *ph )
+    : m_parserHandler( ph ), m_current( 0 ), m_root( 0 ), m_state( Initial ),
       m_preamble( 0 )
   {
   }
@@ -32,7 +32,7 @@ namespace gloox
     delete m_root;
   }
 
-  Parser::ParserState Parser::feed( const std::string& data )
+  bool Parser::feed( const std::string& data )
   {
     std::string::const_iterator it = data.begin();
     for( ; it != data.end(); ++it )
@@ -43,12 +43,12 @@ namespace gloox
       if( !isValid( c ) )
       {
         cleanup();
-        return PARSER_BADXML;
+        return false;
       }
 
       switch( m_state )
       {
-        case INITIAL:
+        case Initial:
           m_tag = "";
           if( isWhitespace( c ) )
             break;
@@ -56,16 +56,16 @@ namespace gloox
           switch( c )
           {
             case '<':
-              m_state = TAG_OPENING;
+              m_state = TagOpening;
               break;
             case '>':
             default:
               cleanup();
-              return PARSER_BADXML;
+              return false;
               break;
           }
           break;
-        case TAG_OPENING:               // opening '<' has been found before
+        case TagOpening:               // opening '<' has been found before
           if( isWhitespace( c ) )
             break;
 
@@ -74,25 +74,25 @@ namespace gloox
             case '<':
             case '>':
               cleanup();
-              return PARSER_BADXML;
+              return false;
               break;
             case '/':
-              m_state = TAG_CLOSING_SLASH;
+              m_state = TagClosingSlash;
               break;
             case '?':
-              m_state = TAG_NAME_COLLECT;
+              m_state = TagNameCollect;
               m_preamble = 1;
               break;
             default:
               m_tag += c;
-              m_state = TAG_NAME_COLLECT;
+              m_state = TagNameCollect;
               break;
           }
           break;
-        case TAG_NAME_COLLECT:          // we're collecting the tag's name, we have at least one octet already
+        case TagNameCollect:          // we're collecting the tag's name, we have at least one octet already
           if( isWhitespace( c ) )
           {
-            m_state = TAG_NAME_COMPLETE;
+            m_state = TagNameComplete;
             break;
           }
 
@@ -101,38 +101,38 @@ namespace gloox
             case '<':
             case '?':
               cleanup();
-              return PARSER_BADXML;
+              return false;
               break;
             case '/':
-              m_state = TAG_OPENING_SLASH;
+              m_state = TagOpeningSlash;
               break;
             case '>':
               addTag();
-              m_state = TAG_INSIDE;
+              m_state = TagInside;
               break;
             default:
               m_tag += c;
               break;
           }
           break;
-        case TAG_INSIDE:                // we're inside a tag, expecting a child tag or cdata
+        case TagInside:                // we're inside a tag, expecting a child tag or cdata
           m_tag = "";
           switch( c )
           {
             case '<':
               addCData();
-              m_state = TAG_OPENING;
+              m_state = TagOpening;
               break;
             case '>':
               cleanup();
-              return PARSER_BADXML;
+              return false;
               break;
             default:
               m_cdata += c;
               break;
           }
           break;
-        case TAG_OPENING_SLASH:         // a slash in an opening tag has been found, initing close of the tag
+        case TagOpeningSlash:         // a slash in an opening tag has been found, initing close of the tag
           if( isWhitespace( c ) )
             break;
 
@@ -142,18 +142,18 @@ namespace gloox
             if( !closeTag() )
             {
               cleanup();
-              return PARSER_BADXML;
+              return false;
             }
 
-            m_state = INITIAL;
+            m_state = Initial;
           }
           else
           {
             cleanup();
-            return PARSER_BADXML;
+            return false;
           }
           break;
-        case TAG_CLOSING_SLASH:         // we have found the '/' of a closing tag
+        case TagClosingSlash:         // we have found the '/' of a closing tag
           if( isWhitespace( c ) )
             break;
 
@@ -163,37 +163,37 @@ namespace gloox
             case '<':
             case '/':
               cleanup();
-              return PARSER_BADXML;
+              return false;
               break;
             default:
               m_tag += c;
-              m_state = TAG_CLOSING;
+              m_state = TagClosing;
               break;
           }
           break;
-        case TAG_CLOSING:               // we're collecting the name of a closing tag
+        case TagClosing:               // we're collecting the name of a closing tag
           switch( c )
           {
             case '<':
             case '/':
               cleanup();
-              return PARSER_BADXML;
+              return false;
               break;
             case '>':
               if( !closeTag() )
               {
                 cleanup();
-                return PARSER_BADXML;
+                return false;
               }
 
-              m_state = INITIAL;
+              m_state = Initial;
               break;
             default:
               m_tag += c;
               break;
           }
           break;
-        case TAG_NAME_COMPLETE:        // a tag name is complete, expect tag close or attribs
+        case TagNameComplete:        // a tag name is complete, expect tag close or attribs
           if( isWhitespace( c ) )
             break;
 
@@ -201,18 +201,18 @@ namespace gloox
           {
             case '<':
               cleanup();
-              return PARSER_BADXML;
+              return false;
               break;
             case '/':
-              m_state = TAG_OPENING_SLASH;
+              m_state = TagOpeningSlash;
               break;
             case '>':
               if( m_preamble == 1 )
               {
                 cleanup();
-                return PARSER_BADXML;
+                return false;
               }
-              m_state = TAG_INSIDE;
+              m_state = TagInside;
               addTag();
               break;
             case '?':
@@ -221,19 +221,19 @@ namespace gloox
               else
               {
                 cleanup();
-                return PARSER_BADXML;
+                return false;
               }
               break;
             default:
               m_attrib += c;
-              m_state = TAG_ATTR;
+              m_state = TagAttribute;
               break;
           }
           break;
-        case TAG_ATTR:                  // we're collecting the name of an attribute, we have at least 1 octet
+        case TagAttribute:                  // we're collecting the name of an attribute, we have at least 1 octet
           if( isWhitespace( c ) )
           {
-            m_state = TAG_ATTR_COMPLETE;
+            m_state = TagAttributeComplete;
             break;
           }
 
@@ -243,34 +243,34 @@ namespace gloox
             case '/':
             case '>':
               cleanup();
-              return PARSER_BADXML;
+              return false;
               break;
             case '=':
-              m_state = TAG_ATTR_EQUAL;
+              m_state = TagAttributeEqual;
               break;
             default:
               m_attrib += c;
           }
           break;
-        case TAG_ATTR_COMPLETE:         // we're expecting an equals sign or ws or the attrib value
+        case TagAttributeComplete:         // we're expecting an equals sign or ws or the attrib value
           if( isWhitespace( c ) )
             break;
 
           switch( c )
           {
             case '=':
-              m_state = TAG_ATTR_EQUAL;
+              m_state = TagAttributeEqual;
               break;
             case '<':
             case '/':
             case '>':
             default:
               cleanup();
-              return PARSER_BADXML;
+              return false;
               break;
           }
           break;
-        case TAG_ATTR_EQUAL:            // we have found a equals sign
+        case TagAttributeEqual:            // we have found a equals sign
           if( isWhitespace( c ) )
             break;
 
@@ -278,29 +278,29 @@ namespace gloox
           {
             case '\'':
             case '"':
-              m_state = TAG_VALUE;
+              m_state = TagValue;
               break;
             case '=':
             case '<':
             case '>':
             default:
               cleanup();
-              return PARSER_BADXML;
+              return false;
               break;
           }
           break;
-        case TAG_VALUE:                 // we're expecting value data
+        case TagValue:                 // we're expecting value data
           switch( c )
           {
             case '<':
             case '>':
               cleanup();
-              return PARSER_BADXML;
+              return false;
               break;
             case '\'':
             case '"':
               addAttribute();
-              m_state = TAG_NAME_COMPLETE;
+              m_state = TagNameComplete;
               break;
             default:
               m_value += c;
@@ -313,7 +313,7 @@ namespace gloox
 //       printf( "parser state: %d\n", m_state );
     }
 
-    return PARSER_OK;
+    return true;
   }
 
   void Parser::addTag()
@@ -322,7 +322,7 @@ namespace gloox
     {
 //       printf( "created Stanza named %s, ", m_tag.c_str() );
       m_root = new Stanza( m_tag, "", "default", true );
-      m_current = (Tag*)m_root;
+      m_current = m_root;
     }
     else
     {
@@ -406,7 +406,7 @@ namespace gloox
     m_attrib = "";
     m_value = "";
     m_attribs.clear();
-    m_state = INITIAL;
+    m_state = Initial;
     m_preamble = 0;
   }
 
@@ -428,18 +428,21 @@ namespace gloox
 
   void Parser::streamEvent( Stanza *stanza )
   {
-    if( m_parent && stanza )
-    {
-      ClientBase::NodeType type = ClientBase::NODE_STREAM_CHILD;
-      if( stanza->name() == "stream:stream" )
-        type = ClientBase::NODE_STREAM_START;
-      else if( stanza->name() == "stream:error" )
-        type = ClientBase::NODE_STREAM_ERROR;
+    if( !m_parserHandler )
+      return;
 
-      m_parent->filter( type, stanza );
+    if( stanza )
+    {
+      NodeType type = NodeStreamChild;
+      if( stanza->name() == "stream:stream" )
+        type = NodeStreamStart;
+      else if( stanza->name() == "stream:error" )
+        type = NodeStreamError;
+
+      m_parserHandler->handleStanza( type, stanza );
     }
-    else if( !stanza )
-      m_parent->filter( ClientBase::NODE_STREAM_CLOSE, 0 );
+    else
+      m_parserHandler->handleStanza( NodeStreamClose, 0 );
   }
 
 }
