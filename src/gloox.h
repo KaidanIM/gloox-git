@@ -334,6 +334,7 @@ namespace gloox
   const std::string XMLNS_MUC_UNIQUE        = "http://jabber.org/protocol/muc#unique";
   const std::string XMLNS_MUC_OWNER         = "http://jabber.org/protocol/muc#owner";
   const std::string XMLNS_MUC_ROOMINFO      = "http://jabber.org/protocol/muc#roominfo";
+  const std::string XMLNS_MUC_ROOMS         = "http://jabber.org/protocol/muc#rooms";
 
   const std::string XMLNS_XMPP_STREAM       = "urn:ietf:params:xml:ns:xmpp-streams";
   const std::string XMLNS_XMPP_STANZAS      = "urn:ietf:params:xml:ns:xmpp-stanzas";
@@ -372,6 +373,7 @@ namespace gloox
                                      * Use ClientBase::streamError() to find the reason. */
     ConnStreamClosed,               /**< The stream has been closed (by the server). */
     ConnIoError,                    /**< An I/O error occured. */
+    ConnParseError,                 /**< An XML parse error occurred. */
     ConnConnectionRefused,          /**< The connection was refused by the server (on the socket level).
                                      * @since 0.9 */
     ConnDnsError,                   /**< Resolving the server's hostname failed.
@@ -884,17 +886,6 @@ namespace gloox
   /**
    *
    */
-  enum MUCRoomType
-  {
-    TypeUnknown,                    /**< */
-    TypeNonAnonymous,               /**< */
-    TypeSemiAnonymous,              /**< */
-    TypeFullyAnonymous              /**< */
-  };
-
-  /**
-   *
-   */
   enum MUCRoomFlag
   {
     FlagPasswordProtected  =    1,  /**< Password-protected room.*/
@@ -909,7 +900,8 @@ namespace gloox
     FlagSemiAnonymous      =  512,  /**< Semi-anonymous room. */
     FlagTemporary          = 1024,  /**< Temporary room. */
     FlagUnmoderated        = 2048,  /**< Unmoderated room. */
-    FlagUnsecured          = 4096   /**< Unsecured room. */
+    FlagUnsecured          = 4096,  /**< Unsecured room. */
+    FlagFullyAnonymous     = 8192   /**< Fully anonymous room. */
   };
 
   /**
