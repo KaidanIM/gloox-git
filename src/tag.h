@@ -195,7 +195,7 @@ namespace gloox
        * with an optional value. The name of the child element does not matter.
        * @param attr The name of the attribute of the child element.
        * @param value The value of the attribute of the child element.
-       * @return The child if found, NUL otherwise.
+       * @return The child if found, NULL otherwise.
        */
       virtual Tag* findChildWithAttrib( const std::string& attr, const std::string& value = "" );
 
@@ -209,7 +209,16 @@ namespace gloox
       virtual bool hasChildWithAttrib( const std::string& attr, const std::string& value = "" ) const;
 
       /**
-       * Returns whether a Tag is considered empty, i.e. invalid.
+       * Returns a list of child tags of the current tag with the given name.
+       * @param name The name of the tags to look for.
+       * @return A list of tags with the given name.
+       * @note The tags are still linked to the current Tag and should not be deleted from the TagList.
+       * @since 0.9
+       */
+      TagList findTags( const std::string& name );
+
+      /**
+       * Returns whether the Tag is considered empty, i.e. invalid.
        * @return @b True if the Tag is valid, @b false if not.
        */
       virtual bool empty() const { return m_name.empty(); };

@@ -326,6 +326,18 @@ namespace gloox
     return replace( what, d );
   }
 
+  Tag::TagList Tag::findTags( const std::string& name )
+  {
+    Tag::TagList ret;
+    Tag::TagList::const_iterator it = m_children.begin();
+    for( ; it != m_children.end(); ++it )
+    {
+      if( (*it)->name() == name )
+        ret.push_back( (*it) );
+    }
+    return ret;
+  }
+
   Tag* Tag::clone() const
   {
     Tag *t = new Tag( name(), cdata() );
