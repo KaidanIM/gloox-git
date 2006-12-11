@@ -38,6 +38,10 @@ namespace gloox
     bool self;                      /**< This is true if the struct refers to this instance's user.
                                      * (MUC servers send presence to all room occupants, including
                                      * the originator of the presence.) */
+    JID *jid;                       /**< Pointer to the occupant's full JID in a non-anonymous room or
+                                     * in a semi-anonymous room if the user (of gloox) has a role of
+                                     * moderator.
+                                     * 0 if the MUC service doesn't provide the JID. */
   };
 
   /**
@@ -54,7 +58,7 @@ namespace gloox
       virtual ~MUCRoomListener() {};
 
       /**
-       *
+       * @note The MUCRoomParticipant struct will be cleaned up after this function returned.
        */
       virtual void handleMUCParticipantPresence( MUCRoom *room, const MUCRoomParticipant participant,
                                                  Presence presence ) = 0;

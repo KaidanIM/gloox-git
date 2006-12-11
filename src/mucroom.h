@@ -42,6 +42,24 @@ namespace gloox
   {
     public:
       /**
+       * Alloowable history request types. To disable sending of history, use any value except
+       * HistoryUnknwon and specify a zero-length time span (using setRequestHistory()).
+       */
+      enum HistoryRequestType
+      {
+        HistoryUnknwon,             /**< It is up to the service to decide how much history to send.
+                                     * This is the default. */
+        HistoryMaxChars,            /**< Limit the total number of characters in the history to "X"
+                                     * (where the character count is the characters of the complete
+                                     * XML stanzas, not only their XML character data). */
+        HistoryMaxStanzas,          /**< Limit the total number of messages in the history to "X". */
+        HistorySeconds,             /**< Send only the messages received in the last "X" seconds. */
+        HistorySince                /**< Send only the messages received since the datetime specified
+                                     * (which MUST conform to the DateTime profile specified in Jabber
+                                     * Date and Time Profiles (XEP-0082)). */
+      };
+
+      /**
        * Creates a new abstraction of a Multi-User Chat room. The room is not joined automatically.
        * Use join() to join the room, use leave() to leave it.
        * @param parent The ClientBase object to use for the communication.
@@ -176,6 +194,24 @@ namespace gloox
       void addHistory( const std::string& message, const JID& from, const std::string& stamp );
 
       /**
+       * Use this function to request room history. Set @c value to zero to disable the room
+       * history request. You should not use HistorySince with this function.
+       * @param value Represents either the number of requested characters, the number of requested
+       * message stanzas, or the number seconds, depending on the value of @c type.
+       * @param type
+       * @note If this function is not used to request a specific amount of room history, it is up
+       * to the MUC service to decide how much history to send.
+       */
+      void setRequestHistory( int value, HistoryRequestType type );
+
+      /**
+       * Use this function to request room history since specific datetime.
+       * @param since A string representing a datetime conforming to the DateTime profile specified
+       * in Jabber Date and Time Profiles (XEP-0082).
+       */
+      void setRequestHistory( const std::string& since );
+
+      /**
        * This static function allows to formally decline a MUC invitation received via the
        * MUCInvitationListener.
        * @param message A reason for declining the invitation.
@@ -244,6 +280,10 @@ namespace gloox
       MUCRoomAffiliation m_affiliation;
       MUCRoomRole m_role;
 
+      HistoryRequestType m_historyType;
+
+      std::string m_historySince;
+      int m_historyValue;
       int m_flags;
       bool m_configChanged;
       bool m_publishNick;
