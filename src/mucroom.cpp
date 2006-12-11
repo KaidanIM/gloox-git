@@ -25,8 +25,9 @@ namespace gloox
 
   MUCRoom::MUCRoom( ClientBase *parent, const JID& nick, MUCRoomListener *mrl )
     : m_parent( parent ), m_nick( nick ), m_roomListener( mrl ), m_affiliation( AffiliationNone ),
-      m_role( RoleNone ), m_flags( 0 ), m_configChanged( false ), m_publishNick( false ),
-      m_publish( false ), m_joined( false ), m_unique( false )
+      m_role( RoleNone ), m_historyType( HistoryUnknown ), m_historyValue( 0 ), m_flags( 0 ),
+      m_configChanged( false ), m_publishNick( false ), m_publish( false ), m_joined( false ),
+      m_unique( false )
   {
 #ifndef _MSC_VER
 #warning TODO: discover reserved room nickname: http://www.xmpp.org/extensions/xep-0045.html#reservednick
@@ -62,9 +63,39 @@ namespace gloox
     x->addAttribute( "xmlns", XMLNS_MUC );
     if( !m_password.empty() )
       new Tag( x, "password",  m_password );
-#ifndef _MSC_VER
-#warning TODO: add history request
-#endif
+    if( m_historyType != HistoryUnknown )
+    {
+      switch( m_historyType )
+      {
+        case HistoryMaxChars:
+        {
+          Tag *h = new Tag( x, "history" );
+          h->addAttribute( "maxchars", m_historyValue );
+          break;
+        }
+        case HistoryMaxStanzas:
+        {
+          Tag *h = new Tag( x, "history" );
+          h->addAttribute( "maxstanzas", m_historyValue );
+          break;
+        }
+        case HistorySeconds:
+        {
+          Tag *h = new Tag( x, "history" );
+          h->addAttribute( "seconds", m_historyValue );
+          break;
+        }
+        case HistorySince:
+        {
+          Tag *h = new Tag( x, "history" );
+          h->addAttribute( "since", m_historySince );
+          break;
+        }
+        default:
+          break;
+      }
+    }
+
     if( m_parent )
       m_parent->send( s );
 
@@ -217,6 +248,20 @@ namespace gloox
     m_parent->send( m );
   }
 
+  void setRequestHistory( int value, HistoryRequestType type )
+  {
+    m_historyType = type;
+    m_historySince = "";
+    m_historyValue = value;
+  }
+
+  void setRequestHistory( const std::string& since )
+  {
+    m_historyType = HistorySince;
+    m_historySince = since;
+    m_historyValue = 0;
+  }
+
   void MUCRoom::handlePresence( Stanza *stanza )
   {
     if( stanza->from().bare() != m_nick.bare() )
@@ -238,6 +283,7 @@ namespace gloox
         MUCRoomParticipant party;
         party.self = false;
         party.nick = new JID( stanza->from() );
+        party.jid = 0;
         Tag *i;
         if( ( i = t->findChild( "item" ) ) != 0 )
         {
@@ -260,6 +306,10 @@ namespace gloox
             party.role = RoleVisitor;
           else
             party.role = RoleNone;
+
+          std::string jid = i->findAttribute( "jid" );
+          if( !jid.empty() )
+            party.jid = new JID( jid );
         }
 
         Tag::TagList l = stanza->children();
@@ -271,9 +321,7 @@ namespace gloox
             const std::string code = i->findAttribute( "code" );
             if( code == "100" )
             {
-              m_flags ^= FlagSemiAnonymous;
-              m_flags ^= FlagFullyAnonymous;
-              m_flags |= FlagNonAnonymous;
+              setNonAnonymous();
             }
             else if( code == "101" )
             {
@@ -309,6 +357,8 @@ namespace gloox
 //         m_participants.push_back( party );
 
         m_roomListener->handleMUCParticipantPresence( this, party, stanza->show() );
+        delete party.jid;
+        delete party.nick;
       }
     }
   }
