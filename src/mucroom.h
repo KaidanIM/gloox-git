@@ -220,6 +220,12 @@ namespace gloox
        */
       static Stanza* declineInvitation( const JID& room, const JID& invitee, const std::string& reason );
 
+      /**
+       * It is not possible for a visitor to speak in a moderated room. Use this function to request
+       * voice from the moderator.
+       */
+      void requestVoice();
+
       // reimplemented from DiscoHandler
       virtual void handleDiscoInfoResult( Stanza *stanza, int context );
 

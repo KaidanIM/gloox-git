@@ -71,7 +71,7 @@ namespace gloox
         FieldTypeInvalid,           /**< The field is invalid. Only possible if the field was created from
                                      * a Tag not correctly describing a Data Form Field. */
         FieldTypeNone               /**< The field is child of either a &lt;reported&gt; or &lt;item&gt;
-                                     * element. Do not use. */
+                                     * element or has no type attribute. */
       };
 
       /**
