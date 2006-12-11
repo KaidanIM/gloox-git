@@ -133,17 +133,17 @@ namespace gloox
        * Use this function to register an @ref DiscoNodeHandler with the Disco
        * object. The DiscoNodeHandler will receive disco#items queries which are
        * directed to the corresponding node registered for the handler.
-       * Only one handler per node is possible.
        * @param nh The NodeHandler-derived object to register.
        * @param node The node name to associate with this handler.
        */
       void registerNodeHandler( DiscoNodeHandler *nh, const std::string& node );
 
       /**
-       * Removes the node handler.
+       * Removes the node handler for the given node.
+       * @param nh The NodeHandler to unregister.
        * @param node The node for which the handler shall be removed.
        */
-      void removeNodeHandler( const std::string& node );
+      void removeNodeHandler( DiscoNodeHandler *nh, const std::string& node );
 
       // reimplemented from IqHandler.
       virtual bool handleIq( Stanza *stanza );
@@ -169,10 +169,11 @@ namespace gloox
 
       ClientBase *m_parent;
 
-      typedef std::list<DiscoHandler*>                   DiscoHandlerList;
-      typedef std::map<std::string, DiscoNodeHandler*>   DiscoNodeHandlerMap;
+      typedef std::list<DiscoHandler*> DiscoHandlerList;
+      typedef std::list<DiscoNodeHandler*> DiscoNodeHandlerList;
+      typedef std::map<std::string, DiscoNodeHandlerList> DiscoNodeHandlerMap;
       typedef std::map<std::string, DiscoHandlerContext> DiscoHandlerMap;
-      typedef std::list<DiscoItem*>                      ItemList;
+      typedef std::list<DiscoItem*> ItemList;
 
       DiscoHandlerList m_discoHandlers;
       DiscoNodeHandlerMap m_nodeHandlers;

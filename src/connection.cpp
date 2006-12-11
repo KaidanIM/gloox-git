@@ -1032,24 +1032,11 @@ printf( "maximumMessage: %ld\n", m_streamSizes.cbMaximumMessage );
     }
     m_totalBytesIn += buf.length();
 
-    Parser::ParserState ret = m_parser->feed( buf );
-    if( ret != Parser::PARSER_OK )
+    if( !m_parser->feed( buf ) )
     {
       cleanup();
-      switch( ret )
-      {
-        case Parser::PARSER_BADXML:
-          m_logInstance.log( LogLevelError, LogAreaClassConnection, "XML parse error" );
-          break;
-        case Parser::PARSER_NOMEM:
-          m_logInstance.log( LogLevelError, LogAreaClassConnection, "memory allocation error" );
-          break;
-        default:
-          m_logInstance.log( LogLevelError, LogAreaClassConnection, "unexpected error" );
-          break;
-      }
-      //printf( "buffer data: %s\n", buf.c_str() );
-      return ConnIoError;
+      m_logInstance.log( LogLevelError, LogAreaClassConnection, "XML parse error" );
+      return ConnParseError;
     }
 
     return ConnNoError;
