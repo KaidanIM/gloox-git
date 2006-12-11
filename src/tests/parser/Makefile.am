@@ -6,8 +6,8 @@ AM_CPPFLAGS = -g3 -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-com
 
 noinst_PROGRAMS = parser_test
 
-parser_test_SOURCES = parser_test.cpp ../../parser.cpp tag.cpp stanza.cpp jid.cpp prep.cpp clientbase.cpp
+parser_test_SOURCES = parser_test.cpp ../../parser.cpp tag.cpp stanza.cpp jid.cpp prep.cpp
 parser_test_LDADD =
 parser_test_CFLAGS = $(CPPFLAGS)
 
-noinst_HEADERS = parser.h clientbase.h
+noinst_HEADERS = stanza.h

@@ -98,6 +98,25 @@ int main( int /*argc*/, char* /*argv[]*/ )
   t = 0;
   c = 0;
 
+  //-------
+  name = "findTags test";
+  t = new Tag( "hello" );
+  t->addAttribute( "test", "bacd" );
+  t->addChild( new Tag( "test" ) );
+  t->addChild( new Tag( "test" ) );
+  t->addChild( new Tag( "test" ) );
+  t->addChild( new Tag( "test" ) );
+  if( t->findTags( "test" ).size() != 4 )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+  delete t;
+  delete c;
+  t = 0;
+  c = 0;
+
+
 
 
 
