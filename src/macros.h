@@ -15,8 +15,8 @@
 #define GLOOX_MACROS_H__
 
 #ifdef _MSC_VER
-#pragma warning( disable:4251 )
-#pragma warning( disable:4786 )
+#  pragma warning( disable:4251 )
+#  pragma warning( disable:4786 )
 #endif
 
 #ifdef WIN32
@@ -28,17 +28,18 @@
 #    endif
 #  endif
 #endif
+
 #ifndef GLOOX_API
 #  define GLOOX_API
 #endif
 
 
 #if defined( __GNUC__ ) && ( __GNUC__ - 0 > 3 || ( __GNUC__ - 0 == 3 && __GNUC_MINOR__ - 0 >= 2 ) )
-#define GLOOX_DEPRECATED __attribute__ ( (deprecated) )
+#  define GLOOX_DEPRECATED __attribute__ ( (deprecated) )
 #elif defined( _MSC_VER ) && ( _MSC_VER >= 1300 )
-#define GLOOX_DEPRECATED __declspec( deprecated )
+#  define GLOOX_DEPRECATED __declspec( deprecated )
 #else
-#define GLOOX_DEPRECATED
+#  define GLOOX_DEPRECATED
 #endif
 
 

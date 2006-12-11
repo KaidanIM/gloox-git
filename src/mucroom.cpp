@@ -25,8 +25,8 @@ namespace gloox
 
   MUCRoom::MUCRoom( ClientBase *parent, const JID& nick, MUCRoomListener *mrl )
     : m_parent( parent ), m_nick( nick ), m_roomListener( mrl ), m_affiliation( AffiliationNone ),
-      m_role( RoleNone ), m_type( TypeUnknown ), m_features( 0 ), m_flags( 0 ),
-      m_joined( false ), m_unique( false )
+      m_role( RoleNone ), m_flags( 0 ), m_configChanged( false ), m_publishNick( false ),
+      m_publish( false ), m_joined( false ), m_unique( false )
   {
 #ifndef _MSC_VER
 #warning TODO: discover reserved room nickname: http://www.xmpp.org/extensions/xep-0045.html#reservednick
@@ -40,6 +40,12 @@ namespace gloox
   {
     if( m_joined )
       leave();
+
+    if( m_parent )
+    {
+      m_parent->removePresenceHandler( this );
+      m_parent->disco()->removeNodeHandler( this, XMLNS_MUC_ROOMS );
+    }
   }
 
   void MUCRoom::join()
@@ -57,7 +63,7 @@ namespace gloox
     if( !m_password.empty() )
       new Tag( x, "password",  m_password );
 #ifndef _MSC_VER
-#warning TODO: add history
+#warning TODO: add history request
 #endif
     if( m_parent )
       m_parent->send( s );
@@ -90,6 +96,18 @@ namespace gloox
   {
     if( m_session && m_joined )
       m_session->setSubject( subject );
+  }
+
+  void MUCRoom::setNick( const std::string& nick )
+  {
+    if( m_parent )
+    {
+      m_newNick = nick;
+
+      Tag *p = new Tag( "presence" );
+      p->addAttribute( "to", m_nick.bare() + "/" + m_newNick );
+      m_parent->send( p );
+    }
   }
 
 //   void MUCRoom::setUnique( bool unique )
@@ -125,6 +143,78 @@ namespace gloox
       JID j( m_nick.bare() );
       m_parent->disco()->getDiscoItems( j, "", this, GetRoomItems );
     }
+  }
+
+  void MUCRoom::setPresence( Presence presence, const std::string& msg )
+  {
+    if( m_parent && presence != PresenceUnavailable && m_joined )
+    {
+      Stanza *p = Stanza::createPresenceStanza( m_nick, msg, presence );
+      m_parent->send( p );
+    }
+  }
+
+  void MUCRoom::invite( const JID& invitee, const std::string& reason, bool cont )
+  {
+    if( !m_parent )
+      return;
+
+    Tag *m = new Tag( "message" );
+    m->addAttribute( "to", m_nick.bare() );
+    Tag *x = new Tag( m, "x" );
+    x->addAttribute( "xmlns", XMLNS_MUC_USER );
+    Tag *i = new Tag( x, "invite" );
+    i->addAttribute( "to", invitee.bare() );
+    if( !reason.empty() )
+      new Tag( i, "reason", reason );
+    if( cont )
+      new Tag( i, "continue" );
+
+    m_parent->send( m );
+  }
+
+  Stanza* MUCRoom::declineInvitation( const JID& room, const JID& invitee, const std::string& reason )
+  {
+    Stanza *m = new Stanza( "message" );
+    m->addAttribute( "to", room.bare() );
+    Tag *x = new Tag( m, "x" );
+    x->addAttribute( "xmlns", XMLNS_MUC_USER );
+    Tag *d = new Tag( x, "decline" );
+    d->addAttribute( "to", invitee.bare() );
+    if( !reason.empty() )
+      new Tag( d, "reason", reason );
+
+    return m;
+  }
+
+  void MUCRoom::setPublish( bool publish, bool publishNick )
+  {
+    m_publish = publish;
+    m_publishNick = publishNick;
+
+    if( !m_parent )
+      return;
+
+    if( m_publish )
+      m_parent->disco()->registerNodeHandler( this, XMLNS_MUC_ROOMS );
+    else
+      m_parent->disco()->removeNodeHandler( this, XMLNS_MUC_ROOMS );
+  }
+
+  void MUCRoom::addHistory( const std::string& message, const JID& from, const std::string& stamp )
+  {
+    if( !m_joined || !m_parent )
+      return;
+
+    Tag *m = new Tag( "message" );
+    m->addAttribute( "to", m_nick.bare() );
+    new Tag( m, "body", message );
+    Tag *x = new Tag( m, "x" );
+    x->addAttribute( "xmlns", XMLNS_X_DELAY );
+    x->addAttribute( "from", from.full() );
+    x->addAttribute( "stamp", stamp );
+
+    m_parent->send( m );
   }
 
   void MUCRoom::handlePresence( Stanza *stanza )
@@ -181,9 +271,9 @@ namespace gloox
             const std::string code = i->findAttribute( "code" );
             if( code == "100" )
             {
-              party.self = true;
-              m_role = party.role;
-              m_affiliation = party.affiliation;
+              m_flags ^= FlagSemiAnonymous;
+              m_flags ^= FlagFullyAnonymous;
+              m_flags |= FlagNonAnonymous;
             }
             else if( code == "101" )
             {
@@ -191,21 +281,57 @@ namespace gloox
             }
             else if( code == "110" )
             {
-              m_type = TypeNonAnonymous;
-//               m_roomListener->handleRoomConfig( m_type );
+              party.self = true;
+              m_role = party.role;
+              m_affiliation = party.affiliation;
             }
             else if( code == "210" )
             {
               m_nick.setResource( stanza->from().resource() );
             }
+            else if( code == "303" )
+            {
+              if( stanza->from().resource() == m_nick.resource()
+                  && stanza->show() == PresenceUnavailable
+                  && !m_newNick.empty() )
+              {
+#warning TODO: implement nick change
+                // myself requested nick change
+              }
+              else if( stanza->show() == PresenceUnavailable )
+              {
+                // somebody else changed nicks
+              }
+            }
           }
         }
 
-        m_participants.push_back( party );
+//         m_participants.push_back( party );
 
         m_roomListener->handleMUCParticipantPresence( this, party, stanza->show() );
       }
     }
+  }
+
+  void MUCRoom::setNonAnonymous()
+  {
+    m_flags ^= FlagSemiAnonymous;
+    m_flags ^= FlagFullyAnonymous;
+    m_flags |= FlagNonAnonymous;
+  }
+
+  void MUCRoom::setSemiAnonymous()
+  {
+    m_flags ^= FlagNonAnonymous;
+    m_flags ^= FlagFullyAnonymous;
+    m_flags |= FlagSemiAnonymous;
+  }
+
+  void MUCRoom::setFullyAnonymous()
+  {
+    m_flags ^= FlagNonAnonymous;
+    m_flags ^= FlagSemiAnonymous;
+    m_flags |= FlagFullyAnonymous;
   }
 
   void MUCRoom::handleMessage( Stanza *stanza )
@@ -223,18 +349,37 @@ namespace gloox
         if( (*it)->name() == "status" )
         {
           const std::string code = (*it)->findAttribute( "code" );
-          if( code == "104" )
+          if( code == "100" )
+          {
+            setNonAnonymous();
+          }
+          else if( code == "104" )
             /*m_configChanged =*/ (void)true;
-          if( code == "170" )
+          else if( code == "170" )
             m_flags |= FlagPublicLogging;
           else if( code == "171" )
             m_flags ^= FlagPublicLogging;
           else if( code == "172" )
-            m_type = TypeNonAnonymous;
+          {
+            setNonAnonymous();
+          }
           else if( code == "173" )
-            m_type = TypeSemiAnonymous;
+          {
+            setSemiAnonymous();
+          }
           else if( code == "174" )
-            m_type = TypeFullyAnonymous;
+          {
+            setFullyAnonymous();
+          }
+        }
+        else if( (*it)->name() == "decline" )
+        {
+          std::string reason;
+          JID invitee( (*it)->findAttribute( "from" ) );
+          if( (*it)->hasChild( "reason" ) )
+            reason = (*it)->findChild( "reason" )->cdata();
+          m_roomListener->handleMUCInviteDecline( this, invitee, reason );
+          return;
         }
         // call some handler?
       }
@@ -325,10 +470,10 @@ namespace gloox
     {
       case GetRoomInfo:
       {
-        int oldfeatures = m_features;
-        m_features = 0;
-        if( oldfeatures & FlagPublicLogging )
-          m_features |= FlagPublicLogging;
+        int oldflags = m_flags;
+        m_flags = 0;
+        if( oldflags & FlagPublicLogging )
+          m_flags |= FlagPublicLogging;
 
         std::string name;
         DataForm *df = 0;
@@ -342,29 +487,31 @@ namespace gloox
             if( (*it)->name() == "feature" )
             {
               if( (*it)->findAttribute( "var" ) == "muc_hidden" )
-                m_features |= FlagHidden;
+                m_flags |= FlagHidden;
               else if( (*it)->findAttribute( "var" ) == "muc_membersonly" )
-                m_features |= FlagMembersOnly;
+                m_flags |= FlagMembersOnly;
               else if( (*it)->findAttribute( "var" ) == "muc_moderated" )
-                m_features |= FlagModerated;
+                m_flags |= FlagModerated;
               else if( (*it)->findAttribute( "var" ) == "muc_nonanonymous" )
-                m_features |= FlagNonAnonymous;
+                setNonAnonymous();
               else if( (*it)->findAttribute( "var" ) == "muc_open" )
-                m_features |= FlagOpen;
+                m_flags |= FlagOpen;
               else if( (*it)->findAttribute( "var" ) == "muc_passwordprotected" )
-                m_features |= FlagPasswordProtected;
+                m_flags |= FlagPasswordProtected;
               else if( (*it)->findAttribute( "var" ) == "muc_persistent" )
-                m_features |= FlagPersistent;
+                m_flags |= FlagPersistent;
               else if( (*it)->findAttribute( "var" ) == "muc_public" )
-                m_features |= FlagPublic;
+                m_flags |= FlagPublic;
               else if( (*it)->findAttribute( "var" ) == "muc_semianonymous" )
-                m_features |= FlagSemiAnonymous;
+                setSemiAnonymous();
               else if( (*it)->findAttribute( "var" ) == "muc_temporary" )
-                m_features |= FlagTemporary;
+                m_flags |= FlagTemporary;
+              else if( (*it)->findAttribute( "var" ) == "muc_fullyanonymous" )
+                setFullyAnonymous();
               else if( (*it)->findAttribute( "var" ) == "muc_unmoderated" )
-                m_features |= FlagUnmoderated;
+                m_flags |= FlagUnmoderated;
               else if( (*it)->findAttribute( "var" ) == "muc_unsecured" )
-                m_features |= FlagUnsecured;
+                m_flags |= FlagUnsecured;
             }
             else if( (*it)->name() == "identity" )
             {
@@ -377,7 +524,7 @@ namespace gloox
           }
         }
         if( m_roomListener )
-          m_roomListener->handleMUCInfo( this, m_features, name, df );
+          m_roomListener->handleMUCInfo( this, m_flags, name, df );
         break;
       }
       default:
@@ -433,6 +580,26 @@ namespace gloox
       default:
         break;
     }
+  }
+
+  StringList MUCRoom::handleDiscoNodeFeatures( const std::string& node )
+  {
+    return StringList();
+  }
+
+  StringMap MUCRoom::handleDiscoNodeIdentities( const std::string& node, std::string& name )
+  {
+    return StringMap();
+  }
+
+  StringMap MUCRoom::handleDiscoNodeItems( const std::string& node )
+  {
+    StringMap m;
+    if( m_publish )
+    {
+      m[m_nick.bare()] = m_publishNick ? m_nick.username() : "";
+    }
+    return m;
   }
 
 }

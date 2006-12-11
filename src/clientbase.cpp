@@ -33,6 +33,7 @@
 #include "subscriptionhandler.h"
 #include "loghandler.h"
 #include "taghandler.h"
+#include "mucinvitationhandler.h"
 #include "jid.h"
 #include "base64.h"
 #include "md5.h"
@@ -50,8 +51,8 @@ namespace gloox
     : m_connection( 0 ), m_disco( 0 ), m_namespace( ns ),
       m_xmllang( "en" ), m_server( server ),
       m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ),
-      m_messageSessionHandler( 0 ), m_statisticsHandler( 0 ), m_parser( 0 ),
-      m_authError( AuthErrorUndefined ), m_streamError( StreamErrorUndefined ),
+      m_messageSessionHandler( 0 ), m_statisticsHandler( 0 ), m_mucInvitationHandler( 0 ),
+      m_parser( 0 ), m_authError( AuthErrorUndefined ), m_streamError( StreamErrorUndefined ),
       m_streamErrorAppCondition( 0 ), m_idCount( 0 ), m_autoMessageSession( false ),
       m_fdRequested( false )
   {
@@ -63,8 +64,8 @@ namespace gloox
     : m_connection( 0 ), m_disco( 0 ), m_namespace( ns ), m_password( password ),
       m_xmllang( "en" ), m_server( server ),
       m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ),
-      m_messageSessionHandler( 0 ), m_statisticsHandler( 0 ), m_parser( 0 ),
-      m_authError( AuthErrorUndefined ), m_streamError( StreamErrorUndefined ),
+      m_messageSessionHandler( 0 ), m_statisticsHandler( 0 ), m_mucInvitationHandler( 0 ),
+      m_parser( 0 ), m_authError( AuthErrorUndefined ), m_streamError( StreamErrorUndefined ),
       m_streamErrorAppCondition( 0 ), m_idCount( 0 ), m_autoMessageSession( false ),
       m_fdRequested( false )
   {
@@ -92,6 +93,7 @@ namespace gloox
     m_stats.s10nStanzasReceived = 0;
     m_stats.presenceStanzasSent = 0;
     m_stats.presenceStanzasReceived = 0;
+    m_stats.encryption = false;
   }
 
   ClientBase::~ClientBase()
@@ -153,14 +155,14 @@ namespace gloox
     }
   }
 
-  void ClientBase::filter( NodeType type, Stanza *stanza )
+  void ClientBase::handleStanza( NodeType type, Stanza *stanza )
   {
     if( stanza )
       logInstance().log( LogLevelDebug, LogAreaXmlIncoming, stanza->xml() );
 
     switch( type )
     {
-      case NODE_STREAM_START:
+      case NodeStreamStart:
       {
         const std::string version = stanza->findAttribute( "version" );
         if( !checkStreamVersion( version ) )
@@ -174,7 +176,7 @@ namespace gloox
         handleStartNode();
         break;
       }
-      case NODE_STREAM_CHILD:
+      case NodeStreamChild:
         if( !handleNormalNode( stanza ) )
         {
           switch( stanza->type() )
@@ -197,11 +199,11 @@ namespace gloox
           }
         }
         break;
-      case NODE_STREAM_ERROR:
+      case NodeStreamError:
         handleStreamError( stanza );
         disconnect( ConnStreamError );
         break;
-      case NODE_STREAM_CLOSE:
+      case NodeStreamClose:
         logInstance().log( LogLevelDebug, LogAreaClassClientbase, "stream closed" );
         disconnect( ConnStreamClosed );
         break;
@@ -727,6 +729,15 @@ namespace gloox
       m_statisticsHandler = sh;
   }
 
+  void ClientBase::registerMUCInvitationHandler( MUCInvitationHandler *mih )
+  {
+    if( mih )
+    {
+      m_mucInvitationHandler = mih;
+      m_disco->addFeature( XMLNS_MUC );
+    }
+  }
+
   void ClientBase::removeStatisticsHandler()
   {
     m_statisticsHandler = 0;
@@ -763,6 +774,12 @@ namespace gloox
     }
   }
 
+  void ClientBase::removeMUCInvitationHandler()
+  {
+    m_mucInvitationHandler = 0;
+    m_disco->removeFeature( XMLNS_MUC );
+  }
+
   void ClientBase::notifyOnConnect()
   {
     ConnectionListenerList::const_iterator it = m_connectionListeners.begin();
@@ -791,6 +808,8 @@ namespace gloox
       if( !(*it)->onTLSConnect( info ) )
         return false;
     }
+
+    m_stats.encryption = true;
 
     return true;
   }
@@ -866,6 +885,29 @@ namespace gloox
 
   void ClientBase::notifyMessageHandlers( Stanza *stanza )
   {
+    if( m_mucInvitationHandler )
+    {
+      Tag *x = stanza->findChild( "x", "xmlns", XMLNS_MUC_USER );
+      if( x && x->hasChild( "invite" ) )
+      {
+        Tag *i = x->findChild( "invite" );
+        JID invitee( i->findAttribute( "from" ) );
+        std::string reason;
+        std::string password;
+        bool cont = false;
+        if( i->hasChild( "reason" ) )
+          reason = i->findChild( "reason" )->cdata();
+        if( i->hasChild( "continue" ) )
+          cont = true;
+        if( x->hasChild( "password" ) )
+          password = x->findChild( "password" )->cdata();
+
+        m_mucInvitationHandler->handleMUCInvitation( stanza->from(), invitee, reason,
+                                                     stanza->body(), password, cont );
+        return;
+      }
+    }
+
     MessageJidHandlerMap::const_iterator it1 = m_messageJidHandlers.find( stanza->from().full() );
     if( it1 != m_messageJidHandlers.end() )
     {

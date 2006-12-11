@@ -39,7 +39,7 @@ namespace gloox
     if( m_parent )
     {
       m_parent->disco()->removeFeature( XMLNS_ADHOC_COMMANDS );
-      m_parent->disco()->removeNodeHandler( XMLNS_ADHOC_COMMANDS );
+      m_parent->disco()->removeNodeHandler( this, XMLNS_ADHOC_COMMANDS );
       m_parent->removeIqHandler( XMLNS_ADHOC_COMMANDS );
     }
   }

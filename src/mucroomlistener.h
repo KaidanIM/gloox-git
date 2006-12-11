@@ -76,6 +76,12 @@ namespace gloox
 
       /**
        *
+       */
+      virtual void handleMUCInviteDecline( MUCRoom *room, const JID& invitee,
+                                           const std::string& reason ) = 0;
+
+      /**
+       *
        * @note The following error conditions are specified for MUC:
        * @li @b Not @b Authorized: Password required.
        * @li @b Forbidden: Access denied, user is banned.
@@ -86,18 +92,22 @@ namespace gloox
        * @li @b Conflict: Desired room nickname is in use or registered by another user.
        * @li @b Service @b Unavailable: Maximum number of users has been reached.
        *
-       * Other errors may probably appear, depending on the service implementation.
+       * Other errors might appear, depending on the service implementation.
        */
       virtual void handleMUCError( MUCRoom *room, StanzaError error ) = 0;
 
       /**
        *
-       * @param infoForm A DataForm containing extended room information. Maybe 0 if the service
+       * @param infoForm A DataForm containing extended room information. May be 0 if the service
        * doesn't support extended room information. See Section 15.5 of XEP-0045 for defined
        * field types.
+       *
+       * @note This function may be called without a prior call to
+       * @link MUCRoom::getRoomInfo() getRoomInfo() @endlink. This happens if the room config is changed,
+       * e.g. by a room admin.
        */
       virtual void handleMUCInfo( MUCRoom *room, int features, const std::string& name,
-                                      const DataForm *infoForm ) = 0;
+                                  const DataForm *infoForm ) = 0;
 
       /**
        *

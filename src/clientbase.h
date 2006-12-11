@@ -19,6 +19,7 @@
 #include "gloox.h"
 #include "jid.h"
 #include "logsink.h"
+#include "parserhandler.h"
 #include "statisticshandler.h"
 
 namespace gloox
@@ -40,20 +41,20 @@ namespace gloox
   class PresenceHandler;
 //   class StatisticsHandler;
   class SubscriptionHandler;
-//   class LogHandler;
+  class MUCInvitationHandler;
   class TagHandler;
 
   /**
    * @brief This is the common base class for a jabber Client and a jabber Component.
    *
    * It manages connection establishing, authentication, filter registration and invocation.
+   *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
    */
-  class GLOOX_API ClientBase
+  class GLOOX_API ClientBase : private ParserHandler
   {
 
-    friend class Parser;
     friend class RosterManager;
 
     public:
@@ -460,8 +461,23 @@ namespace gloox
       /**
        * Returns a StatisticsStruct containing byte and stanza counts for the current
        * active connection.
+       * @return A struct containing the current connection's statistics.
        */
       StatisticsStruct getStatistics();
+
+      /**
+       * Registers a MUCInvitationHandler with the ClientBase.
+       * @param mih The MUCInvitationHandler to register.
+       */
+      void registerMUCInvitationHandler( MUCInvitationHandler *mih );
+
+      /**
+       * Removes the currently registered MUCInvitationHandler.
+       */
+      void removeMUCInvitationHandler();
+
+      // reimplemented from ParserHandler
+      virtual void handleStanza( NodeType type, Stanza *stanza );
 
     protected:
       enum SaslMechanisms
@@ -507,14 +523,6 @@ namespace gloox
       int m_port;
 
     private:
-      enum NodeType
-      {
-        NODE_STREAM_START,             /**< The &lt;stream:stream&gt; tag. */
-        NODE_STREAM_ERROR,             /**< The &lt;stream:error&gt; tag. */
-        NODE_STREAM_CLOSE,             /**< The &lt;/stream:stream&gt; tag. */
-        NODE_STREAM_CHILD              /**< Everything else. */
-      };
-
       virtual void handleStartNode() = 0;
       virtual bool handleNormalNode( Stanza *stanza ) = 0;
       virtual void rosterFilled() = 0;
@@ -528,7 +536,6 @@ namespace gloox
       void notifySubscriptionHandlers( Stanza *stanza );
       void notifyTagHandlers( Stanza *stanza );
       void notifyOnDisconnect( ConnectionError e );
-      void filter( NodeType type, Stanza *stanza );
       void logEvent( const char *data, size_t size, int is_incoming );
       void send( const std::string& xml );
 
@@ -572,6 +579,7 @@ namespace gloox
       StringList              m_cacerts;
       MessageSessionHandler  *m_messageSessionHandler;
       StatisticsHandler      *m_statisticsHandler;
+      MUCInvitationHandler   *m_mucInvitationHandler;
 
       Parser *m_parser;
       LogSink m_logInstance;

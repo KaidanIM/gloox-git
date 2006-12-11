@@ -133,6 +133,11 @@ class MessageTest : public ConnectionListener, LogHandler, MUCRoomListener
       }
     };
 
+    virtual void handleMUCInviteDecline( MUCRoom *room, const JID& invitee, const std::string& reason )
+    {
+      printf( "Invitee %s declined invitation. reason given: %s\n", invitee.full().c_str(), reason.c_str() );
+    };
+
   private:
     Client *j;
     MUCRoom *m_room;
