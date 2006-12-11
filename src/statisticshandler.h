@@ -48,6 +48,7 @@ namespace gloox
     int s10nStanzasReceived;        /**< The total number of Subscription Stanzas received. */
     int presenceStanzasSent;        /**< The total number of Presence Stanzas sent. */
     int presenceStanzasReceived;    /**< The total number of Presence Stanzas received. */
+    bool encryption;
   };
 
   /**
