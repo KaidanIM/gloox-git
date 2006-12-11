@@ -335,6 +335,7 @@ namespace gloox
   const std::string XMLNS_MUC_OWNER         = "http://jabber.org/protocol/muc#owner";
   const std::string XMLNS_MUC_ROOMINFO      = "http://jabber.org/protocol/muc#roominfo";
   const std::string XMLNS_MUC_ROOMS         = "http://jabber.org/protocol/muc#rooms";
+  const std::string XMLNS_MUC_REQUEST       = "http://jabber.org/protocol/muc#request";
 
   const std::string XMLNS_XMPP_STREAM       = "urn:ietf:params:xml:ns:xmpp-streams";
   const std::string XMLNS_XMPP_STANZAS      = "urn:ietf:params:xml:ns:xmpp-stanzas";

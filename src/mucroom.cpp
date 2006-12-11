@@ -262,6 +262,29 @@ namespace gloox
     m_historyValue = 0;
   }
 
+  void MUCRoom::requestVoice()
+  {
+    if( !m_parent )
+      return;
+
+    DataForm df;
+    DataFormField *field = new DataFormField( FieldTypeNone );
+    field->setName( "FORM_TYPE" );
+    field->setValue( XMLNS_MUC_REQUEST );
+    df.addField( field );
+    field = new DataFormField( FieldTypeTextSingle );
+    field->setName( "muc#role" );
+    field->setLabel( "Requested role" );
+    field->setValue( "participant" );
+    df.addField( field );
+
+    Tag *m = new Tag( "messsage" );
+    m->addAttribute( "to", m_nick.bare() );
+    m->addChild( df.tag() );
+
+    m_parent->send( m );
+  }
+
   void MUCRoom::handlePresence( Stanza *stanza )
   {
     if( stanza->from().bare() != m_nick.bare() )
