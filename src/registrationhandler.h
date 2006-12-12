@@ -43,7 +43,7 @@ namespace gloox
         REGISTRATION_SUCCESS = 0,          /*!< The last operation (account registration, account
                                             * deletion or password change) was successful. */
         REGISTRATION_NOT_ACCEPTABLE,       /*!< 406: Not all necessary information provided */
-        REGISTRATION_CONFLICT,             /*!< 409: Username alreday exists. */
+        REGISTRATION_CONFLICT,             /*!< 409: Username already exists. */
         REGISTRATION_NOT_AUTHORIZED,       /*!< Account removal: Unregistered entity waits too long
                                             * before authentication or performs tasks other than
                                             * authentication after registration.<br>
