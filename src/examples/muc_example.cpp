@@ -100,7 +100,8 @@ class MessageTest : public ConnectionListener, LogHandler, MUCRoomListener
     virtual void handleMUCMessage( MUCRoom * /*room*/, const std::string& nick, const std::string& message,
                                    bool history, const std::string& /*when*/, bool priv )
     {
-      printf( "%s said: '%s' (history: %s)\n", nick.c_str(), message.c_str(), history ? "yes" : "no" );
+      printf( "%s said: '%s' (history: %s, private: %s)\n", nick.c_str(), message.c_str(),
+              history ? "yes" : "no", priv ? "yes" : "no" );
       if( nick != "glooxmuctest" && !history )
         m_room->send( message + " yourself" );
     };
