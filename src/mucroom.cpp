@@ -469,21 +469,22 @@ namespace gloox
       }
       else if( !stanza->body().empty() )
       {
-        std::string from;
+        JID from;
         std::string when;
+        bool privMsg = false;
         bool history = false;
         if( ( x = stanza->findChild( "x", "xmlns", XMLNS_X_DELAY ) ) != 0 )
         {
-          JID j( x->findAttribute( "from" ) );
-          from = j.resource();
+          from.setJID( x->findAttribute( "from" ) );
           when = x->findAttribute( "when" );
           history = true;
         }
-        else
-        {
-          from = stanza->from().resource();
-        }
-        m_roomListener->handleMUCMessage( this, from, stanza->body(), history, when, false );
+        if( stanza->subtype() == StanzaMessageChat ||
+            stanza->subtype() == StanzaMessageNormal )
+          privMsg = true;
+
+        m_roomListener->handleMUCMessage( this, stanza->from().resource(), stanza->body(),
+                                          history, when, privMsg );
       }
     }
   }
