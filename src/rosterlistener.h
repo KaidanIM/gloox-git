@@ -78,7 +78,7 @@ namespace gloox
        * server-side contact list. This can include modifying the item's name, its groups, or the
        * subscription status. These changes are pushed by the server to @b all connected resources.
        * This is why this function will be called if you modify a roster item locally and synchronize
-       * it with teh server.
+       * it with the server.
        * @param jid The modified item's full address.
        */
       virtual void itemUpdated( const JID& jid ) = 0;
