@@ -97,9 +97,9 @@ namespace gloox
             {
               Tag *v = stanza->findChild( "vCard", "xmlns", XMLNS_VCARD_TEMP );
               if( v )
-              {
                 (*it).second->handleVCard( stanza->from(), new VCard( v ) );
-              }
+              else
+                (*it).second->handleVCard( stanza->from(), 0 );
               break;
             }
             case VCardHandler::StoreVCard:
