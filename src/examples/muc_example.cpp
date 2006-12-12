@@ -42,7 +42,7 @@ class MessageTest : public ConnectionListener, LogHandler, MUCRoomListener
       JID nick( "test@conference.jabber.org/glooxmuctest" );
       m_room = new MUCRoom( j, nick, this );
 
-      if( j->connect(false) )
+      if( j->connect( false ) )
       {
         ConnectionError ce = ConnNoError;
         while( ce == ConnNoError )
