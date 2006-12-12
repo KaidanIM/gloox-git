@@ -50,7 +50,7 @@ namespace gloox
        * @param xmllang The value of the xmllang attribute. The stanza's primary language.
        */
       Stanza( const std::string& name, const std::string& cdata = "",
-              const std::string& xmllang = "default" );
+              const std::string& xmllang = "default", bool incoming = false );
 
       /**
        * Virtual destructor.

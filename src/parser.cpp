@@ -77,7 +77,7 @@ namespace gloox
       case IKS_OPEN:
       case IKS_SINGLE:
       {
-        Stanza *tag = new Stanza( name );
+        Stanza *tag = new Stanza( name, "", "default", true );
         for(int i=0; atts && atts[i]; )
         {
           tag->addAttribute( atts[i], atts[i+1] );
