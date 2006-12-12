@@ -47,7 +47,7 @@ namespace gloox
        */
       enum HistoryRequestType
       {
-        HistoryUnknwon,             /**< It is up to the service to decide how much history to send.
+        HistoryUnknown,             /**< It is up to the service to decide how much history to send.
                                      * This is the default. */
         HistoryMaxChars,            /**< Limit the total number of characters in the history to "X"
                                      * (where the character count is the characters of the complete

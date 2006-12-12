@@ -69,7 +69,7 @@ namespace gloox
        */
       virtual void handleMUCMessage( MUCRoom *room, const std::string& nick,
                                      const std::string& message, bool history,
-                                     const std::string& when ) = 0;
+                                     const std::string& when, bool priv ) = 0;
 
       /**
        *
