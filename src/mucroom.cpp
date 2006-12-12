@@ -248,14 +248,14 @@ namespace gloox
     m_parent->send( m );
   }
 
-  void setRequestHistory( int value, HistoryRequestType type )
+  void MUCRoom::setRequestHistory( int value, MUCRoom::HistoryRequestType type )
   {
     m_historyType = type;
     m_historySince = "";
     m_historyValue = value;
   }
 
-  void setRequestHistory( const std::string& since )
+  void MUCRoom::setRequestHistory( const std::string& since )
   {
     m_historyType = HistorySince;
     m_historySince = since;
@@ -268,11 +268,11 @@ namespace gloox
       return;
 
     DataForm df;
-    DataFormField *field = new DataFormField( FieldTypeNone );
+    DataFormField *field = new DataFormField( DataFormField::FieldTypeNone );
     field->setName( "FORM_TYPE" );
     field->setValue( XMLNS_MUC_REQUEST );
     df.addField( field );
-    field = new DataFormField( FieldTypeTextSingle );
+    field = new DataFormField( DataFormField::FieldTypeTextSingle );
     field->setName( "muc#role" );
     field->setLabel( "Requested role" );
     field->setValue( "participant" );
@@ -412,73 +412,79 @@ namespace gloox
     if( !m_roomListener )
       return;
 
-    Tag *x;
-    if( ( x = stanza->findChild( "x", "xmlns", XMLNS_MUC_USER ) ) != 0 )
+    if( stanza->subtype() == StanzaMessageError )
     {
-      Tag::TagList l = x->children();
-      Tag::TagList::const_iterator it = l.begin();
-      for( ; it != l.end(); ++it )
-      {
-        if( (*it)->name() == "status" )
-        {
-          const std::string code = (*it)->findAttribute( "code" );
-          if( code == "100" )
-          {
-            setNonAnonymous();
-          }
-          else if( code == "104" )
-            /*m_configChanged =*/ (void)true;
-          else if( code == "170" )
-            m_flags |= FlagPublicLogging;
-          else if( code == "171" )
-            m_flags ^= FlagPublicLogging;
-          else if( code == "172" )
-          {
-            setNonAnonymous();
-          }
-          else if( code == "173" )
-          {
-            setSemiAnonymous();
-          }
-          else if( code == "174" )
-          {
-            setFullyAnonymous();
-          }
-        }
-        else if( (*it)->name() == "decline" )
-        {
-          std::string reason;
-          JID invitee( (*it)->findAttribute( "from" ) );
-          if( (*it)->hasChild( "reason" ) )
-            reason = (*it)->findChild( "reason" )->cdata();
-          m_roomListener->handleMUCInviteDecline( this, invitee, reason );
-          return;
-        }
-        // call some handler?
-      }
     }
+    else
+    {
+      Tag *x;
+      if( ( x = stanza->findChild( "x", "xmlns", XMLNS_MUC_USER ) ) != 0 )
+      {
+        Tag::TagList l = x->children();
+        Tag::TagList::const_iterator it = l.begin();
+        for( ; it != l.end(); ++it )
+        {
+          if( (*it)->name() == "status" )
+          {
+            const std::string code = (*it)->findAttribute( "code" );
+            if( code == "100" )
+            {
+              setNonAnonymous();
+            }
+            else if( code == "104" )
+              /*m_configChanged =*/ (void)true;
+            else if( code == "170" )
+              m_flags |= FlagPublicLogging;
+            else if( code == "171" )
+              m_flags ^= FlagPublicLogging;
+            else if( code == "172" )
+            {
+              setNonAnonymous();
+            }
+            else if( code == "173" )
+            {
+              setSemiAnonymous();
+            }
+            else if( code == "174" )
+            {
+              setFullyAnonymous();
+            }
+          }
+          else if( (*it)->name() == "decline" )
+          {
+            std::string reason;
+            JID invitee( (*it)->findAttribute( "from" ) );
+            if( (*it)->hasChild( "reason" ) )
+              reason = (*it)->findChild( "reason" )->cdata();
+            m_roomListener->handleMUCInviteDecline( this, invitee, reason );
+            return;
+          }
+          // call some handler?
+        }
+      }
 
-    if( !stanza->subject().empty() )
-    {
-      m_roomListener->handleMUCSubject( this, stanza->from().resource(), stanza->subject() );
-    }
-    else if( !stanza->body().empty() )
-    {
-      std::string from;
-      std::string when;
-      bool history = false;
-      if( ( x = stanza->findChild( "x", "xmlns", XMLNS_X_DELAY ) ) != 0 )
+      if( !stanza->subject().empty() )
       {
-        JID j( x->findAttribute( "from" ) );
-        from = j.resource();
-        when = x->findAttribute( "when" );
-        history = true;
+        m_roomListener->handleMUCSubject( this, stanza->from().resource(), stanza->subject() );
       }
-      else
+      else if( !stanza->body().empty() )
       {
-        from = stanza->from().resource();
+        std::string from;
+        std::string when;
+        bool history = false;
+        if( ( x = stanza->findChild( "x", "xmlns", XMLNS_X_DELAY ) ) != 0 )
+        {
+          JID j( x->findAttribute( "from" ) );
+          from = j.resource();
+          when = x->findAttribute( "when" );
+          history = true;
+        }
+        else
+        {
+          from = stanza->from().resource();
+        }
+        m_roomListener->handleMUCMessage( this, from, stanza->body(), history, when, false );
       }
-      m_roomListener->handleMUCMessage( this, from, stanza->body(), history, when );
     }
   }
 
