@@ -4,65 +4,65 @@
 
 AM_CPPFLAGS = -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare -Wpointer-arith -Wswitch -Wunknown-pragmas -Wconversion -Wundef -Wcast-qual -ansi
 
-noinst_PROGRAMS = register_test disco_test adhoc_test roster_test privatexml_test component_test \
-                  bookmarkstorage_test annotations_test privacylist_test message_test flexoff_test \
-                  ibb_test vcard_test reset_test muc_example
+noinst_PROGRAMS = register_example disco_example adhoc_example roster_example privatexml_example component_example \
+                  bookmarkstorage_example annotations_example privacylist_example message_example flexoff_example \
+                  ibb_example vcard_example reset_example muc_example
 
-register_test_SOURCES = register_test.cpp
-register_test_LDADD = ../libgloox.la $(LDFLAGS)
-register_test_CFLAGS = $(CPPFLAGS)
+register_example_SOURCES = register_example.cpp
+register_example_LDADD = ../libgloox.la $(LDFLAGS)
+register_example_CFLAGS = $(CPPFLAGS)
 
-disco_test_SOURCES = disco_test.cpp
-disco_test_LDADD = ../libgloox.la $(LDFLAGS)
-disco_test_CFLAGS = $(CPPFLAGS)
+disco_example_SOURCES = disco_example.cpp
+disco_example_LDADD = ../libgloox.la $(LDFLAGS)
+disco_example_CFLAGS = $(CPPFLAGS)
 
-adhoc_test_SOURCES = adhoc_test.cpp
-adhoc_test_LDADD = ../libgloox.la $(LDFLAGS)
-adhoc_test_CFLAGS = $(CPPFLAGS)
+adhoc_example_SOURCES = adhoc_example.cpp
+adhoc_example_LDADD = ../libgloox.la $(LDFLAGS)
+adhoc_example_CFLAGS = $(CPPFLAGS)
 
-roster_test_SOURCES = roster_test.cpp
-roster_test_LDADD = ../libgloox.la $(LDFLAGS)
-roster_test_CFLAGS = $(CPPFLAGS)
+roster_example_SOURCES = roster_example.cpp
+roster_example_LDADD = ../libgloox.la $(LDFLAGS)
+roster_example_CFLAGS = $(CPPFLAGS)
 
-privatexml_test_SOURCES = privatexml_test.cpp
-privatexml_test_LDADD = ../libgloox.la $(LDFLAGS)
-privatexml_test_CFLAGS = $(CPPFLAGS)
+privatexml_example_SOURCES = privatexml_example.cpp
+privatexml_example_LDADD = ../libgloox.la $(LDFLAGS)
+privatexml_example_CFLAGS = $(CPPFLAGS)
 
-component_test_SOURCES = component_test.cpp
-component_test_LDADD = ../libgloox.la $(LDFLAGS)
-component_test_CFLAGS = $(CPPFLAGS)
+component_example_SOURCES = component_example.cpp
+component_example_LDADD = ../libgloox.la $(LDFLAGS)
+component_example_CFLAGS = $(CPPFLAGS)
 
-bookmarkstorage_test_SOURCES = bookmarkstorage_test.cpp
-bookmarkstorage_test_LDADD = ../libgloox.la $(LDFLAGS)
-bookmarkstorage_test_CFLAGS = $(CPPFLAGS)
+bookmarkstorage_example_SOURCES = bookmarkstorage_example.cpp
+bookmarkstorage_example_LDADD = ../libgloox.la $(LDFLAGS)
+bookmarkstorage_example_CFLAGS = $(CPPFLAGS)
 
-annotations_test_SOURCES = annotations_test.cpp
-annotations_test_LDADD = ../libgloox.la $(LDFLAGS)
-annotations_test_CFLAGS = $(CPPFLAGS)
+annotations_example_SOURCES = annotations_example.cpp
+annotations_example_LDADD = ../libgloox.la $(LDFLAGS)
+annotations_example_CFLAGS = $(CPPFLAGS)
 
-privacylist_test_SOURCES = privacylist_test.cpp
-privacylist_test_LDADD = ../libgloox.la $(LDFLAGS)
-privacylist_test_CFLAGS = $(CPPFLAGS)
+privacylist_example_SOURCES = privacylist_example.cpp
+privacylist_example_LDADD = ../libgloox.la $(LDFLAGS)
+privacylist_example_CFLAGS = $(CPPFLAGS)
 
-message_test_SOURCES = message_test.cpp
-message_test_LDADD = ../libgloox.la $(LDFLAGS)
-message_test_CFLAGS = $(CPPFLAGS)
+message_example_SOURCES = message_example.cpp
+message_example_LDADD = ../libgloox.la $(LDFLAGS)
+message_example_CFLAGS = $(CPPFLAGS)
 
-flexoff_test_SOURCES = flexoff_test.cpp
-flexoff_test_LDADD = ../libgloox.la $(LDFLAGS)
-flexoff_test_CFLAGS = $(CPPFLAGS)
+flexoff_example_SOURCES = flexoff_example.cpp
+flexoff_example_LDADD = ../libgloox.la $(LDFLAGS)
+flexoff_example_CFLAGS = $(CPPFLAGS)
 
-ibb_test_SOURCES = ibb_test.cpp
-ibb_test_LDADD = ../libgloox.la $(LDFLAGS)
-ibb_test_CFLAGS = $(CPPFLAGS)
+ibb_example_SOURCES = ibb_example.cpp
+ibb_example_LDADD = ../libgloox.la $(LDFLAGS)
+ibb_example_CFLAGS = $(CPPFLAGS)
 
-vcard_test_SOURCES = vcard_test.cpp
-vcard_test_LDADD = ../libgloox.la $(LDFLAGS)
-vcard_test_CFLAGS = $(CPPFLAGS)
+vcard_example_SOURCES = vcard_example.cpp
+vcard_example_LDADD = ../libgloox.la $(LDFLAGS)
+vcard_example_CFLAGS = $(CPPFLAGS)
 
-reset_test_SOURCES = reset_test.cpp
-reset_test_LDADD = ../libgloox.la $(LDFLAGS)
-reset_test_CFLAGS = $(CPPFLAGS)
+reset_example_SOURCES = reset_example.cpp
+reset_example_LDADD = ../libgloox.la $(LDFLAGS)
+reset_example_CFLAGS = $(CPPFLAGS)
 
 muc_example_SOURCES = muc_example.cpp
 muc_example_LDADD = ../libgloox.la $(LDFLAGS)

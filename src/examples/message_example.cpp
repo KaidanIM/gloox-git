@@ -35,7 +35,7 @@ class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListen
     {
       setlocale( LC_ALL, "" );
 
-      JID jid( "hurkhurk@jabber.cc/gloox" );
+      JID jid( "hurkhurk@example.net/gloox" );
       j = new Client( jid, "hurkhurks" );
       j->registerConnectionListener( this );
       j->setAutoMessageSession( true, this );
