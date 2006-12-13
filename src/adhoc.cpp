@@ -326,7 +326,7 @@ namespace gloox
 
   void Adhoc::removeAdhocCommandProvider( const std::string& command )
   {
-    m_disco->removeNodeHandler( command );
+    m_parent->disco()->removeNodeHandler( this, command );
     m_adhocCommandProviders.erase( command );
     m_items.erase( command );
   }
