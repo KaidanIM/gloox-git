@@ -226,6 +226,15 @@ namespace gloox
        */
       void requestVoice();
 
+      /**
+       * Use this function to kick a user from the room.
+       * Depending on service and/or room configuration and role/affiliation of the user,
+       * this may not always be possible.
+       * @param nick The nick of the user to be kicked.
+       * @param reason An optional reason for the kicking.
+       */
+      void kick( const std::string& nick, const std::string& reason = "" );
+
       // reimplemented from DiscoHandler
       virtual void handleDiscoInfoResult( Stanza *stanza, int context );
 
@@ -269,7 +278,9 @@ namespace gloox
       {
         RequestUniqueName,
         GetRoomInfo,
-        GetRoomItems
+        GetRoomItems,
+        KickParticipant,
+        BanParticipant
       };
 
       ClientBase *m_parent;
