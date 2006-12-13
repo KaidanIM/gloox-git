@@ -94,7 +94,7 @@ namespace gloox
       AdhocCommandProviderMap::const_iterator it = m_adhocCommandProviders.find( node );
       if( !node.empty() && ( it != m_adhocCommandProviders.end() ) )
       {
-        (*it).second->handleAdhocCommand( node, c, stanza->from() );
+        (*it).second->handleAdhocCommand( node, c, stanza->from(), stanza->id() );
         return true;
       }
     }
