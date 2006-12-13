@@ -193,6 +193,13 @@ namespace gloox
                     const std::string& sessionid = "", DataForm *form = 0,
                     AdhocExecuteActions action = ActionDefault );
 
+      /**
+       * Use this function to unregister an adhoc command previously registered using
+       * registerAdhocCommandProvider().
+       * @param command The command to unregister.
+       */
+      void removeAdhocCommandProvider( const std::string& command );
+
     private:
       typedef std::map<const std::string, AdhocCommandProvider*> AdhocCommandProviderMap;
       AdhocCommandProviderMap m_adhocCommandProviders;
