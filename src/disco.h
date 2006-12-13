@@ -130,7 +130,7 @@ namespace gloox
       void removeDiscoHandler( DiscoHandler *dh );
 
       /**
-       * Use this function to register an @ref DiscoNodeHandler with the Disco
+       * Use this function to register a @ref DiscoNodeHandler with the Disco
        * object. The DiscoNodeHandler will receive disco#items queries which are
        * directed to the corresponding node registered for the handler.
        * @param nh The NodeHandler-derived object to register.
