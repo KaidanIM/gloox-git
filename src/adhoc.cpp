@@ -98,7 +98,7 @@ namespace gloox
       AdhocCommandProviderMap::const_iterator it = m_adhocCommandProviders.find( node );
       if( !node.empty() && ( it != m_adhocCommandProviders.end() ) )
       {
-        (*it).second->handleAdhocCommand( node, c, stanza->from() );
+        (*it).second->handleAdhocCommand( node, c, stanza->from(), stanza->id() );
         return true;
       }
     }
@@ -322,6 +322,13 @@ namespace gloox
 
     m_parent->trackID( this, id, ExecuteAdhocCommand );
     m_parent->send( iq );
+  }
+
+  void Adhoc::removeAdhocCommandProvider( const std::string& command )
+  {
+    m_disco->removeNodeHandler( command );
+    m_adhocCommandProviders.erase( command );
+    m_items.erase( command );
   }
 
 }
