@@ -35,13 +35,15 @@ namespace gloox
                                      * is important. */
     MUCRoomAffiliation affiliation; /**< The participant's affiliation with room. */
     MUCRoomRole role;               /**< The participant's role with the room. */
-    bool self;                      /**< This is true if the struct refers to this instance's user.
-                                     * (MUC servers send presence to all room occupants, including
-                                     * the originator of the presence.) */
     JID *jid;                       /**< Pointer to the occupant's full JID in a non-anonymous room or
                                      * in a semi-anonymous room if the user (of gloox) has a role of
                                      * moderator.
                                      * 0 if the MUC service doesn't provide the JID. */
+    int flags;                      /**< ORed MUCUserFlag values. Indicate conditions like: user has
+                                     * been kicked or banned from the room. Also may indicate that
+                                     * this struct refers to this instance's user.
+                                     * (MUC servers send presence to all room occupants, including
+                                     * the originator of the presence.) */
   };
 
   /**

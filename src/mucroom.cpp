@@ -285,6 +285,25 @@ namespace gloox
     m_parent->send( m );
   }
 
+  void MUCRoom::kick( const std::string& nick, const std::string& reason )
+  {
+    if( !m_parent || nick.empty() )
+      return;
+
+    Tag *i = new Tag( "item" );
+    i->addAttribute( "nick", nick );
+    i->addAttribute( "role", "none" );
+    if( !reason.empty() )
+      new Tag( i, "reason", reason );
+
+    const std::string id = m_parent->getID();
+    JID j( m_nick.bare() );
+    Stanza *k = Stanza::createIqStanza( j, id, StanzaIqSet, XMLNS_MUC_ADMIN, i );
+
+    m_parent->trackID( this, id, KickParticipant );
+    m_parent->send( k );
+  }
+
   void MUCRoom::handlePresence( Stanza *stanza )
   {
     if( stanza->from().bare() != m_nick.bare() )
@@ -304,7 +323,7 @@ namespace gloox
       if( m_roomListener && ( t = stanza->findChild( "x", "xmlns", XMLNS_MUC_USER ) ) != 0 )
       {
         MUCRoomParticipant party;
-        party.self = false;
+        party.flags = 0;
         party.nick = new JID( stanza->from() );
         party.jid = 0;
         Tag *i;
@@ -352,7 +371,7 @@ namespace gloox
             }
             else if( code == "110" )
             {
-              party.self = true;
+              party.flags |= UserSelf;
               m_role = party.role;
               m_affiliation = party.affiliation;
             }
@@ -373,6 +392,10 @@ namespace gloox
               {
                 // somebody else changed nicks
               }
+            }
+            else if( code == "307" )
+            {
+              party.flags |= UserKicked;
             }
           }
         }
@@ -530,6 +553,8 @@ namespace gloox
     {
       case RequestUniqueName:
         break;
+      case KickParticipant:
+        break;
     }
     return false;
   }
@@ -539,6 +564,8 @@ namespace gloox
     switch( context )
     {
       case RequestUniqueName:
+        break;
+      case KickParticipant:
         break;
     }
     return false;
