@@ -96,7 +96,13 @@ namespace gloox
        * the room assigned by the MUC service, return @b true from this function. The room will be opened
        * by the MUC service and availabel for other users to join. If you don't want to accept the default
        * room configuration, return @b false from this function. The room will stay locked until it is
-       * fully configured.
+       * either fully configured, created as an instant room, or creation is canceled.
+       *
+       * If you returned false from this function you should use one of the following options:
+       * @li use MUCRoom::cancelRoomCreation() to abort creation and delete the room,
+       * @li use MUCRoom::acknowledgeInstantRoom() to accept the room's default configuration, or
+       * @li use MUCRoom::requestRoomConfig() to request the room's configuration form.
+       *
        * @param room The room.
        * @return @b True to accept the default room configuration, @b false to keep the room locked
        * until configured manually by the room owner.
