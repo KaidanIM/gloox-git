@@ -46,7 +46,7 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             inbandbytestreammanager.h messagefilter.h         vcard.h \
                             vcardmanager.h            vcardhandler.h          adhochandler.h \
                             search.h                  searchhandler.h         statisticshandler.h \
-                            resource.h                mucroom.h               mucroomlistener.h \
+                            resource.h                mucroom.h               mucroomhandler.h \
                             mucroomconfighandler.h    parser.h                parserhandler.h \
                             mucinvitationhandler.h
 

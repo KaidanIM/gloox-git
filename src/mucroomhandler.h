@@ -12,8 +12,12 @@
 
 
 
-#ifndef MUCROOMLISTENER_H__
-#define MUCROOMLISTENER_H__
+#ifndef MUCROOMHANDLER_H__
+#define MUCROOMHANDLER_H__
+
+#include "gloox.h"
+
+#include <string>
 
 namespace gloox
 {
@@ -68,13 +72,13 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
-  class GLOOX_API MUCRoomListener
+  class GLOOX_API MUCRoomHandler
   {
     public:
       /**
        * Virtual Destructor.
        */
-      virtual ~MUCRoomListener() {};
+      virtual ~MUCRoomHandler() {};
 
       /**
        * @note The MUCRoomParticipant struct, including pointers to JIDs, will be cleaned up after
@@ -162,4 +166,4 @@ namespace gloox
 
 }
 
-#endif// MUCROOMLISTENER_H__
+#endif// MUCROOMHANDLER_H__
