@@ -84,6 +84,11 @@ class VCardTest : public ConnectionListener, LogHandler, VCardHandler
     virtual void handleVCard( const JID& jid, const VCard *vcard )
     {
       ++m_count;
+      if( !vcard )
+      {
+        printf( "empty/no vcard\n" );
+        return;
+      }
       printf( "received vcard for %s: %s, %d\n", jid.full().c_str(), vcard->tag()->xml().c_str(), m_count );
       if( m_count > 2 )
         j->disconnect();

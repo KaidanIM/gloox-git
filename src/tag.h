@@ -43,11 +43,13 @@ namespace gloox
       Tag();
 
       /**
-       * Creates a new tag with agiven name (and XML character data, if given).
+       * Creates a new tag with a given name (and XML character data, if given).
        * @param name The name of the element.
        * @param cdata The XML character data of the element.
+       * @param incoming Indicates whether tag names, attributes, attribute values, and cdata shall
+       * be escaped (false, default) or not (true).
        */
-      Tag( const std::string& name, const std::string& cdata = "" );
+      Tag( const std::string& name, const std::string& cdata = "", bool incoming = false );
 
       /**
        * Creates a new tag as a child tag of the given parent, with a given name (and
@@ -55,8 +57,10 @@ namespace gloox
        * @param parent The parent tag.
        * @param name The name of the element.
        * @param cdata The XML character data of the element.
+       * @param incoming Indicates whether tag names, attributes, attribute values, and cdata shall
+       * be escaped (false, default) or not (true).
        */
-      Tag( Tag *parent, const std::string& name, const std::string& cdata = "" );
+      Tag( Tag *parent, const std::string& name, const std::string& cdata = "", bool incoming = false );
 
       /**
        * Virtual destructor.
@@ -86,7 +90,7 @@ namespace gloox
       virtual void addAttribute( const std::string& name, int value );
 
       /**
-       * Use this function to add a child node to the tag.
+       * Use this function to add a child node to the tag. The Tag will be owned by Tag.
        * @param child The node to be inserted.
        */
       virtual void addChild( Tag *child );
@@ -231,6 +235,7 @@ namespace gloox
       TagList m_children;
       Tag *m_parent;
       StanzaType m_type;
+      bool m_incoming;
 
     private:
       struct duo

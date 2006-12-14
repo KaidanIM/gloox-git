@@ -110,6 +110,13 @@ namespace gloox
       void registerAdhocCommandProvider( AdhocCommandProvider *acp, const std::string& command,
                                          const std::string& name );
 
+      /**
+       * Use this function to unregister an adhoc command previously registered using
+       * registerAdhocCommandProvider().
+       * @param command The command to unregister.
+       */
+      void removeAdhocCommandProvider( const std::string& command );
+
     private:
       typedef std::map<const std::string, AdhocCommandProvider*> AdhocCommandProviderMap;
 
