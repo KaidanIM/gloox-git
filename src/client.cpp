@@ -464,7 +464,7 @@ namespace gloox
     else
       m_priority = priority;
 
-    if( m_connection && m_connection->state() == StateConnected )
+    if( state() >= StateConnected )
       sendPresence();
   }
 
@@ -510,13 +510,14 @@ namespace gloox
       else
         rosterFilled();
     }
-
-    notifyOnConnect();
+    else
+      notifyOnConnect();
   }
 
   void Client::rosterFilled()
   {
     sendPresence();
+    notifyOnConnect();
   }
 
   void Client::disconnect()
