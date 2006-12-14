@@ -215,7 +215,7 @@ namespace gloox
        * @note The tags are still linked to the current Tag and should not be deleted from the TagList.
        * @since 0.9
        */
-      TagList findTags( const std::string& name );
+      TagList findChildren( const std::string& name );
 
       /**
        * Returns whether the Tag is considered empty, i.e. invalid.
