@@ -17,8 +17,6 @@
 #include "dataform.h"
 #include "stanza.h"
 #include "disco.h"
-#include "mucroomhandler.h"
-#include "mucroomconfighandler.h"
 #include "mucmessagesession.h"
 
 namespace gloox
@@ -31,10 +29,6 @@ namespace gloox
       m_historyValue( 0 ), m_flags( 0 ), m_creationInProgress( false ), m_configChanged( false ),
       m_publishNick( false ), m_publish( false ), m_joined( false ), m_unique( false )
   {
-#ifndef _MSC_VER
-#warning TODO: discover reserved room nickname: http://www.xmpp.org/extensions/xep-0045.html#reservednick
-#endif
-    // here or in join()
     if( m_parent )
       m_parent->registerPresenceHandler( this );
   }
@@ -412,6 +406,110 @@ namespace gloox
     m_parent->send( k );
   }
 
+  void MUCRoom::requestList( MUCOperation operation )
+  {
+    if( !m_parent || !m_joined )
+      return;
+
+    Tag *i = new Tag( "item" );
+
+    switch( operation )
+    {
+      case RequestVoiceList:
+        i->addAttribute( "role", "participant" );
+        break;
+      case RequestBanList:
+        i->addAttribute( "affiliation", "outcast" );
+        break;
+      case RequestMemberList:
+        i->addAttribute( "affiliation", "member" );
+        break;
+      case RequestModeratorList:
+        i->addAttribute( "role", "moderator" );
+        break;
+      case RequestOwnerList:
+        i->addAttribute( "affiliation", "owner" );
+        break;
+      case RequestAdminList:
+        i->addAttribute( "affiliation", "admin" );
+        break;
+      default:
+        delete i;
+        return;
+        break;
+    }
+
+    const std::string id = m_parent->getID();
+    JID j( m_nick.bare() );
+    Stanza *iq = Stanza::createIqStanza( j, id, StanzaIqGet, XMLNS_MUC_ADMIN, i );
+
+    m_parent->trackID( this, id, operation );
+    m_parent->send( iq );
+  }
+
+  void MUCRoom::storeList( const MUCListItemList items, MUCOperation operation )
+  {
+    if( !m_parent || !m_joined )
+      return;
+
+    std::string roa;
+    std::string value;
+    switch( operation )
+    {
+      case RequestVoiceList:
+        roa = "role";
+        value = "participant";
+        break;
+      case RequestBanList:
+        roa = "affiliation";
+        value = "outcast";
+        break;
+      case RequestMemberList:
+        roa = "affiliation";
+        value = "member";
+        break;
+      case RequestModeratorList:
+        roa = "role";
+        value = "moderator";
+        break;
+      case RequestOwnerList:
+        roa = "affiliation";
+        value = "owner";
+        break;
+      case RequestAdminList:
+        roa = "affiliation";
+        value = "admin";
+        break;
+      default:
+        return;
+        break;
+    }
+
+    const std::string id = m_parent->getID();
+    Tag *iq = new Tag( "iq" );
+    iq->addAttribute( "id", id );
+    iq->addAttribute( "type", "set" );
+    iq->addAttribute( "to", m_nick.bare() );
+    Tag *q = new Tag( iq, "query" );
+    q->addAttribute( "xmlns", XMLNS_MUC_ADMIN );
+
+    MUCListItemList::const_iterator it = items.begin();
+    for( ; it != items.end(); ++it )
+    {
+      if( (*it).nick.empty() )
+        continue;
+
+      Tag *i = new Tag( q, "item" );
+      i->addAttribute( "nick", (*it).nick );
+      i->addAttribute( roa, value );
+      if( !(*it).reason.empty() )
+        new Tag( i, "reason", (*it).reason );
+    }
+
+    m_parent->trackID( this, id, operation );
+    m_parent->send( iq );
+  }
+
   void MUCRoom::handlePresence( Stanza *stanza )
   {
     if( stanza->from().bare() != m_nick.bare() )
@@ -700,17 +798,11 @@ namespace gloox
 
   bool MUCRoom::handleIqID( Stanza *stanza, int context )
   {
-#ifndef _MSC_VER
-#warning FIXME: use local tracking, delete iterator here
-#endif
+    if( !m_roomConfigHandler )
+      return false;
+
     switch( stanza->subtype() )
     {
-      case StanzaIqGet:
-        return handleIqGet( stanza, context );
-        break;
-      case StanzaIqSet:
-        return handleIqSet( stanza, context );
-        break;
       case StanzaIqResult:
         return handleIqResult( stanza, context );
         break;
@@ -720,16 +812,7 @@ namespace gloox
       default:
         break;
     }
-    return false;
-  }
 
-  bool MUCRoom::handleIqGet( Stanza * /*stanza*/, int /*context*/ )
-  {
-    return false;
-  }
-
-  bool MUCRoom::handleIqSet( Stanza * /*stanza*/, int /*context*/ )
-  {
     return false;
   }
 
@@ -740,114 +823,112 @@ namespace gloox
       case RequestUniqueName:
         break;
       case SetRNone:
-        break;
       case SetVisitor:
-        break;
       case SetParticipant:
-        break;
       case SetModerator:
-        break;
       case SetANone:
-        break;
       case SetOutcast:
-        break;
       case SetMember:
-        break;
       case SetAdmin:
-        break;
       case SetOwner:
-        break;
       case CreateInstantRoom:
-        break;
       case CancelRoomCreation:
+      case DestroyRoom:
+      case StoreVoiceList:
+      case StoreBanList:
+      case StoreMemberList:
+      case StoreModeratorList:
+      case StoreAdminList:
+        m_roomConfigHandler->handleMUCConfigResult( this, true, (MUCOperation)context );
+        return true;
         break;
       case RequestRoomConfig:
+      {
+        Tag *x = 0;
+        Tag *q = stanza->findChild( "query", "xmlns", XMLNS_MUC_OWNER );
+        if( q )
+          x = q->findChild( "x", "xmlns", XMLNS_X_DATA );
+        if( x )
+        {
+          DataForm df( x );
+          m_roomConfigHandler->handleMUCConfigForm( this, df );
+        }
+        return true;
         break;
-      case DestroyRoom:
-        break;
+      }
       case RequestVoiceList:
-        break;
-      case StoreVoiceList:
-        break;
       case RequestBanList:
-        break;
-      case StoreBanList:
-        break;
       case RequestMemberList:
-        break;
-      case StoreMemberList:
-        break;
       case RequestModeratorList:
-        break;
-      case StoreModeratorList:
-        break;
       case RequestOwnerList:
-        break;
-      case StoreOwnerList:
-        break;
       case RequestAdminList:
+      {
+        Tag *x = 0;
+        Tag *q = stanza->findChild( "query", "xmlns", XMLNS_MUC_OWNER );
+        if( q )
+          x = q->findChild( "x", "xmlns", XMLNS_X_DATA );
+        if( x )
+        {
+          MUCListItemList itemList;
+          Tag::TagList items = x->findChildren( "item" );
+          Tag::TagList::const_iterator it = items.begin();
+          for( ; it != items.end(); ++it )
+          {
+            MUCListItem item;
+            item.jid = 0;
+            item.role = getEnumRole( (*it)->findAttribute( "role" ) );
+            item.affiliation = getEnumAffiliation( (*it)->findAttribute( "affiliation" ) );
+            if( (*it)->hasAttribute( "jid" ) )
+              item.jid = new JID( (*it)->findAttribute( "jid" ) );
+            item.nick = (*it)->findAttribute( "nick" );
+            itemList.push_back( item );
+          }
+          m_roomConfigHandler->handleMUCConfigList( this, itemList, (MUCOperation)context );
+
+          MUCListItemList::iterator itl = itemList.begin();
+          for( ; itl != itemList.end(); ++itl )
+            delete (*itl).jid;
+        }
+        return true;
         break;
-      case StoreAdminList:
+      }
+      default:
         break;
     }
     return false;
   }
 
-  bool MUCRoom::handleIqError( Stanza *stanza, int context )
+  bool MUCRoom::handleIqError( Stanza * /*stanza*/, int context )
   {
     switch( context )
     {
       case RequestUniqueName:
-        break;
       case SetRNone:
-        break;
       case SetVisitor:
-        break;
       case SetParticipant:
-        break;
       case SetModerator:
-        break;
       case SetANone:
-        break;
       case SetOutcast:
-        break;
       case SetMember:
-        break;
       case SetAdmin:
-        break;
       case SetOwner:
-        break;
       case CreateInstantRoom:
-        break;
       case CancelRoomCreation:
-        break;
       case RequestRoomConfig:
-        break;
       case DestroyRoom:
-        break;
       case RequestVoiceList:
-        break;
       case StoreVoiceList:
-        break;
       case RequestBanList:
-        break;
       case StoreBanList:
-        break;
       case RequestMemberList:
-        break;
       case StoreMemberList:
-        break;
       case RequestModeratorList:
-        break;
       case StoreModeratorList:
-        break;
       case RequestOwnerList:
-        break;
       case StoreOwnerList:
-        break;
       case RequestAdminList:
-        break;
       case StoreAdminList:
+        m_roomConfigHandler->handleMUCConfigResult( this, false, (MUCOperation)context );
         break;
     }
     return false;
@@ -950,7 +1031,7 @@ namespace gloox
     }
   }
 
-  void MUCRoom::handleDiscoError( Stanza *stanza, int context )
+  void MUCRoom::handleDiscoError( Stanza * /*stanza*/, int context )
   {
     if( !m_roomHandler )
       return;
@@ -971,17 +1052,17 @@ namespace gloox
     }
   }
 
-  StringList MUCRoom::handleDiscoNodeFeatures( const std::string& node )
+  StringList MUCRoom::handleDiscoNodeFeatures( const std::string& /*node*/ )
   {
     return StringList();
   }
 
-  StringMap MUCRoom::handleDiscoNodeIdentities( const std::string& node, std::string& name )
+  StringMap MUCRoom::handleDiscoNodeIdentities( const std::string& /*node*/, std::string& /*name*/ )
   {
     return StringMap();
   }
 
-  StringMap MUCRoom::handleDiscoNodeItems( const std::string& node )
+  StringMap MUCRoom::handleDiscoNodeItems( const std::string& /*node*/ )
   {
     StringMap m;
     if( m_publish )
@@ -989,6 +1070,30 @@ namespace gloox
       m[m_nick.bare()] = m_publishNick ? m_nick.username() : "";
     }
     return m;
+  }
+
+  MUCRoomRole MUCRoom::getEnumRole( const std::string& role )
+  {
+    if( role == "moderator" )
+      return RoleModerator;
+    if( role == "participant" )
+      return RoleParticipant;
+    if( role == "visitor" )
+      return RoleVisitor;
+    return RoleNone;
+  }
+
+  MUCRoomAffiliation MUCRoom::getEnumAffiliation( const std::string& affiliation )
+  {
+    if( affiliation == "owner" )
+      return AffiliationOwner;
+    if( affiliation == "admin" )
+      return AffiliationAdmin;
+    if( affiliation == "member" )
+      return AffiliationMember;
+    if( affiliation == "outcast" )
+      return AffiliationOutcast;
+    return AffiliationNone;
   }
 
 }
