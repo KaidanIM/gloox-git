@@ -77,18 +77,31 @@ namespace gloox
       virtual ~MUCRoomListener() {};
 
       /**
-       * @note The MUCRoomParticipant struct will be cleaned up after this function returned.
+       * @note The MUCRoomParticipant struct, including pointers to JIDs, will be cleaned up after
+       * this function returned.
        */
       virtual void handleMUCParticipantPresence( MUCRoom *room, const MUCRoomParticipant participant,
                                                  Presence presence ) = 0;
 
       /**
        *
-       * @note With some MUC services the nick may be empty for history items.
        */
       virtual void handleMUCMessage( MUCRoom *room, const std::string& nick,
                                      const std::string& message, bool history,
                                      const std::string& when, bool privateMessage ) = 0;
+
+      /**
+       * This function is called if the room that was just joined didn't exist prior to the attempted
+       * join. Therfore the room was created by MUC service. To accept the default configuration of
+       * the room assigned by the MUC service, return @b true from this function. The room will be opened
+       * by the MUC service and availabel for other users to join. If you don't want to accept the default
+       * room configuration, return @b false from this function. The room will stay locked until it is
+       * fully configured.
+       * @param room The room.
+       * @return @b True to accept the default room configuration, @b false to keep the room locked
+       * until configured manually by the room owner.
+       */
+      virtual bool handleMUCRoomCreation( MUCRoom *room ) = 0;
 
       /**
        *
