@@ -868,9 +868,10 @@ namespace gloox
   enum MUCRoomAffiliation
   {
     AffiliationNone,                /**< */
+    AffiliationOutcast,             /**< */
+    AffiliationMember,              /**< */
     AffiliationOwner,               /**< */
-    AffiliationAdmin,               /**< */
-    AffiliationMember               /**< */
+    AffiliationAdmin                /**< */
   };
 
   /**
@@ -879,9 +880,9 @@ namespace gloox
   enum MUCRoomRole
   {
     RoleNone,                       /**< */
-    RoleModerator,                  /**< */
+    RoleVisitor,                    /**< */
     RoleParticipant,                /**< */
-    RoleVisitor                     /**< */
+    RoleModerator                  /**< */
   };
 
   /**
@@ -910,8 +911,10 @@ namespace gloox
    */
   enum MUCUserFlag
   {
-    UserSelf         = 1,           /**< */
-    UserNickModified = 2            /**< */
+    UserSelf         =   1,         /**< */
+    UserNickChanged  =   2,         /**< */
+    UserKicked       =   4,         /**< */
+    UserBanned       =   8          /**< */
   };
 
   /**

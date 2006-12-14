@@ -195,7 +195,8 @@ namespace gloox
 
       /**
        * Use this function to request room history. Set @c value to zero to disable the room
-       * history request. You should not use HistorySince with this function.
+       * history request. You should not use HistorySince type with this function.
+       * History is sent only once after entering a room. You should use this function before joining.
        * @param value Represents either the number of requested characters, the number of requested
        * message stanzas, or the number seconds, depending on the value of @c type.
        * @param type
@@ -206,8 +207,11 @@ namespace gloox
 
       /**
        * Use this function to request room history since specific datetime.
+       * History is sent only once after entering a room. You should use this function before joining.
        * @param since A string representing a datetime conforming to the DateTime profile specified
        * in Jabber Date and Time Profiles (XEP-0082).
+       * @note If this function is not used to request a specific amount of room history, it is up
+       * to the MUC service to decide how much history to send.
        */
       void setRequestHistory( const std::string& since );
 
@@ -228,12 +232,65 @@ namespace gloox
 
       /**
        * Use this function to kick a user from the room.
-       * Depending on service and/or room configuration and role/affiliation of the user,
-       * this may not always be possible.
+       * Depending on service and/or room configuration and role/affiliation
+       * this may not always succeed. Usually, a role of 'moderator' is necessary.
+       * @note This is a convenience function. It directly uses setRole() with a MUCRoomRole of RoleNone.
        * @param nick The nick of the user to be kicked.
-       * @param reason An optional reason for the kicking.
+       * @param reason An optional reason for the kick.
        */
       void kick( const std::string& nick, const std::string& reason = "" );
+
+      /**
+       * Use this function to ban a user from the room.
+       * Depending on service and/or room configuration and role/affiliation
+       * this may not always succeed. Usually, an affiliation of admin is necessary.
+       * @note This is a convenience function. It directly uses setAffiliation() with a MUCRoomAffiliation
+       * of RoleOutcast.
+       * @param nick The nick of the user to be banned.
+       * @param reason An optional reason for the ban.
+       */
+      void ban( const std::string& nick, const std::string& reason );
+
+      /**
+       * Use this function to grant voice to a user in a moderated room.
+       * Depending on service and/or room configuration and role/affiliation
+       * this may not always succeed. Usually, a role of 'moderator' is necessary.
+       * @note This is a convenience function. It directly uses setRole() with a MUCRoomRole
+       * of RoleParticipant.
+       * @param nick The nick of the user to be granted voice.
+       * @param reason An optional reason for the grant.
+       */
+      void grantVoice( const std::string& nick, const std::string& reason );
+
+      /**
+       * Use this function to revoke voice from a user in a moderated room.
+       * Depending on service and/or room configuration and role/affiliation
+       * this may not always succeed. Usually, a role of 'moderator' is necessary.
+       * @note This is a convenience function. It directly uses setRole() with a MUCRoomRole
+       * of RoleVisitor.
+       * @param nick The nick of the user.
+       * @param reason An optional reason for the revoke.
+       */
+      void revokeVoice( const std::string& nick, const std::string& reason );
+
+      /**
+       * Use this function to change the role of a user in the room.
+       * Usually, at least moderator privileges are required to succeed.
+       * @param nick The nick of the user who's role shall be modfified.
+       * @param role The user's new role in the room.
+       * @param reason An optional reason for the role change.
+       */
+      void setRole( const std::string& nick, MUCRoomRole role, const std::string& reason = "" );
+
+      /**
+       * Use this function to change the affiliation of a user in the room.
+       * Usually, at least admin privileges are required to succeed.
+       * @param nick The nick of the user who's affiliation shall be modfified.
+       * @param role The user's new affiliation in the room.
+       * @param reason An optional reason for the affiliation change.
+       */
+      void setAffiliation( const std::string& nick, MUCRoomAffiliation affiliation,
+                           const std::string& reason );
 
       // reimplemented from DiscoHandler
       virtual void handleDiscoInfoResult( Stanza *stanza, int context );
@@ -273,14 +330,23 @@ namespace gloox
       void setNonAnonymous();
       void setSemiAnonymous();
       void setFullyAnonymous();
+      void modifyOccupant( const std::string& nick, int state, const std::string roa,
+                           const std::string& reason );
 
       enum TrackEnum
       {
         RequestUniqueName,
         GetRoomInfo,
         GetRoomItems,
-        KickParticipant,
-        BanParticipant
+        SetRNone,
+        SetVisitor,
+        SetParticipant,
+        SetModerator,
+        SetANone,
+        SetOutcast,
+        SetMember,
+        SetAdmin,
+        SetOwner
       };
 
       ClientBase *m_parent;
