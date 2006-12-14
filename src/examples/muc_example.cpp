@@ -1,6 +1,6 @@
 #include "../client.h"
 #include "../connectionlistener.h"
-#include "../mucroomlistener.h"
+#include "../mucroomhandler.h"
 #include "../mucroom.h"
 #include "../disco.h"
 #include "../stanza.h"
@@ -19,7 +19,7 @@ using namespace gloox;
 #include <windows.h>
 #endif
 
-class MessageTest : public ConnectionListener, LogHandler, MUCRoomListener
+class MessageTest : public ConnectionListener, LogHandler, MUCRoomHandler
 {
   public:
     MessageTest() {};
@@ -28,8 +28,8 @@ class MessageTest : public ConnectionListener, LogHandler, MUCRoomListener
 
     void start()
     {
-      JID jid( "hurkhurk@jabber.cc/gloox" );
-      j = new Client( jid, "kuss" );
+      JID jid( "hurkhurk@example.net/gloox" );
+      j = new Client( jid, "hurkhurks" );
       j->registerConnectionListener( this );
       j->setPresence( PresenceAvailable, -1 );
       j->disco()->setVersion( "gloox muc_example", GLOOX_VERSION, "Linux" );
@@ -41,7 +41,7 @@ class MessageTest : public ConnectionListener, LogHandler, MUCRoomListener
       j->logInstance().registerLogHandler( LogLevelDebug, LogAreaAll, this );
 
       JID nick( "test@conference.jabber.org/glooxmuctest" );
-      m_room = new MUCRoom( j, nick, this );
+      m_room = new MUCRoom( j, nick, this, 0 );
 
       if( j->connect( false ) )
       {

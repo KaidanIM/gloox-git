@@ -20,7 +20,7 @@
 #include "presencehandler.h"
 #include "iqhandler.h"
 #include "messagehandler.h"
-#include "mucroomlistener.h"
+#include "mucroomhandler.h"
 #include "jid.h"
 
 #include <string>
@@ -30,6 +30,7 @@ namespace gloox
 
   class ClientBase;
   class MUCMessageSession;
+  class MUCRoomConfigHandler;
   class Stanza;
 
   /**
@@ -65,9 +66,13 @@ namespace gloox
        * @param parent The ClientBase object to use for the communication.
        * @param nick The room's name and service plus the desired nickname in the form
        * room@service/nick.
-       * @param mrl The MUCRoomListener that will listen to room events.
+       * @param mrh The MUCRoomHandler that will listen to room events. May be 0 and may be specified
+       * later using registerMUCRoomHandler(). However, without one, MUC is no joy.
+       * @param mrh The MUCRoomConfigHandler that will listen to room config result. Defaults to 0
+       * initially. However, at the latest you need one when you create a new room which is not an
+       * instant room. You can set a MUCRoomConfigHandler using registerMUCRoomConfigHandler().
        */
-      MUCRoom( ClientBase *parent, const JID& nick, MUCRoomListener *mrl );
+      MUCRoom( ClientBase *parent, const JID& nick, MUCRoomHandler *mrh, MUCRoomConfigHandler *mrch = 0 );
 
       /**
        * Virtual Destructor.
@@ -121,7 +126,7 @@ namespace gloox
       /**
        * Sets the subject of the room to the given string.
        * The MUC service may decline the request to set a new subject. You should
-       * not assume the subject was set successfully util it is acknowledged via the MUCRoomListener.
+       * not assume the subject was set successfully util it is acknowledged via the MUCRoomHandler.
        * @param subject The new subject.
        */
       void setSubject( const std::string& subject );
@@ -146,7 +151,7 @@ namespace gloox
       /**
        * Use this function to change the user's nickname in the room.
        * The MUC service may decline the request to set a new nickname. You should not assume
-       * the nick change was successful until it is acknowledged via the MUCRoomListener.
+       * the nick change was successful until it is acknowledged via the MUCRoomHandler.
        * @param nick The user's new nickname.
        */
       void setNick( const std::string& nick );
@@ -170,7 +175,7 @@ namespace gloox
 
       /**
        * Use this function to request basic room info, possibly prior to joining it.
-       * Results are announced using the MUCRoomListener.
+       * Results are announced using the MUCRoomHandler.
        */
       void getRoomInfo();
 
@@ -178,7 +183,7 @@ namespace gloox
        * Use this function to request information about the current room occupants,
        * possibly prior to joining it. The room ay be configured not to disclose such
        * information.
-       * Results are announced using the MUCRoomListener.
+       * Results are announced using the MUCRoomHandler.
        */
       void getRoomItems();
 
@@ -194,11 +199,28 @@ namespace gloox
       void setPublish( bool publish, bool publishNick );
 
       /**
-       * Use this function to register a (new) MUCRoomListener with this room. There can be only one
-       * MUCRoomListener per room at any one time.
-       * @param mrl The MUCRoomListener to register.
+       * Use this function to register a (new) MUCRoomHandler with this room. There can be only one
+       * MUCRoomHandler per room at any one time.
+       * @param mrl The MUCRoomHandler to register.
        */
-      void registerMUCRoomListener( MUCRoomListener *mrl ) { m_roomListener = mrl; };
+      void registerMUCRoomHandler( MUCRoomHandler *mrl ) { m_roomHandler = mrl; };
+
+      /**
+       * Use this function to remove the registered MUCRoomHandler.
+       */
+      void removeMUCRoomHandler() { m_roomHandler = 0; };
+
+      /**
+       * Use this function to register a (new) MUCRoomConfigHandler with this room. There can
+       * be only one MUCRoomConfigHandler per room at any one time.
+       * @param mrl The MUCRoomConfigHandler to register.
+       */
+      void registerMUCRoomConfigHandler( MUCRoomConfigHandler *mrch ) { m_roomConfigHandler = mrch; };
+
+      /**
+       * Use this function to remove the registered MUCRoomConfigHandler.
+       */
+      void removeMUCRoomConfigHandler() { m_roomConfigHandler = 0; };
 
       /**
        * Use this function to add history to a (newly created) room. The use case from the MUC spec
@@ -208,7 +230,7 @@ namespace gloox
        * @param from The JID of the original author of this part of the history.
        * @param stamp The datetime of the original message in the format: 20061224T12:15:23
        * @note You should not attempt to use this function before
-       * MUCRoomListener::handleMUCParticipantPresence() was called for the first time.
+       * MUCRoomHandler::handleMUCParticipantPresence() was called for the first time.
        */
       void addHistory( const std::string& message, const JID& from, const std::string& stamp );
 
@@ -313,7 +335,7 @@ namespace gloox
 
       /**
        * Use this function to request the room's configuration form.
-       * It can be used either after MUCRoomListener::handleMUCRoomCreation() was called,
+       * It can be used either after MUCRoomHandler::handleMUCRoomCreation() was called,
        * or at any later time.
        *
        * Usually owner priviledges are required for this action to succeed.
@@ -322,14 +344,14 @@ namespace gloox
 
       /**
        * Use this function to accept the room's default configuration. This function is useful
-       * only after MUCRoomListener::handleMUCRoomCreation() was called. This is a NOOP at
+       * only after MUCRoomHandler::handleMUCRoomCreation() was called. This is a NOOP at
        * any other time.
        */
       void acknowledgeInstantRoom();
 
       /**
        * Use this function to cancel the creation of a room. This function is useful only after
-       * MUCRoomListener::handleMUCRoomCreation() was called. This is a NOOP at any other time.
+       * MUCRoomHandler::handleMUCRoomCreation() was called. This is a NOOP at any other time.
        */
       void cancelRoomCreation();
 
@@ -387,29 +409,10 @@ namespace gloox
                            const std::string& reason );
       void acknowledgeRoomCreation();
 
-      enum TrackEnum
-      {
-        RequestUniqueName,
-        CreateInstantRoom,
-        CancelRoomCreation,
-        RequestRoomConfig,
-        DestroyRoom,
-        GetRoomInfo,
-        GetRoomItems,
-        SetRNone,
-        SetVisitor,
-        SetParticipant,
-        SetModerator,
-        SetANone,
-        SetOutcast,
-        SetMember,
-        SetAdmin,
-        SetOwner
-      };
-
       ClientBase *m_parent;
       JID m_nick;
-      MUCRoomListener *m_roomListener;
+      MUCRoomHandler *m_roomHandler;
+      MUCRoomConfigHandler *m_roomConfigHandler;
       MUCMessageSession *m_session;
 
       typedef std::list<MUCRoomParticipant> ParticipantList;

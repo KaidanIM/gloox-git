@@ -17,17 +17,19 @@
 #include "dataform.h"
 #include "stanza.h"
 #include "disco.h"
-#include "mucroomlistener.h"
+#include "mucroomhandler.h"
+#include "mucroomconfighandler.h"
 #include "mucmessagesession.h"
 
 namespace gloox
 {
 
-  MUCRoom::MUCRoom( ClientBase *parent, const JID& nick, MUCRoomListener *mrl )
-    : m_parent( parent ), m_nick( nick ), m_roomListener( mrl ), m_affiliation( AffiliationNone ),
-      m_role( RoleNone ), m_historyType( HistoryUnknown ), m_historyValue( 0 ), m_flags( 0 ),
-      m_creationInProgress( false ), m_configChanged( false ), m_publishNick( false ), m_publish( false ),
-      m_joined( false ), m_unique( false )
+  MUCRoom::MUCRoom( ClientBase *parent, const JID& nick, MUCRoomHandler *mrh,
+                    MUCRoomConfigHandler *mrch )
+    : m_parent( parent ), m_nick( nick ), m_roomHandler( mrh ), m_roomConfigHandler( mrch ),
+      m_affiliation( AffiliationNone ), m_role( RoleNone ), m_historyType( HistoryUnknown ),
+      m_historyValue( 0 ), m_flags( 0 ), m_creationInProgress( false ), m_configChanged( false ),
+      m_publishNick( false ), m_publish( false ), m_joined( false ), m_unique( false )
   {
 #ifndef _MSC_VER
 #warning TODO: discover reserved room nickname: http://www.xmpp.org/extensions/xep-0045.html#reservednick
@@ -347,7 +349,7 @@ namespace gloox
       return;
 
     std::string newRoA;
-    TrackEnum action = SetRNone;
+    MUCOperation action = SetRNone;
     if( roa == "role" )
     {
       switch( state )
@@ -415,18 +417,18 @@ namespace gloox
     if( stanza->from().bare() != m_nick.bare() )
       return;
 
-    if( !m_roomListener )
+    if( !m_roomHandler )
       return;
 
     if( stanza->subtype() == StanzaPresenceError )
     {
       m_joined = false;
-      m_roomListener->handleMUCError( this, stanza->error() );
+      m_roomHandler->handleMUCError( this, stanza->error() );
     }
     else
     {
       Tag *t;
-      if( m_roomListener && ( t = stanza->findChild( "x", "xmlns", XMLNS_MUC_USER ) ) != 0 )
+      if( m_roomHandler && ( t = stanza->findChild( "x", "xmlns", XMLNS_MUC_USER ) ) != 0 )
       {
         MUCRoomParticipant party;
         party.flags = 0;
@@ -496,7 +498,7 @@ namespace gloox
             else if( code == "201" )
             {
               m_creationInProgress = true;
-              if( m_roomListener->handleMUCRoomCreation( this ) )
+              if( m_roomHandler->handleMUCRoomCreation( this ) )
                 acknowledgeInstantRoom();
             }
             else if( code == "210" )
@@ -531,7 +533,7 @@ namespace gloox
         if( stanza->show() == PresenceUnavailable )
           party.reason = stanza->status();
 
-        m_roomListener->handleMUCParticipantPresence( this, party, stanza->show() );
+        m_roomHandler->handleMUCParticipantPresence( this, party, stanza->show() );
         delete party.jid;
         delete party.nick;
         delete party.actor;
@@ -616,7 +618,7 @@ namespace gloox
 
   void MUCRoom::handleMessage( Stanza *stanza )
   {
-    if( !m_roomListener )
+    if( !m_roomHandler )
       return;
 
     if( stanza->subtype() == StanzaMessageError )
@@ -663,7 +665,7 @@ namespace gloox
             JID invitee( (*it)->findAttribute( "from" ) );
             if( (*it)->hasChild( "reason" ) )
               reason = (*it)->findChild( "reason" )->cdata();
-            m_roomListener->handleMUCInviteDecline( this, invitee, reason );
+            m_roomHandler->handleMUCInviteDecline( this, invitee, reason );
             return;
           }
           // call some handler?
@@ -672,7 +674,7 @@ namespace gloox
 
       if( !stanza->subject().empty() )
       {
-        m_roomListener->handleMUCSubject( this, stanza->from().resource(), stanza->subject() );
+        m_roomHandler->handleMUCSubject( this, stanza->from().resource(), stanza->subject() );
       }
       else if( !stanza->body().empty() )
       {
@@ -690,7 +692,7 @@ namespace gloox
             stanza->subtype() == StanzaMessageNormal )
           privMsg = true;
 
-        m_roomListener->handleMUCMessage( this, stanza->from().resource(), stanza->body(),
+        m_roomHandler->handleMUCMessage( this, stanza->from().resource(), stanza->body(),
                                           history, when, privMsg );
       }
     }
@@ -755,6 +757,38 @@ namespace gloox
         break;
       case SetOwner:
         break;
+      case CreateInstantRoom:
+        break;
+      case CancelRoomCreation:
+        break;
+      case RequestRoomConfig:
+        break;
+      case DestroyRoom:
+        break;
+      case RequestVoiceList:
+        break;
+      case StoreVoiceList:
+        break;
+      case RequestBanList:
+        break;
+      case StoreBanList:
+        break;
+      case RequestMemberList:
+        break;
+      case StoreMemberList:
+        break;
+      case RequestModeratorList:
+        break;
+      case StoreModeratorList:
+        break;
+      case RequestOwnerList:
+        break;
+      case StoreOwnerList:
+        break;
+      case RequestAdminList:
+        break;
+      case StoreAdminList:
+        break;
     }
     return false;
   }
@@ -782,6 +816,38 @@ namespace gloox
       case SetAdmin:
         break;
       case SetOwner:
+        break;
+      case CreateInstantRoom:
+        break;
+      case CancelRoomCreation:
+        break;
+      case RequestRoomConfig:
+        break;
+      case DestroyRoom:
+        break;
+      case RequestVoiceList:
+        break;
+      case StoreVoiceList:
+        break;
+      case RequestBanList:
+        break;
+      case StoreBanList:
+        break;
+      case RequestMemberList:
+        break;
+      case StoreMemberList:
+        break;
+      case RequestModeratorList:
+        break;
+      case StoreModeratorList:
+        break;
+      case RequestOwnerList:
+        break;
+      case StoreOwnerList:
+        break;
+      case RequestAdminList:
+        break;
+      case StoreAdminList:
         break;
     }
     return false;
@@ -846,8 +912,8 @@ namespace gloox
             }
           }
         }
-        if( m_roomListener )
-          m_roomListener->handleMUCInfo( this, m_flags, name, df );
+        if( m_roomHandler )
+          m_roomHandler->handleMUCInfo( this, m_flags, name, df );
         break;
       }
       default:
@@ -874,8 +940,8 @@ namespace gloox
               items[(*it)->findAttribute( "name" )] = (*it)->findAttribute( "jid" );
             }
           }
-          if( m_roomListener )
-            m_roomListener->handleMUCItems( this, items );
+          if( m_roomHandler )
+            m_roomHandler->handleMUCItems( this, items );
         }
         break;
       }
@@ -886,18 +952,18 @@ namespace gloox
 
   void MUCRoom::handleDiscoError( Stanza *stanza, int context )
   {
-    if( !m_roomListener )
+    if( !m_roomHandler )
       return;
 
     switch( context )
     {
       case GetRoomInfo:
-        m_roomListener->handleMUCInfo( this, 0, "", 0 );
+        m_roomHandler->handleMUCInfo( this, 0, "", 0 );
         break;
       case GetRoomItems:
       {
         StringMap items;
-        m_roomListener->handleMUCItems( this, items );
+        m_roomHandler->handleMUCItems( this, items );
         break;
       }
       default:

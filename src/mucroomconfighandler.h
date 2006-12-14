@@ -15,10 +15,79 @@
 #ifndef MUCROOMCONFIGHANDLER_H__
 #define MUCROOMCONFIGHANDLER_H__
 
-#include "macros.h"
+#include "gloox.h"
+
+#include <string>
+#include <list>
 
 namespace gloox
 {
+
+  /**
+   * An item in a list of MUC room users. Lists of these items are
+   * used when manipulating the lists of members, admins, owners, etc.
+   * of a room.
+   */
+  struct MUCListItem
+  {
+    JID *jid;                       /**< Pointer to the occupant's JID if available, 0 otherwise. */
+    std::string nick;               /**< The occupant's nick in the room. */
+    MUCRoomAffiliation affiliation; /**< The occupant's affiliation. */
+    MUCRoomRole role;               /**< The occupant's role. */
+  };
+
+  /**
+   * A list of MUCListItems.
+   */
+  typedef std::list<MUCListItem> MUCListItemList;
+
+  /**
+   *
+   */
+  enum MUCOperation
+  {
+    RequestUniqueName,              /**< */
+    CreateInstantRoom,              /**< */
+    CancelRoomCreation,             /**< */
+    RequestRoomConfig,              /**< */
+    DestroyRoom,                    /**< */
+    GetRoomInfo,                    /**< */
+    GetRoomItems,                   /**< */
+    SetRNone,                       /**< */
+    SetVisitor,                     /**< */
+    SetParticipant,                 /**< */
+    SetModerator,                   /**< */
+    SetANone,                       /**< */
+    SetOutcast,                     /**< */
+    SetMember,                      /**< */
+    SetAdmin,                       /**< */
+    SetOwner,                       /**< */
+    RequestVoiceList,               /**< */
+    StoreVoiceList,                 /**< */
+    RequestBanList,                 /**< */
+    StoreBanList,                   /**< */
+    RequestMemberList,              /**< */
+    StoreMemberList,                /**< */
+    RequestModeratorList,           /**< */
+    StoreModeratorList,             /**< */
+    RequestOwnerList,               /**< */
+    StoreOwnerList,                 /**< */
+    RequestAdminList,               /**< */
+    StoreAdminList                  /**< */
+  };
+
+  /**
+   *
+   */
+  enum MUCListType
+  {
+    MUCListParticipants,            /**< */
+    MUCListModerators,              /**< */
+    MUCListAdmins,                  /**< */
+    MUCListOwners,                  /**< */
+    MUCListMembers,                 /**< */
+    MUCListBanned                   /**< */
+  };
 
   /**
    *
@@ -33,6 +102,31 @@ namespace gloox
        */
       virtual ~MUCRoomConfigHandler() {};
 
+      /**
+       *
+       */
+      virtual void handleMUCConfigList( MUCRoom *room, const MUCListItemList& items, MUCListType type ) = 0;
+
+      /**
+       *
+       */
+      virtual void handleMUCConfigForm( MUCRoom *room, const DataForm *form ) = 0;
+
+      /**
+       *
+       */
+      virtual void handleMUCConfigResult( MUCRoom *room, bool success, MUCOperation operation ) = 0;
+
+      /**
+       *
+       */
+      virtual void handleMUCVoiceRequest( MUCRoom *room, const JID& requester, const DataForm *form ) = 0;
+
+      /**
+       *
+       */
+      virtual void handleMUCRegistrationRequest( MUCRoom *room, const JID& requester,
+                                                 const DataForm *form ) = 0;
 
   };
 
