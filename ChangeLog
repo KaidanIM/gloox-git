@@ -1,3 +1,11 @@
+v0.8.6 -- 14 Dec 2006
+-------------------------
+- Tag: proper escaping of names/attributes/cdata (thanks to Polycom)
+- VCardManager: call handleVCard if VCard is empty
+- ClientBase: some disconnect fixes (thanks to Polycom)
+- Adhoc: de-registrataion of commands
+
+
 v0.8.5 -- 10 Nov 2006
 ---------------------
 - RosterManager: keep Roster up-to-date even if no RosterListener is registered
