@@ -28,9 +28,10 @@ class MessageTest : public ConnectionListener, LogHandler, MUCRoomListener
 
     void start()
     {
-      JID jid( "hurkhurk@example.net/gloox" );
-      j = new Client( jid, "hurkhurks" );
+      JID jid( "hurkhurk@jabber.cc/gloox" );
+      j = new Client( jid, "kuss" );
       j->registerConnectionListener( this );
+      j->setPresence( PresenceAvailable, -1 );
       j->disco()->setVersion( "gloox muc_example", GLOOX_VERSION, "Linux" );
       j->disco()->setIdentity( "client", "bot" );
       StringList ca;
@@ -134,9 +135,15 @@ class MessageTest : public ConnectionListener, LogHandler, MUCRoomListener
       }
     };
 
-    virtual void handleMUCInviteDecline( MUCRoom *room, const JID& invitee, const std::string& reason )
+    virtual void handleMUCInviteDecline( MUCRoom * /*room*/, const JID& invitee, const std::string& reason )
     {
       printf( "Invitee %s declined invitation. reason given: %s\n", invitee.full().c_str(), reason.c_str() );
+    };
+
+    virtual bool handleMUCRoomCreation( MUCRoom *room )
+    {
+      printf( "room %s didn't exist, beeing created.\n", room->name().c_str() );
+      return true;
     };
 
   private:

@@ -419,6 +419,8 @@ namespace gloox
             party.affiliation = AffiliationAdmin;
           else if( affiliation == "member" )
             party.affiliation = AffiliationMember;
+          else if( affiliation == "outcast" )
+            party.affiliation = AffiliationOutcast;
           else
             party.affiliation = AffiliationNone;
 
@@ -435,6 +437,17 @@ namespace gloox
           std::string jid = i->findAttribute( "jid" );
           if( !jid.empty() )
             party.jid = new JID( jid );
+
+          if( i->hasChild( "actor" ) )
+          {
+            const std::string actor = i->findChild( "actor" )->findAttribute( "jid" );
+            if( !actor.empty() )
+              party.actor = new JID( actor );
+          }
+          if( i->hasChild( "reason" ) )
+          {
+            party.reason = i->findChild( "reason" )->cdata();
+          }
         }
 
         Tag::TagList l = stanza->children();
@@ -445,9 +458,7 @@ namespace gloox
           {
             const std::string code = i->findAttribute( "code" );
             if( code == "100" )
-            {
               setNonAnonymous();
-            }
             else if( code == "101" )
             {
               // affiliation changed while not in the room. not to be handled here, I guess
@@ -458,10 +469,15 @@ namespace gloox
               m_role = party.role;
               m_affiliation = party.affiliation;
             }
-            else if( code == "210" )
+            else if( code == "201" )
             {
-              m_nick.setResource( stanza->from().resource() );
+              if( m_roomListener->handleMUCRoomCreation( this ) )
+                acknowledgeRoomCreation();
             }
+            else if( code == "210" )
+              m_nick.setResource( stanza->from().resource() );
+            else if( code == "301" )
+              party.flags |= UserBanned;
             else if( code == "303" )
             {
               party.flags |= UserNickChanged;
@@ -481,19 +497,9 @@ namespace gloox
               }
             }
             else if( code == "307" )
-            {
               party.flags |= UserKicked;
-              if( i && i->hasChild( "actor" ) )
-              {
-                JID *j = new JID( i->findChild( "actor" )->findAttribute( "jid" ) );
-                if( !j->empty() )
-                  party.actor= j;
-              }
-              if( i && i->hasChild( "reason" ) )
-              {
-                party.reason = i->findChild( "reason" )->cdata();
-              }
-            }
+            else if( code == "321" )
+              party.flags |= UserAffiliationChanged;
           }
         }
 
@@ -506,6 +512,20 @@ namespace gloox
         delete party.actor;
       }
     }
+  }
+
+  void MUCRoom::acknowledgeRoomCreation()
+  {
+    Tag *x = new Tag( "x" );
+    x->addAttribute( "xmlns", XMLNS_X_DATA );
+    x->addAttribute( "type", "submit" );
+
+    JID j( m_nick.bare() );
+    const std::string id = m_parent->getID();
+    Stanza *iq = Stanza::createIqStanza( j, id, StanzaIqSet, XMLNS_MUC_OWNER, x );
+
+    m_parent->trackID( this, id, CreateInstantRoom );
+    m_parent->send( iq );
   }
 
   void MUCRoom::setNonAnonymous()

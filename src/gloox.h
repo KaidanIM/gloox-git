@@ -911,10 +911,11 @@ namespace gloox
    */
   enum MUCUserFlag
   {
-    UserSelf         =   1,         /**< */
-    UserNickChanged  =   2,         /**< */
-    UserKicked       =   4,         /**< */
-    UserBanned       =   8          /**< */
+    UserSelf               =   1,   /**< */
+    UserNickChanged        =   2,   /**< */
+    UserKicked             =   4,   /**< */
+    UserBanned             =   8,   /**< */
+    UserAffiliationChanged =  16    /**< */
   };
 
   /**

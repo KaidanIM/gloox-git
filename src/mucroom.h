@@ -83,6 +83,25 @@ namespace gloox
       void setPassword( const std::string& password ) { m_password = password; };
 
       /**
+       * A convenience function that returns the room's name.
+       * @return The room's name.
+       */
+      const std::string name() const { return m_nick.username(); };
+
+      /**
+       * A convenience function that returns the name/address of the MUC service the room is running on
+       * (e.g., conference.jabber.org).
+       * @return The MUC service's name/address.
+       */
+      const std::string service() const { return m_nick.server(); };
+
+      /**
+       * A convenience function that returns the user's nickname in the room.
+       * @return The user's nickname.
+       */
+      const std::string nick() const { return m_nick.resource(); };
+
+      /**
        * Join this room.
        */
       void join();
@@ -332,10 +351,12 @@ namespace gloox
       void setFullyAnonymous();
       void modifyOccupant( const std::string& nick, int state, const std::string roa,
                            const std::string& reason );
+      void acknowledgeRoomCreation();
 
       enum TrackEnum
       {
         RequestUniqueName,
+        CreateInstantRoom,
         GetRoomInfo,
         GetRoomItems,
         SetRNone,
