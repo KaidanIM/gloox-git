@@ -26,8 +26,8 @@ namespace gloox
   MUCRoom::MUCRoom( ClientBase *parent, const JID& nick, MUCRoomListener *mrl )
     : m_parent( parent ), m_nick( nick ), m_roomListener( mrl ), m_affiliation( AffiliationNone ),
       m_role( RoleNone ), m_historyType( HistoryUnknown ), m_historyValue( 0 ), m_flags( 0 ),
-      m_configChanged( false ), m_publishNick( false ), m_publish( false ), m_joined( false ),
-      m_unique( false )
+      m_creationInProgress( false ), m_configChanged( false ), m_publishNick( false ), m_publish( false ),
+      m_joined( false ), m_unique( false )
   {
 #ifndef _MSC_VER
 #warning TODO: discover reserved room nickname: http://www.xmpp.org/extensions/xep-0045.html#reservednick
@@ -117,6 +117,30 @@ namespace gloox
     m_joined = false;
   }
 
+  void MUCRoom::destroy( const std::string& reason, const JID* alternate, const std::string& password )
+  {
+    if( !m_parent || !m_joined )
+      return;
+
+    Tag *d = new Tag( "destroy" );
+    if( alternate )
+      d->addAttribute( "jid", alternate->bare() );
+
+    if( !reason.empty() )
+      new Tag( d, "reason", reason );
+
+    if( !password.empty() )
+      new Tag( d, "password", password );
+
+    const std::string id = m_parent->getID();
+
+    JID j( m_nick.bare() );
+    Stanza *iq = Stanza::createIqStanza( j, id, StanzaIqSet, XMLNS_MUC_OWNER, d );
+
+    m_parent->trackID( this, id, DestroyRoom );
+    m_parent->send( iq );
+  }
+
   void MUCRoom::send( const std::string& message )
   {
     if( m_session && m_joined )
@@ -131,7 +155,7 @@ namespace gloox
 
   void MUCRoom::setNick( const std::string& nick )
   {
-    if( m_parent )
+    if( m_parent && m_joined )
     {
       m_newNick = nick;
 
@@ -187,7 +211,7 @@ namespace gloox
 
   void MUCRoom::invite( const JID& invitee, const std::string& reason, bool cont )
   {
-    if( !m_parent )
+    if( !m_parent || !m_joined )
       return;
 
     Tag *m = new Tag( "message" );
@@ -264,7 +288,7 @@ namespace gloox
 
   void MUCRoom::requestVoice()
   {
-    if( !m_parent )
+    if( !m_parent || !m_joined )
       return;
 
     DataForm df;
@@ -319,7 +343,7 @@ namespace gloox
   void MUCRoom::modifyOccupant( const std::string& nick, int state, const std::string roa,
                                 const std::string& reason )
   {
-    if( !m_parent || nick.empty() || roa.empty() )
+    if( !m_parent || !m_joined || nick.empty() || roa.empty() )
       return;
 
     std::string newRoA;
@@ -471,8 +495,9 @@ namespace gloox
             }
             else if( code == "201" )
             {
+              m_creationInProgress = true;
               if( m_roomListener->handleMUCRoomCreation( this ) )
-                acknowledgeRoomCreation();
+                acknowledgeInstantRoom();
             }
             else if( code == "210" )
               m_nick.setResource( stanza->from().resource() );
@@ -514,8 +539,11 @@ namespace gloox
     }
   }
 
-  void MUCRoom::acknowledgeRoomCreation()
+  void MUCRoom::acknowledgeInstantRoom()
   {
+    if( !m_creationInProgress || !m_parent || !m_joined )
+      return;
+
     Tag *x = new Tag( "x" );
     x->addAttribute( "xmlns", XMLNS_X_DATA );
     x->addAttribute( "type", "submit" );
@@ -526,6 +554,43 @@ namespace gloox
 
     m_parent->trackID( this, id, CreateInstantRoom );
     m_parent->send( iq );
+
+    m_creationInProgress = false;
+  }
+
+  void MUCRoom::cancelRoomCreation()
+  {
+    if( !m_creationInProgress || !m_parent || !m_joined )
+      return;
+
+    Tag *x = new Tag( "x" );
+    x->addAttribute( "xmlns", XMLNS_X_DATA );
+    x->addAttribute( "type", "cancel" );
+
+    JID j( m_nick.bare() );
+    const std::string id = m_parent->getID();
+    Stanza *iq = Stanza::createIqStanza( j, id, StanzaIqSet, XMLNS_MUC_OWNER, x );
+
+    m_parent->trackID( this, id, CancelRoomCreation );
+    m_parent->send( iq );
+
+    m_creationInProgress = false;
+  }
+
+  void MUCRoom::requestRoomConfig()
+  {
+    if( !m_parent || !m_joined )
+      return;
+
+    JID j( m_nick.bare() );
+    const std::string id = m_parent->getID();
+    Stanza *iq = Stanza::createIqStanza( j, id, StanzaIqGet, XMLNS_MUC_OWNER, 0 );
+
+    m_parent->trackID( this, id, RequestRoomConfig );
+    m_parent->send( iq );
+
+    if( m_creationInProgress )
+      m_creationInProgress = false;
   }
 
   void MUCRoom::setNonAnonymous()

@@ -42,8 +42,8 @@ namespace gloox
   {
     public:
       /**
-       * Alloowable history request types. To disable sending of history, use any value except
-       * HistoryUnknwon and specify a zero-length time span (using setRequestHistory()).
+       * Allowable history request types. To disable sending of history, use any value except
+       * HistoryUnknown and specify a zero-length time span (using setRequestHistory()).
        */
       enum HistoryRequestType
       {
@@ -205,7 +205,7 @@ namespace gloox
        * is to add history to a room that was created in the process of a transformation of a
        * one-to-one chat to a multi-user chat.
        * @param message A reason for declining the invitation.
-       * @param from The JID of the original author auf this part of the history.
+       * @param from The JID of the original author of this part of the history.
        * @param stamp The datetime of the original message in the format: 20061224T12:15:23
        * @note You should not attempt to use this function before
        * MUCRoomListener::handleMUCParticipantPresence() was called for the first time.
@@ -311,6 +311,40 @@ namespace gloox
       void setAffiliation( const std::string& nick, MUCRoomAffiliation affiliation,
                            const std::string& reason );
 
+      /**
+       * Use this function to request the room's configuration form.
+       * It can be used either after MUCRoomListener::handleMUCRoomCreation() was called,
+       * or at any later time.
+       *
+       * Usually owner priviledges are required for this action to succeed.
+       */
+      void requestRoomConfig();
+
+      /**
+       * Use this function to accept the room's default configuration. This function is useful
+       * only after MUCRoomListener::handleMUCRoomCreation() was called. This is a NOOP at
+       * any other time.
+       */
+      void acknowledgeInstantRoom();
+
+      /**
+       * Use this function to cancel the creation of a room. This function is useful only after
+       * MUCRoomListener::handleMUCRoomCreation() was called. This is a NOOP at any other time.
+       */
+      void cancelRoomCreation();
+
+      /**
+       * Use this function to destroy the room. All the occupants will be removed from the room.
+       * @param reason An optional reason for the destruction.
+       * @param alternate A pointer to a JID of an alternate venue (e.g., another MUC room).
+       * May be 0.
+       * @param password An optional password for the alternate venue.
+       *
+       * Usually owner priviledges are required for this action to succeed.
+       */
+      void destroy( const std::string& reason = "",
+                    const JID* alternate = 0, const std::string& password = "" );
+
       // reimplemented from DiscoHandler
       virtual void handleDiscoInfoResult( Stanza *stanza, int context );
 
@@ -357,6 +391,9 @@ namespace gloox
       {
         RequestUniqueName,
         CreateInstantRoom,
+        CancelRoomCreation,
+        RequestRoomConfig,
+        DestroyRoom,
         GetRoomInfo,
         GetRoomItems,
         SetRNone,
@@ -389,6 +426,7 @@ namespace gloox
       std::string m_historySince;
       int m_historyValue;
       int m_flags;
+      bool m_creationInProgress;
       bool m_configChanged;
       bool m_publishNick;
       bool m_publish;
