@@ -46,12 +46,12 @@ namespace gloox
       /**
        * Reimplement this function if you want to be notified about
        * incoming IQs with a specific value of the @c id attribute. You
-       * have to enable tracking of those IDs using @c Client::trackID().
+       * have to enable tracking of those IDs using Client::trackID().
        * This is usually useful for IDs that generate a positive reply, i.e.
        * &lt;iq type='result' id='reg'/&gt; where a namespace filter wouldn't
        * work.
        * @param stanza The complete Stanza.
-       * @param context A value to restore context, stored with @ref ClientBase::trackID().
+       * @param context A value to restore context, stored with ClientBase::trackID().
        * @return Indicates whether a request of type 'get' or 'set' has been handled. This includes
        * the obligatory 'result' answer. If you return @b false, a 'error' will be sent.
        */
