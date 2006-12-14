@@ -21,6 +21,7 @@
 #include "iqhandler.h"
 #include "messagehandler.h"
 #include "mucroomhandler.h"
+#include "mucroomconfighandler.h"
 #include "jid.h"
 
 #include <string>
@@ -30,7 +31,6 @@ namespace gloox
 
   class ClientBase;
   class MUCMessageSession;
-  class MUCRoomConfigHandler;
   class Stanza;
 
   /**
@@ -316,7 +316,7 @@ namespace gloox
 
       /**
        * Use this function to change the role of a user in the room.
-       * Usually, at least moderator privileges are required to succeed.
+       * Usually, at least moderator priviledges are required to succeed.
        * @param nick The nick of the user who's role shall be modfified.
        * @param role The user's new role in the room.
        * @param reason An optional reason for the role change.
@@ -325,7 +325,7 @@ namespace gloox
 
       /**
        * Use this function to change the affiliation of a user in the room.
-       * Usually, at least admin privileges are required to succeed.
+       * Usually, at least admin priviledges are required to succeed.
        * @param nick The nick of the user who's affiliation shall be modfified.
        * @param role The user's new affiliation in the room.
        * @param reason An optional reason for the affiliation change.
@@ -367,6 +367,45 @@ namespace gloox
       void destroy( const std::string& reason = "",
                     const JID* alternate = 0, const std::string& password = "" );
 
+      /**
+       * Use this function to request a particluar list of room occupants.
+       * @param operation The following types of lists are available:
+       * @li Voice List: List of people having voice in a moderated room. Use RequestVoiceList.
+       * @li Members List: List of members of a room. Use RequestMemberList.
+       * @li Ban List: List of people banned from the room. Use RequestBanList.
+       * @li Moderator List: List of room moderators. Use RequestModeratorList.
+       * @li Admin List: List of room admins. Use RequestAdminList.
+       * @li Owner List: List of room owners. Use RequestOwnerList.
+       * Any other value of @c operation will be ignored.
+       */
+      void requestList( MUCOperation operation );
+
+      /**
+       * Use this function to store a (modified) list for the room.
+       * @param items The list of items. Example:<br/>
+       * You want to set the Voice List. The priviledge of Voice refers to the role of Participant.
+       * Furthermore, you only store the delta of the original (Voice)List. (Optionally, you could
+       * probably store the whole list, however, remeber to include those items that were modified,
+       * too.)
+       * You want to, say, add one occupant to the Voice List, and remove another one.
+       * Therefore you store:
+       * @li GuyOne, role participant -- this guy gets voice granted, he/she is now a participant.
+       * @li GuyTwo, role visitor -- this guy gets voice revoked, he/she is now a mere visitor
+       * (Visitor is the Role "below" Participant in the priviledges hierarchy).
+       *
+       * For operations modifying Roles, you should specifiy only the new Role in the MUCListItem
+       * structure, for those modifying Affiliations, you should only specify the new Affiliation,
+       * respectively. The nickname is mandatory in the MUCListItem structure. Items without nickname
+       * will be ignored.
+       *
+       * You may specify a reason for the role/affiliation change in the MUCListItem structure.
+       * You should not specify a JID in the MUCListItem structure, it will be ignored.
+       *
+       * @param operation See requestList() for a list of available list types. Any other value will
+       * be ignored.
+       */
+      void storeList( const MUCListItemList items, MUCOperation operation );
+
       // reimplemented from DiscoHandler
       virtual void handleDiscoInfoResult( Stanza *stanza, int context );
 
@@ -383,7 +422,7 @@ namespace gloox
       virtual void handleMessage( Stanza *stanza );
 
       // reimplemented from IqHandler
-      virtual bool handleIq( Stanza *stanza ) { return false; };
+      virtual bool handleIq( Stanza * /*stanza*/ ) { return false; };
 
       // reimplemented from IqHandler
       virtual bool handleIqID( Stanza *stanza, int context );
@@ -398,8 +437,6 @@ namespace gloox
       virtual StringMap handleDiscoNodeItems( const std::string& node = "" );
 
     private:
-      bool handleIqGet( Stanza *stanza, int context );
-      bool handleIqSet( Stanza *stanza, int context );
       bool handleIqResult( Stanza *stanza, int context );
       bool handleIqError( Stanza *stanza, int context );
       void setNonAnonymous();
@@ -408,6 +445,8 @@ namespace gloox
       void modifyOccupant( const std::string& nick, int state, const std::string roa,
                            const std::string& reason );
       void acknowledgeRoomCreation();
+      MUCRoomAffiliation getEnumAffiliation( const std::string& affiliation );
+      MUCRoomRole getEnumRole( const std::string& role );
 
       ClientBase *m_parent;
       JID m_nick;

@@ -34,6 +34,9 @@ namespace gloox
     std::string nick;               /**< The occupant's nick in the room. */
     MUCRoomAffiliation affiliation; /**< The occupant's affiliation. */
     MUCRoomRole role;               /**< The occupant's role. */
+    std::string reason;             /**< Use this only when **setting** the item's role/affiliation to
+                                     * specify a reason for the role/affiliation change. This field is
+                                     * empty in items fetched from the MUC service. */
   };
 
   /**
@@ -105,12 +108,13 @@ namespace gloox
       /**
        *
        */
-      virtual void handleMUCConfigList( MUCRoom *room, const MUCListItemList& items, MUCListType type ) = 0;
+      virtual void handleMUCConfigList( MUCRoom *room, const MUCListItemList& items,
+                                        MUCOperation operation ) = 0;
 
       /**
        *
        */
-      virtual void handleMUCConfigForm( MUCRoom *room, const DataForm *form ) = 0;
+      virtual void handleMUCConfigForm( MUCRoom *room, const DataForm& form ) = 0;
 
       /**
        *
