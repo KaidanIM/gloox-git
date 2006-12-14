@@ -224,14 +224,14 @@ namespace gloox
     m_parent->send( m );
   }
 
-  Stanza* MUCRoom::declineInvitation( const JID& room, const JID& invitee, const std::string& reason )
+  Stanza* MUCRoom::declineInvitation( const JID& room, const JID& invitor, const std::string& reason )
   {
     Stanza *m = new Stanza( "message" );
     m->addAttribute( "to", room.bare() );
     Tag *x = new Tag( m, "x" );
     x->addAttribute( "xmlns", XMLNS_MUC_USER );
     Tag *d = new Tag( x, "decline" );
-    d->addAttribute( "to", invitee.bare() );
+    d->addAttribute( "to", invitor.bare() );
     if( !reason.empty() )
       new Tag( d, "reason", reason );
 
@@ -280,6 +280,15 @@ namespace gloox
     m_historyType = HistorySince;
     m_historySince = since;
     m_historyValue = 0;
+  }
+
+  Tag* MUCRoom::grantVoice( const JID& room, const DataForm& df )
+  {
+    Tag *m = new Tag( "message" );
+    m->addAttribute( "to", room.bare() );
+    m->addChild( df.tag() );
+
+    return m;
   }
 
   void MUCRoom::requestVoice()
@@ -768,6 +777,12 @@ namespace gloox
           }
           // call some handler?
         }
+      }
+      else if( m_roomConfigHandler && ( x = stanza->findChild( "x", "xmlns", XMLNS_X_DATA ) ) != 0 )
+      {
+        DataForm df( x );
+        m_roomConfigHandler->handleMUCVoiceRequest( this, df );
+        return;
       }
 
       if( !stanza->subject().empty() )

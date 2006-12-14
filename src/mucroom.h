@@ -260,10 +260,11 @@ namespace gloox
        * This static function allows to formally decline a MUC invitation received via the
        * MUCInvitationListener.
        * @param message A reason for declining the invitation.
-       * @param from The JID of the invitor.
-       * @param
+       * @param invitor The JID of the invitor.
+       * @param reason An optional reason for the decline.
        */
-      static Stanza* declineInvitation( const JID& room, const JID& invitee, const std::string& reason );
+      static Stanza* declineInvitation( const JID& room, const JID& invitor,
+                                        const std::string& reason = "");
 
       /**
        * It is not possible for a visitor to speak in a moderated room. Use this function to request
@@ -304,6 +305,15 @@ namespace gloox
       void grantVoice( const std::string& nick, const std::string& reason );
 
       /**
+       * Use this function to approve a voice request delivered via
+       * MUCRoomConfigHandler::handleMUCVoiceRequest().
+       * @param room The room's JID. Thsi is needed because you can use this function outside of
+       * room context (e.g, if the admin is not in the room).
+       * @param df The filled-in DataForm from the voice request.
+       */
+      static Tag* grantVoice( const JID& room, const DataForm& df );
+
+      /**
        * Use this function to revoke voice from a user in a moderated room.
        * Depending on service and/or room configuration and role/affiliation
        * this may not always succeed. Usually, a role of 'moderator' is necessary.
@@ -316,7 +326,7 @@ namespace gloox
 
       /**
        * Use this function to change the role of a user in the room.
-       * Usually, at least moderator priviledges are required to succeed.
+       * Usually, at least moderator privileges are required to succeed.
        * @param nick The nick of the user who's role shall be modfified.
        * @param role The user's new role in the room.
        * @param reason An optional reason for the role change.
@@ -325,7 +335,7 @@ namespace gloox
 
       /**
        * Use this function to change the affiliation of a user in the room.
-       * Usually, at least admin priviledges are required to succeed.
+       * Usually, at least admin privileges are required to succeed.
        * @param nick The nick of the user who's affiliation shall be modfified.
        * @param role The user's new affiliation in the room.
        * @param reason An optional reason for the affiliation change.
@@ -338,7 +348,7 @@ namespace gloox
        * It can be used either after MUCRoomHandler::handleMUCRoomCreation() was called,
        * or at any later time.
        *
-       * Usually owner priviledges are required for this action to succeed.
+       * Usually owner privileges are required for this action to succeed.
        */
       void requestRoomConfig();
 
@@ -362,7 +372,7 @@ namespace gloox
        * May be 0.
        * @param password An optional password for the alternate venue.
        *
-       * Usually owner priviledges are required for this action to succeed.
+       * Usually owner privileges are required for this action to succeed.
        */
       void destroy( const std::string& reason = "",
                     const JID* alternate = 0, const std::string& password = "" );
@@ -383,7 +393,7 @@ namespace gloox
       /**
        * Use this function to store a (modified) list for the room.
        * @param items The list of items. Example:<br/>
-       * You want to set the Voice List. The priviledge of Voice refers to the role of Participant.
+       * You want to set the Voice List. The privilege of Voice refers to the role of Participant.
        * Furthermore, you only store the delta of the original (Voice)List. (Optionally, you could
        * probably store the whole list, however, remeber to include those items that were modified,
        * too.)
@@ -391,7 +401,7 @@ namespace gloox
        * Therefore you store:
        * @li GuyOne, role participant -- this guy gets voice granted, he/she is now a participant.
        * @li GuyTwo, role visitor -- this guy gets voice revoked, he/she is now a mere visitor
-       * (Visitor is the Role "below" Participant in the priviledges hierarchy).
+       * (Visitor is the Role "below" Participant in the privileges hierarchy).
        *
        * For operations modifying Roles, you should specifiy only the new Role in the MUCListItem
        * structure, for those modifying Affiliations, you should only specify the new Affiliation,
