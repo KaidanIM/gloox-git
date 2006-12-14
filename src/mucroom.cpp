@@ -287,12 +287,94 @@ namespace gloox
 
   void MUCRoom::kick( const std::string& nick, const std::string& reason )
   {
-    if( !m_parent || nick.empty() )
+    setRole( nick, RoleNone, reason );
+  }
+
+  void MUCRoom::grantVoice( const std::string& nick, const std::string& reason )
+  {
+    setRole( nick, RoleParticipant, reason );
+  }
+
+  void MUCRoom::revokeVoice( const std::string& nick, const std::string& reason )
+  {
+    setRole( nick, RoleVisitor, reason );
+  }
+
+  void MUCRoom::ban( const std::string& nick, const std::string& reason )
+  {
+    setAffiliation( nick, AffiliationOutcast, reason );
+  }
+
+  void MUCRoom::setRole( const std::string& nick, MUCRoomRole role, const std::string& reason )
+  {
+    modifyOccupant( nick, role, "role", reason );
+  }
+
+  void MUCRoom::setAffiliation( const std::string& nick, MUCRoomAffiliation affiliation,
+                                const std::string& reason )
+  {
+    modifyOccupant( nick, affiliation, "affiliation", reason );
+  }
+
+  void MUCRoom::modifyOccupant( const std::string& nick, int state, const std::string roa,
+                                const std::string& reason )
+  {
+    if( !m_parent || nick.empty() || roa.empty() )
       return;
 
+    std::string newRoA;
+    TrackEnum action = SetRNone;
+    if( roa == "role" )
+    {
+      switch( state )
+      {
+        case RoleNone:
+          newRoA = "none";
+          action = SetRNone;
+          break;
+        case RoleVisitor:
+          newRoA = "visitor";
+          action = SetVisitor;
+          break;
+        case RoleParticipant:
+          newRoA = "participant";
+          action = SetParticipant;
+          break;
+        case RoleModerator:
+          newRoA = "moderator";
+          action = SetModerator;
+          break;
+      }
+    }
+    else
+    {
+      switch( state )
+      {
+        case AffiliationOutcast:
+          newRoA = "outcast";
+          action = SetOutcast;
+          break;
+        case AffiliationNone:
+          newRoA = "none";
+          action = SetANone;
+          break;
+        case AffiliationMember:
+          newRoA = "member";
+          action = SetMember;
+          break;
+        case AffiliationAdmin:
+          newRoA = "admin";
+          action = SetAdmin;
+          break;
+        case AffiliationOwner:
+          newRoA = "owner";
+          action = SetOwner;
+          break;
+      }
+    }
     Tag *i = new Tag( "item" );
     i->addAttribute( "nick", nick );
-    i->addAttribute( "role", "none" );
+    i->addAttribute( roa, newRoA );
     if( !reason.empty() )
       new Tag( i, "reason", reason );
 
@@ -300,7 +382,7 @@ namespace gloox
     JID j( m_nick.bare() );
     Stanza *k = Stanza::createIqStanza( j, id, StanzaIqSet, XMLNS_MUC_ADMIN, i );
 
-    m_parent->trackID( this, id, KickParticipant );
+    m_parent->trackID( this, id, action );
     m_parent->send( k );
   }
 
@@ -326,7 +408,8 @@ namespace gloox
         party.flags = 0;
         party.nick = new JID( stanza->from() );
         party.jid = 0;
-        Tag *i;
+        party.actor = 0;
+        Tag *i = 0;
         if( ( i = t->findChild( "item" ) ) != 0 )
         {
           const std::string affiliation = i->findAttribute( "affiliation" );
@@ -381,30 +464,46 @@ namespace gloox
             }
             else if( code == "303" )
             {
-              if( stanza->from().resource() == m_nick.resource()
-                  && stanza->show() == PresenceUnavailable
-                  && !m_newNick.empty() )
+              party.flags |= UserNickChanged;
+
+              std::string newNick;
+              Tag *i = 0;
+              if( i && i->hasAttribute( "nick" ) )
               {
-#warning TODO: implement nick change
-                // myself requested nick change
+                newNick = i->findAttribute( "nick" );
+                party.newNick = newNick;
               }
-              else if( stanza->show() == PresenceUnavailable )
+
+              if( stanza->from().resource() == m_nick.resource()
+                  && !m_newNick.empty() && newNick == m_newNick )
               {
-                // somebody else changed nicks
+                party.flags |= UserSelf;
               }
             }
             else if( code == "307" )
             {
               party.flags |= UserKicked;
+              if( i && i->hasChild( "actor" ) )
+              {
+                JID *j = new JID( i->findChild( "actor" )->findAttribute( "jid" ) );
+                if( !j->empty() )
+                  party.actor= j;
+              }
+              if( i && i->hasChild( "reason" ) )
+              {
+                party.reason = i->findChild( "reason" )->cdata();
+              }
             }
           }
         }
 
-//         m_participants.push_back( party );
+        if( stanza->show() == PresenceUnavailable )
+          party.reason = stanza->status();
 
         m_roomListener->handleMUCParticipantPresence( this, party, stanza->show() );
         delete party.jid;
         delete party.nick;
+        delete party.actor;
       }
     }
   }
@@ -553,7 +652,23 @@ namespace gloox
     {
       case RequestUniqueName:
         break;
-      case KickParticipant:
+      case SetRNone:
+        break;
+      case SetVisitor:
+        break;
+      case SetParticipant:
+        break;
+      case SetModerator:
+        break;
+      case SetANone:
+        break;
+      case SetOutcast:
+        break;
+      case SetMember:
+        break;
+      case SetAdmin:
+        break;
+      case SetOwner:
         break;
     }
     return false;
@@ -565,7 +680,23 @@ namespace gloox
     {
       case RequestUniqueName:
         break;
-      case KickParticipant:
+      case SetRNone:
+        break;
+      case SetVisitor:
+        break;
+      case SetParticipant:
+        break;
+      case SetModerator:
+        break;
+      case SetANone:
+        break;
+      case SetOutcast:
+        break;
+      case SetMember:
+        break;
+      case SetAdmin:
+        break;
+      case SetOwner:
         break;
     }
     return false;

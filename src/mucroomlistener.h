@@ -44,6 +44,23 @@ namespace gloox
                                      * this struct refers to this instance's user.
                                      * (MUC servers send presence to all room occupants, including
                                      * the originator of the presence.) */
+    std::string reason;             /**< If the presence change is the result of an action where the
+                                     * actor can provide a reason for the action, this reason is stored
+                                     * here. Examples: Kicking, banning, leaving the room. */
+    JID *actor;                     /**< If the presence change is the result of an action of a room
+                                     * member, a pointer to the actor JID is stored here, if the
+                                     * actor chose to disclose his or her identity. Examples: Kicking
+                                     * and banning.
+                                     * 0 if the identity is not disclosed. */
+    std::string newNick;            /**< In case of a nickname change, this holds the new nick, while the
+                                     * nick member holds the old room nick (in JID form). @c newNick is only
+                                     * set if @c flags contains @b UserNickChanged. If @c flags contains
+                                     * @b UserSelf as well, a foregoing nick change request (using
+                                     * MUCRoom::setNick()) can be considered acknowledged. In any case
+                                     * the user's presence sent with the nick change acknowledgement
+                                     * is of type @c unavailable. Another presence of type @c available
+                                     * will follow (not necessarily immediately) coming from the user's
+                                     * new nickname. 0 if there is no nick change in progress. */
   };
 
   /**
