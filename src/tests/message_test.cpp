@@ -14,6 +14,7 @@
 #include "../logsink.h"
 using namespace gloox;
 
+#include <unistd.h>
 #include <stdio.h>
 #include <locale.h>
 #include <string>
@@ -114,14 +115,14 @@ class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListen
         sub = "Re: " +  stanza->subject();
 
       m_messageEventFilter->raiseMessageEvent( MessageEventDisplayed );
-#if defined( WIN32 ) || defined( SKYOS )
+#ifdef WIN32
       Sleep( 1000 );
 #else
       sleep( 1 );
 #endif
       m_messageEventFilter->raiseMessageEvent( MessageEventComposing );
       m_chatStateFilter->setChatState( ChatStateComposing );
-#if defined( WIN32 ) || defined( SKYOS )
+#ifdef WIN32
       Sleep( 2000 );
 #else
       sleep( 2 );
