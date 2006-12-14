@@ -216,7 +216,7 @@ namespace gloox
       return -ConnDnsError;
 
     struct protoent* prot;
-    if( ( prot = getprotobyname( "tcp" ) ) == 0)
+    if( ( prot = getprotobyname( "tcp" ) ) == 0 )
       return -ConnDnsError;
 
     int fd;
