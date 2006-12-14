@@ -326,7 +326,7 @@ namespace gloox
     return replace( what, d );
   }
 
-  Tag::TagList Tag::findTags( const std::string& name )
+  Tag::TagList Tag::findChildren( const std::string& name )
   {
     Tag::TagList ret;
     Tag::TagList::const_iterator it = m_children.begin();

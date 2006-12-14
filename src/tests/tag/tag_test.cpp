@@ -99,14 +99,14 @@ int main( int /*argc*/, char* /*argv[]*/ )
   c = 0;
 
   //-------
-  name = "findTags test";
+  name = "findChildren test";
   t = new Tag( "hello" );
   t->addAttribute( "test", "bacd" );
   t->addChild( new Tag( "test" ) );
   t->addChild( new Tag( "test" ) );
   t->addChild( new Tag( "test" ) );
   t->addChild( new Tag( "test" ) );
-  if( t->findTags( "test" ).size() != 4 )
+  if( t->findChildren( "test" ).size() != 4 )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
