@@ -131,11 +131,18 @@ namespace gloox
       void setSasl( bool sasl ) { m_sasl = sasl; };
 
       /**
-       * Switches usage of TLS on/off (if available). Default: on. TLS should only be disabled if
-       * there are problems with using it.
+       * Switches usage of TLS on/off (if available). Default: on if available. TLS should only be
+       * disabled if there are problems with using it.
        * @param tls Whether to switch TLS usage on or off.
        */
       void setTls( bool tls ) { m_tls = tls; };
+
+      /**
+       * Switches usage of Stream Compression on/off (if available). Default: on if available. Stream
+       * Compression should only be disabled if there are problems with using it.
+       * @param tls Whether to switch Stream Compression usage on or off.
+       */
+      void setCompression( bool compression ) { m_compression = compression; };
 
       /**
        * Sets the port to connect to. This is not necessary if either the default port (5222) is used
@@ -165,16 +172,22 @@ namespace gloox
       const std::string server() const { return m_server; };
 
       /**
-       * Returns the current SASL status.
+       * Returns whether SASL is currently enabled (not necessarily used).
        * @return The current SASL status.
        */
       bool sasl() const { return m_sasl; };
 
       /**
-       * Returns the current TLS status.
+       * Returns whether TLS is currently enabled (not necessarily used).
        * @return The current TLS status.
        */
       bool tls() const { return m_tls; };
+
+      /**
+       * Returns whether Stream Compression is currently enabled (not necessarily used).
+       * @return The current Stream Compression status.
+       */
+      bool compression() const { return m_compression; };
 
       /**
        * Returns the port. The default of -1 means that the actual port will be looked up using
@@ -517,6 +530,7 @@ namespace gloox
       std::string m_xmllang;
       std::string m_server;
       std::string m_sid;
+      bool m_compression;
       bool m_authed;
       bool m_sasl;
       bool m_tls;
