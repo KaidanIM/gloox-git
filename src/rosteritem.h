@@ -138,16 +138,6 @@ namespace gloox
        */
       virtual const ResourceMap& resources() const { return m_resources; };
 
-      /**
-       *
-       */
-      virtual void setCaps( const StringList& caps ) { m_caps = caps; };
-
-      /**
-       *
-       */
-      virtual const StringList& caps() const { return m_caps; };
-
     protected:
       /**
        * Sets the current status of the resource.
@@ -194,7 +184,6 @@ namespace gloox
       SubscriptionEnum m_subscription;
       std::string m_name;
       std::string m_jid;
-      StringList m_caps;
       bool m_changed;
   };
 

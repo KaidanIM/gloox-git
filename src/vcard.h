@@ -69,11 +69,11 @@ namespace gloox
        */
       struct Name
       {
-        std::string family;
-        std::string given;
-        std::string middle;
-        std::string prefix;
-        std::string suffix;
+        std::string family;         /**< */
+        std::string given;          /**< */
+        std::string middle;         /**< */
+        std::string prefix;         /**< */
+        std::string suffix;         /**< */
       };
 
       /**
@@ -92,12 +92,12 @@ namespace gloox
        */
       struct Email
       {
-        std::string userid;
-        bool home;
-        bool work;
-        bool internet;
-        bool pref;
-        bool x400;
+        std::string userid;         /**< */
+        bool home;                  /**< */
+        bool work;                  /**< */
+        bool internet;              /**< */
+        bool pref;                  /**< */
+        bool x400;                  /**< */
       };
 
       /**
@@ -110,20 +110,20 @@ namespace gloox
        */
       struct Telephone
       {
-        std::string number;
-        bool home;
-        bool work;
-        bool voice;
-        bool fax;
-        bool pager;
-        bool msg;
-        bool cell;
-        bool video;
-        bool bbs;
-        bool modem;
-        bool isdn;
-        bool pcs;
-        bool pref;
+        std::string number;         /**< */
+        bool home;                  /**< */
+        bool work;                  /**< */
+        bool voice;                 /**< */
+        bool fax;                   /**< */
+        bool pager;                 /**< */
+        bool msg;                   /**< */
+        bool cell;                  /**< */
+        bool video;                 /**< */
+        bool bbs;                   /**< */
+        bool modem;                 /**< */
+        bool isdn;                  /**< */
+        bool pcs;                   /**< */
+        bool pref;                  /**< */
       };
 
       /**
@@ -136,20 +136,20 @@ namespace gloox
        */
       struct Address
       {
-        std::string pobox;
-        std::string extadd;
-        std::string street;
-        std::string locality;
-        std::string region;
-        std::string pcode;
-        std::string ctry;
-        bool home;
-        bool work;
-        bool postal;
-        bool parcel;
-        bool pref;
-        bool dom;
-        bool intl;
+        std::string pobox;          /**< */
+        std::string extadd;         /**< */
+        std::string street;         /**< */
+        std::string locality;       /**< */
+        std::string region;         /**< */
+        std::string pcode;          /**< */
+        std::string ctry;           /**< */
+        bool home;                  /**< */
+        bool work;                  /**< */
+        bool postal;                /**< */
+        bool parcel;                /**< */
+        bool pref;                  /**< */
+        bool dom;                   /**< */
+        bool intl;                  /**< */
       };
 
       /**
@@ -157,14 +157,14 @@ namespace gloox
        */
       struct Label
       {
-        StringList lines;
-        bool home;
-        bool work;
-        bool postal;
-        bool parcel;
-        bool pref;
-        bool dom;
-        bool intl;
+        StringList lines;           /**< */
+        bool home;                  /**< */
+        bool work;                  /**< */
+        bool postal;                /**< */
+        bool parcel;                /**< */
+        bool pref;                  /**< */
+        bool dom;                   /**< */
+        bool intl;                  /**< */
       };
 
       /**
@@ -172,8 +172,8 @@ namespace gloox
        */
       struct Geo
       {
-        std::string latitude;
-        std::string longitude;
+        std::string latitude;       /**< */
+        std::string longitude;      /**< */
       };
 
       /**
@@ -181,8 +181,8 @@ namespace gloox
        */
       struct Org
       {
-        std::string name;
-        StringList units;
+        std::string name;           /**< */
+        StringList units;           /**< */
       };
 
       /**
@@ -190,9 +190,9 @@ namespace gloox
        */
       struct Photo
       {
-        std::string extval;
-        std::string binval;
-        std::string type;
+        std::string extval;         /**< */
+        std::string binval;         /**< */
+        std::string type;           /**< */
       };
 
       /**

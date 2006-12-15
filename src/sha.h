@@ -19,12 +19,19 @@
 
 namespace gloox
 {
+
+  /**
+   * @brief An implementation of SHA1.
+   *
+   * @author Jakob Schroeter <js@camaya.net>
+   * @since 0.9
+   */
   class GLOOX_API SHA
   {
 
     public:
       /**
-       *
+       * Constructs a new SHA object.
        */
       SHA();
 
@@ -34,24 +41,32 @@ namespace gloox
       virtual ~SHA();
 
       /**
-       *
+       * Resets the internal state.
        */
       void reset();
 
       /**
-       *
+       * Finalizes the hash computation.
        */
       void finalize();
 
       /**
-       * Returns the message digest
+       * Returns the message digest in hex notation.
+       * @return The message digest.
        */
       const std::string hex();
 
       /**
-       * Provide input to SHA1
+       * Provide input to SHA1.
+       * @param data The data to compute the digest of.
+       * @param length The size of the data in bytes.
        */
-      void feed( const unsigned char *message_array, unsigned length );
+      void feed( const unsigned char *data, unsigned length );
+
+      /**
+       * Provide input to SHA1.
+       * @param data The data to compute the digest of.
+       */
       void feed( const std::string& data );
 
     private:

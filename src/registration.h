@@ -34,22 +34,22 @@ namespace gloox
    */
   struct RegistrationFields
   {
-    std::string username;
-    std::string nick;
-    std::string password;
-    std::string name;
-    std::string first;
-    std::string last;
-    std::string email;
-    std::string address;
-    std::string city;
-    std::string state;
-    std::string zip;
-    std::string phone;
-    std::string url;
-    std::string date;
-    std::string misc;
-    std::string text;
+    std::string username;           /**< Desired username. */
+    std::string nick;               /**< User's nickname. */
+    std::string password;           /**< User's password. */
+    std::string name;               /**< User's name. */
+    std::string first;              /**< User's first name.*/
+    std::string last;               /**< User's last name. */
+    std::string email;              /**< User's email address. */
+    std::string address;            /**< User's address. */
+    std::string city;               /**< User's city. */
+    std::string state;              /**< User's state. */
+    std::string zip;                /**< User's ZIP code. */
+    std::string phone;              /**< User's phone number. */
+    std::string url;                /**< User's homepage URL (or other URL). */
+    std::string date;               /**< */
+    std::string misc;               /**< */
+    std::string text;               /**< */
   };
 
   /**

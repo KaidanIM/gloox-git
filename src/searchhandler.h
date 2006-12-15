@@ -28,11 +28,11 @@ namespace gloox
    */
   struct SearchFieldStruct
   {
-    std::string first;
-    std::string last;
-    std::string nick;
-    std::string email;
-    JID jid;
+    std::string first;              /**< User's first name. */
+    std::string last;               /**< User's last name. */
+    std::string nick;               /**< User's nickname. */
+    std::string email;              /**< User's email. */
+    JID jid;                        /**< User's JID. */
   };
 
   /**
@@ -40,10 +40,10 @@ namespace gloox
    */
   enum SearchFieldEnum
   {
-    SearchFieldFirst    = 1,
-    SearchFieldLast     = 2,
-    SearchFieldNick     = 4,
-    SearchFieldEmail    = 8
+    SearchFieldFirst    = 1,        /**< Search in first names. */
+    SearchFieldLast     = 2,        /**< Search in last names. */
+    SearchFieldNick     = 4,        /**< Search in nicknames. */
+    SearchFieldEmail    = 8         /**< Search in email addresses. */
   };
 
   /**

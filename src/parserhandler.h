@@ -20,6 +20,9 @@ namespace gloox
 
   class Stanza;
 
+  /**
+   * Defined Node types.
+   */
   enum NodeType
   {
     NodeStreamStart,                /**< The &lt;stream:stream&gt; tag. */
@@ -29,6 +32,7 @@ namespace gloox
   };
 
   /**
+   * @brief This is an interface that can be used in conjunction with the Parser class.
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
@@ -42,7 +46,9 @@ namespace gloox
       virtual ~ParserHandler() {};
 
       /**
-       *
+       * This function is called when a new, complete Stanza (or Tag) has been found.
+       * @param type The NodeType of the Stanza.
+       * @param stanza The Stanza.
        */
       virtual void handleStanza( NodeType type, Stanza *stanza ) = 0;
 

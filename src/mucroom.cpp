@@ -282,7 +282,7 @@ namespace gloox
     m_historyValue = 0;
   }
 
-  Tag* MUCRoom::grantVoice( const JID& room, const DataForm& df )
+  Tag* MUCRoom::createDataForm( const JID& room, const DataForm& df )
   {
     Tag *m = new Tag( "message" );
     m->addAttribute( "to", room.bare() );

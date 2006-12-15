@@ -140,7 +140,7 @@ namespace gloox
       /**
        * Switches usage of Stream Compression on/off (if available). Default: on if available. Stream
        * Compression should only be disabled if there are problems with using it.
-       * @param tls Whether to switch Stream Compression usage on or off.
+       * @param compression Whether to switch Stream Compression usage on or off.
        */
       void setCompression( bool compression ) { m_compression = compression; };
 
@@ -493,6 +493,9 @@ namespace gloox
       virtual void handleStanza( NodeType type, Stanza *stanza );
 
     protected:
+      /**
+       * Supported SASL mechanisms.
+       */
       enum SaslMechanisms
       {
         SaslDigestMd5,              /**< SASL Digest-MD5 according to RFC 2831. */

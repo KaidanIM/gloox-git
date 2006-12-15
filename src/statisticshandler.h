@@ -20,7 +20,7 @@ namespace gloox
 {
 
   /**
-   *
+   * A strcuture describing the current connection statistics.
    */
   struct StatisticsStruct
   {
@@ -48,7 +48,7 @@ namespace gloox
     int s10nStanzasReceived;        /**< The total number of Subscription Stanzas received. */
     int presenceStanzasSent;        /**< The total number of Presence Stanzas sent. */
     int presenceStanzasReceived;    /**< The total number of Presence Stanzas received. */
-    bool encryption;
+    bool encryption;                /**< Whether or not the connection (to the server) is encrypted. */
   };
 
   /**
@@ -68,8 +68,8 @@ namespace gloox
        virtual ~StatisticsHandler() {};
 
        /**
-        * This function is called when a registered XML element arrives.
-        * @param stanza The complete Stanza.
+        * This function is called when a Stanza has been sent or received.
+        * @param stats The updated connection statistics.
         */
        virtual void handleStatistics( const StatisticsStruct stats ) = 0;
   };

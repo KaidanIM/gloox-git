@@ -34,6 +34,7 @@ namespace gloox
   class Stanza;
 
   /**
+   * @brief This is an implementation of XEP-0045 (Multi-User Chat).
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
@@ -68,7 +69,7 @@ namespace gloox
        * room@service/nick.
        * @param mrh The MUCRoomHandler that will listen to room events. May be 0 and may be specified
        * later using registerMUCRoomHandler(). However, without one, MUC is no joy.
-       * @param mrh The MUCRoomConfigHandler that will listen to room config result. Defaults to 0
+       * @param mrch The MUCRoomConfigHandler that will listen to room config result. Defaults to 0
        * initially. However, at the latest you need one when you create a new room which is not an
        * instant room. You can set a MUCRoomConfigHandler using registerMUCRoomConfigHandler().
        */
@@ -213,7 +214,7 @@ namespace gloox
       /**
        * Use this function to register a (new) MUCRoomConfigHandler with this room. There can
        * be only one MUCRoomConfigHandler per room at any one time.
-       * @param mrl The MUCRoomConfigHandler to register.
+       * @param mrch The MUCRoomConfigHandler to register.
        */
       void registerMUCRoomConfigHandler( MUCRoomConfigHandler *mrch ) { m_roomConfigHandler = mrch; };
 
@@ -259,7 +260,7 @@ namespace gloox
       /**
        * This static function allows to formally decline a MUC invitation received via the
        * MUCInvitationListener.
-       * @param message A reason for declining the invitation.
+       * @param room The JID of the room the invitation came from.
        * @param invitor The JID of the invitor.
        * @param reason An optional reason for the decline.
        */
@@ -305,13 +306,14 @@ namespace gloox
       void grantVoice( const std::string& nick, const std::string& reason );
 
       /**
-       * Use this function to approve a voice request delivered via
-       * MUCRoomConfigHandler::handleMUCVoiceRequest().
-       * @param room The room's JID. Thsi is needed because you can use this function outside of
+       * Use this function to create a Tag that approves a voice request or registration request
+       * delivered via MUCRoomConfigHandler::handleMUCVoiceRequest(). You will need to send this
+       * Tag off manually using Client/ClientBase.
+       * @param room The room's JID. This is needed because you can use this function outside of
        * room context (e.g, if the admin is not in the room).
-       * @param df The filled-in DataForm from the voice request.
+       * @param df The filled-in DataForm from the voice/registration request.
        */
-      static Tag* grantVoice( const JID& room, const DataForm& df );
+      static Tag* createDataForm( const JID& room, const DataForm& df );
 
       /**
        * Use this function to revoke voice from a user in a moderated room.
@@ -337,7 +339,7 @@ namespace gloox
        * Use this function to change the affiliation of a user in the room.
        * Usually, at least admin privileges are required to succeed.
        * @param nick The nick of the user who's affiliation shall be modfified.
-       * @param role The user's new affiliation in the room.
+       * @param affiliation The user's new affiliation in the room.
        * @param reason An optional reason for the affiliation change.
        */
       void setAffiliation( const std::string& nick, MUCRoomAffiliation affiliation,
@@ -392,7 +394,7 @@ namespace gloox
 
       /**
        * Use this function to store a (modified) list for the room.
-       * @param items The list of items. Example:<br/>
+       * @param items The list of items. Example:<br>
        * You want to set the Voice List. The privilege of Voice refers to the role of Participant.
        * Furthermore, you only store the delta of the original (Voice)List. (Optionally, you could
        * probably store the whole list, however, remeber to include those items that were modified,
@@ -415,6 +417,12 @@ namespace gloox
        * be ignored.
        */
       void storeList( const MUCListItemList items, MUCOperation operation );
+
+      /**
+       * Returns the currently know room flags.
+       * @return ORed MUCRoomFlag's describing the current room configuration.
+       */
+      int flags() const { return m_flags; };
 
       // reimplemented from DiscoHandler
       virtual void handleDiscoInfoResult( Stanza *stanza, int context );

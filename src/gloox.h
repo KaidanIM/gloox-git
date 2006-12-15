@@ -296,61 +296,61 @@
 namespace gloox
 {
 
-  const std::string XMLNS_CLIENT            = "jabber:client";
-  const std::string XMLNS_COMPONENT_ACCEPT  = "jabber:component:accept";
-  const std::string XMLNS_COMPONENT_CONNECT = "jabber:component:connect";
+  const std::string XMLNS_CLIENT            = "jabber:client";                           /**< */
+  const std::string XMLNS_COMPONENT_ACCEPT  = "jabber:component:accept";                 /**< */
+  const std::string XMLNS_COMPONENT_CONNECT = "jabber:component:connect";                /**< */
 
-  const std::string XMLNS_DISCO_INFO        = "http://jabber.org/protocol/disco#info";
-  const std::string XMLNS_DISCO_ITEMS       = "http://jabber.org/protocol/disco#items";
-  const std::string XMLNS_ADHOC_COMMANDS    = "http://jabber.org/protocol/commands";
-  const std::string XMLNS_COMPRESSION       = "http://jabber.org/protocol/compress";
-  const std::string XMLNS_OFFLINE           = "http://jabber.org/protocol/offline";
-  const std::string XMLNS_CHAT_STATES       = "http://jabber.org/protocol/chatstates";
-  const std::string XMLNS_AMP               = "http://jabber.org/protocol/amp";
-  const std::string XMLNS_IBB               = "http://jabber.org/protocol/ibb";
-  const std::string XMLNS_FEATURE_NEG       = "http://jabber.org/protocol/feature-neg";
-  const std::string XMLNS_CHATNEG           = "http://jabber.org/protocol/chatneg";
-  const std::string XMLNS_XHTML_IM          = "http://jabber.org/protocol/xhtml-im";
-  const std::string XMLNS_ROSTER            = "jabber:iq:roster";
-  const std::string XMLNS_VERSION           = "jabber:iq:version";
-  const std::string XMLNS_REGISTER          = "jabber:iq:register";
-  const std::string XMLNS_PRIVACY           = "jabber:iq:privacy";
-  const std::string XMLNS_AUTH              = "jabber:iq:auth";
-  const std::string XMLNS_PRIVATE_XML       = "jabber:iq:private";
-  const std::string XMLNS_LAST              = "jabber:iq:last";
-  const std::string XMLNS_SEARCH            = "jabber:iq:search";
-  const std::string XMLNS_X_DATA            = "jabber:x:data";
-  const std::string XMLNS_X_EVENT           = "jabber:x:event";
-  const std::string XMLNS_X_OOB             = "jabber:x:oob";
-  const std::string XMLNS_X_DELAY           = "jabber:x:delay";
-  const std::string XMLNS_VCARD_TEMP        = "vcard-temp";
-  const std::string XMLNS_BOOKMARKS         = "storage:bookmarks";
-  const std::string XMLNS_ANNOTATIONS       = "storage:rosternotes";
-  const std::string XMLNS_ROSTER_DELIMITER  = "roster:delimiter";
+  const std::string XMLNS_DISCO_INFO        = "http://jabber.org/protocol/disco#info";   /**< */
+  const std::string XMLNS_DISCO_ITEMS       = "http://jabber.org/protocol/disco#items";  /**< */
+  const std::string XMLNS_ADHOC_COMMANDS    = "http://jabber.org/protocol/commands";     /**< */
+  const std::string XMLNS_COMPRESSION       = "http://jabber.org/protocol/compress";     /**< */
+  const std::string XMLNS_OFFLINE           = "http://jabber.org/protocol/offline";      /**< */
+  const std::string XMLNS_CHAT_STATES       = "http://jabber.org/protocol/chatstates";   /**< */
+  const std::string XMLNS_AMP               = "http://jabber.org/protocol/amp";          /**< */
+  const std::string XMLNS_IBB               = "http://jabber.org/protocol/ibb";          /**< */
+  const std::string XMLNS_FEATURE_NEG       = "http://jabber.org/protocol/feature-neg";  /**< */
+  const std::string XMLNS_CHATNEG           = "http://jabber.org/protocol/chatneg";      /**< */
+  const std::string XMLNS_XHTML_IM          = "http://jabber.org/protocol/xhtml-im";     /**< */
+  const std::string XMLNS_ROSTER            = "jabber:iq:roster";                        /**< */
+  const std::string XMLNS_VERSION           = "jabber:iq:version";                       /**< */
+  const std::string XMLNS_REGISTER          = "jabber:iq:register";                      /**< */
+  const std::string XMLNS_PRIVACY           = "jabber:iq:privacy";                       /**< */
+  const std::string XMLNS_AUTH              = "jabber:iq:auth";                          /**< */
+  const std::string XMLNS_PRIVATE_XML       = "jabber:iq:private";                       /**< */
+  const std::string XMLNS_LAST              = "jabber:iq:last";                          /**< */
+  const std::string XMLNS_SEARCH            = "jabber:iq:search";                        /**< */
+  const std::string XMLNS_X_DATA            = "jabber:x:data";                           /**< */
+  const std::string XMLNS_X_EVENT           = "jabber:x:event";                          /**< */
+  const std::string XMLNS_X_OOB             = "jabber:x:oob";                            /**< */
+  const std::string XMLNS_X_DELAY           = "jabber:x:delay";                          /**< */
+  const std::string XMLNS_VCARD_TEMP        = "vcard-temp";                              /**< */
+  const std::string XMLNS_BOOKMARKS         = "storage:bookmarks";                       /**< */
+  const std::string XMLNS_ANNOTATIONS       = "storage:rosternotes";                     /**< */
+  const std::string XMLNS_ROSTER_DELIMITER  = "roster:delimiter";                        /**< */
 
-  const std::string XMLNS_MUC               = "http://jabber.org/protocol/muc";
-  const std::string XMLNS_MUC_USER          = "http://jabber.org/protocol/muc#user";
-  const std::string XMLNS_MUC_ADMIN         = "http://jabber.org/protocol/muc#admin";
-  const std::string XMLNS_MUC_UNIQUE        = "http://jabber.org/protocol/muc#unique";
-  const std::string XMLNS_MUC_OWNER         = "http://jabber.org/protocol/muc#owner";
-  const std::string XMLNS_MUC_ROOMINFO      = "http://jabber.org/protocol/muc#roominfo";
-  const std::string XMLNS_MUC_ROOMS         = "http://jabber.org/protocol/muc#rooms";
-  const std::string XMLNS_MUC_REQUEST       = "http://jabber.org/protocol/muc#request";
+  const std::string XMLNS_MUC               = "http://jabber.org/protocol/muc";          /**< */
+  const std::string XMLNS_MUC_USER          = "http://jabber.org/protocol/muc#user";     /**< */
+  const std::string XMLNS_MUC_ADMIN         = "http://jabber.org/protocol/muc#admin";    /**< */
+  const std::string XMLNS_MUC_UNIQUE        = "http://jabber.org/protocol/muc#unique";   /**< */
+  const std::string XMLNS_MUC_OWNER         = "http://jabber.org/protocol/muc#owner";    /**< */
+  const std::string XMLNS_MUC_ROOMINFO      = "http://jabber.org/protocol/muc#roominfo"; /**< */
+  const std::string XMLNS_MUC_ROOMS         = "http://jabber.org/protocol/muc#rooms";    /**< */
+  const std::string XMLNS_MUC_REQUEST       = "http://jabber.org/protocol/muc#request";  /**< */
 
-  const std::string XMLNS_XMPP_STREAM       = "urn:ietf:params:xml:ns:xmpp-streams";
-  const std::string XMLNS_XMPP_STANZAS      = "urn:ietf:params:xml:ns:xmpp-stanzas";
-  const std::string XMLNS_STREAM_TLS        = "urn:ietf:params:xml:ns:xmpp-tls";
-  const std::string XMLNS_STREAM_SASL       = "urn:ietf:params:xml:ns:xmpp-sasl";
-  const std::string XMLNS_STREAM_BIND       = "urn:ietf:params:xml:ns:xmpp-bind";
-  const std::string XMLNS_STREAM_SESSION    = "urn:ietf:params:xml:ns:xmpp-session";
-  const std::string XMLNS_STREAM_IQAUTH     = "http://jabber.org/features/iq-auth";
-  const std::string XMLNS_STREAM_IQREGISTER = "http://jabber.org/features/iq-register";
-  const std::string XMLNS_STREAM_ACK        = "http://jabber.org/features/ack";
-  const std::string XMLNS_STREAM_COMPRESS   = "http://jabber.org/features/compress";
+  const std::string XMLNS_XMPP_STREAM       = "urn:ietf:params:xml:ns:xmpp-streams";     /**< */
+  const std::string XMLNS_XMPP_STANZAS      = "urn:ietf:params:xml:ns:xmpp-stanzas";     /**< */
+  const std::string XMLNS_STREAM_TLS        = "urn:ietf:params:xml:ns:xmpp-tls";         /**< */
+  const std::string XMLNS_STREAM_SASL       = "urn:ietf:params:xml:ns:xmpp-sasl";        /**< */
+  const std::string XMLNS_STREAM_BIND       = "urn:ietf:params:xml:ns:xmpp-bind";        /**< */
+  const std::string XMLNS_STREAM_SESSION    = "urn:ietf:params:xml:ns:xmpp-session";     /**< */
+  const std::string XMLNS_STREAM_IQAUTH     = "http://jabber.org/features/iq-auth";      /**< */
+  const std::string XMLNS_STREAM_IQREGISTER = "http://jabber.org/features/iq-register";  /**< */
+  const std::string XMLNS_STREAM_ACK        = "http://jabber.org/features/ack";          /**< */
+  const std::string XMLNS_STREAM_COMPRESS   = "http://jabber.org/features/compress";     /**< */
 
-  const int XMPP_STREAM_VERSION_MAJOR       = 1;
-  const int XMPP_STREAM_VERSION_MINOR       = 0;
-  const std::string GLOOX_VERSION           = "0.9-pre1";
+  const int XMPP_STREAM_VERSION_MAJOR       = 1;                                         /**< */
+  const int XMPP_STREAM_VERSION_MINOR       = 0;                                         /**< */
+  const std::string GLOOX_VERSION           = "0.9-pre2";                                /**< */
 
   /**
    * This describes the possible states of a stream.
@@ -863,30 +863,30 @@ namespace gloox
   };
 
   /**
-   * Possible MUC room affiliations.
+   * Defined MUC room affiliations. See XEP-0045 for default privileges.
    */
   enum MUCRoomAffiliation
   {
-    AffiliationNone,                /**< */
-    AffiliationOutcast,             /**< */
-    AffiliationMember,              /**< */
-    AffiliationOwner,               /**< */
-    AffiliationAdmin                /**< */
+    AffiliationNone,                /**< No affiliation with the room. */
+    AffiliationOutcast,             /**< The user has been banned from the room. */
+    AffiliationMember,              /**< The user is a member of the room. */
+    AffiliationOwner,               /**< The user is a room owner. */
+    AffiliationAdmin                /**< The user is a room admin. */
   };
 
   /**
-   * Possible MUC room roles.
+   * Defined MUC room roles. See XEP-0045 for default privileges.
    */
   enum MUCRoomRole
   {
-    RoleNone,                       /**< */
-    RoleVisitor,                    /**< */
-    RoleParticipant,                /**< */
-    RoleModerator                  /**< */
+    RoleNone,                       /**< Not present in room. */
+    RoleVisitor,                    /**< The user visits a room. */
+    RoleParticipant,                /**< The user has voice in a moderatd room. */
+    RoleModerator                   /**< The user is a room moderator. */
   };
 
   /**
-   *
+   * Configuration flags for a room.
    */
   enum MUCRoomFlag
   {
@@ -907,15 +907,15 @@ namespace gloox
   };
 
   /**
-   *
+   * Configuration flags for a user.
    */
   enum MUCUserFlag
   {
-    UserSelf               =   1,   /**< */
-    UserNickChanged        =   2,   /**< */
-    UserKicked             =   4,   /**< */
-    UserBanned             =   8,   /**< */
-    UserAffiliationChanged =  16    /**< */
+    UserSelf               =   1,   /**< Other flags relate to the current user him/herself. */
+    UserNickChanged        =   2,   /**< The user changed hsi/her nickname. */
+    UserKicked             =   4,   /**< The user has been kicked. */
+    UserBanned             =   8,   /**< The user has been banned. */
+    UserAffiliationChanged =  16    /**< The user's affiliation with the room changed. */
   };
 
   /**
