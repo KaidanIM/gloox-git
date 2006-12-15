@@ -51,9 +51,6 @@ namespace gloox
 
   bool Tag::operator==( const Tag &right ) const
   {
-#ifndef _MSC_VER
-#warning operator== is incomplete WHAT IS MISSING?
-#endif
     if( m_name != right.m_name )
       return false;
 
@@ -66,11 +63,33 @@ namespace gloox
     if( m_children.size() != right.m_children.size() )
       return false;
 
+    TagList::const_iterator it_this = m_children.begin();
+    TagList::const_iterator it_right = right.m_children.begin();
+    for( ; it_this != m_children.end() && it_right != right.m_children.end(); ++it_this, ++it_right )
+    {
+      if( *(*it_this) != *(*it_right) )
+        return false;
+    }
+
+    return true;
+  }
+
+  bool Tag::operator==( Tag &right ) const
+  {
+    return (*this) == (const Tag&)right;
+  }
+
+  bool Tag::operator!=( Tag &right ) const
+  {
+    if( *this == right )
+      return false;
+
     return true;
   }
 
   bool Tag::operator!=( const Tag &right ) const
   {
+    printf( "in const operator!=\n" );
     if( *this == right )
       return false;
 
