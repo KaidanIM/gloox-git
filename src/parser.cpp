@@ -60,8 +60,8 @@ namespace gloox
               break;
             case '>':
             default:
-              cleanup();
-              return false;
+//               cleanup();
+//               return false;
               break;
           }
           break;
@@ -270,7 +270,7 @@ namespace gloox
               break;
           }
           break;
-        case TagAttributeEqual:            // we have found a equals sign
+        case TagAttributeEqual:            // we have found an equals sign
           if( isWhitespace( c ) )
             break;
 
