@@ -22,6 +22,9 @@ namespace gloox
   class ClientBase;
 
   /**
+   * @brief This is a MessageSession, adapted to be used in a MUC context.
+   *
+   * This class is used internally by MUCRoom. You should not need to use it directly.
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
@@ -30,22 +33,26 @@ namespace gloox
   {
     public:
       /**
-       *
+       * Creates a new MUCMessageSession.
+       * @param parent The ClientBase to use for communication.
+       * @param jid The @b bare JID of the MUC room.
        */
       MUCMessageSession( ClientBase *parent, const JID& jid );
 
       /**
-       *
+       * Virtual Destructor.
        */
       virtual ~MUCMessageSession();
 
       /**
-       *
+       * Use this function to send a message to all room occupants.
+       * @param message The message to send.
        */
       virtual void send( const std::string& message );
 
       /**
-       *
+       * Use this function to set a new room subject.
+       * @param subject The new room subject.
        */
       virtual void setSubject( const std::string& subject );
 

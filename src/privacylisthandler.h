@@ -86,7 +86,7 @@ namespace gloox
       /**
        * Reimplement this function to receive results of stores etc.
        * @param id The ID of the request, as returned by the initiating function.
-       * @param result The result of an operation.
+       * @param plResult The result of an operation.
        */
       virtual void handlePrivacyListResult( const std::string& id, PrivacyListResult plResult ) = 0;
 

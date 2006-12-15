@@ -45,51 +45,38 @@ namespace gloox
   typedef std::list<MUCListItem> MUCListItemList;
 
   /**
-   *
+   * Available operations on a room.
    */
   enum MUCOperation
   {
-    RequestUniqueName,              /**< */
-    CreateInstantRoom,              /**< */
-    CancelRoomCreation,             /**< */
-    RequestRoomConfig,              /**< */
-    DestroyRoom,                    /**< */
-    GetRoomInfo,                    /**< */
-    GetRoomItems,                   /**< */
-    SetRNone,                       /**< */
-    SetVisitor,                     /**< */
-    SetParticipant,                 /**< */
-    SetModerator,                   /**< */
-    SetANone,                       /**< */
-    SetOutcast,                     /**< */
-    SetMember,                      /**< */
-    SetAdmin,                       /**< */
-    SetOwner,                       /**< */
-    RequestVoiceList,               /**< */
-    StoreVoiceList,                 /**< */
-    RequestBanList,                 /**< */
-    StoreBanList,                   /**< */
-    RequestMemberList,              /**< */
-    StoreMemberList,                /**< */
-    RequestModeratorList,           /**< */
-    StoreModeratorList,             /**< */
-    RequestOwnerList,               /**< */
-    StoreOwnerList,                 /**< */
-    RequestAdminList,               /**< */
-    StoreAdminList                  /**< */
-  };
-
-  /**
-   *
-   */
-  enum MUCListType
-  {
-    MUCListParticipants,            /**< */
-    MUCListModerators,              /**< */
-    MUCListAdmins,                  /**< */
-    MUCListOwners,                  /**< */
-    MUCListMembers,                 /**< */
-    MUCListBanned                   /**< */
+    RequestUniqueName,              /**< Request a unique room name. */
+    CreateInstantRoom,              /**< Create an instant room. */
+    CancelRoomCreation,             /**< Cancel room creation process. */
+    RequestRoomConfig,              /**< Request room configuration form. */
+    DestroyRoom,                    /**< Destroy room. */
+    GetRoomInfo,                    /**< Fetch room info. */
+    GetRoomItems,                   /**< Fetch room items (e.g., current occupants). */
+    SetRNone,                       /**< Set a user's role to None. */
+    SetVisitor,                     /**< Set a user's role to Visitor. */
+    SetParticipant,                 /**< Set a user's role to Participant. */
+    SetModerator,                   /**< Set a suer's role to Moderator. */
+    SetANone,                       /**< Set a user's affiliation to None. */
+    SetOutcast,                     /**< Set a user's affiliation to Outcast. */
+    SetMember,                      /**< Set a user's affiliation to Member. */
+    SetAdmin,                       /**< Set a user's affiliation to Admin. */
+    SetOwner,                       /**< Set a user's affiliation to Owner. */
+    RequestVoiceList,               /**< Request the room's Voice List. */
+    StoreVoiceList,                 /**< Store the room's Voice List. */
+    RequestBanList,                 /**< Request the room's Ban List. */
+    StoreBanList,                   /**< Store the room's Ban List. */
+    RequestMemberList,              /**< Request the room's Member List. */
+    StoreMemberList,                /**< Store the room's Member List. */
+    RequestModeratorList,           /**< Request the room's Moderator List. */
+    StoreModeratorList,             /**< Store the room's Moderator List. */
+    RequestOwnerList,               /**< Request the room's Owner List. */
+    StoreOwnerList,                 /**< Store the room's Owner List. */
+    RequestAdminList,               /**< Request the room's Admin List. */
+    StoreAdminList                  /**< Store the room's Admin List. */
   };
 
   /**
@@ -106,23 +93,39 @@ namespace gloox
       virtual ~MUCRoomConfigHandler() {};
 
       /**
-       *
+       * This function is called in response to MUCRoom::requestList() if the list was
+       * fetched successfully.
+       * @param room The room for which the list arrived.
+       * @param items The requestd list's items.
+       * @param operation The type of the list.
        */
       virtual void handleMUCConfigList( MUCRoom *room, const MUCListItemList& items,
                                         MUCOperation operation ) = 0;
 
       /**
-       *
+       * This function is called when the room's configuration form arrives. This usually happens
+       * after a call to MUCRoom::requestRoomConfig(). Use MUCRoom::sendDataForm()
+       * to have a Tag created that you can use to send the configuration to the room.
+       * @param room The room for which the config form arrived.
+       * @param form The configuration form.
        */
       virtual void handleMUCConfigForm( MUCRoom *room, const DataForm& form ) = 0;
 
       /**
-       *
+       * This function is called in response to MUCRoom::kick(), MUCRoom::storeList(),
+       * MUCRoom::ban(), and others, to indcate the end of the operation.
+       * @param room The room for which the operation ended.
+       * @param success Whether or not the operation was successful.
+       * @param operation The finished operation.
        */
       virtual void handleMUCConfigResult( MUCRoom *room, bool success, MUCOperation operation ) = 0;
 
       /**
-       *
+       * This function is called when a Voice request or a Registration request arrive through
+       * the room that need to be approved/rejected by the room admin. Use MUCRoom::createDataForm()
+       * to have a Tag created that answers the request.
+       * @param room The room the request arrived from.
+       * @param form A DataForm containing the request.
        */
       virtual void handleMUCRequest( MUCRoom *room, const DataForm& form ) = 0;
 

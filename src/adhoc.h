@@ -117,7 +117,6 @@ namespace gloox
        * Constructor.
        * Creates a new Adhoc client that registers as IqHandler with a ClientBase.
        * @param parent The ClientBase used for XMPP communication.
-       * @param disco The Disco object used to announce available commands.
        */
       Adhoc( ClientBase *parent );
 

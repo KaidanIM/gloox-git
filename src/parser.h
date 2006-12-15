@@ -37,7 +37,7 @@ namespace gloox
     public:
       /**
        * Constructs a new Parser object.
-       * @param parent The object to send incoming Tags to.
+       * @param ph The object to send incoming Tags to.
        */
       Parser( ParserHandler *ph );
 

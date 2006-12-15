@@ -73,7 +73,7 @@ namespace gloox
     }
   }
 
-  void SHA::feed( const unsigned char *message_array, unsigned length )
+  void SHA::feed( const unsigned char *data, unsigned length )
   {
     if( !length )
       return;
@@ -86,7 +86,7 @@ namespace gloox
 
     while( length-- && !m_corrupted )
     {
-      Message_Block[Message_Block_Index++] = ( *message_array & 0xFF );
+      Message_Block[Message_Block_Index++] = ( *data & 0xFF );
 
       Length_Low += 8;
       Length_Low &= 0xFFFFFFFF;
@@ -105,7 +105,7 @@ namespace gloox
         process();
       }
 
-      ++message_array;
+      ++data;
     }
   }
 

@@ -97,7 +97,7 @@ namespace gloox
       /**
        * This funtion is called to notify about the result of an operation.
        * @param from The server or service the result came from.
-       * @param result The result of the last operation.
+       * @param regResult The result of the last operation.
        */
       virtual void handleRegistrationResult( const JID& from, RegistrationResult regResult ) = 0;
 

@@ -144,7 +144,7 @@ namespace gloox
       (*it).second->setStatus( stanza->from().resource(), stanza->show() );
       (*it).second->setStatusMsg( stanza->from().resource(), stanza->status() );
       (*it).second->setPriority( stanza->from().resource(), stanza->priority() );
-      (*it).second->setCaps ( caps );
+//       (*it).second->setCaps ( caps );
 
       if( m_rosterListener && stanza->show() == PresenceAvailable )
       {
@@ -438,7 +438,7 @@ namespace gloox
 
     m_roster[jid]->setSubscription( sub, ask );
     m_roster[jid]->setGroups( groups );
-    m_roster[jid]->setCaps( caps );
+//     m_roster[jid]->setCaps( caps );
     m_roster[jid]->setSynchronized();
   }
 

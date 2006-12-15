@@ -32,7 +32,7 @@ namespace gloox
   struct MUCRoomParticipant
   {
     JID *nick;                      /**< Pointer to a JID holding the participant's full JID
-                                     * in the form of @c room@service/nick. <br/>
+                                     * in the form of @c room@service/nick. <br>
                                      * @note The MUC server @b may change the chosen nickname.
                                      * If the @b self member of this struct is true, one should
                                      * check the resource of of this member if the actual nickname
@@ -68,6 +68,9 @@ namespace gloox
   };
 
   /**
+   * @brief This interface enabled inheriting classes to be notified about certain events in a MUC room.
+   *
+   * See MUCRoom for examples how to use this interface.
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
@@ -81,14 +84,30 @@ namespace gloox
       virtual ~MUCRoomHandler() {};
 
       /**
+       * This function is called whenever a room occupant enters the room, changes presence
+       * inside the room, or leaves the room.
        * @note The MUCRoomParticipant struct, including pointers to JIDs, will be cleaned up after
        * this function returned.
+       * @param room The room.
+       * @param participant A struct describing the occupant's action.
+       * @param presence The occupant's presence.
        */
       virtual void handleMUCParticipantPresence( MUCRoom *room, const MUCRoomParticipant participant,
                                                  Presence presence ) = 0;
 
       /**
-       *
+       * This function is called when a message arrives through the room.
+       * @note This may be a private message! If the message is private, and want to answer
+       * it privately, you should create a new MessageSession to the user's full room nick and use
+       * that for any further private communication with the user.
+       * @param room The room the message came from.
+       * @param nick The sending user's nickname in the room.
+       * @param message The message.
+       * @param history Indicates whetehr or not this is a message that was sent prior to
+       * entering the room and is part of the room history the room sends after joining.
+       * @param when This is only used if @c history is @b true and then contains the
+       * datetime the message was sent in a notation as described in XEP-0082.
+       * @param privateMessage Indicates whether this is a private message.
        */
       virtual void handleMUCMessage( MUCRoom *room, const std::string& nick,
                                      const std::string& message, bool history,
@@ -114,20 +133,27 @@ namespace gloox
       virtual bool handleMUCRoomCreation( MUCRoom *room ) = 0;
 
       /**
-       *
+       * This function is called when the room subject has been changed.
+       * @param room The room.
+       * @param nick The nick of the occupant that changed the room subject.
        * @note With some MUC services the nick may be empty when a room is first entered.
+       * @param subject The new room subject.
        */
       virtual void handleMUCSubject( MUCRoom *room, const std::string& nick,
                                      const std::string& subject ) = 0;
 
       /**
-       *
+       * This function is called when the user invited somebody (e.g., by using MUCRoom::invite())
+       * to the room, but the invitation was declined by that person.
+       * @param room The room.
+       * @param invitee The JID if the person that declined the invitation.
+       * @param reason An optional  reason for declining the invitation.
        */
       virtual void handleMUCInviteDecline( MUCRoom *room, const JID& invitee,
                                            const std::string& reason ) = 0;
 
       /**
-       *
+       * This function is called when an error occurs in the room.
        * @note The following error conditions are specified for MUC:
        * @li @b Not @b Authorized: Password required.
        * @li @b Forbidden: Access denied, user is banned.
@@ -139,24 +165,29 @@ namespace gloox
        * @li @b Service @b Unavailable: Maximum number of users has been reached.
        *
        * Other errors might appear, depending on the service implementation.
+       * @param room The room.
+       * @param error The error.
        */
       virtual void handleMUCError( MUCRoom *room, StanzaError error ) = 0;
 
       /**
-       *
+       * This function usually (see below) is called in response to a call to MUCRoom::getRoomInfo().
+       * @param room The room.
+       * @param features ORed MUCRoomFlag's.
+       * @param name The room's name as returned by Service Discovery.
        * @param infoForm A DataForm containing extended room information. May be 0 if the service
        * doesn't support extended room information. See Section 15.5 of XEP-0045 for defined
        * field types.
        *
-       * @note This function may be called without a prior call to
-       * @link MUCRoom::getRoomInfo() getRoomInfo() @endlink. This happens if the room config is changed,
-       * e.g. by a room admin.
+       * @note This function may be called without a prior call to MUCRoom::getRoomInfo(). This
+       * happens if the room config is changed, e.g. by a room admin.
        */
       virtual void handleMUCInfo( MUCRoom *room, int features, const std::string& name,
                                   const DataForm *infoForm ) = 0;
 
       /**
-       *
+       * This function is called in response to a call to MUCRoom::getRoomItems().
+       * @param room The room.
        * @param items A map of room participants. The key is the name, the value is the occupant's
        * room JID. The map may be empty if such info is private.
        */
