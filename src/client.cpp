@@ -106,7 +106,7 @@ namespace gloox
 #endif
 
 #ifdef HAVE_ZLIB
-      if( ( m_streamFeatures & StreamFeatureCompressZlib )
+      if( m_compression &&  ( m_streamFeatures & StreamFeatureCompressZlib )
               && m_connection->initCompression( StreamFeatureCompressZlib ) )
       {
         negotiateCompression( StreamFeatureCompressZlib );

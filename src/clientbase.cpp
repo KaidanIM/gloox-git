@@ -50,7 +50,7 @@ namespace gloox
   ClientBase::ClientBase( const std::string& ns, const std::string& server, int port )
     : m_connection( 0 ), m_disco( 0 ), m_namespace( ns ),
       m_xmllang( "en" ), m_server( server ),
-      m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ),
+      m_compression( true ), m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ),
       m_messageSessionHandler( 0 ), m_statisticsHandler( 0 ), m_mucInvitationHandler( 0 ),
       m_parser( 0 ), m_authError( AuthErrorUndefined ), m_streamError( StreamErrorUndefined ),
       m_streamErrorAppCondition( 0 ), m_idCount( 0 ), m_autoMessageSession( false ),
@@ -63,7 +63,7 @@ namespace gloox
                           const std::string& server, int port )
     : m_connection( 0 ), m_disco( 0 ), m_namespace( ns ), m_password( password ),
       m_xmllang( "en" ), m_server( server ),
-      m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ),
+      m_compression( true ), m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ),
       m_messageSessionHandler( 0 ), m_statisticsHandler( 0 ), m_mucInvitationHandler( 0 ),
       m_parser( 0 ), m_authError( AuthErrorUndefined ), m_streamError( StreamErrorUndefined ),
       m_streamErrorAppCondition( 0 ), m_idCount( 0 ), m_autoMessageSession( false ),
