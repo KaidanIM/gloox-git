@@ -252,16 +252,32 @@ namespace gloox
       virtual Tag* clone() const;
 
       /**
-       * Checks two Tags for equality.
+       * Checks two Tags for equality. Order of attributes and child tags does matter.
        * @param right The Tag to check against the current Tag.
+       * @since 0.9
        */
       bool operator==( const Tag &right ) const;
 
       /**
-       * Checks two Tags for inequality.
+       * Checks two Tags for equality. Order of attributes and child tags does matter.
        * @param right The Tag to check against the current Tag.
+       * @since 0.9
+      */
+      bool operator==( Tag &right ) const;
+
+      /**
+       * Checks two Tags for inequality. Order of attributes and child tags does matter.
+       * @param right The Tag to check against the current Tag.
+       * @since 0.9
        */
       bool operator!=( const Tag &right ) const;
+
+      /**
+       * Checks two Tags for inequality. Order of attributes and child tags does matter.
+       * @param right The Tag to check against the current Tag.
+       * @since 0.9
+       */
+      bool operator!=( Tag &right ) const;
 
     protected:
       std::string m_name;
