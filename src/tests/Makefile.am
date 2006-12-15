@@ -2,7 +2,7 @@
 ## Process this file with automake to produce Makefile.in
 ##
 
-SUBDIRS = dataform dataformfield parser tag md5 sha
+SUBDIRS = base64 dataform dataformfield md5 parser sha tag
 
 test: ${SUBDIRS}
 	@for i in $?; do \
