@@ -9,4 +9,3 @@ noinst_PROGRAMS = dataform_test
 dataform_test_SOURCES = dataform_test.cpp ../../tag.cpp ../../dataform.cpp ../../dataformbase.cpp ../../dataformreported.cpp ../../dataformitem.cpp ../../dataformfield.cpp
 dataform_test_LDADD =
 dataform_test_CFLAGS = $(CPPFLAGS)
-

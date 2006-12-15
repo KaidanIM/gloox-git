@@ -64,7 +64,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
   c = 0;
 
   //-------
-  name = "clone test 3";
+  name = "operator== test 1";
   t = new Tag( "hello" );
   t->addAttribute( "test", "bacd" );
   t->addChild( new Tag( "hello" ) );
@@ -80,7 +80,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
   c = 0;
 
   //-------
-  name = "clone test 4";
+  name = "operator== test 2";
   t = new Tag( "hello" );
   t->addAttribute( "test", "bacd" );
   t->addChild( new Tag( "hello" ) );
@@ -89,6 +89,44 @@ int main( int /*argc*/, char* /*argv[]*/ )
   c->addChild( new Tag( "yes" ) );
 
   if( *t == *c )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+  delete t;
+  delete c;
+  t = 0;
+  c = 0;
+
+  //-------
+  name = "operator== test 3";
+  t = new Tag( "hello" );
+  t->addAttribute( "test", "bacd" );
+  t->addChild( new Tag( "hello" ) );
+  c = new Tag( "hello" );
+  c->addAttribute( "test", "bacd" );
+  c->addChild( new Tag( "helloo" ) );
+
+  if( *t == *c )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+  delete t;
+  delete c;
+  t = 0;
+  c = 0;
+
+  //-------
+  name = "operator!= test 1";
+  t = new Tag( "hello" );
+  t->addAttribute( "test", "bacd" );
+  t->addChild( new Tag( "hello" ) );
+  c = new Tag( "hello" );
+  c->addAttribute( "test", "bacd" );
+  c->addChild( new Tag( "hello" ) );
+
+  if( *t != *c )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );

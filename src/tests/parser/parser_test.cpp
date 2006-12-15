@@ -13,7 +13,7 @@ class ParserTest : private ParserHandler
     ParserTest() : m_tag( 0 ) {};
     virtual ~ParserTest() {};
 
-    virtual void handleStanza( NodeType type, Stanza *stanza )
+    virtual void handleStanza( NodeType /*type*/, Stanza *stanza )
     {
       m_tag = stanza->clone();
     };
@@ -192,6 +192,8 @@ class ParserTest : private ParserHandler
       delete m_tag;
       m_tag = 0;
 
+
+      // -------
       name = "prolog";
       data = "<?xml version='1.0'?>";
       p->feed( data );
@@ -248,6 +250,21 @@ class ParserTest : private ParserHandler
       }
       delete m_tag;
       m_tag = 0;
+
+      // -------
+      name = "mixed content";
+      data = "<tag1>cdata1<tag2>cdata2</tag2>cdata3</tag1>";
+      p->feed( data );
+      if( m_tag == 0 )
+      {
+        ++fail;
+        printf( "test '%s: %s' failed\n", name.c_str(), data.c_str() );
+      }
+      else
+    //   printf( "stanza: %s\n", m_tag->xml().c_str() );
+      delete m_tag;
+      m_tag = 0;
+
 
 
 
