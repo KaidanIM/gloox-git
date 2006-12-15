@@ -781,7 +781,7 @@ namespace gloox
       else if( m_roomConfigHandler && ( x = stanza->findChild( "x", "xmlns", XMLNS_X_DATA ) ) != 0 )
       {
         DataForm df( x );
-        m_roomConfigHandler->handleMUCVoiceRequest( this, df );
+        m_roomConfigHandler->handleMUCRequest( this, df );
         return;
       }
 

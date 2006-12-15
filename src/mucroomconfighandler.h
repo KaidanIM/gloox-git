@@ -124,13 +124,7 @@ namespace gloox
       /**
        *
        */
-      virtual void handleMUCVoiceRequest( MUCRoom *room, const DataForm& form ) = 0;
-
-      /**
-       *
-       */
-      virtual void handleMUCRegistrationRequest( MUCRoom *room, const JID& requester,
-                                                 const DataForm *form ) = 0;
+      virtual void handleMUCRequest( MUCRoom *room, const DataForm& form ) = 0;
 
   };
 
