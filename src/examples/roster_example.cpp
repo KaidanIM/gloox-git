@@ -112,13 +112,13 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler, Messag
     }
 
     virtual void itemAvailable( const RosterItem& item, const std::string& /*msg*/,
-                                const JID& from )
+                                const JID& /*from*/ )
     {
       printf( "item online: %s\n", item.jid().c_str() );
     }
 
     virtual void itemUnavailable( const RosterItem& item, const std::string& /*msg*/,
-                                  const JID& from )
+                                  const JID& /*from*/ )
     {
       printf( "item offline: %s\n", item.jid().c_str() );
     };
