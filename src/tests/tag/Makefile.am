@@ -9,4 +9,3 @@ noinst_PROGRAMS = tag_test
 tag_test_SOURCES = tag_test.cpp ../../tag.cpp
 tag_test_LDADD =
 tag_test_CFLAGS = $(CPPFLAGS)
-
