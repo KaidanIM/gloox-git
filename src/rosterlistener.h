@@ -102,13 +102,10 @@ namespace gloox
 
       /**
        * This function is called on every status change of an item in the roster.
-       * @note This function is not called for status changes from or to Unavailable.
-       * In these cases, @ref itemAvailable() and @ref itemUnavailable() are called,
-       * respectively.
        * @param item The roster item.
-       * @param status The item's new status.
-       * @param msg The status change message.
        * @param resource The resource that changed presence.
+       * @param presence The item's new presence.
+       * @param msg The status change message.
        * @since 0.9
        */
       virtual void handleRosterPresence( const RosterItem& item, const std::string& resource,
