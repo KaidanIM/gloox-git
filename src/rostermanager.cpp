@@ -79,7 +79,7 @@ namespace gloox
       extractItems( stanza, false );
 
       if( m_rosterListener )
-        m_rosterListener->roster( m_roster );
+        m_rosterListener->handleRoster( m_roster );
 
       m_parent->rosterFilled();
 
@@ -153,7 +153,7 @@ namespace gloox
       m_roster[stanza->from().bare()]->setStatus( stanza->from().resource(), stanza->status() );
       m_roster[stanza->from().bare()]->setPriority( stanza->from().resource(), stanza->priority() );
       if( m_rosterListener )
-        m_rosterListener->nonrosterPresenceReceived( stanza->from() );
+        m_rosterListener->handleNonrosterPresence( stanza->from() );
     }
   }
 
@@ -284,7 +284,7 @@ namespace gloox
     {
       case StanzaS10nSubscribe:
       {
-        bool answer = m_rosterListener->subscriptionRequest( stanza->from(), stanza->status() );
+        bool answer = m_rosterListener->handleSubscriptionRequest( stanza->from(), stanza->status() );
         if( m_syncSubscribeReq )
         {
           ackSubscriptionRequest( stanza->from(), answer );
@@ -299,7 +299,7 @@ namespace gloox
 //         p->addAttribute( "to", stanza->from().bare() );
 //         m_parent->send( p );
 
-        m_rosterListener->itemSubscribed( stanza->from() );
+        m_rosterListener->handleItemSubscribed( stanza->from() );
         break;
       }
 
@@ -311,7 +311,7 @@ namespace gloox
         p->addAttribute( "to", stanza->from().bare() );
         m_parent->send( p );
 
-        bool answer = m_rosterListener->unsubscriptionRequest( stanza->from(), stanza->status() );
+        bool answer = m_rosterListener->handleUnsubscriptionRequest( stanza->from(), stanza->status() );
         if( m_syncSubscribeReq && answer )
           unsubscribe( stanza->from().bare(), "", true );
         break;
@@ -325,7 +325,7 @@ namespace gloox
 //         p->addAttribute( "to", stanza->from().bare() );
 //         m_parent->send( p );
 
-        m_rosterListener->itemUnsubscribed( stanza->from() );
+        m_rosterListener->handleItemUnsubscribed( stanza->from() );
         break;
       }
 
@@ -377,7 +377,7 @@ namespace gloox
             delete (*it_d).second;
             m_roster.erase( it_d );
             if( m_rosterListener )
-              m_rosterListener->itemRemoved( jid );
+              m_rosterListener->handleItemRemoved( jid );
             continue;
           }
           const std::string ask = (*it)->findAttribute( "ask" );
@@ -389,7 +389,7 @@ namespace gloox
           (*it_d).second->setSynchronized();
 
           if( isPush && m_rosterListener )
-            m_rosterListener->itemUpdated( jid );
+            m_rosterListener->handleItemUpdated( jid );
         }
         else
         {
@@ -405,7 +405,7 @@ namespace gloox
           StringList caps;
           add( jid.bare(), name, gl, caps, sub, a );
           if( isPush && m_rosterListener )
-            m_rosterListener->itemAdded( jid );
+            m_rosterListener->handleItemAdded( jid );
         }
       }
     }
