@@ -138,20 +138,27 @@ namespace gloox
        */
       virtual const ResourceMap& resources() const { return m_resources; };
 
+      /**
+       * Returns the Resource for a specific resource string.
+       * @param resource The resource string.
+       * @return The Resource if found, 0 otherwise.
+       */
+      virtual const Resource* resource( const std::string& res ) const;
+
     protected:
       /**
-       * Sets the current status of the resource.
-       * @param resource The resource to set the status for.
-       * @param status The current status, i.e. presence info.
+       * Sets the current presence of the resource.
+       * @param resource The resource to set the presence for.
+       * @param presence The current presence.
        */
-      virtual void setStatus( const std::string& resource, Presence status );
+      virtual void setPresence( const std::string& resource, Presence presence );
 
       /**
        * Sets the current status message of the resource.
        * @param resource The resource to set the status message for.
        * @param msg The current status message, i.e. from the presence info.
        */
-      virtual void setStatusMsg( const std::string& resource, const std::string& msg );
+      virtual void setStatus( const std::string& resource, const std::string& msg );
 
       /**
        * Sets the current priority of the resource.

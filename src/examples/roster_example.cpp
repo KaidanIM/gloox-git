@@ -90,7 +90,7 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler, Messag
     virtual void roster( const Roster& roster )
     {
       printf( "roster arriving\nitems:\n" );
-      RosterListener::Roster::const_iterator it = roster.begin();
+      Roster::const_iterator it = roster.begin();
       for( ; it != roster.end(); ++it )
       {
         printf( "jid: %s, name: %s, subscription: %d\n",
@@ -106,22 +106,11 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler, Messag
       }
     }
 
-    virtual void presenceUpdated( const RosterItem& item, int /*status*/, const std::string& /*msg*/ )
+    virtual void handleRosterPresence( const RosterItem& item, const std::string& resource,
+                                       Presence presence, const std::string& /*msg*/ )
     {
-      printf( "item changed: %s\n", item.jid().c_str() );
+      printf( "presence received: %s/%s -- %d\n", item.jid().c_str(), resource.c_str(), presence );
     }
-
-    virtual void itemAvailable( const RosterItem& item, const std::string& /*msg*/,
-                                const JID& /*from*/ )
-    {
-      printf( "item online: %s\n", item.jid().c_str() );
-    }
-
-    virtual void itemUnavailable( const RosterItem& item, const std::string& /*msg*/,
-                                  const JID& /*from*/ )
-    {
-      printf( "item offline: %s\n", item.jid().c_str() );
-    };
 
     virtual bool subscriptionRequest( const JID& jid, const std::string& /*msg*/ )
     {

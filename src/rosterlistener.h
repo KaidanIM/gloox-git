@@ -23,11 +23,16 @@ namespace gloox
 {
 
   /**
+   * A map of JID/RosterItem pairs.
+   */
+  typedef std::map<const std::string, RosterItem*> Roster;
+
+  /**
    * @brief A virtual interface which can be reimplemented to receive roster updates.
    *
-   * A class implementing this interface and being registered as RosterListener with the Roster
-   * object receives notifications about all the changes in the server-side roster.
-   * Only one RosterListener per Roster at a time is possible.
+   * A class implementing this interface and being registered as RosterListener with the
+   * RosterManager object receives notifications about all the changes in the server-side
+   * roster. Only one RosterListener per Roster at a time is possible.
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
@@ -35,11 +40,6 @@ namespace gloox
   class GLOOX_API RosterListener
   {
     public:
-      /**
-       * A map of JID/RosterItem pairs.
-       */
-      typedef std::map<const std::string, RosterItem*> Roster;
-
       /**
        * Virtual Destructor.
        */
@@ -108,28 +108,11 @@ namespace gloox
        * @param item The roster item.
        * @param status The item's new status.
        * @param msg The status change message.
+       * @param resource The resource that changed presence.
+       * @since 0.9
        */
-      virtual void presenceUpdated( const RosterItem& item, int status, const std::string& msg ) = 0;
-
-      /**
-       * This function is called whenever a roster item comes online (is available).
-       * However, it will not be called for status changes from Away (or any other
-       * status which is not Unavailable) to Available.
-       * @param item A reference to the changed roster item.
-       * @param msg The status change message.
-       * @param from The full JID that became available.
-       */
-      virtual void itemAvailable( const RosterItem& item, const std::string& msg,
-                                  const JID& from ) = 0;
-
-      /**
-       * This function is called whenever a roster item goes offline (is unavailable).
-       * @param item A reference to the changed roster item.
-       * @param msg The status change message.
-       * @param from The full JID that became unavailable.
-       */
-      virtual void itemUnavailable( const RosterItem& item, const std::string& msg,
-                                    const JID& from ) = 0;
+      virtual void handleRosterPresence( const RosterItem& item, const std::string& resource,
+                                         Presence presence, const std::string& msg ) = 0;
 
       /**
        * This function is called when an entity wishes to subscribe to this entity's presence.

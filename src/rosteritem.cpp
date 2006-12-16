@@ -38,17 +38,17 @@ namespace gloox
     m_changed = true;
   }
 
-  void RosterItem::setStatus( const std::string& resource, Presence status )
+  void RosterItem::setPresence( const std::string& resource, Presence presence )
   {
     if( m_resources.find( resource ) == m_resources.end() )
     {
-      m_resources[resource] = new Resource( 0, std::string(),  status );
+      m_resources[resource] = new Resource( 0, std::string(), presence );
     }
     else
-      m_resources[resource]->setStatus( status );
+      m_resources[resource]->setStatus( presence );
   }
 
-  void RosterItem::setStatusMsg( const std::string& resource, const std::string& msg )
+  void RosterItem::setStatus( const std::string& resource, const std::string& msg )
   {
     if( m_resources.find( resource ) == m_resources.end() )
     {
@@ -109,4 +109,16 @@ namespace gloox
     else
       return false;
   }
+
+  const Resource* RosterItem::resource( const std::string& res ) const
+  {
+    ResourceMap::const_iterator it = m_resources.find( res );
+    if( it != m_resources.end() )
+    {
+      return (*it).second;
+    }
+
+    return 0;
+  }
+
 }

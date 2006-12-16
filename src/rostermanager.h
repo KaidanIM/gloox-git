@@ -15,10 +15,10 @@
 #define ROSTERMANAGER_H__
 
 #include "subscriptionhandler.h"
-#include "rosterlistener.h"
 #include "privatexmlhandler.h"
 #include "iqhandler.h"
 #include "presencehandler.h"
+#include "rosterlistener.h"
 
 #include <map>
 #include <string>
@@ -30,6 +30,7 @@ namespace gloox
   class ClientBase;
   class Stanza;
   class PrivateXML;
+  class RosterItem;
 
   /**
    * @brief This class implements Jabber/XMPP roster handling in the @b jabber:iq:roster namespace.
@@ -49,10 +50,9 @@ namespace gloox
     public:
       /**
        * Creates a new RosterManager.
-       * @param parent The @ref Client which is used for communication.
-       * @param self Whether to automatically include a self-contact in the roster. Default: false.
+       * @param parent The ClientBase which is used for communication.
        */
-      RosterManager( ClientBase *parent, bool self = false );
+      RosterManager( ClientBase *parent );
 
       /**
        * Virtual destructor.
@@ -69,7 +69,7 @@ namespace gloox
        * This function returns the roster.
        * @return Returns a map of JIDs with their current presence.
        */
-      RosterListener::Roster* roster();
+      Roster* roster();
 
       /**
        * Use this function to subscribe to a new JID. The contact is added to the roster automatically
@@ -173,9 +173,10 @@ namespace gloox
       void extractItems( Tag *tag, bool isPush );
 
       RosterListener *m_rosterListener;
-      RosterListener::Roster m_roster;
+      Roster m_roster;
       ClientBase *m_parent;
       PrivateXML *m_privateXML;
+      RosterItem *m_self;
 
       std::string m_delimiter;
       bool m_syncSubscribeReq;
