@@ -1,0 +1,672 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="5" />
+	<Project>
+		<Option title="gloox" />
+		<Option pch_mode="0" />
+		<Option default_target="" />
+		<Option compiler="gcc" />
+		<Option virtualFolders="" />
+		<Build>
+			<Target title="default">
+				<Option output="C:\Dokumente und Einstellungen\Administrator\Desktop\gloox\gloox.dll" prefix_auto="0" extension_auto="0" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Option createStaticLib="1" />
+			</Target>
+		</Build>
+		<VirtualTargets>
+			<Add alias="All" targets="default;" />
+		</VirtualTargets>
+		<Compiler>
+			<Add option="-Os" />
+			<Add option="-DBUILDING_DLL=1" />
+			<Add directory="C:\iksemel\include" />
+			<Add directory="C:\Dev-Cpp\include" />
+		</Compiler>
+		<Linker>
+			<Add option="-s" />
+			<Add option="--no-export-all-symbols --add-stdcall-alias" />
+			<Add option="c:\iksemel\libiksemel.a" />
+			<Add option="c:\mingw\lib\libssl.a" />
+			<Add option="c:\mingw\lib\libcrypto.a" />
+			<Add option="c:\mingw\lib\libz.a" />
+			<Add option="c:\mingw\lib\libwsock32.a" />
+			<Add option="c:\mingw\lib\libgdi32.a" />
+			<Add library="wsock32" />
+			<Add library="libcrypto" />
+			<Add library="dnsapi" />
+			<Add directory="C:\msys\1.0\lib" />
+			<Add directory="C:\Dev-Cpp\include" />
+			<Add directory="C:\iksemel" />
+		</Linker>
+		<Unit filename="config.h.win">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\adhoc.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\adhoc.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\adhoccommandprovider.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\annotations.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\annotations.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\annotationshandler.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\base64.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\base64.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\bookmarkhandler.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\bookmarkstorage.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\bookmarkstorage.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\chatstatefilter.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\chatstatefilter.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\chatstatehandler.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\client.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\client.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\clientbase.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\clientbase.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\component.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\component.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\compression.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\compression.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\connection.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\connection.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\connectionlistener.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\dataform.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\dataform.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\dataformbase.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\dataformbase.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\dataformfield.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\dataformfield.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\dataformitem.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\dataformitem.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\dataformreported.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\dataformreported.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\disco.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\disco.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\discohandler.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\disconodehandler.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\dns.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\dns.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\flexoff.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\flexoff.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\flexoffhandler.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\gloox.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\inbandbytestream.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\inbandbytestream.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\inbandbytestreamdatahandler.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\inbandbytestreamhandler.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\inbandbytestreammanager.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\inbandbytestreammanager.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\iqhandler.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\jid.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\jid.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\lastactivity.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\lastactivity.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\lastactivityhandler.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\loghandler.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\logsink.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\logsink.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\macros.h">
+			<Option compilerVar="" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\md5.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\md5.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\messageeventfilter.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\messageeventfilter.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\messageeventhandler.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\messagefilter.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\messagefilter.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\messagehandler.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\messagesession.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\messagesession.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\messagesessionhandler.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\mucmessagesession.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\mucmessagesession.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\mucroom.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\mucroom.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\mucroomlistener.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\nonsaslauth.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\nonsaslauth.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\parser.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\parser.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\prep.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\prep.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\presencehandler.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\privacyitem.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\privacyitem.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\privacylisthandler.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\privacymanager.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\privacymanager.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\privatexml.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\privatexml.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\privatexmlhandler.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\registration.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\registration.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\registrationhandler.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\resource.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\rosteritem.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\rosteritem.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\rosterlistener.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\rostermanager.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\rostermanager.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\search.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\search.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\searchhandler.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\sha.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\sha.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\stanza.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\stanza.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\statisticshandler.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\subscriptionhandler.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\tag.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\tag.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\taghandler.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\vcard.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\vcard.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\vcardhandler.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\vcardmanager.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\vcardmanager.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Extensions />
+	</Project>
+</CodeBlocks_project_file>
