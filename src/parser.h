@@ -27,7 +27,7 @@ namespace gloox
   class Tag;
 
   /**
-   * @brief This class implemenats an XML parser.
+   * @brief This class implements an XML parser.
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
