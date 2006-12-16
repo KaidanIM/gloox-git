@@ -22,7 +22,7 @@
 namespace gloox
 {
 
-  RosterManager::RosterManager( ClientBase *parent, bool self )
+  RosterManager::RosterManager( ClientBase *parent )
     : m_rosterListener( 0 ), m_parent( parent ), m_privateXML( 0 ),
       m_syncSubscribeReq( false )
   {
@@ -32,12 +32,7 @@ namespace gloox
       m_parent->registerPresenceHandler( this );
       m_parent->registerSubscriptionHandler( this );
 
-      if( self )
-      {
-        RosterItem *i = new RosterItem( m_parent->jid().bare() );
-        i->setSynchronized();
-        m_roster[m_parent->jid().bare()] = i;
-      }
+      m_self = new RosterItem( m_parent->jid().bare() );
 
       m_privateXML = new PrivateXML( m_parent );
     }
@@ -50,18 +45,17 @@ namespace gloox
       m_parent->removeIqHandler( XMLNS_ROSTER );
       m_parent->removePresenceHandler( this );
       m_parent->removeSubscriptionHandler( this );
+      delete m_self;
+      delete m_privateXML;
     }
 
-    RosterListener::Roster::iterator it = m_roster.begin();
+    Roster::iterator it = m_roster.begin();
     for( ; it != m_roster.end(); ++it )
       delete (*it).second;
     m_roster.clear();
-
-    if( m_privateXML )
-      delete m_privateXML;
   }
 
-  RosterListener::Roster* RosterManager::roster()
+  Roster* RosterManager::roster()
   {
     return &m_roster;
   }
@@ -124,51 +118,39 @@ namespace gloox
       if( (*it_c)->name() == "c" )
       {
         std::string cap;
-        cap.append ( (*it_c)->findAttribute ( "node" ).c_str() );
-        cap.append ( "#" );
-        cap.append ( (*it_c)->findAttribute ( "ver" ).c_str() );
-        if( (*it_c)->findAttribute ( "ext" ).size ())
+        cap.append( (*it_c)->findAttribute( "node" ).c_str() );
+        cap.append( "#" );
+        cap.append( (*it_c)->findAttribute( "ver" ).c_str() );
+        if( (*it_c)->findAttribute( "ext" ).size ())
         {
-          cap.append ( "#" );
-          cap.append ( (*it_c)->findAttribute ( "ext" ).c_str() );
+          cap.append( "#" );
+          cap.append( (*it_c)->findAttribute( "ext" ).c_str() );
         }
         caps.push_back( cap );
       }
     }
 
-    RosterListener::Roster::iterator it = m_roster.find( stanza->from().bare() );
+    Roster::iterator it = m_roster.find( stanza->from().bare() );
     if( it != m_roster.end() )
     {
-      bool online = (*it).second->online();
-
-      (*it).second->setStatus( stanza->from().resource(), stanza->show() );
-      (*it).second->setStatusMsg( stanza->from().resource(), stanza->status() );
+      (*it).second->setPresence( stanza->from().resource(), stanza->presence() );
+      (*it).second->setStatus( stanza->from().resource(), stanza->status() );
       (*it).second->setPriority( stanza->from().resource(), stanza->priority() );
 //       (*it).second->setCaps ( caps );
 
-      if( m_rosterListener && stanza->show() == PresenceAvailable )
-      {
-        if( !online )
-          m_rosterListener->itemAvailable( (*(*it).second), stanza->status(), stanza->from() );
-        else
-          m_rosterListener->presenceUpdated( (*(*it).second), stanza->show(), stanza->status() );
-      }
-      else if( stanza->show() == PresenceUnavailable )
-      {
+      if( stanza->presence() == PresenceUnavailable )
         (*it).second->removeResource( stanza->from().resource() );
-        if( m_rosterListener )
-          m_rosterListener->itemUnavailable( (*(*it).second), stanza->status(), stanza->from() );
-      }
-      else
-        if( m_rosterListener )
-          m_rosterListener->presenceUpdated( (*(*it).second), stanza->show(), stanza->status() );
+
+      if( m_rosterListener )
+        m_rosterListener->handleRosterPresence( (*(*it).second), stanza->from().resource(),
+                                                stanza->presence(), stanza->status() );
     }
     else
     {
       StringList sl;
       add( stanza->from().bare(), "", sl, caps, "none", false );
-      m_roster[stanza->from().bare()]->setStatus( stanza->from().resource(), stanza->show() );
-      m_roster[stanza->from().bare()]->setStatusMsg( stanza->from().resource(), stanza->status() );
+      m_roster[stanza->from().bare()]->setPresence( stanza->from().resource(), stanza->presence() );
+      m_roster[stanza->from().bare()]->setStatus( stanza->from().resource(), stanza->status() );
       m_roster[stanza->from().bare()]->setPriority( stanza->from().resource(), stanza->priority() );
       if( m_rosterListener )
         m_rosterListener->nonrosterPresenceReceived( stanza->from() );
@@ -251,7 +233,7 @@ namespace gloox
 
   void RosterManager::synchronize()
   {
-    RosterListener::Roster::const_iterator it = m_roster.begin();
+    Roster::const_iterator it = m_roster.begin();
     for( ; it != m_roster.end(); ++it )
     {
       if( (*it).second->changed() )
@@ -385,7 +367,7 @@ namespace gloox
         }
 
         const JID jid = (*it)->findAttribute( "jid" );
-        RosterListener::Roster::iterator it_d = m_roster.find( jid.bare() );
+        Roster::iterator it_d = m_roster.find( jid.bare() );
         if( it_d != m_roster.end() )
         {
           (*it_d).second->setName( (*it)->findAttribute( "name" ) );
@@ -461,7 +443,7 @@ namespace gloox
 
   RosterItem* RosterManager::getRosterItem( const JID& jid )
   {
-    RosterListener::Roster::const_iterator it = m_roster.find( jid.bare() );
+    Roster::const_iterator it = m_roster.find( jid.bare() );
     if( it != m_roster.end() )
       return (*it).second;
     else
