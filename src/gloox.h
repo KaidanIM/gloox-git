@@ -253,6 +253,7 @@
  * @li JEP-0013 @link gloox::FlexibleOffline Flexible Offline Message Retrieval @endlink
  * @li JEP-0022 Message Events (see @link gloox::MessageSession MessageSession @endlink for examples)
  * @li JEP-0030 @link gloox::Disco Service Discovery @endlink
+ * @li XEP-0045 @link gloox::MUCRoom Multi-User Chat @endlink
  * @li JEP-0047 @link gloox::InBandBytestreamManager In-Band Bytestreams @endlink
  * @li JEP-0048 @link gloox::BookmarkStorage Bookmark Storage @endlink
  * @li JEP-0049 @link gloox::PrivateXML Private XML Storage @endlink
