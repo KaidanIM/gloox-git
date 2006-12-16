@@ -15,6 +15,8 @@
 #ifndef PARSERHANDLER_H__
 #define PARSERHANDLER_H__
 
+#include "macros.h"
+
 namespace gloox
 {
 
