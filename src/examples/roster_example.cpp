@@ -62,32 +62,32 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler, Messag
       printf( "onSessionCreateError: %d\n", error );
     };
 
-    virtual void itemSubscribed( const JID& jid )
+    virtual void handleItemSubscribed( const JID& jid )
     {
       printf( "subscribed %s\n", jid.bare().c_str() );
     }
 
-    virtual void itemAdded( const JID& jid )
+    virtual void handleItemAdded( const JID& jid )
     {
       printf( "added %s\n", jid.bare().c_str() );
     }
 
-    virtual void itemUnsubscribed( const JID& jid )
+    virtual void handleItemUnsubscribed( const JID& jid )
     {
       printf( "unsubscribed %s\n", jid.bare().c_str() );
     }
 
-    virtual void itemRemoved( const JID& jid )
+    virtual void handleItemRemoved( const JID& jid )
     {
       printf( "removed %s\n", jid.bare().c_str() );
     }
 
-    virtual void itemUpdated( const JID& jid )
+    virtual void handleItemUpdated( const JID& jid )
     {
       printf( "updated %s\n", jid.bare().c_str() );
     }
 
-    virtual void roster( const Roster& roster )
+    virtual void handleRoster( const Roster& roster )
     {
       printf( "roster arriving\nitems:\n" );
       Roster::const_iterator it = roster.begin();
@@ -112,7 +112,7 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler, Messag
       printf( "presence received: %s/%s -- %d\n", item.jid().c_str(), resource.c_str(), presence );
     }
 
-    virtual bool subscriptionRequest( const JID& jid, const std::string& /*msg*/ )
+    virtual bool handleSubscriptionRequest( const JID& jid, const std::string& /*msg*/ )
     {
       printf( "subscription: %s\n", jid.bare().c_str() );
       StringList groups;
@@ -121,13 +121,13 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler, Messag
       return true;
     }
 
-    virtual bool unsubscriptionRequest( const JID& jid, const std::string& /*msg*/ )
+    virtual bool handleUnsubscriptionRequest( const JID& jid, const std::string& /*msg*/ )
     {
       printf( "unsubscription: %s\n", jid.bare().c_str() );
       return true;
     }
 
-    virtual void nonrosterPresenceReceived( const JID& jid )
+    virtual void handleNonrosterPresence( const JID& jid )
     {
       printf( "received presence from entity not in the roster: %s\n", jid.full().c_str() );
     }

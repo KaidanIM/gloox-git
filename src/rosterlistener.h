@@ -53,14 +53,14 @@ namespace gloox
        * presence is received without them being on the roster.
        * @param jid The new item's full address.
        */
-      virtual void itemAdded( const JID& jid ) = 0;
+      virtual void handleItemAdded( const JID& jid ) = 0;
 
       /**
        * Reimplement this function if you want to be notified about items
        * which authorised subscription.
        * @param jid The authorising item's full address.
        */
-      virtual void itemSubscribed( const JID& jid ) = 0;
+      virtual void handleItemSubscribed( const JID& jid ) = 0;
 
       /**
        * Reimplement this function if you want to be notified about items that
@@ -69,7 +69,7 @@ namespace gloox
        * another.
        * @param jid The removed item's full address.
        */
-      virtual void itemRemoved( const JID& jid ) = 0;
+      virtual void handleItemRemoved( const JID& jid ) = 0;
 
       /**
        * Reimplement this function if you want to be notified about items that
@@ -81,14 +81,14 @@ namespace gloox
        * it with the server.
        * @param jid The modified item's full address.
        */
-      virtual void itemUpdated( const JID& jid ) = 0;
+      virtual void handleItemUpdated( const JID& jid ) = 0;
 
       /**
        * Reimplement this function if you want to be notified about items which
        * removed subscription authorization.
        * @param jid The item's full address.
        */
-      virtual void itemUnsubscribed( const JID& jid ) = 0;
+      virtual void handleItemUnsubscribed( const JID& jid ) = 0;
 
       /**
        * Reimplement this function if you want to receive the whole server-side roster
@@ -98,7 +98,7 @@ namespace gloox
        * roster push only happens once per connection.
        * @param roster The full roster.
        */
-      virtual void roster( const Roster& roster ) = 0;
+      virtual void handleRoster( const Roster& roster ) = 0;
 
       /**
        * This function is called on every status change of an item in the roster.
@@ -121,7 +121,7 @@ namespace gloox
        * @return Return @b true to allow subscription and subscribe to the remote entity's
        * presence, @b false to ignore the request.
        */
-      virtual bool subscriptionRequest( const JID& jid, const std::string& msg ) = 0;
+      virtual bool handleSubscriptionRequest( const JID& jid, const std::string& msg ) = 0;
 
       /**
        * This function is called when an entity unsubscribes from this entity's presence.
@@ -133,14 +133,14 @@ namespace gloox
        * @param msg A message sent along with the request.
        * @return Return @b true to unsubscribe from the remote entity, @b false to ignore.
        */
-      virtual bool unsubscriptionRequest( const JID& jid, const std::string& msg ) = 0;
+      virtual bool handleUnsubscriptionRequest( const JID& jid, const std::string& msg ) = 0;
 
       /**
        * This function is called whenever presence from an entity is received which is not in
        * the roster.
        * @param jid The entity's full JID.
        */
-      virtual void nonrosterPresenceReceived( const JID& jid ) = 0;
+      virtual void handleNonrosterPresence( const JID& jid ) = 0;
 
   };
 
