@@ -141,9 +141,10 @@ namespace gloox
        * decompression was applied.
        * @param uncompressedOut If compression is used, the total number of bytes sent before
        * compression was applied.
+       * @param compression Whether compression is enabled.
        */
       void getStatistics( int &totalIn, int &totalOut, int &compressedIn, int &compressedOut,
-                          int &uncompressedIn, int &uncompressedOut );
+                          int &uncompressedIn, int &uncompressedOut, bool &compression );
 
 #ifdef HAVE_ZLIB
       /**
