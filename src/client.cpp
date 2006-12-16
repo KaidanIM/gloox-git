@@ -81,7 +81,7 @@ namespace gloox
 
   void Client::init()
   {
-    m_rosterManager = new RosterManager( this, true );
+    m_rosterManager = new RosterManager( this );
     m_disco->setIdentity( "client", "bot" );
   }
 
