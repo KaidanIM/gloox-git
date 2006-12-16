@@ -93,7 +93,7 @@ namespace gloox
        * Returns the presence 'show' type of a presence stanza.
        * @return The presence type of the sender.
        */
-      virtual Presence show() const { return m_show; };
+      virtual Presence presence() const { return m_presence; };
 
       /**
        * Returns the status text of a presence stanza for the given language if available.
@@ -249,7 +249,7 @@ namespace gloox
       void init();
 
       StanzaSubType m_subtype;
-      Presence m_show;
+      Presence m_presence;
       StanzaError m_stanzaError;
       StanzaErrorType m_stanzaErrorType;
       Tag *m_stanzaErrorAppCondition;
