@@ -417,7 +417,7 @@ namespace gloox
 
   void MUCRoom::requestList( MUCOperation operation )
   {
-    if( !m_parent || !m_joined )
+    if( !m_parent || !m_joined || !m_roomConfigHandler )
       return;
 
     Tag *i = new Tag( "item" );

@@ -381,6 +381,8 @@ namespace gloox
 
       /**
        * Use this function to request a particluar list of room occupants.
+       * @note There must be a MUCRoomConfigHandler registered with this room for this
+       * function to be executed.
        * @param operation The following types of lists are available:
        * @li Voice List: List of people having voice in a moderated room. Use RequestVoiceList.
        * @li Members List: List of members of a room. Use RequestMemberList.
