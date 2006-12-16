@@ -25,11 +25,11 @@ namespace gloox
   struct StatisticsStruct
   {
     int totalBytesSent;             /**< The total number of bytes sent over the wire. This does @b not
-                                     * include the TLS handshake, but it does include anything sent before
-                                     * compression was switched on. */
+                                     * include the TLS handshake nor any TLS-related overhead, but it does
+                                     * include anything sent before compression was switched on. */
     int totalBytesReceived;         /**< The total number of bytes received over the wire. This does @b not
-                                     * include the TLS handshake, but it does include anything sent before
-                                     * compression was switched on. */
+                                     * include the TLS handshake nor any TLS-related overhead, but it does
+                                     * include anything sent before compression was switched on. */
     int compressedBytesSent;        /**< Total number of bytes sent over the wire after compression was
                                      * applied. */
     int compressedBytesReceived;    /**< Total number of bytes received over the wire before decompression
@@ -49,6 +49,7 @@ namespace gloox
     int presenceStanzasSent;        /**< The total number of Presence Stanzas sent. */
     int presenceStanzasReceived;    /**< The total number of Presence Stanzas received. */
     bool encryption;                /**< Whether or not the connection (to the server) is encrypted. */
+    bool compression;               /**< Whether or not the stream (to the server) gets compressed. */
   };
 
   /**

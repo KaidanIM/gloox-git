@@ -94,6 +94,7 @@ namespace gloox
     m_stats.presenceStanzasSent = 0;
     m_stats.presenceStanzasReceived = 0;
     m_stats.encryption = false;
+    m_stats.compression = false;
   }
 
   ClientBase::~ClientBase()
@@ -483,7 +484,8 @@ namespace gloox
     if( m_connection )
       m_connection->getStatistics( m_stats.totalBytesReceived, m_stats.totalBytesSent,
                                    m_stats.compressedBytesReceived, m_stats.compressedBytesSent,
-                                   m_stats.uncompressedBytesReceived, m_stats.uncompressedBytesSent );
+                                   m_stats.uncompressedBytesReceived, m_stats.uncompressedBytesSent,
+                                   m_stats.compression );
     return m_stats;
   }
 

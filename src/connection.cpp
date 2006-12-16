@@ -1109,7 +1109,8 @@ printf( "maximumMessage: %ld\n", m_streamSizes.cbMaximumMessage );
 
   void Connection::getStatistics( int &totalIn, int &totalOut,
                                   int &compressedIn, int &compressedOut,
-                                  int &uncompressedIn, int &uncompressedOut )
+                                  int &uncompressedIn, int &uncompressedOut,
+                                  bool &compression )
   {
     totalIn = m_totalBytesIn;
     totalOut = m_totalBytesOut;
@@ -1117,6 +1118,7 @@ printf( "maximumMessage: %ld\n", m_streamSizes.cbMaximumMessage );
     compressedOut = m_compressedBytesOut[1];
     uncompressedIn = m_compressedBytesIn[0];
     uncompressedOut = m_compressedBytesOut[0];
+    compression = m_enableCompression;
   }
 
   void Connection::cleanup()
