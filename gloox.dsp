@@ -79,7 +79,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib wsock32.lib C:\iksemel\Debug\iksemel.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib wsock32.lib /nologo /dll /debug /machine:I386 /nodefaultlib:"libcd" /pdbtype:sept
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib wsock32.lib /nologo /dll /debug /machine:I386 /nodefaultlib:"libcd" /pdbtype:sept
 # SUBTRACT LINK32 /pdb:none
 
 !ENDIF 
@@ -266,6 +266,10 @@ SOURCE=.\src\vcard.cpp
 # Begin Source File
 
 SOURCE=.\src\vcardmanager.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\version.rc
 # End Source File
 # End Group
 # Begin Group "Header-Dateien"
@@ -462,6 +466,14 @@ SOURCE=.\src\mucmessagesession.h
 # Begin Source File
 
 SOURCE=.\src\mucroom.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\mucroomconfighandler.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\mucroomhandler.h
 # End Source File
 # Begin Source File
 
