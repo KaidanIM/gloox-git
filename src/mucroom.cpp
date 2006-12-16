@@ -637,10 +637,10 @@ namespace gloox
           }
         }
 
-        if( stanza->show() == PresenceUnavailable )
+        if( stanza->presence() == PresenceUnavailable )
           party.reason = stanza->status();
 
-        m_roomHandler->handleMUCParticipantPresence( this, party, stanza->show() );
+        m_roomHandler->handleMUCParticipantPresence( this, party, stanza->presence() );
         delete party.jid;
         delete party.nick;
         delete party.actor;
