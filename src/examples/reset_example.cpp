@@ -1,6 +1,5 @@
 #include "../client.h"
 #include "../connectionlistener.h"
-#include "../discohandler.h"
 #include "../disco.h"
 #include "../rostermanager.h"
 #include "../loghandler.h"
@@ -11,7 +10,7 @@ using namespace gloox;
 #include <locale.h>
 #include <string>
 
-class RosterTest : public RosterListener, ConnectionListener, LogHandler
+class RosterTest : public ConnectionListener, LogHandler
 {
   public:
     RosterTest() {};
@@ -24,8 +23,7 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler
       JID jid( "hurkhurkss@example.net/gloox" );
       j = new Client( jid, "hurkhurks" );
       j->registerConnectionListener( this );
-      j->rosterManager()->registerRosterListener( this );
-      j->disco()->setVersion( "rosterTest", GLOOX_VERSION );
+      j->disco()->setVersion( "resetTest", GLOOX_VERSION );
       j->disco()->setIdentity( "client", "bot" );
 
       j->logInstance().registerLogHandler( LogLevelDebug, LogAreaAll, this );
@@ -54,83 +52,6 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler
               info.compression.c_str() );
       return true;
     };
-
-    virtual void itemSubscribed( const JID& jid )
-    {
-      printf( "subscribed %s\n", jid.bare().c_str() );
-    }
-
-    virtual void itemAdded( const JID& jid )
-    {
-      printf( "added %s\n", jid.bare().c_str() );
-    }
-
-    virtual void itemUnsubscribed( const JID& jid )
-    {
-      printf( "unsubscribed %s\n", jid.bare().c_str() );
-    }
-
-    virtual void itemRemoved( const JID& jid )
-    {
-      printf( "removed %s\n", jid.bare().c_str() );
-    }
-
-    virtual void itemUpdated( const JID& jid )
-    {
-      printf( "updated %s\n", jid.bare().c_str() );
-    }
-
-    virtual void roster( const Roster& roster )
-    {
-      printf( "roster arriving\nitems:\n" );
-      RosterListener::Roster::const_iterator it = roster.begin();
-      for( ; it != roster.end(); ++it )
-      {
-        printf( "jid: %s, name: %s, subscription: %d\n",
-                (*it).second->jid().c_str(), (*it).second->name().c_str(),
-                (*it).second->subscription() );
-        StringList g = (*it).second->groups();
-        StringList::const_iterator it_g = g.begin();
-        for( ; it_g != g.end(); ++it_g )
-          printf( "\tgroup: %s\n", (*it_g).c_str() );
-      }
-    }
-
-    virtual void presenceUpdated( const RosterItem& item, int /*status*/, const std::string& /*msg*/ )
-    {
-      printf( "item changed: %s\n", item.jid().c_str() );
-    }
-
-    virtual void itemAvailable( const RosterItem& item, const std::string& /*msg*/,
-                                const JID& from )
-    {
-      printf( "item online: %s\n", item.jid().c_str() );
-    }
-
-    virtual void itemUnavailable( const RosterItem& item, const std::string& /*msg*/,
-                                  const JID& from )
-    {
-      printf( "item offline: %s\n", item.jid().c_str() );
-    };
-
-    virtual bool subscriptionRequest( const JID& jid, const std::string& /*msg*/ )
-    {
-      printf( "subscription: %s\n", jid.bare().c_str() );
-      StringList groups;
-      j->rosterManager()->subscribe( jid, "", groups, "" );
-      return true;
-    }
-
-    virtual bool unsubscriptionRequest( const JID& jid, const std::string& /*msg*/ )
-    {
-      printf( "unsubscription: %s\n", jid.bare().c_str() );
-      return true;
-    }
-
-    virtual void nonrosterPresenceReceived( const JID& jid )
-    {
-      printf( "received presence from entity not in the roster: %s\n", jid.full().c_str() );
-    }
 
     virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
     {
