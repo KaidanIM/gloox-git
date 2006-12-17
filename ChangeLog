@@ -1,9 +1,53 @@
+v0.9 -- xx yyy 2006
+-------------------
+- rewrote XML parser (no dependency on iksemel any more)
+- XEP-0045 (Multi-User Chat)
+- added µsec timeout to recv()
+- fetch roster immediately after requesting roster:delimiter
+- delete() --> delete
+- Registration: allow registration with services
+- implement dataforms as list of pointers to DataformFields
+- ClientBase: cleaner Stanza deleting
+- Adhoc: full Adhoc support
+- Disco::getDiscoItems() and ::getDiscoInfo() take JIDs instead of std::strings
+- Tag: added virtual void addChild( const Tag *child )
+- DataForm: added ::type()
+- RosterManager: take JIDs in un/subscribe()/add()
+- RosterListener: announce JIDs, not std::strings
+- DataFormBase: added addField() to add a single field
+- DNS: SRV record resolving on win32 (thanks to Polycom)
+- Client: removed setInitialPriority() and setAutoPresence() in favour of setPresence()
+- support for SASL authorization id != authentication id
+- Disco: added removeFeature()
+- Tag: added setAttributes()
+- merged patch by Polycom to distiguish between incoming and outgoing Tags/Stanzas
+- moved several structs and enums into gloox namespace (mostly from *Handlers)
+- move Resource into gloox namespace (from RosterItem)
+- MessageEventFilter: fixed a bug where error messages triggered events
+- MessageEventFilter: honor feature-not-implemented error
+- Connection: included server name in dns error message (--> 'server.tld: connection refused')
+- ClientBase: onDisconnect() gets called if the connection got refused or DNS error occurred
+- statistics interface (connection/compression/encryption statistics and status, etc)
+- Tag: added 'TagList findChildren( std::string& )'
+- Disco: lifted limit of one DiscoNodeHandler per Node
+- Parser: added ParserHandler and install parser.h
+- Tag: added operator== & operator!=
+- ClientBase: added setCompression( bool ) to switch use of stream compression on/off
 
-v0.8-pre1 -- 14 Feb 2006
-------------------------
-- added an extensible message session abstraction (called MessageSession)
+since -pre2
+- renamed Stanza::show() --> Stanza::presence()
+- RosterListener: moved Roster to gloox namespace
+- RosterListener: new handleRosterPresence() replaces itemUn/Available() and presenceUpdated()
+- RosterListener: added handleSelfPresence()
+
+
+v0.8 -- 08 Apr 2006
+-------------------
+- added an extensible message session abstraction
 - added automatic MessageSession creation facilities upon incoming messages
 - JEP-0022 (Message Events)
+- JEP-0047 (In-Band Bytestreams)
+- JEP-0054 (vcard-temp)
 - JEP-0085 (Chat State Notifications)
 - 'ported' to Linux on Arm (Intel XScale on gumstix in this case)
 - RosterManager: returning true from RosterListener::unsubscriptionRequest()
@@ -16,10 +60,17 @@ v0.8-pre1 -- 14 Feb 2006
 - RosterItem & RosterListener: more const & return values and parameters
 - RosterItem: support for multiple resources, introducing RosterItem::Resource
 - Stanza: added 'int priority()'
+- renamed enum members from ALL_UPPER_CASE to MixedCase
 - SASL EXTERNAL and support for client key/cert
 - RosterManager: added RosterItem* getRosterItem( const JID& jid )
 - added extern "C" const char* gloox_version()
 - Tag: made findChild(...) return 0 instead of new Tag (reverted change from 0.7.6)
+- Tag: added addAttribute( const std::string, int )
+- revamped MessageSession to accept external MessageFilters
+- Disco: added const StringList& features()
+- allow for immediate re-connect() after disconnect()
+- fixed compilation with gcc 4.1
+- semi-fixed missing onDisconnect() call if file descriptor has been fetched and stream error occured
 
 
 v0.7.6.1 -- 10 Feb 2006

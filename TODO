@@ -4,16 +4,50 @@ Todo
 - check subjectAltName for JIDs (core sec. 5.1 rule 8)
 - introduce some 'randomness' for IDs
 - introduce return values for *Handlers to indicate whether following handlers should be invoked as well
-- sort SRV records by weight & cost
-- get rid of iksemel (and don't introduce another hard requirement)
 - unify error recognition
-- thread safety
-- list of filters in messagesession
 - look into IPV6 support
+- empty passwords allowed?
 
 
 In the pipe
 -----------
 
+
+- XEP-0045 (MUC)
+
+- check this change: http://www.jabberstudio.org/cgi-bin/viewcvs.cgi/cvs/jeps/0085/jep-0085.xml?r1=1.28&r2=1.31
+- adhoc error handling
+- XEP-0020 (Feature Negotiation)
+- XEP-0079 (AMP)
+- XEP-0115 (Entity Capabilities)
+- XEP-0153 (vCard-Based Avatars)
+- XEP-0155 (Chat Session Negotiation)
+- XEP-0166 (Jingle Signaling)
+- XEP-0175 (Best Practices for Use of SASL ANONYMOUS)
+- XEP-0186 (Invisible Command)
+- XEP-0198 (Stanza Acknowledgements)
+- XEP-0199 (XMPP Ping)
+- thread safety
+- fix TLS on win32 (jaim.at?)
+- sort SRV records by weight & cost
+- state p. for Stanza types
+- vcard-temp: support AGENT, CATEGORIES, SOUND, KEY
+- RosterItem::status ::statusMsg for highest prio
+- refactor!
+- fix disconnect mess
+- allow for MessageSession filtering by message type (headline, etc)? tobiasfar
 - doc for every class
-- allow immediate re-connection (reset clientbase/client/component/connection)
+- make compression level configurable??
+- make socket tunable (keepalive, siehe Mail)
+- allow for registration and immediate connection from within the same Client object
+- bindings (C, ...) (SWIG)
+- add prePresenceHook (for XEP-0182 (Invisible Command))
+- connection progress callbacks
+- asynchronous socket i/o?
+- overhaul all XEP implementations (and note implemented version number)
+
+
+
+- XPath
+- socks/HTTP proxy support
+- XEP-0174 (Link-Local Messaging)
