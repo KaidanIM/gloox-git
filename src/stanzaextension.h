@@ -25,6 +25,8 @@ namespace gloox
    * @brief This class abstracts a stanza extension (usually an 'x' element in a specific
    * namespace).
    *
+   * You should not need to use this class directly.
+   *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
@@ -32,7 +34,7 @@ namespace gloox
   {
     public:
       /**
-       *
+       * Constructs an empty StanzaExtension.
        */
       StanzaExtension() {};
 
@@ -42,6 +44,7 @@ namespace gloox
       virtual ~StanzaExtension() {};
 
   };
+
 }
 
 #endif // STANZAEXTENSION_H__
