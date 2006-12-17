@@ -23,17 +23,43 @@ namespace gloox
 
   OOB::OOB( Tag *tag )
   {
-    if( tag && tag->name() == "x" && tag->hasAttribute( "xmlns", XMLNS_X_OOB ) )
+    if( tag &&
+        ( ( tag->name() == "x" && tag->hasAttribute( "xmlns", XMLNS_X_OOB ) ) ||
+        ( tag->name() == "query" && tag->hasAttribute( "xmlns", XMLNS_IQ_OOB ) ) ) )
     {
       if( tag->hasChild( "url" ) )
         m_url = tag->findChild( "url" )->cdata();
       if( tag->hasChild( "desc" ) )
-        m_url = tag->findChild( "desc" )->cdata();
+        m_desc = tag->findChild( "desc" )->cdata();
     }
   }
 
   OOB::~OOB()
   {
+  }
+
+  Tag* OOB::tag( const std::string& xmlns ) const
+  {
+    Tag *t = 0;
+
+    if( xmlns == XMLNS_X_OOB && !m_url.empty() )
+    {
+      t = new Tag( "x" );
+      t->addAttribute( "xmlns", XMLNS_X_OOB );
+    }
+    else if( xmlns == XMLNS_IQ_OOB && !m_url.empty() )
+    {
+      t = new Tag( "query" );
+      t->addAttribute( "xmlns", XMLNS_IQ_OOB );
+    }
+    else
+      return 0;
+
+    new Tag( t, "url", m_url );
+    if( !m_desc.empty() )
+      new Tag( t, "desc", m_desc );
+
+    return t;
   }
 
 }

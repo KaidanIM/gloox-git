@@ -25,7 +25,7 @@ namespace gloox
   class Tag;
 
   /**
-   * @brief This is an abstraction of a jabber:x:oob namespace element.
+   * @brief This is an abstraction of a jabber:x:oob namespace element or a jabber:iq:oob namespace element.
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
@@ -39,8 +39,9 @@ namespace gloox
       OOB();
 
       /**
-       * Constructs an OOB object from the given Tag. The Tag should have a name 'x'
-       * in the jabber:x:oob namespace.
+       * Constructs an OOB object from the given Tag. To be recognize properly, the Tag should
+       * either have a name 'x' of in the jabber:x:oob namespace, or a name of 'query' in the
+       * jabber:iq:oob namespace.
        * @param tag The Tag to parse.
        */
       OOB( Tag *tag );
@@ -73,6 +74,15 @@ namespace gloox
        * @return The URL's description.
        */
       const std::string& desc() const { return m_desc; };
+
+      /**
+       * Transforms the OOB into a Tag representation.
+       * @param xmlns Specifies the namespace of the resulting Tag. Either jabber:iq:oob
+       * or jabber:x:oob.
+       * @return A Tag representing the OOB. 0 if either the provided namespace
+       * is invalid or the URL is not set. The caller becomes the owner of the Tag.
+       */
+      Tag* tag( const std::string& xmlns ) const;
 
     private:
       std::string m_url;
