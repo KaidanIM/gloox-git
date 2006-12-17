@@ -18,7 +18,7 @@ namespace gloox
 {
 
   MUCMessageSession::MUCMessageSession( ClientBase *parent, const JID& jid )
-    : MessageSession( parent, jid, false )
+    : MessageSession( parent, jid, false, StanzaMessageGroupchat )
   {
   }
 
