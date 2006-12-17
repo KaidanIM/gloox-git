@@ -23,7 +23,7 @@ namespace gloox
 
   class Tag;
   /**
-   * @brief An abstraction of a single field in a JEP-0004 Data Form.
+   * @brief An abstraction of a single field in a XEP-0004 Data Form.
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.7
@@ -63,10 +63,10 @@ namespace gloox
                                      * the default and MUST be assumed if an entity receives a field type it
                                      * does not understand.*/
         FieldTypeItem,              /**< The field really is an element of type 'item' which allows for
-                                     * addition of sub-fields. See the explanantion in JEP-0004 (Data Forms)
+                                     * addition of sub-fields. See the explanantion in XEP-0004 (Data Forms)
                                      * Section 3.4 for more information */
         FieldTypeReported,          /**< The field really is an element of type 'reported' which allows for
-                                     * addition of sub-fields. See the explanantion in JEP-0004 (Data Forms)
+                                     * addition of sub-fields. See the explanantion in XEP-0004 (Data Forms)
                                      * Section 3.4 for more information */
         FieldTypeInvalid,           /**< The field is invalid. Only possible if the field was created from
                                      * a Tag not correctly describing a Data Form Field. */

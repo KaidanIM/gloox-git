@@ -26,7 +26,7 @@ namespace gloox
   class LastActivityHandler;
 
   /**
-   * @brief This is an implementation of JEP-0012 (Last Activity) for both clients and components.
+   * @brief This is an implementation of XEP-0012 (Last Activity) for both clients and components.
    *
    * LastActivity can be used to query remote entities about their last activity time as well
    * as answer incoming last-activity-queries.

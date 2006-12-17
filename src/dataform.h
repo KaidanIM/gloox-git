@@ -25,7 +25,7 @@ namespace gloox
   class Tag;
 
   /**
-   * @brief An abstraction of a JEP-0004 Data Form.
+   * @brief An abstraction of a XEP-0004 Data Form.
    *
    *
    *

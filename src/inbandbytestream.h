@@ -26,7 +26,7 @@ namespace gloox
   class InBandBytestreamDataHandler;
 
   /**
-   * @brief An implementation of a single In-Band Bytestream (JEP-0047).
+   * @brief An implementation of a single In-Band Bytestream (XEP-0047).
    *
    * One instance of this class handles one byte stream. You can attach as many InBandBytestream
    * objects to a MessageSession as you like.

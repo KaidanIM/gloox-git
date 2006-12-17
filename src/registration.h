@@ -30,7 +30,7 @@ namespace gloox
 
   /**
    * Holds all the possible fields a server may require for registration according
-   * to Section 14.1, JEP-0077.
+   * to Section 14.1, XEP-0077.
    */
   struct RegistrationFields
   {
@@ -53,7 +53,7 @@ namespace gloox
   };
 
   /**
-   * @brief This class is an implementation of JEP-0077 (In-Band Registration).
+   * @brief This class is an implementation of XEP-0077 (In-Band Registration).
    *
    * Derive your object from @ref RegistrationHandler and implement the
    * virtual functions offered by that interface. Then use it like this:
@@ -93,7 +93,7 @@ namespace gloox
     public:
 
       /**
-       * The possible fields of a JEP-0077 account registration.
+       * The possible fields of a XEP-0077 account registration.
        */
       enum fieldEnum
       {
@@ -155,7 +155,7 @@ namespace gloox
       /**
        * Attempts to register an account with the given credentials. This can only be called with an
        * unauthenticated parent (@ref Client).
-       * @note According to JEP-0077, if the server sends both old-style fields and data form,
+       * @note According to XEP-0077, if the server sends both old-style fields and data form,
        * implementations SHOULD prefer data forms.
        * @param form The DataForm containing the registration credentials.
        */

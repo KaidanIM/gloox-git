@@ -27,12 +27,12 @@ namespace gloox
     FomrForbidden,               /**< The requester is a JID other than an authorized resource of the
                                   * user. Something wnet serieously wrong */
     FomrItemNotFound,            /**< The requested node (message ID) does not exist. */
-    FomrUnknownError             /**< An error occurred which is not specified in JEP-0013. */
+    FomrUnknownError             /**< An error occurred which is not specified in XEP-0013. */
   };
 
   /**
    * @brief Implementation of this virtual interface allows for retrieval of offline messages following
-   * JEP-0030.
+   * XEP-0030.
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.7
@@ -46,9 +46,9 @@ namespace gloox
       virtual ~FlexibleOfflineHandler() {};
 
       /**
-       * This function is called to indicate whether the server supports JEP-0013 or not.
+       * This function is called to indicate whether the server supports XEP-0013 or not.
        * Call @ref FlexibleOffline::checkSupport() to trigger the check.
-       * @param support Whether the server support JEP-0013 or not.
+       * @param support Whether the server support XEP-0013 or not.
        */
       virtual void handleFlexibleOfflineSupport( bool support ) = 0;
 

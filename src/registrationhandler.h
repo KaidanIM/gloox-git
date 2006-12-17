@@ -23,7 +23,7 @@ namespace gloox
   class DataForm;
 
   /**
-   * Possible results of a JEP-0077 operation.
+   * Possible results of a XEP-0077 operation.
    */
   enum RegistrationResult
   {

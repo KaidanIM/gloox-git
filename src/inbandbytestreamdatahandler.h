@@ -23,7 +23,7 @@ namespace gloox
 
   /**
    * @brief A virtual interface that allows implementors to receive data
-   * sent over a In-Band Bytestream as defined in JEP-0047.
+   * sent over a In-Band Bytestream as defined in XEP-0047.
    *
    * An InBandBytestreamDataHandler is registered with an InBandBytestream.
    *

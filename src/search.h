@@ -30,7 +30,7 @@ namespace gloox
   class Disco;
 
   /**
-   * @brief An implementation of JEP-0055 (Jabber Search)
+   * @brief An implementation of XEP-0055 (Jabber Search)
    *
    * To perform a search in a directory (e.g., a User Directory):
    *

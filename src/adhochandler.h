@@ -24,7 +24,7 @@ namespace gloox
 {
 
   /**
-   * @brief A virtual interface for an Ad-hoc Command users according to JEP-0050.
+   * @brief A virtual interface for an Ad-hoc Command users according to XEP-0050.
    *
    * Derived classes can be registered with the Adhoc object to receive notifications
    * about Adhoc Commands remote entities support.

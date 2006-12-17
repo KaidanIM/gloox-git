@@ -24,7 +24,7 @@ namespace gloox
 
   /**
    * Holds all the possible fields a server may require for searching according
-   * to Section 7, JEP-0055.
+   * to Section 7, XEP-0055.
    */
   struct SearchFieldStruct
   {
@@ -36,7 +36,7 @@ namespace gloox
   };
 
   /**
-   * The possible fields of a JEP-0055 user search.
+   * The possible fields of a XEP-0055 user search.
    */
   enum SearchFieldEnum
   {
@@ -52,7 +52,7 @@ namespace gloox
   typedef std::list<SearchFieldStruct> SearchResultList;
 
   /**
-   * @brief A virtual interface that enables objects to receive Jabber Search (JEP-0055) results.
+   * @brief A virtual interface that enables objects to receive Jabber Search (XEP-0055) results.
    *
    * A class implementing this interface can receive the result of a Jabber Search.
    *

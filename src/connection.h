@@ -157,7 +157,7 @@ namespace gloox
       bool initCompression( StreamFeature method );
 
       /**
-       * This function is used to enable stream compression as defined in JEP-0138.
+       * This function is used to enable stream compression as defined in XEP-0138.
        * It is necessary because when compression is negotiated it is not enabled instantly.
        */
       void enableCompression();

@@ -23,7 +23,7 @@ namespace gloox
 {
 
   /**
-   * @brief An implementation of JEP-0013 (Flexible Offline Message Retrieval).
+   * @brief An implementation of XEP-0013 (Flexible Offline Message Retrieval).
    *
    * Use the FlexibleOfflineHandler to receive results.
    *
@@ -81,7 +81,7 @@ namespace gloox
       void removeMessages( const StringList& msgs );
 
       /**
-       * Registers a FlexibleOfflineHandler as object that receives results of JEP-0013 queries.
+       * Registers a FlexibleOfflineHandler as object that receives results of XEP-0013 queries.
        * Only one Handler at a time is possible.
        * @param foh The Handler object to register.
        */
