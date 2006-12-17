@@ -40,7 +40,7 @@ namespace gloox
       m_parent->removeMessageHandler( m_target.full() );
   }
 
-  void MessageSession::handleMessage( Stanza *stanza )
+  void MessageSession::handleMessage( Stanza *stanza, MessageSession * /*session*/ )
   {
     if( m_wantUpgrade && stanza->from().bare() == m_target.full() )
       setResource( stanza->from().resource() );
@@ -52,7 +52,7 @@ namespace gloox
     }
 
     if( m_messageHandler && !stanza->body().empty() )
-      m_messageHandler->handleMessage( stanza );
+      m_messageHandler->handleMessage( stanza, this );
   }
 
   void MessageSession::send( const std::string& message, const std::string& subject )

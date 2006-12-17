@@ -14,10 +14,13 @@
 #ifndef MESSAGEHANDLER_H__
 #define MESSAGEHANDLER_H__
 
-#include "stanza.h"
+#include "macros.h"
 
 namespace gloox
 {
+
+  class MessageSession;
+  class Stanza;
 
   /**
    * @brief A virtual interface which can be reimplemented to receive incoming message stanzas.
@@ -42,8 +45,10 @@ namespace gloox
        * Reimplement this function if you want to be notified about
        * incoming messages.
        * @param stanza The complete Stanza.
+       * @param session If this MessageHandler is used with a MessageSession, this parameter
+       * holds a pointer to that MessageSession.
        */
-      virtual void handleMessage( Stanza *stanza ) = 0;
+      virtual void handleMessage( Stanza *stanza, MessageSession *session = 0 ) = 0;
   };
 
 }
