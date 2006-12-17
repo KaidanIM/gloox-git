@@ -36,6 +36,37 @@ namespace gloox
   /**
    * @brief This is an implementation of XEP-0045 (Multi-User Chat).
    *
+   * Usage is pretty simple:
+   *
+   * Derrive an object from MUCRoomHandler and implement its virtuals:
+   * @code
+   * class MyClass : public MUCRoomHandler
+   * {
+   *   ...
+   * };
+   * @endcode
+   *
+   * Then create a new MUCRoom object and pass it a valid ClientBase, the desired full room JID,
+   * your MUCRoomHandler-derived object, and an optional MUCRoomConfigHandler-derived object.
+   * @code
+   * void MyOtherClass::joinRoom( const std::string& room, const std::string& service,
+   *                              const std::string& nick )
+   * {
+   *   MyClass *myHandler = new MyClass(...);
+   *   JID roomJID( room + "@" + service + "/" + nick );
+   *   m_room = new MUCRoom( m_clientbase, roomJID, myHandler, 0 );
+   *   m_room->join();
+   * }
+   * @endcode
+   *
+   * When joining the room was successful, the various MUCRoomHandler functions will start to
+   * be called. If joining was not successful, MUCRoomHandler::handleMUCError() will be called,
+   * giving a hint at the reason for the failure.
+   *
+   * To set up your own room, or to configure an existing room, you should also derive a
+   * class from MUCRoomConfigHandler and register it with the MUCRoom (either by using it
+   * with MUCRoom's constructor, or by calling registerMUCRoomConfigHandler()).
+   *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
