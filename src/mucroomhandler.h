@@ -32,12 +32,12 @@ namespace gloox
   struct MUCRoomParticipant
   {
     JID *nick;                      /**< Pointer to a JID holding the participant's full JID
-                                     * in the form of @c room@service/nick. <br>
+                                     * in the form @c room\@service/nick. <br>
                                      * @note The MUC server @b may change the chosen nickname.
                                      * If the @b self member of this struct is true, one should
                                      * check the resource of of this member if the actual nickname
                                      * is important. */
-    MUCRoomAffiliation affiliation; /**< The participant's affiliation with room. */
+    MUCRoomAffiliation affiliation; /**< The participant's affiliation with the room. */
     MUCRoomRole role;               /**< The participant's role with the room. */
     JID *jid;                       /**< Pointer to the occupant's full JID in a non-anonymous room or
                                      * in a semi-anonymous room if the user (of gloox) has a role of
@@ -52,7 +52,7 @@ namespace gloox
                                      * actor can provide a reason for the action, this reason is stored
                                      * here. Examples: Kicking, banning, leaving the room. */
     JID *actor;                     /**< If the presence change is the result of an action of a room
-                                     * member, a pointer to the actor JID is stored here, if the
+                                     * member, a pointer to the actor's JID is stored here, if the
                                      * actor chose to disclose his or her identity. Examples: Kicking
                                      * and banning.
                                      * 0 if the identity is not disclosed. */
@@ -63,14 +63,18 @@ namespace gloox
                                      * MUCRoom::setNick()) can be considered acknowledged. In any case
                                      * the user's presence sent with the nick change acknowledgement
                                      * is of type @c unavailable. Another presence of type @c available
-                                     * will follow (not necessarily immediately) coming from the user's
-                                     * new nickname. 0 if there is no nick change in progress. */
+                                     * (or whatever the user's presence was at the time of the nick change
+                                     * request) will follow (not necessarily immediately) coming from the
+                                     * user's new nickname. Empty if there is no nick change in progress. */
   };
 
   /**
-   * @brief This interface enabled inheriting classes to be notified about certain events in a MUC room.
+   * @brief This interface enables inheriting classes to be notified about certain events in a MUC room.
    *
    * See MUCRoom for examples how to use this interface.
+   *
+   * @note This interface does not notify about room configuration related events. Use
+   * MUCRoomConfigHandler for that puprose.
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
@@ -89,7 +93,7 @@ namespace gloox
        * @note The MUCRoomParticipant struct, including pointers to JIDs, will be cleaned up after
        * this function returned.
        * @param room The room.
-       * @param participant A struct describing the occupant's action.
+       * @param participant A struct describing the occupant's status and/or action.
        * @param presence The occupant's presence.
        */
       virtual void handleMUCParticipantPresence( MUCRoom *room, const MUCRoomParticipant participant,
@@ -97,13 +101,13 @@ namespace gloox
 
       /**
        * This function is called when a message arrives through the room.
-       * @note This may be a private message! If the message is private, and want to answer
+       * @note This may be a private message! If the message is private, and you want to answer
        * it privately, you should create a new MessageSession to the user's full room nick and use
        * that for any further private communication with the user.
        * @param room The room the message came from.
        * @param nick The sending user's nickname in the room.
        * @param message The message.
-       * @param history Indicates whetehr or not this is a message that was sent prior to
+       * @param history Indicates whether or not this is a message that was sent prior to
        * entering the room and is part of the room history the room sends after joining.
        * @param when This is only used if @c history is @b true and then contains the
        * datetime the message was sent in a notation as described in XEP-0082.
@@ -117,7 +121,7 @@ namespace gloox
        * This function is called if the room that was just joined didn't exist prior to the attempted
        * join. Therfore the room was created by MUC service. To accept the default configuration of
        * the room assigned by the MUC service, return @b true from this function. The room will be opened
-       * by the MUC service and availabel for other users to join. If you don't want to accept the default
+       * by the MUC service and available for other users to join. If you don't want to accept the default
        * room configuration, return @b false from this function. The room will stay locked until it is
        * either fully configured, created as an instant room, or creation is canceled.
        *
@@ -153,7 +157,7 @@ namespace gloox
                                            const std::string& reason ) = 0;
 
       /**
-       * This function is called when an error occurs in the room.
+       * This function is called when an error occurs in the room or when entering the room.
        * @note The following error conditions are specified for MUC:
        * @li @b Not @b Authorized: Password required.
        * @li @b Forbidden: Access denied, user is banned.
