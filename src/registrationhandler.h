@@ -15,12 +15,13 @@
 #ifndef REGISTRATIONHANDLER_H__
 #define REGISTRATIONHANDLER_H__
 
+#include "oob.h"
+#include "dataform.h"
+
 #include <string>
 
 namespace gloox
 {
-
-  class DataForm;
 
   /**
    * Possible results of a XEP-0077 operation.
@@ -113,12 +114,9 @@ namespace gloox
        * This function is called if the server does not offer in-band registration
        * but wants to refer the user to an external URL.
        * @param from The server or service the referal came from.
-       * @param url The external URL where registration is possible (or where more information
-       * can be found).
-       * @param desc Some descriptive text, if supplied.
+       * @param oob The OOB object describing the external URL.
        */
-      virtual void handleOOB( const JID& from, const std::string& url,
-                              const std::string& desc ) = 0;
+      virtual void handleOOB( const JID& from, const OOB& oob ) = 0;
 
   };
 
