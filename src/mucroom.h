@@ -470,7 +470,7 @@ namespace gloox
       virtual void handlePresence( Stanza *stanza );
 
       // reimplemented from MessageHandler
-      virtual void handleMessage( Stanza *stanza );
+      virtual void handleMessage( Stanza *stanza, MessageSession *session = 0 );
 
       // reimplemented from IqHandler
       virtual bool handleIq( Stanza * /*stanza*/ ) { return false; };

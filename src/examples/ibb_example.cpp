@@ -104,7 +104,7 @@ class IBBTest : public MessageSessionHandler, ConnectionListener, LogHandler,
       return true;
     };
 
-    virtual void handleMessage( Stanza *stanza )
+    virtual void handleMessage( Stanza *stanza, MessageSession * /*session*/ )
     {
       printf( "type: %d, subject: %s, message: %s, thread id: %s\n", stanza->subtype(),
               stanza->subject().c_str(), stanza->body().c_str(), stanza->thread().c_str() );

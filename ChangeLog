@@ -39,6 +39,7 @@ since -pre2
 - RosterListener: moved Roster to gloox namespace
 - RosterListener: new handleRosterPresence() replaces itemUn/Available() and presenceUpdated()
 - RosterListener: added handleSelfPresence()
+- MessageHandler: handleMessage() takes optional MessageSession arg
 
 
 v0.8 -- 08 Apr 2006

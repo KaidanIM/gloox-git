@@ -143,7 +143,7 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler, Messag
       printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
     };
 
-    virtual void handleMessage( Stanza *stanza )
+    virtual void handleMessage( Stanza *stanza, MessageSession * /*session*/ )
     {
       if( stanza->body() == "quit" )
         j->disconnect();
