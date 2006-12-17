@@ -16,12 +16,14 @@
 #define REGISTRATIONHANDLER_H__
 
 #include "oob.h"
-#include "dataform.h"
 
 #include <string>
 
 namespace gloox
 {
+
+  class DataForm;
+  class OOB;
 
   /**
    * Possible results of a XEP-0077 operation.
