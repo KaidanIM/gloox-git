@@ -102,6 +102,8 @@ namespace gloox
 
       /**
        * This function is called on every status change of an item in the roster.
+       * If the presence is of type Unavailable, then the resource has already been
+       * removed from the RosterItem.
        * @param item The roster item.
        * @param resource The resource that changed presence.
        * @param presence The item's new presence.
@@ -110,6 +112,20 @@ namespace gloox
        */
       virtual void handleRosterPresence( const RosterItem& item, const std::string& resource,
                                          Presence presence, const std::string& msg ) = 0;
+
+      /**
+       * This function is called on every status change of a JID that matches the Client's
+       * own JID.
+       * If the presence is of type Unavailable, then the resource has already been
+       * removed from the RosterItem.
+       * @param item The self item.
+       * @param resource The resource that changed presence.
+       * @param presence The item's new presence.
+       * @param msg The status change message.
+       * @since 0.9
+       */
+      virtual void handleSelfPresence( const RosterItem& item, const std::string& resource,
+                                       Presence presence, const std::string& msg ) = 0;
 
       /**
        * This function is called when an entity wishes to subscribe to this entity's presence.
