@@ -23,7 +23,7 @@ namespace gloox
 
   /**
    * @brief This class abstracts a stanza extension (usually an 'x' element in a specific
-   * namespace.
+   * namespace).
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
