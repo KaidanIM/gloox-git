@@ -16,6 +16,7 @@
 #include "clientbase.h"
 #include "stanza.h"
 #include "prep.h"
+#include "oob.h"
 
 namespace gloox
 {
@@ -236,16 +237,8 @@ namespace gloox
 
         if( q->hasChild( "x", "xmlns", XMLNS_X_OOB ) )
         {
-          Tag *x = q->findChild( "x", "xmlns", XMLNS_X_OOB );
-          std::string url;
-          if( x->hasChild( "url" ) )
-            url = x->findChild( "url" )->cdata();
-
-          std::string desc;
-          if( x->hasChild( "url" ) )
-            url = x->findChild( "url" )->cdata();
-
-          m_registrationHandler->handleOOB( stanza->from(), url, desc );
+          OOB oob( q->findChild( "x", "xmlns", XMLNS_X_OOB ) );
+          m_registrationHandler->handleOOB( stanza->from(), oob );
         }
 
         int fields = 0;
