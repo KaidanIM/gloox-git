@@ -74,22 +74,8 @@ namespace gloox
     return true;
   }
 
-  bool Tag::operator==( Tag &right ) const
-  {
-    return (*this) == (const Tag&)right;
-  }
-
-  bool Tag::operator!=( Tag &right ) const
-  {
-    if( *this == right )
-      return false;
-
-    return true;
-  }
-
   bool Tag::operator!=( const Tag &right ) const
   {
-    printf( "in const operator!=\n" );
     if( *this == right )
       return false;
 
