@@ -140,7 +140,7 @@ namespace gloox
 
       /**
        * Returns the Resource for a specific resource string.
-       * @param resource The resource string.
+       * @param res The resource string.
        * @return The Resource if found, 0 otherwise.
        */
       virtual const Resource* resource( const std::string& res ) const;

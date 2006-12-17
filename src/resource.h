@@ -37,7 +37,7 @@ namespace gloox
         * Constructor.
         * @param priority The resource's priority.
         * @param msg The resource's status message.
-        * @param status The resource's presence status.
+        * @param presence The resource's presence status.
         */
       Resource( int priority, const std::string& msg, Presence presence )
         : m_priority( priority ), m_message( msg ), m_presence( presence ) {};
