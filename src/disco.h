@@ -33,7 +33,7 @@ namespace gloox
   class Stanza;
 
   /**
-   * @brief This class implements JEP-0030 (Service Discovery) and JEP-0092 (Software Version).
+   * @brief This class implements XEP-0030 (Service Discovery) and XEP-0092 (Software Version).
    *
    * ClientBase will automatically instantiate a Disco object. It can be used to
    * announce special features of your client, or its version, or...
@@ -74,7 +74,7 @@ namespace gloox
 
       /**
        * Queries the given JID for general infomation according to
-       * JEP-0030 (Service Discovery).
+       * XEP-0030 (Service Discovery).
        * To receive the results inherit from DiscoHandler and register with the Disco object.
        * @param to The destination-JID of the query.
        * @param node An optional node to query. Not inserted if empty.
@@ -85,7 +85,7 @@ namespace gloox
 
       /**
        * Queries the given JID for its items according to
-       * JEP-0030 (Service Discovery).
+       * XEP-0030 (Service Discovery).
        * To receive the results inherit from DiscoHandler and register with the Disco object.
        * @param to The destination-JID of the query.
        * @param node An optional node to query. Not inserted if empty.
@@ -108,7 +108,7 @@ namespace gloox
        * Sets the identity of this entity.
        * The library uses this information to answer disco#info requests
        * with a correct identity.
-       * JEP-0030 requires an entity to have at least one identity. See JEP-0030
+       * XEP-0030 requires an entity to have at least one identity. See XEP-0030
        * for more information on categories and types.
        * @param category The entity category of this client. Default: client
        * @param type The type of this entity. Default: bot

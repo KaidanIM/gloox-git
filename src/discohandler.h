@@ -22,7 +22,7 @@ namespace gloox
 {
 
   /**
-   * @brief A virtual interface that enables objects to receive Service Discovery (JEP-0030) events.
+   * @brief A virtual interface that enables objects to receive Service Discovery (XEP-0030) events.
    *
    * A class implementing this interface can receive the results of sent disco queries.
    *

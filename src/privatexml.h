@@ -30,7 +30,7 @@ namespace gloox
   class Stanza;
 
   /**
-   * @brief This class implements JEP-0049 (Private XML Storage).
+   * @brief This class implements XEP-0049 (Private XML Storage).
    *
    * @author Jakob Schroeter <js@camaya.net>
    */

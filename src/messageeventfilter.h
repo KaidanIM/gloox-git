@@ -25,7 +25,7 @@ namespace gloox
   class MessageSession;
 
   /**
-   * @brief This class adds Message Event (JEP-0022) support to a MessageSession.
+   * @brief This class adds Message Event (XEP-0022) support to a MessageSession.
    *
    * This implementation of Message Events is fully transparent to the user of the class.
    * If the remote entity does not request message events, MessageEventFilter will not send
@@ -53,7 +53,7 @@ namespace gloox
       virtual ~MessageEventFilter();
 
       /**
-       * Use this function to raise an event as defined in JEP-0022.
+       * Use this function to raise an event as defined in XEP-0022.
        * @note The Spec states that Message Events shall not be sent to an entity
        * which did not request them. Reasonable effort is taken in this function to
        * avoid spurious event sending. You should be safe to call this even if Message
@@ -66,7 +66,7 @@ namespace gloox
 
       /**
        * The MessageEventHandler registered here will receive Message Events according
-       * to JEP-0022.
+       * to XEP-0022.
        * @param meh The MessageEventHandler to register.
        */
       void registerMessageEventHandler( MessageEventHandler *meh );

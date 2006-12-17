@@ -23,7 +23,7 @@ namespace gloox
 {
 
   /**
-   * @brief An abstract base class for a JEP-0004 Data Form.
+   * @brief An abstract base class for a XEP-0004 Data Form.
    *
    * You shouldn't need to use this class directly. Use DataForm instead.
    *
@@ -44,7 +44,7 @@ namespace gloox
       virtual ~DataFormBase();
 
       /**
-       * A list of JEP-0004 Data Form Fields.
+       * A list of XEP-0004 Data Form Fields.
        */
       typedef std::list<DataFormField*> FieldList;
 
