@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.50)
-AC_INIT([gloox], [0.9-pre1], [js@camaya.net])
+AC_INIT([gloox], [0.9-pre2], [js@camaya.net])
 AC_CONFIG_SRCDIR([configure.ac])
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 
@@ -315,5 +315,6 @@ src/tests/md5/Makefile
 src/tests/parser/Makefile
 src/tests/sha/Makefile
 src/tests/tag/Makefile
+src/tests/base64/Makefile
 ])
 AC_OUTPUT
