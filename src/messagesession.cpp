@@ -23,12 +23,13 @@
 namespace gloox
 {
 
-  MessageSession::MessageSession( ClientBase *parent, const JID& jid, bool wantUpgrade )
-    : m_parent( parent ), m_target( jid ), m_messageHandler( 0 ), m_wantUpgrade( wantUpgrade )
+  MessageSession::MessageSession( ClientBase *parent, const JID& jid, bool wantUpgrade, int types )
+    : m_parent( parent ), m_target( jid ), m_messageHandler( 0 ),
+      m_types( types ), m_wantUpgrade( wantUpgrade )
   {
     if( m_parent )
     {
-      m_parent->registerMessageHandler( m_target.full(), this, wantUpgrade );
+      m_parent->registerMessageHandler( m_target.full(), this, m_types );
 
       m_thread = "gloox" + m_parent->getID();
     }
@@ -90,7 +91,7 @@ namespace gloox
   {
     m_parent->removeMessageHandler( m_target.full() );
     m_target.setResource( resource );
-    m_parent->registerMessageHandler( m_target.full(), this, false );
+    m_parent->registerMessageHandler( m_target.full(), this, m_types );
   }
 
   void MessageSession::registerMessageHandler( MessageHandler *mh )

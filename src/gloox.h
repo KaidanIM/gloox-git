@@ -514,70 +514,70 @@ namespace gloox
    */
   enum StanzaSubType
   {
-    StanzaSubUndefined,             /**< Undefined. */
-    StanzaIqGet,                    /**< The stanza is a request for information or requirements. */
-    StanzaIqSet,                    /**<
+    StanzaSubUndefined        =  0, /**< Undefined. */
+    StanzaIqGet               =  1, /**< The stanza is a request for information or requirements. */
+    StanzaIqSet               =  2, /**<
                                      * The stanza provides required data, sets new values, or
                                      * replaces existing values.
                                      */
-    StanzaIqResult,                 /**< The stanza is a response to a successful get or set request. */
-    StanzaIqError,                  /**<
+    StanzaIqResult            =  4, /**< The stanza is a response to a successful get or set request. */
+    StanzaIqError             =  8, /**<
                                      * An error has occurred regarding processing or
                                      * delivery of a previously-sent get or set (see Stanza Errors
                                      * (Section 9.3)).
                                      */
-    StanzaPresenceUnavailable,      /**<
+    StanzaPresenceUnavailable = 16,      /**<
                                      * Signals that the entity is no longer available for
                                      * communication.
                                      */
-    StanzaPresenceAvailable,        /**<
+    StanzaPresenceAvailable =   32, /**<
                                      * Signals to the server that the sender is online and available
                                      * for communication.
                                      */
-    StanzaPresenceProbe,            /**<
+    StanzaPresenceProbe    =    64, /**<
                                      * A request for an entity's current presence; SHOULD be
                                      * generated only by a server on behalf of a user.
                                      */
-    StanzaPresenceError,            /**<
+    StanzaPresenceError    =   128, /**<
                                      * An error has occurred regarding processing or delivery of
                                      * a previously-sent presence stanza.
                                      */
-    StanzaS10nSubscribe,            /**<
+    StanzaS10nSubscribe    =   256, /**<
                                      * The sender wishes to subscribe to the recipient's
                                      * presence.
                                      */
-    StanzaS10nSubscribed,           /**<
+    StanzaS10nSubscribed   =   512, /**<
                                      * The sender has allowed the recipient to receive
                                      * their presence.
                                      */
-    StanzaS10nUnsubscribe,          /**<
+    StanzaS10nUnsubscribe  =  1024, /**<
                                      * The sender is unsubscribing from another entity's
                                      * presence.
                                      */
-    StanzaS10nUnsubscribed,         /**<
+    StanzaS10nUnsubscribed =  2048, /**<
                                      * The subscription request has been denied or a
                                      * previously-granted subscription has been cancelled.
                                      */
-    StanzaMessageChat,              /**<
+    StanzaMessageChat      =  4096, /**<
                                      * The message is sent in the context of a one-to-one chat
                                      * conversation. A compliant client SHOULD present the message in an
                                      * interface enabling one-to-one chat between the two parties,
                                      * including an appropriate conversation history.
                                      */
-    StanzaMessageError,             /**<
+    StanzaMessageError     =  8192, /**<
                                      * An error has occurred related to a previous message sent
                                      * by the sender (for details regarding stanza error syntax, refer to
                                      * [XMPP-CORE]). A compliant client SHOULD present an appropriate
                                      * interface informing the sender of the nature of the error.
                                      */
-    StanzaMessageGroupchat,         /**<
+    StanzaMessageGroupchat = 16384, /**<
                                      * The message is sent in the context of a multi-user
                                      * chat environment (similar to that of [IRC]). A compliant client
                                      * SHOULD present the message in an interface enabling many-to-many
                                      * chat between the parties, including a roster of parties in the
                                      * chatroom and an appropriate conversation history.
                                      */
-    StanzaMessageHeadline,          /**<
+    StanzaMessageHeadline  = 32768, /**<
                                      * The message is probably generated by an automated
                                      * service that delivers or broadcasts content (news, sports, market
                                      * information, RSS feeds, etc.). No reply to the message is
@@ -586,7 +586,7 @@ namespace gloox
                                      * standalone messages, chat sessions, or groupchat sessions (e.g.,
                                      * by not providing the recipient with the ability to reply).
                                      */
-    StanzaMessageNormal             /**<
+    StanzaMessageNormal    = 65536  /**<
                                      * The message is a single message that is sent outside the
                                      * context of a one-to-one conversation or groupchat, and to which it
                                      * is expected that the recipient will reply. A compliant client

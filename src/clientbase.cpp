@@ -677,13 +677,13 @@ namespace gloox
       m_iqNSHandlers.erase( xmlns );
   }
 
-  void ClientBase::registerMessageHandler( const std::string& jid, MessageHandler *mh, bool wantUpgrade )
+  void ClientBase::registerMessageHandler( const std::string& jid, MessageHandler *mh, int types )
   {
     if( mh && !jid.empty() )
     {
       JidHandlerStruct jhs;
       jhs.mh = mh;
-      jhs.wantUpgrade = wantUpgrade;
+      jhs.types = ( types )?( types ):( StanzaSubUndefined );
       m_messageJidHandlers[jid] = jhs;
     }
   }
@@ -911,14 +911,16 @@ namespace gloox
     }
 
     MessageJidHandlerMap::const_iterator it1 = m_messageJidHandlers.find( stanza->from().full() );
-    if( it1 != m_messageJidHandlers.end() )
+    if( it1 != m_messageJidHandlers.end()
+        && ( (*it1).second.types & stanza->subtype() || (*it1).second.types == StanzaSubUndefined ) )
     {
       (*it1).second.mh->handleMessage( stanza );
       return;
     }
 
     it1 = m_messageJidHandlers.find( stanza->from().bare() );
-    if( it1 != m_messageJidHandlers.end() )
+    if( it1 != m_messageJidHandlers.end()
+        && ( (*it1).second.types & stanza->subtype() || (*it1).second.types == StanzaSubUndefined ) )
     {
       (*it1).second.mh->handleMessage( stanza );
       return;
