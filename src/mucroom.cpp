@@ -723,7 +723,7 @@ namespace gloox
     m_flags |= FlagFullyAnonymous;
   }
 
-  void MUCRoom::handleMessage( Stanza *stanza, MessageSession *session )
+  void MUCRoom::handleMessage( Stanza *stanza, MessageSession * /*session*/ )
   {
     if( !m_roomHandler )
       return;

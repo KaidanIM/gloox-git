@@ -309,10 +309,10 @@ namespace gloox
        * You should not need to use this functionality directly. Instead use a MessageSession.
        * @param jid Messages from this full JID will be sent to the given MessageHandler.
        * @param mh The object to receive Message stanza notifications.
-       * @param wantUpgrade Indicates whether the registered MessageSession wants upgrades
-       * from bare JID to full JID.
+       * @param types ORed list of StanzaSubType. Only the StanzaMessage* subtypes are valid,
+       * or StanzaSubUndefined. Defaults to 0 which means any type.
        */
-      void registerMessageHandler( const std::string& jid, MessageHandler *mh, bool wantUpgrade );
+      void registerMessageHandler( const std::string& jid, MessageHandler *mh, int types = 0 );
 
       /**
        * Registers @c ph as object that receives Presence stanza notifications.
@@ -572,7 +572,7 @@ namespace gloox
       struct JidHandlerStruct
       {
         MessageHandler *mh;
-        bool wantUpgrade;
+        int types;
       };
 
       typedef std::list<ConnectionListener*>                ConnectionListenerList;

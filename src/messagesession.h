@@ -158,10 +158,10 @@ namespace gloox
        * from a full JID to this MessageSession. If unsure, use the default. You probably only want to use
        * a non-default value if this MessageSession is supposed to talk directly to a server or component
        * JID that has no resource. This 'upgrade' will only happen once.
-       * @note As of version 0.9, a MessageSession doesn't silently discard message stanzas with empty
-       * &lt;body&gt; element anymore.
+       * @param types ORed list of StanzaSubType values this MessageSession shall receive. Only the
+       * StanzaMessage* types are valid. Defaults to 0 which means any type is received.
        */
-      MessageSession( ClientBase *parent, const JID& jid, bool wantUpgrade = true );
+      MessageSession( ClientBase *parent, const JID& jid, bool wantUpgrade = true, int types = 0 );
 
       /**
        * Virtual destructor.
@@ -245,6 +245,7 @@ namespace gloox
 
       MessageFilterList m_messageFilterList;
       std::string m_thread;
+      int m_types;
       bool m_wantUpgrade;
 
   };
