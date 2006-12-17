@@ -112,6 +112,12 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler, Messag
       printf( "presence received: %s/%s -- %d\n", item.jid().c_str(), resource.c_str(), presence );
     }
 
+    virtual void handleSelfPresence( const RosterItem& item, const std::string& resource,
+                                       Presence presence, const std::string& /*msg*/ )
+    {
+      printf( "self presence received: %s/%s -- %d\n", item.jid().c_str(), resource.c_str(), presence );
+    }
+
     virtual bool handleSubscriptionRequest( const JID& jid, const std::string& /*msg*/ )
     {
       printf( "subscription: %s\n", jid.bare().c_str() );

@@ -133,17 +133,35 @@ namespace gloox
     Roster::iterator it = m_roster.find( stanza->from().bare() );
     if( it != m_roster.end() )
     {
-      (*it).second->setPresence( stanza->from().resource(), stanza->presence() );
-      (*it).second->setStatus( stanza->from().resource(), stanza->status() );
-      (*it).second->setPriority( stanza->from().resource(), stanza->priority() );
-//       (*it).second->setCaps ( caps );
-
       if( stanza->presence() == PresenceUnavailable )
         (*it).second->removeResource( stanza->from().resource() );
+      else
+      {
+        (*it).second->setPresence( stanza->from().resource(), stanza->presence() );
+        (*it).second->setStatus( stanza->from().resource(), stanza->status() );
+        (*it).second->setPriority( stanza->from().resource(), stanza->priority() );
+  //       (*it).second->setCaps ( caps );
+      }
 
       if( m_rosterListener )
         m_rosterListener->handleRosterPresence( (*(*it).second), stanza->from().resource(),
                                                 stanza->presence(), stanza->status() );
+    }
+    else if( stanza->from().bare() == m_self->jid() )
+    {
+      if( stanza->presence() == PresenceUnavailable )
+        m_self->removeResource( stanza->from().resource() );
+      else
+      {
+        m_self->setPresence( stanza->from().resource(), stanza->presence() );
+        m_self->setStatus( stanza->from().resource(), stanza->status() );
+        m_self->setPriority( stanza->from().resource(), stanza->priority() );
+  //       (*it).second->setCaps ( caps );
+      }
+
+      if( m_rosterListener )
+        m_rosterListener->handleSelfPresence( *m_self, stanza->from().resource(),
+                                              stanza->presence(), stanza->status() );
     }
     else
     {
