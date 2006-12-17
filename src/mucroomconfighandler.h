@@ -23,6 +23,8 @@
 namespace gloox
 {
 
+  class MUCRoom;
+
   /**
    * An item in a list of MUC room users. Lists of these items are
    * used when manipulating the lists of members, admins, owners, etc.
