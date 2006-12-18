@@ -26,6 +26,12 @@ namespace gloox
   /**
    * @brief An implementation of log sink and source.
    *
+   * To log the output of your Client or Component, use ClientBase's
+   * @link ClientBase::logInstance() logInstance() @endlink to get hold of the LogSink
+   * object for that ClientBase. Register your LogHandler with that instance.
+   *
+   * You should not need to use this class directly.
+   *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.8
    */
