@@ -49,8 +49,7 @@ namespace gloox
   void MUCMessageSession::setSubject( const std::string& subject )
   {
     Tag *m = new Tag( "message" );
-    m->addAttribute( "from", m_parent->jid().full() );
-    m->addAttribute( "to", m_target.full() );
+    m->addAttribute( "to", m_target.bare() );
     m->addAttribute( "type", "groupchat" );
     new Tag( m, "subject", subject );
 
