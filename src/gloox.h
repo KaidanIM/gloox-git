@@ -353,7 +353,7 @@ namespace gloox
 
   const int XMPP_STREAM_VERSION_MAJOR       = 1;                                         /**< */
   const int XMPP_STREAM_VERSION_MINOR       = 0;                                         /**< */
-  const std::string GLOOX_VERSION           = "0.9-pre2";                                /**< */
+  const std::string GLOOX_VERSION           = "0.9-pre3";                                /**< */
 
   /**
    * This describes the possible states of a stream.
