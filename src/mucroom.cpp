@@ -282,9 +282,9 @@ namespace gloox
     m_historyValue = 0;
   }
 
-  Tag* MUCRoom::createDataForm( const JID& room, const DataForm& df )
+  Stanza* MUCRoom::createDataForm( const JID& room, const DataForm& df )
   {
-    Tag *m = new Tag( "message" );
+    Stanza *m = new Stanza( "message" );
     m->addAttribute( "to", room.bare() );
     m->addChild( df.tag() );
 
