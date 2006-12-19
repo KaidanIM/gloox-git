@@ -25,6 +25,21 @@ namespace gloox
 {
 
   /**
+   *
+   */
+  struct DiscoNodeItem
+  {
+    std::string node;               /**< Content of the item's node attribute. */
+    std::string jid;                /**< Content of the item's jid attribute. */
+    std::string name;               /**< Content of the item's name attribute. */
+  };
+
+  /**
+   * A list of DiscoNodeItems.
+   */
+  typedef std::list<DiscoNodeItem> DiscoNodeItemList;
+
+  /**
    * @brief Derived classes can be registered as NodeHandlers for certain nodes with the Disco object.
    *
    * Incoming disco#info and disco#items queries are delegated to their respective handlers.
@@ -66,10 +81,10 @@ namespace gloox
        * matches the one registered for this handler. If node is empty, items for the
        * root node (no node) shall be returned.
        * @param node The node this handler is supposed to handle.
-       * @return A map of items supported by this node. The first string is the item's node
+       * @return A list of items supported by this node. The first string is the item's node
        * specifier, the second string is the items natural-language name.
        */
-      virtual StringMap handleDiscoNodeItems( const std::string& node = "" ) = 0;
+      virtual DiscoNodeItemList handleDiscoNodeItems( const std::string& node = "" ) = 0;
 
   };
 

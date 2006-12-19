@@ -51,22 +51,34 @@ namespace gloox
     return features;
   }
 
-  StringMap Adhoc::handleDiscoNodeItems( const std::string& node )
+  DiscoNodeItemList Adhoc::handleDiscoNodeItems( const std::string& node )
   {
     if( node.empty() )
     {
-      StringMap item;
-      item[XMLNS_ADHOC_COMMANDS] = "Ad-Hoc Commands";
-      return item;
+      DiscoNodeItemList l;
+      DiscoNodeItem item;
+      item.node = XMLNS_ADHOC_COMMANDS;
+      item.name = "Ad-Hoc Commands";
+      l.push_back( item );
+      return l;
     }
     else if( node == XMLNS_ADHOC_COMMANDS )
     {
-      return m_items;
+      DiscoNodeItemList l;
+      StringMap::const_iterator it = m_items.begin();
+      for( ; it != m_items.end(); ++it )
+      {
+        DiscoNodeItem item;
+        item.node = (*it).first;
+        item.name = (*it).second;
+        l.push_back( item );
+      }
+      return l;
     }
     else
     {
-      StringMap item;
-      return item;
+      DiscoNodeItemList l;
+      return l;
     }
   }
 
