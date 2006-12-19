@@ -159,6 +159,8 @@ namespace gloox
       p->addAttribute( "to", m_nick.bare() + "/" + m_newNick );
       m_parent->send( p );
     }
+    else
+      m_nick.setResource( nick );
   }
 
 //   void MUCRoom::setUnique( bool unique )
