@@ -1077,14 +1077,22 @@ namespace gloox
     return StringMap();
   }
 
-  StringMap MUCRoom::handleDiscoNodeItems( const std::string& /*node*/ )
+  DiscoNodeItemList MUCRoom::handleDiscoNodeItems( const std::string& node )
   {
-    StringMap m;
+    DiscoNodeItemList l;
+
+    if( node != XMLNS_MUC_ROOMS )
+      return l;
+
     if( m_publish )
     {
-      m[m_nick.bare()] = m_publishNick ? m_nick.username() : "";
+      DiscoNodeItem item;
+      item.jid = m_nick.bare();
+      if( m_publishNick )
+        item.name = m_nick.resource();
+      l.push_back( item );
     }
-    return m;
+    return l;
   }
 
   MUCRoomRole MUCRoom::getEnumRole( const std::string& role )

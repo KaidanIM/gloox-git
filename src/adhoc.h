@@ -132,7 +132,7 @@ namespace gloox
       virtual StringMap handleDiscoNodeIdentities( const std::string& node, std::string& name );
 
       // reimplemented from DiscoNodeHandler
-      virtual StringMap handleDiscoNodeItems( const std::string& node );
+      virtual DiscoNodeItemList handleDiscoNodeItems( const std::string& node );
 
       // reimplemented from IqHandler
       virtual bool handleIq( Stanza *stanza );

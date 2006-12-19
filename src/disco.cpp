@@ -142,17 +142,14 @@ namespace gloox
               DiscoNodeHandlerList::const_iterator in = (*it).second.begin();
               for( ; in != (*it).second.end(); ++in )
               {
-                StringMap items = (*in)->handleDiscoNodeItems( node );
-                StringMap::const_iterator it = items.begin();
+                DiscoNodeItemList items = (*in)->handleDiscoNodeItems( node );
+                DiscoNodeItemList::const_iterator it = items.begin();
                 for( ; it != items.end(); ++it )
                 {
-                  if( !(*it).first.empty() && !(*it).second.empty() )
-                  {
-                    Tag *i = new Tag( query, "item" );
-                    i->addAttribute( "jid",  m_parent->jid().full() );
-                    i->addAttribute( "node", (*it).first );
-                    i->addAttribute( "name", (*it).second );
-                  }
+                  Tag *i = new Tag( query, "item" );
+                  i->addAttribute( "jid",  (*it).jid );
+                  i->addAttribute( "node", (*it).node );
+                  i->addAttribute( "name", (*it).name );
                 }
               }
             }
@@ -165,17 +162,14 @@ namespace gloox
               DiscoNodeHandlerList::const_iterator in = (*it).second.begin();
               for( ; in != (*it).second.end(); ++in )
               {
-                StringMap items = (*in)->handleDiscoNodeItems( "" );
-                StringMap::const_iterator it = items.begin();
+                DiscoNodeItemList items = (*in)->handleDiscoNodeItems( "" );
+                DiscoNodeItemList::const_iterator it = items.begin();
                 for( ; it != items.end(); ++it )
                 {
-                  if( !(*it).first.empty() && !(*it).second.empty() )
-                  {
-                    Tag *i = new Tag( query, "item" );
-                    i->addAttribute( "jid",  m_parent->jid().full() );
-                    i->addAttribute( "node", (*it).first );
-                    i->addAttribute( "name", (*it).second );
-                  }
+                  Tag *i = new Tag( query, "item" );
+                  i->addAttribute( "jid",  (*it).jid );
+                  i->addAttribute( "node", (*it).node );
+                  i->addAttribute( "name", (*it).name );
                 }
               }
             }
