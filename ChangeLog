@@ -2,6 +2,7 @@ v0.9 -- xx yyy 2006
 -------------------
 - rewrote XML parser (no dependency on iksemel any more)
 - XEP-0045 (Multi-User Chat)
+- XEP-0066 (Out of Band Data) abstraction
 - added µsec timeout to recv()
 - fetch roster immediately after requesting roster:delimiter
 - delete() --> delete
@@ -32,7 +33,7 @@ v0.9 -- xx yyy 2006
 - Disco: lifted limit of one DiscoNodeHandler per Node
 - Parser: added ParserHandler and install parser.h
 - Tag: added operator== & operator!=
-- ClientBase: added setCompression( bool ) to switch use of stream compression on/off
+- ClientBase: added setCompression( bool ) to switch stream compression on/off
 
 since -pre2
 - renamed Stanza::show() --> Stanza::presence()
@@ -40,6 +41,8 @@ since -pre2
 - RosterListener: new handleRosterPresence() replaces itemUn/Available() and presenceUpdated()
 - RosterListener: added handleSelfPresence()
 - MessageHandler: handleMessage() takes optional MessageSession arg
+- MessageSession: allow for message type filtering
+- DiscoNodeHandler: added DiscoNodeItem to properly represent a disco#item
 
 
 v0.8 -- 08 Apr 2006

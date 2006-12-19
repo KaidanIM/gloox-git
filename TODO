@@ -35,9 +35,7 @@ In the pipe
 - RosterItem::status ::statusMsg for highest prio
 - refactor!
 - fix disconnect mess
-- allow for MessageSession filtering by message type (headline, etc)? tobiasfar
 - doc for every class
-- make compression level configurable??
 - make socket tunable (keepalive, siehe Mail)
 - allow for registration and immediate connection from within the same Client object
 - bindings (C, ...) (SWIG)
