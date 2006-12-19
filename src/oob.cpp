@@ -18,10 +18,12 @@ namespace gloox
 {
 
   OOB::OOB()
+    : StanzaExtension( ExtOOB )
   {
   }
 
   OOB::OOB( Tag *tag )
+    : StanzaExtension( ExtOOB )
   {
     if( tag &&
         ( ( tag->name() == "x" && tag->hasAttribute( "xmlns", XMLNS_X_OOB ) ) ||
@@ -60,6 +62,11 @@ namespace gloox
       new Tag( t, "desc", m_desc );
 
     return t;
+  }
+
+  Tag* OOB::tag() const
+  {
+    return tag( XMLNS_X_OOB );
   }
 
 }

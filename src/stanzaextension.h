@@ -19,29 +19,57 @@
 namespace gloox
 {
 
-  class GLOOX_API Tag;
+  class Tag;
 
   /**
-   * @brief This class abstracts a stanza extension (usually an 'x' element in a specific
-   * namespace).
+   * Supported Stanza extension types.
+   */
+  enum StanzaExtensionType
+  {
+    ExtNone,                        /**< Invalid StanzaExtension. */
+    ExtVCardUpdate,                 /**< Extension in the vcard-temp:x:update namspace, advertising
+                                     * a user avatar's SHA1 hash (XEP-0153). */
+    ExtOOB,                         /**< An extension in the jabber:iq:oob or jabber:x:oob namespaces
+                                     * (XEP-0066). */
+    ExtGPGSigned,                   /**< An extension containing a GPG/PGP signature (XEP-0027). */
+    ExtGPGEncrypted                 /**< An extension containing aGPG/PGP encrypted message (XEP-0027). */
+  };
+
+  /**
+   * @brief This class abstracts a stanza extension, which is usually (but not necessarily) an 'x'
+   * element in a specific namespace.
    *
    * You should not need to use this class directly.
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
-  class StanzaExtension
+  class GLOOX_API StanzaExtension
   {
     public:
       /**
        * Constructs an empty StanzaExtension.
        */
-      StanzaExtension() {};
+      StanzaExtension( StanzaExtensionType type ) : m_type( type ) {};
 
       /**
        * Virtual destructor.
        */
       virtual ~StanzaExtension() {};
+
+      /**
+       * Returns the extension's type.
+       * @return The extension's type.
+       */
+      StanzaExtensionType type() const { return m_type; };
+
+      /**
+       *
+       */
+      virtual Tag* tag() const = 0;
+
+    private:
+      StanzaExtensionType m_type;
 
   };
 

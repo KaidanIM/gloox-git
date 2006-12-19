@@ -14,7 +14,6 @@
 #ifndef OOB_H__
 #define OOB_H__
 
-#include "macros.h"
 #include "stanzaextension.h"
 
 #include <string>
@@ -39,7 +38,7 @@ namespace gloox
       OOB();
 
       /**
-       * Constructs an OOB object from the given Tag. To be recognize properly, the Tag should
+       * Constructs an OOB object from the given Tag. To be recognized properly, the Tag should
        * either have a name 'x' of in the jabber:x:oob namespace, or a name of 'query' in the
        * jabber:iq:oob namespace.
        * @param tag The Tag to parse.
@@ -83,6 +82,9 @@ namespace gloox
        * is invalid or the URL is not set. The caller becomes the owner of the Tag.
        */
       Tag* tag( const std::string& xmlns ) const;
+
+      // reimplemented from StanzaExtension
+      Tag* tag() const;
 
     private:
       std::string m_url;
