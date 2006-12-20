@@ -9,7 +9,7 @@
 		<Option virtualFolders="" />
 		<Build>
 			<Target title="default">
-				<Option output="C:\Dokumente und Einstellungen\Administrator\Desktop\gloox\gloox.dll" prefix_auto="0" extension_auto="0" />
+				<Option output="gloox.dll" prefix_auto="0" extension_auto="0" />
 				<Option type="3" />
 				<Option compiler="gcc" />
 				<Option createDefFile="1" />
@@ -22,24 +22,16 @@
 		<Compiler>
 			<Add option="-Os" />
 			<Add option="-DBUILDING_DLL=1" />
-			<Add directory="C:\iksemel\include" />
-			<Add directory="C:\Dev-Cpp\include" />
 		</Compiler>
 		<Linker>
 			<Add option="-s" />
 			<Add option="--no-export-all-symbols --add-stdcall-alias" />
-			<Add option="c:\iksemel\libiksemel.a" />
 			<Add option="c:\mingw\lib\libssl.a" />
 			<Add option="c:\mingw\lib\libcrypto.a" />
 			<Add option="c:\mingw\lib\libz.a" />
-			<Add option="c:\mingw\lib\libwsock32.a" />
-			<Add option="c:\mingw\lib\libgdi32.a" />
 			<Add library="wsock32" />
-			<Add library="libcrypto" />
 			<Add library="dnsapi" />
-			<Add directory="C:\msys\1.0\lib" />
-			<Add directory="C:\Dev-Cpp\include" />
-			<Add directory="C:\iksemel" />
+			<Add library="gdi32" />
 		</Linker>
 		<Unit filename="config.h.win">
 			<Option compilerVar="CPP" />
@@ -425,6 +417,12 @@
 			<Option link="0" />
 			<Option target="default" />
 		</Unit>
+		<Unit filename="src\mucinvitationhandler.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
 		<Unit filename="src\mucmessagesession.cpp">
 			<Option compilerVar="CPP" />
 			<Option target="default" />
@@ -445,6 +443,18 @@
 			<Option link="0" />
 			<Option target="default" />
 		</Unit>
+		<Unit filename="src\mucroomconfighandler.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\mucroomhandler.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
 		<Unit filename="src\mucroomlistener.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
@@ -456,6 +466,16 @@
 			<Option target="default" />
 		</Unit>
 		<Unit filename="src\nonsaslauth.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\oob.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\oob.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
@@ -613,6 +633,12 @@
 			<Option link="0" />
 			<Option target="default" />
 		</Unit>
+		<Unit filename="src\stanzaextension.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
 		<Unit filename="src\statisticshandler.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
@@ -665,6 +691,21 @@
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\vcardupdate.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\vcardupdate.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\version.rc">
+			<Option compilerVar="WINDRES" />
+			<Option objectName="src\version.res" />
 			<Option target="default" />
 		</Unit>
 		<Extensions />
