@@ -81,7 +81,7 @@ namespace gloox
 
   bool VCardManager::handleIqID( Stanza *stanza, int context )
   {
-    TrackMap::const_iterator it = m_trackMap.find( stanza->id() );
+    TrackMap::iterator it = m_trackMap.find( stanza->id() );
     if( it != m_trackMap.end() )
     {
       switch( stanza->subtype() )
@@ -121,6 +121,8 @@ namespace gloox
         default:
           return false;
       }
+
+      m_trackMap.erase( it );
     }
     return false;
   }
