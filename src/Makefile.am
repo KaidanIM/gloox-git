@@ -54,6 +54,8 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
 noinst_HEADERS = prep.h connection.h dns.h nonsaslauth.h base64.h compression.h md5.h sha.h \
                    mucmessagesession.h
 
+EXTRA_DIST = version.rc
+
 test:
 	make -C tests test
 
