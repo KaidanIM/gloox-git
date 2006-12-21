@@ -35,7 +35,7 @@ namespace gloox
       /**
        * Constructs an empty OOB object.
        */
-      OOB();
+      OOB( const std::string& xmlns );
 
       /**
        * Constructs an OOB object from the given Tag. To be recognized properly, the Tag should
@@ -74,21 +74,13 @@ namespace gloox
        */
       const std::string& desc() const { return m_desc; };
 
-      /**
-       * Transforms the OOB into a Tag representation.
-       * @param xmlns Specifies the namespace of the resulting Tag. Either jabber:iq:oob
-       * or jabber:x:oob.
-       * @return A Tag representing the OOB. 0 if either the provided namespace
-       * is invalid or the URL is not set. The caller becomes the owner of the Tag.
-       */
-      Tag* tag( const std::string& xmlns ) const;
-
       // reimplemented from StanzaExtension
       Tag* tag() const;
 
     private:
       std::string m_url;
       std::string m_desc;
+      std::string m_xmlns;
   };
 
 }

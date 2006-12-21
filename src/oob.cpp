@@ -17,8 +17,8 @@
 namespace gloox
 {
 
-  OOB::OOB()
-    : StanzaExtension( ExtOOB )
+  OOB::OOB( const std::string& xmlns )
+    : StanzaExtension( ExtOOB ), m_xmlns( xmlns )
   {
   }
 
@@ -33,6 +33,7 @@ namespace gloox
         m_url = tag->findChild( "url" )->cdata();
       if( tag->hasChild( "desc" ) )
         m_desc = tag->findChild( "desc" )->cdata();
+      m_xmlns = tag->findAttribute( "xmlns" );
     }
   }
 
@@ -40,16 +41,16 @@ namespace gloox
   {
   }
 
-  Tag* OOB::tag( const std::string& xmlns ) const
+  Tag* OOB::tag() const
   {
     Tag *t = 0;
 
-    if( xmlns == XMLNS_X_OOB && !m_url.empty() )
+    if( m_xmlns == XMLNS_X_OOB && !m_url.empty() )
     {
       t = new Tag( "x" );
       t->addAttribute( "xmlns", XMLNS_X_OOB );
     }
-    else if( xmlns == XMLNS_IQ_OOB && !m_url.empty() )
+    else if( m_xmlns == XMLNS_IQ_OOB && !m_url.empty() )
     {
       t = new Tag( "query" );
       t->addAttribute( "xmlns", XMLNS_IQ_OOB );
@@ -62,11 +63,6 @@ namespace gloox
       new Tag( t, "desc", m_desc );
 
     return t;
-  }
-
-  Tag* OOB::tag() const
-  {
-    return tag( XMLNS_X_OOB );
   }
 
 }
