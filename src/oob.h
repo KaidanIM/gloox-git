@@ -34,6 +34,7 @@ namespace gloox
     public:
       /**
        * Constructs an empty OOB object.
+       * @param xmlns The namespace of the OOB (either jabber:x:oob or jabber:iq:oob).
        */
       OOB( const std::string& xmlns );
 
