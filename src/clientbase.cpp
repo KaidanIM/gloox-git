@@ -158,8 +158,11 @@ namespace gloox
 
   void ClientBase::handleStanza( NodeType type, Stanza *stanza )
   {
-    if( stanza )
-      logInstance().log( LogLevelDebug, LogAreaXmlIncoming, stanza->xml() );
+    if( !stanza )
+      return;
+
+    logInstance().log( LogLevelDebug, LogAreaXmlIncoming, stanza->xml() );
+    ++m_stats.totalStanzasReceived;
 
     switch( type )
     {
@@ -184,15 +187,19 @@ namespace gloox
           {
             case StanzaIq:
               notifyIqHandlers( stanza );
+              ++m_stats.iqStanzasReceived;
               break;
             case StanzaPresence:
               notifyPresenceHandlers( stanza );
+              ++m_stats.presenceStanzasReceived;
               break;
             case StanzaS10n:
               notifySubscriptionHandlers( stanza );
+              ++m_stats.s10nStanzasReceived;
               break;
             case StanzaMessage:
               notifyMessageHandlers( stanza );
+              ++m_stats.messageStanzasReceived;
               break;
             default:
               notifyTagHandlers( stanza );
