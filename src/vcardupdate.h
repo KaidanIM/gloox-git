@@ -27,6 +27,7 @@ namespace gloox
    * @brief This is an abstraction of a vcard-temp:x:update namespace element, as used in XEP-0153
    * (vCard-Based Avatars).
    *
+   * XEP version: 1.0
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
@@ -39,8 +40,14 @@ namespace gloox
       VCardUpdate();
 
       /**
+       * Constructs a new object with the given hash.
+       * @param hash The current avatar's SHA hash.
+       */
+      VCardUpdate( const std::string& hash );
+
+      /**
        * Constructs an VCardUpdate object from the given Tag. To be recognized properly, the Tag should
-       * have a name 'x' of in the vcard-temp:x:update namespace.
+       * have a name of 'x' in the @c vcard-temp:x:update namespace.
        * @param tag The Tag to parse.
        */
       VCardUpdate( Tag *tag );
@@ -51,12 +58,8 @@ namespace gloox
       virtual ~VCardUpdate();
 
       /**
-       *
-       */
-      void setHash( const std::string& hash ) { m_hash = hash; };
-
-      /**
-       *
+       * Returns the avatar's hash.
+       * @return The avatar's SHA hash.
        */
       const std::string& hash() const { return m_hash; };
 
@@ -67,6 +70,7 @@ namespace gloox
       std::string m_hash;
       bool m_notReady;
       bool m_noImage;
+      bool m_valid;
 
   };
 
