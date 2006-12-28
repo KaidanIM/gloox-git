@@ -18,7 +18,8 @@ libgloox_la_SOURCES = jid.cpp parser.cpp connection.cpp clientbase.cpp tag.cpp s
                         messageeventfilter.cpp chatstatefilter.cpp main.cpp compression.cpp \
                         inbandbytestream.cpp inbandbytestreammanager.cpp messagefilter.cpp vcard.cpp \
                         vcardmanager.cpp md5.cpp sha.cpp search.cpp dataformreported.cpp dataformitem.cpp \
-                        mucroom.cpp mucmessagesession.cpp oob.cpp vcardupdate.cpp
+                        mucroom.cpp mucmessagesession.cpp oob.cpp vcardupdate.cpp stanzaextensionfactory.cpp \
+                        delayeddelivery.cpp xdelayeddelivery.cpp
 
 libgloox_la_LDFLAGS = -version-info 7:0:0 -no-undefined -no-allow-shlib-undefined
 libgloox_la_LIBADD =
@@ -49,7 +50,8 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             resource.h                mucroom.h               mucroomhandler.h \
                             mucroomconfighandler.h    parser.h                parserhandler.h \
                             mucinvitationhandler.h    stanzaextension.h       oob.h \
-                            vcardupdate.h
+                            vcardupdate.h             stanzaextensionfactory.h delayeddelivery.h \
+                            xdelayeddelivery.h
 
 noinst_HEADERS = prep.h connection.h dns.h nonsaslauth.h base64.h compression.h md5.h sha.h \
                    mucmessagesession.h

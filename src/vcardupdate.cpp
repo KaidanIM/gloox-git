@@ -19,23 +19,35 @@ namespace gloox
 
   VCardUpdate::VCardUpdate()
     : StanzaExtension( ExtVCardUpdate ),
-      m_notReady( false ), m_noImage( false )
+      m_notReady( true ), m_noImage( true ), m_valid( true )
   {
   }
 
+  VCardUpdate::VCardUpdate( const std::string& hash )
+    : StanzaExtension( ExtVCardUpdate ),
+      m_hash( hash ), m_notReady( false ), m_noImage( false ), m_valid( true )
+  {
+    if( m_hash.empty() )
+    {
+      m_noImage = true;
+      m_valid = false;
+    }
+  }
+
   VCardUpdate::VCardUpdate( Tag *tag )
-    : StanzaExtension( ExtVCardUpdate )
+    : StanzaExtension( ExtVCardUpdate ),
+      m_notReady( true ), m_noImage( true ), m_valid( false )
   {
     if( tag && tag->name() == "x" && tag->hasAttribute( "xmlns", XMLNS_X_VCARD_UPDATE ) )
     {
+      m_valid = true;
       if( tag->hasChild( "photo" ) )
       {
+        m_notReady = false;
         m_hash = tag->findChild( "photo" )->cdata();
-        if( m_hash.empty() )
-          m_noImage = true;
+        if( !m_hash.empty() )
+          m_noImage = false;
       }
-      else
-        m_notReady = true;
     }
   }
 
@@ -45,6 +57,9 @@ namespace gloox
 
   Tag* VCardUpdate::tag() const
   {
+    if( !m_valid )
+      return 0;
+
     Tag *x = new Tag( "x" );
     x->addAttribute( "xmlns", XMLNS_X_VCARD_UPDATE );
     if( m_notReady )

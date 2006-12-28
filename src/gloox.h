@@ -312,6 +312,7 @@ namespace gloox
   const std::string XMLNS_FEATURE_NEG       = "http://jabber.org/protocol/feature-neg";  /**< */
   const std::string XMLNS_CHATNEG           = "http://jabber.org/protocol/chatneg";      /**< */
   const std::string XMLNS_XHTML_IM          = "http://jabber.org/protocol/xhtml-im";     /**< */
+  const std::string XMLNS_DELAY             = "http://www.xmpp.org/extensions/xep-0203.html#ns";
   const std::string XMLNS_ROSTER            = "jabber:iq:roster";                        /**< */
   const std::string XMLNS_VERSION           = "jabber:iq:version";                       /**< */
   const std::string XMLNS_REGISTER          = "jabber:iq:register";                      /**< */

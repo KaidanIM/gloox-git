@@ -15,6 +15,7 @@
 #define OOB_H__
 
 #include "stanzaextension.h"
+#include "macros.h"
 
 #include <string>
 
@@ -26,6 +27,7 @@ namespace gloox
   /**
    * @brief This is an abstraction of a jabber:x:oob namespace element or a jabber:iq:oob namespace element.
    *
+   * XEP version: 1.5
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
@@ -34,9 +36,12 @@ namespace gloox
     public:
       /**
        * Constructs an empty OOB object.
-       * @param xmlns The namespace of the OOB (either jabber:x:oob or jabber:iq:oob).
+       * @param url The out-of-band URL.
+       * @param description The URL's optional description.
+       * @param iqext Whether this object extends an IQ or a Presence stanza (results in
+       * either jabber:x:oob or jabber:iq:oob namespaced element).
        */
-      OOB( const std::string& xmlns );
+      OOB( const std::string& url, const std::string& description, bool iqext );
 
       /**
        * Constructs an OOB object from the given Tag. To be recognized properly, the Tag should
@@ -52,25 +57,13 @@ namespace gloox
       virtual ~OOB();
 
       /**
-       * Sets the out-of-band URL.
-       * @param url The out-of-band URL.
-       */
-      void setUrl( const std::string& url ) { m_url = url; };
-
-      /**
-       * Let you retrieve the out-of-band URL.
+       * Returns the out-of-band URL.
        * @return The out-of-band URL.
        */
       const std::string& url() const { return m_url; };
 
       /**
-       * Sets a descriptive text.
-       * @param desc A string describing the URL's content.
-       */
-      void setDesc( const std::string& desc ) { m_desc = desc; };
-
-      /**
-       * Lets you retrieve the URL's description.
+       * Returns the URL's description.
        * @return The URL's description.
        */
       const std::string& desc() const { return m_desc; };
@@ -79,9 +72,12 @@ namespace gloox
       Tag* tag() const;
 
     private:
+      std::string m_xmlns;
       std::string m_url;
       std::string m_desc;
-      std::string m_xmlns;
+      bool m_iqext;
+      bool m_valid;
+
   };
 
 }
