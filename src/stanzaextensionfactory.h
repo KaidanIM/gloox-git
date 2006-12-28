@@ -14,8 +14,6 @@
 #ifndef STANZAEXTENSIONFACTORY_H__
 #define STANZAEXTENSIONFACTORY_H__
 
-#include "stanzaextension.h"
-
 #include <string>
 
 namespace gloox
@@ -36,22 +34,7 @@ namespace gloox
       /**
        *
        */
-      StanzaExtensionFactory();
-
-      /**
-       *
-       */
-      virtual ~StanzaExtensionFactory();
-
-      /**
-       *
-       */
-      StanzaExtension* create( StanzaExtensionType type );
-
-      /**
-       *
-       */
-      StanzaExtension* create( Tag* tag );
+      static StanzaExtension* create( Tag* tag );
 
   };
 

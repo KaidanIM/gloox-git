@@ -326,6 +326,8 @@ namespace gloox
   const std::string XMLNS_X_EVENT           = "jabber:x:event";                          /**< */
   const std::string XMLNS_X_OOB             = "jabber:x:oob";                            /**< */
   const std::string XMLNS_X_DELAY           = "jabber:x:delay";                          /**< */
+  const std::string XMLNS_X_GPGSIGNED       = "jabber:x:signed";                         /**< */
+  const std::string XMLNS_X_GPGENCRYPTED    = "jabber:x:encrypted";                      /**< */
   const std::string XMLNS_VCARD_TEMP        = "vcard-temp";                              /**< */
   const std::string XMLNS_X_VCARD_UPDATE    = "vcard-temp:x:update";                     /**< */
   const std::string XMLNS_BOOKMARKS         = "storage:bookmarks";                       /**< */

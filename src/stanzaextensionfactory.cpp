@@ -23,19 +23,6 @@
 namespace gloox
 {
 
-  StanzaExtensionFactory::StanzaExtensionFactory()
-  {
-  }
-
-  StanzaExtensionFactory::~StanzaExtensionFactory()
-  {
-  }
-
-  StanzaExtension* StanzaExtensionFactory::create( StanzaExtensionType type )
-  {
-    return 0;
-  }
-
   StanzaExtension* StanzaExtensionFactory::create( Tag* tag )
   {
     const std::string name = tag->name();
