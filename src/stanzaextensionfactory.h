@@ -23,7 +23,9 @@ namespace gloox
   class Tag;
 
   /**
+   * @brief A Factory that creates StanzaExtensions from Tags.
    *
+   * You should not need to use this class directly.
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
