@@ -2,8 +2,8 @@
 ## Process this file with automake to produce Makefile.in
 ##
 
-SUBDIRS = base64 dataform dataformfield delayeddelivery gpgencrypted gpgsigned md5 oob parser sha tag \
-		vcardupdate xdelayeddelivery
+SUBDIRS = base64 dataform dataformfield delayeddelivery gpgencrypted gpgsigned md5 oob parser sha stanza \
+		tag vcardupdate xdelayeddelivery
 
 test: ${SUBDIRS}
 	@for i in $?; do \
