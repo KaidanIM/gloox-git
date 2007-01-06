@@ -50,11 +50,12 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             resource.h                mucroom.h               mucroomhandler.h \
                             mucroomconfighandler.h    parser.h                parserhandler.h \
                             mucinvitationhandler.h    stanzaextension.h       oob.h \
-                            vcardupdate.h             stanzaextensionfactory.h delayeddelivery.h \
-                            xdelayeddelivery.h        gpgencrypted.h          gpgsigned.h
+                            vcardupdate.h             delayeddelivery.h       base64.h \
+                            xdelayeddelivery.h        gpgencrypted.h          gpgsigned.h \
+                            md5.h                     sha.h
 
-noinst_HEADERS = prep.h connection.h dns.h nonsaslauth.h base64.h compression.h md5.h sha.h \
-                   mucmessagesession.h
+noinst_HEADERS = prep.h connection.h dns.h nonsaslauth.h compression.h \
+                   mucmessagesession.h stanzaextensionfactory.h
 
 EXTRA_DIST = version.rc
 
