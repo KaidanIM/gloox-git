@@ -3,7 +3,7 @@
 ##
 
 SUBDIRS = base64 dataform dataformfield delayeddelivery gpgencrypted gpgsigned md5 oob parser sha stanza \
-		tag vcardupdate xdelayeddelivery
+		stanzaextensionfactory tag vcardupdate xdelayeddelivery
 
 test: ${SUBDIRS}
 	@for i in $?; do \
@@ -13,3 +13,10 @@ test: ${SUBDIRS}
 	  $$i/$${i}_test;    \
 	done;
 
+leakcheck: ${SUBDIRS}
+	@for i in $?; do \
+	  ${MAKE} -C $$i all; \
+	done;
+	@for i in $?; do \
+	  valgrind -q --leak-check=full --show-reachable=yes $$i/$${i}_test;    \
+	done;
