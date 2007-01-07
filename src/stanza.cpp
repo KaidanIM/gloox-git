@@ -13,6 +13,8 @@
 
 #include "stanza.h"
 #include "jid.h"
+#include "stanzaextension.h"
+#include "stanzaextensionfactory.h"
 
 namespace gloox
 {
@@ -41,6 +43,15 @@ namespace gloox
     init();
   }
 
+  Stanza::~Stanza()
+  {
+    StanzaExtensionList::iterator it = m_extensionList.begin();
+    for( ; it != m_extensionList.end(); ++it )
+    {
+      StanzaExtensionFactory::dispose( (*it) );
+    }
+  }
+
   void Stanza::init()
   {
     m_from.setJID( findAttribute( "from" ) );
@@ -64,6 +75,15 @@ namespace gloox
       Tag *t = findChildWithAttrib( "xmlns" );
       if( t )
         m_xmlns = t->findAttribute( "xmlns" );
+
+      TagList& c = children();
+      TagList::const_iterator it = c.begin();
+      for( ; it != c.end(); ++it )
+      {
+        StanzaExtension *se = StanzaExtensionFactory::create( (*it) );
+        if( se )
+          m_extensionList.push_back( se );
+      }
     }
     else if( m_name == "message" )
     {
@@ -100,7 +120,15 @@ namespace gloox
             m_subject["default"] = (*it)->cdata();
         }
         else if( (*it)->name() == "thread" )
+        {
           m_thread = (*it)->cdata();
+        }
+        else
+        {
+          StanzaExtension *se = StanzaExtensionFactory::create( (*it) );
+          if( se )
+            m_extensionList.push_back( se );
+        }
       }
     }
     else if( m_name == "presence" )
@@ -190,6 +218,12 @@ namespace gloox
             m_status[lang] = (*it)->cdata();
           else
             m_status["default"] = (*it)->cdata();
+        }
+        else
+        {
+          StanzaExtension *se = StanzaExtensionFactory::create( (*it) );
+          if( se )
+            m_extensionList.push_back( se );
         }
       }
     }
@@ -331,6 +365,12 @@ namespace gloox
   {
     Stanza *s = new Stanza( this );
     return s;
+  }
+
+  void Stanza::addExtension( StanzaExtension *se )
+  {
+    m_extensionList.push_back( se );
+    addChild( se->tag() );
   }
 
   Stanza* Stanza::createIqStanza( const JID& to, const std::string& id,

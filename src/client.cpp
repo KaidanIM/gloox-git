@@ -23,7 +23,8 @@
 #include "nonsaslauth.h"
 #include "connection.h"
 #include "tag.h"
-#include "stanza.h"
+#include "stanzaextensionfactory.h"
+#include "stanzaextension.h"
 
 #ifndef WIN32
 #include <unistd.h>
@@ -75,6 +76,7 @@ namespace gloox
 
   Client::~Client()
   {
+    removePresenceExtensions();
     delete m_rosterManager;
     delete m_auth;
   }
@@ -452,6 +454,20 @@ namespace gloox
     send( t );
   }
 
+  void Client::addPresenceExtension( StanzaExtension *se )
+  {
+    m_presenceExtensions.push_back( se );
+  }
+
+  void Client::removePresenceExtensions()
+  {
+    StanzaExtensionList::iterator it = m_presenceExtensions.begin();
+    for( ; it != m_presenceExtensions.end(); ++it )
+    {
+      StanzaExtensionFactory::dispose( (*it) );
+    }
+  }
+
   void Client::setPresence( Presence presence, int priority, const std::string& msg )
   {
     m_presence = presence;
@@ -491,6 +507,12 @@ namespace gloox
       std::ostringstream oss;
       oss << m_priority;
       new Tag( p, "priority", oss.str() );
+
+      StanzaExtensionList::const_iterator it = m_presenceExtensions.begin();
+      for( ; it != m_presenceExtensions.end(); ++it )
+      {
+        p->addChild( (*it)->tag() );
+      }
 
       send( p );
     }
