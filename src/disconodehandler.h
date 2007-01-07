@@ -25,7 +25,7 @@ namespace gloox
 {
 
   /**
-   *
+   * A struct describing an item of a Service Discovery Item.
    */
   struct DiscoNodeItem
   {
@@ -81,8 +81,7 @@ namespace gloox
        * matches the one registered for this handler. If node is empty, items for the
        * root node (no node) shall be returned.
        * @param node The node this handler is supposed to handle.
-       * @return A list of items supported by this node. The first string is the item's node
-       * specifier, the second string is the items natural-language name.
+       * @return A list of items supported by this node.
        */
       virtual DiscoNodeItemList handleDiscoNodeItems( const std::string& node = "" ) = 0;
 
