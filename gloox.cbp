@@ -55,6 +55,12 @@
 			<Option link="0" />
 			<Option target="default" />
 		</Unit>
+		<Unit filename="src\adhochandler.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
 		<Unit filename="src\annotations.cpp">
 			<Option compilerVar="CPP" />
 			<Option target="default" />
@@ -219,6 +225,16 @@
 			<Option link="0" />
 			<Option target="default" />
 		</Unit>
+		<Unit filename="src\delayeddelivery.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\delayeddelivery.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
 		<Unit filename="src\disco.cpp">
 			<Option compilerVar="CPP" />
 			<Option target="default" />
@@ -268,6 +284,26 @@
 			<Option target="default" />
 		</Unit>
 		<Unit filename="src\gloox.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\gpgencrypted.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\gpgencrypted.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\gpgsigned.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\gpgsigned.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
@@ -357,6 +393,10 @@
 			<Option compilerVar="" />
 			<Option compile="0" />
 			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\main.cpp">
+			<Option compilerVar="CPP" />
 			<Option target="default" />
 		</Unit>
 		<Unit filename="src\md5.cpp">
@@ -486,6 +526,12 @@
 			<Option target="default" />
 		</Unit>
 		<Unit filename="src\parser.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\parserhandler.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
@@ -639,6 +685,16 @@
 			<Option link="0" />
 			<Option target="default" />
 		</Unit>
+		<Unit filename="src\stanzaextensionfactory.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\stanzaextensionfactory.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
 		<Unit filename="src\statisticshandler.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
@@ -706,6 +762,16 @@
 		<Unit filename="src\version.rc">
 			<Option compilerVar="WINDRES" />
 			<Option objectName="src\version.res" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\xdelayeddelivery.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\xdelayeddelivery.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
 			<Option target="default" />
 		</Unit>
 		<Extensions />
