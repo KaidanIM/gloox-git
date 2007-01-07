@@ -14,6 +14,8 @@
 #ifndef CHATSTATEHANDLER_H__
 #define CHATSTATEHANDLER_H__
 
+#include "gloox.h"
+
 namespace gloox
 {
 
