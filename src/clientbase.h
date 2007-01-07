@@ -417,7 +417,7 @@ namespace gloox
       /**
        * Use this function to register a MessageSessionHandler with the Client.
        * Optionally the MessageSessionHandler can receive only MessageSessions with a given
-       * message type. There can be only one handler per message type.<br/>
+       * message type. There can be only one handler per message type.<br>
        * A MessageSession will be created for every incoming
        * message stanza if there is no MessageHandler registered for the originating JID.
        * @param msh The MessageSessionHandler that will receive the newly created MessageSession.
