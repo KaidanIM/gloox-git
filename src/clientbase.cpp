@@ -51,7 +51,9 @@ namespace gloox
     : m_connection( 0 ), m_disco( 0 ), m_namespace( ns ),
       m_xmllang( "en" ), m_server( server ),
       m_compression( true ), m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ),
-      m_messageSessionHandler( 0 ), m_statisticsHandler( 0 ), m_mucInvitationHandler( 0 ),
+      m_statisticsHandler( 0 ), m_mucInvitationHandler( 0 ),
+      m_messageSessionHandlerChat( 0 ), m_messageSessionHandlerGroupchat( 0 ),
+      m_messageSessionHandlerHeadline( 0 ), m_messageSessionHandlerNormal( 0 ),
       m_parser( 0 ), m_authError( AuthErrorUndefined ), m_streamError( StreamErrorUndefined ),
       m_streamErrorAppCondition( 0 ), m_idCount( 0 ), m_autoMessageSession( false ),
       m_fdRequested( false )
@@ -64,7 +66,9 @@ namespace gloox
     : m_connection( 0 ), m_disco( 0 ), m_namespace( ns ), m_password( password ),
       m_xmllang( "en" ), m_server( server ),
       m_compression( true ), m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ),
-      m_messageSessionHandler( 0 ), m_statisticsHandler( 0 ), m_mucInvitationHandler( 0 ),
+      m_statisticsHandler( 0 ), m_mucInvitationHandler( 0 ),
+      m_messageSessionHandlerChat( 0 ), m_messageSessionHandlerGroupchat( 0 ),
+      m_messageSessionHandlerHeadline( 0 ), m_messageSessionHandlerNormal( 0 ),
       m_parser( 0 ), m_authError( AuthErrorUndefined ), m_streamError( StreamErrorUndefined ),
       m_streamErrorAppCondition( 0 ), m_idCount( 0 ), m_autoMessageSession( false ),
       m_fdRequested( false )
@@ -624,18 +628,19 @@ namespace gloox
       return "";
   }
 
-  void ClientBase::setAutoMessageSession( bool autoMS, MessageSessionHandler *msh )
+  void ClientBase::registerMessageSessionHandler( MessageSessionHandler *msh, int types )
   {
-    if( autoMS && msh )
-    {
-      m_messageSessionHandler = msh;
-      m_autoMessageSession = true;
-    }
-    else
-    {
-      m_autoMessageSession = false;
-      m_messageSessionHandler = 0;
-    }
+    if( types & StanzaMessageChat || types == 0 )
+      m_messageSessionHandlerChat = msh;
+
+    if( types & StanzaMessageNormal || types == 0 )
+      m_messageSessionHandlerNormal = msh;
+
+    if( types & StanzaMessageGroupchat || types == 0 )
+      m_messageSessionHandlerGroupchat = msh;
+
+    if( types & StanzaMessageHeadline || types == 0 )
+      m_messageSessionHandlerHeadline = msh;
   }
 
   int ClientBase::fileDescriptor()
@@ -933,12 +938,54 @@ namespace gloox
       return;
     }
 
-    if( m_autoMessageSession && m_messageSessionHandler )
+    switch( stanza->subtype() )
     {
-      MessageSession *session = new MessageSession( this, stanza->from() );
-      m_messageSessionHandler->handleMessageSession( session );
-      notifyMessageHandlers( stanza );
-      return;
+      case StanzaMessageChat:
+      {
+        if( m_messageSessionHandlerChat )
+        {
+          MessageSession *session = new MessageSession( this, stanza->from() );
+          m_messageSessionHandlerChat->handleMessageSession( session );
+          notifyMessageHandlers( stanza );
+          return;
+        }
+        break;
+      }
+      case StanzaMessageNormal:
+      {
+        if( m_messageSessionHandlerNormal )
+        {
+          MessageSession *session = new MessageSession( this, stanza->from() );
+          m_messageSessionHandlerChat->handleMessageSession( session );
+          notifyMessageHandlers( stanza );
+          return;
+        }
+        break;
+      }
+      case StanzaMessageGroupchat:
+      {
+        if( m_messageSessionHandlerGroupchat )
+        {
+          MessageSession *session = new MessageSession( this, stanza->from() );
+          m_messageSessionHandlerChat->handleMessageSession( session );
+          notifyMessageHandlers( stanza );
+          return;
+        }
+        break;
+      }
+      case StanzaMessageHeadline:
+      {
+        if( m_messageSessionHandlerHeadline )
+        {
+          MessageSession *session = new MessageSession( this, stanza->from() );
+          m_messageSessionHandlerChat->handleMessageSession( session );
+          notifyMessageHandlers( stanza );
+          return;
+        }
+        break;
+      }
+      default:
+        break;
     }
 
     MessageHandlerList::const_iterator it = m_messageHandlers.begin();

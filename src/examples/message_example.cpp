@@ -38,7 +38,7 @@ class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListen
       JID jid( "hurkhurk@example.net/gloox" );
       j = new Client( jid, "hurkhurks" );
       j->registerConnectionListener( this );
-      j->setAutoMessageSession( true, this );
+      j->registerMessageSessionHandler( this, 0 );
       j->disco()->registerDiscoHandler( this );
       j->disco()->setVersion( "messageTest", GLOOX_VERSION, "Linux" );
       j->disco()->setIdentity( "client", "bot" );

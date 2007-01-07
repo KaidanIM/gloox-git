@@ -39,7 +39,7 @@ class IBBTest : public MessageSessionHandler, ConnectionListener, LogHandler,
       JID jid( "hurkhurk@example.org/gloox" );
       j = new Client( jid, "hurkhurks" );
       j->registerConnectionListener( this );
-      j->setAutoMessageSession( true, this );
+      j->registerMessageSessionHandler( this, 0 );
       j->disco()->setVersion( "messageTest", GLOOX_VERSION, "Linux" );
       j->disco()->setIdentity( "client", "bot" );
       j->disco()->addFeature( XMLNS_CHAT_STATES );
