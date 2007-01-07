@@ -97,7 +97,7 @@ namespace gloox
        * Use join() to join the room, use leave() to leave it.
        * @param parent The ClientBase object to use for the communication.
        * @param nick The room's name and service plus the desired nickname in the form
-       * room@service/nick.
+       * room\@service/nick.
        * @param mrh The MUCRoomHandler that will listen to room events. May be 0 and may be specified
        * later using registerMUCRoomHandler(). However, without one, MUC is no joy.
        * @param mrch The MUCRoomConfigHandler that will listen to room config result. Defaults to 0

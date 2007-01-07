@@ -26,7 +26,7 @@ namespace gloox
   {
   }
 
-  void MUCMessageSession::handleMessage( Stanza *stanza )
+  void MUCMessageSession::handleMessage( Stanza *stanza, MessageSession *session = 0 )
   {
     if( m_messageHandler )
       m_messageHandler->handleMessage( stanza );
