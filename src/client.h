@@ -196,7 +196,7 @@ namespace gloox
        * Presence Stanza that is sent out. Use cases include
        * signed presence (@link gloox::GPGSigned GPGSigned @endlink, XEP-0027),
        * VCard avatar notifications (@link gloox::VCardUpdate VCardUpdate @endlink, XEP-0153),
-       * and others (see @link gloox:StanzaExtension StanzaExtension @endlink for derived classes.
+       * and others (see @link gloox::StanzaExtension StanzaExtension @endlink for derived classes.
        * @param se The StanzaExtension to add. Client will become the owner of the given
        * StanzaExtension.
        * @note Currently there is no way to selectively remove an extension. Use

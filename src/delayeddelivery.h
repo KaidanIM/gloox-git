@@ -64,7 +64,7 @@ namespace gloox
 
       /**
        * Sets the original datetime.
-       * @param The original datetime.
+       * @param stamp The original datetime.
        */
       void setStamp( const std::string& stamp ) { m_stamp = stamp; };
 

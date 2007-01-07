@@ -27,6 +27,9 @@ namespace gloox
    * @brief This is an abstraction of a jabber:x:encrypted namespace element, as used in XEP-0027
    * (Current Jabber OpenPGP Usage).
    *
+   * This class does not encrypt or decrypt any stanza content. It's meant to be an abstraction
+   * of the XML representation only.
+   *
    * XEP version: 1.3
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
