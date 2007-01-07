@@ -153,6 +153,10 @@ SOURCE=.\src\dataformreported.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\delayeddelivery.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\disco.cpp
 # End Source File
 # Begin Source File
@@ -162,6 +166,14 @@ SOURCE=.\src\dns.cpp
 # Begin Source File
 
 SOURCE=.\src\flexoff.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\gpgencrypted.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\gpgsigned.cpp
 # End Source File
 # Begin Source File
 
@@ -261,6 +273,10 @@ SOURCE=.\src\stanza.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\stanzaextensionfactory.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\tag.cpp
 # End Source File
 # Begin Source File
@@ -278,6 +294,10 @@ SOURCE=.\src\vcardupdate.cpp
 # Begin Source File
 
 SOURCE=.\src\version.rc
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\xdelayeddelivery.cpp
 # End Source File
 # End Group
 # Begin Group "Header-Dateien"
@@ -369,6 +389,10 @@ SOURCE=.\src\dataformreported.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\delayeddelivery.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\disco.h
 # End Source File
 # Begin Source File
@@ -394,6 +418,14 @@ SOURCE=.\src\flexoffhandler.h
 # Begin Source File
 
 SOURCE=.\src\gloox.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\gpgencrypted.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\gpgsigned.h
 # End Source File
 # Begin Source File
 
@@ -569,6 +601,10 @@ SOURCE=.\src\stanzaextension.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\stanzaextensionfactory.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\statisticshandler.h
 # End Source File
 # Begin Source File
@@ -598,6 +634,10 @@ SOURCE=.\src\vcardmanager.h
 # Begin Source File
 
 SOURCE=.\src\vcardupdate.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\xdelayeddelivery.h
 # End Source File
 # End Group
 # Begin Group "Ressourcendateien"
