@@ -25,7 +25,8 @@ namespace gloox
   class Tag;
 
   /**
-   * @brief This is an abstraction of a jabber:x:oob namespace element or a jabber:iq:oob namespace element.
+   * @brief This is an abstraction of a jabber:x:oob namespace element or a jabber:iq:oob namespace element
+   * as specified in XEP-0066.
    *
    * XEP version: 1.5
    * @author Jakob Schroeter <js@camaya.net>
