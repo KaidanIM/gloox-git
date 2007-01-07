@@ -938,55 +938,37 @@ namespace gloox
       return;
     }
 
-    switch( stanza->subtype() )
+    bool haveSessionHandler = false;
+    MessageSession *session = new MessageSession( this, stanza->from(), true, stanza->subtype() );
+    if( stanza->subtype() == StanzaMessageChat && m_messageSessionHandlerChat )
     {
-      case StanzaMessageChat:
-      {
-        if( m_messageSessionHandlerChat )
-        {
-          MessageSession *session = new MessageSession( this, stanza->from() );
-          m_messageSessionHandlerChat->handleMessageSession( session );
-          notifyMessageHandlers( stanza );
-          return;
-        }
-        break;
-      }
-      case StanzaMessageNormal:
-      {
-        if( m_messageSessionHandlerNormal )
-        {
-          MessageSession *session = new MessageSession( this, stanza->from() );
-          m_messageSessionHandlerChat->handleMessageSession( session );
-          notifyMessageHandlers( stanza );
-          return;
-        }
-        break;
-      }
-      case StanzaMessageGroupchat:
-      {
-        if( m_messageSessionHandlerGroupchat )
-        {
-          MessageSession *session = new MessageSession( this, stanza->from() );
-          m_messageSessionHandlerChat->handleMessageSession( session );
-          notifyMessageHandlers( stanza );
-          return;
-        }
-        break;
-      }
-      case StanzaMessageHeadline:
-      {
-        if( m_messageSessionHandlerHeadline )
-        {
-          MessageSession *session = new MessageSession( this, stanza->from() );
-          m_messageSessionHandlerChat->handleMessageSession( session );
-          notifyMessageHandlers( stanza );
-          return;
-        }
-        break;
-      }
-      default:
-        break;
+      haveSessionHandler = true;
+      m_messageSessionHandlerChat->handleMessageSession( session );
     }
+    else if( stanza->subtype() == StanzaMessageNormal && m_messageSessionHandlerNormal )
+    {
+      haveSessionHandler = true;
+      m_messageSessionHandlerChat->handleMessageSession( session );
+    }
+    else if( stanza->subtype() == StanzaMessageGroupchat && m_messageSessionHandlerGroupchat )
+    {
+      haveSessionHandler = true;
+      m_messageSessionHandlerChat->handleMessageSession( session );
+    }
+    else if( stanza->subtype() == StanzaMessageHeadline && m_messageSessionHandlerHeadline )
+    {
+      haveSessionHandler = true;
+      m_messageSessionHandlerChat->handleMessageSession( session );
+    }
+
+    if( haveSessionHandler )
+    {
+      notifyMessageHandlers( stanza );
+      return;
+    }
+    else
+      delete session;
+
 
     MessageHandlerList::const_iterator it = m_messageHandlers.begin();
     for( ; it != m_messageHandlers.end(); ++it )
