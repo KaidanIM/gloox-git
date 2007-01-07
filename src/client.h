@@ -16,6 +16,7 @@
 
 #include "clientbase.h"
 #include "iqhandler.h"
+#include "stanza.h"
 
 #include <string>
 
@@ -24,7 +25,6 @@ namespace gloox
 
   class RosterManager;
   class NonSaslAuth;
-  class Stanza;
 
   /**
    * @brief This class implements a basic Jabber Client.
@@ -192,6 +192,24 @@ namespace gloox
       void setPresence( Presence presence, int priority = 0, const std::string& msg = "" );
 
       /**
+       * Use this function to add a StanzaExtension which will be sent with eacha nd every
+       * Presence Stanza that is sent out. Use cases include
+       * signed presence (@link gloox::GPGSigned GPGSigned @endlink, XEP-0027),
+       * VCard avatar notifications (@link gloox::VCardUpdate VCardUpdate @endlink, XEP-0153),
+       * and others (see @link gloox:StanzaExtension StanzaExtension @endlink for derived classes.
+       * @param se The StanzaExtension to add. Client will become the owner of the given
+       * StanzaExtension.
+       * @note Currently there is no way to selectively remove an extension. Use
+       * removePresenceExtensions() to remove all extensions.
+       */
+      void addPresenceExtension( StanzaExtension *se );
+
+      /**
+       * Use this function to remove all extensions added using addPresenceExtension().
+       */
+      void removePresenceExtensions();
+
+      /**
        * This is a temporary hack to enforce Non-SASL login. You should not need to use it.
        * @param force Whether to force non-SASL auth. Default @b true.
        * @deprecated
@@ -241,6 +259,8 @@ namespace gloox
 
       RosterManager *m_rosterManager;
       NonSaslAuth *m_auth;
+
+      StanzaExtensionList m_presenceExtensions;
 
       Presence m_presence;
       std::string m_presenceMsg;

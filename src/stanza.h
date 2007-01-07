@@ -21,6 +21,13 @@
 namespace gloox
 {
 
+  class StanzaExtension;
+
+  /**
+   * A list of StanzaExtensions.
+   */
+  typedef std::list<StanzaExtension*> StanzaExtensionList;
+
   /**
    * @brief This is an abstraction of a XMPP stanza.
    *
@@ -32,7 +39,6 @@ namespace gloox
   class GLOOX_API Stanza : public Tag
   {
     public:
-
       /**
        * Creates a new Stanza from a deep copy of the given Tag.
        * @param tag The Tag to create the Stanza from.
@@ -57,7 +63,7 @@ namespace gloox
       /**
        * Virtual destructor.
        */
-      virtual ~Stanza() {};
+      virtual ~Stanza();
 
       /**
        * Returns the sub-type of the stanza.
@@ -149,7 +155,7 @@ namespace gloox
       virtual const std::string errorText( const std::string& lang = "default" ) const;
 
       /**
-       * Returnes the stanza error condition, if any.
+       * Returns the stanza error condition, if any.
        * @return The stanza error condition.
        */
       virtual StanzaError error() const { return m_stanzaError; };
@@ -188,6 +194,21 @@ namespace gloox
        * @since 0.7
        */
       virtual Stanza* clone();
+
+      /**
+       * Use this function to add a StanzaExtension to this Stanza.
+       * @param se The StanzaExtension to add.
+       * @note The Stanza will become the owner of the StanzaExtension and will delete it
+       * after using it.
+       * @since 0.9
+       */
+      void addExtension( StanzaExtension *se );
+
+      /**
+       * Returns the list of the Stanza's extensions.
+       * @return The list of the Stanza's extensions.
+       */
+      const StanzaExtensionList& extensions() const { return m_extensionList; };
 
       /**
        * Creates a new IQ stanza.
@@ -248,6 +269,7 @@ namespace gloox
     protected:
       void init();
 
+      StanzaExtensionList m_extensionList;
       StanzaSubType m_subtype;
       Presence m_presence;
       StanzaError m_stanzaError;

@@ -15,6 +15,9 @@
 #define STANZAEXTENSION_H__
 
 #include "macros.h"
+#include "tag.h"
+
+#include <string>
 
 namespace gloox
 {
@@ -66,7 +69,8 @@ namespace gloox
       StanzaExtensionType type() const { return m_type; };
 
       /**
-       *
+       * Returns a Tag representation of the extension.
+       * @return A Tag representation of the extension.
        */
       virtual Tag* tag() const = 0;
 

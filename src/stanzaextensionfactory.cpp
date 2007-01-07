@@ -19,6 +19,8 @@
 #include "vcardupdate.h"
 #include "delayeddelivery.h"
 #include "xdelayeddelivery.h"
+#include "gpgsigned.h"
+#include "gpgencrypted.h"
 
 namespace gloox
 {
@@ -35,6 +37,10 @@ namespace gloox
         return new OOB( tag );
       else if( xmlns == XMLNS_X_VCARD_UPDATE )
         return new VCardUpdate( tag );
+      else if( xmlns == XMLNS_X_GPGSIGNED )
+        return new GPGSigned( tag );
+      else if( xmlns == XMLNS_X_GPGENCRYPTED )
+        return new GPGEncrypted( tag );
     }
     else if( name == "iq" )
     {
@@ -45,6 +51,53 @@ namespace gloox
       return new DelayedDelivery( tag );
 
     return 0;
+  }
+
+  void StanzaExtensionFactory::dispose( StanzaExtension *se )
+  {
+    OOB *oob = dynamic_cast<OOB*>( se );
+    if( oob )
+    {
+      delete oob;
+      return;
+    }
+
+    XDelayedDelivery *xdd = dynamic_cast<XDelayedDelivery*>( se );
+    if( xdd )
+    {
+      delete xdd;
+      return;
+    }
+
+    DelayedDelivery *dd = dynamic_cast<DelayedDelivery*>( se );
+    if( dd )
+    {
+      delete dd;
+      return;
+    }
+
+    GPGSigned *gs = dynamic_cast<GPGSigned*>( se );
+    if( gs )
+    {
+      delete gs;
+      return;
+    }
+
+    GPGEncrypted *ge = dynamic_cast<GPGEncrypted*>( se );
+    if( ge )
+    {
+      delete ge;
+      return;
+    }
+
+    VCardUpdate *vcu = dynamic_cast<VCardUpdate*>( se );
+    if( vcu )
+    {
+      delete vcu;
+      return;
+    }
+
+    delete se;
   }
 
 }

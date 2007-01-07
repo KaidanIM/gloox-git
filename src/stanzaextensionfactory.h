@@ -38,6 +38,11 @@ namespace gloox
        */
       static StanzaExtension* create( Tag* tag );
 
+      /**
+       *
+       */
+      static void dispose( StanzaExtension *se );
+
   };
 
 }
