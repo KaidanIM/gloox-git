@@ -14,6 +14,8 @@
 #ifndef MESSAGEEVENTHANDLER_H__
 #define MESSAGEEVENTHANDLER_H__
 
+#include "gloox.h"
+
 namespace gloox
 {
 
