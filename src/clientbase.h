@@ -415,16 +415,16 @@ namespace gloox
       void setClientCert( const std::string& clientKey, const std::string& clientCerts );
 
       /**
-       * Use this function to turn the Auto-MessageSession feature on or off.
-       * If this is enabled, a MessageSession will be created for every incoming
+       * Use this function to register a MessageSessionHandler with the Client.
+       * Optionally the MessageSessionHandler can receive only MessageSessions with a given
+       * message type. There can be only one handler per message type.<br/>
+       * A MessageSession will be created for every incoming
        * message stanza if there is no MessageHandler registered for the originating JID.
-       * If you disable automatic MessageSession creation, the MessageSessionHandler will
-       * be cleared. You have to set it anew the next time you want to enable it. You cannot
-       * enable this feature without a valid MessageSessionHandler.
-       * @param autoMS Whether to enable automatic MessageSession creation.
        * @param msh The MessageSessionHandler that will receive the newly created MessageSession.
+       * @param types ORed StanzaSubType's that describe the desired message types the handler
+       * shall receive. Only StanzaMessage* types are valid. A value of 0 means any type (default).
        */
-      void setAutoMessageSession( bool autoMS, MessageSessionHandler *msh );
+      void registerMessageSessionHandler( MessageSessionHandler *msh, int types = 0 );
 
       /**
        * Returns the LogSink instance for this ClientBase and all related objects.
@@ -594,9 +594,12 @@ namespace gloox
       SubscriptionHandlerList m_subscriptionHandlers;
       TagHandlerList          m_tagHandlers;
       StringList              m_cacerts;
-      MessageSessionHandler  *m_messageSessionHandler;
       StatisticsHandler      *m_statisticsHandler;
       MUCInvitationHandler   *m_mucInvitationHandler;
+      MessageSessionHandler  *m_messageSessionHandlerChat;
+      MessageSessionHandler  *m_messageSessionHandlerGroupchat;
+      MessageSessionHandler  *m_messageSessionHandlerHeadline;
+      MessageSessionHandler  *m_messageSessionHandlerNormal;
 
       Parser *m_parser;
       LogSink m_logInstance;
