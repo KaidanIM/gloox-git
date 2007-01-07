@@ -34,12 +34,18 @@ namespace gloox
   {
     public:
       /**
-       *
+       * This function tries to create a valid StanzaExtension (i.e., an object derived from
+       * StanzaExtension) from the given Tag.
+       * @param tag The Tag to parse and create the StanzaExtension from.
+       * @return A StanzaExtension-derived object if the Tag was recognized, or 0.
+       * @note To get rif of a StanzaExtension easily, you may use dispose().
        */
       static StanzaExtension* create( Tag* tag );
 
       /**
-       *
+       * Use this function to completely delete the given StanzaExtension (i.e., the
+       * derived object).
+       * @param se The StanzaExtension to delete.
        */
       static void dispose( StanzaExtension *se );
 
