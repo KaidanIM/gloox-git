@@ -38,6 +38,7 @@ namespace gloox
    * ClientBase will automatically instantiate a Disco object. It can be used to
    * announce special features of your client, or its version, or...
    *
+   * XEP version: 2.2
    * @author Jakob Schroeter <js@camaya.net>
    */
   class GLOOX_API Disco : public IqHandler
