@@ -72,6 +72,7 @@ namespace gloox
    * To execute commands offered by a remote entity:<br>
    * ...TBC...
    *
+   * XEP version: 1.2
    * @author Jakob Schroeter <js@camaya.net>
    */
   class GLOOX_API Adhoc : public DiscoNodeHandler, public DiscoHandler, public IqHandler

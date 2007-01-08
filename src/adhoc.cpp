@@ -176,7 +176,7 @@ namespace gloox
           if( x )
             form.parse( x );
 
-          (*it).second.ah->handleExecutionResult( stanza->from(), command, status, id, form,
+          (*it).second.ah->handleAdhocExecutionResult( stanza->from(), command, status, id, form,
                                                   actions, def, note, type );
         }
 
@@ -208,9 +208,9 @@ namespace gloox
       {
         Tag *q = stanza->findChild( "query", "xmlns", XMLNS_DISCO_INFO );
         if( q && q->hasChild( "feature", "var", XMLNS_ADHOC_COMMANDS ) )
-          (*it).second.ah->handleCheckSupport( (*it).second.remote, true );
+          (*it).second.ah->handleAdhocSupport( (*it).second.remote, true );
         else if( q )
-          (*it).second.ah->handleCheckSupport( (*it).second.remote, false );
+          (*it).second.ah->handleAdhocSupport( (*it).second.remote, false );
 
         m_adhocTrackMap.erase( it );
         break;
@@ -243,7 +243,7 @@ namespace gloox
               commands[node] = name;
             }
           }
-          (*it).second.ah->handleGetCommands( (*it).second.remote, commands );
+          (*it).second.ah->handleAdhocCommands( (*it).second.remote, commands );
         }
 
         m_adhocTrackMap.erase( it );
@@ -254,9 +254,16 @@ namespace gloox
 
   void Adhoc::handleDiscoError( Stanza *stanza, int context )
   {
-#ifndef _MSC_VER
-#warning TODO: handle disco errors!!!
-#endif
+    AdhocTrackMap::iterator it = m_adhocTrackMap.begin();
+    for( ; it != m_adhocTrackMap.end(); ++it )
+    {
+      if( (*it).second.context == context && (*it).second.remote == stanza->from() )
+      {
+        (*it).second.ah->handleAdhocError( (*it).second.remote, stanza->error() );
+
+        m_adhocTrackMap.erase( it );
+      }
+    }
   }
 
   void Adhoc::checkSupport( const JID& remote, AdhocHandler *ah )

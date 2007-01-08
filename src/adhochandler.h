@@ -45,19 +45,27 @@ namespace gloox
        * @param remote The queried remote entity's JID.
        * @param support Whether the remote entity supports Adhoc Commands.
        */
-      virtual void handleCheckSupport( const JID& remote, bool support ) = 0;
+      virtual void handleAdhocSupport( const JID& remote, bool support ) = 0;
 
       /**
-       * This function is called in response to a call to Adhoc::checkSupport()
+       * This function is called in response to a call to Adhoc::getCommands()
        * and delivers a list of supported commands.
        * @param remote The queried remote entity's JID.
        * @param commands A map of supported commands and their human-readable name.
        * The map may be empty.
        */
-      virtual void handleGetCommands( const JID& remote, const StringMap& commands ) = 0;
+      virtual void handleAdhocCommands( const JID& remote, const StringMap& commands ) = 0;
 
       /**
-       *
+       * This function is called in response to a call to Adhoc::getCommands() or
+       * Adhoc::checkSupport() in case the respective request returned an error.
+       * @param remote The queried remote entity's JID.
+       * @param error The error condition.
+       */
+      virtual void handleAdhocError( const JID& remote, StanzaError error ) = 0;
+
+      /**
+       * This function is called in response to a remote command execution.
        * @param remote The remote entity's JID.
        * @param command The command being executed.
        * @param status The command's execution status.
@@ -72,11 +80,12 @@ namespace gloox
        * sequence. May  be empty (no note).
        * @param type The note's severity.
        */
-      virtual void handleExecutionResult( const JID& remote, const std::string& command,
-                                          Adhoc::AdhocCommandStatus status, const std::string& sessionid,
-                                          const DataForm& form, int actions,
-                                          Adhoc::AdhocExecuteActions defaultAction,
-                                          const std::string& note, Adhoc::AdhocNoteType type ) = 0;
+      virtual void handleAdhocExecutionResult( const JID& remote, const std::string& command,
+                                               Adhoc::AdhocCommandStatus status,
+                                               const std::string& sessionid,
+                                               const DataForm& form, int actions,
+                                               Adhoc::AdhocExecuteActions defaultAction,
+                                               const std::string& note, Adhoc::AdhocNoteType type ) = 0;
   };
 
 }
