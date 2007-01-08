@@ -168,13 +168,13 @@ namespace gloox
 
       switch( (*it).type() )
       {
-        case PrivacyItem::TYPE_JID:
+        case PrivacyItem::TypeJid:
           i->addAttribute( "type", "jid" );
           break;
-        case PrivacyItem::TYPE_GROUP:
+        case PrivacyItem::TypeGroup:
           i->addAttribute( "type", "group" );
           break;
-        case PrivacyItem::TYPE_SUBSCRIPTION:
+        case PrivacyItem::TypeSubscription:
           i->addAttribute( "type", "subscription" );
           break;
         default:
@@ -183,10 +183,10 @@ namespace gloox
 
       switch( (*it).action() )
       {
-        case PrivacyItem::ACTION_ALLOW:
+        case PrivacyItem::ActionAllow:
           i->addAttribute( "action", "allow" );
           break;
-        case PrivacyItem::ACTION_DENY:
+        case PrivacyItem::ActionDeny:
           i->addAttribute( "action", "deny" );
           break;
       }
@@ -194,13 +194,13 @@ namespace gloox
       int pType = (*it).packetType();
       if( pType != 15 )
       {
-        if( pType & PrivacyItem::PACKET_MESSAGE )
+        if( pType & PrivacyItem::PacketMessage )
           new Tag( i, "message" );
-        if( pType & PrivacyItem::PACKET_PRESENCE_IN )
+        if( pType & PrivacyItem::PacketPresenceIn )
           new Tag( i, "presence-in" );
-        if( pType & PrivacyItem::PACKET_PRESENCE_OUT )
+        if( pType & PrivacyItem::PacketPresenceOut )
           new Tag( i, "presence-out" );
-        if( pType & PrivacyItem::PACKET_IQ )
+        if( pType & PrivacyItem::PacketIq )
           new Tag( i, "iq" );
       }
 
@@ -299,21 +299,21 @@ namespace gloox
 
               const std::string t = (*it)->findAttribute( "type" );
               if( t == "jid" )
-                type = PrivacyItem::TYPE_JID;
+                type = PrivacyItem::TypeJid;
               else if( t == "group" )
-                type = PrivacyItem::TYPE_GROUP;
+                type = PrivacyItem::TypeGroup;
               else if( t == "subscription" )
-                type = PrivacyItem::TYPE_SUBSCRIPTION;
+                type = PrivacyItem::TypeSubscription;
               else
-                type = PrivacyItem::TYPE_UNDEFINED;
+                type = PrivacyItem::TypeUndefined;
 
               const std::string a = (*it)->findAttribute( "action" );
               if( a == "allow" )
-                action = PrivacyItem::ACTION_ALLOW;
+                action = PrivacyItem::ActionAllow;
               else if( a == "deny" )
-                action = PrivacyItem::ACTION_DENY;
+                action = PrivacyItem::ActionDeny;
               else
-                action = PrivacyItem::ACTION_ALLOW;
+                action = PrivacyItem::ActionAllow;
 
               std::string value = (*it)->findAttribute( "value" );
 
@@ -322,13 +322,13 @@ namespace gloox
               for( ; it_c != c.end(); ++it_c )
               {
                 if( (*it_c)->name() == "iq" )
-                  packetType |= PrivacyItem::PACKET_IQ;
+                  packetType |= PrivacyItem::PacketIq;
                 else if( (*it_c)->name() == "presence-out" )
-                  packetType |= PrivacyItem::PACKET_PRESENCE_OUT;
+                  packetType |= PrivacyItem::PacketPresenceOut;
                 else if( (*it_c)->name() == "presence-in" )
-                  packetType |= PrivacyItem::PACKET_PRESENCE_IN;
+                  packetType |= PrivacyItem::PacketPresenceIn;
                 else if( (*it_c)->name() == "message" )
-                  packetType |= PrivacyItem::PACKET_MESSAGE;
+                  packetType |= PrivacyItem::PacketMessage;
               }
 
               PrivacyItem item( type, action, packetType, value );

@@ -38,4 +38,5 @@ namespace gloox
     else
       return false;
   }
+
 }
