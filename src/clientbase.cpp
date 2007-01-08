@@ -508,9 +508,23 @@ namespace gloox
       return StateDisconnected;
   }
 
-  void ClientBase::ping()
+  void ClientBase::whitespacePing()
   {
     send( " " );
+  }
+
+  void ClientBase::xmppPing( const JID& to )
+  {
+    const std::string id = getID();
+
+    Tag *iq = new Tag( "iq" );
+    iq->addAttribute( "to", to.full() );
+    iq->addAttribute( "id", id );
+    iq->addAttribute( "type", "get" );
+    Tag *p = new Tag( iq, "ping" );
+    p->addAttribute( "xmlns", XMLNS_XMPP_PING );
+
+    send( iq );
   }
 
   const std::string ClientBase::getID()

@@ -260,9 +260,17 @@ namespace gloox
 
       /**
        * Sends a whitespace ping to the server.
-       * @since 0.8.3
+       * @since 0.9
        */
-      void ping();
+      void whitespacePing();
+
+      /**
+       * Sends a XMPP Ping (XEP-0199) to the given JID. There is currently no way to know
+       * whether the remote entity answered (other than registering an IQ handler for the
+       * urn:xmpp:ping namespace).
+       * @since 0.9
+       */
+      void xmppPing( const JID& to );
 
       /**
        * Use this function to set an authorization ID (authzid). Provided the server supports it
