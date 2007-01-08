@@ -962,17 +962,17 @@ namespace gloox
     else if( stanza->subtype() == StanzaMessageNormal && m_messageSessionHandlerNormal )
     {
       haveSessionHandler = true;
-      m_messageSessionHandlerChat->handleMessageSession( session );
+      m_messageSessionHandlerNormal->handleMessageSession( session );
     }
     else if( stanza->subtype() == StanzaMessageGroupchat && m_messageSessionHandlerGroupchat )
     {
       haveSessionHandler = true;
-      m_messageSessionHandlerChat->handleMessageSession( session );
+      m_messageSessionHandlerGroupchat->handleMessageSession( session );
     }
     else if( stanza->subtype() == StanzaMessageHeadline && m_messageSessionHandlerHeadline )
     {
       haveSessionHandler = true;
-      m_messageSessionHandlerChat->handleMessageSession( session );
+      m_messageSessionHandlerHeadline->handleMessageSession( session );
     }
 
     if( haveSessionHandler )
