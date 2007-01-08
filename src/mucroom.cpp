@@ -24,10 +24,11 @@ namespace gloox
 
   MUCRoom::MUCRoom( ClientBase *parent, const JID& nick, MUCRoomHandler *mrh,
                     MUCRoomConfigHandler *mrch )
-    : m_parent( parent ), m_nick( nick ), m_roomHandler( mrh ), m_roomConfigHandler( mrch ),
-      m_affiliation( AffiliationNone ), m_role( RoleNone ), m_historyType( HistoryUnknown ),
-      m_historyValue( 0 ), m_flags( 0 ), m_creationInProgress( false ), m_configChanged( false ),
-      m_publishNick( false ), m_publish( false ), m_joined( false ), m_unique( false )
+    : m_parent( parent ), m_nick( nick ), m_joined( false ), m_roomHandler( mrh ),
+      m_roomConfigHandler( mrch ), m_affiliation( AffiliationNone ), m_role( RoleNone ),
+      m_historyType( HistoryUnknown ), m_historyValue( 0 ), m_flags( 0 ),
+      m_creationInProgress( false ), m_configChanged( false ),
+      m_publishNick( false ), m_publish( false ), m_unique( false )
   {
     if( m_parent )
       m_parent->registerPresenceHandler( this );
@@ -162,23 +163,6 @@ namespace gloox
     else
       m_nick.setResource( nick );
   }
-
-//   void MUCRoom::setUnique( bool unique )
-//   {
-//     if( !m_parent )
-//       return;
-//
-//     const std::string id = m_parent->getID();
-//     Tag *iq = new Tag( "iq" );
-//     iq->addAttribute( "id", id );
-//     iq->addAttribute( "to", m_nick.server() );
-//     iq->addAttribute( "type", "get" );
-//     Tag *u = new Tag( iq, "unique" );
-//     u->addAttribute( "xmlns", XMLNS_MUC_UNIQUE );
-//
-//     m_parent->trackID( this, id, RequestUniqueName );
-//     m_parent->send( iq );
-//   }
 
   void MUCRoom::getRoomInfo()
   {
@@ -607,7 +591,7 @@ namespace gloox
             else if( code == "201" )
             {
               m_creationInProgress = true;
-              if( m_roomHandler->handleMUCRoomCreation( this ) )
+              if( instantRoomHook() || m_roomHandler->handleMUCRoomCreation( this ) )
                 acknowledgeInstantRoom();
             }
             else if( code == "210" )
@@ -837,8 +821,6 @@ namespace gloox
   {
     switch( context )
     {
-      case RequestUniqueName:
-        break;
       case SetRNone:
       case SetVisitor:
       case SetParticipant:
@@ -919,7 +901,6 @@ namespace gloox
   {
     switch( context )
     {
-      case RequestUniqueName:
       case SetRNone:
       case SetVisitor:
       case SetParticipant:
