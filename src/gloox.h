@@ -923,7 +923,7 @@ namespace gloox
   enum MUCUserFlag
   {
     UserSelf               =   1,   /**< Other flags relate to the current user him/herself. */
-    UserNickChanged        =   2,   /**< The user changed hsi/her nickname. */
+    UserNickChanged        =   2,   /**< The user changed his/her nickname. */
     UserKicked             =   4,   /**< The user has been kicked. */
     UserBanned             =   8,   /**< The user has been banned. */
     UserAffiliationChanged =  16    /**< The user's affiliation with the room changed. */
