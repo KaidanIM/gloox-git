@@ -185,6 +185,10 @@ SOURCE=.\src\inbandbytestreammanager.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\instantmucroom.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\jid.cpp
 # End Source File
 # Begin Source File
@@ -278,6 +282,10 @@ SOURCE=.\src\stanzaextensionfactory.cpp
 # Begin Source File
 
 SOURCE=.\src\tag.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\uniquemucroom.cpp
 # End Source File
 # Begin Source File
 
@@ -445,6 +453,10 @@ SOURCE=.\src\inbandbytestreammanager.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\instantmucroom.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\iqhandler.h
 # End Source File
 # Begin Source File
@@ -501,6 +513,10 @@ SOURCE=.\src\messagesessionhandler.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\mucinvitationhandler.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\mucmessagesession.h
 # End Source File
 # Begin Source File
@@ -530,6 +546,10 @@ SOURCE=.\src\oob.h
 # Begin Source File
 
 SOURCE=.\src\parser.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\parserhandler.h
 # End Source File
 # Begin Source File
 
@@ -566,6 +586,10 @@ SOURCE=.\src\registration.h
 # Begin Source File
 
 SOURCE=.\src\registrationhandler.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\resource.h
 # End Source File
 # Begin Source File
 
@@ -618,6 +642,10 @@ SOURCE=.\src\tag.h
 # Begin Source File
 
 SOURCE=.\src\taghandler.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\uniquemucroom.h
 # End Source File
 # Begin Source File
 
