@@ -51,7 +51,8 @@ namespace gloox
       void finalize();
 
       /**
-       * Returns the message digest in hex notation.
+       * Returns the message digest in hex notation. Finalizes the hash if finalize()
+       * has not been called before.
        * @return The message digest.
        */
       const std::string hex();
