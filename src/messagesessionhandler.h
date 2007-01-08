@@ -45,11 +45,17 @@ namespace gloox
        * You receive ownership of the supplied session (@b not the stanza) and
        * are responsible for deleting it at the end of its life.
        *
-       * @note Make sure to read the note in ClientBase::setAutoMessageSession()
+       * @note Make sure to read the note in ClientBase::registerMessageSessionHandler()
        * regarding the feeding of decorators.
        *
        * @note After receiving a MessageSession your object is the owner and is responsible
        * for the destruction of the session.
+       *
+       * @note If you don't need the MessageSession, you should not delete it here. You will
+       * get an endless loop if you do.
+       *
+       * @note You should register your MessageHandler here, or else the first message
+       * (that caused the MessageSession to be created) may get lost.
        *
        * @param session The new MessageSession.
        */
