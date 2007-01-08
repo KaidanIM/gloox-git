@@ -46,7 +46,7 @@ namespace gloox
     x->addAttribute( "xmlns", xmlns );
 
     m_track[id] = pxh;
-    m_parent->trackID( this, id, REQUEST_XML );
+    m_parent->trackID( this, id, RequestXml );
     m_parent->send( iq );
 
     return id;
@@ -64,7 +64,7 @@ namespace gloox
     query->addChild( tag );
 
     m_track[id] = pxh;
-    m_parent->trackID( this, id, STORE_XML );
+    m_parent->trackID( this, id, StoreXml );
     m_parent->send( iq );
 
     return id;
@@ -81,7 +81,7 @@ namespace gloox
         {
           switch( context )
           {
-            case REQUEST_XML:
+            case RequestXml:
             {
               Tag *q = stanza->findChild( "query" );
               if( q )
@@ -96,9 +96,9 @@ namespace gloox
               break;
             }
 
-            case STORE_XML:
+            case StoreXml:
             {
-              (*t).second->handlePrivateXMLResult( stanza->id(), PrivateXMLHandler::PXML_STORE_OK );
+              (*t).second->handlePrivateXMLResult( stanza->id(), PrivateXMLHandler::PxmlStoreOk );
               break;
             }
           }
@@ -110,15 +110,15 @@ namespace gloox
         {
           switch( context )
           {
-            case REQUEST_XML:
+            case RequestXml:
             {
-              (*t).second->handlePrivateXMLResult( stanza->id(), PrivateXMLHandler::PXML_REQUEST_ERROR );
+              (*t).second->handlePrivateXMLResult( stanza->id(), PrivateXMLHandler::PxmlRequestError );
               break;
             }
 
-            case STORE_XML:
+            case StoreXml:
             {
-              (*t).second->handlePrivateXMLResult( stanza->id(), PrivateXMLHandler::PXML_STORE_ERROR );
+              (*t).second->handlePrivateXMLResult( stanza->id(), PrivateXMLHandler::PxmlStoreError );
               break;
             }
           }
