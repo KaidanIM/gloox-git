@@ -67,11 +67,17 @@ namespace gloox
    * class from MUCRoomConfigHandler and register it with the MUCRoom (either by using it
    * with MUCRoom's constructor, or by calling registerMUCRoomConfigHandler()).
    *
+   * To quickly create an instant room, see InstantMUCRoom.
+   *
+   * To quickly create an instant room to turn a one-to-one chat into a multi-user chat,
+   * see UniqueMUCRoom.
+   *
+   * XEP version: 1.21
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
   class GLOOX_API MUCRoom : private DiscoHandler, private PresenceHandler,
-                            private IqHandler, private MessageHandler, private DiscoNodeHandler
+                            public IqHandler, private MessageHandler, private DiscoNodeHandler
   {
     public:
       /**
@@ -141,7 +147,7 @@ namespace gloox
       /**
        * Join this room.
        */
-      void join();
+      virtual void join();
 
       /**
        * Leave this room.
@@ -174,11 +180,6 @@ namespace gloox
        * @return The user's current role.
        */
       MUCRoomRole role() const { return m_role; };
-
-      /**
-       *
-       */
-//       void setUnique( bool unique );
 
       /**
        * Use this function to change the user's nickname in the room.
@@ -487,6 +488,15 @@ namespace gloox
       // reimplemented from DiscoNodeHandler
       virtual DiscoNodeItemList handleDiscoNodeItems( const std::string& node = "" );
 
+    protected:
+      void setName( const std::string& name ) { m_nick.setUsername( name ); };
+      bool instantRoomHook() const { return false; };
+
+      ClientBase *m_parent;
+      JID m_nick;
+
+      bool m_joined;
+
     private:
       bool handleIqResult( Stanza *stanza, int context );
       bool handleIqError( Stanza *stanza, int context );
@@ -499,8 +509,6 @@ namespace gloox
       MUCRoomAffiliation getEnumAffiliation( const std::string& affiliation );
       MUCRoomRole getEnumRole( const std::string& role );
 
-      ClientBase *m_parent;
-      JID m_nick;
       MUCRoomHandler *m_roomHandler;
       MUCRoomConfigHandler *m_roomConfigHandler;
       MUCMessageSession *m_session;
@@ -523,7 +531,6 @@ namespace gloox
       bool m_configChanged;
       bool m_publishNick;
       bool m_publish;
-      bool m_joined;
       bool m_unique;
 
   };
