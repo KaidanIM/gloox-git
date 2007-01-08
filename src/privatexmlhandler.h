@@ -36,9 +36,9 @@ namespace gloox
        */
       enum PrivateXMLResult
       {
-        PXML_STORE_OK,              /**< Storing was successful. */
-        PXML_STORE_ERROR,           /**< An error occurred while storing data in Private XML. */
-        PXML_REQUEST_ERROR          /**< An error occurred while requesting Private XML. */
+        PxmlStoreOk,                /**< Storing was successful. */
+        PxmlStoreError,             /**< An error occurred while storing data in Private XML. */
+        PxmlRequestError            /**< An error occurred while requesting Private XML. */
       };
 
       /**

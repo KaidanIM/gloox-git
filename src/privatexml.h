@@ -80,8 +80,8 @@ namespace gloox
     private:
       enum IdType
       {
-        REQUEST_XML,
-        STORE_XML
+        RequestXml,
+        StoreXml
       };
 
       typedef std::map<std::string, PrivateXMLHandler*> TrackMap;
