@@ -341,6 +341,16 @@
 			<Option link="0" />
 			<Option target="default" />
 		</Unit>
+		<Unit filename="src\instantmucroom.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\instantmucroom.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
 		<Unit filename="src\iqhandler.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
@@ -718,6 +728,16 @@
 			<Option target="default" />
 		</Unit>
 		<Unit filename="src\taghandler.h">
+			<Option compilerVar="CPP" />
+			<Option compile="0" />
+			<Option link="0" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\uniquemucroom.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
+		<Unit filename="src\uniquemucroom.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
 			<Option link="0" />
