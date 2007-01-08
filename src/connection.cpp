@@ -1049,7 +1049,7 @@ printf( "maximumMessage: %ld\n", m_streamSizes.cbMaximumMessage );
 
     while( !m_cancel )
     {
-      ConnectionError r = recv( 1 );
+      ConnectionError r = recv( 10 );
       if( r != ConnNoError )
       {
         return r;
