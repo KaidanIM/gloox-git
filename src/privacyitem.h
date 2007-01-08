@@ -37,13 +37,13 @@ namespace gloox
        */
       enum ItemType
       {
-        TYPE_UNDEFINED,        /**< None of the types below is explicitely selected,
-                                * &quot;fall-through&quot; case. */
-        TYPE_JID,              /**< The item affects the JID which is given in the value attribute. */
-        TYPE_GROUP,            /**< The item affects the group which is given in the value attribute and
-                                * which must exist at least once in the users roster. */
-        TYPE_SUBSCRIPTION      /**< The item affects the subscription type which is given in the value
-                                * attribute. */
+        TypeUndefined,              /**< None of the types below is explicitely selected,
+                                     * &quot;fall-through&quot; case. */
+        TypeJid,                    /**< The item affects the JID which is given in the value attribute. */
+        TypeGroup,                  /**< The item affects the group which is given in the value attribute and
+                                     * which must exist at least once in the users roster. */
+        TypeSubscription            /**< The item affects the subscription type which is given in the value
+                                     * attribute. */
       };
 
       /**
@@ -51,8 +51,8 @@ namespace gloox
        */
       enum ItemAction
       {
-        ACTION_ALLOW,          /**< The item explicitely allows the described packets. */
-        ACTION_DENY            /**< The item forbids the described packets. */
+        ActionAllow,                /**< The item explicitely allows the described packets. */
+        ActionDeny                  /**< The item forbids the described packets. */
       };
 
       /**
@@ -60,11 +60,11 @@ namespace gloox
        */
       enum ItemPacketType
       {
-        PACKET_MESSAGE        =  1,  /**< The item blocks message stanzas. */
-        PACKET_PRESENCE_IN    =  2,  /**< The item blocks incoming presence stanzas. */
-        PACKET_PRESENCE_OUT   =  4,  /**< The item blocks outgoing presence stanzas. */
-        PACKET_IQ             =  8,  /**< The item blocks IQ stanzas. */
-        PACKET_ALL            = 15   /**< The item blocks all of these stanza types. */
+        PacketMessage        =  1,  /**< The item blocks message stanzas. */
+        PacketPresenceIn     =  2,  /**< The item blocks incoming presence stanzas. */
+        PacketPresenceOut    =  4,  /**< The item blocks outgoing presence stanzas. */
+        PacketIq             =  8,  /**< The item blocks IQ stanzas. */
+        PacketAll            = 15   /**< The item blocks all of these stanza types. */
       };
 
       /**
@@ -74,7 +74,7 @@ namespace gloox
        * @param packetType Affected packet types. Bit-wise OR'ed ItemPacketType.
        * @param value The value to check for and match.
        */
-      PrivacyItem( const ItemType type = TYPE_UNDEFINED, const ItemAction action = ACTION_ALLOW,
+      PrivacyItem( const ItemType type = TypeUndefined, const ItemAction action = ActionAllow,
                    const int packetType = 0, const std::string& value = "" );
 
       /**

@@ -65,11 +65,11 @@ class PLTest : public PrivacyListHandler, ConnectionListener
       }
 
       PrivacyListHandler::PrivacyList l;
-      PrivacyItem item( PrivacyItem::TYPE_JID, PrivacyItem::ACTION_DENY,
-                        PrivacyItem::PACKET_MESSAGE, "me@there.com" );
+      PrivacyItem item( PrivacyItem::TypeJid, PrivacyItem::ActionDeny,
+                        PrivacyItem::PacketMessage, "me@there.com" );
       l.push_back( item );
-      PrivacyItem item2( PrivacyItem::TYPE_JID, PrivacyItem::ACTION_ALLOW,
-                        PrivacyItem::PACKET_IQ, "me@example.org" );
+      PrivacyItem item2( PrivacyItem::TypeJid, PrivacyItem::ActionAllow,
+                        PrivacyItem::PacketIq, "me@example.org" );
       l.push_back( item2 );
       p->store( "mnyList", l );
 //       p->unsetDefault();
