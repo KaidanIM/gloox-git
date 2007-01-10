@@ -3,7 +3,7 @@
 ##
 
 SUBDIRS = base64 dataform dataformfield delayeddelivery gpgencrypted gpgsigned md5 oob parser sha stanza \
-		stanzaextensionfactory tag vcardupdate xdelayeddelivery
+		stanzaextensionfactory tag vcardupdate xdelayeddelivery xpath
 
 test: ${SUBDIRS}
 	@for i in $?; do \

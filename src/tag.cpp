@@ -357,4 +357,9 @@ namespace gloox
     return t;
   }
 
+  Tag* Tag::findByPath( const std::string& expression )
+  {
+    return 0;
+  }
+
 }
