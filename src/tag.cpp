@@ -352,7 +352,6 @@ namespace gloox
 
   Tag::TagList Tag::findChildren( Tag::TagList& list, const std::string& name )
   {
-    printf( "findChildren called with arg %s\n", name.c_str() );
     Tag::TagList ret;
     Tag::TagList::const_iterator it = list.begin();
     for( ; it != list.end(); ++it )
