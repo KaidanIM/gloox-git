@@ -15,7 +15,6 @@
 #include "gloox.h"
 
 #include "parser.h"
-#include "clientbase.h"
 #include "stanza.h"
 
 namespace gloox
