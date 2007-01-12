@@ -331,18 +331,6 @@ namespace gloox
     return replace( what, d );
   }
 
-  Tag::TagList Tag::findChildren( const std::string& name )
-  {
-    Tag::TagList ret;
-    Tag::TagList::const_iterator it = m_children.begin();
-    for( ; it != m_children.end(); ++it )
-    {
-      if( (*it)->name() == name )
-        ret.push_back( (*it) );
-    }
-    return ret;
-  }
-
   Tag* Tag::clone() const
   {
     Tag *t = new Tag( name(), cdata() );
@@ -357,9 +345,22 @@ namespace gloox
     return t;
   }
 
-  Tag* Tag::findByPath( const std::string& expression )
+  Tag::TagList Tag::findChildren( const std::string& name )
   {
-    return 0;
+    return findChildren( m_children, name );
+  }
+
+  Tag::TagList Tag::findChildren( Tag::TagList& list, const std::string& name )
+  {
+    printf( "findChildren called with arg %s\n", name.c_str() );
+    Tag::TagList ret;
+    Tag::TagList::const_iterator it = list.begin();
+    for( ; it != list.end(); ++it )
+    {
+      if( (*it)->name() == name )
+        ret.push_back( (*it) );
+    }
+    return ret;
   }
 
 }
