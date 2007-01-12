@@ -252,14 +252,6 @@ namespace gloox
       virtual Tag* clone() const;
 
       /**
-       * Executes the given XPath expression and returns the the result Tag. If more than one
-       * Tag match, only the first is returned.
-       * @param expression An XPath expression to evaluate.
-       * @return The matched Tag, or 0.
-       */
-      Tag* findByPath( const std::string& expression );
-
-      /**
        * Checks two Tags for equality. Order of attributes and child tags does matter.
        * @param right The Tag to check against the current Tag.
        * @since 0.9
@@ -294,6 +286,7 @@ namespace gloox
       const std::string escape( const std::string& what ) const;
       const std::string relax( const std::string& what ) const;
       const std::string replace( const std::string& what, const Duo& duo ) const;
+      TagList findChildren( TagList& list, const std::string& name );
 
   };
 
