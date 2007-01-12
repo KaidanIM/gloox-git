@@ -6,6 +6,6 @@ AM_CPPFLAGS = -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare
 
 noinst_PROGRAMS = xpath_test
 
-xpath_test_SOURCES = xpath_test.cpp ../../tag.cpp
+xpath_test_SOURCES = xpath_test.cpp ../../tag.cpp ../../xpath.cpp
 xpath_test_LDADD =
 xpath_test_CFLAGS = $(CPPFLAGS)
