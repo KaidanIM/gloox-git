@@ -18,32 +18,15 @@ namespace gloox
 
   Tag* XPath::findTag( Tag *tag, const std::string& expression )
   {
-//     printf( "findTag called with tag %s and exp %s\n", tag->name().c_str(), expression.c_str() );
-    if( expression == "/" || expression == "//" )
-      return 0;
-
-    if( tag->parent() && expression.substr( 0, 1 ) == "/" )
-      return findTag( tag->parent(), expression );
-
-    int start = 0;
-    if( expression[0] == '/' )
-      start = 1;
-
-    Tag::TagList l = findTagList( tag/*, tag->children()*/, expression.substr( start ), false );
+    Tag::TagList l = findTagList( tag, expression );
     if( l.size() )
-    {
-//       printf( "found %d tag(s)\n", l.size() );
-      Tag::TagList::iterator it = l.begin();
-      return (*it);
-    }
+      return (*(l.begin()));
     else
       return 0;
   }
 
   Tag::TagList XPath::findTagList( Tag *tag, const std::string& expression )
   {
-//     printf( "tag: %s\n", tag->xml().c_str() );
-//     printf( "findTagList called with tag %s and exp %s\n", tag->name().c_str(), expression.c_str() );
     if( expression == "/" || expression == "//" )
     {
       Tag::TagList l;
@@ -57,75 +40,76 @@ namespace gloox
     if( expression[0] == '/' )
       start = 1;
 
-    return findTagList( tag, /*tag->children(), */expression.substr( start ), false );
+    Tag::TagList l = findTagList( tag, expression.substr( start ), false );
+    unique( l );
+    return l;
   }
 
-  Tag::TagList XPath::findTagList( Tag *tag/*, Tag::TagList& list*/, const std::string& expression,
-                                   bool deepSearch )
+  Tag::TagList XPath::findTagList( Tag *tag, const std::string& expression, bool deepSearch )
   {
-//     printf( "findTagList called with tag %s and exp %s: deepSearch: %d\n", tag->name().c_str(),
-//                                                                   expression.c_str()/*, list.size()*/,
-//                                                                   deepSearch );
-    XPathState state = TokenName;
     std::string token;
     Tag::TagList result;
     bool matchAll = false;
-    bool pathSearch = false;
 
     std::string::size_type i = 0;
     std::string::const_iterator it = expression.begin();
     for( ; it != expression.end(); ++it, ++i )
     {
-      switch( state )
+      switch( (*it) )
       {
-        case TokenName:
-          switch( (*it) )
+        case '/':
+          if( token.empty() && !deepSearch )
           {
-            case '/':
-              if( token.empty() && !deepSearch )
-              {
-//                 printf( "deepSearch is now true\n" );
-                deepSearch = true;
-              }
-              else if( tag->name() == token || matchAll )
-              {
-                if( deepSearch )
-                  result.push_back( tag );
-
-                Tag::TagList res = walkTagList( tag, expression.substr( i + 1 ), deepSearch, true );
-                add( result, res );
-                return result;
-              }
-              else
-              {
-                Tag::TagList l;
-                return l;
-              }
-              break;
-            case '*':
-//               printf( "matchAll is now true\n" );
-              matchAll = true;
-              token += (*it);
-              break;
-            default:
-              token += (*it);
-//               printf( "token now: %s\n", token.c_str() );
-              break;
+            deepSearch = true;
           }
+          else if( tag->name() == token || matchAll )
+          {
+            if( deepSearch )
+              result.push_back( tag );
+
+            Tag::TagList res = walkTagList( tag, expression.substr( i + 1 ), deepSearch, true );
+            add( result, res );
+            return result;
+          }
+          else if( token == "." )
+          {
+            Tag::TagList res = findTagList( tag, expression.substr( i + 1 ), deepSearch );
+            add( result, res );
+            return result;
+          }
+          else if( deepSearch )
+          {
+            Tag::TagList res = walkTagList( tag, expression.substr( 1 ), deepSearch, true );
+            add( result, res );
+            return result;
+          }
+          else
+          {
+            Tag::TagList l;
+            return l;
+          }
+          break;
+        case '*':
+          matchAll = true;
+          token += (*it);
+          break;
+        case '.':
+          token += (*it);
+          break;
+        default:
+          token += (*it);
           break;
       }
     }
 
-//     printf( "token is now %s\n", token.c_str() );
-    if( token == tag->name() || matchAll )
+    if( token == tag->name() || matchAll || token == "." )
     {
-//       printf( "current token/tag is %s/%s, returning it\n", token.c_str(), tag->name().c_str() );
       result.push_back( tag );
     }
 
+
     if( deepSearch )
     {
-//       printf( "last element in search string, and deepSearch is enabled\n" );
       Tag::TagList res = walkTagList( tag, expression, deepSearch, false );
       add( result, res );
     }
@@ -135,7 +119,6 @@ namespace gloox
 
   Tag::TagList XPath::walkTagList( Tag *tag, const std::string& expression, bool deepSearch, bool leaveAlone )
   {
-//     printf( "walking children of <%s> with exp '%s'\n", tag->name().c_str(), expression.c_str() );
     Tag::TagList result;
     Tag::TagList::const_iterator it = tag->children().begin();
     for( ; it != tag->children().end(); ++it )
@@ -159,9 +142,24 @@ namespace gloox
     }
   }
 
-//   int XPath::countFunction( Tag::TagList& list )
-//   {
-//     return list.size();
-//   }
+  void XPath::unique( Tag::TagList& one )
+  {
+    Tag::TagList::iterator t;
+    Tag::TagList::iterator t2;
+    Tag::TagList::iterator it = one.begin();
+    for( ; it != one.end(); ++it )
+    {
+      t = it;
+      ++t;
+      for( ; t != one.end(); ++t )
+      {
+        if( (*t) == (*it) )
+        {
+          one.erase( t );
+          t = it;
+        }
+      }
+    }
+  }
 
 }
