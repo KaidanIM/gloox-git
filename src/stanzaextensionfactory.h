@@ -42,13 +42,6 @@ namespace gloox
        */
       static StanzaExtension* create( Tag* tag );
 
-      /**
-       * Use this function to completely delete the given StanzaExtension (i.e., the
-       * derived object).
-       * @param se The StanzaExtension to delete.
-       */
-      static void dispose( StanzaExtension *se );
-
   };
 
 }

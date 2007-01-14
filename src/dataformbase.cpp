@@ -25,24 +25,11 @@ namespace gloox
 
   DataFormBase::~DataFormBase()
   {
-    FieldList::const_iterator it = m_fields.begin();
+    FieldList::iterator it = m_fields.begin();
     for( ; it != m_fields.end(); ++it )
     {
-      DataFormItem *i = dynamic_cast<DataFormItem*>( (*it) );
-      if( i )
-      {
-        delete i;
-        continue;
-      }
-
-      DataFormReported *r = dynamic_cast<DataFormReported*>( (*it) );
-      if( r )
-      {
-        delete r;
-        continue;
-      }
-
       delete (*it);
+      (*it) = 0;
     }
   }
 

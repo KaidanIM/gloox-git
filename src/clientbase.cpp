@@ -467,11 +467,7 @@ namespace gloox
     }
     ++m_stats.totalStanzasSent;
 
-    Stanza *s = dynamic_cast<Stanza*>( tag );
-    if( s )
-      delete s;
-    else
-      delete tag;
+    delete tag;
 
     if( m_statisticsHandler )
       m_statisticsHandler->handleStatistics( getStatistics() );

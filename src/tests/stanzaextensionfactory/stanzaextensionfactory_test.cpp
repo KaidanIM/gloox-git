@@ -31,7 +31,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
   }
   delete o;
   delete t;
-  StanzaExtensionFactory::dispose( se );
+  delete se;
   t = 0;
 
   // -------
@@ -48,7 +48,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
     }
     delete x;
     delete t;
-    StanzaExtensionFactory::dispose( se );
+    delete se;
     t = 0;
   }
 
@@ -66,7 +66,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
     }
     delete d;
     delete t;
-    StanzaExtensionFactory::dispose( se );
+    delete se;
     t = 0;
   }
 
@@ -83,7 +83,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
     }
     delete d;
     delete t;
-    StanzaExtensionFactory::dispose( se );
+    delete se;
     t = 0;
   }
 
@@ -100,7 +100,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
     }
     delete d;
     delete t;
-    StanzaExtensionFactory::dispose( se );
+    delete se;
     t = 0;
   }
 
@@ -117,7 +117,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
     }
     delete d;
     delete t;
-    StanzaExtensionFactory::dispose( se );
+    delete se;
     t = 0;
   }
 
