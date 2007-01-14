@@ -48,7 +48,7 @@ namespace gloox
     StanzaExtensionList::iterator it = m_extensionList.begin();
     for( ; it != m_extensionList.end(); ++it )
     {
-      StanzaExtensionFactory::dispose( (*it) );
+      delete (*it);
     }
   }
 
