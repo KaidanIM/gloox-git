@@ -34,7 +34,8 @@ namespace gloox
       m_cdata( incoming ? relax( cdata ) : cdata ),
       m_parent( parent ), m_type( StanzaUndefined ), m_incoming( incoming )
   {
-    m_parent->addChild( this );
+    if( m_parent )
+      m_parent->addChild( this );
   }
 
   Tag::~Tag()
