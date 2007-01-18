@@ -23,6 +23,8 @@
 namespace gloox
 {
 
+  class XPathToken;
+
   /**
    * @brief This is an abstraction of an XML element.
    *
@@ -252,6 +254,23 @@ namespace gloox
       virtual Tag* clone() const;
 
       /**
+       * Evaluates the given XPath expression and returns the result Tag. If more than one
+       * Tag match, only the first one is returned.
+       * @param expression An XPath expression to evaluate.
+       * @return The matched Tag, or 0.
+       * @since 0.9
+       */
+      Tag* findTag( const std::string& expression );
+
+      /**
+       * Evaluates the given XPath expression and returns the matched Tags.
+       * @param expression An XPath expression to evaluate.
+       * @return The list of matched Tags, or an empty TagList.
+       * @since 0.9
+       */
+      Tag::TagList findTagList( const std::string& expression );
+
+      /**
        * Checks two Tags for equality. Order of attributes and child tags does matter.
        * @param right The Tag to check against the current Tag.
        * @since 0.9
@@ -266,6 +285,68 @@ namespace gloox
       bool operator!=( const Tag &right ) const;
 
     protected:
+      /**
+       * XPAth error conditions.
+       */
+      enum XPathError
+      {
+        XPNoError,                  /**< No error occured. */
+        XPExpectedLeftOperand,      /**< Operator expected a left-hand operand. */
+        XPUnexpectedToken
+      };
+
+      enum XPathState
+      {
+        Init,
+        LtOperator,
+        GtOperator,
+        MergeOperator,
+        Slash,
+        DoubleSlash,
+        Dot,
+        DoubleDot,
+        LeftBracket,
+        RightBracket,
+        LeftParenthesis,
+        RightParenthesis,
+        Asterisk,
+        AtSign,
+        TokenName
+      };
+
+      enum TokenType
+      {
+        XTNone,
+        XTLeftParenthesis,
+        XTRightParenthesis,
+        XTNodeSet,
+        XTElement,
+        XTLeftBracket,
+        XTRightBracket,
+        XTFunction,
+        XTAsterisk,
+        XTAttribute,
+        XTLiteral,
+        XTDot,
+        XTDoubleDot,
+        XTOperatorOr,
+        XTOperatorAnd,
+        XTOperatorEq,
+        XTOperatorNe,
+        XTOperatorGt,
+        XTOperatorLt,
+        XTOperatorLtE,
+        XTOperatorGtE,
+        XTOperatorPlus,
+        XTOperatorMinus,
+        XTOperatorMul,
+        XTOperatorDiv,
+        XTOperatorMod,
+        XTUnion,
+        XTSlash,
+        XTDoubleSlash
+      };
+
       std::string m_name;
       StringMap m_attribs;
       std::string m_cdata;
@@ -287,7 +368,37 @@ namespace gloox
       const std::string relax( const std::string& what ) const;
       const std::string replace( const std::string& what, const Duo& duo ) const;
       TagList findChildren( TagList& list, const std::string& name );
+      XPathToken* parse( const std::string& expression, int& len, TokenType border = XTNone );
+      void addToken( XPathToken **root, XPathToken **current, TokenType type, const std::string& token );
+      void addOperator( XPathToken **root, XPathToken **current, XPathToken *arg, TokenType type,
+                        const std::string& token );
+      TokenType getType( const std::string& c );
+      bool isWhitespace( const char& c );
+      void add( Tag::TagList& one, const Tag::TagList& two );
+      Tag::TagList evaluateTagList( XPathToken *token );
+      Tag::TagList evaluateUnion( XPathToken *token );
+      Tag::TagList allDescendants();
 
+  };
+
+  class XPathToken : public Tag
+  {
+    public:
+      XPathToken( XPathToken *parent, TokenType type, const std::string& value );
+      virtual ~XPathToken();
+
+//       const TokenList& predicates() const { return m_predicates; };
+      TokenType tokenType() const { return m_tokenType; };
+      void setTokenType( TokenType type ) { m_tokenType = type; };
+
+      void addPredicate( XPathToken *token );
+      void addArgument( XPathToken *token );
+
+      virtual std::string toString() const;
+      virtual XPathToken* clone() const;
+
+    private:
+      TokenType m_tokenType;
   };
 
 }

@@ -1,10 +1,11 @@
 #include "../../tag.h"
-#include "../../xpath.h"
 using namespace gloox;
 
 #include <stdio.h>
 #include <locale.h>
 #include <string>
+
+int fail = 0;
 
 void printResult( const std::string& name, Tag::TagList& result )
 {
@@ -18,9 +19,22 @@ void printResult( const std::string& name, Tag::TagList& result )
   printf( "<-- %s ------------------------------------------------\n", name.c_str() );
 }
 
+// void testLexer( const std::string& name )
+// {
+//   int len = 0;
+//   XPathToken *t = XPath::parse( name, len );
+//   if( !t || t->toString() != name )
+//   {
+//     ++fail;
+//     printf( "test 'lexer: %s' failed: %s\n", name.c_str(), t->toString().c_str() );
+//   }
+//   printf( "str: %s\n", t->toString().c_str() );
+//   printf( "xml: %s\n", t->xml().c_str() );
+//   delete t;
+// }
+
 int main( int /*argc*/, char* /*argv[]*/ )
 {
-  int fail = 0;
   std::string name;
   Tag *aaa = new Tag( "aaa" );
   Tag *bbb = new Tag( aaa, "bbb" ); bbb->addAttribute( "name", "b1" );
@@ -34,6 +48,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
   Tag *jjj = new Tag( hhh, "bbb" ); jjj->addAttribute( "name", "b3" );
   Tag::TagList result;
   Tag::TagList::const_iterator it;
+//   XPathToken *t = 0;
 
 // <aaa>
 //   <bbb name='b1'>
@@ -51,9 +66,114 @@ int main( int /*argc*/, char* /*argv[]*/ )
 //   </fff>
 // </aaa>
 
+  /*
+   * Lexer tests
+   */
+
+//   // -------
+//   name = "/";
+//   t = XPath::parse( name );
+//   if( t != 0 )
+//   {
+//     ++fail;
+//     printf( "test '%s' failed\n", name.c_str() );
+//   }
+//   delete t;
+
+//   // -------
+//   name = "//";
+//   t = XPath::parse( name );
+//   if( t != 0 )
+//   {
+//     ++fail;
+//     printf( "test 'lexer: %s' failed\n", name.c_str() );
+//   }
+//   delete t;
+
+  // ------- working
+//   testLexer( "/abc" );
+//   testLexer( "/abc/def" );
+//   testLexer( "/abc//def" );
+//
+//   testLexer( "/abc/def[//dgh]" );
+//
+//   testLexer( "count(//dgh)" );
+//
+//   testLexer( "/*/abc" );
+//
+//   testLexer( "count(count(//dgh))" );
+//
+//   testLexer( "*/abc" );
+//
+//   testLexer( "*" );
+//
+//   testLexer( "//*" );
+//
+//   testLexer( "count(count(//dgh[//abc]))" );
+//
+//   testLexer( "//c[id>count(//aaa|//bbb)]" );
+//
+//   testLexer( "a/*/b" );
+//
+//   testLexer( "a<b" );
+//
+//   testLexer( "/./*" );
+//
+//   testLexer( "/./../*" );
+//
+//   testLexer( "/./../../." );
+//
+//   testLexer( "a=b" );
+//
+//   testLexer( "/b[@a='b']" );
+
+  // ------- ~working
+
+
+//   testLexer( "a*b" );
+
+//   testLexer( "a*b" );
+
+//   testLexer( "a*b" );
+
+
+
+
+
+
+
+
+
+  //   testLexer( "//c[id>count(//aaa|//bbb*//ccc)]" );
+
+
+
+
+
+//   testLexer( "//aaa|//bbb*(//ccc+//abc)" );
+
+// //   testLexer( "//a|(//b*//c)+//d" );
+
+//   testLexer( "//a|//b*//c+//d" );
+
+//   testLexer( "//c[id>count(//aaa|//bbb*//ccc)+//abc]" );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   // -------
   name = "get root: /";
-  if( XPath::findTag( aaa, "/" ) != 0 )
+  if( aaa->findTag( "/" ) != 0 )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
@@ -61,7 +181,15 @@ int main( int /*argc*/, char* /*argv[]*/ )
 
   // -------
   name = "get deeproot: //";
-  if( XPath::findTag( aaa, "//" ) != 0 )
+  if( aaa->findTag( "//" ) != 0 )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+
+  // -------
+  name = "get root tag: aaa";
+  if( aaa->findTag( "aaa" ) != aaa )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
@@ -69,7 +197,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
 
   // -------
   name = "get root tag: /aaa";
-  if( XPath::findTag( aaa, "/aaa" ) != aaa )
+  if( aaa->findTag( "/aaa" ) != aaa )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
@@ -77,7 +205,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
 
   // -------
   name = "simple child: /aaa/bbb";
-  if( XPath::findTag( aaa, "/aaa/bbb" ) != bbb )
+  if( aaa->findTag( "/aaa/bbb" ) != bbb )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
@@ -85,7 +213,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
 
   // -------
   name = "simple child: /aaa/ccc";
-  if( XPath::findTag( aaa, "/aaa/ccc" ) != ccc )
+  if( aaa->findTag( "/aaa/ccc" ) != ccc )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
@@ -93,7 +221,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
 
   // -------
   name = "simple child: /aaa/ccc/ddd";
-  if( XPath::findTag( aaa, "/aaa/ccc/ddd" ) != ddd )
+  if( aaa->findTag( "/aaa/ccc/ddd" ) != ddd )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
@@ -101,23 +229,25 @@ int main( int /*argc*/, char* /*argv[]*/ )
 
   // -------
   name = "find all: //aaa";
-  if( XPath::findTag( aaa, "//aaa" ) != aaa )
+  if( aaa->findTag( "//aaa" ) != aaa )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
   }
 
+  printf( "----------------------------------------------------\n" );
   // -------
   name = "find all: //eee";
-  if( XPath::findTag( aaa, "//eee" ) != eee )
+  if( aaa->findTag( "//eee" ) != eee )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
   }
+  printf( "----------------------------------------------------\n" );
 
   // -------
   name = "find all: //bbb";
-  if( XPath::findTag( aaa, "//bbb" ) != bbb )
+  if( aaa->findTag( "//bbb" ) != bbb )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
@@ -125,7 +255,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
 
   // -------
   name = "get root tag from child: /aaa";
-  if( XPath::findTag( bbb, "/aaa" ) != aaa )
+  if( bbb->findTag( "/aaa" ) != aaa )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
@@ -133,7 +263,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
 
   // -------
   name = "fail test 1: /abc";
-  if( XPath::findTag( aaa, "/abc" ) != 0 )
+  if( aaa->findTag( "/abc" ) != 0 )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
@@ -141,7 +271,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
 
   // -------
   name = "fail test 2: /bbb";
-  if( XPath::findTag( aaa, "/bbb" ) != 0 )
+  if( aaa->findTag( "/bbb" ) != 0 )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
@@ -149,7 +279,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
 
   // -------
   name = "relative find 1: aaa";
-  if( XPath::findTag( aaa, "aaa" ) != aaa )
+  if( aaa->findTag( "aaa" ) != aaa )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
@@ -157,7 +287,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
 
   // -------
   name = "relative find 2: bbb";
-  if( XPath::findTag( bbb, "bbb" ) != bbb )
+  if( bbb->findTag( "bbb" ) != bbb )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
@@ -165,7 +295,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
 
   // -------
   name = "find TagList: //bbb";
-  result = XPath::findTagList( aaa, "//bbb" );
+  result = aaa->findTagList( "//bbb" );
   it = result.begin();
   if( result.size() != 3 || (*it) != bbb || (*++it) != jjj || (*++it) != iii )
   {
@@ -176,7 +306,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
 
   // -------
   name = "find TagList: //ggg";
-  result = XPath::findTagList( aaa, "//ggg" );
+  result = aaa->findTagList( "//ggg" );
   it = result.begin();
   if( result.size() != 1 || (*it) != ggg )
   {
@@ -187,7 +317,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
 
   // -------
   name = "find all: //*";
-  result = XPath::findTagList( aaa, "//*" );
+  result = aaa->findTagList( "//*" );
   it = result.begin();
   if( result.size() != 10 || (*it) != aaa || (*++it) != bbb || (*++it) != hhh ||
       (*++it) != jjj || (*++it) != iii || (*++it) != ccc || (*++it) != ddd ||
@@ -200,7 +330,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
 
   // -------
   name = "find first level: /*";
-  result = XPath::findTagList( aaa, "/*" );
+  result = aaa->findTagList( "/*" );
   if( result.size() != 1 || result.front() != aaa )
   {
     ++fail;
@@ -210,7 +340,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
 
   // -------
   name = "find second level: /*/*";
-  result = XPath::findTagList( aaa, "/*/*" );
+  result = aaa->findTagList( "/*/*" );
   it = result.begin();
   if( result.size() != 3 || (*it) != bbb || (*++it) != ccc || (*++it) != fff )
   {
@@ -221,7 +351,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
 
   // -------
   name = "find third level: /*/*/*";
-  result = XPath::findTagList( aaa, "/*/*/*" );
+  result = aaa->findTagList( "/*/*/*" );
   it = result.begin();
   if( result.size() != 5 || (*it) != hhh || (*++it) != iii ||
       (*++it) != ddd || (*++it) != eee || (*++it) != ggg )
@@ -233,7 +363,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
 
   // -------
   name = "find fourth level: /*/*/*/*";
-  result = XPath::findTagList( aaa, "/*/*/*/*" );
+  result = aaa->findTagList( "/*/*/*/*" );
   if( result.size() != 1 || result.front() != jjj )
   {
     ++fail;
@@ -243,7 +373,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
 
   // -------
   name = "find fith level: /*/*/*/*/*";
-  result = XPath::findTagList( aaa, "/*/*/*/*/*" );
+  result = aaa->findTagList( "/*/*/*/*/*" );
   if( result.size() != 0 )
   {
     ++fail;
@@ -253,7 +383,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
 
   // -------
   name = "find all sub-bbb: /*/*//bbb";
-  result = XPath::findTagList( aaa, "/*/*//bbb" );
+  result = aaa->findTagList( "/*/*//bbb" );
   if( result.size() != 2 || result.front() != jjj || result.back() != iii )
   {
     ++fail;
@@ -263,7 +393,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
 
   // -------
   name = "find second level bbb: /*/bbb";
-  result = XPath::findTagList( aaa, "/*/bbb" );
+  result = aaa->findTagList( "/*/bbb" );
   if( result.size() != 1 || result.front() != bbb )
   {
     ++fail;
@@ -273,7 +403,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
 
   // -------
   name = "find second level via self/noop: /*/./*";
-  result = XPath::findTagList( aaa, "/*/./*" );
+  result = aaa->findTagList( "/*/./*" );
   it = result.begin();
   if( result.size() != 3 || (*it) != bbb || (*++it) != ccc || (*++it) != fff )
   {
@@ -284,7 +414,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
 
   // -------
   name = "find second level via repeated self/noop: /*/././*";
-  result = XPath::findTagList( aaa, "/*/././*" );
+  result = aaa->findTagList( "/*/././*" );
   it = result.begin();
   if( result.size() != 3 || (*it) != bbb || (*++it) != ccc || (*++it) != fff )
   {
@@ -293,32 +423,60 @@ int main( int /*argc*/, char* /*argv[]*/ )
     printf( "test '%s' failed\n", name.c_str() );
   }
 
-//   // -------
-//   name = "find first level via parent: /*/../*";
-//   result = XPath::findTagList( aaa, "/*/../*" );
-//   it = result.begin();
-//   if( result.size() != 1 || (*it) != aaa )
-//   {
-//     ++fail;
-//     printResult( name, result );
-//     printf( "test '%s' failed\n", name.c_str() );
-//   }
 
-//   // -------
-//   name = "invalid parent: /../*";
-//   result = XPath::findTagList( aaa, "/../*" );
-//   it = result.begin();
-//   if( result.size() != 0 )
-//   {
-//     ++fail;
-//     printResult( name, result );
-//     printf( "test '%s' failed\n", name.c_str() );
-//   }
+// --------------------------------------------------------------------------------------------
+// non-functional with 1st gen parser
+
+  // -------
+  name = "find first level via parent: /*/../*";
+  result = aaa->findTagList( "/*/../*" );
+  it = result.begin();
+  if( result.size() != 1 || (*it) != aaa )
+  {
+    ++fail;
+    printResult( name, result );
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+
+  // -------
+  name = "invalid parent: /../*";
+  result = aaa->findTagList( "/../*" );
+  it = result.begin();
+  if( result.size() != 0 )
+  {
+    ++fail;
+    printResult( name, result );
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+
+  // -------
+  name = "deepsearch && * combined 1: //fff/..";
+  result = aaa->findTagList( "//fff/*" );
+  it = result.begin();
+  if( result.size() != 1 || (*it) != ggg )
+  {
+    ++fail;
+    printResult( name, result );
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+  printf( "--------------------------------------------------------------\n" );
+
+  // -------
+  name = "deepsearch && .. combined 1: //ggg/..";
+  result = aaa->findTagList( "//ggg/.." );
+  it = result.begin();
+  if( result.size() != 1 || (*it) != fff )
+  {
+    ++fail;
+    printResult( name, result );
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+  printf( "--------------------------------------------------------------\n" );
 
 //   printf( "--------------------------------------------------------------\n" );
 //   // -------
 //   name = "select non-leaf elements: //..";
-//   result = XPath::findTagList( aaa, "//.." );
+//   result = aaa->findTagList( "//.." );
 //   it = result.begin();
 //   if( result.size() != 5 || (*it) != aaa || (*++it) != bbb ||
 //       (*++it) != hhh || (*++it) != ccc || (*++it) != fff )
@@ -329,29 +487,63 @@ int main( int /*argc*/, char* /*argv[]*/ )
 //   }
 //   printf( "--------------------------------------------------------------\n" );
 
-//   // -------
-//   name = "deepsearch && .. combined 1: //ggg/..";
-//   result = XPath::findTagList( aaa, "//ggg/.." );
-//   it = result.begin();
-//   if( result.size() != 1 || (*it) != fff )
-//   {
-//     ++fail;
-//     printResult( name, result );
-//     printf( "test '%s' failed\n", name.c_str() );
-//   }
-//   printf( "--------------------------------------------------------------\n" );
+  // -------
+  name = "deepsearch && .. combined 2: //ggg/../../bbb";
+  result = aaa->findTagList( "//ggg/../../bbb" );
+  it = result.begin();
+  if( result.size() != 1 || (*it) != bbb )
+  {
+    ++fail;
+    printResult( name, result );
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+  printf( "--------------------------------------------------------------\n" );
 
-//   // -------
-//   name = "deepsearch && .. combined 2: //ggg/../../bbb";
-//   result = XPath::findTagList( aaa, "//ggg/../../bbb" );
-//   it = result.begin();
-//   if( result.size() != 1 || (*it) != bbb )
-//   {
-//     ++fail;
-//     printResult( name, result );
-//     printf( "test '%s' failed\n", name.c_str() );
-//   }
-//   printf( "--------------------------------------------------------------\n" );
+  // -------
+  name = "deepsearch && .. combined 3: //ggg/../..//bbb";
+  result = aaa->findTagList( "//ggg/../..//bbb" );
+  it = result.begin();
+  if( result.size() != 3 || (*it) != bbb || (*++it) != jjj || (*++it) != iii )
+  {
+    ++fail;
+    printResult( name, result );
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+  printf( "--------------------------------------------------------------\n" );
+
+  // -------
+  name = "deepsearch && .. && * combined 1: //*/../..//bbb";
+  result = aaa->findTagList( "//*/../..//bbb" );
+  it = result.begin();
+  if( result.size() != 3 || (*it) != bbb || (*++it) != jjj || (*++it) != iii )
+  {
+    ++fail;
+    printResult( name, result );
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+  printf( "--------------------------------------------------------------\n" );
+
+  // -------
+  name = "deepsearch && .. && * combined 1: //*/*/..//*";
+  result = aaa->findTagList( "//*/*/..//*" );
+  it = result.begin();
+  if( result.size() != 9 || (*it) != bbb || (*++it) != hhh || (*++it) != jjj ||
+      (*++it) != iii || (*++it) != ccc || (*++it) != ddd || (*++it) != eee ||
+      (*++it) != fff || (*++it) != ggg )
+  {
+    ++fail;
+    printResult( name, result );
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+  printf( "--------------------------------------------------------------\n" );
+
+
+
+
+
+
+
+
 
 
 
