@@ -885,7 +885,7 @@ namespace gloox
     Tag::TagList::const_iterator it = m_children.begin();
     for( ; it != m_children.end(); ++it )
     {
-      t->addChild( (*it)->clone() );
+      t->addChild( static_cast<XPathToken*>( (*it)->clone() ) );
     }
 
     return t;
