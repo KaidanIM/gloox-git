@@ -169,6 +169,7 @@ namespace gloox
        * Sets the HTTP proxy to use.
        * @param host The HTTP proxy's hostname or IP address.
        * @param port The HTTP proxy's port.
+       * @since 0.9
        */
       void setProxy( const std::string& host, unsigned short port );
 
