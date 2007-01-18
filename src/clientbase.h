@@ -166,6 +166,13 @@ namespace gloox
       void setPassword( const std::string &password ) { m_password = password; };
 
       /**
+       * Sets the HTTP proxy to use.
+       * @param host The HTTP proxy's hostname or IP address.
+       * @param port The HTTP proxy's port.
+       */
+      void setProxy( const std::string& host, unsigned short port );
+
+      /**
        * Returns the current prepped server.
        * @return The server used to connect.
        */
@@ -536,6 +543,7 @@ namespace gloox
 
       std::string m_clientCerts;
       std::string m_clientKey;
+      std::string m_proxyHost;
       std::string m_namespace;
       std::string m_password;
       std::string m_xmllang;
@@ -546,6 +554,8 @@ namespace gloox
       bool m_sasl;
       bool m_tls;
       int m_port;
+
+      unsigned short m_proxyPort;
 
     private:
       virtual void handleStartNode() = 0;
