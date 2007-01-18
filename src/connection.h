@@ -69,7 +69,8 @@ namespace gloox
        * to find out about the actual host:port.
        */
       Connection( Parser *parser, const LogSink& logInstance, const std::string& server,
-                  unsigned short port = -1 );
+                  unsigned short port = -1,
+                  const std::string& proxyHost = "", unsigned short proxyPort = 0 );
 
       /**
        * Virtual destructor
@@ -203,6 +204,9 @@ namespace gloox
       void cancel();
       void cleanup();
 
+      bool doProxyHandshake ();
+      ConnectionError handleProxyHandshake( const std::string& buffer );
+
 #ifdef HAVE_TLS
       bool tlsSend( const void *data, size_t len );
       int tlsRecv( void *data, size_t len );
@@ -264,6 +268,11 @@ namespace gloox
       bool m_secure;
       bool m_fdRequested;
       bool m_enableCompression;
+      bool m_proxyHandshake;
+
+      std::string m_proxyHost;
+      std::string m_proxyHandshakeBuffer;
+      unsigned short m_proxyPort;
   };
 
 }

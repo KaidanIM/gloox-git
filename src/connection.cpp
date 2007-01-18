@@ -47,13 +47,14 @@ namespace gloox
 {
 
   Connection::Connection( Parser *parser, const LogSink& logInstance, const std::string& server,
-                          unsigned short port )
+                          unsigned short port, const std::string& proxyHost, unsigned short proxyPort )
     : m_parser( parser ), m_state ( StateDisconnected ), m_disconnect ( ConnNoError ),
       m_logInstance( logInstance ), m_compression( 0 ), m_buf( 0 ),
       m_server( Prep::idna( server ) ), m_port( port ), m_socket( -1 ),
       m_totalBytesIn( 0 ), m_totalBytesOut( 0 ),
       m_bufsize( 17000 ), m_cancel( true ), m_secure( false ), m_fdRequested( false ),
-      m_enableCompression( false )
+      m_enableCompression( false ),
+      m_proxyHost( proxyHost ), m_proxyPort( proxyPort )
   {
     m_buf = (char*)calloc( m_bufsize + 1, sizeof( char ) );
     m_compressedBytesIn[0] = 0;
@@ -909,10 +910,20 @@ printf( "maximumMessage: %ld\n", m_streamSizes.cbMaximumMessage );
   {
     m_state = StateConnecting;
 
-    if( m_port == ( unsigned short ) -1 )
-      m_socket = DNS::connect( m_server, m_logInstance );
+    bool useProxy = (!m_proxyHost.empty() && m_proxyPort != 0);
+
+    if( !useProxy )
+    {
+      if( m_port == (unsigned short)-1 )
+        m_socket = DNS::connect( m_server, m_logInstance );
+      else
+        m_socket = DNS::connect( m_server, m_port, m_logInstance );
+    }
     else
-      m_socket = DNS::connect( m_server, m_port, m_logInstance );
+    {
+      // using HTTP proxy
+      m_socket = DNS::connect( m_proxyHost, m_proxyPort, m_logInstance );
+    }
 
     if( m_socket < 0 )
     {
@@ -930,7 +941,19 @@ printf( "maximumMessage: %ld\n", m_streamSizes.cbMaximumMessage );
       return e;
     }
     else
-      m_state = StateConnected;
+    {
+      if( useProxy )
+      {
+        if( !doProxyHandshake() )
+        {
+          cleanup();
+        }
+        else
+          m_state = StateConnected;
+      }
+      else
+        m_state = StateConnected;
+    }
 
     m_cancel = false;
     return ConnNoError;
@@ -943,6 +966,51 @@ printf( "maximumMessage: %ld\n", m_streamSizes.cbMaximumMessage );
 
     if( m_fdRequested )
       cleanup();
+  }
+
+  bool Connection::doProxyHandshake()
+  {
+    std::string server = m_server;
+    int port = m_port;
+    if( port == (unsigned short)-1 )
+    {
+      DNS::HostMap servers = DNS::resolve( m_server, m_logInstance );
+      if( servers.size() )
+      {
+        server = (*(servers.begin())).first;
+        port = (*(servers.begin())).second;
+      }
+    }
+    // prepare request
+    std::ostringstream os;
+    os << "CONNECT " << server << ":" << port << " HTTP/1.0\r\n";
+    os << "Host: " << server << "\r\n";
+    os << "Content-Length: 0\r\n";
+    os << "Proxy-Connection: Keep-Alive\r\n";
+    os << "Pragma: no-cache\r\n";
+    os << "\r\n";
+
+    if( !send( os.str() ) )
+      return false;
+
+    m_proxyHandshake = true;
+
+    return true;
+  }
+
+  ConnectionError Connection::handleProxyHandshake( const std::string& buffer )
+  {
+    if( ( buffer.substr( 0, 12 ) == "HTTP/1.0 200" ||
+          buffer.substr( 0, 12 ) == "HTTP/1.1 200" )
+        && buffer.substr( buffer.length() - 4 ) == "\r\n\r\n" )
+    {
+      m_proxyHandshake = false;
+      m_proxyHandshakeBuffer = "";
+    }
+    else
+      m_proxyHandshakeBuffer += buffer;
+
+    return ConnNoError;
   }
 
   int Connection::fileDescriptor()
@@ -1024,6 +1092,10 @@ printf( "maximumMessage: %ld\n", m_streamSizes.cbMaximumMessage );
 
     std::string buf;
     buf.assign( m_buf, size );
+
+    if( m_proxyHandshake )
+      return handleProxyHandshake( buf );
+
     if( m_compression && m_enableCompression )
     {
       buf = m_compression->decompress( buf );
