@@ -385,7 +385,9 @@ namespace gloox
     int len = 0;
     XPathToken *p = parse( expression, len );
     printf( "parsed tree: %s\nxml: %s\n", p->toString().c_str(), p->xml().c_str() );
-    return evaluateTagList( p );
+    l = evaluateTagList( p );
+    delete p;
+    return l;
   }
 
   Tag::TagList Tag::evaluateTagList( XPathToken *token )
@@ -494,6 +496,7 @@ namespace gloox
               n->m_name = m_parent->m_name;
               Tag::TagList res = m_parent->evaluateTagList( n );
               add( result, res );
+              delete n;
             }
           }
           else
