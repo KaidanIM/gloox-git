@@ -70,58 +70,17 @@
 namespace gloox
 {
 
-#if defined ( WIN32 ) && defined( HAVE_WINDNS_H )
-  int DNS::connect( const std::string& domain, const LogSink& logInstance )
-  {
-    std::string dname = "_xmpp-client._tcp." + domain;
-
-    DNS_RECORD *pRecord;
-    if( DnsQuery( dname.c_str(), DNS_TYPE_SRV, DNS_QUERY_STANDARD, NULL, &pRecord, NULL ) == ERROR_SUCCESS )
-    {
-      DNS_RECORD *pRec = pRecord;
-      do
-      {
-        if( pRec->wType == DNS_TYPE_SRV )
-        {
-          unsigned short port = pRec->Data.SRV.wPort;
-          dname = pRec->Data.SRV.pNameTarget;
-          std::ostringstream oss;
-          oss << "SRV: " << dname.c_str() << ":" << port;
-          logInstance.log( LogLevelDebug, LogAreaClassDns, oss.str() );
-          int fd = DNS::connect( dname, port, logInstance );
-          if( fd > 0 )
-          {
-            DnsRecordListFree( pRecord, DnsFreeRecordList );
-            return fd;
-          }
-        }
-        pRec = pRec->pNext;
-      } while( pRec != NULL );
-      DnsRecordListFree( pRecord, DnsFreeRecordList );
-    }
-    logInstance.log( LogLevelDebug, LogAreaClassDns, "No usable SRV records found" );
-
-    return DNS::connect( domain, XMPP_PORT, logInstance );
-  }
-#elif !defined( HAVE_RES_QUERYDOMAIN ) || !defined( HAVE_DN_SKIPNAME ) || !defined( HAVE_RES_QUERY )
-  int DNS::connect( const std::string& domain, const LogSink& logInstance )
-  {
-    logInstance.log( LogLevelWarning, LogAreaClassDns,
-                     "note: gloox does not support SRV records on this platform." );
-
-    return DNS::connect( domain, XMPP_PORT, logInstance );
-  }
-#else
-  DNS::HostMap DNS::resolve( const std::string& domain )
+  DNS::HostMap DNS::resolve( const std::string& domain, const LogSink& logInstance )
   {
     std::string service = "xmpp-client";
     std::string proto = "tcp";
 
-    return resolve( service, proto, domain );
+    return resolve( service, proto, domain, logInstance );
   }
 
+#if defined( HAVE_RES_QUERYDOMAIN ) && defined( HAVE_DN_SKIPNAME ) && defined( HAVE_RES_QUERY )
   DNS::HostMap DNS::resolve( const std::string& service, const std::string& proto,
-                             const std::string& domain )
+                             const std::string& domain, const LogSink& logInstance )
   {
     buffer srvbuf;
     bool error = false;
@@ -135,7 +94,7 @@ namespace gloox
       srvbuf.len = res_query( dname.c_str(), C_IN, T_SRV, srvbuf.buf, NS_PACKETSZ );
 
     if( srvbuf.len < 0 )
-      return defaultHostMap( service, proto, domain );
+      return defaultHostMap( service, proto, domain, logInstance );
 
     HEADER* hdr = (HEADER*)srvbuf.buf;
     unsigned char* here = srvbuf.buf + NS_HFIXEDSZ;
@@ -172,7 +131,7 @@ namespace gloox
 
     if( error )
     {
-      return defaultHostMap( service, proto, domain );
+      return defaultHostMap( service, proto, domain, logInstance );
     }
 
     // (q)sort here
@@ -191,8 +150,52 @@ namespace gloox
     return servers;
   }
 
+#elif defined( WIN32 ) && defined( HAVE_WINDNS_H )
+  DNS::HostMap DNS::resolve( const std::string& service, const std::string& proto,
+                             const std::string& domain, const LogSink& logInstance )
+  {
+    const std::string dname = "_" +  service + "._" + proto;
+    bool error = false;
+
+    DNS::HostMap servers;
+    DNS_RECORD *pRecord;
+    if( DnsQuery( dname.c_str(), DNS_TYPE_SRV, DNS_QUERY_STANDARD, NULL, &pRecord, NULL ) == ERROR_SUCCESS )
+    {
+      DNS_RECORD *pRec = pRecord;
+      do
+      {
+        if( pRec->wType == DNS_TYPE_SRV )
+        {
+          servers[pRec->Data.SRV.pNameTarget] = pRec->Data.SRV.wPort;
+        }
+        pRec = pRec->pNext;
+      }
+      while( pRec != NULL );
+      DnsRecordListFree( pRecord, DnsFreeRecordList );
+    }
+    else
+      error = true;
+
+    if( error || !servers.size() )
+    {
+      servers = defaultHostMap( service, proto, domain, logInstance );
+    }
+
+    return servers;
+  }
+
+#else
+  DNS::HostMap DNS::resolve( const std::string& service, const std::string& proto,
+                             const std::string& domain, const LogSink& logInstance )
+  {
+    logInstance.log( LogLevelWarning, LogAreaClassDns,
+                     "note: gloox does not support SRV records on this platform. Using A records instead." );
+    return defaultHostMap( service, proto, domain, logInstance );
+  }
+#endif
+
   DNS::HostMap DNS::defaultHostMap( const std::string& service, const std::string& proto,
-                               const std::string& domain )
+                                    const std::string& domain, const LogSink& logInstance )
   {
     HostMap server;
     struct servent *servent;
@@ -211,61 +214,26 @@ namespace gloox
 
   int DNS::connect( const std::string& domain, const LogSink& logInstance )
   {
-    HostMap hosts = resolve( domain );
+    HostMap hosts = resolve( domain, logInstance );
     if( hosts.size() == 0 )
       return -ConnDnsError;
 
-    struct protoent* prot;
-    if( ( prot = getprotobyname( "tcp" ) ) == 0 )
-      return -ConnDnsError;
-
-    int fd;
-    if( ( fd = socket( PF_INET, SOCK_STREAM, prot->p_proto ) ) == -1 )
-      return -ConnDnsError;
-
-    struct hostent *h;
-    struct sockaddr_in target;
-    target.sin_family = AF_INET;
     int ret = 0;
     HostMap::const_iterator it = hosts.begin();
     for( ; it != hosts.end(); ++it )
     {
-      unsigned short port;
-      if( (*it).second == 0 )
-        port = XMPP_PORT;
-      else
-        port = (*it).second;
-
-      target.sin_port = htons( port );
-      if( ( h = gethostbyname( (*it).first.c_str() ) ) == 0 )
-      {
-        ret = -ConnDnsError;
-        continue;
-      }
-
-      in_addr *addr = (in_addr*)malloc( sizeof( in_addr ) );
-      memcpy( addr, h->h_addr, sizeof( in_addr ) );
-      char *tmp = inet_ntoa( *addr );
-      free( addr );
-      std::ostringstream oss;
-      oss << "resolved " << (*it).first.c_str() <<  " to: " << tmp << ":" << port;
-      logInstance.log( LogLevelDebug, LogAreaClassDns, oss.str() );
-
-      if( inet_aton( tmp, &(target.sin_addr) ) == 0 )
-        continue;
-
-      memset( target.sin_zero, '\0', 8 );
-      if( ::connect( fd, (struct sockaddr *)&target, sizeof( struct sockaddr ) ) == 0 )
+      int fd = DNS::connect( (*it).first, (*it).second, logInstance );
+      if( fd >= 0 )
         return fd;
-
-      close( fd );
+      else
+        ret = fd;
     }
+
     if( ret )
       return ret;
 
     return -ConnConnectionRefused;
   }
-#endif
 
   int DNS::connect( const std::string& domain, unsigned short port, const LogSink& logInstance )
   {
@@ -311,12 +279,18 @@ namespace gloox
     }
 
     std::ostringstream oss;
-    oss << "resolved " << domain.c_str() << " to: " << inet_ntoa( target.sin_addr );
-    logInstance.log( LogLevelDebug, LogAreaClassDns, oss.str() );
-
     memset( target.sin_zero, '\0', 8 );
     if( ::connect( fd, (struct sockaddr *)&target, sizeof( struct sockaddr ) ) == 0 )
+    {
+      oss << "connecting to " << domain.c_str()
+           << " (" << inet_ntoa( target.sin_addr ) << ":" << port << ")";
+      logInstance.log( LogLevelDebug, LogAreaClassDns, oss.str() );
       return fd;
+    }
+
+    oss << "connection to " << domain.c_str()
+         << " (" << inet_ntoa( target.sin_addr ) << ":" << port << ") failed";
+    logInstance.log( LogLevelDebug, LogAreaClassDns, oss.str() );
 
 #ifndef WIN32
     close( fd );
