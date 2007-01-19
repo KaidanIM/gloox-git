@@ -51,11 +51,11 @@ namespace gloox
     : m_connection( 0 ), m_disco( 0 ), m_namespace( ns ),
       m_xmllang( "en" ), m_server( server ),
       m_compression( true ), m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ),
-      m_proxyPort( 0 ), m_statisticsHandler( 0 ), m_mucInvitationHandler( 0 ),
+      m_statisticsHandler( 0 ), m_mucInvitationHandler( 0 ),
       m_messageSessionHandlerChat( 0 ), m_messageSessionHandlerGroupchat( 0 ),
       m_messageSessionHandlerHeadline( 0 ), m_messageSessionHandlerNormal( 0 ),
       m_parser( 0 ), m_authError( AuthErrorUndefined ), m_streamError( StreamErrorUndefined ),
-      m_streamErrorAppCondition( 0 ), m_idCount( 0 ), m_autoMessageSession( false ),
+      m_streamErrorAppCondition( 0 ), m_proxyPort( 0 ), m_idCount( 0 ), m_autoMessageSession( false ),
       m_fdRequested( false )
   {
     init();
@@ -66,11 +66,11 @@ namespace gloox
     : m_connection( 0 ), m_disco( 0 ), m_namespace( ns ), m_password( password ),
       m_xmllang( "en" ), m_server( server ),
       m_compression( true ), m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ),
-      m_proxyPort( 0 ), m_statisticsHandler( 0 ), m_mucInvitationHandler( 0 ),
+      m_statisticsHandler( 0 ), m_mucInvitationHandler( 0 ),
       m_messageSessionHandlerChat( 0 ), m_messageSessionHandlerGroupchat( 0 ),
       m_messageSessionHandlerHeadline( 0 ), m_messageSessionHandlerNormal( 0 ),
       m_parser( 0 ), m_authError( AuthErrorUndefined ), m_streamError( StreamErrorUndefined ),
-      m_streamErrorAppCondition( 0 ), m_idCount( 0 ), m_autoMessageSession( false ),
+      m_streamErrorAppCondition( 0 ), m_proxyPort( 0 ), m_idCount( 0 ), m_autoMessageSession( false ),
       m_fdRequested( false )
   {
     init();
@@ -120,10 +120,13 @@ namespace gloox
     return e;
   }
 
-  void ClientBase::setProxy( const std::string& host, unsigned short port )
+  void ClientBase::setProxy( const std::string& host, unsigned short port,
+                             const std::string& username, const std::string& password )
   {
     m_proxyHost = host;
     m_proxyPort = port;
+    m_proxyUser = username;
+    m_proxyPassword = password;
   }
 
   bool ClientBase::connect( bool block )
@@ -135,7 +138,8 @@ namespace gloox
       m_parser = new Parser( this );
 
     if( !m_connection )
-      m_connection = new Connection( m_parser, m_logInstance, m_server, m_port, m_proxyHost, m_proxyPort );
+      m_connection = new Connection( m_parser, m_logInstance, m_server, m_port,
+                                     m_proxyHost, m_proxyPort, m_proxyUser, m_proxyPassword );
 
 #ifdef HAVE_TLS
     m_connection->setCACerts( m_cacerts );

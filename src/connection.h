@@ -67,10 +67,15 @@ namespace gloox
        * @param server A server to connect to.
        * @param port The port to connect to. The default of -1 means that SRV records will be used
        * to find out about the actual host:port.
+       * @param proxyHost An optional HTTP proxy host.
+       * @param proxyPort An optional HTTP proxy port. Required if @p proxyHost is given.
+       * @param proxyUser An optional HTTP proxy username.
+       * @param proxyPassword An optional HTTP proxy password. Require if @p proxyUser is given.
        */
       Connection( Parser *parser, const LogSink& logInstance, const std::string& server,
                   unsigned short port = -1,
-                  const std::string& proxyHost = "", unsigned short proxyPort = 0 );
+                  const std::string& proxyHost = "", unsigned short proxyPort = 0,
+                  const std::string& proxyUser = "", const std::string& proxyPassword = "" );
 
       /**
        * Virtual destructor
@@ -273,6 +278,8 @@ namespace gloox
       std::string m_proxyHost;
       std::string m_proxyHandshakeBuffer;
       unsigned short m_proxyPort;
+      std::string m_proxyUser;
+      std::string m_proxyPassword;
   };
 
 }
