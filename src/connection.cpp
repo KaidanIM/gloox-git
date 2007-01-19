@@ -14,6 +14,7 @@
 
 #include "gloox.h"
 
+#include "base64.h"
 #include "compression.h"
 #include "connection.h"
 #include "dns.h"
@@ -47,14 +48,16 @@ namespace gloox
 {
 
   Connection::Connection( Parser *parser, const LogSink& logInstance, const std::string& server,
-                          unsigned short port, const std::string& proxyHost, unsigned short proxyPort )
+                          unsigned short port, const std::string& proxyHost, unsigned short proxyPort,
+                          const std::string& proxyUser, const std::string& proxyPassword )
     : m_parser( parser ), m_state ( StateDisconnected ), m_disconnect ( ConnNoError ),
       m_logInstance( logInstance ), m_compression( 0 ), m_buf( 0 ),
       m_server( Prep::idna( server ) ), m_port( port ), m_socket( -1 ),
       m_totalBytesIn( 0 ), m_totalBytesOut( 0 ),
       m_bufsize( 17000 ), m_cancel( true ), m_secure( false ), m_fdRequested( false ),
       m_enableCompression( false ),
-      m_proxyHost( proxyHost ), m_proxyPort( proxyPort )
+      m_proxyHandshake( false ), m_proxyHost( proxyHost ), m_proxyPort( proxyPort ),
+      m_proxyUser( proxyUser ), m_proxyPassword( proxyPassword )
   {
     m_buf = (char*)calloc( m_bufsize + 1, sizeof( char ) );
     m_compressedBytesIn[0] = 0;
@@ -988,6 +991,11 @@ printf( "maximumMessage: %ld\n", m_streamSizes.cbMaximumMessage );
     os << "Content-Length: 0\r\n";
     os << "Proxy-Connection: Keep-Alive\r\n";
     os << "Pragma: no-cache\r\n";
+    if( !m_proxyUser.empty() && !m_proxyPassword.empty() )
+    {
+      std::string proxyAuth = Base64::encode64( m_proxyUser + ":" + m_proxyPassword );
+      os << "Proxy-Authorization: Basic " << proxyAuth << "\r\n";
+    }
     os << "\r\n";
 
     if( !send( os.str() ) )
@@ -1000,15 +1008,19 @@ printf( "maximumMessage: %ld\n", m_streamSizes.cbMaximumMessage );
 
   ConnectionError Connection::handleProxyHandshake( const std::string& buffer )
   {
-    if( ( buffer.substr( 0, 12 ) == "HTTP/1.0 200" ||
-          buffer.substr( 0, 12 ) == "HTTP/1.1 200" )
-        && buffer.substr( buffer.length() - 4 ) == "\r\n\r\n" )
+    m_proxyHandshakeBuffer += buffer;
+    if( ( m_proxyHandshakeBuffer.substr( 0, 12 ) == "HTTP/1.0 200" ||
+          m_proxyHandshakeBuffer.substr( 0, 12 ) == "HTTP/1.1 200" )
+        && m_proxyHandshakeBuffer.substr( m_proxyHandshakeBuffer.length() - 4 ) == "\r\n\r\n" )
     {
       m_proxyHandshake = false;
       m_proxyHandshakeBuffer = "";
     }
-    else
-      m_proxyHandshakeBuffer += buffer;
+    else if( m_proxyHandshakeBuffer.substr( 9, 3 ) == "407" )
+      return ConnProxyAuthRequired;
+    else if( m_proxyHandshakeBuffer.substr( 9, 3 ) == "403" ||
+             m_proxyHandshakeBuffer.substr( 9, 3 ) == "404" )
+      return ConnProxyAuthFailed;
 
     return ConnNoError;
   }
