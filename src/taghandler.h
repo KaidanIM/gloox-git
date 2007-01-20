@@ -39,6 +39,8 @@ namespace gloox
 
        /**
         * This function is called when a registered XML element arrives.
+        * As with every handler in gloox, the Tag is going to be deleted after this function returned.
+        * If you need a copy afterwards, create it using Tag::clone().
         * @param tag The complete Tag.
         */
        virtual void handleTag( Tag *tag ) = 0;
