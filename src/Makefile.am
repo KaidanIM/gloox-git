@@ -49,7 +49,7 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             vcardmanager.h            vcardhandler.h          adhochandler.h \
                             search.h                  searchhandler.h         statisticshandler.h \
                             resource.h                mucroom.h               mucroomhandler.h \
-                            mucroomconfighandler.h    parser.h                parserhandler.h \
+                            mucroomconfighandler.h    parser.h                \
                             mucinvitationhandler.h    stanzaextension.h       oob.h \
                             vcardupdate.h             delayeddelivery.h       base64.h \
                             xdelayeddelivery.h        gpgencrypted.h          gpgsigned.h \

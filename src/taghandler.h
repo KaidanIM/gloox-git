@@ -14,7 +14,7 @@
 #ifndef TAGHANDLER_H__
 #define TAGHANDLER_H__
 
-#include "stanza.h"
+#include "tag.h"
 
 namespace gloox
 {
@@ -22,8 +22,11 @@ namespace gloox
   /**
    * @brief A virtual interface which can be reimplemented to receive non-XMPP Core stanzas.
    *
-   * Derived classes can be registered as TagHandlers with the Client.
-   * A TagHandler can handle arbitrary elements not defined by RFC 3920, XMPP: Core.
+   * Derived classes can be registered as TagHandlers with the ClientBase.
+   * A TagHandler can handle arbitrary elements not defined by RFC 3920, XMPP Core.
+   *
+   * It can also be used to handle Tags emitted by Parser.
+   *
    * @author Jakob Schroeter <js@camaya.net>
    */
   class GLOOX_API TagHandler
@@ -36,9 +39,9 @@ namespace gloox
 
        /**
         * This function is called when a registered XML element arrives.
-        * @param stanza The complete Stanza.
+        * @param tag The complete Tag.
         */
-       virtual void handleTag( Stanza *stanza ) = 0;
+       virtual void handleTag( Tag *tag ) = 0;
   };
 
 }

@@ -19,7 +19,7 @@
 #include "gloox.h"
 #include "jid.h"
 #include "logsink.h"
-#include "parserhandler.h"
+#include "taghandler.h"
 #include "statisticshandler.h"
 
 namespace gloox
@@ -52,7 +52,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
    */
-  class GLOOX_API ClientBase : private ParserHandler
+  class GLOOX_API ClientBase : private TagHandler
   {
 
     friend class RosterManager;
@@ -510,7 +510,7 @@ namespace gloox
       void removeMUCInvitationHandler();
 
       // reimplemented from ParserHandler
-      virtual void handleStanza( NodeType type, Stanza *stanza );
+      virtual void handleTag( Tag *tag );
 
     protected:
       /**
@@ -572,7 +572,7 @@ namespace gloox
       void notifyMessageHandlers( Stanza *stanza );
       void notifyPresenceHandlers( Stanza *stanza );
       void notifySubscriptionHandlers( Stanza *stanza );
-      void notifyTagHandlers( Stanza *stanza );
+      void notifyTagHandlers( Tag *tag );
       void notifyOnDisconnect( ConnectionError e );
       void logEvent( const char *data, size_t size, int is_incoming );
       void send( const std::string& xml );
