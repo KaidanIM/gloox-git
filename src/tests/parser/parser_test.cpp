@@ -1,21 +1,20 @@
 #include "../../parser.h"
-#include "../../parserhandler.h"
-#include "../../stanza.h"
+#include "../../taghandler.h"
 using namespace gloox;
 
 #include <stdio.h>
 #include <locale.h>
 #include <string>
 
-class ParserTest : private ParserHandler
+class ParserTest : private TagHandler
 {
   public:
     ParserTest() : m_tag( 0 ) {};
     virtual ~ParserTest() {};
 
-    virtual void handleStanza( NodeType /*type*/, Stanza *stanza )
+    virtual void handleTag( Tag *tag )
     {
-      m_tag = stanza->clone();
+      m_tag = tag->clone();
     };
 
     int run()
@@ -289,7 +288,7 @@ class ParserTest : private ParserHandler
     };
 
   private:
-    Stanza *m_tag;
+    Tag *m_tag;
 
 };
 

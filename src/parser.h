@@ -16,14 +16,13 @@
 #define PARSER_H__
 
 #include "gloox.h"
-#include "parserhandler.h"
+#include "taghandler.h"
 
 #include <string>
 
 namespace gloox
 {
 
-  class Stanza;
   class Tag;
 
   /**
@@ -39,7 +38,7 @@ namespace gloox
        * Constructs a new Parser object.
        * @param ph The object to send incoming Tags to.
        */
-      Parser( ParserHandler *ph );
+      Parser( TagHandler *ph );
 
       /**
        * Virtual destructor.
@@ -61,7 +60,7 @@ namespace gloox
       void cleanup();
       bool isWhitespace( unsigned char& c );
       bool isValid( unsigned char& c );
-      void streamEvent( Stanza *stanza );
+      void streamEvent( Tag *tag );
 
       enum ParserInternalState
       {
@@ -82,9 +81,9 @@ namespace gloox
         TagPreamble
       };
 
-      ParserHandler *m_parserHandler;
+      TagHandler *m_tagHandler;
       Tag *m_current;
-      Stanza *m_root;
+      Tag *m_root;
 
       ParserInternalState m_state;
       StringMap m_attribs;

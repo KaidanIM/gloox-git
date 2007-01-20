@@ -170,69 +170,71 @@ namespace gloox
     }
   }
 
-  void ClientBase::handleStanza( NodeType type, Stanza *stanza )
+  void ClientBase::handleTag( Tag *tag )
   {
-    if( !stanza )
+    if( !tag )
+    {
+      logInstance().log( LogLevelDebug, LogAreaClassClientbase, "stream closed" );
+      disconnect( ConnStreamClosed );
       return;
+    }
+
+    Stanza *stanza = new Stanza( tag );
 
     logInstance().log( LogLevelDebug, LogAreaXmlIncoming, stanza->xml() );
     ++m_stats.totalStanzasReceived;
 
-    switch( type )
+    if( tag->name() == "stream:stream" )
     {
-      case NodeStreamStart:
+      const std::string version = stanza->findAttribute( "version" );
+      if( !checkStreamVersion( version ) )
       {
-        const std::string version = stanza->findAttribute( "version" );
-        if( !checkStreamVersion( version ) )
-        {
-          logInstance().log( LogLevelDebug, LogAreaClassClientbase, "This server is not XMPP-compliant"
-              " (it does not send a 'version' attribute). Please fix it or try another one.\n" );
-          disconnect( ConnStreamError );
-        }
-
-        m_sid = stanza->findAttribute( "id" );
-        handleStartNode();
-        break;
-      }
-      case NodeStreamChild:
-        if( !handleNormalNode( stanza ) )
-        {
-          switch( stanza->type() )
-          {
-            case StanzaIq:
-              notifyIqHandlers( stanza );
-              ++m_stats.iqStanzasReceived;
-              break;
-            case StanzaPresence:
-              notifyPresenceHandlers( stanza );
-              ++m_stats.presenceStanzasReceived;
-              break;
-            case StanzaS10n:
-              notifySubscriptionHandlers( stanza );
-              ++m_stats.s10nStanzasReceived;
-              break;
-            case StanzaMessage:
-              notifyMessageHandlers( stanza );
-              ++m_stats.messageStanzasReceived;
-              break;
-            default:
-              notifyTagHandlers( stanza );
-              break;
-          }
-        }
-        break;
-      case NodeStreamError:
-        handleStreamError( stanza );
+        logInstance().log( LogLevelDebug, LogAreaClassClientbase, "This server is not XMPP-compliant"
+            " (it does not send a 'version' attribute). Please fix it or try another one.\n" );
         disconnect( ConnStreamError );
-        break;
-      case NodeStreamClose:
-        logInstance().log( LogLevelDebug, LogAreaClassClientbase, "stream closed" );
-        disconnect( ConnStreamClosed );
-        break;
+      }
+
+      m_sid = stanza->findAttribute( "id" );
+      handleStartNode();
+    }
+    else if( tag->name() == "stream:error" )
+    {
+      handleStreamError( stanza );
+      disconnect( ConnStreamError );
+    }
+    else
+    {
+      if( !handleNormalNode( stanza ) )
+      {
+        switch( stanza->type() )
+        {
+          case StanzaIq:
+            notifyIqHandlers( stanza );
+            ++m_stats.iqStanzasReceived;
+            break;
+          case StanzaPresence:
+            notifyPresenceHandlers( stanza );
+            ++m_stats.presenceStanzasReceived;
+            break;
+          case StanzaS10n:
+            notifySubscriptionHandlers( stanza );
+            ++m_stats.s10nStanzasReceived;
+            break;
+          case StanzaMessage:
+            notifyMessageHandlers( stanza );
+            ++m_stats.messageStanzasReceived;
+            break;
+          default:
+            notifyTagHandlers( tag );
+            break;
+        }
+      }
     }
 
     if( m_statisticsHandler )
       m_statisticsHandler->handleStatistics( getStatistics() );
+
+    delete stanza;
   }
 
   void ClientBase::disconnect( ConnectionError reason )
@@ -997,13 +999,13 @@ namespace gloox
     }
   }
 
-  void ClientBase::notifyTagHandlers( Stanza *stanza )
+  void ClientBase::notifyTagHandlers( Tag *tag )
   {
     TagHandlerList::const_iterator it = m_tagHandlers.begin();
     for( ; it != m_tagHandlers.end(); ++it )
     {
-      if( (*it).tag == stanza->name() && (*it).xmlns == stanza->xmlns() )
-        (*it).th->handleTag( stanza );
+      if( (*it).tag == tag->name() && tag->hasAttribute( "xmlns", (*it).xmlns ) )
+        (*it).th->handleTag( tag );
     }
   }
 

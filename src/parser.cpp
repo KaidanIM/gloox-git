@@ -15,13 +15,13 @@
 #include "gloox.h"
 
 #include "parser.h"
-#include "stanza.h"
+#include "tag.h"
 
 namespace gloox
 {
 
-  Parser::Parser( ParserHandler *ph )
-    : m_parserHandler( ph ), m_current( 0 ), m_root( 0 ), m_state( Initial ),
+  Parser::Parser( TagHandler *ph )
+    : m_tagHandler( ph ), m_current( 0 ), m_root( 0 ), m_state( Initial ),
       m_preamble( 0 )
   {
   }
@@ -319,8 +319,8 @@ namespace gloox
   {
     if( !m_root )
     {
-//       printf( "created Stanza named %s, ", m_tag.c_str() );
-      m_root = new Stanza( m_tag, "", "default", true );
+//       printf( "created Tag named %s, ", m_tag.c_str() );
+      m_root = new Tag( m_tag, "", true );
       m_current = m_root;
     }
     else
@@ -387,7 +387,6 @@ namespace gloox
     else
     {
 //       printf( "pushing upstream, " );
-      m_root->finalize();
       streamEvent( m_root );
       cleanup();
     }
@@ -425,23 +424,10 @@ namespace gloox
     return false;
   }
 
-  void Parser::streamEvent( Stanza *stanza )
+  void Parser::streamEvent( Tag *tag )
   {
-    if( !m_parserHandler )
-      return;
-
-    if( stanza )
-    {
-      NodeType type = NodeStreamChild;
-      if( stanza->name() == "stream:stream" )
-        type = NodeStreamStart;
-      else if( stanza->name() == "stream:error" )
-        type = NodeStreamError;
-
-      m_parserHandler->handleStanza( type, stanza );
-    }
-    else
-      m_parserHandler->handleStanza( NodeStreamClose, 0 );
+    if( m_tagHandler )
+      m_tagHandler->handleTag( tag );
   }
 
 }
