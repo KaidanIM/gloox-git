@@ -169,7 +169,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
 
 
 
-
+  // -- simple paths --
 
   // -------
   name = "get root: /";
@@ -235,7 +235,6 @@ int main( int /*argc*/, char* /*argv[]*/ )
     printf( "test '%s' failed\n", name.c_str() );
   }
 
-  printf( "----------------------------------------------------\n" );
   // -------
   name = "find all: //eee";
   if( aaa->findTag( "//eee" ) != eee )
@@ -243,7 +242,6 @@ int main( int /*argc*/, char* /*argv[]*/ )
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
   }
-  printf( "----------------------------------------------------\n" );
 
   // -------
   name = "find all: //bbb";
@@ -423,10 +421,6 @@ int main( int /*argc*/, char* /*argv[]*/ )
     printf( "test '%s' failed\n", name.c_str() );
   }
 
-
-// --------------------------------------------------------------------------------------------
-// non-functional with 1st gen parser
-
   // -------
   name = "find first level via parent: /*/../*";
   result = aaa->findTagList( "/*/../*" );
@@ -459,7 +453,6 @@ int main( int /*argc*/, char* /*argv[]*/ )
     printResult( name, result );
     printf( "test '%s' failed\n", name.c_str() );
   }
-  printf( "--------------------------------------------------------------\n" );
 
   // -------
   name = "deepsearch && .. combined 1: //ggg/..";
@@ -471,7 +464,6 @@ int main( int /*argc*/, char* /*argv[]*/ )
     printResult( name, result );
     printf( "test '%s' failed\n", name.c_str() );
   }
-  printf( "--------------------------------------------------------------\n" );
 
 //   printf( "--------------------------------------------------------------\n" );
 //   // -------
@@ -497,7 +489,6 @@ int main( int /*argc*/, char* /*argv[]*/ )
     printResult( name, result );
     printf( "test '%s' failed\n", name.c_str() );
   }
-  printf( "--------------------------------------------------------------\n" );
 
   // -------
   name = "deepsearch && .. combined 3: //ggg/../..//bbb";
@@ -509,7 +500,6 @@ int main( int /*argc*/, char* /*argv[]*/ )
     printResult( name, result );
     printf( "test '%s' failed\n", name.c_str() );
   }
-  printf( "--------------------------------------------------------------\n" );
 
   // -------
   name = "deepsearch && .. && * combined 1: //*/../..//bbb";
@@ -521,10 +511,9 @@ int main( int /*argc*/, char* /*argv[]*/ )
     printResult( name, result );
     printf( "test '%s' failed\n", name.c_str() );
   }
-  printf( "--------------------------------------------------------------\n" );
 
   // -------
-  name = "deepsearch && .. && * combined 1: //*/*/..//*";
+  name = "deepsearch && .. && * combined 2: //*/*/..//*";
   result = aaa->findTagList( "//*/*/..//*" );
   it = result.begin();
   if( result.size() != 9 || (*it) != bbb || (*++it) != hhh || (*++it) != jjj ||
@@ -535,11 +524,242 @@ int main( int /*argc*/, char* /*argv[]*/ )
     printResult( name, result );
     printf( "test '%s' failed\n", name.c_str() );
   }
+
+  // -------
+  name = "deepsearch: //bbb/hhh/bbb";
+  result = aaa->findTagList( "//bbb/hhh/bbb" );
+  it = result.begin();
+  if( result.size() != 1 || (*it) != jjj )
+  {
+    ++fail;
+    printResult( name, result );
+    printf( "test '%s' failed\n", name.c_str() );
+  }
   printf( "--------------------------------------------------------------\n" );
 
+  // -- ~simple paths --
+
+
+  // -- operators --
+
+  // ---- union ----
+
+  // -------
+  name = "union 1: //bbb|/aaa";
+  result = aaa->findTagList( "//bbb|/aaa" );
+  it = result.begin();
+  if( result.size() != 4 || (*it) != bbb || (*++it) != jjj || (*++it) != iii || (*++it) != aaa )
+  {
+    ++fail;
+    printResult( name, result );
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+  printf( "--------------------------------------------------------------\n" );
+
+  // -------
+  name = "union 1: //bbb|//bbb";
+  result = aaa->findTagList( "//bbb|//bbb" );
+  it = result.begin();
+  if( result.size() != 3 || (*it) != bbb || (*++it) != jjj || (*++it) != iii )
+  {
+    ++fail;
+    printResult( name, result );
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+  printf( "--------------------------------------------------------------\n" );
+
+  // -------
+  name = "union 2: /aaa|/aaa";
+  result = aaa->findTagList( "/aaa|/aaa" );
+  it = result.begin();
+  if( result.size() != 1 || (*it) != aaa )
+  {
+    ++fail;
+    printResult( name, result );
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+  printf( "--------------------------------------------------------------\n" );
+
+  // -------
+  name = "union 3: /aaa|/aaa|//bbb";
+  result = aaa->findTagList( "/aaa|/aaa|//bbb" );
+  it = result.begin();
+  if( result.size() != 4 || (*it) != aaa || (*++it) != bbb || (*++it) != jjj || (*++it) != iii )
+  {
+    ++fail;
+    printResult( name, result );
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+  printf( "--------------------------------------------------------------\n" );
+
+  // -------
+  name = "empty union 3: /cde|/def";
+  result = aaa->findTagList( "/cde|/def" );
+  it = result.begin();
+  if( result.size() != 0 )
+  {
+    ++fail;
+    printResult( name, result );
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+  printf( "--------------------------------------------------------------\n" );
+
+  // ---- ~union ----
+
+  // -- ~operators --
 
 
 
+  // -- predicates --
+
+  // -------
+  name = "filter 1: //bbb[1]";
+  result = aaa->findTagList( "//bbb[1]" );
+  it = result.begin();
+  if( result.size() != 1 || (*it) != bbb )
+  {
+    ++fail;
+    printResult( name, result );
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+  printf( "--------------------------------------------------------------\n" );
+
+  // -------
+  name = "filter 2: //bbb[2]";
+  result = aaa->findTagList( "//bbb[2]" );
+  it = result.begin();
+  if( result.size() != 1 || (*it) != jjj )
+  {
+    ++fail;
+    printResult( name, result );
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+  printf( "--------------------------------------------------------------\n" );
+
+  // -------
+  name = "filter 3: //bbb[3]";
+  result = aaa->findTagList( "//bbb[3]" );
+  it = result.begin();
+  if( result.size() != 1 || (*it) != iii )
+  {
+    ++fail;
+    printResult( name, result );
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+  printf( "--------------------------------------------------------------\n" );
+
+  // -------
+  name = "invalid filter 4: //bbb[4]";
+  result = aaa->findTagList( "//bbb[4]" );
+  it = result.begin();
+  if( result.size() != 0 )
+  {
+    ++fail;
+    printResult( name, result );
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+  printf( "--------------------------------------------------------------\n" );
+
+  // -------
+  name = "filter 5: /aaa/bbb[1]";
+  result = aaa->findTagList( "/aaa/bbb[1]" );
+  it = result.begin();
+  if( result.size() != 1 || (*it) != bbb )
+  {
+    ++fail;
+    printResult( name, result );
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+  printf( "--------------------------------------------------------------\n" );
+
+  // -------
+  name = "filter 5: /aaa[1]";
+  result = aaa->findTagList( "/aaa[1]" );
+  it = result.begin();
+  if( result.size() != 1 || (*it) != aaa )
+  {
+    ++fail;
+    printResult( name, result );
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+  printf( "--------------------------------------------------------------\n" );
+
+  // -------
+  name = "invalid filter 6: /aaa[2]";
+  result = aaa->findTagList( "/aaa[2]" );
+  it = result.begin();
+  if( result.size() != 0 )
+  {
+    ++fail;
+    printResult( name, result );
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+  printf( "--------------------------------------------------------------\n" );
+
+  // -------
+  name = "invalid filter 7: [2]";
+  result = aaa->findTagList( "[2]" );
+  it = result.begin();
+  if( result.size() != 0 )
+  {
+    ++fail;
+    printResult( name, result );
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+  printf( "--------------------------------------------------------------\n" );
+
+  // -------
+  name = "deepsearch + predicate 1: //bbb[@name]";
+  result = aaa->findTagList( "//bbb[@name]" );
+  it = result.begin();
+  if( result.size() != 3 || (*it) != bbb || (*++it) != jjj || (*++it) != iii )
+  {
+    ++fail;
+    printResult( name, result );
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+  printf( "--------------------------------------------------------------\n" );
+
+  // -------
+  name = "deepsearch + predicate 2: //bbb[@xyz]";
+  result = aaa->findTagList( "//bbb[@xyz]" );
+  it = result.begin();
+  if( result.size() != 0 )
+  {
+    ++fail;
+    printResult( name, result );
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+  printf( "--------------------------------------------------------------\n" );
+
+  // -------
+  name = "deepsearch + predicate + literal 1: //bbb[@name='b1']";
+  result = aaa->findTagList( "//bbb[@name='b1']" );
+  it = result.begin();
+  if( result.size() != 1 || (*it) != bbb )
+  {
+    ++fail;
+    printResult( name, result );
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+  printf( "--------------------------------------------------------------\n" );
+
+//   // -------
+//   name = "deepsearch + predicate + path 1: //bbb[hhh]";
+//   result = aaa->findTagList( "//bbb[hhh]" );
+//   it = result.begin();
+//   if( result.size() != 1 || (*it) != bbb )
+//   {
+//     ++fail;
+//     printResult( name, result );
+//     printf( "test '%s' failed\n", name.c_str() );
+//   }
+//   printf( "--------------------------------------------------------------\n" );
+
+
+
+
+  // -- predicates --
 
 
 

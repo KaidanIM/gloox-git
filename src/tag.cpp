@@ -13,6 +13,8 @@
 
 #include "tag.h"
 
+#include <stdlib.h>
+
 #include <sstream>
 
 namespace gloox
@@ -363,6 +365,21 @@ namespace gloox
     return ret;
   }
 
+  bool Tag::removeChild( Tag *tag )
+  {
+    TagList::iterator it = m_children.begin();
+    for( ; it != m_children.end(); ++it )
+    {
+      if( (*it) == tag )
+      {
+        m_children.erase( it );
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   Tag* Tag::findTag( const std::string& expression )
   {
     Tag::TagList l = findTagList( expression );
@@ -383,22 +400,25 @@ namespace gloox
       return m_parent->findTagList( expression );
 
     int len = 0;
-    XPathToken *p = parse( expression, len );
-    printf( "parsed tree: %s\nxml: %s\n", p->toString().c_str(), p->xml().c_str() );
+    Tag *p = parse( expression, len );
+    if( p )
+      printf( "parsed tree: %s\n", p->xml().c_str() );
     l = evaluateTagList( p );
     delete p;
     return l;
   }
 
-  Tag::TagList Tag::evaluateTagList( XPathToken *token )
+  Tag::TagList Tag::evaluateTagList( Tag *token )
   {
-    printf( "evaluateTagList called in Tag %s and Token %s (type: %d)\n", name().c_str(),
-            token->name().c_str(), token->tokenType() );
     Tag::TagList result;
     if( !token )
       return result;
 
-    switch( token->tokenType() )
+    printf( "evaluateTagList called in Tag %s and Token %s (type: %s)\n", name().c_str(),
+            token->name().c_str(), token->findAttribute( "type" ).c_str() );
+
+    TokenType tokenType = (TokenType)atoi( token->findAttribute( "type" ).c_str() );
+    switch( tokenType )
     {
       case XTUnion:
       {
@@ -415,24 +435,52 @@ namespace gloox
           Tag::TagList& tokenChildren = token->children();
           if( tokenChildren.size() )
           {
-            Tag::TagList res;
-            printf( "checking %d children of token %s\n", tokenChildren.size(), token->name().c_str() );
-            XPathToken *testtoken = static_cast<XPathToken*>( (*(tokenChildren.begin())) );
-            if( m_children.size() )
+            bool predicatesSucceeded = true;
+            Tag::TagList::const_iterator cit = tokenChildren.begin();
+            for( ; cit != tokenChildren.end(); ++cit )
             {
-              Tag::TagList::const_iterator it = m_children.begin();
-              for( ; it != m_children.end(); ++it )
+              if( !(*cit)->hasAttribute( "predicate", "true" ) )
+                continue;
+
+              predicatesSucceeded = evaluatePredicate( (*cit) );
+              if( !predicatesSucceeded )
+                break;
+            }
+            printf( "predicatesSucceeded is %d\n", predicatesSucceeded );
+            if( !predicatesSucceeded )
+              break;
+
+            bool hasElementChildren = false;
+            cit = tokenChildren.begin();
+            for( ; cit != tokenChildren.end(); ++cit )
+            {
+              if( (*cit)->hasAttribute( "predicate", "true" ) ||
+                  (*cit)->hasAttribute( "number", "true" ) )
+                continue;
+
+              hasElementChildren = true;
+
+              Tag::TagList res;
+              printf( "checking %d children of token %s\n", tokenChildren.size(), token->name().c_str() );
+              if( m_children.size() )
               {
-                res = (*it)->evaluateTagList( testtoken );
+                Tag::TagList::const_iterator it = m_children.begin();
+                for( ; it != m_children.end(); ++it )
+                {
+                  res = (*it)->evaluateTagList( (*cit) );
+                  add( result, res );
+                }
+              }
+              else if( atoi( (*cit)->findAttribute( "type" ).c_str() ) == XTDoubleDot && m_parent )
+              {
+                (*cit)->addAttribute( "type", XTDot );
+                res = m_parent->evaluateTagList( (*cit) );
                 add( result, res );
               }
             }
-            else if( testtoken->tokenType() == XTDoubleDot && m_parent )
-            {
-              testtoken->setTokenType( XTDot );
-              res = m_parent->evaluateTagList( testtoken );
-              add( result, res );
-            }
+
+            if( !hasElementChildren )
+              result.push_back( this );
           }
           else
           {
@@ -448,9 +496,9 @@ namespace gloox
       case XTDoubleSlash:
       {
         printf( "in XTDoubleSlash\n" );
-        XPathToken *n = token->clone();
+        Tag *n = token->clone();
         printf( "original token: %s\ncloned token: %s\n", token->xml().c_str(), n->xml().c_str() );
-        n->setTokenType( XTElement );
+        n->addAttribute( "type", XTElement );
         Tag::TagList res = evaluateTagList( n );
         add( result, res );
         Tag::TagList res2 = allDescendants();
@@ -468,7 +516,7 @@ namespace gloox
         Tag::TagList& tokenChildren = token->children();
         if( tokenChildren.size() )
         {
-          Tag::TagList res = evaluateTagList( static_cast<XPathToken*>( (*(tokenChildren.begin())) ) );
+          Tag::TagList res = evaluateTagList( (*(tokenChildren.begin())) );
           add( result, res );
         }
         else
@@ -483,7 +531,7 @@ namespace gloox
           Tag::TagList& tokenChildren = token->children();
           if( tokenChildren.size() )
           {
-            XPathToken *testtoken = static_cast<XPathToken*>( (*(tokenChildren.begin())) );
+            Tag *testtoken = (*(tokenChildren.begin()));
             if( testtoken->name() == "*" )
             {
               Tag::TagList res = m_parent->evaluateTagList( testtoken );
@@ -491,8 +539,8 @@ namespace gloox
             }
             else
             {
-              XPathToken *n = token->clone();
-              n->setTokenType( XTElement );
+              Tag *n = token->clone();
+              n->addAttribute( "type", XTElement );
               n->m_name = m_parent->m_name;
               Tag::TagList res = m_parent->evaluateTagList( n );
               add( result, res );
@@ -503,8 +551,86 @@ namespace gloox
             result.push_back( m_parent );
         }
       }
+      case XTInteger:
+      {
+        Tag::TagList l = token->children();
+        if( !l.size() )
+          break;
+
+        Tag::TagList res = evaluateTagList( (*(l.begin())) );
+
+        Tag *tag = 0;
+        int pos = atoi( token->name().c_str() );
+        printf( "checking index %d\n", pos );
+        int i = 1;
+        Tag::TagList::const_iterator it = res.begin();
+        for( ; it != res.end(); ++it, ++i )
+          if( pos == i )
+            tag = (*it);
+        if( tag )
+          result.push_back( tag );
+        break;
+      }
     }
     return result;
+  }
+
+  bool Tag::evaluateBoolean( Tag *token )
+  {
+    if( !token )
+      return false;
+
+    bool result = false;
+    TokenType tokenType = (TokenType)atoi( token->findAttribute( "type" ).c_str() );
+    switch( tokenType )
+    {
+      case XTAttribute:
+        if( token->name() == "*" )
+          result = (bool)m_attribs.size();
+        else
+          result = hasAttribute( token->name() );
+        break;
+      case XTOperatorEq:
+        result = evaluateEquals( token );
+        break;
+      case XTOperatorLt:
+        break;
+      case XTOperatorLtEq:
+        break;
+      case XTOperatorGtEq:
+        break;
+      case XTOperatorGt:
+        break;
+      case XTUnion:
+      case XTElement:
+      {
+        Tag::TagList l = evaluateTagList( token );
+        if( l.size() )
+          result = true;
+        break;
+      }
+    }
+
+    return result;
+  }
+
+  bool Tag::evaluateEquals( Tag *token )
+  {
+    if( !token )
+      return false;
+
+    Tag::TagList& l = token->children();
+    Tag::TagList::const_iterator it;
+
+    return false;
+  }
+
+  bool Tag::evaluatePredicate( Tag *token )
+  {
+    if( !token )
+      return false;
+
+    return evaluateBoolean( token );
   }
 
   Tag::TagList Tag::allDescendants()
@@ -521,7 +647,7 @@ namespace gloox
     return result;
   }
 
-  Tag::TagList Tag::evaluateUnion( XPathToken *token )
+  Tag::TagList Tag::evaluateUnion( Tag *token )
   {
     Tag::TagList result;
     if( !token )
@@ -532,17 +658,17 @@ namespace gloox
     Tag::TagList::const_iterator it = l.begin();
     for( ; it != l.end(); ++it )
     {
-      res = evaluateTagList( static_cast<XPathToken*>( (*it) ) );
+      res = evaluateTagList( (*it) );
       add( result, res );
     }
     return result;
   }
 
-  XPathToken* Tag::parse( const std::string& expression, int& len, Tag::TokenType border )
+  Tag* Tag::parse( const std::string& expression, int& len, Tag::TokenType border )
   {
     printf( "parse() called with '%s'\n", expression.c_str() );
-    XPathToken *root = 0;
-    XPathToken *current = root;
+    Tag *root = 0;
+    Tag *current = root;
     std::string token;
     XPathError error = XPNoError;
     XPathState state = Init;
@@ -603,8 +729,8 @@ namespace gloox
           }
 
           int sublen = 0;
-          XPathToken *t = parse( expression.substr( i ), sublen, XTRightBracket );
-          current->addPredicate( t );
+          Tag *t = parse( expression.substr( i ), sublen, XTRightBracket );
+          addPredicate( &root, &current, t );
           it += sublen;
           i += sublen;
           len += sublen;
@@ -629,16 +755,17 @@ namespace gloox
           }
 
           int sublen = 0;
-          XPathToken *t = parse( expression.substr( i ), sublen, XTRightParenthesis );
+          Tag *t = parse( expression.substr( i ), sublen, XTRightParenthesis );
           if( current )
           {
-            printf( "added %s to %s\n", t->toString().c_str(), current->toString().c_str() );
-            current->addArgument( t );
+            printf( "added %s to %s\n", t->xml().c_str(), current->xml().c_str() );
+            t->addAttribute( "argument", "true" );
+            current->addChild( t );
           }
           else
           {
             root = t;
-            printf( "made %s new root\n", t->toString().c_str() );
+            printf( "made %s new root\n", t->xml().c_str() );
           }
           i += sublen;
           it += sublen;
@@ -659,6 +786,9 @@ namespace gloox
           type = XTLiteral;
           if( (*(it - 1)) == '\\' )
             token += (*it);
+          break;
+        case '@':
+          type = XTAttribute;
           break;
         case '.':
           if( !token.empty() )
@@ -714,7 +844,7 @@ namespace gloox
             return root;
 
           int sublen = 0;
-          XPathToken *t = parse( expression.substr( i ), sublen, ttype );
+          Tag *t = parse( expression.substr( i ), sublen, ttype );
           addOperator( &root, &current, t, ttype, c );
           it += sublen;
           i += sublen;
@@ -736,28 +866,31 @@ namespace gloox
     return root;
   }
 
-  void Tag::addToken( XPathToken **root, XPathToken **current, Tag::TokenType type, const std::string& token )
+  void Tag::addToken( Tag **root, Tag **current, Tag::TokenType type,
+                      const std::string& token )
   {
+    Tag *t = new Tag( token );
+    t->addAttribute( "type", type );
+
     if( *root )
     {
       printf( "new current %s, type: %d\n", token.c_str(), type );
-      XPathToken *t = new XPathToken( 0, type, token );
       (*current)->addChild( t );
       *current = t;
     }
     else
     {
       printf( "new root %s, type: %d\n", token.c_str(), type );
-      XPathToken *t = new XPathToken( 0, type, token );
       *root = t;
       *current = *root;
     }
   }
 
-  void Tag::addOperator( XPathToken **root, XPathToken **current, XPathToken *arg,
+  void Tag::addOperator( Tag **root, Tag **current, Tag *arg,
                            Tag::TokenType type, const std::string& token )
   {
-    XPathToken *t = new XPathToken( 0, type, token );
+    Tag *t = new Tag( token );
+    t->addAttribute( "type", type );
     printf( "new operator: %s (arg1: %s, arg2: %s)\n", t->name().c_str(), (*root)->xml().c_str(),
                                                                           arg->xml().c_str() );
     t->addAttribute( "operator", "true" );
@@ -765,6 +898,36 @@ namespace gloox
     t->addChild( arg );
     *root = t;
     *current = t;
+  }
+
+  void Tag::addPredicate( Tag **root, Tag **current, Tag *token )
+  {
+    if( !*root || !*current )
+      return;
+
+    if( token->isNumber() && !token->children().size() )
+    {
+      printf( "found XTInteger %s, full: %s\n", token->name().c_str(), token->xml().c_str() );
+      token->addAttribute( "type", XTInteger );
+      if( *root == *current )
+      {
+        *root = token;
+        printf( "made XTInteger new root\n" );
+      }
+      else
+      {
+        (*root)->removeChild( *current );
+        (*root)->addChild( token );
+        printf( "added XTInteger somewhere between root and current\n" );
+      }
+      token->addChild( *current );
+      printf( "added XTInteger %s, full: %s\n", token->name().c_str(), token->xml().c_str() );
+    }
+    else
+    {
+      token->addAttribute( "predicate", "true" );
+      (*current)->addChild( token );
+    }
   }
 
   Tag::TokenType Tag::getType( const std::string& c )
@@ -793,6 +956,21 @@ namespace gloox
     return false;
   }
 
+  bool Tag::isNumber()
+  {
+    if( m_name.empty() )
+      return false;
+
+    std::string::size_type l = m_name.length();
+    for( std::string::size_type i = 0; i < l; ++i )
+    {
+      if( m_name[i] < 0x30 || m_name[i] > 0x39 )
+        return false;
+    }
+
+    return true;
+  }
+
   void Tag::add( Tag::TagList& one, const Tag::TagList& two )
   {
     bool doit = true;
@@ -817,81 +995,6 @@ namespace gloox
         one.push_back( (*it) );
       }
     }
-  }
-
-  //
-  // Tag::XPathToken
-  //
-
-  XPathToken::XPathToken( XPathToken *parent, TokenType type, const std::string& value )
-    : Tag( parent, value ), m_tokenType( type )
-  {
-  }
-
-  XPathToken::~XPathToken()
-  {
-  }
-
-  void XPathToken::addPredicate( XPathToken *token )
-  {
-    token->addAttribute( "predicate", "true" );
-    addChild( token );
-  }
-
-  void XPathToken::addArgument( XPathToken *token )
-  {
-    token->addAttribute( "argument", "true" );
-    addChild( token );
-  }
-
-  std::string XPathToken::toString() const
-  {
-    std::string str;
-    if( hasAttribute( "predicate", "true" ) )
-      str += "[";
-
-    Tag::TagList::const_iterator it = m_children.begin();
-    if( hasAttribute( "operator", "true" ) )
-    {
-      str += static_cast<XPathToken*>( (*it) )->toString();
-      if( m_tokenType == XTLiteral )
-        str += "'";
-      str += m_name;
-      if( m_tokenType == XTLiteral )
-        str += "'";
-      str += static_cast<XPathToken*>( (*++it) )->toString();
-    }
-    else
-    {
-      str += m_name;
-      if( m_tokenType == XTFunction )
-        str += "(";
-
-      for( ; it != m_children.end(); ++it )
-        str += static_cast<XPathToken*>( (*it) )->toString();
-
-      if( m_tokenType == XTFunction )
-        str += ")";
-    }
-
-    if( hasAttribute( "predicate", "true" ) )
-      str += "]";
-    return str;
-  }
-
-  XPathToken* XPathToken::clone() const
-  {
-    XPathToken *t = new XPathToken( 0, tokenType(), name() );
-    t->m_attribs = m_attribs;
-    t->m_type = m_type;
-
-    Tag::TagList::const_iterator it = m_children.begin();
-    for( ; it != m_children.end(); ++it )
-    {
-      t->addChild( static_cast<XPathToken*>( (*it)->clone() ) );
-    }
-
-    return t;
   }
 
 }
