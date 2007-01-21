@@ -23,8 +23,6 @@
 namespace gloox
 {
 
-  class XPathToken;
-
   /**
    * @brief This is an abstraction of an XML element.
    *
@@ -220,6 +218,14 @@ namespace gloox
       TagList findChildren( const std::string& name );
 
       /**
+       * Removes the given Tag from the list of child Tags.
+       * @param tag The Tag to delete from the list of child Tags.
+       * @return @b True if the Tag was found, @b false otherwise.
+       * @note The Tag @p tag is not deleted.
+       */
+      bool removeChild( Tag *tag );
+
+      /**
        * Returns whether the Tag is considered empty, i.e. invalid.
        * @return @b True if the Tag is valid, @b false if not.
        */
@@ -286,7 +292,7 @@ namespace gloox
 
     protected:
       /**
-       * XPAth error conditions.
+       * XPath error conditions.
        */
       enum XPathError
       {
@@ -320,6 +326,7 @@ namespace gloox
         XTLeftParenthesis,
         XTRightParenthesis,
         XTNodeSet,
+        XTInteger,
         XTElement,
         XTLeftBracket,
         XTRightBracket,
@@ -335,8 +342,8 @@ namespace gloox
         XTOperatorNe,
         XTOperatorGt,
         XTOperatorLt,
-        XTOperatorLtE,
-        XTOperatorGtE,
+        XTOperatorLtEq,
+        XTOperatorGtEq,
         XTOperatorPlus,
         XTOperatorMinus,
         XTOperatorMul,
@@ -368,37 +375,22 @@ namespace gloox
       const std::string relax( const std::string& what ) const;
       const std::string replace( const std::string& what, const Duo& duo ) const;
       TagList findChildren( TagList& list, const std::string& name );
-      XPathToken* parse( const std::string& expression, int& len, TokenType border = XTNone );
-      void addToken( XPathToken **root, XPathToken **current, TokenType type, const std::string& token );
-      void addOperator( XPathToken **root, XPathToken **current, XPathToken *arg, TokenType type,
+      Tag* parse( const std::string& expression, int& len, TokenType border = XTNone );
+      void addToken( Tag **root, Tag **current, TokenType type, const std::string& token );
+      void addOperator( Tag **root, Tag **current, Tag *arg, TokenType type,
                         const std::string& token );
+      void addPredicate( Tag **root, Tag **current, Tag *token );
       TokenType getType( const std::string& c );
       bool isWhitespace( const char& c );
+      bool isNumber();
       void add( Tag::TagList& one, const Tag::TagList& two );
-      Tag::TagList evaluateTagList( XPathToken *token );
-      Tag::TagList evaluateUnion( XPathToken *token );
+      Tag::TagList evaluateTagList( Tag *token );
+      Tag::TagList evaluateUnion( Tag *token );
+      bool evaluateBoolean( Tag *token );
+      bool evaluatePredicate( Tag *token );
+      bool evaluateEquals( Tag *token );
       Tag::TagList allDescendants();
 
-  };
-
-  class XPathToken : public Tag
-  {
-    public:
-      XPathToken( XPathToken *parent, TokenType type, const std::string& value );
-      virtual ~XPathToken();
-
-//       const TokenList& predicates() const { return m_predicates; };
-      TokenType tokenType() const { return m_tokenType; };
-      void setTokenType( TokenType type ) { m_tokenType = type; };
-
-      void addPredicate( XPathToken *token );
-      void addArgument( XPathToken *token );
-
-      virtual std::string toString() const;
-      virtual XPathToken* clone() const;
-
-    private:
-      TokenType m_tokenType;
   };
 
 }
