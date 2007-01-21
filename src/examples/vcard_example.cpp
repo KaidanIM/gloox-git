@@ -21,7 +21,6 @@ class VCardTest : public ConnectionListener, LogHandler, VCardHandler
 
     void start()
     {
-      setlocale( LC_ALL, "" );
 
       JID jid( "hurkhurk@example.org/gloox" );
       j = new Client( jid, "hurkhurks" );
