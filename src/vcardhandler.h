@@ -14,6 +14,10 @@
 #ifndef VCARDHANDLER_H__
 #define VCARDHANDLER_H__
 
+#include "macros.h"
+#include "vcard.h"
+#include "jid.h"
+
 namespace gloox
 {
 
