@@ -17,7 +17,6 @@ class AnnotationsTest : public AnnotationsHandler, ConnectionListener
 
     void start()
     {
-      setlocale( LC_ALL, "" );
 
       JID jid( "hurkhurk@example.org/gloox" );
       j = new Client( jid, "hurkhurks" );

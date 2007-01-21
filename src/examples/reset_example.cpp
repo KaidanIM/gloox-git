@@ -18,7 +18,6 @@ class RosterTest : public ConnectionListener, LogHandler
 
     void start()
     {
-      setlocale( LC_ALL, "" );
 
       JID jid( "hurkhurkss@example.net/gloox" );
       j = new Client( jid, "hurkhurks" );

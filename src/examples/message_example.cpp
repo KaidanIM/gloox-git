@@ -33,7 +33,6 @@ class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListen
 
     void start()
     {
-      setlocale( LC_ALL, "" );
 
       JID jid( "hurkhurk@example.net/gloox" );
       j = new Client( jid, "hurkhurks" );

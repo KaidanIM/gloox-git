@@ -25,7 +25,6 @@ class FlexOffTest : public DiscoHandler, MessageHandler, ConnectionListener, Fle
 
     void start()
     {
-      setlocale( LC_ALL, "" );
 
       JID jid( "hurkhurk@example.org/gloox" );
       j = new Client( jid, "hurkhurks" );

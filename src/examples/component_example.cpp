@@ -17,7 +17,6 @@ class ComponentTest : public DiscoHandler, ConnectionListener, LogHandler
 
     void start()
     {
-      setlocale( LC_ALL, "" );
 
       j = new Component( XMLNS_COMPONENT_ACCEPT, "example.org",
                          "component.example.org", "secret", 5000 );
