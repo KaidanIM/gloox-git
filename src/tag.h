@@ -301,25 +301,15 @@ namespace gloox
         XPUnexpectedToken
       };
 
-      enum XPathState
-      {
-        Init,
-        LtOperator,
-        GtOperator,
-        MergeOperator,
-        Slash,
-        DoubleSlash,
-        Dot,
-        DoubleDot,
-        LeftBracket,
-        RightBracket,
-        LeftParenthesis,
-        RightParenthesis,
-        Asterisk,
-        AtSign,
-        TokenName
-      };
+      std::string m_name;
+      StringMap m_attribs;
+      std::string m_cdata;
+      TagList m_children;
+      Tag *m_parent;
+      StanzaType m_type;
+      bool m_incoming;
 
+    private:
       enum TokenType
       {
         XTNone,
@@ -354,15 +344,6 @@ namespace gloox
         XTDoubleSlash
       };
 
-      std::string m_name;
-      StringMap m_attribs;
-      std::string m_cdata;
-      TagList m_children;
-      Tag *m_parent;
-      StanzaType m_type;
-      bool m_incoming;
-
-    private:
       struct duo
       {
         duo( std::string f, std::string s ) : first( f), second( s ) {};
