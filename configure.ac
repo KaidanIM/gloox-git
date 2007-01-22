@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.50)
-AC_INIT([gloox], [0.9-pre4], [js@camaya.net])
+AC_INIT([gloox], [0.9-pre5], [js@camaya.net])
 AC_CONFIG_SRCDIR([configure.ac])
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 
@@ -309,20 +309,21 @@ gloox-config
 src/Makefile
 src/examples/Makefile
 src/tests/Makefile
+src/tests/base64/Makefile
 src/tests/dataform/Makefile
 src/tests/dataformfield/Makefile
-src/tests/md5/Makefile
-src/tests/parser/Makefile
-src/tests/sha/Makefile
-src/tests/tag/Makefile
-src/tests/base64/Makefile
-src/tests/vcardupdate/Makefile
 src/tests/delayeddelivery/Makefile
-src/tests/xdelayeddelivery/Makefile
-src/tests/oob/Makefile
 src/tests/gpgencrypted/Makefile
 src/tests/gpgsigned/Makefile
+src/tests/md5/Makefile
+src/tests/oob/Makefile
+src/tests/parser/Makefile
+src/tests/sha/Makefile
 src/tests/stanza/Makefile
 src/tests/stanzaextensionfactory/Makefile
+src/tests/tag/Makefile
+src/tests/vcardupdate/Makefile
+src/tests/xdelayeddelivery/Makefile
+src/tests/xpath/Makefile
 ])
 AC_OUTPUT
