@@ -565,12 +565,19 @@ namespace gloox
         int i = 1;
         Tag::TagList::const_iterator it = res.begin();
         for( ; it != res.end(); ++it, ++i )
+        {
           if( pos == i )
+          {
             tag = (*it);
+            break;
+          }
+        }
         if( tag )
           result.push_back( tag );
         break;
       }
+      default:
+        break;
     }
     return result;
   }
@@ -604,11 +611,18 @@ namespace gloox
       case XTUnion:
       case XTElement:
       {
-        Tag::TagList l = evaluateTagList( token );
+        Tag *t = new Tag( "." );
+        t->addAttribute( "type", XTDot );
+        t->addChild( token );
+        Tag::TagList l = evaluateTagList( t );
         if( l.size() )
           result = true;
+        t->removeChild( token );
+        delete t;
         break;
       }
+      default:
+        break;
     }
 
     return result;
@@ -616,13 +630,53 @@ namespace gloox
 
   bool Tag::evaluateEquals( Tag *token )
   {
-    if( !token )
+    if( !token || token->children().size() != 2 )
       return false;
 
-    Tag::TagList& l = token->children();
-    Tag::TagList::const_iterator it;
+    bool result = false;
+    Tag::TagList::const_iterator it = token->children().begin();
+    Tag *ch1 = (*it);
+    Tag *ch2 = (*++it);
 
-    return false;
+    TokenType tt1 = (TokenType)atoi( ch1->findAttribute( "type" ).c_str() );
+    TokenType tt2 = (TokenType)atoi( ch2->findAttribute( "type" ).c_str() );
+    switch( tt1 )
+    {
+      case XTAttribute:
+        switch( tt2 )
+        {
+          case XTInteger:
+          case XTLiteral:
+            result = ( findAttribute( ch1->name() ) == ch2->name() );
+            break;
+          case XTAttribute:
+            result = ( hasAttribute( ch1->name() ) && hasAttribute( ch2->name() ) &&
+                      findAttribute( ch1->name() ) == findAttribute( ch2->name() ) );
+            break;
+          default:
+            break;
+        }
+        break;
+      case XTInteger:
+      case XTLiteral:
+        switch( tt2 )
+        {
+          case XTAttribute:
+            result = ( ch1->name() == findAttribute( ch2->name() ) );
+            break;
+          case XTLiteral:
+          case XTInteger:
+            result = ( ch1->name() == ch2->name() );
+            break;
+          default:
+            break;
+        }
+        break;
+      default:
+        break;
+    }
+
+    return result;
   }
 
   bool Tag::evaluatePredicate( Tag *token )
@@ -671,10 +725,10 @@ namespace gloox
     Tag *current = root;
     std::string token;
     XPathError error = XPNoError;
-    XPathState state = Init;
-    int expected = 0;
-    bool run = true;
-    bool ws = false;
+//     XPathState state = Init;
+//     int expected = 0;
+//     bool run = true;
+//     bool ws = false;
     Tag::TokenType type  = XTElement;
 
     int length = expression.length();
@@ -743,6 +797,7 @@ namespace gloox
             type = XTElement;
             token = "";
           }
+          ++len;
           return root;
           break;
         case '(':
@@ -846,8 +901,8 @@ namespace gloox
           int sublen = 0;
           Tag *t = parse( expression.substr( i ), sublen, ttype );
           addOperator( &root, &current, t, ttype, c );
-          it += sublen;
           i += sublen;
+          it += sublen;
           len += sublen;
           break;
         }
@@ -870,7 +925,10 @@ namespace gloox
                       const std::string& token )
   {
     Tag *t = new Tag( token );
-    t->addAttribute( "type", type );
+    if( t->isNumber() && !t->children().size() )
+      t->addAttribute( "type", XTInteger );
+    else
+      t->addAttribute( "type", type );
 
     if( *root )
     {
@@ -884,6 +942,13 @@ namespace gloox
       *root = t;
       *current = *root;
     }
+
+//     while( t->parent() )
+//     {
+//       t->parent()->addAttribute( "type", type );
+//       t = t->parent();
+//     }
+
   }
 
   void Tag::addOperator( Tag **root, Tag **current, Tag *arg,
@@ -891,8 +956,8 @@ namespace gloox
   {
     Tag *t = new Tag( token );
     t->addAttribute( "type", type );
-    printf( "new operator: %s (arg1: %s, arg2: %s)\n", t->name().c_str(), (*root)->xml().c_str(),
-                                                                          arg->xml().c_str() );
+//     printf( "new operator: %s (arg1: %s, arg2: %s)\n", t->name().c_str(), (*root)->xml().c_str(),
+//                                                                           arg->xml().c_str() );
     t->addAttribute( "operator", "true" );
     t->addChild( *root );
     t->addChild( arg );
@@ -905,23 +970,26 @@ namespace gloox
     if( !*root || !*current )
       return;
 
-    if( token->isNumber() && !token->children().size() )
+    if( ( token->isNumber() && !token->children().size() ) || token->name() == "+" )
     {
-      printf( "found XTInteger %s, full: %s\n", token->name().c_str(), token->xml().c_str() );
-      token->addAttribute( "type", XTInteger );
+      printf( "found Index %s, full: %s\n", token->name().c_str(), token->xml().c_str() );
+      if( !token->hasAttribute( "operator", "true" ) )
+      {
+        token->addAttribute( "type", XTInteger );
+      }
       if( *root == *current )
       {
         *root = token;
-        printf( "made XTInteger new root\n" );
+        printf( "made Index new root\n" );
       }
       else
       {
         (*root)->removeChild( *current );
         (*root)->addChild( token );
-        printf( "added XTInteger somewhere between root and current\n" );
+        printf( "added Index somewhere between root and current\n" );
       }
       token->addChild( *current );
-      printf( "added XTInteger %s, full: %s\n", token->name().c_str(), token->xml().c_str() );
+      printf( "added Index %s, full: %s\n", token->name().c_str(), token->xml().c_str() );
     }
     else
     {

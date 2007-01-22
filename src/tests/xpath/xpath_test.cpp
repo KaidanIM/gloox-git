@@ -756,6 +756,18 @@ int main( int /*argc*/, char* /*argv[]*/ )
 //   }
 //   printf( "--------------------------------------------------------------\n" );
 
+//   // -------
+//   name = "filter 1: //bbb[1+2]";
+//   result = aaa->findTagList( "//bbb[1+2]" );
+//   it = result.begin();
+//   if( result.size() != 1 || (*it) != iii )
+//   {
+//     ++fail;
+//     printResult( name, result );
+//     printf( "test '%s' failed\n", name.c_str() );
+//   }
+//   printf( "--------------------------------------------------------------\n" );
+
 
 
 
