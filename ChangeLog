@@ -1,9 +1,14 @@
-v0.9 -- xx yyy 2006
+v0.9 -- xx Jan 2007
 -------------------
-- rewrote XML parser (no dependency on iksemel any more)
+- rewrote XML parser (no dependency on iksemel anymore)
 - XEP-0045 (Multi-User Chat)
-- XEP-0066 (Out of Band Data) abstraction
-- added µsec timeout to recv()
+- added StanzaExtensions
+  - XEP-0027 (Current Jabber OpenPGP Usage) abstraction
+  - XEP-0066 (Out of Band Data) abstraction
+  - XEP-0091 (Delayed Delivery) abstraction
+  - XEP-0153 (vCard-Based Avatars) abstraction
+  - XEP-0203 (Delayed Delivery) abstraction
+- added msec timeout to recv()
 - fetch roster immediately after requesting roster:delimiter
 - delete() --> delete
 - Registration: allow registration with services
@@ -34,15 +39,28 @@ v0.9 -- xx yyy 2006
 - Parser: added ParserHandler and install parser.h
 - Tag: added operator== & operator!=
 - ClientBase: added setCompression( bool ) to switch stream compression on/off
-
-since -pre2
 - renamed Stanza::show() --> Stanza::presence()
 - RosterListener: moved Roster to gloox namespace
 - RosterListener: new handleRosterPresence() replaces itemUn/Available() and presenceUpdated()
 - RosterListener: added handleSelfPresence()
+- RosterListener: added 'handle' prefix to function names
 - MessageHandler: handleMessage() takes optional MessageSession arg
-- MessageSession: allow for message type filtering
 - DiscoNodeHandler: added DiscoNodeItem to properly represent a disco#item
+- ClientBase: removed setAutoMessageSession() in favor of registerMessageSessionHandler()
+- PrivacyItem: renamed enum members from ALL_UPPER_CASE to MixedCase
+- PrivateXMLHandler: renamed enum members from ALL_UPPER_CASE to MixedCase
+- MessageSession: allow for message type filtering
+- AdhocHandler: added 'handleAdhoc' prefix
+- Adhoc: handle Disco errors
+- removed unmaintained Dev-C++ project (in favor of Code::Blocks project)
+- ClientBase: renamed ping() --> whitespacePing()
+
+since -pre4:
+  - ClientBase: HTTP proxy support (thanks to Jose A. Perez Sanchez)
+  - Tag: limited XPath support
+  - DNS: cleanup
+  - TagHandler: now receives Tag, not Stanza
+  - Parser: cleanup, now uses TagHandler
 
 
 v0.8 -- 08 Apr 2006
