@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2005-2006 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2005-2007 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -572,6 +572,24 @@ namespace gloox
       track.ih = ih;
       track.context = context;
       m_iqIDHandlers[id] = track;
+    }
+  }
+
+  void ClientBase::removeIDHandler( IqHandler *ih )
+  {
+    IqTrackMap::iterator t;
+    IqTrackMap::iterator it = m_iqIDHandlers.begin();
+    for( ; it != m_iqIDHandlers.end(); ++it )
+    {
+      if( ih == (*it).second.ih )
+      {
+        t = it;
+        ++t;
+        m_iqIDHandlers.erase( it );
+        it = t;
+        if( it == m_iqIDHandlers.end() )
+          break;
+      }
     }
   }
 

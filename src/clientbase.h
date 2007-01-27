@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2005-2006 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2005-2007 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -258,6 +258,15 @@ namespace gloox
        * @param context A value that allows for restoring context.
        */
       void trackID( IqHandler *ih, const std::string& id, int context );
+
+      /**
+       * Removes the given IqHandler from the list of handlers of pending operations, added
+       * using trackID(). Necessary, for example, when closing a GUI elelemnt that has an
+       * operation pending.
+       * @param ih The IqHandler to remove.
+       * @since 0.8.7
+       */
+      void removeIDHandler( IqHandler *ih );
 
       /**
        * Registers @c mh as object that receives Message stanza notifications.
