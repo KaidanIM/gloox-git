@@ -705,6 +705,24 @@ namespace gloox
     }
   }
 
+  void ClientBase::removeIDHandler( IqHandler *ih )
+  {
+    IqTrackMap::iterator t;
+    IqTrackMap::iterator it = m_iqIDHandlers.begin();
+    for( ; it != m_iqIDHandlers.end(); ++it )
+    {
+      if( ih == (*it).second.ih )
+      {
+        t = it;
+        ++t;
+        m_iqIDHandlers.erase( it );
+        it = t;
+        if( it == m_iqIDHandlers.end() )
+          break;
+      }
+    }
+  }
+
   void ClientBase::removeIqHandler( const std::string& xmlns )
   {
     if( !xmlns.empty() )

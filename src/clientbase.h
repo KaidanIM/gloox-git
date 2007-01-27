@@ -318,6 +318,15 @@ namespace gloox
       void trackID( IqHandler *ih, const std::string& id, int context );
 
       /**
+       * Removes the given IqHandler from the list of handlers of pending operations, added
+       * using trackID(). Necessary, for example, when closing a GUI elelemnt that has an
+       * operation pending.
+       * @param ih The IqHandler to remove.
+       * @since 0.8.7
+       */
+      void removeIDHandler( IqHandler *ih );
+
+      /**
        * Registers @c mh as object that receives Message stanza notifications.
        * @param mh The object to receive Message stanza notifications.
        */
