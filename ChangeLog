@@ -54,13 +54,16 @@ v0.9 -- xx Jan 2007
 - Adhoc: handle Disco errors
 - removed unmaintained Dev-C++ project (in favor of Code::Blocks project)
 - ClientBase: renamed ping() --> whitespacePing()
+- ClientBase: HTTP proxy support (thanks to Jose A. Perez Sanchez)
+- Tag: limited XPath support
+- DNS: cleanup
+- TagHandler: now receives Tag, not Stanza
+- Parser: cleanup, now uses TagHandler
 
-since -pre4:
-  - ClientBase: HTTP proxy support (thanks to Jose A. Perez Sanchez)
-  - Tag: limited XPath support
-  - DNS: cleanup
-  - TagHandler: now receives Tag, not Stanza
-  - Parser: cleanup, now uses TagHandler
+since -pre5:
+- ClientBase: added removeIDHandler() to cancel trackID() operations
+- added DataFormField( const std::string& name, const std::string& label = "",
+                       const std::string& value = "", DataFormFieldType type = FieldTypeTextSingle );
 
 
 v0.8 -- 08 Apr 2006

@@ -75,10 +75,21 @@ namespace gloox
       };
 
       /**
-       * Constructs a new Data Form Field.
+       * Constructs a new DataForm field.
        * @param type The type of the field. Default: text-single.
        */
       DataFormField( DataFormFieldType type = FieldTypeTextSingle );
+
+      /**
+       * Constructs a new DataForm field and fills it with the given values.
+       * @param name The field's name (the value of the 'var' attribute).
+       * @param value The field's value.
+       * @param label The field's label.
+       * @param type The field's type.
+       * @since 0.9
+       */
+      DataFormField( const std::string& name, const std::string& value = "",
+                     const std::string& label = "", DataFormFieldType type = FieldTypeTextSingle );
 
       /**
        * Constructs a new Data Form Field from an existing tag that describes a field.

@@ -4,10 +4,6 @@ Todo
 - overhaul all XEP implementations (and note implemented version number)
 - RosterItem::status ::statusMsg for highest prio
 - Disco: allow specification of root node handler
-- DataFormField: add DataFormField( const std::string &var,
-                                    const std::string &label = "",
-                                    enum type = TypeFieldTextSingle )
-- DataFormField: add operator=( const std::string &s )
 
 
 - check this change: http://www.jabberstudio.org/cgi-bin/viewcvs.cgi/cvs/jeps/0085/jep-0085.xml?r1=1.28&r2=1.31
