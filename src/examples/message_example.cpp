@@ -34,8 +34,8 @@ class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListen
     void start()
     {
 
-      JID jid( "hurkhurk@example.net/gloox" );
-      j = new Client( jid, "hurkhurks" );
+      JID jid( "hurkhurk@jabber.cc/gloox" );
+      j = new Client( jid, "kuss" );
       j->registerConnectionListener( this );
       j->registerMessageSessionHandler( this, 0 );
       j->disco()->registerDiscoHandler( this );
@@ -116,14 +116,14 @@ class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListen
         sub = "Re: " +  stanza->subject();
 
       m_messageEventFilter->raiseMessageEvent( MessageEventDisplayed );
-#ifdef WIN32
+#if defined( WIN32 ) || defined( _WIN32 )
       Sleep( 1000 );
 #else
       sleep( 1 );
 #endif
       m_messageEventFilter->raiseMessageEvent( MessageEventComposing );
       m_chatStateFilter->setChatState( ChatStateComposing );
-#ifdef WIN32
+#if defined( WIN32 ) || defined( _WIN32 )
       Sleep( 2000 );
 #else
       sleep( 2 );
