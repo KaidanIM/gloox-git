@@ -35,6 +35,18 @@ int main( int /*argc*/, char* /*argv[]*/ )
   f = 0;
 
   // -------
+  name = "2nd ctor";
+  f = new DataFormField( "fieldName", "fieldValue", "fieldLabel", DataFormField::FieldTypeBoolean );
+  if( f->type() != DataFormField::FieldTypeBoolean || f->name() != "fieldName" ||
+      f->value() != "fieldValue" || f->label() != "fieldLabel" )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+  delete f;
+  f = 0;
+
+  // -------
   name = "parse 0";
   f = new DataFormField( 0 );
   if( f->type() != DataFormField::FieldTypeInvalid )

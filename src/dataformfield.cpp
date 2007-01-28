@@ -22,6 +22,12 @@ namespace gloox
   {
   }
 
+  DataFormField::DataFormField( const std::string& name, const std::string& value,
+                                const std::string& label, DataFormFieldType type )
+    : m_name( name ), m_label( label ), m_value( value ), m_type( type )
+  {
+  }
+
   DataFormField::DataFormField( Tag *tag )
     : m_type( FieldTypeInvalid ), m_required( false )
   {
