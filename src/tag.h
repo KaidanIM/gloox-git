@@ -263,7 +263,7 @@ namespace gloox
        * Evaluates the given XPath expression and returns the result Tag. If more than one
        * Tag match, only the first one is returned.
        * @param expression An XPath expression to evaluate.
-       * @return The matched Tag, or 0.
+       * @return A matched Tag, or 0.
        * @since 0.9
        */
       Tag* findTag( const std::string& expression );
@@ -271,7 +271,7 @@ namespace gloox
       /**
        * Evaluates the given XPath expression and returns the matched Tags.
        * @param expression An XPath expression to evaluate.
-       * @return The list of matched Tags, or an empty TagList.
+       * @return A list of matched Tags, or an empty TagList.
        * @since 0.9
        */
       Tag::TagList findTagList( const std::string& expression );
