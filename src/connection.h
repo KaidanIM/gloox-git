@@ -16,6 +16,8 @@
 
 #ifdef WIN32
 # include "../config.h.win"
+#elif defined( _WIN32_WCE )
+# include "../config.h.win"
 #else
 # include "config.h"
 #endif
@@ -209,8 +211,10 @@ namespace gloox
       void cancel();
       void cleanup();
 
+#ifndef _WIN32_WCE
       bool doProxyHandshake ();
       ConnectionError handleProxyHandshake( const std::string& buffer );
+#endif
 
 #ifdef HAVE_TLS
       bool tlsSend( const void *data, size_t len );

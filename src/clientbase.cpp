@@ -13,9 +13,11 @@
 
 
 #ifdef WIN32
-#include "../config.h.win"
+# include "../config.h.win"
+#elif defined( _WIN32_WCE )
+# include "../config.h.win"
 #else
-#include "config.h"
+# include "config.h"
 #endif
 
 #include "clientbase.h"
@@ -41,8 +43,11 @@
 #include <string>
 #include <map>
 #include <list>
+
+#ifndef _WIN32_WCE
 #include <sstream>
 #include <iomanip>
+#endif
 
 namespace gloox
 {
@@ -251,6 +256,13 @@ namespace gloox
 
   void ClientBase::header()
   {
+#ifdef _WIN32_WCE
+	std::string head = "<?xml version='1.0' ?>";
+	head += "<stream:stream to='" + m_jid.server()+ "' xmlns='" + m_namespace + "' ";
+    head += "xmlns:stream='http://etherx.jabber.org/streams'  xml:lang='" + m_xmllang + "' ";
+    head += "version='1.0'>";
+    send( head );
+#else
     std::ostringstream oss;
     oss << "<?xml version='1.0' ?>";
     oss << "<stream:stream to='" + m_jid.server()+ "' xmlns='" + m_namespace + "' ";
@@ -261,6 +273,7 @@ namespace gloox
     oss << XMPP_STREAM_VERSION_MINOR;
     oss << "'>";
     send( oss.str() );
+#endif
   }
 
   bool ClientBase::hasTls()
@@ -371,9 +384,18 @@ namespace gloox
         return;
       }
 
-      std::ostringstream cnonce;
+	  std::string cnonce;
+#ifdef _WIN32_WCE
+	  char cn[4*8+1];
+	  for( int i = 0; i < 4; ++i )
+	    sprintf( cn + i*8, "%08x", rand() );
+	  cnonce.assign( cn, 4*8 );
+#else
+      std::ostringstream cn;
       for( int i = 0; i < 4; ++i )
-        cnonce << std::hex << std::setw( 8 ) << std::setfill( '0' ) << rand();
+        cn << std::hex << std::setw( 8 ) << std::setfill( '0' ) << rand();
+	  cnonce = cn.str();
+#endif
 
       std::string a1;
       std::string a2;
@@ -392,7 +414,7 @@ namespace gloox
       md5.feed( ":" );
       md5.feed( nonce );
       md5.feed( ":" );
-      md5.feed( cnonce.str() );
+      md5.feed( cnonce );
       md5.finalize();
       a1  = md5.hex();
       md5.reset();
@@ -405,7 +427,7 @@ namespace gloox
       md5.feed( ":" );
       md5.feed( nonce );
       md5.feed( ":00000001:" );
-      md5.feed( cnonce.str() );
+      md5.feed( cnonce );
       md5.feed( ":auth:" );
       md5.feed( a2 );
       md5.finalize();
@@ -413,7 +435,7 @@ namespace gloox
 
       std::string response = "username=\"" + m_jid.username() + "\",realm=\"" + realm;
       response += "\",nonce=\""+ nonce + "\",cnonce=\"";
-      response += cnonce.str();
+      response += cnonce;
       response += "\",nc=00000001,qop=auth,digest-uri=\"xmpp/" + m_jid.server() + "\",response=";
       response += response_value;
       response += ",charset=utf-8";
@@ -537,9 +559,17 @@ namespace gloox
 
   const std::string ClientBase::getID()
   {
+#ifdef _WIN32_WCE
+	std::string ret;
+	char r[8+1];
+	sprintf( r, "%08x", rand() );
+	ret.assign( r, 8 );
+	return std::string( "uid" ) + ret;
+#else
     std::ostringstream oss;
     oss << ++m_idCount;
     return std::string( "uid" ) + oss.str();
+#endif
   }
 
   bool ClientBase::checkStreamVersion( const std::string& version )

@@ -15,7 +15,11 @@
 
 #include <stdlib.h>
 
-#include <sstream>
+#ifdef _WIN32_WCE
+# include <math.h>
+#else
+# include <sstream>
+#endif
 
 namespace gloox
 {
@@ -136,9 +140,18 @@ namespace gloox
   {
     if( !name.empty() )
     {
-      std::ostringstream oss;
+#ifdef _WIN32_WCE
+	  int len = 4+(int)log10(value)+1;
+	  char *tmp = new char[len];
+      sprintf( tmp, "%d", value );
+	  std::string ret;
+	  ret.assign( tmp, len );
+	  m_attribs[m_incoming ? relax( name ) : name] = ret;
+#else
+	  std::ostringstream oss;
       oss << value;
       m_attribs[m_incoming ? relax( name ) : name] = oss.str();
+#endif
     }
   }
 
