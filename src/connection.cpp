@@ -26,13 +26,13 @@
 #include <winsock.h>
 #endif
 
-#ifndef WIN32
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <sys/select.h>
-#include <unistd.h>
+#if !defined( WIN32 ) && !defined( _WIN32_WCE )
+# include <sys/types.h>
+# include <sys/socket.h>
+# include <sys/select.h>
+# include <unistd.h>
 #else
-#include <winsock.h>
+# include <winsock.h>
 #endif
 
 #ifdef USE_WINTLS
@@ -42,7 +42,10 @@
 #include <time.h>
 
 #include <string>
-#include <sstream>
+
+#ifndef _WIN32_WCE
+# include <sstream>
+#endif
 
 namespace gloox
 {
@@ -913,7 +916,10 @@ printf( "maximumMessage: %ld\n", m_streamSizes.cbMaximumMessage );
   {
     m_state = StateConnecting;
 
-    bool useProxy = (!m_proxyHost.empty() && m_proxyPort != 0);
+	bool useProxy = false;
+#ifndef _WIN32_WCE
+    useProxy = (!m_proxyHost.empty() && m_proxyPort != 0);
+#endif
 
     if( !useProxy )
     {
@@ -945,6 +951,7 @@ printf( "maximumMessage: %ld\n", m_streamSizes.cbMaximumMessage );
     }
     else
     {
+#ifndef _WIN32_WCE
       if( useProxy )
       {
         if( !doProxyHandshake() )
@@ -955,6 +962,7 @@ printf( "maximumMessage: %ld\n", m_streamSizes.cbMaximumMessage );
           m_state = StateConnected;
       }
       else
+#endif
         m_state = StateConnected;
     }
 
@@ -971,6 +979,7 @@ printf( "maximumMessage: %ld\n", m_streamSizes.cbMaximumMessage );
       cleanup();
   }
 
+#ifndef _WIN32_WCE
   bool Connection::doProxyHandshake()
   {
     std::string server = m_server;
@@ -1024,6 +1033,7 @@ printf( "maximumMessage: %ld\n", m_streamSizes.cbMaximumMessage );
 
     return ConnNoError;
   }
+#endif
 
   int Connection::fileDescriptor()
   {
@@ -1105,8 +1115,10 @@ printf( "maximumMessage: %ld\n", m_streamSizes.cbMaximumMessage );
     std::string buf;
     buf.assign( m_buf, size );
 
+#ifndef _WIN32_WCE
     if( m_proxyHandshake )
       return handleProxyHandshake( buf );
+#endif
 
     if( m_compression && m_enableCompression )
     {

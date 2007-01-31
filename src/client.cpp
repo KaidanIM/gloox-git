@@ -12,6 +12,8 @@
 
 #ifdef WIN32
 #include "../config.h.win"
+#elif defined( _WIN32_WCE )
+#include "../config.h.win"
 #else
 #include "config.h"
 #endif
@@ -26,12 +28,16 @@
 #include "stanzaextensionfactory.h"
 #include "stanzaextension.h"
 
-#ifndef WIN32
+#if !defined( WIN32 ) && !defined( _WIN32_WCE )
 #include <unistd.h>
 #endif
 
+#ifndef _WIN32_WCE
 #include <iostream>
 #include <sstream>
+#else
+#include <stdio.h>
+#endif
 
 namespace gloox
 {
@@ -504,10 +510,16 @@ namespace gloox
     {
       JID jid;
       Stanza *p = Stanza::createPresenceStanza( jid, m_presenceMsg, m_presence );
+#ifdef _WIN32_WCE
+	  char tmp[5];
+	  tmp[4] = '\0';
+	  sprintf( tmp, "%s", m_priority );
+	  new Tag( p, "priority", tmp );
+#else
       std::ostringstream oss;
       oss << m_priority;
       new Tag( p, "priority", oss.str() );
-
+#endif
       StanzaExtensionList::const_iterator it = m_presenceExtensions.begin();
       for( ; it != m_presenceExtensions.end(); ++it )
       {

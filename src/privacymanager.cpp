@@ -15,7 +15,9 @@
 #include "privacymanager.h"
 #include "clientbase.h"
 
-#include <sstream>
+#ifndef _WIN32_WCE
+# include <sstream>
+#endif
 
 namespace gloox
 {
@@ -205,10 +207,7 @@ namespace gloox
       }
 
       i->addAttribute( "value", (*it).value() );
-
-      std::ostringstream oss;
-      oss << ++count;
-      i->addAttribute( "order", oss.str() );
+      i->addAttribute( "order", ++count );
     }
 
     m_parent->trackID( this, id, PLStore );

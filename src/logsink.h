@@ -18,7 +18,7 @@
 #include "loghandler.h"
 
 #include <string>
-#include <fstream>
+// #include <fstream>
 
 namespace gloox
 {

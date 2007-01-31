@@ -12,35 +12,43 @@
 
 
 #ifdef WIN32
-#include "../config.h.win"
+# include "../config.h.win"
+#elif defined( _WIN32_WCE )
+# include "../config.h.win"
 #else
-#include "config.h"
+# include "config.h"
 #endif
 
 #include "gloox.h"
 #include "dns.h"
 
-#include <sys/types.h>
+#ifndef _WIN32_WCE
+# include <sys/types.h>
+# include <sstream>
+#endif
+
 #include <stdio.h>
 
-#ifndef WIN32
-#include <netinet/in.h>
-#include <arpa/nameser.h>
-#include <resolv.h>
-#include <netdb.h>
-#include <arpa/inet.h>
-#include <sys/socket.h>
-#include <sys/un.h>
-#include <unistd.h>
-#else
-#include <winsock.h>
+#if !defined( WIN32 ) && !defined( _WIN32_WCE )
+# include <netinet/in.h>
+# include <arpa/nameser.h>
+# include <resolv.h>
+# include <netdb.h>
+# include <arpa/inet.h>
+# include <sys/socket.h>
+# include <sys/un.h>
+# include <unistd.h>
+#endif
+
+#ifdef WIN32
+# include <winsock.h>
+#elif defined( _WIN32_WCE )
+# include <winsock2.h>
 #endif
 
 #ifdef HAVE_WINDNS_H
 #include <windns.h>
 #endif
-
-#include <sstream>
 
 #define SRV_COST    (RRFIXEDSZ+0)
 #define SRV_WEIGHT  (RRFIXEDSZ+2)
@@ -278,19 +286,25 @@ namespace gloox
       memcpy( &target.sin_addr, h->h_addr, sizeof( struct in_addr ) );
     }
 
+#ifndef _WIN32_WCE
     std::ostringstream oss;
+#endif
     memset( target.sin_zero, '\0', 8 );
     if( ::connect( fd, (struct sockaddr *)&target, sizeof( struct sockaddr ) ) == 0 )
     {
+#ifndef _WIN32_WCE
       oss << "connecting to " << domain.c_str()
            << " (" << inet_ntoa( target.sin_addr ) << ":" << port << ")";
       logInstance.log( LogLevelDebug, LogAreaClassDns, oss.str() );
+#endif
       return fd;
     }
 
+#ifndef _WIN32_WCE
     oss << "connection to " << domain.c_str()
          << " (" << inet_ntoa( target.sin_addr ) << ":" << port << ") failed";
     logInstance.log( LogLevelDebug, LogAreaClassDns, oss.str() );
+#endif
 
 #ifndef WIN32
     close( fd );
