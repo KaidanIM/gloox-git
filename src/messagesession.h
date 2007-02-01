@@ -101,16 +101,16 @@ namespace gloox
    * raiseMessageEvent() and setChatState(), respectively. For example:
    * @code
    * // user is typing a message
-   * m_messageEventFilter->raiseMessageEvent( MESSAGE_EVENT_COMPOSING );
+   * m_messageEventFilter->raiseMessageEvent( MessageEventComposing );
    *
    * // acknowledge receiving of a message
-   * m_messageEventFilter->raiseMessageEvent( MESSAGE_EVENT_DELIVERED );
+   * m_messageEventFilter->raiseMessageEvent( MessageEventDelivered );
    *
    * // user is not actively paying attention to the chat
-   * m_chatStateFilter->setChatState( CHAT_STATE_INACTIVE );
+   * m_chatStateFilter->setChatState( ChatStateInactive );
    *
    * // user has closed the chat window
-   * m_chatStateFilter->setChatState( CHAT_STATE_GONE );
+   * m_chatStateFilter->setChatState( ChatStateGone );
    * @endcode
    *
    * To send a message to the chat partner of the session, use
