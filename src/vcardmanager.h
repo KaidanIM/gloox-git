@@ -127,6 +127,15 @@ namespace gloox
        */
       void storeVCard( const VCard *vcard, VCardHandler *vch );
 
+      /**
+       * Use this function, e.g. from your VCardHandler-derived class's dtor, to cancel any
+       * outstanding operations (fetchVCard(), storeVCard()). Calling this function even
+       * even if no operations are pending is just fine.
+       * @param vch The VCardHandler to remove from any queues.
+       * @since 0.9
+       */
+      void cancelVCardOperations( VCardHandler *vch );
+
       // reimplemented from IqHandler
       virtual bool handleIq( Stanza *stanza );
 
