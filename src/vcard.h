@@ -43,37 +43,37 @@ namespace gloox
        */
       enum AddressType
       {
-        AddrTypeHome   =      1,    /**< */
-        AddrTypeWork   =      2,    /**< */
-        AddrTypePref   =      4,    /**< */
-        AddrTypeX400   =      8,    /**< */
-        AddrTypeInet   =     16,    /**< */
-        AddrTypeParcel =     32,    /**< */
-        AddrTypePostal =     64,    /**< */
-        AddrTypeDom    =    128,    /**< */
-        AddrTypeIntl   =    256,    /**< */
-        AddrTypeVoice  =    512,    /**< */
-        AddrTypeFax    =   1024,    /**< */
-        AddrTypePager  =   2048,    /**< */
-        AddrTypeMsg    =   4096,    /**< */
-        AddrTypeCell   =   8192,    /**< */
-        AddrTypeVideo  =  16384,    /**< */
-        AddrTypeBbs    =  32768,    /**< */
-        AddrTypeModem  =  65536,    /**< */
-        AddrTypeIsdn   = 131072,    /**< */
-        AddrTypePcs    = 262144     /**< */
+        AddrTypeHome   =      1,    /**< Home address. */
+        AddrTypeWork   =      2,    /**< Work address. */
+        AddrTypePref   =      4,    /**< Preferred address. */
+        AddrTypeX400   =      8,    /**< X.400 address. */
+        AddrTypeInet   =     16,    /**< Internet address. */
+        AddrTypeParcel =     32,    /**< Parcel address. */
+        AddrTypePostal =     64,    /**< Postal address. */
+        AddrTypeDom    =    128,    /**< Domestic(?) address. */
+        AddrTypeIntl   =    256,    /**< International(?) address. */
+        AddrTypeVoice  =    512,    /**< Voice number. */
+        AddrTypeFax    =   1024,    /**< Fax number. */
+        AddrTypePager  =   2048,    /**< Pager. */
+        AddrTypeMsg    =   4096,    /**< MSG(?) */
+        AddrTypeCell   =   8192,    /**< Cell phone number. */
+        AddrTypeVideo  =  16384,    /**< Video chat(?). */
+        AddrTypeBbs    =  32768,    /**< BBS. */
+        AddrTypeModem  =  65536,    /**< Modem. */
+        AddrTypeIsdn   = 131072,    /**< ISDN. */
+        AddrTypePcs    = 262144     /**< PCS. */
       };
 
       /**
-       * A full name.
+       * A person's full name.
        */
       struct Name
       {
-        std::string family;         /**< */
-        std::string given;          /**< */
-        std::string middle;         /**< */
-        std::string prefix;         /**< */
-        std::string suffix;         /**< */
+        std::string family;         /**< Family name. */
+        std::string given;          /**< Given name. */
+        std::string middle;         /**< Middle name. */
+        std::string prefix;         /**< Name prefix. */
+        std::string suffix;         /**< Name suffix. */
       };
 
       /**
@@ -81,10 +81,10 @@ namespace gloox
        */
       enum VCardClassification
       {
-        ClassNone         = 0,      /**< */
-        ClassPublic       = 1,      /**< */
-        ClassPrivate      = 2,      /**< */
-        ClassConfidential = 4       /**< */
+        ClassNone         = 0,      /**< Not classified. */
+        ClassPublic       = 1,      /**< Public. */
+        ClassPrivate      = 2,      /**< Private. */
+        ClassConfidential = 4       /**< Confidential. */
       };
 
       /**
@@ -92,12 +92,12 @@ namespace gloox
        */
       struct Email
       {
-        std::string userid;         /**< */
-        bool home;                  /**< */
-        bool work;                  /**< */
-        bool internet;              /**< */
-        bool pref;                  /**< */
-        bool x400;                  /**< */
+        std::string userid;         /**< Email address. */
+        bool home;                  /**< Whether this is a personal address. */
+        bool work;                  /**< Whether this is a work address. */
+        bool internet;              /**< Whether this is an internet address(?). */
+        bool pref;                  /**< Whether this is the preferred address. */
+        bool x400;                  /**< Whether this is an X.400 address. */
       };
 
       /**
@@ -110,20 +110,20 @@ namespace gloox
        */
       struct Telephone
       {
-        std::string number;         /**< */
-        bool home;                  /**< */
-        bool work;                  /**< */
-        bool voice;                 /**< */
-        bool fax;                   /**< */
-        bool pager;                 /**< */
-        bool msg;                   /**< */
-        bool cell;                  /**< */
-        bool video;                 /**< */
-        bool bbs;                   /**< */
-        bool modem;                 /**< */
-        bool isdn;                  /**< */
-        bool pcs;                   /**< */
-        bool pref;                  /**< */
+        std::string number;         /**< The phone number. */
+        bool home;                  /**< Whether this is a personal number. */
+        bool work;                  /**< Whether this is a work number. */
+        bool voice;                 /**< Whether this is a voice number. */
+        bool fax;                   /**< Whether this is a fax number. */
+        bool pager;                 /**< Whether this is a pager. */
+        bool msg;                   /**< MSG(?)*/
+        bool cell;                  /**< Whether this is a cell phone. */
+        bool video;                 /**< Whether this is a video chat(?). */
+        bool bbs;                   /**< Whether this is a BBS. */
+        bool modem;                 /**< Whether this is a modem. */
+        bool isdn;                  /**< Whether this is a ISDN line(?)*/
+        bool pcs;                   /**< PCS(?)*/
+        bool pref;                  /**< Whether this is the preferred number. */
       };
 
       /**
@@ -136,20 +136,20 @@ namespace gloox
        */
       struct Address
       {
-        std::string pobox;          /**< */
-        std::string extadd;         /**< */
-        std::string street;         /**< */
-        std::string locality;       /**< */
-        std::string region;         /**< */
-        std::string pcode;          /**< */
-        std::string ctry;           /**< */
-        bool home;                  /**< */
-        bool work;                  /**< */
-        bool postal;                /**< */
-        bool parcel;                /**< */
-        bool pref;                  /**< */
-        bool dom;                   /**< */
-        bool intl;                  /**< */
+        std::string pobox;          /**< Pobox. */
+        std::string extadd;         /**< (?) */
+        std::string street;         /**< Street. */
+        std::string locality;       /**< Locality. */
+        std::string region;         /**< Region. */
+        std::string pcode;          /**< Postal code. */
+        std::string ctry;           /**< Country. */
+        bool home;                  /**< Whether this is a personal address. */
+        bool work;                  /**< Whether this is a work address. */
+        bool postal;                /**< Whether this is a postal address(?). */
+        bool parcel;                /**< Whether this is a arcel address(?). */
+        bool pref;                  /**< Whether this is the preferred address. */
+        bool dom;                   /**< Whether this is a domestic(?) address. */
+        bool intl;                  /**< Whether this is an international(?) address. */
       };
 
       /**
@@ -157,14 +157,14 @@ namespace gloox
        */
       struct Label
       {
-        StringList lines;           /**< */
-        bool home;                  /**< */
-        bool work;                  /**< */
-        bool postal;                /**< */
-        bool parcel;                /**< */
-        bool pref;                  /**< */
-        bool dom;                   /**< */
-        bool intl;                  /**< */
+        StringList lines;           /**< A list of lines. */
+        bool home;                  /**< Whether this is a personal address. */
+        bool work;                  /**< Whether this is a work address. */
+        bool postal;                /**< Whether this is a postal address(?). */
+        bool parcel;                /**< Whether this is a arcel address(?). */
+        bool pref;                  /**< Whether this is the preferred address. */
+        bool dom;                   /**< Whether this is a domestic(?) address. */
+        bool intl;                  /**< Whether this is an international(?) address. */
       };
 
       /**
@@ -172,8 +172,8 @@ namespace gloox
        */
       struct Geo
       {
-        std::string latitude;       /**< */
-        std::string longitude;      /**< */
+        std::string latitude;       /**< Longitude. */
+        std::string longitude;      /**< Latitude. */
       };
 
       /**
@@ -181,8 +181,9 @@ namespace gloox
        */
       struct Org
       {
-        std::string name;           /**< */
-        StringList units;           /**< */
+        std::string name;           /**< The organizations name. */
+        StringList units;           /**< A list of units in the organization
+                                     * (the VCard's owner belongs to?). */
       };
 
       /**
@@ -190,9 +191,10 @@ namespace gloox
        */
       struct Photo
       {
-        std::string extval;         /**< */
-        std::string binval;         /**< */
-        std::string type;           /**< */
+        std::string extval;         /**< The photo is not stored inside the VCard. This is a hint (URL?)
+                                     * where to look for it. */
+        std::string binval;         /**< This is the photo (binary). */
+        std::string type;           /**< This is a hint at the mime-type. May be forged! */
       };
 
       /**
@@ -212,7 +214,7 @@ namespace gloox
 
       /**
        * Constructs a new VCard from a given Tag containing appropriate fields.
-       * @param vcard The vcard-tag.
+       * @param vcard The vCard-Tag.
        */
       VCard( Tag* vcard );
 
