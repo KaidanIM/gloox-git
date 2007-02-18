@@ -56,12 +56,13 @@ namespace gloox
     : m_connection( 0 ), m_disco( 0 ), m_namespace( ns ),
       m_xmllang( "en" ), m_server( server ),
       m_compression( true ), m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ),
+      m_availableSaslMechs( SaslMechAll ),
       m_statisticsHandler( 0 ), m_mucInvitationHandler( 0 ),
       m_messageSessionHandlerChat( 0 ), m_messageSessionHandlerGroupchat( 0 ),
       m_messageSessionHandlerHeadline( 0 ), m_messageSessionHandlerNormal( 0 ),
       m_parser( 0 ), m_authError( AuthErrorUndefined ), m_streamError( StreamErrorUndefined ),
-      m_streamErrorAppCondition( 0 ), m_proxyPort( 0 ), m_idCount( 0 ), m_autoMessageSession( false ),
-      m_fdRequested( false )
+      m_streamErrorAppCondition( 0 ), m_selectedSaslMech( SaslMechNone ),
+      m_proxyPort( 0 ), m_idCount( 0 ), m_autoMessageSession( false ), m_fdRequested( false )
   {
     init();
   }
@@ -71,20 +72,24 @@ namespace gloox
     : m_connection( 0 ), m_disco( 0 ), m_namespace( ns ), m_password( password ),
       m_xmllang( "en" ), m_server( server ),
       m_compression( true ), m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ),
+      m_availableSaslMechs( SaslMechAll ),
       m_statisticsHandler( 0 ), m_mucInvitationHandler( 0 ),
       m_messageSessionHandlerChat( 0 ), m_messageSessionHandlerGroupchat( 0 ),
       m_messageSessionHandlerHeadline( 0 ), m_messageSessionHandlerNormal( 0 ),
       m_parser( 0 ), m_authError( AuthErrorUndefined ), m_streamError( StreamErrorUndefined ),
-      m_streamErrorAppCondition( 0 ), m_proxyPort( 0 ), m_idCount( 0 ), m_autoMessageSession( false ),
-      m_fdRequested( false )
+      m_streamErrorAppCondition( 0 ), m_selectedSaslMech( SaslMechNone ),
+      m_proxyPort( 0 ), m_idCount( 0 ), m_autoMessageSession( false ), m_fdRequested( false )
   {
     init();
   }
 
   void ClientBase::init()
   {
-    m_disco = new Disco( this );
-    m_disco->setVersion( "based on gloox", GLOOX_VERSION );
+    if( !m_disco )
+    {
+      m_disco = new Disco( this );
+      m_disco->setVersion( "based on gloox", GLOOX_VERSION );
+    }
 
     m_stats.totalBytesSent = 0;
     m_stats.totalBytesReceived = 0;
@@ -257,8 +262,8 @@ namespace gloox
   void ClientBase::header()
   {
 #ifdef _WIN32_WCE
-	std::string head = "<?xml version='1.0' ?>";
-	head += "<stream:stream to='" + m_jid.server()+ "' xmlns='" + m_namespace + "' ";
+    std::string head = "<?xml version='1.0' ?>";
+    head += "<stream:stream to='" + m_jid.server()+ "' xmlns='" + m_namespace + "' ";
     head += "xmlns:stream='http://etherx.jabber.org/streams'  xml:lang='" + m_xmllang + "' ";
     head += "version='1.0'>";
     send( head );
@@ -300,17 +305,19 @@ namespace gloox
   }
 #endif
 
-  void ClientBase::startSASL( SaslMechanisms type )
+  void ClientBase::startSASL( SaslMechanism type )
   {
+    m_selectedSaslMech = type;
+
     Tag *a = new Tag( "auth" );
     a->addAttribute( "xmlns", XMLNS_STREAM_SASL );
 
     switch( type )
     {
-      case SaslDigestMd5:
+      case SaslMechDigestMd5:
         a->addAttribute( "mechanism", "DIGEST-MD5" );
         break;
-      case SaslPlain:
+      case SaslMechPlain:
       {
         a->addAttribute( "mechanism", "PLAIN" );
 
@@ -334,16 +341,37 @@ namespace gloox
         free( tmp );
         break;
       }
-      case SaslAnonymous:
+      case SaslMechAnonymous:
         a->addAttribute( "mechanism", "ANONYMOUS" );
         a->setCData( getID() );
         break;
-      case SaslExternal:
+      case SaslMechExternal:
         a->addAttribute( "mechanism", "EXTERNAL" );
         if( m_authzid.empty() )
           a->setCData( Base64::encode64( m_jid.bare() ) );
         else
           a->setCData( Base64::encode64( m_authzid.bare() ) );
+        break;
+      case SaslMechGssapi:
+#ifdef _WIN32
+        a->addAttribute( "mechanism", "GSSAPI" );
+// The client calls GSS_Init_sec_context, passing in 0 for
+// input_context_handle (initially) and a targ_name equal to output_name
+// from GSS_Import_Name called with input_name_type of
+// GSS_C_NT_HOSTBASED_SERVICE and input_name_string of
+// "service@hostname" where "service" is the service name specified in
+// the protocol's profile, and "hostname" is the fully qualified host
+// name of the server.  The client then responds with the resulting
+// output_token.
+        std::string token;
+        a->setCData( Base64::encode64( token ) );
+//         etc... see gssapi-sasl-draft.txt
+#else
+        logInstance().log( LogLevelError, LogAreaClassClientbase,
+                    "GSSAPI is not supported on this platform. You should never see this." );
+#endif
+        break;
+      default:
         break;
     }
 
@@ -352,100 +380,119 @@ namespace gloox
 
   void ClientBase::processSASLChallenge( const std::string& challenge )
   {
-    Tag *t;
-    std::string decoded, nonce, realm, response;
-    decoded = Base64::decode64( challenge.c_str() );
+    Tag *t = new Tag( "response" );
+    t->addAttribute( "xmlns", XMLNS_STREAM_SASL );
 
-    if( decoded.substr( 0, 7 ) == "rspauth" )
+    const std::string decoded = Base64::decode64( challenge );
+
+    switch( m_selectedSaslMech )
     {
-      t = new Tag( "response" );
-    }
-    else
-    {
-      size_t r_pos = decoded.find( "realm=" );
-      if( r_pos != std::string::npos )
+      case SaslMechPlain:
+        if( decoded.substr( 0, 7 ) != "rspauth" )
+        {
+          logInstance().log( LogLevelError, LogAreaClassClientbase,
+                      "Received unrecognized SASLPlain challenge." );
+        }
+        break;
+      case SaslMechDigestMd5:
       {
-        size_t r_end = decoded.find( "\"", r_pos + 7 );
-        realm = decoded.substr( r_pos + 7, r_end - (r_pos + 7 ) );
-      }
-      else
-        realm = m_jid.server();
+        std::string realm;
+        size_t r_pos = decoded.find( "realm=" );
+        if( r_pos != std::string::npos )
+        {
+          size_t r_end = decoded.find( "\"", r_pos + 7 );
+          realm = decoded.substr( r_pos + 7, r_end - (r_pos + 7 ) );
+        }
+        else
+          realm = m_jid.server();
 
-      size_t n_pos = decoded.find( "nonce=" );
-      if( n_pos != std::string::npos )
-      {
-        size_t n_end = decoded.find( "\"", n_pos + 7 );
-        while( decoded.substr( n_end-1, 1 ) == "\\" )
-          n_end = decoded.find( "\"", n_end + 1 );
-        nonce = decoded.substr( n_pos + 7, n_end - ( n_pos + 7 ) );
-      }
-      else
-      {
-        return;
-      }
+        std::string nonce;
+        size_t n_pos = decoded.find( "nonce=" );
+        if( n_pos != std::string::npos )
+        {
+          size_t n_end = decoded.find( "\"", n_pos + 7 );
+          while( decoded.substr( n_end-1, 1 ) == "\\" )
+            n_end = decoded.find( "\"", n_end + 1 );
+          nonce = decoded.substr( n_pos + 7, n_end - ( n_pos + 7 ) );
+        }
+        else
+        {
+          return;
+        }
 
-	  std::string cnonce;
+        std::string cnonce;
 #ifdef _WIN32_WCE
-	  char cn[4*8+1];
-	  for( int i = 0; i < 4; ++i )
-	    sprintf( cn + i*8, "%08x", rand() );
-	  cnonce.assign( cn, 4*8 );
+        char cn[4*8+1];
+        for( int i = 0; i < 4; ++i )
+          sprintf( cn + i*8, "%08x", rand() );
+        cnonce.assign( cn, 4*8 );
 #else
-      std::ostringstream cn;
-      for( int i = 0; i < 4; ++i )
-        cn << std::hex << std::setw( 8 ) << std::setfill( '0' ) << rand();
-	  cnonce = cn.str();
+        std::ostringstream cn;
+        for( int i = 0; i < 4; ++i )
+          cn << std::hex << std::setw( 8 ) << std::setfill( '0' ) << rand();
+        cnonce = cn.str();
 #endif
 
-      std::string a1;
-      std::string a2;
-      std::string a1_h;
-      std::string response_value;
-      MD5 md5;
-      md5.feed( m_jid.username() );
-      md5.feed( ":" );
-      md5.feed( realm );
-      md5.feed( ":" );
-      md5.feed( m_password );
-      md5.finalize();
-      a1_h = md5.binary();
-      md5.reset();
-      md5.feed( a1_h );
-      md5.feed( ":" );
-      md5.feed( nonce );
-      md5.feed( ":" );
-      md5.feed( cnonce );
-      md5.finalize();
-      a1  = md5.hex();
-      md5.reset();
-      md5.feed( "AUTHENTICATE:xmpp/" );
-      md5.feed( m_jid.server() );
-      md5.finalize();
-      a2 = md5.hex();
-      md5.reset();
-      md5.feed( a1 );
-      md5.feed( ":" );
-      md5.feed( nonce );
-      md5.feed( ":00000001:" );
-      md5.feed( cnonce );
-      md5.feed( ":auth:" );
-      md5.feed( a2 );
-      md5.finalize();
-      response_value = md5.hex();
+        std::string a1;
+        std::string a2;
+        std::string a1_h;
+        std::string response_value;
+        MD5 md5;
+        md5.feed( m_jid.username() );
+        md5.feed( ":" );
+        md5.feed( realm );
+        md5.feed( ":" );
+        md5.feed( m_password );
+        md5.finalize();
+        a1_h = md5.binary();
+        md5.reset();
+        md5.feed( a1_h );
+        md5.feed( ":" );
+        md5.feed( nonce );
+        md5.feed( ":" );
+        md5.feed( cnonce );
+        md5.finalize();
+        a1  = md5.hex();
+        md5.reset();
+        md5.feed( "AUTHENTICATE:xmpp/" );
+        md5.feed( m_jid.server() );
+        md5.finalize();
+        a2 = md5.hex();
+        md5.reset();
+        md5.feed( a1 );
+        md5.feed( ":" );
+        md5.feed( nonce );
+        md5.feed( ":00000001:" );
+        md5.feed( cnonce );
+        md5.feed( ":auth:" );
+        md5.feed( a2 );
+        md5.finalize();
+        response_value = md5.hex();
 
-      std::string response = "username=\"" + m_jid.username() + "\",realm=\"" + realm;
-      response += "\",nonce=\""+ nonce + "\",cnonce=\"";
-      response += cnonce;
-      response += "\",nc=00000001,qop=auth,digest-uri=\"xmpp/" + m_jid.server() + "\",response=";
-      response += response_value;
-      response += ",charset=utf-8";
+        std::string response = "username=\"" + m_jid.username() + "\",realm=\"" + realm;
+        response += "\",nonce=\""+ nonce + "\",cnonce=\"" + cnonce;
+        response += "\",nc=00000001,qop=auth,digest-uri=\"xmpp/" + m_jid.server() + "\",response=";
+        response += response_value;
+        response += ",charset=utf-8";
 
-      if( !m_authzid.empty() )
-        response += ",authzid=" + m_authzid.bare();
+        if( !m_authzid.empty() )
+          response += ",authzid=" + m_authzid.bare();
 
-      t = new Tag( "response", Base64::encode64( response ) );
+        t->setCData( Base64::encode64( response ) );
+      }
+      case SaslMechGssapi:
+#ifdef _WIN32
+        // see gssapi-sasl-draft.txt
+#else
+        m_logInstance.log( LogLevelError, LogAreaClassClientbase,
+                           "Huh, received GSSAPI challenge?! This should have never happened!" );
+#endif
+        break;
+      default:
+        // should never happen.
+        break;
     }
-    t->addAttribute( "xmlns", XMLNS_STREAM_SASL );
+
     send( t );
   }
 
@@ -560,11 +607,11 @@ namespace gloox
   const std::string ClientBase::getID()
   {
 #ifdef _WIN32_WCE
-	std::string ret;
-	char r[8+1];
-	sprintf( r, "%08x", rand() );
-	ret.assign( r, 8 );
-	return std::string( "uid" ) + ret;
+    std::string ret;
+    char r[8+1];
+    sprintf( r, "%08x", rand() );
+    ret.assign( r, 8 );
+    return std::string( "uid" ) + ret;
 #else
     std::ostringstream oss;
     oss << ++m_idCount;
@@ -1059,7 +1106,7 @@ namespace gloox
 
   void ClientBase::cleanup()
   {
-
+    init();
   }
 
 }
