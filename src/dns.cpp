@@ -206,16 +206,11 @@ namespace gloox
                                     const std::string& domain, const LogSink& logInstance )
   {
     HostMap server;
-    struct servent *servent;
 
-    if( ( servent = getservbyname( service.c_str(), proto.c_str() ) ) == 0 )
-    {
-      server[domain] = 0;
-      return server;
-    }
+    logInstance.log( LogLevelWarning, LogAreaClassDns, "note: using default port." );
 
     if( !domain.empty() )
-      server[domain] = ntohs( servent->s_port );
+      server[domain] = XMPP_PORT;
 
     return server;
   }
@@ -226,19 +221,13 @@ namespace gloox
     if( hosts.size() == 0 )
       return -ConnDnsError;
 
-    int ret = 0;
     HostMap::const_iterator it = hosts.begin();
     for( ; it != hosts.end(); ++it )
     {
       int fd = DNS::connect( (*it).first, (*it).second, logInstance );
       if( fd >= 0 )
         return fd;
-      else
-        ret = fd;
     }
-
-    if( ret )
-      return ret;
 
     return -ConnConnectionRefused;
   }
@@ -289,12 +278,13 @@ namespace gloox
 #ifndef _WIN32_WCE
     std::ostringstream oss;
 #endif
+
     memset( target.sin_zero, '\0', 8 );
     if( ::connect( fd, (struct sockaddr *)&target, sizeof( struct sockaddr ) ) == 0 )
     {
 #ifndef _WIN32_WCE
       oss << "connecting to " << domain.c_str()
-           << " (" << inet_ntoa( target.sin_addr ) << ":" << port << ")";
+          << " (" << inet_ntoa( target.sin_addr ) << ":" << port << ")";
       logInstance.log( LogLevelDebug, LogAreaClassDns, oss.str() );
 #endif
       return fd;
@@ -321,4 +311,5 @@ namespace gloox
     WSACleanup();
 #endif
   }
+
 }
