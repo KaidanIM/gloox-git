@@ -137,7 +137,7 @@ namespace gloox
       struct Address
       {
         std::string pobox;          /**< Pobox. */
-        std::string extadd;         /**< (?) */
+        std::string extadd;         /**< Extended address. */
         std::string street;         /**< Street. */
         std::string locality;       /**< Locality. */
         std::string region;         /**< Region. */
@@ -214,7 +214,7 @@ namespace gloox
 
       /**
        * Constructs a new VCard from a given Tag containing appropriate fields.
-       * @param vcard The vCard-Tag.
+       * @param vcard The VCard-Tag.
        */
       VCard( Tag* vcard );
 
@@ -468,7 +468,7 @@ namespace gloox
       /**
        * Adds an email address.
        * @param userid The email address.
-       * @param type Bit-wise ORed @c AddressType.
+       * @param type Bit-wise ORed @ref AddressType.
        */
       void addEmail( const std::string& userid, int type );
 
@@ -481,13 +481,13 @@ namespace gloox
       /**
        * Adds an address.
        * @param pobox A PO Box.
-       * @param extadd Some extra field.
+       * @param extadd Some extra field (extended address).
        * @param street The street.
        * @param locality The village, city, etc.
        * @param region The region.
        * @param pcode The post code.
        * @param ctry The country.
-       * @param type Bit-wise ORed @c AddressType.
+       * @param type Bit-wise ORed @ref AddressType.
        */
       void addAddress( const std::string& pobox, const std::string& extadd,
                        const std::string& street, const std::string& locality,
@@ -516,7 +516,7 @@ namespace gloox
       /**
        * Adds a telephone number.
        * @param number The telephone number.
-       * @param type Bit-wise ORed @c AddressType.
+       * @param type Bit-wise ORed @ref AddressType.
        */
       void addTelephone( const std::string& number, int type );
 
