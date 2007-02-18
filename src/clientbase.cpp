@@ -353,6 +353,7 @@ namespace gloox
           a->setCData( Base64::encode64( m_authzid.bare() ) );
         break;
       case SaslMechGssapi:
+      {
 #ifdef _WIN32
         a->addAttribute( "mechanism", "GSSAPI" );
 // The client calls GSS_Init_sec_context, passing in 0 for
@@ -371,6 +372,7 @@ namespace gloox
                     "GSSAPI is not supported on this platform. You should never see this." );
 #endif
         break;
+      }
       default:
         break;
     }
