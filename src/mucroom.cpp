@@ -1002,6 +1002,9 @@ namespace gloox
 
   void MUCRoom::handleDiscoItemsResult( Stanza *stanza, int context )
   {
+    if( !m_roomHandler )
+      return;
+
     switch( context )
     {
       case GetRoomItems:
@@ -1019,8 +1022,7 @@ namespace gloox
               items[(*it)->findAttribute( "name" )] = (*it)->findAttribute( "jid" );
             }
           }
-          if( m_roomHandler )
-            m_roomHandler->handleMUCItems( this, items );
+          m_roomHandler->handleMUCItems( this, items );
         }
         break;
       }
