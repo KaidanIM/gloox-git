@@ -916,7 +916,7 @@ printf( "maximumMessage: %ld\n", m_streamSizes.cbMaximumMessage );
   {
     m_state = StateConnecting;
 
-	bool useProxy = false;
+    bool useProxy = false;
 #ifndef _WIN32_WCE
     useProxy = (!m_proxyHost.empty() && m_proxyPort != 0);
 #endif
@@ -963,7 +963,7 @@ printf( "maximumMessage: %ld\n", m_streamSizes.cbMaximumMessage );
       }
       else
 #endif
-        m_state = StateConnected;
+      m_state = StateConnected;
     }
 
     m_cancel = false;
