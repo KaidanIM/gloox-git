@@ -415,20 +415,32 @@ namespace gloox
   {
     StreamFeatureBind             =    1, /**< The server supports resource binding. */
     StreamFeatureSession          =    2, /**< The server supports sessions. */
-    StreamFeatureSaslDigestMd5    =    4, /**< The server supports SASL DIGEST-MD5 mechanism. */
-    StreamFeatureSaslPlain        =    8, /**< The server supports SASL PLAIN mechanism. */
-    StreamFeatureSaslAnonymous    =   16, /**< The server supports SASL ANONYMOUS mechanism. */
-    StreamFeatureSaslExternal     =   32, /**< The server supports SASL EXTERNAL mechanism. */
-    StreamFeatureStartTls         =   64, /**< The server supports &lt;starttls&gt;. */
-    StreamFeatureIqRegister       =  128, /**< The server supports XEP-0077 (In-Band
+    StreamFeatureStartTls         =    8, /**< The server supports &lt;starttls&gt;. */
+    StreamFeatureIqRegister       =   16, /**< The server supports XEP-0077 (In-Band
                                            * Registration). */
-    StreamFeatureIqAuth           =  256, /**< The server supports XEP-0078 (Non-SASL
+    StreamFeatureIqAuth           =   32, /**< The server supports XEP-0078 (Non-SASL
                                            * Authentication). */
-    StreamFeatureAck              =  512, /**< The server supports XEPAck (experimental). */
-    StreamFeatureCompressZlib     = 1024, /**< The server supports XEP-0138 (Stream
-                                           * Compression) (Zlib)*/
-    StreamFeatureCompressDclz     = 2048  /**< The server supports XEP-0138 (Stream
-                                           * Compression) (LZW/DCLZ)*/
+    StreamFeatureCompressZlib     =   64, /**< The server supports XEP-0138 (Stream
+                                           * Compression) (Zlib). */
+    StreamFeatureCompressDclz     =  128  /**< The server supports XEP-0138 (Stream
+                                           * Compression) (LZW/DCLZ). */
+    // SASLMechanism below must be adjusted accordingly.
+  };
+
+  /**
+   * Supported SASL mechanisms.
+   */
+  // must be adjusted with changes to StreamFeature enum above
+  enum SaslMechanism
+  {
+    SaslMechNone           =     0, /**< Invalid SASL Mechanism. */
+    SaslMechDigestMd5      =   256, /**< SASL Digest-MD5 according to RFC 2831. */
+    SaslMechPlain          =   512, /**< SASL PLAIN according to RFC 2595 Section 6. */
+    SaslMechAnonymous      =  1024, /**< SASL ANONYMOUS according to draft-ietf-sasl-anon-05.txt/
+                                     * RFC 2245 Section 6. */
+    SaslMechExternal       =  2048, /**< SASL EXTERNAL according to RFC 2222 Section 7.4. */
+    SaslMechGssapi         =  4096, /**< SASL GSSAPI (Win32 only). */
+    SaslMechAll            = 65536  /**< Includes all supported SASL mechanisms. */
   };
 
   /**
