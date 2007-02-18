@@ -212,7 +212,7 @@ namespace gloox
       /**
        * This is a temporary hack to enforce Non-SASL login. You should not need to use it.
        * @param force Whether to force non-SASL auth. Default @b true.
-       * @deprecated
+       * @deprecated Please update the server to properly support SASL instead.
        */
       GLOOX_DEPRECATED void setForceNonSasl( bool force = true ) { m_forceNonSasl = force; };
 

@@ -294,6 +294,18 @@ namespace gloox
       void setAuthzid( const JID& authzid ) { m_authzid = authzid; };
 
       /**
+       * Use this function to limit SASL mechanisms gloox can use. By default, all
+       * supported mechanisms are allowed. To exclude one (or more) mechanisms, remove
+       * it from SaslMechAll like so:
+       * @code
+       * int mymechs = SaslMechAll ^ SaslMechDigestMd5;
+       * @endcode
+       * @param mechanisms Bitwise ORed @ref SaslMechanism.
+       * @since 0.9
+       */
+      void setSASLMechanisms( int mechanisms ) { m_availableSaslMechs = mechanisms; };
+
+      /**
        * Registers @c cl as object that receives connection notifications.
        * @param cl The object to receive connection notifications.
        */
@@ -522,18 +534,6 @@ namespace gloox
       virtual void handleTag( Tag *tag );
 
     protected:
-      /**
-       * Supported SASL mechanisms.
-       */
-      enum SaslMechanisms
-      {
-        SaslDigestMd5,              /**< SASL Digest-MD5 according to RFC 2831. */
-        SaslPlain,                  /**< SASL PLAIN according to RFC 2595 Section 6. */
-        SaslAnonymous,              /**< SASL ANONYMOUS according to draft-ietf-sasl-anon-05.txt/
-                                     * RFC 2245 Section 6. */
-        SaslExternal                /**< SASL EXTERNAL according to RFC 2222 Section 7.4. */
-      };
-
       void notifyOnResourceBindError( ResourceBindError error );
       void notifyOnSessionCreateError( SessionCreateError error );
       bool notifyOnTLSConnect( const CertInfo& info );
@@ -544,7 +544,7 @@ namespace gloox
       void setAuthFailure( AuthenticationError e ) { m_authError = e; };
       virtual bool checkStreamVersion( const std::string& version );
 
-      void startSASL( SaslMechanisms type );
+      void startSASL( SaslMechanism type );
       void processSASLChallenge( const std::string& challenge );
       void processSASLError( Stanza *stanza );
       void startTls();
@@ -568,6 +568,7 @@ namespace gloox
       bool m_tls;
       int m_port;
 
+      int m_availableSaslMechs;
 
     private:
       virtual void handleStartNode() = 0;
@@ -641,6 +642,8 @@ namespace gloox
       Tag *m_streamErrorAppCondition;
 
       StatisticsStruct m_stats;
+
+      SaslMechanism m_selectedSaslMech;
 
       std::string m_proxyHost;
       std::string m_proxyUser;

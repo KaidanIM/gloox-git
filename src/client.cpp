@@ -139,13 +139,15 @@ namespace gloox
         }
         else if( m_doAuth && !username().empty() && !password().empty() )
         {
-          if( m_streamFeatures & StreamFeatureSaslDigestMd5 && !m_forceNonSasl )
+          if( m_streamFeatures & SaslMechDigestMd5 && m_availableSaslMechs & SaslMechDigestMd5
+              && !m_forceNonSasl )
           {
-            startSASL( SaslDigestMd5 );
+            startSASL( SaslMechDigestMd5 );
           }
-          else if( m_streamFeatures & StreamFeatureSaslPlain && !m_forceNonSasl )
+          else if( m_streamFeatures & SaslMechPlain && m_availableSaslMechs & SaslMechPlain
+                   && !m_forceNonSasl )
           {
-            startSASL( SaslPlain );
+            startSASL( SaslMechPlain );
           }
           else if( m_streamFeatures & StreamFeatureIqAuth || m_forceNonSasl )
           {
@@ -159,13 +161,20 @@ namespace gloox
           }
         }
         else if( m_doAuth && !m_clientCerts.empty() && !m_clientKey.empty()
-                 && m_streamFeatures & StreamFeatureSaslExternal )
+                 && m_streamFeatures & SaslMechExternal && m_availableSaslMechs & SaslMechExternal )
         {
-          startSASL( SaslExternal );
+          startSASL( SaslMechExternal );
         }
-        else if( m_doAuth && m_streamFeatures & StreamFeatureSaslAnonymous )
+#ifdef _WIN32
+        else if( m_doAuth && m_streamFeatures & SaslMechGssapi && m_availableSaslMechs & SaslMechGssapi )
         {
-          startSASL( SaslAnonymous );
+          startSASL( SaslMechGssapi );
+        }
+#endif
+        else if( m_doAuth && m_streamFeatures & SaslMechAnonymous
+                 && m_availableSaslMechs & SaslMechAnonymous )
+        {
+          startSASL( SaslMechAnonymous );
         }
         else
         {
@@ -296,9 +305,6 @@ namespace gloox
     if( stanza->hasChild( "register", "xmlns", XMLNS_STREAM_IQREGISTER ) )
       features |= StreamFeatureIqRegister;
 
-    if( stanza->hasChild( "ack", "xmlns", XMLNS_STREAM_ACK ) )
-      features |= StreamFeatureAck;
-
     if( stanza->hasChild( "compression", "xmlns", XMLNS_STREAM_COMPRESS ) )
       features |= getCompressionMethods( stanza->findChild( "compression" ) );
 
@@ -310,19 +316,22 @@ namespace gloox
 
   int Client::getSaslMechs( Tag *tag )
   {
-    int mechs = 0;
+    int mechs = SaslMechNone;
 
     if( tag->hasChildWithCData( "mechanism", "DIGEST-MD5" ) )
-      mechs |= StreamFeatureSaslDigestMd5;
+      mechs |= SaslMechDigestMd5;
 
     if( tag->hasChildWithCData( "mechanism", "PLAIN" ) )
-      mechs |= StreamFeatureSaslPlain;
+      mechs |= SaslMechPlain;
 
     if( tag->hasChildWithCData( "mechanism", "ANONYMOUS" ) )
-      mechs |= StreamFeatureSaslAnonymous;
+      mechs |= SaslMechAnonymous;
 
     if( tag->hasChildWithCData( "mechanism", "EXTERNAL" ) )
-      mechs |= StreamFeatureSaslExternal;
+      mechs |= SaslMechExternal;
+
+    if( tag->hasChildWithCData( "mechanism", "GSSAPI" ) )
+      mechs |= SaslMechGssapi;
 
     return mechs;
   }
