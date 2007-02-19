@@ -21,7 +21,10 @@
 #endif
 
 #include "clientbase.h"
-#include "connection.h"
+#include "connectionbase.h"
+#include "tlsbase.h"
+#include "compressionbase.h"
+#include "connectiontcp.h"
 #include "disco.h"
 #include "messagesessionhandler.h"
 #include "parser.h"
@@ -39,6 +42,10 @@
 #include "jid.h"
 #include "base64.h"
 #include "md5.h"
+#include "tlsgnutls.h"
+#include "tlsopenssl.h"
+#include "tlsschannel.h"
+#include "compressionzlib.h"
 
 #include <string>
 #include <map>
@@ -54,8 +61,8 @@ namespace gloox
 
   ClientBase::ClientBase( const std::string& ns, const std::string& server, int port )
     : m_connection( 0 ), m_disco( 0 ), m_namespace( ns ),
-      m_xmllang( "en" ), m_server( server ),
-      m_compression( true ), m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ),
+      m_xmllang( "en" ), m_server( server ), m_compressionActive( false ), m_encryptionActive( false ),
+      m_compress( true ), m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ),
       m_availableSaslMechs( SaslMechAll ),
       m_statisticsHandler( 0 ), m_mucInvitationHandler( 0 ),
       m_messageSessionHandlerChat( 0 ), m_messageSessionHandlerGroupchat( 0 ),
@@ -70,8 +77,8 @@ namespace gloox
   ClientBase::ClientBase( const std::string& ns, const std::string& password,
                           const std::string& server, int port )
     : m_connection( 0 ), m_disco( 0 ), m_namespace( ns ), m_password( password ),
-      m_xmllang( "en" ), m_server( server ),
-      m_compression( true ), m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ),
+      m_xmllang( "en" ), m_server( server ), m_compressionActive( false ), m_encryptionActive( false ),
+      m_compress( true ), m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ),
       m_availableSaslMechs( SaslMechAll ),
       m_statisticsHandler( 0 ), m_mucInvitationHandler( 0 ),
       m_messageSessionHandlerChat( 0 ), m_messageSessionHandlerGroupchat( 0 ),
@@ -114,6 +121,8 @@ namespace gloox
   ClientBase::~ClientBase()
   {
     delete m_connection;
+    delete m_encryption;
+    delete m_compression;
     delete m_parser;
     delete m_disco;
   }
@@ -148,17 +157,22 @@ namespace gloox
       m_parser = new Parser( this );
 
     if( !m_connection )
-      m_connection = new Connection( m_parser, m_logInstance, m_server, m_port,
-                                     m_proxyHost, m_proxyPort, m_proxyUser, m_proxyPassword );
-
-#ifdef HAVE_TLS
-    m_connection->setCACerts( m_cacerts );
-    if( !m_clientKey.empty() && !m_clientCerts.empty() )
-      m_connection->setClientCert( m_clientKey, m_clientCerts );
-#endif
+      m_connection = new ConnectionTCP( this, m_logInstance, m_server, m_port );
 
     if( m_connection->state() >= StateConnecting )
       return true;
+
+    if( !m_encryption )
+      m_encryption = getDefaultEncryption();
+
+    if( m_encryption )
+    {
+      m_encryption->setCACerts( m_cacerts );
+      m_encryption->setClientCert( m_clientKey, m_clientCerts );
+    }
+
+    if( !m_compression )
+      m_compression = getDefaultCompression();
 
     ConnectionError ret = m_connection->connect();
     if( ret == ConnNoError )
@@ -247,12 +261,65 @@ namespace gloox
     delete stanza;
   }
 
+  void ClientBase::handleCompressedData( const std::string& data )
+  {
+    if( m_encryption && m_encryptionActive )
+      m_encryption->encrypt( data );
+    else if( m_connection )
+      m_connection->send( data );
+    else
+      m_logInstance.log( LogLevelError, LogAreaClassClientbase, "Compression finished, but chain broken" );
+  }
+
+  void ClientBase::handleDecompressedData( const std::string& data )
+  {
+    if( m_parser )
+      m_parser->feed( data );
+    else
+      m_logInstance.log( LogLevelError, LogAreaClassClientbase, "Decompression finished, but chain broken" );
+  }
+
+  void ClientBase::handleEncryptedData( const std::string& data )
+  {
+    if( m_connection )
+      m_connection->send( data );
+    else
+      m_logInstance.log( LogLevelError, LogAreaClassClientbase, "Encryption finished, but chain broken" );
+  }
+
+  void ClientBase::handleDecryptedData( const std::string& data )
+  {
+    if( m_compression && m_compressionActive )
+      m_compression->decompress( data );
+    else if( m_parser )
+      m_parser->feed( data );
+    else
+      m_logInstance.log( LogLevelError, LogAreaClassClientbase, "Decryption finished, but chain broken" );
+  }
+
+  void ClientBase::handleReceivedData( const std::string& data )
+  {
+    if( m_encryption && m_encryptionActive )
+      m_encryption->decrypt( data );
+    else if( m_compression && m_compressionActive )
+      m_compression->decompress( data );
+    else if( m_parser )
+      m_parser->feed( data );
+    else
+      m_logInstance.log( LogLevelError, LogAreaClassClientbase, "Received data, but chain broken" );
+  }
+
+  void ClientBase::handleDisconnect( ConnectionError reason )
+  {
+    // ???
+  }
+
   void ClientBase::disconnect( ConnectionError reason )
   {
     if( m_connection )
     {
       if( reason != ConnStreamError )
-       send ( "</stream:stream>" );
+        send ( "</stream:stream>" );
       if( reason == ConnUserDisconnected )
         m_streamError = StreamErrorUndefined;
       m_connection->disconnect( reason );
@@ -386,18 +453,16 @@ namespace gloox
     t->addAttribute( "xmlns", XMLNS_STREAM_SASL );
 
     const std::string decoded = Base64::decode64( challenge );
+    printf( "decoded challenge: %s\n", decoded.c_str() );
 
     switch( m_selectedSaslMech )
     {
-      case SaslMechPlain:
-        if( decoded.substr( 0, 7 ) != "rspauth" )
-        {
-          logInstance().log( LogLevelError, LogAreaClassClientbase,
-                      "Received unrecognized SASLPlain challenge." );
-        }
-        break;
       case SaslMechDigestMd5:
       {
+        if( decoded.substr( 0, 7 ) == "rspauth" )
+        {
+          break;
+        }
         std::string realm;
         size_t r_pos = decoded.find( "realm=" );
         if( r_pos != std::string::npos )
@@ -481,6 +546,8 @@ namespace gloox
           response += ",authzid=" + m_authzid.bare();
 
         t->setCData( Base64::encode64( response ) );
+
+        break;
       }
       case SaslMechGssapi:
 #ifdef _WIN32
@@ -560,10 +627,12 @@ namespace gloox
   {
     if( m_connection && m_connection->state() == StateConnected )
     {
-      if( m_connection->send( xml ) == false )
-        disconnect( ConnStreamError );
+      if( m_compression && m_compressionActive )
+        m_compression->compress( xml );
+      else if( m_encryption && m_encryptionActive )
+        m_encryption->encrypt( xml );
       else
-        m_stats.totalBytesSent += xml.length();
+        m_connection->send( xml );
 
       logInstance().log( LogLevelDebug, LogAreaXmlOutgoing, xml );
     }
@@ -571,11 +640,11 @@ namespace gloox
 
   StatisticsStruct ClientBase::getStatistics()
   {
-    if( m_connection )
-      m_connection->getStatistics( m_stats.totalBytesReceived, m_stats.totalBytesSent,
-                                   m_stats.compressedBytesReceived, m_stats.compressedBytesSent,
-                                   m_stats.uncompressedBytesReceived, m_stats.uncompressedBytesSent,
-                                   m_stats.compression );
+//     if( m_connection )
+//       m_connection->getStatistics( m_stats.totalBytesReceived, m_stats.totalBytesSent,
+//                                    m_stats.compressedBytesReceived, m_stats.compressedBytesSent,
+//                                    m_stats.uncompressedBytesReceived, m_stats.uncompressedBytesSent,
+//                                    m_stats.compression );
     return m_stats;
   }
 
@@ -744,16 +813,16 @@ namespace gloox
       m_messageSessionHandlerHeadline = msh;
   }
 
-  int ClientBase::fileDescriptor()
-  {
-    if( m_connection )
-    {
-      m_fdRequested = true;
-      return m_connection->fileDescriptor();
-    }
-    else
-      return -1;
-  }
+//   int ClientBase::fileDescriptor()
+//   {
+//     if( m_connection )
+//     {
+//       m_fdRequested = true;
+//       return m_connection->fileDescriptor();
+//     }
+//     else
+//       return -1;
+//   }
 
   void ClientBase::registerPresenceHandler( PresenceHandler *ph )
   {
@@ -1109,6 +1178,28 @@ namespace gloox
   void ClientBase::cleanup()
   {
     init();
+  }
+
+  CompressionBase* ClientBase::getDefaultCompression()
+  {
+#ifdef HAVE_ZLIB
+    return new CompressionZlib( this );
+#else
+    return 0;
+#endif
+  }
+
+  TLSBase* ClientBase::getDefaultEncryption()
+  {
+#ifdef USE_GNUTLS
+    return 0;/*new GnuTLS( this );*/
+#elif USE_OPENSSL
+    return new OpenSSL( this );
+#elif USE_WINTLS
+    return new SChannel( this );
+#else
+    return 0;
+#endif
   }
 
 }

@@ -440,7 +440,7 @@ namespace gloox
                                      * RFC 2245 Section 6. */
     SaslMechExternal       =  2048, /**< SASL EXTERNAL according to RFC 2222 Section 7.4. */
     SaslMechGssapi         =  4096, /**< SASL GSSAPI (Win32 only). */
-    SaslMechAll            = 65536  /**< Includes all supported SASL mechanisms. */
+    SaslMechAll            = 65535  /**< Includes all supported SASL mechanisms. */
   };
 
   /**

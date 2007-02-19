@@ -9,18 +9,19 @@ AM_CPPFLAGS = -Wall -pedantic -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare
 
 lib_LTLIBRARIES = libgloox.la
 
-libgloox_la_SOURCES = jid.cpp parser.cpp connection.cpp clientbase.cpp tag.cpp stanza.cpp logsink.cpp \
+libgloox_la_SOURCES = jid.cpp parser.cpp connectiontcp.cpp clientbase.cpp tag.cpp stanza.cpp logsink.cpp \
                         dns.cpp prep.cpp base64.cpp client.cpp component.cpp \
                         disco.cpp adhoc.cpp privatexml.cpp registration.cpp \
                         nonsaslauth.cpp rosteritem.cpp rostermanager.cpp privacyitem.cpp \
                         bookmarkstorage.cpp annotations.cpp privacymanager.cpp lastactivity.cpp \
                         flexoff.cpp dataform.cpp dataformfield.cpp dataformbase.cpp messagesession.cpp \
-                        messageeventfilter.cpp chatstatefilter.cpp main.cpp compression.cpp \
+                        messageeventfilter.cpp chatstatefilter.cpp main.cpp \
                         inbandbytestream.cpp inbandbytestreammanager.cpp messagefilter.cpp vcard.cpp \
                         vcardmanager.cpp md5.cpp sha.cpp search.cpp dataformreported.cpp dataformitem.cpp \
                         mucroom.cpp mucmessagesession.cpp oob.cpp vcardupdate.cpp stanzaextensionfactory.cpp \
                         delayeddelivery.cpp xdelayeddelivery.cpp gpgencrypted.cpp gpgsigned.cpp \
-                        uniquemucroom.cpp instantmucroom.cpp
+                        uniquemucroom.cpp instantmucroom.cpp compressionzlib.cpp
+#  gnutls.cpp openssl.cpp schannel.cpp
 
 libgloox_la_LDFLAGS = -version-info 7:0:0 -no-undefined -no-allow-shlib-undefined
 libgloox_la_LIBADD =
@@ -54,10 +55,12 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             vcardupdate.h             delayeddelivery.h       base64.h \
                             xdelayeddelivery.h        gpgencrypted.h          gpgsigned.h \
                             md5.h                     sha.h                   uniquemucroom.h \
-                            instantmucroom.h
+                            instantmucroom.h          tlsbase.h               tlshandler.h \
+                            connectionbase.h          connectiondatahandler.h compressiondatahandler.h \
+                            compressionbase.h         connectiontcp.h
 
-noinst_HEADERS = prep.h connection.h dns.h nonsaslauth.h compression.h \
-                   mucmessagesession.h stanzaextensionfactory.h
+noinst_HEADERS = prep.h dns.h nonsaslauth.h mucmessagesession.h stanzaextensionfactory.h tlsgnutls.h \
+			tlsopenssl.h tlsschannel.h compressionzlib.h
 
 EXTRA_DIST = version.rc
 
