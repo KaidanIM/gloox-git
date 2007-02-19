@@ -197,7 +197,7 @@ namespace gloox
                              const std::string& domain, const LogSink& logInstance )
   {
     logInstance.log( LogLevelWarning, LogAreaClassDns,
-                     "note: gloox does not support SRV records on this platform. Using A records instead." );
+                    "notice: gloox does not support SRV records on this platform. Using A records instead." );
     return defaultHostMap( service, proto, domain, logInstance );
   }
 #endif
@@ -207,7 +207,7 @@ namespace gloox
   {
     HostMap server;
 
-    logInstance.log( LogLevelWarning, LogAreaClassDns, "note: using default port." );
+    logInstance.log( LogLevelWarning, LogAreaClassDns, "notice: using default port." );
 
     if( !domain.empty() )
       server[domain] = XMPP_PORT;
