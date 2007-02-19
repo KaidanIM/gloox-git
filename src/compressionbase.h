@@ -12,10 +12,8 @@
 
 
 
-#ifndef COMPRESSION_H__
-#define COMPRESSION_H__
-
-#include "gloox.h"
+#ifndef COMPRESSIONBASE_H__
+#define COMPRESSIONBASE_H__
 
 #ifdef WIN32
 # include "../config.h.win"
@@ -25,64 +23,55 @@
 # include "config.h"
 #endif
 
-#include <string>
+#include "gloox.h"
+#include "compressiondatahandler.h"
 
-#ifdef HAVE_ZLIB
-#include <zlib.h>
-#endif
+#include <string>
 
 namespace gloox
 {
+
   /**
-   * This is a wrapper around some compression methods.
+   * @brief This is an abstract base class for stream compression implementations.
+   *
+   * You should not need to use this class directly.
    *
    * @author Jakob Schroeter <js@camaya.net>
-   * @since 0.8
+   * @since 0.9
    */
-  class GLOOX_API Compression
+  class GLOOX_API CompressionBase
   {
     public:
       /**
        * Contructor.
-       * @param method The desired compression method.
+       * @param cdh A CompressionDataHandler-derived object that will be notified
+       * about finished de/compression.
        */
-      Compression( StreamFeature method );
+      CompressionBase( CompressionDataHandler *cdh ) : m_handler( cdh ), m_valid( false ) {};
 
       /**
        * Virtual Destructor.
        */
-      virtual ~Compression();
+      virtual ~CompressionBase() {};
 
       /**
        * Compresses the given chunk of data.
        * @param data The original (uncompressed) data.
-       * @return The compressed data.
        */
-      virtual const std::string compress( const std::string& data );
+      virtual void compress( const std::string& data ) = 0;
 
       /**
        * Decompresses the given chunk of data.
        * @param data The compressed data.
-       * @return The decompressed data.
        */
-      virtual const std::string decompress( const std::string& data );
+      virtual void decompress( const std::string& data ) = 0;
 
     protected:
+      CompressionDataHandler *m_handler;
       bool m_valid;
-      StreamFeature m_method;
-      std::string m_inflateBuffer;
-      int m_compCount;
-      int m_decompCount;
-      int m_dataOutCount;
-      int m_dataInCount;
-
-#ifdef HAVE_ZLIB
-      z_stream m_zinflate;
-      z_stream m_zdeflate;
-#endif
 
   };
 
 }
 
-#endif // COMPRESSION_H__
+#endif // COMPRESSIONBASE_H__
