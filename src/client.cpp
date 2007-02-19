@@ -23,7 +23,6 @@
 #include "disco.h"
 #include "logsink.h"
 #include "nonsaslauth.h"
-#include "connection.h"
 #include "tag.h"
 #include "stanzaextensionfactory.h"
 #include "stanzaextension.h"
@@ -105,17 +104,15 @@ namespace gloox
     {
       m_streamFeatures = getStreamFeatures( stanza );
 
-#ifdef HAVE_TLS
-      if( tls() && hasTls() && !m_connection->isSecure() && ( m_streamFeatures & StreamFeatureStartTls ) )
-      {
-        startTls();
-        return true;
-      }
-#endif
+// #ifdef HAVE_TLS
+//       if( tls() && hasTls() && !m_connection->isSecure() && ( m_streamFeatures & StreamFeatureStartTls ) )
+//       {
+//         startTls();
+//         return true;
+//       }
+// #endif
 
-#ifdef HAVE_ZLIB
-      if( m_compression &&  ( m_streamFeatures & StreamFeatureCompressZlib )
-              && m_connection->initCompression( StreamFeatureCompressZlib ) )
+      if( m_compression && ( m_streamFeatures & StreamFeatureCompressZlib ) )
       {
         negotiateCompression( StreamFeatureCompressZlib );
         return true;
@@ -126,7 +123,6 @@ namespace gloox
 //         negotiateCompression( StreamFeatureCompressDclz );
 //         return true;
 //       }
-#endif
 
       if( sasl() )
       {
@@ -192,48 +188,48 @@ namespace gloox
         disconnect( ConnNoSupportedAuth );
       }
     }
-#ifdef HAVE_TLS
-    else if( ( stanza->name() == "proceed" ) && stanza->hasAttribute( "xmlns", XMLNS_STREAM_TLS ) )
-    {
-      logInstance().log( LogLevelDebug, LogAreaClassClient, "starting TLS handshake..." );
+// #ifdef HAVE_TLS
+//     else if( ( stanza->name() == "proceed" ) && stanza->hasAttribute( "xmlns", XMLNS_STREAM_TLS ) )
+//     {
+//       logInstance().log( LogLevelDebug, LogAreaClassClient, "starting TLS handshake..." );
+//
+//       if( m_connection->tlsHandshake() )
+//       {
+//         if( !notifyOnTLSConnect( m_connection->fetchTLSInfo() ) )
+//         {
+//           logInstance().log( LogLevelError, LogAreaClassClient, "Server's certificate rejected!" );
+//           disconnect( ConnTlsFailed );
+//         }
+//         else
+//         {
+//           std::ostringstream oss;
+//           if( m_connection->isSecure() )
+//           {
+//             oss << "connection encryption active";
+//             logInstance().log( LogLevelDebug, LogAreaClassClient, oss.str() );
+//           }
+//           else
+//           {
+//             oss << "connection not encrypted!";
+//             logInstance().log( LogLevelWarning, LogAreaClassClient, oss.str() );
+//           }
+//
+//           header();
+//         }
+//       }
+//       else
+//       {
+//         logInstance().log( LogLevelError, LogAreaClassClient, "TLS handshake failed (local)!" );
+//         disconnect( ConnTlsFailed );
+//       }
+//     }
+//     else if( ( stanza->name() == "failure" ) && stanza->hasAttribute( "xmlns", XMLNS_STREAM_TLS ) )
+//     {
+//       logInstance().log( LogLevelError, LogAreaClassClient, "TLS handshake failed (server-side)!" );
+//       disconnect( ConnTlsFailed );
+//     }
+// #endif
 
-      if( m_connection->tlsHandshake() )
-      {
-        if( !notifyOnTLSConnect( m_connection->fetchTLSInfo() ) )
-        {
-          logInstance().log( LogLevelError, LogAreaClassClient, "Server's certificate rejected!" );
-          disconnect( ConnTlsFailed );
-        }
-        else
-        {
-          std::ostringstream oss;
-          if( m_connection->isSecure() )
-          {
-            oss << "connection encryption active";
-            logInstance().log( LogLevelDebug, LogAreaClassClient, oss.str() );
-          }
-          else
-          {
-            oss << "connection not encrypted!";
-            logInstance().log( LogLevelWarning, LogAreaClassClient, oss.str() );
-          }
-
-          header();
-        }
-      }
-      else
-      {
-        logInstance().log( LogLevelError, LogAreaClassClient, "TLS handshake failed (local)!" );
-        disconnect( ConnTlsFailed );
-      }
-    }
-    else if( ( stanza->name() == "failure" ) && stanza->hasAttribute( "xmlns", XMLNS_STREAM_TLS ) )
-    {
-      logInstance().log( LogLevelError, LogAreaClassClient, "TLS handshake failed (server-side)!" );
-      disconnect( ConnTlsFailed );
-    }
-#endif
-#ifdef HAVE_ZLIB
     else if( ( stanza->name() == "failure" ) && stanza->hasAttribute( "xmlns", XMLNS_COMPRESSION ) )
     {
       logInstance().log( LogLevelError, LogAreaClassClient, "stream compression init failed!" );
@@ -242,10 +238,9 @@ namespace gloox
     else if( ( stanza->name() == "compressed" ) && stanza->hasAttribute( "xmlns", XMLNS_COMPRESSION ) )
     {
       logInstance().log( LogLevelDebug, LogAreaClassClient, "stream compression inited" );
-      m_connection->enableCompression();
+      m_compressionActive = true;
       header();
     }
-#endif
     else if( ( stanza->name() == "challenge" ) && stanza->hasAttribute( "xmlns", XMLNS_STREAM_SASL ) )
     {
       logInstance().log( LogLevelDebug, LogAreaClassClient, "processing sasl challenge" );

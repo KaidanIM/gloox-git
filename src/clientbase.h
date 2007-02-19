@@ -21,6 +21,9 @@
 #include "logsink.h"
 #include "taghandler.h"
 #include "statisticshandler.h"
+#include "tlshandler.h"
+#include "compressiondatahandler.h"
+#include "connectiondatahandler.h"
 
 namespace gloox
 {
@@ -28,9 +31,7 @@ namespace gloox
   class string;
   class map;
   class list;
-  class Connection;
   class Disco;
-  class Packet;
   class Tag;
   class Stanza;
   class Parser;
@@ -43,6 +44,9 @@ namespace gloox
   class SubscriptionHandler;
   class MUCInvitationHandler;
   class TagHandler;
+  class TLSBase;
+  class ConnectionBase;
+  class CompressionBase;
 
   /**
    * @brief This is the common base class for a jabber Client and a jabber Component.
@@ -52,7 +56,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
    */
-  class GLOOX_API ClientBase : private TagHandler
+  class GLOOX_API ClientBase : private TagHandler, ConnectionDataHandler, CompressionDataHandler, TLSHandler
   {
 
     friend class RosterManager;
@@ -142,7 +146,7 @@ namespace gloox
        * Compression should only be disabled if there are problems with using it.
        * @param compression Whether to switch Stream Compression usage on or off.
        */
-      void setCompression( bool compression ) { m_compression = compression; };
+      void setCompression( bool compression ) { m_compress = compression; };
 
       /**
        * Sets the port to connect to. This is not necessary if either the default port (5222) is used
@@ -199,7 +203,7 @@ namespace gloox
        * Returns whether Stream Compression is currently enabled (not necessarily used).
        * @return The current Stream Compression status.
        */
-      bool compression() const { return m_compression; };
+      bool compression() const { return m_compress; };
 
       /**
        * Returns the port. The default of -1 means that the actual port will be looked up using
@@ -268,7 +272,7 @@ namespace gloox
        * can use select() on it and use recv( -1 ) to fetch the data.
        * @return The file descriptor of the active connection, or -1 if no connection is established.
        */
-      int fileDescriptor();
+//       int fileDescriptor();
 
       /**
        * Sends a whitespace ping to the server.
@@ -533,6 +537,24 @@ namespace gloox
       // reimplemented from ParserHandler
       virtual void handleTag( Tag *tag );
 
+      // reimplemented from CompressionDataHandler
+      virtual void handleCompressedData( const std::string& data );
+
+      // reimplemented from CompressionDataHandler
+      virtual void handleDecompressedData( const std::string& data );
+
+      // reimplemented from ConnectionDataHandler
+      virtual void handleReceivedData( const std::string& data );
+
+      // reimplemented from ConnectionDataHandler
+      virtual void handleDisconnect( ConnectionError reason );
+
+      // reimplemented from TLSHandler
+      virtual void handleEncryptedData( const std::string& data );
+
+      // reimplemented from TLSHandler
+      virtual void handleDecryptedData( const std::string& data );
+
     protected:
       void notifyOnResourceBindError( ResourceBindError error );
       void notifyOnSessionCreateError( SessionCreateError error );
@@ -552,7 +574,9 @@ namespace gloox
 
       JID m_jid;
       JID m_authzid;
-      Connection *m_connection;
+      ConnectionBase *m_connection;
+      TLSBase *m_encryption;
+      CompressionBase *m_compression;
       Disco *m_disco;
 
       std::string m_clientCerts;
@@ -562,7 +586,9 @@ namespace gloox
       std::string m_xmllang;
       std::string m_server;
       std::string m_sid;
-      bool m_compression;
+      bool m_compressionActive;
+      bool m_encryptionActive;
+      bool m_compress;
       bool m_authed;
       bool m_sasl;
       bool m_tls;
@@ -577,6 +603,8 @@ namespace gloox
       virtual void cleanup();
       void init();
       void handleStreamError( Stanza *stanza );
+      TLSBase* getDefaultEncryption();
+      CompressionBase* getDefaultCompression();
 
       void notifyIqHandlers( Stanza *stanza );
       void notifyMessageHandlers( Stanza *stanza );
