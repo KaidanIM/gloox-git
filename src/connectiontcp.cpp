@@ -126,7 +126,6 @@ namespace gloox
 
   ConnectionError ConnectionTCP::recv( int timeout )
   {
-    printf(" in recv\n" );
     if( m_cancel )
     {
       ConnectionError e = m_disconnect;
