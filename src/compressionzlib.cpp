@@ -14,6 +14,8 @@
 
 #include "compressionzlib.h"
 
+#ifdef HAVE_ZLIB
+
 namespace gloox
 {
 
@@ -110,3 +112,5 @@ namespace gloox
   }
 
 }
+
+#endif // HAVE_ZLIB

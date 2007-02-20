@@ -16,11 +16,11 @@
 
 #include "compressionbase.h"
 
-#include <string>
-
 #ifdef HAVE_ZLIB
-# include <zlib.h>
-#endif
+
+#include <zlib.h>
+
+#include <string>
 
 namespace gloox
 {
@@ -59,5 +59,7 @@ namespace gloox
   };
 
 }
+
+#endif
 
 #endif // COMPRESSIONZLIB_H__
