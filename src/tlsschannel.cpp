@@ -14,6 +14,8 @@
 
 #include "tlsschannel.h"
 
+#ifdef HAVE_WINTLS
+
 namespace gloox
 {
 
@@ -521,3 +523,5 @@ printf( "maximumMessage: %ld\n", m_streamSizes.cbMaximumMessage );
   }
 
 }
+
+#endif // HAVE_WINTLS
