@@ -14,6 +14,8 @@
 
 #include "tlsopenssl.h"
 
+#ifdef HAVE_OPENSSL
+
 namespace gloox
 {
 
@@ -119,3 +121,5 @@ namespace gloox
   }
 
 }
+
+#endif // HAVE_OPENSSL

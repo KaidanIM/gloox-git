@@ -12,12 +12,12 @@
 
 
 
-#ifndef GNUTLS_H__
-#define GNUTLS_H__
+#ifndef TLSGNUTLS_H__
+#define TLSGNUTLS_H__
 
 #include "tlsbase.h"
 
-#ifdef USE_GNUTLS
+#ifdef HAVE_GNUTLS
 
 #include <gnutls/gnutls.h>
 #include <gnutls/x509.h>
@@ -58,6 +58,12 @@ namespace gloox
       // reimplemented from TLSBase
       virtual bool handshake();
 
+      // reimplemented from TLSBase
+      virtual void setCACerts( const StringList& cacerts );
+
+      // reimplemented from TLSBase
+      virtual void setClientCert( const std::string& clientKey, const std::string& clientCerts );
+
     private:
       bool verifyAgainst( gnutls_x509_crt_t cert, gnutls_x509_crt_t issuer );
       bool verifyAgainstCAs( gnutls_x509_crt_t cert, gnutls_x509_crt_t *CAList, int CAListSize );
@@ -80,6 +86,6 @@ namespace gloox
 
 }
 
-#endif // USE_GNUTLS
+#endif // HAVE_GNUTLS
 
-#endif // GNUTLS_H__
+#endif // TLSGNUTLS_H__

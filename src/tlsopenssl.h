@@ -12,12 +12,12 @@
 
 
 
-#ifndef OPENSSL_H__
-#define OPENSSL_H__
+#ifndef TLSOPENSSL_H__
+#define TLSOPENSSL_H__
 
 #include "tlsbase.h"
 
-#ifdef USE_OPENSSL
+#ifdef HAVE_OPENSSL
 
 #include <openssl/ssl.h>
 
@@ -54,6 +54,12 @@ namespace gloox
       // reimplemented from TLSBase
       virtual bool handshake();
 
+      // reimplemented from TLSBase
+      virtual void setCACerts( const StringList& cacerts );
+
+      // reimplemented from TLSBase
+      virtual void setClientCert( const std::string& clientKey, const std::string& clientCerts );
+
     private:
       SSL *m_ssl;
 
@@ -61,6 +67,6 @@ namespace gloox
 
 }
 
-#endif // USE_OPENSSL
+#endif // HAVE_OPENSSL
 
-#endif // OPENSSL_H__
+#endif // TLSOPENSSL_H__

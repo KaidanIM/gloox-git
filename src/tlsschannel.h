@@ -12,12 +12,12 @@
 
 
 
-#ifndef SCHANNEL_H__
-#define SCHANNEL_H__
+#ifndef TLSSCHANNEL_H__
+#define TLSSCHANNEL_H__
 
 #include "tlsbase.h"
 
-#ifdef USE_WINTLS
+#ifdef HAVE_WINTLS
 
 #define SECURITY_WIN32
 #include <windows.h>
@@ -57,6 +57,12 @@ namespace gloox
       // reimplemented from TLSBase
       virtual bool handshake();
 
+      // reimplemented from TLSBase
+      virtual void setCACerts( const StringList& cacerts );
+
+      // reimplemented from TLSBase
+      virtual void setClientCert( const std::string& clientKey, const std::string& clientCerts );
+
     private:
       bool handshakeLoop();
 
@@ -81,6 +87,6 @@ namespace gloox
 
 }
 
-#endif // USE_WINTLS
+#endif // HAVE_WINTLS
 
-#endif // SCHANNEL_H__
+#endif // TLSSCHANNEL_H__
