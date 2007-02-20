@@ -1219,6 +1219,9 @@ namespace gloox
 
   CompressionBase* ClientBase::getDefaultCompression()
   {
+    if( !m_compress )
+      return 0;
+
 #ifdef HAVE_ZLIB
     return new CompressionZlib( this );
 #else
@@ -1228,11 +1231,14 @@ namespace gloox
 
   TLSBase* ClientBase::getDefaultEncryption()
   {
+    if( !m_tls )
+      return 0;
+
 #ifdef USE_GNUTLS
     return new GnuTLS( this, m_server );
-#elif USE_OPENSSL
+#elif defined( USE_OPENSSL )
     return new OpenSSL( this, m_server );
-#elif USE_WINTLS
+#elif defined( USE_WINTLS )
     return new SChannel( this, m_server );
 #else
     return 0;
