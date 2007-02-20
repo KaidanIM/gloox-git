@@ -105,13 +105,15 @@ namespace gloox
     {
       m_streamFeatures = getStreamFeatures( stanza );
 
-      if( tls() && hasTls() && !m_encryptionActive && ( m_streamFeatures & StreamFeatureStartTls ) )
+      if( m_tls && m_encryption && !m_encryptionActive
+          && ( m_streamFeatures & StreamFeatureStartTls ) )
       {
         startTls();
         return true;
       }
 
-      if( m_compression && ( m_streamFeatures & StreamFeatureCompressZlib ) )
+      if( m_compress && m_compression && !m_compressionActive
+          && ( m_streamFeatures & StreamFeatureCompressZlib ) )
       {
         negotiateCompression( StreamFeatureCompressZlib );
         return true;
@@ -123,7 +125,7 @@ namespace gloox
 //         return true;
 //       }
 
-      if( sasl() )
+      if( m_sasl )
       {
         if( m_authed )
         {
