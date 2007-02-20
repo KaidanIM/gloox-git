@@ -35,13 +35,12 @@
 #endif
 
 #include "gloox.h"
+#include "tlshandler.h"
 
 #include <sys/types.h>
 
 namespace gloox
 {
-
-  class TLSHandler;
 
   /**
    * @brief An abstract base class for TLS implementations.
@@ -55,7 +54,8 @@ namespace gloox
       /**
        * Constructor.
        */
-      TLSBase( TLSHandler *th ) : m_handler( th ), m_secure( false ) {};
+      TLSBase( TLSHandler *th, const std::string server )
+        : m_handler( th ), m_server( server ), m_secure( false ), m_valid( false ) {};
 
       /**
        * Virtual destructor.
@@ -81,6 +81,11 @@ namespace gloox
        *
        */
       virtual bool handshake() = 0;
+
+      /**
+       *
+       */
+      bool isSecure() const { return m_secure; };
 
       /**
        * Use this function to set a number of trusted root CA certificates which shall be
@@ -117,8 +122,10 @@ namespace gloox
       StringList m_cacerts;
       std::string m_clientKey;
       std::string m_clientCerts;
+      std::string m_server;
       CertInfo m_certInfo;
       bool m_secure;
+      bool m_valid;
 
   };
 

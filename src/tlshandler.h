@@ -20,7 +20,10 @@
 namespace gloox
 {
 
+  struct CertInfo;
+
   /**
+   * @brief An interface that allows for interacting with TLS implementations derived from TLSBase.
    *
    * @author Jakob Schröter <js@camaya.net>
    * @since 0.9
@@ -42,6 +45,11 @@ namespace gloox
        *
        */
       virtual void handleDecryptedData( const std::string& data ) = 0;
+
+      /**
+       *
+       */
+      virtual void handleHandshakeResult( bool success, CertInfo &certinfo ) = 0;
 
   };
 

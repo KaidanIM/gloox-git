@@ -17,8 +17,8 @@
 namespace gloox
 {
 
-  SChannel::SChannel( TLSHandler *th )
-    : TLSBase( th )
+  SChannel::SChannel( TLSHandler *th, const std::string& server )
+    : TLSBase( th, server )
   {
   }
 
