@@ -99,7 +99,7 @@ namespace gloox
     }
 
     int ret = gnutls_record_recv( m_session, m_buf, m_bufsize );
-    if( m_handler )
+    if( ret > 0  && m_handler )
     {
       std::string temp;
       temp.assign( m_buf, ret );
