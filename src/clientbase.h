@@ -267,12 +267,69 @@ namespace gloox
       void setXmlLang( const std::string& xmllang ) { m_xmllang = xmllang; };
 
       /**
-       * Gives access to the raw file descriptor of the current connection. Use it wisely. Especially,
-       * you should not ::recv() any data from it. There is no way to feed that back into the parser. You
+       * Gives access to the raw file descriptor of the current connection. Use it wisely. You
        * can use select() on it and use recv( -1 ) to fetch the data.
        * @return The file descriptor of the active connection, or -1 if no connection is established.
+       * @note The return value is only meaningful if the default connection type is used (an
+       * instance of ConnectionTCP).
        */
-//       int fileDescriptor();
+      int fileDescriptor();
+
+      /**
+       * This function allows to set an existing file descriptor (socket) with an established
+       * connection to use for the connection. You will still need to call connect() in order to
+       * negotiate the XMPP stream. You should not set a new file descriptor after calling connect().
+       * @note This function is a NOOP if the default connection type is not used (i.e. anything besides
+       * an instance of ConnectionTCP).
+       * @param fd The existing file descriptor (socket).
+       * @since 0.9
+       */
+      void setFileDescriptor( int fd ) const;
+
+      /**
+       * This function returns the concrete connection implementation currently in use.
+       * @return The concrete connection implementation.
+       * @since 0.9
+       */
+      ConnectionBase* connectionImpl() const { return m_connection; }
+
+      /**
+       * Use this function if you have a class implementing a UDP, SCTP (or whatever)
+       * connection. This should be called before calling connect().
+       * @param cb The connection to use.
+       * @since 0.9
+       */
+      void setConnectionImpl( ConnectionBase *cb ) { m_connection = cb; };
+
+      /**
+       * This function returns the concrete encryption implementation currently in use.
+       * @return The concrete encryption implementation.
+       * @since 0.9
+       */
+      TLSBase* encryptionImpl() const { return m_encryption; }
+
+      /**
+       * Use this function if you have a class supporting hardware encryption (or whatever).
+       * This should be called before calling connect().
+       * @param cb The encryption implementation to use.
+       * @since 0.9
+       */
+      void setEncryptionImpl( TLSBase *tb ) { m_encryption = tb; };
+
+      /**
+       * This function returns the concrete compression implementation currently in use.
+       * @return The concrete compression implementation.
+       * @since 0.9
+       */
+      CompressionBase* compressionImpl() const { return m_compression; }
+
+      /**
+       * Use this function if you have a class supporting some fancy compression algorithm.
+       * This should be called before calling connect().
+       * @param cb The compression implementation to use.
+       * @since 0.9
+       */
+      void setCompressionImpl( CompressionBase *cb ) { m_compression = cb; };
 
       /**
        * Sends a whitespace ping to the server.
@@ -683,7 +740,6 @@ namespace gloox
 
       int m_idCount;
       bool m_autoMessageSession;
-      bool m_fdRequested;
 
   };
 

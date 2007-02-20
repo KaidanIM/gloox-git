@@ -69,7 +69,7 @@ namespace gloox
       m_messageSessionHandlerHeadline( 0 ), m_messageSessionHandlerNormal( 0 ),
       m_parser( 0 ), m_authError( AuthErrorUndefined ), m_streamError( StreamErrorUndefined ),
       m_streamErrorAppCondition( 0 ), m_selectedSaslMech( SaslMechNone ),
-      m_proxyPort( 0 ), m_idCount( 0 ), m_autoMessageSession( false ), m_fdRequested( false )
+      m_proxyPort( 0 ), m_idCount( 0 ), m_autoMessageSession( false )
   {
     init();
   }
@@ -85,7 +85,7 @@ namespace gloox
       m_messageSessionHandlerHeadline( 0 ), m_messageSessionHandlerNormal( 0 ),
       m_parser( 0 ), m_authError( AuthErrorUndefined ), m_streamError( StreamErrorUndefined ),
       m_streamErrorAppCondition( 0 ), m_selectedSaslMech( SaslMechNone ),
-      m_proxyPort( 0 ), m_idCount( 0 ), m_autoMessageSession( false ), m_fdRequested( false )
+      m_proxyPort( 0 ), m_idCount( 0 ), m_autoMessageSession( false )
   {
     init();
   }
@@ -839,16 +839,27 @@ namespace gloox
       m_messageSessionHandlerHeadline = msh;
   }
 
-//   int ClientBase::fileDescriptor()
-//   {
-//     if( m_connection )
-//     {
-//       m_fdRequested = true;
-//       return m_connection->fileDescriptor();
-//     }
-//     else
-//       return -1;
-//   }
+  int ClientBase::fileDescriptor()
+  {
+    if( m_connection )
+    {
+      ConnectionTCP *tcp = dynamic_cast<ConnectionTCP*>( m_connection );
+      if( tcp )
+        return tcp->fileDescriptor();
+    }
+
+    return -1;
+  }
+
+  void ClientBase::setFileDescriptor( int fd ) const
+  {
+    if( m_connection )
+    {
+      ConnectionTCP *tcp = dynamic_cast<ConnectionTCP*>( m_connection );
+      if( tcp )
+        tcp->setFileDescriptor( fd );
+    }
+  }
 
   void ClientBase::registerPresenceHandler( PresenceHandler *ph )
   {
