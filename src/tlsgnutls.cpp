@@ -14,6 +14,8 @@
 
 #include "tlsgnutls.h"
 
+#ifdef HAVE_GNUTLS
+
 #include <errno.h>
 
 namespace gloox
@@ -106,6 +108,27 @@ namespace gloox
     return ret;
   }
 
+  void GnuTLS::setCACerts( const StringList& cacerts )
+  {
+    m_cacerts = cacerts;
+
+    StringList::const_iterator it = m_cacerts.begin();
+    for( ; it != m_cacerts.end(); ++it )
+      gnutls_certificate_set_x509_trust_file( m_credentials, (*it).c_str(), GNUTLS_X509_FMT_PEM );
+  }
+
+  void GnuTLS::setClientCert( const std::string& clientKey, const std::string& clientCerts )
+  {
+    m_clientKey = clientKey;
+    m_clientCerts = clientCerts;
+
+    if( !m_clientKey.empty() && !m_clientCerts.empty() )
+    {
+      gnutls_certificate_set_x509_key_file( m_credentials, m_clientKey.c_str(),
+                                            m_clientCerts.c_str(), GNUTLS_X509_FMT_PEM );
+    }
+  }
+
   void GnuTLS::cleanup()
   {
     gnutls_bye( m_session, GNUTLS_SHUT_RDWR );
@@ -118,17 +141,6 @@ namespace gloox
   {
     if( !m_handler )
       return false;
-
-//     StringList::const_iterator it = m_cacerts.begin();
-//     for( ; it != m_cacerts.end(); ++it )
-//       gnutls_certificate_set_x509_trust_file( m_credentials, (*it).c_str(), GNUTLS_X509_FMT_PEM );
-//
-//     if( !m_clientKey.empty() && !m_clientCerts.empty() )
-//     {
-//       gnutls_certificate_set_x509_key_file( m_credentials, m_clientKey.c_str(),
-//                                             m_clientCerts.c_str(), GNUTLS_X509_FMT_PEM );
-//     }
-
 
     int ret = gnutls_handshake( m_session );
     if( ret < 0 && gnutls_error_is_fatal( ret ) )
@@ -318,3 +330,5 @@ namespace gloox
   }
 
 }
+
+#endif // HAVE_GNUTLS

@@ -92,7 +92,7 @@ namespace gloox
        * used to verify a servers certificate.
        * @param cacerts A list of absolute paths to CA root certificate files in PEM format.
        */
-      void setCACerts( const StringList& cacerts ) { m_cacerts = cacerts; };
+      virtual void setCACerts( const StringList& cacerts ) = 0;
 
       /**
        * This function is used to retrieve certificate and connection info of a encrypted connection.
@@ -111,11 +111,7 @@ namespace gloox
        * @param clientKey The absolute path to the user's private key in PEM format.
        * @param clientCerts A path to a certificate bundle in PEM format.
        */
-      void setClientCert( const std::string& clientKey, const std::string& clientCerts )
-      {
-        m_clientKey = clientKey;
-        m_clientCerts = clientCerts;
-      };
+      virtual void setClientCert( const std::string& clientKey, const std::string& clientCerts ) = 0;
 
     protected:
       TLSHandler *m_handler;
