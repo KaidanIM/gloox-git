@@ -60,7 +60,7 @@ namespace gloox
 {
 
   ClientBase::ClientBase( const std::string& ns, const std::string& server, int port )
-    : m_connection( 0 ), m_disco( 0 ), m_namespace( ns ),
+    : m_connection( 0 ), m_encryption( 0 ), m_compression( 0 ), m_disco( 0 ), m_namespace( ns ),
       m_xmllang( "en" ), m_server( server ), m_compressionActive( false ), m_encryptionActive( false ),
       m_compress( true ), m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ),
       m_availableSaslMechs( SaslMechAll ),
@@ -76,7 +76,8 @@ namespace gloox
 
   ClientBase::ClientBase( const std::string& ns, const std::string& password,
                           const std::string& server, int port )
-    : m_connection( 0 ), m_disco( 0 ), m_namespace( ns ), m_password( password ),
+    : m_connection( 0 ), m_encryption( 0 ), m_compression( 0 ), m_disco( 0 ), m_namespace( ns ),
+      m_password( password ),
       m_xmllang( "en" ), m_server( server ), m_compressionActive( false ), m_encryptionActive( false ),
       m_compress( true ), m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ),
       m_availableSaslMechs( SaslMechAll ),
@@ -479,7 +480,6 @@ namespace gloox
     t->addAttribute( "xmlns", XMLNS_STREAM_SASL );
 
     const std::string decoded = Base64::decode64( challenge );
-    printf( "decoded challenge: %s\n", decoded.c_str() );
 
     switch( m_selectedSaslMech )
     {
