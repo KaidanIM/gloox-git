@@ -49,7 +49,7 @@ namespace gloox
       m_logInstance( logInstance ),
       m_buf( 0 ), m_server( Prep::idna( server ) ), m_port( port ), m_socket( -1 ),
       m_totalBytesIn( 0 ), m_totalBytesOut( 0 ),
-      m_bufsize( 17000 ), m_cancel( true )
+      m_bufsize( 1024 ), m_cancel( true )
   {
     m_buf = (char*)calloc( m_bufsize + 1, sizeof( char ) );
   }
@@ -65,10 +65,13 @@ namespace gloox
   {
     m_state = StateConnecting;
 
-    if( m_port == (unsigned short)-1 )
-      m_socket = DNS::connect( m_server, m_logInstance );
-    else
-      m_socket = DNS::connect( m_server, m_port, m_logInstance );
+    if( m_socket < 0 )
+    {
+      if( m_port == (unsigned short)-1 )
+        m_socket = DNS::connect( m_server, m_logInstance );
+      else
+        m_socket = DNS::connect( m_server, m_port, m_logInstance );
+    }
 
     if( m_socket < 0 )
     {
@@ -79,6 +82,9 @@ namespace gloox
           break;
         case -ConnDnsError:
           m_logInstance.log( LogLevelError, LogAreaClassConnection, m_server + ": host not found" );
+          break;
+        default:
+          m_logInstance.log( LogLevelError, LogAreaClassConnection, "Unknown error condition" );
           break;
       }
       ConnectionError e = (ConnectionError)-m_socket;
@@ -98,11 +104,6 @@ namespace gloox
   {
     m_disconnect = e;
     m_cancel = true;
-  }
-
-  int ConnectionTCP::fileDescriptor()
-  {
-    return m_socket;
   }
 
   bool ConnectionTCP::dataAvailable( int timeout )
@@ -133,7 +134,7 @@ namespace gloox
       return e;
     }
 
-    if( m_socket == -1 )
+    if( m_socket < 0 )
       return ConnNotConnected;
 
     if( !dataAvailable( timeout ) )
@@ -173,7 +174,7 @@ namespace gloox
 
   ConnectionError ConnectionTCP::receive()
   {
-    if( m_socket == -1 )
+    if( m_socket < 0 )
       return ConnNotConnected;
 
     while( !m_cancel )
@@ -192,7 +193,7 @@ namespace gloox
 
   bool ConnectionTCP::send( const std::string& data )
   {
-    if( data.empty() || ( m_socket == -1 ) )
+    if( data.empty() || ( m_socket < 0 ) )
       return false;
 
     size_t num = 0;
@@ -215,7 +216,7 @@ namespace gloox
 
   void ConnectionTCP::cleanup()
   {
-    if( m_socket != -1 )
+    if( m_socket >= 0 )
     {
 #ifdef WIN32
       closesocket( m_socket );
