@@ -56,7 +56,8 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
    */
-  class GLOOX_API ClientBase : private TagHandler, ConnectionDataHandler, CompressionDataHandler, TLSHandler
+  class GLOOX_API ClientBase : private TagHandler, private ConnectionDataHandler,
+                               private CompressionDataHandler, private TLSHandler
   {
 
     friend class RosterManager;
@@ -68,7 +69,7 @@ namespace gloox
        * @param ns The namespace which qualifies the stream. Either jabber:client or jabber:component:*
        * @param server The server to connect to.
        * @param port The port to connect to. The default of -1 means to look up the port via DNS SRV
-       * or to use a default port of 5222 as defined in XMPP: Core.
+       * or to use a default port of 5222 as defined in XMPP Core.
        */
       ClientBase( const std::string& ns, const std::string& server, int port = -1 );
 
