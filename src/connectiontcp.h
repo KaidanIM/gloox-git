@@ -81,12 +81,19 @@ namespace gloox
       virtual void disconnect( ConnectionError e );
 
       /**
-       * Gives access to the raw file descriptor of a connection. Use it wisely. Especially, you should not
-       * ::recv() any data from it. There is no way to feed that back into the parser. You can
+       * Gives access to the raw file descriptor of a connection. Use it wisely. You can
        * select()/poll() it and use ConnectionTCP::recv( -1 ) to fetch the data.
        * @return The file descriptor of the active connection, or -1 if no connection is established.
        */
-      int fileDescriptor();
+      int fileDescriptor() const { return m_socket; };
+
+      /**
+       * This function allows to set an existing file descriptor (socket) with an established
+       * connection to use for the connection. You will still need to call connect() in order to
+       * negotiate the XMPP stream. You should not set a new file descriptor after calling connect().
+       * @param fd The existing file descriptor.
+       */
+      void setFileDescriptor( int fd ) { m_socket = fd; };
 
       /**
        * Returns current connection statistics.
