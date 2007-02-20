@@ -14,24 +14,73 @@
 
 #include "tlsgnutls.h"
 
+#include <errno.h>
+
 namespace gloox
 {
 
-  GnuTLS::GnuTLS( TLSHandler *th )
-    : TLSBase( th )
+  GnuTLS::GnuTLS( TLSHandler *th, const std::string& server )
+    : TLSBase( th, server ), m_buf( 0 ), m_bufsize( 17000 )
   {
+    m_buf = (char*)calloc( m_bufsize + 1, sizeof( char ) );
+
+    const int protocolPriority[] = { GNUTLS_TLS1, GNUTLS_SSL3, 0 };
+    const int kxPriority[]       = { GNUTLS_KX_RSA, 0 };
+    const int cipherPriority[]   = { GNUTLS_CIPHER_AES_256_CBC, GNUTLS_CIPHER_AES_128_CBC,
+                                     GNUTLS_CIPHER_3DES_CBC, GNUTLS_CIPHER_ARCFOUR, 0 };
+    const int compPriority[]     = { GNUTLS_COMP_ZLIB, GNUTLS_COMP_NULL, 0 };
+    const int macPriority[]      = { GNUTLS_MAC_SHA, GNUTLS_MAC_MD5, 0 };
+
+    if( gnutls_global_init() != 0 )
+    {
+      m_valid = false;
+      return;
+    }
+
+    if( gnutls_certificate_allocate_credentials( &m_credentials ) < 0 )
+    {
+      m_valid = false;
+      return;
+    }
+
+    if( gnutls_init( &m_session, GNUTLS_CLIENT ) != 0 )
+    {
+      gnutls_certificate_free_credentials( m_credentials );
+      m_valid = false;
+      return;
+    }
+
+    gnutls_protocol_set_priority( m_session, protocolPriority );
+    gnutls_cipher_set_priority( m_session, cipherPriority );
+    gnutls_compression_set_priority( m_session, compPriority );
+    gnutls_kx_set_priority( m_session, kxPriority );
+    gnutls_mac_set_priority( m_session, macPriority );
+    gnutls_credentials_set( m_session, GNUTLS_CRD_CERTIFICATE, m_credentials );
+
+    gnutls_transport_set_ptr( m_session, (gnutls_transport_ptr_t)this );
+    gnutls_transport_set_push_function( m_session, pushFunc );
+    gnutls_transport_set_pull_function( m_session, pullFunc );
+
   }
 
   GnuTLS::~GnuTLS()
   {
+    free( m_buf );
+    m_buf = 0;
   }
 
   bool GnuTLS::encrypt( const std::string& data )
   {
+    if( !m_secure )
+    {
+      handshake();
+      return 0;
+    }
+
     int ret;
     do
     {
-      ret = gnutls_record_send( m_session, data, len );
+      ret = gnutls_record_send( m_session, data.c_str(), data.length() );
     }
     while( ( ret == GNUTLS_E_AGAIN ) || ( ret == GNUTLS_E_INTERRUPTED ) );
     return true;
@@ -39,7 +88,22 @@ namespace gloox
 
   int GnuTLS::decrypt( const std::string& data )
   {
-    return gnutls_record_recv( m_session, data, len );
+    m_recvBuffer += data;
+
+    if( !m_secure )
+    {
+      handshake();
+      return 0;
+    }
+
+    int ret = gnutls_record_recv( m_session, m_buf, m_bufsize );
+    if( m_handler )
+    {
+      std::string temp;
+      temp.assign( m_buf, ret );
+      m_handler->handleDecryptedData( temp );
+    }
+    return ret;
   }
 
   void GnuTLS::cleanup()
@@ -52,49 +116,36 @@ namespace gloox
 
   bool GnuTLS::handshake()
   {
-    const int protocolPriority[] = { GNUTLS_TLS1, GNUTLS_SSL3, 0 };
-    const int kxPriority[]       = { GNUTLS_KX_RSA, 0 };
-    const int cipherPriority[]   = { GNUTLS_CIPHER_AES_256_CBC, GNUTLS_CIPHER_AES_128_CBC,
-                                             GNUTLS_CIPHER_3DES_CBC, GNUTLS_CIPHER_ARCFOUR, 0 };
-    const int compPriority[]     = { GNUTLS_COMP_ZLIB, GNUTLS_COMP_NULL, 0 };
-    const int macPriority[]      = { GNUTLS_MAC_SHA, GNUTLS_MAC_MD5, 0 };
-
-    if( gnutls_global_init() != 0 )
+    if( !m_handler )
       return false;
 
-    if( gnutls_certificate_allocate_credentials( &m_credentials ) < 0 )
-      return false;
+//     StringList::const_iterator it = m_cacerts.begin();
+//     for( ; it != m_cacerts.end(); ++it )
+//       gnutls_certificate_set_x509_trust_file( m_credentials, (*it).c_str(), GNUTLS_X509_FMT_PEM );
+//
+//     if( !m_clientKey.empty() && !m_clientCerts.empty() )
+//     {
+//       gnutls_certificate_set_x509_key_file( m_credentials, m_clientKey.c_str(),
+//                                             m_clientCerts.c_str(), GNUTLS_X509_FMT_PEM );
+//     }
 
-    StringList::const_iterator it = m_cacerts.begin();
-    for( ; it != m_cacerts.end(); ++it )
-      gnutls_certificate_set_x509_trust_file( m_credentials, (*it).c_str(), GNUTLS_X509_FMT_PEM );
 
-    if( !m_clientKey.empty() && !m_clientCerts.empty() )
-    {
-      gnutls_certificate_set_x509_key_file( m_credentials, m_clientKey.c_str(),
-                                            m_clientCerts.c_str(), GNUTLS_X509_FMT_PEM );
-    }
-
-    if( gnutls_init( &m_session, GNUTLS_CLIENT ) != 0 )
-    {
-      gnutls_certificate_free_credentials( m_credentials );
-      return false;
-    }
-
-    gnutls_protocol_set_priority( m_session, protocolPriority );
-    gnutls_cipher_set_priority( m_session, cipherPriority );
-    gnutls_compression_set_priority( m_session, compPriority );
-    gnutls_kx_set_priority( m_session, kxPriority );
-    gnutls_mac_set_priority( m_session, macPriority );
-    gnutls_credentials_set( m_session, GNUTLS_CRD_CERTIFICATE, m_credentials );
-
-    gnutls_transport_set_ptr( m_session, (gnutls_transport_ptr_t)m_socket );
-    if( gnutls_handshake( m_session ) != 0 )
+    int ret = gnutls_handshake( m_session );
+    if( ret < 0 && gnutls_error_is_fatal( ret ) )
     {
       gnutls_deinit( m_session );
       gnutls_certificate_free_credentials( m_credentials );
+      m_valid = false;
+
+      m_handler->handleHandshakeResult( false, m_certInfo );
+
       return false;
     }
+    else if( ret == GNUTLS_E_AGAIN )
+    {
+      return true;
+    }
+
     gnutls_certificate_free_ca_names( m_credentials );
 
     m_secure = true;
@@ -191,6 +242,9 @@ namespace gloox
 
     delete[] cert;
 
+    m_valid = true;
+
+    m_handler->handleHandshakeResult( true, m_certInfo );
     return true;
   }
 
@@ -224,6 +278,43 @@ namespace gloox
       return false;
 
     return true;
+  }
+
+  ssize_t GnuTLS::pullFunc( void *data, size_t len )
+  {
+    ssize_t cpy = ( len > m_recvBuffer.length() ) ? ( m_recvBuffer.length() ) : ( len );
+    if( cpy > 0 )
+    {
+      memcpy( data, (const void*)m_recvBuffer.c_str(), cpy );
+      m_recvBuffer.erase( 0, cpy );
+      return cpy;
+    }
+    else
+    {
+      errno = EAGAIN;
+      return GNUTLS_E_AGAIN;
+    }
+  }
+
+  ssize_t GnuTLS::pullFunc( gnutls_transport_ptr_t ptr, void *data, size_t len )
+  {
+    return static_cast<GnuTLS*>( ptr )->pullFunc( data, len );
+  }
+
+  ssize_t GnuTLS::pushFunc( const void *data, size_t len )
+  {
+    m_sendBuffer.assign( (const char*)data, len );
+    if( m_handler )
+    {
+      m_handler->handleEncryptedData( m_sendBuffer );
+      m_sendBuffer = "";
+    }
+    return len;
+  }
+
+  ssize_t GnuTLS::pushFunc( gnutls_transport_ptr_t ptr, const void *data, size_t len )
+  {
+    return static_cast<GnuTLS*>( ptr )->pushFunc( data, len );
   }
 
 }

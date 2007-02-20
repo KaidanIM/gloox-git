@@ -35,7 +35,7 @@ namespace gloox
       /**
        * Constructor.
        */
-      OpenSSL( TLSHandler *th );
+      OpenSSL( TLSHandler *th, const std::string& server );
 
       /**
        * Virtual destructor.

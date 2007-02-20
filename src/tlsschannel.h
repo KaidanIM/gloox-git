@@ -38,7 +38,7 @@ namespace gloox
       /**
        * Constructor.
        */
-      SChannel( TLSHandler *th );
+      SChannel( TLSHandler *th, const std::string& server );
 
       /**
        * Virtual destructor.

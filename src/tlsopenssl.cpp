@@ -17,8 +17,8 @@
 namespace gloox
 {
 
-  OpenSSL::OpenSSL( TLSHandler *th )
-    : TLSBase( th )
+  OpenSSL::OpenSSL( TLSHandler *th, const std::string& server )
+    : TLSBase( th, server )
   {
   }
 

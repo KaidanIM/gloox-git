@@ -26,6 +26,9 @@ namespace gloox
 {
 
   /**
+   * @brief This class implements (stream) encryption using GnuTLS.
+   *
+   * You should not need to use this class directly.
    *
    * @author Jakob Schröter <js@camaya.net>
    * @since 0.9
@@ -36,7 +39,7 @@ namespace gloox
       /**
        * Constructor.
        */
-      GnuTLS( TLSHandler *th );
+      GnuTLS( TLSHandler *th, const std::string& server );
 
       /**
        * Virtual destructor.
@@ -61,6 +64,17 @@ namespace gloox
 
       gnutls_session_t m_session;
       gnutls_certificate_credentials m_credentials;
+
+      std::string m_recvBuffer;
+      std::string m_sendBuffer;
+      char *m_buf;
+      const int m_bufsize;
+
+      ssize_t pullFunc( void *data, size_t len );
+      static ssize_t pullFunc( gnutls_transport_ptr_t ptr, void *data, size_t len );
+
+      ssize_t pushFunc( const void *data, size_t len );
+      static ssize_t pushFunc( gnutls_transport_ptr_t ptr, const void *data, size_t len );
 
   };
 
