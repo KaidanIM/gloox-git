@@ -325,7 +325,6 @@ namespace gloox
 
   void ClientBase::handleReceivedData( const std::string& data )
   {
-    printf( "handling received data\n" );
     if( m_encryption && m_encryptionActive )
       m_encryption->decrypt( data );
     else if( m_compression && m_compressionActive )
