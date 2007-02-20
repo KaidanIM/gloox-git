@@ -555,6 +555,9 @@ namespace gloox
       // reimplemented from TLSHandler
       virtual void handleDecryptedData( const std::string& data );
 
+      // reimplemented from TLSHandler
+      virtual void handleHandshakeResult( bool success, CertInfo &certinfo );
+
     protected:
       void notifyOnResourceBindError( ResourceBindError error );
       void notifyOnSessionCreateError( SessionCreateError error );

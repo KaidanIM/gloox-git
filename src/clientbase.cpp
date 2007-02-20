@@ -297,8 +297,35 @@ namespace gloox
       m_logInstance.log( LogLevelError, LogAreaClassClientbase, "Decryption finished, but chain broken" );
   }
 
+  void ClientBase::handleHandshakeResult( bool success, CertInfo &certinfo )
+  {
+    if( success )
+    {
+      if( !notifyOnTLSConnect( m_encryption->fetchTLSInfo() ) )
+      {
+        logInstance().log( LogLevelError, LogAreaClassClient, "Server's certificate rejected!" );
+        disconnect( ConnTlsFailed );
+      }
+      else
+      {
+        if( m_encryption->isSecure() )
+          logInstance().log( LogLevelDebug, LogAreaClassClient, "connection encryption active" );
+        else
+          logInstance().log( LogLevelWarning, LogAreaClassClient, "connection not encrypted!" );
+
+        header();
+      }
+    }
+    else
+    {
+      logInstance().log( LogLevelError, LogAreaClassClient, "TLS handshake failed (local)!" );
+      disconnect( ConnTlsFailed );
+    }
+  }
+
   void ClientBase::handleReceivedData( const std::string& data )
   {
+    printf( "handling received data\n" );
     if( m_encryption && m_encryptionActive )
       m_encryption->decrypt( data );
     else if( m_compression && m_compressionActive )
@@ -1192,11 +1219,11 @@ namespace gloox
   TLSBase* ClientBase::getDefaultEncryption()
   {
 #ifdef USE_GNUTLS
-    return 0;/*new GnuTLS( this );*/
+    return new GnuTLS( this, m_server );
 #elif USE_OPENSSL
-    return new OpenSSL( this );
+    return new OpenSSL( this, m_server );
 #elif USE_WINTLS
-    return new SChannel( this );
+    return new SChannel( this, m_server );
 #else
     return 0;
 #endif

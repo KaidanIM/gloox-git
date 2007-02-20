@@ -26,6 +26,7 @@
 #include "tag.h"
 #include "stanzaextensionfactory.h"
 #include "stanzaextension.h"
+#include "tlsbase.h"
 
 #if !defined( WIN32 ) && !defined( _WIN32_WCE )
 #include <unistd.h>
@@ -104,13 +105,11 @@ namespace gloox
     {
       m_streamFeatures = getStreamFeatures( stanza );
 
-// #ifdef HAVE_TLS
-//       if( tls() && hasTls() && !m_connection->isSecure() && ( m_streamFeatures & StreamFeatureStartTls ) )
-//       {
-//         startTls();
-//         return true;
-//       }
-// #endif
+      if( tls() && hasTls() && !m_encryptionActive && ( m_streamFeatures & StreamFeatureStartTls ) )
+      {
+        startTls();
+        return true;
+      }
 
       if( m_compression && ( m_streamFeatures & StreamFeatureCompressZlib ) )
       {
@@ -188,48 +187,21 @@ namespace gloox
         disconnect( ConnNoSupportedAuth );
       }
     }
-// #ifdef HAVE_TLS
-//     else if( ( stanza->name() == "proceed" ) && stanza->hasAttribute( "xmlns", XMLNS_STREAM_TLS ) )
-//     {
-//       logInstance().log( LogLevelDebug, LogAreaClassClient, "starting TLS handshake..." );
-//
-//       if( m_connection->tlsHandshake() )
-//       {
-//         if( !notifyOnTLSConnect( m_connection->fetchTLSInfo() ) )
-//         {
-//           logInstance().log( LogLevelError, LogAreaClassClient, "Server's certificate rejected!" );
-//           disconnect( ConnTlsFailed );
-//         }
-//         else
-//         {
-//           std::ostringstream oss;
-//           if( m_connection->isSecure() )
-//           {
-//             oss << "connection encryption active";
-//             logInstance().log( LogLevelDebug, LogAreaClassClient, oss.str() );
-//           }
-//           else
-//           {
-//             oss << "connection not encrypted!";
-//             logInstance().log( LogLevelWarning, LogAreaClassClient, oss.str() );
-//           }
-//
-//           header();
-//         }
-//       }
-//       else
-//       {
-//         logInstance().log( LogLevelError, LogAreaClassClient, "TLS handshake failed (local)!" );
-//         disconnect( ConnTlsFailed );
-//       }
-//     }
-//     else if( ( stanza->name() == "failure" ) && stanza->hasAttribute( "xmlns", XMLNS_STREAM_TLS ) )
-//     {
-//       logInstance().log( LogLevelError, LogAreaClassClient, "TLS handshake failed (server-side)!" );
-//       disconnect( ConnTlsFailed );
-//     }
-// #endif
+    else if( ( stanza->name() == "proceed" ) && stanza->hasAttribute( "xmlns", XMLNS_STREAM_TLS ) )
+    {
+      logInstance().log( LogLevelDebug, LogAreaClassClient, "starting TLS handshake..." );
 
+      if( m_encryption )
+      {
+        m_encryptionActive = true;
+        m_encryption->handshake();
+      }
+    }
+    else if( ( stanza->name() == "failure" ) && stanza->hasAttribute( "xmlns", XMLNS_STREAM_TLS ) )
+    {
+      logInstance().log( LogLevelError, LogAreaClassClient, "TLS handshake failed (server-side)!" );
+      disconnect( ConnTlsFailed );
+    }
     else if( ( stanza->name() == "failure" ) && stanza->hasAttribute( "xmlns", XMLNS_COMPRESSION ) )
     {
       logInstance().log( LogLevelError, LogAreaClassClient, "stream compression init failed!" );
