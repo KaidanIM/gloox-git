@@ -71,6 +71,7 @@ namespace gloox
         DiscoNodeItem item;
         item.node = (*it).first;
         item.name = (*it).second;
+        item.jid = m_parent->jid().full();
         l.push_back( item );
       }
       return l;
