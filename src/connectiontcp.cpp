@@ -155,11 +155,13 @@ namespace gloox
     if( size < 0 )
     {
       // error
+      cleanup();
       return ConnIoError;
     }
     else if( size == 0 )
     {
       // connection closed
+      cleanup();
       return ConnUserDisconnected;
     }
 
