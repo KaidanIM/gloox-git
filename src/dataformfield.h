@@ -169,6 +169,18 @@ namespace gloox
       virtual void setLabel( const std::string& label ) { m_label = label; };
 
       /**
+       * Use this function to retrieve the description of this field.
+       * @return The description of this field
+       */
+      virtual const std::string& description() const { return m_desc; };
+
+      /**
+       * Use this function to set the description of this field.
+       * @param desc The description of this field.
+       */
+      virtual void setDescription( const std::string& desc ) { m_desc = desc; };
+
+      /**
        * Use this function to retrieve the value of this field.
        * @return The value of this field.
        */
