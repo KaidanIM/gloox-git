@@ -110,14 +110,12 @@ namespace gloox
 
   JID JID::bareJID() const
   {
-    JID j( bare() );
-    return j;
+    return JID( bare() );
   }
 
   JID JID::fullJID() const
   {
-    JID j( full() );
-    return j;
+    return JID( full() );
   }
 
   int JID::operator==( const JID& right ) const
