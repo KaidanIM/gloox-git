@@ -1,4 +1,4 @@
-v0.9 -- xx Jan 2007
+v0.9 -- xx Feb 2007
 -------------------
 - rewrote XML parser (no dependency on iksemel anymore)
 - XEP-0045 (Multi-User Chat)
@@ -55,7 +55,7 @@ v0.9 -- xx Jan 2007
 - removed unmaintained Dev-C++ project (in favor of Code::Blocks project)
 - ClientBase: renamed ping() --> whitespacePing()
 - ClientBase: HTTP proxy support (thanks to Jose A. Perez Sanchez)
-- Tag: limited XPath support
+- Tag: basic XPath support
 - DNS: cleanup
 - TagHandler: now receives Tag, not Stanza
 - Parser: cleanup, now uses TagHandler
@@ -64,6 +64,18 @@ since -pre5:
 - ClientBase: added removeIDHandler() to cancel trackID() operations
 - added DataFormField( const std::string& name, const std::string& label = "",
                        const std::string& value = "", DataFormFieldType type = FieldTypeTextSingle );
+- ClientBase: added setSASLMechanisms()
+- revamped and modularized the old Connection class
+- Adhoc: added JID to Adhoc item (thanks to Roelof Naude)
+- MUCRoom: fixed memleak (thanks to Roelof Naude)
+- ClientBase: added registerPresenceHandler( const JID& jid, PresenceHandler *ph )
+- MUCRoomParticipant: added 'status' member to hold the presence's status message
+- ClientBase/MessageSession: conform to XEP-0201
+- ClientBase: don't delete a MessageSession manually, use ClientBase::disposeMessageSession()
+- MessageSession: don't delete a MessageFilter manually, use MessageSession::disposeMessageFilter()
+- JID: added fullJID() & bareJID(), returning JID objects
+- Stanza: added setThread()
+- MUCRoomParticipant: added status member
 
 
 v0.8 -- 08 Apr 2006
