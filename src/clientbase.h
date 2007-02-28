@@ -39,6 +39,7 @@ namespace gloox
   class ConnectionListener;
   class IqHandler;
   class MessageHandler;
+  class MessageSession;
   class PresenceHandler;
 //   class StatisticsHandler;
   class SubscriptionHandler;
@@ -296,11 +297,12 @@ namespace gloox
 
       /**
        * Use this function if you have a class implementing a UDP, SCTP (or whatever)
-       * connection. This should be called before calling connect().
+       * connection. This should be called before calling connect(). If there already is a
+       * connection implementation set (either manually or automatically), it gets deleted.
        * @param cb The connection to use.
        * @since 0.9
        */
-      void setConnectionImpl( ConnectionBase *cb ) { m_connection = cb; };
+      void setConnectionImpl( ConnectionBase *cb );
 
       /**
        * This function returns the concrete encryption implementation currently in use.
@@ -311,11 +313,12 @@ namespace gloox
 
       /**
        * Use this function if you have a class supporting hardware encryption (or whatever).
-       * This should be called before calling connect().
+       * This should be called before calling connect(). If there already is a
+       * encryption implementation set (either manually or automatically), it gets deleted.
        * @param cb The encryption implementation to use.
        * @since 0.9
        */
-      void setEncryptionImpl( TLSBase *tb ) { m_encryption = tb; };
+      void setEncryptionImpl( TLSBase *tb );
 
       /**
        * This function returns the concrete compression implementation currently in use.
@@ -326,11 +329,12 @@ namespace gloox
 
       /**
        * Use this function if you have a class supporting some fancy compression algorithm.
-       * This should be called before calling connect().
+       * This should be called before calling connect(). If there already is a
+       * compression implementation set (either manually or automatically), it gets deleted.
        * @param cb The compression implementation to use.
        * @since 0.9
        */
-      void setCompressionImpl( CompressionBase *cb ) { m_compression = cb; };
+      void setCompressionImpl( CompressionBase *cb );
 
       /**
        * Sends a whitespace ping to the server.
@@ -407,21 +411,42 @@ namespace gloox
       void registerMessageHandler( MessageHandler *mh );
 
       /**
-       * Registers @c mh as object that receives Message stanza notifications for the given JID.
-       * Only one message handler per (full) JID is possible.
-       * You should not need to use this functionality directly. Instead use a MessageSession.
-       * @param jid Messages from this full JID will be sent to the given MessageHandler.
-       * @param mh The object to receive Message stanza notifications.
-       * @param types ORed list of StanzaSubType. Only the StanzaMessage* subtypes are valid,
-       * or StanzaSubUndefined. Defaults to 0 which means any type.
+       * Removes the given object from the list of message handlers.
+       * @param mh The object to remove from the list.
        */
-      void registerMessageHandler( const std::string& jid, MessageHandler *mh, int types = 0 );
+      void removeMessageHandler( MessageHandler *mh );
+
+      /**
+       * Registers the given MessageSession to receive Messages incoming from the session's
+       * target JID.
+       * @note The ClientBase instance becomes the owner of the MessageSession, it will be deleted
+       * in ClientBase's destructor. To get rid of the session before that, use disposeMessageSession().
+       * @param session The MessageSession to register.
+       */
+      void registerMessageSession( MessageSession *session );
+
+      /**
+       * Removes the given MessageSession from the  list of MessageSessions and deletes it.
+       * @param session The MessageSession to be deleted.
+       */
+      void disposeMessageSession( MessageSession *session );
 
       /**
        * Registers @c ph as object that receives Presence stanza notifications.
        * @param ph The object to receive Presence stanza notifications.
        */
       void registerPresenceHandler( PresenceHandler *ph );
+
+      /**
+       * Registers a new PresenceHandler for the given JID. Presences received for this
+       * particular JID will not be forwarded to the generic PresenceHandler (and therefore
+       * the Roster). To keep track of a single RosterItem, use RosterItemListener instead.
+       * This functionality is primarily intended for the MUC implementation.
+       * @param jid The JID to 'watch'.
+       * @param ph The PresenceHandler to inform about presence changes from @c jid.
+       * @since 0.9
+       */
+      void registerPresenceHandler( const JID& jid, PresenceHandler *ph );
 
       /**
        * Registers @c sh as object that receives Subscription stanza notifications.
@@ -460,22 +485,18 @@ namespace gloox
       void removeIqHandler( const std::string& xmlns );
 
       /**
-       * Removes the given object from the list of message handlers.
-       * @param mh The object to remove from the list.
-       */
-      void removeMessageHandler( MessageHandler *mh );
-
-      /**
-       * Removes the message handler for the given JID.
-       * @param jid The JID for which listening shall end.
-       */
-      void removeMessageHandler( const std::string& jid );
-
-      /**
        * Removes the given object from the list of presence handlers.
        * @param ph The object to remove from the list.
        */
       void removePresenceHandler( PresenceHandler *ph );
+
+      /**
+       * Removes the given object from the list of presence handlers for the given JID.
+       * @param jid The JID to remove the PresenceHandler(s) for.
+       * @param ph The PresenceHandler to remove from the list. If @c ph is 0,
+       * all handlers for the given JID will be removed.
+       */
+      void removePresenceHandler( const JID& jid, PresenceHandler *ph );
 
       /**
        * Removes the given object from the list of subscription handlers.
@@ -689,37 +710,39 @@ namespace gloox
         std::string tag;
       };
 
-      struct JidHandlerStruct
+      struct JidPresHandlerStruct
       {
-        MessageHandler *mh;
-        int types;
+        JID *jid;
+        PresenceHandler* ph;
       };
 
-      typedef std::list<ConnectionListener*>                ConnectionListenerList;
-      typedef std::map<const std::string, IqHandler*>       IqHandlerMap;
-      typedef std::map<const std::string, TrackStruct>      IqTrackMap;
-      typedef std::map<const std::string, MessageHandler*>  MessageHandlerMap;
-      typedef std::map<const std::string, JidHandlerStruct> MessageJidHandlerMap;
-      typedef std::list<MessageHandler*>                    MessageHandlerList;
-      typedef std::list<PresenceHandler*>                   PresenceHandlerList;
-      typedef std::list<SubscriptionHandler*>               SubscriptionHandlerList;
-      typedef std::list<TagHandlerStruct>                   TagHandlerList;
+      typedef std::list<ConnectionListener*>               ConnectionListenerList;
+      typedef std::map<const std::string, IqHandler*>      IqHandlerMap;
+      typedef std::map<const std::string, TrackStruct>     IqTrackMap;
+      typedef std::map<const std::string, MessageHandler*> MessageHandlerMap;
+      typedef std::list<MessageSession*>                   MessageSessionList;
+      typedef std::list<MessageHandler*>                   MessageHandlerList;
+      typedef std::list<PresenceHandler*>                  PresenceHandlerList;
+      typedef std::list<JidPresHandlerStruct>              PresenceJidHandlerList;
+      typedef std::list<SubscriptionHandler*>              SubscriptionHandlerList;
+      typedef std::list<TagHandlerStruct>                  TagHandlerList;
 
-      ConnectionListenerList  m_connectionListeners;
-      IqHandlerMap            m_iqNSHandlers;
-      IqTrackMap              m_iqIDHandlers;
-      MessageJidHandlerMap    m_messageJidHandlers;
-      MessageHandlerList      m_messageHandlers;
-      PresenceHandlerList     m_presenceHandlers;
-      SubscriptionHandlerList m_subscriptionHandlers;
-      TagHandlerList          m_tagHandlers;
-      StringList              m_cacerts;
-      StatisticsHandler      *m_statisticsHandler;
-      MUCInvitationHandler   *m_mucInvitationHandler;
-      MessageSessionHandler  *m_messageSessionHandlerChat;
-      MessageSessionHandler  *m_messageSessionHandlerGroupchat;
-      MessageSessionHandler  *m_messageSessionHandlerHeadline;
-      MessageSessionHandler  *m_messageSessionHandlerNormal;
+      ConnectionListenerList   m_connectionListeners;
+      IqHandlerMap             m_iqNSHandlers;
+      IqTrackMap               m_iqIDHandlers;
+      MessageSessionList       m_messageSessions;
+      MessageHandlerList       m_messageHandlers;
+      PresenceHandlerList      m_presenceHandlers;
+      PresenceJidHandlerList   m_presenceJidHandlers;
+      SubscriptionHandlerList  m_subscriptionHandlers;
+      TagHandlerList           m_tagHandlers;
+      StringList               m_cacerts;
+      StatisticsHandler       *m_statisticsHandler;
+      MUCInvitationHandler    *m_mucInvitationHandler;
+      MessageSessionHandler   *m_messageSessionHandlerChat;
+      MessageSessionHandler   *m_messageSessionHandlerGroupchat;
+      MessageSessionHandler   *m_messageSessionHandlerHeadline;
+      MessageSessionHandler   *m_messageSessionHandlerNormal;
 
       Parser *m_parser;
       LogSink m_logInstance;
