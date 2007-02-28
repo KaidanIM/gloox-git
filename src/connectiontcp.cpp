@@ -20,7 +20,7 @@
 #include "prep.h"
 
 #ifdef __MINGW32__
-#include <winsock.h>
+# include <winsock.h>
 #endif
 
 #if !defined( WIN32 ) && !defined( _WIN32_WCE )
