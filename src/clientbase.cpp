@@ -126,6 +126,10 @@ namespace gloox
     delete m_compression;
     delete m_parser;
     delete m_disco;
+
+    MessageSessionList::const_iterator it = m_messageSessions.begin();
+    for( ; it != m_messageSessions.end(); ++it )
+      delete (*it);
   }
 
   ConnectionError ClientBase::recv( int timeout )
@@ -743,6 +747,39 @@ namespace gloox
     return m_logInstance;
   }
 
+  void ClientBase::setConnectionImpl( ConnectionBase *cb )
+  {
+    if( m_connection )
+    {
+      delete m_connection;
+      m_connection = 0;
+    }
+
+    m_connection = cb;
+  }
+
+  void ClientBase::setEncryptionImpl( TLSBase *tb )
+  {
+    if( m_encryption )
+    {
+      delete m_encryption;
+      m_encryption = 0;
+    }
+
+    m_encryption = tb;
+  }
+
+  void ClientBase::setCompressionImpl( CompressionBase *cb )
+  {
+    if( m_compression )
+    {
+      delete m_compression;
+      m_compression = 0;
+    }
+
+    m_compression = cb;
+  }
+
   void ClientBase::handleStreamError( Stanza *stanza )
   {
     Tag::TagList& c = stanza->children();
@@ -873,10 +910,30 @@ namespace gloox
       m_presenceHandlers.remove( ph );
   }
 
-  void ClientBase::registerIqHandler( IqHandler *ih, const std::string& xmlns )
+  void ClientBase::registerPresenceHandler( const JID& jid, PresenceHandler *ph )
   {
-    if( ih && !xmlns.empty() )
-      m_iqNSHandlers[xmlns] = ih;
+    if( ph && !jid.empty() )
+    {
+      JidPresHandlerStruct jph;
+      jph.jid = new JID( jid.bare() );
+      jph.ph = ph;
+      m_presenceJidHandlers.push_back( jph );
+    }
+  }
+
+  void ClientBase::removePresenceHandler( const JID& jid, PresenceHandler *ph )
+  {
+    PresenceJidHandlerList::iterator t;
+    PresenceJidHandlerList::iterator it = m_presenceJidHandlers.begin();
+    while( it != m_presenceJidHandlers.end() )
+    {
+      t = it;
+      ++it;
+      if( ( !ph || (*it).ph == ph ) && (*it).jid->bare() == jid.bare() )
+      {
+        m_presenceJidHandlers.erase( t );
+      }
+    }
   }
 
   void ClientBase::trackID( IqHandler *ih, const std::string& id, int context )
@@ -908,20 +965,37 @@ namespace gloox
     }
   }
 
+  void ClientBase::registerIqHandler( IqHandler *ih, const std::string& xmlns )
+  {
+    if( ih && !xmlns.empty() )
+      m_iqNSHandlers[xmlns] = ih;
+  }
+
   void ClientBase::removeIqHandler( const std::string& xmlns )
   {
     if( !xmlns.empty() )
       m_iqNSHandlers.erase( xmlns );
   }
 
-  void ClientBase::registerMessageHandler( const std::string& jid, MessageHandler *mh, int types )
+  void ClientBase::registerMessageSession( MessageSession *session )
   {
-    if( mh && !jid.empty() )
+    if( !session )
+      return;
+
+    m_messageSessions.push_back( session );
+  }
+
+  void ClientBase::disposeMessageSession( MessageSession *session )
+  {
+    MessageSessionList::iterator it = m_messageSessions.begin();
+    for( ; it != m_messageSessions.end(); ++it )
     {
-      JidHandlerStruct jhs;
-      jhs.mh = mh;
-      jhs.types = ( types )?( types ):( StanzaSubUndefined );
-      m_messageJidHandlers[jid] = jhs;
+      if( (*it) == session )
+      {
+        delete (*it);
+        m_messageSessions.erase( it );
+        return;
+      }
     }
   }
 
@@ -929,13 +1003,6 @@ namespace gloox
   {
     if( mh )
       m_messageHandlers.push_back( mh );
-  }
-
-  void ClientBase::removeMessageHandler( const std::string& jid )
-  {
-    MessageJidHandlerMap::iterator it = m_messageJidHandlers.find( jid );
-    if( it != m_messageJidHandlers.end() )
-      m_messageJidHandlers.erase( it );
   }
 
   void ClientBase::removeMessageHandler( MessageHandler *mh )
@@ -950,6 +1017,12 @@ namespace gloox
       m_subscriptionHandlers.push_back( sh );
   }
 
+  void ClientBase::removeSubscriptionHandler( SubscriptionHandler *sh )
+  {
+    if( sh )
+      m_subscriptionHandlers.remove( sh );
+  }
+
   void ClientBase::registerTagHandler( TagHandler *th, const std::string& tag, const std::string& xmlns )
   {
     if( th && !tag.empty() )
@@ -960,44 +1033,6 @@ namespace gloox
       ths.th = th;
       m_tagHandlers.push_back( ths );
     }
-  }
-
-  void ClientBase::registerStatisticsHandler( StatisticsHandler *sh )
-  {
-    if( sh )
-      m_statisticsHandler = sh;
-  }
-
-  void ClientBase::registerMUCInvitationHandler( MUCInvitationHandler *mih )
-  {
-    if( mih )
-    {
-      m_mucInvitationHandler = mih;
-      m_disco->addFeature( XMLNS_MUC );
-    }
-  }
-
-  void ClientBase::removeStatisticsHandler()
-  {
-    m_statisticsHandler = 0;
-  }
-
-  void ClientBase::removeSubscriptionHandler( SubscriptionHandler *sh )
-  {
-    if( sh )
-      m_subscriptionHandlers.remove( sh );
-  }
-
-  void ClientBase::registerConnectionListener( ConnectionListener *cl )
-  {
-    if( cl )
-      m_connectionListeners.push_back( cl );
-  }
-
-  void ClientBase::removeConnectionListener( ConnectionListener *cl )
-  {
-    if( cl )
-      m_connectionListeners.remove( cl );
   }
 
   void ClientBase::removeTagHandler( TagHandler *th, const std::string& tag, const std::string& xmlns )
@@ -1013,10 +1048,42 @@ namespace gloox
     }
   }
 
+  void ClientBase::registerStatisticsHandler( StatisticsHandler *sh )
+  {
+    if( sh )
+      m_statisticsHandler = sh;
+  }
+
+  void ClientBase::removeStatisticsHandler()
+  {
+    m_statisticsHandler = 0;
+  }
+
+  void ClientBase::registerMUCInvitationHandler( MUCInvitationHandler *mih )
+  {
+    if( mih )
+    {
+      m_mucInvitationHandler = mih;
+      m_disco->addFeature( XMLNS_MUC );
+    }
+  }
+
   void ClientBase::removeMUCInvitationHandler()
   {
     m_mucInvitationHandler = 0;
     m_disco->removeFeature( XMLNS_MUC );
+  }
+
+  void ClientBase::registerConnectionListener( ConnectionListener *cl )
+  {
+    if( cl )
+      m_connectionListeners.push_back( cl );
+  }
+
+  void ClientBase::removeConnectionListener( ConnectionListener *cl )
+  {
+    if( cl )
+      m_connectionListeners.remove( cl );
   }
 
   void ClientBase::notifyOnConnect()
@@ -1073,6 +1140,19 @@ namespace gloox
 
   void ClientBase::notifyPresenceHandlers( Stanza *stanza )
   {
+    bool match = false;
+    PresenceJidHandlerList::const_iterator itj = m_presenceJidHandlers.begin();
+    for( ; itj != m_presenceJidHandlers.end(); ++itj )
+    {
+      if( (*itj).jid->bare() == stanza->from().bare() && (*itj).ph )
+      {
+        (*itj).ph->handlePresence( stanza );
+        match = true;
+      }
+    }
+    if( match )
+      return;
+
     PresenceHandlerList::const_iterator it = m_presenceHandlers.begin();
     for( ; it != m_presenceHandlers.end(); ++it )
     {
@@ -1147,20 +1227,26 @@ namespace gloox
       }
     }
 
-    MessageJidHandlerMap::const_iterator it1 = m_messageJidHandlers.find( stanza->from().full() );
-    if( it1 != m_messageJidHandlers.end()
-        && ( (*it1).second.types & stanza->subtype() || (*it1).second.types == StanzaSubUndefined ) )
+    MessageSessionList::const_iterator it1 = m_messageSessions.begin();
+    for( ; it1 != m_messageSessions.end(); ++it1 )
     {
-      (*it1).second.mh->handleMessage( stanza );
-      return;
+      if( (*it1)->target() == stanza->from().full() &&
+            (*it1)->types() & stanza->subtype() || (*it1)->types() == StanzaSubUndefined )
+      {
+        (*it1)->handleMessage( stanza );
+        return;
+      }
     }
 
-    it1 = m_messageJidHandlers.find( stanza->from().bare() );
-    if( it1 != m_messageJidHandlers.end()
-        && ( (*it1).second.types & stanza->subtype() || (*it1).second.types == StanzaSubUndefined ) )
+    it1 = m_messageSessions.begin();
+    for( ; it1 != m_messageSessions.end(); ++it1 )
     {
-      (*it1).second.mh->handleMessage( stanza );
-      return;
+      if( (*it1)->target() == stanza->from().bare() &&
+            ( (*it1)->types() & stanza->subtype() || (*it1)->types() == StanzaSubUndefined ) )
+      {
+        (*it1)->handleMessage( stanza );
+        return;
+      }
     }
 
     bool haveSessionHandler = false;
@@ -1188,12 +1274,12 @@ namespace gloox
 
     if( haveSessionHandler )
     {
-      notifyMessageHandlers( stanza );
+      m_messageSessions.push_back( session );
+      session->handleMessage( stanza );
       return;
     }
     else
       delete session;
-
 
     MessageHandlerList::const_iterator it = m_messageHandlers.begin();
     for( ; it != m_messageHandlers.end(); ++it )
