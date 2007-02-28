@@ -6,7 +6,7 @@ gloox compiles (at least) on
 - MSVC 6
 No other compilers have been tested.
 
-Project files for Bloodshed Dev-C++ (gloox.dev) and MSVC 6 (gloox.dsp) are included.
+Project files for Code::Blocks (gloox.cbp) and MSVC 6 (gloox.dsp) are included.
 
 - Edit config.h.win to suit your needs.
 - Add additional libs you have available to the project.
