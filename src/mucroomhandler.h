@@ -66,6 +66,8 @@ namespace gloox
                                      * (or whatever the user's presence was at the time of the nick change
                                      * request) will follow (not necessarily immediately) coming from the
                                      * user's new nickname. Empty if there is no nick change in progress. */
+    std::string status;             /**< If the presence packet contained a status message, it is stored
+                                     * here. */
   };
 
   /**
