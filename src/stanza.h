@@ -174,6 +174,13 @@ namespace gloox
       virtual const std::string thread() const { return m_thread; };
 
       /**
+       * Sets the Stanza's thread ID. Only useful for message stanzas.
+       * @param thread The thread ID.
+       * @since 0.9
+       */
+      void setThread( const std::string& thread ) { m_thread = thread; };
+
+      /**
        * Retrieves the value of the xml:lang attribute of this stanza.
        * Default is 'en'.
        */
