@@ -66,6 +66,20 @@ namespace gloox
       std::string bare() const;
 
       /**
+       * Creates and returns a JID from this JID's node and server parts.
+       * @return The bare JID.
+       * @since 0.9
+       */
+      JID bareJID() const;
+
+      /**
+       * Creates and returns a JID from this JID's node, server and resource parts.
+       * @return The full JID.
+       * @since 0.9
+       */
+      JID fullJID() const;
+
+      /**
        * Sets the username.
        * @param username The new username.
        */

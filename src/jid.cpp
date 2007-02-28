@@ -108,6 +108,18 @@ namespace gloox
       return m_username + "@" + m_server;
   }
 
+  JID JID::bareJID() const
+  {
+    JID j( bare() );
+    return j;
+  }
+
+  JID JID::fullJID() const
+  {
+    JID j( full() );
+    return j;
+  }
+
   int JID::operator==( const JID& right ) const
   {
     return ( ( m_resource == right.m_resource )
