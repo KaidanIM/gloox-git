@@ -1,10 +1,19 @@
 Todo
 ----
 
+- re-integrate proxy support (and check)
+- fix gnutls
+- fix openssl
+- fix schannel
++ add RosterItemListener
+- comply to XEP-0201
+
+- vcard: add getters for lists (email/addresses/...)
+
 - overhaul all XEP implementations (and note implemented version number)
 - RosterItem::status ::statusMsg for highest prio
 - Disco: allow specification of root node handler
-
+- setTls --> setTLS, setSasl --> setSASL (?)
 
 - check this change: http://www.jabberstudio.org/cgi-bin/viewcvs.cgi/cvs/jeps/0085/jep-0085.xml?r1=1.28&r2=1.31
 - XEP-0020 (Feature Negotiation)
@@ -17,7 +26,6 @@ Todo
 - XEP-0198 (Stanza Acknowledgements)
 - XEP-0199 (XMPP Ping)
 - thread safety
-- fix TLS on win32 (jaim.at?)
 - sort SRV records by weight & cost
 - state p. for Stanza types
 - vcard-temp: support AGENT, CATEGORIES, SOUND, KEY
@@ -30,7 +38,6 @@ Todo
 - add prePresenceHook (for XEP-0182 (Invisible Command))
 - connection progress callbacks
 - asynchronous socket i/o?
-- MessageSessionFactory?
 
 
 - XPath
@@ -42,5 +49,13 @@ Todo
 - introduce some 'randomness' for IDs
 - introduce return values for *Handlers to indicate whether following handlers should be invoked as well
 - unify error recognition
-- look into IPV6 support
+- look into IPv6 support
 - empty passwords allowed?
+
+
+
+rfc3920bis
+----------
+
+3.2: nameprep: set UseSTD3ASCIIRules to true
+
