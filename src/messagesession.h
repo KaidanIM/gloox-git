@@ -14,7 +14,6 @@
 #ifndef MESSAGESESSION_H__
 #define MESSAGESESSION_H__
 
-#include "messagehandler.h"
 #include "jid.h"
 
 #include <string>
@@ -26,6 +25,8 @@ namespace gloox
   class ClientBase;
   class Tag;
   class MessageFilter;
+  class MessageHandler;
+  class Stanza;
 
   /**
    * @brief An abstraction of a message session between any two entities.
@@ -46,21 +47,21 @@ namespace gloox
    * Using MessageSessions has the following advantages over the plain old MessageHandler:
    * @li automatic creation of MessageSessions
    * @li filtering by JID
-   * @li automatic handling of threading (XMPP message threads, that is)
+   * @li automatic handling of threading (i.e., XMPP message threads)
    * @li simpler sending of messages
    * @li support for MessageFilters.
    *
    * @b Usage:<br>
    * Derive an object from MessageSessionHandler and reimplement handleMessageSession() to store your
    * shiny new sessions somewhere, or to create a new chat window, or whatever. Register your
-   * object with a ClientBase instance using setAutoMessageSession(). In code:
+   * object with a ClientBase instance using registerMessageSessionHandler(). In code:
    * @code
    * void MyClass::myFunc()
    * {
    *   JID jid( "abc@example.org/gloox" );
    *   j = new Client( jid, "password" );
    *   [...]
-   *   j->setAutoMessageSession( true, this );
+   *   j->registerMessageSessionHandler( this, 0 );
    * }
    * @endcode
    * MyClass is a MessageSessionHandler here.
@@ -134,10 +135,13 @@ namespace gloox
    *
    * See InBandBytestreamManager for a detailed description on how to implement In-Band Bytestreams.
    *
+   * @note You should never delete a MessageSession manually. Use ClientBase::disposeMessageSession()
+   * instead.
+   *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.8
    */
-  class GLOOX_API MessageSession : public MessageHandler
+  class GLOOX_API MessageSession
   {
 
     friend class MessageEventFilter;
@@ -152,7 +156,7 @@ namespace gloox
        * with every message sent through this session.
        * @param parent The ClientBase to use for communication.
        * @param jid The remote contact's full JID. If you don't know the full JID (this is probably the
-       * most common case) but still want replies from the full JID to be matches to this MessageSession,
+       * most common case) but still want replies from the full JID to be handled by this MessageSession,
        * set the @b wantUpgrade parameter to true (or leave it untouched).
        * @param wantUpgrade This flag indicates whether gloox should try to match an incoming message
        * from a full JID to this MessageSession. If unsure, use the default. You probably only want to use
@@ -209,6 +213,9 @@ namespace gloox
       /**
        * Use this function to hook a new MessageFilter into a MessageSession.
        * The filter will be able to read and/or modify a message stanza's content.
+       * @note The MessageSession will become the owner of the filter, it will be
+       * deleted by MessageSession's destructor. To get rid of the filter before that,
+       * use disposeMessageFilter().
        * @param mf The MessageFilter to add.
        */
       void registerMessageFilter( MessageFilter *mf );
@@ -216,11 +223,29 @@ namespace gloox
       /**
        * Use this function to remove a MessageFilter from the MessageSession.
        * @param mf The MessageFilter to remove.
+       * @note To remove and delete the MessageFilter in one step use disposeMessageFilter().
        */
       void removeMessageFilter( MessageFilter *mf );
 
-      // reimplemented from MessageHandler
-      virtual void handleMessage( Stanza *stanza, MessageSession *session = 0 );
+      /**
+       * Use this function to remove and delete a MessageFilter from the MessageSession.
+       * @param mf The MessageFilter to remove and delete.
+       * @note To just remove (and not delete) the MessageFilter use removeMessageFilter().
+       */
+      void disposeMessageFilter( MessageFilter *mf );
+
+      /**
+       * Returns the message type this MessageSession wants to receive.
+       * @return ORed list of StanzaSubType values this MessageSession wants to receive. Only the
+       * StanzaMessage* types are valid.
+       */
+      int types() const { return m_types; };
+
+      /**
+       * Receives messages from ClientBase.
+       * @param stanza The message Stanza.
+       */
+      void handleMessage( Stanza *stanza );
 
     protected:
       /**
@@ -247,6 +272,7 @@ namespace gloox
       std::string m_thread;
       int m_types;
       bool m_wantUpgrade;
+      bool m_hadMessages;
 
   };
 
