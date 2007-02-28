@@ -72,6 +72,10 @@ namespace gloox
    * To quickly create an instant room to turn a one-to-one chat into a multi-user chat,
    * see UniqueMUCRoom.
    *
+   * To send a private message to a room participant, use
+   * @link MessageSession gloox::MessageSession @endlink with the participant's full room JID
+   * (room\@service/nick).
+   *
    * XEP version: 1.21
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9

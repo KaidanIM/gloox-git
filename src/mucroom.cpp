@@ -31,7 +31,9 @@ namespace gloox
       m_publishNick( false ), m_publish( false ), m_unique( false )
   {
     if( m_parent )
-      m_parent->registerPresenceHandler( this );
+    {
+      m_parent->registerPresenceHandler( m_nick.bareJID(), this );
+    }
   }
 
   MUCRoom::~MUCRoom()
@@ -41,7 +43,7 @@ namespace gloox
 
     if( m_parent )
     {
-      m_parent->removePresenceHandler( this );
+      m_parent->removePresenceHandler( m_nick.bareJID(), this );
       m_parent->disco()->removeNodeHandler( this, XMLNS_MUC_ROOMS );
     }
   }
@@ -109,7 +111,11 @@ namespace gloox
     x->addAttribute( "xmlns", XMLNS_MUC );
 
     if( m_parent )
+    {
       m_parent->send( s );
+      m_parent->disposeMessageSession( m_session );
+      m_session = 0;
+    }
 
     m_joined = false;
   }
@@ -282,7 +288,7 @@ namespace gloox
     if( !m_parent || !m_joined )
       return;
 
-    DataForm df;
+    DataForm df( DataForm::FormTypeSubmit );
     DataFormField *field = new DataFormField( DataFormField::FieldTypeNone );
     field->setName( "FORM_TYPE" );
     field->setValue( XMLNS_MUC_REQUEST );
@@ -623,8 +629,7 @@ namespace gloox
           }
         }
 
-        if( stanza->presence() == PresenceUnavailable )
-          party.reason = stanza->status();
+        party.status = stanza->status();
 
         m_roomHandler->handleMUCParticipantPresence( this, party, stanza->presence() );
         delete party.jid;
