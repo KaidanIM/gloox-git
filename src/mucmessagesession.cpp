@@ -13,6 +13,8 @@
 
 #include "mucmessagesession.h"
 #include "clientbase.h"
+#include "stanza.h"
+#include "messagehandler.h"
 
 namespace gloox
 {
