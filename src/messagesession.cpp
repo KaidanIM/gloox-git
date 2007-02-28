@@ -14,8 +14,8 @@
 #include "messagesession.h"
 
 #include "messagefilter.h"
+#include "messagehandler.h"
 #include "clientbase.h"
-#include "client.h"
 #include "disco.h"
 #include "stanza.h"
 #include "tag.h"
@@ -25,11 +25,11 @@ namespace gloox
 
   MessageSession::MessageSession( ClientBase *parent, const JID& jid, bool wantUpgrade, int types )
     : m_parent( parent ), m_target( jid ), m_messageHandler( 0 ),
-      m_types( types ), m_wantUpgrade( wantUpgrade )
+      m_types( types ), m_wantUpgrade( wantUpgrade ), m_hadMessages( false )
   {
     if( m_parent )
     {
-      m_parent->registerMessageHandler( m_target.full(), this, m_types );
+      m_parent->registerMessageSession( this );
 
       m_thread = "gloox" + m_parent->getID();
     }
@@ -37,14 +37,24 @@ namespace gloox
 
   MessageSession::~MessageSession()
   {
-    if( m_parent )
-      m_parent->removeMessageHandler( m_target.full() );
+    MessageFilterList::const_iterator it = m_messageFilterList.begin();
+    for( ; it != m_messageFilterList.end(); ++it )
+      delete  (*it);
   }
 
-  void MessageSession::handleMessage( Stanza *stanza, MessageSession * /*session*/ )
+  void MessageSession::handleMessage( Stanza *stanza )
   {
     if( m_wantUpgrade && stanza->from().bare() == m_target.full() )
       setResource( stanza->from().resource() );
+
+    if( !m_hadMessages )
+    {
+      m_hadMessages = true;
+      if( stanza->thread().empty() )
+        stanza->setThread( m_thread );
+      else
+        m_thread = stanza->thread();
+    }
 
     MessageFilterList::const_iterator it = m_messageFilterList.begin();
     for( ; it != m_messageFilterList.end(); ++it )
@@ -89,9 +99,7 @@ namespace gloox
 
   void MessageSession::setResource( const std::string& resource )
   {
-    m_parent->removeMessageHandler( m_target.full() );
     m_target.setResource( resource );
-    m_parent->registerMessageHandler( m_target.full(), this, m_types );
   }
 
   void MessageSession::registerMessageHandler( MessageHandler *mh )
@@ -112,6 +120,12 @@ namespace gloox
   void MessageSession::removeMessageFilter( MessageFilter *mf )
   {
     m_messageFilterList.remove( mf );
+  }
+
+  void MessageSession::disposeMessageFilter( MessageFilter *mf )
+  {
+    removeMessageFilter( mf );
+    delete mf;
   }
 
 }
