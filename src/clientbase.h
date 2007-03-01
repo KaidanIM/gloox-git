@@ -422,6 +422,8 @@ namespace gloox
        * @note The ClientBase instance becomes the owner of the MessageSession, it will be deleted
        * in ClientBase's destructor. To get rid of the session before that, use disposeMessageSession().
        * @param session The MessageSession to register.
+       * @note Since a MessageSession automatically registers itself with the ClientBase, there is no
+       * need to call this function directly.
        */
       void registerMessageSession( MessageSession *session );
 
