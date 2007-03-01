@@ -987,6 +987,9 @@ namespace gloox
 
   void ClientBase::disposeMessageSession( MessageSession *session )
   {
+    if( !session )
+      return;
+
     MessageSessionList::iterator it = m_messageSessions.begin();
     for( ; it != m_messageSessions.end(); ++it )
     {
@@ -1230,8 +1233,9 @@ namespace gloox
     MessageSessionList::const_iterator it1 = m_messageSessions.begin();
     for( ; it1 != m_messageSessions.end(); ++it1 )
     {
-      if( (*it1)->target() == stanza->from().full() &&
-            (*it1)->types() & stanza->subtype() || (*it1)->types() == StanzaSubUndefined )
+      if( (*it1)->target().full() == stanza->from().full() &&
+            ( (*it1)->threadID().empty() || (*it1)->threadID() == stanza->thread() ) &&
+            ( (*it1)->types() & stanza->subtype() || (*it1)->types() == StanzaSubUndefined ) )
       {
         (*it1)->handleMessage( stanza );
         return;
@@ -1241,7 +1245,8 @@ namespace gloox
     it1 = m_messageSessions.begin();
     for( ; it1 != m_messageSessions.end(); ++it1 )
     {
-      if( (*it1)->target() == stanza->from().bare() &&
+      if( (*it1)->target().bare() == stanza->from().bare() &&
+            ( (*it1)->threadID().empty() || (*it1)->threadID() == stanza->thread() ) &&
             ( (*it1)->types() & stanza->subtype() || (*it1)->types() == StanzaSubUndefined ) )
       {
         (*it1)->handleMessage( stanza );
