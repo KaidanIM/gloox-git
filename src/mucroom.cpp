@@ -53,8 +53,7 @@ namespace gloox
     if( m_joined )
       return;
 
-    JID j( m_nick.bare() );
-    m_session = new MUCMessageSession( m_parent, j );
+    m_session = new MUCMessageSession( m_parent, m_nick.bareJID() );
     m_session->registerMessageHandler( this );
 
     Stanza *s = Stanza::createPresenceStanza( m_nick );
