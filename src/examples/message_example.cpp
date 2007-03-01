@@ -12,6 +12,7 @@
 #include "../lastactivity.h"
 #include "../loghandler.h"
 #include "../logsink.h"
+#include "../messagehandler.h"
 using namespace gloox;
 
 #include <unistd.h>
@@ -42,6 +43,7 @@ class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListen
       j->disco()->setVersion( "messageTest", GLOOX_VERSION, "Linux" );
       j->disco()->setIdentity( "client", "bot" );
       j->disco()->addFeature( XMLNS_CHAT_STATES );
+      j->setTls( false );
       StringList ca;
       ca.push_back( "/path/to/cacert.crt" );
       j->setCACerts( ca );
@@ -58,14 +60,6 @@ class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListen
         printf( "ce: %d\n", ce );
       }
 
-      // cleanup
-      if( m_session )
-      {
-        m_session->removeMessageHandler();
-        delete m_chatStateFilter;
-        delete m_messageEventFilter;
-        delete m_session;
-      }
       delete( j );
     }
 
@@ -146,9 +140,10 @@ class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListen
 
     virtual void handleMessageSession( MessageSession *session )
     {
-      // this will leak if you talk to this bot from more than one full JID.
-      m_session = session;
       printf( "got new session\n");
+      // this example can handle only one session. so we get rid of the old session
+      j->disposeMessageSession( m_session );
+      m_session = session;
       m_session->registerMessageHandler( this );
       m_messageEventFilter = new MessageEventFilter( m_session );
       m_messageEventFilter->registerMessageEventHandler( this );
