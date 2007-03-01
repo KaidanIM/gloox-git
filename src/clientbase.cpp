@@ -1284,7 +1284,7 @@ namespace gloox
       return;
     }
     else
-      delete session;
+      disposeMessageSession( session );
 
     MessageHandlerList::const_iterator it = m_messageHandlers.begin();
     for( ; it != m_messageHandlers.end(); ++it )
