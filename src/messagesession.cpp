@@ -27,19 +27,13 @@ namespace gloox
     : m_parent( parent ), m_target( jid ), m_messageHandler( 0 ),
       m_types( types ), m_wantUpgrade( wantUpgrade ), m_hadMessages( false )
   {
-    if( m_parent )
-    {
-      m_parent->registerMessageSession( this );
-
-      m_thread = "gloox" + m_parent->getID();
-    }
   }
 
   MessageSession::~MessageSession()
   {
     MessageFilterList::const_iterator it = m_messageFilterList.begin();
     for( ; it != m_messageFilterList.end(); ++it )
-      delete  (*it);
+      delete (*it);
   }
 
   void MessageSession::handleMessage( Stanza *stanza )
@@ -51,7 +45,10 @@ namespace gloox
     {
       m_hadMessages = true;
       if( stanza->thread().empty() )
+      {
+        m_thread = "gloox" + m_parent->getID();
         stanza->setThread( m_thread );
+      }
       else
         m_thread = stanza->thread();
     }
@@ -68,6 +65,12 @@ namespace gloox
 
   void MessageSession::send( const std::string& message, const std::string& subject )
   {
+    if( !m_hadMessages )
+    {
+      m_thread = "gloox" + m_parent->getID();
+      m_hadMessages = true;
+    }
+
     Tag *m = new Tag( "message" );
     m->addAttribute( "type", "chat" );
     new Tag( m, "body", message );
