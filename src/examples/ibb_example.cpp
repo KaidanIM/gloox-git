@@ -15,6 +15,7 @@
 #include "../inbandbytestreammanager.h"
 #include "../inbandbytestreamhandler.h"
 #include "../inbandbytestreamdatahandler.h"
+#include "../messagehandler.h"
 using namespace gloox;
 
 #include <unistd.h>
@@ -70,14 +71,7 @@ class IBBTest : public MessageSessionHandler, ConnectionListener, LogHandler,
       }
 
       // cleanup
-      if( m_session )
-      {
-        m_session->removeMessageHandler();
-        delete m_chatStateFilter;
-        delete m_messageEventFilter;
-        delete m_session;
-      }
-      delete( j );
+     delete( j );
     }
 
     virtual void onConnect()
