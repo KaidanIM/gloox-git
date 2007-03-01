@@ -130,6 +130,10 @@ namespace gloox
     MessageSessionList::const_iterator it = m_messageSessions.begin();
     for( ; it != m_messageSessions.end(); ++it )
       delete (*it);
+
+    PresenceJidHandlerList::const_iterator it1 = m_presenceJidHandlers.begin();
+    for( ; it1 != m_presenceJidHandlers.end(); ++it1 )
+      delete (*it1).jid;
   }
 
   ConnectionError ClientBase::recv( int timeout )
