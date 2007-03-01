@@ -26,8 +26,6 @@ namespace gloox
 
   MessageFilter::~MessageFilter()
   {
-    if( m_parent )
-      m_parent->removeMessageFilter( this );
   }
 
   void MessageFilter::attachTo( MessageSession *session )
