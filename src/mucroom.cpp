@@ -526,62 +526,61 @@ namespace gloox
     }
     else
     {
-      Tag *t;
-      if( m_roomHandler && ( t = stanza->findChild( "x", "xmlns", XMLNS_MUC_USER ) ) != 0 )
+      Tag *x;
+      if( m_roomHandler && ( x = stanza->findChild( "x", "xmlns", XMLNS_MUC_USER ) ) != 0 )
       {
         MUCRoomParticipant party;
         party.flags = 0;
         party.nick = new JID( stanza->from() );
         party.jid = 0;
         party.actor = 0;
-        Tag *i = 0;
-        if( ( i = t->findChild( "item" ) ) != 0 )
-        {
-          const std::string affiliation = i->findAttribute( "affiliation" );
-          if( affiliation == "owner" )
-            party.affiliation = AffiliationOwner;
-          else if( affiliation == "admin" )
-            party.affiliation = AffiliationAdmin;
-          else if( affiliation == "member" )
-            party.affiliation = AffiliationMember;
-          else if( affiliation == "outcast" )
-            party.affiliation = AffiliationOutcast;
-          else
-            party.affiliation = AffiliationNone;
-
-          const std::string role = i->findAttribute( "role" );
-          if( role == "moderator" )
-            party.role = RoleModerator;
-          else if( role == "participant" )
-            party.role = RoleParticipant;
-          else if( role == "visitor" )
-            party.role = RoleVisitor;
-          else
-            party.role = RoleNone;
-
-          std::string jid = i->findAttribute( "jid" );
-          if( !jid.empty() )
-            party.jid = new JID( jid );
-
-          if( i->hasChild( "actor" ) )
-          {
-            const std::string actor = i->findChild( "actor" )->findAttribute( "jid" );
-            if( !actor.empty() )
-              party.actor = new JID( actor );
-          }
-          if( i->hasChild( "reason" ) )
-          {
-            party.reason = i->findChild( "reason" )->cdata();
-          }
-        }
-
-        Tag::TagList l = stanza->children();
+        Tag::TagList l = x->children();
         Tag::TagList::const_iterator it = l.begin();
         for( ; it != l.end(); ++it )
         {
+          if( (*it)->name() == "item" )
+          {
+            const std::string affiliation = (*it)->findAttribute( "affiliation" );
+            if( affiliation == "owner" )
+              party.affiliation = AffiliationOwner;
+            else if( affiliation == "admin" )
+              party.affiliation = AffiliationAdmin;
+            else if( affiliation == "member" )
+              party.affiliation = AffiliationMember;
+            else if( affiliation == "outcast" )
+              party.affiliation = AffiliationOutcast;
+            else
+              party.affiliation = AffiliationNone;
+
+            const std::string role = (*it)->findAttribute( "role" );
+            if( role == "moderator" )
+              party.role = RoleModerator;
+            else if( role == "participant" )
+              party.role = RoleParticipant;
+            else if( role == "visitor" )
+              party.role = RoleVisitor;
+            else
+              party.role = RoleNone;
+
+            std::string jid = (*it)->findAttribute( "jid" );
+            if( !jid.empty() )
+              party.jid = new JID( jid );
+
+            if( (*it)->hasChild( "actor" ) )
+            {
+              const std::string actor = (*it)->findChild( "actor" )->findAttribute( "jid" );
+              if( !actor.empty() )
+                party.actor = new JID( actor );
+            }
+            if( (*it)->hasChild( "reason" ) )
+            {
+              party.reason = (*it)->findChild( "reason" )->cdata();
+            }
+          }
+
           if( (*it)->name() == "status" )
           {
-            const std::string code = i->findAttribute( "code" );
+            const std::string code = (*it)->findAttribute( "code" );
             if( code == "100" )
               setNonAnonymous();
             else if( code == "101" )
