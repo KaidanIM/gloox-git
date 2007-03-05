@@ -310,24 +310,21 @@ namespace gloox
   {
     if( success )
     {
-      if( !notifyOnTLSConnect( m_encryption->fetchTLSInfo() ) )
+      if( !notifyOnTLSConnect( certinfo ) )
       {
-        logInstance().log( LogLevelError, LogAreaClassClient, "Server's certificate rejected!" );
+        logInstance().log( LogLevelError, LogAreaClassClientbase, "Server's certificate rejected!" );
         disconnect( ConnTlsFailed );
       }
       else
       {
-        if( m_encryption->isSecure() )
-          logInstance().log( LogLevelDebug, LogAreaClassClient, "connection encryption active" );
-        else
-          logInstance().log( LogLevelWarning, LogAreaClassClient, "connection not encrypted!" );
+        logInstance().log( LogLevelDebug, LogAreaClassClientbase, "connection encryption active" );
 
         header();
       }
     }
     else
     {
-      logInstance().log( LogLevelError, LogAreaClassClient, "TLS handshake failed (local)!" );
+      logInstance().log( LogLevelError, LogAreaClassClientbase, "TLS handshake failed!" );
       disconnect( ConnTlsFailed );
     }
   }
