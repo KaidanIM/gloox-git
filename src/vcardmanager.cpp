@@ -36,6 +36,7 @@ namespace gloox
     {
       m_parent->disco()->removeFeature( XMLNS_VCARD_TEMP );
       m_parent->removeIqHandler( XMLNS_VCARD_TEMP );
+      m_parent->removeIDHandler( this );
     }
   }
 
@@ -59,6 +60,24 @@ namespace gloox
     m_parent->trackID( this, id, VCardHandler::FetchVCard );
     m_trackMap[id] = vch;
     m_parent->send( iq );
+  }
+
+  void VCardManager::cancelVCardOperations( VCardHandler *vch )
+  {
+    TrackMap::iterator t;
+    TrackMap::iterator it = m_trackMap.begin();
+    for( ; it != m_trackMap.end(); ++it )
+    {
+      if( (*it).second == vch )
+      {
+        t = it;
+        ++t;
+        m_trackMap.erase( it );
+        it = t;
+        if( it == m_trackMap.end() )
+          break;
+      }
+    }
   }
 
   void VCardManager::storeVCard( const VCard *vcard, VCardHandler *vch )
