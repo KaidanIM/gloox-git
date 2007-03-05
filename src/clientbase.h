@@ -537,7 +537,7 @@ namespace gloox
       int m_idCount;
       bool m_autoMessageSession;
       bool m_fdRequested;
-
+      bool m_disconnectAnnounced;
   };
 
 }
