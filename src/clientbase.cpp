@@ -51,7 +51,7 @@ namespace gloox
       m_messageSessionHandler( 0 ), m_parser( 0 ),
       m_authError( AuthErrorUndefined ), m_streamError( StreamErrorUndefined ),
       m_streamErrorAppCondition( 0 ), m_idCount( 0 ), m_autoMessageSession( false ),
-      m_fdRequested( false )
+      m_fdRequested( false ), m_disconnectAnnounced( false )
   {
   }
 
@@ -62,7 +62,7 @@ namespace gloox
       m_messageSessionHandler( 0 ), m_parser( 0 ),
       m_authError( AuthErrorUndefined ), m_streamError( StreamErrorUndefined ),
       m_streamErrorAppCondition( 0 ), m_idCount( 0 ), m_autoMessageSession( false ),
-      m_fdRequested( false )
+      m_fdRequested( false ), m_disconnectAnnounced( false )
   {
   }
 
@@ -100,6 +100,7 @@ namespace gloox
       m_connection->setClientCert( m_clientKey, m_clientCerts );
 #endif
 
+    m_disconnectAnnounced = false;
     int ret = m_connection->connect();
     if( ret == StateConnected )
     {
@@ -689,6 +690,11 @@ namespace gloox
 
   void ClientBase::notifyOnDisconnect( ConnectionError e )
   {
+    if( m_disconnectAnnounced )
+      return;
+
+    m_disconnectAnnounced = true;
+
     ConnectionListenerList::const_iterator it = m_connectionListeners.begin();
     for( ; it != m_connectionListeners.end(); ++it )
     {
