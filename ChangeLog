@@ -1,3 +1,10 @@
+v0.8.7-sic -- 06 Mar 2007
+-------------------------
+- ClientBase: allow cancellation of ID tracking
+- VCardManager: allow cancellation of VCard operations
+- ClientBase: ugly fix to avoid onDisconnect() being called twice
+
+
 v0.8.6-sic -- 14 Dec 2006
 -------------------------
 - Tag: proper escaping of names/attributes/cdata (thanks to Polycom)
