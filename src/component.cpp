@@ -39,9 +39,8 @@ namespace gloox
     if( m_sid.empty() )
       return;
 
-    const std::string data = m_sid + m_password;
     SHA sha;
-    sha.feed( data );
+    sha.feed( m_sid + m_password );
     sha.finalize();
 
     Tag *h = new Tag( "handshake", sha.hex() );
