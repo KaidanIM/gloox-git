@@ -952,17 +952,12 @@ namespace gloox
   {
     IqTrackMap::iterator t;
     IqTrackMap::iterator it = m_iqIDHandlers.begin();
-    for( ; it != m_iqIDHandlers.end(); ++it )
+    while( it != m_iqIDHandlers.end() )
     {
-      if( ih == (*it).second.ih )
-      {
-        t = it;
-        ++t;
-        m_iqIDHandlers.erase( it );
-        it = t;
-        if( it == m_iqIDHandlers.end() )
-          break;
-      }
+      t = it;
+      ++it;
+      if( ih == (*t).second.ih )
+        m_iqIDHandlers.erase( t );
     }
   }
 
