@@ -66,17 +66,12 @@ namespace gloox
   {
     TrackMap::iterator t;
     TrackMap::iterator it = m_trackMap.begin();
-    for( ; it != m_trackMap.end(); ++it )
+    while( it != m_trackMap.end() )
     {
-      if( (*it).second == vch )
-      {
-        t = it;
-        ++t;
-        m_trackMap.erase( it );
-        it = t;
-        if( it == m_trackMap.end() )
-          break;
-      }
+      t = it;
+      ++it;
+      if( (*t).second == vch )
+        m_trackMap.erase( t );
     }
   }
 
