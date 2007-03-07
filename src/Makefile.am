@@ -69,3 +69,8 @@ test:
 	make -C tests test
 
 check: test
+
+leaktest:
+	make -C tests leaktest
+
+leakcheck: leaktest
