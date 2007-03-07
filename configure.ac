@@ -310,6 +310,8 @@ src/Makefile
 src/examples/Makefile
 src/tests/Makefile
 src/tests/base64/Makefile
+src/tests/client/Makefile
+src/tests/clientbase/Makefile
 src/tests/dataform/Makefile
 src/tests/dataformfield/Makefile
 src/tests/delayeddelivery/Makefile
