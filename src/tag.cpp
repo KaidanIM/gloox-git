@@ -141,14 +141,14 @@ namespace gloox
     if( !name.empty() )
     {
 #ifdef _WIN32_WCE
-	  int len = 4+(int)log10(value)+1;
-	  char *tmp = new char[len];
+      int len = 4+(int)log10(value)+1;
+      char *tmp = new char[len];
       sprintf( tmp, "%d", value );
-	  std::string ret;
-	  ret.assign( tmp, len );
-	  m_attribs[m_incoming ? relax( name ) : name] = ret;
+      std::string ret;
+      ret.assign( tmp, len );
+      m_attribs[m_incoming ? relax( name ) : name] = ret;
 #else
-	  std::ostringstream oss;
+      std::ostringstream oss;
       oss << value;
       m_attribs[m_incoming ? relax( name ) : name] = oss.str();
 #endif
@@ -414,8 +414,8 @@ namespace gloox
 
     int len = 0;
     Tag *p = parse( expression, len );
-    if( p )
-      printf( "parsed tree: %s\n", p->xml().c_str() );
+//     if( p )
+//       printf( "parsed tree: %s\n", p->xml().c_str() );
     l = evaluateTagList( p );
     delete p;
     return l;
@@ -427,8 +427,8 @@ namespace gloox
     if( !token )
       return result;
 
-    printf( "evaluateTagList called in Tag %s and Token %s (type: %s)\n", name().c_str(),
-            token->name().c_str(), token->findAttribute( "type" ).c_str() );
+//     printf( "evaluateTagList called in Tag %s and Token %s (type: %s)\n", name().c_str(),
+//             token->name().c_str(), token->findAttribute( "type" ).c_str() );
 
     TokenType tokenType = (TokenType)atoi( token->findAttribute( "type" ).c_str() );
     switch( tokenType )
@@ -441,10 +441,10 @@ namespace gloox
       }
       case XTElement:
       {
-        printf( "in XTElement, token: %s\n", token->name().c_str() );
+//         printf( "in XTElement, token: %s\n", token->name().c_str() );
         if( token->name() == name() || token->name() == "*" )
         {
-          printf( "found %s\n", name().c_str() );
+//           printf( "found %s\n", name().c_str() );
           Tag::TagList& tokenChildren = token->children();
           if( tokenChildren.size() )
           {
@@ -459,7 +459,7 @@ namespace gloox
               if( !predicatesSucceeded )
                 break;
             }
-            printf( "predicatesSucceeded is %d\n", predicatesSucceeded );
+//             printf( "predicatesSucceeded is %d\n", predicatesSucceeded );
             if( !predicatesSucceeded )
               break;
 
@@ -474,7 +474,7 @@ namespace gloox
               hasElementChildren = true;
 
               Tag::TagList res;
-              printf( "checking %d children of token %s\n", tokenChildren.size(), token->name().c_str() );
+//               printf( "checking %d children of token %s\n", tokenChildren.size(), token->name().c_str() );
               if( m_children.size() )
               {
                 Tag::TagList::const_iterator it = m_children.begin();
@@ -497,20 +497,20 @@ namespace gloox
           }
           else
           {
-            printf( "adding %s to result set\n", name().c_str() );
+//             printf( "adding %s to result set\n", name().c_str() );
             result.push_back( this );
           }
         }
-        else
-          printf( "found %s != %s\n", token->name().c_str(), name().c_str() );
+//         else
+//           printf( "found %s != %s\n", token->name().c_str(), name().c_str() );
 
         break;
       }
       case XTDoubleSlash:
       {
-        printf( "in XTDoubleSlash\n" );
+//         printf( "in XTDoubleSlash\n" );
         Tag *n = token->clone();
-        printf( "original token: %s\ncloned token: %s\n", token->xml().c_str(), n->xml().c_str() );
+//         printf( "original token: %s\ncloned token: %s\n", token->xml().c_str(), n->xml().c_str() );
         n->addAttribute( "type", XTElement );
         Tag::TagList res = evaluateTagList( n );
         add( result, res );
@@ -538,7 +538,7 @@ namespace gloox
       }
       case XTDoubleDot:
       {
-        printf( "in XTDoubleDot\n" );
+//         printf( "in XTDoubleDot\n" );
         if( m_parent )
         {
           Tag::TagList& tokenChildren = token->children();
@@ -574,7 +574,7 @@ namespace gloox
 
         Tag *tag = 0;
         int pos = atoi( token->name().c_str() );
-        printf( "checking index %d\n", pos );
+//         printf( "checking index %d\n", pos );
         int i = 1;
         Tag::TagList::const_iterator it = res.begin();
         for( ; it != res.end(); ++it, ++i )
@@ -733,11 +733,11 @@ namespace gloox
 
   Tag* Tag::parse( const std::string& expression, int& len, Tag::TokenType border )
   {
-    printf( "parse() called with '%s'\n", expression.c_str() );
+//     printf( "parse() called with '%s'\n", expression.c_str() );
     Tag *root = 0;
     Tag *current = root;
     std::string token;
-    XPathError error = XPNoError;
+//     XPathError error = XPNoError;
 //     XPathState state = Init;
 //     int expected = 0;
 //     bool run = true;
@@ -759,7 +759,7 @@ namespace gloox
       if( i == length - 1 )
         prelast = true;
 
-      printf( "current char: %c, current type: %d\n", (*it), type );
+//       printf( "current char: %c, current type: %d\n", (*it), type );
 
       switch( (*it) )
       {
@@ -797,7 +797,8 @@ namespace gloox
 
           int sublen = 0;
           Tag *t = parse( expression.substr( i ), sublen, XTRightBracket );
-          addPredicate( &root, &current, t );
+          if( !addPredicate( &root, &current, t ) )
+            delete t;
           it += sublen;
           i += sublen;
           len += sublen;
@@ -826,14 +827,14 @@ namespace gloox
           Tag *t = parse( expression.substr( i ), sublen, XTRightParenthesis );
           if( current )
           {
-            printf( "added %s to %s\n", t->xml().c_str(), current->xml().c_str() );
+//             printf( "added %s to %s\n", t->xml().c_str(), current->xml().c_str() );
             t->addAttribute( "argument", "true" );
             current->addChild( t );
           }
           else
           {
             root = t;
-            printf( "made %s new root\n", t->xml().c_str() );
+//             printf( "made %s new root\n", t->xml().c_str() );
           }
           i += sublen;
           it += sublen;
@@ -927,10 +928,10 @@ namespace gloox
       }
     }
 
-    if( error != XPNoError )
-      printf( "error: %d\n", error );
+//     if( error != XPNoError )
+//       printf( "error: %d\n", error );
 
-    printf( "parse() finished\n" );
+//     printf( "parse() finished\n" );
     return root;
   }
 
@@ -945,13 +946,13 @@ namespace gloox
 
     if( *root )
     {
-      printf( "new current %s, type: %d\n", token.c_str(), type );
+//       printf( "new current %s, type: %d\n", token.c_str(), type );
       (*current)->addChild( t );
       *current = t;
     }
     else
     {
-      printf( "new root %s, type: %d\n", token.c_str(), type );
+//       printf( "new root %s, type: %d\n", token.c_str(), type );
       *root = t;
       *current = *root;
     }
@@ -978,14 +979,14 @@ namespace gloox
     *current = t;
   }
 
-  void Tag::addPredicate( Tag **root, Tag **current, Tag *token )
+  bool Tag::addPredicate( Tag **root, Tag **current, Tag *token )
   {
     if( !*root || !*current )
-      return;
+      return false;
 
     if( ( token->isNumber() && !token->children().size() ) || token->name() == "+" )
     {
-      printf( "found Index %s, full: %s\n", token->name().c_str(), token->xml().c_str() );
+//       printf( "found Index %s, full: %s\n", token->name().c_str(), token->xml().c_str() );
       if( !token->hasAttribute( "operator", "true" ) )
       {
         token->addAttribute( "type", XTInteger );
@@ -993,22 +994,24 @@ namespace gloox
       if( *root == *current )
       {
         *root = token;
-        printf( "made Index new root\n" );
+//         printf( "made Index new root\n" );
       }
       else
       {
         (*root)->removeChild( *current );
         (*root)->addChild( token );
-        printf( "added Index somewhere between root and current\n" );
+//         printf( "added Index somewhere between root and current\n" );
       }
       token->addChild( *current );
-      printf( "added Index %s, full: %s\n", token->name().c_str(), token->xml().c_str() );
+//       printf( "added Index %s, full: %s\n", token->name().c_str(), token->xml().c_str() );
     }
     else
     {
       token->addAttribute( "predicate", "true" );
       (*current)->addChild( token );
     }
+
+    return true;
   }
 
   Tag::TokenType Tag::getType( const std::string& c )
@@ -1064,7 +1067,7 @@ namespace gloox
         if( (*it2) == (*it) )
         {
           doit = false;
-          printf( "found %s in existing set\n", (*it2)->name().c_str() );
+//           printf( "found %s in existing set\n", (*it2)->name().c_str() );
           break;
         }
         else
@@ -1072,7 +1075,7 @@ namespace gloox
       }
       if( doit )
       {
-        printf( "seriously add()ing %s\n", (*it)->name().c_str() );
+//         printf( "seriously add()ing %s\n", (*it)->name().c_str() );
         one.push_back( (*it) );
       }
     }
