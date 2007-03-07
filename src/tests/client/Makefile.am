@@ -1,0 +1,18 @@
+##
+## Process this file with automake to produce Makefile.in
+##
+
+AM_CPPFLAGS = -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare -Wpointer-arith -Wswitch -Wunknown-pragmas -Wconversion -Wundef -Wcast-qual -ansi
+
+noinst_PROGRAMS = client_test
+
+client_test_SOURCES = client_test.cpp ../../client.cpp ../../clientbase.cpp ../../jid.cpp ../../connectiontcp.cpp \
+			../../disco.cpp ../../parser.cpp ../../tag.cpp ../../stanza.cpp ../../base64.cpp \
+			../../md5.cpp ../../tlsgnutls.cpp ../../tlsopenssl.cpp ../../tlsschannel.cpp \
+			../../logsink.cpp ../../messagesession.cpp ../../prep.cpp ../../compressionzlib.cpp \
+			../../dns.cpp ../../stanzaextensionfactory.cpp ../../oob.cpp ../../gpgencrypted.cpp \
+			../../gpgsigned.cpp ../../vcardupdate.cpp ../../delayeddelivery.cpp \
+			../../xdelayeddelivery.cpp ../../rostermanager.cpp ../../nonsaslauth.cpp ../../sha.cpp \
+			../../rosteritem.cpp ../../privatexml.cpp
+client_test_LDADD =
+client_test_CFLAGS = $(CPPFLAGS)
