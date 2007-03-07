@@ -1203,7 +1203,7 @@ namespace gloox
     for( ; it1 != m_messageSessions.end(); ++it1 )
     {
       if( (*it1)->target().full() == stanza->from().full() &&
-            ( (*it1)->threadID().empty() || (*it1)->threadID() == stanza->thread() ) &&
+            ( stanza->thread().empty() || (*it1)->threadID() == stanza->thread() ) &&
             ( (*it1)->types() & stanza->subtype() || (*it1)->types() == StanzaSubUndefined ) )
       {
         (*it1)->handleMessage( stanza );
@@ -1215,7 +1215,7 @@ namespace gloox
     for( ; it1 != m_messageSessions.end(); ++it1 )
     {
       if( (*it1)->target().bare() == stanza->from().bare() &&
-            ( (*it1)->threadID().empty() || (*it1)->threadID() == stanza->thread() ) &&
+            ( stanza->thread().empty() || (*it1)->threadID() == stanza->thread() ) &&
             ( (*it1)->types() & stanza->subtype() || (*it1)->types() == StanzaSubUndefined ) )
       {
         (*it1)->handleMessage( stanza );
@@ -1248,7 +1248,6 @@ namespace gloox
 
     if( haveSessionHandler )
     {
-      m_messageSessions.push_back( session );
       session->handleMessage( stanza );
       return;
     }
