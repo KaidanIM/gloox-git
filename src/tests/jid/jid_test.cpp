@@ -74,16 +74,6 @@ int main( int /*argc*/, char* /*argv[]*/ )
     printf( "test '%s' failed\n", name.c_str() );
   }
 
-//   //-------
-//   name = "punycode dom";
-//   j = JID( "abc@ümlaut.de/rEsOurCe" );
-//   if( j.server() != "xn-mlaut-something" )
-//   {
-//     printf( "is: %s, raw: %s\n", j.server().c_str(), j.serverRaw().c_str() );
-//     ++fail;
-//     printf( "test '%s' failed\n", name.c_str() );
-//   }
-
   // -------
   name = "bare JID getter";
   j = JID( "abc@serVer.dom/rEsOurCe" );
