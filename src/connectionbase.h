@@ -42,15 +42,17 @@ namespace gloox
     public:
       /**
        * Constructor.
+       * @param cdh An object derived from @ref ConnectionDataHandler that will receive
+       * received data.
        */
       ConnectionBase( ConnectionDataHandler *cdh )
-        : m_handler( cdh ), m_state( StateDisconnected ), m_disconnect( ConnNoError )
+        : m_handler( cdh ), m_state( StateDisconnected )
       {};
 
       /**
        * Virtual destructor.
        */
-      virtual ~ConnectionBase() {};
+      virtual ~ConnectionBase() { cleanup(); };
 
       /**
        * Used to initiate the connection.
@@ -81,10 +83,14 @@ namespace gloox
 
       /**
        * Disconnects an established connection. NOOP if no active connection exists.
-       * @param e A ConnectionError decribing why the connection is terminated. Well, it's not really an
-       * error here, but...
        */
-      virtual void disconnect( ConnectionError e ) = 0;
+      virtual void disconnect() = 0;
+
+      /**
+       * This function is called after a disconnect to clean up internal state. It is also called by
+       * ConnectionBase's destructor.
+       */
+      virtual void cleanup() {};
 
       /**
        * Returns the current connection state.
@@ -95,7 +101,6 @@ namespace gloox
     protected:
       ConnectionDataHandler *m_handler;
       ConnectionState m_state;
-      ConnectionError m_disconnect;
 
   };
 
