@@ -57,8 +57,8 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
    */
-  class GLOOX_API ClientBase : private TagHandler, private ConnectionDataHandler,
-                               private CompressionDataHandler, private TLSHandler
+  class GLOOX_API ClientBase : public TagHandler, public ConnectionDataHandler,
+                               public CompressionDataHandler, public TLSHandler
   {
 
     friend class RosterManager;
@@ -172,18 +172,6 @@ namespace gloox
       void setPassword( const std::string &password ) { m_password = password; };
 
       /**
-       * Sets the HTTP proxy to use.
-       * @param host The HTTP proxy's hostname or IP address.
-       * @param port The HTTP proxy's port.
-       * @param username An optional username to use for proxy authorization.
-       * @param password An optional password to use for proxy authorization. Required if @p username
-       * is given.
-       * @since 0.9
-       */
-      void setProxy( const std::string& host, unsigned short port,
-                     const std::string& username = "", const std::string& password = "" );
-
-      /**
        * Returns the current prepped server.
        * @return The server used to connect.
        */
@@ -269,24 +257,24 @@ namespace gloox
       void setXmlLang( const std::string& xmllang ) { m_xmllang = xmllang; };
 
       /**
-       * Gives access to the raw file descriptor of the current connection. Use it wisely. You
+       * Gives access to the raw socket of the current connection. Use it wisely. You
        * can use select() on it and use recv( -1 ) to fetch the data.
-       * @return The file descriptor of the active connection, or -1 if no connection is established.
+       * @return The socket of the active connection, or -1 if no connection is established.
        * @note The return value is only meaningful if the default connection type is used (an
        * instance of ConnectionTCP).
        */
-      int fileDescriptor();
+      int socket();
 
       /**
-       * This function allows to set an existing file descriptor (socket) with an established
+       * This function allows to set an existing socket with an established
        * connection to use for the connection. You will still need to call connect() in order to
        * negotiate the XMPP stream. You should not set a new file descriptor after calling connect().
        * @note This function is a NOOP if the default connection type is not used (i.e. anything besides
        * an instance of ConnectionTCP).
-       * @param fd The existing file descriptor (socket).
+       * @param socket The existing socket.
        * @since 0.9
        */
-      void setFileDescriptor( int fd ) const;
+      void setSocket( int socket ) const;
 
       /**
        * This function returns the concrete connection implementation currently in use.
@@ -758,11 +746,6 @@ namespace gloox
       StatisticsStruct m_stats;
 
       SaslMechanism m_selectedSaslMech;
-
-      std::string m_proxyHost;
-      std::string m_proxyUser;
-      std::string m_proxyPassword;
-      unsigned short m_proxyPort;
 
       int m_idCount;
       bool m_autoMessageSession;

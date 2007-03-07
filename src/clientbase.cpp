@@ -69,7 +69,7 @@ namespace gloox
       m_messageSessionHandlerHeadline( 0 ), m_messageSessionHandlerNormal( 0 ),
       m_parser( 0 ), m_authError( AuthErrorUndefined ), m_streamError( StreamErrorUndefined ),
       m_streamErrorAppCondition( 0 ), m_selectedSaslMech( SaslMechNone ),
-      m_proxyPort( 0 ), m_idCount( 0 ), m_autoMessageSession( false )
+      m_idCount( 0 ), m_autoMessageSession( false )
   {
     init();
   }
@@ -86,7 +86,7 @@ namespace gloox
       m_messageSessionHandlerHeadline( 0 ), m_messageSessionHandlerNormal( 0 ),
       m_parser( 0 ), m_authError( AuthErrorUndefined ), m_streamError( StreamErrorUndefined ),
       m_streamErrorAppCondition( 0 ), m_selectedSaslMech( SaslMechNone ),
-      m_proxyPort( 0 ), m_idCount( 0 ), m_autoMessageSession( false )
+      m_idCount( 0 ), m_autoMessageSession( false )
   {
     init();
   }
@@ -98,6 +98,8 @@ namespace gloox
       m_disco = new Disco( this );
       m_disco->setVersion( "based on gloox", GLOOX_VERSION );
     }
+
+    m_streamError = StreamErrorUndefined;
 
     m_stats.totalBytesSent = 0;
     m_stats.totalBytesReceived = 0;
@@ -141,20 +143,7 @@ namespace gloox
     if( !m_connection || m_connection->state() == StateDisconnected )
       return ConnNotConnected;
 
-    ConnectionError e = m_connection->recv( timeout );
-    if( e != ConnNoError )
-      notifyOnDisconnect( e );
-
-    return e;
-  }
-
-  void ClientBase::setProxy( const std::string& host, unsigned short port,
-                             const std::string& username, const std::string& password )
-  {
-    m_proxyHost = host;
-    m_proxyPort = port;
-    m_proxyUser = username;
-    m_proxyPassword = password;
+    return m_connection->recv( timeout );
   }
 
   bool ClientBase::connect( bool block )
@@ -189,18 +178,14 @@ namespace gloox
       header();
       if( block )
       {
-        ConnectionError e = m_connection->receive();
-        notifyOnDisconnect( e );
+        m_connection->receive();
         return false;
       }
       else
         return true;
     }
     else
-    {
-      notifyOnDisconnect( ret );
       return false;
-    }
   }
 
   void ClientBase::handleTag( Tag *tag )
@@ -343,41 +328,29 @@ namespace gloox
 
   void ClientBase::handleDisconnect( ConnectionError reason )
   {
-    // ???
+     m_connection->cleanup();
+     notifyOnDisconnect( reason );
   }
 
   void ClientBase::disconnect( ConnectionError reason )
   {
-    if( m_connection )
+    if( m_connection && m_connection->state() == StateConnected )
     {
-      if( reason != ConnStreamError )
-        send ( "</stream:stream>" );
-      if( reason == ConnUserDisconnected )
-        m_streamError = StreamErrorUndefined;
-      m_connection->disconnect( reason );
+      send ( "</stream:stream>" );
+      m_connection->disconnect();
+      m_connection->cleanup();
     }
+    notifyOnDisconnect( reason );
+    cleanup();
   }
 
   void ClientBase::header()
   {
-#ifdef _WIN32_WCE
     std::string head = "<?xml version='1.0' ?>";
-    head += "<stream:stream to='" + m_jid.server()+ "' xmlns='" + m_namespace + "' ";
+    head += "<stream:stream to='" + m_jid.server() + "' xmlns='" + m_namespace + "' ";
     head += "xmlns:stream='http://etherx.jabber.org/streams'  xml:lang='" + m_xmllang + "' ";
-    head += "version='1.0'>";
+    head += "version='" + XMPP_STREAM_VERSION_MAJOR + "." + XMPP_STREAM_VERSION_MINOR + "'>";
     send( head );
-#else
-    std::ostringstream oss;
-    oss << "<?xml version='1.0' ?>";
-    oss << "<stream:stream to='" + m_jid.server()+ "' xmlns='" + m_namespace + "' ";
-    oss << "xmlns:stream='http://etherx.jabber.org/streams'  xml:lang='" + m_xmllang + "' ";
-    oss << "version='";
-    oss << XMPP_STREAM_VERSION_MAJOR;
-    oss << ".";
-    oss << XMPP_STREAM_VERSION_MINOR;
-    oss << "'>";
-    send( oss.str() );
-#endif
   }
 
   bool ClientBase::hasTls()
@@ -728,7 +701,7 @@ namespace gloox
 
     int major = 0;
     int minor = 0;
-    int myMajor = XMPP_STREAM_VERSION_MAJOR;
+    int myMajor = atoi( XMPP_STREAM_VERSION_MAJOR.c_str() );
 
     size_t dot = version.find( "." );
     if( !version.empty() && dot && dot != std::string::npos )
@@ -877,25 +850,25 @@ namespace gloox
       m_messageSessionHandlerHeadline = msh;
   }
 
-  int ClientBase::fileDescriptor()
+  int ClientBase::socket()
   {
     if( m_connection )
     {
       ConnectionTCP *tcp = dynamic_cast<ConnectionTCP*>( m_connection );
       if( tcp )
-        return tcp->fileDescriptor();
+        return tcp->socket();
     }
 
     return -1;
   }
 
-  void ClientBase::setFileDescriptor( int fd ) const
+  void ClientBase::setSocket( int socket ) const
   {
     if( m_connection )
     {
       ConnectionTCP *tcp = dynamic_cast<ConnectionTCP*>( m_connection );
       if( tcp )
-        tcp->setFileDescriptor( fd );
+        tcp->setSocket( socket );
     }
   }
 
