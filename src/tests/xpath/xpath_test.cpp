@@ -535,7 +535,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
     printResult( name, result );
     printf( "test '%s' failed\n", name.c_str() );
   }
-  printf( "--------------------------------------------------------------\n" );
+//   printf( "--------------------------------------------------------------\n" );
 
   // -- ~simple paths --
 
@@ -554,7 +554,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
     printResult( name, result );
     printf( "test '%s' failed\n", name.c_str() );
   }
-  printf( "--------------------------------------------------------------\n" );
+//   printf( "--------------------------------------------------------------\n" );
 
   // -------
   name = "union 1: //bbb|//bbb";
@@ -566,7 +566,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
     printResult( name, result );
     printf( "test '%s' failed\n", name.c_str() );
   }
-  printf( "--------------------------------------------------------------\n" );
+//   printf( "--------------------------------------------------------------\n" );
 
   // -------
   name = "union 2: /aaa|/aaa";
@@ -578,7 +578,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
     printResult( name, result );
     printf( "test '%s' failed\n", name.c_str() );
   }
-  printf( "--------------------------------------------------------------\n" );
+//   printf( "--------------------------------------------------------------\n" );
 
   // -------
   name = "union 3: /aaa|/aaa|//bbb";
@@ -590,7 +590,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
     printResult( name, result );
     printf( "test '%s' failed\n", name.c_str() );
   }
-  printf( "--------------------------------------------------------------\n" );
+//   printf( "--------------------------------------------------------------\n" );
 
   // -------
   name = "empty union 3: /cde|/def";
@@ -602,7 +602,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
     printResult( name, result );
     printf( "test '%s' failed\n", name.c_str() );
   }
-  printf( "--------------------------------------------------------------\n" );
+//   printf( "--------------------------------------------------------------\n" );
 
   // ---- ~union ----
 
@@ -622,7 +622,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
     printResult( name, result );
     printf( "test '%s' failed\n", name.c_str() );
   }
-  printf( "--------------------------------------------------------------\n" );
+//   printf( "--------------------------------------------------------------\n" );
 
   // -------
   name = "filter 2: //bbb[2]";
@@ -634,7 +634,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
     printResult( name, result );
     printf( "test '%s' failed\n", name.c_str() );
   }
-  printf( "--------------------------------------------------------------\n" );
+//   printf( "--------------------------------------------------------------\n" );
 
   // -------
   name = "filter 3: //bbb[3]";
@@ -646,7 +646,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
     printResult( name, result );
     printf( "test '%s' failed\n", name.c_str() );
   }
-  printf( "--------------------------------------------------------------\n" );
+//   printf( "--------------------------------------------------------------\n" );
 
   // -------
   name = "invalid filter 4: //bbb[4]";
@@ -658,7 +658,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
     printResult( name, result );
     printf( "test '%s' failed\n", name.c_str() );
   }
-  printf( "--------------------------------------------------------------\n" );
+//   printf( "--------------------------------------------------------------\n" );
 
   // -------
   name = "filter 5: /aaa/bbb[1]";
@@ -670,7 +670,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
     printResult( name, result );
     printf( "test '%s' failed\n", name.c_str() );
   }
-  printf( "--------------------------------------------------------------\n" );
+//   printf( "--------------------------------------------------------------\n" );
 
   // -------
   name = "filter 5: /aaa[1]";
@@ -682,7 +682,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
     printResult( name, result );
     printf( "test '%s' failed\n", name.c_str() );
   }
-  printf( "--------------------------------------------------------------\n" );
+//   printf( "--------------------------------------------------------------\n" );
 
   // -------
   name = "invalid filter 6: /aaa[2]";
@@ -694,7 +694,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
     printResult( name, result );
     printf( "test '%s' failed\n", name.c_str() );
   }
-  printf( "--------------------------------------------------------------\n" );
+//   printf( "--------------------------------------------------------------\n" );
 
   // -------
   name = "invalid filter 7: [2]";
@@ -706,7 +706,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
     printResult( name, result );
     printf( "test '%s' failed\n", name.c_str() );
   }
-  printf( "--------------------------------------------------------------\n" );
+//   printf( "--------------------------------------------------------------\n" );
 
   // -------
   name = "deepsearch + predicate 1: //bbb[@name]";
@@ -718,7 +718,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
     printResult( name, result );
     printf( "test '%s' failed\n", name.c_str() );
   }
-  printf( "--------------------------------------------------------------\n" );
+//   printf( "--------------------------------------------------------------\n" );
 
   // -------
   name = "deepsearch + predicate 2: //bbb[@xyz]";
@@ -730,7 +730,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
     printResult( name, result );
     printf( "test '%s' failed\n", name.c_str() );
   }
-  printf( "--------------------------------------------------------------\n" );
+//   printf( "--------------------------------------------------------------\n" );
 
   // -------
   name = "deepsearch + predicate + literal 1: //bbb[@name='b1']";
@@ -742,7 +742,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
     printResult( name, result );
     printf( "test '%s' failed\n", name.c_str() );
   }
-  printf( "--------------------------------------------------------------\n" );
+//   printf( "--------------------------------------------------------------\n" );
 
 //   // -------
 //   name = "deepsearch + predicate + path 1: //bbb[hhh]";

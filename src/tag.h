@@ -360,7 +360,7 @@ namespace gloox
       void addToken( Tag **root, Tag **current, TokenType type, const std::string& token );
       void addOperator( Tag **root, Tag **current, Tag *arg, TokenType type,
                         const std::string& token );
-      void addPredicate( Tag **root, Tag **current, Tag *token );
+      bool addPredicate( Tag **root, Tag **current, Tag *token );
       TokenType getType( const std::string& c );
       bool isWhitespace( const char& c );
       bool isNumber();
