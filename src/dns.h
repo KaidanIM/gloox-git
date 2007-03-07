@@ -18,24 +18,24 @@
 #include "logsink.h"
 
 #ifdef __MINGW32__
-#include <windows.h>
-#include <windns.h>
+# include <windows.h>
+# include <windns.h>
 #endif
 
 #ifdef HAVE_ARPA_NAMESER_H
-#include <arpa/nameser.h>
+# include <arpa/nameser.h>
 #endif
 
 #ifdef __APPLE__
-#include <arpa/nameser_compat.h>
+# include <arpa/nameser_compat.h>
 #endif
 
 #ifndef NS_MAXDNAME
-#define NS_MAXDNAME 1025
+# define NS_MAXDNAME 1025
 #endif
 
 #ifndef NS_PACKETSZ
-#define NS_PACKETSZ 512
+# define NS_PACKETSZ 512
 #endif
 
 #include <string>

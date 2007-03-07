@@ -14,6 +14,8 @@
 #ifndef FLEXOFFHANDLER_H__
 #define FLEXOFFHANDLER_H__
 
+#include "gloox.h"
+
 namespace gloox
 {
 
@@ -71,6 +73,7 @@ namespace gloox
        * @param foResult The result of the operation.
        */
       virtual void handleFlexibleOfflineResult( FlexibleOfflineResult foResult ) = 0;
+
   };
 
 }

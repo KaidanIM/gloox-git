@@ -47,7 +47,7 @@
 #endif
 
 #ifdef HAVE_WINDNS_H
-#include <windns.h>
+# include <windns.h>
 #endif
 
 #define SRV_COST    (RRFIXEDSZ+0)
@@ -57,7 +57,7 @@
 #define SRV_FIXEDSZ (RRFIXEDSZ+6)
 
 #ifndef T_SRV
-#define T_SRV 33
+# define T_SRV 33
 #endif
 
 // mingw
@@ -66,11 +66,11 @@
 #endif
 
 #ifndef C_IN
-#define C_IN 1
+# define C_IN 1
 #endif
 
 #ifndef INVALID_SOCKET
-#define INVALID_SOCKET -1
+# define INVALID_SOCKET -1
 #endif
 
 #define XMPP_PORT 5222

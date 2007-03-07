@@ -14,6 +14,9 @@
 #ifndef LASTACTIVITYHANDLER_H__
 #define LASTACTIVITYHANDLER_H__
 
+#include "gloox.h"
+#include "jid.h"
+
 namespace gloox
 {
 

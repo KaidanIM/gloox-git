@@ -52,8 +52,8 @@
 #include <list>
 
 #ifndef _WIN32_WCE
-#include <sstream>
-#include <iomanip>
+# include <sstream>
+# include <iomanip>
 #endif
 
 namespace gloox
