@@ -14,5 +14,12 @@ bin_SCRIPTS = gloox-config
 apidox:
 	doxygen
 
-test: all
+check: test
+
+test:
 	make -C src test
+
+leakcheck: leaktest
+
+leaktest:
+	make -C src leaktest
