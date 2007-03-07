@@ -2,8 +2,10 @@
 ## Process this file with automake to produce Makefile.in
 ##
 
-SUBDIRS = base64 dataform dataformfield delayeddelivery gpgencrypted gpgsigned md5 oob parser sha stanza \
-		stanzaextensionfactory tag vcardupdate xdelayeddelivery xpath
+SUBDIRS = base64 client clientbase dataform dataformfield delayeddelivery gpgencrypted gpgsigned \
+	  jid md5 oob parser sha stanza stanzaextensionfactory tag vcardupdate xdelayeddelivery xpath
+
+check: test
 
 test: ${SUBDIRS}
 	@for i in $?; do \
@@ -12,6 +14,8 @@ test: ${SUBDIRS}
 	@for i in $?; do \
 	  $$i/$${i}_test;    \
 	done;
+
+leaktest: leakcheck
 
 leakcheck: ${SUBDIRS}
 	@for i in $?; do \
