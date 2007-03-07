@@ -35,6 +35,8 @@ namespace gloox
       /**
        * Constructs a new ConnectionTCP object.
        * You should not need to use this function directly.
+       * @param cdh An ConnectionDataHandler-derived object that will handle incoming data.
+       * @param logInstance The log target. Obtain it from ClientBase::logInstance().
        * @param server A server to connect to.
        * @param port The port to connect to. The default of -1 means that SRV records will be used
        * to find out about the actual host:port.
@@ -47,53 +49,38 @@ namespace gloox
        */
       virtual ~ConnectionTCP();
 
-      /**
-       * Used to initiate the connection.
-       * @return Returns the connection state.
-       */
+      // reimplemented from ConnectionBase
       virtual ConnectionError connect();
 
-      /**
-       * Use this periodically to receive data from the socket and to feed the parser.
-       * @param timeout The timeout to use for select in microseconds. Default of -1 means blocking.
-       * @return The state of the connection.
-       */
+      // reimplemented from ConnectionBase
       virtual ConnectionError recv( int timeout = -1 );
 
-      /**
-       * Use this function to send a string of data over the wire. The function returns only after
-       * all data has been sent.
-       * @param data The data to send.
-       */
+      // reimplemented from ConnectionBase
       virtual bool send( const std::string& data );
 
-      /**
-       * Use this function to put the connection into 'receive mode'.
-       * @return Returns a value indicating the disconnection reason.
-       */
+      // reimplemented from ConnectionBase
       virtual ConnectionError receive();
 
-      /**
-       * Disconnects an established connection. NOOP if no active connection exists.
-       * @param e A ConnectionError decribing why the connection is terminated. Well, its not really an
-       * error here, but...
-       */
-      virtual void disconnect( ConnectionError e );
+      // reimplemented from ConnectionBase
+      virtual void disconnect();
+
+      // reimplemented from ConnectionBase
+      virtual void cleanup();
 
       /**
-       * Gives access to the raw file descriptor of a connection. Use it wisely. You can
+       * Gives access to the raw socket of this connection. Use it wisely. You can
        * select()/poll() it and use ConnectionTCP::recv( -1 ) to fetch the data.
-       * @return The file descriptor of the active connection, or -1 if no connection is established.
+       * @return The socket of the active connection, or -1 if no connection is established.
        */
-      int fileDescriptor() const { return m_socket; };
+      int socket() const { return m_socket; };
 
       /**
-       * This function allows to set an existing file descriptor (socket) with an established
-       * connection to use for the connection. You will still need to call connect() in order to
-       * negotiate the XMPP stream. You should not set a new file descriptor after calling connect().
-       * @param fd The existing file descriptor.
+       * This function allows to set an existing socket with an established
+       * connection to use in this connection. You will still need to call connect() in order to
+       * negotiate the XMPP stream. You should not set a new socket after having called connect().
+       * @param socket The existing socket.
        */
-      void setFileDescriptor( int fd ) { m_socket = fd; };
+      void setSocket( int socket ) { m_socket = socket; };
 
       /**
        * Returns current connection statistics.
@@ -103,11 +90,10 @@ namespace gloox
       void getStatistics( int &totalIn, int &totalOut );
 
     private:
-      ConnectionTCP &operator = ( const ConnectionTCP & );
+      ConnectionTCP &operator= ( const ConnectionTCP & );
       bool dataAvailable( int timeout = -1 );
 
       void cancel();
-      void cleanup();
 
       const LogSink& m_logInstance;
 

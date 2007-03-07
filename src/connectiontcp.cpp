@@ -56,7 +56,6 @@ namespace gloox
 
   ConnectionTCP::~ConnectionTCP()
   {
-    cleanup();
     free( m_buf );
     m_buf = 0;
   }
@@ -87,9 +86,7 @@ namespace gloox
           m_logInstance.log( LogLevelError, LogAreaClassConnection, "Unknown error condition" );
           break;
       }
-      ConnectionError e = (ConnectionError)-m_socket;
-      cleanup();
-      return e;
+      return (ConnectionError)-m_socket;
     }
     else
     {
@@ -100,9 +97,8 @@ namespace gloox
     return ConnNoError;
   }
 
-  void ConnectionTCP::disconnect( ConnectionError e )
+  void ConnectionTCP::disconnect()
   {
-    m_disconnect = e;
     m_cancel = true;
   }
 
@@ -126,20 +122,11 @@ namespace gloox
 
   ConnectionError ConnectionTCP::recv( int timeout )
   {
-    if( m_cancel )
-    {
-      ConnectionError e = m_disconnect;
-      cleanup();
-      return e;
-    }
-
-    if( m_socket < 0 )
+    if( m_cancel || m_socket < 0 )
       return ConnNotConnected;
 
     if( !dataAvailable( timeout ) )
-    {
       return ConnNoError;
-    }
 
     // optimize(?): recv returns the size. set size+1 = \0
     memset( m_buf, '\0', m_bufsize + 1 );
@@ -155,14 +142,12 @@ namespace gloox
     if( size < 0 )
     {
       // error
-      cleanup();
       return ConnIoError;
     }
     else if( size == 0 )
     {
       // connection closed
-      cleanup();
-      return ConnUserDisconnected;
+      return ConnStreamClosed;
     }
 
     std::string buf;
@@ -170,6 +155,7 @@ namespace gloox
 
     if( m_handler )
       m_handler->handleReceivedData( buf );
+
     return ConnNoError;
   }
 
@@ -186,10 +172,8 @@ namespace gloox
         return r;
       }
     }
-    ConnectionError e = m_disconnect;
-    cleanup();
 
-    return e;
+    return ConnNotConnected;
   }
 
   bool ConnectionTCP::send( const std::string& data )
@@ -227,7 +211,6 @@ namespace gloox
       m_socket = -1;
     }
     m_state = StateDisconnected;
-    m_disconnect = ConnNoError;
     m_cancel = true;
   }
 

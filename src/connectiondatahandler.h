@@ -41,6 +41,10 @@ namespace gloox
        */
       virtual void handleReceivedData( const std::string& data ) = 0;
 
+      /**
+       *
+       */
+      virtual void handleDisconnect( ConnectionError reason ) = 0;
   };
 
 }
