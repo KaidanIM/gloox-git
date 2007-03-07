@@ -12,11 +12,11 @@
 
 
 #ifdef WIN32
-#include "../config.h.win"
+# include "../config.h.win"
 #elif defined( _WIN32_WCE )
-#include "../config.h.win"
+# include "../config.h.win"
 #else
-#include "config.h"
+# include "config.h"
 #endif
 
 #include "prep.h"
@@ -24,8 +24,8 @@
 #include <string>
 
 #ifdef HAVE_LIBIDN
-#include <stringprep.h>
-#include <idna.h>
+# include <stringprep.h>
+# include <idna.h>
 #endif
 
 #define JID_PORTION_SIZE 1023

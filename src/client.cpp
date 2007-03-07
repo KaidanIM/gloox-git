@@ -11,11 +11,11 @@
 */
 
 #ifdef WIN32
-#include "../config.h.win"
+# include "../config.h.win"
 #elif defined( _WIN32_WCE )
-#include "../config.h.win"
+# include "../config.h.win"
 #else
-#include "config.h"
+# include "config.h"
 #endif
 
 #include "client.h"
@@ -29,14 +29,14 @@
 #include "tlsbase.h"
 
 #if !defined( WIN32 ) && !defined( _WIN32_WCE )
-#include <unistd.h>
+# include <unistd.h>
 #endif
 
 #ifndef _WIN32_WCE
-#include <iostream>
-#include <sstream>
+# include <iostream>
+# include <sstream>
 #else
-#include <stdio.h>
+# include <stdio.h>
 #endif
 
 namespace gloox
