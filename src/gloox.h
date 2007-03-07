@@ -362,8 +362,8 @@ namespace gloox
   const std::string XMLNS_STREAM_ACK        = "http://jabber.org/features/ack";          /**< */
   const std::string XMLNS_STREAM_COMPRESS   = "http://jabber.org/features/compress";     /**< */
 
-  const int XMPP_STREAM_VERSION_MAJOR       = 1;                                         /**< */
-  const int XMPP_STREAM_VERSION_MINOR       = 0;                                         /**< */
+  const std::string XMPP_STREAM_VERSION_MAJOR = "1";                                     /**< */
+  const std::string XMPP_STREAM_VERSION_MINOR = "0";                                     /**< */
   const std::string GLOOX_VERSION           = "0.9-pre5";                                /**< */
 
   /**
