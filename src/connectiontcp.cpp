@@ -86,6 +86,7 @@ namespace gloox
           m_logInstance.log( LogLevelError, LogAreaClassConnection, "Unknown error condition" );
           break;
       }
+      m_handler->handleDisconnect( (ConnectionError)-m_socket );
       return (ConnectionError)-m_socket;
     }
     else
@@ -142,11 +143,13 @@ namespace gloox
     if( size < 0 )
     {
       // error
+      m_handler->handleDisconnect( ConnIoError );
       return ConnIoError;
     }
     else if( size == 0 )
     {
       // connection closed
+      m_handler->handleDisconnect( ConnStreamClosed );
       return ConnStreamClosed;
     }
 
@@ -191,7 +194,10 @@ namespace gloox
       int sent = ::send( m_socket, (data.c_str()+num), len - num, 0 );
 #endif
       if( sent == -1 )
+      {
+        m_handler->handleDisconnect( ConnStreamClosed );
         return false;
+      }
 
       num += sent;
     }
