@@ -39,6 +39,8 @@ namespace gloox
     if( m_sid.empty() )
       return;
 
+    notifyStreamEvent( StreamEventAuthentication );
+
     SHA sha;
     sha.feed( m_sid + m_password );
     sha.finalize();
@@ -50,7 +52,10 @@ namespace gloox
   bool Component::handleNormalNode( Stanza *stanza )
   {
     if( stanza->name() == "handshake" )
+    {
+      notifyStreamEvent( StreamEventFinished );
       notifyOnConnect();
+    }
     else
       return false;
 
@@ -66,4 +71,5 @@ namespace gloox
   {
     ClientBase::disconnect( reason );
   }
+
 }
