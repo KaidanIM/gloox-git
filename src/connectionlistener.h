@@ -76,6 +76,15 @@ namespace gloox
        */
       virtual bool onTLSConnect( const CertInfo& info ) = 0;
 
+      /**
+       * This function is called for certain stream events. This is purely informational
+       * and implementation is optional. Nota ll StreamEvent's will necessarily be emitted for
+       * a given connection.
+       * @param event A stream event.
+       * @since 0.9
+       */
+      virtual void onStreamEvent( StreamEvent event ) { (void) (event); };
+
   };
 
 }
