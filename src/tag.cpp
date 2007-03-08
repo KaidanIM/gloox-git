@@ -52,7 +52,6 @@ namespace gloox
       delete (*it);
       (*it) = 0;
     }
-    m_children.clear();
     m_parent = 0;
   }
 
@@ -703,13 +702,11 @@ namespace gloox
   Tag::TagList Tag::allDescendants()
   {
     Tag::TagList result;
-    Tag::TagList res;
     Tag::TagList::const_iterator it = m_children.begin();
     for( ; it != m_children.end(); ++it )
     {
       result.push_back( (*it) );
-      res = (*it)->allDescendants();
-      add( result, res );
+      add( result, (*it)->allDescendants() );
     }
     return result;
   }
@@ -1048,7 +1045,7 @@ namespace gloox
     std::string::size_type l = m_name.length();
     for( std::string::size_type i = 0; i < l; ++i )
     {
-      if( m_name[i] < 0x30 || m_name[i] > 0x39 )
+      if( !std::isdigit( m_name[i] ) )
         return false;
     }
 
