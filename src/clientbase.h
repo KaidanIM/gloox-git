@@ -632,6 +632,7 @@ namespace gloox
       void notifyOnSessionCreateError( SessionCreateError error );
       bool notifyOnTLSConnect( const CertInfo& info );
       void notifyOnConnect();
+      void notifyStreamEvent( StreamEvent event );
       virtual void disconnect( ConnectionError reason );
       void header();
       void setAuthed( bool authed ) { m_authed = authed; };

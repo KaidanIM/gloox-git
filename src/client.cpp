@@ -108,6 +108,7 @@ namespace gloox
       if( m_tls && m_encryption && !m_encryptionActive
           && ( m_streamFeatures & StreamFeatureStartTls ) )
       {
+        notifyStreamEvent( StreamEventEncryption );
         startTls();
         return true;
       }
@@ -115,6 +116,7 @@ namespace gloox
       if( m_compress && m_compression && !m_compressionActive
           && ( m_streamFeatures & StreamFeatureCompressZlib ) )
       {
+        notifyStreamEvent( StreamEventCompression );
         negotiateCompression( StreamFeatureCompressZlib );
         return true;
       }
@@ -131,6 +133,7 @@ namespace gloox
         {
           if( m_streamFeatures & StreamFeatureBind )
           {
+            notifyStreamEvent( StreamEventResourceBinding );
             bindResource();
           }
         }
@@ -139,15 +142,18 @@ namespace gloox
           if( m_streamFeatures & SaslMechDigestMd5 && m_availableSaslMechs & SaslMechDigestMd5
               && !m_forceNonSasl )
           {
+            notifyStreamEvent( StreamEventAuthentication );
             startSASL( SaslMechDigestMd5 );
           }
           else if( m_streamFeatures & SaslMechPlain && m_availableSaslMechs & SaslMechPlain
                    && !m_forceNonSasl )
           {
+            notifyStreamEvent( StreamEventAuthentication );
             startSASL( SaslMechPlain );
           }
           else if( m_streamFeatures & StreamFeatureIqAuth || m_forceNonSasl )
           {
+            notifyStreamEvent( StreamEventAuthentication );
             nonSaslLogin();
           }
           else
@@ -160,26 +166,31 @@ namespace gloox
         else if( m_doAuth && !m_clientCerts.empty() && !m_clientKey.empty()
                  && m_streamFeatures & SaslMechExternal && m_availableSaslMechs & SaslMechExternal )
         {
+          notifyStreamEvent( StreamEventAuthentication );
           startSASL( SaslMechExternal );
         }
 #ifdef _WIN32
         else if( m_doAuth && m_streamFeatures & SaslMechGssapi && m_availableSaslMechs & SaslMechGssapi )
         {
+          notifyStreamEvent( StreamEventAuthentication );
           startSASL( SaslMechGssapi );
         }
 #endif
         else if( m_doAuth && m_streamFeatures & SaslMechAnonymous
                  && m_availableSaslMechs & SaslMechAnonymous )
         {
+          notifyStreamEvent( StreamEventAuthentication );
           startSASL( SaslMechAnonymous );
         }
         else
         {
+          notifyStreamEvent( StreamEventFinished );
           connected();
         }
       }
       else if( m_streamFeatures & StreamFeatureIqAuth )
       {
+        notifyStreamEvent( StreamEventAuthentication );
         nonSaslLogin();
       }
       else
@@ -518,17 +529,24 @@ namespace gloox
     if( m_authed )
     {
       if( m_manageRoster )
+      {
+        notifyStreamEvent( StreamEventFinished );
         m_rosterManager->fill();
+      }
       else
         rosterFilled();
     }
     else
+    {
+      notifyStreamEvent( StreamEventFinished );
       notifyOnConnect();
+    }
   }
 
   void Client::rosterFilled()
   {
     sendPresence();
+    notifyStreamEvent( StreamEventFinished );
     notifyOnConnect();
   }
 

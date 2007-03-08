@@ -373,9 +373,23 @@ namespace gloox
   {
     StateDisconnected,              /**< The client is in disconnected state. */
     StateConnecting,                /**< The client is currently trying to establish a connection. */
-    StateConnected,                 /**< The client is connected to the server but authentication is not
+    StateConnected                  /**< The client is connected to the server but authentication is not
                                      * (yet) done. */
-    StateAuthenticated              /**< Authentication is done. */
+  };
+
+  /**
+   * Describes stream events that get emitted by means of ConnectionListener::onStreamEvent().
+   */
+  enum StreamEvent
+  {
+    StreamEventConnecting,          /**< The Client is about to initaite the connection. */
+    StreamEventEncryption,          /**< The Client is about to negotiate encryption. */
+    StreamEventCompression,         /**< The Client is about to negotiate compression. */
+    StreamEventAuthentication,      /**< The Client is about to authenticate. */
+    StreamEventSessionInit,         /**< The Client is about to create a session. */
+    StreamEventResourceBinding,     /**< The Client is about to bind a resource to the session. */
+    StreamEventRoster,              /**< The Client is about to request the roster. */
+    StreamEventFinished             /**< The log-in phase is completed. */
   };
 
   /**

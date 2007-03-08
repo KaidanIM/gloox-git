@@ -1110,6 +1110,15 @@ namespace gloox
     }
   }
 
+  void ClientBase::notifyStreamEvent( StreamEvent event )
+  {
+    ConnectionListenerList::const_iterator it = m_connectionListeners.begin();
+    for( ; it != m_connectionListeners.end(); ++it )
+    {
+      (*it)->onStreamEvent( event );
+    }
+  }
+
   void ClientBase::notifyPresenceHandlers( Stanza *stanza )
   {
     bool match = false;
