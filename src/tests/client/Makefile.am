@@ -13,6 +13,6 @@ client_test_SOURCES = client_test.cpp ../../client.cpp ../../clientbase.cpp ../.
 			../../dns.cpp ../../stanzaextensionfactory.cpp ../../oob.cpp ../../gpgencrypted.cpp \
 			../../gpgsigned.cpp ../../vcardupdate.cpp ../../delayeddelivery.cpp \
 			../../xdelayeddelivery.cpp ../../rostermanager.cpp ../../nonsaslauth.cpp ../../sha.cpp \
-			../../rosteritem.cpp ../../privatexml.cpp
+			../../rosteritem.cpp ../../privatexml.cpp ../../main.cpp
 client_test_LDADD =
 client_test_CFLAGS = $(CPPFLAGS)
