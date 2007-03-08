@@ -12,6 +12,6 @@ clientbase_test_SOURCES = clientbase_test.cpp ../../clientbase.cpp ../../jid.cpp
 			../../logsink.cpp ../../messagesession.cpp ../../prep.cpp ../../compressionzlib.cpp \
 			../../dns.cpp ../../stanzaextensionfactory.cpp ../../oob.cpp ../../gpgencrypted.cpp \
 			../../gpgsigned.cpp ../../vcardupdate.cpp ../../delayeddelivery.cpp \
-			../../xdelayeddelivery.cpp
+			../../xdelayeddelivery.cpp ../../main.cpp
 clientbase_test_LDADD =
 clientbase_test_CFLAGS = $(CPPFLAGS)
