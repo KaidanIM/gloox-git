@@ -322,12 +322,9 @@ namespace gloox
 
   ssize_t GnuTLS::pushFunc( const void *data, size_t len )
   {
-    m_sendBuffer.assign( (const char*)data, len );
     if( m_handler )
-    {
-      m_handler->handleEncryptedData( m_sendBuffer );
-      m_sendBuffer = "";
-    }
+      m_handler->handleEncryptedData( std::string( (const char*)data, len ) );
+
     return len;
   }
 
