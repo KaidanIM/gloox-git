@@ -100,8 +100,7 @@ namespace gloox
 
   const std::string Tag::xml() const
   {
-    std::string xml;
-    xml = "<" + escape( m_name );
+    std::string xml = "<" + escape( m_name );
     if( m_attribs.size() )
     {
       StringMap::const_iterator it_a = m_attribs.begin();
@@ -191,10 +190,7 @@ namespace gloox
   const std::string Tag::findAttribute( const std::string& name ) const
   {
     StringMap::const_iterator it = m_attribs.find( name );
-    if( it != m_attribs.end() )
-      return (*it).second;
-    else
-      return "";
+    return ( it != m_attribs.end() ) ? (*it).second : std::string();
   }
 
   bool Tag::hasAttribute( const std::string& name, const std::string& value ) const
@@ -222,8 +218,11 @@ namespace gloox
   }
 
   Tag* Tag::findChild( const std::string& name, const std::string& attr,
-                       const std::string& value )
+                       const std::string& value ) const
   {
+    if( name.empty() )
+      return 0;
+
     TagList::const_iterator it = m_children.begin();
     for( ; it != m_children.end(); ++it )
     {
@@ -232,23 +231,6 @@ namespace gloox
     }
 
     return 0;
-  }
-
-  bool Tag::hasChild( const std::string& name,
-                      const std::string& attr, const std::string& value ) const
-  {
-    if( name.empty() )
-      return false;
-
-    TagList::const_iterator it = m_children.begin();
-    for( ; it != m_children.end(); ++it )
-    {
-      if( ( (*it)->name() == name )
-              && (*it)->hasAttribute( attr, value ) )
-        return true;
-    }
-
-    return false;
   }
 
   bool Tag::hasChildWithCData( const std::string& name, const std::string& cdata ) const
@@ -265,19 +247,7 @@ namespace gloox
     return false;
   }
 
-  bool Tag::hasChildWithAttrib( const std::string& attr, const std::string& value ) const
-  {
-    TagList::const_iterator it = m_children.begin();
-    for( ; it != m_children.end(); ++it )
-    {
-      if( (*it)->hasAttribute( attr, value ) )
-        return true;
-    }
-
-    return false;
-  }
-
-  Tag* Tag::findChildWithAttrib( const std::string& attr, const std::string& value )
+  Tag* Tag::findChildWithAttrib( const std::string& attr, const std::string& value ) const
   {
     TagList::const_iterator it = m_children.begin();
     for( ; it != m_children.end(); ++it )
@@ -395,10 +365,7 @@ namespace gloox
   Tag* Tag::findTag( const std::string& expression )
   {
     Tag::TagList l = findTagList( expression );
-    if( l.size() )
-      return (*(l.begin()));
-    else
-      return 0;
+    return l.size() ? (*(l.begin())) : 0;
   }
 
   Tag::TagList Tag::findTagList( const std::string& expression )
@@ -1031,10 +998,7 @@ namespace gloox
 
   bool Tag::isWhitespace( const char& c )
   {
-    if( c == 0x09 || c == 0x0a || c == 0x0d || c == 0x20 )
-      return true;
-
-    return false;
+    return ( c == 0x09 || c == 0x0a || c == 0x0d || c == 0x20 );
   }
 
   bool Tag::isNumber()
