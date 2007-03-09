@@ -131,19 +131,19 @@ namespace gloox
        * Use this function to retrieve the XML character data of an element.
        * @return The cdata the element contains.
        */
-      virtual const std::string cdata() const;
+      virtual const std::string& cdata() const { return m_cdata; }
 
       /**
        * Use this function to manipulate the list of attributes.
        * @return A reference to the list of attributes.
        */
-      virtual StringMap& attributes();
+      virtual StringMap& attributes() { return m_attribs; }
 
       /**
        * Use this function to manipulate the list of child elements.
        * @return A reference to the list of child elements.
        */
-      virtual TagList& children();
+      virtual TagList& children() { return m_children; }
 
       /**
        * This function can be used to retrieve the value of a Tag's attribute.
@@ -166,7 +166,7 @@ namespace gloox
        * @param name The name of the element to search for.
        * @return The found Tag, or NULL.
        */
-      virtual Tag* findChild( const std::string& name );
+      virtual Tag* findChild( const std::string& name ) const;
 
       /**
        * This function finds and returns the @b first element within the child elements of the current tag,
@@ -218,7 +218,7 @@ namespace gloox
        * @note The tags are still linked to the current Tag and should not be deleted from the TagList.
        * @since 0.9
        */
-      TagList findChildren( const std::string& name );
+      TagList findChildren( const std::string& name ) const;
 
       /**
        * Removes the given Tag from the list of child Tags.
@@ -232,7 +232,7 @@ namespace gloox
        * Returns whether the Tag is considered empty, i.e. invalid.
        * @return @b True if the Tag is valid, @b false if not.
        */
-      virtual bool empty() const { return m_name.empty(); };
+      virtual bool empty() const { return m_name.empty(); }
 
       /**
        * This function checks whether a child element with given name exists and has
@@ -247,13 +247,13 @@ namespace gloox
        * Returns the tag's parent Tag.
        * @return The Tag above the current Tag. May be @b 0.
        */
-      Tag* parent() { return m_parent; };
+      Tag* parent() const { return m_parent; }
 
       /**
        * Returns the stanza type.
        * @return The type of the stanza.
        */
-      virtual StanzaType type() const { return m_type; };
+      virtual StanzaType type() const { return m_type; }
 
       /**
        * This function creates a deep copy of this Tag.
@@ -349,7 +349,7 @@ namespace gloox
 
       struct duo
       {
-        duo( std::string f, std::string s ) : first( f), second( s ) {};
+        duo( const std::string& f, const std::string& s ) : first( f ), second( s ) {};
         std::string first;
         std::string second;
       };
@@ -358,14 +358,14 @@ namespace gloox
       const std::string escape( const std::string& what ) const;
       const std::string relax( const std::string& what ) const;
       const std::string replace( const std::string& what, const Duo& duo ) const;
-      TagList findChildren( TagList& list, const std::string& name );
+      TagList findChildren( const TagList& list, const std::string& name ) const;
       Tag* parse( const std::string& expression, int& len, TokenType border = XTNone );
       void addToken( Tag **root, Tag **current, TokenType type, const std::string& token );
       void addOperator( Tag **root, Tag **current, Tag *arg, TokenType type,
                         const std::string& token );
       bool addPredicate( Tag **root, Tag **current, Tag *token );
       TokenType getType( const std::string& c );
-      bool isWhitespace( const char& c );
+      bool isWhitespace( const char c );
       bool isNumber();
       void add( Tag::TagList& one, const Tag::TagList& two );
       Tag::TagList evaluateTagList( Tag *token );

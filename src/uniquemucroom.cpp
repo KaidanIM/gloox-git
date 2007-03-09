@@ -31,10 +31,7 @@ namespace gloox
 
   void UniqueMUCRoom::join()
   {
-    if( !m_parent )
-      return;
-
-    if( m_joined )
+    if( !m_parent || m_joined )
       return;
 
     const std::string& id = m_parent->getID();

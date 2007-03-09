@@ -36,7 +36,7 @@ namespace gloox
     std::string::const_iterator it = data.begin();
     for( ; it != data.end(); ++it )
     {
-      unsigned char c = (*it);
+      const unsigned char c = (*it);
 //       printf( "found char:   %c, ", c );
 
       if( !isValid( c ) )
@@ -371,17 +371,12 @@ namespace gloox
   {
 //     printf( "about to close, " );
 
-    if( !m_current )
+    if( !m_current || m_current->name() != m_tag )
       return false;
-//     else
+
 //       printf( "m_current: %s, ", m_current->name().c_str() );
-
-    if( m_current->name() != m_tag )
-    {
 //       printf( "m_tag: %s, ", m_tag.c_str() );
-      return false;
-    }
-
+     
     if( m_current->parent() )
       m_current = m_current->parent();
     else
@@ -408,20 +403,14 @@ namespace gloox
     m_preamble = 0;
   }
 
-  bool Parser::isValid( unsigned char& c )
+  bool Parser::isValid( unsigned char c )
   {
-    if( c != 0xc0 || c != 0xc1 || c < 0xf5 )
-      return true;
-
-    return false;
+    return ( c != 0xc0 || c != 0xc1 || c < 0xf5 );
   }
 
-  bool Parser::isWhitespace( unsigned char& c )
+  bool Parser::isWhitespace( unsigned char c )
   {
-    if( c == 0x09 || c == 0x0a || c == 0x0d || c == 0x20 )
-      return true;
-
-    return false;
+    return ( c == 0x09 || c == 0x0a || c == 0x0d || c == 0x20 );
   }
 
   void Parser::streamEvent( Tag *tag )
