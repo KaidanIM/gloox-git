@@ -50,7 +50,7 @@ namespace gloox
     if( !m_parent || m_parent->state() != StateConnected )
       return;
 
-    std::string id = m_parent->getID();
+    const std::string& id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
     if( !m_to.empty() )
@@ -131,7 +131,7 @@ namespace gloox
     if( !m_parent || !m_parent->authed() )
       return;
 
-    const std::string id = m_parent->getID();
+    const std::string& id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
     if( !m_to.empty() )
@@ -152,7 +152,7 @@ namespace gloox
     if( !m_parent || !m_parent->authed() )
       return;
 
-    const std::string id = m_parent->getID();
+    const std::string& id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
     if( !m_to.empty() )
