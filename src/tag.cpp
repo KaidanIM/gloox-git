@@ -172,21 +172,6 @@ namespace gloox
     }
   }
 
-  const std::string Tag::cdata() const
-  {
-    return m_cdata;
-  }
-
-  StringMap& Tag::attributes()
-  {
-    return m_attribs;
-  }
-
-  Tag::TagList& Tag::children()
-  {
-    return m_children;
-  }
-
   const std::string Tag::findAttribute( const std::string& name ) const
   {
     StringMap::const_iterator it = m_attribs.find( name );
@@ -205,7 +190,7 @@ namespace gloox
       return false;
   }
 
-  Tag* Tag::findChild( const std::string& name )
+  Tag* Tag::findChild( const std::string& name ) const
   {
     TagList::const_iterator it = m_children.begin();
     for( ; it != m_children.end(); ++it )
@@ -330,12 +315,12 @@ namespace gloox
     return t;
   }
 
-  Tag::TagList Tag::findChildren( const std::string& name )
+  Tag::TagList Tag::findChildren( const std::string& name ) const
   {
     return findChildren( m_children, name );
   }
 
-  Tag::TagList Tag::findChildren( Tag::TagList& list, const std::string& name )
+  Tag::TagList Tag::findChildren( const Tag::TagList& list, const std::string& name ) const
   {
     Tag::TagList ret;
     Tag::TagList::const_iterator it = list.begin();
@@ -996,7 +981,7 @@ namespace gloox
     return XTNone;
   }
 
-  bool Tag::isWhitespace( const char& c )
+  bool Tag::isWhitespace( const char c )
   {
     return ( c == 0x09 || c == 0x0a || c == 0x0d || c == 0x20 );
   }

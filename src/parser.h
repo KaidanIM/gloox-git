@@ -58,8 +58,8 @@ namespace gloox
       void addCData();
       bool closeTag();
       void cleanup();
-      bool isWhitespace( unsigned char& c );
-      bool isValid( unsigned char& c );
+      bool isWhitespace( unsigned char c );
+      bool isValid( unsigned char c );
       void streamEvent( Tag *tag );
 
       enum ParserInternalState
