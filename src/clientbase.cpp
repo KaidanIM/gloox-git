@@ -362,7 +362,6 @@ namespace gloox
 #endif
   }
 
-#ifdef HAVE_TLS
   void ClientBase::startTls()
   {
     Tag *start = new Tag( "starttls" );
@@ -375,7 +374,6 @@ namespace gloox
     m_clientKey = clientKey;
     m_clientCerts = clientCerts;
   }
-#endif
 
   void ClientBase::startSASL( SaslMechanism type )
   {
