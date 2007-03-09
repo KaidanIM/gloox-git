@@ -16,68 +16,68 @@
 namespace gloox
 {
 
-  const std::string gloox::XMLNS_CLIENT            = "jabber:client";
-  const std::string gloox::XMLNS_COMPONENT_ACCEPT  = "jabber:component:accept";
-  const std::string gloox::XMLNS_COMPONENT_CONNECT = "jabber:component:connect";
+  const std::string XMLNS_CLIENT            = "jabber:client";
+  const std::string XMLNS_COMPONENT_ACCEPT  = "jabber:component:accept";
+  const std::string XMLNS_COMPONENT_CONNECT = "jabber:component:connect";
 
-  const std::string gloox::XMLNS_DISCO_INFO        = "http://jabber.org/protocol/disco#info";
-  const std::string gloox::XMLNS_DISCO_ITEMS       = "http://jabber.org/protocol/disco#items";
-  const std::string gloox::XMLNS_ADHOC_COMMANDS    = "http://jabber.org/protocol/commands";
-  const std::string gloox::XMLNS_COMPRESSION       = "http://jabber.org/protocol/compress";
-  const std::string gloox::XMLNS_OFFLINE           = "http://jabber.org/protocol/offline";
-  const std::string gloox::XMLNS_CHAT_STATES       = "http://jabber.org/protocol/chatstates";
-  const std::string gloox::XMLNS_AMP               = "http://jabber.org/protocol/amp";
-  const std::string gloox::XMLNS_IBB               = "http://jabber.org/protocol/ibb";
-  const std::string gloox::XMLNS_FEATURE_NEG       = "http://jabber.org/protocol/feature-neg";
-  const std::string gloox::XMLNS_CHATNEG           = "http://jabber.org/protocol/chatneg";
-  const std::string gloox::XMLNS_XHTML_IM          = "http://jabber.org/protocol/xhtml-im";
-  const std::string gloox::XMLNS_DELAY             = "http://www.xmpp.org/extensions/xep-0203.html#ns";
-  const std::string gloox::XMLNS_ROSTER            = "jabber:iq:roster";
-  const std::string gloox::XMLNS_VERSION           = "jabber:iq:version";
-  const std::string gloox::XMLNS_REGISTER          = "jabber:iq:register";
-  const std::string gloox::XMLNS_PRIVACY           = "jabber:iq:privacy";
-  const std::string gloox::XMLNS_AUTH              = "jabber:iq:auth";
-  const std::string gloox::XMLNS_PRIVATE_XML       = "jabber:iq:private";
-  const std::string gloox::XMLNS_LAST              = "jabber:iq:last";
-  const std::string gloox::XMLNS_SEARCH            = "jabber:iq:search";
-  const std::string gloox::XMLNS_IQ_OOB            = "jabber:iq:oob";
-  const std::string gloox::XMLNS_X_DATA            = "jabber:x:data";
-  const std::string gloox::XMLNS_X_EVENT           = "jabber:x:event";
-  const std::string gloox::XMLNS_X_OOB             = "jabber:x:oob";
-  const std::string gloox::XMLNS_X_DELAY           = "jabber:x:delay";
-  const std::string gloox::XMLNS_X_GPGSIGNED       = "jabber:x:signed";
-  const std::string gloox::XMLNS_X_GPGENCRYPTED    = "jabber:x:encrypted";
-  const std::string gloox::XMLNS_VCARD_TEMP        = "vcard-temp";
-  const std::string gloox::XMLNS_X_VCARD_UPDATE    = "vcard-temp:x:update";
-  const std::string gloox::XMLNS_BOOKMARKS         = "storage:bookmarks";
-  const std::string gloox::XMLNS_ANNOTATIONS       = "storage:rosternotes";
-  const std::string gloox::XMLNS_ROSTER_DELIMITER  = "roster:delimiter";
+  const std::string XMLNS_DISCO_INFO        = "http://jabber.org/protocol/disco#info";
+  const std::string XMLNS_DISCO_ITEMS       = "http://jabber.org/protocol/disco#items";
+  const std::string XMLNS_ADHOC_COMMANDS    = "http://jabber.org/protocol/commands";
+  const std::string XMLNS_COMPRESSION       = "http://jabber.org/protocol/compress";
+  const std::string XMLNS_OFFLINE           = "http://jabber.org/protocol/offline";
+  const std::string XMLNS_CHAT_STATES       = "http://jabber.org/protocol/chatstates";
+  const std::string XMLNS_AMP               = "http://jabber.org/protocol/amp";
+  const std::string XMLNS_IBB               = "http://jabber.org/protocol/ibb";
+  const std::string XMLNS_FEATURE_NEG       = "http://jabber.org/protocol/feature-neg";
+  const std::string XMLNS_CHATNEG           = "http://jabber.org/protocol/chatneg";
+  const std::string XMLNS_XHTML_IM          = "http://jabber.org/protocol/xhtml-im";
+  const std::string XMLNS_DELAY             = "http://www.xmpp.org/extensions/xep-0203.html#ns";
+  const std::string XMLNS_ROSTER            = "jabber:iq:roster";
+  const std::string XMLNS_VERSION           = "jabber:iq:version";
+  const std::string XMLNS_REGISTER          = "jabber:iq:register";
+  const std::string XMLNS_PRIVACY           = "jabber:iq:privacy";
+  const std::string XMLNS_AUTH              = "jabber:iq:auth";
+  const std::string XMLNS_PRIVATE_XML       = "jabber:iq:private";
+  const std::string XMLNS_LAST              = "jabber:iq:last";
+  const std::string XMLNS_SEARCH            = "jabber:iq:search";
+  const std::string XMLNS_IQ_OOB            = "jabber:iq:oob";
+  const std::string XMLNS_X_DATA            = "jabber:x:data";
+  const std::string XMLNS_X_EVENT           = "jabber:x:event";
+  const std::string XMLNS_X_OOB             = "jabber:x:oob";
+  const std::string XMLNS_X_DELAY           = "jabber:x:delay";
+  const std::string XMLNS_X_GPGSIGNED       = "jabber:x:signed";
+  const std::string XMLNS_X_GPGENCRYPTED    = "jabber:x:encrypted";
+  const std::string XMLNS_VCARD_TEMP        = "vcard-temp";
+  const std::string XMLNS_X_VCARD_UPDATE    = "vcard-temp:x:update";
+  const std::string XMLNS_BOOKMARKS         = "storage:bookmarks";
+  const std::string XMLNS_ANNOTATIONS       = "storage:rosternotes";
+  const std::string XMLNS_ROSTER_DELIMITER  = "roster:delimiter";
 
-  const std::string gloox::XMLNS_XMPP_PING         = "urn:xmpp:ping";
+  const std::string XMLNS_XMPP_PING         = "urn:xmpp:ping";
 
-  const std::string gloox::XMLNS_MUC               = "http://jabber.org/protocol/muc";
-  const std::string gloox::XMLNS_MUC_USER          = "http://jabber.org/protocol/muc#user";
-  const std::string gloox::XMLNS_MUC_ADMIN         = "http://jabber.org/protocol/muc#admin";
-  const std::string gloox::XMLNS_MUC_UNIQUE        = "http://jabber.org/protocol/muc#unique";
-  const std::string gloox::XMLNS_MUC_OWNER         = "http://jabber.org/protocol/muc#owner";
-  const std::string gloox::XMLNS_MUC_ROOMINFO      = "http://jabber.org/protocol/muc#roominfo";
-  const std::string gloox::XMLNS_MUC_ROOMS         = "http://jabber.org/protocol/muc#rooms";
-  const std::string gloox::XMLNS_MUC_REQUEST       = "http://jabber.org/protocol/muc#request";
+  const std::string XMLNS_MUC               = "http://jabber.org/protocol/muc";
+  const std::string XMLNS_MUC_USER          = "http://jabber.org/protocol/muc#user";
+  const std::string XMLNS_MUC_ADMIN         = "http://jabber.org/protocol/muc#admin";
+  const std::string XMLNS_MUC_UNIQUE        = "http://jabber.org/protocol/muc#unique";
+  const std::string XMLNS_MUC_OWNER         = "http://jabber.org/protocol/muc#owner";
+  const std::string XMLNS_MUC_ROOMINFO      = "http://jabber.org/protocol/muc#roominfo";
+  const std::string XMLNS_MUC_ROOMS         = "http://jabber.org/protocol/muc#rooms";
+  const std::string XMLNS_MUC_REQUEST       = "http://jabber.org/protocol/muc#request";
 
-  const std::string gloox::XMLNS_XMPP_STREAM       = "urn:ietf:params:xml:ns:xmpp-streams";
-  const std::string gloox::XMLNS_XMPP_STANZAS      = "urn:ietf:params:xml:ns:xmpp-stanzas";
-  const std::string gloox::XMLNS_STREAM_TLS        = "urn:ietf:params:xml:ns:xmpp-tls";
-  const std::string gloox::XMLNS_STREAM_SASL       = "urn:ietf:params:xml:ns:xmpp-sasl";
-  const std::string gloox::XMLNS_STREAM_BIND       = "urn:ietf:params:xml:ns:xmpp-bind";
-  const std::string gloox::XMLNS_STREAM_SESSION    = "urn:ietf:params:xml:ns:xmpp-session";
-  const std::string gloox::XMLNS_STREAM_IQAUTH     = "http://jabber.org/features/iq-auth";
-  const std::string gloox::XMLNS_STREAM_IQREGISTER = "http://jabber.org/features/iq-register";
-  const std::string gloox::XMLNS_STREAM_ACK        = "http://jabber.org/features/ack";
-  const std::string gloox::XMLNS_STREAM_COMPRESS   = "http://jabber.org/features/compress";
+  const std::string XMLNS_XMPP_STREAM       = "urn:ietf:params:xml:ns:xmpp-streams";
+  const std::string XMLNS_XMPP_STANZAS      = "urn:ietf:params:xml:ns:xmpp-stanzas";
+  const std::string XMLNS_STREAM_TLS        = "urn:ietf:params:xml:ns:xmpp-tls";
+  const std::string XMLNS_STREAM_SASL       = "urn:ietf:params:xml:ns:xmpp-sasl";
+  const std::string XMLNS_STREAM_BIND       = "urn:ietf:params:xml:ns:xmpp-bind";
+  const std::string XMLNS_STREAM_SESSION    = "urn:ietf:params:xml:ns:xmpp-session";
+  const std::string XMLNS_STREAM_IQAUTH     = "http://jabber.org/features/iq-auth";
+  const std::string XMLNS_STREAM_IQREGISTER = "http://jabber.org/features/iq-register";
+  const std::string XMLNS_STREAM_ACK        = "http://jabber.org/features/ack";
+  const std::string XMLNS_STREAM_COMPRESS   = "http://jabber.org/features/compress";
 
-  const std::string gloox::XMPP_STREAM_VERSION_MAJOR = "1";
-  const std::string gloox::XMPP_STREAM_VERSION_MINOR = "0";
-  const std::string gloox::GLOOX_VERSION           = "0.9-pre5";
+  const std::string XMPP_STREAM_VERSION_MAJOR = "1";
+  const std::string XMPP_STREAM_VERSION_MINOR = "0";
+  const std::string GLOOX_VERSION           = "0.9-pre5";
 
 }
 
