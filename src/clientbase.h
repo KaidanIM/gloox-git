@@ -175,7 +175,7 @@ namespace gloox
        * Returns the current prepped server.
        * @return The server used to connect.
        */
-      const std::string server() const { return m_server; };
+      const std::string& server() const { return m_server; };
 
       /**
        * Returns whether SASL is currently enabled (not necessarily used).
@@ -569,7 +569,7 @@ namespace gloox
        * this is possible.
        * @return The cdata of the stream error's text element (only for see-other-host).
        */
-      const std::string streamErrorCData() const { return m_streamErrorCData; };
+      const std::string& streamErrorCData() const { return m_streamErrorCData; };
 
       /**
        * This function can be used to retrieve the application-specific error condition of a stream error.
