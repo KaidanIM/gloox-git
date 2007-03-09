@@ -98,14 +98,21 @@ namespace gloox
       return 0;
     }
 
-    int ret = gnutls_record_recv( m_session, m_buf, m_bufsize );
-    if( ret > 0  && m_handler )
+    int sum = 0;
+    int ret = 0;
+    do
     {
-      std::string temp;
-      temp.assign( m_buf, ret );
-      m_handler->handleDecryptedData( temp );
+      ret = gnutls_record_recv( m_session, m_buf, m_bufsize );
+
+      if( ret > 0 && m_handler )
+      {
+        m_handler->handleDecryptedData( std::string( m_buf, ret ) );
+        sum += ret;
+      }
     }
-    return ret;
+    while( ret > 0 );
+
+    return sum;
   }
 
   void GnuTLS::setCACerts( const StringList& cacerts )
