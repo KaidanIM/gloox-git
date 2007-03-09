@@ -37,7 +37,7 @@ namespace gloox
 
   std::string PrivacyManager::requestListNames()
   {
-    std::string id = m_parent->getID();
+    const std::string& id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
     iq->addAttribute( "type", "get" );
@@ -52,7 +52,7 @@ namespace gloox
 
   std::string PrivacyManager::requestList( const std::string& name )
   {
-    std::string id = m_parent->getID();
+    const std::string& id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
     iq->addAttribute( "type", "get" );
@@ -69,7 +69,7 @@ namespace gloox
 
   std::string PrivacyManager::removeList( const std::string& name )
   {
-    std::string id = m_parent->getID();
+    const std::string& id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
     iq->addAttribute( "type", "set" );
@@ -86,7 +86,7 @@ namespace gloox
 
   std::string PrivacyManager::setDefault( const std::string& name )
   {
-    std::string id = m_parent->getID();
+    const std::string& id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
     iq->addAttribute( "type", "set" );
@@ -103,7 +103,7 @@ namespace gloox
 
   std::string PrivacyManager::unsetDefault()
   {
-    std::string id = m_parent->getID();
+    const std::string& id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
     iq->addAttribute( "type", "set" );
@@ -119,7 +119,7 @@ namespace gloox
 
   std::string PrivacyManager::setActive( const std::string& name )
   {
-    std::string id = m_parent->getID();
+    const std::string& id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
     iq->addAttribute( "type", "set" );
@@ -136,7 +136,7 @@ namespace gloox
 
   std::string PrivacyManager::unsetActive()
   {
-    std::string id = m_parent->getID();
+    const std::string& id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
     iq->addAttribute( "type", "set" );
@@ -152,7 +152,7 @@ namespace gloox
 
   std::string PrivacyManager::store( const std::string& name, PrivacyListHandler::PrivacyList& list )
   {
-    std::string id = m_parent->getID();
+    const std::string& id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
     iq->addAttribute( "type", "set" );

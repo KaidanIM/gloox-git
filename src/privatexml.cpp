@@ -35,7 +35,7 @@ namespace gloox
   std::string PrivateXML::requestXML( const std::string& tag, const std::string& xmlns,
                                       PrivateXMLHandler *pxh )
   {
-    const std::string id = m_parent->getID();
+    const std::string& id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
     iq->addAttribute( "id", id );
@@ -54,7 +54,7 @@ namespace gloox
 
   std::string PrivateXML::storeXML( Tag *tag, PrivateXMLHandler *pxh )
   {
-    const std::string id = m_parent->getID();
+    const std::string& id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
     iq->addAttribute( "id", id );

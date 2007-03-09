@@ -300,7 +300,7 @@ namespace gloox
     if( remote.empty() || command.empty() || !ah )
       return;
 
-    const std::string id = m_parent->getID();
+    const std::string& id = m_parent->getID();
     Tag *iq = new Tag( "iq" );
     iq->addAttribute( "type", "set" );
     iq->addAttribute( "to", remote.full() );

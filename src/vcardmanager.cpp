@@ -49,7 +49,7 @@ namespace gloox
     if( it != m_trackMap.end() )
       return;
 
-    const std::string id = m_parent->getID();
+    const std::string& id = m_parent->getID();
     Tag *iq = new Tag( "iq" );
     iq->addAttribute( "type", "get" );
     iq->addAttribute( "id", id );
@@ -80,7 +80,7 @@ namespace gloox
     if( !m_parent || !vch )
       return;
 
-    const std::string id = m_parent->getID();
+    const std::string& id = m_parent->getID();
     Tag *iq = new Tag( "iq" );
     iq->addAttribute( "type", "set" );
     iq->addAttribute( "id", id );

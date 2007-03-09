@@ -251,7 +251,7 @@ namespace gloox
 
   void Disco::getDiscoInfo( const JID& to, const std::string& node, DiscoHandler *dh, int context )
   {
-    std::string id = m_parent->getID();
+    const std::string& id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
     iq->addAttribute( "id", id );
@@ -273,7 +273,7 @@ namespace gloox
 
   void Disco::getDiscoItems( const JID& to, const std::string& node, DiscoHandler *dh, int context )
   {
-    std::string id = m_parent->getID();
+    const std::string& id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
     iq->addAttribute( "id", id );

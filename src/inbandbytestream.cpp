@@ -134,7 +134,7 @@ namespace gloox
     if( !m_parent )
       return;
 
-    const std::string id = m_clientbase->getID();
+    const std::string& id = m_clientbase->getID();
     Tag *iq = new Tag( "iq" );
     iq->addAttribute( "type", "set" );
     iq->addAttribute( "to", m_parent->target().full() );
