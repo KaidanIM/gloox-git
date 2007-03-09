@@ -35,7 +35,7 @@ namespace gloox
 
   void NonSaslAuth::doAuth()
   {
-    std::string id = m_parent->getID();
+    const std::string& id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
     iq->addAttribute( "to", m_parent->jid().server() );
@@ -75,7 +75,7 @@ namespace gloox
         {
           case TRACK_REQUEST_AUTH_FIELDS:
           {
-            std::string id = m_parent->getID();
+            const std::string& id = m_parent->getID();
 
             Tag *iq = new Tag( "iq" );
             iq->addAttribute( "id", id );

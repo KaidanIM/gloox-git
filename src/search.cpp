@@ -34,7 +34,7 @@ namespace gloox
     if( !m_parent || directory.empty() || !sh )
       return;
 
-    std::string id = m_parent->getID();
+    const std::string& id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
     iq->addAttribute( "type", "get" );
@@ -53,7 +53,7 @@ namespace gloox
     if( !m_parent || directory.empty() || !sh )
       return;
 
-    const std::string id = m_parent->getID();
+    const std::string& id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
     iq->addAttribute( "id", id );
@@ -73,7 +73,7 @@ namespace gloox
     if( !m_parent || directory.empty() || !sh )
       return;
 
-    const std::string id = m_parent->getID();
+    const std::string& id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
     iq->addAttribute( "id", id );

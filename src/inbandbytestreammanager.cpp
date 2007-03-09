@@ -52,8 +52,8 @@ namespace gloox
     if( !m_parent || !ibbh )
       return false;
 
-    const std::string sid = m_parent->getID();
-    const std::string id = m_parent->getID();
+    const std::string& sid = m_parent->getID();
+    const std::string& id = m_parent->getID();
     Tag *iq = new Tag( "iq" );
     iq->addAttribute( "type", "set" );
     iq->addAttribute( "to", to.full() );

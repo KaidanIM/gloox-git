@@ -134,7 +134,7 @@ namespace gloox
     if( !password.empty() )
       new Tag( d, "password", password );
 
-    const std::string id = m_parent->getID();
+    const std::string& id = m_parent->getID();
 
     JID j( m_nick.bare() );
     Stanza *iq = Stanza::createIqStanza( j, id, StanzaIqSet, XMLNS_MUC_OWNER, d );
@@ -398,7 +398,7 @@ namespace gloox
     if( !reason.empty() )
       new Tag( i, "reason", reason );
 
-    const std::string id = m_parent->getID();
+    const std::string& id = m_parent->getID();
     JID j( m_nick.bare() );
     Stanza *k = Stanza::createIqStanza( j, id, StanzaIqSet, XMLNS_MUC_ADMIN, i );
 
@@ -439,7 +439,7 @@ namespace gloox
         break;
     }
 
-    const std::string id = m_parent->getID();
+    const std::string& id = m_parent->getID();
     JID j( m_nick.bare() );
     Stanza *iq = Stanza::createIqStanza( j, id, StanzaIqGet, XMLNS_MUC_ADMIN, i );
 
@@ -485,7 +485,7 @@ namespace gloox
         break;
     }
 
-    const std::string id = m_parent->getID();
+    const std::string& id = m_parent->getID();
     Tag *iq = new Tag( "iq" );
     iq->addAttribute( "id", id );
     iq->addAttribute( "type", "set" );
@@ -647,7 +647,7 @@ namespace gloox
     x->addAttribute( "type", "submit" );
 
     JID j( m_nick.bare() );
-    const std::string id = m_parent->getID();
+    const std::string& id = m_parent->getID();
     Stanza *iq = Stanza::createIqStanza( j, id, StanzaIqSet, XMLNS_MUC_OWNER, x );
 
     m_parent->trackID( this, id, CreateInstantRoom );
@@ -666,7 +666,7 @@ namespace gloox
     x->addAttribute( "type", "cancel" );
 
     JID j( m_nick.bare() );
-    const std::string id = m_parent->getID();
+    const std::string& id = m_parent->getID();
     Stanza *iq = Stanza::createIqStanza( j, id, StanzaIqSet, XMLNS_MUC_OWNER, x );
 
     m_parent->trackID( this, id, CancelRoomCreation );
@@ -681,7 +681,7 @@ namespace gloox
       return;
 
     JID j( m_nick.bare() );
-    const std::string id = m_parent->getID();
+    const std::string& id = m_parent->getID();
     Stanza *iq = Stanza::createIqStanza( j, id, StanzaIqGet, XMLNS_MUC_OWNER, 0 );
 
     m_parent->trackID( this, id, RequestRoomConfig );

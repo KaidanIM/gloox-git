@@ -69,7 +69,7 @@ namespace gloox
     if( !m_parent )
       return;
 
-    const std::string id = m_parent->getID();
+    const std::string& id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
     if( !m_to.empty() )

@@ -199,7 +199,7 @@ namespace gloox
     if( jid.empty() )
       return;
 
-    std::string id = m_parent->getID();
+    const std::string& id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
     iq->addAttribute( "type", "set" );
@@ -234,7 +234,7 @@ namespace gloox
 
     if( remove )
     {
-      std::string id = m_parent->getID();
+      const std::string& id = m_parent->getID();
 
       Tag *iq = new Tag( "iq" );
       iq->addAttribute( "type", "set" );
@@ -256,7 +256,7 @@ namespace gloox
     {
       if( (*it).second->changed() )
       {
-        std::string id = m_parent->getID();
+        const std::string& id = m_parent->getID();
 
         Tag *iq = new Tag( "iq" );
         iq->addAttribute( "type", "set" );
