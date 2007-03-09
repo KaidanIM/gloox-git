@@ -72,7 +72,6 @@ namespace gloox
       gnutls_certificate_credentials m_credentials;
 
       std::string m_recvBuffer;
-      std::string m_sendBuffer;
       char *m_buf;
       const int m_bufsize;
 
