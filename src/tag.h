@@ -177,7 +177,7 @@ namespace gloox
        * @return The found Tag, or NULL.
        */
       virtual Tag* findChild( const std::string& name, const std::string& attr,
-                               const std::string& value = "" );
+                               const std::string& value = "" ) const;
 
       /**
        * This function checks whether the Tag has a child element with a given name, and optionally
@@ -187,8 +187,9 @@ namespace gloox
        * @param value The value of the attribute of the child element.
        * @return @b True if the given child element exists, @b false otherwise.
        */
-      virtual bool hasChild( const std::string& name, const std::string& attr = "",
-                             const std::string& value = "" ) const;
+      virtual inline bool hasChild( const std::string& name, const std::string& attr = "",
+                                    const std::string& value = "" ) const
+        { return findChild( name, attr, value ) ? true : false; };
 
       /**
        * This function checks whether the Tag has a child element which posesses a given attribute
@@ -197,7 +198,7 @@ namespace gloox
        * @param value The value of the attribute of the child element.
        * @return The child if found, NULL otherwise.
        */
-      virtual Tag* findChildWithAttrib( const std::string& attr, const std::string& value = "" );
+      virtual Tag* findChildWithAttrib( const std::string& attr, const std::string& value = "" ) const;
 
       /**
        * This function checks whether the Tag has a child element which posesses a given attribute
@@ -206,7 +207,9 @@ namespace gloox
        * @param value The value of the attribute of the child element.
        * @return @b True if any such child element exists, @b false otherwise.
        */
-      virtual bool hasChildWithAttrib( const std::string& attr, const std::string& value = "" ) const;
+      virtual inline bool hasChildWithAttrib( const std::string& attr,
+                                              const std::string& value = "" ) const
+        { return findChildWithAttrib( attr, value ) ? true : false; };
 
       /**
        * Returns a list of child tags of the current tag with the given name.
