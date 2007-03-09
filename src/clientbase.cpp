@@ -482,12 +482,12 @@ namespace gloox
         {
           return;
         }
-        
+
         size_t n_end = decoded.find( "\"", n_pos + 7 );
         while( decoded.substr( n_end-1, 1 ) == "\\" )
           n_end = decoded.find( "\"", n_end + 1 );
         std::string nonce = decoded.substr( n_pos + 7, n_end - ( n_pos + 7 ) );
-        
+
         std::string cnonce;
 #ifdef _WIN32_WCE
         char cn[4*8+1];
@@ -807,7 +807,7 @@ namespace gloox
   const std::string ClientBase::streamErrorText( const std::string& lang ) const
   {
     StringMap::const_iterator it = m_streamErrorText.find( lang );
-    return (it != m_streamErrorText.end() ) ? it->second : std::string();
+    return (it != m_streamErrorText.end() ) ? (*it).second : std::string();
   }
 
   void ClientBase::registerMessageSessionHandler( MessageSessionHandler *msh, int types )

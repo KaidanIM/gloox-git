@@ -118,6 +118,7 @@ namespace gloox
     {
       return FD_ISSET( m_socket, &fds ) ? true : false;
     }
+
     return false;
   }
 
