@@ -113,7 +113,7 @@ namespace gloox
         }
         else if( (*it)->name() == "subject" )
         {
-          const std::string lang = (*it)->findAttribute( "xml:lang" );
+          const std::string& lang = (*it)->findAttribute( "xml:lang" );
           if( !lang.empty() )
             m_subject[lang] = (*it)->cdata();
           else
@@ -213,7 +213,7 @@ namespace gloox
       {
         if( (*it)->name() == "status" )
         {
-          const std::string lang = (*it)->findAttribute( "xml:lang" );
+          const std::string& lang = (*it)->findAttribute( "xml:lang" );
           if( !lang.empty() )
             m_status[lang] = (*it)->cdata();
           else
@@ -328,43 +328,30 @@ namespace gloox
   const std::string Stanza::body( const std::string& lang ) const
   {
     StringMap::const_iterator it = m_body.find( lang );
-    if( it != m_body.end() )
-      return (*it).second;
-    else
-      return "";
+    return ( it != m_body.end() ) ? (*it).second : std::string();
   }
 
   const std::string Stanza::subject( const std::string& lang ) const
   {
     StringMap::const_iterator it = m_subject.find( lang );
-    if( it != m_subject.end() )
-      return (*it).second;
-    else
-      return "";
+    return ( it != m_subject.end() ) ? (*it).second : std::string();
   }
 
   const std::string Stanza::status( const std::string& lang ) const
   {
     StringMap::const_iterator it = m_status.find( lang );
-    if( it != m_status.end() )
-      return (*it).second;
-    else
-      return "";
+    return ( it != m_status.end() ) ? (*it).second : std::string();
   }
 
   const std::string Stanza::errorText( const std::string& lang ) const
   {
     StringMap::const_iterator it = m_errorText.find( lang );
-    if( it != m_errorText.end() )
-      return (*it).second;
-    else
-      return "";
+    return ( it != m_errorText.end() ) ? (*it).second : std::string();
   }
 
   Stanza* Stanza::clone()
   {
-    Stanza *s = new Stanza( this );
-    return s;
+    return new Stanza( this );
   }
 
   void Stanza::addExtension( StanzaExtension *se )
