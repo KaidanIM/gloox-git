@@ -477,20 +477,17 @@ namespace gloox
         else
           realm = m_jid.server();
 
-        std::string nonce;
         size_t n_pos = decoded.find( "nonce=" );
-        if( n_pos != std::string::npos )
-        {
-          size_t n_end = decoded.find( "\"", n_pos + 7 );
-          while( decoded.substr( n_end-1, 1 ) == "\\" )
-            n_end = decoded.find( "\"", n_end + 1 );
-          nonce = decoded.substr( n_pos + 7, n_end - ( n_pos + 7 ) );
-        }
-        else
+        if( n_pos == std::string::npos )
         {
           return;
         }
-
+        
+        size_t n_end = decoded.find( "\"", n_pos + 7 );
+        while( decoded.substr( n_end-1, 1 ) == "\\" )
+          n_end = decoded.find( "\"", n_end + 1 );
+        std::string nonce = decoded.substr( n_pos + 7, n_end - ( n_pos + 7 ) );
+        
         std::string cnonce;
 #ifdef _WIN32_WCE
         char cn[4*8+1];
@@ -504,10 +501,6 @@ namespace gloox
         cnonce = cn.str();
 #endif
 
-        std::string a1;
-        std::string a2;
-        std::string a1_h;
-        std::string response_value;
         MD5 md5;
         md5.feed( m_jid.username() );
         md5.feed( ":" );
@@ -515,7 +508,7 @@ namespace gloox
         md5.feed( ":" );
         md5.feed( m_password );
         md5.finalize();
-        a1_h = md5.binary();
+        const std::string a1_h = md5.binary();
         md5.reset();
         md5.feed( a1_h );
         md5.feed( ":" );
@@ -523,12 +516,12 @@ namespace gloox
         md5.feed( ":" );
         md5.feed( cnonce );
         md5.finalize();
-        a1  = md5.hex();
+        const std::string a1  = md5.hex();
         md5.reset();
         md5.feed( "AUTHENTICATE:xmpp/" );
         md5.feed( m_jid.server() );
         md5.finalize();
-        a2 = md5.hex();
+        const std::string a2 = md5.hex();
         md5.reset();
         md5.feed( a1 );
         md5.feed( ":" );
@@ -538,7 +531,7 @@ namespace gloox
         md5.feed( ":auth:" );
         md5.feed( a2 );
         md5.finalize();
-        response_value = md5.hex();
+        const std::string response_value = md5.hex();
 
         std::string response = "username=\"" + m_jid.username() + "\",realm=\"" + realm;
         response += "\",nonce=\""+ nonce + "\",cnonce=\"" + cnonce;
@@ -589,10 +582,7 @@ namespace gloox
 
   JID& ClientBase::jid()
   {
-    if( m_authzid.empty() )
-      return m_jid;
-    else
-      return m_authzid;
+    return m_authzid.empty() ? m_jid : m_authzid;
   }
 
   void ClientBase::send( Tag *tag )
@@ -654,10 +644,7 @@ namespace gloox
 
   ConnectionState ClientBase::state() const
   {
-    if( m_connection )
-      return m_connection->state();
-    else
-      return StateDisconnected;
+    return m_connection ? m_connection->state() : StateDisconnected;
   }
 
   void ClientBase::whitespacePing()
@@ -710,10 +697,7 @@ namespace gloox
       minor = atoi( version.substr( dot ).c_str() );
     }
 
-    if( myMajor < major )
-      return false;
-    else
-      return true;
+    return ( myMajor < major ) ? false : true;
   }
 
   LogSink& ClientBase::logInstance()
@@ -726,9 +710,7 @@ namespace gloox
     if( m_connection )
     {
       delete m_connection;
-      m_connection = 0;
     }
-
     m_connection = cb;
   }
 
@@ -737,9 +719,7 @@ namespace gloox
     if( m_encryption )
     {
       delete m_encryption;
-      m_encryption = 0;
     }
-
     m_encryption = tb;
   }
 
@@ -748,9 +728,7 @@ namespace gloox
     if( m_compression )
     {
       delete m_compression;
-      m_compression = 0;
     }
-
     m_compression = cb;
   }
 
@@ -829,10 +807,7 @@ namespace gloox
   const std::string ClientBase::streamErrorText( const std::string& lang ) const
   {
     StringMap::const_iterator it = m_streamErrorText.find( lang );
-    if( it != m_streamErrorText.end() )
-      return (*it).second;
-    else
-      return "";
+    return (it != m_streamErrorText.end() ) ? it->second : std::string();
   }
 
   void ClientBase::registerMessageSessionHandler( MessageSessionHandler *msh, int types )
@@ -948,10 +923,8 @@ namespace gloox
 
   void ClientBase::registerMessageSession( MessageSession *session )
   {
-    if( !session )
-      return;
-
-    m_messageSessions.push_back( session );
+    if( session )
+      m_messageSessions.push_back( session );
   }
 
   void ClientBase::disposeMessageSession( MessageSession *session )
