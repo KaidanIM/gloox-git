@@ -654,7 +654,7 @@ namespace gloox
 
   void ClientBase::xmppPing( const JID& to )
   {
-    const std::string id = getID();
+    const std::string& id = getID();
 
     Tag *iq = new Tag( "iq" );
     iq->addAttribute( "to", to.full() );

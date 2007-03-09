@@ -37,7 +37,7 @@ namespace gloox
     if( m_joined )
       return;
 
-    const std::string id = m_parent->getID();
+    const std::string& id = m_parent->getID();
     Tag *iq = new Tag( "iq" );
     iq->addAttribute( "id", id );
     iq->addAttribute( "to", m_nick.server() );
