@@ -39,7 +39,7 @@ namespace gloox
 
   void LastActivity::query( const JID& jid )
   {
-    const std::string id = m_parent->getID();
+    const std::string& id = m_parent->getID();
 
     Tag *t = new Tag( "iq" );
     t->addAttribute( "type", "get" );
