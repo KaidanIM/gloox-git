@@ -62,6 +62,15 @@ namespace gloox
 
     private:
       SSL *m_ssl;
+      SSL_CTX *m_ctx;
+      BIO *m_ibio;
+      BIO *m_nbio;
+      std::string m_recvBuffer;
+      char *m_buf;
+      const int m_bufsize;
+
+      ssize_t pullFunc();
+      ssize_t pushFunc();
 
   };
 
