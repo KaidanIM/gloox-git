@@ -114,12 +114,8 @@ namespace gloox
     tv.tv_sec = timeout / 1000;
     tv.tv_usec = timeout % 1000;
 
-    if( select( m_socket + 1, &fds, 0, 0, timeout == -1 ? 0 : &tv ) >= 0 )
-    {
-      return FD_ISSET( m_socket, &fds ) ? true : false;
-    }
-
-    return false;
+    return ( ( select( m_socket + 1, &fds, 0, 0, timeout == -1 ? 0 : &tv ) > 0 )
+         && FD_ISSET( m_socket, &fds ) != 0 );
   }
 
   ConnectionError ConnectionTCP::recv( int timeout )
@@ -130,35 +126,23 @@ namespace gloox
     if( !dataAvailable( timeout ) )
       return ConnNoError;
 
-    // optimize(?): recv returns the size. set size+1 = \0
-    memset( m_buf, '\0', m_bufsize + 1 );
-    int size = 0;
-    {
 #ifdef SKYOS
-      size = ::recv( m_socket, (unsigned char*)m_buf, m_bufsize, 0 );
+    int size = ::recv( m_socket, (unsigned char*)m_buf, m_bufsize, 0 );
 #else
-      size = ::recv( m_socket, m_buf, m_bufsize, 0 );
+    int size = ::recv( m_socket, m_buf, m_bufsize, 0 );
 #endif
+
+    if( size <= 0 )
+    {
+      ConnectionError error = size ? ConnIoError : ConnStreamClosed;
+      m_handler->handleDisconnect( error );
+      return error;
     }
 
-    if( size < 0 )
-    {
-      // error
-      m_handler->handleDisconnect( ConnIoError );
-      return ConnIoError;
-    }
-    else if( size == 0 )
-    {
-      // connection closed
-      m_handler->handleDisconnect( ConnStreamClosed );
-      return ConnStreamClosed;
-    }
-
-    std::string buf;
-    buf.assign( m_buf, size );
+    m_buf[size] = '\0';
 
     if( m_handler )
-      m_handler->handleReceivedData( buf );
+      m_handler->handleReceivedData( std::string( m_buf, size ) );
 
     return ConnNoError;
   }
@@ -168,16 +152,10 @@ namespace gloox
     if( m_socket < 0 )
       return ConnNotConnected;
 
-    while( !m_cancel )
-    {
-      ConnectionError r = recv( 10 );
-      if( r != ConnNoError )
-      {
-        return r;
-      }
-    }
-
-    return ConnNotConnected;
+    ConnectionError err;
+    while( !m_cancel && ( err = recv( 10 ) ) == ConnNoError )
+      ;
+    return err == ConnNoError ? ConnNotConnected : err;
   }
 
   bool ConnectionTCP::send( const std::string& data )
@@ -185,25 +163,20 @@ namespace gloox
     if( data.empty() || ( m_socket < 0 ) )
       return false;
 
-    size_t num = 0;
-    size_t len = data.length();
-    while( num < len )
+    int sent = 0;
+    for( size_t num = 0, len = data.length(); sent != -1 && num < len; num += len )
     {
 #ifdef SKYOS
-      int sent = ::send( m_socket, (unsigned char*)(data.c_str()+num), len - num, 0 );
+      sent = ::send( m_socket, (unsigned char*)(data.c_str()+num), len - num, 0 );
 #else
-      int sent = ::send( m_socket, (data.c_str()+num), len - num, 0 );
+      sent = ::send( m_socket, (data.c_str()+num), len - num, 0 );
 #endif
-      if( sent == -1 )
-      {
-        m_handler->handleDisconnect( ConnStreamClosed );
-        return false;
-      }
-
-      num += sent;
     }
 
-    return true;
+    if( sent == -1 )
+      m_handler->handleDisconnect( ConnStreamClosed );
+
+    return sent != -1;
   }
 
   void ConnectionTCP::cleanup()
