@@ -94,7 +94,7 @@ namespace gloox
        * @param attributes The attributes to set.
        * @since 0.9
        */
-      virtual void setAttributes( const StringMap& attributes ) { m_attribs = attributes; };
+      virtual void setAttributes( const StringMap& attributes ) { m_attribs = attributes; }
 
       /**
        * Use this function to add a child node to the tag. The Tag will be owned by Tag.
@@ -103,11 +103,11 @@ namespace gloox
       virtual void addChild( Tag *child );
 
       /**
-       * Use this function to add a child node to the tag. The Tag will be copied.
+       * Use this function to add a copy of the given element to the tag.
        * @param child The node to be inserted.
        * @since 0.9
        */
-      virtual void addChild( const Tag *child );
+      virtual void addChildCopy( const Tag *child );
 
       /**
        * Sets the XML character data for this Tag.
@@ -125,7 +125,7 @@ namespace gloox
        * Use this function to retrieve the name of an element.
        * @return The name of the tag.
        */
-      virtual const std::string& name() const { return m_name; };
+      virtual const std::string& name() const { return m_name; }
 
       /**
        * Use this function to retrieve the XML character data of an element.
@@ -189,7 +189,7 @@ namespace gloox
        */
       virtual inline bool hasChild( const std::string& name, const std::string& attr = "",
                                     const std::string& value = "" ) const
-        { return findChild( name, attr, value ) ? true : false; };
+        { return findChild( name, attr, value ) ? true : false; }
 
       /**
        * This function checks whether the Tag has a child element which posesses a given attribute
@@ -209,7 +209,7 @@ namespace gloox
        */
       virtual inline bool hasChildWithAttrib( const std::string& attr,
                                               const std::string& value = "" ) const
-        { return findChildWithAttrib( attr, value ) ? true : false; };
+        { return findChildWithAttrib( attr, value ) ? true : false; }
 
       /**
        * Returns a list of child tags of the current tag with the given name.
@@ -226,7 +226,7 @@ namespace gloox
        * @return @b True if the Tag was found, @b false otherwise.
        * @note The Tag @p tag is not deleted.
        */
-      bool removeChild( Tag *tag );
+      void removeChild( Tag *tag ) { m_children.remove(tag); }
 
       /**
        * Returns whether the Tag is considered empty, i.e. invalid.
@@ -371,7 +371,7 @@ namespace gloox
       Tag::TagList evaluateTagList( Tag *token );
       Tag::TagList evaluateUnion( Tag *token );
       bool evaluateBoolean( Tag *token );
-      bool evaluatePredicate( Tag *token );
+      bool evaluatePredicate( Tag *token ) { return evaluateBoolean( token ); }
       bool evaluateEquals( Tag *token );
       Tag::TagList allDescendants();
 
