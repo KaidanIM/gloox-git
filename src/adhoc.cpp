@@ -107,7 +107,7 @@ namespace gloox
     if( stanza->hasChild( "command" ) )
     {
       Tag *c = stanza->findChild( "command" );
-      const std::string node = c->findAttribute( "node" );
+      const std::string& node = c->findAttribute( "node" );
       AdhocCommandProviderMap::const_iterator it = m_adhocCommandProviders.find( node );
       if( !node.empty() && ( it != m_adhocCommandProviders.end() ) )
       {
@@ -132,8 +132,8 @@ namespace gloox
         Tag *c = stanza->findChild( "command", "xmlns", XMLNS_ADHOC_COMMANDS );
         if( c )
         {
-          const std::string command = c->findAttribute( "node" );
-          const std::string id = c->findAttribute( "sessionid" );
+          const std::string& command = c->findAttribute( "node" );
+          const std::string& id = c->findAttribute( "sessionid" );
           Tag *a = c->findChild( "actions" );
           int actions = ActionCancel;
           Adhoc::AdhocExecuteActions def = ActionCancel;
@@ -145,7 +145,7 @@ namespace gloox
               actions |= ActionNext;
             if( a->hasChild( "complete" ) )
               actions |= ActionComplete;
-            const std::string d = a->findAttribute( "execute" );
+            const std::string& d = a->findAttribute( "execute" );
             if( d == "next" )
               def = ActionNext;
             else if( d == "prev" )
@@ -164,7 +164,7 @@ namespace gloox
             else if( n->hasAttribute( "type", "error" ) )
               type = AdhocNoteError;
           }
-          const std::string s = c->findAttribute( "status" );
+          const std::string& s = c->findAttribute( "status" );
           AdhocCommandStatus status = AdhocCommandStatusUnknown;
           if( s == "executing" )
             status = AdhocCommandExecuting;
@@ -233,12 +233,12 @@ namespace gloox
         if( q )
         {
           StringMap commands;
-          const Tag::TagList &l = q->children();
+          const Tag::TagList& l = q->children();
           Tag::TagList::const_iterator itt = l.begin();
           for( ; itt != l.end(); ++itt )
           {
-            const std::string name = (*itt)->findAttribute( "name" );
-            const std::string node = (*itt)->findAttribute( "node" );
+            const std::string& name = (*itt)->findAttribute( "name" );
+            const std::string& node = (*itt)->findAttribute( "node" );
             if( (*itt)->name() == "item" && !name.empty() && !node.empty() )
             {
               commands[node] = name;

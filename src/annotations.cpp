@@ -63,10 +63,10 @@ namespace gloox
     {
       if( (*it)->name() == "note" )
       {
-        const std::string jid = (*it)->findAttribute( "jid" );
-        const std::string mdate = (*it)->findAttribute( "mdate" );
-        const std::string cdate = (*it)->findAttribute( "cdate" );
-        const std::string note = (*it)->cdata();
+        const std::string& jid = (*it)->findAttribute( "jid" );
+        const std::string& mdate = (*it)->findAttribute( "mdate" );
+        const std::string& cdate = (*it)->findAttribute( "cdate" );
+        const std::string& note = (*it)->cdata();
 
         if( !jid.empty() && !note.empty() )
         {

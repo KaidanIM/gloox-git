@@ -512,10 +512,7 @@ namespace gloox
 
   void MUCRoom::handlePresence( Stanza *stanza )
   {
-    if( stanza->from().bare() != m_nick.bare() )
-      return;
-
-    if( !m_roomHandler )
+    if( ( stanza->from().bare() != m_nick.bare() ) || !m_roomHandler )
       return;
 
     if( stanza->subtype() == StanzaPresenceError )
@@ -539,7 +536,7 @@ namespace gloox
         {
           if( (*it)->name() == "item" )
           {
-            const std::string affiliation = (*it)->findAttribute( "affiliation" );
+            const std::string& affiliation = (*it)->findAttribute( "affiliation" );
             if( affiliation == "owner" )
               party.affiliation = AffiliationOwner;
             else if( affiliation == "admin" )
@@ -551,7 +548,7 @@ namespace gloox
             else
               party.affiliation = AffiliationNone;
 
-            const std::string role = (*it)->findAttribute( "role" );
+            const std::string& role = (*it)->findAttribute( "role" );
             if( role == "moderator" )
               party.role = RoleModerator;
             else if( role == "participant" )
@@ -561,13 +558,13 @@ namespace gloox
             else
               party.role = RoleNone;
 
-            std::string jid = (*it)->findAttribute( "jid" );
+            const std::string& jid = (*it)->findAttribute( "jid" );
             if( !jid.empty() )
               party.jid = new JID( jid );
 
             if( (*it)->hasChild( "actor" ) )
             {
-              const std::string actor = (*it)->findChild( "actor" )->findAttribute( "jid" );
+              const std::string& actor = (*it)->findChild( "actor" )->findAttribute( "jid" );
               if( !actor.empty() )
                 party.actor = new JID( actor );
             }
@@ -579,7 +576,7 @@ namespace gloox
 
           if( (*it)->name() == "status" )
           {
-            const std::string code = (*it)->findAttribute( "code" );
+            const std::string& code = (*it)->findAttribute( "code" );
             if( code == "100" )
               setNonAnonymous();
             else if( code == "101" )
@@ -731,7 +728,7 @@ namespace gloox
         {
           if( (*it)->name() == "status" )
           {
-            const std::string code = (*it)->findAttribute( "code" );
+            const std::string& code = (*it)->findAttribute( "code" );
             if( code == "100" )
             {
               setNonAnonymous();

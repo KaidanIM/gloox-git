@@ -81,8 +81,8 @@ namespace gloox
     {
       if( (*it)->name() == "url" )
       {
-        const std::string url = (*it)->findAttribute( "url" );
-        const std::string name = (*it)->findAttribute( "name" );
+        const std::string& url = (*it)->findAttribute( "url" );
+        const std::string& name = (*it)->findAttribute( "name" );
 
         if( !url.empty() && !name.empty() )
         {
@@ -95,13 +95,13 @@ namespace gloox
       else if( (*it)->name() == "conference" )
       {
         bool autojoin = false;
-        const std::string jid = (*it)->findAttribute( "jid" );
-        const std::string name = (*it)->findAttribute( "name" );
-        const std::string join = (*it)->findAttribute( "autojoin" );
+        const std::string& jid = (*it)->findAttribute( "jid" );
+        const std::string& name = (*it)->findAttribute( "name" );
+        const std::string& join = (*it)->findAttribute( "autojoin" );
         if( ( join == "true" ) || ( join == "1" ) )
           autojoin = true;
-        const std::string nick = (*it)->findChild( "nick" )->cdata();
-        const std::string pwd = (*it)->findChild( "password" )->cdata();
+        const std::string& nick = (*it)->findChild( "nick" )->cdata();
+        const std::string& pwd = (*it)->findChild( "password" )->cdata();
 
         if( !jid.empty() && !name.empty() )
         {

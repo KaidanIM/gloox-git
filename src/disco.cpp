@@ -75,7 +75,7 @@ namespace gloox
           query->addAttribute( "xmlns", XMLNS_DISCO_INFO );
 
           Tag *q = stanza->findChild( "query" );
-          const std::string node = q->findAttribute( "node" );
+          const std::string& node = q->findAttribute( "node" );
           if( !node.empty() )
           {
             DiscoNodeHandlerMap::const_iterator it = m_nodeHandlers.find( node );
@@ -133,7 +133,7 @@ namespace gloox
 
           DiscoNodeHandlerMap::const_iterator it;
           Tag *q = stanza->findChild( "query" );
-          const std::string node = q->findAttribute( "node" );
+          const std::string& node = q->findAttribute( "node" );
           if( !node.empty() )
           {
             it = m_nodeHandlers.find( node );
