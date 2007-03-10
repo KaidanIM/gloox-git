@@ -78,14 +78,6 @@
 namespace gloox
 {
 
-  DNS::HostMap DNS::resolve( const std::string& domain, const LogSink& logInstance )
-  {
-    std::string service = "xmpp-client";
-    std::string proto = "tcp";
-
-    return resolve( service, proto, domain, logInstance );
-  }
-
 #if defined( HAVE_RES_QUERYDOMAIN ) && defined( HAVE_DN_SKIPNAME ) && defined( HAVE_RES_QUERY )
   DNS::HostMap DNS::resolve( const std::string& service, const std::string& proto,
                              const std::string& domain, const LogSink& logInstance )
@@ -102,7 +94,7 @@ namespace gloox
       srvbuf.len = res_query( dname.c_str(), C_IN, T_SRV, srvbuf.buf, NS_PACKETSZ );
 
     if( srvbuf.len < 0 )
-      return defaultHostMap( service, proto, domain, logInstance );
+      return defaultHostMap( domain, logInstance );
 
     HEADER* hdr = (HEADER*)srvbuf.buf;
     unsigned char* here = srvbuf.buf + NS_HFIXEDSZ;
@@ -139,7 +131,7 @@ namespace gloox
 
     if( error )
     {
-      return defaultHostMap( service, proto, domain, logInstance );
+      return defaultHostMap( domain, logInstance );
     }
 
     // (q)sort here
@@ -186,7 +178,7 @@ namespace gloox
 
     if( error || !servers.size() )
     {
-      servers = defaultHostMap( service, proto, domain, logInstance );
+      servers = defaultHostMap( domain, logInstance );
     }
 
     return servers;
@@ -198,12 +190,11 @@ namespace gloox
   {
     logInstance.log( LogLevelWarning, LogAreaClassDns,
                     "notice: gloox does not support SRV records on this platform. Using A records instead." );
-    return defaultHostMap( service, proto, domain, logInstance );
+    return defaultHostMap( domain, logInstance );
   }
 #endif
 
-  DNS::HostMap DNS::defaultHostMap( const std::string& service, const std::string& proto,
-                                    const std::string& domain, const LogSink& logInstance )
+  DNS::HostMap DNS::defaultHostMap( const std::string& domain, const LogSink& logInstance )
   {
     HostMap server;
 
