@@ -81,7 +81,8 @@ namespace gloox
        * @return A list of weighted hostname/port pairs from SRV records, or A records if no SRV
        * records where found.
        */
-      static HostMap resolve( const std::string& domain, const LogSink& logInstance );
+      static HostMap resolve( const std::string& domain, const LogSink& logInstance )
+        { return resolve( "xmpp-client", "tcp", domain, logInstance ); }
 
       /**
        * This is a convenience function which uses @ref resolve() to get a list of hosts
@@ -103,8 +104,7 @@ namespace gloox
       static int connect( const std::string& domain, unsigned short port, const LogSink& logInstance );
 
     private:
-      static HostMap defaultHostMap( const std::string& service, const std::string& proto,
-                                     const std::string& domain, const LogSink& logInstance );
+      static HostMap defaultHostMap( const std::string& domain, const LogSink& logInstance );
       static void cleanup();
 
       typedef struct buffer
