@@ -204,7 +204,7 @@ namespace gloox
 
     if( tag->name() == "stream:stream" )
     {
-      const std::string version = stanza->findAttribute( "version" );
+      const std::string& version = stanza->findAttribute( "version" );
       if( !checkStreamVersion( version ) )
       {
         logInstance().log( LogLevelDebug, LogAreaClassClientbase, "This server is not XMPP-compliant"
@@ -455,7 +455,7 @@ namespace gloox
     Tag *t = new Tag( "response" );
     t->addAttribute( "xmlns", XMLNS_STREAM_SASL );
 
-    const std::string decoded = Base64::decode64( challenge );
+    const std::string& decoded = Base64::decode64( challenge );
 
     switch( m_selectedSaslMech )
     {
@@ -506,7 +506,7 @@ namespace gloox
         md5.feed( ":" );
         md5.feed( m_password );
         md5.finalize();
-        const std::string a1_h = md5.binary();
+        const std::string& a1_h = md5.binary();
         md5.reset();
         md5.feed( a1_h );
         md5.feed( ":" );
@@ -514,12 +514,12 @@ namespace gloox
         md5.feed( ":" );
         md5.feed( cnonce );
         md5.finalize();
-        const std::string a1  = md5.hex();
+        const std::string& a1  = md5.hex();
         md5.reset();
         md5.feed( "AUTHENTICATE:xmpp/" );
         md5.feed( m_jid.server() );
         md5.finalize();
-        const std::string a2 = md5.hex();
+        const std::string& a2 = md5.hex();
         md5.reset();
         md5.feed( a1 );
         md5.feed( ":" );
@@ -529,7 +529,7 @@ namespace gloox
         md5.feed( ":auth:" );
         md5.feed( a2 );
         md5.finalize();
-        const std::string response_value = md5.hex();
+        const std::string& response_value = md5.hex();
 
         std::string response = "username=\"" + m_jid.username() + "\",realm=\"" + realm;
         response += "\",nonce=\""+ nonce + "\",cnonce=\"" + cnonce;
@@ -791,7 +791,7 @@ namespace gloox
         m_streamError = StreamErrorXmlNotWellFormed;
       else if( (*it)->name() == "text" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
       {
-        const std::string lang = (*it)->findAttribute( "xml:lang" );
+        const std::string& lang = (*it)->findAttribute( "xml:lang" );
         if( !lang.empty() )
           m_streamErrorText[lang] = (*it)->cdata();
         else

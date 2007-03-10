@@ -223,7 +223,7 @@ namespace gloox
     Tag *l = stanza->findChild( "query" )->findChild( "list" );
     if( l->hasAttribute( "name" ) )
     {
-      std::string name = l->findAttribute( "name" );
+      const std::string& name = l->findAttribute( "name" );
       m_privacyListHandler->handlePrivacyListChanged( name );
 
       Tag *iq = new Tag( "iq" );
@@ -274,7 +274,7 @@ namespace gloox
                 def = (*it)->findAttribute( "name" );
               if( (*it)->name() == "list" )
               {
-                const std::string name = (*it)->findAttribute( "name" );
+                const std::string& name = (*it)->findAttribute( "name" );
                 lists.push_back( name );
               }
             }
@@ -287,7 +287,7 @@ namespace gloox
             PrivacyListHandler::PrivacyList items;
 
             Tag *list = stanza->findChild( "query" )->findChild( "list" );
-            const std::string name = list->findAttribute( "name" );
+            const std::string& name = list->findAttribute( "name" );
             Tag::TagList l = list->children();
             Tag::TagList::iterator it = l.begin();
             for( ; it != l.end(); ++it )
@@ -296,7 +296,7 @@ namespace gloox
               PrivacyItem::ItemAction action;
               int packetType = 0;
 
-              const std::string t = (*it)->findAttribute( "type" );
+              const std::string& t = (*it)->findAttribute( "type" );
               if( t == "jid" )
                 type = PrivacyItem::TypeJid;
               else if( t == "group" )
@@ -306,7 +306,7 @@ namespace gloox
               else
                 type = PrivacyItem::TypeUndefined;
 
-              const std::string a = (*it)->findAttribute( "action" );
+              const std::string& a = (*it)->findAttribute( "action" );
               if( a == "allow" )
                 action = PrivacyItem::ActionAllow;
               else if( a == "deny" )
@@ -314,7 +314,7 @@ namespace gloox
               else
                 action = PrivacyItem::ActionAllow;
 
-              std::string value = (*it)->findAttribute( "value" );
+              const std::string& value = (*it)->findAttribute( "value" );
 
               Tag::TagList c = (*it)->children();
               Tag::TagList::const_iterator it_c = c.begin();

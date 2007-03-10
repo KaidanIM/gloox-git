@@ -105,14 +105,13 @@ namespace gloox
     {
       case StanzaIqResult:
       {
-        int secs = 0;
         Tag *q = stanza->findChild( "query" );
         if( q )
         {
-          const std::string seconds = q->findAttribute( "seconds" );
+          const std::string& seconds = q->findAttribute( "seconds" );
           if( !seconds.empty() )
           {
-            secs = atoi( seconds.c_str() );
+            int secs = atoi( seconds.c_str() );
             m_lastActivityHandler->handleLastActivityResult( stanza->from(), secs );
           }
         }

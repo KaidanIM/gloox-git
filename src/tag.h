@@ -349,7 +349,7 @@ namespace gloox
 
       struct duo
       {
-        duo( const std::string& f, const std::string& s ) : first( f ), second( s ) {};
+        duo( const std::string& f, const std::string& s ) : first( f ), second( s ) {}
         std::string first;
         std::string second;
       };

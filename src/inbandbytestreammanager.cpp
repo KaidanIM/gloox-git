@@ -80,7 +80,7 @@ namespace gloox
           ( ( o = stanza->findChild( "open", "xmlns", XMLNS_IBB ) ) != 0 ) )
     {
       InBandBytestream *ibb = new InBandBytestream( 0, m_parent );
-      const std::string sid = o->findAttribute( "sid" );
+      const std::string& sid = o->findAttribute( "sid" );
       ibb->setSid( sid );
 
       if( !m_inbandBytestreamHandler )

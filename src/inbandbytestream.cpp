@@ -58,11 +58,11 @@ namespace gloox
     if( ( data = stanza->findChild( "data", "xmlns", XMLNS_IBB ) ) == 0 )
       return;
 
-    const std::string sid = data->findAttribute( "sid" );
+    const std::string& sid = data->findAttribute( "sid" );
     if( sid.empty() || sid != m_sid )
       return;
 
-    const std::string seq = data->findAttribute( "seq" );
+    const std::string& seq = data->findAttribute( "seq" );
     if( seq.empty() )
     {
       m_open = false;

@@ -384,12 +384,12 @@ namespace gloox
           }
         }
 
-        const JID jid = (*it)->findAttribute( "jid" );
+        const JID& jid = (*it)->findAttribute( "jid" );
         Roster::iterator it_d = m_roster.find( jid.bare() );
         if( it_d != m_roster.end() )
         {
           (*it_d).second->setName( (*it)->findAttribute( "name" ) );
-          const std::string sub = (*it)->findAttribute( "subscription" );
+          const std::string& sub = (*it)->findAttribute( "subscription" );
           if( sub == "remove" )
           {
             delete (*it_d).second;
@@ -398,7 +398,7 @@ namespace gloox
               m_rosterListener->handleItemRemoved( jid );
             continue;
           }
-          const std::string ask = (*it)->findAttribute( "ask" );
+          const std::string& ask = (*it)->findAttribute( "ask" );
           bool a = false;
           if( !ask.empty() )
             a = true;
@@ -411,11 +411,11 @@ namespace gloox
         }
         else
         {
-          const std::string sub = (*it)->findAttribute( "subscription" );
+          const std::string& sub = (*it)->findAttribute( "subscription" );
           if( sub == "remove" )
             continue;
-          const std::string name = (*it)->findAttribute( "name" );
-          const std::string ask = (*it)->findAttribute( "ask" );
+          const std::string& name = (*it)->findAttribute( "name" );
+          const std::string& ask = (*it)->findAttribute( "ask" );
           bool a = false;
           if( !ask.empty() )
             a = true;

@@ -105,7 +105,7 @@ namespace gloox
       {
         if( (*it)->name() == "body" )
         {
-          const std::string lang = (*it)->findAttribute( "xml:lang" );
+          const std::string& lang = (*it)->findAttribute( "xml:lang" );
           if( !lang.empty() )
             m_body[lang] = (*it)->cdata();
           else
@@ -313,7 +313,7 @@ namespace gloox
           m_stanzaError = StanzaErrorUnexpectedRequest;
         else if( (*it)->name() == "text" )
         {
-          const std::string lang = (*it)->findAttribute( "xml:lang" );
+          const std::string& lang = (*it)->findAttribute( "xml:lang" );
           if( !lang.empty() )
             m_errorText[lang] = (*it)->cdata();
           else
