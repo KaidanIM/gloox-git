@@ -69,21 +69,6 @@ namespace gloox
     return it == m_children.end();
   }
 
-  bool Tag::operator!=( const Tag &right ) const
-  {
-    return ! ( *this == right );
-  }
-
-  void Tag::setCData( const std::string& cdata )
-  {
-    m_cdata = m_incoming ? relax( cdata ) : cdata;
-  }
-
-  void Tag::addCData( const std::string& cdata )
-  {
-    m_cdata += m_incoming ? relax( cdata ) : cdata;
-  }
-
   const std::string Tag::xml() const
   {
     std::string xml = "<" + escape( m_name );
@@ -170,10 +155,7 @@ namespace gloox
       return true;
 
     StringMap::const_iterator it = m_attribs.find( name );
-    if( it != m_attribs.end() )
-      return ( value.empty() || ( (*it).second == value ) );
-    else
-      return false;
+    return ( it != m_attribs.end() && ( value.empty() || ( (*it).second == value ) ) );
   }
 
   Tag* Tag::findChild( const std::string& name ) const
@@ -451,7 +433,9 @@ namespace gloox
             }
           }
           else
+          {
             result.push_back( m_parent );
+          }
         }
       }
       case XTInteger:
@@ -491,10 +475,7 @@ namespace gloox
     switch( tokenType )
     {
       case XTAttribute:
-        if( token->name() == "*" )
-          result = (bool)m_attribs.size();
-        else
-          result = hasAttribute( token->name() );
+        result = ( token->name() == "*" ) ? (bool)m_attribs.size() : hasAttribute( token->name() );
         break;
       case XTOperatorEq:
         result = evaluateEquals( token );
@@ -513,7 +494,7 @@ namespace gloox
         Tag *t = new Tag( "." );
         t->addAttribute( "type", XTDot );
         t->addChild( token );
-        result = ! evaluateTagList( t ).empty();
+        result = !evaluateTagList( t ).empty();
         t->removeChild( token );
         delete t;
         break;
@@ -603,52 +584,44 @@ namespace gloox
     return result;
   }
 
+  void Tag::closePreviousToken( Tag** root, Tag** current, Tag::TokenType& type, std::string& tok )
+  {
+    if( !tok.empty() )
+    {
+      addToken( root, current, type, tok );
+      type = XTElement;
+      tok.clear();
+    }
+  }
+
   Tag* Tag::parse( const std::string& expression, int& len, Tag::TokenType border )
   {
-//     printf( "parse() called with '%s'\n", expression.c_str() );
     Tag *root = 0;
     Tag *current = root;
     std::string token;
+
 //     XPathError error = XPNoError;
 //     XPathState state = Init;
 //     int expected = 0;
 //     bool run = true;
 //     bool ws = false;
+
     Tag::TokenType type  = XTElement;
 
-    int length = expression.length();
-    int i = 1;
-    bool last = false;
-    bool prelast = false;
-    std::string::const_iterator it = expression.begin();
-    for( ; it != expression.end(); ++it, ++i, ++len )
+    char c;
+    const int length = expression.length();
+
+    for( int sublen; len != length; ++len )
     {
-      if( i == length )
-      {
-        last = true;
-        prelast = false;
-      }
-      if( i == length - 1 )
-        prelast = true;
-
-//       printf( "current char: %c, current type: %d\n", (*it), type );
-
-      switch( (*it) )
+      switch( c = expression[len] )
       {
         case '/':
-          if( !token.empty() )
-          {
-            addToken( &root, &current, type, token );
-            type = XTElement;
-            token = "";
-          }
+          closePreviousToken( &root, &current, type, token );
 
-          if( !last && (*(it + 1)) == '/' )
+          if( len<length-1 && expression[len+1] == '/' )
           {
 //             addToken( &root, &current, XTDoubleSlash, "//" );
             type = XTDoubleSlash;
-            ++it;
-            ++i;
             ++len;
           }
 //           else
@@ -656,47 +629,27 @@ namespace gloox
 //             if( !current )
 //             addToken( &root, &current, XTSlash, "/" );
 //           }
-
           break;
-        case '[':
-        {
-          if( !token.empty() )
-          {
-            addToken( &root, &current, type, token );
-            type = XTElement;
-            token = "";
-          }
-
-          int sublen = 0;
-          Tag *t = parse( expression.substr( i ), sublen, XTRightBracket );
-          if( !addPredicate( &root, &current, t ) )
-            delete t;
-          it += sublen;
-          i += sublen;
-          len += sublen;
-          break;
-        }
         case ']':
-          if( !token.empty() )
-          {
-            addToken( &root, &current, type, token );
-            type = XTElement;
-            token = "";
-          }
+          closePreviousToken( &root, &current, type, token );
           ++len;
           return root;
           break;
+        case '[':
+        {
+          closePreviousToken( &root, &current, type, token );
+          sublen = 0;
+          Tag *t = parse( expression.substr( len + 1 ), sublen, XTRightBracket );
+          if( !addPredicate( &root, &current, t ) )
+            delete t;
+          len += sublen;
+          break;
+        }
         case '(':
         {
-          if( !token.empty() )
-          {
-            addToken( &root, &current, type, token );
-            type = XTElement;
-            token = "";
-          }
-
-          int sublen = 0;
-          Tag *t = parse( expression.substr( i ), sublen, XTRightParenthesis );
+          closePreviousToken( &root, &current, type, token );
+          sublen = 0;
+          Tag *t = parse( expression.substr( len + 1 ), sublen, XTRightParenthesis );
           if( current )
           {
 //             printf( "added %s to %s\n", t->xml().c_str(), current->xml().c_str() );
@@ -708,54 +661,36 @@ namespace gloox
             root = t;
 //             printf( "made %s new root\n", t->xml().c_str() );
           }
-          i += sublen;
-          it += sublen;
           len += sublen;
           break;
         }
         case ')':
-          if( !token.empty() )
-          {
-            addToken( &root, &current, type, token );
-            type = XTElement;
-            token = "";
-          }
+          closePreviousToken( &root, &current, type, token );
           ++len;
           return root;
           break;
         case '\'':
           type = XTLiteral;
-          if( (*(it - 1)) == '\\' )
-            token += (*it);
+          if( expression[len-1] == '\\' )
+            token += c;
           break;
         case '@':
           type = XTAttribute;
           break;
         case '.':
-          if( !token.empty() )
-          {
-            token += (*it);
+          token += c;
+          if( token.size() != 1 )
             break;
-          }
-          if( !last && (*(it + 1)) == '.' )
+          if( len < length-1 && expression[len+1] == '.' )
           {
             type = XTDoubleDot;
-            token += (*it);
-            ++i;
-            ++it;
             ++len;
-            token += (*it);
-            if( prelast )
-              addToken( &root, &current, type, token );
+            token += c;
           }
           else
           {
             type = XTDot;
-            token += (*it);
-            if( last )
-              addToken( &root, &current, type, token );
           }
-
           break;
         case '*':
 //           if( !root || ( current && ( current->tokenType() == XTSlash
@@ -773,37 +708,27 @@ namespace gloox
         case '=':
         case '|':
         {
-          if( !token.empty() )
-          {
-            addToken( &root, &current, type, token );
-            type = XTElement;
-            token = "";
-          }
-          std::string c( 1, (*it) );
-          Tag::TokenType ttype = getType( c );
+          closePreviousToken( &root, &current, type, token );
+          std::string s( 1, c );
+          Tag::TokenType ttype = getType( s );
           if( ttype <= border )
             return root;
-
-          int sublen = 0;
-          Tag *t = parse( expression.substr( i ), sublen, ttype );
-          addOperator( &root, &current, t, ttype, c );
-          i += sublen;
-          it += sublen;
+          sublen = 0;
+          Tag *t = parse( expression.substr( len + 1 ), sublen, ttype );
+          addOperator( &root, &current, t, ttype, s );
           len += sublen;
           break;
         }
         default:
-          token += (*it);
-          if( last )
-            addToken( &root, &current, type, token );
-          break;
+          token += c;
       }
     }
 
+    if( !token.empty() )
+      addToken( &root, &current, type, token );
+
 //     if( error != XPNoError )
 //       printf( "error: %d\n", error );
-
-//     printf( "parse() finished\n" );
     return root;
   }
 
@@ -824,16 +749,8 @@ namespace gloox
     else
     {
 //       printf( "new root %s, type: %d\n", token.c_str(), type );
-      *root = t;
-      *current = *root;
+      *current = *root = t;
     }
-
-//     while( t->parent() )
-//     {
-//       t->parent()->addAttribute( "type", type );
-//       t = t->parent();
-//     }
-
   }
 
   void Tag::addOperator( Tag **root, Tag **current, Tag *arg,
@@ -846,8 +763,7 @@ namespace gloox
     t->addAttribute( "operator", "true" );
     t->addChild( *root );
     t->addChild( arg );
-    *root = t;
-    *current = t;
+    *current = *root = t;
   }
 
   bool Tag::addPredicate( Tag **root, Tag **current, Tag *token )
