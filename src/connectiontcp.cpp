@@ -152,7 +152,7 @@ namespace gloox
     if( m_socket < 0 )
       return ConnNotConnected;
 
-    ConnectionError err;
+    ConnectionError err = ConnNoError;
     while( !m_cancel && ( err = recv( 10 ) ) == ConnNoError )
       ;
     return err == ConnNoError ? ConnNotConnected : err;
