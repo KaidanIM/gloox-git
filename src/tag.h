@@ -113,13 +113,15 @@ namespace gloox
        * Sets the XML character data for this Tag.
        * @param cdata The new cdata.
        */
-      virtual void setCData( const std::string& cdata );
+      virtual void setCData( const std::string& cdata )
+        { m_cdata = m_incoming ? relax( cdata ) : cdata; }
 
       /**
        * Adds the string to the existing XML character data for this Tag.
        * @param cdata The additional cdata.
        */
-      virtual void addCData( const std::string& cdata );
+      virtual void addCData( const std::string& cdata )
+        { m_cdata += m_incoming ? relax( cdata ) : cdata; }
 
       /**
        * Use this function to retrieve the name of an element.
@@ -223,7 +225,6 @@ namespace gloox
       /**
        * Removes the given Tag from the list of child Tags.
        * @param tag The Tag to delete from the list of child Tags.
-       * @return @b True if the Tag was found, @b false otherwise.
        * @note The Tag @p tag is not deleted.
        */
       void removeChild( Tag *tag ) { m_children.remove(tag); }
@@ -291,7 +292,7 @@ namespace gloox
        * @param right The Tag to check against the current Tag.
        * @since 0.9
        */
-      bool operator!=( const Tag &right ) const;
+      bool operator!=( const Tag &right ) const { return !( *this == right ); }
 
     protected:
       /**
@@ -374,6 +375,8 @@ namespace gloox
       bool evaluatePredicate( Tag *token ) { return evaluateBoolean( token ); }
       bool evaluateEquals( Tag *token );
       Tag::TagList allDescendants();
+
+      void closePreviousToken( Tag**, Tag**, TokenType&, std::string& );
 
   };
 
