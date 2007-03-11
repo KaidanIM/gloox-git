@@ -33,7 +33,7 @@ namespace gloox
       m_stanzaErrorAppCondition( 0 ), m_xmllang( "default" )
   {
     m_attribs = tag->attributes();
-    Tag::TagList l = tag->children();
+    const Tag::TagList& l = tag->children();
     Tag::TagList::const_iterator it = l.begin();
     for( ; it != l.end(); ++it )
     {
@@ -76,7 +76,7 @@ namespace gloox
       if( t )
         m_xmlns = t->findAttribute( "xmlns" );
 
-      TagList& c = children();
+      const TagList& c = children();
       TagList::const_iterator it = c.begin();
       for( ; it != c.end(); ++it )
       {
@@ -99,25 +99,17 @@ namespace gloox
       else
         m_subtype = StanzaMessageNormal;
 
-      TagList& c = children();
+      const TagList& c = children();
       TagList::const_iterator it = c.begin();
       for( ; it != c.end(); ++it )
       {
         if( (*it)->name() == "body" )
         {
-          const std::string& lang = (*it)->findAttribute( "xml:lang" );
-          if( !lang.empty() )
-            m_body[lang] = (*it)->cdata();
-          else
-            m_body["default"] = (*it)->cdata();
+          setLang( m_body, (*it) );
         }
         else if( (*it)->name() == "subject" )
         {
-          const std::string& lang = (*it)->findAttribute( "xml:lang" );
-          if( !lang.empty() )
-            m_subject[lang] = (*it)->cdata();
-          else
-            m_subject["default"] = (*it)->cdata();
+          setLang( m_subject, (*it) );
         }
         else if( (*it)->name() == "thread" )
         {
@@ -207,17 +199,13 @@ namespace gloox
 
     if( m_type == StanzaPresence || m_type == StanzaS10n )
     {
-      TagList& c = children();
+      const TagList& c = children();
       TagList::const_iterator it = c.begin();
       for( ; it != c.end(); ++it )
       {
         if( (*it)->name() == "status" )
         {
-          const std::string& lang = (*it)->findAttribute( "xml:lang" );
-          if( !lang.empty() )
-            m_status[lang] = (*it)->cdata();
-          else
-            m_status["default"] = (*it)->cdata();
+          setLang( m_status, (*it) );
         }
         else
         {
@@ -245,108 +233,67 @@ namespace gloox
       else if( e->hasAttribute( "type", "wait" ) )
         m_stanzaErrorType = StanzaErrorTypeWait;
 
-      TagList& c = e->children();
+      const TagList& c = e->children();
       TagList::const_iterator it = c.begin();
+      StanzaError err = StanzaErrorUndefined;
       for( ; it != c.end(); ++it )
       {
-        if( (*it)->name() == "bad-request" && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
-          m_stanzaError = StanzaErrorBadRequest;
-        else if( (*it)->name() == "conflict"
-                   && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
-          m_stanzaError = StanzaErrorConflict;
-        else if( (*it)->name() == "feature-not-implemented"
-                   && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
-          m_stanzaError = StanzaErrorFeatureNotImplemented;
-        else if( (*it)->name() == "forbidden"
-                   && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
-          m_stanzaError = StanzaErrorForbidden;
-        else if( (*it)->name() == "gone"
-                   && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
-          m_stanzaError = StanzaErrorGone;
-        else if( (*it)->name() == "internal-server-error"
-                   && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
-          m_stanzaError = StanzaErrorInternalServerError;
-        else if( (*it)->name() == "item-not-found"
-                   && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
-          m_stanzaError = StanzaErrorItemNotFound;
-        else if( (*it)->name() == "jid-malformed"
-                   && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
-          m_stanzaError = StanzaErrorJidMalformed;
-        else if( (*it)->name() == "not-acceptable"
-                   && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
-          m_stanzaError = StanzaErrorNotAcceptable;
-        else if( (*it)->name() == "not-allowed"
-                   && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
-          m_stanzaError = StanzaErrorNotAllowed;
-        else if( (*it)->name() == "not-authorized"
-                   && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
-          m_stanzaError = StanzaErrorNotAuthorized;
-        else if( (*it)->name() == "recipient-unavailable"
-                   && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
-          m_stanzaError = StanzaErrorRecipientUnavailable;
-        else if( (*it)->name() == "redirect"
-                   && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
-          m_stanzaError = StanzaErrorRedirect;
-        else if( (*it)->name() == "registration-required"
-                   && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
-          m_stanzaError = StanzaErrorRegistrationRequired;
-        else if( (*it)->name() == "remote-server-not-found"
-                   && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
-          m_stanzaError = StanzaErrorRemoteServerNotFound;
-        else if( (*it)->name() == "remote-server-timeout"
-                   && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
-          m_stanzaError = StanzaErrorRemoteServerTimeout;
-        else if( (*it)->name() == "resource-constraint"
-                   && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
-          m_stanzaError = StanzaErrorResourceConstraint;
-        else if( (*it)->name() == "service-unavailable"
-                   && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
-          m_stanzaError = StanzaErrorServiceUnavailable;
-        else if( (*it)->name() == "subscription-required"
-                   && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
-          m_stanzaError = StanzaErrorSubscribtionRequired;
-        else if( (*it)->name() == "undefined-condition"
-                   && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
-          m_stanzaError = StanzaErrorUndefinedCondition;
-        else if( (*it)->name() == "unexpected-request"
-                   && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
-          m_stanzaError = StanzaErrorUnexpectedRequest;
+        if( (*it)->name() == "bad-request" )
+          err = StanzaErrorBadRequest;
+        else if( (*it)->name() == "conflict" )
+          err = StanzaErrorConflict;
+        else if( (*it)->name() == "feature-not-implemented" )
+          err = StanzaErrorFeatureNotImplemented;
+        else if( (*it)->name() == "forbidden" )
+          err = StanzaErrorForbidden;
+        else if( (*it)->name() == "gone" )
+          err = StanzaErrorGone;
+        else if( (*it)->name() == "internal-server-error" )
+          err = StanzaErrorInternalServerError;
+        else if( (*it)->name() == "item-not-found" )
+          err = StanzaErrorItemNotFound;
+        else if( (*it)->name() == "jid-malformed" )
+          err = StanzaErrorJidMalformed;
+        else if( (*it)->name() == "not-acceptable" )
+          err = StanzaErrorNotAcceptable;
+        else if( (*it)->name() == "not-allowed" )
+          err = StanzaErrorNotAllowed;
+        else if( (*it)->name() == "not-authorized" )
+          err = StanzaErrorNotAuthorized;
+        else if( (*it)->name() == "recipient-unavailable" )
+          err = StanzaErrorRecipientUnavailable;
+        else if( (*it)->name() == "redirect" )
+          err = StanzaErrorRedirect;
+        else if( (*it)->name() == "registration-required" )
+          err = StanzaErrorRegistrationRequired;
+        else if( (*it)->name() == "remote-server-not-found" )
+          err = StanzaErrorRemoteServerNotFound;
+        else if( (*it)->name() == "remote-server-timeout" )
+          err = StanzaErrorRemoteServerTimeout;
+        else if( (*it)->name() == "resource-constraint" )
+          err = StanzaErrorResourceConstraint;
+        else if( (*it)->name() == "service-unavailable" )
+          err = StanzaErrorServiceUnavailable;
+        else if( (*it)->name() == "subscription-required" )
+          err = StanzaErrorSubscribtionRequired;
+        else if( (*it)->name() == "undefined-condition" )
+          err = StanzaErrorUndefinedCondition;
+        else if( (*it)->name() == "unexpected-request" )
+          err = StanzaErrorUnexpectedRequest;
         else if( (*it)->name() == "text" )
         {
-          const std::string& lang = (*it)->findAttribute( "xml:lang" );
-          if( !lang.empty() )
-            m_errorText[lang] = (*it)->cdata();
-          else
-            m_errorText["default"] = (*it)->cdata();
+          setLang( m_errorText, (*it) );
         }
-        else
+        else {
           m_stanzaErrorAppCondition = (*it);
+        }
+
+        if( err != StanzaErrorUndefined && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
+        {
+          m_stanzaError = err;
+        }
       }
     }
-  }
-
-  const std::string Stanza::body( const std::string& lang ) const
-  {
-    StringMap::const_iterator it = m_body.find( lang );
-    return ( it != m_body.end() ) ? (*it).second : std::string();
-  }
-
-  const std::string Stanza::subject( const std::string& lang ) const
-  {
-    StringMap::const_iterator it = m_subject.find( lang );
-    return ( it != m_subject.end() ) ? (*it).second : std::string();
-  }
-
-  const std::string Stanza::status( const std::string& lang ) const
-  {
-    StringMap::const_iterator it = m_status.find( lang );
-    return ( it != m_status.end() ) ? (*it).second : std::string();
-  }
-
-  const std::string Stanza::errorText( const std::string& lang ) const
-  {
-    StringMap::const_iterator it = m_errorText.find( lang );
-    return ( it != m_errorText.end() ) ? (*it).second : std::string();
   }
 
   Stanza* Stanza::clone()
@@ -511,6 +458,18 @@ namespace gloox
     s->finalize();
 
     return s;
+  }
+
+  void Stanza::setLang( StringMap& map, const Tag *tag )
+  {
+    const std::string& lang = tag->findAttribute( "xml:lang" );
+    map[ lang.empty() ? "default" : lang ] = tag->cdata();
+  }
+
+  const std::string Stanza::findLang( const StringMap& map, const std::string& lang )
+  {
+    StringMap::const_iterator it = map.find( lang );
+    return ( it != map.end() ) ? (*it).second : std::string();
   }
 
 }
