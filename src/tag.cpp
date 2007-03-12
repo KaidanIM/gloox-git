@@ -593,7 +593,7 @@ namespace gloox
     {
       addToken( root, current, type, tok );
       type = XTElement;
-      tok.clear();
+      tok = "";
     }
   }
 
