@@ -34,7 +34,7 @@ namespace gloox
 {
 
   /**
-   * \brief Wrapper around stringprep.
+   * @brief Wrapper around stringprep.
    * @param s UTF8 string to convert.
    * @param profile Stringprep_profile to use.
    */
@@ -50,7 +50,7 @@ namespace gloox
     std::string preppedString;
     char * p = stringprep_locale_to_utf8( s.c_str() );
     if ( p ) {
-      if ( stringprep( p, JID_PORTION_SIZE, (Stringprep_profile_flags)0, profile ) == STRINGPREP_OK)
+      if ( stringprep( p, JID_PORTION_SIZE, (Stringprep_profile_flags)0, profile ) == STRINGPREP_OK )
         preppedString = p;
       delete p;
     }
