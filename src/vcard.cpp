@@ -61,8 +61,7 @@ namespace gloox
         if( (*it)->hasChild( "SUFFIX" ) )
           m_name.suffix = (*it)->findChild( "SUFFIX" )->cdata();
       }
-
-      if( (*it)->name() == "PHOTO" )
+      else if( (*it)->name() == "PHOTO" )
       {
         if( (*it)->hasChild( "EXTVAL" ) )
         {
@@ -76,8 +75,7 @@ namespace gloox
           m_PHOTO = true;
         }
       }
-
-      if( (*it)->name() == "LOGO" )
+      else if( (*it)->name() == "LOGO" )
       {
         if( (*it)->hasChild( "EXTVAL" ) )
         {
@@ -91,20 +89,18 @@ namespace gloox
           m_LOGO = true;
         }
       }
-
-      if( (*it)->name() == "EMAIL" && (*it)->hasChild( "USERID" ) )
+      else if( (*it)->name() == "EMAIL" && (*it)->hasChild( "USERID" ) )
       {
         Email item;
         item.userid = (*it)->findChild( "USERID" )->cdata();
-        item.internet = ( (*it)->hasChild( "INTERNET" ) )?( true ):( false );
-        item.x400 = ( (*it)->hasChild( "X400" ) )?( true ):( false );
-        item.work = ( (*it)->hasChild( "WORK" ) )?( true ):( false );
-        item.home = ( (*it)->hasChild( "HOME" ) )?( true ):( false );
-        item.pref = ( (*it)->hasChild( "PREF" ) )?( true ):( false );
+        item.internet = (*it)->hasChild( "INTERNET" );
+        item.x400 = (*it)->hasChild( "X400" );
+        item.work = (*it)->hasChild( "WORK" );
+        item.home = (*it)->hasChild( "HOME" );
+        item.pref = (*it)->hasChild( "PREF" );
         m_emailList.push_back( item );
       }
-
-      if( (*it)->name() == "ADR" )
+      else if( (*it)->name() == "ADR" )
       {
         Address item;
         checkField( (*it), "POBOX", item.pobox );
@@ -114,17 +110,16 @@ namespace gloox
         checkField( (*it), "REGION", item.region );
         checkField( (*it), "PCODE", item.pcode );
         checkField( (*it), "CTRY", item.ctry );
-        item.postal = ( (*it)->hasChild( "POSTAL" ) )?( true ):( false );
-        item.parcel = ( (*it)->hasChild( "PARCEL" ) )?( true ):( false );
-        item.work = ( (*it)->hasChild( "WORK" ) )?( true ):( false );
-        item.home = ( (*it)->hasChild( "HOME" ) )?( true ):( false );
-        item.pref = ( (*it)->hasChild( "PREF" ) )?( true ):( false );
-        item.dom = ( (*it)->hasChild( "DOM" ) )?( true ):( false );
-        item.intl = ( !item.dom && (*it)->hasChild( "INTL" ) )?( true ):( false );
+        item.postal = (*it)->hasChild( "POSTAL" );
+        item.parcel = (*it)->hasChild( "PARCEL" );
+        item.work = (*it)->hasChild( "WORK" );
+        item.home = (*it)->hasChild( "HOME" );
+        item.pref = (*it)->hasChild( "PREF" );
+        item.dom = (*it)->hasChild( "DOM" );
+        item.intl = !item.dom && (*it)->hasChild( "INTL" );
         m_addressList.push_back( item );
       }
-
-      if( (*it)->name() == "LABEL" )
+      else if( (*it)->name() == "LABEL" )
       {
         Label item;
         Tag::TagList::const_iterator it2 = (*it)->children().begin();
@@ -132,38 +127,36 @@ namespace gloox
         {
           if( (*it2)->name() == "LINE" )
             item.lines.push_back( (*it)->cdata() );
-          item.postal = ( (*it2)->name() == "POSTAL" )?( true ):( false );
-          item.parcel = ( (*it2)->name() == "PARCEL" )?( true ):( false );
-          item.work = ( (*it2)->name() == "WORK" )?( true ):( false );
-          item.home = ( (*it2)->name() == "HOME" )?( true ):( false );
-          item.pref = ( (*it2)->name() == "PREF" )?( true ):( false );
-          item.dom = ( (*it2)->name() == "DOM" )?( true ):( false );
-          item.intl = ( !item.dom && (*it2)->name() == "INTL" )?( true ):( false );
+          item.postal = (*it2)->name() == "POSTAL";
+          item.parcel = (*it2)->name() == "PARCEL";
+          item.work = (*it2)->name() == "WORK";
+          item.home = (*it2)->name() == "HOME";
+          item.pref = (*it2)->name() == "PREF";
+          item.dom = (*it2)->name() == "DOM";
+          item.intl = !item.dom && (*it2)->name() == "INTL";
         }
         m_labelList.push_back( item );
       }
-
-      if( (*it)->name() == "TEL" && (*it)->hasChild( "NUMBER" ) )
+      else if( (*it)->name() == "TEL" && (*it)->hasChild( "NUMBER" ) )
       {
         Telephone item;
         item.number = (*it)->findChild( "NUMBER" )->cdata();
-        item.work = ( (*it)->hasChild( "WORK" ) )?( true ):( false );
-        item.home = ( (*it)->hasChild( "HOME" ) )?( true ):( false );
-        item.voice = ( (*it)->hasChild( "VOICE" ) )?( true ):( false );
-        item.fax = ( (*it)->hasChild( "FAX" ) )?( true ):( false );
-        item.pager = ( (*it)->hasChild( "PAGER" ) )?( true ):( false );
-        item.msg = ( (*it)->hasChild( "MSG" ) )?( true ):( false );
-        item.cell = ( (*it)->hasChild( "CELL" ) )?( true ):( false );
-        item.video = ( (*it)->hasChild( "VIDEO" ) )?( true ):( false );
-        item.bbs = ( (*it)->hasChild( "BBS" ) )?( true ):( false );
-        item.modem = ( (*it)->hasChild( "MODEM" ) )?( true ):( false );
-        item.isdn = ( (*it)->hasChild( "ISDN" ) )?( true ):( false );
-        item.pcs = ( (*it)->hasChild( "PCS" ) )?( true ):( false );
-        item.pref = ( (*it)->hasChild( "PREF" ) )?( true ):( false );
+        item.work = (*it)->hasChild( "WORK" );
+        item.home = (*it)->hasChild( "HOME" );
+        item.voice = (*it)->hasChild( "VOICE" );
+        item.fax = (*it)->hasChild( "FAX" );
+        item.pager = (*it)->hasChild( "PAGER" );
+        item.msg = (*it)->hasChild( "MSG" );
+        item.cell = (*it)->hasChild( "CELL" );
+        item.video = (*it)->hasChild( "VIDEO" );
+        item.bbs = (*it)->hasChild( "BBS" );
+        item.modem = (*it)->hasChild( "MODEM" );
+        item.isdn = (*it)->hasChild( "ISDN" );
+        item.pcs = (*it)->hasChild( "PCS" );
+        item.pref = (*it)->hasChild( "PREF" );
         m_telephoneList.push_back( item );
       }
-
-      if( (*it)->name() == "ORG" )
+      else if( (*it)->name() == "ORG" )
       {
         Tag::TagList::const_iterator ito = (*it)->children().begin();
         for( ; ito != (*it)->children().end(); ++ito )
@@ -174,14 +167,12 @@ namespace gloox
             m_org.units.push_back( (*ito)->cdata() );
         }
       }
-
-      if( (*it)->name() == "GEO" )
+      else if( (*it)->name() == "GEO" )
       {
         checkField( (*it), "LON", m_geo.longitude );
         checkField( (*it), "LAT", m_geo.latitude );
       }
-
-      if( (*it)->name() == "CLASS" )
+      else if( (*it)->name() == "CLASS" )
       {
         if( (*it)->hasChild( "PRIVATE" ) )
           m_class = ClassPrivate;
@@ -193,10 +184,6 @@ namespace gloox
 
     }
 
-  }
-
-  VCard::~VCard()
-  {
   }
 
   void VCard::checkField( Tag *vcard, const std::string& field, std::string& var )
@@ -261,11 +248,11 @@ namespace gloox
 
     Email item;
     item.userid = userid;
-    item.internet = ( type & AddrTypeInet )?( true ):( false );
-    item.x400 = ( type & AddrTypeX400 )?( true ):( false );
-    item.work = ( type & AddrTypeWork )?( true ):( false );
-    item.home = ( type & AddrTypeHome )?( true ):( false );
-    item.pref = ( type & AddrTypePref )?( true ):( false );
+    item.internet = type & AddrTypeInet;
+    item.x400 = type & AddrTypeX400;
+    item.work = type & AddrTypeWork;
+    item.home = type & AddrTypeHome;
+    item.pref = type & AddrTypePref;
 
     m_emailList.push_back( item );
   }
@@ -287,13 +274,13 @@ namespace gloox
     item.region = region;
     item.pcode = pcode;
     item.ctry = ctry;
-    item.home = ( type & AddrTypeHome )?( true ):( false );
-    item.work = ( type & AddrTypeWork )?( true ):( false );
-    item.parcel = ( type & AddrTypeParcel )?( true ):( false );
-    item.postal = ( type & AddrTypePostal )?( true ):( false );
-    item.dom = ( type & AddrTypeDom )?( true ):( false );
-    item.intl = ( !item.dom && type & AddrTypeIntl )?( true ):( false );
-    item.pref = ( type & AddrTypePref )?( true ):( false );
+    item.home = type & AddrTypeHome;
+    item.work = type & AddrTypeWork;
+    item.parcel = type & AddrTypeParcel;
+    item.postal = type & AddrTypePostal;
+    item.dom = type & AddrTypeDom;
+    item.intl = !item.dom && type & AddrTypeIntl;
+    item.pref = type & AddrTypePref;
 
     m_addressList.push_back( item );
   }
@@ -305,12 +292,13 @@ namespace gloox
 
     Label item;
     item.lines = lines;
-    item.work = ( type & AddrTypeWork )?( true ):( false );
-    item.home = ( type & AddrTypeHome )?( true ):( false );
-    item.parcel = ( type & AddrTypeParcel )?( true ):( false );
-    item.pref = ( type & AddrTypePref )?( true ):( false );
-    item.dom = ( type & AddrTypeDom )?( true ):( false );
-    item.intl = ( !item.dom && type & AddrTypeIntl )?( true ):( false );
+    item.work = type & AddrTypeWork;
+    item.home = type & AddrTypeHome;
+    item.postal = type & AddrTypePostal;
+    item.parcel = type & AddrTypeParcel;
+    item.pref = type & AddrTypePref;
+    item.dom = type & AddrTypeDom;
+    item.intl = !item.dom && type & AddrTypeIntl;
 
     m_labelList.push_back( item );
   }
@@ -322,19 +310,19 @@ namespace gloox
 
     Telephone item;
     item.number = number;
-    item.work = ( type & AddrTypeWork )?( true ):( false );
-    item.home = ( type & AddrTypeHome )?( true ):( false );
-    item.voice = ( type & AddrTypeVoice )?( true ):( false );
-    item.fax = ( type & AddrTypeFax )?( true ):( false );
-    item.pager = ( type & AddrTypePager )?( true ):( false );
-    item.msg = ( type & AddrTypeMsg )?( true ):( false );
-    item.cell = ( type & AddrTypeCell )?( true ):( false );
-    item.video = ( type & AddrTypeVideo )?( true ):( false );
-    item.bbs = ( type & AddrTypeBbs )?( true ):( false );
-    item.modem = ( type & AddrTypeModem )?( true ):( false );
-    item.isdn = ( type & AddrTypeIsdn )?( true ):( false );
-    item.pcs = ( type & AddrTypePcs )?( true ):( false );
-    item.pref = ( type & AddrTypePref )?( true ):( false );
+    item.work = type & AddrTypeWork;
+    item.home = type & AddrTypeHome;
+    item.voice = type & AddrTypeVoice;
+    item.fax = type & AddrTypeFax;
+    item.pager = type & AddrTypePager;
+    item.msg = type & AddrTypeMsg;
+    item.cell = type & AddrTypeCell;
+    item.video = type & AddrTypeVideo;
+    item.bbs = type & AddrTypeBbs;
+    item.modem = type & AddrTypeModem;
+    item.isdn = type & AddrTypeIsdn;
+    item.pcs = type & AddrTypePcs;
+    item.pref = type & AddrTypePref;
 
     m_telephoneList.push_back( item );
   }
