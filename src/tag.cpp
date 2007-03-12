@@ -834,7 +834,7 @@ namespace gloox
 
     std::string::size_type l = m_name.length();
     std::string::size_type i = 0;
-    while( i < l && std::isdigit( m_name[i] ) )
+    while( i < l && isdigit( m_name[i] ) )
       ++i;
     return i == l;
   }
