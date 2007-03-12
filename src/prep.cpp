@@ -10,15 +10,6 @@
   This software is distributed without any warranty.
 */
 
-
-#ifdef WIN32
-# include "../config.h.win"
-#elif defined( _WIN32_WCE )
-# include "../config.h.win"
-#else
-# include "config.h"
-#endif
-
 #include "prep.h"
 
 #include <string>

@@ -18,6 +18,14 @@
 
 #include <string>
 
+#ifdef WIN32
+# include "../config.h.win"
+#elif defined( _WIN32_WCE )
+# include "../config.h.win"
+#else
+# include "config.h"
+#endif
+
 #ifdef HAVE_LIBIDN
 # include <stringprep.h>
 #endif
@@ -26,7 +34,7 @@ namespace gloox
 {
 
   /**
-   * @brief This class offers static functions to stringprep the individual parts of a JID.
+   * @brief This namespace offers functions to stringprep the individual parts of a JID.
    *
    * You should not need to use these functions directly. All the
    * necessary prepping is done for if you stick to the interfaces provided.
