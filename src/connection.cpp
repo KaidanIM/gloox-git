@@ -1013,6 +1013,8 @@ printf( "maximumMessage: %ld\n", m_streamSizes.cbMaximumMessage );
     if( size < 0 )
     {
       // error
+      m_secure = false;
+      cleanup();
       return ConnIoError;
     }
     else if( size == 0 )

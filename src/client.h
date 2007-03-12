@@ -255,6 +255,7 @@ namespace gloox
       void negotiateCompression( StreamFeature method );
       void connected();
       virtual void rosterFilled();
+      virtual void cleanup();
 
       void init();
 

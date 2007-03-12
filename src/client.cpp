@@ -465,7 +465,8 @@ namespace gloox
 
   void Client::nonSaslLogin()
   {
-    m_auth = new NonSaslAuth( this, m_sid );
+    if( !m_auth )
+      m_auth = new NonSaslAuth( this, m_sid );
     m_auth->doAuth();
   }
 
@@ -529,6 +530,13 @@ namespace gloox
     m_authed = false;
     m_streamFeatures = 0;
     ClientBase::disconnect( reason );
+  }
+
+  void Client::cleanup()
+  {
+    m_authed = false;
+    m_resourceBound = false;
+    m_streamFeatures = 0;
   }
 
 }

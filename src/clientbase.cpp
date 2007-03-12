@@ -824,9 +824,4 @@ namespace gloox
     }
   }
 
-  void ClientBase::cleanup()
-  {
-
-  }
-
 }
