@@ -1,8 +1,8 @@
 #include "../../client.h"
 #include "../../jid.h"
 #include "../../connectionbase.h"
-#include "../../logsink.h"
-#include "../../loghandler.h"
+// #include "../../logsink.h"
+// #include "../../loghandler.h"
 #include "../../connectionlistener.h"
 #include "../../gloox.h"
 using namespace gloox;
@@ -11,27 +11,28 @@ using namespace gloox;
 #include <locale.h>
 #include <string>
 
-class ClientTest : public Client, LogHandler, ConnectionListener
+class ClientTest : public Client, /*LogHandler,*/ ConnectionListener
 {
   public:
     ClientTest( const JID& jid, const std::string& password, int port = -1 )
       : Client( jid, password, port ), m_connected( 0 ), m_disconnected( 0 )
     {
-      logInstance().registerLogHandler( LogLevelDebug, LogAreaAll, this );
+//       logInstance().registerLogHandler( LogLevelDebug, LogAreaAll, this );
       registerConnectionListener( this );
     };
-    virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
+/*    virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
     {
       printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
-    };
+    };*/
     virtual void onConnect() { ++m_connected; disconnect(); };
-    virtual void onDisconnect( ConnectionError e ) { ++m_disconnected; m_disconnect = e; printf( "reason: %d\n", e ); };
-    virtual void onResourceBindError( ResourceBindError error ) { printf( "res bind err: %d\n", error ); };
-    virtual void onSessionCreateError( SessionCreateError error ) { printf( "ses err: %d\n", error ); };
+    virtual void onDisconnect( ConnectionError e ) { ++m_disconnected; m_disconnect = e; m_streamerror = streamError(); /*printf( "reason: %d\n", e );*/ };
+    virtual void onResourceBindError( ResourceBindError error ) { /*printf( "res bind err: %d\n", error );*/ };
+    virtual void onSessionCreateError( SessionCreateError error ) { /*printf( "ses err: %d\n", error );*/ };
     virtual bool onTLSConnect( const CertInfo& /*info*/ ) { return false; };
     int connected() const { return m_connected; };
     int disconnected() const { return m_disconnected; };
     ConnectionError disconnectReason() const { return m_disconnect; };
+    StreamError streamErrorReason() const { return m_streamerror; };
 
   protected:
 
@@ -39,6 +40,7 @@ class ClientTest : public Client, LogHandler, ConnectionListener
     int m_connected;
     int m_disconnected;
     ConnectionError m_disconnect;
+    StreamError m_streamerror;
 };
 
 class ConnectionImpl : public ConnectionBase
@@ -75,11 +77,11 @@ class ConnectionImpl : public ConnectionBase
     int m_test;
     int m_pos;
     bool m_run;
-    static const char* m_msgs[3][9];
+    static const char* m_msgs[4][9];
 
 };
 
-const char* ConnectionImpl::m_msgs[3][9] =
+const char* ConnectionImpl::m_msgs[4][9] =
   {
     { // connection/auth goes ok.
       "<stream:stream from='jabber.cc' id='6kpid3u736sqjwd65n25wm57mzz10wz7hopvsj2w' version='1.0'"
@@ -146,6 +148,18 @@ const char* ConnectionImpl::m_msgs[3][9] =
         "zZGVzIixtYXhidWY9MTAyNCxjaGFyc2V0PXV0Zi04LGFsZ29yaXRobT1tZDUtc2Vzcw=="
       "</challenge>",
       0,
+    },
+    { // chokes on the xml
+      "<stream:stream from='jabber.cc' id='6kpid3u736sqjwd65n25wm57mzz10wz7hopvsj2w' version='1.0'"
+        "xmlns='jabber:client' xmlns:stream='http://etherx.jabber.org/streams'>"
+      "<stream:features xmlns:stream='http://etherx.jabber.org/streams'>"
+        "<mechanisms xmlns='urn:ietf:params:xml:ns:xmpp-sasl'>"
+          "<mechanism>PLAIN</mechanism>"
+          "<mechanism>DIGEST-MD5</mechanism>"
+        "</mechanisms>"
+      "</stream:features>",
+      "<stream:error><xml-not-well-formed xmlns='urn:ietf:params:xml:ns:xmpp-streams'/></stream:error>",
+      0,
     }
   };
 
@@ -159,7 +173,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
 
 
   // -------
-  printf( "-----------------------------\n" );
+//   printf( "-----------------------------\n" );
   name = "connect test: ok";
   c = new ClientTest( j, "b" );
   conn = new ConnectionImpl( c, 0 );
@@ -176,7 +190,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
   c = 0;
 
   // -------
-  printf( "-----------------------------\n" );
+//   printf( "-----------------------------\n" );
   name = "connect test: auth failure";
   c = new ClientTest( j, "b" );
   conn = new ConnectionImpl( c, 1 );
@@ -193,7 +207,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
   c = 0;
 
   // -------
-  printf( "-----------------------------\n" );
+//   printf( "-----------------------------\n" );
   name = "connect test: io error";
   c = new ClientTest( j, "b" );
   conn = new ConnectionImpl( c, 2 );
@@ -208,6 +222,28 @@ int main( int /*argc*/, char* /*argv[]*/ )
   }
   delete c;
   c = 0;
+
+//   printf( "-----------------------------\n" );
+  name = "connect test: xml error";
+  c = new ClientTest( j, "b" );
+  conn = new ConnectionImpl( c, 3 );
+  c->setConnectionImpl( conn );
+  c->setTls( false );
+  c->setCompression( false );
+  c->connect();
+  if( c->connected() != 0 || c->disconnected() != 1 || c->disconnectReason() != ConnStreamError
+      || c->streamErrorReason() != StreamErrorXmlNotWellFormed )
+  {
+    ++fail;
+    printf( "test '%s' failed: %d, %d\n", name.c_str(), c->disconnectReason(), c->streamErrorReason() );
+  }
+  delete c;
+  c = 0;
+
+
+
+
+
 
 
 
