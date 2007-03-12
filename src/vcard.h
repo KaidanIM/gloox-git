@@ -221,7 +221,7 @@ namespace gloox
       /**
        * Virtual destructor.
        */
-      virtual ~VCard();
+      virtual ~VCard() {}
 
       /**
        * Returns a Tag representation of the VCard. The caller becomes the owner of the Tag.
@@ -233,13 +233,13 @@ namespace gloox
        * Sets the formatted name.
        * @param name The formatted name.
        */
-      void setFormattedname( const std::string& name ) { m_formattedname = name; };
+      void setFormattedname( const std::string& name ) { m_formattedname = name; }
 
       /**
        * Returns the formatted name.
        * @return The formatted name.
        */
-      const std::string& formattedname() const { return m_formattedname; };
+      const std::string& formattedname() const { return m_formattedname; }
 
       /**
        * Sets the individual name parts. Unused parts can be left empty.
@@ -256,176 +256,176 @@ namespace gloox
        * Returns a full name.
        * @return A full name.
        */
-      const Name& name() const { return m_name; };
+      const Name& name() const { return m_name; }
 
       /**
        * Sets a nickname.
        * @param nickname The nickname.
        */
-      void setNickname( const std::string& nickname ) { m_nickname = nickname; };
+      void setNickname( const std::string& nickname ) { m_nickname = nickname; }
 
       /**
        * Returns the nickname.
        * @return The nickname.
        */
-      const std::string& nickname() const { return m_nickname; };
+      const std::string& nickname() const { return m_nickname; }
 
       /**
        * Sets a URL (homepage, etc.).
        * @param url The URL.
        */
-      void setUrl( const std::string& url ) { m_url = url; };
+      void setUrl( const std::string& url ) { m_url = url; }
 
       /**
        * Returns the url.
        * @return The url.
        */
-      const std::string& url() const { return m_url; };
+      const std::string& url() const { return m_url; }
 
       /**
        * Sets the birthday.
        * @param bday The birthday, ISO 8601 formatted.
        */
-      void setBday( const std::string& bday ) { m_bday = bday; };
+      void setBday( const std::string& bday ) { m_bday = bday; }
 
       /**
        * Returns the birthday.
        * @return The birthday.
        */
-      const std::string& bday() const { return m_bday; };
+      const std::string& bday() const { return m_bday; }
 
       /**
        * Sets a Jabber ID.
        * @param jabberid The (bare) Jabber ID (node\@host).
        */
-      void setJabberid( const std::string& jabberid ) { m_jabberid = jabberid; };
+      void setJabberid( const std::string& jabberid ) { m_jabberid = jabberid; }
 
       /**
        * Returns the Jabber ID.
        * @return The Jabber ID.
        */
-      const std::string& jabberid() const { return m_jabberid; };
+      const std::string& jabberid() const { return m_jabberid; }
 
       /**
        * Sets the person's title.
        * @param title The title.
        */
-      void setTitle( const std::string& title ) { m_title = title; };
+      void setTitle( const std::string& title ) { m_title = title; }
 
       /**
        * Returns the title.
        * @return The title.
        */
-      const std::string& title() const { return m_title; };
+      const std::string& title() const { return m_title; }
 
       /**
        * Sets the person's role.
        * @param role The role.
        */
-      void setRole( const std::string& role ) { m_role = role; };
+      void setRole( const std::string& role ) { m_role = role; }
 
       /**
        * Returns the role.
        * @return The role.
        */
-      const std::string& role() const { return m_role; };
+      const std::string& role() const { return m_role; }
 
       /**
        * Sets a "Commentary note".
        * @param note The note.
        */
-      void setNote( const std::string& note ) { m_note = note; };
+      void setNote( const std::string& note ) { m_note = note; }
 
       /**
        * Returns the note.
        * @return The note.
        */
-      const std::string& note() const { return m_note; };
+      const std::string& note() const { return m_note; }
 
       /**
        * Sets a "free-form descriptive text".
        * @param desc The descriptive text.
        */
-      void setDesc( const std::string& desc ) { m_desc = desc; };
+      void setDesc( const std::string& desc ) { m_desc = desc; }
 
       /**
        * Returns the "free-form descriptive text".
        * @return The descriptive text.
        */
-      const std::string& desc() const { return m_desc; };
+      const std::string& desc() const { return m_desc; }
 
       /**
        * Sets the "Mailer (e.g., Mail User Agent Type) property".
        * @param mailer The mailer.
        */
-      void setMailer( const std::string& mailer ) { m_mailer = mailer; };
+      void setMailer( const std::string& mailer ) { m_mailer = mailer; }
 
       /**
        * Returns the mailer.
        * @return The mailer.
        */
-      const std::string& mailer() const { return m_mailer; };
+      const std::string& mailer() const { return m_mailer; }
 
       /**
        * Sets the "Last revised property. The value must be an ISO 8601 formatted UTC date/time."
        * @param rev The date of the last revision.
        */
-      void setRev( const std::string& rev ) { m_rev = rev; };
+      void setRev( const std::string& rev ) { m_rev = rev; }
 
       /**
        * Returns the date of the last revision.
        * @return The date of the last revision.
        */
-      const std::string& rev() const { return m_rev; };
+      const std::string& rev() const { return m_rev; }
 
       /**
        * Sets the "Unique identifier property."
        * @param uid The unique identifier.
        */
-      void setUid( const std::string& uid ) { m_uid = uid; };
+      void setUid( const std::string& uid ) { m_uid = uid; }
 
       /**
        * Returns the unique identifier.
        * @return The unique identifier.
        */
-      const std::string& uid() const { return m_uid; };
+      const std::string& uid() const { return m_uid; }
 
       /**
        * Sets the "Time zone's Standard Time UTC offset. Value must be an ISO 8601
        * formatted UTC offset.
        * @param tz The timezone offset.
        */
-      void setTz( const std::string& tz ) { m_tz = tz; };
+      void setTz( const std::string& tz ) { m_tz = tz; }
 
       /**
        * Returns the timezone offset.
        * @return The timezone offset.
        */
-      const std::string& tz() const { return m_tz; };
+      const std::string& tz() const { return m_tz; }
 
       /**
        * Sets the "Identifier of product that generated the vCard property."
        * @param prodid The product identifier.
        */
-      void setProdid( const std::string& prodid ) { m_prodid = prodid; };
+      void setProdid( const std::string& prodid ) { m_prodid = prodid; }
 
       /**
        * Returns the product identifier.
        * @return The product identifier.
        */
-      const std::string& prodid() const { return m_prodid; };
+      const std::string& prodid() const { return m_prodid; }
 
       /**
        * Sets the "Sort string property."
        * @param sortstring The sort string.
        */
-      void setSortstring( const std::string& sortstring ) { m_sortstring = sortstring; };
+      void setSortstring( const std::string& sortstring ) { m_sortstring = sortstring; }
 
       /**
        * Returns the sort string.
        * @return The sort string.
        */
-      const std::string& sortstring() const { return m_sortstring; };
+      const std::string& sortstring() const { return m_sortstring; }
 
       /**
        * Sets a URI to a photo.
@@ -444,7 +444,7 @@ namespace gloox
        * Returns photo information.
        * @return Info about the photo.
        */
-      const Photo& photo() const { return m_photo; };
+      const Photo& photo() const { return m_photo; }
 
       /**
        * Sets a URI to a organization logo.
@@ -463,7 +463,7 @@ namespace gloox
        * Returns logo information.
        * @return Info about the logo.
        */
-      const Photo& logo() const { return m_logo; };
+      const Photo& logo() const { return m_logo; }
 
       /**
        * Adds an email address.
@@ -476,7 +476,7 @@ namespace gloox
        * Returns a list of email addresses.
        * @return A list of email addresses.
        */
-      const EmailList& emailAddresses() const { return m_emailList; };
+      const EmailList& emailAddresses() const { return m_emailList; }
 
       /**
        * Adds an address.
@@ -505,13 +505,13 @@ namespace gloox
        * Returns a list of addresses.
        * @return A list of addresses.
        */
-      const AddressList& addresses() const { return m_addressList; };
+      const AddressList& addresses() const { return m_addressList; }
 
       /**
        * Returns a list of address labels.
        * @return A list of address labels.
        */
-      const LabelList& labels() const { return m_labelList; };
+      const LabelList& labels() const { return m_labelList; }
 
       /**
        * Adds a telephone number.
@@ -524,7 +524,7 @@ namespace gloox
        * Returns a list of telephone numbers.
        * @return A list of telephone numbers.
        */
-      const TelephoneList& telephone() const { return m_telephoneList; };
+      const TelephoneList& telephone() const { return m_telephoneList; }
 
       /**
        * Sets "Geographical position. Values are the decimal degrees of
@@ -538,7 +538,7 @@ namespace gloox
        * Returns geo location information.
        * @return Info about the geo location.
        */
-      const Geo& geo() const { return m_geo; };
+      const Geo& geo() const { return m_geo; }
 
       /**
        * Sets "Organizational name and units property."
@@ -551,19 +551,19 @@ namespace gloox
        * Returns organization information.
        * @return Info about the organization.
        */
-      const Org& org() const { return m_org; };
+      const Org& org() const { return m_org; }
 
       /**
        * Sets the "Privacy classification property."
        * @param vclass The classification value.
        */
-      void setClass( VCardClassification vclass ) { m_class = vclass; };
+      void setClass( VCardClassification vclass ) { m_class = vclass; }
 
       /**
        * Returns information about classification.
        * @return Info about the classification.
        */
-      VCardClassification classification() const { return m_class; };
+      VCardClassification classification() const { return m_class; }
 
 
     private:
