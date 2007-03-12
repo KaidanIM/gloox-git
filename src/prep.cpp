@@ -33,26 +33,6 @@
 namespace gloox
 {
 
-#ifdef HAVE_LIBIDN
-  /**
-   * \brief Helper function to convert a string to UTF8.
-   * @param buf preallocated (JID_PORTION_SIZE+1 sized) buffer receiving the prepped string.
-   * @param s string to be prepped.
-   * \todo avoid copying the string everytime from p to buf
-   */
-  static void toUTF8( char * buf, const std::string& s )
-  {
-    memset( buf, '\0', JID_PORTION_SIZE + 1 );
-    strncpy( buf, s.c_str(), s.length() );
-    char* p = stringprep_locale_to_utf8( buf );
-    if( p )
-    {
-      strncpy( buf, p, JID_PORTION_SIZE + 1 );
-      free( p );
-    }
-  }
-#endif
-
   /**
    * \brief Wrapper around stringprep.
    * @param s UTF8 string to convert.
@@ -67,10 +47,14 @@ namespace gloox
       return "";
 
 #ifdef HAVE_LIBIDN
-    char buf[JID_PORTION_SIZE + 1];
-    toUTF8( buf, s );
-    return stringprep( buf, JID_PORTION_SIZE, (Stringprep_profile_flags)0, profile )
-        == STRINGPREP_OK ? buf : std::string();
+    std::string preppedString;
+    char * p = stringprep_locale_to_utf8( s.c_str() );
+    if ( p ) {
+      if ( stringprep( p, JID_PORTION_SIZE, (Stringprep_profile_flags)0, profile ) == STRINGPREP_OK)
+        preppedString = p;
+      delete p;
+    }
+    return preppedString;
 #endif
     return s;
   }
@@ -99,14 +83,19 @@ namespace gloox
       return "";
 
 #ifdef HAVE_LIBIDN
-    char *p = 0;
-    char buf[JID_PORTION_SIZE + 1];
-    toUTF8( buf, domain );
-    int rc = idna_to_ascii_8z( buf, &p, (Idna_flags)0 );
-    std::string str( rc == IDNA_SUCCESS ? p : "" );
-    if ( rc == IDNA_SUCCESS )
+    std::string preppedString;
+    char *p = stringprep_locale_to_utf8( domain.c_str() );
+    if( p )
+    {
+      char * prepped;
+      if ( idna_to_ascii_8z( p, &prepped, (Idna_flags)0 ) == IDNA_SUCCESS )
+      {
+        preppedString = prepped;
+        delete prepped;
+      }
       delete p;
-    return str;
+    }
+    return preppedString;
 #else
     return domain;
 #endif
