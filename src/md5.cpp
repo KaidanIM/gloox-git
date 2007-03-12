@@ -195,7 +195,7 @@ namespace gloox
       */
       static const int w = 1;
 
-      if (*((const unsigned char *)&w)) /* dynamic little-endian */
+      if( *((const unsigned char *)&w) ) /* dynamic little-endian */
 #endif
 #if BYTE_ORDER <= 0		/* little-endian */
       {
@@ -203,7 +203,7 @@ namespace gloox
         * On little-endian machines, we can process properly aligned
         * data without copying it.
         */
-        if (!((data - (const unsigned char*)0) & 3) )
+        if( !((data - (const unsigned char*)0) & 3) )
         {
           /* data are properly aligned */
           X = (const unsigned int*)data;
