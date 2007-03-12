@@ -549,6 +549,8 @@ namespace gloox
       /**
        * Use this function to retrieve the type of the stream error after it occurs and you received a
        * ConnectionError of type @b ConnStreamError from the ConnectionListener.
+       * @return The StreamError.
+       * @note The return value is only meaningful when called from ConnectionListener::onDisconnect().
        */
       StreamError streamError() const { return m_streamError; };
 
