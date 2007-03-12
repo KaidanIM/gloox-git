@@ -79,8 +79,8 @@ namespace gloox
     : m_connection( 0 ), m_encryption( 0 ), m_compression( 0 ), m_disco( 0 ), m_namespace( ns ),
       m_password( password ),
       m_xmllang( "en" ), m_server( server ), m_compressionActive( false ), m_encryptionActive( false ),
-      m_compress( true ), m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ),
-      m_availableSaslMechs( SaslMechAll ),
+      m_compress( true ), m_authed( false ), m_block( false ), m_sasl( true ), m_tls( true ),
+      m_port( port ), m_availableSaslMechs( SaslMechAll ),
       m_statisticsHandler( 0 ), m_mucInvitationHandler( 0 ),
       m_messageSessionHandlerChat( 0 ), m_messageSessionHandlerGroupchat( 0 ),
       m_messageSessionHandlerHeadline( 0 ), m_messageSessionHandlerNormal( 0 ),
@@ -100,6 +100,8 @@ namespace gloox
     }
 
     m_streamError = StreamErrorUndefined;
+
+    m_block = false;
 
     m_stats.totalBytesSent = 0;
     m_stats.totalBytesReceived = 0;
@@ -172,20 +174,9 @@ namespace gloox
     if( !m_compression )
       m_compression = getDefaultCompression();
 
+    m_block = block;
     ConnectionError ret = m_connection->connect();
-    if( ret == ConnNoError )
-    {
-      header();
-      if( block )
-      {
-        m_connection->receive();
-        return false;
-      }
-      else
-        return true;
-    }
-    else
-      return false;
+    return ret == ConnNoError ? true : false;
   }
 
   void ClientBase::handleTag( Tag *tag )
@@ -324,6 +315,15 @@ namespace gloox
       m_parser->feed( data );
     else
       m_logInstance.log( LogLevelError, LogAreaClassClientbase, "Received data, but chain broken" );
+  }
+
+  void ClientBase::handleConnect()
+  {
+    header();
+    if( m_block && m_connection )
+    {
+      m_connection->receive();
+    }
   }
 
   void ClientBase::handleDisconnect( ConnectionError reason )

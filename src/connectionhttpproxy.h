@@ -51,7 +51,8 @@ namespace gloox
        * You should not need to use this function directly.
        * @param cdh An ConnectionDataHandler-derived object that will handle incoming data.
        * @param connection A transport connection. It should be configured to connect to
-       * the proxy host and port, @b not to the XMPP host.
+       * the proxy host and port, @b not to the XMPP host. ConnectionHTTPProxy will own the
+       * transport connection and delete it in its destructor.
        * @param logInstance The log target. Obtain it from ClientBase::logInstance().
        * @param server A server to connect to. This is the XMPP server's address, @b not the proxy.
        * @param port The port to connect to. This is the XMPP server's port, @b not the proxy's.
@@ -88,6 +89,9 @@ namespace gloox
       virtual void handleReceivedData( const std::string& data );
 
       // reimplemented from ConnectionDataHandler
+      virtual void handleConnect();
+
+      // reimplemented from ConnectionDataHandler
       virtual void handleDisconnect( ConnectionError reason );
 
       /**
@@ -113,10 +117,11 @@ namespace gloox
       const LogSink& m_logInstance;
 
       std::string m_server;
+      std::string m_proxyHandshakeBuffer;
       unsigned short m_port;
       int m_totalBytesIn;
       int m_totalBytesOut;
-      bool m_connected;
+      bool m_proxied;
 
   };
 
