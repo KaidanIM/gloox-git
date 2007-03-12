@@ -448,7 +448,7 @@ namespace gloox
 
         int pos = atoi( token->name().c_str() );
 //         printf( "checking index %d\n", pos );
-        if ( pos > 0 && pos <= (int)res.size() )
+        if( pos > 0 && pos <= (int)res.size() )
         {
           Tag::TagList::const_iterator it = res.begin();
           while ( --pos )
