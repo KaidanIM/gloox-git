@@ -18,6 +18,10 @@
 
 #include <string>
 
+#ifdef HAVE_LIBIDN
+# include <stringprep.h>
+#endif
+
 namespace gloox
 {
 
@@ -35,16 +39,15 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.2
    */
-  class GLOOX_API Prep
+  namespace Prep
   {
-    public:
       /**
        * This function applies the Nodeprep profile of Stringprep to a string.
        * @param node The string to apply the profile to.
        * @return Returns the prepped string. In case of an error an empty string
        * is returned. If LibIDN is not available the string is returned unchanged.
        */
-      static std::string nodeprep( const std::string& node );
+      std::string nodeprep( const std::string& node );
 
       /**
        * This function applies the Nameprep profile of Stringprep to a string.
@@ -52,7 +55,7 @@ namespace gloox
        * @return Returns the prepped string. In case of an error an empty string
        * is returned. If LibIDN is not available the string is returned unchanged.
        */
-      static std::string nameprep( const std::string& domain );
+      std::string nameprep( const std::string& domain );
 
       /**
        * This function applies the Resourceprep profile of Stringprep to a std::string.
@@ -60,7 +63,7 @@ namespace gloox
        * @return Returns the prepped string. In case of an error an empty string
        * is returned. If LibIDN is not available the string is returned unchanged.
        */
-      static std::string resourceprep( const std::string& resource );
+      std::string resourceprep( const std::string& resource );
 
       /**
        * This function applies the idna() function to a string. I.e. it transforms
@@ -69,8 +72,19 @@ namespace gloox
        * @return Returns the converted string. In case of an error an empty string
        * is returned. If LibIDN is not available the string is returned unchanged.
        */
-      static std::string idna( const std::string& domain );
-  };
+      std::string idna( const std::string& domain );
+
+      /**
+       * This function applies a profile of StringPrep to a std::string.
+       * @param s The string to apply the profile to.
+       * @param profile The Stringprep profile to apply.
+       * @return Returns the prepped string. In case of an error an empty string
+       * is returned. If LibIDN is not available the string is returned unchanged.
+       */
+#ifdef HAVE_LIBIDN
+      std::string prepare( const std::string& s, const Stringprep_profile* profile );
+#endif
+  }
 
 }
 

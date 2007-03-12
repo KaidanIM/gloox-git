@@ -33,20 +33,12 @@
 namespace gloox
 {
 
-  /**
-   * @brief Wrapper around stringprep.
-   * @param s UTF8 string to convert.
-   * @param profile Stringprep_profile to use.
-   */
-  static std::string prepare( const std::string& s, const Stringprep_profile* profile )
-  {
-    if( s.empty() )
-      return s;
-
-    if( s.length() > JID_PORTION_SIZE )
-      return "";
-
 #ifdef HAVE_LIBIDN
+  std::string Prep::prepare( const std::string& s, const Stringprep_profile* profile )
+  {
+    if( s.empty() || s.length() > JID_PORTION_SIZE )
+      return std::string();
+
     std::string preppedString;
     char * p = stringprep_locale_to_utf8( s.c_str() );
     if ( p ) {
@@ -55,32 +47,40 @@ namespace gloox
       delete p;
     }
     return preppedString;
-#endif
-    return s;
   }
+#endif
 
   std::string Prep::nodeprep( const std::string& node )
   {
+#ifdef HAVE_LIBIDN
     return prepare( node, stringprep_xmpp_nodeprep );
+#else
+    return s;
+#endif
   }
 
   std::string Prep::nameprep( const std::string& domain )
   {
+#ifdef HAVE_LIBIDN
     return prepare( domain, stringprep_nameprep );
+#else
+    return s;
+#endif
   }
 
   std::string Prep::resourceprep( const std::string& resource )
   {
+#ifdef HAVE_LIBIDN
     return prepare( resource, stringprep_xmpp_resourceprep );
+#else
+    return s;
+#endif
   }
 
   std::string Prep::idna( const std::string& domain )
   {
-    if( domain.empty() )
-      return domain;
-
-    if( domain.length() > JID_PORTION_SIZE )
-      return "";
+    if( domain.empty() || domain.length() > JID_PORTION_SIZE )
+      return std::string();
 
 #ifdef HAVE_LIBIDN
     std::string preppedString;
