@@ -480,7 +480,7 @@ namespace gloox
       virtual void handleStartNode() = 0;
       virtual bool handleNormalNode( Stanza *stanza ) = 0;
       virtual void rosterFilled() = 0;
-      virtual void cleanup();
+      virtual void cleanup() {};
       void handleStreamError( Stanza *stanza );
 
       void notifyIqHandlers( Stanza *stanza );
