@@ -34,7 +34,7 @@ namespace gloox
     : ConnectionBase( cdh ), m_connection( connection ),
       m_logInstance( logInstance ),
       m_server( Prep::idna( server ) ), m_port( port ),
-      m_totalBytesIn( 0 ), m_totalBytesOut( 0 ), m_connected( false )
+      m_totalBytesIn( 0 ), m_totalBytesOut( 0 ), m_proxied( false )
   {
     if( m_connection )
       m_connection->registerConnectionDataHandler( this );
@@ -86,7 +86,7 @@ namespace gloox
 
   void ConnectionHTTPProxy::cleanup()
   {
-    m_connected = false;
+    m_proxied = false;
 
     if( m_connection )
       m_connection->cleanup();
@@ -94,15 +94,48 @@ namespace gloox
 
   void ConnectionHTTPProxy::handleReceivedData( const std::string& data )
   {
-    if( !m_connected )
+    if( !m_proxied && m_handler )
     {
+      m_proxyHandshakeBuffer += data;
+      if( ( m_proxyHandshakeBuffer.substr( 0, 12 ) == "HTTP/1.0 200"
+            || m_proxyHandshakeBuffer.substr( 0, 12 ) == "HTTP/1.1 200" )
+          && m_proxyHandshakeBuffer.substr( m_proxyHandshakeBuffer.length() - 4 ) == "\r\n\r\n" )
+      {
+        m_proxyHandshakeBuffer = "";
+        m_proxied = true;
+        m_handler->handleConnect();
+      }
+      else if( m_proxyHandshakeBuffer.substr( 9, 3 ) == "407" )
+        m_handler->handleDisconnect( ConnProxyAuthRequired );
+      else if( m_proxyHandshakeBuffer.substr( 9, 3 ) == "403" ||
+               m_proxyHandshakeBuffer.substr( 9, 3 ) == "404" )
+        m_handler->handleDisconnect( ConnProxyAuthFailed );
     }
     else if( m_handler )
       m_handler->handleReceivedData( data );
   }
 
+  void ConnectionHTTPProxy::handleConnect()
+  {
+    if( m_connection )
+    {
+      std::ostringstream os;
+      os << "CONNECT " << m_server << ":" << m_port << " HTTP/1.0\r\n";
+      os << "Host: " << m_server << "\r\n";
+      os << "Content-Length: 0\r\n";
+      os << "Proxy-Connection: Keep-Alive\r\n";
+      os << "Pragma: no-cache\r\n";
+      os << "\r\n";
+
+      if( !m_connection->send( os.str() ) && m_handler )
+        m_handler->handleDisconnect( ConnIoError );
+    }
+  }
+
   void ConnectionHTTPProxy::handleDisconnect( ConnectionError reason )
   {
+    m_proxied = false;
+
     if( m_handler )
       m_handler->handleDisconnect( reason );
   }

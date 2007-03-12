@@ -618,6 +618,9 @@ namespace gloox
       virtual void handleReceivedData( const std::string& data );
 
       // reimplemented from ConnectionDataHandler
+      virtual void handleConnect();
+
+      // reimplemented from ConnectionDataHandler
       virtual void handleDisconnect( ConnectionError reason );
 
       // reimplemented from TLSHandler
@@ -665,6 +668,7 @@ namespace gloox
       bool m_encryptionActive;
       bool m_compress;
       bool m_authed;
+      bool m_block;
       bool m_sasl;
       bool m_tls;
       int m_port;

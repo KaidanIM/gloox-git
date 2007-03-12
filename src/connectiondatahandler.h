@@ -37,12 +37,19 @@ namespace gloox
       virtual ~ConnectionDataHandler() {};
 
       /**
-       *
+       * This function is called for received from the underlying transport.
+       * @param data The data received.
        */
       virtual void handleReceivedData( const std::string& data ) = 0;
 
       /**
-       *
+       * This function is called when e.g. the raw TCP connection was established.
+       */
+      virtual void handleConnect() = 0;
+
+      /**
+       * This connection is called when e.g. the raw TCP connection was closed.
+       * @param reason The reason for the disconnect.
        */
       virtual void handleDisconnect( ConnectionError reason ) = 0;
   };
