@@ -33,100 +33,61 @@
 namespace gloox
 {
 
-  std::string Prep::nodeprep( const std::string& node )
-  {
-    if( node.empty() )
-      return node;
-
-    if( node.length() > JID_PORTION_SIZE )
-      return "";
-
 #ifdef HAVE_LIBIDN
-  char* p;
-  char buf[JID_PORTION_SIZE + 1];
-  memset( &buf, '\0', JID_PORTION_SIZE + 1 );
-  strncpy( buf, node.c_str(), node.length() );
-  p = stringprep_locale_to_utf8( buf );
-    if ( p )
+  /**
+   * \brief Helper function to convert a string to UTF8.
+   * @param buf preallocated (JID_PORTION_SIZE+1 sized) buffer receiving the prepped string.
+   * @param s string to be prepped.
+   * \todo avoid copying the string everytime from p to buf
+   */
+  static void toUTF8( char * buf, const std::string& s )
+  {
+    memset( buf, '\0', JID_PORTION_SIZE + 1 );
+    strncpy( buf, s.c_str(), s.length() );
+    char* p = stringprep_locale_to_utf8( buf );
+    if( p )
     {
       strncpy( buf, p, JID_PORTION_SIZE + 1 );
       free( p );
     }
-
-    int rc = stringprep( (char*)&buf, JID_PORTION_SIZE,
-                         (Stringprep_profile_flags)0, stringprep_xmpp_nodeprep );
-    if ( rc != STRINGPREP_OK )
-    {
-      return "";
-    }
-    return buf;
-#else
-    return node;
+  }
 #endif
+
+  /**
+   * \brief Wrapper around stringprep.
+   * @param s UTF8 string to convert.
+   * @param profile Stringprep_profile to use.
+   */
+  static std::string prepare( const std::string& s, const Stringprep_profile* profile )
+  {
+    if( s.empty() )
+      return s;
+
+    if( s.length() > JID_PORTION_SIZE )
+      return "";
+
+#ifdef HAVE_LIBIDN
+    char buf[JID_PORTION_SIZE + 1];
+    toUTF8( buf, s );
+    return stringprep( buf, JID_PORTION_SIZE, (Stringprep_profile_flags)0, profile )
+        == STRINGPREP_OK ? buf : std::string();
+#endif
+    return s;
+  }
+
+  std::string Prep::nodeprep( const std::string& node )
+  {
+    return prepare( node, stringprep_xmpp_nodeprep );
   }
 
   std::string Prep::nameprep( const std::string& domain )
   {
-    if( domain.empty() )
-      return domain;
-
-    if( domain.length() > JID_PORTION_SIZE )
-      return "";
-
-#ifdef HAVE_LIBIDN
-    char* p;
-    char buf[JID_PORTION_SIZE + 1];
-    memset( &buf, '\0', JID_PORTION_SIZE + 1 );
-    strncpy( buf, domain.c_str(), domain.length() );
-    p = stringprep_locale_to_utf8( buf );
-    if ( p )
-    {
-      strncpy( buf, p, JID_PORTION_SIZE + 1 );
-      free( p );
-    }
-
-    int rc = stringprep( (char*)&buf, JID_PORTION_SIZE,
-                         (Stringprep_profile_flags)0, stringprep_nameprep );
-    if ( rc != STRINGPREP_OK )
-    {
-      return "";
-    }
-    return buf;
-#else
-    return domain;
-#endif
+    return prepare( domain, stringprep_nameprep );
   }
 
   std::string Prep::resourceprep( const std::string& resource )
   {
-    if( resource.empty() )
-      return resource;
-
-    if( resource.length() > JID_PORTION_SIZE )
-      return "";
-
-#ifdef HAVE_LIBIDN
-    char* p;
-    char buf[JID_PORTION_SIZE + 1];
-    memset( &buf, '\0', JID_PORTION_SIZE + 1 );
-    strncpy( buf, resource.c_str(), resource.length() );
-    p = stringprep_locale_to_utf8( buf );
-    if ( p )
-    {
-      strncpy( buf, p, JID_PORTION_SIZE + 1 );
-      free( p );
-    }
-
-    int rc = stringprep( (char*)&buf, JID_PORTION_SIZE,
-                          (Stringprep_profile_flags)0, stringprep_xmpp_resourceprep );
-    if ( rc != STRINGPREP_OK )
-    {
-      return "";
-    }
-    return buf;
-#else
-    return resource;
-#endif
+    return prepare( resource, stringprep_xmpp_resourceprep );
   }
 
   std::string Prep::idna( const std::string& domain )
@@ -138,23 +99,11 @@ namespace gloox
       return "";
 
 #ifdef HAVE_LIBIDN
-    char* p;
+    char *p = 0;
     char buf[JID_PORTION_SIZE + 1];
-    memset( &buf, '\0', JID_PORTION_SIZE + 1 );
-    strncpy( buf, domain.c_str(), domain.length() );
-    p = stringprep_locale_to_utf8( buf );
-    if ( p )
-    {
-      strncpy( buf, p, JID_PORTION_SIZE + 1 );
-      free( p );
-    }
-
-    int rc = idna_to_ascii_8z( (char*)&buf, &p, (Idna_flags)0 );
-    if ( rc != IDNA_SUCCESS )
-    {
-      return "";
-    }
-    return p;
+    toUTF8( buf, domain );
+    int rc = idna_to_ascii_8z( buf, &p, (Idna_flags)0 );
+    return rc == IDNA_SUCCESS ? p : "";
 #else
     return domain;
 #endif
