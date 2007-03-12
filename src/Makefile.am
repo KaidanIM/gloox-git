@@ -21,7 +21,7 @@ libgloox_la_SOURCES = jid.cpp parser.cpp connectiontcp.cpp clientbase.cpp tag.cp
                         mucroom.cpp mucmessagesession.cpp oob.cpp vcardupdate.cpp stanzaextensionfactory.cpp \
                         delayeddelivery.cpp xdelayeddelivery.cpp gpgencrypted.cpp gpgsigned.cpp \
                         uniquemucroom.cpp instantmucroom.cpp compressionzlib.cpp tlsgnutls.cpp \
-                        tlsopenssl.cpp
+                        tlsopenssl.cpp connectionhttpproxy.cpp
 #tlsschannel.cpp
 
 libgloox_la_LDFLAGS = -version-info 7:0:0 -no-undefined -no-allow-shlib-undefined
@@ -58,7 +58,7 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             md5.h                     sha.h                   uniquemucroom.h \
                             instantmucroom.h          tlsbase.h               tlshandler.h \
                             connectionbase.h          connectiondatahandler.h compressiondatahandler.h \
-                            compressionbase.h         connectiontcp.h
+                            compressionbase.h         connectiontcp.h         connectionhttpproxy.h
 
 noinst_HEADERS = prep.h dns.h nonsaslauth.h mucmessagesession.h stanzaextensionfactory.h tlsgnutls.h \
 			tlsopenssl.h tlsschannel.h compressionzlib.h

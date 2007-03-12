@@ -43,6 +43,17 @@
 namespace gloox
 {
 
+  ConnectionTCP::ConnectionTCP( const LogSink& logInstance,
+                                const std::string& server, unsigned short port )
+    : ConnectionBase( 0 ),
+      m_logInstance( logInstance ),
+      m_buf( 0 ), m_server( Prep::idna( server ) ), m_port( port ), m_socket( -1 ),
+      m_totalBytesIn( 0 ), m_totalBytesOut( 0 ),
+      m_bufsize( 1024 ), m_cancel( true )
+  {
+    m_buf = (char*)calloc( m_bufsize + 1, sizeof( char ) );
+  }
+
   ConnectionTCP::ConnectionTCP( ConnectionDataHandler *cdh, const LogSink& logInstance,
                                 const std::string& server, unsigned short port )
     : ConnectionBase( cdh ),
@@ -86,7 +97,8 @@ namespace gloox
           m_logInstance.log( LogLevelError, LogAreaClassConnection, "Unknown error condition" );
           break;
       }
-      m_handler->handleDisconnect( (ConnectionError)-m_socket );
+      if( m_handler )
+        m_handler->handleDisconnect( (ConnectionError)-m_socket );
       return (ConnectionError)-m_socket;
     }
     else
@@ -135,7 +147,8 @@ namespace gloox
     if( size <= 0 )
     {
       ConnectionError error = size ? ConnIoError : ConnStreamClosed;
-      m_handler->handleDisconnect( error );
+      if( m_handler )
+        m_handler->handleDisconnect( error );
       return error;
     }
 
@@ -173,7 +186,7 @@ namespace gloox
 #endif
     }
 
-    if( sent == -1 )
+    if( sent == -1 && m_handler )
       m_handler->handleDisconnect( ConnStreamClosed );
 
     return sent != -1;

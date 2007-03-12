@@ -35,6 +35,20 @@ namespace gloox
       /**
        * Constructs a new ConnectionTCP object.
        * You should not need to use this function directly.
+       * @param logInstance The log target. Obtain it from ClientBase::logInstance().
+       * @param server A server to connect to.
+       * @param port The port to connect to. The default of -1 means that SRV records will be used
+       * to find out about the actual host:port.
+       * @note To properly use this object, you have to set a ConnectionDataHandler using
+       * registerConnectionDataHandler(). This is not necessary if this object is
+       * part of a 'connection chain', e.g. with ConnectionHTTPProxy.
+       */
+      ConnectionTCP( const LogSink& logInstance,
+                     const std::string& server, unsigned short port = -1 );
+
+      /**
+       * Constructs a new ConnectionTCP object.
+       * You should not need to use this function directly.
        * @param cdh An ConnectionDataHandler-derived object that will handle incoming data.
        * @param logInstance The log target. Obtain it from ClientBase::logInstance().
        * @param server A server to connect to.
