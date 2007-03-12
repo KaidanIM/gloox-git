@@ -9,7 +9,7 @@ v0.9 -- xx Feb 2007
   - XEP-0153 (vCard-Based Avatars) abstraction
   - XEP-0203 (Delayed Delivery) abstraction
 - added msec timeout to recv()
-- fetch roster immediately after requesting roster:delimiter
+- Client: fetch roster immediately after requesting roster:delimiter
 - delete() --> delete
 - Registration: allow registration with services
 - implement dataforms as list of pointers to DataformFields
@@ -49,12 +49,13 @@ v0.9 -- xx Feb 2007
 - ClientBase: removed setAutoMessageSession() in favor of registerMessageSessionHandler()
 - PrivacyItem: renamed enum members from ALL_UPPER_CASE to MixedCase
 - PrivateXMLHandler: renamed enum members from ALL_UPPER_CASE to MixedCase
-- MessageSession: allow for message type filtering
+- MessageSession: added filtering by message type
 - AdhocHandler: added 'handleAdhoc' prefix
 - Adhoc: handle Disco errors
 - removed unmaintained Dev-C++ project (in favor of Code::Blocks project)
 - ClientBase: renamed ping() --> whitespacePing()
-- ClientBase: HTTP proxy support (thanks to Jose A. Perez Sanchez)
+- HTTP proxy support (thanks to Jose A. Perez Sanchez)
+- HTTP proxy auth support
 - Tag: basic XPath support
 - DNS: cleanup
 - TagHandler: now receives Tag, not Stanza
@@ -65,7 +66,7 @@ since -pre5:
 - added DataFormField( const std::string& name, const std::string& label = "",
                        const std::string& value = "", DataFormFieldType type = FieldTypeTextSingle );
 - ClientBase: added setSASLMechanisms()
-- revamped and modularized the old Connection class
+- revamped and modularized the entire connection backend
 - Adhoc: added JID to Adhoc item (thanks to Roelof Naude)
 - MUCRoom: fixed memleak (thanks to Roelof Naude)
 - ClientBase: added registerPresenceHandler( const JID& jid, PresenceHandler *ph )
@@ -76,6 +77,8 @@ since -pre5:
 - JID: added fullJID() & bareJID(), returning JID objects
 - Stanza: added setThread()
 - MUCRoomParticipant: added status member
+- VCardManager: allow cancellation of VCard operations
+- ConnectionListener/Client/Component: added stream events/onStreamEvent()
 
 
 v0.8 -- 08 Apr 2006

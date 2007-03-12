@@ -1,19 +1,18 @@
 Todo
 ----
 
-- re-integrate proxy support (and check)
-- fix gnutls
-- fix openssl
 - fix schannel
-+ add RosterItemListener
-- comply to XEP-0201
++ add RosterItemListener (?)
+- fix STLport support/configure check
+- move stl/stdlib typedefs to types.h (?)
+- split send()/getID() to clientbasebase (?)
+- MUCMessageSession: handle <message type='error'/>
 
 - vcard: add getters for lists (email/addresses/...)
 
 - overhaul all XEP implementations (and note implemented version number)
 - RosterItem::status ::statusMsg for highest prio
 - Disco: allow specification of root node handler
-- setTls --> setTLS, setSasl --> setSASL (?)
 
 - check this change: http://www.jabberstudio.org/cgi-bin/viewcvs.cgi/cvs/jeps/0085/jep-0085.xml?r1=1.28&r2=1.31
 - XEP-0020 (Feature Negotiation)
