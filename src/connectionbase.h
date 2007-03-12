@@ -98,6 +98,13 @@ namespace gloox
        */
       ConnectionState state() const { return m_state; };
 
+      /**
+       * Use this function to register a new ConnectionDataHandler. There can be only one
+       * ConnectionDataHandler at any one time.
+       * @param cdh The new ConnectionDataHandler.
+       */
+      void registerConnectionDataHandler( ConnectionDataHandler *cdh ) { m_handler = cdh; }
+
     protected:
       ConnectionDataHandler *m_handler;
       ConnectionState m_state;
