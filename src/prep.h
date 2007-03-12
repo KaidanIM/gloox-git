@@ -37,7 +37,7 @@ namespace gloox
    * @brief This namespace offers functions to stringprep the individual parts of a JID.
    *
    * You should not need to use these functions directly. All the
-   * necessary prepping is done for if you stick to the interfaces provided.
+   * necessary prepping is done for you if you stick to the interfaces provided.
    * If you write your own enhancements, check with the spec.
    *
    * @note These functions depend on an installed LibIDN at compile time of gloox. If
@@ -82,6 +82,7 @@ namespace gloox
        */
       std::string idna( const std::string& domain );
 
+#ifdef HAVE_LIBIDN
       /**
        * This function applies a profile of StringPrep to a std::string.
        * @param s The string to apply the profile to.
@@ -89,7 +90,6 @@ namespace gloox
        * @return Returns the prepped string. In case of an error an empty string
        * is returned. If LibIDN is not available the string is returned unchanged.
        */
-#ifdef HAVE_LIBIDN
       std::string prepare( const std::string& s, const Stringprep_profile* profile );
 #endif
   }
