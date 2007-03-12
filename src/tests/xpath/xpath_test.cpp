@@ -444,7 +444,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
   }
 
   // -------
-  name = "deepsearch && * combined 1: //fff/..";
+  name = "deepsearch && * combined 1: //fff/*";
   result = aaa->findTagList( "//fff/*" );
   it = result.begin();
   if( result.size() != 1 || (*it) != ggg )
@@ -455,7 +455,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
   }
 
   // -------
-  name = "deepsearch && .. combined 1: //ggg/..";
+  name = "deepsearch && .. combined 2: //ggg/..";
   result = aaa->findTagList( "//ggg/.." );
   it = result.begin();
   if( result.size() != 1 || (*it) != fff )
@@ -480,7 +480,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
 //   printf( "--------------------------------------------------------------\n" );
 
   // -------
-  name = "deepsearch && .. combined 2: //ggg/../../bbb";
+  name = "deepsearch && .. combined 3: //ggg/../../bbb";
   result = aaa->findTagList( "//ggg/../../bbb" );
   it = result.begin();
   if( result.size() != 1 || (*it) != bbb )
@@ -491,7 +491,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
   }
 
   // -------
-  name = "deepsearch && .. combined 3: //ggg/../..//bbb";
+  name = "deepsearch && .. combined 4: //ggg/../..//bbb";
   result = aaa->findTagList( "//ggg/../..//bbb" );
   it = result.begin();
   if( result.size() != 3 || (*it) != bbb || (*++it) != jjj || (*++it) != iii )
