@@ -55,7 +55,7 @@ namespace gloox
 #ifdef HAVE_LIBIDN
     return prepare( node, stringprep_xmpp_nodeprep );
 #else
-    return s;
+    return node;
 #endif
   }
 
@@ -64,7 +64,7 @@ namespace gloox
 #ifdef HAVE_LIBIDN
     return prepare( domain, stringprep_nameprep );
 #else
-    return s;
+    return domain;
 #endif
   }
 
@@ -73,7 +73,7 @@ namespace gloox
 #ifdef HAVE_LIBIDN
     return prepare( resource, stringprep_xmpp_resourceprep );
 #else
-    return s;
+    return resource;
 #endif
   }
 
