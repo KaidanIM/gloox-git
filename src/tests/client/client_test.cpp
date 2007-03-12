@@ -25,7 +25,13 @@ class ClientTest : public Client, /*LogHandler,*/ ConnectionListener
       printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
     };*/
     virtual void onConnect() { ++m_connected; disconnect(); };
-    virtual void onDisconnect( ConnectionError e ) { ++m_disconnected; m_disconnect = e; m_streamerror = streamError(); /*printf( "reason: %d\n", e );*/ };
+    virtual void onDisconnect( ConnectionError e )
+    {
+      ++m_disconnected;
+      m_disconnect = e;
+      m_streamerror = streamError();
+       /*printf( "reason: %d\n", e );*/
+    };
     virtual void onResourceBindError( ResourceBindError error ) { /*printf( "res bind err: %d\n", error );*/ };
     virtual void onSessionCreateError( SessionCreateError error ) { /*printf( "ses err: %d\n", error );*/ };
     virtual bool onTLSConnect( const CertInfo& /*info*/ ) { return false; };
