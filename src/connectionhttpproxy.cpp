@@ -18,6 +18,7 @@
 #include "dns.h"
 #include "logsink.h"
 #include "prep.h"
+#include "base64.h"
 
 #include <string>
 
@@ -30,11 +31,11 @@ namespace gloox
 
   ConnectionHTTPProxy::ConnectionHTTPProxy( ConnectionDataHandler *cdh, ConnectionBase *connection,
                                             const LogSink& logInstance,
-                                            const std::string& server, unsigned short port )
+                                            const std::string& server, int port )
     : ConnectionBase( cdh ), m_connection( connection ),
       m_logInstance( logInstance ),
       m_server( Prep::idna( server ) ), m_port( port ),
-      m_totalBytesIn( 0 ), m_totalBytesOut( 0 ), m_proxied( false )
+      m_totalBytesIn( 0 ), m_totalBytesOut( 0 )
   {
     if( m_connection )
       m_connection->registerConnectionDataHandler( this );
@@ -49,13 +50,17 @@ namespace gloox
   ConnectionError ConnectionHTTPProxy::connect()
   {
     if( m_connection )
+    {
+      m_state = StateConnecting;
       return m_connection->connect();
+    }
 
     return ConnNotConnected;
   }
 
   void ConnectionHTTPProxy::disconnect()
   {
+    m_state = StateDisconnected;
     if( m_connection )
       m_connection->disconnect();
   }
@@ -86,7 +91,7 @@ namespace gloox
 
   void ConnectionHTTPProxy::cleanup()
   {
-    m_proxied = false;
+    m_state = StateDisconnected;
 
     if( m_connection )
       m_connection->cleanup();
@@ -94,7 +99,10 @@ namespace gloox
 
   void ConnectionHTTPProxy::handleReceivedData( const std::string& data )
   {
-    if( !m_proxied && m_handler )
+    if( !m_handler )
+      return;
+
+    if( m_state == StateConnecting )
     {
       m_proxyHandshakeBuffer += data;
       if( ( m_proxyHandshakeBuffer.substr( 0, 12 ) == "HTTP/1.0 200"
@@ -102,7 +110,9 @@ namespace gloox
           && m_proxyHandshakeBuffer.substr( m_proxyHandshakeBuffer.length() - 4 ) == "\r\n\r\n" )
       {
         m_proxyHandshakeBuffer = "";
-        m_proxied = true;
+        m_state = StateConnected;
+        m_logInstance.log( LogLevelDebug, LogAreaClassConnectionHTTPProxy,
+                           "Proxy connection established" );
         m_handler->handleConnect();
       }
       else if( m_proxyHandshakeBuffer.substr( 9, 3 ) == "407" )
@@ -111,7 +121,7 @@ namespace gloox
                m_proxyHandshakeBuffer.substr( 9, 3 ) == "404" )
         m_handler->handleDisconnect( ConnProxyAuthFailed );
     }
-    else if( m_handler )
+    else if( m_state == StateConnected )
       m_handler->handleReceivedData( data );
   }
 
@@ -119,22 +129,44 @@ namespace gloox
   {
     if( m_connection )
     {
+      std::string server = m_server;
+      int port = m_port;
+      if( port == -1 )
+      {
+        DNS::HostMap servers = DNS::resolve( m_server, m_logInstance );
+        if( servers.size() )
+        {
+          server = (*(servers.begin())).first;
+          port = (*(servers.begin())).second;
+        }
+      }
+      m_logInstance.log( LogLevelDebug, LogAreaClassConnectionHTTPProxy,
+                         "Requesting proxy connection to " + server );
       std::ostringstream os;
-      os << "CONNECT " << m_server << ":" << m_port << " HTTP/1.0\r\n";
-      os << "Host: " << m_server << "\r\n";
+      os << "CONNECT " << server << ":" << port << " HTTP/1.0\r\n";
+      os << "Host: " << server << "\r\n";
       os << "Content-Length: 0\r\n";
       os << "Proxy-Connection: Keep-Alive\r\n";
       os << "Pragma: no-cache\r\n";
+      if( !m_proxyUser.empty() && !m_proxyPassword.empty() )
+      {
+        os << "Proxy-Authorization: Basic " << Base64::encode64( m_proxyUser + ":" + m_proxyPassword )
+            << "\r\n";
+      }
       os << "\r\n";
 
       if( !m_connection->send( os.str() ) && m_handler )
+      {
+        m_state = StateDisconnected;
         m_handler->handleDisconnect( ConnIoError );
+      }
     }
   }
 
   void ConnectionHTTPProxy::handleDisconnect( ConnectionError reason )
   {
-    m_proxied = false;
+    m_state = StateDisconnected;
+    m_logInstance.log( LogLevelDebug, LogAreaClassConnectionHTTPProxy, "proxy connection closed" );
 
     if( m_handler )
       m_handler->handleDisconnect( reason );

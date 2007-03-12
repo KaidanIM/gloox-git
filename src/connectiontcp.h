@@ -44,7 +44,7 @@ namespace gloox
        * part of a 'connection chain', e.g. with ConnectionHTTPProxy.
        */
       ConnectionTCP( const LogSink& logInstance,
-                     const std::string& server, unsigned short port = -1 );
+                     const std::string& server, int port = -1 );
 
       /**
        * Constructs a new ConnectionTCP object.
@@ -56,7 +56,7 @@ namespace gloox
        * to find out about the actual host:port.
        */
       ConnectionTCP( ConnectionDataHandler *cdh, const LogSink& logInstance,
-                     const std::string& server, unsigned short port = -1 );
+                     const std::string& server, int port = -1 );
 
       /**
        * Virtual destructor
@@ -113,7 +113,7 @@ namespace gloox
 
       char *m_buf;
       std::string m_server;
-      unsigned short m_port;
+      int m_port;
       int m_socket;
       int m_totalBytesIn;
       int m_totalBytesOut;
