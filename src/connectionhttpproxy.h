@@ -60,7 +60,7 @@ namespace gloox
        */
       ConnectionHTTPProxy( ConnectionDataHandler *cdh, ConnectionBase *connection,
                            const LogSink& logInstance,
-                           const std::string& server, unsigned short port = -1 );
+                           const std::string& server, int port = -1 );
 
       /**
        * Virtual destructor
@@ -110,6 +110,14 @@ namespace gloox
       void setServer( const std::string& host, unsigned short port = -1 )
         { m_server = host; m_port = port; }
 
+      /**
+       * Sets proxy authorization credentials.
+       * @param user The user name to use for proxy authorization.
+       * @param passwordThe password to use for proxy authorization.
+       */
+      void setProxyAuth( const std::string& user, const std::string& password )
+        { m_proxyUser = user; m_proxyPassword = password; }
+
    private:
       ConnectionHTTPProxy &operator= ( const ConnectionHTTPProxy& );
 
@@ -117,11 +125,12 @@ namespace gloox
       const LogSink& m_logInstance;
 
       std::string m_server;
+      std::string m_proxyUser;
+      std::string m_proxyPassword;
       std::string m_proxyHandshakeBuffer;
-      unsigned short m_port;
+      int m_port;
       int m_totalBytesIn;
       int m_totalBytesOut;
-      bool m_proxied;
 
   };
 
