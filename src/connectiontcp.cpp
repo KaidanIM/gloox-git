@@ -44,7 +44,7 @@ namespace gloox
 {
 
   ConnectionTCP::ConnectionTCP( const LogSink& logInstance,
-                                const std::string& server, unsigned short port )
+                                const std::string& server, int port )
     : ConnectionBase( 0 ),
       m_logInstance( logInstance ),
       m_buf( 0 ), m_server( Prep::idna( server ) ), m_port( port ), m_socket( -1 ),
@@ -55,7 +55,7 @@ namespace gloox
   }
 
   ConnectionTCP::ConnectionTCP( ConnectionDataHandler *cdh, const LogSink& logInstance,
-                                const std::string& server, unsigned short port )
+                                const std::string& server, int port )
     : ConnectionBase( cdh ),
       m_logInstance( logInstance ),
       m_buf( 0 ), m_server( Prep::idna( server ) ), m_port( port ), m_socket( -1 ),
@@ -77,7 +77,7 @@ namespace gloox
 
     if( m_socket < 0 )
     {
-      if( m_port == (unsigned short)-1 )
+      if( m_port == -1 )
         m_socket = DNS::connect( m_server, m_logInstance );
       else
         m_socket = DNS::connect( m_server, m_port, m_logInstance );
@@ -88,13 +88,13 @@ namespace gloox
       switch( m_socket )
       {
         case -ConnConnectionRefused:
-          m_logInstance.log( LogLevelError, LogAreaClassConnection, m_server + ": connection refused" );
+          m_logInstance.log( LogLevelError, LogAreaClassConnectionTCP, m_server + ": connection refused" );
           break;
         case -ConnDnsError:
-          m_logInstance.log( LogLevelError, LogAreaClassConnection, m_server + ": host not found" );
+          m_logInstance.log( LogLevelError, LogAreaClassConnectionTCP, m_server + ": host not found" );
           break;
         default:
-          m_logInstance.log( LogLevelError, LogAreaClassConnection, "Unknown error condition" );
+          m_logInstance.log( LogLevelError, LogAreaClassConnectionTCP, "Unknown error condition" );
           break;
       }
       if( m_handler )
@@ -107,6 +107,8 @@ namespace gloox
     }
 
     m_cancel = false;
+    if( m_handler )
+      m_handler->handleConnect();
     return ConnNoError;
   }
 
