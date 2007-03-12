@@ -37,7 +37,6 @@ namespace gloox
 
     if( !BIO_new_bio_pair( &m_ibio, 0, &m_nbio, 0 ) )
     {
-      printf( "BIO_new_bio_pair() failed\n" );
       return;
     }
     SSL_set_bio( m_ssl, m_ibio, m_ibio );
@@ -50,22 +49,20 @@ namespace gloox
 
   bool OpenSSL::encrypt( const std::string& data )
   {
+    m_sendBuffer += data;
+
     if( !m_secure )
     {
       handshake();
       return 0;
     }
 
-    printf( "encrypting: %d\n", data.length() );
-    int ret;
-    ret = SSL_write( m_ssl, data.c_str(), data.length() );
+    doTLSOperation( TLSWrite );
     return true;
   }
 
   int OpenSSL::decrypt( const std::string& data )
   {
-    printf( "decrypting: %d\n", data.length() );
-
     m_recvBuffer += data;
 
     if( !m_secure )
@@ -74,7 +71,8 @@ namespace gloox
       return 0;
     }
 
-    return SSL_read( m_ssl, reinterpret_cast<void*>( const_cast<char*>( data.c_str() ) ), data.length() );
+    doTLSOperation( TLSRead );
+    return true;
   }
 
   void OpenSSL::setCACerts( const StringList& cacerts )
@@ -105,36 +103,60 @@ namespace gloox
     BIO_free( m_nbio );
   }
 
-  bool OpenSSL::handshake()
+  void OpenSSL::doTLSOperation( TLSOperation op )
   {
     if( !m_handler )
-      return false;
+      return;
 
     int ret;
+    bool onceAgain = false;
+
     do
     {
-      ret = SSL_connect( m_ssl );
-      if( ret == -1 )
-      {
-        switch( SSL_get_error( m_ssl, ret ) )
-        {
-          case SSL_ERROR_WANT_READ:
-            printf( "want read\n" );
-          case SSL_ERROR_WANT_WRITE:
-            printf( "want write\n" );
-            pushFunc();
-            break;
-          default:
-            m_handler->handleHandshakeResult( false, m_certInfo );
-            return false;
-            break;
-        }
-//         return true;
-      }
-    }
-    while( ret != 1 || m_recvBuffer.length() );
+      if( op == TLSHandshake )
+        ret = SSL_connect( m_ssl );
+      else if( op == TLSWrite )
+        ret = SSL_write( m_ssl, m_sendBuffer.c_str(), m_sendBuffer.length() );
+      else
+       ret = SSL_read( m_ssl, m_buf, m_bufsize );
 
-    m_secure = true;
+      switch( SSL_get_error( m_ssl, ret ) )
+      {
+        case SSL_ERROR_WANT_READ:
+        case SSL_ERROR_WANT_WRITE:
+          pushFunc();
+          break;
+        case SSL_ERROR_NONE:
+          if( op == TLSHandshake )
+            m_secure = true;
+          else if( op == TLSWrite )
+            m_sendBuffer.erase( 0, ret );
+          else if( op == TLSRead )
+            m_handler->handleDecryptedData( std::string( m_buf, ret ) );
+          pushFunc();
+          break;
+        default:
+          m_handler->handleHandshakeResult( false, m_certInfo );
+          return;
+          break;
+      }
+      if( !onceAgain && !m_recvBuffer.length() )
+        onceAgain = true;
+      else if( onceAgain )
+        onceAgain = false;
+    }
+    while( ( onceAgain || m_recvBuffer.length() ) && ( !m_secure || op == TLSRead ) );
+  }
+
+  bool OpenSSL::handshake()
+  {
+
+    doTLSOperation( TLSHandshake );
+
+    if( !m_secure )
+      return true;
+
+//     m_secure = true;
 
     int res = SSL_get_verify_result( m_ssl );
     if( res != X509_V_OK )
@@ -171,6 +193,9 @@ namespace gloox
     if( tmp )
       m_certInfo.protocol = tmp;
 
+    m_valid = true;
+
+    m_handler->handleHandshakeResult( true, m_certInfo );
     return true;
   }
 
@@ -181,7 +206,6 @@ namespace gloox
 
   int OpenSSL::pushFunc()
   {
-    printf( "in pushFunc\n" );
     int wantwrite;
     size_t wantread;
     int frombio;
@@ -195,31 +219,11 @@ namespace gloox
       if( !wantwrite )
         break;
 
-      printf( "pushing: %d\n", wantwrite );
       frombio = BIO_read( m_nbio, m_buf, wantwrite );
-      printf( "read from bio: %d\n", frombio );
 
       if( m_handler )
         m_handler->handleEncryptedData( std::string( m_buf, frombio ) );
-
-      if( BIO_should_retry( m_nbio ) )
-      {
-        printf( "after BIO_read: BIO_should_retry() is true\n" );
-//         break;
-      }
-      else
-      {
-        printf( "after BIO_read: BIO_should_retry() is false\n" );
-//         break;
-      }
-
     }
-
-    if( BIO_should_read( m_nbio ) )
-      printf( "should read\n" );
-
-    if( BIO_should_write( m_nbio ) )
-      printf( "should write\n" );
 
     while( ( wantread = BIO_ctrl_get_read_request( m_nbio ) ) > 0 )
     {
@@ -229,25 +233,10 @@ namespace gloox
       if( !wantread )
         break;
 
-      printf( "pulling: %d\n", wantread );
       tobio = BIO_write( m_nbio, m_recvBuffer.c_str(), wantread );
-      printf( "wrote to bio: %d of %d\n", tobio, m_recvBuffer.length() );
       m_recvBuffer.erase( 0, tobio );
-
-     if( BIO_should_retry( m_nbio ) )
-      {
-        printf( "after BIO_write: BIO_should_retry() is true\n" );
-//         break;
-      }
-      else
-      {
-        printf( "after BIO_write: BIO_should_retry() is false\n" );
-//         break;
-      }
-
     }
 
-    printf( "leaving pushFunc\n" );
     return 0;
   }
 

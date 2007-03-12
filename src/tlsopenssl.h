@@ -61,11 +61,21 @@ namespace gloox
       virtual void setClientCert( const std::string& clientKey, const std::string& clientCerts );
 
     private:
+      enum TLSOperation
+      {
+        TLSHandshake,
+        TLSWrite,
+        TLSRead
+      };
+
+      void doTLSOperation( TLSOperation op );
+
       SSL *m_ssl;
       SSL_CTX *m_ctx;
       BIO *m_ibio;
       BIO *m_nbio;
       std::string m_recvBuffer;
+      std::string m_sendBuffer;
       char *m_buf;
       const int m_bufsize;
 
