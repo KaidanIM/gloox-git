@@ -18,19 +18,6 @@
 namespace gloox
 {
 
-  JID::JID()
-  {
-  }
-
-  JID::JID( const std::string& jid )
-  {
-    setJID( jid );
-  }
-
-  JID::~JID()
-  {
-  }
-
   void JID::setJID( const std::string& jid )
   {
     if( jid.empty() )
@@ -108,26 +95,12 @@ namespace gloox
       return m_username + "@" + m_server;
   }
 
-  JID JID::bareJID() const
-  {
-    return JID( bare() );
-  }
-
-  JID JID::fullJID() const
-  {
-    return JID( full() );
-  }
-
-  int JID::operator==( const JID& right ) const
+  bool JID::operator==( const JID& right ) const
   {
     return ( ( m_resource == right.m_resource )
         && ( m_server == right.m_server )
         && ( m_username == right.m_username ) );
   }
 
-  int JID::operator!=( const JID& right ) const
-  {
-    return !( *this == right );
-  }
 
 }
