@@ -475,7 +475,10 @@ namespace gloox
     switch( tokenType )
     {
       case XTAttribute:
-        result = ( token->name() == "*" ) ? (bool)m_attribs.size() : hasAttribute( token->name() );
+        if( token->name() == "*" && m_attribs.size() )
+          result = true;
+        else
+          result = hasAttribute( token->name() );
         break;
       case XTOperatorEq:
         result = evaluateEquals( token );
