@@ -34,18 +34,18 @@ namespace gloox
       /**
        * Constructs an empty JID.
        */
-      JID();
+      JID() {}
 
       /**
        * Constructs a new JID from a string.
        * @param jid The string containing the JID.
        */
-      JID( const std::string& jid );
+      JID( const std::string& jid ) { setJID( jid ); }
 
       /**
        * Virtual destructor.
        */
-      virtual ~JID();
+      virtual ~JID() {}
 
       /**
        * Sets the JID from a string.
@@ -70,14 +70,14 @@ namespace gloox
        * @return The bare JID.
        * @since 0.9
        */
-      JID bareJID() const;
+      JID bareJID() const { return JID( bare() ); }
 
       /**
        * Creates and returns a JID from this JID's node, server and resource parts.
        * @return The full JID.
        * @since 0.9
        */
-      JID fullJID() const;
+      JID fullJID() const { return JID( full() ); }
 
       /**
        * Sets the username.
@@ -101,44 +101,44 @@ namespace gloox
        * Returns the prepped username.
        * @return The current username.
        */
-      std::string username() const { return m_username; };
+      std::string username() const { return m_username; }
 
       /**
        * Returns the prepped server name.
        * @return The current server.
        */
-      std::string server() const { return m_server; };
+      const std::string& server() const { return m_server; }
 
       /**
        * Returns the raw (unprepped) server name.
        * @return The raw server name.
        */
-      std::string serverRaw() const { return m_serverRaw; };
+      const std::string& serverRaw() const { return m_serverRaw; }
 
       /**
        * Returns the prepped resource.
        * @return The current resource.
        */
-      std::string resource() const { return m_resource; };
+      const std::string& resource() const { return m_resource; }
 
       /**
        * A JID is empty as long as no server is set.
        * @return @b True if the JID is empty, @b false otherwise.
        */
-      bool empty() const { return m_server.empty(); };
+      bool empty() const { return m_server.empty(); }
 
       /**
        * Compares two JIDs.
        * @param right The second JID.
        */
-      int operator==( const JID& right ) const;
+      bool operator==( const JID& right ) const;
 
       /**
        * Compares two JIDs.
        * @param right The second JID.
        */
-      int operator!=( const JID& right ) const;
-
+      bool operator!=( const JID& right ) const { return ! ( *this == right ); }
+  
     private:
       std::string m_resource;
       std::string m_username;
