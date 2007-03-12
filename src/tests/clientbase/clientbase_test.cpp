@@ -1,7 +1,7 @@
 #include "../../clientbase.h"
 #include "../../connectionbase.h"
-#include "../../logsink.h"
-#include "../../loghandler.h"
+// #include "../../logsink.h"
+// #include "../../loghandler.h"
 #include "../../connectionlistener.h"
 #include "../../gloox.h"
 using namespace gloox;
@@ -10,7 +10,7 @@ using namespace gloox;
 #include <locale.h>
 #include <string>
 
-class ClientBaseTest : public ClientBase, LogHandler, ConnectionListener
+class ClientBaseTest : public ClientBase, /*LogHandler,*/ ConnectionListener
 {
   public:
     ClientBaseTest( const std::string& ns, const std::string& server, int port = -1 )
@@ -20,21 +20,21 @@ class ClientBaseTest : public ClientBase, LogHandler, ConnectionListener
       m_jid.setUsername( "test" );
       m_jid.setServer( server );
       m_jid.setResource( "gloox" );
-      logInstance().registerLogHandler( LogLevelDebug, LogAreaAll, this );
+//       logInstance().registerLogHandler( LogLevelDebug, LogAreaAll, this );
       registerConnectionListener( this );
     };
     virtual const std::string username() const { return "abc"; };
     virtual void handleStartNode() { m_handleStartNodeCalled = true; };
     virtual bool handleNormalNode(gloox::Stanza*) { return true; };
     virtual void rosterFilled() {};
-    virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
+/*    virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
     {
       printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
-    };
-    virtual void onConnect() { printf( "connect\n" ); };
-    virtual void onDisconnect( ConnectionError e ) { printf( "disconnected: %d\n", e ); };
-    virtual void onResourceBindError( ResourceBindError error ) { printf( "res bind err: %d\n", error ); };
-    virtual void onSessionCreateError( SessionCreateError error ) { printf( "ses err: %d\n", error ); };
+    };*/
+    virtual void onConnect() { /*printf( "connect\n" );*/ };
+    virtual void onDisconnect( ConnectionError e ) { /*printf( "disconnected: %d\n", e );*/ };
+    virtual void onResourceBindError( ResourceBindError error ) { /*printf( "res bind err: %d\n", error );*/ };
+    virtual void onSessionCreateError( SessionCreateError error ) { /*printf( "ses err: %d\n", error );*/ };
     virtual bool onTLSConnect( const CertInfo& info ) { return false; };
     bool handleStartNodeCalled() const { return m_handleStartNodeCalled; };
     bool sidOK() const { return ( m_sid == "testsid" ); };
