@@ -103,7 +103,10 @@ namespace gloox
     char buf[JID_PORTION_SIZE + 1];
     toUTF8( buf, domain );
     int rc = idna_to_ascii_8z( buf, &p, (Idna_flags)0 );
-    return rc == IDNA_SUCCESS ? p : "";
+    std::string str( rc == IDNA_SUCCESS ? p : "" );
+    if ( rc == IDNA_SUCCESS )
+      delete p;
+    return str;
 #else
     return domain;
 #endif
