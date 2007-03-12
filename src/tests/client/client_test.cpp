@@ -55,7 +55,12 @@ class ConnectionImpl : public ConnectionBase
     ConnectionImpl( ConnectionDataHandler *cdh, int test )
       : ConnectionBase( cdh ), m_test( test ), m_pos( 0 ), m_run( true ) {};
     virtual ~ConnectionImpl() {};
-    virtual ConnectionError connect() { m_state = StateConnected; return ConnNoError; };
+    virtual ConnectionError connect()
+    {
+      m_state = StateConnected;
+      m_handler->handleConnect();
+      return ConnNoError;
+    };
     virtual ConnectionError recv( int /*timeout = -1*/ )
     {
       if( m_msgs[m_test][m_pos] )
@@ -77,7 +82,7 @@ class ConnectionImpl : public ConnectionBase
         ce = recv( 0 );
       return ce;
     };
-    virtual void disconnect() { m_run = false; };
+    virtual void disconnect() { m_run = false; m_state = StateDisconnected; };
 
   private:
     int m_test;
