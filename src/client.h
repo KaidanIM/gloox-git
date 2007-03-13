@@ -152,7 +152,7 @@ namespace gloox
        * Returns the current prepped resource.
        * @return The resource used to connect.
        */
-       const std::string& resource() const { return m_jid.resource(); }
+      const std::string& resource() const { return m_jid.resource(); }
 
       /**
        * Returns the current priority.
@@ -248,6 +248,7 @@ namespace gloox
       void negotiateCompression( StreamFeature method );
       void connected();
       virtual void rosterFilled();
+      virtual void cleanup();
 
       void init();
 
