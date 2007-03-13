@@ -20,17 +20,17 @@ class ClientTest : public Client, /*LogHandler,*/ ConnectionListener
 //       logInstance().registerLogHandler( LogLevelDebug, LogAreaAll, this );
       registerConnectionListener( this );
     };
-/*    virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
-    {
-      printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
-    };*/
+//     virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
+//     {
+//       printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
+//     };
     virtual void onConnect() { ++m_connected; disconnect(); };
     virtual void onDisconnect( ConnectionError e )
     {
       ++m_disconnected;
       m_disconnect = e;
       m_streamerror = streamError();
-       /*printf( "reason: %d\n", e );*/
+//       printf( "reason: %d\n", e );
     };
     virtual void onResourceBindError( ResourceBindError error ) { /*printf( "res bind err: %d\n", error );*/ };
     virtual void onSessionCreateError( SessionCreateError error ) { /*printf( "ses err: %d\n", error );*/ };
@@ -53,14 +53,15 @@ class ConnectionImpl : public ConnectionBase
 {
   public:
     ConnectionImpl( ConnectionDataHandler *cdh, int test )
-      : ConnectionBase( cdh ), m_test( test ), m_pos( 0 ), m_run( true ) {};
-    virtual ~ConnectionImpl() {};
+      : ConnectionBase( cdh ), m_test( test ), m_pos( 0 ), m_run( true ) {}
+    virtual ~ConnectionImpl() {}
     virtual ConnectionError connect()
     {
+      m_run = true;
       m_state = StateConnected;
       m_handler->handleConnect();
       return ConnNoError;
-    };
+    }
     virtual ConnectionError recv( int /*timeout = -1*/ )
     {
       if( m_msgs[m_test][m_pos] )
@@ -73,16 +74,22 @@ class ConnectionImpl : public ConnectionBase
         m_handler->handleDisconnect( ConnIoError );
         return ConnIoError;
       }
-    };
-    virtual bool send( const std::string& /*data*/ ) { return true; };
+    }
+    virtual bool send( const std::string& /*data*/ ) { return true; }
     virtual ConnectionError receive()
     {
       ConnectionError ce = ConnNoError;
       while( m_run && ce == ConnNoError )
         ce = recv( 0 );
       return ce;
-    };
-    virtual void disconnect() { m_run = false; m_state = StateDisconnected; };
+    }
+    virtual void disconnect() { m_run = false; }
+    virtual void cleanup()
+    {
+      m_state = StateDisconnected;
+      m_pos = 0;
+    }
+    virtual void getStatistics( int& /*totalIn*/, int& /*totalOut*/ ) {}
 
   private:
     int m_test;
@@ -113,7 +120,7 @@ const char* ConnectionImpl::m_msgs[4][9] =
       "</challenge>",
       "<success xmlns='urn:ietf:params:xml:ns:xmpp-sasl'/>",
       "<stream:stream from='jabber.cc' id='1o4p1gz2h0m1wvqutohs24d439nbv9zxx4nykm11' version='1.0'"
-        "xmlns='jabber:client' xmlns:stream='http://etherx.jabber.org/streams'/>"
+        "xmlns='jabber:client' xmlns:stream='http://etherx.jabber.org/streams'>"
       "<stream:features xmlns:stream='http://etherx.jabber.org/streams'>"
         "<bind xmlns='urn:ietf:params:xml:ns:xmpp-bind'/>"
         "<session xmlns='urn:ietf:params:xml:ns:xmpp-session'/>"
@@ -200,7 +207,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
   delete c;
   c = 0;
 
-  // -------
+//   -------
 //   printf( "-----------------------------\n" );
   name = "connect test: auth failure";
   c = new ClientTest( j, "b" );
@@ -251,6 +258,27 @@ int main( int /*argc*/, char* /*argv[]*/ )
   delete c;
   c = 0;
 
+  // -------
+  name = "re-connect test";
+  c = new ClientTest( j, "b" );
+  conn = new ConnectionImpl( c, 2 );
+  c->setConnectionImpl( conn );
+  c->setTls( false );
+  c->setCompression( false );
+  for( int i = 1; i <= 100; ++i )
+  {
+    c->connect();
+    if( c->connected() != 0 || c->disconnected() != i || c->disconnectReason() != ConnIoError )
+    {
+      ++fail;
+      printf( "test '%s' failed, %d, %d, %d\n", name.c_str(),
+              c->connected(), c->disconnected(),
+              c->disconnectReason() );
+      break;
+    }
+  }
+  delete c;
+  c = 0;
 
 
 
