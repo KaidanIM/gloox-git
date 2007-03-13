@@ -43,9 +43,9 @@ namespace gloox
       JID( const std::string& jid ) { setJID( jid ); }
 
       /**
-       * Virtual destructor.
+       * Destructor.
        */
-      virtual ~JID() {}
+      ~JID() {}
 
       /**
        * Sets the JID from a string.
@@ -57,13 +57,13 @@ namespace gloox
        * Returns the full (prepped) JID (user\@host/resource).
        * @return The full JID.
        */
-      std::string full() const;
+      const std::string& full() const { return m_full; }
 
       /**
        * Returns the bare (prepped) JID (user\@host).
        * @return The bare JID.
        */
-      std::string bare() const;
+      const std::string& bare() const { return m_bare; }
 
       /**
        * Creates and returns a JID from this JID's node and server parts.
@@ -101,7 +101,7 @@ namespace gloox
        * Returns the prepped username.
        * @return The current username.
        */
-      std::string username() const { return m_username; }
+      const std::string& username() const { return m_username; }
 
       /**
        * Returns the prepped server name.
@@ -131,19 +131,37 @@ namespace gloox
        * Compares two JIDs.
        * @param right The second JID.
        */
-      bool operator==( const JID& right ) const;
+      bool operator==( const JID& right ) const { return full() == right.full(); }
 
       /**
        * Compares two JIDs.
        * @param right The second JID.
        */
-      bool operator!=( const JID& right ) const { return ! ( *this == right ); }
+      bool operator!=( const JID& right ) const { return full() != right.full(); }
   
     private:
       std::string m_resource;
       std::string m_username;
       std::string m_server;
       std::string m_serverRaw;
+      std::string m_bare;
+      std::string m_full;
+
+      /**
+       * Utility function to rebuild both the bare and full jid.
+       */
+      void setStrings() { setBare(); setFull(); }
+
+      /**
+       * Utility function rebuilding the bare jid.
+       */
+      void setBare();
+
+      /**
+       * Utility function rebuilding the full jid.
+       * \note Do not use this function directly, instead use setStrings.
+       */
+      void setFull();
   };
 
 }
