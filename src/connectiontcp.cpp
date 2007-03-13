@@ -148,7 +148,7 @@ namespace gloox
 
     if( size <= 0 )
     {
-      ConnectionError error = size ? ConnIoError : ConnStreamClosed;
+      ConnectionError error = ( size ? ConnIoError : ConnStreamClosed );
       if( m_handler )
         m_handler->handleDisconnect( error );
       return error;
