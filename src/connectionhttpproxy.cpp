@@ -166,10 +166,11 @@ namespace gloox
       }
       os << "\r\n";
 
-      if( !m_connection->send( os.str() ) && m_handler )
+      if( !m_connection->send( os.str() ) )
       {
         m_state = StateDisconnected;
-        m_handler->handleDisconnect( ConnIoError );
+        if( m_handler )
+          m_handler->handleDisconnect( ConnIoError );
       }
     }
   }
