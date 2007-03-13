@@ -20,40 +20,47 @@ namespace gloox
 
   void JID::setJID( const std::string& jid )
   {
-    if( jid.empty() )
+    if ( jid.empty() )
+    {
+      m_bare = m_full = m_server = m_username = m_serverRaw = m_resource = "";
       return;
+    }
 
     size_t at = jid.find( "@", 0 );
     size_t slash = jid.find( "/", 0 );
 
-    if( ( at == std::string::npos ) && ( slash == std::string::npos ) )
+    if( at == std::string::npos )
     {
-      m_serverRaw = jid;
+      if ( slash == std::string::npos )
+      {
+        m_serverRaw = jid;
+      }
+      else
+      {
+        m_serverRaw = jid.substr( 0, slash );
+        m_resource = Prep::resourceprep( jid.substr( slash + 1 ) );
+      }
     }
-
-    if( ( at != std::string::npos ) && ( slash != std::string::npos ) )
+    else
     {
       m_username = Prep::nodeprep( jid.substr( 0, at ) );
-      m_serverRaw = jid.substr( at + 1, slash - at - 1 );
-      m_resource = Prep::resourceprep( jid.substr( slash + 1 ) );
-    }
-
-    if( ( at == std::string::npos ) && ( slash != std::string::npos ) )
-    {
-      m_serverRaw = jid.substr( 0, slash );
-      m_resource = Prep::resourceprep( jid.substr( slash + 1 ) );
-    }
-
-    if( ( at != std::string::npos ) && ( slash == std::string::npos ) )
-    {
-      m_username = Prep::nodeprep( jid.substr( 0, at ) );
-      m_serverRaw = jid.substr( at + 1 );
+      if( slash != std::string::npos )
+      {
+        m_serverRaw = jid.substr( at + 1, slash - at - 1 );
+        m_resource = Prep::resourceprep( jid.substr( slash + 1 ) );
+      }
+      else
+      {
+        m_serverRaw = jid.substr( at + 1 );
+      }
     }
     m_server = Prep::nameprep( m_serverRaw );
     if ( !m_server.empty() )
     {
       if ( !m_username.empty() )
         m_bare = m_full = m_username + '@';
+      else
+        m_bare = m_full = "";
       m_bare += m_server;
       m_full += m_server;
       if ( !m_resource.empty() )
