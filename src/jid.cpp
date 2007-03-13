@@ -55,32 +55,20 @@ namespace gloox
       }
     }
     m_server = Prep::nameprep( m_serverRaw );
-    if ( !m_server.empty() )
-    {
-      if ( !m_username.empty() )
-        m_bare = m_full = m_username + '@';
-      else
-        m_bare = m_full = "";
-      m_bare += m_server;
-      m_full += m_server;
-      if ( !m_resource.empty() )
-        m_full += '/' + m_resource;
-    }
+    setStrings();
   }
 
   void JID::setUsername( const std::string& username )
   {
     m_username = Prep::nodeprep( username );
-    setBare();
-    setFull();
+    setStrings();
   }
 
   void JID::setServer( const std::string& server )
   {
     m_serverRaw = server;
     m_server = Prep::nameprep( m_serverRaw );
-    setBare();
-    setFull();
+    setStrings();
   }
 
   void JID::setResource( const std::string& resource )
