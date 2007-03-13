@@ -399,6 +399,7 @@ namespace gloox
     ConnNoError,                    /**< Not really an error. Everything went just fine. */
     ConnStreamError,                /**< A stream error occured. The stream has been closed.
                                      * Use ClientBase::streamError() to find the reason. */
+    ConnStreamVersionError,         /**< The incoming stream's version is not supported */
     ConnStreamClosed,               /**< The stream has been closed (by the server). */
     ConnProxyAuthRequired,          /**< The HTTP proxy requires authentication. */
     ConnProxyAuthFailed,            /**< HTTP proxy authentication failed. */

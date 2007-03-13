@@ -202,7 +202,7 @@ namespace gloox
       {
         logInstance().log( LogLevelDebug, LogAreaClassClientbase, "This server is not XMPP-compliant"
             " (it does not send a 'version' attribute). Please fix it or try another one.\n" );
-        disconnect( ConnStreamError );
+        disconnect( ConnStreamVersionError );
       }
 
       m_sid = stanza->findAttribute( "id" );
@@ -261,7 +261,7 @@ namespace gloox
   void ClientBase::handleDecompressedData( const std::string& data )
   {
     if( m_parser )
-      m_parser->feed( data );
+      parse( data );
     else
       m_logInstance.log( LogLevelError, LogAreaClassClientbase, "Decompression finished, but chain broken" );
   }
@@ -279,7 +279,7 @@ namespace gloox
     if( m_compression && m_compressionActive )
       m_compression->decompress( data );
     else if( m_parser )
-      m_parser->feed( data );
+      parse( data );
     else
       m_logInstance.log( LogLevelError, LogAreaClassClientbase, "Decryption finished, but chain broken" );
   }
@@ -296,7 +296,6 @@ namespace gloox
       else
       {
         logInstance().log( LogLevelDebug, LogAreaClassClientbase, "connection encryption active" );
-
         header();
       }
     }
@@ -314,7 +313,7 @@ namespace gloox
     else if( m_compression && m_compressionActive )
       m_compression->decompress( data );
     else if( m_parser )
-      m_parser->feed( data );
+      parse( data );
     else
       m_logInstance.log( LogLevelError, LogAreaClassClientbase, "Received data, but chain broken" );
   }
@@ -344,6 +343,14 @@ namespace gloox
       m_connection->cleanup();
     }
     notifyOnDisconnect( reason );
+  }
+
+  void ClientBase::parse( const std::string& data )
+  {
+    if( m_parser && !m_parser->feed( data ) )
+    {
+      disconnect( ConnParseError );
+    }
   }
 
   void ClientBase::header()

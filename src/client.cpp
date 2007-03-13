@@ -228,18 +228,18 @@ namespace gloox
     }
     else if( ( stanza->name() == "challenge" ) && stanza->hasAttribute( "xmlns", XMLNS_STREAM_SASL ) )
     {
-      logInstance().log( LogLevelDebug, LogAreaClassClient, "processing sasl challenge" );
+      logInstance().log( LogLevelDebug, LogAreaClassClient, "processing SASL challenge" );
       processSASLChallenge( stanza->cdata() );
     }
     else if( ( stanza->name() == "failure" ) && stanza->hasAttribute( "xmlns", XMLNS_STREAM_SASL ) )
     {
-      logInstance().log( LogLevelError, LogAreaClassClient, "sasl authentication failed!" );
+      logInstance().log( LogLevelError, LogAreaClassClient, "SASL authentication failed!" );
       processSASLError( stanza );
       disconnect( ConnAuthenticationFailed );
     }
     else if( ( stanza->name() == "success" ) && stanza->hasAttribute( "xmlns", XMLNS_STREAM_SASL ) )
     {
-      logInstance().log( LogLevelDebug, LogAreaClassClient, "sasl auth successful" );
+      logInstance().log( LogLevelDebug, LogAreaClassClient, "SASL authentication successful" );
       setAuthed( true );
       header();
     }
