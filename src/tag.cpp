@@ -99,6 +99,80 @@ namespace gloox
     return xml;
   }
 
+  /**
+   * Holder struct describing the relation between a special characters and
+   * associated escaping sequence.
+   */
+  struct EscapeDesc {
+    char cchar;
+    std::string escape;
+  };
+
+  static const EscapeDesc escape_values[] = {
+    { '&' , "&amp;"  },
+    { '<' , "&lt;"   },
+    { '>' , "&gt;"   },
+    { '\'', "&apos;" },
+    { '"' , "&quot;" },
+    { '<' , "&#60;"  },
+    { '>' , "&#62;"  },
+    { '\'', "&#39;"  },
+    { '"' , "&#34;"  },
+    { '<' , "&#x3c;" },
+    { '>' , "&#x3e;" },
+    { '<' , "&#x3C;" },
+    { '>' , "&#x3E;" },
+    { '\'', "&#x27;" },
+    { '"' , "&#x22;" },
+    { '<' , "&#X3c;" },
+    { '>' , "&#X3e;" },
+    { '<' , "&#X3C;" },
+    { '>' , "&#X3E;" },
+    { '\'', "&#X27;" },
+    { '"' , "&#X22;" }
+  };
+
+  static const unsigned nb_escape = sizeof(escape_values)/sizeof(EscapeDesc);
+  static const unsigned escape_size = 5;
+
+  const std::string Tag::escape( const std::string& what )
+  {
+    std::string esc( what );
+    for( unsigned val, i = 0; i < esc.length(); ++i )
+    {
+      for( val = 0; val < escape_size; ++val )
+      {
+        if( esc[i] == escape_values[val].cchar )
+        {
+          esc.replace( i, 1, escape_values[val].escape );
+          i += escape_values[val].escape.length()-1;
+          break;
+        }
+      }
+    }
+    return esc;
+  }
+
+  /**
+   * \todo check if it would be possible to delay the packing of the string at the end of the treatment
+   */
+  const std::string Tag::relax( const std::string& what )
+  {
+    std::string esc( what );
+    for( unsigned val, i = 0; i < esc.length(); ++i )
+    {
+      for( val = 0; val < nb_escape; ++val )
+      {
+        if( !strncmp( esc.data()+i, escape_values[val].escape.data(), escape_values[val].escape.length() ) )
+        {
+          esc.replace( i, escape_values[val].escape.length(), std::string( 1, escape_values[val].cchar ) );
+          break;
+        }
+      }
+    }
+    return esc;
+  }
+
   void Tag::addAttribute( const std::string& name, const std::string& value )
   {
     if( !name.empty() && !value.empty() )
@@ -194,63 +268,6 @@ namespace gloox
     return it != m_children.end() ? (*it) : 0;
   }
 
-  const std::string Tag::replace( const std::string& what, const Duo& duo ) const
-  {
-    std::string esc = what;
-    Duo::const_iterator it = duo.begin();
-    for( ; it != duo.end(); ++it )
-    {
-      size_t lookHere = 0;
-      size_t foundHere = 0;
-      while( ( foundHere = esc.find( (*it).first, lookHere ) ) != std::string::npos )
-      {
-        esc.replace( foundHere, (*it).first.size(), (*it).second );
-        lookHere = foundHere + (*it).second.size();
-      }
-    }
-    return esc;
-  }
-
-  const std::string Tag::escape( const std::string& what ) const
-  {
-    Duo d;
-    d.push_back( duo( "&", "&amp;" ) );
-    d.push_back( duo( "<", "&lt;" ) );
-    d.push_back( duo( ">", "&gt;" ) );
-    d.push_back( duo( "'", "&apos;" ) );
-    d.push_back( duo( "\"", "&quot;" ) );
-
-    return replace( what, d );
-  }
-
-  const std::string Tag::relax( const std::string& what ) const
-  {
-    Duo d;
-    d.push_back( duo( "&#60;", "<" ) );
-    d.push_back( duo( "&#62;", ">" ) );
-    d.push_back( duo( "&#39;", "'" ) );
-    d.push_back( duo( "&#34;", "\"" ) );
-    d.push_back( duo( "&#x3c;", "<" ) );
-    d.push_back( duo( "&#x3e;", ">" ) );
-    d.push_back( duo( "&#x3C;", "<" ) );
-    d.push_back( duo( "&#x3E;", ">" ) );
-    d.push_back( duo( "&#x27;", "'" ) );
-    d.push_back( duo( "&#x22;", "\"" ) );
-    d.push_back( duo( "&#X3c;", "<" ) );
-    d.push_back( duo( "&#X3e;", ">" ) );
-    d.push_back( duo( "&#X3C;", "<" ) );
-    d.push_back( duo( "&#X3E;", ">" ) );
-    d.push_back( duo( "&#X27;", "'" ) );
-    d.push_back( duo( "&#X22;", "\"" ) );
-    d.push_back( duo( "&lt;", "<" ) );
-    d.push_back( duo( "&gt;", ">" ) );
-    d.push_back( duo( "&apos;", "'" ) );
-    d.push_back( duo( "&quot;", "\"" ) );
-    d.push_back( duo( "&amp;", "&" ) );
-
-    return replace( what, d );
-  }
-
   Tag* Tag::clone() const
   {
     Tag *t = new Tag( name(), cdata() );
@@ -285,7 +302,7 @@ namespace gloox
   Tag* Tag::findTag( const std::string& expression )
   {
     const Tag::TagList& l = findTagList( expression );
-    return ( ! l.empty() ) ? l.front() : 0;
+    return !l.empty() ? l.front() : 0;
   }
 
   Tag::TagList Tag::findTagList( const std::string& expression )
@@ -298,7 +315,7 @@ namespace gloox
                                                   && expression.substr( 1, 1 ) != "/" )
       return m_parent->findTagList( expression );
 
-    int len = 0;
+    unsigned len = 0;
     Tag *p = parse( expression, len );
 //     if( p )
 //       printf( "parsed tree: %s\n", p->xml().c_str() );
@@ -597,7 +614,7 @@ namespace gloox
     }
   }
 
-  Tag* Tag::parse( const std::string& expression, int& len, Tag::TokenType border )
+  Tag* Tag::parse( const std::string& expression, unsigned& len, Tag::TokenType border )
   {
     Tag *root = 0;
     Tag *current = root;
@@ -612,16 +629,14 @@ namespace gloox
     Tag::TokenType type  = XTElement;
 
     char c;
-    const int length = expression.length();
-
-    for( int sublen; len != length; ++len )
+    for( ; len < expression.length(); ++len )
     {
       switch( c = expression[len] )
       {
         case '/':
           closePreviousToken( &root, &current, type, token );
 
-          if( len<length-1 && expression[len+1] == '/' )
+          if( len < expression.length()-1 && expression[len+1] == '/' )
           {
 //             addToken( &root, &current, XTDoubleSlash, "//" );
             type = XTDoubleSlash;
@@ -637,22 +652,18 @@ namespace gloox
           closePreviousToken( &root, &current, type, token );
           ++len;
           return root;
-          break;
         case '[':
         {
           closePreviousToken( &root, &current, type, token );
-          sublen = 0;
-          Tag *t = parse( expression.substr( len + 1 ), sublen, XTRightBracket );
+          Tag *t = parse( expression, ++len, XTRightBracket );
           if( !addPredicate( &root, &current, t ) )
             delete t;
-          len += sublen;
           break;
         }
         case '(':
         {
           closePreviousToken( &root, &current, type, token );
-          sublen = 0;
-          Tag *t = parse( expression.substr( len + 1 ), sublen, XTRightParenthesis );
+          Tag *t = parse( expression, ++len, XTRightParenthesis );
           if( current )
           {
 //             printf( "added %s to %s\n", t->xml().c_str(), current->xml().c_str() );
@@ -664,14 +675,12 @@ namespace gloox
             root = t;
 //             printf( "made %s new root\n", t->xml().c_str() );
           }
-          len += sublen;
           break;
         }
         case ')':
           closePreviousToken( &root, &current, type, token );
           ++len;
           return root;
-          break;
         case '\'':
           type = XTLiteral;
           if( expression[len-1] == '\\' )
@@ -682,17 +691,18 @@ namespace gloox
           break;
         case '.':
           token += c;
-          if( token.size() != 1 )
-            break;
-          if( len < length-1 && expression[len+1] == '.' )
+          if( token.size() == 1 )
           {
-            type = XTDoubleDot;
-            ++len;
-            token += c;
-          }
-          else
-          {
-            type = XTDot;
+            if( len < expression.length()-1 && expression[len+1] == '.' )
+            {
+              type = XTDoubleDot;
+              ++len;
+              token += c;
+            }
+            else
+            {
+              type = XTDot;
+            }
           }
           break;
         case '*':
@@ -716,10 +726,8 @@ namespace gloox
           Tag::TokenType ttype = getType( s );
           if( ttype <= border )
             return root;
-          sublen = 0;
-          Tag *t = parse( expression.substr( len + 1 ), sublen, ttype );
+          Tag *t = parse( expression, ++len, ttype );
           addOperator( &root, &current, t, ttype, s );
-          len += sublen;
           break;
         }
         default:

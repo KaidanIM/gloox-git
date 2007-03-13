@@ -150,11 +150,25 @@ int main( int /*argc*/, char* /*argv[]*/ )
     printf( "test '%s' failed\n", name.c_str() );
   }
   delete t;
-  delete c;
   t = 0;
-  c = 0;
 
+  //-------
+  name = "escape";
+  if ( Tag::escape( "&<>'\"" ) != "&amp;&lt;&gt;&apos;&quot;" )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+  }
 
+  //-------
+  name = "relax";
+  if ( Tag::relax( "&amp;&lt;&gt;&apos;&quot;&#60;&#62;&#39;&#34;""&#x3c;&#x3e;"
+                   "&#x3C;&#x3E;&#x27;&#x22;&#X3c;&#x3e;&#X3C;&#X3E;&#X27;&#X22;" )
+        != "&<>'\"<>'\"<><>'\"<><>'\"" )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+  }
 
 
 

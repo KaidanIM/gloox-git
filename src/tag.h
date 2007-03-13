@@ -294,6 +294,9 @@ namespace gloox
        */
       bool operator!=( const Tag &right ) const { return !( *this == right ); }
 
+      static const std::string escape( const std::string& what );
+      static const std::string relax( const std::string& what );
+
     protected:
       /**
        * XPath error conditions.
@@ -348,35 +351,30 @@ namespace gloox
         XTDoubleSlash
       };
 
-      struct duo
-      {
-        duo( const std::string& f, const std::string& s ) : first( f ), second( s ) {}
-        std::string first;
-        std::string second;
-      };
-      typedef std::list<duo> Duo;
 
-      const std::string escape( const std::string& what ) const;
-      const std::string relax( const std::string& what ) const;
-      const std::string replace( const std::string& what, const Duo& duo ) const;
-      TagList findChildren( const TagList& list, const std::string& name ) const;
-      Tag* parse( const std::string& expression, int& len, TokenType border = XTNone );
+      Tag* parse( const std::string& expression, unsigned& len, TokenType border = XTNone );
+
+      void closePreviousToken( Tag**, Tag**, TokenType&, std::string& );
       void addToken( Tag **root, Tag **current, TokenType type, const std::string& token );
       void addOperator( Tag **root, Tag **current, Tag *arg, TokenType type,
                         const std::string& token );
       bool addPredicate( Tag **root, Tag **current, Tag *token );
-      TokenType getType( const std::string& c );
-      bool isWhitespace( const char c );
-      bool isNumber();
-      void add( Tag::TagList& one, const Tag::TagList& two );
+
+      TagList findChildren( const TagList& list, const std::string& name ) const;
       Tag::TagList evaluateTagList( Tag *token );
       Tag::TagList evaluateUnion( Tag *token );
+      Tag::TagList allDescendants();
+  
+      static TokenType getType( const std::string& c );
+
+      static bool isWhitespace( const char c );
+      bool isNumber();
+
       bool evaluateBoolean( Tag *token );
       bool evaluatePredicate( Tag *token ) { return evaluateBoolean( token ); }
       bool evaluateEquals( Tag *token );
-      Tag::TagList allDescendants();
-
-      void closePreviousToken( Tag**, Tag**, TokenType&, std::string& );
+      
+      static void add( Tag::TagList& one, const Tag::TagList& two );
 
   };
 
