@@ -154,6 +154,7 @@ namespace gloox
 
       /**
        * Utility function rebuilding the bare jid.
+       * \note Do not use this function directly, instead use setStrings.
        */
       void setBare();
 
