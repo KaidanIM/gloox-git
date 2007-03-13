@@ -98,7 +98,12 @@ int main( int /*argc*/, char* /*argv[]*/ )
   name = "clear jid";
   j = JID( "abc@serVer.dom/rEsOurCe" );
   j.setJID( "" );
-  if( !j.empty() )
+  if( !j.empty() || !j.username().empty()
+                 || !j.server().empty()
+                 || !j.serverRaw().empty()
+                 || !j.resource().empty()
+                 || !j.bare().empty()
+                 || !j.full().empty() )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
