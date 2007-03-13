@@ -196,7 +196,7 @@ namespace gloox
       else
       {
         logInstance().log( LogLevelError, LogAreaClassClient,
-                           "the server doesn't support any auth mechanisms we know about" );
+                           "fallback: the server doesn't support any auth mechanisms we know about" );
         disconnect( ConnNoSupportedAuth );
       }
     }
