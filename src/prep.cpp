@@ -31,13 +31,10 @@ namespace gloox
       return std::string();
 
     std::string preppedString;
-    char* p = stringprep_locale_to_utf8( s.c_str() );
-    if( p )
-    {
-      if ( stringprep( p, JID_PORTION_SIZE, (Stringprep_profile_flags)0, profile ) == STRINGPREP_OK )
-        preppedString = p;
-      free( p );
-    }
+    char* p = strndup( s.c_str(), s.length() );
+    if ( stringprep( p, JID_PORTION_SIZE, (Stringprep_profile_flags)0, profile ) == STRINGPREP_OK )
+      preppedString = p;
+    free( p );
     return preppedString;
   }
 #endif
@@ -76,16 +73,11 @@ namespace gloox
 
 #ifdef HAVE_LIBIDN
     std::string preppedString;
-    char *p = stringprep_locale_to_utf8( domain.c_str() );
-    if( p )
+    char* prepped;
+    if ( idna_to_ascii_8z( domain.c_str(), &prepped, (Idna_flags)0 ) == IDNA_SUCCESS )
     {
-      char * prepped;
-      if ( idna_to_ascii_8z( p, &prepped, (Idna_flags)0 ) == IDNA_SUCCESS )
-      {
-        preppedString = prepped;
-        delete prepped;
-      }
-      delete p;
+      preppedString = prepped;
+      free( prepped );
     }
     return preppedString;
 #else

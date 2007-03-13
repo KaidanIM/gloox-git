@@ -321,6 +321,7 @@ src/tests/jid/Makefile
 src/tests/md5/Makefile
 src/tests/oob/Makefile
 src/tests/parser/Makefile
+src/tests/prep/Makefile
 src/tests/sha/Makefile
 src/tests/stanza/Makefile
 src/tests/stanzaextensionfactory/Makefile
