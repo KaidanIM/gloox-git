@@ -94,6 +94,16 @@ int main( int /*argc*/, char* /*argv[]*/ )
     printf( "test '%s' failed\n", name.c_str() );
   }
 
+  // -------
+  name = "clear jid";
+  j = JID( "abc@serVer.dom/rEsOurCe" );
+  j.setJID( "" );
+  if( !j.empty() )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+
 
 
 
