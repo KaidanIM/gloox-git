@@ -49,58 +49,53 @@ namespace gloox
       m_username = Prep::nodeprep( jid.substr( 0, at ) );
       m_serverRaw = jid.substr( at + 1 );
     }
-
     m_server = Prep::nameprep( m_serverRaw );
+    if ( !m_server.empty() )
+    {
+      if ( !m_username.empty() )
+        m_bare = m_full = m_username + '@';
+      m_bare += m_server;
+      m_full += m_server;
+      if ( !m_resource.empty() )
+        m_full += '/' + m_resource;
+    }
   }
 
   void JID::setUsername( const std::string& username )
   {
     m_username = Prep::nodeprep( username );
+    setBare();
+    setFull();
   }
 
   void JID::setServer( const std::string& server )
   {
     m_serverRaw = server;
     m_server = Prep::nameprep( m_serverRaw );
+    setBare();
+    setFull();
   }
 
   void JID::setResource( const std::string& resource )
   {
     m_resource = Prep::resourceprep( resource );
+    setFull();
   }
 
-  std::string JID::full() const
+  void JID::setFull()
   {
-    if( m_server.empty() )
-      return "";
-    else if( m_username.empty() )
-      if( m_resource.empty() )
-        return m_server;
-      else
-        return ( m_server + "/" + m_resource );
+    m_full = bare();
+    if( !m_resource.empty() )
+      m_full += '/' + m_resource;
+  }
+
+  void JID::setBare()
+  {
+    if( !m_username.empty() )
+      m_bare = m_username + '@';
     else
-      if( m_resource.empty() )
-        return ( m_username + "@" + m_server );
-      else
-        return ( m_username + "@" + m_server + "/" + m_resource );
+      m_bare = "";
+    m_bare += m_server;
   }
-
-  std::string JID::bare() const
-  {
-    if( m_server.empty() )
-      return "";
-    else if( m_username.empty() )
-      return m_server;
-    else
-      return m_username + "@" + m_server;
-  }
-
-  bool JID::operator==( const JID& right ) const
-  {
-    return ( ( m_resource == right.m_resource )
-        && ( m_server == right.m_server )
-        && ( m_username == right.m_username ) );
-  }
-
 
 }
