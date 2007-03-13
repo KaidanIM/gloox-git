@@ -49,13 +49,7 @@ namespace gloox
       /**
        * Virtual Destructor.
        */
-      virtual ~Component();
-
-      // reimplemented from ClientBase
-      virtual const std::string username() const { return ""; };
-
-      // reimplemented from ClientBase
-      virtual const std::string password() const { return ""; };
+      virtual ~Component() {}
 
       /**
        * Disconnects from the server.
@@ -65,12 +59,13 @@ namespace gloox
     protected:
       virtual void handleStartNode();
       virtual bool handleNormalNode( Stanza *stanza );
-      virtual bool checkStreamVersion( const std::string& /*version*/ ) { return true; };
-      virtual void disconnect( ConnectionError reason );
+      virtual bool checkStreamVersion( const std::string& /*version*/ ) { return true; }
+      virtual void disconnect( ConnectionError reason = ConnUserDisconnected )
+        { ClientBase::disconnect( reason ); }
 
     private:
       // reimplemented from ClientBase
-      virtual void rosterFilled() {};
+      virtual void rosterFilled() {}
 
   };
 

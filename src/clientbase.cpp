@@ -176,7 +176,7 @@ namespace gloox
 
     m_block = block;
     ConnectionError ret = m_connection->connect();
-    return ret == ConnNoError ? true : false;
+    return ret == ConnNoError;
   }
 
   void ClientBase::handleTag( Tag *tag )
@@ -577,11 +577,6 @@ namespace gloox
       m_authError = SaslTemporaryAuthFailure;
   }
 
-  JID& ClientBase::jid()
-  {
-    return m_authzid.empty() ? m_jid : m_authzid;
-  }
-
   void ClientBase::send( Tag *tag )
   {
     if( !tag )
@@ -694,7 +689,7 @@ namespace gloox
       minor = atoi( version.substr( dot ).c_str() );
     }
 
-    return ( myMajor < major ) ? false : true;
+    return myMajor >= major;
   }
 
   LogSink& ClientBase::logInstance()
