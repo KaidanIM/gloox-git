@@ -153,22 +153,42 @@ namespace gloox
     return esc;
   }
 
-  /**
-   * \todo check if it would be possible to delay the packing of the string at the end of the treatment
-   */
   const std::string Tag::relax( const std::string& what )
   {
     std::string esc( what );
-    for( unsigned val, i = 0; i < esc.length(); ++i )
+    const unsigned l=what.length();
+    unsigned p=0, i=0;
+
+    for( unsigned val; i < l; ++i )
     {
       for( val = 0; val < nb_escape; ++val )
       {
         if( !strncmp( esc.data()+i, escape_values[val].escape.data(), escape_values[val].escape.length() ) )
         {
-          esc.replace( i, escape_values[val].escape.length(), std::string( 1, escape_values[val].cchar ) );
+          esc[i] = escape_values[val].cchar;
+          for( p=1; p < escape_values[val].escape.length(); ++p )
+             esc[i+p] = 0;
+          i += p-1;
           break;
         }
       }
+    }
+    if( p != i )
+    {
+      i=0;
+      for( p = 0; p < l; ++p)
+      {
+        if( esc[p] != 0 )
+        {
+          if( esc[i] == 0 )
+          {
+            esc[i] = esc[p];
+            esc[i+1] = 0;
+          }
+          ++i;
+        }
+      }
+      esc.resize(i);
     }
     return esc;
   }
