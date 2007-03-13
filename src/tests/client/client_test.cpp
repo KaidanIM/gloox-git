@@ -207,7 +207,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
   delete c;
   c = 0;
 
-//   -------
+  // -------
 //   printf( "-----------------------------\n" );
   name = "connect test: auth failure";
   c = new ClientTest( j, "b" );
@@ -242,6 +242,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
   c = 0;
 
 //   printf( "-----------------------------\n" );
+  // -------
   name = "connect test: xml error";
   c = new ClientTest( j, "b" );
   conn = new ConnectionImpl( c, 3 );
@@ -259,7 +260,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
   c = 0;
 
   // -------
-  name = "re-connect test";
+  name = "re-connect test 1";
   c = new ClientTest( j, "b" );
   conn = new ConnectionImpl( c, 2 );
   c->setConnectionImpl( conn );
@@ -279,6 +280,29 @@ int main( int /*argc*/, char* /*argv[]*/ )
   }
   delete c;
   c = 0;
+
+  // -------
+  name = "re-connect test 2";
+  c = new ClientTest( j, "b" );
+  conn = new ConnectionImpl( c, 0 );
+  c->setConnectionImpl( conn );
+  c->setTls( false );
+  c->setCompression( false );
+  for( int i = 1; i <= 100; ++i )
+  {
+    c->connect();
+    if( c->connected() != i || c->disconnected() != i || c->disconnectReason() != ConnUserDisconnected )
+    {
+      ++fail;
+      printf( "test '%s' failed, %d, %d, %d\n", name.c_str(),
+              c->connected(), c->disconnected(),
+              c->disconnectReason() );
+      break;
+    }
+  }
+  delete c;
+  c = 0;
+
 
 
 
