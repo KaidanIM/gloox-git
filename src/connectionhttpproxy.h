@@ -85,6 +85,9 @@ namespace gloox
       // reimplemented from ConnectionBase
       virtual void cleanup();
 
+      // reimplemented from ConnectionBase
+      virtual void getStatistics( int &totalIn, int &totalOut );
+
       // reimplemented from ConnectionDataHandler
       virtual void handleReceivedData( const std::string& data );
 
@@ -93,13 +96,6 @@ namespace gloox
 
       // reimplemented from ConnectionDataHandler
       virtual void handleDisconnect( ConnectionError reason );
-
-      /**
-       * Returns current connection statistics.
-       * @param totalIn The total number of bytes received.
-       * @param totalOut The total number of bytes sent.
-       */
-      void getStatistics( int &totalIn, int &totalOut );
 
       /**
        * Sets the XMPP server to proxy to.

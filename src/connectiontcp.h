@@ -81,6 +81,9 @@ namespace gloox
       // reimplemented from ConnectionBase
       virtual void cleanup();
 
+      // reimplemented from ConnectionBase
+      virtual void getStatistics( int &totalIn, int &totalOut );
+
       /**
        * Gives access to the raw socket of this connection. Use it wisely. You can
        * select()/poll() it and use ConnectionTCP::recv( -1 ) to fetch the data.
@@ -95,13 +98,6 @@ namespace gloox
        * @param socket The existing socket.
        */
       void setSocket( int socket ) { m_socket = socket; };
-
-      /**
-       * Returns current connection statistics.
-       * @param totalIn The total number of bytes received.
-       * @param totalOut The total number of bytes sent.
-       */
-      void getStatistics( int &totalIn, int &totalOut );
 
     private:
       ConnectionTCP &operator= ( const ConnectionTCP & );

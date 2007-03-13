@@ -97,6 +97,17 @@ namespace gloox
       m_connection->cleanup();
   }
 
+  void ConnectionHTTPProxy::getStatistics( int &totalIn, int &totalOut )
+  {
+    if( m_connection )
+      m_connection->getStatistics( totalIn, totalOut );
+    else
+    {
+      totalIn = 0;
+      totalOut = 0;
+    }
+  }
+
   void ConnectionHTTPProxy::handleReceivedData( const std::string& data )
   {
     if( !m_handler )
