@@ -80,7 +80,7 @@ namespace gloox
     q->addAttribute( "xmlns", XMLNS_REGISTER );
 
     if( fields & FieldUsername )
-      new Tag( q, "username", Prep::nodeprep( values.username ) );
+      new Tag( q, "username", prep::nodeprep( values.username ) );
     if( fields & FieldNick )
       new Tag( q, "nick", values.nick );
     if( fields & FieldPassword )
@@ -211,10 +211,7 @@ namespace gloox
 
   bool Registration::handleIqID( Stanza *stanza, int context )
   {
-    if( stanza->subtype() != StanzaIqResult )
-      return false;
-
-    if( !m_registrationHandler )
+    if( stanza->subtype() != StanzaIqResult || !m_registrationHandler )
       return false;
 
     switch( context )

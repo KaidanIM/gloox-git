@@ -34,7 +34,7 @@ namespace gloox
                                             const std::string& server, int port )
     : ConnectionBase( cdh ), m_connection( connection ),
       m_logInstance( logInstance ),
-      m_server( Prep::idna( server ) ), m_port( port ),
+      m_server( prep::idna( server ) ), m_port( port ),
       m_totalBytesIn( 0 ), m_totalBytesOut( 0 )
   {
     if( m_connection )

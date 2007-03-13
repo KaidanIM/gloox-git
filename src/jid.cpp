@@ -38,42 +38,42 @@ namespace gloox
       else
       {
         m_serverRaw = jid.substr( 0, slash );
-        m_resource = Prep::resourceprep( jid.substr( slash + 1 ) );
+        m_resource = prep::resourceprep( jid.substr( slash + 1 ) );
       }
     }
     else
     {
-      m_username = Prep::nodeprep( jid.substr( 0, at ) );
+      m_username = prep::nodeprep( jid.substr( 0, at ) );
       if( slash != std::string::npos )
       {
         m_serverRaw = jid.substr( at + 1, slash - at - 1 );
-        m_resource = Prep::resourceprep( jid.substr( slash + 1 ) );
+        m_resource = prep::resourceprep( jid.substr( slash + 1 ) );
       }
       else
       {
         m_serverRaw = jid.substr( at + 1 );
       }
     }
-    m_server = Prep::nameprep( m_serverRaw );
+    m_server = prep::nameprep( m_serverRaw );
     setStrings();
   }
 
   void JID::setUsername( const std::string& username )
   {
-    m_username = Prep::nodeprep( username );
+    m_username = prep::nodeprep( username );
     setStrings();
   }
 
   void JID::setServer( const std::string& server )
   {
     m_serverRaw = server;
-    m_server = Prep::nameprep( m_serverRaw );
+    m_server = prep::nameprep( m_serverRaw );
     setStrings();
   }
 
   void JID::setResource( const std::string& resource )
   {
-    m_resource = Prep::resourceprep( resource );
+    m_resource = prep::resourceprep( resource );
     setFull();
   }
 
