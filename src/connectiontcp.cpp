@@ -47,7 +47,7 @@ namespace gloox
                                 const std::string& server, int port )
     : ConnectionBase( 0 ),
       m_logInstance( logInstance ),
-      m_buf( 0 ), m_server( Prep::idna( server ) ), m_port( port ), m_socket( -1 ),
+      m_buf( 0 ), m_server( prep::idna( server ) ), m_port( port ), m_socket( -1 ),
       m_totalBytesIn( 0 ), m_totalBytesOut( 0 ),
       m_bufsize( 1024 ), m_cancel( true )
   {
@@ -58,7 +58,7 @@ namespace gloox
                                 const std::string& server, int port )
     : ConnectionBase( cdh ),
       m_logInstance( logInstance ),
-      m_buf( 0 ), m_server( Prep::idna( server ) ), m_port( port ), m_socket( -1 ),
+      m_buf( 0 ), m_server( prep::idna( server ) ), m_port( port ), m_socket( -1 ),
       m_totalBytesIn( 0 ), m_totalBytesOut( 0 ),
       m_bufsize( 1024 ), m_cancel( true )
   {

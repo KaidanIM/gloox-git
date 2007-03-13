@@ -47,7 +47,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.2
    */
-  namespace Prep
+  namespace prep
   {
       /**
        * This function applies the Nodeprep profile of Stringprep to a string.
