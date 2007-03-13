@@ -14,6 +14,14 @@
 
 #include <string>
 
+#ifdef WIN32
+# include "../config.h.win"
+#elif defined( _WIN32_WCE )
+# include "../config.h.win"
+#else
+# include "config.h"
+#endif
+
 #ifdef HAVE_LIBIDN
 # include <stringprep.h>
 # include <idna.h>
@@ -77,11 +85,11 @@ namespace gloox
 
       std::string preppedString;
       char* prepped;
-      if ( idna_to_ascii_8z( domain.c_str(), &prepped, (Idna_flags)0 ) == IDNA_SUCCESS )
-      {
+      int rc = idna_to_ascii_8z( domain.c_str(), &prepped, (Idna_flags)0 );
+      if ( rc == IDNA_SUCCESS )
         preppedString = prepped;
+      if( rc != IDNA_MALLOC_ERROR )
         free( prepped );
-      }
       return preppedString;
 #else
       return domain;

@@ -18,18 +18,6 @@
 
 #include <string>
 
-#ifdef WIN32
-# include "../config.h.win"
-#elif defined( _WIN32_WCE )
-# include "../config.h.win"
-#else
-# include "config.h"
-#endif
-
-#ifdef HAVE_LIBIDN
-# include <stringprep.h>
-#endif
-
 namespace gloox
 {
 
@@ -82,16 +70,6 @@ namespace gloox
        */
       std::string idna( const std::string& domain );
 
-#ifdef HAVE_LIBIDN
-      /**
-       * This function applies a profile of StringPrep to a std::string.
-       * @param s The string to apply the profile to.
-       * @param profile The Stringprep profile to apply.
-       * @return Returns the prepped string. In case of an error an empty string
-       * is returned. If LibIDN is not available the string is returned unchanged.
-       */
-      std::string prepare( const std::string& s, const Stringprep_profile* profile );
-#endif
   }
 
 }
