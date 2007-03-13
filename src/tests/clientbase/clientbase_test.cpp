@@ -23,7 +23,6 @@ class ClientBaseTest : public ClientBase, /*LogHandler,*/ ConnectionListener
 //       logInstance().registerLogHandler( LogLevelDebug, LogAreaAll, this );
       registerConnectionListener( this );
     };
-    virtual const std::string username() const { return "abc"; };
     virtual void handleStartNode() { m_handleStartNodeCalled = true; };
     virtual bool handleNormalNode(gloox::Stanza*) { return true; };
     virtual void rosterFilled() {};

@@ -118,7 +118,7 @@ namespace gloox
        * Reimplement this function to provide a username for connection purposes.
        * @return The username.
        */
-      virtual const std::string username() const = 0;
+      virtual const std::string& username() const { return m_jid.username(); }
 
       /**
        * Returns the current Jabber ID. If an authentication ID has been set (using setAuthzid())
@@ -127,35 +127,35 @@ namespace gloox
        * @note If you change the server part of the JID, the server of the connection is not synced.
        * You have to do that manually using @ref setServer().
        */
-      JID& jid();
+      const JID& jid() { return m_authzid.empty() ? m_jid : m_authzid; }
 
       /**
        * Switches usage of SASL on/off. Default: on. SASL should only be disabled if there are
        * problems with using it.
        * @param sasl Whether to switch SASL usage on or off.
        */
-      void setSasl( bool sasl ) { m_sasl = sasl; };
+      void setSasl( bool sasl ) { m_sasl = sasl; }
 
       /**
        * Switches usage of TLS on/off (if available). Default: on if available. TLS should only be
        * disabled if there are problems with using it.
        * @param tls Whether to switch TLS usage on or off.
        */
-      void setTls( bool tls ) { m_tls = tls; };
+      void setTls( bool tls ) { m_tls = tls; }
 
       /**
        * Switches usage of Stream Compression on/off (if available). Default: on if available. Stream
        * Compression should only be disabled if there are problems with using it.
        * @param compression Whether to switch Stream Compression usage on or off.
        */
-      void setCompression( bool compression ) { m_compress = compression; };
+      void setCompression( bool compression ) { m_compress = compression; }
 
       /**
        * Sets the port to connect to. This is not necessary if either the default port (5222) is used
        * or SRV records exist which will be resolved.
        * @param port The port to connect to.
        */
-      void setPort( int port ) { m_port = port; };
+      void setPort( int port ) { m_port = port; }
 
       /**
        * Sets the XMPP server to connect to.
@@ -163,56 +163,56 @@ namespace gloox
        * @note If you change the server, the server part of the JID is not synced. You have to do that
        * manually using @ref jid() and @ref JID::setServer().
        */
-      void setServer( const std::string &server ) { m_server = server; };
+      void setServer( const std::string &server ) { m_server = server; }
 
       /**
        * Sets the password to use to connect to the XMPP server.
        * @param password The password to use for authentication.
        */
-      void setPassword( const std::string &password ) { m_password = password; };
+      void setPassword( const std::string &password ) { m_password = password; }
 
       /**
        * Returns the current prepped server.
        * @return The server used to connect.
        */
-      const std::string& server() const { return m_server; };
+      const std::string& server() const { return m_server; }
 
       /**
        * Returns whether SASL is currently enabled (not necessarily used).
        * @return The current SASL status.
        */
-      bool sasl() const { return m_sasl; };
+      bool sasl() const { return m_sasl; }
 
       /**
        * Returns whether TLS is currently enabled (not necessarily used).
        * @return The current TLS status.
        */
-      bool tls() const { return m_tls; };
+      bool tls() const { return m_tls; }
 
       /**
        * Returns whether Stream Compression is currently enabled (not necessarily used).
        * @return The current Stream Compression status.
        */
-      bool compression() const { return m_compress; };
+      bool compression() const { return m_compress; }
 
       /**
        * Returns the port. The default of -1 means that the actual port will be looked up using
        * SRV records, or the XMPP default port of 5222 will be used.
        * @return The port used to connect.
        */
-      int port() const { return m_port; };
+      int port() const { return m_port; }
 
       /**
        * Returns the current password.
        * @return The password used to connect.
        */
-      virtual const std::string password() const { return m_password; };
+      virtual const std::string& password() const { return m_password; }
 
       /**
        * This function gives access to the @c Disco object.
        * @return A pointer to the Disco object.
        */
-      virtual Disco* disco() const { return m_disco; };
+      virtual Disco* disco() const { return m_disco; }
 
       /**
        * Creates a string which is unique in the current instance and
@@ -234,7 +234,7 @@ namespace gloox
        * Returns whether authentication has taken place and was successful.
        * @return @b True if authentication has been carried out @b and was successful, @b false otherwise.
        */
-      bool authed() const { return m_authed; };
+      bool authed() const { return m_authed; }
 
       /**
        * Returns the current connection status.
@@ -246,7 +246,7 @@ namespace gloox
        * Retrieves the value of the xml:lang attribute of the initial stream.
        * Default is 'en', i.e. if not changed by a call to @ref setXmlLang().
        */
-      const std::string& xmlLang() const { return m_xmllang; };
+      const std::string& xmlLang() const { return m_xmllang; }
 
       /**
        * Sets the value for the xml:lang attribute of the initial stream.
@@ -254,7 +254,7 @@ namespace gloox
        * section 2.12 of the XML specification and RFC 3066.
        * Default is 'en'.
        */
-      void setXmlLang( const std::string& xmllang ) { m_xmllang = xmllang; };
+      void setXmlLang( const std::string& xmllang ) { m_xmllang = xmllang; }
 
       /**
        * Gives access to the raw socket of the current connection. Use it wisely. You
@@ -345,7 +345,7 @@ namespace gloox
        * @param authzid The JID to authorize as. Only the bare JID is used.
        * @since 0.9
        */
-      void setAuthzid( const JID& authzid ) { m_authzid = authzid; };
+      void setAuthzid( const JID& authzid ) { m_authzid = authzid; }
 
       /**
        * Use this function to limit SASL mechanisms gloox can use. By default, all
@@ -357,7 +357,7 @@ namespace gloox
        * @param mechanisms Bitwise ORed @ref SaslMechanism.
        * @since 0.9
        */
-      void setSASLMechanisms( int mechanisms ) { m_availableSaslMechs = mechanisms; };
+      void setSASLMechanisms( int mechanisms ) { m_availableSaslMechs = mechanisms; }
 
       /**
        * Registers @c cl as object that receives connection notifications.
@@ -552,7 +552,7 @@ namespace gloox
        * @return The StreamError.
        * @note The return value is only meaningful when called from ConnectionListener::onDisconnect().
        */
-      StreamError streamError() const { return m_streamError; };
+      StreamError streamError() const { return m_streamError; }
 
       /**
        * Returns the text of a stream error for the given language if available.
@@ -578,14 +578,14 @@ namespace gloox
        * @return The application-specific error element of a stream error. 0 if no respective element was
        * found or no error occured.
        */
-      const Tag* streamErrorAppCondition() const { return m_streamErrorAppCondition; };
+      const Tag* streamErrorAppCondition() const { return m_streamErrorAppCondition; }
 
       /**
        * Use this function to retrieve the type of the authentication error after it occurs and you
        * received a ConnectionError of type @b ConnAuthenticationFailed from the ConnectionListener.
        * @return The type of the authentication, if any, @b AuthErrorUndefined otherwise.
        */
-      AuthenticationError authError() const { return m_authError; };
+      AuthenticationError authError() const { return m_authError; }
 
       /**
        * Returns a StatisticsStruct containing byte and stanza counts for the current

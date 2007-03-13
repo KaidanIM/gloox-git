@@ -30,10 +30,6 @@ namespace gloox
     m_disco->setIdentity( "component", "generic" );
   }
 
-  Component::~Component()
-  {
-  }
-
   void Component::handleStartNode()
   {
     if( m_sid.empty() )
@@ -51,25 +47,13 @@ namespace gloox
 
   bool Component::handleNormalNode( Stanza *stanza )
   {
-    if( stanza->name() == "handshake" )
-    {
-      notifyStreamEvent( StreamEventFinished );
-      notifyOnConnect();
-    }
-    else
+    if( stanza->name() != "handshake" )
       return false;
 
+    notifyStreamEvent( StreamEventFinished );
+    notifyOnConnect();
+
     return true;
-  }
-
-  void Component::disconnect()
-  {
-    disconnect( ConnUserDisconnected );
-  }
-
-  void Component::disconnect( ConnectionError reason )
-  {
-    ClientBase::disconnect( reason );
   }
 
 }

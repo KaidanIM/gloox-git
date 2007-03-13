@@ -149,22 +149,16 @@ namespace gloox
       void bindResource();
 
       /**
-       * Returns the current prepped username.
-       * @return The username used to connect.
-       */
-      virtual const std::string username() const { return m_jid.username(); };
-
-      /**
        * Returns the current prepped resource.
        * @return The resource used to connect.
        */
-      std::string const resource() const { return m_jid.resource(); };
+       const std::string& resource() const { return m_jid.resource(); }
 
       /**
        * Returns the current priority.
        * @return The priority of the current resource.
        */
-      int priority() const { return m_priority; };
+      int priority() const { return m_priority; }
 
       /**
        * Sets the username to use to connect to the XMPP server.
@@ -176,7 +170,7 @@ namespace gloox
        * Sets the resource to use to connect to the XMPP server.
        * @param resource The resource to use to log into the server.
        */
-      void setResource( const std::string &resource ) { m_jid.setResource( resource ); };
+      void setResource( const std::string &resource ) { m_jid.setResource( resource ); }
 
       /**
        * Use this function to set the entity's presence.
@@ -214,7 +208,7 @@ namespace gloox
        * @param force Whether to force non-SASL auth. Default @b true.
        * @deprecated Please update the server to properly support SASL instead.
        */
-      GLOOX_DEPRECATED void setForceNonSasl( bool force = true ) { m_forceNonSasl = force; };
+      GLOOX_DEPRECATED void setForceNonSasl( bool force = true ) { m_forceNonSasl = force; }
 
       /**
        * Disables the automatic roster management.
