@@ -3,7 +3,7 @@
 ##
 
 SUBDIRS = base64 client clientbase dataform dataformfield delayeddelivery gpgencrypted gpgsigned \
-	  jid md5 oob parser sha stanza stanzaextensionfactory tag vcardupdate xdelayeddelivery xpath
+	  jid md5 oob parser prep sha stanza stanzaextensionfactory tag vcardupdate xdelayeddelivery xpath
 
 check: test
 
