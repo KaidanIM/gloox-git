@@ -121,6 +121,8 @@ namespace gloox
     m_stats.presenceStanzasReceived = 0;
     m_stats.encryption = false;
     m_stats.compression = false;
+
+    cleanup();
   }
 
   ClientBase::~ClientBase()
@@ -328,8 +330,9 @@ namespace gloox
 
   void ClientBase::handleDisconnect( ConnectionError reason )
   {
-     m_connection->cleanup();
-     notifyOnDisconnect( reason );
+    if( m_connection )
+      m_connection->cleanup();
+    notifyOnDisconnect( reason );
   }
 
   void ClientBase::disconnect( ConnectionError reason )
@@ -1042,7 +1045,7 @@ namespace gloox
       (*it)->onDisconnect( e );
     }
 
-    cleanup();
+    init();
   }
 
   bool ClientBase::notifyOnTLSConnect( const CertInfo& info )
@@ -1245,11 +1248,6 @@ namespace gloox
       if( (*it).tag == tag->name() && tag->hasAttribute( "xmlns", (*it).xmlns ) )
         (*it).th->handleTag( tag );
     }
-  }
-
-  void ClientBase::cleanup()
-  {
-    init();
   }
 
   CompressionBase* ClientBase::getDefaultCompression()
