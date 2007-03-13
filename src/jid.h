@@ -138,7 +138,7 @@ namespace gloox
        * @param right The second JID.
        */
       bool operator!=( const JID& right ) const { return full() != right.full(); }
-  
+
     private:
       std::string m_resource;
       std::string m_username;
