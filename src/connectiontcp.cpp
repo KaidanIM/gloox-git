@@ -156,6 +156,7 @@ namespace gloox
 
     m_buf[size] = '\0';
 
+    m_totalBytesIn += size;
     if( m_handler )
       m_handler->handleReceivedData( std::string( m_buf, size ) );
 
@@ -188,10 +189,17 @@ namespace gloox
 #endif
     }
 
+    m_totalBytesOut += data.length();
     if( sent == -1 && m_handler )
       m_handler->handleDisconnect( ConnStreamClosed );
 
     return sent != -1;
+  }
+
+  void ConnectionTCP::getStatistics( int &totalIn, int &totalOut )
+  {
+    totalIn = m_totalBytesIn;
+    totalOut = m_totalBytesOut;
   }
 
   void ConnectionTCP::cleanup()

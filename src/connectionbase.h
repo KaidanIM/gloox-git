@@ -105,6 +105,13 @@ namespace gloox
        */
       void registerConnectionDataHandler( ConnectionDataHandler *cdh ) { m_handler = cdh; }
 
+      /**
+       * Returns current connection statistics.
+       * @param totalIn The total number of bytes received.
+       * @param totalOut The total number of bytes sent.
+       */
+      virtual void getStatistics( int &totalIn, int &totalOut ) = 0;
+
     protected:
       ConnectionDataHandler *m_handler;
       ConnectionState m_state;
