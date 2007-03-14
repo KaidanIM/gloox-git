@@ -17,7 +17,7 @@ static void printTime ( const char * testName, struct timeval tv1, struct timeva
 {
   t = tv2.tv_sec - tv1.tv_sec;
   t +=  ( tv2.tv_usec - tv1.tv_usec ) / divider;
-  printf( "%s: %.02f seconds (%.02f/s)\n", testName, t, num / t );
+  printf( "%s: %.02f seconds (%.00f/s)\n", testName, t, num / t );
 }
 
 static Tag * newTag ( const char *str, bool incoming = false )
@@ -110,17 +110,8 @@ int main( int /*argc*/, char* /*argv[]*/ )
   gettimeofday( &tv2, 0 );
   printTime ("clone/delete", tv1, tv2);
 
-  // -----------------------------------------------------------------------
 
-  tag = newSimpleTag();
 
-  gettimeofday( &tv1, 0 );
-  for( int i = 0; i < num; ++i )
-  {
-    delete tag->clone();
-  }
-  gettimeofday( &tv2, 0 );
-  printTime ("clone/delete", tv1, tv2);
 
 
   delete tag;
