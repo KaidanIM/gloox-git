@@ -40,7 +40,6 @@ namespace gloox
       /**
        * Constructor.
        * @param parent The @ref ClientBase which is used to authenticate.
-       * @param sid The session ID given by the server with the stream opening tag.
        */
       NonSaslAuth( Client *parent );
 
