@@ -170,7 +170,7 @@ namespace gloox
    */
   const std::string Tag::relax( std::string esc )
   {
-    const unsigned int l = what.length();
+    const unsigned int l = esc.length();
     unsigned int p = 0;
     unsigned int i = 0;
 
