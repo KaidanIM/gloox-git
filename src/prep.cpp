@@ -43,7 +43,7 @@ namespace gloox
 
       std::string preppedString;
       char* p = strndup( s.c_str(), s.length() );
-      if ( stringprep( p, JID_PORTION_SIZE, (Stringprep_profile_flags)0, profile ) == STRINGPREP_OK )
+      if( stringprep( p, JID_PORTION_SIZE, (Stringprep_profile_flags)0, profile ) == STRINGPREP_OK )
         preppedString = p;
       free( p );
       return preppedString;
@@ -86,7 +86,7 @@ namespace gloox
       std::string preppedString;
       char* prepped;
       int rc = idna_to_ascii_8z( domain.c_str(), &prepped, (Idna_flags)0 );
-      if ( rc == IDNA_SUCCESS )
+      if( rc == IDNA_SUCCESS )
         preppedString = prepped;
       if( rc != IDNA_MALLOC_ERROR )
         free( prepped );

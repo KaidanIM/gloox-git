@@ -156,10 +156,11 @@ namespace gloox
   const std::string Tag::relax( const std::string& what )
   {
     std::string esc( what );
-    const unsigned l=what.length();
-    unsigned p=0, i=0;
+    const unsigned l = what.length();
+    unsigned int p = 0;
+    unsigned int i = 0;
 
-    for( unsigned val; i < l; ++i )
+    for( unsigned int val; i < l; ++i )
     {
       for( val = 0; val < nb_escape; ++val )
       {
@@ -175,8 +176,8 @@ namespace gloox
     }
     if( p != i )
     {
-      i=0;
-      for( p = 0; p < l; ++p)
+      i = 0;
+      for( p = 0; p < l; ++p )
       {
         if( esc[p] != 0 )
         {
@@ -188,7 +189,7 @@ namespace gloox
           ++i;
         }
       }
-      esc.resize(i);
+      esc.resize( i );
     }
     return esc;
   }

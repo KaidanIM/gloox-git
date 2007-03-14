@@ -45,6 +45,7 @@ namespace gloox
 
   OpenSSL::~OpenSSL()
   {
+    free( m_buf );
   }
 
   bool OpenSSL::encrypt( const std::string& data )
@@ -98,6 +99,7 @@ namespace gloox
 
   void OpenSSL::cleanup()
   {
+    SSL_CTX_free( m_ctx );
     SSL_shutdown( m_ssl );
     SSL_free( m_ssl );
     BIO_free( m_nbio );
