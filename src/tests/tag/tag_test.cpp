@@ -170,6 +170,44 @@ int main( int /*argc*/, char* /*argv[]*/ )
     printf( "test '%s' failed\n", name.c_str() );
   }
 
+  //-------
+  name = "xml() 1";
+  t = new Tag( "hello" );
+  t->addAttribute( "test", "bacd" );
+  t->addChild( new Tag( "test" ) );
+  t->addChild( new Tag( "test" ) );
+  t->addChild( new Tag( "test" ) );
+  t->addChild( new Tag( "test" ) );
+  if( t->xml() != "<hello test='bacd'><test/><test/><test/><test/></hello>" )
+  {
+    ++fail;
+    printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+  }
+  delete t;
+  t = 0;
+
+  //-------
+  name = "xml() 2 -- known failure";
+  t = new Tag( "hello" );
+  t->addAttribute( "test", "bacd" );
+  t->addAttribute( "foo", "bar" );
+  t->addChild( new Tag( "test" ) );
+  t->addChild( new Tag( "test" ) );
+  t->addChild( new Tag( "test" ) );
+  t->addChild( new Tag( "test" ) );
+  if( t->xml() != "<hello test='bacd' foo='bar'><test/><test/><test/><test/></hello>" )
+  {
+    ++fail;
+    printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+  }
+  delete t;
+  t = 0;
+
+
+
+
+
+
 
 
 
