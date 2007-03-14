@@ -968,7 +968,7 @@ printf( "maximumMessage: %ld\n", m_streamSizes.cbMaximumMessage );
     tv.tv_sec = timeout / 1000;
     tv.tv_usec = timeout % 1000;
 
-    if( select( m_socket + 1, &fds, 0, 0, timeout == -1 ? 0 : &tv ) >= 0 )
+    if( select( m_socket + 1, &fds, 0, 0, timeout == -1 ? 0 : &tv ) > 0 )
     {
       return FD_ISSET( m_socket, &fds ) ? true : false;
     }
@@ -1020,6 +1020,8 @@ printf( "maximumMessage: %ld\n", m_streamSizes.cbMaximumMessage );
     else if( size == 0 )
     {
       // connection closed
+      m_secure = false;
+      cleanup();
       return ConnUserDisconnected;
     }
 
