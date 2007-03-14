@@ -56,7 +56,8 @@ namespace gloox
 
   bool Tag::operator==( const Tag &right ) const
   {
-    if( m_name != right.m_name || m_attribs != right.m_attribs || m_children.size() != right.m_children.size() )
+    if( m_name != right.m_name || m_attribs != right.m_attribs
+         || m_children.size() != right.m_children.size() )
       return false;
 
     TagList::const_iterator it = m_children.begin();
@@ -295,7 +296,8 @@ namespace gloox
   bool Tag::hasChildWithCData( const std::string& name, const std::string& cdata ) const
   {
     TagList::const_iterator it = m_children.begin();
-    while( it != m_children.end() && ( (*it)->name() != name || ( !cdata.empty() && (*it)->cdata() != cdata ) ) )
+    while( it != m_children.end() && ( (*it)->name() != name
+            || ( !cdata.empty() && (*it)->cdata() != cdata ) ) )
       ++it;
     return it != m_children.end();
   }
@@ -310,8 +312,9 @@ namespace gloox
 
   Tag* Tag::clone() const
   {
-    Tag *t = new Tag( name(), cdata() );
+    Tag *t = new Tag( name(), cdata(), m_incoming );
     t->m_attribs = m_attribs;
+    t->m_type = m_type;
 
     Tag::TagList::const_iterator it = m_children.begin();
     for( ; it != m_children.end(); ++it )
