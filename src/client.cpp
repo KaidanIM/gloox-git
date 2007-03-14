@@ -489,8 +489,8 @@ namespace gloox
   void Client::nonSaslLogin()
   {
     if( !m_auth )
-      m_auth = new NonSaslAuth( this, m_sid );
-    m_auth->doAuth();
+      m_auth = new NonSaslAuth( this );
+    m_auth->doAuth( m_sid );
   }
 
   void Client::sendPresence()

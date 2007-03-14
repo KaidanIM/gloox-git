@@ -40,9 +40,8 @@ namespace gloox
       /**
        * Constructor.
        * @param parent The @ref ClientBase which is used to authenticate.
-       * @param sid The session ID given by the server with the stream opening tag.
        */
-      NonSaslAuth( Client *parent, const std::string& sid );
+      NonSaslAuth( Client *parent );
 
       /**
        * Virtual Destructor.
@@ -52,8 +51,9 @@ namespace gloox
       /**
        * Starts authentication by querying the server for the required authentication fields.
        * Digest authentication is preferred over plain text passwords.
+       * @param sid The session ID given by the server with the stream opening tag.
        */
-      void doAuth();
+      void doAuth( const std::string& sid );
 
       // reimplemented from IqHandler
       virtual bool handleIq( Stanza *stanza );
