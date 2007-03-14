@@ -79,12 +79,14 @@ namespace gloox
       return 0;
     }
 
-    int ret;
+    int ret = 0;
+    std::string::size_type sum = 0;
     do
     {
-      ret = gnutls_record_send( m_session, data.c_str(), data.length() );
+      ret = gnutls_record_send( m_session, data.c_str() + sum, data.length() - sum );
+      sum += ret;
     }
-    while( ( ret == GNUTLS_E_AGAIN ) || ( ret == GNUTLS_E_INTERRUPTED ) );
+    while( ( ret == GNUTLS_E_AGAIN ) || ( ret == GNUTLS_E_INTERRUPTED ) || sum < data.length() );
     return true;
   }
 
