@@ -172,7 +172,7 @@ namespace gloox
   const std::string Tag::relax( const std::string& what )
   {
     std::string esc( what );
-    const unsigned l = what.length();
+    const unsigned int l = what.length();
     unsigned int p = 0;
     unsigned int i = 0;
 
@@ -183,7 +183,8 @@ namespace gloox
 
       for( val = 0; val < nb_escape; ++val )
       {
-        if( !strncmp( esc.data()+i+1, escape_values[val].escape.data()+1, escape_values[val].escape.length()-1 ) )
+        if( !strncmp( esc.data()+i+1, escape_values[val].escape.data()+1,
+                      escape_values[val].escape.length()-1 ) )
         {
           esc[i] = escape_values[val].cchar;
           for( p=1; p < escape_values[val].escape.length(); ++p )
