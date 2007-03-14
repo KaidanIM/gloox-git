@@ -21,8 +21,8 @@
 namespace gloox
 {
 
-  NonSaslAuth::NonSaslAuth( Client *parent, const std::string& sid )
-    : m_parent( parent ), m_sid( sid )
+  NonSaslAuth::NonSaslAuth( Client *parent )
+    : m_parent( parent )
   {
     if( m_parent )
       m_parent->registerIqHandler( this, XMLNS_AUTH );
@@ -34,8 +34,9 @@ namespace gloox
       m_parent->removeIqHandler( XMLNS_AUTH );
   }
 
-  void NonSaslAuth::doAuth()
+  void NonSaslAuth::doAuth( const std::string& sid )
   {
+    m_sid = sid;
     std::string id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
