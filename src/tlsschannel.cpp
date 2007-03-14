@@ -10,6 +10,8 @@
 
 #include "tlsschannel.h"
 
+#ifdef HAVE_WINTLS
+
 #include <stdio.h> // just for debugging output
 #include <iostream>
 
@@ -526,3 +528,5 @@ void SChannel::setCACerts( const StringList& cacerts ) {}
         }
     }
 }
+
+#endif // HAVE_WINTLS
