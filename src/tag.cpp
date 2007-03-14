@@ -71,13 +71,18 @@ namespace gloox
 
   const std::string Tag::xml() const
   {
-    std::string xml = "<" + escape( m_name );
-    if( m_attribs.size() )
+    std::string xml = "<";
+    xml += escape( m_name );
+    if( !m_attribs.empty() )
     {
       StringMap::const_iterator it_a = m_attribs.begin();
       for( ; it_a != m_attribs.end(); ++it_a )
       {
-        xml += " " + escape( (*it_a).first ) + "='" + escape( (*it_a).second ) + "'";
+        xml += " ";
+        xml += escape( (*it_a).first );
+        xml += "='";
+        xml += escape( (*it_a).second );
+        xml += "'";
       }
     }
 
@@ -91,17 +96,24 @@ namespace gloox
       {
         xml += (*it_c)->xml();
       }
-      xml += "</" + escape( m_name ) + ">";
+      xml += "</";
+      xml += escape( m_name );
+      xml += ">";
     }
     else if( !m_cdata.empty() )
-      xml += ">" + escape( m_cdata ) + "</" + escape( m_name ) + ">";
+    {
+      xml += ">";
+      xml += escape( m_cdata );
+      xml += "</";
+      xml += escape( m_name );
+      xml += ">";
+    }
 
     return xml;
   }
 
   /**
-   * Holder struct describing the relation between a special characters and
-   * associated escaping sequence.
+   * Holder struct describing an escaping sequence.
    */
   struct EscapeDesc {
     char cchar;
@@ -153,6 +165,10 @@ namespace gloox
     return esc;
   }
 
+  /*
+   * When a sequence is found, do not repack the string directly, just set
+   * the new symbol and mark the rest for deletation (0).
+   */
   const std::string Tag::relax( const std::string& what )
   {
     std::string esc( what );
@@ -162,13 +178,16 @@ namespace gloox
 
     for( unsigned int val; i < l; ++i )
     {
+      if( esc[i] != '&' )
+        continue;
+
       for( val = 0; val < nb_escape; ++val )
       {
-        if( !strncmp( esc.data()+i, escape_values[val].escape.data(), escape_values[val].escape.length() ) )
+        if( !strncmp( esc.data()+i+1, escape_values[val].escape.data()+1, escape_values[val].escape.length()-1 ) )
         {
           esc[i] = escape_values[val].cchar;
           for( p=1; p < escape_values[val].escape.length(); ++p )
-             esc[i+p] = 0;
+            esc[i+p] = 0;
           i += p-1;
           break;
         }
