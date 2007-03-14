@@ -225,10 +225,9 @@ namespace gloox
     {
 #ifdef _WIN32_WCE
       int len = 4+(int)log10(value)+1;
-      char *tmp = new char[len];
+      char tmp[len];
       sprintf( tmp, "%d", value );
-      std::string ret;
-      ret.assign( tmp, len );
+      std::string ret( tmp, len );
       m_attribs[m_incoming ? relax( name ) : name] = ret;
 #else
       std::ostringstream oss;
