@@ -294,8 +294,8 @@ namespace gloox
        */
       bool operator!=( const Tag &right ) const { return !( *this == right ); }
 
-      static const std::string escape( const std::string& what );
-      static const std::string relax( const std::string& what );
+      static const std::string escape( std::string what );
+      static const std::string relax( std::string what );
 
     protected:
       /**

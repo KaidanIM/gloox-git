@@ -93,15 +93,14 @@ namespace gloox
     m_zinflate.next_in = (Bytef*)in;
 
     int ret = Z_OK;
-    std::string result, tmp;
+    std::string result;
     do
     {
       m_zinflate.avail_out = CHUNK;
       m_zinflate.next_out = (Bytef*)out;
 
       ret = inflate( &m_zinflate, Z_SYNC_FLUSH );
-      tmp.assign( out, CHUNK - m_zinflate.avail_out );
-      result += tmp;
+      result.append( out, CHUNK - m_zinflate.avail_out );
     } while( m_zinflate.avail_out == 0 );
 
     delete[] out;

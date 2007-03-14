@@ -8,7 +8,7 @@ using namespace gloox;
 #include <sys/time.h>
 
 static double divider = 1000000;
-static int num = 100000;
+static int num = 10000;
 static double t;
 
 static Tag *tag;
@@ -17,33 +17,32 @@ static void printTime ( const char * testName, struct timeval tv1, struct timeva
 {
   t = tv2.tv_sec - tv1.tv_sec;
   t +=  ( tv2.tv_usec - tv1.tv_usec ) / divider;
-  printf( "%d %s took %.02f seconds\n", num, testName, t );
-  printf( "that's %.02f per sec\n", num / t );
+  printf( "%s: %.02f seconds (%.02f/s)\n", testName, t, num / t );
 }
 
-static Tag * newTag ( const char *str )
+static Tag * newTag ( const char *str, bool incoming = false )
 {
-  Tag *aaa = new Tag( str );
-  Tag *bbb = new Tag( aaa, str ); bbb->addAttribute( str, str );
-  Tag *ccc = new Tag( aaa, str ); ccc->addAttribute( str, str );
-  Tag *ddd = new Tag( ccc, str ); ddd->addAttribute( str, str );
-  Tag *eee = new Tag( ccc, str ); eee->addAttribute( str, str );
-  Tag *fff = new Tag( aaa, str ); fff->addAttribute( str, str );
-  Tag *ggg = new Tag( fff, str ); ggg->addAttribute( str, str );
-  Tag *hhh = new Tag( bbb, str ); hhh->addAttribute( str, str );
-  Tag *iii = new Tag( bbb, str ); iii->addAttribute( str, str );
-  Tag *jjj = new Tag( hhh, str ); jjj->addAttribute( str, str );
+  Tag *aaa = new Tag( str, str, incoming );
+  Tag *bbb = new Tag( aaa, str, str, incoming ); bbb->addAttribute( str, str );
+  Tag *ccc = new Tag( aaa, str, str, incoming ); ccc->addAttribute( str, str );
+  Tag *ddd = new Tag( ccc, str, str, incoming ); ddd->addAttribute( str, str );
+  Tag *eee = new Tag( ccc, str, str, incoming ); eee->addAttribute( str, str );
+  Tag *fff = new Tag( aaa, str, str, incoming ); fff->addAttribute( str, str );
+  Tag *ggg = new Tag( fff, str, str, incoming ); ggg->addAttribute( str, str );
+  Tag *hhh = new Tag( bbb, str, str, incoming ); hhh->addAttribute( str, str );
+  Tag *iii = new Tag( bbb, str, str, incoming ); iii->addAttribute( str, str );
+  Tag *jjj = new Tag( hhh, str, str, incoming ); jjj->addAttribute( str, str );
   return aaa;
 }
 
-static const char * simpleString  = "azzaaaggaaaaqs dfqsdadddaads dfqsd faa";
-static const char * escapedString = ">aa< < <w<w wx.'c <sdz& %)(>><<<<.\"''";
-static const char * escapableString = "&amp;&lt;&gt;&apos;&quot;&#60;&#62;&#39;&#34;&#x3c;&#x3e;&#x3C;"
+static const char * simpleString  = "azzaaaggaaaaqs dfqsdadddaads dfqsd faaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+static const char * escapableString = ">aa< < <w<w wx.'c <sdz& %)(>><<<<.\"''";
+static const char * escapedString = "&amp;&lt;&gt;&apos;&quot;&#60;&#62;&#39;&#34;&#x3c;&#x3e;&#x3C;"
                                       "&#x3E;&#x27;&#x22;&#X3c;&#X3e;&#X3C;&#X3E;&#X27;&#X22;";
 
-static inline Tag * newSimpleTag ()  { newTag(  simpleString ); }
-static inline Tag * newEscapedTag () { newTag( escapedString ); }
-static inline Tag * newEscapableTag () { newTag( escapableString ); }
+static inline Tag * newSimpleTag ()    { return newTag( simpleString ); }
+static inline Tag * newEscapedTag ()   { return newTag( escapedString ); }
+static inline Tag * newEscapableTag () { return newTag( escapableString, true ); }
 
 
 int main( int /*argc*/, char* /*argv[]*/ )
@@ -51,61 +50,55 @@ int main( int /*argc*/, char* /*argv[]*/ )
   struct timeval tv1;
   struct timeval tv2;
 
-  printf( "=== Testing without escaping ===\n" );
-
-  gettimeofday( &tv1, 0 );
-  for( int i = 0; i < num; ++i )
-  {
-    tag = newSimpleTag();
-    delete tag;
-  }
-  gettimeofday( &tv2, 0 );
-  printTime ("create/delete", tv1, tv2);
-
-  // -----------------------------------------------------------------------
+  printf( "Testing %d...\n", num );
 
   tag = newSimpleTag();
-
   gettimeofday( &tv1, 0 );
   for( int i = 0; i < num; ++i )
   {
     tag->xml();
   }
   gettimeofday( &tv2, 0 );
-  printTime ("xml()", tv1, tv2);
+  delete tag;
+  printTime ("non escaping xml", tv1, tv2);
+
+
+  // ---------------------------------------------------------------------
+
+  tag = newEscapableTag();
+  gettimeofday( &tv1, 0 );
+  for( int i = 0; i < num; ++i )
+  {
+    tag->xml();
+  }
+  gettimeofday( &tv2, 0 );
+  delete tag;
+  printTime ("escaping xml", tv1, tv2);
+
+
+  // ---------------------------------------------------------------------
+
+  gettimeofday( &tv1, 0 );
+  for( int i = 0; i < num; ++i )
+  {
+    delete newSimpleTag();
+  }
+  gettimeofday( &tv2, 0 );
+  printTime ("non relaxing create/delete", tv1, tv2);
 
 
   // -----------------------------------------------------------------------
-
-  printf( "=== Testing with escaping ===\n" );
-
   
   gettimeofday( &tv1, 0 );
   for( int i = 0; i < num; ++i )
   {
-    tag = newEscapableTag();
-    delete tag;
+    delete newEscapedTag();
   }
   gettimeofday( &tv2, 0 );
-  printTime ("create/delete", tv1, tv2);
+  printTime ("relaxing create/delete", tv1, tv2);
 
 
-  // ---------------------------------------------------------------------
-
-  tag = newEscapedTag();
-
-  gettimeofday( &tv1, 0 );
-  for( int i = 0; i < num; ++i )
-  {
-    tag->xml();
-  }
-  gettimeofday( &tv2, 0 );
-  printTime ("xml()", tv1, tv2);
-
-
-  // ---------------------------------------------------------------------
-
-  printf( "=== Testing escaping independent functions ===\n" );
+  // -----------------------------------------------------------------------
 
   tag = newSimpleTag();
 
@@ -117,6 +110,17 @@ int main( int /*argc*/, char* /*argv[]*/ )
   gettimeofday( &tv2, 0 );
   printTime ("clone/delete", tv1, tv2);
 
+  // -----------------------------------------------------------------------
+
+  tag = newSimpleTag();
+
+  gettimeofday( &tv1, 0 );
+  for( int i = 0; i < num; ++i )
+  {
+    delete tag->clone();
+  }
+  gettimeofday( &tv2, 0 );
+  printTime ("clone/delete", tv1, tv2);
 
 
   delete tag;
