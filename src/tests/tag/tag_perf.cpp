@@ -35,8 +35,8 @@ static Tag * newTag ( const char *str, bool incoming = false )
   return aaa;
 }
 
-static const char * simpleString  = "azzaaaggaaaaqs dfqsdadddaads dfqsd faaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-static const char * escapableString = ">aa< < <w<w wx.'c <sdz& %)(>><<<<.\"''";
+static const char * simpleString    = "azzaaaggaaaaqs dfqsdadddaads ";
+static const char * escapableString = ">aa< < <w< w<<<<.' <.<& %)(>>";
 static const char * escapedString = "&amp;&lt;&gt;&apos;&quot;&#60;&#62;&#39;&#34;&#x3c;&#x3e;&#x3C;"
                                       "&#x3E;&#x27;&#x22;&#X3c;&#X3e;&#X3C;&#X3E;&#X27;&#X22;";
 
