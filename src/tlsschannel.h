@@ -22,7 +22,7 @@
 #define SECURITY_WIN32
 #include <windows.h>
 #include <security.h>
-#include <sspi.h>
+#include <schnlsp.h>
 
 namespace gloox
 {
@@ -64,26 +64,26 @@ namespace gloox
       virtual void setClientCert( const std::string& clientKey, const std::string& clientCerts );
 
     private:
-      bool handshakeLoop();
+        CredHandle      m_cred_handle;
+        CtxtHandle		m_context;
 
-      SecurityFunctionTableA *m_securityFunc;
-      CredHandle m_credentials;
-      CtxtHandle m_context;
-      SecBufferDesc m_imessage;
-      SecBufferDesc m_omessage;
-      SecBuffer m_ibuffers[4];
-      SecBuffer m_obuffers[4];
-      SecPkgContext_StreamSizes m_streamSizes;
-      HMODULE m_lib;
+        SecPkgContext_StreamSizes m_sizes;
 
-      char *m_messageOffset;
-      char *m_iBuffer;
-      char *m_oBuffer;
-      int m_bufferSize;
-      int m_bufferOffset;
-      int m_sspiFlags;
+        size_t          m_header_max;
+        size_t          m_message_max;
+        size_t          m_trailer_max;
 
-  };
+        std::string     m_buffer;
+
+        void handshake_stage(const std::string &data);
+        void set_sizes();
+
+        bool validateCert();
+        void setCertinfos();
+
+        // windows error outputs
+        void print_error(int errorcode, const char *place = 0);
+    };
 
 }
 
