@@ -147,9 +147,8 @@ namespace gloox
   static const unsigned nb_escape = sizeof(escape_values)/sizeof(EscapeDesc);
   static const unsigned escape_size = 5;
 
-  const std::string Tag::escape( const std::string& what )
+  const std::string Tag::escape( std::string esc )
   {
-    std::string esc( what );
     for( unsigned val, i = 0; i < esc.length(); ++i )
     {
       for( val = 0; val < escape_size; ++val )
@@ -169,9 +168,8 @@ namespace gloox
    * When a sequence is found, do not repack the string directly, just set
    * the new symbol and mark the rest for deletation (0).
    */
-  const std::string Tag::relax( const std::string& what )
+  const std::string Tag::relax( std::string esc )
   {
-    std::string esc( what );
     const unsigned int l = what.length();
     unsigned int p = 0;
     unsigned int i = 0;
@@ -183,8 +181,9 @@ namespace gloox
 
       for( val = 0; val < nb_escape; ++val )
       {
-        if( !strncmp( esc.data()+i+1, escape_values[val].escape.data()+1,
-                      escape_values[val].escape.length()-1 ) )
+        if( ( i + escape_values[val].escape.length() <= l )
+        && !strncmp( esc.data()+i+1, escape_values[val].escape.data()+1,
+                                     escape_values[val].escape.length()-1 ) )
         {
           esc[i] = escape_values[val].cchar;
           for( p=1; p < escape_values[val].escape.length(); ++p )
@@ -194,7 +193,7 @@ namespace gloox
         }
       }
     }
-    if( p != i )
+    if( p )
     {
       i = 0;
       for( p = 0; p < l; ++p )
