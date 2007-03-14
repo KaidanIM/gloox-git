@@ -224,11 +224,12 @@ namespace gloox
     if( !name.empty() )
     {
 #ifdef _WIN32_WCE
-      int len = 4+(int)log10(value)+1;
-      char tmp[len];
+      const int len = 4+(int)log10(value)+1;
+      char *tmp = new char[len];
       sprintf( tmp, "%d", value );
       std::string ret( tmp, len );
       m_attribs[m_incoming ? relax( name ) : name] = ret;
+      delete tmp;
 #else
       std::ostringstream oss;
       oss << value;
