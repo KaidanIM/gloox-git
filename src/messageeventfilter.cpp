@@ -93,30 +93,26 @@ namespace gloox
       x->addAttribute( "xmlns", XMLNS_X_EVENT );
       new Tag( x, "id", m_lastID );
 
-      bool used = false;
+      bool used = true;
       switch( event )
       {
         case MessageEventOffline:
           new Tag( x, "offline" );
           m_requestedEvents ^= event;
-          used = true;
           break;
         case MessageEventDelivered:
           new Tag( x, "delivered" );
           m_requestedEvents ^= event;
-          used = true;
           break;
         case MessageEventDisplayed:
           new Tag( x, "displayed" );
           m_requestedEvents ^= event;
-          used = true;
           break;
         case MessageEventComposing:
           if( m_lastSent != MessageEventComposing )
-          {
             new Tag( x, "composing" );
-            used = true;
-          }
+          else
+            used = false;
           break;
         case MessageEventCancel:
           break;
