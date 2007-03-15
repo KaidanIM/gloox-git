@@ -117,8 +117,8 @@ namespace gloox
    * Holder struct describing an escaping sequence.
    */
   struct EscapeDesc {
-    char cchar;
-    std::string escape;
+    char cchar;                     /**< Char to be escaped. */
+    std::string escape;             /**< Escaped char. */
   };
 
   static const EscapeDesc escape_values[] = {

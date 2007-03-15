@@ -189,7 +189,7 @@
  * means the call blocks until any data was received, which is then parsed automatically.
  *
  * As an alternative to periodic polling you can use
- * @link gloox::ClientBase::fileDescriptor() ClientBase::fileDescriptor() @endlink to get a hold
+ * @link gloox::ClientBase::socket() ClientBase::socket() @endlink to get a hold
  * of the raw file descriptor used for the connection. You can then use select() on it and use
  * @link gloox::ClientBase::recv() ClientBase::recv() @endlink when select indicates that data is
  * available. You should @b not recv() any data from the file descriptor directly as there is no
@@ -302,68 +302,67 @@
  */
 namespace gloox
 {
-  extern const std::string XMLNS_CLIENT;
-  extern const std::string XMLNS_COMPONENT_ACCEPT;
-  extern const std::string XMLNS_COMPONENT_CONNECT;
+  extern const std::string XMLNS_CLIENT;              /**< Client namespace (RFC 3920)*/
+  extern const std::string XMLNS_COMPONENT_ACCEPT;    /**< Component Accept namespace (XEP-0114) */
+  extern const std::string XMLNS_COMPONENT_CONNECT;   /**< Component Connect namespace (XEP-0114) */
 
-  extern const std::string XMLNS_DISCO_INFO;
-  extern const std::string XMLNS_DISCO_ITEMS;
-  extern const std::string XMLNS_ADHOC_COMMANDS;
-  extern const std::string XMLNS_COMPRESSION;
-  extern const std::string XMLNS_OFFLINE;
-  extern const std::string XMLNS_CHAT_STATES;
-  extern const std::string XMLNS_AMP;
-  extern const std::string XMLNS_IBB;
-  extern const std::string XMLNS_FEATURE_NEG;
-  extern const std::string XMLNS_CHATNEG;
-  extern const std::string XMLNS_XHTML_IM;
-  extern const std::string XMLNS_DELAY;
-  extern const std::string XMLNS_ROSTER;
-  extern const std::string XMLNS_VERSION;
-  extern const std::string XMLNS_REGISTER;
-  extern const std::string XMLNS_PRIVACY;
-  extern const std::string XMLNS_AUTH;
-  extern const std::string XMLNS_PRIVATE_XML;
-  extern const std::string XMLNS_LAST;
-  extern const std::string XMLNS_SEARCH;
-  extern const std::string XMLNS_IQ_OOB;
-  extern const std::string XMLNS_X_DATA;
-  extern const std::string XMLNS_X_EVENT;
-  extern const std::string XMLNS_X_OOB;
-  extern const std::string XMLNS_X_DELAY;
-  extern const std::string XMLNS_X_GPGSIGNED;
-  extern const std::string XMLNS_X_GPGENCRYPTED;
-  extern const std::string XMLNS_VCARD_TEMP;
-  extern const std::string XMLNS_X_VCARD_UPDATE;
-  extern const std::string XMLNS_BOOKMARKS;
-  extern const std::string XMLNS_ANNOTATIONS;
-  extern const std::string XMLNS_ROSTER_DELIMITER;
+  extern const std::string XMLNS_DISCO_INFO;          /**< Service Discovery Info namespace (XEP-0030) */
+  extern const std::string XMLNS_DISCO_ITEMS;         /**< Service Discovery Items namespace (XEP-0030) */
+  extern const std::string XMLNS_ADHOC_COMMANDS;      /**< Adhoc Commands namespace (XEP-0050) */
+  extern const std::string XMLNS_COMPRESSION;         /**< Stream Compression namespace (XEP-0138) */
+  extern const std::string XMLNS_OFFLINE;             /**< Flexible Offline Message Retrieval (XEP-0013) */
+  extern const std::string XMLNS_CHAT_STATES;         /**< Chat State Notifications namespace (XEP-0085) */
+  extern const std::string XMLNS_AMP;                 /**< Advanced Message Processing (XEP-0079) */
+  extern const std::string XMLNS_IBB;                 /**< In-Band Bytestreams namespace (XEP-0047) */
+  extern const std::string XMLNS_FEATURE_NEG;         /**< Feature Negotiation namespace (XEP-0020) */
+  extern const std::string XMLNS_CHATNEG;             /**< Chat Session Negotiation namespace (XEP-0155) */
+  extern const std::string XMLNS_XHTML_IM;            /**< XHTML-IM namespace (XEP-0071) */
+  extern const std::string XMLNS_DELAY;               /**< Delayed Delivery namespace (XEP-0203) */
+  extern const std::string XMLNS_ROSTER;              /**< Roster namespace (RFC 3921) */
+  extern const std::string XMLNS_VERSION;             /**< Software Version namespace (XEP-0092) */
+  extern const std::string XMLNS_REGISTER;            /**< In-Band Registration namespace (XEP-0077) */
+  extern const std::string XMLNS_PRIVACY;             /**< Privacy lists namespace (RFC 3921) */
+  extern const std::string XMLNS_AUTH;                /**< Non-SASL Authentication namespace (XEP-0078) */
+  extern const std::string XMLNS_PRIVATE_XML;         /**< Private XML Storage namespace (XEP-0049) */
+  extern const std::string XMLNS_LAST;                /**< Last Activity namespace (XEP-0012) */
+  extern const std::string XMLNS_SEARCH;              /**< Jabber Search namespace (XEP-0055) */
+  extern const std::string XMLNS_IQ_OOB;              /**< Out of Band Data (IQ) namespace (XEP-0066) */
+  extern const std::string XMLNS_X_DATA;              /**< Data Forms namespace (XEP-0004) */
+  extern const std::string XMLNS_X_EVENT;             /**< Message Events (XEP-0022) */
+  extern const std::string XMLNS_X_OOB;               /**< Out of Band Data (X) namespace (XEP-0066) */
+  extern const std::string XMLNS_X_DELAY;             /**< Delayed Delivery namespace (XEP-0091) */
+  extern const std::string XMLNS_X_GPGSIGNED;         /**< Current Jabber OpenPGP Usage (Sign.) (XEP-0027) */
+  extern const std::string XMLNS_X_GPGENCRYPTED;      /**< Current Jabber OpenPGP Usage (Enc.) (XEP-0027) */
+  extern const std::string XMLNS_VCARD_TEMP;          /**< vcard-temp namespace (XEP-0054) */
+  extern const std::string XMLNS_X_VCARD_UPDATE;      /**< vCard-Based Avatars namespace (XEP-0153) */
+  extern const std::string XMLNS_BOOKMARKS;           /**< Bookmark Storage namespace (XEP-0048) */
+  extern const std::string XMLNS_ANNOTATIONS;         /**< Annotations namespace (XEP-0145) */
+  extern const std::string XMLNS_ROSTER_DELIMITER;    /**< Nested Roster Groups namespace (XEP-0083) */
 
-  extern const std::string XMLNS_XMPP_PING;
+  extern const std::string XMLNS_XMPP_PING;           /**< XMPP Ping namespace (XEP-0199) */
 
-  extern const std::string XMLNS_MUC;
-  extern const std::string XMLNS_MUC_USER;
-  extern const std::string XMLNS_MUC_ADMIN;
-  extern const std::string XMLNS_MUC_UNIQUE;
-  extern const std::string XMLNS_MUC_OWNER;
-  extern const std::string XMLNS_MUC_ROOMINFO;
-  extern const std::string XMLNS_MUC_ROOMS;
-  extern const std::string XMLNS_MUC_REQUEST;
+  extern const std::string XMLNS_MUC;                 /**< Multi-User Chat namespace (XEP-0045) */
+  extern const std::string XMLNS_MUC_USER;            /**< Multi-User Chat namespace (user) (XEP-0045) */
+  extern const std::string XMLNS_MUC_ADMIN;           /**< Multi-User Chat namespace (admin) (XEP-0045) */
+  extern const std::string XMLNS_MUC_UNIQUE;          /**< Multi-User Chat namespace (unique) (XEP-0045) */
+  extern const std::string XMLNS_MUC_OWNER;           /**< Multi-User Chat namespace (owner) (XEP-0045) */
+  extern const std::string XMLNS_MUC_ROOMINFO;        /**< Multi-User Chat namespace (roominfo) (XEP-0045) */
+  extern const std::string XMLNS_MUC_ROOMS;           /**< Multi-User Chat namespace (rooms) (XEP-0045) */
+  extern const std::string XMLNS_MUC_REQUEST;         /**< Multi-User Chat namespace (request) (XEP-0045) */
 
-  extern const std::string XMLNS_XMPP_STREAM;
-  extern const std::string XMLNS_XMPP_STANZAS;
-  extern const std::string XMLNS_STREAM_TLS;
-  extern const std::string XMLNS_STREAM_SASL;
-  extern const std::string XMLNS_STREAM_BIND;
-  extern const std::string XMLNS_STREAM_SESSION;
-  extern const std::string XMLNS_STREAM_IQAUTH;
-  extern const std::string XMLNS_STREAM_IQREGISTER;
-  extern const std::string XMLNS_STREAM_ACK;
-  extern const std::string XMLNS_STREAM_COMPRESS;
+  extern const std::string XMLNS_XMPP_STREAM;         /**< XMPP stream namespace (RFC 3920) */
+  extern const std::string XMLNS_XMPP_STANZAS;        /**< XMPP stanzas namespace (RFC 3920) */
+  extern const std::string XMLNS_STREAM_TLS;          /**< TLS Stream Feature namespace (RFC 3920) */
+  extern const std::string XMLNS_STREAM_SASL;         /**< SASL Stream Feature namespace (RFC 3920) */
+  extern const std::string XMLNS_STREAM_BIND;         /**< Resource Bind Stream Feature (RFC 3921) */
+  extern const std::string XMLNS_STREAM_SESSION;      /**< Session Create Stream Feature (RFC 3921) */
+  extern const std::string XMLNS_STREAM_IQAUTH;       /**< Non-SASL Auth. Stream Feature (XEP-0078) */
+  extern const std::string XMLNS_STREAM_IQREGISTER;   /**< In-Band Registration namespace (XEP-0077) */
+  extern const std::string XMLNS_STREAM_COMPRESS;     /**< Stream Compression Feature namespace (XEP-0138) */
 
-  extern const std::string XMPP_STREAM_VERSION_MAJOR;
-  extern const std::string XMPP_STREAM_VERSION_MINOR;
-  extern const std::string GLOOX_VERSION;
+  extern const std::string XMPP_STREAM_VERSION_MAJOR; /**< Supported stream version (major). */
+  extern const std::string XMPP_STREAM_VERSION_MINOR; /**< Supported stream version (minor). */
+  extern const std::string GLOOX_VERSION;             /**< gloox version */
 
   /**
    * This describes the possible states of a stream.

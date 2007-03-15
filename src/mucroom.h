@@ -478,7 +478,7 @@ namespace gloox
       virtual void handleMessage( Stanza *stanza, MessageSession *session = 0 );
 
       // reimplemented from IqHandler
-      virtual bool handleIq( Stanza * /*stanza*/ ) { return false; };
+      virtual bool handleIq( Stanza* /*stanza*/ ) { return false; };
 
       // reimplemented from IqHandler
       virtual bool handleIqID( Stanza *stanza, int context );

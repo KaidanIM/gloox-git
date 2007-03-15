@@ -37,17 +37,21 @@ namespace gloox
       virtual ~TLSHandler() {};
 
       /**
-       *
+       * Reimplement this function to receive encrypted data from a TLSBase implementation.
+       * @param data The encrypted data (e.g. to send over the wire).
        */
       virtual void handleEncryptedData( const std::string& data ) = 0;
 
       /**
-       *
+       * Reimplement this function to receive decrypted data from a TLSBase implementation.
+       * @param data The decrypted data (e.g. to parse).
        */
       virtual void handleDecryptedData( const std::string& data ) = 0;
 
       /**
-       *
+       * Reimplement this function to receive the result of a TLS handshake.
+       * @param success Whether or not the handshake was successful.
+       * @param certinfo Information about the server's certificate.
        */
       virtual void handleHandshakeResult( bool success, CertInfo &certinfo ) = 0;
 
