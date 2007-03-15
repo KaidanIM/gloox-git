@@ -86,7 +86,7 @@ namespace gloox
               Tag *q = stanza->findChild( "query" );
               if( q )
               {
-                Tag::TagList l = q->children();
+                const Tag::TagList& l = q->children();
                 Tag::TagList::const_iterator it = l.begin();
                 if( it != l.end() )
                 {

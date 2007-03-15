@@ -264,7 +264,7 @@ namespace gloox
             std::string def;
             std::string active;
             Tag *q = stanza->findChild( "query" );
-            Tag::TagList l = q->children();
+            const Tag::TagList& l = q->children();
             Tag::TagList::const_iterator it = l.begin();
             for( ; it != l.end(); ++it )
             {
@@ -288,8 +288,8 @@ namespace gloox
 
             Tag *list = stanza->findChild( "query" )->findChild( "list" );
             const std::string& name = list->findAttribute( "name" );
-            Tag::TagList l = list->children();
-            Tag::TagList::iterator it = l.begin();
+            const Tag::TagList& l = list->children();
+            Tag::TagList::const_iterator it = l.begin();
             for( ; it != l.end(); ++it )
             {
               PrivacyItem::ItemType type;
@@ -316,7 +316,7 @@ namespace gloox
 
               const std::string& value = (*it)->findAttribute( "value" );
 
-              Tag::TagList c = (*it)->children();
+              const Tag::TagList& c = (*it)->children();
               Tag::TagList::const_iterator it_c = c.begin();
               for( ; it_c != c.end(); ++it_c )
               {

@@ -61,7 +61,7 @@ namespace gloox
     else
       return false;
 
-    Tag::TagList l = tag->children();
+    const Tag::TagList& l = tag->children();
     Tag::TagList::const_iterator it = l.begin();
     for( ; it != l.end(); ++it )
     {

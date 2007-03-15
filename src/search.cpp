@@ -153,7 +153,7 @@ namespace gloox
                 {
                   SearchResultList e;
                   SearchFieldStruct s;
-                  Tag::TagList &l = q->children();
+                  const Tag::TagList &l = q->children();
                   Tag::TagList::const_iterator itl = l.begin();
                   for( ; itl != l.end(); ++it )
                   {

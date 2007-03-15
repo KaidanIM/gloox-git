@@ -530,7 +530,7 @@ namespace gloox
         party.nick = new JID( stanza->from() );
         party.jid = 0;
         party.actor = 0;
-        Tag::TagList l = x->children();
+        const Tag::TagList& l = x->children();
         Tag::TagList::const_iterator it = l.begin();
         for( ; it != l.end(); ++it )
         {
@@ -722,7 +722,7 @@ namespace gloox
       Tag *x;
       if( ( x = stanza->findChild( "x", "xmlns", XMLNS_MUC_USER ) ) != 0 )
       {
-        Tag::TagList l = x->children();
+        const Tag::TagList& l = x->children();
         Tag::TagList::const_iterator it = l.begin();
         for( ; it != l.end(); ++it )
         {
@@ -869,7 +869,7 @@ namespace gloox
         if( x )
         {
           MUCListItemList itemList;
-          Tag::TagList items = x->findChildren( "item" );
+          const Tag::TagList& items = x->findChildren( "item" );
           Tag::TagList::const_iterator it = items.begin();
           for( ; it != items.end(); ++it )
           {
@@ -948,7 +948,7 @@ namespace gloox
         Tag *q = stanza->findChild( "query" );
         if( q )
         {
-          Tag::TagList l = q->children();
+          const Tag::TagList& l = q->children();
           Tag::TagList::const_iterator it = l.begin();
           for( ; it != l.end(); ++it )
           {
@@ -1013,7 +1013,7 @@ namespace gloox
         if( q )
         {
           StringMap items;
-          Tag::TagList l = q->children();
+          const Tag::TagList& l = q->children();
           Tag::TagList::const_iterator it = l.begin();
           for( ; it != l.end(); ++it )
           {

@@ -135,7 +135,7 @@ namespace gloox
       if( q && q->hasAttribute( "xmlns", XMLNS_DISCO_ITEMS ) && q->hasAttribute( "node", XMLNS_OFFLINE ) )
       {
         StringMap m;
-        Tag::TagList l = q->children();
+        const Tag::TagList& l = q->children();
         Tag::TagList::const_iterator it = l.begin();
         for( ; it != l.end(); ++it )
         {
