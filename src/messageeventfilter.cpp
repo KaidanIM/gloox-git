@@ -43,11 +43,11 @@ namespace gloox
       return;
     }
 
-    if( ( m_messageEventHandler ) && stanza->hasChild( "x", "xmlns", XMLNS_X_EVENT ) )
+    Tag *x = stanza->findChild( "x", "xmlns", XMLNS_X_EVENT );
+    if( x && m_messageEventHandler )
     {
       if( stanza->body().empty() )
       {
-        Tag *x = stanza->findChild( "x" );
         if( x->hasChild( "offline" ) )
           m_messageEventHandler->handleMessageEvent( stanza->from(), MessageEventOffline );
         else if( x->hasChild( "delivered" ) )
@@ -61,6 +61,7 @@ namespace gloox
       }
       else
       {
+        m_lastID = stanza->findAttribute( "id" );
         m_requestedEvents = 0;
         Tag *x = stanza->findChild( "x" );
         if( x->hasChild( "offline" ) )
