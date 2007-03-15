@@ -245,7 +245,7 @@ namespace gloox
        * Receives messages from ClientBase.
        * @param stanza The message Stanza.
        */
-      void handleMessage( Stanza *stanza );
+      virtual void handleMessage( Stanza *stanza );
 
     protected:
       /**

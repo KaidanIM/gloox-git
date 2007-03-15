@@ -47,9 +47,9 @@ namespace gloox
     std::string zip;                /**< User's ZIP code. */
     std::string phone;              /**< User's phone number. */
     std::string url;                /**< User's homepage URL (or other URL). */
-    std::string date;               /**< */
-    std::string misc;               /**< */
-    std::string text;               /**< */
+    std::string date;               /**< Date (?) */
+    std::string misc;               /**< Misc (?) */
+    std::string text;               /**< Text (?)*/
   };
 
   /**

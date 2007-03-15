@@ -294,7 +294,16 @@ namespace gloox
        */
       bool operator!=( const Tag &right ) const { return !( *this == right ); }
 
+      /**
+       * Does some fancy escaping. (& --> &amp;, etc).
+       * @param what A string to escape.
+       */
       static const std::string escape( std::string what );
+
+      /**
+       * Reverses operation of escape(). (&amp; --> &).
+       * @param what A string to de-escape.
+       */
       static const std::string relax( std::string what );
 
     protected:
@@ -364,7 +373,7 @@ namespace gloox
       Tag::TagList evaluateTagList( Tag *token );
       Tag::TagList evaluateUnion( Tag *token );
       Tag::TagList allDescendants();
-  
+
       static TokenType getType( const std::string& c );
 
       static bool isWhitespace( const char c );
@@ -373,7 +382,7 @@ namespace gloox
       bool evaluateBoolean( Tag *token );
       bool evaluatePredicate( Tag *token ) { return evaluateBoolean( token ); }
       bool evaluateEquals( Tag *token );
-      
+
       static void add( Tag::TagList& one, const Tag::TagList& two );
 
   };

@@ -109,7 +109,7 @@ namespace gloox
       /**
        * Sets proxy authorization credentials.
        * @param user The user name to use for proxy authorization.
-       * @param passwordThe password to use for proxy authorization.
+       * @param password The password to use for proxy authorization.
        */
       void setProxyAuth( const std::string& user, const std::string& password )
         { m_proxyUser = user; m_proxyPassword = password; }

@@ -42,7 +42,7 @@ namespace gloox
   {
   }
 
-  Tag* DataFormItem::tag()
+  Tag* DataFormItem::tag() const
   {
     Tag *i = new Tag ( "item" );
     DataFormBase::FieldList::const_iterator it = m_fields.begin();

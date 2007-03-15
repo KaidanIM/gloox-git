@@ -303,7 +303,7 @@ namespace gloox
        * Use this function if you have a class supporting hardware encryption (or whatever).
        * This should be called before calling connect(). If there already is a
        * encryption implementation set (either manually or automatically), it gets deleted.
-       * @param cb The encryption implementation to use.
+       * @param tb The encryption implementation to use.
        * @since 0.9
        */
       void setEncryptionImpl( TLSBase *tb );

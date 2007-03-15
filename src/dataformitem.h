@@ -51,7 +51,7 @@ namespace gloox
       virtual ~DataFormItem();
 
       // reimplemented from DataFormField
-      virtual Tag* tag();
+      virtual Tag* tag() const;
 
   };
 

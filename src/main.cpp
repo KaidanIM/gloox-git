@@ -72,7 +72,6 @@ namespace gloox
   const std::string XMLNS_STREAM_SESSION    = "urn:ietf:params:xml:ns:xmpp-session";
   const std::string XMLNS_STREAM_IQAUTH     = "http://jabber.org/features/iq-auth";
   const std::string XMLNS_STREAM_IQREGISTER = "http://jabber.org/features/iq-register";
-  const std::string XMLNS_STREAM_ACK        = "http://jabber.org/features/ack";
   const std::string XMLNS_STREAM_COMPRESS   = "http://jabber.org/features/compress";
 
   const std::string XMPP_STREAM_VERSION_MAJOR = "1";
