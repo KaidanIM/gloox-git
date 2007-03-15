@@ -54,14 +54,12 @@ namespace gloox
       /**
        * Disconnects from the server.
        */
-      void disconnect();
+      void disconnect() { ClientBase::disconnect( ConnUserDisconnected ); }
 
     protected:
       virtual void handleStartNode();
       virtual bool handleNormalNode( Stanza *stanza );
       virtual bool checkStreamVersion( const std::string& /*version*/ ) { return true; }
-      virtual void disconnect( ConnectionError reason = ConnUserDisconnected )
-        { ClientBase::disconnect( reason ); }
 
     private:
       // reimplemented from ClientBase
