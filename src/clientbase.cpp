@@ -1058,15 +1058,9 @@ namespace gloox
   bool ClientBase::notifyOnTLSConnect( const CertInfo& info )
   {
     ConnectionListenerList::const_iterator it = m_connectionListeners.begin();
-    for( ; it != m_connectionListeners.end(); ++it )
-    {
-      if( !(*it)->onTLSConnect( info ) )
-        return false;
-    }
-
-    m_stats.encryption = true;
-
-    return true;
+    for( ; it != m_connectionListeners.end() && (*it)->onTLSConnect( info ); ++it )
+      ;
+    return m_stats.encryption = it != m_connectionListeners.end();
   }
 
   void ClientBase::notifyOnResourceBindError( ResourceBindError error )
@@ -1169,18 +1163,16 @@ namespace gloox
       {
         Tag *i = x->findChild( "invite" );
         JID invitee( i->findAttribute( "from" ) );
-        std::string reason;
-        std::string password;
-        bool cont = false;
-        if( i->hasChild( "reason" ) )
-          reason = i->findChild( "reason" )->cdata();
-        if( i->hasChild( "continue" ) )
-          cont = true;
-        if( x->hasChild( "password" ) )
-          password = x->findChild( "password" )->cdata();
 
-        m_mucInvitationHandler->handleMUCInvitation( stanza->from(), invitee, reason,
-                                                     stanza->body(), password, cont );
+        Tag * t = i->findChild( "reason" );
+        std::string reason ( t ? t->cdata() : "" );
+
+        t = x->findChild( "password" );
+        std::string password ( t ? t->cdata() : "" );
+
+        m_mucInvitationHandler->handleMUCInvitation( stanza->from(), invitee,
+                                              reason, stanza->body(), password,
+                                              i->hasChild( "continue" ) );
         return;
       }
     }
@@ -1209,36 +1201,27 @@ namespace gloox
       }
     }
 
-    bool haveSessionHandler = false;
+    bool haveSessionHandler = true;
     MessageSession *session = new MessageSession( this, stanza->from(), true, stanza->subtype() );
+
     if( stanza->subtype() == StanzaMessageChat && m_messageSessionHandlerChat )
-    {
-      haveSessionHandler = true;
       m_messageSessionHandlerChat->handleMessageSession( session );
-    }
     else if( stanza->subtype() == StanzaMessageNormal && m_messageSessionHandlerNormal )
-    {
-      haveSessionHandler = true;
       m_messageSessionHandlerNormal->handleMessageSession( session );
-    }
     else if( stanza->subtype() == StanzaMessageGroupchat && m_messageSessionHandlerGroupchat )
-    {
-      haveSessionHandler = true;
       m_messageSessionHandlerGroupchat->handleMessageSession( session );
-    }
     else if( stanza->subtype() == StanzaMessageHeadline && m_messageSessionHandlerHeadline )
-    {
-      haveSessionHandler = true;
       m_messageSessionHandlerHeadline->handleMessageSession( session );
-    }
+    else
+      haveSessionHandler = false;
 
     if( haveSessionHandler )
     {
       session->handleMessage( stanza );
       return;
     }
-    else
-      disposeMessageSession( session );
+
+    disposeMessageSession( session );
 
     MessageHandlerList::const_iterator it = m_messageHandlers.begin();
     for( ; it != m_messageHandlers.end(); ++it )
