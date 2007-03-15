@@ -3,12 +3,13 @@ Todo
 
 - fix schannel
 + add RosterItemListener (?)
-- fix STLport support/configure check
+- fix STLport support/configure check (broken on autoconf 2.61?
 - move stl/stdlib typedefs to types.h (?)
 - split send()/getID() to clientbasebase (?)
 - MUCMessageSession: handle <message type='error'/>
-
 - vcard: add getters for lists (email/addresses/...)
+- mixed-content XML
+- preserve order of attributes
 
 - overhaul all XEP implementations (and note implemented version number)
 - RosterItem::status ::statusMsg for highest prio
