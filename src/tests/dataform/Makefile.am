@@ -6,6 +6,6 @@ AM_CPPFLAGS = -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare
 
 noinst_PROGRAMS = dataform_test
 
-dataform_test_SOURCES = dataform_test.cpp ../../tag.cpp ../../dataform.cpp ../../dataformbase.cpp ../../dataformreported.cpp ../../dataformitem.cpp ../../dataformfield.cpp ../../main.cpp
-dataform_test_LDADD =
+dataform_test_SOURCES = dataform_test.cpp
+dataform_test_LDADD = ../../tag.o ../../dataform.o ../../dataformbase.o ../../dataformreported.o ../../dataformitem.o ../../dataformfield.o ../../main.o
 dataform_test_CFLAGS = $(CPPFLAGS)

@@ -6,6 +6,6 @@ AM_CPPFLAGS = -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare
 
 noinst_PROGRAMS = prep_test
 
-prep_test_SOURCES = prep_test.cpp ../../prep.cpp
-prep_test_LDADD =
+prep_test_SOURCES = prep_test.cpp
+prep_test_LDADD = ../../prep.o
 prep_test_CFLAGS = $(CPPFLAGS)

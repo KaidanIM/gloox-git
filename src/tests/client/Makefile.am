@@ -6,13 +6,13 @@ AM_CPPFLAGS = -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare
 
 noinst_PROGRAMS = client_test
 
-client_test_SOURCES = client_test.cpp ../../client.cpp ../../clientbase.cpp ../../jid.cpp ../../connectiontcp.cpp \
-			../../disco.cpp ../../parser.cpp ../../tag.cpp ../../stanza.cpp ../../base64.cpp \
-			../../md5.cpp ../../tlsgnutls.cpp ../../tlsopenssl.cpp ../../tlsschannel.cpp \
-			../../logsink.cpp ../../messagesession.cpp ../../prep.cpp ../../compressionzlib.cpp \
-			../../dns.cpp ../../stanzaextensionfactory.cpp ../../oob.cpp ../../gpgencrypted.cpp \
-			../../gpgsigned.cpp ../../vcardupdate.cpp ../../delayeddelivery.cpp \
-			../../xdelayeddelivery.cpp ../../rostermanager.cpp ../../nonsaslauth.cpp ../../sha.cpp \
-			../../rosteritem.cpp ../../privatexml.cpp ../../main.cpp
-client_test_LDADD =
+client_test_SOURCES = client_test.cpp
+client_test_LDADD = ../../client.o ../../clientbase.o ../../jid.o ../../connectiontcp.o \
+			../../disco.o ../../parser.o ../../tag.o ../../stanza.o ../../base64.o \
+			../../md5.o ../../tlsgnutls.o ../../tlsopenssl.o ../../tlsschannel.o \
+			../../logsink.o ../../messagesession.o ../../prep.o ../../compressionzlib.o \
+			../../dns.o ../../stanzaextensionfactory.o ../../oob.o ../../gpgencrypted.o \
+			../../gpgsigned.o ../../vcardupdate.o ../../delayeddelivery.o \
+			../../xdelayeddelivery.o ../../rostermanager.o ../../nonsaslauth.o ../../sha.o \
+			../../rosteritem.o ../../privatexml.o ../../main.o
 client_test_CFLAGS = $(CPPFLAGS)
