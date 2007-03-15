@@ -8,7 +8,7 @@ using namespace gloox;
 #include <sys/time.h>
 
 static double divider = 1000000;
-static int num = 10000;
+static int num = 2500;
 static double t;
 
 static Tag *tag;
@@ -17,7 +17,7 @@ static void printTime ( const char * testName, struct timeval tv1, struct timeva
 {
   t = tv2.tv_sec - tv1.tv_sec;
   t +=  ( tv2.tv_usec - tv1.tv_usec ) / divider;
-  printf( "%s: %.02f seconds (%.00f/s)\n", testName, t, num / t );
+  printf( "%s: %.03f seconds (%.00f/s)\n", testName, t, num / t );
 }
 
 static Tag * newTag ( const char *str, bool incoming = false )
@@ -37,13 +37,39 @@ static Tag * newTag ( const char *str, bool incoming = false )
 
 static const char * simpleString    = "azzaaaggaaaaqs dfqsdadddaads ";
 static const char * escapableString = ">aa< < <w< w<<<<.' <.<& %)(>>";
-static const char * escapedString = "&amp;&lt;&gt;&apos;&quot;&#60;&#62;&#39;&#34;&#x3c;&#x3e;&#x3C;"
+static const char * escapedString   = "&amp;&lt;&gt;&apos;&quot;&#60;&#62;&#39;&#34;&#x3c;&#x3e;&#x3C;"
                                       "&#x3E;&#x27;&#x22;&#X3c;&#X3e;&#X3C;&#X3E;&#X27;&#X22;";
 
 static inline Tag * newSimpleTag ()    { return newTag( simpleString ); }
 static inline Tag * newEscapedTag ()   { return newTag( escapedString ); }
 static inline Tag * newEscapableTag () { return newTag( escapableString, true ); }
 
+
+static const int sz_s = 100;
+static const int sz_b = 1000;
+
+static char values_s[sz_s];
+static char values_b[sz_b];
+
+static void randomize_s()
+{
+  srand( time(NULL) );
+  for (int i = 0; i < sz_s-1; ++i)
+  {
+    values_s[i] = rand() % 96 + 32;
+  }
+  values_s[sz_s-1] = 0;
+}
+
+static void randomize_b()
+{
+  srand( time(NULL) );
+  for (int i = 0; i < sz_b-1; ++i)
+  {
+    values_b[i] = rand() % 96 + 32;
+  }
+  values_b[sz_b-1] = 0;
+}
 
 int main( int /*argc*/, char* /*argv[]*/ )
 {
@@ -90,13 +116,25 @@ int main( int /*argc*/, char* /*argv[]*/ )
   // -----------------------------------------------------------------------
   
   gettimeofday( &tv1, 0 );
-  for( int i = 0; i < num; ++i )
+  for (int i = 0; i < num; ++i)
   {
-    delete newEscapedTag();
+    randomize_s();
+    delete newTag( values_s, true );
   }
   gettimeofday( &tv2, 0 );
-  printTime ("relaxing create/delete", tv1, tv2);
+  printTime ("relaxing create/delete (small)", tv1, tv2);
 
+
+  // -----------------------------------------------------------------------
+
+  gettimeofday( &tv1, 0 );
+  for (int i = 0; i < num; ++i)
+  {
+    randomize_b();
+    delete newTag( values_b, true );
+  }
+  gettimeofday( &tv2, 0 );
+  printTime ("relaxing create/delete (big)", tv1, tv2);
 
   // -----------------------------------------------------------------------
 
@@ -109,7 +147,6 @@ int main( int /*argc*/, char* /*argv[]*/ )
   }
   gettimeofday( &tv2, 0 );
   printTime ("clone/delete", tv1, tv2);
-
 
 
 
