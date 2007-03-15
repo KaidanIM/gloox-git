@@ -57,24 +57,20 @@ namespace gloox
   void Annotations::handlePrivateXML( const std::string& /*tag*/, Tag *xml )
   {
     AnnotationsList aList;
-    const Tag::TagList l = xml->children();
+    const Tag::TagList& l = xml->children();
     Tag::TagList::const_iterator it = l.begin();
     for( ; it != l.end(); ++it )
     {
       if( (*it)->name() == "note" )
       {
         const std::string& jid = (*it)->findAttribute( "jid" );
-        const std::string& mdate = (*it)->findAttribute( "mdate" );
-        const std::string& cdate = (*it)->findAttribute( "cdate" );
         const std::string& note = (*it)->cdata();
 
         if( !jid.empty() && !note.empty() )
         {
-          AnnotationsListItem item;
-          item.jid = jid;
-          item.note = note;
-          item.mdate = mdate;
-          item.cdate = cdate;
+          const std::string& cdate = (*it)->findAttribute( "cdate" );
+          const std::string& mdate = (*it)->findAttribute( "mdate" );
+          AnnotationsListItem item = { jid, cdate, mdate, note };
           aList.push_back( item );
         }
       }
