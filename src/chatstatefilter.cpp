@@ -36,6 +36,7 @@ namespace gloox
     {
       if( stanza->body().empty() )
       {
+        m_enableChatStates = true;
         if( stanza->hasChild( "active" ) )
           m_chatStateHandler->handleChatState( stanza->from(), ChatStateActive );
         else if( stanza->hasChild( "composing" ) )
