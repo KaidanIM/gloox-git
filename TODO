@@ -11,6 +11,7 @@ Todo
 - mixed-content XML
 - preserve order of attributes
 
+- optimize tests/example build system to re-use .o
 - overhaul all XEP implementations (and note implemented version number)
 - RosterItem::status ::statusMsg for highest prio
 - Disco: allow specification of root node handler
