@@ -6,6 +6,6 @@ AM_CPPFLAGS = -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare
 
 noinst_PROGRAMS = sha_test
 
-sha_test_SOURCES = sha_test.cpp ../../sha.cpp
-sha_test_LDADD =
+sha_test_SOURCES = sha_test.cpp
+sha_test_LDADD = ../../sha.o
 sha_test_CFLAGS = $(CPPFLAGS)

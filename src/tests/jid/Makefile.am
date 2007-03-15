@@ -6,6 +6,6 @@ AM_CPPFLAGS = -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare
 
 noinst_PROGRAMS = jid_test
 
-jid_test_SOURCES = jid_test.cpp ../../jid.cpp ../../prep.cpp
-jid_test_LDADD =
+jid_test_SOURCES = jid_test.cpp
+jid_test_LDADD = ../../jid.o ../../prep.o
 jid_test_CFLAGS = $(CPPFLAGS)

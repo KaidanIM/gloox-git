@@ -6,6 +6,6 @@ AM_CPPFLAGS = -g3 -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-com
 
 noinst_PROGRAMS = parser_test
 
-parser_test_SOURCES = parser_test.cpp ../../parser.cpp ../../tag.cpp
-parser_test_LDADD =
+parser_test_SOURCES = parser_test.cpp
+parser_test_LDADD = ../../parser.o ../../tag.o
 parser_test_CFLAGS = $(CPPFLAGS)

@@ -6,6 +6,6 @@ AM_CPPFLAGS = -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare
 
 noinst_PROGRAMS = gpgencrypted_test
 
-gpgencrypted_test_SOURCES = gpgencrypted_test.cpp ../../gpgencrypted.cpp ../../tag.cpp ../../main.cpp
-gpgencrypted_test_LDADD =
+gpgencrypted_test_SOURCES = gpgencrypted_test.cpp
+gpgencrypted_test_LDADD = ../../gpgencrypted.o ../../tag.o ../../main.o
 gpgencrypted_test_CFLAGS = $(CPPFLAGS)

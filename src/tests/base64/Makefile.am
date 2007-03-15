@@ -6,8 +6,8 @@ AM_CPPFLAGS = -g3 -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-com
 
 noinst_PROGRAMS = base64_test
 
-base64_test_SOURCES = base64_test.cpp ../../base64.cpp
-base64_test_LDADD =
+base64_test_SOURCES = base64_test.cpp
+base64_test_LDADD = ../../base64.o
 base64_test_CFLAGS = $(CPPFLAGS)
 
 noinst_HEADERS =
