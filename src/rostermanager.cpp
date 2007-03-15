@@ -111,8 +111,8 @@ namespace gloox
       return;
 
     StringList caps;
-    Tag::TagList l = stanza->children();
-    Tag::TagList::iterator it_c = l.begin();
+    const Tag::TagList& l = stanza->children();
+    Tag::TagList::const_iterator it_c = l.begin();
     for( ; it_c != l.end(); ++it_c )
     {
       if( (*it_c)->name() == "c" )
@@ -367,8 +367,8 @@ namespace gloox
   void RosterManager::extractItems( Tag *tag, bool isPush )
   {
     Tag *t = tag->findChild( "query" );
-    Tag::TagList l = t->children();
-    Tag::TagList::iterator it = l.begin();
+    const Tag::TagList& l = t->children();
+    Tag::TagList::const_iterator it = l.begin();
     for( ; it != l.end(); ++it )
     {
       if( (*it)->name() == "item" )
@@ -376,7 +376,7 @@ namespace gloox
         StringList gl;
         if( (*it)->hasChild( "group" ) )
         {
-          Tag::TagList g = (*it)->children();
+          const Tag::TagList& g = (*it)->children();
           Tag::TagList::const_iterator it_g = g.begin();
           for( ; it_g != g.end(); ++it_g )
           {

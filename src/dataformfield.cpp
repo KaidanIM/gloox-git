@@ -63,7 +63,7 @@ namespace gloox
     if( tag->hasAttribute( "label" ) )
       m_label = tag->findAttribute( "label" );
 
-    Tag::TagList l = tag->children();
+    const Tag::TagList& l = tag->children();
     Tag::TagList::const_iterator it = l.begin();
     for( ; it != l.end(); ++it )
     {
