@@ -430,7 +430,7 @@ namespace gloox
       /**
        * Registers a new PresenceHandler for the given JID. Presences received for this
        * particular JID will not be forwarded to the generic PresenceHandler (and therefore
-       * the Roster). To keep track of a single RosterItem, use RosterItemListener instead.
+       * the Roster).
        * This functionality is primarily intended for the MUC implementation.
        * @param jid The JID to 'watch'.
        * @param ph The PresenceHandler to inform about presence changes from @c jid.
