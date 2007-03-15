@@ -494,7 +494,7 @@ namespace gloox
 
     protected:
       void setName( const std::string& name ) { m_nick.setUsername( name ); };
-      bool instantRoomHook() const { return false; };
+      virtual bool instantRoomHook() const { return false; };
 
       ClientBase *m_parent;
       JID m_nick;
