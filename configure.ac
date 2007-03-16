@@ -287,6 +287,7 @@ src/tests/gpgencrypted/Makefile
 src/tests/gpgsigned/Makefile
 src/tests/jid/Makefile
 src/tests/md5/Makefile
+src/tests/messageeventfilter/Makefile
 src/tests/oob/Makefile
 src/tests/parser/Makefile
 src/tests/prep/Makefile
