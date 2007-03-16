@@ -187,7 +187,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
   t = 0;
 
   //-------
-  name = "xml() 2 -- known failure";
+  name = "xml() 2";
   t = new Tag( "hello" );
   t->addAttribute( "test", "bacd" );
   t->addAttribute( "foo", "bar" );
@@ -202,6 +202,39 @@ int main( int /*argc*/, char* /*argv[]*/ )
   }
   delete t;
   t = 0;
+
+  //-------
+  name = "hasChild 1";
+  t = new Tag( "hello" );
+  t->addAttribute( "test", "bacd" );
+  t->addAttribute( "foo", "bar" );
+  t->addChild( new Tag( "test1" ) );
+  t->addChild( new Tag( "test2" ) );
+  t->addChild( new Tag( "test3" ) );
+  t->addChild( new Tag( "test4" ) );
+  if( !t->hasChild( "test1" ) || !t->hasChild( "test2" )
+       || !t->hasChild( "test3" ) || !t->hasChild( "test4" ) )
+  {
+    ++fail;
+    printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+  }
+  delete t;
+  t = 0;
+
+  //-------
+  name = "hasAttribute 1";
+  t = new Tag( "hello" );
+  t->addAttribute( "test", "bacd" );
+  t->addAttribute( "foo", "bar" );
+  if( !t->hasAttribute( "test" ) || !t->hasAttribute( "test", "bacd" )
+       || !t->hasAttribute( "foo" ) || !t->hasAttribute( "foo", "bar" ) )
+  {
+    ++fail;
+    printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+  }
+  delete t;
+  t = 0;
+
 
 
 

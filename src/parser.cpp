@@ -15,7 +15,6 @@
 #include "gloox.h"
 
 #include "parser.h"
-#include "tag.h"
 
 namespace gloox
 {
@@ -351,7 +350,7 @@ namespace gloox
   void Parser::addAttribute()
   {
 //     printf( "adding attribute: %s='%s', ", m_attrib.c_str(), m_value.c_str() );
-    m_attribs[m_attrib] = m_value;
+    m_attribs.push_back( Tag::Attribute( m_attrib, m_value ) );
     m_attrib = "";
     m_value = "";
 //     printf( "added, " );
@@ -376,7 +375,7 @@ namespace gloox
 
 //       printf( "m_current: %s, ", m_current->name().c_str() );
 //       printf( "m_tag: %s, ", m_tag.c_str() );
-     
+
     if( m_current->parent() )
       m_current = m_current->parent();
     else

@@ -76,7 +76,7 @@ namespace gloox
     xml += escape( m_name );
     if( !m_attribs.empty() )
     {
-      StringMap::const_iterator it_a = m_attribs.begin();
+      AttributeList::const_iterator it_a = m_attribs.begin();
       for( ; it_a != m_attribs.end(); ++it_a )
       {
         xml += " ";
@@ -216,8 +216,21 @@ namespace gloox
 
   void Tag::addAttribute( const std::string& name, const std::string& value )
   {
-    if( !name.empty() && !value.empty() )
-      m_attribs[m_incoming ? relax( name ) : name] = m_incoming ? relax( value ) : value;
+    if( name.empty() || value.empty() )
+      return;
+
+    AttributeList::iterator it = m_attribs.begin();
+    for( ; it != m_attribs.end(); ++it )
+    {
+      if( (*it).first == ( m_incoming ? relax( name ) : name ) )
+      {
+        (*it).second = m_incoming ? relax( value ) : value;
+        return;
+      }
+    }
+
+    m_attribs.push_back( Attribute( m_incoming ? relax( name ) : name,
+                                    m_incoming ? relax( value ) : value ) );
   }
 
   void Tag::addAttribute( const std::string& name, int value )
@@ -229,12 +242,12 @@ namespace gloox
       char *tmp = new char[len];
       sprintf( tmp, "%d", value );
       std::string ret( tmp, len );
-      m_attribs[m_incoming ? relax( name ) : name] = ret;
+      addAttribute( name, ret );
       delete tmp;
 #else
       std::ostringstream oss;
       oss << value;
-      m_attribs[m_incoming ? relax( name ) : name] = oss.str();
+      addAttribute( name, oss.str() );
 #endif
     }
   }
@@ -260,8 +273,12 @@ namespace gloox
 
   const std::string Tag::findAttribute( const std::string& name ) const
   {
-    StringMap::const_iterator it = m_attribs.find( name );
-    return ( it != m_attribs.end() ) ? (*it).second : std::string();
+    AttributeList::const_iterator it = m_attribs.begin();
+    for( ; it != m_attribs.end(); ++it )
+      if( (*it).first == ( m_incoming ? relax( name ) : name ) )
+        return (*it).second;
+
+    return std::string();
   }
 
   bool Tag::hasAttribute( const std::string& name, const std::string& value ) const
@@ -269,14 +286,19 @@ namespace gloox
     if( name.empty() )
       return true;
 
-    StringMap::const_iterator it = m_attribs.find( name );
-    return ( it != m_attribs.end() && ( value.empty() || ( (*it).second == value ) ) );
+    AttributeList::const_iterator it = m_attribs.begin();
+    for( ; it != m_attribs.end(); ++it )
+      if( (*it).first == ( m_incoming ? relax( name ) : name )
+            && ( value.empty() || (*it).second == ( m_incoming ? relax( value ) : value ) ) )
+        return true;
+
+    return false;
   }
 
   Tag* Tag::findChild( const std::string& name ) const
   {
     TagList::const_iterator it = m_children.begin();
-    while( it != m_children.end() && (*it)->name() != name )
+    while( it != m_children.end() && (*it)->name() != ( m_incoming ? relax( name ) : name ) )
       ++it;
     return it != m_children.end() ? (*it) : 0;
   }
@@ -288,7 +310,9 @@ namespace gloox
       return 0;
 
     TagList::const_iterator it = m_children.begin();
-    while( it != m_children.end() && ( (*it)->name() != name || ! (*it)->hasAttribute( attr, value ) ) )
+    while( it != m_children.end()
+           && ( (*it)->name() != ( m_incoming ? relax( name ) : name )
+                || ! (*it)->hasAttribute( attr, value ) ) )
       ++it;
     return it != m_children.end() ? (*it) : 0;
   }
@@ -296,8 +320,8 @@ namespace gloox
   bool Tag::hasChildWithCData( const std::string& name, const std::string& cdata ) const
   {
     TagList::const_iterator it = m_children.begin();
-    while( it != m_children.end() && ( (*it)->name() != name
-            || ( !cdata.empty() && (*it)->cdata() != cdata ) ) )
+    while( it != m_children.end() && ( (*it)->name() != ( m_incoming ? relax( name ) : name )
+            || ( !cdata.empty() && (*it)->cdata() != ( m_incoming ? relax( cdata ) : cdata ) ) ) )
       ++it;
     return it != m_children.end();
   }
@@ -336,7 +360,7 @@ namespace gloox
     Tag::TagList::const_iterator it = list.begin();
     for( ; it != list.end(); ++it )
     {
-      if( (*it)->name() == name )
+      if( (*it)->name() == ( m_incoming ? relax( name ) : name ) )
         ret.push_back( (*it) );
     }
     return ret;

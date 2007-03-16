@@ -17,13 +17,13 @@
 
 #include "gloox.h"
 #include "taghandler.h"
+#include "tag.h"
 
 #include <string>
 
 namespace gloox
 {
 
-  class Tag;
 
   /**
    * @brief This class implements an XML parser.
@@ -86,7 +86,7 @@ namespace gloox
       Tag *m_root;
 
       ParserInternalState m_state;
-      StringMap m_attribs;
+      Tag::AttributeList m_attribs;
       std::string m_tag;
       std::string m_cdata;
       std::string m_attrib;

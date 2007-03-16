@@ -18,7 +18,7 @@
 
 #include <string>
 #include <list>
-#include <map>
+#include <utility>
 
 namespace gloox
 {
@@ -32,6 +32,16 @@ namespace gloox
   class GLOOX_API Tag
   {
     public:
+      /**
+       * An XML element's attribute.
+       */
+      typedef std::pair<std::string, std::string> Attribute;
+
+      /**
+       * A list of XML element attributes.
+       */
+      typedef std::list<Attribute> AttributeList;
+
       /**
        * A list of Tags.
        */
@@ -94,7 +104,7 @@ namespace gloox
        * @param attributes The attributes to set.
        * @since 0.9
        */
-      virtual void setAttributes( const StringMap& attributes ) { m_attribs = attributes; }
+      virtual void setAttributes( const AttributeList& attributes ) { m_attribs = attributes; }
 
       /**
        * Use this function to add a child node to the tag. The Tag will be owned by Tag.
@@ -139,7 +149,7 @@ namespace gloox
        * Use this function to manipulate the list of attributes.
        * @return A reference to the list of attributes.
        */
-      virtual StringMap& attributes() { return m_attribs; }
+      virtual AttributeList& attributes() { return m_attribs; }
 
       /**
        * Use this function to manipulate the list of child elements.
@@ -317,8 +327,8 @@ namespace gloox
         XPUnexpectedToken
       };
 
+      AttributeList m_attribs;
       std::string m_name;
-      StringMap m_attribs;
       std::string m_cdata;
       TagList m_children;
       Tag *m_parent;
