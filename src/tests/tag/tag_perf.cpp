@@ -20,7 +20,7 @@ static void printTime ( const char * testName, struct timeval tv1, struct timeva
   printf( "%s: %.03f seconds (%.00f/s)\n", testName, t, num / t );
 }
 
-static Tag * newTag ( const char *str, bool incoming = false )
+static Tag * newTag ( const std::string& str, bool incoming = false )
 {
   Tag *aaa = new Tag( str, str, incoming );
   Tag *bbb = new Tag( aaa, str, str, incoming ); bbb->addAttribute( str, str );
@@ -35,9 +35,9 @@ static Tag * newTag ( const char *str, bool incoming = false )
   return aaa;
 }
 
-static const char * simpleString    = "azzaaaggaaaaqs dfqsdadddaads ";
-static const char * escapableString = ">aa< < <w< w<<<<.' <.<& %)(>>";
-static const char * escapedString   = "&amp;&lt;&gt;&apos;&quot;&#60;&#62;&#39;&#34;&#x3c;&#x3e;&#x3C;"
+static const std::string simpleString    = "azzaaaggaaaaqs dfqsdadddaads ";
+static const std::string escapableString = ">aa< < <w< w<<<<.' <.<& %)(>>";
+static const std::string escapedString   = "&amp;&lt;&gt;&apos;&quot;&#60;&#62;&#39;&#34;&#x3c;&#x3e;&#x3C;"
                                       "&#x3E;&#x27;&#x22;&#X3c;&#X3e;&#X3C;&#X3E;&#X27;&#X22;";
 
 static inline Tag * newSimpleTag ()    { return newTag( simpleString ); }

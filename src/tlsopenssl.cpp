@@ -115,12 +115,18 @@ namespace gloox
 
     do
     {
-      if( op == TLSHandshake )
-        ret = SSL_connect( m_ssl );
-      else if( op == TLSWrite )
-        ret = SSL_write( m_ssl, m_sendBuffer.c_str(), m_sendBuffer.length() );
-      else
-       ret = SSL_read( m_ssl, m_buf, m_bufsize );
+      switch ( op )
+      {
+        case TLSHandshake:
+          ret = SSL_connect( m_ssl );
+          break;
+        case TLSWrite:
+          ret = SSL_write( m_ssl, m_sendBuffer.c_str(), m_sendBuffer.length() );
+          break;
+        case TLSREAD:
+          ret = SSL_read( m_ssl, m_buf, m_bufsize );
+          break;
+      }
 
       switch( SSL_get_error( m_ssl, ret ) )
       {
