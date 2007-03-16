@@ -307,7 +307,7 @@ SChannel::SChannel( TLSHandler *th, const std::string& server ) :
 
                 m_secure = true;
                 m_handler->handleHandshakeResult(true, m_certInfo);
-
+                break;
             } else if (error == SEC_I_CONTINUE_NEEDED) {
 
                 std::cout << "obuf[0].cbBuffer: " << obuf[0].cbBuffer << "\t" << obuf[0].BufferType << "\n";
