@@ -1060,7 +1060,7 @@ namespace gloox
     ConnectionListenerList::const_iterator it = m_connectionListeners.begin();
     for( ; it != m_connectionListeners.end() && (*it)->onTLSConnect( info ); ++it )
       ;
-    return m_stats.encryption = ( it != m_connectionListeners.end() );
+    return m_stats.encryption = ( it == m_connectionListeners.end() );
   }
 
   void ClientBase::notifyOnResourceBindError( ResourceBindError error )
