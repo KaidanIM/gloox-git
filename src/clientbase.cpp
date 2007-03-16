@@ -811,7 +811,7 @@ namespace gloox
   const std::string ClientBase::streamErrorText( const std::string& lang ) const
   {
     StringMap::const_iterator it = m_streamErrorText.find( lang );
-    return (it != m_streamErrorText.end() ) ? (*it).second : std::string();
+    return ( it != m_streamErrorText.end() ) ? (*it).second : std::string();
   }
 
   void ClientBase::registerMessageSessionHandler( MessageSessionHandler *msh, int types )
@@ -1060,7 +1060,7 @@ namespace gloox
     ConnectionListenerList::const_iterator it = m_connectionListeners.begin();
     for( ; it != m_connectionListeners.end() && (*it)->onTLSConnect( info ); ++it )
       ;
-    return m_stats.encryption = it != m_connectionListeners.end();
+    return m_stats.encryption = ( it != m_connectionListeners.end() );
   }
 
   void ClientBase::notifyOnResourceBindError( ResourceBindError error )
