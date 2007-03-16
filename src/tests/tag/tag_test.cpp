@@ -9,148 +9,140 @@ int main( int /*argc*/, char* /*argv[]*/ )
 {
   int fail = 0;
   std::string name;
-  Tag *t;
+  Tag *t = new Tag( "toe" ); t->addAttribute( "foo", "bar" );
+  Tag *u = new Tag( t, "uni" ); u->addAttribute( "u3", "3u" );
+  Tag *v = new Tag( t, "vie" ); v->addAttribute( "v3", "3v" );
+  Tag *v2 = new Tag( t, "vie" ); v->addAttribute( "v32", "3v2" );
+  Tag *w = new Tag( u, "who" ); w->addAttribute( "w3", "3w" );
+  Tag *x = new Tag( v, "xep" ); x->addAttribute( "x3", "3x" );
+  Tag *y = new Tag( u, "yps" ); y->addAttribute( "y3", "3y" );
+  Tag *z = new Tag( w, "zoo" ); z->addAttribute( "z3", "3z" );
+  Tag *c = 0;
+  Tag *d = 0;
 
   // -------
   name = "undefined tag";
-  t = new Tag();
-  if( t->type() != StanzaUndefined )
+  c = new Tag();
+  if( c->type() != StanzaUndefined || c->name() != "" )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
   }
-  delete t;
-  t = 0;
+  delete c;
+  c = 0;
 
-  name = "empty tag";
-  t = new Tag( "test" );
-  if( t->name() != "test" )
+  // -------
+  name = "simple ctor";
+  if( t->name() != "toe" )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
   }
-  delete t;
-  t = 0;
 
+  // -------
+  name = "cdata ctor";
+  c = new Tag( "cod", "foobar" );
+  if( c->name() != "cod" || c->cdata() != "foobar" )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+  delete c;
+  c = 0;
 
   //-------
   name = "clone test 1";
-  t = new Tag( "hallo" );
-  Tag *c = t->clone();
-  if( *t != *c )
+  c = z->clone();
+  if( *z != *c )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
   }
-  delete t;
   delete c;
-  t = 0;
   c = 0;
 
   //-------
   name = "clone test 2";
-  t = new Tag( "hello" );
-  t->addAttribute( "test", "bacd" );
-  t->addChild( new Tag( "hello" ) );
   c = t->clone();
   if( *t != *c )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
   }
-  delete t;
   delete c;
-  t = 0;
   c = 0;
 
   //-------
   name = "operator== test 1";
-  t = new Tag( "hello" );
-  t->addAttribute( "test", "bacd" );
-  t->addChild( new Tag( "hello" ) );
   c = new Tag();
   if( *t == *c )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
   }
-  delete t;
   delete c;
-  t = 0;
   c = 0;
 
   //-------
   name = "operator== test 2";
-  t = new Tag( "hello" );
-  t->addAttribute( "test", "bacd" );
-  t->addChild( new Tag( "hello" ) );
   c = new Tag( "test" );
   c->addAttribute( "me", "help" );
   c->addChild( new Tag( "yes" ) );
-
   if( *t == *c )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
   }
-  delete t;
   delete c;
-  t = 0;
   c = 0;
 
   //-------
   name = "operator== test 3";
-  t = new Tag( "hello" );
-  t->addAttribute( "test", "bacd" );
-  t->addChild( new Tag( "hello" ) );
-  c = new Tag( "hello" );
-  c->addAttribute( "test", "bacd" );
-  c->addChild( new Tag( "helloo" ) );
-
-  if( *t == *c )
-  {
-    ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
-  }
-  delete t;
-  delete c;
-  t = 0;
-  c = 0;
-
-  //-------
-  name = "operator!= test 1";
-  t = new Tag( "hello" );
-  t->addAttribute( "test", "bacd" );
-  t->addChild( new Tag( "hello" ) );
   c = new Tag( "hello" );
   c->addAttribute( "test", "bacd" );
   c->addChild( new Tag( "hello" ) );
-
-  if( *t != *c )
+  d = new Tag( "hello" );
+  d->addAttribute( "test", "bacd" );
+  d->addChild( new Tag( "helloo" ) );
+  if( *d == *c )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
   }
-  delete t;
   delete c;
-  t = 0;
+  delete d;
   c = 0;
+  d = 0;
+
+  //-------
+  name = "operator!= test 1";
+  c = new Tag( "hello" );
+  c->addAttribute( "test", "bacd" );
+  c->addChild( new Tag( "hello" ) );
+  d = new Tag( "hello" );
+  d->addAttribute( "test", "bacd" );
+  d->addChild( new Tag( "hello" ) );
+  if( *d != *c )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+  delete c;
+  delete d;
+  c = 0;
+  d = 0;
 
   //-------
   name = "findChildren test";
-  t = new Tag( "hello" );
-  t->addAttribute( "test", "bacd" );
-  t->addChild( new Tag( "test" ) );
-  t->addChild( new Tag( "test" ) );
-  t->addChild( new Tag( "test" ) );
-  t->addChild( new Tag( "test" ) );
-  if( t->findChildren( "test" ).size() != 4 )
+  Tag::TagList l = t->findChildren( "vie" );
+  Tag::TagList::const_iterator it = l.begin();
+  if( l.size() != 2 || (*it) != v || *(++it) != v2 )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
   }
-  delete t;
-  t = 0;
+  delete c;
+  c = 0;
 
   //-------
   name = "escape";
@@ -172,68 +164,108 @@ int main( int /*argc*/, char* /*argv[]*/ )
 
   //-------
   name = "xml() 1";
-  t = new Tag( "hello" );
-  t->addAttribute( "test", "bacd" );
-  t->addChild( new Tag( "test" ) );
-  t->addChild( new Tag( "test" ) );
-  t->addChild( new Tag( "test" ) );
-  t->addChild( new Tag( "test" ) );
-  if( t->xml() != "<hello test='bacd'><test/><test/><test/><test/></hello>" )
+  if( t->xml() != "<toe foo='bar'><uni u3='3u'><who w3='3w'><zoo z3='3z'/></who><yps y3='3y'/>"
+                    "</uni><vie v3='3v' v32='3v2'><xep x3='3x'/></vie><vie/></toe>" )
   {
     ++fail;
     printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
   }
-  delete t;
-  t = 0;
 
   //-------
   name = "xml() 2";
-  t = new Tag( "hello" );
   t->addAttribute( "test", "bacd" );
-  t->addAttribute( "foo", "bar" );
-  t->addChild( new Tag( "test" ) );
-  t->addChild( new Tag( "test" ) );
-  t->addChild( new Tag( "test" ) );
-  t->addChild( new Tag( "test" ) );
-  if( t->xml() != "<hello test='bacd' foo='bar'><test/><test/><test/><test/></hello>" )
+  if( t->xml() != "<toe foo='bar' test='bacd'><uni u3='3u'><who w3='3w'><zoo z3='3z'/></who><yps y3='3y'/>"
+                    "</uni><vie v3='3v' v32='3v2'><xep x3='3x'/></vie><vie/></toe>" )
   {
     ++fail;
     printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
   }
-  delete t;
-  t = 0;
 
   //-------
   name = "hasChild 1";
-  t = new Tag( "hello" );
-  t->addAttribute( "test", "bacd" );
-  t->addAttribute( "foo", "bar" );
-  t->addChild( new Tag( "test1" ) );
-  t->addChild( new Tag( "test2" ) );
-  t->addChild( new Tag( "test3" ) );
-  t->addChild( new Tag( "test4" ) );
-  if( !t->hasChild( "test1" ) || !t->hasChild( "test2" )
-       || !t->hasChild( "test3" ) || !t->hasChild( "test4" ) )
+  if( !t->hasChild( "uni" ) || !t->hasChild( "vie" ) || !u->hasChild( "who" ) || !w->hasChild( "zoo" )
+      || !u->hasChild( "yps" ) )
   {
     ++fail;
     printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
   }
-  delete t;
-  t = 0;
 
   //-------
   name = "hasAttribute 1";
-  t = new Tag( "hello" );
-  t->addAttribute( "test", "bacd" );
-  t->addAttribute( "foo", "bar" );
   if( !t->hasAttribute( "test" ) || !t->hasAttribute( "test", "bacd" )
-       || !t->hasAttribute( "foo" ) || !t->hasAttribute( "foo", "bar" ) )
+      || !t->hasAttribute( "foo" ) || !t->hasAttribute( "foo", "bar" ) )
   {
     ++fail;
     printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
   }
+
+  //-------
+  name = "findAttribute 1";
+  if( t->findAttribute( "test" ) != "bacd" || t->findAttribute( "foo" ) != "bar" )
+  {
+    ++fail;
+    printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+  }
+
+  //-------
+  name = "findChild 1";
+  c = t->findChild( "uni" );
+  if( c != u )
+  {
+    ++fail;
+    printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+  }
+
+  //-------
+  name = "findChild 2";
+  c = t->findChild( "uni", "u3" );
+  if( c != u )
+  {
+    ++fail;
+    printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+  }
+
+  //-------
+  name = "findChild 3";
+  c = t->findChild( "uni", "u3", "3u" );
+  if( c != u )
+  {
+    ++fail;
+    printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+  }
+
+  //-------
+  name = "findChildWithAttrib 1";
+  c = t->findChildWithAttrib( "u3" );
+  if( c != u )
+  {
+    ++fail;
+    printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+  }
+
+  //-------
+  name = "findChildWithAttrib 2";
+  c = t->findChildWithAttrib( "u3", "3u" );
+  if( c != u )
+  {
+    ++fail;
+    printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+  }
+
+
+
+
+
+
   delete t;
   t = 0;
+
+
+
+
+
+
+
 
 
 
