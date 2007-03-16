@@ -83,49 +83,46 @@ namespace gloox
 
   void MessageEventFilter::raiseMessageEvent( MessageEventType event )
   {
-    if( m_disable )
+    if( m_disable || ( !( m_requestedEvents & event ) && ( event != MessageEventCancel ) ) )
       return;
 
-    if( ( m_requestedEvents & event ) || ( event == MessageEventCancel ) )
+    Tag *m = new Tag( "message" );
+    m->addAttribute( "to", m_parent->target().full() );
+    Tag *x = new Tag( m, "x" );
+    x->addAttribute( "xmlns", XMLNS_X_EVENT );
+    new Tag( x, "id", m_lastID );
+
+    bool used = true;
+    switch( event )
     {
-      Tag *m = new Tag( "message" );
-      m->addAttribute( "to", m_parent->target().full() );
-      Tag *x = new Tag( m, "x" );
-      x->addAttribute( "xmlns", XMLNS_X_EVENT );
-      new Tag( x, "id", m_lastID );
-
-      bool used = true;
-      switch( event )
-      {
-        case MessageEventOffline:
-          new Tag( x, "offline" );
-          m_requestedEvents ^= event;
-          break;
-        case MessageEventDelivered:
-          new Tag( x, "delivered" );
-          m_requestedEvents ^= event;
-          break;
-        case MessageEventDisplayed:
-          new Tag( x, "displayed" );
-          m_requestedEvents ^= event;
-          break;
-        case MessageEventComposing:
-          if( m_lastSent != MessageEventComposing )
-            new Tag( x, "composing" );
-          else
-            used = false;
-          break;
-        case MessageEventCancel:
-          break;
-      }
-
-      m_lastSent = event;
-
-      if( used )
-        m_parent->send( m );
-      else
-        delete m;
+      case MessageEventOffline:
+        new Tag( x, "offline" );
+        m_requestedEvents ^= event;
+        break;
+      case MessageEventDelivered:
+        new Tag( x, "delivered" );
+        m_requestedEvents ^= event;
+        break;
+      case MessageEventDisplayed:
+        new Tag( x, "displayed" );
+        m_requestedEvents ^= event;
+        break;
+      case MessageEventComposing:
+        if( m_lastSent != MessageEventComposing )
+          new Tag( x, "composing" );
+        else
+          used = false;
+        break;
+      case MessageEventCancel:
+        break;
     }
+
+    m_lastSent = event;
+
+    if( used )
+      m_parent->send( m );
+    else
+      delete m;
   }
 
   void MessageEventFilter::decorate( Tag *tag )

@@ -21,6 +21,7 @@ namespace gloox
 {
 
   class Tag;
+  class Stanza;
   class MessageEventHandler;
   class MessageSession;
 
@@ -44,8 +45,8 @@ namespace gloox
        * for every message sent. Default: all.
        */
       MessageEventFilter( MessageSession *parent,
-                             int defaultEvents = MessageEventOffline | MessageEventDelivered
-                                               | MessageEventDisplayed | MessageEventComposing );
+                          int defaultEvents = MessageEventOffline | MessageEventDelivered
+                                              | MessageEventDisplayed | MessageEventComposing );
 
       /**
        * Virtual destructor.
