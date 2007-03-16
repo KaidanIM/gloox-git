@@ -2,9 +2,9 @@
 ## Process this file with automake to produce Makefile.in
 ##
 
-SUBDIRS = base64 client clientbase dataform dataformfield delayeddelivery gpgencrypted gpgsigned \
-	  jid md5 messageeventfilter oob parser prep sha stanza stanzaextensionfactory tag vcardupdate \
-	  xdelayeddelivery xpath
+SUBDIRS = base64 chatstatefilter client clientbase dataform dataformfield delayeddelivery gpgencrypted \
+	  gpgsigned jid md5 messageeventfilter oob parser prep sha stanza stanzaextensionfactory tag \
+	  vcardupdate xdelayeddelivery xpath
 
 check: test
 
