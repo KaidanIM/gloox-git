@@ -18,27 +18,24 @@
 namespace gloox {
 SChannel::SChannel( TLSHandler *th, const std::string& server ) :
     TLSBase( th, server ) {
-        printf(">> SChannel::SChannel()\n");
+        //printf(">> SChannel::SChannel()\n");
     }
 
     SChannel::~SChannel() {
-        printf(">> SChannel::~SChannel()\n");
+        //printf(">> SChannel::~SChannel()\n");
     }
 
     bool SChannel::encrypt( const std::string& data ) {
-        printf(">> SChannel::encrypt()\n");
+        //printf(">> SChannel::encrypt()\n");
         std::string data_copy = data;
 
         SecBuffer       buffer[4];
         SecBufferDesc   buffer_desc;
         DWORD cbIoBufferLength = m_sizes.cbHeader + m_sizes.cbMaximumMessage + m_sizes.cbTrailer;
-        char str[50];
-        sprintf(str, "MAXMSG: %i", m_sizes.cbMaximumMessage);
-        OutputDebugString(str);
 
         PBYTE e_iobuffer = static_cast<PBYTE>(LocalAlloc(LMEM_FIXED, cbIoBufferLength));
         if (e_iobuffer == NULL) {
-            printf("**** Out of memory (2)\n");
+            //printf("**** Out of memory (2)\n");
             return 1;
         }
         PBYTE e_message = e_iobuffer + m_sizes.cbHeader;
@@ -46,11 +43,9 @@ SChannel::SChannel( TLSHandler *th, const std::string& server ) :
             std::string tmp = data_copy.substr(0, data_copy.size() > m_sizes.cbMaximumMessage ? m_sizes.cbMaximumMessage : data_copy.size());
             if (data_copy.size() > m_sizes.cbMaximumMessage) {
                 data_copy = data_copy.substr(m_sizes.cbMaximumMessage-1);
-            }
+            } else data_copy = "";
 
             // copy data chunk from tmp string into encryption memory buffer
-            sprintf(str, "tmp.size(): %i", tmp.size());
-            OutputDebugString(str);
             memcpy(e_message, tmp.data(), tmp.size());
 
             buffer[0].pvBuffer     = e_iobuffer;
@@ -75,7 +70,7 @@ SChannel::SChannel( TLSHandler *th, const std::string& server ) :
             if (SUCCEEDED(e_status)) {
                 std::string encrypted(reinterpret_cast<const char*>(e_iobuffer), buffer[0].cbBuffer + buffer[1].cbBuffer + buffer[2].cbBuffer);
                 m_handler->handleEncryptedData(encrypted);
-                if (data_copy.size() <= m_sizes.cbMaximumMessage) data_copy = "";
+                //if (data_copy.size() <= m_sizes.cbMaximumMessage) data_copy = "";
             } else {
                 LocalFree(e_iobuffer);
                 // throw an error
@@ -87,7 +82,7 @@ SChannel::SChannel( TLSHandler *th, const std::string& server ) :
     }
 
     int SChannel::decrypt( const std::string& data ) {
-        printf(">> SChannel::decrypt()\n");
+        //printf(">> SChannel::decrypt()\n");
         if (m_secure) {
             m_buffer += data;
 
@@ -97,7 +92,7 @@ SChannel::SChannel( TLSHandler *th, const std::string& server ) :
 
             PBYTE e_iobuffer = static_cast<PBYTE>(LocalAlloc(LMEM_FIXED, cbIoBufferLength));
             if (e_iobuffer == NULL) {
-                printf("**** Out of memory (2)\n");
+                //printf("**** Out of memory (2)\n");
                 return 1;
             }
             SECURITY_STATUS e_status;
@@ -109,25 +104,26 @@ SChannel::SChannel( TLSHandler *th, const std::string& server ) :
                 buffer[0].pvBuffer     = e_iobuffer;
                 buffer[0].cbBuffer     = m_buffer.size() > cbIoBufferLength ? cbIoBufferLength : m_buffer.size();
                 buffer[0].BufferType   = SECBUFFER_DATA;
-
+                buffer[1].cbBuffer = buffer[2].cbBuffer = buffer[3].cbBuffer = 0;
                 buffer[1].BufferType = buffer[2].BufferType = buffer[3].BufferType  = SECBUFFER_EMPTY;
 
                 buffer_desc.ulVersion       = SECBUFFER_VERSION;
                 buffer_desc.cBuffers        = 4;
                 buffer_desc.pBuffers        = buffer;
 
+                unsigned long processed_data = buffer[0].cbBuffer;
                 e_status = DecryptMessage(&m_context, &buffer_desc, 0, 0);
-                print_error(e_status, "decrypt() ~ DecryptMessage()");
-                for (int n=0; n<4; n++)
-                    std::cout << "buffer[" << n << "].cbBuffer: " << buffer[n].cbBuffer << "\t"
-                    << buffer[n].BufferType << "\n";
+
+                // print_error(e_status, "decrypt() ~ DecryptMessage()");
+                // for (int n=0; n<4; n++) printf("buffer[%d].cbBuffer: %d   \t%d\n", n, buffer[n].cbBuffer, buffer[n].BufferType);
+
                 // Locate data and (optional) extra buffers.
                 SecBuffer *pDataBuffer  = NULL;
                 SecBuffer *pExtraBuffer = NULL;
                 for (int i = 1; i < 4; i++) {
                     if (pDataBuffer == NULL && buffer[i].BufferType == SECBUFFER_DATA) {
                         pDataBuffer = &buffer[i];
-                        printf("buffer[%d].BufferType = SECBUFFER_DATA\n",i);
+                        //printf("buffer[%d].BufferType = SECBUFFER_DATA\n",i);
                     }
                     if (pExtraBuffer == NULL && buffer[i].BufferType == SECBUFFER_EXTRA) {
                         pExtraBuffer = &buffer[i];
@@ -136,11 +132,12 @@ SChannel::SChannel( TLSHandler *th, const std::string& server ) :
                 if (e_status == SEC_E_OK) {
                     std::string decrypted(reinterpret_cast<const char*>(pDataBuffer->pvBuffer), pDataBuffer->cbBuffer);
                     m_handler->handleDecryptedData(decrypted);
-                    if (pExtraBuffer == NULL) m_buffer.clear();
-                    else {
-                        std::cout << "m_buffer.size() = " << pExtraBuffer->cbBuffer << std::endl;
+                    if (pExtraBuffer == NULL) {
+                        m_buffer.erase(0, processed_data);
+                    } else {
+                        //std::cout << "m_buffer.size() = " << pExtraBuffer->cbBuffer << std::endl;
                         m_buffer.erase(0, m_buffer.size() - pExtraBuffer->cbBuffer);
-                        std::cout << "m_buffer.size() = " << m_buffer.size() << std::endl;
+                        //std::cout << "m_buffer.size() = " << m_buffer.size() << std::endl;
                     }
                 } else if (e_status == SEC_E_INCOMPLETE_MESSAGE) {
                     break;
@@ -156,14 +153,14 @@ SChannel::SChannel( TLSHandler *th, const std::string& server ) :
         } else {
             handshake_stage(data);
         }
-        printf("<< SChannel::decrypt()\n");
+        //printf("<< SChannel::decrypt()\n");
         return 0;
     }
 
     void SChannel::cleanup() {}
 
     bool SChannel::handshake() {
-        printf(">> SChannel::handshake()\n");
+        //printf(">> SChannel::handshake()\n");
         SECURITY_STATUS error;
         ULONG return_flags;
         TimeStamp t;
@@ -193,7 +190,7 @@ SChannel::SChannel( TLSHandler *th, const std::string& server ) :
                                             0,
                                             &m_cred_handle,
                                             &t);
-        print_error(error, "handshake() ~ AcquireCredentialsHandle()");
+        //print_error(error, "handshake() ~ AcquireCredentialsHandle()");
         if (error != SEC_E_OK) {
             return false;
         } else {
@@ -220,12 +217,12 @@ SChannel::SChannel( TLSHandler *th, const std::string& server ) :
                                                 &obufs,
                                                 &return_flags,
                                                 NULL);
-            print_error(error, "handshake() ~ InitializeSecurityContext()");
+            //print_error(error, "handshake() ~ InitializeSecurityContext()");
 
             if (error == SEC_E_OK) {
                 return false;
             } else if (error == SEC_I_CONTINUE_NEEDED) {
-                std::cout << "obuf[1].cbBuffer: " << obuf[0].cbBuffer << "\n";
+                //std::cout << "obuf[1].cbBuffer: " << obuf[0].cbBuffer << "\n";
                 std::string senddata(static_cast<char*>(obuf[0].pvBuffer), obuf[0].cbBuffer);
                 FreeContextBuffer (obuf[0].pvBuffer);
                 m_handler->handleEncryptedData(senddata);
@@ -236,7 +233,7 @@ SChannel::SChannel( TLSHandler *th, const std::string& server ) :
     }
 
     void SChannel::handshake_stage(const std::string &data) {
-        printf(" >> handshake_stage\n");
+        //printf(" >> handshake_stage\n");
         m_buffer += data;
 
         SECURITY_STATUS error;
@@ -259,7 +256,7 @@ SChannel::SChannel( TLSHandler *th, const std::string& server ) :
             /* initialize buffers */
             ibuf[0].cbBuffer = m_buffer.size();
             ibuf[0].pvBuffer = static_cast<void*>(const_cast<char*>(m_buffer.c_str()));
-            std::cout << "Size: " << m_buffer.size() << "\n";
+            //std::cout << "Size: " << m_buffer.size() << "\n";
             ibuf[1].cbBuffer = 0;
             ibuf[1].pvBuffer = 0;
             obuf[0].cbBuffer = 0;
@@ -275,9 +272,11 @@ SChannel::SChannel( TLSHandler *th, const std::string& server ) :
             ibufs.pBuffers = ibuf;
             obufs.pBuffers = obuf;
 
+            /*
             std::cout << "obuf[0].cbBuffer: " << obuf[0].cbBuffer << "\t" << obuf[0].BufferType << "\n";
             std::cout << "ibuf[0].cbBuffer: " << ibuf[0].cbBuffer << "\t" << ibuf[0].BufferType << "\n";
             std::cout << "ibuf[1].cbBuffer: " << ibuf[1].cbBuffer << "\t" << ibuf[1].BufferType << "\n";
+            */
 
 
             /* negotiate security */
@@ -293,7 +292,7 @@ SChannel::SChannel( TLSHandler *th, const std::string& server ) :
                                                 &obufs,
                                                 &a,
                                                 &t);
-            print_error(error, "handshake() ~ InitializeSecurityContext()");
+            //print_error(error, "handshake() ~ InitializeSecurityContext()");
             if (error == SEC_E_OK) {
                 // EXTRA STUFF??
                 if ( ibuf[1].BufferType == SECBUFFER_EXTRA ) {
@@ -309,10 +308,12 @@ SChannel::SChannel( TLSHandler *th, const std::string& server ) :
                 m_handler->handleHandshakeResult(true, m_certInfo);
                 break;
             } else if (error == SEC_I_CONTINUE_NEEDED) {
-
+                /*
                 std::cout << "obuf[0].cbBuffer: " << obuf[0].cbBuffer << "\t" << obuf[0].BufferType << "\n";
                 std::cout << "ibuf[0].cbBuffer: " << ibuf[0].cbBuffer << "\t" << ibuf[0].BufferType << "\n";
                 std::cout << "ibuf[1].cbBuffer: " << ibuf[1].cbBuffer << "\t" << ibuf[1].BufferType << "\n";
+                */
+
                 // STUFF TO SEND??
                 if (obuf[0].cbBuffer != 0 && obuf[0].pvBuffer != NULL) {
                     std::string senddata(static_cast<char*>(obuf[0].pvBuffer), obuf[0].cbBuffer);
@@ -342,9 +343,9 @@ void SChannel::setCACerts( const StringList& cacerts ) {}
 
     void SChannel::set_sizes() {
         if (QueryContextAttributes(&m_context, SECPKG_ATTR_STREAM_SIZES, &m_sizes) == SEC_E_OK) {
-            std::cout << "set_sizes success\n";
+            //std::cout << "set_sizes success\n";
         } else {
-            std::cout << "set_sizes no success\n";
+            //std::cout << "set_sizes no success\n";
         }
     }
 
@@ -371,7 +372,7 @@ void SChannel::setCACerts( const StringList& cacerts ) {}
         do {
             // Get server's certificate.
             if (QueryContextAttributes(&m_context, SECPKG_ATTR_REMOTE_CERT_CONTEXT, (PVOID)&remoteCertContext) != SEC_E_OK) {
-                printf("Error querying remote certificate\n");
+                //printf("Error querying remote certificate\n");
                 // !!! THROW SOME ERROR
                 break;
             }
@@ -381,14 +382,14 @@ void SChannel::setCACerts( const StringList& cacerts ) {}
             csizeServerName = MultiByteToWideChar(CP_ACP, 0, serverName, -1, NULL, 0);
             uServerName =reinterpret_cast<WCHAR*>(LocalAlloc(LMEM_FIXED, csizeServerName * sizeof(WCHAR)));
             if (uServerName == NULL) {
-                printf("SEC_E_INSUFFICIENT_MEMORY ~ Not enough memory!!!\n");
+                //printf("SEC_E_INSUFFICIENT_MEMORY ~ Not enough memory!!!\n");
                 break;
             }
 
             // convert into unicode
             csizeServerName = MultiByteToWideChar(CP_ACP, 0, serverName, -1, uServerName, csizeServerName);
             if (csizeServerName == 0) {
-                printf("SEC_E_WRONG_PRINCIPAL\n");
+                //printf("SEC_E_WRONG_PRINCIPAL\n");
                 break;
             }
 
@@ -402,7 +403,7 @@ void SChannel::setCACerts( const StringList& cacerts ) {}
             if (!CertGetCertificateChain(   NULL, remoteCertContext, NULL, remoteCertContext->hCertStore,
                                             &chainParameter, 0, NULL, &chainContext)) {
                 DWORD status = GetLastError();
-                printf("Error 0x%x returned by CertGetCertificateChain!!!\n", status);
+                //printf("Error 0x%x returned by CertGetCertificateChain!!!\n", status);
                 break;
             }
 
@@ -423,12 +424,12 @@ void SChannel::setCACerts( const StringList& cacerts ) {}
             if (!CertVerifyCertificateChainPolicy(  CERT_CHAIN_POLICY_SSL, chainContext, &policyParameter,
                                                     &policyStatus)) {
                 DWORD status = GetLastError();
-                printf("Error 0x%x returned by CertVerifyCertificateChainPolicy!!!\n", status);
+                //printf("Error 0x%x returned by CertVerifyCertificateChainPolicy!!!\n", status);
                 break;
             }
 
             if (policyStatus.dwError) {
-                printf("Trust Error!!!}n");
+                //printf("Trust Error!!!}n");
                 break;
             }
             valid = true;
