@@ -34,12 +34,8 @@
 # define HAVE_TLS
 #endif
 
-#ifdef HAVE_TLS
-
 #include "gloox.h"
 #include "tlshandler.h"
-
-#include <sys/types.h>
 
 namespace gloox
 {
@@ -140,7 +136,5 @@ namespace gloox
   };
 
 }
-
-#endif // HAVE_TLS
 
 #endif // TLSBASE_H__
