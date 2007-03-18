@@ -125,11 +125,15 @@ SOURCE=.\src\component.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\compression.cpp
+SOURCE=.\src\compressionzlib.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\connection.cpp
+SOURCE=.\src\connectionhttpproxy.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\connectiontcp.cpp
 # End Source File
 # Begin Source File
 
@@ -198,6 +202,10 @@ SOURCE=.\src\lastactivity.cpp
 # Begin Source File
 
 SOURCE=.\src\logsink.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\main.cpp
 # End Source File
 # Begin Source File
 
@@ -285,6 +293,30 @@ SOURCE=.\src\tag.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\tlsgnutlsbase.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\tlsgnutlsclient.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\tlsgnutlsclientanon.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\tlsgnutlsserveranon.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\tlsopenssl.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\tlsschannel.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\uniquemucroom.cpp
 # End Source File
 # Begin Source File
@@ -365,15 +397,35 @@ SOURCE=.\src\component.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\compression.h
+SOURCE=.\src\compressionbase.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\connection.h
+SOURCE=.\src\compressiondatahandler.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\compressionzlib.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\connectionbase.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\connectiondatahandler.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\connectionhttpproxy.h
 # End Source File
 # Begin Source File
 
 SOURCE=.\src\connectionlistener.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\connectiontcp.h
 # End Source File
 # Begin Source File
 
@@ -642,6 +694,38 @@ SOURCE=.\src\tag.h
 # Begin Source File
 
 SOURCE=.\src\taghandler.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\tlsbase.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\tlsgnutlsbase.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\tlsgnutlsclient.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\tlsgnutlsclientanon.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\tlsgnutlsserveranon.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\tlshandler.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\tlsopenssl.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\tlsschannel.h
 # End Source File
 # Begin Source File
 
