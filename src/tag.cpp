@@ -113,39 +113,15 @@ namespace gloox
     return xml;
   }
 
-  /**
-   * Holder struct describing an escaping sequence.
-   */
-  struct EscapeDesc {
-    char cchar;                     /**< Char to be escaped. */
-    std::string escape;             /**< Escaped char. */
-  };
+  static const char escape_chars[] = { '&', '<', '>', '\'', '"', '<', '>',
+  '\'', '"', '<', '>', '<', '>', '\'', '"', '<', '>', '<', '>', '\'', '"' };
 
-  static const EscapeDesc escape_values[] = {
-    { '&' , "&amp;"  },
-    { '<' , "&lt;"   },
-    { '>' , "&gt;"   },
-    { '\'', "&apos;" },
-    { '"' , "&quot;" },
-    { '<' , "&#60;"  },
-    { '>' , "&#62;"  },
-    { '\'', "&#39;"  },
-    { '"' , "&#34;"  },
-    { '<' , "&#x3c;" },
-    { '>' , "&#x3e;" },
-    { '<' , "&#x3C;" },
-    { '>' , "&#x3E;" },
-    { '\'', "&#x27;" },
-    { '"' , "&#x22;" },
-    { '<' , "&#X3c;" },
-    { '>' , "&#X3e;" },
-    { '<' , "&#X3C;" },
-    { '>' , "&#X3E;" },
-    { '\'', "&#X27;" },
-    { '"' , "&#X22;" }
-  };
+  static const std::string escape_seqs[] = { "&amp;", "&lt;", "&gt;", "&apos;",
+  "&quot;", "&#60;", "&#62;", "&#39;", "&#34;", "&#x3c;", "&#x3e;", "&#x3C;",
+  "&#x3E;", "&#x27;", "&#x22;", "&#X3c;", "&#X3e;", "&#X3C;", "&#X3E;", "&#X27;",
+  "&#X22;" };
 
-  static const unsigned nb_escape = sizeof(escape_values)/sizeof(EscapeDesc);
+  static const unsigned nb_escape = sizeof(escape_chars)/sizeof(char);
   static const unsigned escape_size = 5;
 
   const std::string Tag::escape( std::string esc )
@@ -154,10 +130,10 @@ namespace gloox
     {
       for( val = 0; val < escape_size; ++val )
       {
-        if( esc[i] == escape_values[val].cchar )
+        if( esc[i] == escape_chars[val] )
         {
-          esc.replace( i, 1, escape_values[val].escape );
-          i += escape_values[val].escape.length()-1;
+          esc.replace( i, 1, escape_seqs[val] );
+          i += escape_seqs[val].length()-1;
           break;
         }
       }
@@ -182,12 +158,12 @@ namespace gloox
 
       for( val = 0; val < nb_escape; ++val )
       {
-        if( ( i + escape_values[val].escape.length() <= l )
-        && !strncmp( esc.data()+i+1, escape_values[val].escape.data()+1,
-                                     escape_values[val].escape.length()-1 ) )
+        if( ( i + escape_seqs[val].length() <= l )
+        && !strncmp( esc.data()+i+1, escape_seqs[val].data()+1,
+                                     escape_seqs[val].length()-1 ) )
         {
-          esc[i] = escape_values[val].cchar;
-          for( p=1; p < escape_values[val].escape.length(); ++p )
+          esc[i] = escape_chars[val];
+          for( p=1; p < escape_seqs[val].length(); ++p )
             esc[i+p] = 0;
           i += p-1;
           break;
@@ -196,20 +172,19 @@ namespace gloox
     }
     if( p )
     {
-      i = 0;
-      for( p = 0; p < l; ++p )
+      for( p = 0, i = 0; i < l; ++i )
       {
-        if( esc[p] != 0 )
+        if( esc[i] != 0 )
         {
-          if( esc[i] == 0 )
+          if( esc[p] == 0 )
           {
-            esc[i] = esc[p];
-            esc[i+1] = 0;
+            esc[p] = esc[i];
+            esc[p+1] = 0;
           }
-          ++i;
+          ++p;
         }
       }
-      esc.resize( i );
+      esc.resize( p );
     }
     return esc;
   }
