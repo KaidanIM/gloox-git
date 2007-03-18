@@ -29,6 +29,7 @@ namespace gloox
 
   GnuTLSBase::~GnuTLSBase()
   {
+    m_handler = 0;
     free( m_buf );
     m_buf = 0;
     cleanup();
