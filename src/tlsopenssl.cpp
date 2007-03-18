@@ -125,7 +125,7 @@ namespace gloox
         case TLSWrite:
           ret = SSL_write( m_ssl, m_sendBuffer.c_str(), m_sendBuffer.length() );
           break;
-        case TLSREAD:
+        case TLSRead:
           ret = SSL_read( m_ssl, m_buf, m_bufsize );
           break;
       }
@@ -207,11 +207,6 @@ namespace gloox
 
     m_handler->handleHandshakeResult( this, true, m_certInfo );
     return true;
-  }
-
-  int OpenSSL::pullFunc()
-  {
-    return 0;
   }
 
   int OpenSSL::pushFunc()
