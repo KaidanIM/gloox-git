@@ -21,6 +21,7 @@ namespace gloox
 {
 
   struct CertInfo;
+  class TLSBase;
 
   /**
    * @brief An interface that allows for interacting with TLS implementations derived from TLSBase.
@@ -38,22 +39,25 @@ namespace gloox
 
       /**
        * Reimplement this function to receive encrypted data from a TLSBase implementation.
+       * @param base The encryption implementation which called this function.
        * @param data The encrypted data (e.g. to send over the wire).
        */
-      virtual void handleEncryptedData( const std::string& data ) = 0;
+      virtual void handleEncryptedData( const TLSBase* base, const std::string& data ) = 0;
 
       /**
        * Reimplement this function to receive decrypted data from a TLSBase implementation.
+       * @param base The encryption implementation which called this function.
        * @param data The decrypted data (e.g. to parse).
        */
-      virtual void handleDecryptedData( const std::string& data ) = 0;
+      virtual void handleDecryptedData( const TLSBase* base, const std::string& data ) = 0;
 
       /**
        * Reimplement this function to receive the result of a TLS handshake.
+       * @param base The encryption implementation which called this function.
        * @param success Whether or not the handshake was successful.
        * @param certinfo Information about the server's certificate.
        */
-      virtual void handleHandshakeResult( bool success, CertInfo &certinfo ) = 0;
+      virtual void handleHandshakeResult( const TLSBase* base, bool success, CertInfo &certinfo ) = 0;
 
   };
 

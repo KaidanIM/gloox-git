@@ -624,13 +624,13 @@ namespace gloox
       virtual void handleDisconnect( ConnectionError reason );
 
       // reimplemented from TLSHandler
-      virtual void handleEncryptedData( const std::string& data );
+      virtual void handleEncryptedData( const TLSBase *base, const std::string& data );
 
       // reimplemented from TLSHandler
-      virtual void handleDecryptedData( const std::string& data );
+      virtual void handleDecryptedData( const TLSBase *base, const std::string& data );
 
       // reimplemented from TLSHandler
-      virtual void handleHandshakeResult( bool success, CertInfo &certinfo );
+      virtual void handleHandshakeResult( const TLSBase *base, bool success, CertInfo &certinfo );
 
     protected:
       void notifyOnResourceBindError( ResourceBindError error );

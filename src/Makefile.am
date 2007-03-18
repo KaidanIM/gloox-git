@@ -20,9 +20,9 @@ libgloox_la_SOURCES = jid.cpp parser.cpp connectiontcp.cpp clientbase.cpp tag.cp
                         vcardmanager.cpp md5.cpp sha.cpp search.cpp dataformreported.cpp dataformitem.cpp \
                         mucroom.cpp mucmessagesession.cpp oob.cpp vcardupdate.cpp stanzaextensionfactory.cpp \
                         delayeddelivery.cpp xdelayeddelivery.cpp gpgencrypted.cpp gpgsigned.cpp \
-                        uniquemucroom.cpp instantmucroom.cpp compressionzlib.cpp tlsgnutls.cpp \
-                        tlsopenssl.cpp connectionhttpproxy.cpp
-#tlsschannel.cpp
+                        uniquemucroom.cpp instantmucroom.cpp compressionzlib.cpp tlsgnutlsclient.cpp \
+                        tlsopenssl.cpp connectionhttpproxy.cpp tlsgnutlsserveranon.cpp tlsgnutlsbase.cpp \
+                        tlsgnutlsclientanon.cpp tlsschannel.cpp
 
 libgloox_la_LDFLAGS = -version-info 7:0:0 -no-undefined -no-allow-shlib-undefined
 libgloox_la_LIBADD =
@@ -60,8 +60,9 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             connectionbase.h          connectiondatahandler.h compressiondatahandler.h \
                             compressionbase.h         connectiontcp.h         connectionhttpproxy.h
 
-noinst_HEADERS = prep.h dns.h nonsaslauth.h mucmessagesession.h stanzaextensionfactory.h tlsgnutls.h \
-			tlsopenssl.h tlsschannel.h compressionzlib.h
+noinst_HEADERS = prep.h dns.h nonsaslauth.h mucmessagesession.h stanzaextensionfactory.h tlsgnutlsclient.h \
+                   tlsgnutlsbase.h tlsgnutlsclientanon.h tlsgnutlsserveranon.h tlsopenssl.h tlsschannel.h \
+                   compressionzlib.h
 
 EXTRA_DIST = version.rc
 
