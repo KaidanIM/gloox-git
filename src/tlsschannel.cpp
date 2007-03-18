@@ -36,6 +36,8 @@ SChannel::SChannel( TLSHandler *th, const std::string& server ) :
         PBYTE e_iobuffer = static_cast<PBYTE>(LocalAlloc(LMEM_FIXED, cbIoBufferLength));
         if (e_iobuffer == NULL) {
             //printf("**** Out of memory (2)\n");
+            cleanup();
+            m_handler->handleHandshakeResult(this, false, m_certInfo);
             return 1;
         }
         PBYTE e_message = e_iobuffer + m_sizes.cbHeader;
@@ -73,7 +75,8 @@ SChannel::SChannel( TLSHandler *th, const std::string& server ) :
                 //if (data_copy.size() <= m_sizes.cbMaximumMessage) data_copy = "";
             } else {
                 LocalFree(e_iobuffer);
-                // throw an error
+                cleanup();
+                m_handler->handleHandshakeResult(this, false, m_certInfo);
                 return 1;
             }
         } while (data_copy.size() > 0);
@@ -93,6 +96,8 @@ SChannel::SChannel( TLSHandler *th, const std::string& server ) :
             PBYTE e_iobuffer = static_cast<PBYTE>(LocalAlloc(LMEM_FIXED, cbIoBufferLength));
             if (e_iobuffer == NULL) {
                 //printf("**** Out of memory (2)\n");
+                cleanup();
+                m_handler->handleHandshakeResult(this, false, m_certInfo);
                 return 1;
             }
             SECURITY_STATUS e_status;
@@ -142,22 +147,24 @@ SChannel::SChannel( TLSHandler *th, const std::string& server ) :
                 } else if (e_status == SEC_E_INCOMPLETE_MESSAGE) {
                     break;
                 } else {
-                    std::cout << "decrypt !!!ERROR!!!\n";
-                    system("PAUSE");
-                    // throw an error
-                    exit(1);
+                    //std::cout << "decrypt !!!ERROR!!!\n";
+                    cleanup();
+                    m_handler->handleHandshakeResult(this, false, m_certInfo);
                     break;
                 }
             } while (m_buffer.size() != 0);
             LocalFree(e_iobuffer);
         } else {
-            handshake_stage(data);
+            handshakeStage(data);
         }
         //printf("<< SChannel::decrypt()\n");
         return 0;
     }
 
-    void SChannel::cleanup() {}
+    void SChannel::cleanup() {
+      FreeCredentialsHandle(&m_cred_handle);
+      DeleteSecurityContext(&m_context);
+    }
 
     bool SChannel::handshake() {
         //printf(">> SChannel::handshake()\n");
@@ -192,6 +199,8 @@ SChannel::SChannel( TLSHandler *th, const std::string& server ) :
                                             &t);
         //print_error(error, "handshake() ~ AcquireCredentialsHandle()");
         if (error != SEC_E_OK) {
+            cleanup();
+            m_handler->handleHandshakeResult(this, false, m_certInfo);
             return false;
         } else {
             /* initialize buffers */
@@ -227,12 +236,15 @@ SChannel::SChannel( TLSHandler *th, const std::string& server ) :
                 FreeContextBuffer (obuf[0].pvBuffer);
                 m_handler->handleEncryptedData( this, senddata );
                 return true;
-            } else {}
+            } else {
+                cleanup();
+                m_handler->handleHandshakeResult(this, false, m_certInfo);
+            }
         }
         return true;
     }
 
-    void SChannel::handshake_stage(const std::string &data) {
+    void SChannel::handshakeStage(const std::string &data) {
         //printf(" >> handshake_stage\n");
         m_buffer += data;
 
@@ -300,8 +312,7 @@ SChannel::SChannel( TLSHandler *th, const std::string& server ) :
                 } else {
                     m_buffer = "";
                 }
-                set_sizes();
-
+                setSizes();
                 setCertinfos();
 
                 m_secure = true;
@@ -328,24 +339,29 @@ SChannel::SChannel( TLSHandler *th, const std::string& server ) :
                 }
                 return;
             } else if (error == SEC_I_INCOMPLETE_CREDENTIALS) {
-                handshake_stage("");
+                handshakeStage("");
             } else if (error == SEC_E_INCOMPLETE_MESSAGE) {
                 break;
             }
-            else if (error == SEC_E_INVALID_TOKEN) break;
-            else break;
+            else {
+                cleanup();
+                m_handler->handleHandshakeResult(this, false, m_certInfo);
+                break;
+            }
         } while (true);
     }
 
-void SChannel::setCACerts( const StringList& cacerts ) {}
+    void SChannel::setCACerts( const StringList& cacerts ) {}
 
     void SChannel::setClientCert( const std::string& clientKey, const std::string& clientCerts ) {}
 
-    void SChannel::set_sizes() {
+    void SChannel::setSizes() {
         if (QueryContextAttributes(&m_context, SECPKG_ATTR_STREAM_SIZES, &m_sizes) == SEC_E_OK) {
             //std::cout << "set_sizes success\n";
         } else {
             //std::cout << "set_sizes no success\n";
+            cleanup();
+            m_handler->handleHandshakeResult(this, false, m_certInfo);
         }
     }
 

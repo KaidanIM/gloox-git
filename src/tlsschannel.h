@@ -75,8 +75,8 @@ namespace gloox
 
         std::string     m_buffer;
 
-        void handshake_stage(const std::string &data);
-        void set_sizes();
+        void handshakeStage(const std::string &data);
+        void setSizes();
 
         time_t filetime2int(FILETIME t);
 
