@@ -209,7 +209,7 @@ namespace gloox
     return true;
   }
 
-  int OpenSSL::pushFunc()
+  ssize_t OpenSSL::pushFunc()
   {
     int wantwrite;
     size_t wantread;
