@@ -349,7 +349,14 @@ void SChannel::setCACerts( const StringList& cacerts ) {}
         }
     }
 
-    bool SChannel::validateCert() {
+    time_t SChannel::filetime2int(FILETIME t) {
+        LONGLONG ll = t.dwLowDateTime | (static_cast<LONGLONG>(t.dwHighDateTime) << 32 );
+        ll -= 116444736 * 10000 * 100000;
+        ll /= 10000000;
+        return static_cast<time_t>(ll);
+    }
+
+    void SChannel::validateCert() {
         bool valid = false;
         HTTPSPolicyCallbackData policyHTTPS;
         CERT_CHAIN_POLICY_PARA policyParameter;
@@ -436,11 +443,95 @@ void SChannel::setCACerts( const StringList& cacerts ) {}
         } while (false);
         // cleanup
         if (chainContext) CertFreeCertificateChain(chainContext);
-        return valid;
+        m_certInfo.chain = valid;
+    }
+
+    void SChannel::connectionInfos() {
+        SecPkgContext_ConnectionInfo conn_info;
+        memset(&conn_info, 0, sizeof(conn_info));
+
+        if(QueryContextAttributes(&m_context, SECPKG_ATTR_CONNECTION_INFO, &conn_info) == SEC_E_OK) {
+            switch (conn_info.dwProtocol) {
+                case SP_PROT_TLS1_CLIENT:
+                    m_certInfo.protocol = "TLSv1";
+                    break;
+                case SP_PROT_SSL3_CLIENT:
+                    m_certInfo.protocol = "SSLv3";
+                    break;
+                default:
+                    m_certInfo.protocol = "unknown";
+            };
+
+            switch (conn_info.aiCipher) {
+                case CALG_3DES:
+                    m_certInfo.cipher = "3DES";
+                    break;
+                case CALG_AES_128:
+                    m_certInfo.cipher = "AES_128";
+                    break;
+                case CALG_AES_256:
+                    m_certInfo.cipher = "AES_256";
+                    break;
+                case CALG_DES:
+                    m_certInfo.cipher = "DES";
+                    break;
+                case CALG_RC2:
+                    m_certInfo.cipher = "RC2";
+                    break;
+                case CALG_RC4:
+                    m_certInfo.cipher = "RC4";
+                    break;
+                default:
+                    m_certInfo.cipher = "";
+            };
+
+            switch (conn_info.aiHash) {
+                case CALG_MD5:
+                    m_certInfo.mac = "MD5";
+                    break;
+                case CALG_SHA:
+                    m_certInfo.mac = "SHA";
+                    break;
+                default:
+                    m_certInfo.mac = "";
+            };
+        }
+    }
+
+    void SChannel::certData() {
+        PCCERT_CONTEXT remoteCertContext = NULL;
+        CHAR certString[1000];
+
+        // getting server's certificate
+        if (QueryContextAttributes(&m_context, SECPKG_ATTR_REMOTE_CERT_CONTEXT, (PVOID)&remoteCertContext) != SEC_E_OK) {
+            return;
+        }
+
+        // setting certificat's lifespan
+        m_certInfo.date_from = filetime2int(remoteCertContext->pCertInfo->NotBefore);
+        m_certInfo.date_to = filetime2int(remoteCertContext->pCertInfo->NotAfter);
+
+        if (!CertNameToStr(remoteCertContext->dwCertEncodingType,
+                           &remoteCertContext->pCertInfo->Subject,
+                           CERT_X500_NAME_STR | CERT_NAME_STR_NO_PLUS_FLAG,
+                           certString, sizeof(certString))) {
+            return;
+        }
+        m_certInfo.server = certString;
+
+        if (!CertNameToStr(remoteCertContext->dwCertEncodingType,
+                           &remoteCertContext->pCertInfo->Issuer,
+                           CERT_X500_NAME_STR | CERT_NAME_STR_NO_PLUS_FLAG,
+                           certString, sizeof(certString))) {
+            return;
+        }
+        m_certInfo.issuer = certString;
     }
 
     void SChannel::setCertinfos() {
-        m_certInfo.chain = validateCert();
+         validateCert();
+         connectionInfos();
+         certData();
     }
 
     void SChannel::print_error(int errorcode, const char *place) {
