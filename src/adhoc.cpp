@@ -278,7 +278,7 @@ namespace gloox
       return;
 
     TrackStruct track;
-    rack.remote = remote;
+    track.remote = remote;
     track.context = FetchAdhocCommands;
     track.ah = ah;
     m_adhocTrackMap[m_parent->getID()] = track;
