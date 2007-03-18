@@ -14,7 +14,7 @@
 #ifndef GLOOX_MACROS_H__
 #define GLOOX_MACROS_H__
 
-#ifdef _MSC_VER
+#if defined( _MSC_VER ) || ( _WIN32_WCE )
 #  pragma warning( disable:4251 )
 #  pragma warning( disable:4786 )
 #endif
