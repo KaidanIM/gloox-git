@@ -9,10 +9,10 @@ noinst_PROGRAMS = client_test
 client_test_SOURCES = client_test.cpp
 client_test_LDADD = ../../client.o ../../clientbase.o ../../jid.o ../../connectiontcp.o \
 			../../disco.o ../../parser.o ../../tag.o ../../stanza.o ../../base64.o \
-			../../md5.o ../../tlsgnutls.o ../../tlsopenssl.o ../../tlsschannel.o \
+			../../md5.o ../../tlsgnutlsclient.o ../../tlsopenssl.o ../../tlsschannel.o \
 			../../logsink.o ../../messagesession.o ../../prep.o ../../compressionzlib.o \
 			../../dns.o ../../stanzaextensionfactory.o ../../oob.o ../../gpgencrypted.o \
 			../../gpgsigned.o ../../vcardupdate.o ../../delayeddelivery.o \
 			../../xdelayeddelivery.o ../../rostermanager.o ../../nonsaslauth.o ../../sha.o \
-			../../rosteritem.o ../../privatexml.o ../../main.o
+			../../rosteritem.o ../../privatexml.o ../../main.o ../../tlsgnutlsbase.o
 client_test_CFLAGS = $(CPPFLAGS)
