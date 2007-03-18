@@ -8,6 +8,8 @@ using namespace gloox;
 #include <locale.h>
 #include <string>
 
+#ifdef HAVE_GNUTLS
+
 class GnuTLSTest : TLSHandler
 {
   public:
@@ -238,5 +240,11 @@ int main( int /*argc*/, char* /*argv[]*/ )
     printf( "TLSGnuTLS: %d test(s) failed\n", fail );
     return 1;
   }
-
 }
+#else
+int main( int /*argc*/, char* /*argv[]*/ )
+{
+  printf( "GnuTLS not enabled. Skipped tests.\n" );
+}
+#endif // HAVE_GNUTLS
+
