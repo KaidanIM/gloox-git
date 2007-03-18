@@ -57,9 +57,9 @@ namespace gloox
     if( node.empty() )
     {
       DiscoNodeItem item;
-	  item.node = XMLNS_ADHOC_COMMANDS;
-	  item.jid = "";
-	  item.name = "Ad-Hoc Commands";
+      item.node = XMLNS_ADHOC_COMMANDS;
+      item.jid = "";
+      item.name = "Ad-Hoc Commands";
       l.push_back( item );
     }
     else if( node == XMLNS_ADHOC_COMMANDS )
@@ -68,9 +68,9 @@ namespace gloox
       for( ; it != m_items.end(); ++it )
       {
         DiscoNodeItem item;
-		item.node = (*it).first;
-		item.jid = m_parent->jid().full();
-		item.name = (*it).second;
+        item.node = (*it).first;
+        item.jid = m_parent->jid().full();
+        item.name = (*it).second;
         l.push_back( item );
       }
     }
@@ -265,9 +265,9 @@ namespace gloox
       return;
 
     TrackStruct track;
-	track.remote = remote;
-	track.context = CheckAdhocSupport;
-	track.ah = ah;
+    track.remote = remote;
+    track.context = CheckAdhocSupport;
+    track.ah = ah;
     m_adhocTrackMap[m_parent->getID()] = track;
     m_parent->disco()->getDiscoInfo( remote, "", this, CheckAdhocSupport );
   }
@@ -278,9 +278,9 @@ namespace gloox
       return;
 
     TrackStruct track;
-	track.remote = remote;
-	track.context = FetchAdhocCommands;
-	track.ah = ah;
+    rack.remote = remote;
+    track.context = FetchAdhocCommands;
+    track.ah = ah;
     m_adhocTrackMap[m_parent->getID()] = track;
     m_parent->disco()->getDiscoItems( remote, XMLNS_ADHOC_COMMANDS, this, FetchAdhocCommands );
   }
@@ -327,9 +327,9 @@ namespace gloox
       c->addChild( form->tag() );
 
     TrackStruct track;
-	track.remote = remote;
-	track.context = ExecuteAdhocCommand;
-	track.ah = ah;
+    track.remote = remote;
+    track.context = ExecuteAdhocCommand;
+    track.ah = ah;
     m_adhocTrackMap[id] = track;
 
     m_parent->trackID( this, id, ExecuteAdhocCommand );

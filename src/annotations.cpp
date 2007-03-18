@@ -71,10 +71,10 @@ namespace gloox
           const std::string& cdate = (*it)->findAttribute( "cdate" );
           const std::string& mdate = (*it)->findAttribute( "mdate" );
           AnnotationsListItem item;
-		  item.jid = jid;
-		  item.cdate = cdate;
-		  item.mdate = mdate;
-		  item.note = note;
+          item.jid = jid;
+          item.cdate = cdate;
+          item.mdate = mdate;
+          item.note = note;
           aList.push_back( item );
         }
       }
