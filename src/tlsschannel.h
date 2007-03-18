@@ -78,7 +78,11 @@ namespace gloox
         void handshake_stage(const std::string &data);
         void set_sizes();
 
-        bool validateCert();
+        time_t filetime2int(FILETIME t);
+
+        void validateCert();
+        void connectionInfos();
+        void certData();
         void setCertinfos();
 
         // windows error outputs
