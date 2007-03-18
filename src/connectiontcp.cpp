@@ -67,6 +67,7 @@ namespace gloox
 
   ConnectionTCP::~ConnectionTCP()
   {
+    cleanup();
     free( m_buf );
     m_buf = 0;
   }

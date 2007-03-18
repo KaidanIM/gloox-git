@@ -45,7 +45,9 @@ namespace gloox
 
   OpenSSL::~OpenSSL()
   {
+    m_handler = 0;
     free( m_buf );
+    cleanup();
   }
 
   bool OpenSSL::encrypt( const std::string& data )

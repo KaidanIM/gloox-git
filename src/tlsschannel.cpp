@@ -27,6 +27,8 @@ namespace gloox
 
   SChannel::~SChannel()
   {
+    m_handler = 0;
+    cleanup();
     //printf(">> SChannel::~SChannel()\n");
   }
 
@@ -282,11 +284,7 @@ namespace gloox
                                          NULL );
       //print_error(error, "handshake() ~ InitializeSecurityContext()");
 
-      if( error == SEC_E_OK )
-      {
-        return false;
-      }
-      else if( error == SEC_I_CONTINUE_NEEDED )
+      if( error == SEC_I_CONTINUE_NEEDED )
       {
         //std::cout << "obuf[1].cbBuffer: " << obuf[0].cbBuffer << "\n";
         std::string senddata( static_cast<char*>(obuf[0].pvBuffer), obuf[0].cbBuffer );
@@ -660,6 +658,7 @@ namespace gloox
     certData();
   }
 
+#if 0
   void SChannel::print_error( int errorcode, const char* place )
   {
     printf( "Win error at %s.\n", place );
@@ -752,6 +751,7 @@ namespace gloox
         printf( "\tDesc:\tUnknown error code.\n" );
     }
   }
+#endif
 
 }
 
