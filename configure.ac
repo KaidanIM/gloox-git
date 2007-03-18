@@ -300,5 +300,6 @@ src/tests/tlsgnutls/Makefile
 src/tests/vcardupdate/Makefile
 src/tests/xdelayeddelivery/Makefile
 src/tests/xpath/Makefile
+src/tests/zlib/Makefile
 ])
 AC_OUTPUT
