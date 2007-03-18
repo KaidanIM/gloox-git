@@ -84,7 +84,7 @@ namespace gloox
     void setCertinfos();
 
     // windows error outputs
-    void print_error( int errorcode, const char* place = 0 );
+//     void print_error( int errorcode, const char* place = 0 );
   };
 }
 

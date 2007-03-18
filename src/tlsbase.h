@@ -88,6 +88,8 @@ namespace gloox
        * This functiopn performs the TLS handshake. Handshake data from the server side should be
        * fed in using decrypt(). Handshake data that is to be sent to the other side is pushed through
        * TLSBase's handleEncryptedData().
+       * @return @b True if the handshake was successful or if more input is needed, @b false if the
+       * handshake failed.
        */
       virtual bool handshake() = 0;
 
