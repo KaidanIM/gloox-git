@@ -296,6 +296,7 @@ src/tests/sha/Makefile
 src/tests/stanza/Makefile
 src/tests/stanzaextensionfactory/Makefile
 src/tests/tag/Makefile
+src/tests/tlsgnutls/Makefile
 src/tests/vcardupdate/Makefile
 src/tests/xdelayeddelivery/Makefile
 src/tests/xpath/Makefile
