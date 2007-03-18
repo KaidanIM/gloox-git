@@ -34,7 +34,6 @@ class MessageTest : public ConnectionListener, LogHandler, MUCRoomHandler
       j->setPresence( PresenceAvailable, -1 );
       j->disco()->setVersion( "gloox muc_example", GLOOX_VERSION, "Linux" );
       j->disco()->setIdentity( "client", "bot" );
-      j->setTls( false );
       j->setCompression( false );
       StringList ca;
       ca.push_back( "/path/to/cacert.crt" );
@@ -105,9 +104,6 @@ class MessageTest : public ConnectionListener, LogHandler, MUCRoomHandler
     {
       printf( "%s said: '%s' (history: %s, private: %s)\n", nick.c_str(), message.c_str(),
               history ? "yes" : "no", priv ? "yes" : "no" );
-      // disconnect on first message received
-      room->leave();
-      j->disconnect();
     };
 
     virtual void handleMUCSubject( MUCRoom * /*room*/, const std::string& nick, const std::string& subject )
@@ -159,6 +155,5 @@ int main( int /*argc*/, char* /*argv[]*/ )
   MessageTest *r = new MessageTest();
   r->start();
   delete( r );
-  return 0;
   return 0;
 }
