@@ -42,7 +42,7 @@
 #include "jid.h"
 #include "base64.h"
 #include "md5.h"
-#include "tlsgnutls.h"
+#include "tlsgnutlsclient.h"
 #include "tlsopenssl.h"
 #include "tlsschannel.h"
 #include "compressionzlib.h"
@@ -266,7 +266,7 @@ namespace gloox
       m_logInstance.log( LogLevelError, LogAreaClassClientbase, "Decompression finished, but chain broken" );
   }
 
-  void ClientBase::handleEncryptedData( const std::string& data )
+  void ClientBase::handleEncryptedData( const TLSBase* /*base*/, const std::string& data )
   {
     if( m_connection )
       m_connection->send( data );
@@ -274,7 +274,7 @@ namespace gloox
       m_logInstance.log( LogLevelError, LogAreaClassClientbase, "Encryption finished, but chain broken" );
   }
 
-  void ClientBase::handleDecryptedData( const std::string& data )
+  void ClientBase::handleDecryptedData( const TLSBase* /*base*/, const std::string& data )
   {
     if( m_compression && m_compressionActive )
       m_compression->decompress( data );
@@ -284,7 +284,7 @@ namespace gloox
       m_logInstance.log( LogLevelError, LogAreaClassClientbase, "Decryption finished, but chain broken" );
   }
 
-  void ClientBase::handleHandshakeResult( bool success, CertInfo &certinfo )
+  void ClientBase::handleHandshakeResult( const TLSBase* /*base*/, bool success, CertInfo &certinfo )
   {
     if( success )
     {
@@ -1258,7 +1258,7 @@ namespace gloox
       return 0;
 
 #ifdef USE_GNUTLS
-    return new GnuTLS( this, m_server );
+    return new GnuTLSClient( this, m_server );
 #elif defined( USE_OPENSSL )
     return new OpenSSL( this, m_server );
 #elif defined( USE_WINTLS )

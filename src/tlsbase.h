@@ -60,12 +60,13 @@ namespace gloox
       /**
        * Virtual destructor.
        */
-      virtual ~TLSBase() { if( m_secure ) cleanup(); };
+      virtual ~TLSBase() {};
 
       /**
        * Use this function to feed unencrypted data to the encryption implementation.
        * The encrypted result will be pushed to the TLSHandler's handleEncryptedData() function.
        * @param data The data to encrypt.
+       * @return Whether or not the data was used successfully.
        */
       virtual bool encrypt( const std::string& data ) = 0;
 
@@ -74,14 +75,14 @@ namespace gloox
        * encryption implementation. Handshake data will be eaten, unencrypted data
        * will be pushed to the TLSHandler's handleDecryptedData() function.
        * @param data The data to decrypt.
+       * @return The number of bytes used from the input.
        */
       virtual int decrypt( const std::string& data ) = 0;
 
       /**
-       * This function performs internal cleanup. It is called by TLSBase's destructor
-       * automatically.
+       * This function performs internal cleanup and will be called after a failed handshake attempt.
        */
-      virtual void cleanup() {};
+      virtual void cleanup() = 0;
 
       /**
        * This functiopn performs the TLS handshake. Handshake data from the server side should be
