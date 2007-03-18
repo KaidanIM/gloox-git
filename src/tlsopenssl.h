@@ -79,7 +79,6 @@ namespace gloox
       char *m_buf;
       const int m_bufsize;
 
-      ssize_t pullFunc();
       ssize_t pushFunc();
 
   };
