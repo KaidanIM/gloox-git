@@ -69,7 +69,7 @@ SChannel::SChannel( TLSHandler *th, const std::string& server ) :
             SECURITY_STATUS e_status = EncryptMessage(&m_context, 0, &buffer_desc, 0);
             if (SUCCEEDED(e_status)) {
                 std::string encrypted(reinterpret_cast<const char*>(e_iobuffer), buffer[0].cbBuffer + buffer[1].cbBuffer + buffer[2].cbBuffer);
-                m_handler->handleEncryptedData(encrypted);
+                m_handler->handleEncryptedData( this, encrypted );
                 //if (data_copy.size() <= m_sizes.cbMaximumMessage) data_copy = "";
             } else {
                 LocalFree(e_iobuffer);
@@ -131,7 +131,7 @@ SChannel::SChannel( TLSHandler *th, const std::string& server ) :
                 }
                 if (e_status == SEC_E_OK) {
                     std::string decrypted(reinterpret_cast<const char*>(pDataBuffer->pvBuffer), pDataBuffer->cbBuffer);
-                    m_handler->handleDecryptedData(decrypted);
+                    m_handler->handleDecryptedData( this, decrypted );
                     if (pExtraBuffer == NULL) {
                         m_buffer.erase(0, processed_data);
                     } else {
@@ -225,7 +225,7 @@ SChannel::SChannel( TLSHandler *th, const std::string& server ) :
                 //std::cout << "obuf[1].cbBuffer: " << obuf[0].cbBuffer << "\n";
                 std::string senddata(static_cast<char*>(obuf[0].pvBuffer), obuf[0].cbBuffer);
                 FreeContextBuffer (obuf[0].pvBuffer);
-                m_handler->handleEncryptedData(senddata);
+                m_handler->handleEncryptedData( this, senddata );
                 return true;
             } else {}
         }
@@ -305,7 +305,7 @@ SChannel::SChannel( TLSHandler *th, const std::string& server ) :
                 setCertinfos();
 
                 m_secure = true;
-                m_handler->handleHandshakeResult(true, m_certInfo);
+                m_handler->handleHandshakeResult( this, true, m_certInfo );
                 break;
             } else if (error == SEC_I_CONTINUE_NEEDED) {
                 /*
@@ -318,7 +318,7 @@ SChannel::SChannel( TLSHandler *th, const std::string& server ) :
                 if (obuf[0].cbBuffer != 0 && obuf[0].pvBuffer != NULL) {
                     std::string senddata(static_cast<char*>(obuf[0].pvBuffer), obuf[0].cbBuffer);
                     FreeContextBuffer(obuf[0].pvBuffer);
-                    m_handler->handleEncryptedData(senddata);
+                    m_handler->handleEncryptedData( this, senddata );
                 }
                 // EXTRA STUFF??
                 if ( ibuf[1].BufferType == SECBUFFER_EXTRA ) {

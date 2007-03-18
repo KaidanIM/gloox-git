@@ -115,7 +115,7 @@ namespace gloox
 
     do
     {
-      switch ( op )
+      switch( op )
       {
         case TLSHandshake:
           ret = SSL_connect( m_ssl );
@@ -140,11 +140,11 @@ namespace gloox
           else if( op == TLSWrite )
             m_sendBuffer.erase( 0, ret );
           else if( op == TLSRead )
-            m_handler->handleDecryptedData( std::string( m_buf, ret ) );
+            m_handler->handleDecryptedData( this, std::string( m_buf, ret ) );
           pushFunc();
           break;
         default:
-          m_handler->handleHandshakeResult( false, m_certInfo );
+          m_handler->handleHandshakeResult( this, false, m_certInfo );
           return;
           break;
       }
@@ -203,7 +203,7 @@ namespace gloox
 
     m_valid = true;
 
-    m_handler->handleHandshakeResult( true, m_certInfo );
+    m_handler->handleHandshakeResult( this, true, m_certInfo );
     return true;
   }
 
@@ -230,7 +230,7 @@ namespace gloox
       frombio = BIO_read( m_nbio, m_buf, wantwrite );
 
       if( m_handler )
-        m_handler->handleEncryptedData( std::string( m_buf, frombio ) );
+        m_handler->handleEncryptedData( this, std::string( m_buf, frombio ) );
     }
 
     while( ( wantread = BIO_ctrl_get_read_request( m_nbio ) ) > 0 )
