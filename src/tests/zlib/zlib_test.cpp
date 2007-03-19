@@ -13,7 +13,7 @@ class ZlibTest : public CompressionDataHandler
     ~ZlibTest() {};
     virtual void handleCompressedData( const std::string& data );
     virtual void handleDecompressedData( const std::string& data );
-    const std::string& data() const { return m_decompressed; }
+    const std::string data() { std::string ret = m_decompressed; m_decompressed = ""; return ret; }
     void compress(  const std::string& data );
   private:
     CompressionZlib m_zlib;
@@ -32,7 +32,7 @@ void ZlibTest::handleCompressedData( const std::string& data )
 
 void ZlibTest::handleDecompressedData( const std::string& data )
 {
-  m_decompressed = data;
+  m_decompressed += data;
 }
 
 int main( int /*argc*/, char* /*argv[]*/ )
@@ -80,6 +80,19 @@ int main( int /*argc*/, char* /*argv[]*/ )
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
   }
+
+  // -------
+  name = "concat test";
+  t.compress( a );
+  t.compress( b );
+  t.compress( c );
+  t.compress( d );
+  if( t.data() != a + b + c + d )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+
 
 
 

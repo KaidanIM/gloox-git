@@ -51,8 +51,6 @@ namespace gloox
       virtual void decompress( const std::string& data );
 
     private:
-      std::string m_inflateBuffer;
-
       z_stream m_zinflate;
       z_stream m_zdeflate;
 
@@ -60,6 +58,6 @@ namespace gloox
 
 }
 
-#endif
+#endif // HAVE_ZLIB
 
 #endif // COMPRESSIONZLIB_H__

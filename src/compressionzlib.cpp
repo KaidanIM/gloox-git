@@ -83,13 +83,11 @@ namespace gloox
     if( !m_valid || !m_handler || data.empty() )
       return;
 
-    m_inflateBuffer += data;
-
     int CHUNK = 50;
     char *out = new char[CHUNK];
-    char *in = const_cast<char*>( m_inflateBuffer.c_str() );
+    char *in = const_cast<char*>( data.c_str() );
 
-    m_zinflate.avail_in = m_inflateBuffer.length();
+    m_zinflate.avail_in = data.length();
     m_zinflate.next_in = (Bytef*)in;
 
     int ret = Z_OK;
@@ -104,8 +102,6 @@ namespace gloox
     } while( m_zinflate.avail_out == 0 );
 
     delete[] out;
-
-    m_inflateBuffer.clear();
 
     m_handler->handleDecompressedData( result );
   }
