@@ -45,30 +45,18 @@ static inline Tag * newEscapedTag ()   { return newTag( escapedString ); }
 static inline Tag * newEscapableTag () { return newTag( escapableString, true ); }
 
 
-static const int sz_s = 100;
-static const int sz_b = 1000;
+static const int sz_max = 1000;
 
-static char values_s[sz_s];
-static char values_b[sz_b];
+static char values[sz_max];
 
-static void randomize_s()
+static void randomize( const int size )
 {
   srand( time(NULL) );
-  for (int i = 0; i < sz_s-1; ++i)
+  for (int i = 0; i < size-1; ++i)
   {
-    values_s[i] = rand() % 96 + 32;
+    values[i] = rand() % 96 + 32;
   }
-  values_s[sz_s-1] = 0;
-}
-
-static void randomize_b()
-{
-  srand( time(NULL) );
-  for (int i = 0; i < sz_b-1; ++i)
-  {
-    values_b[i] = rand() % 96 + 32;
-  }
-  values_b[sz_b-1] = 0;
+  values[size-1] = 0;
 }
 
 int main( int /*argc*/, char* /*argv[]*/ )
@@ -118,8 +106,8 @@ int main( int /*argc*/, char* /*argv[]*/ )
   gettimeofday( &tv1, 0 );
   for (int i = 0; i < num; ++i)
   {
-    randomize_s();
-    delete newTag( values_s, true );
+    randomize( 100 );
+    delete newTag( values, true );
   }
   gettimeofday( &tv2, 0 );
   printTime ("relaxing create/delete (small)", tv1, tv2);
@@ -130,8 +118,8 @@ int main( int /*argc*/, char* /*argv[]*/ )
   gettimeofday( &tv1, 0 );
   for (int i = 0; i < num; ++i)
   {
-    randomize_b();
-    delete newTag( values_b, true );
+    randomize( 1000 );
+    delete newTag( values, true );
   }
   gettimeofday( &tv2, 0 );
   printTime ("relaxing create/delete (big)", tv1, tv2);
