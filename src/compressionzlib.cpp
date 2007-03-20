@@ -63,14 +63,13 @@ namespace gloox
     m_zdeflate.next_in = (Bytef*)in;
 
     int ret;
-    std::string result, tmp;
+    std::string result;
     do {
       m_zdeflate.avail_out = CHUNK;
       m_zdeflate.next_out = (Bytef*)out;
 
       ret = deflate( &m_zdeflate, Z_SYNC_FLUSH );
-      tmp.assign( (char*)out, CHUNK - m_zdeflate.avail_out );
-      result += tmp;
+      result.append( (char*)out, CHUNK - m_zdeflate.avail_out );
     } while( m_zdeflate.avail_out == 0 );
 
     delete[] out;
