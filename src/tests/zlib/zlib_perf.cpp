@@ -60,8 +60,6 @@ int main( int, char** )
   struct timeval tv2;
 
   printf("testing %d run of 10^{4,5,6}...\n", num);
-  randomize( 20 );
-  printf( "values: %s\n", values );
 
   // -------
   randomize( 10000 );
