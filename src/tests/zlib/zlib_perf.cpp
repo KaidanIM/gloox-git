@@ -42,6 +42,11 @@ static char values[sz_max+1];
 
 static void randomize( const int size )
 {
+  if( size > sz_max )
+  {
+    printf( "error: randomize size bigger than buffer size\n" );
+    exit( 1 );
+  }
   srand( time(NULL) );
   for (int i = 0; i < size; ++i)
   {
