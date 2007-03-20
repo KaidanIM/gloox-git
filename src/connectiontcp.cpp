@@ -126,8 +126,8 @@ namespace gloox
     FD_ZERO( &fds );
     FD_SET( m_socket, &fds );
 
-    tv.tv_sec = timeout / 1000;
-    tv.tv_usec = timeout % 1000;
+    tv.tv_sec = timeout / 1000000;
+    tv.tv_usec = timeout % 1000000;
 
     return ( ( select( m_socket + 1, &fds, 0, 0, timeout == -1 ? 0 : &tv ) > 0 )
          && FD_ISSET( m_socket, &fds ) != 0 );
