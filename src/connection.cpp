@@ -272,14 +272,14 @@ namespace gloox
       error = true;
     else if( t < time( 0 ) )
       m_certInfo.status |= CertExpired;
-    m_certInfo.date_from = t;
+    m_certInfo.date_to = t;
 
     t = (int)gnutls_x509_crt_get_activation_time( cert[0] );
     if( t == -1 )
       error = true;
     else if( t > time( 0 ) )
       m_certInfo.status |= CertNotActive;
-    m_certInfo.date_to = t;
+    m_certInfo.date_from = t;
 
     char name[64];
     size_t nameSize = sizeof( name );
@@ -965,8 +965,8 @@ printf( "maximumMessage: %ld\n", m_streamSizes.cbMaximumMessage );
     FD_ZERO( &fds );
     FD_SET( m_socket, &fds );
 
-    tv.tv_sec = timeout / 1000;
-    tv.tv_usec = timeout % 1000;
+    tv.tv_sec = timeout / 1000000;
+    tv.tv_usec = timeout % 1000000;
 
     if( select( m_socket + 1, &fds, 0, 0, timeout == -1 ? 0 : &tv ) >= 0 )
     {

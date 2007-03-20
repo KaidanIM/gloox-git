@@ -1,3 +1,11 @@
+v0.8.8 -- xx Mar 2007
+-------------------------
+- ClientBase/Client/NonSaslAuth: made re-connect-safe
+- MessageEventFilter: fixed sending of MessageEventCancel
+- MessageEventFilter: fixed handling of IDs
+- ChatStateFilter: fixed hypothetical revival of chat states
+
+
 v0.8.7 -- 06 Mar 2007
 -------------------------
 - ClientBase: allow cancellation of ID tracking
