@@ -87,7 +87,8 @@ namespace gloox
     gnutls_bye( m_session, GNUTLS_SHUT_RDWR );
     gnutls_db_remove_session( m_session );
     gnutls_credentials_clear( m_session );
-    gnutls_deinit( m_session );
+    if( m_secure )
+      gnutls_deinit( m_session );
   }
 
   bool GnuTLSBase::handshake()

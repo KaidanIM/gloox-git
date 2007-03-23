@@ -12,8 +12,8 @@
 
 
 
-#ifndef TLSGNUTLSSERVER_H__
-#define TLSGNUTLSSERVER_H__
+#ifndef TLSGNUTLSSERVERANON_H__
+#define TLSGNUTLSSERVERANON_H__
 
 #include "tlsgnutlsbase.h"
 
@@ -39,7 +39,7 @@ namespace gloox
       /**
        * Constructor.
        */
-      GnuTLSServerAnon( TLSHandler *th, const std::string& server );
+      GnuTLSServerAnon( TLSHandler *th );
 
       /**
        * Virtual destructor.
@@ -61,4 +61,4 @@ namespace gloox
 
 #endif // HAVE_GNUTLS
 
-#endif // TLSGNUTLSSERVER_H__
+#endif // TLSGNUTLSSERVERANON_H__

@@ -21,8 +21,8 @@
 namespace gloox
 {
 
-  GnuTLSServerAnon::GnuTLSServerAnon( TLSHandler *th, const std::string& server )
-    : GnuTLSBase( th, server ), m_dhBits( 1024 )
+  GnuTLSServerAnon::GnuTLSServerAnon( TLSHandler *th )
+    : GnuTLSBase( th ), m_dhBits( 1024 )
   {
     const int protocolPriority[] = { GNUTLS_TLS1, 0 };
     const int kxPriority[]       = { GNUTLS_KX_ANON_DH, 0 };
