@@ -85,7 +85,7 @@ namespace gloox
               DiscoNodeHandlerList::const_iterator in = (*it).second.begin();
               for( ; in != (*it).second.end(); ++in )
               {
-                StringMap identities = (*in)->handleDiscoNodeIdentities( node, name );
+                const StringMap& identities = (*in)->handleDiscoNodeIdentities( node, name );
                 StringMap::const_iterator im = identities.begin();
                 for( ; im != identities.end(); ++im )
                 {
@@ -94,7 +94,7 @@ namespace gloox
                   i->addAttribute( "type", (*im).second );
                   i->addAttribute( "name", name );
                 }
-                StringList features = (*in)->handleDiscoNodeFeatures( node );
+                const StringList& features = (*in)->handleDiscoNodeFeatures( node );
                 StringList::const_iterator fi = features.begin();
                 for( ; fi != features.end(); ++fi )
                 {
@@ -142,7 +142,7 @@ namespace gloox
               DiscoNodeHandlerList::const_iterator in = (*it).second.begin();
               for( ; in != (*it).second.end(); ++in )
               {
-                DiscoNodeItemList items = (*in)->handleDiscoNodeItems( node );
+                const DiscoNodeItemList& items = (*in)->handleDiscoNodeItems( node );
                 DiscoNodeItemList::const_iterator it = items.begin();
                 for( ; it != items.end(); ++it )
                 {
@@ -162,7 +162,7 @@ namespace gloox
               DiscoNodeHandlerList::const_iterator in = (*it).second.begin();
               for( ; in != (*it).second.end(); ++in )
               {
-                DiscoNodeItemList items = (*in)->handleDiscoNodeItems( "" );
+                const DiscoNodeItemList& items = (*in)->handleDiscoNodeItems( "" );
                 DiscoNodeItemList::const_iterator it = items.begin();
                 for( ; it != items.end(); ++it )
                 {
