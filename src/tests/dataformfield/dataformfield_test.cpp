@@ -281,6 +281,33 @@ int main( int /*argc*/, char* /*argv[]*/ )
   f = 0;
 
 
+
+  // -------
+  name = "boolean duplicate <value/>";
+  f = new DataFormField( DataFormField::FieldTypeBoolean );
+  f->setName( "name" );
+  f->setValue( "1" );
+  f->setLabel( "label" );
+  t = f->tag();
+  if( t->children().size() != 1 || t->xml() != "<field type='boolean' var='name' "
+                                               "label='label'><value>1</value></field>" )
+  {
+    ++fail;
+    printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+  }
+  delete f;
+  delete t;
+  f = 0;
+  t = 0;
+
+
+
+
+
+
+
+
+
   if( fail == 0 )
   {
     printf( "DataFormField: all tests passed\n" );
