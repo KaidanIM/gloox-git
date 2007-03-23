@@ -25,8 +25,8 @@ namespace gloox
   {
   }
 
-  DataForm::DataForm( DataFormType type )
-    : m_type( type )
+  DataForm::DataForm( DataFormType type, const std::string& title )
+    : m_type( type ), m_title( title )
   {
   }
 
