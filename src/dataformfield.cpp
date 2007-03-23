@@ -168,7 +168,8 @@ namespace gloox
         new Tag( field, "value", (*it) );
     }
 
-    if( !m_value.empty() )
+    if( !m_value.empty() && !( m_type == FieldTypeTextMulti || m_type == FieldTypeListMulti
+                               || m_type == FieldTypeBoolean || m_type == FieldTypeListSingle ) )
       new Tag( field, "value", m_value );
 
     return field;
