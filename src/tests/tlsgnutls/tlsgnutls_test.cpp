@@ -40,8 +40,8 @@ GnuTLSTest::GnuTLSTest()
  : m_clientHandshake( false ), m_clientHandshakeResult( false ),
    m_serverHandshake( false ), m_serverHandshakeResult( false )
 {
-  m_client = new GnuTLSClientAnon( this, "" );
-  m_server = new GnuTLSServerAnon( this, "" );
+  m_client = new GnuTLSClientAnon( this );
+  m_server = new GnuTLSServerAnon( this );
 }
 
 GnuTLSTest::~GnuTLSTest()

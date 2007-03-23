@@ -12,8 +12,8 @@
 
 
 
-#ifndef TLSGNUTLS_H__
-#define TLSGNUTLS_H__
+#ifndef TLSGNUTLSCLIENT_H__
+#define TLSGNUTLSCLIENT_H__
 
 #include "tlsgnutlsbase.h"
 
@@ -66,4 +66,4 @@ namespace gloox
 
 #endif // HAVE_GNUTLS
 
-#endif // TLSGNUTLS_H__
+#endif // TLSGNUTLSCLIENT_H__
