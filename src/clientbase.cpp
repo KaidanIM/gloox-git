@@ -414,8 +414,7 @@ namespace gloox
           sprintf( tmp, "%s%c%s%c%s", m_authzid.bare().c_str(), 0, m_jid.username().c_str(), 0,
                    m_password.c_str() );
 
-        std::string dec;
-        dec.assign( tmp, len );
+        std::string dec( tmp, len );
         a->setCData( Base64::encode64( dec ) );
         free( tmp );
         break;
@@ -671,10 +670,9 @@ namespace gloox
   const std::string ClientBase::getID()
   {
 #ifdef _WIN32_WCE
-    std::string ret;
     char r[8+1];
     sprintf( r, "%08x", rand() );
-    ret.assign( r, 8 );
+    std::string ret( r, 8 );
     return std::string( "uid" ) + ret;
 #else
     std::ostringstream oss;
