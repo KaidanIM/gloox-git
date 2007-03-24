@@ -104,21 +104,13 @@ namespace gloox
 
   bool RosterItem::online() const
   {
-    if( m_resources.size() )
-      return true;
-    else
-      return false;
+    return !m_resources.empty();
   }
 
   const Resource* RosterItem::resource( const std::string& res ) const
   {
     ResourceMap::const_iterator it = m_resources.find( res );
-    if( it != m_resources.end() )
-    {
-      return (*it).second;
-    }
-
-    return 0;
+    return it != m_resources.end() ? (*it).second : 0;
   }
 
 }
