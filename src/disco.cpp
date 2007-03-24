@@ -239,14 +239,7 @@ namespace gloox
 
   void Disco::removeFeature( const std::string& feature )
   {
-    StringList::iterator it = m_features.begin();
-    while( it != m_features.end() )
-    {
-      StringList::iterator t = it;
-      ++it;
-      if( (*t) == feature )
-        m_features.erase( t );
-    }
+    m_features.remove( feature );
   }
 
   void Disco::getDiscoInfo( const JID& to, const std::string& node, DiscoHandler *dh, int context )
@@ -318,17 +311,7 @@ namespace gloox
 
   void Disco::registerNodeHandler( DiscoNodeHandler *nh, const std::string& node )
   {
-    DiscoNodeHandlerMap::iterator it = m_nodeHandlers.find( node );
-    if( it != m_nodeHandlers.end() )
-    {
-      (*it).second.push_back( nh );
-    }
-    else
-    {
-      DiscoNodeHandlerList l;
-      l.push_back( nh );
-      m_nodeHandlers[node] = l;
-    }
+    m_nodeHandlers[node].push_back(nh);
   }
 
   void Disco::removeNodeHandler( DiscoNodeHandler *nh, const std::string& node )
