@@ -39,7 +39,7 @@ namespace gloox
       /**
        * Constructor.
        */
-      GnuTLSBase( TLSHandler *th, const std::string& server );
+      GnuTLSBase( TLSHandler *th, const std::string& server = "" );
 
       /**
        * Virtual destructor.
