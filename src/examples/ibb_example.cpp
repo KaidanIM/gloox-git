@@ -23,6 +23,10 @@ using namespace gloox;
 #include <locale.h>
 #include <string>
 
+#if defined(WIN32) || defined(_WIN32)
+#include <windows.h>
+#endif
+
 class IBBTest : public MessageSessionHandler, ConnectionListener, LogHandler,
                     MessageEventHandler, MessageHandler, ChatStateHandler, InBandBytestreamHandler,
                     InBandBytestreamDataHandler
