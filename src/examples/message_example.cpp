@@ -20,7 +20,7 @@ using namespace gloox;
 #include <locale.h>
 #include <string>
 
-#ifdef WIN32
+#if defined(WIN32) || defined(_WIN32)
 #include <windows.h>
 #endif
 
