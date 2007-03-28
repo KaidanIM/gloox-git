@@ -8,5 +8,5 @@ noinst_PROGRAMS = xdelayeddelivery_test
 
 xdelayeddelivery_test_SOURCES = xdelayeddelivery_test.cpp
 xdelayeddelivery_test_LDADD = ../../xdelayeddelivery.o ../../tag.o \
-		../../jid.o ../../prep.o ../../main.o
+		../../jid.o ../../prep.o ../../gloox.o
 xdelayeddelivery_test_CFLAGS = $(CPPFLAGS)

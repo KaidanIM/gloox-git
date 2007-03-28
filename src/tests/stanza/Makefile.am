@@ -10,5 +10,5 @@ stanza_test_SOURCES = stanza_test.cpp
 stanza_test_LDADD = ../../tag.o ../../stanza.o ../../jid.o \
 			../../prep.o ../../stanzaextensionfactory.o ../../oob.o ../../vcardupdate.o \
  			../../delayeddelivery.o ../../xdelayeddelivery.o ../../gpgsigned.o \
- 			../../gpgencrypted.o ../../main.o
+ 			../../gpgencrypted.o ../../gloox.o
 stanza_test_CFLAGS = $(CPPFLAGS)
