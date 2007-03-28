@@ -22,7 +22,7 @@ libgloox_la_SOURCES = jid.cpp parser.cpp connectiontcp.cpp clientbase.cpp tag.cp
                         delayeddelivery.cpp xdelayeddelivery.cpp gpgencrypted.cpp gpgsigned.cpp \
                         uniquemucroom.cpp instantmucroom.cpp compressionzlib.cpp tlsgnutlsclient.cpp \
                         tlsopenssl.cpp connectionhttpproxy.cpp tlsgnutlsserveranon.cpp tlsgnutlsbase.cpp \
-                        tlsgnutlsclientanon.cpp tlsschannel.cpp sessionnegotiationfilter.cpp
+                        tlsgnutlsclientanon.cpp tlsschannel.cpp
 
 libgloox_la_LDFLAGS = -version-info 7:0:0 -no-undefined -no-allow-shlib-undefined
 libgloox_la_LIBADD =
@@ -51,15 +51,14 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             vcardmanager.h            vcardhandler.h          adhochandler.h \
                             search.h                  searchhandler.h         statisticshandler.h \
                             resource.h                mucroom.h               mucroomhandler.h \
-                            mucroomconfighandler.h    parser.h                sessionnegotiationfilter.h \
+                            mucroomconfighandler.h    parser.h                \
                             mucinvitationhandler.h    stanzaextension.h       oob.h \
                             vcardupdate.h             delayeddelivery.h       base64.h \
                             xdelayeddelivery.h        gpgencrypted.h          gpgsigned.h \
                             md5.h                     sha.h                   uniquemucroom.h \
                             instantmucroom.h          tlsbase.h               tlshandler.h \
                             connectionbase.h          connectiondatahandler.h compressiondatahandler.h \
-                            compressionbase.h         connectiontcp.h         connectionhttpproxy.h \
-                            sessionnegotiationhandler.h
+                            compressionbase.h         connectiontcp.h         connectionhttpproxy.h
 
 noinst_HEADERS = prep.h dns.h nonsaslauth.h mucmessagesession.h stanzaextensionfactory.h tlsgnutlsclient.h \
                    tlsgnutlsbase.h tlsgnutlsclientanon.h tlsgnutlsserveranon.h tlsopenssl.h tlsschannel.h \
