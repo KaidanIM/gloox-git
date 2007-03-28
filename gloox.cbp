@@ -318,6 +318,10 @@
 			<Option link="0" />
 			<Option target="default" />
 		</Unit>
+		<Unit filename="src\gloox.cpp">
+			<Option compilerVar="CPP" />
+			<Option target="default" />
+		</Unit>
 		<Unit filename="src\gloox.h">
 			<Option compilerVar="CPP" />
 			<Option compile="0" />
@@ -438,10 +442,6 @@
 			<Option compilerVar="" />
 			<Option compile="0" />
 			<Option link="0" />
-			<Option target="default" />
-		</Unit>
-		<Unit filename="src\main.cpp">
-			<Option compilerVar="CPP" />
 			<Option target="default" />
 		</Unit>
 		<Unit filename="src\md5.cpp">
