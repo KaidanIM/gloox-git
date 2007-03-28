@@ -7,5 +7,5 @@ AM_CPPFLAGS = -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare
 noinst_PROGRAMS = vcardupdate_test
 
 vcardupdate_test_SOURCES = vcardupdate_test.cpp
-vcardupdate_test_LDADD = ../../vcardupdate.o ../../tag.o ../../main.o
+vcardupdate_test_LDADD = ../../vcardupdate.o ../../tag.o ../../gloox.o
 vcardupdate_test_CFLAGS = $(CPPFLAGS)

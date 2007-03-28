@@ -8,6 +8,6 @@ noinst_PROGRAMS = chatstatefilter_test
 
 chatstatefilter_test_SOURCES = chatstatefilter_test.cpp
 chatstatefilter_test_LDADD = ../../tag.o ../../stanza.o ../../stanzaextensionfactory.o ../../gpgsigned.o \
- 				../../jid.o ../../prep.o ../../main.o ../../gpgencrypted.o ../../oob.o \
+ 				../../jid.o ../../prep.o ../../gloox.o ../../gpgencrypted.o ../../oob.o \
  				 ../../vcardupdate.o ../../delayeddelivery.o ../../xdelayeddelivery.o
 chatstatefilter_test_CPPFLAGS = $(CPPFLAGS)

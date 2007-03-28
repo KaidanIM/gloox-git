@@ -7,5 +7,5 @@ AM_CPPFLAGS = -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare
 noinst_PROGRAMS = gpgsigned_test
 
 gpgsigned_test_SOURCES = gpgsigned_test.cpp
-gpgsigned_test_LDADD = ../../gpgsigned.o ../../tag.o ../../main.o
+gpgsigned_test_LDADD = ../../gpgsigned.o ../../tag.o ../../gloox.o
 gpgsigned_test_CFLAGS = $(CPPFLAGS)
