@@ -173,6 +173,10 @@ SOURCE=.\src\flexoff.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\gloox.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\gpgencrypted.cpp
 # End Source File
 # Begin Source File
@@ -202,10 +206,6 @@ SOURCE=.\src\lastactivity.cpp
 # Begin Source File
 
 SOURCE=.\src\logsink.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\main.cpp
 # End Source File
 # Begin Source File
 
