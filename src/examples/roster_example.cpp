@@ -132,9 +132,9 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler, Messag
       return true;
     }
 
-    virtual void handleNonrosterPresence( const JID& jid )
+    virtual void handleNonrosterPresence( Stanza* stanza )
     {
-      printf( "received presence from entity not in the roster: %s\n", jid.full().c_str() );
+      printf( "received presence from entity not in the roster: %s\n", stanza->from().full().c_str() );
     }
 
     virtual void handleLog( LogLevel level, LogArea area, const std::string& message )

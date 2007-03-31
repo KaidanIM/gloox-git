@@ -165,13 +165,8 @@ namespace gloox
     }
     else
     {
-      StringList sl;
-      add( stanza->from().bare(), "", sl, caps, "none", false );
-      m_roster[stanza->from().bare()]->setPresence( stanza->from().resource(), stanza->presence() );
-      m_roster[stanza->from().bare()]->setStatus( stanza->from().resource(), stanza->status() );
-      m_roster[stanza->from().bare()]->setPriority( stanza->from().resource(), stanza->priority() );
       if( m_rosterListener )
-        m_rosterListener->handleNonrosterPresence( stanza->from() );
+        m_rosterListener->handleNonrosterPresence( stanza );
     }
   }
 
