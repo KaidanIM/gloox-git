@@ -160,10 +160,15 @@ namespace gloox
                     if( (*itl)->name() == "item" )
                     {
                       s.jid.setJID( (*itl)->findAttribute( "jid" ) );
-                      s.first = (*itl)->findAttribute( "first" );
-                      s.last = (*itl)->findAttribute( "last" );
-                      s.nick = (*itl)->findAttribute( "nick" );
-                      s.email = (*itl)->findAttribute( "email" );
+                      Tag *t = 0;
+                      if( ( t = (*itl)->findChild( "first" ) ) != 0 )
+                        s.first = t->cdata();
+                      if( ( t = (*itl)->findChild( "last" ) ) != 0 )
+                        s.last = t->cdata();
+                      if( ( t = (*itl)->findChild( "nick" ) ) != 0 )
+                        s.nick = t->cdata();
+                      if( ( t = (*itl)->findChild( "email" ) ) != 0 )
+                        s.email = t->cdata();
                       e.push_back( s );
                     }
                   }
