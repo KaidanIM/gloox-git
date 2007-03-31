@@ -154,9 +154,9 @@ namespace gloox
       /**
        * This function is called whenever presence from an entity is received which is not in
        * the roster.
-       * @param jid The entity's full JID.
+       * @param stanza The full presence stanza.
        */
-      virtual void handleNonrosterPresence( const JID& jid ) = 0;
+      virtual void handleNonrosterPresence( Stanza* stanza ) = 0;
 
   };
 
