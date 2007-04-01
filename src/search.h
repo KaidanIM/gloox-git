@@ -73,7 +73,7 @@ namespace gloox
        * @param form The DataForm contains the phrases the user wishes to search for.
        * @param sh The SearchHandler to notify about the results.
        */
-      void search( const JID& directory, DataForm *form, SearchHandler *sh );
+      void search( const JID& directory, const DataForm& form, SearchHandler *sh );
 
       /**
        * Initiates a search on the given directory, with the given phrases. The given SearchHandler

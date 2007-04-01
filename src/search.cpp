@@ -48,9 +48,9 @@ namespace gloox
     m_parent->send( iq );
   }
 
-  void Search::search( const JID& directory, DataForm *form, SearchHandler *sh )
+  void Search::search( const JID& directory, const DataForm& form, SearchHandler *sh )
   {
-    if( !m_parent || !form || directory.empty() || !sh )
+    if( !m_parent || directory.empty() || !sh )
       return;
 
     const std::string& id = m_parent->getID();
@@ -61,7 +61,7 @@ namespace gloox
     iq->addAttribute( "to", directory.full() );
     Tag *q = new Tag( iq, "query" );
     q->addAttribute( "xmlns", XMLNS_SEARCH );
-    q->addChild( form->tag() );
+    q->addChild( form.tag() );
 
     m_track[id] = sh;
     m_parent->trackID( this, id, DoSearch );
