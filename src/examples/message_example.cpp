@@ -17,11 +17,10 @@ using namespace gloox;
 
 #include <unistd.h>
 #include <stdio.h>
-#include <locale.h>
 #include <string>
 
-#if defined(WIN32) || defined(_WIN32)
-#include <windows.h>
+#if defined( WIN32 ) || defined( _WIN32 )
+# include <windows.h>
 #endif
 
 class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListener, LogHandler,
@@ -35,15 +34,14 @@ class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListen
     void start()
     {
 
-      JID jid( "hurkhurk@jabber.cc/gloox" );
-      j = new Client( jid, "kuss" );
+      JID jid( "hurkhurk@example.net/gloox" );
+      j = new Client( jid, "hurkhurks" );
       j->registerConnectionListener( this );
       j->registerMessageSessionHandler( this, 0 );
       j->disco()->registerDiscoHandler( this );
       j->disco()->setVersion( "messageTest", GLOOX_VERSION, "Linux" );
       j->disco()->setIdentity( "client", "bot" );
       j->disco()->addFeature( XMLNS_CHAT_STATES );
-      j->setTls( false );
       StringList ca;
       ca.push_back( "/path/to/cacert.crt" );
       j->setCACerts( ca );
@@ -77,10 +75,12 @@ class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListen
 
     virtual bool onTLSConnect( const CertInfo& info )
     {
-      printf( "status: %d\nissuer: %s\npeer: %s\nprotocol: %s\nmac: %s\ncipher: %s\ncompression: %s\n",
+      printf( "status: %d\nissuer: %s\npeer: %s\nprotocol: %s\nmac: %s\ncipher: %s\ncompression: %s\n"
+              "from: %s\nto: %s\n",
               info.status, info.issuer.c_str(), info.server.c_str(),
               info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
-              info.compression.c_str() );
+              info.compression.c_str(), ctime( (const time_t*)&info.date_from ),
+              ctime( (const time_t*)&info.date_to ) );
       return true;
     };
 
@@ -168,6 +168,5 @@ int main( int /*argc*/, char* /*argv[]*/ )
   MessageTest *r = new MessageTest();
   r->start();
   delete( r );
-  return 0;
   return 0;
 }
