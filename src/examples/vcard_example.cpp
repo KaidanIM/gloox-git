@@ -125,7 +125,7 @@ class VCardTest : public ConnectionListener, LogHandler, VCardHandler
     int m_count;
 };
 
-int main( int /*argc*/, char* /*argv[]*/ )
+int main( int /*argc*/, char** /*argv*/ )
 {
   VCardTest *v = new VCardTest();
   v->start();

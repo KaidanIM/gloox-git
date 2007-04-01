@@ -150,7 +150,7 @@ class FlexOffTest : public DiscoHandler, MessageHandler, ConnectionListener, Fle
     FlexibleOffline *f;
 };
 
-int main( int /*argc*/, char* /*argv[]*/ )
+int main( int /*argc*/, char** /*argv*/ )
 {
   FlexOffTest *r = new FlexOffTest();
   r->start();

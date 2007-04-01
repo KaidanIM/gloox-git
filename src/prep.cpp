@@ -12,6 +12,7 @@
 
 #include "prep.h"
 
+#include <cstdlib>
 #include <string>
 
 #ifdef WIN32

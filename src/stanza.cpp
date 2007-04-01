@@ -16,6 +16,8 @@
 #include "stanzaextension.h"
 #include "stanzaextensionfactory.h"
 
+#include <cstdlib>
+
 namespace gloox
 {
 

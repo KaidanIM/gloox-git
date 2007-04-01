@@ -15,6 +15,8 @@
 #include "dataform.h"
 #include "disco.h"
 
+#include <cstdlib>
+
 namespace gloox
 {
 

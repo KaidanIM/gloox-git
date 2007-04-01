@@ -19,6 +19,8 @@
 #include "prep.h"
 #include "sha.h"
 
+#include <cstdlib>
+
 namespace gloox
 {
 

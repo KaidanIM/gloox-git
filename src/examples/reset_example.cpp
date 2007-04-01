@@ -61,7 +61,7 @@ class RosterTest : public ConnectionListener, LogHandler
     Client *j;
 };
 
-int main( int /*argc*/, char* /*argv[]*/ )
+int main( int /*argc*/, char** /*argv*/ )
 {
   RosterTest *r = new RosterTest();
   r->start();

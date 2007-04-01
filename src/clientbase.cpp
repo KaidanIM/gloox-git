@@ -47,6 +47,7 @@
 #include "tlsschannel.h"
 #include "compressionzlib.h"
 
+#include <cstdlib>
 #include <string>
 #include <map>
 #include <list>

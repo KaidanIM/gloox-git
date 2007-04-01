@@ -59,7 +59,7 @@ static void randomize( const int size )
   values[size-1] = 0;
 }
 
-int main( int /*argc*/, char* /*argv[]*/ )
+int main( int /*argc*/, char** /*argv*/ )
 {
   struct timeval tv1;
   struct timeval tv2;

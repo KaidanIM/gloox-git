@@ -292,7 +292,7 @@ class ParserTest : private TagHandler
 
 };
 
-int main( int /*argc*/, char* /*argv[]*/ )
+int main( int /*argc*/, char** /*argv*/ )
 {
   ParserTest p;
   return p.run();

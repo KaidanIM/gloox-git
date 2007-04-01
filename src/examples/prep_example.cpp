@@ -4,7 +4,7 @@ using namespace gloox;
 #include <string>
 #include <iostream>
 
-int main( int /*argc*/, char* /*argv[]*/ )
+int main( int /*argc*/, char** /*argv*/ )
 {
   std::string test = "OLD\\Administrator";
   printf( "orig: %s -- nodeprepped: %s\n", test.c_str(), Prep::nodeprep( test ).c_str() );

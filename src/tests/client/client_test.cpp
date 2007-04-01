@@ -181,7 +181,7 @@ const char* ConnectionImpl::m_msgs[4][9] =
     }
   };
 
-int main( int /*argc*/, char* /*argv[]*/ )
+int main( int /*argc*/, char** /*argv*/ )
 {
   int fail = 0;
   std::string name;

@@ -135,7 +135,7 @@ class MessageTest : public ConnectionListener, LogHandler,
     const JID rcpt;
 };
 
-int main( int /*argc*/, char* /*argv[]*/ )
+int main( int /*argc*/, char** /*argv*/ )
 {
   MessageTest *r = new MessageTest();
   r->start();

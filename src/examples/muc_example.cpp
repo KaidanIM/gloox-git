@@ -150,7 +150,7 @@ class MessageTest : public ConnectionListener, LogHandler, MUCRoomHandler
     MUCRoom *m_room;
 };
 
-int main( int /*argc*/, char* /*argv[]*/ )
+int main( int /*argc*/, char** /*argv*/ )
 {
   MessageTest *r = new MessageTest();
   r->start();
