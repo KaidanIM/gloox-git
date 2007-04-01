@@ -40,20 +40,54 @@ class SearchTest : public gloox::SearchHandler, public gloox::ClientBase
     virtual void handleSearchFields( const gloox::JID& directory, int fields,
                                      const std::string& instructions )
     {
+      if( m_test != 2 )
+        return;
+
+      if( directory.full() == g_dir && instructions == g_inst && fields == 15 )
+        m_result = true;
+    }
+    virtual void handleSearchFields( const gloox::JID& directory, gloox::DataForm *form )
+    {
+      if( m_test != 6 )
+        return;
+
+      if( directory.full() == g_dir && form != 0 )
+        m_result = true;
+
+      delete form;
+    }
+    virtual void handleSearchResult( const gloox::JID& directory, const gloox::SearchResultList& resultList )
+    {
       switch( m_test )
       {
-        case 2:
-          if( directory.full() == g_dir && instructions == g_inst && fields == 15 )
+        case 4:
+        {
+          gloox::SearchResultList::const_iterator it = resultList.begin();
+          if( directory.full() == g_dir && resultList.size() == 2
+              && (*it).first == "f1" && (*it).last == "l1" && (*it).nick == "n1" && (*it).email == "e1"
+              && (*++it).first == "f2" && (*it).last == "l2" && (*it).nick == "n2" && (*it).email == "e2" )
+            m_result = true;
+          break;
+        }
+        case 5:
+          if( directory.full() == g_dir && resultList.size() == 0 )
             m_result = true;
           break;
         default:
           break;
       }
-    };
-    virtual void handleSearchFields( const gloox::JID& directory, gloox::DataForm *form ) {};
-    virtual void handleSearchResult( const gloox::JID& directory, const gloox::SearchResultList& resultList ) {};
-    virtual void handleSearchResult( const gloox::JID& directory, const gloox::DataForm *form ) {};
-    virtual void handleSearchError( const gloox::JID& directory, gloox::Stanza *stanza ) {};
+    }
+    virtual void handleSearchResult( const gloox::JID& directory, const gloox::DataForm *form )
+    {
+      if( m_test != 8 )
+        return;
+
+      if( directory.full() == g_dir && form != 0 )
+        m_result = true;
+
+      delete form;
+    }
+    virtual void handleSearchError( const gloox::JID& /*directory*/, gloox::Stanza* /*stanza*/ ) {}
     virtual void send( gloox::Tag* tag )
     {
       switch( m_test )
@@ -75,16 +109,29 @@ class SearchTest : public gloox::SearchHandler, public gloox::ClientBase
             m_result = true;
           break;
         }
+        case 7:
+        {
+          gloox::Tag *t = 0;
+          if( tag && tag->hasAttribute( "id", "id" ) && tag->hasAttribute( "to", g_dir )
+               && tag->hasAttribute( "type", "set" )
+               && ( ( t = tag->findChild( "query", "xmlns", gloox::XMLNS_SEARCH ) ) != 0 )
+               && t->hasChild( "x", "xmlns", gloox::XMLNS_X_DATA ) )
+            m_result = true;
+          break;
+        }
         default:
           break;
       }
+      delete tag;
     }
     void setTest( int test ) { m_test = test; }
     void fetchSearchFields() { m_search.fetchSearchFields( g_dir, this ); }
     bool result() { bool t = m_result; m_result = false; return t; }
     void feed( gloox::Stanza *s ) { m_search.handleIqID( s, m_context ); }
-    virtual void trackID( gloox::IqHandler *ih, const std::string& id, int context ) { m_context = context; }
+    virtual void trackID( gloox::IqHandler* /*ih*/, const std::string& /*id*/, int context )
+      { m_context = context; }
     void search( const gloox::SearchFieldStruct& fields ) { m_search.search( g_dir, 15, fields, this ); }
+    void search( const gloox::DataForm& form ) { m_search.search( g_dir, form, this ); }
   private:
     gloox::Search m_search;
     int m_test;
@@ -102,7 +149,7 @@ int main( int /*argc*/, char** /*argv*/ )
   SearchTest t;
 
   // -------
-  name = "fetch fields";
+  name = "fetch fields (old-style)";
   t.setTest( 1 );
   t.fetchSearchFields();
   if( !t.result() )
@@ -112,7 +159,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
 
   // -------
-  name = "receive fields";
+  name = "receive fields (old-style)";
   gloox::Stanza *iq = new gloox::Stanza( "iq" );
   iq->addAttribute( "from", g_dir );
   iq->addAttribute( "to", "searchtest" );
@@ -137,7 +184,7 @@ int main( int /*argc*/, char** /*argv*/ )
   iq = 0;
 
   // -------
-  name = "old-style search";
+  name = "search request (old-style)";
   t.setTest( 3 );
   gloox::SearchFieldStruct sf;
   sf.first = "first";
@@ -151,15 +198,133 @@ int main( int /*argc*/, char** /*argv*/ )
     printf( "test '%s' failed\n", name.c_str() );
   }
 
+  // -------
+  name = "search result (old-style)";
+  iq = new gloox::Stanza( "iq" );
+  iq->addAttribute( "from", g_dir );
+  iq->addAttribute( "to", "searchtest" );
+  iq->addAttribute( "id", "id" );
+  iq->addAttribute( "type", "result" );
+  q = new gloox::Tag( iq, "query" );
+  q->addAttribute( "xmlns", gloox::XMLNS_SEARCH );
+  gloox::Tag *i = new gloox::Tag( q,"item" );
+  new gloox::Tag( i, "first", "f1" );
+  new gloox::Tag( i, "last", "l1" );
+  new gloox::Tag( i, "nick", "n1" );
+  new gloox::Tag( i, "email", "e1" );
+  i = new gloox::Tag( q, "item" );
+  new gloox::Tag( i, "first", "f2" );
+  new gloox::Tag( i, "last", "l2" );
+  new gloox::Tag( i, "nick", "n2" );
+  new gloox::Tag( i, "email", "e2" );
+  iq->finalize();
+  t.setTest( 4 );
+  t.feed( iq );
+  if( !t.result() )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+  delete iq;
+  iq = 0;
 
+  // -------
+  name = "intermediary search request (old-style)";
+  t.setTest( 3 );
+  sf.first = "first";
+  sf.last = "last";
+  sf.nick = "nick";
+  sf.email = "email";
+  t.search( sf );
+  if( !t.result() )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+  }
 
+  // -------
+  name = "search result (old-style), empty";
+  iq = new gloox::Stanza( "iq" );
+  iq->addAttribute( "from", g_dir );
+  iq->addAttribute( "to", "searchtest" );
+  iq->addAttribute( "id", "id" );
+  iq->addAttribute( "type", "result" );
+  q = new gloox::Tag( iq, "query" );
+  q->addAttribute( "xmlns", gloox::XMLNS_SEARCH );
+  iq->finalize();
+  t.setTest( 5 );
+  t.feed( iq );
+  if( !t.result() )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+  delete iq;
+  iq = 0;
 
+  // -------
+  name = "fetch fields (dataform)";
+  t.setTest( 1 );
+  t.fetchSearchFields();
+  if( !t.result() )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+  }
 
+  // -------
+  name = "receive fields (dataform)";
+  iq = new gloox::Stanza( "iq" );
+  iq->addAttribute( "from", g_dir );
+  iq->addAttribute( "to", "searchtest" );
+  iq->addAttribute( "id", "id" );
+  iq->addAttribute( "type", "result" );
+  q = new gloox::Tag( iq, "query" );
+  q->addAttribute( "xmlns", gloox::XMLNS_SEARCH );
+  gloox::DataForm df( gloox::DataForm::FormTypeForm );
+  q->addChild( df.tag() );
+  iq->finalize();
+  t.setTest( 6 );
+  t.feed( iq );
+  if( !t.result() )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+  delete iq;
+  iq = 0;
 
+  // -------
+  name = "search request (dataform)";
+  t.setTest( 7 );
+  t.search( df );
+  if( !t.result() )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+  }
 
-
-
-
+  // -------
+  name = "search result (dataform)";
+  iq = new gloox::Stanza( "iq" );
+  iq->addAttribute( "from", g_dir );
+  iq->addAttribute( "to", "searchtest" );
+  iq->addAttribute( "id", "id" );
+  iq->addAttribute( "type", "result" );
+  q = new gloox::Tag( iq, "query" );
+  q->addAttribute( "xmlns", gloox::XMLNS_SEARCH );
+  gloox::DataForm df2( gloox::DataForm::FormTypeResult );
+  q->addChild( df2.tag() );
+  iq->finalize();
+  t.setTest( 8 );
+  t.feed( iq );
+  if( !t.result() )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+  delete iq;
+  iq = 0;
 
 
 
