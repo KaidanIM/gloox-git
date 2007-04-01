@@ -79,7 +79,7 @@ namespace gloox
        * Initiates a search on the given directory, with the given phrases. The given SearchHandler
        * is notified about the results.
        * @param directory The (user) directory to search.
-       * @param fields Bit-wise ORed FieldEnum values describing the valid (set) fields in
+       * @param fields Bit-wise ORed FieldEnum values describing the valid (i.e., set) fields in
        * the @b values parameter.
        * @param values Contains the phrases to search for.
        * @param sh The SearchHandler to notify about the results.

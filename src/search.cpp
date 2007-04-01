@@ -50,7 +50,7 @@ namespace gloox
 
   void Search::search( const JID& directory, DataForm *form, SearchHandler *sh )
   {
-    if( !m_parent || directory.empty() || !sh )
+    if( !m_parent || !form || directory.empty() || !sh )
       return;
 
     const std::string& id = m_parent->getID();
