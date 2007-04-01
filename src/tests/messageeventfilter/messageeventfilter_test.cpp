@@ -87,7 +87,7 @@ namespace gloox
 #include "../../messageeventfilter.h"
 #include "../../messageeventfilter.cpp"
 
-int main( int /*argc*/, char* /*argv[]*/ )
+int main( int /*argc*/, char** /*argv*/ )
 {
   int fail = 0;
   std::string name;

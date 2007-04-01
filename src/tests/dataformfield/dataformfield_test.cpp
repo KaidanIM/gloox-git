@@ -6,7 +6,7 @@ using namespace gloox;
 #include <locale.h>
 #include <string>
 
-int main( int /*argc*/, char* /*argv[]*/ )
+int main( int /*argc*/, char** /*argv*/ )
 {
   int fail = 0;
   std::string name;

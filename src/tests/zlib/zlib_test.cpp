@@ -35,7 +35,7 @@ void ZlibTest::handleDecompressedData( const std::string& data )
   m_decompressed += data;
 }
 
-int main( int /*argc*/, char* /*argv[]*/ )
+int main( int /*argc*/, char** /*argv*/ )
 {
   int fail = 0;
   std::string name;

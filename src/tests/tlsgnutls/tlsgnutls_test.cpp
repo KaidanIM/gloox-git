@@ -162,7 +162,7 @@ std::string GnuTLSTest::send( const std::string& txt )
   return t;
 }
 
-int main( int /*argc*/, char* /*argv[]*/ )
+int main( int /*argc*/, char** /*argv*/ )
 {
   int fail = 0;
   std::string name;
@@ -242,7 +242,7 @@ int main( int /*argc*/, char* /*argv[]*/ )
   }
 }
 #else
-int main( int /*argc*/, char* /*argv[]*/ )
+int main( int /*argc*/, char** /*argv*/ )
 {
   printf( "GnuTLS not enabled. Skipped tests.\n" );
 }

@@ -100,7 +100,7 @@ class BookmarkStorageTest : public BookmarkHandler, ConnectionListener
     BookmarkStorage *b;
 };
 
-int main( int /*argc*/, char* /*argv[]*/ )
+int main( int /*argc*/, char** /*argv*/ )
 {
   BookmarkStorageTest *t = new BookmarkStorageTest();
   t->start();

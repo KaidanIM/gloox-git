@@ -130,7 +130,7 @@ class MessageTest : public ConnectionListener, LogHandler,
     std::string m_send;
 };
 
-int main( int /*argc*/, char* /*argv[]*/ )
+int main( int /*argc*/, char** /*argv*/ )
 {
   MessageTest *r = new MessageTest();
   r->start();

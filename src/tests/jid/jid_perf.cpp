@@ -26,7 +26,7 @@ static const int sz_s = 100;
 static const int sz_b = 1000;
 
 
-int main( int /*argc*/, char* /*argv[]*/ )
+int main( int /*argc*/, char** /*argv*/ )
 {
   struct timeval tv1;
   struct timeval tv2;

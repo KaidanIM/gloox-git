@@ -33,7 +33,7 @@ void printResult( const std::string& name, Tag::TagList& result )
 //   delete t;
 // }
 
-int main( int /*argc*/, char* /*argv[]*/ )
+int main( int /*argc*/, char** /*argv*/ )
 {
   std::string name;
   Tag *aaa = new Tag( "aaa" );

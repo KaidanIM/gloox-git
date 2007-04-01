@@ -81,7 +81,7 @@ class AnnotationsTest : public AnnotationsHandler, ConnectionListener
     Annotations *a;
 };
 
-int main( int /*argc*/, char* /*argv[]*/ )
+int main( int /*argc*/, char** /*argv*/ )
 {
   AnnotationsTest *t = new AnnotationsTest();
   t->start();

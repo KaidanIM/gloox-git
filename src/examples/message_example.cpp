@@ -163,7 +163,7 @@ class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListen
     ChatStateFilter *m_chatStateFilter;
 };
 
-int main( int /*argc*/, char* /*argv[]*/ )
+int main( int /*argc*/, char** /*argv*/ )
 {
   MessageTest *r = new MessageTest();
   r->start();

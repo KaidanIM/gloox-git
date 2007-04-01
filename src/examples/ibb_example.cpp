@@ -213,7 +213,7 @@ class IBBTest : public MessageSessionHandler, ConnectionListener, LogHandler,
     bool m_send;
 };
 
-int main( int /*argc*/, char* /*argv[]*/ )
+int main( int /*argc*/, char** /*argv*/ )
 {
   IBBTest *r = new IBBTest();
   r->start();
