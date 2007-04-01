@@ -11,6 +11,7 @@
 */
 
 
+#include <cstdlib>
 #include "flexoff.h"
 #include "dataform.h"
 

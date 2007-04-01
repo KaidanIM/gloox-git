@@ -13,6 +13,7 @@
 
 #include "stanza.h"
 #include "jid.h"
+#include <cstdlib>
 
 namespace gloox
 {

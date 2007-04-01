@@ -70,7 +70,7 @@ class AdhocTest : public ConnectionListener, AdhocCommandProvider
     Adhoc *a;
 };
 
-int main( int /*argc*/, char* /*argv[]*/ )
+int main( int /*argc*/, char** /*argv*/ )
 {
   AdhocTest *b = new AdhocTest();
   b->start();

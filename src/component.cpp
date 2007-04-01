@@ -20,6 +20,8 @@
 
 #include <iksemel.h>
 
+#include <cstdlib>
+
 namespace gloox
 {
 

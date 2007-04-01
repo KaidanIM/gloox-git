@@ -72,7 +72,7 @@ class ComponentTest : public DiscoHandler, ConnectionListener, LogHandler
     Component *j;
 };
 
-int main( int /*argc*/, char* /*argv[]*/ )
+int main( int /*argc*/, char** /*argv*/ )
 {
   ComponentTest *r = new ComponentTest();
   r->start();

@@ -77,7 +77,7 @@ class DiscoTest : public DiscoHandler, ConnectionListener, LogHandler
     Client *j;
 };
 
-int main( int /*argc*/, char* /*argv[]*/ )
+int main( int /*argc*/, char** /*argv*/ )
 {
   DiscoTest *r = new DiscoTest();
   r->start();

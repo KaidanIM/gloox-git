@@ -18,6 +18,7 @@
 #include "config.h"
 #endif
 
+#include <cstdlib>
 #include "clientbase.h"
 #include "connection.h"
 #include "messagesessionhandler.h"

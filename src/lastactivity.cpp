@@ -18,6 +18,7 @@
 #include "client.h"
 #include "lastactivityhandler.h"
 
+#include <cstdlib>
 #include <sstream>
 
 namespace gloox
