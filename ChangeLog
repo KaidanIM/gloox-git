@@ -6,6 +6,7 @@ v0.8.8-sic -- xx Mar 2007
 - ChatStateFilter: fixed hypothetical revival of chat states
 - Connection: fixed timeout conversion
 - Connection: fixed 'valid from' and 'valid to' with gnutls
+- compile fix for gcc 4.3 (thanks to Martin Michlmayr)
 
 
 v0.8.7-sic -- 06 Mar 2007
