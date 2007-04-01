@@ -20,11 +20,10 @@ using namespace gloox;
 
 #include <unistd.h>
 #include <stdio.h>
-#include <locale.h>
 #include <string>
 
-#if defined(WIN32) || defined(_WIN32)
-#include <windows.h>
+#if defined( WIN32 ) || defined( _WIN32 )
+# include <windows.h>
 #endif
 
 class IBBTest : public MessageSessionHandler, ConnectionListener, LogHandler,
