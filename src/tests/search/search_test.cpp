@@ -40,7 +40,6 @@ class SearchTest : public gloox::SearchHandler, public gloox::ClientBase
     virtual void handleSearchFields( const gloox::JID& directory, int fields,
                                      const std::string& instructions )
     {
-      printf( "handleSearchFields being called\n ");
       switch( m_test )
       {
         case 2:
@@ -65,6 +64,17 @@ class SearchTest : public gloox::SearchHandler, public gloox::ClientBase
             m_result = true;
           m_test = 0;
           break;
+        case 3:
+        {
+          gloox::Tag *t = 0;
+          if( tag && tag->hasAttribute( "id", "id" ) && tag->hasAttribute( "to", g_dir )
+               && tag->hasAttribute( "type", "set" )
+               && ( ( t = tag->findChild( "query", "xmlns", gloox::XMLNS_SEARCH ) ) != 0 )
+               && t->hasChildWithCData( "first", "first" ) && t->hasChildWithCData( "last", "last" )
+               && t->hasChildWithCData( "nick", "nick" ) && t->hasChildWithCData( "email", "email" ) )
+            m_result = true;
+          break;
+        }
         default:
           break;
       }
@@ -74,6 +84,7 @@ class SearchTest : public gloox::SearchHandler, public gloox::ClientBase
     bool result() { bool t = m_result; m_result = false; return t; }
     void feed( gloox::Stanza *s ) { m_search.handleIqID( s, m_context ); }
     virtual void trackID( gloox::IqHandler *ih, const std::string& id, int context ) { m_context = context; }
+    void search( const gloox::SearchFieldStruct& fields ) { m_search.search( g_dir, 15, fields, this ); }
   private:
     gloox::Search m_search;
     int m_test;
@@ -128,19 +139,17 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   name = "old-style search";
   t.setTest( 3 );
-  SearchFieldStruct sf;
+  gloox::SearchFieldStruct sf;
   sf.first = "first";
   sf.last = "last";
   sf.nick = "nick";
   sf.email = "email";
-  t.search();
+  t.search( sf );
   if( !t.result() )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
   }
-  delete iq;
-  iq = 0;
 
 
 
