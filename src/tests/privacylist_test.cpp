@@ -105,7 +105,7 @@ class PLTest : public PrivacyListHandler, ConnectionListener
     PrivacyManager *p;
 };
 
-int main( int /*argc*/, char* /*argv[]*/ )
+int main( int /*argc*/, char** /*argv*/ )
 {
   PLTest *t = new PLTest();
   t->start();

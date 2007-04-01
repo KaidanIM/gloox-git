@@ -72,7 +72,7 @@ class PrivateXMLTest : public PrivateXMLHandler, ConnectionListener
     PrivateXML *p;
 };
 
-int main( int /*argc*/, char* /*argv[]*/ )
+int main( int /*argc*/, char** /*argv*/ )
 {
   PrivateXMLTest *r = new PrivateXMLTest();
   r->start();

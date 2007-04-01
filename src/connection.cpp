@@ -40,6 +40,7 @@
 
 #include <time.h>
 
+#include <cstdlib>
 #include <string>
 #include <sstream>
 

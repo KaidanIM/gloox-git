@@ -19,6 +19,7 @@
 
 #include "prep.h"
 
+#include <cstdlib>
 #include <string>
 
 #ifdef HAVE_LIBIDN
