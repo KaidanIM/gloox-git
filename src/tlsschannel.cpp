@@ -211,8 +211,8 @@ namespace gloox
 
   void SChannel::cleanup()
   {
-    FreeCredentialsHandle( &m_cred_handle );
     DeleteSecurityContext( &m_context );
+    FreeCredentialsHandle( &m_cred_handle );
   }
 
   bool SChannel::handshake()
