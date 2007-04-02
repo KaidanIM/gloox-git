@@ -83,6 +83,8 @@ namespace gloox
 
     std::string m_buffer;
 
+    bool m_cleanedup;
+
     // windows error outputs
 //     void print_error( int errorcode, const char* place = 0 );
   };

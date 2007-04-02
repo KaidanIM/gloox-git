@@ -22,6 +22,7 @@ namespace gloox
   SChannel::SChannel( TLSHandler* th, const std::string& server )
     : TLSBase( th, server )
   {
+    m_cleanedup = true;
     //printf(">> SChannel::SChannel()\n");
   }
 
@@ -211,8 +212,11 @@ namespace gloox
 
   void SChannel::cleanup()
   {
-    DeleteSecurityContext( &m_context );
-    FreeCredentialsHandle( &m_credHandle );
+    if ( !m_cleanedup )
+    {
+      DeleteSecurityContext( &m_context );
+      FreeCredentialsHandle( &m_credHandle );
+    }
   }
 
   bool SChannel::handshake()
@@ -286,6 +290,7 @@ namespace gloox
 
       if( error == SEC_I_CONTINUE_NEEDED )
       {
+        m_cleanedup = false;
         //std::cout << "obuf[1].cbBuffer: " << obuf[0].cbBuffer << "\n";
         std::string senddata( static_cast<char*>(obuf[0].pvBuffer), obuf[0].cbBuffer );
         FreeContextBuffer( obuf[0].pvBuffer );
