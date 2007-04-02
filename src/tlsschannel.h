@@ -62,17 +62,6 @@ namespace gloox
     virtual void setClientCert( const std::string& clientKey, const std::string& clientCerts );
 
     private:
-    CredHandle m_cred_handle;
-    CtxtHandle m_context;
-
-    SecPkgContext_StreamSizes m_sizes;
-
-    size_t m_header_max;
-    size_t m_message_max;
-    size_t m_trailer_max;
-
-    std::string m_buffer;
-
     void handshakeStage( const std::string& data );
     void setSizes();
 
@@ -82,6 +71,17 @@ namespace gloox
     void connectionInfos();
     void certData();
     void setCertinfos();
+
+    CredHandle m_credHandle;
+    CtxtHandle m_context;
+
+    SecPkgContext_StreamSizes m_sizes;
+
+    size_t m_header_max;
+    size_t m_message_max;
+    size_t m_trailer_max;
+
+    std::string m_buffer;
 
     // windows error outputs
 //     void print_error( int errorcode, const char* place = 0 );
