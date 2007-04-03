@@ -293,6 +293,10 @@ SOURCE=.\src\tag.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\tlsdefault.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\tlsgnutlsbase.cpp
 # End Source File
 # Begin Source File
@@ -698,6 +702,10 @@ SOURCE=.\src\taghandler.h
 # Begin Source File
 
 SOURCE=.\src\tlsbase.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\tlsdefault.h
 # End Source File
 # Begin Source File
 
