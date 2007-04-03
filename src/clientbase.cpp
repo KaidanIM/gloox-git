@@ -339,7 +339,7 @@ namespace gloox
   {
     if( m_connection && m_connection->state() == StateConnected )
     {
-      send ( "</stream:stream>" );
+      send( "</stream:stream>" );
       m_connection->disconnect();
       m_connection->cleanup();
     }
