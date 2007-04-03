@@ -252,7 +252,7 @@ namespace gloox
                                       &tlscred,
                                       0,
                                       0,
-                                      &m_cred_handle,
+                                      &m_credHandle,
                                       &t );
     //print_error(error, "handshake() ~ AcquireCredentialsHandle()");
     if( error != SEC_E_OK )
@@ -274,7 +274,7 @@ namespace gloox
       /* negotiate security */
       SEC_CHAR* hname = const_cast<char*>( m_server.c_str() );
 
-      error = InitializeSecurityContext( &m_cred_handle,
+      error = InitializeSecurityContext( &m_credHandle,
                                          0,
                                          hname,
                                          request,
@@ -356,7 +356,7 @@ namespace gloox
        */
 
       /* negotiate security */
-      error = InitializeSecurityContext( &m_cred_handle,
+      error = InitializeSecurityContext( &m_credHandle,
                                          &m_context,
                                          hname,
                                          request,
