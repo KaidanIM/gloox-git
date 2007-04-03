@@ -3,6 +3,7 @@ Building on Win CE/Pocket PC 2003
 
 gloox compiles (at least) on
 - eMbedded Visual C++ 4.0
+
 No other compilers have been tested.
 
 A project file for eVC++4 is included.
@@ -16,4 +17,4 @@ For eVC++ 4 you will need:
 
 disabled features:
 - SRV record support
-- InBand Bytestreams
+- In-Band Bytestreams
