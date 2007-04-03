@@ -3889,11 +3889,8 @@ DEP_CPP_CLIENT=\
 	".\src\tag.h"\
 	".\src\taghandler.h"\
 	".\src\tlsbase.h"\
-	".\src\tlsgnutlsbase.h"\
-	".\src\tlsgnutlsclient.h"\
+	".\src\tlsdefault.h"\
 	".\src\tlshandler.h"\
-	".\src\tlsopenssl.h"\
-	".\src\tlsschannel.h"\
 	
 NODEP_CPP_CLIENT=\
 	".\src\config.h"\
@@ -5002,7 +4999,6 @@ NODEP_CPP_CONNE=\
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_CONNE=\
-	".\config.h.win"\
 	".\src\connectionbase.h"\
 	".\src\connectiondatahandler.h"\
 	".\src\connectiontcp.h"\
@@ -5012,9 +5008,6 @@ DEP_CPP_CONNE=\
 	".\src\logsink.h"\
 	".\src\macros.h"\
 	".\src\prep.h"\
-	
-NODEP_CPP_CONNE=\
-	".\src\config.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
@@ -15422,6 +15415,353 @@ DEP_CPP_TAG_C=\
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\tlsdefault.cpp
+
+!IF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Release"
+
+DEP_CPP_TLSDE=\
+	".\config.h.win"\
+	".\src\gloox.h"\
+	".\src\macros.h"\
+	".\src\tlsbase.h"\
+	".\src\tlsdefault.h"\
+	".\src\tlshandler.h"\
+	".\src\tlsopenssl.h"\
+	".\src\tlsschannel.h"\
+	
+NODEP_CPP_TLSDE=\
+	".\src\config.h"\
+	".\src\tlsgnutls.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Debug"
+
+DEP_CPP_TLSDE=\
+	".\config.h.win"\
+	".\src\gloox.h"\
+	".\src\macros.h"\
+	".\src\tlsbase.h"\
+	".\src\tlsdefault.h"\
+	".\src\tlshandler.h"\
+	".\src\tlsopenssl.h"\
+	".\src\tlsschannel.h"\
+	
+NODEP_CPP_TLSDE=\
+	".\src\config.h"\
+	".\src\tlsgnutls.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Release"
+
+DEP_CPP_TLSDE=\
+	".\config.h.win"\
+	".\src\gloox.h"\
+	".\src\macros.h"\
+	".\src\tlsbase.h"\
+	".\src\tlsdefault.h"\
+	".\src\tlshandler.h"\
+	".\src\tlsopenssl.h"\
+	".\src\tlsschannel.h"\
+	
+NODEP_CPP_TLSDE=\
+	".\src\config.h"\
+	".\src\tlsgnutls.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Debug"
+
+DEP_CPP_TLSDE=\
+	".\config.h.win"\
+	".\src\gloox.h"\
+	".\src\macros.h"\
+	".\src\tlsbase.h"\
+	".\src\tlsdefault.h"\
+	".\src\tlshandler.h"\
+	".\src\tlsopenssl.h"\
+	".\src\tlsschannel.h"\
+	
+NODEP_CPP_TLSDE=\
+	".\src\config.h"\
+	".\src\tlsgnutls.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Release"
+
+DEP_CPP_TLSDE=\
+	".\config.h.win"\
+	".\src\gloox.h"\
+	".\src\macros.h"\
+	".\src\tlsbase.h"\
+	".\src\tlsdefault.h"\
+	".\src\tlshandler.h"\
+	".\src\tlsopenssl.h"\
+	".\src\tlsschannel.h"\
+	
+NODEP_CPP_TLSDE=\
+	".\src\config.h"\
+	".\src\tlsgnutls.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Debug"
+
+DEP_CPP_TLSDE=\
+	".\config.h.win"\
+	".\src\gloox.h"\
+	".\src\macros.h"\
+	".\src\tlsbase.h"\
+	".\src\tlsdefault.h"\
+	".\src\tlshandler.h"\
+	".\src\tlsopenssl.h"\
+	".\src\tlsschannel.h"\
+	
+NODEP_CPP_TLSDE=\
+	".\src\config.h"\
+	".\src\tlsgnutls.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Release"
+
+DEP_CPP_TLSDE=\
+	".\config.h.win"\
+	".\src\gloox.h"\
+	".\src\macros.h"\
+	".\src\tlsbase.h"\
+	".\src\tlsdefault.h"\
+	".\src\tlshandler.h"\
+	".\src\tlsopenssl.h"\
+	".\src\tlsschannel.h"\
+	
+NODEP_CPP_TLSDE=\
+	".\src\config.h"\
+	".\src\tlsgnutls.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Debug"
+
+DEP_CPP_TLSDE=\
+	".\config.h.win"\
+	".\src\gloox.h"\
+	".\src\macros.h"\
+	".\src\tlsbase.h"\
+	".\src\tlsdefault.h"\
+	".\src\tlshandler.h"\
+	".\src\tlsopenssl.h"\
+	".\src\tlsschannel.h"\
+	
+NODEP_CPP_TLSDE=\
+	".\src\config.h"\
+	".\src\tlsgnutls.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Release"
+
+DEP_CPP_TLSDE=\
+	".\config.h.win"\
+	".\src\gloox.h"\
+	".\src\macros.h"\
+	".\src\tlsbase.h"\
+	".\src\tlsdefault.h"\
+	".\src\tlshandler.h"\
+	".\src\tlsopenssl.h"\
+	".\src\tlsschannel.h"\
+	
+NODEP_CPP_TLSDE=\
+	".\src\config.h"\
+	".\src\tlsgnutls.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Debug"
+
+DEP_CPP_TLSDE=\
+	".\config.h.win"\
+	".\src\gloox.h"\
+	".\src\macros.h"\
+	".\src\tlsbase.h"\
+	".\src\tlsdefault.h"\
+	".\src\tlshandler.h"\
+	".\src\tlsopenssl.h"\
+	".\src\tlsschannel.h"\
+	
+NODEP_CPP_TLSDE=\
+	".\src\config.h"\
+	".\src\tlsgnutls.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Release"
+
+DEP_CPP_TLSDE=\
+	".\config.h.win"\
+	".\src\gloox.h"\
+	".\src\macros.h"\
+	".\src\tlsbase.h"\
+	".\src\tlsdefault.h"\
+	".\src\tlshandler.h"\
+	".\src\tlsopenssl.h"\
+	".\src\tlsschannel.h"\
+	
+NODEP_CPP_TLSDE=\
+	".\src\config.h"\
+	".\src\tlsgnutls.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Debug"
+
+DEP_CPP_TLSDE=\
+	".\config.h.win"\
+	".\src\gloox.h"\
+	".\src\macros.h"\
+	".\src\tlsbase.h"\
+	".\src\tlsdefault.h"\
+	".\src\tlshandler.h"\
+	".\src\tlsopenssl.h"\
+	".\src\tlsschannel.h"\
+	
+NODEP_CPP_TLSDE=\
+	".\src\config.h"\
+	".\src\tlsgnutls.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Release"
+
+DEP_CPP_TLSDE=\
+	".\config.h.win"\
+	".\src\gloox.h"\
+	".\src\macros.h"\
+	".\src\tlsbase.h"\
+	".\src\tlsdefault.h"\
+	".\src\tlshandler.h"\
+	".\src\tlsopenssl.h"\
+	".\src\tlsschannel.h"\
+	
+NODEP_CPP_TLSDE=\
+	".\src\config.h"\
+	".\src\tlsgnutls.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Debug"
+
+DEP_CPP_TLSDE=\
+	".\config.h.win"\
+	".\src\gloox.h"\
+	".\src\macros.h"\
+	".\src\tlsbase.h"\
+	".\src\tlsdefault.h"\
+	".\src\tlshandler.h"\
+	".\src\tlsopenssl.h"\
+	".\src\tlsschannel.h"\
+	
+NODEP_CPP_TLSDE=\
+	".\src\config.h"\
+	".\src\tlsgnutls.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Release"
+
+DEP_CPP_TLSDE=\
+	".\config.h.win"\
+	".\src\gloox.h"\
+	".\src\macros.h"\
+	".\src\tlsbase.h"\
+	".\src\tlsdefault.h"\
+	".\src\tlshandler.h"\
+	".\src\tlsopenssl.h"\
+	".\src\tlsschannel.h"\
+	
+NODEP_CPP_TLSDE=\
+	".\src\config.h"\
+	".\src\tlsgnutls.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Debug"
+
+DEP_CPP_TLSDE=\
+	".\config.h.win"\
+	".\src\gloox.h"\
+	".\src\macros.h"\
+	".\src\tlsbase.h"\
+	".\src\tlsdefault.h"\
+	".\src\tlshandler.h"\
+	".\src\tlsopenssl.h"\
+	".\src\tlsschannel.h"\
+	
+NODEP_CPP_TLSDE=\
+	".\src\config.h"\
+	".\src\tlsgnutls.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Release"
+
+DEP_CPP_TLSDE=\
+	".\config.h.win"\
+	".\src\gloox.h"\
+	".\src\macros.h"\
+	".\src\tlsbase.h"\
+	".\src\tlsdefault.h"\
+	".\src\tlshandler.h"\
+	".\src\tlsopenssl.h"\
+	".\src\tlsschannel.h"\
+	
+NODEP_CPP_TLSDE=\
+	".\src\config.h"\
+	".\src\tlsgnutls.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_TLSDE=\
+	".\config.h.win"\
+	".\src\gloox.h"\
+	".\src\macros.h"\
+	".\src\tlsbase.h"\
+	".\src\tlsdefault.h"\
+	".\src\tlshandler.h"\
+	".\src\tlsopenssl.h"\
+	".\src\tlsschannel.h"\
+	
+NODEP_CPP_TLSDE=\
+	".\src\config.h"\
+	".\src\tlsgnutls.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
+
+DEP_CPP_TLSDE=\
+	".\config.h.win"\
+	".\src\gloox.h"\
+	".\src\macros.h"\
+	".\src\tlsbase.h"\
+	".\src\tlsdefault.h"\
+	".\src\tlshandler.h"\
+	".\src\tlsopenssl.h"\
+	".\src\tlsschannel.h"\
+	
+NODEP_CPP_TLSDE=\
+	".\src\config.h"\
+	".\src\tlsgnutls.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Debug"
+
+DEP_CPP_TLSDE=\
+	".\config.h.win"\
+	".\src\gloox.h"\
+	".\src\macros.h"\
+	".\src\tlsbase.h"\
+	".\src\tlsdefault.h"\
+	".\src\tlshandler.h"\
+	".\src\tlsopenssl.h"\
+	".\src\tlsschannel.h"\
+	
+NODEP_CPP_TLSDE=\
+	".\src\config.h"\
+	".\src\tlsgnutls.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\tlsgnutlsbase.cpp
 
 !IF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Release"
@@ -19126,6 +19466,10 @@ SOURCE=.\src\taghandler.h
 # Begin Source File
 
 SOURCE=.\src\tlsbase.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\tlsdefault.h
 # End Source File
 # Begin Source File
 
