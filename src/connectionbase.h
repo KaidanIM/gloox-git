@@ -15,14 +15,6 @@
 #ifndef CONNECTIONBASE_H__
 #define CONNECTIONBASE_H__
 
-#ifdef WIN32
-# include "../config.h.win"
-#elif defined( _WIN32_WCE )
-# include "../config.h.win"
-#else
-# include "config.h"
-#endif
-
 #include "gloox.h"
 #include "connectiondatahandler.h"
 

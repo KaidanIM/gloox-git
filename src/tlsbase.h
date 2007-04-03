@@ -15,25 +15,6 @@
 #ifndef TLSBASE_H__
 #define TLSBASE_H__
 
-#ifdef WIN32
-# include "../config.h.win"
-#elif defined( _WIN32_WCE )
-# include "../config.h.win"
-#else
-# include "config.h"
-#endif
-
-#if defined( HAVE_OPENSSL )
-# define USE_OPENSSL
-# define HAVE_TLS
-#elif defined( HAVE_GNUTLS )
-# define USE_GNUTLS
-# define HAVE_TLS
-#elif defined( HAVE_WINTLS )
-# define USE_WINTLS
-# define HAVE_TLS
-#endif
-
 #include "gloox.h"
 #include "tlshandler.h"
 
@@ -95,7 +76,7 @@ namespace gloox
        * Returns the state of the encryption.
        * @return The state of the encryption.
        */
-      bool isSecure() const { return m_secure; };
+      virtual bool isSecure() const { return m_secure; };
 
       /**
        * Use this function to set a number of trusted root CA certificates which shall be
@@ -108,7 +89,7 @@ namespace gloox
        * This function is used to retrieve certificate and connection info of a encrypted connection.
        * @return Certificate information.
        */
-      const CertInfo& fetchTLSInfo() const { return m_certInfo; };
+      virtual const CertInfo& fetchTLSInfo() const { return m_certInfo; };
 
       /**
        * Use this function to set the user's certificate and private key. The certificate will
