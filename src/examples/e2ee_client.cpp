@@ -20,6 +20,13 @@ using namespace gloox;
 #include <windows.h>
 #endif
 
+#ifdef HAVE_GNUTLS
+
+/*
+ * Using TLS to encrypt end-to-end traffic is not a recommended prectice, nor is
+ * it standardized in any way. Use this code at your own risk.
+ */
+
 class MessageTest : public ConnectionListener, LogHandler,
                     MessageHandler, TLSHandler
 {
@@ -134,11 +141,14 @@ class MessageTest : public ConnectionListener, LogHandler,
     std::string m_send;
     const JID rcpt;
 };
+#endif // HAVE_GNUTLS
 
 int main( int /*argc*/, char** /*argv*/ )
 {
+#ifdef HAVE_GNUTLS
   MessageTest *r = new MessageTest();
   r->start();
   delete( r );
+#endif // HAVE_GNUTLS
   return 0;
 }
