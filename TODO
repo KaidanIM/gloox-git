@@ -1,21 +1,17 @@
 Todo
 ----
 
-- fix schannel
-+ add RosterItemListener (?)
-- fix STLport support/configure check (broken on autoconf 2.61?
-- move stl/stdlib typedefs to types.h (?)
-- split send()/getID() to clientbasebase (?)
 - MUCMessageSession: handle <message type='error'/>
 - vcard: add getters for lists (email/addresses/...)
 - mixed-content XML
-- preserve order of attributes
+- unit tests (NonSaslAuth)
 
-- optimize tests/example build system to re-use .o
 - overhaul all XEP implementations (and note implemented version number)
 - RosterItem::status ::statusMsg for highest prio
 - Disco: allow specification of root node handler
 
+- move stl/stdlib typedefs to types.h (?)
+- split send()/getID() to clientbasebase (?)
 - check this change: http://www.jabberstudio.org/cgi-bin/viewcvs.cgi/cvs/jeps/0085/jep-0085.xml?r1=1.28&r2=1.31
 - XEP-0020 (Feature Negotiation)
 - XEP-0079 (AMP)
@@ -26,23 +22,21 @@ Todo
 - XEP-0186 (Invisible Command)
 - XEP-0198 (Stanza Acknowledgements)
 - XEP-0199 (XMPP Ping)
-- thread safety
+- thread safety(?)
 - sort SRV records by weight & cost
 - state p. for Stanza types
 - vcard-temp: support AGENT, CATEGORIES, SOUND, KEY
-- refactor!
-- fix disconnect mess
-- doc for every class
 - make socket tunable (keepalive)
 - allow for registration and immediate connection from within the same Client object
 - bindings (C, ...) (SWIG)
 - add prePresenceHook (for XEP-0182 (Invisible Command))
 - connection progress callbacks
 - asynchronous socket i/o?
+- fix STLport support/configure check (broken on autoconf 2.61?)
 
 
 - XPath
-- socks/HTTP proxy support
+- socks5 proxy/bytestreams support
 - XEP-0174 (Link-Local Messaging)
 
 
