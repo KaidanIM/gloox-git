@@ -292,6 +292,7 @@ src/tests/messageeventfilter/Makefile
 src/tests/oob/Makefile
 src/tests/parser/Makefile
 src/tests/prep/Makefile
+src/tests/search/Makefile
 src/tests/sha/Makefile
 src/tests/stanza/Makefile
 src/tests/stanzaextensionfactory/Makefile
