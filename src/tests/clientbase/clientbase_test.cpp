@@ -31,10 +31,10 @@ class ClientBaseTest : public ClientBase, /*LogHandler,*/ ConnectionListener
       printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
     };*/
     virtual void onConnect() { /*printf( "connect\n" );*/ };
-    virtual void onDisconnect( ConnectionError e ) { /*printf( "disconnected: %d\n", e );*/ };
-    virtual void onResourceBindError( ResourceBindError error ) { /*printf( "res bind err: %d\n", error );*/ };
-    virtual void onSessionCreateError( SessionCreateError error ) { /*printf( "ses err: %d\n", error );*/ };
-    virtual bool onTLSConnect( const CertInfo& info ) { return false; };
+    virtual void onDisconnect( ConnectionError /*e*/ ) { /*printf( "disconnected: %d\n", e );*/ };
+    virtual void onResourceBindError( ResourceBindError /*error*/ ) { /*printf( "res bind err: %d\n", error );*/ };
+    virtual void onSessionCreateError( SessionCreateError /*error*/ ) { /*printf( "ses err: %d\n", error );*/ };
+    virtual bool onTLSConnect( const CertInfo& /*info*/ ) { return false; };
     bool handleStartNodeCalled() const { return m_handleStartNodeCalled; };
     bool sidOK() const { return ( m_sid == "testsid" ); };
     bool versionOK() const { return m_versionOK; };

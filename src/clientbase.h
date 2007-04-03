@@ -385,7 +385,7 @@ namespace gloox
 
       /**
        * Removes the given IqHandler from the list of handlers of pending operations, added
-       * using trackID(). Necessary, for example, when closing a GUI elelemnt that has an
+       * using trackID(). Necessary, for example, when closing a GUI element that has an
        * operation pending.
        * @param ih The IqHandler to remove.
        * @since 0.8.7

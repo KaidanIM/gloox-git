@@ -42,9 +42,7 @@
 #include "jid.h"
 #include "base64.h"
 #include "md5.h"
-#include "tlsgnutlsclient.h"
-#include "tlsopenssl.h"
-#include "tlsschannel.h"
+#include "tlsdefault.h"
 #include "compressionzlib.h"
 
 #include <cstdlib>
@@ -1256,15 +1254,7 @@ namespace gloox
     if( !m_tls )
       return 0;
 
-#ifdef USE_GNUTLS
-    return new GnuTLSClient( this, m_server );
-#elif defined( USE_OPENSSL )
-    return new OpenSSL( this, m_server );
-#elif defined( USE_WINTLS )
-    return new SChannel( this, m_server );
-#else
-    return 0;
-#endif
+    return new TLSDefault( this, m_server );
   }
 
 }

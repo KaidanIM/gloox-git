@@ -112,7 +112,7 @@ namespace gloox
     if( !m_handler )
       return;
 
-    int ret;
+    int ret = 0;
     bool onceAgain = false;
 
     do
