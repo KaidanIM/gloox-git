@@ -31,7 +31,7 @@ namespace gloox
 
     if( at == std::string::npos )
     {
-      if ( slash == std::string::npos )
+      if( slash == std::string::npos )
       {
         m_serverRaw = jid;
       }
