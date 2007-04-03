@@ -5,6 +5,9 @@ gloox compiles (at least) on
 - MinGW (http://mingw.org)
 - MSVC 6
 No other compilers have been tested.
+However, successful compilation has been reported for VS2003, VS2005, and VS2005 .NET Express.
+
+See README.wince for info on building gloox for Win CE/Mobile
 
 Project files for Code::Blocks (gloox.cbp) and MSVC 6 (gloox.dsp) are included.
 
@@ -16,15 +19,23 @@ Project files for Code::Blocks (gloox.cbp) and MSVC 6 (gloox.dsp) are included.
   Undefine HAVE_WINTLS in config.h.win if you don't have schannel.h.
 
 
-Building gloox in MinGW
------------------------
+Building gloox in MinGW and Code::Blocks
+----------------------------------------
+
 gloox should build out of the box on MinGW.
 
 
 Building gloox on MSVC
 ----------------------
+
 - use the included project file or create your own
 - don't forget to switch 'include RTTI information' on
 - to receive any debug output you should use the LogSink facilities (this is not win32-specific)
 - build
 - if you get C4541 warnings, you forgot RTTI ;)
+
+
+Linking against gloox
+---------------------
+
+When building a program that links against gloox, make sure you have GLOOX_IMPORTS defined.
