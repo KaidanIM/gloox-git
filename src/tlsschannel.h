@@ -71,8 +71,7 @@ namespace gloox
     void connectionInfos();
     void certData();
     void setCertinfos();
-
-    CredHandle m_credHandle;
+    CredHandle m_cred_handle;
     CtxtHandle m_context;
 
     SecPkgContext_StreamSizes m_sizes;
