@@ -7,6 +7,7 @@ v0.8.8-sic -- xx Mar 2007
 - Connection: fixed timeout conversion
 - Connection: fixed 'valid from' and 'valid to' with gnutls
 - compile fix for gcc 4.3 (thanks to Martin Michlmayr)
+- Registration: fixed createAccount( const DataForm& form ) to do something useful
 
 
 v0.8.7-sic -- 06 Mar 2007
