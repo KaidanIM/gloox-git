@@ -36,7 +36,7 @@ v0.9 -- xx Feb 2007
 - statistics interface (connection/compression/encryption statistics and status, etc)
 - Tag: added 'TagList findChildren( std::string& )'
 - Disco: lifted limit of one DiscoNodeHandler per Node
-- Parser: added ParserHandler and install parser.h
+- Parser: install parser.h
 - Tag: added operator== & operator!=
 - ClientBase: added setCompression( bool ) to switch stream compression on/off
 - renamed Stanza::show() --> Stanza::presence()
@@ -81,7 +81,8 @@ since -pre5:
 - ConnectionListener/Client/Component: added stream events/onStreamEvent()
 - Client/Base: renamed fileDescriptor() --> socket()
 - TLS: TLS server support when used with GnuTLS
-- Search: search(): Dataform *form --> const DataForm& form
+- Search::search(): Dataform *form --> const DataForm& form
+- Registration: fixed createAccount( const DataForm& form ) to do something useful
 
 
 v0.8 -- 08 Apr 2006
