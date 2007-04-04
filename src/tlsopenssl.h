@@ -33,6 +33,7 @@ namespace gloox
 {
 
   /**
+   * This class implements an TLS backend using OpenSSL.
    *
    * @author Jakob Schröter <js@camaya.net>
    * @since 0.9
@@ -42,6 +43,8 @@ namespace gloox
     public:
       /**
        * Constructor.
+       * @param th The TLSHandler to handle TLS-related events.
+       * @param server The server to use in certificate verification.
        */
       OpenSSL( TLSHandler *th, const std::string& server );
 

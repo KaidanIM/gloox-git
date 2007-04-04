@@ -34,7 +34,7 @@ namespace gloox
 {
 
   /**
-   * @brief This class implements (stream) encryption using GnuTLS.
+   * @brief This class implements a TLS backend using GnuTLS.
    *
    * You should not need to use this class directly.
    *
@@ -46,6 +46,8 @@ namespace gloox
     public:
       /**
        * Constructor.
+       * @param th The TLSHandler to handle TLS-related events.
+       * @param server The server to use in certificate verification.
        */
       GnuTLSClient( TLSHandler *th, const std::string& server );
 
