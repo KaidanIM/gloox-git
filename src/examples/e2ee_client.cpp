@@ -90,13 +90,13 @@ class MessageTest : public ConnectionListener, LogHandler,
       j->send( m );
     };
 
-    virtual void handleEncryptedData( const TLSBase* base, const std::string& data )
+    virtual void handleEncryptedData( const TLSBase* /*base*/, const std::string& data )
     {
       printf( "caching %d bytes of encrypted data\n", data.length() );
       m_send += data;
     }
 
-    virtual void handleDecryptedData( const TLSBase* base, const std::string& data )
+    virtual void handleDecryptedData( const TLSBase* /*base*/, const std::string& data )
     {
       printf( "decrypted packet contents: %s\n", data.c_str() );
       m_tls.encrypt( "bye" );
@@ -104,7 +104,7 @@ class MessageTest : public ConnectionListener, LogHandler,
       j->disconnect();
     }
 
-    virtual void handleHandshakeResult( const TLSBase* base, bool success, CertInfo &certinfo )
+    virtual void handleHandshakeResult( const TLSBase* /*base*/, bool success, CertInfo& /*certinfo*/ )
     {
       if( success )
       {
