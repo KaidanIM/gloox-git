@@ -79,7 +79,7 @@ since -pre5:
 - MUCRoomParticipant: added status member
 - VCardManager: allow cancellation of VCard operations
 - ConnectionListener/Client/Component: added stream events/onStreamEvent()
-- Client/Base: renamed fileDescriptor() --> socket()
+- ClientBase: removed fileDescriptor(). Use ConnectionTCP instead.
 - TLS: TLS server support when used with GnuTLS
 - Search::search(): Dataform *form --> const DataForm& form
 - Registration: fixed createAccount( const DataForm& form ) to do something useful
