@@ -57,7 +57,7 @@ static void randomize( const int size )
 
 int main( int, char** )
 {
-  int fail = 0;
+//   int fail = 0;
   std::string name;
   ZlibTest t;
 

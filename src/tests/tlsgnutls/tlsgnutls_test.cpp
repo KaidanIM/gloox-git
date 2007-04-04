@@ -119,7 +119,7 @@ void GnuTLSTest::handleDecryptedData( const TLSBase* base, const std::string& da
   }
 }
 
-void GnuTLSTest::handleHandshakeResult( const TLSBase* base, bool success, CertInfo &certinfo )
+void GnuTLSTest::handleHandshakeResult( const TLSBase* base, bool success, CertInfo& /*certinfo*/ )
 {
 //   printfCert( certinfo );
   const GnuTLSClientAnon *c = dynamic_cast<const GnuTLSClientAnon*>( base );
