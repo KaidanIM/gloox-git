@@ -34,6 +34,7 @@ namespace gloox
 {
 
   /**
+   * This class implements a TLS backend using SChannel.
    *
    * @author Jakob Schröter <js@camaya.net>
    * @since 0.9
@@ -41,59 +42,62 @@ namespace gloox
   class SChannel : public TLSBase
   {
     public:
-    /**
-     * Constructor.
-     */
-    SChannel( TLSHandler* th, const std::string& server );
+      /**
+       * Constructor.
+       * @param th The TLSHandler to handle TLS-related events.
+       * @param server The server to use in certificate verification.
+       */
+      SChannel( TLSHandler* th, const std::string& server );
 
-    /**
-     * Virtual destructor.
-     */
-    virtual ~SChannel();
+      /**
+       * Virtual destructor.
+       */
+      virtual ~SChannel();
 
-    // reimplemented from TLSBase
-    virtual bool encrypt( const std::string& data );
+      // reimplemented from TLSBase
+      virtual bool encrypt( const std::string& data );
 
-    // reimplemented from TLSBase
-    virtual int decrypt( const std::string& data );
+      // reimplemented from TLSBase
+      virtual int decrypt( const std::string& data );
 
-    // reimplemented from TLSBase
-    virtual void cleanup();
+      // reimplemented from TLSBase
+      virtual void cleanup();
 
-    // reimplemented from TLSBase
-    virtual bool handshake();
+      // reimplemented from TLSBase
+      virtual bool handshake();
 
-    // reimplemented from TLSBase
-    virtual void setCACerts( const StringList& cacerts );
+      // reimplemented from TLSBase
+      virtual void setCACerts( const StringList& cacerts );
 
-    // reimplemented from TLSBase
-    virtual void setClientCert( const std::string& clientKey, const std::string& clientCerts );
+      // reimplemented from TLSBase
+      virtual void setClientCert( const std::string& clientKey, const std::string& clientCerts );
 
     private:
-    void handshakeStage( const std::string& data );
-    void setSizes();
+      void handshakeStage( const std::string& data );
+      void setSizes();
 
-    time_t filetime2int( FILETIME t );
+      time_t filetime2int( FILETIME t );
 
-    void validateCert();
-    void connectionInfos();
-    void certData();
-    void setCertinfos();
-    CredHandle m_credHandle;
-    CtxtHandle m_context;
+      void validateCert();
+      void connectionInfos();
+      void certData();
+      void setCertinfos();
+      CredHandle m_credHandle;
+      CtxtHandle m_context;
 
-    SecPkgContext_StreamSizes m_sizes;
+      SecPkgContext_StreamSizes m_sizes;
 
-    size_t m_header_max;
-    size_t m_message_max;
-    size_t m_trailer_max;
+      size_t m_header_max;
+      size_t m_message_max;
+      size_t m_trailer_max;
 
-    std::string m_buffer;
+      std::string m_buffer;
 
-    bool m_cleanedup;
+      bool m_cleanedup;
 
-    // windows error outputs
-//     void print_error( int errorcode, const char* place = 0 );
+      // windows error outputs
+//       void print_error( int errorcode, const char* place = 0 );
+
   };
 }
 

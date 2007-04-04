@@ -31,7 +31,9 @@ namespace gloox
   {
     public:
       /**
-       *
+       * Constructs a new TLS wrapper.
+       * @param th The TLSHandler to handle TLS-related events.
+       * @param server The server to use in certificate verification.
        */
       TLSDefault( TLSHandler *th, const std::string server );
 

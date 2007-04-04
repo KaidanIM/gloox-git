@@ -34,7 +34,7 @@ namespace gloox
 {
 
   /**
-   * @brief This class implements (stream) encryption using GnuTLS.
+   * @brief This class implements an anonymous TLS backend using GnuTLS.
    *
    * You should not need to use this class directly.
    *
@@ -46,6 +46,7 @@ namespace gloox
     public:
       /**
        * Constructor.
+       * @param th The TLSHandler to handle TLS-related events.
        */
       GnuTLSClientAnon( TLSHandler *th );
 

@@ -32,6 +32,8 @@ namespace gloox
     public:
       /**
        * Constructor.
+       * @param th The TLSHandler to handle TLS-related events.
+       * @param server The server to use in certificate verification.
        */
       TLSBase( TLSHandler *th, const std::string server )
         : m_handler( th ), m_server( server ), m_secure( false ), m_valid( false ) {};
