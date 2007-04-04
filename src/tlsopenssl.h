@@ -33,7 +33,7 @@ namespace gloox
 {
 
   /**
-   * This class implements an TLS backend using OpenSSL.
+   * This class implements a TLS backend using OpenSSL.
    *
    * @author Jakob Schröter <js@camaya.net>
    * @since 0.9
