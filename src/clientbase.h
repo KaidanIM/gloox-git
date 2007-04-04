@@ -257,26 +257,6 @@ namespace gloox
       void setXmlLang( const std::string& xmllang ) { m_xmllang = xmllang; }
 
       /**
-       * Gives access to the raw socket of the current connection. Use it wisely. You
-       * can use select() on it and use recv( -1 ) to fetch the data.
-       * @return The socket of the active connection, or -1 if no connection is established.
-       * @note The return value is only meaningful if the default connection type is used (an
-       * instance of ConnectionTCP).
-       */
-      int socket();
-
-      /**
-       * This function allows to set an existing socket with an established
-       * connection to use for the connection. You will still need to call connect() in order to
-       * negotiate the XMPP stream. You should not set a new file descriptor after calling connect().
-       * @note This function is a NOOP if the default connection type is not used (i.e. anything besides
-       * an instance of ConnectionTCP).
-       * @param socket The existing socket.
-       * @since 0.9
-       */
-      void setSocket( int socket ) const;
-
-      /**
        * This function returns the concrete connection implementation currently in use.
        * @return The concrete connection implementation.
        * @since 0.9

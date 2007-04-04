@@ -26,6 +26,9 @@ namespace gloox
   /**
    * @brief This is an implementation of a simple TCP connection.
    *
+   * You should only need to use this class directly if you need access to some special feature, like
+   * the raw socket().
+   *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
@@ -34,7 +37,6 @@ namespace gloox
     public:
       /**
        * Constructs a new ConnectionTCP object.
-       * You should not need to use this function directly.
        * @param logInstance The log target. Obtain it from ClientBase::logInstance().
        * @param server A server to connect to.
        * @param port The port to connect to. The default of -1 means that SRV records will be used
@@ -48,7 +50,6 @@ namespace gloox
 
       /**
        * Constructs a new ConnectionTCP object.
-       * You should not need to use this function directly.
        * @param cdh An ConnectionDataHandler-derived object that will handle incoming data.
        * @param logInstance The log target. Obtain it from ClientBase::logInstance().
        * @param server A server to connect to.

@@ -188,12 +188,38 @@
  * periodically with the desired timeout (in microseconds) as parameter. The default value of -1
  * means the call blocks until any data was received, which is then parsed automatically.
  *
- * As an alternative to periodic polling you can use
- * @link gloox::ClientBase::socket() ClientBase::socket() @endlink to get a hold
- * of the raw file descriptor used for the connection. You can then use select() on it and use
+ * As an alternative to periodic polling you can get a hold of the raw file descriptor used for the
+ * connection. You can then use select() on it and use
  * @link gloox::ClientBase::recv() ClientBase::recv() @endlink when select indicates that data is
  * available. You should @b not recv() any data from the file descriptor directly as there is no
  * way to feed that back into the parser.
+ *
+ * To get the file descriptor you'll need to set a connection class (e.g. an instance of
+ * @link gloox::ConnectionTCP ConnectionTCP @endlink) manually, like so:
+ *
+ * @code
+ * Client* client = new Client( ... );
+ * ConnectionTCP* conn = new ConnectionTCP( client, client->logInstance(), server, port );
+ * client->setConnectionImpl( conn );
+ *
+ * client->connect( false );
+ * int sock = conn->socket();
+ *
+ * [...]
+ * @endcode
+ *
+ * It would also be possible to fetch the fd like this:
+ *
+ * @code
+ * Client* client = new Client( ... );
+ * client->connect( false );
+ * int sock = dynamic_cast<ConnectionTCP*>( client->connectionImpl() )->socket();
+ *
+ * [...]
+ * @endcode
+ *
+ *
+ * @note This has changed in 0.9. ClientBase::fileDescriptor() is no longer available.
  *
  * @section roster_sec Roster Management
  *
@@ -243,10 +269,10 @@
  * of messages as well as message events and chat states (such as typing notifications, etc.). See
  * @link gloox::MessageSession MessageSession @endlink for more details.
  *
- * @section jeps_sec Protocol Enhancements
+ * @section jeps_sec Protocol Enhancements (XEPs)
  *
- * The Jabber Software Foundation has published a number of extensions to the core protocols, called
- * Jabber Enhancement Proposals (XEPs). A couple of these XEPs are implemented in gloox:
+ * The XMPP Standards Foundation has published a number of extensions to the core protocols, called
+ * XMPP Extension Protocols (XEPs). A couple of these XEPs are implemented in gloox:
  *
  * @li XEP-0004 @link gloox::DataForm Data Forms @endlink
  * @li XEP-0012 @link gloox::LastActivity  Last Activity @endlink

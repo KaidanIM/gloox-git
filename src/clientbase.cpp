@@ -826,28 +826,6 @@ namespace gloox
       m_messageSessionHandlerHeadline = msh;
   }
 
-  int ClientBase::socket()
-  {
-    if( m_connection )
-    {
-      ConnectionTCP *tcp = dynamic_cast<ConnectionTCP*>( m_connection );
-      if( tcp )
-        return tcp->socket();
-    }
-
-    return -1;
-  }
-
-  void ClientBase::setSocket( int socket ) const
-  {
-    if( m_connection )
-    {
-      ConnectionTCP *tcp = dynamic_cast<ConnectionTCP*>( m_connection );
-      if( tcp )
-        tcp->setSocket( socket );
-    }
-  }
-
   void ClientBase::registerPresenceHandler( PresenceHandler *ph )
   {
     if( ph )
