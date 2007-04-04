@@ -269,7 +269,7 @@
  * of messages as well as message events and chat states (such as typing notifications, etc.). See
  * @link gloox::MessageSession MessageSession @endlink for more details.
  *
- * @section jeps_sec Protocol Enhancements (XEPs)
+ * @section xeps_sec Protocol Enhancements (XEPs)
  *
  * The XMPP Standards Foundation has published a number of extensions to the core protocols, called
  * XMPP Extension Protocols (XEPs). A couple of these XEPs are implemented in gloox:
