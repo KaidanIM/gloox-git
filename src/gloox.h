@@ -22,7 +22,7 @@
  * @ref privacy_sec <br>
  * @ref auth_sec <br>
  * @ref msg_sec <br>
- * @ref jeps_sec <br>
+ * @ref xeps_sec <br>
  * @ref filetransfer_sec <br>
  * <br>
  *
