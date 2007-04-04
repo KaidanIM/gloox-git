@@ -80,9 +80,9 @@ since -pre5:
 - VCardManager: allow cancellation of VCard operations
 - ConnectionListener/Client/Component: added stream events/onStreamEvent()
 - ClientBase: removed fileDescriptor(). Use ConnectionTCP instead.
-- TLS: TLS server support when used with GnuTLS
 - Search::search(): Dataform *form --> const DataForm& form
 - Registration: fixed createAccount( const DataForm& form ) to do something useful
+- ported to Win CE/Mobile. see README.wince
 
 
 v0.8 -- 08 Apr 2006
