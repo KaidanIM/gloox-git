@@ -29,7 +29,7 @@
 #elif defined( HAVE_GNUTLS )
 # define USE_GNUTLS
 # define HAVE_TLS
-# include "tlsgnutls.h"
+# include "tlsgnutlsclient.h"
 #elif defined( HAVE_WINTLS )
 # define USE_WINTLS
 # define HAVE_TLS
