@@ -52,7 +52,7 @@ namespace gloox
 
   void Registration::createAccount( int fields, const fieldStruct& values )
   {
-    if( !m_parent )
+    if( !m_parent || m_parent->state() != StateConnected )
       return;
 
     const std::string id = m_parent->getID();
@@ -102,12 +102,27 @@ namespace gloox
 
   void Registration::createAccount( const DataForm& form )
   {
+    if( !m_parent || m_parent->state() != StateConnected )
+      return;
+
+    const std::string id = m_parent->getID();
+
+    Tag *iq = new Tag( "iq" );
+    iq->addAttribute( "id", id );
+    iq->addAttribute( "type", "set" );
+    Tag *q = new Tag( iq, "query" );
+    q->addAttribute( "xmlns", XMLNS_REGISTER );
+
     const Tag *tmp = form.tag();
     if( tmp )
     {
-      Tag *c = tmp->clone();
-      m_parent->send( c );
+      q->addChild( tmp->clone() );
+      delete tmp;
+      m_parent->trackID( this, id, CREATE_ACCOUNT );
+      m_parent->send( iq );
     }
+    else
+      delete iq;
   }
 
   void Registration::removeAccount()
@@ -139,7 +154,7 @@ namespace gloox
     Tag *iq = new Tag( "iq" );
     iq->addAttribute( "type", "set" );
     iq->addAttribute( "id", id );
-    iq->addAttribute( "to", m_parent->server() );
+    iq->addAttribute( "to", m_parent->jid().server() );
     Tag *q = new Tag( iq, "query" );
     q->addAttribute( "xmlns", XMLNS_REGISTER );
     new Tag( q, "username", m_parent->username() );
