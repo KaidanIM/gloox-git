@@ -221,7 +221,7 @@ namespace gloox
        * This function gives access to the @c RosterManager object.
        * @return A pointer to the RosterManager.
        */
-      RosterManager* rosterManager();
+      RosterManager* rosterManager() { return m_rosterManager; }
 
       /**
        * Disconnects from the server.

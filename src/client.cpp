@@ -501,10 +501,10 @@ namespace gloox
       JID jid;
       Stanza *p = Stanza::createPresenceStanza( jid, m_presenceMsg, m_presence );
 #ifdef _WIN32_WCE
-	  char tmp[5];
-	  tmp[4] = '\0';
-	  sprintf( tmp, "%s", m_priority );
-	  new Tag( p, "priority", tmp );
+      char tmp[5];
+      tmp[4] = '\0';
+      sprintf( tmp, "%s", m_priority );
+      new Tag( p, "priority", tmp );
 #else
       std::ostringstream oss;
       oss << m_priority;
@@ -518,11 +518,6 @@ namespace gloox
 
       send( p );
     }
-  }
-
-  RosterManager* Client::rosterManager()
-  {
-    return m_rosterManager;
   }
 
   void Client::connected()
