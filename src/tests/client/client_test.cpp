@@ -32,8 +32,10 @@ class ClientTest : public Client, /*LogHandler,*/ ConnectionListener
       m_streamerror = streamError();
 //       printf( "reason: %d\n", e );
     };
-    virtual void onResourceBindError( ResourceBindError error ) { /*printf( "res bind err: %d\n", error );*/ };
-    virtual void onSessionCreateError( SessionCreateError error ) { /*printf( "ses err: %d\n", error );*/ };
+    virtual void onResourceBindError( ResourceBindError /*error*/ )
+      { /*printf( "res bind err: %d\n", error );*/ };
+    virtual void onSessionCreateError( SessionCreateError /*error*/ )
+      { /*printf( "ses err: %d\n", error );*/ };
     virtual bool onTLSConnect( const CertInfo& /*info*/ ) { return false; };
     int connected() const { return m_connected; };
     int disconnected() const { return m_disconnected; };
