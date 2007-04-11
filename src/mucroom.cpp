@@ -690,16 +690,16 @@ namespace gloox
 
   void MUCRoom::setNonAnonymous()
   {
+    m_flags |= FlagNonAnonymous;
     m_flags ^= FlagSemiAnonymous;
     m_flags ^= FlagFullyAnonymous;
-    m_flags |= FlagNonAnonymous;
   }
 
   void MUCRoom::setSemiAnonymous()
   {
     m_flags ^= FlagNonAnonymous;
-    m_flags ^= FlagFullyAnonymous;
     m_flags |= FlagSemiAnonymous;
+    m_flags ^= FlagFullyAnonymous;
   }
 
   void MUCRoom::setFullyAnonymous()
@@ -716,6 +716,7 @@ namespace gloox
 
     if( stanza->subtype() == StanzaMessageError )
     {
+      m_roomHandler->handleMUCError( this, stanza->error() );
     }
     else
     {
