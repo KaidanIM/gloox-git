@@ -30,6 +30,8 @@
 # define USE_GNUTLS
 # define HAVE_TLS
 # include "tlsgnutlsclient.h"
+# include "tlsgnutlsclientanon.h"
+# include "tlsgnutlsserveranon.h"
 #elif defined( HAVE_WINTLS )
 # define USE_WINTLS
 # define HAVE_TLS
@@ -39,18 +41,35 @@
 namespace gloox
 {
 
-  TLSDefault::TLSDefault( TLSHandler *th, const std::string server )
+  TLSDefault::TLSDefault( TLSHandler *th, const std::string server, Type type )
     : TLSBase( th, server ), m_impl( 0 )
   {
+    switch( type )
+    {
+      case VerifyingClient:
 #ifdef USE_GNUTLS
-    m_impl = new GnuTLSClient( th, server );
+        m_impl = new GnuTLSClient( th, server );
 #elif defined( USE_OPENSSL )
-    m_impl = new OpenSSL( th, server );
+        m_impl = new OpenSSL( th, server );
 #elif defined( USE_WINTLS )
-    m_impl = new SChannel( th, server );
-#else
-    m_impl = 0;
+        m_impl = new SChannel( th, server );
 #endif
+        break;
+      case AnonymousClient:
+#ifdef USE_GNUTLS
+        m_impl = new GnuTLSClientAnon( th );
+#endif
+        break;
+      case AnonymousServer:
+#ifdef USE_GNUTLS
+        m_impl = new GnuTLSServerAnon( th );
+#endif
+        break;
+      case VerifyingServer:
+        break;
+      default:
+        break;
+    }
   }
 
   TLSDefault::~TLSDefault()

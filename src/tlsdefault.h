@@ -30,12 +30,28 @@ namespace gloox
   class TLSDefault : public TLSBase
   {
     public:
+
+      /**
+       * Supported TLS types.
+       */
+      enum Type
+      {
+        VerifyingClient,            /**< TLS client, verifying, available for all
+                                     * TLS implementations. */
+        AnonymousClient,            /**< Anonymous TLS client (non-verifying), available with
+                                     * GnuTLS. */
+        VerifyingServer,            /**< TLS server, verifying, currently not available. */
+        AnonymousServer             /**< Anonymous TLS server (non-verifying), available with
+                                     * GnuTLS. */
+      };
+
       /**
        * Constructs a new TLS wrapper.
        * @param th The TLSHandler to handle TLS-related events.
        * @param server The server to use in certificate verification.
+       * @param type What you want to use this TLS object for.
        */
-      TLSDefault( TLSHandler *th, const std::string server );
+      TLSDefault( TLSHandler *th, const std::string server, Type type = VerifyingClient );
 
       /**
        * Virtual Destructor.
