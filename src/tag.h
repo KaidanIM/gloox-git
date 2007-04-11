@@ -276,6 +276,9 @@ namespace gloox
       /**
        * Evaluates the given XPath expression and returns the result Tag. If more than one
        * Tag match, only the first one is returned.
+       * @note Currently, XPath support is somewhat limited. However, it should be useable
+       * for basic expressions. For now, see src/tests/xpath/xpath_test.cpp for supported
+       * expressions.
        * @param expression An XPath expression to evaluate.
        * @return A matched Tag, or 0.
        * @since 0.9
@@ -284,6 +287,9 @@ namespace gloox
 
       /**
        * Evaluates the given XPath expression and returns the matched Tags.
+       * @note Currently, XPath support is somewhat limited. However, it should be useable
+       * for basic expressions. For now, see src/tests/xpath/xpath_test.cpp for supported
+       * expressions.
        * @param expression An XPath expression to evaluate.
        * @return A list of matched Tags, or an empty TagList.
        * @since 0.9
