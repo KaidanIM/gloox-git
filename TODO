@@ -1,10 +1,11 @@
 Todo
 ----
 
-- MUCMessageSession: handle <message type='error'/>
-- vcard: add getters for lists (email/addresses/...)
+- fix OpenSSL certs
 - mixed-content XML
 - unit tests (NonSaslAuth)
+- fix socket_test.cpp
+- test socket() etc.
 
 - overhaul all XEP implementations (and note implemented version number)
 - RosterItem::status ::statusMsg for highest prio
@@ -22,7 +23,7 @@ Todo
 - XEP-0186 (Invisible Command)
 - XEP-0198 (Stanza Acknowledgements)
 - XEP-0199 (XMPP Ping)
-- thread safety(?)
+- thread safety (?)
 - sort SRV records by weight & cost
 - state p. for Stanza types
 - vcard-temp: support AGENT, CATEGORIES, SOUND, KEY
@@ -30,12 +31,10 @@ Todo
 - allow for registration and immediate connection from within the same Client object
 - bindings (C, ...) (SWIG)
 - add prePresenceHook (for XEP-0182 (Invisible Command))
-- connection progress callbacks
-- asynchronous socket i/o?
 - fix STLport support/configure check (broken on autoconf 2.61?)
 
 
-- XPath
+- more XPath
 - socks5 proxy/bytestreams support
 - XEP-0174 (Link-Local Messaging)
 

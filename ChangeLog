@@ -82,7 +82,9 @@ since -pre5:
 - ClientBase: removed fileDescriptor(). Use ConnectionTCP instead.
 - Search::search(): Dataform *form --> const DataForm& form
 - Registration: fixed createAccount( const DataForm& form ) to do something useful
-- ported to Win CE/Mobile. see README.wince
+- ported to Win CE/Mobile (experimental). see README.wince
+- ClientBase::setServer: update's Connection(Base)'s server as well
+- VCard: const *List& *() --> *List& *() to allow modification
 
 
 v0.8 -- 08 Apr 2006
