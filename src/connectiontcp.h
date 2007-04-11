@@ -27,7 +27,8 @@ namespace gloox
    * @brief This is an implementation of a simple TCP connection.
    *
    * You should only need to use this class directly if you need access to some special feature, like
-   * the raw socket().
+   * the raw socket(), or if you need HTTP proxy support (see @ref gloox::ConnectionHTTPProxy for more
+   * information).
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
@@ -100,10 +101,10 @@ namespace gloox
        */
       void setSocket( int socket ) { m_socket = socket; };
 
-    private:
+//     private:
       ConnectionTCP &operator= ( const ConnectionTCP & );
       bool dataAvailable( int timeout = -1 );
-
+    private:
       void cancel();
 
       const LogSink& m_logInstance;

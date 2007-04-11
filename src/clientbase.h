@@ -162,8 +162,9 @@ namespace gloox
        * @param server The server to connect to. Either IP or fully qualified domain name.
        * @note If you change the server, the server part of the JID is not synced. You have to do that
        * manually using @ref jid() and @ref JID::setServer().
+       * @note This function also sets the server of the Connection(Base) in use.
        */
-      void setServer( const std::string &server ) { m_server = server; }
+      void setServer( const std::string &server );
 
       /**
        * Sets the password to use to connect to the XMPP server.

@@ -48,10 +48,11 @@ namespace gloox
                                 const std::string& server, int port )
     : ConnectionBase( 0 ),
       m_logInstance( logInstance ),
-      m_buf( 0 ), m_server( prep::idna( server ) ), m_port( port ), m_socket( -1 ),
+      m_buf( 0 ), m_port( port ), m_socket( -1 ),
       m_totalBytesIn( 0 ), m_totalBytesOut( 0 ),
       m_bufsize( 1024 ), m_cancel( true )
   {
+    m_server =  prep::idna( server );
     m_buf = (char*)calloc( m_bufsize + 1, sizeof( char ) );
   }
 
@@ -59,10 +60,11 @@ namespace gloox
                                 const std::string& server, int port )
     : ConnectionBase( cdh ),
       m_logInstance( logInstance ),
-      m_buf( 0 ), m_server( prep::idna( server ) ), m_port( port ), m_socket( -1 ),
+      m_buf( 0 ), m_port( port ), m_socket( -1 ),
       m_totalBytesIn( 0 ), m_totalBytesOut( 0 ),
       m_bufsize( 1024 ), m_cancel( true )
   {
+    m_server =  prep::idna( server );
     m_buf = (char*)calloc( m_bufsize + 1, sizeof( char ) );
   }
 
@@ -121,6 +123,9 @@ namespace gloox
 
   bool ConnectionTCP::dataAvailable( int timeout )
   {
+    if( m_socket < 0 )
+      return false;
+
     fd_set fds;
     struct timeval tv;
 
@@ -131,7 +136,7 @@ namespace gloox
     tv.tv_usec = timeout % 1000000;
 
     return ( ( select( m_socket + 1, &fds, 0, 0, timeout == -1 ? 0 : &tv ) > 0 )
-         && FD_ISSET( m_socket, &fds ) != 0 );
+             && FD_ISSET( m_socket, &fds ) != 0 );
   }
 
   ConnectionError ConnectionTCP::recv( int timeout )

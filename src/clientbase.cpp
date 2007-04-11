@@ -377,6 +377,13 @@ namespace gloox
     send( start );
   }
 
+  void ClientBase::setServer( const std::string &server )
+  {
+    m_server = server;
+    if( m_connection )
+      m_connection->setServer( server );
+  }
+
   void ClientBase::setClientCert( const std::string& clientKey, const std::string& clientCerts )
   {
     m_clientKey = clientKey;

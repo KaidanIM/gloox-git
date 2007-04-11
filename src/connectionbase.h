@@ -18,6 +18,8 @@
 #include "gloox.h"
 #include "connectiondatahandler.h"
 
+#include <string>
+
 namespace gloox
 {
 
@@ -98,6 +100,12 @@ namespace gloox
       void registerConnectionDataHandler( ConnectionDataHandler *cdh ) { m_handler = cdh; }
 
       /**
+       * Sets the server to connect to.
+       * @param server The server to connect to. Either IP or fully qualified domain name.
+       */
+      void setServer( const std::string &server ) { m_server = server; }
+
+      /**
        * Returns current connection statistics.
        * @param totalIn The total number of bytes received.
        * @param totalOut The total number of bytes sent.
@@ -107,6 +115,7 @@ namespace gloox
     protected:
       ConnectionDataHandler *m_handler;
       ConnectionState m_state;
+      std::string m_server;
 
   };
 
