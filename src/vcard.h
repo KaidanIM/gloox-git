@@ -476,7 +476,7 @@ namespace gloox
        * Returns a list of email addresses.
        * @return A list of email addresses.
        */
-      const EmailList& emailAddresses() const { return m_emailList; }
+      EmailList& emailAddresses() { return m_emailList; }
 
       /**
        * Adds an address.
@@ -505,13 +505,13 @@ namespace gloox
        * Returns a list of addresses.
        * @return A list of addresses.
        */
-      const AddressList& addresses() const { return m_addressList; }
+      AddressList& addresses() { return m_addressList; }
 
       /**
        * Returns a list of address labels.
        * @return A list of address labels.
        */
-      const LabelList& labels() const { return m_labelList; }
+      LabelList& labels() { return m_labelList; }
 
       /**
        * Adds a telephone number.
@@ -524,7 +524,7 @@ namespace gloox
        * Returns a list of telephone numbers.
        * @return A list of telephone numbers.
        */
-      const TelephoneList& telephone() const { return m_telephoneList; }
+      TelephoneList& telephone() { return m_telephoneList; }
 
       /**
        * Sets "Geographical position. Values are the decimal degrees of
