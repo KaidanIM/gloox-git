@@ -5,7 +5,7 @@
 #include "../gloox.h"
 #include "../loghandler.h"
 #include "../tlshandler.h"
-#include "../tlsgnutlsclientanon.h"
+#include "../tlsdefault.h"
 #include "../logsink.h"
 #include "../messagehandler.h"
 #include "../base64.h"
@@ -31,9 +31,14 @@ class MessageTest : public ConnectionListener, LogHandler,
                     MessageHandler, TLSHandler
 {
   public:
-    MessageTest() : m_tls( this ), rcpt( "hurkhurk@example.net/server" ) {};
+    MessageTest()
+      : m_tls( new TLSDefault( this, "", TLSDefault::AnonymousClient ) ),
+        rcpt( "hurkhurk@example.net/server" ) {};
 
-    virtual ~MessageTest() {};
+    virtual ~MessageTest()
+    {
+      delete m_tls;
+    };
 
     void start()
     {
@@ -56,7 +61,7 @@ class MessageTest : public ConnectionListener, LogHandler,
     virtual void onConnect()
     {
       printf( "connected!\n" );
-      m_tls.handshake();
+      m_tls->handshake();
       xtlsSend();
       m_send = "";
     };
@@ -99,7 +104,7 @@ class MessageTest : public ConnectionListener, LogHandler,
     virtual void handleDecryptedData( const TLSBase* /*base*/, const std::string& data )
     {
       printf( "decrypted packet contents: %s\n", data.c_str() );
-      m_tls.encrypt( "bye" );
+      m_tls->encrypt( "bye" );
       xtlsSend();
       j->disconnect();
     }
@@ -109,7 +114,7 @@ class MessageTest : public ConnectionListener, LogHandler,
       if( success )
       {
         printf( "xtls handshake successful!\n" );
-        m_tls.encrypt( "ping" );
+        m_tls->encrypt( "ping" );
         xtlsSend();
       }
       else
@@ -125,7 +130,7 @@ class MessageTest : public ConnectionListener, LogHandler,
       if( x )
       {
         printf( "decrypting: %d\n", x->cdata().length() );
-        m_tls.decrypt( Base64::decode64( x->cdata() ) );
+        m_tls->decrypt( Base64::decode64( x->cdata() ) );
         xtlsSend();
       }
     }
@@ -137,7 +142,7 @@ class MessageTest : public ConnectionListener, LogHandler,
 
   private:
     Client *j;
-    GnuTLSClientAnon m_tls;
+    TLSBase* m_tls;
     std::string m_send;
     const JID rcpt;
 };

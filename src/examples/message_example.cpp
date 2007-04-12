@@ -48,7 +48,7 @@ class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListen
 
       j->logInstance().registerLogHandler( LogLevelDebug, LogAreaAll, this );
 
-      if( j->connect(false) )
+      if( j->connect( false ) )
       {
         ConnectionError ce = ConnNoError;
         while( ce == ConnNoError )

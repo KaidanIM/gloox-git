@@ -31,9 +31,14 @@ class MessageTest : public ConnectionListener, LogHandler,
                     MessageHandler, TLSHandler
 {
   public:
-    MessageTest() : m_tls( this ), rcpt( "hurkhurk@example.net/client" ) {};
+    MessageTest()
+      : m_tls( new TLSDefault( this, "", TLSDefault::AnonymousServer ) ),
+        rcpt( "hurkhurk@example.net/client" ) {};
 
-    virtual ~MessageTest() {};
+    virtual ~MessageTest()
+    {
+      delete m_tls;
+    };
 
     void start()
     {
@@ -99,7 +104,7 @@ class MessageTest : public ConnectionListener, LogHandler,
       if( data == "bye" )
         j->disconnect();
 
-      m_tls.encrypt( "pong" );
+      m_tls->encrypt( "pong" );
       xtlsSend();
     }
 
@@ -120,7 +125,7 @@ class MessageTest : public ConnectionListener, LogHandler,
       if( x )
       {
         printf( "decrypting: %d\n", x->cdata().length() );
-        m_tls.decrypt( Base64::decode64( x->cdata() ) );
+        m_tls->decrypt( Base64::decode64( x->cdata() ) );
         xtlsSend();
       }
     }
@@ -132,7 +137,7 @@ class MessageTest : public ConnectionListener, LogHandler,
 
   private:
     Client *j;
-    GnuTLSServerAnon m_tls;
+    TLSBase* m_tls;
     const JID rcpt;
     std::string m_send;
 };
