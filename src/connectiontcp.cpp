@@ -124,7 +124,7 @@ namespace gloox
   bool ConnectionTCP::dataAvailable( int timeout )
   {
     if( m_socket < 0 )
-      return true;
+      return true; // let recv() catch the closed fd
 
     fd_set fds;
     struct timeval tv;
