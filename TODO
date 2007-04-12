@@ -1,11 +1,9 @@
 Todo
 ----
 
-- fix OpenSSL certs
 - mixed-content XML
 - unit tests (NonSaslAuth)
-- fix socket_test.cpp
-- test socket() etc.
+
 
 - overhaul all XEP implementations (and note implemented version number)
 - RosterItem::status ::statusMsg for highest prio
