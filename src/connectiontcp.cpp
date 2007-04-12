@@ -52,7 +52,7 @@ namespace gloox
       m_totalBytesIn( 0 ), m_totalBytesOut( 0 ),
       m_bufsize( 1024 ), m_cancel( true )
   {
-    m_server =  prep::idna( server );
+    m_server = prep::idna( server );
     m_buf = (char*)calloc( m_bufsize + 1, sizeof( char ) );
   }
 
@@ -64,7 +64,7 @@ namespace gloox
       m_totalBytesIn( 0 ), m_totalBytesOut( 0 ),
       m_bufsize( 1024 ), m_cancel( true )
   {
-    m_server =  prep::idna( server );
+    m_server = prep::idna( server );
     m_buf = (char*)calloc( m_bufsize + 1, sizeof( char ) );
   }
 
@@ -124,7 +124,7 @@ namespace gloox
   bool ConnectionTCP::dataAvailable( int timeout )
   {
     if( m_socket < 0 )
-      return false;
+      return true;
 
     fd_set fds;
     struct timeval tv;
