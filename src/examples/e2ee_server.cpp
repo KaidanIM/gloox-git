@@ -5,7 +5,7 @@
 #include "../gloox.h"
 #include "../loghandler.h"
 #include "../tlshandler.h"
-#include "../tlsgnutlsserveranon.h"
+#include "../tlsdefault.h"
 #include "../logsink.h"
 #include "../messagehandler.h"
 #include "../base64.h"

@@ -99,7 +99,7 @@ class MessageTest : public ConnectionListener, LogHandler, MUCRoomHandler
         printf( "Presence is %d of %s\n", presence, participant.nick->resource().c_str() );
     };
 
-    virtual void handleMUCMessage( MUCRoom *room, const std::string& nick, const std::string& message,
+    virtual void handleMUCMessage( MUCRoom* /*room*/, const std::string& nick, const std::string& message,
                                    bool history, const std::string& /*when*/, bool priv )
     {
       printf( "%s said: '%s' (history: %s, private: %s)\n", nick.c_str(), message.c_str(),
