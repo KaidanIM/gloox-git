@@ -77,6 +77,21 @@ namespace gloox
     delete m_impl;
   }
 
+  int TLSDefault::types()
+  {
+    int types = 0;
+#ifdef USE_GNUTLS
+    types |= VerifyingClient;
+    types |= AnonymousClient;
+    types |= AnonymousServer;
+#elif defined( USE_OPENSSL )
+    types |= VerifyingClient;
+#elif defined( USE_WINTLS )
+    types |= VerifyingClient;
+#endif
+    return types;
+  }
+
   bool TLSDefault::encrypt( const std::string& data )
   {
     if( m_impl )

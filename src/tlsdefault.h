@@ -36,12 +36,12 @@ namespace gloox
        */
       enum Type
       {
-        VerifyingClient,            /**< TLS client, verifying, available for all
+        VerifyingClient   =  1,     /**< TLS client, verifying, available for all
                                      * TLS implementations. */
-        AnonymousClient,            /**< Anonymous TLS client (non-verifying), available with
+        AnonymousClient   =  2,     /**< Anonymous TLS client (non-verifying), available with
                                      * GnuTLS. */
-        VerifyingServer,            /**< TLS server, verifying, currently not available. */
-        AnonymousServer             /**< Anonymous TLS server (non-verifying), available with
+        VerifyingServer   =  4,     /**< TLS server, verifying, currently not available. */
+        AnonymousServer   =  8      /**< Anonymous TLS server (non-verifying), available with
                                      * GnuTLS. */
       };
 
@@ -71,16 +71,22 @@ namespace gloox
       virtual bool handshake();
 
       // re-implemented from TLSBase
-      bool isSecure() const;
+      virtual bool isSecure() const;
 
       // re-implemented from TLSBase
       virtual void setCACerts( const StringList& cacerts );
 
       // re-implemented from TLSBase
-      const CertInfo& fetchTLSInfo() const;
+      virtual const CertInfo& fetchTLSInfo() const;
 
       // re-implemented from TLSBase
       virtual void setClientCert( const std::string& clientKey, const std::string& clientCerts );
+
+      /**
+       * Returns an ORed list of supported TLS types.
+       * @return ORed TLSDefault::type members.
+       */
+      static int types();
 
     private:
       TLSBase* m_impl;
