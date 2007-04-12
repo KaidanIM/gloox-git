@@ -25,7 +25,7 @@ namespace gloox
     m_buf = (char*)calloc( m_bufsize + 1, sizeof( char ) );
 
     SSL_library_init();
-    SSL_CTX *m_ctx = SSL_CTX_new( TLSv1_client_method() );
+    m_ctx = SSL_CTX_new( TLSv1_client_method() );
     if( !m_ctx )
       return;
 
@@ -84,7 +84,7 @@ namespace gloox
 
     StringList::const_iterator it = m_cacerts.begin();
     for( ; it != m_cacerts.end(); ++it )
-      SSL_CTX_load_verify_locations( m_ctx, (*it).c_str(), NULL );
+      SSL_CTX_load_verify_locations( m_ctx, (*it).c_str(), 0 );
   }
 
   void OpenSSL::setClientCert( const std::string& clientKey, const std::string& clientCerts )
