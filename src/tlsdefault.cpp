@@ -23,17 +23,14 @@
 #endif
 
 #if defined( HAVE_OPENSSL )
-# define USE_OPENSSL
 # define HAVE_TLS
 # include "tlsopenssl.h"
 #elif defined( HAVE_GNUTLS )
-# define USE_GNUTLS
 # define HAVE_TLS
 # include "tlsgnutlsclient.h"
 # include "tlsgnutlsclientanon.h"
 # include "tlsgnutlsserveranon.h"
 #elif defined( HAVE_WINTLS )
-# define USE_WINTLS
 # define HAVE_TLS
 # include "tlsschannel.h"
 #endif
@@ -47,21 +44,21 @@ namespace gloox
     switch( type )
     {
       case VerifyingClient:
-#ifdef USE_GNUTLS
+#ifdef HAVE_GNUTLS
         m_impl = new GnuTLSClient( th, server );
-#elif defined( USE_OPENSSL )
+#elif defined( HAVE_OPENSSL )
         m_impl = new OpenSSL( th, server );
-#elif defined( USE_WINTLS )
+#elif defined( HAVE_WINTLS )
         m_impl = new SChannel( th, server );
 #endif
         break;
       case AnonymousClient:
-#ifdef USE_GNUTLS
+#ifdef HAVE_GNUTLS
         m_impl = new GnuTLSClientAnon( th );
 #endif
         break;
       case AnonymousServer:
-#ifdef USE_GNUTLS
+#ifdef HAVE_GNUTLS
         m_impl = new GnuTLSServerAnon( th );
 #endif
         break;
@@ -80,13 +77,13 @@ namespace gloox
   int TLSDefault::types()
   {
     int types = 0;
-#ifdef USE_GNUTLS
+#ifdef HAVE_GNUTLS
     types |= VerifyingClient;
     types |= AnonymousClient;
     types |= AnonymousServer;
-#elif defined( USE_OPENSSL )
+#elif defined( HAVE_OPENSSL )
     types |= VerifyingClient;
-#elif defined( USE_WINTLS )
+#elif defined( HAVE_WINTLS )
     types |= VerifyingClient;
 #endif
     return types;
