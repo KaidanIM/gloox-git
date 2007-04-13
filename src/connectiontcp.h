@@ -101,10 +101,9 @@ namespace gloox
        */
       void setSocket( int socket ) { m_socket = socket; };
 
-//     private:
+    private:
       ConnectionTCP &operator= ( const ConnectionTCP & );
       bool dataAvailable( int timeout = -1 );
-    private:
       void cancel();
 
       const LogSink& m_logInstance;
