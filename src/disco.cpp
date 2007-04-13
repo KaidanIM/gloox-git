@@ -64,7 +64,7 @@ namespace gloox
 
           m_parent->send( iq );
         }
-        else if( stanza->xmlns() == XMLNS_DISCO_INFO )
+        else if( stanza->xmlns() == XMLNS_DISCO_INFO && stanza->hasChild( "query" ) )
         {
           Tag *iq = new Tag( "iq" );
           iq->addAttribute( "id", stanza->id() );
@@ -121,7 +121,7 @@ namespace gloox
 
           m_parent->send( iq );
         }
-        else if( stanza->xmlns() == XMLNS_DISCO_ITEMS )
+        else if( stanza->xmlns() == XMLNS_DISCO_ITEMS && stanza->hasChild( "query" ) )
         {
           Tag *iq = new Tag( "iq" );
           iq->addAttribute( "id", stanza->id() );
