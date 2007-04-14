@@ -44,10 +44,13 @@ namespace gloox
     }
   }
 
-  StringList Adhoc::handleDiscoNodeFeatures( const std::string& /*node*/ )
+  StringList Adhoc::handleDiscoNodeFeatures( const std::string& node )
   {
     StringList features;
-    features.push_back( XMLNS_ADHOC_COMMANDS );
+
+    if( m_items.find( node ) != m_items.end() )
+      features.push_back( XMLNS_ADHOC_COMMANDS );
+
     return features;
   }
 
@@ -164,7 +167,7 @@ namespace gloox
             form.parse( x );
 
           (*it).second.ah->handleAdhocExecutionResult( stanza->from(), command, status, id, form,
-                                                  actions, def, note, type );
+                                                       actions, def, note, type );
         }
 
         m_adhocTrackMap.erase( it );
