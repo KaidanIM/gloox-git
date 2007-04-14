@@ -78,6 +78,7 @@ namespace gloox
           const std::string& node = q->findAttribute( "node" );
           if( !node.empty() )
           {
+            query->addAttribute( "node", node );
             DiscoNodeHandlerMap::const_iterator it = m_nodeHandlers.find( node );
             if( it != m_nodeHandlers.end() )
             {
@@ -136,6 +137,7 @@ namespace gloox
           const std::string& node = q->findAttribute( "node" );
           if( !node.empty() )
           {
+            query->addAttribute( "node", node );
             it = m_nodeHandlers.find( node );
             if( it != m_nodeHandlers.end() )
             {
@@ -162,7 +164,7 @@ namespace gloox
               DiscoNodeHandlerList::const_iterator in = (*it).second.begin();
               for( ; in != (*it).second.end(); ++in )
               {
-                const DiscoNodeItemList& items = (*in)->handleDiscoNodeItems( "" );
+                const DiscoNodeItemList& items = (*in)->handleDiscoNodeItems( std::string() );
                 DiscoNodeItemList::const_iterator it = items.begin();
                 for( ; it != items.end(); ++it )
                 {
