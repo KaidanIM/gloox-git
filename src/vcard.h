@@ -101,7 +101,7 @@ namespace gloox
       };
 
       /**
-       * Al list of email fields.
+       * A list of email fields.
        */
       typedef std::list<Email> EmailList;
 
@@ -116,13 +116,13 @@ namespace gloox
         bool voice;                 /**< Whether this is a voice number. */
         bool fax;                   /**< Whether this is a fax number. */
         bool pager;                 /**< Whether this is a pager. */
-        bool msg;                   /**< MSG(?)*/
+        bool msg;                   /**< MSG(?) */
         bool cell;                  /**< Whether this is a cell phone. */
         bool video;                 /**< Whether this is a video chat(?). */
         bool bbs;                   /**< Whether this is a BBS. */
         bool modem;                 /**< Whether this is a modem. */
-        bool isdn;                  /**< Whether this is a ISDN line(?)*/
-        bool pcs;                   /**< PCS(?)*/
+        bool isdn;                  /**< Whether this is a ISDN line(?) */
+        bool pcs;                   /**< PCS(?) */
         bool pref;                  /**< Whether this is the preferred number. */
       };
 
