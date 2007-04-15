@@ -54,6 +54,8 @@ namespace gloox
   const std::string XMLNS_ROSTER_DELIMITER  = "roster:delimiter";
 
   const std::string XMLNS_XMPP_PING         = "urn:xmpp:ping";
+  const std::string XMLNS_SI                = "http://jabber.org/protocol/si";
+  const std::string XMLNS_SI_FT             = "http://jabber.org/protocol/si/profile/file-transfer";
 
   const std::string XMLNS_MUC               = "http://jabber.org/protocol/muc";
   const std::string XMLNS_MUC_USER          = "http://jabber.org/protocol/muc#user";
