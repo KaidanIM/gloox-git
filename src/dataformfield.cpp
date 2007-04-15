@@ -161,7 +161,7 @@ namespace gloox
         new Tag( field, "value", "1" );
     }
 
-    if( m_type == FieldTypeTextMulti || m_type == FieldTypeListMulti )
+    if( m_type == FieldTypeTextMulti || m_type == FieldTypeListMulti || m_type == FieldTypeJidMulti )
     {
       StringList::const_iterator it = m_values.begin();
       for( ; it != m_values.end() ; ++it )
