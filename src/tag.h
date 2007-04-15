@@ -73,6 +73,32 @@ namespace gloox
       Tag( Tag *parent, const std::string& name, const std::string& cdata = "", bool incoming = false );
 
       /**
+       * Creates a new tag with a given name and an attribute.
+       * @param name The name of the element.
+       * @param attrib The attribute name.
+       * @param value The attribute value.
+       * @param incoming Indicates whether tag names, attributes, attribute values, and cdata shall
+       * be escaped (false, default) or not (true).
+       * @since 0.9
+       */
+      Tag( const std::string& name, const std::string& attrib, const std::string& value,
+           bool incoming = false );
+
+      /**
+       * Creates a new tag as a child tag of the given parent, with a given name and
+       * an attribute.
+       * @param parent The parent tag.
+       * @param name The name of the element.
+       * @param attrib The attribute name.
+       * @param value The attribute value.
+       * @param incoming Indicates whether tag names, attributes, attribute values, and cdata shall
+       * be escaped (false, default) or not (true).
+       * @since 0.9
+       */
+      Tag( Tag *parent, const std::string& name, const std::string& attrib, const std::string& value,
+           bool incoming = false );
+
+      /**
        * Virtual destructor.
        */
       virtual ~Tag();

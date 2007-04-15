@@ -44,6 +44,23 @@ namespace gloox
       m_parent->addChild( this );
   }
 
+  Tag::Tag( const std::string& name, const std::string& attrib, const std::string& value, bool incoming )
+    : m_name( incoming ? relax( name ) : name ),
+      m_parent( 0 ), m_type( StanzaUndefined ), m_incoming( incoming )
+  {
+    addAttribute( attrib, value );
+  }
+
+  Tag::Tag( Tag *parent, const std::string& name, const std::string&  attrib, const std::string& value,
+            bool incoming )
+    : m_name( incoming ? relax( name ) : name ),
+      m_parent( parent ), m_type( StanzaUndefined ), m_incoming( incoming )
+  {
+    if( m_parent )
+      m_parent->addChild( this );
+    addAttribute( attrib, value );
+  }
+
   Tag::~Tag()
   {
     TagList::iterator it = m_children.begin();
