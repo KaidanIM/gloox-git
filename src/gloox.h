@@ -436,6 +436,12 @@ namespace gloox
   /** XMPP Ping namespace (XEP-0199) */
   GLOOX_API extern const std::string XMLNS_XMPP_PING;
 
+  /** Stream Initiation namespace (XEP-0095) **/
+  GLOOX_API extern const std::string XMLNS_SI;
+
+  /** File transfer profile of Stream Initiation (XEP-0096) **/
+  GLOOX_API extern const std::string XMLNS_SI_FT;
+
   /** Multi-User Chat namespace (XEP-0045) */
   GLOOX_API extern const std::string XMLNS_MUC;
 
