@@ -73,7 +73,7 @@ namespace gloox
         m_required = true;
       else if( (*it)->name() == "value" )
       {
-        if( m_type == FieldTypeTextMulti || m_type == FieldTypeListMulti )
+        if( m_type == FieldTypeTextMulti || m_type == FieldTypeListMulti || m_type == FieldTypeJidMulti )
           m_values.push_back( (*it)->cdata() );
         else
           m_value = (*it)->cdata();
