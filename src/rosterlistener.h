@@ -22,6 +22,8 @@
 namespace gloox
 {
 
+  class Stanza;
+
   /**
    * A map of JID/RosterItem pairs.
    */
