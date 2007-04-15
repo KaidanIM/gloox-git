@@ -64,7 +64,7 @@ namespace gloox
     si->addChild( child1 );
     si->addChild( child2 );
 
-    TrackStruct t = { id2, sih };
+    TrackStruct t = { id2, profile, sih };
     m_track[id] = t;
     m_parent->trackID( this, id, OfferSI );
     m_parent->send( iq );
@@ -149,7 +149,7 @@ namespace gloox
       if( it != m_handlers.end() && (*it).second )
       {
         Tag* p = si->findChildWithAttrib( "xmlns", profile );
-        Tag* f = si->findChildWithAttrib( "xmlns", XMLNS_FEATURE_NEG );
+        Tag* f = si->findChild( "feature", "xmlns", XMLNS_FEATURE_NEG );
         (*it).second->handleSIRequest( stanza->from(), stanza->id(), profile, si, p, f );
         return true;
       }
@@ -163,16 +163,35 @@ namespace gloox
     switch( stanza->subtype() )
     {
       case StanzaIqResult:
-        switch( context )
+        if( context == OfferSI )
         {
-          case OfferSI:
-
-            break;
+          TrackMap::iterator it = m_track.find( stanza->id() );
+          if( it != m_track.end() )
+          {
+            Tag* si = stanza->findChild( "si", "xmlns", XMLNS_SI );
+            Tag* ptag = 0;
+            Tag* fneg = 0;
+            if( si )
+            {
+              ptag = si->findChildWithAttrib( "xmlns", (*it).second.profile );
+              fneg = si->findChild( "feature", "xmlns", XMLNS_FEATURE_NEG );
+            }
+            (*it).second.sih->handleSIRequestResult( stanza->from(), (*it).second.sid, si, ptag, fneg );
+          }
+          return true;
         }
-        return true;
         break;
       case StanzaIqError:
-        return true;
+        if( context == OfferSI )
+        {
+          TrackMap::iterator it = m_track.find( stanza->id() );
+          if( it != m_track.end() )
+          {
+            (*it).second.sih->handleSIRequestError( stanza );
+          }
+          return true;
+        }
+        break;
         break;
       case StanzaIqSet:
       case StanzaIqGet:

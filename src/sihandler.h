@@ -48,10 +48,16 @@ namespace gloox
        * @param sid The stream ID.
        * @param si The request's complete &lt;si/&gt; Tag.
        * @param ptag The profile-specific child of the SI request. May be 0.
-       * @param fneg The &lt;feature/&gt; child of the SI request. May be 0, but should not be.
+       * @param fneg The &lt;feature/&gt; child of the SI request. May be 0 (but should not be).
        */
       virtual void handleSIRequestResult( const JID& from, const std::string& sid,
                                           Tag* si, Tag* ptag, Tag* fneg ) = 0;
+
+      /**
+       * This function is called to handle a request error or decline.
+       * @param stanza The complete error stanza.
+       */
+      virtual void handleSIRequestError( Stanza* stanza ) = 0;
 
   };
 

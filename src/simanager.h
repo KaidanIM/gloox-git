@@ -36,7 +36,7 @@ namespace gloox
 
     public:
       /**
-       *
+       * SI error conditions.
        */
       enum SIError
       {
@@ -123,6 +123,7 @@ namespace gloox
       struct TrackStruct
       {
         std::string sid;
+        std::string profile;
         SIHandler* sih;
       };
       typedef std::map<std::string, TrackStruct> TrackMap;
