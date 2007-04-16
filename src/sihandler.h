@@ -14,11 +14,12 @@
 #ifndef SIHANDLER_H__
 #define SIHANDLER_H__
 
-class string;
+#include <string>
 
 namespace gloox
 {
 
+  class Stanza;
   class Tag;
   class JID;
 
@@ -44,7 +45,7 @@ namespace gloox
       /**
        * This function is called to handle results of outgoing SI requests, i.e. you requested a stream
        * (using SIManager::requestSI()) to send a file to a remote entity.
-       * @param from The SI requestor.
+       * @param from The SI receiver.
        * @param sid The stream ID.
        * @param si The request's complete &lt;si/&gt; Tag.
        * @param ptag The profile-specific child of the SI request. May be 0.

@@ -58,7 +58,10 @@ namespace gloox
     Tag* si = new Tag( iq, "si" );
     si->addAttribute( "xmlns", XMLNS_SI );
     si->addAttribute( "id", id2 );
-    si->addAttribute( "mime-type", mimetype );
+    if( mimetype.empty() )
+      si->addAttribute( "mime-type", "binary/octet-stream" );
+    else
+      si->addAttribute( "mime-type", mimetype );
     si->addAttribute( "profile", profile );
 
     si->addChild( child1 );
@@ -141,6 +144,7 @@ namespace gloox
 
   bool SIManager::handleIq( Stanza *stanza )
   {
+    printf( "recved si iq\n" );
     Tag *si = stanza->findChild( "si", "xmlns", XMLNS_SI );
     if( si && si->hasAttribute( "profile" ) )
     {
