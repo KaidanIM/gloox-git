@@ -44,13 +44,10 @@ namespace gloox
     }
   }
 
-  StringList Adhoc::handleDiscoNodeFeatures( const std::string& node )
+  StringList Adhoc::handleDiscoNodeFeatures( const std::string& /*node*/ )
   {
     StringList features;
-
-    if( m_items.find( node ) != m_items.end() )
-      features.push_back( XMLNS_ADHOC_COMMANDS );
-
+    features.push_back( XMLNS_ADHOC_COMMANDS );
     return features;
   }
 
