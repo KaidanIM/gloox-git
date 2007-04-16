@@ -14,7 +14,9 @@
 #ifndef SIPROFILEHANDLER_H__
 #define SIPROFILEHANDLER_H__
 
-class string;
+#include "jid.h"
+
+#include <string>
 
 namespace gloox
 {
