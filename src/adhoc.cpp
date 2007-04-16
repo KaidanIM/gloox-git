@@ -54,7 +54,15 @@ namespace gloox
   DiscoNodeItemList Adhoc::handleDiscoNodeItems( const std::string& node )
   {
     DiscoNodeItemList l;
-    if( node == XMLNS_ADHOC_COMMANDS )
+    if( node.empty() )
+    {
+      DiscoNodeItem item;
+      item.node = XMLNS_ADHOC_COMMANDS;
+      item.jid = "";
+      item.name = "Ad-Hoc Commands";
+      l.push_back( item );
+    }
+    else if( node == XMLNS_ADHOC_COMMANDS )
     {
       StringMap::const_iterator it = m_items.begin();
       for( ; it != m_items.end(); ++it )
