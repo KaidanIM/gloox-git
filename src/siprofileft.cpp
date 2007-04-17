@@ -106,10 +106,13 @@ namespace gloox
 
     if( m_handler )
     {
+      std::string desc;
+      if( ptag->hasChild( "desc" ) )
+        desc = ptag->findChild( "desc" )->cdata();
       const std::string& mt = si->findAttribute( "mime-type" );
       m_handler->handleFTRequest( from, id, ptag->findAttribute( "name" ), ptag->findAttribute( "size" ),
                                   ptag->findAttribute( "hash" ), ptag->findAttribute( "date" ),
-                                  mt.empty() ? "binary/octet-stream" : mt );
+                                  mt.empty() ? "binary/octet-stream" : mt, desc );
     }
   }
 
