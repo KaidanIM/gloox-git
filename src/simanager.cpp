@@ -144,7 +144,6 @@ namespace gloox
 
   bool SIManager::handleIq( Stanza *stanza )
   {
-    printf( "recved si iq\n" );
     Tag *si = stanza->findChild( "si", "xmlns", XMLNS_SI );
     if( si && si->hasAttribute( "profile" ) )
     {

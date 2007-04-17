@@ -50,10 +50,12 @@ namespace gloox
        * @param hash The file content's MD5 sum.
        * @param date The file's last modification time.
        * @param mimetype The file's mime-type.
+       * @param desc The file's description.
        */
       virtual void handleFTRequest( const JID& from, const std::string& id, const std::string& name,
                                     const std::string& size, const std::string& hash,
-                                    const std::string& date, const std::string& mimetype ) = 0;
+                                    const std::string& date, const std::string& mimetype,
+                                    const std::string& desc ) = 0;
 
       /**
        * This function is called to handle results of outgoing file transfer requests,
