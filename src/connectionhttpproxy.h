@@ -40,6 +40,9 @@ namespace gloox
    * Make sure to pass the proxy host/port to the transport connection (ConnectionTCP in this case),
    * and the XMPP host/port to the proxy connection.
    *
+   * The reason why ConnectionHTTPProxy doesn't manage its own ConnectionTCP is that it allows it
+   * to be used with other transports (like IPv6).
+   *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
