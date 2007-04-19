@@ -100,6 +100,9 @@ namespace gloox
       // reimplemented from ConnectionDataHandler
       virtual void handleDisconnect( ConnectionError reason );
 
+      // reimplemented from ConnectionDataHandler
+      virtual ConnectionHTTPProxy* newInstance() const;
+
       /**
        * Sets the XMPP server to proxy to.
        * @param host The XMPP server hostname (IP address).
@@ -117,19 +120,21 @@ namespace gloox
       void setProxyAuth( const std::string& user, const std::string& password )
         { m_proxyUser = user; m_proxyPassword = password; }
 
+      /**
+       * Sets the underlying transport connection. A possibly existing connection will be deleted.
+       * @param connection The ConnectionBase to replace the current connection, if any.
+       */
+      void setConnection( ConnectionBase* connection );
+
    private:
       ConnectionHTTPProxy &operator= ( const ConnectionHTTPProxy& );
 
       ConnectionBase *m_connection;
       const LogSink& m_logInstance;
 
-      std::string m_server;
       std::string m_proxyUser;
       std::string m_proxyPassword;
       std::string m_proxyHandshakeBuffer;
-      int m_port;
-      int m_totalBytesIn;
-      int m_totalBytesOut;
 
   };
 
