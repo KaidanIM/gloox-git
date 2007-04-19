@@ -47,6 +47,10 @@ namespace gloox
   {
     m_handler = 0;
     free( m_buf );
+    SSL_CTX_free( m_ctx );
+    SSL_shutdown( m_ssl );
+    SSL_free( m_ssl );
+    BIO_free( m_nbio );
     cleanup();
   }
 
@@ -101,10 +105,8 @@ namespace gloox
 
   void OpenSSL::cleanup()
   {
-    SSL_CTX_free( m_ctx );
-    SSL_shutdown( m_ssl );
-    SSL_free( m_ssl );
-    BIO_free( m_nbio );
+    m_secure = false;
+    m_valid = false;
   }
 
   void OpenSSL::doTLSOperation( TLSOperation op )

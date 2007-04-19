@@ -62,7 +62,11 @@ namespace gloox
       // reimplemented from TLSBase
       virtual void setClientCert( const std::string& clientKey, const std::string& clientCerts );
 
+      // re-implemented from TLSBase
+      virtual void cleanup();
+
     private:
+      virtual void init();
       virtual void getCertInfo();
 
       bool verifyAgainst( gnutls_x509_crt_t cert, gnutls_x509_crt_t issuer );
