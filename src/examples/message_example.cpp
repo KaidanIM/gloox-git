@@ -5,7 +5,6 @@
 #include "../chatstatehandler.h"
 #include "../chatstatefilter.h"
 #include "../connectionlistener.h"
-#include "../discohandler.h"
 #include "../disco.h"
 #include "../stanza.h"
 #include "../gloox.h"
@@ -23,7 +22,7 @@ using namespace gloox;
 # include <windows.h>
 #endif
 
-class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListener, LogHandler,
+class MessageTest : public MessageSessionHandler, ConnectionListener, LogHandler,
                     MessageEventHandler, MessageHandler, ChatStateHandler
 {
   public:
@@ -83,21 +82,6 @@ class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListen
               ctime( (const time_t*)&info.date_to ) );
       return true;
     };
-
-    virtual void handleDiscoInfoResult( Stanza * /*stanza*/, int /*context*/ )
-    {
-      printf( "handleDiscoInfoResult}\n" );
-    }
-
-    virtual void handleDiscoItemsResult( Stanza * /*stanza*/, int /*context*/ )
-    {
-      printf( "handleDiscoItemsResult\n" );
-    }
-
-    virtual void handleDiscoError( Stanza * /*stanza*/, int /*context*/ )
-    {
-      printf( "handleDiscoError\n" );
-    }
 
     virtual void handleMessage( Stanza *stanza, MessageSession * /*session*/ )
     {
