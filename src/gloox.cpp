@@ -25,54 +25,61 @@ namespace gloox
   const std::string XMLNS_ADHOC_COMMANDS    = "http://jabber.org/protocol/commands";
   const std::string XMLNS_COMPRESSION       = "http://jabber.org/protocol/compress";
   const std::string XMLNS_OFFLINE           = "http://jabber.org/protocol/offline";
+
   const std::string XMLNS_CHAT_STATES       = "http://jabber.org/protocol/chatstates";
   const std::string XMLNS_AMP               = "http://jabber.org/protocol/amp";
   const std::string XMLNS_IBB               = "http://jabber.org/protocol/ibb";
   const std::string XMLNS_FEATURE_NEG       = "http://jabber.org/protocol/feature-neg";
   const std::string XMLNS_CHATNEG           = "http://jabber.org/protocol/chatneg";
+
   const std::string XMLNS_XHTML_IM          = "http://jabber.org/protocol/xhtml-im";
-  const std::string XMLNS_DELAY             = "http://www.xmpp.org/extensions/xep-0203.html#ns";
+  const std::string XMLNS_DELAY             = "urn:xmpp:delay";
   const std::string XMLNS_ROSTER            = "jabber:iq:roster";
   const std::string XMLNS_VERSION           = "jabber:iq:version";
   const std::string XMLNS_REGISTER          = "jabber:iq:register";
+
   const std::string XMLNS_PRIVACY           = "jabber:iq:privacy";
   const std::string XMLNS_AUTH              = "jabber:iq:auth";
   const std::string XMLNS_PRIVATE_XML       = "jabber:iq:private";
   const std::string XMLNS_LAST              = "jabber:iq:last";
   const std::string XMLNS_SEARCH            = "jabber:iq:search";
+
   const std::string XMLNS_IQ_OOB            = "jabber:iq:oob";
   const std::string XMLNS_X_DATA            = "jabber:x:data";
   const std::string XMLNS_X_EVENT           = "jabber:x:event";
   const std::string XMLNS_X_OOB             = "jabber:x:oob";
   const std::string XMLNS_X_DELAY           = "jabber:x:delay";
+
   const std::string XMLNS_X_GPGSIGNED       = "jabber:x:signed";
   const std::string XMLNS_X_GPGENCRYPTED    = "jabber:x:encrypted";
   const std::string XMLNS_VCARD_TEMP        = "vcard-temp";
   const std::string XMLNS_X_VCARD_UPDATE    = "vcard-temp:x:update";
   const std::string XMLNS_BOOKMARKS         = "storage:bookmarks";
+
   const std::string XMLNS_ANNOTATIONS       = "storage:rosternotes";
   const std::string XMLNS_ROSTER_DELIMITER  = "roster:delimiter";
-
   const std::string XMLNS_XMPP_PING         = "urn:xmpp:ping";
   const std::string XMLNS_SI                = "http://jabber.org/protocol/si";
   const std::string XMLNS_SI_FT             = "http://jabber.org/protocol/si/profile/file-transfer";
-  const std::string XMLNS_BYTESTREAMS       = "http://jabber.org/protocol/bytestreams";
 
+  const std::string XMLNS_BYTESTREAMS       = "http://jabber.org/protocol/bytestreams";
   const std::string XMLNS_MUC               = "http://jabber.org/protocol/muc";
   const std::string XMLNS_MUC_USER          = "http://jabber.org/protocol/muc#user";
   const std::string XMLNS_MUC_ADMIN         = "http://jabber.org/protocol/muc#admin";
   const std::string XMLNS_MUC_UNIQUE        = "http://jabber.org/protocol/muc#unique";
+
   const std::string XMLNS_MUC_OWNER         = "http://jabber.org/protocol/muc#owner";
   const std::string XMLNS_MUC_ROOMINFO      = "http://jabber.org/protocol/muc#roominfo";
   const std::string XMLNS_MUC_ROOMS         = "http://jabber.org/protocol/muc#rooms";
   const std::string XMLNS_MUC_REQUEST       = "http://jabber.org/protocol/muc#request";
-
   const std::string XMLNS_XMPP_STREAM       = "urn:ietf:params:xml:ns:xmpp-streams";
+
   const std::string XMLNS_XMPP_STANZAS      = "urn:ietf:params:xml:ns:xmpp-stanzas";
   const std::string XMLNS_STREAM_TLS        = "urn:ietf:params:xml:ns:xmpp-tls";
   const std::string XMLNS_STREAM_SASL       = "urn:ietf:params:xml:ns:xmpp-sasl";
   const std::string XMLNS_STREAM_BIND       = "urn:ietf:params:xml:ns:xmpp-bind";
   const std::string XMLNS_STREAM_SESSION    = "urn:ietf:params:xml:ns:xmpp-session";
+
   const std::string XMLNS_STREAM_IQAUTH     = "http://jabber.org/features/iq-auth";
   const std::string XMLNS_STREAM_IQREGISTER = "http://jabber.org/features/iq-register";
   const std::string XMLNS_STREAM_COMPRESS   = "http://jabber.org/features/compress";
