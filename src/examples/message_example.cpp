@@ -37,7 +37,6 @@ class MessageTest : public MessageSessionHandler, ConnectionListener, LogHandler
       j = new Client( jid, "hurkhurks" );
       j->registerConnectionListener( this );
       j->registerMessageSessionHandler( this, 0 );
-      j->disco()->registerDiscoHandler( this );
       j->disco()->setVersion( "messageTest", GLOOX_VERSION, "Linux" );
       j->disco()->setIdentity( "client", "bot" );
       j->disco()->addFeature( XMLNS_CHAT_STATES );
