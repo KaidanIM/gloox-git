@@ -62,11 +62,11 @@ namespace gloox
        * @param sih The SIHandler to handle the result of this request.
        * @param to The entity to talk to.
        * @param profile The SI profile to use. See XEP-0095 for more info.
-       * @param child1 One of the two allowed children of the SI offer. See
+       * @param child1 The first of the two allowed children of the SI offer. See
        * XEP-0095 for more info.
-       * @param child1 The second of the two allowed children of the SI offer. See
+       * @param child2 The second of the two allowed children of the SI offer. See
        * XEP-0095 for more info. Defaults to 0.
-       * @param mimetype The stream's mime-type. Defaults to 'binary/octet-stream'.
+       * @param mimetype The stream's/file's mime-type. Defaults to 'binary/octet-stream'.
        * @note The SIManager claims ownership of the Tags supplied to this function, and will
        * delete them after use.
        */
