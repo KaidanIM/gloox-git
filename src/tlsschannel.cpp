@@ -214,6 +214,8 @@ namespace gloox
   {
     if( !m_cleanedup )
     {
+      m_valid = false;
+      m_secure = false;
       DeleteSecurityContext( &m_context );
       FreeCredentialsHandle( &m_credHandle );
     }

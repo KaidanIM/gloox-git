@@ -24,6 +24,22 @@ namespace gloox
   GnuTLSClient::GnuTLSClient( TLSHandler *th, const std::string& server )
     : GnuTLSBase( th, server )
   {
+    init();
+  }
+
+  GnuTLSClient::~GnuTLSClient()
+  {
+  }
+
+  void GnuTLSClient::cleanup()
+  {
+    GnuTLSBase::cleanup();
+    init();
+  }
+
+  void GnuTLSClient::init()
+  {
+    printf( "init called\n" );
     const int protocolPriority[] = { GNUTLS_TLS1, GNUTLS_SSL3, 0 };
     const int kxPriority[]       = { GNUTLS_KX_RSA, 0 };
     const int cipherPriority[]   = { GNUTLS_CIPHER_AES_256_CBC, GNUTLS_CIPHER_AES_128_CBC,
@@ -43,27 +59,23 @@ namespace gloox
       return;
     }
 
-    if( gnutls_init( &m_session, GNUTLS_CLIENT ) != 0 )
+    if( gnutls_init( m_session, GNUTLS_CLIENT ) != 0 )
     {
       gnutls_certificate_free_credentials( m_credentials );
       m_valid = false;
       return;
     }
 
-    gnutls_protocol_set_priority( m_session, protocolPriority );
-    gnutls_cipher_set_priority( m_session, cipherPriority );
-    gnutls_compression_set_priority( m_session, compPriority );
-    gnutls_kx_set_priority( m_session, kxPriority );
-    gnutls_mac_set_priority( m_session, macPriority );
-    gnutls_credentials_set( m_session, GNUTLS_CRD_CERTIFICATE, m_credentials );
+    gnutls_protocol_set_priority( *m_session, protocolPriority );
+    gnutls_cipher_set_priority( *m_session, cipherPriority );
+    gnutls_compression_set_priority( *m_session, compPriority );
+    gnutls_kx_set_priority( *m_session, kxPriority );
+    gnutls_mac_set_priority( *m_session, macPriority );
+    gnutls_credentials_set( *m_session, GNUTLS_CRD_CERTIFICATE, m_credentials );
 
-    gnutls_transport_set_ptr( m_session, (gnutls_transport_ptr_t)this );
-    gnutls_transport_set_push_function( m_session, pushFunc );
-    gnutls_transport_set_pull_function( m_session, pullFunc );
-  }
-
-  GnuTLSClient::~GnuTLSClient()
-  {
+    gnutls_transport_set_ptr( *m_session, (gnutls_transport_ptr_t)this );
+    gnutls_transport_set_push_function( *m_session, pushFunc );
+    gnutls_transport_set_pull_function( *m_session, pullFunc );
   }
 
   void GnuTLSClient::setCACerts( const StringList& cacerts )
@@ -94,7 +106,7 @@ namespace gloox
 
     gnutls_certificate_free_ca_names( m_credentials );
 
-    if( gnutls_certificate_verify_peers2( m_session, &status ) < 0 )
+    if( gnutls_certificate_verify_peers2( *m_session, &status ) < 0 )
       error = true;
 
     m_certInfo.status = 0;
@@ -108,7 +120,7 @@ namespace gloox
       m_certInfo.status |= CertSignerNotCa;
     const gnutls_datum_t* certList = 0;
     unsigned int certListSize;
-    if( !error && ( ( certList = gnutls_certificate_get_peers( m_session, &certListSize ) ) == 0 ) )
+    if( !error && ( ( certList = gnutls_certificate_get_peers( *m_session, &certListSize ) ) == 0 ) )
       error = true;
 
     gnutls_x509_crt_t *cert = new gnutls_x509_crt_t[certListSize+1];
@@ -159,19 +171,19 @@ namespace gloox
     m_certInfo.server = name;
 
     const char* info;
-    info = gnutls_compression_get_name( gnutls_compression_get( m_session ) );
+    info = gnutls_compression_get_name( gnutls_compression_get( *m_session ) );
     if( info )
       m_certInfo.compression = info;
 
-    info = gnutls_mac_get_name( gnutls_mac_get( m_session ) );
+    info = gnutls_mac_get_name( gnutls_mac_get( *m_session ) );
     if( info )
       m_certInfo.mac = info;
 
-    info = gnutls_cipher_get_name( gnutls_cipher_get( m_session ) );
+    info = gnutls_cipher_get_name( gnutls_cipher_get( *m_session ) );
     if( info )
       m_certInfo.cipher = info;
 
-    info = gnutls_protocol_get_name( gnutls_protocol_get_version( m_session ) );
+    info = gnutls_protocol_get_name( gnutls_protocol_get_version( *m_session ) );
     if( info )
       m_certInfo.protocol = info;
 

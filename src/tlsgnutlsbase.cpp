@@ -22,17 +22,17 @@ namespace gloox
 {
 
   GnuTLSBase::GnuTLSBase( TLSHandler *th, const std::string& server )
-    : TLSBase( th, server ), m_buf( 0 ), m_bufsize( 17000 )
+    : TLSBase( th, server ), m_session( new gnutls_session_t ), m_buf( 0 ), m_bufsize( 17000 )
   {
     m_buf = (char*)calloc( m_bufsize + 1, sizeof( char ) );
   }
 
   GnuTLSBase::~GnuTLSBase()
   {
-    m_handler = 0;
     free( m_buf );
     m_buf = 0;
     cleanup();
+    delete m_session;
     gnutls_global_deinit();
   }
 
@@ -48,7 +48,7 @@ namespace gloox
     std::string::size_type sum = 0;
     do
     {
-      ret = gnutls_record_send( m_session, data.c_str() + sum, data.length() - sum );
+      ret = gnutls_record_send( *m_session, data.c_str() + sum, data.length() - sum );
       sum += ret;
     }
     while( ( ret == GNUTLS_E_AGAIN ) || ( ret == GNUTLS_E_INTERRUPTED ) || sum < data.length() );
@@ -69,7 +69,7 @@ namespace gloox
     int ret = 0;
     do
     {
-      ret = gnutls_record_recv( m_session, m_buf, m_bufsize );
+      ret = gnutls_record_recv( *m_session, m_buf, m_bufsize );
 
       if( ret > 0 && m_handler )
       {
@@ -84,11 +84,20 @@ namespace gloox
 
   void GnuTLSBase::cleanup()
   {
-    gnutls_bye( m_session, GNUTLS_SHUT_RDWR );
-    gnutls_db_remove_session( m_session );
-    gnutls_credentials_clear( m_session );
+    TLSHandler* handler = m_handler;
+    m_handler = 0;
+    gnutls_bye( *m_session, GNUTLS_SHUT_RDWR );
+    gnutls_db_remove_session( *m_session );
+    gnutls_credentials_clear( *m_session );
     if( m_secure )
-      gnutls_deinit( m_session );
+      gnutls_deinit( *m_session );
+
+    m_secure = false;
+    m_valid = false;
+    delete m_session;
+    m_session = 0;
+    m_session = new gnutls_session_t;
+    m_handler = handler;
   }
 
   bool GnuTLSBase::handshake()
@@ -96,12 +105,12 @@ namespace gloox
     if( !m_handler )
       return false;
 
-    int ret = gnutls_handshake( m_session );
+    int ret = gnutls_handshake( *m_session );
     if( ret < 0 && gnutls_error_is_fatal( ret ) )
     {
       gnutls_perror( ret );
-      gnutls_db_remove_session( m_session );
-      gnutls_deinit( m_session );
+      gnutls_db_remove_session( *m_session );
+      gnutls_deinit( *m_session );
       m_valid = false;
 
       m_handler->handleHandshakeResult( this, false, m_certInfo );

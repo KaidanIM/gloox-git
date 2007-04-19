@@ -75,9 +75,10 @@ namespace gloox
       virtual void setClientCert( const std::string& /*clientKey*/, const std::string& /*clientCerts*/ ) {};
 
     protected:
+      virtual void init() = 0;
       virtual void getCertInfo() {};
 
-      gnutls_session_t m_session;
+      gnutls_session_t* m_session;
 
       std::string m_recvBuffer;
       char *m_buf;
