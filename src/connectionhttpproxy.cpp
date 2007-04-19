@@ -50,7 +50,8 @@ namespace gloox
 
   ConnectionHTTPProxy* ConnectionHTTPProxy::newInstance() const
   {
-    return new ConnectionHTTPProxy( m_handler, m_connection, m_logInstance, m_server, m_port );
+    ConnectionBase* conn = m_connection ? m_connection->newInstance() : 0;
+    return new ConnectionHTTPProxy( m_handler, conn, m_logInstance, m_server, m_port );
   }
 
   void ConnectionHTTPProxy::setConnection( ConnectionBase* connection )
