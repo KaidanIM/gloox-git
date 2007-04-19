@@ -4,6 +4,8 @@
 #include "../disco.h"
 #include "../adhoc.h"
 #include "../tag.h"
+#include "../loghandler.h"
+#include "../logsink.h"
 using namespace gloox;
 
 #include <stdio.h>
@@ -11,7 +13,7 @@ using namespace gloox;
 #include <string>
 
 
-class AdhocTest : public ConnectionListener, AdhocCommandProvider
+class AdhocTest : public ConnectionListener, AdhocCommandProvider, LogHandler
 {
   public:
     AdhocTest() {};
@@ -26,6 +28,7 @@ class AdhocTest : public ConnectionListener, AdhocCommandProvider
       j->registerConnectionListener( this );
       j->disco()->setVersion( "adhocTest", GLOOX_VERSION );
       j->disco()->setIdentity( "client", "bot" );
+      j->logInstance().registerLogHandler( LogLevelDebug, LogAreaAll, this );
 
       a = new Adhoc( j );
       a->registerAdhocCommandProvider( this, "helloworld", "Hello World!" );
@@ -63,6 +66,11 @@ class AdhocTest : public ConnectionListener, AdhocCommandProvider
               info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
               info.compression.c_str() );
       return true;
+    };
+
+    virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
+    {
+      printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
     };
 
   private:
