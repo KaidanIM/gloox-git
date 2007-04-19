@@ -33,10 +33,11 @@ namespace gloox
                                             const LogSink& logInstance,
                                             const std::string& server, int port )
     : ConnectionBase( cdh ), m_connection( connection ),
-      m_logInstance( logInstance ),
-      m_server( prep::idna( server ) ), m_port( port ),
-      m_totalBytesIn( 0 ), m_totalBytesOut( 0 )
+      m_logInstance( logInstance )
   {
+    m_server = prep::idna( server );
+    m_port = port;
+
     if( m_connection )
       m_connection->registerConnectionDataHandler( this );
   }
@@ -45,6 +46,19 @@ namespace gloox
   {
     if( m_connection )
       delete m_connection;
+  }
+
+  ConnectionHTTPProxy* ConnectionHTTPProxy::newInstance() const
+  {
+    return new ConnectionHTTPProxy( m_handler, m_connection, m_logInstance, m_server, m_port );
+  }
+
+  void ConnectionHTTPProxy::setConnection( ConnectionBase* connection )
+  {
+    if( m_connection )
+      delete m_connection;
+
+    m_connection = connection;
   }
 
   ConnectionError ConnectionHTTPProxy::connect()

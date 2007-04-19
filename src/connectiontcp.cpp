@@ -44,27 +44,34 @@
 namespace gloox
 {
 
+  ConnectionTCP::ConnectionTCP( const LogSink& logInstance )
+    : ConnectionBase( 0 ),
+      m_logInstance( logInstance ), m_buf( 0 ), m_socket( -1 ), m_totalBytesIn( 0 ),
+      m_totalBytesOut( 0 ), m_bufsize( 1024 ), m_cancel( true )
+  {
+    m_port = -1;
+    m_buf = (char*)calloc( m_bufsize + 1, sizeof( char ) );
+  }
+
   ConnectionTCP::ConnectionTCP( const LogSink& logInstance,
                                 const std::string& server, int port )
     : ConnectionBase( 0 ),
-      m_logInstance( logInstance ),
-      m_buf( 0 ), m_port( port ), m_socket( -1 ),
-      m_totalBytesIn( 0 ), m_totalBytesOut( 0 ),
-      m_bufsize( 1024 ), m_cancel( true )
+      m_logInstance( logInstance ), m_buf( 0 ), m_socket( -1 ), m_totalBytesIn( 0 ),
+      m_totalBytesOut( 0 ), m_bufsize( 1024 ), m_cancel( true )
   {
     m_server = prep::idna( server );
+    m_port = port;
     m_buf = (char*)calloc( m_bufsize + 1, sizeof( char ) );
   }
 
   ConnectionTCP::ConnectionTCP( ConnectionDataHandler *cdh, const LogSink& logInstance,
                                 const std::string& server, int port )
     : ConnectionBase( cdh ),
-      m_logInstance( logInstance ),
-      m_buf( 0 ), m_port( port ), m_socket( -1 ),
-      m_totalBytesIn( 0 ), m_totalBytesOut( 0 ),
-      m_bufsize( 1024 ), m_cancel( true )
+      m_logInstance( logInstance ), m_buf( 0 ), m_socket( -1 ), m_totalBytesIn( 0 ),
+      m_totalBytesOut( 0 ), m_bufsize( 1024 ), m_cancel( true )
   {
     m_server = prep::idna( server );
+    m_port = port;
     m_buf = (char*)calloc( m_bufsize + 1, sizeof( char ) );
   }
 
@@ -73,6 +80,11 @@ namespace gloox
     cleanup();
     free( m_buf );
     m_buf = 0;
+  }
+
+  ConnectionTCP* ConnectionTCP::newInstance() const
+  {
+    return new ConnectionTCP( m_handler, m_logInstance, m_server, m_port );
   }
 
   ConnectionError ConnectionTCP::connect()

@@ -37,6 +37,12 @@ namespace gloox
   {
     public:
       /**
+       * Constructs an empty ConnectionTCP object. You need to call setServer() to make it useable.
+       * @param logInstance The log target. Obtain it from ClientBase::logInstance().
+       */
+      ConnectionTCP( const LogSink& logInstance );
+
+      /**
        * Constructs a new ConnectionTCP object.
        * @param logInstance The log target. Obtain it from ClientBase::logInstance().
        * @param server A server to connect to.
@@ -86,6 +92,9 @@ namespace gloox
       // reimplemented from ConnectionBase
       virtual void getStatistics( int &totalIn, int &totalOut );
 
+      // reimplemented from ConnectionBase
+      virtual ConnectionTCP* newInstance() const;
+
       /**
        * Gives access to the raw socket of this connection. Use it wisely. You can
        * select()/poll() it and use ConnectionTCP::recv( -1 ) to fetch the data.
@@ -109,8 +118,6 @@ namespace gloox
       const LogSink& m_logInstance;
 
       char *m_buf;
-      std::string m_server;
-      int m_port;
       int m_socket;
       int m_totalBytesIn;
       int m_totalBytesOut;

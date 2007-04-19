@@ -40,7 +40,7 @@ namespace gloox
        * received data.
        */
       ConnectionBase( ConnectionDataHandler *cdh )
-        : m_handler( cdh ), m_state( StateDisconnected )
+        : m_handler( cdh ), m_state( StateDisconnected ), m_port( -1 )
       {};
 
       /**
@@ -102,8 +102,9 @@ namespace gloox
       /**
        * Sets the server to connect to.
        * @param server The server to connect to. Either IP or fully qualified domain name.
+       * @param port The port to connect to.
        */
-      void setServer( const std::string &server ) { m_server = server; }
+      void setServer( const std::string &server, int port = -1 ) { m_server = server; m_port = port; }
 
       /**
        * Returns current connection statistics.
@@ -112,10 +113,19 @@ namespace gloox
        */
       virtual void getStatistics( int &totalIn, int &totalOut ) = 0;
 
+      /**
+       * This function returns a new instance of the current ConnectionBase-derived object.
+       * The idea is to be able to 'clone' ConnectionBase-derived objects without knowing of
+       * what type they are exactly.
+       * @return A new Connection* instance.
+       */
+      virtual ConnectionBase* newInstance() const = 0;
+
     protected:
       ConnectionDataHandler *m_handler;
       ConnectionState m_state;
       std::string m_server;
+      int m_port;
 
   };
 
