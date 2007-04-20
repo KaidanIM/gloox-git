@@ -179,7 +179,7 @@ namespace gloox
     if( m_connection )
     {
       if( reason != ConnStreamError )
-       send ( "</stream:stream>" );
+        send( "</stream:stream>" );
       if( reason == ConnUserDisconnected )
         m_streamError = StreamErrorUndefined;
       m_connection->disconnect( reason );
