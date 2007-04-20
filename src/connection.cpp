@@ -43,6 +43,7 @@
 #include <cstdlib>
 #include <string>
 #include <sstream>
+#include <algorithm>
 
 namespace gloox
 {
@@ -953,6 +954,9 @@ printf( "maximumMessage: %ld\n", m_streamSizes.cbMaximumMessage );
 
   bool Connection::dataAvailable( int timeout )
   {
+    if( m_socket < 0 )
+      return true;
+
 #ifdef HAVE_TLS
     if( tls_dataAvailable() )
     {
