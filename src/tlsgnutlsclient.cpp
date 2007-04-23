@@ -39,7 +39,6 @@ namespace gloox
 
   void GnuTLSClient::init()
   {
-    printf( "init called\n" );
     const int protocolPriority[] = { GNUTLS_TLS1, GNUTLS_SSL3, 0 };
     const int kxPriority[]       = { GNUTLS_KX_RSA, 0 };
     const int cipherPriority[]   = { GNUTLS_CIPHER_AES_256_CBC, GNUTLS_CIPHER_AES_128_CBC,
