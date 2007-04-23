@@ -178,10 +178,22 @@ namespace gloox
       virtual AttributeList& attributes() { return m_attribs; }
 
       /**
+       * Use this function to fetch a const list of attributes.
+       * @return A constant reference to the list of attributes.
+       */
+      virtual const AttributeList& attributes() const { return m_attribs; }
+
+      /**
        * Use this function to manipulate the list of child elements.
        * @return A reference to the list of child elements.
        */
       virtual TagList& children() { return m_children; }
+
+      /**
+       * Use this function to fetch a const list of child elements.
+       * @return A constant reference to the list of child elements.
+       */
+      virtual const TagList& children() const { return m_children; }
 
       /**
        * This function can be used to retrieve the value of a Tag's attribute.
