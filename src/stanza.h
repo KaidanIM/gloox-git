@@ -47,7 +47,7 @@ namespace gloox
        * semantics have changed. The copy created by this constructor is no longer a shallow one. You have to
        * make sure the copy is deleted properly.
        */
-      Stanza( Tag *tag );
+      Stanza( const Tag *tag );
 
       /**
        * Creates a new Stanza with given name and optional CData.
@@ -204,7 +204,7 @@ namespace gloox
        * @return An independent copy of the stanza.
        * @since 0.7
        */
-      virtual Stanza* clone();
+      virtual Stanza* clone() const;
 
       /**
        * Use this function to add a StanzaExtension to this Stanza.

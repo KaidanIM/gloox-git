@@ -29,7 +29,7 @@ namespace gloox
   {
   }
 
-  Stanza::Stanza( Tag *tag )
+  Stanza::Stanza( const Tag *tag )
     : Tag( tag->name(), tag->cdata(), false ), m_presence( PresenceUnknown ),
       m_stanzaError( StanzaErrorUndefined ), m_stanzaErrorType( StanzaErrorTypeUndefined ),
       m_stanzaErrorAppCondition( 0 ), m_xmllang( "default" )
@@ -298,7 +298,7 @@ namespace gloox
     }
   }
 
-  Stanza* Stanza::clone()
+  Stanza* Stanza::clone() const
   {
     return new Stanza( this );
   }
