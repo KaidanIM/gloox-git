@@ -89,6 +89,9 @@ namespace gloox
 
   ConnectionError ConnectionTCP::connect()
   {
+    if( !m_handler )
+      return ConnNotConnected;
+
     m_state = StateConnecting;
 
     if( m_socket < 0 )
