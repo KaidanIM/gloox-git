@@ -113,12 +113,6 @@ namespace gloox
 
   bool ConnectionSOCKS5Proxy::send( const std::string& data )
   {
-    printf( "data sent: " );
-    const char* x = data.c_str();
-    for( unsigned int i = 0; i < data.length(); ++i )
-      printf( "%02X ", (const int)x[i] );
-    printf( "\n" );
-
     if( m_connection )
       return m_connection->send( data );
 
@@ -149,12 +143,6 @@ namespace gloox
   {
     if( !m_connection || !m_handler )
       return;
-
-    printf( "data recv: " );
-    const char* x = data.c_str();
-    for( unsigned int i = 0; i < data.length(); ++i )
-      printf( "%02X ", (const int)x[i] );
-    printf( "\n" );
 
     switch( m_s5state  )
     {
@@ -270,7 +258,6 @@ namespace gloox
     port = htons( port );
     d[pos++] = port;
     d[pos++] = port >> 8;
-    printf( "pos: %d, port low: %02X, high: %02X\n", pos, d[pos-2], d[pos-1] );
 
     if( !send( std::string( d, pos ) ) )
     {
