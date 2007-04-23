@@ -1,4 +1,4 @@
-v0.8.8 -- xx Mar 2007
+v0.8.8 -- 24 Apr 2007
 -------------------------
 - ClientBase/Client/NonSaslAuth: made re-connect-safe
 - MessageEventFilter: fixed sending of MessageEventCancel
