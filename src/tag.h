@@ -129,7 +129,7 @@ namespace gloox
        * Use this function to fetch a const list of attributes.
        * @return A constant reference to the list of attributes.
        */
-      virtual const AttributeList& attributes() const { return m_attribs; }
+      virtual const StringMap& attributes() const { return m_attribs; }
 
       /**
        * Use this function to manipulate the list of child elements.
