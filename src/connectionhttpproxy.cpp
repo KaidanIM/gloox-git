@@ -64,7 +64,7 @@ namespace gloox
 
   ConnectionError ConnectionHTTPProxy::connect()
   {
-    if( m_connection )
+    if( m_connection && m_handler )
     {
       m_state = StateConnecting;
       return m_connection->connect();
@@ -142,10 +142,16 @@ namespace gloox
         m_handler->handleConnect();
       }
       else if( m_proxyHandshakeBuffer.substr( 9, 3 ) == "407" )
+      {
         m_handler->handleDisconnect( ConnProxyAuthRequired );
+        m_connection->disconnect();
+      }
       else if( m_proxyHandshakeBuffer.substr( 9, 3 ) == "403" ||
                m_proxyHandshakeBuffer.substr( 9, 3 ) == "404" )
+      {
         m_handler->handleDisconnect( ConnProxyAuthFailed );
+        m_connection->disconnect();
+      }
     }
     else if( m_state == StateConnected )
       m_handler->handleReceivedData( data );

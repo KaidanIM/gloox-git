@@ -51,7 +51,6 @@ namespace gloox
     public:
       /**
        * Constructs a new ConnectionHTTPProxy object.
-       * You should not need to use this function directly.
        * @param cdh An ConnectionDataHandler-derived object that will handle incoming data.
        * @param connection A transport connection. It should be configured to connect to
        * the proxy host and port, @b not to the XMPP host. ConnectionHTTPProxy will own the
