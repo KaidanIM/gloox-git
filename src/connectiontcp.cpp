@@ -18,6 +18,8 @@
 #include "dns.h"
 #include "logsink.h"
 #include "prep.h"
+#include "mutex.h"
+#include "mutexguard.h"
 
 #ifdef __MINGW32__
 # include <winsock.h>
@@ -50,7 +52,7 @@ namespace gloox
       m_totalBytesOut( 0 ), m_bufsize( 1024 ), m_cancel( true )
   {
     m_port = -1;
-    m_buf = (char*)calloc( m_bufsize + 1, sizeof( char ) );
+    init();
   }
 
   ConnectionTCP::ConnectionTCP( const LogSink& logInstance,
@@ -61,7 +63,7 @@ namespace gloox
   {
     m_server = prep::idna( server );
     m_port = port;
-    m_buf = (char*)calloc( m_bufsize + 1, sizeof( char ) );
+    init();
   }
 
   ConnectionTCP::ConnectionTCP( ConnectionDataHandler *cdh, const LogSink& logInstance,
@@ -72,11 +74,20 @@ namespace gloox
   {
     m_server = prep::idna( server );
     m_port = port;
+    init();
+  }
+
+  void ConnectionTCP::init()
+  {
     m_buf = (char*)calloc( m_bufsize + 1, sizeof( char ) );
+    m_sendMutex = new Mutex();
+    m_recvMutex = new Mutex();
   }
 
   ConnectionTCP::~ConnectionTCP()
   {
+    delete m_sendMutex;
+    delete m_recvMutex;
     cleanup();
     free( m_buf );
     m_buf = 0;
@@ -89,10 +100,14 @@ namespace gloox
 
   ConnectionError ConnectionTCP::connect()
   {
-    if( !m_handler )
+    MutexGuard mg( m_sendMutex );
+
+    if( !m_handler || m_state > StateDisconnected )
       return ConnNotConnected;
 
     m_state = StateConnecting;
+
+    mg.unlock();
 
     if( m_socket < 0 )
     {
@@ -116,8 +131,7 @@ namespace gloox
           m_logInstance.log( LogLevelError, LogAreaClassConnectionTCP, "Unknown error condition" );
           break;
       }
-      if( m_handler )
-        m_handler->handleDisconnect( (ConnectionError)-m_socket );
+      m_handler->handleDisconnect( (ConnectionError)-m_socket );
       return (ConnectionError)-m_socket;
     }
     else
@@ -126,8 +140,7 @@ namespace gloox
     }
 
     m_cancel = false;
-    if( m_handler )
-      m_handler->handleConnect();
+    m_handler->handleConnect();
     return ConnNoError;
   }
 
@@ -156,6 +169,8 @@ namespace gloox
 
   ConnectionError ConnectionTCP::recv( int timeout )
   {
+    MutexGuard mg( m_recvMutex );
+
     if( m_cancel || m_socket < 0 )
       return ConnNotConnected;
 
@@ -167,6 +182,8 @@ namespace gloox
 #else
     int size = ::recv( m_socket, m_buf, m_bufsize, 0 );
 #endif
+
+    mg.unlock();
 
     if( size <= 0 )
     {
@@ -198,6 +215,8 @@ namespace gloox
 
   bool ConnectionTCP::send( const std::string& data )
   {
+    MutexGuard mg( m_sendMutex );
+
     if( data.empty() || ( m_socket < 0 ) )
       return false;
 
@@ -210,6 +229,8 @@ namespace gloox
       sent = ::send( m_socket, (data.c_str()+num), len - num, 0 );
 #endif
     }
+
+    mg.unlock();
 
     m_totalBytesOut += data.length();
     if( sent == -1 && m_handler )

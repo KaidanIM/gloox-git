@@ -23,6 +23,8 @@
 namespace gloox
 {
 
+  class Mutex;
+
   /**
    * @brief This is an implementation of a simple TCP connection.
    *
@@ -112,10 +114,13 @@ namespace gloox
 
     private:
       ConnectionTCP &operator= ( const ConnectionTCP & );
+      void init();
       bool dataAvailable( int timeout = -1 );
       void cancel();
 
       const LogSink& m_logInstance;
+      Mutex* m_sendMutex;
+      Mutex* m_recvMutex;
 
       char *m_buf;
       int m_socket;
