@@ -43,6 +43,18 @@
 namespace gloox
 {
 
+  ConnectionSOCKS5Proxy::ConnectionSOCKS5Proxy( ConnectionBase *connection, const LogSink& logInstance,
+                                                const std::string& server, int port, bool ip )
+    : ConnectionBase( 0 ), m_connection( connection ),
+      m_logInstance( logInstance ), m_s5state( S5StateDisconnected ), m_ip( ip )
+  {
+    m_server = prep::idna( server );
+    m_port = port;
+
+    if( m_connection )
+      m_connection->registerConnectionDataHandler( this );
+  }
+
   ConnectionSOCKS5Proxy::ConnectionSOCKS5Proxy( ConnectionDataHandler *cdh, ConnectionBase *connection,
                                                 const LogSink& logInstance,
                                                 const std::string& server, int port, bool ip )
@@ -113,6 +125,12 @@ namespace gloox
 
   bool ConnectionSOCKS5Proxy::send( const std::string& data )
   {
+    printf( "data sent: " );
+    const char* x = data.c_str();
+    for( unsigned int i = 0; i < data.length(); ++i )
+      printf( "%02X ", (const int)x[i] );
+    printf( "\n" );
+
     if( m_connection )
       return m_connection->send( data );
 
@@ -141,6 +159,12 @@ namespace gloox
 
   void ConnectionSOCKS5Proxy::handleReceivedData( const std::string& data )
   {
+    printf( "data recv: " );
+    const char* x = data.c_str();
+    for( unsigned int i = 0; i < data.length(); ++i )
+      printf( "%02X ", (const int)x[i] );
+    printf( "\n" );
+
     if( !m_connection || !m_handler )
       return;
 

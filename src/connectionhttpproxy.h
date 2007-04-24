@@ -51,6 +51,22 @@ namespace gloox
     public:
       /**
        * Constructs a new ConnectionHTTPProxy object.
+       * @param connection A transport connection. It should be configured to connect to
+       * the proxy host and port, @b not to the XMPP host. ConnectionHTTPProxy will own the
+       * transport connection and delete it in its destructor.
+       * @param logInstance The log target. Obtain it from ClientBase::logInstance().
+       * @param server A server to connect to. This is the XMPP server's address, @b not the proxy.
+       * @param port The port to connect to. This is the XMPP server's port, @b not the proxy's.
+       * The default of -1 means that SRV records will be used to find out about the actual host:port.
+       * @note To properly use this object, you have to set a ConnectionDataHandler using
+       * registerConnectionDataHandler(). This is not necessary if this object is
+       * part of a 'connection chain', e.g. with ConnectionSOCKS5Proxy.
+       */
+      ConnectionHTTPProxy( ConnectionBase *connection, const LogSink& logInstance,
+                           const std::string& server, int port = -1 );
+
+      /**
+       * Constructs a new ConnectionHTTPProxy object.
        * @param cdh An ConnectionDataHandler-derived object that will handle incoming data.
        * @param connection A transport connection. It should be configured to connect to
        * the proxy host and port, @b not to the XMPP host. ConnectionHTTPProxy will own the
