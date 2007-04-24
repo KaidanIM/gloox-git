@@ -543,6 +543,7 @@ namespace gloox
     ConnStreamClosed,               /**< The stream has been closed (by the server). */
     ConnProxyAuthRequired,          /**< The HTTP/SOCKS5 proxy requires authentication. */
     ConnProxyAuthFailed,            /**< HTTP/SOCKS5 proxy authentication failed. */
+    ConnProxyNoSupportedAuth,       /**< The HTTP/SOCKS5 proxy requires an unsupported auth mechanism. */
     ConnIoError,                    /**< An I/O error occured. */
     ConnParseError,                 /**< An XML parse error occurred. */
     ConnConnectionRefused,          /**< The connection was refused by the server (on the socket level).
