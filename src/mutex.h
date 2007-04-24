@@ -19,26 +19,33 @@ namespace gloox
 
   class MutexImpl;
 
+  /**
+   * @brief A simple implementation of mutex as a wrapper around a pthread mutex
+   * or a win32 critical section.
+   *
+   * @author Jakob Schroeter <js@camaya.net>
+   * @since 0.9
+   */
   class Mutex
   {
     public:
       /**
-       *
+       * Contructs a new simple mutex.
        */
       Mutex();
 
       /**
-       *
+       * Destructor
        */
       ~Mutex();
 
       /**
-       *
+       * Locks the mutex.
        */
       void lock();
 
       /**
-       *
+       * Releases the mutex.
        */
       void unlock();
 
