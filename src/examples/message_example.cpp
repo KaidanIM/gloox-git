@@ -56,7 +56,7 @@ class MessageTest : public MessageSessionHandler, ConnectionListener, LogHandler
 //                                   new ConnectionTCP( j->logInstance(),
 //                                                      "sockshost", 1080 ),
 //                                   j->logInstance(), "example.net" );
-//       conn->setProxyAuth( "socksuser", "sockspwdtest" );
+//       conn->setProxyAuth( "socksuser", "sockspwd" );
 //       j->setConnectionImpl( conn );
 
 //
@@ -64,9 +64,9 @@ class MessageTest : public MessageSessionHandler, ConnectionListener, LogHandler
 //
 //       ConnectionTCP* conn0 = new ConnectionTCP( j->logInstance(), "old", 1080 );
 //       ConnectionSOCKS5Proxy* conn1 = new ConnectionSOCKS5Proxy( conn0, j->logInstance(), "old", 8080 );
-//       conn1->setProxyAuth( "js", "test" );
+//       conn1->setProxyAuth( "socksuser", "sockspwd" );
 //       ConnectionHTTPProxy* conn2 = new ConnectionHTTPProxy( j, conn1, j->logInstance(), "jabber.cc" );
-//       conn2->setProxyAuth( "js", "test" );
+//       conn2->setProxyAuth( "httpuser", "httppwd" );
 //       j->setConnectionImpl( conn2 );
 
 
