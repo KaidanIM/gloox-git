@@ -13,15 +13,11 @@
 
 #include "mutex.h"
 
-#ifdef WIN32
-# include "../config.h.win"
-#elif defined( _WIN32_WCE )
-# include "../config.h.win"
-#else
+#if !defined( WIN32 ) && !defined( _WIN32_WCE )
 # include "config.h"
 #endif
 
-#ifdef HAVE_PTHREADS
+#ifdef HAVE_PTHREAD
 # include <pthread.h>
 #endif
 
@@ -41,7 +37,7 @@ namespace gloox
 
 #ifdef _WIN32
       CRITICAL_SECTION m_cs;
-#elif defined( HAVE_PTHREADS )
+#elif defined( HAVE_PTHREAD )
       pthread_mutex_t m_mutex;
 #endif
 
@@ -51,7 +47,7 @@ namespace gloox
   {
 #ifdef _WIN32
     InitializeCriticalSection( &m_cs );
-#elif defined( HAVE_PTHREADS )
+#elif defined( HAVE_PTHREAD )
     pthread_mutex_init( &m_mutex, 0 );
 #endif
   }
@@ -60,7 +56,7 @@ namespace gloox
   {
 #ifdef _WIN32
     DeleteCriticalSection( &m_cs );
-#elif defined( HAVE_PTHREADS )
+#elif defined( HAVE_PTHREAD )
     pthread_mutex_destroy( &m_mutex );
 #endif
   }
@@ -69,7 +65,7 @@ namespace gloox
   {
 #ifdef _WIN32
     EnterCriticalSection( &m_cs )
-#elif defined( HAVE_PTHREADS )
+#elif defined( HAVE_PTHREAD )
     pthread_mutex_lock( &m_mutex );
 #endif
   }
@@ -78,7 +74,7 @@ namespace gloox
   {
 #ifdef _WIN32
     LeaveCriticalSection( &m_cs );
-#elif defined( HAVE_PTHREADS )
+#elif defined( HAVE_PTHREAD )
     pthread_mutex_unlock( &m_mutex );
 #endif
   }
