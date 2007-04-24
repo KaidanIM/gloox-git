@@ -541,8 +541,8 @@ namespace gloox
                                      * Use ClientBase::streamError() to find the reason. */
     ConnStreamVersionError,         /**< The incoming stream's version is not supported */
     ConnStreamClosed,               /**< The stream has been closed (by the server). */
-    ConnProxyAuthRequired,          /**< The HTTP proxy requires authentication. */
-    ConnProxyAuthFailed,            /**< HTTP proxy authentication failed. */
+    ConnProxyAuthRequired,          /**< The HTTP/SOCKS5 proxy requires authentication. */
+    ConnProxyAuthFailed,            /**< HTTP/SOCKS5 proxy authentication failed. */
     ConnIoError,                    /**< An I/O error occured. */
     ConnParseError,                 /**< An XML parse error occurred. */
     ConnConnectionRefused,          /**< The connection was refused by the server (on the socket level).
