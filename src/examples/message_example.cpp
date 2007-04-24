@@ -11,6 +11,9 @@
 #include "../lastactivity.h"
 #include "../loghandler.h"
 #include "../logsink.h"
+#include "../connectiontcp.h"
+#include "../connectionsocks5proxy.h"
+#include "../connectionhttpproxy.h"
 #include "../messagehandler.h"
 using namespace gloox;
 
@@ -45,6 +48,27 @@ class MessageTest : public MessageSessionHandler, ConnectionListener, LogHandler
       j->setCACerts( ca );
 
       j->logInstance().registerLogHandler( LogLevelDebug, LogAreaAll, this );
+
+//
+// this code connects to a jabber server through a SOCKS5 proxy
+//
+//       ConnectionSOCKS5Proxy* conn = new ConnectionSOCKS5Proxy( j,
+//                                   new ConnectionTCP( j->logInstance(),
+//                                                      "sockshost", 1080 ),
+//                                   j->logInstance(), "example.net" );
+//       conn->setProxyAuth( "socksuser", "sockspwdtest" );
+//       j->setConnectionImpl( conn );
+
+//
+// this code connects to a jabber server through a HTTP proxy through a SOCKS5 proxy
+//
+//       ConnectionTCP* conn0 = new ConnectionTCP( j->logInstance(), "old", 1080 );
+//       ConnectionSOCKS5Proxy* conn1 = new ConnectionSOCKS5Proxy( conn0, j->logInstance(), "old", 8080 );
+//       conn1->setProxyAuth( "js", "test" );
+//       ConnectionHTTPProxy* conn2 = new ConnectionHTTPProxy( j, conn1, j->logInstance(), "jabber.cc" );
+//       conn2->setProxyAuth( "js", "test" );
+//       j->setConnectionImpl( conn2 );
+
 
       if( j->connect( false ) )
       {
