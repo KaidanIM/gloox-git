@@ -29,6 +29,18 @@
 namespace gloox
 {
 
+  ConnectionHTTPProxy::ConnectionHTTPProxy( ConnectionBase *connection, const LogSink& logInstance,
+                                            const std::string& server, int port )
+    : ConnectionBase( 0 ), m_connection( connection ),
+      m_logInstance( logInstance )
+  {
+    m_server = prep::idna( server );
+    m_port = port;
+
+    if( m_connection )
+      m_connection->registerConnectionDataHandler( this );
+  }
+
   ConnectionHTTPProxy::ConnectionHTTPProxy( ConnectionDataHandler *cdh, ConnectionBase *connection,
                                             const LogSink& logInstance,
                                             const std::string& server, int port )
@@ -138,7 +150,7 @@ namespace gloox
         m_proxyHandshakeBuffer = "";
         m_state = StateConnected;
         m_logInstance.log( LogLevelDebug, LogAreaClassConnectionHTTPProxy,
-                           "Proxy connection established" );
+                           "http proxy connection established" );
         m_handler->handleConnect();
       }
       else if( m_proxyHandshakeBuffer.substr( 9, 3 ) == "407" )
@@ -172,8 +184,11 @@ namespace gloox
           port = (*(servers.begin())).second;
         }
       }
-      m_logInstance.log( LogLevelDebug, LogAreaClassConnectionHTTPProxy,
-                         "Requesting proxy connection to " + server );
+#ifndef _WIN32_WCE
+    std::ostringstream oss;
+    oss << "requesting http proxy connection to " << server << ":" << port;
+    m_logInstance.log( LogLevelDebug, LogAreaClassConnectionHTTPProxy, oss.str() );
+#endif
       std::ostringstream os;
       os << "CONNECT " << server << ":" << port << " HTTP/1.0\r\n";
       os << "Host: " << server << "\r\n";
@@ -199,7 +214,7 @@ namespace gloox
   void ConnectionHTTPProxy::handleDisconnect( ConnectionError reason )
   {
     m_state = StateDisconnected;
-    m_logInstance.log( LogLevelDebug, LogAreaClassConnectionHTTPProxy, "proxy connection closed" );
+    m_logInstance.log( LogLevelDebug, LogAreaClassConnectionHTTPProxy, "http proxy connection closed" );
 
     if( m_handler )
       m_handler->handleDisconnect( reason );
