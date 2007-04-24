@@ -59,7 +59,7 @@ namespace gloox
       virtual bool handleIncomingInBandBytestream( const JID& from, InBandBytestream *ibb ) = 0;
 
       /**
-       * Notifies the implementor of successful establishing of an outcoming IBB request.
+       * Notifies the implementor of successful establishing of an outgoing IBB request.
        * Attach the IBB to a MessageSession using InBandBytestream::attachTo().
        * The stream has been accepted by the remote entity and is ready to send data.
        * The InBandBytestreamHandler becomes the owner of the InBandBytestream object.
