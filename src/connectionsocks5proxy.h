@@ -46,6 +46,9 @@ namespace gloox
    * @note This class is also used by the SOCKS5 bytestreams implementation (with slightly different
    * semantics).
    *
+   * @note Simple @b plain-text username/password authentication is supported. GSSAPI authentication
+   * is not supported.
+   *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */

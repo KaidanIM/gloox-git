@@ -172,14 +172,28 @@ namespace gloox
           if( !send( std::string( d, pos ) ) )
           {
             cleanup();
-            if( m_handler )
-              m_handler->handleDisconnect( ConnIoError );
+            m_handler->handleDisconnect( ConnIoError );
           }
           delete[] d;
         }
+        else if( data[1] == 0xFF && !m_proxyUser.empty() && !m_proxyPassword.empty() )
+        {
+          m_connection->disconnect();
+          m_handler->handleDisconnect( ConnProxyNoSupportedAuth );
+        }
+        else if( data[1] == 0xFF && ( m_proxyUser.empty() || m_proxyPassword.empty() ) )
+        {
+          m_connection->disconnect();
+          m_handler->handleDisconnect( ConnProxyAuthRequired );
+        }
+        else
+        {
+          m_connection->disconnect();
+          m_handler->handleDisconnect( ConnProxyAuthRequired );
+        }
         break;
       case S5StateNegotiating:
-        if( data.length() >= 6 && data[0] == 0x05 )
+        if( data.length() >= 6 && data[0] == 0x05 && data[1] == 0x00 )
         {
           m_state = StateConnected;
           m_s5state = S5StateConnected;
@@ -199,7 +213,7 @@ namespace gloox
         else
         {
           m_connection->disconnect();
-          m_handler->handleDisconnect( ConnIoError );
+          m_handler->handleDisconnect( ConnProxyAuthFailed );
         }
         break;
       case S5StateConnected:
@@ -222,7 +236,7 @@ namespace gloox
     std::string server = m_server;
     if( m_ip ) // IP address
     {
-      d[pos++] = 0x01;
+      d[pos++] = 0x01; // IPv4 address
       std::string s;
       int j = server.length();
       int l = 0;
@@ -250,20 +264,25 @@ namespace gloox
           port = (*(servers.begin())).second;
         }
       }
-      d[pos++] = 0x03;
+      d[pos++] = 0x03; // hostname
       d[pos++] = m_server.length();
       strncpy( d + pos, m_server.c_str(), m_server.length() );
       pos += m_server.length();
     }
-    port = htons( port );
-    d[pos++] = port;
-    d[pos++] = port >> 8;
+    int nport = htons( port );
+    d[pos++] = nport;
+    d[pos++] = nport >> 8;
+
+#ifndef _WIN32_WCE
+    std::ostringstream oss;
+    oss << "requesting socks5 proxy connection to " << server << ":" << port;
+    m_logInstance.log( LogLevelDebug, LogAreaClassConnectionSOCKS5Proxy, oss.str() );
+#endif
 
     if( !send( std::string( d, pos ) ) )
     {
       cleanup();
-      if( m_handler )
-        m_handler->handleDisconnect( ConnIoError );
+      m_handler->handleDisconnect( ConnIoError );
     }
     delete[] d;
   }
@@ -284,7 +303,7 @@ namespace gloox
         }
       }
       m_logInstance.log( LogLevelDebug, LogAreaClassConnectionSOCKS5Proxy,
-                         "Requesting socks5 proxy connection to " + server );
+                         "connecting to socks5 proxy" );
 
       bool auth = !m_proxyUser.empty() && !m_proxyPassword.empty();
       char *d = new char[auth ? 4 : 3];
