@@ -47,24 +47,25 @@ namespace gloox
     }
   }
 
-  bool InBandBytestreamManager::requestInBandBytestream( const JID& to, InBandBytestreamHandler *ibbh )
+  bool InBandBytestreamManager::requestInBandBytestream( const JID& to, InBandBytestreamHandler *ibbh,
+                                                         const std::string& sid )
   {
     if( !m_parent || !ibbh )
       return false;
 
-    const std::string& sid = m_parent->getID();
+    const std::string& msid = sid.empty() ? m_parent->getID() : sid;
     const std::string& id = m_parent->getID();
     Tag *iq = new Tag( "iq" );
     iq->addAttribute( "type", "set" );
     iq->addAttribute( "to", to.full() );
     iq->addAttribute( "id", id );
     Tag *o = new Tag( iq, "open" );
-    o->addAttribute( "sid", sid );
+    o->addAttribute( "sid", msid );
     o->addAttribute( "block-size", m_blockSize );
     o->addAttribute( "xmlns", XMLNS_IBB );
 
     TrackItem item;
-    item.sid = sid;
+    item.sid = msid;
     item.ibbh = ibbh;
     m_trackMap[id] = item;
     m_parent->trackID( this, id, IBBOpenStream );
