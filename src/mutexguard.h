@@ -20,7 +20,7 @@ namespace gloox
 {
 
   /**
-   * @brief A simple implementation of mutex guard.
+   * @brief A simple implementation of a mutex guard.
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
@@ -29,7 +29,7 @@ namespace gloox
   {
     public:
       /**
-       * Contructs a new simple mutex gaurdc and locks the supplied Mutex.
+       * Contructs a new simple mutex guard and locks the supplied Mutex.
        * @param mutex The Mutex to guard.
        */
       MutexGuard( Mutex* mutex ) : m_mutex( mutex ) { if( m_mutex ) m_mutex->lock(); }
