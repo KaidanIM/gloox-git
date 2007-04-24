@@ -196,11 +196,13 @@ namespace gloox
        * without waiting for success.
        * @param to The recipient of the requested bytestream.
        * @param ibbh The InBandBytestreamHandler to send the new bytestream to.
+       * @param sid The bytestream's stream ID, if previously negotiated e.g. using SI (XEP-0095).
        * @return @b False in case of an error, @b true otherwise. A return value of @b true does
        * @b not indicate that the bytestream has been opened. This is announced by means of the
        * InBandBytestreamHandler.
        */
-      bool requestInBandBytestream( const JID& to, InBandBytestreamHandler *ibbh );
+      bool requestInBandBytestream( const JID& to, InBandBytestreamHandler *ibbh,
+                                    const std::string& sid = "" );
 
       /**
        * Sets the default block-size. Default: 4096
