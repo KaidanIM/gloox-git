@@ -526,7 +526,7 @@ namespace gloox
     {
       if( m_manageRoster )
       {
-        notifyStreamEvent( StreamEventFinished );
+        notifyStreamEvent( StreamEventRoster );
         m_rosterManager->fill();
       }
       else
