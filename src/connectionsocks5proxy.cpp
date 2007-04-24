@@ -205,11 +205,19 @@ namespace gloox
         }
         break;
       case S5StateNegotiating:
-        if( data.length() >= 6 && data[0] == 0x05 && data[1] == 0x00 )
+        if( data.length() >= 6 && data[0] == 0x05 )
         {
-          m_state = StateConnected;
-          m_s5state = S5StateConnected;
-          m_handler->handleConnect();
+          if( data[1] == 0x00 )
+          {
+            m_state = StateConnected;
+            m_s5state = S5StateConnected;
+            m_handler->handleConnect();
+          }
+          else if( data[1] == 0x05 ) // connection refused
+          {
+            m_connection->disconnect();
+            m_handler->handleDisconnect( ConnConnectionRefused );
+          }
         }
         else
         {
