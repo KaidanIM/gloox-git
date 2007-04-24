@@ -176,12 +176,12 @@ namespace gloox
           }
           delete[] d;
         }
-        else if( data[1] == 0xFF && !m_proxyUser.empty() && !m_proxyPassword.empty() )
+        else if( data[1] == (char)0xFF && !m_proxyUser.empty() && !m_proxyPassword.empty() )
         {
           m_connection->disconnect();
           m_handler->handleDisconnect( ConnProxyNoSupportedAuth );
         }
-        else if( data[1] == 0xFF && ( m_proxyUser.empty() || m_proxyPassword.empty() ) )
+        else if( data[1] == (char)0xFF && ( m_proxyUser.empty() || m_proxyPassword.empty() ) )
         {
           m_connection->disconnect();
           m_handler->handleDisconnect( ConnProxyAuthRequired );
