@@ -60,8 +60,6 @@ v0.9 -- xx Feb 2007
 - DNS: cleanup
 - TagHandler: now receives Tag, not Stanza
 - Parser: cleanup, now uses TagHandler
-
-since -pre5:
 - ClientBase: added removeIDHandler() to cancel trackID() operations
 - added DataFormField( const std::string& name, const std::string& label = "",
                        const std::string& value = "", DataFormFieldType type = FieldTypeTextSingle );
@@ -85,6 +83,12 @@ since -pre5:
 - ported to Win CE/Mobile (experimental). see README.wince
 - ClientBase::setServer: update's Connection(Base)'s server as well
 - VCard: const *List& *() --> *List& *() to allow modification
+
+since -rc1:
+- Disco: minor spec compliance fixes
+- Adhoc: minor spec compliance fixes
+- Tag: added ctors to easily create a single attribute
+- SOCKS5 proxy support (RFC 1928), incl. username password auth (RFC 1929)
 
 
 v0.8 -- 08 Apr 2006
