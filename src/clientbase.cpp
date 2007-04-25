@@ -1242,7 +1242,7 @@ namespace gloox
 
   TLSBase* ClientBase::getDefaultEncryption()
   {
-    if( !m_tls )
+    if( !m_tls || !hasTls() )
       return 0;
 
     return new TLSDefault( this, m_server );
