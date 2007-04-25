@@ -39,7 +39,7 @@ namespace gloox
   {
     public:
       /**
-       * Constructs an empty ConnectionTCP object. You need to call setServer() to make it useable.
+       * Constructs an empty ConnectionTCP object. You need to call setServer() to make it usable.
        * @param logInstance The log target. Obtain it from ClientBase::logInstance().
        */
       ConnectionTCP( const LogSink& logInstance );
@@ -48,8 +48,8 @@ namespace gloox
        * Constructs a new ConnectionTCP object.
        * @param logInstance The log target. Obtain it from ClientBase::logInstance().
        * @param server A server to connect to.
-       * @param port The port to connect to. The default of -1 means that SRV records will be used
-       * to find out about the actual host:port.
+       * @param port The port to connect to. The default of -1 means that XMPP SRV records
+       * will be used to find out about the actual host:port.
        * @note To properly use this object, you have to set a ConnectionDataHandler using
        * registerConnectionDataHandler(). This is not necessary if this object is
        * part of a 'connection chain', e.g. with ConnectionHTTPProxy.

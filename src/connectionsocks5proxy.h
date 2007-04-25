@@ -30,10 +30,8 @@ namespace gloox
    *
    * @code
    * Client *c = new Client( ... );
-   * c->setConnectionImpl(
-   *       new ConnectionSOCKS5Proxy( c,
-   *                                new ConnectionTCP( c->logInstance(),
-   *                                                   proxyHost, proxyPort ),
+   * c->setConnectionImpl( new ConnectionSOCKS5Proxy( c,
+   *                                new ConnectionTCP( c->logInstance(), proxyHost, proxyPort ),
    *                                c->logInstance(), xmppHost, xmppPort ) );
    * @endcode
    *
