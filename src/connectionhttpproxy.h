@@ -30,10 +30,8 @@ namespace gloox
    *
    * @code
    * Client *c = new Client( ... );
-   * c->setConnectionImpl(
-   *       new ConnectionHTTPProxy( c,
-   *                                new ConnectionTCP( c->logInstance(),
-   *                                                   proxyHost, proxyPort ),
+   * c->setConnectionImpl( new ConnectionHTTPProxy( c,
+   *                                new ConnectionTCP( c->logInstance(), proxyHost, proxyPort ),
    *                                c->logInstance(), xmppHost, xmppPort ) );
    * @endcode
    *
@@ -41,7 +39,7 @@ namespace gloox
    * and the XMPP host/port to the proxy connection.
    *
    * The reason why ConnectionHTTPProxy doesn't manage its own ConnectionTCP is that it allows it
-   * to be used with other transports (like IPv6).
+   * to be used with other transports (like IPv6 or chained SOCKS5/HTTP proxies).
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
