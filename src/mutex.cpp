@@ -68,7 +68,7 @@ namespace gloox
   void MutexImpl::lock()
   {
 #ifdef _WIN32
-    EnterCriticalSection( &m_cs )
+    EnterCriticalSection( &m_cs );
 #elif defined( HAVE_PTHREAD )
     pthread_mutex_lock( &m_mutex );
 #endif
