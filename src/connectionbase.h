@@ -65,6 +65,8 @@ namespace gloox
        * Use this function to send a string of data over the wire. The function returns only after
        * all data has been sent.
        * @param data The data to send.
+       * @return @b True if the data has been sent (no guarantee of receipt), @b false
+       * in case of an error.
        */
       virtual bool send( const std::string& data ) = 0;
 
