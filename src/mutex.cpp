@@ -17,6 +17,10 @@
 # include "config.h"
 #endif
 
+#ifdef WIN32
+# include <windows.h>
+#endif
+
 #ifdef HAVE_PTHREAD
 # include <pthread.h>
 #endif
