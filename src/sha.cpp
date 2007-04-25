@@ -56,11 +56,11 @@ namespace gloox
       m_finished = true;
     }
 
-    char buf[41];
+    char buf[40];
     for( int i = 0; i < 20; ++i )
       sprintf( buf + i * 2, "%02x", (unsigned char)( H[i >> 2] >> ( ( 3 - ( i & 3 ) ) << 3 ) ) );
 
-    return buf;
+    return std::string( buf, 40 );
   }
 
   void SHA::finalize()
