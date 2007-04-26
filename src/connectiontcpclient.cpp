@@ -115,4 +115,39 @@ namespace gloox
     return ConnNoError;
   }
 
+  ConnectionError ConnectionTCPClient::recv( int timeout )
+  {
+    MutexGuard mg( m_recvMutex );
+
+    if( m_cancel || m_socket < 0 )
+      return ConnNotConnected;
+
+    if( !dataAvailable( timeout ) )
+      return ConnNoError;
+
+#ifdef SKYOS
+    int size = ::recv( m_socket, (unsigned char*)m_buf, m_bufsize, 0 );
+#else
+    int size = ::recv( m_socket, m_buf, m_bufsize, 0 );
+#endif
+
+    mg.unlock();
+
+    if( size <= 0 )
+    {
+      ConnectionError error = ( size ? ConnIoError : ConnStreamClosed );
+      if( m_handler )
+        m_handler->handleDisconnect( error );
+      return error;
+    }
+
+    m_buf[size] = '\0';
+
+    m_totalBytesIn += size;
+    if( m_handler )
+      m_handler->handleReceivedData( std::string( m_buf, size ) );
+
+    return ConnNoError;
+  }
+
 }

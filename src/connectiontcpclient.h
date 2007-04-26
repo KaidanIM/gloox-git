@@ -65,6 +65,9 @@ namespace gloox
       virtual ~ConnectionTCPClient();
 
       // reimplemented from ConnectionBase
+      virtual ConnectionError recv( int timeout = -1 );
+
+      // reimplemented from ConnectionBase
       virtual ConnectionError connect();
 
       // reimplemented from ConnectionBase

@@ -65,9 +65,6 @@ namespace gloox
       virtual ~ConnectionTCPBase();
 
       // reimplemented from ConnectionBase
-      virtual ConnectionError recv( int timeout = -1 );
-
-      // reimplemented from ConnectionBase
       virtual bool send( const std::string& data );
 
       // reimplemented from ConnectionBase
