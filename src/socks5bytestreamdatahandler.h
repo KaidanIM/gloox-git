@@ -59,11 +59,18 @@ namespace gloox
       virtual void handleSOCKS5Error( const std::string& sid, const JID& remote, StanzaError se ) = 0;
 
       /**
-       * Notifies the handler that the bytestream for the given JID has been closed by
+       * Notifies the handler that the bytestream for the given SID has been acknowledged
+       * and is ready to send/receive data.
+       * @param sid The opened bytestream's ID.
+       */
+      virtual void handleSOCKS5Open( SOCKS5Bytestream* s5b ) = 0;
+
+      /**
+       * Notifies the handler that the bytestream for the given SID has been closed by
        * the peer.
        * @param sid The closed bytestream's ID.
        */
-      virtual void handleSOCKS5Close( const std::string& sid ) = 0;
+      virtual void handleSOCKS5Close( SOCKS5Bytestream* s5b ) = 0;
 
   };
 

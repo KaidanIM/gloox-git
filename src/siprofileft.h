@@ -17,14 +17,18 @@
 #include "siprofilehandler.h"
 #include "sihandler.h"
 #include "simanager.h"
+#include "socks5bytestreamhandler.h"
 
 #include <string>
 
 namespace gloox
 {
 
+  class ClientBase;
   class JID;
   class SIProfileFTHandler;
+  class SOCKS5Bytestream;
+  class SOCKS5BytestreamManager;
 
   /**
    * @brief An implementation of the file transfer SI profile (XEP-0096).
@@ -34,7 +38,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
-  class SIProfileFT : public SIProfileHandler, public SIHandler
+  class SIProfileFT : public SIProfileHandler, public SIHandler, public SOCKS5BytestreamHandler
   {
     public:
       /**
@@ -42,15 +46,18 @@ namespace gloox
        */
       enum StreamType
       {
-        FTTypeS5B,                  /**< SOCKS5 Bytestreams. */
-        FTTypeIBB,                  /**< In-Band Bytestreams. */
-        FTTypeOOB                   /**< Out-of-Band Data. */
+        FTTypeS5B/*,*/                  /**< SOCKS5 Bytestreams. */
+        /*FTTypeIBB,*/                  /**< In-Band Bytestreams. */
+        /*FTTypeOOB*/                   /**< Out-of-Band Data. */
       };
 
       /**
        * Constructor.
+       * @param parent The ClientBase to use for signaling.
+       * @param manager The SIManager to register with.
+       * @param sipfth The SIProfileFTHandler to receive events.
        */
-      SIProfileFT( SIManager* manager );
+      SIProfileFT( ClientBase* parent, SIManager* manager, SIProfileFTHandler* sipfth );
 
       /**
        * Virtual destructor.
@@ -74,11 +81,11 @@ namespace gloox
        * Call this function to accept a file transfer request previously announced by means of
        * SIProfileFTHandler::handleFTRequest().
        * @param to The requestor.
-       * @param id The request's id, as passed to SIProfileHandler::handleFTRequest().
+       * @param sid The request's id, as passed to SIProfileHandler::handleFTRequest().
        * @param type The desired stream type to use for this file transfer. Defaults to
        * SOCKS5 Bytestream.
        */
-      void acceptFT( const JID& to, const std::string& id, StreamType type = FTTypeS5B );
+      void acceptFT( const JID& to, const std::string& sid, StreamType type = FTTypeS5B );
 
       /**
        * Call this function to decline a FT request previously announced by means of
@@ -105,7 +112,7 @@ namespace gloox
       void removeSIProfileFTHandler() { m_handler = 0; }
 
       // re-implemented from SIProfileHandler
-      virtual void handleSIRequest( const JID& from, const std::string& id, const std::string& profile,
+      virtual void handleSIRequest( const JID& from, const std::string& sid, const std::string& profile,
                                     Tag* si, Tag* ptag, Tag* fneg );
 
       // re-implemented from SIHandler
@@ -115,9 +122,23 @@ namespace gloox
       // re-implemented from SIHandler
       virtual void handleSIRequestError( Stanza* stanza );
 
+      // re-implemented from SOCKS5BytestreamHandler
+      virtual void handleIncomingSOCKS5BytestreamRequest( const std::string& sid, const JID& from );
+
+      // re-implemented from SOCKS5BytestreamHandler
+      virtual void handleIncomingSOCKS5Bytestream( const std::string& sid, SOCKS5Bytestream* s5b );
+
+      // re-implemented from SOCKS5BytestreamHandler
+      virtual void handleOutgoingSOCKS5Bytestream( const JID& to, SOCKS5Bytestream *s5b );
+
+      // re-implemented from SOCKS5BytestreamHandler
+      virtual void handleSOCKS5BytestreamError( const JID& remote, StanzaError se );
+
     private:
-      SIManager* m_parent;
+      ClientBase* m_parent;
+      SIManager* m_manager;
       SIProfileFTHandler* m_handler;
+      SOCKS5BytestreamManager* m_socks5Manager;
 
   };
 

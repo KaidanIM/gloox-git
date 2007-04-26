@@ -83,7 +83,7 @@ namespace gloox
 
       /**
        * Call this function repeatedly to receive data from the socket. You should even do this
-       * if you merely use the bytestream to @b send data.
+       * if you use the bytestream to merely @b send data.
        * @param timeout The timeout to use for select in microseconds. Default of -1 means blocking.
        * @return The state of the connection.
        */
@@ -148,12 +148,14 @@ namespace gloox
 
       SOCKS5BytestreamManager *m_manager;
       ConnectionBase* m_connection;
+      ConnectionBase* m_socks5;
       const LogSink& m_logInstance;
       SOCKS5BytestreamDataHandler *m_socks5BytestreamDataHandler;
       const JID m_initiator;
       const JID m_target;
       std::string m_sid;
       bool m_open;
+      JID m_proxy;
 
       StreamHostList m_hosts;
 
