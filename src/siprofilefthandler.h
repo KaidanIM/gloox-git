@@ -43,7 +43,7 @@ namespace gloox
        * to send a file to you. You should use either SIProfileFT::acceptFT() or
        * SIProfileFT::declineFT() to accept or reject the request, respectively.
        * @param from The file transfer requestor.
-       * @param id The request's id. This id MUST be supplied to either SIProfileFT::acceptFT() or
+       * @param sid The request's id. This id MUST be supplied to either SIProfileFT::acceptFT() or
        * SIProfileFT::declineFT().
        * @param name The file name.
        * @param size The file size.
@@ -52,7 +52,7 @@ namespace gloox
        * @param mimetype The file's mime-type.
        * @param desc The file's description.
        */
-      virtual void handleFTRequest( const JID& from, const std::string& id, const std::string& name,
+      virtual void handleFTRequest( const JID& from, const std::string& sid, const std::string& name,
                                     const std::string& size, const std::string& hash,
                                     const std::string& date, const std::string& mimetype,
                                     const std::string& desc ) = 0;
@@ -71,6 +71,23 @@ namespace gloox
        * @param stanza The complete error stanza.
        */
       virtual void handleFTRequestError( Stanza* stanza ) = 0;
+
+      /**
+       * This function is called to pass a negotiated SOCKS5 bytestream.
+       * The bytestream is not yet open and not ready to send/receive data.
+       * @note To initialize the bytestream and to prepare it for data transfer
+       * do the following, preferable in that order:
+       * @li register a SOCKS5BytestreamDataHandler with the SOCKS5Bytestream,
+       * @li set up a separate thread for the bytestream or integrate it into
+       * your main loop,
+       * @li call its connect() method and check the return value.
+       * To not block your application while the data transfer and/or the connection
+       * attempts last, you most likely want to put  the bytestream into its own
+       * thread or process (before calling connect() on it). It is safe to do so
+       * without additional synchronization.
+       * @param s5b The SOCKS5 bytestream.
+       */
+      virtual void handleFTSOCKS5Bytestream( SOCKS5Bytestream* s5b ) = 0;
   };
 
 }
