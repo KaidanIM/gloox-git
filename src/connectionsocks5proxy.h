@@ -158,7 +158,7 @@ namespace gloox
        S5StateConnected
      };
 
-      ConnectionSOCKS5Proxy &operator= ( const ConnectionSOCKS5Proxy& );
+      ConnectionSOCKS5Proxy &operator=( const ConnectionSOCKS5Proxy& );
       void negotiate();
 
       ConnectionBase* m_connection;

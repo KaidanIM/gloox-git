@@ -147,7 +147,7 @@ namespace gloox
       void setHTTP11( bool http11 ) { m_http11 = http11; }
 
    private:
-      ConnectionHTTPProxy &operator= ( const ConnectionHTTPProxy& );
+      ConnectionHTTPProxy &operator=( const ConnectionHTTPProxy& );
 
       ConnectionBase *m_connection;
       const LogSink& m_logInstance;
