@@ -80,7 +80,7 @@ namespace gloox
     return new ConnectionSOCKS5Proxy( m_handler, conn, m_logInstance, m_server, m_port, m_ip );
   }
 
-  void ConnectionSOCKS5Proxy::setConnection( ConnectionBase* connection )
+  void ConnectionSOCKS5Proxy::setConnectionImpl( ConnectionBase* connection )
   {
     if( m_connection )
       delete m_connection;
@@ -267,7 +267,7 @@ namespace gloox
   void ConnectionSOCKS5Proxy::negotiate()
   {
     m_s5state = S5StateNegotiating;
-    char *d = new char[m_ip ? 10 : 6 + m_server.length()];
+    char *d = new char[m_ip ? 10 : 6 + m_server.length() + 1];
     int pos = 0;
     d[pos++] = 0x05; // SOCKS version 5
     d[pos++] = 0x01; // command CONNECT
