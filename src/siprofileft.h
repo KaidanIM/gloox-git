@@ -99,6 +99,14 @@ namespace gloox
                       const std::string& text = "" );
 
       /**
+       * To get rid of a bytestream (i.e., close and delete it), call this function. You
+       * should not use the bytestream any more.
+       * The remote entity will be notified about the closing of the stream.
+       * @param s5b The bytestream to dispose. It will be deleted here.
+       */
+      void dispose( SOCKS5Bytestream *s5b );
+
+      /**
        * Registers a handler that will be informed about incoming file transfer requests,
        * i.e. when a remote entity wishes to send a file.
        * @param sipfth A SIProfileFTHandler to register. Only one handler can be registered
