@@ -146,7 +146,7 @@ namespace gloox
        * Sets the underlying transport connection. A possibly existing connection will be deleted.
        * @param connection The ConnectionBase to replace the current connection, if any.
        */
-      void setConnection( ConnectionBase* connection );
+      void setConnectionImpl( ConnectionBase* connection );
 
    private:
      enum Socks5State

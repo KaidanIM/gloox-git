@@ -66,7 +66,7 @@ namespace gloox
     return new ConnectionHTTPProxy( m_handler, conn, m_logInstance, m_server, m_port );
   }
 
-  void ConnectionHTTPProxy::setConnection( ConnectionBase* connection )
+  void ConnectionHTTPProxy::setConnectionImpl( ConnectionBase* connection )
   {
     if( m_connection )
       delete m_connection;
