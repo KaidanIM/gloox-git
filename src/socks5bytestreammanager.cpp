@@ -39,7 +39,7 @@ namespace gloox
     for( ; it != m_s5bMap.end(); ++it )
     {
       delete (*it).second;
-      m_s5bMap.erase( it );
+      (*it).second = 0;
     }
   }
 
