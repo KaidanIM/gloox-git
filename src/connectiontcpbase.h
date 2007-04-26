@@ -26,26 +26,24 @@ namespace gloox
   class Mutex;
 
   /**
-   * @brief This is an implementation of a simple TCP connection.
+   * @brief This is a base class for a simple TCP connection.
    *
-   * You should only need to use this class directly if you need access to some special feature, like
-   * the raw socket(), or if you need HTTP proxy support (see @ref gloox::ConnectionHTTPProxy for more
-   * information).
+   * You should not need to use this class directly.
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
-  class GLOOX_API ConnectionTCP : public ConnectionBase
+  class ConnectionTCPBase : public ConnectionBase
   {
     public:
       /**
-       * Constructs an empty ConnectionTCP object. You need to call setServer() to make it usable.
+       * Constructs an empty ConnectionTCPBase object.
        * @param logInstance The log target. Obtain it from ClientBase::logInstance().
        */
-      ConnectionTCP( const LogSink& logInstance );
+      ConnectionTCPBase( const LogSink& logInstance );
 
       /**
-       * Constructs a new ConnectionTCP object.
+       * Constructs a new ConnectionTCPBase object.
        * @param logInstance The log target. Obtain it from ClientBase::logInstance().
        * @param server A server to connect to.
        * @param port The port to connect to. The default of -1 means that XMPP SRV records
@@ -54,27 +52,23 @@ namespace gloox
        * registerConnectionDataHandler(). This is not necessary if this object is
        * part of a 'connection chain', e.g. with ConnectionHTTPProxy.
        */
-      ConnectionTCP( const LogSink& logInstance,
-                     const std::string& server, int port = -1 );
+      ConnectionTCPBase( const LogSink& logInstance, const std::string& server, int port = -1 );
 
       /**
-       * Constructs a new ConnectionTCP object.
+       * Constructs a new ConnectionTCPBase object.
        * @param cdh An ConnectionDataHandler-derived object that will handle incoming data.
        * @param logInstance The log target. Obtain it from ClientBase::logInstance().
        * @param server A server to connect to.
        * @param port The port to connect to. The default of -1 means that SRV records will be used
        * to find out about the actual host:port.
        */
-      ConnectionTCP( ConnectionDataHandler *cdh, const LogSink& logInstance,
-                     const std::string& server, int port = -1 );
+      ConnectionTCPBase( ConnectionDataHandler *cdh, const LogSink& logInstance,
+                         const std::string& server, int port = -1 );
 
       /**
        * Virtual destructor
        */
-      virtual ~ConnectionTCP();
-
-      // reimplemented from ConnectionBase
-      virtual ConnectionError connect();
+      virtual ~ConnectionTCPBase();
 
       // reimplemented from ConnectionBase
       virtual ConnectionError recv( int timeout = -1 );
@@ -94,12 +88,9 @@ namespace gloox
       // reimplemented from ConnectionBase
       virtual void getStatistics( int &totalIn, int &totalOut );
 
-      // reimplemented from ConnectionBase
-      virtual ConnectionTCP* newInstance() const;
-
       /**
        * Gives access to the raw socket of this connection. Use it wisely. You can
-       * select()/poll() it and use ConnectionTCP::recv( -1 ) to fetch the data.
+       * select()/poll() it and use ConnectionTCPBase::recv( -1 ) to fetch the data.
        * @return The socket of the active connection, or -1 if no connection is established.
        */
       int socket() const { return m_socket; };
@@ -112,8 +103,8 @@ namespace gloox
        */
       void setSocket( int socket ) { m_socket = socket; };
 
-    private:
-      ConnectionTCP &operator= ( const ConnectionTCP & );
+    protected:
+      ConnectionTCPBase &operator=( const ConnectionTCPBase & );
       void init();
       bool dataAvailable( int timeout = -1 );
       void cancel();
