@@ -33,8 +33,6 @@
 # include <winsock.h>
 #endif
 
-#include <time.h>
-
 #include <cstdlib>
 #include <string>
 
@@ -76,8 +74,11 @@ namespace gloox
   {
     MutexGuard mg( m_sendMutex );
 
-    if( !m_handler || m_state > StateDisconnected )
+    if( !m_handler )
       return ConnNotConnected;
+
+    if( m_state > StateDisconnected )
+      return ConnNoError;
 
     m_state = StateConnecting;
 
