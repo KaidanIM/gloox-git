@@ -44,31 +44,29 @@ namespace gloox
        * Reimplement this function to receive data which is sent over the bytestream.
        * The data received here is (probably) only a single chunk of the complete data (depending
        * on the amount of data you want to send).
+       * @param s5b The bytestream.
        * @param data The actual stream payload.
-       * @param sid The stream's ID.
        */
-      virtual void handleSOCKS5Data( const std::string& data, const std::string& sid ) = 0;
+      virtual void handleSOCKS5Data( SOCKS5Bytestream* s5b, const std::string& data ) = 0;
 
       /**
        * Notifies about an error occuring while using a bytestream.
        * When this handler is called the stream has already been closed.
-       * @param sid The stream's ID.
-       * @param remote The remote entity.
-       * @param se The error.
+       * @param s5b The bytestream.
+       * @param stanza The error stanza.
        */
-      virtual void handleSOCKS5Error( const std::string& sid, const JID& remote, StanzaError se ) = 0;
+      virtual void handleSOCKS5Error( SOCKS5Bytestream* s5b, Stanza* stanza ) = 0;
 
       /**
-       * Notifies the handler that the bytestream for the given SID has been acknowledged
+       * Notifies the handler that the given bytestream has been acknowledged
        * and is ready to send/receive data.
-       * @param sid The opened bytestream's ID.
+       * @param s5b The opened bytestream.
        */
       virtual void handleSOCKS5Open( SOCKS5Bytestream* s5b ) = 0;
 
       /**
-       * Notifies the handler that the bytestream for the given SID has been closed by
-       * the peer.
-       * @param sid The closed bytestream's ID.
+       * Notifies the handler that the given bytestream has been closed.
+       * @param s5b The closed bytestream.
        */
       virtual void handleSOCKS5Close( SOCKS5Bytestream* s5b ) = 0;
 
