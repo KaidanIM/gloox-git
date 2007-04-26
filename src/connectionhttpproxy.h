@@ -139,6 +139,13 @@ namespace gloox
        */
       void setConnectionImpl( ConnectionBase* connection );
 
+      /**
+       * Switches usage of HTTP/1.1 on or off.
+       * @param http11 Set this to @b true to connect through a HTTP/1.1-only proxy, or @b false
+       * to use HTTP/1.0. Defaults to HTTP/1.0 which should work with 99.9% of proxies.
+       */
+      void setHTTP11( bool http11 ) { m_http11 = http11; }
+
    private:
       ConnectionHTTPProxy &operator= ( const ConnectionHTTPProxy& );
 
@@ -148,6 +155,8 @@ namespace gloox
       std::string m_proxyUser;
       std::string m_proxyPassword;
       std::string m_proxyHandshakeBuffer;
+
+      bool m_http11;
 
   };
 

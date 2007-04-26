@@ -32,7 +32,7 @@ namespace gloox
   ConnectionHTTPProxy::ConnectionHTTPProxy( ConnectionBase *connection, const LogSink& logInstance,
                                             const std::string& server, int port )
     : ConnectionBase( 0 ), m_connection( connection ),
-      m_logInstance( logInstance )
+      m_logInstance( logInstance ), m_http11( false )
   {
     m_server = prep::idna( server );
     m_port = port;
@@ -190,7 +190,7 @@ namespace gloox
     m_logInstance.log( LogLevelDebug, LogAreaClassConnectionHTTPProxy, oss.str() );
 #endif
       std::ostringstream os;
-      os << "CONNECT " << server << ":" << port << " HTTP/1.0\r\n";
+      os << "CONNECT " << server << ":" << port << ( m_http11 ? " HTTP/1.1" : " HTTP/1.0" ) << "\r\n";
       os << "Host: " << server << "\r\n";
       os << "Content-Length: 0\r\n";
       os << "Proxy-Connection: Keep-Alive\r\n";
