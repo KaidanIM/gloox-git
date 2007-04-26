@@ -125,6 +125,15 @@ namespace gloox
 
   bool ConnectionSOCKS5Proxy::send( const std::string& data )
   {
+    if( m_s5state != S5StateConnected )
+    {
+      printf( "data sent: " );
+      const char* x = data.c_str();
+      for( unsigned int i = 0; i < data.length(); ++i )
+        printf( "%02X ", (const int)x[i] );
+      printf( "\n" );
+    }
+
     if( m_connection )
       return m_connection->send( data );
 
@@ -153,6 +162,15 @@ namespace gloox
 
   void ConnectionSOCKS5Proxy::handleReceivedData( const std::string& data )
   {
+    if( m_s5state != S5StateConnected )
+    {
+      printf( "data recv: " );
+      const char* x = data.c_str();
+      for( unsigned int i = 0; i < data.length(); ++i )
+        printf( "%02X ", (const int)x[i] );
+      printf( "\n" );
+    }
+
     if( !m_connection || !m_handler )
       return;
 
@@ -170,6 +188,8 @@ namespace gloox
         }
         else if( data[1] == 0x02 && !m_proxyUser.empty() && !m_proxyPassword.empty() ) // user/password auth
         {
+          m_logInstance.log( LogLevelDebug, LogAreaClassConnectionSOCKS5Proxy,
+                             "authenticating to socks5 proxy as user " + m_proxyUser );
           m_s5state = S5StateAuthenticating;
           char* d = new char[3 + m_proxyUser.length() + m_proxyPassword.length()];
           int pos = 0;
@@ -323,7 +343,7 @@ namespace gloox
         }
       }
       m_logInstance.log( LogLevelDebug, LogAreaClassConnectionSOCKS5Proxy,
-                         "connecting to socks5 proxy" );
+                         "attempting to negotiate socks5 proxy connection" );
 
       bool auth = !m_proxyUser.empty() && !m_proxyPassword.empty();
       char *d = new char[auth ? 4 : 3];
