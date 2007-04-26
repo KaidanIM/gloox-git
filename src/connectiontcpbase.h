@@ -37,12 +37,6 @@ namespace gloox
   {
     public:
       /**
-       * Constructs an empty ConnectionTCPBase object.
-       * @param logInstance The log target. Obtain it from ClientBase::logInstance().
-       */
-      ConnectionTCPBase( const LogSink& logInstance );
-
-      /**
        * Constructs a new ConnectionTCPBase object.
        * @param logInstance The log target. Obtain it from ClientBase::logInstance().
        * @param server A server to connect to.

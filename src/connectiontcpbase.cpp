@@ -46,17 +46,8 @@
 namespace gloox
 {
 
-  ConnectionTCPBase::ConnectionTCPBase( const LogSink& logInstance )
-    : ConnectionBase( 0 ),
-      m_logInstance( logInstance ), m_buf( 0 ), m_socket( -1 ), m_totalBytesIn( 0 ),
-      m_totalBytesOut( 0 ), m_bufsize( 1024 ), m_cancel( true )
-  {
-    m_port = -1;
-    init();
-  }
-
   ConnectionTCPBase::ConnectionTCPBase( const LogSink& logInstance,
-                                const std::string& server, int port )
+                                        const std::string& server, int port )
     : ConnectionBase( 0 ),
       m_logInstance( logInstance ), m_buf( 0 ), m_socket( -1 ), m_totalBytesIn( 0 ),
       m_totalBytesOut( 0 ), m_bufsize( 1024 ), m_cancel( true )
@@ -67,7 +58,7 @@ namespace gloox
   }
 
   ConnectionTCPBase::ConnectionTCPBase( ConnectionDataHandler *cdh, const LogSink& logInstance,
-                                const std::string& server, int port )
+                                        const std::string& server, int port )
     : ConnectionBase( cdh ),
       m_logInstance( logInstance ), m_buf( 0 ), m_socket( -1 ), m_totalBytesIn( 0 ),
       m_totalBytesOut( 0 ), m_bufsize( 1024 ), m_cancel( true )
