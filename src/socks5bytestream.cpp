@@ -118,14 +118,22 @@ namespace gloox
     if( !m_socks5BytestreamDataHandler )
       return;
 
-    if( !m_open && data.length() == 1 && data[0] == 0x00 )
+    if( !m_open )
     {
       m_open = true;
       m_socks5BytestreamDataHandler->handleSOCKS5Open( this );
-      return;
     }
 
-    m_socks5BytestreamDataHandler->handleSOCKS5Data( data, m_sid );
+//     if( !m_open && data.length() == 2 && data[0] == 0x05 && data[1] == 0x00 )
+//     {
+//       printf( "received acknowleding zero byte, stream is now open\n" );
+//       m_open = true;
+//       m_socks5BytestreamDataHandler->handleSOCKS5Open( this );
+//       return;
+//     }
+
+    if( m_open )
+      m_socks5BytestreamDataHandler->handleSOCKS5Data( this, data );
   }
 
   void SOCKS5Bytestream::handleConnect()
