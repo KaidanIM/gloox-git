@@ -106,6 +106,12 @@ namespace gloox
     m_manager->declineSI( to, id, reason, text );
   }
 
+  void SIProfileFT::dispose( SOCKS5Bytestream* s5b )
+  {
+    if( m_socks5Manager )
+      m_socks5Manager->dispose( s5b );
+  }
+
   void SIProfileFT::handleSIRequest( const JID& from, const std::string& sid, const std::string& profile,
                                      Tag* si, Tag* ptag, Tag* /*fneg*/ )
   {
