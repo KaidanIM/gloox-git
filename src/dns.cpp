@@ -223,7 +223,7 @@ namespace gloox
     return -ConnConnectionRefused;
   }
 
-  int DNS::connect( const std::string& domain, unsigned short port, const LogSink& logInstance )
+  int DNS::getSocket()
   {
 #ifdef WIN32
     WSADATA wsaData;
@@ -244,6 +244,15 @@ namespace gloox
       cleanup();
       return -ConnConnectionRefused;
     }
+
+    return fd;
+  }
+
+  int DNS::connect( const std::string& domain, unsigned short port, const LogSink& logInstance )
+  {
+    int fd = getSocket();
+    if( fd < 0 )
+      return fd;
 
     struct hostent *h;
     if( ( h = gethostbyname( domain.c_str() ) ) == 0 )
@@ -287,13 +296,17 @@ namespace gloox
     logInstance.log( LogLevelDebug, LogAreaClassDns, oss.str() );
 #endif
 
+    closeSocket( fd );
+    return -ConnConnectionRefused;
+  }
+
+  void DNS::closeSocket( int fd )
+  {
 #ifndef WIN32
     close( fd );
 #else
     closesocket( fd );
-    cleanup();
 #endif
-    return -ConnConnectionRefused;
   }
 
   void DNS::cleanup()

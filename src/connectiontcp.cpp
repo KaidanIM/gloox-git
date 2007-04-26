@@ -249,11 +249,7 @@ namespace gloox
   {
     if( m_socket >= 0 )
     {
-#ifdef WIN32
-      closesocket( m_socket );
-#else
-      close( m_socket );
-#endif
+      DNS::closeSocket( m_socket );
       m_socket = -1;
     }
     m_state = StateDisconnected;
