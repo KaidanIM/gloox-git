@@ -15,7 +15,7 @@
 #ifndef CONNECTIONHANDLER_H__
 #define CONNECTIONHANDLER_H__
 
-#include <string>
+#include "connectionbase.h"
 
 namespace gloox
 {
