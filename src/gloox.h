@@ -966,13 +966,15 @@ namespace gloox
   enum LogArea
   {
     LogAreaClassParser                = 0x00001, /**< Log messages from Parser. */
-    LogAreaClassConnectionTCP         = 0x00002, /**< Log messages from ConnectionTCP. */
+    LogAreaClassConnectionTCPBase     = 0x00002, /**< Log messages from ConnectionTCPBase. */
     LogAreaClassClient                = 0x00004, /**< Log messages from Client. */
     LogAreaClassClientbase            = 0x00008, /**< Log messages from ClientBase. */
     LogAreaClassComponent             = 0x00010, /**< Log messages from Component. */
     LogAreaClassDns                   = 0x00020, /**< Log messages from DNS. */
     LogAreaClassConnectionHTTPProxy   = 0x00040, /**< Log messages from ConnectionHTTPProxy */
     LogAreaClassConnectionSOCKS5Proxy = 0x00080, /**< Log messages from ConnectionHTTPProxy */
+    LogAreaClassConnectionTCPClient   = 0x00100, /**< Log messages from ConnectionTCPClient. */
+    LogAreaClassConnectionTCPServer   = 0x00200, /**< Log messages from ConnectionTCPServer. */
     LogAreaAllClasses                 = 0x01FFF, /**< All log messages from all the classes. */
     LogAreaXmlIncoming                = 0x02000, /**< Incoming XML. */
     LogAreaXmlOutgoing                = 0x04000, /**< Outgoing XML. */

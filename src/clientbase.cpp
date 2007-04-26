@@ -24,7 +24,7 @@
 #include "connectionbase.h"
 #include "tlsbase.h"
 #include "compressionbase.h"
-#include "connectiontcp.h"
+#include "connectiontcpclient.h"
 #include "disco.h"
 #include "messagesessionhandler.h"
 #include "parser.h"
@@ -158,7 +158,7 @@ namespace gloox
       m_parser = new Parser( this );
 
     if( !m_connection )
-      m_connection = new ConnectionTCP( this, m_logInstance, m_server, m_port );
+      m_connection = new ConnectionTCPClient( this, m_logInstance, m_server, m_port );
 
     if( m_connection->state() >= StateConnecting )
       return true;

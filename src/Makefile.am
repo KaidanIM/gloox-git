@@ -9,7 +9,7 @@ AM_CPPFLAGS = -Wall -pedantic -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare
 
 lib_LTLIBRARIES = libgloox.la
 
-libgloox_la_SOURCES = jid.cpp parser.cpp connectiontcp.cpp clientbase.cpp tag.cpp stanza.cpp logsink.cpp \
+libgloox_la_SOURCES = jid.cpp parser.cpp connectiontcpclient.cpp clientbase.cpp tag.cpp stanza.cpp logsink.cpp \
                         dns.cpp prep.cpp base64.cpp client.cpp component.cpp \
                         disco.cpp adhoc.cpp privatexml.cpp registration.cpp \
                         nonsaslauth.cpp rosteritem.cpp rostermanager.cpp privacyitem.cpp \
@@ -23,7 +23,8 @@ libgloox_la_SOURCES = jid.cpp parser.cpp connectiontcp.cpp clientbase.cpp tag.cp
                         uniquemucroom.cpp instantmucroom.cpp compressionzlib.cpp tlsgnutlsclient.cpp \
                         tlsopenssl.cpp connectionhttpproxy.cpp tlsgnutlsserveranon.cpp tlsgnutlsbase.cpp \
                         tlsgnutlsclientanon.cpp tlsschannel.cpp tlsdefault.cpp simanager.cpp siprofileft.cpp \
-                        mutex.cpp connectionsocks5proxy.cpp socks5bytestreammanager.cpp socks5bytestream.cpp
+                        mutex.cpp connectionsocks5proxy.cpp socks5bytestreammanager.cpp socks5bytestream.cpp \
+                        connectiontcpbase.cpp
 
 libgloox_la_LDFLAGS = -version-info 7:0:0 -no-undefined -no-allow-shlib-undefined
 libgloox_la_LIBADD =
@@ -59,7 +60,7 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             md5.h                     sha.h                   uniquemucroom.h \
                             instantmucroom.h          tlsbase.h               tlshandler.h \
                             connectionbase.h          connectiondatahandler.h compressiondatahandler.h \
-                            compressionbase.h         connectiontcp.h         connectionhttpproxy.h \
+                            compressionbase.h         connectiontcpclient.h   connectionhttpproxy.h \
                             tlsdefault.h              simanager.h             siprofilehandler.h \
                             sihandler.h               siprofileft.h           siprofilefthandler.h \
                             socks5bytestreammanager.h connectionsocks5proxy.h socks5bytestreamdatahandler.h \
@@ -67,7 +68,7 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
 
 noinst_HEADERS = prep.h dns.h nonsaslauth.h mucmessagesession.h stanzaextensionfactory.h tlsgnutlsclient.h \
                    tlsgnutlsbase.h tlsgnutlsclientanon.h tlsgnutlsserveranon.h tlsopenssl.h tlsschannel.h \
-                   compressionzlib.h mutex.h mutexguard.h
+                   compressionzlib.h mutex.h mutexguard.h connectiontcpbase.h
 
 EXTRA_DIST = version.rc
 

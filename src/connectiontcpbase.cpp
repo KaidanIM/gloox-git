@@ -14,7 +14,7 @@
 
 #include "gloox.h"
 
-#include "connectiontcp.h"
+#include "connectiontcpbase.h"
 #include "dns.h"
 #include "logsink.h"
 #include "prep.h"
@@ -46,7 +46,7 @@
 namespace gloox
 {
 
-  ConnectionTCP::ConnectionTCP( const LogSink& logInstance )
+  ConnectionTCPBase::ConnectionTCPBase( const LogSink& logInstance )
     : ConnectionBase( 0 ),
       m_logInstance( logInstance ), m_buf( 0 ), m_socket( -1 ), m_totalBytesIn( 0 ),
       m_totalBytesOut( 0 ), m_bufsize( 1024 ), m_cancel( true )
@@ -55,7 +55,7 @@ namespace gloox
     init();
   }
 
-  ConnectionTCP::ConnectionTCP( const LogSink& logInstance,
+  ConnectionTCPBase::ConnectionTCPBase( const LogSink& logInstance,
                                 const std::string& server, int port )
     : ConnectionBase( 0 ),
       m_logInstance( logInstance ), m_buf( 0 ), m_socket( -1 ), m_totalBytesIn( 0 ),
@@ -66,7 +66,7 @@ namespace gloox
     init();
   }
 
-  ConnectionTCP::ConnectionTCP( ConnectionDataHandler *cdh, const LogSink& logInstance,
+  ConnectionTCPBase::ConnectionTCPBase( ConnectionDataHandler *cdh, const LogSink& logInstance,
                                 const std::string& server, int port )
     : ConnectionBase( cdh ),
       m_logInstance( logInstance ), m_buf( 0 ), m_socket( -1 ), m_totalBytesIn( 0 ),
@@ -77,14 +77,14 @@ namespace gloox
     init();
   }
 
-  void ConnectionTCP::init()
+  void ConnectionTCPBase::init()
   {
     m_buf = (char*)calloc( m_bufsize + 1, sizeof( char ) );
     m_sendMutex = new Mutex();
     m_recvMutex = new Mutex();
   }
 
-  ConnectionTCP::~ConnectionTCP()
+  ConnectionTCPBase::~ConnectionTCPBase()
   {
     delete m_sendMutex;
     delete m_recvMutex;
@@ -93,63 +93,12 @@ namespace gloox
     m_buf = 0;
   }
 
-  ConnectionTCP* ConnectionTCP::newInstance() const
-  {
-    return new ConnectionTCP( m_handler, m_logInstance, m_server, m_port );
-  }
-
-  ConnectionError ConnectionTCP::connect()
-  {
-    MutexGuard mg( m_sendMutex );
-
-    if( !m_handler || m_state > StateDisconnected )
-      return ConnNotConnected;
-
-    m_state = StateConnecting;
-
-    mg.unlock();
-
-    if( m_socket < 0 )
-    {
-      if( m_port == -1 )
-        m_socket = DNS::connect( m_server, m_logInstance );
-      else
-        m_socket = DNS::connect( m_server, m_port, m_logInstance );
-    }
-
-    if( m_socket < 0 )
-    {
-      switch( m_socket )
-      {
-        case -ConnConnectionRefused:
-          m_logInstance.log( LogLevelError, LogAreaClassConnectionTCP, m_server + ": connection refused" );
-          break;
-        case -ConnDnsError:
-          m_logInstance.log( LogLevelError, LogAreaClassConnectionTCP, m_server + ": host not found" );
-          break;
-        default:
-          m_logInstance.log( LogLevelError, LogAreaClassConnectionTCP, "Unknown error condition" );
-          break;
-      }
-      m_handler->handleDisconnect( (ConnectionError)-m_socket );
-      return (ConnectionError)-m_socket;
-    }
-    else
-    {
-      m_state = StateConnected;
-    }
-
-    m_cancel = false;
-    m_handler->handleConnect();
-    return ConnNoError;
-  }
-
-  void ConnectionTCP::disconnect()
+  void ConnectionTCPBase::disconnect()
   {
     m_cancel = true;
   }
 
-  bool ConnectionTCP::dataAvailable( int timeout )
+  bool ConnectionTCPBase::dataAvailable( int timeout )
   {
     if( m_socket < 0 )
       return true; // let recv() catch the closed fd
@@ -167,7 +116,7 @@ namespace gloox
              && FD_ISSET( m_socket, &fds ) != 0 );
   }
 
-  ConnectionError ConnectionTCP::recv( int timeout )
+  ConnectionError ConnectionTCPBase::recv( int timeout )
   {
     MutexGuard mg( m_recvMutex );
 
@@ -202,7 +151,7 @@ namespace gloox
     return ConnNoError;
   }
 
-  ConnectionError ConnectionTCP::receive()
+  ConnectionError ConnectionTCPBase::receive()
   {
     if( m_socket < 0 )
       return ConnNotConnected;
@@ -213,7 +162,7 @@ namespace gloox
     return err == ConnNoError ? ConnNotConnected : err;
   }
 
-  bool ConnectionTCP::send( const std::string& data )
+  bool ConnectionTCPBase::send( const std::string& data )
   {
     MutexGuard mg( m_sendMutex );
 
@@ -239,13 +188,13 @@ namespace gloox
     return sent != -1;
   }
 
-  void ConnectionTCP::getStatistics( int &totalIn, int &totalOut )
+  void ConnectionTCPBase::getStatistics( int &totalIn, int &totalOut )
   {
     totalIn = m_totalBytesIn;
     totalOut = m_totalBytesOut;
   }
 
-  void ConnectionTCP::cleanup()
+  void ConnectionTCPBase::cleanup()
   {
     if( m_socket >= 0 )
     {
