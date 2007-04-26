@@ -92,6 +92,7 @@ class ConnectionImpl : public ConnectionBase
       m_pos = 0;
     }
     virtual void getStatistics( int& /*totalIn*/, int& /*totalOut*/ ) {}
+    virtual ConnectionBase* newInstance() const { return 0; }
 
   private:
     int m_test;
