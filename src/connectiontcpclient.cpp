@@ -43,11 +43,6 @@
 namespace gloox
 {
 
-  ConnectionTCPClient::ConnectionTCPClient( const LogSink& logInstance )
-    : ConnectionTCPBase( logInstance )
-  {
-  }
-
   ConnectionTCPClient::ConnectionTCPClient( const LogSink& logInstance,
                                             const std::string& server, int port )
     : ConnectionTCPBase( logInstance, server, port )

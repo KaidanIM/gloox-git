@@ -37,12 +37,6 @@ namespace gloox
   {
     public:
       /**
-       * Constructs an empty ConnectionTCPClient object. You need to call setServer() to make it usable.
-       * @param logInstance The log target. Obtain it from ClientBase::logInstance().
-       */
-      ConnectionTCPClient( const LogSink& logInstance );
-
-      /**
        * Constructs a new ConnectionTCPClient object.
        * @param logInstance The log target. Obtain it from ClientBase::logInstance().
        * @param server A server to connect to.
@@ -52,8 +46,7 @@ namespace gloox
        * registerConnectionDataHandler(). This is not necessary if this object is
        * part of a 'connection chain', e.g. with ConnectionHTTPProxy.
        */
-      ConnectionTCPClient( const LogSink& logInstance,
-                           const std::string& server, int port = -1 );
+      ConnectionTCPClient( const LogSink& logInstance, const std::string& server, int port = -1 );
 
       /**
        * Constructs a new ConnectionTCPClient object.
