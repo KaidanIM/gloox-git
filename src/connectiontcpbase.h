@@ -11,8 +11,8 @@
 */
 
 
-#ifndef CONNECTIONTCP_H__
-#define CONNECTIONTCP_H__
+#ifndef CONNECTIONTCPBASE_H__
+#define CONNECTIONTCPBASE_H__
 
 #include "gloox.h"
 #include "connectionbase.h"
@@ -124,4 +124,4 @@ namespace gloox
 
 }
 
-#endif // CONNECTIONTCP_H__
+#endif // CONNECTIONTCPBASE_H__
