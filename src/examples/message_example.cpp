@@ -11,7 +11,7 @@
 #include "../lastactivity.h"
 #include "../loghandler.h"
 #include "../logsink.h"
-#include "../connectiontcp.h"
+#include "../connectiontcpclient.h"
 #include "../connectionsocks5proxy.h"
 #include "../connectionhttpproxy.h"
 #include "../messagehandler.h"
