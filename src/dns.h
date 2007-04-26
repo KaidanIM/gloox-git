@@ -103,6 +103,18 @@ namespace gloox
        */
       static int connect( const std::string& domain, unsigned short port, const LogSink& logInstance );
 
+      /**
+       * Prepares and returnes a simple socket.
+       * @return A simple socket.
+       */
+      static int getSocket();
+
+      /**
+       * Closes the given socket.
+       * @param fd The socket to close.
+       */
+      static void closeSocket( int fd );
+
     private:
       static HostMap defaultHostMap( const std::string& domain, const LogSink& logInstance );
       static void cleanup();
