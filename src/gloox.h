@@ -287,6 +287,7 @@
  * @li XEP-0049 @link gloox::PrivateXML Private XML Storage @endlink
  * @li XEP-0050 @link gloox::Adhoc Ad-hoc Commands @endlink
  * @li XEP-0054 @link gloox::VCardManager vcard-temp @endlink
+ * @li XEP-0065 Used with File Transfer. See below.
  * @li XEP-0066 @link gloox::OOB Out of Band Data @endlink
  * @li XEP-0077 @link gloox::Registration In-Band Registration @endlink
  * @li XEP-0078 Non-SASL Authentication (automatically used if the server does not support SASL)
@@ -296,6 +297,8 @@
  * examples)
  * @li XEP-0091 @link gloox::XDelayedDelivery Delayed Delivery @endlink (old spec)
  * @li XEP-0092 Software Version (integrated into @link gloox::Disco Service Discovery @endlink)
+ * @li XEP-0095 Used with File Transfer. See below.
+ * @li XEP-0096 (File Transfer). See @link gloox::SIProfileFT SIProfileFT @endlink and below.
  * @li XEP-0114 @link gloox::Component Jabber Component Protocol @endlink
  * @li XEP-0138 Stream Compression (used automatically if gloox is compiled with zlib and if the server
  * supports it)
@@ -305,10 +308,14 @@
 
  * @section filetransfer_sec File Transfer
  *
- * For file transfer there is currently an implementation of XEP-0047 (In-Band Bytestreams). However,
- * this protocol is probably not suited for offering file transfer to end-users. No other file
- * transfer protocols are currently supported. See
- * @link gloox::InBandBytestreamManager InBandBytestreamManager @endlink for a starting point.
+ * For file transfer gloox implements XEP-0095 (Stream Initiation) and XEP-0096 (File Transfer) for the
+ * signalling, and XEP-0065 (SOCKS5 Bytestreams) for the transport. See
+ * @link gloox::SIProfileFT SIProfileFT @endlink.
+ *
+ * Additionally, there is an implementation of XEP-0047 (In-Band Bytestreams) which is currently not
+ * integrated into the signalling of XEPs 0095  and 0096. Therefore, this protocol is probably not
+ * suited for offering file transfer to end-users.
+ * See @link gloox::InBandBytestreamManager InBandBytestreamManager @endlink.
  */
 
 #ifndef GLOOX_H__
