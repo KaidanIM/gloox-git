@@ -65,7 +65,9 @@ namespace gloox
       /**
        * Notifies the implementor of successful establishing of an outgoing SOCKS5 bytestream request.
        * The stream has been accepted by the remote entity and is ready to send data.
-       * The SOCKS5BytestreamHandler becomes the owner of the SOCKS5Bytestream object.
+       * The SOCKS5BytestreamHandler does @b not become the owner of the SOCKS5Bytestream object.
+       * Use SIProfileFT::dispose() (or SOCKS5BytestreamManager::dispose() if you use
+       * SOCKS5BytestreamManager directly) to get rid of the bytestream object after it has been closed.
        * @param to The remote entity's JID.
        * @param s5b The new bytestream.
        */

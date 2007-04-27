@@ -112,6 +112,18 @@ namespace gloox
       m_socks5Manager->dispose( s5b );
   }
 
+  void SIProfileFT::setStreamHosts( StreamHostList hosts )
+  {
+    if( m_socks5Manager )
+      m_socks5Manager->setStreamHosts( hosts );
+  }
+
+  void SIProfileFT::addStreamHost( const JID& jid, const std::string& host, int port )
+  {
+    if( m_socks5Manager )
+      m_socks5Manager->addStreamHost( jid, host, port );
+  }
+
   void SIProfileFT::handleSIRequest( const JID& from, const std::string& sid, const std::string& profile,
                                      Tag* si, Tag* ptag, Tag* /*fneg*/ )
   {
@@ -131,10 +143,23 @@ printf( "handleSIRequest\n" );
   }
 
   void SIProfileFT::handleSIRequestResult( const JID& from, const std::string& sid,
-                                           Tag* /*si*/, Tag* /*ptag*/, Tag* /*fneg*/ )
+                                           Tag* /*si*/, Tag* /*ptag*/, Tag* fneg )
   {
-    if( m_handler )
-      m_handler->handleFTRequestResult( from, sid );
+
+    if( m_socks5Manager && fneg && fneg->hasChild( "x", "xmlns", XMLNS_X_DATA ) )
+    {
+      DataForm df( fneg->findChild( "x", "xmlns", XMLNS_X_DATA ) );
+      DataFormField* dff = df.field( "stream-method" );
+      if( dff && dff->value() == XMLNS_BYTESTREAMS )
+      {
+        printf( "requesting new SOCKS5Bytestream\n" );
+        // check return value:
+        m_socks5Manager->requestSOCKS5Bytestream( from, SOCKS5BytestreamManager::S5BTCP, sid );
+      }
+    }
+
+//     if( m_handler )
+//       m_handler->handleFTRequestResult( from, sid );
   }
 
   void SIProfileFT::handleSIRequestError( Stanza* stanza )
@@ -152,12 +177,16 @@ printf( "handleSIRequest\n" );
 
   void SIProfileFT::handleIncomingSOCKS5Bytestream( const std::string& sid, SOCKS5Bytestream* s5b )
   {
+    printf( "SIProfileFT::handleIncomingSOCKS5Bytestream\n" );
     if( m_handler )
       m_handler->handleFTSOCKS5Bytestream( s5b );
   }
 
   void SIProfileFT::handleOutgoingSOCKS5Bytestream( const JID& to, SOCKS5Bytestream *s5b )
   {
+    printf( "SIProfileFT::handleOutgoingSOCKS5Bytestream\n" );
+    if( m_handler )
+      m_handler->handleFTSOCKS5Bytestream( s5b );
   }
 
   void SIProfileFT::handleSOCKS5BytestreamError( const JID& remote, StanzaError se )

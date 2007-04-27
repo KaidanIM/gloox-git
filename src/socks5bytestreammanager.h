@@ -80,13 +80,20 @@ namespace gloox
       void setStreamHosts( StreamHostList hosts ) { m_hosts = hosts; }
 
       /**
+       * Adds one StreamHost to the list of StreamHosts.
+       * @param jid The StreamHost's JID.
+       * @param host The StreamHost's hostname.
+       * @param port The StreamHost's port.
+       */
+      void addStreamHost( const JID& jid, const std::string& host, int port );
+
+      /**
        * This function requests a bytestream with the remote entity.
        * Data can only be sent over an open stream. Use isOpen() to find out what the stream's
        * current state is. However, successful opening/initiation will be announced by means of the
        * SOCKS5BytestreamHandler interface. Multiple bytestreams (even per JID) can be initiated
        * without waiting for success.
        * @param to The recipient of the requested bytestream.
-       * @param s5bh The SOCKS5BytestreamHandler to send the new bytestream to.
        * @param mode The desired transport layer protocol.
        * @param hosts A list of available StreamHosts. See XEP-0065.
        * @param sid The bytestreakm's stream ID, if previously negotiated e.g. using SI (XEP-0095).
@@ -94,8 +101,7 @@ namespace gloox
        * @b not indicate that the bytestream has been opened. This is announced by means of the
        * SOCKS5BytestreamHandler.
        */
-      bool requestSOCKS5Bytestream( const JID& to, SOCKS5BytestreamHandler *s5bh,
-                                    S5BMode mode, const std::string& sid = "" );
+      bool requestSOCKS5Bytestream( const JID& to, S5BMode mode, const std::string& sid = "" );
 
       /**
        * To get rid of a bytestream (i.e., close and delete it), call this function. You
@@ -141,32 +147,26 @@ namespace gloox
     private:
       void rejectSOCKS5Bytestream( const JID& from, const std::string& id, StanzaError reason );
       bool haveStream( const JID& from );
-      const StreamHost* findProxy( const JID& from, const std::string& hostjid, std::string& sid );
+      const StreamHost* findProxy( const JID& from, const std::string& hostjid, const std::string& sid );
 
       void acknowledgeStreamHost( bool success, const JID& jid, const std::string& sid );
 
       enum IBBActionType
       {
         S5BOpenStream,
-        S5BCloseStream
+        S5BCloseStream,
+        S5BActivateStream
       };
 
       typedef std::map<std::string, SOCKS5Bytestream*> S5BMap;
       S5BMap m_s5bMap;
-
-      struct TrackItem
-      {
-        std::string sid;
-        SOCKS5BytestreamHandler *s5bh;
-      };
-      typedef std::map<std::string, TrackItem> TrackMap;
-      TrackMap m_trackMap;
 
       struct AsyncS5BItem
       {
         JID from;
         std::string id;
         StreamHostList sHosts;
+        bool incoming;
       };
       typedef std::map<std::string, AsyncS5BItem> AsyncTrackMap;
       AsyncTrackMap m_asyncTrackMap;
@@ -174,6 +174,7 @@ namespace gloox
       ClientBase *m_parent;
       SOCKS5BytestreamHandler *m_socks5BytestreamHandler;
       StreamHostList m_hosts;
+      StringMap m_trackMap;
 
   };
 

@@ -43,10 +43,19 @@ namespace gloox
     }
   }
 
-  bool SOCKS5BytestreamManager::requestSOCKS5Bytestream( const JID& to, SOCKS5BytestreamHandler *s5bh,
-                                                         S5BMode /*mode*/, const std::string& sid )
+  void SOCKS5BytestreamManager::addStreamHost( const JID& jid, const std::string& host, int port )
   {
-    if( !m_parent || !s5bh || m_hosts.empty() )
+    StreamHost sh;
+    sh.jid = jid;
+    sh.host = host;
+    sh.port = port;
+    m_hosts.push_back( sh );
+  }
+
+  bool SOCKS5BytestreamManager::requestSOCKS5Bytestream( const JID& to, S5BMode /*mode*/,
+                                                         const std::string& sid )
+  {
+    if( !m_parent || m_hosts.empty() )
       return false;
 
     const std::string& msid = sid.empty() ? m_parent->getID() : sid;
@@ -62,15 +71,19 @@ namespace gloox
     StreamHostList::const_iterator it = m_hosts.begin();
     for( ; it != m_hosts.end(); ++it )
     {
-      Tag* s = new Tag( "streamhost", "jid", (*it).jid.full() );
+      Tag* s = new Tag( q, "streamhost", "jid", (*it).jid.full() );
       s->addAttribute( "host", (*it).host );
       s->addAttribute( "port", (*it).port );
     }
 
-    TrackItem item;
-    item.sid = msid;
-    item.s5bh = s5bh;
-    m_trackMap[id] = item;
+    AsyncS5BItem asi;
+    asi.sHosts = m_hosts;
+    asi.id = id;
+    asi.from = to;
+    asi.incoming = false;
+    m_asyncTrackMap[msid] = asi;
+
+    m_trackMap[id] = msid;
     m_parent->trackID( this, id, S5BOpenStream );
     m_parent->send( iq );
 
@@ -85,22 +98,42 @@ namespace gloox
       return;
 
     Tag *iq = new Tag( "iq" );
-    iq->addAttribute( "to", (*it).second.from.full() );
-    iq->addAttribute( "id", (*it).second.id );
 
-    if( success )
+    if( (*it).second.incoming )
     {
-      iq->addAttribute( "type", "result" );
-      Tag* q = new Tag( iq, "query", "xmlns", XMLNS_XMPP_STANZAS );
-      new Tag( q, "streamhost-used", "jid", jid.full() );
+      iq->addAttribute( "to", (*it).second.from.full() );
+      iq->addAttribute( "id", (*it).second.id );
+
+      if( success )
+      {
+        iq->addAttribute( "type", "result" );
+        Tag* q = new Tag( iq, "query", "xmlns", XMLNS_XMPP_STANZAS );
+        new Tag( q, "streamhost-used", "jid", jid.full() );
+      }
+      else
+      {
+        iq->addAttribute( "type", "error" );
+        Tag* e = new Tag( iq, "error" );
+        e->addAttribute( "code", "404" );
+        e->addAttribute( "type", "cancel" );
+        new Tag( e, "item-not-found", "xmlns", XMLNS_XMPP_STANZAS );
+      }
     }
     else
     {
-      iq->addAttribute( "type", "error" );
-      Tag* e = new Tag( iq, "error" );
-      e->addAttribute( "code", "404" );
-      e->addAttribute( "type", "cancel" );
-      new Tag( e, "item-not-found", "xmlns", XMLNS_XMPP_STANZAS );
+      if( success )
+      {
+        const std::string& id = m_parent->getID();
+        iq->addAttribute( "to", jid.full() );
+        iq->addAttribute( "id", id );
+        iq->addAttribute( "type", "set" );
+        Tag* q = new Tag( iq, "query", "xmlns", XMLNS_BYTESTREAMS );
+        q->addAttribute( "sid", sid );
+        new Tag( q, "activate", (*it).second.from.full() );
+
+        m_trackMap[id] = sid;
+        m_parent->trackID( this, id, S5BActivateStream );
+      }
     }
 
     m_parent->send( iq );
@@ -110,6 +143,9 @@ namespace gloox
   {
     Tag* q = stanza->findChild( "query", "xmlns", XMLNS_BYTESTREAMS );
     if( !q || !m_socks5BytestreamHandler )
+      return false;
+
+    if( m_trackMap.find( stanza->id() ) != m_trackMap.end() )
       return false;
 
     printf( "SOCKS5BytestreamManager::handleIq\n" );
@@ -143,25 +179,9 @@ namespace gloox
         }
         asi.id = stanza->id();
         asi.from = stanza->from();
+        asi.incoming = true;
         m_asyncTrackMap[sid] = asi;
         m_socks5BytestreamHandler->handleIncomingSOCKS5BytestreamRequest( sid, stanza->from() );
-        break;
-      }
-      case StanzaIqResult:
-      {
-        Tag* s = q->findChild( "streamhost-used" );
-        if( !s || !s->hasAttribute( "jid" ) )
-          return true;
-
-        std::string sid;
-        const StreamHost* sh = findProxy( stanza->from(), s->findAttribute( "jid" ), sid );
-        if( sh )
-        {
-          SOCKS5Bytestream* s5b = new SOCKS5Bytestream( this, m_parent->connectionImpl()->newInstance(),
-                                                        m_parent->logInstance(),
-                                                        stanza->from(), m_parent->jid(), sid );
-          m_s5bMap[stanza->id()] = s5b;
-        }
         break;
       }
       case StanzaIqError:
@@ -175,20 +195,23 @@ namespace gloox
   }
 
   const StreamHost* SOCKS5BytestreamManager::findProxy( const JID& from, const std::string& hostjid,
-                                                        std::string& sid )
+                                                        const std::string& sid )
   {
+    printf( "SOCKS5BytestreamManager::findProxy\n" );
     AsyncTrackMap::const_iterator it = m_asyncTrackMap.find( sid );
     if( it == m_asyncTrackMap.end() )
       return 0;
+    printf( "found sid in AsyncTrackMap: %s\n", sid.c_str() );
 
     if( (*it).second.from == from )
     {
+      printf( "found from: %s\n", from.full().c_str() );
       StreamHostList::const_iterator it2 = (*it).second.sHosts.begin();
       for( ; it2 != (*it).second.sHosts.end(); ++it2 )
       {
         if( (*it2).jid == hostjid )
         {
-          sid = (*it).first;
+          printf( "found proxy jid: %s\n", hostjid.c_str() );
           return &(*it2);
         }
       }
@@ -221,7 +244,7 @@ namespace gloox
                                                   m_parent->logInstance(),
                                                   (*it).second.from, m_parent->jid(), sid );
     s5b->setStreamHosts( (*it).second.sHosts );
-    m_s5bMap[(*it).second.id] = s5b;
+    m_s5bMap[sid] = s5b;
     m_socks5BytestreamHandler->handleIncomingSOCKS5Bytestream( sid, s5b );
 
 //     m_asyncTrackMap.erase( it );
@@ -288,41 +311,79 @@ namespace gloox
 
   bool SOCKS5BytestreamManager::handleIqID( Stanza *stanza, int context )
   {
+    printf( "SOCKS5BytestreamManager::handleIqID\n" );
+
+    Tag* q = stanza->findChild( "query", "xmlns", XMLNS_BYTESTREAMS );
+    if( !q || !m_socks5BytestreamHandler )
+      return false;
+
+    StringMap::iterator it = m_trackMap.find( stanza->id() );
+    if( it == m_trackMap.end() )
+      return false;
+
     switch( context )
     {
       case S5BOpenStream:
       {
-        TrackMap::iterator it = m_trackMap.find( stanza->id() );
-        if( it != m_trackMap.end() )
+        switch( stanza->subtype() )
         {
-          switch( stanza->subtype() )
+          case StanzaIqResult:
           {
-            case StanzaIqResult:
+            printf( "yeah, found the request\n" );
+            Tag* s = q->findChild( "streamhost-used" );
+            if( !s || !s->hasAttribute( "jid" ) )
+              return false;
+
+            printf( "got a stream-host to use: %s\n", s->findAttribute( "jid" ).c_str() );
+
+            const StreamHost* sh = findProxy( stanza->from(), s->findAttribute( "jid" ), (*it).second );
+            if( sh )
             {
-              SOCKS5Bytestream *s5b = new SOCKS5Bytestream( this, m_parent->connectionImpl()->newInstance(),
+              printf( "findProxy returned true: proxy is valid for this session\n" );
+              SOCKS5Bytestream* s5b = new SOCKS5Bytestream( this,
+                                                            m_parent->connectionImpl()->newInstance(),
                                                             m_parent->logInstance(),
-                                                             stanza->from(), m_parent->jid(),
-                                                            ""/*sid*/ );
-              s5b->setSid( (*it).second.sid );
-              m_s5bMap[(*it).second.sid] = s5b;
-              SOCKS5BytestreamHandler *t = (*it).second.s5bh;
-              m_trackMap.erase( it );
-              t->handleOutgoingSOCKS5Bytestream( stanza->from(), s5b );
-              break;
+                                                            m_parent->jid(), stanza->from(),
+                                                            (*it).second );
+              StreamHostList shl;
+              shl.push_back( *sh );
+              s5b->setStreamHosts( shl );
+              m_s5bMap[(*it).second] = s5b;
+              m_socks5BytestreamHandler->handleOutgoingSOCKS5Bytestream( stanza->from(), s5b );
             }
-            case StanzaIqError:
-              (*it).second.s5bh->handleSOCKS5BytestreamError( stanza->from(), stanza->error() );
-              break;
-            default:
-              break;
+            break;
           }
-          m_trackMap.erase( it );
+          case StanzaIqError:
+            m_socks5BytestreamHandler->handleSOCKS5BytestreamError( stanza->from(), stanza->error() );
+            break;
+          default:
+            break;
+        }
+        break;
+      }
+      case S5BActivateStream:
+      {
+        switch( stanza->subtype() )
+        {
+          case StanzaIqResult:
+          {
+            S5BMap::const_iterator it5 = m_s5bMap.find( (*it).second );
+            if( it5 != m_s5bMap.end() )
+              (*it5).second->activate();
+            break;
+          }
+          case StanzaIqError:
+            m_socks5BytestreamHandler->handleSOCKS5BytestreamError( stanza->from(), stanza->error() );
+            break;
+          default:
+            break;
         }
         break;
       }
       default:
         break;
     }
+    m_trackMap.erase( it );
 
     return false;
   }

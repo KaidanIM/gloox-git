@@ -67,6 +67,7 @@ namespace gloox
       return false;
 
     printf( "SOCKS5Bytestream::connect\n" );
+    printf( "m_connection status: %d\n", m_connection->state() );
 
     StreamHostList::const_iterator it = m_hosts.begin();
     for( ; it != m_hosts.end(); ++it )
@@ -100,17 +101,30 @@ namespace gloox
     return m_socks5->recv( timeout );
   }
 
-  void SOCKS5Bytestream::closed()
+  void SOCKS5Bytestream::activate()
   {
-    m_open = false;
-
+    printf( "SOCKS5Bytestream::activate\n" );
+    m_open = true;
     if( m_socks5BytestreamDataHandler )
-      m_socks5BytestreamDataHandler->handleSOCKS5Close( this );
+      m_socks5BytestreamDataHandler->handleSOCKS5Open( this );
   }
+
+//   void SOCKS5Bytestream::closed()
+//   {
+//     m_open = false;
+//
+//     if( m_socks5BytestreamDataHandler )
+//       m_socks5BytestreamDataHandler->handleSOCKS5Close( this );
+//   }
 
   void SOCKS5Bytestream::close()
   {
-    m_open = false;
+    if( m_open )
+    {
+      m_open = false;
+      m_socks5->disconnect();
+      m_socks5BytestreamDataHandler->handleSOCKS5Close( this );
+    }
   }
 
   void SOCKS5Bytestream::handleReceivedData( const std::string& data )
