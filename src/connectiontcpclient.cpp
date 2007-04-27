@@ -69,7 +69,7 @@ namespace gloox
   {
     MutexGuard mg( m_sendMutex );
 
-    if( !m_handler || m_socket < 0 )
+    if( !m_handler || m_socket >= 0 )
       return ConnNotConnected;
 
     if( m_state > StateDisconnected )
