@@ -69,13 +69,14 @@ namespace gloox
        * @param to The entity to talk to.
        * @param name The file's name. Mandatory.
        * @param size The file's size. Mandatory.
-       * @param hash The file's content's MD5 hash.
+       * @param hash The file content's MD5 hash.
        * @param desc A description.
        * @param date The file's last modification date/time. See XEP-0082 for details.
        * @param mimetype The file's mime-type. Defaults to 'binary/octet-stream' if empty.
        */
-      void requestFT( const JID& to, const std::string& name, int size, const std::string& hash,
-                      const std::string& desc, const std::string& date, const std::string& mimetype );
+      void requestFT( const JID& to, const std::string& name, int size, const std::string& hash = "",
+                      const std::string& desc = "", const std::string& date = "",
+                      const std::string& mimetype = "" );
 
       /**
        * Call this function to accept a file transfer request previously announced by means of
@@ -119,6 +120,21 @@ namespace gloox
        */
       void removeSIProfileFTHandler() { m_handler = 0; }
 
+      /**
+       * Sets a list of StreamHosts that will be used for subsequent SOCKS5 bytestream requests.
+       * @note At least one StreamHost is required.
+       * @param hosts A list of StreamHosts.
+       */
+      void setStreamHosts( StreamHostList hosts );
+
+      /**
+       * Adds one StreamHost to the list of SOCKS5 StreamHosts.
+       * @param jid The StreamHost's JID.
+       * @param host The StreamHost's hostname.
+       * @param port The StreamHost's port.
+       */
+      void addStreamHost( const JID& jid, const std::string& host, int port );
+
       // re-implemented from SIProfileHandler
       virtual void handleSIRequest( const JID& from, const std::string& sid, const std::string& profile,
                                     Tag* si, Tag* ptag, Tag* fneg );
@@ -147,6 +163,7 @@ namespace gloox
       SIManager* m_manager;
       SIProfileFTHandler* m_handler;
       SOCKS5BytestreamManager* m_socks5Manager;
+      StreamHostList m_hosts;
 
   };
 
