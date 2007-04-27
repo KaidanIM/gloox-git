@@ -49,7 +49,7 @@ namespace gloox
       typedef std::list<DataFormField*> FieldList;
 
       /**
-       * Use this function to check whether  this form contains a field with the given name.
+       * Use this function to check whether this form contains a field with the given name.
        * @param field The name of the field (the content of the 'var' attribute).
        * @return Whether or not the form contains the named field.
        */
