@@ -33,7 +33,61 @@ namespace gloox
   /**
    * @brief An implementation of the file transfer SI profile (XEP-0096).
    *
-   * An SIProfileFT object acts as a 'plugin' to the SIManager.
+   * An SIProfileFT object acts as a 'plugin' to the SIManager. SIProfileFT
+   * manages most of the file transfer functionality.
+   *
+   * Usage:
+   *
+   * Create a new SIManager object. It is needed for the signalling only and you won't
+   * have to interact with it. You need, however, to keep it around as long as you want
+   * to be able to send and/or receive files.
+   *
+   * Pass that SIManager object to the constructor of SIProfileFT. Both SIManager and
+   * SIProfileFT need a ClientBase -derived object. SIProfileFT also needs a SIProfileFTHandler -derived
+   * object that will receive file transfer-related events.
+   * @code
+   * class MyFileTransferHandler : public SIProfileFTHandler
+   * {
+   *   // ...
+   * };
+   *
+   * Client* client = new Client( ... );
+   * // ...
+   * MyFileTransferHandler* mh = new MyFileTransferHandler( ... );
+   *
+   * SIManager* si = new SIManager( client );
+   * SIProfileFT* ft = new SIProfileFT( client, si, mh );
+   * @endcode
+   *
+   * You are now, basically, ready to send and receive files.
+   *
+   * A couple of notes:
+   * @li To be able to send files, you will need access to a SOCKS5 bytestream proxy (called
+   * StreamHost)(not an ordinary SOCKS5 proxy). You should use Disco to query it for its host
+   * and port and feed that information into SIProfileFT:
+   *
+   * @code
+   * ft->addStreamHost( JID( "proxy.jabber.org" ), "101.102.103.104", 666 );
+   * @endcode
+   *
+   * You should @b not hard-code this information (esp. host/IP and port) into your app since
+   * the proxy may go down occasionally or vanish completely.
+   *
+   * @li When you finally receive a SOCKS5Bytestream via the SIProfileFTHandler, you will need
+   * to integrate this bytestream with your mainloop, or put it into a separate thread (if
+   * occasional blocking is not acceptable. You will have to call connect() on the bytestream.
+   * connect()will block until it has a connection established with one of the StreamHosts. Further,
+   * if you want to receive a file via the bytestream, you will have to call recv() on
+   * the object from time to time.
+   *
+   * When cleaning up, delete the objectes you created above in the opposite order of
+   * creation:
+   *
+   * @code
+   * delete ft;
+   * delete si;
+   * delete client;
+   * @endcode
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
