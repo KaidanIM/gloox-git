@@ -71,6 +71,11 @@ namespace gloox
       bool connect();
 
       /**
+       * Closes the bytestream.
+       */
+      void close();
+
+      /**
        * Use this function to send a chunk of data over an open bytestream. There is
        * no limit for the size of the chunk (other than your machine's memory).
        * If the stream is not open or has been closed again
@@ -96,10 +101,18 @@ namespace gloox
       const std::string& sid() const { return m_sid; };
 
       /**
-       * Returns the remote entity's JID.
+       * Returns the target entity's JID. If this bytestream is remote-initiated, this is
+       * the local JID. If it is local-initiated, this is the remote entity's JID.
        * @return The target's JID.
        */
       const JID& target() const { return m_target; }
+
+      /**
+       * Returns the initiating entity's JID. If this bytestream is remote-initiated, this is
+       * the remote entity's JID. If it is local-initiated, this is the local JID.
+       * @return The initiator's JID.
+       */
+      const JID& initiator() const { return m_initiator; }
 
       /**
        * Sets the connection to use.
@@ -142,9 +155,9 @@ namespace gloox
       SOCKS5Bytestream( SOCKS5BytestreamManager* manager, ConnectionBase* connection,
                         LogSink& logInstance, const JID& initiator, const JID& target,
                         const std::string& sid );
-      void close();  // locally
       void closed(); // by remote entity
       void setSid( const std::string& sid ) { m_sid = sid; };
+      void activate();
 
       SOCKS5BytestreamManager *m_manager;
       ConnectionBase* m_connection;
