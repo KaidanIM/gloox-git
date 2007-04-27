@@ -24,6 +24,7 @@
  * @ref msg_sec <br>
  * @ref xeps_sec <br>
  * @ref filetransfer_sec <br>
+ * @ref proxy_sec <br>
  * <br>
  *
  * @section intro_sec Introduction
@@ -316,6 +317,12 @@
  * integrated into the signalling of XEPs 0095  and 0096. Therefore, this protocol is probably not
  * suited for offering file transfer to end-users.
  * See @link gloox::InBandBytestreamManager InBandBytestreamManager @endlink.
+ *
+ * @section proxy_sec HTTP and SOCKS5 Proxy support
+ *
+ * gloox is capable of traversing HTTP as well as SOCKS5 proxies, even chained. See
+ * @link gloox::ConnectionHTTPProxy ConnectionHTTPProxy @endlink and
+ * @link gloox::ConnectionSOCKS5Proxy ConnectionSOCKS5Proxy @endlink.
  */
 
 #ifndef GLOOX_H__
