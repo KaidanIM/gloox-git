@@ -369,7 +369,7 @@ namespace gloox
 
   bool ClientBase::hasTls()
   {
-#ifdef HAVE_TLS
+#if defined( HAVE_GNUTLS ) || defined( HAVE_OPENSSL ) || defined( HAVE_WINTLS )
     return true;
 #else
     return false;
