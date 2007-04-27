@@ -6,7 +6,7 @@ AM_CPPFLAGS = -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare
 
 noinst_PROGRAMS = register_example disco_example adhoc_example roster_example privatexml_example component_example \
                   bookmarkstorage_example annotations_example privacylist_example message_example flexoff_example \
-                  ibb_example vcard_example reset_example muc_example e2ee_client e2ee_server ft_example
+                  ibb_example vcard_example reset_example muc_example e2ee_client e2ee_server ft_recv ft_send
 
 register_example_SOURCES = register_example.cpp
 register_example_LDADD = ../libgloox.la $(LDFLAGS)
@@ -76,7 +76,11 @@ e2ee_server_SOURCES = e2ee_server.cpp
 e2ee_server_LDADD = ../libgloox.la $(LDFLAGS)
 e2ee_server_CFLAGS = $(CPPFLAGS)
 
-ft_example_SOURCES = ft_example.cpp
-ft_example_LDADD = ../libgloox.la $(LDFLAGS)
-ft_example_CFLAGS = $(CPPFLAGS)
+ft_recv_SOURCES = ft_recv.cpp
+ft_recv_LDADD = ../libgloox.la $(LDFLAGS)
+ft_recv_CFLAGS = $(CPPFLAGS)
+
+ft_send_SOURCES = ft_send.cpp
+ft_send_LDADD = ../libgloox.la $(LDFLAGS)
+ft_send_CFLAGS = $(CPPFLAGS)
 

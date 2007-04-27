@@ -12,9 +12,13 @@
 #include "../socks5bytestreamdatahandler.h"
 using namespace gloox;
 
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <string>
+#include <fstream>
+#include <ios>
 
 #if defined( WIN32 ) || defined( _WIN32 )
 # include <windows.h>
@@ -23,17 +27,26 @@ using namespace gloox;
 class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, SOCKS5BytestreamDataHandler
 {
   public:
-    FTTest() : m_quit( false ) {}
+    FTTest( const JID& to, const std::string& file ) : m_s5b( 0 ), m_to( to ), m_file( file ), m_quit( false ) {}
 
     virtual ~FTTest() {}
 
     void start()
     {
 
-      JID jid( "hurkhurk@example.net/gloox" );
-      j = new Client( jid, "hurkhurks" );
+      struct stat f_stat;
+      if( stat( m_file.c_str(), &f_stat ) )
+        return;
+
+      m_size = f_stat.st_size;
+      std::ifstream ifile( m_file.c_str(), std::ios_base::in | std::ios_base::binary );
+      if( !ifile )
+        return;
+
+      JID jid( "me@server/glooxsendfile" );
+      j = new Client( jid, "pwd" );
       j->registerConnectionListener( this );
-      j->disco()->setVersion( "ftTest", GLOOX_VERSION, "Linux" );
+      j->disco()->setVersion( "ftsend", GLOOX_VERSION, "Linux" );
       j->disco()->setIdentity( "client", "bot" );
       StringList ca;
       ca.push_back( "/path/to/cacert.crt" );
@@ -44,23 +57,36 @@ class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, SOCKS5
       s = new SIManager( j );
       f = new SIProfileFT( j, s, this );
 
+      // you should obtain this using disco, really
+      f->addStreamHost( JID( "proxy.jabber.org" ), "208.245.212.98", 7777 );
+
       if( j->connect( false ) )
       {
+        char input[1024];
         ConnectionError ce = ConnNoError;
         while( ce == ConnNoError )
         {
           if( m_quit )
             j->disconnect();
 
-          ce = j->recv( 100 );
-          std::list<SOCKS5Bytestream*>::iterator it = m_s5bs.begin();
-          for( ; it != m_s5bs.end(); ++it )
-            (*it)->recv( 100 );
+          ce = j->recv( 1 );
+          if( m_s5b && !ifile.eof() )
+          {
+            if( m_s5b->isOpen() )
+            {
+              ifile.read( input, 1024 );
+              std::string t( input, ifile.gcount() );
+              m_s5b->send( t );
+            }
+            m_s5b->recv( 1 );
+          }
+          else if( m_s5b )
+            m_s5b->close();
         }
         printf( "ce: %d\n", ce );
       }
 
-      f->dispose( m_s5bs.front() );
+      f->dispose( m_s5b );
       delete f;
       delete s;
       delete j;
@@ -69,11 +95,12 @@ class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, SOCKS5
     virtual void onConnect()
     {
       printf( "connected!!!\n" );
+      f->requestFT( m_to, m_file, m_size );
     }
 
     virtual void onDisconnect( ConnectionError e )
     {
-      printf( "message_test: disconnected: %d\n", e );
+      printf( "ft_send: disconnected: %d\n", e );
       if( e == ConnAuthenticationFailed )
         printf( "auth failed. reason: %d\n", j->authError() );
     };
@@ -111,14 +138,15 @@ class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, SOCKS5
 
     virtual void handleFTRequestError( Stanza* stanza )
     {
+      printf( "ft request error\n" );
     }
 
     virtual void handleFTSOCKS5Bytestream( SOCKS5Bytestream* s5b )
     {
       printf( "received socks5 bytestream\n" );
-      m_s5bs.push_back( s5b );
-      s5b->registerSOCKS5BytestreamDataHandler( this );
-      if( s5b->connect() )
+      m_s5b = s5b;
+      m_s5b->registerSOCKS5BytestreamDataHandler( this );
+      if( m_s5b->connect() )
       {
         printf( "ok! s5b connected to streamhost\n" );
       }
@@ -131,6 +159,7 @@ class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, SOCKS5
 
     virtual void handleSOCKS5Error( SOCKS5Bytestream* s5b, Stanza* stanza )
     {
+      printf( "socks5 stream error\n" );
     }
 
     virtual void handleSOCKS5Open( SOCKS5Bytestream* s5b )
@@ -141,22 +170,31 @@ class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, SOCKS5
     virtual void handleSOCKS5Close( SOCKS5Bytestream* s5b )
     {
       printf( "stream closed\n" );
-//       m_quit = true;
+      m_quit = true;
     }
 
   private:
     Client *j;
     SIManager* s;
     SIProfileFT* f;
-    SOCKS5BytestreamManager* s5b;
-    std::list<SOCKS5Bytestream*> m_s5bs;
+    SOCKS5Bytestream* m_s5b;
+    JID m_to;
+    std::string m_file;
     bool m_quit;
+    int m_size;
 };
 
-int main( int /*argc*/, char** /*argv*/ )
+int main( int argc, char** argv )
 {
-  FTTest *r = new FTTest();
-  r->start();
-  delete( r );
+  if( argc == 3 )
+  {
+    FTTest *r = new FTTest( JID( argv[1] ), argv[2] );
+    r->start();
+    delete( r );
+  }
+  else
+  {
+    printf( "error: need jid + file\n" );
+  }
   return 0;
 }
