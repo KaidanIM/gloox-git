@@ -192,7 +192,7 @@ namespace gloox
       void addStreamHost( const JID& jid, const std::string& host, int port );
 
       // re-implemented from SIProfileHandler
-      virtual void handleSIRequest( const JID& from, const std::string& sid, const std::string& profile,
+      virtual void handleSIRequest( const JID& from, const std::string& id, const std::string& profile,
                                     Tag* si, Tag* ptag, Tag* fneg );
 
       // re-implemented from SIHandler

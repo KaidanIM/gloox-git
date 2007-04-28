@@ -64,6 +64,8 @@ namespace gloox
       /**
        * Constructs a new SOCKS5BytestreamManager.
        * @param parent The ClientBase to use for sending data.
+       * @param s5bh A SOCKS5BytestreamManager -derived object that will receive
+       * incoming and outgoing SOCKS5Bytestreams.
        */
       SOCKS5BytestreamManager( ClientBase *parent, SOCKS5BytestreamHandler* s5bh );
 
