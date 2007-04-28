@@ -212,10 +212,10 @@ namespace gloox
       virtual void handleIncomingSOCKS5BytestreamRequest( const std::string& sid, const JID& from );
 
       // re-implemented from SOCKS5BytestreamHandler
-      virtual void handleIncomingSOCKS5Bytestream( const std::string& sid, SOCKS5Bytestream* s5b );
+      virtual void handleIncomingSOCKS5Bytestream( SOCKS5Bytestream* s5b );
 
       // re-implemented from SOCKS5BytestreamHandler
-      virtual void handleOutgoingSOCKS5Bytestream( const JID& to, SOCKS5Bytestream *s5b );
+      virtual void handleOutgoingSOCKS5Bytestream( SOCKS5Bytestream *s5b );
 
       // re-implemented from SOCKS5BytestreamHandler
       virtual void handleSOCKS5BytestreamError( Stanza* stanza );

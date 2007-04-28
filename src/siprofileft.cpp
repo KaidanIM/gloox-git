@@ -185,18 +185,18 @@ printf( "handleSIRequest\n" );
   void SIProfileFT::handleIncomingSOCKS5BytestreamRequest( const std::string& sid, const JID& from )
   {
     printf( "SIProfileFT::handleIncomingSOCKS5BytestreamRequest dummy impl\n" );
-    // check for valid sid/from tuple
+#warning TODO: check for valid sid/from tuple
     m_socks5Manager->acceptSOCKS5Bytestream( sid );
   }
 
-  void SIProfileFT::handleIncomingSOCKS5Bytestream( const std::string& sid, SOCKS5Bytestream* s5b )
+  void SIProfileFT::handleIncomingSOCKS5Bytestream( SOCKS5Bytestream* s5b )
   {
     printf( "SIProfileFT::handleIncomingSOCKS5Bytestream\n" );
     if( m_handler )
       m_handler->handleFTSOCKS5Bytestream( s5b );
   }
 
-  void SIProfileFT::handleOutgoingSOCKS5Bytestream( const JID& to, SOCKS5Bytestream *s5b )
+  void SIProfileFT::handleOutgoingSOCKS5Bytestream( SOCKS5Bytestream *s5b )
   {
     printf( "SIProfileFT::handleOutgoingSOCKS5Bytestream\n" );
     if( m_handler )

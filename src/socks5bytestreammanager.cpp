@@ -245,7 +245,7 @@ namespace gloox
                                                   (*it).second.from, m_parent->jid(), sid );
     s5b->setStreamHosts( (*it).second.sHosts );
     m_s5bMap[sid] = s5b;
-    m_socks5BytestreamHandler->handleIncomingSOCKS5Bytestream( sid, s5b );
+    m_socks5BytestreamHandler->handleIncomingSOCKS5Bytestream( s5b );
 
 //     m_asyncTrackMap.erase( it );
   }
@@ -349,7 +349,7 @@ namespace gloox
               shl.push_back( *sh );
               s5b->setStreamHosts( shl );
               m_s5bMap[(*it).second] = s5b;
-              m_socks5BytestreamHandler->handleOutgoingSOCKS5Bytestream( stanza->from(), s5b );
+              m_socks5BytestreamHandler->handleOutgoingSOCKS5Bytestream( s5b );
             }
             break;
           }

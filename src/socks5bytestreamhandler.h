@@ -53,14 +53,16 @@ namespace gloox
       /**
        * Notifies the implementor of a new incoming SOCKS5 bytestream. The bytestream is not yet ready to
        * send data.
-       * To initialize the bytestream and to prepare it for data transfer, call its connect() method and
-       * check its return value. To not block your application while the data transfer lasts, you most
+       * To initialize the bytestream and to prepare it for data transfer, register a
+       * SOCKS5BytestreamDataHandler with it and call its connect() method.
+       * To not block your application while the data transfer lasts, you most
        * likely want to put the bytestream into its own thread or process (before calling connect() on it).
        * It is safe to do so without additional synchronization.
-       * @param sid The bytestream's ID.
+       * When you are finished using the bytestream, use SIProfileFT::dispose() (or
+       * SOCKS5BytestreamManager::dispose() if you use SOCKS5BytestreamManager directly) to get rid of it.
        * @param s5b The bytestream.
        */
-      virtual void handleIncomingSOCKS5Bytestream( const std::string& sid, SOCKS5Bytestream* s5b ) = 0;
+      virtual void handleIncomingSOCKS5Bytestream( SOCKS5Bytestream* s5b ) = 0;
 
       /**
        * Notifies the implementor of successful establishing of an outgoing SOCKS5 bytestream request.
@@ -68,15 +70,15 @@ namespace gloox
        * The SOCKS5BytestreamHandler does @b not become the owner of the SOCKS5Bytestream object.
        * Use SIProfileFT::dispose() (or SOCKS5BytestreamManager::dispose() if you use
        * SOCKS5BytestreamManager directly) to get rid of the bytestream object after it has been closed.
-       * @param to The remote entity's JID.
        * @param s5b The new bytestream.
        */
-      virtual void handleOutgoingSOCKS5Bytestream( const JID& to, SOCKS5Bytestream *s5b ) = 0;
+      virtual void handleOutgoingSOCKS5Bytestream( SOCKS5Bytestream *s5b ) = 0;
 
       /**
        * Notifies the handler of errors occuring when a bytestream was requested.
        * For example, if the remote entity does not implement SOCKS5 bytestreams.
-       * @param stanza The error stanza.       */
+       * @param stanza The error stanza.
+       */
       virtual void handleSOCKS5BytestreamError( Stanza* stanza ) = 0;
 
   };
