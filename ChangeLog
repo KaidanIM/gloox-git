@@ -88,7 +88,8 @@ since -rc1:
 - Disco: minor spec compliance fixes
 - Adhoc: minor spec compliance fixes
 - Tag: added ctors to easily create a single attribute
-- SOCKS5 proxy support (RFC 1928), incl. username password auth (RFC 1929)
+- SOCKS5 proxy support (RFC 1928), incl. username/password auth (RFC 1929)
+- file transfer (XEPs 0065, 0095, 0096)
 
 
 v0.8 -- 08 Apr 2006
