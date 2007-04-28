@@ -313,10 +313,6 @@ namespace gloox
   {
     printf( "SOCKS5BytestreamManager::handleIqID\n" );
 
-    Tag* q = stanza->findChild( "query", "xmlns", XMLNS_BYTESTREAMS );
-    if( !q || !m_socks5BytestreamHandler )
-      return false;
-
     StringMap::iterator it = m_trackMap.find( stanza->id() );
     if( it == m_trackMap.end() )
       return false;
@@ -329,6 +325,10 @@ namespace gloox
         {
           case StanzaIqResult:
           {
+            Tag* q = stanza->findChild( "query", "xmlns", XMLNS_BYTESTREAMS );
+            if( !q || !m_socks5BytestreamHandler )
+              return false;
+
             printf( "yeah, found the request\n" );
             Tag* s = q->findChild( "streamhost-used" );
             if( !s || !s->hasAttribute( "jid" ) )
