@@ -24,6 +24,12 @@ using namespace gloox;
 # include <windows.h>
 #endif
 
+/**
+ * Usage:
+ *   ft_send jid@server/full /path/to/file
+ *
+ * Sends the given file to the given full JID.
+ */
 class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, SOCKS5BytestreamDataHandler
 {
   public:

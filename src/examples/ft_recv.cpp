@@ -20,6 +20,9 @@ using namespace gloox;
 # include <windows.h>
 #endif
 
+/**
+ * Receives one file and displayes it. Does not save anything.
+ */
 class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, SOCKS5BytestreamDataHandler
 {
   public:
