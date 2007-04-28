@@ -19,7 +19,6 @@
 #include "lastactivityhandler.h"
 
 #include <cstdlib>
-#include <sstream>
 
 namespace gloox
 {
@@ -66,9 +65,7 @@ namespace gloox
         t->addAttribute( "id", stanza->id() );
         t->addAttribute( "to", stanza->from().full() );
         Tag *q = new Tag( t, "query" );
-        std::ostringstream oss;
-        oss << (int)(now - m_active);
-        q->addAttribute( "seconds", oss.str() );
+        q->addAttribute( "seconds", now - m_active );
         q->addAttribute( "xmlns", XMLNS_LAST );
 
         m_parent->send( t );

@@ -19,8 +19,6 @@
 #include "sha.h"
 #include "logsink.h"
 
-#include <sstream>
-
 namespace gloox
 {
 
