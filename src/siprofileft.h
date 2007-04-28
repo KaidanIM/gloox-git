@@ -75,10 +75,12 @@ namespace gloox
    *
    * @li When you finally receive a SOCKS5Bytestream via the SIProfileFTHandler, you will need
    * to integrate this bytestream with your mainloop, or put it into a separate thread (if
-   * occasional blocking is not acceptable. You will have to call connect() on the bytestream.
-   * connect()will block until it has a connection established with one of the StreamHosts. Further,
+   * occasional blocking is not acceptable). You will need to call connect() on the bytestream.
+   * connect() will block until it has a connection established with one of the StreamHosts. Further,
    * if you want to receive a file via the bytestream, you will have to call recv() on
    * the object from time to time.
+   *
+   * @li Do @b not delete a SOCKS5Bytestream manually. Use dispose() for this.
    *
    * When cleaning up, delete the objectes you created above in the opposite order of
    * creation:
