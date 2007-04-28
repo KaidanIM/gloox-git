@@ -67,7 +67,10 @@ namespace gloox
     si->addChild( child1 );
     si->addChild( child2 );
 
-    TrackStruct t = { id2, profile, sih };
+    TrackStruct t;
+    t.sid = id2;
+    t.profile = profile;
+    t.sih = sih;
     m_track[id] = t;
     m_parent->trackID( this, id, OfferSI );
     m_parent->send( iq );
