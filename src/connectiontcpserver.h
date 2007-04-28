@@ -38,9 +38,9 @@ namespace gloox
     public:
       /**
        * Constructs a new ConnectionTCPServer object.
-       * @param cdh An ConnectionHandler-derived object that will handle incoming connections.
+       * @param ch An ConnectionHandler-derived object that will handle incoming connections.
        * @param logInstance The log target. Obtain it from ClientBase::logInstance().
-       * @param ip The local IP address to listen on. This should @b not be a hostname.
+       * @param ip The local IP address to listen on. This must @b not be a hostname.
        * Leave this empty to listen on all local interfaces.
        * @param port The port to listen on.
        */

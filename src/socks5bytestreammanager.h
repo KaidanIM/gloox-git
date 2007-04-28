@@ -97,7 +97,6 @@ namespace gloox
        * without waiting for success.
        * @param to The recipient of the requested bytestream.
        * @param mode The desired transport layer protocol.
-       * @param hosts A list of available StreamHosts. See XEP-0065.
        * @param sid The bytestreakm's stream ID, if previously negotiated e.g. using SI (XEP-0095).
        * @return @b False in case of an error, @b true otherwise. A return value of @b true does
        * @b not indicate that the bytestream has been opened. This is announced by means of the
