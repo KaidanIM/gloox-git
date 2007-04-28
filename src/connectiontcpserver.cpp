@@ -75,7 +75,7 @@ namespace gloox
   {
     MutexGuard mg( m_sendMutex );
 
-    if( m_socket < 0 || m_state > StateDisconnected )
+    if( m_socket >= 0 || m_state > StateDisconnected )
       return ConnNoError;
 
     m_state = StateConnecting;
@@ -114,7 +114,11 @@ namespace gloox
 
     struct sockaddr_in they;
     int sin_size = sizeof( struct sockaddr_in );
+#ifdef WIN32
+    int newfd = accept( m_socket, (struct sockaddr*)&they, &sin_size );
+#else
     int newfd = accept( m_socket, (struct sockaddr*)&they, (socklen_t*)&sin_size );
+#endif
 
     mg.unlock();
 
