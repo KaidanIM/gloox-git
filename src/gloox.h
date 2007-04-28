@@ -196,7 +196,7 @@
  * way to feed that back into the parser.
  *
  * To get the file descriptor you'll need to set a connection class (e.g. an instance of
- * @link gloox::ConnectionTCP ConnectionTCP @endlink) manually, like so:
+ * @link gloox::ConnectionTCPClient ConnectionTCPClient @endlink) manually, like so:
  *
  * @code
  * Client* client = new Client( ... );
