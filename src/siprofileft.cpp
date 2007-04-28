@@ -27,13 +27,13 @@ namespace gloox
     : m_parent( parent ), m_manager( manager ), m_handler( sipfth ),
       m_socks5Manager( s5Manager ), m_delManager( false ), m_delS5Manager( false )
   {
-    if( m_manager )
-      m_manager->registerProfile( XMLNS_SI_FT, this );
-    else
+    if( !m_manager )
     {
       m_delManager = true;
       m_manager = new SIManager( m_parent );
     }
+
+    m_manager->registerProfile( XMLNS_SI_FT, this );
 
     if( !m_socks5Manager )
     {
@@ -44,13 +44,10 @@ namespace gloox
 
   SIProfileFT::~SIProfileFT()
   {
-    if( m_manager )
-    {
-      m_manager->removeProfile( XMLNS_SI_FT );
+    m_manager->removeProfile( XMLNS_SI_FT );
 
-      if( m_delManager )
-        delete m_manager;
-    }
+    if( m_delManager )
+      delete m_manager;
 
     if( m_socks5Manager && m_delS5Manager )
       delete m_socks5Manager;
