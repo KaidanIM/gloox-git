@@ -298,7 +298,11 @@ namespace gloox
     }
   }
 
+#if defined( _MSV_VER ) && ( _MSC_VER > 1200 )
   Stanza* Stanza::clone() const
+#else
+  Stanza* Stanza::clone()
+#endif
   {
     return new Stanza( this );
   }
