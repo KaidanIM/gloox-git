@@ -309,8 +309,8 @@
 
  * @section filetransfer_sec File Transfer
  *
- * For file transfer gloox implements XEP-0095 (Stream Initiation) and XEP-0096 (File Transfer) for the
- * signalling, and XEP-0065 (SOCKS5 Bytestreams) for the transport. See
+ * For file transfer, gloox implements XEP-0095 (Stream Initiation) as well XEP-0096 (File Transfer)
+ * for the signalling, and XEP-0065 (SOCKS5 Bytestreams) for the transport. See
  * @link gloox::SIProfileFT SIProfileFT @endlink.
  *
  * Additionally, there is an implementation of XEP-0047 (In-Band Bytestreams) which is currently not

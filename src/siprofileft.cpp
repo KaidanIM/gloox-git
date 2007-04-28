@@ -124,7 +124,7 @@ namespace gloox
       m_socks5Manager->addStreamHost( jid, host, port );
   }
 
-  void SIProfileFT::handleSIRequest( const JID& from, const std::string& sid, const std::string& profile,
+  void SIProfileFT::handleSIRequest( const JID& from, const std::string& id, const std::string& profile,
                                      Tag* si, Tag* ptag, Tag* /*fneg*/ )
   {
     if( profile != XMLNS_SI_FT || !ptag || !si )
@@ -136,7 +136,7 @@ printf( "handleSIRequest\n" );
       if( ptag->hasChild( "desc" ) )
         desc = ptag->findChild( "desc" )->cdata();
       const std::string& mt = si->findAttribute( "mime-type" );
-      m_handler->handleFTRequest( from, sid, ptag->findAttribute( "name" ), ptag->findAttribute( "size" ),
+      m_handler->handleFTRequest( from, id, ptag->findAttribute( "name" ), ptag->findAttribute( "size" ),
                                   ptag->findAttribute( "hash" ), ptag->findAttribute( "date" ),
                                   mt.empty() ? "binary/octet-stream" : mt, desc );
     }

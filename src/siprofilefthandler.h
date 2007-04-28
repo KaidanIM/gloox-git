@@ -43,7 +43,7 @@ namespace gloox
        * to send a file to you. You should use either SIProfileFT::acceptFT() or
        * SIProfileFT::declineFT() to accept or reject the request, respectively.
        * @param from The file transfer requestor.
-       * @param sid The request's id. This id MUST be supplied to either SIProfileFT::acceptFT() or
+       * @param id The request's id. This id MUST be supplied to either SIProfileFT::acceptFT() or
        * SIProfileFT::declineFT().
        * @param name The file name.
        * @param size The file size.
@@ -52,7 +52,7 @@ namespace gloox
        * @param mimetype The file's mime-type.
        * @param desc The file's description.
        */
-      virtual void handleFTRequest( const JID& from, const std::string& sid, const std::string& name,
+      virtual void handleFTRequest( const JID& from, const std::string& id, const std::string& name,
                                     const std::string& size, const std::string& hash,
                                     const std::string& date, const std::string& mimetype,
                                     const std::string& desc ) = 0;
