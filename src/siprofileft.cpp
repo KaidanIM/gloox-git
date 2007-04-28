@@ -155,7 +155,7 @@ printf( "handleSIRequest\n" );
       const std::string& mt = si->findAttribute( "mime-type" );
       m_handler->handleFTRequest( from, id, ptag->findAttribute( "name" ), ptag->findAttribute( "size" ),
                                   ptag->findAttribute( "hash" ), ptag->findAttribute( "date" ),
-                                  mt.empty() ? "binary/octet-stream" : mt, desc );
+                                  mt.empty() ? "binary/octet-stream" : mt, desc, FTTypeS5B );
     }
   }
 

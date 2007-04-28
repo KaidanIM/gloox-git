@@ -100,9 +100,9 @@ namespace gloox
        */
       enum StreamType
       {
-        FTTypeS5B/*,*/                  /**< SOCKS5 Bytestreams. */
-//        FTTypeIBB,                  /**< In-Band Bytestreams. */
-//        FTTypeOOB                   /**< Out-of-Band Data. */
+        FTTypeS5B     = 1/*,*/      /**< SOCKS5 Bytestreams. */
+//        FTTypeIBB   = 2,          /**< In-Band Bytestreams. */
+//        FTTypeOOB   = 4           /**< Out-of-Band Data. */
       };
 
       /**
