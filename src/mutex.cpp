@@ -21,6 +21,10 @@
 # include <windows.h>
 #endif
 
+#ifdef _WIN32_WCE
+# include <winbase.h>
+#endif
+
 #ifdef HAVE_PTHREAD
 # include <pthread.h>
 #endif
