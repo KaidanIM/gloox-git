@@ -38,7 +38,7 @@ namespace gloox
    *
    * Usage:
    *
-   * Create a new SIProfileFT object.It needs a ClientBase -derived object as well as a
+   * Create a new SIProfileFT object. It needs a ClientBase -derived object as well as a
    * SIProfileFTHandler -derived object that will receive file transfer-related events.
    * The naming comes from the fact that File Transfer (FT) is a profile of Stream Initiation (SI).
    * If you already use SI and the SIManager somewhere else, you should pass a pointer to that
@@ -79,7 +79,14 @@ namespace gloox
    * until all attempts failed). Further, if you want to receive a file via the bytestream, you will
    * have to call recv() on the object from time to time.
    *
-   * @li Do @b not delete a SOCKS5Bytestream manually. Use dispose() for this.
+   * @li If you e.g. told Client to connect through a @link gloox::ConnectionHTTPProxy HTTP proxy @endlink
+   * or a @link gloox::ConnectionSOCKS5Proxy SOCKS5 proxy @endlink, or any other ConnectionBase -derived
+   * method, or even chains thereof, SIProfileFT will use the same connection types with the same
+   * configuration to connect to the Stream Host/SOCKS5 proxy. If this is inappropriate because you have
+   * e.g. a local SOCKS5 proxy inside your local network, use SOCKS5Bytestream::setConnectionImpl() to
+   * override the above default connection(s).
+   *
+   * @li Do @b not delete a SOCKS5Bytestream manually. Use dispose() instead.
    *
    * When cleaning up, delete the objectes you created above in the opposite order of
    * creation:
