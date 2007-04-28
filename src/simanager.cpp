@@ -144,6 +144,10 @@ namespace gloox
 
   bool SIManager::handleIq( Stanza *stanza )
   {
+    TrackMap::iterator it = m_track.find( stanza->id() );
+    if( it != m_track.end() )
+      return false;
+
     Tag *si = stanza->findChild( "si", "xmlns", XMLNS_SI );
     if( si && si->hasAttribute( "profile" ) )
     {
