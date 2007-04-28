@@ -109,6 +109,12 @@ namespace gloox
       void setServer( const std::string &server, int port = -1 ) { m_server = server; m_port = port; }
 
       /**
+       * Returns the currently set server/IP.
+       * @return The server host/IP.
+       */
+      const std::string& server() const { return m_server; }
+
+      /**
        * Returns current connection statistics.
        * @param totalIn The total number of bytes received.
        * @param totalOut The total number of bytes sent.
