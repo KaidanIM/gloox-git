@@ -51,7 +51,7 @@ namespace gloox
        * @param date The file's last modification time.
        * @param mimetype The file's mime-type.
        * @param desc The file's description.
-       * @param stypes An ORed list of @link gloox::SIProfileFT::StreamTypes SIProfileFT::StreamType @endlink
+       * @param stypes An ORed list of @link gloox::SIProfileFT::StreamType SIProfileFT::StreamType @endlink
        * indicating the StreamTypes the initiator supports.
        */
       virtual void handleFTRequest( const JID& from, const std::string& id, const std::string& name,
