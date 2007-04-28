@@ -5,7 +5,6 @@
 #include "../disco.h"
 #include "../loghandler.h"
 #include "../logsink.h"
-#include "../simanager.h"
 #include "../siprofileft.h"
 #include "../siprofilefthandler.h"
 #include "../socks5bytestreammanager.h"
@@ -66,7 +65,6 @@ class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, SOCKS5
 
       f->dispose( m_s5bs.front() );
       delete f;
-      delete s;
       delete j;
     }
 
@@ -152,7 +150,6 @@ class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, SOCKS5
 
   private:
     Client *j;
-    SIManager* s;
     SIProfileFT* f;
     SOCKS5BytestreamManager* s5b;
     std::list<SOCKS5Bytestream*> m_s5bs;

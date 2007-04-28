@@ -5,7 +5,6 @@
 #include "../disco.h"
 #include "../loghandler.h"
 #include "../logsink.h"
-#include "../simanager.h"
 #include "../siprofileft.h"
 #include "../siprofilefthandler.h"
 #include "../socks5bytestreammanager.h"
@@ -49,8 +48,8 @@ class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, SOCKS5
       if( !ifile )
         return;
 
-      JID jid( "me@server/glooxsendfile" );
-      j = new Client( jid, "pwd" );
+      JID jid( "hurkhurk@example.net/gloox" );
+      j = new Client( jid, "hurkhurks" );
       j->registerConnectionListener( this );
       j->disco()->setVersion( "ftsend", GLOOX_VERSION, "Linux" );
       j->disco()->setIdentity( "client", "bot" );
@@ -93,7 +92,6 @@ class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, SOCKS5
 
       f->dispose( m_s5b );
       delete f;
-      delete s;
       delete j;
     }
 
@@ -144,6 +142,7 @@ class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, SOCKS5
     virtual void handleFTRequestError( Stanza* stanza )
     {
       printf( "ft request error\n" );
+      m_quit = true;
     }
 
     virtual void handleFTSOCKS5Bytestream( SOCKS5Bytestream* s5b )
@@ -180,7 +179,6 @@ class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, SOCKS5
 
   private:
     Client *j;
-    SIManager* s;
     SIProfileFT* f;
     SOCKS5Bytestream* m_s5b;
     JID m_to;
