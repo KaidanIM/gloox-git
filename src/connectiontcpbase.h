@@ -17,6 +17,7 @@
 #include "gloox.h"
 #include "connectionbase.h"
 #include "logsink.h"
+#include "mutex.h"
 
 #include <string>
 
@@ -96,13 +97,13 @@ namespace gloox
 
     protected:
       ConnectionTCPBase &operator=( const ConnectionTCPBase & );
-      void init();
+      void init( const std::string& server, int port );
       bool dataAvailable( int timeout = -1 );
       void cancel();
 
       const LogSink& m_logInstance;
-      Mutex* m_sendMutex;
-      Mutex* m_recvMutex;
+      Mutex m_sendMutex;
+      Mutex m_recvMutex;
 
       char *m_buf;
       int m_socket;
