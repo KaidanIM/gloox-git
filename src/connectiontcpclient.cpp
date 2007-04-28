@@ -60,7 +60,7 @@ namespace gloox
   {
   }
 
-  ConnectionTCPClient* ConnectionTCPClient::newInstance() const
+  ConnectionBase* ConnectionTCPClient::newInstance() const
   {
     return new ConnectionTCPClient( m_handler, m_logInstance, m_server, m_port );
   }

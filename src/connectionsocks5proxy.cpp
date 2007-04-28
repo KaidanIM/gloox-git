@@ -74,7 +74,7 @@ namespace gloox
       delete m_connection;
   }
 
-  ConnectionSOCKS5Proxy* ConnectionSOCKS5Proxy::newInstance() const
+  ConnectionBase* ConnectionSOCKS5Proxy::newInstance() const
   {
     ConnectionBase* conn = m_connection ? m_connection->newInstance() : 0;
     return new ConnectionSOCKS5Proxy( m_handler, conn, m_logInstance, m_server, m_port, m_ip );

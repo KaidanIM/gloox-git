@@ -114,7 +114,7 @@ namespace gloox
       virtual void handleDisconnect( ConnectionError reason );
 
       // reimplemented from ConnectionDataHandler
-      virtual ConnectionHTTPProxy* newInstance() const;
+      virtual ConnectionBase* newInstance() const;
 
       /**
        * Sets the XMPP server to proxy to.

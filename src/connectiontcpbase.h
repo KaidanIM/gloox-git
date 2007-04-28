@@ -33,7 +33,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
-  class ConnectionTCPBase : public ConnectionBase
+  class GLOOX_API ConnectionTCPBase : public ConnectionBase
   {
     public:
       /**
