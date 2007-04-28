@@ -19,7 +19,6 @@
 #include "logsink.h"
 #include "prep.h"
 #include "mutex.h"
-#include "mutexguard.h"
 
 #ifdef __MINGW32__
 # include <winsock.h>
@@ -71,8 +70,8 @@ namespace gloox
   void ConnectionTCPBase::init()
   {
     m_buf = (char*)calloc( m_bufsize + 1, sizeof( char ) );
-    m_sendMutex = new Mutex();
-    m_recvMutex = new Mutex();
+    m_sendMutex = new Mutex( "sendMutex" );
+    m_recvMutex = new Mutex( "recvMutex" );
   }
 
   ConnectionTCPBase::~ConnectionTCPBase()
@@ -120,10 +119,13 @@ namespace gloox
 
   bool ConnectionTCPBase::send( const std::string& data )
   {
-    MutexGuard mg( m_sendMutex );
+    m_sendMutex->lock();
 
     if( data.empty() || ( m_socket < 0 ) )
+    {
+      m_sendMutex->unlock();
       return false;
+    }
 
     int sent = 0;
     for( size_t num = 0, len = data.length(); sent != -1 && num < len; num += len )
@@ -135,7 +137,7 @@ namespace gloox
 #endif
     }
 
-    mg.unlock();
+    m_sendMutex->unlock();
 
     m_totalBytesOut += data.length();
     if( sent == -1 && m_handler )

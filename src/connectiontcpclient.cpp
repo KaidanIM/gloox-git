@@ -18,7 +18,6 @@
 #include "dns.h"
 #include "logsink.h"
 #include "mutex.h"
-#include "mutexguard.h"
 
 #ifdef __MINGW32__
 # include <winsock.h>
@@ -67,13 +66,19 @@ namespace gloox
 
   ConnectionError ConnectionTCPClient::connect()
   {
-    MutexGuard mg( m_sendMutex );
+    m_sendMutex->lock();
 
     if( !m_handler || m_socket >= 0 )
+    {
+      m_sendMutex->unlock();
       return ConnNotConnected;
+    }
 
     if( m_state > StateDisconnected )
+    {
+      m_sendMutex->unlock();
       return ConnNoError;
+    }
 
     m_state = StateConnecting;
 
@@ -84,6 +89,8 @@ namespace gloox
       else
         m_socket = DNS::connect( m_server, m_port, m_logInstance );
     }
+
+    m_sendMutex->unlock();
 
     if( m_socket < 0 )
     {
@@ -117,13 +124,19 @@ namespace gloox
 
   ConnectionError ConnectionTCPClient::recv( int timeout )
   {
-    MutexGuard mg( m_recvMutex );
+    m_recvMutex->lock();
 
     if( m_cancel || m_socket < 0 )
+    {
+      m_recvMutex->unlock();
       return ConnNotConnected;
+    }
 
     if( !dataAvailable( timeout ) )
+    {
+      m_recvMutex->unlock();
       return ConnNoError;
+    }
 
 #ifdef SKYOS
     int size = ::recv( m_socket, (unsigned char*)m_buf, m_bufsize, 0 );
@@ -131,7 +144,7 @@ namespace gloox
     int size = ::recv( m_socket, m_buf, m_bufsize, 0 );
 #endif
 
-    mg.unlock();
+    m_recvMutex->unlock();
 
     if( size <= 0 )
     {
