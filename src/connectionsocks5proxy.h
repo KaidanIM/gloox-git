@@ -131,7 +131,7 @@ namespace gloox
        * to find out about the actual host:port.
        * @param ip Indicates whether @c host is an IP address (true) or a host name (false).
        */
-      void setServer( const std::string& host, unsigned short port = -1, bool ip )
+      void setServer( const std::string& host, unsigned short port = -1, bool ip = false )
         { m_server = host; m_port = port; m_ip = ip; }
 
       /**
