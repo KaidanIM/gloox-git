@@ -38,13 +38,11 @@ namespace gloox
    *
    * Usage:
    *
-   * Create a new SIManager object. It is needed for the signalling only and you won't
-   * have to interact with it. You need, however, to keep it around as long as you want
-   * to be able to send and/or receive files.
-   *
-   * Pass that SIManager object to the constructor of SIProfileFT. Both SIManager and
-   * SIProfileFT need a ClientBase -derived object. SIProfileFT also needs a SIProfileFTHandler -derived
-   * object that will receive file transfer-related events.
+   * Create a new SIProfileFT object.It needs a ClientBase -derived object as well as a
+   * SIProfileFTHandler -derived object that will receive file transfer-related events.
+   * The naming comes from the fact that File Transfer (FT) is a profile of Stream Initiation (SI).
+   * If you already use SI and the SIManager somewhere else, you should pass a pointer to that
+   * SIManager object as third parameter to SIProfileFT's constructor.
    * @code
    * class MyFileTransferHandler : public SIProfileFTHandler
    * {
@@ -55,8 +53,7 @@ namespace gloox
    * // ...
    * MyFileTransferHandler* mh = new MyFileTransferHandler( ... );
    *
-   * SIManager* si = new SIManager( client );
-   * SIProfileFT* ft = new SIProfileFT( client, si, mh );
+   * SIProfileFT* ft = new SIProfileFT( client, mh );
    * @endcode
    *
    * You are now, basically, ready to send and receive files.
@@ -75,10 +72,12 @@ namespace gloox
    *
    * @li When you finally receive a SOCKS5Bytestream via the SIProfileFTHandler, you will need
    * to integrate this bytestream with your mainloop, or put it into a separate thread (if
-   * occasional blocking is not acceptable). You will need to call connect() on the bytestream.
-   * connect() will block until it has a connection established with one of the StreamHosts. Further,
-   * if you want to receive a file via the bytestream, you will have to call recv() on
-   * the object from time to time.
+   * occasional blocking is not acceptable). You will need to call
+   * @link gloox::SOCKS5Bytestream::connect() SOCKS5Bytestream::connect() @endlink.
+   * @link gloox::SOCKS5Bytestream::connect() connect() @endlink will try to connect to each of the
+   * given StreamHosts and block until it has established a connection with one of the them (or
+   * until all attempts failed). Further, if you want to receive a file via the bytestream, you will
+   * have to call recv() on the object from time to time.
    *
    * @li Do @b not delete a SOCKS5Bytestream manually. Use dispose() for this.
    *
@@ -87,7 +86,6 @@ namespace gloox
    *
    * @code
    * delete ft;
-   * delete si;
    * delete client;
    * @endcode
    *
@@ -103,17 +101,25 @@ namespace gloox
       enum StreamType
       {
         FTTypeS5B/*,*/                  /**< SOCKS5 Bytestreams. */
-        /*FTTypeIBB,*/                  /**< In-Band Bytestreams. */
-        /*FTTypeOOB*/                   /**< Out-of-Band Data. */
+//        FTTypeIBB,                  /**< In-Band Bytestreams. */
+//        FTTypeOOB                   /**< Out-of-Band Data. */
       };
 
       /**
        * Constructor.
        * @param parent The ClientBase to use for signaling.
-       * @param manager The SIManager to register with.
        * @param sipfth The SIProfileFTHandler to receive events.
+       * @param manager An optional SIManager to register with. If this is zero, SIProfileFT
+       * will create its own SIManager. You should pass a valid SIManager here if you are
+       * already using one with the @c parent ClientBase above.
+       * @param s5Manager An optional SOCKS5BytestreamManager to use. If this is zero, SIProfileFT
+       * will create its own SOCKS5BytestreamManager. You should pass a valid SOCKS5BytestreamManager
+       * here if you are already using one with the @c parent ClientBase above.
+       * @note If you passed a SIManager and/or SOCKS5BytestreamManager to SIProfileFT's constructor,
+       * these objects will @b not be deleted on desctruction of SIProfileFT.
        */
-      SIProfileFT( ClientBase* parent, SIManager* manager, SIProfileFTHandler* sipfth );
+      SIProfileFT( ClientBase* parent, SIProfileFTHandler* sipfth, SIManager* manager = 0,
+                   SOCKS5BytestreamManager* s5Manager = 0 );
 
       /**
        * Virtual destructor.
@@ -124,7 +130,7 @@ namespace gloox
        * Starts negotiating a file transfer with a remote entity.
        * @param to The entity to talk to.
        * @param name The file's name. Mandatory.
-       * @param size The file's size. Mandatory.
+       * @param size The file's size. Mandatory and must be > 0.
        * @param hash The file content's MD5 hash.
        * @param desc A description.
        * @param date The file's last modification date/time. See XEP-0082 for details.
@@ -136,17 +142,17 @@ namespace gloox
 
       /**
        * Call this function to accept a file transfer request previously announced by means of
-       * SIProfileFTHandler::handleFTRequest().
+       * @link gloox::SIProfileFTHandler::handleFTRequest() SIProfileFTHandler::handleFTRequest() @endlink.
        * @param to The requestor.
-       * @param sid The request's id, as passed to SIProfileHandler::handleFTRequest().
+       * @param id The request's id, as passed to SIProfileHandler::handleFTRequest().
        * @param type The desired stream type to use for this file transfer. Defaults to
        * SOCKS5 Bytestream.
        */
-      void acceptFT( const JID& to, const std::string& sid, StreamType type = FTTypeS5B );
+      void acceptFT( const JID& to, const std::string& id, StreamType type = FTTypeS5B );
 
       /**
        * Call this function to decline a FT request previously announced by means of
-       * SIProfileFTHandler::handleFTRequest().
+       * @link gloox::SIProfileFTHandler::handleFTRequest() SIProfileFTHandler::handleFTRequest() @endlink.
        * @param to The requestor.
        * @param id The request's id, as passed to SIProfileFTHandler::handleFTRequest().
        * @param reason The reason for the reject.
@@ -220,6 +226,8 @@ namespace gloox
       SIProfileFTHandler* m_handler;
       SOCKS5BytestreamManager* m_socks5Manager;
       StreamHostList m_hosts;
+      bool m_delManager;
+      bool m_delS5Manager;
 
   };
 
