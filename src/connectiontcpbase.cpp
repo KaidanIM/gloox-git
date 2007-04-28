@@ -70,8 +70,8 @@ namespace gloox
   void ConnectionTCPBase::init()
   {
     m_buf = (char*)calloc( m_bufsize + 1, sizeof( char ) );
-    m_sendMutex = new Mutex( "sendMutex" );
-    m_recvMutex = new Mutex( "recvMutex" );
+    m_sendMutex = new Mutex();
+    m_recvMutex = new Mutex();
   }
 
   ConnectionTCPBase::~ConnectionTCPBase()
