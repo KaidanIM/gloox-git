@@ -21,8 +21,6 @@
 #include "base64.h"
 
 #include <string>
-#include <iostream>
-#include <iomanip>
 
 #include <string.h>
 
