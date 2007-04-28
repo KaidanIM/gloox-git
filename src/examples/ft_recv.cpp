@@ -41,8 +41,7 @@ class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, SOCKS5
 
       j->logInstance().registerLogHandler( LogLevelDebug, LogAreaAll, this );
 
-      s = new SIManager( j );
-      f = new SIProfileFT( j, s, this );
+      f = new SIProfileFT( j, this );
       // you should obtain this using disco, really
       f->addStreamHost( JID( "proxy.jabber.org" ), "208.245.212.98", 7777 );
 

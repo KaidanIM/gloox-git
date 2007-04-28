@@ -22,20 +22,37 @@
 namespace gloox
 {
 
-  SIProfileFT::SIProfileFT( ClientBase* parent, SIManager* manager, SIProfileFTHandler* sipfth )
+  SIProfileFT::SIProfileFT( ClientBase* parent, SIProfileFTHandler* sipfth, SIManager* manager,
+                            SOCKS5BytestreamManager* s5Manager )
     : m_parent( parent ), m_manager( manager ), m_handler( sipfth ),
-      m_socks5Manager( new SOCKS5BytestreamManager( m_parent, this ) )
+      m_socks5Manager( s5Manager ), m_delManager( false ), m_delS5Manager( false )
   {
     if( m_manager )
       m_manager->registerProfile( XMLNS_SI_FT, this );
+    else
+    {
+      m_delManager = true;
+      m_manager = new SIManager( m_parent );
+    }
+
+    if( !m_socks5Manager )
+    {
+      m_socks5Manager = new SOCKS5BytestreamManager( m_parent, this );
+      m_delS5Manager = true;
+    }
   }
 
   SIProfileFT::~SIProfileFT()
   {
     if( m_manager )
+    {
       m_manager->removeProfile( XMLNS_SI_FT );
 
-    if( m_socks5Manager )
+      if( m_delManager )
+        delete m_manager;
+    }
+
+    if( m_socks5Manager && m_delS5Manager )
       delete m_socks5Manager;
   }
 
@@ -69,7 +86,7 @@ namespace gloox
     m_manager->requestSI( this, to, XMLNS_SI_FT, file, feature, mimetype );
   }
 
-  void SIProfileFT::acceptFT( const JID& to, const std::string& sid, StreamType type )
+  void SIProfileFT::acceptFT( const JID& to, const std::string& id, StreamType type )
   {
     if( !m_manager )
       return;
@@ -93,7 +110,7 @@ namespace gloox
     df.addField( dff );
     feature->addChild( df.tag() );
 
-    m_manager->acceptSI( to, sid, 0, feature );
+    m_manager->acceptSI( to, id, 0, feature );
   }
 
   void SIProfileFT::declineFT( const JID& to, const std::string& id, SIManager::SIError reason,
