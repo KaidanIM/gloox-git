@@ -218,7 +218,7 @@ namespace gloox
       virtual void handleOutgoingSOCKS5Bytestream( const JID& to, SOCKS5Bytestream *s5b );
 
       // re-implemented from SOCKS5BytestreamHandler
-      virtual void handleSOCKS5BytestreamError( const JID& remote, StanzaError se );
+      virtual void handleSOCKS5BytestreamError( Stanza* stanza );
 
     private:
       ClientBase* m_parent;

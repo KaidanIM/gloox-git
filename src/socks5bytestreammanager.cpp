@@ -185,7 +185,7 @@ namespace gloox
         break;
       }
       case StanzaIqError:
-        m_socks5BytestreamHandler->handleSOCKS5BytestreamError( stanza->from(), stanza->error() );
+        m_socks5BytestreamHandler->handleSOCKS5BytestreamError( stanza );
         break;
       default:
         break;
@@ -354,7 +354,7 @@ namespace gloox
             break;
           }
           case StanzaIqError:
-            m_socks5BytestreamHandler->handleSOCKS5BytestreamError( stanza->from(), stanza->error() );
+            m_socks5BytestreamHandler->handleSOCKS5BytestreamError( stanza );
             break;
           default:
             break;
@@ -373,7 +373,7 @@ namespace gloox
             break;
           }
           case StanzaIqError:
-            m_socks5BytestreamHandler->handleSOCKS5BytestreamError( stanza->from(), stanza->error() );
+            m_socks5BytestreamHandler->handleSOCKS5BytestreamError( stanza );
             break;
           default:
             break;
