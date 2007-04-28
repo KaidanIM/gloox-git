@@ -122,7 +122,7 @@ namespace gloox
       virtual void handleDisconnect( ConnectionError reason );
 
       // reimplemented from ConnectionDataHandler
-      virtual ConnectionSOCKS5Proxy* newInstance() const;
+      virtual ConnectionBase* newInstance() const;
 
       /**
        * Sets the server to proxy to.

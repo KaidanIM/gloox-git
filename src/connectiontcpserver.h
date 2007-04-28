@@ -63,7 +63,7 @@ namespace gloox
       virtual ConnectionError connect();
 
       // reimplemented from ConnectionBase
-      virtual ConnectionTCPServer* newInstance() const;
+      virtual ConnectionBase* newInstance() const;
 
     private:
       ConnectionTCPServer &operator=( const ConnectionTCPServer & );

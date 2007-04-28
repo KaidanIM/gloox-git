@@ -60,7 +60,7 @@ namespace gloox
       delete m_connection;
   }
 
-  ConnectionHTTPProxy* ConnectionHTTPProxy::newInstance() const
+  ConnectionBase* ConnectionHTTPProxy::newInstance() const
   {
     ConnectionBase* conn = m_connection ? m_connection->newInstance() : 0;
     return new ConnectionHTTPProxy( m_handler, conn, m_logInstance, m_server, m_port );

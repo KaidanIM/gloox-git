@@ -66,7 +66,7 @@ namespace gloox
   {
   }
 
-  ConnectionTCPServer* ConnectionTCPServer::newInstance() const
+  ConnectionBase* ConnectionTCPServer::newInstance() const
   {
     return new ConnectionTCPServer( m_connectionHandler, m_logInstance, m_server, m_port );
   }
