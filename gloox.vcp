@@ -3865,7 +3865,8 @@ DEP_CPP_CLIENT=\
 	".\src\connectionbase.h"\
 	".\src\connectiondatahandler.h"\
 	".\src\connectionlistener.h"\
-	".\src\connectiontcp.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\connectiontcpclient.h"\
 	".\src\disco.h"\
 	".\src\disconodehandler.h"\
 	".\src\gloox.h"\
@@ -4688,303 +4689,255 @@ NODEP_CPP_COMPR=\
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\connectiontcp.cpp
+SOURCE=.\src\connectionsocks5proxy.cpp
 
 !IF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Release"
 
 DEP_CPP_CONNE=\
-	".\config.h.win"\
+	".\src\base64.h"\
 	".\src\connectionbase.h"\
 	".\src\connectiondatahandler.h"\
-	".\src\connectiontcp.h"\
+	".\src\connectionsocks5proxy.h"\
 	".\src\dns.h"\
 	".\src\gloox.h"\
 	".\src\loghandler.h"\
 	".\src\logsink.h"\
 	".\src\macros.h"\
 	".\src\prep.h"\
-	
-NODEP_CPP_CONNE=\
-	".\src\config.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Debug"
 
 DEP_CPP_CONNE=\
-	".\config.h.win"\
+	".\src\base64.h"\
 	".\src\connectionbase.h"\
 	".\src\connectiondatahandler.h"\
-	".\src\connectiontcp.h"\
+	".\src\connectionsocks5proxy.h"\
 	".\src\dns.h"\
 	".\src\gloox.h"\
 	".\src\loghandler.h"\
 	".\src\logsink.h"\
 	".\src\macros.h"\
 	".\src\prep.h"\
-	
-NODEP_CPP_CONNE=\
-	".\src\config.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Release"
 
 DEP_CPP_CONNE=\
-	".\config.h.win"\
+	".\src\base64.h"\
 	".\src\connectionbase.h"\
 	".\src\connectiondatahandler.h"\
-	".\src\connectiontcp.h"\
+	".\src\connectionsocks5proxy.h"\
 	".\src\dns.h"\
 	".\src\gloox.h"\
 	".\src\loghandler.h"\
 	".\src\logsink.h"\
 	".\src\macros.h"\
 	".\src\prep.h"\
-	
-NODEP_CPP_CONNE=\
-	".\src\config.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Debug"
 
 DEP_CPP_CONNE=\
-	".\config.h.win"\
+	".\src\base64.h"\
 	".\src\connectionbase.h"\
 	".\src\connectiondatahandler.h"\
-	".\src\connectiontcp.h"\
+	".\src\connectionsocks5proxy.h"\
 	".\src\dns.h"\
 	".\src\gloox.h"\
 	".\src\loghandler.h"\
 	".\src\logsink.h"\
 	".\src\macros.h"\
 	".\src\prep.h"\
-	
-NODEP_CPP_CONNE=\
-	".\src\config.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Release"
 
 DEP_CPP_CONNE=\
-	".\config.h.win"\
+	".\src\base64.h"\
 	".\src\connectionbase.h"\
 	".\src\connectiondatahandler.h"\
-	".\src\connectiontcp.h"\
+	".\src\connectionsocks5proxy.h"\
 	".\src\dns.h"\
 	".\src\gloox.h"\
 	".\src\loghandler.h"\
 	".\src\logsink.h"\
 	".\src\macros.h"\
 	".\src\prep.h"\
-	
-NODEP_CPP_CONNE=\
-	".\src\config.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Debug"
 
 DEP_CPP_CONNE=\
-	".\config.h.win"\
+	".\src\base64.h"\
 	".\src\connectionbase.h"\
 	".\src\connectiondatahandler.h"\
-	".\src\connectiontcp.h"\
+	".\src\connectionsocks5proxy.h"\
 	".\src\dns.h"\
 	".\src\gloox.h"\
 	".\src\loghandler.h"\
 	".\src\logsink.h"\
 	".\src\macros.h"\
 	".\src\prep.h"\
-	
-NODEP_CPP_CONNE=\
-	".\src\config.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Release"
 
 DEP_CPP_CONNE=\
-	".\config.h.win"\
+	".\src\base64.h"\
 	".\src\connectionbase.h"\
 	".\src\connectiondatahandler.h"\
-	".\src\connectiontcp.h"\
+	".\src\connectionsocks5proxy.h"\
 	".\src\dns.h"\
 	".\src\gloox.h"\
 	".\src\loghandler.h"\
 	".\src\logsink.h"\
 	".\src\macros.h"\
 	".\src\prep.h"\
-	
-NODEP_CPP_CONNE=\
-	".\src\config.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Debug"
 
 DEP_CPP_CONNE=\
-	".\config.h.win"\
+	".\src\base64.h"\
 	".\src\connectionbase.h"\
 	".\src\connectiondatahandler.h"\
-	".\src\connectiontcp.h"\
+	".\src\connectionsocks5proxy.h"\
 	".\src\dns.h"\
 	".\src\gloox.h"\
 	".\src\loghandler.h"\
 	".\src\logsink.h"\
 	".\src\macros.h"\
 	".\src\prep.h"\
-	
-NODEP_CPP_CONNE=\
-	".\src\config.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Release"
 
 DEP_CPP_CONNE=\
-	".\config.h.win"\
+	".\src\base64.h"\
 	".\src\connectionbase.h"\
 	".\src\connectiondatahandler.h"\
-	".\src\connectiontcp.h"\
+	".\src\connectionsocks5proxy.h"\
 	".\src\dns.h"\
 	".\src\gloox.h"\
 	".\src\loghandler.h"\
 	".\src\logsink.h"\
 	".\src\macros.h"\
 	".\src\prep.h"\
-	
-NODEP_CPP_CONNE=\
-	".\src\config.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Debug"
 
 DEP_CPP_CONNE=\
-	".\config.h.win"\
+	".\src\base64.h"\
 	".\src\connectionbase.h"\
 	".\src\connectiondatahandler.h"\
-	".\src\connectiontcp.h"\
+	".\src\connectionsocks5proxy.h"\
 	".\src\dns.h"\
 	".\src\gloox.h"\
 	".\src\loghandler.h"\
 	".\src\logsink.h"\
 	".\src\macros.h"\
 	".\src\prep.h"\
-	
-NODEP_CPP_CONNE=\
-	".\src\config.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Release"
 
 DEP_CPP_CONNE=\
-	".\config.h.win"\
+	".\src\base64.h"\
 	".\src\connectionbase.h"\
 	".\src\connectiondatahandler.h"\
-	".\src\connectiontcp.h"\
+	".\src\connectionsocks5proxy.h"\
 	".\src\dns.h"\
 	".\src\gloox.h"\
 	".\src\loghandler.h"\
 	".\src\logsink.h"\
 	".\src\macros.h"\
 	".\src\prep.h"\
-	
-NODEP_CPP_CONNE=\
-	".\src\config.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Debug"
 
 DEP_CPP_CONNE=\
-	".\config.h.win"\
+	".\src\base64.h"\
 	".\src\connectionbase.h"\
 	".\src\connectiondatahandler.h"\
-	".\src\connectiontcp.h"\
+	".\src\connectionsocks5proxy.h"\
 	".\src\dns.h"\
 	".\src\gloox.h"\
 	".\src\loghandler.h"\
 	".\src\logsink.h"\
 	".\src\macros.h"\
 	".\src\prep.h"\
-	
-NODEP_CPP_CONNE=\
-	".\src\config.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Release"
 
 DEP_CPP_CONNE=\
-	".\config.h.win"\
+	".\src\base64.h"\
 	".\src\connectionbase.h"\
 	".\src\connectiondatahandler.h"\
-	".\src\connectiontcp.h"\
+	".\src\connectionsocks5proxy.h"\
 	".\src\dns.h"\
 	".\src\gloox.h"\
 	".\src\loghandler.h"\
 	".\src\logsink.h"\
 	".\src\macros.h"\
 	".\src\prep.h"\
-	
-NODEP_CPP_CONNE=\
-	".\src\config.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Debug"
 
 DEP_CPP_CONNE=\
-	".\config.h.win"\
+	".\src\base64.h"\
 	".\src\connectionbase.h"\
 	".\src\connectiondatahandler.h"\
-	".\src\connectiontcp.h"\
+	".\src\connectionsocks5proxy.h"\
 	".\src\dns.h"\
 	".\src\gloox.h"\
 	".\src\loghandler.h"\
 	".\src\logsink.h"\
 	".\src\macros.h"\
 	".\src\prep.h"\
-	
-NODEP_CPP_CONNE=\
-	".\src\config.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Release"
 
 DEP_CPP_CONNE=\
-	".\config.h.win"\
+	".\src\base64.h"\
 	".\src\connectionbase.h"\
 	".\src\connectiondatahandler.h"\
-	".\src\connectiontcp.h"\
+	".\src\connectionsocks5proxy.h"\
 	".\src\dns.h"\
 	".\src\gloox.h"\
 	".\src\loghandler.h"\
 	".\src\logsink.h"\
 	".\src\macros.h"\
 	".\src\prep.h"\
-	
-NODEP_CPP_CONNE=\
-	".\src\config.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Debug"
 
 DEP_CPP_CONNE=\
-	".\config.h.win"\
+	".\src\base64.h"\
 	".\src\connectionbase.h"\
 	".\src\connectiondatahandler.h"\
-	".\src\connectiontcp.h"\
+	".\src\connectionsocks5proxy.h"\
 	".\src\dns.h"\
 	".\src\gloox.h"\
 	".\src\loghandler.h"\
 	".\src\logsink.h"\
 	".\src\macros.h"\
 	".\src\prep.h"\
-	
-NODEP_CPP_CONNE=\
-	".\src\config.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_CONNE=\
-	".\config.h.win"\
+	".\src\base64.h"\
 	".\src\connectionbase.h"\
 	".\src\connectiondatahandler.h"\
-	".\src\connectiontcp.h"\
+	".\src\connectionsocks5proxy.h"\
 	".\src\dns.h"\
 	".\src\gloox.h"\
 	".\src\loghandler.h"\
@@ -4992,16 +4945,14 @@ DEP_CPP_CONNE=\
 	".\src\macros.h"\
 	".\src\prep.h"\
 	
-NODEP_CPP_CONNE=\
-	".\src\config.h"\
-	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_CONNE=\
+	".\src\base64.h"\
 	".\src\connectionbase.h"\
 	".\src\connectiondatahandler.h"\
-	".\src\connectiontcp.h"\
+	".\src\connectionsocks5proxy.h"\
 	".\src\dns.h"\
 	".\src\gloox.h"\
 	".\src\loghandler.h"\
@@ -5013,28 +4964,25 @@ DEP_CPP_CONNE=\
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
 
 DEP_CPP_CONNE=\
-	".\config.h.win"\
+	".\src\base64.h"\
 	".\src\connectionbase.h"\
 	".\src\connectiondatahandler.h"\
-	".\src\connectiontcp.h"\
+	".\src\connectionsocks5proxy.h"\
 	".\src\dns.h"\
 	".\src\gloox.h"\
 	".\src\loghandler.h"\
 	".\src\logsink.h"\
 	".\src\macros.h"\
 	".\src\prep.h"\
-	
-NODEP_CPP_CONNE=\
-	".\src\config.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Debug"
 
 DEP_CPP_CONNE=\
-	".\config.h.win"\
+	".\src\base64.h"\
 	".\src\connectionbase.h"\
 	".\src\connectiondatahandler.h"\
-	".\src\connectiontcp.h"\
+	".\src\connectionsocks5proxy.h"\
 	".\src\dns.h"\
 	".\src\gloox.h"\
 	".\src\loghandler.h"\
@@ -5042,8 +4990,1026 @@ DEP_CPP_CONNE=\
 	".\src\macros.h"\
 	".\src\prep.h"\
 	
-NODEP_CPP_CONNE=\
-	".\src\config.h"\
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\connectiontcpbase.cpp
+
+!IF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Release"
+
+DEP_CPP_CONNEC=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	".\src\prep.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Debug"
+
+DEP_CPP_CONNEC=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	".\src\prep.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Release"
+
+DEP_CPP_CONNEC=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	".\src\prep.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Debug"
+
+DEP_CPP_CONNEC=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	".\src\prep.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Release"
+
+DEP_CPP_CONNEC=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	".\src\prep.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Debug"
+
+DEP_CPP_CONNEC=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	".\src\prep.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Release"
+
+DEP_CPP_CONNEC=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	".\src\prep.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Debug"
+
+DEP_CPP_CONNEC=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	".\src\prep.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Release"
+
+DEP_CPP_CONNEC=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	".\src\prep.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Debug"
+
+DEP_CPP_CONNEC=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	".\src\prep.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Release"
+
+DEP_CPP_CONNEC=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	".\src\prep.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Debug"
+
+DEP_CPP_CONNEC=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	".\src\prep.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Release"
+
+DEP_CPP_CONNEC=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	".\src\prep.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Debug"
+
+DEP_CPP_CONNEC=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	".\src\prep.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Release"
+
+DEP_CPP_CONNEC=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	".\src\prep.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Debug"
+
+DEP_CPP_CONNEC=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	".\src\prep.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Release"
+
+DEP_CPP_CONNEC=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	".\src\prep.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_CONNEC=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	".\src\prep.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
+
+DEP_CPP_CONNEC=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	".\src\prep.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Debug"
+
+DEP_CPP_CONNEC=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	".\src\prep.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\connectiontcpclient.cpp
+
+!IF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Release"
+
+DEP_CPP_CONNECT=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\connectiontcpclient.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Debug"
+
+DEP_CPP_CONNECT=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\connectiontcpclient.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Release"
+
+DEP_CPP_CONNECT=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\connectiontcpclient.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Debug"
+
+DEP_CPP_CONNECT=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\connectiontcpclient.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Release"
+
+DEP_CPP_CONNECT=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\connectiontcpclient.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Debug"
+
+DEP_CPP_CONNECT=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\connectiontcpclient.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Release"
+
+DEP_CPP_CONNECT=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\connectiontcpclient.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Debug"
+
+DEP_CPP_CONNECT=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\connectiontcpclient.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Release"
+
+DEP_CPP_CONNECT=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\connectiontcpclient.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Debug"
+
+DEP_CPP_CONNECT=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\connectiontcpclient.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Release"
+
+DEP_CPP_CONNECT=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\connectiontcpclient.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Debug"
+
+DEP_CPP_CONNECT=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\connectiontcpclient.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Release"
+
+DEP_CPP_CONNECT=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\connectiontcpclient.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Debug"
+
+DEP_CPP_CONNECT=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\connectiontcpclient.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Release"
+
+DEP_CPP_CONNECT=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\connectiontcpclient.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Debug"
+
+DEP_CPP_CONNECT=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\connectiontcpclient.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Release"
+
+DEP_CPP_CONNECT=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\connectiontcpclient.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_CONNECT=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\connectiontcpclient.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
+
+DEP_CPP_CONNECT=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\connectiontcpclient.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Debug"
+
+DEP_CPP_CONNECT=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\connectiontcpclient.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\connectiontcpserver.cpp
+
+!IF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Release"
+
+DEP_CPP_CONNECTI=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectionhandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\connectiontcpclient.h"\
+	".\src\connectiontcpserver.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Debug"
+
+DEP_CPP_CONNECTI=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectionhandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\connectiontcpclient.h"\
+	".\src\connectiontcpserver.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Release"
+
+DEP_CPP_CONNECTI=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectionhandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\connectiontcpclient.h"\
+	".\src\connectiontcpserver.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Debug"
+
+DEP_CPP_CONNECTI=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectionhandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\connectiontcpclient.h"\
+	".\src\connectiontcpserver.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Release"
+
+DEP_CPP_CONNECTI=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectionhandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\connectiontcpclient.h"\
+	".\src\connectiontcpserver.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Debug"
+
+DEP_CPP_CONNECTI=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectionhandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\connectiontcpclient.h"\
+	".\src\connectiontcpserver.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Release"
+
+DEP_CPP_CONNECTI=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectionhandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\connectiontcpclient.h"\
+	".\src\connectiontcpserver.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Debug"
+
+DEP_CPP_CONNECTI=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectionhandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\connectiontcpclient.h"\
+	".\src\connectiontcpserver.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Release"
+
+DEP_CPP_CONNECTI=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectionhandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\connectiontcpclient.h"\
+	".\src\connectiontcpserver.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Debug"
+
+DEP_CPP_CONNECTI=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectionhandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\connectiontcpclient.h"\
+	".\src\connectiontcpserver.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Release"
+
+DEP_CPP_CONNECTI=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectionhandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\connectiontcpclient.h"\
+	".\src\connectiontcpserver.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Debug"
+
+DEP_CPP_CONNECTI=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectionhandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\connectiontcpclient.h"\
+	".\src\connectiontcpserver.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Release"
+
+DEP_CPP_CONNECTI=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectionhandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\connectiontcpclient.h"\
+	".\src\connectiontcpserver.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Debug"
+
+DEP_CPP_CONNECTI=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectionhandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\connectiontcpclient.h"\
+	".\src\connectiontcpserver.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Release"
+
+DEP_CPP_CONNECTI=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectionhandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\connectiontcpclient.h"\
+	".\src\connectiontcpserver.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Debug"
+
+DEP_CPP_CONNECTI=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectionhandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\connectiontcpclient.h"\
+	".\src\connectiontcpserver.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Release"
+
+DEP_CPP_CONNECTI=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectionhandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\connectiontcpclient.h"\
+	".\src\connectiontcpserver.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_CONNECTI=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectionhandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\connectiontcpclient.h"\
+	".\src\connectiontcpserver.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
+
+DEP_CPP_CONNECTI=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectionhandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\connectiontcpclient.h"\
+	".\src\connectiontcpserver.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Debug"
+
+DEP_CPP_CONNECTI=\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectionhandler.h"\
+	".\src\connectiontcpbase.h"\
+	".\src\connectiontcpclient.h"\
+	".\src\connectiontcpserver.h"\
+	".\src\dns.h"\
+	".\src\gloox.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\mutex.h"\
+	".\src\mutexguard.h"\
 	
 
 !ENDIF 
@@ -11073,6 +12039,193 @@ DEP_CPP_MUCRO=\
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\mutex.cpp
+
+!IF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Release"
+
+DEP_CPP_MUTEX=\
+	".\src\mutex.h"\
+	
+NODEP_CPP_MUTEX=\
+	".\src\config.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Debug"
+
+DEP_CPP_MUTEX=\
+	".\src\mutex.h"\
+	
+NODEP_CPP_MUTEX=\
+	".\src\config.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Release"
+
+DEP_CPP_MUTEX=\
+	".\src\mutex.h"\
+	
+NODEP_CPP_MUTEX=\
+	".\src\config.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Debug"
+
+DEP_CPP_MUTEX=\
+	".\src\mutex.h"\
+	
+NODEP_CPP_MUTEX=\
+	".\src\config.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Release"
+
+DEP_CPP_MUTEX=\
+	".\src\mutex.h"\
+	
+NODEP_CPP_MUTEX=\
+	".\src\config.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Debug"
+
+DEP_CPP_MUTEX=\
+	".\src\mutex.h"\
+	
+NODEP_CPP_MUTEX=\
+	".\src\config.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Release"
+
+DEP_CPP_MUTEX=\
+	".\src\mutex.h"\
+	
+NODEP_CPP_MUTEX=\
+	".\src\config.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Debug"
+
+DEP_CPP_MUTEX=\
+	".\src\mutex.h"\
+	
+NODEP_CPP_MUTEX=\
+	".\src\config.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Release"
+
+DEP_CPP_MUTEX=\
+	".\src\mutex.h"\
+	
+NODEP_CPP_MUTEX=\
+	".\src\config.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Debug"
+
+DEP_CPP_MUTEX=\
+	".\src\mutex.h"\
+	
+NODEP_CPP_MUTEX=\
+	".\src\config.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Release"
+
+DEP_CPP_MUTEX=\
+	".\src\mutex.h"\
+	
+NODEP_CPP_MUTEX=\
+	".\src\config.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Debug"
+
+DEP_CPP_MUTEX=\
+	".\src\mutex.h"\
+	
+NODEP_CPP_MUTEX=\
+	".\src\config.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Release"
+
+DEP_CPP_MUTEX=\
+	".\src\mutex.h"\
+	
+NODEP_CPP_MUTEX=\
+	".\src\config.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Debug"
+
+DEP_CPP_MUTEX=\
+	".\src\mutex.h"\
+	
+NODEP_CPP_MUTEX=\
+	".\src\config.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Release"
+
+DEP_CPP_MUTEX=\
+	".\src\mutex.h"\
+	
+NODEP_CPP_MUTEX=\
+	".\src\config.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Debug"
+
+DEP_CPP_MUTEX=\
+	".\src\mutex.h"\
+	
+NODEP_CPP_MUTEX=\
+	".\src\config.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Release"
+
+DEP_CPP_MUTEX=\
+	".\src\mutex.h"\
+	
+NODEP_CPP_MUTEX=\
+	".\src\config.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_MUTEX=\
+	".\src\mutex.h"\
+	
+NODEP_CPP_MUTEX=\
+	".\src\config.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
+
+DEP_CPP_MUTEX=\
+	".\src\mutex.h"\
+	
+NODEP_CPP_MUTEX=\
+	".\src\config.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Debug"
+
+DEP_CPP_MUTEX=\
+	".\src\mutex.h"\
+	
+NODEP_CPP_MUTEX=\
+	".\src\config.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\nonsaslauth.cpp
 
 !IF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Release"
@@ -14654,6 +15807,2094 @@ DEP_CPP_SHA_C=\
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\simanager.cpp
+
+!IF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Release"
+
+DEP_CPP_SIMAN=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\disco.h"\
+	".\src\disconodehandler.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\sihandler.h"\
+	".\src\simanager.h"\
+	".\src\siprofilehandler.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Debug"
+
+DEP_CPP_SIMAN=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\disco.h"\
+	".\src\disconodehandler.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\sihandler.h"\
+	".\src\simanager.h"\
+	".\src\siprofilehandler.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Release"
+
+DEP_CPP_SIMAN=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\disco.h"\
+	".\src\disconodehandler.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\sihandler.h"\
+	".\src\simanager.h"\
+	".\src\siprofilehandler.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Debug"
+
+DEP_CPP_SIMAN=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\disco.h"\
+	".\src\disconodehandler.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\sihandler.h"\
+	".\src\simanager.h"\
+	".\src\siprofilehandler.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Release"
+
+DEP_CPP_SIMAN=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\disco.h"\
+	".\src\disconodehandler.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\sihandler.h"\
+	".\src\simanager.h"\
+	".\src\siprofilehandler.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Debug"
+
+DEP_CPP_SIMAN=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\disco.h"\
+	".\src\disconodehandler.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\sihandler.h"\
+	".\src\simanager.h"\
+	".\src\siprofilehandler.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Release"
+
+DEP_CPP_SIMAN=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\disco.h"\
+	".\src\disconodehandler.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\sihandler.h"\
+	".\src\simanager.h"\
+	".\src\siprofilehandler.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Debug"
+
+DEP_CPP_SIMAN=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\disco.h"\
+	".\src\disconodehandler.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\sihandler.h"\
+	".\src\simanager.h"\
+	".\src\siprofilehandler.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Release"
+
+DEP_CPP_SIMAN=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\disco.h"\
+	".\src\disconodehandler.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\sihandler.h"\
+	".\src\simanager.h"\
+	".\src\siprofilehandler.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Debug"
+
+DEP_CPP_SIMAN=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\disco.h"\
+	".\src\disconodehandler.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\sihandler.h"\
+	".\src\simanager.h"\
+	".\src\siprofilehandler.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Release"
+
+DEP_CPP_SIMAN=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\disco.h"\
+	".\src\disconodehandler.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\sihandler.h"\
+	".\src\simanager.h"\
+	".\src\siprofilehandler.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Debug"
+
+DEP_CPP_SIMAN=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\disco.h"\
+	".\src\disconodehandler.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\sihandler.h"\
+	".\src\simanager.h"\
+	".\src\siprofilehandler.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Release"
+
+DEP_CPP_SIMAN=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\disco.h"\
+	".\src\disconodehandler.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\sihandler.h"\
+	".\src\simanager.h"\
+	".\src\siprofilehandler.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Debug"
+
+DEP_CPP_SIMAN=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\disco.h"\
+	".\src\disconodehandler.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\sihandler.h"\
+	".\src\simanager.h"\
+	".\src\siprofilehandler.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Release"
+
+DEP_CPP_SIMAN=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\disco.h"\
+	".\src\disconodehandler.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\sihandler.h"\
+	".\src\simanager.h"\
+	".\src\siprofilehandler.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Debug"
+
+DEP_CPP_SIMAN=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\disco.h"\
+	".\src\disconodehandler.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\sihandler.h"\
+	".\src\simanager.h"\
+	".\src\siprofilehandler.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Release"
+
+DEP_CPP_SIMAN=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\disco.h"\
+	".\src\disconodehandler.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\sihandler.h"\
+	".\src\simanager.h"\
+	".\src\siprofilehandler.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_SIMAN=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\disco.h"\
+	".\src\disconodehandler.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\sihandler.h"\
+	".\src\simanager.h"\
+	".\src\siprofilehandler.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
+
+DEP_CPP_SIMAN=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\disco.h"\
+	".\src\disconodehandler.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\sihandler.h"\
+	".\src\simanager.h"\
+	".\src\siprofilehandler.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Debug"
+
+DEP_CPP_SIMAN=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\disco.h"\
+	".\src\disconodehandler.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\sihandler.h"\
+	".\src\simanager.h"\
+	".\src\siprofilehandler.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\siprofileft.cpp
+
+!IF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Release"
+
+DEP_CPP_SIPRO=\
+	".\src\connectiondatahandler.h"\
+	".\src\dataform.h"\
+	".\src\dataformbase.h"\
+	".\src\dataformfield.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\sihandler.h"\
+	".\src\simanager.h"\
+	".\src\siprofileft.h"\
+	".\src\siprofilefthandler.h"\
+	".\src\siprofilehandler.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamhandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Debug"
+
+DEP_CPP_SIPRO=\
+	".\src\connectiondatahandler.h"\
+	".\src\dataform.h"\
+	".\src\dataformbase.h"\
+	".\src\dataformfield.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\sihandler.h"\
+	".\src\simanager.h"\
+	".\src\siprofileft.h"\
+	".\src\siprofilefthandler.h"\
+	".\src\siprofilehandler.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamhandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Release"
+
+DEP_CPP_SIPRO=\
+	".\src\connectiondatahandler.h"\
+	".\src\dataform.h"\
+	".\src\dataformbase.h"\
+	".\src\dataformfield.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\sihandler.h"\
+	".\src\simanager.h"\
+	".\src\siprofileft.h"\
+	".\src\siprofilefthandler.h"\
+	".\src\siprofilehandler.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamhandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Debug"
+
+DEP_CPP_SIPRO=\
+	".\src\connectiondatahandler.h"\
+	".\src\dataform.h"\
+	".\src\dataformbase.h"\
+	".\src\dataformfield.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\sihandler.h"\
+	".\src\simanager.h"\
+	".\src\siprofileft.h"\
+	".\src\siprofilefthandler.h"\
+	".\src\siprofilehandler.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamhandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Release"
+
+DEP_CPP_SIPRO=\
+	".\src\connectiondatahandler.h"\
+	".\src\dataform.h"\
+	".\src\dataformbase.h"\
+	".\src\dataformfield.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\sihandler.h"\
+	".\src\simanager.h"\
+	".\src\siprofileft.h"\
+	".\src\siprofilefthandler.h"\
+	".\src\siprofilehandler.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamhandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Debug"
+
+DEP_CPP_SIPRO=\
+	".\src\connectiondatahandler.h"\
+	".\src\dataform.h"\
+	".\src\dataformbase.h"\
+	".\src\dataformfield.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\sihandler.h"\
+	".\src\simanager.h"\
+	".\src\siprofileft.h"\
+	".\src\siprofilefthandler.h"\
+	".\src\siprofilehandler.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamhandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Release"
+
+DEP_CPP_SIPRO=\
+	".\src\connectiondatahandler.h"\
+	".\src\dataform.h"\
+	".\src\dataformbase.h"\
+	".\src\dataformfield.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\sihandler.h"\
+	".\src\simanager.h"\
+	".\src\siprofileft.h"\
+	".\src\siprofilefthandler.h"\
+	".\src\siprofilehandler.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamhandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Debug"
+
+DEP_CPP_SIPRO=\
+	".\src\connectiondatahandler.h"\
+	".\src\dataform.h"\
+	".\src\dataformbase.h"\
+	".\src\dataformfield.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\sihandler.h"\
+	".\src\simanager.h"\
+	".\src\siprofileft.h"\
+	".\src\siprofilefthandler.h"\
+	".\src\siprofilehandler.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamhandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Release"
+
+DEP_CPP_SIPRO=\
+	".\src\connectiondatahandler.h"\
+	".\src\dataform.h"\
+	".\src\dataformbase.h"\
+	".\src\dataformfield.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\sihandler.h"\
+	".\src\simanager.h"\
+	".\src\siprofileft.h"\
+	".\src\siprofilefthandler.h"\
+	".\src\siprofilehandler.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamhandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Debug"
+
+DEP_CPP_SIPRO=\
+	".\src\connectiondatahandler.h"\
+	".\src\dataform.h"\
+	".\src\dataformbase.h"\
+	".\src\dataformfield.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\sihandler.h"\
+	".\src\simanager.h"\
+	".\src\siprofileft.h"\
+	".\src\siprofilefthandler.h"\
+	".\src\siprofilehandler.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamhandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Release"
+
+DEP_CPP_SIPRO=\
+	".\src\connectiondatahandler.h"\
+	".\src\dataform.h"\
+	".\src\dataformbase.h"\
+	".\src\dataformfield.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\sihandler.h"\
+	".\src\simanager.h"\
+	".\src\siprofileft.h"\
+	".\src\siprofilefthandler.h"\
+	".\src\siprofilehandler.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamhandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Debug"
+
+DEP_CPP_SIPRO=\
+	".\src\connectiondatahandler.h"\
+	".\src\dataform.h"\
+	".\src\dataformbase.h"\
+	".\src\dataformfield.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\sihandler.h"\
+	".\src\simanager.h"\
+	".\src\siprofileft.h"\
+	".\src\siprofilefthandler.h"\
+	".\src\siprofilehandler.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamhandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Release"
+
+DEP_CPP_SIPRO=\
+	".\src\connectiondatahandler.h"\
+	".\src\dataform.h"\
+	".\src\dataformbase.h"\
+	".\src\dataformfield.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\sihandler.h"\
+	".\src\simanager.h"\
+	".\src\siprofileft.h"\
+	".\src\siprofilefthandler.h"\
+	".\src\siprofilehandler.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamhandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Debug"
+
+DEP_CPP_SIPRO=\
+	".\src\connectiondatahandler.h"\
+	".\src\dataform.h"\
+	".\src\dataformbase.h"\
+	".\src\dataformfield.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\sihandler.h"\
+	".\src\simanager.h"\
+	".\src\siprofileft.h"\
+	".\src\siprofilefthandler.h"\
+	".\src\siprofilehandler.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamhandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Release"
+
+DEP_CPP_SIPRO=\
+	".\src\connectiondatahandler.h"\
+	".\src\dataform.h"\
+	".\src\dataformbase.h"\
+	".\src\dataformfield.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\sihandler.h"\
+	".\src\simanager.h"\
+	".\src\siprofileft.h"\
+	".\src\siprofilefthandler.h"\
+	".\src\siprofilehandler.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamhandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Debug"
+
+DEP_CPP_SIPRO=\
+	".\src\connectiondatahandler.h"\
+	".\src\dataform.h"\
+	".\src\dataformbase.h"\
+	".\src\dataformfield.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\sihandler.h"\
+	".\src\simanager.h"\
+	".\src\siprofileft.h"\
+	".\src\siprofilefthandler.h"\
+	".\src\siprofilehandler.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamhandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Release"
+
+DEP_CPP_SIPRO=\
+	".\src\connectiondatahandler.h"\
+	".\src\dataform.h"\
+	".\src\dataformbase.h"\
+	".\src\dataformfield.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\sihandler.h"\
+	".\src\simanager.h"\
+	".\src\siprofileft.h"\
+	".\src\siprofilefthandler.h"\
+	".\src\siprofilehandler.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamhandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_SIPRO=\
+	".\src\connectiondatahandler.h"\
+	".\src\dataform.h"\
+	".\src\dataformbase.h"\
+	".\src\dataformfield.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\sihandler.h"\
+	".\src\simanager.h"\
+	".\src\siprofileft.h"\
+	".\src\siprofilefthandler.h"\
+	".\src\siprofilehandler.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamhandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
+
+DEP_CPP_SIPRO=\
+	".\src\connectiondatahandler.h"\
+	".\src\dataform.h"\
+	".\src\dataformbase.h"\
+	".\src\dataformfield.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\sihandler.h"\
+	".\src\simanager.h"\
+	".\src\siprofileft.h"\
+	".\src\siprofilefthandler.h"\
+	".\src\siprofilehandler.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamhandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\tag.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Debug"
+
+DEP_CPP_SIPRO=\
+	".\src\connectiondatahandler.h"\
+	".\src\dataform.h"\
+	".\src\dataformbase.h"\
+	".\src\dataformfield.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\sihandler.h"\
+	".\src\simanager.h"\
+	".\src\siprofileft.h"\
+	".\src\siprofilefthandler.h"\
+	".\src\siprofilehandler.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamhandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\tag.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\socks5bytestream.cpp
+
+!IF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Release"
+
+DEP_CPP_SOCKS=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectionsocks5proxy.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\sha.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamdatahandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Debug"
+
+DEP_CPP_SOCKS=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectionsocks5proxy.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\sha.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamdatahandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Release"
+
+DEP_CPP_SOCKS=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectionsocks5proxy.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\sha.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamdatahandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Debug"
+
+DEP_CPP_SOCKS=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectionsocks5proxy.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\sha.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamdatahandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Release"
+
+DEP_CPP_SOCKS=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectionsocks5proxy.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\sha.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamdatahandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Debug"
+
+DEP_CPP_SOCKS=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectionsocks5proxy.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\sha.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamdatahandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Release"
+
+DEP_CPP_SOCKS=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectionsocks5proxy.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\sha.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamdatahandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Debug"
+
+DEP_CPP_SOCKS=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectionsocks5proxy.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\sha.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamdatahandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Release"
+
+DEP_CPP_SOCKS=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectionsocks5proxy.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\sha.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamdatahandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Debug"
+
+DEP_CPP_SOCKS=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectionsocks5proxy.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\sha.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamdatahandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Release"
+
+DEP_CPP_SOCKS=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectionsocks5proxy.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\sha.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamdatahandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Debug"
+
+DEP_CPP_SOCKS=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectionsocks5proxy.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\sha.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamdatahandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Release"
+
+DEP_CPP_SOCKS=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectionsocks5proxy.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\sha.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamdatahandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Debug"
+
+DEP_CPP_SOCKS=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectionsocks5proxy.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\sha.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamdatahandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Release"
+
+DEP_CPP_SOCKS=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectionsocks5proxy.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\sha.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamdatahandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Debug"
+
+DEP_CPP_SOCKS=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectionsocks5proxy.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\sha.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamdatahandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Release"
+
+DEP_CPP_SOCKS=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectionsocks5proxy.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\sha.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamdatahandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_SOCKS=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectionsocks5proxy.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\sha.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamdatahandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
+
+DEP_CPP_SOCKS=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectionsocks5proxy.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\sha.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamdatahandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Debug"
+
+DEP_CPP_SOCKS=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\connectionsocks5proxy.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\sha.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamdatahandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\socks5bytestreammanager.cpp
+
+!IF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Release"
+
+DEP_CPP_SOCKS5=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\disco.h"\
+	".\src\disconodehandler.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamhandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Debug"
+
+DEP_CPP_SOCKS5=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\disco.h"\
+	".\src\disconodehandler.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamhandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Release"
+
+DEP_CPP_SOCKS5=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\disco.h"\
+	".\src\disconodehandler.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamhandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Debug"
+
+DEP_CPP_SOCKS5=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\disco.h"\
+	".\src\disconodehandler.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamhandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Release"
+
+DEP_CPP_SOCKS5=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\disco.h"\
+	".\src\disconodehandler.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamhandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Debug"
+
+DEP_CPP_SOCKS5=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\disco.h"\
+	".\src\disconodehandler.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamhandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Release"
+
+DEP_CPP_SOCKS5=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\disco.h"\
+	".\src\disconodehandler.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamhandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Debug"
+
+DEP_CPP_SOCKS5=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\disco.h"\
+	".\src\disconodehandler.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamhandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Release"
+
+DEP_CPP_SOCKS5=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\disco.h"\
+	".\src\disconodehandler.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamhandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Debug"
+
+DEP_CPP_SOCKS5=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\disco.h"\
+	".\src\disconodehandler.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamhandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Release"
+
+DEP_CPP_SOCKS5=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\disco.h"\
+	".\src\disconodehandler.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamhandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Debug"
+
+DEP_CPP_SOCKS5=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\disco.h"\
+	".\src\disconodehandler.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamhandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Release"
+
+DEP_CPP_SOCKS5=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\disco.h"\
+	".\src\disconodehandler.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamhandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Debug"
+
+DEP_CPP_SOCKS5=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\disco.h"\
+	".\src\disconodehandler.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamhandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Release"
+
+DEP_CPP_SOCKS5=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\disco.h"\
+	".\src\disconodehandler.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamhandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Debug"
+
+DEP_CPP_SOCKS5=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\disco.h"\
+	".\src\disconodehandler.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamhandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Release"
+
+DEP_CPP_SOCKS5=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\disco.h"\
+	".\src\disconodehandler.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamhandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_SOCKS5=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\disco.h"\
+	".\src\disconodehandler.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamhandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
+
+DEP_CPP_SOCKS5=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\disco.h"\
+	".\src\disconodehandler.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamhandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Debug"
+
+DEP_CPP_SOCKS5=\
+	".\src\clientbase.h"\
+	".\src\compressiondatahandler.h"\
+	".\src\connectionbase.h"\
+	".\src\connectiondatahandler.h"\
+	".\src\disco.h"\
+	".\src\disconodehandler.h"\
+	".\src\gloox.h"\
+	".\src\iqhandler.h"\
+	".\src\jid.h"\
+	".\src\loghandler.h"\
+	".\src\logsink.h"\
+	".\src\macros.h"\
+	".\src\messagefilter.h"\
+	".\src\messagesession.h"\
+	".\src\socks5bytestream.h"\
+	".\src\socks5bytestreamhandler.h"\
+	".\src\socks5bytestreammanager.h"\
+	".\src\stanza.h"\
+	".\src\statisticshandler.h"\
+	".\src\tag.h"\
+	".\src\taghandler.h"\
+	".\src\tlshandler.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\stanza.cpp
 
 !IF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Release"
@@ -15714,13 +18955,16 @@ DEP_CPP_TLSDE=\
 	".\src\macros.h"\
 	".\src\tlsbase.h"\
 	".\src\tlsdefault.h"\
+	".\src\tlsgnutlsbase.h"\
+	".\src\tlsgnutlsclient.h"\
+	".\src\tlsgnutlsclientanon.h"\
+	".\src\tlsgnutlsserveranon.h"\
 	".\src\tlshandler.h"\
 	".\src\tlsopenssl.h"\
 	".\src\tlsschannel.h"\
 	
 NODEP_CPP_TLSDE=\
 	".\src\config.h"\
-	".\src\tlsgnutls.h"\
 	
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
@@ -18074,648 +21318,11 @@ DEP_CPP_UNIQU=\
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\vcard.cpp
-
-!IF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Release"
-
-DEP_CPP_VCARD=\
-	".\src\base64.h"\
-	".\src\gloox.h"\
-	".\src\macros.h"\
-	".\src\tag.h"\
-	".\src\vcard.h"\
-	
-
-!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Debug"
-
-DEP_CPP_VCARD=\
-	".\src\base64.h"\
-	".\src\gloox.h"\
-	".\src\macros.h"\
-	".\src\tag.h"\
-	".\src\vcard.h"\
-	
-
-!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Release"
-
-DEP_CPP_VCARD=\
-	".\src\base64.h"\
-	".\src\gloox.h"\
-	".\src\macros.h"\
-	".\src\tag.h"\
-	".\src\vcard.h"\
-	
-
-!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Debug"
-
-DEP_CPP_VCARD=\
-	".\src\base64.h"\
-	".\src\gloox.h"\
-	".\src\macros.h"\
-	".\src\tag.h"\
-	".\src\vcard.h"\
-	
-
-!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Release"
-
-DEP_CPP_VCARD=\
-	".\src\base64.h"\
-	".\src\gloox.h"\
-	".\src\macros.h"\
-	".\src\tag.h"\
-	".\src\vcard.h"\
-	
-
-!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Debug"
-
-DEP_CPP_VCARD=\
-	".\src\base64.h"\
-	".\src\gloox.h"\
-	".\src\macros.h"\
-	".\src\tag.h"\
-	".\src\vcard.h"\
-	
-
-!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Release"
-
-DEP_CPP_VCARD=\
-	".\src\base64.h"\
-	".\src\gloox.h"\
-	".\src\macros.h"\
-	".\src\tag.h"\
-	".\src\vcard.h"\
-	
-
-!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Debug"
-
-DEP_CPP_VCARD=\
-	".\src\base64.h"\
-	".\src\gloox.h"\
-	".\src\macros.h"\
-	".\src\tag.h"\
-	".\src\vcard.h"\
-	
-
-!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Release"
-
-DEP_CPP_VCARD=\
-	".\src\base64.h"\
-	".\src\gloox.h"\
-	".\src\macros.h"\
-	".\src\tag.h"\
-	".\src\vcard.h"\
-	
-
-!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Debug"
-
-DEP_CPP_VCARD=\
-	".\src\base64.h"\
-	".\src\gloox.h"\
-	".\src\macros.h"\
-	".\src\tag.h"\
-	".\src\vcard.h"\
-	
-
-!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Release"
-
-DEP_CPP_VCARD=\
-	".\src\base64.h"\
-	".\src\gloox.h"\
-	".\src\macros.h"\
-	".\src\tag.h"\
-	".\src\vcard.h"\
-	
-
-!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Debug"
-
-DEP_CPP_VCARD=\
-	".\src\base64.h"\
-	".\src\gloox.h"\
-	".\src\macros.h"\
-	".\src\tag.h"\
-	".\src\vcard.h"\
-	
-
-!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Release"
-
-DEP_CPP_VCARD=\
-	".\src\base64.h"\
-	".\src\gloox.h"\
-	".\src\macros.h"\
-	".\src\tag.h"\
-	".\src\vcard.h"\
-	
-
-!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Debug"
-
-DEP_CPP_VCARD=\
-	".\src\base64.h"\
-	".\src\gloox.h"\
-	".\src\macros.h"\
-	".\src\tag.h"\
-	".\src\vcard.h"\
-	
-
-!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Release"
-
-DEP_CPP_VCARD=\
-	".\src\base64.h"\
-	".\src\gloox.h"\
-	".\src\macros.h"\
-	".\src\tag.h"\
-	".\src\vcard.h"\
-	
-
-!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Debug"
-
-DEP_CPP_VCARD=\
-	".\src\base64.h"\
-	".\src\gloox.h"\
-	".\src\macros.h"\
-	".\src\tag.h"\
-	".\src\vcard.h"\
-	
-
-!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Release"
-
-DEP_CPP_VCARD=\
-	".\src\base64.h"\
-	".\src\gloox.h"\
-	".\src\macros.h"\
-	".\src\tag.h"\
-	".\src\vcard.h"\
-	
-
-!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
-
-DEP_CPP_VCARD=\
-	".\src\base64.h"\
-	".\src\gloox.h"\
-	".\src\macros.h"\
-	".\src\tag.h"\
-	".\src\vcard.h"\
-	
-
-!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
-
-DEP_CPP_VCARD=\
-	".\src\base64.h"\
-	".\src\gloox.h"\
-	".\src\macros.h"\
-	".\src\tag.h"\
-	".\src\vcard.h"\
-	
-
-!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Debug"
-
-DEP_CPP_VCARD=\
-	".\src\base64.h"\
-	".\src\gloox.h"\
-	".\src\macros.h"\
-	".\src\tag.h"\
-	".\src\vcard.h"\
-	
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\vcardmanager.cpp
-
-!IF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Release"
-
-DEP_CPP_VCARDM=\
-	".\src\clientbase.h"\
-	".\src\disco.h"\
-	".\src\disconodehandler.h"\
-	".\src\gloox.h"\
-	".\src\iqhandler.h"\
-	".\src\jid.h"\
-	".\src\loghandler.h"\
-	".\src\logsink.h"\
-	".\src\macros.h"\
-	".\src\stanza.h"\
-	".\src\statisticshandler.h"\
-	".\src\tag.h"\
-	".\src\taghandler.h"\
-	".\src\vcard.h"\
-	".\src\vcardhandler.h"\
-	".\src\vcardmanager.h"\
-	
-
-!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Debug"
-
-DEP_CPP_VCARDM=\
-	".\src\clientbase.h"\
-	".\src\disco.h"\
-	".\src\disconodehandler.h"\
-	".\src\gloox.h"\
-	".\src\iqhandler.h"\
-	".\src\jid.h"\
-	".\src\loghandler.h"\
-	".\src\logsink.h"\
-	".\src\macros.h"\
-	".\src\stanza.h"\
-	".\src\statisticshandler.h"\
-	".\src\tag.h"\
-	".\src\taghandler.h"\
-	".\src\vcard.h"\
-	".\src\vcardhandler.h"\
-	".\src\vcardmanager.h"\
-	
-
-!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Release"
-
-DEP_CPP_VCARDM=\
-	".\src\clientbase.h"\
-	".\src\disco.h"\
-	".\src\disconodehandler.h"\
-	".\src\gloox.h"\
-	".\src\iqhandler.h"\
-	".\src\jid.h"\
-	".\src\loghandler.h"\
-	".\src\logsink.h"\
-	".\src\macros.h"\
-	".\src\stanza.h"\
-	".\src\statisticshandler.h"\
-	".\src\tag.h"\
-	".\src\taghandler.h"\
-	".\src\vcard.h"\
-	".\src\vcardhandler.h"\
-	".\src\vcardmanager.h"\
-	
-
-!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Debug"
-
-DEP_CPP_VCARDM=\
-	".\src\clientbase.h"\
-	".\src\disco.h"\
-	".\src\disconodehandler.h"\
-	".\src\gloox.h"\
-	".\src\iqhandler.h"\
-	".\src\jid.h"\
-	".\src\loghandler.h"\
-	".\src\logsink.h"\
-	".\src\macros.h"\
-	".\src\stanza.h"\
-	".\src\statisticshandler.h"\
-	".\src\tag.h"\
-	".\src\taghandler.h"\
-	".\src\vcard.h"\
-	".\src\vcardhandler.h"\
-	".\src\vcardmanager.h"\
-	
-
-!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Release"
-
-DEP_CPP_VCARDM=\
-	".\src\clientbase.h"\
-	".\src\disco.h"\
-	".\src\disconodehandler.h"\
-	".\src\gloox.h"\
-	".\src\iqhandler.h"\
-	".\src\jid.h"\
-	".\src\loghandler.h"\
-	".\src\logsink.h"\
-	".\src\macros.h"\
-	".\src\stanza.h"\
-	".\src\statisticshandler.h"\
-	".\src\tag.h"\
-	".\src\taghandler.h"\
-	".\src\vcard.h"\
-	".\src\vcardhandler.h"\
-	".\src\vcardmanager.h"\
-	
-
-!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Debug"
-
-DEP_CPP_VCARDM=\
-	".\src\clientbase.h"\
-	".\src\disco.h"\
-	".\src\disconodehandler.h"\
-	".\src\gloox.h"\
-	".\src\iqhandler.h"\
-	".\src\jid.h"\
-	".\src\loghandler.h"\
-	".\src\logsink.h"\
-	".\src\macros.h"\
-	".\src\stanza.h"\
-	".\src\statisticshandler.h"\
-	".\src\tag.h"\
-	".\src\taghandler.h"\
-	".\src\vcard.h"\
-	".\src\vcardhandler.h"\
-	".\src\vcardmanager.h"\
-	
-
-!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Release"
-
-DEP_CPP_VCARDM=\
-	".\src\clientbase.h"\
-	".\src\disco.h"\
-	".\src\disconodehandler.h"\
-	".\src\gloox.h"\
-	".\src\iqhandler.h"\
-	".\src\jid.h"\
-	".\src\loghandler.h"\
-	".\src\logsink.h"\
-	".\src\macros.h"\
-	".\src\stanza.h"\
-	".\src\statisticshandler.h"\
-	".\src\tag.h"\
-	".\src\taghandler.h"\
-	".\src\vcard.h"\
-	".\src\vcardhandler.h"\
-	".\src\vcardmanager.h"\
-	
-
-!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Debug"
-
-DEP_CPP_VCARDM=\
-	".\src\clientbase.h"\
-	".\src\disco.h"\
-	".\src\disconodehandler.h"\
-	".\src\gloox.h"\
-	".\src\iqhandler.h"\
-	".\src\jid.h"\
-	".\src\loghandler.h"\
-	".\src\logsink.h"\
-	".\src\macros.h"\
-	".\src\stanza.h"\
-	".\src\statisticshandler.h"\
-	".\src\tag.h"\
-	".\src\taghandler.h"\
-	".\src\vcard.h"\
-	".\src\vcardhandler.h"\
-	".\src\vcardmanager.h"\
-	
-
-!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Release"
-
-DEP_CPP_VCARDM=\
-	".\src\clientbase.h"\
-	".\src\disco.h"\
-	".\src\disconodehandler.h"\
-	".\src\gloox.h"\
-	".\src\iqhandler.h"\
-	".\src\jid.h"\
-	".\src\loghandler.h"\
-	".\src\logsink.h"\
-	".\src\macros.h"\
-	".\src\stanza.h"\
-	".\src\statisticshandler.h"\
-	".\src\tag.h"\
-	".\src\taghandler.h"\
-	".\src\vcard.h"\
-	".\src\vcardhandler.h"\
-	".\src\vcardmanager.h"\
-	
-
-!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Debug"
-
-DEP_CPP_VCARDM=\
-	".\src\clientbase.h"\
-	".\src\disco.h"\
-	".\src\disconodehandler.h"\
-	".\src\gloox.h"\
-	".\src\iqhandler.h"\
-	".\src\jid.h"\
-	".\src\loghandler.h"\
-	".\src\logsink.h"\
-	".\src\macros.h"\
-	".\src\stanza.h"\
-	".\src\statisticshandler.h"\
-	".\src\tag.h"\
-	".\src\taghandler.h"\
-	".\src\vcard.h"\
-	".\src\vcardhandler.h"\
-	".\src\vcardmanager.h"\
-	
-
-!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Release"
-
-DEP_CPP_VCARDM=\
-	".\src\clientbase.h"\
-	".\src\disco.h"\
-	".\src\disconodehandler.h"\
-	".\src\gloox.h"\
-	".\src\iqhandler.h"\
-	".\src\jid.h"\
-	".\src\loghandler.h"\
-	".\src\logsink.h"\
-	".\src\macros.h"\
-	".\src\stanza.h"\
-	".\src\statisticshandler.h"\
-	".\src\tag.h"\
-	".\src\taghandler.h"\
-	".\src\vcard.h"\
-	".\src\vcardhandler.h"\
-	".\src\vcardmanager.h"\
-	
-
-!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Debug"
-
-DEP_CPP_VCARDM=\
-	".\src\clientbase.h"\
-	".\src\disco.h"\
-	".\src\disconodehandler.h"\
-	".\src\gloox.h"\
-	".\src\iqhandler.h"\
-	".\src\jid.h"\
-	".\src\loghandler.h"\
-	".\src\logsink.h"\
-	".\src\macros.h"\
-	".\src\stanza.h"\
-	".\src\statisticshandler.h"\
-	".\src\tag.h"\
-	".\src\taghandler.h"\
-	".\src\vcard.h"\
-	".\src\vcardhandler.h"\
-	".\src\vcardmanager.h"\
-	
-
-!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Release"
-
-DEP_CPP_VCARDM=\
-	".\src\clientbase.h"\
-	".\src\disco.h"\
-	".\src\disconodehandler.h"\
-	".\src\gloox.h"\
-	".\src\iqhandler.h"\
-	".\src\jid.h"\
-	".\src\loghandler.h"\
-	".\src\logsink.h"\
-	".\src\macros.h"\
-	".\src\stanza.h"\
-	".\src\statisticshandler.h"\
-	".\src\tag.h"\
-	".\src\taghandler.h"\
-	".\src\vcard.h"\
-	".\src\vcardhandler.h"\
-	".\src\vcardmanager.h"\
-	
-
-!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Debug"
-
-DEP_CPP_VCARDM=\
-	".\src\clientbase.h"\
-	".\src\disco.h"\
-	".\src\disconodehandler.h"\
-	".\src\gloox.h"\
-	".\src\iqhandler.h"\
-	".\src\jid.h"\
-	".\src\loghandler.h"\
-	".\src\logsink.h"\
-	".\src\macros.h"\
-	".\src\stanza.h"\
-	".\src\statisticshandler.h"\
-	".\src\tag.h"\
-	".\src\taghandler.h"\
-	".\src\vcard.h"\
-	".\src\vcardhandler.h"\
-	".\src\vcardmanager.h"\
-	
-
-!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Release"
-
-DEP_CPP_VCARDM=\
-	".\src\clientbase.h"\
-	".\src\disco.h"\
-	".\src\disconodehandler.h"\
-	".\src\gloox.h"\
-	".\src\iqhandler.h"\
-	".\src\jid.h"\
-	".\src\loghandler.h"\
-	".\src\logsink.h"\
-	".\src\macros.h"\
-	".\src\stanza.h"\
-	".\src\statisticshandler.h"\
-	".\src\tag.h"\
-	".\src\taghandler.h"\
-	".\src\vcard.h"\
-	".\src\vcardhandler.h"\
-	".\src\vcardmanager.h"\
-	
-
-!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Debug"
-
-DEP_CPP_VCARDM=\
-	".\src\clientbase.h"\
-	".\src\disco.h"\
-	".\src\disconodehandler.h"\
-	".\src\gloox.h"\
-	".\src\iqhandler.h"\
-	".\src\jid.h"\
-	".\src\loghandler.h"\
-	".\src\logsink.h"\
-	".\src\macros.h"\
-	".\src\stanza.h"\
-	".\src\statisticshandler.h"\
-	".\src\tag.h"\
-	".\src\taghandler.h"\
-	".\src\vcard.h"\
-	".\src\vcardhandler.h"\
-	".\src\vcardmanager.h"\
-	
-
-!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Release"
-
-DEP_CPP_VCARDM=\
-	".\src\clientbase.h"\
-	".\src\disco.h"\
-	".\src\disconodehandler.h"\
-	".\src\gloox.h"\
-	".\src\iqhandler.h"\
-	".\src\jid.h"\
-	".\src\loghandler.h"\
-	".\src\logsink.h"\
-	".\src\macros.h"\
-	".\src\stanza.h"\
-	".\src\statisticshandler.h"\
-	".\src\tag.h"\
-	".\src\taghandler.h"\
-	".\src\vcard.h"\
-	".\src\vcardhandler.h"\
-	".\src\vcardmanager.h"\
-	
-
-!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
-
-DEP_CPP_VCARDM=\
-	".\src\clientbase.h"\
-	".\src\compressiondatahandler.h"\
-	".\src\connectiondatahandler.h"\
-	".\src\disco.h"\
-	".\src\disconodehandler.h"\
-	".\src\gloox.h"\
-	".\src\iqhandler.h"\
-	".\src\jid.h"\
-	".\src\loghandler.h"\
-	".\src\logsink.h"\
-	".\src\macros.h"\
-	".\src\stanza.h"\
-	".\src\statisticshandler.h"\
-	".\src\tag.h"\
-	".\src\taghandler.h"\
-	".\src\tlshandler.h"\
-	".\src\vcard.h"\
-	".\src\vcardhandler.h"\
-	".\src\vcardmanager.h"\
-	
-
-!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
-
-DEP_CPP_VCARDM=\
-	".\src\clientbase.h"\
-	".\src\disco.h"\
-	".\src\disconodehandler.h"\
-	".\src\gloox.h"\
-	".\src\iqhandler.h"\
-	".\src\jid.h"\
-	".\src\loghandler.h"\
-	".\src\logsink.h"\
-	".\src\macros.h"\
-	".\src\stanza.h"\
-	".\src\statisticshandler.h"\
-	".\src\tag.h"\
-	".\src\taghandler.h"\
-	".\src\vcard.h"\
-	".\src\vcardhandler.h"\
-	".\src\vcardmanager.h"\
-	
-
-!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Debug"
-
-DEP_CPP_VCARDM=\
-	".\src\clientbase.h"\
-	".\src\disco.h"\
-	".\src\disconodehandler.h"\
-	".\src\gloox.h"\
-	".\src\iqhandler.h"\
-	".\src\jid.h"\
-	".\src\loghandler.h"\
-	".\src\logsink.h"\
-	".\src\macros.h"\
-	".\src\stanza.h"\
-	".\src\statisticshandler.h"\
-	".\src\tag.h"\
-	".\src\taghandler.h"\
-	".\src\vcard.h"\
-	".\src\vcardhandler.h"\
-	".\src\vcardmanager.h"\
-	
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\src\vcardupdate.cpp
 
 !IF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Release"
 
-DEP_CPP_VCARDU=\
+DEP_CPP_VCARD=\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\stanzaextension.h"\
@@ -18725,7 +21332,7 @@ DEP_CPP_VCARDU=\
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Debug"
 
-DEP_CPP_VCARDU=\
+DEP_CPP_VCARD=\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\stanzaextension.h"\
@@ -18735,7 +21342,7 @@ DEP_CPP_VCARDU=\
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Release"
 
-DEP_CPP_VCARDU=\
+DEP_CPP_VCARD=\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\stanzaextension.h"\
@@ -18745,7 +21352,7 @@ DEP_CPP_VCARDU=\
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Debug"
 
-DEP_CPP_VCARDU=\
+DEP_CPP_VCARD=\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\stanzaextension.h"\
@@ -18755,7 +21362,7 @@ DEP_CPP_VCARDU=\
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Release"
 
-DEP_CPP_VCARDU=\
+DEP_CPP_VCARD=\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\stanzaextension.h"\
@@ -18765,7 +21372,7 @@ DEP_CPP_VCARDU=\
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Debug"
 
-DEP_CPP_VCARDU=\
+DEP_CPP_VCARD=\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\stanzaextension.h"\
@@ -18775,7 +21382,7 @@ DEP_CPP_VCARDU=\
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Release"
 
-DEP_CPP_VCARDU=\
+DEP_CPP_VCARD=\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\stanzaextension.h"\
@@ -18785,7 +21392,7 @@ DEP_CPP_VCARDU=\
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Debug"
 
-DEP_CPP_VCARDU=\
+DEP_CPP_VCARD=\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\stanzaextension.h"\
@@ -18795,7 +21402,7 @@ DEP_CPP_VCARDU=\
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Release"
 
-DEP_CPP_VCARDU=\
+DEP_CPP_VCARD=\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\stanzaextension.h"\
@@ -18805,7 +21412,7 @@ DEP_CPP_VCARDU=\
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Debug"
 
-DEP_CPP_VCARDU=\
+DEP_CPP_VCARD=\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\stanzaextension.h"\
@@ -18815,7 +21422,7 @@ DEP_CPP_VCARDU=\
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Release"
 
-DEP_CPP_VCARDU=\
+DEP_CPP_VCARD=\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\stanzaextension.h"\
@@ -18825,7 +21432,7 @@ DEP_CPP_VCARDU=\
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Debug"
 
-DEP_CPP_VCARDU=\
+DEP_CPP_VCARD=\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\stanzaextension.h"\
@@ -18835,7 +21442,7 @@ DEP_CPP_VCARDU=\
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Release"
 
-DEP_CPP_VCARDU=\
+DEP_CPP_VCARD=\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\stanzaextension.h"\
@@ -18845,7 +21452,7 @@ DEP_CPP_VCARDU=\
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Debug"
 
-DEP_CPP_VCARDU=\
+DEP_CPP_VCARD=\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\stanzaextension.h"\
@@ -18855,7 +21462,7 @@ DEP_CPP_VCARDU=\
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Release"
 
-DEP_CPP_VCARDU=\
+DEP_CPP_VCARD=\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\stanzaextension.h"\
@@ -18865,7 +21472,7 @@ DEP_CPP_VCARDU=\
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Debug"
 
-DEP_CPP_VCARDU=\
+DEP_CPP_VCARD=\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\stanzaextension.h"\
@@ -18875,7 +21482,7 @@ DEP_CPP_VCARDU=\
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Release"
 
-DEP_CPP_VCARDU=\
+DEP_CPP_VCARD=\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\stanzaextension.h"\
@@ -18885,7 +21492,7 @@ DEP_CPP_VCARDU=\
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
 
-DEP_CPP_VCARDU=\
+DEP_CPP_VCARD=\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\stanzaextension.h"\
@@ -18895,7 +21502,7 @@ DEP_CPP_VCARDU=\
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
 
-DEP_CPP_VCARDU=\
+DEP_CPP_VCARD=\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\stanzaextension.h"\
@@ -18905,13 +21512,60 @@ DEP_CPP_VCARDU=\
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Debug"
 
-DEP_CPP_VCARDU=\
+DEP_CPP_VCARD=\
 	".\src\gloox.h"\
 	".\src\macros.h"\
 	".\src\stanzaextension.h"\
 	".\src\tag.h"\
 	".\src\vcardupdate.h"\
 	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\version.rc
+
+!IF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Release"
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII_FP) Debug"
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Release"
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSII) Debug"
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Release"
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH4) Debug"
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Release"
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE SH3) Debug"
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Release"
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV) Debug"
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Release"
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE emulator) Debug"
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Release"
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4I) Debug"
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Release"
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE MIPSIV_FP) Debug"
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Release"
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE ARMV4) Debug"
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Release"
+
+!ELSEIF  "$(CFG)" == "gloox - Win32 (WCE x86) Debug"
 
 !ENDIF 
 
@@ -19221,11 +21875,27 @@ SOURCE=.\src\connectiondatahandler.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\connectionhandler.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\connectionlistener.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\connectiontcp.h
+SOURCE=.\src\connectionsocks5proxy.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\connectiontcpbase.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\connectiontcpclient.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\connectiontcpserver.h
 # End Source File
 # Begin Source File
 
@@ -19361,6 +22031,14 @@ SOURCE=.\src\mucroomhandler.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\mutex.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\mutexguard.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\nonsaslauth.h
 # End Source File
 # Begin Source File
@@ -19437,6 +22115,42 @@ SOURCE=.\src\sha.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\sihandler.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\simanager.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\siprofileft.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\siprofilefthandler.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\siprofilehandler.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\socks5bytestream.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\socks5bytestreamdatahandler.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\socks5bytestreamhandler.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\socks5bytestreammanager.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\stanza.h
 # End Source File
 # Begin Source File
@@ -19502,18 +22216,6 @@ SOURCE=.\src\tlsschannel.h
 # Begin Source File
 
 SOURCE=.\src\uniquemucroom.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\vcard.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\vcardhandler.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\vcardmanager.h
 # End Source File
 # Begin Source File
 

@@ -133,7 +133,19 @@ SOURCE=.\src\connectionhttpproxy.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\connectiontcp.cpp
+SOURCE=.\src\connectionsocks5proxy.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\connectiontcpbase.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\connectiontcpclient.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\connectiontcpserver.cpp
 # End Source File
 # Begin Source File
 
@@ -233,6 +245,10 @@ SOURCE=.\src\mucroom.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\mutex.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\nonsaslauth.cpp
 # End Source File
 # Begin Source File
@@ -278,6 +294,22 @@ SOURCE=.\src\search.cpp
 # Begin Source File
 
 SOURCE=.\src\sha.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\simanager.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\siprofileft.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\socks5bytestream.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\socks5bytestreammanager.cpp
 # End Source File
 # Begin Source File
 
@@ -421,6 +453,10 @@ SOURCE=.\src\connectiondatahandler.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\connectionhandler.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\connectionhttpproxy.h
 # End Source File
 # Begin Source File
@@ -429,7 +465,19 @@ SOURCE=.\src\connectionlistener.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\connectiontcp.h
+SOURCE=.\src\connectionsocks5proxy.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\connectiontcpbase.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\connectiontcpclient.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\connectiontcpserver.h
 # End Source File
 # Begin Source File
 
@@ -593,6 +641,14 @@ SOURCE=.\src\mucroomlistener.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\mutex.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\mutexguard.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\nonsaslauth.h
 # End Source File
 # Begin Source File
@@ -670,6 +726,42 @@ SOURCE=.\src\searchhandler.h
 # Begin Source File
 
 SOURCE=.\src\sha.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\sihandler.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\simanager.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\siprofileft.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\siprofilefthandler.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\siprofilehandler.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\socks5bytestream.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\socks5bytestreamdatahandler.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\socks5bytestreamhandler.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\socks5bytestreammanager.h
 # End Source File
 # Begin Source File
 
