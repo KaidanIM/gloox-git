@@ -7,7 +7,6 @@
 #include "../logsink.h"
 #include "../siprofileft.h"
 #include "../siprofilefthandler.h"
-#include "../socks5bytestreammanager.h"
 #include "../socks5bytestreamdatahandler.h"
 using namespace gloox;
 
