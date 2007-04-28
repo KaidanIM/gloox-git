@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.50)
-AC_INIT([gloox], [0.9-rc1], [js@camaya.net])
+AC_INIT([gloox], [0.9-rc2], [js@camaya.net])
 AC_CONFIG_SRCDIR([configure.ac])
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 
@@ -143,6 +143,11 @@ else
 fi
 AC_MSG_CHECKING([if Zlib should be used])
 AC_MSG_RESULT($zlib)
+
+dnl pthread
+ACX_PTHREAD()
+LIBS="$PTHREAD_LIBS $LIBS"
+CPPFLAGS="$CPPFLAGS $PTHREAD_CFLAGS"
 
 dnl check for res_querydomain in libc, libbind and libresolv
 AC_CHECK_FUNCS(res_querydomain)
