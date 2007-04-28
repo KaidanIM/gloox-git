@@ -76,10 +76,8 @@ namespace gloox
       /**
        * Notifies the handler of errors occuring when a bytestream was requested.
        * For example, if the remote entity does not implement SOCKS5 bytestreams.
-       * @param remote The remote entity's JID which relates to the error.
-       * @param se The error.
-       */
-      virtual void handleSOCKS5BytestreamError( const JID& remote, StanzaError se ) = 0;
+       * @param stanza The error stanza.       */
+      virtual void handleSOCKS5BytestreamError( Stanza* stanza ) = 0;
 
   };
 

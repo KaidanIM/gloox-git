@@ -203,8 +203,10 @@ printf( "handleSIRequest\n" );
       m_handler->handleFTSOCKS5Bytestream( s5b );
   }
 
-  void SIProfileFT::handleSOCKS5BytestreamError( const JID& remote, StanzaError se )
+  void SIProfileFT::handleSOCKS5BytestreamError( Stanza* stanza )
   {
+    if( m_handler )
+      m_handler->handleFTRequestError( stanza );
   }
 
 }
