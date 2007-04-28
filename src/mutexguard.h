@@ -32,25 +32,21 @@ namespace gloox
        * Contructs a new simple mutex guard and locks the supplied Mutex.
        * @param mutex The Mutex to guard.
        */
-      MutexGuard( Mutex* mutex ) : m_mutex( mutex ) { if( m_mutex ) m_mutex->lock(); }
+      MutexGuard( Mutex* mutex ) : m_mutex( *mutex ) { if( mutex ) m_mutex.lock(); }
+
+      /**
+       * Contructs a new simple mutex guard and locks the supplied Mutex.
+       * @param mutex The Mutex to guard.
+       */
+      MutexGuard( Mutex& mutex ) : m_mutex( mutex ) { m_mutex.lock(); }
 
       /**
        * Destructor. Releases the guarded Mutex.
        */
-      ~MutexGuard() { if( m_mutex ) m_mutex->unlock(); }
-
-      /**
-       * Locks the guarded mutex.
-       */
-      void lock() { if( m_mutex ) m_mutex->lock(); }
-
-      /**
-       * Releases the guarded mutex.
-       */
-      void unlock() { if( m_mutex ) m_mutex->unlock(); }
+      ~MutexGuard() { m_mutex.unlock(); }
 
     private:
-      Mutex* m_mutex;
+      Mutex& m_mutex;
 
   };
 }

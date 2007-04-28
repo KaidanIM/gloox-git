@@ -73,7 +73,7 @@ namespace gloox
 
   ConnectionError ConnectionTCPServer::connect()
   {
-    MutexGuard mg( m_sendMutex );
+    MutexGuard mg( &m_sendMutex );
 
     if( m_socket >= 0 || m_state > StateDisconnected )
       return ConnNoError;
@@ -104,13 +104,19 @@ namespace gloox
 
   ConnectionError ConnectionTCPServer::recv( int timeout )
   {
-    MutexGuard mg( m_recvMutex );
+    m_recvMutex.lock();
 
     if( m_cancel || m_socket < 0 || !m_connectionHandler )
+    {
+      m_recvMutex.unlock();
       return ConnNotConnected;
+    }
 
     if( !dataAvailable( timeout ) )
+    {
+      m_recvMutex.unlock();
       return ConnNoError;
+    }
 
     struct sockaddr_in they;
     int sin_size = sizeof( struct sockaddr_in );
@@ -120,7 +126,7 @@ namespace gloox
     int newfd = accept( m_socket, (struct sockaddr*)&they, (socklen_t*)&sin_size );
 #endif
 
-    mg.unlock();
+    m_recvMutex.unlock();
 
     ConnectionTCPClient* conn = new ConnectionTCPClient( m_logInstance, inet_ntoa( they.sin_addr ),
                                                          ntohs( they.sin_port ) );

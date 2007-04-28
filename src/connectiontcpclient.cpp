@@ -17,7 +17,7 @@
 #include "connectiontcpclient.h"
 #include "dns.h"
 #include "logsink.h"
-#include "mutex.h"
+#include "mutexguard.h"
 
 #ifdef __MINGW32__
 # include <winsock.h>
@@ -66,17 +66,17 @@ namespace gloox
 
   ConnectionError ConnectionTCPClient::connect()
   {
-    m_sendMutex->lock();
+    m_sendMutex.lock();
 
     if( !m_handler || m_socket >= 0 )
     {
-      m_sendMutex->unlock();
+      m_sendMutex.unlock();
       return ConnNotConnected;
     }
 
     if( m_state > StateDisconnected )
     {
-      m_sendMutex->unlock();
+      m_sendMutex.unlock();
       return ConnNoError;
     }
 
@@ -90,7 +90,7 @@ namespace gloox
         m_socket = DNS::connect( m_server, m_port, m_logInstance );
     }
 
-    m_sendMutex->unlock();
+    m_sendMutex.unlock();
 
     if( m_socket < 0 )
     {
@@ -124,17 +124,17 @@ namespace gloox
 
   ConnectionError ConnectionTCPClient::recv( int timeout )
   {
-    m_recvMutex->lock();
+    m_recvMutex.lock();
 
     if( m_cancel || m_socket < 0 )
     {
-      m_recvMutex->unlock();
+      m_recvMutex.unlock();
       return ConnNotConnected;
     }
 
     if( !dataAvailable( timeout ) )
     {
-      m_recvMutex->unlock();
+      m_recvMutex.unlock();
       return ConnNoError;
     }
 
@@ -144,7 +144,7 @@ namespace gloox
     int size = ::recv( m_socket, m_buf, m_bufsize, 0 );
 #endif
 
-    m_recvMutex->unlock();
+    m_recvMutex.unlock();
 
     if( size <= 0 )
     {
