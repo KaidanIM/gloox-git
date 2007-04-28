@@ -31,7 +31,7 @@ namespace gloox
    * by gloox.
    *
    * @author Jakob Schroeter <js@camaya.net>
-   * @since 0.9.1
+   * @since 0.9
    */
   class SIHandler
   {

@@ -29,7 +29,7 @@ namespace gloox
    * You need only one SIManager object per ClientBase instance.
    *
    * @author Jakob Schroeter <js@camaya.net>
-   * @since 0.9.1
+   * @since 0.9
    */
   class SIManager : public IqHandler
   {
