@@ -288,7 +288,8 @@
  * @li XEP-0049 @link gloox::PrivateXML Private XML Storage @endlink
  * @li XEP-0050 @link gloox::Adhoc Ad-hoc Commands @endlink
  * @li XEP-0054 @link gloox::VCardManager vcard-temp @endlink
- * @li XEP-0065 Used with File Transfer. See below.
+ * @li XEP-0065 @link gloox::SOCKS5BytestreamManager SOCKS5 Bytestreams @endlink, used with
+ * @ref filetransfer_sec and @ref proxy_sec
  * @li XEP-0066 @link gloox::OOB Out of Band Data @endlink
  * @li XEP-0077 @link gloox::Registration In-Band Registration @endlink
  * @li XEP-0078 Non-SASL Authentication (automatically used if the server does not support SASL)
@@ -298,8 +299,8 @@
  * examples)
  * @li XEP-0091 @link gloox::XDelayedDelivery Delayed Delivery @endlink (old spec)
  * @li XEP-0092 Software Version (integrated into @link gloox::Disco Service Discovery @endlink)
- * @li XEP-0095 Used with File Transfer. See below.
- * @li XEP-0096 (File Transfer). See @link gloox::SIProfileFT SIProfileFT @endlink and below.
+ * @li XEP-0095 @link gloox::SIManager Stream Initiation @endlink, used with @ref filetransfer_sec
+ * @li XEP-0096 @ref filetransfer_sec
  * @li XEP-0114 @link gloox::Component Jabber Component Protocol @endlink
  * @li XEP-0138 Stream Compression (used automatically if gloox is compiled with zlib and if the server
  * supports it)
