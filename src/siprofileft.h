@@ -135,15 +135,16 @@ namespace gloox
 
       /**
        * Starts negotiating a file transfer with a remote entity.
-       * @param to The entity to talk to.
-       * @param name The file's name. Mandatory.
+       * @param to The entity to send the file to. Must be a full JID.
+       * @param name The file's name. Mandatory and must not be empty.
        * @param size The file's size. Mandatory and must be > 0.
        * @param hash The file content's MD5 hash.
        * @param desc A description.
        * @param date The file's last modification date/time. See XEP-0082 for details.
        * @param mimetype The file's mime-type. Defaults to 'binary/octet-stream' if empty.
+       * @return @b False if conditions above (file name, size) are not met, @b true otherwise.
        */
-      void requestFT( const JID& to, const std::string& name, int size, const std::string& hash = "",
+      bool requestFT( const JID& to, const std::string& name, int size, const std::string& hash = "",
                       const std::string& desc = "", const std::string& date = "",
                       const std::string& mimetype = "" );
 
