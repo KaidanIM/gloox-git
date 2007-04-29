@@ -24,7 +24,7 @@ libgloox_la_SOURCES = jid.cpp parser.cpp connectiontcpclient.cpp clientbase.cpp 
                         tlsopenssl.cpp connectionhttpproxy.cpp tlsgnutlsserveranon.cpp tlsgnutlsbase.cpp \
                         tlsgnutlsclientanon.cpp tlsschannel.cpp tlsdefault.cpp simanager.cpp siprofileft.cpp \
                         mutex.cpp connectionsocks5proxy.cpp socks5bytestreammanager.cpp socks5bytestream.cpp \
-                        connectiontcpbase.cpp
+                        connectiontcpbase.cpp connectiontcpserver.cpp socks5bytestreamserver.cpp
 
 libgloox_la_LDFLAGS = -version-info 7:0:0 -no-undefined -no-allow-shlib-undefined
 libgloox_la_LIBADD =
@@ -64,11 +64,12 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             tlsdefault.h              simanager.h             siprofilehandler.h \
                             sihandler.h               siprofileft.h           siprofilefthandler.h \
                             socks5bytestreammanager.h connectionsocks5proxy.h socks5bytestreamdatahandler.h \
-                            socks5bytestreamhandler.h socks5bytestream.h
+                            socks5bytestreamhandler.h socks5bytestream.h      socks5bytestreamserver.h \
+                            mutex.h                   mutexguard.h
 
 noinst_HEADERS = prep.h dns.h nonsaslauth.h mucmessagesession.h stanzaextensionfactory.h tlsgnutlsclient.h \
                    tlsgnutlsbase.h tlsgnutlsclientanon.h tlsgnutlsserveranon.h tlsopenssl.h tlsschannel.h \
-                   compressionzlib.h mutex.h mutexguard.h connectiontcpbase.h
+                   compressionzlib.h connectiontcpbase.h connectiontcpserver.h connectionhandler.h
 
 EXTRA_DIST = version.rc
 

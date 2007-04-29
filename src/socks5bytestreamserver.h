@@ -84,7 +84,13 @@ namespace gloox
         StateActive
       };
 
-      typedef std::map<ConnectionBase*, NegotiationState> ConnectionMap;
+      struct ConnectionInfo
+      {
+        NegotiationState state;
+        std::string hash;
+      };
+
+      typedef std::map<ConnectionBase*, ConnectionInfo> ConnectionMap;
       ConnectionMap m_connections;
 
       ConnectionTCPServer* m_tcpServer;

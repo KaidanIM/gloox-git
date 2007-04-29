@@ -73,46 +73,72 @@ namespace gloox
   {
     printf( "got new connection: %s\n", connection->server().c_str() );
     connection->registerConnectionDataHandler( this );
-    m_connections[connection] = StateUnnegotiated;
+    ConnectionInfo ci;
+    ci.state = StateUnnegotiated;
+    m_connections[connection] = ci;
   }
 
   void SOCKS5BytestreamServer::handleReceivedData( const ConnectionBase* connection,
                                                    const std::string& data )
   {
-    ConnectionMap::const_iterator it = m_connections.find( const_cast<ConnectionBase*>( connection ) );
+    ConnectionMap::iterator it = m_connections.find( const_cast<ConnectionBase*>( connection ) );
     if( it == m_connections.end() )
       return;
 
-    switch( (*it).second )
+    switch( (*it).second.state )
     {
       case StateDisconnected:
         (*it).first->disconnect();
         break;
       case StateUnnegotiated:
       {
-        if( data.length() < 3 || data[0] != 0x05 )
+        char c[2];
+        c[0] = 0x05;
+        c[1] = 0xFF;
+        (*it).second.state = StateDisconnected;
+
+        if( data.length() >= 3 && data[0] == 0x05 )
         {
-          char c[2];
-          c[0] = 0x05;
-          c[1] = 0xFF;
-          (*it).first->send( std::string( c ) );
-          return;
+          unsigned int sz = ( data.length() - 2 < (unsigned int)data[1] )
+                              ? ( data.length() - 2 )
+                              : ( (unsigned int)data[1] );
+          for( unsigned int i = 2; i < sz; ++i )
+          {
+            if( data[i] == 0x00 )
+            {
+              c[1] = 0x00;
+              (*it).second.state = StateAuthAccepted;
+              break;
+            }
+          }
         }
-        unsigned int sz = ( data.length() - 2 < (unsigned int)data[1] )
-                            ? ( data.length() - 2 )
-                            : ( (unsigned int)data[1] );
-        for( unsigned int i = 1; i < sz; ++i )
-        {
-        }
+        (*it).first->send( std::string( c ) );
         break;
       }
       case StateAuthmethodAccepted:
+        // place to implement any future auth support
         break;
       case StateAuthAccepted:
+      {
+        std::string rep = data;
+        if( data.length() == 47 && data[0] == 0x05 && data[1] == 0x01 && data[2] == 0x00
+            && data[3] == 0x03 && data[4] == 0x28 && data[45] == 0x00 && data[46] == 0x00 )
+        {
+          rep[1] = 0x00;
+          (*it).second.hash = data.substr( 5, 40 );
+          (*it).second.state = StateDestinationAccepted;
+        }
+        else
+        {
+          rep[1] = 0x01; // general SOCKS server failure
+          (*it).second.state = StateDisconnected;
+        }
+        (*it).first->send( rep );
         break;
+      }
       case StateDestinationAccepted:
-        break;
       case StateActive:
+        // should not happen
         break;
     }
   }
