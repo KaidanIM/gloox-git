@@ -135,7 +135,8 @@ namespace gloox
     }
   }
 
-  void ConnectionHTTPProxy::handleReceivedData( const std::string& data )
+  void ConnectionHTTPProxy::handleReceivedData( const ConnectionBase* /*connection*/,
+                                                const std::string& data )
   {
     if( !m_handler )
       return;
@@ -151,25 +152,25 @@ namespace gloox
         m_state = StateConnected;
         m_logInstance.log( LogLevelDebug, LogAreaClassConnectionHTTPProxy,
                            "http proxy connection established" );
-        m_handler->handleConnect();
+        m_handler->handleConnect( this );
       }
       else if( m_proxyHandshakeBuffer.substr( 9, 3 ) == "407" )
       {
-        m_handler->handleDisconnect( ConnProxyAuthRequired );
+        m_handler->handleDisconnect( this, ConnProxyAuthRequired );
         m_connection->disconnect();
       }
       else if( m_proxyHandshakeBuffer.substr( 9, 3 ) == "403" ||
                m_proxyHandshakeBuffer.substr( 9, 3 ) == "404" )
       {
-        m_handler->handleDisconnect( ConnProxyAuthFailed );
+        m_handler->handleDisconnect( this, ConnProxyAuthFailed );
         m_connection->disconnect();
       }
     }
     else if( m_state == StateConnected )
-      m_handler->handleReceivedData( data );
+      m_handler->handleReceivedData( this, data );
   }
 
-  void ConnectionHTTPProxy::handleConnect()
+  void ConnectionHTTPProxy::handleConnect( const ConnectionBase* /*connection*/ )
   {
     if( m_connection )
     {
@@ -206,18 +207,19 @@ namespace gloox
       {
         m_state = StateDisconnected;
         if( m_handler )
-          m_handler->handleDisconnect( ConnIoError );
+          m_handler->handleDisconnect( this, ConnIoError );
       }
     }
   }
 
-  void ConnectionHTTPProxy::handleDisconnect( ConnectionError reason )
+  void ConnectionHTTPProxy::handleDisconnect( const ConnectionBase* /*connection*/,
+                                              ConnectionError reason )
   {
     m_state = StateDisconnected;
     m_logInstance.log( LogLevelDebug, LogAreaClassConnectionHTTPProxy, "http proxy connection closed" );
 
     if( m_handler )
-      m_handler->handleDisconnect( reason );
+      m_handler->handleDisconnect( this, reason );
   }
 
 }

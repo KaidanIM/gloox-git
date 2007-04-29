@@ -125,7 +125,7 @@ namespace gloox
     }
   }
 
-  void SOCKS5Bytestream::handleReceivedData( const std::string& data )
+  void SOCKS5Bytestream::handleReceivedData( const ConnectionBase* /*connection*/, const std::string& data )
   {
     if( !m_socks5BytestreamDataHandler )
       return;
@@ -148,12 +148,12 @@ namespace gloox
       m_socks5BytestreamDataHandler->handleSOCKS5Data( this, data );
   }
 
-  void SOCKS5Bytestream::handleConnect()
+  void SOCKS5Bytestream::handleConnect( const ConnectionBase* /*connection*/ )
   {
     m_manager->acknowledgeStreamHost( true, m_proxy, m_sid );
   }
 
-  void SOCKS5Bytestream::handleDisconnect( ConnectionError /*reason*/ )
+  void SOCKS5Bytestream::handleDisconnect( const ConnectionBase* /*connection*/, ConnectionError /*reason*/ )
   {
     if( m_socks5BytestreamDataHandler )
       m_socks5BytestreamDataHandler->handleSOCKS5Close( this );

@@ -20,6 +20,8 @@
 namespace gloox
 {
 
+  class ConnectionBase;
+
   /**
    * @brief This is an abstract base class to receive events from a ConnectionBase-derived object.
    *
@@ -38,20 +40,23 @@ namespace gloox
 
       /**
        * This function is called for received from the underlying transport.
+       * @param connection The connection that received the data.
        * @param data The data received.
        */
-      virtual void handleReceivedData( const std::string& data ) = 0;
+      virtual void handleReceivedData( const ConnectionBase* connection, const std::string& data ) = 0;
 
       /**
        * This function is called when e.g. the raw TCP connection was established.
+       * @param connection The connection.
        */
-      virtual void handleConnect() = 0;
+      virtual void handleConnect( const ConnectionBase* connection ) = 0;
 
       /**
        * This connection is called when e.g. the raw TCP connection was closed.
+       * @param connection The connection.
        * @param reason The reason for the disconnect.
        */
-      virtual void handleDisconnect( ConnectionError reason ) = 0;
+      virtual void handleDisconnect( const ConnectionBase* connection, ConnectionError reason ) = 0;
   };
 
 }

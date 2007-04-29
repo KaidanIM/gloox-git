@@ -305,7 +305,7 @@ namespace gloox
     }
   }
 
-  void ClientBase::handleReceivedData( const std::string& data )
+  void ClientBase::handleReceivedData( const ConnectionBase* /*connection*/, const std::string& data )
   {
     if( m_encryption && m_encryptionActive )
       m_encryption->decrypt( data );
@@ -317,7 +317,7 @@ namespace gloox
       m_logInstance.log( LogLevelError, LogAreaClassClientbase, "Received data, but chain broken" );
   }
 
-  void ClientBase::handleConnect()
+  void ClientBase::handleConnect( const ConnectionBase* /*connection*/ )
   {
     header();
     if( m_block && m_connection )
@@ -326,7 +326,7 @@ namespace gloox
     }
   }
 
-  void ClientBase::handleDisconnect( ConnectionError reason )
+  void ClientBase::handleDisconnect( const ConnectionBase* /*connection*/, ConnectionError reason )
   {
     if( m_connection )
       m_connection->cleanup();

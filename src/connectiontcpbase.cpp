@@ -130,11 +130,12 @@ namespace gloox
 #endif
     }
 
+    m_totalBytesOut += data.length();
+
     m_sendMutex.unlock();
 
-    m_totalBytesOut += data.length();
     if( sent == -1 && m_handler )
-      m_handler->handleDisconnect( ConnStreamClosed );
+      m_handler->handleDisconnect( this, ConnIoError );
 
     return sent != -1;
   }
