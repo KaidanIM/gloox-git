@@ -128,6 +128,7 @@ namespace gloox
 
     if( m_cancel || m_socket < 0 )
     {
+      printf( "erroring out\n " );
       m_recvMutex.unlock();
       return ConnNotConnected;
     }

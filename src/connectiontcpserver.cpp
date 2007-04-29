@@ -131,6 +131,7 @@ namespace gloox
     ConnectionTCPClient* conn = new ConnectionTCPClient( m_logInstance, inet_ntoa( they.sin_addr ),
                                                          ntohs( they.sin_port ) );
     conn->setSocket( newfd );
+    printf( "socket: %d\n", newfd );
     m_connectionHandler->handleIncomingConnection( conn );
 
     return ConnNoError;

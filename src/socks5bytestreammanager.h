@@ -21,6 +21,7 @@ namespace gloox
 {
 
   class SOCKS5BytestreamHandler;
+  class SOCKS5BytestreamServer;
   class ClientBase;
 
   /**
@@ -139,6 +140,18 @@ namespace gloox
       void removeSOCKS5BytestreamHandler()
         { m_socks5BytestreamHandler = 0; }
 
+      /**
+       * Tells the SOCKS5BytestreamManager which SOCKS5BytestreamServer handles peer-2-peer SOCKS5
+       * bytestreams.
+       * @param server The SOCKS5BytestreamServer to use.
+       */
+      void registerSOCKS5BytestreamServer( SOCKS5BytestreamServer* server ) { m_server = server; }
+
+      /**
+       * Un-registers any local SOCKS5BytestreamServer.
+       */
+      void removeSOCKS5BytestreamServer() { m_server = 0; }
+
       // reimplemented from IqHandler
       virtual bool handleIq( Stanza *stanza );
 
@@ -173,7 +186,8 @@ namespace gloox
       AsyncTrackMap m_asyncTrackMap;
 
       ClientBase *m_parent;
-      SOCKS5BytestreamHandler *m_socks5BytestreamHandler;
+      SOCKS5BytestreamHandler* m_socks5BytestreamHandler;
+      SOCKS5BytestreamServer* m_server;
       StreamHostList m_hosts;
       StringMap m_trackMap;
 
