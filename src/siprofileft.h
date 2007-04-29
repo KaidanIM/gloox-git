@@ -205,6 +205,20 @@ namespace gloox
        */
       void addStreamHost( const JID& jid, const std::string& host, int port );
 
+      /**
+       * Tells the interal SOCKS5BytestreamManager which SOCKS5BytestreamServer handles
+       * peer-2-peer SOCKS5 bytestreams.
+       * @param server The SOCKS5BytestreamServer to use.
+       */
+      void registerSOCKS5BytestreamServer( SOCKS5BytestreamServer* server )
+        { if( m_socks5Manager ) m_socks5Manager->registerSOCKS5BytestreamServer( server ); }
+
+      /**
+       * Un-registers any local SOCKS5BytestreamServer.
+       */
+      void removeSOCKS5BytestreamServer()
+        { if( m_socks5Manager ) m_socks5Manager->removeSOCKS5BytestreamServer(); }
+
       // re-implemented from SIProfileHandler
       virtual void handleSIRequest( const JID& from, const std::string& id, const std::string& profile,
                                     Tag* si, Tag* ptag, Tag* fneg );

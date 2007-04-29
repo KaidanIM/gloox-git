@@ -31,11 +31,17 @@ namespace gloox
    */
   class GLOOX_API SOCKS5BytestreamServer : public ConnectionHandler, ConnectionDataHandler
   {
+
+    friend class SOCKS5BytestreamManager;
+
     public:
       /**
        * Constructs a new SOCKS5BytestreamServer.
+       * @param logInstance A LoGSink to use.
+       * @param port The local port to listen on.
+       * @param ip The local IP to bind to. If empty, the server will listen on all local interfaces.
        */
-      SOCKS5BytestreamServer( const LogSink& logInstance, const std::string& ip, int port );
+      SOCKS5BytestreamServer( const LogSink& logInstance, int port, const std::string& ip = "" );
 
       /**
        * Destructor.
@@ -44,22 +50,25 @@ namespace gloox
 
       /**
        * Starts listening on the specified interface and port.
-       * @return Returns @c ConnNoError on success, @c ConnIoError on failure.
+       * @return Returns @c ConnNoError on success, @c ConnIoError on failure (e.g. if the port
+       * is already in use).
        */
       ConnectionError listen();
 
       /**
        * Call this function repeatedly to check for incoming connections and to negotiate
        * them.
-       * @param timeout The timeout to use for select in microseconds. Default of -1 means blocking.
+       * @param timeout The timeout to use for select in microseconds.
        * @return The state of the listening socket.
        */
-      ConnectionError recv( int timeout = -1 );
+      ConnectionError recv( int timeout );
 
       /**
        * Stops listening and unbinds from the interface and port.
        */
       void stop();
+
+  void send( ConnectionBase* connection, const std::string& data );
 
       // re-implemented from ConnectionHandler
       virtual void handleIncomingConnection( ConnectionBase* connection );
@@ -74,6 +83,10 @@ namespace gloox
       virtual void handleDisconnect( const ConnectionBase* connection, ConnectionError reason );
 
     private:
+      void registerHash( const std::string& hash ) { printf( "registered: %s\n", hash.c_str() ); m_hashes.push_back( hash ); }
+      void removeHash( const std::string& hash ) { m_hashes.remove( hash ); }
+      ConnectionBase* getConnection( const std::string& hash );
+
       enum NegotiationState
       {
         StateDisconnected,
@@ -92,6 +105,9 @@ namespace gloox
 
       typedef std::map<ConnectionBase*, ConnectionInfo> ConnectionMap;
       ConnectionMap m_connections;
+
+      typedef std::list<std::string> HashMap;
+      HashMap m_hashes;
 
       ConnectionTCPServer* m_tcpServer;
 

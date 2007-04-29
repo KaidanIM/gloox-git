@@ -55,7 +55,6 @@ namespace gloox
     sha.feed( m_sid );
     sha.feed( m_initiator.full() );
     sha.feed( m_target.full() );
-    sha.finalize();
     m_socks5 = new ConnectionSOCKS5Proxy( this, connection, m_logInstance, sha.hex(), 0 );
   }
 
@@ -63,6 +62,9 @@ namespace gloox
   {
     if( !m_connection || !m_socks5 || !m_manager )
       return false;
+
+    if( m_open )
+      return true;
 
     printf( "SOCKS5Bytestream::connect\n" );
     printf( "m_connection status: %d\n", m_connection->state() );

@@ -123,14 +123,14 @@ namespace gloox
 
   bool ConnectionSOCKS5Proxy::send( const std::string& data )
   {
-    if( m_s5state != S5StateConnected )
-    {
-      printf( "data sent: " );
-      const char* x = data.c_str();
-      for( unsigned int i = 0; i < data.length(); ++i )
-        printf( "%02X ", (const int)x[i] );
-      printf( "\n" );
-    }
+//     if( m_s5state != S5StateConnected )
+//     {
+//       printf( "p data sent: " );
+//       const char* x = data.c_str();
+//       for( unsigned int i = 0; i < data.length(); ++i )
+//         printf( "%02X ", (const char)x[i] );
+//       printf( "\n" );
+//     }
 
     if( m_connection )
       return m_connection->send( data );
@@ -161,14 +161,14 @@ namespace gloox
   void ConnectionSOCKS5Proxy::handleReceivedData( const ConnectionBase* /*connection*/,
                                                   const std::string& data )
   {
-    if( m_s5state != S5StateConnected )
-    {
-      printf( "data recv: " );
-      const char* x = data.c_str();
-      for( unsigned int i = 0; i < data.length(); ++i )
-        printf( "%02X ", (const int)x[i] );
-      printf( "\n" );
-    }
+//     if( m_s5state != S5StateConnected )
+//     {
+//       printf( "data recv: " );
+//       const char* x = data.c_str();
+//       for( unsigned int i = 0; i < data.length(); ++i )
+//         printf( "%02X ", (const char)x[i] );
+//       printf( "\n" );
+//     }
 
     if( !m_connection || !m_handler )
       return;
@@ -232,7 +232,7 @@ namespace gloox
             m_s5state = S5StateConnected;
             m_handler->handleConnect( this );
           }
-          else if( data[1] == 0x05 ) // connection refused
+          else // connection refused
           {
             m_connection->disconnect();
             m_handler->handleDisconnect( this, ConnConnectionRefused );

@@ -13,10 +13,12 @@
 
 #include "socks5bytestreammanager.h"
 #include "socks5bytestreamhandler.h"
+#include "socks5bytestreamserver.h"
 #include "socks5bytestream.h"
 #include "clientbase.h"
 #include "disco.h"
 #include "connectionbase.h"
+#include "sha.h"
 
 #include <cstdlib>
 
@@ -76,6 +78,15 @@ namespace gloox
       s->addAttribute( "port", (*it).port );
     }
 
+    if( m_server )
+    {
+      SHA sha;
+      sha.feed( msid );
+      sha.feed( m_parent->jid().full() );
+      sha.feed( to.full() );
+      m_server->registerHash( sha.hex() );
+    }
+
     AsyncS5BItem asi;
     asi.sHosts = m_hosts;
     asi.id = id;
@@ -107,7 +118,7 @@ namespace gloox
       if( success )
       {
         iq->addAttribute( "type", "result" );
-        Tag* q = new Tag( iq, "query", "xmlns", XMLNS_XMPP_STANZAS );
+        Tag* q = new Tag( iq, "query", "xmlns", XMLNS_BYTESTREAMS );
         new Tag( q, "streamhost-used", "jid", jid.full() );
       }
       else
@@ -336,20 +347,38 @@ namespace gloox
 
             printf( "got a stream-host to use: %s\n", s->findAttribute( "jid" ).c_str() );
 
-            const StreamHost* sh = findProxy( stanza->from(), s->findAttribute( "jid" ), (*it).second );
+            const std::string & proxy = s->findAttribute( "jid" );
+            const StreamHost* sh = findProxy( stanza->from(), proxy, (*it).second );
             if( sh )
             {
               printf( "findProxy returned true: proxy is valid for this session\n" );
-              SOCKS5Bytestream* s5b = new SOCKS5Bytestream( this,
-                                                            m_parent->connectionImpl()->newInstance(),
-                                                            m_parent->logInstance(),
-                                                            m_parent->jid(), stanza->from(),
-                                                            (*it).second );
-              StreamHostList shl;
-              shl.push_back( *sh );
-              s5b->setStreamHosts( shl );
+              SOCKS5Bytestream* s5b = 0;
+              bool selfProxy = ( proxy == m_parent->jid().full() && m_server );
+              if( selfProxy )
+              {
+                SHA sha;
+                sha.feed( (*it).second );
+                sha.feed( m_parent->jid().full() );
+                sha.feed( stanza->from().full() );
+                s5b = new SOCKS5Bytestream( this, m_server->getConnection( sha.hex() ),
+                                            m_parent->logInstance(),
+                                            m_parent->jid(), stanza->from(),
+                                            (*it).second );
+              }
+              else
+              {
+                s5b = new SOCKS5Bytestream( this, m_parent->connectionImpl()->newInstance(),
+                                            m_parent->logInstance(),
+                                            m_parent->jid(), stanza->from(),
+                                            (*it).second );
+                StreamHostList shl;
+                shl.push_back( *sh );
+                s5b->setStreamHosts( shl );
+              }
               m_s5bMap[(*it).second] = s5b;
               m_socks5BytestreamHandler->handleOutgoingSOCKS5Bytestream( s5b );
+              if( selfProxy )
+                s5b->activate();
             }
             break;
           }
