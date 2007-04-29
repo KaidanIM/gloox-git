@@ -93,7 +93,7 @@ namespace gloox
        * negotiate the XMPP stream. You should not set a new socket after having called connect().
        * @param socket The existing socket.
        */
-      void setSocket( int socket ) { m_socket = socket; };
+      void setSocket( int socket ) { m_cancel = false; m_socket = socket; };
 
     protected:
       ConnectionTCPBase &operator=( const ConnectionTCPBase & );
