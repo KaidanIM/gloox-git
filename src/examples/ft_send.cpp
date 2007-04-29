@@ -8,6 +8,7 @@
 #include "../siprofileft.h"
 #include "../siprofilefthandler.h"
 #include "../socks5bytestreamdatahandler.h"
+#include "../socks5bytestreamserver.h"
 using namespace gloox;
 
 #include <sys/types.h>
@@ -47,7 +48,7 @@ class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, SOCKS5
       if( !ifile )
         return;
 
-      JID jid( "hurkhurk@example.net/gloox" );
+      JID jid( "hurkhurk@example.net/glooxsendfile" );
       j = new Client( jid, "hurkhurks" );
       j->registerConnectionListener( this );
       j->disco()->setVersion( "ftsend", GLOOX_VERSION, "Linux" );
@@ -58,28 +59,51 @@ class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, SOCKS5
 
       j->logInstance().registerLogHandler( LogLevelDebug, LogAreaAll, this );
 
-      f = new SIProfileFT( j, this );
 
-      // you should obtain this using disco, really
-      f->addStreamHost( JID( "proxy.jabber.org" ), "208.245.212.98", 7777 );
+      m_server = new SOCKS5BytestreamServer( j->logInstance(), 6666 );
+      printf( "about to listen\n" );
+      ConnectionError le = ConnNoError;
+      if( ( le = m_server->listen() ) != ConnNoError )
+        printf( "listen returned: %d\n", le );
+      printf( "listening\n" );
+
+      f = new SIProfileFT( j, this );
+      f->registerSOCKS5BytestreamServer( m_server );
+      f->addStreamHost( j->jid(), "192.168.100.20", 6666 );
+      // you should obtain this using disco, really:
+//       f->addStreamHost( JID( "reflector.amessage.eu" ), "reflector.amessage.eu", 6565 );
+//       f->addStreamHost( JID( "proxy.jabber.org" ), "208.245.212.98", 7777 );
 
       if( j->connect( false ) )
       {
-        char input[1024];
+        char input[200024];
         ConnectionError ce = ConnNoError;
+        ConnectionError se = ConnNoError;
         while( ce == ConnNoError )
         {
           if( m_quit )
             j->disconnect();
 
           ce = j->recv( 1 );
+          if( m_server )
+          {
+            se = m_server->recv( 1 );
+            if( se != ConnNoError )
+            {
+              printf( "SOCKS5BytestreamServer returned: %d\n", se );
+              delete m_server;
+              m_server = 0;
+              m_quit = true;
+            }
+          }
           if( m_s5b && !ifile.eof() )
           {
             if( m_s5b->isOpen() )
             {
-              ifile.read( input, 1024 );
+              ifile.read( input, 200024 );
               std::string t( input, ifile.gcount() );
-              m_s5b->send( t );
+              if( !m_s5b->send( t ) )
+                m_quit = true;
             }
             m_s5b->recv( 1 );
           }
@@ -180,6 +204,7 @@ class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, SOCKS5
     Client *j;
     SIProfileFT* f;
     SOCKS5Bytestream* m_s5b;
+    SOCKS5BytestreamServer* m_server;
     JID m_to;
     std::string m_file;
     bool m_quit;
