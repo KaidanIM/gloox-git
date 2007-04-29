@@ -158,7 +158,8 @@ namespace gloox
     }
   }
 
-  void ConnectionSOCKS5Proxy::handleReceivedData( const std::string& data )
+  void ConnectionSOCKS5Proxy::handleReceivedData( const ConnectionBase* /*connection*/,
+                                                  const std::string& data )
   {
     if( m_s5state != S5StateConnected )
     {
@@ -178,7 +179,7 @@ namespace gloox
         if( data.length() != 2 || data[0] != 0x05 )
         {
           m_connection->disconnect();
-          m_handler->handleDisconnect( ConnIoError );
+          m_handler->handleDisconnect( this, ConnIoError );
         }
         if( data[1] == 0x00 ) // no auth
         {
@@ -202,24 +203,24 @@ namespace gloox
           if( !send( std::string( d, pos ) ) )
           {
             cleanup();
-            m_handler->handleDisconnect( ConnIoError );
+            m_handler->handleDisconnect( this, ConnIoError );
           }
           delete[] d;
         }
         else if( data[1] == (char)0xFF && !m_proxyUser.empty() && !m_proxyPassword.empty() )
         {
           m_connection->disconnect();
-          m_handler->handleDisconnect( ConnProxyNoSupportedAuth );
+          m_handler->handleDisconnect( this, ConnProxyNoSupportedAuth );
         }
         else if( data[1] == (char)0xFF && ( m_proxyUser.empty() || m_proxyPassword.empty() ) )
         {
           m_connection->disconnect();
-          m_handler->handleDisconnect( ConnProxyAuthRequired );
+          m_handler->handleDisconnect( this, ConnProxyAuthRequired );
         }
         else
         {
           m_connection->disconnect();
-          m_handler->handleDisconnect( ConnProxyAuthRequired );
+          m_handler->handleDisconnect( this, ConnProxyAuthRequired );
         }
         break;
       case S5StateNegotiating:
@@ -229,18 +230,18 @@ namespace gloox
           {
             m_state = StateConnected;
             m_s5state = S5StateConnected;
-            m_handler->handleConnect();
+            m_handler->handleConnect( this );
           }
           else if( data[1] == 0x05 ) // connection refused
           {
             m_connection->disconnect();
-            m_handler->handleDisconnect( ConnConnectionRefused );
+            m_handler->handleDisconnect( this, ConnConnectionRefused );
           }
         }
         else
         {
           m_connection->disconnect();
-          m_handler->handleDisconnect( ConnIoError );
+          m_handler->handleDisconnect( this, ConnIoError );
         }
         break;
       case S5StateAuthenticating:
@@ -251,11 +252,11 @@ namespace gloox
         else
         {
           m_connection->disconnect();
-          m_handler->handleDisconnect( ConnProxyAuthFailed );
+          m_handler->handleDisconnect( this, ConnProxyAuthFailed );
         }
         break;
       case S5StateConnected:
-        m_handler->handleReceivedData( data );
+        m_handler->handleReceivedData( this, data );
         break;
       default:
         break;
@@ -320,12 +321,12 @@ namespace gloox
     if( !send( std::string( d, pos ) ) )
     {
       cleanup();
-      m_handler->handleDisconnect( ConnIoError );
+      m_handler->handleDisconnect( this, ConnIoError );
     }
     delete[] d;
   }
 
-  void ConnectionSOCKS5Proxy::handleConnect()
+  void ConnectionSOCKS5Proxy::handleConnect( const ConnectionBase* /*connection*/ )
   {
     if( m_connection )
     {
@@ -359,19 +360,20 @@ namespace gloox
       {
         cleanup();
         if( m_handler )
-          m_handler->handleDisconnect( ConnIoError );
+          m_handler->handleDisconnect( this, ConnIoError );
       }
       delete[] d;
     }
   }
 
-  void ConnectionSOCKS5Proxy::handleDisconnect( ConnectionError reason )
+  void ConnectionSOCKS5Proxy::handleDisconnect( const ConnectionBase* /*connection*/,
+                                                ConnectionError reason )
   {
     cleanup();
     m_logInstance.log( LogLevelDebug, LogAreaClassConnectionSOCKS5Proxy, "socks5 proxy connection closed" );
 
     if( m_handler )
-      m_handler->handleDisconnect( reason );
+      m_handler->handleDisconnect( this, reason );
   }
 
 }

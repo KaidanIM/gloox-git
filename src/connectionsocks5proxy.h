@@ -113,13 +113,13 @@ namespace gloox
       virtual void getStatistics( int &totalIn, int &totalOut );
 
       // reimplemented from ConnectionDataHandler
-      virtual void handleReceivedData( const std::string& data );
+      virtual void handleReceivedData( const ConnectionBase* connection, const std::string& data );
 
       // reimplemented from ConnectionDataHandler
-      virtual void handleConnect();
+      virtual void handleConnect( const ConnectionBase* connection );
 
       // reimplemented from ConnectionDataHandler
-      virtual void handleDisconnect( ConnectionError reason );
+      virtual void handleDisconnect( const ConnectionBase* connection, ConnectionError reason );
 
       // reimplemented from ConnectionDataHandler
       virtual ConnectionBase* newInstance() const;

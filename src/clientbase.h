@@ -596,13 +596,13 @@ namespace gloox
       virtual void handleDecompressedData( const std::string& data );
 
       // reimplemented from ConnectionDataHandler
-      virtual void handleReceivedData( const std::string& data );
+      virtual void handleReceivedData( const ConnectionBase* connection, const std::string& data );
 
       // reimplemented from ConnectionDataHandler
-      virtual void handleConnect();
+      virtual void handleConnect( const ConnectionBase* connection );
 
       // reimplemented from ConnectionDataHandler
-      virtual void handleDisconnect( ConnectionError reason );
+      virtual void handleDisconnect( const ConnectionBase* connection, ConnectionError reason );
 
       // reimplemented from TLSHandler
       virtual void handleEncryptedData( const TLSBase *base, const std::string& data );

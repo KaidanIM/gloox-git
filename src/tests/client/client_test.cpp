@@ -61,19 +61,19 @@ class ConnectionImpl : public ConnectionBase
     {
       m_run = true;
       m_state = StateConnected;
-      m_handler->handleConnect();
+      m_handler->handleConnect( this );
       return ConnNoError;
     }
     virtual ConnectionError recv( int /*timeout = -1*/ )
     {
       if( m_msgs[m_test][m_pos] )
       {
-        m_handler->handleReceivedData( m_msgs[m_test][m_pos++] );
+        m_handler->handleReceivedData( this, m_msgs[m_test][m_pos++] );
         return ConnNoError;
       }
       else
       {
-        m_handler->handleDisconnect( ConnIoError );
+        m_handler->handleDisconnect( this, ConnIoError );
         return ConnIoError;
       }
     }

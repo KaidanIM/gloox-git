@@ -143,13 +143,13 @@ namespace gloox
         { m_socks5BytestreamDataHandler = 0; }
 
       // re-implemented from ConnectionDataHandler
-      virtual void handleReceivedData( const std::string& data );
+      virtual void handleReceivedData( const ConnectionBase* connection, const std::string& data );
 
       // re-implemented from ConnectionDataHandler
-      virtual void handleConnect();
+      virtual void handleConnect( const ConnectionBase* connection );
 
       // re-implemented from ConnectionDataHandler
-      virtual void handleDisconnect( ConnectionError reason );
+      virtual void handleDisconnect( const ConnectionBase* connection, ConnectionError reason );
 
     private:
       SOCKS5Bytestream( SOCKS5BytestreamManager* manager, ConnectionBase* connection,

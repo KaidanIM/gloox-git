@@ -109,7 +109,7 @@ namespace gloox
                              "Unknown error condition" );
           break;
       }
-      m_handler->handleDisconnect( (ConnectionError)-m_socket );
+      m_handler->handleDisconnect( this, (ConnectionError)-m_socket );
       return (ConnectionError)-m_socket;
     }
     else
@@ -118,7 +118,7 @@ namespace gloox
     }
 
     m_cancel = false;
-    m_handler->handleConnect();
+    m_handler->handleConnect( this );
     return ConnNoError;
   }
 
@@ -150,7 +150,7 @@ namespace gloox
     {
       ConnectionError error = ( size ? ConnIoError : ConnStreamClosed );
       if( m_handler )
-        m_handler->handleDisconnect( error );
+        m_handler->handleDisconnect( this, error );
       return error;
     }
 
@@ -158,7 +158,7 @@ namespace gloox
 
     m_totalBytesIn += size;
     if( m_handler )
-      m_handler->handleReceivedData( std::string( m_buf, size ) );
+      m_handler->handleReceivedData( this, std::string( m_buf, size ) );
 
     return ConnNoError;
   }
