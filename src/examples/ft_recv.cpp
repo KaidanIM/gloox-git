@@ -98,7 +98,7 @@ class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, SOCKS5
     virtual void handleFTRequest( const JID& from, const std::string& id, const std::string& name,
                                   const std::string& size, const std::string& hash,
                                   const std::string& date, const std::string& mimetype,
-                                  const std::string& desc, int stypes )
+                                  const std::string& desc, int /*stypes*/ )
     {
       printf( "received ft request from %s: %s (%s bytes). hash: %s, date: %s, mime-type: %s\ndesc: %s\n",
               from.full().c_str(), name.c_str(), size.c_str(), hash.c_str(), date.c_str(), mimetype.c_str(),
@@ -106,11 +106,11 @@ class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, SOCKS5
       f->acceptFT( from, id, SIProfileFT::FTTypeS5B );
     }
 
-    virtual void handleFTRequestResult( const JID& from, const std::string& sid )
-    {
-    }
+//     virtual void handleFTRequestResult( const JID& /*from*/, const std::string& /*sid*/ )
+//     {
+//     }
 
-    virtual void handleFTRequestError( Stanza* stanza )
+    virtual void handleFTRequestError( Stanza* /*stanza*/ )
     {
       printf( "ft request error\n" );
     }
@@ -126,22 +126,22 @@ class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, SOCKS5
       }
     }
 
-    virtual void handleSOCKS5Data( SOCKS5Bytestream* s5b, const std::string& data )
+    virtual void handleSOCKS5Data( SOCKS5Bytestream* /*s5b*/, const std::string& data )
     {
       printf( "received %d bytes of data:\n%s\n", data.length(), data.c_str() );
     }
 
-    virtual void handleSOCKS5Error( SOCKS5Bytestream* s5b, Stanza* stanza )
+    virtual void handleSOCKS5Error( SOCKS5Bytestream* /*s5b*/, Stanza* /*stanza*/ )
     {
       printf( "socks5 stream error\n" );
     }
 
-    virtual void handleSOCKS5Open( SOCKS5Bytestream* s5b )
+    virtual void handleSOCKS5Open( SOCKS5Bytestream* /*s5b*/ )
     {
       printf( "stream opened\n" );
     }
 
-    virtual void handleSOCKS5Close( SOCKS5Bytestream* s5b )
+    virtual void handleSOCKS5Close( SOCKS5Bytestream* /*s5b*/ )
     {
       printf( "stream closed\n" );
       m_quit = true;

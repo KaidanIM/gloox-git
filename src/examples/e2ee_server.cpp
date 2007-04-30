@@ -100,13 +100,13 @@ class MessageTest : public ConnectionListener, LogHandler,
       j->send( m );
     }
 
-    virtual void handleEncryptedData( const TLSBase* base, const std::string& data )
+    virtual void handleEncryptedData( const TLSBase* /*base*/, const std::string& data )
     {
       printf( "caching %d bytes of encrypted data\n", data.length() );
       m_send += data;
     }
 
-    virtual void handleDecryptedData( const TLSBase* base, const std::string& data )
+    virtual void handleDecryptedData( const TLSBase* /*base*/, const std::string& data )
     {
       printf( "decrypted packet contents: %s\n", data.c_str() );
       if( data == "bye" )
@@ -116,7 +116,7 @@ class MessageTest : public ConnectionListener, LogHandler,
       xtlsSend();
     }
 
-    virtual void handleHandshakeResult( const TLSBase* base, bool success, CertInfo &certinfo )
+    virtual void handleHandshakeResult( const TLSBase* /*base*/, bool success, CertInfo &certinfo )
     {
       if( success )
         printf( "xtls handshake successful, waiting for encrypted packets!\n" );
