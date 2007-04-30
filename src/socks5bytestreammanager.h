@@ -22,6 +22,7 @@ namespace gloox
 
   class SOCKS5BytestreamHandler;
   class SOCKS5BytestreamServer;
+  class SOCKS5Bytestream;
   class ClientBase;
 
   /**
