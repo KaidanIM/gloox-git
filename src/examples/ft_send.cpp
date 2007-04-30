@@ -115,6 +115,7 @@ class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, SOCKS5
 
       f->dispose( m_s5b );
       delete f;
+      delete m_server;
       delete j;
     }
 
