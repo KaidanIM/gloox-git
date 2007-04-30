@@ -27,6 +27,10 @@ namespace gloox
   /**
    * @brief A server listening for SOCKS5 bytestreams.
    *
+   * @note You can use a single SOCKS5BytestreamServer instance with multiple Client objects.
+   *
+   * @note It is safe to put a SOCKS5BytestreamServer instance into a separate thread.
+   *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
@@ -38,7 +42,7 @@ namespace gloox
     public:
       /**
        * Constructs a new SOCKS5BytestreamServer.
-       * @param logInstance A LoGSink to use.
+       * @param logInstance A LogSink to use.
        * @param port The local port to listen on.
        * @param ip The local IP to bind to. If empty, the server will listen on all local interfaces.
        */
