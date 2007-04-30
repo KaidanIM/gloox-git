@@ -8,6 +8,14 @@ using namespace gloox;
 #include <locale.h>
 #include <string>
 
+#ifdef WIN32
+# include "../../config.h.win"
+#elif defined( _WIN32_WCE )
+# include "../../config.h.win"
+#else
+# include "config.h"
+#endif
+
 #ifdef HAVE_GNUTLS
 
 class GnuTLSTest : TLSHandler

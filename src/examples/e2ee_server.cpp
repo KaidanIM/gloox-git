@@ -20,6 +20,14 @@ using namespace gloox;
 #include <windows.h>
 #endif
 
+#ifdef WIN32
+# include "../../config.h.win"
+#elif defined( _WIN32_WCE )
+# include "../../config.h.win"
+#else
+# include "config.h"
+#endif
+
 #ifdef HAVE_GNUTLS
 
 /*
@@ -53,7 +61,7 @@ class MessageTest : public ConnectionListener, LogHandler,
 
       j->logInstance().registerLogHandler( LogLevelDebug, LogAreaAll, this );
 
-      j->connect( true );
+      j->connect();
 
       delete j;
     }
