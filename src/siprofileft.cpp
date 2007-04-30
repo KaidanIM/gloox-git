@@ -180,7 +180,7 @@ namespace gloox
       m_handler->handleFTRequestError( stanza );
   }
 
-  void SIProfileFT::handleIncomingSOCKS5BytestreamRequest( const std::string& sid, const JID& from )
+  void SIProfileFT::handleIncomingSOCKS5BytestreamRequest( const std::string& sid, const JID& /*from*/ )
   {
 // TODO: check for valid sid/from tuple
     m_socks5Manager->acceptSOCKS5Bytestream( sid );
