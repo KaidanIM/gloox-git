@@ -101,14 +101,6 @@ namespace gloox
       m_socks5BytestreamDataHandler->handleSOCKS5Open( this );
   }
 
-//   void SOCKS5Bytestream::closed()
-//   {
-//     m_open = false;
-//
-//     if( m_socks5BytestreamDataHandler )
-//       m_socks5BytestreamDataHandler->handleSOCKS5Close( this );
-//   }
-
   void SOCKS5Bytestream::close()
   {
     if( m_open )
