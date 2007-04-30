@@ -62,11 +62,9 @@ namespace gloox
    * @li To be able to send files, you will need access to a SOCKS5 bytestream proxy (called
    * StreamHost)(not an ordinary SOCKS5 proxy). You should use Disco to query it for its host
    * and port and feed that information into SIProfileFT:
-   *
    * @code
-   * ft->addStreamHost( JID( "proxy.jabber.org" ), "101.102.103.104", 666 );
+   * ft->addStreamHost( JID( "proxy.server.dom" ), "101.102.103.104", 6677 );
    * @endcode
-   *
    * You should @b not hard-code this information (esp. host/IP and port) into your app since
    * the proxy may go down occasionally or vanish completely.
    *
@@ -88,13 +86,33 @@ namespace gloox
    *
    * @li Do @b not delete a SOCKS5Bytestream manually. Use dispose() instead.
    *
+   * @li Additionally to using external SOCKS5 proxies, you can use a SOCKS5BytestreamServer object
+   * that gloox provides:
+   * @code
+   * SOCKS5BytestreamServer* server = new SOCKS5BytestreamServer( client->logInstance(), 1234 );
+   * if( server->listen() != ConnNoError )
+   *   printf( "port in use\n" );
+   *
+   * ft->addStreamHost( client->jid(), my_ip, 1234 );
+   * ft->registerSOCKS5BytestreamServer( server );
+   * @endcode
+   * This listening server should then be integrated into your mainloop to have its
+   * @link gloox::SOCKS5BytestreamServer::recv() recv() @endlink method called from time to time.
+   * It is safe to put the server into its own thread.
+   *
+   * @li Using addStreamHost(), you can add as many potential StreamHosts as you like. However, you
+   * should add the best options (e.g. the local SOCKS5BytestreamServer) first.
+   *
    * When cleaning up, delete the objectes you created above in the opposite order of
    * creation:
    *
    * @code
+   * delete server
    * delete ft;
    * delete client;
    * @endcode
+   *
+   * For usage examples see src/examples/ft_send.cpp and src/examples/ft_recv.cpp.
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
