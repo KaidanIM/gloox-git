@@ -155,7 +155,6 @@ namespace gloox
       SOCKS5Bytestream( SOCKS5BytestreamManager* manager, ConnectionBase* connection,
                         LogSink& logInstance, const JID& initiator, const JID& target,
                         const std::string& sid );
-      void closed(); // by remote entity
       void setSid( const std::string& sid ) { m_sid = sid; };
       void activate();
 
