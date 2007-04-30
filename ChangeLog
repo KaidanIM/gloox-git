@@ -85,11 +85,14 @@ v0.9 -- xx Feb 2007
 - VCard: const *List& *() --> *List& *() to allow modification
 
 since -rc1:
+- XEP-0065 (SOCKS5 Bytestreams)
+- XEP-0095 (Stream Initiation)
+- XEP-0096 (File Transfer)
+- SOCKS5 proxy support (RFC 1928), incl. username/password auth (RFC 1929)
 - Disco: minor spec compliance fixes
 - Adhoc: minor spec compliance fixes
 - Tag: added ctors to easily create a single attribute
-- SOCKS5 proxy support (RFC 1928), incl. username/password auth (RFC 1929)
-- file transfer (XEPs 0065, 0095, 0096)
+- ConnectionTCP: protected send() and recv() with simple Mutexes
 
 
 v0.8 -- 08 Apr 2006
