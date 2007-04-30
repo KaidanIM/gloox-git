@@ -313,6 +313,10 @@ SOURCE=.\src\socks5bytestreammanager.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\socks5bytestreamserver.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\stanza.cpp
 # End Source File
 # Begin Source File
@@ -762,6 +766,10 @@ SOURCE=.\src\socks5bytestreamhandler.h
 # Begin Source File
 
 SOURCE=.\src\socks5bytestreammanager.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\socks5bytestreamserver.h
 # End Source File
 # Begin Source File
 
