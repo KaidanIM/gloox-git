@@ -50,6 +50,7 @@ namespace gloox
       void unlock();
 
     private:
+      Mutex& operator=( const Mutex& );
       MutexImpl* m_mutex;
 
   };
