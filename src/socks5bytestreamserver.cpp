@@ -88,7 +88,6 @@ namespace gloox
 
   void SOCKS5BytestreamServer::handleIncomingConnection( ConnectionBase* connection )
   {
-    printf( "got new connection: %s\n", connection->server().c_str() );
     connection->registerConnectionDataHandler( this );
     ConnectionInfo ci;
     ci.state = StateUnnegotiated;
@@ -98,12 +97,6 @@ namespace gloox
   void SOCKS5BytestreamServer::handleReceivedData( const ConnectionBase* connection,
                                                    const std::string& data )
   {
-      printf( "data recv: " );
-      const char* x = data.c_str();
-      for( unsigned int i = 0; i < data.length(); ++i )
-        printf( "%02X ", (const char)x[i] );
-      printf( "\n" );
-
     ConnectionMap::iterator it = m_connections.find( const_cast<ConnectionBase*>( connection ) );
     if( it == m_connections.end() )
       return;
@@ -122,25 +115,20 @@ namespace gloox
 
         if( data.length() >= 3 && data[0] == 0x05 )
         {
-          printf( "sizeof char: %d\n", sizeof( char ) );
-          printf( "data.length() >= 3 && data[0] == 0x05\n" );
           unsigned int sz = ( data.length() - 2 < (unsigned int)data[1] )
                               ? ( data.length() - 2 )
                               : ( (unsigned int)data[1] );
-          printf( "checking 2 to %d\n", sz );
           for( unsigned int i = 2; i < sz + 2; ++i )
           {
-            printf( "checking data[%d]: %02X\n", i, data[i] );
             if( data[i] == 0x00 )
             {
-              printf( "data[%d] is 0x00\n", i );
               c[1] = 0x00;
               (*it).second.state = StateAuthAccepted;
               break;
             }
           }
         }
-        /*(*it).first->*/send( (*it).first, std::string( c, 2 ) );
+        (*it).first->send( std::string( c, 2 ) );
         break;
       }
       case StateAuthmethodAccepted:
@@ -160,7 +148,6 @@ namespace gloox
             && data[3] == 0x03 && data[4] == 0x28 && data[45] == 0x00 && data[46] == 0x00 )
         {
           const std::string hash = data.substr( 5, 40 );
-          printf( "hash: %s\n", hash.c_str() );
 
           HashMap::const_iterator ith = m_hashes.begin();
           for( ; ith != m_hashes.end() && (*ith) != hash; ++ith )
@@ -172,10 +159,8 @@ namespace gloox
             (*it).second.hash = hash;
             (*it).second.state = StateDestinationAccepted;
           }
-          else
-            printf( "hash not found\n" );
         }
-        /*(*it).first->*/send( (*it).first, reply );
+        (*it).first->send( reply );
         break;
       }
       case StateDestinationAccepted:
@@ -183,17 +168,6 @@ namespace gloox
         // should not happen
         break;
     }
-  }
-
-  void SOCKS5BytestreamServer::send( ConnectionBase* connection, const std::string& data )
-  {
-      printf( "s data sent: " );
-      const char* x = data.c_str();
-      for( unsigned int i = 0; i < data.length(); ++i )
-        printf( "%02X ", (const char)x[i] );
-      printf( "\n" );
-
-    connection->send( data );
   }
 
   void SOCKS5BytestreamServer::handleConnect( const ConnectionBase* /*connection*/ )

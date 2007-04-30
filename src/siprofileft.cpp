@@ -88,7 +88,6 @@ namespace gloox
   {
     if( !m_manager )
       return;
-    printf( "accepting si\n" );
 
     Tag* feature = new Tag( "feature", "xmlns", XMLNS_FEATURE_NEG );
     DataFormField* dff = new DataFormField( "stream-method" );
@@ -114,7 +113,6 @@ namespace gloox
   void SIProfileFT::declineFT( const JID& to, const std::string& id, SIManager::SIError reason,
                                const std::string& text )
   {
-    printf( "declining si\n" );
     if( !m_manager )
       return;
 
@@ -144,7 +142,7 @@ namespace gloox
   {
     if( profile != XMLNS_SI_FT || !ptag || !si )
       return;
-printf( "handleSIRequest\n" );
+
     if( m_handler )
     {
       std::string desc;
@@ -167,7 +165,6 @@ printf( "handleSIRequest\n" );
       DataFormField* dff = df.field( "stream-method" );
       if( dff && dff->value() == XMLNS_BYTESTREAMS )
       {
-        printf( "requesting new SOCKS5Bytestream\n" );
         // check return value:
         m_socks5Manager->requestSOCKS5Bytestream( from, SOCKS5BytestreamManager::S5BTCP, sid );
       }
@@ -185,21 +182,18 @@ printf( "handleSIRequest\n" );
 
   void SIProfileFT::handleIncomingSOCKS5BytestreamRequest( const std::string& sid, const JID& from )
   {
-    printf( "SIProfileFT::handleIncomingSOCKS5BytestreamRequest dummy impl\n" );
 #warning TODO: check for valid sid/from tuple
     m_socks5Manager->acceptSOCKS5Bytestream( sid );
   }
 
   void SIProfileFT::handleIncomingSOCKS5Bytestream( SOCKS5Bytestream* s5b )
   {
-    printf( "SIProfileFT::handleIncomingSOCKS5Bytestream\n" );
     if( m_handler )
       m_handler->handleFTSOCKS5Bytestream( s5b );
   }
 
   void SIProfileFT::handleOutgoingSOCKS5Bytestream( SOCKS5Bytestream *s5b )
   {
-    printf( "SIProfileFT::handleOutgoingSOCKS5Bytestream\n" );
     if( m_handler )
       m_handler->handleFTSOCKS5Bytestream( s5b );
   }
