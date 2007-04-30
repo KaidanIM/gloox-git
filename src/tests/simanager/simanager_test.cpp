@@ -120,18 +120,6 @@ int main( int /*argc*/, char** /*argv*/ )
     printf( "test '%s' failed\n", name.c_str() );
   }
 
-  // -------
-  name = "register profile";
-  cb->setTest( 1 );
-  sim->registerProfile( g_profile, cb );
-  sim->handleIq( st )
-  if( !cb->ok() )
-  {
-    ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
-  }
-
-
 
 
 
