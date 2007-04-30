@@ -66,7 +66,7 @@ namespace gloox
        * @param from The file transfer receiver.
        * @param sid The stream ID.
        */
-      virtual void handleFTRequestResult( const JID& from, const std::string& sid ) = 0;
+//       virtual void handleFTRequestResult( const JID& from, const std::string& sid ) = 0;
 
       /**
        * This function is called to handle a request error or decline.

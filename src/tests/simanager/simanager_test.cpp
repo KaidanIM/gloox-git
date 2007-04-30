@@ -30,8 +30,8 @@ namespace gloox
   };
   Disco::Disco() {}
   Disco::~Disco() {}
-  void Disco::addFeature( const std::string& feature ) {}
-  void Disco::removeFeature( const std::string& feature ) {}
+  void Disco::addFeature( const std::string& /*feature*/ ) {}
+  void Disco::removeFeature( const std::string& /*feature*/ ) {}
 
   class ClientBase : public SIHandler, public SIProfileHandler
   {
@@ -76,14 +76,15 @@ namespace gloox
       }
     }
   }
-  void ClientBase::trackID( IqHandler *ih, const std::string& id, int context ) {}
-  void ClientBase::registerIqHandler( IqHandler *ih, const std::string& xmlns ) {}
-  void ClientBase::removeIqHandler( const std::string& xmlns ) {}
-  void ClientBase::handleSIRequestResult( const JID& from, const std::string& sid,
-                                          Tag* si, Tag* ptag, Tag* fneg ) {}
-  void ClientBase::handleSIRequestError( Stanza* stanza ) {}
-  void ClientBase::handleSIRequest( const JID& from, const std::string& id, const std::string& profile,
-                                    Tag* si, Tag* ptag, Tag* fneg ) {}
+  void ClientBase::trackID( IqHandler* /*ih*/, const std::string& /*id*/, int /*context*/ ) {}
+  void ClientBase::registerIqHandler( IqHandler* /*ih*/, const std::string& /*xmlns*/ ) {}
+  void ClientBase::removeIqHandler( const std::string& /*xmlns*/ ) {}
+  void ClientBase::handleSIRequestResult( const JID& /*from*/, const std::string& /*sid*/,
+                                          Tag* /*si*/, Tag* /*ptag*/, Tag* /*fneg*/ ) {}
+  void ClientBase::handleSIRequestError( Stanza* /*stanza*/ ) {}
+  void ClientBase::handleSIRequest( const JID& /*from*/, const std::string& /*id*/,
+                                    const std::string& /*profile*/,
+                                    Tag* /*si*/, Tag* /*ptag*/, Tag* /*fneg*/ ) {}
   void ClientBase::setTest( int test ) { m_test = test; }
   bool ClientBase::ok() { bool t = m_ok; m_ok = false; return t; }
 }
