@@ -182,7 +182,7 @@ namespace gloox
 
   void SIProfileFT::handleIncomingSOCKS5BytestreamRequest( const std::string& sid, const JID& from )
   {
-#warning TODO: check for valid sid/from tuple
+// TODO: check for valid sid/from tuple
     m_socks5Manager->acceptSOCKS5Bytestream( sid );
   }
 
