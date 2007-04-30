@@ -13,6 +13,7 @@
 
 #include "socks5bytestreamserver.h"
 #include "connectiontcpserver.h"
+#include "mutexguard.h"
 
 namespace gloox
 {
@@ -72,6 +73,8 @@ namespace gloox
 
   ConnectionBase* SOCKS5BytestreamServer::getConnection( const std::string& hash )
   {
+    MutexGuard mg( m_mutex );
+
     ConnectionMap::iterator it = m_connections.begin();
     for( ; it != m_connections.end(); ++it )
     {
@@ -84,6 +87,18 @@ namespace gloox
     }
 
     return 0;
+  }
+
+  void SOCKS5BytestreamServer::registerHash( const std::string& hash )
+  {
+    MutexGuard mg( m_mutex );
+    m_hashes.push_back( hash );
+  }
+
+  void SOCKS5BytestreamServer::removeHash( const std::string& hash )
+  {
+    MutexGuard mg( m_mutex );
+    m_hashes.remove( hash );
   }
 
   void SOCKS5BytestreamServer::handleIncomingConnection( ConnectionBase* connection )

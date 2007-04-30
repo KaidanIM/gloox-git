@@ -17,6 +17,7 @@
 #include "macros.h"
 #include "connectionhandler.h"
 #include "logsink.h"
+#include "mutex.h"
 
 namespace gloox
 {
@@ -82,8 +83,8 @@ namespace gloox
 
     private:
       SOCKS5BytestreamServer& operator=( const SOCKS5BytestreamServer& );
-      void registerHash( const std::string& hash ) { m_hashes.push_back( hash ); }
-      void removeHash( const std::string& hash ) { m_hashes.remove( hash ); }
+      void registerHash( const std::string& hash );
+      void removeHash( const std::string& hash );
       ConnectionBase* getConnection( const std::string& hash );
 
       enum NegotiationState
@@ -110,6 +111,7 @@ namespace gloox
 
       ConnectionTCPServer* m_tcpServer;
 
+      Mutex m_mutex;
       const LogSink& m_logInstance;
       std::string m_ip;
       int m_port;
