@@ -159,8 +159,6 @@ namespace gloox
     if( m_trackMap.find( stanza->id() ) != m_trackMap.end() )
       return false;
 
-    printf( "SOCKS5BytestreamManager::handleIq\n" );
-
     switch( stanza->subtype() )
     {
       case StanzaIqSet:
@@ -169,7 +167,6 @@ namespace gloox
         const std::string& mode = q->findAttribute( "mode" );
         if( haveStream( stanza->from() ) || sid.empty() || mode == "udp" )
         {
-          printf( "SOCKS5BytestreamManager::handleIq rejecting\n" );
           rejectSOCKS5Bytestream( stanza->from(), stanza->id(), StanzaErrorNotAcceptable );
           return true;
         }
@@ -208,21 +205,17 @@ namespace gloox
   const StreamHost* SOCKS5BytestreamManager::findProxy( const JID& from, const std::string& hostjid,
                                                         const std::string& sid )
   {
-    printf( "SOCKS5BytestreamManager::findProxy\n" );
     AsyncTrackMap::const_iterator it = m_asyncTrackMap.find( sid );
     if( it == m_asyncTrackMap.end() )
       return 0;
-    printf( "found sid in AsyncTrackMap: %s\n", sid.c_str() );
 
     if( (*it).second.from == from )
     {
-      printf( "found from: %s\n", from.full().c_str() );
       StreamHostList::const_iterator it2 = (*it).second.sHosts.begin();
       for( ; it2 != (*it).second.sHosts.end(); ++it2 )
       {
         if( (*it2).jid == hostjid )
         {
-          printf( "found proxy jid: %s\n", hostjid.c_str() );
           return &(*it2);
         }
       }
@@ -233,20 +226,17 @@ namespace gloox
 
   bool SOCKS5BytestreamManager::haveStream( const JID& from )
   {
-    printf( "SOCKS5BytestreamManager::haveStream\n" );
     S5BMap::const_iterator it = m_s5bMap.begin();
     for( ; it != m_s5bMap.end(); ++it )
     {
       if( (*it).second && (*it).second->target() == from )
         return true;
     }
-    printf( "SOCKS5BytestreamManager::haveStream returns false\n" );
     return false;
   }
 
   void SOCKS5BytestreamManager::acceptSOCKS5Bytestream( const std::string& sid )
   {
-    printf( "SOCKS5BytestreamManager::acceptSOCKS5Bytestream\n" );
     AsyncTrackMap::iterator it = m_asyncTrackMap.find( sid );
     if( it == m_asyncTrackMap.end() || !m_socks5BytestreamHandler )
       return;
@@ -257,8 +247,6 @@ namespace gloox
     s5b->setStreamHosts( (*it).second.sHosts );
     m_s5bMap[sid] = s5b;
     m_socks5BytestreamHandler->handleIncomingSOCKS5Bytestream( s5b );
-
-//     m_asyncTrackMap.erase( it );
   }
 
   void SOCKS5BytestreamManager::rejectSOCKS5Bytestream( const std::string& sid )
@@ -322,8 +310,6 @@ namespace gloox
 
   bool SOCKS5BytestreamManager::handleIqID( Stanza *stanza, int context )
   {
-    printf( "SOCKS5BytestreamManager::handleIqID\n" );
-
     StringMap::iterator it = m_trackMap.find( stanza->id() );
     if( it == m_trackMap.end() )
       return false;
@@ -340,18 +326,14 @@ namespace gloox
             if( !q || !m_socks5BytestreamHandler )
               return false;
 
-            printf( "yeah, found the request\n" );
             Tag* s = q->findChild( "streamhost-used" );
             if( !s || !s->hasAttribute( "jid" ) )
               return false;
-
-            printf( "got a stream-host to use: %s\n", s->findAttribute( "jid" ).c_str() );
 
             const std::string & proxy = s->findAttribute( "jid" );
             const StreamHost* sh = findProxy( stanza->from(), proxy, (*it).second );
             if( sh )
             {
-              printf( "findProxy returned true: proxy is valid for this session\n" );
               SOCKS5Bytestream* s5b = 0;
               bool selfProxy = ( proxy == m_parent->jid().full() && m_server );
               if( selfProxy )

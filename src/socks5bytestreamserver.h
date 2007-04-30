@@ -68,8 +68,6 @@ namespace gloox
        */
       void stop();
 
-  void send( ConnectionBase* connection, const std::string& data );
-
       // re-implemented from ConnectionHandler
       virtual void handleIncomingConnection( ConnectionBase* connection );
 
@@ -83,7 +81,8 @@ namespace gloox
       virtual void handleDisconnect( const ConnectionBase* connection, ConnectionError reason );
 
     private:
-      void registerHash( const std::string& hash ) { printf( "registered: %s\n", hash.c_str() ); m_hashes.push_back( hash ); }
+      SOCKS5BytestreamServer& operator=( const SOCKS5BytestreamServer& );
+      void registerHash( const std::string& hash ) { m_hashes.push_back( hash ); }
       void removeHash( const std::string& hash ) { m_hashes.remove( hash ); }
       ConnectionBase* getConnection( const std::string& hash );
 

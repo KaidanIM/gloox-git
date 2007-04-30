@@ -29,8 +29,6 @@ namespace gloox
       m_socks5BytestreamDataHandler( 0 ), m_initiator( initiator ), m_target( target ),
       m_sid( sid ), m_open( false )
   {
-    printf( "SOCKS5Bytestream::SOCKS5Bytestream\n" );
-
     setConnectionImpl( connection );
   }
 
@@ -50,7 +48,6 @@ namespace gloox
 
     m_connection = connection;
 
-    printf( "socks5 host: %s%s%s\n", m_sid.c_str(), m_initiator.full().c_str(), m_target.full().c_str() );
     SHA sha;
     sha.feed( m_sid );
     sha.feed( m_initiator.full() );
@@ -66,13 +63,9 @@ namespace gloox
     if( m_open )
       return true;
 
-    printf( "SOCKS5Bytestream::connect\n" );
-    printf( "m_connection status: %d\n", m_connection->state() );
-
     StreamHostList::const_iterator it = m_hosts.begin();
     for( ; it != m_hosts.end(); ++it )
     {
-      printf( "trying to connect to %s:%d\n", (*it).host.c_str(), (*it).port );
       m_connection->setServer( (*it).host, (*it).port );
       if( m_socks5->connect() == ConnNoError )
       {
@@ -103,7 +96,6 @@ namespace gloox
 
   void SOCKS5Bytestream::activate()
   {
-    printf( "SOCKS5Bytestream::activate\n" );
     m_open = true;
     if( m_socks5BytestreamDataHandler )
       m_socks5BytestreamDataHandler->handleSOCKS5Open( this );
