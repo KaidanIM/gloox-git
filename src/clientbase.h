@@ -25,12 +25,13 @@
 #include "compressiondatahandler.h"
 #include "connectiondatahandler.h"
 
+#include <string>
+#include <list>
+#include <map>
+
 namespace gloox
 {
 
-  class string;
-  class map;
-  class list;
   class Disco;
   class Tag;
   class Stanza;
@@ -41,7 +42,6 @@ namespace gloox
   class MessageHandler;
   class MessageSession;
   class PresenceHandler;
-//   class StatisticsHandler;
   class SubscriptionHandler;
   class MUCInvitationHandler;
   class TagHandler;
