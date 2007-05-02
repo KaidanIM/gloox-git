@@ -144,6 +144,9 @@ namespace gloox
     int size = ::recv( m_socket, m_buf, m_bufsize, 0 );
 #endif
 
+    if( size > 0 )
+      m_totalBytesIn += size;
+
     m_recvMutex.unlock();
 
     if( size <= 0 )
@@ -156,7 +159,6 @@ namespace gloox
 
     m_buf[size] = '\0';
 
-    m_totalBytesIn += size;
     if( m_handler )
       m_handler->handleReceivedData( this, std::string( m_buf, size ) );
 

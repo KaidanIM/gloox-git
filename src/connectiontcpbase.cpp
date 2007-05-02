@@ -148,6 +148,9 @@ namespace gloox
 
   void ConnectionTCPBase::cleanup()
   {
+    MutexGuard( m_sendMutex );
+    MutexGuard( m_recvMutex );
+
     if( m_socket >= 0 )
     {
       DNS::closeSocket( m_socket );
