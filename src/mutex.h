@@ -14,6 +14,8 @@
 #ifndef MUTEX_H__
 #define MUTEX_H__
 
+#include "macros.h"
+
 namespace gloox
 {
 
@@ -26,7 +28,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
-  class Mutex
+  class GLOOX_API Mutex
   {
     public:
       /**
