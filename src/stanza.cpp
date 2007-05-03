@@ -298,7 +298,7 @@ namespace gloox
     }
   }
 
-#if defined( _MSV_VER ) && ( _MSC_VER > 1200 )
+#if !defined( _MSC_VER ) || ( defined( _MSC_VER ) && ( _MSC_VER > 1310 ) )
   Stanza* Stanza::clone() const
 #else
   Stanza* Stanza::clone()
