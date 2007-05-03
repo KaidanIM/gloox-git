@@ -18,6 +18,7 @@
 #include "dns.h"
 #include "logsink.h"
 #include "prep.h"
+#include "mutexguard.h"
 
 #ifdef __MINGW32__
 # include <winsock.h>
@@ -148,8 +149,8 @@ namespace gloox
 
   void ConnectionTCPBase::cleanup()
   {
-    MutexGuard( m_sendMutex );
-    MutexGuard( m_recvMutex );
+    MutexGuard sm( m_sendMutex );
+    MutexGuard rm( m_recvMutex );
 
     if( m_socket >= 0 )
     {
