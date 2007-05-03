@@ -25,7 +25,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
-  class MutexGuard
+  class GLOOX_API MutexGuard
   {
     public:
       /**
