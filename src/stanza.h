@@ -204,7 +204,7 @@ namespace gloox
        * @return An independent copy of the stanza.
        * @since 0.7
        */
-#if !defined( _MSC_VER ) || ( defined( _MSC_VER ) && ( _MSC_VER > 1310 ) )
+#if !defined( _MSC_VER ) || ( _MSC_VER > 1310 )
       virtual Stanza* clone() const;
 #else
       virtual Stanza* clone();
