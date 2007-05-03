@@ -34,7 +34,7 @@ namespace gloox
 {
 
   /**
-   * @brief This class implements (stream) encryption using GnuTLS server-side.
+   * @brief This is the common base class for (stream) encryption using GnuTLS.
    *
    * You should not need to use this class directly.
    *
