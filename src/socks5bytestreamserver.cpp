@@ -81,6 +81,7 @@ namespace gloox
       if( (*it).second.hash == hash )
       {
         ConnectionBase* conn = (*it).first;
+        conn->registerConnectionDataHandler( 0 );
         m_connections.erase( it );
         return conn;
       }
