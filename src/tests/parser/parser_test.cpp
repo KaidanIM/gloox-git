@@ -15,7 +15,7 @@ class ParserTest : private TagHandler
     virtual void handleTag( Tag *tag )
     {
       m_tag = tag->clone();
-    };
+    }
 
     int run()
     {
@@ -285,7 +285,7 @@ class ParserTest : private TagHandler
         return 1;
       }
 
-    };
+    }
 
   private:
     Tag *m_tag;

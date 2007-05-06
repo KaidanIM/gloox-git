@@ -19,11 +19,11 @@ class ClientTest : public Client, /*LogHandler,*/ ConnectionListener
     {
 //       logInstance().registerLogHandler( LogLevelDebug, LogAreaAll, this );
       registerConnectionListener( this );
-    };
+    }
 //     virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
 //     {
 //       printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
-//     };
+//     }
     virtual void onConnect() { ++m_connected; disconnect(); }
     virtual void onDisconnect( ConnectionError e )
     {
@@ -31,7 +31,7 @@ class ClientTest : public Client, /*LogHandler,*/ ConnectionListener
       m_disconnect = e;
       m_streamerror = streamError();
 //       printf( "reason: %d\n", e );
-    };
+    }
     virtual void onResourceBindError( ResourceBindError /*error*/ )
       { /*printf( "res bind err: %d\n", error );*/ }
     virtual void onSessionCreateError( SessionCreateError /*error*/ )
