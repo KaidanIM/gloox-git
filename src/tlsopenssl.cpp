@@ -192,6 +192,12 @@ namespace gloox
       transform( p.begin(), p.end(), p.begin(), pf );
       if( p != m_server )
         m_certInfo.status |= CertWrongPeer;
+
+      if( ASN1_UTCTIME_cmp_time_t( X509_get_notBefore( peer ), time( 0 ) ) != -1 )
+        m_certInfo.status |= CertNotActive;
+
+      if( ASN1_UTCTIME_cmp_time_t( X509_get_notAfter( peer ), time( 0 ) ) != 1 )
+        m_certInfo.status |= CertExpired;
     }
     else
     {
