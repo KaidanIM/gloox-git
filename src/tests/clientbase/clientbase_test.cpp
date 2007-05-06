@@ -22,14 +22,14 @@ class ClientBaseTest : public ClientBase, /*LogHandler,*/ ConnectionListener
       m_jid.setResource( "gloox" );
 //       logInstance().registerLogHandler( LogLevelDebug, LogAreaAll, this );
       registerConnectionListener( this );
-    };
+    }
     virtual void handleStartNode() { m_handleStartNodeCalled = true; }
     virtual bool handleNormalNode(gloox::Stanza*) { return true; }
     virtual void rosterFilled() {}
 /*    virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
     {
       printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
-    };*/
+    }*/
     virtual void onConnect() { /*printf( "connect\n" );*/ }
     virtual void onDisconnect( ConnectionError /*e*/ ) { /*printf( "disconnected: %d\n", e );*/ }
     virtual void onResourceBindError( ResourceBindError /*error*/ ) { /*printf( "res bind err: %d\n", error );*/ }
@@ -44,7 +44,7 @@ class ClientBaseTest : public ClientBase, /*LogHandler,*/ ConnectionListener
       {
         m_versionOK = ClientBase::checkStreamVersion( version );
         return m_versionOK;
-      };
+      }
 
   private:
     bool m_handleStartNodeCalled;
@@ -66,7 +66,7 @@ class ConnectionImpl : public ConnectionBase
       while( ce == ConnNoError && m_pos <= 8 )
         ce = recv( 0 );
       return ConnNotConnected;
-    };
+    }
     virtual void disconnect() {}
 
   private:
