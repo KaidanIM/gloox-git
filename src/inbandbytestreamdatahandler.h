@@ -38,7 +38,7 @@ namespace gloox
       /**
        * Virtual destructor.
        */
-      virtual ~InBandBytestreamDataHandler() {};
+      virtual ~InBandBytestreamDataHandler() {}
 
       /**
        * Reimplement this function to receive data which is sent over the bytestream.

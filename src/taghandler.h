@@ -32,7 +32,7 @@ namespace gloox
       /**
        * Virtual Destructor.
        */
-       virtual ~TagHandler() {};
+       virtual ~TagHandler() {}
 
        /**
         * This function is called when a registered XML element arrives.

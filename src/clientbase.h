@@ -115,26 +115,26 @@ namespace gloox
        * @note I you change the server part of the JID, the server of the connection is not synced.
        * You have to do that manually using @ref setServer().
        */
-      JID& jid() { return m_jid; };
+      JID& jid() { return m_jid; }
 
       /**
        * Switches usage of SASL on/off. Default: on
        * @param sasl Whether to switch SASL usage on or off.
        */
-      void setSasl( bool sasl ) { m_sasl = sasl; };
+      void setSasl( bool sasl ) { m_sasl = sasl; }
 
       /**
        * Switches usage of TLS on/off (if available). Default: on
        * @param tls Whether to switch TLS usage on or off.
        */
-      void setTls( bool tls ) { m_tls = tls; };
+      void setTls( bool tls ) { m_tls = tls; }
 
       /**
        * Sets the port to connect to. This is not necessary if either the default port (5222) is used
        * or SRV records exist which will be resolved.
        * @param port The port to connect to.
        */
-      void setPort( int port ) { m_port = port; };
+      void setPort( int port ) { m_port = port; }
 
       /**
        * Sets the XMPP server to connect to.
@@ -142,44 +142,44 @@ namespace gloox
        * @note If you change the server, the server part of the JID is not synced. You have to do that
        * manually using @ref jid() and @ref JID::setServer().
        */
-      void setServer( const std::string &server ) { m_server = server; };
+      void setServer( const std::string &server ) { m_server = server; }
 
       /**
        * Sets the password to use to connect to the XMPP server.
        * @param password The password to use for authentication.
        */
-      void setPassword( const std::string &password ) { m_password = password; };
+      void setPassword( const std::string &password ) { m_password = password; }
 
       /**
        * Returns the current prepped server.
        * @return The server used to connect.
        */
-      const std::string server() const { return m_server; };
+      const std::string server() const { return m_server; }
 
       /**
        * Returns the current SASL status.
        * @return The current SASL status.
        */
-      bool sasl() const { return m_sasl; };
+      bool sasl() const { return m_sasl; }
 
       /**
        * Returns the current TLS status.
        * @return The current TLS status.
        */
-      bool tls() const { return m_tls; };
+      bool tls() const { return m_tls; }
 
       /**
        * Returns the port. The default of -1 means that the actual port will be looked up using
        * SRV records, or the XMPP default port of 5222 will be used.
        * @return The port used to connect.
        */
-      int port() const { return m_port; };
+      int port() const { return m_port; }
 
       /**
        * Returns the current password.
        * @return The password used to connect.
        */
-      virtual const std::string password() const { return m_password; };
+      virtual const std::string password() const { return m_password; }
 
       /**
        * Creates a string which is unique in the current instance and
@@ -200,7 +200,7 @@ namespace gloox
        * Returns whether authentication has taken place and was successful.
        * @return @b True if authentication has been carried out @b and was successful, @b false otherwise.
        */
-      bool authed() const { return m_authed; };
+      bool authed() const { return m_authed; }
 
       /**
        * Returns the current connection status.
@@ -212,7 +212,7 @@ namespace gloox
        * Retrieves the value of the xml:lang attribute of the initial stream.
        * Default is 'en', i.e. if not changed by a call to @ref setXmlLang().
        */
-      const std::string& xmlLang() const { return m_xmllang; };
+      const std::string& xmlLang() const { return m_xmllang; }
 
       /**
        * Sets the value for the xml:lang attribute of the initial stream.
@@ -220,7 +220,7 @@ namespace gloox
        * section 2.12 of the XML specification and RFC 3066.
        * Default is 'en'.
        */
-      void setXmlLang( const std::string& xmllang ) { m_xmllang = xmllang; };
+      void setXmlLang( const std::string& xmllang ) { m_xmllang = xmllang; }
 
       /**
        * Gives access to the raw file descriptor of the current connection. Use it wisely. Especially,
@@ -355,7 +355,7 @@ namespace gloox
        * used to verify a servers certificate.
        * @param cacerts A list of absolute paths to CA root certificate files in PEM format.
        */
-      void setCACerts( const StringList& cacerts ) { m_cacerts = cacerts; };
+      void setCACerts( const StringList& cacerts ) { m_cacerts = cacerts; }
 
       /**
        * Use this function to set the user's certificate and private key. The certificate will
@@ -392,7 +392,7 @@ namespace gloox
        * Use this function to retrieve the type of the stream error after it occurs and you received a
        * ConnectionError of type CONN_STREAM_ERROR from the ConnectionListener.
        */
-      StreamError streamError() const { return m_streamError; };
+      StreamError streamError() const { return m_streamError; }
 
       /**
        * Returns the text of a stream error for the given language if available.
@@ -411,21 +411,21 @@ namespace gloox
        * this is possible.
        * @return The cdata of the stream error's text element (only for see-other-host).
        */
-      const std::string streamErrorCData() const { return m_streamErrorCData; };
+      const std::string streamErrorCData() const { return m_streamErrorCData; }
 
       /**
        * This function can be used to retrieve the application-specific error condition of a stream error.
        * @return The application-specific error element of a stream error. 0 if no respective element was
        * found or no error occured.
        */
-      const Tag* streamErrorAppCondition() const { return m_streamErrorAppCondition; };
+      const Tag* streamErrorAppCondition() const { return m_streamErrorAppCondition; }
 
       /**
        * Use this function to retrieve the type of the authentication error after it occurs and you
        * received a ConnectionError of type CONN_AUTHENTICATION_FAILED from the ConnectionListener.
        * @return The type of the authentication, if any, AUTH_ERROR_UNDEFINED otherwise.
        */
-      AuthenticationError authError() const { return m_authError; };
+      AuthenticationError authError() const { return m_authError; }
 
     protected:
       enum SaslMechanisms
@@ -443,8 +443,8 @@ namespace gloox
       void notifyOnConnect();
       virtual void disconnect( ConnectionError reason );
       void header();
-      void setAuthed( bool authed ) { m_authed = authed; };
-      void setAuthFailure( AuthenticationError e ) { m_authError = e; };
+      void setAuthed( bool authed ) { m_authed = authed; }
+      void setAuthFailure( AuthenticationError e ) { m_authError = e; }
       virtual bool checkStreamVersion( const std::string& version );
 
       void startSASL( SaslMechanisms type );
@@ -480,7 +480,7 @@ namespace gloox
       virtual void handleStartNode() = 0;
       virtual bool handleNormalNode( Stanza *stanza ) = 0;
       virtual void rosterFilled() = 0;
-      virtual void cleanup() {};
+      virtual void cleanup() {}
       void handleStreamError( Stanza *stanza );
 
       void notifyIqHandlers( Stanza *stanza );

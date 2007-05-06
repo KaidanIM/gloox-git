@@ -50,7 +50,7 @@ namespace gloox
        * Returns whether the bytestream is open, that is, accepted by both parties.
        * @return Whether the bytestream is open or not.
        */
-      bool isOpen() const { return m_open; };
+      bool isOpen() const { return m_open; }
 
       /**
        * Use this function to send a chunk of data over an open byte stream.
@@ -68,13 +68,13 @@ namespace gloox
        * Lets you retrieve the stream's ID.
        * @return The stream's ID.
        */
-      const std::string& sid() const { return m_sid; };
+      const std::string& sid() const { return m_sid; }
 
       /**
        * Lets you retrieve this bytestream's block-size.
        * @return The bytestream's block-size.
        */
-      int blockSize() const { return (int)m_blockSize; };
+      int blockSize() const { return (int)m_blockSize; }
 
       /**
        * Use this function to register an object that will receive any notifications from
@@ -97,10 +97,10 @@ namespace gloox
 
     private:
       InBandBytestream( MessageSession *session, ClientBase *clientbase );
-      void setBlockSize( int blockSize ) { m_blockSize = blockSize; };
+      void setBlockSize( int blockSize ) { m_blockSize = blockSize; }
       void close();  // locally
       void closed(); // by remote entity
-      void setSid( const std::string& sid ) { m_sid = sid; };
+      void setSid( const std::string& sid ) { m_sid = sid; }
 
       ClientBase *m_clientbase;
       InBandBytestreamManager *m_manager;

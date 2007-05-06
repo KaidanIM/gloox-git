@@ -53,16 +53,16 @@ namespace gloox
       virtual ~Component();
 
       // reimplemented from ClientBase
-      virtual const std::string username() const { return ""; };
+      virtual const std::string username() const { return ""; }
 
       // reimplemented from ClientBase
-      virtual const std::string password() const { return ""; };
+      virtual const std::string password() const { return ""; }
 
       /**
        * Gives access to the component's Disco object.
        * @return A pointer to the Disco object.
        */
-      Disco* disco() const { return m_disco; };
+      Disco* disco() const { return m_disco; }
 
       /**
        * Disconnects from the server.
@@ -72,12 +72,12 @@ namespace gloox
     protected:
       virtual void handleStartNode();
       virtual bool handleNormalNode( Stanza *stanza );
-      virtual bool checkStreamVersion( const std::string& /*version*/ ) { return true; };
+      virtual bool checkStreamVersion( const std::string& /*version*/ ) { return true; }
       virtual void disconnect( ConnectionError reason );
 
     private:
       // reimplemented from ClientBase
-      virtual void rosterFilled() {};
+      virtual void rosterFilled() {}
 
       Disco *m_disco;
   };

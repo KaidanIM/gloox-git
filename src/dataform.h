@@ -81,20 +81,20 @@ namespace gloox
        * Use this function to retrieve the title of the form.
        * @return The title of the form.
        */
-      const std::string& title() const { return m_title; };
+      const std::string& title() const { return m_title; }
 
       /**
        * Use this function to set the title of the form.
        * @param title The new title of the form.
        * @note The title should not contain newlines (\\n, \\r).
        */
-      void setTitle( const std::string& title ) { m_title = title; };
+      void setTitle( const std::string& title ) { m_title = title; }
 
       /**
        * Retrieves the natural-language instructions for the form.
        * @return The fill-in instructions for the form.
        */
-      const StringList& instructions() const { return m_instructions; };
+      const StringList& instructions() const { return m_instructions; }
 
       /**
        * Use this function to set natural-language instructions for the form.
@@ -103,7 +103,7 @@ namespace gloox
        * element of the StringMap. This allows for platform dependent newline handling on the target
        * platform.
        */
-      void setInstructions( const StringList& instructions ) { m_instructions = instructions; };
+      void setInstructions( const StringList& instructions ) { m_instructions = instructions; }
 
     private:
       StringList m_instructions;

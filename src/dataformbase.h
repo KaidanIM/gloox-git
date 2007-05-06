@@ -67,14 +67,14 @@ namespace gloox
        * Use this function to retrieve the list of fields of a form.
        * @return The list of fields the form contains.
        */
-      FieldList& fields() { return m_fields; };
+      FieldList& fields() { return m_fields; }
 
       /**
        * Use this function to set the fields the form contains.
        * @param fields The list of fields.
        * @note Any previously set fields will be deleted. Always set all fields, not a delta.
        */
-      virtual void setFields( FieldList& fields ) { m_fields = fields; };
+      virtual void setFields( FieldList& fields ) { m_fields = fields; }
 
     protected:
       FieldList m_fields;

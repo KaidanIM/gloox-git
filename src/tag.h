@@ -111,7 +111,7 @@ namespace gloox
        * Use this function to retrieve the name of an element.
        * @return The name of the tag.
        */
-      virtual const std::string& name() const { return m_name; };
+      virtual const std::string& name() const { return m_name; }
 
       /**
        * Use this function to retrieve the XML character data of an element.
@@ -210,7 +210,7 @@ namespace gloox
        * Returns whether a Tag is considered empty, i.e. invalid.
        * @return @b True if the Tag is valid, @b false if not.
        */
-      virtual bool empty() const { return m_name.empty(); };
+      virtual bool empty() const { return m_name.empty(); }
 
       /**
        * This function checks whether a child element with given name exists and has
@@ -225,13 +225,13 @@ namespace gloox
        * Returns the tag's parent Tag.
        * @return The Tag above the current Tag. May be @b 0.
        */
-      Tag* parent() { return m_parent; };
+      Tag* parent() { return m_parent; }
 
       /**
        * Returns the stanza type.
        * @return The type of the stanza.
        */
-      virtual StanzaType type() const { return m_type; };
+      virtual StanzaType type() const { return m_type; }
 
       /**
        * This function creates a deep copy of this Tag.
@@ -252,7 +252,7 @@ namespace gloox
     private:
       struct duo
       {
-        duo( std::string f, std::string s ) : first( f), second( s ) {};
+        duo( std::string f, std::string s ) : first( f), second( s ) {}
         std::string first;
         std::string second;
       };

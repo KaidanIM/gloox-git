@@ -65,7 +65,7 @@ namespace gloox
       /**
        * Virtual Destructor.
        */
-      virtual ~BookmarkHandler() {};
+      virtual ~BookmarkHandler() {}
 
       /**
        * This function is called when bookmarks arrive from the server.

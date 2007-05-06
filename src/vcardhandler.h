@@ -44,7 +44,7 @@ namespace gloox
       /**
        * Virtual destructor.
        */
-      virtual ~VCardHandler() {};
+      virtual ~VCardHandler() {}
 
       /**
        * This function is called when a VCard has been successfully fetched.

@@ -14,8 +14,8 @@ using namespace gloox;
 class RosterTest : public RosterListener, ConnectionListener, LogHandler
 {
   public:
-    RosterTest() {};
-    virtual ~RosterTest() {};
+    RosterTest() {}
+    virtual ~RosterTest() {}
 
     void start()
     {
@@ -39,9 +39,9 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler
 
     virtual void onConnect()
     {
-    };
+    }
 
-    virtual void onDisconnect( ConnectionError /*e*/ ) { printf( "disco_test: disconnected\n" ); };
+    virtual void onDisconnect( ConnectionError /*e*/ ) { printf( "disco_test: disconnected\n" ); }
 
     virtual bool onTLSConnect( const CertInfo& info )
     {
@@ -50,7 +50,7 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler
               info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
               info.compression.c_str() );
       return true;
-    };
+    }
 
     virtual void itemSubscribed( const std::string& jid )
     {
@@ -106,7 +106,7 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler
     virtual void itemUnavailable( const RosterItem& item, const std::string& /*msg*/ )
     {
       printf( "item offline: %s\n", item.jid().c_str() );
-    };
+    }
 
     virtual bool subscriptionRequest( const std::string& jid, const std::string& /*msg*/ )
     {
@@ -130,7 +130,7 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler
     virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
     {
       printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
-    };
+    }
 
   private:
     Client *j;

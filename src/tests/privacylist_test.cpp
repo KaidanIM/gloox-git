@@ -12,8 +12,8 @@ using namespace gloox;
 class PLTest : public PrivacyListHandler, ConnectionListener
 {
   public:
-    PLTest() {};
-    virtual ~PLTest() {};
+    PLTest() {}
+    virtual ~PLTest() {}
 
     void start()
     {
@@ -35,14 +35,14 @@ class PLTest : public PrivacyListHandler, ConnectionListener
 
       delete( p );
       delete( j );
-    };
+    }
 
     virtual void onConnect()
     {
       p->requestListNames();
-    };
+    }
 
-    virtual void onDisconnect( ConnectionError /*e*/ ) { printf( "disco_test: disconnected\n" ); };
+    virtual void onDisconnect( ConnectionError /*e*/ ) { printf( "disco_test: disconnected\n" ); }
 
     virtual bool onTLSConnect( const CertInfo& info )
     {
@@ -51,7 +51,7 @@ class PLTest : public PrivacyListHandler, ConnectionListener
               info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
               info.compression.c_str() );
       return true;
-    };
+    }
 
     virtual void handlePrivacyListNames( const std::string& active, const std::string& def,
                                          const StringList& lists )
@@ -77,12 +77,12 @@ class PLTest : public PrivacyListHandler, ConnectionListener
 //       p->unsetDefault();
 //       p->unsetActive();
       p->requestList( "mnyList" );
-    };
+    }
 
     virtual void handlePrivacyListResult( const std::string& id, resultEnum result )
     {
       printf( "result for id '%s': %d\n", id.c_str(), result );
-    };
+    }
 
     virtual void handlePrivacyList( const std::string& name, PrivacyList& items )
     {
@@ -93,12 +93,12 @@ class PLTest : public PrivacyListHandler, ConnectionListener
         printf( "item: type: %d, action: %d, packetType: %d, value: %s\n",
                 (*it).type(), (*it).action(), (*it).packetType(), (*it).value().c_str() );
       }
-    };
+    }
 
     virtual void handlePrivacyListChanged( const std::string& name )
     {
       printf( "list changed: %s\n", name.c_str() );
-    };
+    }
 
   private:
     Client *j;

@@ -55,43 +55,43 @@ namespace gloox
       /**
        * Virtual destructor.
        */
-      virtual ~Stanza() {};
+      virtual ~Stanza() {}
 
       /**
        * Returns the sub-type of the stanza.
        * @return The sub-type of the stanza.
        */
-      virtual StanzaSubType subtype() const { return m_subtype; };
+      virtual StanzaSubType subtype() const { return m_subtype; }
 
       /**
        * Returns the JID the stanza comes from.
        * @return The origin of the stanza.
        */
-      virtual const JID& from() const { return m_from; };
+      virtual const JID& from() const { return m_from; }
 
       /**
        * Returns the receiver of the stanza.
        * @return The stanza's destination.
        */
-      virtual const JID& to() const { return m_to; };
+      virtual const JID& to() const { return m_to; }
 
       /**
        * Returns the id of the stanza, if set.
        * @return The ID of the stanza.
        */
-      virtual const std::string id() const { return m_id; };
+      virtual const std::string id() const { return m_id; }
 
       /**
        * Returns the value of the xmlns attribute of the first child node.
        * @return The namespace of the IQ stanza.
        */
-      virtual const std::string& xmlns() const { return m_xmlns; };
+      virtual const std::string& xmlns() const { return m_xmlns; }
 
       /**
        * Returns the presence 'show' type of a presence stanza.
        * @return The presence type of the sender.
        */
-      virtual Presence show() const { return m_show; };
+      virtual Presence show() const { return m_show; }
 
       /**
        * Returns the status text of a presence stanza for the given language if available.
@@ -111,7 +111,7 @@ namespace gloox
        * -128 and +127.
        * @return The priority information contained in the stanza, if any, or a value below -128.
        */
-      virtual int priority() const { return m_priority; };
+      virtual int priority() const { return m_priority; }
 
       /**
        * Returns the body of a message stanza for the given language if available.
@@ -150,26 +150,26 @@ namespace gloox
        * Returnes the stanza error condition, if any.
        * @return The stanza error condition.
        */
-      virtual StanzaError error() const { return m_stanzaError; };
+      virtual StanzaError error() const { return m_stanzaError; }
 
       /**
        * This function can be used to retrieve the application-specific error condition of a stanza error.
        * @return The application-specific error element of a stanza error. 0 if no respective element was
        * found or no error occured.
        */
-      Tag* errorAppCondition() { return m_stanzaErrorAppCondition; };
+      Tag* errorAppCondition() { return m_stanzaErrorAppCondition; }
 
       /**
        * Returns the thread ID of a message stanza.
        * @return The thread ID of a message stanza. Empty for non-message stanzas.
        */
-      virtual const std::string thread() const { return m_thread; };
+      virtual const std::string thread() const { return m_thread; }
 
       /**
        * Retrieves the value of the xml:lang attribute of this stanza.
        * Default is 'en'.
        */
-      const std::string& xmlLang() const { return m_xmllang; };
+      const std::string& xmlLang() const { return m_xmllang; }
 
       /**
        * Use this function to parse the content of the Tag and determine type, etc.
@@ -178,7 +178,7 @@ namespace gloox
        * Stanzas provided by gloox are fully parsed.
        * @deprecated
        */
-      void finalize() { init(); };
+      void finalize() { init(); }
 
       /**
        * This function creates a deep copy of this Stanza.

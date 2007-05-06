@@ -32,7 +32,7 @@ namespace gloox
       /**
        * Virtual Destructor.
        */
-      virtual ~MessageEventHandler() {};
+      virtual ~MessageEventHandler() {}
 
       /**
        * Notifies the MessageEventHandler that an event has been raised by the remote

@@ -156,19 +156,19 @@ namespace gloox
        * Returns the current prepped username.
        * @return The username used to connect.
        */
-      virtual const std::string username() const { return m_jid.username(); };
+      virtual const std::string username() const { return m_jid.username(); }
 
       /**
        * Returns the current prepped resource.
        * @return The resource used to connect.
        */
-      std::string const resource() const { return m_jid.resource(); };
+      std::string const resource() const { return m_jid.resource(); }
 
       /**
        * Returns the current priority.
        * @return The priority of the current resource.
        */
-      int priority() const { return m_priority; };
+      int priority() const { return m_priority; }
 
       /**
        * Sets the username to use to connect to the XMPP server.
@@ -180,7 +180,7 @@ namespace gloox
        * Sets the resource to use to connect to the XMPP server.
        * @param resource The resource to use to log into the server.
        */
-      void setResource( const std::string &resource ) { m_jid.setResource( resource ); };
+      void setResource( const std::string &resource ) { m_jid.setResource( resource ); }
 
       /**
        * Set initial priority. Legal values: -128 <= priority <= 127
@@ -194,14 +194,14 @@ namespace gloox
        * are notified. Default: off
        * @param autoPresence Whether to switch AutoPresence on or off.
        */
-      void setAutoPresence( bool autoPresence ) { m_autoPresence = autoPresence; };
+      void setAutoPresence( bool autoPresence ) { m_autoPresence = autoPresence; }
 
       /**
        * This is a temporary hack to enforce Non-SASL login. You should not need to use it.
        * @param force Whether to force non-SASL auth. Default @b true.
        * @deprecated
        */
-      GLOOX_DEPRECATED void setForceNonSasl( bool force = true ) { m_forceNonSasl = force; };
+      GLOOX_DEPRECATED void setForceNonSasl( bool force = true ) { m_forceNonSasl = force; }
 
       /**
        * Disables automatic handling of disco queries.
@@ -242,7 +242,7 @@ namespace gloox
       void nonSaslLogin();
 
     private:
-      virtual void handleStartNode() {};
+      virtual void handleStartNode() {}
       virtual bool handleNormalNode( Stanza *stanza );
       virtual void disconnect( ConnectionError reason );
       int getStreamFeatures( Stanza *stanza );

@@ -36,7 +36,7 @@ namespace gloox
       /**
        * Virtual destructor.
        */
-      virtual ~AdhocCommandProvider() {};
+      virtual ~AdhocCommandProvider() {}
 
       /**
        * This function is called when an Ad-hoc Command needs to be handled.

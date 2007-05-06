@@ -30,7 +30,7 @@ namespace gloox
       /**
        * Virtual Destructor.
        */
-      virtual ~LastActivityHandler() {};
+      virtual ~LastActivityHandler() {}
 
       /**
        * This function is called when a positive result of a query arrives.
