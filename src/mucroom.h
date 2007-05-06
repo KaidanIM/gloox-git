@@ -127,26 +127,26 @@ namespace gloox
        * @param password The password to use for this room.
        * @note This function does not password-protect a room.
        */
-      void setPassword( const std::string& password ) { m_password = password; };
+      void setPassword( const std::string& password ) { m_password = password; }
 
       /**
        * A convenience function that returns the room's name.
        * @return The room's name.
        */
-      const std::string name() const { return m_nick.username(); };
+      const std::string name() const { return m_nick.username(); }
 
       /**
        * A convenience function that returns the name/address of the MUC service the room is running on
        * (e.g., conference.jabber.org).
        * @return The MUC service's name/address.
        */
-      const std::string service() const { return m_nick.server(); };
+      const std::string service() const { return m_nick.server(); }
 
       /**
        * A convenience function that returns the user's nickname in the room.
        * @return The user's nickname.
        */
-      const std::string nick() const { return m_nick.resource(); };
+      const std::string nick() const { return m_nick.resource(); }
 
       /**
        * Join this room.
@@ -177,13 +177,13 @@ namespace gloox
        * Returns the user's current affiliation with this room.
        * @return The user's current affiliation.
        */
-      MUCRoomAffiliation affiliation() const { return m_affiliation; };
+      MUCRoomAffiliation affiliation() const { return m_affiliation; }
 
       /**
        * Returns the user's current role in this room.
        * @return The user's current role.
        */
-      MUCRoomRole role() const { return m_role; };
+      MUCRoomRole role() const { return m_role; }
 
       /**
        * Use this function to change the user's nickname in the room.
@@ -240,24 +240,24 @@ namespace gloox
        * MUCRoomHandler per room at any one time.
        * @param mrl The MUCRoomHandler to register.
        */
-      void registerMUCRoomHandler( MUCRoomHandler *mrl ) { m_roomHandler = mrl; };
+      void registerMUCRoomHandler( MUCRoomHandler *mrl ) { m_roomHandler = mrl; }
 
       /**
        * Use this function to remove the registered MUCRoomHandler.
        */
-      void removeMUCRoomHandler() { m_roomHandler = 0; };
+      void removeMUCRoomHandler() { m_roomHandler = 0; }
 
       /**
        * Use this function to register a (new) MUCRoomConfigHandler with this room. There can
        * be only one MUCRoomConfigHandler per room at any one time.
        * @param mrch The MUCRoomConfigHandler to register.
        */
-      void registerMUCRoomConfigHandler( MUCRoomConfigHandler *mrch ) { m_roomConfigHandler = mrch; };
+      void registerMUCRoomConfigHandler( MUCRoomConfigHandler *mrch ) { m_roomConfigHandler = mrch; }
 
       /**
        * Use this function to remove the registered MUCRoomConfigHandler.
        */
-      void removeMUCRoomConfigHandler() { m_roomConfigHandler = 0; };
+      void removeMUCRoomConfigHandler() { m_roomConfigHandler = 0; }
 
       /**
        * Use this function to add history to a (newly created) room. The use case from the MUC spec
@@ -460,7 +460,7 @@ namespace gloox
        * Returns the currently know room flags.
        * @return ORed MUCRoomFlag's describing the current room configuration.
        */
-      int flags() const { return m_flags; };
+      int flags() const { return m_flags; }
 
       // reimplemented from DiscoHandler
       virtual void handleDiscoInfoResult( Stanza *stanza, int context );
@@ -478,7 +478,7 @@ namespace gloox
       virtual void handleMessage( Stanza *stanza, MessageSession *session = 0 );
 
       // reimplemented from IqHandler
-      virtual bool handleIq( Stanza* /*stanza*/ ) { return false; };
+      virtual bool handleIq( Stanza* /*stanza*/ ) { return false; }
 
       // reimplemented from IqHandler
       virtual bool handleIqID( Stanza *stanza, int context );
@@ -493,8 +493,8 @@ namespace gloox
       virtual DiscoNodeItemList handleDiscoNodeItems( const std::string& node = "" );
 
     protected:
-      void setName( const std::string& name ) { m_nick.setUsername( name ); };
-      virtual bool instantRoomHook() const { return false; };
+      void setName( const std::string& name ) { m_nick.setUsername( name ); }
+      virtual bool instantRoomHook() const { return false; }
 
       ClientBase *m_parent;
       JID m_nick;

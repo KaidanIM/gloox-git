@@ -60,13 +60,13 @@ namespace gloox
        * be expressed in UTC.
        * @return The original datetime.
        */
-      const std::string& stamp() const { return m_stamp; };
+      const std::string& stamp() const { return m_stamp; }
 
       /**
        * Sets the original datetime.
        * @param stamp The original datetime.
        */
-      void setStamp( const std::string& stamp ) { m_stamp = stamp; };
+      void setStamp( const std::string& stamp ) { m_stamp = stamp; }
 
       /**
        * Returns the JID of the original sender of the stanza or the entity that
@@ -75,25 +75,25 @@ namespace gloox
        * be expressed in UTC.
        * @return The JID.
        */
-      const JID& from() const { return m_from; };
+      const JID& from() const { return m_from; }
 
       /**
        * Sets the JID of the origianl sender or the entity that delayed the sending.
        * @param from The JID.
        */
-      void setFrom( const JID& from ) { m_from = from; };
+      void setFrom( const JID& from ) { m_from = from; }
 
       /**
        * Returns a natural language reason fro the delay.
        * @return A natural language reason fro the delay.
        */
-      const std::string& reason() const { return m_reason; };
+      const std::string& reason() const { return m_reason; }
 
       /**
        * Sets the reason for the delay.
        * @param reason The reason for the delay.
        */
-      void setBody( const std::string& reason ) { m_reason = reason; };
+      void setBody( const std::string& reason ) { m_reason = reason; }
 
       // reimplemented from StanzaExtension
       virtual Tag* tag() const;

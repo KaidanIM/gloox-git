@@ -36,7 +36,7 @@ namespace gloox
       /**
        * Virtual Destructor.
        */
-      virtual ~ConnectionDataHandler() {};
+      virtual ~ConnectionDataHandler() {}
 
       /**
        * This function is called for received from the underlying transport.

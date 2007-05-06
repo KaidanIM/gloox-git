@@ -39,7 +39,7 @@ namespace gloox
       /**
        * Virtual Destructor.
        */
-      virtual ~MessageHandler() {};
+      virtual ~MessageHandler() {}
 
       /**
        * Reimplement this function if you want to be notified about

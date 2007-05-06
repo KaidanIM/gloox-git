@@ -55,18 +55,18 @@ namespace gloox
       /**
        * Constructs an empty StanzaExtension.
        */
-      StanzaExtension( StanzaExtensionType type ) : m_type( type ) {};
+      StanzaExtension( StanzaExtensionType type ) : m_type( type ) {}
 
       /**
        * Virtual destructor.
        */
-      virtual ~StanzaExtension() {};
+      virtual ~StanzaExtension() {}
 
       /**
        * Returns the extension's type.
        * @return The extension's type.
        */
-      StanzaExtensionType type() const { return m_type; };
+      StanzaExtensionType type() const { return m_type; }
 
       /**
        * Returns a Tag representation of the extension.

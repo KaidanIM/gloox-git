@@ -59,7 +59,7 @@ namespace gloox
        * Returns the signature.
        * @return The signature.
        */
-      const std::string& signature() const { return m_signature; };
+      const std::string& signature() const { return m_signature; }
 
       // reimplemented from StanzaExtension
       Tag* tag() const;

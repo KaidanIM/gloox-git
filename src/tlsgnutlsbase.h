@@ -69,14 +69,14 @@ namespace gloox
       virtual bool handshake();
 
       // reimplemented from TLSBase
-      virtual void setCACerts( const StringList& /*cacerts*/ ) {};
+      virtual void setCACerts( const StringList& /*cacerts*/ ) {}
 
       // reimplemented from TLSBase
-      virtual void setClientCert( const std::string& /*clientKey*/, const std::string& /*clientCerts*/ ) {};
+      virtual void setClientCert( const std::string& /*clientKey*/, const std::string& /*clientCerts*/ ) {}
 
     protected:
       virtual void init() = 0;
-      virtual void getCertInfo() {};
+      virtual void getCertInfo() {}
 
       gnutls_session_t* m_session;
 

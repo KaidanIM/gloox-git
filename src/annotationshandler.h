@@ -52,7 +52,7 @@ namespace gloox
       /**
        * Virtual destructor.
        */
-      virtual ~AnnotationsHandler() {};
+      virtual ~AnnotationsHandler() {}
 
       /**
        * This function is called when notes arrive from the server.

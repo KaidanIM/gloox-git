@@ -34,7 +34,7 @@ namespace gloox
       /**
        * Virtual Destructor.
        */
-      virtual ~ChatStateHandler() {};
+      virtual ~ChatStateHandler() {}
 
       /**
        * Notifies the ChatStateHandler that a different chat state has been set by the remote

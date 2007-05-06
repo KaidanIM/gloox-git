@@ -59,7 +59,7 @@ namespace gloox
        * Returns the encrypted message.
        * @return The encrypted message.
        */
-      const std::string& encrypted() const { return m_encrypted; };
+      const std::string& encrypted() const { return m_encrypted; }
 
       // reimplemented from StanzaExtension
       Tag* tag() const;

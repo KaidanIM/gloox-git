@@ -44,7 +44,7 @@ namespace gloox
       /**
        * Virtual Destructor.
        */
-      virtual ~PrivateXMLHandler() {};
+      virtual ~PrivateXMLHandler() {}
 
       /**
        * Reimplement this function to receive the private XML that was requested earlier using

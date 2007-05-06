@@ -36,7 +36,7 @@ namespace gloox
       /**
        * Virtual Destructor.
        */
-      virtual ~ConnectionHandler() {};
+      virtual ~ConnectionHandler() {}
 
       /**
        * This function is called to receive an incoming connection.

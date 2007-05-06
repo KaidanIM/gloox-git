@@ -34,7 +34,7 @@ namespace gloox
       /**
        * Virtual Destructor.
        */
-      virtual ~MUCInvitationHandler() {};
+      virtual ~MUCInvitationHandler() {}
 
       /**
        *

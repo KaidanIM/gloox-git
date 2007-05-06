@@ -35,7 +35,7 @@ namespace gloox
       /**
        * Virtual Destructor.
        */
-      virtual ~TLSHandler() {};
+      virtual ~TLSHandler() {}
 
       /**
        * Reimplement this function to receive encrypted data from a TLSBase implementation.

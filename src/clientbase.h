@@ -494,7 +494,7 @@ namespace gloox
        * used to verify a servers certificate.
        * @param cacerts A list of absolute paths to CA root certificate files in PEM format.
        */
-      void setCACerts( const StringList& cacerts ) { m_cacerts = cacerts; };
+      void setCACerts( const StringList& cacerts ) { m_cacerts = cacerts; }
 
       /**
        * Use this function to set the user's certificate and private key. The certificate will
@@ -552,7 +552,7 @@ namespace gloox
        * this is possible.
        * @return The cdata of the stream error's text element (only for see-other-host).
        */
-      const std::string& streamErrorCData() const { return m_streamErrorCData; };
+      const std::string& streamErrorCData() const { return m_streamErrorCData; }
 
       /**
        * This function can be used to retrieve the application-specific error condition of a stream error.
@@ -621,8 +621,8 @@ namespace gloox
       void notifyStreamEvent( StreamEvent event );
       virtual void disconnect( ConnectionError reason );
       void header();
-      void setAuthed( bool authed ) { m_authed = authed; };
-      void setAuthFailure( AuthenticationError e ) { m_authError = e; };
+      void setAuthed( bool authed ) { m_authed = authed; }
+      void setAuthFailure( AuthenticationError e ) { m_authError = e; }
       virtual bool checkStreamVersion( const std::string& version );
 
       void startSASL( SaslMechanism type );

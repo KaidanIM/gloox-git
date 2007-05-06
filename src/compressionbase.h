@@ -39,12 +39,12 @@ namespace gloox
        * @param cdh A CompressionDataHandler-derived object that will be notified
        * about finished de/compression.
        */
-      CompressionBase( CompressionDataHandler *cdh ) : m_handler( cdh ), m_valid( false ) {};
+      CompressionBase( CompressionDataHandler *cdh ) : m_handler( cdh ), m_valid( false ) {}
 
       /**
        * Virtual Destructor.
        */
-      virtual ~CompressionBase() {};
+      virtual ~CompressionBase() {}
 
       /**
        * Compresses the given chunk of data.

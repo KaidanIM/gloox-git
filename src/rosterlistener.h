@@ -45,7 +45,7 @@ namespace gloox
       /**
        * Virtual Destructor.
        */
-      virtual ~RosterListener() {};
+      virtual ~RosterListener() {}
 
       /**
        * Reimplement this function if you want to be notified about new items

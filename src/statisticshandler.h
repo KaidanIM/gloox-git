@@ -66,7 +66,7 @@ namespace gloox
       /**
        * Virtual Destructor.
        */
-       virtual ~StatisticsHandler() {};
+       virtual ~StatisticsHandler() {}
 
        /**
         * This function is called when a Stanza has been sent or received.

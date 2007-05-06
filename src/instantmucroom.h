@@ -51,7 +51,7 @@ namespace gloox
     protected:
       // reimplemented from MUCRoom (acknowledges instant room creation w/o a
       // call to the MUCRoomConfigHandler)
-      virtual bool instantRoomHook() const { return true; };
+      virtual bool instantRoomHook() const { return true; }
 
   };
 

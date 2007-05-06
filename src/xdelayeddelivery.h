@@ -59,20 +59,20 @@ namespace gloox
        * The format SHOULD be "CCYYMMDDThh:mm:ss" and is to be understood as UTC.
        * @return The original datetime.
        */
-      const std::string& stamp() const { return m_stamp; };
+      const std::string& stamp() const { return m_stamp; }
 
       /**
        * Returns the JID of the original sender of the stanza or of the entity that
        * delayed the sending.
        * @return The JID.
        */
-      const JID& from() const { return m_from; };
+      const JID& from() const { return m_from; }
 
       /**
        * Returns a natural language reason for the delay.
        * @return A natural language reason for the delay.
        */
-      const std::string& reason() const { return m_reason; };
+      const std::string& reason() const { return m_reason; }
 
       // reimplemented from StanzaExtension
       virtual Tag* tag() const;

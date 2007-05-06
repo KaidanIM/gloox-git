@@ -235,7 +235,7 @@ namespace gloox
       void nonSaslLogin();
 
     private:
-      virtual void handleStartNode() {};
+      virtual void handleStartNode() {}
       virtual bool handleNormalNode( Stanza *stanza );
       virtual void disconnect( ConnectionError reason );
       int getStreamFeatures( Stanza *stanza );

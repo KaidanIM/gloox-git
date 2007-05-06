@@ -38,7 +38,7 @@ namespace gloox
       /**
        * Virtual destructor.
        */
-      virtual ~AdhocHandler() {};
+      virtual ~AdhocHandler() {}
 
       /**
        * This function is called in response to a call to Adhoc::checkSupport().

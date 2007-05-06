@@ -117,7 +117,7 @@ namespace gloox
        * @return The group delimiter.
        * @since 0.7
        */
-      const std::string& delimiter() const { return m_delimiter; };
+      const std::string& delimiter() const { return m_delimiter; }
 
       /**
        * Use this function to set the group delimiter (XEP-0083).

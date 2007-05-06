@@ -35,7 +35,7 @@ namespace gloox
       /**
        * Virtual Destructor.
        */
-      virtual ~CompressionDataHandler() {};
+      virtual ~CompressionDataHandler() {}
 
       /**
        * This function is called when compression is finished.

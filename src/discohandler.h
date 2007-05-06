@@ -34,7 +34,7 @@ namespace gloox
       /**
        * Virtual Destructor.
        */
-      virtual ~DiscoHandler() {};
+      virtual ~DiscoHandler() {}
 
       /**
        * Reimplement this function if you want to be notified about the result
@@ -69,7 +69,7 @@ namespace gloox
        * @return Returns @b true if the stanza was handled and answered, @b false otherwise.
        * @todo Replace the stanza with decoded values.
        */
-      virtual bool handleDiscoSet( Stanza *stanza ) { (void) stanza; return false; };
+      virtual bool handleDiscoSet( Stanza *stanza ) { (void) stanza; return false; }
 
   };
 

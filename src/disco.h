@@ -71,7 +71,7 @@ namespace gloox
        * Lets you retrieve the features this Disco instance supports.
        * @return A list of disco items.
        */
-      const StringList& features() const { return m_features; };
+      const StringList& features() const { return m_features; }
 
       /**
        * Queries the given JID for general infomation according to

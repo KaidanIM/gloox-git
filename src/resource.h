@@ -40,35 +40,35 @@ namespace gloox
         * @param presence The resource's presence status.
         */
       Resource( int priority, const std::string& msg, Presence presence )
-        : m_priority( priority ), m_message( msg ), m_presence( presence ) {};
+        : m_priority( priority ), m_message( msg ), m_presence( presence ) {}
 
       /**
         * Virtual destrcutor.
         */
-      virtual ~Resource() {};
+      virtual ~Resource() {}
 
       /**
         * Lets you fetch the resource's priority.
         * @return The resource's priority.
         */
-      int priority() const { return m_priority; };
+      int priority() const { return m_priority; }
 
       /**
         * Lets you fetch the resource's status message.
         * @return The resource's status message.
         */
-      const std::string& message() const { return m_message; };
+      const std::string& message() const { return m_message; }
 
       /**
         * Lets you fetch the resource's presence status.
         * @return The resource's presence status.
         */
-      Presence presence() const { return m_presence; };
+      Presence presence() const { return m_presence; }
 
     private:
-      void setPriority( int priority ) { m_priority = priority; };
-      void setMessage( std::string message ) { m_message = message; };
-      void setStatus( Presence presence ) { m_presence = presence; };
+      void setPriority( int priority ) { m_priority = priority; }
+      void setMessage( std::string message ) { m_message = message; }
+      void setStatus( Presence presence ) { m_presence = presence; }
 
       int m_priority;
       std::string m_message;

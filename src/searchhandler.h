@@ -65,7 +65,7 @@ namespace gloox
       /**
        * Virtual Destructor.
        */
-      virtual ~SearchHandler() {};
+      virtual ~SearchHandler() {}
 
       /**
        * This function is called to announce the searchable fields a directory supports. It is the result
