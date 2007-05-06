@@ -370,6 +370,9 @@ namespace gloox
   {
 //     printf( "about to close, " );
 
+    if( m_tag == "stream:stream" )
+      return true;
+
     if( !m_current || m_current->name() != m_tag )
       return false;
 
