@@ -34,7 +34,7 @@ namespace gloox
       /**
        * Virtual Destructor.
        */
-      virtual ~ConnectionListener() {};
+      virtual ~ConnectionListener() {}
 
       /**
        * This function notifies about successful connections. It will be called either after all
@@ -59,14 +59,14 @@ namespace gloox
        * This function is called (by a Client object) if an error occurs while trying to bind a resource.
        * @param error Describes the error condition.
        */
-      virtual void onResourceBindError( ResourceBindError error ) { (void) (error); };
+      virtual void onResourceBindError( ResourceBindError error ) { (void) (error); }
 
       /**
        * This function is called (by a Client object) if an error occurs while trying to establish
        * a session.
        * @param error Describes the error condition.
        */
-      virtual void onSessionCreateError( SessionCreateError error ) { (void) (error); };
+      virtual void onSessionCreateError( SessionCreateError error ) { (void) (error); }
 
       /**
        * This function is called when the connection was TLS/SSL secured.

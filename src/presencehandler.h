@@ -33,7 +33,7 @@ namespace gloox
       /**
        * Virtual Destructor.
        */
-      virtual ~PresenceHandler() {};
+      virtual ~PresenceHandler() {}
 
       /**
        * Reimplement this function if you want to be updated on

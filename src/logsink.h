@@ -72,7 +72,7 @@ namespace gloox
         int areas;
       };
 
-      LogSink( const LogSink& /*copy*/ ) {};
+      LogSink( const LogSink& /*copy*/ ) {}
 
       typedef std::map<LogHandler*, LogInfo> LogHandlerMap;
       LogHandlerMap m_logHandlers;

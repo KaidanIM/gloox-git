@@ -76,7 +76,7 @@ namespace gloox
       /**
        * Virtual Destructor.
        */
-      virtual ~RegistrationHandler() {};
+      virtual ~RegistrationHandler() {}
 
       /**
        * Reimplement this function to receive results of the

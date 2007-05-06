@@ -95,7 +95,7 @@ namespace gloox
        * Use this function to retrieve the optional values of a field.
        * @return The options of a field.
        */
-      StringMap& options() { return m_options; };
+      StringMap& options() { return m_options; }
 
       /**
        * Use this function to create a Tag representation of the form field. This is usually called by
@@ -109,7 +109,7 @@ namespace gloox
        * Use this function to retrieve the name of the field (the content of the 'var' attribute).
        * @return The name of the field.
        */
-      virtual const std::string& name() const { return m_name; };
+      virtual const std::string& name() const { return m_name; }
 
       /**
        * Sets the name (the content of the 'var' attribute) of the field. The name identifies the
@@ -117,7 +117,7 @@ namespace gloox
        * @param name The new name of the field.
        * @note Fields of type other than 'fixed' MUST have a name, if it is 'fixed', it MAY.
        */
-      void setName( const std::string& name ) { m_name = name; };
+      void setName( const std::string& name ) { m_name = name; }
 
       /**
        * Use this function to set the optional values of the field. The key of the map
@@ -125,62 +125,62 @@ namespace gloox
        * value. ;)
        * @param options The optional values of a list* or *multi type of field.
        */
-      void setOptions( const StringMap& options ) { m_options = options; };
+      void setOptions( const StringMap& options ) { m_options = options; }
 
       /**
        * Use this function to determine whether or not this field is required.
        * @return Whether or not this field is required.
        */
-      bool required() const { return m_required; };
+      bool required() const { return m_required; }
 
       /**
        * Use this field to set this field to be required.
        * @param required Whether or not this field is required.
        */
-      void setRequired( bool required ) { m_required = required; };
+      void setRequired( bool required ) { m_required = required; }
 
       /**
        * Use this function to retrieve the type of this field.
        * @return The type of this field.
        */
-      DataFormFieldType type() const { return m_type; };
+      DataFormFieldType type() const { return m_type; }
 
       /**
        * Use this function to retrieve the describing label of this field.
        * @return The describing label of this field.
        */
-      const std::string& label() const { return m_label; };
+      const std::string& label() const { return m_label; }
 
       /**
        * Use this function to set the describing label of this field.
        * @param label The describing label of this field.
        */
-      void setLabel( const std::string& label ) { m_label = label; };
+      void setLabel( const std::string& label ) { m_label = label; }
 
       /**
        * Use this function to retrieve the value of this field.
        * @return The value of this field.
        */
-      const std::string& value() const { return m_value; };
+      const std::string& value() const { return m_value; }
 
       /**
        * Use this function to set the value of this field.
        * @param value The new value of this field.
        */
-      void setValue( const std::string& value ) { m_value = value; };
+      void setValue( const std::string& value ) { m_value = value; }
 
       /**
        * Use this function to retrieve the values of this field, if its of type 'text-multi'.
        * @return The value of this field.
        */
-      const StringList& values() const { return m_values; };
+      const StringList& values() const { return m_values; }
 
       /**
        * Use this function to set multiple values of this field, if it is of type 'text-multi'. If its not,
        * use @ref setValue() instead.
        * @param values The new values of this field.
        */
-      void setValues( const StringList& values ) { m_values = values; };
+      void setValues( const StringList& values ) { m_values = values; }
 
     private:
       StringMap m_options;

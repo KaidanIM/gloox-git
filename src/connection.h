@@ -113,13 +113,13 @@ namespace gloox
        * Use this function to determine whether an esatblished connection is encrypted.
        * @return @b True if the connection is encrypted, @b false otherwise.
        */
-      bool isSecure() const { return m_secure; };
+      bool isSecure() const { return m_secure; }
 
       /**
        * Returns the current connection state.
        * @return The state of the connection.
        */
-      ConnectionState state() const { return m_state; };
+      ConnectionState state() const { return m_state; }
 
       /**
        * Gives access to the raw file descriptor of a connection. Use it wisely. Especially, you should not
@@ -157,13 +157,13 @@ namespace gloox
        * used to verify a servers certificate.
        * @param cacerts A list of absolute paths to CA root certificate files in PEM format.
        */
-      void setCACerts( const StringList& cacerts ) { m_cacerts = cacerts; };
+      void setCACerts( const StringList& cacerts ) { m_cacerts = cacerts; }
 
       /**
        * This function is used to retrieve certificate and connection info of a encrypted connection.
        * @return Certificate information.
        */
-      const CertInfo& fetchTLSInfo() const { return m_certInfo; };
+      const CertInfo& fetchTLSInfo() const { return m_certInfo; }
 
       /**
        * Use this function to set the user's certificate and private key. The certificate will

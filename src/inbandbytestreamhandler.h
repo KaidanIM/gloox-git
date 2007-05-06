@@ -36,7 +36,7 @@ namespace gloox
       /**
        * Virtual destructor.
        */
-      virtual ~InBandBytestreamHandler() {};
+      virtual ~InBandBytestreamHandler() {}
 
       /**
        * Notifies the implementor of a new incoming IBB request.

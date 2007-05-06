@@ -23,9 +23,9 @@ class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListen
                     MessageEventHandler, MessageHandler, ChatStateHandler
 {
   public:
-    MessageTest() : m_session( 0 ), m_messageEventFilter( 0 ), m_chatStateFilter( 0 ) {};
+    MessageTest() : m_session( 0 ), m_messageEventFilter( 0 ), m_chatStateFilter( 0 ) {}
 
-    virtual ~MessageTest() {};
+    virtual ~MessageTest() {}
 
     void start()
     {
@@ -71,14 +71,14 @@ class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListen
     virtual void onConnect()
     {
       printf( "connected!!!\n" );
-    };
+    }
 
     virtual void onDisconnect( ConnectionError e )
     {
       printf( "message_test: disconnected: %d\n", e );
       if( e == ConnAuthenticationFailed )
         printf( "auth failed. reason: %d\n", j->authError() );
-    };
+    }
 
     virtual bool onTLSConnect( const CertInfo& info )
     {
@@ -87,7 +87,7 @@ class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListen
               info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
               info.compression.c_str() );
       return true;
-    };
+    }
 
     virtual void handleDiscoInfoResult( Stanza * /*stanza*/, int /*context*/ )
     {
@@ -158,7 +158,7 @@ class MessageTest : public DiscoHandler, MessageSessionHandler, ConnectionListen
     virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
     {
       printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
-    };
+    }
 
   private:
     Client *j;

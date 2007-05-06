@@ -14,8 +14,8 @@ using namespace gloox;
 class AdhocTest : public ConnectionListener, AdhocCommandProvider
 {
   public:
-    AdhocTest() {};
-    virtual ~AdhocTest() {};
+    AdhocTest() {}
+    virtual ~AdhocTest() {}
 
     void start()
     {
@@ -52,9 +52,9 @@ class AdhocTest : public ConnectionListener, AdhocCommandProvider
 
     virtual void onConnect()
     {
-    };
+    }
 
-    virtual void onDisconnect( ConnectionError /*e*/ ) { printf( "disco_test: disconnected\n" ); };
+    virtual void onDisconnect( ConnectionError /*e*/ ) { printf( "disco_test: disconnected\n" ); }
 
     virtual bool onTLSConnect( const CertInfo& info )
     {
@@ -63,7 +63,7 @@ class AdhocTest : public ConnectionListener, AdhocCommandProvider
               info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
               info.compression.c_str() );
       return true;
-    };
+    }
 
   private:
     Client *j;

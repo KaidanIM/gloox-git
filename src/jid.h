@@ -87,31 +87,31 @@ namespace gloox
        * Returns the prepped username.
        * @return The current username.
        */
-      std::string username() const { return m_username; };
+      std::string username() const { return m_username; }
 
       /**
        * Returns the prepped server name.
        * @return The current server.
        */
-      std::string server() const { return m_server; };
+      std::string server() const { return m_server; }
 
       /**
        * Returns the raw (unprepped) server name.
        * @return The raw server name.
        */
-      std::string serverRaw() const { return m_serverRaw; };
+      std::string serverRaw() const { return m_serverRaw; }
 
       /**
        * Returns the prepped resource.
        * @return The current resource.
        */
-      std::string resource() const { return m_resource; };
+      std::string resource() const { return m_resource; }
 
       /**
        * A JID is empty as long as no server is set.
        * @return @b True if the JID is empty, @b false otherwise.
        */
-      bool empty() const { return m_server.empty(); };
+      bool empty() const { return m_server.empty(); }
 
       /**
        * Compares two JIDs.

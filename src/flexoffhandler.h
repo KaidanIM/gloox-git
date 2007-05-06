@@ -43,7 +43,7 @@ namespace gloox
       /**
        * Virtual Destructor.
        */
-      virtual ~FlexibleOfflineHandler() {};
+      virtual ~FlexibleOfflineHandler() {}
 
       /**
        * This function is called to indicate whether the server supports JEP-0013 or not.

@@ -207,13 +207,13 @@ namespace gloox
        * Sets the default block-size. Default: 4096
        * @param blockSize The default block-size in byte.
        */
-      void setBlockSize( int blockSize ) { m_blockSize = blockSize; };
+      void setBlockSize( int blockSize ) { m_blockSize = blockSize; }
 
       /**
        * Returns the currently set block-size.
        * @return The currently set block-size.
        */
-      int blockSize() const { return m_blockSize; };
+      int blockSize() const { return m_blockSize; }
 
       /**
        * To get rid of a bytestream (i.e., close and delete it), call this function. You

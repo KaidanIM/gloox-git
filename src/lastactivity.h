@@ -60,12 +60,12 @@ namespace gloox
        * Only one handler is possible at a time.
        * @param lah The object to register as handler.
        */
-      void registerLastActivityHandler( LastActivityHandler *lah ) { m_lastActivityHandler = lah; };
+      void registerLastActivityHandler( LastActivityHandler *lah ) { m_lastActivityHandler = lah; }
 
       /**
        * Use this function to un-register the LastActivityHandler set earlier.
        */
-      void removeLastActivityHandler() { m_lastActivityHandler = 0; };
+      void removeLastActivityHandler() { m_lastActivityHandler = 0; }
 
       /**
        * Use this function to reset the idle timer. By default the number of seconds since the

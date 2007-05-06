@@ -28,9 +28,9 @@ class IBBTest : public MessageSessionHandler, ConnectionListener, LogHandler,
 {
   public:
     IBBTest() : m_session( 0 ), m_messageEventFilter( 0 ), m_chatStateFilter( 0 ),
-    m_ibbManager( 0 ), m_ibb( 0 ), c( 0 ), m_send( false ) {};
+    m_ibbManager( 0 ), m_ibb( 0 ), c( 0 ), m_send( false ) {}
 
-    virtual ~IBBTest() {};
+    virtual ~IBBTest() {}
 
     void start()
     {
@@ -88,14 +88,14 @@ class IBBTest : public MessageSessionHandler, ConnectionListener, LogHandler,
       printf( "connected!!!\n" );
       JID jid( "you@example.org/res" );
       m_ibbManager->requestInBandBytestream( jid, this );
-    };
+    }
 
     virtual void onDisconnect( ConnectionError e )
     {
       printf( "message_test: disconnected: %d\n", e );
       if( e == ConnAuthenticationFailed )
         printf( "auth failed. reason: %d\n", j->authError() );
-    };
+    }
 
     virtual bool onTLSConnect( const CertInfo& info )
     {
@@ -104,7 +104,7 @@ class IBBTest : public MessageSessionHandler, ConnectionListener, LogHandler,
               info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
               info.compression.c_str() );
       return true;
-    };
+    }
 
     virtual void handleMessage( Stanza *stanza )
     {
@@ -160,7 +160,7 @@ class IBBTest : public MessageSessionHandler, ConnectionListener, LogHandler,
     virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
     {
       printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
-    };
+    }
 
     virtual bool handleIncomingInBandBytestream( const JID& from, InBandBytestream *ibb )
     {
@@ -173,7 +173,7 @@ class IBBTest : public MessageSessionHandler, ConnectionListener, LogHandler,
       m_ibb->registerInBandBytestreamDataHandler( this );
       m_send = true;
       return true;
-    };
+    }
 
     virtual void handleOutgoingInBandBytestream( const JID& to, InBandBytestream *ibb )
     {
@@ -186,27 +186,27 @@ class IBBTest : public MessageSessionHandler, ConnectionListener, LogHandler,
       m_ibb->attachTo( m_session );
       m_ibb->registerInBandBytestreamDataHandler( this );
       m_send = true;
-    };
+    }
 
     virtual void handleInBandBytestreamError( const JID& /*remote*/, StanzaError /*se*/ )
     {
       printf( "unused\n" );
-    };
+    }
 
     virtual void handleInBandData( const std::string& data, const std::string& sid )
     {
       printf( "incoming data from stream %s: %s\n", sid.c_str(), data.c_str() );
-    };
+    }
 
     virtual void handleInBandError( const std::string& /*sid*/, const JID& /*remote*/, StanzaError /*se*/ )
     {
       printf( "unused\n" );
-    };
+    }
 
     virtual void handleInBandClose( const std::string& /*sid*/, const JID& /*from*/ )
     {
       printf( "bytestream closed\n" );
-    };
+    }
 
   private:
     Client *j;
