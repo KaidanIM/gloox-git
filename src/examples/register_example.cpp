@@ -12,8 +12,8 @@ using namespace gloox;
 class RegTest : public RegistrationHandler, ConnectionListener, LogHandler
 {
   public:
-    RegTest() {};
-    virtual ~RegTest() {};
+    RegTest() {}
+    virtual ~RegTest() {}
 
     void start()
     {
@@ -44,9 +44,9 @@ class RegTest : public RegistrationHandler, ConnectionListener, LogHandler
 
       // unregistering
 //       m_reg->removeAccount();
-    };
+    }
 
-    virtual void onDisconnect( ConnectionError e ) { printf( "register_test: disconnected: %d\n", e ); };
+    virtual void onDisconnect( ConnectionError e ) { printf( "register_test: disconnected: %d\n", e ); }
 
     virtual bool onTLSConnect( const CertInfo& info )
     {
@@ -55,7 +55,7 @@ class RegTest : public RegistrationHandler, ConnectionListener, LogHandler
               info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
               info.compression.c_str() );
       return true;
-    };
+    }
 
     virtual void handleRegistrationFields( const JID& /*from*/, int fields, std::string instructions )
     {
@@ -64,23 +64,23 @@ class RegTest : public RegistrationHandler, ConnectionListener, LogHandler
       vals.username = "hurkhurk";
       vals.password = "hurkhurks";
       m_reg->createAccount( fields, vals );
-    };
+    }
 
     virtual void handleRegistrationResult( const JID& /*from*/, RegistrationResult result )
     {
       printf( "result: %d\n", result );
       j->disconnect();
-    };
+    }
 
     virtual void handleAlreadyRegistered( const JID& /*from*/ )
     {
       printf( "the account already exists.\n" );
-    };
+    }
 
     virtual void handleDataForm( const JID& /*from*/, const DataForm& /*form*/ )
     {
       printf( "datForm received\n" );
-    };
+    }
 
     virtual void handleOOB( const JID& /*from*/, const OOB& oob )
     {
@@ -90,7 +90,7 @@ class RegTest : public RegistrationHandler, ConnectionListener, LogHandler
     virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
     {
       printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
-    };
+    }
 
   private:
     Registration *m_reg;

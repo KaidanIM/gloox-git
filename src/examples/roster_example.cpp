@@ -15,8 +15,8 @@ using namespace gloox;
 class RosterTest : public RosterListener, ConnectionListener, LogHandler, MessageHandler
 {
   public:
-    RosterTest() {};
-    virtual ~RosterTest() {};
+    RosterTest() {}
+    virtual ~RosterTest() {}
 
     void start()
     {
@@ -38,9 +38,9 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler, Messag
 
     virtual void onConnect()
     {
-    };
+    }
 
-    virtual void onDisconnect( ConnectionError e ) { printf( "disco_test: disconnected: %d\n", e ); };
+    virtual void onDisconnect( ConnectionError e ) { printf( "disco_test: disconnected: %d\n", e ); }
 
     virtual bool onTLSConnect( const CertInfo& info )
     {
@@ -49,17 +49,17 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler, Messag
               info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
               info.compression.c_str() );
       return true;
-    };
+    }
 
     virtual void onResourceBindError( ResourceBindError error )
     {
       printf( "onResourceBindError: %d\n", error );
-    };
+    }
 
     virtual void onSessionCreateError( SessionCreateError error )
     {
       printf( "onSessionCreateError: %d\n", error );
-    };
+    }
 
     virtual void handleItemSubscribed( const JID& jid )
     {
@@ -140,7 +140,7 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler, Messag
     virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
     {
       printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
-    };
+    }
 
     virtual void handleMessage( Stanza *stanza, MessageSession * /*session*/ )
     {
@@ -148,7 +148,7 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler, Messag
         j->disconnect();
       else
         printf( "msg: %s\n", stanza->body().c_str() );
-    };
+    }
 
   private:
     Client *j;

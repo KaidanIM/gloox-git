@@ -13,8 +13,8 @@ using namespace gloox;
 class RosterTest : public ConnectionListener, LogHandler
 {
   public:
-    RosterTest() {};
-    virtual ~RosterTest() {};
+    RosterTest() {}
+    virtual ~RosterTest() {}
 
     void start()
     {
@@ -36,12 +36,12 @@ class RosterTest : public ConnectionListener, LogHandler
     virtual void onConnect()
     {
       j->disconnect();
-    };
+    }
 
     virtual void onDisconnect( ConnectionError e )
     {
       printf( "reset_test: disconnected: %d\n", e );
-    };
+    }
 
     virtual bool onTLSConnect( const CertInfo& info )
     {
@@ -50,12 +50,12 @@ class RosterTest : public ConnectionListener, LogHandler
               info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
               info.compression.c_str() );
       return true;
-    };
+    }
 
     virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
     {
       printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
-    };
+    }
 
   private:
     Client *j;

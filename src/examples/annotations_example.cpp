@@ -12,8 +12,8 @@ using namespace gloox;
 class AnnotationsTest : public AnnotationsHandler, ConnectionListener
 {
   public:
-    AnnotationsTest() {};
-    virtual ~AnnotationsTest() {};
+    AnnotationsTest() {}
+    virtual ~AnnotationsTest() {}
 
     void start()
     {
@@ -32,14 +32,14 @@ class AnnotationsTest : public AnnotationsHandler, ConnectionListener
 
       delete( a );
       delete( j );
-    };
+    }
 
     virtual void onConnect()
     {
       a->requestAnnotations();
-    };
+    }
 
-    virtual void onDisconnect( ConnectionError /*e*/ ) { printf( "annotations_test: disconnected\n" ); };
+    virtual void onDisconnect( ConnectionError /*e*/ ) { printf( "annotations_test: disconnected\n" ); }
 
     virtual bool onTLSConnect( const CertInfo& info )
     {
@@ -48,7 +48,7 @@ class AnnotationsTest : public AnnotationsHandler, ConnectionListener
               info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
               info.compression.c_str() );
       return true;
-    };
+    }
 
     virtual void handleAnnotations( const AnnotationsList &aList )
     {
@@ -74,7 +74,7 @@ class AnnotationsTest : public AnnotationsHandler, ConnectionListener
       mybList.push_back( bItem );
 
       a->storeAnnotations( mybList );
-    };
+    }
 
   private:
     Client *j;

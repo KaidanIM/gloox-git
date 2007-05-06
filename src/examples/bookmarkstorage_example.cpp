@@ -12,8 +12,8 @@ using namespace gloox;
 class BookmarkStorageTest : public BookmarkHandler, ConnectionListener
 {
   public:
-    BookmarkStorageTest() {};
-    virtual ~BookmarkStorageTest() {};
+    BookmarkStorageTest() {}
+    virtual ~BookmarkStorageTest() {}
 
     void start()
     {
@@ -32,14 +32,14 @@ class BookmarkStorageTest : public BookmarkHandler, ConnectionListener
 
       delete( b );
       delete( j );
-    };
+    }
 
     virtual void onConnect()
     {
       b->requestBookmarks();
-    };
+    }
 
-    virtual void onDisconnect( ConnectionError /*e*/ ) { printf( "disco_test: disconnected\n" ); };
+    virtual void onDisconnect( ConnectionError /*e*/ ) { printf( "disco_test: disconnected\n" ); }
 
     virtual bool onTLSConnect( const CertInfo& info )
     {
@@ -48,7 +48,7 @@ class BookmarkStorageTest : public BookmarkHandler, ConnectionListener
               info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
               info.compression.c_str() );
       return true;
-    };
+    }
 
     virtual void handleBookmarks( const BookmarkList &bList, const ConferenceList &cList )
     {
@@ -93,7 +93,7 @@ class BookmarkStorageTest : public BookmarkHandler, ConnectionListener
       mycList.push_back( cItem );
 
       b->storeBookmarks( mybList, mycList );
-    };
+    }
 
   private:
     Client *j;

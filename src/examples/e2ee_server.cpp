@@ -41,12 +41,12 @@ class MessageTest : public ConnectionListener, LogHandler,
   public:
     MessageTest()
       : m_tls( new TLSDefault( this, "", TLSDefault::AnonymousServer ) ),
-        rcpt( "hurkhurk@example.net/client" ) {};
+        rcpt( "hurkhurk@example.net/client" ) {}
 
     virtual ~MessageTest()
     {
       delete m_tls;
-    };
+    }
 
     void start()
     {
@@ -69,14 +69,14 @@ class MessageTest : public ConnectionListener, LogHandler,
     virtual void onConnect()
     {
       printf( "connected!\n" );
-    };
+    }
 
     virtual void onDisconnect( ConnectionError e )
     {
       printf( "message_test: disconnected: %d\n", e );
       if( e == ConnAuthenticationFailed )
         printf( "auth failed. reason: %d\n", j->authError() );
-    };
+    }
 
     virtual bool onTLSConnect( const CertInfo& info )
     {
@@ -87,7 +87,7 @@ class MessageTest : public ConnectionListener, LogHandler,
               info.compression.c_str(), ctime( (const time_t*)&info.date_from ),
               ctime( (const time_t*)&info.date_to ) );
       return true;
-    };
+    }
 
     void xtlsSend()
     {
@@ -141,7 +141,7 @@ class MessageTest : public ConnectionListener, LogHandler,
     virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
     {
       printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
-    };
+    }
 
   private:
     Client *j;

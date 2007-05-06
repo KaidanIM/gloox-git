@@ -20,8 +20,8 @@ class FlexOffTest : public DiscoHandler, MessageHandler, ConnectionListener, Fle
                            LogHandler
 {
   public:
-    FlexOffTest() {};
-    virtual ~FlexOffTest() {};
+    FlexOffTest() {}
+    virtual ~FlexOffTest() {}
 
     void start()
     {
@@ -50,14 +50,14 @@ class FlexOffTest : public DiscoHandler, MessageHandler, ConnectionListener, Fle
     virtual void onConnect()
     {
       f->checkSupport();
-    };
+    }
 
     virtual void onDisconnect( ConnectionError e )
     {
       printf( "message_test: disconnected: %d\n", e );
       if( e == ConnAuthenticationFailed )
         printf( "auth failed. reason: %d\n", j->authError() );
-    };
+    }
 
     virtual bool onTLSConnect( const CertInfo& info )
     {
@@ -66,7 +66,7 @@ class FlexOffTest : public DiscoHandler, MessageHandler, ConnectionListener, Fle
               info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
               info.compression.c_str() );
       return true;
-    };
+    }
 
     virtual void handleDiscoInfoResult( Stanza */*stanza*/, int /*context*/ )
     {
@@ -143,7 +143,7 @@ class FlexOffTest : public DiscoHandler, MessageHandler, ConnectionListener, Fle
     virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
     {
       printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
-    };
+    }
 
   private:
     Client *j;

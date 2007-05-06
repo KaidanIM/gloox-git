@@ -12,8 +12,8 @@ using namespace gloox;
 class PrivateXMLTest : public PrivateXMLHandler, ConnectionListener
 {
   public:
-    PrivateXMLTest() {};
-    virtual ~PrivateXMLTest() {};
+    PrivateXMLTest() {}
+    virtual ~PrivateXMLTest() {}
 
     void start()
     {
@@ -36,9 +36,9 @@ class PrivateXMLTest : public PrivateXMLHandler, ConnectionListener
     virtual void onConnect()
     {
       p->requestXML( "test", "http://camaya.net/jabber/test", this );
-    };
+    }
 
-    virtual void onDisconnect( ConnectionError /*e*/ ) { printf( "disco_test: disconnected\n" ); };
+    virtual void onDisconnect( ConnectionError /*e*/ ) { printf( "disco_test: disconnected\n" ); }
 
     virtual bool onTLSConnect( const CertInfo& info )
     {
@@ -47,7 +47,7 @@ class PrivateXMLTest : public PrivateXMLHandler, ConnectionListener
               info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
               info.compression.c_str() );
       return true;
-    };
+    }
 
     virtual void handlePrivateXML( const std::string& /*tag*/, Tag */*xml*/ )
     {
@@ -58,11 +58,11 @@ class PrivateXMLTest : public PrivateXMLHandler, ConnectionListener
       Tag *b = new Tag( "blah", id );
       x->addChild( b );
       p->storeXML( x, this );
-    };
+    }
 
     virtual void handlePrivateXMLResult( const std::string& /*uid*/, PrivateXMLResult /*result*/ )
     {
-    };
+    }
 
   private:
     Client *j;

@@ -130,7 +130,7 @@ class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, SOCKS5
       printf( "ft_send: disconnected: %d\n", e );
       if( e == ConnAuthenticationFailed )
         printf( "auth failed. reason: %d\n", j->authError() );
-    };
+    }
 
     virtual bool onTLSConnect( const CertInfo& info )
     {
@@ -141,12 +141,12 @@ class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, SOCKS5
               info.compression.c_str(), ctime( (const time_t*)&info.date_from ),
               ctime( (const time_t*)&info.date_to ) );
       return true;
-    };
+    }
 
     virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
     {
       printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
-    };
+    }
 
     virtual void handleFTRequest( const JID& from, const std::string& id, const std::string& name,
                                   const std::string& size, const std::string& hash,
