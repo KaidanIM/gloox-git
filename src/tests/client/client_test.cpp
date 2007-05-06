@@ -24,7 +24,7 @@ class ClientTest : public Client, /*LogHandler,*/ ConnectionListener
 //     {
 //       printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
 //     };
-    virtual void onConnect() { ++m_connected; disconnect(); };
+    virtual void onConnect() { ++m_connected; disconnect(); }
     virtual void onDisconnect( ConnectionError e )
     {
       ++m_disconnected;
@@ -33,14 +33,14 @@ class ClientTest : public Client, /*LogHandler,*/ ConnectionListener
 //       printf( "reason: %d\n", e );
     };
     virtual void onResourceBindError( ResourceBindError /*error*/ )
-      { /*printf( "res bind err: %d\n", error );*/ };
+      { /*printf( "res bind err: %d\n", error );*/ }
     virtual void onSessionCreateError( SessionCreateError /*error*/ )
-      { /*printf( "ses err: %d\n", error );*/ };
-    virtual bool onTLSConnect( const CertInfo& /*info*/ ) { return false; };
-    int connected() const { return m_connected; };
-    int disconnected() const { return m_disconnected; };
-    ConnectionError disconnectReason() const { return m_disconnect; };
-    StreamError streamErrorReason() const { return m_streamerror; };
+      { /*printf( "ses err: %d\n", error );*/ }
+    virtual bool onTLSConnect( const CertInfo& /*info*/ ) { return false; }
+    int connected() const { return m_connected; }
+    int disconnected() const { return m_disconnected; }
+    ConnectionError disconnectReason() const { return m_disconnect; }
+    StreamError streamErrorReason() const { return m_streamerror; }
 
   protected:
 
