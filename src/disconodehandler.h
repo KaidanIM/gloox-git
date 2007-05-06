@@ -52,7 +52,7 @@ namespace gloox
       /**
        * Virtual Destructor.
        */
-      virtual ~DiscoNodeHandler() {};
+      virtual ~DiscoNodeHandler() {}
 
       /**
        * In addition to @c handleDiscoNodeIdentities, this function is used to gather

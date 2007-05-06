@@ -41,12 +41,12 @@ namespace gloox
        */
       ConnectionBase( ConnectionDataHandler *cdh )
         : m_handler( cdh ), m_state( StateDisconnected ), m_port( -1 )
-      {};
+      {}
 
       /**
        * Virtual destructor.
        */
-      virtual ~ConnectionBase() { cleanup(); };
+      virtual ~ConnectionBase() { cleanup(); }
 
       /**
        * Used to initiate the connection.
@@ -86,13 +86,13 @@ namespace gloox
        * This function is called after a disconnect to clean up internal state. It is also called by
        * ConnectionBase's destructor.
        */
-      virtual void cleanup() {};
+      virtual void cleanup() {}
 
       /**
        * Returns the current connection state.
        * @return The state of the connection.
        */
-      ConnectionState state() const { return m_state; };
+      ConnectionState state() const { return m_state; }
 
       /**
        * Use this function to register a new ConnectionDataHandler. There can be only one

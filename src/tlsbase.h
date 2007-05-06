@@ -36,12 +36,12 @@ namespace gloox
        * @param server The server to use in certificate verification.
        */
       TLSBase( TLSHandler *th, const std::string server )
-        : m_handler( th ), m_server( server ), m_secure( false ), m_valid( false ) {};
+        : m_handler( th ), m_server( server ), m_secure( false ), m_valid( false ) {}
 
       /**
        * Virtual destructor.
        */
-      virtual ~TLSBase() {};
+      virtual ~TLSBase() {}
 
       /**
        * Use this function to feed unencrypted data to the encryption implementation.
@@ -78,7 +78,7 @@ namespace gloox
        * Returns the state of the encryption.
        * @return The state of the encryption.
        */
-      virtual bool isSecure() const { return m_secure; };
+      virtual bool isSecure() const { return m_secure; }
 
       /**
        * Use this function to set a number of trusted root CA certificates which shall be
@@ -91,7 +91,7 @@ namespace gloox
        * This function is used to retrieve certificate and connection info of a encrypted connection.
        * @return Certificate information.
        */
-      virtual const CertInfo& fetchTLSInfo() const { return m_certInfo; };
+      virtual const CertInfo& fetchTLSInfo() const { return m_certInfo; }
 
       /**
        * Use this function to set the user's certificate and private key. The certificate will

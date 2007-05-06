@@ -36,7 +36,7 @@ namespace gloox
       /**
        * Virtual destructor.
        */
-      virtual ~SOCKS5BytestreamHandler() {};
+      virtual ~SOCKS5BytestreamHandler() {}
 
       /**
        * Notifies the implementor of a new incoming SOCKS5 request.

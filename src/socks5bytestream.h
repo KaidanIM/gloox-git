@@ -98,7 +98,7 @@ namespace gloox
        * Lets you retrieve the stream's ID.
        * @return The stream's ID.
        */
-      const std::string& sid() const { return m_sid; };
+      const std::string& sid() const { return m_sid; }
 
       /**
        * Returns the target entity's JID. If this bytestream is remote-initiated, this is

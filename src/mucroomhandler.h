@@ -87,7 +87,7 @@ namespace gloox
       /**
        * Virtual Destructor.
        */
-      virtual ~MUCRoomHandler() {};
+      virtual ~MUCRoomHandler() {}
 
       /**
        * This function is called whenever a room occupant enters the room, changes presence

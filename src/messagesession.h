@@ -179,14 +179,14 @@ namespace gloox
        * Use this function to find out where is this session points at.
        * @return The receipient's JID.
        */
-      const JID& target() const { return m_target; };
+      const JID& target() const { return m_target; }
 
       /**
        * By default, a thread ID is sent with every message to identify
        * messages belonging together.
        * @returns The thread ID for this session.
        */
-      const std::string& threadID() const { return m_thread; };
+      const std::string& threadID() const { return m_thread; }
 
       /**
        * Use this function to associate a MessageHandler with this MessageSession.
@@ -239,7 +239,7 @@ namespace gloox
        * @return ORed list of StanzaSubType values this MessageSession wants to receive. Only the
        * StanzaMessage* types are valid.
        */
-      int types() const { return m_types; };
+      int types() const { return m_types; }
 
       /**
        * Receives messages from ClientBase.

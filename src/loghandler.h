@@ -36,7 +36,7 @@ namespace gloox
       /**
        * Virtual Destructor.
        */
-      virtual ~LogHandler() {};
+      virtual ~LogHandler() {}
 
       /**
        * Reimplement this function if you want to receive the chunks of the conversation

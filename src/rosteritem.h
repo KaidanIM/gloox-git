@@ -94,19 +94,19 @@ namespace gloox
        * Retrieves the displayed name of a contact/roster item.
        * @return The contact's name.
        */
-      virtual const std::string& name() const { return m_name; };
+      virtual const std::string& name() const { return m_name; }
 
       /**
        * Returns the contact's bare JID.
        * @return The contact's bare JID.
        */
-      virtual const std::string& jid() const { return m_jid; };
+      virtual const std::string& jid() const { return m_jid; }
 
       /**
        * Returns the current subscription type between the remote and the local entity.
        * @return The subscription type.
        */
-      virtual SubscriptionEnum subscription() const { return m_subscription; };
+      virtual SubscriptionEnum subscription() const { return m_subscription; }
 
       /**
        * Sets the groups this RosterItem belongs to.
@@ -118,13 +118,13 @@ namespace gloox
        * Returns the groups this RosterItem belongs to.
        * @return The groups this item belongs to.
        */
-      virtual const StringList& groups() const { return m_groups; };
+      virtual const StringList& groups() const { return m_groups; }
 
       /**
        * Whether the item has unsynchronized changes.
        * @return @b True if the item has unsynchronized changes, @b false otherwise.
        */
-      virtual bool changed() const { return m_changed; };
+      virtual bool changed() const { return m_changed; }
 
       /**
        * Indicates whether this item has at least one resource online (in any state).
@@ -136,7 +136,7 @@ namespace gloox
        * Returns the contact's resources.
        * @return The contact's resources.
        */
-      virtual const ResourceMap& resources() const { return m_resources; };
+      virtual const ResourceMap& resources() const { return m_resources; }
 
       /**
        * Returns the Resource for a specific resource string.
@@ -177,7 +177,7 @@ namespace gloox
       /**
        * Removes the 'changed' flag from the item.
        */
-      virtual void setSynchronized() { m_changed = false; };
+      virtual void setSynchronized() { m_changed = false; }
 
       /**
        * This function is called to remove subsequent resources from a RosterItem.

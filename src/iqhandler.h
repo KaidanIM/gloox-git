@@ -33,7 +33,7 @@ namespace gloox
       /**
        * Virtual Destructor.
        */
-      virtual ~IqHandler() {};
+      virtual ~IqHandler() {}
 
       /**
        * Reimplement this function if you want to be notified about incoming IQs.

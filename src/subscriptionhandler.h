@@ -32,7 +32,7 @@ namespace gloox
       /**
        * Virtual destructor.
        */
-      virtual ~SubscriptionHandler() {};
+      virtual ~SubscriptionHandler() {}
 
       /**
        * Reimplement this function if you want to be notified about incoming

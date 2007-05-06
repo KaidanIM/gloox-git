@@ -92,7 +92,7 @@ namespace gloox
       /**
        * Virtual Destructor.
        */
-      virtual ~MUCRoomConfigHandler() {};
+      virtual ~MUCRoomConfigHandler() {}
 
       /**
        * This function is called in response to MUCRoom::requestList() if the list was

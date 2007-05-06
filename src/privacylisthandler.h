@@ -57,7 +57,7 @@ namespace gloox
       /**
        * Virtual Destructor.
        */
-      virtual ~PrivacyListHandler() {};
+      virtual ~PrivacyListHandler() {}
 
       /**
        * Reimplement this function to retrieve the list of privacy list names after requesting it using

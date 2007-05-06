@@ -61,13 +61,13 @@ namespace gloox
        * Returns the out-of-band URL.
        * @return The out-of-band URL.
        */
-      const std::string& url() const { return m_url; };
+      const std::string& url() const { return m_url; }
 
       /**
        * Returns the URL's description.
        * @return The URL's description.
        */
-      const std::string& desc() const { return m_desc; };
+      const std::string& desc() const { return m_desc; }
 
       // reimplemented from StanzaExtension
       Tag* tag() const;

@@ -38,7 +38,7 @@ namespace gloox
       /**
        * Virtual destructor.
        */
-      virtual ~SOCKS5BytestreamDataHandler() {};
+      virtual ~SOCKS5BytestreamDataHandler() {}
 
       /**
        * Reimplement this function to receive data which is sent over the bytestream.

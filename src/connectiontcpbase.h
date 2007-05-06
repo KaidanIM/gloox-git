@@ -85,7 +85,7 @@ namespace gloox
        * select()/poll() it and use ConnectionTCPBase::recv( -1 ) to fetch the data.
        * @return The socket of the active connection, or -1 if no connection is established.
        */
-      int socket() const { return m_socket; };
+      int socket() const { return m_socket; }
 
       /**
        * This function allows to set an existing socket with an established
@@ -93,7 +93,7 @@ namespace gloox
        * negotiate the XMPP stream. You should not set a new socket after having called connect().
        * @param socket The existing socket.
        */
-      void setSocket( int socket ) { m_cancel = false; m_socket = socket; };
+      void setSocket( int socket ) { m_cancel = false; m_socket = socket; }
 
     protected:
       ConnectionTCPBase &operator=( const ConnectionTCPBase & );

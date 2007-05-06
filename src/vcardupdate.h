@@ -61,7 +61,7 @@ namespace gloox
        * Returns the avatar's hash.
        * @return The avatar's SHA hash.
        */
-      const std::string& hash() const { return m_hash; };
+      const std::string& hash() const { return m_hash; }
 
       // reimplemented from StanzaExtension
       Tag* tag() const;
