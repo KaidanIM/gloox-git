@@ -16,8 +16,8 @@ using namespace gloox;
 class VCardTest : public ConnectionListener, LogHandler, VCardHandler
 {
   public:
-    VCardTest() : m_count( 0 ) {};
-    virtual ~VCardTest() {};
+    VCardTest() : m_count( 0 ) {}
+    virtual ~VCardTest() {}
 
     void start()
     {
@@ -45,9 +45,9 @@ class VCardTest : public ConnectionListener, LogHandler, VCardHandler
       printf( "connected\n" );
       JID jid( "hurkhurk@example.org" );
       m_vManager->fetchVCard( jid, this );
-    };
+    }
 
-    virtual void onDisconnect( ConnectionError e ) { printf( "disco_test: disconnected: %d\n", e ); };
+    virtual void onDisconnect( ConnectionError e ) { printf( "disco_test: disconnected: %d\n", e ); }
 
     virtual bool onTLSConnect( const CertInfo& info )
     {
@@ -56,7 +56,7 @@ class VCardTest : public ConnectionListener, LogHandler, VCardHandler
               info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
               info.compression.c_str() );
       return true;
-    };
+    }
 
     virtual void handleDiscoInfoResult( Stanza */*stanza*/, int /*context*/ )
     {
@@ -76,7 +76,7 @@ class VCardTest : public ConnectionListener, LogHandler, VCardHandler
     virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
     {
       printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
-    };
+    }
 
     virtual void handleVCard( const JID& jid, VCard *vcard )
     {

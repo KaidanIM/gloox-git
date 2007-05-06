@@ -14,8 +14,8 @@ using namespace gloox;
 class DiscoTest : public DiscoHandler, ConnectionListener, LogHandler
 {
   public:
-    DiscoTest() {};
-    virtual ~DiscoTest() {};
+    DiscoTest() {}
+    virtual ~DiscoTest() {}
 
     void start()
     {
@@ -39,9 +39,9 @@ class DiscoTest : public DiscoHandler, ConnectionListener, LogHandler
 
     virtual void onConnect()
     {
-    };
+    }
 
-    virtual void onDisconnect( ConnectionError e ) { printf( "disco_test: disconnected: %d\n", e ); };
+    virtual void onDisconnect( ConnectionError e ) { printf( "disco_test: disconnected: %d\n", e ); }
 
     virtual bool onTLSConnect( const CertInfo& info )
     {
@@ -50,7 +50,7 @@ class DiscoTest : public DiscoHandler, ConnectionListener, LogHandler
               info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
               info.compression.c_str() );
       return true;
-    };
+    }
 
     virtual void handleDiscoInfoResult( Stanza */*stanza*/, int /*context*/ )
     {
@@ -70,7 +70,7 @@ class DiscoTest : public DiscoHandler, ConnectionListener, LogHandler
     virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
     {
       printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
-    };
+    }
 
   private:
     Client *j;
