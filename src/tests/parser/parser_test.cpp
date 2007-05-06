@@ -9,8 +9,8 @@ using namespace gloox;
 class ParserTest : private TagHandler
 {
   public:
-    ParserTest() : m_tag( 0 ) {};
-    virtual ~ParserTest() {};
+    ParserTest() : m_tag( 0 ) {}
+    virtual ~ParserTest() {}
 
     virtual void handleTag( Tag *tag )
     {

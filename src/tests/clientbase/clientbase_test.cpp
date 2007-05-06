@@ -23,21 +23,21 @@ class ClientBaseTest : public ClientBase, /*LogHandler,*/ ConnectionListener
 //       logInstance().registerLogHandler( LogLevelDebug, LogAreaAll, this );
       registerConnectionListener( this );
     };
-    virtual void handleStartNode() { m_handleStartNodeCalled = true; };
-    virtual bool handleNormalNode(gloox::Stanza*) { return true; };
-    virtual void rosterFilled() {};
+    virtual void handleStartNode() { m_handleStartNodeCalled = true; }
+    virtual bool handleNormalNode(gloox::Stanza*) { return true; }
+    virtual void rosterFilled() {}
 /*    virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
     {
       printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
     };*/
-    virtual void onConnect() { /*printf( "connect\n" );*/ };
-    virtual void onDisconnect( ConnectionError /*e*/ ) { /*printf( "disconnected: %d\n", e );*/ };
-    virtual void onResourceBindError( ResourceBindError /*error*/ ) { /*printf( "res bind err: %d\n", error );*/ };
-    virtual void onSessionCreateError( SessionCreateError /*error*/ ) { /*printf( "ses err: %d\n", error );*/ };
-    virtual bool onTLSConnect( const CertInfo& /*info*/ ) { return false; };
-    bool handleStartNodeCalled() const { return m_handleStartNodeCalled; };
-    bool sidOK() const { return ( m_sid == "testsid" ); };
-    bool versionOK() const { return m_versionOK; };
+    virtual void onConnect() { /*printf( "connect\n" );*/ }
+    virtual void onDisconnect( ConnectionError /*e*/ ) { /*printf( "disconnected: %d\n", e );*/ }
+    virtual void onResourceBindError( ResourceBindError /*error*/ ) { /*printf( "res bind err: %d\n", error );*/ }
+    virtual void onSessionCreateError( SessionCreateError /*error*/ ) { /*printf( "ses err: %d\n", error );*/ }
+    virtual bool onTLSConnect( const CertInfo& /*info*/ ) { return false; }
+    bool handleStartNodeCalled() const { return m_handleStartNodeCalled; }
+    bool sidOK() const { return ( m_sid == "testsid" ); }
+    bool versionOK() const { return m_versionOK; }
 
   protected:
       virtual bool checkStreamVersion( const std::string& version )
@@ -55,11 +55,11 @@ class ConnectionImpl : public ConnectionBase
 {
   public:
     ConnectionImpl( ConnectionDataHandler *cdh )
-      : ConnectionBase( cdh ), m_pos( 0 ) {};
-    virtual ~ConnectionImpl() {};
-    virtual ConnectionError connect() { m_state = StateConnected; return ConnNoError; };
-    virtual ConnectionError recv( int timeout = -1 ) { return ConnNoError; };
-    virtual bool send( const std::string& data ) { return true; };
+      : ConnectionBase( cdh ), m_pos( 0 ) {}
+    virtual ~ConnectionImpl() {}
+    virtual ConnectionError connect() { m_state = StateConnected; return ConnNoError; }
+    virtual ConnectionError recv( int timeout = -1 ) { return ConnNoError; }
+    virtual bool send( const std::string& data ) { return true; }
     virtual ConnectionError receive()
     {
       ConnectionError ce = ConnNoError;
@@ -67,7 +67,7 @@ class ConnectionImpl : public ConnectionBase
         ce = recv( 0 );
       return ConnNotConnected;
     };
-    virtual void disconnect() {};
+    virtual void disconnect() {}
 
   private:
     int m_pos;
