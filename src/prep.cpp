@@ -36,6 +36,7 @@ namespace gloox
   namespace prep
   {
 
+#ifdef HAVE_LIBIDN
     /**
      * Applies a Stringprep profile to a string. This function does the actual
      * work behind nodeprep, nameprep and resourceprep.
@@ -46,7 +47,6 @@ namespace gloox
      */
     static std::string prepare( const std::string& s, const Stringprep_profile* profile )
     {
-#ifdef HAVE_LIBIDN
       if( s.empty() || s.length() > JID_PORTION_SIZE )
         return std::string();
 
@@ -56,24 +56,34 @@ namespace gloox
         preppedString = p;
       free( p );
       return preppedString;
+    }
+#endif
+
+    std::string nodeprep( const std::string& node )
+    {
+#ifdef HAVE_LIBIDN
+      return prepare( node, stringprep_xmpp_nodeprep );
 #else
       return s;
 #endif
     }
 
-    std::string nodeprep( const std::string& node )
-    {
-      return prepare( node, stringprep_xmpp_nodeprep );
-    }
-
     std::string nameprep( const std::string& domain )
     {
+#ifdef HAVE_LIBIDN
       return prepare( domain, stringprep_nameprep );
+#else
+      return s;
+#endif
     }
 
     std::string resourceprep( const std::string& resource )
     {
+#ifdef HAVE_LIBIDN
       return prepare( resource, stringprep_xmpp_resourceprep );
+#else
+      return s;
+#endif
     }
 
     std::string idna( const std::string& domain )
