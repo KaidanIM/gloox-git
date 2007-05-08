@@ -19,13 +19,15 @@
 #include "socks5bytestream.h"
 #include "socks5bytestreammanager.h"
 
+#include <cstdlib>
+
 namespace gloox
 {
 
   SIProfileFT::SIProfileFT( ClientBase* parent, SIProfileFTHandler* sipfth, SIManager* manager,
                             SOCKS5BytestreamManager* s5Manager )
     : m_parent( parent ), m_manager( manager ), m_handler( sipfth ),
-      m_socks5Manager( s5Manager ), m_delManager( false ), m_delS5Manager( false )
+      m_socks5Manager( s5Manager ), m_delManager( false ), m_delS5Manager( false ), m_ranged( false )
   {
     if( !m_manager )
     {
@@ -53,7 +55,7 @@ namespace gloox
       delete m_socks5Manager;
   }
 
-  bool SIProfileFT::requestFT( const JID& to, const std::string& name, int size, const std::string& hash,
+  bool SIProfileFT::requestFT( const JID& to, const std::string& name, long size, const std::string& hash,
                                const std::string& desc, const std::string& date, const std::string& mimetype )
   {
     if( name.empty() || size <= 0 || !m_manager )
@@ -68,6 +70,8 @@ namespace gloox
       file->addAttribute( "date", date );
     if( !desc.empty() )
       new Tag( file, "desc", desc );
+    if( m_ranged )
+      new Tag( file, "range" );
 
     Tag* feature = new Tag( "feature", "xmlns", XMLNS_FEATURE_NEG );
     DataFormField* dff = new DataFormField( "stream-method", "", "", DataFormField::FieldTypeListSingle );
@@ -146,12 +150,23 @@ namespace gloox
     if( m_handler )
     {
       std::string desc;
+      long offset = 0;
+      long length = -1;
       if( ptag->hasChild( "desc" ) )
         desc = ptag->findChild( "desc" )->cdata();
+      Tag* r = ptag->findChild( "range" );
+      if( r )
+      {
+        if( r->hasAttribute( "offset" ) )
+          offset = std::atol( r->findAttribute( "offset" ).c_str() );
+        if( r->hasAttribute( "length" ) )
+          length = std::atol( r->findAttribute( "length" ).c_str() );
+      }
       const std::string& mt = si->findAttribute( "mime-type" );
-      m_handler->handleFTRequest( from, id, ptag->findAttribute( "name" ), ptag->findAttribute( "size" ),
+      m_handler->handleFTRequest( from, id, ptag->findAttribute( "name" ),
+                                  std::atol( ptag->findAttribute( "size" ).c_str() ),
                                   ptag->findAttribute( "hash" ), ptag->findAttribute( "date" ),
-                                  mt.empty() ? "binary/octet-stream" : mt, desc, FTTypeS5B );
+                                  mt.empty() ? "binary/octet-stream" : mt, desc, FTTypeS5B, offset, length );
     }
   }
 

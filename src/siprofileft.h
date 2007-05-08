@@ -162,7 +162,7 @@ namespace gloox
        * @param mimetype The file's mime-type. Defaults to 'binary/octet-stream' if empty.
        * @return @b False if conditions above (file name, size) are not met, @b true otherwise.
        */
-      bool requestFT( const JID& to, const std::string& name, int size, const std::string& hash = "",
+      bool requestFT( const JID& to, const std::string& name, long size, const std::string& hash = "",
                       const std::string& desc = "", const std::string& date = "",
                       const std::string& mimetype = "" );
 
@@ -186,6 +186,13 @@ namespace gloox
        */
       void declineFT( const JID& to, const std::string& id, SIManager::SIError reason,
                       const std::string& text = "" );
+
+      /**
+       * Enables or disables offering of ranged file transfers.
+       * This is off by default.
+       * @param ranged @b True if you want to support ranged transfers, @b false otherwise.
+       */
+      void setRangedTransfers( bool ranged ) { m_ranged = ranged; }
 
       /**
        * To get rid of a bytestream (i.e., close and delete it), call this function. You
@@ -268,6 +275,7 @@ namespace gloox
       StreamHostList m_hosts;
       bool m_delManager;
       bool m_delS5Manager;
+      bool m_ranged;
 
   };
 

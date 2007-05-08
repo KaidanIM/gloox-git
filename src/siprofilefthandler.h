@@ -53,11 +53,14 @@ namespace gloox
        * @param desc The file's description.
        * @param stypes An ORed list of @link gloox::SIProfileFT::StreamType SIProfileFT::StreamType @endlink
        * indicating the StreamTypes the initiator supports.
+       * @param offset The offset in bytes from which the file should be transmitted.
+       * @param length The number of bytes to send, starting from the given offset. A value of -1
+       * indicates that the entire file is to be transmitted (taking the offset into account).
        */
       virtual void handleFTRequest( const JID& from, const std::string& id, const std::string& name,
-                                    const std::string& size, const std::string& hash,
+                                    long size, const std::string& hash,
                                     const std::string& date, const std::string& mimetype,
-                                    const std::string& desc, int stypes ) = 0;
+                                    const std::string& desc, int stypes, long offset, long length ) = 0;
 
       /**
        * This function is called to handle results of outgoing file transfer requests,

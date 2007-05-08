@@ -96,12 +96,12 @@ class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, SOCKS5
     }
 
     virtual void handleFTRequest( const JID& from, const std::string& id, const std::string& name,
-                                  const std::string& size, const std::string& hash,
+                                  long size, const std::string& hash,
                                   const std::string& date, const std::string& mimetype,
-                                  const std::string& desc, int /*stypes*/ )
+                                  const std::string& desc, int /*stypes*/, long /*offset*/, long /*length*/ )
     {
-      printf( "received ft request from %s: %s (%s bytes). hash: %s, date: %s, mime-type: %s\ndesc: %s\n",
-              from.full().c_str(), name.c_str(), size.c_str(), hash.c_str(), date.c_str(), mimetype.c_str(),
+      printf( "received ft request from %s: %s (%ld bytes). hash: %s, date: %s, mime-type: %s\ndesc: %s\n",
+              from.full().c_str(), name.c_str(), size, hash.c_str(), date.c_str(), mimetype.c_str(),
               desc.c_str() );
       f->acceptFT( from, id, SIProfileFT::FTTypeS5B );
     }
