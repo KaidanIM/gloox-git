@@ -72,6 +72,8 @@ namespace gloox
       virtual void setClientCert( const std::string& clientKey, const std::string& clientCerts );
 
     private:
+      void pushFunc();
+
       enum TLSOperation
       {
         TLSHandshake,
@@ -89,8 +91,6 @@ namespace gloox
       std::string m_sendBuffer;
       char *m_buf;
       const int m_bufsize;
-
-      ssize_t pushFunc();
 
   };
 

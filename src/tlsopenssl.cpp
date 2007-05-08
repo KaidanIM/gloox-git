@@ -16,6 +16,7 @@
 
 #ifdef HAVE_OPENSSL
 
+#include <algorithm>
 #include <cctype>
 
 namespace gloox
@@ -188,8 +189,7 @@ namespace gloox
       m_certInfo.server = peer_CN;
       std::string p;
       p.assign( peer_CN );
-      int (*pf)( int ) = std::tolower;
-      transform( p.begin(), p.end(), p.begin(), pf );
+      std::transform( p.begin(), p.end(), p.begin(), std::tolower );
       if( p != m_server )
         m_certInfo.status |= CertWrongPeer;
 
@@ -219,7 +219,7 @@ namespace gloox
     return true;
   }
 
-  ssize_t OpenSSL::pushFunc()
+  void OpenSSL::pushFunc()
   {
     int wantwrite;
     size_t wantread;
@@ -251,8 +251,6 @@ namespace gloox
       tobio = BIO_write( m_nbio, m_recvBuffer.c_str(), wantread );
       m_recvBuffer.erase( 0, tobio );
     }
-
-    return 0;
   }
 
 }
