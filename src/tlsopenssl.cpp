@@ -171,8 +171,6 @@ namespace gloox
     if( !m_secure )
       return true;
 
-//     m_secure = true;
-
     int res = SSL_get_verify_result( m_ssl );
     if( res != X509_V_OK )
       m_certInfo.status = CertInvalid;
