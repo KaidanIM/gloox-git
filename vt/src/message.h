@@ -9,7 +9,7 @@
 namespace gloox
 {
 
-  class Message : public Tag
+  class Message : public Stanza
   {
 
     public:
@@ -26,19 +26,7 @@ namespace gloox
         MessageNormal
       };
 
-      /**
-       * @brief Creates a chat Message.
-       */
-      Message ( const std::string& id,
-                const std::string& to = "",
-                const std::string& from = "" );
-
-      /**
-       * @brief Creates a Message.
-       */
-      Message ( MessageType type, const std::string& id,
-                                  const std::string& to = "",
-                                  const std::string& from = "" );
+      Message( Tag * tag ) : Stanza( tag ) {}
 
       /**
        * @brief Creates a Message.
@@ -46,9 +34,10 @@ namespace gloox
       Message ( MessageType type, const std::string& id,
                                   const std::string& to,
                                   const std::string& from,
-                                  const std::string& xmlns,
-                                  const std::string& node = "" );
-
+                                  const std::string& body,
+                                  const std::string& thread = "",
+                                  const std::string& xmllang = "",
+                                  const std::string& subject = "" );
       /**
        * @brief Virtual destructor.
        */
@@ -58,7 +47,7 @@ namespace gloox
        * @brief Adds an extension to the message.
        * @arg ext Extension to add. The extension must be a legal message extension.
        */
-      void addExtension( StanzaExtension * ext ) // + switch ext->type() to ensure legal extension is added
+      void addExtension( StanzaExtension * ext ) // + switch ext->type() to ensure legal extension is added ?
         { m_extensions.push_back( extension ); }
 
       MessageType type() const { return m_messageType; }
@@ -66,7 +55,6 @@ namespace gloox
 
     private:
       MessageType m_messageType;
-      std::list< StanzaExtension * > m_extensions;
   };
 
 }
