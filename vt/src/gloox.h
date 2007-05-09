@@ -726,7 +726,7 @@ namespace gloox
                                      * delivery of a previously-sent get or set (see Stanza Errors
                                      * (Section 9.3)).
                                      */
-    StanzaPresenceUnavailable = 16,      /**<
+    StanzaPresenceUnavailable = 16, /**<
                                      * Signals that the entity is no longer available for
                                      * communication.
                                      */
