@@ -17,7 +17,7 @@ namespace gloox
                                       const std::string& thread,
                                       const std::string& xmllang,
                                       const std::string& subject )
-    : Tag( "message" )
+    : Stanza( "message" )
   {
     addAttribute( "id", id );
     addAttribute( "to", to );

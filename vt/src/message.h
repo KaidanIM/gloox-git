@@ -3,8 +3,7 @@
 
 #include <string>
 #include <list>
-#include "tag.h"
-#include "stanzaextension.h"
+#include "stanza.h"
 
 namespace gloox
 {
