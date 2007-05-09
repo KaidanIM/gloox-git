@@ -3,13 +3,6 @@
 namespace gloox
 {
 
-  static const std::string IQS = "iq",
-                           ID = "id",
-                           TO = "to",
-                           FROM = "from",
-                           TYPE = "type",
-                           XMLNS = "xmlns";
-
   static const std::string iqTypeStringValues[] = {
     "get", "set", "result", "error"
   };
@@ -20,30 +13,29 @@ namespace gloox
   IQ::IQ( IqType type, const std::string& id,
                        const std::string& to,
                        const std::string& from )
-    : Tag( IQS )
+    : Tag( "iq" )
   {
-    addAttribute( ID, id );
-    addAttribute( TYPE, typeString( type ) );
+    addAttribute( "id", id );
+    addAttribute( "type", typeString( type ) );
     if( !to.empty() )
-      addAttribute( TO, to );
+      addAttribute( "to", to );
     if( !from.empty() )
-      addAttribute( FROM, from );
+      addAttribute( "from", from );
   }
 
   IQ::IQ( IqType type, const std::string& id,
                        const std::string& to,
                        const std::string& from,
                        const std::string& childtag,
-                       const std::string& xmlns,
-                       const std::string& node )
-    : Tag( IQS )
+                       const std::string& xmlns )
+    : Tag( "iq" )
   {
-    addAttribute( ID, id );
-    addAttribute( TYPE, typeString( type ) );
-    addAttribute( TO, to );
-    addAttribute( FROM, from );
+    addAttribute( "id", id );
+    addAttribute( "type", typeString( type ) );
+    addAttribute( "to", to );
+    addAttribute( "from", from );
     Tag *tag = new Tag( this, childtag );
-    tag->addAttribute( XMLNS, xmlns );
+    tag->addAttribute( "xmlns", xmlns );
     if( !node.empty() )
       tag->addAttribute( "node", node );
   }
