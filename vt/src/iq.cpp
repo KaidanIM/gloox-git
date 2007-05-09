@@ -13,7 +13,7 @@ namespace gloox
   IQ::IQ( IqType type, const std::string& id,
                        const std::string& to,
                        const std::string& from )
-    : Tag( "iq" )
+    : Stanza( "iq" )
   {
     addAttribute( "id", id );
     addAttribute( "type", typeString( type ) );
@@ -28,7 +28,7 @@ namespace gloox
                        const std::string& from,
                        const std::string& childtag,
                        const std::string& xmlns )
-    : Tag( "iq" )
+    : Stanza( "iq" )
   {
     addAttribute( "id", id );
     addAttribute( "type", typeString( type ) );
