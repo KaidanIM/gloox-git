@@ -173,12 +173,20 @@ namespace gloox
       struct Node
       {
         public:
-          Node( NodeType _type = NodeInvalid )
-            : type( _type ) {}
-          Node( NodeType _type, const std::string& _name, const std::string& _service )
-            : type( _type ), service( _service ), name( _name) {}
+          /**
+           * Constructs a Node from a type, a JID (XEP-0060 Sect 4.6.1) and a name.
+           */
+          Node( NodeType _type, const std::string& _jid, const std::string& _name )
+            : type( _type ), jid( _jid ), name( _name) {}
+          /**
+           * Constructs a Node from a type, a JID+NodeID (XEP-0060 Sect 4.6.2) and a name.
+           */
+          Node( NodeType _type, const std::string& _jid,
+                                const std::string& _node,
+                                const std::string& _name )
+            : type( _type ), jid( _jid ), name( _name) { jid.setResource( _node ); }
           NodeType type;
-          std::string service;
+          JID jid;
           std::string name;
           /*
           union {
