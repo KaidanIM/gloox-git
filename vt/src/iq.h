@@ -22,27 +22,19 @@ namespace gloox
                      *   previously-sent get or set (see Stanza Errors (Section 9.3)). */
     };
 
-
     /**
      * Creates an IQ from a tag.
      */
-    IQ::IQ( Tag * tag ) : Stanza( tag ) {}
-
-    /**
-     * Creates a simple IQ.
-     */
-    IQ ( IqType type, const std::string& id,
-                      const std::string& to = "",
-                      const std::string& from = "" );
+    IQ( Tag * tag ) : Stanza( tag ) {}
 
     /**
      * Creates an IQ Query.
      */
     IQ ( IqType type, const std::string& id,
                       const std::string& to,
-                      const std::string& from,
-                      const std::string& xmlns,
-                      const std::string& node = "" );
+                      const std::string& from = "",
+                      const std::string& childtag = "",
+                      const std::string& xmlns = "");
 
   };
 
