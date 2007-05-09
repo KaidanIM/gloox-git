@@ -122,7 +122,7 @@ namespace gloox
     }
 
     int sent = 0;
-    for( size_t num = 0, len = data.length(); sent != -1 && num < len; num += len )
+    for( size_t num = 0, len = data.length(); sent != -1 && num < len; num += sent )
     {
 #ifdef SKYOS
       sent = ::send( m_socket, (unsigned char*)(data.c_str()+num), len - num, 0 );
