@@ -165,7 +165,7 @@ namespace gloox
                                  sid  = subscription->findAttribute( "subid" ),
                                  sub  = subscription->findAttribute( "subsciption" );
               SubscriptionType subType = subscriptionType( sub );
-              handleSubscriptionResult( jid, node, sid, subType, SubscriptionErrorNone );
+              //handleSubscriptionResult( jid, node, sid, subType, SubscriptionErrorNone );
             }
             break;
           }
@@ -175,7 +175,7 @@ namespace gloox
                                srv  = stanza->findAttribute( "from" );
             if( jid.empty() || srv.empty() )
               return 0;
-            handleUnsubscriptionResult( jid, srv, UnsubscriptionErrorNone );
+            //handleUnsubscriptionResult( jid, srv, UnsubscriptionErrorNone );
             break;
           }
           case RequestSubscriptionList:
@@ -194,7 +194,7 @@ namespace gloox
                   return 0;
                 subMap[node] = subscriptionType( sub );
               }
-              handleSubscriptionListResult( stanza->from(), subMap );
+              //handleSubscriptionListResult( stanza->from(), subMap );
             }
             break;
           }
@@ -214,7 +214,7 @@ namespace gloox
                   return 0;
                 affMap[node] = affiliationType( aff );
               }
-              handleAffiliationListResult( stanza->from(), affMap );
+              //handleAffiliationListResult( stanza->from(), affMap );
             }
             break;
           }
@@ -223,7 +223,7 @@ namespace gloox
             Tag *ps = stanza->findChild( "pubsub", "xmlns", XMLNS_PUBSUB );
             Tag *options = ps->findChild( "options" );
             const DataForm dataForm( options->findChild( "x" ) );
-            handleOptions( stanza->from(), options->findAttribute("node"), dataForm, OptionRequestErrorNone );
+            //handleOptions( stanza->from(), options->findAttribute("node"), dataForm, OptionRequestErrorNone );
             break;
           }
         }
@@ -288,7 +288,7 @@ namespace gloox
             }
             else
               return false;
-            handleSubscriptionResult( jid, node, "", SubscriptionNone, errorType );
+            //handleSubscriptionResult( jid, node, "", SubscriptionNone, errorType );
             break;
           }
           case Unsubscription:
@@ -328,7 +328,7 @@ namespace gloox
             }
             else
               return false;
-            handleUnsubscriptionResult( jid, node, errorType );
+            //handleUnsubscriptionResult( jid, node, errorType );
             break;
           }
           case RequestSubscriptionList:
@@ -340,7 +340,7 @@ namespace gloox
                 error->hasChild( "unsupported", "xmlns", XMLNS_PUBSUB_ERRORS ) )
                 /* feature='retrieve-subscriptions'/> */
             {
-              handleSubscriptionListError( jid, node );
+              //handleSubscriptionListError( jid, node );
             }
             else
               return false;
@@ -355,7 +355,7 @@ namespace gloox
                 error->hasChild( "unsupported", "xmlns", XMLNS_PUBSUB_ERRORS ) )
                 /* feature='retrieve-affiliations'/> */
             {
-              handleAffiliationListError( jid, node );
+              //handleAffiliationListError( jid, node );
             }
             else
               return false;

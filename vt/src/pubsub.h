@@ -112,6 +112,9 @@ namespace gloox
 
   class ClientBase;
   class DataForm;
+  class PSSubscriptionHandler;
+  class PSSubscriptionListHandler;
+  class PSAffiliationListHandler;
 
   /**
    * Describes the different node types.
@@ -222,59 +225,32 @@ namespace gloox
       virtual ~PubSubManager() {}
 
       /**
-       * Requests the subscription list from a service.
-       * @param jid Service to query.
-       */
-      void requestSubscriptionList( const std::string& jid );
-      /**
-       * Receives the Subscription map for a specific service.
-       * @param jid The service 
-       * @param subMap The map of subscriptions.
-       */
-      virtual void handleSubscriptionListResult( const JID& jid, const SubscriptionMap& subMap ) = 0;
-      virtual void handleSubscriptionListError( const std::string& jid, const std::string& node ) = 0;
-
-      /**
-       * Requests the affiliation list from a service.
-       * @param jid Service to query.
-       */
-      void requestAffiliationList( const std::string& jid );
-      /**
-       * Receives the Subscription map for a specific service.
-       * @param jid The service 
-       * @param subMap The map of subscriptions.
-       */
-      virtual void handleAffiliationListResult( const JID& jid, const AffiliationMap& subList ) = 0;
-      virtual void handleAffiliationListError( const std::string& jid, const std::string& node ) = 0;
-
-      /**
        * 
        */
       void subscribe( const std::string& jid, const std::string& node );
+
       /**
        * 
        */
       void unsubscribe( const std::string& jid, const std::string& node );
 
       /**
-       * 
+       * Requests the subscription list from a service.
+       * @param jid Service to query.
        */
-      virtual void handleSubscriptionResult( const JID& jid,
-                                             const std::string& node,
-                                             const std::string& sid,
-                                             const SubscriptionType subType,
-                                             const SubscriptionError se ) = 0;
+      void requestSubscriptionList( const std::string& jid );
+
       /**
-       * 
+       * Requests the affiliation list from a service.
+       * @param jid Service to query.
        */
-      virtual void handleUnsubscriptionResult( const JID& jid,
-                                               const JID& service,
-                                               const UnsubscriptionError se ) = 0;
+      void requestAffiliationList( const std::string& jid );
 
       /**
        * 
        */
       void requestOptions( const std::string& jid, const std::string& node );
+
       /**
        * 
        */
@@ -287,13 +263,17 @@ namespace gloox
 
       bool handleIqID (Stanza *stanza, int context);
 
-      
-
-      NodeMap m_nodeMap;
-      ServiceMap m_service_list;
+      //NodeMap m_nodeMap;
+      //ServiceMap m_service_list;
 
     private:
+      typedef std::map<std::string, PSSubscriptionHandler * > SubscriptionTrackMap;
+      typedef std::map<std::string, PSAffiliationListHandler * > AffiliationListTrackMap;
+      typedef std::map<std::string, PSSubscriptionListHandler * > SubscriptionListTrackMap;
       ClientBase* m_parent;
+      SubscriptionTrackMap m_subscriptionTrackMap;
+      AffiliationListTrackMap m_affListTrackMap;
+      SubscriptionListTrackMap m_subListtrackMap;
   };
 
 }
