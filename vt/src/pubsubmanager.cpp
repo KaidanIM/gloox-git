@@ -1,7 +1,22 @@
+/*
+  Copyright (c) 2006-2007 by Jakob Schroeter <js@camaya.net>
+  This file is part of the gloox library. http://camaya.net/gloox
+
+  This software is distributed under a license. The full license
+  agreement can be found in the file LICENSE in this distribution.
+  This software may not be copied, modified, sold or distributed
+  other than expressed in the named license agreement.
+
+  This software is distributed without any warranty.
+*/
+
 #include "pubsub.h"
 #include "clientbase.h"
 #include "dataform.h"
 #include "tag.h"
+#include "psaffiliationlisthandler.h"
+#include "pssubscriptionhandler.h"
+#include "pssubscriptionlisthandler.h"
 
 namespace gloox
 {
@@ -17,7 +32,7 @@ namespace gloox
     RequestOptions
   };
 
-  void PubSubManager::requestSubscriptionList( const std::string& jid )
+  void PubSubManager::requestSubscriptionList( const std::string& jid, PSSubscriptionListHandler * slh )
   {
     if( !m_parent )
       return;
@@ -32,10 +47,11 @@ namespace gloox
     new Tag( ps, "subscriptions" );
 
     m_parent->trackID( this, id, RequestSubscriptionList );
+    m_subListTrackMap[id] = slh;
     m_parent->send( iq );
   }
 
-  void PubSubManager::requestAffiliationList( const std::string& jid )
+  void PubSubManager::requestAffiliationList( const std::string& jid, PSAffiliationListHandler * alh )
   {
     if( !m_parent )
       return;
@@ -50,6 +66,7 @@ namespace gloox
     new Tag( ps, "affiliations" );
 
     m_parent->trackID( this, id, RequestAffiliationList );
+    m_affListTrackMap[id] = afl;
     m_parent->send( iq );
   }
 
@@ -110,6 +127,7 @@ namespace gloox
     sub->addAttribute( "jid", m_parent->jid().bare() );
 
     m_parent->trackID( this, id, RequestOptions );
+    
     m_parent->send( iq );
   }
 

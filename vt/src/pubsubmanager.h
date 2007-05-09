@@ -1,3 +1,15 @@
+/*
+  Copyright (c) 2006-2007 by Jakob Schroeter <js@camaya.net>
+  This file is part of the gloox library. http://camaya.net/gloox
+
+  This software is distributed under a license. The full license
+  agreement can be found in the file LICENSE in this distribution.
+  This software may not be copied, modified, sold or distributed
+  other than expressed in the named license agreement.
+
+  This software is distributed without any warranty.
+*/
+
 #ifndef PUBSUB_H__
 #define PUBSUB_H__
 
@@ -7,21 +19,6 @@
 
 namespace gloox
 {
-  /**
-   * Describes the different subscription types.
-   */
-  enum SubscriptionType {
-    SubscriptionInvalid,      /**< Invalid subscription type. */
-    SubscriptionNone,         /**< The node MUST NOT send event notifications or payloads to the Entity. */
-    SubscriptionPending,      /**< An entity has requested to subscribe to a node and the request has not yet
-                               *   been approved by a node owner. The node MUST NOT send event notifications
-                               *   or payloads to the entity while it is in this state. */
-    SubscriptionUnconfigured, /**< An entity has subscribed but its subscription options have not yet been
-                               *   configured. The node MAY send event notifications or payloads to the entity
-                               *   while it is in this state. The service MAY timeout unconfigured subscriptions. */
-    SubscriptionSubscribed    /**< An entity is subscribed to a node. The node MUST send all event notifications
-                               *   (and, if configured, payloads) to the entity while it is in this state. */
-  };
 
   /**
    * Describes the different access types.
@@ -44,42 +41,6 @@ namespace gloox
                       *   node owner MUST automatically be on the whitelist. In order to add entities to the
                       *   whitelist, the node owner SHOULD use the protocol specified in the Manage Affiliated
                       *   Entities section of this document. */
-  };
-
-  /**
-   * Describes the different possible errors when subscribing to a node.
-   */
-  enum SubscriptionError {
-    SubscriptionErrorNone,            /**< No error */
-    SubscriptionErrorJIDMismatch,     /**< The bare JID portions of the JIDs do not match. */
-    SubscriptionErrorAccessPresence,  /**< The node has an access model of "presence" and the requesting
-                                       *   entity is not subscribed to the owner's presence. */
-    SubscriptionErrorAccessRoster,    /**< The node has an access model of "roster" and the requesting
-                                       *   entity is not in one of the authorized roster groups. */
-    SubscriptionErrorAccessWhiteList, /**< The node has an access model of "whitelist" and the requesting
-                                       *   entity is not on the whitelist. */
-    SubscriptionErrorPayment,         /**< The service requires payment for subscriptions to the node. */
-    SubscriptionErrorAnonymous,       /**< The requesting entity is anonymous and the service does not
-                                       *   allow anonymous entities to subscribe. */
-    SubscriptionErrorPending,         /**< The requesting entity has a pending subscription. */
-    SubscriptionErrorBlocked,         /**< The requesting entity is blocked from subscribing
-                                       *   (e.g., because having an affiliation of outcast). */
-    SubscriptionErrorUnsupported,     /**< The node does not support subscriptions. */
-    SubscriptionErrorItemNotFound     /**< The node does not exist. */
-  };
-
-  /**
-   * Describes the different possible errors when unsubscribing from a node.
-   */
-  enum UnsubscriptionError {
-    UnsubscriptionErrorNone,          /**< No error */
-    UnsubscriptionErrorMissingSID,    /**< The requesting entity has multiple subscriptions to the node
-                                       *   but does not specify a subscription ID. */
-    UnsubscriptionErrorNotSubscriber, /**< The request does not specify an existing subscriber. */
-    UnsubscriptionErrorUnprivileged,  /**< The requesting entity does not have sufficient privileges to
-                                       *   unsubscribe the specified JID. */
-    UnsubscriptionErrorItemNotFound,    /**< The node does not exist. */
-    UnsubscriptionErrorInvalidSID     /**< The request specifies a subscription ID that is not valid or current. */
   };
 
   /**
@@ -116,21 +77,10 @@ namespace gloox
   class PSSubscriptionListHandler;
   class PSAffiliationListHandler;
 
-  /**
-   * Describes the different node types.
-   */
-  enum NodeType {
-    NodeInvalid,     /**< Invalid node type */
-    NodeLeaf,        /**< A node that contains published items only. It is NOT a container for other nodes. */
-    NodeCollection   /**< A node that contains nodes and/or other collections but no published items.
-                      *   Collections make it possible to represent hierarchial node structures. */
-  };
-
 
   /**
    * \bug No 'from' field to iq (use m_parent->BareJID() ?),
    *      same for the jid field of the subscription tag in subscribe.
-   * \bug Better use/configurability of JID's
    * \bug Tracking...
    * \bug HandleOptions is incomplete
    * \bug conflicting AffiliationType w/ MUCXXX
@@ -139,19 +89,6 @@ namespace gloox
   {
     public:
 
-      /**
-       * Describes the different affiliation types.
-       */
-      enum AffiliationType {
-        AffiliationInvalid,   /**< Invalid Affiliation type. */
-        AffiliationOutcast,   /**< Entity is disallowed from subscribing or publishing. */
-        AffiliationNone,      /**<  */
-        AffiliationPublisher, /**<  */
-        AffiliationOwner      /**<  */
-      };
-
-      typedef std::map< std::string, SubscriptionType > SubscriptionMap;
-      typedef std::map< std::string, AffiliationType  > AffiliationMap;
 
       class Node;
       class Item;
@@ -159,8 +96,8 @@ namespace gloox
       typedef std::list< Node * > NodeList;
       typedef std::list< Item * > ItemList;
 
-      typedef std::map< JID, NodeList > ServiceMap;
-      typedef std::map< std::string, AffiliationType > NodeMap;
+      //typedef std::map< JID, NodeList > ServiceMap;
+      //typedef std::map< std::string, AffiliationType > NodeMap;
 
       struct Item
       {
@@ -177,10 +114,21 @@ namespace gloox
       {
         public:
           /**
+           * Describes the different node types.
+           */
+          enum NodeType {
+            NodeInvalid,     /**< Invalid node type */
+            NodeLeaf,        /**< A node that contains published items only. It is NOT a container for other nodes. */
+            NodeCollection   /**< A node that contains nodes and/or other collections but no published items.
+                              *   Collections make it possible to represent hierarchial node structures. */
+          };
+
+          /**
            * Constructs a Node from a type, a JID (XEP-0060 Sect 4.6.1) and a name.
            */
           Node( NodeType _type, const std::string& _jid, const std::string& _name )
             : type( _type ), jid( _jid ), name( _name) {}
+
           /**
            * Constructs a Node from a type, a JID+NodeID (XEP-0060 Sect 4.6.2) and a name.
            */
@@ -188,6 +136,7 @@ namespace gloox
                                 const std::string& _node,
                                 const std::string& _name )
             : type( _type ), jid( _jid ), name( _name) { jid.setResource( _node ); }
+
           NodeType type;
           JID jid;
           std::string name;
@@ -219,6 +168,7 @@ namespace gloox
        * Initialize the manager.
        */
       PubSubManager( ClientBase* parent ) : m_parent(parent) {}
+
       /**
        * Virtual Destructor.
        */
@@ -238,13 +188,13 @@ namespace gloox
        * Requests the subscription list from a service.
        * @param jid Service to query.
        */
-      void requestSubscriptionList( const std::string& jid );
+      void requestSubscriptionList( const std::string& jid, PSSubscriptionListHandler * slh  );
 
       /**
        * Requests the affiliation list from a service.
        * @param jid Service to query.
        */
-      void requestAffiliationList( const std::string& jid );
+      void requestAffiliationList( const std::string& jid, PSAffiliationListHandler * alh );
 
       /**
        * 
