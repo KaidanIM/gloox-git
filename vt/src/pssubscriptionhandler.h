@@ -19,46 +19,51 @@
 
 namespace gloox
 {
-  /**
-   * @brief A virtual interface for receiving (un)subscription result.
-   *
-   * Derive from this interface and register with the PubSubManagerManager.
-   *
-   * @author Jakob Schroeter <js@camaya.net>
-   */
-  class PSSubscriptionHandler
+
+  namespace PubSub
   {
-    public:
-      /**
-      * Receives the subscription results.
-      * 
-      */
-      virtual void handleSubscriptionResult( const JID& jid,
-                                             const std::string& node,
-                                             const std::string& sid,
-                                             const SubscriptionType subType,
-                                             const SubscriptionError se ) = 0;
+    /**
+     * @brief A virtual interface for receiving (un)subscription result.
+     *
+     * Derive from this interface and register with the PubSubManagerManager.
+     *
+     * @author Jakob Schroeter <js@camaya.net>
+     */
+    class SubscriptionHandler
+    {
+      public:
+        /**
+        * Receives the subscription results.
+        * 
+        */
+        virtual void handleSubscriptionResult( const JID& jid,
+                                               const std::string& node,
+                                               const std::string& sid,
+                                               const SubscriptionType subType,
+                                               const SubscriptionError se ) = 0;
 
-      /**
-       * Receives the Subscription map for a specific service.
-       * @param jid The pubsub service.
-       * @param node The error node.
-       */
-      virtual void handleSubscriptionError( const std::string& jid, const std::string& node ) = 0;
+        /**
+         * Receives the Subscription map for a specific service.
+         * @param jid The pubsub service.
+         * @param node The error node.
+         */
+        virtual void handleSubscriptionError( const std::string& jid, const std::string& node ) = 0;
 
-      /**
-       * 
-       */
-      virtual void handleUnsubscriptionResult( const JID& jid,
-                                               const JID& service,
-                                               const UnsubscriptionError se ) = 0;
+        /**
+         * 
+         */
+        virtual void handleUnsubscriptionResult( const JID& jid,
+                                                 const JID& service,
+                                                 const UnsubscriptionError se ) = 0;
 
-      /**
-       * Virtual destructor.
-       */
-      virtual ~PSSubscriptionHandler() {}
+        /**
+         * Virtual destructor.
+         */
+        virtual ~SubscriptionHandler() {}
 
-  };
+    };
+
+  }
 
 }
 

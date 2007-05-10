@@ -20,36 +20,42 @@
 
 namespace gloox
 {
-  /**
-   * @brief A virtual interface for receiving (un)subscription result.
-   *
-   * Derive from this interface and register with the PubSubManagerManager.
-   *
-   * @author Jakob Schroeter <js@camaya.net>
-   */
-  class PSAffiliationListHandler
+
+  namespace PubSub
   {
-    public:
-      /**
-       * Receives the Affiliation map for a specific service.
-       * @param jid The queried service.
-       * @param subMap The map of each node's affiliation subscription.
-       */
-      virtual void handleAffiliationListResult( const JID& jid, const AffiliationMap& subMap ) = 0;
 
-      /**
-       * Receives the Subscription map for a specific service.
-       * @param jid The service.
-       * @param subMap The map of subscriptions.
-       */
-      virtual void handleAffiliationListError( const std::string& jid, const std::string& node ) = 0;
+    /**
+     * @brief A virtual interface for receiving (un)subscription result.
+     *
+     * Derive from this interface and register with the PubSubManagerManager.
+     *
+     * @author Jakob Schroeter <js@camaya.net>
+     */
+    class AffiliationListHandler
+    {
+      public:
+        /**
+         * Receives the Affiliation map for a specific service.
+         * @param jid The queried service.
+         * @param subMap The map of each node's affiliation subscription.
+         */
+        virtual void handleAffiliationListResult( const JID& jid, const AffiliationMap& subMap ) = 0;
 
-      /**
-       * Virtual destructor.
-       */
-      virtual ~PSAffiliationListHandler() {}
+        /**
+         * Receives the Subscription map for a specific service.
+         * @param jid The service.
+         * @param subMap The map of subscriptions.
+         */
+        virtual void handleAffiliationListError( const std::string& jid, const std::string& node ) = 0;
 
-  };
+        /**
+         * Virtual destructor.
+         */
+        virtual ~AffiliationListHandler() {}
+
+    };
+
+  }
 
 }
 

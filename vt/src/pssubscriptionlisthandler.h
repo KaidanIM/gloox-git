@@ -20,36 +20,42 @@
 
 namespace gloox
 {
-  /**
-   * @brief A virtual interface for receiving subscription list result.
-   *
-   * Derive from this interface and register with the PubSubManagerManager.
-   *
-   * @author Jakob Schroeter <js@camaya.net>
-   */
-  class PSSubscriptionListHandler
+
+  namespace PubSub
   {
-    public:
-      /**
-       * Receives the Subscription map for a specific service.
-       * @param jid The queried service.
-       * @param subMap The map of each node's subscription.
-       */
-      virtual void handleSubscriptionListResult( const JID& jid, const SubscriptionMap& subMap ) = 0;
 
-      /**
-       * Receives the Subscription map for a specific service.
-       * @param jid The service 
-       * @param subMap The map of subscriptions.
-       */
-      virtual void handleSubscriptionListError( const std::string& jid, const std::string& node ) = 0;
+    /**
+     * @brief A virtual interface for receiving subscription list result.
+     *
+     * Derive from this interface and register with the PubSubManagerManager.
+     *
+     * @author Jakob Schroeter <js@camaya.net>
+     */
+    class SubscriptionListHandler
+    {
+      public:
+        /**
+         * Receives the Subscription map for a specific service.
+         * @param jid The queried service.
+         * @param subMap The map of each node's subscription.
+         */
+        virtual void handleSubscriptionListResult( const JID& jid, const SubscriptionMap& subMap ) = 0;
 
-      /**
-       * Virtual destructor.
-       */
-      virtual ~PSSubscriptionListHandler() {}
+        /**
+         * Receives the Subscription map for a specific service.
+         * @param jid The service 
+         * @param subMap The map of subscriptions.
+         */
+        virtual void handleSubscriptionListError( const std::string& jid, const std::string& node ) = 0;
 
-  };
+        /**
+         * Virtual destructor.
+         */
+        virtual ~SubscriptionListHandler() {}
+
+    };
+
+  }
 
 }
 

@@ -23,164 +23,111 @@ namespace gloox
 
   class ClientBase;
   class DataForm;
-  class PSSubscriptionHandler;
-  class PSSubscriptionListHandler;
-  class PSAffiliationListHandler;
 
-  /**
-   * 
-   * \bug No 'from' field to iq (use m_parent->BareJID() ?),
-   *      same for the jid field of the subscription tag in subscribe.
-   * \bug Tracking...
-   * \bug HandleOptions is incomplete
-   * \bug conflicting AffiliationType w/ MUCXXX
-   */
-  class PubSubManager : public IqHandler
+  namespace PubSub
   {
-    public:
+  
+    class SubscriptionHandler;
+    class SubscriptionListHandler;
+    class AffiliationListHandler;
 
+    /**
+     * 
+     * \bug No 'from' field to iq (use m_parent->BareJID() ?),
+     *      same for the jid field of the subscription tag in subscribe.
+     * \bug Tracking...
+     * \bug HandleOptions is incomplete
+     * \bug conflicting AffiliationType w/ MUCXXX
+     */
+    class PubSubManager : public IqHandler
+    {
+      public:
 
-      class Node;
-      class Item;
+        class Node;
+        class Item;
 
-      typedef std::list< Node * > NodeList;
-      typedef std::list< Item * > ItemList;
+        typedef std::list< Node * > NodeList;
+        typedef std::list< Item * > ItemList;
 
-      struct Item
-      {
-        public:
-          Item( const std::string& _id )
-            : id( _id )
-          {}
-          std::string id;
-          
-          
-      };
+        /**
+         * Initialize the manager.
+         */
+        PubSubManager( ClientBase* parent ) : m_parent(parent) {}
 
-      struct Node
-      {
-        public:
-          /**
-           * Describes the different node types.
-           */
-          enum NodeType {
-            NodeInvalid,     /**< Invalid node type */
-            NodeLeaf,        /**< A node that contains published items only. It is NOT a container for other nodes. */
-            NodeCollection   /**< A node that contains nodes and/or other collections but no published items.
-                              *   Collections make it possible to represent hierarchial node structures. */
-          };
+        /**
+         * Virtual Destructor.
+         */
+        virtual ~PubSubManager() {}
 
-          /**
-           * Constructs a Node from a type, a JID (XEP-0060 Sect 4.6.1) and a name.
-           */
-          Node( NodeType _type, const std::string& _jid, const std::string& _name )
-            : type( _type ), jid( _jid ), name( _name) {}
+        /**
+         * 
+         */
+        void subscribe( const std::string& jid, const std::string& node );
 
-          /**
-           * Constructs a Node from a type, a JID+NodeID (XEP-0060 Sect 4.6.2) and a name.
-           */
-          Node( NodeType _type, const std::string& _jid,
-                                const std::string& _node,
-                                const std::string& _name )
-            : type( _type ), jid( _jid ), name( _name) { jid.setResource( _node ); }
+        /**
+         * 
+         */
+        void unsubscribe( const std::string& jid, const std::string& node );
 
-          NodeType type;
-          JID jid;
-          std::string name;
-          /*
-          union {
-            ItemList items;
-            NodeList nodes;
-          };
-          */
-      };
+        /**
+         * Requests the subscription list from a service.
+         * @param jid Service to query.
+         */
+        void requestSubscriptionList( const std::string& jid, SubscriptionListHandler * slh  );
 
-      struct LeafNode : public Node
-      {
-        LeafNode( const std::string& _service, const std::string& _name )
-          : Node( NodeLeaf, _service, _name )
-        {}
-        ItemList m_itemList;
-      };
+        /**
+         * Requests the affiliation list from a service.
+         * @param jid Service to query.
+         */
+        void requestAffiliationList( const std::string& jid, AffiliationListHandler * alh );
 
-      struct CollectionNode : public Node
-      {
-        CollectionNode( const std::string& _service, const std::string& _name )
-          : Node( NodeCollection, _service, _name )
-        {}
-        NodeList m_nodeList;
-      };
+        /**
+         * 
+         */
+        void requestOptions( const std::string& jid, const std::string& node );
 
-      /**
-       * Initialize the manager.
-       */
-      PubSubManager( ClientBase* parent ) : m_parent(parent) {}
+        /**
+         * 
+         */
+        void requestNodeItems( const JID& node );
 
-      /**
-       * Virtual Destructor.
-       */
-      virtual ~PubSubManager() {}
+        /**
+         * Registers an handler to receive notification of (un)subscription events.
+         */
+        void registerSubscriptionHandler( SubscriptionHandler * handler )
+          { m_subscriptionTrackList.push_back( handler ); }
 
-      /**
-       * 
-       */
-      void subscribe( const std::string& jid, const std::string& node );
+        /**
+         * Removes an handler from the list of objects listening to (un)subscription events.
+         */
+        void removeSubscriptionHandler( SubscriptionHandler * handler )
+          { m_subscriptionTrackList.remove( handler ); }
 
-      /**
-       * 
-       */
-      void unsubscribe( const std::string& jid, const std::string& node );
+        /**
+         * 
+         */
+        virtual void handleOptions( const JID& jid,
+                                    const std::string& node,
+                                    const DataForm& dataForm,
+                                    const OptionRequestError e ) = 0;
 
-      /**
-       * Requests the subscription list from a service.
-       * @param jid Service to query.
-       */
-      void requestSubscriptionList( const std::string& jid, PSSubscriptionListHandler * slh  );
+        bool handleIq  ( Stanza *stanza );
+        bool handleIqID( Stanza *stanza, int context );
 
-      /**
-       * Requests the affiliation list from a service.
-       * @param jid Service to query.
-       */
-      void requestAffiliationList( const std::string& jid, PSAffiliationListHandler * alh );
+      private:
+        typedef std::list< SubscriptionHandler * > SubscriptionTrackList;
+        typedef std::map< std::string, AffiliationListHandler * > AffiliationListTrackMap;
+        typedef std::map< std::string, SubscriptionListHandler * > SubscriptionListTrackMap;
 
-      /**
-       * 
-       */
-      void requestOptions( const std::string& jid, const std::string& node );
+        ClientBase* m_parent;
 
-      /**
-       * Registers an handler to receive notification of (un)subscription events.
-       */
-      void registerSubscriptionHandler( PSSubscriptionHandler * handler )
-        { m_subscriptionTrackList.push_back( handler ); }
+        SubscriptionTrackList m_subscriptionTrackList;
+        AffiliationListTrackMap m_affListTrackMap;
+        SubscriptionListTrackMap m_subListTrackMap;
 
-      /**
-       * Removes an handler from the list of objects listening to (un)subscription events.
-       */
-      void removeSubscriptionHandler( PSSubscriptionHandler * handler )
-        { m_subscriptionTrackList.remove( handler ); }
+    };
 
-      /**
-       * 
-       */
-      virtual void handleOptions( const JID& jid,
-                                  const std::string& node,
-                                  const DataForm& dataForm,
-                                  const OptionRequestError e ) = 0;
-
-      bool handleIq (Stanza *stanza);
-      bool handleIqID (Stanza *stanza, int context);
-
-    private:
-      typedef std::list< PSSubscriptionHandler * > SubscriptionTrackList;
-      typedef std::map< std::string, PSAffiliationListHandler * > AffiliationListTrackMap;
-      typedef std::map< std::string, PSSubscriptionListHandler * > SubscriptionListTrackMap;
-      ClientBase* m_parent;
-      SubscriptionTrackList m_subscriptionTrackList;
-      AffiliationListTrackMap m_affListTrackMap;
-      SubscriptionListTrackMap m_subListTrackMap;
-  };
-
+  }
 }
 
 #endif /* PUBSUBMANAGER_H__ */
