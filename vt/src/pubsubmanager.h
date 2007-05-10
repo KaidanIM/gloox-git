@@ -31,8 +31,6 @@ namespace gloox
     class SubscriptionListHandler;
     class AffiliationListHandler;
     class ItemHandler;
-    class Item;
-    class Node;
 
     /**
      * 
@@ -45,10 +43,6 @@ namespace gloox
     class Manager : public IqHandler
     {
       public:
-
-
-        //typedef std::list< Node * > NodeList;
-        //typedef std::list< Item * > ItemList;
 
         /**
          * Initialize the manager.

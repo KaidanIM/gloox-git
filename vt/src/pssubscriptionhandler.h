@@ -33,26 +33,31 @@ namespace gloox
     {
       public:
         /**
-        * Receives the subscription results.
-        * 
-        */
-        virtual void handleSubscriptionResult( const JID& jid,
+         * Receives the subscription results. In case a problem occured, the
+         * SubscriptionError is set accordingly and the Subscription ID and
+         * SubscriptionType becomes irrelevant.
+         *
+         * @param service PubSub service asked for subscription..
+         * @param node Node asked for subscription.
+         * @param sid Subscription ID.
+         * @param subType Type of the subscription.
+         * @param se Subscription error.
+         */
+        virtual void handleSubscriptionResult( const std::string& service,
                                                const std::string& node,
                                                const std::string& sid,
                                                const SubscriptionType subType,
                                                const SubscriptionError se ) = 0;
 
         /**
-         * Receives the Subscription map for a specific service.
-         * @param jid The pubsub service.
-         * @param node The error node.
+         * Receives the unsubscription results. In case a problem occured, the
+         * UnsubscriptionError is set accordingly.
+         *
+         * @param service PubSub service asked for subscription.
+         * @param node Node asked for subscription.
+         * @param se Unsubscription error.
          */
-        virtual void handleSubscriptionError( const std::string& jid, const std::string& node ) = 0;
-
-        /**
-         * 
-         */
-        virtual void handleUnsubscriptionResult( const JID& jid,
+        virtual void handleUnsubscriptionResult( const std::string& service,
                                                  const JID& service,
                                                  const UnsubscriptionError se ) = 0;
 

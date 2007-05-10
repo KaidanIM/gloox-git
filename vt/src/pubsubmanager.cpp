@@ -35,7 +35,7 @@ namespace gloox
       RequestSubscriptionList,
       RequestAffiliationList,
       RequestOptions,
-      RequestItems
+      RequestItemList
     };
 
     void Manager::requestSubscriptionList( const std::string& jid, SubscriptionListHandler * slh )
@@ -152,7 +152,7 @@ namespace gloox
       Tag *sub = new Tag( ps, "items" );
       sub->addAttribute( "node", node.resource() );
 
-      m_parent->trackID( this, id, RequestItems );
+      m_parent->trackID( this, id, RequestItemList );
       
       m_parent->send( iq );
     }
@@ -282,7 +282,7 @@ namespace gloox
               //handleOptions( stanza->from(), options->findAttribute("node"), dataForm, OptionRequestErrorNone );
               break;
             }
-            case RequestItems:
+            case RequestItemList:
             {
               break;
             }
@@ -298,11 +298,12 @@ namespace gloox
               Tag *ps = stanza->findChild( "pubsub", "xmlns", XMLNS_PUBSUB );
               if( !ps )
                 return false;
-              Tag *subscription = ps->findChild( "subscribe" );
-              if( !subscription )
+              Tag *sub = ps->findChild( "subscribe" );
+              if( !sub )
                 return false;
-              const std::string& node = subscription->findAttribute( "node" ),
-                                 jid  = subscription->findAttribute( "jid" );
+              const std::string& service = stanza->findAttribute( "from" ),
+                                 node = sub->findAttribute( "node" ),
+                                 jid  = sub->findAttribute( "jid" );
               Tag* error = stanza->findChild( "error" );
               SubscriptionError errorType = SubscriptionErrorNone;
               if( error->hasChild( "not-authorized", "xmlns", XMLNS_XMPP_STANZAS ) )
@@ -348,7 +349,7 @@ namespace gloox
               }
               else
                 return false;
-              //handleSubscriptionResult( jid, node, "", SubscriptionNone, errorType );
+              //handleSubscriptionResult( service, node, jid, "", SubscriptionNone, errorType );
               break;
             }
             case Unsubscription:
@@ -359,7 +360,8 @@ namespace gloox
               Tag *subscription = ps->findChild( "subscribe" );
               if( !subscription )
                 return false;
-              const std::string& node = subscription->findAttribute( "node" ),
+              const std::string& service = stanza->findAttribute( "from" ),
+                                 node = subscription->findAttribute( "node" ),
                                  jid  = subscription->findAttribute( "jid" );
               Tag* error = stanza->findChild( "error" );
               UnsubscriptionError errorType;
@@ -388,19 +390,18 @@ namespace gloox
               }
               else
                 return false;
-              //handleUnsubscriptionResult( jid, node, errorType );
+              //handleUnsubscriptionResult( service, node, errorType );
               break;
             }
             case RequestSubscriptionList:
             {
-              const std::string& node = stanza->findAttribute( "node" ),
-                                 jid  = stanza->findAttribute( "jid" );
+              const std::string& jid  = stanza->findAttribute( "from" );
               Tag* error = stanza->findChild( "error" );
               if( error->hasChild( "feature-not-implemented", "xmlns", XMLNS_XMPP_STANZAS ) &&
                   error->hasChild( "unsupported", "xmlns", XMLNS_PUBSUB_ERRORS ) )
                   /* feature='retrieve-subscriptions'/> */
               {
-                //handleSubscriptionListError( jid, node );
+                //handleSubscriptionListError( jid );
               }
               else
                 return false;
@@ -408,14 +409,13 @@ namespace gloox
             }
             case RequestAffiliationList:
             {
-              const std::string& node = stanza->findAttribute( "node" ),
-                                 jid  = stanza->findAttribute( "jid" );
+              const std::string& jid  = stanza->findAttribute( "from" );
               Tag* error = stanza->findChild( "error" );
               if( error->hasChild( "feature-not-implemented", "xmlns", XMLNS_XMPP_STANZAS ) &&
                   error->hasChild( "unsupported", "xmlns", XMLNS_PUBSUB_ERRORS ) )
                   /* feature='retrieve-affiliations'/> */
               {
-                //handleAffiliationListError( jid, node );
+                //handleAffiliationListError( jid );
               }
               else
                 return false;
@@ -424,31 +424,90 @@ namespace gloox
             case RequestOptions:
             {
               /*
+              OptionRequestError errorType = OptionRequestErrorNone;
               if( )
                 errorType = OptionRequestUnprivileged;
+              else if( )
                 errorType = OptionRequestUnsubscribed;
+              else if( )
                 errorType = OptionRequestNodeAndJID;
+              else if( )
                 errorType = OptionRequestMissingSID;
+              else if( )
                 errorType = OptionRequestInvalidSID;
+              else if( )
                 errorType = OptionRequestUnsupported;
+              else if( )
                 errorType = OptionRequestItemNotFound;
               */
               break;
             }
-            case RequestItems:
+            case RequestItemList:
             {
-              /*
-              if( )
-                errorType = OptionRequestUnprivileged;
-                errorType = OptionRequestUnsubscribed;
-                errorType = OptionRequestNodeAndJID;
-                errorType = OptionRequestMissingSID;
-                errorType = OptionRequestInvalidSID;
-                errorType = OptionRequestUnsupported;
-                errorType = OptionRequestItemNotFound;
-              */
+              Tag * pubsub = stanza->findChild( "pubsub" );
+              if( !pubsub )
+                return false;
+              Tag * items = stanza->findChild( "items" );
+              if( !items )
+                return false;
+              const std::string& node = items->findAttribute( "node" ),
+                                 service  = stanza->findAttribute( "from" );
+              Tag* error = stanza->findChild( "error" );
+
+              ItemRequestError errorType = ItemRequestErrorNone;
+              if( error->hasChild( "bad-request", "xmlns", XMLNS_XMPP_STANZAS ) &&
+                  error->hasChild( "subid-required", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+              {
+                errorType = ItemRequestMissingSID;
+              }
+              else if( error->hasChild( "not-acceptable", "xmlns", XMLNS_XMPP_STANZAS ) &&
+                       error->hasChild( "invalid-subid", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+              {
+                errorType = ItemRequestInvalidSID;
+              }
+              else if( error->hasChild( "not-authorized", "xmlns", XMLNS_XMPP_STANZAS ) )
+              {
+                if( error->hasChild( "not-subscribed", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+                  errorType = ItemRequestNotSubscribed;
+                else if( error->hasChild( "presence-subscription-required", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+                  errorType = ItemRequestAccessPresence;
+                else if( error->hasChild( "not-in-roster-group", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+                  errorType = ItemRequestAccessRoster;
+                else
+                  return false;
+              }
+              else if( error->hasChild( "feature-not-implemented", "xmlns", XMLNS_XMPP_STANZAS ) )
+              {  
+                Tag * unsupported = error->findChild( "unsupported", "xmlns", XMLNS_PUBSUB_ERRORS );
+                if( unsupported->hasAttribute( "feature", "persistent-items" ) )
+                  errorType = ItemRequestNoPersistent;
+                else if( unsupported->hasAttribute( "feature", "retrieve-items" ) )
+                  errorType = ItemRequestUnsupported;
+                else
+                  return false;
+              }
+              else if( error->hasChild( "not-allowed", "xmlns", XMLNS_XMPP_STANZAS ) &&
+                       error->hasChild( "closed-node", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+              {
+                errorType = ItemRequestAccessWhiteList;
+              }
+              else if( error->hasChild( "payment-required", "xmlns", XMLNS_XMPP_STANZAS ) )
+              {
+                errorType = ItemRequestPayment;
+              }
+              else if( error->hasChild( "forbidden", "xmlns", XMLNS_XMPP_STANZAS ) )
+              {
+                errorType = ItemRequestBlocked;
+              }
+              else if( error->hasChild( "item-not-found", "xmlns", XMLNS_XMPP_STANZAS ) )
+              {
+                errorType = ItemRetrievalItemNotFound;
+              }
+              //handleRequestItemListError( service, node, errorType );
               break;
             }
+            default:
+              return false;
           }
           break;
         }

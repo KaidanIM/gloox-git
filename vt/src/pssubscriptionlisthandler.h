@@ -42,12 +42,14 @@ namespace gloox
         virtual void handleSubscriptionListResult( const JID& jid, const SubscriptionMap& subMap ) = 0;
 
         /**
-         * Receives the Subscription map for a specific service.
-         * @param jid The service 
-         * @param subMap The map of subscriptions.
+         * Receives the subscription listing error from a service (ie unsupported).
+         * @param jid The queried service.
          */
-        virtual void handleSubscriptionListError( const std::string& jid, const std::string& node ) = 0;
-
+        virtual void handleSubscriptionListError( const std::string& jid ) = 0;
+/**
+         * Receives the affiliation 
+         * @param jid The queried service.
+         */
         /**
          * Virtual destructor.
          */

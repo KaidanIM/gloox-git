@@ -138,7 +138,7 @@ namespace gloox
       ItemRequestInvalidSID,      /**< The requesting entity is subscribed but specifies an invalid subscription ID. */
       ItemRequestNotSubscribed,   /**< The node does not return items to unsubscribed entities and the requesting
                                    *   entity is not subscribed. */
-      ItemRequest,                /**< The service or node does not support persistent items and does not return
+      ItemRequestNoPersistent,    /**< The service or node does not support persistent items and does not return
                                    *   the last published item. */
       ItemRequestUnsupported,     /**< The service or node does not support item retrieval. */
       ItemRequestAccessPresence,  /**< The node has an access model of "presence" and the requesting entity
