@@ -28,6 +28,9 @@ namespace gloox
     m_buf = (char*)calloc( m_bufsize + 1, sizeof( char ) );
 
     SSL_library_init();
+
+    SSL_COMP_add_compression_method( 1, COMP_zlib() );
+
     m_ctx = SSL_CTX_new( TLSv1_client_method() );
     if( !m_ctx )
       return;
