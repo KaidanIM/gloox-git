@@ -183,9 +183,11 @@ namespace gloox
                                  sid  = subscription->findAttribute( "subid" ),
                                  sub  = subscription->findAttribute( "subsciption" );
               SubscriptionType subType = subscriptionType( sub );
-              //handleSubscriptionResult( jid, node, sid, subType, SubscriptionErrorNone );
+              SubscriptionTrackList::iterator it = m_subscriptionTrackList.begin();
+              for( ; it != m_subscriptionTrackList.end(); ++it )
+                (*it)->handleSubscriptionResult( jid, node, sid, subType, SubscriptionErrorNone );
+              break;
             }
-            break;
           }
           case Unsubscription:
           {
@@ -193,11 +195,16 @@ namespace gloox
                                srv  = stanza->findAttribute( "from" );
             if( jid.empty() || srv.empty() )
               return 0;
-            //handleUnsubscriptionResult( jid, srv, UnsubscriptionErrorNone );
+            SubscriptionTrackList::iterator it = m_subscriptionTrackList.begin();
+            for( ; it != m_subscriptionTrackList.end(); ++it )
+              (*it)->handleUnsubscriptionResult( jid, srv, UnsubscriptionErrorNone );
             break;
           }
           case RequestSubscriptionList:
           {
+            SubscriptionListTrackMap::iterator ith = m_subListTrackMap.find( stanza->id() );
+            if( ith == m_subListTrackMap.end() )
+              return 0;
             Tag *ps = stanza->findChild( "pubsub", "xmlns", XMLNS_PUBSUB );
             Tag *subscription = ps->findChild( "subscriptions" );
             if( subscription )
@@ -212,12 +219,16 @@ namespace gloox
                   return 0;
                 subMap[node] = subscriptionType( sub );
               }
-              //handleSubscriptionListResult( stanza->from(), subMap );
+              (*ith).second->handleSubscriptionListResult( stanza->from(), subMap );
+              m_subListTrackMap.erase( ith );
             }
             break;
           }
           case RequestAffiliationList:
           {
+            AffiliationListTrackMap::iterator ith = m_affListTrackMap.find( stanza->id() );
+            if( ith == m_affListTrackMap.end() )
+              return 0;
             Tag *ps = stanza->findChild( "pubsub", "xmlns", XMLNS_PUBSUB );
             Tag *affiliations = ps->findChild( "affiliations" );
             if( affiliations )
@@ -232,7 +243,8 @@ namespace gloox
                   return 0;
                 affMap[node] = affiliationType( aff );
               }
-              //handleAffiliationListResult( stanza->from(), affMap );
+              (*ith).second->handleAffiliationListResult( stanza->from(), affMap );
+              m_affListTrackMap.erase( ith );
             }
             break;
           }

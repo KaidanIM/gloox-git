@@ -28,6 +28,7 @@ namespace gloox
   class PSAffiliationListHandler;
 
   /**
+   * 
    * \bug No 'from' field to iq (use m_parent->BareJID() ?),
    *      same for the jid field of the subscription tag in subscribe.
    * \bug Tracking...
@@ -148,6 +149,18 @@ namespace gloox
       void requestOptions( const std::string& jid, const std::string& node );
 
       /**
+       * Registers an handler to receive notification of (un)subscription events.
+       */
+      void registerSubscriptionHandler( PSSubscriptionHandler * handler )
+        { m_subscriptionTrackList.push_back( handler ); }
+
+      /**
+       * Removes an handler from the list of objects listening to (un)subscription events.
+       */
+      void removeSubscriptionHandler( PSSubscriptionHandler * handler )
+        { m_subscriptionTrackList.remove( handler ); }
+
+      /**
        * 
        */
       virtual void handleOptions( const JID& jid,
@@ -159,11 +172,11 @@ namespace gloox
       bool handleIqID (Stanza *stanza, int context);
 
     private:
-      typedef std::map<std::string, PSSubscriptionHandler * > SubscriptionTrackMap;
-      typedef std::map<std::string, PSAffiliationListHandler * > AffiliationListTrackMap;
-      typedef std::map<std::string, PSSubscriptionListHandler * > SubscriptionListTrackMap;
+      typedef std::list< PSSubscriptionHandler * > SubscriptionTrackList;
+      typedef std::map< std::string, PSAffiliationListHandler * > AffiliationListTrackMap;
+      typedef std::map< std::string, PSSubscriptionListHandler * > SubscriptionListTrackMap;
       ClientBase* m_parent;
-      SubscriptionTrackMap m_subscriptionTrackMap;
+      SubscriptionTrackList m_subscriptionTrackList;
       AffiliationListTrackMap m_affListTrackMap;
       SubscriptionListTrackMap m_subListTrackMap;
   };
