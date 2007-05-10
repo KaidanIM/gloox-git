@@ -15,6 +15,8 @@
 
 #include "jid.h"
 #include <string>
+#include <map>
+#include "pubsub.h"
 
 namespace gloox
 {
@@ -33,7 +35,7 @@ namespace gloox
        * @param jid The queried service.
        * @param subMap The map of each node's affiliation subscription.
        */
-      virtual void handleAffiliationListResult( const JID& jid, const SubscriptionMap& subMap ) = 0;
+      virtual void handleAffiliationListResult( const JID& jid, const AffiliationMap& subMap ) = 0;
 
       /**
        * Receives the Subscription map for a specific service.

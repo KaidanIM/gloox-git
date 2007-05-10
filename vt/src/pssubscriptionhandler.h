@@ -15,6 +15,7 @@
 
 #include "jid.h"
 #include <string>
+#include "pubsub.h"
 
 namespace gloox
 {

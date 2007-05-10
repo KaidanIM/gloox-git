@@ -10,7 +10,7 @@
   This software is distributed without any warranty.
 */
 
-#include "pubsub.h"
+#include "pubsubmanager.h"
 #include "clientbase.h"
 #include "dataform.h"
 #include "tag.h"
@@ -66,7 +66,7 @@ namespace gloox
     new Tag( ps, "affiliations" );
 
     m_parent->trackID( this, id, RequestAffiliationList );
-    m_affListTrackMap[id] = afl;
+    m_affListTrackMap[id] = alh;
     m_parent->send( iq );
   }
 
@@ -150,17 +150,17 @@ namespace gloox
     return subType;
   }
 
-  static PubSubManager::AffiliationType affiliationType( const std::string& affiliation )
+  static pubsub::AffiliationType affiliationType( const std::string& affiliation )
   {
-    PubSubManager::AffiliationType affType = PubSubManager::AffiliationInvalid;
+    pubsub::AffiliationType affType = pubsub::AffiliationInvalid;
     if( affiliation == "none" )
-      affType = PubSubManager::AffiliationNone;
+      affType = pubsub::AffiliationNone;
     else if( affiliation == "publisher" )
-      affType = PubSubManager::AffiliationPublisher;
+      affType = pubsub::AffiliationPublisher;
     else if( affiliation == "owner" )
-      affType = PubSubManager::AffiliationOwner;
+      affType = pubsub::AffiliationOwner;
     else if( affiliation == "outcast" )
-      affType = PubSubManager::AffiliationOutcast;
+      affType = pubsub::AffiliationOutcast;
     return affType;
   }
 
