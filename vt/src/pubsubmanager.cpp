@@ -34,7 +34,7 @@ namespace gloox
       Unsubscription,
       RequestSubscriptionList,
       RequestAffiliationList,
-      RequestOptions,
+      RequestOptionList,
       RequestItemList
     };
 
@@ -132,7 +132,7 @@ namespace gloox
       sub->addAttribute( "node", node );
       sub->addAttribute( "jid", m_parent->jid().bare() );
 
-      m_parent->trackID( this, id, RequestOptions );
+      m_parent->trackID( this, id, RequestOptionList );
       
       m_parent->send( iq );
     }
@@ -274,7 +274,7 @@ namespace gloox
               }
               break;
             }
-            case RequestOptions:
+            case RequestOptionList:
             {
               Tag *ps = stanza->findChild( "pubsub", "xmlns", XMLNS_PUBSUB );
               Tag *options = ps->findChild( "options" );
@@ -421,25 +421,55 @@ namespace gloox
                 return false;
               break;
             }
-            case RequestOptions:
+            case RequestOptionList:
             {
-              /*
+              Tag * pubsub = stanza->findChild( "pubsub" );
+              if( !pubsub )
+                return false;
+              Tag * items = stanza->findChild( "items" );
+              if( !items )
+                return false;
+              const std::string& node = items->findAttribute( "node" ),
+                                 service  = stanza->findAttribute( "from" );
+              Tag* error = stanza->findChild( "error" );
               OptionRequestError errorType = OptionRequestErrorNone;
-              if( )
+              if( error->hasChild( "forbidden", "xmlns", XMLNS_XMPP_STANZAS ) )
+              {
                 errorType = OptionRequestUnprivileged;
-              else if( )
+              }
+              else if( error->hasChild( "unexpected-request", "xmlns", XMLNS_XMPP_STANZAS ) &&
+                       error->hasChild( "not-subscribed", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+              {
                 errorType = OptionRequestUnsubscribed;
-              else if( )
-                errorType = OptionRequestNodeAndJID;
-              else if( )
+              }
+              else if( error->hasChild( "bad-request", "xmlns", XMLNS_XMPP_STANZAS ) &&
+                       error->hasChild( "jid-required", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+              {
+                errorType = OptionRequestMissingJID;
+              }
+              else if( error->hasChild( "bad-request", "xmlns", XMLNS_XMPP_STANZAS ) &&
+                       error->hasChild( "subid-required", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+              {
                 errorType = OptionRequestMissingSID;
-              else if( )
+              }
+              else if( error->hasChild( "not-acceptable", "xmlns", XMLNS_XMPP_STANZAS ) &&
+                       error->hasChild( "invalid-subid", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+              {
                 errorType = OptionRequestInvalidSID;
-              else if( )
+              }
+              else if( error->hasChild( "feature-not-implemented", "xmlns", XMLNS_XMPP_STANZAS ) &&
+                       error->hasChild( "unsupported", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+                       // feature='subscription-options'
+              {
                 errorType = OptionRequestUnsupported;
-              else if( )
+              }
+              else if( error->hasChild( "item-not-found", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+              {
                 errorType = OptionRequestItemNotFound;
-              */
+              }
+              else
+                return false;
+              // handleOptionListError( "" );
               break;
             }
             case RequestItemList:
@@ -503,6 +533,8 @@ namespace gloox
               {
                 errorType = ItemRetrievalItemNotFound;
               }
+              else
+                return false;
               //handleRequestItemListError( service, node, errorType );
               break;
             }

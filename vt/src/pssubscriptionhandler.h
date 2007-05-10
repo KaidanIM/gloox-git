@@ -25,7 +25,7 @@ namespace gloox
     /**
      * @brief A virtual interface for receiving (un)subscription result.
      *
-     * Derive from this interface and register with the PubSubManagerManager.
+     * Derive from this interface and register with the Manager.
      *
      * @author Jakob Schroeter <js@camaya.net>
      */

@@ -120,7 +120,7 @@ namespace gloox
       OptionRequestUnprivileged,    /**< The requesting entity does not have sufficient privileges to
                                      *   modify subscription options for the specified JID. */
       OptionRequestUnsubscribed,    /**< The requesting entity (or specified subscriber) is not subscribed. */
-      OptionRequestNodeAndJID,      /**< The request does not specify both the NodeID and the subscriber's JID. */
+      OptionRequestMissingJID,     /**< The request does not specify both the NodeID and the subscriber's JID. */
       OptionRequestMissingSID,      /**< The request does not specify a subscription ID but one is required. */
       OptionRequestInvalidSID,      /**< The request specifies a subscription ID that is not valid or current. */
       OptionRequestUnsupported,     /**< Subscription options are not supported. */
