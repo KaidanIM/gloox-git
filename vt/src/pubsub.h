@@ -112,13 +112,13 @@ namespace gloox
                         *   Entities section of this document. */
     };
 
-  /**
-   * Describes the different possible errors related to subscription options.
-   */
+    /**
+     * Describes the different possible errors related to subscription options.
+     */
     enum OptionRequestError {
       OptionRequestErrorNone,       /**< No error */
       OptionRequestUnprivileged,    /**< The requesting entity does not have sufficient privileges to
-                                   *   modify subscription options for the specified JID. */
+                                     *   modify subscription options for the specified JID. */
       OptionRequestUnsubscribed,    /**< The requesting entity (or specified subscriber) is not subscribed. */
       OptionRequestNodeAndJID,      /**< The request does not specify both the NodeID and the subscriber's JID. */
       OptionRequestMissingSID,      /**< The request does not specify a subscription ID but one is required. */
@@ -127,6 +127,35 @@ namespace gloox
       OptionRequestItemNotFound     /**< The node does not exist. */
     };
 
+    /**
+     * Describes the different possible errors related to item retrieval.
+     */
+    enum ItemRequestError
+    {
+      ItemRequestErrorNone,       /**< No error */
+      ItemRequestMissingSID,      /**< The requesting entity has multiple subscriptions to the node but does not
+                                   *   specify a subscription ID. */
+      ItemRequestInvalidSID,      /**< The requesting entity is subscribed but specifies an invalid subscription ID. */
+      ItemRequestNotSubscribed,   /**< The node does not return items to unsubscribed entities and the requesting
+                                   *   entity is not subscribed. */
+      ItemRequest,                /**< The service or node does not support persistent items and does not return
+                                   *   the last published item. */
+      ItemRequestUnsupported,     /**< The service or node does not support item retrieval. */
+      ItemRequestAccessPresence,  /**< The node has an access model of "presence" and the requesting entity
+                                   *   is not subscribed to the owner's presence. */
+      ItemRequestAccessRoster,    /**< The node has an access model of "roster" and the requesting entity
+                                   *   is not in one of the authorized roster groups. */
+      ItemRequestAccessWhiteList, /**< The node has an access model of "whitelist" and the requesting entity
+                                   *   is not on the whitelist. */
+      ItemRequestPayment,         /**< The service or node requires payment for item retrieval. */
+      ItemRequestBlocked,         /**< The requesting entity is blocked from retrieving items from the node
+                                   *   (e.g., because having an affiliation of outcast). */
+      ItemRetrievalItemNotFound   /**< The node does not exist. */
+    };
+
+    /**
+     * Describes the different PubSub features (XEP-0060 Sect. 10).
+     */
     enum PubSubFeatures
     {
       FeatureCollections,           /**< Collection nodes are supported. RECOMMENDED */

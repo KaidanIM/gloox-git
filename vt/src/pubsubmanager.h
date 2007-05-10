@@ -30,6 +30,9 @@ namespace gloox
     class SubscriptionHandler;
     class SubscriptionListHandler;
     class AffiliationListHandler;
+    class ItemHandler;
+    class Item;
+    class Node;
 
     /**
      * 
@@ -39,25 +42,23 @@ namespace gloox
      * \bug HandleOptions is incomplete
      * \bug conflicting AffiliationType w/ MUCXXX
      */
-    class PubSubManager : public IqHandler
+    class Manager : public IqHandler
     {
       public:
 
-        class Node;
-        class Item;
 
-        typedef std::list< Node * > NodeList;
-        typedef std::list< Item * > ItemList;
+        //typedef std::list< Node * > NodeList;
+        //typedef std::list< Item * > ItemList;
 
         /**
          * Initialize the manager.
          */
-        PubSubManager( ClientBase* parent ) : m_parent(parent) {}
+        Manager( ClientBase* parent ) : m_parent(parent) {}
 
         /**
          * Virtual Destructor.
          */
-        virtual ~PubSubManager() {}
+        virtual ~Manager() {}
 
         /**
          * 
@@ -89,7 +90,7 @@ namespace gloox
         /**
          * 
          */
-        void requestNodeItems( const JID& node );
+        void requestItems( const JID& node, ItemHandler * handler );
 
         /**
          * Registers an handler to receive notification of (un)subscription events.

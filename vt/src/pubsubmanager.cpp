@@ -17,6 +17,8 @@
 #include "psaffiliationlisthandler.h"
 #include "pssubscriptionhandler.h"
 #include "pssubscriptionlisthandler.h"
+#include "pubsubitemhandler.h"
+#include "pubsub.h"
 
 namespace gloox
 {
@@ -32,10 +34,11 @@ namespace gloox
       Unsubscription,
       RequestSubscriptionList,
       RequestAffiliationList,
-      RequestOptions
+      RequestOptions,
+      RequestItems
     };
 
-    void PubSubManager::requestSubscriptionList( const std::string& jid, SubscriptionListHandler * slh )
+    void Manager::requestSubscriptionList( const std::string& jid, SubscriptionListHandler * slh )
     {
       if( !m_parent )
         return;
@@ -54,7 +57,7 @@ namespace gloox
       m_parent->send( iq );
     }
 
-    void PubSubManager::requestAffiliationList( const std::string& jid, AffiliationListHandler * alh )
+    void Manager::requestAffiliationList( const std::string& jid, AffiliationListHandler * alh )
     {
       if( !m_parent )
         return;
@@ -73,7 +76,7 @@ namespace gloox
       m_parent->send( iq );
     }
 
-    void PubSubManager::subscribe( const std::string& jid, const std::string& node )
+    void Manager::subscribe( const std::string& jid, const std::string& node )
     {
       if( !m_parent )
         return;
@@ -93,7 +96,7 @@ namespace gloox
       m_parent->send( iq );
     }
 
-    void PubSubManager::unsubscribe( const std::string& jid, const std::string& node )
+    void Manager::unsubscribe( const std::string& jid, const std::string& node )
     {
       if( !m_parent )
         return;
@@ -113,7 +116,7 @@ namespace gloox
       m_parent->send( iq );
     }
 
-    void PubSubManager::requestOptions( const std::string& jid, const std::string& node )
+    void Manager::requestOptions( const std::string& jid, const std::string& node )
     {
       if( !m_parent )
         return;
@@ -134,7 +137,7 @@ namespace gloox
       m_parent->send( iq );
     }
 
-    void PubSubManager::requestNodeItems( const JID& node )
+    void Manager::requestItems( const JID& node, ItemHandler * handler )
     {
       if( !m_parent )
         return;
@@ -149,12 +152,12 @@ namespace gloox
       Tag *sub = new Tag( ps, "items" );
       sub->addAttribute( "node", node.resource() );
 
-      m_parent->trackID( this, id, RequestOptions );
-
+      m_parent->trackID( this, id, RequestItems );
+      
       m_parent->send( iq );
     }
 
-    bool PubSubManager::handleIq( Stanza */*stanza*/ )
+    bool Manager::handleIq( Stanza */*stanza*/ )
     {
       return 0;
     }
@@ -187,7 +190,7 @@ namespace gloox
       return affType;
     }
 
-    bool PubSubManager::handleIqID( Stanza *stanza, int context )
+    bool Manager::handleIqID( Stanza *stanza, int context )
     {
       switch( stanza->subtype() )
       {
@@ -277,6 +280,10 @@ namespace gloox
               Tag *options = ps->findChild( "options" );
               const DataForm dataForm( options->findChild( "x" ) );
               //handleOptions( stanza->from(), options->findAttribute("node"), dataForm, OptionRequestErrorNone );
+              break;
+            }
+            case RequestItems:
+            {
               break;
             }
           }
@@ -428,7 +435,20 @@ namespace gloox
               */
               break;
             }
-
+            case RequestItems:
+            {
+              /*
+              if( )
+                errorType = OptionRequestUnprivileged;
+                errorType = OptionRequestUnsubscribed;
+                errorType = OptionRequestNodeAndJID;
+                errorType = OptionRequestMissingSID;
+                errorType = OptionRequestInvalidSID;
+                errorType = OptionRequestUnsupported;
+                errorType = OptionRequestItemNotFound;
+              */
+              break;
+            }
           }
           break;
         }

@@ -14,6 +14,7 @@
 #define __PUBSUBITEM_H__
 
 #include <string>
+#include <list>
 
 namespace gloox
 {
@@ -49,7 +50,11 @@ namespace gloox
         //time_t publishDate;
         //time_t updateDate;
     };
+
+    typedef std::list< Item * > ItemList;
+
   }
+
 }
 
 
