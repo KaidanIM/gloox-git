@@ -22,7 +22,7 @@
 
 #include <string>
 #include <map>
-#include <string>
+#include <list>
 
 namespace gloox
 {
