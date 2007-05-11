@@ -29,13 +29,15 @@ namespace gloox
     static const std::string XMLNS_PUBSUB = "http://jabber.org/protocol/pubsub";
     static const std::string XMLNS_PUBSUB_ERRORS = "http://jabber.org/protocol/pubsub#errors";
 
-    enum PubSubContext {
+    enum Context {
       Subscription,
       Unsubscription,
       RequestSubscriptionList,
       RequestAffiliationList,
       RequestOptionList,
-      RequestItemList
+      RequestItemList,
+      PublishItem,
+      DeleteItem
     };
 
     void Manager::requestSubscriptionList( const std::string& jid, SubscriptionListHandler * slh )
@@ -116,6 +118,48 @@ namespace gloox
       m_parent->send( iq );
     }
 
+    void Manager::publishItem( const std::string& service, const std::string& node, const Item& item )
+    {
+      if( !m_parent )
+        return;
+
+      const std::string& id = m_parent->getID();
+      Tag * iq = new Tag( "iq", "type", "set" );
+      iq->addAttribute( "to", service );
+      iq->addAttribute( "id", id );
+      Tag * pubsub = new Tag( iq, "pubsub" );
+      pubsub->addAttribute( "xmlns", XMLNS_PUBSUB );
+      Tag * publish = new Tag( pubsub, "publish" );
+      publish->addAttribute( "node", node );
+      /*
+      Tag * item = new Tag( retract, "item" );
+      item->addAttribute( "id", item.id );
+
+      m_parent->trackID( this, id, PublishItem );
+      m_parent->send( iq );
+      */
+    }
+
+    void Manager::deleteItem( const std::string& service, const std::string& node, const std::string& itemID )
+    {
+      if( !m_parent )
+        return;
+
+      const std::string& id = m_parent->getID();
+      Tag * iq = new Tag( "iq", "type", "set" );
+      iq->addAttribute( "to", service );
+      iq->addAttribute( "id", id );
+      Tag * pubsub = new Tag( iq, "pubsub" );
+      pubsub->addAttribute( "xmlns", XMLNS_PUBSUB );
+      Tag * retract = new Tag( pubsub, "retract" );
+      retract->addAttribute( "node", node );
+      Tag * item = new Tag( retract, "item" );
+      item->addAttribute( "id", itemID );
+
+      m_parent->trackID( this, id, DeleteItem );
+      m_parent->send( iq );
+    }
+    
     void Manager::requestOptions( const std::string& jid, const std::string& node )
     {
       if( !m_parent )
@@ -153,7 +197,6 @@ namespace gloox
       sub->addAttribute( "node", node.resource() );
 
       m_parent->trackID( this, id, RequestItemList );
-      
       m_parent->send( iq );
     }
 
@@ -212,8 +255,8 @@ namespace gloox
                 SubscriptionTrackList::iterator it = m_subscriptionTrackList.begin();
                 for( ; it != m_subscriptionTrackList.end(); ++it )
                   (*it)->handleSubscriptionResult( jid, node, sid, subType, SubscriptionErrorNone );
-                break;
               }
+              break;
             }
             case Unsubscription:
             {
@@ -286,6 +329,16 @@ namespace gloox
             {
               break;
             }
+            case PublishItem:
+            {
+              break;
+            }
+            case DeleteItem:
+            {
+              // store the node id locally for the del notif ?
+              break;
+            }
+            
           }
         }
         break;
@@ -484,7 +537,7 @@ namespace gloox
                                  service  = stanza->findAttribute( "from" );
               Tag* error = stanza->findChild( "error" );
 
-              ItemRequestError errorType = ItemRequestErrorNone;
+              ItemRetrivalError errorType = ItemRequestErrorNone;
               if( error->hasChild( "bad-request", "xmlns", XMLNS_XMPP_STANZAS ) &&
                   error->hasChild( "subid-required", "xmlns", XMLNS_PUBSUB_ERRORS ) )
               {
@@ -508,10 +561,12 @@ namespace gloox
               }
               else if( error->hasChild( "feature-not-implemented", "xmlns", XMLNS_XMPP_STANZAS ) )
               {  
-                Tag * unsupported = error->findChild( "unsupported", "xmlns", XMLNS_PUBSUB_ERRORS );
-                if( unsupported->hasAttribute( "feature", "persistent-items" ) )
+                Tag * unsup = error->findChild( "unsupported", "xmlns", XMLNS_PUBSUB_ERRORS );
+                if( !unsup )
+                  return false;
+                if( unsup->hasAttribute( "feature", "persistent-items" ) )
                   errorType = ItemRequestNoPersistent;
-                else if( unsupported->hasAttribute( "feature", "retrieve-items" ) )
+                else if( unsup->hasAttribute( "feature", "retrieve-items" ) )
                   errorType = ItemRequestUnsupported;
                 else
                   return false;
@@ -536,6 +591,85 @@ namespace gloox
               else
                 return false;
               //handleRequestItemListError( service, node, errorType );
+              break;
+            }
+            case PublishItem:
+            {
+              ItemPublicationError errorType = ItemPublicationErrorNone;
+              if( stanza->hasChild( "forbidden", "xmlns", XMLNS_XMPP_STANZAS ) )
+              {
+                errorType = ItemPublicationUnprivileged;
+              }  
+              else if( stanza->hasChild( "feature-not-implemented", "xmlns", XMLNS_XMPP_STANZAS ) &&
+                       stanza->hasChild( "unsupported", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+                       // feature='publish'
+              {
+                errorType = ItemPublicationUnsupported;
+              }  
+              else if( stanza->hasChild( "item-not-found", "xmlns", XMLNS_XMPP_STANZAS ) )
+              {
+                errorType = ItemPublicationNodeNotFound;
+              }  
+              else if( stanza->hasChild( "not-acceptable", "xmlns", XMLNS_XMPP_STANZAS ) &&
+                       stanza->hasChild( "payload-too-big", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+              {
+                errorType = ItemPublicationPayloadSize;
+              }  
+              else if( stanza->hasChild( "bad-request", "xmlns", XMLNS_XMPP_STANZAS ) )
+              {
+                /* Configuration errors needs to be specified */
+                if( stanza->hasChild( "invalid-payload", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+                  errorType = ItemPublicationPayload;
+                else if( stanza->hasChild( "item-required", "xmlns", XMLNS_PUBSUB_ERRORS) )
+                  errorType = ItemPublicationConfiguration;
+                else if( stanza->hasChild( "payload-required", "xmlns", XMLNS_PUBSUB_ERRORS) )
+                  errorType = ItemPublicationConfiguration;
+                else if( stanza->hasChild( "item-forbidden", "xmlns", XMLNS_PUBSUB_ERRORS) )
+                  errorType = ItemPublicationConfiguration;
+                else
+                  return false;
+              }
+              else
+                return false;
+              //handle
+              break;
+            }
+            case DeleteItem:
+            {
+              ItemDeletationError errorType = ItemDeletationErrorNone;
+              if( stanza->hasChild( "forbidden", "xmlns", XMLNS_XMPP_STANZAS ) )
+              {
+                errorType = ItemDeletationUnpriviledged;
+              }  
+              else if( stanza->hasChild( "item-not-found", "xmlns", XMLNS_XMPP_STANZAS ) )
+              {
+                errorType = ItemDeletationItemNotFound;
+              }  
+              else if( stanza->hasChild( "bad-request", "xmlns", XMLNS_XMPP_STANZAS ) &&
+                       stanza->hasChild( "node-required", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+              {
+                errorType = ItemDeletationMissingNode;
+              }  
+              else if( stanza->hasChild( "bad-request", "xmlns", XMLNS_XMPP_STANZAS ) &&
+                       stanza->hasChild( "item-required", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+              {
+                errorType = ItemDeletationMissingItem;
+              }  
+              else if( stanza->hasChild( "feature-not-implemented", "xmlns", XMLNS_XMPP_STANZAS ) )
+              {
+                Tag * unsup = stanza->findChild( "unsupported", "xmlns", XMLNS_PUBSUB_ERRORS );
+                if( !unsup )
+                  return false;
+                if( unsup->hasAttribute( "feature", "persistent-items" ) )
+                  errorType = ItemDeletationNoPersistent;
+                else if( unsup->hasAttribute( "feature", "delete-nodes" ) )
+                  errorType = ItemDeletationUnsupported;
+                else
+                  return false;
+              } 
+              else
+                return false;
+              //handle
               break;
             }
             default:

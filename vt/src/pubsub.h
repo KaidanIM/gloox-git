@@ -29,7 +29,8 @@ namespace gloox
     /**
      * Describes the different affiliation types.
      */
-    enum AffiliationType {
+    enum AffiliationType
+    {
       AffiliationInvalid,   /**< Invalid Affiliation type. */
       AffiliationOutcast,   /**< Entity is disallowed from subscribing or publishing. */
       AffiliationNone,      /**<  */
@@ -40,7 +41,8 @@ namespace gloox
     /**
      * Describes the different subscription types.
      */
-    enum SubscriptionType {
+    enum SubscriptionType
+    {
       SubscriptionInvalid,      /**< Invalid subscription type. */
       SubscriptionNone,         /**< The node MUST NOT send event notifications or payloads to the Entity. */
       SubscriptionPending,      /**< An entity has requested to subscribe to a node and the request has not yet
@@ -56,7 +58,8 @@ namespace gloox
     /**
      * Describes the different possible errors when subscribing to a node.
      */
-    enum SubscriptionError {
+    enum SubscriptionError
+    {
       SubscriptionErrorNone,            /**< No error */
       SubscriptionErrorJIDMismatch,     /**< The bare JID portions of the JIDs do not match. */
       SubscriptionErrorAccessPresence,  /**< The node has an access model of "presence" and the requesting
@@ -78,7 +81,8 @@ namespace gloox
     /**
      * Describes the different possible errors when unsubscribing from a node.
      */
-    enum UnsubscriptionError {
+    enum UnsubscriptionError
+    {
       UnsubscriptionErrorNone,          /**< No error */
       UnsubscriptionErrorMissingSID,    /**< The requesting entity has multiple subscriptions to the node
                                          *   but does not specify a subscription ID. */
@@ -92,7 +96,8 @@ namespace gloox
     /**
      * Describes the different access types.
      */
-    enum AccessType {
+    enum AccessType
+    {
       AccessOpen,      /**< Any entity may subscribe to the node (i.e., without the necessity for subscription
                         *   approval) and any entity may retrieve items from the node (i.e., without being
                         *   subscribed); this SHOULD be the default access model for generic pubsub services. */
@@ -115,12 +120,13 @@ namespace gloox
     /**
      * Describes the different possible errors related to subscription options.
      */
-    enum OptionRequestError {
+    enum OptionRequestError
+    {
       OptionRequestErrorNone,       /**< No error */
       OptionRequestUnprivileged,    /**< The requesting entity does not have sufficient privileges to
                                      *   modify subscription options for the specified JID. */
       OptionRequestUnsubscribed,    /**< The requesting entity (or specified subscriber) is not subscribed. */
-      OptionRequestMissingJID,     /**< The request does not specify both the NodeID and the subscriber's JID. */
+      OptionRequestMissingJID,      /**< The request does not specify both the NodeID and the subscriber's JID. */
       OptionRequestMissingSID,      /**< The request does not specify a subscription ID but one is required. */
       OptionRequestInvalidSID,      /**< The request specifies a subscription ID that is not valid or current. */
       OptionRequestUnsupported,     /**< Subscription options are not supported. */
@@ -130,7 +136,39 @@ namespace gloox
     /**
      * Describes the different possible errors related to item retrieval.
      */
-    enum ItemRequestError
+    enum ItemPublicationError
+    {
+      ItemPublicationErrorNone,     /**< No error */
+      ItemPublicationUnprivileged,  /**< The requesting entity does not have sufficient privileges to publish. */
+      ItemPublicationUnsupported,   /**< The node does not support item publication. */
+      ItemPublicationNodeNotFound,  /**< The node does not exist. */
+      ItemPublicationPayloadSize,   /**< The payload size exceeds a service-defined limit. */
+      ItemPublicationPayload,       /**< The item contains more than one payload element or the namespace
+                                     *   of the root payload element does not match the configured namespace
+                                     *   for the node. */
+      ItemPublicationConfiguration  /**< The request does not match the node configuration. */
+    };
+
+    /**
+     * Describes the different possible errors related to item deletation.
+     */
+    enum ItemDeletationError
+    {
+      ItemDeletationErrorNone,     /**< No error */
+      ItemDeletationUnpriviledged, /**< The publisher does not have sufficient privileges to delete the
+                                    *   requested item. */
+      ItemDeletationItemNotFound,  /**< The node or item does not exist. */
+      ItemDeletationMissingNode,   /**< The request does not specify a node. */
+      ItemDeletationMissingItem,   /**< The request does not include an <item/> element or the <item/> element
+                                    *   does not specify an ItemID. */
+      ItemDeletationNoPersistent,  /**< The node does not support persistent items. */
+      ItemDeletationUnsupported    /**< The service does not support the deletion of items. */
+    };
+
+    /**
+     * Describes the different possible errors related to item retrieval.
+     */
+    enum ItemRetrivalError
     {
       ItemRequestErrorNone,       /**< No error */
       ItemRequestMissingSID,      /**< The requesting entity has multiple subscriptions to the node but does not

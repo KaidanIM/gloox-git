@@ -31,6 +31,7 @@ namespace gloox
     class SubscriptionListHandler;
     class AffiliationListHandler;
     class ItemHandler;
+    class Item;
 
     /**
      * 
@@ -55,14 +56,32 @@ namespace gloox
         virtual ~Manager() {}
 
         /**
-         * 
+         * Subscribe to a node.
+         * @param jid Service hosting the node.
+         * @param node Name of the node to subscribe to.
          */
         void subscribe( const std::string& jid, const std::string& node );
 
         /**
-         * 
+         * Subscribe to a node.
+         * @param jid Node location (service/node).
+         */
+        void subscribe( const JID& jid )
+          { subscribe( jid.bare(), jid.resource() ); }
+
+        /**
+         * Unsubscribe from a node.
+         * @param jid Service hosting the node.
+         * @param node Name of the node to unsubscribe from.
          */
         void unsubscribe( const std::string& jid, const std::string& node );
+
+        /**
+         * Unsubscribe from a node.
+         * @param jid Node location (service/node).
+         */
+        void unsubscribe( const JID& jid )
+          { unsubscribe( jid.bare(), jid.resource() ); }
 
         /**
          * Requests the subscription list from a service.
@@ -77,6 +96,23 @@ namespace gloox
         void requestAffiliationList( const std::string& jid, AffiliationListHandler * alh );
 
         /**
+         * Publish an item to a node.
+         * @param jid Service hosting the node.
+         * @param node Name of the node to delete the item from.
+         * @param item Item to publish.
+         */
+        void publishItem( const std::string& jid, const std::string& node, const Item& item );
+
+
+        /**
+         * Delete an item from a node.
+         * @param jid Service hosting the node.
+         * @param node Name of the node to delete the item from.
+         * @param itemID ID of the item in the node.
+         */
+        void deleteItem( const std::string& jid, const std::string& node, const std::string& itemID );
+
+        /**
          * 
          */
         void requestOptions( const std::string& jid, const std::string& node );
@@ -84,16 +120,26 @@ namespace gloox
         /**
          * 
          */
+        void requestOptions( const JID& jid )
+          { requestOptions( jid.bare(), jid.resource() ); }
+
+        /**
+         * Ask for the item list of a specific node.
+         * @param node Node location (service/node).
+         * @param handler ItemHandler to send the result to.
+         */
         void requestItems( const JID& node, ItemHandler * handler );
 
         /**
          * Registers an handler to receive notification of (un)subscription events.
+         * @param handler SubscriptionHandler to register.
          */
         void registerSubscriptionHandler( SubscriptionHandler * handler )
           { m_subscriptionTrackList.push_back( handler ); }
 
         /**
          * Removes an handler from the list of objects listening to (un)subscription events.
+         * @param handler SubscriptionHandler to remove.
          */
         void removeSubscriptionHandler( SubscriptionHandler * handler )
           { m_subscriptionTrackList.remove( handler ); }
