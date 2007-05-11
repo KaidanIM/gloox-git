@@ -20,12 +20,13 @@
 #include "jid.h"
 #include "logsink.h"
 
+#include <string>
+#include <map>
+#include <string>
+
 namespace gloox
 {
 
-  class string;
-  class map;
-  class list;
   class Connection;
   class Packet;
   class Tag;
