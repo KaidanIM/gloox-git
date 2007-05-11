@@ -870,8 +870,9 @@ namespace gloox
     {
       t = it;
       ++it;
-      if( ( !ph || (*it).ph == ph ) && (*it).jid->bare() == jid.bare() )
+      if( ( !ph || (*t).ph == ph ) && (*t).jid->bare() == jid.bare() )
       {
+        delete (*t).jid;
         m_presenceJidHandlers.erase( t );
       }
     }
