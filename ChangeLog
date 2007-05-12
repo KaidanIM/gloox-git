@@ -2,6 +2,9 @@ v0.9 -- xx Feb 2007
 -------------------
 - rewrote XML parser (no dependency on iksemel anymore)
 - XEP-0045 (Multi-User Chat)
+- XEP-0065 (SOCKS5 Bytestreams)
+- XEP-0095 (Stream Initiation)
+- XEP-0096 (File Transfer)
 - added StanzaExtensions
   - XEP-0027 (Current Jabber OpenPGP Usage) abstraction
   - XEP-0066 (Out of Band Data) abstraction
@@ -55,7 +58,7 @@ v0.9 -- xx Feb 2007
 - removed unmaintained Dev-C++ project (in favor of Code::Blocks project)
 - ClientBase: renamed ping() --> whitespacePing()
 - HTTP proxy support (thanks to Jose A. Perez Sanchez)
-- HTTP proxy auth support
+- HTTP proxy Basic auth support
 - Tag: basic XPath support
 - DNS: cleanup
 - TagHandler: now receives Tag, not Stanza
@@ -83,16 +86,18 @@ v0.9 -- xx Feb 2007
 - ported to Win CE/Mobile (experimental). see README.wince
 - ClientBase::setServer: update's Connection(Base)'s server as well
 - VCard: const *List& *() --> *List& *() to allow modification
-
-since -rc1:
-- XEP-0065 (SOCKS5 Bytestreams)
-- XEP-0095 (Stream Initiation)
-- XEP-0096 (File Transfer)
 - SOCKS5 proxy support (RFC 1928), incl. username/password auth (RFC 1929)
 - Disco: minor spec compliance fixes
 - Adhoc: minor spec compliance fixes
 - Tag: added ctors to easily create a single attribute
 - ConnectionTCP: protected send() and recv() with simple Mutexes
+
+since -rc2:
+- GCC 4.3 compile fixes
+- OpenSSL: check cert dates
+- Parser: don't throw parse error on incoming </stream>
+- SIProfileFT: fixed ranged file transfers
+- Disco: more spec compliance fixes
 
 
 v0.8 -- 08 Apr 2006
