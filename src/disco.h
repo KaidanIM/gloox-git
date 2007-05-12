@@ -135,14 +135,16 @@ namespace gloox
        * object. The DiscoNodeHandler will receive disco#items queries which are
        * directed to the corresponding node registered for the handler.
        * @param nh The NodeHandler-derived object to register.
-       * @param node The node name to associate with this handler.
+       * @param node The node name to associate with this handler. Use an empty string to
+       * register for the root node.
        */
       void registerNodeHandler( DiscoNodeHandler *nh, const std::string& node );
 
       /**
        * Removes the node handler for the given node.
        * @param nh The NodeHandler to unregister.
-       * @param node The node for which the handler shall be removed.
+       * @param node The node for which the handler shall be removed. Use an empty string to
+       * remove the root node's handler.
        */
       void removeNodeHandler( DiscoNodeHandler *nh, const std::string& node );
 

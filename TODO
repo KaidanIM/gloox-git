@@ -1,20 +1,6 @@
 Todo
 ----
 
--Adhoc advertises 2 ad-hoc items:
-[Debug::XMLIncoming] <iq from='tobiasfar@jabber.org/home' to='tobiasfar@jabber.org/god_himself' id='95' type='get' xml:lang='de-DE'>
-   <query xmlns='http://jabber.org/protocol/disco#items'/>
-</iq>
-
-[Debug::XMLOutgoing] <iq id='95' to='tobiasfar@jabber.org/home' from='tobiasfar@jabber.org/god_himself' type='result'>
-  <query xmlns='http://jabber.org/protocol/disco#items'>
-    <item node='http://jabber.org/protocol/commands' name='Ad-Hoc Commands'/>
-    <item node='http://jabber.org/protocol/commands' name='Ad-Hoc Commands'/>
-  </query>
-</iq>
-prob is: für jedes adhoc command wird das command als node mit Disco registeriert. für die leere node bei einer disco items query werden _alle_ nodes abgefragt. es sollte eine möglichkeit geben, speziell eine leere node anzulegen, die die items für die root node bereitstellt
-
-- http://mail.jabber.org/pipermail/standards/2007-April/014946.html
 - mixed-content XML
 - unit tests (NonSaslAuth)
 - DataFormField: simply adding of values (keep StringList internally): addValue()
@@ -48,7 +34,6 @@ prob is: für jedes adhoc command wird das command als node mit Disco registerier
 
 
 - more XPath
-- socks5 proxy/bytestreams support
 - XEP-0174 (Link-Local Messaging)
   - zeroconf support in XEP-0065
 
