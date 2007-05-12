@@ -79,6 +79,8 @@ namespace gloox
           if( !node.empty() )
           {
             query->addAttribute( "node", node );
+            new Tag( query, "feature", "var", XMLNS_DISCO_INFO );
+
             DiscoNodeHandlerMap::const_iterator it = m_nodeHandlers.find( node );
             if( it != m_nodeHandlers.end() )
             {
@@ -116,7 +118,7 @@ namespace gloox
             for( ; it != m_features.end(); ++it )
             {
               Tag *f = new Tag( query, "feature" );
-              f->addAttribute( "var", (*it).c_str() );
+              f->addAttribute( "var", (*it) );
             }
           }
 
@@ -149,7 +151,7 @@ namespace gloox
                 for( ; it != items.end(); ++it )
                 {
                   Tag *i = new Tag( query, "item" );
-                  i->addAttribute( "jid",  (*it).jid );
+                  i->addAttribute( "jid",  (*it).jid.empty() ? m_parent->jid().full() : (*it).jid );
                   i->addAttribute( "node", (*it).node );
                   i->addAttribute( "name", (*it).name );
                 }
@@ -169,7 +171,7 @@ namespace gloox
                 for( ; it != items.end(); ++it )
                 {
                   Tag *i = new Tag( query, "item" );
-                  i->addAttribute( "jid",  (*it).jid );
+                  i->addAttribute( "jid",  (*it).jid.empty() ? m_parent->jid().full() : (*it).jid );
                   i->addAttribute( "node", (*it).node );
                   i->addAttribute( "name", (*it).name );
                 }
@@ -313,7 +315,7 @@ namespace gloox
 
   void Disco::registerNodeHandler( DiscoNodeHandler *nh, const std::string& node )
   {
-    m_nodeHandlers[node].push_back(nh);
+    m_nodeHandlers[node].push_back( nh );
   }
 
   void Disco::removeNodeHandler( DiscoNodeHandler *nh, const std::string& node )
