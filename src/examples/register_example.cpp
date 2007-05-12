@@ -17,9 +17,24 @@ class RegTest : public RegistrationHandler, ConnectionListener, LogHandler
 
     void start()
     {
+// README
+// to create an account:
+// - create the Client instance by passing it the server only, e.g. j = new Client( "example.net" );
+// - in onConnect() (or some similar place) call Registration::fetchRegistrationFields()
+// - in RegistrationHandler::handleRegistrationFields() set up an RegistrationFields struct
+//   with the desired username/password and call Registration::createAccount()
 
-      JID jid( "hurkhurk@example.org/gloox" );
-      j = new Client( jid, "hurkhurks" );
+// to change an account's password:
+// - connect to the server as usual
+// - in onConnect() or at any later time call Registration::changePassword()
+
+// to delete an account:
+// - connect to teh server as usual
+// - in onConnect() or at any later time call Registration::removeAccount()
+
+// be sure to read the API documentation for class Registration!
+
+      j = new Client( "example.net" );
       j->disableRoster();
       j->registerConnectionListener( this );
 
@@ -61,8 +76,8 @@ class RegTest : public RegistrationHandler, ConnectionListener, LogHandler
     {
       printf( "fields: %d\ninstructions: %s\n", fields, instructions.c_str() );
       RegistrationFields vals;
-      vals.username = "hurkhurk";
-      vals.password = "hurkhurks";
+      vals.username = "testuser";
+      vals.password = "testpwd";
       m_reg->createAccount( fields, vals );
     }
 
