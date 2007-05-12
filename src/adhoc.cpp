@@ -31,6 +31,7 @@ namespace gloox
       m_parent->registerIqHandler( this, XMLNS_ADHOC_COMMANDS );
       m_parent->disco()->addFeature( XMLNS_ADHOC_COMMANDS );
       m_parent->disco()->registerNodeHandler( this, XMLNS_ADHOC_COMMANDS );
+      m_parent->disco()->registerNodeHandler( this, std::string() );
     }
   }
 
@@ -40,6 +41,7 @@ namespace gloox
     {
       m_parent->disco()->removeFeature( XMLNS_ADHOC_COMMANDS );
       m_parent->disco()->removeNodeHandler( this, XMLNS_ADHOC_COMMANDS );
+      m_parent->disco()->removeNodeHandler( this, std::string() );
       m_parent->removeIqHandler( XMLNS_ADHOC_COMMANDS );
     }
   }
@@ -58,7 +60,7 @@ namespace gloox
     {
       DiscoNodeItem item;
       item.node = XMLNS_ADHOC_COMMANDS;
-      item.jid = "";
+      item.jid = m_parent->jid().full();
       item.name = "Ad-Hoc Commands";
       l.push_back( item );
     }
