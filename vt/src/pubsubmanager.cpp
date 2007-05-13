@@ -292,7 +292,7 @@ namespace gloox
      */
     bool Manager::handleIqID( Stanza *stanza, int context )
     {
-      const std::string& service = stanza->findAttribute( "from" );
+      const JID& service = stanza->findAttribute( "from" );
 
       switch( stanza->subtype() )
       {

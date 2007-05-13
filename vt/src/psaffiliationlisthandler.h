@@ -36,16 +36,16 @@ namespace gloox
       public:
         /**
          * Receives the Affiliation map for a specific service.
-         * @param jid The queried service.
+         * @param service The queried service.
          * @param subMap The map of each node's affiliation subscription.
          */
-        virtual void handleAffiliationListResult( const JID& jid, const AffiliationMap& subMap ) = 0;
+        virtual void handleAffiliationListResult( const JID& service, const AffiliationMap& subMap ) = 0;
 
         /**
          * Receives the affiliation listing error from a service (ie unsupported).
-         * @param jid The queried service.
+         * @param service The queried service.
          */
-        virtual void handleAffiliationListError( const std::string& jid ) = 0;
+        virtual void handleAffiliationListError( const JID& service ) = 0;
 
         /**
          * Virtual destructor.

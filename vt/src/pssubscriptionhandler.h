@@ -43,7 +43,7 @@ namespace gloox
          * @param subType Type of the subscription.
          * @param se Subscription error.
          */
-        virtual void handleSubscriptionResult( const std::string& service,
+        virtual void handleSubscriptionResult( const JID& service,
                                                const std::string& nodeID,
                                                const std::string& sid,
                                                const SubscriptionType subType,
@@ -57,7 +57,7 @@ namespace gloox
          * @param node Node asked for subscription.
          * @param se Unsubscription error.
          */
-        virtual void handleUnsubscriptionResult( const std::string& service,
+        virtual void handleUnsubscriptionResult( const JID& service,
                                                  const std::string& nodeID,
                                                  const UnsubscriptionError se ) = 0;
 
