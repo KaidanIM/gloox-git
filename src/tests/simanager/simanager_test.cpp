@@ -56,25 +56,25 @@ namespace gloox
       int m_test;
       bool m_ok;
   };
-  ClientBase::ClientBase() : m_disco( new Disco() ), m_test( 0 ), m_ok( false ) {printf(" new CB\n" );}
+  ClientBase::ClientBase() : m_disco( new Disco() ), m_test( 0 ), m_ok( false ) {}
   ClientBase::~ClientBase() { delete m_disco; }
   const std::string ClientBase::getID() { return "id"; }
-  Disco* ClientBase::disco() { printf( "disco\n" );return m_disco; }
+  Disco* ClientBase::disco() { return m_disco; }
   void ClientBase::send( Tag *tag )
   {
     switch( m_test )
     {
       case 1:
       {
-        printf( "tag:%s\n", tag->xml().c_str() );
         Tag* si = tag->findChild( "si", "xmlns", XMLNS_SI );
-        if( tag->findAttribute( "to" ) == to.full() && si && si->findChild( "file" ) == t1
-            && si->findChild( "feature" ) == t2 && si->findAttribute( "mime-type" ) == "binary/octet-stream"
+        if( tag->findAttribute( "to" ) == to.full() && si && *(si->findChild( "file" )) == *t1
+            && *(si->findChild( "feature" )) == *t2 && si->findAttribute( "mime-type" ) == "binary/octet-stream"
             && si->findAttribute( "profile" ) == g_profile )
           m_ok = true;
         break;
       }
     }
+    delete tag;
   }
   void ClientBase::trackID( IqHandler* /*ih*/, const std::string& /*id*/, int /*context*/ ) {}
   void ClientBase::registerIqHandler( IqHandler* /*ih*/, const std::string& /*xmlns*/ ) {}
@@ -114,7 +114,7 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   name = "request si";
   cb->setTest( 1 );
-  sim->requestSI( cb, to, g_profile, t1, t2 );
+  sim->requestSI( cb, to, g_profile, t1->clone(), t2->clone() );
   if( !cb->ok() )
   {
     ++fail;
@@ -131,6 +131,8 @@ int main( int /*argc*/, char** /*argv*/ )
 
   delete t1;
   delete t2;
+  delete sim;
+  delete cb;
 
   if( fail == 0 )
   {
