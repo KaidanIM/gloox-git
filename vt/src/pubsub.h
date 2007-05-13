@@ -26,6 +26,17 @@ namespace gloox
    */
   namespace PubSub
   {
+
+    /**
+     * Describes the different node types.
+     */
+    enum NodeType {
+      NodeInvalid,     /**< Invalid node type */
+      NodeLeaf,        /**< A node that contains published items only. It is NOT a container for other nodes. */
+      NodeCollection   /**< A node that contains nodes and/or other collections but no published items.
+                        *   Collections make it possible to represent hierarchial node structures. */
+    };
+
     /**
      * Describes the different affiliation types.
      */
@@ -56,7 +67,7 @@ namespace gloox
     };
 
     /**
-     * Describes the different possible errors when subscribing to a node.
+     * Describes the possible errors when subscribing to a node.
      */
     enum SubscriptionError
     {
@@ -79,7 +90,7 @@ namespace gloox
     };
 
     /**
-     * Describes the different possible errors when unsubscribing from a node.
+     * Describes the possible errors when unsubscribing from a node.
      */
     enum UnsubscriptionError
     {
@@ -94,7 +105,7 @@ namespace gloox
     };
 
     /**
-     * Describes the different access types.
+     * Describes the access types.
      */
     enum AccessType
     {
@@ -118,7 +129,7 @@ namespace gloox
     };
 
     /**
-     * Describes the different possible errors related to subscription options.
+     * Describes the possible errors related to subscription options.
      */
     enum OptionRequestError
     {
@@ -134,23 +145,24 @@ namespace gloox
     };
 
     /**
-     * Describes the different possible errors related to item retrieval.
+     * Describes the possible errors related to item retrieval.
      */
     enum ItemPublicationError
     {
       ItemPublicationErrorNone,     /**< No error */
-      ItemPublicationUnprivileged,  /**< The requesting entity does not have sufficient privileges to publish. */
+      ItemPublicationUnprivileged,  /**< The requesting entity does not have sufficient
+                                     *   privileges to publish. */
       ItemPublicationUnsupported,   /**< The node does not support item publication. */
       ItemPublicationNodeNotFound,  /**< The node does not exist. */
       ItemPublicationPayloadSize,   /**< The payload size exceeds a service-defined limit. */
-      ItemPublicationPayload,       /**< The item contains more than one payload element or the namespace
-                                     *   of the root payload element does not match the configured namespace
-                                     *   for the node. */
+      ItemPublicationPayload,       /**< The item contains more than one payload element or the
+                                     *   namespace of the root payload element does not match
+                                     *   the configured namespace for the node. */
       ItemPublicationConfiguration  /**< The request does not match the node configuration. */
     };
 
     /**
-     * Describes the different possible errors related to item deletation.
+     * Describes the possible errors related to item deletation.
      */
     enum ItemDeletationError
     {
@@ -166,7 +178,7 @@ namespace gloox
     };
 
     /**
-     * Describes the different possible errors related to item retrieval.
+     * Describes the possible errors related to item retrieval.
      */
     enum ItemRetrivalError
     {
@@ -189,6 +201,100 @@ namespace gloox
       ItemRequestBlocked,         /**< The requesting entity is blocked from retrieving items from the node
                                    *   (e.g., because having an affiliation of outcast). */
       ItemRetrievalItemNotFound   /**< The node does not exist. */
+    };
+
+    /**
+     * Describes the possible errors when purging a node.
+     * @note The last 3 errors are specific to collection nodes.
+     */
+    enum NodeCreationError
+    {
+      NodeCreationErrorNone,      /**< No error. */
+      NodeCreationUnsupported,    /**< The service does not support node creation. */
+      NodeCreationUnregistered,   /**< Only entities that are registered with the service are
+                                   *   allowed to create nodes but the requesting entity is
+                                   *   not registered. */
+      NodeCreationUnpriviledged,  /**< The requesting entity does not have sufficient privileges
+                                   *   to create nodes. */
+      NodeCreationExistingNodeID, /**< The requested NodeID already exists. */
+      NodeCreationMissingNodeID,  /**< The request did not include a NodeID and "instant nodes"
+                                   *   are not supported. */
+      NodeCreationColUnsupported,         /**< The service does not support collection nodes. */
+      NodeCreationColCreationUnsupported, /**< The service does not support creation of
+                                           *   collection nodes. */
+      NodeCreationColUnpriviledged        /**< The requesting entity does not have sufficient
+                                           *   privileges to create collection nodes. */
+    };
+
+    /**
+     * Describes the possible errors when purging a node.
+     */
+    enum NodeRemovalError
+    {
+      NodeRemovalErrorNone,     /**< No error. */
+      NodeRemovalUnpriviledged, /**< The requesting entity does not have sufficient privileges
+                                 *   to delete the node. */
+      NodeRemovalRoot,          /**< The node is the root collection node, which cannot be
+                                 *   deleted. */
+      NodeRemovalItemNotFound   /**< The specified node does not exist. */
+    };
+
+    /**
+     * Describes the possible errors when purging a node.
+     */
+    enum NodeConfigurationError
+    {
+    };
+
+    /**
+     * Describes the possible errors when purging a node.
+     */
+    enum NodeConfigurationRequestError
+    {
+    };
+
+    /**
+     * Describes the possible errors when associating a node with a Collection node.
+     */
+    enum NodeAssociationError
+    {
+    };
+
+    /**
+     * Describes the possible errors when disassociating a node with a Collection node.
+     */
+    enum NodeDisassociationError
+    {
+    };
+
+
+
+    enum SubscriptionModificationError
+    {
+      SubscriptionModificationErrorNone,   /**< No error. */
+      SubscriptionModificationUnsupported,
+      SubscriptionModification,
+      SubscriptionModificationItemNotFound
+    };
+
+    enum AffiliationModificationError
+    {
+      AffiliationModificationErrorNone,     /**< No error. */
+      AffiliationModificationUnsupported,   /**< The service does not support modification of affiliations. */
+      AffiliationModificationUnpriviledged, /**< The requesting entity does not have sufficient privileges
+                                             *   to modify affiliations. */
+      AffiliationModificationItemNotFound   /**< The specified node does not exist. */
+    };
+
+    /**
+     * Describes the different possible errors when purging a node.
+     */
+    enum ItemPurgeError
+    {
+      ItemPurgeUnsupported,   /**< The node or service does not support node purging. */
+      ItemPurgeUnpriviledged, /**< The requesting entity does not have sufficient privileges to purge the node. */
+      ItemPurgePersist,       /**< The node is not configured to persist items. */
+      ItemPurgeItemNotFound   /**< The specified node does not exist. */
     };
 
     /**

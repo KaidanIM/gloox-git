@@ -21,6 +21,7 @@ namespace gloox
 
     Item::Item( Tag * tag )
     {
+      
     }
 
   }

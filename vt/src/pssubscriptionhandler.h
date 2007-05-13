@@ -37,14 +37,14 @@ namespace gloox
          * SubscriptionError is set accordingly and the Subscription ID and
          * SubscriptionType becomes irrelevant.
          *
-         * @param service PubSub service asked for subscription..
+         * @param service PubSub service asked for subscription.
          * @param node Node asked for subscription.
          * @param sid Subscription ID.
          * @param subType Type of the subscription.
          * @param se Subscription error.
          */
         virtual void handleSubscriptionResult( const std::string& service,
-                                               const std::string& node,
+                                               const std::string& nodeID,
                                                const std::string& sid,
                                                const SubscriptionType subType,
                                                const SubscriptionError se ) = 0;
@@ -58,7 +58,7 @@ namespace gloox
          * @param se Unsubscription error.
          */
         virtual void handleUnsubscriptionResult( const std::string& service,
-                                                 const JID& service,
+                                                 const std::string& nodeID,
                                                  const UnsubscriptionError se ) = 0;
 
         /**

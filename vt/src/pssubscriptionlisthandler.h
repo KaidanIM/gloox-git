@@ -39,13 +39,13 @@ namespace gloox
          * @param jid The queried service.
          * @param subMap The map of each node's subscription.
          */
-        virtual void handleSubscriptionListResult( const JID& jid, const SubscriptionMap& subMap ) = 0;
+        virtual void handleSubscriptionListResult( const std::string& service, const SubscriptionMap& subMap ) = 0;
 
         /**
          * Receives the subscription listing error from a service (ie unsupported).
          * @param jid The queried service.
          */
-        virtual void handleSubscriptionListError( const std::string& jid ) = 0;
+        virtual void handleSubscriptionListError( const std::string& service ) = 0;
 /**
          * Receives the affiliation 
          * @param jid The queried service.

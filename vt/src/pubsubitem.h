@@ -26,16 +26,17 @@ namespace gloox
     /**
      *
      */
-    struct Item
+    class Item
     {
       public:
+
         /**
-         *
+         * Constructs an Item from a tag.
          */
         Item( Tag * tag );
 
         /**
-         *
+         * Construct an Item
          */
         Item( const std::string& _id,
               const std::string& _title,
@@ -43,10 +44,12 @@ namespace gloox
               const std::string& _link = "" )
           : id( _id ), title( _title ), summary( _sum ), link( _link ) {}
 
-        std::string id;
-        std::string title;
-        std::string summary;
-        std::string link;
+      private:
+
+        std::string id;      /**< Unique item ID. */
+        std::string title;   /**< Item title. */
+        std::string summary; /**< Item summary. */
+        std::string link;    /**< Item link. */
         //time_t publishDate;
         //time_t updateDate;
     };

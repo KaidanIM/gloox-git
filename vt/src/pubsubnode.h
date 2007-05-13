@@ -22,65 +22,106 @@ namespace gloox
   {
 
     /**
-     *
+     * Describes a PubSub node.
      */
-    struct Node
+    class Node
     {
-      /**
-       * Describes the different node types.
-       */
-      enum NodeType {
-        NodeInvalid,     /**< Invalid node type */
-        NodeLeaf,        /**< A node that contains published items only. It is NOT a container for other nodes. */
-        NodeCollection   /**< A node that contains nodes and/or other collections but no published items.
-                          *   Collections make it possible to represent hierarchial node structures. */
-      };
+      public:
 
-      /**
-       * Constructs a Node from a type, a JID (XEP-0060 Sect 4.6.1) and a name.
-       */
-      Node( NodeType _type, const std::string& _jid, const std::string& _name )
-        : type( _type ), jid( _jid ), name( _name) {}
+        /**
+         * Constructs a Node from a type, a JID (XEP-0060 Sect 4.6.1) and a name.
+         * @param _type
+         * @param _jid
+         * @param _id
+         * @param _name
+         */
+        Node( NodeType _type, const std::string& _jid,
+                              const std::string& _id,
+                              const std::string& _name )
+          : type( _type ), service( _jid ),
+                id( _id), name( _name )
+        {}
 
-      /**
-       * Constructs a Node from a type, a JID+NodeID (XEP-0060 Sect 4.6.2) and a name.
-       */
-      Node( NodeType _type, const std::string& _jid,
-                            const std::string& _node,
-                            const std::string& _name )
-        : type( _type ), jid( _jid ), name( _name) { jid.setResource( _node ); }
+        /**
+         * Constructs a Node from a type, a JID (XEP-0060 Sect 4.6.1)
+         * and a name.
+         * @param
+         * @param
+         * @param
+         */
+        Node( NodeType _type, const JID& _jid,
+                              const std::string& _name )
+          : type( _type ), service( _jid.bare() ),
+                id( jid.resource() ), name( _name)
+        {}
 
-      NodeType type;
-      JID jid;
-      std::string name;
-      std::string sid;
-      SubscriptionType subscription;
-      /*
-      union {
-        ItemList items;
-        NodeList nodes;
-      };
-      */
+        /**
+         * Constructs a Node from a type, a JID+NodeID (XEP-0060 Sect 4.6.2)
+         * and a name.
+         * @param
+         * @param
+         * @param
+         */
+        Node( NodeType _type, const std::string& _jid,
+                              const std::string& _id,
+                              const std::string& _sid, 
+                              const std::string& _name )
+          : type( _type ), service( _jid ),
+                id( id ), sid( _sid ), name( _name)
+        {}
+
+        /**
+         * Constructs a Node from a type, a JID+NodeID (XEP-0060 Sect 4.6.2)
+         * and a name.
+         * @param 
+         * @param 
+         * @param 
+         */
+        Node( NodeType _type, const JID& _jid,
+                              const std::string& _sid,
+                              const std::string& _name )
+          : type( _type ), service( _jid.bare() ),
+                id( _jid.resource() ), sid( _sid ), name( _name)
+        {}
+
+      private:
+
+        NodeType type;
+        std::string service;
+        std::string id;
+        std::string name;
+        std::string sid;
+        SubscriptionType subscription;
+        /*
+        union {
+          ItemList items;
+          NodeList nodes;
+        };
+        */
     };
 
     /**
      *
      */
-    struct LeafNode : public PSNode
+    class LeafNode : public Node
     {
-      LeafNode( const std::string& _service, const std::string& _name )
-        : Node( NodeLeaf, _service, _name ) {}
-      ItemList m_itemList;
+      public:
+        LeafNode( const std::string& _service, const std::string& _name )
+          : Node( NodeLeaf, _service, _name ) {}
+      private:
+        ItemList m_itemList;
     };
 
     /**
      *
      */
-    struct CollectionNode : public PSNode
+    class CollectionNode : public Node
     {
-      CollectionNode( const std::string& _service, const std::string& _name )
-        : Node( NodeCollection, _service, _name ) {}
-      NodeList m_nodeList;
+      public:
+        CollectionNode( const std::string& _service, const std::string& _name )
+          : Node( NodeCollection, _service, _name ) {}
+      private:
+        NodeList m_nodeList;
     };
 
   }
