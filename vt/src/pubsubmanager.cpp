@@ -52,7 +52,7 @@ namespace gloox
       NodeDisassociation
     };
 
-    void Manager::requestSubscriptionList( const std::string& jid, SubscriptionListHandler * slh )
+    void Manager::requestSubscriptionList( const JID& service, SubscriptionListHandler * slh )
     {
       if( !m_parent )
         return;
@@ -60,7 +60,7 @@ namespace gloox
       const std::string& id = m_parent->getID();
       Tag *iq = new Tag( "iq", "type", "get" );
       iq->addAttribute( "id", id );
-      iq->addAttribute( "to", jid );
+      iq->addAttribute( "to", service.full() );
       Tag *ps = new Tag( iq, "pubsub", "xmlns", XMLNS_PUBSUB );
       new Tag( ps, "subscriptions" );
 
@@ -69,7 +69,7 @@ namespace gloox
       m_parent->send( iq );
     }
 
-    void Manager::requestAffiliationList( const std::string& jid, AffiliationListHandler * alh )
+    void Manager::requestAffiliationList( const JID& service, AffiliationListHandler * alh )
     {
       if( !m_parent )
         return;
@@ -77,7 +77,7 @@ namespace gloox
       const std::string& id = m_parent->getID();
       Tag *iq = new Tag( "iq", "type", "get" );
       iq->addAttribute( "id", id );
-      iq->addAttribute( "to", jid );
+      iq->addAttribute( "to", service.full() );
       Tag *ps = new Tag( iq, "pubsub", "xmlns", XMLNS_PUBSUB );
       new Tag( ps, "affiliations" );
 
@@ -86,7 +86,7 @@ namespace gloox
       m_parent->send( iq );
     }
 
-    void Manager::subscribe( const std::string& jid, const std::string& node )
+    void Manager::subscribe( const JID& service, const std::string& nodeid )
     {
       if( !m_parent )
         return;
@@ -94,16 +94,16 @@ namespace gloox
       const std::string& id = m_parent->getID();
       Tag *iq = new Tag( "iq", "type", "set" );
       iq->addAttribute( "id", id );
-      iq->addAttribute( "to", jid );
+      iq->addAttribute( "to", service.full() );
       Tag *ps = new Tag( iq, "pubsub", "xmlns", XMLNS_PUBSUB );
-      Tag *sub = new Tag( ps, "subscribe", "node", node );
+      Tag *sub = new Tag( ps, "subscribe", "node", nodeid );
       sub->addAttribute( "jid", m_parent->jid().bare() );
 
       m_parent->trackID( this, id, Subscription );
       m_parent->send( iq );
     }
 
-    void Manager::unsubscribe( const std::string& jid, const std::string& node )
+    void Manager::unsubscribe( const JID& service, const std::string& nodeid )
     {
       if( !m_parent )
         return;
@@ -111,16 +111,16 @@ namespace gloox
       const std::string& id = m_parent->getID();
       Tag *iq = new Tag( "iq", "type", "set" );
       iq->addAttribute( "id", id );
-      iq->addAttribute( "to", jid );
+      iq->addAttribute( "to", service.full() );
       Tag *ps = new Tag( iq, "pubsub", "xmlns", XMLNS_PUBSUB );
-      Tag *sub = new Tag( ps, "unsubscribe", "node", node );
+      Tag *sub = new Tag( ps, "unsubscribe", "node", nodeid );
       sub->addAttribute( "jid", m_parent->jid().bare() );
 
       m_parent->trackID( this, id, Unsubscription );
       m_parent->send( iq );
     }
 
-    void Manager::publishItem( const std::string& /*service*/, const std::string& /*nodeid*/, const Item& /*item*/ )
+    void Manager::publishItem( const JID& /*service*/, const std::string& /*nodeid*/, const Item& /*item*/ )
     {
       /*
       if( !m_parent )
@@ -128,10 +128,10 @@ namespace gloox
 
       const std::string& id = m_parent->getID();
       Tag * iq = new Tag( "iq", "type", "set" );
-      iq->addAttribute( "to", service );
+      iq->addAttribute( "to", service.full() );
       iq->addAttribute( "id", id );
       Tag * pubsub = new Tag( iq, "pubsub", "xmlns", XMLNS_PUBSUB );
-      Tag * publish = new Tag( pubsub, "publish", "node", node );
+      Tag * publish = new Tag( pubsub, "publish", "node", nodeid );
       
       Tag * item = new Tag( retract, "item" );
       item->addAttribute( "id", item.id );
@@ -142,14 +142,14 @@ namespace gloox
       */
     }
 
-    void Manager::deleteItem( const std::string& service, const std::string& nodeid, const std::string& itemid )
+    void Manager::deleteItem( const JID& service, const std::string& nodeid, const std::string& itemid )
     {
       if( !m_parent )
         return;
 
       const std::string& id = m_parent->getID();
       Tag * iq = new Tag( "iq", "type", "set" );
-      iq->addAttribute( "to", service );
+      iq->addAttribute( "to", service.full() );
       iq->addAttribute( "id", id );
       Tag * pubsub = new Tag( iq, "pubsub" );
       pubsub->addAttribute( "xmlns", XMLNS_PUBSUB );
@@ -164,14 +164,14 @@ namespace gloox
     }
 
     void Manager::createNode( NodeType type,
-                              const std::string& service,
+                              const JID& service,
                               const std::string& nodeid,
                               const std::string& name,
-                              const std::string& parent )
+                              const std::string& parentid )
     {
       const std::string& id = m_parent->getID();
       Tag * iq = new Tag( "iq", "type", "set" );
-      iq->addAttribute( "to", service );
+      iq->addAttribute( "to", service.full() );
       iq->addAttribute( "id", id );
       Tag * pubsub = new Tag( iq, "pubsub", "xmlns", XMLNS_PUBSUB );
       Tag * create = new Tag( pubsub, "create", "node", nodeid );
@@ -193,12 +193,11 @@ namespace gloox
       m_parent->send( iq );
     }
 
-    void Manager::deleteNode( const std::string& service,
-                              const std::string& nodeid )
+    void Manager::deleteNode( const JID& service, const std::string& nodeid )
     {
       const std::string& id = m_parent->getID();
       Tag * iq = new Tag( "iq", "type", "set" );
-      iq->addAttribute( "to", service );
+      iq->addAttribute( "to", service.full() );
       iq->addAttribute( "id", id );
       Tag * pubsub = new Tag( iq, "pubsub", "xmlns", XMLNS_PUBSUB_OWNER );
       new Tag( pubsub, "delete", "node", nodeid );
@@ -208,7 +207,7 @@ namespace gloox
       m_parent->send( iq );
     }
 
-    void Manager::requestNodeConfig( const std::string& jid, const std::string& node )
+    void Manager::requestNodeConfig( const JID& service, const std::string& nodeid )
     {
       if( !m_parent )
         return;
@@ -216,16 +215,18 @@ namespace gloox
       const std::string& id = m_parent->getID();
       Tag *iq = new Tag( "iq", "type", "get" );
       iq->addAttribute( "id", id );
-      iq->addAttribute( "to", jid );
+      iq->addAttribute( "to", service.full() );
       Tag *ps = new Tag( iq, "pubsub", "xmlns", XMLNS_PUBSUB );
-      Tag *sub = new Tag( ps, "options", "node", node );
+      Tag *sub = new Tag( ps, "options", "node", nodeid );
       sub->addAttribute( "jid", m_parent->jid().bare() );
 
       m_parent->trackID( this, id, RequestOptionList );
       m_parent->send( iq );
     }
 
-    void Manager::requestItems( const JID& node, ItemHandler * handler )
+    void Manager::requestItems( const JID& service,
+                                const std::string& nodeid,
+                                ItemHandler * handler )
     {
       if( !m_parent )
         return;
@@ -233,19 +234,19 @@ namespace gloox
       const std::string& id = m_parent->getID();
       Tag *iq = new Tag( "iq", "type", "get" );
       iq->addAttribute( "id", id );
-      iq->addAttribute( "to", node.bare() );
+      iq->addAttribute( "to", service.full() );
       Tag *ps = new Tag( iq, "pubsub", "xmlns", XMLNS_PUBSUB );
-      new Tag( ps, "items", "node", node.resource() );
+      new Tag( ps, "items", "node", nodeid );
 
       m_parent->trackID( this, id, RequestItemList );
       m_parent->send( iq );
     }
 
-    void Manager::purgeNodeItems( const std::string& service, const std::string& nodeid )
+    void Manager::purgeNodeItems( const JID& service, const std::string& nodeid )
     {
       const std::string& id = m_parent->getID();
       Tag * iq = new Tag( "iq", "type", "set" );
-      iq->addAttribute( "to", service );
+      iq->addAttribute( "to", service.full() );
       iq->addAttribute( "id", id );
       Tag * pubsub = new Tag( iq, "pubsub", "xmlns", XMLNS_PUBSUB_OWNER );
       new Tag( pubsub, "purge", "node", nodeid );
@@ -292,7 +293,7 @@ namespace gloox
      */
     bool Manager::handleIqID( Stanza *stanza, int context )
     {
-      const JID& service = stanza->findAttribute( "from" );
+      const JID& service = stanza->from();
 
       switch( stanza->subtype() )
       {

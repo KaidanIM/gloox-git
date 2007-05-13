@@ -80,93 +80,71 @@ namespace gloox
 
         /**
          * Subscribe to a node.
-         * @param jid Service hosting the node.
-         * @param node ID of the node to subscribe to.
+         * @param service Service hosting the node.
+         * @param nodeid ID of the node to subscribe to.
          */
-        void subscribe( const std::string& jid, const std::string& node );
-
-        /**
-         * Subscribe to a node.
-         * @param jid Node location (service/node).
-         */
-        void subscribe( const JID& jid )
-          { subscribe( jid.bare(), jid.resource() ); }
+        void subscribe( const JID& service, const std::string& nodeid );
 
         /**
          * Unsubscribe from a node.
-         * @param jid Service hosting the node.
+         * @param service Service hosting the node.
          * @param node ID of the node to unsubscribe from.
          */
-        void unsubscribe( const std::string& jid, const std::string& node );
-
-        /**
-         * Unsubscribe from a node.
-         * @param jid Node location (service/node).
-         */
-        void unsubscribe( const JID& jid )
-          { unsubscribe( jid.bare(), jid.resource() ); }
+        void unsubscribe( const JID& service, const std::string& nodeid );
 
         /**
          * Requests the subscription list from a service.
          * @param jid Service to query.
          */
-        void requestSubscriptionList( const std::string& jid, SubscriptionListHandler * slh  );
+        void requestSubscriptionList( const JID& jid, SubscriptionListHandler * slh  );
 
         /**
          * Requests the affiliation list from a service.
-         * @param jid Service to query.
+         * @param service Service to query.
          */
-        void requestAffiliationList( const std::string& jid, AffiliationListHandler * alh );
+        void requestAffiliationList( const JID& jid, AffiliationListHandler * alh );
 
         /**
          * Publish an item to a node.
-         * @param jid Service hosting the node.
-         * @param node Name of the node to delete the item from.
+         * @param service Service hosting the node.
+         * @param nodeid ID of the node to delete the item from.
          * @param item Item to publish.
          */
-        void publishItem( const std::string& jid, const std::string& node, const Item& item );
+        void publishItem( const JID& jid, const std::string& nodeid, const Item& item );
 
         /**
          * Delete an item from a node.
-         * @param jid Service hosting the node.
-         * @param node Name of the node to delete the item from.
-         * @param itemID ID of the item in the node.
+         * @param service Service hosting the node.
+         * @param node ID of the node to delete the item from.
+         * @param itemid ID of the item in the node.
          */
-        void deleteItem( const std::string& jid, const std::string& node, const std::string& itemID );
+        void deleteItem( const JID& service,
+                         const std::string& nodeid,
+                         const std::string& itemid );
 
         /**
          * Ask for the item list of a specific node.
-         * @param node Node location (service/node).
+         * @param service Service hosting the node.
+         * @param node ID of the node.
          * @param handler ItemHandler to send the result to.
          */
-        void requestItems( const JID& node, ItemHandler * handler );
+        void requestItems( const JID& service,
+                           const std::string& nodeid,
+                           ItemHandler * handler );
 
         /**
          * Creates a new node.
          * @param type NodeType of the new node.
          * @param service Service where to create the new node.
-         * @param nodeid Node ID of the new node.
+         * @param nodeid ID of the new node.
          * @param name Name of the new node.
-         * @param parent Node containing this node. If empty, the node will be located at the
+         * @param parent ID of the parent node. If empty, the node will be located at the
          *               root of the service.
          */
-        void createNode( NodeType type, const std::string& service,
+        void createNode( NodeType type, const JID& service,
                                         const std::string& nodeid,
                                         const std::string& name,
-                                        const std::string& parent = "" );
-
-        /**
-         * Creates a new node.
-         * @param type NodeType of the new node.
-         * @param node Location (service/nodeid) of the new node.
-         * @param name Name of the new node.
-         * @param parent Node containing this node. If empty, the node will be located at the
-         *               root of the service.
-         */
-        void createNode( NodeType type, const JID& node,
-                                        const std::string& name,
-                                        const std::string& parent = ""  )
-          { createNode( type, node.bare(), node.resource(), name, parent ); }
+                                        const std::string& parentid = ""  );
 
         /**
          * Creates a new leaf node.
@@ -176,11 +154,11 @@ namespace gloox
          * @param parent Node containing this node. If empty, the node will be located at the
          *               root of the service.
          */
-        void createLeafNode( const std::string& service,
+        void createLeafNode( const JID& service,
                              const std::string& nodeid,
                              const std::string& name,
-                             const std::string& parent = "" )
-          { createNode( NodeLeaf, service, nodeid, name, parent ); }
+                             const std::string& parentid = "" )
+          { createNode( NodeLeaf, service, nodeid, name, parentid ); }
 
         /**
          * Creates a new collection node.
@@ -190,18 +168,18 @@ namespace gloox
          * @param parent Node containing this node. If empty, the node will be located at the
          *               root of the service.
          */
-        void createCollectionNode( const std::string& service,
+        void createCollectionNode( const JID& service,
                                    const std::string& nodeid,
                                    const std::string& name,
-                                   const std::string& parent = "" )
-          { createNode( NodeCollection, service, nodeid, name, parent ); }
+                                   const std::string& parentid = "" )
+          { createNode( NodeCollection, service, nodeid, name, parentid ); }
 
         /**
          * Deletes a node.
          * @param service Service where to create the new node.
          * @param nodeid Node ID of the new node.
          */
-        void deleteNode( const std::string& service,
+        void deleteNode( const JID& service,
                          const std::string& nodeid );
 
 /*
@@ -236,10 +214,7 @@ namespace gloox
 
         void handleNodeConfigRequestError( const std::string& service, const std::string& nodeid ) = 0;
 */
-        void purgeNodeItems( const std::string& service, const std::string& nodeid );
-
-        void purgeNodeItems( const JID& node )
-          { purgeNodeItems( node.bare(), node.resource() ); }
+        void purgeNodeItems( const JID& service, const std::string& nodeid );
 
 /*
         void modifySubscriptions( const std::string& service,
@@ -271,19 +246,19 @@ namespace gloox
 
         /**
          * Retrieve the configuration of a node.
+         * @param service Service hosting the node.
+         * @param nodeid ID of the node.
          */
-        void requestNodeConfig( const std::string& jid, const std::string& node );
+        void requestNodeConfig( const JID& service, const std::string& nodeid );
 
         /**
-         * 
+         * Retrieve the configuration of a node.
+         * @param service Service hosting the node.
+         * @param nodeid ID of the node.
+         * @param dataform Configuration of the node.
+         * @param e Error of the configuration request.
          */
-        void requestNodeConfig( const JID& jid )
-          { requestNodeConfig( jid.bare(), jid.resource() ); }
-
-        /**
-         * 
-         */
-        virtual void handleNodeConfig( const std::string& service,
+        virtual void handleNodeConfig( const JID& service,
                                        const std::string& nodeid,
                                        const DataForm& dataForm,
                                        const OptionRequestError e ) = 0;
