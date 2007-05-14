@@ -6,6 +6,7 @@
 #include "../../gpgencrypted.h"
 #include "../../stanzaextension.h"
 #include "../../stanzaextensionfactory.h"
+#include "../../tag.h"
 using namespace gloox;
 
 #include <stdio.h>

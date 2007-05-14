@@ -15,9 +15,6 @@
 #define STANZAEXTENSION_H__
 
 #include "macros.h"
-#include "tag.h"
-
-#include <string>
 
 namespace gloox
 {
