@@ -15,9 +15,6 @@
 #define STANZAEXTENSION_H__
 
 #include "macros.h"
-#include "tag.h"
-
-#include <string>
 
 namespace gloox
 {
@@ -38,7 +35,8 @@ namespace gloox
     ExtGPGEncrypted        =  16,   /**< An extension containing a GPG/PGP encrypted message (XEP-0027). */
     ExtXDelay              =  32,   /**< An extension containing notice of delayed delivery (XEP-0091). */
     ExtDelay               =  64,   /**< An extension containing notice of delayed delivery (XEP-0203). */
-    ExtAMP                 = 128    /**< An extension containing advanced message processing rules (XEP-0079). */
+    ExtAMP                 = 128,   /**< An extension containing advanced message processing rules (XEP-0079). */
+    ExtError               = 256    /**< An extension containing an error. */
   };
 
   /**

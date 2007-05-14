@@ -297,7 +297,6 @@ namespace gloox
 
       switch( stanza->subtype() )
       {
-        
         case StanzaIqResult:
         {
           switch( context )

@@ -19,6 +19,7 @@
 #include <time.h>
 
 #include <string>
+#include <list>
 
 namespace gloox
 {
