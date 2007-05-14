@@ -4,12 +4,10 @@
 
 /*
  - do we need tag() / how to save the XMLNS's (ie copy string or enumerated type) ?
- - std::pair on all platforms ?
+ - std::pair / templates on all platforms ?
  - index based lookup offers short code as well as marking a clear
    relashionship between string value and error code. It also ease
    adding/modifying/removing values and is much less error prone.
- - eg shall i check that there is a feature attribute to a unsupported 
-   sub error tag ?
 */
 
 namespace gloox
@@ -144,6 +142,7 @@ namespace gloox
         i = lookup( (*it)->findAttribute( "feature" ), featureValues, nbFeatures );
         if( i == nbFeatures )
           return;
+        m_feature = featureValues[i].second;
       }
     }
   }
