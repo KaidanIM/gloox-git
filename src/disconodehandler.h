@@ -29,6 +29,11 @@ namespace gloox
    */
   struct DiscoNodeItem
   {
+    DiscoNodeItem() {}
+    DiscoNodeItem( const std::string& _node,
+                   const std::string& _jid,
+                   const std::string& _name )
+      : node( _node ), jid( _jid ), name( _name ) {}
     std::string node;               /**< Content of the item's node attribute. */
     std::string jid;                /**< Content of the item's jid attribute. */
     std::string name;               /**< Content of the item's name attribute. */
