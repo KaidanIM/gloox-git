@@ -200,7 +200,7 @@
  *
  * @code
  * Client* client = new Client( ... );
- * ConnectionTCP* conn = new ConnectionTCP( client, client->logInstance(), server, port );
+ * ConnectionTCPClient* conn = new ConnectionTCPClient( client, client->logInstance(), server, port );
  * client->setConnectionImpl( conn );
  *
  * client->connect( false );
@@ -214,7 +214,7 @@
  * @code
  * Client* client = new Client( ... );
  * client->connect( false );
- * int sock = dynamic_cast<ConnectionTCP*>( client->connectionImpl() )->socket();
+ * int sock = dynamic_cast<ConnectionTCPClient*>( client->connectionImpl() )->socket();
  *
  * [...]
  * @endcode
