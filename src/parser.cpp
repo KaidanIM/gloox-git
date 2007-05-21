@@ -350,7 +350,7 @@ namespace gloox
   void Parser::addAttribute()
   {
 //     printf( "adding attribute: %s='%s', ", m_attrib.c_str(), m_value.c_str() );
-    m_attribs.push_back( Tag::Attribute( m_attrib, m_value ) );
+    m_attribs.push_back( Tag::Attribute( Tag::relax( m_attrib ), Tag::relax( m_value ) ) );
     m_attrib = "";
     m_value = "";
 //     printf( "added, " );
