@@ -530,6 +530,7 @@ namespace gloox
         party.nick = new JID( stanza->from() );
         party.jid = 0;
         party.actor = 0;
+        party.alternate = 0;
         const Tag::TagList& l = x->children();
         Tag::TagList::const_iterator it = l.begin();
         for( ; it != l.end(); ++it )
@@ -573,8 +574,7 @@ namespace gloox
               party.reason = (*it)->findChild( "reason" )->cdata();
             }
           }
-
-          if( (*it)->name() == "status" )
+          else if( (*it)->name() == "status" )
           {
             const std::string& code = (*it)->findAttribute( "code" );
             if( code == "100" )
@@ -622,6 +622,16 @@ namespace gloox
             else if( code == "321" )
               party.flags |= UserAffiliationChanged;
           }
+          else if( (*it)->name() == "destroy" )
+          {
+            if( (*it)->hasAttribute( "jid" ) )
+              party.alternate = new JID( (*it)->findAttribute( "jid" ) );
+
+            if( (*it)->hasChild( "reason" ) )
+              party.reason = (*it)->findChild( "reason" )->cdata();
+
+            party.flags |= UserRoomDestroyed;
+          }
         }
 
         party.status = stanza->status();
@@ -630,6 +640,7 @@ namespace gloox
         delete party.jid;
         delete party.nick;
         delete party.actor;
+        delete party.alternate;
       }
     }
   }

@@ -1119,7 +1119,8 @@ namespace gloox
     UserNickChanged        =   2,   /**< The user changed his/her nickname. */
     UserKicked             =   4,   /**< The user has been kicked. */
     UserBanned             =   8,   /**< The user has been banned. */
-    UserAffiliationChanged =  16    /**< The user's affiliation with the room changed. */
+    UserAffiliationChanged =  16,   /**< The user's affiliation with the room changed. */
+    UserRoomDestroyed      =  32    /**< The room has been destroyed. */
   };
 
   /**

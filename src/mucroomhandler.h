@@ -68,6 +68,9 @@ namespace gloox
                                      * user's new nickname. Empty if there is no nick change in progress. */
     std::string status;             /**< If the presence packet contained a status message, it is stored
                                      * here. */
+    JID* alternate;                 /**< If @c flags contains UserRoomDestroyed, and if the user who
+                                     * destroyed the room specified an alternate room, this member holds
+                                     * a pointer to the alternate room's JID, else it is 0. */
   };
 
   /**
