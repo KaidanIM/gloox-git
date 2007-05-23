@@ -27,7 +27,7 @@ namespace gloox
    * @author Jakob Schröter <js@camaya.net>
    * @since 0.9
    */
-  class TLSBase
+  class GLOOX_API TLSBase
   {
     public:
       /**

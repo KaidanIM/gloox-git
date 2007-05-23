@@ -158,13 +158,13 @@ namespace gloox
       if( r )
       {
         if( r->hasAttribute( "offset" ) )
-          offset = std::atol( r->findAttribute( "offset" ).c_str() );
+          offset = atol( r->findAttribute( "offset" ).c_str() );
         if( r->hasAttribute( "length" ) )
-          length = std::atol( r->findAttribute( "length" ).c_str() );
+          length = atol( r->findAttribute( "length" ).c_str() );
       }
       const std::string& mt = si->findAttribute( "mime-type" );
       m_handler->handleFTRequest( from, id, ptag->findAttribute( "name" ),
-                                  std::atol( ptag->findAttribute( "size" ).c_str() ),
+                                  atol( ptag->findAttribute( "size" ).c_str() ),
                                   ptag->findAttribute( "hash" ), ptag->findAttribute( "date" ),
                                   mt.empty() ? "binary/octet-stream" : mt, desc, FTTypeS5B, offset, length );
     }
