@@ -925,15 +925,11 @@ namespace gloox
     if( !session )
       return;
 
-    MessageSessionList::iterator it = m_messageSessions.begin();
-    for( ; it != m_messageSessions.end(); ++it )
+    MessageSessionList::iterator it = std::find( m_messageSessions.begin(), m_messageSessions.end(), session );
+    if( it != m_messageSessions.end() )
     {
-      if( (*it) == session )
-      {
-        delete (*it);
-        m_messageSessions.erase( it );
-        return;
-      }
+      delete (*it);
+      m_messageSessions.erase( it );
     }
   }
 
@@ -1040,7 +1036,6 @@ namespace gloox
     {
       (*it)->onDisconnect( e );
     }
-
     init();
   }
 
@@ -1190,32 +1185,38 @@ namespace gloox
       }
     }
 
-    bool haveSessionHandler = true;
-    MessageSession *session = new MessageSession( this, stanza->from(), true, stanza->subtype() );
+    MessageSessionHandler * msHandler = 0;
 
-    if( stanza->subtype() == StanzaMessageChat && m_messageSessionHandlerChat )
-      m_messageSessionHandlerChat->handleMessageSession( session );
-    else if( stanza->subtype() == StanzaMessageNormal && m_messageSessionHandlerNormal )
-      m_messageSessionHandlerNormal->handleMessageSession( session );
-    else if( stanza->subtype() == StanzaMessageGroupchat && m_messageSessionHandlerGroupchat )
-      m_messageSessionHandlerGroupchat->handleMessageSession( session );
-    else if( stanza->subtype() == StanzaMessageHeadline && m_messageSessionHandlerHeadline )
-      m_messageSessionHandlerHeadline->handleMessageSession( session );
-    else
-      haveSessionHandler = false;
-
-    if( haveSessionHandler )
+    switch( stanza->subtype() )
     {
-      session->handleMessage( stanza );
-      return;
+      case StanzaMessageChat:
+        msHandler = m_messageSessionHandlerChat;
+        break;
+      case StanzaMessageNormal:
+        msHandler = m_messageSessionHandlerNormal;
+        break;
+      case StanzaMessageGroupchat:
+        msHandler = m_messageSessionHandlerGroupchat;
+        break;
+      case StanzaMessageHeadline:
+        msHandler = m_messageSessionHandlerHeadline;
+        break;
+      default:
+        break;
     }
 
-    disposeMessageSession( session );
-
-    MessageHandlerList::const_iterator it = m_messageHandlers.begin();
-    for( ; it != m_messageHandlers.end(); ++it )
+    if( msHandler )
     {
-      (*it)->handleMessage( stanza );
+      MessageSession *session = new MessageSession( this, stanza->from(), true, stanza->subtype() );
+      msHandler->handleMessageSession( session );
+    }
+    else
+    {
+      MessageHandlerList::const_iterator it = m_messageHandlers.begin();
+      for( ; it != m_messageHandlers.end(); ++it )
+      {
+        (*it)->handleMessage( stanza );
+      }
     }
   }
 
