@@ -133,10 +133,10 @@ namespace gloox
   static const char escape_chars[] = { '&', '<', '>', '\'', '"', '<', '>',
   '\'', '"', '<', '>', '<', '>', '\'', '"', '<', '>', '<', '>', '\'', '"' };
 
-  static const std::string escape_seqs[] = { "&amp;", "&lt;", "&gt;", "&apos;",
-  "&quot;", "&#60;", "&#62;", "&#39;", "&#34;", "&#x3c;", "&#x3e;", "&#x3C;",
-  "&#x3E;", "&#x27;", "&#x22;", "&#X3c;", "&#X3e;", "&#X3C;", "&#X3E;", "&#X27;",
-  "&#X22;" };
+  static const std::string escape_seqs[] = { "amp;", "lt;", "gt;", "apos;",
+  "quot;", "#60;", "#62;", "#39;", "#34;", "#x3c;", "#x3e;", "#x3C;",
+  "#x3E;", "#x27;", "#x22;", "#X3c;", "#X3e;", "#X3C;", "#X3E;", "#X27;",
+  "#X22;" };
 
   static const unsigned nb_escape = sizeof(escape_chars)/sizeof(char);
   static const unsigned escape_size = 5;
@@ -149,8 +149,9 @@ namespace gloox
       {
         if( esc[i] == escape_chars[val] )
         {
-          esc.replace( i, 1, escape_seqs[val] );
-          i += escape_seqs[val].length()-1;
+          esc[i] = '&';
+          esc.insert( i+1, escape_seqs[val] );
+          i += escape_seqs[val].length();
           break;
         }
       }
@@ -176,11 +177,11 @@ namespace gloox
       for( val = 0; val < nb_escape; ++val )
       {
         if( ( i + escape_seqs[val].length() <= l )
-        && !strncmp( esc.data()+i+1, escape_seqs[val].data()+1,
-                                     escape_seqs[val].length()-1 ) )
+        && !strncmp( esc.data()+i+1, escape_seqs[val].data(),
+                                     escape_seqs[val].length() ) )
         {
           esc[i] = escape_chars[val];
-          for( p=1; p < escape_seqs[val].length(); ++p )
+          for( p=1; p <= escape_seqs[val].length(); ++p )
             esc[i+p] = 0;
           i += p-1;
           break;
