@@ -44,7 +44,7 @@ namespace gloox
               const std::string& _link = "" )
           : id( _id ), title( _title ), summary( _sum ), link( _link ) {}
 
-      private:
+      //private:
 
         std::string id;      /**< Unique item ID. */
         std::string title;   /**< Item title. */

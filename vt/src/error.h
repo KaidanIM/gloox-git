@@ -15,6 +15,7 @@
 #define __ERROR_H__
 
 #include "stanzaextension.h"
+#include <string>
 
 namespace gloox
 {
@@ -107,7 +108,14 @@ namespace gloox
   class Error : public StanzaExtension
   {
     public:
-      Error( Tag * );
+
+      Error()
+        : StanzaExtension( ExtError ), m_genericType( GenericErrorNone ),
+          m_type( ErrorNone ), m_subType( SubErrorNone ), m_feature( FeatureNone )
+      {}
+
+      Error( const Tag * );
+
       Error( GenericErrorType genType,
              ErrorType type,
              SubErrorType subType = SubErrorNone,
@@ -115,6 +123,9 @@ namespace gloox
         : StanzaExtension( ExtError ), m_genericType( genType ),
           m_type( type ), m_subType( subType ), m_feature( feat )
       {}
+
+      //Error& operator=( const Tag * ) { return this; }
+
       GenericErrorType gentype() const
         { return m_genericType; }
       ErrorType type() const
@@ -126,10 +137,13 @@ namespace gloox
       Tag * tag() const;
 
     private:
+      void setValues( const Tag * tag );
       GenericErrorType m_genericType;
       ErrorType m_type;
       SubErrorType m_subType;
       FeatureType m_feature;
+      std::string m_xmlns1;
+      std::string m_xmlns2;
   };
 
 }

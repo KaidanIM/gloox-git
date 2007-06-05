@@ -17,6 +17,7 @@
 #include <string>
 #include "iqhandler.h"
 #include "pubsub.h"
+#include "discohandler.h"
 
 namespace gloox
 {
@@ -63,7 +64,7 @@ namespace gloox
      *
      * XEP Version: 1.9
      */
-    class Manager : public IqHandler
+    class Manager : public IqHandler, public DiscoHandler
     {
       public:
 
@@ -71,19 +72,59 @@ namespace gloox
          * Initialize the manager.
          * @param parent Client to which this manager belongs to.
          */
-        Manager( ClientBase* parent ) : m_parent(parent) {}
+        Manager( ClientBase* parent );
 
         /**
          * Virtual Destructor.
          */
         virtual ~Manager() {}
 
+        // reimplemented from DiscoHandler
+        void handleDiscoInfoResult( Stanza *stanza, int context );
+        void handleDiscoItemsResult( Stanza *stanza, int context );
+        void handleDiscoError( Stanza *stanza, int context );
+        bool handleDiscoSet( Stanza * stanza ) { return 0; }
+
+        /**
+         * Performs a Disco query to a service or node.
+         * @param service Service to query.
+         * @param nodeid ID of the node to query. If empty, the root node will be queried.
+         */
+        void discoverInfos( const JID& service, const std::string& node = "");
+
+        /**
+         * Performs a Disco query to a service or node.
+         * @param service Service to query.
+         * @param nodeid ID of the node to query. If empty, the root node will be queried.
+         */
+        void discoverServiceInfos( const JID& service )
+          { discoverInfos( service ); }
+
+        /**
+         * Performs a Disco query to a service or node.
+         * @param service Service to query.
+         * @param nodeid ID of the node to query. If empty, the root node will be queried.
+         */
+        void discoverNodeInfos( const JID& service, const std::string& node )
+          { discoverInfos( service, node ); }
+
+        /**
+         * Ask for the list children of a node.
+         * @param service Service hosting the node.
+         * @param nodeid ID of the node to ask for subnodes. If empty, the root node
+         *               will be queried.
+         */
+        void discoverNodeItems( const JID& service, const std::string& nodeid = "" );
+
         /**
          * Subscribe to a node.
          * @param service Service hosting the node.
          * @param nodeid ID of the node to subscribe to.
+         * @param jid JID to subscribe. If empty, the client's JID will be used (ie
+	 self subscription).
          */
-        void subscribe( const JID& service, const std::string& nodeid );
+        void subscribe( const JID& service, const std::string& nodeid, const
+	std::string& jid = "" );
 
         /**
          * Unsubscribe from a node.
@@ -138,8 +179,8 @@ namespace gloox
          * @param service Service where to create the new node.
          * @param nodeid ID of the new node.
          * @param name Name of the new node.
-         * @param parent ID of the parent node. If empty, the node will be located at the
-         *               root of the service.
+         * @param parentid ID of the parent node. If empty, the node will
+         *                 be located at the root of the service.
          */
         void createNode( NodeType type, const JID& service,
                                         const std::string& nodeid,
@@ -151,8 +192,8 @@ namespace gloox
          * @param service Service where to create the new node.
          * @param nodeid Node ID of the new node.
          * @param name Name of the new node.
-         * @param parent Node containing this node. If empty, the node will be located at the
-         *               root of the service.
+         * @param parentid ID of the parent node. If empty, the node will
+         *               be located at the root of the service.
          */
         void createLeafNode( const JID& service,
                              const std::string& nodeid,
@@ -165,8 +206,8 @@ namespace gloox
          * @param service Service where to create the new node.
          * @param nodeid Node ID of the new node.
          * @param name Name of the new node.
-         * @param parent Node containing this node. If empty, the node will be located at the
-         *               root of the service.
+         * @param parentid ID of the parent node. If empty, the node will
+         *               be located at the root of the service.
          */
         void createCollectionNode( const JID& service,
                                    const std::string& nodeid,
@@ -233,17 +274,6 @@ namespace gloox
                                                   SubscriptionModificationError error) = 0;
 */
 
-/*
-  implement centralized error parsing w/ a TagName/ErrorType array
-  to reduce size overhead ?
-  PubSub::ErrorType errorType( Tag * error )
-  {
-    if( !tag || tag->name() != "error" )
-      return ErrorNone;
-    ...
-  }
-*/
-
         /**
          * Retrieve the configuration of a node.
          * @param service Service hosting the node.
@@ -258,10 +288,25 @@ namespace gloox
          * @param dataform Configuration of the node.
          * @param e Error of the configuration request.
          */
-        virtual void handleNodeConfig( const JID& service,
+        /*virtual void handleNodeConfig( const JID& service,
                                        const std::string& nodeid,
                                        const DataForm& dataForm,
                                        const OptionRequestError e ) = 0;
+*/
+
+        /**
+         * Registers an handler to receive notification of (un)subscription events.
+         * @param handler SubscriptionHandler to register.
+         */
+        void registerItemHandler( ItemHandler * handler )
+          { m_itemHandlerList.push_back( handler ); }
+
+        /**
+         * Removes an handler from the list of objects listening to (un)subscription events.
+         * @param handler SubscriptionHandler to remove.
+         */
+        void removeItemHandler( ItemHandler * handler )
+          { m_itemHandlerList.remove( handler ); }
 
         /**
          * Registers an handler to receive notification of (un)subscription events.
@@ -284,6 +329,7 @@ namespace gloox
         typedef std::list< SubscriptionHandler * > SubscriptionTrackList;
         typedef std::map < std::string, AffiliationListHandler * > AffiliationListTrackMap;
         typedef std::map < std::string, SubscriptionListHandler * > SubscriptionListTrackMap;
+        typedef std::list</*std::map < std::string,*/ ItemHandler * > ItemHandlerList;
         typedef std::pair< std::string, std::string > TrackedItem;
         typedef std::map < std::string, TrackedItem > ItemOperationTrackMap;
         typedef std::map < std::string, std::string > NodeOperationTrackMap;
@@ -294,6 +340,7 @@ namespace gloox
         SubscriptionTrackList m_subscriptionTrackList;
         AffiliationListTrackMap m_affListTrackMap;
         SubscriptionListTrackMap m_subListTrackMap;
+        ItemHandlerList m_itemHandlerList;
         ItemOperationTrackMap m_iopTrackMap;
         NodeOperationTrackMap m_nopTrackMap;
     };

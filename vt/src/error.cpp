@@ -1,7 +1,6 @@
 #include "error.h"
 #include "tag.h"
 
-
 /*
  - do we need tag() / how to save the XMLNS's (ie copy string or enumerated type) ?
  - std::pair / templates on all platforms ?
@@ -20,7 +19,8 @@ namespace gloox
                             int size )
   {
     int i=0;
-    while( i < size && str != tab[i].first ) ++i;
+    while( i < size && str != tab[i].first )
+      ++i;
     return i;
   }
 
@@ -115,46 +115,97 @@ namespace gloox
   static const int nbSubErrors = sizeof(subErrorValues)/sizeof(SubErrorValue);
   static const int nbGenericErrors = sizeof(genericErrorValues)/sizeof(GenericErrorValue);
 
-  Error::Error( Tag * error )
+  Error::Error( const Tag * error )
     : StanzaExtension( ExtError ), m_genericType( GenericErrorNone ),
       m_type( ErrorNone ), m_subType( SubErrorNone ), m_feature( FeatureNone )
   {
+    //setValues( error );
+    //this = error;
     const std::string& genType = error->findAttribute( "type" );
+    if( genType.empty() )
+    {
+      printf( "error: no basic error type\n" );
+    }
     int i = lookup( genType, genericErrorValues, nbGenericErrors );
     if( i == nbGenericErrors )
       return;
     m_genericType = genericErrorValues[i].second;
-    Tag::TagList::iterator it = error->children().begin();
+    Tag::TagList::const_iterator it = error->children().begin();
     i = lookup( (*it)->name(), errorValues, nbErrors );
     if( i == nbErrors )
       return;
     m_type = errorValues[i].second;
-    // xmlns...
+    m_xmlns1 = (*it)->findAttribute( "xmlns" );
     if( ++it != error->children().end() )
     {
       i = lookup( (*it)->name(), subErrorValues, nbSubErrors );
       if( i == nbSubErrors )
         return;
       m_subType = subErrorValues[i].second;
-      // xmlns... 
-      if( m_subType  == Unsupported )
-      {
-        i = lookup( (*it)->findAttribute( "feature" ), featureValues, nbFeatures );
-        if( i == nbFeatures )
-          return;
-        m_feature = featureValues[i].second;
-      }
+      m_xmlns2 = (*it)->findAttribute( "xmlns" );
+      const std::string& feat = (*it)->findAttribute( "feature" );
+      if( feat.empty() )
+        return;
+      i = lookup( feat, featureValues, nbFeatures );
+      if( i == nbFeatures )
+        return;
+      m_feature = featureValues[i].second;
     }
   }
+/*
+  Error& Error::operator=( const Tag * error)
+  {
+    //setValues( error );
+    const std::string& genType = error->findAttribute( "type" );
+    if( genType.empty() )
+    {
+      printf( "error: no basic error type\n" );
+    }
+    int i = lookup( genType, genericErrorValues, nbGenericErrors );
+    if( i == nbGenericErrors )
+      return;
+    m_genericType = genericErrorValues[i].second;
+    Tag::TagList::const_iterator it = error->children().begin();
+    i = lookup( (*it)->name(), errorValues, nbErrors );
+    if( i == nbErrors )
+      return;
+    m_type = errorValues[i].second;
+    m_xmlns1 = (*it)->findAttribute( "xmlns" );
+    if( ++it != error->children().end() )
+    {
+      i = lookup( (*it)->name(), subErrorValues, nbSubErrors );
+      if( i == nbSubErrors )
+        return;
+      m_subType = subErrorValues[i].second;
+      m_xmlns2 = (*it)->findAttribute( "xmlns" );
+      const std::string& feat = (*it)->findAttribute( "feature" );
+      if( feat.empty() )
+        return;
+      i = lookup( feat, featureValues, nbFeatures );
+      if( i == nbFeatures )
+        return;
+      m_feature = featureValues[i].second;
+    }
+    return this;
+  }
 
+  void Error::setValues( const * tag )
+  {
+  }
+*/
   Tag * Error::tag() const
   {
     if( m_genericType == GenericErrorNone || m_type == ErrorNone )
       return 0;
-    Tag * error = new Tag( "error", "type", genericErrorValues[m_genericType].first );
-    new Tag( error, errorValues[m_type].first, "xmlns", "????????" );
+    Tag * error = new Tag( "error" );
+    error->addAttribute( "type", genericErrorValues[m_genericType].first );
+    new Tag( error, errorValues[m_type].first, "xmlns", m_xmlns1 );
     if( m_subType != SubErrorNone )
-      new Tag( error, subErrorValues[m_subType].first, "xmlns", "????????" );
+    {
+      Tag * tag = new Tag( error, subErrorValues[m_subType].first, "xmlns", m_xmlns2 );
+      if( m_subType == Unsupported )
+        tag->addAttribute( "feature", m_feature );      
+    }
     return error;
   }
 

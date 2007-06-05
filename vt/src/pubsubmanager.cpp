@@ -20,6 +20,8 @@
 #include "pubsubitemhandler.h"
 #include "pubsubitem.h"
 #include "pubsub.h"
+#include "disco.h"
+#include <iostream>
 
 namespace gloox
 {
@@ -33,9 +35,6 @@ namespace gloox
     static const std::string XMLNS_PUBSUB_OWNER = "http://jabber.org/protocol/pubsub#owner";
     static const std::string XMLNS_PUBSUB_NODE_CONFIG = "http://jabber.org/protocol/pubsub#node_config";
 
-    /**
-     * Actions 
-     */
     enum Context {
       Subscription,
       Unsubscription,
@@ -49,8 +48,90 @@ namespace gloox
       DeleteNode,
       PurgeNodeItems,
       NodeAssociation,
-      NodeDisassociation
+      NodeDisassociation,
+      RequestFeatureList,
+      DiscoverNode
     };
+
+    Manager::Manager( ClientBase * parent )
+      : m_parent(parent)
+    {
+      parent->disco()->registerDiscoHandler( this );
+    }
+
+    enum DiscoInfoContext
+    {
+      ServiceInfo,
+      NodeInfo
+    };
+
+    void Manager::discoverInfos( const JID& service, const std::string& node )
+    {
+      m_parent->disco()->getDiscoInfo( service, node, this,
+                                       node.empty() ? ServiceInfo : NodeInfo );
+    }
+
+    void Manager::discoverNodeItems( const JID& service, const std::string& nodeid )
+    {
+      m_parent->disco()->getDiscoItems( service, nodeid, this, 0 );
+    }
+
+    class NodeItemHandler
+    {
+      public:
+        virtual void handleNodeItems( const JID& service,
+                                      const std::string& parent,
+                                      const DiscoNodeItemList ) = 0;
+        virtual ~NodeItemHandler() {}
+    };
+
+    void Manager::handleDiscoInfoResult( Stanza *stanza, int context )
+    {
+      const JID& service = stanza->from();
+      const Tag::TagList& list = stanza->children();
+      Tag::TagList::const_iterator it = list.begin();
+
+      printf( "[%s]\n", __FUNCTION__ );
+      for( ; it != list.end(); ++it )
+        std::cout << (*it)->xml() << std::endl;
+
+      switch( context )
+      {
+        case ServiceInfo:
+//          for( ; it != list.end(); ++it )
+  //          std::cout << (*it)->xml() << std::endl;
+          //handleServiceInfoResult( service, 
+          break;
+        case NodeInfo:
+          //handleNodeInfoResult
+          break;
+      }      
+    }
+
+    void Manager::handleDiscoItemsResult( Stanza *stanza, int context )
+    {
+      const Tag * query = stanza->findChild( "query" );
+      const Tag::TagList& content = query->children();
+      Tag::TagList::const_iterator it = content.begin();
+      DiscoNodeItemList contentList;
+      for( ; it != content.end(); ++it )
+      {
+        DiscoNodeItem item( (*it)->findAttribute( "node" ),
+                            (*it)->findAttribute( "jid" ),
+                            (*it)->findAttribute( "name" ) );
+        contentList.push_back( item );
+      }
+      const JID& service = stanza->from();
+      const std::string& parentid = query->findAttribute( "node" );
+      ItemHandlerList::iterator ith = m_itemHandlerList.begin();
+      for( ; ith != m_itemHandlerList.end(); ++ith )
+        (*ith)->handleNodeItemDiscovery( service, parentid, contentList );
+    }
+
+    void Manager::handleDiscoError( Stanza *stanza, int context )
+    {
+      
+    }
 
     void Manager::requestSubscriptionList( const JID& service, SubscriptionListHandler * slh )
     {
@@ -58,7 +139,8 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      Tag *iq = new Tag( "iq", "type", "get" );
+      Tag *iq = new Tag( "iq" );
+      iq->addAttribute( "type", "get" );
       iq->addAttribute( "id", id );
       iq->addAttribute( "to", service.full() );
       Tag *ps = new Tag( iq, "pubsub", "xmlns", XMLNS_PUBSUB );
@@ -75,7 +157,8 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      Tag *iq = new Tag( "iq", "type", "get" );
+      Tag *iq = new Tag( "iq" );
+      iq->addAttribute( "type", "get" );
       iq->addAttribute( "id", id );
       iq->addAttribute( "to", service.full() );
       Tag *ps = new Tag( iq, "pubsub", "xmlns", XMLNS_PUBSUB );
@@ -86,18 +169,21 @@ namespace gloox
       m_parent->send( iq );
     }
 
-    void Manager::subscribe( const JID& service, const std::string& nodeid )
+    void Manager::subscribe( const JID& service,
+                             const std::string& nodeid,
+			     const std::string& jid )
     {
       if( !m_parent )
         return;
 
       const std::string& id = m_parent->getID();
-      Tag *iq = new Tag( "iq", "type", "set" );
+      Tag *iq = new Tag( "iq" );
+      iq->addAttribute( "type", "set" );
       iq->addAttribute( "id", id );
       iq->addAttribute( "to", service.full() );
       Tag *ps = new Tag( iq, "pubsub", "xmlns", XMLNS_PUBSUB );
       Tag *sub = new Tag( ps, "subscribe", "node", nodeid );
-      sub->addAttribute( "jid", m_parent->jid().bare() );
+      sub->addAttribute( "jid", jid.empty() ? m_parent->jid().bare() :jid );
 
       m_parent->trackID( this, id, Subscription );
       m_parent->send( iq );
@@ -109,7 +195,8 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      Tag *iq = new Tag( "iq", "type", "set" );
+      Tag *iq = new Tag( "iq" );
+      iq->addAttribute( "type", "set" );
       iq->addAttribute( "id", id );
       iq->addAttribute( "to", service.full() );
       Tag *ps = new Tag( iq, "pubsub", "xmlns", XMLNS_PUBSUB );
@@ -132,7 +219,7 @@ namespace gloox
       iq->addAttribute( "id", id );
       Tag * pubsub = new Tag( iq, "pubsub", "xmlns", XMLNS_PUBSUB );
       Tag * publish = new Tag( pubsub, "publish", "node", nodeid );
-      
+
       Tag * item = new Tag( retract, "item" );
       item->addAttribute( "id", item.id );
 
@@ -148,7 +235,8 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      Tag * iq = new Tag( "iq", "type", "set" );
+      Tag * iq = new Tag( "iq" );
+      iq->addAttribute( "type", "set" );
       iq->addAttribute( "to", service.full() );
       iq->addAttribute( "id", id );
       Tag * pubsub = new Tag( iq, "pubsub" );
@@ -170,7 +258,8 @@ namespace gloox
                               const std::string& parentid )
     {
       const std::string& id = m_parent->getID();
-      Tag * iq = new Tag( "iq", "type", "set" );
+      Tag * iq = new Tag( "iq" );
+      iq->addAttribute( "type", "set" );
       iq->addAttribute( "to", service.full() );
       iq->addAttribute( "id", id );
       Tag * pubsub = new Tag( iq, "pubsub", "xmlns", XMLNS_PUBSUB );
@@ -196,7 +285,8 @@ namespace gloox
     void Manager::deleteNode( const JID& service, const std::string& nodeid )
     {
       const std::string& id = m_parent->getID();
-      Tag * iq = new Tag( "iq", "type", "set" );
+      Tag * iq = new Tag( "iq" );
+      iq->addAttribute( "type", "set" );
       iq->addAttribute( "to", service.full() );
       iq->addAttribute( "id", id );
       Tag * pubsub = new Tag( iq, "pubsub", "xmlns", XMLNS_PUBSUB_OWNER );
@@ -213,7 +303,8 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      Tag *iq = new Tag( "iq", "type", "get" );
+      Tag *iq = new Tag( "iq" );
+      iq->addAttribute( "type", "get" );
       iq->addAttribute( "id", id );
       iq->addAttribute( "to", service.full() );
       Tag *ps = new Tag( iq, "pubsub", "xmlns", XMLNS_PUBSUB );
@@ -232,7 +323,8 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      Tag *iq = new Tag( "iq", "type", "get" );
+      Tag *iq = new Tag( "iq" );
+      iq->addAttribute( "type", "get" );
       iq->addAttribute( "id", id );
       iq->addAttribute( "to", service.full() );
       Tag *ps = new Tag( iq, "pubsub", "xmlns", XMLNS_PUBSUB );
@@ -245,7 +337,8 @@ namespace gloox
     void Manager::purgeNodeItems( const JID& service, const std::string& nodeid )
     {
       const std::string& id = m_parent->getID();
-      Tag * iq = new Tag( "iq", "type", "set" );
+      Tag * iq = new Tag( "iq" );
+      iq->addAttribute( "type", "set" );
       iq->addAttribute( "to", service.full() );
       iq->addAttribute( "id", id );
       Tag * pubsub = new Tag( iq, "pubsub", "xmlns", XMLNS_PUBSUB_OWNER );
@@ -303,18 +396,29 @@ namespace gloox
           {
             case Subscription:
             {
-              Tag *ps = stanza->findChild( "pubsub", "xmlns", XMLNS_PUBSUB );
+              std::cout << "SUBSCRIPTION" << std::endl;
+	      Tag *ps = stanza->findChild( "pubsub", "xmlns", XMLNS_PUBSUB );
+	      if( !ps )
+	      {
+	        std::cout << "no ps" << std::endl;
+		break;
+	      }
+	      std::cout << __LINE__ << std::endl;
               Tag *sub = ps->findChild( "subscription" );
+	      std::cout << __LINE__ << std::endl;
               if( sub )
               {
+	        std::cout << __LINE__ << std::endl;
                 const std::string& nodeid = sub->findAttribute( "node" ),
                                    sid    = sub->findAttribute( "subid" ),
                                    jid    = sub->findAttribute( "jid" );
                 SubscriptionType subType = subscriptionType( sub->findAttribute( "subsciption" ) );
                 SubscriptionTrackList::iterator it = m_subscriptionTrackList.begin();
+		std::cout << __LINE__ << std::endl;
                 for( ; it != m_subscriptionTrackList.end(); ++it )
                   (*it)->handleSubscriptionResult( service, nodeid, sid, subType, SubscriptionErrorNone );
               }
+	      std::cout << __LINE__ << std::endl;
               break;
             }
             case Unsubscription:
@@ -379,21 +483,24 @@ namespace gloox
             }
             case RequestItemList:
             {
-              Tag *ps = stanza->findChild( "pubsub", "xmlns", XMLNS_PUBSUB );
+              Tag *ps = stanza->findChild( "pubsub", "xmlns",
+	      XMLNS_PUBSUB_EVENT );
+	      if( !ps )
+	      {
+	        std::cout << "no pubsub!" << std::endl;
+		break;
+	      }
               Tag *items = ps->findChild( "items" );
-              Tag *entry ;
-              ItemList itemList;
-              Tag::TagList::const_iterator it = items->children().begin();
-              for( ; it != items->children().end(); ++it )
-              {
-                entry = (*it)->findChild( "entry" );
-                const std::string& id = (*it)->findAttribute( "id" ),
-                                   title = entry->findChild( "title" )->cdata(),
-                                   sum = entry->findChild( "summary" )->cdata(),
-                                   link = entry->findChild( "link" )->findAttribute( "href" );
-                itemList.push_back( new Item( id, title, sum, link ) );
-              }
-              //handle( stanza->from(), resultList )
+	      if( !items )
+	      {
+	        std::cout << "no pubsub!" << std::endl;
+		break;
+	      }
+              const std::string& node = items->findAttribute( "node" );
+              ItemHandlerList::iterator ith = m_itemHandlerList.begin();
+              for( ; ith != m_itemHandlerList.end();++ith )
+	        (*ith)->handleItemList( stanza->from(), node,
+	      items->children() );
               break;
             }
             case PublishItem:
@@ -428,16 +535,19 @@ namespace gloox
           {
             case Subscription:
             {
+	      std::cout << "SUBSCRIPTION ERROR" << std::endl;
               Tag *ps = stanza->findChild( "pubsub", "xmlns", XMLNS_PUBSUB );
               if( !ps )
                 return false;
               Tag *sub = ps->findChild( "subscribe" );
               if( !sub )
                 return false;
+              std::cout << __LINE__ << std::endl;
               const std::string& node = sub->findAttribute( "node" ),
                                  jid  = sub->findAttribute( "jid" );
               SubscriptionError errorType = SubscriptionErrorNone;
-              if( error->hasChild( "not-authorized", "xmlns", XMLNS_XMPP_STANZAS ) )
+              std::cout << __LINE__ << std::endl;
+	      if( error->hasChild( "not-authorized", "xmlns", XMLNS_XMPP_STANZAS ) )
               {
                 if( error->hasChild( "pending-subscription", "xmlns", XMLNS_PUBSUB_ERRORS ) )
                   errorType = SubscriptionErrorPending;
@@ -480,6 +590,7 @@ namespace gloox
               }
               else
                 return false;
+              std::cout << __LINE__ << std::endl;
               //handleSubscriptionResult( service, node, jid, "", SubscriptionNone, errorType );
               break;
             }
