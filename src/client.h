@@ -186,6 +186,18 @@ namespace gloox
       void setPresence( Presence presence, int priority = 0, const std::string& msg = "" );
 
       /**
+       * Returns the current presence.
+       * @return The current presence.
+       */
+      Presence presence() const { return m_presence; }
+
+      /**
+       * Returns the current status message.
+       * @return The current status message.
+       */
+      const std::string& status() const { return m_status; }
+
+      /**
        * Use this function to add a StanzaExtension which will be sent with eacha nd every
        * Presence Stanza that is sent out. Use cases include
        * signed presence (@link gloox::GPGSigned GPGSigned @endlink, XEP-0027),
@@ -258,7 +270,7 @@ namespace gloox
       StanzaExtensionList m_presenceExtensions;
 
       Presence m_presence;
-      std::string m_presenceMsg;
+      std::string m_status;
 
       bool m_resourceBound;
       bool m_forceNonSasl;
