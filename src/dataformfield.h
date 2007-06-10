@@ -184,13 +184,13 @@ namespace gloox
        * Use this function to retrieve the value of this field.
        * @return The value of this field.
        */
-      virtual const std::string& value() const { return m_value; }
+      virtual const std::string& value() const { return m_values.front(); }
 
       /**
        * Use this function to set the value of this field.
        * @param value The new value of this field.
        */
-      virtual void setValue( const std::string& value ) { m_value = value; }
+      virtual void setValue( const std::string& value ) { m_values.clear(); addValue( value ); }
 
       /**
        * Use this function to retrieve the values of this field, if its of type 'text-multi'.
@@ -205,6 +205,12 @@ namespace gloox
        */
       virtual void setValues( const StringList& values ) { m_values = values; }
 
+      /**
+       * Adds a single value to the list of values. If
+       * @param value The value to add.
+       */
+      virtual void addValue( const std::string& value ) { m_values.push_back( value ); }
+
     private:
       StringMap m_options;
       StringList m_values;
@@ -212,7 +218,6 @@ namespace gloox
       std::string m_name;
       std::string m_desc;
       std::string m_label;
-      std::string m_value;
       DataFormFieldType m_type;
       bool m_required;
   };

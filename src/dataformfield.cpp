@@ -24,8 +24,9 @@ namespace gloox
 
   DataFormField::DataFormField( const std::string& name, const std::string& value,
                                 const std::string& label, DataFormFieldType type )
-    : m_name( name ), m_label( label ), m_value( value ), m_type( type ), m_required( false )
+    : m_name( name ), m_label( label ), m_type( type ), m_required( false )
   {
+    m_values.push_back( value );
   }
 
   DataFormField::DataFormField( Tag *tag )
@@ -74,9 +75,9 @@ namespace gloox
       else if( (*it)->name() == "value" )
       {
         if( m_type == FieldTypeTextMulti || m_type == FieldTypeListMulti || m_type == FieldTypeJidMulti )
-          m_values.push_back( (*it)->cdata() );
+          addValue( (*it)->cdata() );
         else
-          m_value = (*it)->cdata();
+          setValue( (*it)->cdata() );
       }
       else if( (*it)->name() == "option" )
       {
@@ -155,7 +156,7 @@ namespace gloox
     }
     else if( m_type == FieldTypeBoolean )
     {
-      if( m_value.empty() || m_value == "false" || m_value == "0" )
+      if( m_values.size() == 0 || m_values.front() == "false" || m_values.front() == "0" )
         new Tag( field, "value", "0" );
       else
         new Tag( field, "value", "1" );
@@ -168,10 +169,10 @@ namespace gloox
         new Tag( field, "value", (*it) );
     }
 
-    if( !m_value.empty() && !( m_type == FieldTypeTextMulti || m_type == FieldTypeListMulti
+    if( m_values.size() && !( m_type == FieldTypeTextMulti || m_type == FieldTypeListMulti
                                || m_type == FieldTypeBoolean || m_type == FieldTypeListSingle
                                || m_type == FieldTypeJidMulti ) )
-      new Tag( field, "value", m_value );
+      new Tag( field, "value", m_values.front() );
 
     return field;
   }
