@@ -97,19 +97,22 @@ namespace gloox
       void add( const JID& jid, const std::string& name, const StringList& groups );
 
       /**
-       * Use this function to unsubscribe from a JID in the roster.
+       * Use this function to unsubscribe from a contact's presence. You will no longer
+       * receive presence from this contact.
        * @param jid The address to unsubscribe from.
        * @param msg A message to send along with the request.
        * @since 0.9
-       * @note Use remove() to remove a contact from the roster and to cancel its subscriptions
+       * @note Use remove() to remove a contact from the roster and to cancel its subscriptions.
        */
       void unsubscribe( const JID& jid, const std::string& msg = "" );
 
       /**
-       * Use this function to cancel the contacts subscription to this entity.
+       * Use this function to cancel the contact's subscription to your presence. The contact will
+       * no longer receive presence from you.
        * @param jid The contact's JID.
        * @param msg A message to send along with the request.
        * @since 0.9
+       * @note Use remove() to remove a contact from the roster and to cancel its subscriptions.
        */
       void cancel( const JID& jid, const std::string& msg = "" );
 
