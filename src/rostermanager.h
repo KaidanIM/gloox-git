@@ -79,8 +79,8 @@ namespace gloox
        * @param groups A list of groups the contact belongs to.
        * @param msg A message sent along with the request.
        */
-      void subscribe( const JID& jid, const std::string& name, StringList& groups,
-                      const std::string& msg );
+      void subscribe( const JID& jid, const std::string& name = "", const StringList& groups = StringList(),
+                      const std::string& msg = "" );
 
       /**
        * Synchronizes locally modified RosterItems back to the server.
@@ -94,15 +94,32 @@ namespace gloox
        * @param name The displayed name of the contact.
        * @param groups A list of groups the contact belongs to.
        */
-      void add( const JID& jid, const std::string& name, StringList& groups );
+      void add( const JID& jid, const std::string& name, const StringList& groups );
 
       /**
        * Use this function to unsubscribe from a JID in the roster.
        * @param jid The address to unsubscribe from.
        * @param msg A message to send along with the request.
-       * @param remove Whether the contact should also be removed from the roster.
+       * @since 0.9
+       * @note Use remove() to remove a contact from the roster and to cancel its subscriptions
        */
-      void unsubscribe( const JID& jid, const std::string& msg, bool remove );
+      void unsubscribe( const JID& jid, const std::string& msg = "" );
+
+      /**
+       * Use this function to cancel the contacts subscription to this entity.
+       * @param jid The contact's JID.
+       * @param msg A message to send along with the request.
+       * @since 0.9
+       */
+      void cancel( const JID& jid, const std::string& msg = "" );
+
+      /**
+       * Use this function to remove a contact from the roster. Subscription is implicitely
+       * cancelled.
+       * @param jid The contact's JID.
+       * @since 0.9
+       */
+      void remove( const JID& jid );
 
       /**
        * Use this function to acknowledge a subscription request if you requested asynchronous
@@ -169,7 +186,7 @@ namespace gloox
 
     private:
       void add( const std::string& jid, const std::string& name,
-                StringList& groups, StringList& caps, const std::string& sub, bool ask );
+                const StringList& groups, const StringList& caps, const std::string& sub, bool ask );
       void extractItems( Tag *tag, bool isPush );
 
       RosterListener *m_rosterListener;
