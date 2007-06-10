@@ -171,7 +171,7 @@ namespace gloox
   }
 
   void RosterManager::subscribe( const JID& jid, const std::string& name,
-                                 StringList& groups, const std::string& msg )
+                                 const StringList& groups, const std::string& msg )
   {
     if( jid.empty() )
       return;
@@ -189,7 +189,7 @@ namespace gloox
   }
 
 
-  void RosterManager::add( const JID& jid, const std::string& name, StringList& groups )
+  void RosterManager::add( const JID& jid, const std::string& name, const StringList& groups )
   {
     if( jid.empty() )
       return;
@@ -216,7 +216,7 @@ namespace gloox
     m_parent->send( iq );
   }
 
-  void RosterManager::unsubscribe( const JID& jid, const std::string& msg, bool remove )
+  void RosterManager::unsubscribe( const JID& jid, const std::string& msg )
   {
     Tag *s = new Tag( "presence" );
     s->addAttribute( "type", "unsubscribe" );
@@ -227,21 +227,35 @@ namespace gloox
 
     m_parent->send( s );
 
-    if( remove )
-    {
-      const std::string& id = m_parent->getID();
+  }
 
-      Tag *iq = new Tag( "iq" );
-      iq->addAttribute( "type", "set" );
-      iq->addAttribute( "id", id );
-      Tag *q = new Tag( iq, "query" );
-      q->addAttribute( "xmlns", XMLNS_ROSTER );
-      Tag *i = new Tag( q, "item" );
-      i->addAttribute( "jid", jid.bare() );
-      i->addAttribute( "subscription", "remove" );
+  void RosterManager::cancel( const JID& jid, const std::string& msg )
+  {
+    Tag *s = new Tag( "presence" );
+    s->addAttribute( "type", "unsubscribed" );
+    s->addAttribute( "from", m_parent->jid().bare() );
+    s->addAttribute( "to", jid.bare() );
+    if( !msg.empty() )
+      new Tag( s, "status", msg );
 
-      m_parent->send( iq );
-    }
+    m_parent->send( s );
+
+  }
+
+  void RosterManager::remove( const JID& jid )
+  {
+    const std::string& id = m_parent->getID();
+
+    Tag *iq = new Tag( "iq" );
+    iq->addAttribute( "type", "set" );
+    iq->addAttribute( "id", id );
+    Tag *q = new Tag( iq, "query" );
+    q->addAttribute( "xmlns", XMLNS_ROSTER );
+    Tag *i = new Tag( q, "item" );
+    i->addAttribute( "jid", jid.bare() );
+    i->addAttribute( "subscription", "remove" );
+
+    m_parent->send( iq );
   }
 
   void RosterManager::synchronize()
@@ -326,7 +340,7 @@ namespace gloox
 
         bool answer = m_rosterListener->handleUnsubscriptionRequest( stanza->from(), stanza->status() );
         if( m_syncSubscribeReq && answer )
-          unsubscribe( stanza->from().bare(), "", true );
+          remove( stanza->from().bare() );
         break;
       }
 
@@ -425,7 +439,7 @@ namespace gloox
   }
 
   void RosterManager::add( const std::string& jid, const std::string& name,
-                           StringList& groups, StringList& caps,
+                           const StringList& groups, const StringList& caps,
                            const std::string& sub, bool ask )
   {
     if( m_roster.find( jid ) == m_roster.end() )
