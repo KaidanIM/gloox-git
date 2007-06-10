@@ -27,16 +27,17 @@ namespace gloox
     */
   enum PrivacyListResult
   {
-    ResultStoreSuccess,         /**< Storing was successful. */
-    ResultActivateSuccess,      /**< Activation was successful. */
-    ResultDefaultSuccess,       /**< Setting the default list was successful. */
-    ResultRemoveSuccess,        /**< Removing a list was successful. */
-    ResultRequestNamesSuccess, /**< Requesting the list names was successful. */
-    ResultRequestListSuccess,  /**< The list was requested successfully. */
-    ResultConflict,              /**< A conflict occurred when activating a list or setting the default
-                                    * list. */
-    ResultItemNotFound,        /**< The requested list does not exist. */
-    ResultBadRequest            /**< Bad request. */
+    ResultStoreSuccess,             /**< Storing was successful. */
+    ResultActivateSuccess,          /**< Activation was successful. */
+    ResultDefaultSuccess,           /**< Setting the default list was successful. */
+    ResultRemoveSuccess,            /**< Removing a list was successful. */
+    ResultRequestNamesSuccess,      /**< Requesting the list names was successful. */
+    ResultRequestListSuccess,       /**< The list was requested successfully. */
+    ResultConflict,                 /**< A conflict occurred when activating a list or setting the default
+                                     * list. */
+    ResultItemNotFound,             /**< The requested list does not exist. */
+    ResultBadRequest,               /**< Bad request. */
+    ResultUnknownError              /**< An unknown error occured. */
   };
 
   /**

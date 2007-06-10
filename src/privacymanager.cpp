@@ -341,13 +341,21 @@ namespace gloox
 
       case StanzaIqError:
       {
-        Tag *e = stanza->findChild( "error" );
-        if( e->hasChild( "conflict" ) )
-          m_privacyListHandler->handlePrivacyListResult( stanza->id(), ResultConflict );
-        else if( e->hasChild( "item-not-found" ) )
-          m_privacyListHandler->handlePrivacyListResult( stanza->id(), ResultItemNotFound );
-        else if( e->hasChild( "bad-request" ) )
-          m_privacyListHandler->handlePrivacyListResult( stanza->id(), ResultBadRequest );
+        switch( stanza->error() )
+        {
+          case StanzaErrorConflict:
+            m_privacyListHandler->handlePrivacyListResult( stanza->id(), ResultConflict );
+            break;
+          case StanzaErrorItemNotFound:
+            m_privacyListHandler->handlePrivacyListResult( stanza->id(), ResultItemNotFound );
+            break;
+          case StanzaErrorBadRequest:
+            m_privacyListHandler->handlePrivacyListResult( stanza->id(), ResultBadRequest );
+            break;
+          default:
+            m_privacyListHandler->handlePrivacyListResult( stanza->id(), ResultUnknownError );
+            break;
+        }
         break;
       }
 
