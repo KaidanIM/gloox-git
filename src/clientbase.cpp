@@ -1131,9 +1131,11 @@ namespace gloox
          ( ( stanza->subtype() == StanzaIqGet ) || ( stanza->subtype() == StanzaIqSet ) ) )
     {
       Tag *iq = new Tag( "iq" );
-      iq->addAttribute( "type", "result" );
+      iq->addAttribute( "type", "error" );
       iq->addAttribute( "id", stanza->id() );
       iq->addAttribute( "to", stanza->from().full() );
+      Tag *e = new Tag( iq, "error", "type", "cancel" );
+      new Tag( e, "feature-not-implemented", "xmlns", XMLNS_XMPP_STANZAS );
       send( iq );
     }
   }
