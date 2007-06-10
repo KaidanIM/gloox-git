@@ -39,7 +39,7 @@ namespace gloox
       return false;
 
     //printf(">> SChannel::encrypt()\n");
-    std::string data_copy = data;
+    const std::string data_copy = data;
 
     SecBuffer buffer[4];
     SecBufferDesc buffer_desc;
@@ -243,7 +243,7 @@ namespace gloox
                     | ISC_REQ_MANUAL_CRED_VALIDATION;
 
     /* initialize TLS credential */
-    memset( &tlscred, 0, sizeof (SCHANNEL_CRED) );
+    memset( &tlscred, 0, sizeof( SCHANNEL_CRED ) );
     tlscred.dwVersion = SCHANNEL_CRED_VERSION;
     tlscred.grbitEnabledProtocols = SP_PROT_TLS1;
     /* acquire credentials */
@@ -454,11 +454,11 @@ namespace gloox
   // FIXME
   time_t SChannel::filetime2int( FILETIME t )
   {
-    LONGLONG ll = t.dwLowDateTime | (static_cast<LONGLONG>(t.dwHighDateTime) << 32);
+    LONGLONG ll = t.dwLowDateTime | ( static_cast<LONGLONG>( t.dwHighDateTime ) << 32 );
 
     ll -= 116444736 * 10000 * 100000;
     ll /= 10000000;
-    return static_cast<time_t>(ll);
+    return static_cast<time_t>( ll );
   }
 
   void SChannel::validateCert()
@@ -481,7 +481,7 @@ namespace gloox
       szOID_SERVER_GATED_CRYPTO,
       szOID_SGC_NETSCAPE
     };
-    DWORD cUsages = sizeof(Usages) / sizeof(LPSTR);
+    DWORD cUsages = sizeof( Usages ) / sizeof( LPSTR );
 
     do
     {
@@ -497,7 +497,8 @@ namespace gloox
       // unicode conversation
       // calculating unicode server name size
       csizeServerName = MultiByteToWideChar( CP_ACP, 0, serverName, -1, NULL, 0 );
-      uServerName = reinterpret_cast<WCHAR *>( LocalAlloc( LMEM_FIXED, csizeServerName * sizeof(WCHAR) ) );
+      uServerName = reinterpret_cast<WCHAR *>( LocalAlloc( LMEM_FIXED,
+                                                             csizeServerName * sizeof( WCHAR ) ) );
       if( uServerName == NULL )
       {
         //printf("SEC_E_INSUFFICIENT_MEMORY ~ Not enough memory!!!\n");
@@ -513,8 +514,8 @@ namespace gloox
       }
 
       // create the chain
-      ZeroMemory( &chainParameter, sizeof(chainParameter) );
-      chainParameter.cbSize = sizeof(chainParameter);
+      ZeroMemory( &chainParameter, sizeof( chainParameter ) );
+      chainParameter.cbSize = sizeof( chainParameter );
       chainParameter.RequestedUsage.dwType = USAGE_MATCH_TYPE_OR;
       chainParameter.RequestedUsage.Usage.cUsageIdentifier     = cUsages;
       chainParameter.RequestedUsage.Usage.rgpszUsageIdentifier = Usages;
@@ -528,18 +529,18 @@ namespace gloox
       }
 
       // validate the chain
-      ZeroMemory( &policyHTTPS, sizeof(HTTPSPolicyCallbackData) );
-      policyHTTPS.cbStruct           = sizeof(HTTPSPolicyCallbackData);
+      ZeroMemory( &policyHTTPS, sizeof( HTTPSPolicyCallbackData ) );
+      policyHTTPS.cbStruct           = sizeof( HTTPSPolicyCallbackData );
       policyHTTPS.dwAuthType         = AUTHTYPE_SERVER;
       policyHTTPS.fdwChecks          = 0;
       policyHTTPS.pwszServerName     = uServerName;
 
-      memset( &policyParameter, 0, sizeof(policyParameter) );
-      policyParameter.cbSize            = sizeof(policyParameter);
+      memset( &policyParameter, 0, sizeof( policyParameter ) );
+      policyParameter.cbSize            = sizeof( policyParameter );
       policyParameter.pvExtraPolicyPara = &policyHTTPS;
 
-      memset( &policyStatus, 0, sizeof(policyStatus) );
-      policyStatus.cbSize = sizeof(policyStatus);
+      memset( &policyStatus, 0, sizeof( policyStatus ) );
+      policyStatus.cbSize = sizeof( policyStatus );
 
       if( !CertVerifyCertificateChainPolicy( CERT_CHAIN_POLICY_SSL, chainContext, &policyParameter,
                                              &policyStatus ) )
@@ -566,7 +567,7 @@ namespace gloox
   {
     SecPkgContext_ConnectionInfo conn_info;
 
-    memset( &conn_info, 0, sizeof(conn_info) );
+    memset( &conn_info, 0, sizeof( conn_info ) );
 
     if( QueryContextAttributes( &m_context, SECPKG_ATTR_CONNECTION_INFO, &conn_info ) == SEC_E_OK )
     {
@@ -581,7 +582,6 @@ namespace gloox
         default:
           m_certInfo.protocol = "unknown";
       }
-      ;
 
       switch( conn_info.aiCipher )
       {
@@ -606,7 +606,6 @@ namespace gloox
         default:
           m_certInfo.cipher = "";
       }
-      ;
 
       switch( conn_info.aiHash )
       {
@@ -619,7 +618,6 @@ namespace gloox
         default:
           m_certInfo.mac = "";
       }
-      ;
     }
   }
 
@@ -640,9 +638,9 @@ namespace gloox
     m_certInfo.date_to = filetime2int( remoteCertContext->pCertInfo->NotAfter );
 
     if( !CertNameToStr( remoteCertContext->dwCertEncodingType,
-                       &remoteCertContext->pCertInfo->Subject,
-                       CERT_X500_NAME_STR | CERT_NAME_STR_NO_PLUS_FLAG,
-                       certString, sizeof(certString) ) )
+                        &remoteCertContext->pCertInfo->Subject,
+                        CERT_X500_NAME_STR | CERT_NAME_STR_NO_PLUS_FLAG,
+                        certString, sizeof( certString ) ) )
     {
       return;
     }
@@ -651,7 +649,7 @@ namespace gloox
     if( !CertNameToStr( remoteCertContext->dwCertEncodingType,
                        &remoteCertContext->pCertInfo->Issuer,
                        CERT_X500_NAME_STR | CERT_NAME_STR_NO_PLUS_FLAG,
-                       certString, sizeof(certString) ) )
+                       certString, sizeof( certString ) ) )
     {
       return;
     }
