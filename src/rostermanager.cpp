@@ -96,6 +96,11 @@ namespace gloox
 
       return true;
     }
+    else if( stanza->subtype() == StanzaIqError )
+    {
+      if( m_rosterListener )
+        m_rosterListener->handleRosterError( stanza );
+    }
 
     return false;
   }

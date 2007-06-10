@@ -160,6 +160,11 @@ namespace gloox
        */
       virtual void handleNonrosterPresence( Stanza* stanza ) = 0;
 
+      /**
+       * This function is called if the server returned an error.
+       * @param stanza The error stanza.
+       */
+      virtual void handleRosterError( Stanza* stanza ) = 0;
   };
 
 }
