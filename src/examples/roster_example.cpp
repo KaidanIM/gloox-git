@@ -105,6 +105,11 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler, Messag
       }
     }
 
+    virtual void handleRosterError( Stanza *stanza )
+    {
+      printf( "an roster-related error occured\n" );
+    }
+
     virtual void handleRosterPresence( const RosterItem& item, const std::string& resource,
                                        Presence presence, const std::string& /*msg*/ )
     {
