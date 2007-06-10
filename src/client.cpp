@@ -466,7 +466,7 @@ namespace gloox
   void Client::setPresence( Presence presence, int priority, const std::string& msg )
   {
     m_presence = presence;
-    m_presenceMsg = msg;
+    m_status = msg;
 
     if( priority < -128 )
       m_priority = -128;
@@ -499,7 +499,7 @@ namespace gloox
         m_presence != PresenceUnavailable )
     {
       JID jid;
-      Stanza *p = Stanza::createPresenceStanza( jid, m_presenceMsg, m_presence );
+      Stanza *p = Stanza::createPresenceStanza( jid, m_status, m_presence );
 #ifdef _WIN32_WCE
       char tmp[5];
       tmp[4] = '\0';
