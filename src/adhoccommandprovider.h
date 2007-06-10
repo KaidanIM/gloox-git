@@ -51,7 +51,7 @@ namespace gloox
        * iq result or error stanza.
        */
       virtual void handleAdhocCommand( const std::string& command, Tag *tag, const JID& from,
-                                       const std::string& id ) = 0;
+                                        const std::string& id ) = 0;
 
   };
 
