@@ -75,6 +75,7 @@ namespace gloox
 
     Tag *m = new Tag( "message" );
     m->addAttribute( "to", m_parent->target().full() );
+    m->addAttribute( "type", "chat" );
 
     Tag *s = 0;
     switch( state )
