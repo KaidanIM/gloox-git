@@ -105,7 +105,7 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler, Messag
       }
     }
 
-    virtual void handleRosterError( Stanza *stanza )
+    virtual void handleRosterError( Stanza * /*stanza*/ )
     {
       printf( "an roster-related error occured\n" );
     }
@@ -151,6 +151,14 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler, Messag
     {
       if( stanza->body() == "quit" )
         j->disconnect();
+      else if( stanza->body() == "subscribe" )
+        j->rosterManager()->subscribe( stanza->from() );
+      else if( stanza->body() == "unsubscribe" )
+        j->rosterManager()->unsubscribe( stanza->from() );
+      else if( stanza->body() == "cancel" )
+        j->rosterManager()->cancel( stanza->from() );
+      else if( stanza->body() == "remove" )
+        j->rosterManager()->remove( stanza->from() );
       else
         printf( "msg: %s\n", stanza->body().c_str() );
     }
