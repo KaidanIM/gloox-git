@@ -98,6 +98,13 @@ since -rc2:
 - Parser: don't throw parse error on incoming </stream>
 - SIProfileFT: fixed ranged file transfers
 - Disco: more spec compliance fixes
+- DataFormField: added addValue()
+- Stanza: removed clone(), use: new Stanza( Tag* ); Tag::clone() is not affected
+- RosterManager: added cancel()
+- RosterManager: split unsubscribe() into unsubscribe() + remove()
+- Client: added presence(), status()
+- RosterListener: added handleRosterError()
+- PrivacyListHandler: handle unknown errors
 
 
 v0.8 -- 08 Apr 2006
