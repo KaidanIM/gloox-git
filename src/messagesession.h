@@ -176,7 +176,7 @@ namespace gloox
       virtual ~MessageSession();
 
       /**
-       * Use this function to find out where is this session points at.
+       * Use this function to find out where this session points at.
        * @return The receipient's JID.
        */
       const JID& target() const { return m_target; }
