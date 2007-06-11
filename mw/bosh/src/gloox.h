@@ -990,6 +990,7 @@ namespace gloox
     LogAreaClassConnectionSOCKS5Proxy = 0x00080, /**< Log messages from ConnectionHTTPProxy */
     LogAreaClassConnectionTCPClient   = 0x00100, /**< Log messages from ConnectionTCPClient. */
     LogAreaClassConnectionTCPServer   = 0x00200, /**< Log messages from ConnectionTCPServer. */
+    LogAreaClassConnectionBOSH        = 0x00400, /**< Log messages from ConnectionBOSH */
     LogAreaAllClasses                 = 0x01FFF, /**< All log messages from all the classes. */
     LogAreaXmlIncoming                = 0x02000, /**< Incoming XML. */
     LogAreaXmlOutgoing                = 0x04000, /**< Outgoing XML. */
