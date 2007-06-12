@@ -20,8 +20,10 @@
 #include "pubsubitemhandler.h"
 #include "pubsubitem.h"
 #include "pubsub.h"
+#include "pubsubdiscohandler.h"
 #include "disco.h"
 #include <iostream>
+
 
 namespace gloox
 {
@@ -65,47 +67,81 @@ namespace gloox
       NodeInfo
     };
 
-    void Manager::discoverInfos( const JID& service, const std::string& node )
+    void Manager::discoverInfos( const JID& service, const std::string& node, PubSub::DiscoHandler * handler )
     {
-      m_parent->disco()->getDiscoInfo( service, node, this,
-                                       node.empty() ? ServiceInfo : NodeInfo );
+      const std::string& id = m_parent->getID();
+      m_discoHandlerTrackMap[id] = handler;
+      int context = node.empty() ? ServiceInfo : NodeInfo;
+      m_parent->disco()->getDiscoInfo( service, node, this, context, id );
     }
 
-    void Manager::discoverNodeItems( const JID& service, const std::string& nodeid )
+    void Manager::discoverNodeItems( const JID& service, const std::string& nodeid, PubSub::DiscoHandler * handler )
     {
-      m_parent->disco()->getDiscoItems( service, nodeid, this, 0 );
+      const std::string& id = m_parent->getID();
+      m_discoHandlerTrackMap[id] = handler;
+      m_parent->disco()->getDiscoItems( service, nodeid, this, 0, id );
     }
 
-    class NodeItemHandler
-    {
-      public:
-        virtual void handleNodeItems( const JID& service,
-                                      const std::string& parent,
-                                      const DiscoNodeItemList ) = 0;
-        virtual ~NodeItemHandler() {}
+    typedef std::pair< const char *, PubSubFeature > featureStringPair;
+
+    static const featureStringPair featureList [] = {
+      featureStringPair( "collections", FeatureCollections )
+      // ...
     };
 
-    void Manager::handleDiscoInfoResult( Stanza *stanza, int context )
-    {
-      const JID& service = stanza->from();
-      const Tag::TagList& list = stanza->children();
-      Tag::TagList::const_iterator it = list.begin();
+    static const int featureListSize = sizeof( featureList ) / sizeof( featureStringPair );
 
-      printf( "[%s]\n", __FUNCTION__ );
-      for( ; it != list.end(); ++it )
-        std::cout << (*it)->xml() << std::endl;
+    static PubSubFeature featureType( const std::string& feat )
+    {
+      int i=0;
+      for( ; i < featureListSize && feat != featureList[i].first; ++i )
+        ;
+      return i != featureListSize ? featureList[i].second : FeatureUnknown;
+    }
+
+    void Manager::handleDiscoInfoResult( Stanza * stanza, int context )
+    {
+      const Tag * query = stanza->findChild( "query" );
+      const Tag * identity = query->findChild( "identity" );
+      const JID& service = stanza->from();
+      const std::string& id = stanza->id();
+      const std::string& type = identity->findAttribute( "type" );
+
+      DiscoHandlerTrackMap::iterator ith = m_discoHandlerTrackMap.find( id );
+      if( ith == m_discoHandlerTrackMap.end() || (*ith).second == 0 )
+        return;
 
       switch( context )
       {
         case ServiceInfo:
-//          for( ; it != list.end(); ++it )
-  //          std::cout << (*it)->xml() << std::endl;
-          //handleServiceInfoResult( service, 
+        {
+          int features=0;
+          const Tag::TagList& qchildren = query->children();
+
+          Tag::TagList::const_iterator it = qchildren.begin();
+          for( ; it != qchildren.end(); ++it )
+            if( (*it)->name() == "feature" )
+              features |= featureType( (*it)->findAttribute( "var" ) );
+
+          (*ith).second->handleServiceInfoResult( service, features );
           break;
+        }
         case NodeInfo:
-          //handleNodeInfoResult
+        {
+          Tag * df = query->findChild( "x" );
+          const std::string& node = query->findAttribute( "node" );
+
+          NodeType nodeType = NodeInvalid;
+          if( type == "collection" )
+            nodeType = NodeCollection;
+          else if( type == "leaf" )
+            nodeType = NodeLeaf;
+
+          (*ith).second->handleNodeInfoResult( service, node, nodeType, DataForm( df ) );
           break;
-      }      
+        }
+      }
+      m_discoHandlerTrackMap.erase( ith );
     }
 
     void Manager::handleDiscoItemsResult( Stanza *stanza, int context )
@@ -116,16 +152,15 @@ namespace gloox
       DiscoNodeItemList contentList;
       for( ; it != content.end(); ++it )
       {
-        DiscoNodeItem item( (*it)->findAttribute( "node" ),
-                            (*it)->findAttribute( "jid" ),
-                            (*it)->findAttribute( "name" ) );
-        contentList.push_back( item );
+        contentList.push_back( DiscoNodeItem ( (*it)->findAttribute( "node" ),
+                                               (*it)->findAttribute( "jid" ),
+                                               (*it)->findAttribute( "name" ) ) );
       }
       const JID& service = stanza->from();
       const std::string& parentid = query->findAttribute( "node" );
-      ItemHandlerList::iterator ith = m_itemHandlerList.begin();
-      for( ; ith != m_itemHandlerList.end(); ++ith )
-        (*ith)->handleNodeItemDiscovery( service, parentid, contentList );
+      DiscoHandlerTrackMap::iterator ith = m_discoHandlerTrackMap.find( stanza->id() );
+      if( ith != m_discoHandlerTrackMap.end() && (*ith).second )
+        (*ith).second->handleNodeItemDiscovery( service, parentid, contentList );
     }
 
     void Manager::handleDiscoError( Stanza *stanza, int context )
@@ -491,6 +526,7 @@ namespace gloox
 		break;
 	      }
               Tag *items = ps->findChild( "items" );
+
 	      if( !items )
 	      {
 	        std::cout << "no pubsub!" << std::endl;
@@ -499,8 +535,7 @@ namespace gloox
               const std::string& node = items->findAttribute( "node" );
               ItemHandlerList::iterator ith = m_itemHandlerList.begin();
               for( ; ith != m_itemHandlerList.end();++ith )
-	        (*ith)->handleItemList( stanza->from(), node,
-	      items->children() );
+	        (*ith)->handleItemList( stanza->from(), node, items->children() );
               break;
             }
             case PublishItem:

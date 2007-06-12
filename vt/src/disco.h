@@ -81,8 +81,11 @@ namespace gloox
        * @param node An optional node to query. Not inserted if empty.
        * @param dh The DiscoHandler to notify about results.
        * @param context A context identifier.
+       * @param tid An optional id that is going to be used as the IQ request's id. Only
+       * necessary if you need to know the request's id.
        */
-      void getDiscoInfo( const JID& to, const std::string& node, DiscoHandler *dh, int context );
+      void getDiscoInfo( const JID& to, const std::string& node, DiscoHandler *dh, int context,
+                         const std::string& tid = "" );
 
       /**
        * Queries the given JID for its items according to
@@ -92,8 +95,11 @@ namespace gloox
        * @param node An optional node to query. Not inserted if empty.
        * @param dh The DiscoHandler to notify about results.
        * @param context A context identifier.
+       * @param tid An optional id that is going to be used as the IQ request's id. Only
+       * necessary if you need to know the request's id.
        */
-      void getDiscoItems( const JID& to, const std::string& node, DiscoHandler *dh, int context );
+      void getDiscoItems( const JID& to, const std::string& node, DiscoHandler *dh, int context,
+                          const std::string& tid = "" );
 
       /**
        * Sets the version of the host application using this library.

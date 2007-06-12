@@ -300,37 +300,38 @@ namespace gloox
     /**
      * Describes the different PubSub features (XEP-0060 Sect. 10).
      */
-    enum PubSubFeatures
+    enum PubSubFeature
     {
-      FeatureCollections,           /**< Collection nodes are supported. RECOMMENDED */
-      FeatureConfigNode,            /**< Configuration of node options is supported. RECOMMENDED */
-      FeatureCreateAndConfig,       /**< Simultaneous creation and configuration of nodes is supported. RECOMMENDED */
-      FeatureCreateNodes,           /**< Creation of nodes is supported. RECOMMENDED */
-      FeatureDeleteAny,             /**< Any publisher may delete an item (not only the originating publisher). OPTIONAL */
-      FeatureDeleteNodes,           /**< Deletion of nodes is supported. RECOMMENDED */
-      FeatureGetPending,            /**< Retrieval of pending subscription approvals is supported. OPTIONAL */
-      FeatureInstantNodes,          /**< Creation of instant nodes is supported. RECOMMENDED */
-      FeatureItemIDs,               /**< Publishers may specify item identifiers. RECOMMENDED */
-      FeatureLeasedSubscription,    /**< Time-based subscriptions are supported. OPTIONAL */
-      FeatureManageSubscriptions,   /**< Node owners may manage subscriptions. OPTIONAL */
-      FeatureMetaData,              /**< Node meta-data is supported. RECOMMENDED */
-      FeatureModifyAffiliations,    /**< Node owners may modify affiliations. OPTIONAL */
-      FeatureMultiCollection,       /**< A single leaf node may be associated with multiple collections. OPTIONAL */
-      FeatureMultiSubscribe,        /**< A single entity may subscribe to a node multiple times. OPTIONAL */
-      FeaturePutcastAffiliation,    /**< The outcast affiliation is supported. RECOMMENDED */
-      FeaturePersistentItems,       /**< Persistent items are supported. RECOMMENDED */
-      FeaturePresenceNotifications, /**< Presence-based delivery of event notifications is supported. OPTIONAL */
-      FeaturePublish,               /**< Publishing items is supported (note: not valid for collection nodes). REQUIRED */
-      FeaturePublisherAffiliation,  /**< The publisher affiliation is supported. OPTIONAL */
-      FeaturePurgeNodes,            /**< Purging of nodes is supported. OPTIONAL */
-      FeatureRetractItems,          /**< Item retraction is supported. OPTIONAL */
-      FeatureRetrieveAffiliations,  /**< Retrieval of current affiliations is supported. RECOMMENDED */
-      FeatureRetrieveDefault,       /**< Retrieval of default node configuration is supported. RECOMMENDED */
-      FeatureRetrieveItems,         /**< Item retrieval is supported. RECOMMENDED */
-      FeatureRetrieveSubscriptions, /**< Retrieval of current subscriptions is supported. RECOMMENDED */
-      FeatureSubscribe,             /**< Subscribing and unsubscribing are supported. REQUIRED */
-      FeatureSubscriptionOptions,   /**< Configuration of subscription options is supported. OPTIONAL */
-      FeatureSubscriptionNotifs     /**< Notification of subscription state changes is supported. */
+      FeatureUnknown               = 0,     /**< Unrecognized feature */
+      FeatureCollections           = 1,     /**< Collection nodes are supported. RECOMMENDED */
+      FeatureConfigNode            = 1<<1,  /**< Configuration of node options is supported. RECOMMENDED */
+      FeatureCreateAndConfig       = 1<<2,  /**< Simultaneous creation and configuration of nodes is supported. RECOMMENDED */
+      FeatureCreateNodes           = 1<<3,  /**< Creation of nodes is supported. RECOMMENDED */
+      FeatureDeleteAny             = 1<<4,  /**< Any publisher may delete an item (not only the originating publisher). OPTIONAL */
+      FeatureDeleteNodes           = 1<<5,  /**< Deletion of nodes is supported. RECOMMENDED */
+      FeatureGetPending            = 1<<6,  /**< Retrieval of pending subscription approvals is supported. OPTIONAL */
+      FeatureInstantNodes          = 1<<7,  /**< Creation of instant nodes is supported. RECOMMENDED */
+      FeatureItemIDs               = 1<<8,  /**< Publishers may specify item identifiers. RECOMMENDED */
+      FeatureLeasedSubscription    = 1<<9,  /**< Time-based subscriptions are supported. OPTIONAL */
+      FeatureManageSubscriptions   = 1<<10, /**< Node owners may manage subscriptions. OPTIONAL */
+      FeatureMetaData              = 1<<11, /**< Node meta-data is supported. RECOMMENDED */
+      FeatureModifyAffiliations    = 1<<12, /**< Node owners may modify affiliations. OPTIONAL */
+      FeatureMultiCollection       = 1<<13, /**< A single leaf node may be associated with multiple collections. OPTIONAL */
+      FeatureMultiSubscribe        = 1<<14, /**< A single entity may subscribe to a node multiple times. OPTIONAL */
+      FeaturePutcastAffiliation    = 1<<15, /**< The outcast affiliation is supported. RECOMMENDED */
+      FeaturePersistentItems       = 1<<16, /**< Persistent items are supported. RECOMMENDED */
+      FeaturePresenceNotifications = 1<<17, /**< Presence-based delivery of event notifications is supported. OPTIONAL */
+      FeaturePublish               = 1<<18, /**< Publishing items is supported (note: not valid for collection nodes). REQUIRED */
+      FeaturePublisherAffiliation  = 1<<19, /**< The publisher affiliation is supported. OPTIONAL */
+      FeaturePurgeNodes            = 1<<20, /**< Purging of nodes is supported. OPTIONAL */
+      FeatureRetractItems          = 1<<21, /**< Item retraction is supported. OPTIONAL */
+      FeatureRetrieveAffiliations  = 1<<22, /**< Retrieval of current affiliations is supported. RECOMMENDED */
+      FeatureRetrieveDefault       = 1<<23, /**< Retrieval of default node configuration is supported. RECOMMENDED */
+      FeatureRetrieveItems         = 1<<24, /**< Item retrieval is supported. RECOMMENDED */
+      FeatureRetrieveSubscriptions = 1<<25, /**< Retrieval of current subscriptions is supported. RECOMMENDED */
+      FeatureSubscribe             = 1<<26, /**< Subscribing and unsubscribing are supported. REQUIRED */
+      FeatureSubscriptionOptions   = 1<<27, /**< Configuration of subscription options is supported. OPTIONAL */
+      FeatureSubscriptionNotifs    = 1<<28  /**< Notification of subscription state changes is supported. */
     };
 
 // [Persistent - Notification]
