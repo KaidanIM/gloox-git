@@ -49,6 +49,7 @@
 #include <string>
 #include <map>
 #include <list>
+#include <algorithm>
 
 #ifndef _WIN32_WCE
 # include <sstream>
@@ -1134,7 +1135,7 @@ namespace gloox
       iq->addAttribute( "type", "error" );
       iq->addAttribute( "id", stanza->id() );
       iq->addAttribute( "to", stanza->from().full() );
-      Tag *e = new Tag( iq, "error", "type", "cancel" );
+      Tag *e = new Tag( iq, "error", "type", "cancel", false );
       new Tag( e, "feature-not-implemented", "xmlns", XMLNS_XMPP_STANZAS );
       send( iq );
     }
