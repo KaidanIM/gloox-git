@@ -81,6 +81,7 @@ namespace gloox
 
     m->addAttribute( "from", m_parent->jid().full() );
     m->addAttribute( "to", m_target.full() );
+    m->addAttribute( "id", m_parent->getID() );
     new Tag( m, "thread", m_thread );
 
     decorate( m );
