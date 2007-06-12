@@ -926,7 +926,8 @@ namespace gloox
     if( !session )
       return;
 
-    MessageSessionList::iterator it = std::find( m_messageSessions.begin(), m_messageSessions.end(), session );
+    MessageSessionList::iterator it = std::find( m_messageSessions.begin(), m_messageSessions.end(),
+                                                 session );
     if( it != m_messageSessions.end() )
     {
       delete (*it);
@@ -1188,7 +1189,7 @@ namespace gloox
       }
     }
 
-    MessageSessionHandler * msHandler = 0;
+    MessageSessionHandler *msHandler = 0;
 
     switch( stanza->subtype() )
     {
@@ -1212,6 +1213,7 @@ namespace gloox
     {
       MessageSession *session = new MessageSession( this, stanza->from(), true, stanza->subtype() );
       msHandler->handleMessageSession( session );
+      session->handleMessage( stanza );
     }
     else
     {
