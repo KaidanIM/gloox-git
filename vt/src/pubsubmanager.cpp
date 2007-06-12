@@ -159,8 +159,12 @@ namespace gloox
       const JID& service = stanza->from();
       const std::string& parentid = query->findAttribute( "node" );
       DiscoHandlerTrackMap::iterator ith = m_discoHandlerTrackMap.find( stanza->id() );
-      if( ith != m_discoHandlerTrackMap.end() && (*ith).second )
-        (*ith).second->handleNodeItemDiscovery( service, parentid, contentList );
+      if( ith != m_discoHandlerTrackMap.end() )
+      {
+        if( (*ith).second )
+          (*ith).second->handleNodeItemDiscovery( service, parentid, contentList );
+	m_discoHandlerTrackMap.erase( ith );
+      }
     }
 
     void Manager::handleDiscoError( Stanza *stanza, int context )
