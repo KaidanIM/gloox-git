@@ -39,7 +39,7 @@ namespace gloox
       return false;
 
     //printf(">> SChannel::encrypt()\n");
-    const std::string data_copy = data;
+    std::string data_copy = data;
 
     SecBuffer buffer[4];
     SecBufferDesc buffer_desc;
