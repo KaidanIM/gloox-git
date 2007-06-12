@@ -17,7 +17,10 @@
 #include "../messagehandler.h"
 using namespace gloox;
 
-#include <unistd.h>
+#ifndef _WIN32
+# include <unistd.h>
+#endif
+
 #include <stdio.h>
 #include <string>
 
