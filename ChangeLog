@@ -91,8 +91,6 @@ v0.9 -- xx Feb 2007
 - Adhoc: minor spec compliance fixes
 - Tag: added ctors to easily create a single attribute
 - ConnectionTCP: protected send() and recv() with simple Mutexes
-
-since -rc2:
 - GCC 4.3 compile fixes
 - OpenSSL: check cert dates
 - Parser: don't throw parse error on incoming </stream>
@@ -105,6 +103,10 @@ since -rc2:
 - Client: added presence(), status()
 - RosterListener: added handleRosterError()
 - PrivacyListHandler: handle unknown errors
+
+since -rc3:
+- TLSOpenSSL: don't throw handshake errors if the connection was closed by the server
+- fixed compilation issues introduced in -rc3
 
 
 v0.8 -- 08 Apr 2006
