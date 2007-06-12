@@ -14,6 +14,7 @@
 
 #include <cstdlib>
 #include <string>
+#include <string.h>
 
 #ifdef WIN32
 # include "../config.h.win"
@@ -51,7 +52,8 @@ namespace gloox
         return std::string();
 
       std::string preppedString;
-      char* p = strndup( s.c_str(), s.length() );
+      char* p = static_cast<char*>( malloc( s.length() ) );
+	  strncpy( p, s.c_str(), s.length() );
       if( stringprep( p, JID_PORTION_SIZE, (Stringprep_profile_flags)0, profile ) == STRINGPREP_OK )
         preppedString = p;
       free( p );
