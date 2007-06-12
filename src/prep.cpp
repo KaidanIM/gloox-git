@@ -53,7 +53,7 @@ namespace gloox
 
       std::string preppedString;
       char* p = static_cast<char*>( malloc( s.length() ) );
-	  strncpy( p, s.c_str(), s.length() );
+      strncpy( p, s.c_str(), s.length() );
       if( stringprep( p, JID_PORTION_SIZE, (Stringprep_profile_flags)0, profile ) == STRINGPREP_OK )
         preppedString = p;
       free( p );
