@@ -32,32 +32,37 @@ namespace gloox
       public:
 
         /**
-	 *
-	 */
+         *
+         */
         virtual void handleServiceInfoResult( const JID& service, int features ) = 0;
 
-	
+
         /**
-	 *
-	 */
-	virtual void handleNodeInfoResult( const JID& service,
-	                                   const std::string& node,
-					   const NodeType nodeType,
-					   const DataForm& df ) = 0;
+         *
+         */
+        virtual void handleNodeInfoResult( const JID& service,
+                                           const std::string& node,
+                                           const NodeType nodeType,
+                                           const DataForm& df ) = 0;
 
 	
         /**
-	 *
-	 */
-	virtual void handleNodeItemDiscovery( const JID& service,
-	                                      const std::string& parent,
-					      const DiscoNodeItemList& children ) = 0;
+      	 *
+      	 */
+        virtual void handleNodeItemDiscovery( const JID& service,
+                                              const std::string& parent,
+                                              const DiscoNodeItemList& children ) = 0;
 
        /**
         *
-	*/
+        */
        virtual void handleDiscoError( const JID& service,
-	                              const std::string& parent ) = 0;
+                                      const std::string& parent ) = 0;
+
+       /**
+        *
+        */
+       virtual ~DiscoHandler() {}
 
     };
 
