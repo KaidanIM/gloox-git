@@ -52,6 +52,13 @@ namespace gloox
 	virtual void handleNodeItemDiscovery( const JID& service,
 	                                      const std::string& parent,
 					      const DiscoNodeItemList& children ) = 0;
+
+       /**
+        *
+	*/
+       virtual void handleDiscoError( const JID& service,
+	                              const std::string& parent ) = 0;
+
     };
 
   }

@@ -69,6 +69,8 @@ namespace gloox
 
     void Manager::discoverInfos( const JID& service, const std::string& node, PubSub::DiscoHandler * handler )
     {
+      if( !handler )
+        return;
       const std::string& id = m_parent->getID();
       m_discoHandlerTrackMap[id] = handler;
       int context = node.empty() ? ServiceInfo : NodeInfo;
@@ -77,6 +79,8 @@ namespace gloox
 
     void Manager::discoverNodeItems( const JID& service, const std::string& nodeid, PubSub::DiscoHandler * handler )
     {
+      if( !handler )
+        return;
       const std::string& id = m_parent->getID();
       m_discoHandlerTrackMap[id] = handler;
       m_parent->disco()->getDiscoItems( service, nodeid, this, 0, id );
@@ -108,7 +112,7 @@ namespace gloox
       const std::string& type = identity->findAttribute( "type" );
 
       DiscoHandlerTrackMap::iterator ith = m_discoHandlerTrackMap.find( id );
-      if( ith == m_discoHandlerTrackMap.end() || (*ith).second == 0 )
+      if( ith == m_discoHandlerTrackMap.end() )
         return;
 
       switch( context )
@@ -146,30 +150,40 @@ namespace gloox
 
     void Manager::handleDiscoItemsResult( Stanza *stanza, int context )
     {
+      DiscoHandlerTrackMap::iterator ith = m_discoHandlerTrackMap.find( stanza->id() );
+      if( ith == m_discoHandlerTrackMap.end() )
+        return;
+
       const Tag * query = stanza->findChild( "query" );
       const Tag::TagList& content = query->children();
-      Tag::TagList::const_iterator it = content.begin();
+
+
       DiscoNodeItemList contentList;
+      Tag::TagList::const_iterator it = content.begin();
       for( ; it != content.end(); ++it )
       {
         contentList.push_back( DiscoNodeItem ( (*it)->findAttribute( "node" ),
                                                (*it)->findAttribute( "jid" ),
                                                (*it)->findAttribute( "name" ) ) );
       }
+
       const JID& service = stanza->from();
       const std::string& parentid = query->findAttribute( "node" );
-      DiscoHandlerTrackMap::iterator ith = m_discoHandlerTrackMap.find( stanza->id() );
-      if( ith != m_discoHandlerTrackMap.end() )
-      {
-        if( (*ith).second )
-          (*ith).second->handleNodeItemDiscovery( service, parentid, contentList );
-	m_discoHandlerTrackMap.erase( ith );
-      }
+      
+      (*ith).second->handleNodeItemDiscovery( service, parentid, contentList );
+      m_discoHandlerTrackMap.erase( ith );
     }
 
     void Manager::handleDiscoError( Stanza *stanza, int context )
     {
-      
+      const JID& service = stanza->from();
+      DiscoHandlerTrackMap::iterator ith = m_discoHandlerTrackMap.find( stanza->id() );
+      if( ith != m_discoHandlerTrackMap.end() )
+      {
+        //if( (*ith).second )
+        //  (*ith).second->handleDiscoError( service, parentid, error );
+	m_discoHandlerTrackMap.erase( ith );
+      }
     }
 
     void Manager::requestSubscriptionList( const JID& service, SubscriptionListHandler * slh )
@@ -317,12 +331,15 @@ namespace gloox
         configure->addChild( df.tag() );
       }
       m_parent->trackID( this, id, CreateNode );
-      m_nopTrackMap[id] = nodeid;
+      m_nopTrackMap[id] = make_pair( service, nodeid );
       m_parent->send( iq );
     }
 
     void Manager::deleteNode( const JID& service, const std::string& nodeid )
     {
+      if( !m_parent )
+        return;
+
       const std::string& id = m_parent->getID();
       Tag * iq = new Tag( "iq" );
       iq->addAttribute( "type", "set" );
@@ -332,7 +349,7 @@ namespace gloox
       new Tag( pubsub, "delete", "node", nodeid );
 
       m_parent->trackID( this, id, DeleteNode );
-      m_nopTrackMap[id] = nodeid;
+      m_nopTrackMap[id] = make_pair( service, nodeid );
       m_parent->send( iq );
     }
 
@@ -442,18 +459,15 @@ namespace gloox
 	        std::cout << "no ps" << std::endl;
 		break;
 	      }
-	      std::cout << __LINE__ << std::endl;
+
               Tag *sub = ps->findChild( "subscription" );
-	      std::cout << __LINE__ << std::endl;
               if( sub )
               {
-	        std::cout << __LINE__ << std::endl;
                 const std::string& nodeid = sub->findAttribute( "node" ),
                                    sid    = sub->findAttribute( "subid" ),
                                    jid    = sub->findAttribute( "jid" );
                 SubscriptionType subType = subscriptionType( sub->findAttribute( "subsciption" ) );
                 SubscriptionTrackList::iterator it = m_subscriptionTrackList.begin();
-		std::cout << __LINE__ << std::endl;
                 for( ; it != m_subscriptionTrackList.end(); ++it )
                   (*it)->handleSubscriptionResult( service, nodeid, sid, subType, SubscriptionErrorNone );
               }
@@ -462,10 +476,9 @@ namespace gloox
             }
             case Unsubscription:
             {
-              SubscriptionTrackList::iterator it = m_subscriptionTrackList.begin();
+              //SubscriptionTrackList::iterator it = m_subscriptionTrackList.begin();
               //for( ; it != m_subscriptionTrackList.end(); ++it )
               //  (*it)->handleUnsubscriptionResult( service, jid, UnsubscriptionErrorNone );
-              //remove id/node from trackmap
               break;
             }
             case RequestSubscriptionList:

@@ -70,7 +70,8 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             connectiontcpserver.h     amp.h                   psaffiliationlisthandler.h \
                             pubsubmanager.h           pssubscriptionhandler.h pssubscriptionlisthandler.h \
                             iq.h                      pubsub.h                pubsubitem.h \
-                            pubsubnode.h              pubsubitemhandler.h     error.h
+                            pubsubnode.h              pubsubitemhandler.h     error.h \
+			    pubsubdiscohandler.h
 
 noinst_HEADERS = prep.h dns.h nonsaslauth.h mucmessagesession.h stanzaextensionfactory.h tlsgnutlsclient.h \
                    tlsgnutlsbase.h tlsgnutlsclientanon.h tlsgnutlsserveranon.h tlsopenssl.h tlsschannel.h \
