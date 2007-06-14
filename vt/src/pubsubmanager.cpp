@@ -42,7 +42,8 @@ namespace gloox
       Unsubscription,
       RequestSubscriptionList,
       RequestAffiliationList,
-      RequestOptionList,
+      RequestConfig,
+      RequestDefaultConfig,
       RequestItemList,
       PublishItem,
       DeleteItem,
@@ -89,12 +90,45 @@ namespace gloox
     typedef std::pair< const char *, PubSubFeature > featureStringPair;
 
     static const featureStringPair featureList [] = {
-      featureStringPair( "collections", FeatureCollections )
-      // ...
+      featureStringPair( "collections", FeatureCollections ),
+      featureStringPair( "config-node", FeatureConfigNode ),
+      featureStringPair( "create-and-configure", FeatureCreateAndConfig ),
+      featureStringPair( "create-nodes", FeatureCreateNodes ),
+      featureStringPair( "delete-any", FeatureDeleteAny ),
+      featureStringPair( "delete-nodes", FeatureDeleteNodes ),
+      featureStringPair( "get-pending", FeatureGetPending ),
+      featureStringPair( "instant-nodes", FeatureInstantNodes ),
+      featureStringPair( "item-ids", FeatureItemIDs ),
+      featureStringPair( "leased-subscription", FeatureLeasedSubscription ),
+      featureStringPair( "manage-subscriptions", FeatureManageSubscriptions ),
+      featureStringPair( "meta-data", FeatureMetaData ),
+      featureStringPair( "modify-affiliations", FeatureModifyAffiliations ),
+      featureStringPair( "multi-collection", FeatureMultiCollection ),
+      featureStringPair( "multi-subscribe", FeatureMultiSubscribe ),
+      featureStringPair( "outcast-affiliation", FeaturePutcastAffiliation ),
+      featureStringPair( "persistent-items", FeaturePersistentItems ),
+      featureStringPair( "presence-notifications", FeaturePresenceNotifications ),
+      featureStringPair( "publish", FeaturePublish ),
+      featureStringPair( "publisher-affiliation", FeaturePublisherAffiliation ),
+      featureStringPair( "purge-nodes", FeaturePurgeNodes ),
+      featureStringPair( "retract-items", FeatureRetractItems ),
+      featureStringPair( "retrieve-affiliations", FeatureRetrieveAffiliations ),
+      featureStringPair( "retrieve-default", FeatureRetrieveDefault ),
+      featureStringPair( "retrieve-items", FeatureRetrieveItems ),
+      featureStringPair( "retrieve-subscriptions", FeatureRetrieveSubscriptions ),
+      featureStringPair( "subscribe", FeatureSubscribe ),
+      featureStringPair( "subscription-options", FeatureSubscriptionOptions ),
+      featureStringPair( "subscription-notifications", FeatureSubscriptionNotifs )
     };
 
     static const int featureListSize = sizeof( featureList ) / sizeof( featureStringPair );
 
+    /**
+     * Finds the associated PubSubFeature for a feature tag 'type' attribute,
+     * as received from a disco info query on a pubsub service (XEP-0060 sect. 10).
+     * @param feat Feature string to search for.
+     * @return the associated PubSubFeature.
+     */
     static PubSubFeature featureType( const std::string& feat )
     {
       int i=0;
@@ -107,6 +141,8 @@ namespace gloox
     {
       const Tag * query = stanza->findChild( "query" );
       const Tag * identity = query->findChild( "identity" );
+      if( !identity )
+        return; // ejabberd...
       const JID& service = stanza->from();
       const std::string& id = stanza->id();
       const std::string& type = identity->findAttribute( "type" );
@@ -124,8 +160,21 @@ namespace gloox
 
           Tag::TagList::const_iterator it = qchildren.begin();
           for( ; it != qchildren.end(); ++it )
+          {
             if( (*it)->name() == "feature" )
-              features |= featureType( (*it)->findAttribute( "var" ) );
+            {
+              static std::string PUBSUB_PROTO_URI = "http://jabber.org/protocol/pubsub";
+              const std::string& var = (*it)->findAttribute( "var" );
+
+              if( var.size() > PUBSUB_PROTO_URI.size()
+                  && var.find( PUBSUB_PROTO_URI ) == 0 )
+              {
+                unsigned fpos = var.rfind( '#' );
+                if( fpos != std::string::npos )
+                  features |= featureType( var.substr( fpos+1 ) );
+              }
+            }
+          }
 
           (*ith).second->handleServiceInfoResult( service, features );
           break;
@@ -303,12 +352,23 @@ namespace gloox
       m_iopTrackMap[id] = TrackedItem(nodeid, itemid);
       m_parent->send( iq );
     }
+    
+    
+    static const char * accessModelStrings[] = {
+      "open",
+      "presence",
+      "roster",
+      "authorize",
+      "whitelist"
+    };
 
     void Manager::createNode( NodeType type,
                               const JID& service,
                               const std::string& nodeid,
                               const std::string& name,
-                              const std::string& parentid )
+                              const std::string& parentid,
+                              const StringMap * config,
+                              AccessModel accessModel )
     {
       const std::string& id = m_parent->getID();
       Tag * iq = new Tag( "iq" );
@@ -318,18 +378,42 @@ namespace gloox
       Tag * pubsub = new Tag( iq, "pubsub", "xmlns", XMLNS_PUBSUB );
       Tag * create = new Tag( pubsub, "create", "node", nodeid );
       Tag * configure = new Tag( pubsub, "configure" );
-      if( type == NodeCollection )
+
+      if( config || type == NodeCollection || accessModel != AccessDefault )
       {
         DataForm df( DataForm::FormTypeSubmit );
         DataFormField *field = new DataFormField( DataFormField::FieldTypeHidden );
         field->setName( "FORM_TYPE" );
         field->setValue( XMLNS_PUBSUB_NODE_CONFIG );
         df.addField( field );
-        field = new DataFormField( DataFormField::FieldTypeNone );
-        field->setName( "pubsub#node_type" );
-        field->setValue( "collection" );
-        configure->addChild( df.tag() );
+
+        if( type == NodeCollection )
+        {
+          field = new DataFormField( DataFormField::FieldTypeNone );
+          field->setName( "pubsub#node_type" );
+          field->setValue( "collection" );
+          configure->addChild( df.tag() );
+        }
+        if( accessModel != AccessDefault )
+        {
+          field = new DataFormField( DataFormField::FieldTypeNone );
+          field->setName( "pubsub#access_model" );
+          field->setValue( accessModelStrings[accessModel] );
+          configure->addChild( df.tag() );
+        }
+        if( config )
+        {
+          StringMap::const_iterator it = config->begin();
+          for( ; it != config->end();++it )
+          {
+            field = new DataFormField( DataFormField::FieldTypeNone );
+            field->setName( (*it).first );
+            field->setValue( (*it).first );
+            configure->addChild( df.tag() );
+          }
+        }
       }
+
       m_parent->trackID( this, id, CreateNode );
       m_nopTrackMap[id] = make_pair( service, nodeid );
       m_parent->send( iq );
@@ -352,7 +436,24 @@ namespace gloox
       m_nopTrackMap[id] = make_pair( service, nodeid );
       m_parent->send( iq );
     }
-
+/*
+    void Manager::getDefaultNodeConfig( const JID& service, const std::string& nodeid )
+    {
+      
+      const std::string& id = m_parent->getID();
+      Tag * iq = new Tag( "iq" );
+      iq->addAttribute( "type", "set" );
+      iq->addAttribute( "to", service.full() );
+      iq->addAttribute( "id", id );
+      Tag * pubsub = new Tag( iq, "pubsub", "xmlns", XMLNS_PUBSUB );
+      Tag * create = new Tag( pubsub, "default" );
+      if( !nodeid.empty() )
+        create->addAttribute( "node", nodeid );
+      m_parent->trackID( this, id, RequestConfig );
+      m_nopTrackMap[id] = make_pair( service, nodeid );
+      m_parent->send( iq );
+    }
+*/
     void Manager::requestNodeConfig( const JID& service, const std::string& nodeid )
     {
       if( !m_parent )
@@ -367,7 +468,7 @@ namespace gloox
       Tag *sub = new Tag( ps, "options", "node", nodeid );
       sub->addAttribute( "jid", m_parent->jid().bare() );
 
-      m_parent->trackID( this, id, RequestOptionList );
+      m_parent->trackID( this, id, RequestConfig );
       m_parent->send( iq );
     }
 
@@ -525,7 +626,7 @@ namespace gloox
               }
               break;
             }
-            case RequestOptionList:
+            case RequestConfig:
             {
               Tag *ps = stanza->findChild( "pubsub", "xmlns", XMLNS_PUBSUB );
               Tag *options = ps->findChild( "options" );
@@ -709,7 +810,7 @@ namespace gloox
                 return false;
               break;
             }
-            case RequestOptionList:
+            case RequestConfig:
             {
               Tag * pubsub = stanza->findChild( "pubsub" );
               if( !pubsub )

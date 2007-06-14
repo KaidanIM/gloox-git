@@ -189,7 +189,9 @@ namespace gloox
         void createNode( NodeType type, const JID& service,
                                         const std::string& nodeid,
                                         const std::string& name,
-                                        const std::string& parentid = ""  );
+                                        const std::string& parentid = "",
+                                        const StringMap * config = 0,
+                                        AccessModel accessModel = AccessDefault );
 
         /**
          * Creates a new leaf node.
@@ -202,8 +204,10 @@ namespace gloox
         void createLeafNode( const JID& service,
                              const std::string& nodeid,
                              const std::string& name,
-                             const std::string& parentid = "" )
-          { createNode( NodeLeaf, service, nodeid, name, parentid ); }
+                             const std::string& parentid = "",
+                             const StringMap * config = 0,
+                             AccessModel accessModel = AccessDefault )
+          { createNode( NodeLeaf, service, nodeid, name, parentid, config ); }
 
         /**
          * Creates a new collection node.
@@ -216,8 +220,10 @@ namespace gloox
         void createCollectionNode( const JID& service,
                                    const std::string& nodeid,
                                    const std::string& name,
-                                   const std::string& parentid = "" )
-          { createNode( NodeCollection, service, nodeid, name, parentid ); }
+                                   const std::string& parentid = "",
+                                   const StringMap * config = 0,
+                                   AccessModel accessModel = AccessDefault )
+          { createNode( NodeCollection, service, nodeid, name, parentid, config ); }
 
         /**
          * Deletes a node.
@@ -337,7 +343,7 @@ namespace gloox
         typedef std::pair< std::string, std::string > TrackedItem;
         typedef std::map < std::string, TrackedItem > ItemOperationTrackMap;
         typedef std::map < std::string, std::pair< JID, std::string > > NodeOperationTrackMap;
-	typedef std::map < std::string, PubSub::DiscoHandler* > DiscoHandlerTrackMap;
+        typedef std::map < std::string, PubSub::DiscoHandler* > DiscoHandlerTrackMap;
 
         ClientBase* m_parent;
 
@@ -347,7 +353,7 @@ namespace gloox
         ItemHandlerList m_itemHandlerList;
         ItemOperationTrackMap m_iopTrackMap;
         NodeOperationTrackMap m_nopTrackMap;
-	DiscoHandlerTrackMap m_discoHandlerTrackMap;
+        DiscoHandlerTrackMap m_discoHandlerTrackMap;
     };
 
   }

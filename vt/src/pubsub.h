@@ -107,9 +107,9 @@ namespace gloox
     /**
      * Describes the access types.
      */
-    enum AccessType
+    enum AccessModel
     {
-      AccessOpen,      /**< Any entity may subscribe to the node (i.e., without the necessity for subscription
+      AccessOpen = 0,  /**< Any entity may subscribe to the node (i.e., without the necessity for subscription
                         *   approval) and any entity may retrieve items from the node (i.e., without being
                         *   subscribed); this SHOULD be the default access model for generic pubsub services. */
       AccessPresence,  /**< Any entity with a subscription of type "from" or "both" may subscribe to the node
@@ -120,12 +120,13 @@ namespace gloox
                         *   (see RFC 3921). */
       AccessAuthorize, /**< The node owner must approve all subscription requests, and only subscribers may
                         *   retrieve items from the node. */
-      AccessWhitelist  /**< An entity may be subscribed only through being added to a whitelist by the node
+      AccessWhitelist, /**< An entity may be subscribed only through being added to a whitelist by the node
                         *   owner (unsolicited subscription requests are rejected), and only subscribers may
                         *   retrieve items from the node. In effect, the default affiliation is outcast. The
                         *   node owner MUST automatically be on the whitelist. In order to add entities to the
                         *   whitelist, the node owner SHOULD use the protocol specified in the Manage Affiliated
                         *   Entities section of this document. */
+      AccessDefault    /**< Unspecified (default) Access Model */
     };
 
     /**
