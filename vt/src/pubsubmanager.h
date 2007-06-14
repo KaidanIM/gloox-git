@@ -118,7 +118,8 @@ namespace gloox
          *               will be queried.
          * @param handler DiscoHandler to notify when receiving a response
          */
-        void discoverNodeItems( const JID& service, const std::string& nodeid, PubSub::DiscoHandler * handler );
+        void discoverNodeItems( const JID& service, const std::string& nodeid,
+                                                    PubSub::DiscoHandler * handler );
 
         /**
          * Subscribe to a node.
@@ -126,9 +127,13 @@ namespace gloox
          * @param nodeid ID of the node to subscribe to.
          * @param jid JID to subscribe. If empty, the client's JID will be used (ie
 	 self subscription).
+         * @param type SibscriptionType of the subscription (Collections only!).
+         * @param depth Subscription depth. For 'all', use 0. (Collections only!).
          */
-        void subscribe( const JID& service, const std::string& nodeid, const
-	std::string& jid = "" );
+        void subscribe( const JID& service, const std::string& nodeid,
+                                            const std::string& jid,
+                                            SubscriptionObject type = SubscriptionNodes,
+                                            int depth = 1 );
 
         /**
          * Unsubscribe from a node.
@@ -187,11 +192,11 @@ namespace gloox
          *                 be located at the root of the service.
          */
         void createNode( NodeType type, const JID& service,
-                                        const std::string& nodeid,
+                                        const std::string& node,
                                         const std::string& name,
-                                        const std::string& parentid = "",
+                                        const std::string& parent = "",
                                         const StringMap * config = 0,
-                                        AccessModel accessModel = AccessDefault );
+                                        AccessModel access = AccessDefault );
 
         /**
          * Creates a new leaf node.
@@ -202,12 +207,12 @@ namespace gloox
          *               be located at the root of the service.
          */
         void createLeafNode( const JID& service,
-                             const std::string& nodeid,
+                             const std::string& node,
                              const std::string& name,
-                             const std::string& parentid = "",
+                             const std::string& parent = "",
                              const StringMap * config = 0,
-                             AccessModel accessModel = AccessDefault )
-          { createNode( NodeLeaf, service, nodeid, name, parentid, config ); }
+                             AccessModel access = AccessDefault )
+          { createNode( NodeLeaf, service, node, name, parent, config, access ); }
 
         /**
          * Creates a new collection node.
@@ -218,12 +223,12 @@ namespace gloox
          *               be located at the root of the service.
          */
         void createCollectionNode( const JID& service,
-                                   const std::string& nodeid,
+                                   const std::string& node,
                                    const std::string& name,
-                                   const std::string& parentid = "",
+                                   const std::string& parent = "",
                                    const StringMap * config = 0,
-                                   AccessModel accessModel = AccessDefault )
-          { createNode( NodeCollection, service, nodeid, name, parentid, config ); }
+                                   AccessModel access = AccessDefault )
+          { createNode( NodeCollection, service, node, name, parent, config, access ); }
 
         /**
          * Deletes a node.

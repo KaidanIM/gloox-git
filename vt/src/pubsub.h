@@ -67,6 +67,15 @@ namespace gloox
     };
 
     /**
+     * Describes the different subscription types.
+     */
+    enum SubscriptionObject
+    {
+      SubscriptionNodes,      /**< Invalid subscription type. */
+      SubscriptionItems       /**< The node MUST NOT send event notifications or payloads to the Entity. */
+    };
+
+    /**
      * Describes the possible errors when subscribing to a node.
      */
     enum SubscriptionError

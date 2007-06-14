@@ -36,6 +36,7 @@ namespace gloox
     static const std::string XMLNS_PUBSUB_EVENT = "http://jabber.org/protocol/pubsub#event";
     static const std::string XMLNS_PUBSUB_OWNER = "http://jabber.org/protocol/pubsub#owner";
     static const std::string XMLNS_PUBSUB_NODE_CONFIG = "http://jabber.org/protocol/pubsub#node_config";
+    static const std::string XMLNS_PUBSUB_SUBSCRIBE_OPTIONS = "http://jabber.org/protocol/pubsub#subscribe_opetions";
 
     enum Context {
       Subscription,
@@ -231,7 +232,7 @@ namespace gloox
       {
         //if( (*ith).second )
         //  (*ith).second->handleDiscoError( service, parentid, error );
-	m_discoHandlerTrackMap.erase( ith );
+        m_discoHandlerTrackMap.erase( ith );
       }
     }
 
@@ -273,7 +274,9 @@ namespace gloox
 
     void Manager::subscribe( const JID& service,
                              const std::string& nodeid,
-			     const std::string& jid )
+			                       const std::string& jid,
+			                       SubscriptionObject type,
+			                       int depth )
     {
       if( !m_parent )
         return;
@@ -286,6 +289,31 @@ namespace gloox
       Tag *ps = new Tag( iq, "pubsub", "xmlns", XMLNS_PUBSUB );
       Tag *sub = new Tag( ps, "subscribe", "node", nodeid );
       sub->addAttribute( "jid", jid.empty() ? m_parent->jid().bare() :jid );
+
+      if( type != SubscriptionNodes || depth != 1 )
+      {
+        Tag * options = new Tag( ps, "options" );
+        DataForm df( DataForm::FormTypeSubmit );
+        DataFormField *field = new DataFormField( DataFormField::FieldTypeHidden );
+        field->setName( "FORM_TYPE" );
+        field->setValue( XMLNS_PUBSUB_SUBSCRIBE_OPTIONS );
+        df.addField( field );
+
+        if( type == SubscriptionItems )
+          df.addField( new DataFormField( "pubsub#subscription_type", "items", "", DataFormField::FieldTypeNone ) );
+
+        if( depth != 1 )
+        {
+          field = new DataFormField( DataFormField::FieldTypeNone );
+          field->setName( "pubsub#subscription_depth" );
+          if( depth == 0 )
+            field->setValue( "all" );
+          //else
+          //  field->setValue( depth );
+          df.addField( field );
+        }
+        options->addChild( df.tag() );
+      }
 
       m_parent->trackID( this, id, Subscription );
       m_parent->send( iq );
@@ -352,8 +380,7 @@ namespace gloox
       m_iopTrackMap[id] = TrackedItem(nodeid, itemid);
       m_parent->send( iq );
     }
-    
-    
+
     static const char * accessModelStrings[] = {
       "open",
       "presence",
@@ -364,11 +391,11 @@ namespace gloox
 
     void Manager::createNode( NodeType type,
                               const JID& service,
-                              const std::string& nodeid,
+                              const std::string& node,
                               const std::string& name,
-                              const std::string& parentid,
+                              const std::string& parent,
                               const StringMap * config,
-                              AccessModel accessModel )
+                              AccessModel access )
     {
       const std::string& id = m_parent->getID();
       Tag * iq = new Tag( "iq" );
@@ -376,10 +403,10 @@ namespace gloox
       iq->addAttribute( "to", service.full() );
       iq->addAttribute( "id", id );
       Tag * pubsub = new Tag( iq, "pubsub", "xmlns", XMLNS_PUBSUB );
-      Tag * create = new Tag( pubsub, "create", "node", nodeid );
+      Tag * create = new Tag( pubsub, "create", "node", node );
       Tag * configure = new Tag( pubsub, "configure" );
 
-      if( config || type == NodeCollection || accessModel != AccessDefault )
+      if( config || type == NodeCollection || access != AccessDefault )
       {
         DataForm df( DataForm::FormTypeSubmit );
         DataFormField *field = new DataFormField( DataFormField::FieldTypeHidden );
@@ -388,34 +415,22 @@ namespace gloox
         df.addField( field );
 
         if( type == NodeCollection )
-        {
-          field = new DataFormField( DataFormField::FieldTypeNone );
-          field->setName( "pubsub#node_type" );
-          field->setValue( "collection" );
-          configure->addChild( df.tag() );
-        }
-        if( accessModel != AccessDefault )
-        {
-          field = new DataFormField( DataFormField::FieldTypeNone );
-          field->setName( "pubsub#access_model" );
-          field->setValue( accessModelStrings[accessModel] );
-          configure->addChild( df.tag() );
-        }
+          df.addField( new DataFormField( "pubsub#node_type", "collection", "", DataFormField::FieldTypeNone ) );
+
+        if( access != AccessDefault )
+          df.addField( new DataFormField( "pubsub#access_model", accessModelStrings[access], "", DataFormField::FieldTypeNone ) );
+
         if( config )
         {
           StringMap::const_iterator it = config->begin();
-          for( ; it != config->end();++it )
-          {
-            field = new DataFormField( DataFormField::FieldTypeNone );
-            field->setName( (*it).first );
-            field->setValue( (*it).first );
-            configure->addChild( df.tag() );
-          }
+          for( ; it != config->end(); ++it )
+            df.addField( new DataFormField( (*it).first, (*it).first, "", DataFormField::FieldTypeNone ) );
         }
+        configure->addChild( df.tag() );
       }
 
       m_parent->trackID( this, id, CreateNode );
-      m_nopTrackMap[id] = make_pair( service, nodeid );
+      m_nopTrackMap[id] = make_pair( service, node );
       m_parent->send( iq );
     }
 
