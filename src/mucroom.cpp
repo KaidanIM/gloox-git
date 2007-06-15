@@ -110,11 +110,10 @@ namespace gloox
     x->addAttribute( "xmlns", XMLNS_MUC );
 
     if( m_parent )
-    {
       m_parent->send( s );
-      m_parent->disposeMessageSession( m_session );
-      m_session = 0;
-    }
+
+    delete m_session;
+    m_session = 0;
 
     m_joined = false;
   }
