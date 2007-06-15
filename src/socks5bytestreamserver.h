@@ -34,7 +34,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
-  class GLOOX_API SOCKS5BytestreamServer : public ConnectionHandler, ConnectionDataHandler
+  class GLOOX_API SOCKS5BytestreamServer : public ConnectionHandler, public ConnectionDataHandler
   {
 
     friend class SOCKS5BytestreamManager;
