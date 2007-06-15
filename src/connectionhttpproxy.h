@@ -44,7 +44,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
-  class GLOOX_API ConnectionHTTPProxy : public ConnectionBase, ConnectionDataHandler
+  class GLOOX_API ConnectionHTTPProxy : public ConnectionBase, public ConnectionDataHandler
   {
     public:
       /**
@@ -122,7 +122,7 @@ namespace gloox
        * @param port The XMPP server port. The default of -1 means that SRV records will be used
        * to find out about the actual host:port.
        */
-      void setServer( const std::string& host, unsigned short port = -1 )
+      void setServer( const std::string& host, int port = -1 )
         { m_server = host; m_port = port; }
 
       /**
