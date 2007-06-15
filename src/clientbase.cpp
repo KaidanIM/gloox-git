@@ -921,7 +921,7 @@ namespace gloox
       m_messageSessions.push_back( session );
   }
 
-  void ClientBase::disposeMessageSession( MessageSession *session )
+  void ClientBase::removeMessageSession( MessageSession *session )
   {
     if( !session )
       return;
@@ -930,8 +930,16 @@ namespace gloox
                                                  session );
     if( it != m_messageSessions.end() )
     {
-      delete (*it);
       m_messageSessions.erase( it );
+    }
+  }
+
+  void ClientBase::disposeMessageSession( MessageSession *session )
+  {
+    if( session )
+    {
+      removeMessageSession( session );
+      delete session;
     }
   }
 
