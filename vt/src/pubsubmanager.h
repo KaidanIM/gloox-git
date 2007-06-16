@@ -15,9 +15,11 @@
 
 #include <map>
 #include <string>
-#include "iqhandler.h"
 #include "pubsub.h"
+#include "iqhandler.h"
 #include "discohandler.h"
+#include "messagehandler.h"
+#include "pubsubnodehandler.h"
 
 namespace gloox
 {
@@ -31,9 +33,10 @@ namespace gloox
     class SubscriptionHandler;
     class SubscriptionListHandler;
     class AffiliationListHandler;
+    class NodeHandler;
     class ItemHandler;
-    class Item;
     class DiscoHandler;
+    class EventHandler;
 
     /**
      * @brief This manager is used to interact with PubSub services.
@@ -65,7 +68,7 @@ namespace gloox
      *
      * XEP Version: 1.9
      */
-    class Manager : public IqHandler, public gloox::DiscoHandler
+    class Manager : public IqHandler, public gloox::DiscoHandler, public MessageHandler
     {
       public:
 
@@ -76,7 +79,7 @@ namespace gloox
         Manager( ClientBase* parent );
 
         /**
-         * Virtual Destructor.
+         * Default virtual destructor.
          */
         virtual ~Manager() {}
 
@@ -84,7 +87,14 @@ namespace gloox
         void handleDiscoInfoResult( Stanza *stanza, int context );
         void handleDiscoItemsResult( Stanza *stanza, int context );
         void handleDiscoError( Stanza *stanza, int context );
-        bool handleDiscoSet( Stanza * stanza ) { return 0; }
+        bool handleDiscoSet( Stanza * ) { return 0; }
+
+        // reimplemented from MessageHandler
+        void handleMessage( Stanza * stanza, MessageSession * );
+
+        // reimplemented from IqHandler
+        bool handleIq  ( Stanza *stanza );
+        bool handleIqID( Stanza *stanza, int context );
 
         /**
          * Performs a Disco query to a service or node.
@@ -125,13 +135,13 @@ namespace gloox
          * Subscribe to a node.
          * @param service Service hosting the node.
          * @param nodeid ID of the node to subscribe to.
-         * @param jid JID to subscribe. If empty, the client's JID will be used (ie
-	 self subscription).
+         * @param jid JID to subscribe. If empty, the client's JID will be used
+         *            (ie self subscription).
          * @param type SibscriptionType of the subscription (Collections only!).
-         * @param depth Subscription depth. For 'all', use 0. (Collections only!).
+         * @param depth Subscription depth. For 'all', use 0 (Collections only!).
          */
         void subscribe( const JID& service, const std::string& nodeid,
-                                            const std::string& jid,
+                                            const JID& jid = JID(),
                                             SubscriptionObject type = SubscriptionNodes,
                                             int depth = 1 );
 
@@ -140,19 +150,50 @@ namespace gloox
          * @param service Service hosting the node.
          * @param node ID of the node to unsubscribe from.
          */
-        void unsubscribe( const JID& service, const std::string& nodeid );
+        void unsubscribe( const JID& service, const std::string& node );
 
         /**
          * Requests the subscription list from a service.
-         * @param jid Service to query.
+         * @param service Service to query.
          */
-        void requestSubscriptionList( const JID& jid, SubscriptionListHandler * slh  );
+        void requestSubscriptionList( const JID& service, SubscriptionListHandler * slh  );
 
         /**
          * Requests the affiliation list from a service.
          * @param service Service to query.
          */
-        void requestAffiliationList( const JID& jid, AffiliationListHandler * alh );
+        void requestAffiliationList( const JID& service, AffiliationListHandler * alh );
+
+        /**
+         * Requests subscription options.
+         * @param service Service to query.
+         * @param jid Subscribed entity.
+         * @param node Node ID of the node.
+         * @param handler Node ID of the node.
+         */
+        void requestSubscriptionOptions( const JID& service,
+                                         const JID& jid,
+                                         const std::string& node,
+                                         NodeHandler * slh  );
+
+        /**
+         * Modifies subscription options.
+         * @param service Service to query.
+         * @param jid Subscribed entity.
+         * @param node Node ID of the node.
+         * @param df New configuration.
+         */
+        void setSubscriptionOptions( const JID& service,
+                                     const JID& jid,
+                                     const std::string& node,
+                                     const DataForm& df );
+
+        /**
+         * Requests the affiliation list for a node.
+         * @param service Service to query.
+         * @param node Node ID of the node.
+         */
+        void requestAffiliationList( const JID& service, const std::string& node, AffiliationListHandler * alh );
 
         /**
          * Publish an item to a node.
@@ -160,7 +201,7 @@ namespace gloox
          * @param nodeid ID of the node to delete the item from.
          * @param item Item to publish.
          */
-        void publishItem( const JID& jid, const std::string& nodeid, const Item& item );
+        void publishItem( const JID& service, const std::string& nodeid, const Tag& item );
 
         /**
          * Delete an item from a node.
@@ -239,16 +280,6 @@ namespace gloox
                          const std::string& nodeid );
 
 /*
-        void createNode( Node::NodeType type, const std::string& service,
-                                              const std::string& nodeid,
-                                              const std::string& name,
-                                              const Dataform& config );
-
-        void createNode( NodeType type, const JID& node,
-                                        const std::string& name,
-                                        const Dataform& config );
-          { createNode( node.bare(), node.resource(), config ); }
-
         void associateNode( const std::string& service,
                             const std::string& nodeid,
                             const std::string& collectionid );
@@ -261,53 +292,88 @@ namespace gloox
 
         void getDefaultNodeConfig( NodeType = NodeTypeLeaf );
 
-        void getNodeConfig( const std::string& service, const std::string nodeid );
-
-        void getNodeConfig( const JID& node )
-          { getNodeConfig( node.bare(), node.resource ); }
-
         void handleNodeConfigError( const std::string& service, const std::string& nodeid ) = 0;
 
         void handleNodeConfigRequestError( const std::string& service, const std::string& nodeid ) = 0;
 */
-        void purgeNodeItems( const JID& service, const std::string& nodeid );
 
-/*
-        void modifySubscriptions( const std::string& service,
-                                  const std::string& nodeid,
-                                  const std::string& jid,
-                                  const SubscriptionMap& subMap );
+        /**
+         * Requests the subscriber list for a node.
+         * @param service Service to query.
+         * @param node Node ID of the node.
+         * @param handler NodeHandler .
+         */
+        void purgeNodeItems( const JID& service, const std::string& node,
+                                                 NodeHandler * handler );
 
-        void modifySubscriptions( const JID& node,
-                                  const std::string& jid,
-                                  const SubscriptionMap& subMap )
-          { modifySubscriptions( node.bare(), node.resource(), jid, subMap ); }
+        /**
+         * Requests the subscriber list for a node.
+         * @param service Service to query.
+         * @param node Node ID of the node.
+         * @param handler NodeHandler.
+         */
+        void requestSubscriberList( const JID& service,
+                                    const std::string& node,
+                                    NodeHandler * handler )
+          { subscriberList( service, node, 0, handler ); }
 
-        void handleSubscriptionModificationError( const std::string& service,
-                                                  const std::string& nodeid,
-                                                  const SubscriptionMap& subMap,
-                                                  SubscriptionModificationError error) = 0;
-*/
+        /**
+         * Modifies the subscriber list for a node. This function SHOULD only set the 
+         * @param service Service to query.
+         * @param node Node ID of the node.
+         * @param list NodeHandler .
+         */
+        void setSubscriberList( const JID& service,
+                                const std::string& node,
+                                const SubscriberList& list,
+                                NodeHandler * handler )
+          { subscriberList( service, node, &list, handler ); }
+
+        /**
+         * Requests the affiliate list for a node.
+         * @param service Service to query.
+         * @param node Node ID of the node.
+         * @param handler NodeHandler .
+         */
+        void requestAffiliateList( const JID& service,
+                                   const std::string& node,
+                                   NodeHandler * handler )
+          { affiliateList( service, node, 0, handler ); }
+
+        /**
+         * Modifies the affiliate list for a node.
+         * @param service Service to query.
+         * @param node Node ID of the node.
+         * @param list NodeHandler .
+         */
+        void setAffiliateList( const JID& service,
+                               const std::string& node,
+                               const AffiliateList& list,
+                               NodeHandler * handler )
+          { affiliateList( service, node, &list, handler ); }
 
         /**
          * Retrieve the configuration of a node.
          * @param service Service hosting the node.
-         * @param nodeid ID of the node.
+         * @param node ID of the node.
+         * @param handler NodeHandler responsible to handle the request result.
          */
-        void requestNodeConfig( const JID& service, const std::string& nodeid );
+        void requestNodeConfig( const JID& service,
+                                const std::string& node,
+                                NodeHandler * handler )
+          { nodeConfig( service, node, 0, handler ); }
 
         /**
-         * Retrieve the configuration of a node.
-         * @param service Service hosting the node.
-         * @param nodeid ID of the node.
-         * @param dataform Configuration of the node.
-         * @param e Error of the configuration request.
+         * Changes a node's configuration.
+         * @param service Service to query.
+         * @param node Node ID of the node.
+         * @param handler NodeHandler responsible to handle the request result.
          */
-        /*virtual void handleNodeConfig( const JID& service,
-                                       const std::string& nodeid,
-                                       const DataForm& dataForm,
-                                       const OptionRequestError e ) = 0;
-*/
+        void setNodeConfig( const JID& service,
+                            const std::string& node,
+                            const DataForm& config,
+                            NodeHandler * handler  )
+          { nodeConfig( service, node, &config, handler ); }
 
         /**
          * Registers an handler to receive notification of (un)subscription events.
@@ -324,6 +390,20 @@ namespace gloox
           { m_itemHandlerList.remove( handler ); }
 
         /**
+         * Registers an handler to receive notification of events.
+         * @param handler EventHandler to register.
+         */
+        void registerEventHandler( EventHandler * handler )
+          { m_eventHandlerList.push_back( handler ); }
+
+        /**
+         * Removes an handler from the list of event handlers.
+         * @param handler EventHandler to remove.
+         */
+        void removeEventHandler( EventHandler * handler )
+          { m_eventHandlerList.remove( handler ); }
+
+        /**
          * Registers an handler to receive notification of (un)subscription events.
          * @param handler SubscriptionHandler to register.
          */
@@ -337,10 +417,50 @@ namespace gloox
         void removeSubscriptionHandler( SubscriptionHandler * handler )
           { m_subscriptionTrackList.remove( handler ); }
 
-        bool handleIq  ( Stanza *stanza );
-        bool handleIqID( Stanza *stanza, int context );
-
       private:
+
+        /**
+         * This function sets or requests a node's configuration form
+         * (depending on arguments).
+         * Requests or changes a node's configuration.
+         * @param service Service to query.
+         * @param node Node ID of the node.
+         * @param config If not NULL, the function will request the node config.
+         *               Otherwise, it will set the config based on the form.
+         * @param handler NodeHandler responsible to handle the request result.
+         */ 
+        void nodeConfig( const JID& service, const std::string& node,
+                                             const DataForm * config,
+                                             NodeHandler * handler );
+
+        /**
+         * This function sets or requests a node's subscribers list form
+         * (depending on arguments).
+         * Requests or changes a node's configuration.
+         * @param service Service to query.
+         * @param node Node ID of the node.
+         * @param config If not NULL, the function will request the node config.
+         *               Otherwise, it will set the config based on the form.
+         * @param handler NodeHandler responsible to handle the request result.
+         */ 
+        void subscriberList( const JID& service, const std::string& node,
+                                                 const SubscriberList * config,
+                                                 NodeHandler * handler );
+
+        /**
+         * This function sets or requests a node's affiliates list
+         * (depending on arguments).
+         * Requests or changes a node's configuration.
+         * @param service Service to query.
+         * @param node Node ID of the node.
+         * @param config If not NULL, the function will request the node config.
+         *               Otherwise, it will set the config based on the form.
+         * @param handler NodeHandler responsible to handle the request result.
+         */ 
+        void affiliateList( const JID& service, const std::string& node,
+                                                const AffiliateList * config,
+                                                NodeHandler * handler );
+
         typedef std::list< SubscriptionHandler * > SubscriptionTrackList;
         typedef std::map < std::string, AffiliationListHandler * > AffiliationListTrackMap;
         typedef std::map < std::string, SubscriptionListHandler * > SubscriptionListTrackMap;
@@ -349,6 +469,8 @@ namespace gloox
         typedef std::map < std::string, TrackedItem > ItemOperationTrackMap;
         typedef std::map < std::string, std::pair< JID, std::string > > NodeOperationTrackMap;
         typedef std::map < std::string, PubSub::DiscoHandler* > DiscoHandlerTrackMap;
+        typedef std::list< EventHandler* > EventHandlerList;
+        typedef std::map< std::string, NodeHandler* > NodeHandlerTrackMap;
 
         ClientBase* m_parent;
 
@@ -359,6 +481,8 @@ namespace gloox
         ItemOperationTrackMap m_iopTrackMap;
         NodeOperationTrackMap m_nopTrackMap;
         DiscoHandlerTrackMap m_discoHandlerTrackMap;
+        EventHandlerList m_eventHandlerList;
+        NodeHandlerTrackMap m_nodeHandlerTrackMap;
     };
 
   }

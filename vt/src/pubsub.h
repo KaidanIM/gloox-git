@@ -42,11 +42,11 @@ namespace gloox
      */
     enum AffiliationType
     {
-      AffiliationInvalid,   /**< Invalid Affiliation type. */
-      AffiliationOutcast,   /**< Entity is disallowed from subscribing or publishing. */
-      AffiliationNone,      /**<  */
-      AffiliationPublisher, /**<  */
-      AffiliationOwner      /**<  */
+      AffiliationOutcast = 0,       /**< Entity is disallowed from subscribing or publishing. */
+      AffiliationNone,          /**<  */
+      AffiliationPublisher,     /**<  */
+      AffiliationOwner,          /**<  */
+      AffiliationInvalid        /**< Invalid Affiliation type. */
     };
 
     /**
@@ -54,16 +54,16 @@ namespace gloox
      */
     enum SubscriptionType
     {
-      SubscriptionInvalid,      /**< Invalid subscription type. */
-      SubscriptionNone,         /**< The node MUST NOT send event notifications or payloads to the Entity. */
+      SubscriptionNone = 0,     /**< The node MUST NOT send event notifications or payloads to the Entity. */
       SubscriptionPending,      /**< An entity has requested to subscribe to a node and the request has not yet
                                  *   been approved by a node owner. The node MUST NOT send event notifications
                                  *   or payloads to the entity while it is in this state. */
       SubscriptionUnconfigured, /**< An entity has subscribed but its subscription options have not yet been
                                  *   configured. The node MAY send event notifications or payloads to the entity
                                  *   while it is in this state. The service MAY timeout unconfigured subscriptions. */
-      SubscriptionSubscribed    /**< An entity is subscribed to a node. The node MUST send all event notifications
+      SubscriptionSubscribed,   /**< An entity is subscribed to a node. The node MUST send all event notifications
                                  *   (and, if configured, payloads) to the entity while it is in this state. */
+      SubscriptionInvalid       /**< Invalid subscription type. */
     };
 
     /**
@@ -135,7 +135,7 @@ namespace gloox
                         *   node owner MUST automatically be on the whitelist. In order to add entities to the
                         *   whitelist, the node owner SHOULD use the protocol specified in the Manage Affiliated
                         *   Entities section of this document. */
-      AccessDefault    /**< Unspecified (default) Access Model */
+      AccessDefault    /**< Unspecified (default) Access Model (does not represent a real access type by itself). */
     };
 
     /**
@@ -341,7 +341,9 @@ namespace gloox
       FeatureRetrieveSubscriptions = 1<<25, /**< Retrieval of current subscriptions is supported. RECOMMENDED */
       FeatureSubscribe             = 1<<26, /**< Subscribing and unsubscribing are supported. REQUIRED */
       FeatureSubscriptionOptions   = 1<<27, /**< Configuration of subscription options is supported. OPTIONAL */
-      FeatureSubscriptionNotifs    = 1<<28  /**< Notification of subscription state changes is supported. */
+      FeatureSubscriptionNotifs    = 1<<28, /**< Notification of subscription state changes is supported. */
+      FeatureMetaOwner             = 1<<29,
+      FeatureMetaEvent             = 1<<30
     };
 
 // [Persistent - Notification]

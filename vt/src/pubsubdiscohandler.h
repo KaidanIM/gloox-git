@@ -13,8 +13,6 @@
 #ifndef PUBSUBDISCOHANDLER_H_
 #define PUBSUBDISCOHANDLER_H_
 
-//#include "jid.h"
-//#include "dataform.h"
 #include <string>
 
 namespace gloox

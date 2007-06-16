@@ -25,7 +25,7 @@ libgloox_la_SOURCES = jid.cpp parser.cpp connectiontcpclient.cpp clientbase.cpp 
                         tlsgnutlsclientanon.cpp tlsschannel.cpp tlsdefault.cpp simanager.cpp siprofileft.cpp \
                         mutex.cpp connectionsocks5proxy.cpp socks5bytestreammanager.cpp socks5bytestream.cpp \
                         connectiontcpbase.cpp connectiontcpserver.cpp socks5bytestreamserver.cpp amp.cpp \
-                        pubsubmanager.cpp iq.cpp pubsubitem.cpp error.cpp
+                        pubsubmanager.cpp iq.cpp pubsubitem.cpp error.cpp parserutils.cpp
 
 libgloox_la_LDFLAGS = -version-info 7:0:0 -no-undefined -no-allow-shlib-undefined
 libgloox_la_LIBADD =
@@ -71,7 +71,7 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             pubsubmanager.h           pssubscriptionhandler.h pssubscriptionlisthandler.h \
                             iq.h                      pubsub.h                pubsubitem.h \
                             pubsubnode.h              pubsubitemhandler.h     error.h \
-			    pubsubdiscohandler.h
+                            pubsubdiscohandler.h      pubsubeventhandler.h
 
 noinst_HEADERS = prep.h dns.h nonsaslauth.h mucmessagesession.h stanzaextensionfactory.h tlsgnutlsclient.h \
                    tlsgnutlsbase.h tlsgnutlsclientanon.h tlsgnutlsserveranon.h tlsopenssl.h tlsschannel.h \

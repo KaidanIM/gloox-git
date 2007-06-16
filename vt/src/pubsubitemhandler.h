@@ -10,8 +10,8 @@
   This software is distributed without any warranty.
 */
 
-#ifndef __PUBSUBITEMHANDLER_H__
-#define __PUBSUBITEMHANDLER_H__
+#ifndef PUBSUBITEMHANDLER_H__
+#define PUBSUBITEMHANDLER_H__
 
 #include <list>
 
@@ -19,6 +19,7 @@ namespace gloox
 {  
 
   class JID;
+  class Tag;
   class DiscoNodeItem;
 
   typedef std::list<DiscoNodeItem> DiscoNodeItemList;
@@ -30,9 +31,9 @@ namespace gloox
     //typedef std::list< const Tag * > ItemList;
 
     /**
-     * @brief A virtual interface for receiving item (list) result.
+     * @brief A virtual interface for receiving results from item related requests.
      *
-     * Derive from this interface and register with the PubSub::Manager.
+     * Derive from this interface.
      *
      * @author Jakob Schroeter <js@camaya.net>
      */
@@ -42,7 +43,7 @@ namespace gloox
         /**
          * 
          */
-        virtual void handleItem( const JID& service, const std::string& nodeid, const Item * item ) = 0;
+        virtual void handleItem( const JID& service, const std::string& nodeid, const Tag * entry ) = 0;
 
         /**
          * Receives the list of Items for a node.
@@ -64,4 +65,4 @@ namespace gloox
 
 
 
-#endif /* __PUBSUBITEMHANDLER_H__ */
+#endif /* PUBSUBITEMHANDLER_H__ */
