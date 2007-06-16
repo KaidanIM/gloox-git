@@ -25,6 +25,8 @@
 
 #ifdef HAVE_WINTLS
 
+#include <ctime>
+
 #define SECURITY_WIN32
 #include <windows.h>
 #include <security.h>
@@ -76,7 +78,7 @@ namespace gloox
       void handshakeStage( const std::string& data );
       void setSizes();
 
-      time_t filetime2int( FILETIME t );
+      int filetime2int( FILETIME t );
 
       void validateCert();
       void connectionInfos();

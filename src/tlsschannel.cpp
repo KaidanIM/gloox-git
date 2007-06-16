@@ -451,14 +451,22 @@ namespace gloox
     }
   }
 
-  // FIXME
-  time_t SChannel::filetime2int( FILETIME t )
+  int SChannel::filetime2int( FILETIME t )
   {
-    LONGLONG ll = t.dwLowDateTime | ( static_cast<LONGLONG>( t.dwHighDateTime ) << 32 );
+    SYSTEMTIME stUTC;
+    FileTimeToSystemTime(&t, &stUTC);
+    std::tm ts;
+    ts.tm_year = stUTC.wYear - 1900;
+    ts.tm_mon = stUTC.wMonth - 1;
+    ts.tm_mday = stUTC.wDay;
+    ts.tm_hour = stUTC.wHour;
+    ts.tm_min = stUTC.wMinute;
+    ts.tm_sec = stUTC.wSecond;
 
-    ll -= 116444736 * 10000 * 100000;
-    ll /= 10000000;
-    return static_cast<time_t>( ll );
+    int unixtime;
+    if ( (unixtime = mktime(&ts)) == -1 )
+      unixtime = 0;
+    return unixtime;
   }
 
   void SChannel::validateCert()
