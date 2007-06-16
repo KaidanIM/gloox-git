@@ -929,8 +929,10 @@ namespace gloox
     bool chain;                     /**< Determines whether the cert chain verified ok. */
     std::string issuer;             /**< The name of the issuing entity.*/
     std::string server;             /**< The server the certificate has been issued for. */
-    int date_from;                  /**< The date from which onwards the certificate is valid. */
-    int date_to;                    /**< The date up to which the certificate is valid. */
+    int date_from;                  /**< The date from which onwards the certificate is valid
+                                     * (in UTC, not set when using OpenSSL). */
+    int date_to;                    /**< The date up to which the certificate is valid
+                                     * (in UTC, not set when using OpenSSL). */
     std::string protocol;           /**< The encryption protocol used for the connection. */
     std::string cipher;             /**< The cipher used for the connection. */
     std::string mac;                /**< The MAC used for the connection. */
