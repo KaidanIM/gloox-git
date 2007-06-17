@@ -33,7 +33,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
-  class SIProfileHandler
+  class GLOOX_API SIProfileHandler
   {
 
     public:
