@@ -1,4 +1,4 @@
-v0.9 -- xx Feb 2007
+v0.9 -- 17 Jun 2007
 -------------------
 - rewrote XML parser (no dependency on iksemel anymore)
 - XEP-0045 (Multi-User Chat)
@@ -24,12 +24,12 @@ v0.9 -- xx Feb 2007
 - RosterManager: take JIDs in un/subscribe()/add()
 - RosterListener: announce JIDs, not std::strings
 - DataFormBase: added addField() to add a single field
-- DNS: SRV record resolving on win32 (thanks to Polycom)
+- DNS: SRV record resolving on win32 (thanks to Marc Rousseau)
 - Client: removed setInitialPriority() and setAutoPresence() in favour of setPresence()
 - support for SASL authorization id != authentication id
 - Disco: added removeFeature()
 - Tag: added setAttributes()
-- merged patch by Polycom to distiguish between incoming and outgoing Tags/Stanzas
+- merged patch by Marc Rousseau to distiguish between incoming and outgoing Tags/Stanzas
 - moved several structs and enums into gloox namespace (mostly from *Handlers)
 - move Resource into gloox namespace (from RosterItem)
 - MessageEventFilter: fixed a bug where error messages triggered events
@@ -56,9 +56,8 @@ v0.9 -- xx Feb 2007
 - AdhocHandler: added 'handleAdhoc' prefix
 - Adhoc: handle Disco errors
 - removed unmaintained Dev-C++ project (in favor of Code::Blocks project)
-- ClientBase: renamed ping() --> whitespacePing()
-- HTTP proxy support (thanks to Jose A. Perez Sanchez)
-- HTTP proxy Basic auth support
+- ClientBase: added whitespacePing()
+- HTTP proxy support, incl. Basic auth support
 - Tag: basic XPath support
 - DNS: cleanup
 - TagHandler: now receives Tag, not Stanza
@@ -103,10 +102,9 @@ v0.9 -- xx Feb 2007
 - Client: added presence(), status()
 - RosterListener: added handleRosterError()
 - PrivacyListHandler: handle unknown errors
-
-since -rc3:
 - TLSOpenSSL: don't throw handshake errors if the connection was closed by the server
-- fixed compilation issues introduced in -rc3
+- allow manual deletion of MessageSessions again (thanks to Martin Milata)
+- Tag: added addAttribute( const std::string&, bool )
 
 
 v0.8 -- 08 Apr 2006
