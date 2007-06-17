@@ -57,6 +57,19 @@ namespace gloox
     {
       public:
 
+        virtual void handleNodeCreationResult( const JID& service,
+                                               const std::string& node/*,
+                                               const Error& e*/ ) = 0;
+
+        virtual void handleNodeDeletationResult( const JID& service,
+                                                 const std::string& node/*,
+                                                 const Error& e*/ ) = 0;
+
+        virtual void handleNodePurgeResult( const JID& service,
+                                            const std::string& node/*,
+                                            const Error& e*/ ) = 0;
+
+
         /**
          * Receives the list of Items for a node.
          * @param service Service hosting the queried node.

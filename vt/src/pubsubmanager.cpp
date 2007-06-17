@@ -457,7 +457,7 @@ namespace gloox
       }
 
       m_parent->trackID( this, id, Subscription );
-      m_nopTrackMap[id] = std::make_pair( service, node );
+      m_nopTrackMap[id] = node;
       m_parent->send( iq );
     }
 
@@ -572,7 +572,7 @@ namespace gloox
       }
 
       m_parent->trackID( this, id, CreateNode );
-      m_nopTrackMap[id] = make_pair( service, node );
+      m_nopTrackMap[id] = node;
       m_parent->send( iq );
     }
 
@@ -590,7 +590,7 @@ namespace gloox
       new Tag( pubsub, "delete", "node", nodeid );
 
       m_parent->trackID( this, id, DeleteNode );
-      m_nopTrackMap[id] = make_pair( service, nodeid );
+      m_nopTrackMap[id] = nodeid;
       m_parent->send( iq );
     }
 /*
@@ -874,7 +874,7 @@ namespace gloox
                   NodeOperationTrackMap::iterator it = m_nopTrackMap.find( id );
                   if( it != m_nopTrackMap.end() )
                   {
-                    const std::string& node = (*it).second.second;
+                    const std::string& node = (*it).second;
                     switch( context )
                     {
                       case SetSubscriptionOptions:
