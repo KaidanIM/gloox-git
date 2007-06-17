@@ -31,17 +31,17 @@ namespace gloox
 
   void FlexibleOffline::checkSupport()
   {
-    m_parent->disco()->getDiscoInfo( m_parent->jid().server(), "", this, FO_CHECK_SUPPORT );
+    m_parent->disco()->getDiscoInfo( m_parent->jid().server(), "", this, FOCheckSupport );
   }
 
   void FlexibleOffline::getMsgCount()
   {
-    m_parent->disco()->getDiscoInfo( m_parent->jid().server(), XMLNS_OFFLINE, this, FO_REQUEST_NUM );
+    m_parent->disco()->getDiscoInfo( m_parent->jid().server(), XMLNS_OFFLINE, this, FORequestNum );
   }
 
   void FlexibleOffline::fetchHeaders()
   {
-    m_parent->disco()->getDiscoItems( m_parent->jid().server(), XMLNS_OFFLINE, this, FO_REQUEST_HEADERS );
+    m_parent->disco()->getDiscoItems( m_parent->jid().server(), XMLNS_OFFLINE, this, FORequestHeaders );
   }
 
   void FlexibleOffline::fetchMessages( const StringList& msgs )
@@ -66,7 +66,7 @@ namespace gloox
       }
     }
 
-    m_parent->trackID( this, id, FO_REQUEST_MSGS );
+    m_parent->trackID( this, id, FORequestMsgs );
     m_parent->send( iq );
   }
 
@@ -92,7 +92,7 @@ namespace gloox
       }
     }
 
-    m_parent->trackID( this, id, FO_REMOVE_MSGS );
+    m_parent->trackID( this, id, FORemoveMsgs );
     m_parent->send( iq );
   }
 
@@ -113,12 +113,12 @@ namespace gloox
 
     switch( context )
     {
-      case FO_CHECK_SUPPORT:
+      case FOCheckSupport:
         m_flexibleOfflineHandler->handleFlexibleOfflineSupport(
             stanza->findChild( "query" )->hasChild( "feature", "var", XMLNS_OFFLINE ) );
         break;
 
-      case FO_REQUEST_NUM:
+      case FORequestNum:
         int num = -1;
         DataForm f( stanza->findChild( "query" )->findChild( "x" ) );
         if( f.hasField( "number_of_messages" ) )
@@ -131,7 +131,7 @@ namespace gloox
 
   void FlexibleOffline::handleDiscoItemsResult( Stanza *stanza, int context )
   {
-    if( context == FO_REQUEST_HEADERS && m_flexibleOfflineHandler )
+    if( context == FORequestHeaders && m_flexibleOfflineHandler )
     {
       Tag *q = stanza->findChild( "query" );
       if( q && q->hasAttribute( "xmlns", XMLNS_DISCO_ITEMS ) && q->hasAttribute( "node", XMLNS_OFFLINE ) )
@@ -159,7 +159,7 @@ namespace gloox
 
     switch( context )
     {
-      case FO_REQUEST_MSGS:
+      case FORequestMsgs:
         switch( stanza->subtype() )
         {
           case StanzaIqResult:
@@ -183,7 +183,7 @@ namespace gloox
             break;
         }
         break;
-      case FO_REMOVE_MSGS:
+      case FORemoveMsgs:
         switch( stanza->subtype() )
         {
           case StanzaIqResult:
