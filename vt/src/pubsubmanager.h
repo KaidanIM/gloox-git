@@ -466,7 +466,7 @@ namespace gloox
         typedef std::list</*std::map < std::string,*/ ItemHandler * > ItemHandlerList;
         typedef std::pair< std::string, std::string > TrackedItem;
         typedef std::map < std::string, TrackedItem > ItemOperationTrackMap;
-        typedef std::map < std::string, std::pair< JID, std::string > > NodeOperationTrackMap;
+        typedef std::map < std::string, std::string > NodeOperationTrackMap;
         typedef std::map < std::string, PubSub::DiscoHandler* > DiscoHandlerTrackMap;
         typedef std::list< EventHandler* > EventHandlerList;
         typedef std::map< std::string, NodeHandler* > NodeHandlerTrackMap;

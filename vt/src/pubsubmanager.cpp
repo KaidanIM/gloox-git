@@ -457,7 +457,7 @@ namespace gloox
       }
 
       m_parent->trackID( this, id, Subscription );
-      //m_nopTrackMap[id] = StringPair( service, node );
+      m_nopTrackMap[id] = std::make_pair( service, node );
       m_parent->send( iq );
     }
 
@@ -762,19 +762,18 @@ namespace gloox
               Tag *sub = ps->findChild( "subscription" );
               if( sub )
               {
-                const std::string& nodeid = sub->findAttribute( "node" ),
-                                   sid    = sub->findAttribute( "subid" ),
-                                   jid    = sub->findAttribute( "jid" );
+                const std::string& node = sub->findAttribute( "node" ),
+                                   sid  = sub->findAttribute( "subid" ),
+                                   jid  = sub->findAttribute( "jid" );
                 SubscriptionType subType = subscriptionType( sub->findAttribute( "subsciption" ) );
                 SubscriptionTrackList::iterator it = m_subscriptionTrackList.begin();
                 for( ; it != m_subscriptionTrackList.end(); ++it )
-                  (*it)->handleSubscriptionResult( service, nodeid, sid, subType, SubscriptionErrorNone );
+                  (*it)->handleSubscriptionResult( service, node, sid, subType, SubscriptionErrorNone );
               }
               break;
             }
             case Unsubscription:
             {
-              std::cout << "UNSUBSCRIPTION" << std::endl;
               SubscriptionTrackList::iterator it = m_subscriptionTrackList.begin();
               //for( ; it != m_subscriptionTrackList.end(); ++it )
               //  (*it)->handleUnsubscriptionResult( service, jid, UnsubscriptionErrorNone );
@@ -868,11 +867,13 @@ namespace gloox
                 case SetSubscriberList:
                 case SetAffiliateList:
                 case SetNodeConfig:
+                case CreateNode:
+                case DeleteNode:
+                case PurgeNodeItems:
                 {
                   NodeOperationTrackMap::iterator it = m_nopTrackMap.find( id );
                   if( it != m_nopTrackMap.end() )
                   {
-                    const JID& service = (*it).second.first;
                     const std::string& node = (*it).second.second;
                     switch( context )
                     {
@@ -887,6 +888,15 @@ namespace gloox
                         break;
                       case SetNodeConfig:
                         (*ith).second->handleNodeConfigResult( service, node );
+                        break;
+                      case CreateNode:
+                        (*ith).second->handleNodeCreationResult( service, node );
+                        break;
+                      case DeleteNode:
+                        (*ith).second->handleNodeDeletationResult( service, node );
+                        break;
+                      case PurgeNodeItems:
+                        (*ith).second->handleNodePurgeResult( service, node );
                         break;
                     }
                     m_nopTrackMap.erase( it );
@@ -967,39 +977,6 @@ namespace gloox
                 //(*ith).second->handleItemDeletationResult( (*it).second.first,
                 //                                           (*it).second.second );
                 m_iopTrackMap.erase( it );
-              }
-              break;
-            }
-            case CreateNode:
-            {
-              NodeOperationTrackMap::iterator it = m_nopTrackMap.find( id );
-              if( it != m_nopTrackMap.end() )
-              {
-                //(*ith).second->handleNodeCreationResult( (*it).second.first,
-                //                                         (*it).second.second );
-                m_nopTrackMap.erase( it );
-              }
-              break;
-            }
-            case DeleteNode:
-            {
-              NodeOperationTrackMap::iterator it = m_nopTrackMap.find( id );
-              if( it != m_nopTrackMap.end() )
-              {
-                //(*ith).second->handleNodeDeletationResult( (*it).second.first,
-                //                                           (*it).second.second );
-                m_nopTrackMap.erase( it );
-              }
-              break;
-            }
-            case PurgeNodeItems:
-            {
-              NodeOperationTrackMap::iterator it = m_nopTrackMap.find( id );
-              if( it != m_nopTrackMap.end() )
-              {
-                //(*ith).second->handleNodePurgeResult( (*it).second.first,
-                //                                      (*it).second.second );
-                m_nopTrackMap.erase( it );
               }
               break;
             }
