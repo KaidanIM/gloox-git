@@ -57,21 +57,36 @@ namespace gloox
     {
       public:
 
+        /**
+         * Receives the result of a node creation request.
+         * @param service Service hosting the node.
+         * @param node ID of the node.
+         */
         virtual void handleNodeCreationResult( const JID& service,
                                                const std::string& node/*,
                                                const Error& e*/ ) = 0;
 
+        /**
+         * Receives the result of a node removal request.
+         * @param service Service hosting the node.
+         * @param node ID of the node.
+         */
         virtual void handleNodeDeletationResult( const JID& service,
                                                  const std::string& node/*,
                                                  const Error& e*/ ) = 0;
 
+        /**
+         * Receives the result of a node purge request.
+         * @param service Service hosting the node.
+         * @param node ID of the node.
+         */
         virtual void handleNodePurgeResult( const JID& service,
                                             const std::string& node/*,
                                             const Error& e*/ ) = 0;
 
 
         /**
-         * Receives the list of Items for a node.
+         * Receives the configuration form of a node.
          * @param service Service hosting the queried node.
          * @param jid Subscribed entity.
          * @param node ID of the queried node.
@@ -94,7 +109,7 @@ namespace gloox
                                                       const Error& e*/ ) = 0;
 
         /**
-         * 
+         * Receives the list of subscribers to a node.
          * @param service Service hosting the node.
          * @param node ID of the queried node.
          * @param list Subscriber list.
@@ -104,7 +119,7 @@ namespace gloox
                                            const SubscriberList& list ) = 0;
 
         /**
-         * 
+         * Receives the result of a subscription's options modification.
          * @param service Service hosting the node.
          * @param node ID of the node.
          */
