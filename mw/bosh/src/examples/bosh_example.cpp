@@ -73,7 +73,7 @@ class MessageTest : public MessageSessionHandler, ConnectionListener, LogHandler
 // this code connects to a jabber server through a BOSH connection...
 
        ConnectionTCPClient* conn0 = new ConnectionTCPClient( j->logInstance(), "localhost", 8080 );
-       ConnectionBOSH* conn1 = new ConnectionBOSH( j, conn0, j->logInstance(), "localhost", "localhost",5222);
+       ConnectionBOSH* conn1 = new ConnectionBOSH( j, conn0, j->logInstance(), "localhost", "localhost");
        j->setConnectionImpl( conn1 );
 
 

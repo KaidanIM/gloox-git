@@ -160,7 +160,9 @@ namespace gloox
    
       ConnectionState m_state;
 
-      bool m_http11;
+      bool m_http11; // Persistent connections
+      bool m_pipelining; // Multiple requests between responses (on a single connection)
+   
 
   };
 

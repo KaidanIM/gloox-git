@@ -19,6 +19,7 @@
 #include "logsink.h"
 #include "prep.h"
 #include "base64.h"
+#include "tag.h"
 
 #include <string>
 
@@ -36,7 +37,7 @@ namespace gloox
   {
     m_server = prep::idna( xmppServer );
     m_port = xmppPort;
-
+    m_path = "/";
     if( m_connection )
       m_connection->registerConnectionDataHandler( this );
   }
@@ -49,7 +50,7 @@ namespace gloox
   {
     m_server = prep::idna( xmppServer );
     m_port = xmppPort;
-
+    m_path = "/";
     if( m_connection )
       m_connection->registerConnectionDataHandler( this );
   }
@@ -79,6 +80,7 @@ namespace gloox
     if( m_connection && m_handler )
     {
       m_state = StateConnecting;
+      m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh initiating connection to server" );
       return m_connection->connect();
     }
 
@@ -87,6 +89,7 @@ namespace gloox
 
   void ConnectionBOSH::disconnect()
   {
+    m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh disconnected from server" );
     m_state = StateDisconnected;
     if( m_connection )
       m_connection->disconnect();
@@ -112,20 +115,8 @@ namespace gloox
   {
     if( !m_connection )
       return false;
-    
-    std::ostringstream connrequest, connbody;
- 
-    connbody << "<body content='text/xml; charset=utf-8' hold='" << m_hold << "' rid='"
-    << m_rid << "' to='"<< m_server << "' route='xmpp:" << m_server << ":" << m_port << "secure='false' "
-    << "ver='1.6' wait='" << m_wait << "' ack='0' xml:lang='en' xmlns='http://jabber.org/protocol/httpbind' />";
-    
-    connrequest << "POST " << m_path << "HTTP/1.1\r\n";
-    connrequest << "Host: " << m_server << "\r\n";
-    connrequest << "Content-Type: text/xml; charset=utf-8\r\n";
-    connrequest << "Content-Length: " << connbody.str().length() << "\r\n\r\n";
-    connrequest << connbody.str() << "\r\n";
-  
-    return m_connection->send(connrequest.str());  
+    m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh sent" + data);
+    return true;
   }
 
   void ConnectionBOSH::cleanup()
@@ -150,10 +141,33 @@ namespace gloox
   void ConnectionBOSH::handleReceivedData( const ConnectionBase* connection,
                                                 const std::string& data )
   {
+	  m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh received" + data);
   }
 
   void ConnectionBOSH::handleConnect( const ConnectionBase* /*connection*/ )
   {
+	  
+    std::ostringstream connrequest;
+    Tag requestBody("body");
+    
+    requestBody.addAttribute("content", "text/xml");
+    requestBody.addAttribute("charset", "utf-8");
+    requestBody.addAttribute("hold", (int)m_hold); // Shouldn't there be a boolean variant of addAttribute?
+    requestBody.addAttribute("rid", m_rid);
+    requestBody.addAttribute("ver", "1.6");
+    requestBody.addAttribute("wait", m_wait);
+    requestBody.addAttribute("ack", 0);
+    requestBody.addAttribute("xml:lang", "en");
+    requestBody.addAttribute("xmlns", "http://jabber.org/protocol/httpbind");
+    
+    connrequest << "POST " << m_path << " HTTP/1.1\r\n";
+    connrequest << "Host: " << m_server << "\r\n";
+    connrequest << "Content-Type: text/xml; charset=utf-8\r\n";
+    connrequest << "Content-Length: " << requestBody.xml().length() << "\r\n\r\n";
+    connrequest << requestBody.xml() << "\r\n";
+    
+    m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh connection request sent" );
+    m_connection->send(connrequest.str());  
   }
 
   void ConnectionBOSH::handleDisconnect( const ConnectionBase* /*connection*/,
