@@ -21,6 +21,7 @@ namespace gloox
 
   class JID;
   class Tag;
+  class DataForm;
 
   namespace PubSub
   {
@@ -78,10 +79,10 @@ namespace gloox
          * @param type New SubscriptionType.
          */
         virtual void handleSubscriptionChange( const JID& service,
-                                                   const std::string& node,
-                                                   const std::string& jid,
-                                                   const std::string& reason,
-                                                   SubscriptionType type ) = 0;
+                                               const JID& jid,
+                                               const std::string& node,
+                                               const std::string& reason,
+                                               SubscriptionType type ) = 0;
 
         /**
          * Receives notifications of node configuration changes.
@@ -100,9 +101,6 @@ namespace gloox
          */
         virtual void handleNodePurge( const JID& service,
                                       const std::string& node ) = 0;
-
-
-
 
         /**
          * Default virtual destructor.

@@ -198,20 +198,20 @@ namespace gloox
         /**
          * Publish an item to a node.
          * @param service Service hosting the node.
-         * @param nodeid ID of the node to delete the item from.
+         * @param node ID of the node to delete the item from.
          * @param item Item to publish.
          */
-        void publishItem( const JID& service, const std::string& nodeid, const Tag& item );
+        void publishItem( const JID& service, const std::string& node, const Tag& item );
 
         /**
          * Delete an item from a node.
          * @param service Service hosting the node.
          * @param node ID of the node to delete the item from.
-         * @param itemid ID of the item in the node.
+         * @param item ID of the item in the node.
          */
         void deleteItem( const JID& service,
-                         const std::string& nodeid,
-                         const std::string& itemid );
+                         const std::string& node,
+                         const std::string& item );
 
         /**
          * Ask for the item list of a specific node.
@@ -227,74 +227,70 @@ namespace gloox
          * Creates a new node.
          * @param type NodeType of the new node.
          * @param service Service where to create the new node.
-         * @param nodeid ID of the new node.
+         * @param node ID of the new node.
          * @param name Name of the new node.
-         * @param parentid ID of the parent node. If empty, the node will
-         *                 be located at the root of the service.
+         * @param parent ID of the parent node. If empty, the node will
+         *               be located at the root of the service.
          */
         void createNode( NodeType type, const JID& service,
                                         const std::string& node,
                                         const std::string& name,
                                         const std::string& parent = "",
-                                        const StringMap * config = 0,
-                                        AccessModel access = AccessDefault );
+                                        AccessModel access = AccessDefault,
+                                        const StringMap * config = 0 );
 
         /**
          * Creates a new leaf node.
          * @param service Service where to create the new node.
-         * @param nodeid Node ID of the new node.
+         * @param node Node ID of the new node.
          * @param name Name of the new node.
-         * @param parentid ID of the parent node. If empty, the node will
+         * @param parent ID of the parent node. If empty, the node will
          *               be located at the root of the service.
          */
         void createLeafNode( const JID& service,
                              const std::string& node,
                              const std::string& name,
                              const std::string& parent = "",
-                             const StringMap * config = 0,
-                             AccessModel access = AccessDefault )
-          { createNode( NodeLeaf, service, node, name, parent, config, access ); }
+                             AccessModel access = AccessDefault,
+                             const StringMap * config = 0 )
+          { createNode( NodeLeaf, service, node, name, parent, access, config ); }
 
         /**
          * Creates a new collection node.
          * @param service Service where to create the new node.
-         * @param nodeid Node ID of the new node.
+         * @param node Node ID of the new node.
          * @param name Name of the new node.
-         * @param parentid ID of the parent node. If empty, the node will
+         * @param parent ID of the parent node. If empty, the node will
          *               be located at the root of the service.
          */
         void createCollectionNode( const JID& service,
                                    const std::string& node,
                                    const std::string& name,
                                    const std::string& parent = "",
-                                   const StringMap * config = 0,
-                                   AccessModel access = AccessDefault )
-          { createNode( NodeCollection, service, node, name, parent, config, access ); }
+                                   AccessModel access = AccessDefault,
+                                   const StringMap * config = 0 )
+          { createNode( NodeCollection, service, node, name, parent, access, config ); }
 
         /**
          * Deletes a node.
          * @param service Service where to create the new node.
-         * @param nodeid Node ID of the new node.
+         * @param node Node ID of the new node.
          */
         void deleteNode( const JID& service,
-                         const std::string& nodeid );
+                         const std::string& node );
 
 /*
-        void associateNode( const std::string& service,
-                            const std::string& nodeid,
-                            const std::string& collectionid );
+        void associateNode( const JID& service,
+                            const std::string& node,
+                            const std::string& collection );
 
-        void disassociateNode( const std::string& service,
-                               const std::string& nodeid,
-                               const std::string& collectionid );
+        void disassociateNode( const JID& service,
+                               const std::string& node,
+                               const std::string& collection );
 
-        void disassociateNode()
+        void disassociateNode();
 
         void getDefaultNodeConfig( NodeType = NodeTypeLeaf );
-
-        void handleNodeConfigError( const std::string& service, const std::string& nodeid ) = 0;
-
-        void handleNodeConfigRequestError( const std::string& service, const std::string& nodeid ) = 0;
 */
 
         /**
@@ -321,7 +317,7 @@ namespace gloox
          * Modifies the subscriber list for a node. This function SHOULD only set the 
          * @param service Service to query.
          * @param node Node ID of the node.
-         * @param list NodeHandler .
+         * @param list NodeHandler.
          */
         void setSubscriberList( const JID& service,
                                 const std::string& node,
@@ -333,7 +329,7 @@ namespace gloox
          * Requests the affiliate list for a node.
          * @param service Service to query.
          * @param node Node ID of the node.
-         * @param handler NodeHandler .
+         * @param handler NodeHandler.
          */
         void requestAffiliateList( const JID& service,
                                    const std::string& node,
@@ -344,7 +340,7 @@ namespace gloox
          * Modifies the affiliate list for a node.
          * @param service Service to query.
          * @param node Node ID of the node.
-         * @param list NodeHandler .
+         * @param list NodeHandler.
          */
         void setAffiliateList( const JID& service,
                                const std::string& node,
@@ -353,7 +349,7 @@ namespace gloox
           { affiliateList( service, node, &list, handler ); }
 
         /**
-         * Retrieve the configuration of a node.
+         * Retrieve the configuration (options) of a node.
          * @param service Service hosting the node.
          * @param node ID of the node.
          * @param handler NodeHandler responsible to handle the request result.
@@ -364,7 +360,7 @@ namespace gloox
           { nodeConfig( service, node, 0, handler ); }
 
         /**
-         * Changes a node's configuration.
+         * Changes a node's configuration (options).
          * @param service Service to query.
          * @param node Node ID of the node.
          * @param handler NodeHandler responsible to handle the request result.
@@ -421,7 +417,8 @@ namespace gloox
 
         /**
          * This function sets or requests a node's configuration form
-         * (depending on arguments).
+         * (depending on arguments). Does the actual work for requestNodeConfig
+         * and setNodeConfig.
          * Requests or changes a node's configuration.
          * @param service Service to query.
          * @param node Node ID of the node.
@@ -435,7 +432,8 @@ namespace gloox
 
         /**
          * This function sets or requests a node's subscribers list form
-         * (depending on arguments).
+         * (depending on arguments). Does the actual work for
+         * requestSubscriberList and setSubscriberList.
          * Requests or changes a node's configuration.
          * @param service Service to query.
          * @param node Node ID of the node.
@@ -449,7 +447,8 @@ namespace gloox
 
         /**
          * This function sets or requests a node's affiliates list
-         * (depending on arguments).
+         * (depending on arguments). Does the actual work for
+         * requestAffiliateList and setAffiliateList.
          * Requests or changes a node's configuration.
          * @param service Service to query.
          * @param node Node ID of the node.

@@ -277,8 +277,6 @@ namespace gloox
     {
     };
 
-
-
     enum SubscriptionModificationError
     {
       SubscriptionModificationErrorNone,   /**< No error. */

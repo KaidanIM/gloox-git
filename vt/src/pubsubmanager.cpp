@@ -20,7 +20,6 @@
 #include "pubsubeventhandler.h"
 #include "pubsubitemhandler.h"
 #include "pubsubnodehandler.h"
-#include "pubsubitem.h"
 #include "pubsub.h"
 #include "pubsubdiscohandler.h"
 #include "disco.h"
@@ -210,10 +209,11 @@ namespace gloox
           {
             case EventCollection:
             {
-              Tag * node = (*it)->findChild( "node" );
+              Tag * nodet = (*it)->findChild( "node" );
               Tag * df = (*it)->findChild( "x" );
               DataForm * form = df ? new DataForm( df ) : 0;
-              (*ith)->handleNodeCreation( service, node->findAttribute( "id" ), form );
+              const std::string& node = (*it)->findAttribute( "node" );
+              (*ith)->handleNodeCreation( service, node, form );
               break;
             }
             case EventConfigure:
@@ -248,7 +248,7 @@ namespace gloox
               const std::string& sub  = (*it)->findAttribute( "subscription" );
               SubscriptionType type   = subscriptionType( sub );
               const Tag * body = event->findChild( "body" );
-              (*ith)->handleSubscriptionChange( service, node, jid,
+              (*ith)->handleSubscriptionChange( service, jid, node,
                                                   body ? body->cdata()
                                                        : std::string(), type );
               break;
@@ -346,7 +346,7 @@ namespace gloox
 
     void Manager::handleDiscoError( Stanza *stanza, int )
     {
-      //const JID& service = stanza->from();
+      const JID& service = stanza->from();
       DiscoHandlerTrackMap::iterator ith = m_discoHandlerTrackMap.find( stanza->id() );
       if( ith != m_discoHandlerTrackMap.end() )
       {
@@ -524,8 +524,8 @@ namespace gloox
                               const std::string& node,
                               const std::string& name,
                               const std::string& parent,
-                              const StringMap * config,
-                              AccessModel access )
+                              AccessModel access,
+                              const StringMap * config )
     {
       static LookupPair accessValues[] = {
         LookupPair( "open",      AccessOpen ),
@@ -653,11 +653,10 @@ namespace gloox
         SubscriberList::const_iterator it = list->begin();
         for( ; it != list->end(); ++it )
         {
-          s = new Tag( "subscription", "jid", (*it).jid.full() );
+          s = new Tag( sub, "subscription", "jid", (*it).jid.full() );
           s->addAttribute( "subscription", lookup( (*it).type, subscriptionValues ) );
           if( !(*it).subid.empty() )
             s->addAttribute( "subid", (*it).subid );
-          sub->addChild( s );
         }
       }
 
@@ -1043,7 +1042,7 @@ namespace gloox
               }
               else if( error->hasChild( "feature-not-implemented", "xmlns", XMLNS_XMPP_STANZAS ) &&
                        error->hasChild( "unsupported", "xmlns", XMLNS_PUBSUB_ERRORS ) )
-                       /*&& feature='subscribe'/> )*/
+                       //&& feature='subscribe'/> )
               {
                 errorType = SubscriptionErrorUnsupported;
               }
@@ -1118,7 +1117,7 @@ namespace gloox
             {
               if( error->hasChild( "feature-not-implemented", "xmlns", XMLNS_XMPP_STANZAS ) &&
                   error->hasChild( "unsupported", "xmlns", XMLNS_PUBSUB_ERRORS ) )
-                  /* feature='retrieve-subscriptions'/> */
+                  // feature='retrieve-subscriptions'/>
               {
                 //handleSubscriptionListError( service );
               }
@@ -1130,7 +1129,7 @@ namespace gloox
             {
               if( error->hasChild( "feature-not-implemented", "xmlns", XMLNS_XMPP_STANZAS ) &&
                   error->hasChild( "unsupported", "xmlns", XMLNS_PUBSUB_ERRORS ) )
-                  /* feature='retrieve-affiliations'/> */
+                  // feature='retrieve-affiliations'/>
               {
                 //handleAffiliationListError( service );
               }
@@ -1281,7 +1280,7 @@ namespace gloox
               }  
               else if( error->hasChild( "bad-request", "xmlns", XMLNS_XMPP_STANZAS ) )
               {
-                /* Configuration errors needs to be specified */
+                // Configuration errors needs to be specified
                 if( error->hasChild( "invalid-payload", "xmlns", XMLNS_PUBSUB_ERRORS ) )
                   errorType = ItemPublicationPayload;
                 else if( error->hasChild( "item-required", "xmlns", XMLNS_PUBSUB_ERRORS) )
@@ -1313,7 +1312,7 @@ namespace gloox
                        error->hasChild( "node-required", "xmlns", XMLNS_PUBSUB_ERRORS ) )
               {
                 errorType = ItemDeletationMissingNode;
-              }  
+              }
               else if( error->hasChild( "bad-request", "xmlns", XMLNS_XMPP_STANZAS ) &&
                        error->hasChild( "item-required", "xmlns", XMLNS_PUBSUB_ERRORS ) )
               {
