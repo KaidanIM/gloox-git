@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2006-2007 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2007 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -35,6 +35,11 @@ namespace gloox
     {
       public:
         /**
+         * Virtual destructor.
+         */
+        virtual ~SubscriptionListHandler() {}
+
+        /**
          * Receives the Subscription map for a specific service.
          * @param service The queried service.
          * @param subMap The map of each node's subscription.
@@ -46,14 +51,11 @@ namespace gloox
          * @param service The queried service.
          */
         virtual void handleSubscriptionListError( const JID& service ) = 0;
-/**
-         * Receives the affiliation 
+
+        /**
+         * Receives the affiliation
          * @param jid The queried service.
          */
-        /**
-         * Virtual destructor.
-         */
-        virtual ~SubscriptionListHandler() {}
 
     };
 

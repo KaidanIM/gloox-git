@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2006-2007 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2007 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -10,8 +10,8 @@
   This software is distributed without any warranty.
 */
 
-#ifndef PUBSUBDISCOHANDLER_H_
-#define PUBSUBDISCOHANDLER_H_
+#ifndef PUBSUBDISCOHANDLER_H__
+#define PUBSUBDISCOHANDLER_H__
 
 #include <string>
 
@@ -32,8 +32,12 @@ namespace gloox
         /**
          *
          */
-        virtual void handleServiceInfoResult( const JID& service, int features ) = 0;
+        virtual ~DiscoHandler() {}
 
+        /**
+         *
+         */
+        virtual void handleServiceInfoResult( const JID& service, int features ) = 0;
 
         /**
          *
@@ -43,10 +47,9 @@ namespace gloox
                                            const NodeType nodeType,
                                            const DataForm& df ) = 0;
 
-	
         /**
-      	 *
-      	 */
+         *
+         */
         virtual void handleNodeItemDiscovery( const JID& service,
                                               const std::string& parent,
                                               const DiscoNodeItemList& children ) = 0;
@@ -57,15 +60,10 @@ namespace gloox
        virtual void handleDiscoError( const JID& service,
                                       const std::string& parent ) = 0;
 
-       /**
-        *
-        */
-       virtual ~DiscoHandler() {}
-
     };
 
   }
 
 }
 
-#endif /* PUBSUBDISCOHANDLER_H_ */
+#endif /* PUBSUBDISCOHANDLER_H__ */

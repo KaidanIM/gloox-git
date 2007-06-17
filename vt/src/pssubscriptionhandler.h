@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2006-2007 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2007 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -33,6 +33,11 @@ namespace gloox
     {
       public:
         /**
+         * Virtual destructor.
+         */
+        virtual ~SubscriptionHandler() {}
+
+        /**
          * Receives the subscription results. In case a problem occured, the
          * SubscriptionError is set accordingly and the Subscription ID and
          * SubscriptionType becomes irrelevant.
@@ -60,11 +65,6 @@ namespace gloox
         virtual void handleUnsubscriptionResult( const JID& service,
                                                  const std::string& nodeID,
                                                  const UnsubscriptionError se ) = 0;
-
-        /**
-         * Virtual destructor.
-         */
-        virtual ~SubscriptionHandler() {}
 
     };
 

@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2006-2007 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2007 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -10,8 +10,8 @@
   This software is distributed without any warranty.
 */
 
-#ifndef PUBSUBEVENTHANDLER_H_
-#define PUBSUBEVENTHANDLER_H_
+#ifndef PUBSUBEVENTHANDLER_H__
+#define PUBSUBEVENTHANDLER_H__
 
 #include <string>
 #include "pubsub.h"
@@ -29,6 +29,11 @@ namespace gloox
     class EventHandler
     {
       public:
+        /**
+         * Default virtual destructor.
+         */
+        virtual ~EventHandler() {}
+
         /**
          * Receives notification of node creations.
          * @param service Service hosting the new node.
@@ -102,15 +107,11 @@ namespace gloox
         virtual void handleNodePurge( const JID& service,
                                       const std::string& node ) = 0;
 
-        /**
-         * Default virtual destructor.
-         */
-        virtual ~EventHandler() {}
     };
 
   }
 
 }
 
-#endif /* PUBSUBEVENTHANDLER_H_ */
+#endif /* PUBSUBEVENTHANDLER_H__ */
 

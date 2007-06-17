@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2006-2007 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2007 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -16,7 +16,7 @@
 #include <list>
 
 namespace gloox
-{  
+{
 
   class JID;
   class Tag;
@@ -41,7 +41,12 @@ namespace gloox
     {
       public:
         /**
-         * 
+         * Virtual destructor.
+         */
+        virtual ~ItemHandler() {}
+
+        /**
+         *
          */
         virtual void handleItem( const JID& service, const std::string& nodeid, const Tag * entry ) = 0;
 
@@ -51,12 +56,9 @@ namespace gloox
          * @param nodeid ID of the queried node. If empty, the root node has been queried.
          * @param itemList List of contained items.
          */
-        virtual void handleItemList( const JID& service, const std::string& nodeid, const Tag::TagList& itemList ) = 0;
+        virtual void handleItemList( const JID& service, const std::string& nodeid,
+                                      const Tag::TagList& itemList ) = 0;
 
-        /**
-         * Virtual destructor.
-         */
-        virtual ~ItemHandler() {}
     };
 
   }

@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2006-2007 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2007 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -10,8 +10,8 @@
   This software is distributed without any warranty.
 */
 
-#ifndef __PUBSUBITEM_H__
-#define __PUBSUBITEM_H__
+#ifndef PUBSUBNODE_H__
+#define PUBSUBNODE_H__
 
 #include <string>
 
@@ -30,68 +30,59 @@ namespace gloox
 
         /**
          * Constructs a Node from a type, a JID (XEP-0060 Sect 4.6.1) and a name.
-         * @param _type
-         * @param _jid
-         * @param _id
-         * @param _name
+         * @param type
+         * @param jid
+         * @param id
+         * @param name
          */
-        Node( NodeType _type, const std::string& _jid,
-                              const std::string& _id,
-                              const std::string& _name )
-          : type( _type ), service( _jid ),
-                id( _id), name( _name )
+        Node( NodeType type, const std::string& jid,
+              const std::string& id, const std::string& name )
+          : m_type( type ), m_service( jid ), m_id( id), m_name( name )
         {}
 
         /**
          * Constructs a Node from a type, a JID (XEP-0060 Sect 4.6.1)
          * and a name.
-         * @param
-         * @param
-         * @param
+         * @param type
+         * @param jid
+         * @param name
          */
-        Node( NodeType _type, const JID& _jid,
-                              const std::string& _name )
-          : type( _type ), service( _jid.bare() ),
-                id( jid.resource() ), name( _name)
+        Node( NodeType type, const JID& jid, const std::string& name )
+          : m_type( type ), m_service( jid.bare() ), m_id( jid.resource() ), m_name( name)
         {}
 
         /**
          * Constructs a Node from a type, a JID+NodeID (XEP-0060 Sect 4.6.2)
          * and a name.
-         * @param
-         * @param
-         * @param
+         * @param type
+         * @param jid
+         * @param id
          */
-        Node( NodeType _type, const std::string& _jid,
-                              const std::string& _id,
-                              const std::string& _sid, 
-                              const std::string& _name )
-          : type( _type ), service( _jid ),
-                id( id ), sid( _sid ), name( _name)
+        Node( NodeType type, const std::string& jid, const std::string& id,
+              const std::string& sid, const std::string& name )
+          : m_type( type ), m_service( jid ), m_id( id ), m_sid( sid ), m_name( name)
         {}
 
         /**
          * Constructs a Node from a type, a JID+NodeID (XEP-0060 Sect 4.6.2)
          * and a name.
-         * @param 
-         * @param 
-         * @param 
+         * @param type
+         * @param jid
+         * @param sid
+         * @param name
          */
-        Node( NodeType _type, const JID& _jid,
-                              const std::string& _sid,
-                              const std::string& _name )
-          : type( _type ), service( _jid.bare() ),
-                id( _jid.resource() ), sid( _sid ), name( _name)
+        Node( NodeType type, const JID& jid, const std::string& sid, const std::string& name )
+          : m_type( type ), m_service( jid.bare() ), m_id( jid.resource() ), m_sid( sid ), m_name( name)
         {}
 
       private:
 
-        NodeType type;
-        std::string service;
-        std::string id;
-        std::string name;
-        std::string sid;
-        SubscriptionType subscription;
+        NodeType m_type;
+        std::string m_service;
+        std::string m_id;
+        std::string m_name;
+        std::string m_sid;
+        SubscriptionType m_subscription;
         /*
         union {
           ItemList items;
@@ -101,25 +92,27 @@ namespace gloox
     };
 
     /**
-     *
+     * A leaf node.
      */
     class LeafNode : public Node
     {
       public:
-        LeafNode( const std::string& _service, const std::string& _name )
-          : Node( NodeLeaf, _service, _name ) {}
+        LeafNode( const std::string& service, const std::string& name )
+          : Node( NodeLeaf, service, name )
+        {}
       private:
         ItemList m_itemList;
     };
 
     /**
-     *
+     * A collection node.
      */
     class CollectionNode : public Node
     {
       public:
-        CollectionNode( const std::string& _service, const std::string& _name )
-          : Node( NodeCollection, _service, _name ) {}
+        CollectionNode( const std::string& service, const std::string& name )
+          : Node( NodeCollection, service, name )
+        {}
       private:
         NodeList m_nodeList;
     };
@@ -127,3 +120,5 @@ namespace gloox
   }
 
 }
+
+#endif // PUBSUBNODE_H__

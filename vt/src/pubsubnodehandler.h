@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2006-2007 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2007 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -10,13 +10,13 @@
   This software is distributed without any warranty.
 */
 
-#ifndef PUBSUBNODEHANDLER_H_
-#define PUBSUBNODEHANDLER_H_
+#ifndef PUBSUBNODEHANDLER_H__
+#define PUBSUBNODEHANDLER_H__
 
 #include <string>
 
 namespace gloox
-{  
+{
 
   class JID;
   class DataForm;
@@ -58,6 +58,11 @@ namespace gloox
       public:
 
         /**
+         * Default virtual destructor.
+         */
+        virtual ~NodeHandler() {}
+
+        /**
          * Receives the result of a node creation request.
          * @param service Service hosting the node.
          * @param node ID of the node.
@@ -92,8 +97,7 @@ namespace gloox
          * @param node ID of the queried node.
          * @param options Options DataForm.
          */
-        virtual void handleSubscriptionOptions( const JID& service,
-                                                const JID& jid,
+        virtual void handleSubscriptionOptions( const JID& service, const JID& jid,
                                                 const std::string& node,
                                                 const DataForm& options ) = 0;
 
@@ -114,8 +118,7 @@ namespace gloox
          * @param node ID of the queried node.
          * @param list Subscriber list.
          */
-        virtual void handleSubscriberList( const JID& service,
-                                           const std::string& node,
+        virtual void handleSubscriberList( const JID& service, const std::string& node,
                                            const SubscriberList& list ) = 0;
 
         /**
@@ -123,8 +126,7 @@ namespace gloox
          * @param service Service hosting the node.
          * @param node ID of the node.
          */
-        virtual void handleSubscriberListResult( const JID& service,
-                                                 const std::string& node/*,
+        virtual void handleSubscriberListResult( const JID& service, const std::string& node/*,
                                                  const Error& e*/ ) = 0;
 
         /**
@@ -133,19 +135,17 @@ namespace gloox
          * @param node ID of the node.
          * @param list Affiliation list.
          */
-        virtual void handleAffiliateList( const JID& service,
-                                          const std::string& node,
+        virtual void handleAffiliateList( const JID& service, const std::string& node,
                                           const AffiliateList& list ) = 0;
 
         /**
-         * 
+         *
          * @param service Service hosting the node.
          * @param node ID of the node.
          * @param itemList List of contained items.
          */
-        virtual void handleAffiliateListResult( const JID& service,
-                                                const std::string& node/*,
-                                                 const Error& e*/ ) = 0;
+        virtual void handleAffiliateListResult( const JID& service, const std::string& node/*,
+                                                const Error& e*/ ) = 0;
 
         /**
          * Handle the configuration for a specific node.
@@ -153,27 +153,21 @@ namespace gloox
          * @param node ID of the node.
          * @param config Configuration DataForm.
          */
-        virtual void handleNodeConfig( const JID& service,
-                                       const std::string& node,
+        virtual void handleNodeConfig( const JID& service, const std::string& node,
                                        const DataForm& config ) = 0;
 
         /**
-         * 
+         *
          * @param service Service hosting the node.
          * @param node ID of the node.
          */
-        virtual void handleNodeConfigResult( const JID& service,
-                                             const std::string& node/*,
+        virtual void handleNodeConfigResult( const JID& service, const std::string& node/*,
                                              const Error& e*/ ) = 0;
 
-        /**
-         * Default virtual destructor.
-         */
-        virtual ~NodeHandler() {}
     };
 
   }
 
 }
 
-#endif /* PUBSUBNODEHANDLER_H_ */
+#endif /* PUBSUBNODEHANDLER_H__ */

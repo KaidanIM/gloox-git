@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2006-2007 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2007 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -37,7 +37,8 @@ namespace gloox
     static const std::string XMLNS_PUBSUB_EVENT = "http://jabber.org/protocol/pubsub#event";
     static const std::string XMLNS_PUBSUB_OWNER = "http://jabber.org/protocol/pubsub#owner";
     static const std::string XMLNS_PUBSUB_NODE_CONFIG = "http://jabber.org/protocol/pubsub#node_config";
-    static const std::string XMLNS_PUBSUB_SUBSCRIBE_OPTIONS = "http://jabber.org/protocol/pubsub#subscribe_opetions";
+    static const std::string XMLNS_PUBSUB_SUBSCRIBE_OPTIONS =
+        "http://jabber.org/protocol/pubsub#subscribe_opetions";
 
     enum Context {
       Subscription,
@@ -65,7 +66,7 @@ namespace gloox
       DiscoverNode
     };
 
-    Manager::Manager( ClientBase * parent )
+    Manager::Manager( ClientBase *parent )
       : m_parent(parent)
     {
       m_parent->disco()->registerDiscoHandler( this );
@@ -78,7 +79,8 @@ namespace gloox
       NodeInfo
     };
 
-    void Manager::discoverInfos( const JID& service, const std::string& node, PubSub::DiscoHandler * handler )
+    void Manager::discoverInfos( const JID& service, const std::string& node,
+                                 PubSub::DiscoHandler *handler )
     {
       if( !handler )
         return;
@@ -88,7 +90,8 @@ namespace gloox
       m_parent->disco()->getDiscoInfo( service, node, this, context, id );
     }
 
-    void Manager::discoverNodeItems( const JID& service, const std::string& nodeid, PubSub::DiscoHandler * handler )
+    void Manager::discoverNodeItems( const JID& service, const std::string& nodeid,
+                                     PubSub::DiscoHandler *handler )
     {
       if( !handler )
         return;
@@ -105,7 +108,7 @@ namespace gloox
     };
 
     static SubscriptionType subscriptionType( const std::string& subscription )
-    {  
+    {
       return (SubscriptionType)lookup( subscription, subscriptionValues );
     }
 
@@ -197,7 +200,7 @@ namespace gloox
       const Tag::TagList& events = event->children();
       EventType type;
       EventHandlerList::iterator ith = m_eventHandlerList.begin();
-      
+
       // in case an event may contain several different notifications
       Tag::TagList::const_iterator it = events.begin();
       for( ; it != events.end(); ++it )
@@ -249,8 +252,7 @@ namespace gloox
               SubscriptionType type   = subscriptionType( sub );
               const Tag * body = event->findChild( "body" );
               (*ith)->handleSubscriptionChange( service, jid, node,
-                                                  body ? body->cdata()
-                                                       : std::string(), type );
+                                                  body ? body->cdata() : std::string(), type );
               break;
             }
           }
@@ -339,7 +341,7 @@ namespace gloox
 
       const JID& service = stanza->from();
       const std::string& parentid = query->findAttribute( "node" );
-      
+
       (*ith).second->handleNodeItemDiscovery( service, parentid, contentList );
       m_discoHandlerTrackMap.erase( ith );
     }
@@ -413,11 +415,8 @@ namespace gloox
       m_parent->send( iq );
     }
 
-    void Manager::subscribe( const JID& service,
-                             const std::string& node,
-			                       const JID& jid,
-			                       SubscriptionObject type,
-			                       int depth )
+    void Manager::subscribe( const JID& service, const std::string& node,
+                             const JID& jid, SubscriptionObject type, int depth )
     {
       if( !m_parent )
         return;
@@ -441,7 +440,8 @@ namespace gloox
         df.addField( field );
 
         if( type == SubscriptionItems )
-          df.addField( new DataFormField( "pubsub#subscription_type", "items", "", DataFormField::FieldTypeNone ) );
+          df.addField( new DataFormField( "pubsub#subscription_type", "items", "",
+                       DataFormField::FieldTypeNone ) );
 
         if( depth != 1 )
         {
@@ -557,10 +557,12 @@ namespace gloox
           df.addField( new DataFormField( "pubsub#title", name, "", DataFormField::FieldTypeNone ) );
 
         if( type == NodeCollection )
-          df.addField( new DataFormField( "pubsub#node_type", "collection", "", DataFormField::FieldTypeNone ) );
+          df.addField( new DataFormField( "pubsub#node_type", "collection", "",
+                       DataFormField::FieldTypeNone ) );
 
         if( access != AccessDefault )
-          df.addField( new DataFormField( "pubsub#access_model", lookup( access, accessValues ), "", DataFormField::FieldTypeNone ) );
+          df.addField( new DataFormField( "pubsub#access_model", lookup( access, accessValues ), "",
+                       DataFormField::FieldTypeNone ) );
 
         if( config )
         {
@@ -612,8 +614,7 @@ namespace gloox
 */
 
     void Manager::nodeConfig( const JID& service, const std::string& node,
-                                                  const DataForm * config,
-                                                  NodeHandler * handler )
+                              const DataForm * config, NodeHandler * handler )
     {
       if( !m_parent )
         return;
@@ -686,9 +687,8 @@ namespace gloox
         AffiliateList::const_iterator it = list->begin();
         for( ; it != list->end(); ++it )
         {
-          a = new Tag( "affiliation", "jid", (*it).jid.full() );
+          a = new Tag( aff, "affiliation", "jid", (*it).jid.full() );
           a->addAttribute( "affiliation", lookup( (*it).type, affiliationValues ) );
-          aff->addChild( a );
         }
       }
 
@@ -740,7 +740,7 @@ namespace gloox
     }
 
     /**
-     * \bug Unsubscription does not retrieve the correct node id (needs a tracking map).
+     * @bug Unsubscription does not retrieve the correct node id (needs a tracking map).
      */
     bool Manager::handleIqID( Stanza *stanza, int context )
     {
@@ -905,12 +905,12 @@ namespace gloox
                 }
                 case RequestAffiliateList:
                 {
-                  
+
                   break;
                 }
                 case RequestNodeConfig:
                 {
-                  
+
                   break;
                 }
                 default:
@@ -987,7 +987,7 @@ namespace gloox
         {
           Tag* error = stanza->findChild( "error" );
           //Error error( stanza->findChild( "error" ) );
-          
+
           switch( context )
           {
             case Subscription:
@@ -1166,7 +1166,7 @@ namespace gloox
             }
             case RequestNodeConfig:
             {
-              
+
             }
             case RequestItemList:
             {
@@ -1200,7 +1200,7 @@ namespace gloox
                   return false;
               }
               else if( error->hasChild( "feature-not-implemented", "xmlns", XMLNS_XMPP_STANZAS ) )
-              {  
+              {
                 Tag * unsup = error->findChild( "unsupported", "xmlns", XMLNS_PUBSUB_ERRORS );
                 if( !unsup )
                   return false;
@@ -1239,22 +1239,22 @@ namespace gloox
               if( error->hasChild( "forbidden", "xmlns", XMLNS_XMPP_STANZAS ) )
               {
                 errorType = ItemPublicationUnprivileged;
-              }  
+              }
               else if( error->hasChild( "feature-not-implemented", "xmlns", XMLNS_XMPP_STANZAS ) &&
                        error->hasChild( "unsupported", "xmlns", XMLNS_PUBSUB_ERRORS ) )
                        // feature='publish'
               {
                 errorType = ItemPublicationUnsupported;
-              }  
+              }
               else if( error->hasChild( "item-not-found", "xmlns", XMLNS_XMPP_STANZAS ) )
               {
                 errorType = ItemPublicationNodeNotFound;
-              }  
+              }
               else if( error->hasChild( "not-acceptable", "xmlns", XMLNS_XMPP_STANZAS ) &&
                        error->hasChild( "payload-too-big", "xmlns", XMLNS_PUBSUB_ERRORS ) )
               {
                 errorType = ItemPublicationPayloadSize;
-              }  
+              }
               else if( error->hasChild( "bad-request", "xmlns", XMLNS_XMPP_STANZAS ) )
               {
                 // Configuration errors needs to be specified
@@ -1280,11 +1280,11 @@ namespace gloox
               if( error->hasChild( "forbidden", "xmlns", XMLNS_XMPP_STANZAS ) )
               {
                 errorType = ItemDeletationUnpriviledged;
-              }  
+              }
               else if( error->hasChild( "item-not-found", "xmlns", XMLNS_XMPP_STANZAS ) )
               {
                 errorType = ItemDeletationItemNotFound;
-              }  
+              }
               else if( error->hasChild( "bad-request", "xmlns", XMLNS_XMPP_STANZAS ) &&
                        error->hasChild( "node-required", "xmlns", XMLNS_PUBSUB_ERRORS ) )
               {
@@ -1294,7 +1294,7 @@ namespace gloox
                        error->hasChild( "item-required", "xmlns", XMLNS_PUBSUB_ERRORS ) )
               {
                 errorType = ItemDeletationMissingItem;
-              }  
+              }
               else if( error->hasChild( "feature-not-implemented", "xmlns", XMLNS_XMPP_STANZAS ) )
               {
                 Tag * unsup = error->findChild( "unsupported", "xmlns", XMLNS_PUBSUB_ERRORS );
