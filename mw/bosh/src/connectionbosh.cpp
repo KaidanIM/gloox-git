@@ -71,7 +71,7 @@ namespace gloox
   {
     if( m_connection )
       delete m_connection;
-
+    m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh connection implementation set" );
     m_connection = connection;
   }
 
