@@ -31,7 +31,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
-  class SIManager : public IqHandler
+  class GLOOX_API SIManager : public IqHandler
   {
 
     public:

@@ -117,7 +117,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
-  class SIProfileFT : public SIProfileHandler, public SIHandler, public SOCKS5BytestreamHandler
+  class GLOOX_API SIProfileFT : public SIProfileHandler, public SIHandler, public SOCKS5BytestreamHandler
   {
     public:
       /**
