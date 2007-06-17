@@ -21,6 +21,8 @@
 # include <sstream>
 #endif
 
+#include <algorithm>
+
 namespace gloox
 {
   Tag::Tag()
