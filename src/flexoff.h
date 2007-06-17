@@ -110,11 +110,11 @@ namespace gloox
     private:
       enum FOContext
       {
-        FO_CHECK_SUPPORT,
-        FO_REQUEST_NUM,
-        FO_REQUEST_HEADERS,
-        FO_REQUEST_MSGS,
-        FO_REMOVE_MSGS
+        FOCheckSupport,
+        FORequestNum,
+        FORequestHeaders,
+        FORequestMsgs,
+        FORemoveMsgs
       };
 
       ClientBase *m_parent;
