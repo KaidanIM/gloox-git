@@ -27,14 +27,16 @@ namespace gloox
   enum StanzaExtensionType
   {
     ExtNone                =   1,   /**< Invalid StanzaExtension. */
-    ExtVCardUpdate         =   2,   /**< Extension in the vcard-temp:x:update namspace, advertising
+    ExtVCardUpdate         =   2,   /**< Extension in the vcard-temp:x:update namespace, advertising
                                      * a user avatar's SHA1 hash (XEP-0153). */
     ExtOOB                 =   4,   /**< An extension in the jabber:iq:oob or jabber:x:oob namespaces
                                      * (XEP-0066). */
     ExtGPGSigned           =   8,   /**< An extension containing a GPG/PGP signature (XEP-0027). */
     ExtGPGEncrypted        =  16,   /**< An extension containing a GPG/PGP encrypted message (XEP-0027). */
     ExtXDelay              =  32,   /**< An extension containing notice of delayed delivery (XEP-0091). */
-    ExtDelay               =  64    /**< An extension containing notice of delayed delivery (XEP-0203). */
+    ExtDelay               =  64,   /**< An extension containing notice of delayed delivery (XEP-0203). */
+    ExtAMP                 = 128,   /**< An extension containing advanced message processing rules (XEP-0079). */
+    ExtError               = 256    /**< An extension containing an error. */
   };
 
   /**
