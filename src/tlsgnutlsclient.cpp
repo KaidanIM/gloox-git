@@ -125,8 +125,8 @@ namespace gloox
     gnutls_x509_crt_t *cert = new gnutls_x509_crt_t[certListSize+1];
     for( unsigned int i=0; !error && ( i<certListSize ); ++i )
     {
-      if( gnutls_x509_crt_init( &cert[i] ) < 0 
-       || gnutls_x509_crt_import( cert[i], &certList[i], GNUTLS_X509_FMT_DER ) < 0 ) )
+      if( gnutls_x509_crt_init( &cert[i] ) < 0
+          || gnutls_x509_crt_import( cert[i], &certList[i], GNUTLS_X509_FMT_DER ) < 0 )
         error = true;
     }
 
