@@ -16,6 +16,7 @@
 #include "gloox.h"
 #include "tag.h"
 #include "oob.h"
+#include "amp.h"
 #include "vcardupdate.h"
 #include "delayeddelivery.h"
 #include "xdelayeddelivery.h"
@@ -48,7 +49,13 @@ namespace gloox
         return new OOB( tag );
     }
     else if( name == "delay" && xmlns == XMLNS_DELAY )
+    {
       return new DelayedDelivery( tag );
+    }
+    else if( name == "amp" && xmlns == XMLNS_AMP )
+    {
+      return new AMP( tag );
+    }
 
     return 0;
   }
