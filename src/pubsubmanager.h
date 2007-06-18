@@ -84,25 +84,12 @@ namespace gloox
          */
         virtual ~Manager() {}
 
-        // reimplemented from DiscoHandler
-        void handleDiscoInfoResult( Stanza *stanza, int context );
-        void handleDiscoItemsResult( Stanza *stanza, int context );
-        void handleDiscoError( Stanza *stanza, int context );
-        bool handleDiscoSet( Stanza * ) { return 0; }
-
-        // reimplemented from MessageHandler
-        void handleMessage( Stanza * stanza, MessageSession * );
-
-        // reimplemented from IqHandler
-        bool handleIq  ( Stanza *stanza );
-        bool handleIqID( Stanza *stanza, int context );
-
         /**
          * Performs a Disco query to a service or node.
          * @param service Service to query.
          * @param nodeid ID of the node to query. If empty, the root node will be queried.
          */
-        void discoverInfos( const JID& service, const std::string& node, PubSub::DiscoHandler * handler );
+        void discoverInfos( const JID& service, const std::string& node, PubSub::DiscoHandler *handler );
 
         /**
          * Performs a Disco query to a service or node.
@@ -110,7 +97,7 @@ namespace gloox
          * @param nodeid ID of the node to query. If empty, the root node will be queried.
          * @param handler DiscoHandler to notify when receiving a response
          */
-        void discoverServiceInfos( const JID& service, PubSub::DiscoHandler * handler )
+        void discoverServiceInfos( const JID& service, PubSub::DiscoHandler *handler )
           { discoverInfos( service, "", handler ); }
 
         /**
@@ -119,18 +106,18 @@ namespace gloox
          * @param nodeid ID of the node to query. If empty, the root node will be queried.
          * @param handler DiscoHandler to notify when receiving a response
          */
-        void discoverNodeInfos( const JID& service, const std::string& node, PubSub::DiscoHandler * handler )
+        void discoverNodeInfos( const JID& service, const std::string& node, PubSub::DiscoHandler *handler )
           { discoverInfos( service, node, handler ); }
 
         /**
          * Ask for the list children of a node.
          * @param service Service hosting the node.
          * @param nodeid ID of the node to ask for subnodes. If empty, the root node
-         *               will be queried.
+         * will be queried.
          * @param handler DiscoHandler to notify when receiving a response
          */
         void discoverNodeItems( const JID& service, const std::string& nodeid,
-                                                    PubSub::DiscoHandler * handler );
+                                PubSub::DiscoHandler *handler );
 
         /**
          * Subscribe to a node.
@@ -420,6 +407,19 @@ namespace gloox
          */
         void removeSubscriptionHandler( SubscriptionHandler * handler )
           { m_subscriptionTrackList.remove( handler ); }
+
+        // reimplemented from DiscoHandler
+        virtual void handleDiscoInfoResult( Stanza *stanza, int context );
+        virtual void handleDiscoItemsResult( Stanza *stanza, int context );
+        virtual void handleDiscoError( Stanza *stanza, int context );
+        virtual bool handleDiscoSet( Stanza * ) { return 0; }
+
+        // reimplemented from MessageHandler
+        virtual void handleMessage( Stanza * stanza, MessageSession * );
+
+        // reimplemented from IqHandler
+        virtual bool handleIq  ( Stanza *stanza );
+        virtual bool handleIqID( Stanza *stanza, int context );
 
       private:
 
