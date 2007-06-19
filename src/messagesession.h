@@ -172,8 +172,8 @@ namespace gloox
       /**
        * Virtual destructor.
        *
-       * @note This destructor de-registers with the ClientBase provided to the constructor. So make
-       * sure you have it still around when you delete your last MessageSession.
+       * @note You should never delete a MessageSession manually. Use ClientBase::disposeMessageSession()
+       * instead.
        */
       virtual ~MessageSession();
 
