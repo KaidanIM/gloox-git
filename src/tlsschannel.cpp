@@ -20,9 +20,8 @@
 namespace gloox
 {
   SChannel::SChannel( TLSHandler* th, const std::string& server )
-    : TLSBase( th, server )
+    : TLSBase( th, server ), m_cleanedup( true )
   {
-    m_cleanedup = true;
     //printf(">> SChannel::SChannel()\n");
   }
 
