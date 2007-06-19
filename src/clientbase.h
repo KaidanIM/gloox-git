@@ -388,8 +388,8 @@ namespace gloox
       /**
        * Registers the given MessageSession to receive Messages incoming from the session's
        * target JID.
-       * @note The ClientBase instance will delete the MessageSession in ClientBase's destructor
-       * unless you deleted it prior to deleting the ClientBase.
+       * @note The ClientBase instance becomes the owner of the MessageSession, it will be deleted
+       * in ClientBase's destructor. To get rid of the session before that, use disposeMessageSession().
        * @param session The MessageSession to register.
        * @note Since a MessageSession automatically registers itself with the ClientBase, there is no
        * need to call this function directly.
@@ -397,16 +397,8 @@ namespace gloox
       void registerMessageSession( MessageSession *session );
 
       /**
-       * Removes the given MessageSession from the list of MessageSessions.
-       * @param session The MessageSession to remove.
-       * @since 0.9
-       */
-      void removeMessageSession( MessageSession *session );
-
-      /**
-       * Removes and deletes the given MessageSession from the list of MessageSessions.
-       * @param session The MessageSession to remove and delete.
-       * @since 0.9
+       * Removes the given MessageSession from the  list of MessageSessions and deletes it.
+       * @param session The MessageSession to be deleted.
        */
       void disposeMessageSession( MessageSession *session );
 

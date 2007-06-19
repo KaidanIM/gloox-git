@@ -74,7 +74,7 @@ namespace gloox
    * {
    *   // for this example only, we delete any earlier session
    *   if( m_session )
-   *     delete m_session;
+   *     j->disposeMessageSession( m_session );
    *   m_session = session;
    *   m_session->registerMessageHandler( this );
    *
@@ -137,10 +137,8 @@ namespace gloox
    *
    * See InBandBytestreamManager for a detailed description on how to implement In-Band Bytestreams.
    *
-   * When done using a MessageSession, you can either delete it or pass it to
-   * @link gloox::ClientBase::disposeMessageSession ClientBase::disposeMessageSession @endlink.
-   * Use @link gloox::ClientBase::removeMessageSession ClientBase::removeMessageSession @endlink
-   * to detach a MessageSession from its ClientBase.
+   * @note You should never delete a MessageSession manually. Use ClientBase::disposeMessageSession()
+   * instead.
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.8

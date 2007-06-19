@@ -36,8 +36,6 @@ namespace gloox
     MessageFilterList::const_iterator it = m_messageFilterList.begin();
     for( ; it != m_messageFilterList.end(); ++it )
       delete (*it);
-
-    m_parent->removeMessageSession( this );
   }
 
   void MessageSession::handleMessage( Stanza *stanza )
