@@ -381,6 +381,13 @@ namespace gloox
     return ret;
   }
 
+  void Tag::ripoff( Tag *tag )
+  {
+    delete m_children;
+    m_children = tag->m_children;
+    tag->m_children = new TagList();
+  }
+
   Tag* Tag::findTag( const std::string& expression )
   {
     const Tag::TagList& l = findTagList( expression );

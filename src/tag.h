@@ -369,6 +369,8 @@ namespace gloox
       static const std::string relax( std::string what );
 
     protected:
+      void ripoff( Tag *tag );
+
       /**
        * XPath error conditions.
        */
