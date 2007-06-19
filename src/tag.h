@@ -195,13 +195,13 @@ namespace gloox
        * Use this function to manipulate the list of child elements.
        * @return A reference to the list of child elements.
        */
-      virtual TagList& children() { return m_children; }
+      virtual TagList& children() { return *m_children; }
 
       /**
        * Use this function to fetch a const list of child elements.
        * @return A constant reference to the list of child elements.
        */
-      virtual const TagList& children() const { return m_children; }
+      virtual const TagList& children() const { return *m_children; }
 
       /**
        * This function can be used to retrieve the value of a Tag's attribute.
@@ -283,7 +283,7 @@ namespace gloox
        * @param tag The Tag to delete from the list of child Tags.
        * @note The Tag @p tag is not deleted.
        */
-      void removeChild( Tag *tag ) { m_children.remove(tag); }
+      void removeChild( Tag *tag ) { m_children->remove(tag); }
 
       /**
        * Returns whether the Tag is considered empty, i.e. invalid.
@@ -382,7 +382,7 @@ namespace gloox
       AttributeList m_attribs;
       std::string m_name;
       std::string m_cdata;
-      TagList m_children;
+      TagList *m_children;
       Tag *m_parent;
       StanzaType m_type;
       bool m_incoming;
