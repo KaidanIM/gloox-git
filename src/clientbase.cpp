@@ -338,7 +338,9 @@ namespace gloox
   {
     if( m_connection && m_connection->state() >= StateConnecting )
     {
-      send( "</stream:stream>" );
+      if( reason != ConnTlsFailed )
+        send( "</stream:stream>" );
+
       m_connection->disconnect();
       m_connection->cleanup();
 
