@@ -533,6 +533,7 @@ namespace gloox
 
   /**
    * Describes stream events that get emitted by means of ConnectionListener::onStreamEvent().
+   * @since 0.9
    */
   enum StreamEvent
   {
@@ -542,7 +543,8 @@ namespace gloox
     StreamEventAuthentication,      /**< The Client is about to authenticate. */
     StreamEventSessionInit,         /**< The Client is about to create a session. */
     StreamEventResourceBinding,     /**< The Client is about to bind a resource to the stream. */
-    StreamEventSessionCreation,     /**< The Client is about to create a session. */
+    StreamEventSessionCreation,     /**< The Client is about to create a session.
+                                     * @since 0.9.1 */
     StreamEventRoster,              /**< The Client is about to request the roster. */
     StreamEventFinished             /**< The log-in phase is completed. */
   };
