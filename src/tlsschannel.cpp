@@ -50,7 +50,8 @@ namespace gloox
     {
       //printf("**** Out of memory (2)\n");
       cleanup();
-      m_handler->handleHandshakeResult( this, false, m_certInfo );
+      if( !m_secure )
+        m_handler->handleHandshakeResult( this, false, m_certInfo );
       return false;
     }
     PBYTE e_message = e_iobuffer + m_sizes.cbHeader;
@@ -98,7 +99,8 @@ namespace gloox
       {
         LocalFree( e_iobuffer );
         cleanup();
-        m_handler->handleHandshakeResult( this, false, m_certInfo );
+        if( !m_secure )
+          m_handler->handleHandshakeResult( this, false, m_certInfo );
         return false;
       }
     }
@@ -127,7 +129,8 @@ namespace gloox
       {
         //printf("**** Out of memory (2)\n");
         cleanup();
-        m_handler->handleHandshakeResult( this, false, m_certInfo );
+        if( !m_secure )
+          m_handler->handleHandshakeResult( this, false, m_certInfo );
         return 0;
       }
       SECURITY_STATUS e_status;
@@ -194,7 +197,8 @@ namespace gloox
         {
           //std::cout << "decrypt !!!ERROR!!!\n";
           cleanup();
-          m_handler->handleHandshakeResult( this, false, m_certInfo );
+          if( !m_secure )
+            m_handler->handleHandshakeResult( this, false, m_certInfo );
           break;
         }
       }
