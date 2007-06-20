@@ -358,6 +358,7 @@ namespace gloox
   {
     if( m_parser && !m_parser->feed( data ) )
     {
+      m_logInstance.log( LogLevelError, LogAreaClassClientbase, "parse error: " + data );
       disconnect( ConnParseError );
     }
   }
