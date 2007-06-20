@@ -5,7 +5,7 @@ v0.9.1 -- 20 Jun 2007
 - ClientBase: avoid double call of onDisconnect() under rare circumstances
 - ClientBase: reply with 'service-unavailable' to unhandled IQs
 - documentation updates and fixes
-- ClientBase: avoid disocnnect loop if TLS failed
+- ClientBase: avoid disconnect loop if TLS failed
 - Client: added Session Creation event
 
 
