@@ -336,19 +336,22 @@ namespace gloox
 
   void ClientBase::disconnect( ConnectionError reason )
   {
-    if( m_connection && m_connection->state() == StateConnected )
+    if( m_connection && m_connection->state() >= StateConnecting )
     {
-      send( "</stream:stream>" );
+      if( reason != ConnTlsFailed )
+        send( "</stream:stream>" );
+
       m_connection->disconnect();
       m_connection->cleanup();
+
+      if( m_encryption )
+        m_encryption->cleanup();
+
+      m_encryptionActive = false;
+      m_compressionActive = false;
+
+      notifyOnDisconnect( reason );
     }
-
-    if( m_encryption )
-      m_encryption->cleanup();
-
-    m_encryptionActive = false;
-    m_compressionActive = false;
-    notifyOnDisconnect( reason );
   }
 
   void ClientBase::parse( const std::string& data )
@@ -921,7 +924,7 @@ namespace gloox
       m_messageSessions.push_back( session );
   }
 
-  void ClientBase::removeMessageSession( MessageSession *session )
+  void ClientBase::disposeMessageSession( MessageSession *session )
   {
     if( !session )
       return;
@@ -930,16 +933,8 @@ namespace gloox
                                                  session );
     if( it != m_messageSessions.end() )
     {
+      delete (*it);
       m_messageSessions.erase( it );
-    }
-  }
-
-  void ClientBase::disposeMessageSession( MessageSession *session )
-  {
-    if( session )
-    {
-      removeMessageSession( session );
-      delete session;
     }
   }
 
@@ -1145,7 +1140,7 @@ namespace gloox
       iq->addAttribute( "id", stanza->id() );
       iq->addAttribute( "to", stanza->from().full() );
       Tag *e = new Tag( iq, "error", "type", "cancel", false );
-      new Tag( e, "feature-not-implemented", "xmlns", XMLNS_XMPP_STANZAS );
+      new Tag( e, "service-unavailable", "xmlns", XMLNS_XMPP_STANZAS );
       send( iq );
     }
   }

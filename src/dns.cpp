@@ -198,7 +198,8 @@ namespace gloox
   {
     HostMap server;
 
-    logInstance.log( LogLevelWarning, LogAreaClassDns, "notice: using default port." );
+    logInstance.log( LogLevelWarning, LogAreaClassDns, "notice: no SRV record found for " + domain
+                                                       + ", using default port." );
 
     if( !domain.empty() )
       server[domain] = XMPP_PORT;

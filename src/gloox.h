@@ -533,6 +533,7 @@ namespace gloox
 
   /**
    * Describes stream events that get emitted by means of ConnectionListener::onStreamEvent().
+   * @since 0.9
    */
   enum StreamEvent
   {
@@ -541,7 +542,9 @@ namespace gloox
     StreamEventCompression,         /**< The Client is about to negotiate compression. */
     StreamEventAuthentication,      /**< The Client is about to authenticate. */
     StreamEventSessionInit,         /**< The Client is about to create a session. */
-    StreamEventResourceBinding,     /**< The Client is about to bind a resource to the session. */
+    StreamEventResourceBinding,     /**< The Client is about to bind a resource to the stream. */
+    StreamEventSessionCreation,     /**< The Client is about to create a session.
+                                     * @since 0.9.1 */
     StreamEventRoster,              /**< The Client is about to request the roster. */
     StreamEventFinished             /**< The log-in phase is completed. */
   };
@@ -686,7 +689,8 @@ namespace gloox
                                      * conditions in this list; this error condition SHOULD be used only in
                                      * conjunction with an application-specific condition. */
     StreamErrorUnsupportedEncoding, /**< The initiating entity has encoded the stream in an encoding that is
-                                     * not supported by the server (see Character Encoding (Section 11.5)). */
+                                     * not supported by the server (see Character Encoding (Section 11.5)).
+                                     */
     StreamErrorUnsupportedStanzaType,/**< The initiating entity has sent a first-level child of the stream
                                      * that is not supported by the server. */
     StreamErrorUnsupportedVersion,  /**< The value of the 'version' attribute provided by the initiating
