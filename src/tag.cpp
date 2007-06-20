@@ -30,10 +30,9 @@ namespace gloox
   {
   }
 
-  Tag::Tag( const std::string& name, const std::string& cdata, bool incoming )
-    : m_name( incoming ? relax( name ) : name ),
-      m_cdata( incoming ? relax( cdata ) : cdata ),
-      m_children( new TagList() ), m_parent( 0 ), m_type( StanzaUndefined ), m_incoming( incoming )
+  Tag::Tag( const std::string& name, const std::string& cdata )
+    : m_name( name ), m_cdata( cdata ), m_children( new TagList() ), m_parent( 0 ),
+      m_type( StanzaUndefined ), m_incoming( false )
   {
   }
 
@@ -46,17 +45,16 @@ namespace gloox
       m_parent->addChild( this );
   }
 
-  Tag::Tag( const std::string& name, const std::string& attrib, const std::string& value, bool incoming )
-    : m_name( incoming ? relax( name ) : name ),
-      m_children( new TagList() ), m_parent( 0 ), m_type( StanzaUndefined ), m_incoming( incoming )
+  Tag::Tag( const std::string& name, const std::string& attrib, const std::string& value )
+    : m_name( name ), m_children( new TagList() ), m_parent( 0 ), m_type( StanzaUndefined ),
+      m_incoming( false )
   {
     addAttribute( attrib, value );
   }
 
-  Tag::Tag( Tag *parent, const std::string& name, const std::string&  attrib, const std::string& value,
-            bool incoming )
-    : m_name( incoming ? relax( name ) : name ),
-      m_children( new TagList() ), m_parent( parent ), m_type( StanzaUndefined ), m_incoming( incoming )
+  Tag::Tag( Tag *parent, const std::string& name, const std::string&  attrib, const std::string& value )
+    : m_name( name ), m_children( new TagList() ), m_parent( parent ), m_type( StanzaUndefined ),
+      m_incoming( false )
   {
     if( m_parent )
       m_parent->addChild( this );
@@ -351,7 +349,7 @@ namespace gloox
 
   Tag* Tag::clone() const
   {
-    Tag *t = new Tag( name(), cdata(), m_incoming );
+    Tag *t = new Tag( 0, name(), cdata(), m_incoming );
     t->m_attribs = m_attribs;
     t->m_type = m_type;
 

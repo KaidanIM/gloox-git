@@ -319,7 +319,7 @@ namespace gloox
     if( !m_root )
     {
 //       printf( "created Tag named %s, ", m_tag.c_str() );
-      m_root = new Tag( m_tag, "", true );
+      m_root = new Tag( 0, m_tag, "", true );
       m_current = m_root;
     }
     else
