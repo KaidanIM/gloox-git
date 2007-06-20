@@ -92,6 +92,7 @@ namespace gloox
       std::string m_attrib;
       std::string m_value;
       int m_preamble;
+      bool m_quote;
 
   };
 
