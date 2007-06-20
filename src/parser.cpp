@@ -21,7 +21,7 @@ namespace gloox
 
   Parser::Parser( TagHandler *ph )
     : m_tagHandler( ph ), m_current( 0 ), m_root( 0 ), m_state( Initial ),
-      m_preamble( 0 )
+      m_preamble( 0 ), m_quote( false )
   {
   }
 
@@ -121,7 +121,7 @@ namespace gloox
               addCData();
               m_state = TagOpening;
               break;
-            case '>':
+            case '"':
               cleanup();
               return false;
               break;
@@ -274,8 +274,9 @@ namespace gloox
 
           switch( c )
           {
-            case '\'':
             case '"':
+              m_quote = true;
+            case '\'':
               m_state = TagValue;
               break;
             case '=':
@@ -291,15 +292,21 @@ namespace gloox
           switch( c )
           {
             case '<':
-            case '>':
               cleanup();
               return false;
               break;
             case '\'':
+              if( m_quote )
+              {
+                m_value += c;
+                break;
+              }
             case '"':
               addAttribute();
               m_state = TagNameComplete;
+              m_quote = false;
               break;
+            case '>':
             default:
               m_value += c;
           }
