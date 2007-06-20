@@ -22,7 +22,7 @@ static void printTime ( const char * testName, struct timeval tv1, struct timeva
 
 static Tag * newTag ( const std::string& str, bool incoming = false )
 {
-  Tag *aaa = new Tag( str, str, incoming );
+  Tag *aaa = new Tag( 0, str, str, incoming );
   Tag *bbb = new Tag( aaa, str, str, incoming ); bbb->addAttribute( str, str );
   Tag *ccc = new Tag( aaa, str, str, incoming ); ccc->addAttribute( str, str );
   Tag *ddd = new Tag( ccc, str, str, incoming ); ddd->addAttribute( str, str );
@@ -102,7 +102,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
 
   // -----------------------------------------------------------------------
-  
+
   gettimeofday( &tv1, 0 );
   for (int i = 0; i < num; ++i)
   {
