@@ -20,6 +20,8 @@
 namespace gloox
 {
 
+  class JID;
+
   /**
    *
    * @author Vincent Thomasset
@@ -55,8 +57,8 @@ namespace gloox
       /**
        * Creates an IQ Query.
        */
-      IQ ( IqType type, const std::string& id, const std::string& to, const std::string& xmlns = "",
-           const std::string& childtag = "", const std::string& from = "" );
+      IQ ( IqType type, const JID& to, const std::string& id, const std::string& xmlns = "",
+           const std::string& childtag = "", const JID& from = JID() );
 
       /**
        * Virtual destructor.

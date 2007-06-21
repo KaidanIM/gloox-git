@@ -172,10 +172,10 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "new simple Presence available";
-  i = new Presence( Presence::PresenceAvailable, "xyz@example.org/blah", "the status",
-                        10, "the xmllang", "the from" );
+  i = new Presence( Presence::PresenceAvailable, JID( "xyz@example.org/blah" ), "the status",
+                        10, "the xmllang", JID( "foo@bar.com" ) );
   if( !i->hasAttribute( "type", "available" )
-      || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "the from" )
+      || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
       || !i->hasChildWithCData( "status", "the status" )
       || !i->hasChild( "status", "xml:lang", "the xmllang" )
       || !i->hasChildWithCData( "priority", "10" ) )
@@ -188,10 +188,10 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "new simple Presence unavailable";
-  i = new Presence( Presence::PresenceUnavailable, "xyz@example.org/blah", "the status",
-                        10, "the xmllang", "the from" );
+  i = new Presence( Presence::PresenceUnavailable, JID( "xyz@example.org/blah" ), "the status",
+                        10, "the xmllang", JID( "foo@bar.com" ) );
   if( !i->hasAttribute( "type", "unavailable" )
-      || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "the from" )
+      || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
       || !i->hasChildWithCData( "status", "the status" )
       || !i->hasChild( "status", "xml:lang", "the xmllang" ) )
   {
@@ -203,10 +203,10 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "new simple Presence chat";
-  i = new Presence( Presence::PresenceChat, "xyz@example.org/blah", "the status",
-                        10, "the xmllang", "the from" );
+  i = new Presence( Presence::PresenceChat, JID( "xyz@example.org/blah" ), "the status",
+                        10, "the xmllang", JID( "foo@bar.com" ) );
   if( !i->hasAttribute( "type", "available" )
-      || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "the from" )
+      || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
       || !i->hasChildWithCData( "status", "the status" )
       || !i->hasChild( "status", "xml:lang", "the xmllang" )
       || !i->hasChildWithCData( "priority", "10" )
@@ -220,10 +220,10 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "new simple Presence away";
-  i = new Presence( Presence::PresenceAway, "xyz@example.org/blah", "the status",
-                        10, "the xmllang", "the from" );
+  i = new Presence( Presence::PresenceAway, JID( "xyz@example.org/blah" ), "the status",
+                        10, "the xmllang", JID( "foo@bar.com" ) );
   if( !i->hasAttribute( "type", "available" )
-      || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "the from" )
+      || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
       || !i->hasChildWithCData( "status", "the status" )
       || !i->hasChild( "status", "xml:lang", "the xmllang" )
       || !i->hasChildWithCData( "priority", "10" )
@@ -237,10 +237,10 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "new simple Presence dnd";
-  i = new Presence( Presence::PresenceDnd, "xyz@example.org/blah", "the status",
-                        10, "the xmllang", "the from" );
+  i = new Presence( Presence::PresenceDnd, JID( "xyz@example.org/blah" ), "the status",
+                        10, "the xmllang", JID( "foo@bar.com" ) );
   if( !i->hasAttribute( "type", "available" )
-      || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "the from" )
+      || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
       || !i->hasChildWithCData( "status", "the status" )
       || !i->hasChild( "status", "xml:lang", "the xmllang" )
       || !i->hasChildWithCData( "priority", "10" )
@@ -254,10 +254,10 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "new simple Presence xa";
-  i = new Presence( Presence::PresenceXa, "xyz@example.org/blah", "the status",
-                        10, "the xmllang", "the from" );
+  i = new Presence( Presence::PresenceXa, JID( "xyz@example.org/blah" ), "the status",
+                        10, "the xmllang", JID( "foo@bar.com" ) );
   if( !i->hasAttribute( "type", "available" )
-      || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "the from" )
+      || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
       || !i->hasChildWithCData( "status", "the status" )
       || !i->hasChild( "status", "xml:lang", "the xmllang" )
       || !i->hasChildWithCData( "priority", "10" )
@@ -271,10 +271,10 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "new simple Presence probe";
-  i = new Presence( Presence::PresenceProbe, "xyz@example.org/blah", "the status",
-                        10, "the xmllang", "the from" );
+  i = new Presence( Presence::PresenceProbe, JID( "xyz@example.org/blah" ), "the status",
+                        10, "the xmllang", JID( "foo@bar.com" ) );
   if( !i->hasAttribute( "type", "probe" )
-      || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "the from" )
+      || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
       || !i->hasChildWithCData( "status", "the status" )
       || !i->hasChild( "status", "xml:lang", "the xmllang" )
       || !i->hasChildWithCData( "priority", "10" ) )
@@ -287,10 +287,10 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "new simple Presence error";
-  i = new Presence( Presence::PresenceError, "xyz@example.org/blah", "the status",
-                        10, "the xmllang", "the from" );
+  i = new Presence( Presence::PresenceError, JID( "xyz@example.org/blah" ), "the status",
+                        10, "the xmllang", JID( "foo@bar.com" ) );
   if( !i->hasAttribute( "type", "error" )
-      || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "the from" )
+      || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
       || !i->hasChildWithCData( "status", "the status" )
       || !i->hasChild( "status", "xml:lang", "the xmllang" )
       || !i->hasChildWithCData( "priority", "10" ) )

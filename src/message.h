@@ -20,6 +20,8 @@
 namespace gloox
 {
 
+  class JID;
+
   /**
    *
    * @author Vincent Thomasset
@@ -53,10 +55,10 @@ namespace gloox
       /**
        * Creates a Message.
        */
-      Message( MessageType type, const std::string& to,
+      Message( MessageType type, const JID& to,
                 const std::string& body = "", const std::string& thread = "",
                 const std::string& xmllang = "", const std::string& subject = "",
-                const std::string& from = "" );
+                const JID& from = JID() );
       /**
        * Destructor.
        */

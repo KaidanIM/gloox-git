@@ -54,18 +54,11 @@ namespace gloox
     }
   }
 
-  Subscription::Subscription( S10nType type, const std::string& to, const std::string& status,
-                              const std::string& xmllang, const std::string& from )
-    : Stanza( "presence" ), m_subtype( S10nInvalid )
+  Subscription::Subscription( S10nType type, const JID& to, const std::string& status,
+                              const std::string& xmllang, const JID& from )
+    : Stanza( "presence", to, from ), m_subtype( S10nInvalid )
   {
     addAttribute( "type", typeString( type ) );
-    addAttribute( "to", to );
-    m_to.setJID( to );
-    if( !from.empty() )
-    {
-      addAttribute( "from", from );
-      m_from.setJID( from );
-    }
 
     if( !status.empty() )
     {

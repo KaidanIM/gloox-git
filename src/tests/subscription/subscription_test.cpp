@@ -86,10 +86,10 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "new simple Subscription subscribe";
-  i = new Subscription( Subscription::S10nSubscribe, "xyz@example.org/blah", "the status",
-                        "the xmllang", "the from" );
+  i = new Subscription( Subscription::S10nSubscribe, JID( "xyz@example.org/blah" ), "the status",
+                        "the xmllang", JID( "foo@bar.com" ) );
   if( !i->hasAttribute( "type", "subscribe" )
-      || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "the from" )
+      || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
       || !i->hasChildWithCData( "status", "the status" )
       || !i->hasChild( "status", "xml:lang", "the xmllang" ) )
   {
@@ -101,10 +101,10 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "new simple Subscription subscribed";
-  i = new Subscription( Subscription::S10nSubscribed, "xyz@example.org/blah", "the status",
-                        "the xmllang", "the from" );
+  i = new Subscription( Subscription::S10nSubscribed, JID( "xyz@example.org/blah" ), "the status",
+                        "the xmllang", JID( "foo@bar.com" ) );
   if( !i->hasAttribute( "type", "subscribed" )
-      || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "the from" )
+      || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
       || !i->hasChildWithCData( "status", "the status" )
       || !i->hasChild( "status", "xml:lang", "the xmllang" ) )
   {
@@ -116,10 +116,10 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "new simple Subscription unsubscribe";
-  i = new Subscription( Subscription::S10nUnsubscribe, "xyz@example.org/blah", "the status",
-                        "the xmllang", "the from" );
+  i = new Subscription( Subscription::S10nUnsubscribe, JID( "xyz@example.org/blah" ), "the status",
+                        "the xmllang", JID( "foo@bar.com" ) );
   if( !i->hasAttribute( "type", "unsubscribe" )
-      || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "the from" )
+      || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
       || !i->hasChildWithCData( "status", "the status" )
       || !i->hasChild( "status", "xml:lang", "the xmllang" ) )
   {
@@ -131,10 +131,10 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "new simple Subscription unsubscribed";
-  i = new Subscription( Subscription::S10nUnsubscribed, "xyz@example.org/blah", "the status",
-                        "the xmllang", "the from" );
+  i = new Subscription( Subscription::S10nUnsubscribed, JID( "xyz@example.org/blah" ), "the status",
+                        "the xmllang", JID( "foo@bar.com" ) );
   if( !i->hasAttribute( "type", "unsubscribed" )
-      || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "the from" )
+      || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
       || !i->hasChildWithCData( "status", "the status" )
       || !i->hasChild( "status", "xml:lang", "the xmllang" ) )
   {

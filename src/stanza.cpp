@@ -21,10 +21,11 @@
 namespace gloox
 {
 
-  Stanza::Stanza( const std::string& name )
+  Stanza::Stanza( const std::string& name, const JID& to, const JID& from )
     : Tag( name ),
       m_stanzaError( StanzaErrorUndefined ), m_stanzaErrorType( StanzaErrorTypeUndefined ),
-      m_stanzaErrorAppCondition( 0 ), m_xmllang( "default" )
+      m_stanzaErrorAppCondition( 0 ), m_xmllang( "default" ),
+      m_from( from ), m_to( to )
   {
   }
 

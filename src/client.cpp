@@ -338,7 +338,7 @@ namespace gloox
     if( !m_resourceBound )
     {
       const std::string& id = getID();
-      IQ *iq = new IQ( IQ::IqTypeSet, id, "", XMLNS_STREAM_BIND, "bind" );
+      IQ *iq = new IQ( IQ::IqTypeSet, JID(), id, XMLNS_STREAM_BIND, "bind" );
       if( !resource().empty() )
         new Tag( iq->query(), "resource", resource() );
 
@@ -407,7 +407,7 @@ namespace gloox
     notifyStreamEvent( StreamEventSessionCreation );
 
     const std::string& id = getID();
-    IQ *iq = new IQ( IQ::IqTypeSet, id, "", XMLNS_STREAM_SESSION, "session" );
+    IQ *iq = new IQ( IQ::IqTypeSet, JID(), id, XMLNS_STREAM_SESSION, "session" );
 
     trackID( this, id, SessionEstablishment );
     send( iq );
@@ -512,8 +512,7 @@ namespace gloox
     if( m_presence != Presence::PresenceInvalid &&
         m_presence != Presence::PresenceUnavailable )
     {
-      JID jid;
-      Stanza *p = new Presence( m_presence, "", m_status, m_priority );
+      Stanza *p = new Presence( m_presence, JID(), m_status, m_priority );
 /*#ifdef _WIN32_WCE
       char tmp[5];
       tmp[4] = '\0';

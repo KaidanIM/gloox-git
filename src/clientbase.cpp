@@ -1151,10 +1151,7 @@ namespace gloox
     if( !res && ( iq->type() == StanzaIq ) &&
         ( ( iq->subtype() == IQ::IqTypeGet ) || ( iq->subtype() == IQ::IqTypeSet ) ) )
     {
-      Tag *re = new Tag( "iq" );
-      re->addAttribute( "type", "error" );
-      re->addAttribute( "id", iq->id() );
-      re->addAttribute( "to", iq->from().full() );
+      Tag *re = new IQ( IQ::IqTypeError, iq->from(), iq->id() );
       Tag *e = new Tag( re, "error", "type", "cancel" );
       new Tag( e, "service-unavailable", "xmlns", XMLNS_XMPP_STANZAS );
       send( re );
