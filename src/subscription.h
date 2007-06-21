@@ -51,7 +51,7 @@ namespace gloox
       /**
        * Creates a Subscription request.
        */
-      Subscription ( S10nType type, const std::string& to, const std::string& status,
+      Subscription( S10nType type, const std::string& to, const std::string& status,
                      const std::string& xmllang = "", const std::string& from = "" );
       /**
        * Destructor.

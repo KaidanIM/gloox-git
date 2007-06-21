@@ -53,7 +53,7 @@ namespace gloox
       /**
        * Creates a Message.
        */
-      Message ( MessageType type, const std::string& id, const std::string& to,
+      Message( MessageType type, const std::string& id, const std::string& to,
                 const std::string& body, const std::string& thread = "",
                 const std::string& xmllang = "", const std::string& subject = "",
                 const std::string& from = "" );
