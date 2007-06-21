@@ -25,7 +25,7 @@ libgloox_la_SOURCES = jid.cpp parser.cpp connectiontcpclient.cpp clientbase.cpp 
                         tlsgnutlsclientanon.cpp tlsschannel.cpp tlsdefault.cpp simanager.cpp siprofileft.cpp \
                         mutex.cpp connectionsocks5proxy.cpp socks5bytestreammanager.cpp socks5bytestream.cpp \
                         connectiontcpbase.cpp connectiontcpserver.cpp socks5bytestreamserver.cpp amp.cpp \
-                        pubsubmanager.cpp iq.cpp error.cpp parserutils.cpp
+                        pubsubmanager.cpp error.cpp parserutils.cpp
 
 libgloox_la_LDFLAGS = -version-info 7:0:0 -no-undefined -no-allow-shlib-undefined
 libgloox_la_LIBADD =
