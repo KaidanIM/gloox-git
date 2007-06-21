@@ -40,35 +40,9 @@ namespace gloox
   {
     public:
       /**
-       * Creates a new Stanza from a deep copy of the given Tag.
-       * @param tag The Tag to create the Stanza from.
-       * @param rip Whether to rip off the original Tag.
-       * @since 1.0
-       * @note While the signature of this constructor in 0.7 is the the same as in older versions,
-       * semantics have changed. The copy created by this constructor is no longer a shallow one. You have to
-       * make sure the copy is deleted properly.
-       */
-      Stanza( Tag *tag, bool rip = false );
-
-      /**
-       * Creates a new Stanza with given name and optional CData.
-       * @param name The name of the root tag.
-       * @param cdata Initial XML character data for the tag.
-       * @param xmllang The value of the xmllang attribute. The stanza's primary language.
-       */
-      Stanza( const std::string& name, const std::string& cdata = "",
-              const std::string& xmllang = "default" );
-
-      /**
        * Virtual destructor.
        */
       virtual ~Stanza();
-
-      /**
-       * Returns the sub-type of the stanza.
-       * @return The sub-type of the stanza.
-       */
-//       virtual StanzaSubType subtype() const { return m_subtype; }
 
       /**
        * Returns the JID the stanza comes from.
@@ -87,27 +61,6 @@ namespace gloox
        * @return The ID of the stanza.
        */
       virtual const std::string& id() const { return m_id; }
-
-      /**
-       * Returns the value of the xmlns attribute of the first child node.
-       * @return The namespace of the IQ stanza.
-       */
-//       virtual const std::string& xmlns() const { return m_xmlns; }
-
-      /**
-       * Returns the presence 'show' type of a presence stanza.
-       * @return The presence type of the sender.
-       */
-//       virtual Presence presence() const { return m_presence; }
-
-      /**
-       * Returns the remote entity resource's presence priority if the stanza is a presence stanza.
-       * If the stanza is not a presence stanza or if no priority information was included, a value
-       * below -128 is returned, which is an illegal value for the priority. Legal range is between
-       * -128 and +127.
-       * @return The priority information contained in the stanza, if any, or a value below -128.
-       */
-//       virtual int priority() const { return m_priority; }
 
       /**
        * Returns the text of a error stanza for the given language if available.
@@ -135,26 +88,10 @@ namespace gloox
       Tag* errorAppCondition() { return m_stanzaErrorAppCondition; }
 
       /**
-       * Sets the Stanza's thread ID. Only useful for message stanzas.
-       * @param thread The thread ID.
-       * @since 0.9
-       */
-//       void setThread( const std::string& thread ) { m_thread = thread; }
-
-      /**
        * Retrieves the value of the xml:lang attribute of this stanza.
        * Default is 'en'.
        */
       const std::string& xmlLang() const { return m_xmllang; }
-
-      /**
-       * Use this function to parse the content of the Tag and determine type, etc.
-       * of the Stanza. This feels kind of hackish...
-       * You only need to call this if you are constructing a bare Stanza from scratch.
-       * Stanzas provided by gloox are fully parsed.
-       * @deprecated
-       */
-//       void finalize() { init(); }
 
       /**
        * Use this function to add a StanzaExtension to this Stanza.
@@ -171,80 +108,31 @@ namespace gloox
        */
       const StanzaExtensionList& extensions() const { return m_extensionList; }
 
-      /**
-       * Creates a new IQ stanza.
-       * @param to The receiver of the stanza.
-       * @param id An ID for the stanza. Best is to use ClientBase::getID() as input.
-       * @param subtype The IQ type. Only StanzaIq* types are valid.
-       * @param xmlns If this is non-empty, a child element named 'query' will be included, with this
-       * value as value of the 'xmlns' attribute.
-       * @param tag If this if not NULL, and xmlns is not empty, this Tag will be included as child tag of
-       * the 'query' element.
-       * @since 0.7
-       */
-//       static Stanza* createIqStanza( const JID& to, const std::string& id,
-//                                      StanzaSubType subtype = StanzaIqGet,
-//                                      const std::string& xmlns = "", Tag* tag = 0 );
-
-      /**
-       * Creates a new presence stanza.
-       * @c to can be an empty JID. This makes the created stanza a broadcast stanza sent to all
-       * contacts in the roster.
-       * @param to The receiver of the stanza.
-       * @param msg An optional message.
-       * @param status The status.
-       * @param xmllang The status message's language.
-       * @since 0.7
-       */
-//       static Stanza* createPresenceStanza( const JID& to, const std::string& msg = "",
-//                                            Presence status = PresenceAvailable,
-//                                            const std::string& xmllang = "" );
-
-      /**
-       * Creates a new message stanza.
-       * @param to The receiver of the message.
-       * @param body The message's body.
-       * @param subtype The message type. Only StanzaMessage* types are valid.
-       * @param subject The message's subject.
-       * @param thread The message's conversation thread id.
-       * @param xmllang The message's language.
-       * @since 0.7
-       */
-//       static Stanza* createMessageStanza( const JID& to, const std::string& body,
-//                                           StanzaSubType subtype = StanzaMessageChat,
-//                                           const std::string& subject = "", const std::string& thread = "",
-//                                           const std::string& xmllang = "" );
-
-      /**
-       * Creates a new subscription stanza.
-       * @param to The recipient of the subscription stanza.
-       * @param msg An optional message.
-       * @param subtype The subscription type. Only StanzaS10n* types are vaild.
-       * @param xmllang The message's language.
-       * @since 0.7
-       */
-//       static Stanza* createSubscriptionStanza( const JID& to, const std::string& msg = "",
-//                                                StanzaSubType subtype = StanzaS10nSubscribe,
-//                                                const std::string& xmllang = "" );
-
     protected:
-      void init();
+      /**
+     * Creates a new Stanza from a deep copy of the given Tag.
+     * @param tag The Tag to create the Stanza from.
+     * @param rip Whether to rip off the original Tag.
+     * @since 1.0
+       */
+      Stanza( Tag *tag, bool rip = false );
+
+      /**
+       * Creates a new Stanza with given name.
+       * @param name The name of the root tag.
+       * @since 1.0
+       */
+      Stanza( const std::string& name );
 
       StanzaExtensionList m_extensionList;
-//       StanzaSubType m_subtype;
-//       Presence m_presence;
       StanzaError m_stanzaError;
       StanzaErrorType m_stanzaErrorType;
       Tag *m_stanzaErrorAppCondition;
       StringMap m_errorText;
-//       StringMap m_status;
       JID m_from;
       JID m_to;
-//       std::string m_xmlns;
       std::string m_id;
-//       std::string m_thread;
       std::string m_xmllang;
-//       int m_priority;
 
       static const std::string findLang( const StringMap& map, const std::string& lang );
       static void setLang( StringMap& map, const Tag *tag );
