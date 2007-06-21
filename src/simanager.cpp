@@ -43,7 +43,7 @@ namespace gloox
   }
 
   const std::string SIManager::requestSI( SIHandler* sih, const JID& to, const std::string& profile,
-                             Tag* child1, Tag* child2, const std::string& mimetype )
+                                          Tag* child1, Tag* child2, const std::string& mimetype )
   {
     if( !m_parent || !sih )
       return std::string();
