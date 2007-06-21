@@ -160,11 +160,12 @@ namespace gloox
        * @param desc A description.
        * @param date The file's last modification date/time. See XEP-0082 for details.
        * @param mimetype The file's mime-type. Defaults to 'binary/octet-stream' if empty.
-       * @return @b False if conditions above (file name, size) are not met, @b true otherwise.
+       * @return The requested stream's ID (SID). Empty if conditions above (file name, size)
+       * are not met.
        */
-      bool requestFT( const JID& to, const std::string& name, long size, const std::string& hash = "",
-                      const std::string& desc = "", const std::string& date = "",
-                      const std::string& mimetype = "" );
+      const std::string requestFT( const JID& to, const std::string& name, long size,
+                                   const std::string& hash = "", const std::string& desc = "",
+                                   const std::string& date = "", const std::string& mimetype = "" );
 
       /**
        * Call this function to accept a file transfer request previously announced by means of

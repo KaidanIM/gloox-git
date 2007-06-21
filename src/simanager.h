@@ -67,11 +67,12 @@ namespace gloox
        * @param child2 The second of the two allowed children of the SI offer. See
        * XEP-0095 for more info. Defaults to 0.
        * @param mimetype The stream's/file's mime-type. Defaults to 'binary/octet-stream'.
+       * @return The requested stream's ID (SID). Empty if SIHandler or ClientBase are invalid.
        * @note The SIManager claims ownership of the Tags supplied to this function, and will
        * delete them after use.
        */
-      void requestSI( SIHandler* sih, const JID& to, const std::string& profile, Tag* child1,
-                      Tag* child2 = 0, const std::string& mimetype = "binary/octet-stream" );
+      const std::string requestSI( SIHandler* sih, const JID& to, const std::string& profile, Tag* child1,
+                                   Tag* child2 = 0, const std::string& mimetype = "binary/octet-stream" );
 
       /**
        * Call this function to accept an SI request previously announced by means of
