@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2006-2007 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2007 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -13,59 +13,109 @@
 #ifndef MESSAGE_H__
 #define MESSAGE_H__
 
-#include <string>
-#include <list>
 #include "stanza.h"
+
+#include <string>
 
 namespace gloox
 {
 
+  /**
+   *
+   * @author Vincent Thomasset
+   * @author Jakob Schroeter <js@camaya.net>
+   * @since 1.0
+   */
   class Message : public Stanza
   {
 
     public:
 
       /**
-       * @brief Describes the different valid message types.
+       * Describes the different valid message types.
        */
       enum MessageType
       {
+        MessageInvalid,
         MessageChat,
         MessageError,
-        MessageGroupChat,
+        MessageGroupchat,
         MessageHeadline,
         MessageNormal
       };
 
-      Message( Tag * tag ) : Stanza( tag ) {}
+      /**
+       * Creates a message Stanza from the given Tag.
+       * @param tag The Tag to parse.
+       */
+      Message( Tag *tag );
 
       /**
-       * @brief Creates a Message.
+       * Creates a Message.
        */
-      Message ( MessageType type, const std::string& id,
-                                  const std::string& to,
-                                  const std::string& from,
-                                  const std::string& body,
-                                  const std::string& thread = "",
-                                  const std::string& xmllang = "",
-                                  const std::string& subject = "" );
+      Message ( MessageType type, const std::string& id, const std::string& to,
+                const std::string& body, const std::string& thread = "",
+                const std::string& xmllang = "", const std::string& subject = "",
+                const std::string& from = "" );
       /**
-       * @brief Virtual destructor.
+       * Destructor.
        */
-      ~Message();
+      virtual ~Message();
 
       /**
-       * @brief Adds an extension to the message.
-       * @arg ext Extension to add. The extension must be a legal message extension.
+       * Adds an extension to the message.
+       * @param ext Extension to add. The extension must be a legal message extension.
        */
-      void addExtension( StanzaExtension * ext ) // + switch ext->type() to ensure legal extension is added ?
-        { m_extensions.push_back( extension ); }
+      void addExtension( StanzaExtension *extension ) // + switch ext->type() to ensure legal extension is added ?
+        { m_extensionList.push_back( extension ); }
 
-      MessageType type() const { return m_messageType; }
-      void type( MessageType type ) { m_messageType = type; }
+      /**
+       *
+       */
+      MessageType subtype() const { return m_subtype; }
+
+      /**
+       * Returns the body of a message stanza for the given language if available.
+       * If the requested language is not available, the default body (without a xml:lang
+       * attribute) will be returned.
+       * @param lang The language identifier for the desired language. It must conform to
+       * section 2.12 of the XML specification and RFC 3066. If empty, the default body
+       * will be returned, if any.
+       * @return The body of a message stanza.
+       */
+      virtual const std::string body( const std::string& lang = "default" ) const
+      { return findLang( m_body, lang ); }
+
+      /**
+       * Returns the subject of a message stanza for the given language if available.
+       * If the requested language is not available, the default subject (without a xml:lang
+       * attribute) will be returned.
+       * @param lang The language identifier for the desired language. It must conform to
+       * section 2.12 of the XML specification and RFC 3066. If empty, the default subject
+       * will be returned, if any.
+       * @return The subject of a message stanza.
+       */
+      virtual const std::string subject( const std::string& lang = "default" ) const
+      { return findLang( m_subject, lang ); }
+
+      /**
+       * Returns the thread ID of a message stanza.
+       * @return The thread ID of a message stanza. Empty for non-message stanzas.
+       */
+      virtual const std::string& thread() const { return m_thread; }
+
+      /**
+       * Sets the Stanza's thread ID. Only useful for message stanzas.
+       * @param thread The thread ID.
+       * @since 0.9
+       */
+      void setThread( const std::string& thread ) { m_thread = thread; }
 
     private:
-      MessageType m_messageType;
+      MessageType m_subtype;
+      StringMap m_body;
+      StringMap m_subject;
+      std::string m_thread;
   };
 
 }

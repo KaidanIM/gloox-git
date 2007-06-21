@@ -3,8 +3,9 @@
 ##
 
 SUBDIRS = base64 chatstatefilter client clientbase dataform dataformfield delayeddelivery \
-          gpgencrypted gpgsigned jid md5 messageeventfilter oob parser prep search sha simanager \
-	  stanza stanzaextensionfactory tag tlsgnutls vcardupdate xdelayeddelivery xpath zlib
+          gpgencrypted gpgsigned iq jid md5 message messageeventfilter oob parser prep search \
+          sha simanager stanza stanzaextensionfactory tag tlsgnutls vcardupdate xdelayeddelivery \
+          xpath zlib
 
 check: test
 

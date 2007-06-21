@@ -291,8 +291,10 @@ src/tests/dataformfield/Makefile
 src/tests/delayeddelivery/Makefile
 src/tests/gpgencrypted/Makefile
 src/tests/gpgsigned/Makefile
+src/tests/iq/Makefile
 src/tests/jid/Makefile
 src/tests/md5/Makefile
+src/tests/message/Makefile
 src/tests/messageeventfilter/Makefile
 src/tests/oob/Makefile
 src/tests/parser/Makefile
