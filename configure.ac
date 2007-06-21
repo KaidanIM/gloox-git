@@ -299,6 +299,7 @@ src/tests/messageeventfilter/Makefile
 src/tests/oob/Makefile
 src/tests/parser/Makefile
 src/tests/prep/Makefile
+src/tests/presence/Makefile
 src/tests/search/Makefile
 src/tests/sha/Makefile
 src/tests/simanager/Makefile
