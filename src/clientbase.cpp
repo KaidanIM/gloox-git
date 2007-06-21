@@ -1150,7 +1150,7 @@ namespace gloox
       iq->addAttribute( "type", "error" );
       iq->addAttribute( "id", stanza->id() );
       iq->addAttribute( "to", stanza->from().full() );
-      Tag *e = new Tag( iq, "error", "type", "cancel", false );
+      Tag *e = new Tag( iq, "error", "type", "cancel" );
       new Tag( e, "service-unavailable", "xmlns", XMLNS_XMPP_STANZAS );
       send( iq );
     }
