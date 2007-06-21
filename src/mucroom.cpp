@@ -271,8 +271,7 @@ namespace gloox
 
   Stanza* MUCRoom::createDataForm( const JID& room, const DataForm& df )
   {
-    Stanza *m = new Stanza( "message" );
-    m->addAttribute( "to", room.bare() );
+    Message* m = new Message( Message::MessageNormal, room.bare() );
     m->addChild( df.tag() );
 
     return m;
