@@ -125,7 +125,7 @@ namespace gloox
       return;
 
     const std::string& id = m_parent->getID();
-    IQ* iq = new IQ( IQ::IqTypeSet, m_nick.bare(), id, XMLNS_MUC_OWNER );
+    IQ* iq = new IQ( IQ::IqTypeSet, m_nick.bareJID(), id, XMLNS_MUC_OWNER );
     Tag *d = new Tag( iq->query(), "destroy" );
     if( alternate )
       d->addAttribute( "jid", alternate->bare() );
@@ -389,7 +389,7 @@ namespace gloox
     }
 
     const std::string& id = m_parent->getID();
-    IQ *k = new IQ( IQ::IqTypeSet, m_nick.bare(), id, XMLNS_MUC_ADMIN );
+    IQ *k = new IQ( IQ::IqTypeSet, m_nick.bareJID(), id, XMLNS_MUC_ADMIN );
     Tag *i = new Tag( k->query(), "item" );
     i->addAttribute( "nick", nick );
     i->addAttribute( roa, newRoA );
@@ -406,7 +406,7 @@ namespace gloox
       return;
 
     const std::string& id = m_parent->getID();
-    IQ *iq = new IQ( IQ::IqTypeGet, m_nick.bare(), id, XMLNS_MUC_ADMIN );
+    IQ *iq = new IQ( IQ::IqTypeGet, m_nick.bareJID(), id, XMLNS_MUC_ADMIN );
     Tag *i = new Tag( iq->query(), "item" );
 
     switch( operation )
@@ -643,7 +643,7 @@ namespace gloox
       return;
 
     const std::string& id = m_parent->getID();
-    IQ* iq = new IQ( IQ::IqTypeSet, m_nick.bare(), id, XMLNS_MUC_OWNER );
+    IQ* iq = new IQ( IQ::IqTypeSet, m_nick.bareJID(), id, XMLNS_MUC_OWNER );
     Tag *x = new Tag( iq->query(), "x" );
     x->addAttribute( "xmlns", XMLNS_X_DATA );
     x->addAttribute( "type", "submit" );
@@ -660,7 +660,7 @@ namespace gloox
       return;
 
     const std::string& id = m_parent->getID();
-    IQ* iq = new IQ( IQ::IqTypeSet, m_nick.bare(), id, XMLNS_MUC_OWNER );
+    IQ* iq = new IQ( IQ::IqTypeSet, m_nick.bareJID(), id, XMLNS_MUC_OWNER );
     Tag *x = new Tag( iq->query(), "x" );
     x->addAttribute( "xmlns", XMLNS_X_DATA );
     x->addAttribute( "type", "cancel" );
@@ -677,7 +677,7 @@ namespace gloox
       return;
 
     const std::string& id = m_parent->getID();
-    IQ* iq = new IQ( IQ::IqTypeGet, m_nick.bare(), id, XMLNS_MUC_OWNER );
+    IQ* iq = new IQ( IQ::IqTypeGet, m_nick.bareJID(), id, XMLNS_MUC_OWNER );
 
     m_parent->trackID( this, id, RequestRoomConfig );
     m_parent->send( iq );
