@@ -49,7 +49,7 @@ namespace gloox
   }
 
   IQ::IQ( IqType type, const std::string& id, const std::string& to, const std::string& xmlns,
-          const std::string& childtag, Tag* subtag, const std::string& from )
+          const std::string& childtag, const std::string& from )
     : Stanza( "iq" ), m_query( 0 ), m_subtype( type )
   {
     m_type = StanzaIq;
@@ -70,11 +70,6 @@ namespace gloox
       m_xmlns = xmlns;
       m_query = new Tag( this, childtag.empty() ? "query" : childtag );
       m_query->addAttribute( "xmlns", xmlns );
-
-      if( subtag )
-      {
-        m_query->addChild( subtag );
-      }
     }
   }
 
