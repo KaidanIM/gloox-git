@@ -144,6 +144,8 @@ namespace gloox
 
    private:
       ConnectionBOSH &operator=( const ConnectionBOSH& );
+      void handleXMLData(const ConnectionBase* connection, const std::string& data);
+      std::string GetHTTPField(const std::string& field);
 
       ConnectionBase *m_connection;
       const LogSink& m_logInstance;
@@ -157,12 +159,13 @@ namespace gloox
       long m_rid;
       int m_hold;
       int m_wait;
-   
-      ConnectionState m_state;
 
       bool m_http11; // Persistent connections
       bool m_pipelining; // Multiple requests between responses (on a single connection)
    
+      std::string m_buffer;
+      std::string m_bufferHeader;
+      long m_bufferContentLength;
 
   };
 

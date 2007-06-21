@@ -22,6 +22,7 @@
 #include "tag.h"
 
 #include <string>
+#include <stdlib.h>
 
 #ifndef _WIN32_WCE
 # include <sstream>
@@ -37,7 +38,7 @@ namespace gloox
   {
     m_server = prep::idna( xmppServer );
     m_port = xmppPort;
-    m_path = "/";
+    m_path = "/http-bind/";
     if( m_connection )
       m_connection->registerConnectionDataHandler( this );
   }
@@ -50,7 +51,7 @@ namespace gloox
   {
     m_server = prep::idna( xmppServer );
     m_port = xmppPort;
-    m_path = "/";
+    m_path = "/http-bind/";
     if( m_connection )
       m_connection->registerConnectionDataHandler( this );
   }
@@ -102,6 +103,12 @@ namespace gloox
     else
       return ConnNotConnected;
   }
+  
+  std::string ConnectionBOSH::GetHTTPField(const std::string& field)
+  {
+    int fieldpos = m_bufferHeader.find("\r\n" + field + ": ") + field.length() + 4;
+    return m_bufferHeader.substr(fieldpos, m_bufferHeader.find("\r\n", fieldpos));
+  }
 
   ConnectionError ConnectionBOSH::receive()
   {
@@ -141,17 +148,48 @@ namespace gloox
   void ConnectionBOSH::handleReceivedData( const ConnectionBase* connection,
                                                 const std::string& data )
   {
-	  m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh received" + data);
+	  m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh received:\n" + data);
+    
+    m_buffer += data;
+    
+    if(m_bufferHeader.empty()) // HTTP header not received yet?
+    {
+      std::string::size_type headerLength = m_buffer.find("\r\n\r\n", 0);
+      if(headerLength != std::string::npos) 
+      {
+        m_bufferHeader = m_buffer.substr(0, headerLength);
+        m_buffer = m_buffer.substr(headerLength + 4); // Remove header from m_buffer
+        m_bufferContentLength = atol(GetHTTPField("Content-Length").c_str());
+      }
+    }
+    
+    if(m_buffer.length() >= m_bufferContentLength) // We have at least one full response
+    {
+      handleXMLData(connection, m_buffer.substr(0, m_bufferContentLength));
+      m_buffer = m_buffer.substr(m_bufferContentLength); // Remove the handled response from the buffer, and reset variables for reuse
+      m_bufferContentLength = -1;
+      m_bufferHeader = "";
+      handleReceivedData(connection, ""); // In case there are more full responses in the buffer
+    }
+  }
+  
+  void ConnectionBOSH::handleXMLData(const ConnectionBase* connection, const std::string& data)
+  {
+    m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh received XML:\n" + data);
+    
   }
 
   void ConnectionBOSH::handleConnect( const ConnectionBase* /*connection*/ )
   {
 	  
+    m_state = StateConnecting;
+    
+    m_rid = ( rand() % 100000 + 47289472);
+    
     std::ostringstream connrequest;
     Tag requestBody("body");
     
-    requestBody.addAttribute("content", "text/xml");
-    requestBody.addAttribute("charset", "utf-8");
+    requestBody.addAttribute("content", "text/xml; charset=utf-8");
     requestBody.addAttribute("hold", (int)m_hold); // Shouldn't there be a boolean variant of addAttribute?
     requestBody.addAttribute("rid", m_rid);
     requestBody.addAttribute("ver", "1.6");
@@ -159,6 +197,7 @@ namespace gloox
     requestBody.addAttribute("ack", 0);
     requestBody.addAttribute("xml:lang", "en");
     requestBody.addAttribute("xmlns", "http://jabber.org/protocol/httpbind");
+    requestBody.addAttribute("to", m_server);
     
     connrequest << "POST " << m_path << " HTTP/1.1\r\n";
     connrequest << "Host: " << m_server << "\r\n";
