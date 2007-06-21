@@ -48,9 +48,10 @@ namespace gloox
       /**
        * Use this function to feed the parser with more XML.
        * @param data Raw xml to parse.
-       * @return Returns @b true if parsing was successful, @b false otherwise.
+       * @return Returns @b -1 if parsing was successful. If a parse error occured, the
+       * character position where the error was occured is returned.
        */
-      bool feed( const std::string& data );
+      int feed( const std::string& data );
 
     private:
       void addTag();

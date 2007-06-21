@@ -30,10 +30,11 @@ namespace gloox
     delete m_root;
   }
 
-  bool Parser::feed( const std::string& data )
+  int Parser::feed( const std::string& data )
   {
+    int i = 0;
     std::string::const_iterator it = data.begin();
-    for( ; it != data.end(); ++it )
+    for( ; it != data.end(); ++it, ++i )
     {
       const unsigned char c = (*it);
 //       printf( "found char:   %c, ", c );
@@ -41,7 +42,7 @@ namespace gloox
       if( !isValid( c ) )
       {
         cleanup();
-        return false;
+        return i;
       }
 
       switch( m_state )
@@ -59,7 +60,7 @@ namespace gloox
             case '>':
             default:
 //               cleanup();
-//               return false;
+//               return i;
               break;
           }
           break;
@@ -72,7 +73,7 @@ namespace gloox
             case '<':
             case '>':
               cleanup();
-              return false;
+              return i;
               break;
             case '/':
               m_state = TagClosingSlash;
@@ -99,7 +100,7 @@ namespace gloox
             case '<':
             case '?':
               cleanup();
-              return false;
+              return i;
               break;
             case '/':
               m_state = TagOpeningSlash;
@@ -123,7 +124,7 @@ namespace gloox
               break;
             case '"':
               cleanup();
-              return false;
+              return i;
               break;
             default:
               m_cdata += c;
@@ -140,7 +141,7 @@ namespace gloox
             if( !closeTag() )
             {
               cleanup();
-              return false;
+              return i;
             }
 
             m_state = Initial;
@@ -148,7 +149,7 @@ namespace gloox
           else
           {
             cleanup();
-            return false;
+            return i;
           }
           break;
         case TagClosingSlash:         // we have found the '/' of a closing tag
@@ -161,7 +162,7 @@ namespace gloox
             case '<':
             case '/':
               cleanup();
-              return false;
+              return i;
               break;
             default:
               m_tag += c;
@@ -175,13 +176,13 @@ namespace gloox
             case '<':
             case '/':
               cleanup();
-              return false;
+              return i;
               break;
             case '>':
               if( !closeTag() )
               {
                 cleanup();
-                return false;
+                return i;
               }
 
               m_state = Initial;
@@ -199,7 +200,7 @@ namespace gloox
           {
             case '<':
               cleanup();
-              return false;
+              return i;
               break;
             case '/':
               m_state = TagOpeningSlash;
@@ -208,7 +209,7 @@ namespace gloox
               if( m_preamble == 1 )
               {
                 cleanup();
-                return false;
+                return i;
               }
               m_state = TagInside;
               addTag();
@@ -219,7 +220,7 @@ namespace gloox
               else
               {
                 cleanup();
-                return false;
+                return i;
               }
               break;
             default:
@@ -241,7 +242,7 @@ namespace gloox
             case '/':
             case '>':
               cleanup();
-              return false;
+              return i;
               break;
             case '=':
               m_state = TagAttributeEqual;
@@ -264,7 +265,7 @@ namespace gloox
             case '>':
             default:
               cleanup();
-              return false;
+              return i;
               break;
           }
           break;
@@ -284,7 +285,7 @@ namespace gloox
             case '>':
             default:
               cleanup();
-              return false;
+              return i;
               break;
           }
           break;
@@ -293,7 +294,7 @@ namespace gloox
           {
             case '<':
               cleanup();
-              return false;
+              return i;
               break;
             case '\'':
               if( m_quote )
@@ -318,7 +319,7 @@ namespace gloox
 //       printf( "parser state: %d\n", m_state );
     }
 
-    return true;
+    return -1;
   }
 
   void Parser::addTag()
