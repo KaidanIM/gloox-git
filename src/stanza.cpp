@@ -27,6 +27,10 @@ namespace gloox
       m_stanzaErrorAppCondition( 0 ), m_xmllang( "default" ),
       m_from( from ), m_to( to )
   {
+    if( !m_to.empty() )
+      addAttribute( "to", m_to.full() );
+    if( !m_from.empty() )
+      addAttribute( "from", m_from.full() );
   }
 
   Stanza::Stanza( Tag *tag, bool rip )

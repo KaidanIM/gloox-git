@@ -129,10 +129,10 @@ namespace gloox
       StanzaErrorType m_stanzaErrorType;
       Tag *m_stanzaErrorAppCondition;
       StringMap m_errorText;
-      JID m_from;
-      JID m_to;
       std::string m_id;
       std::string m_xmllang;
+      JID m_from;
+      JID m_to;
 
       static const std::string findLang( const StringMap& map, const std::string& lang );
       static void setLang( StringMap& map, const Tag *tag );
