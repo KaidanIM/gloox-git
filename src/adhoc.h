@@ -136,10 +136,10 @@ namespace gloox
       virtual DiscoNodeItemList handleDiscoNodeItems( const std::string& node );
 
       // reimplemented from IqHandler
-      virtual bool handleIq( Stanza *stanza );
+      virtual bool handleIq( IQ* iq );
 
       // reimplemented from IqHandler
-      virtual bool handleIqID( Stanza *stanza, int context );
+      virtual void handleIqID( IQ* iq, int context );
 
       // reimplemented from DiscoHandler
       virtual void handleDiscoInfoResult( Stanza *stanza, int context );

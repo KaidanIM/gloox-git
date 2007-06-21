@@ -44,19 +44,19 @@ namespace gloox
     }
   }
 
-  bool Disco::handleIq( Stanza *stanza )
+  bool Disco::handleIq( IQ* iq )
   {
-    switch( stanza->subtype() )
+    switch( iq->subtype() )
     {
-      case StanzaIqGet:
-        if( stanza->xmlns() == XMLNS_VERSION )
+      case IQ::IqTypeGet:
+        if( iq->xmlns() == XMLNS_VERSION )
         {
-          Tag *iq = new Tag( "iq" );
-          iq->addAttribute( "id", stanza->id() );
-          iq->addAttribute( "from", m_parent->jid().full() );
-          iq->addAttribute( "to", stanza->from().full() );
-          iq->addAttribute( "type", "result" );
-          Tag *query = new Tag( iq, "query" );
+          Tag *re = new Tag( "iq" );
+          re->addAttribute( "id", iq->id() );
+          re->addAttribute( "from", m_parent->jid().full() );
+          re->addAttribute( "to", iq->from().full() );
+          re->addAttribute( "type", "result" );
+          Tag *query = new Tag( re, "query" );
           query->addAttribute( "xmlns", XMLNS_VERSION );
           new Tag( query, "name", m_versionName );
           new Tag( query, "version", m_versionVersion );
@@ -64,17 +64,17 @@ namespace gloox
 
           m_parent->send( iq );
         }
-        else if( stanza->xmlns() == XMLNS_DISCO_INFO && stanza->hasChild( "query" ) )
+        else if( iq->xmlns() == XMLNS_DISCO_INFO && iq->query() )
         {
-          Tag *iq = new Tag( "iq" );
-          iq->addAttribute( "id", stanza->id() );
-          iq->addAttribute( "from", m_parent->jid().full() );
-          iq->addAttribute( "to", stanza->from().full() );
-          iq->addAttribute( "type", "result" );
-          Tag *query = new Tag( iq, "query" );
+          Tag *re = new Tag( "iq" );
+          re->addAttribute( "id", iq->id() );
+          re->addAttribute( "from", m_parent->jid().full() );
+          re->addAttribute( "to", iq->from().full() );
+          re->addAttribute( "type", "result" );
+          Tag *query = new Tag( re, "query" );
           query->addAttribute( "xmlns", XMLNS_DISCO_INFO );
 
-          Tag *q = stanza->findChild( "query" );
+          Tag *q = iq->query();
           const std::string& node = q->findAttribute( "node" );
           if( !node.empty() )
           {
@@ -124,18 +124,18 @@ namespace gloox
 
           m_parent->send( iq );
         }
-        else if( stanza->xmlns() == XMLNS_DISCO_ITEMS && stanza->hasChild( "query" ) )
+        else if( iq->xmlns() == XMLNS_DISCO_ITEMS && iq->hasChild( "query" ) )
         {
-          Tag *iq = new Tag( "iq" );
-          iq->addAttribute( "id", stanza->id() );
-          iq->addAttribute( "to", stanza->from().full() );
-          iq->addAttribute( "from", m_parent->jid().full() );
-          iq->addAttribute( "type", "result" );
-          Tag *query = new Tag( iq, "query" );
+          Tag *re = new Tag( "iq" );
+          re->addAttribute( "id", iq->id() );
+          re->addAttribute( "to", iq->from().full() );
+          re->addAttribute( "from", m_parent->jid().full() );
+          re->addAttribute( "type", "result" );
+          Tag *query = new Tag( re, "query" );
           query->addAttribute( "xmlns", XMLNS_DISCO_ITEMS );
 
           DiscoNodeHandlerMap::const_iterator it;
-          Tag *q = stanza->findChild( "query" );
+          Tag *q = iq->findChild( "query" );
           const std::string& node = q->findAttribute( "node" );
           query->addAttribute( "node", node );
           it = m_nodeHandlers.find( node );
@@ -161,13 +161,13 @@ namespace gloox
         return true;
         break;
 
-      case StanzaIqSet:
+      case IQ::IqTypeSet:
       {
         bool res = false;
         DiscoHandlerList::const_iterator it = m_discoHandlers.begin();
         for( ; it != m_discoHandlers.end(); ++it )
         {
-          if( (*it)->handleDiscoSet( stanza ) )
+          if( (*it)->handleDiscoSet( iq ) )
             res = true;
         }
         return res;
@@ -180,27 +180,27 @@ namespace gloox
     return false;
   }
 
-  bool Disco::handleIqID( Stanza *stanza, int context )
+  void Disco::handleIqID( IQ* iq, int context )
   {
-    DiscoHandlerMap::iterator it = m_track.find( stanza->id() );
+    DiscoHandlerMap::iterator it = m_track.find( iq->id() );
     if( it != m_track.end() )
     {
-      switch( stanza->subtype() )
+      switch( iq->subtype() )
       {
-        case StanzaIqResult:
+        case IQ::IqTypeResult:
           switch( context )
           {
             case GET_DISCO_INFO:
-              (*it).second.dh->handleDiscoInfoResult( stanza, (*it).second.context );
+              (*it).second.dh->handleDiscoInfoResult( iq, (*it).second.context );
               break;
             case GET_DISCO_ITEMS:
-              (*it).second.dh->handleDiscoItemsResult( stanza, (*it).second.context );
+              (*it).second.dh->handleDiscoItemsResult( iq, (*it).second.context );
               break;
            }
         break;
 
-        case StanzaIqError:
-          (*it).second.dh->handleDiscoError( stanza, (*it).second.context );
+        case IQ::IqTypeError:
+          (*it).second.dh->handleDiscoError( iq, (*it).second.context );
           break;
 
         default:
@@ -209,8 +209,6 @@ namespace gloox
 
       m_track.erase( it );
     }
-
-    return false;
   }
 
   void Disco::addFeature( const std::string& feature )

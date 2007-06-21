@@ -215,55 +215,55 @@ namespace gloox
     return id;
   }
 
-  bool PrivacyManager::handleIq( Stanza *stanza )
+  bool PrivacyManager::handleIq( IQ* iq )
   {
-    if( stanza->subtype() != StanzaIqSet || !m_privacyListHandler )
+    if( iq->subtype() != IQ::IqTypeSet || !m_privacyListHandler )
       return false;
 
-    Tag *l = stanza->findChild( "query" )->findChild( "list" );
+    Tag *l = iq->query()->findChild( "list" );
     if( l->hasAttribute( "name" ) )
     {
       const std::string& name = l->findAttribute( "name" );
       m_privacyListHandler->handlePrivacyListChanged( name );
 
-      Tag *iq = new Tag( "iq" );
-      iq->addAttribute( "type", "result" );
-      iq->addAttribute( "id", stanza->id() );
-      m_parent->send( iq );
+      Tag *re = new Tag( "iq" );
+      re->addAttribute( "type", "result" );
+      re->addAttribute( "id", iq->id() );
+      m_parent->send( re );
       return true;
     }
 
     return false;
   }
 
-  bool PrivacyManager::handleIqID( Stanza *stanza, int context )
+  void PrivacyManager::handleIqID( IQ* iq, int context )
   {
-    if( stanza->subtype() != StanzaIqResult || !m_privacyListHandler )
-      return false;
+    if( iq->subtype() != IQ::IqTypeResult || !m_privacyListHandler )
+      return;
 
-    switch( stanza->subtype() )
+    switch( iq->subtype() )
     {
-      case StanzaIqResult:
+      case IQ::IqTypeResult:
         switch( context )
         {
           case PLStore:
-            m_privacyListHandler->handlePrivacyListResult( stanza->id(), ResultStoreSuccess );
+            m_privacyListHandler->handlePrivacyListResult( iq->id(), ResultStoreSuccess );
             break;
           case PLActivate:
-            m_privacyListHandler->handlePrivacyListResult( stanza->id(), ResultActivateSuccess );
+            m_privacyListHandler->handlePrivacyListResult( iq->id(), ResultActivateSuccess );
             break;
           case PLDefault:
-            m_privacyListHandler->handlePrivacyListResult( stanza->id(), ResultDefaultSuccess );
+            m_privacyListHandler->handlePrivacyListResult( iq->id(), ResultDefaultSuccess );
             break;
           case PLRemove:
-            m_privacyListHandler->handlePrivacyListResult( stanza->id(), ResultRemoveSuccess );
+            m_privacyListHandler->handlePrivacyListResult( iq->id(), ResultRemoveSuccess );
             break;
           case PLRequestNames:
           {
             StringList lists;
             std::string def;
             std::string active;
-            Tag *q = stanza->findChild( "query" );
+            Tag *q = iq->query();
             const Tag::TagList& l = q->children();
             Tag::TagList::const_iterator it = l.begin();
             for( ; it != l.end(); ++it )
@@ -286,7 +286,7 @@ namespace gloox
           {
             PrivacyListHandler::PrivacyList items;
 
-            Tag *list = stanza->findChild( "query" )->findChild( "list" );
+            Tag *list = iq->query()->findChild( "list" );
             const std::string& name = list->findAttribute( "name" );
             const Tag::TagList& l = list->children();
             Tag::TagList::const_iterator it = l.begin();
@@ -339,21 +339,21 @@ namespace gloox
         }
         break;
 
-      case StanzaIqError:
+      case IQ::IqTypeError:
       {
-        switch( stanza->error() )
+        switch( iq->error() )
         {
           case StanzaErrorConflict:
-            m_privacyListHandler->handlePrivacyListResult( stanza->id(), ResultConflict );
+            m_privacyListHandler->handlePrivacyListResult( iq->id(), ResultConflict );
             break;
           case StanzaErrorItemNotFound:
-            m_privacyListHandler->handlePrivacyListResult( stanza->id(), ResultItemNotFound );
+            m_privacyListHandler->handlePrivacyListResult( iq->id(), ResultItemNotFound );
             break;
           case StanzaErrorBadRequest:
-            m_privacyListHandler->handlePrivacyListResult( stanza->id(), ResultBadRequest );
+            m_privacyListHandler->handlePrivacyListResult( iq->id(), ResultBadRequest );
             break;
           default:
-            m_privacyListHandler->handlePrivacyListResult( stanza->id(), ResultUnknownError );
+            m_privacyListHandler->handlePrivacyListResult( iq->id(), ResultUnknownError );
             break;
         }
         break;
@@ -362,7 +362,6 @@ namespace gloox
       default:
         break;
     }
-    return false;
   }
 
   void PrivacyManager::registerPrivacyListHandler( PrivacyListHandler *plh )

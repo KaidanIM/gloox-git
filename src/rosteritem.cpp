@@ -38,7 +38,7 @@ namespace gloox
     m_changed = true;
   }
 
-  void RosterItem::setPresence( const std::string& resource, Presence presence )
+  void RosterItem::setPresence( const std::string& resource, Presence::PresenceType presence )
   {
     if( m_resources.find( resource ) == m_resources.end() )
     {
@@ -52,7 +52,7 @@ namespace gloox
   {
     if( m_resources.find( resource ) == m_resources.end() )
     {
-      m_resources[resource] = new Resource( 0, msg, PresenceUnavailable );
+      m_resources[resource] = new Resource( 0, msg, Presence::PresenceUnavailable );
     }
     else
       m_resources[resource]->setMessage( msg );
@@ -62,7 +62,7 @@ namespace gloox
   {
     if( m_resources.find( resource ) == m_resources.end() )
     {
-      m_resources[resource] = new Resource( priority, std::string(), PresenceUnavailable );
+      m_resources[resource] = new Resource( priority, std::string(), Presence::PresenceUnavailable );
     }
     else
       m_resources[resource]->setPriority( priority );

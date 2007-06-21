@@ -19,7 +19,7 @@
 namespace gloox
 {
 
-  class Stanza;
+  class Message;
   class Tag;
 
   /**
@@ -71,7 +71,7 @@ namespace gloox
        * which got to see the stanza before this filter, though).
        * @param stanza The complete message stanza.
        */
-      virtual void filter( Stanza *stanza ) = 0;
+      virtual void filter( Message* msg ) = 0;
 
     protected:
       MessageSession *m_parent;

@@ -70,20 +70,20 @@ namespace gloox
     return id;
   }
 
-  bool PrivateXML::handleIqID( Stanza *stanza, int context )
+  void PrivateXML::handleIqID( IQ* iq, int context )
   {
-    TrackMap::iterator t = m_track.find( stanza->id() );
+    TrackMap::iterator t = m_track.find( iq->id() );
     if( t != m_track.end() )
     {
-      switch( stanza->subtype() )
+      switch( iq->subtype() )
       {
-        case StanzaIqResult:
+        case IQ::IqTypeResult:
         {
           switch( context )
           {
             case RequestXml:
             {
-              Tag *q = stanza->findChild( "query" );
+              Tag *q = iq->query();
               if( q )
               {
                 const Tag::TagList& l = q->children();
@@ -98,27 +98,27 @@ namespace gloox
 
             case StoreXml:
             {
-              (*t).second->handlePrivateXMLResult( stanza->id(), PrivateXMLHandler::PxmlStoreOk );
+              (*t).second->handlePrivateXMLResult( iq->id(), PrivateXMLHandler::PxmlStoreOk );
               break;
             }
           }
           m_track.erase( t );
-          return true;
+          return;
           break;
         }
-        case StanzaIqError:
+        case IQ::IqTypeError:
         {
           switch( context )
           {
             case RequestXml:
             {
-              (*t).second->handlePrivateXMLResult( stanza->id(), PrivateXMLHandler::PxmlRequestError );
+              (*t).second->handlePrivateXMLResult( iq->id(), PrivateXMLHandler::PxmlRequestError );
               break;
             }
 
             case StoreXml:
             {
-              (*t).second->handlePrivateXMLResult( stanza->id(), PrivateXMLHandler::PxmlStoreError );
+              (*t).second->handlePrivateXMLResult( iq->id(), PrivateXMLHandler::PxmlStoreError );
               break;
             }
           }
@@ -130,11 +130,9 @@ namespace gloox
 
       m_track.erase( t );
     }
-
-    return false;
   }
 
-  bool PrivateXML::handleIq( Stanza * /*stanza*/ )
+  bool PrivateXML::handleIq( IQ* /*iq*/ )
   {
     return false;
   }

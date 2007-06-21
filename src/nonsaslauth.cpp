@@ -50,16 +50,16 @@ namespace gloox
     m_parent->send( iq );
   }
 
-  bool NonSaslAuth::handleIqID( Stanza *stanza, int context )
+  void NonSaslAuth::handleIqID( IQ* iq, int context )
   {
-    switch( stanza->subtype() )
+    switch( iq->subtype() )
     {
-      case StanzaIqError:
+      case IQ::IqTypeError:
       {
         m_parent->setAuthed( false );
         m_parent->disconnect( ConnAuthenticationFailed );
 
-        Tag *t = stanza->findChild( "error" );
+        Tag *t = iq->findChild( "error" );
         if( t )
         {
           if( t->hasChild( "conflict" ) || t->hasAttribute( "code", "409" ) )
@@ -71,7 +71,7 @@ namespace gloox
         }
         break;
       }
-      case StanzaIqResult:
+      case IQ::IqTypeResult:
         switch( context )
         {
           case TRACK_REQUEST_AUTH_FIELDS:
@@ -86,7 +86,7 @@ namespace gloox
             new Tag( query, "username", m_parent->jid().username() );
             new Tag( query, "resource", m_parent->jid().resource() );
 
-            Tag *q = stanza->findChild( "query" );
+            Tag *q = iq->findChild( "query" );
             if( ( q->hasChild( "digest" ) ) && !m_sid.empty() )
             {
               SHA sha;
@@ -114,10 +114,9 @@ namespace gloox
       default:
         break;
     }
-    return false;
   }
 
-  bool NonSaslAuth::handleIq( Stanza * /*stanza*/ )
+  bool NonSaslAuth::handleIq( IQ* /*iq*/ )
   {
     return false;
   }

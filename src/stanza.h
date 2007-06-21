@@ -42,20 +42,19 @@ namespace gloox
       /**
        * Creates a new Stanza from a deep copy of the given Tag.
        * @param tag The Tag to create the Stanza from.
-       * @since 0.7
+       * @param rip Whether to rip off the original Tag.
+       * @since 1.0
        * @note While the signature of this constructor in 0.7 is the the same as in older versions,
        * semantics have changed. The copy created by this constructor is no longer a shallow one. You have to
        * make sure the copy is deleted properly.
        */
-      Stanza( const Tag *tag );
+      Stanza( Tag *tag, bool rip = false );
 
       /**
        * Creates a new Stanza with given name and optional CData.
        * @param name The name of the root tag.
        * @param cdata Initial XML character data for the tag.
        * @param xmllang The value of the xmllang attribute. The stanza's primary language.
-       * @param incoming Indicates whether tag names, attributes, attribute values, and cdata shall
-       * be escaped (false, default) or not (true).
        */
       Stanza( const std::string& name, const std::string& cdata = "",
               const std::string& xmllang = "default" );
@@ -69,7 +68,7 @@ namespace gloox
        * Returns the sub-type of the stanza.
        * @return The sub-type of the stanza.
        */
-      virtual StanzaSubType subtype() const { return m_subtype; }
+//       virtual StanzaSubType subtype() const { return m_subtype; }
 
       /**
        * Returns the JID the stanza comes from.
@@ -93,13 +92,13 @@ namespace gloox
        * Returns the value of the xmlns attribute of the first child node.
        * @return The namespace of the IQ stanza.
        */
-      virtual const std::string& xmlns() const { return m_xmlns; }
+//       virtual const std::string& xmlns() const { return m_xmlns; }
 
       /**
        * Returns the presence 'show' type of a presence stanza.
        * @return The presence type of the sender.
        */
-      virtual Presence presence() const { return m_presence; }
+//       virtual Presence presence() const { return m_presence; }
 
       /**
        * Returns the remote entity resource's presence priority if the stanza is a presence stanza.
@@ -108,43 +107,7 @@ namespace gloox
        * -128 and +127.
        * @return The priority information contained in the stanza, if any, or a value below -128.
        */
-      virtual int priority() const { return m_priority; }
-
-      /**
-       * Returns the status text of a presence stanza for the given language if available.
-       * If the requested language is not available, the default status text (without a xml:lang
-       * attribute) will be returned.
-       * @param lang The language identifier for the desired language. It must conform to
-       * section 2.12 of the XML specification and RFC 3066. If empty, the default body
-       * will be returned, if any.
-       * @return The status text set by the sender.
-       */
-      virtual const std::string status( const std::string& lang = "default" ) const
-        { return findLang( m_status, lang ); }
-
-      /**
-       * Returns the body of a message stanza for the given language if available.
-       * If the requested language is not available, the default body (without a xml:lang
-       * attribute) will be returned.
-       * @param lang The language identifier for the desired language. It must conform to
-       * section 2.12 of the XML specification and RFC 3066. If empty, the default body
-       * will be returned, if any.
-       * @return The body of a message stanza. Empty for non-message stanzas.
-       */
-      virtual const std::string body( const std::string& lang = "default" ) const
-        { return findLang( m_body, lang ); }
-
-      /**
-       * Returns the subject of a message stanza for the given language if available.
-       * If the requested language is not available, the default subject (without a xml:lang
-       * attribute) will be returned.
-       * @param lang The language identifier for the desired language. It must conform to
-       * section 2.12 of the XML specification and RFC 3066. If empty, the default subject
-       * will be returned, if any.
-       * @return The subject of a message stanza. Empty for non-message stanzas.
-       */
-      virtual const std::string subject( const std::string& lang = "default" ) const
-        { return findLang( m_subject, lang ); }
+//       virtual int priority() const { return m_priority; }
 
       /**
        * Returns the text of a error stanza for the given language if available.
@@ -172,17 +135,11 @@ namespace gloox
       Tag* errorAppCondition() { return m_stanzaErrorAppCondition; }
 
       /**
-       * Returns the thread ID of a message stanza.
-       * @return The thread ID of a message stanza. Empty for non-message stanzas.
-       */
-      virtual const std::string& thread() const { return m_thread; }
-
-      /**
        * Sets the Stanza's thread ID. Only useful for message stanzas.
        * @param thread The thread ID.
        * @since 0.9
        */
-      void setThread( const std::string& thread ) { m_thread = thread; }
+//       void setThread( const std::string& thread ) { m_thread = thread; }
 
       /**
        * Retrieves the value of the xml:lang attribute of this stanza.
@@ -197,7 +154,7 @@ namespace gloox
        * Stanzas provided by gloox are fully parsed.
        * @deprecated
        */
-      void finalize() { init(); }
+//       void finalize() { init(); }
 
       /**
        * Use this function to add a StanzaExtension to this Stanza.
@@ -225,9 +182,9 @@ namespace gloox
        * the 'query' element.
        * @since 0.7
        */
-      static Stanza* createIqStanza( const JID& to, const std::string& id,
-                                     StanzaSubType subtype = StanzaIqGet,
-                                     const std::string& xmlns = "", Tag* tag = 0 );
+//       static Stanza* createIqStanza( const JID& to, const std::string& id,
+//                                      StanzaSubType subtype = StanzaIqGet,
+//                                      const std::string& xmlns = "", Tag* tag = 0 );
 
       /**
        * Creates a new presence stanza.
@@ -239,9 +196,9 @@ namespace gloox
        * @param xmllang The status message's language.
        * @since 0.7
        */
-      static Stanza* createPresenceStanza( const JID& to, const std::string& msg = "",
-                                           Presence status = PresenceAvailable,
-                                           const std::string& xmllang = "" );
+//       static Stanza* createPresenceStanza( const JID& to, const std::string& msg = "",
+//                                            Presence status = PresenceAvailable,
+//                                            const std::string& xmllang = "" );
 
       /**
        * Creates a new message stanza.
@@ -253,10 +210,10 @@ namespace gloox
        * @param xmllang The message's language.
        * @since 0.7
        */
-      static Stanza* createMessageStanza( const JID& to, const std::string& body,
-                                          StanzaSubType subtype = StanzaMessageChat,
-                                          const std::string& subject = "", const std::string& thread = "",
-                                          const std::string& xmllang = "" );
+//       static Stanza* createMessageStanza( const JID& to, const std::string& body,
+//                                           StanzaSubType subtype = StanzaMessageChat,
+//                                           const std::string& subject = "", const std::string& thread = "",
+//                                           const std::string& xmllang = "" );
 
       /**
        * Creates a new subscription stanza.
@@ -266,30 +223,28 @@ namespace gloox
        * @param xmllang The message's language.
        * @since 0.7
        */
-      static Stanza* createSubscriptionStanza( const JID& to, const std::string& msg = "",
-                                               StanzaSubType subtype = StanzaS10nSubscribe,
-                                               const std::string& xmllang = "" );
+//       static Stanza* createSubscriptionStanza( const JID& to, const std::string& msg = "",
+//                                                StanzaSubType subtype = StanzaS10nSubscribe,
+//                                                const std::string& xmllang = "" );
 
     protected:
       void init();
 
       StanzaExtensionList m_extensionList;
-      StanzaSubType m_subtype;
-      Presence m_presence;
+//       StanzaSubType m_subtype;
+//       Presence m_presence;
       StanzaError m_stanzaError;
       StanzaErrorType m_stanzaErrorType;
       Tag *m_stanzaErrorAppCondition;
       StringMap m_errorText;
-      StringMap m_body;
-      StringMap m_subject;
-      StringMap m_status;
+//       StringMap m_status;
       JID m_from;
       JID m_to;
-      std::string m_xmlns;
+//       std::string m_xmlns;
       std::string m_id;
-      std::string m_thread;
+//       std::string m_thread;
       std::string m_xmllang;
-      int m_priority;
+//       int m_priority;
 
       static const std::string findLang( const StringMap& map, const std::string& lang );
       static void setLang( StringMap& map, const Tag *tag );

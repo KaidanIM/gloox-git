@@ -15,7 +15,7 @@
 #ifndef PRESENCEHANDLER_H__
 #define PRESENCEHANDLER_H__
 
-#include "stanza.h"
+#include "presence.h"
 
 namespace gloox
 {
@@ -38,9 +38,9 @@ namespace gloox
       /**
        * Reimplement this function if you want to be updated on
        * incoming presence notifications.
-       * @param stanza The complete stanza.
+       * @param presence The complete stanza.
        */
-      virtual void handlePresence( Stanza *stanza ) = 0;
+      virtual void handlePresence( Presence* presence ) = 0;
   };
 
 }

@@ -31,7 +31,7 @@ namespace gloox
 
   class ClientBase;
   class MUCMessageSession;
-  class Stanza;
+  class Message;
 
   /**
    * @brief This is an implementation of XEP-0045 (Multi-User Chat).
@@ -199,7 +199,7 @@ namespace gloox
        * @param presence The user's new presence.
        * @param msg An optional status message. Default: empty.
        */
-      void setPresence( Presence presence, const std::string& msg = "" );
+      void setPresence( Presence::PresenceType presence, const std::string& msg = "" );
 
       /**
        * Use this function to invite another user to this room.
@@ -300,7 +300,7 @@ namespace gloox
        * @param invitor The JID of the invitor.
        * @param reason An optional reason for the decline.
        */
-      static Stanza* declineInvitation( const JID& room, const JID& invitor,
+      static Message* declineInvitation( const JID& room, const JID& invitor,
                                         const std::string& reason = "");
 
       /**
@@ -472,16 +472,16 @@ namespace gloox
       virtual void handleDiscoError( Stanza *stanza, int context );
 
       // reimplemented from PresenceHandler
-      virtual void handlePresence( Stanza *stanza );
+      virtual void handlePresence( Presence* presence );
 
       // reimplemented from MessageHandler
-      virtual void handleMessage( Stanza *stanza, MessageSession *session = 0 );
+      virtual void handleMessage( Message* msg, MessageSession *session = 0 );
 
       // reimplemented from IqHandler
-      virtual bool handleIq( Stanza* /*stanza*/ ) { return false; }
+      virtual bool handleIq( IQ* /*iq*/ ) { return false; }
 
       // reimplemented from IqHandler
-      virtual bool handleIqID( Stanza *stanza, int context );
+      virtual void handleIqID( IQ* iq, int context );
 
       // reimplemented from DiscoNodeHandler
       virtual StringList handleDiscoNodeFeatures( const std::string& node );
@@ -502,12 +502,12 @@ namespace gloox
       bool m_joined;
 
     private:
-      bool handleIqResult( Stanza *stanza, int context );
-      bool handleIqError( Stanza *stanza, int context );
+      void handleIqResult( IQ* iq, int context );
+      void handleIqError( IQ* iq, int context );
       void setNonAnonymous();
       void setSemiAnonymous();
       void setFullyAnonymous();
-      void modifyOccupant( const std::string& nick, int state, const std::string roa,
+      void modifyOccupant( const std::string& nick, int state, const std::string& roa,
                            const std::string& reason );
       void acknowledgeRoomCreation();
       MUCRoomAffiliation getEnumAffiliation( const std::string& affiliation );

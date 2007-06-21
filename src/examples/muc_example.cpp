@@ -3,7 +3,8 @@
 #include "../mucroomhandler.h"
 #include "../mucroom.h"
 #include "../disco.h"
-#include "../stanza.h"
+#include "../presence.h"
+#include "../message.h"
 #include "../dataform.h"
 #include "../gloox.h"
 #include "../lastactivity.h"
@@ -31,7 +32,7 @@ class MessageTest : public ConnectionListener, LogHandler, MUCRoomHandler
       JID jid( "hurkhurk@example.net/gloox" );
       j = new Client( jid, "hurkhurks" );
       j->registerConnectionListener( this );
-      j->setPresence( PresenceAvailable, -1 );
+      j->setPresence( Presence::PresenceAvailable, -1 );
       j->disco()->setVersion( "gloox muc_example", GLOOX_VERSION, "Linux" );
       j->disco()->setIdentity( "client", "bot" );
       j->setCompression( false );
@@ -89,11 +90,11 @@ class MessageTest : public ConnectionListener, LogHandler, MUCRoomHandler
     }
 
     virtual void handleMUCParticipantPresence( MUCRoom * /*room*/, const MUCRoomParticipant participant,
-                                            Presence presence )
+                                            Presence::PresenceType presence )
     {
-      if( presence == PresenceAvailable )
+      if( presence == Presence::PresenceAvailable )
         printf( "!!!!!!!!!!!!!!!! %s is in the room, too\n", participant.nick->resource().c_str() );
-      else if( presence == PresenceUnavailable )
+      else if( presence == Presence::PresenceUnavailable )
         printf( "!!!!!!!!!!!!!!!! %s left the room\n", participant.nick->resource().c_str() );
       else
         printf( "Presence is %d of %s\n", presence, participant.nick->resource().c_str() );

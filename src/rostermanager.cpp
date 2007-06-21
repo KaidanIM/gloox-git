@@ -72,11 +72,11 @@ namespace gloox
     m_parent->send( iq );
   }
 
-  bool RosterManager::handleIq( Stanza *stanza )
+  bool RosterManager::handleIq( IQ* iq )
   {
-    if( stanza->subtype() == StanzaIqResult ) // initial roster
+    if( iq->subtype() == IQ::IqTypeResult ) // initial roster
     {
-      extractItems( stanza, false );
+      extractItems( iq, false );
 
       if( m_rosterListener )
         m_rosterListener->handleRoster( m_roster );
@@ -85,38 +85,37 @@ namespace gloox
 
       return true;
     }
-    else if( stanza->subtype() == StanzaIqSet ) // roster item push
+    else if( iq->subtype() == IQ::IqTypeSet ) // roster item push
     {
-      extractItems( stanza, true );
+      extractItems( iq, true );
 
-      Tag *iq = new Tag( "iq" );
-      iq->addAttribute( "id", stanza->id() );
-      iq->addAttribute( "type", "result" );
-      m_parent->send( iq );
+      Tag *re = new Tag( "iq" );
+      re->addAttribute( "id", iq->id() );
+      re->addAttribute( "type", "result" );
+      m_parent->send( re );
 
       return true;
     }
-    else if( stanza->subtype() == StanzaIqError )
+    else if( iq->subtype() == IQ::IqTypeError )
     {
       if( m_rosterListener )
-        m_rosterListener->handleRosterError( stanza );
+        m_rosterListener->handleRosterError( iq );
     }
 
     return false;
   }
 
-  bool RosterManager::handleIqID( Stanza * /*stanza*/, int /*context*/ )
+  void RosterManager::handleIqID( IQ* /*iq*/, int /*context*/ )
   {
-    return false;
   }
 
-  void RosterManager::handlePresence( Stanza *stanza )
+  void RosterManager::handlePresence( Presence* presence )
   {
-    if( stanza->subtype() == StanzaPresenceError )
+    if( presence->subtype() == Presence::PresenceError )
       return;
 
     StringList caps;
-    const Tag::TagList& l = stanza->children();
+    const Tag::TagList& l = presence->children();
     Tag::TagList::const_iterator it_c = l.begin();
     for( ; it_c != l.end(); ++it_c )
     {
@@ -135,43 +134,43 @@ namespace gloox
       }
     }
 
-    Roster::iterator it = m_roster.find( stanza->from().bare() );
+    Roster::iterator it = m_roster.find( presence->from().bare() );
     if( it != m_roster.end() )
     {
-      if( stanza->presence() == PresenceUnavailable )
-        (*it).second->removeResource( stanza->from().resource() );
+      if( presence->presence() == Presence::PresenceUnavailable )
+        (*it).second->removeResource( presence->from().resource() );
       else
       {
-        (*it).second->setPresence( stanza->from().resource(), stanza->presence() );
-        (*it).second->setStatus( stanza->from().resource(), stanza->status() );
-        (*it).second->setPriority( stanza->from().resource(), stanza->priority() );
+        (*it).second->setPresence( presence->from().resource(), presence->presence() );
+        (*it).second->setStatus( presence->from().resource(), presence->status() );
+        (*it).second->setPriority( presence->from().resource(), presence->priority() );
   //       (*it).second->setCaps ( caps );
       }
 
       if( m_rosterListener )
-        m_rosterListener->handleRosterPresence( (*(*it).second), stanza->from().resource(),
-                                                stanza->presence(), stanza->status() );
+        m_rosterListener->handleRosterPresence( (*(*it).second), presence->from().resource(),
+                                                presence->presence(), presence->status() );
     }
-    else if( stanza->from().bare() == m_self->jid() )
+    else if( presence->from().bare() == m_self->jid() )
     {
-      if( stanza->presence() == PresenceUnavailable )
-        m_self->removeResource( stanza->from().resource() );
+      if( presence->presence() == Presence::PresenceUnavailable )
+        m_self->removeResource( presence->from().resource() );
       else
       {
-        m_self->setPresence( stanza->from().resource(), stanza->presence() );
-        m_self->setStatus( stanza->from().resource(), stanza->status() );
-        m_self->setPriority( stanza->from().resource(), stanza->priority() );
+        m_self->setPresence( presence->from().resource(), presence->presence() );
+        m_self->setStatus( presence->from().resource(), presence->status() );
+        m_self->setPriority( presence->from().resource(), presence->priority() );
   //       (*it).second->setCaps ( caps );
       }
 
       if( m_rosterListener )
-        m_rosterListener->handleSelfPresence( *m_self, stanza->from().resource(),
-                                              stanza->presence(), stanza->status() );
+        m_rosterListener->handleSelfPresence( *m_self, presence->from().resource(),
+                                               presence->presence(), presence->status() );
     }
     else
     {
       if( m_rosterListener )
-        m_rosterListener->handleNonrosterPresence( stanza );
+        m_rosterListener->handleNonrosterPresence( presence );
     }
   }
 
@@ -307,23 +306,23 @@ namespace gloox
     m_parent->send( p );
   }
 
-  void RosterManager::handleSubscription( Stanza *stanza )
+  void RosterManager::handleSubscription( Subscription* s10n )
   {
     if( !m_rosterListener )
       return;
 
-    switch( stanza->subtype() )
+    switch( s10n->subtype() )
     {
-      case StanzaS10nSubscribe:
+      case Subscription::S10nSubscribe:
       {
-        bool answer = m_rosterListener->handleSubscriptionRequest( stanza->from(), stanza->status() );
+        bool answer = m_rosterListener->handleSubscriptionRequest( s10n->from(), s10n->status() );
         if( m_syncSubscribeReq )
         {
-          ackSubscriptionRequest( stanza->from(), answer );
+          ackSubscriptionRequest( s10n->from(), answer );
         }
         break;
       }
-      case StanzaS10nSubscribed:
+      case Subscription::S10nSubscribed:
       {
 //         Tag *p = new Tag( "presence" );
 //         p->addAttribute( "type", "subscribe" );
@@ -331,25 +330,25 @@ namespace gloox
 //         p->addAttribute( "to", stanza->from().bare() );
 //         m_parent->send( p );
 
-        m_rosterListener->handleItemSubscribed( stanza->from() );
+        m_rosterListener->handleItemSubscribed( s10n->from() );
         break;
       }
 
-      case StanzaS10nUnsubscribe:
+      case Subscription::S10nUnsubscribe:
       {
         Tag *p = new Tag( "presence" );
         p->addAttribute( "type", "unsubscribed" );
         p->addAttribute( "from", m_parent->jid().bare() );
-        p->addAttribute( "to", stanza->from().bare() );
+        p->addAttribute( "to", s10n->from().bare() );
         m_parent->send( p );
 
-        bool answer = m_rosterListener->handleUnsubscriptionRequest( stanza->from(), stanza->status() );
+        bool answer = m_rosterListener->handleUnsubscriptionRequest( s10n->from(), s10n->status() );
         if( m_syncSubscribeReq && answer )
-          remove( stanza->from().bare() );
+          remove( s10n->from().bare() );
         break;
       }
 
-      case StanzaS10nUnsubscribed:
+      case Subscription::S10nUnsubscribed:
       {
 //         Tag *p = new Tag( "presence" );
 //         p->addAttribute( "type", "unsubscribe" );
@@ -357,7 +356,7 @@ namespace gloox
 //         p->addAttribute( "to", stanza->from().bare() );
 //         m_parent->send( p );
 
-        m_rosterListener->handleItemUnsubscribed( stanza->from() );
+        m_rosterListener->handleItemUnsubscribed( s10n->from() );
         break;
       }
 

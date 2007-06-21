@@ -95,19 +95,19 @@ namespace gloox
     return ident;
   }
 
-  bool Adhoc::handleIq( Stanza *stanza )
+  bool Adhoc::handleIq( IQ* iq )
   {
-    if( stanza->subtype() != StanzaIqSet )
+    if( iq->subtype() != IQ::IqTypeSet )
       return false;
 
-    if( stanza->hasChild( "command" ) )
+    if( iq->hasChild( "command" ) )
     {
-      Tag *c = stanza->findChild( "command" );
+      Tag *c = iq->findChild( "command" );
       const std::string& node = c->findAttribute( "node" );
       AdhocCommandProviderMap::const_iterator it = m_adhocCommandProviders.find( node );
       if( !node.empty() && ( it != m_adhocCommandProviders.end() ) )
       {
-        (*it).second->handleAdhocCommand( node, c, stanza->from(), stanza->id() );
+        (*it).second->handleAdhocCommand( node, c, iq->from(), iq->id() );
         return true;
       }
     }
@@ -115,17 +115,17 @@ namespace gloox
     return false;
   }
 
-  bool Adhoc::handleIqID( Stanza * stanza, int context )
+  void Adhoc::handleIqID( IQ* iq, int context )
   {
-    if( context != ExecuteAdhocCommand || stanza->subtype() != StanzaIqResult )
-      return false;
+    if( context != ExecuteAdhocCommand || iq->subtype() != IQ::IqTypeResult )
+      return;
 
     AdhocTrackMap::iterator it = m_adhocTrackMap.begin();
     for( ; it != m_adhocTrackMap.end(); ++it )
     {
-      if( (*it).second.context == context && (*it).second.remote == stanza->from() )
+      if( (*it).second.context == context && (*it).second.remote == iq->from() )
       {
-        Tag *c = stanza->findChild( "command", "xmlns", XMLNS_ADHOC_COMMANDS );
+        Tag *c = iq->findChild( "command", "xmlns", XMLNS_ADHOC_COMMANDS );
         if( c )
         {
           const std::string& command = c->findAttribute( "node" );
@@ -173,16 +173,15 @@ namespace gloox
           if( x )
             form.parse( x );
 
-          (*it).second.ah->handleAdhocExecutionResult( stanza->from(), command, status, id, form,
+          (*it).second.ah->handleAdhocExecutionResult( iq->from(), command, status, id, form,
                                                        actions, def, note, type );
         }
 
         m_adhocTrackMap.erase( it );
-        return true;
+        return;
       }
     }
 
-    return false;
   }
 
   void Adhoc::registerAdhocCommandProvider( AdhocCommandProvider *acp, const std::string& command,

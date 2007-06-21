@@ -47,9 +47,9 @@ namespace gloox
     send( h );
   }
 
-  bool Component::handleNormalNode( Stanza *stanza )
+  bool Component::handleNormalNode( Tag* tag )
   {
-    if( stanza->name() != "handshake" )
+    if( tag->name() != "handshake" )
       return false;
 
     notifyStreamEvent( StreamEventFinished );

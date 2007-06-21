@@ -74,40 +74,40 @@ namespace gloox
     return true;
   }
 
-  bool InBandBytestreamManager::handleIq( Stanza *stanza )
+  bool InBandBytestreamManager::handleIq( IQ* iq )
   {
     Tag *o = 0;
-    if( ( stanza->subtype() == StanzaIqSet ) &&
-          ( ( o = stanza->findChild( "open", "xmlns", XMLNS_IBB ) ) != 0 ) )
+    if( ( iq->subtype() == IQ::IqTypeSet ) &&
+          ( ( o = iq->findChild( "open", "xmlns", XMLNS_IBB ) ) != 0 ) )
     {
       InBandBytestream *ibb = new InBandBytestream( 0, m_parent );
       const std::string& sid = o->findAttribute( "sid" );
       ibb->setSid( sid );
 
       if( !m_inbandBytestreamHandler )
-        rejectInBandBytestream( ibb, stanza->from(), stanza->id() );
+        rejectInBandBytestream( ibb, iq->from(), iq->id() );
 
       if( !m_syncInbandBytestreams )
       {
         AsyncIBBItem item;
         item.ibb = ibb;
-        item.from = stanza->from();
-        item.id = stanza->id();
+        item.from = iq->from();
+        item.id = iq->id();
         m_asyncTrackMap[sid] = item;
       }
 
-      bool t = m_inbandBytestreamHandler->handleIncomingInBandBytestream( stanza->from(), ibb );
+      bool t = m_inbandBytestreamHandler->handleIncomingInBandBytestream( iq->from(), ibb );
       if( m_syncInbandBytestreams && t )
       {
-        acceptInBandBytestream( ibb, stanza->from(), stanza->id() );
+        acceptInBandBytestream( ibb, iq->from(), iq->id() );
       }
       else if( m_syncInbandBytestreams && !t )
       {
-        rejectInBandBytestream( ibb, stanza->from(), stanza->id() );
+        rejectInBandBytestream( ibb, iq->from(), iq->id() );
       }
     }
-    else if( ( stanza->subtype() == StanzaIqSet ) &&
-               ( ( o = stanza->findChild( "close", "xmlns", XMLNS_IBB ) ) != 0 ) &&
+    else if( ( iq->subtype() == IQ::IqTypeSet ) &&
+               ( ( o = iq->findChild( "close", "xmlns", XMLNS_IBB ) ) != 0 ) &&
                o->hasAttribute( "sid" ) )
     {
       IBBMap::iterator it = m_ibbMap.find( o->findAttribute( "sid" ) );
@@ -115,12 +115,12 @@ namespace gloox
       {
         (*it).second->closed();
 
-        Tag *iq = new Tag( "iq" );
-        iq->addAttribute( "type", "result" );
-        iq->addAttribute( "to", stanza->from().full() );
-        iq->addAttribute( "id", stanza->id() );
+        Tag *re = new Tag( "iq" );
+        re->addAttribute( "type", "result" );
+        re->addAttribute( "to", iq->from().full() );
+        re->addAttribute( "id", iq->id() );
 
-        m_parent->send( iq );
+        m_parent->send( re );
       }
     }
     else
@@ -184,18 +184,18 @@ namespace gloox
     m_parent->send( iq );
   }
 
-  bool InBandBytestreamManager::handleIqID( Stanza *stanza, int context )
+  void InBandBytestreamManager::handleIqID( IQ* iq, int context )
   {
     switch( context )
     {
       case IBBOpenStream:
       {
-        TrackMap::iterator it = m_trackMap.find( stanza->id() );
+        TrackMap::iterator it = m_trackMap.find( iq->id() );
         if( it != m_trackMap.end() )
         {
-          switch( stanza->subtype() )
+          switch( iq->subtype() )
           {
-            case StanzaIqResult:
+            case IQ::IqTypeResult:
             {
               InBandBytestream *ibb = new InBandBytestream( 0, m_parent );
               ibb->setSid( (*it).second.sid );
@@ -203,11 +203,11 @@ namespace gloox
               m_ibbMap[(*it).second.sid] = ibb;
               InBandBytestreamHandler *t = (*it).second.ibbh;
               m_trackMap.erase( it );
-              t->handleOutgoingInBandBytestream( stanza->from(), ibb );
+              t->handleOutgoingInBandBytestream( iq->from(), ibb );
               break;
             }
-            case StanzaIqError:
-              (*it).second.ibbh->handleInBandBytestreamError( stanza->from(), stanza->error() );
+            case IQ::IqTypeError:
+              (*it).second.ibbh->handleInBandBytestreamError( iq->from(), iq->error() );
               break;
             default:
               break;
@@ -219,8 +219,6 @@ namespace gloox
       default:
         break;
     }
-
-    return false;
   }
 
   bool InBandBytestreamManager::dispose( InBandBytestream *ibb )

@@ -91,57 +91,56 @@ namespace gloox
     m_parent->send( iq );
   }
 
-  bool VCardManager::handleIq( Stanza * /*stanza*/ )
+  bool VCardManager::handleIq( IQ* /*iq*/ )
   {
     return false;
   }
 
-  bool VCardManager::handleIqID( Stanza *stanza, int context )
+  void VCardManager::handleIqID( IQ* iq, int context )
   {
-    TrackMap::iterator it = m_trackMap.find( stanza->id() );
+    TrackMap::iterator it = m_trackMap.find( iq->id() );
     if( it != m_trackMap.end() )
     {
-      switch( stanza->subtype() )
+      switch( iq->subtype() )
       {
-        case StanzaIqResult:
+        case IQ::IqTypeResult:
         {
           switch( context )
           {
             case VCardHandler::FetchVCard:
             {
-              Tag *v = stanza->findChild( "vCard", "xmlns", XMLNS_VCARD_TEMP );
+              Tag *v = iq->findChild( "vCard", "xmlns", XMLNS_VCARD_TEMP );
               if( v )
-                (*it).second->handleVCard( stanza->from(), new VCard( v ) );
+                (*it).second->handleVCard( iq->from(), new VCard( v ) );
               else
-                (*it).second->handleVCard( stanza->from(), 0 );
+                (*it).second->handleVCard( iq->from(), 0 );
               break;
             }
             case VCardHandler::StoreVCard:
-              (*it).second->handleVCardResult( VCardHandler::StoreVCard, stanza->from() );
+              (*it).second->handleVCardResult( VCardHandler::StoreVCard, iq->from() );
               break;
           }
         }
         break;
-        case StanzaIqError:
+        case IQ::IqTypeError:
         {
           switch( context )
           {
             case VCardHandler::FetchVCard:
-              (*it).second->handleVCardResult( VCardHandler::FetchVCard, stanza->from(), stanza->error() );
+              (*it).second->handleVCardResult( VCardHandler::FetchVCard, iq->from(), iq->error() );
               break;
             case VCardHandler::StoreVCard:
-              (*it).second->handleVCardResult( VCardHandler::StoreVCard, stanza->from(), stanza->error() );
+              (*it).second->handleVCardResult( VCardHandler::StoreVCard, iq->from(), iq->error() );
               break;
           }
           break;
         }
         default:
-          return false;
+          break;
       }
 
       m_trackMap.erase( it );
     }
-    return false;
   }
 
 }

@@ -24,6 +24,7 @@ namespace gloox
 
   class ClientBase;
   class InBandBytestreamDataHandler;
+  class Message;
 
   /**
    * @brief An implementation of a single In-Band Bytestream (XEP-0047).
@@ -93,7 +94,7 @@ namespace gloox
       virtual void decorate( Tag *tag );
 
       // reimplemented from MessageFilter
-      virtual void filter( Stanza *stanza );
+      virtual void filter( Message* msg );
 
     private:
       InBandBytestream( MessageSession *session, ClientBase *clientbase );

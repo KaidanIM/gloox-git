@@ -139,10 +139,10 @@ namespace gloox
       void cancelVCardOperations( VCardHandler *vch );
 
       // reimplemented from IqHandler
-      virtual bool handleIq( Stanza *stanza );
+      virtual bool handleIq( IQ* iq );
 
       // reimplemented from IqHandler
-      virtual bool handleIqID( Stanza *stanza, int context );
+      virtual void handleIqID( IQ* iq, int context );
 
     private:
       typedef std::map<std::string, VCardHandler*> TrackMap;

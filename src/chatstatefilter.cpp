@@ -15,7 +15,7 @@
 #include "chatstatehandler.h"
 #include "messageeventhandler.h"
 #include "messagesession.h"
-#include "stanza.h"
+#include "message.h"
 
 namespace gloox
 {
@@ -30,33 +30,33 @@ namespace gloox
   {
   }
 
-  void ChatStateFilter::filter( Stanza *stanza )
+  void ChatStateFilter::filter( Message* msg )
   {
     if( m_chatStateHandler )
     {
-      if( stanza->body().empty() )
+      if( msg->body().empty() )
       {
         m_enableChatStates = true;
-        if( stanza->hasChild( "active" ) )
-          m_chatStateHandler->handleChatState( stanza->from(), ChatStateActive );
-        else if( stanza->hasChild( "composing" ) )
-          m_chatStateHandler->handleChatState( stanza->from(), ChatStateComposing );
-        else if( stanza->hasChild( "paused" ) )
-          m_chatStateHandler->handleChatState( stanza->from(), ChatStatePaused );
-        else if( stanza->hasChild( "inactive" ) )
-          m_chatStateHandler->handleChatState( stanza->from(), ChatStateInactive );
-        else if( stanza->hasChild( "gone" ) )
-          m_chatStateHandler->handleChatState( stanza->from(), ChatStateGone );
+        if( msg->hasChild( "active" ) )
+          m_chatStateHandler->handleChatState( msg->from(), ChatStateActive );
+        else if( msg->hasChild( "composing" ) )
+          m_chatStateHandler->handleChatState( msg->from(), ChatStateComposing );
+        else if( msg->hasChild( "paused" ) )
+          m_chatStateHandler->handleChatState( msg->from(), ChatStatePaused );
+        else if( msg->hasChild( "inactive" ) )
+          m_chatStateHandler->handleChatState( msg->from(), ChatStateInactive );
+        else if( msg->hasChild( "gone" ) )
+          m_chatStateHandler->handleChatState( msg->from(), ChatStateGone );
         else
           m_enableChatStates = false;
       }
       else
       {
-        if( stanza->hasChild( "active", "xmlns", XMLNS_CHAT_STATES )
-            || stanza->hasChild( "composing", "xmlns", XMLNS_CHAT_STATES )
-            || stanza->hasChild( "paused", "xmlns", XMLNS_CHAT_STATES )
-            || stanza->hasChild( "inactive", "xmlns", XMLNS_CHAT_STATES )
-            || stanza->hasChild( "gone", "xmlns", XMLNS_CHAT_STATES ) )
+        if( msg->hasChild( "active", "xmlns", XMLNS_CHAT_STATES )
+            || msg->hasChild( "composing", "xmlns", XMLNS_CHAT_STATES )
+            || msg->hasChild( "paused", "xmlns", XMLNS_CHAT_STATES )
+            || msg->hasChild( "inactive", "xmlns", XMLNS_CHAT_STATES )
+            || msg->hasChild( "gone", "xmlns", XMLNS_CHAT_STATES ) )
           m_enableChatStates = true;
         else
           m_enableChatStates = false;

@@ -118,16 +118,14 @@ int main( int /*argc*/, char** /*argv*/ )
   f = new gloox::MessageEventFilter( ms );
   f->registerMessageEventHandler( ms );
 
-  gloox::Tag *m = new gloox::Stanza( "message" );
-  m->addAttribute( "type", "chat" );
-  new gloox::Tag( m, "body", "my message" );
+  gloox::Message *m = new gloox::Message( gloox::Message::MessageChat, "", "my message" );
   x = new gloox::Tag( m, "x" );
   x->addAttribute( "xmlns", gloox::XMLNS_X_EVENT );
   new gloox::Tag( x, "offline" );
   new gloox::Tag( x, "delivered" );
   new gloox::Tag( x, "displayed" );
   new gloox::Tag( x, "composing" );
-  gloox::Stanza *s = new gloox::Stanza( m );
+  gloox::Message *s = new gloox::Message( m );
   delete m;
   f->filter( s );
 

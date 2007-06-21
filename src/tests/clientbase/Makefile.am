@@ -14,5 +14,6 @@ clientbase_test_LDADD = ../../clientbase.o ../../jid.o ../../connectiontcpclient
 			../../dns.o ../../stanzaextensionfactory.o ../../oob.o ../../gpgencrypted.o \
 			../../gpgsigned.o ../../vcardupdate.o ../../delayeddelivery.o \
 			../../xdelayeddelivery.o ../../gloox.o ../../tlsgnutlsbase.o ../../tlsdefault.o \
-			 ../../tlsgnutlsclientanon.o ../../tlsgnutlsserveranon.o ../../mutex.o ../../amp.o
+			 ../../tlsgnutlsclientanon.o ../../tlsgnutlsserveranon.o ../../mutex.o ../../amp.o \
+			  ../../iq.o ../../presence.o ../../message.o ../../subscription.o
 clientbase_test_CFLAGS = $(CPPFLAGS)

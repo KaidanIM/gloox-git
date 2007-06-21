@@ -188,64 +188,64 @@ namespace gloox
     m_registrationHandler = 0;
   }
 
-  bool Registration::handleIq( Stanza *stanza )
+  bool Registration::handleIq( IQ* iq )
   {
-    if( stanza->subtype() == StanzaIqError )
+    if( iq->subtype() == IQ::IqTypeError )
     {
-      Tag *e = stanza->findChild( "error" );
+      Tag *e = iq->findChild( "error" );
 
       if( !e || !m_registrationHandler )
         return false;
 
       if( e->hasChild( "conflict" ) || e->hasAttribute( "code", "409" ) )
-        m_registrationHandler->handleRegistrationResult( stanza->from(), RegistrationConflict );
+        m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationConflict );
       else if( e->hasChild( "not-acceptable" ) || e->hasAttribute( "code", "406" ) )
-        m_registrationHandler->handleRegistrationResult( stanza->from(), RegistrationNotAcceptable );
+        m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationNotAcceptable );
       else if( e->hasChild( "bad-request" ) || e->hasAttribute( "code", "400" ) )
-        m_registrationHandler->handleRegistrationResult( stanza->from(), RegistrationBadRequest );
+        m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationBadRequest );
       else if( e->hasChild( "forbidden" ) || e->hasAttribute( "code", "403" ) )
-        m_registrationHandler->handleRegistrationResult( stanza->from(), RegistrationForbidden );
+        m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationForbidden );
       else if( e->hasChild( "registration-required" ) || e->hasAttribute( "code", "407" ) )
-        m_registrationHandler->handleRegistrationResult( stanza->from(), RegistrationRequired );
+        m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationRequired );
       else if( e->hasChild( "unexpected-request" ) || e->hasAttribute( "code", "400" ) )
-        m_registrationHandler->handleRegistrationResult( stanza->from(), RegistrationUnexpectedRequest );
+        m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationUnexpectedRequest );
       else if( e->hasChild( "not-authorized" ) || e->hasAttribute( "code", "401" ) )
-        m_registrationHandler->handleRegistrationResult( stanza->from(), RegistrationNotAuthorized );
+        m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationNotAuthorized );
       else if( e->hasChild( "not-allowed" ) || e->hasAttribute( "code", "405" ) )
-        m_registrationHandler->handleRegistrationResult( stanza->from(), RegistrationNotAllowed );
+        m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationNotAllowed );
       else
-        m_registrationHandler->handleRegistrationResult( stanza->from(), RegistrationUnknownError );
+        m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationUnknownError );
     }
     return false;
   }
 
-  bool Registration::handleIqID( Stanza *stanza, int context )
+  void Registration::handleIqID( IQ* iq, int context )
   {
-    if( stanza->subtype() != StanzaIqResult || !m_registrationHandler )
-      return false;
+    if( iq->subtype() != IQ::IqTypeResult || !m_registrationHandler )
+      return;
 
     switch( context )
     {
       case FetchRegistrationFields:
       {
-        Tag *q = stanza->findChild( "query" );
+        Tag *q = iq->query();
 
         if( q->hasChild( "registered" ) )
         {
-          m_registrationHandler->handleAlreadyRegistered( stanza->from() );
+          m_registrationHandler->handleAlreadyRegistered( iq->from() );
           break;
         }
 
         if( q->hasChild( "x", "xmlns", XMLNS_X_DATA ) )
         {
           DataForm form( q->findChild( "x", "xmlns", XMLNS_X_DATA ) );
-          m_registrationHandler->handleDataForm( stanza->from(), form );
+          m_registrationHandler->handleDataForm( iq->from(), form );
         }
 
         if( q->hasChild( "x", "xmlns", XMLNS_X_OOB ) )
         {
           OOB oob( q->findChild( "x", "xmlns", XMLNS_X_OOB ) );
-          m_registrationHandler->handleOOB( stanza->from(), oob );
+          m_registrationHandler->handleOOB( iq->from(), oob );
         }
 
         int fields = 0;
@@ -286,23 +286,23 @@ namespace gloox
         if( q->hasChild( "instructions" ) )
           instructions = q->findChild( "instructions" )->cdata();
 
-        m_registrationHandler->handleRegistrationFields( stanza->from(), fields, instructions );
+        m_registrationHandler->handleRegistrationFields( iq->from(), fields, instructions );
         break;
       }
 
       case CreateAccount:
-        m_registrationHandler->handleRegistrationResult( stanza->from(), RegistrationSuccess );
+        m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationSuccess );
         break;
 
       case ChangePassword:
-        m_registrationHandler->handleRegistrationResult( stanza->from(), RegistrationSuccess );
+        m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationSuccess );
         break;
 
       case RemoveAccount:
-        m_registrationHandler->handleRegistrationResult( stanza->from(), RegistrationSuccess );
+        m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationSuccess );
         break;
     }
-    return false;
+    return;
   }
 
 }

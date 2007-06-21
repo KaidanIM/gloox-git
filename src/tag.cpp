@@ -342,7 +342,7 @@ namespace gloox
   Tag* Tag::findChildWithAttrib( const std::string& attr, const std::string& value ) const
   {
     TagList::const_iterator it = m_children->begin();
-    while( it != m_children->end() && ! (*it)->hasAttribute( attr, value ) )
+    while( it != m_children->end() && !(*it)->hasAttribute( attr, value ) )
       ++it;
     return it != m_children->end() ? (*it) : 0;
   }

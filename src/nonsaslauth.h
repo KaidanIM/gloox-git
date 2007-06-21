@@ -56,10 +56,10 @@ namespace gloox
       void doAuth( const std::string& sid );
 
       // reimplemented from IqHandler
-      virtual bool handleIq( Stanza *stanza );
+      virtual bool handleIq( IQ* iq );
 
       // reimplemented from IqHandler
-      virtual bool handleIqID( Stanza *stanza, int context );
+      virtual void handleIqID( IQ* iq, int context );
 
     private:
       enum NonSaslAuthTrack

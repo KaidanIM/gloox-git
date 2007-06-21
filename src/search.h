@@ -26,7 +26,7 @@ namespace gloox
 {
 
   class ClientBase;
-  class Stanza;
+  class IQ;
   class Disco;
 
   /**
@@ -87,10 +87,10 @@ namespace gloox
       void search( const JID& directory, int fields, const SearchFieldStruct& values, SearchHandler *sh );
 
       // reimplemented from IqHandler
-      virtual bool handleIq( Stanza *stanza ) { (void) stanza; return false; }
+      virtual bool handleIq( IQ *iq ) { (void) iq; return false; }
 
       // reimplemented from IqHandler
-      virtual bool handleIqID( Stanza *stanza, int context );
+      virtual void handleIqID( IQ *iq, int context );
 
     private:
       enum IdType

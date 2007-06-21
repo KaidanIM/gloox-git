@@ -13,15 +13,15 @@
 
 #include "mucmessagesession.h"
 #include "clientbase.h"
-#include "stanza.h"
+#include "message.h"
 #include "messagehandler.h"
 
 namespace gloox
 {
 
   MUCMessageSession::MUCMessageSession( ClientBase *parent, const JID& jid )
-    : MessageSession( parent, jid, false, StanzaMessageGroupchat | StanzaMessageChat
-                                          | StanzaMessageNormal | StanzaMessageError )
+    : MessageSession( parent, jid, false, Message::MessageGroupchat | Message::MessageChat
+                                          | Message::MessageNormal | Message::MessageError )
   {
   }
 
@@ -29,10 +29,10 @@ namespace gloox
   {
   }
 
-  void MUCMessageSession::handleMessage( Stanza *stanza )
+  void MUCMessageSession::handleMessage( Message* msg )
   {
     if( m_messageHandler )
-      m_messageHandler->handleMessage( stanza );
+      m_messageHandler->handleMessage( msg );
   }
 
   void MUCMessageSession::send( const std::string& message )

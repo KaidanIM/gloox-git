@@ -415,11 +415,11 @@ namespace gloox
         virtual bool handleDiscoSet( Stanza * ) { return 0; }
 
         // reimplemented from MessageHandler
-        virtual void handleMessage( Stanza * stanza, MessageSession * );
+        virtual void handleMessage( Message* msg, MessageSession * );
 
         // reimplemented from IqHandler
-        virtual bool handleIq  ( Stanza *stanza );
-        virtual bool handleIqID( Stanza *stanza, int context );
+        virtual bool handleIq  ( IQ* iq );
+        virtual void handleIqID( IQ* iq, int context );
 
       private:
 

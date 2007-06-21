@@ -29,7 +29,10 @@
 #include "messagesessionhandler.h"
 #include "parser.h"
 #include "tag.h"
-#include "stanza.h"
+#include "iq.h"
+#include "message.h"
+#include "subscription.h"
+#include "presence.h"
 #include "connectionlistener.h"
 #include "iqhandler.h"
 #include "messagehandler.h"
@@ -191,14 +194,12 @@ namespace gloox
       return;
     }
 
-    Stanza *stanza = new Stanza( tag );
-
-    logInstance().log( LogLevelDebug, LogAreaXmlIncoming, stanza->xml() );
+    logInstance().log( LogLevelDebug, LogAreaXmlIncoming, tag->xml() );
     ++m_stats.totalStanzasReceived;
 
     if( tag->name() == "stream:stream" )
     {
-      const std::string& version = stanza->findAttribute( "version" );
+      const std::string& version = tag->findAttribute( "version" );
       if( !checkStreamVersion( version ) )
       {
         logInstance().log( LogLevelDebug, LogAreaClassClientbase, "This server is not XMPP-compliant"
@@ -206,47 +207,59 @@ namespace gloox
         disconnect( ConnStreamVersionError );
       }
 
-      m_sid = stanza->findAttribute( "id" );
+      m_sid = tag->findAttribute( "id" );
       handleStartNode();
     }
     else if( tag->name() == "stream:error" )
     {
-      handleStreamError( stanza );
+      handleStreamError( tag );
       disconnect( ConnStreamError );
     }
     else
     {
-      if( !handleNormalNode( stanza ) )
+      if( !handleNormalNode( tag ) )
       {
-        switch( stanza->type() )
+        if( tag->name() == "iq" )
         {
-          case StanzaIq:
-            notifyIqHandlers( stanza );
-            ++m_stats.iqStanzasReceived;
-            break;
-          case StanzaPresence:
-            notifyPresenceHandlers( stanza );
-            ++m_stats.presenceStanzasReceived;
-            break;
-          case StanzaS10n:
-            notifySubscriptionHandlers( stanza );
+          IQ *iq = new IQ( tag, true );
+          notifyIqHandlers( iq );
+          delete iq;
+          ++m_stats.iqStanzasReceived;
+        }
+        else if( tag->name() == "message" )
+        {
+          Message *msg = new Message( tag, true );
+          notifyMessageHandlers( msg );
+          delete msg;
+          ++m_stats.messageStanzasReceived;
+        }
+        else if( tag->name() == "presence" )
+        {
+          if( tag->hasAttribute( "type", "subscribe" ) || tag->hasAttribute( "type", "subscribed" )
+              || tag->hasAttribute( "type", "unsubscribe" ) || tag->hasAttribute( "type", "unsubscribed" ) )
+          {
+            Subscription *sub = new Subscription( tag, true );
+            notifySubscriptionHandlers( sub );
+            delete sub;
             ++m_stats.s10nStanzasReceived;
-            break;
-          case StanzaMessage:
-            notifyMessageHandlers( stanza );
-            ++m_stats.messageStanzasReceived;
-            break;
-          default:
-            notifyTagHandlers( tag );
-            break;
+          }
+          else
+          {
+            Presence *pres = new Presence( tag, true );
+            notifyPresenceHandlers( pres );
+            delete pres;
+            ++m_stats.presenceStanzasReceived;
+          }
+        }
+        else
+        {
+          notifyTagHandlers( tag );
         }
       }
     }
 
     if( m_statisticsHandler )
       m_statisticsHandler->handleStatistics( getStatistics() );
-
-    delete stanza;
   }
 
   void ClientBase::handleCompressedData( const std::string& data )
@@ -595,21 +608,21 @@ namespace gloox
     send( t );
   }
 
-  void ClientBase::processSASLError( Stanza *stanza )
+  void ClientBase::processSASLError( Tag *tag )
   {
-    if( stanza->hasChild( "aborted" ) )
+    if( tag->hasChild( "aborted" ) )
       m_authError = SaslAborted;
-    else if( stanza->hasChild( "incorrect-encoding" ) )
+    else if( tag->hasChild( "incorrect-encoding" ) )
       m_authError = SaslIncorrectEncoding;
-    else if( stanza->hasChild( "invalid-authzid" ) )
+    else if( tag->hasChild( "invalid-authzid" ) )
       m_authError = SaslInvalidAuthzid;
-    else if( stanza->hasChild( "invalid-mechanism" ) )
+    else if( tag->hasChild( "invalid-mechanism" ) )
       m_authError = SaslInvalidMechanism;
-    else if( stanza->hasChild( "mechanism-too-weak" ) )
+    else if( tag->hasChild( "mechanism-too-weak" ) )
       m_authError = SaslMechanismTooWeak;
-    else if( stanza->hasChild( "not-authorized" ) )
+    else if( tag->hasChild( "not-authorized" ) )
       m_authError = SaslNotAuthorized;
-    else if( stanza->hasChild( "temporary-auth-failure" ) )
+    else if( tag->hasChild( "temporary-auth-failure" ) )
       m_authError = SaslTemporaryAuthFailure;
   }
 
@@ -759,10 +772,10 @@ namespace gloox
     m_compression = cb;
   }
 
-  void ClientBase::handleStreamError( Stanza *stanza )
+  void ClientBase::handleStreamError( Tag *tag )
   {
     StreamError err = StreamErrorUndefined;
-    const Tag::TagList& c = stanza->children();
+    const Tag::TagList& c = tag->children();
     Tag::TagList::const_iterator it = c.begin();
     for( ; it != c.end(); ++it )
     {
@@ -803,7 +816,7 @@ namespace gloox
       else if( (*it)->name() == "see-other-host" )
       {
         err = StreamErrorSeeOtherHost;
-        m_streamErrorCData = stanza->findChild( "see-other-host" )->cdata();
+        m_streamErrorCData = tag->findChild( "see-other-host" )->cdata();
       }
       else if( (*it)->name() == "system-shutdown" )
         err = StreamErrorSystemShutdown;
@@ -841,16 +854,16 @@ namespace gloox
 
   void ClientBase::registerMessageSessionHandler( MessageSessionHandler *msh, int types )
   {
-    if( types & StanzaMessageChat || types == 0 )
+    if( types & Message::MessageChat || types == 0 )
       m_messageSessionHandlerChat = msh;
 
-    if( types & StanzaMessageNormal || types == 0 )
+    if( types & Message::MessageNormal || types == 0 )
       m_messageSessionHandlerNormal = msh;
 
-    if( types & StanzaMessageGroupchat || types == 0 )
+    if( types & Message::MessageGroupchat || types == 0 )
       m_messageSessionHandlerGroupchat = msh;
 
-    if( types & StanzaMessageHeadline || types == 0 )
+    if( types & Message::MessageHeadline || types == 0 )
       m_messageSessionHandlerHeadline = msh;
   }
 
@@ -1090,15 +1103,15 @@ namespace gloox
     }
   }
 
-  void ClientBase::notifyPresenceHandlers( Stanza *stanza )
+  void ClientBase::notifyPresenceHandlers( Presence *pres )
   {
     bool match = false;
     PresenceJidHandlerList::const_iterator itj = m_presenceJidHandlers.begin();
     for( ; itj != m_presenceJidHandlers.end(); ++itj )
     {
-      if( (*itj).jid->bare() == stanza->from().bare() && (*itj).ph )
+      if( (*itj).jid->bare() == pres->from().bare() && (*itj).ph )
       {
-        (*itj).ph->handlePresence( stanza );
+        (*itj).ph->handlePresence( pres );
         match = true;
       }
     }
@@ -1108,59 +1121,63 @@ namespace gloox
     PresenceHandlerList::const_iterator it = m_presenceHandlers.begin();
     for( ; it != m_presenceHandlers.end(); ++it )
     {
-      (*it)->handlePresence( stanza );
+      (*it)->handlePresence( pres );
     }
   }
 
-  void ClientBase::notifySubscriptionHandlers( Stanza *stanza )
+  void ClientBase::notifySubscriptionHandlers( Subscription *s10n )
   {
     SubscriptionHandlerList::const_iterator it = m_subscriptionHandlers.begin();
     for( ; it != m_subscriptionHandlers.end(); ++it )
     {
-      (*it)->handleSubscription( stanza );
+      (*it)->handleSubscription( s10n );
     }
   }
 
-  void ClientBase::notifyIqHandlers( Stanza *stanza )
+  void ClientBase::notifyIqHandlers( IQ *iq )
   {
     bool res = false;
 
     IqHandlerMap::const_iterator it = m_iqNSHandlers.begin();
     for( ; it != m_iqNSHandlers.end(); ++it )
     {
-      if( stanza->hasChildWithAttrib( "xmlns", (*it).first ) )
+      if( iq->hasChildWithAttrib( "xmlns", (*it).first ) )
       {
-        if( (*it).second->handleIq( stanza ) )
+        if( (*it).second->handleIq( iq ) )
           res = true;
       }
     }
 
-    IqTrackMap::iterator it_id = m_iqIDHandlers.find( stanza->id() );
-    if( it_id != m_iqIDHandlers.end() )
+    if( !res && ( iq->type() == StanzaIq ) &&
+        ( ( iq->subtype() == IQ::IqTypeGet ) || ( iq->subtype() == IQ::IqTypeSet ) ) )
     {
-      if( (*it_id).second.ih->handleIqID( stanza, (*it_id).second.context ) )
-        res = true;
-      m_iqIDHandlers.erase( it_id );
+      Tag *re = new Tag( "iq" );
+      re->addAttribute( "type", "error" );
+      re->addAttribute( "id", iq->id() );
+      re->addAttribute( "to", iq->from().full() );
+      Tag *e = new Tag( re, "error", "type", "cancel" );
+      new Tag( e, "service-unavailable", "xmlns", XMLNS_XMPP_STANZAS );
+      send( re );
+      return;
     }
 
-    if( !res && ( stanza->type() == StanzaIq ) &&
-         ( ( stanza->subtype() == StanzaIqGet ) || ( stanza->subtype() == StanzaIqSet ) ) )
+    if( res )
+      return;
+
+    IqTrackMap::iterator it_id = m_iqIDHandlers.find( iq->id() );
+    if( it_id != m_iqIDHandlers.end() &&
+        ( ( iq->subtype() == IQ::IqTypeResult ) || ( iq->subtype() == IQ::IqTypeError ) ) )
     {
-      Tag *iq = new Tag( "iq" );
-      iq->addAttribute( "type", "error" );
-      iq->addAttribute( "id", stanza->id() );
-      iq->addAttribute( "to", stanza->from().full() );
-      Tag *e = new Tag( iq, "error", "type", "cancel" );
-      new Tag( e, "service-unavailable", "xmlns", XMLNS_XMPP_STANZAS );
-      send( iq );
+      (*it_id).second.ih->handleIqID( iq, (*it_id).second.context );
+      m_iqIDHandlers.erase( it_id );
     }
   }
 
-  void ClientBase::notifyMessageHandlers( Stanza *stanza )
+  void ClientBase::notifyMessageHandlers( Message *msg )
   {
     if( m_mucInvitationHandler )
     {
-      Tag *x = stanza->findChild( "x", "xmlns", XMLNS_MUC_USER );
+      Tag *x = msg->findChild( "x", "xmlns", XMLNS_MUC_USER );
       if( x && x->hasChild( "invite" ) )
       {
         Tag *i = x->findChild( "invite" );
@@ -1172,9 +1189,9 @@ namespace gloox
         t = x->findChild( "password" );
         std::string password ( t ? t->cdata() : "" );
 
-        m_mucInvitationHandler->handleMUCInvitation( stanza->from(), invitee,
-                                              reason, stanza->body(), password,
-                                              i->hasChild( "continue" ) );
+        m_mucInvitationHandler->handleMUCInvitation( msg->from(), invitee,
+                                                     reason, msg->body(), password,
+                                                     i->hasChild( "continue" ) );
         return;
       }
     }
@@ -1182,11 +1199,11 @@ namespace gloox
     MessageSessionList::const_iterator it1 = m_messageSessions.begin();
     for( ; it1 != m_messageSessions.end(); ++it1 )
     {
-      if( (*it1)->target().full() == stanza->from().full() &&
-            ( stanza->thread().empty() || (*it1)->threadID() == stanza->thread() ) &&
-            ( (*it1)->types() & stanza->subtype() || (*it1)->types() == StanzaSubUndefined ) )
+      if( (*it1)->target().full() == msg->from().full() &&
+            ( msg->thread().empty() || (*it1)->threadID() == msg->thread() ) &&
+            ( (*it1)->types() & msg->subtype() || (*it1)->types() == StanzaSubUndefined ) )
       {
-        (*it1)->handleMessage( stanza );
+        (*it1)->handleMessage( msg );
         return;
       }
     }
@@ -1194,29 +1211,29 @@ namespace gloox
     it1 = m_messageSessions.begin();
     for( ; it1 != m_messageSessions.end(); ++it1 )
     {
-      if( (*it1)->target().bare() == stanza->from().bare() &&
-            ( stanza->thread().empty() || (*it1)->threadID() == stanza->thread() ) &&
-            ( (*it1)->types() & stanza->subtype() || (*it1)->types() == StanzaSubUndefined ) )
+      if( (*it1)->target().bare() == msg->from().bare() &&
+            ( msg->thread().empty() || (*it1)->threadID() == msg->thread() ) &&
+            ( (*it1)->types() & msg->subtype() || (*it1)->types() == StanzaSubUndefined ) )
       {
-        (*it1)->handleMessage( stanza );
+        (*it1)->handleMessage( msg );
         return;
       }
     }
 
     MessageSessionHandler *msHandler = 0;
 
-    switch( stanza->subtype() )
+    switch( msg->subtype() )
     {
-      case StanzaMessageChat:
+      case Message::MessageChat:
         msHandler = m_messageSessionHandlerChat;
         break;
-      case StanzaMessageNormal:
+      case Message::MessageNormal:
         msHandler = m_messageSessionHandlerNormal;
         break;
-      case StanzaMessageGroupchat:
+      case Message::MessageGroupchat:
         msHandler = m_messageSessionHandlerGroupchat;
         break;
-      case StanzaMessageHeadline:
+      case Message::MessageHeadline:
         msHandler = m_messageSessionHandlerHeadline;
         break;
       default:
@@ -1225,16 +1242,16 @@ namespace gloox
 
     if( msHandler )
     {
-      MessageSession *session = new MessageSession( this, stanza->from(), true, stanza->subtype() );
+      MessageSession *session = new MessageSession( this, msg->from(), true, msg->subtype() );
       msHandler->handleMessageSession( session );
-      session->handleMessage( stanza );
+      session->handleMessage( msg );
     }
     else
     {
       MessageHandlerList::const_iterator it = m_messageHandlers.begin();
       for( ; it != m_messageHandlers.end(); ++it )
       {
-        (*it)->handleMessage( stanza );
+        (*it)->handleMessage( msg );
       }
     }
   }

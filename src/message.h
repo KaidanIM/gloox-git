@@ -48,13 +48,13 @@ namespace gloox
        * Creates a message Stanza from the given Tag.
        * @param tag The Tag to parse.
        */
-      Message( Tag *tag );
+      Message( Tag *tag, bool rip = false );
 
       /**
        * Creates a Message.
        */
-      Message( MessageType type, const std::string& id, const std::string& to,
-                const std::string& body, const std::string& thread = "",
+      Message( MessageType type, const std::string& to,
+                const std::string& body = "", const std::string& thread = "",
                 const std::string& xmllang = "", const std::string& subject = "",
                 const std::string& from = "" );
       /**

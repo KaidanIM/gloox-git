@@ -74,10 +74,10 @@ namespace gloox
       void resetIdleTimer();
 
       // reimplemented from IqHandler
-      virtual bool handleIqID( Stanza *stanza, int context );
+      virtual bool handleIq( IQ* iq );
 
       // reimplemented from IqHandler
-      virtual bool handleIq( Stanza *stanza );
+      virtual void handleIqID( IQ* iq, int context );
 
     private:
       LastActivityHandler *m_lastActivityHandler;

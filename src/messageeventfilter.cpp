@@ -14,7 +14,7 @@
 #include "messageeventfilter.h"
 #include "messageeventhandler.h"
 #include "messagesession.h"
-#include "stanza.h"
+#include "message.h"
 
 namespace gloox
 {
@@ -30,40 +30,40 @@ namespace gloox
   {
   }
 
-  void MessageEventFilter::filter( Stanza *stanza )
+  void MessageEventFilter::filter( Message* msg )
   {
     if( m_disable )
       return;
 
-    if( stanza->subtype() == StanzaMessageError )
+    if( msg->subtype() == Message::MessageError )
     {
-      if( stanza->error() == StanzaErrorFeatureNotImplemented )
+      if( msg->error() == StanzaErrorFeatureNotImplemented )
         m_disable = true;
 
       return;
     }
 
-    Tag *x = stanza->findChild( "x", "xmlns", XMLNS_X_EVENT );
+    Tag *x = msg->findChild( "x", "xmlns", XMLNS_X_EVENT );
     if( x && m_messageEventHandler )
     {
-      if( stanza->body().empty() )
+      if( msg->body().empty() )
       {
         if( x->hasChild( "offline" ) )
-          m_messageEventHandler->handleMessageEvent( stanza->from(), MessageEventOffline );
+          m_messageEventHandler->handleMessageEvent( msg->from(), MessageEventOffline );
         else if( x->hasChild( "delivered" ) )
-          m_messageEventHandler->handleMessageEvent( stanza->from(), MessageEventDelivered );
+          m_messageEventHandler->handleMessageEvent( msg->from(), MessageEventDelivered );
         else if( x->hasChild( "displayed" ) )
-          m_messageEventHandler->handleMessageEvent( stanza->from(), MessageEventDisplayed );
+          m_messageEventHandler->handleMessageEvent( msg->from(), MessageEventDisplayed );
         else if( x->hasChild( "composing" ) )
-          m_messageEventHandler->handleMessageEvent( stanza->from(), MessageEventComposing );
+          m_messageEventHandler->handleMessageEvent( msg->from(), MessageEventComposing );
         else
-          m_messageEventHandler->handleMessageEvent( stanza->from(), MessageEventCancel );
+          m_messageEventHandler->handleMessageEvent( msg->from(), MessageEventCancel );
       }
       else
       {
-        m_lastID = stanza->findAttribute( "id" );
+        m_lastID = msg->findAttribute( "id" );
         m_requestedEvents = 0;
-        Tag *x = stanza->findChild( "x" );
+        Tag *x = msg->findChild( "x" );
         if( x->hasChild( "offline" ) )
           m_requestedEvents |= MessageEventOffline;
         if( x->hasChild( "delivered" ) )
@@ -74,7 +74,7 @@ namespace gloox
           m_requestedEvents |= MessageEventComposing;
       }
     }
-    else if( stanza->body().empty() )
+    else if( msg->body().empty() )
     {
       m_requestedEvents = 0;
       m_lastID = "";

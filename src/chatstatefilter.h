@@ -23,7 +23,7 @@ namespace gloox
   class Tag;
   class ChatStateHandler;
   class MessageSession;
-  class Stanza;
+  class Message;
 
   /**
    * @brief This class adds Chat State Notifications (XEP-0085) support to a MessageSession.
@@ -81,7 +81,7 @@ namespace gloox
       virtual void decorate( Tag *tag );
 
       // reimplemented from MessageFilter
-      virtual void filter( Stanza *stanza );
+      virtual void filter( Message* msg );
 
     private:
       ChatStateHandler *m_chatStateHandler;

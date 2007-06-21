@@ -896,17 +896,17 @@ namespace gloox
   /**
    * Describes the possible 'available presence' types.
    */
-  enum Presence
-  {
-    PresenceUnknown,                /**< Unknown status. */
-    PresenceAvailable,              /**< The entity or resource is online and available. */
-    PresenceChat,                   /**< The entity or resource is actively interested in chatting. */
-    PresenceAway,                   /**< The entity or resource is temporarily away. */
-    PresenceDnd,                    /**< The entity or resource is busy (dnd = "Do Not Disturb"). */
-    PresenceXa,                     /**< The entity or resource is away for an extended period (xa =
-                                     * "eXtended Away"). */
-    PresenceUnavailable             /**< The entity or resource is offline. */
-  };
+//   enum Presence
+//   {
+//     PresenceUnknown,                /**< Unknown status. */
+//     PresenceAvailable,              /**< The entity or resource is online and available. */
+//     PresenceChat,                   /**< The entity or resource is actively interested in chatting. */
+//     PresenceAway,                   /**< The entity or resource is temporarily away. */
+//     PresenceDnd,                    /**< The entity or resource is busy (dnd = "Do Not Disturb"). */
+//     PresenceXa,                     /**< The entity or resource is away for an extended period (xa =
+//                                      * "eXtended Away"). */
+//     PresenceUnavailable             /**< The entity or resource is offline. */
+//   };
 
   /**
    * Describes the verification results of a certificate.

@@ -147,13 +147,13 @@ namespace gloox
       m_parent->disco()->removeFeature( profile );
   }
 
-  bool SIManager::handleIq( Stanza *stanza )
+  bool SIManager::handleIq( IQ* iq )
   {
-    TrackMap::iterator it = m_track.find( stanza->id() );
+    TrackMap::iterator it = m_track.find( iq->id() );
     if( it != m_track.end() )
       return false;
 
-    Tag *si = stanza->findChild( "si", "xmlns", XMLNS_SI );
+    Tag *si = iq->findChild( "si", "xmlns", XMLNS_SI );
     if( si && si->hasAttribute( "profile" ) )
     {
       const std::string& profile = si->findAttribute( "profile" );
@@ -162,7 +162,7 @@ namespace gloox
       {
         Tag* p = si->findChildWithAttrib( "xmlns", profile );
         Tag* f = si->findChild( "feature", "xmlns", XMLNS_FEATURE_NEG );
-        (*it).second->handleSIRequest( stanza->from(), stanza->id(), profile, si, p, f );
+        (*it).second->handleSIRequest( iq->from(), iq->id(), profile, si, p, f );
         return true;
       }
     }
@@ -170,17 +170,17 @@ namespace gloox
     return false;
   }
 
-  bool SIManager::handleIqID( Stanza *stanza, int context )
+  void SIManager::handleIqID( IQ* iq, int context )
   {
-    switch( stanza->subtype() )
+    switch( iq->subtype() )
     {
-      case StanzaIqResult:
+      case IQ::IqTypeResult:
         if( context == OfferSI )
         {
-          TrackMap::iterator it = m_track.find( stanza->id() );
+          TrackMap::iterator it = m_track.find( iq->id() );
           if( it != m_track.end() )
           {
-            Tag* si = stanza->findChild( "si", "xmlns", XMLNS_SI );
+            Tag* si = iq->findChild( "si", "xmlns", XMLNS_SI );
             Tag* ptag = 0;
             Tag* fneg = 0;
             if( si )
@@ -188,30 +188,25 @@ namespace gloox
               ptag = si->findChildWithAttrib( "xmlns", (*it).second.profile );
               fneg = si->findChild( "feature", "xmlns", XMLNS_FEATURE_NEG );
             }
-            (*it).second.sih->handleSIRequestResult( stanza->from(), (*it).second.sid, si, ptag, fneg );
+            (*it).second.sih->handleSIRequestResult( iq->from(), (*it).second.sid, si, ptag, fneg );
           }
-          return true;
         }
         break;
-      case StanzaIqError:
+      case IQ::IqTypeError:
         if( context == OfferSI )
         {
-          TrackMap::iterator it = m_track.find( stanza->id() );
+          TrackMap::iterator it = m_track.find( iq->id() );
           if( it != m_track.end() )
           {
-            (*it).second.sih->handleSIRequestError( stanza );
+            (*it).second.sih->handleSIRequestError( iq );
           }
-          return true;
         }
         break;
-        break;
-      case StanzaIqSet:
-      case StanzaIqGet:
+      case IQ::IqTypeSet:
+      case IQ::IqTypeGet:
       default:
         break;
     }
-
-    return false;
   }
 
 }
