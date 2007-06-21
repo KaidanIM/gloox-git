@@ -1,6 +1,7 @@
 v0.9.2 -- xx Jun 2007
 ---------------------
 - Parser: accept ' and > in attribute values and cdata
+- Parser: log parse errors
 - SIManager, SIProfileFT: return requested stream's id (SID)
 
 
