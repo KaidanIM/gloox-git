@@ -145,8 +145,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "new simple IQ set 4";
-  i = new IQ( IQ::IqTypeSet, "id2", "xyz@example.org/blah", "mynamespace", "testtag", 0,
-              "blah@example.net/foo" );
+  i = new IQ( IQ::IqTypeSet, "id2", "xyz@example.org/blah", "mynamespace", "testtag", "blah@example.net/foo" );
   if( !i->hasAttribute( "type", "set" ) || !i->hasAttribute( "id", "id2" )
        || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasChild( "testtag", "xmlns", "mynamespace" )
        || !i->hasAttribute( "from", "blah@example.net/foo" ) )
