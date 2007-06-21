@@ -50,6 +50,7 @@
 #include <map>
 #include <list>
 #include <algorithm>
+#include <cmath>
 
 #ifndef _WIN32_WCE
 # include <sstream>
@@ -356,10 +357,19 @@ namespace gloox
 
   void ClientBase::parse( const std::string& data )
   {
-    if( m_parser && !m_parser->feed( data ) )
+    int i = 0;
+    if( m_parser && ( i = m_parser->feed( data ) ) >= 0 )
     {
-      m_logInstance.log( LogLevelError, LogAreaClassClientbase, "parse error: " + data );
+      const int len = 4 + (int)std::log10( i ) + 1;
+      char *tmp = new char[len];
+      tmp[len-1] = '\0';
+      sprintf( tmp, "%d", i );
+      std::string error = "parse error (at pos ";
+      error += tmp;
+      error += "): ";
+      m_logInstance.log( LogLevelError, LogAreaClassClientbase, error + data );
       disconnect( ConnParseError );
+      delete[] tmp;
     }
   }
 
