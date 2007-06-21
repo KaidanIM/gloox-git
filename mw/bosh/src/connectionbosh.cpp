@@ -34,11 +34,11 @@ namespace gloox
   ConnectionBOSH::ConnectionBOSH( ConnectionBase *connection, const LogSink& logInstance, const std::string& boshHost,
                                             const std::string& xmppServer, int xmppPort )
     : ConnectionBase( 0 ), m_connection( connection ),
-      m_logInstance( logInstance ), m_boshHost( boshHost), m_http11( false )
+      m_logInstance( logInstance ), m_boshHost( boshHost), m_http11( false ), m_path("/http-bind/"), m_handler(NULL)
   {
     m_server = prep::idna( xmppServer );
     m_port = xmppPort;
-    m_path = "/http-bind/";
+    m_parser = new Parser(this);
     if( m_connection )
       m_connection->registerConnectionDataHandler( this );
   }
@@ -47,11 +47,11 @@ namespace gloox
                                             const LogSink& logInstance, const std::string& boshHost,
                                             const std::string& xmppServer, int xmppPort )
     : ConnectionBase( cdh ), m_connection( connection ),
-      m_logInstance( logInstance ), m_boshHost( boshHost )
+      m_logInstance( logInstance ), m_boshHost( boshHost ), m_path("/http-bind/"), m_handler(cdh)
   {
     m_server = prep::idna( xmppServer );
     m_port = xmppPort;
-    m_path = "/http-bind/";
+    m_parser = new Parser(this);
     if( m_connection )
       m_connection->registerConnectionDataHandler( this );
   }
@@ -120,9 +120,9 @@ namespace gloox
 
   bool ConnectionBOSH::send( const std::string& data )
   {
+    m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh sent" + data);
     if( !m_connection )
       return false;
-    m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh sent" + data);
     return true;
   }
 
@@ -176,7 +176,7 @@ namespace gloox
   void ConnectionBOSH::handleXMLData(const ConnectionBase* connection, const std::string& data)
   {
     m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh received XML:\n" + data);
-    
+    m_parser->feed(data);
   }
 
   void ConnectionBOSH::handleConnect( const ConnectionBase* /*connection*/ )
@@ -218,6 +218,28 @@ namespace gloox
     if( m_handler )
       m_handler->handleDisconnect( this, reason );
   }
+  
+  void ConnectionBOSH::handleTag(Tag* tag)
+  {
+    if(tag->name() == "body")
+    {
+      if(tag->hasAttribute("sid"))
+      {
+        if(m_handler)
+          m_handler->handleConnect(this);
+      }
+      else
+      {
+        Tag::TagList stanzas = tag->children();
+        Tag::TagList::const_iterator i;
+        for(i = stanzas.begin(); i != stanzas.end(); i++)
+        { 
+          m_handler->handleReceivedData(this, (*i)->xml());
+        };
+      }
+    }
+  }
+  
 
   
 } // namespace gloox;

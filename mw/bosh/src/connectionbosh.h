@@ -17,6 +17,8 @@
 #include "gloox.h"
 #include "connectionbase.h"
 #include "logsink.h"
+#include "taghandler.h"
+#include "parser.h"
 
 #include <string>
 
@@ -46,7 +48,7 @@ namespace gloox
    * @author Matthew Wild <mwild1@gmail.com>
    * @since 0.9
    */
-  class GLOOX_API ConnectionBOSH : public ConnectionBase, ConnectionDataHandler
+  class GLOOX_API ConnectionBOSH : public ConnectionBase, ConnectionDataHandler, TagHandler
   {
     public:
       /**
@@ -141,6 +143,9 @@ namespace gloox
        * to use HTTP/1.0. Defaults to HTTP/1.0 which should work with 99.9% of proxies.
        */
       void setHTTP11( bool http11 ) { m_http11 = http11; }
+        
+      // reimplemented from TagHandler
+      virtual void handleTag(Tag* tag);
 
    private:
       ConnectionBOSH &operator=( const ConnectionBOSH& );
@@ -149,6 +154,9 @@ namespace gloox
 
       ConnectionBase *m_connection;
       const LogSink& m_logInstance;
+   
+      Parser* m_parser; // Used for parsing XML section of responses
+      ConnectionDataHandler* m_handler;
 
       std::string m_path; // The path part of the URL that we need to request
       std::string m_proxyServer;
