@@ -1,3 +1,9 @@
+v0.9.2 -- xx Jun 2007
+---------------------
+- Parser: accept ' and > in attribute values and cdata
+- SIManager, SIProfileFT: return requested stream's id (SID)
+
+
 v0.9.1 -- 20 Jun 2007
 ---------------------
 - MessageSession: fix potential crash when ClientBase deletes MessageSessions in its dtor

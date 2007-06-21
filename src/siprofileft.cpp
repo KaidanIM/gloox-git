@@ -55,11 +55,12 @@ namespace gloox
       delete m_socks5Manager;
   }
 
-  bool SIProfileFT::requestFT( const JID& to, const std::string& name, long size, const std::string& hash,
-                               const std::string& desc, const std::string& date, const std::string& mimetype )
+  const std::string SIProfileFT::requestFT( const JID& to, const std::string& name, long size,
+                                            const std::string& hash, const std::string& desc,
+                                            const std::string& date, const std::string& mimetype )
   {
     if( name.empty() || size <= 0 || !m_manager )
-      return false;
+      return std::string();
 
     Tag* file = new Tag( "file", "xmlns", XMLNS_SI_FT );
     file->addAttribute( "name", name );
@@ -84,8 +85,7 @@ namespace gloox
     df.addField( dff );
     feature->addChild( df.tag() );
 
-    m_manager->requestSI( this, to, XMLNS_SI_FT, file, feature, mimetype );
-    return true;
+    return m_manager->requestSI( this, to, XMLNS_SI_FT, file, feature, mimetype );;
   }
 
   void SIProfileFT::acceptFT( const JID& to, const std::string& id, StreamType type )
