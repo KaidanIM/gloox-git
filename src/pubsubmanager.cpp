@@ -13,7 +13,8 @@
 #include "pubsubmanager.h"
 #include "clientbase.h"
 #include "dataform.h"
-#include "tag.h"
+#include "message.h"
+#include "iq.h"
 #include "psaffiliationlisthandler.h"
 #include "pssubscriptionhandler.h"
 #include "pssubscriptionlisthandler.h"
@@ -23,8 +24,9 @@
 #include "pubsub.h"
 #include "pubsubdiscohandler.h"
 #include "disco.h"
-#include <iostream>
 #include "parserutils.h"
+
+#include <iostream>
 
 namespace gloox
 {
@@ -190,13 +192,13 @@ namespace gloox
       return (EventType)lookup( event, values );
     }
 
-    void Manager::handleMessage( Stanza * stanza, MessageSession * )
+    void Manager::handleMessage( Message* msg, MessageSession * )
     {
-      Tag * event = stanza->findChild( "event", "xmlns", XMLNS_PUBSUB_EVENT );
+      Tag * event = msg->findChild( "event", "xmlns", XMLNS_PUBSUB_EVENT );
       if( !event || m_eventHandlerList.empty() )
         return;
 
-      const JID& service = stanza->from();
+      const JID& service = msg->from();
       const Tag::TagList& events = event->children();
       EventType type;
       EventHandlerList::iterator ith = m_eventHandlerList.begin();
@@ -733,29 +735,29 @@ namespace gloox
       m_parent->send( iq );
     }
 
-    bool Manager::handleIq( Stanza *stanza )
+    bool Manager::handleIq( IQ* iq )
     {
-      std::cout << __FUNCTION__ << ": " << stanza->xml() << std::endl;
+      std::cout << __FUNCTION__ << ": " << iq->xml() << std::endl;
       return 0;
     }
 
     /**
      * @bug Unsubscription does not retrieve the correct node id (needs a tracking map).
      */
-    bool Manager::handleIqID( Stanza *stanza, int context )
+    void Manager::handleIqID( IQ* iq, int context )
     {
-      const JID& service = stanza->from();
-      const std::string& id = stanza->id();
+      const JID& service = iq->from();
+      const std::string& id = iq->id();
 
-      switch( stanza->subtype() )
+      switch( iq->subtype() )
       {
-        case StanzaIqResult:
+        case IQ::IqTypeResult:
         {
           switch( context )
           {
             case Subscription:
             {
-              Tag *ps = stanza->findChild( "pubsub", "xmlns", XMLNS_PUBSUB );
+              Tag *ps = iq->findChild( "pubsub", "xmlns", XMLNS_PUBSUB );
               if( !ps )
                 break;
 
@@ -781,8 +783,8 @@ namespace gloox
             }
             case RequestSubscriptionList:
             {
-              SubscriptionListTrackMap::iterator ith = m_subListTrackMap.find( stanza->id() );
-              Tag *ps = stanza->findChild( "pubsub", "xmlns", XMLNS_PUBSUB );
+              SubscriptionListTrackMap::iterator ith = m_subListTrackMap.find( iq->id() );
+              Tag *ps = iq->findChild( "pubsub", "xmlns", XMLNS_PUBSUB );
               Tag *subscription = ps->findChild( "subscriptions" );
               if( subscription )
               {
@@ -801,8 +803,8 @@ namespace gloox
             }
             case RequestAffiliationList:
             {
-              AffiliationListTrackMap::iterator ith = m_affListTrackMap.find( stanza->id() );
-              Tag *ps = stanza->findChild( "pubsub", "xmlns", XMLNS_PUBSUB );
+              AffiliationListTrackMap::iterator ith = m_affListTrackMap.find( iq->id() );
+              Tag *ps = iq->findChild( "pubsub", "xmlns", XMLNS_PUBSUB );
               Tag *affiliations = ps->findChild( "affiliations" );
               if( affiliations )
               {
@@ -813,10 +815,10 @@ namespace gloox
                   const std::string& node = affiliations->findAttribute( "node" ),
                                      aff  = affiliations->findAttribute( "affiliation" );
                   if( node.empty() || aff.empty() )
-                    return 0;
+                    return;
                   affMap[node] = affiliationType( aff );
                 }
-                (*ith).second->handleAffiliationListResult( stanza->from(), affMap );
+                (*ith).second->handleAffiliationListResult( iq->from(), affMap );
                 m_affListTrackMap.erase( ith );
               }
               break;
@@ -837,18 +839,18 @@ namespace gloox
               {
                 case RequestSubscriptionOptions:
                 {
-                  Tag *ps = stanza->findChild( "pubsub", "xmlns", XMLNS_PUBSUB );
+                  Tag *ps = iq->findChild( "pubsub", "xmlns", XMLNS_PUBSUB );
                   Tag *options = ps->findChild( "options" );
                   Tag * x = options->findChild( "x" );
                   const DataForm df( x );
-                  (*ith).second->handleSubscriptionOptions( stanza->from(),
+                  (*ith).second->handleSubscriptionOptions( iq->from(),
                                          options->findAttribute( "jid" ),
                                          options->findAttribute( "node" ), df );
                   break;
                 }
                 case RequestSubscriberList:
                 {
-                  Tag * ps = stanza->findChild( "pubsub", "xmlns", XMLNS_PUBSUB_OWNER );
+                  Tag * ps = iq->findChild( "pubsub", "xmlns", XMLNS_PUBSUB_OWNER );
                   Tag * subt = ps->findChild( "subscriptions" );
                   SubscriberList list;
                   const Tag::TagList& subs = subt->children();
@@ -934,18 +936,18 @@ namespace gloox
             }
             case RequestNodeConfig:
             {
-              Tag *ps = stanza->findChild( "pubsub", "xmlns", XMLNS_PUBSUB );
+              Tag *ps = iq->findChild( "pubsub", "xmlns", XMLNS_PUBSUB );
               Tag *options = ps->findChild( "configure" );
               Tag * x = options->findChild( "x" );
               const DataForm * df = x ? new DataForm( x ) : 0;
-              //handleNodeConfiguration( stanza->from(), options->findAttribute("node"), df, OptionRequestErrorNone );
+              //handleNodeConfiguration( iq->from(), options->findAttribute("node"), df, OptionRequestErrorNone );
             }
             case SetNodeConfig:
             {
             }*/
             case RequestItemList:
             {
-              Tag *ps = stanza->findChild( "pubsub", "xmlns", XMLNS_PUBSUB_EVENT );
+              Tag *ps = iq->findChild( "pubsub", "xmlns", XMLNS_PUBSUB_EVENT );
               if( !ps )
                 break;
               Tag *items = ps->findChild( "items" );
@@ -955,7 +957,7 @@ namespace gloox
               const std::string& node = items->findAttribute( "node" );
               ItemHandlerList::iterator ith = m_itemHandlerList.begin();
               for( ; ith != m_itemHandlerList.end(); ++ith )
-                (*ith)->handleItemList( stanza->from(), node, items->children() );
+                (*ith)->handleItemList( iq->from(), node, items->children() );
               break;
             }
             case PublishItem:
@@ -983,22 +985,22 @@ namespace gloox
           }
         }
         break;
-        case StanzaIqError:
+        case IQ::IqTypeError:
         {
-          Tag* error = stanza->findChild( "error" );
-          //Error error( stanza->findChild( "error" ) );
+          Tag* error = iq->findChild( "error" );
+          //Error error( iq->findChild( "error" ) );
 
           switch( context )
           {
             case Subscription:
             {
               std::cout << "SUBSCRIPTION ERROR" << std::endl;
-              Tag *ps = stanza->findChild( "pubsub", "xmlns", XMLNS_PUBSUB );
+              Tag *ps = iq->findChild( "pubsub", "xmlns", XMLNS_PUBSUB );
               if( !ps )
-                return false;
+                return;
               Tag *sub = ps->findChild( "subscribe" );
               if( !sub )
-                return false;
+                return;
 
               const std::string& node = sub->findAttribute( "node" ),
                                  jid  = sub->findAttribute( "jid" );
@@ -1046,19 +1048,19 @@ namespace gloox
                 errorType = SubscriptionErrorPayment;
               }
               else
-                return false;
+                return;
 
               //handleSubscriptionResult( service, node, jid, "", SubscriptionNone, errorType );
               break;
             }
             case Unsubscription:
             {
-              Tag *ps = stanza->findChild( "pubsub", "xmlns", XMLNS_PUBSUB );
+              Tag *ps = iq->findChild( "pubsub", "xmlns", XMLNS_PUBSUB );
               if( !ps )
-                return false;
+                return;
               Tag *subscription = ps->findChild( "subscribe" );
               if( !subscription )
-                return false;
+                return;
               const std::string& node = subscription->findAttribute( "node" ),
                                  jid  = subscription->findAttribute( "jid" );
               UnsubscriptionError errorType;
@@ -1086,7 +1088,7 @@ namespace gloox
                 errorType = UnsubscriptionErrorInvalidSID;
               }
               else
-                return false;
+                return;
               //handleUnsubscriptionResult( service, node, errorType );
               break;
             }
@@ -1099,7 +1101,7 @@ namespace gloox
                 //handleSubscriptionListError( service );
               }
               else
-                return false;
+                return;
               break;
             }
             case RequestAffiliationList:
@@ -1111,17 +1113,17 @@ namespace gloox
                 //handleAffiliationListError( service );
               }
               else
-                return false;
+                return;
               break;
             }
             case RequestSubscriptionOptions:
             {
-              Tag * pubsub = stanza->findChild( "pubsub" );
+              Tag * pubsub = iq->findChild( "pubsub" );
               if( !pubsub )
-                return false;
-              Tag * items = stanza->findChild( "items" );
+                return;
+              Tag * items = iq->findChild( "items" );
               if( !items )
-                return false;
+                return;
 
               const std::string& node = items->findAttribute( "node" );
               OptionRequestError errorType = OptionRequestErrorNone;
@@ -1160,7 +1162,7 @@ namespace gloox
                 errorType = OptionRequestItemNotFound;
               }
               else
-                return false;
+                return;
               // handleOptionListError( "" );
               break;
             }
@@ -1170,12 +1172,12 @@ namespace gloox
             }
             case RequestItemList:
             {
-              Tag * pubsub = stanza->findChild( "pubsub" );
+              Tag * pubsub = iq->findChild( "pubsub" );
               if( !pubsub )
-                return false;
-              Tag * items = stanza->findChild( "items" );
+                return;
+              Tag * items = iq->findChild( "items" );
               if( !items )
-                return false;
+                return;
               const std::string& node = items->findAttribute( "node" );
               ItemRetrivalError errorType = ItemRequestErrorNone;
               if( error->hasChild( "bad-request", "xmlns", XMLNS_XMPP_STANZAS ) &&
@@ -1197,19 +1199,19 @@ namespace gloox
                 else if( error->hasChild( "not-in-roster-group", "xmlns", XMLNS_PUBSUB_ERRORS ) )
                   errorType = ItemRequestAccessRoster;
                 else
-                  return false;
+                  return;
               }
               else if( error->hasChild( "feature-not-implemented", "xmlns", XMLNS_XMPP_STANZAS ) )
               {
                 Tag * unsup = error->findChild( "unsupported", "xmlns", XMLNS_PUBSUB_ERRORS );
                 if( !unsup )
-                  return false;
+                  return;
                 if( unsup->hasAttribute( "feature", "persistent-items" ) )
                   errorType = ItemRequestNoPersistent;
                 else if( unsup->hasAttribute( "feature", "retrieve-items" ) )
                   errorType = ItemRequestUnsupported;
                 else
-                  return false;
+                  return;
               }
               else if( error->hasChild( "not-allowed", "xmlns", XMLNS_XMPP_STANZAS ) &&
                        error->hasChild( "closed-node", "xmlns", XMLNS_PUBSUB_ERRORS ) )
@@ -1229,7 +1231,7 @@ namespace gloox
                 errorType = ItemRetrievalItemNotFound;
               }
               else
-                return false;
+                return;
               //handleRequestItemListError( service, node, errorType );
               break;
             }
@@ -1267,10 +1269,10 @@ namespace gloox
                 else if( error->hasChild( "item-forbidden", "xmlns", XMLNS_PUBSUB_ERRORS) )
                   errorType = ItemPublicationConfiguration;
                 else
-                  return false;
+                  return;
               }
               else
-                return false;
+                return;
               //handle
               break;
             }
@@ -1299,16 +1301,16 @@ namespace gloox
               {
                 Tag * unsup = error->findChild( "unsupported", "xmlns", XMLNS_PUBSUB_ERRORS );
                 if( !unsup )
-                  return false;
+                  return;
                 if( unsup->hasAttribute( "feature", "persistent-items" ) )
                   errorType = ItemDeletationNoPersistent;
                 else if( unsup->hasAttribute( "feature", "delete-nodes" ) )
                   errorType = ItemDeletationUnsupported;
                 else
-                  return false;
+                  return;
               }
               else
-                return false;
+                return;
               //handle
               break;
             }
@@ -1317,14 +1319,13 @@ namespace gloox
               break;
             }
             default:
-              return false;
+              return;
           }
           break;
         }
         default:
-          return false;
+          break;
       }
-      return true;
     }
   }
 }

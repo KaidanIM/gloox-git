@@ -6,6 +6,8 @@
 #include "../loghandler.h"
 #include "../logsink.h"
 #include "../messagehandler.h"
+#include "../message.h"
+#include "../presence.h"
 using namespace gloox;
 
 #include <stdio.h>
@@ -105,19 +107,19 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler, Messag
       }
     }
 
-    virtual void handleRosterError( Stanza * /*stanza*/ )
+    virtual void handleRosterError( IQ* /*iq*/ )
     {
-      printf( "an roster-related error occured\n" );
+      printf( "a roster-related error occured\n" );
     }
 
     virtual void handleRosterPresence( const RosterItem& item, const std::string& resource,
-                                       Presence presence, const std::string& /*msg*/ )
+                                       Presence::PresenceType presence, const std::string& /*msg*/ )
     {
       printf( "presence received: %s/%s -- %d\n", item.jid().c_str(), resource.c_str(), presence );
     }
 
     virtual void handleSelfPresence( const RosterItem& item, const std::string& resource,
-                                       Presence presence, const std::string& /*msg*/ )
+                                       Presence::PresenceType presence, const std::string& /*msg*/ )
     {
       printf( "self presence received: %s/%s -- %d\n", item.jid().c_str(), resource.c_str(), presence );
     }
@@ -137,9 +139,9 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler, Messag
       return true;
     }
 
-    virtual void handleNonrosterPresence( Stanza* stanza )
+    virtual void handleNonrosterPresence( Presence* presence )
     {
-      printf( "received presence from entity not in the roster: %s\n", stanza->from().full().c_str() );
+      printf( "received presence from entity not in the roster: %s\n", presence->from().full().c_str() );
     }
 
     virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
@@ -147,20 +149,20 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler, Messag
       printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
     }
 
-    virtual void handleMessage( Stanza *stanza, MessageSession * /*session*/ )
+    virtual void handleMessage( Message* msg, MessageSession * /*session*/ )
     {
-      if( stanza->body() == "quit" )
+      if( msg->body() == "quit" )
         j->disconnect();
-      else if( stanza->body() == "subscribe" )
-        j->rosterManager()->subscribe( stanza->from() );
-      else if( stanza->body() == "unsubscribe" )
-        j->rosterManager()->unsubscribe( stanza->from() );
-      else if( stanza->body() == "cancel" )
-        j->rosterManager()->cancel( stanza->from() );
-      else if( stanza->body() == "remove" )
-        j->rosterManager()->remove( stanza->from() );
+      else if( msg->body() == "subscribe" )
+        j->rosterManager()->subscribe( msg->from() );
+      else if( msg->body() == "unsubscribe" )
+        j->rosterManager()->unsubscribe( msg->from() );
+      else if( msg->body() == "cancel" )
+        j->rosterManager()->cancel( msg->from() );
+      else if( msg->body() == "remove" )
+        j->rosterManager()->remove( msg->from() );
       else
-        printf( "msg: %s\n", stanza->body().c_str() );
+        printf( "msg: %s\n", msg->body().c_str() );
     }
 
   private:

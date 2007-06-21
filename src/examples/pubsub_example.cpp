@@ -6,7 +6,7 @@
 #include "../chatstatefilter.h"
 #include "../connectionlistener.h"
 #include "../disco.h"
-#include "../stanza.h"
+#include "../message.h"
 #include "../gloox.h"
 #include "../lastactivity.h"
 #include "../loghandler.h"
@@ -101,11 +101,11 @@ class PubsubExample : public MessageSessionHandler, ConnectionListener, LogHandl
       return true;
     }
 
-    virtual void handleMessage( Stanza *stanza, MessageSession * /*session*/ )
+    virtual void handleMessage( Message* msg, MessageSession * /*session*/ )
     {
-      if( stanza->body() == "quit" )
+      if( msg->body() == "quit" )
         j->disconnect();
-      else if( stanza->body() == "create" )
+      else if( msg->body() == "create" )
         pubsub->createCollectionNode( JID( "pubsub.jabber.ru" ), "blah", "blubb", "pubsub/nodes" );
     }
 

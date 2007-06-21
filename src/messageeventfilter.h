@@ -21,7 +21,7 @@ namespace gloox
 {
 
   class Tag;
-  class Stanza;
+  class Message;
   class MessageEventHandler;
   class MessageSession;
 
@@ -83,7 +83,7 @@ namespace gloox
       virtual void decorate( Tag *tag );
 
       // reimplemented from MessageFilter
-      virtual void filter( Stanza *stanza );
+      virtual void filter( Message* msg );
 
     private:
       MessageEventHandler *m_messageEventHandler;

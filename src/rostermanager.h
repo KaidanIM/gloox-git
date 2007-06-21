@@ -170,16 +170,16 @@ namespace gloox
       void removeRosterListener();
 
       // reimplemented from IqHandler.
-      virtual bool handleIq( Stanza *stanza );
+      virtual bool handleIq( IQ* iq );
 
       // reimplemented from IqHandler.
-      virtual bool handleIqID( Stanza *stanza, int context );
+      virtual void handleIqID( IQ* iq, int context );
 
       // reimplemented from PresenceHandler.
-      virtual void handlePresence( Stanza *stanza );
+      virtual void handlePresence( Presence* presence );
 
       // reimplemented from SubscriptionHandler.
-      virtual void handleSubscription( Stanza *stanza );
+      virtual void handleSubscription( Subscription* subscription );
 
       // reimplemented from PrivateXMLHandler
       virtual void handlePrivateXML( const std::string& tag, Tag *xml );

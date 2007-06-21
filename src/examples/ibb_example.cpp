@@ -6,7 +6,7 @@
 #include "../chatstatefilter.h"
 #include "../connectionlistener.h"
 #include "../disco.h"
-#include "../stanza.h"
+#include "../message.h"
 #include "../gloox.h"
 #include "../lastactivity.h"
 #include "../loghandler.h"
@@ -100,15 +100,15 @@ class IBBTest : public MessageSessionHandler, ConnectionListener, LogHandler,
       return true;
     }
 
-    virtual void handleMessage( Stanza *stanza, MessageSession * /*session*/ )
+    virtual void handleMessage( Message* msg, MessageSession * /*session*/ )
     {
-      printf( "type: %d, subject: %s, message: %s, thread id: %s\n", stanza->subtype(),
-              stanza->subject().c_str(), stanza->body().c_str(), stanza->thread().c_str() );
+      printf( "type: %d, subject: %s, message: %s, thread id: %s\n", msg->subtype(),
+              msg->subject().c_str(), msg->body().c_str(), msg->thread().c_str() );
 
-      std::string msg = "You said:\n> " + stanza->body() + "\nI like that statement.";
+      std::string re = "You said:\n> " + msg->body() + "\nI like that statement.";
       std::string sub;
-      if( !stanza->subject().empty() )
-        sub = "Re: " +  stanza->subject();
+      if( !msg->subject().empty() )
+        sub = "Re: " +  msg->subject();
 
       m_messageEventFilter->raiseMessageEvent( MessageEventDisplayed );
 #if defined( WIN32 ) || defined( _WIN32 )
@@ -123,9 +123,9 @@ class IBBTest : public MessageSessionHandler, ConnectionListener, LogHandler,
 #else
       sleep( 2 );
 #endif
-      m_session->send( msg, sub );
+      m_session->send( re, sub );
 
-      if( stanza->body() == "quit" )
+      if( msg->body() == "quit" )
         j->disconnect();
     }
 

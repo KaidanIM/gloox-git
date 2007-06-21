@@ -22,26 +22,38 @@ namespace gloox
 {
 
   Stanza::Stanza( const std::string& name, const std::string& cdata, const std::string& xmllang )
-    : Tag( name, cdata ), m_subtype( StanzaSubUndefined ), m_presence( PresenceUnknown ),
+    : Tag( name, cdata )/*, m_subtype( StanzaSubUndefined ), m_presence( PresenceUnknown )*/,
       m_stanzaError( StanzaErrorUndefined ), m_stanzaErrorType( StanzaErrorTypeUndefined ),
-      m_stanzaErrorAppCondition( 0 ), m_xmllang( xmllang ), m_priority( -300 )
+      m_stanzaErrorAppCondition( 0 ), m_xmllang( xmllang )/*, m_priority( -300 )*/
   {
   }
 
-  Stanza::Stanza( const Tag *tag )
-    : Tag( tag->name(), tag->cdata() ), m_presence( PresenceUnknown ),
+  Stanza::Stanza( Tag *tag, bool rip )
+    : Tag( tag->name(), tag->cdata() )/*, m_presence( PresenceUnknown )*/,
       m_stanzaError( StanzaErrorUndefined ), m_stanzaErrorType( StanzaErrorTypeUndefined ),
       m_stanzaErrorAppCondition( 0 ), m_xmllang( "default" )
   {
     m_attribs = tag->attributes();
-    const Tag::TagList& l = tag->children();
-    Tag::TagList::const_iterator it = l.begin();
-    for( ; it != l.end(); ++it )
+
+    if( rip )
     {
-      addChild( (*it)->clone() );
+      ripoff( tag );
+    }
+    else
+    {
+      const Tag::TagList& l = tag->children();
+      Tag::TagList::const_iterator it = l.begin();
+      for( ; it != l.end(); ++it )
+      {
+        addChild( (*it)->clone() );
+      }
     }
 
-    init();
+    m_from.setJID( findAttribute( "from" ) );
+    m_to.setJID( findAttribute( "to" ) );
+    m_id = findAttribute( "id" );
+
+//     init();
   }
 
   Stanza::~Stanza()
@@ -55,21 +67,17 @@ namespace gloox
 
   void Stanza::init()
   {
-    m_from.setJID( findAttribute( "from" ) );
-    m_to.setJID( findAttribute( "to" ) );
-    m_id = findAttribute( "id" );
-
-    if( m_name == "iq" )
+/*    if( m_name == "iq" )
     {
       m_type = StanzaIq;
       if( hasAttribute( "type", "get" ) )
-        m_subtype = StanzaIqGet;
+        m_subtype = IQ::IqTypeGet;
       else if( hasAttribute( "type", "set" ) )
-        m_subtype = StanzaIqSet;
+        m_subtype = IQ::IqTypeSet;
       else if( hasAttribute( "type", "result" ) )
-        m_subtype = StanzaIqResult;
+        m_subtype = IQ::IqTypeResult;
       else if( hasAttribute( "type", "error" ) )
-        m_subtype = StanzaIqError;
+        m_subtype = IQ::IqTypeError;
       else
         m_subtype = StanzaSubUndefined;
 
@@ -90,15 +98,15 @@ namespace gloox
     {
       m_type = StanzaMessage;
       if( hasAttribute( "type", "chat" ) )
-        m_subtype = StanzaMessageChat;
+        m_subtype = Message::MessageChat;
       else if( hasAttribute( "type", "error" ) )
-        m_subtype = StanzaMessageError;
+        m_subtype = Message::MessageError;
       else if( hasAttribute( "type", "headline" ) )
-        m_subtype = StanzaMessageHeadline;
+        m_subtype = Message::MessageHeadline;
       else if( hasAttribute( "type", "groupchat" ) )
-        m_subtype = StanzaMessageGroupchat;
+        m_subtype = Message::MessageGroupchat;
       else
-        m_subtype = StanzaMessageNormal;
+        m_subtype = Message::MessageNormal;
 
       const TagList& c = children();
       TagList::const_iterator it = c.begin();
@@ -129,53 +137,53 @@ namespace gloox
       if( hasAttribute( "type", "subscribe" ) )
       {
         m_type = StanzaS10n;
-        m_subtype = StanzaS10nSubscribe;
+//         m_subtype = StanzaS10nSubscribe;
       }
       else if( hasAttribute( "type", "subscribed" ) )
       {
         m_type = StanzaS10n;
-        m_subtype = StanzaS10nSubscribed;
+//         m_subtype = StanzaS10nSubscribed;
       }
       else if( hasAttribute( "type", "unsubscribe" ) )
       {
         m_type = StanzaS10n;
-        m_subtype = StanzaS10nUnsubscribe;
+//         m_subtype = StanzaS10nUnsubscribe;
       }
       else if( hasAttribute( "type", "unsubscribed" ) )
       {
         m_type = StanzaS10n;
-        m_subtype = StanzaS10nUnsubscribed;
+//         m_subtype = StanzaS10nUnsubscribed;
       }
       else if( hasAttribute( "type", "unavailable" ) )
       {
         m_type = StanzaPresence;
-        m_subtype = StanzaPresenceUnavailable;
+//         m_subtype = Presence::PresenceUnavailable;
       }
       else if( hasAttribute( "type", "probe" ) )
       {
         m_type = StanzaPresence;
-        m_subtype = StanzaPresenceProbe;
+//         m_subtype = StanzaPresenceProbe;
       }
       else if( hasAttribute( "type", "error" ) )
       {
         m_type = StanzaPresence;
-        m_subtype = StanzaPresenceError;
+//         m_subtype = Presence::PresenceError;
       }
       else if( !hasAttribute( "type" ) )
       {
         m_type = StanzaPresence;
-        m_subtype = StanzaPresenceAvailable;
+//         m_subtype = Presence::PresenceAvailable;
       }
       else
       {
         m_type = StanzaPresence;
-        m_subtype = StanzaSubUndefined;
+//         m_subtype = StanzaSubUndefined;
       }
     }
     else
     {
       m_type = StanzaUndefined;
-      m_subtype = StanzaSubUndefined;
+//       m_subtype = StanzaSubUndefined;
     }
 
     if( m_type == StanzaPresence )
@@ -208,7 +216,7 @@ namespace gloox
         {
           setLang( m_status, (*it) );
         }
-        else
+//         else
         {
           StanzaExtension *se = StanzaExtensionFactory::create( (*it) );
           if( se )
@@ -216,7 +224,7 @@ namespace gloox
         }
       }
     }
-
+*/
     m_xmllang = findAttribute( "xml:lang" );
 
     if( hasAttribute( "type", "error" ) && hasChild( "error" ) )
@@ -303,158 +311,158 @@ namespace gloox
     addChild( se->tag() );
   }
 
-  Stanza* Stanza::createIqStanza( const JID& to, const std::string& id,
-                                  StanzaSubType subtype, const std::string& xmlns, Tag* tag )
-  {
-    Stanza *s = new Stanza( "iq" );
-    switch( subtype )
-    {
-      case StanzaIqError:
-        s->addAttribute( "type", "error" );
-        break;
-      case StanzaIqSet:
-        s->addAttribute( "type", "set" );
-        break;
-      case StanzaIqResult:
-        s->addAttribute( "type", "result" );
-        break;
-      case StanzaIqGet:
-      default:
-        s->addAttribute( "type", "get" );
-        break;
-    }
+//   Stanza* Stanza::createIqStanza( const JID& to, const std::string& id,
+//                                   StanzaSubType subtype, const std::string& xmlns, Tag* tag )
+//   {
+//     Stanza *s = new Stanza( "iq" );
+//     switch( subtype )
+//     {
+//       case IQ::IqTypeError:
+//         s->addAttribute( "type", "error" );
+//         break;
+//       case IQ::IqTypeSet:
+//         s->addAttribute( "type", "set" );
+//         break;
+//       case IQ::IqTypeResult:
+//         s->addAttribute( "type", "result" );
+//         break;
+//       case IQ::IqTypeGet:
+//       default:
+//         s->addAttribute( "type", "get" );
+//         break;
+//     }
+//
+//     if( !xmlns.empty() )
+//     {
+//       Tag *q = new Tag( s, "query" );
+//       q->addAttribute( "xmlns", xmlns );
+//       if( tag )
+//         q->addChild( tag );
+//     }
+//     s->addAttribute( "to", to.full() );
+//     s->addAttribute( "id", id );
+//
+//     s->finalize();
+//
+//     return s;
+//   }
 
-    if( !xmlns.empty() )
-    {
-      Tag *q = new Tag( s, "query" );
-      q->addAttribute( "xmlns", xmlns );
-      if( tag )
-        q->addChild( tag );
-    }
-    s->addAttribute( "to", to.full() );
-    s->addAttribute( "id", id );
+//   Stanza* Stanza::createPresenceStanza( const JID& to, const std::string& msg,
+//                                         Presence status, const std::string& xmllang )
+//   {
+//     Stanza *s = new Stanza( "presence" );
+//     switch( status )
+//     {
+//       case PresenceUnavailable:
+//         s->addAttribute( "type", "unavailable" );
+//         break;
+//       case PresenceChat:
+//         new Tag( s, "show", "chat" );
+//         break;
+//       case PresenceAway:
+//         new Tag( s, "show", "away" );
+//         break;
+//       case PresenceDnd:
+//         new Tag( s, "show", "dnd" );
+//         break;
+//       case PresenceXa:
+//         new Tag( s, "show", "xa" );
+//         break;
+//       default:
+//         break;
+//     }
+//
+//     if( !to.empty() )
+//       s->addAttribute( "to", to.full() );
+//
+//     if( !msg.empty() )
+//     {
+//       Tag *t = new Tag( s, "status", msg );
+//       t->addAttribute( "xml:lang", xmllang );
+//     }
+//
+// //     s->finalize();
+//
+//     return s;
+//   }
 
-    s->finalize();
+//   Stanza* Stanza::createMessageStanza( const JID& to, const std::string& body,
+//                                        StanzaSubType subtype, const std::string& subject,
+//                                        const std::string& thread, const std::string& xmllang )
+//   {
+//     Stanza *s = new Stanza( "message" );
+//     switch( subtype )
+//     {
+//       case Message::MessageError:
+//         s->addAttribute( "type", "error" );
+//         break;
+//       case Message::MessageNormal:
+//         s->addAttribute( "type", "normal" );
+//         break;
+//       case Message::MessageHeadline:
+//         s->addAttribute( "type", "headline" );
+//         break;
+//       case Message::MessageGroupchat:
+//         s->addAttribute( "type", "groupchat" );
+//         break;
+//       case Message::MessageChat:
+//       default:
+//         s->addAttribute( "type", "chat" );
+//         break;
+//     }
+//
+//     s->addAttribute( "to", to.full() );
+//
+//     if( !body.empty() )
+//     {
+//       Tag *b = new Tag( s, "body", body );
+//       b->addAttribute( "xml:lang", xmllang );
+//     }
+//     if( !subject.empty() )
+//     {
+//       Tag *su = new Tag( s, "subject", subject );
+//       su->addAttribute( "xml:lang", xmllang );
+//     }
+//     if( !thread.empty() )
+//       new Tag( s, "thread", thread );
+//
+// //     s->finalize();
+//
+//     return s;
+//   }
 
-    return s;
-  }
-
-  Stanza* Stanza::createPresenceStanza( const JID& to, const std::string& msg,
-                                        Presence status, const std::string& xmllang )
-  {
-    Stanza *s = new Stanza( "presence" );
-    switch( status )
-    {
-      case PresenceUnavailable:
-        s->addAttribute( "type", "unavailable" );
-        break;
-      case PresenceChat:
-        new Tag( s, "show", "chat" );
-        break;
-      case PresenceAway:
-        new Tag( s, "show", "away" );
-        break;
-      case PresenceDnd:
-        new Tag( s, "show", "dnd" );
-        break;
-      case PresenceXa:
-        new Tag( s, "show", "xa" );
-        break;
-      default:
-        break;
-    }
-
-    if( !to.empty() )
-      s->addAttribute( "to", to.full() );
-
-    if( !msg.empty() )
-    {
-      Tag *t = new Tag( s, "status", msg );
-      t->addAttribute( "xml:lang", xmllang );
-    }
-
-    s->finalize();
-
-    return s;
-  }
-
-  Stanza* Stanza::createMessageStanza( const JID& to, const std::string& body,
-                                       StanzaSubType subtype, const std::string& subject,
-                                       const std::string& thread, const std::string& xmllang )
-  {
-    Stanza *s = new Stanza( "message" );
-    switch( subtype )
-    {
-      case StanzaMessageError:
-        s->addAttribute( "type", "error" );
-        break;
-      case StanzaMessageNormal:
-        s->addAttribute( "type", "normal" );
-        break;
-      case StanzaMessageHeadline:
-        s->addAttribute( "type", "headline" );
-        break;
-      case StanzaMessageGroupchat:
-        s->addAttribute( "type", "groupchat" );
-        break;
-      case StanzaMessageChat:
-      default:
-        s->addAttribute( "type", "chat" );
-        break;
-    }
-
-    s->addAttribute( "to", to.full() );
-
-    if( !body.empty() )
-    {
-      Tag *b = new Tag( s, "body", body );
-      b->addAttribute( "xml:lang", xmllang );
-    }
-    if( !subject.empty() )
-    {
-      Tag *su = new Tag( s, "subject", subject );
-      su->addAttribute( "xml:lang", xmllang );
-    }
-    if( !thread.empty() )
-      new Tag( s, "thread", thread );
-
-    s->finalize();
-
-    return s;
-  }
-
-  Stanza* Stanza::createSubscriptionStanza( const JID& to, const std::string& msg,
-                                            StanzaSubType subtype, const std::string& xmllang )
-  {
-    Stanza *s = new Stanza( "presence" );
-    switch( subtype )
-    {
-      case StanzaS10nSubscribed:
-        s->addAttribute( "type", "subscribed" );
-        break;
-      case StanzaS10nUnsubscribe:
-        s->addAttribute( "type", "unsubscribe" );
-        break;
-      case StanzaS10nUnsubscribed:
-        s->addAttribute( "type", "unsubscribed" );
-        break;
-      case StanzaS10nSubscribe:
-      default:
-        s->addAttribute( "type", "subscribe" );
-        break;
-    }
-
-    s->addAttribute( "to", to.full() );
-    if( !msg.empty() )
-    {
-      Tag *t = new Tag( s, "status", msg );
-      t->addAttribute( "xml:lang", xmllang );
-    }
-
-    s->finalize();
-
-    return s;
-  }
+//   Stanza* Stanza::createSubscriptionStanza( const JID& to, const std::string& msg,
+//                                             StanzaSubType subtype, const std::string& xmllang )
+//   {
+//     Stanza *s = new Stanza( "presence" );
+//     switch( subtype )
+//     {
+//       case StanzaS10nSubscribed:
+//         s->addAttribute( "type", "subscribed" );
+//         break;
+//       case StanzaS10nUnsubscribe:
+//         s->addAttribute( "type", "unsubscribe" );
+//         break;
+//       case StanzaS10nUnsubscribed:
+//         s->addAttribute( "type", "unsubscribed" );
+//         break;
+//       case StanzaS10nSubscribe:
+//       default:
+//         s->addAttribute( "type", "subscribe" );
+//         break;
+//     }
+//
+//     s->addAttribute( "to", to.full() );
+//     if( !msg.empty() )
+//     {
+//       Tag *t = new Tag( s, "status", msg );
+//       t->addAttribute( "xml:lang", xmllang );
+//     }
+//
+// //     s->finalize();
+//
+//     return s;
+//   }
 
   void Stanza::setLang( StringMap& map, const Tag *tag )
   {

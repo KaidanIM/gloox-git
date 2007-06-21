@@ -30,7 +30,7 @@ namespace gloox
   class ClientBase;
   class DiscoHandler;
   class DiscoItem;
-  class Stanza;
+  class IQ;
 
   /**
    * @brief This class implements XEP-0030 (Service Discovery) and XEP-0092 (Software Version).
@@ -155,10 +155,10 @@ namespace gloox
       void removeNodeHandler( DiscoNodeHandler *nh, const std::string& node );
 
       // reimplemented from IqHandler.
-      virtual bool handleIq( Stanza *stanza );
+      virtual bool handleIq( IQ* iq );
 
       // reimplemented from IqHandler.
-      virtual bool handleIqID( Stanza *stanza, int context );
+      virtual void handleIqID( IQ* iq, int context );
 
     private:
       Disco( ClientBase *parent );

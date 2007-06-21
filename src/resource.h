@@ -14,10 +14,14 @@
 #ifndef RESOURCE_H__
 #define RESOURCE_H__
 
+#include "presence.h"
+
 #include <string>
 
 namespace gloox
 {
+
+  class Presence;
 
   /**
     * @brief Holds resource attributes.
@@ -39,7 +43,7 @@ namespace gloox
         * @param msg The resource's status message.
         * @param presence The resource's presence status.
         */
-      Resource( int priority, const std::string& msg, Presence presence )
+      Resource( int priority, const std::string& msg, Presence::PresenceType presence )
         : m_priority( priority ), m_message( msg ), m_presence( presence ) {}
 
       /**
@@ -60,20 +64,20 @@ namespace gloox
       const std::string& message() const { return m_message; }
 
       /**
-        * Lets you fetch the resource's presence status.
+        * Lets you fetch the resource's last presence packet.
         * @return The resource's presence status.
         */
-      Presence presence() const { return m_presence; }
+      const Presence::PresenceType presence() const { return m_presence; }
 
     private:
       void setPriority( int priority ) { m_priority = priority; }
       void setMessage( std::string message ) { m_message = message; }
-      void setStatus( Presence presence ) { m_presence = presence; }
+      void setStatus( Presence::PresenceType presence ) { m_presence = presence; }
 
       int m_priority;
       std::string m_message;
       std::string m_name;
-      Presence m_presence;
+      Presence::PresenceType m_presence;
 
   };
 

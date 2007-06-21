@@ -26,7 +26,7 @@ namespace gloox
   class Tag;
   class MessageFilter;
   class MessageHandler;
-  class Stanza;
+  class Message;
 
   /**
    * @brief An abstraction of a message session between any two entities.
@@ -247,7 +247,7 @@ namespace gloox
        * Receives messages from ClientBase.
        * @param stanza The message Stanza.
        */
-      virtual void handleMessage( Stanza *stanza );
+      virtual void handleMessage( Message* msg );
 
     protected:
       /**

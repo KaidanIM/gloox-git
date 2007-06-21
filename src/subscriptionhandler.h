@@ -14,7 +14,7 @@
 #ifndef SUBSCRIPTIONHANDLER_H__
 #define SUBSCRIPTIONHANDLER_H__
 
-#include "stanza.h"
+#include "subscription.h"
 
 namespace gloox
 {
@@ -39,7 +39,7 @@ namespace gloox
        * subscriptions/subscription requests.
        * @param stanza The complete Stanza.
        */
-      virtual void handleSubscription( Stanza *stanza ) = 0;
+      virtual void handleSubscription( Subscription* subscription ) = 0;
   };
 
 }

@@ -17,6 +17,7 @@
 #include "disco.h"
 #include "clientbase.h"
 #include "base64.h"
+#include "message.h"
 
 #include <sstream>
 
@@ -43,19 +44,19 @@ namespace gloox
   {
   }
 
-  void InBandBytestream::filter( Stanza *stanza )
+  void InBandBytestream::filter( Message *msg )
   {
     if( !m_inbandBytestreamDataHandler || !m_open )
       return;
 
-    if( stanza->subtype() == StanzaMessageError )
+    if( msg->subtype() == Message::MessageError )
     {
-      m_inbandBytestreamDataHandler->handleInBandError( m_sid, stanza->from(), stanza->error() );
+      m_inbandBytestreamDataHandler->handleInBandError( m_sid, msg->from(), msg->error() );
       m_open = false;
     }
 
     Tag *data = 0;
-    if( ( data = stanza->findChild( "data", "xmlns", XMLNS_IBB ) ) == 0 )
+    if( ( data = msg->findChild( "data", "xmlns", XMLNS_IBB ) ) == 0 )
       return;
 
     const std::string& sid = data->findAttribute( "sid" );

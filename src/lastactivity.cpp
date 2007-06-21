@@ -52,18 +52,18 @@ namespace gloox
     m_parent->send( t );
   }
 
-  bool LastActivity::handleIq( Stanza *stanza )
+  bool LastActivity::handleIq( IQ* iq )
   {
-    switch( stanza->subtype() )
+    switch( iq->subtype() )
     {
-      case StanzaIqGet:
+      case IQ::IqTypeGet:
       {
         time_t now = time( 0 );
 
         Tag *t = new Tag( "iq" );
         t->addAttribute( "type", "result" );
-        t->addAttribute( "id", stanza->id() );
-        t->addAttribute( "to", stanza->from().full() );
+        t->addAttribute( "id", iq->id() );
+        t->addAttribute( "to", iq->from().full() );
         Tag *q = new Tag( t, "query" );
         q->addAttribute( "seconds", (long)( now - m_active ) );
         q->addAttribute( "xmlns", XMLNS_LAST );
@@ -72,11 +72,11 @@ namespace gloox
         break;
       }
 
-      case StanzaIqSet:
+      case IQ::IqTypeSet:
       {
         Tag *t = new Tag( "iq" );
-        t->addAttribute( "id", stanza->id() );
-        t->addAttribute( "to", stanza->from().full() );
+        t->addAttribute( "id", iq->id() );
+        t->addAttribute( "to", iq->from().full() );
         t->addAttribute( "type", "error" );
         Tag *e = new Tag( t, "error" );
         e->addAttribute( "type", "cancel" );
@@ -94,35 +94,33 @@ namespace gloox
     return true;
   }
 
-  bool LastActivity::handleIqID( Stanza *stanza, int /*context*/ )
+  void LastActivity::handleIqID( IQ* iq, int /*context*/ )
   {
     if( !m_lastActivityHandler )
-      return false;
+      return;
 
-    switch( stanza->subtype() )
+    switch( iq->subtype() )
     {
-      case StanzaIqResult:
+      case IQ::IqTypeResult:
       {
-        Tag *q = stanza->findChild( "query" );
+        Tag *q = iq->query();
         if( q )
         {
           const std::string& seconds = q->findAttribute( "seconds" );
           if( !seconds.empty() )
           {
             int secs = atoi( seconds.c_str() );
-            m_lastActivityHandler->handleLastActivityResult( stanza->from(), secs );
+            m_lastActivityHandler->handleLastActivityResult( iq->from(), secs );
           }
         }
         break;
       }
-      case StanzaIqError:
-        m_lastActivityHandler->handleLastActivityError( stanza->from(), stanza->error() );
+      case IQ::IqTypeError:
+        m_lastActivityHandler->handleLastActivityError( iq->from(), iq->error() );
         break;
       default:
         break;
     }
-
-    return false;
   }
 
   void LastActivity::resetIdleTimer()

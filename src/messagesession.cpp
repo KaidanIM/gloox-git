@@ -17,8 +17,7 @@
 #include "messagehandler.h"
 #include "clientbase.h"
 #include "disco.h"
-#include "stanza.h"
-#include "tag.h"
+#include "message.h"
 
 namespace gloox
 {
@@ -38,31 +37,31 @@ namespace gloox
       delete (*it);
   }
 
-  void MessageSession::handleMessage( Stanza *stanza )
+  void MessageSession::handleMessage( Message* msg )
   {
-    if( m_wantUpgrade && stanza->from().bare() == m_target.full() )
-      setResource( stanza->from().resource() );
+    if( m_wantUpgrade && msg->from().bare() == m_target.full() )
+      setResource( msg->from().resource() );
 
     if( !m_hadMessages )
     {
       m_hadMessages = true;
-      if( stanza->thread().empty() )
+      if( msg->thread().empty() )
       {
         m_thread = "gloox" + m_parent->getID();
-        stanza->setThread( m_thread );
+        msg->setThread( m_thread );
       }
       else
-        m_thread = stanza->thread();
+        m_thread = msg->thread();
     }
 
     MessageFilterList::const_iterator it = m_messageFilterList.begin();
     for( ; it != m_messageFilterList.end(); ++it )
     {
-      (*it)->filter( stanza );
+      (*it)->filter( msg );
     }
 
-    if( m_messageHandler && !stanza->body().empty() )
-      m_messageHandler->handleMessage( stanza, this );
+    if( m_messageHandler && !msg->body().empty() )
+      m_messageHandler->handleMessage( msg, this );
   }
 
   void MessageSession::send( const std::string& message, const std::string& subject )

@@ -25,8 +25,8 @@ namespace gloox
   static inline const std::string& typeString( Message::MessageType type )
     { return msgTypeStringValues[type-1]; }
 
-  Message::Message( Tag *tag )
-    : Stanza( tag ), m_subtype( MessageInvalid )
+  Message::Message( Tag *tag, bool rip )
+    : Stanza( tag, rip ), m_subtype( MessageInvalid )
   {
     if( !tag || tag->name() != "message" )
     {
@@ -72,14 +72,12 @@ namespace gloox
     }
   }
 
-  Message::Message( MessageType type, const std::string& id, const std::string& to,
+  Message::Message( MessageType type, const std::string& to,
                     const std::string& body, const std::string& thread,
                     const std::string& xmllang, const std::string& subject, const std::string& from )
     : Stanza( "message" ), m_subtype( MessageInvalid )
   {
     addAttribute( "type", typeString( type ) );
-    addAttribute( "id", id );
-    m_id = id;
     addAttribute( "to", to );
     m_to.setJID( to );
     if( !from.empty() )

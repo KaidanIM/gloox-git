@@ -16,7 +16,7 @@
 
 #include "clientbase.h"
 #include "iqhandler.h"
-#include "stanza.h"
+#include "presence.h"
 
 #include <string>
 
@@ -25,6 +25,7 @@ namespace gloox
 
   class RosterManager;
   class NonSaslAuth;
+  class IQ;
 
   /**
    * @brief This class implements a basic Jabber Client.
@@ -54,7 +55,7 @@ namespace gloox
    *   j->connect();
    * }
    *
-   * virtual void TestProg::presenceHandler( Stanza *stanza )
+   * virtual void TestProg::presenceHandler( Presence* presence )
    * {
    *   // handle incoming presence packets here
    * }
@@ -94,7 +95,7 @@ namespace gloox
    *
    * @author Jakob Schroeter <js@camaya.net>
    */
-  class GLOOX_API Client : public ClientBase
+  class GLOOX_API Client : public ClientBase, public IqHandler
   {
     public:
 
@@ -183,13 +184,13 @@ namespace gloox
        * @param msg An optional message describing the presence state.
        * @since 0.9
        */
-      void setPresence( Presence presence, int priority = 0, const std::string& msg = "" );
+      void setPresence( Presence::PresenceType presence, int priority = 0, const std::string& msg = "" );
 
       /**
        * Returns the current presence.
        * @return The current presence.
        */
-      Presence presence() const { return m_presence; }
+      Presence::PresenceType presence() const { return m_presence; }
 
       /**
        * Returns the current status message.
@@ -240,6 +241,12 @@ namespace gloox
        */
       void disconnect();
 
+      // re-implemented from IaHandler
+      virtual bool handleIq( IQ *iq ) { (void)iq; return false; }
+
+      // re-implemented from IaHandler
+      virtual void handleIqID( IQ *iq, int context );
+
     protected:
       /**
        * Initiates non-SASL login.
@@ -248,13 +255,13 @@ namespace gloox
 
     private:
       virtual void handleStartNode() {}
-      virtual bool handleNormalNode( Stanza *stanza );
+      virtual bool handleNormalNode( Tag *tag );
       virtual void disconnect( ConnectionError reason );
-      int getStreamFeatures( Stanza *stanza );
-      int getSaslMechs( Tag *tag );
-      int getCompressionMethods( Tag *tag );
-      void processResourceBind( Stanza *stanza );
-      void processCreateSession( Stanza *stanza );
+      int getStreamFeatures( Tag* tag );
+      int getSaslMechs( Tag* tag );
+      int getCompressionMethods( Tag* tag );
+      void processResourceBind( IQ* iq );
+      void processCreateSession( IQ* iq );
       void sendPresence();
       void createSession();
       void negotiateCompression( StreamFeature method );
@@ -264,12 +271,18 @@ namespace gloox
 
       void init();
 
+      enum TrackContext
+      {
+        ResourceBind,
+        SessionEstablishment
+      };
+
       RosterManager *m_rosterManager;
       NonSaslAuth *m_auth;
 
       StanzaExtensionList m_presenceExtensions;
 
-      Presence m_presence;
+      Presence::PresenceType m_presence;
       std::string m_status;
 
       bool m_resourceBound;

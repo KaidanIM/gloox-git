@@ -1,7 +1,7 @@
 #include "../client.h"
 #include "../connectionlistener.h"
 #include "../disco.h"
-#include "../stanza.h"
+#include "../message.h"
 #include "../gloox.h"
 #include "../loghandler.h"
 #include "../tlshandler.h"
@@ -127,9 +127,9 @@ class MessageTest : public ConnectionListener, LogHandler,
       }
     }
 
-    virtual void handleMessage( Stanza *stanza, MessageSession * /*session*/ )
+    virtual void handleMessage( Message* msg, MessageSession * /*session*/ )
     {
-      Tag *x = stanza->findChild( "xtls", "xmlns", "test:xtls" );
+      Tag *x = msg->findChild( "xtls", "xmlns", "test:xtls" );
       if( x )
       {
         printf( "decrypting: %d\n", x->cdata().length() );

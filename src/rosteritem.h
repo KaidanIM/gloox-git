@@ -17,6 +17,7 @@
 #include "gloox.h"
 #include "jid.h"
 #include "resource.h"
+#include "presence.h"
 
 #include <string>
 #include <list>
@@ -151,7 +152,7 @@ namespace gloox
        * @param resource The resource to set the presence for.
        * @param presence The current presence.
        */
-      virtual void setPresence( const std::string& resource, Presence presence );
+      virtual void setPresence( const std::string& resource, Presence::PresenceType presence );
 
       /**
        * Sets the current status message of the resource.

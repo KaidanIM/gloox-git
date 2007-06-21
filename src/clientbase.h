@@ -34,7 +34,10 @@ namespace gloox
 
   class Disco;
   class Tag;
-  class Stanza;
+  class IQ;
+  class Message;
+  class Presence;
+  class Subscription;
   class Parser;
   class MessageSessionHandler;
   class ConnectionListener;
@@ -627,7 +630,7 @@ namespace gloox
 
       void startSASL( SaslMechanism type );
       void processSASLChallenge( const std::string& challenge );
-      void processSASLError( Stanza *stanza );
+      void processSASLError( Tag* tag );
       void startTls();
       bool hasTls();
 
@@ -658,19 +661,19 @@ namespace gloox
 
     private:
       virtual void handleStartNode() = 0;
-      virtual bool handleNormalNode( Stanza *stanza ) = 0;
+      virtual bool handleNormalNode( Tag *tag ) = 0;
       virtual void rosterFilled() = 0;
       virtual void cleanup() {}
       void parse( const std::string& data );
       void init();
-      void handleStreamError( Stanza *stanza );
+      void handleStreamError( Tag *tag );
       TLSBase* getDefaultEncryption();
       CompressionBase* getDefaultCompression();
 
-      void notifyIqHandlers( Stanza *stanza );
-      void notifyMessageHandlers( Stanza *stanza );
-      void notifyPresenceHandlers( Stanza *stanza );
-      void notifySubscriptionHandlers( Stanza *stanza );
+      void notifyIqHandlers( IQ *iq );
+      void notifyMessageHandlers( Message *msg );
+      void notifyPresenceHandlers( Presence *presence );
+      void notifySubscriptionHandlers( Subscription *s10n );
       void notifyTagHandlers( Tag *tag );
       void notifyOnDisconnect( ConnectionError e );
       void logEvent( const char *data, size_t size, int is_incoming );

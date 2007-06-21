@@ -4,6 +4,7 @@
 #include "../../stanza.h"
 #include "../../tag.h"
 #include "../../iqhandler.h"
+#include "../../iq.h"
 
 #include <stdio.h>
 #include <locale.h>
@@ -127,7 +128,7 @@ class SearchTest : public gloox::SearchHandler, public gloox::ClientBase
     void setTest( int test ) { m_test = test; }
     void fetchSearchFields() { m_search.fetchSearchFields( g_dir, this ); }
     bool result() { bool t = m_result; m_result = false; return t; }
-    void feed( gloox::Stanza *s ) { m_search.handleIqID( s, m_context ); }
+    void feed( gloox::IQ *s ) { m_search.handleIqID( s, m_context ); }
     virtual void trackID( gloox::IqHandler* /*ih*/, const std::string& /*id*/, int context )
       { m_context = context; }
     void search( const gloox::SearchFieldStruct& fields ) { m_search.search( g_dir, 15, fields, this ); }
@@ -160,19 +161,13 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "receive fields (old-style)";
-  gloox::Stanza *iq = new gloox::Stanza( "iq" );
-  iq->addAttribute( "from", g_dir );
-  iq->addAttribute( "to", "searchtest" );
-  iq->addAttribute( "id", "id" );
-  iq->addAttribute( "type", "result" );
-  gloox::Tag *q = new gloox::Tag( iq, "query" );
-  q->addAttribute( "xmlns", gloox::XMLNS_SEARCH );
-  new gloox::Tag( q, "instructions", g_inst );
-  new gloox::Tag( q, "first" );
-  new gloox::Tag( q, "last" );
-  new gloox::Tag( q, "nick" );
-  new gloox::Tag( q, "email" );
-  iq->finalize();
+  gloox::IQ *iq = new gloox::IQ( gloox::IQ::IqTypeResult, "id", "searchtest",
+                                 gloox::XMLNS_SEARCH, "query", g_dir );
+  new gloox::Tag( iq->query(), "instructions", g_inst );
+  new gloox::Tag( iq->query(), "first" );
+  new gloox::Tag( iq->query(), "last" );
+  new gloox::Tag( iq->query(), "nick" );
+  new gloox::Tag( iq->query(), "email" );
   t.setTest( 2 );
   t.feed( iq );
   if( !t.result() )
@@ -200,24 +195,18 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "search result (old-style)";
-  iq = new gloox::Stanza( "iq" );
-  iq->addAttribute( "from", g_dir );
-  iq->addAttribute( "to", "searchtest" );
-  iq->addAttribute( "id", "id" );
-  iq->addAttribute( "type", "result" );
-  q = new gloox::Tag( iq, "query" );
-  q->addAttribute( "xmlns", gloox::XMLNS_SEARCH );
-  gloox::Tag *i = new gloox::Tag( q,"item" );
+  iq = new gloox::IQ( gloox::IQ::IqTypeResult, "id", "searchtest",
+                      gloox::XMLNS_SEARCH, "query", g_dir );
+  gloox::Tag *i = new gloox::Tag( iq->query(), "item" );
   new gloox::Tag( i, "first", "f1" );
   new gloox::Tag( i, "last", "l1" );
   new gloox::Tag( i, "nick", "n1" );
   new gloox::Tag( i, "email", "e1" );
-  i = new gloox::Tag( q, "item" );
+  i = new gloox::Tag( iq->query(), "item" );
   new gloox::Tag( i, "first", "f2" );
   new gloox::Tag( i, "last", "l2" );
   new gloox::Tag( i, "nick", "n2" );
   new gloox::Tag( i, "email", "e2" );
-  iq->finalize();
   t.setTest( 4 );
   t.feed( iq );
   if( !t.result() )
@@ -244,14 +233,8 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "search result (old-style), empty";
-  iq = new gloox::Stanza( "iq" );
-  iq->addAttribute( "from", g_dir );
-  iq->addAttribute( "to", "searchtest" );
-  iq->addAttribute( "id", "id" );
-  iq->addAttribute( "type", "result" );
-  q = new gloox::Tag( iq, "query" );
-  q->addAttribute( "xmlns", gloox::XMLNS_SEARCH );
-  iq->finalize();
+  iq = new gloox::IQ( gloox::IQ::IqTypeResult, "id", "searchtest",
+                      gloox::XMLNS_SEARCH, "query", g_dir );
   t.setTest( 5 );
   t.feed( iq );
   if( !t.result() )
@@ -274,16 +257,10 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "receive fields (dataform)";
-  iq = new gloox::Stanza( "iq" );
-  iq->addAttribute( "from", g_dir );
-  iq->addAttribute( "to", "searchtest" );
-  iq->addAttribute( "id", "id" );
-  iq->addAttribute( "type", "result" );
-  q = new gloox::Tag( iq, "query" );
-  q->addAttribute( "xmlns", gloox::XMLNS_SEARCH );
+  iq = new gloox::IQ( gloox::IQ::IqTypeResult, "id", "searchtest",
+                      gloox::XMLNS_SEARCH, "query", g_dir );
   gloox::DataForm df( gloox::DataForm::FormTypeForm );
-  q->addChild( df.tag() );
-  iq->finalize();
+  iq->query()->addChild( df.tag() );
   t.setTest( 6 );
   t.feed( iq );
   if( !t.result() )
@@ -306,16 +283,10 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "search result (dataform)";
-  iq = new gloox::Stanza( "iq" );
-  iq->addAttribute( "from", g_dir );
-  iq->addAttribute( "to", "searchtest" );
-  iq->addAttribute( "id", "id" );
-  iq->addAttribute( "type", "result" );
-  q = new gloox::Tag( iq, "query" );
-  q->addAttribute( "xmlns", gloox::XMLNS_SEARCH );
+  iq = new gloox::IQ( gloox::IQ::IqTypeResult, "id", "searchtest",
+                      gloox::XMLNS_SEARCH, "query", g_dir );
   gloox::DataForm df2( gloox::DataForm::FormTypeResult );
-  q->addChild( df2.tag() );
-  iq->finalize();
+  iq->query()->addChild( df2.tag() );
   t.setTest( 8 );
   t.feed( iq );
   if( !t.result() )

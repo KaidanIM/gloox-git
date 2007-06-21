@@ -114,10 +114,10 @@ namespace gloox
       void removeProfile( const std::string& profile );
 
       // re-implemented from IqHandler
-      virtual bool handleIq( Stanza *stanza );
+      virtual bool handleIq( IQ* iq );
 
       // re-implemented from IqHandler
-      virtual bool handleIqID( Stanza *stanza, int context );
+      virtual void handleIqID( IQ* iq, int context );
 
     private:
       enum TrackContext

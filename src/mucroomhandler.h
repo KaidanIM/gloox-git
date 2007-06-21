@@ -16,6 +16,7 @@
 #define MUCROOMHANDLER_H__
 
 #include "gloox.h"
+#include "presence.h"
 
 #include <string>
 
@@ -102,7 +103,7 @@ namespace gloox
        * @param presence The occupant's presence.
        */
       virtual void handleMUCParticipantPresence( MUCRoom *room, const MUCRoomParticipant participant,
-                                                 Presence presence ) = 0;
+                                                 Presence::PresenceType presence ) = 0;
 
       /**
        * This function is called when a message arrives through the room.

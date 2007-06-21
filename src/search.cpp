@@ -15,7 +15,7 @@
 #include "search.h"
 
 #include "clientbase.h"
-#include "stanza.h"
+#include "iq.h"
 
 namespace gloox
 {
@@ -96,26 +96,26 @@ namespace gloox
     m_parent->send( iq );
   }
 
-  bool Search::handleIqID( Stanza *stanza, int context )
+  void Search::handleIqID( IQ *iq, int context )
   {
-    TrackMap::iterator it = m_track.find( stanza->id() );
+    TrackMap::iterator it = m_track.find( iq->id() );
     if( it != m_track.end() )
     {
-      switch( stanza->subtype() )
+      switch( iq->subtype() )
       {
-        case StanzaIqResult:
+        case IQ::IqTypeResult:
           switch( context )
           {
             case FetchSearchFields:
             {
-              Tag *q = stanza->findChild( "query" );
+              Tag *q = iq->query();
               if( q && q->hasAttribute( "xmlns", XMLNS_SEARCH ) )
               {
                 Tag *x = q->findChild( "x", "xmlns", XMLNS_X_DATA );
                 if( x )
                 {
                   DataForm *df = new DataForm( x );
-                  (*it).second->handleSearchFields( stanza->from(), df );
+                  (*it).second->handleSearchFields( iq->from(), df );
                 }
                 else
                 {
@@ -133,21 +133,21 @@ namespace gloox
                   if( q->hasChild( "instructions" ) )
                     instructions = q->findChild( "instructions" )->cdata();
 
-                  (*it).second->handleSearchFields( stanza->from(), fields, instructions );
+                  (*it).second->handleSearchFields( iq->from(), fields, instructions );
                 }
               }
               break;
             }
             case DoSearch:
             {
-              Tag *q = stanza->findChild( "query" );
+              Tag *q = iq->query();
               if( q && q->hasAttribute( "xmlns", XMLNS_SEARCH ) )
               {
                 Tag *x = q->findChild( "x", "xmlns", XMLNS_X_DATA );
                 if( x )
                 {
                   DataForm *df = new DataForm( x );
-                  (*it).second->handleSearchResult( stanza->from(), df );
+                  (*it).second->handleSearchResult( iq->from(), df );
                 }
                 else
                 {
@@ -173,15 +173,15 @@ namespace gloox
                     }
                   }
 
-                  (*it).second->handleSearchResult( stanza->from(), e );
+                  (*it).second->handleSearchResult( iq->from(), e );
                 }
               }
               break;
             }
           }
           break;
-        case StanzaIqError:
-          (*it).second->handleSearchError( stanza->from(), stanza );
+        case IQ::IqTypeError:
+          (*it).second->handleSearchError( iq->from(), iq );
           break;
 
         default:
@@ -191,7 +191,7 @@ namespace gloox
       m_track.erase( it );
     }
 
-    return false;
+    return;
   }
 
 }

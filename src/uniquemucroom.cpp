@@ -46,14 +46,14 @@ namespace gloox
     m_parent->send( iq );
   }
 
-  bool UniqueMUCRoom::handleIqID( Stanza *stanza, int context )
+  void UniqueMUCRoom::handleIqID( IQ* iq, int context )
   {
-    switch( stanza->subtype() )
+    switch( iq->subtype() )
     {
-      case StanzaIqResult:
+      case IQ::IqTypeResult:
         if( context == RequestUniqueName )
         {
-          Tag *u = stanza->findChild( "unique", XMLNS_MUC_UNIQUE );
+          Tag *u = iq->findChild( "unique", XMLNS_MUC_UNIQUE );
           if( u )
           {
             const std::string& name = u->cdata();
@@ -62,7 +62,7 @@ namespace gloox
           }
         }
         break;
-      case StanzaIqError:
+      case IQ::IqTypeError:
         if( context == RequestUniqueName )
         {
           SHA s;
@@ -76,8 +76,6 @@ namespace gloox
     }
 
     MUCRoom::join();
-
-    return false;
   }
 
 }

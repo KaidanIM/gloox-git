@@ -152,21 +152,21 @@ namespace gloox
   {
   }
 
-  bool FlexibleOffline::handleIqID( Stanza *stanza, int context )
+  void FlexibleOffline::handleIqID( IQ* iq, int context )
   {
     if( !m_flexibleOfflineHandler )
-      return false;
+      return;
 
     switch( context )
     {
       case FORequestMsgs:
-        switch( stanza->subtype() )
+        switch( iq->subtype() )
         {
-          case StanzaIqResult:
+          case IQ::IqTypeResult:
             m_flexibleOfflineHandler->handleFlexibleOfflineResult( FomrRequestSuccess );
             break;
-          case StanzaIqError:
-            switch( stanza->error() )
+          case IQ::IqTypeError:
+            switch( iq->error() )
             {
               case StanzaErrorForbidden:
                 m_flexibleOfflineHandler->handleFlexibleOfflineResult( FomrForbidden );
@@ -184,13 +184,13 @@ namespace gloox
         }
         break;
       case FORemoveMsgs:
-        switch( stanza->subtype() )
+        switch( iq->subtype() )
         {
-          case StanzaIqResult:
+          case IQ::IqTypeResult:
             m_flexibleOfflineHandler->handleFlexibleOfflineResult( FomrRemoveSuccess );
             break;
-          case StanzaIqError:
-            switch( stanza->error() )
+          case IQ::IqTypeError:
+            switch( iq->error() )
             {
               case StanzaErrorForbidden:
                 m_flexibleOfflineHandler->handleFlexibleOfflineResult( FomrForbidden );
@@ -208,11 +208,9 @@ namespace gloox
         }
         break;
     }
-
-    return false;
   }
 
-  bool FlexibleOffline::handleIq( Stanza * /*stanza*/ )
+  bool FlexibleOffline::handleIq( IQ* /*iq*/ )
   {
     return false;
   }

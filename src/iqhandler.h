@@ -15,7 +15,7 @@
 #ifndef IQHANDLER_H__
 #define IQHANDLER_H__
 
-#include "stanza.h"
+#include "iq.h"
 
 namespace gloox
 {
@@ -25,6 +25,7 @@ namespace gloox
    *
    * Derived classes can be registered as IqHandlers with the Client.
    * Upon an incoming IQ packet @ref handleIq() will be called.
+   *
    * @author Jakob Schroeter <js@camaya.net>
    */
   class GLOOX_API IqHandler
@@ -37,11 +38,11 @@ namespace gloox
 
       /**
        * Reimplement this function if you want to be notified about incoming IQs.
-       * @param stanza The complete Stanza.
+       * @param iq The complete IQ stanza.
        * @return Indicates whether a request of type 'get' or 'set' has been handled. This includes
        * the obligatory 'result' answer. If you return @b false, a 'error' will be sent.
        */
-      virtual bool handleIq( Stanza *stanza ) = 0;
+      virtual bool handleIq( IQ *iq ) = 0;
 
       /**
        * Reimplement this function if you want to be notified about
@@ -50,12 +51,11 @@ namespace gloox
        * This is usually useful for IDs that generate a positive reply, i.e.
        * &lt;iq type='result' id='reg'/&gt; where a namespace filter wouldn't
        * work.
-       * @param stanza The complete Stanza.
+       * @param iq The complete IQ stanza.
        * @param context A value to restore context, stored with ClientBase::trackID().
-       * @return Indicates whether a request of type 'get' or 'set' has been handled. This includes
-       * the obligatory 'result' answer. If you return @b false, a 'error' will be sent.
+       * @note Only IQ stanzas of type 'result' or 'error' can arrive here.
        */
-      virtual bool handleIqID( Stanza *stanza, int context ) = 0;
+      virtual void handleIqID( IQ *iq, int context ) = 0;
   };
 
 }

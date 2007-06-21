@@ -22,7 +22,7 @@
 namespace gloox
 {
 
-  class Stanza;
+  class Presence;
 
   /**
    * A map of JID/RosterItem pairs.
@@ -113,7 +113,7 @@ namespace gloox
        * @since 0.9
        */
       virtual void handleRosterPresence( const RosterItem& item, const std::string& resource,
-                                         Presence presence, const std::string& msg ) = 0;
+                                         Presence::PresenceType presence, const std::string& msg ) = 0;
 
       /**
        * This function is called on every status change of a JID that matches the Client's
@@ -127,7 +127,7 @@ namespace gloox
        * @since 0.9
        */
       virtual void handleSelfPresence( const RosterItem& item, const std::string& resource,
-                                       Presence presence, const std::string& msg ) = 0;
+                                       Presence::PresenceType presence, const std::string& msg ) = 0;
 
       /**
        * This function is called when an entity wishes to subscribe to this entity's presence.
@@ -158,13 +158,13 @@ namespace gloox
        * the roster.
        * @param stanza The full presence stanza.
        */
-      virtual void handleNonrosterPresence( Stanza* stanza ) = 0;
+      virtual void handleNonrosterPresence( Presence* presence ) = 0;
 
       /**
        * This function is called if the server returned an error.
        * @param stanza The error stanza.
        */
-      virtual void handleRosterError( Stanza* stanza ) = 0;
+      virtual void handleRosterError( IQ* iq ) = 0;
   };
 
 }

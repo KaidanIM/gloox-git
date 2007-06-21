@@ -1,4 +1,4 @@
-#include "../../stanza.h"
+#include "../../message.h"
 #include "../../tag.h"
 #include "../../prep.h"
 #include "../../gloox.h"
@@ -117,8 +117,8 @@ int main( int /*argc*/, char** /*argv*/ )
   gloox::MessageSession *ms;
   gloox::Tag *t = 0;
   gloox::Tag *x = 0;
-  gloox::Tag *m = 0;
-  gloox::Stanza *s = 0;
+  gloox::Message *m = 0;
+  gloox::Message *s = 0;
 
   // -------
   name = "simple decorate";
@@ -141,10 +141,9 @@ int main( int /*argc*/, char** /*argv*/ )
   f->registerChatStateHandler( ms );
 
   name = "filter gone";
-  m = new gloox::Stanza( "message" );
-  m->addAttribute( "type", "chat" );
+  m = new gloox::Message( gloox::Message::MessageChat, "" );
   t = new gloox::Tag( m, "gone" ); t->addAttribute( "xmlns", gloox::XMLNS_CHAT_STATES );
-  s = new gloox::Stanza( m );
+  s = new gloox::Message( m );
   delete m;
   ms->setTest( 0 );
   f->filter( s );
@@ -158,10 +157,9 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "filter inactive";
-  m = new gloox::Stanza( "message" );
-  m->addAttribute( "type", "chat" );
+  m = new gloox::Message( gloox::Message::MessageChat, "" );
   t = new gloox::Tag( m, "inactive" ); t->addAttribute( "xmlns", gloox::XMLNS_CHAT_STATES );
-  s = new gloox::Stanza( m );
+  s = new gloox::Message( m );
   delete m;
   ms->setTest( 1 );
   f->filter( s );
@@ -175,10 +173,9 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "filter active";
-  m = new gloox::Stanza( "message" );
-  m->addAttribute( "type", "chat" );
+  m = new gloox::Message( gloox::Message::MessageChat, "" );
   t = new gloox::Tag( m, "active" ); t->addAttribute( "xmlns", gloox::XMLNS_CHAT_STATES );
-  s = new gloox::Stanza( m );
+  s = new gloox::Message( m );
   delete m;
   ms->setTest( 2 );
   f->filter( s );
@@ -192,10 +189,9 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "filter composing";
-  m = new gloox::Stanza( "message" );
-  m->addAttribute( "type", "chat" );
+  m = new gloox::Message( gloox::Message::MessageChat, "" );
   t = new gloox::Tag( m, "composing" ); t->addAttribute( "xmlns", gloox::XMLNS_CHAT_STATES );
-  s = new gloox::Stanza( m );
+  s = new gloox::Message( m );
   delete m;
   ms->setTest( 3 );
   f->filter( s );
@@ -209,10 +205,9 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "filter paused";
-  m = new gloox::Stanza( "message" );
-  m->addAttribute( "type", "chat" );
+  m = new gloox::Message( gloox::Message::MessageChat, "" );
   t = new gloox::Tag( m, "paused" ); t->addAttribute( "xmlns", gloox::XMLNS_CHAT_STATES );
-  s = new gloox::Stanza( m );
+  s = new gloox::Message( m );
   delete m;
   ms->setTest( 4 );
   f->filter( s );

@@ -46,7 +46,7 @@ namespace gloox
        * Creates a Subscription request from the given Tag.
        * @param tag The Tag to parse.
        */
-      Subscription( Tag *tag );
+      Subscription( Tag *tag, bool rip = false );
 
       /**
        * Creates a Subscription request.

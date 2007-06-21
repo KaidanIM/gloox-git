@@ -50,12 +50,12 @@ namespace gloox
        * Creates a Presence request from the given Tag.
        * @param tag The Tag to parse.
        */
-      Presence( Tag *tag );
+      Presence( Tag *tag, bool rip = false );
 
       /**
        * Creates a Presence request.
        */
-      Presence( PresenceType type, const std::string& to, const std::string& status,
+      Presence( PresenceType type, const std::string& to, const std::string& status = "",
                 int priority = 0, const std::string& xmllang = "", const std::string& from = "" );
       /**
        * Destructor.
@@ -66,6 +66,12 @@ namespace gloox
        *
        */
       PresenceType subtype() const { return m_subtype; }
+
+      /**
+       *
+       */
+#warning FIXME return something useful (only 'show' values?) or kill this func
+      PresenceType presence() const { return m_subtype; }
 
       /**
        * Returns the status text of a presence stanza for the given language if available.

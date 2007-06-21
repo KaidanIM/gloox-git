@@ -20,7 +20,7 @@ namespace gloox
 {
 
   class MessageSession;
-  class Stanza;
+  class Message;
 
   /**
    * @brief A virtual interface which can be reimplemented to receive incoming message stanzas.
@@ -48,7 +48,7 @@ namespace gloox
        * @param session If this MessageHandler is used with a MessageSession, this parameter
        * holds a pointer to that MessageSession.
        */
-      virtual void handleMessage( Stanza *stanza, MessageSession *session = 0 ) = 0;
+      virtual void handleMessage( Message* msg, MessageSession *session = 0 ) = 0;
   };
 
 }

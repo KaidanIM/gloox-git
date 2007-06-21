@@ -102,10 +102,10 @@ namespace gloox
       virtual void handleDiscoError( Stanza *stanza, int context );
 
       // reimplemented from IqHandler
-      virtual bool handleIqID( Stanza *stanza, int context );
+      virtual bool handleIq( IQ* iq );
 
       // reimplemented from IqHandler
-      virtual bool handleIq( Stanza *stanza );
+      virtual void handleIqID( IQ* iq, int context );
 
     private:
       enum FOContext

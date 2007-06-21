@@ -3,7 +3,7 @@
 #include "../connectionlistener.h"
 #include "../discohandler.h"
 #include "../disco.h"
-#include "../stanza.h"
+#include "../message.h"
 #include "../gloox.h"
 #include "../lastactivity.h"
 #include "../flexoff.h"
@@ -83,26 +83,22 @@ class FlexOffTest : public DiscoHandler, MessageHandler, ConnectionListener, Fle
       printf( "handleDiscoError\n" );
     }
 
-    virtual void handleMessage( Stanza *stanza, MessageSession * /*session*/ )
+    virtual void handleMessage( Message* msg, MessageSession * /*session*/ )
     {
-      printf( "type: %d, subject: %s, message: %s, thread id: %s\n", stanza->subtype(),
-              stanza->subject().c_str(), stanza->body().c_str(), stanza->thread().c_str() );
+      printf( "type: %d, subject: %s, message: %s, thread id: %s\n", msg->subtype(),
+              msg->subject().c_str(), msg->body().c_str(), msg->thread().c_str() );
       Tag *m = new Tag( "message" );
       m->addAttribute( "from", j->jid().full() );
-      m->addAttribute( "to", stanza->from().full() );
+      m->addAttribute( "to", msg->from().full() );
       m->addAttribute( "type", "chat" );
-      Tag *b = new Tag( "body", "You said:\n> " + stanza->body() + "\nI like that statement." );
+      Tag *b = new Tag( "body", "You said:\n> " + msg->body() + "\nI like that statement." );
       m->addChild( b );
-      if( !stanza->subject().empty() )
+      if( !msg->subject().empty() )
       {
-        Tag *s = new Tag( "subject", "Re:" +  stanza->subject() );
+        Tag *s = new Tag( "subject", "Re:" +  msg->subject() );
         m->addChild( s );
       }
       j->send( m );
-    }
-
-    virtual void handleMessage( const std::string& /*jid*/, Stanza * /*stanza*/ )
-    {
     }
 
     virtual void handleFlexibleOfflineSupport( bool support )
