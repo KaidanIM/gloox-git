@@ -20,6 +20,8 @@
 namespace gloox
 {
 
+  class JID;
+
   /**
    *
    * @author Jakob Schroeter <js@camaya.net>
@@ -51,8 +53,8 @@ namespace gloox
       /**
        * Creates a Subscription request.
        */
-      Subscription( S10nType type, const std::string& to, const std::string& status,
-                     const std::string& xmllang = "", const std::string& from = "" );
+      Subscription( S10nType type, const JID& to, const std::string& status,
+                     const std::string& xmllang = "", const JID& from = JID() );
       /**
        * Destructor.
        */

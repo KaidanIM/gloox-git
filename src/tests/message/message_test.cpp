@@ -105,10 +105,10 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "new simple Message error";
-  i = new Message( Message::MessageError, "xyz@example.org/blah", "the body", "the thread",
-                   "the xmllang", "the subject", "the from" );
+  i = new Message( Message::MessageError, JID( "xyz@example.org/blah" ), "the body", "the thread",
+                   "the xmllang", "the subject", JID( "foo@bar.com" ) );
   if( !i->hasAttribute( "type", "error" )
-      || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "the from" )
+      || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
       || !i->hasChildWithCData( "body", "the body" ) || !i->hasChildWithCData( "thread", "the thread" )
       || !i->hasChildWithCData( "subject", "the subject" ) || !i->hasChild( "body", "xml:lang", "the xmllang" )
       || !i->hasChild( "subject", "xml:lang", "the xmllang" ) )
@@ -121,10 +121,10 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "new simple Message chat";
-  i = new Message( Message::MessageChat, "xyz@example.org/blah", "the body", "the thread",
-                   "the xmllang", "the subject", "the from" );
+  i = new Message( Message::MessageChat, JID( "xyz@example.org/blah" ), "the body", "the thread",
+                   "the xmllang", "the subject", JID( "foo@bar.com" ) );
   if( !i->hasAttribute( "type", "chat" )
-      || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "the from" )
+      || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
       || !i->hasChildWithCData( "body", "the body" ) || !i->hasChildWithCData( "thread", "the thread" )
       || !i->hasChildWithCData( "subject", "the subject" ) || !i->hasChild( "body", "xml:lang", "the xmllang" )
       || !i->hasChild( "subject", "xml:lang", "the xmllang" ) )
@@ -137,10 +137,10 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "new simple Message normal";
-  i = new Message( Message::MessageNormal, "xyz@example.org/blah", "the body", "the thread",
-                   "the xmllang", "the subject", "the from" );
+  i = new Message( Message::MessageNormal, JID( "xyz@example.org/blah" ), "the body", "the thread",
+                   "the xmllang", "the subject", JID( "foo@bar.com" ) );
   if( !i->hasAttribute( "type", "normal" )
-      || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "the from" )
+      || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
       || !i->hasChildWithCData( "body", "the body" ) || !i->hasChildWithCData( "thread", "the thread" )
       || !i->hasChildWithCData( "subject", "the subject" ) || !i->hasChild( "body", "xml:lang", "the xmllang" )
       || !i->hasChild( "subject", "xml:lang", "the xmllang" ) )
@@ -153,10 +153,10 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "new simple Message groupchat";
-  i = new Message( Message::MessageGroupchat, "xyz@example.org/blah", "the body", "the thread",
-                   "the xmllang", "the subject", "the from" );
+  i = new Message( Message::MessageGroupchat, JID( "xyz@example.org/blah" ), "the body", "the thread",
+                   "the xmllang", "the subject", JID( "foo@bar.com" ) );
   if( !i->hasAttribute( "type", "groupchat" )
-      || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "the from" )
+      || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
       || !i->hasChildWithCData( "body", "the body" ) || !i->hasChildWithCData( "thread", "the thread" )
       || !i->hasChildWithCData( "subject", "the subject" ) || !i->hasChild( "body", "xml:lang", "the xmllang" )
       || !i->hasChild( "subject", "xml:lang", "the xmllang" ) )

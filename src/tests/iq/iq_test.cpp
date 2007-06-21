@@ -73,7 +73,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "new simple IQ error";
-  i = new IQ( IQ::IqTypeError, "id2", "xyz@example.org/blah" );
+  i = new IQ( IQ::IqTypeError, JID( "xyz@example.org/blah" ), "id2" );
   if( !i->hasAttribute( "type", "error" ) || !i->hasAttribute( "id", "id2" )
        || !i->hasAttribute( "to", "xyz@example.org/blah" ) )
   {
@@ -85,7 +85,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "new simple IQ result";
-  i = new IQ( IQ::IqTypeResult, "id2", "xyz@example.org/blah" );
+  i = new IQ( IQ::IqTypeResult, JID( "xyz@example.org/blah" ), "id2" );
   if( !i->hasAttribute( "type", "result" ) || !i->hasAttribute( "id", "id2" )
        || !i->hasAttribute( "to", "xyz@example.org/blah" ) )
   {
@@ -97,7 +97,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "new simple IQ get";
-  i = new IQ( IQ::IqTypeGet, "id2", "xyz@example.org/blah" );
+  i = new IQ( IQ::IqTypeGet, JID( "xyz@example.org/blah" ), "id2" );
   if( !i->hasAttribute( "type", "get" ) || !i->hasAttribute( "id", "id2" )
        || !i->hasAttribute( "to", "xyz@example.org/blah" ) )
   {
@@ -109,7 +109,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "new simple IQ set 1";
-  i = new IQ( IQ::IqTypeSet, "id2", "xyz@example.org/blah" );
+  i = new IQ( IQ::IqTypeSet, JID( "xyz@example.org/blah" ), "id2" );
   if( !i->hasAttribute( "type", "set" ) || !i->hasAttribute( "id", "id2" )
        || !i->hasAttribute( "to", "xyz@example.org/blah" ) )
   {
@@ -121,7 +121,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "new simple IQ set 2";
-  i = new IQ( IQ::IqTypeSet, "id2", "xyz@example.org/blah", "mynamespace" );
+  i = new IQ( IQ::IqTypeSet, JID( "xyz@example.org/blah" ), "id2", "mynamespace" );
   if( !i->hasAttribute( "type", "set" ) || !i->hasAttribute( "id", "id2" )
        || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasChild( "query", "xmlns", "mynamespace" ) )
   {
@@ -133,7 +133,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "new simple IQ set 3";
-  i = new IQ( IQ::IqTypeSet, "id2", "xyz@example.org/blah", "mynamespace", "testtag" );
+  i = new IQ( IQ::IqTypeSet, JID( "xyz@example.org/blah" ), "id2", "mynamespace", "testtag" );
   if( !i->hasAttribute( "type", "set" ) || !i->hasAttribute( "id", "id2" )
        || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasChild( "testtag", "xmlns", "mynamespace" ) )
   {
@@ -145,7 +145,8 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "new simple IQ set 4";
-  i = new IQ( IQ::IqTypeSet, "id2", "xyz@example.org/blah", "mynamespace", "testtag", "blah@example.net/foo" );
+  i = new IQ( IQ::IqTypeSet, JID( "xyz@example.org/blah" ), "id2", "mynamespace", "testtag",
+              JID( "blah@example.net/foo" ) );
   if( !i->hasAttribute( "type", "set" ) || !i->hasAttribute( "id", "id2" )
        || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasChild( "testtag", "xmlns", "mynamespace" )
        || !i->hasAttribute( "from", "blah@example.net/foo" ) )

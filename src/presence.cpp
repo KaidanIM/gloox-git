@@ -84,19 +84,11 @@ namespace gloox
     }
   }
 
-  Presence::Presence( PresenceType type, const std::string& to, const std::string& status,
-                      int priority, const std::string& xmllang, const std::string& from )
-    : Stanza( "presence" ), m_subtype( PresenceInvalid )
+  Presence::Presence( PresenceType type, const JID& to, const std::string& status,
+                      int priority, const std::string& xmllang, const JID& from )
+    : Stanza( "presence", to, from ), m_subtype( PresenceInvalid )
   {
     addAttribute( "type", typeString( type ) );
-
-    addAttribute( "to", to );
-    m_to.setJID( to );
-    if( !from.empty() )
-    {
-      addAttribute( "from", from );
-      m_from.setJID( from );
-    }
 
     const std::string& show = showString( type );
     if( !show.empty() )

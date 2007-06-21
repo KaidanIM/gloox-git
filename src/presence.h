@@ -20,6 +20,8 @@
 namespace gloox
 {
 
+  class JID;
+
   /**
    *
    * @author Jakob Schroeter <js@camaya.net>
@@ -55,8 +57,8 @@ namespace gloox
       /**
        * Creates a Presence request.
        */
-      Presence( PresenceType type, const std::string& to, const std::string& status = "",
-                int priority = 0, const std::string& xmllang = "", const std::string& from = "" );
+      Presence( PresenceType type, const JID& to, const std::string& status = "",
+                int priority = 0, const std::string& xmllang = "", const JID& from = JID() );
       /**
        * Destructor.
        */

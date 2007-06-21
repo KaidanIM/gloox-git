@@ -122,7 +122,7 @@ namespace gloox
        * @param name The name of the root tag.
        * @since 1.0
        */
-      Stanza( const std::string& name );
+      Stanza( const std::string& name, const JID& to, const JID& from );
 
       StanzaExtensionList m_extensionList;
       StanzaError m_stanzaError;

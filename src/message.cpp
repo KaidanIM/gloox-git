@@ -72,19 +72,12 @@ namespace gloox
     }
   }
 
-  Message::Message( MessageType type, const std::string& to,
+  Message::Message( MessageType type, const JID& to,
                     const std::string& body, const std::string& thread,
-                    const std::string& xmllang, const std::string& subject, const std::string& from )
-    : Stanza( "message" ), m_subtype( MessageInvalid )
+                    const std::string& xmllang, const std::string& subject, const JID& from )
+    : Stanza( "message", to, from ), m_subtype( MessageInvalid )
   {
     addAttribute( "type", typeString( type ) );
-    addAttribute( "to", to );
-    m_to.setJID( to );
-    if( !from.empty() )
-    {
-      addAttribute( "from", from );
-      m_from.setJID( from );
-    }
 
     if( !body.empty() )
     {
