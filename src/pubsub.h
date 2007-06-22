@@ -325,7 +325,6 @@ namespace gloox
      */
     enum PubSubFeature
     {
-      FeatureUnknown               = 0,     /**< Unrecognized feature */
       FeatureCollections           = 1,     /**< Collection nodes are supported. RECOMMENDED */
       FeatureConfigNode            = 1<<1,  /**< Configuration of node options is supported. RECOMMENDED */
       FeatureCreateAndConfig       = 1<<2,  /**< Simultaneous creation and configuration of nodes is supported.
@@ -363,8 +362,7 @@ namespace gloox
       FeatureSubscribe             = 1<<26, /**< Subscribing and unsubscribing are supported. REQUIRED */
       FeatureSubscriptionOptions   = 1<<27, /**< Configuration of subscription options is supported. OPTIONAL */
       FeatureSubscriptionNotifs    = 1<<28, /**< Notification of subscription state changes is supported. */
-      FeatureMetaOwner             = 1<<29,
-      FeatureMetaEvent             = 1<<30
+      FeatureUnknown               = 1<<29  /**< Unrecognized feature */
     };
 
 // [Persistent - Notification]

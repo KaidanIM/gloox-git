@@ -108,8 +108,7 @@ namespace gloox
 
     static SubscriptionType subscriptionType( const std::string& subscription )
     {
-      return (SubscriptionType)util::lookup( subscription, subscriptionValues,
-                              sizeof(subscriptionValues)/sizeof(const char*) );
+      return (SubscriptionType)util::lookup( subscription, subscriptionValues );
     }
 
     static const char * affiliationValues[] = {
@@ -118,8 +117,7 @@ namespace gloox
 
     static AffiliationType affiliationType( const std::string& affiliation )
     {
-      return (AffiliationType)util::lookup( affiliation, affiliationValues,
-                              sizeof(affiliationValues)/sizeof(const char*) );
+      return (AffiliationType)util::lookup( affiliation, affiliationValues );
     }
 
     /**
@@ -130,40 +128,40 @@ namespace gloox
      */
     static PubSubFeature featureType( const std::string& str )
     {
-      static const LookupPair values [] = {
-        LookupPair( "collections",                FeatureCollections ),
-        LookupPair( "config-node",                FeatureConfigNode ),
-        LookupPair( "create-and-configure",       FeatureCreateAndConfig ),
-        LookupPair( "create-nodes",               FeatureCreateNodes ),
-        LookupPair( "delete-any",                 FeatureDeleteAny ),
-        LookupPair( "delete-nodes",               FeatureDeleteNodes ),
-        LookupPair( "get-pending",                FeatureGetPending ),
-        LookupPair( "instant-nodes",              FeatureInstantNodes ),
-        LookupPair( "item-ids",                   FeatureItemIDs ),
-        LookupPair( "leased-subscription",        FeatureLeasedSubscription ),
-        LookupPair( "manage-subscriptions",       FeatureManageSubscriptions ),
-        LookupPair( "meta-data",                  FeatureMetaData ),
-        LookupPair( "modify-affiliations",        FeatureModifyAffiliations ),
-        LookupPair( "multi-collection",           FeatureMultiCollection ),
-        LookupPair( "multi-subscribe",            FeatureMultiSubscribe ),
-        LookupPair( "outcast-affiliation",        FeaturePutcastAffiliation ),
-        LookupPair( "persistent-items",           FeaturePersistentItems ),
-        LookupPair( "presence-notifications",     FeaturePresenceNotifications ),
-        LookupPair( "publish",                    FeaturePublish ),
-        LookupPair( "publisher-affiliation",      FeaturePublisherAffiliation ),
-        LookupPair( "purge-nodes",                FeaturePurgeNodes ),
-        LookupPair( "retract-items",              FeatureRetractItems ),
-        LookupPair( "retrieve-affiliations",      FeatureRetrieveAffiliations ),
-        LookupPair( "retrieve-default",           FeatureRetrieveDefault ),
-        LookupPair( "retrieve-items",             FeatureRetrieveItems ),
-        LookupPair( "retrieve-subscriptions",     FeatureRetrieveSubscriptions ),
-        LookupPair( "subscribe",                  FeatureSubscribe ),
-        LookupPair( "subscription-options",       FeatureSubscriptionOptions ),
-        LookupPair( "subscription-notifications", FeatureSubscriptionNotifs ),
-        LookupPair( "owner",                      FeatureMetaOwner ),
-        LookupPair( "event",                      FeatureMetaEvent ),
+      static const char * values [] = {
+        "collections",
+        "config-node",
+        "create-and-configure",
+        "create-nodes",
+        "delete-any",
+        "delete-nodes",
+        "get-pending",
+        "instant-nodes",
+        "item-ids",
+        "leased-subscription",
+        "manage-subscriptions",
+        "meta-data",
+        "modify-affiliations",
+        "multi-collection",
+        "multi-subscribe",
+        "outcast-affiliation",
+        "persistent-items",
+        "presence-notifications",
+        "publish",
+        "publisher-affiliation",
+        "purge-nodes",
+        "retract-items",
+        "retrieve-affiliations",
+        "retrieve-default",
+        "retrieve-items",
+        "retrieve-subscriptions",
+        "subscribe",
+        "subscription-options",
+        "subscription-notifications",
+        "owner",
+        "event",
       };
-      return static_cast< PubSubFeature >( util::lookup( str, values, sizeof(values)/sizeof(LookupPair) ) );
+      return static_cast< PubSubFeature >( util::lookup2( str, values ) );
     }
 
     enum EventType {
@@ -186,7 +184,7 @@ namespace gloox
         "purge",
         "subscription",
       };
-      return (EventType)util::lookup( event, values, sizeof(values)/sizeof(const char *) );
+      return (EventType)util::lookup( event, values );
     }
 
     void Manager::handleMessage( Message* msg, MessageSession * )
@@ -499,12 +497,12 @@ namespace gloox
                               AccessModel access,
                               const StringMap * config )
     {
-      static LookupPair accessValues[] = {
-        LookupPair( "open",      AccessOpen ),
-        LookupPair( "presence",  AccessPresence ),
-        LookupPair( "roster",    AccessRoster ),
-        LookupPair( "authorize", AccessAuthorize ),
-        LookupPair( "whitelist", AccessWhitelist )
+      static const char * accessValues[] = {
+        "open",
+        "presence",
+        "roster",
+        "authorize",
+        "whitelist"
       };
 
       const std::string& id = m_parent->getID();
@@ -531,9 +529,9 @@ namespace gloox
                        DataFormField::FieldTypeNone ) );
 
         if( access != AccessDefault )
-          df.addField( new DataFormField( "pubsub#access_model", util::lookup( access, accessValues,
-                                           sizeof(accessValues)/sizeof(LookupPair) ), "",
-                       DataFormField::FieldTypeNone ) );
+          df.addField( new DataFormField( "pubsub#access_model",
+                            util::lookup( access, accessValues ), "",
+                                           DataFormField::FieldTypeNone ) );
 
         if( config )
         {
@@ -610,8 +608,7 @@ namespace gloox
         for( ; it != list->end(); ++it )
         {
           s = new Tag( sub, "subscription", "jid", (*it).jid.full() );
-          s->addAttribute( "subscription", util::lookup( (*it).type, subscriptionValues,
-                               sizeof(subscriptionValues)/sizeof(LookupPair) ) );
+          s->addAttribute( "subscription", util::lookup( (*it).type, subscriptionValues ) );
           if( !(*it).subid.empty() )
             s->addAttribute( "subid", (*it).subid );
         }
@@ -640,8 +637,7 @@ namespace gloox
         for( ; it != list->end(); ++it )
         {
           a = new Tag( aff, "affiliation", "jid", (*it).jid.full() );
-          a->addAttribute( "affiliation", util::lookup( (*it).type, affiliationValues,
-                               sizeof(affiliationValues)/sizeof(LookupPair) ) );
+          a->addAttribute( "affiliation", util::lookup( (*it).type, affiliationValues ) );
         }
       }
 
@@ -929,7 +925,7 @@ namespace gloox
         }
         break;
         case IQ::Error:
-        {
+        {/*
           Tag* error = iq->findChild( "error" );
           //Error error( iq->findChild( "error" ) );
 
@@ -1265,7 +1261,7 @@ namespace gloox
               return;
           }
           break;
-        }
+        */}
         default:
           break;
       }

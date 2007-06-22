@@ -34,8 +34,7 @@ namespace gloox
     }
 
     m_type = StanzaIq;
-    m_subtype = ( IQ::IqType )util::lookup( findAttribute( "type" ), iqTypeStringValues,
-                                         sizeof( iqTypeStringValues ) / sizeof( const char * ) );
+    m_subtype = ( IQ::IqType )util::lookup( findAttribute( "type" ), iqTypeStringValues );
 
     m_query = findChildWithAttrib( "xmlns" );
     if( m_query )

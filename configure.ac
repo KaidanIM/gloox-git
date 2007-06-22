@@ -308,6 +308,7 @@ src/tests/stanzaextensionfactory/Makefile
 src/tests/subscription/Makefile
 src/tests/tag/Makefile
 src/tests/tlsgnutls/Makefile
+src/tests/util/Makefile
 src/tests/vcardupdate/Makefile
 src/tests/xdelayeddelivery/Makefile
 src/tests/xpath/Makefile
