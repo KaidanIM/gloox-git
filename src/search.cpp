@@ -36,12 +36,7 @@ namespace gloox
 
     const std::string& id = m_parent->getID();
 
-    Tag *iq = new Tag( "iq" );
-    iq->addAttribute( "type", "get" );
-    iq->addAttribute( "id", id );
-    iq->addAttribute( "to", directory.full() );
-    Tag *q = new Tag( iq, "query" );
-    q->addAttribute( "xmlns", XMLNS_SEARCH );
+    IQ* iq = new IQ( IQ::IqTypeGet, directory, id, XMLNS_SEARCH );
 
     m_track[id] = sh;
     m_parent->trackID( this, id, FetchSearchFields );
@@ -55,13 +50,8 @@ namespace gloox
 
     const std::string& id = m_parent->getID();
 
-    Tag *iq = new Tag( "iq" );
-    iq->addAttribute( "id", id );
-    iq->addAttribute( "type", "set" );
-    iq->addAttribute( "to", directory.full() );
-    Tag *q = new Tag( iq, "query" );
-    q->addAttribute( "xmlns", XMLNS_SEARCH );
-    q->addChild( form.tag() );
+    IQ* iq = new IQ( IQ::IqTypeSet, directory, id, XMLNS_SEARCH );
+    iq->query()->addChild( form.tag() );
 
     m_track[id] = sh;
     m_parent->trackID( this, id, DoSearch );
@@ -75,12 +65,8 @@ namespace gloox
 
     const std::string& id = m_parent->getID();
 
-    Tag *iq = new Tag( "iq" );
-    iq->addAttribute( "id", id );
-    iq->addAttribute( "type", "set" );
-    iq->addAttribute( "to", directory.full() );
-    Tag *q = new Tag( iq, "query" );
-    q->addAttribute( "xmlns", XMLNS_SEARCH );
+    IQ* iq = new IQ( IQ::IqTypeSet, directory, id, XMLNS_SEARCH );
+    Tag *q = iq->query();
 
     if( fields & SearchFieldFirst )
       new Tag( q, "first", values.first );

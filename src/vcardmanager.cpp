@@ -50,12 +50,7 @@ namespace gloox
       return;
 
     const std::string& id = m_parent->getID();
-    Tag *iq = new Tag( "iq" );
-    iq->addAttribute( "type", "get" );
-    iq->addAttribute( "id", id );
-    iq->addAttribute( "to", jid.bare() );
-    Tag *v = new Tag( iq, "vCard" );
-    v->addAttribute( "xmlns", XMLNS_VCARD_TEMP );
+    IQ* iq = new IQ( IQ::IqTypeGet, jid.bareJID(), id, XMLNS_VCARD_TEMP, "vCard" );
 
     m_parent->trackID( this, id, VCardHandler::FetchVCard );
     m_trackMap[id] = vch;
@@ -81,9 +76,7 @@ namespace gloox
       return;
 
     const std::string& id = m_parent->getID();
-    Tag *iq = new Tag( "iq" );
-    iq->addAttribute( "type", "set" );
-    iq->addAttribute( "id", id );
+    IQ* iq = new IQ( IQ::IqTypeSet, JID(), id );
     iq->addChild( vcard->tag() );
 
     m_parent->trackID( this, id, VCardHandler::StoreVCard );

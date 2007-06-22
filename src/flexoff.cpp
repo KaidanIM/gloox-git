@@ -47,11 +47,8 @@ namespace gloox
   void FlexibleOffline::fetchMessages( const StringList& msgs )
   {
     const std::string& id = m_parent->getID();
-    Tag *iq = new Tag( "iq" );
-    iq->addAttribute( "type", "get" );
-    iq->addAttribute( "id", id );
-    Tag *o = new Tag( iq, "offline" );
-    o->addAttribute( "xmlns", XMLNS_OFFLINE );
+    IQ* iq = new IQ( IQ::IqTypeGet, JID(), id, XMLNS_OFFLINE, "offline" );
+    Tag *o = iq->query();
 
     if( msgs.size() == 0 )
       new Tag( o, "fetch" );
@@ -73,11 +70,8 @@ namespace gloox
   void FlexibleOffline::removeMessages( const StringList& msgs )
   {
     const std::string& id = m_parent->getID();
-    Tag *iq = new Tag( "iq" );
-    iq->addAttribute( "type", "get" );
-    iq->addAttribute( "id", id );
-    Tag *o = new Tag( iq, "offline" );
-    o->addAttribute( "xmlns", XMLNS_OFFLINE );
+    IQ* iq = new IQ( IQ::IqTypeGet, JID(), id, XMLNS_OFFLINE, "offline" );
+    Tag *o = iq->query();
 
     if( msgs.size() == 0 )
       new Tag( o, "purge" );

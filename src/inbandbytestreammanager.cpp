@@ -55,14 +55,10 @@ namespace gloox
 
     const std::string& msid = sid.empty() ? m_parent->getID() : sid;
     const std::string& id = m_parent->getID();
-    Tag *iq = new Tag( "iq" );
-    iq->addAttribute( "type", "set" );
-    iq->addAttribute( "to", to.full() );
-    iq->addAttribute( "id", id );
-    Tag *o = new Tag( iq, "open" );
+    IQ* iq = new IQ( IQ::IqTypeSet, to, id, XMLNS_IBB, "open" );
+    Tag *o = iq->query();
     o->addAttribute( "sid", msid );
     o->addAttribute( "block-size", m_blockSize );
-    o->addAttribute( "xmlns", XMLNS_IBB );
 
     TrackItem item;
     item.sid = msid;
@@ -115,11 +111,7 @@ namespace gloox
       {
         (*it).second->closed();
 
-        Tag *re = new Tag( "iq" );
-        re->addAttribute( "type", "result" );
-        re->addAttribute( "to", iq->from().full() );
-        re->addAttribute( "id", iq->id() );
-
+        IQ* re = new IQ( IQ::IqTypeResult, iq->from(), iq->id() );
         m_parent->send( re );
       }
     }
@@ -161,10 +153,7 @@ namespace gloox
       const JID& from, const std::string& id )
   {
     m_ibbMap[ibb->sid()] = ibb;
-    Tag *iq = new Tag( "iq" );
-    iq->addAttribute( "type", "result" );
-    iq->addAttribute( "to", from.full() );
-    iq->addAttribute( "id", id );
+    IQ* iq = new IQ( IQ::IqTypeResult, from, id );
     m_parent->send( iq );
   }
 
@@ -172,10 +161,7 @@ namespace gloox
       const JID& from, const std::string& id )
   {
     delete ibb;
-    Tag *iq = new Tag( "iq" );
-    iq->addAttribute( "type", "error" );
-    iq->addAttribute( "to", from.full() );
-    iq->addAttribute( "id", id );
+    IQ* iq = new IQ( IQ::IqTypeError, from, id );
     Tag *e = new Tag( iq, "error" );
     e->addAttribute( "code", "501" );
     e->addAttribute( "type", "cancel" );

@@ -35,12 +35,7 @@ namespace gloox
       return;
 
     const std::string& id = m_parent->getID();
-    Tag *iq = new Tag( "iq" );
-    iq->addAttribute( "id", id );
-    iq->addAttribute( "to", m_nick.server() );
-    iq->addAttribute( "type", "get" );
-    Tag *u = new Tag( iq, "unique" );
-    u->addAttribute( "xmlns", XMLNS_MUC_UNIQUE );
+    IQ* iq = new IQ( IQ::IqTypeGet, m_nick.server(), id, XMLNS_MUC_UNIQUE, "unique" );
 
     m_parent->trackID( this, id, RequestUniqueName );
     m_parent->send( iq );

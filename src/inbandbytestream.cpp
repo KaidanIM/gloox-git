@@ -136,13 +136,8 @@ namespace gloox
       return;
 
     const std::string& id = m_clientbase->getID();
-    Tag *iq = new Tag( "iq" );
-    iq->addAttribute( "type", "set" );
-    iq->addAttribute( "to", m_parent->target().full() );
-    iq->addAttribute( "id", id );
-    Tag *c = new Tag( iq, "close" );
-    c->addAttribute( "sid", m_sid );
-    c->addAttribute( "xmlns", XMLNS_IBB );
+    IQ* iq = new IQ( IQ::IqTypeSet, m_parent->target(), id, XMLNS_IBB, "close" );
+    iq->query()->addAttribute( "sid", m_sid );
 
     m_clientbase->send( iq );
   }

@@ -294,12 +294,8 @@ namespace gloox
       return;
 
     const std::string& id = m_parent->getID();
-    Tag *iq = new Tag( "iq" );
-    iq->addAttribute( "type", "set" );
-    iq->addAttribute( "to", remote.full() );
-    iq->addAttribute( "id", id );
-    Tag *c = new Tag( iq, "command" );
-    c->addAttribute( "xmlns", XMLNS_ADHOC_COMMANDS );
+    IQ* iq = new IQ( IQ::IqTypeSet, remote, id, XMLNS_ADHOC_COMMANDS, "command" );
+    Tag* c = iq->query();
     c->addAttribute( "node", command );
     c->addAttribute( "action", "execute" );
     if( !sessionid.empty() )

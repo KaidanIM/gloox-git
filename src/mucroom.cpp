@@ -478,11 +478,8 @@ namespace gloox
     }
 
     const std::string& id = m_parent->getID();
-    Tag *iq = new Tag( "iq" );
-    iq->addAttribute( "id", id );
-    iq->addAttribute( "type", "set" );
-    iq->addAttribute( "to", m_nick.bare() );
-    Tag *q = new Tag( iq, "query" );
+    IQ* iq = new IQ( IQ::IqTypeSet, m_nick.bareJID(), id, XMLNS_MUC_ADMIN );
+    Tag *q = iq->query();
     q->addAttribute( "xmlns", XMLNS_MUC_ADMIN );
 
     MUCListItemList::const_iterator it = items.begin();
