@@ -11,7 +11,7 @@
 */
 
 #include "iq.h"
-#include "parserutils.h"
+#include "util.h"
 
 namespace gloox
 {
@@ -34,7 +34,7 @@ namespace gloox
     }
 
     m_type = StanzaIq;
-    m_subtype = ( IQ::IqType )lookup( findAttribute( "type" ), iqTypeStringValues,
+    m_subtype = ( IQ::IqType )util::lookup( findAttribute( "type" ), iqTypeStringValues,
                                          sizeof( iqTypeStringValues ) / sizeof( const char * ) );
 
     m_query = findChildWithAttrib( "xmlns" );

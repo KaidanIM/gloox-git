@@ -9,5 +9,5 @@ noinst_PROGRAMS = message_test
 message_test_SOURCES = message_test.cpp
 message_test_LDADD = ../../tag.o ../../message.o ../../stanza.o ../../stanzaextensionfactory.o ../../oob.o \
                 ../../gpgencrypted.o ../../gpgsigned.o ../../vcardupdate.o ../../delayeddelivery.o \
-                ../../xdelayeddelivery.o ../../amp.o ../../jid.o ../../prep.o ../../gloox.o ../../parserutils.o
+                ../../xdelayeddelivery.o ../../amp.o ../../jid.o ../../prep.o ../../gloox.o ../../util.o
 message_test_CFLAGS = $(CPPFLAGS)

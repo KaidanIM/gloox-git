@@ -10,5 +10,5 @@ chatstatefilter_test_SOURCES = chatstatefilter_test.cpp
 chatstatefilter_test_LDADD = ../../tag.o ../../stanza.o ../../stanzaextensionfactory.o ../../gpgsigned.o \
  				../../jid.o ../../prep.o ../../gloox.o ../../gpgencrypted.o ../../oob.o \
  				../../vcardupdate.o ../../delayeddelivery.o ../../xdelayeddelivery.o \
-				../../amp.o ../../message.o ../../parserutils.o
+				../../amp.o ../../message.o ../../util.o
 chatstatefilter_test_CPPFLAGS = $(CPPFLAGS)
