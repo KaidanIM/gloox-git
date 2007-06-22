@@ -37,7 +37,7 @@ namespace gloox
   {
     const std::string& id = m_parent->getID();
 
-    IQ* iq = new IQ( IQ::IqTypeGet, JID(), id, XMLNS_PRIVATE_XML );
+    IQ* iq = new IQ( IQ::Get, JID(), id, XMLNS_PRIVATE_XML );
     Tag *x = new Tag( iq->query(), tag );
     x->addAttribute( "xmlns", xmlns );
 
@@ -52,7 +52,7 @@ namespace gloox
   {
     const std::string& id = m_parent->getID();
 
-    IQ* iq = new IQ( IQ::IqTypeSet, JID(), id, XMLNS_PRIVATE_XML );
+    IQ* iq = new IQ( IQ::Set, JID(), id, XMLNS_PRIVATE_XML );
     iq->query()->addChild( tag );
 
     m_track[id] = pxh;
@@ -69,7 +69,7 @@ namespace gloox
     {
       switch( iq->subtype() )
       {
-        case IQ::IqTypeResult:
+        case IQ::Result:
         {
           switch( context )
           {
@@ -98,7 +98,7 @@ namespace gloox
           return;
           break;
         }
-        case IQ::IqTypeError:
+        case IQ::Error:
         {
           switch( context )
           {

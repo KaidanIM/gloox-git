@@ -37,14 +37,14 @@ namespace gloox
        */
       enum PresenceType
       {
-        PresenceAvailable,
-        PresenceChat,
-        PresenceAway,
-        PresenceDnd,
-        PresenceXa,
-        PresenceUnavailable,
-        PresenceProbe,
-        PresenceError,
+        Available,
+        Chat,
+        Away,
+        DND,
+        XA,
+        Unavailable,
+        Probe,
+        Error,
         PresenceInvalid
       };
 

@@ -96,7 +96,7 @@ namespace gloox
     if( !m_open || !m_parent || !m_clientbase || data.length() > m_blockSize )
       return false;
 
-    Message* m = new Message( Message::MessageNormal, m_parent->target() );
+    Message* m = new Message( Message::Normal, m_parent->target() );
     m->addAttribute( "id", m_clientbase->getID() );
     Tag *d = new Tag( m, "data", Base64::encode64( data ) );
     d->addAttribute( "sid", m_sid );
@@ -135,7 +135,7 @@ namespace gloox
       return;
 
     const std::string& id = m_clientbase->getID();
-    IQ* iq = new IQ( IQ::IqTypeSet, m_parent->target(), id, XMLNS_IBB, "close" );
+    IQ* iq = new IQ( IQ::Set, m_parent->target(), id, XMLNS_IBB, "close" );
     iq->query()->addAttribute( "sid", m_sid );
 
     m_clientbase->send( iq );

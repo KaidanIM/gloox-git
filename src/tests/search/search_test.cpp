@@ -161,7 +161,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "receive fields (old-style)";
-  gloox::IQ *iq = new gloox::IQ( gloox::IQ::IqTypeResult, gloox::JID( "searchtest" ), "id",
+  gloox::IQ *iq = new gloox::IQ( gloox::IQ::Result, gloox::JID( "searchtest" ), "id",
                                  gloox::XMLNS_SEARCH, "query", gloox::JID( g_dir ) );
   new gloox::Tag( iq->query(), "instructions", g_inst );
   new gloox::Tag( iq->query(), "first" );
@@ -195,7 +195,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "search result (old-style)";
-  iq = new gloox::IQ( gloox::IQ::IqTypeResult, gloox::JID( "searchtest" ), "id",
+  iq = new gloox::IQ( gloox::IQ::Result, gloox::JID( "searchtest" ), "id",
                       gloox::XMLNS_SEARCH, "query", gloox::JID( g_dir ) );
   gloox::Tag *i = new gloox::Tag( iq->query(), "item" );
   new gloox::Tag( i, "first", "f1" );
@@ -233,7 +233,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "search result (old-style), empty";
-  iq = new gloox::IQ( gloox::IQ::IqTypeResult, gloox::JID( "searchtest" ), "id",
+  iq = new gloox::IQ( gloox::IQ::Result, gloox::JID( "searchtest" ), "id",
                       gloox::XMLNS_SEARCH, "query", gloox::JID( g_dir ) );
   t.setTest( 5 );
   t.feed( iq );
@@ -257,7 +257,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "receive fields (dataform)";
-  iq = new gloox::IQ( gloox::IQ::IqTypeResult, gloox::JID( "searchtest" ), "id",
+  iq = new gloox::IQ( gloox::IQ::Result, gloox::JID( "searchtest" ), "id",
                       gloox::XMLNS_SEARCH, "query", gloox::JID( g_dir ) );
   gloox::DataForm df( gloox::DataForm::FormTypeForm );
   iq->query()->addChild( df.tag() );
@@ -283,7 +283,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "search result (dataform)";
-  iq = new gloox::IQ( gloox::IQ::IqTypeResult, gloox::JID( "searchtest" ), "id",
+  iq = new gloox::IQ( gloox::IQ::Result, gloox::JID( "searchtest" ), "id",
                       gloox::XMLNS_SEARCH, "query", gloox::JID( g_dir ) );
   gloox::DataForm df2( gloox::DataForm::FormTypeResult );
   iq->query()->addChild( df2.tag() );

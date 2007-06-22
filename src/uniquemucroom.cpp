@@ -35,7 +35,7 @@ namespace gloox
       return;
 
     const std::string& id = m_parent->getID();
-    IQ* iq = new IQ( IQ::IqTypeGet, m_nick.server(), id, XMLNS_MUC_UNIQUE, "unique" );
+    IQ* iq = new IQ( IQ::Get, m_nick.server(), id, XMLNS_MUC_UNIQUE, "unique" );
 
     m_parent->trackID( this, id, RequestUniqueName );
     m_parent->send( iq );
@@ -45,7 +45,7 @@ namespace gloox
   {
     switch( iq->subtype() )
     {
-      case IQ::IqTypeResult:
+      case IQ::Result:
         if( context == RequestUniqueName )
         {
           Tag *u = iq->findChild( "unique", XMLNS_MUC_UNIQUE );
@@ -57,7 +57,7 @@ namespace gloox
           }
         }
         break;
-      case IQ::IqTypeError:
+      case IQ::Error:
         if( context == RequestUniqueName )
         {
           SHA s;

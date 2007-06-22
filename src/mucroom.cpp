@@ -57,7 +57,7 @@ namespace gloox
     m_session = new MUCMessageSession( m_parent, m_nick.bareJID() );
     m_session->registerMessageHandler( this );
 
-    Presence *s = new Presence( Presence::PresenceAvailable, m_nick.full() );
+    Presence *s = new Presence( Presence::Available, m_nick.full() );
     Tag *x = new Tag( s, "x" );
     x->addAttribute( "xmlns", XMLNS_MUC );
     if( !m_password.empty() )
@@ -106,7 +106,7 @@ namespace gloox
     if( !m_joined )
       return;
 
-    Presence *s = new Presence( Presence::PresenceUnavailable, m_nick.full(), msg );
+    Presence *s = new Presence( Presence::Unavailable, m_nick.full(), msg );
     Tag *x = new Tag( s, "x" );
     x->addAttribute( "xmlns", XMLNS_MUC );
 
@@ -125,7 +125,7 @@ namespace gloox
       return;
 
     const std::string& id = m_parent->getID();
-    IQ* iq = new IQ( IQ::IqTypeSet, m_nick.bareJID(), id, XMLNS_MUC_OWNER );
+    IQ* iq = new IQ( IQ::Set, m_nick.bareJID(), id, XMLNS_MUC_OWNER );
     Tag *d = new Tag( iq->query(), "destroy" );
     if( alternate )
       d->addAttribute( "jid", alternate->bare() );
@@ -158,7 +158,7 @@ namespace gloox
     {
       m_newNick = nick;
 
-      Presence* p = new Presence( Presence::PresenceAvailable, m_nick.bare() + "/" + m_newNick );
+      Presence* p = new Presence( Presence::Available, m_nick.bare() + "/" + m_newNick );
       m_parent->send( p );
     }
     else
@@ -185,7 +185,7 @@ namespace gloox
 
   void MUCRoom::setPresence( Presence::PresenceType presence, const std::string& msg )
   {
-    if( m_parent && presence != Presence::PresenceUnavailable && m_joined )
+    if( m_parent && presence != Presence::Unavailable && m_joined )
     {
       Presence *p = new Presence( presence, m_nick.full(), msg );
       m_parent->send( p );
@@ -197,7 +197,7 @@ namespace gloox
     if( !m_parent || !m_joined )
       return;
 
-    Message* m = new Message( Message::MessageNormal, m_nick.bareJID() );
+    Message* m = new Message( Message::Normal, m_nick.bareJID() );
     Tag *x = new Tag( m, "x" );
     x->addAttribute( "xmlns", XMLNS_MUC_USER );
     Tag *i = new Tag( x, "invite" );
@@ -212,7 +212,7 @@ namespace gloox
 
   Message* MUCRoom::declineInvitation( const JID& room, const JID& invitor, const std::string& reason )
   {
-    Message *m = new Message( Message::MessageNormal, room.bare() );
+    Message *m = new Message( Message::Normal, room.bare() );
     Tag *x = new Tag( m, "x" );
     x->addAttribute( "xmlns", XMLNS_MUC_USER );
     Tag *d = new Tag( x, "decline" );
@@ -242,7 +242,7 @@ namespace gloox
     if( !m_joined || !m_parent )
       return;
 
-    Message *m = new Message( Message::MessageNormal, m_nick.bareJID(), message );
+    Message *m = new Message( Message::Normal, m_nick.bareJID(), message );
     Tag *x = new Tag( m, "x" );
     x->addAttribute( "xmlns", XMLNS_X_DELAY );
     x->addAttribute( "from", from.full() );
@@ -267,7 +267,7 @@ namespace gloox
 
   Stanza* MUCRoom::createDataForm( const JID& room, const DataForm& df )
   {
-    Message* m = new Message( Message::MessageNormal, room.bare() );
+    Message* m = new Message( Message::Normal, room.bare() );
     m->addChild( df.tag() );
 
     return m;
@@ -385,7 +385,7 @@ namespace gloox
     }
 
     const std::string& id = m_parent->getID();
-    IQ *k = new IQ( IQ::IqTypeSet, m_nick.bareJID(), id, XMLNS_MUC_ADMIN );
+    IQ *k = new IQ( IQ::Set, m_nick.bareJID(), id, XMLNS_MUC_ADMIN );
     Tag *i = new Tag( k->query(), "item" );
     i->addAttribute( "nick", nick );
     i->addAttribute( roa, newRoA );
@@ -402,7 +402,7 @@ namespace gloox
       return;
 
     const std::string& id = m_parent->getID();
-    IQ *iq = new IQ( IQ::IqTypeGet, m_nick.bareJID(), id, XMLNS_MUC_ADMIN );
+    IQ *iq = new IQ( IQ::Get, m_nick.bareJID(), id, XMLNS_MUC_ADMIN );
     Tag *i = new Tag( iq->query(), "item" );
 
     switch( operation )
@@ -474,7 +474,7 @@ namespace gloox
     }
 
     const std::string& id = m_parent->getID();
-    IQ* iq = new IQ( IQ::IqTypeSet, m_nick.bareJID(), id, XMLNS_MUC_ADMIN );
+    IQ* iq = new IQ( IQ::Set, m_nick.bareJID(), id, XMLNS_MUC_ADMIN );
     Tag *q = iq->query();
     q->addAttribute( "xmlns", XMLNS_MUC_ADMIN );
 
@@ -500,7 +500,7 @@ namespace gloox
     if( ( presence->from().bare() != m_nick.bare() ) || !m_roomHandler )
       return;
 
-    if( presence->subtype() == Presence::PresenceError )
+    if( presence->subtype() == Presence::Error )
     {
       m_joined = false;
       m_roomHandler->handleMUCError( this, presence->error() );
@@ -636,7 +636,7 @@ namespace gloox
       return;
 
     const std::string& id = m_parent->getID();
-    IQ* iq = new IQ( IQ::IqTypeSet, m_nick.bareJID(), id, XMLNS_MUC_OWNER );
+    IQ* iq = new IQ( IQ::Set, m_nick.bareJID(), id, XMLNS_MUC_OWNER );
     Tag *x = new Tag( iq->query(), "x" );
     x->addAttribute( "xmlns", XMLNS_X_DATA );
     x->addAttribute( "type", "submit" );
@@ -653,7 +653,7 @@ namespace gloox
       return;
 
     const std::string& id = m_parent->getID();
-    IQ* iq = new IQ( IQ::IqTypeSet, m_nick.bareJID(), id, XMLNS_MUC_OWNER );
+    IQ* iq = new IQ( IQ::Set, m_nick.bareJID(), id, XMLNS_MUC_OWNER );
     Tag *x = new Tag( iq->query(), "x" );
     x->addAttribute( "xmlns", XMLNS_X_DATA );
     x->addAttribute( "type", "cancel" );
@@ -670,7 +670,7 @@ namespace gloox
       return;
 
     const std::string& id = m_parent->getID();
-    IQ* iq = new IQ( IQ::IqTypeGet, m_nick.bareJID(), id, XMLNS_MUC_OWNER );
+    IQ* iq = new IQ( IQ::Get, m_nick.bareJID(), id, XMLNS_MUC_OWNER );
 
     m_parent->trackID( this, id, RequestRoomConfig );
     m_parent->send( iq );
@@ -779,8 +779,8 @@ namespace gloox
           when = x->findAttribute( "when" );
           history = true;
         }
-        if( msg->subtype() == Message::MessageChat ||
-            msg->subtype() == Message::MessageNormal )
+        if( msg->subtype() == Message::Chat ||
+            msg->subtype() == Message::Normal )
           privMsg = true;
 
         m_roomHandler->handleMUCMessage( this, msg->from().resource(), msg->body(),
@@ -796,10 +796,10 @@ namespace gloox
 
     switch( iq->subtype() )
     {
-      case IQ::IqTypeResult:
+      case IQ::Result:
         handleIqResult( iq, context );
         break;
-      case IQ::IqTypeError:
+      case IQ::Error:
         handleIqError( iq, context );
         break;
       default:

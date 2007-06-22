@@ -50,7 +50,7 @@ namespace gloox
       return;
 
     const std::string& id = m_parent->getID();
-    IQ* iq = new IQ( IQ::IqTypeGet, jid.bareJID(), id, XMLNS_VCARD_TEMP, "vCard" );
+    IQ* iq = new IQ( IQ::Get, jid.bareJID(), id, XMLNS_VCARD_TEMP, "vCard" );
 
     m_parent->trackID( this, id, VCardHandler::FetchVCard );
     m_trackMap[id] = vch;
@@ -76,7 +76,7 @@ namespace gloox
       return;
 
     const std::string& id = m_parent->getID();
-    IQ* iq = new IQ( IQ::IqTypeSet, JID(), id );
+    IQ* iq = new IQ( IQ::Set, JID(), id );
     iq->addChild( vcard->tag() );
 
     m_parent->trackID( this, id, VCardHandler::StoreVCard );
@@ -96,7 +96,7 @@ namespace gloox
     {
       switch( iq->subtype() )
       {
-        case IQ::IqTypeResult:
+        case IQ::Result:
         {
           switch( context )
           {
@@ -115,7 +115,7 @@ namespace gloox
           }
         }
         break;
-        case IQ::IqTypeError:
+        case IQ::Error:
         {
           switch( context )
           {

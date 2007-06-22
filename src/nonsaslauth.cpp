@@ -38,7 +38,7 @@ namespace gloox
     m_sid = sid;
     const std::string& id = m_parent->getID();
 
-    IQ* iq = new IQ( IQ::IqTypeGet, m_parent->jid().server(), id, XMLNS_AUTH );
+    IQ* iq = new IQ( IQ::Get, m_parent->jid().server(), id, XMLNS_AUTH );
     new Tag( iq->query(), "username", m_parent->username() );
 
     m_parent->trackID( this, id, TRACK_REQUEST_AUTH_FIELDS );
@@ -49,7 +49,7 @@ namespace gloox
   {
     switch( iq->subtype() )
     {
-      case IQ::IqTypeError:
+      case IQ::Error:
       {
         m_parent->setAuthed( false );
         m_parent->disconnect( ConnAuthenticationFailed );
@@ -66,14 +66,14 @@ namespace gloox
         }
         break;
       }
-      case IQ::IqTypeResult:
+      case IQ::Result:
         switch( context )
         {
           case TRACK_REQUEST_AUTH_FIELDS:
           {
             const std::string& id = m_parent->getID();
 
-            IQ* re = new IQ( IQ::IqTypeSet, JID(), id, XMLNS_AUTH );
+            IQ* re = new IQ( IQ::Set, JID(), id, XMLNS_AUTH );
             Tag *query = re->query();
             new Tag( query, "username", m_parent->jid().username() );
             new Tag( query, "resource", m_parent->jid().resource() );

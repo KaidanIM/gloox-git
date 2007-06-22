@@ -51,7 +51,7 @@ namespace gloox
     const std::string& id = m_parent->getID();
     const std::string& id2 = m_parent->getID();
 
-    IQ* iq = new IQ( IQ::IqTypeSet, to, id, XMLNS_SI, "si" );
+    IQ* iq = new IQ( IQ::Set, to, id, XMLNS_SI, "si" );
     Tag* si = iq->query();
     si->addAttribute( "id", id2 );
     si->addAttribute( "mime-type", mimetype.empty() ? "binary/octet-stream" : mimetype );
@@ -73,7 +73,7 @@ namespace gloox
 
   void SIManager::acceptSI( const JID& to, const std::string& id, Tag* child1, Tag* child2 )
   {
-    IQ* iq = new IQ( IQ::IqTypeResult, to, id, XMLNS_SI, "si" );
+    IQ* iq = new IQ( IQ::Result, to, id, XMLNS_SI, "si" );
     iq->query()->addChild( child1 );
     iq->query()->addChild( child2 );
 
@@ -82,7 +82,7 @@ namespace gloox
 
   void SIManager::declineSI( const JID& to, const std::string& id, SIError reason, const std::string& text )
   {
-    IQ* iq = new IQ( IQ::IqTypeError, to, id );
+    IQ* iq = new IQ( IQ::Error, to, id );
     Tag* error = new Tag( iq, "error" );
     if( reason == NoValidStreams || reason == BadProfile )
     {
@@ -158,7 +158,7 @@ namespace gloox
   {
     switch( iq->subtype() )
     {
-      case IQ::IqTypeResult:
+      case IQ::Result:
         if( context == OfferSI )
         {
           TrackMap::iterator it = m_track.find( iq->id() );
@@ -176,7 +176,7 @@ namespace gloox
           }
         }
         break;
-      case IQ::IqTypeError:
+      case IQ::Error:
         if( context == OfferSI )
         {
           TrackMap::iterator it = m_track.find( iq->id() );
@@ -186,8 +186,8 @@ namespace gloox
           }
         }
         break;
-      case IQ::IqTypeSet:
-      case IQ::IqTypeGet:
+      case IQ::Set:
+      case IQ::Get:
       default:
         break;
     }

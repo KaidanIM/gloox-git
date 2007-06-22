@@ -52,7 +52,7 @@ namespace gloox
   {
     if( m_resources.find( resource ) == m_resources.end() )
     {
-      m_resources[resource] = new Resource( 0, msg, Presence::PresenceUnavailable );
+      m_resources[resource] = new Resource( 0, msg, Presence::Unavailable );
     }
     else
       m_resources[resource]->setMessage( msg );
@@ -62,7 +62,7 @@ namespace gloox
   {
     if( m_resources.find( resource ) == m_resources.end() )
     {
-      m_resources[resource] = new Resource( priority, std::string(), Presence::PresenceUnavailable );
+      m_resources[resource] = new Resource( priority, std::string(), Presence::Unavailable );
     }
     else
       m_resources[resource]->setPriority( priority );

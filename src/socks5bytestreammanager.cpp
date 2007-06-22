@@ -62,7 +62,7 @@ namespace gloox
 
     const std::string& msid = sid.empty() ? m_parent->getID() : sid;
     const std::string& id = m_parent->getID();
-    IQ* iq = new IQ( IQ::IqTypeSet, to, id, XMLNS_BYTESTREAMS );
+    IQ* iq = new IQ( IQ::Set, to, id, XMLNS_BYTESTREAMS );
     Tag *q = iq->query();
     q->addAttribute( "sid", msid );
     q->addAttribute( "mode", /*( mode == S5BTCP ) ?*/ "tcp" /*: "udp"*/ );
@@ -158,7 +158,7 @@ namespace gloox
 
     switch( iq->subtype() )
     {
-      case IQ::IqTypeSet:
+      case IQ::Set:
       {
         const std::string& sid = q->findAttribute( "sid" );
         const std::string& mode = q->findAttribute( "mode" );
@@ -189,7 +189,7 @@ namespace gloox
         m_socks5BytestreamHandler->handleIncomingSOCKS5BytestreamRequest( sid, iq->from() );
         break;
       }
-      case IQ::IqTypeError:
+      case IQ::Error:
         m_socks5BytestreamHandler->handleSOCKS5BytestreamError( iq );
         break;
       default:
@@ -259,7 +259,7 @@ namespace gloox
   void SOCKS5BytestreamManager::rejectSOCKS5Bytestream( const JID& from, const std::string& id,
                                                         StanzaError reason )
   {
-    IQ* iq = new IQ( IQ::IqTypeError, from, id );
+    IQ* iq = new IQ( IQ::Error, from, id );
     Tag *e = new Tag( iq, "error" );
     switch( reason )
     {
@@ -314,7 +314,7 @@ namespace gloox
       {
         switch( iq->subtype() )
         {
-          case IQ::IqTypeResult:
+          case IQ::Result:
           {
             Tag* q = iq->findChild( "query", "xmlns", XMLNS_BYTESTREAMS );
             if( !q || !m_socks5BytestreamHandler )
@@ -358,7 +358,7 @@ namespace gloox
             }
             break;
           }
-          case IQ::IqTypeError:
+          case IQ::Error:
             m_socks5BytestreamHandler->handleSOCKS5BytestreamError( iq );
             break;
           default:
@@ -370,14 +370,14 @@ namespace gloox
       {
         switch( iq->subtype() )
         {
-          case IQ::IqTypeResult:
+          case IQ::Result:
           {
             S5BMap::const_iterator it5 = m_s5bMap.find( (*it).second );
             if( it5 != m_s5bMap.end() )
               (*it5).second->activate();
             break;
           }
-          case IQ::IqTypeError:
+          case IQ::Error:
             m_socks5BytestreamHandler->handleSOCKS5BytestreamError( iq );
             break;
           default:

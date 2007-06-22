@@ -41,7 +41,7 @@ namespace gloox
   {
     const std::string& id = m_parent->getID();
 
-    IQ* t = new IQ( IQ::IqTypeGet, jid, id, XMLNS_LAST );
+    IQ* t = new IQ( IQ::Get, jid, id, XMLNS_LAST );
 
     m_parent->trackID( this, id, 0 );
     m_parent->send( t );
@@ -51,20 +51,20 @@ namespace gloox
   {
     switch( iq->subtype() )
     {
-      case IQ::IqTypeGet:
+      case IQ::Get:
       {
         time_t now = time( 0 );
 
-        IQ* t = new IQ( IQ::IqTypeResult, iq->from(), iq->id(), XMLNS_LAST );
+        IQ* t = new IQ( IQ::Result, iq->from(), iq->id(), XMLNS_LAST );
         t->query()->addAttribute( "seconds", (long)( now - m_active ) );
 
         m_parent->send( t );
         break;
       }
 
-      case IQ::IqTypeSet:
+      case IQ::Set:
       {
-        IQ* t = new IQ( IQ::IqTypeError, iq->from(), iq->id() );
+        IQ* t = new IQ( IQ::Error, iq->from(), iq->id() );
         Tag *e = new Tag( t, "error" );
         e->addAttribute( "type", "cancel" );
         Tag *f = new Tag( e, "feature-not-implemented" );
@@ -88,7 +88,7 @@ namespace gloox
 
     switch( iq->subtype() )
     {
-      case IQ::IqTypeResult:
+      case IQ::Result:
       {
         Tag *q = iq->query();
         if( q )
@@ -102,7 +102,7 @@ namespace gloox
         }
         break;
       }
-      case IQ::IqTypeError:
+      case IQ::Error:
         m_lastActivityHandler->handleLastActivityError( iq->from(), iq->error() );
         break;
       default:

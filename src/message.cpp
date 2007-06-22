@@ -37,15 +37,15 @@ namespace gloox
     m_type = StanzaMessage;
 
     if( hasAttribute( "type", "chat" ) )
-      m_subtype = MessageChat;
+      m_subtype = Chat;
     else if( hasAttribute( "type", "error" ) )
       m_subtype = MessageError;
     else if( hasAttribute( "type", "headline" ) )
-      m_subtype = MessageHeadline;
+      m_subtype = Headline;
     else if( hasAttribute( "type", "groupchat" ) )
-      m_subtype = MessageGroupchat;
+      m_subtype = Groupchat;
     else
-      m_subtype = MessageNormal;
+      m_subtype = Normal;
 
     const TagList& c = children();
     TagList::const_iterator it = c.begin();
