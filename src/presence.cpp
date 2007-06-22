@@ -17,7 +17,7 @@ namespace gloox
 
   static const std::string msgTypeStringValues[] =
   {
-    "available", "available", "available", "available", "available", "unavailable", "probe", "error"
+    "", "", "", "", "", "unavailable", "probe", "error"
   };
 
   static inline const std::string& typeString( Presence::PresenceType type )
