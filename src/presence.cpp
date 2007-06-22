@@ -29,7 +29,7 @@ namespace gloox
     "", "chat", "away", "dnd", "xa", "", "", ""
   };
 
-  static inline const std::string& showString( Presence::PresenceType type )
+  static inline const char * showString( Presence::PresenceType type )
   { return msgShowStringValues[type]; }
 
   Presence::Presence( Tag *tag, bool rip )
