@@ -206,28 +206,14 @@ namespace gloox
 
   void RosterManager::unsubscribe( const JID& jid, const std::string& msg )
   {
-    Tag *s = new Tag( "presence" );
-    s->addAttribute( "type", "unsubscribe" );
-    s->addAttribute( "from", m_parent->jid().bare() );
-    s->addAttribute( "to", jid.bare() );
-    if( !msg.empty() )
-      new Tag( s, "status", msg );
-
+    Subscription* p = new Subscription( Subscription::S10nUnsubscribe, jid.bareJID(), msg );
     m_parent->send( s );
-
   }
 
   void RosterManager::cancel( const JID& jid, const std::string& msg )
   {
-    Tag *s = new Tag( "presence" );
-    s->addAttribute( "type", "unsubscribed" );
-    s->addAttribute( "from", m_parent->jid().bare() );
-    s->addAttribute( "to", jid.bare() );
-    if( !msg.empty() )
-      new Tag( s, "status", msg );
-
-    m_parent->send( s );
-
+    Subscription* p = new Subscription( Subscription::S10nUnsubscribed, jid.bareJID(), msg );
+    m_parent->send( p );
   }
 
   void RosterManager::remove( const JID& jid )
@@ -271,14 +257,8 @@ namespace gloox
 
   void RosterManager::ackSubscriptionRequest( const JID& to, bool ack )
   {
-    Tag *p = new Tag( "presence" );
-    if( ack )
-      p->addAttribute( "type", "subscribed" );
-    else
-      p->addAttribute( "type", "unsubscribed" );
-
-    p->addAttribute( "from", m_parent->jid().bare() );
-    p->addAttribute( "to", to.bare() );
+    Subscription* p = new Subscription( ack ? Subscription::S10nSubscribed : Subscription::S10nUnsubscribed,
+                                        to.bareJID() );
     m_parent->send( p );
   }
 
@@ -300,10 +280,7 @@ namespace gloox
       }
       case Subscription::S10nSubscribed:
       {
-//         Tag *p = new Tag( "presence" );
-//         p->addAttribute( "type", "subscribe" );
-//         p->addAttribute( "from", m_parent->jid().bare() );
-//         p->addAttribute( "to", stanza->from().bare() );
+//         Subscription* p = new Subscription( Subscription::S10nSubscribe, s10n->from().bareJID() );
 //         m_parent->send( p );
 
         m_rosterListener->handleItemSubscribed( s10n->from() );
@@ -312,10 +289,7 @@ namespace gloox
 
       case Subscription::S10nUnsubscribe:
       {
-        Tag *p = new Tag( "presence" );
-        p->addAttribute( "type", "unsubscribed" );
-        p->addAttribute( "from", m_parent->jid().bare() );
-        p->addAttribute( "to", s10n->from().bare() );
+        Subscription* p = new Subscription( Subscription::S10nUnsubscribed, s10n->from().bareJID() );
         m_parent->send( p );
 
         bool answer = m_rosterListener->handleUnsubscriptionRequest( s10n->from(), s10n->status() );
@@ -326,10 +300,7 @@ namespace gloox
 
       case Subscription::S10nUnsubscribed:
       {
-//         Tag *p = new Tag( "presence" );
-//         p->addAttribute( "type", "unsubscribe" );
-//         p->addAttribute( "from", m_parent->jid().bare() );
-//         p->addAttribute( "to", stanza->from().bare() );
+//         Subscription* p = new Subscription( Subscription::S10nUnsubscribe, s10n->from().bareJID() );
 //         m_parent->send( p );
 
         m_rosterListener->handleItemUnsubscribed( s10n->from() );
