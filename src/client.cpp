@@ -507,7 +507,7 @@ namespace gloox
 
   void Client::sendPresence()
   {
-    if( m_presence != Presence::PresenceInvalid &&
+    if( m_presence != Presence::Invalid &&
         m_presence != Presence::Unavailable )
     {
       Presence* p = new Presence( m_presence, JID(), m_status, m_priority );

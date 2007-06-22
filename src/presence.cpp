@@ -33,7 +33,7 @@ namespace gloox
   { return msgShowStringValues[type]; }
 
   Presence::Presence( Tag *tag, bool rip )
-    : Stanza( tag, rip ), m_subtype( PresenceInvalid ), m_priority( 0 )
+    : Stanza( tag, rip ), m_subtype( Invalid ), m_priority( 0 )
   {
     if( !tag || tag->name() != "presence" )
     {
@@ -72,7 +72,7 @@ namespace gloox
 
   Presence::Presence( PresenceType type, const JID& to, const std::string& status,
                       int priority, const std::string& xmllang, const JID& from )
-    : Stanza( "presence", to, from ), m_subtype( PresenceInvalid )
+    : Stanza( "presence", to, from ), m_subtype( type )
   {
     addAttribute( "type", typeString( type ) );
 

@@ -37,11 +37,11 @@ namespace gloox
        */
       enum S10nType
       {
-        S10nInvalid,
         Subscribe,
         Subscribed,
         Unsubscribe,
-        Unsubscribed
+        Unsubscribed,
+        Invalid
       };
 
       /**

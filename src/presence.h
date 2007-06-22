@@ -45,7 +45,7 @@ namespace gloox
         Unavailable,
         Probe,
         Error,
-        PresenceInvalid
+        Invalid
       };
 
       /**

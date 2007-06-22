@@ -25,7 +25,7 @@ namespace gloox
     { return iqTypeStringValues[type]; }
 
   IQ::IQ( Tag *tag, bool rip )
-    : Stanza( tag, rip ), m_query( 0 ), m_subtype( IqTypeInvalid )
+    : Stanza( tag, rip ), m_query( 0 ), m_subtype( Invalid )
   {
     if( !tag || tag->name() != "iq" )
     {
