@@ -56,10 +56,10 @@ namespace gloox
        * @brief Possible types for a rule's condition.
        */
       enum ConditionType {
-        ConditionDeliver,      /**< Ensures (non-)delivery of the message */
-        ConditionExpireAt,     /**< Ensures delivery only before a certain time (UTC) */
-        ConditionMatchResource /**< Ensures delivery only to a specific resource type */
-        ConditionInvalid,      /**< Invalid condition */
+        ConditionDeliver,       /**< Ensures (non-)delivery of the message */
+        ConditionExpireAt,      /**< Ensures delivery only before a certain time (UTC) */
+        ConditionMatchResource, /**< Ensures delivery only to a specific resource type */
+        ConditionInvalid        /**< Invalid condition */
       };
 
       /**
@@ -70,8 +70,8 @@ namespace gloox
         ActionAlert,       /**< Sends back a message stanza with an 'alert' status */
         ActionError,       /**< Sends back a message stanza with an error type */
         ActionDrop,        /**< Silently ignore the message */
-        ActionNotify       /**< Sends back a message stanza with a 'notify' status */
-        ActionInvalid,     /**< Invalid action */
+        ActionNotify,      /**< Sends back a message stanza with a 'notify' status */
+        ActionInvalid      /**< Invalid action */
       };
 
       enum DeliverType {
@@ -84,9 +84,9 @@ namespace gloox
         DeliverNone,        /**< The message would not be delivered at all (e.g., because
                              *   the intended recipient is offline and message storage is
                              *   not enabled). */
-        DeliverStored       /**< The message would be stored offline for later delivery
+        DeliverStored,      /**< The message would be stored offline for later delivery
                              *   to the intended recipient. */
-        DeliverInvalid,     /**< Invalid deliver value */
+        DeliverInvalid      /**< Invalid deliver value */
       };
 
       enum MatchResourceType {
@@ -94,9 +94,9 @@ namespace gloox
                                    *   ignoring the intended resource. */
         MatchResourceExact,       /**< Destination resource exactly matches the intended
                                    *   resource. */
-        MatchResourceOther        /**< Destination resource matches any value except for
+        MatchResourceOther,        /**< Destination resource matches any value except for
                                    *   the intended resource. */
-        MatchResourceInvalid,     /**< Invalid match-resource value */
+        MatchResourceInvalid      /**< Invalid match-resource value */
       };
 
       /**
