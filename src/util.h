@@ -27,8 +27,6 @@ namespace gloox
 
     /**
      * Finds the enumerated value associated with a string value.
-     * The enumerated type must have a default (invalid/unknown) value type with
-     * a value of 0. eg: enum X { XInvalid = 0, ... };
      * @param str String to search for.
      * @param values Array of String/Code pairs to look into.
      * @return The associated enum code.
@@ -37,8 +35,6 @@ namespace gloox
 
     /**
      * Finds the enumerated value associated with a string value.
-     * The enumerated type must have a default (invalid/unknown) value type with
-     * a value of 0. eg: enum X { XInvalid = 0, ... };
      * @param str String to search for.
      * @param values Array of String/Code pairs to look into.
      * @return The associated enum code.
@@ -47,9 +43,7 @@ namespace gloox
       {  return code < size ? values[code] : 0;  }
 
     /**
-     * Finds the enumerated value associated with a string value.
-     * The enumerated type must have a default (invalid/unknown) value type with
-     * a value of 0. eg: enum X { XInvalid = 0, ... };
+     * Finds the ORable enumerated value associated with a string value.
      * @param str String to search for.
      * @param values Array of String/Code pairs to look into.
      * @return The associated enum code.
@@ -58,7 +52,7 @@ namespace gloox
       {  return 1 << _lookup( str, values, size ); }
 
     /**
-     * Finds the string associated with an enumerated type.
+     * Finds the string associated with an ORable enumerated type.
      * @param code Feature string to search for.
      * @param values Array of String/Code pairs to look into.
      * @return The associated string (or 0 in case there's no match).
