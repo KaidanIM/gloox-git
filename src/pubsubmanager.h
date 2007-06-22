@@ -65,7 +65,7 @@ namespace gloox
      *
      * @endcode
      *
-     * @author Jakob Schroeter <js@camaya.net>
+     * @author Vincent Thomasset <vthomasset@gmail.com>
      *
      * XEP Version: 1.9
      */
