@@ -32,12 +32,12 @@ namespace gloox
      */
     enum NodeType
     {
-      NodeInvalid,                  /**< Invalid node type */
-      NodeLeaf,                     /**< A node that contains published items only. It is NOT
+      NodeLeaf = 0,                     /**< A node that contains published items only. It is NOT
                                      * a container for other nodes. */
-      NodeCollection               /**< A node that contains nodes and/or other collections but
+      NodeCollection,              /**< A node that contains nodes and/or other collections but
                                     * no published items. Collections make it possible to represent
                                     * hierarchial node structures. */
+      NodeInvalid                   /**< Invalid node type */
     };
 
     /**
@@ -45,10 +45,10 @@ namespace gloox
      */
     enum AffiliationType
     {
-      AffiliationOutcast = 0,       /**< Entity is disallowed from subscribing or publishing. */
-      AffiliationNone,              /**<  */
+      AffiliationNone = 0,          /**<  */
       AffiliationPublisher,         /**<  */
       AffiliationOwner,             /**<  */
+      AffiliationOutcast,           /**< Entity is disallowed from subscribing or publishing. */
       AffiliationInvalid            /**< Invalid Affiliation type. */
     };
 
@@ -59,6 +59,9 @@ namespace gloox
     {
       SubscriptionNone = 0,         /**< The node MUST NOT send event notifications or payloads to the
                                      * Entity. */
+      SubscriptionSubscribed,       /**< An entity is subscribed to a node. The node MUST send all event
+                                     * notifications (and, if configured, payloads) to the entity while it
+                                     * is in this state. */
       SubscriptionPending,          /**< An entity has requested to subscribe to a node and the request
                                      * has not yet been approved by a node owner. The node MUST NOT send
                                      * event notifications or payloads to the entity while it is in this
@@ -67,9 +70,7 @@ namespace gloox
                                      * been configured. The node MAY send event notifications or payloads
                                      * to the entity while it is in this state. The service MAY timeout
                                      * unconfigured subscriptions. */
-      SubscriptionSubscribed,       /**< An entity is subscribed to a node. The node MUST send all event
-                                     * notifications (and, if configured, payloads) to the entity while it
-                                     * is in this state. */
+      
       SubscriptionInvalid           /**< Invalid subscription type. */
     };
 
