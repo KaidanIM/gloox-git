@@ -55,7 +55,7 @@ namespace gloox
           new Tag( re->query(), "name", m_versionName );
           new Tag( re->query(), "version", m_versionVersion );
           new Tag( re->query(), "os", m_versionOs );
-          m_parent->send( iq );
+          m_parent->send( re );
         }
         else if( iq->xmlns() == XMLNS_DISCO_INFO && iq->query() )
         {
@@ -110,7 +110,7 @@ namespace gloox
             }
           }
 
-          m_parent->send( iq );
+          m_parent->send( re );
         }
         else if( iq->xmlns() == XMLNS_DISCO_ITEMS && iq->query() )
         {
@@ -139,7 +139,7 @@ namespace gloox
             }
           }
 
-          m_parent->send( iq );
+          m_parent->send( re );
         }
         return true;
         break;
