@@ -13,50 +13,36 @@
 
 #include "amp.h"
 #include "tag.h"
+#include "parserutils.h"
 
 namespace gloox
 {
+
+  static const char * conditionValues[] = {
+    "deliver", "expire-at", "match-resource"
+  };
+
+  static const char * actionValues[] = {
+    "alert", "error", "drop", "notify"
+  };
+
+  static const char * deliverValues[] = {
+    "direct", "forward", "gateway", "none", "stored"
+  };
 
   AMP::Rule::Rule( const std::string& condition,
                    const std::string& action,
                    const std::string& value )
   {
-    if( condition == "deliver" )
-      m_condition = AMP::ConditionDeliver;
-    else if( condition == "expire-at" )
-      m_condition = AMP::ConditionExpireAt;
-    else if( condition == "match-resource" )
-      m_condition = AMP::ConditionMatchResource;
-    else
-      m_condition = AMP::ConditionInvalid;
-
-    if( action == "alert" )
-      m_action = AMP::ActionAlert;
-    else if( action == "error" )
-      m_action = AMP::ActionError;
-    else if( action == "drop" )
-      m_action = AMP::ActionDrop;
-    else if( action == "notify" )
-      m_action = AMP::ActionNotify;
-    else
-      m_action = AMP::ActionInvalid;
-
+    m_condition = (ConditionType)lookup( condition, conditionValues,
+                                 sizeof(conditionValues)/sizeof(const char *) );
+    m_action = (ActionType)lookup( action, actionValues,
+                                    sizeof(actionValues)/sizeof(const char *) );
     switch( m_condition )
     {
       case ConditionDeliver:
-        if( value == "direct" )
-          deliver = DeliverDirect;
-        else if( value == "forward" )
-          deliver = DeliverForward;
-        else if( value == "gateway" )
-          deliver = DeliverGateway;
-        else if( value == "none" )
-          deliver = DeliverNone;
-        else if( value == "stored" )
-          deliver = DeliverStored;
-        else
-          deliver = DeliverInvalid;
-        break;
+        deliver = (DeliverType)lookup( value, deliverValues,
+                                   sizeof(deliverValues)/sizeof(const char *) );
       case ConditionExpireAt:
         // parse time
         //  expireat.tm_ = val;
@@ -79,91 +65,39 @@ namespace gloox
 
   Tag* AMP::Rule::tag() const
   {
+    if( m_condition == ConditionInvalid || m_action == ActionInvalid
+       || deliver == DeliverInvalid )
+     return 0;
+      
     Tag* rule = new Tag( "rule" );
+    rule->addAttribute( "condition", lookup( m_condition, conditionValues,
+                               sizeof(conditionValues)/sizeof(const char *) ) );
+    rule->addAttribute( "action", lookup( m_action, actionValues,
+                                  sizeof(actionValues)/sizeof(const char *) ) );
+
     switch( m_condition )
     {
       case ConditionDeliver:
-        rule->addAttribute( "condition", "deliver" );
-        break;
-      case ConditionExpireAt:
-        rule->addAttribute( "condition", "expire-at" );
-        break;
-      case ConditionMatchResource:
-        rule->addAttribute( "condition", "match-resource" );
-        break;
-      default:
-      case ConditionInvalid: // shouldn't happen
-        delete rule;
-        return 0;
-    }
-    switch( m_action )
-    {
-      case ActionAlert:
-        rule->addAttribute( "action", "alert" );
-        break;
-      case ActionError:
-        rule->addAttribute( "action", "error" );
-        break;
-      case ActionDrop:
-        rule->addAttribute( "action", "drop" );
-        break;
-      case ActionNotify:
-        rule->addAttribute( "action", "notify" );
-        break;
-      default:
-      case ActionInvalid: // shouldn't happen
-        delete rule;
-        return 0;
-    }
-    switch( m_condition )
-    {
-      case ConditionDeliver:
-        switch( deliver )
+        if( deliver == DeliverInvalid )
         {
-          case DeliverDirect:
-            rule->addAttribute( "value", "direct" );
-            break;
-          case DeliverForward:
-            rule->addAttribute( "value", "forward" );
-            break;
-          case DeliverGateway:
-            rule->addAttribute( "value", "gateway" );
-            break;
-          case DeliverNone:
-            rule->addAttribute( "value", "none" );
-            break;
-          case DeliverStored:
-            rule->addAttribute( "value", "stored" );
-            break;
-          case DeliverInvalid:
-            delete rule;
-            return 0;
+          delete rule;
+          return 0;
         }
+        rule->addAttribute( "value", lookup( deliver, deliverValues,
+                                  sizeof(deliverValues)/sizeof(const char*) ) );
         break;
       case ConditionExpireAt:
           // parse time
           //expireat.tm_ = val;
         break;
       case ConditionMatchResource:
-        switch( matchresource )
+        if( matchresource == MatchResourceInvalid )
         {
-          case MatchResourceAny:
-            rule->addAttribute( "value", "any" );
-            break;
-          case MatchResourceExact:
-            rule->addAttribute( "value", "exact" );
-            break;
-          case MatchResourceOther:
-            rule->addAttribute( "value", "other" );
-            break;
-          case MatchResourceInvalid:
-            delete rule;
-            return 0;
+          delete rule;
+          return 0;
         }
+        rule->addAttribute( "value", "any" );
         break;
-      case ConditionInvalid: // shouldn't happen
-        delete rule;
-        return 0;
     }
     return rule;
   }
@@ -178,10 +112,9 @@ namespace gloox
     Tag::TagList::const_iterator it = rules.begin();
     for( ; it != rules.end(); ++it )
     {
-      const std::string& condition = tag->findAttribute( "condition" );
-      const std::string& action = tag->findAttribute( "action" );
-      const std::string& value = tag->findAttribute( "value" );
-      m_rules.push_back( new Rule( condition, action, value ) );
+      m_rules.push_back( new Rule( tag->findAttribute( "condition" ),
+                                   tag->findAttribute( "action" ),
+                                   tag->findAttribute( "value" ) ) );
     }
     m_valid = true;
   }

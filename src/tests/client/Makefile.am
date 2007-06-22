@@ -16,5 +16,6 @@ client_test_LDADD = ../../client.o ../../clientbase.o ../../connectiontcpbase.o 
 			../../xdelayeddelivery.o ../../rostermanager.o ../../nonsaslauth.o ../../sha.o \
 			../../rosteritem.o ../../privatexml.o ../../gloox.o ../../tlsgnutlsbase.o \
 			../../tlsdefault.o ../../tlsgnutlsclientanon.o ../../tlsgnutlsserveranon.o \
-			../../mutex.o ../../amp.o ../../iq.o ../../presence.o ../../message.o ../../subscription.o
+			../../mutex.o ../../amp.o ../../iq.o ../../presence.o ../../message.o ../../subscription.o \
+                        ../../parserutils.o
 client_test_CFLAGS = $(CPPFLAGS)

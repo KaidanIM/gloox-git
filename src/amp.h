@@ -56,7 +56,7 @@ namespace gloox
        * @brief Possible types for a rule's condition.
        */
       enum ConditionType {
-        ConditionInvalid,      /**< Invalid condition */
+        ConditionInvalid = 0,  /**< Invalid condition */
         ConditionDeliver,      /**< Ensures (non-)delivery of the message */
         ConditionExpireAt,     /**< Ensures delivery only before a certain time (UTC) */
         ConditionMatchResource /**< Ensures delivery only to a specific resource type */
@@ -66,36 +66,36 @@ namespace gloox
        * @brief Possible actions to take when the corresponding condition is met.
        */
       enum ActionType {
-        ActionInvalid, /**< Invalid action */
-        ActionAlert,   /**< Sends back a message stanza with an 'alert' status */
-        ActionError,   /**< Sends back a message stanza with an error type */
-        ActionDrop,    /**< Silently ignore the message */
-        ActionNotify   /**< Sends back a message stanza with a 'notify' status */
+        ActionInvalid = 0, /**< Invalid action */
+        ActionAlert,       /**< Sends back a message stanza with an 'alert' status */
+        ActionError,       /**< Sends back a message stanza with an error type */
+        ActionDrop,        /**< Silently ignore the message */
+        ActionNotify       /**< Sends back a message stanza with a 'notify' status */
       };
 
       enum DeliverType {
-        DeliverInvalid, /**< Invalid deliver value */
-        DeliverDirect,  /**< The message would be immediately delivered to the intended
-                         *   recipient or routed to the next hop. */
-        DeliverForward, /**< The message would be forwarded to another XMPP address or
-                         *   account. */
-        DeliverGateway, /**< The message would be sent through a gateway to an address
-                         *   or account on a non-XMPP system. */
-        DeliverNone,    /**< The message would not be delivered at all (e.g., because
-                         *   the intended recipient is offline and message storage is
-                         *   not enabled). */
-        DeliverStored   /**< The message would be stored offline for later delivery
-                         *   to the intended recipient. */
+        DeliverInvalid = 0, /**< Invalid deliver value */
+        DeliverDirect,      /**< The message would be immediately delivered to the intended
+                             *   recipient or routed to the next hop. */
+        DeliverForward,     /**< The message would be forwarded to another XMPP address or
+                             *   account. */
+        DeliverGateway,     /**< The message would be sent through a gateway to an address
+                             *   or account on a non-XMPP system. */
+        DeliverNone,        /**< The message would not be delivered at all (e.g., because
+                             *   the intended recipient is offline and message storage is
+                             *   not enabled). */
+        DeliverStored       /**< The message would be stored offline for later delivery
+                             *   to the intended recipient. */
       };
 
       enum MatchResourceType {
-        MatchResourceInvalid, /**< Invalid match-resource value */
-        MatchResourceAny,     /**< Destination resource matches any value, effectively
-                               *   ignoring the intended resource. */
-        MatchResourceExact,   /**< Destination resource exactly matches the intended
-                               *   resource. */
-        MatchResourceOther    /**< Destination resource matches any value except for
-                               *   the intended resource. */
+        MatchResourceInvalid = 0, /**< Invalid match-resource value */
+        MatchResourceAny,         /**< Destination resource matches any value, effectively
+                                   *   ignoring the intended resource. */
+        MatchResourceExact,       /**< Destination resource exactly matches the intended
+                                   *   resource. */
+        MatchResourceOther        /**< Destination resource matches any value except for
+                                   *   the intended resource. */
       };
 
       /**
