@@ -90,7 +90,7 @@ int main( int /*argc*/, char** /*argv*/ )
   name = "parse Message error";
   msg->addAttribute( "type", "error" );
   i = new Message( msg );
-  if( i->subtype() != Message::MessageError || !i->hasAttribute( "type", "error" )
+  if( i->subtype() != Message::Error || !i->hasAttribute( "type", "error" )
       || !i->hasAttribute( "id", "id1" )
       || !i->hasAttribute( "to", "you@example.net/gloox" )
       || !i->hasAttribute( "from", "me@example.net/gloox" )
@@ -105,7 +105,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "new simple Message error";
-  i = new Message( Message::MessageError, JID( "xyz@example.org/blah" ), "the body", "the subject",
+  i = new Message( Message::Error, JID( "xyz@example.org/blah" ), "the body", "the subject",
                    "the thread", "the xmllang", JID( "foo@bar.com" ) );
   if( !i->hasAttribute( "type", "error" )
       || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )

@@ -705,7 +705,7 @@ namespace gloox
     if( !m_roomHandler )
       return;
 
-    if( msg->subtype() == Message::MessageError )
+    if( msg->subtype() == Message::Error )
     {
       m_roomHandler->handleMUCError( this, msg->error() );
     }

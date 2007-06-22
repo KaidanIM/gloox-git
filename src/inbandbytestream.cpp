@@ -49,7 +49,7 @@ namespace gloox
     if( !m_inbandBytestreamDataHandler || !m_open )
       return;
 
-    if( msg->subtype() == Message::MessageError )
+    if( msg->subtype() == Message::Error )
     {
       m_inbandBytestreamDataHandler->handleInBandError( m_sid, msg->from(), msg->error() );
       m_open = false;

@@ -39,7 +39,7 @@ namespace gloox
       enum MessageType
       {
         Chat           =  1,        /**< */
-        MessageError   =  2,        /**< */
+        Error          =  2,        /**< */
         Groupchat      =  4,        /**< */
         Headline       =  8,        /**< */
         Normal         = 16,        /**< */
@@ -109,7 +109,6 @@ namespace gloox
       /**
        * Sets the Stanza's thread ID. Only useful for message stanzas.
        * @param thread The thread ID.
-       * @since 0.9
        */
       void setThread( const std::string& thread ) { m_thread = thread; }
 
