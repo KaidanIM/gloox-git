@@ -18,7 +18,7 @@ namespace gloox
 
   static const char * msgTypeStringValues[] =
   {
-    "", "", "", "", "", "unavailable", "probe", "error"
+    "available", "", "", "", "", "unavailable", "probe", "error"
   };
 
   static inline const char * typeString( Presence::PresenceType type )
@@ -42,7 +42,11 @@ namespace gloox
     }
 
     m_type = StanzaPresence;
-    m_subtype = (PresenceType)util::lookup( findAttribute( "type" ), msgTypeStringValues,
+    const std::string& type = findAttribute( "type" );
+    if( type.empty() )
+      m_subtype = PresenceAvailable;
+    else
+      m_subtype = (PresenceType)util::lookup( type, msgTypeStringValues,
                                sizeof( msgTypeStringValues ) / sizeof(char*) );
     printf("parsed '%s'\n", msgTypeStringValues[m_subtype]);
 
