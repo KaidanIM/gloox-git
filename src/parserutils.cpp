@@ -41,8 +41,8 @@ namespace gloox
     int lookup( const std::string& str, const char * values[], unsigned size )
     {
       unsigned i = 0;
-      for( ; ( i < size ) && ( str != values[i] ); ++i ) ;
-      return i != size ? i : 0;
+      for( ; i < size && str != values[i]; ++i ) ;
+      return i;
     }
 
     /**

@@ -102,30 +102,24 @@ namespace gloox
       m_parent->disco()->getDiscoItems( service, nodeid, this, 0, id );
     }
 
-    static LookupPair subscriptionValues[] = {
-      LookupPair( "pending",      SubscriptionPending ),
-      LookupPair( "subscribed",   SubscriptionSubscribed ),
-      LookupPair( "none",         SubscriptionNone ),
-      LookupPair( "unconfigured", SubscriptionUnconfigured )
+    static const char * subscriptionValues[] = {
+      "none", "subscribed", "pending", "unconfigured"
     };
 
     static SubscriptionType subscriptionType( const std::string& subscription )
     {
       return (SubscriptionType)lookup( subscription, subscriptionValues,
-                              sizeof(subscriptionValues)/sizeof(LookupPair) );
+                              sizeof(subscriptionValues)/sizeof(const char*) );
     }
 
-    static LookupPair affiliationValues[] = {
-      LookupPair( "none",      AffiliationNone ),
-      LookupPair( "publisher", AffiliationPublisher ),
-      LookupPair( "owner",     AffiliationOwner ),
-      LookupPair( "outcast",   AffiliationOutcast )
+    static const char * affiliationValues[] = {
+      "none", "publisher", "owner", "outcast"
     };
 
     static AffiliationType affiliationType( const std::string& affiliation )
     {
       return (AffiliationType)lookup( affiliation, affiliationValues,
-                              sizeof(affiliationValues)/sizeof(LookupPair) );
+                              sizeof(affiliationValues)/sizeof(const char*) );
     }
 
     /**
@@ -173,25 +167,26 @@ namespace gloox
     }
 
     enum EventType {
-      EventCollection,
+      EventCollection = 0,
       EventConfigure,
       EventDelete,
       EventItems,
       EventPurge,
-      EventSubscription
+      EventSubscription,
+      EventUnkown
     };
 
     static EventType eventType( const std::string& event )
     {
-      static const LookupPair values[] = {
-        LookupPair( "collection",    EventCollection ),
-        LookupPair( "configuration", EventConfigure ),
-        LookupPair( "delete",        EventDelete ),
-        LookupPair( "items",         EventItems ),
-        LookupPair( "purge",         EventPurge ),
-        LookupPair( "subscription",  EventSubscription )
+      static const char * values[] = {
+        "collection",
+        "configuration",
+        "delete",
+        "items",
+        "purge",
+        "subscription",
       };
-      return (EventType)lookup( event, values, sizeof(values)/sizeof(LookupPair) );
+      return (EventType)lookup( event, values, sizeof(values)/sizeof(const char *) );
     }
 
     void Manager::handleMessage( Message* msg, MessageSession * )
