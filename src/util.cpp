@@ -10,15 +10,13 @@
   This software is distributed without any warranty.
 */
 
-#ifndef PARSERUTILS_H_
-#define PARSERUTILS_H_
-
-#include <string>
+#include "util.h"
 
 namespace gloox
 {
 
-    typedef std::pair< const char *, unsigned > LookupPair;
+  namespace util
+  {
 
     /**
      * Finds the enumerated value associated with a string value.
@@ -28,7 +26,27 @@ namespace gloox
      * @param values Array of String/Code pairs to look into.
      * @return The associated enum code.
      */
-    unsigned lookup( const std::string& str, const LookupPair values[], unsigned size );
+    unsigned lookup( const std::string& str, const LookupPair values[], unsigned size )
+    {
+      unsigned i = 0;
+      for( ; i < size && str != values[i].first;  ++i ) ;
+      return i != size ? values[i].second : 0;
+    }
+
+    /**
+     * Finds the enumerated value associated with a string value.
+     * The enumerated type must have a default (invalid/unknown) value type with
+     * a value of 0. eg: enum X { XInvalid = 0, ... };
+     * @param str String to search for.
+     * @param values Array of String/Code pairs to look into.
+     * @return The associated enum code.
+     */
+    unsigned lookup( const std::string& str, const char * values[], unsigned size )
+    {
+      unsigned i = 0;
+      for( ; i < size && str != values[i]; ++i ) ;
+      return i;
+    }
 
     /**
      * Finds the string associated with an enumerated type.
@@ -36,29 +54,14 @@ namespace gloox
      * @param values Array of String/Code pairs to look into.
      * @return The associated string (or 0 in case there's no match).
      */
-    const char * lookup( unsigned code, const LookupPair values[], unsigned size );
+    const char * lookup( unsigned code, const LookupPair values[], unsigned size )
+    {
+      unsigned i = 0;
+      for( ; i < size && code != values[i].second; ++i ) ;
+      return i != size ? values[i].first : 0;
+    }
 
-    /**
-     * Finds the enumerated value associated with a string value.
-     * The enumerated type must have a default (invalid/unknown) value type with
-     * a value of 0. eg: enum X { XInvalid = 0, ... };
-     * @param str String to search for.
-     * @param values Array of String/Code pairs to look into.
-     * @return The associated enum code.
-     */
-    unsigned lookup( const std::string& str, const char * values[], unsigned size );
-
-    /**
-     * Finds the enumerated value associated with a string value.
-     * The enumerated type must have a default (invalid/unknown) value type with
-     * a value of 0. eg: enum X { XInvalid = 0, ... };
-     * @param str String to search for.
-     * @param values Array of String/Code pairs to look into.
-     * @return The associated enum code.
-     */
-    inline const char * lookup( unsigned code, const char * values[], unsigned /*size*/ )
-      {  return values[code];  }
+  }
 
 }
 
-#endif /* PARSERUTILS_H_ */

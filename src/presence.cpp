@@ -11,7 +11,7 @@
 */
 
 #include "presence.h"
-#include "parserutils.h"
+#include "util.h"
 
 namespace gloox
 {
@@ -42,15 +42,17 @@ namespace gloox
     }
 
     m_type = StanzaPresence;
-    m_subtype = (PresenceType)lookup( findAttribute( "type" ), msgTypeStringValues,
+    m_subtype = (PresenceType)util::lookup( findAttribute( "type" ), msgTypeStringValues,
                                sizeof( msgTypeStringValues ) / sizeof(char*) );
+    printf("parsed '%s'\n", msgTypeStringValues[m_subtype]);
 
     if( m_subtype == PresenceAvailable )
     {
       Tag* t = findChild( "show" );
       if( t )
-        m_subtype = (PresenceType)lookup( t->cdata(), msgShowStringValues,
+        m_subtype = (PresenceType)util::lookup( t->cdata(), msgShowStringValues,
                               sizeof( msgShowStringValues ) / sizeof( char * ) );
+      printf("parsed '%s'\n", msgShowStringValues[m_subtype]);
     }
 
     const TagList& c = children();

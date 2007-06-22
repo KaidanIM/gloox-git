@@ -9,5 +9,5 @@ noinst_PROGRAMS = iq_test
 iq_test_SOURCES = iq_test.cpp
 iq_test_LDADD = ../../tag.o ../../iq.o ../../stanza.o ../../stanzaextensionfactory.o ../../oob.o \
                 ../../gpgencrypted.o ../../gpgsigned.o ../../vcardupdate.o ../../delayeddelivery.o \
-                ../../xdelayeddelivery.o ../../amp.o ../../jid.o ../../prep.o ../../gloox.o ../../parserutils.o
+                ../../xdelayeddelivery.o ../../amp.o ../../jid.o ../../prep.o ../../gloox.o ../../util.o
 iq_test_CFLAGS = $(CPPFLAGS)

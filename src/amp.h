@@ -47,7 +47,7 @@ namespace gloox
       /**
        * @brief Virtual Destructor.
        */
-      virtual ~AMP() {}
+      virtual ~AMP();
 
       // reimplemented from StanzaExtension
       virtual Tag* tag() const;

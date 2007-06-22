@@ -1,11 +1,11 @@
 #include "error.h"
 #include "tag.h"
-#include "parserutils.h"
+#include "util.h"
 
 /*
  - do we need tag() / how to save the XMLNS's (ie copy string or enumerated type) ?
  - std::pair / templates on all platforms ?
- - index based lookup offers short code as well as marking a clear
+ - index based util::lookup offers short code as well as marking a clear
    relashionship between string value and error code. It also ease
    adding/modifying/removing values and is much less error prone.
 */
@@ -101,16 +101,16 @@ namespace gloox
       m_type( ErrorNone ), m_subType( SubErrorNone ), m_feature( FeatureNone )
   {
     const std::string& genType = error->findAttribute( "type" );
-    m_genericType = (GenericErrorType)lookup( genType, genericErrorValues, nbGenericErrors );
+    m_genericType = (GenericErrorType)util::lookup( genType, genericErrorValues, nbGenericErrors );
     Tag::TagList::const_iterator it = error->children().begin();
-    m_type = (ErrorType)lookup( (*it)->name(), errorValues, nbErrors );
+    m_type = (ErrorType)util::lookup( (*it)->name(), errorValues, nbErrors );
     m_xmlns1 = (*it)->findAttribute( "xmlns" );
     if( ++it != error->children().end() )
     {
-      m_subType = (SubErrorType)lookup( (*it)->name(), subErrorValues, nbSubErrors );
+      m_subType = (SubErrorType)util::lookup( (*it)->name(), subErrorValues, nbSubErrors );
       m_xmlns2 = (*it)->findAttribute( "xmlns" );
       const std::string& feat = (*it)->findAttribute( "feature" );
-      m_feature = (FeatureType)lookup( feat, featureValues, nbFeatures );
+      m_feature = (FeatureType)util::lookup( feat, featureValues, nbFeatures );
     }
   }
 /*
@@ -122,19 +122,19 @@ namespace gloox
     {
       printf( "error: no basic error type\n" );
     }
-    int i = lookup( genType, genericErrorValues, nbGenericErrors );
+    int i = util::lookup( genType, genericErrorValues, nbGenericErrors );
     if( i == nbGenericErrors )
       return;
     m_genericType = genericErrorValues[i].second;
     Tag::TagList::const_iterator it = error->children().begin();
-    i = lookup( (*it)->name(), errorValues, nbErrors );
+    i = util::lookup( (*it)->name(), errorValues, nbErrors );
     if( i == nbErrors )
       return;
     m_type = errorValues[i].second;
     m_xmlns1 = (*it)->findAttribute( "xmlns" );
     if( ++it != error->children().end() )
     {
-      i = lookup( (*it)->name(), subErrorValues, nbSubErrors );
+      i = util::lookup( (*it)->name(), subErrorValues, nbSubErrors );
       if( i == nbSubErrors )
         return;
       m_subType = subErrorValues[i].second;
@@ -142,7 +142,7 @@ namespace gloox
       const std::string& feat = (*it)->findAttribute( "feature" );
       if( feat.empty() )
         return;
-      i = lookup( feat, featureValues, nbFeatures );
+      i = util::lookup( feat, featureValues, nbFeatures );
       if( i == nbFeatures )
         return;
       m_feature = featureValues[i].second;
@@ -159,11 +159,11 @@ namespace gloox
     if( m_genericType == GenericErrorNone || m_type == ErrorNone )
       return 0;
     Tag * error = new Tag( "error" );
-    error->addAttribute( "type", lookup( m_genericType, genericErrorValues, nbGenericErrors ) );
-    new Tag( error, lookup( m_type, errorValues, nbErrors ), "xmlns", m_xmlns1 );
+    error->addAttribute( "type", util::lookup( m_genericType, genericErrorValues, nbGenericErrors ) );
+    new Tag( error, util::lookup( m_type, errorValues, nbErrors ), "xmlns", m_xmlns1 );
     if( m_subType != SubErrorNone )
     {
-      Tag * tag = new Tag( error, lookup( m_subType, subErrorValues, nbSubErrors ), "xmlns", m_xmlns2 );
+      Tag * tag = new Tag( error, util::lookup( m_subType, subErrorValues, nbSubErrors ), "xmlns", m_xmlns2 );
       if( m_subType == Unsupported )
         tag->addAttribute( "feature", m_feature );      
     }

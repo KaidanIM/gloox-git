@@ -13,7 +13,7 @@
 
 #include "amp.h"
 #include "tag.h"
-#include "parserutils.h"
+#include "util.h"
 
 namespace gloox
 {
@@ -30,32 +30,30 @@ namespace gloox
     "direct", "forward", "gateway", "none", "stored"
   };
 
+  static const char * matchResourceValues[] = {
+    "any", "exact", "other"
+  };
+
   AMP::Rule::Rule( const std::string& condition,
                    const std::string& action,
                    const std::string& value )
   {
-    m_condition = (ConditionType)lookup( condition, conditionValues,
+    m_condition = (ConditionType)util::lookup( condition, conditionValues,
                                  sizeof(conditionValues)/sizeof(const char *) );
-    m_action = (ActionType)lookup( action, actionValues,
+    m_action = (ActionType)util::lookup( action, actionValues,
                                     sizeof(actionValues)/sizeof(const char *) );
     switch( m_condition )
     {
       case ConditionDeliver:
-        deliver = (DeliverType)lookup( value, deliverValues,
+        deliver = (DeliverType)util::lookup( value, deliverValues,
                                    sizeof(deliverValues)/sizeof(const char *) );
       case ConditionExpireAt:
         // parse time
         //  expireat.tm_ = val;
         break;
       case ConditionMatchResource:
-        if( value == "any" )
-          matchresource = MatchResourceAny;
-        else if( value == "exact" )
-          matchresource = MatchResourceExact;
-        else if( value == "other" )
-          matchresource = MatchResourceOther;
-        else
-          matchresource = MatchResourceInvalid;
+        matchresource = (MatchResourceType)util::lookup( value, matchResourceValues,
+                                   sizeof(matchResourceValues)/sizeof(const char *) );
         break;
       default:
       case ConditionInvalid: // shouldn't happen
@@ -70,9 +68,9 @@ namespace gloox
      return 0;
       
     Tag* rule = new Tag( "rule" );
-    rule->addAttribute( "condition", lookup( m_condition, conditionValues,
+    rule->addAttribute( "condition", util::lookup( m_condition, conditionValues,
                                sizeof(conditionValues)/sizeof(const char *) ) );
-    rule->addAttribute( "action", lookup( m_action, actionValues,
+    rule->addAttribute( "action", util::lookup( m_action, actionValues,
                                   sizeof(actionValues)/sizeof(const char *) ) );
 
     switch( m_condition )
@@ -83,7 +81,7 @@ namespace gloox
           delete rule;
           return 0;
         }
-        rule->addAttribute( "value", lookup( deliver, deliverValues,
+        rule->addAttribute( "value", util::lookup( deliver, deliverValues,
                                   sizeof(deliverValues)/sizeof(const char*) ) );
         break;
       case ConditionExpireAt:
@@ -131,6 +129,13 @@ namespace gloox
       amp->addChild( (*it)->tag() );
 
     return amp;
+  }
+
+  AMP::~AMP()
+  {
+    RuleList::iterator it = m_rules.begin();
+    for( ; it != m_rules.end() ; ++it )
+      delete (*it);
   }
 
 }
