@@ -18,19 +18,23 @@
 namespace gloox
 {
 
-  static const char * conditionValues[] = {
+  static const char * conditionValues[] =
+  {
     "deliver", "expire-at", "match-resource"
   };
 
-  static const char * actionValues[] = {
+  static const char * actionValues[] =
+  {
     "alert", "error", "drop", "notify"
   };
 
-  static const char * deliverValues[] = {
+  static const char * deliverValues[] =
+  {
     "direct", "forward", "gateway", "none", "stored"
   };
 
-  static const char * matchResourceValues[] = {
+  static const char * matchResourceValues[] =
+  {
     "any", "exact", "other"
   };
 
@@ -62,7 +66,7 @@ namespace gloox
     if( m_condition == ConditionInvalid || m_action == ActionInvalid
        || deliver == DeliverInvalid )
      return 0;
-      
+
     Tag* rule = new Tag( "rule" );
     rule->addAttribute( "condition", util::lookup( m_condition, conditionValues ) );
     rule->addAttribute( "action", util::lookup( m_action, actionValues ) );

@@ -56,7 +56,8 @@ namespace gloox
       /**
        * @brief Possible types for a rule's condition.
        */
-      enum ConditionType {
+      enum ConditionType
+      {
         ConditionDeliver,       /**< Ensures (non-)delivery of the message */
         ConditionExpireAt,      /**< Ensures delivery only before a certain time (UTC) */
         ConditionMatchResource, /**< Ensures delivery only to a specific resource type */
@@ -66,7 +67,8 @@ namespace gloox
       /**
        * @brief Possible actions to take when the corresponding condition is met.
        */
-      enum ActionType {
+      enum ActionType
+      {
 
         ActionAlert,       /**< Sends back a message stanza with an 'alert' status */
         ActionError,       /**< Sends back a message stanza with an error type */
@@ -75,7 +77,8 @@ namespace gloox
         ActionInvalid      /**< Invalid action */
       };
 
-      enum DeliverType {
+      enum DeliverType
+      {
         DeliverDirect,      /**< The message would be immediately delivered to the intended
                              *   recipient or routed to the next hop. */
         DeliverForward,     /**< The message would be forwarded to another XMPP address or
@@ -90,7 +93,8 @@ namespace gloox
         DeliverInvalid      /**< Invalid deliver value */
       };
 
-      enum MatchResourceType {
+      enum MatchResourceType
+      {
         MatchResourceAny,         /**< Destination resource matches any value, effectively
                                    *   ignoring the intended resource. */
         MatchResourceExact,       /**< Destination resource exactly matches the intended
