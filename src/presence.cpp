@@ -48,7 +48,6 @@ namespace gloox
     else
       m_subtype = (PresenceType)util::lookup( type, msgTypeStringValues,
                                sizeof( msgTypeStringValues ) / sizeof(char*) );
-    printf("parsed '%s'\n", msgTypeStringValues[m_subtype]);
 
     if( m_subtype == PresenceAvailable )
     {
@@ -56,7 +55,6 @@ namespace gloox
       if( t )
         m_subtype = (PresenceType)util::lookup( t->cdata(), msgShowStringValues,
                               sizeof( msgShowStringValues ) / sizeof( char * ) );
-      printf("parsed '%s'\n", msgShowStringValues[m_subtype]);
     }
 
     const TagList& c = children();
