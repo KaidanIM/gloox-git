@@ -303,7 +303,6 @@ src/tests/presence/Makefile
 src/tests/search/Makefile
 src/tests/sha/Makefile
 src/tests/simanager/Makefile
-src/tests/stanza/Makefile
 src/tests/stanzaextensionfactory/Makefile
 src/tests/subscription/Makefile
 src/tests/tag/Makefile
