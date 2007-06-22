@@ -11,25 +11,26 @@
 */
 
 #include "presence.h"
+#include "parserutils.h"
 
 namespace gloox
 {
 
-  static const std::string msgTypeStringValues[] =
+  static const char * msgTypeStringValues[] =
   {
     "", "", "", "", "", "unavailable", "probe", "error"
   };
 
-  static inline const std::string& typeString( Presence::PresenceType type )
-    { return msgTypeStringValues[type-1]; }
+  static inline const char * typeString( Presence::PresenceType type )
+    { return msgTypeStringValues[type]; }
 
-  static const std::string msgShowStringValues[] =
+  static const char * msgShowStringValues[] =
   {
     "", "chat", "away", "dnd", "xa", "", "", ""
   };
 
   static inline const std::string& showString( Presence::PresenceType type )
-  { return msgShowStringValues[type-1]; }
+  { return msgShowStringValues[type]; }
 
   Presence::Presence( Tag *tag, bool rip )
     : Stanza( tag, rip ), m_subtype( PresenceInvalid ), m_priority( 0 )
@@ -41,33 +42,16 @@ namespace gloox
     }
 
     m_type = StanzaPresence;
+    m_subtype = lookup( findAttribute( "type" ), msgTypeStringValues,
+                               sizeof( msgTypeStringValues ) / sizeof(char*) );
 
-//     m_subtype = lookup( findAttribute( "type" ), msgTypeStringValues, sizeof( msgTypeStringValues ) );
-    const std::string& type = findAttribute( "type" );
-    if( type.empty() || type == "available" )
+    if( m_subtype == PresenceAvailable )
     {
-      m_subtype = PresenceAvailable;
       Tag* t = findChild( "show" );
       if( t )
-      {
-//       m_subtype = _lookup( show, msgShowStringValues, sizeof( msgShowStringValues );
-        const std::string& show = t->cdata();
-        if( show == "chat" )
-          m_subtype = PresenceChat;
-        else if( show == "away" )
-          m_subtype = PresenceAway;
-        else if( show == "dnd" )
-          m_subtype = PresenceDnd;
-        else if( show == "xa" )
-          m_subtype = PresenceXa;
-      }
+        m_subtype = lookup( t->cdata(), msgShowStringValues,
+                              sizeof( msgShowStringValues ) / sizeof( char * );
     }
-    else if( type == "unavailable" )
-      m_subtype = PresenceUnavailable;
-    else if( type == "error" )
-      m_subtype = PresenceError;
-    else if( type == "probe" )
-      m_subtype = PresenceProbe;
 
     const TagList& c = children();
     TagList::const_iterator it = c.begin();
