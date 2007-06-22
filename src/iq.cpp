@@ -21,7 +21,7 @@ namespace gloox
   };
 
   static inline const std::string& typeString( IQ::IqType type )
-    { return iqTypeStringValues[type-1]; }
+    { return iqTypeStringValues[type]; }
 
   IQ::IQ( Tag *tag, bool rip )
     : Stanza( tag, rip ), m_query( 0 ), m_subtype( IqTypeInvalid )
