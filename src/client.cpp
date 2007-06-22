@@ -510,17 +510,8 @@ namespace gloox
     if( m_presence != Presence::PresenceInvalid &&
         m_presence != Presence::PresenceUnavailable )
     {
-      Stanza *p = new Presence( m_presence, JID(), m_status, m_priority );
-/*#ifdef _WIN32_WCE
-      char tmp[5];
-      tmp[4] = '\0';
-      sprintf( tmp, "%d", m_priority );
-      new Tag( p, "priority", tmp );
-#else
-      std::ostringstream oss;
-      oss << m_priority;
-      new Tag( p, "priority", oss.str() );
-#endif*/
+      Presence* p = new Presence( m_presence, JID(), m_status, m_priority );
+
       StanzaExtensionList::const_iterator it = m_presenceExtensions.begin();
       for( ; it != m_presenceExtensions.end(); ++it )
       {
