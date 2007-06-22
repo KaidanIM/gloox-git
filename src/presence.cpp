@@ -42,15 +42,15 @@ namespace gloox
     }
 
     m_type = StanzaPresence;
-    m_subtype = lookup( findAttribute( "type" ), msgTypeStringValues,
+    m_subtype = (PresenceType)lookup( findAttribute( "type" ), msgTypeStringValues,
                                sizeof( msgTypeStringValues ) / sizeof(char*) );
 
     if( m_subtype == PresenceAvailable )
     {
       Tag* t = findChild( "show" );
       if( t )
-        m_subtype = lookup( t->cdata(), msgShowStringValues,
-                              sizeof( msgShowStringValues ) / sizeof( char * );
+        m_subtype = (PresenceType)lookup( t->cdata(), msgShowStringValues,
+                              sizeof( msgShowStringValues ) / sizeof( char * ) );
     }
 
     const TagList& c = children();
