@@ -23,7 +23,7 @@ namespace gloox
      * @param values Array of String/Code pairs to look into.
      * @return The associated enum code.
      */
-    int lookup( const std::string& str, const LookupPair values[], unsigned size )
+    unsigned lookup( const std::string& str, const LookupPair values[], unsigned size )
     {
       unsigned i = 0;
       for( ; i < size && str != values[i].first;  ++i ) ;
@@ -38,7 +38,7 @@ namespace gloox
      * @param values Array of String/Code pairs to look into.
      * @return The associated enum code.
      */
-    int lookup( const std::string& str, const char * values[], unsigned size )
+    unsigned lookup( const std::string& str, const char * values[], unsigned size )
     {
       unsigned i = 0;
       for( ; i < size && str != values[i]; ++i ) ;
@@ -51,24 +51,11 @@ namespace gloox
      * @param values Array of String/Code pairs to look into.
      * @return The associated string (or 0 in case there's no match).
      */
-    const char * lookup( int code, const LookupPair values[], unsigned size )
+    const char * lookup( unsigned code, const LookupPair values[], unsigned size )
     {
       unsigned i = 0;
       for( ; i < size && code != values[i].second; ++i ) ;
       return i != size ? values[i].first : 0;
-    }
-
-    /**
-     * Finds the enumerated value associated with a string value.
-     * The enumerated type must have a default (invalid/unknown) value type with
-     * a value of 0. eg: enum X { XInvalid = 0, ... };
-     * @param str String to search for.
-     * @param values Array of String/Code pairs to look into.
-     * @return The associated enum code.
-     */
-    const char * lookup( int i, const char * values[], unsigned size )
-    {
-      return i < size ? values[i] : 0;
     }
 
 }

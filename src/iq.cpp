@@ -11,16 +11,17 @@
 */
 
 #include "iq.h"
+#include "parserutils.h"
 
 namespace gloox
 {
 
-  static const std::string iqTypeStringValues[] =
+  static const char * iqTypeStringValues[] =
   {
     "get", "set", "result", "error"
   };
 
-  static inline const std::string& typeString( IQ::IqType type )
+  static inline const char * typeString( IQ::IqType type )
     { return iqTypeStringValues[type]; }
 
   IQ::IQ( Tag *tag, bool rip )
@@ -33,15 +34,8 @@ namespace gloox
     }
 
     m_type = StanzaIq;
-
-    if( hasAttribute( "type", "get" ) )
-      m_subtype = IqTypeGet;
-    else if( hasAttribute( "type", "set" ) )
-      m_subtype = IqTypeSet;
-    else if( hasAttribute( "type", "result" ) )
-      m_subtype = IqTypeResult;
-    else if( hasAttribute( "type", "error" ) )
-      m_subtype = IqTypeError;
+    m_subtype = ( IQ::IqType )lookup( findAttribute( "type" ), iqTypeStringValues,
+                                         sizeof( iqTypeStringValues ) / sizeof( const char * ) );
 
     m_query = findChildWithAttrib( "xmlns" );
     if( m_query )
