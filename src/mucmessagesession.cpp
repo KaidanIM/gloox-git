@@ -37,12 +37,7 @@ namespace gloox
 
   void MUCMessageSession::send( const std::string& message )
   {
-    Tag *m = new Tag( "message" );
-    m->addAttribute( "type", "groupchat" );
-    new Tag( m, "body", message );
-
-    m->addAttribute( "from", m_parent->jid().full() );
-    m->addAttribute( "to", m_target.full() );
+    Message* m = new Message( Message::MessageGroupchat, m_target, message );
 
 //     decorate( m );
 
@@ -51,11 +46,7 @@ namespace gloox
 
   void MUCMessageSession::setSubject( const std::string& subject )
   {
-    Tag *m = new Tag( "message" );
-    m->addAttribute( "to", m_target.bare() );
-    m->addAttribute( "type", "groupchat" );
-    new Tag( m, "subject", subject );
-
+    Message* m = new Message( Message::MessageGroupchat, m_target.bareJID(), "", subject );
     m_parent->send( m );
   }
 

@@ -56,9 +56,9 @@ namespace gloox
        * Creates a Message.
        */
       Message( MessageType type, const JID& to,
-                const std::string& body = "", const std::string& thread = "",
-                const std::string& xmllang = "", const std::string& subject = "",
-                const JID& from = JID() );
+               const std::string& body = "", const std::string& subject = "",
+               const std::string& thread = "", const std::string& xmllang = "",
+               const JID& from = JID() );
       /**
        * Destructor.
        */

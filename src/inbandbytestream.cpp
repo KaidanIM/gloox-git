@@ -96,8 +96,7 @@ namespace gloox
     if( !m_open || !m_parent || !m_clientbase || data.length() > m_blockSize )
       return false;
 
-    Tag *m = new Tag( "message" );
-    m->addAttribute( "to", m_parent->target().full() );
+    Message* m = new Message( Message::MessageNormal, m_parent->target() );
     m->addAttribute( "id", m_clientbase->getID() );
     Tag *d = new Tag( m, "data", Base64::encode64( data ) );
     d->addAttribute( "sid", m_sid );

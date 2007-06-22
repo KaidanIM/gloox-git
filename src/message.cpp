@@ -73,8 +73,8 @@ namespace gloox
   }
 
   Message::Message( MessageType type, const JID& to,
-                    const std::string& body, const std::string& thread,
-                    const std::string& xmllang, const std::string& subject, const JID& from )
+                    const std::string& body, const std::string& subject,
+                    const std::string& thread, const std::string& xmllang, const JID& from )
     : Stanza( "message", to, from ), m_subtype( MessageInvalid )
   {
     addAttribute( "type", typeString( type ) );
