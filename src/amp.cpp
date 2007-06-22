@@ -38,22 +38,18 @@ namespace gloox
                    const std::string& action,
                    const std::string& value )
   {
-    m_condition = (ConditionType)util::lookup( condition, conditionValues,
-                                 sizeof(conditionValues)/sizeof(const char *) );
-    m_action = (ActionType)util::lookup( action, actionValues,
-                                    sizeof(actionValues)/sizeof(const char *) );
+    m_condition = (ConditionType)util::lookup( condition, conditionValues );
+    m_action = (ActionType)util::lookup( action, actionValues );
     switch( m_condition )
     {
       case ConditionDeliver:
-        deliver = (DeliverType)util::lookup( value, deliverValues,
-                                   sizeof(deliverValues)/sizeof(const char *) );
+        deliver = (DeliverType)util::lookup( value, deliverValues );
       case ConditionExpireAt:
         // parse time
         //  expireat.tm_ = val;
         break;
       case ConditionMatchResource:
-        matchresource = (MatchResourceType)util::lookup( value, matchResourceValues,
-                                   sizeof(matchResourceValues)/sizeof(const char *) );
+        matchresource = (MatchResourceType)util::lookup( value, matchResourceValues );
         break;
       default:
       case ConditionInvalid: // shouldn't happen
@@ -68,10 +64,8 @@ namespace gloox
      return 0;
       
     Tag* rule = new Tag( "rule" );
-    rule->addAttribute( "condition", util::lookup( m_condition, conditionValues,
-                               sizeof(conditionValues)/sizeof(const char *) ) );
-    rule->addAttribute( "action", util::lookup( m_action, actionValues,
-                                  sizeof(actionValues)/sizeof(const char *) ) );
+    rule->addAttribute( "condition", util::lookup( m_condition, conditionValues ) );
+    rule->addAttribute( "action", util::lookup( m_action, actionValues ) );
 
     switch( m_condition )
     {
@@ -81,8 +75,7 @@ namespace gloox
           delete rule;
           return 0;
         }
-        rule->addAttribute( "value", util::lookup( deliver, deliverValues,
-                                  sizeof(deliverValues)/sizeof(const char*) ) );
+        rule->addAttribute( "value", util::lookup( deliver, deliverValues ) );
         break;
       case ConditionExpireAt:
           // parse time

@@ -91,26 +91,21 @@ namespace gloox
      "subscription-notifications",
   };
 
-  static const int nbErrors = sizeof(errorValues)/sizeof(LookupPair);
-  static const int nbFeatures = sizeof(featureValues)/sizeof(LookupPair);
-  static const int nbSubErrors = sizeof(subErrorValues)/sizeof(LookupPair);
-  static const int nbGenericErrors = sizeof(genericErrorValues)/sizeof(LookupPair);
-
   Error::Error( const Tag * error )
     : StanzaExtension( ExtError ), m_genericType( GenericErrorNone ),
       m_type( ErrorNone ), m_subType( SubErrorNone ), m_feature( FeatureNone )
   {
     const std::string& genType = error->findAttribute( "type" );
-    m_genericType = (GenericErrorType)util::lookup( genType, genericErrorValues, nbGenericErrors );
+    m_genericType = (GenericErrorType)util::lookup( genType, genericErrorValues );
     Tag::TagList::const_iterator it = error->children().begin();
-    m_type = (ErrorType)util::lookup( (*it)->name(), errorValues, nbErrors );
+    m_type = (ErrorType)util::lookup( (*it)->name(), errorValues );
     m_xmlns1 = (*it)->findAttribute( "xmlns" );
     if( ++it != error->children().end() )
     {
-      m_subType = (SubErrorType)util::lookup( (*it)->name(), subErrorValues, nbSubErrors );
+      m_subType = (SubErrorType)util::lookup( (*it)->name(), subErrorValues );
       m_xmlns2 = (*it)->findAttribute( "xmlns" );
       const std::string& feat = (*it)->findAttribute( "feature" );
-      m_feature = (FeatureType)util::lookup( feat, featureValues, nbFeatures );
+      m_feature = (FeatureType)util::lookup( feat, featureValues );
     }
   }
 /*
@@ -159,11 +154,11 @@ namespace gloox
     if( m_genericType == GenericErrorNone || m_type == ErrorNone )
       return 0;
     Tag * error = new Tag( "error" );
-    error->addAttribute( "type", util::lookup( m_genericType, genericErrorValues, nbGenericErrors ) );
-    new Tag( error, util::lookup( m_type, errorValues, nbErrors ), "xmlns", m_xmlns1 );
+    error->addAttribute( "type", util::lookup( m_genericType, genericErrorValues ) );
+    new Tag( error, util::lookup( m_type, errorValues ), "xmlns", m_xmlns1 );
     if( m_subType != SubErrorNone )
     {
-      Tag * tag = new Tag( error, util::lookup( m_subType, subErrorValues, nbSubErrors ), "xmlns", m_xmlns2 );
+      Tag * tag = new Tag( error, util::lookup( m_subType, subErrorValues ), "xmlns", m_xmlns2 );
       if( m_subType == Unsupported )
         tag->addAttribute( "feature", m_feature );      
     }

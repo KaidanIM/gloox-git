@@ -14,14 +14,16 @@
 #define UTIL_H_
 
 #include <string>
+#include <math.h>
 
 namespace gloox
 {
 
-  typedef std::pair< const char *, unsigned > LookupPair;
-
   namespace util
   {  
+
+    #define lookup( a, b ) _lookup( a, b, sizeof(b)/sizeof(char*) )
+    #define lookup2( a, b ) _lookup2( a, b, sizeof(b)/sizeof(char*) )
 
     /**
      * Finds the enumerated value associated with a string value.
@@ -31,7 +33,29 @@ namespace gloox
      * @param values Array of String/Code pairs to look into.
      * @return The associated enum code.
      */
-    unsigned lookup( const std::string& str, const LookupPair values[], unsigned size );
+    unsigned _lookup( const std::string& str, const char * values[], unsigned size );
+
+    /**
+     * Finds the enumerated value associated with a string value.
+     * The enumerated type must have a default (invalid/unknown) value type with
+     * a value of 0. eg: enum X { XInvalid = 0, ... };
+     * @param str String to search for.
+     * @param values Array of String/Code pairs to look into.
+     * @return The associated enum code.
+     */
+    inline const char * _lookup( unsigned code, const char * values[], unsigned size )
+      {  return code < size ? values[code] : 0;  }
+
+    /**
+     * Finds the enumerated value associated with a string value.
+     * The enumerated type must have a default (invalid/unknown) value type with
+     * a value of 0. eg: enum X { XInvalid = 0, ... };
+     * @param str String to search for.
+     * @param values Array of String/Code pairs to look into.
+     * @return The associated enum code.
+     */
+    inline unsigned _lookup2( const std::string& str, const char * values[], unsigned size )
+      {  return 1 << _lookup( str, values, size ); }
 
     /**
      * Finds the string associated with an enumerated type.
@@ -39,28 +63,11 @@ namespace gloox
      * @param values Array of String/Code pairs to look into.
      * @return The associated string (or 0 in case there's no match).
      */
-    const char * lookup( unsigned code, const LookupPair values[], unsigned size );
-
-    /**
-     * Finds the enumerated value associated with a string value.
-     * The enumerated type must have a default (invalid/unknown) value type with
-     * a value of 0. eg: enum X { XInvalid = 0, ... };
-     * @param str String to search for.
-     * @param values Array of String/Code pairs to look into.
-     * @return The associated enum code.
-     */
-    unsigned lookup( const std::string& str, const char * values[], unsigned size );
-
-    /**
-     * Finds the enumerated value associated with a string value.
-     * The enumerated type must have a default (invalid/unknown) value type with
-     * a value of 0. eg: enum X { XInvalid = 0, ... };
-     * @param str String to search for.
-     * @param values Array of String/Code pairs to look into.
-     * @return The associated enum code.
-     */
-    inline const char * lookup( unsigned code, const char * values[], unsigned /*size*/ )
-      {  return values[code];  }
+    inline const char * _lookup2( unsigned code, const char * values[], unsigned size )
+    {
+      long i = log2(code);
+      return i < size ? values[i] : 0;
+    }
 
   }
 
