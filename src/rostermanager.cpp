@@ -207,7 +207,7 @@ namespace gloox
   void RosterManager::unsubscribe( const JID& jid, const std::string& msg )
   {
     Subscription* p = new Subscription( Subscription::S10nUnsubscribe, jid.bareJID(), msg );
-    m_parent->send( s );
+    m_parent->send( p );
   }
 
   void RosterManager::cancel( const JID& jid, const std::string& msg )

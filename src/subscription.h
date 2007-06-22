@@ -53,7 +53,7 @@ namespace gloox
       /**
        * Creates a Subscription request.
        */
-      Subscription( S10nType type, const JID& to, const std::string& status,
+      Subscription( S10nType type, const JID& to, const std::string& status = "",
                      const std::string& xmllang = "", const JID& from = JID() );
       /**
        * Destructor.

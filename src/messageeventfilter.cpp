@@ -86,8 +86,7 @@ namespace gloox
     if( m_disable || ( !( m_requestedEvents & event ) && ( event != MessageEventCancel ) ) )
       return;
 
-    Tag *m = new Tag( "message" );
-    m->addAttribute( "to", m_parent->target().full() );
+    Message* m = new Message( Message::MessageNormal, m_parent->target() );
     Tag *x = new Tag( m, "x" );
     x->addAttribute( "xmlns", XMLNS_X_EVENT );
     new Tag( x, "id", m_lastID );

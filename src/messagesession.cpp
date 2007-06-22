@@ -72,16 +72,8 @@ namespace gloox
       m_hadMessages = true;
     }
 
-    Tag *m = new Tag( "message" );
-    m->addAttribute( "type", "chat" );
-    new Tag( m, "body", message );
-    if( !subject.empty() )
-      new Tag( m, "subject", subject );
-
-    m->addAttribute( "from", m_parent->jid().full() );
-    m->addAttribute( "to", m_target.full() );
+    Message* m = new Message( Message::MessageChat, m_target.full(), message, subject, m_thread );
     m->addAttribute( "id", m_parent->getID() );
-    new Tag( m, "thread", m_thread );
 
     decorate( m );
 

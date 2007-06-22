@@ -197,8 +197,7 @@ namespace gloox
     if( !m_parent || !m_joined )
       return;
 
-    Tag *m = new Tag( "message" );
-    m->addAttribute( "to", m_nick.bare() );
+    Message* m = new Message( Message::MessageNormal, m_nick.bareJID() );
     Tag *x = new Tag( m, "x" );
     x->addAttribute( "xmlns", XMLNS_MUC_USER );
     Tag *i = new Tag( x, "invite" );
@@ -243,9 +242,7 @@ namespace gloox
     if( !m_joined || !m_parent )
       return;
 
-    Tag *m = new Tag( "message" );
-    m->addAttribute( "to", m_nick.bare() );
-    new Tag( m, "body", message );
+    Message *m = new Message( Message::MessageNormal, m_nick.bareJID(), message );
     Tag *x = new Tag( m, "x" );
     x->addAttribute( "xmlns", XMLNS_X_DELAY );
     x->addAttribute( "from", from.full() );
