@@ -51,17 +51,10 @@ namespace gloox
     const std::string& id = m_parent->getID();
     const std::string& id2 = m_parent->getID();
 
-    Tag* iq = new Tag( "iq" );
-    iq->addAttribute( "type", "set" );
-    iq->addAttribute( "id", id );
-    iq->addAttribute( "to", to.full() );
-    Tag* si = new Tag( iq, "si" );
-    si->addAttribute( "xmlns", XMLNS_SI );
+    IQ* iq = new IQ( IQ::IqTypeSet, to, id, XMLNS_SI, "si" );
+    Tag* si = iq->query();
     si->addAttribute( "id", id2 );
-    if( mimetype.empty() )
-      si->addAttribute( "mime-type", "binary/octet-stream" );
-    else
-      si->addAttribute( "mime-type", mimetype );
+    si->addAttribute( "mime-type", mimetype.empty() ? "binary/octet-stream" : mimetype );
     si->addAttribute( "profile", profile );
 
     si->addChild( child1 );
@@ -80,25 +73,16 @@ namespace gloox
 
   void SIManager::acceptSI( const JID& to, const std::string& id, Tag* child1, Tag* child2 )
   {
-    Tag* iq = new Tag( "iq" );
-    iq->addAttribute( "id", id );
-    iq->addAttribute( "to", to.full() );
-    iq->addAttribute( "type", "result" );
-    Tag* si = new Tag( iq, "si" );
-    si->addAttribute( "xmlns", XMLNS_SI );
-
-    si->addChild( child1 );
-    si->addChild( child2 );
+    IQ* iq = new IQ( IQ::IqTypeResult, to, id, XMLNS_SI, "si" );
+    iq->query()->addChild( child1 );
+    iq->query()->addChild( child2 );
 
     m_parent->send( iq );
   }
 
   void SIManager::declineSI( const JID& to, const std::string& id, SIError reason, const std::string& text )
   {
-    Tag* iq = new Tag( "iq" );
-    iq->addAttribute( "id", id );
-    iq->addAttribute( "to", to.full() );
-    iq->addAttribute( "type", "error" );
+    IQ* iq = new IQ( IQ::IqTypeError, to, id );
     Tag* error = new Tag( iq, "error" );
     if( reason == NoValidStreams || reason == BadProfile )
     {

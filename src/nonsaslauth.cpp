@@ -38,13 +38,8 @@ namespace gloox
     m_sid = sid;
     const std::string& id = m_parent->getID();
 
-    Tag *iq = new Tag( "iq" );
-    iq->addAttribute( "to", m_parent->jid().server() );
-    iq->addAttribute( "id", id );
-    iq->addAttribute( "type", "get" );
-    Tag *q = new Tag( iq, "query" );
-    q->addAttribute( "xmlns", XMLNS_AUTH );
-    new Tag( q, "username", m_parent->username() );
+    IQ* iq = new IQ( IQ::IqTypeGet, m_parent->jid().server(), id, XMLNS_AUTH );
+    new Tag( iq->query(), "username", m_parent->username() );
 
     m_parent->trackID( this, id, TRACK_REQUEST_AUTH_FIELDS );
     m_parent->send( iq );
@@ -78,16 +73,13 @@ namespace gloox
           {
             const std::string& id = m_parent->getID();
 
-            Tag *iq = new Tag( "iq" );
-            iq->addAttribute( "id", id );
-            iq->addAttribute( "type", "set" );
-            Tag *query = new Tag( iq, "query" );
-            query->addAttribute( "xmlns", XMLNS_AUTH );
+            IQ* re = new IQ( IQ::IqTypeSet, JID(), id, XMLNS_AUTH );
+            Tag *query = re->query();
             new Tag( query, "username", m_parent->jid().username() );
             new Tag( query, "resource", m_parent->jid().resource() );
 
-            Tag *q = iq->findChild( "query" );
-            if( ( q->hasChild( "digest" ) ) && !m_sid.empty() )
+            Tag *q = iq->query();
+            if( q && q->hasChild( "digest" ) && !m_sid.empty() )
             {
               SHA sha;
               sha.feed( m_sid );
@@ -101,7 +93,7 @@ namespace gloox
             }
 
             m_parent->trackID( this, id, TRACK_SEND_AUTH );
-            m_parent->send( iq );
+            m_parent->send( re );
             break;
           }
           case TRACK_SEND_AUTH:

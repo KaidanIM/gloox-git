@@ -405,10 +405,8 @@ namespace gloox
   void Client::createSession()
   {
     notifyStreamEvent( StreamEventSessionCreation );
-
     const std::string& id = getID();
     IQ *iq = new IQ( IQ::IqTypeSet, JID(), id, XMLNS_STREAM_SESSION, "session" );
-
     trackID( this, id, SessionEstablishment );
     send( iq );
   }

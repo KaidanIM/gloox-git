@@ -52,13 +52,7 @@ namespace gloox
 
     const std::string& id = m_parent->getID();
 
-    Tag *iq = new Tag( "iq" );
-    if( !m_to.empty() )
-      iq->addAttribute( "to", m_to.full() );
-    iq->addAttribute( "type", "get" );
-    iq->addAttribute( "id", id );
-    Tag *q = new Tag( iq, "query" );
-    q->addAttribute( "xmlns", XMLNS_REGISTER );
+    IQ* iq = new IQ( IQ::IqTypeGet, m_to, id, XMLNS_REGISTER );
 
     m_parent->trackID( this, id, FetchRegistrationFields );
     m_parent->send( iq );
@@ -71,13 +65,8 @@ namespace gloox
 
     const std::string& id = m_parent->getID();
 
-    Tag *iq = new Tag( "iq" );
-    if( !m_to.empty() )
-      iq->addAttribute( "to", m_to.full() );
-    iq->addAttribute( "id", id );
-    iq->addAttribute( "type", "set" );
-    Tag *q = new Tag( iq, "query" );
-    q->addAttribute( "xmlns", XMLNS_REGISTER );
+    IQ* iq = new IQ( IQ::IqTypeSet, m_to, id, XMLNS_REGISTER );
+    Tag *q = iq->query();
 
     if( fields & FieldUsername )
       new Tag( q, "username", prep::nodeprep( values.username ) );
@@ -123,14 +112,8 @@ namespace gloox
 
     const std::string& id = m_parent->getID();
 
-    Tag *iq = new Tag( "iq" );
-    if( !m_to.empty() )
-      iq->addAttribute( "to", m_to.full() );
-    iq->addAttribute( "id", id );
-    iq->addAttribute( "type", "set" );
-    Tag *q = new Tag( iq, "query" );
-    q->addAttribute( "xmlns", XMLNS_REGISTER );
-    q->addChild( form.tag() );
+    IQ* iq = new IQ( IQ::IqTypeSet, m_to, id, XMLNS_REGISTER );
+    iq->query()->addChild( form.tag() );
 
     m_parent->trackID( this, id, CreateAccount );
     m_parent->send( iq );
@@ -143,15 +126,9 @@ namespace gloox
 
     const std::string& id = m_parent->getID();
 
-    Tag *iq = new Tag( "iq" );
-    if( !m_to.empty() )
-      iq->addAttribute( "to", m_to.full() );
-    iq->addAttribute( "type", "set" );
-    iq->addAttribute( "id", id );
+    IQ* iq = new IQ( IQ::IqTypeSet, m_to, id, XMLNS_REGISTER );
     iq->addAttribute( "from", m_parent->jid().full() );
-    Tag *q = new Tag( iq, "query" );
-    q->addAttribute( "xmlns", XMLNS_REGISTER );
-    new Tag( q, "remove" );
+    new Tag( iq->query(), "remove" );
 
     m_parent->trackID( this, id, RemoveAccount );
     m_parent->send( iq );
@@ -164,15 +141,9 @@ namespace gloox
 
     const std::string& id = m_parent->getID();
 
-    Tag *iq = new Tag( "iq" );
-    if( !m_to.empty() )
-      iq->addAttribute( "to", m_to.full() );
-    iq->addAttribute( "type", "set" );
-    iq->addAttribute( "id", id );
-    Tag *q = new Tag( iq, "query" );
-    q->addAttribute( "xmlns", XMLNS_REGISTER );
-    new Tag( q, "username", username );
-    new Tag( q, "password", password );
+    IQ* iq = new IQ( IQ::IqTypeSet, m_to, id, XMLNS_REGISTER );
+    new Tag( iq->query(), "username", username );
+    new Tag( iq->query(), "password", password );
 
     m_parent->trackID( this, id, ChangePassword );
     m_parent->send( iq );

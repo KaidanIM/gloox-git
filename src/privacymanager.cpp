@@ -39,11 +39,7 @@ namespace gloox
   {
     const std::string& id = m_parent->getID();
 
-    Tag *iq = new Tag( "iq" );
-    iq->addAttribute( "type", "get" );
-    iq->addAttribute( "id", id );
-    Tag *q = new Tag( iq, "query" );
-    q->addAttribute( "xmlns", XMLNS_PRIVACY );
+    IQ* iq = new IQ( IQ::IqTypeGet, JID(), id, XMLNS_PRIVACY );
 
     m_parent->trackID( this, id, PLRequestNames );
     m_parent->send( iq );
@@ -54,12 +50,8 @@ namespace gloox
   {
     const std::string& id = m_parent->getID();
 
-    Tag *iq = new Tag( "iq" );
-    iq->addAttribute( "type", "get" );
-    iq->addAttribute( "id", id );
-    Tag *q = new Tag( iq, "query" );
-    q->addAttribute( "xmlns", XMLNS_PRIVACY );
-    Tag *l = new Tag( q, "list" );
+    IQ* iq = new IQ( IQ::IqTypeGet, JID(), id, XMLNS_PRIVACY );
+    Tag *l = new Tag( iq->query(), "list" );
     l->addAttribute( "name", name );
 
     m_parent->trackID( this, id, PLRequestList );
@@ -71,12 +63,8 @@ namespace gloox
   {
     const std::string& id = m_parent->getID();
 
-    Tag *iq = new Tag( "iq" );
-    iq->addAttribute( "type", "set" );
-    iq->addAttribute( "id", id );
-    Tag *q = new Tag( iq, "query" );
-    q->addAttribute( "xmlns", XMLNS_PRIVACY );
-    Tag *l = new Tag( q, "list" );
+    IQ* iq = new IQ ( IQ::IqTypeSet, JID(), id, XMLNS_PRIVACY );
+    Tag *l = new Tag( iq->query(), "list" );
     l->addAttribute( "name", name );
 
     m_parent->trackID( this, id, PLRemove );
@@ -88,12 +76,8 @@ namespace gloox
   {
     const std::string& id = m_parent->getID();
 
-    Tag *iq = new Tag( "iq" );
-    iq->addAttribute( "type", "set" );
-    iq->addAttribute( "id", id );
-    Tag *q = new Tag( iq, "query" );
-    q->addAttribute( "xmlns", XMLNS_PRIVACY );
-    Tag *d = new Tag( q, "default" );
+    IQ* iq = new IQ( IQ::IqTypeSet, JID(), id, XMLNS_PRIVACY );
+    Tag *d = new Tag( iq->query(), "default" );
     d->addAttribute( "name", name );
 
     m_parent->trackID( this, id, PLDefault );
@@ -105,12 +89,8 @@ namespace gloox
   {
     const std::string& id = m_parent->getID();
 
-    Tag *iq = new Tag( "iq" );
-    iq->addAttribute( "type", "set" );
-    iq->addAttribute( "id", id );
-    Tag *q = new Tag( iq, "query" );
-    q->addAttribute( "xmlns", XMLNS_PRIVACY );
-    new Tag( q, "default" );
+    IQ* iq = new IQ( IQ::IqTypeSet, JID(), id, XMLNS_PRIVACY );
+    new Tag( iq->query(), "default" );
 
     m_parent->trackID( this, id, PLUnsetDefault );
     m_parent->send( iq );
@@ -121,12 +101,8 @@ namespace gloox
   {
     const std::string& id = m_parent->getID();
 
-    Tag *iq = new Tag( "iq" );
-    iq->addAttribute( "type", "set" );
-    iq->addAttribute( "id", id );
-    Tag *q = new Tag( iq, "query" );
-    q->addAttribute( "xmlns", XMLNS_PRIVACY );
-    Tag *a = new Tag( q, "active" );
+    IQ* iq = new IQ( IQ::IqTypeSet, JID(), id, XMLNS_PRIVACY );
+    Tag *a = new Tag( iq->query(), "active" );
     a->addAttribute( "name", name );
 
     m_parent->trackID( this, id, PLActivate );
@@ -138,12 +114,8 @@ namespace gloox
   {
     const std::string& id = m_parent->getID();
 
-    Tag *iq = new Tag( "iq" );
-    iq->addAttribute( "type", "set" );
-    iq->addAttribute( "id", id );
-    Tag *q = new Tag( iq, "query" );
-    q->addAttribute( "xmlns", XMLNS_PRIVACY );
-    new Tag( q, "active" );
+    IQ* iq = new IQ( IQ::IqTypeSet, JID(), id, XMLNS_PRIVACY );
+    new Tag( iq->query(), "active" );
 
     m_parent->trackID( this, id, PLUnsetActivate );
     m_parent->send( iq );
@@ -154,12 +126,8 @@ namespace gloox
   {
     const std::string& id = m_parent->getID();
 
-    Tag *iq = new Tag( "iq" );
-    iq->addAttribute( "type", "set" );
-    iq->addAttribute( "id", id );
-    Tag *q = new Tag( iq, "query" );
-    q->addAttribute( "xmlns", XMLNS_PRIVACY );
-    Tag *l = new Tag( q, "list" );
+    IQ* iq = new IQ( IQ::IqTypeSet, JID(), id, XMLNS_PRIVACY );
+    Tag *l = new Tag( iq->query(), "list" );
     l->addAttribute( "name", name );
 
     int count = 0;
@@ -226,9 +194,7 @@ namespace gloox
       const std::string& name = l->findAttribute( "name" );
       m_privacyListHandler->handlePrivacyListChanged( name );
 
-      Tag *re = new Tag( "iq" );
-      re->addAttribute( "type", "result" );
-      re->addAttribute( "id", iq->id() );
+      IQ* re = new IQ( IQ::IqTypeResult, JID(), iq->id() );
       m_parent->send( re );
       return true;
     }

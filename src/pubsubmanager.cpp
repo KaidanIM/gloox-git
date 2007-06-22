@@ -369,12 +369,8 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      Tag *iq = new Tag( "iq" );
-      iq->addAttribute( "type", "get" );
-      iq->addAttribute( "id", id );
-      iq->addAttribute( "to", service.full() );
-      Tag *ps = new Tag( iq, "pubsub", "xmlns", XMLNS_PUBSUB );
-      Tag *sub = new Tag( ps, "options", "node", node );
+      IQ* iq = new IQ( IQ::IqTypeGet, service, id, XMLNS_PUBSUB, "pubsub" );
+      Tag *sub = new Tag( iq->query(), "options", "node", node );
       sub->addAttribute( "jid", jid.empty() ? m_parent->jid().bare() : jid.bare() );
 
       m_parent->trackID( this, id, RequestSubscriptionOptions );
@@ -387,12 +383,8 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      Tag *iq = new Tag( "iq" );
-      iq->addAttribute( "type", "get" );
-      iq->addAttribute( "id", id );
-      iq->addAttribute( "to", service.full() );
-      Tag *ps = new Tag( iq, "pubsub", "xmlns", XMLNS_PUBSUB );
-      new Tag( ps, "subscriptions" );
+      IQ* iq = new IQ( IQ::IqTypeGet, service, id, XMLNS_PUBSUB, "pubsub" );
+      new Tag( iq->query(), "subscriptions" );
 
       m_parent->trackID( this, id, RequestSubscriptionList );
       m_subListTrackMap[id] = slh;
@@ -405,12 +397,8 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      Tag *iq = new Tag( "iq" );
-      iq->addAttribute( "type", "get" );
-      iq->addAttribute( "id", id );
-      iq->addAttribute( "to", service.full() );
-      Tag *ps = new Tag( iq, "pubsub", "xmlns", XMLNS_PUBSUB );
-      new Tag( ps, "affiliations" );
+      IQ* iq = new IQ( IQ::IqTypeGet, service, id, XMLNS_PUBSUB, "pubsub" );
+      new Tag( iq->query(), "affiliations" );
 
       m_parent->trackID( this, id, RequestAffiliationList );
       m_affListTrackMap[id] = alh;
@@ -424,12 +412,9 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      Tag *iq = new Tag( "iq" );
-      iq->addAttribute( "type", "set" );
-      iq->addAttribute( "id", id );
-      iq->addAttribute( "to", service.full() );
-      Tag *ps = new Tag( iq, "pubsub", "xmlns", XMLNS_PUBSUB );
-      Tag *sub = new Tag( ps, "subscribe", "node", node );
+      IQ* iq = new IQ( IQ::IqTypeSet, service, id, XMLNS_PUBSUB, "pubsub" );
+      Tag* ps = iq->query();
+      Tag* sub = new Tag( ps, "subscribe", "node", node );
       sub->addAttribute( "jid", jid.empty() ? m_parent->jid().full() : jid.full() );
 
       if( type != SubscriptionNodes || depth != 1 )
@@ -469,12 +454,8 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      Tag *iq = new Tag( "iq" );
-      iq->addAttribute( "type", "set" );
-      iq->addAttribute( "id", id );
-      iq->addAttribute( "to", service.full() );
-      Tag *ps = new Tag( iq, "pubsub", "xmlns", XMLNS_PUBSUB );
-      Tag *sub = new Tag( ps, "unsubscribe", "node", nodeid );
+      IQ* iq = new IQ( IQ::IqTypeSet, service, id, XMLNS_PUBSUB, "pubsub" );
+      Tag *sub = new Tag( iq->query(), "unsubscribe", "node", nodeid );
       sub->addAttribute( "jid", m_parent->jid().bare() );
 
       m_parent->trackID( this, id, Unsubscription );
@@ -487,11 +468,8 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      Tag * iq = new Tag( "iq", "type", "set" );
-      iq->addAttribute( "to", service.full() );
-      iq->addAttribute( "id", id );
-      Tag * pubsub = new Tag( iq, "pubsub", "xmlns", XMLNS_PUBSUB );
-      Tag * publish = new Tag( pubsub, "publish", "node", node );
+      IQ* iq = new IQ( IQ::IqTypeSet, service, id, XMLNS_PUBSUB, "pubsub" );
+      Tag* publish = new Tag( iq->query(), "publish", "node", node );
       publish->addChild( item.clone() );
 
       m_parent->trackID( this, id, PublishItem );
@@ -505,13 +483,8 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      Tag * iq = new Tag( "iq" );
-      iq->addAttribute( "type", "set" );
-      iq->addAttribute( "to", service.full() );
-      iq->addAttribute( "id", id );
-      Tag * pubsub = new Tag( iq, "pubsub" );
-      pubsub->addAttribute( "xmlns", XMLNS_PUBSUB );
-      Tag * retract = new Tag( pubsub, "retract" );
+      IQ* iq = new IQ( IQ::IqTypeSet, service, id, XMLNS_PUBSUB, "pubsub" );
+      Tag * retract = new Tag( iq->query(), "retract" );
       retract->addAttribute( "node", node );
       Tag * item = new Tag( retract, "item" );
       item->addAttribute( "id", itemid );
@@ -536,14 +509,12 @@ namespace gloox
         LookupPair( "authorize", AccessAuthorize ),
         LookupPair( "whitelist", AccessWhitelist )
       };
+
       const std::string& id = m_parent->getID();
-      Tag * iq = new Tag( "iq" );
-      iq->addAttribute( "type", "set" );
-      iq->addAttribute( "to", service.full() );
-      iq->addAttribute( "id", id );
-      Tag * pubsub = new Tag( iq, "pubsub", "xmlns", XMLNS_PUBSUB );
+      IQ* iq = new IQ( IQ::IqTypeSet, service, id, XMLNS_PUBSUB, "pubsub" );
+      Tag* pubsub = iq->query();
       new Tag( pubsub, "create", "node", node );
-      Tag * configure = new Tag( pubsub, "configure" );
+      Tag* configure = new Tag( pubsub, "configure" );
 
       if( !parent.empty() || config || type == NodeCollection || access != AccessDefault )
       {
@@ -586,12 +557,8 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      Tag * iq = new Tag( "iq" );
-      iq->addAttribute( "type", "set" );
-      iq->addAttribute( "to", service.full() );
-      iq->addAttribute( "id", id );
-      Tag * pubsub = new Tag( iq, "pubsub", "xmlns", XMLNS_PUBSUB_OWNER );
-      new Tag( pubsub, "delete", "node", nodeid );
+      IQ* iq = new IQ( IQ::IqTypeSet, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
+      new Tag( iq->query(), "delete", "node", nodeid );
 
       m_parent->trackID( this, id, DeleteNode );
       m_nopTrackMap[id] = nodeid;
@@ -601,12 +568,8 @@ namespace gloox
     void Manager::getDefaultNodeConfig( const JID& service, const std::string& nodeid )
     {
       const std::string& id = m_parent->getID();
-      Tag * iq = new Tag( "iq" );
-      iq->addAttribute( "type", "set" );
-      iq->addAttribute( "to", service.full() );
-      iq->addAttribute( "id", id );
-      Tag * pubsub = new Tag( iq, "pubsub", "xmlns", XMLNS_PUBSUB );
-      Tag * create = new Tag( pubsub, "default" );
+      IQ* iq = new IQ( IQ::IqTypeSet, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
+      Tag * create = new Tag( iq->query(), "default" );
       if( !nodeid.empty() )
         create->addAttribute( "node", nodeid );
       m_parent->trackID( this, id, RequestConfig );
@@ -622,12 +585,8 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      Tag *iq = new Tag( "iq" );
-      iq->addAttribute( "type", config ? "set" : "get" );
-      iq->addAttribute( "id", id );
-      iq->addAttribute( "to", service.full() );
-      Tag *ps = new Tag( iq, "pubsub", "xmlns", XMLNS_PUBSUB_OWNER );
-      Tag *sub = new Tag( ps, "configure", "node", node );
+      IQ* iq = new IQ( config ? IQ::IqTypeSet : IQ::IqTypeGet, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
+      Tag *sub = new Tag( iq->query(), "configure", "node", node );
       if( config )
         sub->addChild( config->tag() );
 
@@ -644,12 +603,8 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      Tag *iq = new Tag( "iq" );
-      iq->addAttribute( "type", list ? "set" : "get" );
-      iq->addAttribute( "id", id );
-      iq->addAttribute( "to", service.full() );
-      Tag *ps = new Tag( iq, "pubsub", "xmlns", XMLNS_PUBSUB_OWNER );
-      Tag *sub = new Tag( ps, "subscriptions", "node", node );
+      IQ* iq = new IQ( list ? IQ::IqTypeSet : IQ::IqTypeGet, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
+      Tag *sub = new Tag( iq->query(), "subscriptions", "node", node );
       if( list )
       {
         Tag * s;
@@ -677,12 +632,8 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      Tag *iq = new Tag( "iq" );
-      iq->addAttribute( "type", list ? "set" : "get" );
-      iq->addAttribute( "id", id );
-      iq->addAttribute( "to", service.full() );
-      Tag *ps = new Tag( iq, "pubsub", "xmlns", XMLNS_PUBSUB_OWNER );
-      Tag *aff = new Tag( ps, "affiliations", "node", node );
+      IQ* iq = new IQ( list ? IQ::IqTypeSet : IQ::IqTypeGet, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
+      Tag *aff = new Tag( iq->query(), "affiliations", "node", node );
       if( list )
       {
         Tag * a;
@@ -707,12 +658,8 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      Tag *iq = new Tag( "iq" );
-      iq->addAttribute( "type", "get" );
-      iq->addAttribute( "id", id );
-      iq->addAttribute( "to", service.full() );
-      Tag *ps = new Tag( iq, "pubsub", "xmlns", XMLNS_PUBSUB );
-      new Tag( ps, "items", "node", nodeid );
+      IQ* iq = new IQ( IQ::IqTypeGet, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
+      new Tag( iq->query(), "items", "node", nodeid );
 
       m_parent->trackID( this, id, RequestItemList );
       //m_itemHandlerList[id] = handler;
@@ -723,12 +670,8 @@ namespace gloox
                                                       NodeHandler * handler  )
     {
       const std::string& id = m_parent->getID();
-      Tag * iq = new Tag( "iq" );
-      iq->addAttribute( "type", "set" );
-      iq->addAttribute( "to", service.full() );
-      iq->addAttribute( "id", id );
-      Tag * pubsub = new Tag( iq, "pubsub", "xmlns", XMLNS_PUBSUB_OWNER );
-      new Tag( pubsub, "purge", "node", nodeid );
+      IQ* iq = new IQ( IQ::IqTypeSet, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
+      new Tag( iq->query(), "purge", "node", nodeid );
 
       m_parent->trackID( this, id, PurgeNodeItems );
       m_nodeHandlerTrackMap[id] = handler;

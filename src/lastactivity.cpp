@@ -41,12 +41,7 @@ namespace gloox
   {
     const std::string& id = m_parent->getID();
 
-    Tag *t = new Tag( "iq" );
-    t->addAttribute( "type", "get" );
-    t->addAttribute( "id", id );
-    t->addAttribute( "to", jid.full() );
-    Tag *q = new Tag( t, "query" );
-    q->addAttribute( "xmlns", XMLNS_LAST );
+    IQ* t = new IQ( IQ::IqTypeGet, jid, id, XMLNS_LAST );
 
     m_parent->trackID( this, id, 0 );
     m_parent->send( t );
@@ -60,13 +55,8 @@ namespace gloox
       {
         time_t now = time( 0 );
 
-        Tag *t = new Tag( "iq" );
-        t->addAttribute( "type", "result" );
-        t->addAttribute( "id", iq->id() );
-        t->addAttribute( "to", iq->from().full() );
-        Tag *q = new Tag( t, "query" );
-        q->addAttribute( "seconds", (long)( now - m_active ) );
-        q->addAttribute( "xmlns", XMLNS_LAST );
+        IQ* t = new IQ( IQ::IqTypeResult, iq->from(), iq->id(), XMLNS_LAST );
+        t->query()->addAttribute( "seconds", (long)( now - m_active ) );
 
         m_parent->send( t );
         break;
@@ -74,10 +64,7 @@ namespace gloox
 
       case IQ::IqTypeSet:
       {
-        Tag *t = new Tag( "iq" );
-        t->addAttribute( "id", iq->id() );
-        t->addAttribute( "to", iq->from().full() );
-        t->addAttribute( "type", "error" );
+        IQ* t = new IQ( IQ::IqTypeError, iq->from(), iq->id() );
         Tag *e = new Tag( t, "error" );
         e->addAttribute( "type", "cancel" );
         Tag *f = new Tag( e, "feature-not-implemented" );

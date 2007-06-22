@@ -696,14 +696,7 @@ namespace gloox
   void ClientBase::xmppPing( const JID& to )
   {
     const std::string& id = getID();
-
-    Tag *iq = new Tag( "iq" );
-    iq->addAttribute( "to", to.full() );
-    iq->addAttribute( "id", id );
-    iq->addAttribute( "type", "get" );
-    Tag *p = new Tag( iq, "ping" );
-    p->addAttribute( "xmlns", XMLNS_XMPP_PING );
-
+    IQ* iq = new IQ( IQ::IqTypeGet, to, id, XMLNS_XMPP_PING, "ping" );
     send( iq );
   }
 

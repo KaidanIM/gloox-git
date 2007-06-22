@@ -62,11 +62,8 @@ namespace gloox
 
     const std::string& msid = sid.empty() ? m_parent->getID() : sid;
     const std::string& id = m_parent->getID();
-    Tag *iq = new Tag( "iq" );
-    iq->addAttribute( "type", "set" );
-    iq->addAttribute( "to", to.full() );
-    iq->addAttribute( "id", id );
-    Tag *q = new Tag( iq, "query", "xmlns", XMLNS_BYTESTREAMS );
+    IQ* iq = new IQ( IQ::IqTypeSet, to, id, XMLNS_BYTESTREAMS );
+    Tag *q = iq->query();
     q->addAttribute( "sid", msid );
     q->addAttribute( "mode", /*( mode == S5BTCP ) ?*/ "tcp" /*: "udp"*/ );
 
@@ -262,10 +259,7 @@ namespace gloox
   void SOCKS5BytestreamManager::rejectSOCKS5Bytestream( const JID& from, const std::string& id,
                                                         StanzaError reason )
   {
-    Tag *iq = new Tag( "iq" );
-    iq->addAttribute( "type", "error" );
-    iq->addAttribute( "to", from.full() );
-    iq->addAttribute( "id", id );
+    IQ* iq = new IQ( IQ::IqTypeError, from, id );
     Tag *e = new Tag( iq, "error" );
     switch( reason )
     {

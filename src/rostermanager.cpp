@@ -64,11 +64,7 @@ namespace gloox
   {
     m_privateXML->requestXML( "roster", XMLNS_ROSTER_DELIMITER, this );
 
-    Tag *iq = new Tag( "iq" );
-    iq->addAttribute( "type", "get" );
-    iq->addAttribute( "id", m_parent->getID() );
-    Tag *q = new Tag( iq, "query" );
-    q->addAttribute( "xmlns", XMLNS_ROSTER );
+    IQ* iq = new IQ( IQ::IqTypeGet, JID(), m_parent->getID(), XMLNS_ROSTER );
     m_parent->send( iq );
   }
 
@@ -89,9 +85,7 @@ namespace gloox
     {
       extractItems( iq, true );
 
-      Tag *re = new Tag( "iq" );
-      re->addAttribute( "id", iq->id() );
-      re->addAttribute( "type", "result" );
+      IQ* re = new IQ( IQ::IqTypeResult, JID(), iq->id() );
       m_parent->send( re );
 
       return true;
@@ -182,13 +176,7 @@ namespace gloox
 
     add( jid, name, groups );
 
-    Tag *s = new Tag( "presence" );
-    s->addAttribute( "type", "subscribe" );
-    s->addAttribute( "to", jid.bare() );
-    s->addAttribute( "from", m_parent->jid().full() );
-    if( !msg.empty() )
-      new Tag( s, "status", msg );
-
+    Subscription* s = new Subscription( Subscription::S10nSubscribe, jid.bareJID(), msg );
     m_parent->send( s );
   }
 
@@ -200,12 +188,8 @@ namespace gloox
 
     const std::string& id = m_parent->getID();
 
-    Tag *iq = new Tag( "iq" );
-    iq->addAttribute( "type", "set" );
-    iq->addAttribute( "id", id );
-    Tag *q = new Tag( iq, "query" );
-    q->addAttribute( "xmlns", XMLNS_ROSTER );
-    Tag *i = new Tag( q, "item" );
+    IQ* iq = new IQ( IQ::IqTypeSet, JID(), id, XMLNS_ROSTER );
+    Tag *i = new Tag( iq->query(), "item" );
     i->addAttribute( "jid", jid.bare() );
     if( !name.empty() )
       i->addAttribute( "name", name );
@@ -250,12 +234,8 @@ namespace gloox
   {
     const std::string& id = m_parent->getID();
 
-    Tag *iq = new Tag( "iq" );
-    iq->addAttribute( "type", "set" );
-    iq->addAttribute( "id", id );
-    Tag *q = new Tag( iq, "query" );
-    q->addAttribute( "xmlns", XMLNS_ROSTER );
-    Tag *i = new Tag( q, "item" );
+    IQ* iq = new IQ( IQ::IqTypeSet, JID(), id, XMLNS_ROSTER );
+    Tag *i = new Tag( iq->query(), "item" );
     i->addAttribute( "jid", jid.bare() );
     i->addAttribute( "subscription", "remove" );
 
@@ -271,12 +251,8 @@ namespace gloox
       {
         const std::string& id = m_parent->getID();
 
-        Tag *iq = new Tag( "iq" );
-        iq->addAttribute( "type", "set" );
-        iq->addAttribute( "id", id );
-        Tag *q = new Tag( iq, "query" );
-        q->addAttribute( "xmlns", XMLNS_ROSTER );
-        Tag *i = new Tag( q, "item" );
+        IQ* iq = new IQ( IQ::IqTypeSet, JID(), id, XMLNS_ROSTER );
+        Tag *i = new Tag( iq->query(), "item" );
         i->addAttribute( "jid", (*it).second->jid() );
         if( !(*it).second->name().empty() )
           i->addAttribute( "name", (*it).second->name() );
