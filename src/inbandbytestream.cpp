@@ -103,7 +103,7 @@ namespace gloox
     d->addAttribute( "seq", ++m_sequence );
     d->addAttribute( "xmlns", XMLNS_IBB );
 
-    // FIXME: hard-coded AMP
+#warning FIXME: hard-coded AMP
     Tag *a = new Tag( m, "amp" );
     a->addAttribute( "xmlns", XMLNS_AMP );
     Tag *r = new Tag( a, "rule" );
