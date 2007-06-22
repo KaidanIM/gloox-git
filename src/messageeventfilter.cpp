@@ -35,7 +35,7 @@ namespace gloox
     if( m_disable )
       return;
 
-    if( msg->subtype() == Message::MessageError )
+    if( msg->subtype() == Message::Error )
     {
       if( msg->error() == StanzaErrorFeatureNotImplemented )
         m_disable = true;
