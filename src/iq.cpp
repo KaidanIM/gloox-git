@@ -43,7 +43,7 @@ namespace gloox
     else if( hasAttribute( "type", "error" ) )
       m_subtype = IqTypeError;
 
-    Tag *m_query = findChildWithAttrib( "xmlns" );
+    m_query = findChildWithAttrib( "xmlns" );
     if( m_query )
       m_xmlns = m_query->findAttribute( "xmlns" );
   }
