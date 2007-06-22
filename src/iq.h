@@ -58,7 +58,7 @@ namespace gloox
        * Creates an IQ Query.
        */
       IQ ( IqType type, const JID& to, const std::string& id, const std::string& xmlns = "",
-           const std::string& childtag = "", const JID& from = JID() );
+           const std::string& childtag = "query", const JID& from = JID() );
 
       /**
        * Virtual destructor.
