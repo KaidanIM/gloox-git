@@ -25,7 +25,7 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   name = "parse Presence implicit available";
   i = new Presence( pres );
-  if( i->subtype() != Presence::PresenceAvailable
+  if( i->subtype() != Presence::Available
       || !i->hasAttribute( "to", "you@example.net/gloox" )
       || !i->hasAttribute( "from", "me@example.net/gloox" )
       || i->from().full() != "me@example.net/gloox" || i->to().full() != "you@example.net/gloox"
@@ -41,7 +41,7 @@ int main( int /*argc*/, char** /*argv*/ )
   name = "parse Presence available";
   pres->addAttribute( "type", "available" );
   i = new Presence( pres );
-  if( i->subtype() != Presence::PresenceAvailable
+  if( i->subtype() != Presence::Available
       || !i->hasAttribute( "to", "you@example.net/gloox" )
       || !i->hasAttribute( "from", "me@example.net/gloox" )
       || i->from().full() != "me@example.net/gloox" || i->to().full() != "you@example.net/gloox"
@@ -57,7 +57,7 @@ int main( int /*argc*/, char** /*argv*/ )
   name = "parse Presence unavailable";
   pres->addAttribute( "type", "unavailable" );
   i = new Presence( pres );
-  if( i->subtype() != Presence::PresenceUnavailable
+  if( i->subtype() != Presence::Unavailable
       || !i->hasAttribute( "to", "you@example.net/gloox" )
       || !i->hasAttribute( "from", "me@example.net/gloox" )
       || i->from().full() != "me@example.net/gloox" || i->to().full() != "you@example.net/gloox"
@@ -73,7 +73,7 @@ int main( int /*argc*/, char** /*argv*/ )
   name = "parse Presence error";
   pres->addAttribute( "type", "error" );
   i = new Presence( pres );
-  if( i->subtype() != Presence::PresenceError
+  if( i->subtype() != Presence::Error
       || !i->hasAttribute( "to", "you@example.net/gloox" )
       || !i->hasAttribute( "from", "me@example.net/gloox" )
       || i->from().full() != "me@example.net/gloox" || i->to().full() != "you@example.net/gloox"
@@ -89,7 +89,7 @@ int main( int /*argc*/, char** /*argv*/ )
   name = "parse Presence probe";
   pres->addAttribute( "type", "probe" );
   i = new Presence( pres );
-  if( i->subtype() != Presence::PresenceProbe
+  if( i->subtype() != Presence::Probe
       || !i->hasAttribute( "to", "you@example.net/gloox" )
       || !i->hasAttribute( "from", "me@example.net/gloox" )
       || i->from().full() != "me@example.net/gloox" || i->to().full() != "you@example.net/gloox"
@@ -107,7 +107,7 @@ int main( int /*argc*/, char** /*argv*/ )
   pres->addChild( s );
   s->setCData( "chat" );
   i = new Presence( pres );
-  if( i->subtype() != Presence::PresenceChat
+  if( i->subtype() != Presence::Chat
       || !i->hasAttribute( "to", "you@example.net/gloox" )
       || !i->hasAttribute( "from", "me@example.net/gloox" )
       || i->from().full() != "me@example.net/gloox" || i->to().full() != "you@example.net/gloox"
@@ -124,7 +124,7 @@ int main( int /*argc*/, char** /*argv*/ )
   pres->addAttribute( "type", "available" );
   s->setCData( "away" );
   i = new Presence( pres );
-  if( i->subtype() != Presence::PresenceAway
+  if( i->subtype() != Presence::Away
       || !i->hasAttribute( "to", "you@example.net/gloox" )
       || !i->hasAttribute( "from", "me@example.net/gloox" )
       || i->from().full() != "me@example.net/gloox" || i->to().full() != "you@example.net/gloox"
@@ -141,7 +141,7 @@ int main( int /*argc*/, char** /*argv*/ )
   pres->addAttribute( "type", "available" );
   s->setCData( "dnd" );
   i = new Presence( pres );
-  if( i->subtype() != Presence::PresenceDnd
+  if( i->subtype() != Presence::DND
       || !i->hasAttribute( "to", "you@example.net/gloox" )
       || !i->hasAttribute( "from", "me@example.net/gloox" )
       || i->from().full() != "me@example.net/gloox" || i->to().full() != "you@example.net/gloox"
@@ -158,7 +158,7 @@ int main( int /*argc*/, char** /*argv*/ )
   pres->addAttribute( "type", "available" );
   s->setCData( "xa" );
   i = new Presence( pres );
-  if( i->subtype() != Presence::PresenceXa
+  if( i->subtype() != Presence::XA
       || !i->hasAttribute( "to", "you@example.net/gloox" )
       || !i->hasAttribute( "from", "me@example.net/gloox" )
       || i->from().full() != "me@example.net/gloox" || i->to().full() != "you@example.net/gloox"
@@ -172,7 +172,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "new simple Presence available";
-  i = new Presence( Presence::PresenceAvailable, JID( "xyz@example.org/blah" ), "the status",
+  i = new Presence( Presence::Available, JID( "xyz@example.org/blah" ), "the status",
                         10, "the xmllang", JID( "foo@bar.com" ) );
   if( !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
       || !i->hasChildWithCData( "status", "the status" )
@@ -187,7 +187,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "new simple Presence unavailable";
-  i = new Presence( Presence::PresenceUnavailable, JID( "xyz@example.org/blah" ), "the status",
+  i = new Presence( Presence::Unavailable, JID( "xyz@example.org/blah" ), "the status",
                         10, "the xmllang", JID( "foo@bar.com" ) );
   if( !i->hasAttribute( "type", "unavailable" )
       || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
@@ -202,7 +202,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "new simple Presence chat";
-  i = new Presence( Presence::PresenceChat, JID( "xyz@example.org/blah" ), "the status",
+  i = new Presence( Presence::Chat, JID( "xyz@example.org/blah" ), "the status",
                         10, "the xmllang", JID( "foo@bar.com" ) );
   if( !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
       || !i->hasChildWithCData( "status", "the status" )
@@ -218,7 +218,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "new simple Presence away";
-  i = new Presence( Presence::PresenceAway, JID( "xyz@example.org/blah" ), "the status",
+  i = new Presence( Presence::Away, JID( "xyz@example.org/blah" ), "the status",
                         10, "the xmllang", JID( "foo@bar.com" ) );
   if( !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
       || !i->hasChildWithCData( "status", "the status" )
@@ -234,7 +234,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "new simple Presence dnd";
-  i = new Presence( Presence::PresenceDnd, JID( "xyz@example.org/blah" ), "the status",
+  i = new Presence( Presence::DND, JID( "xyz@example.org/blah" ), "the status",
                         10, "the xmllang", JID( "foo@bar.com" ) );
   if( !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
       || !i->hasChildWithCData( "status", "the status" )
@@ -250,7 +250,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "new simple Presence xa";
-  i = new Presence( Presence::PresenceXa, JID( "xyz@example.org/blah" ), "the status",
+  i = new Presence( Presence::XA, JID( "xyz@example.org/blah" ), "the status",
                         10, "the xmllang", JID( "foo@bar.com" ) );
   if( !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
       || !i->hasChildWithCData( "status", "the status" )
@@ -266,7 +266,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "new simple Presence probe";
-  i = new Presence( Presence::PresenceProbe, JID( "xyz@example.org/blah" ), "the status",
+  i = new Presence( Presence::Probe, JID( "xyz@example.org/blah" ), "the status",
                         10, "the xmllang", JID( "foo@bar.com" ) );
   if( !i->hasAttribute( "type", "probe" )
       || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
@@ -282,7 +282,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "new simple Presence error";
-  i = new Presence( Presence::PresenceError, JID( "xyz@example.org/blah" ), "the status",
+  i = new Presence( Presence::Error, JID( "xyz@example.org/blah" ), "the status",
                         10, "the xmllang", JID( "foo@bar.com" ) );
   if( !i->hasAttribute( "type", "error" )
       || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )

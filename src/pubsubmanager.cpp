@@ -366,7 +366,7 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      IQ* iq = new IQ( IQ::IqTypeGet, service, id, XMLNS_PUBSUB, "pubsub" );
+      IQ* iq = new IQ( IQ::Get, service, id, XMLNS_PUBSUB, "pubsub" );
       Tag *sub = new Tag( iq->query(), "options", "node", node );
       sub->addAttribute( "jid", jid.empty() ? m_parent->jid().bare() : jid.bare() );
 
@@ -380,7 +380,7 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      IQ* iq = new IQ( IQ::IqTypeGet, service, id, XMLNS_PUBSUB, "pubsub" );
+      IQ* iq = new IQ( IQ::Get, service, id, XMLNS_PUBSUB, "pubsub" );
       new Tag( iq->query(), "subscriptions" );
 
       m_parent->trackID( this, id, RequestSubscriptionList );
@@ -394,7 +394,7 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      IQ* iq = new IQ( IQ::IqTypeGet, service, id, XMLNS_PUBSUB, "pubsub" );
+      IQ* iq = new IQ( IQ::Get, service, id, XMLNS_PUBSUB, "pubsub" );
       new Tag( iq->query(), "affiliations" );
 
       m_parent->trackID( this, id, RequestAffiliationList );
@@ -409,7 +409,7 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      IQ* iq = new IQ( IQ::IqTypeSet, service, id, XMLNS_PUBSUB, "pubsub" );
+      IQ* iq = new IQ( IQ::Set, service, id, XMLNS_PUBSUB, "pubsub" );
       Tag* ps = iq->query();
       Tag* sub = new Tag( ps, "subscribe", "node", node );
       sub->addAttribute( "jid", jid.empty() ? m_parent->jid().full() : jid.full() );
@@ -451,7 +451,7 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      IQ* iq = new IQ( IQ::IqTypeSet, service, id, XMLNS_PUBSUB, "pubsub" );
+      IQ* iq = new IQ( IQ::Set, service, id, XMLNS_PUBSUB, "pubsub" );
       Tag *sub = new Tag( iq->query(), "unsubscribe", "node", nodeid );
       sub->addAttribute( "jid", m_parent->jid().bare() );
 
@@ -465,7 +465,7 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      IQ* iq = new IQ( IQ::IqTypeSet, service, id, XMLNS_PUBSUB, "pubsub" );
+      IQ* iq = new IQ( IQ::Set, service, id, XMLNS_PUBSUB, "pubsub" );
       Tag* publish = new Tag( iq->query(), "publish", "node", node );
       publish->addChild( item.clone() );
 
@@ -480,7 +480,7 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      IQ* iq = new IQ( IQ::IqTypeSet, service, id, XMLNS_PUBSUB, "pubsub" );
+      IQ* iq = new IQ( IQ::Set, service, id, XMLNS_PUBSUB, "pubsub" );
       Tag * retract = new Tag( iq->query(), "retract" );
       retract->addAttribute( "node", node );
       Tag * item = new Tag( retract, "item" );
@@ -508,7 +508,7 @@ namespace gloox
       };
 
       const std::string& id = m_parent->getID();
-      IQ* iq = new IQ( IQ::IqTypeSet, service, id, XMLNS_PUBSUB, "pubsub" );
+      IQ* iq = new IQ( IQ::Set, service, id, XMLNS_PUBSUB, "pubsub" );
       Tag* pubsub = iq->query();
       new Tag( pubsub, "create", "node", node );
       Tag* configure = new Tag( pubsub, "configure" );
@@ -555,7 +555,7 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      IQ* iq = new IQ( IQ::IqTypeSet, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
+      IQ* iq = new IQ( IQ::Set, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
       new Tag( iq->query(), "delete", "node", nodeid );
 
       m_parent->trackID( this, id, DeleteNode );
@@ -566,7 +566,7 @@ namespace gloox
     void Manager::getDefaultNodeConfig( const JID& service, const std::string& nodeid )
     {
       const std::string& id = m_parent->getID();
-      IQ* iq = new IQ( IQ::IqTypeSet, service, id, XMLNS_PUBSUB, "pubsub" );
+      IQ* iq = new IQ( IQ::Set, service, id, XMLNS_PUBSUB, "pubsub" );
       Tag * create = new Tag( iq->query(), "default" );
       if( !nodeid.empty() )
         create->addAttribute( "node", nodeid );
@@ -583,7 +583,7 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      IQ* iq = new IQ( config ? IQ::IqTypeSet : IQ::IqTypeGet, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
+      IQ* iq = new IQ( config ? IQ::Set : IQ::Get, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
       Tag *sub = new Tag( iq->query(), "configure", "node", node );
       if( config )
         sub->addChild( config->tag() );
@@ -601,7 +601,7 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      IQ* iq = new IQ( list ? IQ::IqTypeSet : IQ::IqTypeGet, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
+      IQ* iq = new IQ( list ? IQ::Set : IQ::Get, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
       Tag *sub = new Tag( iq->query(), "subscriptions", "node", node );
       if( list )
       {
@@ -631,7 +631,7 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      IQ* iq = new IQ( list ? IQ::IqTypeSet : IQ::IqTypeGet, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
+      IQ* iq = new IQ( list ? IQ::Set : IQ::Get, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
       Tag *aff = new Tag( iq->query(), "affiliations", "node", node );
       if( list )
       {
@@ -658,7 +658,7 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      IQ* iq = new IQ( IQ::IqTypeGet, service, id, XMLNS_PUBSUB, "pubsub" );
+      IQ* iq = new IQ( IQ::Get, service, id, XMLNS_PUBSUB, "pubsub" );
       new Tag( iq->query(), "items", "node", nodeid );
 
       m_parent->trackID( this, id, RequestItemList );
@@ -670,7 +670,7 @@ namespace gloox
                                                       NodeHandler * handler  )
     {
       const std::string& id = m_parent->getID();
-      IQ* iq = new IQ( IQ::IqTypeSet, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
+      IQ* iq = new IQ( IQ::Set, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
       new Tag( iq->query(), "purge", "node", nodeid );
 
       m_parent->trackID( this, id, PurgeNodeItems );
@@ -694,7 +694,7 @@ namespace gloox
 
       switch( iq->subtype() )
       {
-        case IQ::IqTypeResult:
+        case IQ::Result:
         {
           switch( context )
           {
@@ -928,7 +928,7 @@ namespace gloox
           }
         }
         break;
-        case IQ::IqTypeError:
+        case IQ::Error:
         {
           Tag* error = iq->findChild( "error" );
           //Error error( iq->findChild( "error" ) );

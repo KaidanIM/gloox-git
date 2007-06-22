@@ -195,7 +195,7 @@ namespace gloox
 
       /**
        * Use this function to set the user's presence in this room. It is not possible to
-       * use PresenceUnavailable with this function.
+       * use Unavailable with this function.
        * @param presence The user's new presence.
        * @param msg An optional status message. Default: empty.
        */

@@ -696,7 +696,7 @@ namespace gloox
   void ClientBase::xmppPing( const JID& to )
   {
     const std::string& id = getID();
-    IQ* iq = new IQ( IQ::IqTypeGet, to, id, XMLNS_XMPP_PING, "ping" );
+    IQ* iq = new IQ( IQ::Get, to, id, XMLNS_XMPP_PING, "ping" );
     send( iq );
   }
 
@@ -847,16 +847,16 @@ namespace gloox
 
   void ClientBase::registerMessageSessionHandler( MessageSessionHandler *msh, int types )
   {
-    if( types & Message::MessageChat || types == 0 )
+    if( types & Message::Chat || types == 0 )
       m_messageSessionHandlerChat = msh;
 
-    if( types & Message::MessageNormal || types == 0 )
+    if( types & Message::Normal || types == 0 )
       m_messageSessionHandlerNormal = msh;
 
-    if( types & Message::MessageGroupchat || types == 0 )
+    if( types & Message::Groupchat || types == 0 )
       m_messageSessionHandlerGroupchat = msh;
 
-    if( types & Message::MessageHeadline || types == 0 )
+    if( types & Message::Headline || types == 0 )
       m_messageSessionHandlerHeadline = msh;
   }
 
@@ -1142,9 +1142,9 @@ namespace gloox
     }
 
     if( !res && ( iq->type() == StanzaIq ) &&
-        ( ( iq->subtype() == IQ::IqTypeGet ) || ( iq->subtype() == IQ::IqTypeSet ) ) )
+        ( ( iq->subtype() == IQ::Get ) || ( iq->subtype() == IQ::Set ) ) )
     {
-      Tag *re = new IQ( IQ::IqTypeError, iq->from(), iq->id() );
+      Tag *re = new IQ( IQ::Error, iq->from(), iq->id() );
       Tag *e = new Tag( re, "error", "type", "cancel" );
       new Tag( e, "service-unavailable", "xmlns", XMLNS_XMPP_STANZAS );
       send( re );
@@ -1156,7 +1156,7 @@ namespace gloox
 
     IqTrackMap::iterator it_id = m_iqIDHandlers.find( iq->id() );
     if( it_id != m_iqIDHandlers.end() &&
-        ( ( iq->subtype() == IQ::IqTypeResult ) || ( iq->subtype() == IQ::IqTypeError ) ) )
+        ( ( iq->subtype() == IQ::Result ) || ( iq->subtype() == IQ::Error ) ) )
     {
       (*it_id).second.ih->handleIqID( iq, (*it_id).second.context );
       m_iqIDHandlers.erase( it_id );
@@ -1214,16 +1214,16 @@ namespace gloox
 
     switch( msg->subtype() )
     {
-      case Message::MessageChat:
+      case Message::Chat:
         msHandler = m_messageSessionHandlerChat;
         break;
-      case Message::MessageNormal:
+      case Message::Normal:
         msHandler = m_messageSessionHandlerNormal;
         break;
-      case Message::MessageGroupchat:
+      case Message::Groupchat:
         msHandler = m_messageSessionHandlerGroupchat;
         break;
-      case Message::MessageHeadline:
+      case Message::Headline:
         msHandler = m_messageSessionHandlerHeadline;
         break;
       default:

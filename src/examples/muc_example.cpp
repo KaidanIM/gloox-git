@@ -32,7 +32,7 @@ class MessageTest : public ConnectionListener, LogHandler, MUCRoomHandler
       JID jid( "hurkhurk@example.net/gloox" );
       j = new Client( jid, "hurkhurks" );
       j->registerConnectionListener( this );
-      j->setPresence( Presence::PresenceAvailable, -1 );
+      j->setPresence( Presence::Available, -1 );
       j->disco()->setVersion( "gloox muc_example", GLOOX_VERSION, "Linux" );
       j->disco()->setIdentity( "client", "bot" );
       j->setCompression( false );
@@ -92,9 +92,9 @@ class MessageTest : public ConnectionListener, LogHandler, MUCRoomHandler
     virtual void handleMUCParticipantPresence( MUCRoom * /*room*/, const MUCRoomParticipant participant,
                                             Presence::PresenceType presence )
     {
-      if( presence == Presence::PresenceAvailable )
+      if( presence == Presence::Available )
         printf( "!!!!!!!!!!!!!!!! %s is in the room, too\n", participant.nick->resource().c_str() );
-      else if( presence == Presence::PresenceUnavailable )
+      else if( presence == Presence::Unavailable )
         printf( "!!!!!!!!!!!!!!!! %s left the room\n", participant.nick->resource().c_str() );
       else
         printf( "Presence is %d of %s\n", presence, participant.nick->resource().c_str() );

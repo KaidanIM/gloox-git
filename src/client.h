@@ -73,7 +73,7 @@ namespace gloox
    * returned.
    * @note As of gloox 0.9, by default a priority of 0 is sent along with the initial presence.
    * @note As of gloox 0.9, initial presence is automatically sent. Presence: available, Priority: 0.
-   * To disable sending of initial Presence use setPresence() with a value of PresenceUnavailable
+   * To disable sending of initial Presence use setPresence() with a value of Unavailable
    * prior to connecting.
    *
    * @section sasl_auth SASL Authentication

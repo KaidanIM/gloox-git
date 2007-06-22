@@ -39,7 +39,7 @@ namespace gloox
   {
     const std::string& id = m_parent->getID();
 
-    IQ* iq = new IQ( IQ::IqTypeGet, JID(), id, XMLNS_PRIVACY );
+    IQ* iq = new IQ( IQ::Get, JID(), id, XMLNS_PRIVACY );
 
     m_parent->trackID( this, id, PLRequestNames );
     m_parent->send( iq );
@@ -50,7 +50,7 @@ namespace gloox
   {
     const std::string& id = m_parent->getID();
 
-    IQ* iq = new IQ( IQ::IqTypeGet, JID(), id, XMLNS_PRIVACY );
+    IQ* iq = new IQ( IQ::Get, JID(), id, XMLNS_PRIVACY );
     Tag *l = new Tag( iq->query(), "list" );
     l->addAttribute( "name", name );
 
@@ -63,7 +63,7 @@ namespace gloox
   {
     const std::string& id = m_parent->getID();
 
-    IQ* iq = new IQ ( IQ::IqTypeSet, JID(), id, XMLNS_PRIVACY );
+    IQ* iq = new IQ ( IQ::Set, JID(), id, XMLNS_PRIVACY );
     Tag *l = new Tag( iq->query(), "list" );
     l->addAttribute( "name", name );
 
@@ -76,7 +76,7 @@ namespace gloox
   {
     const std::string& id = m_parent->getID();
 
-    IQ* iq = new IQ( IQ::IqTypeSet, JID(), id, XMLNS_PRIVACY );
+    IQ* iq = new IQ( IQ::Set, JID(), id, XMLNS_PRIVACY );
     Tag *d = new Tag( iq->query(), "default" );
     d->addAttribute( "name", name );
 
@@ -89,7 +89,7 @@ namespace gloox
   {
     const std::string& id = m_parent->getID();
 
-    IQ* iq = new IQ( IQ::IqTypeSet, JID(), id, XMLNS_PRIVACY );
+    IQ* iq = new IQ( IQ::Set, JID(), id, XMLNS_PRIVACY );
     new Tag( iq->query(), "default" );
 
     m_parent->trackID( this, id, PLUnsetDefault );
@@ -101,7 +101,7 @@ namespace gloox
   {
     const std::string& id = m_parent->getID();
 
-    IQ* iq = new IQ( IQ::IqTypeSet, JID(), id, XMLNS_PRIVACY );
+    IQ* iq = new IQ( IQ::Set, JID(), id, XMLNS_PRIVACY );
     Tag *a = new Tag( iq->query(), "active" );
     a->addAttribute( "name", name );
 
@@ -114,7 +114,7 @@ namespace gloox
   {
     const std::string& id = m_parent->getID();
 
-    IQ* iq = new IQ( IQ::IqTypeSet, JID(), id, XMLNS_PRIVACY );
+    IQ* iq = new IQ( IQ::Set, JID(), id, XMLNS_PRIVACY );
     new Tag( iq->query(), "active" );
 
     m_parent->trackID( this, id, PLUnsetActivate );
@@ -126,7 +126,7 @@ namespace gloox
   {
     const std::string& id = m_parent->getID();
 
-    IQ* iq = new IQ( IQ::IqTypeSet, JID(), id, XMLNS_PRIVACY );
+    IQ* iq = new IQ( IQ::Set, JID(), id, XMLNS_PRIVACY );
     Tag *l = new Tag( iq->query(), "list" );
     l->addAttribute( "name", name );
 
@@ -185,7 +185,7 @@ namespace gloox
 
   bool PrivacyManager::handleIq( IQ* iq )
   {
-    if( iq->subtype() != IQ::IqTypeSet || !m_privacyListHandler )
+    if( iq->subtype() != IQ::Set || !m_privacyListHandler )
       return false;
 
     Tag *l = iq->query()->findChild( "list" );
@@ -194,7 +194,7 @@ namespace gloox
       const std::string& name = l->findAttribute( "name" );
       m_privacyListHandler->handlePrivacyListChanged( name );
 
-      IQ* re = new IQ( IQ::IqTypeResult, JID(), iq->id() );
+      IQ* re = new IQ( IQ::Result, JID(), iq->id() );
       m_parent->send( re );
       return true;
     }
@@ -204,12 +204,12 @@ namespace gloox
 
   void PrivacyManager::handleIqID( IQ* iq, int context )
   {
-    if( iq->subtype() != IQ::IqTypeResult || !m_privacyListHandler )
+    if( iq->subtype() != IQ::Result || !m_privacyListHandler )
       return;
 
     switch( iq->subtype() )
     {
-      case IQ::IqTypeResult:
+      case IQ::Result:
         switch( context )
         {
           case PLStore:
@@ -305,7 +305,7 @@ namespace gloox
         }
         break;
 
-      case IQ::IqTypeError:
+      case IQ::Error:
       {
         switch( iq->error() )
         {

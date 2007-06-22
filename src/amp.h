@@ -16,10 +16,11 @@
 
 #include "stanzaextension.h"
 #include "jid.h"
-#include <time.h>
 
 #include <string>
 #include <list>
+
+#include <time.h>
 
 namespace gloox
 {
@@ -31,7 +32,7 @@ namespace gloox
    *
    * XEP Version: 1.2
    * @author Jakob Schroeter <js@camaya.net>
-   * @since 0.9
+   * @since 1.0
    */
   class AMP : public StanzaExtension
   {

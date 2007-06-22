@@ -45,7 +45,7 @@ namespace gloox
   Client::Client( const std::string& server )
     : ClientBase( XMLNS_CLIENT, server ),
       m_rosterManager( 0 ), m_auth( 0 ),
-      m_presence( Presence::PresenceAvailable ), m_resourceBound( false ), m_forceNonSasl( false ),
+      m_presence( Presence::Available ), m_resourceBound( false ), m_forceNonSasl( false ),
       m_manageRoster( true ), m_doAuth( false ),
       m_streamFeatures( 0 ), m_priority( 0 )
   {
@@ -56,7 +56,7 @@ namespace gloox
   Client::Client( const JID& jid, const std::string& password, int port )
     : ClientBase( XMLNS_CLIENT, password, "", port ),
       m_rosterManager( 0 ), m_auth( 0 ),
-      m_presence( Presence::PresenceAvailable ), m_resourceBound( false ), m_forceNonSasl( false ),
+      m_presence( Presence::Available ), m_resourceBound( false ), m_forceNonSasl( false ),
       m_manageRoster( true ), m_doAuth( true ),
       m_streamFeatures( 0 ), m_priority( 0 )
   {
@@ -69,7 +69,7 @@ namespace gloox
                   const std::string& server, const std::string& resource, int port )
     : ClientBase( XMLNS_CLIENT, password, server, port ),
       m_rosterManager( 0 ), m_auth( 0 ),
-      m_presence( Presence::PresenceAvailable ), m_resourceBound( false ), m_forceNonSasl( false ),
+      m_presence( Presence::Available ), m_resourceBound( false ), m_forceNonSasl( false ),
       m_manageRoster( true ), m_doAuth( true ),
       m_streamFeatures( 0 ), m_priority( 0 )
   {
@@ -338,7 +338,7 @@ namespace gloox
     if( !m_resourceBound )
     {
       const std::string& id = getID();
-      IQ *iq = new IQ( IQ::IqTypeSet, JID(), id, XMLNS_STREAM_BIND, "bind" );
+      IQ *iq = new IQ( IQ::Set, JID(), id, XMLNS_STREAM_BIND, "bind" );
       if( !resource().empty() )
         new Tag( iq->query(), "resource", resource() );
 
@@ -351,7 +351,7 @@ namespace gloox
   {
     switch( iq->subtype() )
     {
-      case IQ::IqTypeResult:
+      case IQ::Result:
       {
         Tag *bind = iq->query();
         if( !bind )
@@ -376,7 +376,7 @@ namespace gloox
           connected();
         break;
       }
-      case IQ::IqTypeError:
+      case IQ::Error:
       {
         Tag *error = iq->findChild( "error" );
         if( iq->hasChild( "error", "type", "modify" )
@@ -406,7 +406,7 @@ namespace gloox
   {
     notifyStreamEvent( StreamEventSessionCreation );
     const std::string& id = getID();
-    IQ *iq = new IQ( IQ::IqTypeSet, JID(), id, XMLNS_STREAM_SESSION, "session" );
+    IQ *iq = new IQ( IQ::Set, JID(), id, XMLNS_STREAM_SESSION, "session" );
     trackID( this, id, SessionEstablishment );
     send( iq );
   }
@@ -415,12 +415,12 @@ namespace gloox
   {
     switch( iq->subtype() )
     {
-      case IQ::IqTypeResult:
+      case IQ::Result:
       {
         connected();
         break;
       }
-      case IQ::IqTypeError:
+      case IQ::Error:
       {
         Tag *error = iq->findChild( "error" );
         if( iq->hasChild( "error", "type", "wait" )
@@ -508,7 +508,7 @@ namespace gloox
   void Client::sendPresence()
   {
     if( m_presence != Presence::PresenceInvalid &&
-        m_presence != Presence::PresenceUnavailable )
+        m_presence != Presence::Unavailable )
     {
       Presence* p = new Presence( m_presence, JID(), m_status, m_priority );
 

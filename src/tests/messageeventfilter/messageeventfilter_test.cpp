@@ -119,7 +119,7 @@ int main( int /*argc*/, char** /*argv*/ )
   f = new gloox::MessageEventFilter( ms );
   f->registerMessageEventHandler( ms );
 
-  gloox::Message *m = new gloox::Message( gloox::Message::MessageChat, gloox::JID(), "my message" );
+  gloox::Message *m = new gloox::Message( gloox::Message::Chat, gloox::JID(), "my message" );
   x = new gloox::Tag( m, "x" );
   x->addAttribute( "xmlns", gloox::XMLNS_X_EVENT );
   new gloox::Tag( x, "offline" );

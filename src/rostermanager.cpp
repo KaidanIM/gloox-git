@@ -64,13 +64,13 @@ namespace gloox
   {
     m_privateXML->requestXML( "roster", XMLNS_ROSTER_DELIMITER, this );
 
-    IQ* iq = new IQ( IQ::IqTypeGet, JID(), m_parent->getID(), XMLNS_ROSTER );
+    IQ* iq = new IQ( IQ::Get, JID(), m_parent->getID(), XMLNS_ROSTER );
     m_parent->send( iq );
   }
 
   bool RosterManager::handleIq( IQ* iq )
   {
-    if( iq->subtype() == IQ::IqTypeResult ) // initial roster
+    if( iq->subtype() == IQ::Result ) // initial roster
     {
       extractItems( iq, false );
 
@@ -81,16 +81,16 @@ namespace gloox
 
       return true;
     }
-    else if( iq->subtype() == IQ::IqTypeSet ) // roster item push
+    else if( iq->subtype() == IQ::Set ) // roster item push
     {
       extractItems( iq, true );
 
-      IQ* re = new IQ( IQ::IqTypeResult, JID(), iq->id() );
+      IQ* re = new IQ( IQ::Result, JID(), iq->id() );
       m_parent->send( re );
 
       return true;
     }
-    else if( iq->subtype() == IQ::IqTypeError )
+    else if( iq->subtype() == IQ::Error )
     {
       if( m_rosterListener )
         m_rosterListener->handleRosterError( iq );
@@ -105,7 +105,7 @@ namespace gloox
 
   void RosterManager::handlePresence( Presence* presence )
   {
-    if( presence->subtype() == Presence::PresenceError )
+    if( presence->subtype() == Presence::Error )
       return;
 
     StringList caps;
@@ -131,7 +131,7 @@ namespace gloox
     Roster::iterator it = m_roster.find( presence->from().bare() );
     if( it != m_roster.end() )
     {
-      if( presence->presence() == Presence::PresenceUnavailable )
+      if( presence->presence() == Presence::Unavailable )
         (*it).second->removeResource( presence->from().resource() );
       else
       {
@@ -147,7 +147,7 @@ namespace gloox
     }
     else if( presence->from().bare() == m_self->jid() )
     {
-      if( presence->presence() == Presence::PresenceUnavailable )
+      if( presence->presence() == Presence::Unavailable )
         m_self->removeResource( presence->from().resource() );
       else
       {
@@ -176,7 +176,7 @@ namespace gloox
 
     add( jid, name, groups );
 
-    Subscription* s = new Subscription( Subscription::S10nSubscribe, jid.bareJID(), msg );
+    Subscription* s = new Subscription( Subscription::Subscribe, jid.bareJID(), msg );
     m_parent->send( s );
   }
 
@@ -188,7 +188,7 @@ namespace gloox
 
     const std::string& id = m_parent->getID();
 
-    IQ* iq = new IQ( IQ::IqTypeSet, JID(), id, XMLNS_ROSTER );
+    IQ* iq = new IQ( IQ::Set, JID(), id, XMLNS_ROSTER );
     Tag *i = new Tag( iq->query(), "item" );
     i->addAttribute( "jid", jid.bare() );
     if( !name.empty() )
@@ -206,13 +206,13 @@ namespace gloox
 
   void RosterManager::unsubscribe( const JID& jid, const std::string& msg )
   {
-    Subscription* p = new Subscription( Subscription::S10nUnsubscribe, jid.bareJID(), msg );
+    Subscription* p = new Subscription( Subscription::Unsubscribe, jid.bareJID(), msg );
     m_parent->send( p );
   }
 
   void RosterManager::cancel( const JID& jid, const std::string& msg )
   {
-    Subscription* p = new Subscription( Subscription::S10nUnsubscribed, jid.bareJID(), msg );
+    Subscription* p = new Subscription( Subscription::Unsubscribed, jid.bareJID(), msg );
     m_parent->send( p );
   }
 
@@ -220,7 +220,7 @@ namespace gloox
   {
     const std::string& id = m_parent->getID();
 
-    IQ* iq = new IQ( IQ::IqTypeSet, JID(), id, XMLNS_ROSTER );
+    IQ* iq = new IQ( IQ::Set, JID(), id, XMLNS_ROSTER );
     Tag *i = new Tag( iq->query(), "item" );
     i->addAttribute( "jid", jid.bare() );
     i->addAttribute( "subscription", "remove" );
@@ -237,7 +237,7 @@ namespace gloox
       {
         const std::string& id = m_parent->getID();
 
-        IQ* iq = new IQ( IQ::IqTypeSet, JID(), id, XMLNS_ROSTER );
+        IQ* iq = new IQ( IQ::Set, JID(), id, XMLNS_ROSTER );
         Tag *i = new Tag( iq->query(), "item" );
         i->addAttribute( "jid", (*it).second->jid() );
         if( !(*it).second->name().empty() )
@@ -257,7 +257,7 @@ namespace gloox
 
   void RosterManager::ackSubscriptionRequest( const JID& to, bool ack )
   {
-    Subscription* p = new Subscription( ack ? Subscription::S10nSubscribed : Subscription::S10nUnsubscribed,
+    Subscription* p = new Subscription( ack ? Subscription::Subscribed : Subscription::Unsubscribed,
                                         to.bareJID() );
     m_parent->send( p );
   }
@@ -269,7 +269,7 @@ namespace gloox
 
     switch( s10n->subtype() )
     {
-      case Subscription::S10nSubscribe:
+      case Subscription::Subscribe:
       {
         bool answer = m_rosterListener->handleSubscriptionRequest( s10n->from(), s10n->status() );
         if( m_syncSubscribeReq )
@@ -278,18 +278,18 @@ namespace gloox
         }
         break;
       }
-      case Subscription::S10nSubscribed:
+      case Subscription::Subscribed:
       {
-//         Subscription* p = new Subscription( Subscription::S10nSubscribe, s10n->from().bareJID() );
+//         Subscription* p = new Subscription( Subscription::Subscribe, s10n->from().bareJID() );
 //         m_parent->send( p );
 
         m_rosterListener->handleItemSubscribed( s10n->from() );
         break;
       }
 
-      case Subscription::S10nUnsubscribe:
+      case Subscription::Unsubscribe:
       {
-        Subscription* p = new Subscription( Subscription::S10nUnsubscribed, s10n->from().bareJID() );
+        Subscription* p = new Subscription( Subscription::Unsubscribed, s10n->from().bareJID() );
         m_parent->send( p );
 
         bool answer = m_rosterListener->handleUnsubscriptionRequest( s10n->from(), s10n->status() );
@@ -298,9 +298,9 @@ namespace gloox
         break;
       }
 
-      case Subscription::S10nUnsubscribed:
+      case Subscription::Unsubscribed:
       {
-//         Subscription* p = new Subscription( Subscription::S10nUnsubscribe, s10n->from().bareJID() );
+//         Subscription* p = new Subscription( Subscription::Unsubscribe, s10n->from().bareJID() );
 //         m_parent->send( p );
 
         m_rosterListener->handleItemUnsubscribed( s10n->from() );

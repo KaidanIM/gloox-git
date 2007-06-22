@@ -48,10 +48,10 @@ namespace gloox
   {
     switch( iq->subtype() )
     {
-      case IQ::IqTypeGet:
+      case IQ::Get:
         if( iq->xmlns() == XMLNS_VERSION )
         {
-          IQ* re = new IQ( IQ::IqTypeResult, iq->from(), iq->id(), XMLNS_VERSION );
+          IQ* re = new IQ( IQ::Result, iq->from(), iq->id(), XMLNS_VERSION );
           new Tag( re->query(), "name", m_versionName );
           new Tag( re->query(), "version", m_versionVersion );
           new Tag( re->query(), "os", m_versionOs );
@@ -59,7 +59,7 @@ namespace gloox
         }
         else if( iq->xmlns() == XMLNS_DISCO_INFO && iq->query() )
         {
-          IQ* re = new IQ( IQ::IqTypeResult, iq->from(), iq->id(), XMLNS_DISCO_INFO );
+          IQ* re = new IQ( IQ::Result, iq->from(), iq->id(), XMLNS_DISCO_INFO );
           Tag *query = re->query();
 
           Tag *q = iq->query();
@@ -114,7 +114,7 @@ namespace gloox
         }
         else if( iq->xmlns() == XMLNS_DISCO_ITEMS && iq->query() )
         {
-          IQ* re = new IQ( IQ::IqTypeResult, iq->from(), iq->id(), XMLNS_DISCO_ITEMS );
+          IQ* re = new IQ( IQ::Result, iq->from(), iq->id(), XMLNS_DISCO_ITEMS );
           Tag *query = re->query();
 
           DiscoNodeHandlerMap::const_iterator it;
@@ -144,7 +144,7 @@ namespace gloox
         return true;
         break;
 
-      case IQ::IqTypeSet:
+      case IQ::Set:
       {
         bool res = false;
         DiscoHandlerList::const_iterator it = m_discoHandlers.begin();
@@ -170,7 +170,7 @@ namespace gloox
     {
       switch( iq->subtype() )
       {
-        case IQ::IqTypeResult:
+        case IQ::Result:
           switch( context )
           {
             case GET_DISCO_INFO:
@@ -182,7 +182,7 @@ namespace gloox
            }
         break;
 
-        case IQ::IqTypeError:
+        case IQ::Error:
           (*it).second.dh->handleDiscoError( iq, (*it).second.context );
           break;
 
@@ -209,7 +209,7 @@ namespace gloox
   {
     const std::string& id = tid.empty() ? m_parent->getID() : tid;
 
-    IQ* iq = new IQ( IQ::IqTypeGet, to, id, XMLNS_DISCO_INFO );
+    IQ* iq = new IQ( IQ::Get, to, id, XMLNS_DISCO_INFO );
     Tag *q = iq->query();
     if( !node.empty() )
       q->addAttribute( "node", node );
@@ -227,7 +227,7 @@ namespace gloox
   {
     const std::string& id = tid.empty() ? m_parent->getID() : tid;
 
-    IQ* iq = new IQ( IQ::IqTypeGet, to, id, XMLNS_DISCO_ITEMS );
+    IQ* iq = new IQ( IQ::Get, to, id, XMLNS_DISCO_ITEMS );
     Tag *q = iq->query();
     if( !node.empty() )
       q->addAttribute( "node", node );

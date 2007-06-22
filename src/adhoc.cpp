@@ -97,7 +97,7 @@ namespace gloox
 
   bool Adhoc::handleIq( IQ* iq )
   {
-    if( iq->subtype() != IQ::IqTypeSet )
+    if( iq->subtype() != IQ::Set )
       return false;
 
     if( iq->hasChild( "command" ) )
@@ -117,7 +117,7 @@ namespace gloox
 
   void Adhoc::handleIqID( IQ* iq, int context )
   {
-    if( context != ExecuteAdhocCommand || iq->subtype() != IQ::IqTypeResult )
+    if( context != ExecuteAdhocCommand || iq->subtype() != IQ::Result )
       return;
 
     AdhocTrackMap::iterator it = m_adhocTrackMap.begin();
@@ -294,7 +294,7 @@ namespace gloox
       return;
 
     const std::string& id = m_parent->getID();
-    IQ* iq = new IQ( IQ::IqTypeSet, remote, id, XMLNS_ADHOC_COMMANDS, "command" );
+    IQ* iq = new IQ( IQ::Set, remote, id, XMLNS_ADHOC_COMMANDS, "command" );
     Tag* c = iq->query();
     c->addAttribute( "node", command );
     c->addAttribute( "action", "execute" );

@@ -55,7 +55,7 @@ namespace gloox
 
     const std::string& msid = sid.empty() ? m_parent->getID() : sid;
     const std::string& id = m_parent->getID();
-    IQ* iq = new IQ( IQ::IqTypeSet, to, id, XMLNS_IBB, "open" );
+    IQ* iq = new IQ( IQ::Set, to, id, XMLNS_IBB, "open" );
     Tag *o = iq->query();
     o->addAttribute( "sid", msid );
     o->addAttribute( "block-size", m_blockSize );
@@ -73,7 +73,7 @@ namespace gloox
   bool InBandBytestreamManager::handleIq( IQ* iq )
   {
     Tag *o = 0;
-    if( ( iq->subtype() == IQ::IqTypeSet ) &&
+    if( ( iq->subtype() == IQ::Set ) &&
           ( ( o = iq->findChild( "open", "xmlns", XMLNS_IBB ) ) != 0 ) )
     {
       InBandBytestream *ibb = new InBandBytestream( 0, m_parent );
@@ -102,7 +102,7 @@ namespace gloox
         rejectInBandBytestream( ibb, iq->from(), iq->id() );
       }
     }
-    else if( ( iq->subtype() == IQ::IqTypeSet ) &&
+    else if( ( iq->subtype() == IQ::Set ) &&
                ( ( o = iq->findChild( "close", "xmlns", XMLNS_IBB ) ) != 0 ) &&
                o->hasAttribute( "sid" ) )
     {
@@ -111,7 +111,7 @@ namespace gloox
       {
         (*it).second->closed();
 
-        IQ* re = new IQ( IQ::IqTypeResult, iq->from(), iq->id() );
+        IQ* re = new IQ( IQ::Result, iq->from(), iq->id() );
         m_parent->send( re );
       }
     }
@@ -153,7 +153,7 @@ namespace gloox
       const JID& from, const std::string& id )
   {
     m_ibbMap[ibb->sid()] = ibb;
-    IQ* iq = new IQ( IQ::IqTypeResult, from, id );
+    IQ* iq = new IQ( IQ::Result, from, id );
     m_parent->send( iq );
   }
 
@@ -161,7 +161,7 @@ namespace gloox
       const JID& from, const std::string& id )
   {
     delete ibb;
-    IQ* iq = new IQ( IQ::IqTypeError, from, id );
+    IQ* iq = new IQ( IQ::Error, from, id );
     Tag *e = new Tag( iq, "error" );
     e->addAttribute( "code", "501" );
     e->addAttribute( "type", "cancel" );
@@ -181,7 +181,7 @@ namespace gloox
         {
           switch( iq->subtype() )
           {
-            case IQ::IqTypeResult:
+            case IQ::Result:
             {
               InBandBytestream *ibb = new InBandBytestream( 0, m_parent );
               ibb->setSid( (*it).second.sid );
@@ -192,7 +192,7 @@ namespace gloox
               t->handleOutgoingInBandBytestream( iq->from(), ibb );
               break;
             }
-            case IQ::IqTypeError:
+            case IQ::Error:
               (*it).second.ibbh->handleInBandBytestreamError( iq->from(), iq->error() );
               break;
             default:

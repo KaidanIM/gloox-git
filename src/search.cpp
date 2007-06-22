@@ -36,7 +36,7 @@ namespace gloox
 
     const std::string& id = m_parent->getID();
 
-    IQ* iq = new IQ( IQ::IqTypeGet, directory, id, XMLNS_SEARCH );
+    IQ* iq = new IQ( IQ::Get, directory, id, XMLNS_SEARCH );
 
     m_track[id] = sh;
     m_parent->trackID( this, id, FetchSearchFields );
@@ -50,7 +50,7 @@ namespace gloox
 
     const std::string& id = m_parent->getID();
 
-    IQ* iq = new IQ( IQ::IqTypeSet, directory, id, XMLNS_SEARCH );
+    IQ* iq = new IQ( IQ::Set, directory, id, XMLNS_SEARCH );
     iq->query()->addChild( form.tag() );
 
     m_track[id] = sh;
@@ -65,7 +65,7 @@ namespace gloox
 
     const std::string& id = m_parent->getID();
 
-    IQ* iq = new IQ( IQ::IqTypeSet, directory, id, XMLNS_SEARCH );
+    IQ* iq = new IQ( IQ::Set, directory, id, XMLNS_SEARCH );
     Tag *q = iq->query();
 
     if( fields & SearchFieldFirst )
@@ -89,7 +89,7 @@ namespace gloox
     {
       switch( iq->subtype() )
       {
-        case IQ::IqTypeResult:
+        case IQ::Result:
           switch( context )
           {
             case FetchSearchFields:
@@ -166,7 +166,7 @@ namespace gloox
             }
           }
           break;
-        case IQ::IqTypeError:
+        case IQ::Error:
           (*it).second->handleSearchError( iq->from(), iq );
           break;
 

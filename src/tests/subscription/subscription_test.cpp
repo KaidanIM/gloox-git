@@ -23,7 +23,7 @@ int main( int /*argc*/, char** /*argv*/ )
   name = "parse Subscription subscribe";
   s10n->addAttribute( "type", "subscribe" );
   i = new Subscription( s10n );
-  if( i->subtype() != Subscription::S10nSubscribe
+  if( i->subtype() != Subscription::Subscribe
       || !i->hasAttribute( "type", "subscribe" )
       || !i->hasAttribute( "to", "you@example.net/gloox" )
       || !i->hasAttribute( "from", "me@example.net/gloox" )
@@ -40,7 +40,7 @@ int main( int /*argc*/, char** /*argv*/ )
   name = "parse Subscription subscribed";
   s10n->addAttribute( "type", "subscribed" );
   i = new Subscription( s10n );
-  if( i->subtype() != Subscription::S10nSubscribed || !i->hasAttribute( "type", "subscribed" )
+  if( i->subtype() != Subscription::Subscribed || !i->hasAttribute( "type", "subscribed" )
       || !i->hasAttribute( "to", "you@example.net/gloox" )
       || !i->hasAttribute( "from", "me@example.net/gloox" )
       || i->from().full() != "me@example.net/gloox" || i->to().full() != "you@example.net/gloox"
@@ -56,7 +56,7 @@ int main( int /*argc*/, char** /*argv*/ )
   name = "parse Subscription unsubscribe";
   s10n->addAttribute( "type", "unsubscribe" );
   i = new Subscription( s10n );
-  if( i->subtype() != Subscription::S10nUnsubscribe || !i->hasAttribute( "type", "unsubscribe" )
+  if( i->subtype() != Subscription::Unsubscribe || !i->hasAttribute( "type", "unsubscribe" )
       || !i->hasAttribute( "to", "you@example.net/gloox" )
       || !i->hasAttribute( "from", "me@example.net/gloox" )
       || i->from().full() != "me@example.net/gloox" || i->to().full() != "you@example.net/gloox"
@@ -72,7 +72,7 @@ int main( int /*argc*/, char** /*argv*/ )
   name = "parse Subscription unsubscribed";
   s10n->addAttribute( "type", "unsubscribed" );
   i = new Subscription( s10n );
-  if( i->subtype() != Subscription::S10nUnsubscribed || !i->hasAttribute( "type", "unsubscribed" )
+  if( i->subtype() != Subscription::Unsubscribed || !i->hasAttribute( "type", "unsubscribed" )
       || !i->hasAttribute( "to", "you@example.net/gloox" )
       || !i->hasAttribute( "from", "me@example.net/gloox" )
       || i->from().full() != "me@example.net/gloox" || i->to().full() != "you@example.net/gloox"
@@ -86,7 +86,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "new simple Subscription subscribe";
-  i = new Subscription( Subscription::S10nSubscribe, JID( "xyz@example.org/blah" ), "the status",
+  i = new Subscription( Subscription::Subscribe, JID( "xyz@example.org/blah" ), "the status",
                         "the xmllang", JID( "foo@bar.com" ) );
   if( !i->hasAttribute( "type", "subscribe" )
       || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
@@ -101,7 +101,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "new simple Subscription subscribed";
-  i = new Subscription( Subscription::S10nSubscribed, JID( "xyz@example.org/blah" ), "the status",
+  i = new Subscription( Subscription::Subscribed, JID( "xyz@example.org/blah" ), "the status",
                         "the xmllang", JID( "foo@bar.com" ) );
   if( !i->hasAttribute( "type", "subscribed" )
       || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
@@ -116,7 +116,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "new simple Subscription unsubscribe";
-  i = new Subscription( Subscription::S10nUnsubscribe, JID( "xyz@example.org/blah" ), "the status",
+  i = new Subscription( Subscription::Unsubscribe, JID( "xyz@example.org/blah" ), "the status",
                         "the xmllang", JID( "foo@bar.com" ) );
   if( !i->hasAttribute( "type", "unsubscribe" )
       || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
@@ -131,7 +131,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "new simple Subscription unsubscribed";
-  i = new Subscription( Subscription::S10nUnsubscribed, JID( "xyz@example.org/blah" ), "the status",
+  i = new Subscription( Subscription::Unsubscribed, JID( "xyz@example.org/blah" ), "the status",
                         "the xmllang", JID( "foo@bar.com" ) );
   if( !i->hasAttribute( "type", "unsubscribed" )
       || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )

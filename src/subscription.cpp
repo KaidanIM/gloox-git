@@ -35,13 +35,13 @@ namespace gloox
     m_type = StanzaS10n;
 
     if( hasAttribute( "type", "subscribe" ) )
-      m_subtype = S10nSubscribe;
+      m_subtype = Subscribe;
     else if( hasAttribute( "type", "subscribed" ) )
-      m_subtype = S10nSubscribed;
+      m_subtype = Subscribed;
     else if( hasAttribute( "type", "unsubscribe" ) )
-      m_subtype = S10nUnsubscribe;
+      m_subtype = Unsubscribe;
     else if( hasAttribute( "type", "unsubscribed" ) )
-      m_subtype = S10nUnsubscribed;
+      m_subtype = Unsubscribed;
 
     const TagList& c = children();
     TagList::const_iterator it = c.begin();

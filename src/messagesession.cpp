@@ -72,7 +72,7 @@ namespace gloox
       m_hadMessages = true;
     }
 
-    Message* m = new Message( Message::MessageChat, m_target.full(), message, subject, m_thread );
+    Message* m = new Message( Message::Chat, m_target.full(), message, subject, m_thread );
     m->addAttribute( "id", m_parent->getID() );
 
     decorate( m );

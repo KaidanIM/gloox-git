@@ -47,7 +47,7 @@ namespace gloox
   void FlexibleOffline::fetchMessages( const StringList& msgs )
   {
     const std::string& id = m_parent->getID();
-    IQ* iq = new IQ( IQ::IqTypeGet, JID(), id, XMLNS_OFFLINE, "offline" );
+    IQ* iq = new IQ( IQ::Get, JID(), id, XMLNS_OFFLINE, "offline" );
     Tag *o = iq->query();
 
     if( msgs.size() == 0 )
@@ -70,7 +70,7 @@ namespace gloox
   void FlexibleOffline::removeMessages( const StringList& msgs )
   {
     const std::string& id = m_parent->getID();
-    IQ* iq = new IQ( IQ::IqTypeGet, JID(), id, XMLNS_OFFLINE, "offline" );
+    IQ* iq = new IQ( IQ::Get, JID(), id, XMLNS_OFFLINE, "offline" );
     Tag *o = iq->query();
 
     if( msgs.size() == 0 )
@@ -156,10 +156,10 @@ namespace gloox
       case FORequestMsgs:
         switch( iq->subtype() )
         {
-          case IQ::IqTypeResult:
+          case IQ::Result:
             m_flexibleOfflineHandler->handleFlexibleOfflineResult( FomrRequestSuccess );
             break;
-          case IQ::IqTypeError:
+          case IQ::Error:
             switch( iq->error() )
             {
               case StanzaErrorForbidden:
@@ -180,10 +180,10 @@ namespace gloox
       case FORemoveMsgs:
         switch( iq->subtype() )
         {
-          case IQ::IqTypeResult:
+          case IQ::Result:
             m_flexibleOfflineHandler->handleFlexibleOfflineResult( FomrRemoveSuccess );
             break;
-          case IQ::IqTypeError:
+          case IQ::Error:
             switch( iq->error() )
             {
               case StanzaErrorForbidden:

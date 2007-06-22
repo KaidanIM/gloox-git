@@ -39,11 +39,11 @@ namespace gloox
       enum MessageType
       {
         MessageInvalid,
-        MessageChat,
+        Chat,
         MessageError,
-        MessageGroupchat,
-        MessageHeadline,
-        MessageNormal
+        Groupchat,
+        Headline,
+        Normal
       };
 
       /**

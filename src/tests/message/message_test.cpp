@@ -23,7 +23,7 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   name = "parse Message normal 1";
   i = new Message( msg );
-  if( i->subtype() != Message::MessageNormal || !i->hasAttribute( "id", "id1" )
+  if( i->subtype() != Message::Normal || !i->hasAttribute( "id", "id1" )
       || !i->hasAttribute( "to", "you@example.net/gloox" )
       || !i->hasAttribute( "from", "me@example.net/gloox" )
       || i->from().full() != "me@example.net/gloox" || i->to().full() != "you@example.net/gloox"
@@ -39,7 +39,7 @@ int main( int /*argc*/, char** /*argv*/ )
   name = "parse Message normal 2";
   msg->addAttribute( "type", "normal" );
   i = new Message( msg );
-  if( i->subtype() != Message::MessageNormal || !i->hasAttribute( "type", "normal" )
+  if( i->subtype() != Message::Normal || !i->hasAttribute( "type", "normal" )
       || !i->hasAttribute( "id", "id1" )
       || !i->hasAttribute( "to", "you@example.net/gloox" )
       || !i->hasAttribute( "from", "me@example.net/gloox" )
@@ -56,7 +56,7 @@ int main( int /*argc*/, char** /*argv*/ )
   name = "parse Message chat";
   msg->addAttribute( "type", "chat" );
   i = new Message( msg );
-  if( i->subtype() != Message::MessageChat || !i->hasAttribute( "type", "chat" )
+  if( i->subtype() != Message::Chat || !i->hasAttribute( "type", "chat" )
       || !i->hasAttribute( "id", "id1" )
       || !i->hasAttribute( "to", "you@example.net/gloox" )
       || !i->hasAttribute( "from", "me@example.net/gloox" )
@@ -73,7 +73,7 @@ int main( int /*argc*/, char** /*argv*/ )
   name = "parse Message groupchat";
   msg->addAttribute( "type", "groupchat" );
   i = new Message( msg );
-  if( i->subtype() != Message::MessageGroupchat || !i->hasAttribute( "type", "groupchat" )
+  if( i->subtype() != Message::Groupchat || !i->hasAttribute( "type", "groupchat" )
       || !i->hasAttribute( "id", "id1" )
       || !i->hasAttribute( "to", "you@example.net/gloox" )
       || !i->hasAttribute( "from", "me@example.net/gloox" )
@@ -121,7 +121,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "new simple Message chat";
-  i = new Message( Message::MessageChat, JID( "xyz@example.org/blah" ), "the body", "the subject",
+  i = new Message( Message::Chat, JID( "xyz@example.org/blah" ), "the body", "the subject",
                    "the thread", "the xmllang", JID( "foo@bar.com" ) );
   if( !i->hasAttribute( "type", "chat" )
       || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
@@ -137,7 +137,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "new simple Message normal";
-  i = new Message( Message::MessageNormal, JID( "xyz@example.org/blah" ), "the body", "the subject",
+  i = new Message( Message::Normal, JID( "xyz@example.org/blah" ), "the body", "the subject",
                    "the thread", "the xmllang", JID( "foo@bar.com" ) );
   if( !i->hasAttribute( "type", "normal" )
       || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
@@ -153,7 +153,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "new simple Message groupchat";
-  i = new Message( Message::MessageGroupchat, JID( "xyz@example.org/blah" ), "the body", "the subject",
+  i = new Message( Message::Groupchat, JID( "xyz@example.org/blah" ), "the body", "the subject",
                    "the thread", "the xmllang", JID( "foo@bar.com" ) );
   if( !i->hasAttribute( "type", "groupchat" )
       || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )

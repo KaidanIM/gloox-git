@@ -73,7 +73,7 @@ namespace gloox
     if( !m_enableChatStates )
       return;
 
-    Message* m = new Message( Message::MessageChat, m_parent->target() );
+    Message* m = new Message( Message::Chat, m_parent->target() );
 
     Tag *s = 0;
     switch( state )

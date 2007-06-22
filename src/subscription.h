@@ -38,10 +38,10 @@ namespace gloox
       enum S10nType
       {
         S10nInvalid,
-        S10nSubscribe,
-        S10nSubscribed,
-        S10nUnsubscribe,
-        S10nUnsubscribed
+        Subscribe,
+        Subscribed,
+        Unsubscribe,
+        Unsubscribed
       };
 
       /**

@@ -52,7 +52,7 @@ namespace gloox
 
     const std::string& id = m_parent->getID();
 
-    IQ* iq = new IQ( IQ::IqTypeGet, m_to, id, XMLNS_REGISTER );
+    IQ* iq = new IQ( IQ::Get, m_to, id, XMLNS_REGISTER );
 
     m_parent->trackID( this, id, FetchRegistrationFields );
     m_parent->send( iq );
@@ -65,7 +65,7 @@ namespace gloox
 
     const std::string& id = m_parent->getID();
 
-    IQ* iq = new IQ( IQ::IqTypeSet, m_to, id, XMLNS_REGISTER );
+    IQ* iq = new IQ( IQ::Set, m_to, id, XMLNS_REGISTER );
     Tag *q = iq->query();
 
     if( fields & FieldUsername )
@@ -112,7 +112,7 @@ namespace gloox
 
     const std::string& id = m_parent->getID();
 
-    IQ* iq = new IQ( IQ::IqTypeSet, m_to, id, XMLNS_REGISTER );
+    IQ* iq = new IQ( IQ::Set, m_to, id, XMLNS_REGISTER );
     iq->query()->addChild( form.tag() );
 
     m_parent->trackID( this, id, CreateAccount );
@@ -126,7 +126,7 @@ namespace gloox
 
     const std::string& id = m_parent->getID();
 
-    IQ* iq = new IQ( IQ::IqTypeSet, m_to, id, XMLNS_REGISTER );
+    IQ* iq = new IQ( IQ::Set, m_to, id, XMLNS_REGISTER );
     iq->addAttribute( "from", m_parent->jid().full() );
     new Tag( iq->query(), "remove" );
 
@@ -141,7 +141,7 @@ namespace gloox
 
     const std::string& id = m_parent->getID();
 
-    IQ* iq = new IQ( IQ::IqTypeSet, m_to, id, XMLNS_REGISTER );
+    IQ* iq = new IQ( IQ::Set, m_to, id, XMLNS_REGISTER );
     new Tag( iq->query(), "username", username );
     new Tag( iq->query(), "password", password );
 
@@ -161,7 +161,7 @@ namespace gloox
 
   bool Registration::handleIq( IQ* iq )
   {
-    if( iq->subtype() == IQ::IqTypeError )
+    if( iq->subtype() == IQ::Error )
     {
       Tag *e = iq->findChild( "error" );
 
@@ -192,7 +192,7 @@ namespace gloox
 
   void Registration::handleIqID( IQ* iq, int context )
   {
-    if( iq->subtype() != IQ::IqTypeResult || !m_registrationHandler )
+    if( iq->subtype() != IQ::Result || !m_registrationHandler )
       return;
 
     switch( context )

@@ -44,12 +44,12 @@ namespace gloox
     m_type = StanzaPresence;
     const std::string& type = findAttribute( "type" );
     if( type.empty() )
-      m_subtype = PresenceAvailable;
+      m_subtype = Available;
     else
       m_subtype = (PresenceType)util::lookup( type, msgTypeStringValues,
                                sizeof( msgTypeStringValues ) / sizeof(char*) );
 
-    if( m_subtype == PresenceAvailable )
+    if( m_subtype == Available )
     {
       Tag* t = findChild( "show" );
       if( t )
@@ -95,7 +95,7 @@ namespace gloox
     else
       m_priority = priority;
 
-    if( type != PresenceUnavailable )
+    if( type != Unavailable )
     {
       char tmp[5];
       tmp[4] = '\0';
