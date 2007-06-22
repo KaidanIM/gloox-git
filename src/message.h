@@ -38,12 +38,12 @@ namespace gloox
        */
       enum MessageType
       {
-        MessageInvalid,
-        Chat,
-        MessageError,
-        Groupchat,
-        Headline,
-        Normal
+        Chat           =  1,        /**< */
+        MessageError   =  2,        /**< */
+        Groupchat      =  4,        /**< */
+        Headline       =  8,        /**< */
+        Normal         = 16,        /**< */
+        Invalid        = 32         /**< */
       };
 
       /**

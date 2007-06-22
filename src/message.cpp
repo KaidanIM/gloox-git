@@ -26,7 +26,7 @@ namespace gloox
     { return msgTypeStringValues[type-1]; }
 
   Message::Message( Tag *tag, bool rip )
-    : Stanza( tag, rip ), m_subtype( MessageInvalid )
+    : Stanza( tag, rip ), m_subtype( Invalid )
   {
     if( !tag || tag->name() != "message" )
     {
@@ -75,7 +75,7 @@ namespace gloox
   Message::Message( MessageType type, const JID& to,
                     const std::string& body, const std::string& subject,
                     const std::string& thread, const std::string& xmllang, const JID& from )
-    : Stanza( "message", to, from ), m_subtype( MessageInvalid )
+    : Stanza( "message", to, from ), m_subtype( Invalid )
   {
     addAttribute( "type", typeString( type ) );
 
