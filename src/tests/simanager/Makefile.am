@@ -8,6 +8,6 @@ noinst_PROGRAMS = simanager_test
 
 simanager_test_SOURCES = simanager_test.cpp
 simanager_test_LDADD = ../../jid.o ../../tag.o \
-			../../logsink.o ../../prep.o \
+			../../logsink.o ../../prep.o ../../parserutils.o \
 			../../gloox.o ../../iq.o ../../stanza.o
 simanager_test_CFLAGS = $(CPPFLAGS)
