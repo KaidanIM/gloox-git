@@ -10,6 +10,7 @@
   This software is distributed without any warranty.
 */
 
+#include "util.h"
 #include "message.h"
 #include "stanzaextension.h"
 #include "stanzaextensionfactory.h"
@@ -17,13 +18,10 @@
 namespace gloox
 {
 
-  static const std::string msgTypeStringValues[] =
+  static const char * msgTypeStringValues[] =
   {
     "chat", "error", "groupchat", "headline", "normal"
   };
-
-  static inline const std::string& typeString( Message::MessageType type )
-    { return msgTypeStringValues[type-1]; }
 
   Message::Message( Tag *tag, bool rip )
     : Stanza( tag, rip ), m_subtype( Invalid )
@@ -36,16 +34,12 @@ namespace gloox
 
     m_type = StanzaMessage;
 
-    if( hasAttribute( "type", "chat" ) )
-      m_subtype = Chat;
-    else if( hasAttribute( "type", "error" ) )
-      m_subtype = MessageError;
-    else if( hasAttribute( "type", "headline" ) )
-      m_subtype = Headline;
-    else if( hasAttribute( "type", "groupchat" ) )
-      m_subtype = Groupchat;
-    else
+    const std::string& typestring = findAttribute( "type" );
+    if( typestring.empty() )
       m_subtype = Normal;
+    else
+      m_subtype = (MessageType)util::lookup2( typestring , msgTypeStringValues );
+    
 
     const TagList& c = children();
     TagList::const_iterator it = c.begin();
@@ -77,7 +71,7 @@ namespace gloox
                     const std::string& thread, const std::string& xmllang, const JID& from )
     : Stanza( "message", to, from ), m_subtype( Invalid )
   {
-    addAttribute( "type", typeString( type ) );
+    addAttribute( "type", util::lookup2( type, msgTypeStringValues ) );
 
     if( !body.empty() )
     {
