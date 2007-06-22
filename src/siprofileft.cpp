@@ -163,7 +163,7 @@ namespace gloox
           length = atol( r->findAttribute( "length" ).c_str() );
       }
       const std::string& mt = si->findAttribute( "mime-type" );
-      m_handler->handleFTRequest( from, id, ptag->findAttribute( "name" ),
+      m_handler->handleFTRequest( from, id, si->findAttribute( "id" ), ptag->findAttribute( "name" ),
                                   atol( ptag->findAttribute( "size" ).c_str() ),
                                   ptag->findAttribute( "hash" ), ptag->findAttribute( "date" ),
                                   mt.empty() ? "binary/octet-stream" : mt, desc, FTTypeS5B, offset, length );
