@@ -24,7 +24,7 @@ namespace gloox
     { return msgTypeStringValues[type-1]; }
 
   Subscription::Subscription( Tag *tag, bool rip )
-    : Stanza( tag, rip ), m_subtype( S10nInvalid )
+    : Stanza( tag, rip ), m_subtype( Invalid )
   {
     if( !tag || tag->name() != "presence" )
     {
@@ -56,7 +56,7 @@ namespace gloox
 
   Subscription::Subscription( S10nType type, const JID& to, const std::string& status,
                               const std::string& xmllang, const JID& from )
-    : Stanza( "presence", to, from ), m_subtype( S10nInvalid )
+    : Stanza( "presence", to, from ), m_subtype( type )
   {
     addAttribute( "type", typeString( type ) );
 

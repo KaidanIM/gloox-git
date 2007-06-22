@@ -38,13 +38,13 @@ namespace gloox
        */
       enum IqType
       {
-        Get = 0,              /**< The stanza is a request for information or requirements. */
-        Set,                  /**< The stanza provides required data, sets new values, or
+        Get = 0,                    /**< The stanza is a request for information or requirements. */
+        Set,                        /**< The stanza provides required data, sets new values, or
                                      * replaces existing values. */
-        Result,               /**< The stanza is a response to a successful get or set request. */
-        Error,                /**< An error has occurred regarding processing or delivery of a
+        Result,                     /**< The stanza is a response to a successful get or set request. */
+        Error,                      /**< An error has occurred regarding processing or delivery of a
                                      * previously-sent get or set (see Stanza Errors (Section 9.3)). */
-        IqTypeInvalid               /**< The stanza is invalid */
+        Invalid                     /**< The stanza is invalid */
       };
 
       /**
