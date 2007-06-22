@@ -566,7 +566,7 @@ namespace gloox
     void Manager::getDefaultNodeConfig( const JID& service, const std::string& nodeid )
     {
       const std::string& id = m_parent->getID();
-      IQ* iq = new IQ( IQ::IqTypeSet, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
+      IQ* iq = new IQ( IQ::IqTypeSet, service, id, XMLNS_PUBSUB, "pubsub" );
       Tag * create = new Tag( iq->query(), "default" );
       if( !nodeid.empty() )
         create->addAttribute( "node", nodeid );
@@ -658,7 +658,7 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      IQ* iq = new IQ( IQ::IqTypeGet, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
+      IQ* iq = new IQ( IQ::IqTypeGet, service, id, XMLNS_PUBSUB, "pubsub" );
       new Tag( iq->query(), "items", "node", nodeid );
 
       m_parent->trackID( this, id, RequestItemList );
