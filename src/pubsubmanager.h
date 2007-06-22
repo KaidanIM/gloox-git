@@ -65,7 +65,7 @@ namespace gloox
      *
      * @endcode
      *
-     * @author Vincent Thomasset <vthomasset@gmail.com>
+     * @author Vincent Thomasset
      *
      * XEP Version: 1.9
      */
