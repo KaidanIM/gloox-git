@@ -185,7 +185,7 @@ namespace gloox
   }
 
 #else
-  DNS::HostMap DNS::resolve( const std::string& service, const std::string& proto,
+  DNS::HostMap DNS::resolve( const std::string& /*service*/, const std::string& /*proto*/,
                              const std::string& domain, const LogSink& logInstance )
   {
     logInstance.log( LogLevelWarning, LogAreaClassDns,
