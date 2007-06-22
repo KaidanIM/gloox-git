@@ -15,8 +15,6 @@
 namespace gloox
 {
 
-    typedef std::pair< const char *, int > LookupPair;
-
     /**
      * Finds the enumerated value associated with a string value.
      * The enumerated type must have a default (invalid/unknown) value type with
@@ -25,7 +23,7 @@ namespace gloox
      * @param values Array of String/Code pairs to look into.
      * @return The associated enum code.
      */
-    int _lookup( const std::string& str, const LookupPair values[], unsigned size )
+    int lookup( const std::string& str, const LookupPair values[], unsigned size )
     {
       unsigned i = 0;
       for( ; i < size && str != values[i].first;  ++i ) ;
@@ -40,20 +38,20 @@ namespace gloox
      * @param values Array of String/Code pairs to look into.
      * @return The associated enum code.
      */
-/*    int _lookup( const std::string& str, const char * values[], unsigned size )
+    int lookup( const std::string& str, const char * values[], unsigned size )
     {
       unsigned i = 0;
       for( ; ( i < size ) && ( str != values[i] ); ++i ) ;
       return i != size ? i : 0;
     }
-*/
+
     /**
      * Finds the string associated with an enumerated type.
      * @param code Feature string to search for.
      * @param values Array of String/Code pairs to look into.
      * @return The associated string (or 0 in case there's no match).
      */
-    const char * _lookup( int code, const LookupPair values[], unsigned size )
+    const char * lookup( int code, const LookupPair values[], unsigned size )
     {
       unsigned i = 0;
       for( ; i < size && code != values[i].second; ++i ) ;
@@ -68,10 +66,10 @@ namespace gloox
      * @param values Array of String/Code pairs to look into.
      * @return The associated enum code.
      */
-/*    const char * _lookup( int i, const char * values[], unsigned size )
+    const char * lookup( int i, const char * values[], unsigned size )
     {
       return i < size ? values[i] : 0;
     }
-*/
+
 }
 

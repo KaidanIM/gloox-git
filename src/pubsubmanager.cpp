@@ -111,7 +111,8 @@ namespace gloox
 
     static SubscriptionType subscriptionType( const std::string& subscription )
     {
-      return (SubscriptionType)lookup( subscription, subscriptionValues );
+      return (SubscriptionType)lookup( subscription, subscriptionValues,
+                              sizeof(subscriptionValues)/sizeof(LookupPair) );
     }
 
     static LookupPair affiliationValues[] = {
@@ -123,7 +124,8 @@ namespace gloox
 
     static AffiliationType affiliationType( const std::string& affiliation )
     {
-      return (AffiliationType)lookup( affiliation, affiliationValues );
+      return (AffiliationType)lookup( affiliation, affiliationValues,
+                              sizeof(affiliationValues)/sizeof(LookupPair) );
     }
 
     /**
@@ -167,7 +169,7 @@ namespace gloox
         LookupPair( "owner",                      FeatureMetaOwner ),
         LookupPair( "event",                      FeatureMetaEvent ),
       };
-      return static_cast< PubSubFeature >( lookup( str, values ) );
+      return static_cast< PubSubFeature >( lookup( str, values, sizeof(values)/sizeof(LookupPair) ) );
     }
 
     enum EventType {
@@ -189,7 +191,7 @@ namespace gloox
         LookupPair( "purge",         EventPurge ),
         LookupPair( "subscription",  EventSubscription )
       };
-      return (EventType)lookup( event, values );
+      return (EventType)lookup( event, values, sizeof(values)/sizeof(LookupPair) );
     }
 
     void Manager::handleMessage( Message* msg, MessageSession * )
@@ -534,7 +536,8 @@ namespace gloox
                        DataFormField::FieldTypeNone ) );
 
         if( access != AccessDefault )
-          df.addField( new DataFormField( "pubsub#access_model", lookup( access, accessValues ), "",
+          df.addField( new DataFormField( "pubsub#access_model", lookup( access, accessValues,
+                                           sizeof(accessValues)/sizeof(LookupPair) ), "",
                        DataFormField::FieldTypeNone ) );
 
         if( config )
@@ -612,7 +615,8 @@ namespace gloox
         for( ; it != list->end(); ++it )
         {
           s = new Tag( sub, "subscription", "jid", (*it).jid.full() );
-          s->addAttribute( "subscription", lookup( (*it).type, subscriptionValues ) );
+          s->addAttribute( "subscription", lookup( (*it).type, subscriptionValues,
+                               sizeof(subscriptionValues)/sizeof(LookupPair) ) );
           if( !(*it).subid.empty() )
             s->addAttribute( "subid", (*it).subid );
         }
@@ -641,7 +645,8 @@ namespace gloox
         for( ; it != list->end(); ++it )
         {
           a = new Tag( aff, "affiliation", "jid", (*it).jid.full() );
-          a->addAttribute( "affiliation", lookup( (*it).type, affiliationValues ) );
+          a->addAttribute( "affiliation", lookup( (*it).type, affiliationValues,
+                               sizeof(affiliationValues)/sizeof(LookupPair) ) );
         }
       }
 

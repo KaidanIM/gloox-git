@@ -9,5 +9,5 @@ noinst_PROGRAMS = presence_test
 presence_test_SOURCES = presence_test.cpp
 presence_test_LDADD = ../../tag.o ../../presence.o ../../stanza.o ../../stanzaextensionfactory.o \
                 ../../oob.o ../../gpgencrypted.o ../../gpgsigned.o ../../vcardupdate.o ../../delayeddelivery.o \
-                ../../xdelayeddelivery.o ../../amp.o ../../jid.o ../../prep.o ../../gloox.o
+                ../../xdelayeddelivery.o ../../amp.o ../../jid.o ../../prep.o ../../gloox.o ../../parserutils.o
 presence_test_CFLAGS = $(CPPFLAGS)

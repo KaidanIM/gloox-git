@@ -1,5 +1,6 @@
 #include "error.h"
 #include "tag.h"
+#include "parserutils.h"
 
 /*
  - do we need tag() / how to save the XMLNS's (ie copy string or enumerated type) ?
@@ -11,145 +12,105 @@
 
 namespace gloox
 {
-  typedef const char * StrType;
-
-  template< typename E >
-  static inline int lookup( const std::string& str,
-                            const std::pair< StrType, E > * tab,
-                            int size )
-  {
-    int i=0;
-    while( i < size && str != tab[i].first )
-      ++i;
-    return i;
-  }
-
-  typedef std::pair< StrType, GenericErrorType > GenericErrorValue;
 
   /* "generic" error values */
-  static const GenericErrorValue genericErrorValues[] = {
-    GenericErrorValue("auth",   Auth),
-    GenericErrorValue("cancel", Cancel),
-    GenericErrorValue("modify", Modify)
+  static const char * genericErrorValues[] = {
+    "auth",   
+    "cancel", 
+    "modify", 
   };
-
-  typedef std::pair< StrType, ErrorType > ErrorValue;
 
   /* "first level" error values */
-  static const ErrorValue errorValues[] = {
-    ErrorValue( "bad-request",                BadRequest ),
-    ErrorValue( "item-not-found",             ItemNotFound ),
-    ErrorValue( "forbidden",                  Forbidden ),
-    ErrorValue( "feature-not-implemented",    FeatureNotImplemented ),
-    ErrorValue( "not-acceptable",             NotAcceptable ),
-    ErrorValue( "not-allowed",                NotAllowed ),
-    ErrorValue( "conflict",                   Conflict ),
-    ErrorValue( "payment-required",           PaymentRequired ),
-    ErrorValue( "registration-required",      RegistrationRequired ),
-    ErrorValue( "service-unavailable",        ServiceUnavailable )
+  static const char * errorValues[] = {
+     "bad-request",             
+     "item-not-found",          
+     "forbidden",               
+     "feature-not-implemented", 
+     "not-acceptable",          
+     "not-allowed",             
+     "conflict",                
+     "payment-required",        
+     "registration-required",   
+     "service-unavailable",      
   };
-
-  typedef std::pair< StrType, SubErrorType > SubErrorValue;
 
   /* "second level" error values */
-  static const SubErrorValue subErrorValues[] = {
-    SubErrorValue( "closed-node",                    ClosedNode ),
-    SubErrorValue( "configuration-required",         ConfigurationRequired ),
-    SubErrorValue( "invalid-jid",                    InvalidJid ),
-    SubErrorValue( "invalid-options",                InvalidOptions ),
-    SubErrorValue( "invalid-payload",                InvalidPayload ),
-    SubErrorValue( "invalid-subid",                  InvalidSubid ),
-    SubErrorValue( "item-forbidden",                 ItemForbidden ),
-    SubErrorValue( "item-required",                  ItemRequired ),
-    SubErrorValue( "jid-required",                   JidRequired ),
-    SubErrorValue( "max-nodes-exceeded",             MaxNodesExceeded ),
-    SubErrorValue( "nodeid-required",                NodeidRequired),
-    SubErrorValue( "not-in-roster-group",            NotInRosterGroup),
-    SubErrorValue( "not-subscribed",                 NotSubscribed),
-    SubErrorValue( "payload-too-big",                PayloadTooBig),
-    SubErrorValue( "payload-required",               PayloadRequired),
-    SubErrorValue( "pending-subscription",           PendingSubscription),
-    SubErrorValue( "presence-subscription-required", PresenceSubscriptionRequired),
-    SubErrorValue( "subid-required",                 SubidRequired),
-    SubErrorValue( "unsupported",                    Unsupported),
-    SubErrorValue( "unsupported-access-model",       UnsupportedAccessModel)
+  static const char * subErrorValues[] = {
+     "closed-node",                    
+     "configuration-required",         
+     "invalid-jid",                    
+     "invalid-options",                
+     "invalid-payload",                
+     "invalid-subid",                  
+     "item-forbidden",                 
+     "item-required",                  
+     "jid-required",                   
+     "max-nodes-exceeded",             
+     "nodeid-required",                
+     "not-in-roster-group",            
+     "not-subscribed",                 
+     "payload-too-big",                
+     "payload-required",               
+     "pending-subscription",           
+     "presence-subscription-required", 
+     "subid-required",                 
+     "unsupported",                    
+     "unsupported-access-model",       
   };
-
-  typedef std::pair< StrType, FeatureType > FeatureValue;
 
   /* feature values */
-  static const FeatureValue featureValues[] = {
-    FeatureValue( "collections",                Collections ),
-    FeatureValue( "config-node",                ConfigNode ),
-    FeatureValue( "create-and-configure",       CreateAndconfigure ),
-    FeatureValue( "create-nodes",               CreateNodes ),
-    FeatureValue( "delete-any",                 DeleteAny ),
-    FeatureValue( "delete-nodes",               DeleteNodes ),
-    FeatureValue( "get-pending",                GetPending ),
-    FeatureValue( "instant-nodes",              InstantNodes ),
-    FeatureValue( "item-ids",                   ItemIds ),
-    FeatureValue( "leased-subscription",        LeasedSubscription ),
-    FeatureValue( "manage-subscriptions",       ManageSubscriptions ),
-    FeatureValue( "meta-data",                  MetaData ),
-    FeatureValue( "modify-affiliations",        ModifyAffiliations ),
-    FeatureValue( "multi-collection",           MultiCollection ),
-    FeatureValue( "multi-subscribe",            MultiSubscribe ),
-    FeatureValue( "outcast-affiliation",        OutcastAffiliation ),
-    FeatureValue( "persistent-items",           PersistentItems ),
-    FeatureValue( "presence-notifications",     PresenceNotifications ),
-    FeatureValue( "publish",                    Publish ),
-    FeatureValue( "publisher-affiliation",      PublisherAffiliation ),
-    FeatureValue( "purge-nodes",                PurgeNodes ),
-    FeatureValue( "retract-items",              RetractItems ),
-    FeatureValue( "retrieve-affiliations",      RetrieveAffiliations ),
-    FeatureValue( "retrieve-default",           RetrieveDefault ),
-    FeatureValue( "retrieve-items",             RetrieveItems ),
-    FeatureValue( "retrieve-subscriptions",     RetrieveSubscriptions ),
-    FeatureValue( "subscribe",                  Subscribe ),
-    FeatureValue( "subscription-options",       SubscriptionOptions ),
-    FeatureValue( "subscription-notifications", SubscriptionNotifications )
+  static const char * featureValues[] = {
+     "collections",
+     "config-node",
+     "create-and-configure",
+     "create-nodes",             
+     "delete-any",               
+     "delete-nodes",             
+     "get-pending",              
+     "instant-nodes",            
+     "item-ids",                 
+     "leased-subscription",      
+     "manage-subscriptions",     
+     "meta-data",                
+     "modify-affiliations",      
+     "multi-collection",         
+     "multi-subscribe",          
+     "outcast-affiliation",      
+     "persistent-items",         
+     "presence-notifications",   
+     "publish",                  
+     "publisher-affiliation",    
+     "purge-nodes",              
+     "retract-items",            
+     "retrieve-affiliations",    
+     "retrieve-default",         
+     "retrieve-items",           
+     "retrieve-subscriptions",   
+     "subscribe",                
+     "subscription-options",     
+     "subscription-notifications",
   };
 
-  static const int nbErrors = sizeof(errorValues)/sizeof(ErrorValue);
-  static const int nbFeatures = sizeof(featureValues)/sizeof(FeatureValue);
-  static const int nbSubErrors = sizeof(subErrorValues)/sizeof(SubErrorValue);
-  static const int nbGenericErrors = sizeof(genericErrorValues)/sizeof(GenericErrorValue);
+  static const int nbErrors = sizeof(errorValues)/sizeof(LookupPair);
+  static const int nbFeatures = sizeof(featureValues)/sizeof(LookupPair);
+  static const int nbSubErrors = sizeof(subErrorValues)/sizeof(LookupPair);
+  static const int nbGenericErrors = sizeof(genericErrorValues)/sizeof(LookupPair);
 
   Error::Error( const Tag * error )
     : StanzaExtension( ExtError ), m_genericType( GenericErrorNone ),
       m_type( ErrorNone ), m_subType( SubErrorNone ), m_feature( FeatureNone )
   {
-    //setValues( error );
-    //this = error;
     const std::string& genType = error->findAttribute( "type" );
-    if( genType.empty() )
-    {
-      printf( "error: no basic error type\n" );
-    }
-    int i = lookup( genType, genericErrorValues, nbGenericErrors );
-    if( i == nbGenericErrors )
-      return;
-    m_genericType = genericErrorValues[i].second;
+    m_genericType = (GenericErrorType)lookup( genType, genericErrorValues, nbGenericErrors );
     Tag::TagList::const_iterator it = error->children().begin();
-    i = lookup( (*it)->name(), errorValues, nbErrors );
-    if( i == nbErrors )
-      return;
-    m_type = errorValues[i].second;
+    m_type = (ErrorType)lookup( (*it)->name(), errorValues, nbErrors );
     m_xmlns1 = (*it)->findAttribute( "xmlns" );
     if( ++it != error->children().end() )
     {
-      i = lookup( (*it)->name(), subErrorValues, nbSubErrors );
-      if( i == nbSubErrors )
-        return;
-      m_subType = subErrorValues[i].second;
+      m_subType = (SubErrorType)lookup( (*it)->name(), subErrorValues, nbSubErrors );
       m_xmlns2 = (*it)->findAttribute( "xmlns" );
       const std::string& feat = (*it)->findAttribute( "feature" );
-      if( feat.empty() )
-        return;
-      i = lookup( feat, featureValues, nbFeatures );
-      if( i == nbFeatures )
-        return;
-      m_feature = featureValues[i].second;
+      m_feature = (FeatureType)lookup( feat, featureValues, nbFeatures );
     }
   }
 /*
@@ -198,11 +159,11 @@ namespace gloox
     if( m_genericType == GenericErrorNone || m_type == ErrorNone )
       return 0;
     Tag * error = new Tag( "error" );
-    error->addAttribute( "type", genericErrorValues[m_genericType].first );
-    new Tag( error, errorValues[m_type].first, "xmlns", m_xmlns1 );
+    error->addAttribute( "type", lookup( m_genericType, genericErrorValues, nbGenericErrors ) );
+    new Tag( error, lookup( m_type, errorValues, nbErrors ), "xmlns", m_xmlns1 );
     if( m_subType != SubErrorNone )
     {
-      Tag * tag = new Tag( error, subErrorValues[m_subType].first, "xmlns", m_xmlns2 );
+      Tag * tag = new Tag( error, lookup( m_subType, subErrorValues, nbSubErrors ), "xmlns", m_xmlns2 );
       if( m_subType == Unsupported )
         tag->addAttribute( "feature", m_feature );      
     }

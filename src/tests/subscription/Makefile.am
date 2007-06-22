@@ -9,5 +9,5 @@ noinst_PROGRAMS = subscription_test
 subscription_test_SOURCES = subscription_test.cpp
 subscription_test_LDADD = ../../tag.o ../../subscription.o ../../stanza.o ../../stanzaextensionfactory.o \
                 ../../oob.o ../../gpgencrypted.o ../../gpgsigned.o ../../vcardupdate.o ../../delayeddelivery.o \
-                ../../xdelayeddelivery.o ../../amp.o ../../jid.o ../../prep.o ../../gloox.o
+                ../../xdelayeddelivery.o ../../amp.o ../../jid.o ../../prep.o ../../gloox.o ../../parserutils.o
 subscription_test_CFLAGS = $(CPPFLAGS)
