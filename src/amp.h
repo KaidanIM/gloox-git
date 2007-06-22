@@ -56,25 +56,25 @@ namespace gloox
        * @brief Possible types for a rule's condition.
        */
       enum ConditionType {
-        ConditionInvalid = 0,  /**< Invalid condition */
         ConditionDeliver,      /**< Ensures (non-)delivery of the message */
         ConditionExpireAt,     /**< Ensures delivery only before a certain time (UTC) */
         ConditionMatchResource /**< Ensures delivery only to a specific resource type */
+        ConditionInvalid,      /**< Invalid condition */
       };
 
       /**
        * @brief Possible actions to take when the corresponding condition is met.
        */
       enum ActionType {
-        ActionInvalid = 0, /**< Invalid action */
+
         ActionAlert,       /**< Sends back a message stanza with an 'alert' status */
         ActionError,       /**< Sends back a message stanza with an error type */
         ActionDrop,        /**< Silently ignore the message */
         ActionNotify       /**< Sends back a message stanza with a 'notify' status */
+        ActionInvalid,     /**< Invalid action */
       };
 
       enum DeliverType {
-        DeliverInvalid = 0, /**< Invalid deliver value */
         DeliverDirect,      /**< The message would be immediately delivered to the intended
                              *   recipient or routed to the next hop. */
         DeliverForward,     /**< The message would be forwarded to another XMPP address or
@@ -86,16 +86,17 @@ namespace gloox
                              *   not enabled). */
         DeliverStored       /**< The message would be stored offline for later delivery
                              *   to the intended recipient. */
+        DeliverInvalid,     /**< Invalid deliver value */
       };
 
       enum MatchResourceType {
-        MatchResourceInvalid = 0, /**< Invalid match-resource value */
         MatchResourceAny,         /**< Destination resource matches any value, effectively
                                    *   ignoring the intended resource. */
         MatchResourceExact,       /**< Destination resource exactly matches the intended
                                    *   resource. */
         MatchResourceOther        /**< Destination resource matches any value except for
                                    *   the intended resource. */
+        MatchResourceInvalid,     /**< Invalid match-resource value */
       };
 
       /**
