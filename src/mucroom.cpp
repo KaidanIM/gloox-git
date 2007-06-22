@@ -158,8 +158,7 @@ namespace gloox
     {
       m_newNick = nick;
 
-      Tag *p = new Tag( "presence" );
-      p->addAttribute( "to", m_nick.bare() + "/" + m_newNick );
+      Presence* p = new Presence( Presence::PresenceAvailable, m_nick.bare() + "/" + m_newNick );
       m_parent->send( p );
     }
     else
