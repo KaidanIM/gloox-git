@@ -16,6 +16,7 @@
 #include "../connectionhttpproxy.h"
 #include "../messagehandler.h"
 #include "../pubsubmanager.h"
+#include "../pubsubnodehandler.h"
 using namespace gloox;
 
 #include <unistd.h>
@@ -27,7 +28,7 @@ using namespace gloox;
 #endif
 
 class PubsubExample : public MessageSessionHandler, ConnectionListener, LogHandler,
-                    MessageEventHandler, MessageHandler, ChatStateHandler
+                    MessageEventHandler, MessageHandler, ChatStateHandler, PubSub::NodeHandler
 {
   public:
     PubsubExample() : m_session( 0 ), m_messageEventFilter( 0 ), m_chatStateFilter( 0 ) {}
@@ -106,7 +107,7 @@ class PubsubExample : public MessageSessionHandler, ConnectionListener, LogHandl
       if( msg->body() == "quit" )
         j->disconnect();
       else if( msg->body() == "create" )
-        pubsub->createCollectionNode( JID( "pubsub.jabber.ru" ), "blah", "blubb", "pubsub/nodes" );
+        pubsub->createCollectionNode( JID( "pubsub.jabber.ru" ), "blah", this, "blubb", "pubsub/nodes" );
     }
 
     virtual void handleMessageEvent( const JID& from, MessageEventType event )
@@ -136,6 +137,48 @@ class PubsubExample : public MessageSessionHandler, ConnectionListener, LogHandl
     {
       printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
     }
+
+    virtual void handleNodeCreationResult( const JID& service,
+                                            const std::string& node/*,
+                                            const Error& e*/ )
+    {
+      printf( "created node '%s' on '%s'\n", node.c_str(), service.bare().c_str() );
+    }
+
+    virtual void handleNodeDeletationResult( const JID& service,
+                                              const std::string& node/*,
+                                              const Error& e*/ ) {}
+
+    virtual void handleNodePurgeResult( const JID& service,
+                                        const std::string& node/*,
+                                        const Error& e*/ ) {}
+
+    virtual void handleSubscriptionOptions( const JID& service, const JID& jid,
+                                            const std::string& node,
+                                            const DataForm& options ) {}
+
+    virtual void handleSubscriptionOptionsResult( const JID& service,
+                                                  //const JID& jid,
+                                                  const std::string& node/*,
+                                                  const Error& e*/ ) {}
+
+    virtual void handleSubscriberList( const JID& service, const std::string& node,
+                                        const PubSub::SubscriberList& list ) {}
+
+    virtual void handleSubscriberListResult( const JID& service, const std::string& node/*,
+                                              const Error& e*/ ) {}
+
+    virtual void handleAffiliateList( const JID& service, const std::string& node,
+                                      const PubSub::AffiliateList& list ) {}
+
+    virtual void handleAffiliateListResult( const JID& service, const std::string& node/*,
+                                            const Error& e*/ ) {}
+
+    virtual void handleNodeConfig( const JID& service, const std::string& node,
+                                    const DataForm& config ) {}
+
+    virtual void handleNodeConfigResult( const JID& service, const std::string& node/*,
+                                          const Error& e*/ ) {}
 
   private:
     Client *j;
