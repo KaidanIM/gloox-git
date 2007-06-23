@@ -58,22 +58,22 @@ namespace gloox
     setStrings();
   }
 
-  void JID::setUsername( const std::string& username )
+  void JID::setUsername( const std::string& uname )
   {
-    m_username = prep::nodeprep( username );
+    m_username = prep::nodeprep( uname );
     setStrings();
   }
 
-  void JID::setServer( const std::string& server )
+  void JID::setServer( const std::string& serv )
   {
-    m_serverRaw = server;
+    m_serverRaw = serv;
     m_server = prep::nameprep( m_serverRaw );
     setStrings();
   }
 
-  void JID::setResource( const std::string& resource )
+  void JID::setResource( const std::string& res )
   {
-    m_resource = prep::resourceprep( resource );
+    m_resource = prep::resourceprep( res );
     setFull();
   }
 
