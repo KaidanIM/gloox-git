@@ -11,17 +11,18 @@
 */
 
 #include "subscription.h"
+#include "util.h"
 
 namespace gloox
 {
 
-  static const std::string msgTypeStringValues[] =
+  static const char* msgTypeStringValues[] =
   {
     "subscribe", "subscribed", "unsubscribe", "unsubscribed"
   };
 
-  static inline const std::string& typeString( Subscription::S10nType type )
-    { return msgTypeStringValues[type-1]; }
+  static inline const char* typeString( Subscription::S10nType type )
+    { return msgTypeStringValues[type]; }
 
   Subscription::Subscription( Tag *tag, bool rip )
     : Stanza( tag, rip ), m_subtype( Invalid )
@@ -33,15 +34,7 @@ namespace gloox
     }
 
     m_type = StanzaS10n;
-
-    if( hasAttribute( "type", "subscribe" ) )
-      m_subtype = Subscribe;
-    else if( hasAttribute( "type", "subscribed" ) )
-      m_subtype = Subscribed;
-    else if( hasAttribute( "type", "unsubscribe" ) )
-      m_subtype = Unsubscribe;
-    else if( hasAttribute( "type", "unsubscribed" ) )
-      m_subtype = Unsubscribed;
+    m_subtype = (S10nType)util::lookup( findAttribute( "type" ), msgTypeStringValues );
 
     const TagList& c = children();
     TagList::const_iterator it = c.begin();
