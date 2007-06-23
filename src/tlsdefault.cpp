@@ -91,18 +91,12 @@ namespace gloox
 
   bool TLSDefault::encrypt( const std::string& data )
   {
-    if( m_impl )
-      return m_impl->encrypt( data );
-
-    return false;
+    return m_impl ? m_impl->encrypt( data ) : false;
   }
 
   int TLSDefault::decrypt( const std::string& data )
   {
-    if( m_impl )
-      return m_impl->decrypt( data );
-
-    return 0;
+    return m_impl ? m_impl->decrypt( data ) : 0;
   }
 
   void TLSDefault::cleanup()
@@ -113,18 +107,12 @@ namespace gloox
 
   bool TLSDefault::handshake()
   {
-    if( m_impl )
-      return m_impl->handshake();
-
-    return false;
+    return m_impl ? m_impl->handshake() : false;
   }
 
   bool TLSDefault::isSecure() const
   {
-    if( m_impl )
-      return m_impl->isSecure();
-
-    return false;
+    return m_impl ? m_impl->isSecure() : false;
   }
 
   void TLSDefault::setCACerts( const StringList& cacerts )
@@ -135,10 +123,7 @@ namespace gloox
 
   const CertInfo& TLSDefault::fetchTLSInfo() const
   {
-    if( m_impl )
-      return m_impl->fetchTLSInfo();
-
-    return m_certInfo;
+    return m_impl ? m_impl->fetchTLSInfo() : m_certInfo;
   }
 
   void TLSDefault::setClientCert( const std::string& clientKey, const std::string& clientCerts )
