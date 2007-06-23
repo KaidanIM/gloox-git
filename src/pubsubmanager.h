@@ -129,7 +129,8 @@ namespace gloox
          * @param depth Subscription depth. For 'all', use 0 (Collections only!).
          */
         void subscribe( const JID& service, const std::string& nodeid,
-                        const JID& jid = JID(), SubscriptionObject type = SubscriptionNodes,
+                        NodeHandler* handler, const JID& jid = JID(),
+                        SubscriptionObject type = SubscriptionNodes,
                         int depth = 1 );
 
         /**
@@ -137,7 +138,8 @@ namespace gloox
          * @param service Service hosting the node.
          * @param node ID of the node to unsubscribe from.
          */
-        void unsubscribe( const JID& service, const std::string& node );
+        void unsubscribe( const JID& service, const std::string& node,
+                                              NodeHandler* handler );
 
         /**
          * Requests the subscription list from a service.
@@ -180,7 +182,8 @@ namespace gloox
          * @param node Node ID of the node.
          * @param alh The AffiliationListHandler to handle the result.
          */
-        void requestAffiliationList( const JID& service, const std::string& node,
+        void requestAffiliationList( const JID& service,
+                                     const std::string& node,
                                      AffiliationListHandler *alh );
 
         /**
@@ -189,7 +192,10 @@ namespace gloox
          * @param node ID of the node to delete the item from.
          * @param item The item to publish.
          */
-        void publishItem( const JID& service, const std::string& node, const Tag& item );
+        void publishItem( const JID& service,
+                          const std::string& node,
+                          Tag * item,
+                          ItemHandler* handler );
 
         /**
          * Delete an item from a node.
@@ -199,7 +205,8 @@ namespace gloox
          */
         void deleteItem( const JID& service,
                          const std::string& node,
-                         const std::string& item );
+                         const std::string& item,
+                         ItemHandler* handler );
 
         /**
          * Ask for the item list of a specific node.
@@ -207,7 +214,9 @@ namespace gloox
          * @param node ID of the node.
          * @param handler ItemHandler to send the result to.
          */
-        void requestItems( const JID& service, const std::string& nodeid, ItemHandler *handler );
+        void requestItems( const JID& service,
+                           const std::string& nodeid,
+                           ItemHandler* handler );
 
         /**
          * Creates a new node.
@@ -224,10 +233,11 @@ namespace gloox
          */
         void createNode( NodeType type, const JID& service,
                                         const std::string& node,
+                                        NodeHandler* handler,
                                         const std::string& name,
                                         const std::string& parent = "",
                                         AccessModel access = AccessDefault,
-                                        const StringMap * config = 0 );
+                                        const StringMap* config = 0 );
 
         /**
          * Creates a new leaf node.
@@ -243,11 +253,12 @@ namespace gloox
          */
         void createLeafNode( const JID& service,
                              const std::string& node,
+                             NodeHandler* handler,
                              const std::string& name,
                              const std::string& parent = "",
                              AccessModel access = AccessDefault,
-                             const StringMap * config = 0 )
-          { createNode( NodeLeaf, service, node, name, parent, access, config ); }
+                             const StringMap* config = 0 )
+          { createNode( NodeLeaf, service, node, handler, name, parent, access, config ); }
 
         /**
          * Creates a new collection node.
@@ -263,11 +274,12 @@ namespace gloox
          */
         void createCollectionNode( const JID& service,
                                    const std::string& node,
+                                   NodeHandler* handler,
                                    const std::string& name,
                                    const std::string& parent = "",
                                    AccessModel access = AccessDefault,
                                    const StringMap * config = 0 )
-          { createNode( NodeCollection, service, node, name, parent, access, config ); }
+          { createNode( NodeCollection, service, node, handler, name, parent, access, config ); }
 
         /**
          * Deletes a node.
@@ -367,20 +379,6 @@ namespace gloox
           { nodeConfig( service, node, &config, handler ); }
 
         /**
-         * Registers an handler to receive notification of (un)subscription events.
-         * @param handler SubscriptionHandler to register.
-         */
-        void registerItemHandler( ItemHandler * handler )
-          { m_itemHandlerList.push_back( handler ); }
-
-        /**
-         * Removes an handler from the list of objects listening to (un)subscription events.
-         * @param handler SubscriptionHandler to remove.
-         */
-        void removeItemHandler( ItemHandler * handler )
-          { m_itemHandlerList.remove( handler ); }
-
-        /**
          * Registers an handler to receive notification of events.
          * @param handler EventHandler to register.
          */
@@ -398,15 +396,15 @@ namespace gloox
          * Registers an handler to receive notification of (un)subscription events.
          * @param handler SubscriptionHandler to register.
          */
-        void registerSubscriptionHandler( SubscriptionHandler * handler )
-          { m_subscriptionTrackList.push_back( handler ); }
+//        void registerSubscriptionHandler( SubscriptionHandler * handler )
+//          { m_subscriptionTrackList.push_back( handler ); }
 
         /**
          * Removes an handler from the list of objects listening to (un)subscription events.
          * @param handler SubscriptionHandler to remove.
          */
-        void removeSubscriptionHandler( SubscriptionHandler * handler )
-          { m_subscriptionTrackList.remove( handler ); }
+//        void removeSubscriptionHandler( SubscriptionHandler * handler )
+//          { m_subscriptionTrackList.remove( handler ); }
 
         // reimplemented from DiscoHandler
         virtual void handleDiscoInfoResult( Stanza *stanza, int context );
@@ -468,24 +466,30 @@ namespace gloox
         typedef std::list< SubscriptionHandler * > SubscriptionTrackList;
         typedef std::map < std::string, AffiliationListHandler * > AffiliationListTrackMap;
         typedef std::map < std::string, SubscriptionListHandler * > SubscriptionListTrackMap;
-        typedef std::list</*std::map < std::string,*/ ItemHandler * > ItemHandlerList;
+
         typedef std::pair< std::string, std::string > TrackedItem;
         typedef std::map < std::string, TrackedItem > ItemOperationTrackMap;
         typedef std::map < std::string, std::string > NodeOperationTrackMap;
+
         typedef std::map < std::string, PubSub::DiscoHandler* > DiscoHandlerTrackMap;
         typedef std::list< EventHandler* > EventHandlerList;
-        typedef std::map< std::string, NodeHandler* > NodeHandlerTrackMap;
+
+        typedef std::map < std::string, NodeHandler* > NodeHandlerTrackMap;
+        typedef std::map < std::string, ItemHandler* > ItemHandlerTrackMap;
 
         ClientBase *m_parent;
 
         SubscriptionTrackList m_subscriptionTrackList;
         AffiliationListTrackMap m_affListTrackMap;
         SubscriptionListTrackMap m_subListTrackMap;
-        ItemHandlerList m_itemHandlerList;
-        ItemOperationTrackMap m_iopTrackMap;
-        NodeOperationTrackMap m_nopTrackMap;
+
         DiscoHandlerTrackMap m_discoHandlerTrackMap;
         EventHandlerList m_eventHandlerList;
+
+        ItemOperationTrackMap m_iopTrackMap;
+        NodeOperationTrackMap m_nopTrackMap;
+
+        ItemHandlerTrackMap m_itemHandlerTrackMap;
         NodeHandlerTrackMap m_nodeHandlerTrackMap;
     };
 
