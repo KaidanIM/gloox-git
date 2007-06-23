@@ -122,12 +122,14 @@ namespace gloox
        * Use this function to register a AnnotationsHandler.
        * @param ah The AnnotationsHandler which shall receive retrieved notes.
        */
-      void registerAnnotationsHandler( AnnotationsHandler *ah );
+      void registerAnnotationsHandler( AnnotationsHandler *ah )
+        { m_annotationsHandler = ah; }
 
       /**
        * Use this function to un-register the AnnotationsHandler.
        */
-      void removeAnnotationsHandler();
+      void removeAnnotationsHandler()
+        { m_annotationsHandler = 0; }
 
       // reimplemented from PrivateXMLHandler
       virtual void handlePrivateXML( const std::string& tag, Tag *xml );

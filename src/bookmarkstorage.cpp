@@ -34,33 +34,24 @@ namespace gloox
     Tag *s = new Tag( "storage" );
     s->addAttribute( "xmlns", XMLNS_BOOKMARKS );
 
-    if( bList.size() )
+    BookmarkList::const_iterator itb = bList.begin();
+    for( ; itb != bList.end(); ++itb )
     {
-      BookmarkList::const_iterator it = bList.begin();
-      for( ; it != bList.end(); ++it )
-      {
-        Tag *i = new Tag( s, "url" );
-        i->addAttribute( "name", (*it).name );
-        i->addAttribute( "url", (*it).url );
-      }
+      Tag *i = new Tag( s, "url" );
+      i->addAttribute( "name", (*itb).name );
+      i->addAttribute( "url", (*itb).url );
     }
 
-    if( cList.size() )
+    ConferenceList::const_iterator itc = cList.begin();
+    for( ; itc != cList.end(); ++itc )
     {
-      ConferenceList::const_iterator it = cList.begin();
-      for( ; it != cList.end(); ++it )
-      {
-        Tag *i = new Tag( s, "conference" );
-        i->addAttribute( "name", (*it).name );
-        i->addAttribute( "jid", (*it).jid );
-        if( (*it).autojoin )
-          i->addAttribute( "autojoin", "true" );
-        else
-          i->addAttribute( "autojoin", "false" );
+      Tag *i = new Tag( s, "conference" );
+      i->addAttribute( "name", (*itc).name );
+      i->addAttribute( "jid", (*itc).jid );
+      i->addAttribute( "autojoin", (*itc).autojoin ? "true" : "false" );
 
-        new Tag( i, "nick", (*it).nick );
-        new Tag( i, "password", (*it).password );
-      }
+      new Tag( i, "nick", (*itc).nick );
+      new Tag( i, "password", (*itc).password );
     }
 
     storeXML( s, this );
@@ -94,23 +85,18 @@ namespace gloox
       }
       else if( (*it)->name() == "conference" )
       {
-        bool autojoin = false;
         const std::string& jid = (*it)->findAttribute( "jid" );
         const std::string& name = (*it)->findAttribute( "name" );
-        const std::string& join = (*it)->findAttribute( "autojoin" );
-        if( ( join == "true" ) || ( join == "1" ) )
-          autojoin = true;
-        const std::string& nick = (*it)->findChild( "nick" )->cdata();
-        const std::string& pwd = (*it)->findChild( "password" )->cdata();
 
         if( !jid.empty() && !name.empty() )
         {
+          const std::string& join = (*it)->findAttribute( "autojoin" );
           ConferenceListItem item;
           item.jid = jid;
           item.name = name;
-          item.nick = nick;
-          item.password = pwd;
-          item.autojoin = autojoin;
+          item.nick = (*it)->findChild( "nick" )->cdata();
+          item.password = (*it)->findChild( "password" )->cdata();
+          item.autojoin = ( join == "true" || join == "1" );
           cList.push_back( item );
         }
       }
@@ -122,16 +108,6 @@ namespace gloox
 
   void BookmarkStorage::handlePrivateXMLResult( const std::string& /*uid*/, PrivateXMLResult /*result*/ )
   {
-  }
-
-  void BookmarkStorage::registerBookmarkHandler( BookmarkHandler *bmh )
-  {
-    m_bookmarkHandler = bmh;
-  }
-
-  void BookmarkStorage::removeBookmarkHandler()
-  {
-    m_bookmarkHandler = 0;
   }
 
 }
