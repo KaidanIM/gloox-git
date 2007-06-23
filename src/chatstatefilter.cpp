@@ -75,28 +75,22 @@ namespace gloox
 
     Message* m = new Message( Message::Chat, m_parent->target() );
 
-    Tag *s = 0;
     switch( state )
     {
       case ChatStateActive:
-        s = new Tag( m, "active" );
-        s->addAttribute( "xmlns", XMLNS_CHAT_STATES );
+        new Tag( m, "active", "xmlns", XMLNS_CHAT_STATES );
         break;
       case ChatStateComposing:
-        s = new Tag( m, "composing" );
-        s->addAttribute( "xmlns", XMLNS_CHAT_STATES );
+        new Tag( m, "composing", "xmlns", XMLNS_CHAT_STATES );
         break;
       case ChatStatePaused:
-        s = new Tag( m, "paused" );
-        s->addAttribute( "xmlns", XMLNS_CHAT_STATES );
+        new Tag( m, "paused", "xmlns", XMLNS_CHAT_STATES );
         break;
       case ChatStateInactive:
-        s = new Tag( m, "inactive" );
-        s->addAttribute( "xmlns", XMLNS_CHAT_STATES );
+        new Tag( m, "inactive", "xmlns", XMLNS_CHAT_STATES );
         break;
       case ChatStateGone:
-        s = new Tag( m, "gone" );
-        s->addAttribute( "xmlns", XMLNS_CHAT_STATES );
+        new Tag( m, "gone", "xmlns", XMLNS_CHAT_STATES );
         break;
     }
 
@@ -107,21 +101,8 @@ namespace gloox
 
   void ChatStateFilter::decorate( Tag *tag )
   {
-    if( !m_enableChatStates )
-      return;
-
-    Tag *s = new Tag( tag, "active" );
-    s->addAttribute( "xmlns", XMLNS_CHAT_STATES );
-  }
-
-  void ChatStateFilter::registerChatStateHandler( ChatStateHandler *csh )
-  {
-    m_chatStateHandler = csh;
-  }
-
-  void ChatStateFilter::removeChatStateHandler()
-  {
-    m_chatStateHandler = 0;
+    if( m_enableChatStates )
+      new Tag( tag, "active", "xmlns", XMLNS_CHAT_STATES );
   }
 
 }

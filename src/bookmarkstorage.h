@@ -126,12 +126,14 @@ namespace gloox
        * Use this function to register a BookmarkHandler.
        * @param bmh The BookmarkHandler which shall receive retrieved bookmarks.
        */
-      void registerBookmarkHandler( BookmarkHandler *bmh );
+      void registerBookmarkHandler( BookmarkHandler *bmh )
+        { m_bookmarkHandler = bmh; }
 
       /**
        * Use this function to un-register the BookmarkHandler.
        */
-      void removeBookmarkHandler();
+      void removeBookmarkHandler()
+        { m_bookmarkHandler = 0; }
 
       // reimplemented from PrivateXMLHandler
       virtual void handlePrivateXML( const std::string& tag, Tag *xml );

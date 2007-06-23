@@ -104,28 +104,8 @@ namespace gloox
     }
 
     m_streamError = StreamErrorUndefined;
-
     m_block = false;
-
-    m_stats.totalBytesSent = 0;
-    m_stats.totalBytesReceived = 0;
-    m_stats.compressedBytesSent = 0;
-    m_stats.compressedBytesReceived = 0;
-    m_stats.uncompressedBytesSent = 0;
-    m_stats.uncompressedBytesReceived = 0;
-    m_stats.totalStanzasSent = 0;
-    m_stats.totalStanzasReceived = 0;
-    m_stats.iqStanzasSent = 0;
-    m_stats.iqStanzasReceived = 0;
-    m_stats.messageStanzasSent = 0;
-    m_stats.messageStanzasReceived = 0;
-    m_stats.s10nStanzasSent = 0;
-    m_stats.s10nStanzasReceived = 0;
-    m_stats.presenceStanzasSent = 0;
-    m_stats.presenceStanzasReceived = 0;
-    m_stats.encryption = false;
-    m_stats.compression = false;
-
+    memset( &m_stats, 0, sizeof( m_stats ) );
     cleanup();
   }
 

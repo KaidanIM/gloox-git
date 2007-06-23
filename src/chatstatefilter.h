@@ -68,14 +68,16 @@ namespace gloox
        * to XEP-0085.
        * @param csh The ChatStateHandler to register.
        */
-      void registerChatStateHandler( ChatStateHandler *csh );
+      void registerChatStateHandler( ChatStateHandler *csh )
+        { m_chatStateHandler = csh; }
 
       /**
        * This function clears the internal pointer to the ChatStateHandler.
        * Chat States will not be delivered anymore after calling this function until another
        * ChatStateHandler is registered.
        */
-      void removeChatStateHandler();
+      void removeChatStateHandler()
+        { m_chatStateHandler = 0; }
 
       // reimplemented from MessageFilter
       virtual void decorate( Tag *tag );
