@@ -188,8 +188,9 @@ namespace gloox
 
   void VCard::checkField( Tag *vcard, const std::string& field, std::string& var )
   {
-    if( vcard->hasChild( field ) )
-      var = vcard->findChild( field )->cdata();
+    Tag* child = vcard->findChild( field );
+    if( child )
+      var = child->cdata();
   }
 
   void VCard::setName( const std::string& family, const std::string& given, const std::string& middle,
