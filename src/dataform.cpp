@@ -15,6 +15,7 @@
 #include "dataformfield.h"
 #include "dataformreported.h"
 #include "dataformitem.h"
+#include "util.h"
 #include "tag.h"
 
 namespace gloox
@@ -45,20 +46,18 @@ namespace gloox
   {
   }
 
+  static const char * dfTypeValues[] =
+  {
+    "form", "submit", "cancel", "result"
+  };
+
   bool DataForm::parse( Tag *tag )
   {
     if( !tag || !tag->hasAttribute( "xmlns", XMLNS_X_DATA ) || tag->name() != "x" )
       return false;
 
-    if( tag->hasAttribute( "type", "form" ) )
-      m_type = FormTypeForm;
-    else if( tag->hasAttribute( "type", "submit" ) )
-      m_type = FormTypeSubmit;
-    else if( tag->hasAttribute( "type", "cancel" ) )
-      m_type = FormTypeCancel;
-    else if( tag->hasAttribute( "type", "result" ) )
-      m_type = FormTypeResult;
-    else
+    m_type = (DataFormType)util::lookup(tag->findAttribute( "type" ), dfTypeValues );
+    if( m_type == FormTypeInvalid )
       return false;
 
     const Tag::TagList& l = tag->children();
@@ -70,20 +69,11 @@ namespace gloox
       else if( (*it)->name() == "instructions" )
         m_instructions.push_back( (*it)->cdata() );
       else if( (*it)->name() == "field" )
-      {
-        DataFormField *f = new DataFormField( (*it) );
-        m_fields.push_back( f );
-      }
+        m_fields.push_back( new DataFormField( (*it) ) );
       else if( (*it)->name() == "reported" )
-      {
-        DataFormReported *r = new DataFormReported( (*it) );
-        m_fields.push_back( r );
-      }
+        m_fields.push_back( new DataFormReported( (*it) ) );
       else if( (*it)->name() == "item" )
-      {
-        DataFormItem *i = new DataFormItem( (*it) );
-        m_fields.push_back( i );
-      }
+        m_fields.push_back( new DataFormItem( (*it) ) );
     }
 
     return true;
@@ -94,8 +84,8 @@ namespace gloox
     if( m_type == FormTypeInvalid )
       return 0;
 
-    Tag *x = new Tag( "x" );
-    x->addAttribute( "xmlns", XMLNS_X_DATA );
+    Tag *x = new Tag( "x", "xmlns", XMLNS_X_DATA );
+    x->addAttribute( "type", util::lookup( m_type, dfTypeValues ) );
     if( !m_title.empty() )
       new Tag( x, "title", m_title );
 
@@ -121,24 +111,6 @@ namespace gloox
       }
 
       x->addChild( (*it)->tag() );
-    }
-
-    switch( m_type )
-    {
-      case FormTypeForm:
-        x->addAttribute( "type", "form" );
-        break;
-      case FormTypeSubmit:
-        x->addAttribute( "type", "submit" );
-        break;
-      case FormTypeCancel:
-        x->addAttribute( "type", "cancel" );
-        break;
-      case FormTypeResult:
-        x->addAttribute( "type", "result" );
-        break;
-      default:
-        break;
     }
 
     return x;
