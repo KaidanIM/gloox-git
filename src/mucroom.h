@@ -90,16 +90,16 @@ namespace gloox
        */
       enum HistoryRequestType
       {
-        HistoryUnknown,             /**< It is up to the service to decide how much history to send.
-                                     * This is the default. */
         HistoryMaxChars,            /**< Limit the total number of characters in the history to "X"
                                      * (where the character count is the characters of the complete
                                      * XML stanzas, not only their XML character data). */
         HistoryMaxStanzas,          /**< Limit the total number of messages in the history to "X". */
         HistorySeconds,             /**< Send only the messages received in the last "X" seconds. */
-        HistorySince                /**< Send only the messages received since the datetime specified
+        HistorySince,               /**< Send only the messages received since the datetime specified
                                      * (which MUST conform to the DateTime profile specified in Jabber
                                      * Date and Time Profiles (XEP-0082)). */
+        HistoryUnknown              /**< It is up to the service to decide how much history to send.
+                                     * This is the default. */
       };
 
       /**
@@ -389,6 +389,8 @@ namespace gloox
        * Usually owner privileges are required for this action to succeed.
        */
       void requestRoomConfig();
+
+      void instantRoom( int context );
 
       /**
        * Use this function to accept the room's default configuration. This function is useful
