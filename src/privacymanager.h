@@ -45,17 +45,6 @@ namespace gloox
       virtual ~PrivacyManager();
 
       /**
-       * Triggers the request of the privacy lists currently stored on the server.
-       */
-      std::string requestListNames();
-
-      /**
-       * Triggers the retrieval of the named privacy lists.
-       * @param name The name of the list to retrieve.
-       */
-      std::string requestList( const std::string& name );
-
-      /**
        * Stores the given list on the server. If a list with the given name exists, the existing
        * list is overwritten.
        * @param name The list's name.
@@ -66,32 +55,50 @@ namespace gloox
       std::string store( const std::string& name, PrivacyListHandler::PrivacyList& list );
 
       /**
+       * Triggers the request of the privacy lists currently stored on the server.
+       */
+      std::string requestListNames()
+        { return operation( PLRequestNames, "" ); }
+
+      /**
+       * Triggers the retrieval of the named privacy lists.
+       * @param name The name of the list to retrieve.
+       */
+      std::string requestList( const std::string& name )
+        { return operation( PLRequestList, name ); }
+
+      /**
        * Removes a list by its name.
        * @param name The name of the list to remove.
        */
-      std::string removeList( const std::string& name );
+      std::string removeList( const std::string& name )
+        { return operation( PLRemove, name ); }
 
       /**
        * Sets the named list as the default list, i.e. active by default after login.
        * @param name The name of the list to set as default.
        */
-      std::string setDefault( const std::string& name );
+      std::string setDefault( const std::string& name )
+        { return operation( PLDefault, name ); }
 
       /**
        * This function declines the use of any default list.
        */
-      std::string unsetDefault();
+      std::string unsetDefault()
+        { return operation( PLUnsetDefault, "" ); }
 
       /**
        * Sets the named list as active, i.e. active for this session
        * @param name The name of the list to set active.
        */
-      std::string setActive( const std::string& name );
+      std::string setActive( const std::string& name )
+        { return operation( PLActivate, name ); }
 
       /**
        * This function declines the use of any active list.
        */
-      std::string unsetActive();
+      std::string unsetActive()
+        { return operation( PLUnsetActivate, "" ); }
 
       /**
        * Use this function to register an object as PrivacyListHandler.
@@ -123,6 +130,8 @@ namespace gloox
         PLRemove,
         PLStore
       };
+
+      std::string operation( int context, const std::string& name );
 
       ClientBase *m_parent;
       PrivacyListHandler *m_privacyListHandler;

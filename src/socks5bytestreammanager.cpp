@@ -121,8 +121,7 @@ namespace gloox
       else
       {
         iq->addAttribute( "type", "error" );
-        Tag* e = new Tag( iq, "error" );
-        e->addAttribute( "code", "404" );
+        Tag* e = new Tag( iq, "error", "code", "404" );
         e->addAttribute( "type", "cancel" );
         new Tag( e, "item-not-found", "xmlns", XMLNS_XMPP_STANZAS );
       }
