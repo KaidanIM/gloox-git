@@ -19,6 +19,7 @@
 #include "disco.h"
 #include "mucmessagesession.h"
 #include "message.h"
+#include "util.h"
 
 namespace gloox
 {
@@ -49,6 +50,11 @@ namespace gloox
     }
   }
 
+  const char * historyTypeValues[] =
+  {
+    "maxchars", "maxstanzas", "seconds", "since"
+  };
+
   void MUCRoom::join()
   {
     if( m_joined )
@@ -62,37 +68,15 @@ namespace gloox
     x->addAttribute( "xmlns", XMLNS_MUC );
     if( !m_password.empty() )
       new Tag( x, "password",  m_password );
+
     if( m_historyType != HistoryUnknown )
     {
-      switch( m_historyType )
-      {
-        case HistoryMaxChars:
-        {
-          Tag *h = new Tag( x, "history" );
-          h->addAttribute( "maxchars", m_historyValue );
-          break;
-        }
-        case HistoryMaxStanzas:
-        {
-          Tag *h = new Tag( x, "history" );
-          h->addAttribute( "maxstanzas", m_historyValue );
-          break;
-        }
-        case HistorySeconds:
-        {
-          Tag *h = new Tag( x, "history" );
-          h->addAttribute( "seconds", m_historyValue );
-          break;
-        }
-        case HistorySince:
-        {
-          Tag *h = new Tag( x, "history" );
-          h->addAttribute( "since", m_historySince );
-          break;
-        }
-        default:
-          break;
-      }
+      const char * histStr = util::lookup( m_historyType, historyTypeValues );
+      Tag* h = new Tag( x, "history" );
+      if( m_historyType == HistorySince )
+        h->addAttribute( histStr, m_historySince );
+      else
+        h->addAttribute( histStr, m_historyValue );
     }
 
     if( m_parent )
@@ -198,10 +182,8 @@ namespace gloox
       return;
 
     Message* m = new Message( Message::Normal, m_nick.bareJID() );
-    Tag *x = new Tag( m, "x" );
-    x->addAttribute( "xmlns", XMLNS_MUC_USER );
-    Tag *i = new Tag( x, "invite" );
-    i->addAttribute( "to", invitee.bare() );
+    Tag *x = new Tag( m, "x", "xmlns", XMLNS_MUC_USER );
+    Tag *i = new Tag( x, "invite", "to", invitee.bare() );
     if( !reason.empty() )
       new Tag( i, "reason", reason );
     if( cont )
@@ -213,10 +195,8 @@ namespace gloox
   Message* MUCRoom::declineInvitation( const JID& room, const JID& invitor, const std::string& reason )
   {
     Message *m = new Message( Message::Normal, room.bare() );
-    Tag *x = new Tag( m, "x" );
-    x->addAttribute( "xmlns", XMLNS_MUC_USER );
-    Tag *d = new Tag( x, "decline" );
-    d->addAttribute( "to", invitor.bare() );
+    Tag *x = new Tag( m, "x", "xmlns", XMLNS_MUC_USER );
+    Tag *d = new Tag( x, "decline", "to", invitor.bare() );
     if( !reason.empty() )
       new Tag( d, "reason", reason );
 
@@ -243,8 +223,7 @@ namespace gloox
       return;
 
     Message *m = new Message( Message::Normal, m_nick.bareJID(), message );
-    Tag *x = new Tag( m, "x" );
-    x->addAttribute( "xmlns", XMLNS_X_DELAY );
+    Tag *x = new Tag( m, "x", "xmlns", XMLNS_X_DELAY );
     x->addAttribute( "from", from.full() );
     x->addAttribute( "stamp", stamp );
 
@@ -630,7 +609,7 @@ namespace gloox
     }
   }
 
-  void MUCRoom::acknowledgeInstantRoom()
+  void MUCRoom::instantRoom( int context )
   {
     if( !m_creationInProgress || !m_parent || !m_joined )
       return;
@@ -639,29 +618,22 @@ namespace gloox
     IQ* iq = new IQ( IQ::Set, m_nick.bareJID(), id, XMLNS_MUC_OWNER );
     Tag *x = new Tag( iq->query(), "x" );
     x->addAttribute( "xmlns", XMLNS_X_DATA );
-    x->addAttribute( "type", "submit" );
+    x->addAttribute( "type", context == CreateInstantRoom ? "submit" :"cancel" );
 
-    m_parent->trackID( this, id, CreateInstantRoom );
+    m_parent->trackID( this, id, context );
     m_parent->send( iq );
 
     m_creationInProgress = false;
   }
 
+  void MUCRoom::acknowledgeInstantRoom()
+  {
+    instantRoom( CreateInstantRoom );
+  }
+
   void MUCRoom::cancelRoomCreation()
   {
-    if( !m_creationInProgress || !m_parent || !m_joined )
-      return;
-
-    const std::string& id = m_parent->getID();
-    IQ* iq = new IQ( IQ::Set, m_nick.bareJID(), id, XMLNS_MUC_OWNER );
-    Tag *x = new Tag( iq->query(), "x" );
-    x->addAttribute( "xmlns", XMLNS_X_DATA );
-    x->addAttribute( "type", "cancel" );
-
-    m_parent->trackID( this, id, CancelRoomCreation );
-    m_parent->send( iq );
-
-    m_creationInProgress = false;
+    instantRoom( CancelRoomCreation );
   }
 
   void MUCRoom::requestRoomConfig()
