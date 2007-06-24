@@ -62,7 +62,9 @@ namespace gloox
        * The result is announced through the FlexibleOfflineHandler.
        */
       void fetchHeaders();
-
+private:
+      void messageOperation( int context, const StringList& msgs );
+public:
       /**
        * Initiates fetching of one or more specific messages, or all messages.
        * The result is announced through the FlexibleOfflineHandler.
@@ -70,7 +72,8 @@ namespace gloox
        * fetched. If the list is empty all messages are fetched (&lt;fetch&gt;).
        * @param msgs A list of message nodes to fetch.
        */
-      void fetchMessages( const StringList& msgs );
+      void fetchMessages( const StringList& msgs )
+        { messageOperation( FORequestMsgs, msgs ); }
 
       /**
        * Initiates removing of one or more specific messages, or all messages.
@@ -78,7 +81,8 @@ namespace gloox
        * If the list of message nodes contains one or more nodes, the corresponding messages are
        * removed. If the list is empty all messages are removed (&lt;purge&gt;).
        */
-      void removeMessages( const StringList& msgs );
+      void removeMessages( const StringList& msgs )
+        { messageOperation( FORemoveMsgs, msgs ); }
 
       /**
        * Registers a FlexibleOfflineHandler as object that receives results of XEP-0013 queries.

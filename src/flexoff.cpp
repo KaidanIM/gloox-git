@@ -44,49 +44,27 @@ namespace gloox
     m_parent->disco()->getDiscoItems( m_parent->jid().server(), XMLNS_OFFLINE, this, FORequestHeaders );
   }
 
-  void FlexibleOffline::fetchMessages( const StringList& msgs )
+  void FlexibleOffline::messageOperation( int context, const StringList& msgs )
   {
     const std::string& id = m_parent->getID();
-    IQ* iq = new IQ( IQ::Get, JID(), id, XMLNS_OFFLINE, "offline" );
+    IQ::IqType iqType = context == FORequestMsgs ? IQ::Get : IQ::Set;
+    IQ* iq = new IQ( iqType, JID(), id, XMLNS_OFFLINE, "offline" );
     Tag *o = iq->query();
 
-    if( msgs.size() == 0 )
-      new Tag( o, "fetch" );
+    if( msgs.empty() )
+      new Tag( o, context == FORequestMsgs ? "fetch" : "purge" );
     else
     {
+      const std::string action = context == FORequestMsgs ? "view" : "remove";
       StringList::const_iterator it = msgs.begin();
       for( ; it != msgs.end(); ++it )
       {
-        Tag *i = new Tag( o, "item" );
-        i->addAttribute( "action", "view" );
+        Tag *i = new Tag( o, "item", "action", action );
         i->addAttribute( "node", (*it) );
       }
     }
 
-    m_parent->trackID( this, id, FORequestMsgs );
-    m_parent->send( iq );
-  }
-
-  void FlexibleOffline::removeMessages( const StringList& msgs )
-  {
-    const std::string& id = m_parent->getID();
-    IQ* iq = new IQ( IQ::Get, JID(), id, XMLNS_OFFLINE, "offline" );
-    Tag *o = iq->query();
-
-    if( msgs.size() == 0 )
-      new Tag( o, "purge" );
-    else
-    {
-      StringList::const_iterator it = msgs.begin();
-      for( ; it != msgs.end(); ++it )
-      {
-        Tag *i = new Tag( o, "item" );
-        i->addAttribute( "action", "remove" );
-        i->addAttribute( "node", (*it) );
-      }
-    }
-
-    m_parent->trackID( this, id, FORemoveMsgs );
+    m_parent->trackID( this, id, context );
     m_parent->send( iq );
   }
 
