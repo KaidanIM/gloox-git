@@ -45,7 +45,7 @@ namespace gloox
 
   ConnectionError SOCKS5BytestreamServer::recv( int timeout )
   {
-    if( m_tcpServer )
+    if( !m_tcpServer )
       return ConnNotConnected;
     
     ConnectionError ce = m_tcpServer->recv( timeout );
