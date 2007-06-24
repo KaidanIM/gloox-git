@@ -103,10 +103,7 @@ namespace gloox
             case VCardHandler::FetchVCard:
             {
               Tag *v = iq->findChild( "vCard", "xmlns", XMLNS_VCARD_TEMP );
-              if( v )
-                (*it).second->handleVCard( iq->from(), new VCard( v ) );
-              else
-                (*it).second->handleVCard( iq->from(), 0 );
+              (*it).second->handleVCard( iq->from(), v ? new VCard( v ) : 0 );
               break;
             }
             case VCardHandler::StoreVCard:
@@ -117,15 +114,8 @@ namespace gloox
         break;
         case IQ::Error:
         {
-          switch( context )
-          {
-            case VCardHandler::FetchVCard:
-              (*it).second->handleVCardResult( VCardHandler::FetchVCard, iq->from(), iq->error() );
-              break;
-            case VCardHandler::StoreVCard:
-              (*it).second->handleVCardResult( VCardHandler::StoreVCard, iq->from(), iq->error() );
-              break;
-          }
+          (*it).second->handleVCardResult( (VCardHandler::VCardContext)context,
+                                                   iq->from(), iq->error() );
           break;
         }
         default:
