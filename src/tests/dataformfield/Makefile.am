@@ -7,5 +7,5 @@ AM_CPPFLAGS = -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare
 noinst_PROGRAMS = dataformfield_test
 
 dataformfield_test_SOURCES = dataformfield_test.cpp
-dataformfield_test_LDADD = ../../tag.o ../../dataformfield.o
+dataformfield_test_LDADD = ../../tag.o ../../dataformfield.o ../../util.o
 dataformfield_test_CFLAGS = $(CPPFLAGS)
