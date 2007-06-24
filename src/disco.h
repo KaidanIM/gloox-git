@@ -85,7 +85,8 @@ namespace gloox
        * necessary if you need to know the request's id.
        */
       void getDiscoInfo( const JID& to, const std::string& node, DiscoHandler *dh, int context,
-                         const std::string& tid = "" );
+                         const std::string& tid = "" )
+        { getDisco( to, node, dh, context, GET_DISCO_INFO, tid ); }
 
       /**
        * Queries the given JID for its items according to
@@ -99,7 +100,8 @@ namespace gloox
        * necessary if you need to know the request's id.
        */
       void getDiscoItems( const JID& to, const std::string& node, DiscoHandler *dh, int context,
-                          const std::string& tid = "" );
+                          const std::string& tid = "" )
+        { getDisco( to, node, dh, context, GET_DISCO_ITEMS, tid ); }
 
       /**
        * Sets the version of the host application using this library.
@@ -169,6 +171,9 @@ namespace gloox
         GET_DISCO_INFO,
         GET_DISCO_ITEMS
       };
+
+      void getDisco( const JID& to, const std::string& node, DiscoHandler *dh,
+                     int context, IdType idType, const std::string& tid );
 
       struct DiscoHandlerContext
       {
