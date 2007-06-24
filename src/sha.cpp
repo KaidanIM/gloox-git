@@ -65,7 +65,6 @@ namespace gloox
     {
       pad();
       m_finished = true;
-      return;
     }
   }
 
