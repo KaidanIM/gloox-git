@@ -60,17 +60,13 @@ namespace gloox
     if( !m_valid )
       return 0;
 
-    Tag *x = new Tag( "x" );
-    x->addAttribute( "xmlns", XMLNS_X_VCARD_UPDATE );
-    if( m_notReady )
-      return x;
-
-    Tag *p = new Tag( x, "photo" );
-    if( m_noImage )
-      return x;
-
-    p->setCData( m_hash );
-
+    Tag *x = new Tag( "x", "xmlns", XMLNS_X_VCARD_UPDATE );
+    if( !m_notReady )
+    {
+      Tag *p = new Tag( x, "photo" );
+      if( !m_noImage )
+        p->setCData( m_hash );
+    }
     return x;
   }
 
