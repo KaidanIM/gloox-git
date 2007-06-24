@@ -50,16 +50,17 @@ namespace gloox
       if( (*it)->name() == "N" )
       {
         m_N = true;
-        if( (*it)->hasChild( "FAMILY" ) )
-          m_name.family = (*it)->findChild( "FAMILY" )->cdata();
-        if( (*it)->hasChild( "GIVEN" ) )
-          m_name.given = (*it)->findChild( "GIVEN" )->cdata();
-        if( (*it)->hasChild( "MIDDLE" ) )
-          m_name.middle = (*it)->findChild( "MIDDLE" )->cdata();
-        if( (*it)->hasChild( "PREFIX" ) )
-          m_name.prefix = (*it)->findChild( "PREFIX" )->cdata();
-        if( (*it)->hasChild( "SUFFIX" ) )
-          m_name.suffix = (*it)->findChild( "SUFFIX" )->cdata();
+        const Tag * child = (*it)->findChild( "FAMILY" );
+        if( child )
+          m_name.family = child->cdata();
+        if( child = (*it)->findChild( "GIVEN" ) )
+          m_name.given = child->cdata();
+        if( child = (*it)->findChild( "MIDDLE" ) )
+          m_name.middle = child->cdata();
+        if( child = (*it)->findChild( "PREFIX" ) )
+          m_name.prefix = child->cdata();
+        if( child = (*it)->findChild( "SUFFIX" ) )
+          m_name.suffix = child->cdata();
       }
       else if( (*it)->name() == "PHOTO" )
       {
