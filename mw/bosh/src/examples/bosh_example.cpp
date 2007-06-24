@@ -15,6 +15,7 @@
 #include "../connectionsocks5proxy.h"
 #include "../messagehandler.h"
 #include "../connectionbosh.h"
+#include "../connectionhttpproxy.h"
 
 using namespace gloox;
 
@@ -44,6 +45,7 @@ class MessageTest : public MessageSessionHandler, ConnectionListener, LogHandler
       j->disco()->setVersion( "messageTest", GLOOX_VERSION, "Linux" );
       j->disco()->setIdentity( "client", "bot" );
       j->disco()->addFeature( XMLNS_CHAT_STATES );
+      j->setCompression(false);
       //StringList ca;
       //ca.push_back( "/path/to/cacert.crt" );
       //j->setCACerts( ca );
@@ -72,9 +74,14 @@ class MessageTest : public MessageSessionHandler, ConnectionListener, LogHandler
 
 // this code connects to a jabber server through a BOSH connection...
 
+       // ConnectionTCPClient* conn0 = new ConnectionTCPClient( j->logInstance(), "192.168.0.1", 8889 );
+       // ConnectionBOSH* conn1 = new ConnectionBOSH( j, conn0, j->logInstance(), "doomsong.co.uk", "doomsong.co.uk", 8080);
+       // j->setConnectionImpl( conn1 );
+       
        ConnectionTCPClient* conn0 = new ConnectionTCPClient( j->logInstance(), "localhost", 8080 );
        ConnectionBOSH* conn1 = new ConnectionBOSH( j, conn0, j->logInstance(), "localhost", "localhost");
        j->setConnectionImpl( conn1 );
+       
 
 
       if( j->connect( false ) )

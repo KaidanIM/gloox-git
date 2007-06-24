@@ -165,8 +165,12 @@ namespace gloox
    
       // BOSH parameters
       long m_rid;
+      std::string m_sid;
       int m_hold;
       int m_wait;
+      int m_requests;
+   
+      int m_openRequests;
 
       bool m_http11; // Persistent connections
       bool m_pipelining; // Multiple requests between responses (on a single connection)
@@ -174,6 +178,7 @@ namespace gloox
       std::string m_buffer;
       std::string m_bufferHeader;
       long m_bufferContentLength;
+      bool m_initialStreamSent;
 
   };
 

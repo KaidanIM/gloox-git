@@ -34,10 +34,18 @@ namespace gloox
   ConnectionBOSH::ConnectionBOSH( ConnectionBase *connection, const LogSink& logInstance, const std::string& boshHost,
                                             const std::string& xmppServer, int xmppPort )
     : ConnectionBase( 0 ), m_connection( connection ),
-      m_logInstance( logInstance ), m_boshHost( boshHost), m_http11( false ), m_path("/http-bind/"), m_handler(NULL)
+      m_logInstance( logInstance ), m_boshHost( boshHost), m_http11( false ), m_path("/http-bind/"), m_handler(NULL),
+      m_initialStreamSent(false), m_openRequests(0), m_requests(2), m_wait(30), m_hold(2)
   {
     m_server = prep::idna( xmppServer );
     m_port = xmppPort;
+    
+    if(m_port != -1)
+    {
+      std::ostringstream strBOSHHost;
+      strBOSHHost << m_boshHost << ":" << m_port;
+      m_boshHost = strBOSHHost.str();
+    }
     m_parser = new Parser(this);
     if( m_connection )
       m_connection->registerConnectionDataHandler( this );
@@ -47,10 +55,18 @@ namespace gloox
                                             const LogSink& logInstance, const std::string& boshHost,
                                             const std::string& xmppServer, int xmppPort )
     : ConnectionBase( cdh ), m_connection( connection ),
-      m_logInstance( logInstance ), m_boshHost( boshHost ), m_path("/http-bind/"), m_handler(cdh)
+      m_logInstance( logInstance ), m_boshHost( boshHost ), m_path("/http-bind/"), m_handler(cdh),
+      m_initialStreamSent(false), m_openRequests(0), m_requests(2), m_wait(30), m_hold(2)
   {
     m_server = prep::idna( xmppServer );
     m_port = xmppPort;
+    if(m_port != -1)
+    {
+      std::ostringstream strBOSHHost;
+      strBOSHHost << m_boshHost << ":" << m_port;
+      m_boshHost = strBOSHHost.str();
+    }
+    
     m_parser = new Parser(this);
     if( m_connection )
       m_connection->registerConnectionDataHandler( this );
@@ -93,13 +109,19 @@ namespace gloox
     m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh disconnected from server" );
     m_state = StateDisconnected;
     if( m_connection )
-      m_connection->disconnect();
+       m_connection->disconnect();
   }
 
   ConnectionError ConnectionBOSH::recv( int timeout )
   {
     if( m_connection )
+    {
+      if(m_openRequests < 1 && !m_sid.empty())
+      {
+        this->send("");
+      }
       return m_connection->recv( timeout );
+    }
     else
       return ConnNotConnected;
   }
@@ -120,9 +142,64 @@ namespace gloox
 
   bool ConnectionBOSH::send( const std::string& data )
   {
-    m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh sent" + data);
     if( !m_connection )
       return false;
+    
+    bool streamRestart = false;
+    std::ostringstream request;
+    std::ostringstream requestBody;
+    
+    if(data.substr(0,2) == "<?")
+    {
+        if(m_initialStreamSent)
+        {
+          streamRestart = true;
+        }
+        else
+        {
+          m_initialStreamSent = true;
+          m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "initial <stream:stream> dropped");
+          return true;
+        }
+    }
+    else if(data == "</stream:stream>")
+      return true;
+
+    m_rid++;
+    
+    requestBody << "<body ";
+    requestBody << "rid='" << m_rid << "' ";
+    requestBody << "sid='" << m_sid << "' ";
+    requestBody << "xmlns='http://jabber.org/protocol/httpbind' ";
+    
+    if(streamRestart)
+    {
+      requestBody << "xmpp:restart='true' to='" << m_server << "' xml:lang='en' xmlns:xmpp='urn:xmpp:xbosh' />";
+      m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "restarting stream");
+    }
+    else
+    {
+      requestBody << ">" << data << "</body>";
+    }
+    
+    
+    request << "POST " << m_path << " HTTP/1.1\r\n";
+    request << "Host: " << m_boshHost << "\r\n";
+    request << "Content-Type: text/xml; charset=utf-8\r\n";
+    request << "Content-Length: " << requestBody.str().length() << "\r\n\r\n";
+    request << requestBody.str() << "\r\n";
+
+    
+    m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh sent:\n" + request.str() +"\n");
+    m_connection->send(request.str());
+    m_openRequests++;
+    
+    if(m_handler && streamRestart)
+    {
+      m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "sending spoofed <stream:stream>");
+      m_handler->handleReceivedData(this, "<?xml version='1.0' ?><stream:stream xmlns:stream='http://etherx.jabber.org/streams' xmlns='jabber:client' version='1.0' from='localhost' id ='" +m_sid+"' xml:lang='en' />");
+      m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "sent spoofed <stream:stream>");
+    }
     return true;
   }
 
@@ -165,6 +242,7 @@ namespace gloox
     
     if(m_buffer.length() >= m_bufferContentLength) // We have at least one full response
     {
+      m_openRequests--;
       handleXMLData(connection, m_buffer.substr(0, m_bufferContentLength));
       m_buffer = m_buffer.substr(m_bufferContentLength); // Remove the handled response from the buffer, and reset variables for reuse
       m_bufferContentLength = -1;
@@ -190,7 +268,7 @@ namespace gloox
     Tag requestBody("body");
     
     requestBody.addAttribute("content", "text/xml; charset=utf-8");
-    requestBody.addAttribute("hold", (int)m_hold); // Shouldn't there be a boolean variant of addAttribute?
+    requestBody.addAttribute("hold", m_hold);
     requestBody.addAttribute("rid", m_rid);
     requestBody.addAttribute("ver", "1.6");
     requestBody.addAttribute("wait", m_wait);
@@ -200,13 +278,14 @@ namespace gloox
     requestBody.addAttribute("to", m_server);
     
     connrequest << "POST " << m_path << " HTTP/1.1\r\n";
-    connrequest << "Host: " << m_server << "\r\n";
+    connrequest << "Host: " << m_boshHost << "\r\n";
     connrequest << "Content-Type: text/xml; charset=utf-8\r\n";
     connrequest << "Content-Length: " << requestBody.xml().length() << "\r\n\r\n";
     connrequest << requestBody.xml() << "\r\n";
     
     m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh connection request sent" );
-    m_connection->send(connrequest.str());  
+    m_openRequests++;
+    m_connection->send(connrequest.str()); 
   }
 
   void ConnectionBOSH::handleDisconnect( const ConnectionBase* /*connection*/,
@@ -225,19 +304,47 @@ namespace gloox
     {
       if(tag->hasAttribute("sid"))
       {
+        m_state = StateConnected;
+        m_sid = tag->findAttribute("sid");
+        if(tag->hasAttribute("hold"))
+          m_hold = atoi(tag->findAttribute("hold").c_str());
+        if(tag->hasAttribute("requests"))
+        {
+          int serverRequests = atoi(tag->findAttribute("requests").c_str());
+          if(serverRequests < m_requests)
+            m_requests = serverRequests;
+        }
+        if(tag->hasAttribute("hold"))
+        {
+          int serverRequests = atoi(tag->findAttribute("hold").c_str());
+          if(serverRequests < m_hold)
+            m_hold = serverRequests;
+        }
         if(m_handler)
+        {
           m_handler->handleConnect(this);
+          m_handler->handleReceivedData(this, "<?xml version='1.0' ?><stream:stream xmlns:stream='http://etherx.jabber.org/streams' xmlns='jabber:client' version='1.0' from='localhost' id ='" +m_sid+"' xml:lang='en'>");
+        }
       }
-      else
+      if(tag->hasAttribute("type"))
       {
-        Tag::TagList stanzas = tag->children();
-        Tag::TagList::const_iterator i;
-        for(i = stanzas.begin(); i != stanzas.end(); i++)
-        { 
-          m_handler->handleReceivedData(this, (*i)->xml());
-        };
+        if(tag->findAttribute("type") == "terminal")
+        {
+          m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh connection closed by server: "+tag->findAttribute("condition"));
+          m_state = StateDisconnected;
+          if(m_handler)
+            m_handler->handleDisconnect(this, ConnStreamClosed);
+          return;
+        }
       }
-    }
+      
+      Tag::TagList stanzas = tag->children();
+      Tag::TagList::const_iterator i;
+      for(i = stanzas.begin(); i != stanzas.end(); i++)
+      { 
+        m_handler->handleReceivedData(this, (*i)->xml());
+      };
+     }
   }
   
 
