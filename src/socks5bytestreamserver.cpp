@@ -46,20 +46,18 @@ namespace gloox
   ConnectionError SOCKS5BytestreamServer::recv( int timeout )
   {
     if( m_tcpServer )
-    {
-      ConnectionError ce = m_tcpServer->recv( timeout );
-      if( ce != ConnNoError )
-        return ce;
-
-      ConnectionMap::const_iterator it = m_connections.begin();
-      for( ; it != m_connections.end(); ++it )
-      {
-        (*it).first->recv( timeout );
-      }
-      return ConnNoError;
-    }
-    else
       return ConnNotConnected;
+    
+    ConnectionError ce = m_tcpServer->recv( timeout );
+    if( ce != ConnNoError )
+      return ce;
+
+    ConnectionMap::const_iterator it = m_connections.begin();
+    for( ; it != m_connections.end(); ++it )
+    {
+      (*it).first->recv( timeout );
+    }
+    return ConnNoError;  
   }
 
   void SOCKS5BytestreamServer::stop()
