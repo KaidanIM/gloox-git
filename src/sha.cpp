@@ -50,11 +50,7 @@ namespace gloox
     if( m_corrupted )
       return "";
 
-    if( !m_finished )
-    {
-      pad();
-      m_finished = true;
-    }
+    finalize();
 
     char buf[40];
     for( int i = 0; i < 20; ++i )
