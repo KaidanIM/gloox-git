@@ -44,6 +44,13 @@ namespace gloox
     }
   }
 
+  static void addFeatures( const StringList& features, Tag * parent )
+  {
+    StringList::const_iterator it = features.begin();
+    for( ; it != features.end(); ++it )
+      new Tag( parent, "feature", "var", (*it) );
+  }
+
   bool Disco::handleIq( IQ* iq )
   {
     switch( iq->subtype() )
@@ -85,13 +92,7 @@ namespace gloox
                   i->addAttribute( "type", (*im).second );
                   i->addAttribute( "name", name );
                 }
-                const StringList& features = (*in)->handleDiscoNodeFeatures( node );
-                StringList::const_iterator fi = features.begin();
-                for( ; fi != features.end(); ++fi )
-                {
-                  Tag *f = new Tag( query, "feature" );
-                  f->addAttribute( "var", (*fi) );
-                }
+                addFeatures( (*in)->handleDiscoNodeFeatures( node ), query );
               }
             }
           }
@@ -102,12 +103,7 @@ namespace gloox
             i->addAttribute( "type", m_identityType );
             i->addAttribute( "name", m_versionName );
 
-            StringList::const_iterator it = m_features.begin();
-            for( ; it != m_features.end(); ++it )
-            {
-              Tag *f = new Tag( query, "feature" );
-              f->addAttribute( "var", (*it) );
-            }
+            addFeatures( m_features, query );         
           }
 
           m_parent->send( re );
@@ -204,39 +200,21 @@ namespace gloox
     m_features.remove( feature );
   }
 
-  void Disco::getDiscoInfo( const JID& to, const std::string& node, DiscoHandler *dh, int context,
-                            const std::string& tid )
+  void Disco::getDisco( const JID& to, const std::string& node, DiscoHandler *dh, int context,
+                        IdType idType, const std::string& tid )
   {
     const std::string& id = tid.empty() ? m_parent->getID() : tid;
 
-    IQ* iq = new IQ( IQ::Get, to, id, XMLNS_DISCO_INFO );
-    Tag *q = iq->query();
+    IQ* iq = new IQ( IQ::Get, to, id, idType == GET_DISCO_INFO ? XMLNS_DISCO_INFO
+                                                               : XMLNS_DISCO_ITEMS );
     if( !node.empty() )
-      q->addAttribute( "node", node );
+      iq->query()->addAttribute( "node", node );
 
     DiscoHandlerContext ct;
     ct.dh = dh;
     ct.context = context;
     m_track[id] = ct;
-    m_parent->trackID( this, id, GET_DISCO_INFO );
-    m_parent->send( iq );
-  }
-
-  void Disco::getDiscoItems( const JID& to, const std::string& node, DiscoHandler *dh, int context,
-                             const std::string& tid )
-  {
-    const std::string& id = tid.empty() ? m_parent->getID() : tid;
-
-    IQ* iq = new IQ( IQ::Get, to, id, XMLNS_DISCO_ITEMS );
-    Tag *q = iq->query();
-    if( !node.empty() )
-      q->addAttribute( "node", node );
-
-    DiscoHandlerContext ct;
-    ct.dh = dh;
-    ct.context = context;
-    m_track[id] = ct;
-    m_parent->trackID( this, id, GET_DISCO_ITEMS );
+    m_parent->trackID( this, id, idType );
     m_parent->send( iq );
   }
 
