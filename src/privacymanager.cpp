@@ -35,89 +35,36 @@ namespace gloox
       m_parent->removeIqHandler( XMLNS_PRIVACY );
   }
 
-  std::string PrivacyManager::requestListNames()
+  std::string PrivacyManager::operation( int context, const std::string& name )
   {
     const std::string& id = m_parent->getID();
-
-    IQ* iq = new IQ( IQ::Get, JID(), id, XMLNS_PRIVACY );
-
-    m_parent->trackID( this, id, PLRequestNames );
-    m_parent->send( iq );
-    return id;
-  }
-
-  std::string PrivacyManager::requestList( const std::string& name )
-  {
-    const std::string& id = m_parent->getID();
-
-    IQ* iq = new IQ( IQ::Get, JID(), id, XMLNS_PRIVACY );
-    Tag *l = new Tag( iq->query(), "list" );
-    l->addAttribute( "name", name );
-
-    m_parent->trackID( this, id, PLRequestList );
-    m_parent->send( iq );
-    return id;
-  }
-
-  std::string PrivacyManager::removeList( const std::string& name )
-  {
-    const std::string& id = m_parent->getID();
-
-    IQ* iq = new IQ ( IQ::Set, JID(), id, XMLNS_PRIVACY );
-    Tag *l = new Tag( iq->query(), "list" );
-    l->addAttribute( "name", name );
-
-    m_parent->trackID( this, id, PLRemove );
-    m_parent->send( iq );
-    return id;
-  }
-
-  std::string PrivacyManager::setDefault( const std::string& name )
-  {
-    const std::string& id = m_parent->getID();
-
-    IQ* iq = new IQ( IQ::Set, JID(), id, XMLNS_PRIVACY );
-    Tag *d = new Tag( iq->query(), "default" );
-    d->addAttribute( "name", name );
-
-    m_parent->trackID( this, id, PLDefault );
-    m_parent->send( iq );
-    return id;
-  }
-
-  std::string PrivacyManager::unsetDefault()
-  {
-    const std::string& id = m_parent->getID();
-
-    IQ* iq = new IQ( IQ::Set, JID(), id, XMLNS_PRIVACY );
-    new Tag( iq->query(), "default" );
-
-    m_parent->trackID( this, id, PLUnsetDefault );
-    m_parent->send( iq );
-    return id;
-  }
-
-  std::string PrivacyManager::setActive( const std::string& name )
-  {
-    const std::string& id = m_parent->getID();
-
-    IQ* iq = new IQ( IQ::Set, JID(), id, XMLNS_PRIVACY );
-    Tag *a = new Tag( iq->query(), "active" );
-    a->addAttribute( "name", name );
-
-    m_parent->trackID( this, id, PLActivate );
-    m_parent->send( iq );
-    return id;
-  }
-
-  std::string PrivacyManager::unsetActive()
-  {
-    const std::string& id = m_parent->getID();
-
-    IQ* iq = new IQ( IQ::Set, JID(), id, XMLNS_PRIVACY );
-    new Tag( iq->query(), "active" );
-
-    m_parent->trackID( this, id, PLUnsetActivate );
+    IQ::IqType iqType = IQ::Set;
+    if( context == PLRequestNames || context == PLRequestList )
+      iqType = IQ::Get;
+    IQ* iq = new IQ( iqType, JID(), id, XMLNS_PRIVACY );
+    if( context != PLRequestNames )
+    {
+      const char * child = 0;
+      switch( context )
+      {
+        case PLRequestList:
+        case PLRemove:
+          child = "list";
+          break;
+        case PLDefault:
+        case PLUnsetDefault:
+          child = "default";
+          break;
+        case PLActivate:
+        case PLUnsetActivate:
+          child = "active";
+          break;
+      }
+      Tag* l = new Tag( iq->query(), child ); 
+      if( !name.empty() )
+        l->addAttribute( "name", name );
+    }
+    m_parent->trackID( this, id, context );
     m_parent->send( iq );
     return id;
   }
