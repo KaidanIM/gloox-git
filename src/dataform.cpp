@@ -84,8 +84,7 @@ namespace gloox
     if( m_type == FormTypeInvalid )
       return 0;
 
-    Tag *x = new Tag( "x" );
-    x->addAttribute( "xmlns", XMLNS_X_DATA );
+    Tag *x = new Tag( "x", "xmlns", XMLNS_X_DATA );
     x->addAttribute( "type", util::lookup( m_type, dfTypeValues ) );
     if( !m_title.empty() )
       new Tag( x, "title", m_title );

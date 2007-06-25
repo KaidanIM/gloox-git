@@ -58,15 +58,9 @@ namespace gloox
     Tag *t = 0;
 
     if( m_iqext )
-    {
-      t = new Tag( "query" );
-      t->addAttribute( "xmlns", XMLNS_IQ_OOB );
-    }
+      t = new Tag( "query", "xmlns", XMLNS_IQ_OOB );
     else
-    {
-      t = new Tag( "x" );
-      t->addAttribute( "xmlns", XMLNS_X_OOB );
-    }
+      t = new Tag( "x", "xmlns", XMLNS_X_OOB );
 
     new Tag( t, "url", m_url );
     if( !m_desc.empty() )
