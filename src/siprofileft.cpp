@@ -62,7 +62,8 @@ namespace gloox
     if( name.empty() || size <= 0 || !m_manager )
       return std::string();
 
-    Tag* file = new Tag( "file", "xmlns", XMLNS_SI_FT );
+    Tag* file = new Tag( "file" );
+    file->addAttribute( "xmlns", XMLNS_SI_FT );
     file->addAttribute( "name", name );
     file->addAttribute( "size", size );
     if( !hash.empty() )
@@ -74,7 +75,8 @@ namespace gloox
     if( m_ranged )
       new Tag( file, "range" );
 
-    Tag* feature = new Tag( "feature", "xmlns", XMLNS_FEATURE_NEG );
+    Tag* feature = new Tag( "feature" );
+    feature->addAttribute( "xmlns", XMLNS_FEATURE_NEG );
     DataFormField* dff = new DataFormField( "stream-method", "", "", DataFormField::FieldTypeListSingle );
     StringMap sm;
     sm["s5b"] = XMLNS_BYTESTREAMS;
@@ -93,7 +95,8 @@ namespace gloox
     if( !m_manager )
       return;
 
-    Tag* feature = new Tag( "feature", "xmlns", XMLNS_FEATURE_NEG );
+    Tag* feature = new Tag( "feature" );
+    feature->addAttribute( "xmlns", XMLNS_FEATURE_NEG );
     DataFormField* dff = new DataFormField( "stream-method" );
     switch( type )
     {
