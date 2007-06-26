@@ -35,7 +35,7 @@ namespace gloox
                                             const std::string& xmppServer, int xmppPort )
     : ConnectionBase( 0 ), m_connection( connection ),
       m_logInstance( logInstance ), m_boshHost( boshHost), m_http11( false ), m_path("/http-bind/"), m_handler(NULL),
-      m_initialStreamSent(false), m_openRequests(0), m_requests(2), m_wait(30), m_hold(2)
+      m_initialStreamSent(false), m_openRequests(0), m_requests(2), m_wait(30), m_hold(2), m_streamRestart(false)
   {
     m_server = prep::idna( xmppServer );
     m_port = xmppPort;
@@ -56,7 +56,7 @@ namespace gloox
                                             const std::string& xmppServer, int xmppPort )
     : ConnectionBase( cdh ), m_connection( connection ),
       m_logInstance( logInstance ), m_boshHost( boshHost ), m_path("/http-bind/"), m_handler(cdh),
-      m_initialStreamSent(false), m_openRequests(0), m_requests(2), m_wait(30), m_hold(2)
+      m_initialStreamSent(false), m_openRequests(0), m_requests(2), m_wait(30), m_hold(2), m_streamRestart(false)
   {
     m_server = prep::idna( xmppServer );
     m_port = xmppPort;
@@ -145,7 +145,6 @@ namespace gloox
     if( !m_connection )
       return false;
     
-    bool streamRestart = false;
     std::ostringstream request;
     std::ostringstream requestBody;
     
@@ -153,7 +152,7 @@ namespace gloox
     {
         if(m_initialStreamSent)
         {
-          streamRestart = true;
+          m_streamRestart = true;
         }
         else
         {
@@ -172,7 +171,7 @@ namespace gloox
     requestBody << "sid='" << m_sid << "' ";
     requestBody << "xmlns='http://jabber.org/protocol/httpbind' ";
     
-    if(streamRestart)
+    if(m_streamRestart)
     {
       requestBody << "xmpp:restart='true' to='" << m_server << "' xml:lang='en' xmlns:xmpp='urn:xmpp:xbosh' />";
       m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "restarting stream");
@@ -194,12 +193,6 @@ namespace gloox
     m_connection->send(request.str());
     m_openRequests++;
     
-    if(m_handler && streamRestart)
-    {
-      m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "sending spoofed <stream:stream>");
-      m_handler->handleReceivedData(this, "<?xml version='1.0' ?><stream:stream xmlns:stream='http://etherx.jabber.org/streams' xmlns='jabber:client' version='1.0' from='localhost' id ='" +m_sid+"' xml:lang='en' />");
-      m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "sent spoofed <stream:stream>");
-    }
     return true;
   }
 
@@ -225,7 +218,7 @@ namespace gloox
   void ConnectionBOSH::handleReceivedData( const ConnectionBase* connection,
                                                 const std::string& data )
   {
-	  m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh received:\n" + data);
+	  m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh received:\n" + data + "\n");
     
     m_buffer += data;
     
@@ -253,7 +246,14 @@ namespace gloox
   
   void ConnectionBOSH::handleXMLData(const ConnectionBase* connection, const std::string& data)
   {
-    m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh received XML:\n" + data);
+    if(m_handler && m_streamRestart)
+     {
+       m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "sending spoofed <stream:stream>");
+       m_handler->handleReceivedData(this, "<?xml version='1.0' ?><stream:stream xmlns:stream='http://etherx.jabber.org/streams' xmlns='jabber:client' version='1.0' from='localhost' id ='" +m_sid+"' xml:lang='en' ><stream:features><bind xmlns='urn:ietf:params:xml:ns:xmpp-bind'/><session xmlns='urn:ietf:params:xml:ns:xmpp-session'/></stream:features>");
+       m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "sent spoofed <stream:stream>");
+       m_streamRestart = false;
+     }
+    m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh received XML:\n" + data + "\n");
     m_parser->feed(data);
   }
 

@@ -178,7 +178,9 @@ namespace gloox
       std::string m_buffer;
       std::string m_bufferHeader;
       long m_bufferContentLength;
+      
       bool m_initialStreamSent;
+      bool m_streamRestart;
 
   };
 
