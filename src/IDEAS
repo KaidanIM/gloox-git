@@ -1,12 +1,7 @@
 
-- Use a generic framework for sending stanzas and handling results.
-
   == Description ==
 
-    Currently, there's a lot of redundancy in the request code and structures
-    for building, sending and (un)tracking requests.
-
-    Most manager type classes holds lists of different handler/observer classes
+    Most manager classes holds lists of different handler/observer classes
     and other tracked informations on a "per-manager" basis, resulting in a
     bunch of (mainly empty) lists.
 
@@ -16,107 +11,56 @@
     it would be possible to by-pass the manager step and avoid this indirection
     (which basically does the same the client does (tracking and untracking)).
 
-    If it were possible to agree on a generic API for building, tracking and
-    sending requests, the code complexity would be (somewhat) reduced (as well
-    as the testing effort for outgoing stanzas). This API would need to be
-    flexible enough to handle all (most ?) request types, which is the main
-    drawback (along with the scale of the move).
-
+    A UserHandler class would contain a static map for all information tracking.
+    Real handlers would derive from it and use this map for all info tracking.
 
   == Advantages ==
 
-    - Only write code specific to the request (less LOC).
-      There's no need anymore to :
-        * create the including stanza
-        * track the handler (when there is one)
-        * track context information (info not sent back in the result)
-        * check for m_parent and handler validity
-        * think about IDs
-        * send()
-
     - Using IqHandler as a base class for UserHandler allows to use clientbase's
-      tracking directly and get rid of all the other (local) handler maps (which
-      is faster and smaller and allows the parsing to be somewhat more local).
+      tracking directly and get rid of all local tracking code and per-manager
+      handler maps (which is faster and smaller and would allow the parsing to be
+      somewhat more local).
 
-    - The UserHandler class (derived from IqHandler and base for all other Handlers)
-      would hold a static map to hold "informations" about requests (map< string,
-      StringPair >). If these 2 Strings are not enough information for the handler,
-      it is still free not to use it and declare another tracking map in it's
-      derived class.so that there is a generic map for all handlers and the
-      possibility to add others for specific needs (as is being done currently).
-
-    - Along with the preceding points, probably a smaller binary and a smaller
-      memory footprint.
-
-    - The childTag argument could be created by a private function. This makes
-      for easier testing of outgoing stanzas (the user API calls would simply
-      wrap to 'sendIQ( type, context, createNodeSubTag( ... ), ... )').
-
+    - Smaller binary and memory footprint.
 
   == Disadvantages ==
 
-    - Big change (and all side effects).
-
-    - Need to get the API right (ie need to see if it's realistic).
-
+    - We loose track of the manager and associated client, so we need to make
+      sure that no handler needs any info from them. Ie What happens if we need
+      to send a response to a result (eg an error) ?
 
   == Example ==
 
-    Here's a raw exemple of the idea.
-
-
-    /**
-     * Sends an IQ. The argument is rather big, but this is probably the worst
-     * case, other versions would have less of them (sendIQ could (should ?) also
-     * be split between a couple helper functions.
-     */
-    Client::sendIQ( IQ::IqType iqType,
-                    int context,
-                    Tag* childTag,
-                    UserHandler* handler,
-                    string xmlns,
-                    string service,
-                    string track1,
-                    string track2 )
+    void request( ... )
     {
-      if( !m_parent || !handler )
-      {
-        delete childTag;
+      if( !m_parent )
         return;
-      }
       const std::string& id = m_parent->getID();
       IQ* iq = new IQ( iqType, id, parent, ... );
 
-      // generic track map for all handlers
-      m_handlerTrackMap[id] = handler;
-
       // generic track map for all infos
-      m_infoTrackMap[id] = TrackItem( track1, track2 );
+      if( needsInfoTracking )
+        handler::trackInfos( id, TrackItem( track1, track2 ) );
 
-      // tracking the handler, not a manager
+      // no more local tracking because we track a handler, not a manager
       m_parent->trackID( handler, id, context );
       m_parent->send( iq );
     }
 
-    /**
-     * Base class for all user handlers.
-     */
+    /* Base class for all user handlers. */
     class UserHandler : public IqHandler
     {
       virtual bool handleIqID() = 0;
       static std::map< std::string, StringPair > m_infoTrackMap;
+      static void trackInfos( id, item ) { m_infoTrackMap[id] = item; }
     }
 
-    /**
-     * An actual handler. It can retrieve info using
-     * UserHandler::m_infoTrackMap or define another one.
-     */
+    /* An actual handler. It can retrieve info using m_infoTrackMap. */
     class NodeHandler : public UserHandler
     {
       public:
-        virtual void handleNodeCreation( service, node );
-        virtual void handleItemCreation( service, node, item );
-
+        virtual void handleNodeCreation( service, node ) = 0;
+        virtual void handleItemCreation( service, node, item ) = 0;
       private:
         bool handleIqID( IQ* iq, int context )
         {
@@ -126,16 +70,5 @@
           // ...
           handleItemCreation( service, node, item );
         }
-    }
-
-    /**
-     * Creates the subtag for the createNode() method.
-     * Can easily be tested for correctness.
-     */
-    Tag* PubSub::createNodeTag( const std::string& node )
-    {
-      Tag* tag = createPubsubHeaderTag();
-      tag->addChild( "create", "node", node );
-      return tag;
     }
 
