@@ -165,7 +165,7 @@ namespace gloox
     }
 
     enum EventType {
-      EventCollection = 0,
+      EventCollection,
       EventConfigure,
       EventDelete,
       EventItems,
@@ -360,7 +360,7 @@ namespace gloox
                                               const std::string& node,
                                               NodeHandler * handler )
     {
-      if( !m_parent )
+      if( !m_parent || !handler )
         return;
 
       const std::string& id = m_parent->getID();
@@ -688,12 +688,6 @@ namespace gloox
       m_nodeHandlerTrackMap[id] = handler;
       m_nopTrackMap[id] = node;
       m_parent->send( iq );
-    }
-
-    bool Manager::handleIq( IQ* iq )
-    {
-      std::cout << __FUNCTION__ << ": " << iq->xml() << std::endl;
-      return 0;
     }
 
     /**

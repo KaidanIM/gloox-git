@@ -416,7 +416,7 @@ namespace gloox
         virtual void handleMessage( Message* msg, MessageSession * );
 
         // reimplemented from IqHandler
-        virtual bool handleIq  ( IQ* iq );
+        virtual bool handleIq  ( IQ* iq ) { return 0; }
         virtual void handleIqID( IQ* iq, int context );
 
       private:
