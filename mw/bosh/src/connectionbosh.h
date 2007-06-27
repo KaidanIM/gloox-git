@@ -168,9 +168,12 @@ namespace gloox
       std::string m_sid;
       int m_hold;
       int m_wait;
-      int m_requests;
-   
+      int m_maxOpenRequests;
+      
       int m_openRequests;
+      
+      long m_lastRequestTime;
+      long m_minTimePerRequest;
 
       bool m_http11; // Persistent connections
       bool m_pipelining; // Multiple requests between responses (on a single connection)
@@ -179,8 +182,10 @@ namespace gloox
       std::string m_bufferHeader;
       long m_bufferContentLength;
       
+      std::string m_sendBuffer;
+      
       bool m_initialStreamSent;
-      bool m_streamRestart;
+      bool m_streamRestart; // Set to true if we are waiting for an acknowledgement of a stream restart
 
   };
 

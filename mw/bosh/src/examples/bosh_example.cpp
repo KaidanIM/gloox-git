@@ -82,6 +82,8 @@ class MessageTest : public MessageSessionHandler, ConnectionListener, LogHandler
        ConnectionBOSH* conn1 = new ConnectionBOSH( j, conn0, j->logInstance(), "localhost", "localhost");
        j->setConnectionImpl( conn1 );
        
+       j->setForceNonSasl();
+       
 
 
       if( j->connect( false ) )

@@ -35,7 +35,8 @@ namespace gloox
                                             const std::string& xmppServer, int xmppPort )
     : ConnectionBase( 0 ), m_connection( connection ),
       m_logInstance( logInstance ), m_boshHost( boshHost), m_http11( false ), m_path("/http-bind/"), m_handler(NULL),
-      m_initialStreamSent(false), m_openRequests(0), m_requests(2), m_wait(30), m_hold(2), m_streamRestart(false)
+      m_initialStreamSent(false), m_openRequests(0), m_maxOpenRequests(20), m_wait(30), m_hold(20), m_streamRestart(false),
+      m_lastRequestTime(0), m_minTimePerRequest(0), m_sendBuffer("")
   {
     m_server = prep::idna( xmppServer );
     m_port = xmppPort;
@@ -56,7 +57,8 @@ namespace gloox
                                             const std::string& xmppServer, int xmppPort )
     : ConnectionBase( cdh ), m_connection( connection ),
       m_logInstance( logInstance ), m_boshHost( boshHost ), m_path("/http-bind/"), m_handler(cdh),
-      m_initialStreamSent(false), m_openRequests(0), m_requests(2), m_wait(30), m_hold(2), m_streamRestart(false)
+      m_initialStreamSent(false), m_openRequests(0), m_maxOpenRequests(20), m_wait(30), m_hold(20), m_streamRestart(false),
+      m_lastRequestTime(0), m_minTimePerRequest(0), m_sendBuffer("")
   {
     m_server = prep::idna( xmppServer );
     m_port = xmppPort;
@@ -116,9 +118,17 @@ namespace gloox
   {
     if( m_connection )
     {
+      if(m_handler && m_streamRestart)
+     {
+       m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "sending spoofed <stream:stream>");
+       m_handler->handleReceivedData(this, "<?xml version='1.0' ?><stream:stream xmlns:stream='http://etherx.jabber.org/streams' xmlns='jabber:client' version='1.0' from='" + m_server + "' id ='" +m_sid+"' xml:lang='en' >");
+       m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "sent spoofed <stream:stream>");
+       m_streamRestart = false;
+     }
       if(m_openRequests < 1 && !m_sid.empty())
       {
-        this->send("");
+        this->send(m_sendBuffer);
+        m_sendBuffer = "";
       }
       return m_connection->recv( timeout );
     }
@@ -145,6 +155,30 @@ namespace gloox
     if( !m_connection )
       return false;
     
+    printf("\nTold to send: %s\n", data.c_str());
+    
+    if(m_openRequests >= m_maxOpenRequests)
+    {
+      m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "too many open requests, not sending");
+      m_sendBuffer += data;
+      return false;
+    }
+    else
+    {
+      printf("m_openRequests == %d\n", m_openRequests);
+    }
+    
+    if(data.empty() && (time(NULL) - m_lastRequestTime) < m_minTimePerRequest && m_openRequests > 0)
+    {
+      m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "too little time between requests, not sending");
+      m_sendBuffer += data;
+      return false;
+    }
+    else
+    {
+      printf("\n %d seconds since last request\n", time(NULL) - m_lastRequestTime);
+    }
+    
     std::ostringstream request;
     std::ostringstream requestBody;
     
@@ -169,11 +203,11 @@ namespace gloox
     requestBody << "<body ";
     requestBody << "rid='" << m_rid << "' ";
     requestBody << "sid='" << m_sid << "' ";
-    requestBody << "xmlns='http://jabber.org/protocol/httpbind' ";
+    requestBody << "xmlns='http://jabber.org/protocol/httpbind'";
     
     if(m_streamRestart)
     {
-      requestBody << "xmpp:restart='true' to='" << m_server << "' xml:lang='en' xmlns:xmpp='urn:xmpp:xbosh' />";
+      requestBody << " xmpp:restart='true' to='" << m_server << "' xml:lang='en' xmlns:xmpp='urn:xmpp:xbosh' />";
       m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "restarting stream");
     }
     else
@@ -181,6 +215,7 @@ namespace gloox
       requestBody << ">" << data << "</body>";
     }
     
+    m_sendBuffer = "";
     
     request << "POST " << m_path << " HTTP/1.1\r\n";
     request << "Host: " << m_boshHost << "\r\n";
@@ -190,9 +225,12 @@ namespace gloox
 
     
     m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh sent:\n" + request.str() +"\n");
-    m_connection->send(request.str());
-    m_openRequests++;
     
+    m_lastRequestTime = time(NULL);
+    m_openRequests++;
+    printf("Incrementing m_openRequests to %d\n", m_openRequests);
+    
+    m_connection->send(request.str());
     return true;
   }
 
@@ -218,8 +256,6 @@ namespace gloox
   void ConnectionBOSH::handleReceivedData( const ConnectionBase* connection,
                                                 const std::string& data )
   {
-	  m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh received:\n" + data + "\n");
-    
     m_buffer += data;
     
     if(m_bufferHeader.empty()) // HTTP header not received yet?
@@ -236,23 +272,17 @@ namespace gloox
     if(m_buffer.length() >= m_bufferContentLength) // We have at least one full response
     {
       m_openRequests--;
+      printf("Decrementing m_openRequests to %d\n", m_openRequests);
       handleXMLData(connection, m_buffer.substr(0, m_bufferContentLength));
       m_buffer = m_buffer.substr(m_bufferContentLength); // Remove the handled response from the buffer, and reset variables for reuse
       m_bufferContentLength = -1;
       m_bufferHeader = "";
-      handleReceivedData(connection, ""); // In case there are more full responses in the buffer
+      //handleReceivedData(connection, ""); // In case there are more full responses in the buffer
     }
   }
   
   void ConnectionBOSH::handleXMLData(const ConnectionBase* connection, const std::string& data)
   {
-    if(m_handler && m_streamRestart)
-     {
-       m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "sending spoofed <stream:stream>");
-       m_handler->handleReceivedData(this, "<?xml version='1.0' ?><stream:stream xmlns:stream='http://etherx.jabber.org/streams' xmlns='jabber:client' version='1.0' from='localhost' id ='" +m_sid+"' xml:lang='en' >");
-       m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "sent spoofed <stream:stream>");
-       m_streamRestart = false;
-     }
     m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh received XML:\n" + data + "\n");
     m_parser->feed(data);
   }
@@ -273,8 +303,11 @@ namespace gloox
     requestBody.addAttribute("ver", "1.6");
     requestBody.addAttribute("wait", m_wait);
     requestBody.addAttribute("ack", 0);
+    requestBody.addAttribute("secure", "false");
     requestBody.addAttribute("xml:lang", "en");
+    requestBody.addAttribute("xmpp:version", "1.0");
     requestBody.addAttribute("xmlns", "http://jabber.org/protocol/httpbind");
+    requestBody.addAttribute("xmlns:xmpp", "urn:xmpp:xbosh");
     requestBody.addAttribute("to", m_server);
     
     connrequest << "POST " << m_path << " HTTP/1.1\r\n";
@@ -285,6 +318,7 @@ namespace gloox
     
     m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh connection request sent" );
     m_openRequests++;
+    printf("Incrementing m_openRequests to %d\n", m_openRequests);
     m_connection->send(connrequest.str()); 
   }
 
@@ -306,19 +340,39 @@ namespace gloox
       {
         m_state = StateConnected;
         m_sid = tag->findAttribute("sid");
-        if(tag->hasAttribute("hold"))
-          m_hold = atoi(tag->findAttribute("hold").c_str());
+        
         if(tag->hasAttribute("requests"))
         {
           int serverRequests = atoi(tag->findAttribute("requests").c_str());
-          if(serverRequests < m_requests)
-            m_requests = serverRequests;
+          if(serverRequests < m_maxOpenRequests)
+          {
+            m_maxOpenRequests = serverRequests;
+            m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh parameter 'requests' now set to " + tag->findAttribute("requests") );
+          }
         }
         if(tag->hasAttribute("hold"))
         {
-          int serverRequests = atoi(tag->findAttribute("hold").c_str());
-          if(serverRequests < m_hold)
-            m_hold = serverRequests;
+          int maxHold = atoi(tag->findAttribute("hold").c_str());
+          if(maxHold < m_hold)
+          {
+            m_hold = maxHold;
+            m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh parameter 'hold' now set to " + tag->findAttribute("hold") );
+          }
+        }
+        if(tag->hasAttribute("wait"))
+        {
+          int maxWait = atoi(tag->findAttribute("wait").c_str());
+          if(maxWait < m_wait)
+          {
+            m_wait = maxWait;
+            m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh parameter 'wait' now set to " + tag->findAttribute("wait") + " seconds");
+          }
+        }
+        if(tag->hasAttribute("polling"))
+        {
+          int minTime = atoi(tag->findAttribute("polling").c_str());
+          m_minTimePerRequest = minTime;
+          m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh parameter 'polling' now set to " + tag->findAttribute("polling") + " seconds");
         }
         if(m_handler)
         {
