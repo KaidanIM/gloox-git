@@ -37,6 +37,7 @@ namespace gloox
   {
     FieldList::const_iterator it = m_fields.begin();
     for( ; it != m_fields.end() && (*it)->name() != field; ++it )
+      ;
     return it != m_fields.end() ? (*it) : 0;
   }
 
