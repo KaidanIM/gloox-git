@@ -1211,6 +1211,7 @@ namespace gloox
     {
       MessageSession *session = new MessageSession( this, stanza->from(), true, stanza->subtype() );
       msHandler->handleMessageSession( session );
+      session->handleMessage( stanza );
     }
     else
     {
