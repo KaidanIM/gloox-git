@@ -34,6 +34,8 @@ int main( int /*argc*/, char** /*argv*/ )
     ++fail;
     printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
   }
+  delete i;
+  i = 0;
 
   // -------
   name = "parse IQ get";
@@ -46,6 +48,8 @@ int main( int /*argc*/, char** /*argv*/ )
     ++fail;
     printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
   }
+  delete i;
+  i = 0;
 
   // -------
   name = "parse IQ error";
@@ -58,6 +62,8 @@ int main( int /*argc*/, char** /*argv*/ )
     ++fail;
     printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
   }
+  delete i;
+  i = 0;
 
   // -------
   name = "parse IQ result";
@@ -70,6 +76,8 @@ int main( int /*argc*/, char** /*argv*/ )
     ++fail;
     printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
   }
+  delete i;
+  i = 0;
 
   // -------
   name = "new simple IQ error";
