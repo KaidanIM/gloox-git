@@ -343,6 +343,16 @@ class ParserTest : private TagHandler
         printf( "test '%s: %s' failed\n", name.c_str(), data.c_str() );
       }
 
+  //-------
+  name = "relax";
+  if ( Parser::relax( "&amp;&lt;&gt;&apos;&quot;&#60;&#62;&#39;&#34;""&#x3c;&#x3e;"
+                   "&#x3C;&#x3E;&#x27;&#x22;&#X3c;&#x3e;&#X3C;&#X3E;&#X27;&#X22;" )
+        != "&<>'\"<>'\"<><>'\"<><>'\"" )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+
 
       delete p;
       p = 0;

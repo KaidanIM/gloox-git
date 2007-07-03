@@ -68,10 +68,8 @@ namespace gloox
        * @param parent The parent tag.
        * @param name The name of the element.
        * @param cdata The XML character data of the element.
-       * @param incoming Indicates whether tag names, attributes, attribute values, and cdata shall
-       * be escaped (false, default) or not (true).
        */
-      Tag( Tag *parent, const std::string& name, const std::string& cdata = "", bool incoming = false );
+      Tag( Tag *parent, const std::string& name, const std::string& cdata = "" );
 
       /**
        * Creates a new tag with a given name and an attribute.
@@ -155,14 +153,14 @@ namespace gloox
        * @param cdata The new cdata.
        */
       virtual void setCData( const std::string& cdata )
-        { m_cdata = m_incoming ? relax( cdata ) : cdata; }
+        { m_cdata = cdata; }
 
       /**
        * Adds the string to the existing XML character data for this Tag.
        * @param cdata The additional cdata.
        */
       virtual void addCData( const std::string& cdata )
-        { m_cdata += m_incoming ? relax( cdata ) : cdata; }
+        { m_cdata += cdata; }
 
       /**
        * Use this function to retrieve the name of an element.
@@ -359,12 +357,6 @@ namespace gloox
        */
       static const std::string escape( std::string what );
 
-      /**
-       * Reverses operation of escape(). (&amp; --> &).
-       * @param what A string to de-escape.
-       */
-      static const std::string relax( std::string what );
-
     protected:
       void ripoff( Tag *tag );
 
@@ -384,7 +376,6 @@ namespace gloox
       TagList *m_children;
       Tag *m_parent;
       StanzaType m_type;
-      bool m_incoming;
 
     private:
       enum TokenType

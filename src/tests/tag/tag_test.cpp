@@ -153,16 +153,6 @@ int main( int /*argc*/, char** /*argv*/ )
   }
 
   //-------
-  name = "relax";
-  if ( Tag::relax( "&amp;&lt;&gt;&apos;&quot;&#60;&#62;&#39;&#34;""&#x3c;&#x3e;"
-                   "&#x3C;&#x3E;&#x27;&#x22;&#X3c;&#x3e;&#X3C;&#X3E;&#X27;&#X22;" )
-        != "&<>'\"<>'\"<><>'\"<><>'\"" )
-  {
-    ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
-  }
-
-  //-------
   name = "xml() 1";
   if( t->xml() != "<toe foo='bar'><uni u3='3u'><who w3='3w'><zoo z3='3z'/></who><yps y3='3y'/>"
                     "</uni><vie v3='3v' v32='3v2'><xep x3='3x'/></vie><vie/></toe>" )
