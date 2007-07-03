@@ -26,35 +26,32 @@
 namespace gloox
 {
   Tag::Tag()
-    : m_children( new TagList() ), m_parent( 0 ), m_type( StanzaUndefined ), m_incoming( false )
+    : m_children( new TagList() ), m_parent( 0 ), m_type( StanzaUndefined )
   {
   }
 
   Tag::Tag( const std::string& name, const std::string& cdata )
     : m_name( name ), m_cdata( cdata ), m_children( new TagList() ), m_parent( 0 ),
-      m_type( StanzaUndefined ), m_incoming( false )
+      m_type( StanzaUndefined )
   {
   }
 
-  Tag::Tag( Tag *parent, const std::string& name, const std::string& cdata, bool incoming )
-    : m_name( incoming ? relax( name ) : name ),
-      m_cdata( incoming ? relax( cdata ) : cdata ),
-      m_children( new TagList() ), m_parent( parent ), m_type( StanzaUndefined ), m_incoming( incoming )
+  Tag::Tag( Tag *parent, const std::string& name, const std::string& cdata )
+    : m_name( name ), m_cdata( cdata ), m_children( new TagList() ), m_parent( parent ),
+      m_type( StanzaUndefined )
   {
     if( m_parent )
       m_parent->addChild( this );
   }
 
   Tag::Tag( const std::string& name, const std::string& attrib, const std::string& value )
-    : m_name( name ), m_children( new TagList() ), m_parent( 0 ), m_type( StanzaUndefined ),
-      m_incoming( false )
+    : m_name( name ), m_children( new TagList() ), m_parent( 0 ), m_type( StanzaUndefined )
   {
     addAttribute( attrib, value );
   }
 
   Tag::Tag( Tag *parent, const std::string& name, const std::string&  attrib, const std::string& value )
-    : m_name( name ), m_children( new TagList() ), m_parent( parent ), m_type( StanzaUndefined ),
-      m_incoming( false )
+    : m_name( name ), m_children( new TagList() ), m_parent( parent ), m_type( StanzaUndefined )
   {
     if( m_parent )
       m_parent->addChild( this );
@@ -160,54 +157,6 @@ namespace gloox
     return esc;
   }
 
-  /*
-   * When a sequence is found, do not repack the string directly, just set
-   * the new symbol and mark the rest for deletation (0).
-   */
-  const std::string Tag::relax( std::string esc )
-  {
-    const unsigned int l = esc.length();
-    unsigned int p = 0;
-    unsigned int i = 0;
-
-    for( unsigned int val; i < l; ++i )
-    {
-      if( esc[i] != '&' )
-        continue;
-
-      for( val = 0; val < nb_escape; ++val )
-      {
-        if( ( i + escape_seqs[val].length() <= l )
-        && !strncmp( esc.data()+i+1, escape_seqs[val].data(),
-                                     escape_seqs[val].length() ) )
-        {
-          esc[i] = escape_chars[val];
-          for( p=1; p <= escape_seqs[val].length(); ++p )
-            esc[i+p] = 0;
-          i += p-1;
-          break;
-        }
-      }
-    }
-    if( p )
-    {
-      for( p = 0, i = 0; i < l; ++i )
-      {
-        if( esc[i] != 0 )
-        {
-          if( esc[p] == 0 )
-          {
-            esc[p] = esc[i];
-            esc[p+1] = 0;
-          }
-          ++p;
-        }
-      }
-      esc.resize( p );
-    }
-    return esc;
-  }
-
   void Tag::addAttribute( const std::string& name, const std::string& value )
   {
     if( name.empty() || value.empty() )
@@ -216,15 +165,14 @@ namespace gloox
     AttributeList::iterator it = m_attribs.begin();
     for( ; it != m_attribs.end(); ++it )
     {
-      if( (*it).first == ( m_incoming ? relax( name ) : name ) )
+      if( (*it).first == name )
       {
-        (*it).second = m_incoming ? relax( value ) : value;
+        (*it).second = value;
         return;
       }
     }
 
-    m_attribs.push_back( Attribute( m_incoming ? relax( name ) : name,
-                                    m_incoming ? relax( value ) : value ) );
+    m_attribs.push_back( Attribute( name, value ) );
   }
 
   void Tag::addAttribute( const std::string& name, int value )
@@ -288,7 +236,7 @@ namespace gloox
   {
     AttributeList::const_iterator it = m_attribs.begin();
     for( ; it != m_attribs.end(); ++it )
-      if( (*it).first == ( m_incoming ? relax( name ) : name ) )
+      if( (*it).first == name )
         return (*it).second;
 
     return std::string();
@@ -301,8 +249,7 @@ namespace gloox
 
     AttributeList::const_iterator it = m_attribs.begin();
     for( ; it != m_attribs.end(); ++it )
-      if( (*it).first == ( m_incoming ? relax( name ) : name )
-            && ( value.empty() || (*it).second == ( m_incoming ? relax( value ) : value ) ) )
+      if( (*it).first == name && ( value.empty() || (*it).second == value ) )
         return true;
 
     return false;
@@ -311,7 +258,7 @@ namespace gloox
   Tag* Tag::findChild( const std::string& name ) const
   {
     TagList::const_iterator it = m_children->begin();
-    while( it != m_children->end() && (*it)->name() != ( m_incoming ? relax( name ) : name ) )
+    while( it != m_children->end() && (*it)->name() != name )
       ++it;
     return it != m_children->end() ? (*it) : 0;
   }
@@ -323,9 +270,7 @@ namespace gloox
       return 0;
 
     TagList::const_iterator it = m_children->begin();
-    while( it != m_children->end()
-           && ( (*it)->name() != ( m_incoming ? relax( name ) : name )
-                || ! (*it)->hasAttribute( attr, value ) ) )
+    while( it != m_children->end() && ( (*it)->name() != name || !(*it)->hasAttribute( attr, value ) ) )
       ++it;
     return it != m_children->end() ? (*it) : 0;
   }
@@ -333,8 +278,8 @@ namespace gloox
   bool Tag::hasChildWithCData( const std::string& name, const std::string& cdata ) const
   {
     TagList::const_iterator it = m_children->begin();
-    while( it != m_children->end() && ( (*it)->name() != ( m_incoming ? relax( name ) : name )
-            || ( !cdata.empty() && (*it)->cdata() != ( m_incoming ? relax( cdata ) : cdata ) ) ) )
+    while( it != m_children->end() && ( (*it)->name() != name
+            || ( !cdata.empty() && (*it)->cdata() != cdata ) ) )
       ++it;
     return it != m_children->end();
   }
@@ -349,7 +294,7 @@ namespace gloox
 
   Tag* Tag::clone() const
   {
-    Tag *t = new Tag( 0, name(), cdata(), m_incoming );
+    Tag *t = new Tag( 0, name(), cdata() );
     t->m_attribs = m_attribs;
     t->m_type = m_type;
 
@@ -373,7 +318,7 @@ namespace gloox
     Tag::TagList::const_iterator it = list.begin();
     for( ; it != list.end(); ++it )
     {
-      if( (*it)->name() == ( m_incoming ? relax( name ) : name ) )
+      if( (*it)->name() == name )
         ret.push_back( (*it) );
     }
     return ret;

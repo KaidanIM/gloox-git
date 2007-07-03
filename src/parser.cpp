@@ -327,13 +327,13 @@ namespace gloox
     if( !m_root )
     {
 //       printf( "created Tag named %s, ", m_tag.c_str() );
-      m_root = new Tag( 0, m_tag, "", true );
+      m_root = new Tag( 0, relax( m_tag ), "" );
       m_current = m_root;
     }
     else
     {
 //       printf( "created Tag named %s, ", m_tag.c_str() );
-      m_current = new Tag( m_current, m_tag, "", true );
+      m_current = new Tag( m_current, relax( m_tag ), "" );
     }
 
     if( m_attribs.size() )
@@ -358,7 +358,7 @@ namespace gloox
   void Parser::addAttribute()
   {
 //     printf( "adding attribute: %s='%s', ", m_attrib.c_str(), m_value.c_str() );
-    m_attribs.push_back( Tag::Attribute( Tag::relax( m_attrib ), Tag::relax( m_value ) ) );
+    m_attribs.push_back( Tag::Attribute( relax( m_attrib ), relax( m_value ) ) );
     m_attrib = "";
     m_value = "";
 //     printf( "added, " );
@@ -368,7 +368,7 @@ namespace gloox
   {
     if( m_current )
     {
-      m_current->setCData( m_cdata );
+      m_current->setCData( relax( m_cdata ) );
 //       printf( "added cdata %s, ", m_cdata.c_str() );
       m_cdata = "";
     }
@@ -427,6 +427,65 @@ namespace gloox
   {
     if( m_tagHandler )
       m_tagHandler->handleTag( tag );
+  }
+
+  static const char escape_chars[] = { '&', '<', '>', '\'', '"', '<', '>',
+    '\'', '"', '<', '>', '<', '>', '\'', '"', '<', '>', '<', '>', '\'', '"' };
+
+  static const std::string escape_seqs[] = { "amp;", "lt;", "gt;", "apos;",
+    "quot;", "#60;", "#62;", "#39;", "#34;", "#x3c;", "#x3e;", "#x3C;",
+    "#x3E;", "#x27;", "#x22;", "#X3c;", "#X3e;", "#X3C;", "#X3E;", "#X27;",
+    "#X22;" };
+
+  static const unsigned nb_escape = sizeof(escape_chars)/sizeof(char);
+  static const unsigned escape_size = 5;
+
+  /*
+  * When a sequence is found, do not repack the string directly, just set
+  * the new symbol and mark the rest for deletation (0).
+  */
+  const std::string Parser::relax( std::string esc )
+  {
+    const unsigned int l = esc.length();
+    unsigned int p = 0;
+    unsigned int i = 0;
+
+    for( unsigned int val; i < l; ++i )
+    {
+      if( esc[i] != '&' )
+        continue;
+
+      for( val = 0; val < nb_escape; ++val )
+      {
+        if( ( i + escape_seqs[val].length() <= l )
+              && !strncmp( esc.data()+i+1, escape_seqs[val].data(),
+                           escape_seqs[val].length() ) )
+        {
+          esc[i] = escape_chars[val];
+          for( p=1; p <= escape_seqs[val].length(); ++p )
+            esc[i+p] = 0;
+          i += p-1;
+          break;
+        }
+      }
+    }
+    if( p )
+    {
+      for( p = 0, i = 0; i < l; ++i )
+      {
+        if( esc[i] != 0 )
+        {
+          if( esc[p] == 0 )
+          {
+            esc[p] = esc[i];
+            esc[p+1] = 0;
+          }
+          ++p;
+        }
+      }
+      esc.resize( p );
+    }
+    return esc;
   }
 
 }
