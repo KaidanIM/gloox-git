@@ -29,9 +29,7 @@ namespace gloox
   typedef std::list<StanzaExtension*> StanzaExtensionList;
 
   /**
-   * @brief This is an abstraction of a XMPP stanza.
-   *
-   * You can create a new Stanza from an existing Tag (or another stanza).
+   * @brief This is a base class for XMPP stanza abstractions.
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.4

@@ -32,15 +32,72 @@ namespace gloox
   class GLOOX_API Tag
   {
     public:
+
       /**
        * An XML element's attribute.
+       *
+       * @author Jakob Schroeter <js@camaya.net>
+       * @since 1.0
        */
-      typedef std::pair<std::string, std::string> Attribute;
+      class Attribute
+      {
+        public:
+          /**
+           *
+           */
+          Attribute( const std::string& name, const std::string& value, const std::string& xmlns = "" )
+            : m_name( name ), m_value( value ), m_xmlns( xmlns )
+            {}
+
+          /**
+           *
+           */
+          ~Attribute() {}
+
+          /**
+           *
+           */
+          const std::string& name() const { return m_name; }
+
+          /**
+           *
+           */
+          const std::string& value() const { return m_value; }
+
+          /**
+           *
+           */
+          void setValue( const std::string& value ) { m_value = value; }
+
+          /**
+           *
+           */
+          const std::string& xmlns() const { return m_xmlns; }
+
+          /**
+           * Checks two Attributes for equality.
+           * @param right The Attribute to check against the current Attribute.
+           */
+          bool operator==( const Attribute &right ) const
+            { return m_name == right.m_name && m_value == right.m_value && m_xmlns == right.m_xmlns; }
+
+          /**
+           * Checks two Attributes for inequality.
+           * @param right The Attribute to check against the current Attribute.
+           */
+          bool operator!=( const Attribute &right ) const
+            { return !( *this == right ); }
+
+        private:
+          std::string m_name;
+          std::string m_value;
+          std::string m_xmlns;
+      };
 
       /**
        * A list of XML element attributes.
        */
-      typedef std::list<Attribute> AttributeList;
+      typedef std::list<Attribute*> AttributeList;
 
       /**
        * A list of Tags.
@@ -133,7 +190,7 @@ namespace gloox
        * @param attributes The attributes to set.
        * @since 0.9
        */
-      virtual void setAttributes( const AttributeList& attributes ) { m_attribs = attributes; }
+      virtual void setAttributes( const AttributeList& attributes );
 
       /**
        * Use this function to add a child node to the tag. The Tag will be owned by Tag.
@@ -178,13 +235,13 @@ namespace gloox
        * Use this function to manipulate the list of attributes.
        * @return A reference to the list of attributes.
        */
-      virtual AttributeList& attributes() { return m_attribs; }
+      virtual AttributeList& attributes() { return *m_attribs; }
 
       /**
        * Use this function to fetch a const list of attributes.
        * @return A constant reference to the list of attributes.
        */
-      virtual const AttributeList& attributes() const { return m_attribs; }
+      virtual const AttributeList& attributes() const { return *m_attribs; }
 
       /**
        * Use this function to manipulate the list of child elements.
@@ -370,11 +427,12 @@ namespace gloox
         XPUnexpectedToken
       };
 
-      AttributeList m_attribs;
       std::string m_name;
       std::string m_cdata;
-      TagList *m_children;
-      Tag *m_parent;
+      std::string m_xmlns;
+      TagList* m_children;
+      Tag* m_parent;
+      AttributeList* m_attribs;
       StanzaType m_type;
 
     private:

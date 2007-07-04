@@ -26,32 +26,34 @@
 namespace gloox
 {
   Tag::Tag()
-    : m_children( new TagList() ), m_parent( 0 ), m_type( StanzaUndefined )
+    : m_children( new TagList() ), m_parent( 0 ), m_attribs( new AttributeList() ), m_type( StanzaUndefined )
   {
   }
 
   Tag::Tag( const std::string& name, const std::string& cdata )
     : m_name( name ), m_cdata( cdata ), m_children( new TagList() ), m_parent( 0 ),
-      m_type( StanzaUndefined )
+      m_attribs( new AttributeList() ), m_type( StanzaUndefined )
   {
   }
 
   Tag::Tag( Tag *parent, const std::string& name, const std::string& cdata )
     : m_name( name ), m_cdata( cdata ), m_children( new TagList() ), m_parent( parent ),
-      m_type( StanzaUndefined )
+      m_attribs( new AttributeList() ), m_type( StanzaUndefined )
   {
     if( m_parent )
       m_parent->addChild( this );
   }
 
   Tag::Tag( const std::string& name, const std::string& attrib, const std::string& value )
-    : m_name( name ), m_children( new TagList() ), m_parent( 0 ), m_type( StanzaUndefined )
+    : m_name( name ), m_children( new TagList() ), m_parent( 0 ), m_attribs( new AttributeList() ),
+      m_type( StanzaUndefined )
   {
     addAttribute( attrib, value );
   }
 
   Tag::Tag( Tag *parent, const std::string& name, const std::string&  attrib, const std::string& value )
-    : m_name( name ), m_children( new TagList() ), m_parent( parent ), m_type( StanzaUndefined )
+    : m_name( name ), m_children( new TagList() ), m_parent( parent ), m_attribs( new AttributeList() ),
+      m_type( StanzaUndefined )
   {
     if( m_parent )
       m_parent->addChild( this );
@@ -60,6 +62,13 @@ namespace gloox
 
   Tag::~Tag()
   {
+    AttributeList::iterator at = m_attribs->begin();
+    for( ; at != m_attribs->end(); ++at )
+    {
+      delete (*at);
+    }
+    delete m_attribs;
+
     TagList::iterator it = m_children->begin();
     for( ; it != m_children->end(); ++it )
     {
@@ -71,8 +80,8 @@ namespace gloox
 
   bool Tag::operator==( const Tag &right ) const
   {
-    if( m_name != right.m_name || m_attribs != right.m_attribs
-         || m_children->size() != right.m_children->size() )
+    if( m_name != right.m_name ||
+        m_xmlns != right.m_xmlns || m_children->size() != right.m_children->size() )
       return false;
 
     TagList::const_iterator it = m_children->begin();
@@ -82,22 +91,32 @@ namespace gloox
       ++it;
       ++it_r;
     }
-    return it == m_children->end();
+    if( it != m_children->end() )
+      return false;
+
+    AttributeList::const_iterator at = m_attribs->begin();
+    AttributeList::const_iterator at_r = right.m_attribs->begin();
+    while( at != m_attribs->end() && at_r != right.m_attribs->end() && *(*at) == *(*at_r) )
+    {
+      ++at;
+      ++at_r;
+    }
+    return at == m_attribs->end();
   }
 
   const std::string Tag::xml() const
   {
     std::string xml = "<";
     xml += escape( m_name );
-    if( !m_attribs.empty() )
+    if( !m_attribs->empty() )
     {
-      AttributeList::const_iterator it_a = m_attribs.begin();
-      for( ; it_a != m_attribs.end(); ++it_a )
+      AttributeList::const_iterator it_a = m_attribs->begin();
+      for( ; it_a != m_attribs->end(); ++it_a )
       {
         xml += " ";
-        xml += escape( (*it_a).first );
+        xml += escape( (*it_a)->name() );
         xml += "='";
-        xml += escape( (*it_a).second );
+        xml += escape( (*it_a)->value() );
         xml += "'";
       }
     }
@@ -162,17 +181,17 @@ namespace gloox
     if( name.empty() || value.empty() )
       return;
 
-    AttributeList::iterator it = m_attribs.begin();
-    for( ; it != m_attribs.end(); ++it )
+    AttributeList::iterator it = m_attribs->begin();
+    for( ; it != m_attribs->end(); ++it )
     {
-      if( (*it).first == name )
+      if( (*it)->name() == name )
       {
-        (*it).second = value;
+        (*it)->setValue( value );
         return;
       }
     }
 
-    m_attribs.push_back( Attribute( name, value ) );
+    m_attribs->push_back( new Attribute( name, value ) );
   }
 
   void Tag::addAttribute( const std::string& name, int value )
@@ -213,6 +232,18 @@ namespace gloox
     }
   }
 
+  void Tag::setAttributes( const AttributeList& attributes )
+  {
+    AttributeList::iterator it = m_attribs->begin();
+    for( ; it != m_attribs->end(); ++it )
+    {
+      delete (*it);
+    }
+    delete m_attribs;
+
+    m_attribs = new AttributeList( attributes );
+  }
+
   void Tag::addChild( Tag *child )
   {
     if( child )
@@ -234,10 +265,10 @@ namespace gloox
 
   const std::string Tag::findAttribute( const std::string& name ) const
   {
-    AttributeList::const_iterator it = m_attribs.begin();
-    for( ; it != m_attribs.end(); ++it )
-      if( (*it).first == name )
-        return (*it).second;
+    AttributeList::const_iterator it = m_attribs->begin();
+    for( ; it != m_attribs->end(); ++it )
+      if( (*it)->name() == name )
+        return (*it)->value();
 
     return std::string();
   }
@@ -247,9 +278,9 @@ namespace gloox
     if( name.empty() )
       return true;
 
-    AttributeList::const_iterator it = m_attribs.begin();
-    for( ; it != m_attribs.end(); ++it )
-      if( (*it).first == name && ( value.empty() || (*it).second == value ) )
+    AttributeList::const_iterator it = m_attribs->begin();
+    for( ; it != m_attribs->end(); ++it )
+      if( (*it)->name() == name && ( value.empty() || (*it)->value() == value ) )
         return true;
 
     return false;
@@ -295,8 +326,14 @@ namespace gloox
   Tag* Tag::clone() const
   {
     Tag *t = new Tag( 0, name(), cdata() );
-    t->m_attribs = m_attribs;
     t->m_type = m_type;
+    t->m_xmlns = m_xmlns;
+
+    Tag::AttributeList::const_iterator at = m_attribs->begin();
+    for( ; at != m_attribs->end(); ++at )
+    {
+      t->m_attribs->push_back( new Attribute( (*at)->name(), (*at)->value(), (*at)->xmlns() ) );
+    }
 
     Tag::TagList::const_iterator it = m_children->begin();
     for( ; it != m_children->end(); ++it )
@@ -326,6 +363,16 @@ namespace gloox
 
   void Tag::ripoff( Tag *tag )
   {
+    AttributeList::iterator at = m_attribs->begin();
+    for( ; at != m_attribs->end(); ++at )
+      delete (*at);
+    delete m_attribs;
+    m_attribs = tag->m_attribs;
+    tag->m_attribs = new AttributeList();
+
+    TagList::iterator it = m_children->begin();
+    for( ; it != m_children->end(); ++it )
+      delete (*it);
     delete m_children;
     m_children = tag->m_children;
     tag->m_children = new TagList();
@@ -524,7 +571,7 @@ namespace gloox
     switch( tokenType )
     {
       case XTAttribute:
-        if( token->name() == "*" && m_attribs.size() )
+        if( token->name() == "*" && m_attribs->size() )
           result = true;
         else
           result = hasAttribute( token->name() );

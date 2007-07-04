@@ -358,7 +358,7 @@ namespace gloox
   void Parser::addAttribute()
   {
 //     printf( "adding attribute: %s='%s', ", m_attrib.c_str(), m_value.c_str() );
-    m_attribs.push_back( Tag::Attribute( relax( m_attrib ), relax( m_value ) ) );
+    m_attribs.push_back( new Tag::Attribute( relax( m_attrib ), relax( m_value ) ) );
     m_attrib = "";
     m_value = "";
 //     printf( "added, " );
@@ -408,6 +408,9 @@ namespace gloox
     m_tag = "";
     m_attrib = "";
     m_value = "";
+    Tag::AttributeList::iterator at = m_attribs.begin();
+    for( ; at != m_attribs.end(); ++at )
+      delete (*at);
     m_attribs.clear();
     m_state = Initial;
     m_preamble = 0;
