@@ -53,13 +53,13 @@ namespace gloox
         const Tag * child = (*it)->findChild( "FAMILY" );
         if( child )
           m_name.family = child->cdata();
-        if( child = (*it)->findChild( "GIVEN" ) )
+        if( ( child = (*it)->findChild( "GIVEN" ) ) )
           m_name.given = child->cdata();
-        if( child = (*it)->findChild( "MIDDLE" ) )
+        if( ( child = (*it)->findChild( "MIDDLE" ) ) )
           m_name.middle = child->cdata();
-        if( child = (*it)->findChild( "PREFIX" ) )
+        if( ( child = (*it)->findChild( "PREFIX" ) ) )
           m_name.prefix = child->cdata();
-        if( child = (*it)->findChild( "SUFFIX" ) )
+        if( ( child = (*it)->findChild( "SUFFIX" ) ) )
           m_name.suffix = child->cdata();
       }
       else if( (*it)->name() == "PHOTO" )
