@@ -19,6 +19,7 @@
 #include "disco.h"
 #include "connectionbase.h"
 #include "sha.h"
+#include "util.h"
 
 #include <cstdlib>
 
@@ -37,12 +38,7 @@ namespace gloox
     if( m_parent )
       m_parent->removeIqHandler( XMLNS_BYTESTREAMS );
 
-    S5BMap::iterator it = m_s5bMap.begin();
-    for( ; it != m_s5bMap.end(); ++it )
-    {
-      delete (*it).second;
-      (*it).second = 0;
-    }
+    util::clear( m_s5bMap );
   }
 
   void SOCKS5BytestreamManager::addStreamHost( const JID& jid, const std::string& host, int port )

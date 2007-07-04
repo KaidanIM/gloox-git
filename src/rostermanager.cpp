@@ -17,6 +17,7 @@
 #include "rosteritem.h"
 #include "rosterlistener.h"
 #include "privatexml.h"
+#include "util.h"
 
 
 namespace gloox
@@ -48,10 +49,7 @@ namespace gloox
       delete m_privateXML;
     }
 
-    Roster::iterator it = m_roster.begin();
-    for( ; it != m_roster.end(); ++it )
-      delete (*it).second;
-    m_roster.clear();
+    util::clear( m_roster );
   }
 
   Roster* RosterManager::roster()

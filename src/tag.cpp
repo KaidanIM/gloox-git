@@ -22,6 +22,7 @@
 #endif
 
 #include <algorithm>
+#include "util.h"
 
 namespace gloox
 {
@@ -62,18 +63,9 @@ namespace gloox
 
   Tag::~Tag()
   {
-    AttributeList::iterator at = m_attribs->begin();
-    for( ; at != m_attribs->end(); ++at )
-    {
-      delete (*at);
-    }
+    util::clear( *m_attribs );
+    util::clear( *m_children );
     delete m_attribs;
-
-    TagList::iterator it = m_children->begin();
-    for( ; it != m_children->end(); ++it )
-    {
-      delete (*it);
-    }
     delete m_children;
     m_parent = 0;
   }

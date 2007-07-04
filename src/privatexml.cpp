@@ -29,7 +29,6 @@ namespace gloox
   {
     if( m_parent )
       m_parent->removeIqHandler( XMLNS_PRIVATE_XML );
-
   }
 
   std::string PrivateXML::requestXML( const std::string& tag, const std::string& xmlns,

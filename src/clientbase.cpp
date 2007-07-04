@@ -45,6 +45,7 @@
 #include "jid.h"
 #include "base64.h"
 #include "md5.h"
+#include "util.h"
 #include "tlsdefault.h"
 #include "compressionzlib.h"
 
@@ -117,9 +118,7 @@ namespace gloox
     delete m_parser;
     delete m_disco;
 
-    MessageSessionList::const_iterator it = m_messageSessions.begin();
-    for( ; it != m_messageSessions.end(); ++it )
-      delete (*it);
+    util::clear( m_messageSessions );
 
     PresenceJidHandlerList::const_iterator it1 = m_presenceJidHandlers.begin();
     for( ; it1 != m_presenceJidHandlers.end(); ++it1 )

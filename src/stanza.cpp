@@ -13,6 +13,7 @@
 
 #include "stanza.h"
 #include "jid.h"
+#include "util.h"
 #include "stanzaextension.h"
 #include "stanzaextensionfactory.h"
 
@@ -63,11 +64,7 @@ namespace gloox
 
   Stanza::~Stanza()
   {
-    StanzaExtensionList::iterator it = m_extensionList.begin();
-    for( ; it != m_extensionList.end(); ++it )
-    {
-      delete (*it);
-    }
+    util::clear( m_extensionList );
   }
 
 //   void Stanza::init()

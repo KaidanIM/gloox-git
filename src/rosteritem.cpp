@@ -13,6 +13,7 @@
 
 
 #include "rosteritem.h"
+#include "util.h"
 
 namespace gloox
 {
@@ -24,12 +25,7 @@ namespace gloox
 
   RosterItem::~RosterItem()
   {
-    ResourceMap::iterator it = m_resources.begin();
-    for( ; it != m_resources.end(); ++it )
-    {
-      delete (*it).second;
-      (*it).second = 0;
-    }
+    util::clear( m_resources );
   }
 
   void RosterItem::setName( const std::string& name )
