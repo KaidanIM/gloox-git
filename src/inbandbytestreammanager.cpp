@@ -16,6 +16,7 @@
 #include "inbandbytestream.h"
 #include "clientbase.h"
 #include "disco.h"
+#include "util.h"
 
 namespace gloox
 {
@@ -39,12 +40,7 @@ namespace gloox
       m_parent->removeIqHandler( XMLNS_IBB );
     }
 
-    IBBMap::iterator it = m_ibbMap.begin();
-    for( ; it != m_ibbMap.end(); ++it )
-    {
-      delete (*it).second;
-      m_ibbMap.erase( it );
-    }
+    util::clear( m_ibbMap );
   }
 
   bool InBandBytestreamManager::requestInBandBytestream( const JID& to, InBandBytestreamHandler *ibbh,

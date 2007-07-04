@@ -18,6 +18,7 @@
 #include "clientbase.h"
 #include "disco.h"
 #include "message.h"
+#include "util.h"
 
 namespace gloox
 {
@@ -32,9 +33,7 @@ namespace gloox
 
   MessageSession::~MessageSession()
   {
-    MessageFilterList::const_iterator it = m_messageFilterList.begin();
-    for( ; it != m_messageFilterList.end(); ++it )
-      delete (*it);
+    util::clear( m_messageFilterList );
   }
 
   void MessageSession::handleMessage( Message* msg )

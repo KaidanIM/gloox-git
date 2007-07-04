@@ -14,6 +14,8 @@
 #define UTIL_H_
 
 #include <string>
+#include <list>
+#include <map>
 #include <math.h>
 
 namespace gloox
@@ -61,6 +63,40 @@ namespace gloox
     {
       long i = log2(code);
       return i < size ? values[i] : 0;
+    }
+
+    /**
+     * Delete all elements from a list of pointers.
+     * @param L List of pointers to delete.
+     */
+    template< typename T >
+    inline void clear( std::list< T* >& L )
+    {
+      typename std::list< T* >::iterator it = L.begin();
+      for( ; it != L.end(); ++it ) delete (*it);
+    }
+
+    /**
+     * Delete all associated values from a map (not the key elements).
+     * @param M Map of pointer values to delete.
+     */
+    template< typename Key, typename T >
+    inline void clear( std::map< Key, T* >& M )
+    {
+      typename std::map< Key, T* >::iterator it = M.begin();
+      for( ; it != M.end(); ++it ) delete (*it).second;
+    }
+
+    /**
+     * Delete all associated values from a map (not the key elements).
+     * Const key type version.
+     * @param M Map of pointer values to delete.
+     */
+    template< typename Key, typename T >
+    inline void clear( std::map< const Key, T* >& M )
+    {
+      typename std::map< const Key, T* >::iterator it = M.begin();
+      for( ; it != M.end(); ++it ) delete (*it).second;
     }
 
   }

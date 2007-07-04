@@ -130,9 +130,7 @@ namespace gloox
 
   AMP::~AMP()
   {
-    RuleList::iterator it = m_rules.begin();
-    for( ; it != m_rules.end() ; ++it )
-      delete (*it);
+    util::clear( m_rules );
   }
 
 }
