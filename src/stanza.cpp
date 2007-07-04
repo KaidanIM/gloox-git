@@ -38,20 +38,21 @@ namespace gloox
       m_stanzaError( StanzaErrorUndefined ), m_stanzaErrorType( StanzaErrorTypeUndefined ),
       m_stanzaErrorAppCondition( 0 ), m_xmllang( "default" )
   {
-    m_attribs = tag->attributes();
-
     if( rip )
     {
       ripoff( tag );
     }
     else
     {
+      const Tag::AttributeList& al = tag->attributes();
+      Tag::AttributeList::const_iterator ia = al.begin();
+      for( ; ia != al.end(); ++ia )
+        m_attribs->push_back( new Tag::Attribute( (*ia)->name(), (*ia)->value(), (*ia)->xmlns() ) );
+
       const Tag::TagList& l = tag->children();
       Tag::TagList::const_iterator it = l.begin();
       for( ; it != l.end(); ++it )
-      {
-        addChild( (*it)->clone() );
-      }
+        m_children->push_back( (*it)->clone() );
     }
 
     m_from.setJID( findAttribute( "from" ) );
