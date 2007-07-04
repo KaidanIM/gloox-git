@@ -24,6 +24,7 @@ namespace gloox
 
   class DataForm;
   class OOB;
+  class JID;
 
   /**
    * Possible results of a XEP-0077 operation.
