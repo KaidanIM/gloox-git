@@ -271,7 +271,7 @@ namespace gloox
     {
       case StanzaErrorForbidden:
       {
-        new Tag( "query", "xmlns", XMLNS_BYTESTREAMS );
+        new Tag( iq, "query", "xmlns", XMLNS_BYTESTREAMS );
         e->addAttribute( "code", "403" );
         e->addAttribute( "type", "auth" );
         Tag *f = new Tag( e, "forbidden" );
@@ -288,7 +288,7 @@ namespace gloox
       }
       case StanzaErrorNotAllowed:
       {
-        new Tag( "query", "xmlns", XMLNS_BYTESTREAMS );
+        new Tag( iq, "query", "xmlns", XMLNS_BYTESTREAMS );
         e->addAttribute( "code", "405" );
         e->addAttribute( "type", "cancel" );
         Tag *f = new Tag( e, "not-allowed" );
