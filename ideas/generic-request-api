@@ -1,0 +1,92 @@
+
+  Abstract: Create a generic API for sending stanzas to avoid the repetitive
+            steps taken when creating and sending requests.
+
+  Note: depends on common-user-handler-base
+
+  == Description ==
+
+    Currently, there's a lot of redundancy in the request code and structures
+    for building, sending and (un)tracking requests.
+
+    If it were possible to agree on a generic API for building, tracking and
+    sending requests, the code complexity would be (somewhat) reduced (as well
+    as the testing effort for outgoing stanzas). This API would need to be
+    flexible enough to handle all (most ?) request types, which is the main
+    drawback (along with the scale of the move).
+
+  == Advantages ==
+
+    - Only write code specific to the request (less LOC).
+      There's no need anymore to :
+        * create the including stanza
+        * track the handler (when there is one)
+        * track context information (info not sent back in the result)
+        * check for m_parent and handler validity
+        * think about IDs
+        * send()
+
+    - Smaller binary.
+
+    - The childTag argument could be created by a private function. This makes
+      testing of outgoing stanzas easier (the user API calls would simply
+      wrap to 'sendIQ( type, context, createNodeSubTag( ... ), ... )').
+
+  == Disadvantages ==
+
+    - Need to get the API simple enough yet flexible (ie see if it's realistic).
+
+  == Example ==
+
+    /**
+     * Tracked informations is 1 or 2 string... could be turned into a
+     * full fledged class if needed too.
+     */
+    typedef std::pair< std::string, std::string > TrackedItem;
+
+    /**
+     * Sends an IQ. The argument list is rather big, but this is probably the worst
+     * case, other versions would have less of them (sendIQ could (should ?) also
+     * be split between a couple helper functions.
+     *
+     * The TrackedItem
+     */
+    Client::sendIQ( IQ::IqType iqType, int context, Tag* childTag,
+                    UserHandler* handler, string service, TrackedItem item );
+    {
+      if( !m_parent || !handler )
+      {
+        delete childTag;
+        return;
+      }
+      const std::string& id = m_parent->getID();
+      IQ* iq = new IQ( iqType, id, parent, ... );
+
+      // generic track map for all infos
+      if( needsInfoTracking )
+        handler::trackInfos( id, item );
+
+      // tracking the handler, not a manager
+      m_parent->trackID( handler, id, context );
+      m_parent->send( iq );
+    }
+
+    /**
+     * Creates the subtag for the createNode() method. Can easily be tested for
+     * correctness (it only test subpart(s) of a stanza, but that should not be
+     * a problem).
+     */
+    Tag* PubSub::createNodeTag( const std::string& node )
+    {
+      return pubsubHeaderTag( new Tag( "create", "node", node ) );
+    }
+
+    /**
+     * This is the request as available from the user API which simply calls
+     * sendIQ with the created subtag.
+     */
+    void createNode( const std::string& service, const std::string& node, ... )
+    {
+      sendIQ( IQ::Set, NodeCreation, createNodeTag( node ), handler,
+                   service, TrackedItem( node ) );
+    }
