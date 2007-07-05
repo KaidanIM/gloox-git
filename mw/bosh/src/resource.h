@@ -22,7 +22,7 @@ namespace gloox
   /**
     * @brief Holds resource attributes.
     *
-    * This holds the information of one single resource of a contact that is online.
+    * This holds the information of a single resource of a contact that is online.
     *
     * @author Jakob Schroeter <js@caaya.net>
     * @since 0.8

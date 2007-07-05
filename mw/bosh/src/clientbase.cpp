@@ -49,6 +49,7 @@
 #include <string>
 #include <map>
 #include <list>
+#include <algorithm>
 
 #ifndef _WIN32_WCE
 # include <sstream>
@@ -335,25 +336,29 @@ namespace gloox
 
   void ClientBase::disconnect( ConnectionError reason )
   {
-    if( m_connection && m_connection->state() == StateConnected )
+    if( m_connection && m_connection->state() >= StateConnecting )
     {
-      send( "</stream:stream>" );
+      if( reason != ConnTlsFailed )
+        send( "</stream:stream>" );
+
       m_connection->disconnect();
       m_connection->cleanup();
+
+      if( m_encryption )
+        m_encryption->cleanup();
+
+      m_encryptionActive = false;
+      m_compressionActive = false;
+
+      notifyOnDisconnect( reason );
     }
-
-    if( m_encryption )
-      m_encryption->cleanup();
-
-    m_encryptionActive = false;
-    m_compressionActive = false;
-    notifyOnDisconnect( reason );
   }
 
   void ClientBase::parse( const std::string& data )
   {
     if( m_parser && !m_parser->feed( data ) )
     {
+      m_logInstance.log( LogLevelError, LogAreaClassClientbase, "parse error: " + data );
       disconnect( ConnParseError );
     }
   }
@@ -925,7 +930,8 @@ namespace gloox
     if( !session )
       return;
 
-    MessageSessionList::iterator it = std::find( m_messageSessions.begin(), m_messageSessions.end(), session );
+    MessageSessionList::iterator it = std::find( m_messageSessions.begin(), m_messageSessions.end(),
+                                                 session );
     if( it != m_messageSessions.end() )
     {
       delete (*it);
@@ -1134,8 +1140,8 @@ namespace gloox
       iq->addAttribute( "type", "error" );
       iq->addAttribute( "id", stanza->id() );
       iq->addAttribute( "to", stanza->from().full() );
-      Tag *e = new Tag( iq, "error", "type", "cancel" );
-      new Tag( e, "feature-not-implemented", "xmlns", XMLNS_XMPP_STANZAS );
+      Tag *e = new Tag( iq, "error", "type", "cancel", false );
+      new Tag( e, "service-unavailable", "xmlns", XMLNS_XMPP_STANZAS );
       send( iq );
     }
   }
@@ -1187,7 +1193,7 @@ namespace gloox
       }
     }
 
-    MessageSessionHandler * msHandler = 0;
+    MessageSessionHandler *msHandler = 0;
 
     switch( stanza->subtype() )
     {

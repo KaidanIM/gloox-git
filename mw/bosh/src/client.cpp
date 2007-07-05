@@ -390,6 +390,7 @@ namespace gloox
 
   void Client::createSession()
   {
+    notifyStreamEvent( StreamEventSessionCreation );
     Tag *iq = new Tag( "iq" );
     iq->addAttribute( "type", "set" );
     iq->addAttribute( "id", "session" );

@@ -92,6 +92,8 @@ namespace gloox
    * @note Currently, this implementation lacks support for the following fields:
    * AGENT, CATEGORIES, SOUND, KEY
    *
+   * When cleaning up, delete your VCardManager instance @b before deleting the Client/ClientBase instance.
+   *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.8
    */

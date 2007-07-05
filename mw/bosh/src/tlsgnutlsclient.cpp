@@ -125,10 +125,9 @@ namespace gloox
     gnutls_x509_crt_t *cert = new gnutls_x509_crt_t[certListSize+1];
     for( unsigned int i=0; !error && ( i<certListSize ); ++i )
     {
-      if( !error && ( gnutls_x509_crt_init( &cert[i] ) < 0 ) )
-        error = true;
-      if( !error && ( gnutls_x509_crt_import( cert[i], &certList[i], GNUTLS_X509_FMT_DER ) < 0 ) )
-        error = true;
+      if( !error && ( gnutls_x509_crt_init( &cert[i] ) < 0 
+                   || gnutls_x509_crt_import( cert[i], &certList[i], GNUTLS_X509_FMT_DER ) < 0 ) )
+          error = true;
     }
 
     if( ( gnutls_x509_crt_check_issuer( cert[certListSize-1], cert[certListSize-1] ) > 0 )
@@ -197,36 +196,25 @@ namespace gloox
     m_valid = true;
   }
 
+  static bool verifyCert( gnutls_x509_crt_t cert, unsigned result )
+  {
+    return ! ( ( result & GNUTLS_CERT_INVALID )
+      || gnutls_x509_crt_get_expiration_time( cert ) < time( 0 )
+      || gnutls_x509_crt_get_activation_time( cert ) > time( 0 ) );
+  }
+
   bool GnuTLSClient::verifyAgainst( gnutls_x509_crt_t cert, gnutls_x509_crt_t issuer )
   {
     unsigned int result;
     gnutls_x509_crt_verify( cert, &issuer, 1, 0, &result );
-    if( result & GNUTLS_CERT_INVALID )
-      return false;
-
-    if( gnutls_x509_crt_get_expiration_time( cert ) < time( 0 ) )
-      return false;
-
-    if( gnutls_x509_crt_get_activation_time( cert ) > time( 0 ) )
-      return false;
-
-    return true;
+    return verifyCert( cert, result );
   }
 
   bool GnuTLSClient::verifyAgainstCAs( gnutls_x509_crt_t cert, gnutls_x509_crt_t *CAList, int CAListSize )
   {
     unsigned int result;
     gnutls_x509_crt_verify( cert, CAList, CAListSize, GNUTLS_VERIFY_ALLOW_X509_V1_CA_CRT, &result );
-    if( result & GNUTLS_CERT_INVALID )
-      return false;
-
-    if( gnutls_x509_crt_get_expiration_time( cert ) < time( 0 ) )
-      return false;
-
-    if( gnutls_x509_crt_get_activation_time( cert ) > time( 0 ) )
-      return false;
-
-    return true;
+    return verifyCert( cert, result );
   }
 
 }

@@ -154,7 +154,8 @@ namespace gloox
           pushFunc();
           break;
         default:
-          m_handler->handleHandshakeResult( this, false, m_certInfo );
+          if( !m_secure )
+            m_handler->handleHandshakeResult( this, false, m_certInfo );
           return;
           break;
       }

@@ -252,6 +252,24 @@ int main( int /*argc*/, char** /*argv*/ )
     printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
   }
 
+  //-------
+  name = "attribute order";
+  c = new Tag( "abc" );
+  c->addAttribute( "abc", "def" );
+  c->addAttribute( "xyz", "123" );
+  d = c->clone();
+  if( c->xml() != d->xml() )
+  {
+    ++fail;
+    printf( "test '%s' failed: %s\n", name.c_str(), d->xml().c_str() );
+  }
+  delete c;
+  c = 0;
+  delete d;
+  d = 0;
+
+
+
 
 
 

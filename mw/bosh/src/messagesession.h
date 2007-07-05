@@ -72,7 +72,9 @@ namespace gloox
    * @code
    * virtual void MyClass::handleMessageSession( MessageSession *session )
    * {
-   *   // this leaks heavily if there was an earlier session
+   *   // for this example only, we delete any earlier session
+   *   if( m_session )
+   *     j->disposeMessageSession( m_session );
    *   m_session = session;
    *   m_session->registerMessageHandler( this );
    *
@@ -170,13 +172,13 @@ namespace gloox
       /**
        * Virtual destructor.
        *
-       * @note This destructor de-registers with the ClientBase provided to the constructor. So make
-       * sure you have it still around when you delete your last MessageSession.
+       * @note You should never delete a MessageSession manually. Use ClientBase::disposeMessageSession()
+       * instead.
        */
       virtual ~MessageSession();
 
       /**
-       * Use this function to find out where is this session points at.
+       * Use this function to find out where this session points at.
        * @return The receipient's JID.
        */
       const JID& target() const { return m_target; }

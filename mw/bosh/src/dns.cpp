@@ -185,7 +185,7 @@ namespace gloox
   }
 
 #else
-  DNS::HostMap DNS::resolve( const std::string& service, const std::string& proto,
+  DNS::HostMap DNS::resolve( const std::string& /*service*/, const std::string& /*proto*/,
                              const std::string& domain, const LogSink& logInstance )
   {
     logInstance.log( LogLevelWarning, LogAreaClassDns,
@@ -198,7 +198,8 @@ namespace gloox
   {
     HostMap server;
 
-    logInstance.log( LogLevelWarning, LogAreaClassDns, "notice: using default port." );
+    logInstance.log( LogLevelWarning, LogAreaClassDns, "notice: no SRV record found for " + domain
+                                                       + ", using default port." );
 
     if( !domain.empty() )
       server[domain] = XMPP_PORT;

@@ -21,6 +21,8 @@
 # include <sstream>
 #endif
 
+#include <algorithm>
+
 namespace gloox
 {
   Tag::Tag()
@@ -928,28 +930,10 @@ namespace gloox
 
   void Tag::add( Tag::TagList& one, const Tag::TagList& two )
   {
-    bool doit = true;
     Tag::TagList::const_iterator it = two.begin();
     for( ; it != two.end(); ++it )
-    {
-      Tag::TagList::const_iterator it2 = one.begin();
-      for( ; it2 != one.end(); ++it2 )
-      {
-        if( (*it2) == (*it) )
-        {
-          doit = false;
-//           printf( "found %s in existing set\n", (*it2)->name().c_str() );
-          break;
-        }
-        else
-          doit = true;
-      }
-      if( doit )
-      {
-//         printf( "seriously add()ing %s\n", (*it)->name().c_str() );
+      if( std::find( one.begin(), one.end(), (*it) ) == one.end() )
         one.push_back( (*it) );
-      }
-    }
   }
 
 }

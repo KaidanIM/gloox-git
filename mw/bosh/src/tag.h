@@ -126,7 +126,7 @@ namespace gloox
       virtual void addAttribute( const std::string& name, int value );
 
       /**
-       * Use this function to add a new attribute to the tag. The value is an @c long here.
+       * Use this function to add a new attribute to the tag. The value is a @c long here.
        * @param name The name of the attribute.
        * @param value The value of the attribute.
        * @since 0.9
