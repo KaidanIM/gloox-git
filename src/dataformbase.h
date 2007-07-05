@@ -54,7 +54,7 @@ namespace gloox
        * @return Whether or not the form contains the named field.
        */
       bool hasField( const std::string& field )
-        { return DataFormBase::field( field ); }
+        { return DataFormBase::field( field ) != 0; }
 
       /**
        * Use this function to fetch a pointer to a field of the form. If no such field exists,
