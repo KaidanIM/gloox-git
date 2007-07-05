@@ -195,7 +195,6 @@ namespace gloox
     {
       m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "too many open requests, not sending");
       m_sendBuffer += data;
-      recv();
       return false;
     }
     else
@@ -247,7 +246,7 @@ namespace gloox
     }
     else
     {
-      requestBody << ">" << data << "</body>";
+      requestBody << ">" << m_sendBuffer << data << "</body>";
     }
     
     m_sendBuffer = "";
@@ -292,7 +291,7 @@ namespace gloox
     if(m_bufferHeader.empty()) // HTTP header not received yet?
     {
       std::string::size_type headerLength = m_buffer.find("\r\n\r\n", 0);
-      if(headerLength != std::string::npos) 
+      if(headerLength != std::string::npos) // We have a full header in the buffer?
       {
         m_bufferHeader = m_buffer.substr(0, headerLength);
         printf("\n--------------\nHTTP header is:\n%s\n---------------\n", m_bufferHeader.c_str());
@@ -306,10 +305,12 @@ namespace gloox
       printf("Response length is %d but I think it is at least %d\n", m_buffer.length(), m_bufferContentLength);
       m_openRequests--;
       printf("Decrementing m_openRequests to %d\n", m_openRequests);
+      printf("\n-----------FULL RESPONSE BUFFER---------------\n%s\n---------------END-------------\n", m_buffer.c_str());
       handleXMLData(connection, m_buffer.substr(0, m_bufferContentLength));
-      m_buffer = m_buffer.substr(m_bufferContentLength); // Remove the handled response from the buffer, and reset variables for reuse
+      m_buffer = m_buffer.erase(0, m_bufferContentLength); // Remove the handled response from the buffer, and reset variables for reuse
       m_bufferContentLength = -1;
       m_bufferHeader = "";
+      printf("\n-----------FULL RESPONSE BUFFER (after handling)---------------\n%s\n---------------END-------------\n", m_buffer.c_str());
       handleReceivedData(connection, ""); // In case there are more full responses in the buffer
     }
   }
@@ -432,7 +433,10 @@ namespace gloox
       { 
         printf("(*i) is %p, m_handler is %p\n", *i, m_handler);
         if(m_handler && *i)
+        {
+          printf("\n\nSending to gloox: %s\n", (*i)->xml().c_str());
           m_handler->handleReceivedData(this, (*i)->xml());
+        }
       };
      }
   }
