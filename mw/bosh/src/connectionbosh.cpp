@@ -108,10 +108,43 @@ namespace gloox
 
   void ConnectionBOSH::disconnect()
   {
-    m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh disconnected from server" );
     m_state = StateDisconnected;
-    if( m_connection )
-       m_connection->disconnect();
+    
+    if(!m_connection)
+      return;
+    
+    std::ostringstream connrequest;
+    std::ostringstream requestBody;
+    
+    m_rid++;
+    
+    requestBody << "<body ";
+    requestBody << "rid='" << m_rid << "' ";
+    requestBody << "sid='" << m_sid << "' ";
+    requestBody << "type='terminal' ";
+    requestBody << "xml:lang='en' ";
+    requestBody << "xmlns='http://jabber.org/protocol/httpbind'";
+    if(m_sendBuffer.empty()) // Make sure that any data in the send buffer gets sent
+      requestBody << "/>";
+    else
+    {
+      requestBody << ">" << m_sendBuffer << "</body>";
+      m_sendBuffer = "";
+    }
+    
+    connrequest << "POST " << m_path << " HTTP/1.1\r\n";
+    connrequest << "Host: " << m_boshHost << "\r\n";
+    connrequest << "Content-Type: text/xml; charset=utf-8\r\n";
+    connrequest << "Content-Length: " << requestBody.str().length() << "\r\n\r\n";
+    connrequest << requestBody.str() << "\r\n";
+    
+    m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh disconnection request sent" );
+    m_openRequests++;
+    printf("Incrementing m_openRequests to %d\n", m_openRequests);
+    m_connection->send(connrequest.str()); 
+    m_connection->disconnect();
+    if(m_handler)
+      m_handler->handleDisconnect(this, ConnUserDisconnected);
   }
 
   ConnectionError ConnectionBOSH::recv( int timeout )
@@ -139,6 +172,7 @@ namespace gloox
   std::string ConnectionBOSH::GetHTTPField(const std::string& field)
   {
     int fieldpos = m_bufferHeader.find("\r\n" + field + ": ") + field.length() + 4;
+    printf("\nHTTP buffer says: %s\n\n\n", m_bufferHeader.c_str());
     return m_bufferHeader.substr(fieldpos, m_bufferHeader.find("\r\n", fieldpos));
   }
 
@@ -152,7 +186,7 @@ namespace gloox
 
   bool ConnectionBOSH::send( const std::string& data )
   {
-    if( !m_connection )
+    if( !m_connection  || m_state == StateDisconnected)
       return false;
     
     printf("\nTold to send: %s\n", data.c_str());
@@ -161,6 +195,7 @@ namespace gloox
     {
       m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "too many open requests, not sending");
       m_sendBuffer += data;
+      recv();
       return false;
     }
     else
@@ -168,21 +203,18 @@ namespace gloox
       printf("m_openRequests == %d\n", m_openRequests);
     }
     
-    if(data.empty() && (time(NULL) - m_lastRequestTime) < m_minTimePerRequest && m_openRequests > 0)
+    if(data.empty())
     {
-      m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "too little time between requests, not sending");
-      m_sendBuffer += data;
-      return false;
+      if((time(NULL) - m_lastRequestTime) < m_minTimePerRequest && m_openRequests > 0)
+      {
+        m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "too little time between requests, not sending");
+        return false;
+      }
+      printf("\n>>>>> %d seconds since last empty request <<<<<\n", time(NULL) - m_lastRequestTime);
+      m_lastRequestTime = time(NULL);
+      m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "sending empty request");
     }
-    else
-    {
-      printf("\n %d seconds since last request\n", time(NULL) - m_lastRequestTime);
-    }
-    
-    std::ostringstream request;
-    std::ostringstream requestBody;
-    
-    if(data.substr(0,2) == "<?")
+    else if(data.substr(0,2) == "<?")
     {
         if(m_initialStreamSent)
         {
@@ -198,6 +230,9 @@ namespace gloox
     else if(data == "</stream:stream>")
       return true;
 
+    std::ostringstream request;
+    std::ostringstream requestBody;
+    
     m_rid++;
     
     requestBody << "<body ";
@@ -222,11 +257,7 @@ namespace gloox
     request << "Content-Type: text/xml; charset=utf-8\r\n";
     request << "Content-Length: " << requestBody.str().length() << "\r\n\r\n";
     request << requestBody.str() << "\r\n";
-
     
-    m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh sent:\n" + request.str() +"\n");
-    
-    m_lastRequestTime = time(NULL);
     m_openRequests++;
     printf("Incrementing m_openRequests to %d\n", m_openRequests);
     
@@ -264,20 +295,22 @@ namespace gloox
       if(headerLength != std::string::npos) 
       {
         m_bufferHeader = m_buffer.substr(0, headerLength);
-        m_buffer = m_buffer.substr(headerLength + 4); // Remove header from m_buffer
+        printf("\n--------------\nHTTP header is:\n%s\n---------------\n", m_bufferHeader.c_str());
+        m_buffer = m_buffer.substr(headerLength + 4); // Remove header from m_buffer, and \r\n\r\n
         m_bufferContentLength = atol(GetHTTPField("Content-Length").c_str());
       }
     }
     
-    if(m_buffer.length() >= m_bufferContentLength) // We have at least one full response
+    if(m_buffer.length() >= m_bufferContentLength && !m_buffer.empty()) // We have at least one full response
     {
+      printf("Response length is %d but I think it is at least %d\n", m_buffer.length(), m_bufferContentLength);
       m_openRequests--;
       printf("Decrementing m_openRequests to %d\n", m_openRequests);
       handleXMLData(connection, m_buffer.substr(0, m_bufferContentLength));
       m_buffer = m_buffer.substr(m_bufferContentLength); // Remove the handled response from the buffer, and reset variables for reuse
       m_bufferContentLength = -1;
       m_bufferHeader = "";
-      //handleReceivedData(connection, ""); // In case there are more full responses in the buffer
+      handleReceivedData(connection, ""); // In case there are more full responses in the buffer
     }
   }
   
@@ -304,6 +337,7 @@ namespace gloox
     requestBody.addAttribute("wait", m_wait);
     requestBody.addAttribute("ack", 0);
     requestBody.addAttribute("secure", "false");
+    requestBody.addAttribute("route", "xmpp:"+m_server+":5222");
     requestBody.addAttribute("xml:lang", "en");
     requestBody.addAttribute("xmpp:version", "1.0");
     requestBody.addAttribute("xmlns", "http://jabber.org/protocol/httpbind");
@@ -396,7 +430,9 @@ namespace gloox
       Tag::TagList::const_iterator i;
       for(i = stanzas.begin(); i != stanzas.end(); i++)
       { 
-        m_handler->handleReceivedData(this, (*i)->xml());
+        printf("(*i) is %p, m_handler is %p\n", *i, m_handler);
+        if(m_handler && *i)
+          m_handler->handleReceivedData(this, (*i)->xml());
       };
      }
   }

@@ -176,7 +176,22 @@ class MessageTest : public MessageSessionHandler, ConnectionListener, LogHandler
 
     virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
     {
-      printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
+	printf("%d: ", time(NULL));
+	switch(area)
+	{
+          case LogAreaXmlIncoming:
+           printf("Received XML: ");
+	   break;
+	  case LogAreaXmlOutgoing:
+	   printf("Sent XML: ");
+	   break;
+	  case LogAreaClassConnectionBOSH:
+	   printf("BOSH: ");
+	   break;
+	  default:
+           printf("log: level: %d, area: %d, ", level, area);
+	}
+      printf("%s\n", message.c_str() );
     }
 
   private:
