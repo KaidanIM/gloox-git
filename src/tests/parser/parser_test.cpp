@@ -1,5 +1,6 @@
 #include "../../parser.h"
 #include "../../taghandler.h"
+#include "../../util.h"
 using namespace gloox;
 
 #include <stdio.h>
@@ -9,12 +10,17 @@ using namespace gloox;
 class ParserTest : private TagHandler
 {
   public:
-    ParserTest() : m_tag( 0 ) {}
+    ParserTest() : m_tag( 0 ), m_multiple( false ) {}
     virtual ~ParserTest() {}
 
     virtual void handleTag( Tag *tag )
     {
-      m_tag = tag->clone();
+      if( m_multiple )
+      {
+        m_tags.push_back( tag->clone() );
+      }
+      else
+        m_tag = tag->clone();
     }
 
     int run()
@@ -251,13 +257,25 @@ class ParserTest : private TagHandler
       m_tag = 0;
 
       // -------
-      name = "mixed content";
+      name = "mixed content 1";
       data = "<tag1>cdata1<tag2>cdata2</tag2>cdata3</tag1>";
       p->feed( data );
       if( m_tag == 0 )
       {
         ++fail;
         printf( "test '%s: %s' failed\n", name.c_str(), data.c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      // -------
+      name = "mixed content 2";
+      data = "<tag1>cdata1<tag2>cdata2</tag2>cdata3</tag1>";
+      p->feed( data );
+      if( m_tag == 0 || m_tag->xml() != data )
+      {
+        ++fail;
+        printf( "test '%s: %s' failed\n", name.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -343,16 +361,28 @@ class ParserTest : private TagHandler
         printf( "test '%s: %s' failed\n", name.c_str(), data.c_str() );
       }
 
-  //-------
-  name = "relax";
-  if ( Parser::relax( "&amp;&lt;&gt;&apos;&quot;&#60;&#62;&#39;&#34;""&#x3c;&#x3e;"
-                   "&#x3C;&#x3E;&#x27;&#x22;&#X3c;&#x3e;&#X3C;&#X3E;&#X27;&#X22;" )
-        != "&<>'\"<>'\"<><>'\"<><>'\"" )
-  {
-    ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
-  }
+      //-------
+      name = "relax";
+      if ( Parser::relax( "&amp;&lt;&gt;&apos;&quot;&#60;&#62;&#39;&#34;""&#x3c;&#x3e;"
+                      "&#x3C;&#x3E;&#x27;&#x22;&#X3c;&#x3e;&#X3C;&#X3E;&#X27;&#X22;" )
+            != "&<>'\"<>'\"<><>'\"<><>'\"" )
+      {
+        ++fail;
+        printf( "test '%s' failed\n", name.c_str() );
+      }
 
+      //-------
+      name = "more than one tag at a time";
+      m_multiple = true;
+      data = "<tag1/><tag2/><tag3/>";
+      int i = -1;
+      if( ( i = p->feed( data ) ) >= 0 || m_tags.size() != 3 )
+      {
+        ++fail;
+        printf( "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
+      }
+      m_multiple = false;
+      util::clear( m_tags );
 
       delete p;
       p = 0;
@@ -372,6 +402,8 @@ class ParserTest : private TagHandler
 
   private:
     Tag *m_tag;
+    Tag::TagList m_tags;
+    bool m_multiple;
 
 };
 

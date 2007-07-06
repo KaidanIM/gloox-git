@@ -26,35 +26,43 @@
 
 namespace gloox
 {
+
   Tag::Tag()
-    : m_children( new TagList() ), m_parent( 0 ), m_attribs( new AttributeList() ), m_type( StanzaUndefined )
+    : m_parent( 0 ), m_children( new TagList() ), m_cdata( new StringPList() ),
+      m_attribs( new AttributeList() ), m_nodes( new NodeList() ), m_type( StanzaUndefined )
   {
   }
 
   Tag::Tag( const std::string& name, const std::string& cdata )
-    : m_name( name ), m_cdata( cdata ), m_children( new TagList() ), m_parent( 0 ),
-      m_attribs( new AttributeList() ), m_type( StanzaUndefined )
+    : m_parent( 0 ), m_children( new TagList() ), m_cdata( new StringPList() ),
+      m_attribs( new AttributeList() ), m_nodes( new NodeList() ),
+      m_type( StanzaUndefined ), m_name( name )
   {
+    addCData( cdata );
   }
 
   Tag::Tag( Tag *parent, const std::string& name, const std::string& cdata )
-    : m_name( name ), m_cdata( cdata ), m_children( new TagList() ), m_parent( parent ),
-      m_attribs( new AttributeList() ), m_type( StanzaUndefined )
+    : m_parent( parent ), m_children( new TagList() ), m_cdata( new StringPList() ),
+      m_attribs( new AttributeList() ), m_nodes( new NodeList() ),
+      m_type( StanzaUndefined ), m_name( name )
   {
     if( m_parent )
       m_parent->addChild( this );
+    addCData( cdata );
   }
 
   Tag::Tag( const std::string& name, const std::string& attrib, const std::string& value )
-    : m_name( name ), m_children( new TagList() ), m_parent( 0 ), m_attribs( new AttributeList() ),
-      m_type( StanzaUndefined )
+    : m_parent( 0 ), m_children( new TagList() ), m_cdata( new StringPList() ),
+      m_attribs( new AttributeList() ), m_nodes( new NodeList() ),
+      m_type( StanzaUndefined ), m_name( name )
   {
     addAttribute( attrib, value );
   }
 
   Tag::Tag( Tag *parent, const std::string& name, const std::string&  attrib, const std::string& value )
-    : m_name( name ), m_children( new TagList() ), m_parent( parent ), m_attribs( new AttributeList() ),
-      m_type( StanzaUndefined )
+    : m_parent( parent ), m_children( new TagList() ), m_cdata( new StringPList() ),
+      m_attribs( new AttributeList() ), m_nodes( new NodeList() ),
+      m_type( StanzaUndefined ), m_name( name )
   {
     if( m_parent )
       m_parent->addChild( this );
@@ -63,10 +71,14 @@ namespace gloox
 
   Tag::~Tag()
   {
+    util::clear( *m_cdata );
     util::clear( *m_attribs );
     util::clear( *m_children );
+    util::clear( *m_nodes );
+    delete m_cdata;
     delete m_attribs;
     delete m_children;
+    delete m_nodes;
     m_parent = 0;
   }
 
@@ -74,6 +86,16 @@ namespace gloox
   {
     if( m_name != right.m_name ||
         m_xmlns != right.m_xmlns || m_children->size() != right.m_children->size() )
+      return false;
+
+    StringPList::const_iterator ct = m_cdata->begin();
+    StringPList::const_iterator ct_r = right.m_cdata->begin();
+    while( ct != m_cdata->end() && ct_r != right.m_cdata->end() && *(*ct) == *(*ct_r) )
+    {
+      ++ct;
+      ++ct_r;
+    }
+    if( ct != m_cdata->end() )
       return false;
 
     TagList::const_iterator it = m_children->begin();
@@ -113,24 +135,24 @@ namespace gloox
       }
     }
 
-    if( m_cdata.empty() && !m_children->size() )
+    if( m_nodes->empty() )
       xml += "/>";
-    else if( m_children->size() )
+    else
     {
       xml += ">";
-      TagList::const_iterator it_c = m_children->begin();
-      for( ; it_c != m_children->end(); ++it_c )
+      NodeList::const_iterator it_n = m_nodes->begin();
+      for( ; it_n != m_nodes->end(); ++it_n )
       {
-        xml += (*it_c)->xml();
+        switch( (*it_n)->type )
+        {
+          case TypeTag:
+            xml += (*it_n)->tag->xml();
+            break;
+          case TypeString:
+            xml += *((*it_n)->str);
+            break;
+        }
       }
-      xml += "</";
-      xml += escape( m_name );
-      xml += ">";
-    }
-    else if( !m_cdata.empty() )
-    {
-      xml += ">";
-      xml += escape( m_cdata );
       xml += "</";
       xml += escape( m_name );
       xml += ">";
@@ -147,7 +169,7 @@ namespace gloox
   "#x3E;", "#x27;", "#x22;", "#X3c;", "#X3e;", "#X3C;", "#X3E;", "#X27;",
   "#X22;" };
 
-  static const unsigned nb_escape = sizeof(escape_chars)/sizeof(char);
+  static const unsigned nb_escape = sizeof( escape_chars )/sizeof( char );
   static const unsigned escape_size = 5;
 
   const std::string Tag::escape( std::string esc )
@@ -191,7 +213,7 @@ namespace gloox
     if( !name.empty() )
     {
 #ifdef _WIN32_WCE
-      const int len = 4 + (int)std::log10( value ) + 1;
+      const int len = 4 + (int)std::log10( value ? 0 : 1 ) + 1;
       char *tmp = new char[len];
       sprintf( tmp, "%d", value );
       std::string ret( tmp, len );
@@ -210,7 +232,7 @@ namespace gloox
     if( !name.empty() )
     {
 #ifdef _WIN32_WCE
-      const int len = 4 + (int)std::log10( value ) + 1;
+      const int len = 4 + (int)std::log10( value ? 0 : 1 ) + 1;
       char *tmp = new char[len];
       sprintf( tmp, "%ld", value );
       std::string ret( tmp, len );
@@ -242,6 +264,7 @@ namespace gloox
     {
       m_children->push_back( child );
       child->m_parent = this;
+      m_nodes->push_back( new Node( TypeTag, child ) );
     }
   }
 
@@ -252,7 +275,50 @@ namespace gloox
       Tag *t = child->clone();
       m_children->push_back( t );
       t->m_parent = this;
+      m_nodes->push_back( new Node( TypeTag, t ) );
     }
+  }
+
+  void Tag::setCData( const std::string& cdata )
+  {
+    if( cdata.empty() )
+      return;
+
+    util::clear( *m_cdata );
+    m_cdata->clear();
+    NodeList::iterator it = m_nodes->begin();
+    NodeList::iterator t = m_nodes->begin();
+    while( it != m_nodes->end() )
+    {
+      if( (*it)->type == TypeString )
+      {
+        t = it;
+        ++it;
+        delete (*t);
+        m_nodes->remove( (*t) );
+      }
+    }
+    addCData( cdata );
+  }
+
+  void Tag::addCData( const std::string& cdata )
+  {
+    if( cdata.empty() )
+      return;
+
+    std::string* str = new std::string( cdata );
+    m_cdata->push_back( str );
+    m_nodes->push_back( new Node( TypeString, str ) );
+  }
+
+  const std::string Tag::cdata() const
+  {
+    std::string str;
+    StringPList::const_iterator it = m_cdata->begin();
+    for( ; it != m_cdata->end(); ++it )
+      str += *(*it);
+
+    return str;
   }
 
   const std::string Tag::findAttribute( const std::string& name ) const
@@ -353,8 +419,35 @@ namespace gloox
     return ret;
   }
 
+  void Tag::removeChild( Tag *tag )
+  {
+    m_children->remove( tag );
+
+    NodeList::iterator it = m_nodes->begin();
+    for( ; it != m_nodes->end(); ++it )
+    {
+      if( (*it)->type == TypeTag && (*it)->tag == tag )
+      {
+        delete (*it);
+        m_nodes->remove( (*it) );
+        return;
+      }
+    }
+  }
+
   void Tag::ripoff( Tag *tag )
   {
+    delete m_nodes;
+    m_nodes = tag->m_nodes;
+    tag->m_nodes = new NodeList();
+
+    StringPList::iterator ct = m_cdata->begin();
+    for( ; ct != m_cdata->end(); ++ct )
+      delete (*ct);
+    delete m_cdata;
+    m_cdata = tag->m_cdata;
+    tag->m_cdata = new StringPList();
+
     AttributeList::iterator at = m_attribs->begin();
     for( ; at != m_attribs->end(); ++at )
       delete (*at);

@@ -209,15 +209,13 @@ namespace gloox
        * Sets the XML character data for this Tag.
        * @param cdata The new cdata.
        */
-      virtual void setCData( const std::string& cdata )
-        { m_cdata = cdata; }
+      virtual void setCData( const std::string& cdata );
 
       /**
        * Adds the string to the existing XML character data for this Tag.
        * @param cdata The additional cdata.
        */
-      virtual void addCData( const std::string& cdata )
-        { m_cdata += cdata; }
+      virtual void addCData( const std::string& cdata );
 
       /**
        * Use this function to retrieve the name of an element.
@@ -229,7 +227,7 @@ namespace gloox
        * Use this function to retrieve the XML character data of an element.
        * @return The cdata the element contains.
        */
-      virtual const std::string& cdata() const { return m_cdata; }
+      virtual const std::string cdata() const;
 
       /**
        * Use this function to manipulate the list of attributes.
@@ -332,10 +330,10 @@ namespace gloox
 
       /**
        * Removes the given Tag from the list of child Tags.
-       * @param tag The Tag to delete from the list of child Tags.
+       * @param tag The Tag to remove from the list of child Tags.
        * @note The Tag @p tag is not deleted.
        */
-      void removeChild( Tag *tag ) { m_children->remove(tag); }
+      void removeChild( Tag *tag );
 
       /**
        * Returns whether the Tag is considered empty, i.e. invalid.
@@ -427,13 +425,37 @@ namespace gloox
         XPUnexpectedToken
       };
 
-      std::string m_name;
-      std::string m_cdata;
-      std::string m_xmlns;
-      TagList* m_children;
+      enum NodeType
+      {
+        TypeTag,
+        TypeString
+      };
+
+      struct Node
+      {
+        Node( NodeType _type, Tag* _tag ) : type( _type ), tag( _tag ) {}
+        Node( NodeType _type, std::string* _str ) : type( _type ), str( _str ) {}
+        ~Node() {}
+
+        NodeType type;
+        union
+        {
+          Tag* tag;
+          std::string* str;
+        };
+      };
+
+      typedef std::list<Node*> NodeList;
+      typedef std::list<std::string*> StringPList;
+
       Tag* m_parent;
+      TagList* m_children;
+      StringPList* m_cdata;
       AttributeList* m_attribs;
+      NodeList* m_nodes;
       StanzaType m_type;
+      std::string m_name;
+      std::string m_xmlns;
 
     private:
       enum TokenType

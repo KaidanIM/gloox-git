@@ -258,6 +258,22 @@ int main( int /*argc*/, char** /*argv*/ )
   delete d;
   d = 0;
 
+  //-------
+  name = "mixed content 1";
+  c = new Tag( "abc" );
+  c->addCData( "cdata1" );
+  new Tag( c, "fgh" );
+  c->addCData( "cdata2" );
+  new Tag( c, "xyz" );
+  c->addCData( "cdata3" );
+  if( c->xml() != "<abc>cdata1<fgh/>cdata2<xyz/>cdata3</abc>" )
+  {
+    ++fail;
+    printf( "test '%s' failed: %s\n", name.c_str(), c->xml().c_str() );
+  }
+  delete c;
+  c = 0;
+
 
 
 
