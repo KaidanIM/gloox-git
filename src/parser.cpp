@@ -14,6 +14,7 @@
 
 #include "gloox.h"
 
+#include "util.h"
 #include "parser.h"
 
 namespace gloox
@@ -327,13 +328,13 @@ namespace gloox
     if( !m_root )
     {
 //       printf( "created Tag named %s, ", m_tag.c_str() );
-      m_root = new Tag( 0, relax( m_tag ), "" );
+      m_root = new Tag( 0, relax( m_tag ) );
       m_current = m_root;
     }
     else
     {
 //       printf( "created Tag named %s, ", m_tag.c_str() );
-      m_current = new Tag( m_current, relax( m_tag ), "" );
+      m_current = new Tag( m_current, relax( m_tag ) );
     }
 
     if( m_attribs.size() )
@@ -408,9 +409,7 @@ namespace gloox
     m_tag = "";
     m_attrib = "";
     m_value = "";
-    Tag::AttributeList::iterator at = m_attribs.begin();
-    for( ; at != m_attribs.end(); ++at )
-      delete (*at);
+    util::clear( m_attribs );
     m_attribs.clear();
     m_state = Initial;
     m_preamble = 0;
