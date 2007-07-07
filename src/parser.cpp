@@ -49,6 +49,7 @@ namespace gloox
       switch( m_state )
       {
         case Initial:
+//           printf( "Initial: %c\n", c );
           m_tag = "";
           if( isWhitespace( c ) )
             break;
@@ -60,12 +61,18 @@ namespace gloox
               break;
             case '>':
             default:
+              if( m_current )
+              {
+                m_cdata += c;
+                m_state = TagInside;
+              }
 //               cleanup();
 //               return i;
               break;
           }
           break;
         case TagOpening:               // opening '<' has been found before
+//           printf( "TagOpening: %c\n", c );
           if( isWhitespace( c ) )
             break;
 
@@ -90,6 +97,7 @@ namespace gloox
           }
           break;
         case TagNameCollect:          // we're collecting the tag's name, we have at least one octet already
+//           printf( "TagNameCollect: %c\n", c );
           if( isWhitespace( c ) )
           {
             m_state = TagNameComplete;
@@ -116,6 +124,7 @@ namespace gloox
           }
           break;
         case TagInside:                // we're inside a tag, expecting a child tag or cdata
+//           printf( "TagInside: %c\n", c );
           m_tag = "";
           switch( c )
           {
@@ -133,6 +142,7 @@ namespace gloox
           }
           break;
         case TagOpeningSlash:         // a slash in an opening tag has been found, initing close of the tag
+//           printf( "TagOpeningSlash: %c\n", c );
           if( isWhitespace( c ) )
             break;
 
@@ -154,6 +164,7 @@ namespace gloox
           }
           break;
         case TagClosingSlash:         // we have found the '/' of a closing tag
+//           printf( "TagClosingSlash: %c\n", c );
           if( isWhitespace( c ) )
             break;
 
@@ -172,6 +183,7 @@ namespace gloox
           }
           break;
         case TagClosing:               // we're collecting the name of a closing tag
+//           printf( "TagClosing: %c\n", c );
           switch( c )
           {
             case '<':
@@ -194,6 +206,7 @@ namespace gloox
           }
           break;
         case TagNameComplete:        // a tag name is complete, expect tag close or attribs
+//           printf( "TagNameComplete: %c\n", c );
           if( isWhitespace( c ) )
             break;
 
@@ -231,6 +244,7 @@ namespace gloox
           }
           break;
         case TagAttribute:                  // we're collecting the name of an attribute, we have at least 1 octet
+//           printf( "TagAttribute: %c\n", c );
           if( isWhitespace( c ) )
           {
             m_state = TagAttributeComplete;
@@ -253,6 +267,7 @@ namespace gloox
           }
           break;
         case TagAttributeComplete:         // we're expecting an equals sign or ws or the attrib value
+//           printf( "TagAttributeComplete: %c\n", c );
           if( isWhitespace( c ) )
             break;
 
@@ -271,6 +286,7 @@ namespace gloox
           }
           break;
         case TagAttributeEqual:            // we have found an equals sign
+//           printf( "TagAttributeEqual: %c\n", c );
           if( isWhitespace( c ) )
             break;
 
@@ -291,6 +307,7 @@ namespace gloox
           }
           break;
         case TagValue:                 // we're expecting value data
+//           printf( "TagValue: %c\n", c );
           switch( c )
           {
             case '<':
@@ -369,8 +386,9 @@ namespace gloox
   {
     if( m_current )
     {
-      m_current->setCData( relax( m_cdata ) );
-//       printf( "added cdata %s, ", m_cdata.c_str() );
+      m_current->addCData( relax( m_cdata ) );
+//       printf( "added cdata %s to %s: %s\n",
+//               m_cdata.c_str(), m_current->name().c_str(), m_current->xml().c_str() );
       m_cdata = "";
     }
   }
@@ -392,7 +410,7 @@ namespace gloox
       m_current = m_current->parent();
     else
     {
-//       printf( "pushing upstream, " );
+//       printf( "pushing upstream\n" );
       streamEvent( m_root );
       cleanup();
     }

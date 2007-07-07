@@ -151,20 +151,6 @@ class ParserTest : private TagHandler
       delete m_tag;
       m_tag = 0;
 
-    //   // -------
-    //   name = "tag w/ cdata and child";
-    //   data = "< tag4 > cdata < tag/ ></tag4>";
-    //   if( c->setTest( p, data ) != Parser::PARSER_BADXML );
-    //   {
-    //     s = c->getLastResult();
-    //     printf( "xml: %s\n", m_tag->xml().c_str() );
-    //     ++fail;
-    //     printf( "test '%s: %s' failed\n", name.c_str(), data.c_str() );
-    //   }
-    //   delete m_tag;
-    //   m_tag = 0;
-
-
       // -------
       name = "simple child + white\tspace";
       data = "<tag1 ><child\t/ >< /  \ttag1>";
@@ -271,6 +257,18 @@ class ParserTest : private TagHandler
       // -------
       name = "mixed content 2";
       data = "<tag1>cdata1<tag2>cdata2</tag2>cdata3</tag1>";
+      p->feed( data );
+      if( m_tag == 0 || m_tag->xml() != data )
+      {
+        ++fail;
+        printf( "test '%s: %s' failed\n", name.c_str(), m_tag->xml().c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      // -------
+      name = "mixed content 3";
+      data = "<tag1>cdata1<tag2/>cdata2<tag3/>cdata3</tag1>";
       p->feed( data );
       if( m_tag == 0 || m_tag->xml() != data )
       {
