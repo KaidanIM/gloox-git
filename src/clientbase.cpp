@@ -352,7 +352,7 @@ namespace gloox
     int i = 0;
     if( m_parser && ( i = m_parser->feed( data ) ) >= 0 )
     {
-      const int len = 4 + (int)std::log10( i == 0 ? 1 : i ) + 1;
+      const int len = 4 + (int)std::log10( i ? i : 1 ) + 1;
       char *tmp = new char[len];
       tmp[len-1] = '\0';
       sprintf( tmp, "%d", i );
