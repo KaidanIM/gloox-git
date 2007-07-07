@@ -353,7 +353,8 @@ class ParserTest : private TagHandler
       // -------
       name = "quote inside cdata";
       data = "<tag1 name='foobar'>cda\"ta3</tag1>";
-      if( p->feed( data ) == -1 )
+      p->feed( data );
+      if( m_tag == 0 )
       {
         ++fail;
         printf( "test '%s: %s' failed\n", name.c_str(), data.c_str() );
