@@ -449,23 +449,17 @@ namespace gloox
     m_nodes = tag->m_nodes;
     tag->m_nodes = new NodeList();
 
-    StringPList::iterator ct = m_cdata->begin();
-    for( ; ct != m_cdata->end(); ++ct )
-      delete (*ct);
+    util::clear( *m_cdata );
     delete m_cdata;
     m_cdata = tag->m_cdata;
     tag->m_cdata = new StringPList();
 
-    AttributeList::iterator at = m_attribs->begin();
-    for( ; at != m_attribs->end(); ++at )
-      delete (*at);
+    util::clear( *m_attribs );
     delete m_attribs;
     m_attribs = tag->m_attribs;
     tag->m_attribs = new AttributeList();
 
-    TagList::iterator it = m_children->begin();
-    for( ; it != m_children->end(); ++it )
-      delete (*it);
+    util::clear( *m_children );
     delete m_children;
     m_children = tag->m_children;
     tag->m_children = new TagList();
