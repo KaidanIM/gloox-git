@@ -62,16 +62,16 @@ namespace gloox
                                      * word of text, which may be shown in an interface. This field type is
                                      * the default and MUST be assumed if an entity receives a field type it
                                      * does not understand.*/
+        FieldTypeNone,              /**< The field is child of either a &lt;reported&gt; or &lt;item&gt;
+                                     * element or has no type attribute. */
         FieldTypeInvalid,           /**< The field is invalid. Only possible if the field was created from
                                      * a Tag not correctly describing a Data Form Field. */
         FieldTypeItem,              /**< The field really is an element of type 'item' which allows for
                                      * addition of sub-fields. See the explanantion in XEP-0004 (Data Forms)
                                      * Section 3.4 for more information */
-        FieldTypeReported,          /**< The field really is an element of type 'reported' which allows for
+        FieldTypeReported           /**< The field really is an element of type 'reported' which allows for
                                      * addition of sub-fields. See the explanantion in XEP-0004 (Data Forms)
                                      * Section 3.4 for more information */
-        FieldTypeNone               /**< The field is child of either a &lt;reported&gt; or &lt;item&gt;
-                                     * element or has no type attribute. */
       };
 
       /**

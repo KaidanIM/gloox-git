@@ -21,7 +21,7 @@ namespace gloox
   static const char * fieldTypeValues[] =
   {
     "boolean", "fixed", "hidden", "jid-multi", "jid-single",
-    "list-multi", "list-single", "text-multi", "text-private", "text-single"
+    "list-multi", "list-single", "text-multi", "text-private", "text-single", ""
   };
 
   DataFormField::DataFormField( DataFormFieldType type )
