@@ -149,7 +149,7 @@ namespace gloox
             xml += (*it_n)->tag->xml();
             break;
           case TypeString:
-            xml += *((*it_n)->str);
+            xml += escape( *((*it_n)->str) );
             break;
         }
       }
