@@ -74,7 +74,8 @@ namespace gloox
                       int priority, const std::string& xmllang, const JID& from )
     : Stanza( "presence", to, from ), m_subtype( type )
   {
-    addAttribute( "type", typeString( type ) );
+    if( type != Available )
+      addAttribute( "type", typeString( type ) );
 
     const std::string& show = showString( type );
     if( !show.empty() )
