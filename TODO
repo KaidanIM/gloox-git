@@ -1,9 +1,12 @@
 Todo
 ----
 
+for 1.0
+- StanzaExtension: SE( Stanza* )
+
+
 - libidn replacement?
 
-- mixed-content XML
 - unit tests (NonSaslAuth)
 - dns, linux, dyndns and 127.0.0.1
 
