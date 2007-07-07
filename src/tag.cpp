@@ -383,7 +383,7 @@ namespace gloox
 
   Tag* Tag::clone() const
   {
-    Tag *t = new Tag( 0, name(), cdata() );
+    Tag *t = new Tag( 0, name() );
     t->m_type = m_type;
     t->m_xmlns = m_xmlns;
 
@@ -393,10 +393,18 @@ namespace gloox
       t->m_attribs->push_back( new Attribute( (*at)->name(), (*at)->value(), (*at)->xmlns() ) );
     }
 
-    Tag::TagList::const_iterator it = m_children->begin();
-    for( ; it != m_children->end(); ++it )
+    Tag::NodeList::const_iterator nt = m_nodes->begin();
+    for( ; nt != m_nodes->end(); ++nt )
     {
-      t->addChild( (*it)->clone() );
+      switch( (*nt)->type )
+      {
+        case TypeTag:
+          t->addChild( (*nt)->tag->clone() );
+          break;
+        case TypeString:
+          t->addCData( *((*nt)->str) );
+          break;
+      }
     }
 
     return t;
