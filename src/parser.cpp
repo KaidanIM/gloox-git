@@ -132,10 +132,13 @@ namespace gloox
               addCData();
               m_state = TagOpening;
               break;
-            case '"':
-              cleanup();
-              return i;
-              break;
+            case '"':   // this is actually a violation of XMPP
+            case '\'':  // this is actually a violation of XMPP
+            case '>':   // this is actually a violation of XMPP
+//               printf( "received literal \"\n" );
+//               cleanup();
+//               return i;
+//               break;
             default:
               m_cdata += c;
               break;
