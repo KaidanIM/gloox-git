@@ -213,7 +213,7 @@ namespace gloox
     if( !name.empty() )
     {
 #ifdef _WIN32_WCE
-      const int len = 4 + (int)std::log10( value ? 0 : 1 ) + 1;
+      const int len = 4 + (int)std::log10( value == 0 ? 1 : value ) + 1;
       char *tmp = new char[len];
       sprintf( tmp, "%d", value );
       std::string ret( tmp, len );
@@ -232,7 +232,7 @@ namespace gloox
     if( !name.empty() )
     {
 #ifdef _WIN32_WCE
-      const int len = 4 + (int)std::log10( value ? 0 : 1 ) + 1;
+      const int len = 4 + (int)std::log10( value == 0 ? 1 : value ) + 1;
       char *tmp = new char[len];
       sprintf( tmp, "%ld", value );
       std::string ret( tmp, len );
