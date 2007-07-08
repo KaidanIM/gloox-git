@@ -13,6 +13,7 @@
 
 #include "siprofileft.h"
 
+#include "clientbase.h"
 #include "siprofilefthandler.h"
 #include "simanager.h"
 #include "dataform.h"
@@ -57,7 +58,8 @@ namespace gloox
 
   const std::string SIProfileFT::requestFT( const JID& to, const std::string& name, long size,
                                             const std::string& hash, const std::string& desc,
-                                            const std::string& date, const std::string& mimetype )
+                                            const std::string& date, const std::string& mimetype,
+                                            int streamTypes )
   {
     if( name.empty() || size <= 0 || !m_manager )
       return std::string();
@@ -77,15 +79,18 @@ namespace gloox
     Tag* feature = new Tag( "feature", "xmlns", XMLNS_FEATURE_NEG );
     DataFormField* dff = new DataFormField( "stream-method", "", "", DataFormField::FieldTypeListSingle );
     StringMap sm;
-    sm["s5b"] = XMLNS_BYTESTREAMS;
-//     sm["ibb"] = XMLNS_IBB;
-//     sm["oob"] = XMLNS_IQ_OOB;
+    if( streamTypes & FTTypeS5B )
+      sm["s5b"] = XMLNS_BYTESTREAMS;
+    if( streamTypes & FTTypeIBB )
+      sm["ibb"] = XMLNS_IBB;
+    if( streamTypes & FTTypeOOB )
+      sm["oob"] = XMLNS_IQ_OOB;
     dff->setOptions( sm );
     DataForm df( DataForm::FormTypeForm );
     df.addField( dff );
     feature->addChild( df.tag() );
 
-    return m_manager->requestSI( this, to, XMLNS_SI_FT, file, feature, mimetype );;
+    return m_manager->requestSI( this, to, XMLNS_SI_FT, file, feature, mimetype );
   }
 
   void SIProfileFT::acceptFT( const JID& to, const std::string& id, StreamType type )
@@ -97,15 +102,16 @@ namespace gloox
     DataFormField* dff = new DataFormField( "stream-method" );
     switch( type )
     {
+      case FTTypeAll:
       case FTTypeS5B:
         dff->setValue( XMLNS_BYTESTREAMS );
         break;
-/*      case FTTypeIBB:
+      case FTTypeIBB:
         dff->setValue( XMLNS_IBB );
         break;
       case FTTypeOOB:
         dff->setValue( XMLNS_IQ_OOB );
-        break;*/
+        break;
     }
     DataForm df( DataForm::FormTypeSubmit );
     df.addField( dff );
@@ -142,7 +148,7 @@ namespace gloox
   }
 
   void SIProfileFT::handleSIRequest( const JID& from, const std::string& id, const std::string& profile,
-                                     Tag* si, Tag* ptag, Tag* /*fneg*/ )
+                                     Tag* si, Tag* ptag, Tag* fneg )
   {
     if( profile != XMLNS_SI_FT || !ptag || !si )
       return;
@@ -163,30 +169,57 @@ namespace gloox
           length = atol( r->findAttribute( "length" ).c_str() );
       }
       const std::string& mt = si->findAttribute( "mime-type" );
+      int types = 0;
+      Tag* x = fneg ? fneg->findChild( "x", "xmlns", XMLNS_X_DATA ) : 0;
+      DataForm df( x );
+      DataFormField* dff = df.field( "stream-method" );
+      if( dff && dff->value() == XMLNS_BYTESTREAMS )
+        types |= FTTypeS5B;
+      if( dff && dff->value() == XMLNS_IBB )
+        types |= FTTypeIBB;
+      if( dff && dff->value() == XMLNS_IQ_OOB )
+        types |= FTTypeOOB;
       m_handler->handleFTRequest( from, id, si->findAttribute( "id" ), ptag->findAttribute( "name" ),
                                   atol( ptag->findAttribute( "size" ).c_str() ),
                                   ptag->findAttribute( "hash" ), ptag->findAttribute( "date" ),
-                                  mt.empty() ? "binary/octet-stream" : mt, desc, FTTypeS5B, offset, length );
+                                  mt.empty() ? "binary/octet-stream" : mt, desc, types, offset, length );
     }
   }
 
   void SIProfileFT::handleSIRequestResult( const JID& from, const std::string& sid,
                                            Tag* /*si*/, Tag* /*ptag*/, Tag* fneg )
   {
-
-    if( m_socks5Manager && fneg && fneg->hasChild( "x", "xmlns", XMLNS_X_DATA ) )
+    Tag* x = fneg ? fneg->findChild( "x", "xmlns", XMLNS_X_DATA ) : 0;
+    DataForm df( x );
+    DataFormField* dff = df.field( "stream-method" );
+    if( m_socks5Manager && dff && dff->value() == XMLNS_BYTESTREAMS )
     {
-      DataForm df( fneg->findChild( "x", "xmlns", XMLNS_X_DATA ) );
-      DataFormField* dff = df.field( "stream-method" );
-      if( dff && dff->value() == XMLNS_BYTESTREAMS )
+      // check return value:
+      m_socks5Manager->requestSOCKS5Bytestream( from, SOCKS5BytestreamManager::S5BTCP, sid );
+    }
+    else if( m_handler && dff && dff->value() == XMLNS_IQ_OOB )
+    {
+      const std::string& url = m_handler->handleOOBRequestResult( from, sid );
+      if( !url.empty() )
       {
-        // check return value:
-        m_socks5Manager->requestSOCKS5Bytestream( from, SOCKS5BytestreamManager::S5BTCP, sid );
+        const std::string& id = m_parent->getID();
+        IQ* iq = new IQ( IQ::Set, from, id, XMLNS_IQ_OOB );
+        new Tag( iq->query(), "url", url );
+        m_parent->trackID( this, id, OOBSent );
+        m_parent->send( iq );
       }
     }
+  }
 
-//     if( m_handler )
-//       m_handler->handleFTRequestResult( from, sid );
+  void SIProfileFT::handleIqID( IQ* iq, int context )
+  {
+    switch( context )
+    {
+      case OOBSent:
+//         if( iq->subtype() == IQ::Error )
+//           m_handler->handleOOBError
+        break;
+    }
   }
 
   void SIProfileFT::handleSIRequestError( Stanza* stanza )
