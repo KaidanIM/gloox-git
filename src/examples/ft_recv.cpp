@@ -127,6 +127,11 @@ class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, SOCKS5
       }
     }
 
+    virtual const std::string handleOOBRequestResult( const JID& /*from*/, const std::string& /*sid*/ )
+    {
+      return std::string();
+    };
+
     virtual void handleSOCKS5Data( SOCKS5Bytestream* /*s5b*/, const std::string& data )
     {
       printf( "received %d bytes of data:\n%s\n", data.length(), data.c_str() );

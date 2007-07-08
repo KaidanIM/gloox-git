@@ -14,6 +14,7 @@
 #ifndef SIPROFILEFT_H__
 #define SIPROFILEFT_H__
 
+#include "iqhandler.h"
 #include "siprofilehandler.h"
 #include "sihandler.h"
 #include "simanager.h"
@@ -29,6 +30,7 @@ namespace gloox
   class SIProfileFTHandler;
   class SOCKS5Bytestream;
   class SOCKS5BytestreamManager;
+  class IQ;
 
   /**
    * @brief An implementation of the file transfer SI profile (XEP-0096).
@@ -117,7 +119,8 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
-  class GLOOX_API SIProfileFT : public SIProfileHandler, public SIHandler, public SOCKS5BytestreamHandler
+  class GLOOX_API SIProfileFT : public SIProfileHandler, public SIHandler, public SOCKS5BytestreamHandler,
+                                public IqHandler
   {
     public:
       /**
@@ -125,9 +128,10 @@ namespace gloox
        */
       enum StreamType
       {
-        FTTypeS5B     = 1/*,*/      /**< SOCKS5 Bytestreams. */
-//        FTTypeIBB   = 2,          /**< In-Band Bytestreams. */
-//        FTTypeOOB   = 4           /**< Out-of-Band Data. */
+        FTTypeS5B     = 1,          /**< SOCKS5 Bytestreams. */
+        FTTypeIBB     = 2,          /**< In-Band Bytestreams. */
+        FTTypeOOB     = 4,          /**< Out-of-Band Data. */
+        FTTypeAll     = 0xFF        /**< All types. */
       };
 
       /**
@@ -160,12 +164,14 @@ namespace gloox
        * @param desc A description.
        * @param date The file's last modification date/time. See XEP-0082 for details.
        * @param mimetype The file's mime-type. Defaults to 'binary/octet-stream' if empty.
+       * @param streamTypes ORed StreamType that can be used for this transfer.
        * @return The requested stream's ID (SID). Empty if conditions above (file name, size)
        * are not met.
        */
       const std::string requestFT( const JID& to, const std::string& name, long size,
                                    const std::string& hash = "", const std::string& desc = "",
-                                   const std::string& date = "", const std::string& mimetype = "" );
+                                   const std::string& date = "", const std::string& mimetype = "",
+                                   int streamTypes = FTTypeAll );
 
       /**
        * Call this function to accept a file transfer request previously announced by means of
@@ -173,7 +179,7 @@ namespace gloox
        * @param to The requestor.
        * @param id The request's id, as passed to SIProfileHandler::handleFTRequest().
        * @param type The desired stream type to use for this file transfer. Defaults to
-       * SOCKS5 Bytestream.
+       * SOCKS5 Bytestream. You should not use @c FTTypeAll here.
        */
       void acceptFT( const JID& to, const std::string& id, StreamType type = FTTypeS5B );
 
@@ -268,7 +274,19 @@ namespace gloox
       // re-implemented from SOCKS5BytestreamHandler
       virtual void handleSOCKS5BytestreamError( Stanza* stanza );
 
+      //re-implemented from IqHandler
+      virtual bool handleIq( IQ* /*iq*/ ) { return false; }
+
+      //re-implemented from IqHandler
+      virtual void handleIqID( IQ* iq, int context );
+
     private:
+
+      enum TrackEnum
+      {
+        OOBSent
+      };
+
       ClientBase* m_parent;
       SIManager* m_manager;
       SIProfileFTHandler* m_handler;

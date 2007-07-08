@@ -64,15 +64,6 @@ namespace gloox
                                     const std::string& desc, int stypes, long offset, long length ) = 0;
 
       /**
-       * This function is called to handle results of outgoing file transfer requests,
-       * i.e. you requested a stream (using SIProfileFT::requestFT()) to send a file
-       * to a remote entity.
-       * @param from The file transfer receiver.
-       * @param sid The stream ID.
-       */
-//       virtual void handleFTRequestResult( const JID& from, const std::string& sid ) = 0;
-
-      /**
        * This function is called to handle a request error or decline.
        * @param stanza The complete error stanza.
        */
@@ -94,6 +85,14 @@ namespace gloox
        * @param s5b The SOCKS5 bytestream.
        */
       virtual void handleFTSOCKS5Bytestream( SOCKS5Bytestream* s5b ) = 0;
+
+      /**
+       * This function is called if the contact chose OOB as the mechanism.
+       * @param from The conatct's JID.
+       * @param sid The stream's ID.
+       * @return The file's URL.
+       */
+      virtual const std::string handleOOBRequestResult( const JID& from, const std::string& sid ) = 0;
   };
 
 }
