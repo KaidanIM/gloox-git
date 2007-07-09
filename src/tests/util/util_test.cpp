@@ -35,9 +35,8 @@ int main()
     ++fail;
   }
 
-
   name = "invalid code lookup";
-  if( util::lookup( Inval, values ) != 0 )
+  if( !util::lookup( Inval, values ).empty() )
   {
     printf( "test '%s' failed\n", name.c_str() );
     ++fail;
@@ -45,12 +44,11 @@ int main()
 
 
   name = "out-of-range code lookup";
-  if( util::lookup( 700, values ) != 0 )
+  if( !util::lookup( 700, values ).empty() )
   {
     printf( "test '%s' failed\n", name.c_str() );
     ++fail;
   }
-
 
   name = "string lookup (ORable)";
   if( util::lookup2( "d", values2 ) != D )
@@ -77,7 +75,7 @@ int main()
 
 
   name = "invalid code lookup (ORable)";
-  if( util::lookup2( Inval2, values2 ) != 0 )
+  if( !util::lookup2( Inval2, values2 ).empty() )
   {
     printf( "test '%s' failed\n", name.c_str() );
     ++fail;
@@ -85,7 +83,7 @@ int main()
 
 
   name = "out-of-range code lookup (ORable)";
-  if( util::lookup2( 700, values2 ) != 0 )
+  if( !util::lookup2( 700, values2 ).empty() )
   {
     printf( "test '%s' failed\n", name.c_str() );
     ++fail;
