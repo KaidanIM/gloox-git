@@ -26,6 +26,17 @@ namespace gloox
       return i;
     }
 
+    std::string _lookup( unsigned code, const char * values[], unsigned size )
+    {
+      return code < size ? std::string(values[code]) : std::string();
+    }
+
+    std::string _lookup2( unsigned code, const char * values[], unsigned size )
+    {
+      const unsigned i = log2(code);
+      return i < size ? std::string(values[i]) : std::string();
+    }
+
   }
 
 }
