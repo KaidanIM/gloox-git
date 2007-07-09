@@ -12,9 +12,6 @@ int main()
   static const char * values2[] = { "d", "e", "f" };
   int fail = 0;
 
-  printf( "== Testing lookup() on char * arrays\n" );
-
-
   std::string name = "string lookup";
   if( util::lookup( "a", values ) != A )
   {
@@ -55,11 +52,7 @@ int main()
   }
 
 
-  printf( "== Testing lookup() on ORable types\n" );
-
-
-
-  name = "string lookup";
+  name = "string lookup (ORable)";
   if( util::lookup2( "d", values2 ) != D )
   {
     printf( "test '%s' failed\n", name.c_str() );
@@ -67,7 +60,7 @@ int main()
   }
 
 
-  name = "invalid string lookup";
+  name = "invalid string lookup (ORable)";
   if( util::lookup2( "", values2 ) != Inval2 )
   {
     printf( "test '%s' failed\n", name.c_str() );
@@ -75,7 +68,7 @@ int main()
   }
 
 
-  name = "code lookup";
+  name = "code lookup (ORable)";
   if( util::lookup2( D, values2 ) != "d" )
   {
     printf( "test '%s' failed\n", name.c_str() );
@@ -83,7 +76,7 @@ int main()
   }
 
 
-  name = "invalid code lookup";
+  name = "invalid code lookup (ORable)";
   if( util::lookup2( Inval2, values2 ) != 0 )
   {
     printf( "test '%s' failed\n", name.c_str() );
@@ -91,7 +84,7 @@ int main()
   }
 
 
-  name = "out-of-range code lookup";
+  name = "out-of-range code lookup (ORable)";
   if( util::lookup2( 700, values2 ) != 0 )
   {
     printf( "test '%s' failed\n", name.c_str() );
