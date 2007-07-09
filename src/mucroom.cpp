@@ -71,7 +71,7 @@ namespace gloox
 
     if( m_historyType != HistoryUnknown )
     {
-      const char * histStr = util::lookup( m_historyType, historyTypeValues );
+      const std::string& histStr = util::lookup( m_historyType, historyTypeValues );
       Tag* h = new Tag( x, "history" );
       if( m_historyType == HistorySince )
         h->addAttribute( histStr, m_historySince );
