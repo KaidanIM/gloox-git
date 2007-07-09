@@ -248,14 +248,8 @@ namespace gloox
 
   void Tag::setAttributes( const AttributeList& attributes )
   {
-    AttributeList::iterator it = m_attribs->begin();
-    for( ; it != m_attribs->end(); ++it )
-    {
-      delete (*it);
-    }
-    delete m_attribs;
-
-    m_attribs = new AttributeList( attributes );
+    util::clear( *m_attribs );
+    *m_attribs = attributes;
   }
 
   void Tag::addChild( Tag *child )
@@ -390,7 +384,7 @@ namespace gloox
     Tag::AttributeList::const_iterator at = m_attribs->begin();
     for( ; at != m_attribs->end(); ++at )
     {
-      t->m_attribs->push_back( new Attribute( (*at)->name(), (*at)->value(), (*at)->xmlns() ) );
+      t->m_attribs->push_back( new Attribute( *(*at) ) );
     }
 
     Tag::NodeList::const_iterator nt = m_nodes->begin();
@@ -477,8 +471,8 @@ namespace gloox
     if( expression == "/" || expression == "//" )
       return l;
 
-    if( m_parent && expression.length() >= 2 && expression.substr( 0, 1 ) == "/"
-                                                  && expression.substr( 1, 1 ) != "/" )
+    if( m_parent && expression.length() >= 2 && expression[0] == '/'
+                                             && expression[1] != '/' )
       return m_parent->findTagList( expression );
 
     unsigned len = 0;
