@@ -2,14 +2,6 @@
 #include "tag.h"
 #include "util.h"
 
-/*
- - do we need tag() / how to save the XMLNS's (ie copy string or enumerated type) ?
- - std::pair / templates on all platforms ?
- - index based util::lookup offers short code as well as marking a clear
-   relashionship between string value and error code. It also ease
-   adding/modifying/removing values and is much less error prone.
-*/
-
 namespace gloox
 {
 

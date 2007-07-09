@@ -16,7 +16,6 @@
 #include <string>
 #include <list>
 #include <map>
-#include <math.h>
 
 namespace gloox
 {
@@ -36,10 +35,10 @@ namespace gloox
     unsigned _lookup( const std::string& str, const char * values[], unsigned size );
 
     /**
-     * Finds the enumerated value associated with a string value.
-     * @param str String to search for.
+     * Finds the string associated with an enumerated type.
+     * @param code Code of the string to search for.
      * @param values Array of String/Code pairs to look into.
-     * @return The associated enum code.
+     * @return The associated string (empty in case there's no match).
      */
     std::string _lookup( unsigned code, const char * values[], unsigned size );
 
@@ -54,9 +53,9 @@ namespace gloox
 
     /**
      * Finds the string associated with an ORable enumerated type.
-     * @param code Feature string to search for.
+     * @param code Code of the string to search for.
      * @param values Array of String/Code pairs to look into.
-     * @return The associated string (or 0 in case there's no match).
+     * @return The associated string (empty in case there's no match).
      */
     std::string _lookup2( unsigned code, const char * values[], unsigned size );
 
