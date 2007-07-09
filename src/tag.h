@@ -50,6 +50,13 @@ namespace gloox
             {}
 
           /**
+           * Copy constructor.
+           */
+          Attribute( const Attribute& attr )
+            : m_name( attr.m_name ), m_value( attr.m_value ), m_xmlns( attr.m_xmlns )
+            {}
+
+          /**
            *
            */
           ~Attribute() {}
