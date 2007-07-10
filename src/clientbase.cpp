@@ -904,16 +904,16 @@ namespace gloox
 
   void ClientBase::registerIqHandler( IqHandler *ih, const std::string& xmlns )
   {
-    if( ih && !xmlns.empty() )
-    {
-      IqHandlerMap::iterator it = m_iqNSHandlers.lower_bound( xmlns );
-      for( ; it != m_iqNSHandlers.upper_bound( xmlns ); ++it )
-      {
-        if( (*it).second == ih )
-          return;
-      }
-      m_iqNSHandlers.insert( make_pair( xmlns, ih ) );
-    }
+    if( !ih || xmlns.empty() )
+      return;
+
+    typedef IqHandlerMap::const_iterator IQci;
+    std::pair<IQci, IQci> g = m_iqNSHandlers.equal_range( xmlns );
+    for( IQci it = g.first; it != g.second; ++it )
+      if( (*it).second == ih )
+        return;
+
+    m_iqNSHandlers.insert( make_pair( xmlns, ih ) );
   }
 
   void ClientBase::removeIqHandler( const std::string& xmlns )
