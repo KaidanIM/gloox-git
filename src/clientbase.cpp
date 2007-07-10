@@ -905,7 +905,15 @@ namespace gloox
   void ClientBase::registerIqHandler( IqHandler *ih, const std::string& xmlns )
   {
     if( ih && !xmlns.empty() )
-      m_iqNSHandlers[xmlns] = ih;
+    {
+      IqHandlerMap::iterator it = m_iqNSHandlers.lower_bound( xmlns );
+      for( ; it != m_iqNSHandlers.upper_bound( xmlns ); ++it )
+      {
+        if( (*it).second == ih )
+          return;
+      }
+      m_iqNSHandlers.insert( make_pair( xmlns, ih ) );
+    }
   }
 
   void ClientBase::removeIqHandler( const std::string& xmlns )
@@ -1110,14 +1118,14 @@ namespace gloox
   {
     bool res = false;
 
-    IqHandlerMap::const_iterator it = m_iqNSHandlers.begin();
-    for( ; it != m_iqNSHandlers.end(); ++it )
+    Tag* q = iq->query();
+    if( q )
     {
-      if( iq->hasChildWithAttrib( "xmlns", (*it).first ) )
-      {
+      typedef IqHandlerMap::const_iterator IQci;
+      std::pair<IQci, IQci> g = m_iqNSHandlers.equal_range( q->findAttribute( "xmlns" ) );
+      for( IQci it = g.first; it != g.second; ++it )
         if( (*it).second->handleIq( iq ) )
           res = true;
-      }
     }
 
     if( !res && ( iq->type() == StanzaIq ) &&

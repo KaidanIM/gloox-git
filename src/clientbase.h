@@ -699,7 +699,7 @@ namespace gloox
       };
 
       typedef std::list<ConnectionListener*>               ConnectionListenerList;
-      typedef std::map<const std::string, IqHandler*>      IqHandlerMap;
+      typedef std::multimap<const std::string, IqHandler*> IqHandlerMap;
       typedef std::map<const std::string, TrackStruct>     IqTrackMap;
       typedef std::map<const std::string, MessageHandler*> MessageHandlerMap;
       typedef std::list<MessageSession*>                   MessageSessionList;
