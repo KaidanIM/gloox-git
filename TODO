@@ -3,6 +3,11 @@ Todo
 
 for 1.0
 - StanzaExtension: SE( Stanza* )
+- fix XEP-0079 (AMP)
+- finish XEP-0115 (Entity Capabilities)
+- check XEP-0060 (Publish-Subscribe)
+- IBB support in File Transfer
+- OOB support in File Transfer
 
 
 - libidn replacement?
@@ -18,8 +23,6 @@ for 1.0
 - split send()/getID() to clientbasebase (?)
 - check this change: http://www.jabberstudio.org/cgi-bin/viewcvs.cgi/cvs/jeps/0085/jep-0085.xml?r1=1.28&r2=1.31
 - XEP-0020 (Feature Negotiation)
-- XEP-0079 (AMP)
-- XEP-0115 (Entity Capabilities)
 - XEP-0155 (Chat Session Negotiation)
 - XEP-0166 (Jingle Signaling)
 - XEP-0175 (Best Practices for Use of SASL ANONYMOUS)
