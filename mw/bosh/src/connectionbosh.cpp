@@ -208,7 +208,7 @@ namespace gloox
         m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "too little time between requests, adding to send buffer");
         return false;
       }
-      printf("\n>>>>> %d seconds since last empty request <<<<<\n", time(NULL) - m_lastRequestTime);
+      printf("\n>>>>> %ld seconds since last empty request <<<<<\n", time(NULL) - m_lastRequestTime);
       m_lastRequestTime = time(NULL);
       m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "sending empty request");
     }
@@ -299,9 +299,9 @@ namespace gloox
       }
     }
     
-    if(m_buffer.length() >= m_bufferContentLength && !m_buffer.empty()) // We have at least one full response
+    if((long)(m_buffer.length()) >= m_bufferContentLength && !m_buffer.empty()) // We have at least one full response
     {
-      printf("Response length is %d but I think it is at least %d\n", m_buffer.length(), m_bufferContentLength);
+      printf("Response length is %d but I think it is at least %ld\n", m_buffer.length(), m_bufferContentLength);
       m_openRequests--;
       printf("Decrementing m_openRequests to %d\n", m_openRequests);
       printf("\n-----------FULL RESPONSE BUFFER---------------\n%s\n---------------END-------------\n", m_buffer.c_str());
@@ -314,7 +314,7 @@ namespace gloox
     }
   }
   
-  void ConnectionBOSH::handleXMLData(const ConnectionBase* connection, const std::string& data)
+  void ConnectionBOSH::handleXMLData(const ConnectionBase* /*connection*/, const std::string& data)
   {
     m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh received XML:\n" + data + "\n");
     m_parser->feed(data);

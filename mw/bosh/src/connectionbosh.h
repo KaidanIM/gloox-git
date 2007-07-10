@@ -156,26 +156,32 @@ namespace gloox
       const LogSink& m_logInstance;
    
       Parser* m_parser; // Used for parsing XML section of responses
-      ConnectionDataHandler* m_handler;
-
+      std::string m_boshHost; // 
+      bool m_http11; // Persistent connections
       std::string m_path; // The path part of the URL that we need to request
+      ConnectionDataHandler* m_handler;
+ 
+
       std::string m_proxyServer;
       std::string m_proxyPort;
-      std::string m_boshHost; // 
+
    
       // BOSH parameters
       long m_rid;
       std::string m_sid;
-      int m_hold;
-      int m_wait;
-      int m_maxOpenRequests;
       
+      bool m_initialStreamSent;
       int m_openRequests;
-      
+      int m_maxOpenRequests;
+      int m_wait;
+      int m_hold;
+ 
+      bool m_streamRestart; // Set to true if we are waiting for an acknowledgement of a stream restart
+
       long m_lastRequestTime;
       long m_minTimePerRequest;
 
-      bool m_http11; // Persistent connections
+      
       bool m_pipelining; // Multiple requests between responses (on a single connection)
    
       std::string m_buffer;
@@ -184,8 +190,7 @@ namespace gloox
       
       std::string m_sendBuffer;
       
-      bool m_initialStreamSent;
-      bool m_streamRestart; // Set to true if we are waiting for an acknowledgement of a stream restart
+
 
   };
 
