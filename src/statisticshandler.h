@@ -20,7 +20,7 @@ namespace gloox
 {
 
   /**
-   * A strcuture describing the current connection statistics.
+   * A structure describing the current connection statistics.
    */
   struct StatisticsStruct
   {
