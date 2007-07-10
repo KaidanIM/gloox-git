@@ -91,7 +91,7 @@ class MessageTest : public MessageSessionHandler, ConnectionListener, LogHandler
         ConnectionError ce = ConnNoError;
         while( ce == ConnNoError )
         {
-          ce = j->recv();
+          ce = j->recv(20);
         }
         printf( "ce: %d\n", ce );
       }
@@ -133,18 +133,8 @@ class MessageTest : public MessageSessionHandler, ConnectionListener, LogHandler
         sub = "Re: " +  stanza->subject();
 
       m_messageEventFilter->raiseMessageEvent( MessageEventDisplayed );
-#if defined( WIN32 ) || defined( _WIN32 )
-      Sleep( 1000 );
-#else
-      sleep( 1 );
-#endif
       m_messageEventFilter->raiseMessageEvent( MessageEventComposing );
       m_chatStateFilter->setChatState( ChatStateComposing );
-#if defined( WIN32 ) || defined( _WIN32 )
-      Sleep( 2000 );
-#else
-      sleep( 2 );
-#endif
       m_session->send( msg, sub );
 
       if( stanza->body() == "quit" )

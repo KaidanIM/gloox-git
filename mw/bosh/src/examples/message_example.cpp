@@ -39,8 +39,8 @@ class MessageTest : public MessageSessionHandler, ConnectionListener, LogHandler
     void start()
     {
 
-      JID jid( "hurkhurk@example.net/gloox" );
-      j = new Client( jid, "hurkhurks" );
+      JID jid( "mattj2@localhost/gloox" );
+      j = new Client( jid, "pumpkin" );
       j->registerConnectionListener( this );
       j->registerMessageSessionHandler( this, 0 );
       j->disco()->setVersion( "messageTest", GLOOX_VERSION, "Linux" );

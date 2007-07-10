@@ -35,7 +35,7 @@ namespace gloox
                                             const std::string& xmppServer, int xmppPort )
     : ConnectionBase( 0 ), m_connection( connection ),
       m_logInstance( logInstance ), m_boshHost( boshHost), m_http11( false ), m_path("/http-bind/"), m_handler(NULL),
-      m_initialStreamSent(false), m_openRequests(0), m_maxOpenRequests(20), m_wait(30), m_hold(20), m_streamRestart(false),
+      m_initialStreamSent(false), m_openRequests(0), m_maxOpenRequests(20), m_wait(30), m_hold(2), m_streamRestart(false),
       m_lastRequestTime(0), m_minTimePerRequest(0), m_sendBuffer("")
   {
     m_server = prep::idna( xmppServer );
@@ -57,7 +57,7 @@ namespace gloox
                                             const std::string& xmppServer, int xmppPort )
     : ConnectionBase( cdh ), m_connection( connection ),
       m_logInstance( logInstance ), m_boshHost( boshHost ), m_path("/http-bind/"), m_handler(cdh),
-      m_initialStreamSent(false), m_openRequests(0), m_maxOpenRequests(20), m_wait(30), m_hold(20), m_streamRestart(false),
+      m_initialStreamSent(false), m_openRequests(0), m_maxOpenRequests(20), m_wait(30), m_hold(2), m_streamRestart(false),
       m_lastRequestTime(0), m_minTimePerRequest(0), m_sendBuffer("")
   {
     m_server = prep::idna( xmppServer );
@@ -172,7 +172,6 @@ namespace gloox
   std::string ConnectionBOSH::GetHTTPField(const std::string& field)
   {
     int fieldpos = m_bufferHeader.find("\r\n" + field + ": ") + field.length() + 4;
-    printf("\nHTTP buffer says: %s\n\n\n", m_bufferHeader.c_str());
     return m_bufferHeader.substr(fieldpos, m_bufferHeader.find("\r\n", fieldpos));
   }
 
@@ -193,20 +192,20 @@ namespace gloox
     
     if(m_openRequests >= m_maxOpenRequests)
     {
-      m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "too many open requests, not sending");
+      m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "too many open requests, adding to send buffer");
       m_sendBuffer += data;
       return false;
     }
     else
     {
-      printf("m_openRequests == %d\n", m_openRequests);
+      printf("%d: m_openRequests == %d\n", time(NULL), m_openRequests);
     }
     
     if(data.empty())
     {
       if((time(NULL) - m_lastRequestTime) < m_minTimePerRequest && m_openRequests > 0)
       {
-        m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "too little time between requests, not sending");
+        m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "too little time between requests, adding to send buffer");
         return false;
       }
       printf("\n>>>>> %d seconds since last empty request <<<<<\n", time(NULL) - m_lastRequestTime);
@@ -247,9 +246,10 @@ namespace gloox
     else
     {
       requestBody << ">" << m_sendBuffer << data << "</body>";
+      m_sendBuffer = "";
     }
     
-    m_sendBuffer = "";
+    
     
     request << "POST " << m_path << " HTTP/1.1\r\n";
     request << "Host: " << m_boshHost << "\r\n";
@@ -258,7 +258,7 @@ namespace gloox
     request << requestBody.str() << "\r\n";
     
     m_openRequests++;
-    printf("Incrementing m_openRequests to %d\n", m_openRequests);
+    printf("%d: Incrementing m_openRequests to %d\n", time(NULL), m_openRequests);
     
     m_connection->send(request.str());
     return true;
@@ -294,7 +294,6 @@ namespace gloox
       if(headerLength != std::string::npos) // We have a full header in the buffer?
       {
         m_bufferHeader = m_buffer.substr(0, headerLength);
-        printf("\n--------------\nHTTP header is:\n%s\n---------------\n", m_bufferHeader.c_str());
         m_buffer = m_buffer.substr(headerLength + 4); // Remove header from m_buffer, and \r\n\r\n
         m_bufferContentLength = atol(GetHTTPField("Content-Length").c_str());
       }
@@ -307,7 +306,7 @@ namespace gloox
       printf("Decrementing m_openRequests to %d\n", m_openRequests);
       printf("\n-----------FULL RESPONSE BUFFER---------------\n%s\n---------------END-------------\n", m_buffer.c_str());
       handleXMLData(connection, m_buffer.substr(0, m_bufferContentLength));
-      m_buffer = m_buffer.erase(0, m_bufferContentLength); // Remove the handled response from the buffer, and reset variables for reuse
+      m_buffer.erase(0, m_bufferContentLength); // Remove the handled response from the buffer, and reset variables for reuse
       m_bufferContentLength = -1;
       m_bufferHeader = "";
       printf("\n-----------FULL RESPONSE BUFFER (after handling)---------------\n%s\n---------------END-------------\n", m_buffer.c_str());
@@ -431,10 +430,8 @@ namespace gloox
       Tag::TagList::const_iterator i;
       for(i = stanzas.begin(); i != stanzas.end(); i++)
       { 
-        printf("(*i) is %p, m_handler is %p\n", *i, m_handler);
         if(m_handler && *i)
         {
-          printf("\n\nSending to gloox: %s\n", (*i)->xml().c_str());
           m_handler->handleReceivedData(this, (*i)->xml());
         }
       };
