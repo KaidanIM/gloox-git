@@ -351,7 +351,7 @@ namespace gloox
 
       /**
        * Registers @c ih as object that receives Iq stanza notifications for namespace
-       * @c xmlns. Only one handler per namespace is possible.
+       * @c xmlns. As of 1.0, the number of handlers per namespace is not limited.
        * @param ih The object to receive Iq stanza notifications.
        * @param xmlns The namespace the object handles.
        */
