@@ -40,7 +40,7 @@ namespace gloox
      * @param values Array of String/Code pairs to look into.
      * @return The associated string (empty in case there's no match).
      */
-    std::string _lookup( unsigned code, const char * values[], unsigned size );
+    const std::string _lookup( unsigned code, const char * values[], unsigned size );
 
     /**
      * Finds the ORable enumerated value associated with a string value.
@@ -57,7 +57,7 @@ namespace gloox
      * @param values Array of String/Code pairs to look into.
      * @return The associated string (empty in case there's no match).
      */
-    std::string _lookup2( unsigned code, const char * values[], unsigned size );
+    const std::string _lookup2( unsigned code, const char * values[], unsigned size );
 
     /**
      * Delete all elements from a list of pointers.
