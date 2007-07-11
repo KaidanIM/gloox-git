@@ -14,8 +14,7 @@
 #ifndef SOCKS5BYTESTREAM_H__
 #define SOCKS5BYTESTREAM_H__
 
-#include "messagefilter.h"
-#include "iqhandler.h"
+#include "bytestream.h"
 #include "gloox.h"
 #include "socks5bytestreammanager.h"
 #include "connectiondatahandler.h"
@@ -25,7 +24,6 @@
 namespace gloox
 {
 
-  class ClientBase;
   class SOCKS5BytestreamDataHandler;
   class ConnectionBase;
   class LogSink;
@@ -41,7 +39,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
-  class GLOOX_API SOCKS5Bytestream : public ConnectionDataHandler
+  class GLOOX_API SOCKS5Bytestream : public ConnectionDataHandler, public Bytestream
   {
     friend class SOCKS5BytestreamManager;
 
@@ -50,12 +48,6 @@ namespace gloox
        * Virtual destructor.
        */
       virtual ~SOCKS5Bytestream();
-
-      /**
-       * Returns whether the bytestream is open, that is, accepted by both parties.
-       * @return Whether the bytestream is open or not.
-       */
-      bool isOpen() const { return m_open; }
 
       /**
        * This function starts the connection process. That is, it attempts to connect
@@ -68,12 +60,12 @@ namespace gloox
        * @note Make sure you have a SOCKS5BytestreamDataHandler registered (using
        * registerSOCKS5BytestreamDataHandler()) before calling this function.
        */
-      bool connect();
+      virtual bool connect();
 
       /**
        * Closes the bytestream.
        */
-      void close();
+      virtual void close();
 
       /**
        * Use this function to send a chunk of data over an open bytestream. There is
@@ -84,7 +76,7 @@ namespace gloox
        * @return @b True if the data has been sent (no guarantee of receipt), @b false
        * in case of an error.
        */
-      bool send( const std::string& data );
+      virtual bool send( const std::string& data );
 
       /**
        * Call this function repeatedly to receive data from the socket. You should even do this
@@ -92,27 +84,7 @@ namespace gloox
        * @param timeout The timeout to use for select in microseconds. Default of -1 means blocking.
        * @return The state of the connection.
        */
-      ConnectionError recv( int timeout = -1 );
-
-      /**
-       * Lets you retrieve the stream's ID.
-       * @return The stream's ID.
-       */
-      const std::string& sid() const { return m_sid; }
-
-      /**
-       * Returns the target entity's JID. If this bytestream is remote-initiated, this is
-       * the local JID. If it is local-initiated, this is the remote entity's JID.
-       * @return The target's JID.
-       */
-      const JID& target() const { return m_target; }
-
-      /**
-       * Returns the initiating entity's JID. If this bytestream is remote-initiated, this is
-       * the remote entity's JID. If it is local-initiated, this is the local JID.
-       * @return The initiator's JID.
-       */
-      const JID& initiator() const { return m_initiator; }
+      virtual ConnectionError recv( int timeout = -1 );
 
       /**
        * Sets the connection to use.
@@ -126,21 +98,6 @@ namespace gloox
        * use this function directly.
        */
       void setStreamHosts( const StreamHostList& hosts ) { m_hosts = hosts; }
-
-      /**
-       * Use this function to register an object that will receive any notifications from
-       * the SOCKS5Bytestream instance. Only one SOCKS5BytestreamDataHandler can be registered
-       * at any one time.
-       * @param s5bdh The SOCKS5BytestreamDataHandler-derived object to receive notifications.
-       */
-      void registerSOCKS5BytestreamDataHandler( SOCKS5BytestreamDataHandler *s5bdh )
-        { m_socks5BytestreamDataHandler = s5bdh; }
-
-      /**
-       * Removes the registered SOCKS5BytestreamDataHandler.
-       */
-      void removeSOCKS5BytestreamDataHandler()
-        { m_socks5BytestreamDataHandler = 0; }
 
       // re-implemented from ConnectionDataHandler
       virtual void handleReceivedData( const ConnectionBase* connection, const std::string& data );
@@ -160,12 +117,6 @@ namespace gloox
       SOCKS5BytestreamManager *m_manager;
       ConnectionBase* m_connection;
       ConnectionBase* m_socks5;
-      const LogSink& m_logInstance;
-      SOCKS5BytestreamDataHandler *m_socks5BytestreamDataHandler;
-      const JID m_initiator;
-      const JID m_target;
-      std::string m_sid;
-      bool m_open;
       JID m_proxy;
 
       StreamHostList m_hosts;

@@ -12,23 +12,23 @@
 
 
 #include "inbandbytestream.h"
-#include "inbandbytestreamdatahandler.h"
-#include "messagesession.h"
+#include "bytestreamdatahandler.h"
 #include "disco.h"
 #include "clientbase.h"
 #include "base64.h"
-#include "message.h"
-
-#include <sstream>
 
 namespace gloox
 {
 
-  InBandBytestream::InBandBytestream( MessageSession *session, ClientBase *clientbase )
-    : MessageFilter( session ), m_clientbase( clientbase ),
-      m_inbandBytestreamDataHandler( 0 ), m_blockSize( 4096 ), m_sequence( -1 ),
-      m_lastChunkReceived( -1 ), m_open( true )
+  InBandBytestream::InBandBytestream( ClientBase* clientbase, LogSink& logInstance, const JID& initiator,
+                                      const JID& target, const std::string& sid )
+    : Bytestream( Bytestream::IBB, logInstance, initiator, target, sid ),
+      m_clientbase( clientbase ), m_blockSize( 4096 ), m_sequence( -1 ), m_lastChunkReceived( -1 )
   {
+    if( m_clientbase )
+      m_clientbase->registerIqHandler( this, XMLNS_IBB );
+
+    m_open = true;
   }
 
   InBandBytestream::~InBandBytestream()
@@ -36,119 +36,129 @@ namespace gloox
     if( m_open )
       close();
 
-    if( m_parent )
-      m_parent->removeMessageFilter( this );
+    if( m_clientbase )
+    {
+      m_clientbase->removeIqHandler( this, XMLNS_IBB );
+      m_clientbase->removeIDHandler( this );
+    }
   }
 
-  void InBandBytestream::decorate( Tag * /*tag*/ )
+  bool InBandBytestream::connect()
   {
-  }
-
-  void InBandBytestream::filter( Message *msg )
-  {
-    if( !m_inbandBytestreamDataHandler || !m_open )
-      return;
-
-    if( msg->subtype() == Message::Error )
-    {
-      m_inbandBytestreamDataHandler->handleInBandError( m_sid, msg->from(), msg->error() );
-      m_open = false;
-    }
-
-    Tag *data = 0;
-    if( ( data = msg->findChild( "data", "xmlns", XMLNS_IBB ) ) == 0 )
-      return;
-
-    const std::string& sid = data->findAttribute( "sid" );
-    if( sid.empty() || sid != m_sid )
-      return;
-
-    const std::string& seq = data->findAttribute( "seq" );
-    if( seq.empty() )
-    {
-      m_open = false;
-      return;
-    }
-
-    std::stringstream str;
-    int sequence = 0;
-    str << seq;
-    str >> sequence;
-
-    if( m_lastChunkReceived + 1 != sequence )
-    {
-      m_open = false;
-      return;
-    }
-    m_lastChunkReceived = sequence;
-
-    if( !data->cdata().length() )
-    {
-      m_open = false;
-      return;
-    }
-
-    m_inbandBytestreamDataHandler->handleInBandData( Base64::decode64( data->cdata() ), sid );
-  }
-
-  bool InBandBytestream::sendBlock( const std::string& data )
-  {
-    if( !m_open || !m_parent || !m_clientbase || data.length() > m_blockSize )
+    if( !m_clientbase )
       return false;
 
-    Message* m = new Message( Message::Normal, m_parent->target() );
-    m->addAttribute( "id", m_clientbase->getID() );
-    Tag *d = new Tag( m, "data", Base64::encode64( data ) );
-    d->addAttribute( "sid", m_sid );
-    d->addAttribute( "seq", ++m_sequence );
-    d->addAttribute( "xmlns", XMLNS_IBB );
+    if( m_target == m_clientbase->jid() )
+      return true;
 
-#warning FIXME: hard-coded AMP
-    Tag *a = new Tag( m, "amp" );
-    a->addAttribute( "xmlns", XMLNS_AMP );
-    Tag *r = new Tag( a, "rule" );
-    r->addAttribute( "condition", "deliver-at" );
-    r->addAttribute( "value", "stored" );
-    r->addAttribute( "action", "error" );
-    r = new Tag( a, "rule" );
-    r->addAttribute( "condition", "match-resource" );
-    r->addAttribute( "value", "exact" );
-    r->addAttribute( "action", "error" );
+    const std::string& id = m_clientbase->getID();
+    IQ* iq = new IQ( IQ::Set, m_target, id, XMLNS_IBB, "open" );
+    iq->query()->addAttribute( "sid", m_sid );
+    iq->query()->addAttribute( "block-size", m_blockSize );
 
-    m_clientbase->send( m );
+    m_clientbase->trackID( this, id, IBBOpen );
+    m_clientbase->send( iq );
+    return true;
+  }
+
+  void InBandBytestream::handleIqID( IQ *iq, int context )
+  {
+    switch( iq->subtype() )
+    {
+      case IQ::Result:
+        if( context == IBBOpen && m_handler )
+          m_handler->handleBytestreamOpen( this );
+        break;
+      case IQ::Error:
+        closed();
+        break;
+      default:
+        break;
+    }
+  }
+
+  bool InBandBytestream::handleIq( IQ* iq ) // data or open request, always 'set'
+  {
+    Tag* q = iq->query();
+    if( !q || !q->hasAttribute( "sid", m_sid ) || !m_handler || iq->subtype() != IQ::Set )
+      return false;
+
+    if( !m_open )
+    {
+      if( q->name() == "open" )
+      {
+        m_open = true;
+        m_handler->handleBytestreamOpen( this );
+        return true;
+      }
+      return false;
+    }
+
+    const std::string& seq = q->findAttribute( "seq" );
+    if( seq.empty() || ++m_lastChunkReceived != atoi( seq.c_str() ) )
+    {
+      m_open = false;
+      return false;
+    }
+
+    const std::string& data = q->cdata();
+    if( data.empty() )
+    {
+      m_open = false;
+      return false;
+    }
+
+    m_handler->handleBytestreamData( this, Base64::decode64( data ) );
+    return true;
+  }
+
+  bool InBandBytestream::send( const std::string& data )
+  {
+    if( !m_open || !m_clientbase || data.length() > m_blockSize )
+      return false;
+
+    const std::string& id = m_clientbase->getID();
+    IQ* iq = new IQ( IQ::Set, m_target, id, XMLNS_IBB, data );
+    iq->query()->setCData( Base64::encode64( data ) );
+    iq->query()->addAttribute( "sid", m_sid );
+    iq->query()->addAttribute( "seq", ++m_sequence );
+
+    m_clientbase->trackID( this, id, IBBData );
+    m_clientbase->send( iq );
+
+    if( m_sequence == 65535 )
+      m_sequence = -1;
+
     return true;
   }
 
   void InBandBytestream::closed()
   {
+    if( !m_open )
+      return;
+
     m_open = false;
 
-    if( m_inbandBytestreamDataHandler )
-      m_inbandBytestreamDataHandler->handleInBandClose( m_sid, m_parent->target() );
+    if( m_handler )
+      m_handler->handleBytestreamClose( this );
   }
 
   void InBandBytestream::close()
   {
     m_open = false;
 
-    if( !m_parent )
+    if( !m_clientbase )
       return;
 
     const std::string& id = m_clientbase->getID();
-    IQ* iq = new IQ( IQ::Set, m_parent->target(), id, XMLNS_IBB, "close" );
+    IQ* iq = new IQ( IQ::Set, m_target, id, XMLNS_IBB, "close" );
     iq->query()->addAttribute( "sid", m_sid );
 
+    m_clientbase->trackID( this, id, IBBClose );
     m_clientbase->send( iq );
-  }
 
-  void InBandBytestream::registerInBandBytestreamDataHandler( InBandBytestreamDataHandler *ibbdh )
-  {
-    m_inbandBytestreamDataHandler = ibbdh;
-  }
-
-  void InBandBytestream::removeInBandBytestreamDataHandler()
-  {
-    m_inbandBytestreamDataHandler = 0;
+    if( m_handler )
+      m_handler->handleBytestreamClose( this );
   }
 
 }

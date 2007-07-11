@@ -11,8 +11,8 @@
 */
 
 
+#include "bytestreamhandler.h"
 #include "socks5bytestreammanager.h"
-#include "socks5bytestreamhandler.h"
 #include "socks5bytestreamserver.h"
 #include "socks5bytestream.h"
 #include "clientbase.h"
@@ -26,7 +26,7 @@
 namespace gloox
 {
 
-  SOCKS5BytestreamManager::SOCKS5BytestreamManager( ClientBase *parent, SOCKS5BytestreamHandler* s5bh )
+  SOCKS5BytestreamManager::SOCKS5BytestreamManager( ClientBase *parent, BytestreamHandler* s5bh )
     : m_parent( parent ), m_socks5BytestreamHandler( s5bh )
   {
     if( m_parent )
@@ -36,7 +36,7 @@ namespace gloox
   SOCKS5BytestreamManager::~SOCKS5BytestreamManager()
   {
     if( m_parent )
-      m_parent->removeIqHandler( XMLNS_BYTESTREAMS );
+      m_parent->removeIqHandler( this, XMLNS_BYTESTREAMS );
 
     util::clear( m_s5bMap );
   }
@@ -181,11 +181,11 @@ namespace gloox
         asi.from = iq->from();
         asi.incoming = true;
         m_asyncTrackMap[sid] = asi;
-        m_socks5BytestreamHandler->handleIncomingSOCKS5BytestreamRequest( sid, iq->from() );
+        m_socks5BytestreamHandler->handleIncomingBytestreamRequest( sid, iq->from() );
         break;
       }
       case IQ::Error:
-        m_socks5BytestreamHandler->handleSOCKS5BytestreamError( iq );
+        m_socks5BytestreamHandler->handleBytestreamError( iq );
         break;
       default:
         break;
@@ -238,7 +238,7 @@ namespace gloox
                                                   (*it).second.from, m_parent->jid(), sid );
     s5b->setStreamHosts( (*it).second.sHosts );
     m_s5bMap[sid] = s5b;
-    m_socks5BytestreamHandler->handleIncomingSOCKS5Bytestream( s5b );
+    m_socks5BytestreamHandler->handleIncomingBytestream( s5b );
   }
 
   void SOCKS5BytestreamManager::rejectSOCKS5Bytestream( const std::string& sid )
@@ -347,14 +347,14 @@ namespace gloox
                 s5b->setStreamHosts( shl );
               }
               m_s5bMap[(*it).second] = s5b;
-              m_socks5BytestreamHandler->handleOutgoingSOCKS5Bytestream( s5b );
+              m_socks5BytestreamHandler->handleOutgoingBytestream( s5b );
               if( selfProxy )
                 s5b->activate();
             }
             break;
           }
           case IQ::Error:
-            m_socks5BytestreamHandler->handleSOCKS5BytestreamError( iq );
+            m_socks5BytestreamHandler->handleBytestreamError( iq );
             break;
           default:
             break;
@@ -373,7 +373,7 @@ namespace gloox
             break;
           }
           case IQ::Error:
-            m_socks5BytestreamHandler->handleSOCKS5BytestreamError( iq );
+            m_socks5BytestreamHandler->handleBytestreamError( iq );
             break;
           default:
             break;

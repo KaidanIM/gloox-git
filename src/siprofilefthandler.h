@@ -22,6 +22,7 @@ namespace gloox
 {
 
   class JID;
+  class IQ;
 
   /**
    * @brief An abstract base class to handle file transfer (FT) requests.
@@ -67,7 +68,7 @@ namespace gloox
        * This function is called to handle a request error or decline.
        * @param stanza The complete error stanza.
        */
-      virtual void handleFTRequestError( Stanza* stanza ) = 0;
+      virtual void handleFTRequestError( IQ* iq ) = 0;
 
       /**
        * This function is called to pass a negotiated SOCKS5 bytestream.
@@ -82,9 +83,9 @@ namespace gloox
        * attempts last, you most likely want to put  the bytestream into its own
        * thread or process (before calling connect() on it). It is safe to do so
        * without additional synchronization.
-       * @param s5b The SOCKS5 bytestream.
+       * @param bs The bytestream.
        */
-      virtual void handleFTSOCKS5Bytestream( SOCKS5Bytestream* s5b ) = 0;
+      virtual void handleFTBytestream( Bytestream* bs ) = 0;
 
       /**
        * This function is called if the contact chose OOB as the mechanism.
@@ -93,6 +94,7 @@ namespace gloox
        * @return The file's URL.
        */
       virtual const std::string handleOOBRequestResult( const JID& from, const std::string& sid ) = 0;
+
   };
 
 }

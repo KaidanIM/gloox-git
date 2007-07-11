@@ -17,7 +17,7 @@ libgloox_la_SOURCES = jid.cpp parser.cpp connectiontcpclient.cpp clientbase.cpp 
                         bookmarkstorage.cpp annotations.cpp privacymanager.cpp lastactivity.cpp \
                         flexoff.cpp dataform.cpp dataformfield.cpp dataformbase.cpp messagesession.cpp \
                         messageeventfilter.cpp chatstatefilter.cpp gloox.cpp \
-                        inbandbytestream.cpp inbandbytestreammanager.cpp messagefilter.cpp vcard.cpp \
+                        inbandbytestream.cpp messagefilter.cpp vcard.cpp \
                         vcardmanager.cpp md5.cpp sha.cpp search.cpp dataformreported.cpp dataformitem.cpp \
                         mucroom.cpp mucmessagesession.cpp oob.cpp vcardupdate.cpp stanzaextensionfactory.cpp \
                         delayeddelivery.cpp xdelayeddelivery.cpp gpgencrypted.cpp gpgsigned.cpp \
@@ -51,8 +51,7 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             macros.h                  logsink.h               messagesession.h \
                             messageeventhandler.h     messagesessionhandler.h chatstatehandler.h \
                             chatstatefilter.h         messageeventfilter.h    inbandbytestream.h \
-                            inbandbytestreamhandler.h inbandbytestreamdatahandler.h \
-                            inbandbytestreammanager.h messagefilter.h         vcard.h \
+                            messagefilter.h           vcard.h \
                             vcardmanager.h            vcardhandler.h          adhochandler.h \
                             search.h                  searchhandler.h         statisticshandler.h \
                             resource.h                mucroom.h               mucroomhandler.h \
@@ -66,15 +65,16 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             compressionbase.h         connectiontcpclient.h   connectionhttpproxy.h \
                             tlsdefault.h              simanager.h             siprofilehandler.h \
                             sihandler.h               siprofileft.h           siprofilefthandler.h \
-                            socks5bytestreammanager.h connectionsocks5proxy.h socks5bytestreamdatahandler.h \
-                            socks5bytestreamhandler.h socks5bytestream.h      socks5bytestreamserver.h \
+                            socks5bytestreammanager.h connectionsocks5proxy.h \
+                            socks5bytestream.h        socks5bytestreamserver.h \
                             mutex.h                   mutexguard.h            connectiontcpbase.h \
                             connectiontcpserver.h     amp.h                   psaffiliationlisthandler.h \
                             pubsubmanager.h           pssubscriptionhandler.h pssubscriptionlisthandler.h \
                             iq.h                      pubsub.h                pubsubnode.h \
                             pubsubitemhandler.h       error.h                 pubsubdiscohandler.h \
                             pubsubeventhandler.h      connectionhandler.h     iq.h \
-                            message.h                 presence.h              subscription.h
+                            message.h                 presence.h              subscription.h \
+                            bytestream.h              bytestreamdatahandler.h bytestreamhandler.h
 
 noinst_HEADERS = prep.h dns.h nonsaslauth.h mucmessagesession.h stanzaextensionfactory.h tlsgnutlsclient.h \
                    tlsgnutlsbase.h tlsgnutlsclientanon.h tlsgnutlsserveranon.h tlsopenssl.h tlsschannel.h \
