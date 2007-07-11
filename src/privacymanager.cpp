@@ -32,7 +32,7 @@ namespace gloox
   PrivacyManager::~PrivacyManager()
   {
     if( m_parent )
-      m_parent->removeIqHandler( XMLNS_PRIVACY );
+      m_parent->removeIqHandler( this, XMLNS_PRIVACY );
   }
 
   std::string PrivacyManager::operation( int context, const std::string& name )
@@ -60,7 +60,7 @@ namespace gloox
           child = "active";
           break;
       }
-      Tag* l = new Tag( iq->query(), child ); 
+      Tag* l = new Tag( iq->query(), child );
       if( !name.empty() )
         l->addAttribute( "name", name );
     }

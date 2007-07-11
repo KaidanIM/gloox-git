@@ -38,9 +38,9 @@ namespace gloox
   {
     if( m_parent )
     {
-      m_parent->removeIqHandler( XMLNS_DISCO_INFO );
-      m_parent->removeIqHandler( XMLNS_DISCO_ITEMS );
-      m_parent->removeIqHandler( XMLNS_VERSION );
+      m_parent->removeIqHandler( this, XMLNS_DISCO_INFO );
+      m_parent->removeIqHandler( this, XMLNS_DISCO_ITEMS );
+      m_parent->removeIqHandler( this, XMLNS_VERSION );
     }
   }
 
@@ -103,7 +103,7 @@ namespace gloox
             i->addAttribute( "type", m_identityType );
             i->addAttribute( "name", m_versionName );
 
-            addFeatures( m_features, query );         
+            addFeatures( m_features, query );
           }
 
           m_parent->send( re );

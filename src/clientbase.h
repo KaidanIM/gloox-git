@@ -453,10 +453,12 @@ namespace gloox
       void removeConnectionListener( ConnectionListener *cl );
 
       /**
-       * Removes the handler for the given namespace from the list of Iq handlers.
+       * Removes the given IQ handler for the given namespace.
+       * @param ih The IqHandler.
        * @param xmlns The namespace to remove from the list.
+       * @since 1.0
        */
-      void removeIqHandler( const std::string& xmlns );
+      void removeIqHandler( IqHandler* ih, const std::string& xmlns );
 
       /**
        * Removes the given object from the list of presence handlers.

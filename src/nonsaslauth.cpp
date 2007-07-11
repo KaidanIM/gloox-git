@@ -30,7 +30,7 @@ namespace gloox
   NonSaslAuth::~NonSaslAuth()
   {
     if( m_parent )
-      m_parent->removeIqHandler( XMLNS_AUTH );
+      m_parent->removeIqHandler( this, XMLNS_AUTH );
   }
 
   void NonSaslAuth::doAuth( const std::string& sid )

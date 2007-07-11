@@ -28,7 +28,7 @@ namespace gloox
   PrivateXML::~PrivateXML()
   {
     if( m_parent )
-      m_parent->removeIqHandler( XMLNS_PRIVATE_XML );
+      m_parent->removeIqHandler( this, XMLNS_PRIVATE_XML );
   }
 
   std::string PrivateXML::requestXML( const std::string& tag, const std::string& xmlns,
