@@ -17,7 +17,6 @@
 #include "bytestream.h"
 #include "iqhandler.h"
 #include "gloox.h"
-#include "inbandbytestreammanager.h"
 
 namespace gloox
 {
