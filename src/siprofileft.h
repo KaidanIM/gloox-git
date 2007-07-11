@@ -15,10 +15,11 @@
 #define SIPROFILEFT_H__
 
 #include "iqhandler.h"
+#include "socks5bytestreammanager.h"
 #include "siprofilehandler.h"
 #include "sihandler.h"
 #include "simanager.h"
-#include "socks5bytestreamhandler.h"
+#include "bytestreamhandler.h"
 
 #include <string>
 
@@ -26,11 +27,11 @@ namespace gloox
 {
 
   class ClientBase;
+  class InBandBytestream;
+  class IQ;
   class JID;
   class SIProfileFTHandler;
   class SOCKS5Bytestream;
-  class SOCKS5BytestreamManager;
-  class IQ;
 
   /**
    * @brief An implementation of the file transfer SI profile (XEP-0096).
@@ -75,7 +76,7 @@ namespace gloox
    * occasional blocking is not acceptable). You will need to call
    * @link gloox::SOCKS5Bytestream::connect() SOCKS5Bytestream::connect() @endlink.
    * @link gloox::SOCKS5Bytestream::connect() connect() @endlink will try to connect to each of the
-   * given StreamHosts and block until it has established a connection with one of the them (or
+   * given StreamHosts and block until it has established a connection with one of them (or
    * until all attempts failed). Further, if you want to receive a file via the bytestream, you will
    * have to call recv() on the object from time to time.
    *
@@ -119,7 +120,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
-  class GLOOX_API SIProfileFT : public SIProfileHandler, public SIHandler, public SOCKS5BytestreamHandler,
+  class GLOOX_API SIProfileFT : public SIProfileHandler, public SIHandler, public BytestreamHandler,
                                 public IqHandler
   {
     public:
@@ -144,8 +145,11 @@ namespace gloox
        * @param s5Manager An optional SOCKS5BytestreamManager to use. If this is zero, SIProfileFT
        * will create its own SOCKS5BytestreamManager. You should pass a valid SOCKS5BytestreamManager
        * here if you are already using one with the @c parent ClientBase above.
-       * @note If you passed a SIManager and/or SOCKS5BytestreamManager to SIProfileFT's constructor,
-       * these objects will @b not be deleted on desctruction of SIProfileFT.
+       * @param ibbManager An optional InBandBytestreamManager to use. If this is zero, SIProfileFT
+       * will create its own InBandBytestreamManager. You should pass a valid InBandBytestreamManager
+       * here if you are already using one with the @c parent ClientBase above.
+       * @note If you passed a SIManager and/or SOCKS5BytestreamManager and/or InBandBytestreamManager
+       * to SIProfileFT's constructor, these objects will @b not be deleted on desctruction of SIProfileFT.
        */
       SIProfileFT( ClientBase* parent, SIProfileFTHandler* sipfth, SIManager* manager = 0,
                    SOCKS5BytestreamManager* s5Manager = 0 );
@@ -202,12 +206,11 @@ namespace gloox
       void setRangedTransfers( bool ranged ) { m_ranged = ranged; }
 
       /**
-       * To get rid of a bytestream (i.e., close and delete it), call this function. You
-       * should not use the bytestream any more.
+       * To get rid of a bytestream (i.e., close and delete it), call this function.
        * The remote entity will be notified about the closing of the stream.
-       * @param s5b The bytestream to dispose. It will be deleted here.
+       * @param bs The bytestream to dispose. It will be deleted here.
        */
-      void dispose( SOCKS5Bytestream *s5b );
+      void dispose( Bytestream* bs );
 
       /**
        * Registers a handler that will be informed about incoming file transfer requests,
@@ -260,19 +263,19 @@ namespace gloox
                                           Tag* si, Tag* ptag, Tag* fneg );
 
       // re-implemented from SIHandler
-      virtual void handleSIRequestError( Stanza* stanza );
+      virtual void handleSIRequestError( IQ* iq );
 
-      // re-implemented from SOCKS5BytestreamHandler
-      virtual void handleIncomingSOCKS5BytestreamRequest( const std::string& sid, const JID& from );
+      // re-implemented from BytestreamHandler
+      virtual void handleIncomingBytestreamRequest( const std::string& sid, const JID& from );
 
-      // re-implemented from SOCKS5BytestreamHandler
-      virtual void handleIncomingSOCKS5Bytestream( SOCKS5Bytestream* s5b );
+      // re-implemented from BytestreamHandler
+      virtual void handleIncomingBytestream( Bytestream* bs );
 
-      // re-implemented from SOCKS5BytestreamHandler
-      virtual void handleOutgoingSOCKS5Bytestream( SOCKS5Bytestream *s5b );
+      // re-implemented from BytestreamHandler
+      virtual void handleOutgoingBytestream( Bytestream* bs );
 
-      // re-implemented from SOCKS5BytestreamHandler
-      virtual void handleSOCKS5BytestreamError( Stanza* stanza );
+      // re-implemented from BytestreamHandler
+      virtual void handleBytestreamError( IQ* iq );
 
       //re-implemented from IqHandler
       virtual bool handleIq( IQ* /*iq*/ ) { return false; }

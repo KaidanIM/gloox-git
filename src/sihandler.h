@@ -19,7 +19,7 @@
 namespace gloox
 {
 
-  class Stanza;
+  class IQ;
   class Tag;
   class JID;
 
@@ -58,7 +58,7 @@ namespace gloox
        * This function is called to handle a request error or decline.
        * @param stanza The complete error stanza.
        */
-      virtual void handleSIRequestError( Stanza* stanza ) = 0;
+      virtual void handleSIRequestError( IQ* iq ) = 0;
 
   };
 

@@ -14,7 +14,7 @@
 #ifndef INBANDBYTESTREAM_H__
 #define INBANDBYTESTREAM_H__
 
-#include "messagefilter.h"
+#include "bytestream.h"
 #include "iqhandler.h"
 #include "gloox.h"
 #include "inbandbytestreammanager.h"
@@ -23,23 +23,21 @@ namespace gloox
 {
 
   class ClientBase;
-  class InBandBytestreamDataHandler;
-  class Message;
+  class BytestreamDataHandler;
 
   /**
    * @brief An implementation of a single In-Band Bytestream (XEP-0047).
    *
-   * One instance of this class handles one byte stream. You can attach as many InBandBytestream
-   * objects to a MessageSession as you like.
+   * One instance of this class handles one byte stream.
    *
    * See InBandBytestreamManager for a detailed description on how to implement In-Band Bytestreams.
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.8
    */
-  class GLOOX_API InBandBytestream : public MessageFilter
+  class GLOOX_API InBandBytestream : public Bytestream, public IqHandler
   {
-    friend class InBandBytestreamManager;
+    friend class SIProfileFT;
 
     public:
       /**
@@ -47,11 +45,8 @@ namespace gloox
        */
       virtual ~InBandBytestream();
 
-      /**
-       * Returns whether the bytestream is open, that is, accepted by both parties.
-       * @return Whether the bytestream is open or not.
-       */
-      bool isOpen() const { return m_open; }
+      // re-implemented from Bytestream
+      virtual ConnectionError recv( int timeout = -1 ) { return ConnNoError; }
 
       /**
        * Use this function to send a chunk of data over an open byte stream.
@@ -63,54 +58,49 @@ namespace gloox
        * @return @b True if the data has been sent (no guarantee of receipt), @b false
        * in case of an error.
        */
-      bool sendBlock( const std::string& data );
-
-      /**
-       * Lets you retrieve the stream's ID.
-       * @return The stream's ID.
-       */
-      const std::string& sid() const { return m_sid; }
+      bool send( const std::string& data );
 
       /**
        * Lets you retrieve this bytestream's block-size.
        * @return The bytestream's block-size.
        */
-      int blockSize() const { return (int)m_blockSize; }
+      int blockSize() const { return m_blockSize; }
 
       /**
-       * Use this function to register an object that will receive any notifications from
-       * the InBandBytestream instance. Only one InBandBytestreamDataHandler can be registered
-       * at any one time.
-       * @param ibbdh The InBandBytestreamDataHandler-derived object to receive notifications.
+       * Sets the stream's block-size. Default: 4096
+       * @param blockSize Th enew block size.
+       * @note You should not change the block size once connect() has been called.
        */
-      void registerInBandBytestreamDataHandler( InBandBytestreamDataHandler *ibbdh );
+      void setBlockSize( int blockSize ) { m_blockSize = blockSize; }
 
-      /**
-       * Removes the registered InBandBytestreamDataHandler.
-       */
-      void removeInBandBytestreamDataHandler();
+      // re-implemented from Bytestream
+      virtual bool connect();
 
-      // reimplemented from MessageFilter
-      virtual void decorate( Tag *tag );
+      // re-implemented from Bytestream
+      virtual void close();
 
-      // reimplemented from MessageFilter
-      virtual void filter( Message* msg );
+      // re-implemented from IqHandler
+      virtual bool handleIq( IQ* iq );
+
+      // re-implemented from IqHandler
+      virtual void handleIqID( IQ *iq, int context );
 
     private:
-      InBandBytestream( MessageSession *session, ClientBase *clientbase );
-      void setBlockSize( int blockSize ) { m_blockSize = blockSize; }
-      void close();  // locally
+      enum TrackEnum
+      {
+        IBBOpen,
+        IBBData,
+        IBBClose
+      };
+
+      InBandBytestream( ClientBase* clientbase, LogSink& logInstance, const JID& initiator,
+                        const JID& target, const std::string& sid );
       void closed(); // by remote entity
-      void setSid( const std::string& sid ) { m_sid = sid; }
 
       ClientBase *m_clientbase;
-      InBandBytestreamManager *m_manager;
-      InBandBytestreamDataHandler *m_inbandBytestreamDataHandler;
-      std::string m_sid;
-      std::string::size_type m_blockSize;
+      int m_blockSize;
       int m_sequence;
       int m_lastChunkReceived;
-      bool m_open;
 
   };
 

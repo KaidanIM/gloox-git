@@ -43,10 +43,10 @@ namespace gloox
       void send( Tag *tag );
       void trackID( IqHandler *ih, const std::string& id, int context );
       void registerIqHandler( IqHandler *ih, const std::string& xmlns );
-      void removeIqHandler( const std::string& xmlns );
+      void removeIqHandler( IqHandler* ih, const std::string& xmlns );
       virtual void handleSIRequestResult( const JID& from, const std::string& sid,
                                           Tag* si, Tag* ptag, Tag* fneg );
-      virtual void handleSIRequestError( Stanza* stanza );
+      virtual void handleSIRequestError( IQ* iq );
       virtual void handleSIRequest( const JID& from, const std::string& id, const std::string& profile,
                                     Tag* si, Tag* ptag, Tag* fneg );
       void setTest( int test );
@@ -78,10 +78,10 @@ namespace gloox
   }
   void ClientBase::trackID( IqHandler* /*ih*/, const std::string& /*id*/, int /*context*/ ) {}
   void ClientBase::registerIqHandler( IqHandler* /*ih*/, const std::string& /*xmlns*/ ) {}
-  void ClientBase::removeIqHandler( const std::string& /*xmlns*/ ) {}
+  void ClientBase::removeIqHandler( IqHandler* /*ih*/, const std::string& /*xmlns*/ ) {}
   void ClientBase::handleSIRequestResult( const JID& /*from*/, const std::string& /*sid*/,
                                           Tag* /*si*/, Tag* /*ptag*/, Tag* /*fneg*/ ) {}
-  void ClientBase::handleSIRequestError( Stanza* /*stanza*/ ) {}
+  void ClientBase::handleSIRequestError( IQ* /*iq*/ ) {}
   void ClientBase::handleSIRequest( const JID& /*from*/, const std::string& /*id*/,
                                     const std::string& /*profile*/,
                                     Tag* /*si*/, Tag* /*ptag*/, Tag* /*fneg*/ ) {}

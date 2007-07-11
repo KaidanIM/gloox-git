@@ -12,7 +12,7 @@
 
 
 #include "socks5bytestream.h"
-#include "socks5bytestreamdatahandler.h"
+#include "bytestreamdatahandler.h"
 #include "clientbase.h"
 #include "connectionbase.h"
 #include "connectionsocks5proxy.h"
@@ -25,9 +25,8 @@ namespace gloox
   SOCKS5Bytestream::SOCKS5Bytestream( SOCKS5BytestreamManager* manager, ConnectionBase* connection,
                                       LogSink& logInstance, const JID& initiator, const JID& target,
                                       const std::string& sid )
-    : m_manager( manager ), m_connection( 0 ), m_socks5( 0 ), m_logInstance( logInstance ),
-      m_socks5BytestreamDataHandler( 0 ), m_initiator( initiator ), m_target( target ),
-      m_sid( sid ), m_open( false )
+    : Bytestream( Bytestream::S5B, logInstance, initiator, target, sid ),
+      m_manager( manager ), m_connection( 0 ), m_socks5( 0 )
   {
     setConnectionImpl( connection );
   }
@@ -97,8 +96,8 @@ namespace gloox
   void SOCKS5Bytestream::activate()
   {
     m_open = true;
-    if( m_socks5BytestreamDataHandler )
-      m_socks5BytestreamDataHandler->handleSOCKS5Open( this );
+    if( m_handler )
+      m_handler->handleBytestreamOpen( this );
   }
 
   void SOCKS5Bytestream::close()
@@ -107,31 +106,31 @@ namespace gloox
     {
       m_open = false;
       m_socks5->disconnect();
-      m_socks5BytestreamDataHandler->handleSOCKS5Close( this );
+      m_handler->handleBytestreamClose( this );
     }
   }
 
   void SOCKS5Bytestream::handleReceivedData( const ConnectionBase* /*connection*/, const std::string& data )
   {
-    if( !m_socks5BytestreamDataHandler )
+    if( !m_handler )
       return;
 
     if( !m_open )
     {
       m_open = true;
-      m_socks5BytestreamDataHandler->handleSOCKS5Open( this );
+      m_handler->handleBytestreamOpen( this );
     }
 
 //     if( !m_open && data.length() == 2 && data[0] == 0x05 && data[1] == 0x00 )
 //     {
 //       printf( "received acknowleding zero byte, stream is now open\n" );
 //       m_open = true;
-//       m_socks5BytestreamDataHandler->handleSOCKS5Open( this );
+//       m_handler->handleBytestream5Open( this );
 //       return;
 //     }
 
     if( m_open )
-      m_socks5BytestreamDataHandler->handleSOCKS5Data( this, data );
+      m_handler->handleBytestreamData( this, data );
   }
 
   void SOCKS5Bytestream::handleConnect( const ConnectionBase* /*connection*/ )
@@ -141,8 +140,8 @@ namespace gloox
 
   void SOCKS5Bytestream::handleDisconnect( const ConnectionBase* /*connection*/, ConnectionError /*reason*/ )
   {
-    if( m_socks5BytestreamDataHandler )
-      m_socks5BytestreamDataHandler->handleSOCKS5Close( this );
+    if( m_handler )
+      m_handler->handleBytestreamClose( this );
   }
 
 }

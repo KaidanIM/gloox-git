@@ -189,7 +189,7 @@ namespace gloox
               break;
             }
             case IQ::Error:
-              (*it).second.ibbh->handleInBandBytestreamError( iq->from(), iq->error() );
+              (*it).second.ibbh->handleInBandBytestreamError( iq );
               break;
             default:
               break;

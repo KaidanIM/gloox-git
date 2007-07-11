@@ -7,7 +7,8 @@
 #include "../logsink.h"
 #include "../siprofileft.h"
 #include "../siprofilefthandler.h"
-#include "../socks5bytestreamdatahandler.h"
+#include "../bytestreamdatahandler.h"
+#include "../socks5bytestream.h"
 using namespace gloox;
 
 #include <unistd.h>
@@ -21,7 +22,7 @@ using namespace gloox;
 /**
  * Receives one file and displayes it. Does not save anything.
  */
-class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, SOCKS5BytestreamDataHandler
+class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, BytestreamDataHandler
 {
   public:
     FTTest() : m_quit( false ) {}
@@ -55,14 +56,14 @@ class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, SOCKS5
             j->disconnect();
 
           ce = j->recv( 100 );
-          std::list<SOCKS5Bytestream*>::iterator it = m_s5bs.begin();
-          for( ; it != m_s5bs.end(); ++it )
+          std::list<Bytestream*>::iterator it = m_bs.begin();
+          for( ; it != m_bs.end(); ++it )
             (*it)->recv( 100 );
         }
         printf( "ce: %d\n", ce );
       }
 
-      f->dispose( m_s5bs.front() );
+      f->dispose( m_bs.front() );
       delete f;
       delete j;
     }
@@ -111,19 +112,22 @@ class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, SOCKS5
 //     {
 //     }
 
-    virtual void handleFTRequestError( Stanza* /*stanza*/ )
+    virtual void handleFTRequestError( IQ* /*iq*/ )
     {
       printf( "ft request error\n" );
     }
 
-    virtual void handleFTSOCKS5Bytestream( SOCKS5Bytestream* s5b )
+    virtual void handleFTBytestream( Bytestream* bs )
     {
-      printf( "received socks5 bytestream\n" );
-      m_s5bs.push_back( s5b );
-      s5b->registerSOCKS5BytestreamDataHandler( this );
-      if( s5b->connect() )
+      printf( "received bytestream type: %s\n", bs->type() == Bytestream::S5B ? "s5b" : "ibb" );
+      m_bs.push_back( bs );
+      bs->registerBytestreamDataHandler( this );
+      if( bs->connect() )
       {
-        printf( "ok! s5b connected to streamhost\n" );
+        if( bs->type() == Bytestream::S5B )
+          printf( "ok! s5b connected to streamhost\n" );
+        else
+          printf( "ok! ibb sent request to remote entity\n" );
       }
     }
 
@@ -132,22 +136,22 @@ class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, SOCKS5
       return std::string();
     };
 
-    virtual void handleSOCKS5Data( SOCKS5Bytestream* /*s5b*/, const std::string& data )
+    virtual void handleBytestreamData( Bytestream* /*s5b*/, const std::string& data )
     {
       printf( "received %d bytes of data:\n%s\n", data.length(), data.c_str() );
     }
 
-    virtual void handleSOCKS5Error( SOCKS5Bytestream* /*s5b*/, Stanza* /*stanza*/ )
+    virtual void handleBytestreamError( Bytestream* /*s5b*/, IQ* /*stanza*/ )
     {
       printf( "socks5 stream error\n" );
     }
 
-    virtual void handleSOCKS5Open( SOCKS5Bytestream* /*s5b*/ )
+    virtual void handleBytestreamOpen( Bytestream* /*s5b*/ )
     {
       printf( "stream opened\n" );
     }
 
-    virtual void handleSOCKS5Close( SOCKS5Bytestream* /*s5b*/ )
+    virtual void handleBytestreamClose( Bytestream* /*s5b*/ )
     {
       printf( "stream closed\n" );
       m_quit = true;
@@ -157,7 +161,7 @@ class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, SOCKS5
     Client *j;
     SIProfileFT* f;
     SOCKS5BytestreamManager* s5b;
-    std::list<SOCKS5Bytestream*> m_s5bs;
+    std::list<Bytestream*> m_bs;
     bool m_quit;
 };
 

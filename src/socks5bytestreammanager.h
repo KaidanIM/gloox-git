@@ -20,7 +20,7 @@
 namespace gloox
 {
 
-  class SOCKS5BytestreamHandler;
+  class BytestreamHandler;
   class SOCKS5BytestreamServer;
   class SOCKS5Bytestream;
   class ClientBase;
@@ -69,7 +69,7 @@ namespace gloox
        * @param s5bh A SOCKS5BytestreamManager -derived object that will receive
        * incoming and outgoing SOCKS5Bytestreams.
        */
-      SOCKS5BytestreamManager( ClientBase *parent, SOCKS5BytestreamHandler* s5bh );
+      SOCKS5BytestreamManager( ClientBase *parent, BytestreamHandler* s5bh );
 
       /**
        * Virtual destructor.
@@ -95,14 +95,14 @@ namespace gloox
        * This function requests a bytestream with the remote entity.
        * Data can only be sent over an open stream. Use isOpen() to find out what the stream's
        * current state is. However, successful opening/initiation will be announced by means of the
-       * SOCKS5BytestreamHandler interface. Multiple bytestreams (even per JID) can be initiated
+       * BytestreamHandler interface. Multiple bytestreams (even per JID) can be initiated
        * without waiting for success.
        * @param to The recipient of the requested bytestream.
        * @param mode The desired transport layer protocol.
        * @param sid The bytestreakm's stream ID, if previously negotiated e.g. using SI (XEP-0095).
        * @return @b False in case of an error, @b true otherwise. A return value of @b true does
        * @b not indicate that the bytestream has been opened. This is announced by means of the
-       * SOCKS5BytestreamHandler.
+       * BytestreamHandler.
        */
       bool requestSOCKS5Bytestream( const JID& to, S5BMode mode, const std::string& sid = "" );
 
@@ -116,29 +116,29 @@ namespace gloox
 
       /**
        * Use this function to accept an incoming bytestream.
-       * @param sid The stream's id as passed to SOCKS5BytestreamHandler::handleIncomingSOCKS5Bytestream().
+       * @param sid The stream's id as passed to BytestreamHandler::handleIncomingSOCKS5Bytestream().
        */
       void acceptSOCKS5Bytestream( const std::string& sid );
 
       /**
        * Use this function to reject an incoming bytestream.
-       * @param sid The stream's id as passed to SOCKS5BytestreamHandler::handleIncomingSOCKS5Bytestream().
+       * @param sid The stream's id as passed to BytestreamHandler::handleIncomingSOCKS5Bytestream().
        */
       void rejectSOCKS5Bytestream( const std::string& sid );
 
       /**
        * Use this function to register an object that will receive new @b incoming bytestream
-       * requests from the SOCKS5BytestreamManager. Only one SOCKS5BytestreamHandler can be
+       * requests from the SOCKS5BytestreamManager. Only one BytestreamHandler can be
        * registered at any one time.
-       * @param s5bh The SOCKS5BytestreamHandler derived object to receive notifications.
+       * @param s5bh The BytestreamHandler derived object to receive notifications.
        */
-      void registerSOCKS5BytestreamHandler( SOCKS5BytestreamHandler *s5bh )
+      void registerBytestreamHandler( BytestreamHandler *s5bh )
         { m_socks5BytestreamHandler = s5bh; }
 
       /**
-       * Removes the registered SOCKS5BytestreamHandler.
+       * Removes the registered BytestreamHandler.
        */
-      void removeSOCKS5BytestreamHandler()
+      void removeBytestreamHandler()
         { m_socks5BytestreamHandler = 0; }
 
       /**
@@ -187,7 +187,7 @@ namespace gloox
       AsyncTrackMap m_asyncTrackMap;
 
       ClientBase *m_parent;
-      SOCKS5BytestreamHandler* m_socks5BytestreamHandler;
+      BytestreamHandler* m_socks5BytestreamHandler;
       SOCKS5BytestreamServer* m_server;
       StreamHostList m_hosts;
       StringMap m_trackMap;

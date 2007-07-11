@@ -17,6 +17,7 @@
 #include "siprofilefthandler.h"
 #include "simanager.h"
 #include "dataform.h"
+#include "inbandbytestream.h"
 #include "socks5bytestream.h"
 #include "socks5bytestreammanager.h"
 
@@ -28,7 +29,8 @@ namespace gloox
   SIProfileFT::SIProfileFT( ClientBase* parent, SIProfileFTHandler* sipfth, SIManager* manager,
                             SOCKS5BytestreamManager* s5Manager )
     : m_parent( parent ), m_manager( manager ), m_handler( sipfth ),
-      m_socks5Manager( s5Manager ), m_delManager( false ), m_delS5Manager( false ), m_ranged( false )
+      m_socks5Manager( s5Manager ), m_delManager( false ),
+      m_delS5Manager( false ), m_ranged( false )
   {
     if( !m_manager )
     {
@@ -129,10 +131,12 @@ namespace gloox
     m_manager->declineSI( to, id, reason, text );
   }
 
-  void SIProfileFT::dispose( SOCKS5Bytestream* s5b )
+  void SIProfileFT::dispose( Bytestream* bs )
   {
-    if( m_socks5Manager )
-      m_socks5Manager->dispose( s5b );
+    if( bs && bs->type() == Bytestream::S5B && m_socks5Manager )
+      m_socks5Manager->dispose( static_cast<SOCKS5Bytestream*>( bs ) );
+    else
+      delete bs;
   }
 
   void SIProfileFT::setStreamHosts( StreamHostList hosts )
@@ -199,6 +203,12 @@ namespace gloox
     }
     else if( m_handler && dff && dff->value() == XMLNS_IQ_OOB )
     {
+      InBandBytestream* ibb = new InBandBytestream( m_parent, m_parent->logInstance(), m_parent->jid(),
+                                                    from, sid );
+      m_handler->handleFTBytestream( ibb );
+    }
+    else if( m_handler && dff && dff->value() == XMLNS_IQ_OOB )
+    {
       const std::string& url = m_handler->handleOOBRequestResult( from, sid );
       if( !url.empty() )
       {
@@ -211,7 +221,7 @@ namespace gloox
     }
   }
 
-  void SIProfileFT::handleIqID( IQ* iq, int context )
+  void SIProfileFT::handleIqID( IQ* /*iq*/, int context )
   {
     switch( context )
     {
@@ -222,34 +232,34 @@ namespace gloox
     }
   }
 
-  void SIProfileFT::handleSIRequestError( Stanza* stanza )
+  void SIProfileFT::handleSIRequestError( IQ* iq )
   {
     if( m_handler )
-      m_handler->handleFTRequestError( stanza );
+      m_handler->handleFTRequestError( iq );
   }
 
-  void SIProfileFT::handleIncomingSOCKS5BytestreamRequest( const std::string& sid, const JID& /*from*/ )
+  void SIProfileFT::handleIncomingBytestreamRequest( const std::string& sid, const JID& /*from*/ )
   {
 // TODO: check for valid sid/from tuple
     m_socks5Manager->acceptSOCKS5Bytestream( sid );
   }
 
-  void SIProfileFT::handleIncomingSOCKS5Bytestream( SOCKS5Bytestream* s5b )
+  void SIProfileFT::handleIncomingBytestream( Bytestream* bs )
   {
     if( m_handler )
-      m_handler->handleFTSOCKS5Bytestream( s5b );
+      m_handler->handleFTBytestream( bs );
   }
 
-  void SIProfileFT::handleOutgoingSOCKS5Bytestream( SOCKS5Bytestream *s5b )
+  void SIProfileFT::handleOutgoingBytestream( Bytestream* bs )
   {
     if( m_handler )
-      m_handler->handleFTSOCKS5Bytestream( s5b );
+      m_handler->handleFTBytestream( bs );
   }
 
-  void SIProfileFT::handleSOCKS5BytestreamError( Stanza* stanza )
+  void SIProfileFT::handleBytestreamError( IQ* iq )
   {
     if( m_handler )
-      m_handler->handleFTRequestError( stanza );
+      m_handler->handleFTRequestError( iq );
   }
 
 }

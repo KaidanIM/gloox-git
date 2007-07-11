@@ -42,7 +42,7 @@ namespace gloox
        * @return Indicates whether a request of type 'get' or 'set' has been handled. This includes
        * the obligatory 'result' answer. If you return @b false, a 'error' will be sent.
        */
-      virtual bool handleIq( IQ *iq ) = 0;
+      virtual bool handleIq( IQ* iq ) = 0;
 
       /**
        * Reimplement this function if you want to be notified about
@@ -55,7 +55,7 @@ namespace gloox
        * @param context A value to restore context, stored with ClientBase::trackID().
        * @note Only IQ stanzas of type 'result' or 'error' can arrive here.
        */
-      virtual void handleIqID( IQ *iq, int context ) = 0;
+      virtual void handleIqID( IQ* iq, int context ) = 0;
   };
 
 }
