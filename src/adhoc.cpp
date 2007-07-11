@@ -42,7 +42,7 @@ namespace gloox
       m_parent->disco()->removeFeature( XMLNS_ADHOC_COMMANDS );
       m_parent->disco()->removeNodeHandler( this, XMLNS_ADHOC_COMMANDS );
       m_parent->disco()->removeNodeHandler( this, std::string() );
-      m_parent->removeIqHandler( XMLNS_ADHOC_COMMANDS );
+      m_parent->removeIqHandler( this, XMLNS_ADHOC_COMMANDS );
     }
   }
 

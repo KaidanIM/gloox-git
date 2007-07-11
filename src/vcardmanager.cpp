@@ -35,7 +35,7 @@ namespace gloox
     if( m_parent )
     {
       m_parent->disco()->removeFeature( XMLNS_VCARD_TEMP );
-      m_parent->removeIqHandler( XMLNS_VCARD_TEMP );
+      m_parent->removeIqHandler( this, XMLNS_VCARD_TEMP );
       m_parent->removeIDHandler( this );
     }
   }

@@ -916,10 +916,16 @@ namespace gloox
     m_iqNSHandlers.insert( make_pair( xmlns, ih ) );
   }
 
-  void ClientBase::removeIqHandler( const std::string& xmlns )
+  void ClientBase::removeIqHandler( IqHandler* ih, const std::string& xmlns )
   {
-    if( !xmlns.empty() )
-      m_iqNSHandlers.erase( xmlns );
+    if( !ih || xmlns.empty() )
+      return;
+
+    typedef IqHandlerMap::iterator IQi;
+    std::pair<IQi, IQi> g = m_iqNSHandlers.equal_range( xmlns );
+    for( IQi it = g.first; it != g.second; ++it )
+      if( (*it).second == ih )
+        m_iqNSHandlers.erase( it );
   }
 
   void ClientBase::registerMessageSession( MessageSession *session )
