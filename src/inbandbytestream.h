@@ -67,7 +67,7 @@ namespace gloox
 
       /**
        * Sets the stream's block-size. Default: 4096
-       * @param blockSize Th enew block size.
+       * @param blockSize The new block size.
        * @note You should not change the block size once connect() has been called.
        */
       void setBlockSize( int blockSize ) { m_blockSize = blockSize; }
