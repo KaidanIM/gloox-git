@@ -23,6 +23,7 @@ namespace gloox
   class JID;
 
   /**
+   * @brief An abstraction of a message stanza.
    *
    * @author Vincent Thomasset
    * @author Jakob Schroeter <js@camaya.net>
@@ -38,22 +39,30 @@ namespace gloox
        */
       enum MessageType
       {
-        Chat           =  1,        /**< */
-        Error          =  2,        /**< */
-        Groupchat      =  4,        /**< */
-        Headline       =  8,        /**< */
-        Normal         = 16,        /**< */
-        Invalid        = 32         /**< */
+        Chat           =  1,        /**< A chat message. */
+        Error          =  2,        /**< An error message. */
+        Groupchat      =  4,        /**< A groupchat message. */
+        Headline       =  8,        /**< A headline message. */
+        Normal         = 16,        /**< A normal message. */
+        Invalid        = 32         /**< The message stanza is invalid. */
       };
 
       /**
        * Creates a message Stanza from the given Tag.
        * @param tag The Tag to parse.
+       * @param rip Whether to rip off the original Tag.
        */
       Message( Tag *tag, bool rip = false );
 
       /**
        * Creates a Message.
+       * @param type The message type.
+       * @param to The intended receiver.
+       * @param body The message's body text.
+       * @param subject The message's optional subject.
+       * @param thread The message's optional thread ID.
+       * @param xmllang An optional xml:lang for the message body.
+       * @param from An optional sender address. Usually not needed. Cannot be forged.
        */
       Message( MessageType type, const JID& to,
                const std::string& body = "", const std::string& subject = "",
@@ -65,14 +74,8 @@ namespace gloox
       virtual ~Message();
 
       /**
-       * Adds an extension to the message.
-       * @param ext Extension to add. The extension must be a legal message extension.
-       */
-      void addExtension( StanzaExtension *extension ) // + switch ext->type() to ensure legal extension is added ?
-        { m_extensionList.push_back( extension ); }
-
-      /**
-       *
+       * Returns the message's type.
+       * @return The message's type.
        */
       MessageType subtype() const { return m_subtype; }
 

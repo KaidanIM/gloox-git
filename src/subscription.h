@@ -23,6 +23,7 @@ namespace gloox
   class JID;
 
   /**
+   * @brief An abstraction of a subscription stanza.
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 1.0
@@ -37,21 +38,27 @@ namespace gloox
        */
       enum S10nType
       {
-        Subscribe,
-        Subscribed,
-        Unsubscribe,
-        Unsubscribed,
-        Invalid
+        Subscribe,                  /**> A subscription request. */
+        Subscribed,                 /**< A subscription notification. */
+        Unsubscribe,                /**< An unsubscription request. */
+        Unsubscribed,               /**< An unsubscription notification. */
+        Invalid                     /**< The stanza is invalid. */
       };
 
       /**
        * Creates a Subscription request from the given Tag.
        * @param tag The Tag to parse.
+       * @param rip Whether to rip off the tag.
        */
       Subscription( Tag *tag, bool rip = false );
 
       /**
        * Creates a Subscription request.
+       * @param type The presence type.
+       * @param to The intended receiver. Use an empty JID to create a broadcast packet.
+       * @param status An optional status message (e.g. "please authorize me").
+       * @param xmllang An optional xml:lang for the status message.
+       * @param from An optional sender address. Usually not needed. Cannot be forged.
        */
       Subscription( S10nType type, const JID& to, const std::string& status = "",
                      const std::string& xmllang = "", const JID& from = JID() );
@@ -61,6 +68,8 @@ namespace gloox
       virtual ~Subscription();
 
       /**
+       * Returns the subscription stanza's type.
+       * @return The subscription stanza's type.
        *
        */
       S10nType subtype() const { return m_subtype; }

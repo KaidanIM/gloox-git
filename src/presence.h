@@ -23,6 +23,7 @@ namespace gloox
   class JID;
 
   /**
+   * @brief An abstraction of a presence stanza.
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 1.0
@@ -37,25 +38,33 @@ namespace gloox
        */
       enum PresenceType
       {
-        Available,
-        Chat,
-        Away,
-        DND,
-        XA,
-        Unavailable,
-        Probe,
-        Error,
-        Invalid
+        Available,                  /**< The entity is online. */
+        Chat,                       /**< The entity is 'available for chat'. */
+        Away,                       /**< The entity is away. */
+        DND,                        /**< The entity is DND (Do Not Disturb). */
+        XA,                         /**< The entity is XA (eXtended Away). */
+        Unavailable,                /**< The entity is offline. */
+        Probe,                      /**< This is a presence probe. */
+        Error,                      /**< This is a presence error. */
+        Invalid                     /**< The stanza is invalid. */
       };
 
       /**
        * Creates a Presence request from the given Tag.
        * @param tag The Tag to parse.
+       * @param rip Whether to rip off the tag.
        */
-      Presence( Tag *tag, bool rip = false );
+      Presence( Tag* tag, bool rip = false );
 
       /**
        * Creates a Presence request.
+       * @param type The presence type.
+       * @param to The intended receiver. Use an empty JID to create a broadcast packet.
+       * @param status An optional status message (e.g. "gone fishing").
+       * @param priority An optional presence priority. Legal range is between -128 and +127.
+       * Defaults to 0.
+       * @param xmllang An optional xml:lang for the status message.
+       * @param from An optional sender address. Usually not needed. Cannot be forged.
        */
       Presence( PresenceType type, const JID& to, const std::string& status = "",
                 int priority = 0, const std::string& xmllang = "", const JID& from = JID() );
@@ -65,12 +74,14 @@ namespace gloox
       virtual ~Presence();
 
       /**
-       *
+       * Returns the presence's type.
+       * @return The presence's type.
        */
       PresenceType subtype() const { return m_subtype; }
 
       /**
-       *
+       * Returns the presence's type.
+       * @return The presence's type.
        */
 #warning FIXME return something useful (only 'show' values?) or kill this func
       PresenceType presence() const { return m_subtype; }
@@ -89,10 +100,8 @@ namespace gloox
 
       /**
          * Returns the remote entity resource's presence priority if the stanza is a presence stanza.
-         * If the stanza is not a presence stanza or if no priority information was included, a value
-         * below -128 is returned, which is an illegal value for the priority. Legal range is between
-         * -128 and +127.
-         * @return The priority information contained in the stanza, if any, or a value below -128.
+         * Legal range is between -128 and +127.
+         * @return The priority information contained in the stanza, if any, or 0.
        */
       int priority() const { return m_priority; }
 
