@@ -93,7 +93,8 @@ namespace gloox
    *
    * @li In general, both types of streams can be handled equally, i.e. there's no need to know whether
    * the underlying stream really is a SOCKS5Bytestream or an InBandBytestream.
-   * @link gloox::Bytestream::type() Bytestream::type() @endlink tells anyway.
+   * @link gloox::Bytestream::type() Bytestream::type() @endlink tells anyway. Note, however, that
+   * sending large amounts of data using in-band bytestreams may trigger rate limiting in some servers.
    *
    * @li If you e.g. told Client to connect through a @link gloox::ConnectionHTTPProxy HTTP proxy @endlink
    * or a @link gloox::ConnectionSOCKS5Proxy SOCKS5 proxy @endlink, or any other ConnectionBase -derived
