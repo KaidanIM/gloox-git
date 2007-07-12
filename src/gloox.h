@@ -283,14 +283,15 @@
  * and @link gloox::GPGEncrypted GPGEncrypted @endlink)
  * @li XEP-0030 @link gloox::Disco Service Discovery @endlink
  * @li XEP-0045 @link gloox::MUCRoom Multi-User Chat @endlink
- * @li XEP-0047 @link gloox::InBandBytestreamManager In-Band Bytestreams @endlink
+ * @li XEP-0047 Used with @ref filetransfer_sec
  * @li XEP-0048 @link gloox::BookmarkStorage Bookmark Storage @endlink
  * @li XEP-0049 @link gloox::PrivateXML Private XML Storage @endlink
  * @li XEP-0050 @link gloox::Adhoc Ad-hoc Commands @endlink
  * @li XEP-0054 @link gloox::VCardManager vcard-temp @endlink
+ * @li XEP-0060 @link gloox::PubSub::Manager Publish-Subscribe @endlink
  * @li XEP-0065 @link gloox::SOCKS5BytestreamManager SOCKS5 Bytestreams @endlink, used with
  * @ref filetransfer_sec and @ref proxy_sec
- * @li XEP-0066 @link gloox::OOB Out of Band Data @endlink
+ * @li XEP-0066 @link gloox::OOB Out of Band Data @endlink, also used with @ref filetransfer_sec
  * @li XEP-0077 @link gloox::Registration In-Band Registration @endlink
  * @li XEP-0078 Non-SASL Authentication (automatically used if the server does not support SASL)
  * @li XEP-0083 Nested Roster Groups (automatically used if supported by the server. see
