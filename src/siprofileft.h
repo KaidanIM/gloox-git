@@ -37,13 +37,13 @@ namespace gloox
    * @brief An implementation of the file transfer SI profile (XEP-0096).
    *
    * An SIProfileFT object acts as a 'plugin' to the SIManager. SIProfileFT
-   * manages most of the file transfer functionality.
+   * manages most of the file transfer functionality. The naming comes from the fact that
+   * File Transfer (FT) is a profile of Stream Initiation (SI).
    *
    * Usage:
    *
-   * Create a new SIProfileFT object. It needs a ClientBase -derived object as well as a
-   * SIProfileFTHandler -derived object that will receive file transfer-related events.
-   * The naming comes from the fact that File Transfer (FT) is a profile of Stream Initiation (SI).
+   * Create a new SIProfileFT object. It needs a ClientBase -derived object (e.g. Client)
+   * as well as a SIProfileFTHandler -derived object that will receive file transfer-related events.
    * If you already use SI and the SIManager somewhere else, you should pass a pointer to that
    * SIManager object as third parameter to SIProfileFT's constructor.
    * @code
@@ -62,23 +62,38 @@ namespace gloox
    * You are now, basically, ready to send and receive files.
    *
    * A couple of notes:
-   * @li To be able to send files, you will need access to a SOCKS5 bytestream proxy (called
-   * StreamHost)(not an ordinary SOCKS5 proxy). You should use Disco to query it for its host
-   * and port and feed that information into SIProfileFT:
+   * @li There are two (actually two and a half) possible "techniques" to transfer files
+   * using SI. The first is using a peer-to-peer SOCKS5 bytestream, optionally via a
+   * (special) SOCKS5 proxy.
+   * The second techniques is using an in-band bytestream, i.e. the data is encapsulated in XMPP stanzas
+   * and sent through the server.
+   *
+   * @li To be able to send files using the former method (SOCKS5 bytestreams), you will need
+   * access to a SOCKS5 bytestream proxy (called StreamHost). You should use Disco to query it
+   * for its host and port and feed that information into SIProfileFT:
    * @code
    * ft->addStreamHost( JID( "proxy.server.dom" ), "101.102.103.104", 6677 );
    * @endcode
    * You should @b not hard-code this information (esp. host/IP and port) into your app since
    * the proxy may go down occasionally or vanish completely.
    *
-   * @li When you finally receive a SOCKS5Bytestream via the SIProfileFTHandler, you will need
+   * @li When you finally receive a Bytestream via the SIProfileFTHandler, you will need
    * to integrate this bytestream with your mainloop, or put it into a separate thread (if
    * occasional blocking is not acceptable). You will need to call
-   * @link gloox::SOCKS5Bytestream::connect() SOCKS5Bytestream::connect() @endlink.
-   * @link gloox::SOCKS5Bytestream::connect() connect() @endlink will try to connect to each of the
-   * given StreamHosts and block until it has established a connection with one of them (or
-   * until all attempts failed). Further, if you want to receive a file via the bytestream, you will
-   * have to call recv() on the object from time to time.
+   * @link gloox::Bytestream::connect() connect() @endlink on that Bytestream. For SOCKS5 bytestreams,
+   * this function will try to connect to each of the given StreamHosts and block until it has established
+   * a connection with one of them (or until all attempts failed). Further, if you want to receive
+   * a file via the bytestream, you will have to call recv() on the object from time to time.
+   * For in-band bytestreams, @link gloox::Bytestream::connect() connect() @endlink will send an "open the
+   * bytestream" request to the contact.
+   *
+   * @li For both stream types,
+   * @link gloox::BytestreamDataHandler::handleBytestreamOpen() BytestreamDataHandler::handleBytestreamOpen() @endlink
+   * will announce the established bytestream. The stream then is ready to send and receive data.
+   *
+   * @li In general, both types of streams can be handled equally, i.e. there's no need to know whether
+   * the underlying stream really is a SOCKS5Bytestream or an InBandBytestream.
+   * @link gloox::Bytestream::type() Bytestream::type() @endlink tells anyway.
    *
    * @li If you e.g. told Client to connect through a @link gloox::ConnectionHTTPProxy HTTP proxy @endlink
    * or a @link gloox::ConnectionSOCKS5Proxy SOCKS5 proxy @endlink, or any other ConnectionBase -derived
@@ -87,7 +102,7 @@ namespace gloox
    * e.g. a local SOCKS5 proxy inside your local network, use SOCKS5Bytestream::setConnectionImpl() to
    * override the above default connection(s).
    *
-   * @li Do @b not delete a SOCKS5Bytestream manually. Use dispose() instead.
+   * @li Do @b not delete Bytestream objects manually. Use dispose() instead.
    *
    * @li Additionally to using external SOCKS5 proxies, you can use a SOCKS5BytestreamServer object
    * that gloox provides:
@@ -102,6 +117,8 @@ namespace gloox
    * This listening server should then be integrated into your mainloop to have its
    * @link gloox::SOCKS5BytestreamServer::recv() recv() @endlink method called from time to time.
    * It is safe to put the server into its own thread.
+   *
+   * @li The interal SOCKS5BytestreamServer will obviously not work across NATs.
    *
    * @li Using addStreamHost(), you can add as many potential StreamHosts as you like. However, you
    * should add the best options (e.g. the local SOCKS5BytestreamServer) first.
