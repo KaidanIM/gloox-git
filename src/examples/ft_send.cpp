@@ -158,7 +158,7 @@ class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, Bytest
               "desc: %s\n",
               from.full().c_str(), name.c_str(), size, sid.c_str(), hash.c_str(), date.c_str(),
               mimetype.c_str(), desc.c_str() );
-      f->acceptFT( from, id, SIProfileFT::FTTypeS5B );
+      f->acceptFT( from, id, sid, SIProfileFT::FTTypeS5B );
     }
 
 //     virtual void handleFTRequestResult( const JID& /*from*/, const std::string& /*sid*/ )
