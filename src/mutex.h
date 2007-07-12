@@ -19,8 +19,6 @@
 namespace gloox
 {
 
-  class MutexImpl;
-
   /**
    * @brief A simple implementation of mutex as a wrapper around a pthread mutex
    * or a win32 critical section.
@@ -52,6 +50,8 @@ namespace gloox
       void unlock();
 
     private:
+      class MutexImpl;
+
       Mutex& operator=( const Mutex& );
       MutexImpl* m_mutex;
 
