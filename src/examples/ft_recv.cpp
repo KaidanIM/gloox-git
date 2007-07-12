@@ -8,7 +8,6 @@
 #include "../siprofileft.h"
 #include "../siprofilefthandler.h"
 #include "../bytestreamdatahandler.h"
-#include "../socks5bytestream.h"
 using namespace gloox;
 
 #include <unistd.h>
