@@ -95,7 +95,7 @@ namespace gloox
     return m_manager->requestSI( this, to, XMLNS_SI_FT, file, feature, mimetype );
   }
 
-  void SIProfileFT::acceptFT( const JID& to, const std::string& id, StreamType type )
+  void SIProfileFT::acceptFT( const JID& to, const std::string& id, const std::string& sid, StreamType type )
   {
     if( !m_manager )
       return;
@@ -110,6 +110,12 @@ namespace gloox
         break;
       case FTTypeIBB:
         dff->setValue( XMLNS_IBB );
+        if( m_handler )
+        {
+          InBandBytestream* ibb = new InBandBytestream( m_parent, m_parent->logInstance(), to,
+                                                        m_parent->jid(), sid );
+          m_handler->handleFTBytestream( ibb );
+        }
         break;
       case FTTypeOOB:
         dff->setValue( XMLNS_IQ_OOB );
@@ -201,7 +207,7 @@ namespace gloox
       // check return value:
       m_socks5Manager->requestSOCKS5Bytestream( from, SOCKS5BytestreamManager::S5BTCP, sid );
     }
-    else if( m_handler && dff && dff->value() == XMLNS_IQ_OOB )
+    else if( m_handler && dff && dff->value() == XMLNS_IBB )
     {
       InBandBytestream* ibb = new InBandBytestream( m_parent, m_parent->logInstance(), m_parent->jid(),
                                                     from, sid );

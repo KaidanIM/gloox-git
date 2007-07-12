@@ -27,9 +27,9 @@ namespace gloox
   /**
    * @brief An implementation of a single In-Band Bytestream (XEP-0047).
    *
-   * One instance of this class handles one byte stream.
+   * One instance of this class handles a single  byte stream.
    *
-   * See InBandBytestreamManager for a detailed description on how to implement In-Band Bytestreams.
+   * See SIProfileFT for a detailed description on how to implement file transfer.
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.8
@@ -95,6 +95,7 @@ namespace gloox
       InBandBytestream( ClientBase* clientbase, LogSink& logInstance, const JID& initiator,
                         const JID& target, const std::string& sid );
       void closed(); // by remote entity
+      void returnResult( const JID& to, const std::string& id );
 
       ClientBase *m_clientbase;
       int m_blockSize;

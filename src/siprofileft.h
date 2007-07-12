@@ -182,10 +182,12 @@ namespace gloox
        * @link gloox::SIProfileFTHandler::handleFTRequest() SIProfileFTHandler::handleFTRequest() @endlink.
        * @param to The requestor.
        * @param id The request's id, as passed to SIProfileHandler::handleFTRequest().
+       * @param sid The request's sid, as passed to SIProfileHandler::handleFTRequest().
        * @param type The desired stream type to use for this file transfer. Defaults to
        * SOCKS5 Bytestream. You should not use @c FTTypeAll here.
        */
-      void acceptFT( const JID& to, const std::string& id, StreamType type = FTTypeS5B );
+      void acceptFT( const JID& to, const std::string& id, const std::string& sid,
+                     StreamType type = FTTypeS5B );
 
       /**
        * Call this function to decline a FT request previously announced by means of

@@ -28,7 +28,7 @@ namespace gloox
     if( m_clientbase )
       m_clientbase->registerIqHandler( this, XMLNS_IBB );
 
-    m_open = true;
+    m_open = false;
   }
 
   InBandBytestream::~InBandBytestream()
@@ -67,7 +67,10 @@ namespace gloox
     {
       case IQ::Result:
         if( context == IBBOpen && m_handler )
+        {
           m_handler->handleBytestreamOpen( this );
+          m_open = true;
+        }
         break;
       case IQ::Error:
         closed();
@@ -87,11 +90,19 @@ namespace gloox
     {
       if( q->name() == "open" )
       {
+        returnResult( iq->from(), iq->id() );
         m_open = true;
         m_handler->handleBytestreamOpen( this );
         return true;
       }
       return false;
+    }
+
+    if( q->name() == "close" )
+    {
+      returnResult( iq->from(), iq->id() );
+      closed();
+      return true;
     }
 
     const std::string& seq = q->findAttribute( "seq" );
@@ -108,8 +119,15 @@ namespace gloox
       return false;
     }
 
+    returnResult( iq->from(), iq->id() );
     m_handler->handleBytestreamData( this, Base64::decode64( data ) );
     return true;
+  }
+
+  void InBandBytestream::returnResult( const JID& to, const std::string& id )
+  {
+    IQ* iq = new IQ( IQ::Result, to, id );
+    m_clientbase->send( iq );
   }
 
   bool InBandBytestream::send( const std::string& data )
@@ -118,7 +136,7 @@ namespace gloox
       return false;
 
     const std::string& id = m_clientbase->getID();
-    IQ* iq = new IQ( IQ::Set, m_target, id, XMLNS_IBB, data );
+    IQ* iq = new IQ( IQ::Set, m_target, id, XMLNS_IBB, "data" );
     iq->query()->setCData( Base64::encode64( data ) );
     iq->query()->addAttribute( "sid", m_sid );
     iq->query()->addAttribute( "seq", ++m_sequence );
