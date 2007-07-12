@@ -102,7 +102,7 @@ namespace gloox
 
   void SOCKS5Bytestream::close()
   {
-    if( m_open )
+    if( m_open && m_handler )
     {
       m_open = false;
       m_socks5->disconnect();
