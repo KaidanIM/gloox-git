@@ -35,7 +35,7 @@ namespace gloox
     public:
 
       /**
-       *
+       * Describes the different valid IQ types.
        */
       enum IqType
       {
@@ -62,7 +62,7 @@ namespace gloox
        * @param id The request's ID. Usually obtained from ClientBase::getID()
        * @param The child tag's xmlns. Optional. If omitted, no child tag is added.
        * @param childtag The child tag's name. Defaults to "query".
-       * @param from An optional sender address. Usually not needed. A from address can not be forged.
+       * @param from An optional sender address. Usually not needed. Cannot be forged.
        */
       IQ ( IqType type, const JID& to, const std::string& id, const std::string& xmlns = "",
            const std::string& childtag = "query", const JID& from = JID() );
