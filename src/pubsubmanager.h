@@ -28,6 +28,9 @@ namespace gloox
   class ClientBase;
   class DataForm;
 
+  /**
+   * A namespace holding all the Pubsub-related classes etc.
+   */
   namespace PubSub
   {
 
@@ -60,7 +63,7 @@ namespace gloox
      *       { m_psManager->requestItemList( service, nodeid ); }
      *
      *   private:
-     *     PubSub::Manager * m_pubsubManager;
+     *     PubSub::Manager* m_pubsubManager;
      * };
      *
      * @endcode
