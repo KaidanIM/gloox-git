@@ -6,8 +6,6 @@ for 1.0
 - fix XEP-0079 (AMP)
 - finish XEP-0115 (Entity Capabilities)
 - check XEP-0060 (Publish-Subscribe)
-- IBB support in File Transfer
-- OOB support in File Transfer
 
 
 - libidn replacement?
