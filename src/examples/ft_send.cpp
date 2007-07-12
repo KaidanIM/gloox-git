@@ -9,7 +9,6 @@
 #include "../siprofilefthandler.h"
 #include "../bytestreamdatahandler.h"
 #include "../socks5bytestreamserver.h"
-#include "../socks5bytestream.h"
 using namespace gloox;
 
 #include <sys/types.h>
