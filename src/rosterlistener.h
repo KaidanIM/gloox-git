@@ -15,6 +15,7 @@
 #define ROSTERLISTENER_H__
 
 #include "rosteritem.h"
+#include "iq.h"
 
 #include <string>
 #include <map>
