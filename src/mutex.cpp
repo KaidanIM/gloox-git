@@ -32,7 +32,7 @@
 namespace gloox
 {
 
-  class MutexImpl
+  class Mutex::MutexImpl
   {
     public:
       MutexImpl();
@@ -51,7 +51,7 @@ namespace gloox
 
   };
 
-  MutexImpl::MutexImpl()
+  Mutex::MutexImpl::MutexImpl()
   {
 #ifdef _WIN32
     InitializeCriticalSection( &m_cs );
@@ -60,7 +60,7 @@ namespace gloox
 #endif
   }
 
-  MutexImpl::~MutexImpl()
+  Mutex::MutexImpl::~MutexImpl()
   {
 #ifdef _WIN32
     DeleteCriticalSection( &m_cs );
@@ -69,7 +69,7 @@ namespace gloox
 #endif
   }
 
-  void MutexImpl::lock()
+  void Mutex::MutexImpl::lock()
   {
 #ifdef _WIN32
     EnterCriticalSection( &m_cs );
@@ -78,7 +78,7 @@ namespace gloox
 #endif
   }
 
-  void MutexImpl::unlock()
+  void Mutex::MutexImpl::unlock()
   {
 #ifdef _WIN32
     LeaveCriticalSection( &m_cs );
