@@ -27,7 +27,7 @@ namespace gloox
   /**
    * @brief An implementation of a single In-Band Bytestream (XEP-0047).
    *
-   * One instance of this class handles a single  byte stream.
+   * One instance of this class handles a single byte stream.
    *
    * See SIProfileFT for a detailed description on how to implement file transfer.
    *
