@@ -23,6 +23,7 @@ namespace gloox
   class JID;
 
   /**
+   * @brief An abstraction of an IQ stanza.
    *
    * @author Vincent Thomasset
    * @author Jakob Schroeter <js@camaya.net>
@@ -56,6 +57,12 @@ namespace gloox
 
       /**
        * Creates an IQ Query.
+       * @param type The desired IqType.
+       * @param to The intended receiver.
+       * @param id The request's ID. Usually obtained from ClientBase::getID()
+       * @param The child tag's xmlns. Optional. If omitted, no child tag is added.
+       * @param childtag The child tag's name. Defaults to "query".
+       * @param from An optional sender address. Usually not needed. A from address can not be forged.
        */
       IQ ( IqType type, const JID& to, const std::string& id, const std::string& xmlns = "",
            const std::string& childtag = "query", const JID& from = JID() );
@@ -66,12 +73,14 @@ namespace gloox
       virtual ~IQ();
 
       /**
-       *
+       * Returns the IQ's child tag (Only one is allowed, unless the IQ is of type 'error').
+       * @return The IQ's child tag.
        */
       Tag *query() const { return m_query; }
 
       /**
-       *
+       * Returns the IQ's type.
+       * @return The IQ's type.
        */
       IqType subtype() const { return m_subtype; }
 
@@ -79,7 +88,7 @@ namespace gloox
        * Returns the value of the xmlns attribute of the first child node.
        * @return The namespace of the IQ stanza.
        */
-      virtual const std::string& xmlns() const { return m_xmlns; }
+      const std::string& xmlns() const { return m_xmlns; }
 
     private:
       Tag *m_query;
