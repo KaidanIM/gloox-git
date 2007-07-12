@@ -1122,17 +1122,25 @@ namespace gloox
 
   void ClientBase::notifyIqHandlers( IQ *iq )
   {
+    IqTrackMap::iterator it_id = m_iqIDHandlers.find( iq->id() );
+    if( it_id != m_iqIDHandlers.end() &&
+        ( iq->subtype() == IQ::Result || iq->subtype() == IQ::Error ) )
+    {
+      (*it_id).second.ih->handleIqID( iq, (*it_id).second.context );
+      m_iqIDHandlers.erase( it_id );
+      return;
+    }
+
+    if( !iq->query() )
+      return;
+
     bool res = false;
 
-    Tag* q = iq->query();
-    if( q )
-    {
-      typedef IqHandlerMap::const_iterator IQci;
-      std::pair<IQci, IQci> g = m_iqNSHandlers.equal_range( q->findAttribute( "xmlns" ) );
-      for( IQci it = g.first; it != g.second; ++it )
-        if( (*it).second->handleIq( iq ) )
-          res = true;
-    }
+    typedef IqHandlerMap::const_iterator IQci;
+    std::pair<IQci, IQci> g = m_iqNSHandlers.equal_range( iq->xmlns() );
+    for( IQci it = g.first; it != g.second; ++it )
+      if( (*it).second->handleIq( iq ) )
+        res = true;
 
     if( !res && ( iq->type() == StanzaIq ) &&
         ( ( iq->subtype() == IQ::Get ) || ( iq->subtype() == IQ::Set ) ) )
@@ -1142,17 +1150,6 @@ namespace gloox
       new Tag( e, "service-unavailable", "xmlns", XMLNS_XMPP_STANZAS );
       send( re );
       return;
-    }
-
-    if( res )
-      return;
-
-    IqTrackMap::iterator it_id = m_iqIDHandlers.find( iq->id() );
-    if( it_id != m_iqIDHandlers.end() &&
-        ( ( iq->subtype() == IQ::Result ) || ( iq->subtype() == IQ::Error ) ) )
-    {
-      (*it_id).second.ih->handleIqID( iq, (*it_id).second.context );
-      m_iqIDHandlers.erase( it_id );
     }
   }
 
