@@ -44,21 +44,6 @@ namespace gloox
        */
       virtual ~InBandBytestream();
 
-      // re-implemented from Bytestream
-      virtual ConnectionError recv( int timeout = -1 ) { return ConnNoError; }
-
-      /**
-       * Use this function to send a chunk of data over an open byte stream.
-       * The negotiated block size is enforced. If the block is larger, nothing is sent
-       * and @b false is returned. If the stream is not open or has been closed again
-       * (by the remote entity or locally), nothing is sent and @b false is returned.
-       * This function does the necessary base64 encoding for you.
-       * @param data The block of data to send.
-       * @return @b True if the data has been sent (no guarantee of receipt), @b false
-       * in case of an error.
-       */
-      bool send( const std::string& data );
-
       /**
        * Lets you retrieve this bytestream's block-size.
        * @return The bytestream's block-size.
@@ -71,6 +56,12 @@ namespace gloox
        * @note You should not change the block size once connect() has been called.
        */
       void setBlockSize( int blockSize ) { m_blockSize = blockSize; }
+
+      // re-implemented from Bytestream
+      virtual ConnectionError recv( int timeout = -1 ) { return ConnNoError; }
+
+      // re-implemented from Bytestream
+      bool send( const std::string& data );
 
       // re-implemented from Bytestream
       virtual bool connect();

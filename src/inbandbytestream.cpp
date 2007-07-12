@@ -132,20 +132,27 @@ namespace gloox
 
   bool InBandBytestream::send( const std::string& data )
   {
-    if( !m_open || !m_clientbase || data.length() > m_blockSize )
+    if( !m_open || !m_clientbase )
       return false;
 
-    const std::string& id = m_clientbase->getID();
-    IQ* iq = new IQ( IQ::Set, m_target, id, XMLNS_IBB, "data" );
-    iq->query()->setCData( Base64::encode64( data ) );
-    iq->query()->addAttribute( "sid", m_sid );
-    iq->query()->addAttribute( "seq", ++m_sequence );
+    int pos = 0;
+    int len = data.length();
+    do
+    {
+      const std::string& id = m_clientbase->getID();
+      IQ* iq = new IQ( IQ::Set, m_target, id, XMLNS_IBB, "data" );
+      iq->query()->setCData( Base64::encode64( data.substr( pos, m_blockSize ) ) );
+      iq->query()->addAttribute( "sid", m_sid );
+      iq->query()->addAttribute( "seq", ++m_sequence );
 
-    m_clientbase->trackID( this, id, IBBData );
-    m_clientbase->send( iq );
+      m_clientbase->trackID( this, id, IBBData );
+      m_clientbase->send( iq );
 
-    if( m_sequence == 65535 )
-      m_sequence = -1;
+      pos += m_blockSize;
+      if( m_sequence == 65535 )
+        m_sequence = -1;
+    }
+    while( pos < len );
 
     return true;
   }
