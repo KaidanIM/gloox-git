@@ -199,7 +199,7 @@ namespace gloox
       const std::string& status() const { return m_status; }
 
       /**
-       * Use this function to add a StanzaExtension which will be sent with eacha nd every
+       * Use this function to add a StanzaExtension which will be sent with each and every
        * Presence Stanza that is sent out. Use cases include
        * signed presence (@link gloox::GPGSigned GPGSigned @endlink, XEP-0027),
        * VCard avatar notifications (@link gloox::VCardUpdate VCardUpdate @endlink, XEP-0153),
