@@ -171,6 +171,8 @@ namespace gloox
         case FetchRegistrationFields:
         {
           Tag *q = iq->query();
+          if( !q )
+            return;
 
           if( q->hasChild( "registered" ) )
           {
