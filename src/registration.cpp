@@ -183,13 +183,99 @@ namespace gloox
     m_registrationHandler = 0;
   }
 
-  bool Registration::handleIq( Stanza *stanza )
+  bool Registration::handleIqID( Stanza* stanza, int context )
   {
-    if( stanza->subtype() == StanzaIqError )
+    if( !m_registrationHandler )
+      return false;
+
+    if( stanza->subtype() == StanzaIqResult )
+    {
+      switch( context )
+      {
+        case FetchRegistrationFields:
+        {
+          Tag *q = stanza->findChild( "query" );
+          if( !q )
+            return false;
+
+          if( q && q->hasChild( "registered" ) )
+          {
+            m_registrationHandler->handleAlreadyRegistered( stanza->from() );
+            break;
+          }
+
+          if( q->hasChild( "x", "xmlns", XMLNS_X_DATA ) )
+          {
+            DataForm form( q->findChild( "x", "xmlns", XMLNS_X_DATA ) );
+            m_registrationHandler->handleDataForm( stanza->from(), form );
+          }
+
+          if( q->hasChild( "x", "xmlns", XMLNS_X_OOB ) )
+          {
+            OOB oob( q->findChild( "x", "xmlns", XMLNS_X_OOB ) );
+            m_registrationHandler->handleOOB( stanza->from(), oob );
+          }
+
+          int fields = 0;
+          std::string instructions;
+
+          if( q->hasChild( "username" ) )
+            fields |= FieldUsername;
+          if( q->hasChild( "nick" ) )
+            fields |= FieldNick;
+          if( q->hasChild( "password" ) )
+            fields |= FieldPassword;
+          if( q->hasChild( "name" ) )
+            fields |= FieldName;
+          if( q->hasChild( "first" ) )
+            fields |= FieldFirst;
+          if( q->hasChild( "last" ) )
+            fields |= FieldLast;
+          if( q->hasChild( "email" ) )
+            fields |= FieldEmail;
+          if( q->hasChild( "address" ) )
+            fields |= FieldAddress;
+          if( q->hasChild( "city" ) )
+            fields |= FieldCity;
+          if( q->hasChild( "state" ) )
+            fields |= FieldState;
+          if( q->hasChild( "zip" ) )
+            fields |= FieldZip;
+          if( q->hasChild( "phone" ) )
+            fields |= FieldPhone;
+          if( q->hasChild( "url" ) )
+            fields |= FieldUrl;
+          if( q->hasChild( "date" ) )
+            fields |= FieldDate;
+          if( q->hasChild( "misc" ) )
+            fields |= FieldMisc;
+          if( q->hasChild( "text" ) )
+            fields |= FieldText;
+          if( q->hasChild( "instructions" ) )
+            instructions = q->findChild( "instructions" )->cdata();
+
+          m_registrationHandler->handleRegistrationFields( stanza->from(), fields, instructions );
+          break;
+        }
+
+        case CreateAccount:
+          m_registrationHandler->handleRegistrationResult( stanza->from(), RegistrationSuccess );
+          break;
+
+        case ChangePassword:
+          m_registrationHandler->handleRegistrationResult( stanza->from(), RegistrationSuccess );
+          break;
+
+        case RemoveAccount:
+          m_registrationHandler->handleRegistrationResult( stanza->from(), RegistrationSuccess );
+          break;
+      }
+    }
+    else if( stanza->subtype() == StanzaIqError )
     {
       Tag *e = stanza->findChild( "error" );
 
-      if( e->empty() || !m_registrationHandler )
+      if( !e )
         return false;
 
       if( e->hasChild( "conflict" ) || e->hasAttribute( "code", "409" ) )
@@ -220,106 +306,7 @@ namespace gloox
         m_registrationHandler->handleRegistrationResult( stanza->from(),
           RegistrationHandler::UNKNOWN_ERROR );
     }
-    return false;
-  }
 
-  bool Registration::handleIqID( Stanza *stanza, int context )
-  {
-    if( stanza->subtype() != StanzaIqResult )
-      return false;
-
-    if( !m_registrationHandler )
-      return false;
-
-    switch( context )
-    {
-      case FETCH_REGISTRATION_FIELDS:
-      {
-        Tag *q = stanza->findChild( "query" );
-
-        if( q->hasChild( "registered" ) )
-        {
-          m_registrationHandler->handleAlreadyRegistered( stanza->from() );
-          break;
-        }
-
-        if( q->hasChild( "x", "xmlns", XMLNS_X_DATA ) )
-        {
-          DataForm form( q->findChild( "x", "xmlns", XMLNS_X_DATA ) );
-          m_registrationHandler->handleDataForm( stanza->from(), form );
-        }
-
-        if( q->hasChild( "x", "xmlns", XMLNS_X_OOB ) )
-        {
-          Tag *x = q->findChild( "x", "xmlns", XMLNS_X_OOB );
-          std::string url;
-          if( x->hasChild( "url" ) )
-            url = x->findChild( "url" )->cdata();
-
-          std::string desc;
-          if( x->hasChild( "url" ) )
-            url = x->findChild( "url" )->cdata();
-
-          m_registrationHandler->handleOOB( stanza->from(), url, desc );
-        }
-
-        int fields = 0;
-        std::string instructions;
-
-        if( q->hasChild( "username" ) )
-          fields |= FIELD_USERNAME;
-        if( q->hasChild( "nick" ) )
-          fields |= FIELD_NICK;
-        if( q->hasChild( "password" ) )
-          fields |= FIELD_PASSWORD;
-        if( q->hasChild( "name" ) )
-          fields |= FIELD_NAME;
-        if( q->hasChild( "first" ) )
-          fields |= FIELD_FIRST;
-        if( q->hasChild( "last" ) )
-            fields |= FIELD_LAST;
-        if( q->hasChild( "email" ) )
-          fields |= FIELD_EMAIL;
-        if( q->hasChild( "address" ) )
-          fields |= FIELD_ADDRESS;
-        if( q->hasChild( "city" ) )
-          fields |= FIELD_CITY;
-        if( q->hasChild( "state" ) )
-          fields |= FIELD_STATE;
-        if( q->hasChild( "zip" ) )
-          fields |= FIELD_ZIP;
-        if( q->hasChild( "phone" ) )
-          fields |= FIELD_PHONE;
-        if( q->hasChild( "url" ) )
-          fields |= FIELD_URL;
-        if( q->hasChild( "date" ) )
-          fields |= FIELD_DATE;
-        if( q->hasChild( "misc" ) )
-          fields |= FIELD_MISC;
-        if( q->hasChild( "text" ) )
-          fields |= FIELD_TEXT;
-        if( q->hasChild( "instructions" ) )
-          instructions = q->findChild( "instructions" )->cdata();
-
-        m_registrationHandler->handleRegistrationFields( stanza->from(), fields, instructions );
-        break;
-      }
-
-      case CREATE_ACCOUNT:
-        m_registrationHandler->handleRegistrationResult( stanza->from(),
-            RegistrationHandler::REGISTRATION_SUCCESS );
-        break;
-
-      case CHANGE_PASSWORD:
-        m_registrationHandler->handleRegistrationResult( stanza->from(),
-            RegistrationHandler::REGISTRATION_SUCCESS );
-        break;
-
-      case REMOVE_ACCOUNT:
-        m_registrationHandler->handleRegistrationResult( stanza->from(),
-            RegistrationHandler::REGISTRATION_SUCCESS );
-        break;
-    }
     return false;
   }
 
