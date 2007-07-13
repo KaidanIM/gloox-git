@@ -35,8 +35,10 @@ namespace gloox
     ExtGPGEncrypted        =  16,   /**< An extension containing a GPG/PGP encrypted message (XEP-0027). */
     ExtXDelay              =  32,   /**< An extension containing notice of delayed delivery (XEP-0091). */
     ExtDelay               =  64,   /**< An extension containing notice of delayed delivery (XEP-0203). */
-    ExtAMP                 = 128,   /**< An extension containing advanced message processing rules (XEP-0079). */
-    ExtError               = 256    /**< An extension containing an error. */
+    ExtAMP                 = 128,   /**< An extension containing advanced message processing rules
+                                     * (XEP-0079). */
+    ExtError               = 256,   /**< An extension containing an error. */
+    ExtCaps                = 512    /**< An extension containing Entity Capabilities (XEP-0115). */
   };
 
   /**
