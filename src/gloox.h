@@ -519,6 +519,10 @@ namespace gloox
   /** gloox version */
   GLOOX_API extern const std::string GLOOX_VERSION;
 
+  extern const std::string XMLNS;
+
+  extern const std::string TYPE;
+
   /**
    * This describes the possible states of a stream.
    */

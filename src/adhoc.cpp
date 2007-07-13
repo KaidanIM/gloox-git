@@ -125,7 +125,7 @@ namespace gloox
     {
       if( (*it).second.context == context && (*it).second.remote == iq->from() )
       {
-        Tag *c = iq->findChild( "command", "xmlns", XMLNS_ADHOC_COMMANDS );
+        Tag *c = iq->findChild( "command", XMLNS, XMLNS_ADHOC_COMMANDS );
         if( c )
         {
           const std::string& command = c->findAttribute( "node" );
@@ -155,9 +155,9 @@ namespace gloox
           if( n )
           {
             note = n->cdata();
-            if( n->hasAttribute( "type", "warn" ) )
+            if( n->hasAttribute( TYPE, "warn" ) )
               type = AdhocNoteWarn;
-            else if( n->hasAttribute( "type", "error" ) )
+            else if( n->hasAttribute( TYPE, "error" ) )
               type = AdhocNoteError;
           }
           const std::string& s = c->findAttribute( "status" );
@@ -169,7 +169,7 @@ namespace gloox
           else if( s == "canceled" )
             status = AdhocCommandCanceled;
           DataForm form;
-          Tag *x = c->findChild( "x", "xmlns", XMLNS_X_DATA );
+          Tag *x = c->findChild( "x", XMLNS, XMLNS_X_DATA );
           if( x )
             form.parse( x );
 
@@ -202,7 +202,7 @@ namespace gloox
     {
       if( (*it).second.context == context && (*it).second.remote == stanza->from() )
       {
-        Tag *q = stanza->findChild( "query", "xmlns", XMLNS_DISCO_INFO );
+        Tag *q = stanza->findChild( "query", XMLNS, XMLNS_DISCO_INFO );
         if( q )
           (*it).second.ah->handleAdhocSupport( (*it).second.remote,
                   q->hasChild( "feature", "var", XMLNS_ADHOC_COMMANDS ) );
@@ -222,7 +222,7 @@ namespace gloox
     {
       if( (*it).second.context == context && (*it).second.remote == stanza->from() )
       {
-        Tag *q = stanza->findChild( "query", "xmlns", XMLNS_DISCO_ITEMS );
+        Tag *q = stanza->findChild( "query", XMLNS, XMLNS_DISCO_ITEMS );
         if( q )
         {
           StringMap commands;

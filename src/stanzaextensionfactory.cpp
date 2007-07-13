@@ -30,7 +30,7 @@ namespace gloox
   StanzaExtension* StanzaExtensionFactory::create( Tag* tag )
   {
     const std::string& name = tag->name();
-    const std::string& xmlns = tag->findAttribute( "xmlns" );
+    const std::string& xmlns = tag->findAttribute( XMLNS );
     if( name == "x" )
     {
       if( xmlns == XMLNS_X_DELAY )

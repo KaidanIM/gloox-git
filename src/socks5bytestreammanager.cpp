@@ -110,16 +110,16 @@ namespace gloox
 
       if( success )
       {
-        iq->addAttribute( "type", "result" );
-        Tag* q = new Tag( iq, "query", "xmlns", XMLNS_BYTESTREAMS );
+        iq->addAttribute( TYPE, "result" );
+        Tag* q = new Tag( iq, "query", XMLNS, XMLNS_BYTESTREAMS );
         new Tag( q, "streamhost-used", "jid", jid.full() );
       }
       else
       {
-        iq->addAttribute( "type", "error" );
+        iq->addAttribute( TYPE, "error" );
         Tag* e = new Tag( iq, "error", "code", "404" );
-        e->addAttribute( "type", "cancel" );
-        new Tag( e, "item-not-found", "xmlns", XMLNS_XMPP_STANZAS );
+        e->addAttribute( TYPE, "cancel" );
+        new Tag( e, "item-not-found", XMLNS, XMLNS_XMPP_STANZAS );
       }
     }
     else
@@ -129,8 +129,8 @@ namespace gloox
         const std::string& id = m_parent->getID();
         iq->addAttribute( "to", jid.full() );
         iq->addAttribute( "id", id );
-        iq->addAttribute( "type", "set" );
-        Tag* q = new Tag( iq, "query", "xmlns", XMLNS_BYTESTREAMS );
+        iq->addAttribute( TYPE, "set" );
+        Tag* q = new Tag( iq, "query", XMLNS, XMLNS_BYTESTREAMS );
         q->addAttribute( "sid", sid );
         new Tag( q, "activate", (*it).second.from.full() );
 
@@ -144,7 +144,7 @@ namespace gloox
 
   bool SOCKS5BytestreamManager::handleIq( IQ* iq )
   {
-    Tag* q = iq->findChild( "query", "xmlns", XMLNS_BYTESTREAMS );
+    Tag* q = iq->findChild( "query", XMLNS, XMLNS_BYTESTREAMS );
     if( !q || !m_socks5BytestreamHandler )
       return false;
 
@@ -260,37 +260,37 @@ namespace gloox
     {
       case StanzaErrorForbidden:
       {
-        new Tag( iq, "query", "xmlns", XMLNS_BYTESTREAMS );
+        new Tag( iq, "query", XMLNS, XMLNS_BYTESTREAMS );
         e->addAttribute( "code", "403" );
-        e->addAttribute( "type", "auth" );
+        e->addAttribute( TYPE, "auth" );
         Tag *f = new Tag( e, "forbidden" );
-        f->addAttribute( "xmlns", XMLNS_XMPP_STANZAS );
+        f->addAttribute( XMLNS, XMLNS_XMPP_STANZAS );
         break;
       }
       case StanzaErrorFeatureNotImplemented:
       {
         e->addAttribute( "code", "404" );
-        e->addAttribute( "type", "cancel" );
+        e->addAttribute( TYPE, "cancel" );
         Tag *f = new Tag( e, "item-not-found" );
-        f->addAttribute( "xmlns", XMLNS_XMPP_STANZAS );
+        f->addAttribute( XMLNS, XMLNS_XMPP_STANZAS );
         break;
       }
       case StanzaErrorNotAllowed:
       {
-        new Tag( iq, "query", "xmlns", XMLNS_BYTESTREAMS );
+        new Tag( iq, "query", XMLNS, XMLNS_BYTESTREAMS );
         e->addAttribute( "code", "405" );
-        e->addAttribute( "type", "cancel" );
+        e->addAttribute( TYPE, "cancel" );
         Tag *f = new Tag( e, "not-allowed" );
-        f->addAttribute( "xmlns", XMLNS_XMPP_STANZAS );
+        f->addAttribute( XMLNS, XMLNS_XMPP_STANZAS );
         break;
       }
       case StanzaErrorNotAcceptable:
       default:
       {
         e->addAttribute( "code", "406" );
-        e->addAttribute( "type", "auth" );
+        e->addAttribute( TYPE, "auth" );
         Tag *f = new Tag( e, "not-acceptable" );
-        f->addAttribute( "xmlns", XMLNS_XMPP_STANZAS );
+        f->addAttribute( XMLNS, XMLNS_XMPP_STANZAS );
         break;
       }
     }
@@ -311,7 +311,7 @@ namespace gloox
         {
           case IQ::Result:
           {
-            Tag* q = iq->findChild( "query", "xmlns", XMLNS_BYTESTREAMS );
+            Tag* q = iq->findChild( "query", XMLNS, XMLNS_BYTESTREAMS );
             if( !q || !m_socks5BytestreamHandler )
               return;
 

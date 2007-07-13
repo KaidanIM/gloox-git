@@ -32,7 +32,7 @@ namespace gloox
   void BookmarkStorage::storeBookmarks( const BookmarkList& bList, const ConferenceList& cList )
   {
     Tag *s = new Tag( "storage" );
-    s->addAttribute( "xmlns", XMLNS_BOOKMARKS );
+    s->addAttribute( XMLNS, XMLNS_BOOKMARKS );
 
     BookmarkList::const_iterator itb = bList.begin();
     for( ; itb != bList.end(); ++itb )

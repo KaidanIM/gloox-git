@@ -29,7 +29,7 @@ namespace gloox
   Capabilities::Capabilities( Tag *tag )
     : StanzaExtension( ExtCaps ), m_valid( false )
   {
-    if( !tag || tag->name() != "c" || !tag->hasAttribute( "xmlns", XMLNS_CAPS )
+    if( !tag || tag->name() != "c" || !tag->hasAttribute( XMLNS, XMLNS_CAPS )
         || !tag->hasAttribute( "node" ) || !tag->hasAttribute( "ver" ) )
       return;
 
@@ -49,7 +49,7 @@ namespace gloox
       return 0;
 
     Tag *t = new Tag( "c" );
-    t->addAttribute( "xmlns", XMLNS_CAPS );
+    t->addAttribute( XMLNS, XMLNS_CAPS );
     t->addAttribute( "node", m_node );
     t->addAttribute( "ver", m_version );
     t->addAttribute( "ext", m_ext );

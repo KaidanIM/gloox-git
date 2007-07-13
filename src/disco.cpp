@@ -89,7 +89,7 @@ namespace gloox
                 {
                   Tag *i = new Tag( query, "identity" );
                   i->addAttribute( "category", (*im).first );
-                  i->addAttribute( "type", (*im).second );
+                  i->addAttribute( TYPE, (*im).second );
                   i->addAttribute( "name", name );
                 }
                 addFeatures( (*in)->handleDiscoNodeFeatures( node ), query );
@@ -100,7 +100,7 @@ namespace gloox
           {
             Tag *i = new Tag( query, "identity" );
             i->addAttribute( "category", m_identityCategory );
-            i->addAttribute( "type", m_identityType );
+            i->addAttribute( TYPE, m_identityType );
             i->addAttribute( "name", m_versionName );
 
             addFeatures( m_features, query );

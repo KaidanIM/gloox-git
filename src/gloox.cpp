@@ -90,6 +90,8 @@ namespace gloox
   const std::string XMPP_STREAM_VERSION_MINOR = "0";
   const std::string GLOOX_VERSION           = "0.9";
 
+  const std::string XMLNS = "xmlns";
+  const std::string TYPE = "type";
 }
 
 const char* gloox_version()

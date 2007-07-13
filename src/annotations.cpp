@@ -32,7 +32,7 @@ namespace gloox
   void Annotations::storeAnnotations( const AnnotationsList& aList )
   {
     Tag *s = new Tag( "storage" );
-    s->addAttribute( "xmlns", XMLNS_ANNOTATIONS );
+    s->addAttribute( XMLNS, XMLNS_ANNOTATIONS );
 
     AnnotationsList::const_iterator it = aList.begin();
     for( ; it != aList.end(); ++it )

@@ -66,7 +66,7 @@ namespace gloox
     if( name.empty() || size <= 0 || !m_manager )
       return std::string();
 
-    Tag* file = new Tag( "file", "xmlns", XMLNS_SI_FT );
+    Tag* file = new Tag( "file", XMLNS, XMLNS_SI_FT );
     file->addAttribute( "name", name );
     file->addAttribute( "size", size );
     if( !hash.empty() )
@@ -78,7 +78,7 @@ namespace gloox
     if( m_ranged )
       new Tag( file, "range" );
 
-    Tag* feature = new Tag( "feature", "xmlns", XMLNS_FEATURE_NEG );
+    Tag* feature = new Tag( "feature", XMLNS, XMLNS_FEATURE_NEG );
     DataFormField* dff = new DataFormField( "stream-method", "", "", DataFormField::FieldTypeListSingle );
     StringMap sm;
     if( streamTypes & FTTypeS5B )
@@ -100,7 +100,7 @@ namespace gloox
     if( !m_manager )
       return;
 
-    Tag* feature = new Tag( "feature", "xmlns", XMLNS_FEATURE_NEG );
+    Tag* feature = new Tag( "feature", XMLNS, XMLNS_FEATURE_NEG );
     DataFormField* dff = new DataFormField( "stream-method" );
     switch( type )
     {
@@ -180,7 +180,7 @@ namespace gloox
       }
       const std::string& mt = si->findAttribute( "mime-type" );
       int types = 0;
-      Tag* x = fneg ? fneg->findChild( "x", "xmlns", XMLNS_X_DATA ) : 0;
+      Tag* x = fneg ? fneg->findChild( "x", XMLNS, XMLNS_X_DATA ) : 0;
       DataForm df( x );
       DataFormField* dff = df.field( "stream-method" );
       if( dff && dff->value() == XMLNS_BYTESTREAMS )
@@ -199,7 +199,7 @@ namespace gloox
   void SIProfileFT::handleSIRequestResult( const JID& from, const std::string& sid,
                                            Tag* /*si*/, Tag* /*ptag*/, Tag* fneg )
   {
-    Tag* x = fneg ? fneg->findChild( "x", "xmlns", XMLNS_X_DATA ) : 0;
+    Tag* x = fneg ? fneg->findChild( "x", XMLNS, XMLNS_X_DATA ) : 0;
     DataForm df( x );
     DataFormField* dff = df.field( "stream-method" );
     if( m_socks5Manager && dff && dff->value() == XMLNS_BYTESTREAMS )

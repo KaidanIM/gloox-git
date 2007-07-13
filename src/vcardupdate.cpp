@@ -38,7 +38,7 @@ namespace gloox
     : StanzaExtension( ExtVCardUpdate ),
       m_notReady( true ), m_noImage( true ), m_valid( false )
   {
-    if( tag && tag->name() == "x" && tag->hasAttribute( "xmlns", XMLNS_X_VCARD_UPDATE ) )
+    if( tag && tag->name() == "x" && tag->hasAttribute( XMLNS, XMLNS_X_VCARD_UPDATE ) )
     {
       m_valid = true;
       if( tag->hasChild( "photo" ) )
@@ -60,7 +60,7 @@ namespace gloox
     if( !m_valid )
       return 0;
 
-    Tag *x = new Tag( "x", "xmlns", XMLNS_X_VCARD_UPDATE );
+    Tag *x = new Tag( "x", XMLNS, XMLNS_X_VCARD_UPDATE );
     if( !m_notReady )
     {
       Tag *p = new Tag( x, "photo" );

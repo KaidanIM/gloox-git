@@ -34,7 +34,7 @@ namespace gloox
     }
 
     m_type = StanzaS10n;
-    m_subtype = (S10nType)util::lookup( findAttribute( "type" ), msgTypeStringValues );
+    m_subtype = (S10nType)util::lookup( findAttribute( TYPE ), msgTypeStringValues );
 
     const TagList& c = children();
     TagList::const_iterator it = c.begin();
@@ -51,7 +51,7 @@ namespace gloox
                               const std::string& xmllang, const JID& from )
     : Stanza( "presence", to, from ), m_subtype( type )
   {
-    addAttribute( "type", typeString( type ) );
+    addAttribute( TYPE, typeString( type ) );
 
     if( !status.empty() )
     {

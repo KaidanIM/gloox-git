@@ -43,7 +43,7 @@ namespace gloox
       return;
     }
 
-    Tag *x = msg->findChild( "x", "xmlns", XMLNS_X_EVENT );
+    Tag *x = msg->findChild( "x", XMLNS, XMLNS_X_EVENT );
     if( x && m_messageEventHandler )
     {
       if( msg->body().empty() )
@@ -88,7 +88,7 @@ namespace gloox
 
     Message* m = new Message( Message::Normal, m_parent->target() );
     Tag *x = new Tag( m, "x" );
-    x->addAttribute( "xmlns", XMLNS_X_EVENT );
+    x->addAttribute( XMLNS, XMLNS_X_EVENT );
     new Tag( x, "id", m_lastID );
 
     bool used = true;
@@ -132,7 +132,7 @@ namespace gloox
     if( m_defaultEvents != 0 )
     {
       Tag *x = new Tag( tag, "x" );
-      x->addAttribute( "xmlns", XMLNS_X_EVENT );
+      x->addAttribute( XMLNS, XMLNS_X_EVENT );
 
       if( m_defaultEvents & MessageEventOffline )
         new Tag( x, "offline" );

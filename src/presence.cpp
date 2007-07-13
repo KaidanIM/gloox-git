@@ -42,7 +42,7 @@ namespace gloox
     }
 
     m_type = StanzaPresence;
-    const std::string& type = findAttribute( "type" );
+    const std::string& type = findAttribute( TYPE );
     if( type.empty() )
       m_subtype = Available;
     else
@@ -75,7 +75,7 @@ namespace gloox
     : Stanza( "presence", to, from ), m_subtype( type )
   {
     if( type != Available )
-      addAttribute( "type", typeString( type ) );
+      addAttribute( TYPE, typeString( type ) );
 
     const std::string& show = showString( type );
     if( !show.empty() )

@@ -95,9 +95,9 @@ namespace gloox
             case FetchSearchFields:
             {
               Tag *q = iq->query();
-              if( q && q->hasAttribute( "xmlns", XMLNS_SEARCH ) )
+              if( q && q->hasAttribute( XMLNS, XMLNS_SEARCH ) )
               {
-                Tag *x = q->findChild( "x", "xmlns", XMLNS_X_DATA );
+                Tag *x = q->findChild( "x", XMLNS, XMLNS_X_DATA );
                 if( x )
                 {
                   DataForm *df = new DataForm( x );
@@ -127,9 +127,9 @@ namespace gloox
             case DoSearch:
             {
               Tag *q = iq->query();
-              if( q && q->hasAttribute( "xmlns", XMLNS_SEARCH ) )
+              if( q && q->hasAttribute( XMLNS, XMLNS_SEARCH ) )
               {
-                Tag *x = q->findChild( "x", "xmlns", XMLNS_X_DATA );
+                Tag *x = q->findChild( "x", XMLNS, XMLNS_X_DATA );
                 if( x )
                 {
                   DataForm *df = new DataForm( x );

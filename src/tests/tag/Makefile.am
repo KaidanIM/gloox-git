@@ -7,9 +7,9 @@ AM_CPPFLAGS = -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare
 noinst_PROGRAMS = tag_test tag_perf
 
 tag_test_SOURCES = tag_test.cpp
-tag_test_LDADD = ../../tag.o
+tag_test_LDADD = ../../tag.o ../../gloox.o
 tag_test_CFLAGS = $(CPPFLAGS)
 
 tag_perf_SOURCES = tag_perf.cpp
-tag_perf_LDADD = ../../tag.o
+tag_perf_LDADD = ../../tag.o ../../gloox.o
 tag_perf_CFLAGS = $(CPPFLAGS)

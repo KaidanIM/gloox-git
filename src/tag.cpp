@@ -491,9 +491,9 @@ namespace gloox
       return result;
 
 //     printf( "evaluateTagList called in Tag %s and Token %s (type: %s)\n", name().c_str(),
-//             token->name().c_str(), token->findAttribute( "type" ).c_str() );
+//             token->name().c_str(), token->findAttribute( TYPE ).c_str() );
 
-    TokenType tokenType = (TokenType)atoi( token->findAttribute( "type" ).c_str() );
+    TokenType tokenType = (TokenType)atoi( token->findAttribute( TYPE ).c_str() );
     switch( tokenType )
     {
       case XTUnion:
@@ -539,9 +539,9 @@ namespace gloox
                   add( result, (*it)->evaluateTagList( (*cit) ) );
                 }
               }
-              else if( atoi( (*cit)->findAttribute( "type" ).c_str() ) == XTDoubleDot && m_parent )
+              else if( atoi( (*cit)->findAttribute( TYPE ).c_str() ) == XTDoubleDot && m_parent )
               {
-                (*cit)->addAttribute( "type", XTDot );
+                (*cit)->addAttribute( TYPE, XTDot );
                 add( result, m_parent->evaluateTagList( (*cit) ) );
               }
             }
@@ -565,7 +565,7 @@ namespace gloox
 //         printf( "in XTDoubleSlash\n" );
         Tag *t = token->clone();
 //         printf( "original token: %s\ncloned token: %s\n", token->xml().c_str(), n->xml().c_str() );
-        t->addAttribute( "type", XTElement );
+        t->addAttribute( TYPE, XTElement );
         add( result, evaluateTagList( t ) );
         const Tag::TagList& res2 = allDescendants();
         Tag::TagList::const_iterator it = res2.begin();
@@ -603,7 +603,7 @@ namespace gloox
             else
             {
               Tag *t = token->clone();
-              t->addAttribute( "type", XTElement );
+              t->addAttribute( TYPE, XTElement );
               t->m_name = m_parent->m_name;
               add( result, m_parent->evaluateTagList( t ) );
               delete t;
@@ -648,7 +648,7 @@ namespace gloox
       return false;
 
     bool result = false;
-    TokenType tokenType = (TokenType)atoi( token->findAttribute( "type" ).c_str() );
+    TokenType tokenType = (TokenType)atoi( token->findAttribute( TYPE ).c_str() );
     switch( tokenType )
     {
       case XTAttribute:
@@ -672,7 +672,7 @@ namespace gloox
       case XTElement:
       {
         Tag *t = new Tag( "." );
-        t->addAttribute( "type", XTDot );
+        t->addAttribute( TYPE, XTDot );
         t->addChild( token );
         result = !evaluateTagList( t ).empty();
         t->removeChild( token );
@@ -696,8 +696,8 @@ namespace gloox
     Tag *ch1 = (*it);
     Tag *ch2 = (*++it);
 
-    TokenType tt1 = (TokenType)atoi( ch1->findAttribute( "type" ).c_str() );
-    TokenType tt2 = (TokenType)atoi( ch2->findAttribute( "type" ).c_str() );
+    TokenType tt1 = (TokenType)atoi( ch1->findAttribute( TYPE ).c_str() );
+    TokenType tt2 = (TokenType)atoi( ch2->findAttribute( TYPE ).c_str() );
     switch( tt1 )
     {
       case XTAttribute:
@@ -909,7 +909,7 @@ namespace gloox
     Tag *t = new Tag( token );
     if( t->isNumber() && !t->children().size() )
       type = XTInteger;
-    t->addAttribute( "type", type );
+    t->addAttribute( TYPE, type );
 
     if( *root )
     {
@@ -928,7 +928,7 @@ namespace gloox
                            Tag::TokenType type, const std::string& token )
   {
     Tag *t = new Tag( token );
-    t->addAttribute( "type", type );
+    t->addAttribute( TYPE, type );
 //     printf( "new operator: %s (arg1: %s, arg2: %s)\n", t->name().c_str(), (*root)->xml().c_str(),
 //                                                                           arg->xml().c_str() );
     t->addAttribute( "operator", "true" );
@@ -947,7 +947,7 @@ namespace gloox
 //       printf( "found Index %s, full: %s\n", token->name().c_str(), token->xml().c_str() );
       if( !token->hasAttribute( "operator", "true" ) )
       {
-        token->addAttribute( "type", XTInteger );
+        token->addAttribute( TYPE, XTInteger );
       }
       if( *root == *current )
       {
