@@ -159,14 +159,98 @@ namespace gloox
     m_registrationHandler = 0;
   }
 
-  bool Registration::handleIq( IQ* iq )
+  void Registration::handleIqID( IQ* iq, int context )
   {
-    if( iq->subtype() == IQ::Error )
+    if( !m_registrationHandler )
+      return;
+
+    if( iq->subtype() == IQ::Result )
+    {
+      switch( context )
+      {
+        case FetchRegistrationFields:
+        {
+          Tag *q = iq->query();
+
+          if( q->hasChild( "registered" ) )
+          {
+            m_registrationHandler->handleAlreadyRegistered( iq->from() );
+            break;
+          }
+
+          if( q->hasChild( "x", "xmlns", XMLNS_X_DATA ) )
+          {
+            DataForm form( q->findChild( "x", "xmlns", XMLNS_X_DATA ) );
+            m_registrationHandler->handleDataForm( iq->from(), form );
+          }
+
+          if( q->hasChild( "x", "xmlns", XMLNS_X_OOB ) )
+          {
+            OOB oob( q->findChild( "x", "xmlns", XMLNS_X_OOB ) );
+            m_registrationHandler->handleOOB( iq->from(), oob );
+          }
+
+          int fields = 0;
+          std::string instructions;
+
+          if( q->hasChild( "username" ) )
+            fields |= FieldUsername;
+          if( q->hasChild( "nick" ) )
+            fields |= FieldNick;
+          if( q->hasChild( "password" ) )
+            fields |= FieldPassword;
+          if( q->hasChild( "name" ) )
+            fields |= FieldName;
+          if( q->hasChild( "first" ) )
+            fields |= FieldFirst;
+          if( q->hasChild( "last" ) )
+              fields |= FieldLast;
+          if( q->hasChild( "email" ) )
+            fields |= FieldEmail;
+          if( q->hasChild( "address" ) )
+            fields |= FieldAddress;
+          if( q->hasChild( "city" ) )
+            fields |= FieldCity;
+          if( q->hasChild( "state" ) )
+            fields |= FieldState;
+          if( q->hasChild( "zip" ) )
+            fields |= FieldZip;
+          if( q->hasChild( "phone" ) )
+            fields |= FieldPhone;
+          if( q->hasChild( "url" ) )
+            fields |= FieldUrl;
+          if( q->hasChild( "date" ) )
+            fields |= FieldDate;
+          if( q->hasChild( "misc" ) )
+            fields |= FieldMisc;
+          if( q->hasChild( "text" ) )
+            fields |= FieldText;
+          if( q->hasChild( "instructions" ) )
+            instructions = q->findChild( "instructions" )->cdata();
+
+          m_registrationHandler->handleRegistrationFields( iq->from(), fields, instructions );
+          break;
+        }
+
+        case CreateAccount:
+          m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationSuccess );
+          break;
+
+        case ChangePassword:
+          m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationSuccess );
+          break;
+
+        case RemoveAccount:
+          m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationSuccess );
+          break;
+      }
+    }
+    else if( iq->subtype() == IQ::Error )
     {
       Tag *e = iq->findChild( "error" );
 
-      if( !e || !m_registrationHandler )
-        return false;
+      if( !e )
+        return;
 
       if( e->hasChild( "conflict" ) || e->hasAttribute( "code", "409" ) )
         m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationConflict );
@@ -187,93 +271,7 @@ namespace gloox
       else
         m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationUnknownError );
     }
-    return false;
-  }
 
-  void Registration::handleIqID( IQ* iq, int context )
-  {
-    if( iq->subtype() != IQ::Result || !m_registrationHandler )
-      return;
-
-    switch( context )
-    {
-      case FetchRegistrationFields:
-      {
-        Tag *q = iq->query();
-
-        if( q->hasChild( "registered" ) )
-        {
-          m_registrationHandler->handleAlreadyRegistered( iq->from() );
-          break;
-        }
-
-        if( q->hasChild( "x", "xmlns", XMLNS_X_DATA ) )
-        {
-          DataForm form( q->findChild( "x", "xmlns", XMLNS_X_DATA ) );
-          m_registrationHandler->handleDataForm( iq->from(), form );
-        }
-
-        if( q->hasChild( "x", "xmlns", XMLNS_X_OOB ) )
-        {
-          OOB oob( q->findChild( "x", "xmlns", XMLNS_X_OOB ) );
-          m_registrationHandler->handleOOB( iq->from(), oob );
-        }
-
-        int fields = 0;
-        std::string instructions;
-
-        if( q->hasChild( "username" ) )
-          fields |= FieldUsername;
-        if( q->hasChild( "nick" ) )
-          fields |= FieldNick;
-        if( q->hasChild( "password" ) )
-          fields |= FieldPassword;
-        if( q->hasChild( "name" ) )
-          fields |= FieldName;
-        if( q->hasChild( "first" ) )
-          fields |= FieldFirst;
-        if( q->hasChild( "last" ) )
-            fields |= FieldLast;
-        if( q->hasChild( "email" ) )
-          fields |= FieldEmail;
-        if( q->hasChild( "address" ) )
-          fields |= FieldAddress;
-        if( q->hasChild( "city" ) )
-          fields |= FieldCity;
-        if( q->hasChild( "state" ) )
-          fields |= FieldState;
-        if( q->hasChild( "zip" ) )
-          fields |= FieldZip;
-        if( q->hasChild( "phone" ) )
-          fields |= FieldPhone;
-        if( q->hasChild( "url" ) )
-          fields |= FieldUrl;
-        if( q->hasChild( "date" ) )
-          fields |= FieldDate;
-        if( q->hasChild( "misc" ) )
-          fields |= FieldMisc;
-        if( q->hasChild( "text" ) )
-          fields |= FieldText;
-        if( q->hasChild( "instructions" ) )
-          instructions = q->findChild( "instructions" )->cdata();
-
-        m_registrationHandler->handleRegistrationFields( iq->from(), fields, instructions );
-        break;
-      }
-
-      case CreateAccount:
-        m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationSuccess );
-        break;
-
-      case ChangePassword:
-        m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationSuccess );
-        break;
-
-      case RemoveAccount:
-        m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationSuccess );
-        break;
-    }
-    return;
   }
 
 }

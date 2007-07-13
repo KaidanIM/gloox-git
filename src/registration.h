@@ -168,9 +168,9 @@ namespace gloox
 
       /**
        * Tells the server to change the password for the current account.
-       * @param password The new password.
        * @param username The username to change the password for. You might want to use
        * Client::username() to get the current prepped username.
+       * @param password The new password.
        */
       void changePassword( const std::string& username, const std::string& password );
 
@@ -186,7 +186,7 @@ namespace gloox
       void removeRegistrationHandler();
 
       // reimplemented from IqHandler
-      virtual bool handleIq( IQ* iq );
+      virtual bool handleIq( IQ* /*iq*/ ) { return false; }
 
       // reimplemented from IqHandler
       virtual void handleIqID( IQ* iq, int context );
