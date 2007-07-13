@@ -23,6 +23,7 @@
 namespace gloox
 {
 
+  class Capabilities;
   class RosterManager;
   class NonSaslAuth;
   class IQ;
@@ -217,6 +218,12 @@ namespace gloox
       void removePresenceExtensions();
 
       /**
+       * Returns a pointer to the Client's capabilities (XEP-0115). Do not delete it.
+       * @return A pointer to the Client's capabilities.
+       */
+      Capabilities* capabilities() const { return m_capabilities; }
+
+      /**
        * This is a temporary hack to enforce Non-SASL login. You should not need to use it.
        * @param force Whether to force non-SASL auth. Default @b true.
        * @deprecated Please update the server to properly support SASL instead.
@@ -284,6 +291,8 @@ namespace gloox
 
       Presence::PresenceType m_presence;
       std::string m_status;
+
+      Capabilities* m_capabilities;
 
       bool m_resourceBound;
       bool m_forceNonSasl;
