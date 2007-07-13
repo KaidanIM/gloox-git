@@ -163,9 +163,6 @@ namespace gloox
        * @param s5Manager An optional SOCKS5BytestreamManager to use. If this is zero, SIProfileFT
        * will create its own SOCKS5BytestreamManager. You should pass a valid SOCKS5BytestreamManager
        * here if you are already using one with the @c parent ClientBase above.
-       * @param ibbManager An optional InBandBytestreamManager to use. If this is zero, SIProfileFT
-       * will create its own InBandBytestreamManager. You should pass a valid InBandBytestreamManager
-       * here if you are already using one with the @c parent ClientBase above.
        * @note If you passed a SIManager and/or SOCKS5BytestreamManager and/or InBandBytestreamManager
        * to SIProfileFT's constructor, these objects will @b not be deleted on desctruction of SIProfileFT.
        */

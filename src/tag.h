@@ -43,7 +43,10 @@ namespace gloox
       {
         public:
           /**
-           *
+           * Creates a new Attribute from name, value and optional xmlns.
+           * @param name The attribute's name.
+           * @param value The attribute's value.
+           * @param
            */
           Attribute( const std::string& name, const std::string& value, const std::string& xmlns = "" )
             : m_name( name ), m_value( value ), m_xmlns( xmlns )
@@ -51,33 +54,38 @@ namespace gloox
 
           /**
            * Copy constructor.
+           * @param attr The Attribute to copy.
            */
           Attribute( const Attribute& attr )
             : m_name( attr.m_name ), m_value( attr.m_value ), m_xmlns( attr.m_xmlns )
             {}
 
           /**
-           *
+           * Destructor.
            */
           ~Attribute() {}
 
           /**
-           *
+           * Returns the attribute's name.
+           * @return The attribute's name.
            */
           const std::string& name() const { return m_name; }
 
           /**
-           *
+           * Returns the attribute's value.
+           * @return The attribute's value.
            */
           const std::string& value() const { return m_value; }
 
           /**
-           *
+           * Sets the attribute's value.
+           * @param value The new value.
            */
           void setValue( const std::string& value ) { m_value = value; }
 
           /**
-           *
+           * Returns the attribute's xmlns.
+           * @return The attribute's xmlns.
            */
           const std::string& xmlns() const { return m_xmlns; }
 
@@ -434,8 +442,8 @@ namespace gloox
 
       enum NodeType
       {
-        TypeTag,
-        TypeString
+        TypeTag,                    /**< The Node is a Tag. */
+        TypeString                  /**< The Node is a std::string. */
       };
 
       struct Node

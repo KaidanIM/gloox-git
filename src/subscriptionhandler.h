@@ -37,7 +37,7 @@ namespace gloox
       /**
        * Reimplement this function if you want to be notified about incoming
        * subscriptions/subscription requests.
-       * @param stanza The complete Stanza.
+       * @param subscription The complete Stanza.
        */
       virtual void handleSubscription( Subscription* subscription ) = 0;
   };

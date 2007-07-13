@@ -19,7 +19,7 @@
 namespace gloox
 {
   /**
-   * @brief to avoid clashing with MUCAffiliationType's
+   * @brief A namespace holding all the Pubsub-related classes etc.
    *
    * @todo Be consistent with naming, either always use PubSubXXX, or PSXXX,
    *       or PubSubXXX for classes and PSXXX for enums.
@@ -32,11 +32,11 @@ namespace gloox
      */
     enum NodeType
     {
-      NodeLeaf = 0,                     /**< A node that contains published items only. It is NOT
+      NodeLeaf = 0,                 /**< A node that contains published items only. It is NOT
                                      * a container for other nodes. */
-      NodeCollection,              /**< A node that contains nodes and/or other collections but
-                                    * no published items. Collections make it possible to represent
-                                    * hierarchial node structures. */
+      NodeCollection,               /**< A node that contains nodes and/or other collections but
+                                     * no published items. Collections make it possible to represent
+                                     * hierarchial node structures. */
       NodeInvalid                   /**< Invalid node type */
     };
 
@@ -70,7 +70,7 @@ namespace gloox
                                      * been configured. The node MAY send event notifications or payloads
                                      * to the entity while it is in this state. The service MAY timeout
                                      * unconfigured subscriptions. */
-      
+
       SubscriptionInvalid           /**< Invalid subscription type. */
     };
 
@@ -114,10 +114,10 @@ namespace gloox
     {
       UnsubscriptionErrorNone,          /**< No error. */
       UnsubscriptionErrorMissingSID,    /**< The requesting entity has multiple subscriptions to the node
-                                         *   but does not specify a subscription ID. */
+                                         * but does not specify a subscription ID. */
       UnsubscriptionErrorNotSubscriber, /**< The request does not specify an existing subscriber. */
       UnsubscriptionErrorUnprivileged,  /**< The requesting entity does not have sufficient privileges to
-                                         *   unsubscribe the specified JID. */
+                                         * unsubscribe the specified JID. */
       UnsubscriptionErrorItemNotFound,  /**< The node does not exist. */
       UnsubscriptionErrorInvalidSID     /**< The request specifies a subscription ID that is not valid or
                                          * current. */
@@ -130,8 +130,8 @@ namespace gloox
     {
       AccessOpen = 0,               /**< Any entity may subscribe to the node (i.e., without the necessity
                                      * for subscription approval) and any entity may retrieve items from the
-                                     * node (i.e., without being subscribed); this SHOULD be the default access
-                                     * model for generic pubsub services. */
+                                     * node (i.e., without being subscribed); this SHOULD be the default
+                                     * access model for generic pubsub services. */
       AccessPresence,               /**< Any entity with a subscription of type "from" or "both" may subscribe
                                      * to the node and retrieve items from the node; this access model applies
                                      * mainly to instant messaging systems (see RFC 3921). */
@@ -142,11 +142,11 @@ namespace gloox
                                      * subscribers may retrieve items from the node. */
       AccessWhitelist,              /**< An entity may be subscribed only through being added to a whitelist
                                      * by the node owner (unsolicited subscription requests are rejected), and
-                                     * only subscribers may retrieve items from the node. In effect, the default
-                                     * affiliation is outcast. The node owner MUST automatically be on the
-                                     * whitelist. In order to add entities to the whitelist, the node owner
-                                     * SHOULD use the protocol specified in the Manage Affiliated Entities
-                                     * section of this document. */
+                                     * only subscribers may retrieve items from the node. In effect, the
+                                     * default affiliation is outcast. The node owner MUST automatically be
+                                     * on the whitelist. In order to add entities to the whitelist, the
+                                     * node owner SHOULD use the protocol specified in the Manage Affiliated
+                                     * Entities section of this document. */
       AccessDefault                 /**< Unspecified (default) Access Model (does not represent a real access
                                      * type by itself). */
     };
@@ -160,9 +160,12 @@ namespace gloox
       OptionRequestUnprivileged,    /**< The requesting entity does not have sufficient privileges to
                                      * modify subscription options for the specified JID. */
       OptionRequestUnsubscribed,    /**< The requesting entity (or specified subscriber) is not subscribed. */
-      OptionRequestMissingJID,      /**< The request does not specify both the NodeID and the subscriber's JID. */
-      OptionRequestMissingSID,      /**< The request does not specify a subscription ID but one is required. */
-      OptionRequestInvalidSID,      /**< The request specifies a subscription ID that is not valid or current. */
+      OptionRequestMissingJID,      /**< The request does not specify both the NodeID and the subscriber's
+                                     * JID. */
+      OptionRequestMissingSID,      /**< The request does not specify a subscription ID but one is
+                                     * required. */
+      OptionRequestInvalidSID,      /**< The request specifies a subscription ID that is not valid or
+                                     * current. */
       OptionRequestUnsupported,     /**< Subscription options are not supported. */
       OptionRequestItemNotFound     /**< The node does not exist. */
     };
@@ -245,9 +248,9 @@ namespace gloox
                                            * are not supported. */
       NodeCreationColUnsupported,         /**< The service does not support collection nodes. */
       NodeCreationColCreationUnsupported, /**< The service does not support creation of
-                                           *   collection nodes. */
+                                           * collection nodes. */
       NodeCreationColUnpriviledged        /**< The requesting entity does not have sufficient
-                                           *   privileges to create collection nodes. */
+                                           * privileges to create collection nodes. */
     };
 
     /**
@@ -304,7 +307,7 @@ namespace gloox
       AffiliationModificationErrorNone,     /**< No error. */
       AffiliationModificationUnsupported,   /**< The service does not support modification of affiliations. */
       AffiliationModificationUnpriviledged, /**< The requesting entity does not have sufficient privileges
-                                             *   to modify affiliations. */
+                                             * to modify affiliations. */
       AffiliationModificationItemNotFound   /**< The specified node does not exist. */
     };
 
@@ -327,8 +330,8 @@ namespace gloox
     {
       FeatureCollections           = 1,     /**< Collection nodes are supported. RECOMMENDED */
       FeatureConfigNode            = 1<<1,  /**< Configuration of node options is supported. RECOMMENDED */
-      FeatureCreateAndConfig       = 1<<2,  /**< Simultaneous creation and configuration of nodes is supported.
-                                             * RECOMMENDED */
+      FeatureCreateAndConfig       = 1<<2,  /**< Simultaneous creation and configuration of nodes is
+                                             * supported. RECOMMENDED */
       FeatureCreateNodes           = 1<<3,  /**< Creation of nodes is supported. RECOMMENDED */
       FeatureDeleteAny             = 1<<4,  /**< Any publisher may delete an item (not only the originating
                                              * publisher). OPTIONAL */
@@ -341,8 +344,8 @@ namespace gloox
       FeatureManageSubscriptions   = 1<<10, /**< Node owners may manage subscriptions. OPTIONAL */
       FeatureMetaData              = 1<<11, /**< Node meta-data is supported. RECOMMENDED */
       FeatureModifyAffiliations    = 1<<12, /**< Node owners may modify affiliations. OPTIONAL */
-      FeatureMultiCollection       = 1<<13, /**< A single leaf node may be associated with multiple collections.
-                                             * OPTIONAL */
+      FeatureMultiCollection       = 1<<13, /**< A single leaf node may be associated with multiple
+                                             * collections. OPTIONAL */
       FeatureMultiSubscribe        = 1<<14, /**< A single entity may subscribe to a node multiple times.
                                              * OPTIONAL */
       FeaturePutcastAffiliation    = 1<<15, /**< The outcast affiliation is supported. RECOMMENDED */
@@ -354,13 +357,16 @@ namespace gloox
       FeaturePublisherAffiliation  = 1<<19, /**< The publisher affiliation is supported. OPTIONAL */
       FeaturePurgeNodes            = 1<<20, /**< Purging of nodes is supported. OPTIONAL */
       FeatureRetractItems          = 1<<21, /**< Item retraction is supported. OPTIONAL */
-      FeatureRetrieveAffiliations  = 1<<22, /**< Retrieval of current affiliations is supported. RECOMMENDED */
+      FeatureRetrieveAffiliations  = 1<<22, /**< Retrieval of current affiliations is supported.
+                                             * RECOMMENDED */
       FeatureRetrieveDefault       = 1<<23, /**< Retrieval of default node configuration is supported.
                                              * RECOMMENDED */
       FeatureRetrieveItems         = 1<<24, /**< Item retrieval is supported. RECOMMENDED */
-      FeatureRetrieveSubscriptions = 1<<25, /**< Retrieval of current subscriptions is supported. RECOMMENDED */
+      FeatureRetrieveSubscriptions = 1<<25, /**< Retrieval of current subscriptions is supported.
+                                             * RECOMMENDED */
       FeatureSubscribe             = 1<<26, /**< Subscribing and unsubscribing are supported. REQUIRED */
-      FeatureSubscriptionOptions   = 1<<27, /**< Configuration of subscription options is supported. OPTIONAL */
+      FeatureSubscriptionOptions   = 1<<27, /**< Configuration of subscription options is supported.
+                                             * OPTIONAL */
       FeatureSubscriptionNotifs    = 1<<28, /**< Notification of subscription state changes is supported. */
       FeatureUnknown               = 1<<29  /**< Unrecognized feature */
     };

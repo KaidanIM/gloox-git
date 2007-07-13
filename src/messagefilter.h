@@ -69,7 +69,7 @@ namespace gloox
       /**
        * This function receives a message stanza right after it was received (there may be other filters
        * which got to see the stanza before this filter, though).
-       * @param stanza The complete message stanza.
+       * @param msg The complete message stanza.
        */
       virtual void filter( Message* msg ) = 0;
 
