@@ -55,7 +55,7 @@ class RegTest : public RegistrationHandler, ConnectionListener, LogHandler
      m_reg->fetchRegistrationFields();
 
       // changing password
-//        m_reg->changePassword( "test" );
+//        m_reg->changePassword( j->username(), "test" );
 
       // unregistering
 //       m_reg->removeAccount();
