@@ -480,6 +480,9 @@ namespace gloox
   /** Multi-User Chat namespace (request) (XEP-0045) */
   GLOOX_API extern const std::string XMLNS_MUC_REQUEST;
 
+  /** Entity Capabilities namespace (XEP-0115) */
+  GLOOX_API extern const std::string XMLNS_CAPS;
+
   /** XMPP stream namespace (RFC 3920) */
   GLOOX_API extern const std::string XMLNS_XMPP_STREAM;
 

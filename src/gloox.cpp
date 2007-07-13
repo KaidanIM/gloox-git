@@ -72,14 +72,16 @@ namespace gloox
   const std::string XMLNS_MUC_ROOMINFO      = "http://jabber.org/protocol/muc#roominfo";
   const std::string XMLNS_MUC_ROOMS         = "http://jabber.org/protocol/muc#rooms";
   const std::string XMLNS_MUC_REQUEST       = "http://jabber.org/protocol/muc#request";
-  const std::string XMLNS_XMPP_STREAM       = "urn:ietf:params:xml:ns:xmpp-streams";
 
+  const std::string XMLNS_CAPS              = "http://jabber.org/protocol/caps";
+
+  const std::string XMLNS_XMPP_STREAM       = "urn:ietf:params:xml:ns:xmpp-streams";
   const std::string XMLNS_XMPP_STANZAS      = "urn:ietf:params:xml:ns:xmpp-stanzas";
   const std::string XMLNS_STREAM_TLS        = "urn:ietf:params:xml:ns:xmpp-tls";
   const std::string XMLNS_STREAM_SASL       = "urn:ietf:params:xml:ns:xmpp-sasl";
   const std::string XMLNS_STREAM_BIND       = "urn:ietf:params:xml:ns:xmpp-bind";
-  const std::string XMLNS_STREAM_SESSION    = "urn:ietf:params:xml:ns:xmpp-session";
 
+  const std::string XMLNS_STREAM_SESSION    = "urn:ietf:params:xml:ns:xmpp-session";
   const std::string XMLNS_STREAM_IQAUTH     = "http://jabber.org/features/iq-auth";
   const std::string XMLNS_STREAM_IQREGISTER = "http://jabber.org/features/iq-register";
   const std::string XMLNS_STREAM_COMPRESS   = "http://jabber.org/features/compress";
