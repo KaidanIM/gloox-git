@@ -48,7 +48,7 @@ namespace gloox
   const std::string SHA::hex()
   {
     if( m_corrupted )
-      return "";
+      return std::string();
 
     finalize();
 
