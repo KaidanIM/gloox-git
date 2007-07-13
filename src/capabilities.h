@@ -61,10 +61,22 @@ namespace gloox
       const std::string& node() const { return m_node; }
 
       /**
+       * Sets the client's identifying node.
+       * @param node The node.
+       */
+      void setNode( const std::string& node ) { m_node = node; }
+
+      /**
        * Returns the client's identifying version.
        * @return The version.
        */
       const std::string& version() const { return m_version; }
+
+      /**
+       * Sets the client's identifying version.
+       * @param node The version.
+       */
+      void setVersion( const std::string& version ) { m_version = version; }
 
       /**
        * Returns the client's extensions (whitespace-separated).
