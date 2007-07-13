@@ -175,10 +175,10 @@ namespace gloox
       void removeRegistrationHandler();
 
       // reimplemented from IqHandler
-      virtual bool handleIq( Stanza *stanza );
+      virtual bool handleIq( Stanza* /*stanza*/ ) { return false; }
 
       // reimplemented from IqHandler
-      virtual bool handleIqID( Stanza *stanza, int context );
+      virtual bool handleIqID( Stanza* stanza, int context );
 
     private:
       enum IdType
