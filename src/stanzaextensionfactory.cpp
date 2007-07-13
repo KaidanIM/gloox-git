@@ -22,6 +22,7 @@
 #include "xdelayeddelivery.h"
 #include "gpgsigned.h"
 #include "gpgencrypted.h"
+#include "capabilities.h"
 
 namespace gloox
 {
@@ -42,10 +43,7 @@ namespace gloox
         return new GPGSigned( tag );
       else if( xmlns == XMLNS_X_GPGENCRYPTED )
         return new GPGEncrypted( tag );
-    }
-    else if( name == "iq" )
-    {
-      if( xmlns == XMLNS_IQ_OOB )
+      else if( xmlns == XMLNS_IQ_OOB )
         return new OOB( tag );
     }
     else if( name == "delay" && xmlns == XMLNS_DELAY )
@@ -55,6 +53,10 @@ namespace gloox
     else if( name == "amp" && xmlns == XMLNS_AMP )
     {
       return new AMP( tag );
+    }
+    else if( name == "c" && xmlns == XMLNS_CAPS )
+    {
+      return new Capabilities( tag );
     }
 
     return 0;
