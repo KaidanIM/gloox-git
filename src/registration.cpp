@@ -276,7 +276,7 @@ namespace gloox
           break;
       }
     }
-    else if( stanza->subtype() == StanzaIqResult )
+    else if( stanza->subtype() == StanzaIqError )
     {
       Tag *e = stanza->findChild( "error" );
 
