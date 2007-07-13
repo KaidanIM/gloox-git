@@ -25,14 +25,12 @@ namespace gloox
 
   /**
    * @brief A virtual interface that allows implementors to receive data
-   * sent over a SOCKS5 Bytestream as defined in XEP-0066, or a In-Band Bytestream
+   * sent over a SOCKS5 Bytestream as defined in XEP-0066, or an In-Band Bytestream
    * as defined in XEP-0047.
    *
    * An BytestreamDataHandler is registered with a Bytestream.
    *
-   * See SOCKS5BytestreamManager for a detailed description on how to implement SOCKS5 Bytestreams.
-   *
-   * See InBandBytestreamManager for a detailed description on how to implement In-Band Bytestreams.
+   * See SIProfileFT for more information regarding file transfer.
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 1.0
@@ -49,7 +47,7 @@ namespace gloox
        * Reimplement this function to receive data which is sent over the bytestream.
        * The data received here is (probably) only a single chunk of the complete data (depending
        * on the amount of data you want to send).
-       * @param s5b The bytestream.
+       * @param bs The bytestream.
        * @param data The actual stream payload.
        */
       virtual void handleBytestreamData( Bytestream* bs, const std::string& data ) = 0;
@@ -57,21 +55,21 @@ namespace gloox
       /**
        * Notifies about an error occuring while using a bytestream.
        * When this handler is called the stream has already been closed.
-       * @param s5b The bytestream.
-       * @param stanza The error stanza.
+       * @param bs The bytestream.
+       * @param iq The error stanza.
        */
       virtual void handleBytestreamError( Bytestream* bs, IQ* iq ) = 0;
 
       /**
        * Notifies the handler that the given bytestream has been acknowledged
        * and is ready to send/receive data.
-       * @param s5b The opened bytestream.
+       * @param bs The opened bytestream.
        */
       virtual void handleBytestreamOpen( Bytestream* bs ) = 0;
 
       /**
        * Notifies the handler that the given bytestream has been closed.
-       * @param s5b The closed bytestream.
+       * @param bs The closed bytestream.
        */
       virtual void handleBytestreamClose( Bytestream* bs ) = 0;
 

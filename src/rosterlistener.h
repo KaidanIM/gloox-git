@@ -157,13 +157,13 @@ namespace gloox
       /**
        * This function is called whenever presence from an entity is received which is not in
        * the roster.
-       * @param stanza The full presence stanza.
+       * @param presence The full presence stanza.
        */
       virtual void handleNonrosterPresence( Presence* presence ) = 0;
 
       /**
        * This function is called if the server returned an error.
-       * @param stanza The error stanza.
+       * @param iq The error stanza.
        */
       virtual void handleRosterError( IQ* iq ) = 0;
   };

@@ -29,7 +29,14 @@ namespace gloox
    */
   struct DiscoNodeItem
   {
-    DiscoNodeItem() {}
+    DiscoNodeItem() {}              /**< Default constructor. */
+
+    /**
+     * Constructs a DiscoNodeItem from a node, jid and name.
+     * @param _node The item's node.
+     * @param _jid The item's jid.
+     * @param _name The item's name.
+     */
     DiscoNodeItem( const std::string& _node,
                    const std::string& _jid,
                    const std::string& _name )

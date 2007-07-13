@@ -37,7 +37,7 @@ namespace gloox
   {
     public:
       /**
-       *
+       * Available stream types.
        */
       enum StreamType
       {
@@ -46,7 +46,12 @@ namespace gloox
       };
 
       /**
-       *
+       * Creates a new Bytestream.
+       * @param type The stream type.
+       * @param logInstance A Logsink to use for logging. Obtain it from ClientBase::logInstance().
+       * @param initiator The initiator of the stream (usually the sender).
+       * @param target The target of the stream (usually the receiver).
+       * @param sid The stream's ID.
        */
       Bytestream( StreamType type, LogSink& logInstance, const JID& initiator, const JID& target,
                   const std::string& sid )
@@ -60,21 +65,20 @@ namespace gloox
       virtual ~Bytestream() {}
 
       /**
-       * Returns whether the bytestream is open, that is, accepted by both parties.
-       * @return Whether the bytestream is open or not.
+       * Returns whether the bytestream is open, that is, accepted by both parties and ready
+       * to send/receive data.
+       * @return Whether or not the bytestream is open.
        */
       bool isOpen() const { return m_open; }
 
       /**
-       * This function starts the connection process. That is, it attempts to connect
-       * to each of the available StreamHosts. Once a working StreamHosts is found, the
-       * SOCKS5BytestreamManager is notified and the function returns.
-       * @return @b True if a connection to a StreamHost could be established, @b false
+       * This function starts the connection process.
+       * @return @b True if a connection to a remote entity could be established, @b false
        * otherwise.
-       * @note If @b false is returned you should hand this SOCKS5Bytestream object
-       * to SOCKS5BytestreamManager::dispose() for deletion.
-       * @note Make sure you have a SOCKS5BytestreamDataHandler registered (using
-       * registerSOCKS5BytestreamDataHandler()) before calling this function.
+       * @note If @b false is returned you should pass this Bytestream object
+       * to SIProfileFT::dispose() for deletion.
+       * @note Make sure you have a BytestreamDataHandler registered (using
+       * registerBytestreamDataHandler()) before calling this function.
        */
       virtual bool connect() = 0;
 
@@ -95,8 +99,9 @@ namespace gloox
       virtual bool send( const std::string& data ) = 0;
 
       /**
-       * Call this function repeatedly to receive data from the socket. You should even do this
-       * if you use the bytestream to merely @b send data.
+       * Call this function repeatedly to receive data. You should even do this
+       * if you use the bytestream to merely @b send data. May be a NOOP, depending on the actual
+       * stream type.
        * @param timeout The timeout to use for select in microseconds. Default of -1 means blocking.
        * @return The state of the connection.
        */
@@ -132,7 +137,7 @@ namespace gloox
        * Use this function to register an object that will receive any notifications from
        * the Bytestream instance. Only one BytestreamDataHandler can be registered
        * at any one time.
-       * @param bbdh The BytestreamDataHandler-derived object to receive notifications.
+       * @param bdh The BytestreamDataHandler-derived object to receive notifications.
        */
       void registerBytestreamDataHandler( BytestreamDataHandler* bdh )
         { m_handler = bdh; }
@@ -144,8 +149,6 @@ namespace gloox
         { m_handler = 0; }
 
     protected:
-      void setSid( const std::string& sid ) { m_sid = sid; }
-
       BytestreamDataHandler *m_handler;
       const LogSink& m_logInstance;
       const JID m_initiator;

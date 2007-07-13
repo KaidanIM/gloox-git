@@ -28,9 +28,6 @@ namespace gloox
   class ClientBase;
   class DataForm;
 
-  /**
-   * A namespace holding all the Pubsub-related classes etc.
-   */
   namespace PubSub
   {
 

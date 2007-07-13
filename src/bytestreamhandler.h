@@ -26,9 +26,7 @@ namespace gloox
    * @brief A virtual interface that allows to receive new incoming Bytestream requests
    * from remote entities.
    *
-   * See BytestreamManager for a detailed description on how to implement SOCKS5 Bytestreams.
-   *
-   * See InBandBytestreamManager for a detailed description on how to implement In-Band Bytestreams.
+   * You should not need to use this interface directly.
    *
    * See SIProfileFT on how to implement file transfer in general.
    *
@@ -44,7 +42,7 @@ namespace gloox
       virtual ~BytestreamHandler() {}
 
       /**
-       * Notifies the implementor of a new incoming SOCKS5 request.
+       * Notifies the implementor of a new incoming bytestream request.
        * You have to call either
        * BytestreamManager::acceptBytestream() or
        * BytestreamManager::rejectBytestream(), to accept or reject the bytestream
@@ -56,33 +54,31 @@ namespace gloox
       virtual void handleIncomingBytestreamRequest( const std::string& sid, const JID& from ) = 0;
 
       /**
-       * Notifies the implementor of a new incoming SOCKS5 bytestream. The bytestream is not yet ready to
+       * Notifies the implementor of a new incoming bytestream. The bytestream is not yet ready to
        * send data.
        * To initialize the bytestream and to prepare it for data transfer, register a
        * BytestreamDataHandler with it and call its connect() method.
        * To not block your application while the data transfer lasts, you most
        * likely want to put the bytestream into its own thread or process (before calling connect() on it).
        * It is safe to do so without additional synchronization.
-       * When you are finished using the bytestream, use SIProfileFT::dispose() (or
-       * BytestreamManager::dispose() if you use BytestreamManager directly) to get rid of it.
-       * @param s5b The bytestream.
+       * When you are finished using the bytestream, use SIProfileFT::dispose() to get rid of it.
+       * @param bs The bytestream.
        */
-      virtual void handleIncomingBytestream( Bytestream* s5b ) = 0;
+      virtual void handleIncomingBytestream( Bytestream* bs ) = 0;
 
       /**
-       * Notifies the implementor of successful establishing of an outgoing SOCKS5 bytestream request.
+       * Notifies the implementor of successful establishing of an outgoing bytestream request.
        * The stream has been accepted by the remote entity and is ready to send data.
        * The BytestreamHandler does @b not become the owner of the Bytestream object.
-       * Use SIProfileFT::dispose() (or BytestreamManager::dispose() if you use
-       * BytestreamManager directly) to get rid of the bytestream object after it has been closed.
-       * @param s5b The new bytestream.
+       * Use SIProfileFT::dispose() to get rid of the bytestream object after it has been closed.
+       * @param bs The new bytestream.
        */
-      virtual void handleOutgoingBytestream( Bytestream *s5b ) = 0;
+      virtual void handleOutgoingBytestream( Bytestream *bs ) = 0;
 
       /**
        * Notifies the handler of errors occuring when a bytestream was requested.
        * For example, if the remote entity does not implement SOCKS5 bytestreams.
-       * @param stanza The error stanza.
+       * @param iq The error stanza.
        */
       virtual void handleBytestreamError( IQ* iq ) = 0;
 

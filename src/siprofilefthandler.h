@@ -27,6 +27,8 @@ namespace gloox
   /**
    * @brief An abstract base class to handle file transfer (FT) requests.
    *
+   * See SIProfileFT for more information regarding file transfer.
+   *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */

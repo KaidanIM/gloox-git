@@ -60,7 +60,7 @@ namespace gloox
        * @param type The desired IqType.
        * @param to The intended receiver.
        * @param id The request's ID. Usually obtained from ClientBase::getID()
-       * @param The child tag's xmlns. Optional. If omitted, no child tag is added.
+       * @param xmlns The child tag's xmlns. Optional. If omitted, no child tag is added.
        * @param childtag The child tag's name. Defaults to "query".
        * @param from An optional sender address. Usually not needed. Cannot be forged.
        */
