@@ -200,8 +200,10 @@ namespace gloox
         case FetchRegistrationFields:
         {
           Tag *q = stanza->findChild( "query" );
+          if( !q )
+            return false;
 
-          if( q && q->hasChild( "registered" ) )
+          if( q->hasChild( "registered" ) )
           {
             m_registrationHandler->handleAlreadyRegistered( stanza->from() );
             break;
