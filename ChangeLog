@@ -1,8 +1,14 @@
 v1.0 -- xx yyy 200z
 -------------------
+- XEP-0060 (Publish-Subscribe)
+- integrated XEP-0047 (In-Band Bytestreams) with XEP-0096 (File Transfer)
+- integrated XEP-0066 (Out-of-Band Data) with XEP-0096 (File Transfer)
+- removed message-based IBB
 - added IQ, Message, Subscription, Presence classes
 - Parser: feed() returns -1 on success, parse error position otherwise
 - Parser and Tag: support mixed content xml
+- ClientBase: removed limit of one handler per xmlns
+- ClientBase: IQ ID handlers will be called first, only if none matched xmlns handlers will be called
 
 
 v0.9 -- 17 Jun 2007

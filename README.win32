@@ -38,4 +38,5 @@ Building gloox on MSVC
 Linking against gloox
 ---------------------
 
-When building a program that links against gloox, make sure you have GLOOX_IMPORTS defined.
+- When building a program that links against gloox, make sure you have GLOOX_IMPORTS defined.
+- Make sure you use the same runtime library for both gloox and your app.
