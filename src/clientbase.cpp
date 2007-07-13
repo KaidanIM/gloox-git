@@ -214,8 +214,8 @@ namespace gloox
         }
         else if( tag->name() == "presence" )
         {
-          if( tag->hasAttribute( "type", "subscribe" ) || tag->hasAttribute( "type", "subscribed" )
-              || tag->hasAttribute( "type", "unsubscribe" ) || tag->hasAttribute( "type", "unsubscribed" ) )
+          if( tag->hasAttribute( TYPE, "subscribe" ) || tag->hasAttribute( TYPE, "subscribed" )
+              || tag->hasAttribute( TYPE, "unsubscribe" ) || tag->hasAttribute( TYPE, "unsubscribed" ) )
           {
             Subscription *sub = new Subscription( tag, true );
             notifySubscriptionHandlers( sub );
@@ -386,7 +386,7 @@ namespace gloox
   void ClientBase::startTls()
   {
     Tag *start = new Tag( "starttls" );
-    start->addAttribute( "xmlns", XMLNS_STREAM_TLS );
+    start->addAttribute( XMLNS, XMLNS_STREAM_TLS );
     send( start );
   }
 
@@ -408,7 +408,7 @@ namespace gloox
     m_selectedSaslMech = type;
 
     Tag *a = new Tag( "auth" );
-    a->addAttribute( "xmlns", XMLNS_STREAM_SASL );
+    a->addAttribute( XMLNS, XMLNS_STREAM_SASL );
 
     switch( type )
     {
@@ -480,7 +480,7 @@ namespace gloox
   void ClientBase::processSASLChallenge( const std::string& challenge )
   {
     Tag *t = new Tag( "response" );
-    t->addAttribute( "xmlns", XMLNS_STREAM_SASL );
+    t->addAttribute( XMLNS, XMLNS_STREAM_SASL );
 
     const std::string& decoded = Base64::decode64( challenge );
 
@@ -813,7 +813,7 @@ namespace gloox
       else
         m_streamErrorAppCondition = (*it);
 
-      if( err != StreamErrorUndefined && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STREAM ) )
+      if( err != StreamErrorUndefined && (*it)->hasAttribute( XMLNS, XMLNS_XMPP_STREAM ) )
         m_streamError = err;
     }
   }
@@ -1146,8 +1146,8 @@ namespace gloox
         ( ( iq->subtype() == IQ::Get ) || ( iq->subtype() == IQ::Set ) ) )
     {
       Tag *re = new IQ( IQ::Error, iq->from(), iq->id() );
-      Tag *e = new Tag( re, "error", "type", "cancel" );
-      new Tag( e, "service-unavailable", "xmlns", XMLNS_XMPP_STANZAS );
+      Tag *e = new Tag( re, "error", TYPE, "cancel" );
+      new Tag( e, "service-unavailable", XMLNS, XMLNS_XMPP_STANZAS );
       send( re );
       return;
     }
@@ -1157,7 +1157,7 @@ namespace gloox
   {
     if( m_mucInvitationHandler )
     {
-      Tag *x = msg->findChild( "x", "xmlns", XMLNS_MUC_USER );
+      Tag *x = msg->findChild( "x", XMLNS, XMLNS_MUC_USER );
       if( x && x->hasChild( "invite" ) )
       {
         Tag *i = x->findChild( "invite" );
@@ -1241,7 +1241,7 @@ namespace gloox
     TagHandlerList::const_iterator it = m_tagHandlers.begin();
     for( ; it != m_tagHandlers.end(); ++it )
     {
-      if( (*it).tag == tag->name() && tag->hasAttribute( "xmlns", (*it).xmlns ) )
+      if( (*it).tag == tag->name() && tag->hasAttribute( XMLNS, (*it).xmlns ) )
         (*it).th->handleTag( tag );
     }
   }

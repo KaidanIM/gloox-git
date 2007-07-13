@@ -86,13 +86,13 @@ namespace gloox
       switch( (*it).type() )
       {
         case PrivacyItem::TypeJid:
-          i->addAttribute( "type", "jid" );
+          i->addAttribute( TYPE, "jid" );
           break;
         case PrivacyItem::TypeGroup:
-          i->addAttribute( "type", "group" );
+          i->addAttribute( TYPE, "group" );
           break;
         case PrivacyItem::TypeSubscription:
-          i->addAttribute( "type", "subscription" );
+          i->addAttribute( TYPE, "subscription" );
           break;
         default:
           break;
@@ -209,7 +209,7 @@ namespace gloox
               PrivacyItem::ItemAction action;
               int packetType = 0;
 
-              const std::string& t = (*it)->findAttribute( "type" );
+              const std::string& t = (*it)->findAttribute( TYPE );
               if( t == "jid" )
                 type = PrivacyItem::TypeJid;
               else if( t == "group" )

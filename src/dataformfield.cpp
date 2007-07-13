@@ -42,7 +42,7 @@ namespace gloox
     if( !tag )
       return;
 
-    const std::string& type = tag->findAttribute( "type" );
+    const std::string& type = tag->findAttribute( TYPE );
     if( type.empty() )
     {
       if( !tag->name().empty() )
@@ -92,7 +92,7 @@ namespace gloox
       return 0;
 
     Tag *field = new Tag( "field" );
-    field->addAttribute( "type", util::lookup( m_type, fieldTypeValues ) );
+    field->addAttribute( TYPE, util::lookup( m_type, fieldTypeValues ) );
     field->addAttribute( "var", m_name );
     field->addAttribute( "label", m_label );
     if( m_required )

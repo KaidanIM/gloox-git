@@ -29,7 +29,7 @@ namespace gloox
   DelayedDelivery::DelayedDelivery( Tag *tag )
     : StanzaExtension( ExtDelay ), m_valid( false )
   {
-    if( !tag || tag->name() != "delay" || !tag->hasAttribute( "xmlns", XMLNS_DELAY )
+    if( !tag || tag->name() != "delay" || !tag->hasAttribute( XMLNS, XMLNS_DELAY )
          || !tag->hasAttribute( "stamp" ) )
       return;
 
@@ -49,7 +49,7 @@ namespace gloox
       return 0;
 
     Tag *t = new Tag( "delay" );
-    t->addAttribute( "xmlns", XMLNS_DELAY );
+    t->addAttribute( XMLNS, XMLNS_DELAY );
     if( !m_from.empty() )
       t->addAttribute( "from", m_from.full() );
     if( !m_stamp.empty() )

@@ -87,21 +87,21 @@ namespace gloox
     if( reason == NoValidStreams || reason == BadProfile )
     {
       error->addAttribute( "error", "400" );
-      error->addAttribute( "type", "cancel" );
-      new Tag( error, "bad-request", "xmlns", XMLNS_XMPP_STANZAS );
+      error->addAttribute( TYPE, "cancel" );
+      new Tag( error, "bad-request", XMLNS, XMLNS_XMPP_STANZAS );
       if( reason == NoValidStreams )
-        new Tag( error, "no-valid-streams", "xmlns", XMLNS_SI );
+        new Tag( error, "no-valid-streams", XMLNS, XMLNS_SI );
       else if( reason == BadProfile )
-        new Tag( error, "bad-profile", "xmlns", XMLNS_SI );
+        new Tag( error, "bad-profile", XMLNS, XMLNS_SI );
     }
     else
     {
       error->addAttribute( "error", "403" );
-      error->addAttribute( "type", "cancel" );
-      new Tag( error, "forbidden", "xmlns", XMLNS_XMPP_STANZAS );
+      error->addAttribute( TYPE, "cancel" );
+      new Tag( error, "forbidden", XMLNS, XMLNS_XMPP_STANZAS );
       if( !text.empty() )
       {
-        Tag* t = new Tag( error, "text", "xmlns", XMLNS_XMPP_STANZAS );
+        Tag* t = new Tag( error, "text", XMLNS, XMLNS_XMPP_STANZAS );
         t->setCData( text );
       }
     }
@@ -137,15 +137,15 @@ namespace gloox
     if( it != m_track.end() )
       return false;
 
-    Tag *si = iq->findChild( "si", "xmlns", XMLNS_SI );
+    Tag *si = iq->findChild( "si", XMLNS, XMLNS_SI );
     if( si && si->hasAttribute( "profile" ) )
     {
       const std::string& profile = si->findAttribute( "profile" );
       HandlerMap::const_iterator it = m_handlers.find( profile );
       if( it != m_handlers.end() && (*it).second )
       {
-        Tag* p = si->findChildWithAttrib( "xmlns", profile );
-        Tag* f = si->findChild( "feature", "xmlns", XMLNS_FEATURE_NEG );
+        Tag* p = si->findChildWithAttrib( XMLNS, profile );
+        Tag* f = si->findChild( "feature", XMLNS, XMLNS_FEATURE_NEG );
         (*it).second->handleSIRequest( iq->from(), iq->id(), profile, si, p, f );
         return true;
       }
@@ -164,13 +164,13 @@ namespace gloox
           TrackMap::iterator it = m_track.find( iq->id() );
           if( it != m_track.end() )
           {
-            Tag* si = iq->findChild( "si", "xmlns", XMLNS_SI );
+            Tag* si = iq->findChild( "si", XMLNS, XMLNS_SI );
             Tag* ptag = 0;
             Tag* fneg = 0;
             if( si )
             {
-              ptag = si->findChildWithAttrib( "xmlns", (*it).second.profile );
-              fneg = si->findChild( "feature", "xmlns", XMLNS_FEATURE_NEG );
+              ptag = si->findChildWithAttrib( XMLNS, (*it).second.profile );
+              fneg = si->findChild( "feature", XMLNS, XMLNS_FEATURE_NEG );
             }
             (*it).second.sih->handleSIRequestResult( iq->from(), (*it).second.sid, si, ptag, fneg );
           }

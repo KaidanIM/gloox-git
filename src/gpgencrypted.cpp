@@ -29,7 +29,7 @@ namespace gloox
     : StanzaExtension( ExtGPGEncrypted ),
       m_valid( false )
   {
-    if( tag && tag->name() == "x" && tag->hasAttribute( "xmlns", XMLNS_X_GPGENCRYPTED ) )
+    if( tag && tag->name() == "x" && tag->hasAttribute( XMLNS, XMLNS_X_GPGENCRYPTED ) )
     {
       m_valid = true;
       m_encrypted = tag->cdata();
@@ -46,7 +46,7 @@ namespace gloox
       return 0;
 
     Tag *x = new Tag( "x", m_encrypted );
-    x->addAttribute( "xmlns", XMLNS_X_GPGENCRYPTED );
+    x->addAttribute( XMLNS, XMLNS_X_GPGENCRYPTED );
 
     return x;
   }

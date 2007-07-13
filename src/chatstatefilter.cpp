@@ -52,11 +52,11 @@ namespace gloox
       }
       else
       {
-        if( msg->hasChild( "active", "xmlns", XMLNS_CHAT_STATES )
-            || msg->hasChild( "composing", "xmlns", XMLNS_CHAT_STATES )
-            || msg->hasChild( "paused", "xmlns", XMLNS_CHAT_STATES )
-            || msg->hasChild( "inactive", "xmlns", XMLNS_CHAT_STATES )
-            || msg->hasChild( "gone", "xmlns", XMLNS_CHAT_STATES ) )
+        if( msg->hasChild( "active", XMLNS, XMLNS_CHAT_STATES )
+            || msg->hasChild( "composing", XMLNS, XMLNS_CHAT_STATES )
+            || msg->hasChild( "paused", XMLNS, XMLNS_CHAT_STATES )
+            || msg->hasChild( "inactive", XMLNS, XMLNS_CHAT_STATES )
+            || msg->hasChild( "gone", XMLNS, XMLNS_CHAT_STATES ) )
           m_enableChatStates = true;
         else
           m_enableChatStates = false;
@@ -78,19 +78,19 @@ namespace gloox
     switch( state )
     {
       case ChatStateActive:
-        new Tag( m, "active", "xmlns", XMLNS_CHAT_STATES );
+        new Tag( m, "active", XMLNS, XMLNS_CHAT_STATES );
         break;
       case ChatStateComposing:
-        new Tag( m, "composing", "xmlns", XMLNS_CHAT_STATES );
+        new Tag( m, "composing", XMLNS, XMLNS_CHAT_STATES );
         break;
       case ChatStatePaused:
-        new Tag( m, "paused", "xmlns", XMLNS_CHAT_STATES );
+        new Tag( m, "paused", XMLNS, XMLNS_CHAT_STATES );
         break;
       case ChatStateInactive:
-        new Tag( m, "inactive", "xmlns", XMLNS_CHAT_STATES );
+        new Tag( m, "inactive", XMLNS, XMLNS_CHAT_STATES );
         break;
       case ChatStateGone:
-        new Tag( m, "gone", "xmlns", XMLNS_CHAT_STATES );
+        new Tag( m, "gone", XMLNS, XMLNS_CHAT_STATES );
         break;
     }
 
@@ -102,7 +102,7 @@ namespace gloox
   void ChatStateFilter::decorate( Tag *tag )
   {
     if( m_enableChatStates )
-      new Tag( tag, "active", "xmlns", XMLNS_CHAT_STATES );
+      new Tag( tag, "active", XMLNS, XMLNS_CHAT_STATES );
   }
 
 }

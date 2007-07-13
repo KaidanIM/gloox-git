@@ -106,7 +106,7 @@ namespace gloox
     if( context == FORequestHeaders && m_flexibleOfflineHandler )
     {
       Tag *q = stanza->findChild( "query" );
-      if( q && q->hasAttribute( "xmlns", XMLNS_DISCO_ITEMS ) && q->hasAttribute( "node", XMLNS_OFFLINE ) )
+      if( q && q->hasAttribute( XMLNS, XMLNS_DISCO_ITEMS ) && q->hasAttribute( "node", XMLNS_OFFLINE ) )
       {
         StringMap m;
         const Tag::TagList& l = q->children();

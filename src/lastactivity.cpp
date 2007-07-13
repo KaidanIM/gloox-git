@@ -66,9 +66,9 @@ namespace gloox
       {
         IQ* t = new IQ( IQ::Error, iq->from(), iq->id() );
         Tag *e = new Tag( t, "error" );
-        e->addAttribute( "type", "cancel" );
+        e->addAttribute( TYPE, "cancel" );
         Tag *f = new Tag( e, "feature-not-implemented" );
-        f->addAttribute( "xmlns", XMLNS_XMPP_STANZAS );
+        f->addAttribute( XMLNS, XMLNS_XMPP_STANZAS );
 
         m_parent->send( t );
         break;

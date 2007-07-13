@@ -87,15 +87,15 @@ namespace gloox
     : StanzaExtension( ExtError ), m_genericType( GenericErrorNone ),
       m_type( ErrorNone ), m_subType( SubErrorNone ), m_feature( FeatureNone )
   {
-    const std::string& genType = error->findAttribute( "type" );
+    const std::string& genType = error->findAttribute( TYPE );
     m_genericType = (GenericErrorType)util::lookup( genType, genericErrorValues );
     Tag::TagList::const_iterator it = error->children().begin();
     m_type = (ErrorType)util::lookup( (*it)->name(), errorValues );
-    m_xmlns1 = (*it)->findAttribute( "xmlns" );
+    m_xmlns1 = (*it)->findAttribute( XMLNS );
     if( ++it != error->children().end() )
     {
       m_subType = (SubErrorType)util::lookup( (*it)->name(), subErrorValues );
-      m_xmlns2 = (*it)->findAttribute( "xmlns" );
+      m_xmlns2 = (*it)->findAttribute( XMLNS );
       const std::string& feat = (*it)->findAttribute( "feature" );
       m_feature = (FeatureType)util::lookup( feat, featureValues );
     }
@@ -104,7 +104,7 @@ namespace gloox
   Error& Error::operator=( const Tag * error)
   {
     //setValues( error );
-    const std::string& genType = error->findAttribute( "type" );
+    const std::string& genType = error->findAttribute( TYPE );
     if( genType.empty() )
     {
       printf( "error: no basic error type\n" );
@@ -118,14 +118,14 @@ namespace gloox
     if( i == nbErrors )
       return;
     m_type = errorValues[i].second;
-    m_xmlns1 = (*it)->findAttribute( "xmlns" );
+    m_xmlns1 = (*it)->findAttribute( XMLNS );
     if( ++it != error->children().end() )
     {
       i = util::lookup( (*it)->name(), subErrorValues, nbSubErrors );
       if( i == nbSubErrors )
         return;
       m_subType = subErrorValues[i].second;
-      m_xmlns2 = (*it)->findAttribute( "xmlns" );
+      m_xmlns2 = (*it)->findAttribute( XMLNS );
       const std::string& feat = (*it)->findAttribute( "feature" );
       if( feat.empty() )
         return;
@@ -146,11 +146,11 @@ namespace gloox
     if( m_genericType == GenericErrorNone || m_type == ErrorNone )
       return 0;
     Tag * error = new Tag( "error" );
-    error->addAttribute( "type", util::lookup( m_genericType, genericErrorValues ) );
-    new Tag( error, util::lookup( m_type, errorValues ), "xmlns", m_xmlns1 );
+    error->addAttribute( TYPE, util::lookup( m_genericType, genericErrorValues ) );
+    new Tag( error, util::lookup( m_type, errorValues ), XMLNS, m_xmlns1 );
     if( m_subType != SubErrorNone )
     {
-      Tag * tag = new Tag( error, util::lookup( m_subType, subErrorValues ), "xmlns", m_xmlns2 );
+      Tag * tag = new Tag( error, util::lookup( m_subType, subErrorValues ), XMLNS, m_xmlns2 );
       if( m_subType == Unsupported )
         tag->addAttribute( "feature", m_feature );      
     }

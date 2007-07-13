@@ -65,7 +65,7 @@ namespace gloox
 
     Presence *s = new Presence( Presence::Available, m_nick.full() );
     Tag *x = new Tag( s, "x" );
-    x->addAttribute( "xmlns", XMLNS_MUC );
+    x->addAttribute( XMLNS, XMLNS_MUC );
     if( !m_password.empty() )
       new Tag( x, "password",  m_password );
 
@@ -92,7 +92,7 @@ namespace gloox
 
     Presence *s = new Presence( Presence::Unavailable, m_nick.full(), msg );
     Tag *x = new Tag( s, "x" );
-    x->addAttribute( "xmlns", XMLNS_MUC );
+    x->addAttribute( XMLNS, XMLNS_MUC );
 
     if( m_parent )
       m_parent->send( s );
@@ -182,7 +182,7 @@ namespace gloox
       return;
 
     Message* m = new Message( Message::Normal, m_nick.bareJID() );
-    Tag *x = new Tag( m, "x", "xmlns", XMLNS_MUC_USER );
+    Tag *x = new Tag( m, "x", XMLNS, XMLNS_MUC_USER );
     Tag *i = new Tag( x, "invite", "to", invitee.bare() );
     if( !reason.empty() )
       new Tag( i, "reason", reason );
@@ -195,7 +195,7 @@ namespace gloox
   Message* MUCRoom::declineInvitation( const JID& room, const JID& invitor, const std::string& reason )
   {
     Message *m = new Message( Message::Normal, room.bare() );
-    Tag *x = new Tag( m, "x", "xmlns", XMLNS_MUC_USER );
+    Tag *x = new Tag( m, "x", XMLNS, XMLNS_MUC_USER );
     Tag *d = new Tag( x, "decline", "to", invitor.bare() );
     if( !reason.empty() )
       new Tag( d, "reason", reason );
@@ -223,7 +223,7 @@ namespace gloox
       return;
 
     Message *m = new Message( Message::Normal, m_nick.bareJID(), message );
-    Tag *x = new Tag( m, "x", "xmlns", XMLNS_X_DELAY );
+    Tag *x = new Tag( m, "x", XMLNS, XMLNS_X_DELAY );
     x->addAttribute( "from", from.full() );
     x->addAttribute( "stamp", stamp );
 
@@ -455,7 +455,7 @@ namespace gloox
     const std::string& id = m_parent->getID();
     IQ* iq = new IQ( IQ::Set, m_nick.bareJID(), id, XMLNS_MUC_ADMIN );
     Tag *q = iq->query();
-    q->addAttribute( "xmlns", XMLNS_MUC_ADMIN );
+    q->addAttribute( XMLNS, XMLNS_MUC_ADMIN );
 
     MUCListItemList::const_iterator it = items.begin();
     for( ; it != items.end(); ++it )
@@ -487,7 +487,7 @@ namespace gloox
     else
     {
       Tag *x;
-      if( m_roomHandler && ( x = presence->findChild( "x", "xmlns", XMLNS_MUC_USER ) ) != 0 )
+      if( m_roomHandler && ( x = presence->findChild( "x", XMLNS, XMLNS_MUC_USER ) ) != 0 )
       {
         MUCRoomParticipant party;
         party.flags = 0;
@@ -617,8 +617,8 @@ namespace gloox
     const std::string& id = m_parent->getID();
     IQ* iq = new IQ( IQ::Set, m_nick.bareJID(), id, XMLNS_MUC_OWNER );
     Tag *x = new Tag( iq->query(), "x" );
-    x->addAttribute( "xmlns", XMLNS_X_DATA );
-    x->addAttribute( "type", context == CreateInstantRoom ? "submit" :"cancel" );
+    x->addAttribute( XMLNS, XMLNS_X_DATA );
+    x->addAttribute( TYPE, context == CreateInstantRoom ? "submit" :"cancel" );
 
     m_parent->trackID( this, id, context );
     m_parent->send( iq );
@@ -684,7 +684,7 @@ namespace gloox
     else
     {
       Tag *x;
-      if( ( x = msg->findChild( "x", "xmlns", XMLNS_MUC_USER ) ) != 0 )
+      if( ( x = msg->findChild( "x", XMLNS, XMLNS_MUC_USER ) ) != 0 )
       {
         const Tag::TagList& l = x->children();
         Tag::TagList::const_iterator it = l.begin();
@@ -728,7 +728,7 @@ namespace gloox
           // call some handler?
         }
       }
-      else if( m_roomConfigHandler && ( x = msg->findChild( "x", "xmlns", XMLNS_X_DATA ) ) != 0 )
+      else if( m_roomConfigHandler && ( x = msg->findChild( "x", XMLNS, XMLNS_X_DATA ) ) != 0 )
       {
         DataForm df( x );
         m_roomConfigHandler->handleMUCRequest( this, df );
@@ -745,7 +745,7 @@ namespace gloox
         std::string when;
         bool privMsg = false;
         bool history = false;
-        if( ( x = msg->findChild( "x", "xmlns", XMLNS_X_DELAY ) ) != 0 )
+        if( ( x = msg->findChild( "x", XMLNS, XMLNS_X_DELAY ) ) != 0 )
         {
           from.setJID( x->findAttribute( "from" ) );
           when = x->findAttribute( "when" );
@@ -805,9 +805,9 @@ namespace gloox
       case RequestRoomConfig:
       {
         Tag *x = 0;
-        Tag *q = iq->findChild( "query", "xmlns", XMLNS_MUC_OWNER );
+        Tag *q = iq->findChild( "query", XMLNS, XMLNS_MUC_OWNER );
         if( q )
-          x = q->findChild( "x", "xmlns", XMLNS_X_DATA );
+          x = q->findChild( "x", XMLNS, XMLNS_X_DATA );
         if( x )
         {
           DataForm df( x );
@@ -823,9 +823,9 @@ namespace gloox
       case RequestAdminList:
       {
         Tag *x = 0;
-        Tag *q = iq->findChild( "query", "xmlns", XMLNS_MUC_OWNER );
+        Tag *q = iq->findChild( "query", XMLNS, XMLNS_MUC_OWNER );
         if( q )
-          x = q->findChild( "x", "xmlns", XMLNS_X_DATA );
+          x = q->findChild( "x", XMLNS, XMLNS_X_DATA );
         if( x )
         {
           MUCListItemList itemList;
@@ -942,7 +942,7 @@ namespace gloox
             {
               name = (*it)->findAttribute( "name" );
             }
-            else if( (*it)->name() == "x" && (*it)->hasAttribute( "xmlns", XMLNS_X_DATA ) )
+            else if( (*it)->name() == "x" && (*it)->hasAttribute( XMLNS, XMLNS_X_DATA ) )
             {
               df = new DataForm( (*it) );
             }

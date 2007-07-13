@@ -189,7 +189,7 @@ namespace gloox
 
     void Manager::handleMessage( Message* msg, MessageSession * )
     {
-      Tag * event = msg->findChild( "event", "xmlns", XMLNS_PUBSUB_EVENT );
+      Tag * event = msg->findChild( "event", XMLNS, XMLNS_PUBSUB_EVENT );
       if( !event || m_eventHandlerList.empty() )
         return;
 
@@ -265,7 +265,7 @@ namespace gloox
         return; // ejabberd...
       const JID& service = stanza->from();
       const std::string& id = stanza->id();
-      const std::string& type = identity->findAttribute( "type" );
+      const std::string& type = identity->findAttribute( TYPE );
 
       DiscoHandlerTrackMap::iterator ith = m_discoHandlerTrackMap.find( id );
       if( ith == m_discoHandlerTrackMap.end() )
@@ -706,7 +706,7 @@ namespace gloox
           {
             case Subscription:
             {
-              Tag *ps = iq->findChild( "pubsub", "xmlns", XMLNS_PUBSUB );
+              Tag *ps = iq->findChild( "pubsub", XMLNS, XMLNS_PUBSUB );
               if( !ps )
                 break;
 
@@ -733,7 +733,7 @@ namespace gloox
             case RequestSubscriptionList:
             {
               SubscriptionListTrackMap::iterator ith = m_subListTrackMap.find( iq->id() );
-              Tag *ps = iq->findChild( "pubsub", "xmlns", XMLNS_PUBSUB );
+              Tag *ps = iq->findChild( "pubsub", XMLNS, XMLNS_PUBSUB );
               Tag *subscription = ps->findChild( "subscriptions" );
               if( subscription )
               {
@@ -753,7 +753,7 @@ namespace gloox
             case RequestAffiliationList:
             {
               AffiliationListTrackMap::iterator ith = m_affListTrackMap.find( iq->id() );
-              Tag *ps = iq->findChild( "pubsub", "xmlns", XMLNS_PUBSUB );
+              Tag *ps = iq->findChild( "pubsub", XMLNS, XMLNS_PUBSUB );
               Tag *affiliations = ps->findChild( "affiliations" );
               if( affiliations )
               {
@@ -788,7 +788,7 @@ namespace gloox
               {
                 case RequestSubscriptionOptions:
                 {
-                  Tag *ps = iq->findChild( "pubsub", "xmlns", XMLNS_PUBSUB );
+                  Tag *ps = iq->findChild( "pubsub", XMLNS, XMLNS_PUBSUB );
                   Tag *options = ps->findChild( "options" );
                   Tag * x = options->findChild( "x" );
                   const DataForm df( x );
@@ -799,7 +799,7 @@ namespace gloox
                 }
                 case RequestSubscriberList:
                 {
-                  Tag * ps = iq->findChild( "pubsub", "xmlns", XMLNS_PUBSUB_OWNER );
+                  Tag * ps = iq->findChild( "pubsub", XMLNS, XMLNS_PUBSUB_OWNER );
                   Tag * subt = ps->findChild( "subscriptions" );
                   SubscriberList list;
                   const Tag::TagList& subs = subt->children();
@@ -885,7 +885,7 @@ namespace gloox
             }
             case RequestNodeConfig:
             {
-              Tag *ps = iq->findChild( "pubsub", "xmlns", XMLNS_PUBSUB );
+              Tag *ps = iq->findChild( "pubsub", XMLNS, XMLNS_PUBSUB );
               Tag *options = ps->findChild( "configure" );
               Tag * x = options->findChild( "x" );
               const DataForm * df = x ? new DataForm( x ) : 0;
@@ -896,7 +896,7 @@ namespace gloox
             }*/
             case RequestItemList:
             {
-              Tag *ps = iq->findChild( "pubsub", "xmlns", XMLNS_PUBSUB_EVENT );
+              Tag *ps = iq->findChild( "pubsub", XMLNS, XMLNS_PUBSUB_EVENT );
               if( !ps )
                 break;
               Tag *items = ps->findChild( "items" );
@@ -944,7 +944,7 @@ namespace gloox
             case Subscription:
             {
               std::cout << "SUBSCRIPTION ERROR" << std::endl;
-              Tag *ps = iq->findChild( "pubsub", "xmlns", XMLNS_PUBSUB );
+              Tag *ps = iq->findChild( "pubsub", XMLNS, XMLNS_PUBSUB );
               if( !ps )
                 return;
               Tag *sub = ps->findChild( "subscribe" );
@@ -955,44 +955,44 @@ namespace gloox
                                  jid  = sub->findAttribute( "jid" );
               SubscriptionError errorType = SubscriptionErrorNone;
 
-              if( error->hasChild( "not-authorized", "xmlns", XMLNS_XMPP_STANZAS ) )
+              if( error->hasChild( "not-authorized", XMLNS, XMLNS_XMPP_STANZAS ) )
               {
-                if( error->hasChild( "pending-subscription", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+                if( error->hasChild( "pending-subscription", XMLNS, XMLNS_PUBSUB_ERRORS ) )
                   errorType = SubscriptionErrorPending;
-                else if ( error->hasChild( "presence-subscription-required", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+                else if ( error->hasChild( "presence-subscription-required", XMLNS, XMLNS_PUBSUB_ERRORS ) )
                   errorType = SubscriptionErrorAccessPresence;
-                else if ( error->hasChild( "not-in-roster-group", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+                else if ( error->hasChild( "not-in-roster-group", XMLNS, XMLNS_PUBSUB_ERRORS ) )
                   errorType = SubscriptionErrorAccessRoster;
               }
-              else if( error->hasChild( "item-not-found", "xmlns", XMLNS_XMPP_STANZAS ) )
+              else if( error->hasChild( "item-not-found", XMLNS, XMLNS_XMPP_STANZAS ) )
               {
                 errorType = SubscriptionErrorItemNotFound;
               }
-              else if( error->hasChild( "feature-not-implemented", "xmlns", XMLNS_XMPP_STANZAS ) &&
-                       error->hasChild( "unsupported", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+              else if( error->hasChild( "feature-not-implemented", XMLNS, XMLNS_XMPP_STANZAS ) &&
+                       error->hasChild( "unsupported", XMLNS, XMLNS_PUBSUB_ERRORS ) )
                        //&& feature='subscribe'/> )
               {
                 errorType = SubscriptionErrorUnsupported;
               }
-              else if( error->hasChild( "not-allowed", "xmlns", XMLNS_XMPP_STANZAS ) &&
-                      error->hasChild( "closed-node", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+              else if( error->hasChild( "not-allowed", XMLNS, XMLNS_XMPP_STANZAS ) &&
+                      error->hasChild( "closed-node", XMLNS, XMLNS_PUBSUB_ERRORS ) )
               {
                 errorType = SubscriptionErrorAccessWhiteList;
               }
-              else if ( error->hasChild( "forbidden", "xmlns", XMLNS_XMPP_STANZAS ) )
+              else if ( error->hasChild( "forbidden", XMLNS, XMLNS_XMPP_STANZAS ) )
               {
-                const std::string& type = error->findAttribute( "type" );
+                const std::string& type = error->findAttribute( TYPE );
                 if( type == "cancel" )
                   errorType = SubscriptionErrorAnonymous;
                 else if( type == "auth" )
                   errorType = SubscriptionErrorBlocked;
               }
-              else if ( error->hasChild( "bad-request", "xmlns", XMLNS_XMPP_STANZAS ) &&
-                        error->hasChild( "invalid-jid", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+              else if ( error->hasChild( "bad-request", XMLNS, XMLNS_XMPP_STANZAS ) &&
+                        error->hasChild( "invalid-jid", XMLNS, XMLNS_PUBSUB_ERRORS ) )
               {
                 errorType = SubscriptionErrorJIDMismatch;
               }
-              else if ( error->hasChild( "payment-required", "xmlns", XMLNS_XMPP_STANZAS ) )
+              else if ( error->hasChild( "payment-required", XMLNS, XMLNS_XMPP_STANZAS ) )
               {
                 errorType = SubscriptionErrorPayment;
               }
@@ -1004,7 +1004,7 @@ namespace gloox
             }
             case Unsubscription:
             {
-              Tag *ps = iq->findChild( "pubsub", "xmlns", XMLNS_PUBSUB );
+              Tag *ps = iq->findChild( "pubsub", XMLNS, XMLNS_PUBSUB );
               if( !ps )
                 return;
               Tag *subscription = ps->findChild( "subscribe" );
@@ -1013,26 +1013,26 @@ namespace gloox
               const std::string& node = subscription->findAttribute( "node" ),
                                  jid  = subscription->findAttribute( "jid" );
               UnsubscriptionError errorType;
-              if( error->hasChild( "bad-request", "xmlns", XMLNS_XMPP_STANZAS ) &&
-                  error->hasChild( "subid-required", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+              if( error->hasChild( "bad-request", XMLNS, XMLNS_XMPP_STANZAS ) &&
+                  error->hasChild( "subid-required", XMLNS, XMLNS_PUBSUB_ERRORS ) )
               {
                 errorType = UnsubscriptionErrorMissingSID;
               }
-              else if( error->hasChild( "unexpected-request", "xmlns", XMLNS_XMPP_STANZAS ) &&
-                       error->hasChild( "not-subscribed", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+              else if( error->hasChild( "unexpected-request", XMLNS, XMLNS_XMPP_STANZAS ) &&
+                       error->hasChild( "not-subscribed", XMLNS, XMLNS_PUBSUB_ERRORS ) )
               {
                 errorType = UnsubscriptionErrorNotSubscriber;
               }
-              else if( error->hasChild( "forbidden", "xmlns", XMLNS_XMPP_STANZAS ) )
+              else if( error->hasChild( "forbidden", XMLNS, XMLNS_XMPP_STANZAS ) )
               {
                 errorType = UnsubscriptionErrorUnprivileged;
               }
-              else if( error->hasChild( "item-not-found", "xmlns", XMLNS_XMPP_STANZAS ) )
+              else if( error->hasChild( "item-not-found", XMLNS, XMLNS_XMPP_STANZAS ) )
               {
                 errorType = UnsubscriptionErrorItemNotFound;
               }
-              else if( error->hasChild( "not-acceptable", "xmlns", XMLNS_XMPP_STANZAS ) &&
-                       error->hasChild( "invalid-subid", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+              else if( error->hasChild( "not-acceptable", XMLNS, XMLNS_XMPP_STANZAS ) &&
+                       error->hasChild( "invalid-subid", XMLNS, XMLNS_PUBSUB_ERRORS ) )
               {
                 errorType = UnsubscriptionErrorInvalidSID;
               }
@@ -1043,8 +1043,8 @@ namespace gloox
             }
             case RequestSubscriptionList:
             {
-              if( error->hasChild( "feature-not-implemented", "xmlns", XMLNS_XMPP_STANZAS ) &&
-                  error->hasChild( "unsupported", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+              if( error->hasChild( "feature-not-implemented", XMLNS, XMLNS_XMPP_STANZAS ) &&
+                  error->hasChild( "unsupported", XMLNS, XMLNS_PUBSUB_ERRORS ) )
                   // feature='retrieve-subscriptions'/>
               {
                 //handleSubscriptionListError( service );
@@ -1055,8 +1055,8 @@ namespace gloox
             }
             case RequestAffiliationList:
             {
-              if( error->hasChild( "feature-not-implemented", "xmlns", XMLNS_XMPP_STANZAS ) &&
-                  error->hasChild( "unsupported", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+              if( error->hasChild( "feature-not-implemented", XMLNS, XMLNS_XMPP_STANZAS ) &&
+                  error->hasChild( "unsupported", XMLNS, XMLNS_PUBSUB_ERRORS ) )
                   // feature='retrieve-affiliations'/>
               {
                 //handleAffiliationListError( service );
@@ -1076,37 +1076,37 @@ namespace gloox
 
               const std::string& node = items->findAttribute( "node" );
               OptionRequestError errorType = OptionRequestErrorNone;
-              if( error->hasChild( "forbidden", "xmlns", XMLNS_XMPP_STANZAS ) )
+              if( error->hasChild( "forbidden", XMLNS, XMLNS_XMPP_STANZAS ) )
               {
                 errorType = OptionRequestUnprivileged;
               }
-              else if( error->hasChild( "unexpected-request", "xmlns", XMLNS_XMPP_STANZAS ) &&
-                       error->hasChild( "not-subscribed", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+              else if( error->hasChild( "unexpected-request", XMLNS, XMLNS_XMPP_STANZAS ) &&
+                       error->hasChild( "not-subscribed", XMLNS, XMLNS_PUBSUB_ERRORS ) )
               {
                 errorType = OptionRequestUnsubscribed;
               }
-              else if( error->hasChild( "bad-request", "xmlns", XMLNS_XMPP_STANZAS ) &&
-                       error->hasChild( "jid-required", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+              else if( error->hasChild( "bad-request", XMLNS, XMLNS_XMPP_STANZAS ) &&
+                       error->hasChild( "jid-required", XMLNS, XMLNS_PUBSUB_ERRORS ) )
               {
                 errorType = OptionRequestMissingJID;
               }
-              else if( error->hasChild( "bad-request", "xmlns", XMLNS_XMPP_STANZAS ) &&
-                       error->hasChild( "subid-required", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+              else if( error->hasChild( "bad-request", XMLNS, XMLNS_XMPP_STANZAS ) &&
+                       error->hasChild( "subid-required", XMLNS, XMLNS_PUBSUB_ERRORS ) )
               {
                 errorType = OptionRequestMissingSID;
               }
-              else if( error->hasChild( "not-acceptable", "xmlns", XMLNS_XMPP_STANZAS ) &&
-                       error->hasChild( "invalid-subid", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+              else if( error->hasChild( "not-acceptable", XMLNS, XMLNS_XMPP_STANZAS ) &&
+                       error->hasChild( "invalid-subid", XMLNS, XMLNS_PUBSUB_ERRORS ) )
               {
                 errorType = OptionRequestInvalidSID;
               }
-              else if( error->hasChild( "feature-not-implemented", "xmlns", XMLNS_XMPP_STANZAS ) &&
-                       error->hasChild( "unsupported", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+              else if( error->hasChild( "feature-not-implemented", XMLNS, XMLNS_XMPP_STANZAS ) &&
+                       error->hasChild( "unsupported", XMLNS, XMLNS_PUBSUB_ERRORS ) )
                        // feature='subscription-options'
               {
                 errorType = OptionRequestUnsupported;
               }
-              else if( error->hasChild( "item-not-found", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+              else if( error->hasChild( "item-not-found", XMLNS, XMLNS_PUBSUB_ERRORS ) )
               {
                 errorType = OptionRequestItemNotFound;
               }
@@ -1129,30 +1129,30 @@ namespace gloox
                 return;
               const std::string& node = items->findAttribute( "node" );
               ItemRetrivalError errorType = ItemRequestErrorNone;
-              if( error->hasChild( "bad-request", "xmlns", XMLNS_XMPP_STANZAS ) &&
-                  error->hasChild( "subid-required", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+              if( error->hasChild( "bad-request", XMLNS, XMLNS_XMPP_STANZAS ) &&
+                  error->hasChild( "subid-required", XMLNS, XMLNS_PUBSUB_ERRORS ) )
               {
                 errorType = ItemRequestMissingSID;
               }
-              else if( error->hasChild( "not-acceptable", "xmlns", XMLNS_XMPP_STANZAS ) &&
-                       error->hasChild( "invalid-subid", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+              else if( error->hasChild( "not-acceptable", XMLNS, XMLNS_XMPP_STANZAS ) &&
+                       error->hasChild( "invalid-subid", XMLNS, XMLNS_PUBSUB_ERRORS ) )
               {
                 errorType = ItemRequestInvalidSID;
               }
-              else if( error->hasChild( "not-authorized", "xmlns", XMLNS_XMPP_STANZAS ) )
+              else if( error->hasChild( "not-authorized", XMLNS, XMLNS_XMPP_STANZAS ) )
               {
-                if( error->hasChild( "not-subscribed", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+                if( error->hasChild( "not-subscribed", XMLNS, XMLNS_PUBSUB_ERRORS ) )
                   errorType = ItemRequestNotSubscribed;
-                else if( error->hasChild( "presence-subscription-required", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+                else if( error->hasChild( "presence-subscription-required", XMLNS, XMLNS_PUBSUB_ERRORS ) )
                   errorType = ItemRequestAccessPresence;
-                else if( error->hasChild( "not-in-roster-group", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+                else if( error->hasChild( "not-in-roster-group", XMLNS, XMLNS_PUBSUB_ERRORS ) )
                   errorType = ItemRequestAccessRoster;
                 else
                   return;
               }
-              else if( error->hasChild( "feature-not-implemented", "xmlns", XMLNS_XMPP_STANZAS ) )
+              else if( error->hasChild( "feature-not-implemented", XMLNS, XMLNS_XMPP_STANZAS ) )
               {
-                Tag * unsup = error->findChild( "unsupported", "xmlns", XMLNS_PUBSUB_ERRORS );
+                Tag * unsup = error->findChild( "unsupported", XMLNS, XMLNS_PUBSUB_ERRORS );
                 if( !unsup )
                   return;
                 if( unsup->hasAttribute( "feature", "persistent-items" ) )
@@ -1162,20 +1162,20 @@ namespace gloox
                 else
                   return;
               }
-              else if( error->hasChild( "not-allowed", "xmlns", XMLNS_XMPP_STANZAS ) &&
-                       error->hasChild( "closed-node", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+              else if( error->hasChild( "not-allowed", XMLNS, XMLNS_XMPP_STANZAS ) &&
+                       error->hasChild( "closed-node", XMLNS, XMLNS_PUBSUB_ERRORS ) )
               {
                 errorType = ItemRequestAccessWhiteList;
               }
-              else if( error->hasChild( "payment-required", "xmlns", XMLNS_XMPP_STANZAS ) )
+              else if( error->hasChild( "payment-required", XMLNS, XMLNS_XMPP_STANZAS ) )
               {
                 errorType = ItemRequestPayment;
               }
-              else if( error->hasChild( "forbidden", "xmlns", XMLNS_XMPP_STANZAS ) )
+              else if( error->hasChild( "forbidden", XMLNS, XMLNS_XMPP_STANZAS ) )
               {
                 errorType = ItemRequestBlocked;
               }
-              else if( error->hasChild( "item-not-found", "xmlns", XMLNS_XMPP_STANZAS ) )
+              else if( error->hasChild( "item-not-found", XMLNS, XMLNS_XMPP_STANZAS ) )
               {
                 errorType = ItemRetrievalItemNotFound;
               }
@@ -1187,35 +1187,35 @@ namespace gloox
             case PublishItem:
             {
               ItemPublicationError errorType = ItemPublicationErrorNone;
-              if( error->hasChild( "forbidden", "xmlns", XMLNS_XMPP_STANZAS ) )
+              if( error->hasChild( "forbidden", XMLNS, XMLNS_XMPP_STANZAS ) )
               {
                 errorType = ItemPublicationUnprivileged;
               }
-              else if( error->hasChild( "feature-not-implemented", "xmlns", XMLNS_XMPP_STANZAS ) &&
-                       error->hasChild( "unsupported", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+              else if( error->hasChild( "feature-not-implemented", XMLNS, XMLNS_XMPP_STANZAS ) &&
+                       error->hasChild( "unsupported", XMLNS, XMLNS_PUBSUB_ERRORS ) )
                        // feature='publish'
               {
                 errorType = ItemPublicationUnsupported;
               }
-              else if( error->hasChild( "item-not-found", "xmlns", XMLNS_XMPP_STANZAS ) )
+              else if( error->hasChild( "item-not-found", XMLNS, XMLNS_XMPP_STANZAS ) )
               {
                 errorType = ItemPublicationNodeNotFound;
               }
-              else if( error->hasChild( "not-acceptable", "xmlns", XMLNS_XMPP_STANZAS ) &&
-                       error->hasChild( "payload-too-big", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+              else if( error->hasChild( "not-acceptable", XMLNS, XMLNS_XMPP_STANZAS ) &&
+                       error->hasChild( "payload-too-big", XMLNS, XMLNS_PUBSUB_ERRORS ) )
               {
                 errorType = ItemPublicationPayloadSize;
               }
-              else if( error->hasChild( "bad-request", "xmlns", XMLNS_XMPP_STANZAS ) )
+              else if( error->hasChild( "bad-request", XMLNS, XMLNS_XMPP_STANZAS ) )
               {
                 // Configuration errors needs to be specified
-                if( error->hasChild( "invalid-payload", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+                if( error->hasChild( "invalid-payload", XMLNS, XMLNS_PUBSUB_ERRORS ) )
                   errorType = ItemPublicationPayload;
-                else if( error->hasChild( "item-required", "xmlns", XMLNS_PUBSUB_ERRORS) )
+                else if( error->hasChild( "item-required", XMLNS, XMLNS_PUBSUB_ERRORS) )
                   errorType = ItemPublicationConfiguration;
-                else if( error->hasChild( "payload-required", "xmlns", XMLNS_PUBSUB_ERRORS) )
+                else if( error->hasChild( "payload-required", XMLNS, XMLNS_PUBSUB_ERRORS) )
                   errorType = ItemPublicationConfiguration;
-                else if( error->hasChild( "item-forbidden", "xmlns", XMLNS_PUBSUB_ERRORS) )
+                else if( error->hasChild( "item-forbidden", XMLNS, XMLNS_PUBSUB_ERRORS) )
                   errorType = ItemPublicationConfiguration;
                 else
                   return;
@@ -1228,27 +1228,27 @@ namespace gloox
             case DeleteItem:
             {
               ItemDeletationError errorType = ItemDeletationErrorNone;
-              if( error->hasChild( "forbidden", "xmlns", XMLNS_XMPP_STANZAS ) )
+              if( error->hasChild( "forbidden", XMLNS, XMLNS_XMPP_STANZAS ) )
               {
                 errorType = ItemDeletationUnpriviledged;
               }
-              else if( error->hasChild( "item-not-found", "xmlns", XMLNS_XMPP_STANZAS ) )
+              else if( error->hasChild( "item-not-found", XMLNS, XMLNS_XMPP_STANZAS ) )
               {
                 errorType = ItemDeletationItemNotFound;
               }
-              else if( error->hasChild( "bad-request", "xmlns", XMLNS_XMPP_STANZAS ) &&
-                       error->hasChild( "node-required", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+              else if( error->hasChild( "bad-request", XMLNS, XMLNS_XMPP_STANZAS ) &&
+                       error->hasChild( "node-required", XMLNS, XMLNS_PUBSUB_ERRORS ) )
               {
                 errorType = ItemDeletationMissingNode;
               }
-              else if( error->hasChild( "bad-request", "xmlns", XMLNS_XMPP_STANZAS ) &&
-                       error->hasChild( "item-required", "xmlns", XMLNS_PUBSUB_ERRORS ) )
+              else if( error->hasChild( "bad-request", XMLNS, XMLNS_XMPP_STANZAS ) &&
+                       error->hasChild( "item-required", XMLNS, XMLNS_PUBSUB_ERRORS ) )
               {
                 errorType = ItemDeletationMissingItem;
               }
-              else if( error->hasChild( "feature-not-implemented", "xmlns", XMLNS_XMPP_STANZAS ) )
+              else if( error->hasChild( "feature-not-implemented", XMLNS, XMLNS_XMPP_STANZAS ) )
               {
-                Tag * unsup = error->findChild( "unsupported", "xmlns", XMLNS_PUBSUB_ERRORS );
+                Tag * unsup = error->findChild( "unsupported", XMLNS, XMLNS_PUBSUB_ERRORS );
                 if( !unsup )
                   return;
                 if( unsup->hasAttribute( "feature", "persistent-items" ) )

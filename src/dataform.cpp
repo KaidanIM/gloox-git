@@ -53,10 +53,10 @@ namespace gloox
 
   bool DataForm::parse( Tag *tag )
   {
-    if( !tag || !tag->hasAttribute( "xmlns", XMLNS_X_DATA ) || tag->name() != "x" )
+    if( !tag || !tag->hasAttribute( XMLNS, XMLNS_X_DATA ) || tag->name() != "x" )
       return false;
 
-    m_type = (DataFormType)util::lookup(tag->findAttribute( "type" ), dfTypeValues );
+    m_type = (DataFormType)util::lookup(tag->findAttribute( TYPE ), dfTypeValues );
     if( m_type == FormTypeInvalid )
       return false;
 
@@ -84,8 +84,8 @@ namespace gloox
     if( m_type == FormTypeInvalid )
       return 0;
 
-    Tag *x = new Tag( "x", "xmlns", XMLNS_X_DATA );
-    x->addAttribute( "type", util::lookup( m_type, dfTypeValues ) );
+    Tag *x = new Tag( "x", XMLNS, XMLNS_X_DATA );
+    x->addAttribute( TYPE, util::lookup( m_type, dfTypeValues ) );
     if( !m_title.empty() )
       new Tag( x, "title", m_title );
 

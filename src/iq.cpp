@@ -34,11 +34,11 @@ namespace gloox
     }
 
     m_type = StanzaIq;
-    m_subtype = ( IQ::IqType )util::lookup( findAttribute( "type" ), iqTypeStringValues );
+    m_subtype = ( IQ::IqType )util::lookup( findAttribute( TYPE ), iqTypeStringValues );
 
-    m_query = findChildWithAttrib( "xmlns" );
+    m_query = findChildWithAttrib( XMLNS );
     if( m_query )
-      m_xmlns = m_query->findAttribute( "xmlns" );
+      m_xmlns = m_query->findAttribute( XMLNS );
   }
 
   IQ::IQ( IqType type, const JID& to, const std::string& id, const std::string& xmlns,
@@ -47,7 +47,7 @@ namespace gloox
   {
     m_type = StanzaIq;
 
-    addAttribute( "type", typeString( type ) );
+    addAttribute( TYPE, typeString( type ) );
     addAttribute( "id", id );
     m_id = id;
 
@@ -55,7 +55,7 @@ namespace gloox
     {
       m_xmlns = xmlns;
       m_query = new Tag( this, childtag.empty() ? "query" : childtag );
-      m_query->addAttribute( "xmlns", xmlns );
+      m_query->addAttribute( XMLNS, xmlns );
     }
   }
 

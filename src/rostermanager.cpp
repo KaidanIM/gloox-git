@@ -386,7 +386,7 @@ namespace gloox
   {
     m_delimiter = delimiter;
     Tag *t = new Tag( "roster", m_delimiter );
-    t->addAttribute( "xmlns", XMLNS_ROSTER_DELIMITER );
+    t->addAttribute( XMLNS, XMLNS_ROSTER_DELIMITER );
     m_privateXML->storeXML( t, this );
   }
 

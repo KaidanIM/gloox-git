@@ -71,19 +71,19 @@ namespace gloox
 //   {
 //     m_xmllang = findAttribute( "xml:lang" );
 //
-//     if( hasAttribute( "type", "error" ) && hasChild( "error" ) )
+//     if( hasAttribute( TYPE, "error" ) && hasChild( "error" ) )
 //     {
 //       Tag *e = findChild( "error" );
 //
-//       if( e->hasAttribute( "type", "cancel" ) )
+//       if( e->hasAttribute( TYPE, "cancel" ) )
 //         m_stanzaErrorType = StanzaErrorTypeCancel;
-//       else if( e->hasAttribute( "type", "continue" ) )
+//       else if( e->hasAttribute( TYPE, "continue" ) )
 //         m_stanzaErrorType = StanzaErrorTypeContinue;
-//       else if( e->hasAttribute( "type", "modify" ) )
+//       else if( e->hasAttribute( TYPE, "modify" ) )
 //         m_stanzaErrorType = StanzaErrorTypeModify;
-//       else if( e->hasAttribute( "type", "auth" ) )
+//       else if( e->hasAttribute( TYPE, "auth" ) )
 //         m_stanzaErrorType = StanzaErrorTypeAuth;
-//       else if( e->hasAttribute( "type", "wait" ) )
+//       else if( e->hasAttribute( TYPE, "wait" ) )
 //         m_stanzaErrorType = StanzaErrorTypeWait;
 //
 //       const TagList& c = e->children();
@@ -141,7 +141,7 @@ namespace gloox
 //           m_stanzaErrorAppCondition = (*it);
 //         }
 //
-//         if( err != StanzaErrorUndefined && (*it)->hasAttribute( "xmlns", XMLNS_XMPP_STANZAS ) )
+//         if( err != StanzaErrorUndefined && (*it)->hasAttribute( XMLNS, XMLNS_XMPP_STANZAS ) )
 //         {
 //           m_stanzaError = err;
 //         }

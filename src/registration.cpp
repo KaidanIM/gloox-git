@@ -180,15 +180,15 @@ namespace gloox
             break;
           }
 
-          if( q->hasChild( "x", "xmlns", XMLNS_X_DATA ) )
+          if( q->hasChild( "x", XMLNS, XMLNS_X_DATA ) )
           {
-            DataForm form( q->findChild( "x", "xmlns", XMLNS_X_DATA ) );
+            DataForm form( q->findChild( "x", XMLNS, XMLNS_X_DATA ) );
             m_registrationHandler->handleDataForm( iq->from(), form );
           }
 
-          if( q->hasChild( "x", "xmlns", XMLNS_X_OOB ) )
+          if( q->hasChild( "x", XMLNS, XMLNS_X_OOB ) )
           {
-            OOB oob( q->findChild( "x", "xmlns", XMLNS_X_OOB ) );
+            OOB oob( q->findChild( "x", XMLNS, XMLNS_X_OOB ) );
             m_registrationHandler->handleOOB( iq->from(), oob );
           }
 

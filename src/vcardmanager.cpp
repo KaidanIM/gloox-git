@@ -102,7 +102,7 @@ namespace gloox
           {
             case VCardHandler::FetchVCard:
             {
-              Tag *v = iq->findChild( "vCard", "xmlns", XMLNS_VCARD_TEMP );
+              Tag *v = iq->findChild( "vCard", XMLNS, XMLNS_VCARD_TEMP );
               (*it).second->handleVCard( iq->from(), v ? new VCard( v ) : 0 );
               break;
             }

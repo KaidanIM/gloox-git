@@ -34,7 +34,7 @@ namespace gloox
 
     m_type = StanzaMessage;
 
-    const std::string& typestring = findAttribute( "type" );
+    const std::string& typestring = findAttribute( TYPE );
     if( typestring.empty() )
       m_subtype = Normal;
     else
@@ -70,7 +70,7 @@ namespace gloox
                     const std::string& thread, const std::string& xmllang, const JID& from )
     : Stanza( "message", to, from ), m_subtype( type )
   {
-    addAttribute( "type", util::lookup2( type, msgTypeStringValues ) );
+    addAttribute( TYPE, util::lookup2( type, msgTypeStringValues ) );
 
     if( !body.empty() )
     {
