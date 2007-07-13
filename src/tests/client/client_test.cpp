@@ -128,13 +128,13 @@ const char* ConnectionImpl::m_msgs[4][9] =
         "<bind xmlns='urn:ietf:params:xml:ns:xmpp-bind'/>"
         "<session xmlns='urn:ietf:params:xml:ns:xmpp-session'/>"
       "</stream:features>",
-      "<iq id='bind' type='result' xmlns='jabber:client'>"
+      "<iq id='uid1' type='result' xmlns='jabber:client'>"
         "<bind xmlns='urn:ietf:params:xml:ns:xmpp-bind'>"
         "<jid>hurkhurk@jabber.cc/gloox</jid></bind></iq>",
-      "<iq id='session' type='result' xmlns='jabber:client'/>",
-      "<iq id='uid1' type='result' xmlns='jabber:client'><query xmlns='jabber:iq:private'>"
+      "<iq id='uid2' type='result' xmlns='jabber:client'/>",
+      "<iq id='uid3' type='result' xmlns='jabber:client'><query xmlns='jabber:iq:private'>"
         "<roster xmlns='roster:delimiter'>::</roster></query></iq>"
-      "<iq id='uid2' type='result' xmlns='jabber:client'><query xmlns='jabber:iq:roster'/></iq>",
+      "<iq id='uid4' type='result' xmlns='jabber:client'><query xmlns='jabber:iq:roster'/></iq>",
       0
     },
     { // auth failure
