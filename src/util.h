@@ -71,7 +71,8 @@ namespace gloox
     inline void clear( std::list< T* >& L )
     {
       typename std::list< T* >::iterator it = L.begin();
-      for( ; it != L.end(); ++it ) delete (*it);
+      for( ; it != L.end(); ++it )
+        delete (*it);
     }
 
     /**
@@ -82,7 +83,8 @@ namespace gloox
     inline void clear( std::map< Key, T* >& M )
     {
       typename std::map< Key, T* >::iterator it = M.begin();
-      for( ; it != M.end(); ++it ) delete (*it).second;
+      for( ; it != M.end(); ++it )
+        delete (*it).second;
     }
 
     /**
@@ -94,7 +96,8 @@ namespace gloox
     inline void clear( std::map< const Key, T* >& M )
     {
       typename std::map< const Key, T* >::iterator it = M.begin();
-      for( ; it != M.end(); ++it ) delete (*it).second;
+      for( ; it != M.end(); ++it )
+        delete (*it).second;
     }
 
   }
