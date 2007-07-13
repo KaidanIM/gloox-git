@@ -19,6 +19,7 @@
 #endif
 
 #include "client.h"
+#include "capabilities.h"
 #include "rostermanager.h"
 #include "disco.h"
 #include "logsink.h"
@@ -45,8 +46,8 @@ namespace gloox
   Client::Client( const std::string& server )
     : ClientBase( XMLNS_CLIENT, server ),
       m_rosterManager( 0 ), m_auth( 0 ),
-      m_presence( Presence::Available ), m_resourceBound( false ), m_forceNonSasl( false ),
-      m_manageRoster( true ), m_doAuth( false ),
+      m_presence( Presence::Available ), m_capabilities( 0 ), m_resourceBound( false ),
+      m_forceNonSasl( false ), m_manageRoster( true ), m_doAuth( false ),
       m_streamFeatures( 0 ), m_priority( 0 )
   {
     m_jid.setServer( server );
@@ -56,8 +57,8 @@ namespace gloox
   Client::Client( const JID& jid, const std::string& password, int port )
     : ClientBase( XMLNS_CLIENT, password, "", port ),
       m_rosterManager( 0 ), m_auth( 0 ),
-      m_presence( Presence::Available ), m_resourceBound( false ), m_forceNonSasl( false ),
-      m_manageRoster( true ), m_doAuth( true ),
+      m_presence( Presence::Available ), m_capabilities( 0 ), m_resourceBound( false ),
+      m_forceNonSasl( false ), m_manageRoster( true ), m_doAuth( true ),
       m_streamFeatures( 0 ), m_priority( 0 )
   {
     m_jid = jid;
@@ -69,8 +70,8 @@ namespace gloox
                   const std::string& server, const std::string& resource, int port )
     : ClientBase( XMLNS_CLIENT, password, server, port ),
       m_rosterManager( 0 ), m_auth( 0 ),
-      m_presence( Presence::Available ), m_resourceBound( false ), m_forceNonSasl( false ),
-      m_manageRoster( true ), m_doAuth( true ),
+      m_presence( Presence::Available ), m_capabilities( 0 ), m_resourceBound( false ),
+      m_forceNonSasl( false ), m_manageRoster( true ), m_doAuth( true ),
       m_streamFeatures( 0 ), m_priority( 0 )
   {
     m_jid.setUsername( username );
@@ -91,6 +92,8 @@ namespace gloox
   {
     m_rosterManager = new RosterManager( this );
     m_disco->setIdentity( "client", "bot" );
+    m_capabilities = new Capabilities( "http://camaya.net/glooxcaps", GLOOX_VERSION );
+    addPresenceExtension( m_capabilities );
   }
 
   void Client::setUsername( const std::string &username )
