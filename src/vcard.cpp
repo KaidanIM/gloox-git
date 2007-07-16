@@ -289,7 +289,7 @@ namespace gloox
 
   void VCard::addLabel( const StringList& lines, int type )
   {
-    if( !lines.size() )
+    if( lines.empty() )
       return;
 
     Label item;
