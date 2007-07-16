@@ -75,7 +75,7 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             pubsubeventhandler.h      connectionhandler.h     iq.h \
                             message.h                 presence.h              subscription.h \
                             bytestream.h              bytestreamdatahandler.h bytestreamhandler.h \
-                            capabilities.h
+                            capabilities.h            pubsubnodehandler.h
 
 noinst_HEADERS = prep.h dns.h nonsaslauth.h mucmessagesession.h stanzaextensionfactory.h tlsgnutlsclient.h \
                    tlsgnutlsbase.h tlsgnutlsclientanon.h tlsgnutlsserveranon.h tlsopenssl.h tlsschannel.h \
