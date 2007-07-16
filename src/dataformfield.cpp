@@ -127,8 +127,7 @@ namespace gloox
     }
 
     if( m_values.size() && !( m_type == FieldTypeTextMulti || m_type == FieldTypeListMulti
-                               || m_type == FieldTypeBoolean || m_type == FieldTypeListSingle
-                               || m_type == FieldTypeJidMulti ) )
+                              || m_type == FieldTypeBoolean || m_type == FieldTypeJidMulti ) )
       new Tag( field, "value", m_values.front() );
 
     return field;
