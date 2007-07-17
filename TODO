@@ -5,7 +5,14 @@ for 1.0
 - StanzaExtension: SE( Stanza* )
 - fix XEP-0079 (AMP)
 - finish XEP-0115 (Entity Capabilities)
-- check XEP-0060 (Publish-Subscribe)
+- finish XEP-0060 (Publish-Subscribe)
+  - associate/dissaciateNode()
+  - getDefaultNodeConfig()
+  - error handling (ideally using the Error class)
+  - subscription request management 
+  - documentation (examples, tests)
+  - check naming convention / API
+  - testing
 
 
 - libidn replacement?
@@ -48,7 +55,7 @@ for 1.0
 - unify error recognition
 - look into IPv6 support
 - empty passwords allowed?
-
+- check serverRaw() use (ClientBase::m_server)
 
 
 rfc3920bis
