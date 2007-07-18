@@ -673,7 +673,6 @@ namespace gloox
       void notifySubscriptionHandlers( Stanza *stanza );
       void notifyTagHandlers( Tag *tag );
       void notifyOnDisconnect( ConnectionError e );
-      void logEvent( const char *data, size_t size, int is_incoming );
       void send( const std::string& xml );
 
       struct TrackStruct
