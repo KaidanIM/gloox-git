@@ -768,7 +768,10 @@ namespace gloox
             token += c;
           break;
         case '@':
-          type = XTAttribute;
+          if( type == XTLiteral )
+            token += c;
+          else
+            type = XTAttribute;
           break;
         case '.':
           token += c;

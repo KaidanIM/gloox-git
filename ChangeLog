@@ -1,10 +1,11 @@
-v0.9.3 -- xx yyy 2007
+v0.9.3 -- 18 Jul 2007
 ---------------------
 - SOCKS5BytestreamManager: include error child in IQ of type error
-- Parser: further relax the parser due to buggy XMPP in the wild
 - allow a default value to be set for data form fields of type FieldTypeListSingle (thanks to Roelof Naude)
 - DelayedDelivery: fixed SE type
 - Registration: fixed error handling
+- Parser: disallow ", ' and > again for full XMPP compliance
+- XPath: accept @ in string literals
 
 
 v0.9.2 -- 23 Jun 2007
