@@ -359,6 +359,9 @@ namespace gloox
     if( m_parser && !m_parser->feed( data ) )
     {
       m_logInstance.log( LogLevelError, LogAreaClassClientbase, "parse error: " + data );
+      Tag* e = new Tag( "stream:error" );
+      new Tag( e, "restricted-xml", "xmlns", XMLNS_XMPP_STREAM );
+      send( e );
       disconnect( ConnParseError );
     }
   }
