@@ -10,7 +10,6 @@
   This software is distributed without any warranty.
 */
 
-
 #ifndef __ERROR_H__
 #define __ERROR_H__
 
@@ -68,6 +67,9 @@ namespace gloox
     SubErrorNone
   };
 
+  /**
+   * For use with Unsupported SubErrorType
+   */
   enum FeatureType
   {
     Collections,
@@ -103,7 +105,9 @@ namespace gloox
   };
 
   /**
-   * 
+   *  \todo Move enums into Error (eg Error::Unsupported).
+   *  \todo check for completeness of all supported error type, including unsupported stuff.
+   *  \todo copy ctor (and assignment operator ?), just in case it ever gets used.
    */
   class Error : public StanzaExtension
   {
@@ -124,16 +128,13 @@ namespace gloox
           m_type( type ), m_subType( subType ), m_feature( feat )
       {}
 
+      //Error( const Error& error );
       //Error& operator=( const Tag * ) { return this; }
 
-      GenericErrorType gentype() const
-        { return m_genericType; }
-      ErrorType type() const
-        { return m_type; }
-      SubErrorType subtype() const
-        { return m_subType; }
-      FeatureType feature() const
-        { return m_feature; }
+      GenericErrorType gentype() const { return m_genericType; }
+      ErrorType type() const { return m_type; }
+      SubErrorType subtype() const { return m_subType; }
+      FeatureType feature() const { return m_feature; }
       Tag * tag() const;
 
     private:
