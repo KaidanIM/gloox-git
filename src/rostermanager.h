@@ -189,7 +189,7 @@ namespace gloox
 
     private:
       void add( const std::string& jid, const std::string& name,
-                const StringList& groups, const StringList& caps, const std::string& sub, bool ask );
+                const StringList& groups, const std::string& sub, bool ask );
       void extractItems( Tag *tag, bool isPush );
 
       RosterListener *m_rosterListener;

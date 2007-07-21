@@ -15,7 +15,6 @@
 #define RESOURCE_H__
 
 #include "presence.h"
-#include "capabilities.h"
 
 #include <string>
 
@@ -45,12 +44,12 @@ namespace gloox
        * @param presence The resource's presence status.
        */
       Resource( int priority, const std::string& msg, Presence::PresenceType presence )
-        : m_priority( priority ), m_message( msg ), m_presence( presence ), m_caps( 0 ) {}
+        : m_priority( priority ), m_message( msg ), m_presence( presence ) {}
 
       /**
        * Virtual destrcutor.
        */
-      virtual ~Resource() { delete m_caps; }
+      virtual ~Resource() {}
 
       /**
        * Lets you fetch the resource's priority.
@@ -71,23 +70,31 @@ namespace gloox
       const Presence::PresenceType presence() const { return m_presence; }
 
       /**
-       * Lets you fetch the resource's last capabilities packet.
-       * @return The resource's capabilities. May be 0.
+       * Returns the entity's capabilities node. This should uniquely identify the contact's
+       * client. Also, it should ususally not be needed. See Capabilities for more info.
+       * @return The resource's capabilities node.
        */
-      const StanzaExtension* capabilities() const { return m_caps; }
+      const std::string& node() const { return m_node; }
+
+      /**
+       * Returns the entity's capabilities @c ver string. This uniquely identifies the contact's
+       * client's features. See Capabilities for more info.
+       * @return The resource's capabilities @c ver string.
+       */
+      const std::string& ver() const { return m_ver; }
 
     private:
       void setPriority( int priority ) { m_priority = priority; }
       void setMessage( std::string message ) { m_message = message; }
       void setStatus( Presence::PresenceType presence ) { m_presence = presence; }
-      void setCaps( StanzaExtension* caps )
-        { if( caps) m_caps = new Capabilities( *(static_cast<Capabilities*>( caps ) ) ); }
+      void setCaps( const std::string& node, const std::string& ver ) { m_node = node; m_ver = ver; }
 
       int m_priority;
       std::string m_message;
       std::string m_name;
       Presence::PresenceType m_presence;
-      StanzaExtension* m_caps;
+      std::string m_node;
+      std::string m_ver;
 
   };
 
