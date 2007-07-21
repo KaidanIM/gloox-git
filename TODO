@@ -4,15 +4,18 @@ Todo
 for 1.0
 - StanzaExtension: SE( Stanza* )
 - fix XEP-0079 (AMP)
-- finish XEP-0115 (Entity Capabilities)
 - finish XEP-0060 (Publish-Subscribe)
   - associate/dissaciateNode()
   - getDefaultNodeConfig()
   - error handling (ideally using the Error class)
-  - subscription request management 
+  - subscription request management
   - documentation (examples, tests)
   - check naming convention / API
   - testing
+- in FT, add Fast Mode:
+    http://delta.affinix.com/specs/stream.html
+  and Failover:
+    http://thread.gmane.org/gmane.network.jabber.standards-jig/10468
 
 - include BOSH?
 - include LLM?
