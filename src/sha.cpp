@@ -59,6 +59,20 @@ namespace gloox
     return std::string( buf, 40 );
   }
 
+  const std::string SHA::binary()
+  {
+    if( !m_finished )
+      finalize();
+
+    unsigned char digest[20];
+    for( int i = 0; i < 20; ++i )
+      digest[i] = (unsigned char)( H[i >> 2] >> ( ( 3 - ( i & 3 ) ) << 3 ) );
+
+    std::string t;
+    t.assign( (char*)&digest, 20 );
+    return t;
+  }
+
   void SHA::finalize()
   {
     if( !m_finished )
