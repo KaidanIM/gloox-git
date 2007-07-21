@@ -70,7 +70,7 @@ namespace gloox
 
   void ChatStateFilter::setChatState( ChatStateType state )
   {
-    if( !m_enableChatStates )
+    if( !m_enableChatStates || state == m_lastSent )
       return;
 
     Message* m = new Message( Message::Chat, m_parent->target() );
