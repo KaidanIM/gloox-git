@@ -22,7 +22,7 @@ namespace gloox
 {
 
   Capabilities::Capabilities( Disco* disco, const std::string& node )
-    : StanzaExtension( ExtCaps ), m_disco( disco ), m_node( node ), m_ver( version ), m_valid( false )
+    : StanzaExtension( ExtCaps ), m_disco( disco ), m_node( node ), m_valid( false )
   {
     if( !m_node.empty() && !m_ver.empty() )
       m_valid = true;
@@ -45,14 +45,8 @@ namespace gloox
   {
   }
 
-  Tag* Capabilities::tag() const
+  const std::string Capabilities::ver() const
   {
-    if( !m_valid || m_node.empty() || m_ver.empty() )
-      return 0;
-
-    Tag *t = new Tag( "c" );
-    t->addAttribute( XMLNS, XMLNS_CAPS );
-    t->addAttribute( "node", m_node );
     if( m_disco )
     {
       std::string s;
@@ -68,14 +62,23 @@ namespace gloox
         s += (*it);
         s += '<';
       }
-      printf( "ver: %s\n", s.c_str() );
       SHA sha;
       sha.feed( s );
-      t->addAttribute( "ver", Base64::encode64( sha.binary() ) );
+      return Base64::encode64( sha.binary() );
     }
     else
-      t->addAttribute( "ver", m_ver );
+      return m_ver;
+  }
 
+  Tag* Capabilities::tag() const
+  {
+    if( !m_valid || m_node.empty() || m_ver.empty() )
+      return 0;
+
+    Tag *t = new Tag( "c" );
+    t->addAttribute( XMLNS, XMLNS_CAPS );
+    t->addAttribute( "node", m_node );
+    t->addAttribute( "ver", ver() );
     return t;
   }
 
