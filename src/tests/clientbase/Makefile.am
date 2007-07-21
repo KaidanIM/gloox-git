@@ -16,5 +16,5 @@ clientbase_test_LDADD = ../../clientbase.o ../../jid.o ../../connectiontcpclient
 			../../xdelayeddelivery.o ../../gloox.o ../../tlsgnutlsbase.o ../../tlsdefault.o \
 			../../tlsgnutlsclientanon.o ../../tlsgnutlsserveranon.o ../../mutex.o ../../amp.o \
 			../../iq.o ../../presence.o ../../message.o ../../subscription.o ../../util.o \
-			../../capabilities.o
+			../../capabilities.o ../../sha.o
 clientbase_test_CFLAGS = $(CPPFLAGS)

@@ -11,5 +11,5 @@ stanzaextensionfactory_test_LDADD = ../../tag.o ../../stanza.o \
  			../../jid.o ../../prep.o ../../stanzaextensionfactory.o ../../oob.o \
  			../../vcardupdate.o ../../delayeddelivery.o ../../xdelayeddelivery.o \
  			../../gpgsigned.o ../../gpgencrypted.o ../../gloox.o ../../amp.o \
- 			../../util.o ../../capabilities.o
+ 			../../util.o ../../capabilities.o ../../sha.o ../../base64.o
 stanzaextensionfactory_test_CFLAGS = $(CPPFLAGS)
