@@ -69,13 +69,7 @@ namespace gloox
        * Returns the client's identifying ver string.
        * @return The ver string.
        */
-      const std::string& ver() const { return m_ver; }
-
-      /**
-       * Sets the client's identifying ver string.
-       * @param node The ver string.
-       */
-      void setVer( const std::string& ver ) { m_ver = ver; }
+      const std::string ver() const;
 
       // reimplemented from StanzaExtension
       virtual Tag* tag() const;
