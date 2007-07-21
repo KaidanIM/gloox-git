@@ -38,7 +38,7 @@ namespace gloox
       MutexImpl();
       ~MutexImpl();
       void lock();
-			bool tryLock();
+      bool tryLock();
       void unlock();
     private:
       MutexImpl( const MutexImpl& );

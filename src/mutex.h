@@ -23,7 +23,8 @@ namespace gloox
    * @brief A simple implementation of mutex as a wrapper around a pthread mutex
    * or a win32 critical section.
    *
-	 * If you locked a mutex you MUST unlock it within the same thread.
+   * If you locked a mutex you MUST unlock it within the same thread.
+   *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
@@ -46,9 +47,9 @@ namespace gloox
       void lock();
 
       /**
-       * Trys to lock the mutex.
-       * @return True if the lock request succeeded. In this case you MUST unlock the mutex. If the mutex
-       *		 is already locked false is returned.
+       * Tries to lock the mutex.
+       * @return @b True if the lock request succeeded. In this case you MUST unlock the mutex. If the mutex
+       * is already locked @b false is returned.
        */
       bool tryLock();
 
