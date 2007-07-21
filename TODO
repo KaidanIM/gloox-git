@@ -14,6 +14,8 @@ for 1.0
   - check naming convention / API
   - testing
 
+- include BOSH?
+- include LLM?
 
 - libidn replacement?
 
