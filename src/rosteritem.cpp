@@ -58,13 +58,13 @@ namespace gloox
       m_resources[resource]->setPriority( priority );
   }
 
-  void RosterItem::setCaps( const std::string& resource, StanzaExtension* caps )
+  void RosterItem::setCaps( const std::string& resource, const std::string& node, const std::string& ver )
   {
     if( m_resources.find( resource ) == m_resources.end() )
       m_resources[resource] = new Resource( 0, std::string(), Presence::Unavailable );
 
-    if( caps )
-      m_resources[resource]->setCaps( caps );
+    if( !node.empty() && !ver.empty() )
+      m_resources[resource]->setCaps( node, ver );
   }
 
   void RosterItem::setSubscription( const std::string& subscription, bool ask )

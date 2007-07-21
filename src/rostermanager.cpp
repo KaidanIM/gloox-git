@@ -19,6 +19,7 @@
 #include "privatexml.h"
 #include "util.h"
 #include "stanzaextension.h"
+#include "capabilities.h"
 
 
 namespace gloox
@@ -99,14 +100,16 @@ namespace gloox
     if( presence->subtype() == Presence::Error )
       return;
 
-    StanzaExtension* caps = 0;
+    std::string capsNode;
+    std::string capsVer;
     const StanzaExtensionList& ext = presence->extensions();
     StanzaExtensionList::const_iterator it_e = ext.begin();
     for( ; it_e != ext.end(); ++it_e )
     {
       if( (*it_e)->type() == ExtCaps )
       {
-        caps = (*it_e);
+        capsNode = static_cast<Capabilities*>( (*it_e) )->node();
+        capsVer = static_cast<Capabilities*>( (*it_e) )->ver();
         break;
       }
     }
@@ -123,7 +126,7 @@ namespace gloox
         ri->setPresence( resource, presence->presence() );
         ri->setStatus( resource, presence->status() );
         ri->setPriority( resource, presence->priority() );
-        ri->setCaps( resource, caps );
+        ri->setCaps( resource, capsNode, capsVer );
       }
 
       if( m_rosterListener )
@@ -139,7 +142,7 @@ namespace gloox
         m_self->setPresence( presence->from().resource(), presence->presence() );
         m_self->setStatus( presence->from().resource(), presence->status() );
         m_self->setPriority( presence->from().resource(), presence->priority() );
-        m_self->setCaps( presence->from().resource(), caps );
+        m_self->setCaps( presence->from().resource(), capsNode, capsVer );
       }
 
       if( m_rosterListener )
@@ -353,8 +356,7 @@ namespace gloox
           const std::string& name = (*it)->findAttribute( "name" );
           const std::string& ask = (*it)->findAttribute( "ask" );
 
-          StringList caps;
-          add( jid.bare(), name, gl, caps, sub, !ask.empty() );
+          add( jid.bare(), name, gl, sub, !ask.empty() );
         }
 
         if( isPush && m_rosterListener )
@@ -364,15 +366,13 @@ namespace gloox
   }
 
   void RosterManager::add( const std::string& jid, const std::string& name,
-                           const StringList& groups, const StringList& caps,
-                           const std::string& sub, bool ask )
+                           const StringList& groups, const std::string& sub, bool ask )
   {
     if( m_roster.find( jid ) == m_roster.end() )
       m_roster[jid] = new RosterItem( jid, name );
 
     m_roster[jid]->setSubscription( sub, ask );
     m_roster[jid]->setGroups( groups );
-//     m_roster[jid]->setCaps( caps );
     m_roster[jid]->setSynchronized();
   }
 

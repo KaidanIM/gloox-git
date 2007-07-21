@@ -26,8 +26,6 @@
 namespace gloox
 {
 
-  class StanzaExtension;
-
   /**
    * @brief An abstraction of a roster item.
    *
@@ -173,9 +171,10 @@ namespace gloox
       /**
        * Sets the resource's Entity Capabilities.
        * @param resource The resource to set the caps for.
-       * @param caps The resource's caps.
+       * @param node The capabilities node.
+       * @param ver The capabilities ver string.
        */
-      virtual void setCaps( const std::string& resource, StanzaExtension* caps );
+      virtual void setCaps( const std::string& resource, const std::string& node, const std::string& ver );
 
       /**
        * Sets the current subscription status of the contact.
