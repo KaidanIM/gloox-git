@@ -18,6 +18,7 @@
 #include "rosterlistener.h"
 #include "privatexml.h"
 #include "util.h"
+#include "stanzaextension.h"
 
 
 namespace gloox
@@ -98,22 +99,15 @@ namespace gloox
     if( presence->subtype() == Presence::Error )
       return;
 
-    StringList caps;
-    const Tag::TagList& l = presence->children();
-    Tag::TagList::const_iterator it_c = l.begin();
-    for( ; it_c != l.end(); ++it_c )
+    StanzaExtension* caps = 0;
+    const StanzaExtensionList& ext = presence->extensions();
+    StanzaExtensionList::const_iterator it_e = ext.begin();
+    for( ; it_e != ext.end(); ++it_e )
     {
-      if( (*it_c)->name() == "c" )
+      if( (*it_e)->type() == ExtCaps )
       {
-        std::string cap( (*it_c)->findAttribute( "node" ) );
-        cap.append( "#" );
-        cap.append( (*it_c)->findAttribute( "ver" ) );
-        if( (*it_c)->findAttribute( "ext" ).size() )
-        {
-          cap.append( "#" );
-          cap.append( (*it_c)->findAttribute( "ext" ) );
-        }
-        caps.push_back( cap );
+        caps = (*it_e);
+        break;
       }
     }
 
@@ -129,7 +123,7 @@ namespace gloox
         ri->setPresence( resource, presence->presence() );
         ri->setStatus( resource, presence->status() );
         ri->setPriority( resource, presence->priority() );
-  //       (*it).second->setCaps ( caps );
+        ri->setCaps( resource, caps );
       }
 
       if( m_rosterListener )
@@ -145,7 +139,7 @@ namespace gloox
         m_self->setPresence( presence->from().resource(), presence->presence() );
         m_self->setStatus( presence->from().resource(), presence->status() );
         m_self->setPriority( presence->from().resource(), presence->priority() );
-  //       (*it).second->setCaps ( caps );
+        m_self->setCaps( presence->from().resource(), caps );
       }
 
       if( m_rosterListener )
