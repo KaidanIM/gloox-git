@@ -22,12 +22,13 @@
 namespace gloox
 {
 
+  class Disco;
   class Tag;
 
   /**
    * @brief This is an implementation of XEP-0115 (Entity Capabilities).
    *
-   * XEP Version: 1.3
+   * XEP Version: 1.4
    * @author Jakob Schroeter <js@camaya.net>
    * @since 1.0
    */
@@ -38,10 +39,9 @@ namespace gloox
       /**
        * Constructs a new object and fills it according to the parameters.
        * @param node The node identifying the client.
-       * @param stamp The client's version.
-       * @param reason A whitespace-separated list of supported extensions.
+       * @param ver The client's ver string.
        */
-      Capabilities( const std::string& node, const std::string& version, const std::string& ext = "" );
+      Capabilities( Disco* disco, const std::string& node, const std::string& ver );
 
       /**
        * Constructs a new object from the given Tag.
@@ -67,36 +67,24 @@ namespace gloox
       void setNode( const std::string& node ) { m_node = node; }
 
       /**
-       * Returns the client's identifying version.
-       * @return The version.
+       * Returns the client's identifying ver string.
+       * @return The ver string.
        */
-      const std::string& version() const { return m_version; }
+      const std::string& ver() const { return m_ver; }
 
       /**
-       * Sets the client's identifying version.
-       * @param node The version.
+       * Sets the client's identifying ver string.
+       * @param node The ver string.
        */
-      void setVersion( const std::string& version ) { m_version = version; }
-
-      /**
-       * Returns the client's extensions (whitespace-separated).
-       * @return The extensions.
-       */
-      const std::string& ext() const { return m_ext; }
-
-      /**
-       * Sets the client's extensions (whitespace-separated).
-       * @param node The extensions (whitespace-separated).
-       */
-      void setExt( const std::string& ext ) { m_ext = ext; }
+      void setVer( const std::string& ver ) { m_ver = ver; }
 
       // reimplemented from StanzaExtension
       virtual Tag* tag() const;
 
     private:
+      Disco* m_disco;
       std::string m_node;
-      std::string m_version;
-      std::string m_ext;
+      std::string m_ver;
       bool m_valid;
   };
 
