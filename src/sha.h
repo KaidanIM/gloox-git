@@ -58,6 +58,13 @@ namespace gloox
       const std::string hex();
 
       /**
+       * Returns the raw binary message digest. Finalizes the hash if finalize()
+       * has not been called before.
+       * @return The message raw binary digest.
+       */
+      const std::string binary();
+
+      /**
        * Provide input to SHA1.
        * @param data The data to compute the digest of.
        * @param length The size of the data in bytes.
