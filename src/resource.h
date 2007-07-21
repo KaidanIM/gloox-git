@@ -15,6 +15,7 @@
 #define RESOURCE_H__
 
 #include "presence.h"
+#include "capabilities.h"
 
 #include <string>
 
@@ -24,13 +25,13 @@ namespace gloox
   class Presence;
 
   /**
-    * @brief Holds resource attributes.
-    *
-    * This holds the information of a single resource of a contact that is online.
-    *
-    * @author Jakob Schroeter <js@caaya.net>
-    * @since 0.8
-    */
+   * @brief Holds resource attributes.
+   *
+   * This holds the information of a single resource of a contact that is online.
+   *
+   * @author Jakob Schroeter <js@caaya.net>
+   * @since 0.8
+   */
   class GLOOX_API Resource
   {
 
@@ -38,46 +39,55 @@ namespace gloox
 
     public:
       /**
-        * Constructor.
-        * @param priority The resource's priority.
-        * @param msg The resource's status message.
-        * @param presence The resource's presence status.
-        */
+       * Constructor.
+       * @param priority The resource's priority.
+       * @param msg The resource's status message.
+       * @param presence The resource's presence status.
+       */
       Resource( int priority, const std::string& msg, Presence::PresenceType presence )
-        : m_priority( priority ), m_message( msg ), m_presence( presence ) {}
+        : m_priority( priority ), m_message( msg ), m_presence( presence ), m_caps( 0 ) {}
 
       /**
-        * Virtual destrcutor.
-        */
-      virtual ~Resource() {}
+       * Virtual destrcutor.
+       */
+      virtual ~Resource() { delete m_caps; }
 
       /**
-        * Lets you fetch the resource's priority.
-        * @return The resource's priority.
-        */
+       * Lets you fetch the resource's priority.
+       * @return The resource's priority.
+       */
       int priority() const { return m_priority; }
 
       /**
-        * Lets you fetch the resource's status message.
-        * @return The resource's status message.
-        */
+       * Lets you fetch the resource's status message.
+       * @return The resource's status message.
+       */
       const std::string& message() const { return m_message; }
 
       /**
-        * Lets you fetch the resource's last presence packet.
-        * @return The resource's presence status.
-        */
+       * Lets you fetch the resource's last presence.
+       * @return The resource's presence status.
+       */
       const Presence::PresenceType presence() const { return m_presence; }
+
+      /**
+       * Lets you fetch the resource's last capabilities packet.
+       * @return The resource's capabilities. May be 0.
+       */
+      const StanzaExtension* capabilities() const { return m_caps; }
 
     private:
       void setPriority( int priority ) { m_priority = priority; }
       void setMessage( std::string message ) { m_message = message; }
       void setStatus( Presence::PresenceType presence ) { m_presence = presence; }
+      void setCaps( StanzaExtension* caps )
+        { if( caps) m_caps = new Capabilities( *(static_cast<Capabilities*>( caps ) ) ); }
 
       int m_priority;
       std::string m_message;
       std::string m_name;
       Presence::PresenceType m_presence;
+      StanzaExtension* m_caps;
 
   };
 

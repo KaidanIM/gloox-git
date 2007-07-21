@@ -26,6 +26,8 @@
 namespace gloox
 {
 
+  class StanzaExtension;
+
   /**
    * @brief An abstraction of a roster item.
    *
@@ -167,6 +169,13 @@ namespace gloox
        * @param priority The resource's priority, i.e. from the presence info.
        */
       virtual void setPriority( const std::string& resource, int priority );
+
+      /**
+       * Sets the resource's Entity Capabilities.
+       * @param resource The resource to set the caps for.
+       * @param caps The resource's caps.
+       */
+      virtual void setCaps( const std::string& resource, StanzaExtension* caps );
 
       /**
        * Sets the current subscription status of the contact.
