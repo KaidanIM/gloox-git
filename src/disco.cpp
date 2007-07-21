@@ -44,7 +44,7 @@ namespace gloox
     }
   }
 
-  static void addFeatures( const StringList& features, Tag * parent )
+  static void addFeatures( const StringList& features, Tag* parent )
   {
     StringList::const_iterator it = features.begin();
     for( ; it != features.end(); ++it )
