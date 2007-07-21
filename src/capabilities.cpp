@@ -72,7 +72,7 @@ namespace gloox
 
   Tag* Capabilities::tag() const
   {
-    if( !m_valid || m_node.empty() || m_ver.empty() )
+    if( !m_valid || m_node.empty() )
       return 0;
 
     Tag *t = new Tag( "c" );
