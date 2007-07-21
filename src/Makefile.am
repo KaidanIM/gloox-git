@@ -29,7 +29,7 @@ libgloox_la_SOURCES = jid.cpp parser.cpp connectiontcpclient.cpp clientbase.cpp 
                         pubsubmanager.cpp error.cpp util.cpp iq.cpp message.cpp presence.cpp \
                         subscription.cpp capabilities.cpp
 
-libgloox_la_LDFLAGS = -version-info 7:0:0 -no-undefined -no-allow-shlib-undefined
+libgloox_la_LDFLAGS = -version-info 8:0:0 -no-undefined -no-allow-shlib-undefined
 libgloox_la_LIBADD =
 libgloox_la_CFLAGS = $(CPPFLAGS)
 
