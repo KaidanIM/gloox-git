@@ -519,6 +519,9 @@ namespace gloox
   /** gloox version */
   GLOOX_API extern const std::string GLOOX_VERSION;
 
+  /** gloox caps node */
+  GLOOX_API extern const std::string GLOOX_CAPS_NODE;
+
   extern const std::string XMLNS;
 
   extern const std::string TYPE;
