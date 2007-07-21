@@ -12,6 +12,8 @@
 
 #include "presence.h"
 #include "util.h"
+#include "stanzaextension.h"
+#include "stanzaextensionfactory.h"
 
 namespace gloox
 {
@@ -66,6 +68,12 @@ namespace gloox
       else if( (*it)->name() == "priority" )
       {
         m_priority = atoi( (*it)->cdata().c_str() );
+      }
+      else
+      {
+        StanzaExtension *se = StanzaExtensionFactory::create( (*it) );
+        if( se )
+          m_extensionList.push_back( se );
       }
     }
   }
