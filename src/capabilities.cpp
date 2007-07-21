@@ -13,29 +13,31 @@
 
 #include "capabilities.h"
 
+#include "base64.h"
+#include "disco.h"
+#include "sha.h"
 #include "tag.h"
 
 namespace gloox
 {
 
-  Capabilities::Capabilities( const std::string& node, const std::string& version, const std::string& ext )
-    : StanzaExtension( ExtCaps ), m_node( node ), m_version( version ), m_ext( ext ), m_valid( false )
+  Capabilities::Capabilities( Disco* disco, const std::string& node, const std::string& version )
+    : StanzaExtension( ExtCaps ), m_disco( disco ), m_node( node ), m_ver( version ), m_valid( false )
   {
-    if( !m_node.empty() && !m_version.empty() )
+    if( !m_node.empty() && !m_ver.empty() )
       m_valid = true;
   }
 
 
   Capabilities::Capabilities( Tag *tag )
-    : StanzaExtension( ExtCaps ), m_valid( false )
+    : StanzaExtension( ExtCaps ), m_disco( 0 ), m_valid( false )
   {
     if( !tag || tag->name() != "c" || !tag->hasAttribute( XMLNS, XMLNS_CAPS )
         || !tag->hasAttribute( "node" ) || !tag->hasAttribute( "ver" ) )
       return;
 
     m_node = tag->findAttribute( "node" );
-    m_version = tag->findAttribute( "ver" );
-    m_ext = tag->findAttribute( "ext" );
+    m_ver = tag->findAttribute( "ver" );
     m_valid = true;
   }
 
@@ -45,14 +47,35 @@ namespace gloox
 
   Tag* Capabilities::tag() const
   {
-    if( !m_valid || m_node.empty() || m_version.empty() )
+    if( !m_valid || m_node.empty() || m_ver.empty() )
       return 0;
 
     Tag *t = new Tag( "c" );
     t->addAttribute( XMLNS, XMLNS_CAPS );
     t->addAttribute( "node", m_node );
-    t->addAttribute( "ver", m_version );
-    t->addAttribute( "ext", m_ext );
+    if( m_disco )
+    {
+      std::string s;
+      s += m_disco->category();
+      s += '/';
+      s += m_disco->type();
+      s += '<';
+      StringList f = m_disco->features();
+      f.sort();
+      StringList::const_iterator it = f.begin();
+      for( ; it != f.end(); ++it )
+      {
+        s += (*it);
+        s += '<';
+      }
+      printf( "ver: %s\n", s.c_str() );
+      SHA sha;
+      sha.feed( s );
+      t->addAttribute( "ver", Base64::encode64( sha.binary() ) );
+    }
+    else
+      t->addAttribute( "ver", m_ver );
+
     return t;
   }
 
