@@ -19,3 +19,6 @@
 
 /* Comment out if you don't have windns.h (e.g. if you use an old Platform SDK) */
 #define HAVE_WINDNS_H 1
+
+/* Comment out if you don't have the `setsockopt' function. Usually available. */
+#define HAVE_SETSOCKOPT 1
