@@ -87,8 +87,8 @@ namespace gloox
     else
       return false;
 #elif defined( HAVE_PTHREAD )
-    if( pthread_mutex_trylock( &m_mutex ) != EBUSY)
-      return true;
+    if( pthread_mutex_trylock( &m_mutex ) != 0 )
+      return false;
     else
       return false;
 #endif
