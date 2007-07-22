@@ -25,7 +25,7 @@ namespace gloox
       m_valid = false;
   }
 
-  GPGSigned::GPGSigned( Tag *tag )
+  GPGSigned::GPGSigned( const Tag *tag )
     : StanzaExtension( ExtGPGSigned ),
       m_valid( false )
   {

@@ -29,7 +29,7 @@ namespace gloox
   }
 
 
-  Capabilities::Capabilities( Tag *tag )
+  Capabilities::Capabilities( const Tag *tag )
     : StanzaExtension( ExtCaps ), m_disco( 0 ), m_valid( false )
   {
     if( !tag || tag->name() != "c" || !tag->hasAttribute( XMLNS, XMLNS_CAPS )

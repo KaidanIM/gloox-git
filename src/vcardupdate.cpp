@@ -34,7 +34,7 @@ namespace gloox
     }
   }
 
-  VCardUpdate::VCardUpdate( Tag *tag )
+  VCardUpdate::VCardUpdate( const Tag *tag )
     : StanzaExtension( ExtVCardUpdate ),
       m_notReady( true ), m_noImage( true ), m_valid( false )
   {

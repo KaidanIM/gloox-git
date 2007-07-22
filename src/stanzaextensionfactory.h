@@ -42,7 +42,7 @@ namespace gloox
        * @return A StanzaExtension-derived object if the Tag was recognized, or 0.
        * @note To get rif of a StanzaExtension easily, you may use dispose().
        */
-      static StanzaExtension* create( Tag* tag );
+      static StanzaExtension* create( const Tag* tag );
 
   };
 

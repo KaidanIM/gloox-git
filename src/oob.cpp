@@ -25,7 +25,7 @@ namespace gloox
       m_valid = false;
   }
 
-  OOB::OOB( Tag *tag )
+  OOB::OOB( const Tag *tag )
     : StanzaExtension( ExtOOB ), m_iqext( false ), m_valid( false )
   {
     if( tag && ( ( tag->name() == "x" && tag->hasAttribute( XMLNS, XMLNS_X_OOB ) ) ||

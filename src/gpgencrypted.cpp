@@ -25,7 +25,7 @@ namespace gloox
       m_valid = false;
   }
 
-  GPGEncrypted::GPGEncrypted( Tag *tag )
+  GPGEncrypted::GPGEncrypted( const Tag *tag )
     : StanzaExtension( ExtGPGEncrypted ),
       m_valid( false )
   {
