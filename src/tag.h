@@ -507,7 +507,6 @@ namespace gloox
         XTDoubleSlash
       };
 
-
       Tag* parse( const std::string& expression, unsigned& len, TokenType border = XTNone );
 
       void closePreviousToken( Tag**, Tag**, TokenType&, std::string& );
