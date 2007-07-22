@@ -28,6 +28,7 @@
 #include "stanzaextensionfactory.h"
 #include "stanzaextension.h"
 #include "tlsbase.h"
+#include "util.h"
 
 #if !defined( WIN32 ) && !defined( _WIN32_WCE )
 # include <unistd.h>
@@ -471,11 +472,7 @@ namespace gloox
 
   void Client::removePresenceExtensions()
   {
-    StanzaExtensionList::iterator it = m_presenceExtensions.begin();
-    for( ; it != m_presenceExtensions.end(); ++it )
-    {
-      delete (*it);
-    }
+    util::clear( m_presenceExtensions );
   }
 
   void Client::setPresence( Presence::PresenceType presence, int priority, const std::string& msg )
