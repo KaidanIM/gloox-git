@@ -47,13 +47,6 @@ namespace gloox
       void lock();
 
       /**
-       * Tries to lock the mutex.
-       * @return @b True if the lock request succeeded. In this case you MUST unlock the mutex. If the mutex
-       * is already locked @b false is returned.
-       */
-      bool tryLock();
-
-      /**
        * Releases the mutex.
        */
       void unlock();
