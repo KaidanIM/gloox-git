@@ -24,6 +24,9 @@ namespace gloox
   namespace PubSub
   {
 
+    /**
+     * Describes a subscribed entity.
+     */
     struct Subscriber
     {
       Subscriber( const std::string& _jid, SubscriptionType _type,
@@ -34,6 +37,9 @@ namespace gloox
       const std::string subid;
     };
 
+    /**
+     * 
+     */
     struct Affiliate
     {
       Affiliate( const std::string& _jid, AffiliationType _type )
@@ -45,13 +51,12 @@ namespace gloox
     typedef std::list< Subscriber > SubscriberList;
     typedef std::list<  Affiliate > AffiliateList;
 
-
     /**
-     * @brief A virtual interface for receiving node related results.
+     * @brief A virtual interface for receiving node related requests results.
      *
-     * Derive from this interface.
+     * Derive from this interface and pass it to item related requests.
      *
-     * @author Jakob Schroeter <js@camaya.net>
+     * @author Vincent Thomasset
      */
     class NodeHandler
     {
@@ -97,7 +102,8 @@ namespace gloox
          * @param node ID of the queried node.
          * @param options Options DataForm.
          */
-        virtual void handleSubscriptionOptions( const JID& service, const JID& jid,
+        virtual void handleSubscriptionOptions( const JID& service,
+                                                const JID& jid,
                                                 const std::string& node,
                                                 const DataForm& options ) = 0;
 
@@ -118,7 +124,8 @@ namespace gloox
          * @param node ID of the queried node.
          * @param list Subscriber list.
          */
-        virtual void handleSubscriberList( const JID& service, const std::string& node,
+        virtual void handleSubscriberList( const JID& service,
+                                           const std::string& node,
                                            const SubscriberList& list ) = 0;
 
         /**
@@ -126,7 +133,8 @@ namespace gloox
          * @param service Service hosting the node.
          * @param node ID of the node.
          */
-        virtual void handleSubscriberListResult( const JID& service, const std::string& node/*,
+        virtual void handleSubscriberListResult( const JID& service,
+                                                 const std::string& node/*,
                                                  const Error& e*/ ) = 0;
 
         /**
@@ -135,7 +143,8 @@ namespace gloox
          * @param node ID of the node.
          * @param list Affiliation list.
          */
-        virtual void handleAffiliateList( const JID& service, const std::string& node,
+        virtual void handleAffiliateList( const JID& service,
+                                          const std::string& node,
                                           const AffiliateList& list ) = 0;
 
         /**
@@ -144,7 +153,8 @@ namespace gloox
          * @param node ID of the node.
          * @param itemList List of contained items.
          */
-        virtual void handleAffiliateListResult( const JID& service, const std::string& node/*,
+        virtual void handleAffiliateListResult( const JID& service,
+                                                const std::string& node/*,
                                                 const Error& e*/ ) = 0;
 
         /**
@@ -153,7 +163,8 @@ namespace gloox
          * @param node ID of the node.
          * @param config Configuration DataForm.
          */
-        virtual void handleNodeConfig( const JID& service, const std::string& node,
+        virtual void handleNodeConfig( const JID& service,
+                                       const std::string& node,
                                        const DataForm& config ) = 0;
 
         /**
@@ -161,7 +172,8 @@ namespace gloox
          * @param service Service hosting the node.
          * @param node ID of the node.
          */
-        virtual void handleNodeConfigResult( const JID& service, const std::string& node/*,
+        virtual void handleNodeConfigResult( const JID& service,
+                                             const std::string& node/*,
                                              const Error& e*/ ) = 0;
 
     };
