@@ -810,12 +810,13 @@ namespace gloox
    */
   enum StanzaErrorType
   {
-    StanzaErrorTypeUndefined,       /**< No error. */
+    StanzaErrorTypeAuth,            /**< Retry after providing credentials. */
     StanzaErrorTypeCancel,          /**< Do not retry (the error is unrecoverable). */
     StanzaErrorTypeContinue,        /**< Proceed (the condition was only a warning). */
     StanzaErrorTypeModify,          /**< Retry after changing the data sent. */
-    StanzaErrorTypeAuth,            /**< Retry after providing credentials. */
-    StanzaErrorTypeWait             /**< Retry after waiting (the error is temporary). */
+    
+    StanzaErrorTypeWait,            /**< Retry after waiting (the error is temporary). */
+    StanzaErrorTypeUndefined        /**< No error. */
   };
 
   /**
@@ -824,7 +825,7 @@ namespace gloox
    */
   enum StanzaError
   {
-    StanzaErrorUndefined = 0,       /**< No stanza error occured. */
+
     StanzaErrorBadRequest,          /**< The sender has sent XML that is malformed or that cannot be
                                      * processed (e.g., an IQ stanza that includes an unrecognized value
                                      * of the 'type' attribute); the associated error type SHOULD be
@@ -857,9 +858,8 @@ namespace gloox
                                      * messages); the associated error type SHOULD be "modify". */
     StanzaErrorNotAllowed,          /**< The recipient or server does not allow any entity to perform the
                                      * action; the associated error type SHOULD be "cancel". */
-    StanzaErrorNotAuthorized,       /**< The sender must provide proper credentials before being allowed to
-                                     * perform the action, or has provided improper credentials; the
-                                     * associated error type SHOULD be "auth". */
+    StanzaErrorNotModified,         /**< The item requested has not changed since it was last requested;
+                                     * the associated error type SHOULD be "continue". */
     StanzaErrorPaymentRequired,     /**< The requesting entity is not authorized to access the requested
                                      * service because payment is required; the associated error type SHOULD
                                      * be "auth". */
@@ -894,9 +894,14 @@ namespace gloox
                                      * conditions in this list; any error type may be associated with this
                                      * condition, and it SHOULD be used only in conjunction with an
                                      * application-specific condition. */
-    StanzaErrorUnexpectedRequest    /**< The recipient or server understood the request but was not expecting
+    StanzaErrorUnexpectedRequest,   /**< The recipient or server understood the request but was not expecting
                                      * it at this time (e.g., the request was out of order); the associated
                                      * error type SHOULD be "wait". */
+    StanzaErrorUnknownSender,       /**< The stanza 'from' address specified by a connected client is not
+                                     * valid for the stream (e.g., the stanza does not include a 'from'
+                                     * address when multiple resources are bound to the stream); the
+                                     * associated error type SHOULD be "modify".*/
+    StanzaErrorUndefined            /**< No stanza error occured. */
   };
 
   /**
