@@ -108,10 +108,10 @@ namespace gloox
 
     protected:
       /**
-     * Creates a new Stanza from a deep copy of the given Tag.
-     * @param tag The Tag to create the Stanza from.
-     * @param rip Whether to rip off the original Tag.
-     * @since 1.0
+       * Creates a new Stanza from a deep copy of the given Tag.
+       * @param tag The Tag to create the Stanza from.
+       * @param rip Whether to rip off the original Tag.
+       * @since 1.0
        */
       Stanza( Tag *tag, bool rip = false );
 
