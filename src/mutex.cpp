@@ -90,7 +90,7 @@ namespace gloox
     if( pthread_mutex_trylock( &m_mutex ) != 0 )
       return false;
     else
-      return false;
+      return true;
 #endif
   }
 
