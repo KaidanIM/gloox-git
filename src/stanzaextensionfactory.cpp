@@ -27,7 +27,7 @@
 namespace gloox
 {
 
-  StanzaExtension* StanzaExtensionFactory::create( Tag* tag )
+  StanzaExtension* StanzaExtensionFactory::create( const Tag* tag )
   {
     const std::string& name = tag->name();
     const std::string& xmlns = tag->findAttribute( XMLNS );

@@ -25,7 +25,7 @@ namespace gloox
       m_valid = true;
   }
 
-  XDelayedDelivery::XDelayedDelivery( Tag *tag )
+  XDelayedDelivery::XDelayedDelivery( const Tag *tag )
     : StanzaExtension( ExtXDelay ), m_valid( false )
   {
     if( !tag || tag->name() != "x" || !tag->hasAttribute( XMLNS, XMLNS_X_DELAY )

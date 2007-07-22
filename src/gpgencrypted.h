@@ -48,7 +48,7 @@ namespace gloox
        * have a name of 'x' in the @c jabber:x:encrypted namespace.
        * @param tag The Tag to parse.
        */
-      GPGEncrypted( Tag *tag );
+      GPGEncrypted( const Tag *tag );
 
       /**
        * Virtual destructor.

@@ -26,7 +26,7 @@ namespace gloox
   }
 
 
-  DelayedDelivery::DelayedDelivery( Tag *tag )
+  DelayedDelivery::DelayedDelivery( const Tag *tag )
     : StanzaExtension( ExtDelay ), m_valid( false )
   {
     if( !tag || tag->name() != "delay" || !tag->hasAttribute( XMLNS, XMLNS_DELAY )

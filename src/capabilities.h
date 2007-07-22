@@ -46,7 +46,7 @@ namespace gloox
        * Constructs a new object from the given Tag.
        * @param tag The Tag to parse.
        */
-      Capabilities( Tag *tag );
+      Capabilities( const Tag *tag );
 
       /**
        * Virtual Destructor.
