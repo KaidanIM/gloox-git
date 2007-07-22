@@ -19,7 +19,7 @@
 namespace gloox
 {
   /**
-   * @brief A namespace holding all the Pubsub-related classes etc.
+   * @brief Namespace holding all the Pubsub-related structures and definition.
    *
    * @todo Be consistent with naming, either always use PubSubXXX, or PSXXX,
    *       or PubSubXXX for classes and PSXXX for enums.
@@ -32,7 +32,7 @@ namespace gloox
      */
     enum NodeType
     {
-      NodeLeaf = 0,                 /**< A node that contains published items only. It is NOT
+      NodeLeaf,                     /**< A node that contains published items only. It is NOT
                                      * a container for other nodes. */
       NodeCollection,               /**< A node that contains nodes and/or other collections but
                                      * no published items. Collections make it possible to represent
@@ -41,13 +41,13 @@ namespace gloox
     };
 
     /**
-     * Describes the different affiliation types.
+     * Describes the different node affiliation types.
      */
     enum AffiliationType
     {
-      AffiliationNone = 0,          /**<  */
-      AffiliationPublisher,         /**<  */
-      AffiliationOwner,             /**<  */
+      AffiliationNone,              /**< No particular affiliation type. */
+      AffiliationPublisher,         /**< Entity is allowed to publish items. */
+      AffiliationOwner,             /**< Manager for the node. */
       AffiliationOutcast,           /**< Entity is disallowed from subscribing or publishing. */
       AffiliationInvalid            /**< Invalid Affiliation type. */
     };
@@ -57,7 +57,7 @@ namespace gloox
      */
     enum SubscriptionType
     {
-      SubscriptionNone = 0,         /**< The node MUST NOT send event notifications or payloads to the
+      SubscriptionNone,             /**< The node MUST NOT send event notifications or payloads to the
                                      * Entity. */
       SubscriptionSubscribed,       /**< An entity is subscribed to a node. The node MUST send all event
                                      * notifications (and, if configured, payloads) to the entity while it
@@ -70,7 +70,6 @@ namespace gloox
                                      * been configured. The node MAY send event notifications or payloads
                                      * to the entity while it is in this state. The service MAY timeout
                                      * unconfigured subscriptions. */
-
       SubscriptionInvalid           /**< Invalid subscription type. */
     };
 
@@ -128,7 +127,7 @@ namespace gloox
      */
     enum AccessModel
     {
-      AccessOpen = 0,               /**< Any entity may subscribe to the node (i.e., without the necessity
+      AccessOpen,                   /**< Any entity may subscribe to the node (i.e., without the necessity
                                      * for subscription approval) and any entity may retrieve items from the
                                      * node (i.e., without being subscribed); this SHOULD be the default
                                      * access model for generic pubsub services. */
