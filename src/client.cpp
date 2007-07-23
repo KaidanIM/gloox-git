@@ -93,7 +93,7 @@ namespace gloox
   {
     m_rosterManager = new RosterManager( this );
     m_disco->setIdentity( "client", "bot" );
-    m_capabilities = new Capabilities( m_disco, GLOOX_CAPS_NODE );
+    m_capabilities = new Capabilities( m_disco );
     addPresenceExtension( m_capabilities );
   }
 
