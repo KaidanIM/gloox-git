@@ -199,7 +199,7 @@ int main( int /*argc*/, char** /*argv*/ )
   c = new ClientTest( j, "b" );
   conn = new ConnectionImpl( c, 0 );
   c->setConnectionImpl( conn );
-  c->setTls( false );
+  c->setTls( TLSDisabled );
   c->setCompression( false );
   c->connect();
   if( c->connected() != 1 || c->disconnected() != 1 || c->disconnectReason() != ConnUserDisconnected )
@@ -216,7 +216,7 @@ int main( int /*argc*/, char** /*argv*/ )
   c = new ClientTest( j, "b" );
   conn = new ConnectionImpl( c, 1 );
   c->setConnectionImpl( conn );
-  c->setTls( false );
+  c->setTls( TLSDisabled );
   c->setCompression( false );
   c->connect();
   if( c->connected() != 0 || c->disconnected() != 1 || c->disconnectReason() != ConnAuthenticationFailed )
@@ -233,7 +233,7 @@ int main( int /*argc*/, char** /*argv*/ )
   c = new ClientTest( j, "b" );
   conn = new ConnectionImpl( c, 2 );
   c->setConnectionImpl( conn );
-  c->setTls( false );
+  c->setTls( TLSDisabled );
   c->setCompression( false );
   c->connect();
   if( c->connected() != 0 || c->disconnected() != 1 || c->disconnectReason() != ConnIoError )
@@ -250,7 +250,7 @@ int main( int /*argc*/, char** /*argv*/ )
   c = new ClientTest( j, "b" );
   conn = new ConnectionImpl( c, 3 );
   c->setConnectionImpl( conn );
-  c->setTls( false );
+  c->setTls( TLSDisabled );
   c->setCompression( false );
   c->connect();
   if( c->connected() != 0 || c->disconnected() != 1 || c->disconnectReason() != ConnStreamError
@@ -267,7 +267,7 @@ int main( int /*argc*/, char** /*argv*/ )
   c = new ClientTest( j, "b" );
   conn = new ConnectionImpl( c, 2 );
   c->setConnectionImpl( conn );
-  c->setTls( false );
+  c->setTls( TLSDisabled );
   c->setCompression( false );
   for( int i = 1; i <= 100; ++i )
   {
@@ -289,7 +289,7 @@ int main( int /*argc*/, char** /*argv*/ )
   c = new ClientTest( j, "b" );
   conn = new ConnectionImpl( c, 0 );
   c->setConnectionImpl( conn );
-  c->setTls( false );
+  c->setTls( TLSDisabled );
   c->setCompression( false );
   for( int i = 1; i <= 100; ++i )
   {

@@ -62,7 +62,7 @@ namespace gloox
   ClientBase::ClientBase( const std::string& ns, const std::string& server, int port )
     : m_connection( 0 ), m_encryption( 0 ), m_compression( 0 ), m_disco( 0 ), m_namespace( ns ),
       m_xmllang( "en" ), m_server( server ), m_compressionActive( false ), m_encryptionActive( false ),
-      m_compress( true ), m_authed( false ), m_sasl( true ), m_tls( true ), m_port( port ),
+      m_compress( true ), m_authed( false ), m_sasl( true ), m_tls( TLSOptional ), m_port( port ),
       m_availableSaslMechs( SaslMechAll ),
       m_statisticsHandler( 0 ), m_mucInvitationHandler( 0 ),
       m_messageSessionHandlerChat( 0 ), m_messageSessionHandlerGroupchat( 0 ),
@@ -79,7 +79,7 @@ namespace gloox
     : m_connection( 0 ), m_encryption( 0 ), m_compression( 0 ), m_disco( 0 ), m_namespace( ns ),
       m_password( password ),
       m_xmllang( "en" ), m_server( server ), m_compressionActive( false ), m_encryptionActive( false ),
-      m_compress( true ), m_authed( false ), m_block( false ), m_sasl( true ), m_tls( true ),
+      m_compress( true ), m_authed( false ), m_block( false ), m_sasl( true ), m_tls( TLSOptional ),
       m_port( port ), m_availableSaslMechs( SaslMechAll ),
       m_statisticsHandler( 0 ), m_mucInvitationHandler( 0 ),
       m_messageSessionHandlerChat( 0 ), m_messageSessionHandlerGroupchat( 0 ),
@@ -1256,7 +1256,7 @@ namespace gloox
 
   TLSBase* ClientBase::getDefaultEncryption()
   {
-    if( !m_tls || !hasTls() )
+    if( !m_tls == TLSDisabled || !hasTls() )
       return 0;
 
     return new TLSDefault( this, m_server );
