@@ -116,32 +116,14 @@ namespace gloox
                     "Client is configured to require TLS but either the server didn't offer TLS or "
                     "TLS support is not compiled in." );
         disconnect( ConnTlsNotAvailable );
-        return true;
       }
-
-      if( m_tls > TLSDisabled && m_encryption && !m_encryptionActive
+      else if( m_tls > TLSDisabled && m_encryption && !m_encryptionActive
           && ( m_streamFeatures & StreamFeatureStartTls ) )
       {
         notifyStreamEvent( StreamEventEncryption );
         startTls();
-        return true;
       }
-
-      if( m_compress && m_compression && !m_compressionActive
-          && ( m_streamFeatures & StreamFeatureCompressZlib ) )
-      {
-        notifyStreamEvent( StreamEventCompression );
-        negotiateCompression( StreamFeatureCompressZlib );
-        return true;
-      }
-//       if( ( m_streamFeatures & StreamFeatureCompressDclz )
-//               && m_connection->initCompression( StreamFeatureCompressDclz ) )
-//       {
-//         negotiateCompression( StreamFeatureCompressDclz );
-//         return true;
-//       }
-
-      if( m_sasl )
+      else if( m_sasl )
       {
         if( m_authed )
         {
@@ -202,6 +184,17 @@ namespace gloox
           connected();
         }
       }
+      else if( m_compress && m_compression && !m_compressionActive
+          && ( m_streamFeatures & StreamFeatureCompressZlib ) )
+      {
+        notifyStreamEvent( StreamEventCompression );
+        negotiateCompression( StreamFeatureCompressZlib );
+      }
+//       else if( ( m_streamFeatures & StreamFeatureCompressDclz )
+//               && m_connection->initCompression( StreamFeatureCompressDclz ) )
+//       {
+//         negotiateCompression( StreamFeatureCompressDclz );
+//       }
       else if( m_streamFeatures & StreamFeatureIqAuth )
       {
         notifyStreamEvent( StreamEventAuthentication );
