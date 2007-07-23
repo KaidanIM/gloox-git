@@ -970,7 +970,7 @@ namespace gloox
   };
 
   /**
-   * Describes the defined SASL error conditions.
+   * Describes the defined SASL (and non-SASL) error conditions.
    */
   enum AuthenticationError
   {
@@ -991,6 +991,10 @@ namespace gloox
     SaslInvalidMechanism,           /**< The initiating entity did not provide a mechanism or requested a
                                      * mechanism that is not supported by the receiving entity; sent in reply
                                      * to an &lt;auth/&gt; element. */
+    SaslMalformedRequest,           /**< The request is malformed (e.g., the &lt;auth/&gt; element includes
+                                     * an initial response but the mechanism does not allow that); sent in
+                                     * reply to an &lt;abort/&gt;, &lt;auth/&gt;, &lt;challenge/&gt;, or
+                                     * &lt;response/&gt; element. */
     SaslMechanismTooWeak,           /**< The mechanism requested by the initiating entity is weaker than
                                      * server policy permits for that initiating entity; sent in reply to a
                                      * &lt;response/&gt; element or an &lt;auth/&gt; element with initial
