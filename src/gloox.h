@@ -582,12 +582,27 @@ namespace gloox
                                      * or the server offered no auth mechanisms at all. */
     ConnTlsFailed,                  /**< The server's certificate could not be verified or the TLS
                                      * handshake did not complete successfully. */
+    ConnTlsNotAvailable,            /**< The server didn't offer TLS while it was set to be required
+                                     * or TLS was not compiled in.
+                                    * @since 0.9.4 */
     ConnCompressionFailed,          /**< Negotiating/initializing compression failed.
                                      * @since 0.9 */
     ConnAuthenticationFailed,       /**< Authentication failed. Username/password wrong or account does
                                      * not exist. Use ClientBase::authError() to find the reason. */
     ConnUserDisconnected,           /**< The user (or higher-level protocol) requested a disconnect. */
     ConnNotConnected                /**< There is no active connection. */
+  };
+
+  /**
+   * ClientBase's policy regarding TLS usage. Use with ClientBase::setTls().
+   */
+  enum TLSPolicy
+  {
+    TLSDisabled,                    /**< Don't use TLS. */
+    TLSOptional,                    /**< Use TLS if compiled in and offered by the server. */
+    TLSRequired                     /**< Don't attempt to log in if the server didn't offer TLS
+                                     * or if TLS was not compiled in. Disconnect error will be
+                                     * ConnTlsNotAvailable. */
   };
 
   /**
@@ -677,8 +692,8 @@ namespace gloox
     StreamErrorPolicyViolation,     /**< The entity has violated some local service policy; the server MAY
                                      * choose to specify the policy in the &lt;text/&gt;  element or an
                                      * application-specific condition element. */
-    StreamErrorRemoteConnectionFailed,/**< The server is unable to properly connect to a remote entity that is
-                                     * required for authentication or authorization. */
+    StreamErrorRemoteConnectionFailed,/**< The server is unable to properly connect to a remote entity that
+                                     * is required for authentication or authorization. */
     StreamErrorResourceConstraint,  /**< the server lacks the system resources necessary to service the
                                      * stream. */
     StreamErrorRestrictedXml,       /**< The entity has attempted to send restricted XML features such as a
@@ -814,7 +829,7 @@ namespace gloox
     StanzaErrorTypeCancel,          /**< Do not retry (the error is unrecoverable). */
     StanzaErrorTypeContinue,        /**< Proceed (the condition was only a warning). */
     StanzaErrorTypeModify,          /**< Retry after changing the data sent. */
-    
+
     StanzaErrorTypeWait,            /**< Retry after waiting (the error is temporary). */
     StanzaErrorTypeUndefined        /**< No error. */
   };

@@ -109,7 +109,17 @@ namespace gloox
     {
       m_streamFeatures = getStreamFeatures( tag );
 
-      if( m_tls && m_encryption && !m_encryptionActive
+      if( m_tls == TLSRequired
+          && ( !m_encryption || !( m_streamFeatures & StreamFeatureStartTls ) ) )
+      {
+        logInstance().log( LogLevelError, LogAreaClassClient,
+                    "Client is configured to require TLS but either the server didn't offer TLS or "
+                    "TLS support is not compiled in." );
+        disconnect( ConnTlsNotAvailable );
+        return true;
+      }
+
+      if( m_tls > TLSDisabled && m_encryption && !m_encryptionActive
           && ( m_streamFeatures & StreamFeatureStartTls ) )
       {
         notifyStreamEvent( StreamEventEncryption );
