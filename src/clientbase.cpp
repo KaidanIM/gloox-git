@@ -600,6 +600,8 @@ namespace gloox
       m_authError = SaslInvalidAuthzid;
     else if( tag->hasChild( "invalid-mechanism" ) )
       m_authError = SaslInvalidMechanism;
+    else if( tag->hasChild( "malformed-request" ) )
+      m_authError = SaslMalformedRequest;
     else if( tag->hasChild( "mechanism-too-weak" ) )
       m_authError = SaslMechanismTooWeak;
     else if( tag->hasChild( "not-authorized" ) )
