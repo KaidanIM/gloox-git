@@ -38,9 +38,9 @@ namespace gloox
     public:
       /**
        * Constructs a new object and fills it according to the parameters.
-       * @param node The node identifying the client.
+       * @param disco The current Client's Disco object.
        */
-      Capabilities( Disco* disco, const std::string& node );
+      Capabilities( Disco* disco );
 
       /**
        * Constructs a new object from the given Tag.

@@ -21,8 +21,8 @@
 namespace gloox
 {
 
-  Capabilities::Capabilities( Disco* disco, const std::string& node )
-    : StanzaExtension( ExtCaps ), m_disco( disco ), m_node( node ), m_valid( false )
+  Capabilities::Capabilities( Disco* disco )
+    : StanzaExtension( ExtCaps ), m_disco( disco ), m_node( GLOOX_CAPS_NODE ), m_valid( false )
   {
     if( !m_node.empty() && !m_ver.empty() )
       m_valid = true;
