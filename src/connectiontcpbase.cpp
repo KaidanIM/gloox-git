@@ -159,6 +159,8 @@ namespace gloox
     MutexGuard rm( m_recvMutex );
     m_state = StateDisconnected;
     m_cancel = true;
+    m_totalBytesIn = 0;
+    m_totalBytesOut = 0;
   }
 
 }
