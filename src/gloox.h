@@ -873,6 +873,9 @@ namespace gloox
                                      * messages); the associated error type SHOULD be "modify". */
     StanzaErrorNotAllowed,          /**< The recipient or server does not allow any entity to perform the
                                      * action; the associated error type SHOULD be "cancel". */
+    StanzaErrorNotAuthorized,       /**< The sender must provide proper credentials before being allowed to
+                                     * perform the action, or has provided impreoper credentials; the
+                                     * associated error type should be "auth". */
     StanzaErrorNotModified,         /**< The item requested has not changed since it was last requested;
                                      * the associated error type SHOULD be "continue". */
     StanzaErrorPaymentRequired,     /**< The requesting entity is not authorized to access the requested
