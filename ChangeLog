@@ -2,9 +2,11 @@ v0.9.4 -- xx yyy 2007
 ---------------------
 - ChatStateHandler: make sure to never send the same chat state twice in a row
 - Tag: make ctors explicit
-- ClientBase: added setTls( TLSPolicy ) to allow enforcing TLS
+- ClientBase: added setTls( TLSPolicy ) to allow enforcing of TLS
 - ClientBase: deprecated setTls( bool )
 - conform to XEP-0170 (Recommended Order of Stream Feature Negotiation)
+- ConnectionTCPBase: avoid race condition in cleanup()
+- ConnectionTCPBase: reset byte counters on disconnect
 
 
 v0.9.3 -- 18 Jul 2007
