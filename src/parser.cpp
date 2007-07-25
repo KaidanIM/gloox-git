@@ -132,12 +132,6 @@ namespace gloox
               addCData();
               m_state = TagOpening;
               break;
-            case '"':
-            case '\'':
-            case '>':
-              cleanup();
-              return i;
-              break;
             default:
               m_cdata += c;
               break;
