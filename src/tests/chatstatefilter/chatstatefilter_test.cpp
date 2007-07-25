@@ -10,10 +10,14 @@
 
 namespace gloox
 {
+  class ClientBase;
+
   class MessageSession : public ChatStateHandler
   {
     public:
       MessageSession() : m_jid( "abc@example.net/foo" ), m_test( 0 ), m_result( false ) {}
+      MessageSession( ClientBase*, const JID&, bool, int ); /*: m_jid( "abc@example.net/foo" ), m_test( 0 ),
+                      m_result( false ) {}*/
       virtual ~MessageSession() {}
       const JID& target() const { return m_jid; }
       void send( Tag* tag )
@@ -87,6 +91,9 @@ namespace gloox
       int m_test;
       bool m_result;
   };
+
+  MessageSession::MessageSession( ClientBase*, const JID&, bool, int )
+  : m_jid( "abc@example.net/foo" ), m_test( 0 ), m_result( false ) {}
 
   class MessageFilter
   {
@@ -222,16 +229,6 @@ int main( int /*argc*/, char** /*argv*/ )
 
 
   // -------
-  name = "set gone state";
-  ms->setTest( 0 );
-  f->setChatState( gloox::ChatStateGone );
-  if( !ms->ok() )
-  {
-    ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
-  }
-
-  // -------
   name = "set inactive state";
   ms->setTest( 1 );
   f->setChatState( gloox::ChatStateInactive );
@@ -265,6 +262,16 @@ int main( int /*argc*/, char** /*argv*/ )
   name = "set paused state";
   ms->setTest( 4 );
   f->setChatState( gloox::ChatStatePaused );
+  if( !ms->ok() )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+
+  // -------
+  name = "set gone state";
+  ms->setTest( 0 );
+  f->setChatState( gloox::ChatStateGone );
   if( !ms->ok() )
   {
     ++fail;

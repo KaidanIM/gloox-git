@@ -15,7 +15,7 @@ chatstatefilter_test_LDADD = ../../tag.o ../../stanza.o ../../stanzaextensionfac
 			../../clientbase.o ../../connectiontcpclient.o ../../connectiontcpbase.o \
 			../../parser.o \
 			../../md5.o ../../tlsgnutlsclient.o ../../tlsopenssl.o ../../tlsschannel.o \
-			../../logsink.o ../../messagesession.o ../../compressionzlib.o \
+			../../logsink.o ../../compressionzlib.o \
 			../../dns.o \
 			../../gloox.o ../../tlsgnutlsbase.o ../../tlsdefault.o \
 			../../tlsgnutlsclientanon.o ../../tlsgnutlsserveranon.o ../../mutex.o \
