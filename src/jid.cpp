@@ -10,9 +10,7 @@
   This software is distributed without any warranty.
 */
 
-
 #include "jid.h"
-
 #include "prep.h"
 
 namespace gloox
@@ -26,35 +24,18 @@ namespace gloox
       return;
     }
 
-    size_t at = jid.find( "@", 0 );
-    size_t slash = jid.find( "/", 0 );
+    const size_t at = jid.find( '@' );
+    const size_t slash = jid.rfind( '/' );
 
-    if( at == std::string::npos )
-    {
-      if( slash == std::string::npos )
-      {
-        m_serverRaw = jid;
-      }
-      else
-      {
-        m_serverRaw = jid.substr( 0, slash );
-        m_resource = prep::resourceprep( jid.substr( slash + 1 ) );
-      }
-    }
-    else
-    {
+    if( at != std::string::npos )
       m_username = prep::nodeprep( jid.substr( 0, at ) );
-      if( slash != std::string::npos )
-      {
-        m_serverRaw = jid.substr( at + 1, slash - at - 1 );
-        m_resource = prep::resourceprep( jid.substr( slash + 1 ) );
-      }
-      else
-      {
-        m_serverRaw = jid.substr( at + 1 );
-      }
-    }
+
+    m_serverRaw = jid.substr( at == std::string::npos ? 0 : at + 1, slash - at - 1 );
     m_server = prep::nameprep( m_serverRaw );
+
+    if( slash != std::string::npos )
+      m_resource = prep::resourceprep( jid.substr( slash + 1 ) );
+
     setStrings();
   }
 
