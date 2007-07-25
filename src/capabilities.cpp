@@ -24,7 +24,7 @@ namespace gloox
   Capabilities::Capabilities( Disco* disco )
     : StanzaExtension( ExtCaps ), m_disco( disco ), m_node( GLOOX_CAPS_NODE ), m_valid( false )
   {
-    if( !m_node.empty() && !m_ver.empty() )
+    if( m_disco )
       m_valid = true;
   }
 
