@@ -279,7 +279,7 @@ class ParserTest : private TagHandler
       m_tag = 0;
 
       // -------
-      name = "apos inside quotes";
+      name = "apos inside quotes in attrib value";
       data = "<tag1 name=\"foo'bar\">cdata3</tag1>";
       p->feed( data );
       if( m_tag == 0 )
@@ -291,7 +291,7 @@ class ParserTest : private TagHandler
       m_tag = 0;
 
       // -------
-      name = "apos inside apos";
+      name = "apos inside apos in attrib value";
       data = "<tag1 name='foo'bar'>cdata3</tag1>";
       if( p->feed( data ) == -1 )
       {
@@ -300,7 +300,7 @@ class ParserTest : private TagHandler
       }
 
       // -------
-      name = "quote inside apos";
+      name = "quote inside apos in attrib value";
       data = "<tag1 name='foo\"bar'>cdata3</tag1>";
       if( p->feed( data ) == -1 )
       {
@@ -309,7 +309,7 @@ class ParserTest : private TagHandler
       }
 
       // -------
-      name = "quote inside quotes";
+      name = "quote inside quotes in attrib value";
       data = "<tag1 name=\"foo\"bar\">cdata3</tag1>";
       if( p->feed( data ) == -1 )
       {
@@ -318,7 +318,7 @@ class ParserTest : private TagHandler
       }
 
       // -------
-      name = "< inside attrib value";
+      name = "lt inside attrib value";
       data = "<tag1 name='foo<bar'>cdata3</tag1>";
       if( p->feed( data ) == -1 )
       {
@@ -327,7 +327,7 @@ class ParserTest : private TagHandler
       }
 
       // -------
-      name = "> inside attrib value";
+      name = "gt inside attrib value";
       data = "<tag1 name='foo>bar'>cdata3</tag1>";
       p->feed( data );
       if( m_tag == 0 )
@@ -342,7 +342,7 @@ class ParserTest : private TagHandler
       name = "> inside cdata";
       data = "<tag1 name='foobar'>cda>ta3</tag1>";
       p->feed( data );
-      if( m_tag != 0 )
+      if( m_tag == 0 )
       {
         ++fail;
         printf( "test '%s: %s' failed\n", name.c_str(), data.c_str() );
@@ -351,14 +351,37 @@ class ParserTest : private TagHandler
       m_tag = 0;
 
       // -------
-      name = "quote inside cdata";
-      data = "<tag1 name='foobar'>cda\"ta3</tag1>";
-      p->feed( data );
-      if( m_tag != 0 )
+      name = "< inside cdata";
+      data = "<tag1 name='foobar'>cda<ta3</tag1>";
+      if( p->feed( data ) == -1 )
       {
         ++fail;
         printf( "test '%s: %s' failed\n", name.c_str(), data.c_str() );
       }
+
+      // -------
+      name = "quote inside cdata";
+      data = "<tag1 name='foobar'>cda\"ta3</tag1>";
+      p->feed( data );
+      if( m_tag == 0 )
+      {
+        ++fail;
+        printf( "test '%s: %s' failed\n", name.c_str(), data.c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      // -------
+      name = "apos inside cdata";
+      data = "<tag1 name='foobar'>cda'ta3</tag1>";
+      p->feed( data );
+      if( m_tag == 0 )
+      {
+        ++fail;
+        printf( "test '%s: %s' failed\n", name.c_str(), data.c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
 
       //-------
       name = "relax";
