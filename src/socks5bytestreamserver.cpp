@@ -47,7 +47,7 @@ namespace gloox
   {
     if( !m_tcpServer )
       return ConnNotConnected;
-    
+
     ConnectionError ce = m_tcpServer->recv( timeout );
     if( ce != ConnNoError )
       return ce;
@@ -57,7 +57,7 @@ namespace gloox
     {
       (*it).first->recv( timeout );
     }
-    return ConnNoError;  
+    return ConnNoError;
   }
 
   void SOCKS5BytestreamServer::stop()
