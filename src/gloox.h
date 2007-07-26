@@ -483,6 +483,9 @@ namespace gloox
   /** Entity Capabilities namespace (XEP-0115) */
   GLOOX_API extern const std::string XMLNS_CAPS;
 
+  /** SOCKS5 Fast Mode namespace */
+  GLOOX_API extern const std::string XMLNS_FT_FASTMODE;
+
   /** XMPP stream namespace (RFC 3920) */
   GLOOX_API extern const std::string XMLNS_XMPP_STREAM;
 
@@ -963,9 +966,9 @@ namespace gloox
     std::string issuer;             /**< The name of the issuing entity.*/
     std::string server;             /**< The server the certificate has been issued for. */
     int date_from;                  /**< The date from which onwards the certificate is valid
-                                     * (in UTC, not set when using OpenSSL). */
+                                     * (UNIX timestamp; UTC; not set when using OpenSSL). */
     int date_to;                    /**< The date up to which the certificate is valid
-                                     * (in UTC, not set when using OpenSSL). */
+                                     * (UNIX timestamp; UTC; not set when using OpenSSL). */
     std::string protocol;           /**< The encryption protocol used for the connection. */
     std::string cipher;             /**< The cipher used for the connection. */
     std::string mac;                /**< The MAC used for the connection. */
@@ -1026,10 +1029,11 @@ namespace gloox
     LogAreaClassComponent             = 0x00010, /**< Log messages from Component. */
     LogAreaClassDns                   = 0x00020, /**< Log messages from DNS. */
     LogAreaClassConnectionHTTPProxy   = 0x00040, /**< Log messages from ConnectionHTTPProxy */
-    LogAreaClassConnectionSOCKS5Proxy = 0x00080, /**< Log messages from ConnectionHTTPProxy */
+    LogAreaClassConnectionSOCKS5Proxy = 0x00080, /**< Log messages from ConnectionSOCKS5Proxy */
     LogAreaClassConnectionTCPClient   = 0x00100, /**< Log messages from ConnectionTCPClient. */
     LogAreaClassConnectionTCPServer   = 0x00200, /**< Log messages from ConnectionTCPServer. */
-    LogAreaAllClasses                 = 0x01FFF, /**< All log messages from all the classes. */
+    LogAreaClassSOCKS5Bytestream      = 0x00400, /**< Log messages from SOCKS5Bytestream. */
+    LogAreaAllClasses                 = 0x01FFF, /**< Log messages from all the classes. */
     LogAreaXmlIncoming                = 0x02000, /**< Incoming XML. */
     LogAreaXmlOutgoing                = 0x04000, /**< Outgoing XML. */
     LogAreaUser                       = 0x80000, /**< User-defined sources. */
