@@ -74,6 +74,7 @@ namespace gloox
   const std::string XMLNS_MUC_REQUEST       = "http://jabber.org/protocol/muc#request";
 
   const std::string XMLNS_CAPS              = "http://jabber.org/protocol/caps";
+  const std::string XMLNS_FT_FASTMODE       = "http://affinix.com/jabber/stream";
 
   const std::string XMLNS_XMPP_STREAM       = "urn:ietf:params:xml:ns:xmpp-streams";
   const std::string XMLNS_XMPP_STANZAS      = "urn:ietf:params:xml:ns:xmpp-stanzas";
