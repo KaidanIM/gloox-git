@@ -89,7 +89,7 @@ namespace gloox
        * @param name The field's name (the value of the 'var' attribute).
        * @param value The field's value.
        * @param label The field's label.
-       * @since 1.0
+       * @since 0.9.4
        */
       DataFormField* addField( DataFormField::DataFormFieldType type, const std::string& name,
                                const std::string& value = "", const std::string& label = "" )
