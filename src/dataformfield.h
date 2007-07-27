@@ -139,6 +139,15 @@ namespace gloox
       virtual void setOptions( const StringMap& options ) { m_options = options; }
 
       /**
+       * Adds a single option to the list of options.
+       * @param label The label of the option.
+       * @param value The value of the option.
+       * @since 1.0
+       */
+      virtual void addOption( const std::string& label, const std::string& value )
+        { m_options.insert( make_pair( label, value ) ); }
+
+      /**
        * Use this function to determine whether or not this field is required.
        * @return Whether or not this field is required.
        */
@@ -206,7 +215,7 @@ namespace gloox
       virtual void setValues( const StringList& values ) { m_values = values; }
 
       /**
-       * Adds a single value to the list of values. If
+       * Adds a single value to the list of values.
        * @param value The value to add.
        */
       virtual void addValue( const std::string& value ) { m_values.push_back( value ); }

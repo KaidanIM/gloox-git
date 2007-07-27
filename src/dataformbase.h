@@ -84,6 +84,18 @@ namespace gloox
        */
       virtual void addField( DataFormField *field ) { m_fields.push_back( field ); }
 
+      /**
+       * Adds a single new Field and returns a pointer to that field.
+       * @param type The field's type.
+       * @param name The field's name (the value of the 'var' attribute).
+       * @param value The field's value.
+       * @param label The field's label.
+       * @since 1.0
+       */
+      DataFormField* addField( DataFormField::DataFormFieldType type, const std::string& name,
+                               const std::string& value = "", const std::string& label = "" )
+      { m_fields.push_back( new DataFormField( name, value, label, type ) ); return m_fields.back(); }
+
     protected:
       FieldList m_fields;
 
