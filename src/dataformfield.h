@@ -142,7 +142,7 @@ namespace gloox
        * Adds a single option to the list of options.
        * @param label The label of the option.
        * @param value The value of the option.
-       * @since 1.0
+       * @since 0.9.4
        */
       virtual void addOption( const std::string& label, const std::string& value )
         { m_options.insert( make_pair( label, value ) ); }
