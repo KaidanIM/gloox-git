@@ -83,8 +83,6 @@ namespace gloox
       typedef std::map<LogHandler*, LogInfo> LogHandlerMap;
       LogHandlerMap m_logHandlers;
 
-      int m_fileFilter;
-
   };
 
 }

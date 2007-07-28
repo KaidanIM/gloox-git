@@ -18,7 +18,6 @@ namespace gloox
 {
 
   LogSink::LogSink()
-    : m_fileFilter( 0 )
   {
   }
 
