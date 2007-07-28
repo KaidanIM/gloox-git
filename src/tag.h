@@ -46,7 +46,7 @@ namespace gloox
            * Creates a new Attribute from name, value and optional xmlns.
            * @param name The attribute's name.
            * @param value The attribute's value.
-           * @param
+           * @param xmlns The attribute's namespace.
            */
           Attribute( const std::string& name, const std::string& value, const std::string& xmlns = "" )
             : m_name( name ), m_value( value ), m_xmlns( xmlns )
@@ -300,7 +300,7 @@ namespace gloox
        * @return The found Tag, or NULL.
        */
       virtual Tag* findChild( const std::string& name, const std::string& attr,
-                               const std::string& value = "" ) const;
+                              const std::string& value = "" ) const;
 
       /**
        * This function checks whether the Tag has a child element with a given name, and optionally
