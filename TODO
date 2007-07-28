@@ -9,7 +9,7 @@ for 1.0
 - fix/finish XEP-0079 (AMP)
 - check again for conformance to XEP-0085
 - finish XEP-0060 (Publish-Subscribe)
-  - associate/dissaciateNode()
+  - associate/disassociateNode()
   - getDefaultNodeConfig()
   - error handling (ideally using the Error class)
   - subscription request management
@@ -20,17 +20,21 @@ for 1.0
     http://delta.affinix.com/specs/stream.html
   and Failover:
     http://thread.gmane.org/gmane.network.jabber.standards-jig/10468
-- comply with rfc3920bis/rfc3921bis, which icnludes at least:
+- comply with rfc3920bis/rfc3921bis (or current drafts), which icnludes at least:
   - 3.2: nameprep: set UseSTD3ASCIIRules to true
   - support optional binding of multiple resources
   - recognize <unknown-sender/> stanza error for multiple resource binding
   - recognizse <not-modified/> stanza error for future ETags usage
   - check conformance to XEP-0016 (Privacy Lists)
   - look into (removed) acks for presence subscribed, unsubscribe, unsubscribed
+  - handle roster get failures
 - more XPath
   - findCData()
 - unify error recognition (Error class)
 - check serverRaw() use (ClientBase::m_server)
+- ClientBase: Tag queueing?
+- (more) namespaces? e.g. DataForm
+- comply with RFC2831, Section 7.2, i.e. escape SASL-special chars in usernames
 
 
 optional for 1.0:
@@ -47,7 +51,6 @@ optional for 1.0:
 - overhaul all XEP implementations (and note implemented version number)
 - RosterItem::status ::statusMsg for highest prio
 
-- (more) namespaces?
 - move stl/stdlib typedefs to types.h (?)
 - split send()/getID() to clientbasebase (??)
 - XEP-0020 (Feature Negotiation)
