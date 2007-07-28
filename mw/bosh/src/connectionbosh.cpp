@@ -23,6 +23,7 @@
 
 #include <string>
 #include <stdlib.h>
+#include <iostream>
 
 #ifndef _WIN32_WCE
 # include <sstream>
@@ -34,7 +35,7 @@ namespace gloox
   ConnectionBOSH::ConnectionBOSH( ConnectionBase *connection, const LogSink& logInstance, const std::string& boshHost,
                                             const std::string& xmppServer, int xmppPort )
     : ConnectionBase( 0 ), m_connection( connection ),
-      m_logInstance( logInstance ), m_boshHost( boshHost), m_http11( false ), m_path("/http-bind/"), m_handler(NULL),
+      m_logInstance( logInstance ), m_boshHost( boshHost), m_http11( false ), m_path("/JHB/"), m_handler(NULL),
       m_initialStreamSent(false), m_openRequests(0), m_maxOpenRequests(20), m_wait(30), m_hold(2), m_streamRestart(false),
       m_lastRequestTime(0), m_minTimePerRequest(0), m_sendBuffer("")
   {
@@ -56,7 +57,7 @@ namespace gloox
                                             const LogSink& logInstance, const std::string& boshHost,
                                             const std::string& xmppServer, int xmppPort )
     : ConnectionBase( cdh ), m_connection( connection ),
-      m_logInstance( logInstance ), m_boshHost( boshHost ), m_path("/http-bind/"), m_handler(cdh),
+      m_logInstance( logInstance ), m_boshHost( boshHost ), m_path("/JHB/"), m_handler(cdh),
       m_initialStreamSent(false), m_openRequests(0), m_maxOpenRequests(20), m_wait(30), m_hold(2), m_streamRestart(false),
       m_lastRequestTime(0), m_minTimePerRequest(0), m_sendBuffer("")
   {
@@ -158,7 +159,7 @@ namespace gloox
        m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "sent spoofed <stream:stream>");
        m_streamRestart = false;
      }
-      if(m_openRequests < 1 && !m_sid.empty())
+      if(m_openRequests < 1 && !m_sid.empty() && m_bufferHeader.length() <= 0)
       {
         this->send(m_sendBuffer);
         m_sendBuffer = "";
@@ -208,7 +209,7 @@ namespace gloox
         m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "too little time between requests, adding to send buffer");
         return false;
       }
-      printf("\n>>>>> %ld seconds since last empty request <<<<<\n", time(NULL) - m_lastRequestTime);
+      printf("\n>>>>> %d seconds since last empty request <<<<<\n", time(NULL) - m_lastRequestTime);
       m_lastRequestTime = time(NULL);
       m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "sending empty request");
     }
@@ -299,9 +300,9 @@ namespace gloox
       }
     }
     
-    if((long)(m_buffer.length()) >= m_bufferContentLength && !m_buffer.empty()) // We have at least one full response
+    if(m_buffer.length() >= m_bufferContentLength && !m_buffer.empty()) // We have at least one full response
     {
-      printf("Response length is %d but I think it is at least %ld\n", m_buffer.length(), m_bufferContentLength);
+      printf("Response length is %d but I think it is at least %d\n", m_buffer.length(), m_bufferContentLength);
       m_openRequests--;
       printf("Decrementing m_openRequests to %d\n", m_openRequests);
       printf("\n-----------FULL RESPONSE BUFFER---------------\n%s\n---------------END-------------\n", m_buffer.c_str());
@@ -314,7 +315,7 @@ namespace gloox
     }
   }
   
-  void ConnectionBOSH::handleXMLData(const ConnectionBase* /*connection*/, const std::string& data)
+  void ConnectionBOSH::handleXMLData(const ConnectionBase* connection, const std::string& data)
   {
     m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh received XML:\n" + data + "\n");
     m_parser->feed(data);
@@ -370,7 +371,7 @@ namespace gloox
   {
     if(tag->name() == "body")
     {
-      if(tag->hasAttribute("sid"))
+      if(tag->hasAttribute("sid")) // If true, then this is the initial connection response
       {
         m_state = StateConnected;
         m_sid = tag->findAttribute("sid");
@@ -411,7 +412,10 @@ namespace gloox
         if(m_handler)
         {
           m_handler->handleConnect(this);
-          m_handler->handleReceivedData(this, "<?xml version='1.0' ?><stream:stream xmlns:stream='http://etherx.jabber.org/streams' xmlns='jabber:client' version='1.0' from='localhost' id ='" +m_sid+"' xml:lang='en'>");
+          std::string streamout = "<?xml version='1.0' ?><stream:stream xmlns:stream='http://etherx.jabber.org/streams' xmlns='jabber:client' version='1.0' from='localhost' id ='" + ((tag->hasAttribute("authid")) ? tag->findAttribute("authid") : m_sid) +"' xml:lang='en'>";
+          printf("\n\nPassed stream:stream to goox: %s\n", streamout.c_str());
+          std::cout << "s: " << streamout << std::endl;
+          m_handler->handleReceivedData(this, streamout);
         }
       }
       if(tag->hasAttribute("type"))

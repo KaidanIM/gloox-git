@@ -38,7 +38,7 @@ class MessageTest : public MessageSessionHandler, ConnectionListener, LogHandler
     void start()
     {
 
-      JID jid( "mattj2@localhost/gloox/bosh" );
+      JID jid( "mattj2@localhost/bosh" );
       j = new Client( jid, "pumpkin" );
       j->registerConnectionListener( this );
       j->registerMessageSessionHandler( this, 0 );
@@ -78,11 +78,11 @@ class MessageTest : public MessageSessionHandler, ConnectionListener, LogHandler
        // ConnectionBOSH* conn1 = new ConnectionBOSH( j, conn0, j->logInstance(), "doomsong.co.uk", "doomsong.co.uk", 8080);
        // j->setConnectionImpl( conn1 );
        
-       ConnectionTCPClient* conn0 = new ConnectionTCPClient( j->logInstance(), "localhost", 8080 );
+       ConnectionTCPClient* conn0 = new ConnectionTCPClient( j->logInstance(), "localhost", 8180 );
        ConnectionBOSH* conn1 = new ConnectionBOSH( j, conn0, j->logInstance(), "localhost", "localhost");
        j->setConnectionImpl( conn1 );
        
-       j->setForceNonSasl();
+       // j->setForceNonSasl(); // Needed for non XEP-0206 compliant connection managers
        
 
 
