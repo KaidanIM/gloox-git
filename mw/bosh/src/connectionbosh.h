@@ -180,6 +180,7 @@ namespace gloox
       int m_openRequests;
       
       long m_lastRequestTime;
+      bool m_lastResponseEmpty;
       long m_minTimePerRequest;
 
       bool m_http11; // Persistent connections

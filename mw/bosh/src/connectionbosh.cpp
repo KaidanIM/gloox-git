@@ -37,7 +37,7 @@ namespace gloox
     : ConnectionBase( 0 ), m_connection( connection ),
       m_logInstance( logInstance ), m_boshHost( boshHost), m_http11( false ), m_path("/JHB/"), m_handler(NULL),
       m_initialStreamSent(false), m_openRequests(0), m_maxOpenRequests(20), m_wait(30), m_hold(2), m_streamRestart(false),
-      m_lastRequestTime(0), m_minTimePerRequest(0), m_sendBuffer("")
+      m_lastRequestTime(0), m_lastResponseEmpty(false), m_minTimePerRequest(0), m_sendBuffer("")
   {
     m_server = prep::idna( xmppServer );
     m_port = xmppPort;
@@ -59,7 +59,7 @@ namespace gloox
     : ConnectionBase( cdh ), m_connection( connection ),
       m_logInstance( logInstance ), m_boshHost( boshHost ), m_path("/JHB/"), m_handler(cdh),
       m_initialStreamSent(false), m_openRequests(0), m_maxOpenRequests(20), m_wait(30), m_hold(2), m_streamRestart(false),
-      m_lastRequestTime(0), m_minTimePerRequest(0), m_sendBuffer("")
+      m_lastRequestTime(0), m_lastResponseEmpty(false), m_minTimePerRequest(0), m_sendBuffer("")
   {
     m_server = prep::idna( xmppServer );
     m_port = xmppPort;
@@ -426,20 +426,27 @@ namespace gloox
           m_state = StateDisconnected;
           if(m_handler)
             m_handler->handleDisconnect(this, ConnStreamClosed);
+        }
           return;
-        }
       }
-      
       Tag::TagList stanzas = tag->children();
-      Tag::TagList::const_iterator i;
-      for(i = stanzas.begin(); i != stanzas.end(); i++)
-      { 
-        if(m_handler && *i)
-        {
-          m_handler->handleReceivedData(this, (*i)->xml());
-        }
-      };
-     }
+      if(!stanzas.empty())
+      {
+        m_lastResponseEmpty = false;
+        Tag::TagList::const_iterator i;
+        for(i = stanzas.begin(); i != stanzas.end(); i++)
+        {  
+          if(m_handler && *i)
+          {
+            m_handler->handleReceivedData(this, (*i)->xml());
+          }
+        };
+      }
+      else // body element is empty
+      {
+        m_lastResponseEmpty = true;
+      }
+     } // if(tag->name() == "body")
   }
   
 
