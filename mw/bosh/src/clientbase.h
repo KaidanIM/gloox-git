@@ -141,7 +141,14 @@ namespace gloox
        * disabled if there are problems with using it.
        * @param tls Whether to switch TLS usage on or off.
        */
-      void setTls( bool tls ) { m_tls = tls; }
+      GLOOX_DEPRECATED void setTls( bool tls ) { m_tls = (TLSPolicy)tls; }
+
+      /**
+       * Switches usage of TLS on/off (if available). Default: on if available. TLS should only be
+       * disabled if there are problems with using it.
+       * @param tls Whether to switch TLS usage on or off.
+       */
+      void setTls( TLSPolicy tls ) { m_tls = tls; }
 
       /**
        * Switches usage of Stream Compression on/off (if available). Default: on if available. Stream
@@ -188,7 +195,7 @@ namespace gloox
        * Returns whether TLS is currently enabled (not necessarily used).
        * @return The current TLS status.
        */
-      bool tls() const { return m_tls; }
+      bool tls() const { return (bool)m_tls; }
 
       /**
        * Returns whether Stream Compression is currently enabled (not necessarily used).
@@ -651,7 +658,7 @@ namespace gloox
       bool m_authed;
       bool m_block;
       bool m_sasl;
-      bool m_tls;
+      TLSPolicy m_tls;
       int m_port;
 
       int m_availableSaslMechs;
@@ -673,7 +680,6 @@ namespace gloox
       void notifySubscriptionHandlers( Stanza *stanza );
       void notifyTagHandlers( Tag *tag );
       void notifyOnDisconnect( ConnectionError e );
-      void logEvent( const char *data, size_t size, int is_incoming );
       void send( const std::string& xml );
 
       struct TrackStruct

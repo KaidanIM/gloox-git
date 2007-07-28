@@ -1,3 +1,26 @@
+v0.9.4 -- xx yyy 2007
+---------------------
+- ChatStateHandler: make sure to never send the same chat state twice in a row
+- Tag: make ctors explicit
+- ClientBase: added setTls( TLSPolicy ) to allow enforcing of TLS
+- ClientBase: deprecated setTls( bool )
+- conform to XEP-0170 (Recommended Order of Stream Feature Negotiation)
+- ConnectionTCPBase: avoid race condition in cleanup()
+- ConnectionTCPBase: reset byte counters on disconnect
+- DataFormBase: added addField( DataFormFieldType, ... )
+- DataFormField: added addOption( string, string )
+
+
+v0.9.3 -- 18 Jul 2007
+---------------------
+- SOCKS5BytestreamManager: include error child in IQ of type error
+- allow a default value to be set for data form fields of type FieldTypeListSingle (thanks to Roelof Naude)
+- DelayedDelivery: fixed SE type
+- Registration: fixed error handling
+- Parser: disallow ", ' and > again for full XMPP compliance
+- XPath: accept @ in string literals
+
+
 v0.9.2 -- 23 Jun 2007
 ---------------------
 - Parser: accept ' and > in attribute values and cdata
@@ -15,7 +38,6 @@ v0.9.1 -- 20 Jun 2007
 - documentation updates and fixes
 - ClientBase: avoid disconnect loop if TLS failed
 - Client: added Session Creation event
-
 
 
 v0.9 -- 17 Jun 2007

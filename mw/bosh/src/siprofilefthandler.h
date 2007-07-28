@@ -22,6 +22,7 @@ namespace gloox
 {
 
   class JID;
+  class Stanza;
 
   /**
    * @brief An abstract base class to handle file transfer (FT) requests.

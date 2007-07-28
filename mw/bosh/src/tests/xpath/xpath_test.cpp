@@ -9,14 +9,14 @@ int fail = 0;
 
 void printResult( const std::string& name, Tag::TagList& result )
 {
-  printf( ">-- %s ------------------------------------------------\n", name.c_str() );
+  printf( ">-- %s -------------------------------------------\n", name.c_str() );
   int i = 0;
   Tag::TagList::const_iterator it = result.begin();
   for( ; it != result.end(); ++it, ++i )
   {
     printf( "tag #%d: %s\n", i, (*it)->xml().c_str() );
   }
-  printf( "<-- %s ------------------------------------------------\n", name.c_str() );
+  printf( "<-- %s -------------------------------------------\n", name.c_str() );
 }
 
 // void testLexer( const std::string& name )
@@ -735,6 +735,17 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   name = "deepsearch + predicate + literal 1: //bbb[@name='b1']";
   result = aaa->findTagList( "//bbb[@name='b1']" );
+  it = result.begin();
+  if( result.size() != 1 || (*it) != bbb )
+  {
+    ++fail;
+    printResult( name, result );
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+
+  name = "deepsearch + predicate + literal 2: //bbb[@name='test@test2']";
+  bbb->addAttribute( "blah", "test@test2" );
+  result = aaa->findTagList( "//bbb[@blah='test@test2']" );
   it = result.begin();
   if( result.size() != 1 || (*it) != bbb )
   {

@@ -122,6 +122,8 @@ namespace gloox
               m_state = TagOpening;
               break;
             case '"':
+            case '\'':
+            case '>':
 //               cleanup();
 //               return false;
 //               break;

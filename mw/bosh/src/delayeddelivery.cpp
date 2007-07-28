@@ -19,7 +19,7 @@ namespace gloox
 {
 
   DelayedDelivery::DelayedDelivery( const JID& from, const std::string stamp, const std::string& reason )
-    : StanzaExtension( ExtXDelay ), m_from( from ), m_stamp( stamp ), m_reason( reason ), m_valid( false )
+    : StanzaExtension( ExtDelay ), m_from( from ), m_stamp( stamp ), m_reason( reason ), m_valid( false )
   {
     if( !m_stamp.empty() )
       m_valid = true;
