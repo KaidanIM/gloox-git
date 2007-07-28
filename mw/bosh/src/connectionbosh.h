@@ -21,6 +21,7 @@
 #include "parser.h"
 
 #include <string>
+#include <deque>
 
 namespace gloox
 {
@@ -89,6 +90,13 @@ namespace gloox
        */
       virtual ~ConnectionBOSH();
 
+      enum ConnMode
+      {
+        ModeLegacyHTTP             = 0, // HTTP 1.0 connections, closed after receiving a response
+        ModePersistentHTTP        = 1, // HTTP 1.1 connections, re-used after receiving a response
+        ModePipelining                 = 3 // HTTP Pipelining (implies HTTP 1.1) a single connection is used
+      };
+
       // reimplemented from ConnectionBase
       virtual ConnectionError connect();
 
@@ -131,70 +139,63 @@ namespace gloox
       void setServer( const std::string& xmppHost, unsigned short xmppPort = -1 )
         { m_server = xmppHost; m_port = xmppPort; }
   
-      /**
-       * Sets the underlying transport connection. A possibly existing connection will be deleted.
-       * @param connection The ConnectionBase to replace the current connection, if any.
-       */
-      void setConnectionImpl( ConnectionBase* connection );
-
-      /**
-       * Switches usage of HTTP/1.1 on or off.
-       * @param http11 Set this to @b true to connect through a HTTP/1.1-only proxy, or @b false
-       * to use HTTP/1.0. Defaults to HTTP/1.0 which should work with 99.9% of proxies.
-       */
-      void setHTTP11( bool http11 ) { m_http11 = http11; }
-      
-      /**
-       * Sets the path on the server to request
-       * @param path Set this to the path where the BOSH requests should be made to, ie. "/http-bind/".
-       * Defaults to "/" if setPath is not called.
+        /**
+       * Sets the path on the connection manager to request
+       * @param path The path, for example "/http-bind/"
        */
       void setPath( const std::string& path ) { m_path = path; }
         
+      /**
+       * Sets the connection mode
+       * @param mode The connection mode, ConnMode
+       */
+      void setMode(ConnMode mode) { m_connMode = mode; }
+        
       // reimplemented from TagHandler
       virtual void handleTag(Tag* tag);
-
-   private:
+      
+  protected:
       ConnectionBOSH &operator=( const ConnectionBOSH& );
       void handleXMLData(const ConnectionBase* connection, const std::string& data);
+      bool sendRequest(const std::string& xml);
+      bool sendXML(const std::string& data);
       std::string GetHTTPField(const std::string& field);
 
-      ConnectionBase *m_connection;
+      //ConnectionBase *m_connection;
       const LogSink& m_logInstance;
    
       Parser* m_parser; // Used for parsing XML section of responses
-      ConnectionDataHandler* m_handler;
-
+      std::string m_boshHost; // 
       std::string m_path; // The path part of the URL that we need to request
+      ConnectionDataHandler* m_handler; // This is where data will be passed to when received
+
       std::string m_proxyServer;
       std::string m_proxyPort;
-      std::string m_boshHost; // 
-   
+
       // BOSH parameters
       long m_rid;
       std::string m_sid;
-      int m_hold;
-      int m_wait;
-      int m_maxOpenRequests;
-      
-      int m_openRequests;
-      
-      long m_lastRequestTime;
-      bool m_lastResponseEmpty;
-      long m_minTimePerRequest;
-
-      bool m_http11; // Persistent connections
-      bool m_pipelining; // Multiple requests between responses (on a single connection)
-   
-      std::string m_buffer;
-      std::string m_bufferHeader;
-      long m_bufferContentLength;
-      
-      std::string m_sendBuffer;
       
       bool m_initialStreamSent;
+      int m_openRequests;
+      int m_maxOpenRequests;
+      int m_wait;
+      int m_hold;
+ 
       bool m_streamRestart; // Set to true if we are waiting for an acknowledgement of a stream restart
 
+      long m_lastRequestTime;
+      long m_minTimePerRequest;
+      
+      std::string m_buffer; // Buffer of received data
+      std::string m_bufferHeader; // HTTP header of data currently in buffer
+      long m_bufferContentLength; // Length of the data in the current response
+      
+      std::string m_sendBuffer; // Data waiting to be sent
+
+      std::deque<ConnectionBase *> m_activeConnections;
+      std::deque<ConnectionBase *> m_connectionPool;
+      ConnMode m_connMode;
   };
 
 }
