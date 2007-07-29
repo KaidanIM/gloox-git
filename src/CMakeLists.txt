@@ -22,7 +22,6 @@ dataformreported.cpp
 delayeddelivery.cpp
 disco.cpp
 dns.cpp
-entitytime.cpp
 error.cpp
 flexoff.cpp
 gloox.cpp
@@ -56,7 +55,6 @@ registration.cpp
 rosteritem.cpp
 rostermanager.cpp
 search.cpp
-sessionnegotiationfilter.cpp
 sha.cpp
 simanager.cpp
 siprofileft.cpp
