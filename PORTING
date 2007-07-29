@@ -6,3 +6,7 @@ Known Portability Issues
 
 - don't rely on list/map::erase returning the next iterator
 
+- define a template based on a template from an argument (old MSVC++ ?)
+  eg
+    template < typename T >
+    void func( const std::list< T* >& l );
