@@ -90,7 +90,7 @@ namespace gloox
     local.sin_family = AF_INET;
     local.sin_port = htons( m_port );
     local.sin_addr.s_addr = m_server.empty() ? INADDR_ANY : inet_addr( m_server.c_str() );
-    memset( &(local.sin_zero), '\0', 8 );
+    memset( local.sin_zero, '\0', 8 );
 
     if( bind( m_socket, (struct sockaddr*)&local, sizeof( struct sockaddr ) ) < 0 )
       return ConnIoError;
