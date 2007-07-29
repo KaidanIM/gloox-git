@@ -15,16 +15,15 @@
 #include "dataform.h"
 #include "message.h"
 #include "iq.h"
-#include "psaffiliationlisthandler.h"
-#include "pssubscriptionhandler.h"
-#include "pssubscriptionlisthandler.h"
-#include "pubsubeventhandler.h"
-#include "pubsubitemhandler.h"
-#include "pubsubnodehandler.h"
 #include "pubsub.h"
+#include "pubsubeventhandler.h"
+#include "pubsubservicehandler.h"
+#include "pubsubnodehandler.h"
+#include "pubsubitemhandler.h"
 #include "pubsubdiscohandler.h"
 #include "disco.h"
 #include "util.h"
+#include "error.h"
 
 #include <iostream>
 
@@ -211,7 +210,7 @@ namespace gloox
             {
               Tag * nodet = (*it)->findChild( "node" );
               Tag * df = (*it)->findChild( "x" );
-              DataForm * form = df ? new DataForm( df ) : 0;
+              DataForm form( df );
               const std::string& node = (*it)->findAttribute( "node" );
               (*ith)->handleNodeCreation( service, node, form );
               break;
@@ -219,7 +218,7 @@ namespace gloox
             case EventConfigure:
             {
               Tag * df = (*it)->findChild( "x" );
-              DataForm * form = df ? new DataForm( df ) : 0;
+              DataForm form( df );
               const std::string& node = (*it)->findAttribute( "node" );
               (*ith)->handleConfigurationChange( service, node, form );
               break;
@@ -373,9 +372,9 @@ namespace gloox
       m_parent->send( iq );
     }
 
-    void Manager::requestSubscriptionList( const JID& service, SubscriptionListHandler * slh )
+    void Manager::requestSubscriptionList( const JID& service, ServiceHandler * handler )
     {
-      if( !m_parent || !slh )
+      if( !m_parent || !handler )
         return;
 
       const std::string& id = m_parent->getID();
@@ -383,13 +382,13 @@ namespace gloox
       new Tag( iq->query(), "subscriptions" );
 
       m_parent->trackID( this, id, RequestSubscriptionList );
-      m_subListTrackMap[id] = slh;
+      m_serviceHandlerTrackMap[id] = handler;
       m_parent->send( iq );
     }
 
-    void Manager::requestAffiliationList( const JID& service, AffiliationListHandler * alh )
+    void Manager::requestAffiliationList( const JID& service, ServiceHandler * handler )
     {
-      if( !m_parent || !alh  )
+      if( !m_parent || !handler  )
         return;
 
       const std::string& id = m_parent->getID();
@@ -397,7 +396,7 @@ namespace gloox
       new Tag( iq->query(), "affiliations" );
 
       m_parent->trackID( this, id, RequestAffiliationList );
-      m_affListTrackMap[id] = alh;
+      m_serviceHandlerTrackMap[id] = handler;
       m_parent->send( iq );
     }
 
@@ -418,24 +417,18 @@ namespace gloox
       {
         Tag * options = new Tag( ps, "options" );
         DataForm df( DataForm::FormTypeSubmit );
-        DataFormField *field = new DataFormField( DataFormField::FieldTypeHidden );
-        field->setName( "FORM_TYPE" );
-        field->setValue( XMLNS_PUBSUB_SUBSCRIBE_OPTIONS );
-        df.addField( field );
+        df.addField( DataFormField::FieldTypeHidden, "FORM_TYPE", XMLNS_PUBSUB_SUBSCRIBE_OPTIONS );
 
         if( type == SubscriptionItems )
-          df.addField( new DataFormField( "pubsub#subscription_type", "items", "",
-                       DataFormField::FieldTypeNone ) );
+          df.addField( DataFormField::FieldTypeNone, "pubsub#subscription_type", "items" );
 
         if( depth != 1 )
         {
-          field = new DataFormField( DataFormField::FieldTypeNone );
-          field->setName( "pubsub#subscription_depth" );
+          DataFormField * field = df.addField( DataFormField::FieldTypeNone, "pubsub#subscription_depth" );
           if( depth == 0 )
             field->setValue( "all" );
           //else
           //  field->setValue( depth );
-          df.addField( field );
         }
         options->addChild( df.tag() );
       }
@@ -525,30 +518,26 @@ namespace gloox
       if( !parent.empty() || config || type == NodeCollection || access != AccessDefault )
       {
         DataForm df( DataForm::FormTypeSubmit );
-        DataFormField *field = new DataFormField( "FORM_TYPE", XMLNS_PUBSUB_NODE_CONFIG,
-                                                  "", DataFormField::FieldTypeHidden );
-        df.addField( field );
+        df.addField( DataFormField::FieldTypeHidden, "FORM_TYPE", XMLNS_PUBSUB_NODE_CONFIG );
 
         if( !parent.empty() )
-          df.addField( new DataFormField( "pubsub#collection", parent, "", DataFormField::FieldTypeNone ) );
+          df.addField( DataFormField::FieldTypeNone, "pubsub#collection", parent );
 
         if( !name.empty() )
-          df.addField( new DataFormField( "pubsub#title", name, "", DataFormField::FieldTypeNone ) );
+          df.addField( DataFormField::FieldTypeNone, "pubsub#title", name );
 
         if( type == NodeCollection )
-          df.addField( new DataFormField( "pubsub#node_type", "collection", "",
-                       DataFormField::FieldTypeNone ) );
+          df.addField( DataFormField::FieldTypeNone, "pubsub#node_type", "collection" );
 
         if( access != AccessDefault )
-          df.addField( new DataFormField( "pubsub#access_model",
-                            util::lookup( access, accessValues ), "",
-                                           DataFormField::FieldTypeNone ) );
+          df.addField( DataFormField::FieldTypeNone, "pubsub#access_model",
+                            util::lookup( access, accessValues ) );
 
         if( config )
         {
           StringMap::const_iterator it = config->begin();
           for( ; it != config->end(); ++it )
-            df.addField( new DataFormField( (*it).first, (*it).first, "", DataFormField::FieldTypeNone ) );
+            df.addField( DataFormField::FieldTypeNone, (*it).first, (*it).first );
         }
         configure->addChild( df.tag() );
       }
@@ -559,9 +548,9 @@ namespace gloox
       m_parent->send( iq );
     }
 
-    void Manager::deleteNode( const JID& service, const std::string& nodeid )
+    void Manager::deleteNode( const JID& service, const std::string& nodeid, NodeHandler* handler )
     {
-      if( !m_parent )
+      if( !m_parent || !handler )
         return;
 
       const std::string& id = m_parent->getID();
@@ -570,21 +559,27 @@ namespace gloox
 
       m_parent->trackID( this, id, DeleteNode );
       m_nopTrackMap[id] = nodeid;
+      m_nodeHandlerTrackMap[id] = handler;
       m_parent->send( iq );
     }
-/*
-    void Manager::getDefaultNodeConfig( const JID& service, const std::string& nodeid )
+
+    void Manager::getDefaultNodeConfig( const JID& service, NodeType type, ServiceHandler * handler )
     {
       const std::string& id = m_parent->getID();
-      IQ* iq = new IQ( IQ::Set, service, id, XMLNS_PUBSUB, "pubsub" );
-      Tag * create = new Tag( iq->query(), "default" );
-      if( !nodeid.empty() )
-        create->addAttribute( "node", nodeid );
-      m_parent->trackID( this, id, RequestConfig );
-      m_nopTrackMap[id] = make_pair( service, nodeid );
+      IQ* iq = new IQ( IQ::Set, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
+      Tag* def = new Tag( iq->query(), "default" );
+      if( type == NodeCollection )
+      {
+        DataForm df( DataForm::FormTypeSubmit );
+        df.addField( DataFormField::FieldTypeHidden, "FORM_TYPE", XMLNS_PUBSUB_NODE_CONFIG );
+        df.addField( DataFormField::FieldTypeNone, "pubsub#node_type", "collection" );
+        def->addChild( df.tag() );
+      }
+
+      m_parent->trackID( this, id, RequestDefaultConfig );
+      m_serviceHandlerTrackMap[id] = handler;
       m_parent->send( iq );
     }
-*/
 
     void Manager::nodeConfig( const JID& service, const std::string& node,
                               const DataForm * config, NodeHandler * handler )
@@ -691,12 +686,15 @@ namespace gloox
     }
 
     /**
-     * @bug Unsubscription does not retrieve the correct node id (needs a tracking map).
+     * @todo Unsubscription does not retrieve the correct node id (needs a tracking map).
+     * 
      */
     void Manager::handleIqID( IQ* iq, int context )
     {
       const JID& service = iq->from();
+      const Tag * query = iq->query();
       const std::string& id = iq->id();
+      const Error error( iq->findChild( "error" ) );
 
       switch( iq->subtype() )
       {
@@ -706,35 +704,36 @@ namespace gloox
           {
             case Subscription:
             {
-              Tag *ps = iq->findChild( "pubsub", XMLNS, XMLNS_PUBSUB );
-              if( !ps )
-                break;
-
-              Tag *sub = ps->findChild( "subscription" );
+              Tag *sub = query->findChild( "subscription" );
               if( sub )
               {
                 const std::string& node = sub->findAttribute( "node" ),
                                    sid  = sub->findAttribute( "subid" ),
                                    jid  = sub->findAttribute( "jid" );
                 SubscriptionType subType = subscriptionType( sub->findAttribute( "subsciption" ) );
-                SubscriptionTrackList::iterator it = m_subscriptionTrackList.begin();
-                for( ; it != m_subscriptionTrackList.end(); ++it )
-                  (*it)->handleSubscriptionResult( service, node, sid, subType, SubscriptionErrorNone );
+                NodeHandlerTrackMap::iterator it = m_nodeHandlerTrackMap.find( id );
+                if( it != m_nodeHandlerTrackMap.end() )
+                {
+                  (*it).second->handleSubscriptionResult( service, node, sid, subType, /*SubscriptionErrorNone,*/ error );
+                  m_nodeHandlerTrackMap.erase( it );
+                }
               }
               break;
             }
             case Unsubscription:
             {
-              SubscriptionTrackList::iterator it = m_subscriptionTrackList.begin();
-              //for( ; it != m_subscriptionTrackList.end(); ++it )
-              //  (*it)->handleUnsubscriptionResult( service, jid, UnsubscriptionErrorNone );
+              //NodeHandlerTrackMap::iterator it = m_nodeHandlerTrackMap.find( id );
+              //if( it != m_nodeHandlerTrackMap.end() )
+              //{
+              //  (*it).second->handleSubscription( service, node, sid, subType, SubscriptionErrorNone );
+              //  m_nodeHandlerTrackMap.remove( it );
+              //}
               break;
             }
             case RequestSubscriptionList:
             {
-              SubscriptionListTrackMap::iterator ith = m_subListTrackMap.find( iq->id() );
-              Tag *ps = iq->findChild( "pubsub", XMLNS, XMLNS_PUBSUB );
-              Tag *subscription = ps->findChild( "subscriptions" );
+              ServiceHandlerTrackMap::iterator ith = m_serviceHandlerTrackMap.find( iq->id() );
+              Tag *subscription = query->findChild( "subscriptions" );
               if( subscription )
               {
                 SubscriptionMap subMap;
@@ -745,16 +744,15 @@ namespace gloox
                                      sub  = (*it)->findAttribute( "subscription" );
                   subMap[node] = subscriptionType( sub );
                 }
-                (*ith).second->handleSubscriptionListResult( service, subMap );
-                m_subListTrackMap.erase( ith );
+                (*ith).second->handleSubscriptionListResult( service, &subMap, error );
+                m_serviceHandlerTrackMap.erase( ith );
               }
               break;
             }
             case RequestAffiliationList:
             {
-              AffiliationListTrackMap::iterator ith = m_affListTrackMap.find( iq->id() );
-              Tag *ps = iq->findChild( "pubsub", XMLNS, XMLNS_PUBSUB );
-              Tag *affiliations = ps->findChild( "affiliations" );
+              ServiceHandlerTrackMap::iterator ith = m_serviceHandlerTrackMap.find( iq->id() );
+              Tag *affiliations = query->findChild( "affiliations" );
               if( affiliations )
               {
                 AffiliationMap affMap;
@@ -767,8 +765,8 @@ namespace gloox
                     return;
                   affMap[node] = affiliationType( aff );
                 }
-                (*ith).second->handleAffiliationListResult( iq->from(), affMap );
-                m_affListTrackMap.erase( ith );
+                (*ith).second->handleAffiliationListResult( iq->from(), &affMap, error );
+                m_serviceHandlerTrackMap.erase( ith );
               }
               break;
             }
@@ -788,19 +786,17 @@ namespace gloox
               {
                 case RequestSubscriptionOptions:
                 {
-                  Tag *ps = iq->findChild( "pubsub", XMLNS, XMLNS_PUBSUB );
-                  Tag *options = ps->findChild( "options" );
+                  Tag *options = query->findChild( "options" );
                   Tag * x = options->findChild( "x" );
                   const DataForm df( x );
                   (*ith).second->handleSubscriptionOptions( iq->from(),
-                                         options->findAttribute( "jid" ),
-                                         options->findAttribute( "node" ), df );
+                                         JID( options->findAttribute( "jid" ) ),
+                                         options->findAttribute( "node" ), df, error );
                   break;
                 }
                 case RequestSubscriberList:
                 {
-                  Tag * ps = iq->findChild( "pubsub", XMLNS, XMLNS_PUBSUB_OWNER );
-                  Tag * subt = ps->findChild( "subscriptions" );
+                  Tag * subt = query->findChild( "subscriptions" );
                   SubscriberList list;
                   const Tag::TagList& subs = subt->children();
                   Tag::TagList::const_iterator it = subs.begin();
@@ -811,7 +807,7 @@ namespace gloox
                     const std::string& subid = (*it)->findAttribute( "subid" );
                     list.push_back( Subscriber( jid, subscriptionType( sub ), subid ) );
                   }
-                  (*ith).second->handleSubscriberList( service, subt->findAttribute( "node" ), list );
+                  (*ith).second->handleSubscriberList( service, subt->findAttribute( "node" ), list, error );
                   break;
                 }
                 case SetSubscriptionOptions:
@@ -829,25 +825,25 @@ namespace gloox
                     switch( context )
                     {
                       case SetSubscriptionOptions:
-                        (*ith).second->handleSubscriptionOptionsResult( service, node );
+                        (*ith).second->handleSubscriptionOptionsResult( service, JID(  ), node, error );
                         break;
                       case SetSubscriberList:
-                        (*ith).second->handleSubscriberListResult( service, node );
+                        (*ith).second->handleSubscriberListResult( service, node, error );
                         break;
                       case SetAffiliateList:
-                        (*ith).second->handleAffiliateListResult( service, node );
+                        (*ith).second->handleAffiliateListResult( service, node, error );
                         break;
                       case SetNodeConfig:
-                        (*ith).second->handleNodeConfigResult( service, node );
+                        (*ith).second->handleNodeConfigResult( service, node, error );
                         break;
                       case CreateNode:
-                        (*ith).second->handleNodeCreationResult( service, node );
+                        (*ith).second->handleNodeCreationResult( service, node, error );
                         break;
                       case DeleteNode:
-                        (*ith).second->handleNodeDeletationResult( service, node );
+                        (*ith).second->handleNodeDeletationResult( service, node, error );
                         break;
                       case PurgeNodeItems:
-                        (*ith).second->handleNodePurgeResult( service, node );
+                        (*ith).second->handleNodePurgeResult( service, node, error );
                         break;
                     }
                     m_nopTrackMap.erase( it );
@@ -861,7 +857,6 @@ namespace gloox
                 }
                 case RequestNodeConfig:
                 {
-
                   break;
                 }
                 default:
@@ -887,7 +882,7 @@ namespace gloox
             {
               Tag *ps = iq->findChild( "pubsub", XMLNS, XMLNS_PUBSUB );
               Tag *options = ps->findChild( "configure" );
-              Tag * x = options->findChild( "x" );
+              Tag * x = options->findChild( X );
               const DataForm * df = x ? new DataForm( x ) : 0;
               //handleNodeConfiguration( iq->from(), options->findAttribute("node"), df, OptionRequestErrorNone );
             }
@@ -896,10 +891,7 @@ namespace gloox
             }*/
             case RequestItemList:
             {
-              Tag *ps = iq->findChild( "pubsub", XMLNS, XMLNS_PUBSUB_EVENT );
-              if( !ps )
-                break;
-              Tag *items = ps->findChild( "items" );
+              Tag *items = query->findChild( "items" );
               if( !items )
                 break;
 

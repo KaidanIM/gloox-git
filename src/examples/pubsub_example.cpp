@@ -26,7 +26,7 @@ using namespace gloox;
 #if defined( WIN32 ) || defined( _WIN32 )
 # include <windows.h>
 #endif
-
+/*
 class PubsubExample : public MessageSessionHandler, ConnectionListener, LogHandler,
                     MessageEventHandler, MessageHandler, ChatStateHandler, PubSub::NodeHandler
 {
@@ -102,7 +102,7 @@ class PubsubExample : public MessageSessionHandler, ConnectionListener, LogHandl
       return true;
     }
 
-    virtual void handleMessage( Message* msg, MessageSession * /*session*/ )
+    virtual void handleMessage( Message* msg, MessageSession * session )
     {
       if( msg->body() == "quit" )
         j->disconnect();
@@ -139,19 +139,19 @@ class PubsubExample : public MessageSessionHandler, ConnectionListener, LogHandl
     }
 
     virtual void handleNodeCreationResult( const JID& service,
-                                            const std::string& node/*,
-                                            const Error& e*/ )
+                                            const std::string& node,
+                                            const Error& e )
     {
       printf( "created node '%s' on '%s'\n", node.c_str(), service.bare().c_str() );
     }
 
     virtual void handleNodeDeletationResult( const JID& service,
-                                              const std::string& node/*,
-                                              const Error& e*/ ) {}
+                                              const std::string& node,
+                                              const Error& e ) {}
 
     virtual void handleNodePurgeResult( const JID& service,
-                                        const std::string& node/*,
-                                        const Error& e*/ ) {}
+                                        const std::string& node,
+                                        const Error& e ) {}
 
     virtual void handleSubscriptionOptions( const JID& service, const JID& jid,
                                             const std::string& node,
@@ -159,26 +159,26 @@ class PubsubExample : public MessageSessionHandler, ConnectionListener, LogHandl
 
     virtual void handleSubscriptionOptionsResult( const JID& service,
                                                   //const JID& jid,
-                                                  const std::string& node/*,
-                                                  const Error& e*/ ) {}
+                                                  const std::string& node,
+                                                  const Error& e ) {}
 
     virtual void handleSubscriberList( const JID& service, const std::string& node,
                                         const PubSub::SubscriberList& list ) {}
 
-    virtual void handleSubscriberListResult( const JID& service, const std::string& node/*,
-                                              const Error& e*/ ) {}
+    virtual void handleSubscriberListResult( const JID& service, const std::string& node,
+                                              const Error& e ) {}
 
     virtual void handleAffiliateList( const JID& service, const std::string& node,
                                       const PubSub::AffiliateList& list ) {}
 
-    virtual void handleAffiliateListResult( const JID& service, const std::string& node/*,
-                                            const Error& e*/ ) {}
+    virtual void handleAffiliateListResult( const JID& service, const std::string& node,
+                                            const Error& e ) {}
 
     virtual void handleNodeConfig( const JID& service, const std::string& node,
                                     const DataForm& config ) {}
 
-    virtual void handleNodeConfigResult( const JID& service, const std::string& node/*,
-                                          const Error& e*/ ) {}
+    virtual void handleNodeConfigResult( const JID& service, const std::string& node,
+                                          const Error& e ) {}
 
   private:
     Client *j;
@@ -187,11 +187,11 @@ class PubsubExample : public MessageSessionHandler, ConnectionListener, LogHandl
     ChatStateFilter *m_chatStateFilter;
     PubSub::Manager *pubsub;
 };
-
+*/
 int main( int /*argc*/, char** /*argv*/ )
 {
-  PubsubExample *r = new PubsubExample();
-  r->start();
-  delete( r );
+  //PubsubExample *r = new PubsubExample();
+  //r->start();
+  //delete( r );
   return 0;
 }

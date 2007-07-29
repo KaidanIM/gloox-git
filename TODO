@@ -10,8 +10,7 @@ for 1.0
 - check again for conformance to XEP-0085
 - finish XEP-0060 (Publish-Subscribe)
   - associate/disassociateNode()
-  - getDefaultNodeConfig()
-  - error handling (ideally using the Error class)
+  - error handling
   - subscription request management
   - documentation (examples, tests)
   - check naming convention / API
