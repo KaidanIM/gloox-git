@@ -499,7 +499,7 @@ namespace gloox
         size_t r_pos = decoded.find( "realm=" );
         if( r_pos != std::string::npos )
         {
-          size_t r_end = decoded.find( "\"", r_pos + 7 );
+          size_t r_end = decoded.find( '"', r_pos + 7 );
           realm = decoded.substr( r_pos + 7, r_end - (r_pos + 7 ) );
         }
         else
@@ -511,9 +511,9 @@ namespace gloox
           return;
         }
 
-        size_t n_end = decoded.find( "\"", n_pos + 7 );
+        size_t n_end = decoded.find( '"', n_pos + 7 );
         while( decoded.substr( n_end-1, 1 ) == "\\" )
-          n_end = decoded.find( "\"", n_end + 1 );
+          n_end = decoded.find( '"', n_end + 1 );
         std::string nonce = decoded.substr( n_pos + 7, n_end - ( n_pos + 7 ) );
 
         std::string cnonce;
@@ -707,7 +707,7 @@ namespace gloox
     int minor = 0;
     int myMajor = atoi( XMPP_STREAM_VERSION_MAJOR.c_str() );
 
-    size_t dot = version.find( "." );
+    size_t dot = version.find( '.' );
     if( !version.empty() && dot && dot != std::string::npos )
     {
       major = atoi( version.substr( 0, dot ).c_str() );
