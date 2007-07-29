@@ -31,39 +31,137 @@ namespace gloox
   namespace PubSub
   {
 
-    class SubscriptionHandler;
-    class SubscriptionListHandler;
-    class AffiliationListHandler;
+    class ServiceHandler;
     class NodeHandler;
     class ItemHandler;
     class DiscoHandler;
     class EventHandler;
 
     /**
-     * @brief This manager is used to interact with PubSub services.
+     * @brief This manager is used to interact with PubSub services:
+     * - @ref discovery_sec <br>
+     * - @ref eventhandler_sec <br>
+     * - @ref nodeoperations_sec <br>
+     * - @ref itemoperations_sec <br>
+     * - @ref subaff_sec <br>
+     *   - @ref manageownsub_sec <br>
+     *   - @ref managenodesub_sec <br>
      *
+     * @section discovery_sec Browsing a service
      *
+     * A wrapper for Disco queries on PubSub services is available from the Manager.
+     * PubSub Disco queries use PubSub::DiscoHandler for tracking and notification.
+     * Here's an example:
+     * 
      * @code
-     * class MyClient : public Client
+     *
+     * class MyPSDiscoHandler : public PubSub::DiscoHandler
      * {
-     *   public:
-     *     MyClient( ... ) : Client( ... )
-     *     {
-     *       m_psManager->registerSubscriptionHandler( new MySubscriptionHandler() );
-     *       m_psManager->registerSubscriptionListHandler( new MySubscriptionListHandler() );
-     *       m_psManager->registerAffiliationListHandler( new MySubscriptionHandler() );
-     *       m_psManager->registerNodeHandler( new MyNodeHandler() );
-     *       m_psManager->registerItemHandler( new MyItemHandler() );
-     *     }
-     *
-     *     void requestItemList( const std::string& service, const std::string nodeid )
-     *       { m_psManager->requestItemList( service, nodeid ); }
-     *
-     *   private:
-     *     PubSub::Manager* m_pubsubManager;
+     *    public:
+     *      void handleServiceInfoResult( const gloox::JID& service, int features );
+     *      void handleNodeItemDiscovery( const gloox::JID& service,
+     *                                    const std::string& parent,
+     *                                    const gloox::DiscoNodeItemList& children );
+     *      // ...
      * };
      *
      * @endcode
+     *
+     * Then pass this handler to PubSub Disco queries.
+     *
+     * @code
+     *
+     * psManager->discoverServiceInfos( service, psDiscoHandler );
+     * psManager->discoverNodeInfos( service, nodeid, psDiscoHandler );
+     * psManager->discoverNodeItems( service, nodeid, psDiscoHandler );
+     *
+     * @endcode
+     *
+     * Alternatively, you can also use a regular gloox::DiscoHandler.
+     *
+     * @section eventhandler_sec Event notifications
+     *
+     * PubSub event notifications are received using EventHandler. By definition,
+     * many PubSub queries (IQ set queries) will both trigger a notification from
+     * registered EventHandler's and from the handler specific to the query (see below).
+     * Register one (or more) with a manager to receive event notifications (using
+     * Manager::registerEventHandler). So that 
+     *
+     * @code
+     *
+     * psManager->deleteNode( service, nodeid, nodeHandler );
+     *
+     * @endcode
+     *
+     * would then trigger EventHandler::handleNodeRemoval (if successfull).
+     *
+     * @section nodeoperations_sec Node operations
+     *
+     * Node related operations (creation, configuration, items listing, etc) takes
+     * an additional NodeHandler argument. Each one of these requests will then look
+     * like
+     *
+     * @code
+     *
+     * psManager->someNodeOperation( service, nodeid, ..., nodeHandler );
+     *
+     * @endcode
+     *
+     * @section itemoperations_sec Item operations
+     *
+     * As for the @ref nodeoperations_sec, item related operations require an
+     * ItemHandler. They also generally (but not always) require an additionnal
+     * argument: the item ID inside it's parent Node.
+     *
+     * @code
+     *
+     * psManager->someItemOperation( service, nodeid, itemid, ..., itemHandler );
+     *
+     * @endcode
+     *
+     * @section subaff_sec Subscriptions and affiliations
+     *
+     * @subsection manageownsub_sec Retrieve your subscriptions and affiliations
+     *
+     * PubSub services should allow an entity to retrieve the list of subscriptions
+     * and affiliations.
+     *
+     * @code
+     *
+     * psManager->requestSubscriptionList( service, node );
+     * psManager->requestAffiliationList ( service, node );
+     *
+     * @endcode
+     *
+     *
+     * @subsection managenodesub_sec Manage a node's subscriptions and affiliations
+     *
+     * If a PubSub service supports it, the owner of a node may retrieve and 
+     * modify subscriptions and affiliations for a particular node.
+     *
+     * To require a node's subscription/affiliation list, use:
+     *
+     * @code
+     *
+     * psManager->requestSubscriberList( service, node );
+     * psManager->requestAffiliateList ( service, node );
+     *
+     * @endcode
+     *
+     * If willing to modify a list send either a SubscriptionList or AffiliationList
+     * (containing ONLY the values that should be changed) as follows:
+     *
+     * @code
+     *
+     * psManager->setSubscriptionList( service, node, subList );
+     * psManager->setAffiliationList ( service, node, affList );
+     *
+     * @endcode
+     *
+     *
+     * @subsection managesub_sec Manage subscription requests
+     *
+     * NOT YET IMPLEMENTED
      *
      * @author Vincent Thomasset
      *
@@ -84,39 +182,42 @@ namespace gloox
          */
         virtual ~Manager() {}
 
+private:
         /**
          * Performs a Disco query to a service or node.
          * @param service Service to query.
-         * @param nodeid ID of the node to query. If empty, the root node will be queried.
+         * @param node ID of the node to query. If empty, the service will be queried.
+         * @param handler DiscoHandler to notify when receiving a response.
          */
         void discoverInfos( const JID& service, const std::string& node, PubSub::DiscoHandler *handler );
 
+public:
         /**
-         * Performs a Disco query to a service or node.
+         * Performs a Disco query to a service.
          * @param service Service to query.
-         * @param nodeid ID of the node to query. If empty, the root node will be queried.
          * @param handler DiscoHandler to notify when receiving a response
          */
         void discoverServiceInfos( const JID& service, PubSub::DiscoHandler *handler )
           { discoverInfos( service, "", handler ); }
 
         /**
-         * Performs a Disco query to a service or node.
-         * @param service Service to query.
-         * @param nodeid ID of the node to query. If empty, the root node will be queried.
+         * Performs a Disco query to a node.
+         * @param service Service hosting the node to query.
+         * @param node ID of the node to query. If empty, the root node will be queried.
          * @param handler DiscoHandler to notify when receiving a response
          */
-        void discoverNodeInfos( const JID& service, const std::string& node, PubSub::DiscoHandler *handler )
+        void discoverNodeInfos( const JID& service, const std::string& node,
+                                PubSub::DiscoHandler *handler )
           { discoverInfos( service, node, handler ); }
 
         /**
          * Ask for the list children of a node.
          * @param service Service hosting the node.
-         * @param nodeid ID of the node to ask for subnodes. If empty, the root node
+         * @param node ID of the node to ask for subnodes. If empty, the root node
          * will be queried.
          * @param handler DiscoHandler to notify when receiving a response
          */
-        void discoverNodeItems( const JID& service, const std::string& nodeid,
+        void discoverNodeItems( const JID& service, const std::string& node,
                                 PubSub::DiscoHandler *handler );
 
         /**
@@ -137,6 +238,7 @@ namespace gloox
          * Unsubscribe from a node.
          * @param service Service hosting the node.
          * @param node ID of the node to unsubscribe from.
+         * @param handler NodeHandler receiving the result notification.
          */
         void unsubscribe( const JID& service, const std::string& node,
                                               NodeHandler* handler );
@@ -144,16 +246,16 @@ namespace gloox
         /**
          * Requests the subscription list from a service.
          * @param service Service to query.
-         * @param slh The SubscriptionListHandler to handle the result.
+         * @param handler The ServiceHandler to handle the result.
          */
-        void requestSubscriptionList( const JID& service, SubscriptionListHandler *slh  );
+        void requestSubscriptionList( const JID& service, ServiceHandler* handler );
 
         /**
          * Requests the affiliation list from a service.
          * @param service Service to query.
-         * @param alh The AffiliationListHandler to handle the result.
+         * @param handler The ServiceHandler to handle the result.
          */
-        void requestAffiliationList( const JID& service, AffiliationListHandler *alh );
+        void requestAffiliationList( const JID& service, ServiceHandler* handler );
 
         /**
          * Requests subscription options.
@@ -164,7 +266,7 @@ namespace gloox
          * @param slh The SubscriptionListHandler to handle the result.
          */
         void requestSubscriptionOptions( const JID& service, const JID& jid,
-                                         const std::string& node, NodeHandler *slh  );
+                                         const std::string& node, NodeHandler * );
 
         /**
          * Modifies subscription options.
@@ -174,17 +276,18 @@ namespace gloox
          * @param df New configuration.
          */
         void setSubscriptionOptions( const JID& service, const JID& jid,
-                                     const std::string& node, const DataForm& df );
+                                     const std::string& node, const DataForm& df,
+                                     const NodeHandler* handler );
 
         /**
          * Requests the affiliation list for a node.
          * @param service Service to query.
          * @param node Node ID of the node.
-         * @param alh The AffiliationListHandler to handle the result.
+         * @param handler The AffiliationListHandler to handle the result.
          */
         void requestAffiliationList( const JID& service,
                                      const std::string& node,
-                                     AffiliationListHandler *alh );
+                                     ServiceHandler* handler );
 
         /**
          * Publish an item to a node.
@@ -228,13 +331,13 @@ namespace gloox
          * the service.
          * @param access The node's access model.
          * @param config A map of further node configuration options. The keys of the map should be in
-         * the form of 'pubsub#name', where 'name' is a valid pubsub option. It is not necessary to
-         * include an access model config option. Use the @c access parameter instead.
+         * the form of 'pubsub#name', where 'name' is a valid pubsub option. Do not use this map to
+         * include an access model config option, use the @c access parameter instead.
          */
         void createNode( NodeType type, const JID& service,
                                         const std::string& node,
                                         NodeHandler* handler,
-                                        const std::string& name,
+                                        const std::string& name = "",
                                         const std::string& parent = "",
                                         AccessModel access = AccessDefault,
                                         const StringMap* config = 0 );
@@ -248,8 +351,8 @@ namespace gloox
          * the service.
          * @param access The node's access model.
          * @param config A map of further node configuration options. The keys of the map should be in
-         * the form of 'pubsub#name', where 'name' is a valid pubsub option. It is not necessary to
-         * include an access model config option. Use the @c access parameter instead.
+         * the form of 'pubsub#name', where 'name' is a valid pubsub option. Do not use this map to
+         * include an access model config option, use the @c access parameter instead.
          */
         void createLeafNode( const JID& service,
                              const std::string& node,
@@ -287,7 +390,8 @@ namespace gloox
          * @param node Node ID of the new node.
          */
         void deleteNode( const JID& service,
-                         const std::string& node );
+                         const std::string& node,
+                         NodeHandler* handler );
 
 /*
         void associateNode( const JID& service,
@@ -297,11 +401,14 @@ namespace gloox
         void disassociateNode( const JID& service,
                                const std::string& node,
                                const std::string& collection );
-
-        void disassociateNode();
-
-        void getDefaultNodeConfig( NodeType = NodeTypeLeaf );
 */
+        /**
+         * Retrieves the default configuration for a specific NodeType.
+         * @param service The queried service.
+         * @param type NodeType to get default configuration for.
+         * @param handler ServiceHandler.
+         */
+        void getDefaultNodeConfig( const JID& service, NodeType type, ServiceHandler * handler );
 
         /**
          * Requests the subscriber list for a node.
@@ -416,7 +523,7 @@ namespace gloox
         virtual void handleMessage( Message* msg, MessageSession * );
 
         // reimplemented from IqHandler
-        virtual bool handleIq  ( IQ* iq ) { return 0; }
+        virtual bool handleIq  ( IQ* ) { return 0; }
         virtual void handleIqID( IQ* iq, int context );
 
       private:
@@ -463,34 +570,26 @@ namespace gloox
         void affiliateList( const JID& service, const std::string& node,
                             const AffiliateList * config, NodeHandler * handler );
 
-        typedef std::list< SubscriptionHandler * > SubscriptionTrackList;
-        typedef std::map < std::string, AffiliationListHandler * > AffiliationListTrackMap;
-        typedef std::map < std::string, SubscriptionListHandler * > SubscriptionListTrackMap;
-
         typedef std::pair< std::string, std::string > TrackedItem;
         typedef std::map < std::string, TrackedItem > ItemOperationTrackMap;
         typedef std::map < std::string, std::string > NodeOperationTrackMap;
 
         typedef std::map < std::string, PubSub::DiscoHandler* > DiscoHandlerTrackMap;
-        typedef std::list< EventHandler* > EventHandlerList;
-
+        typedef std::map < std::string, ServiceHandler * > ServiceHandlerTrackMap;
         typedef std::map < std::string, NodeHandler* > NodeHandlerTrackMap;
         typedef std::map < std::string, ItemHandler* > ItemHandlerTrackMap;
+        typedef std::list< EventHandler* > EventHandlerList;
 
         ClientBase *m_parent;
 
-        SubscriptionTrackList m_subscriptionTrackList;
-        AffiliationListTrackMap m_affListTrackMap;
-        SubscriptionListTrackMap m_subListTrackMap;
+        ItemOperationTrackMap  m_iopTrackMap;
+        NodeOperationTrackMap  m_nopTrackMap;
 
-        DiscoHandlerTrackMap m_discoHandlerTrackMap;
-        EventHandlerList m_eventHandlerList;
-
-        ItemOperationTrackMap m_iopTrackMap;
-        NodeOperationTrackMap m_nopTrackMap;
-
-        ItemHandlerTrackMap m_itemHandlerTrackMap;
-        NodeHandlerTrackMap m_nodeHandlerTrackMap;
+        ServiceHandlerTrackMap m_serviceHandlerTrackMap;
+        ItemHandlerTrackMap    m_itemHandlerTrackMap;
+        NodeHandlerTrackMap    m_nodeHandlerTrackMap;
+        DiscoHandlerTrackMap   m_discoHandlerTrackMap;
+        EventHandlerList       m_eventHandlerList;
     };
 
   }

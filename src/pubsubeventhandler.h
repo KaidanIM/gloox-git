@@ -14,7 +14,6 @@
 #define PUBSUBEVENTHANDLER_H__
 
 #include <string>
-#include "pubsub.h"
 
 namespace gloox
 {
@@ -26,6 +25,11 @@ namespace gloox
   namespace PubSub
   {
 
+    /**
+     * Handler for PubSub event notifications.
+     *
+     * @author Vincent Thomasset
+     */
     class EventHandler
     {
       public:
@@ -38,11 +42,11 @@ namespace gloox
          * Receives notification of node creations.
          * @param service Service hosting the new node.
          * @param node Node ID of the new node.
-         * @param config Optional DataForm of the new configuration (may be NULL).
+         * @param config Optional DataForm of the new configuration (may be empty).
          */
         virtual void handleNodeCreation( const JID& service,
                                          const std::string& node,
-                                         const DataForm * config ) = 0;
+                                         const DataForm& config ) = 0;
 
         /**
          * Receives notification of node destructions.
@@ -93,11 +97,11 @@ namespace gloox
          * Receives notifications of node configuration changes.
          * @param service Service hosting the node.
          * @param node Node ID of the node.
-         * @param config Optional DataForm of the new configuration (may be NULL).
+         * @param config Optional DataForm of the new configuration (may be empty).
          */
         virtual void handleConfigurationChange( const JID& service,
                                                 const std::string& node,
-                                                const DataForm * config ) = 0;
+                                                const DataForm& config ) = 0;
 
         /**
          * Receives notifications of node purges.

@@ -27,15 +27,12 @@ namespace gloox
   namespace PubSub
   {
 
-    //class Item;
-    //typedef std::list< const Tag * > ItemList;
-
     /**
-     * @brief A virtual interface for receiving results from item related requests.
+     * @brief A virtual interface to receive item related requests results.
      *
-     * Derive from this interface.
+     * Derive from this interface and pass it to item related requests.
      *
-     * @author Jakob Schroeter <js@camaya.net>
+     * @author Vincent Thomasset
      */
     class ItemHandler
     {
@@ -46,9 +43,9 @@ namespace gloox
         virtual ~ItemHandler() {}
 
         /**
-         *
+         * 
          */
-        virtual void handleItem( const JID& service, const std::string& nodeid, const Tag * entry ) = 0;
+        virtual void handleItem( const JID& service, const std::string& node, const Tag * entry ) = 0;
 
         /**
          * Receives the list of Items for a node.
@@ -56,8 +53,9 @@ namespace gloox
          * @param nodeid ID of the queried node. If empty, the root node has been queried.
          * @param itemList List of contained items.
          */
-        virtual void handleItemList( const JID& service, const std::string& nodeid,
-                                      const Tag::TagList& itemList ) = 0;
+        virtual void handleItemList( const JID& service,
+                                     const std::string& node,
+                                     const Tag::TagList& itemList ) = 0;
 
     };
 
