@@ -68,9 +68,7 @@ namespace gloox
     for( int i = 0; i < 20; ++i )
       digest[i] = (unsigned char)( H[i >> 2] >> ( ( 3 - ( i & 3 ) ) << 3 ) );
 
-    std::string t;
-    t.assign( (char*)&digest, 20 );
-    return t;
+    return std::string( (char*)&digest, 20 );
   }
 
   void SHA::finalize()
@@ -137,7 +135,7 @@ namespace gloox
 
     for( t = 0; t < 16; t++ )
     {
-      W[t] = ((unsigned) Message_Block[t * 4]) << 24;
+      W[t] =  ((unsigned) Message_Block[t * 4]) << 24;
       W[t] |= ((unsigned) Message_Block[t * 4 + 1]) << 16;
       W[t] |= ((unsigned) Message_Block[t * 4 + 2]) << 8;
       W[t] |= ((unsigned) Message_Block[t * 4 + 3]);
@@ -209,29 +207,21 @@ namespace gloox
 
   void SHA::pad()
   {
+    Message_Block[Message_Block_Index++] = 0x80;
+
     if( Message_Block_Index > 55 )
     {
-      Message_Block[Message_Block_Index++] = 0x80;
       while( Message_Block_Index < 64 )
       {
         Message_Block[Message_Block_Index++] = 0;
       }
 
       process();
-
-      while( Message_Block_Index < 56 )
-      {
-        Message_Block[Message_Block_Index++] = 0;
-      }
     }
-    else
-    {
-      Message_Block[Message_Block_Index++] = 0x80;
-      while( Message_Block_Index < 56 )
-      {
-        Message_Block[Message_Block_Index++] = 0;
-      }
 
+    while( Message_Block_Index < 56 )
+    {
+      Message_Block[Message_Block_Index++] = 0;
     }
 
     Message_Block[56] = ( Length_High >> 24 ) & 0xFF;
