@@ -281,15 +281,16 @@ namespace gloox
     util::clear( *m_cdata );
     m_cdata->clear();
     NodeList::iterator it = m_nodes->begin();
+    NodeList::iterator t;
     while( it != m_nodes->end() )
     {
       if( (*it)->type == TypeString )
       {
-        delete (*it);
-        it = m_nodes->erase( it );
-      }
-      else
+        t = it;
         ++it;
+        delete (*t);
+        m_nodes->erase( t );
+      }
     }
 
     addCData( cdata );
