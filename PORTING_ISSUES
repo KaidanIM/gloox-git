@@ -1,0 +1,8 @@
+Known Portability Issues
+------------------------
+
+- avoid use of streams as far as possible for now
+  problematic (non-existent) on (old) WinCE
+
+- don't rely on list/map::erase returning the next iterator
+
