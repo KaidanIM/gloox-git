@@ -189,8 +189,7 @@ namespace gloox
       m_certInfo.issuer = peer_CN;
       X509_NAME_get_text_by_NID( X509_get_subject_name( peer ), NID_commonName, peer_CN, sizeof( peer_CN ) );
       m_certInfo.server = peer_CN;
-      std::string p;
-      p.assign( peer_CN );
+      std::string p( peer_CN );
       std::transform( p.begin(), p.end(), p.begin(), std::tolower );
       if( p != m_server )
         m_certInfo.status |= CertWrongPeer;

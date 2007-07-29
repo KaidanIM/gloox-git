@@ -414,10 +414,9 @@ namespace gloox
       return;
 
     unsigned char data[8];
-    int i;
 
     /* Save the length before padding. */
-    for( i = 0; i < 8; ++i )
+    for( int i = 0; i < 8; ++i )
       data[i] = (unsigned char)( m_state.count[i >> 2] >> ( ( i & 3 ) << 3 ) );
 
     /* Pad to 56 bytes mod 64. */
@@ -434,12 +433,12 @@ namespace gloox
     if( !m_finished )
       finalize();
 
-    char buf[33];
+    char buf[32];
 
     for( int i = 0; i < 16; ++i )
       sprintf( buf + i * 2, "%02x", (unsigned char)( m_state.abcd[i >> 2] >> ( ( i & 3 ) << 3 ) ) );
 
-    return buf;
+    return std::string( buf, 32 );
   }
 
   const std::string MD5::binary()
@@ -451,9 +450,7 @@ namespace gloox
     for( int i = 0; i < 16; ++i )
       digest[i] = (unsigned char)( m_state.abcd[i >> 2] >> ( ( i & 3 ) << 3 ) );
 
-    std::string t;
-    t.assign( (char*)&digest, 16 );
-    return t;
+    return std::string( (char*)&digest, 16 );
   }
 
   void MD5::reset()
