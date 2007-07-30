@@ -289,6 +289,7 @@ src/tests/clientbase/Makefile
 src/tests/dataform/Makefile
 src/tests/dataformfield/Makefile
 src/tests/delayeddelivery/Makefile
+src/tests/error/Makefile
 src/tests/gpgencrypted/Makefile
 src/tests/gpgsigned/Makefile
 src/tests/iq/Makefile
