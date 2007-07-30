@@ -112,7 +112,7 @@ namespace gloox
     if( m_parent )
       m_parent->send( s );
 
-    delete m_session;
+    m_parent->disposeMessageSession( m_session );
     m_session = 0;
 
     m_joined = false;

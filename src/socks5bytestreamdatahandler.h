@@ -21,6 +21,9 @@
 namespace gloox
 {
 
+  class SOCKS5Bytestream;
+  class Stanza;
+
   /**
    * @brief A virtual interface that allows implementors to receive data
    * sent over a SOCKS5 Bytestream as defined in XEP-0066.
