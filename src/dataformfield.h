@@ -16,6 +16,7 @@
 
 #include "gloox.h"
 
+#include <utility>
 #include <string>
 
 namespace gloox
@@ -145,7 +146,7 @@ namespace gloox
        * @since 0.9.4
        */
       virtual void addOption( const std::string& label, const std::string& value )
-        { m_options.insert( make_pair( label, value ) ); }
+	  { m_options.insert( std::make_pair( label, value ) ); }
 
       /**
        * Use this function to determine whether or not this field is required.
