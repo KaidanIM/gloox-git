@@ -22,6 +22,7 @@ namespace gloox
 {
 
   class Bytestream;
+  class IQ;
 
   /**
    * @brief A virtual interface that allows implementors to receive data
