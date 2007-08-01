@@ -191,14 +191,14 @@ namespace gloox
 
           if( q && q->hasChild( "registered" ) )
           {
-            m_registrationHandler->handleAlreadyRegistered( stanza->from() );
+            m_registrationHandler->handleAlreadyRegistered();
             break;
           }
 
           if( q->hasChild( "x", "xmlns", XMLNS_X_DATA ) )
           {
             DataForm form( q->findChild( "x", "xmlns", XMLNS_X_DATA ) );
-            m_registrationHandler->handleDataForm( stanza->from(), form );
+            m_registrationHandler->handleDataForm( form );
           }
 
           if( q->hasChild( "x", "xmlns", XMLNS_X_OOB ) )
@@ -212,7 +212,7 @@ namespace gloox
             if( x->hasChild( "url" ) )
               url = x->findChild( "url" )->cdata();
 
-            m_registrationHandler->handleOOB( stanza->from(), url, desc );
+            m_registrationHandler->handleOOB( url, desc );
           }
 
           int fields = 0;
@@ -252,23 +252,20 @@ namespace gloox
           if( q->hasChild( "instructions" ) )
             instructions = q->findChild( "instructions" )->cdata();
 
-          m_registrationHandler->handleRegistrationFields( stanza->from(), fields, instructions );
+          m_registrationHandler->handleRegistrationFields( fields, instructions );
           break;
         }
 
         case CREATE_ACCOUNT:
-          m_registrationHandler->handleRegistrationResult( stanza->from(),
-              RegistrationHandler::REGISTRATION_SUCCESS );
+          m_registrationHandler->handleRegistrationResult( RegistrationHandler::REGISTRATION_SUCCESS );
           break;
 
         case CHANGE_PASSWORD:
-          m_registrationHandler->handleRegistrationResult( stanza->from(),
-              RegistrationHandler::REGISTRATION_SUCCESS );
+          m_registrationHandler->handleRegistrationResult( RegistrationHandler::REGISTRATION_SUCCESS );
           break;
 
         case REMOVE_ACCOUNT:
-          m_registrationHandler->handleRegistrationResult( stanza->from(),
-              RegistrationHandler::REGISTRATION_SUCCESS );
+          m_registrationHandler->handleRegistrationResult( RegistrationHandler::REGISTRATION_SUCCESS );
           break;
       }
     }
