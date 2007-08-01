@@ -45,6 +45,6 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             inbandbytestreamhandler.h inbandbytestreamdatahandler.h \
                             inbandbytestreammanager.h messagefilter.h         vcard.h \
                             vcardmanager.h            vcardhandler.h          search.h \
-                            searchhandler.h
+                            searchhandler.h           base64.h
 
-noinst_HEADERS = prep.h parser.h connection.h dns.h nonsaslauth.h base64.h compression.h
+noinst_HEADERS = prep.h parser.h connection.h dns.h nonsaslauth.h compression.h
