@@ -183,7 +183,7 @@ namespace gloox
     {
       switch( context )
       {
-        case FetchRegistrationFields:
+        case FETCH_REGISTRATION_FIELDS:
         {
           Tag *q = stanza->findChild( "query" );
           if( !q )
@@ -203,45 +203,52 @@ namespace gloox
 
           if( q->hasChild( "x", "xmlns", XMLNS_X_OOB ) )
           {
-            OOB oob( q->findChild( "x", "xmlns", XMLNS_X_OOB ) );
-            m_registrationHandler->handleOOB( stanza->from(), oob );
+            Tag *x = q->findChild( "x", "xmlns", XMLNS_X_OOB );
+            std::string url;
+            if( x->hasChild( "url" ) )
+              url = x->findChild( "url" )->cdata();
+
+            std::string desc;
+            if( x->hasChild( "url" ) )
+              url = x->findChild( "url" )->cdata();
+
+            m_registrationHandler->handleOOB( stanza->from(), url, desc );
           }
 
           int fields = 0;
           std::string instructions;
-
           if( q->hasChild( "username" ) )
-            fields |= FieldUsername;
+            fields |= FIELD_USERNAME;
           if( q->hasChild( "nick" ) )
-            fields |= FieldNick;
+            fields |= FIELD_NICK;
           if( q->hasChild( "password" ) )
-            fields |= FieldPassword;
+            fields |= FIELD_PASSWORD;
           if( q->hasChild( "name" ) )
-            fields |= FieldName;
+            fields |= FIELD_NAME;
           if( q->hasChild( "first" ) )
-            fields |= FieldFirst;
+            fields |= FIELD_FIRST;
           if( q->hasChild( "last" ) )
-            fields |= FieldLast;
+              fields |= FIELD_LAST;
           if( q->hasChild( "email" ) )
-            fields |= FieldEmail;
+            fields |= FIELD_EMAIL;
           if( q->hasChild( "address" ) )
-            fields |= FieldAddress;
+            fields |= FIELD_ADDRESS;
           if( q->hasChild( "city" ) )
-            fields |= FieldCity;
+            fields |= FIELD_CITY;
           if( q->hasChild( "state" ) )
-            fields |= FieldState;
+            fields |= FIELD_STATE;
           if( q->hasChild( "zip" ) )
-            fields |= FieldZip;
+            fields |= FIELD_ZIP;
           if( q->hasChild( "phone" ) )
-            fields |= FieldPhone;
+            fields |= FIELD_PHONE;
           if( q->hasChild( "url" ) )
-            fields |= FieldUrl;
+            fields |= FIELD_URL;
           if( q->hasChild( "date" ) )
-            fields |= FieldDate;
+            fields |= FIELD_DATE;
           if( q->hasChild( "misc" ) )
-            fields |= FieldMisc;
+            fields |= FIELD_MISC;
           if( q->hasChild( "text" ) )
-            fields |= FieldText;
+            fields |= FIELD_TEXT;
           if( q->hasChild( "instructions" ) )
             instructions = q->findChild( "instructions" )->cdata();
 
@@ -249,16 +256,19 @@ namespace gloox
           break;
         }
 
-        case CreateAccount:
-          m_registrationHandler->handleRegistrationResult( stanza->from(), RegistrationSuccess );
+        case CREATE_ACCOUNT:
+          m_registrationHandler->handleRegistrationResult( stanza->from(),
+              RegistrationHandler::REGISTRATION_SUCCESS );
           break;
 
-        case ChangePassword:
-          m_registrationHandler->handleRegistrationResult( stanza->from(), RegistrationSuccess );
+        case CHANGE_PASSWORD:
+          m_registrationHandler->handleRegistrationResult( stanza->from(),
+              RegistrationHandler::REGISTRATION_SUCCESS );
           break;
 
-        case RemoveAccount:
-          m_registrationHandler->handleRegistrationResult( stanza->from(), RegistrationSuccess );
+        case REMOVE_ACCOUNT:
+          m_registrationHandler->handleRegistrationResult( stanza->from(),
+              RegistrationHandler::REGISTRATION_SUCCESS );
           break;
       }
     }
