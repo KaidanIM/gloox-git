@@ -52,7 +52,7 @@ namespace gloox
 
     finalize();
 
-    char buf[40];
+    char buf[41];
     for( int i = 0; i < 20; ++i )
       sprintf( buf + i * 2, "%02x", (unsigned char)( H[i >> 2] >> ( ( 3 - ( i & 3 ) ) << 3 ) ) );
 

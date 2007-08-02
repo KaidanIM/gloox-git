@@ -433,7 +433,7 @@ namespace gloox
     if( !m_finished )
       finalize();
 
-    char buf[32];
+    char buf[33];
 
     for( int i = 0; i < 16; ++i )
       sprintf( buf + i * 2, "%02x", (unsigned char)( m_state.abcd[i >> 2] >> ( ( i & 3 ) << 3 ) ) );
