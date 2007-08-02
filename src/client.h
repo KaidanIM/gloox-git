@@ -131,7 +131,7 @@ namespace gloox
        * @param username The username/local part of the JID.
        * @param resource The resource part of the JID.
        * @param password The password to use for authentication.
-       * @param server The Jabber ID'S server part and the host name to connect to. If those are different
+       * @param server The Jabber ID's server part and the host name to connect to. If those are different
        * for your setup, use the second constructor instead.
        * @param port The port to connect to. The default of -1 means to look up the port via DNS SRV.
        */
