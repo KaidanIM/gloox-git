@@ -451,9 +451,7 @@ namespace gloox
     for( int i = 0; i < 16; ++i )
       digest[i] = (unsigned char)( m_state.abcd[i >> 2] >> ( ( i & 3 ) << 3 ) );
 
-    std::string t;
-    t.assign( (char*)&digest, 16 );
-    return t;
+    return std::string( (char*)digest, 16 );
   }
 
   void MD5::reset()
