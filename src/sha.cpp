@@ -68,7 +68,7 @@ namespace gloox
     for( int i = 0; i < 20; ++i )
       digest[i] = (unsigned char)( H[i >> 2] >> ( ( 3 - ( i & 3 ) ) << 3 ) );
 
-    return std::string( (char*)&digest, 20 );
+    return std::string( (char*)digest, 20 );
   }
 
   void SHA::finalize()
