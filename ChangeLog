@@ -9,6 +9,8 @@ v0.9.4 -- xx yyy 2007
 - ConnectionTCPBase: reset byte counters on disconnect
 - DataFormBase: added addField( DataFormFieldType, ... )
 - DataFormField: added addOption( string, string )
+- MUCRoom: fix potential crash in dtor
+- Buildsystem: disabled implicit build of tests and examples; use 'make test' and 'make examples'
 
 
 v0.9.3 -- 18 Jul 2007

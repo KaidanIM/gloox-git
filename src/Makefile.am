@@ -2,7 +2,7 @@
 ## Process this file with automake to produce Makefile.in
 ##
 
-SUBDIRS = . tests examples
+SUBDIRS = .
 
 AM_CPPFLAGS = -Wall -pedantic -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare -Wpointer-arith \
                 -Wswitch -Wunknown-pragmas -Wconversion -Wundef -Wcast-qual -ansi
@@ -83,3 +83,6 @@ leaktest:
 	make -C tests leaktest
 
 leakcheck: leaktest
+
+examples:
+	make -C examples
