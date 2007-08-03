@@ -579,6 +579,11 @@ namespace gloox
           }
         }
 
+        if( party.flags & UserNickChanged && !party.newNick.empty()
+            && m_nick.resource() == presence->from().resource()
+            && party.newNick == m_newNick )
+          party.flags |= UserSelf;
+
         if( party.flags & UserNickChanged && party.flags & UserSelf && !party.newNick.empty() )
           m_nick.setResource( party.newNick );
 
