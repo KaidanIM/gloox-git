@@ -67,7 +67,7 @@ namespace gloox
        * @param lang The lang for which the text has to be retrieved (empty for default lang)
        * @return The text associated with a specific lang.
        */
-      std::string text( const std::string& lang = "" ) const;
+      std::string text( const std::string& lang = "default" ) const;
 
       /**
        * The 
