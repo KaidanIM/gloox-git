@@ -85,11 +85,21 @@ namespace gloox
   {
     if( m_type == StanzaErrorTypeUndefined || m_error == StanzaErrorUndefined )
       return 0;
-    Tag * error = new Tag( "error" );
-    error->addAttribute( TYPE, util::lookup( m_type, errValues ) );
+
+    Tag * error = new Tag( "error", TYPE, util::lookup( m_type, errValues ) );
     new Tag( error, util::lookup( m_error, stanzaErrValues ), XMLNS, XMLNS_XMPP_STANZAS );
+
+    StringMap::const_iterator it = m_text.begin();
+    for( ; it != m_text.end(); ++it )
+    {
+      Tag * txt = new Tag( error, "text", XMLNS, XMLNS_XMPP_STANZAS );
+      txt->addAttribute( "xml:lang", (*it).first );
+      txt->setCData( (*it).second );
+    }
+
     if( m_appError )
-      error->addChild( m_appError );
+      error->addChild( m_appError->clone() );
+
     return error;
   }
 
