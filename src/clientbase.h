@@ -140,16 +140,8 @@ namespace gloox
       void setSasl( bool sasl ) { m_sasl = sasl; }
 
       /**
-       * Switches usage of TLS on/off (if available). Default: on if available. TLS should only be
-       * disabled if there are problems with using it.
-       * @param tls Whether to switch TLS usage on or off.
-       * @deprecated
-       */
-      GLOOX_DEPRECATED void setTls( bool tls ) { m_tls = (TLSPolicy)tls; }
-
-      /**
-       * Switches usage of TLS on/off (if available). Default: on if available. TLS should only be
-       * disabled if there are problems with using it.
+       * Switches usage of TLS on/off (if available), or enforces its usage. Default: on if available.
+       * TLS should only be disabled if there are problems with using it.
        * @param tls Whether to switch TLS usage on or off.
        */
       void setTls( TLSPolicy tls ) { m_tls = tls; }
