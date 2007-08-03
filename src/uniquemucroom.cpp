@@ -48,7 +48,7 @@ namespace gloox
       case IQ::Result:
         if( context == RequestUniqueName )
         {
-          Tag *u = iq->findChild( "unique", XMLNS_MUC_UNIQUE );
+          Tag *u = iq->findChild( "unique", "xmlns", XMLNS_MUC_UNIQUE );
           if( u )
           {
             const std::string& name = u->cdata();
