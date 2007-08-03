@@ -65,7 +65,7 @@ namespace gloox
         m_error = srt;
       else if( (*it)->name() == "text" )
         m_text[(*it)->findAttribute("xml:lang")] = (*it)->cdata();
-      else   
+      else
         m_appError = (*it)->clone();
     }
   }
