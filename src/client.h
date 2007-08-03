@@ -182,10 +182,31 @@ namespace gloox
        * sent out immediately.
        * @param presence The Presence value to set.
        * @param priority An optional priority value. Legal values: -128 <= priority <= 127
-       * @param msg An optional message describing the presence state.
+       * @param status An optional message describing the presence state.
        * @since 0.9
        */
-      void setPresence( Presence::PresenceType presence, int priority = 0, const std::string& msg = "" );
+      void setPresence( Presence::PresenceType presence, int priority, const std::string& status = "" );
+
+      /**
+       * A convenience function that only changes the presence type.
+       * @param presence The new presence.
+       */
+      void setPresence( Presence::PresenceType presence )
+        { setPresence( presence, m_priority, m_status ); }
+
+      /**
+       * A convenience function that only changes the priority.
+       * @param priority The new priority.
+       */
+      void setPresence( int priority )
+        { setPresence( m_presence, priority, m_status ); }
+
+      /**
+       * A convenience function that only changes the status message.
+       * @param status The new status message.
+       */
+      void setPresence( const std::string& status )
+        { setPresence( m_presence, m_priority, status ); }
 
       /**
        * Returns the current presence.
