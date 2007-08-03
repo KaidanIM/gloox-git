@@ -53,7 +53,7 @@ namespace gloox
       case StanzaIqResult:
         if( context == RequestUniqueName )
         {
-          Tag *u = stanza->findChild( "unique", XMLNS_MUC_UNIQUE );
+          Tag *u = iq->findChild( "unique", "xmlns", XMLNS_MUC_UNIQUE );
           if( u )
           {
             const std::string& name = u->cdata();

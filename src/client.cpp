@@ -467,10 +467,10 @@ namespace gloox
     }
   }
 
-  void Client::setPresence( Presence presence, int priority, const std::string& msg )
+  void Client::setPresence( Presence::PresenceType presence, int priority, const std::string& status )
   {
     m_presence = presence;
-    m_status = msg;
+    m_status = status;
 
     if( priority < -128 )
       m_priority = -128;
@@ -479,8 +479,7 @@ namespace gloox
     else
       m_priority = priority;
 
-    if( state() >= StateConnected )
-      sendPresence();
+    sendPresence();
   }
 
   void Client::disableRoster()
@@ -499,8 +498,8 @@ namespace gloox
 
   void Client::sendPresence()
   {
-    if( m_presence != PresenceUnknown &&
-        m_presence != PresenceUnavailable )
+    if( m_presence != Presence::Invalid &&
+        state() >= StateConnected )
     {
       JID jid;
       Stanza *p = Stanza::createPresenceStanza( jid, m_status, m_presence );
