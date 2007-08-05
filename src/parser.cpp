@@ -83,7 +83,7 @@ namespace gloox
               m_preamble = 1;
               break;
             case '!':
-              if( m_tag.empty() && it + 7 != data.end() && data.substr( i, 8 ) == "![CDATA[" )
+              if( m_tag.empty() && it + 7 != data.end() && !data.compare( i, 8, "![CDATA[" ) )
               {
                 it += 7;
                 i += 7;
@@ -105,7 +105,7 @@ namespace gloox
           switch( c )
           {
             case ']':
-              if( it + 2 != data.end() && data.substr( i, 3 ) == "]]>" )
+              if( it + 2 != data.end() && !data.compare( i, 3, "]]>" ) )
               {
                 it += 2;
                 i += 2;
