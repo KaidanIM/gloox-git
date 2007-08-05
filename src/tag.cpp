@@ -812,6 +812,8 @@ namespace gloox
             return root;
           Tag *t = parse( expression, ++len, ttype );
           addOperator( &root, &current, t, ttype, s );
+          if( border == XTRightBracket )
+            return root;
           break;
         }
         default:
