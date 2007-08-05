@@ -175,7 +175,20 @@ namespace gloox
       void setResource( const std::string &resource ) { m_jid.setResource( resource ); }
 
       /**
-       * Use this function to set the entity's presence.
+       * Sends directed presence to the given JID. This is a NOOP if there's no active connection.
+       * To broadcast presence use setPresence( Presence::PresenceType, int, const std::string& ).
+       * @param to The JID to send directed Presence to.
+       * @param presence The presence to send.
+       * @param priority The priority to include. Legal values: -128 <= priority <= 127
+       * @param status The optional status message to include.
+       */
+      void setPresence( const JID& to, Presence::PresenceType presence, int priority,
+                        const std::string& status = "" );
+
+      /**
+       * Use this function to set the entity's presence, that is, to broadcast presence to all
+       * subscribed entities. To send directed presence, use
+       * setPresence( const JID&, Presence::PresenceType, int, const std::string& ).
        * If used prior to establishing a connection, the set values will be sent with
        * the initial presence stanza.
        * If used while a connection already is established a repective presence stanza will be
@@ -185,7 +198,8 @@ namespace gloox
        * @param status An optional message describing the presence state.
        * @since 0.9
        */
-      void setPresence( Presence::PresenceType presence, int priority, const std::string& status = "" );
+      void setPresence( Presence::PresenceType presence, int priority, const std::string& status = "" )
+        { setPresence( JID(), presence, priority, status ); }
 
       /**
        * A convenience function that only changes the presence type.
@@ -290,7 +304,7 @@ namespace gloox
       int getCompressionMethods( Tag* tag );
       void processResourceBind( IQ* iq );
       void processCreateSession( IQ* iq );
-      void sendPresence();
+      void sendPresence( const JID& to );
       void createSession();
       void negotiateCompression( StreamFeature method );
       void connected();
