@@ -467,7 +467,7 @@ namespace gloox
     }
   }
 
-  void Client::setPresence( Presence::PresenceType presence, int priority, const std::string& status )
+  void Client::setPresence( Presence presence, int priority, const std::string& status )
   {
     m_presence = presence;
     m_status = status;
@@ -498,7 +498,7 @@ namespace gloox
 
   void Client::sendPresence()
   {
-    if( m_presence != Presence::Invalid &&
+    if( m_presence != PresenceUnknown &&
         state() >= StateConnected )
     {
       JID jid;
