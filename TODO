@@ -17,8 +17,6 @@ for 1.0
   - testing
 - in FT, add Fast Mode:
     http://delta.affinix.com/specs/stream.html
-  and Failover:
-    http://thread.gmane.org/gmane.network.jabber.standards-jig/10468
 - comply with rfc3920bis/rfc3921bis (or current drafts), which icnludes at least:
   - 3.2: nameprep: set UseSTD3ASCIIRules to true
   - support optional binding of multiple resources
