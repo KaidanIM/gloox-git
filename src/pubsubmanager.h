@@ -38,54 +38,17 @@ namespace gloox
     class EventHandler;
 
     /**
-     * @brief This manager is used to interact with PubSub services:
-     * - @ref discovery_sec <br>
-     * - @ref eventhandler_sec <br>
-     * - @ref nodeoperations_sec <br>
-     * - @ref itemoperations_sec <br>
-     * - @ref subaff_sec <br>
-     *   - @ref manageownsub_sec <br>
-     *   - @ref managenodesub_sec <br>
+     * @brief This manager is used to interact with PubSub services, along with
+     * 5 different handlers.
      *
-     * @section discovery_sec Browsing a service
+     * DiscoHandler, NodeHandler, ItemHandler and ServiceHandler objects should
+     * respectivaly be passed to disco, node, item and service related requests
+     * for result notifications (null handlers are not allowed).
      *
-     * A wrapper for Disco queries on PubSub services is available from the Manager.
-     * PubSub Disco queries use PubSub::DiscoHandler for tracking and notification.
-     * Here's an example:
-     * 
-     * @code
-     *
-     * class MyPSDiscoHandler : public PubSub::DiscoHandler
-     * {
-     *    public:
-     *      void handleServiceInfoResult( const gloox::JID& service, int features );
-     *      void handleNodeItemDiscovery( const gloox::JID& service,
-     *                                    const std::string& parent,
-     *                                    const gloox::DiscoNodeItemList& children );
-     *      // ...
-     * };
-     *
-     * @endcode
-     *
-     * Then pass this handler to PubSub Disco queries.
-     *
-     * @code
-     *
-     * psManager->discoverServiceInfos( service, psDiscoHandler );
-     * psManager->discoverNodeInfos( service, nodeid, psDiscoHandler );
-     * psManager->discoverNodeItems( service, nodeid, psDiscoHandler );
-     *
-     * @endcode
-     *
-     * Alternatively, you can also use a regular gloox::DiscoHandler.
-     *
-     * @section eventhandler_sec Event notifications
-     *
-     * PubSub event notifications are received using EventHandler. By definition,
-     * many PubSub queries (IQ set queries) will both trigger a notification from
-     * registered EventHandler's and from the handler specific to the query (see below).
-     * Register one (or more) with a manager to receive event notifications (using
-     * Manager::registerEventHandler). So that 
+     * EventHandler is used to receive actual PubSub event notifications. Register
+     * as much as you need to the Manager. Note that many PubSub queries will
+     * both trigger a notification from registered EventHandler's and from the
+     * handler specific to the query. In this regard,
      *
      * @code
      *
@@ -93,77 +56,11 @@ namespace gloox
      *
      * @endcode
      *
-     * would then trigger EventHandler::handleNodeRemoval (if successfull).
-     *
-     * @section nodeoperations_sec Node operations
-     *
-     * Node related operations (creation, configuration, items listing, etc) takes
-     * an additional NodeHandler argument. Each one of these requests will then look
-     * like
-     *
-     * @code
-     *
-     * psManager->someNodeOperation( service, nodeid, ..., nodeHandler );
-     *
-     * @endcode
-     *
-     * @section itemoperations_sec Item operations
-     *
-     * As for the @ref nodeoperations_sec, item related operations require an
-     * ItemHandler. They also generally (but not always) require an additionnal
-     * argument: the item ID inside it's parent Node.
-     *
-     * @code
-     *
-     * psManager->someItemOperation( service, nodeid, itemid, ..., itemHandler );
-     *
-     * @endcode
-     *
-     * @section subaff_sec Subscriptions and affiliations
-     *
-     * @subsection manageownsub_sec Retrieve your subscriptions and affiliations
-     *
-     * PubSub services should allow an entity to retrieve the list of subscriptions
-     * and affiliations.
-     *
-     * @code
-     *
-     * psManager->requestSubscriptionList( service, node );
-     * psManager->requestAffiliationList ( service, node );
-     *
-     * @endcode
-     *
-     *
-     * @subsection managenodesub_sec Manage a node's subscriptions and affiliations
-     *
-     * If a PubSub service supports it, the owner of a node may retrieve and 
-     * modify subscriptions and affiliations for a particular node.
-     *
-     * To require a node's subscription/affiliation list, use:
-     *
-     * @code
-     *
-     * psManager->requestSubscriberList( service, node );
-     * psManager->requestAffiliateList ( service, node );
-     *
-     * @endcode
-     *
-     * If willing to modify a list send either a SubscriptionList or AffiliationList
-     * (containing ONLY the values that should be changed) as follows:
-     *
-     * @code
-     *
-     * psManager->setSubscriptionList( service, node, subList );
-     * psManager->setAffiliationList ( service, node, affList );
-     *
-     * @endcode
-     *
-     *
-     * @subsection managesub_sec Manage subscription requests
-     *
-     * NOT YET IMPLEMENTED
+     * would then trigger NodeHandler::handleNodeDeletationResult and 
+     * EventHandler::handleNodeRemoval (if successfull).
      *
      * @author Vincent Thomasset
+     * @todo Subscription request management is currently missing.
      *
      * XEP Version: 1.9
      */
