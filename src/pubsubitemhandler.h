@@ -20,6 +20,7 @@ namespace gloox
 
   class JID;
   class Tag;
+  class Error;
   class DiscoNodeItem;
 
   typedef std::list<DiscoNodeItem> DiscoNodeItemList;
@@ -55,14 +56,25 @@ namespace gloox
          */
         virtual void handleItemList( const JID& service,
                                      const std::string& node,
-                                     const Tag::TagList& itemList ) = 0;
+                                     const Tag::TagList * itemList ) = 0;
+
+
+        virtual void handleItemPublicationResult( const JID& service,
+                                                  const std::string& node,
+                                                  const std::string& item,
+                                                  const Error * error = 0 ) = 0;
+
+
+        virtual void handleItemDeletationResult(  const JID& service,
+                                                  const std::string& node,
+                                                  const std::string& item,
+                                                  const Error * error = 0 ) = 0;
+
 
     };
 
   }
 
 }
-
-
 
 #endif /* PUBSUBITEMHANDLER_H__ */

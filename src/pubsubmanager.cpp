@@ -41,7 +41,8 @@ namespace gloox
     static const std::string XMLNS_PUBSUB_SUBSCRIBE_OPTIONS =
         "http://jabber.org/protocol/pubsub#subscribe_options";
 
-    enum Context {
+    enum Context
+    {
       Subscription,
       Unsubscription,
       RequestSubscriptionOptions,
@@ -105,7 +106,7 @@ namespace gloox
       "none", "subscribed", "pending", "unconfigured"
     };
 
-    static SubscriptionType subscriptionType( const std::string& subscription )
+    static inline SubscriptionType subscriptionType( const std::string& subscription )
     {
       return (SubscriptionType)util::lookup( subscription, subscriptionValues );
     }
@@ -114,7 +115,7 @@ namespace gloox
       "none", "publisher", "owner", "outcast"
     };
 
-    static AffiliationType affiliationType( const std::string& affiliation )
+    static inline AffiliationType affiliationType( const std::string& affiliation )
     {
       return (AffiliationType)util::lookup( affiliation, affiliationValues );
     }
@@ -163,7 +164,8 @@ namespace gloox
       return static_cast< PubSubFeature >( util::lookup2( str, values ) );
     }
 
-    enum EventType {
+    enum EventType
+    {
       EventCollection,
       EventConfigure,
       EventDelete,
@@ -467,8 +469,8 @@ namespace gloox
       publish->addChild( item );
 
       m_parent->trackID( this, id, PublishItem );
-      //m_iopTrackMap[id] = TrackedItem(nodeid, itemid);
-      //m_itemHandlerTrackMap[id] = handler;
+//      m_iopTrackMap[id] = TrackedItem(node, item);
+      m_itemHandlerTrackMap[id] = handler;
       m_parent->send( iq );
     }
 
@@ -484,8 +486,8 @@ namespace gloox
       new Tag( retract, "item", "id", item );
 
       m_parent->trackID( this, id, DeleteItem );
-      //m_iopTrackMap[id] = TrackedItem( node, itemid );
-      //m_itemHandlerTrackMap[id] = handler;
+      m_iopTrackMap[id] = TrackedItem( node, item );
+      m_itemHandlerTrackMap[id] = handler;
       m_parent->send( iq );
     }
 
@@ -532,7 +534,6 @@ namespace gloox
         if( access != AccessDefault )
           df.addField( DataFormField::FieldTypeNone, "pubsub#access_model",
                             util::lookup( access, accessValues ) );
-
         if( config )
         {
           StringMap::const_iterator it = config->begin();
@@ -548,17 +549,17 @@ namespace gloox
       m_parent->send( iq );
     }
 
-    void Manager::deleteNode( const JID& service, const std::string& nodeid, NodeHandler* handler )
+    void Manager::deleteNode( const JID& service, const std::string& node, NodeHandler* handler )
     {
       if( !m_parent || !handler )
         return;
 
       const std::string& id = m_parent->getID();
       IQ* iq = new IQ( IQ::Set, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
-      new Tag( iq->query(), "delete", "node", nodeid );
+      new Tag( iq->query(), "delete", "node", node );
 
       m_parent->trackID( this, id, DeleteNode );
-      m_nopTrackMap[id] = nodeid;
+      m_nopTrackMap[id] = node;
       m_nodeHandlerTrackMap[id] = handler;
       m_parent->send( iq );
     }
@@ -620,11 +621,10 @@ namespace gloox
           if( !(*it).subid.empty() )
             s->addAttribute( "subid", (*it).subid );
         }
+        m_nopTrackMap[id] = node;
       }
 
       m_parent->trackID( this, id, list ? SetSubscriberList : RequestSubscriberList );
-      if( list )
-        m_nopTrackMap[id] = node;
       m_nodeHandlerTrackMap[id] = handler;
       m_parent->send( iq );
     }
@@ -649,6 +649,7 @@ namespace gloox
           a = new Tag( aff, "affiliation", "jid", (*it).jid.full() );
           a->addAttribute( "affiliation", util::lookup( (*it).type, affiliationValues ) );
         }
+        m_nopTrackMap[id] = node;
       }
 
       m_parent->trackID( this, id, list ? SetAffiliateList : RequestAffiliateList );
@@ -694,7 +695,6 @@ namespace gloox
       const JID& service = iq->from();
       const Tag * query = iq->query();
       const std::string& id = iq->id();
-      const Error error( iq->findChild( "error" ) );
 
       switch( iq->subtype() )
       {
@@ -714,7 +714,7 @@ namespace gloox
                 NodeHandlerTrackMap::iterator it = m_nodeHandlerTrackMap.find( id );
                 if( it != m_nodeHandlerTrackMap.end() )
                 {
-                  (*it).second->handleSubscriptionResult( service, node, sid, subType, /*SubscriptionErrorNone,*/ error );
+                  (*it).second->handleSubscriptionResult( service, node, sid, subType );
                   m_nodeHandlerTrackMap.erase( it );
                 }
               }
@@ -744,7 +744,7 @@ namespace gloox
                                      sub  = (*it)->findAttribute( "subscription" );
                   subMap[node] = subscriptionType( sub );
                 }
-                (*ith).second->handleSubscriptionListResult( service, &subMap, error );
+                (*ith).second->handleSubscriptionListResult( service, &subMap );
                 m_serviceHandlerTrackMap.erase( ith );
               }
               break;
@@ -761,11 +761,9 @@ namespace gloox
                 {
                   const std::string& node = affiliations->findAttribute( "node" ),
                                      aff  = affiliations->findAttribute( "affiliation" );
-                  if( node.empty() || aff.empty() )
-                    return;
                   affMap[node] = affiliationType( aff );
                 }
-                (*ith).second->handleAffiliationListResult( iq->from(), &affMap, error );
+                (*ith).second->handleAffiliationListResult( iq->from(), &affMap );
                 m_serviceHandlerTrackMap.erase( ith );
               }
               break;
@@ -791,12 +789,16 @@ namespace gloox
                   const DataForm df( x );
                   (*ith).second->handleSubscriptionOptions( iq->from(),
                                          JID( options->findAttribute( "jid" ) ),
-                                         options->findAttribute( "node" ), df, error );
+                                         options->findAttribute( "node" ), &df );
                   break;
                 }
                 case RequestSubscriberList:
                 {
-                  Tag * subt = query->findChild( "subscriptions" );
+                  NodeHandlerTrackMap::iterator ith = m_nodeHandlerTrackMap.begin();
+                  if( ith == m_nodeHandlerTrackMap.end() )
+                    return;
+
+                  Tag * subt = query->findChild( "subscriptions" );                  
                   SubscriberList list;
                   const Tag::TagList& subs = subt->children();
                   Tag::TagList::const_iterator it = subs.begin();
@@ -807,7 +809,7 @@ namespace gloox
                     const std::string& subid = (*it)->findAttribute( "subid" );
                     list.push_back( Subscriber( jid, subscriptionType( sub ), subid ) );
                   }
-                  (*ith).second->handleSubscriberList( service, subt->findAttribute( "node" ), list, error );
+                  (*ith).second->handleSubscriberList( service, subt->findAttribute( "node" ), &list );
                   break;
                 }
                 case SetSubscriptionOptions:
@@ -825,25 +827,25 @@ namespace gloox
                     switch( context )
                     {
                       case SetSubscriptionOptions:
-                        (*ith).second->handleSubscriptionOptionsResult( service, JID(  ), node, error );
+                        (*ith).second->handleSubscriptionOptionsResult( service, JID(  ), node );
                         break;
                       case SetSubscriberList:
-                        (*ith).second->handleSubscriberListResult( service, node, error );
+                        (*ith).second->handleSubscriberListResult( service, node );
                         break;
                       case SetAffiliateList:
-                        (*ith).second->handleAffiliateListResult( service, node, error );
+                        (*ith).second->handleAffiliateListResult( service, node );
                         break;
                       case SetNodeConfig:
-                        (*ith).second->handleNodeConfigResult( service, node, error );
+                        (*ith).second->handleNodeConfigResult( service, node );
                         break;
                       case CreateNode:
-                        (*ith).second->handleNodeCreationResult( service, node, error );
+                        (*ith).second->handleNodeCreationResult( service, node );
                         break;
                       case DeleteNode:
-                        (*ith).second->handleNodeDeletationResult( service, node, error );
+                        (*ith).second->handleNodeDeletationResult( service, node );
                         break;
                       case PurgeNodeItems:
-                        (*ith).second->handleNodePurgeResult( service, node, error );
+                        (*ith).second->handleNodePurgeResult( service, node );
                         break;
                     }
                     m_nopTrackMap.erase( it );
@@ -852,11 +854,28 @@ namespace gloox
                 }
                 case RequestAffiliateList:
                 {
-
+                  const Tag::TagList& affiliates = query->children();
+                  AffiliateList affList;
+                  Tag::TagList::const_iterator it = affiliates.begin();
+                  for( ; it != affiliates.end(); ++it )
+                  {
+                    Affiliate aff( (*it)->findAttribute( "jid" ),
+                                   affiliationType( (*it)->findAttribute( "affiliation" ) ) );
+                    affList.push_back( aff );
+                  }
+                  (*ith).second->handleAffiliateList( service, query->findAttribute( "node" ), &affList );
                   break;
                 }
                 case RequestNodeConfig:
                 {
+                  Tag *ps = iq->findChild( "pubsub", XMLNS, XMLNS_PUBSUB );
+                  Tag *options = ps->findChild( "configure" );
+                  Tag * x = options->findChild( "x" );
+                  const DataForm * df = x ? new DataForm( x ) : 0;
+                  const std::string& node = options->findAttribute("node");
+                  (*ith).second->handleNodeConfig( service, node, df );
+                  if( df )
+                    delete df;
                   break;
                 }
                 default:
@@ -865,30 +884,7 @@ namespace gloox
 
               m_nodeHandlerTrackMap.erase( ith );
               break;
-            }/*
-            case SetSubscriberList:
-            {
-              break;
             }
-            case RequestAffiliateList:
-            {
-              break;
-            }
-            case SetAffiliateList:
-            {
-              break;
-            }
-            case RequestNodeConfig:
-            {
-              Tag *ps = iq->findChild( "pubsub", XMLNS, XMLNS_PUBSUB );
-              Tag *options = ps->findChild( "configure" );
-              Tag * x = options->findChild( X );
-              const DataForm * df = x ? new DataForm( x ) : 0;
-              //handleNodeConfiguration( iq->from(), options->findAttribute("node"), df, OptionRequestErrorNone );
-            }
-            case SetNodeConfig:
-            {
-            }*/
             case RequestItemList:
             {
               Tag *items = query->findChild( "items" );
@@ -898,53 +894,68 @@ namespace gloox
               const std::string& node = items->findAttribute( "node" );
               ItemHandlerTrackMap::iterator ith = m_itemHandlerTrackMap.find( id );
               if( ith != m_itemHandlerTrackMap.end() )
-                (*ith).second->handleItemList( iq->from(), node, items->children() );
+              {
+                (*ith).second->handleItemList( iq->from(), node, &items->children() );
+                m_itemHandlerTrackMap.erase( ith );
+              }
               break;
             }
             case PublishItem:
             {
+              ItemHandlerTrackMap::iterator ith = m_itemHandlerTrackMap.find( id );
+              if( ith == m_itemHandlerTrackMap.end() )
+                break;
+
               ItemOperationTrackMap::iterator it = m_iopTrackMap.find( id );
               if( it != m_iopTrackMap.end() )
               {
-                //(*ith).second->handleItemPublicationResult( (*it).second.first,
-                //                                            (*it).second.second );
+                (*ith).second->handleItemPublicationResult( service,
+                                                            (*it).second.first,
+                                                            (*it).second.second );
                 m_iopTrackMap.erase( it );
               }
+              m_itemHandlerTrackMap.erase( ith );
               break;
             }
             case DeleteItem:
             {
+              ItemHandlerTrackMap::iterator ith = m_itemHandlerTrackMap.find( id );
+              if( ith == m_itemHandlerTrackMap.end() )
+                break;
+
               ItemOperationTrackMap::iterator it = m_iopTrackMap.find( id );
               if( it != m_iopTrackMap.end() )
               {
-                //(*ith).second->handleItemDeletationResult( (*it).second.first,
-                //                                           (*it).second.second );
+                (*ith).second->handleItemDeletationResult( service,
+                                                           (*it).second.first,
+                                                           (*it).second.second );
                 m_iopTrackMap.erase( it );
               }
+              m_itemHandlerTrackMap.erase( ith );
               break;
             }
           }
         }
         break;
         case IQ::Error:
-        {/*
-          Tag* error = iq->findChild( "error" );
-          //Error error( iq->findChild( "error" ) );
-
+        {
+          const Error error( iq->findChild( "error" ) );
           switch( context )
           {
             case Subscription:
             {
-              std::cout << "SUBSCRIPTION ERROR" << std::endl;
-              Tag *ps = iq->findChild( "pubsub", XMLNS, XMLNS_PUBSUB );
-              if( !ps )
+              NodeHandlerTrackMap::iterator ith = m_nodeHandlerTrackMap.find( id );
+              if( ith == m_nodeHandlerTrackMap.end() )
                 return;
-              Tag *sub = ps->findChild( "subscribe" );
+
+              Tag *sub = query->findChild( "subscribe" );
               if( !sub )
                 return;
 
               const std::string& node = sub->findAttribute( "node" ),
                                  jid  = sub->findAttribute( "jid" );
+
+/*
               SubscriptionError errorType = SubscriptionErrorNone;
 
               if( error->hasChild( "not-authorized", XMLNS, XMLNS_XMPP_STANZAS ) )
@@ -990,20 +1001,19 @@ namespace gloox
               }
               else
                 return;
-
-              //handleSubscriptionResult( service, node, jid, "", SubscriptionNone, errorType );
+*/
+              (*ith).second->handleSubscriptionResult( service, node, jid, SubscriptionNone, &error );
               break;
             }
             case Unsubscription:
             {
-              Tag *ps = iq->findChild( "pubsub", XMLNS, XMLNS_PUBSUB );
-              if( !ps )
-                return;
-              Tag *subscription = ps->findChild( "subscribe" );
+              Tag *subscription = query->findChild( "subscribe" );
               if( !subscription )
                 return;
               const std::string& node = subscription->findAttribute( "node" ),
                                  jid  = subscription->findAttribute( "jid" );
+
+/*
               UnsubscriptionError errorType;
               if( error->hasChild( "bad-request", XMLNS, XMLNS_XMPP_STANZAS ) &&
                   error->hasChild( "subid-required", XMLNS, XMLNS_PUBSUB_ERRORS ) )
@@ -1030,11 +1040,13 @@ namespace gloox
               }
               else
                 return;
+*/
               //handleUnsubscriptionResult( service, node, errorType );
               break;
             }
             case RequestSubscriptionList:
             {
+/*
               if( error->hasChild( "feature-not-implemented", XMLNS, XMLNS_XMPP_STANZAS ) &&
                   error->hasChild( "unsupported", XMLNS, XMLNS_PUBSUB_ERRORS ) )
                   // feature='retrieve-subscriptions'/>
@@ -1043,11 +1055,12 @@ namespace gloox
               }
               else
                 return;
+*/
               break;
             }
             case RequestAffiliationList:
             {
-              if( error->hasChild( "feature-not-implemented", XMLNS, XMLNS_XMPP_STANZAS ) &&
+/*              if( error->hasChild( "feature-not-implemented", XMLNS, XMLNS_XMPP_STANZAS ) &&
                   error->hasChild( "unsupported", XMLNS, XMLNS_PUBSUB_ERRORS ) )
                   // feature='retrieve-affiliations'/>
               {
@@ -1055,18 +1068,18 @@ namespace gloox
               }
               else
                 return;
+*/
               break;
             }
             case RequestSubscriptionOptions:
             {
-              Tag * pubsub = iq->findChild( "pubsub" );
-              if( !pubsub )
-                return;
-              Tag * items = iq->findChild( "items" );
+              Tag * items = query->findChild( "items" );
               if( !items )
                 return;
 
               const std::string& node = items->findAttribute( "node" );
+
+/*
               OptionRequestError errorType = OptionRequestErrorNone;
               if( error->hasChild( "forbidden", XMLNS, XMLNS_XMPP_STANZAS ) )
               {
@@ -1104,6 +1117,7 @@ namespace gloox
               }
               else
                 return;
+*/
               // handleOptionListError( "" );
               break;
             }
@@ -1113,13 +1127,12 @@ namespace gloox
             }
             case RequestItemList:
             {
-              Tag * pubsub = iq->findChild( "pubsub" );
-              if( !pubsub )
-                return;
-              Tag * items = iq->findChild( "items" );
+              Tag * items = query->findChild( "items" );
               if( !items )
                 return;
               const std::string& node = items->findAttribute( "node" );
+
+/*
               ItemRetrivalError errorType = ItemRequestErrorNone;
               if( error->hasChild( "bad-request", XMLNS, XMLNS_XMPP_STANZAS ) &&
                   error->hasChild( "subid-required", XMLNS, XMLNS_PUBSUB_ERRORS ) )
@@ -1173,11 +1186,13 @@ namespace gloox
               }
               else
                 return;
+*/
               //handleRequestItemListError( service, node, errorType );
               break;
             }
             case PublishItem:
             {
+/*
               ItemPublicationError errorType = ItemPublicationErrorNone;
               if( error->hasChild( "forbidden", XMLNS, XMLNS_XMPP_STANZAS ) )
               {
@@ -1214,11 +1229,13 @@ namespace gloox
               }
               else
                 return;
+*/
               //handle
               break;
             }
             case DeleteItem:
             {
+/*
               ItemDeletationError errorType = ItemDeletationErrorNone;
               if( error->hasChild( "forbidden", XMLNS, XMLNS_XMPP_STANZAS ) )
               {
@@ -1252,6 +1269,7 @@ namespace gloox
               }
               else
                 return;
+*/
               //handle
               break;
             }
@@ -1263,10 +1281,11 @@ namespace gloox
               return;
           }
           break;
-        */}
+        }
         default:
           break;
       }
     }
   }
 }
+
