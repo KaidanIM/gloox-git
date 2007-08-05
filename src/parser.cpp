@@ -32,8 +32,9 @@ namespace gloox
 
   bool Parser::feed( const std::string& data )
   {
+    int i = 0;
     std::string::const_iterator it = data.begin();
-    for( ; it != data.end(); ++it )
+    for( ; it != data.end(); ++it, ++i )
     {
       const unsigned char c = (*it);
 //       printf( "found char:   %c, ", c );
@@ -81,10 +82,40 @@ namespace gloox
               m_state = TagNameCollect;
               m_preamble = 1;
               break;
+            case '!':
+              if( m_tag.empty() && it + 7 != data.end() && data.substr( i, 8 ) == "![CDATA[" )
+              {
+                it += 7;
+                i += 7;
+                m_state = TagCDATASection;
+              }
+              else
+              {
+                cleanup();
+                return false;
+              }
+              break;
             default:
               m_tag += c;
               m_state = TagNameCollect;
               break;
+          }
+          break;
+        case TagCDATASection:
+          switch( c )
+          {
+            case ']':
+              if( it + 2 != data.end() && data.substr( i, 3 ) == "]]>" )
+              {
+                it += 2;
+                i += 2;
+                addCData();
+                m_state = TagInside;
+                break;
+              } // fall-through intended
+            default:
+            m_cdata += c;
+            break;
           }
           break;
         case TagNameCollect:          // we're collecting the tag's name, we have at least one octet already
@@ -367,10 +398,11 @@ namespace gloox
 
   void Parser::addCData()
   {
-    if( m_current )
+    if( m_current && !m_cdata.empty() )
     {
       m_current->setCData( m_cdata );
-//       printf( "added cdata %s, ", m_cdata.c_str() );
+//       printf( "added cdata %s to %s: %s\n",
+//               m_cdata.c_str(), m_current->name().c_str(), m_current->xml().c_str() );
       m_cdata = "";
     }
   }
