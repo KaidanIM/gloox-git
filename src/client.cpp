@@ -478,7 +478,8 @@ namespace gloox
     util::clear( m_presenceExtensions );
   }
 
-  void Client::setPresence( Presence::PresenceType presence, int priority, const std::string& status )
+  void Client::setPresence( const JID& to, Presence::PresenceType presence, int priority,
+                            const std::string& status )
   {
     m_presence = presence;
     m_status = status;
@@ -490,7 +491,7 @@ namespace gloox
     else
       m_priority = priority;
 
-    sendPresence();
+    sendPresence( to );
   }
 
   void Client::disableRoster()
@@ -507,12 +508,12 @@ namespace gloox
     m_auth->doAuth( m_sid );
   }
 
-  void Client::sendPresence()
+  void Client::sendPresence( const JID& to )
   {
     if( m_presence != Presence::Invalid &&
         state() >= StateConnected )
     {
-      Presence* p = new Presence( m_presence, JID(), m_status, m_priority );
+      Presence* p = new Presence( m_presence, to, m_status, m_priority );
 
       StanzaExtensionList::const_iterator it = m_presenceExtensions.begin();
       for( ; it != m_presenceExtensions.end(); ++it )
@@ -545,7 +546,7 @@ namespace gloox
 
   void Client::rosterFilled()
   {
-    sendPresence();
+    sendPresence( JID() );
     notifyStreamEvent( StreamEventFinished );
     notifyOnConnect();
   }
