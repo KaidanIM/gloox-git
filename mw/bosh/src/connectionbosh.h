@@ -174,19 +174,19 @@ namespace gloox
       std::string m_proxyPort;
 
       // BOSH parameters
-      long m_rid;
+      unsigned long m_rid;
       std::string m_sid;
       
       bool m_initialStreamSent;
-      int m_openRequests;
-      int m_maxOpenRequests;
-      int m_wait;
-      int m_hold;
+      unsigned int m_openRequests;
+      unsigned int m_maxOpenRequests;
+      unsigned int m_wait;
+      unsigned int m_hold;
  
       bool m_streamRestart; // Set to true if we are waiting for an acknowledgement of a stream restart
 
-      long m_lastRequestTime;
-      long m_minTimePerRequest;
+      unsigned long m_lastRequestTime;
+      unsigned long m_minTimePerRequest;
       
       std::string m_buffer; // Buffer of received data
       std::string m_bufferHeader; // HTTP header of data currently in buffer

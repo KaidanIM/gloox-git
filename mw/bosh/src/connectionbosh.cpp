@@ -65,35 +65,18 @@ namespace gloox
 		}
 
 		m_parser = new Parser ( this );
-		//if( m_connection )
-		//  m_connection->registerConnectionDataHandler( this );
-		//if(connection)
-		//{
-		// ConnectionBase * pConnection = connection->newInstance();
-		/* if(m_connMode ==  ModePipelining)
-		   {
-		     // queue this connection so that it is ready for immediate use
-		     m_activeConnections.push_back(connection);
-		     m_activeConnections.back()->registerConnectionDataHandler( this );
-		   }
-		 else
-		   { */
+
 		// drop this connection into our pool of available connections
 		printf ( "Added initial connection to connection pool\n" );
 		printf ( "Connections in pool: %d\n", m_connectionPool.size() );
 		connection->registerConnectionDataHandler ( this );
 		m_connectionPool.push_back ( connection );
 		printf ( "Connections in pool: %d\n", m_connectionPool.size() );
-		//}
-		//}
-		//else
-		//      printf("Not a valid pointer...\n");
+
 	}
 
 	ConnectionBOSH::~ConnectionBOSH()
 	{
-		//if( m_connection )
-		//  delete m_connection;
 		if ( !m_activeConnections.empty() )
 		{
 			while ( !m_activeConnections.empty() )
@@ -117,8 +100,6 @@ namespace gloox
 
 	ConnectionBase* ConnectionBOSH::newInstance() const
 	{
-		//ConnectionBase* conn = m_connection ? m_connection->newInstance() : 0;
-		//return new ConnectionBOSH( m_handler, conn, m_logInstance, m_boshHost, m_server, m_port );
 		ConnectionBOSH * pNewConnection = new ConnectionBOSH ( m_handler, /*conn*/NULL, m_logInstance, m_boshHost, m_server, m_port );
 
 		pNewConnection->m_activeConnections = m_activeConnections;
@@ -131,19 +112,6 @@ namespace gloox
 
 	ConnectionError ConnectionBOSH::connect()
 	{
-		// Perform connection to server
-
-		/* //if( m_connection && m_handler )
-		 if( !m_activeConnections.empty() && m_handler )
-		 {
-		   m_state = StateConnecting;
-		   m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh initiating connection to server" );
-		   //return m_connection->connect();
-		   return m_activeConnections.front()->connect();
-		 }
-
-		 return ConnNotConnected;
-		*/
 		ConnectionError eRet = ConnNotConnected;
 
 		/* the following assumes that there is only one connection either in the connection pool or
@@ -169,17 +137,12 @@ namespace gloox
 				eRet = m_connectionPool.back()->connect();
 			}
 		}
-		else
-		{
-			int a = 1;
-		}
 
 		return eRet;
 	}
 
 	void ConnectionBOSH::disconnect()
 	{
-		//if(!m_connection)
 		if ( (m_connMode == ModePipelining && m_activeConnections.empty()) || (m_connectionPool.empty() && m_activeConnections.empty()) )
 				return;
 
@@ -205,8 +168,6 @@ namespace gloox
 		m_logInstance.log ( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh disconnection request sent" );
 		m_openRequests++;
 		printf ( "Incrementing m_openRequests to %d\n", m_openRequests );
-		//m_connection->send(connrequest.str());
-		//m_connection->disconnect();
 		
 		for ( uint i = 0; i < m_activeConnections.size(); i++ )
 		{
@@ -231,13 +192,22 @@ namespace gloox
 		// (Some CMs do not obey this, it seems)
 		if ( m_activeConnections.empty() || m_sendBuffer.size() > 0)
 		{
-			printf("*******Sending buffer: %s\n", m_sendBuffer.c_str());
+			m_logInstance.log ( LogLevelDebug, LogAreaClassConnectionBOSH, "Sending empty request (or there is data in the send buffer)");
 			sendXML ( m_sendBuffer );
 		}
 
 
 		if ( !m_activeConnections.empty() )
 		{
+			// If this the first recv() after a stream restart, pass to gloox a stream:stream tag
+			if ( m_handler && m_streamRestart )
+			{
+				m_logInstance.log ( LogLevelDebug, LogAreaClassConnectionBOSH, "sending spoofed <stream:stream>" );
+				m_handler->handleReceivedData ( this, "<?xml version='1.0' ?><stream:stream xmlns:stream='http://etherx.jabber.org/streams' xmlns='jabber:client' version='1.0' from='" + m_server + "' id ='" + m_sid + "' xml:lang='en' >" );
+				m_logInstance.log ( LogLevelDebug, LogAreaClassConnectionBOSH, "sent spoofed <stream:stream>" );
+				m_streamRestart = false;
+			}
+			
 			switch ( m_connMode )
 			{
 				case ModePipelining:
@@ -246,53 +216,18 @@ namespace gloox
 					break;
 				case ModeLegacyHTTP:
 				case ModePersistentHTTP:
-				{
-					ConnectionBase *pC = m_activeConnections.front();
-					size_t size = m_activeConnections.size();
-					if(pC == NULL)
-					{
-						int a=1;
-					}
 					// Read from connection at front of queue
-					// printf("About to read from connection %p\n", m_activeConnections.front());
 					m_activeConnections.front()->recv ( timeout );
-				}
 					break;
 				default:
 					break;
 			}//switch
 		}
 		else
-			printf ( "%d connections to listen on?! (but %d in the pool)\n", m_activeConnections.size(), m_connectionPool.size() );
-
-		/*	if ( !m_activeConnections.empty() )
 		{
-			if ( m_handler && m_streamRestart )
-			{
-				m_logInstance.log ( LogLevelDebug, LogAreaClassConnectionBOSH, "sending spoofed <stream:stream>" );
-				m_handler->handleReceivedData ( this, "<?xml version='1.0' ?><stream:stream xmlns:stream='http://etherx.jabber.org/streams' xmlns='jabber:client' version='1.0' from='" + m_server + "' id ='" + m_sid + "' xml:lang='en' >" );
-				m_logInstance.log ( LogLevelDebug, LogAreaClassConnectionBOSH, "sent spoofed <stream:stream>" );
-				m_streamRestart = false;
-			}
-			if ( m_openRequests < 1 && !m_sid.empty() )
-			{
-				this->send ( m_sendBuffer );
-				m_sendBuffer = "";
-			}
-			//return m_connection->recv( timeout );
-			eRet = m_activeConnections.front()->recv ( timeout );
-
-			if ( ( eRet == ConnNoError ) && m_connMode != ModePipelining )
-			{
-				// remove this connection from the list of active connections and drop it into the
-				// connection pool
-				ConnectionBase * pConnection = m_activeConnections.front();
-				m_connectionPool.push_back ( pConnection );
-				m_activeConnections.pop_front();
-			}
-		} */
-		
-		
+			m_logInstance.log ( LogLevelDebug, LogAreaClassConnectionBOSH, "No available connections open");
+			eRet = ConnNotConnected;
+		}
 		return eRet;
 	}
 
@@ -304,17 +239,17 @@ namespace gloox
 		{
 			if ( m_connMode == ModePipelining && m_activeConnections.empty())
 			{
-				printf("Pipelining selected, but no connection open.\n");
+				m_logInstance.log ( LogLevelDebug, LogAreaClassConnectionBOSH, "Pipelining selected, but no connection open.");
 				return false;
 			}
 			else if ( m_connectionPool.empty() && m_activeConnections.empty() )		
 			{
-				printf("No available connections to send on...\n");
+				m_logInstance.log ( LogLevelDebug, LogAreaClassConnectionBOSH, "No available connections to send on...");
 				return false;
 			}
 			else if(m_activeConnections.size() < m_maxOpenRequests)
 			{
-				printf("sendRequest() called, but impossible to send (too many (%d, %d) connections open)\n", m_activeConnections.size(), m_openRequests);
+				m_logInstance.log ( LogLevelDebug, LogAreaClassConnectionBOSH, "sendRequest() called, but impossible to send (too many connections/requests open)");
 			}
 		}
 		std::ostringstream request;
@@ -391,7 +326,7 @@ namespace gloox
 			}
 				
 		}
-		printf("Unable to send request\n");
+		m_logInstance.log ( LogLevelDebug, LogAreaClassConnectionBOSH, "Unable to send request\n");
 		return false;
 
 	}
@@ -438,7 +373,7 @@ namespace gloox
 		}
 		else
 		{
-			printf("Unable to send. Connection not complete, or too many open requests, so added to buffer.\n");
+			m_logInstance.log ( LogLevelDebug, LogAreaClassConnectionBOSH, "Unable to send. Connection not complete, or too many open requests, so added to buffer.\n");
 			m_sendBuffer += data;
 			printf("\n---------------Buffer---------------\n%s\n----------------EOB--------------\n", m_sendBuffer.c_str());
 		}
@@ -455,28 +390,7 @@ namespace gloox
 
 	ConnectionError ConnectionBOSH::receive()
 	{
-		//if( m_connection )
-		//  return m_connection->receive();
-
-		/*	ConnectionError eRet = ConnNoError;
-
-		if ( !m_activeConnections.empty() )
-		{
-			eRet = m_activeConnections.front()->receive();
-
-			if ( ( eRet = ConnNoError ) && m_connMode != ModePipelining )
-			{
-				// remove this connection from the list of active connections and drop it into the
-				// connection pool
-				ConnectionBase * pConnection = m_activeConnections.front();
-				m_connectionPool.push_back ( pConnection );
-				m_activeConnections.pop_front();
-			}
-		}
-
-		return eRet;*/
-		ConnectionError eRet = recv(0);
-		
+		ConnectionError eRet = recv(0);	
 		return eRet;
 	}
 
@@ -488,18 +402,6 @@ namespace gloox
 			return false;
 
 		printf ( "\nTold to send: %s\n", data.c_str() );
-
-		/* if ( m_openRequests >= m_maxOpenRequests )
-		{
-			m_logInstance.log ( LogLevelDebug, LogAreaClassConnectionBOSH, "too many open requests, adding to send buffer" );
-			m_sendBuffer += data;
-			return false;
-		}
-		else
-		{
-			printf ( "%d: m_openRequests == %d\n", ( int ) time ( NULL ), m_openRequests );
-		} */
-
 		
 		if ( data.substr ( 0, 2 ) == "<?" )
 		{
@@ -526,8 +428,6 @@ namespace gloox
 	{
 		m_state = StateDisconnected;
 
-		//if( m_connection )
-		//  m_connection->cleanup();
 		for ( uint i = 0; i < m_activeConnections.size(); i++ )
 		{
 			m_activeConnections[i]->cleanup();
@@ -541,9 +441,6 @@ namespace gloox
 
 	void ConnectionBOSH::getStatistics ( int &totalIn, int &totalOut )
 	{
-		//if( m_connection )
-		//  m_connection->getStatistics( totalIn, totalOut );
-
 		// TODO...
 		if ( !m_activeConnections.empty() )
 			m_activeConnections.back()->getStatistics ( totalIn, totalOut );
@@ -629,15 +526,15 @@ namespace gloox
 
 		if ( m_state == StateConnecting )
 		{
-			m_rid = ( rand() % 100000 + 47289472 );
+			m_rid = ( rand() % 100000 + 1728679472 );
 
 			Tag requestBody ( "body" );
 
 			requestBody.addAttribute ( "content", "text/xml; charset=utf-8" );
-			requestBody.addAttribute ( "hold", m_hold );
-			requestBody.addAttribute ( "rid", m_rid );
+			requestBody.addAttribute ( "hold", (long)m_hold );
+			requestBody.addAttribute ( "rid", (long)m_rid );
 			requestBody.addAttribute ( "ver", "1.6" );
-			requestBody.addAttribute ( "wait", m_wait );
+			requestBody.addAttribute ( "wait", (long)m_wait );
 			requestBody.addAttribute ( "ack", 0 );
 			requestBody.addAttribute ( "secure", "false" );
 			requestBody.addAttribute ( "route", "xmpp:" + m_server + ":5222" );
@@ -746,7 +643,6 @@ namespace gloox
 			Tag::TagList::const_iterator i;
 			for ( i = stanzas.begin(); i != stanzas.end(); i++ )
 			{
-//        printf("(*i) is %p, m_handler is %p\n", (void*)*i, (void*)m_handler);
 
 				if ( m_handler && *i )
 				{
