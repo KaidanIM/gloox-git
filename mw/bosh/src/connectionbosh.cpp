@@ -179,24 +179,13 @@ namespace gloox
 
 	void ConnectionBOSH::disconnect()
 	{
-		m_state = StateDisconnected;
-
 		//if(!m_connection)
-		if ( m_connMode == ModePipelining )
-		{
-			if ( m_activeConnections.empty() )
+		if ( (m_connMode == ModePipelining && m_activeConnections.empty()) || (m_connectionPool.empty() && m_activeConnections.empty()) )
 				return;
-		}
-		else
-		{
-			if ( m_connectionPool.empty() && m_activeConnections.empty() )
-				return;
-		}
-
-		std::ostringstream connrequest;
-		std::ostringstream requestBody;
 
 		m_rid++;
+		
+		std::ostringstream requestBody;
 
 		requestBody << "<body ";
 		requestBody << "rid='" << m_rid << "' ";
@@ -211,28 +200,27 @@ namespace gloox
 			requestBody << ">" << m_sendBuffer << "</body>";
 			m_sendBuffer = "";
 		}
-		connrequest << "POST " << m_path << " HTTP/1.1\r\n";
-		connrequest << "Host: " << m_boshHost << "\r\n";
-		connrequest << "Content-Type: text/xml; charset=utf-8\r\n";
-		connrequest << "Content-Length: " << requestBody.str().length() << "\r\n\r\n";
-		connrequest << requestBody.str() << "\r\n";
+		sendRequest(requestBody.str(), true);
 
 		m_logInstance.log ( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh disconnection request sent" );
 		m_openRequests++;
 		printf ( "Incrementing m_openRequests to %d\n", m_openRequests );
 		//m_connection->send(connrequest.str());
 		//m_connection->disconnect();
-		if ( m_connMode == ModePipelining )
+		
+		for ( uint i = 0; i < m_activeConnections.size(); i++ )
 		{
-			m_activeConnections.back()->send ( connrequest.str() );
-			if ( !m_connMode & 1 )
-				m_activeConnections.back()->disconnect();
+			m_activeConnections[i]->disconnect();
 		}
-		else
+		
+		for ( uint i = 0; i < m_connectionPool.size(); i++ )
 		{
-			if ( m_handler )
-				m_handler->handleDisconnect ( this, ConnUserDisconnected );
+			m_connectionPool[i]->disconnect();
 		}
+		
+		m_state = StateDisconnected;
+		if ( m_handler )
+			m_handler->handleDisconnect ( this, ConnUserDisconnected );
 	}
 
 	ConnectionError ConnectionBOSH::recv ( int timeout )
