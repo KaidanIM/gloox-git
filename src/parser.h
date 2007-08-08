@@ -51,7 +51,7 @@ namespace gloox
        * @return Returns @b -1 if parsing was successful. If a parse error occured, the
        * character position where the error was occured is returned.
        */
-      int feed( const std::string& data );
+      int feed( std::string& data );
 
       /**
        * Reverses operation of escape(). (&amp; --> &).
@@ -99,6 +99,7 @@ namespace gloox
       std::string m_cdata;
       std::string m_attrib;
       std::string m_value;
+      std::string m_backBuffer;
       int m_preamble;
       bool m_quote;
 

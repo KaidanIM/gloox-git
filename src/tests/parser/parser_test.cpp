@@ -444,6 +444,24 @@ class ParserTest : private TagHandler
       m_tag = 0;
 
       //-------
+      name = "split <![CDATA[ section";
+      data = "<tag1><![CDA";
+      i = -1;
+      if( ( i = p->feed( data ) ) >= 0 || m_tag )
+      {
+        ++fail;
+        printf( "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
+      }
+      data = "TA[abc&amp;&&lt;]]defg]]></tag1>";
+      if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->cdata() != "abc&amp;&&lt;]]defg" )
+      {
+        ++fail;
+        printf( "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      //-------
       name = "invalid name 1";
       data = "<tag1><!></tag1>";
       if( p->feed( data ) == -1 )
