@@ -10,3 +10,5 @@ Known Portability Issues
   eg
     template < typename T >
     void func( const std::list< T* >& l );
+
+- avoid std::string::clear(), it's not portable
