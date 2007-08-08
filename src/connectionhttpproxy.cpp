@@ -145,7 +145,7 @@ namespace gloox
          || !m_proxyHandshakeBuffer.compare( 0, 12, "HTTP/1.1 200" ) )
          && !m_proxyHandshakeBuffer.compare( m_proxyHandshakeBuffer.length() - 4, 4, "\r\n\r\n" ) )
       {
-        m_proxyHandshakeBuffer.clear();
+        m_proxyHandshakeBuffer = "";
         m_state = StateConnected;
         m_logInstance.log( LogLevelDebug, LogAreaClassConnectionHTTPProxy,
                            "http proxy connection established" );
