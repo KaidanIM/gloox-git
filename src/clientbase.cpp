@@ -349,8 +349,9 @@ namespace gloox
 
   void ClientBase::parse( const std::string& data )
   {
+    std::string copy = data;
     int i = 0;
-    if( m_parser && ( i = m_parser->feed( data ) ) >= 0 )
+    if( m_parser && ( i = m_parser->feed( copy ) ) >= 0 )
     {
       const int len = 4 + (int)std::log10( i ? i : 1 ) + 1;
       char *tmp = new char[len];
@@ -359,7 +360,7 @@ namespace gloox
       std::string error = "parse error (at pos ";
       error += tmp;
       error += "): ";
-      m_logInstance.log( LogLevelError, LogAreaClassClientbase, error + data );
+      m_logInstance.log( LogLevelError, LogAreaClassClientbase, error + copy );
       Tag* e = new Tag( "stream:error" );
       new Tag( e, "restricted-xml", "xmlns", XMLNS_XMPP_STREAM );
       send( e );
