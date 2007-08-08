@@ -129,10 +129,7 @@ namespace gloox
     if( m_connection )
       m_connection->getStatistics( totalIn, totalOut );
     else
-    {
-      totalIn = 0;
-      totalOut = 0;
-    }
+      totalIn = totalOut = 0;
   }
 
   void ConnectionHTTPProxy::handleReceivedData( const ConnectionBase* /*connection*/,
@@ -144,23 +141,23 @@ namespace gloox
     if( m_state == StateConnecting )
     {
       m_proxyHandshakeBuffer += data;
-      if( ( m_proxyHandshakeBuffer.substr( 0, 12 ) == "HTTP/1.0 200"
-            || m_proxyHandshakeBuffer.substr( 0, 12 ) == "HTTP/1.1 200" )
-          && m_proxyHandshakeBuffer.substr( m_proxyHandshakeBuffer.length() - 4 ) == "\r\n\r\n" )
+      if( ( !m_proxyHandshakeBuffer.compare( 0, 12, "HTTP/1.0 200" )
+         || !m_proxyHandshakeBuffer.compare( 0, 12, "HTTP/1.1 200" ) )
+         && !m_proxyHandshakeBuffer.compare( m_proxyHandshakeBuffer.length() - 4, 4, "\r\n\r\n" ) )
       {
-        m_proxyHandshakeBuffer = "";
+        m_proxyHandshakeBuffer.clear();
         m_state = StateConnected;
         m_logInstance.log( LogLevelDebug, LogAreaClassConnectionHTTPProxy,
                            "http proxy connection established" );
         m_handler->handleConnect( this );
       }
-      else if( m_proxyHandshakeBuffer.substr( 9, 3 ) == "407" )
+      else if( !m_proxyHandshakeBuffer.compare( 9, 3, "407" ) )
       {
         m_handler->handleDisconnect( this, ConnProxyAuthRequired );
         m_connection->disconnect();
       }
-      else if( m_proxyHandshakeBuffer.substr( 9, 3 ) == "403" ||
-               m_proxyHandshakeBuffer.substr( 9, 3 ) == "404" )
+      else if( !m_proxyHandshakeBuffer.compare( 9, 3, "403" )
+            || !m_proxyHandshakeBuffer.compare( 9, 3, "404" ) )
       {
         m_handler->handleDisconnect( this, ConnProxyAuthFailed );
         m_connection->disconnect();
