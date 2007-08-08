@@ -491,7 +491,7 @@ namespace gloox
     {
       case SaslMechDigestMd5:
       {
-        if( decoded.substr( 0, 7 ) == "rspauth" )
+        if( !decoded.compare( 0, 7, "rspauth" ) )
         {
           break;
         }
@@ -512,7 +512,7 @@ namespace gloox
         }
 
         size_t n_end = decoded.find( '"', n_pos + 7 );
-        while( decoded.substr( n_end-1, 1 ) == "\\" )
+        while( decoded[n_end-1] == '\\' )
           n_end = decoded.find( '"', n_end + 1 );
         std::string nonce = decoded.substr( n_pos + 7, n_end - ( n_pos + 7 ) );
 
