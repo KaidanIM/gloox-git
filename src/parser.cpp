@@ -31,8 +31,14 @@ namespace gloox
     delete m_root;
   }
 
-  int Parser::feed( const std::string& data )
+  int Parser::feed( std::string& data )
   {
+    if( !m_backBuffer.empty() )
+    {
+      data.insert( 0, m_backBuffer );
+      m_backBuffer = "";
+    }
+
     int i = 0;
     std::string::const_iterator it = data.begin();
     for( ; it != data.end(); ++it, ++i )
@@ -91,16 +97,24 @@ namespace gloox
               m_preamble = 1;
               break;
             case '!':
-              if( m_tag.empty() && it + 7 != data.end() && !data.compare( i, 8, "![CDATA[" ) )
+              if( i + 8 <= static_cast<int>( data.size() ) )
               {
-                it += 7;
-                i += 7;
-                m_state = TagCDATASection;
+                if( m_tag.empty() && !data.compare( i, 8, "![CDATA[" ) )
+                {
+                  it += 7;
+                  i += 7;
+                  m_state = TagCDATASection;
+                }
+                else
+                {
+                  cleanup();
+                  return i;
+                }
               }
               else
               {
-                cleanup();
-                return i;
+                m_backBuffer = data.substr( i );
+                return -1;
               }
               break;
             default:
@@ -113,17 +127,29 @@ namespace gloox
           switch( c )
           {
             case ']':
-              if( it + 2 != data.end() && !data.compare( i, 3, "]]>" ) )
+              if( i + 3 <= static_cast<int>( data.size() ) )
               {
-                it += 2;
-                i += 2;
-                addCData();
-                m_state = TagInside;
-                break;
-              } // fall-through intended
+                if( !data.compare( i, 3, "]]>" ) )
+                {
+                  it += 2;
+                  i += 2;
+                  addCData();
+                  m_state = TagInside;
+                }
+                else
+                {
+                  m_cdata += c;
+                }
+              }
+              else
+              {
+                m_backBuffer = data.substr( i );
+                return -1;
+              }
+              break;
             default:
-            m_cdata += c;
-            break;
+              m_cdata += c;
+              break;
           }
           break;
         case TagNameCollect:          // we're collecting the tag's name, we have at least one octet already
