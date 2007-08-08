@@ -900,31 +900,32 @@ namespace gloox
           {
             if( (*it)->name() == "feature" )
             {
-              if( (*it)->findAttribute( "var" ) == "muc_hidden" )
+              const std::string& var = (*it)->findAttribute( "var" );
+              if( var == "muc_hidden" )
                 m_flags |= FlagHidden;
-              else if( (*it)->findAttribute( "var" ) == "muc_membersonly" )
+              else if( var == "muc_membersonly" )
                 m_flags |= FlagMembersOnly;
-              else if( (*it)->findAttribute( "var" ) == "muc_moderated" )
+              else if( var == "muc_moderated" )
                 m_flags |= FlagModerated;
-              else if( (*it)->findAttribute( "var" ) == "muc_nonanonymous" )
+              else if( var == "muc_nonanonymous" )
                 setNonAnonymous();
-              else if( (*it)->findAttribute( "var" ) == "muc_open" )
+              else if( var == "muc_open" )
                 m_flags |= FlagOpen;
-              else if( (*it)->findAttribute( "var" ) == "muc_passwordprotected" )
+              else if( var == "muc_passwordprotected" )
                 m_flags |= FlagPasswordProtected;
-              else if( (*it)->findAttribute( "var" ) == "muc_persistent" )
+              else if( var == "muc_persistent" )
                 m_flags |= FlagPersistent;
-              else if( (*it)->findAttribute( "var" ) == "muc_public" )
+              else if( var == "muc_public" )
                 m_flags |= FlagPublic;
-              else if( (*it)->findAttribute( "var" ) == "muc_semianonymous" )
+              else if( var == "muc_semianonymous" )
                 setSemiAnonymous();
-              else if( (*it)->findAttribute( "var" ) == "muc_temporary" )
+              else if( var == "muc_temporary" )
                 m_flags |= FlagTemporary;
-              else if( (*it)->findAttribute( "var" ) == "muc_fullyanonymous" )
+              else if( var == "muc_fullyanonymous" )
                 setFullyAnonymous();
-              else if( (*it)->findAttribute( "var" ) == "muc_unmoderated" )
+              else if( var == "muc_unmoderated" )
                 m_flags |= FlagUnmoderated;
-              else if( (*it)->findAttribute( "var" ) == "muc_unsecured" )
+              else if( var == "muc_unsecured" )
                 m_flags |= FlagUnsecured;
             }
             else if( (*it)->name() == "identity" )
