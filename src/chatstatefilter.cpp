@@ -96,7 +96,7 @@ namespace gloox
 
     m_lastSent = state;
 
-    m_parent->send( m );
+    send( m );
   }
 
   void ChatStateFilter::decorate( Tag *tag )
