@@ -12,6 +12,7 @@
 
 
 #include "tag.h"
+#include "util.h"
 
 #include <stdlib.h>
 
@@ -22,7 +23,6 @@
 #endif
 
 #include <algorithm>
-#include "util.h"
 
 namespace gloox
 {
