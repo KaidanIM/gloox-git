@@ -438,7 +438,7 @@ class ParserTest : private TagHandler
       if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->cdata() != "abc&&<]]defg" )
       {
         ++fail;
-        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str() );
+        printf( "test '%s' failed: %s\n", name.c_str(), data.c_str() );
       }
       delete m_tag;
       m_tag = 0;
