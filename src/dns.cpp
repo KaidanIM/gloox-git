@@ -246,6 +246,11 @@ namespace gloox
       return -ConnConnectionRefused;
     }
 
+#ifdef HAVE_SETSOCKOPT
+    int val = 1;
+    setsockopt( fd, SOL_SOCKET, SO_REUSEADDR, (char*)&val, sizeof( val ) );
+#endif
+
     return fd;
   }
 
