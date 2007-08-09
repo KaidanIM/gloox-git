@@ -359,7 +359,7 @@ class ParserTest : private TagHandler
       //-------
       name = "<![CDATA[ section 1";
       data = "<tag1><![CDATA[abcdefg]]></tag1>";
-      i = -1;
+      int i = -1;
       if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->cdata() != "abcdefg" )
       {
         ++fail;

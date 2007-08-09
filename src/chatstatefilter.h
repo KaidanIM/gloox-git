@@ -83,7 +83,7 @@ namespace gloox
       // reimplemented from MessageFilter
       virtual void filter( Stanza *stanza );
 
-    private:
+    protected:
       ChatStateHandler *m_chatStateHandler;
       ChatStateType m_lastSent;
       bool m_enableChatStates;
