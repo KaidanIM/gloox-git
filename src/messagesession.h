@@ -146,9 +146,7 @@ namespace gloox
   class GLOOX_API MessageSession
   {
 
-    friend class MessageEventFilter;
-    friend class ChatStateFilter;
-    friend class InBandBytestream;
+    friend class MessageFilter;
 
     public:
       /**

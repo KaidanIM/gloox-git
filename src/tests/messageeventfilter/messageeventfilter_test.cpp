@@ -73,6 +73,7 @@ namespace gloox
       virtual ~MessageFilter();
       void attachTo( MessageSession *session );
       virtual void decorate( Tag *tag );
+      void send( Tag* tag );
     protected:
       MessageSession *m_parent;
   };
@@ -81,6 +82,7 @@ namespace gloox
   MessageFilter::~MessageFilter() { delete m_parent; }
   void MessageFilter::attachTo( MessageSession *session ) {}
   void MessageFilter::decorate( Tag *tag ) {}
+  void MessageFilter::send( Tag* tag ) { m_parent->send( tag ); }
 }
 
 #define MESSAGEFILTER_H__

@@ -74,6 +74,8 @@ namespace gloox
       virtual void filter( Message* msg ) = 0;
 
     protected:
+      void send( Tag* tag ) { if( m_parent ) m_parent->send( tag ); }
+
       MessageSession *m_parent;
 
   };

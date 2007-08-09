@@ -119,7 +119,7 @@ namespace gloox
     m_lastSent = event;
 
     if( used )
-      m_parent->send( m );
+      send( m );
     else
       delete m;
   }
