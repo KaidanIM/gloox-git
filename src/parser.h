@@ -69,6 +69,7 @@ namespace gloox
         TagInside,
         TagNameCollect,
         TagNameComplete,
+        TagNameAlmostComplete,
         TagAttribute,
         TagAttributeComplete,
         TagAttributeEqual,
@@ -87,6 +88,13 @@ namespace gloox
         ForwardInsufficientSize
       };
 
+      enum DecodeState
+      {
+        DecodeValid,
+        DecodeInvalid,
+        DecodeInsufficient
+      };
+
       void addTag();
       void addAttribute();
       void addCData();
@@ -97,6 +105,7 @@ namespace gloox
       void streamEvent( Tag *tag );
       ForwardScanState forwardScan( int& pos, std::string::const_iterator& it,
                                     const std::string& data, const std::string& needle );
+      DecodeState decode( int& pos, std::string::const_iterator& it, const std::string& data );
 
       TagHandler *m_tagHandler;
       Tag *m_current;

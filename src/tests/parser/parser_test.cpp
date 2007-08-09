@@ -438,7 +438,7 @@ class ParserTest : private TagHandler
       if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->cdata() != "abc&&<]]defg" )
       {
         ++fail;
-        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->cdata().c_str() );
+        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str() );
       }
       delete m_tag;
       m_tag = 0;
@@ -565,6 +565,105 @@ class ParserTest : private TagHandler
       }
       delete m_tag;
       m_tag = 0;
+
+      //-------
+      name = "invalid tag 6";
+      data = "<tag1 a='b'a><abcd/></tag1>";
+      if( p->feed( data ) == -1 )
+      {
+        ++fail;
+        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      //-------
+      name = "invalid tag 7";
+      data = "<tag1 a=a'b'><abcd/></tag1>";
+      if( p->feed( data ) == -1 )
+      {
+        ++fail;
+        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      //-------
+      name = "invalid tag 8";
+      data = "<tag1 c=a><abcd/></tag1>";
+      if( p->feed( data ) == -1 )
+      {
+        ++fail;
+        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      //-------
+      name = "invalid tag 9";
+      data = "<tag1 =a><abcd/></tag1>";
+      if( p->feed( data ) == -1 )
+      {
+        ++fail;
+        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      //-------
+      name = "invalid tag 10";
+      data = "<tag1 =><abcd/></tag1>";
+      if( p->feed( data ) == -1 )
+      {
+        ++fail;
+        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      //-------
+      name = "invalid tag 11";
+      data = "<tag1 a><abcd/></tag1>";
+      if( p->feed( data ) == -1 )
+      {
+        ++fail;
+        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      //-------
+      name = "invalid tag 12";
+      data = "<tag1 <><abcd/></tag1>";
+      if( p->feed( data ) == -1 )
+      {
+        ++fail;
+        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      //-------
+      name = "escaping 1";
+      data = "<tag1>&gt;&lt;&apos;&amp;&quot;</tag1>";
+      if( p->feed( data ) == -1 )
+      {
+        ++fail;
+        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+
+
+
+
+
+
+
+
+
+
 
 
 

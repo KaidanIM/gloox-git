@@ -31,8 +31,38 @@ namespace gloox
     delete m_root;
   }
 
+  Parser::DecodeState Parser::decode( int& pos, std::string::const_iterator& it, const std::string& data )
+  {
+    // FIXME
+    printf( "decode called at pos %d\n", pos );
+    std::string rep;
+    std::string::size_type p = data.find( pos, ';' );
+    if( p == std::string::npos )
+    {
+      m_backBuffer = data.substr( pos );
+      return DecodeInsufficient;
+    }
+    // ~FIXME
+
+    switch( m_state )
+    {
+      case TagInside:
+      case TagCDATASection:
+        m_tag += rep;
+        break;
+      case TagAttributeValue:
+        m_cdata += rep;
+        break;
+      default:
+        break;
+    }
+    pos += p;
+    it += p;
+    return DecodeValid;
+  }
+
   Parser::ForwardScanState Parser::forwardScan( int& pos, std::string::const_iterator& it,
-                                        const std::string& data, const std::string& needle )
+                                                const std::string& data, const std::string& needle )
   {
     if( pos + static_cast<int>( needle.length() ) <= static_cast<int>( data.length() ) )
     {
@@ -153,6 +183,18 @@ namespace gloox
                   return -1;
               }
               break;
+            case '&':
+              switch( decode( i, it, data ) )
+              {
+                case DecodeValid:
+                  break;
+                case DecodeInvalid:
+                  cleanup();
+                  return i;
+                case DecodeInsufficient:
+                  return -1;
+              }
+              break;
             default:
               m_cdata += c;
               break;
@@ -195,6 +237,18 @@ namespace gloox
             case '<':
               addCData();
               m_state = TagOpening;
+              break;
+            case '&':
+              switch( decode( i, it, data ) )
+              {
+                case DecodeValid:
+                  break;
+                case DecodeInvalid:
+                  cleanup();
+                  return i;
+                case DecodeInsufficient:
+                  return -1;
+              }
               break;
             default:
               m_cdata += c;
@@ -248,6 +302,9 @@ namespace gloox
           {
             case '<':
             case '/':
+            case '!':
+            case '?':
+            case '&':
               cleanup();
               return i;
               break;
@@ -257,7 +314,6 @@ namespace gloox
                 cleanup();
                 return i;
               }
-
               m_state = Initial;
               break;
             default:
@@ -273,6 +329,8 @@ namespace gloox
           switch( c )
           {
             case '<':
+            case '!':
+            case '&':
               cleanup();
               return i;
               break;
@@ -316,6 +374,9 @@ namespace gloox
             case '<':
             case '/':
             case '>':
+            case '?':
+            case '!':
+            case '&':
               cleanup();
               return i;
               break;
@@ -326,7 +387,7 @@ namespace gloox
               m_attrib += c;
           }
           break;
-        case TagAttributeComplete:         // we're expecting an equals sign or ws or the attrib value
+        case TagAttributeComplete:         // we're expecting an equals sign or ws
 //           printf( "TagAttributeComplete: %c\n", c );
           if( isWhitespace( c ) )
             break;
@@ -336,9 +397,6 @@ namespace gloox
             case '=':
               m_state = TagAttributeEqual;
               break;
-            case '<':
-            case '/':
-            case '>':
             default:
               cleanup();
               return i;
@@ -357,9 +415,6 @@ namespace gloox
             case '\'':
               m_state = TagAttributeValue;
               break;
-            case '=':
-            case '<':
-            case '>':
             default:
               cleanup();
               return i;
@@ -382,12 +437,61 @@ namespace gloox
               }
             case '"':
               addAttribute();
-              m_state = TagNameComplete;
+              m_state = TagNameAlmostComplete;
               m_quote = false;
+              break;
+            case '&':
+              switch( decode( i, it, data ) )
+              {
+                case DecodeValid:
+                  break;
+                case DecodeInvalid:
+                  cleanup();
+                  return i;
+                case DecodeInsufficient:
+                  return -1;
+              }
               break;
             case '>':
             default:
               m_value += c;
+          }
+          break;
+        case TagNameAlmostComplete:
+//           printf( "TagAttributeEqual: %c\n", c );
+          if( isWhitespace( c ) )
+          {
+            m_state = TagNameComplete;
+            break;
+          }
+
+          switch( c )
+          {
+            case '/':
+              m_state = TagOpeningSlash;
+              break;
+            case '>':
+              if( m_preamble == 1 )
+              {
+                cleanup();
+                return i;
+              }
+              m_state = TagInside;
+              addTag();
+              break;
+            case '?':
+              if( m_preamble == 1 )
+                m_preamble = 2;
+              else
+              {
+                cleanup();
+                return i;
+              }
+              break;
+            default:
+              cleanup();
+              return i;
+              break;
           }
           break;
         default:
@@ -436,7 +540,7 @@ namespace gloox
   void Parser::addAttribute()
   {
 //     printf( "adding attribute: %s='%s', ", m_attrib.c_str(), m_value.c_str() );
-    m_attribs.push_back( new Tag::Attribute( m_attrib, relax( m_value ) ) );
+    m_attribs.push_back( new Tag::Attribute( m_attrib, m_value ) );
     m_attrib = "";
     m_value = "";
 //     printf( "added, " );
@@ -446,7 +550,7 @@ namespace gloox
   {
     if( m_current && !m_cdata.empty() )
     {
-      m_current->addCData( m_state == TagCDATASection ? m_cdata : relax( m_cdata ) );
+      m_current->addCData( m_state == TagCDATASection ? m_cdata : m_cdata );
 //       printf( "added cdata %s to %s: %s\n",
 //               m_cdata.c_str(), m_current->name().c_str(), m_current->xml().c_str() );
       m_cdata = "";
