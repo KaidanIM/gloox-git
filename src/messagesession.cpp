@@ -93,6 +93,12 @@ namespace gloox
     }
   }
 
+  void MessageSession::resetResource()
+  {
+    m_wantUpgrade = true;
+    m_target.setResource( "" );
+  }
+
   void MessageSession::setResource( const std::string& resource )
   {
     m_target.setResource( resource );
