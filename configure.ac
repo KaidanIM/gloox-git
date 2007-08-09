@@ -261,7 +261,8 @@ AC_MSG_RESULT($debug)
 dnl Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS(unistd.h strings.h errno.h arpa/nameser.h)
-AC_CHECK_FUNCS(ns_get16 __ns_get16 setsockopt)
+AC_CHECK_FUNCS(ns_get16 __ns_get16)
+AC_CHECK_FUNCS(setsockopt,,[AC_CHECK_LIB(socket,setsockopt)])
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST

@@ -249,6 +249,7 @@ namespace gloox
 #ifdef HAVE_SETSOCKOPT
     int timeout = 5000;
     setsockopt( fd, SOL_SOCKET, SO_SNDTIMEO, (char*)&timeout, sizeof( timeout ) );
+    setsockopt( fd, SOL_SOCKET, SO_REUSEADDR, (char*)&timeout, sizeof( timeout ) );
 #endif
 
     return fd;
