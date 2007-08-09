@@ -60,15 +60,6 @@ namespace gloox
       static const std::string relax( std::string what );
 
     private:
-      void addTag();
-      void addAttribute();
-      void addCData();
-      bool closeTag();
-      void cleanup();
-      bool isWhitespace( unsigned char c );
-      bool isValid( unsigned char c );
-      void streamEvent( Tag *tag );
-
       enum ParserInternalState
       {
         Initial,
@@ -88,6 +79,24 @@ namespace gloox
         TagPreamble,
         TagCDATASection
       };
+
+      enum ForwardScanState
+      {
+        ForwardFound,
+        ForwardNotFound,
+        ForwardInsufficientSize
+      };
+
+      void addTag();
+      void addAttribute();
+      void addCData();
+      bool closeTag();
+      void cleanup();
+      bool isWhitespace( unsigned char c );
+      bool isValid( unsigned char c );
+      void streamEvent( Tag *tag );
+      ForwardScanState forwardScan( int& pos, std::string::const_iterator& it,
+                                    const std::string& data, const std::string& needle );
 
       TagHandler *m_tagHandler;
       Tag *m_current;

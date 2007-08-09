@@ -31,6 +31,29 @@ namespace gloox
     delete m_root;
   }
 
+  Parser::ForwardScanState Parser::forwardScan( int& pos, std::string::const_iterator& it,
+                                        const std::string& data, const std::string& needle )
+  {
+    if( pos + static_cast<int>( needle.length() ) <= static_cast<int>( data.length() ) )
+    {
+      if( !data.compare( pos, needle.length(), needle ) )
+      {
+        it += needle.length() - 1;
+        pos += needle.length() - 1;
+        return ForwardFound;
+      }
+      else
+      {
+        return ForwardNotFound;
+      }
+    }
+    else
+    {
+      m_backBuffer = data.substr( pos );
+      return ForwardInsufficientSize;
+    }
+  }
+
   int Parser::feed( std::string& data )
   {
     if( !m_backBuffer.empty() )
@@ -98,24 +121,16 @@ namespace gloox
               m_preamble = 1;
               break;
             case '!':
-              if( i + 8 <= static_cast<int>( data.size() ) )
+              switch( forwardScan( i, it, data, "![CDATA[" ) )
               {
-                if( !data.compare( i, 8, "![CDATA[" ) )
-                {
-                  it += 7;
-                  i += 7;
+                case ForwardFound:
                   m_state = TagCDATASection;
-                }
-                else
-                {
+                  break;
+                case ForwardNotFound:
                   cleanup();
                   return i;
-                }
-              }
-              else
-              {
-                m_backBuffer = data.substr( i );
-                return -1;
+                case ForwardInsufficientSize:
+                  return -1;
               }
               break;
             default:
@@ -128,24 +143,16 @@ namespace gloox
           switch( c )
           {
             case ']':
-              if( i + 3 <= static_cast<int>( data.size() ) )
+              switch( forwardScan( i, it, data, "]]>" ) )
               {
-                if( !data.compare( i, 3, "]]>" ) )
-                {
-                  it += 2;
-                  i += 2;
-                  addCData();
+                case ForwardFound:
                   m_state = TagInside;
-                }
-                else
-                {
+                  break;
+                case ForwardNotFound:
                   m_cdata += c;
-                }
-              }
-              else
-              {
-                m_backBuffer = data.substr( i );
-                return -1;
+                  break;
+                case ForwardInsufficientSize:
+                  return -1;
               }
               break;
             default:
