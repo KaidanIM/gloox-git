@@ -99,7 +99,7 @@ namespace gloox
             case '!':
               if( i + 8 <= static_cast<int>( data.size() ) )
               {
-                if( m_tag.empty() && !data.compare( i, 8, "![CDATA[" ) )
+                if( !data.compare( i, 8, "![CDATA[" ) )
                 {
                   it += 7;
                   i += 7;
@@ -164,6 +164,7 @@ namespace gloox
           {
             case '<':
             case '?':
+            case '!':
               cleanup();
               return i;
               break;
