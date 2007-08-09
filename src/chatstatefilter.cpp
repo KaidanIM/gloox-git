@@ -21,7 +21,7 @@ namespace gloox
 {
 
   ChatStateFilter::ChatStateFilter( MessageSession *parent )
-  : MessageFilter( parent ), m_chatStateHandler( 0 ), m_lastSent( ChatStateGone ),
+    : MessageFilter( parent ), m_chatStateHandler( 0 ), m_lastSent( ChatStateGone ),
       m_enableChatStates( true )
   {
   }

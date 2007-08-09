@@ -260,8 +260,6 @@ namespace gloox
       * @param tag A Tag to send.
       */
       virtual void send( Tag *tag );
-
-    protected:
       void decorate( Tag *tag );
 
       ClientBase *m_parent;
@@ -272,8 +270,8 @@ namespace gloox
       void setResource( const std::string& resource );
 
       typedef std::list<MessageFilter*> MessageFilterList;
-
       MessageFilterList m_messageFilterList;
+
       std::string m_thread;
       int m_types;
       bool m_wantUpgrade;
