@@ -92,7 +92,7 @@ namespace gloox
       // reimplemented from IqHandler
       virtual void handleIqID( IQ *iq, int context );
 
-    private:
+    protected:
       enum IdType
       {
         FetchSearchFields,
