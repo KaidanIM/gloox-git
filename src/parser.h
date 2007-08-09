@@ -103,9 +103,9 @@ namespace gloox
       bool isWhitespace( unsigned char c );
       bool isValid( unsigned char c );
       void streamEvent( Tag *tag );
-      ForwardScanState forwardScan( int& pos, std::string::const_iterator& it,
-                                    const std::string& data, const std::string& needle );
-      DecodeState decode( int& pos, std::string::const_iterator& it, const std::string& data );
+      ForwardScanState forwardScan( std::string::size_type& pos, const std::string& data,
+                                    const std::string& needle );
+      DecodeState decode( std::string::size_type& pos, const std::string& data );
 
       TagHandler *m_tagHandler;
       Tag *m_current;

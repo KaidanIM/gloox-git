@@ -31,7 +31,7 @@ namespace gloox
     delete m_root;
   }
 
-  Parser::DecodeState Parser::decode( int& pos, std::string::const_iterator& it, const std::string& data )
+  Parser::DecodeState Parser::decode( std::string::size_type& pos, const std::string& data )
   {
     // FIXME
     printf( "decode called at pos %d\n", pos );
@@ -57,18 +57,16 @@ namespace gloox
         break;
     }
     pos += p;
-    it += p;
     return DecodeValid;
   }
 
-  Parser::ForwardScanState Parser::forwardScan( int& pos, std::string::const_iterator& it,
-                                                const std::string& data, const std::string& needle )
+  Parser::ForwardScanState Parser::forwardScan( std::string::size_type& pos, const std::string& data,
+                                                const std::string& needle )
   {
-    if( pos + static_cast<int>( needle.length() ) <= static_cast<int>( data.length() ) )
+    if( pos + needle.length() <= data.length() )
     {
       if( !data.compare( pos, needle.length(), needle ) )
       {
-        it += needle.length() - 1;
         pos += needle.length() - 1;
         return ForwardFound;
       }
@@ -92,11 +90,10 @@ namespace gloox
       m_backBuffer = "";
     }
 
-    int i = 0;
-    std::string::const_iterator it = data.begin();
-    for( ; it != data.end(); ++it, ++i )
+    std::string::size_type count = data.length();
+    for( std::string::size_type i = 0 ; i <= count; ++i )
     {
-      const unsigned char c = (*it);
+      const unsigned char c = data[i];
 //       printf( "found char:   %c, ", c );
 
       if( !isValid( c ) )
@@ -149,7 +146,7 @@ namespace gloox
               m_preamble = 1;
               break;
             case '!':
-              switch( forwardScan( i, it, data, "![CDATA[" ) )
+              switch( forwardScan( i, data, "![CDATA[" ) )
               {
                 case ForwardFound:
                   m_state = TagCDATASection;
@@ -171,7 +168,7 @@ namespace gloox
           switch( c )
           {
             case ']':
-              switch( forwardScan( i, it, data, "]]>" ) )
+              switch( forwardScan( i, data, "]]>" ) )
               {
                 case ForwardFound:
                   m_state = TagInside;
@@ -184,7 +181,7 @@ namespace gloox
               }
               break;
             case '&':
-              switch( decode( i, it, data ) )
+              switch( decode( i, data ) )
               {
                 case DecodeValid:
                   break;
@@ -239,7 +236,7 @@ namespace gloox
               m_state = TagOpening;
               break;
             case '&':
-              switch( decode( i, it, data ) )
+              switch( decode( i, data ) )
               {
                 case DecodeValid:
                   break;
@@ -441,7 +438,7 @@ namespace gloox
               m_quote = false;
               break;
             case '&':
-              switch( decode( i, it, data ) )
+              switch( decode( i, data ) )
               {
                 case DecodeValid:
                   break;
