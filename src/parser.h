@@ -75,7 +75,7 @@ namespace gloox
         TagClosing,
         TagClosingSlash,
         TagValueApos,
-        TagValue,
+        TagAttributeValue,
         TagPreamble,
         TagCDATASection
       };

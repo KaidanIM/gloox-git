@@ -95,8 +95,6 @@ namespace gloox
                 m_cdata += c;
                 m_state = TagInside;
               }
-//               cleanup();
-//               return i;
               break;
           }
           break;
@@ -357,7 +355,7 @@ namespace gloox
             case '"':
               m_quote = true;
             case '\'':
-              m_state = TagValue;
+              m_state = TagAttributeValue;
               break;
             case '=':
             case '<':
@@ -368,7 +366,7 @@ namespace gloox
               break;
           }
           break;
-        case TagValue:                 // we're expecting value data
+        case TagAttributeValue:                 // we're expecting value data
 //           printf( "TagValue: %c\n", c );
           switch( c )
           {
