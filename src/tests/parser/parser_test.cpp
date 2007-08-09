@@ -435,16 +435,16 @@ class ParserTest : private TagHandler
       name = "<![CDATA[ section 3";
       data = "<tag1><![CDATA[abc&amp;&&lt;]]defg]]></tag1>";
       i = -1;
-      if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->cdata() != "abc&amp;&&lt;]]defg" )
+      if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->cdata() != "abc&&<]]defg" )
       {
         ++fail;
-        printf( "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
+        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->cdata().c_str() );
       }
       delete m_tag;
       m_tag = 0;
 
       //-------
-      name = "split <![CDATA[ section";
+      name = "split <![CDATA[ section 1";
       data = "<tag1><![CDA";
       i = -1;
       if( ( i = p->feed( data ) ) >= 0 || m_tag )
@@ -453,7 +453,7 @@ class ParserTest : private TagHandler
         printf( "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
       }
       data = "TA[abc&amp;&&lt;]]defg]]></tag1>";
-      if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->cdata() != "abc&amp;&&lt;]]defg" )
+      if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->cdata() != "abc&&<]]defg" )
       {
         ++fail;
         printf( "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
@@ -478,7 +478,7 @@ class ParserTest : private TagHandler
         printf( "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
       }
       data = "TA[abc&amp;&&lt;]]defg]]></tag1>";
-      if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->cdata() != "abc&amp;&&lt;]]defg" )
+      if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->cdata() != "abc&&<]]defg" )
       {
         ++fail;
         printf( "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
@@ -503,7 +503,7 @@ class ParserTest : private TagHandler
         printf( "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
       }
       data = "]></tag1>";
-      if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->cdata() != "abc&amp;&&lt;]]defg" )
+      if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->cdata() != "abc&&<]]defg" )
       {
         ++fail;
         printf( "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
