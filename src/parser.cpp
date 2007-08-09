@@ -86,6 +86,7 @@ namespace gloox
           {
             case '<':
             case '>':
+            case '&':
               cleanup();
               return i;
               break;
@@ -165,6 +166,7 @@ namespace gloox
             case '<':
             case '?':
             case '!':
+            case '&':
               cleanup();
               return i;
               break;
@@ -398,13 +400,13 @@ namespace gloox
     if( !m_root )
     {
 //       printf( "created Tag named %s, ", m_tag.c_str() );
-      m_root = new Tag( 0, relax( m_tag ) );
+      m_root = new Tag( m_tag );
       m_current = m_root;
     }
     else
     {
 //       printf( "created Tag named %s, ", m_tag.c_str() );
-      m_current = new Tag( m_current, relax( m_tag ) );
+      m_current = new Tag( m_current, m_tag );
     }
 
     if( m_attribs.size() )
@@ -429,7 +431,7 @@ namespace gloox
   void Parser::addAttribute()
   {
 //     printf( "adding attribute: %s='%s', ", m_attrib.c_str(), m_value.c_str() );
-    m_attribs.push_back( new Tag::Attribute( relax( m_attrib ), relax( m_value ) ) );
+    m_attribs.push_back( new Tag::Attribute( m_attrib, relax( m_value ) ) );
     m_attrib = "";
     m_value = "";
 //     printf( "added, " );

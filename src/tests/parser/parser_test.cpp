@@ -539,10 +539,37 @@ class ParserTest : private TagHandler
       if( p->feed( data ) == -1 )
       {
         ++fail;
-        printf( "test '%s' failed: %s\n", name.c_str(), data.c_str() );
+        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
       }
       delete m_tag;
       m_tag = 0;
+
+      //-------
+      name = "invalid name 4";
+      data = "<tag1><ab&amp;cd/></tag1>";
+      if( p->feed( data ) == -1 )
+      {
+        ++fail;
+        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      //-------
+      name = "invalid name 5";
+      data = "<tag1><ab?cd/></tag1>";
+      if( p->feed( data ) == -1 )
+      {
+        ++fail;
+        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+
+
+
+
 
 
 
