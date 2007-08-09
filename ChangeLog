@@ -16,6 +16,10 @@ v0.9.4 -- xx yyy 2007
 - UniqueMUCRoom: fix creation of unique room names
 - XPath: support expressions like /abc[@foo='bar']/def[@bar='foo']
 - Parser: support CDATA sections
+- MessageFilter: enabled writing of custom MessageFilters
+- ChatStateFilter: made members protected
+- MessageSession: added resetResource()
+- Search: made members protected
 
 
 v0.9.3 -- 18 Jul 2007

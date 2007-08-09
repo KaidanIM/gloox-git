@@ -242,9 +242,15 @@ namespace gloox
       int types() const { return m_types; }
 
       /**
-       * Receives messages from ClientBase.
-       * @param stanza The message Stanza.
+       * This function resets the session's target JID to its bare form such that
+       * subsequently sent messages will be sent to that bare JID. The server will
+       * determine the best resource to deliver to. Useful if the target
+       * resource changed presence to e.g. away or offline.
+       * @since 0.9.4
        */
+      void resetResource();
+
+      // re-implemented from MessageHandler
       virtual void handleMessage( Stanza *stanza );
 
     protected:
@@ -255,8 +261,6 @@ namespace gloox
       * @param tag A Tag to send.
       */
       virtual void send( Tag *tag );
-
-    protected:
       void decorate( Tag *tag );
 
       ClientBase *m_parent;
@@ -267,8 +271,8 @@ namespace gloox
       void setResource( const std::string& resource );
 
       typedef std::list<MessageFilter*> MessageFilterList;
-
       MessageFilterList m_messageFilterList;
+
       std::string m_thread;
       int m_types;
       bool m_wantUpgrade;
