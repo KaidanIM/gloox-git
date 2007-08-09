@@ -242,9 +242,14 @@ namespace gloox
       int types() const { return m_types; }
 
       /**
-       * Receives messages from ClientBase.
-       * @param msg The message Stanza.
+       * This function resets the session's target JID to its bare form such that
+       * subsequently sent messages will be sent to that bare JID. The server will
+       * determine the best resource to deliver to. Useful if the target
+       * resource changed presence to e.g. away or offline.
        */
+      void resetResource();
+
+      // re-implemented from MessageHandler
       virtual void handleMessage( Message* msg );
 
     protected:
