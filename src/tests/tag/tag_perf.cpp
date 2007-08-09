@@ -22,7 +22,7 @@ static void printTime ( const char * testName, struct timeval tv1, struct timeva
 
 static Tag * newTag ( const std::string& str )
 {
-  Tag *aaa = new Tag( 0, str, str );
+  Tag *aaa = new Tag( str, str );
   Tag *bbb = new Tag( aaa, str, str ); bbb->addAttribute( str, str );
   Tag *ccc = new Tag( aaa, str, str ); ccc->addAttribute( str, str );
   Tag *ddd = new Tag( ccc, str, str ); ddd->addAttribute( str, str );

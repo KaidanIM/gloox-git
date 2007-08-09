@@ -27,12 +27,6 @@
 namespace gloox
 {
 
-  Tag::Tag()
-    : m_parent( 0 ), m_children( new TagList() ), m_cdata( new StringPList() ),
-      m_attribs( new AttributeList() ), m_nodes( new NodeList() ), m_type( StanzaUndefined )
-  {
-  }
-
   Tag::Tag( const std::string& name, const std::string& cdata )
     : m_parent( 0 ), m_children( new TagList() ), m_cdata( new StringPList() ),
       m_attribs( new AttributeList() ), m_nodes( new NodeList() ),
@@ -378,7 +372,7 @@ namespace gloox
 
   Tag* Tag::clone() const
   {
-    Tag *t = new Tag( 0, name() );
+    Tag *t = new Tag( name() );
     t->m_type = m_type;
     t->m_xmlns = m_xmlns;
 

@@ -120,11 +120,6 @@ namespace gloox
       typedef std::list<Tag*> TagList;
 
       /**
-       * Creates an empty tag.
-       */
-      Tag();
-
-      /**
        * Creates a new tag with a given name (and XML character data, if given).
        * @param name The name of the element.
        * @param cdata The XML character data of the element.
