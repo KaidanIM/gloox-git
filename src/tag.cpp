@@ -712,7 +712,14 @@ namespace gloox
     char c;
     for( ; len < expression.length(); ++len )
     {
-      switch( c = expression[len] )
+      c = expression[len];
+      if( type == XTLiteralInside && c != '\'' )
+      {
+        token += c;
+        continue;
+      }
+
+      switch( c )
       {
         case '/':
           closePreviousToken( &root, &current, type, token );
@@ -763,15 +770,16 @@ namespace gloox
           ++len;
           return root;
         case '\'':
-          type = XTLiteral;
-          if( expression[len-1] == '\\' )
-            token += c;
+          if( type == XTLiteralInside )
+            if( expression[len - 2] == '\\' )
+              token[token.length() - 2] = c;
+            else
+              type = XTLiteral;
+          else
+            type = XTLiteralInside;
           break;
         case '@':
-          if( type == XTLiteral )
-            token += c;
-          else
-            type = XTAttribute;
+          type = XTAttribute;
           break;
         case '.':
           token += c;

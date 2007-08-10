@@ -402,6 +402,7 @@ namespace gloox
         XTFunction,
         XTAsterisk,
         XTAttribute,
+        XTLiteralInside,
         XTLiteral,
         XTDot,
         XTDoubleDot,
