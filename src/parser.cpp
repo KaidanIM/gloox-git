@@ -33,11 +33,8 @@ namespace gloox
 
   Parser::DecodeState Parser::decode( std::string::size_type& pos, const std::string& data )
   {
-    // FIXME
-//     printf( "decode called at pos %d of %s\n", pos, data.c_str() );
     std::string::size_type p = data.find( ';', pos );
     std::string::size_type diff = p - pos;
-//     printf( "found ; at pos %d, %d from pos %d\n", p, diff, pos );
     if( diff > 7 || diff < 3 )
     {
       return DecodeInvalid;
@@ -52,6 +49,16 @@ namespace gloox
     switch( data[pos + 1] )
     {
       case '#':
+        if( std::isdigit( data[pos + 2] ) )
+        {
+          // FIXME
+        }
+        else if( data[pos + 2] == 'x' || data[pos + 2] == 'X' )
+        {
+          // FIXME
+        }
+        else
+          return DecodeInvalid;
         break;
       case 'l':
         if( diff == 3 && data[pos + 2] == 't' )
@@ -66,15 +73,15 @@ namespace gloox
           return DecodeInvalid;
         break;
       case 'a':
-        if( diff == 5 && !data.compare( pos+1, 5, "apos;" ) )
+        if( diff == 5 && !data.compare( pos + 1, 5, "apos;" ) )
           rep += '\'';
-        else if( diff == 4 && !data.compare( pos+1, 4, "amp;" ) )
+        else if( diff == 4 && !data.compare( pos + 1, 4, "amp;" ) )
           rep += '&';
         else
           return DecodeInvalid;
         break;
       case 'q':
-        if( diff == 5 && !data.compare( pos+1, 5, "quot;" ) )
+        if( diff == 5 && !data.compare( pos + 1, 5, "quot;" ) )
           rep += '"';
         else
           return DecodeInvalid;
@@ -82,12 +89,10 @@ namespace gloox
       default:
         return DecodeInvalid;
     }
-    // ~FIXME
 
     switch( m_state )
     {
       case TagInside:
-//       case TagCDATASection:
         m_cdata += rep;
         break;
       case TagAttributeValue:
@@ -220,19 +225,6 @@ namespace gloox
                   return -1;
               }
               break;
-            case '&':
-//               printf( "TagCDATASection, calling decode\n" );
-//               switch( decode( i, data ) )
-//               {
-//                 case DecodeValid:
-//                   break;
-//                 case DecodeInvalid:
-//                   cleanup();
-//                   return i;
-//                 case DecodeInsufficient:
-//                   return -1;
-//               }
-//               break;
             default:
               m_cdata += c;
               break;
