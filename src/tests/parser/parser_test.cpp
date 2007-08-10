@@ -797,6 +797,33 @@ class ParserTest : private TagHandler
       delete m_tag;
       m_tag = 0;
 
+      //-------
+      name = "escaping 7";
+      data = "<tag1>&#x1234;&#x43;&#34;&#43;</tag1>";
+      if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->cdata() != "ሴC\"+" )
+      {
+        ++fail;
+        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      //-------
+      name = "escaping 8";
+      data = "<tag1>&amp;&lt;&gt;&apos;&quot;  &#60;&#62;&#39;&#34;  &#x3c;&#x3e;&#x3C;&#x3E;&#x27;&#x22; "
+             " &#X3c;&#X3e;&#X3C;&#X3E;&#X27;&#X22;</tag1>";
+      if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->cdata() != "&<>'\"  <>'\"  <><>'\"  <><>'\"" )
+      {
+        ++fail;
+        printf( "test '%s' failed: \n%s\n%s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+
+
+
+
 
 
 
