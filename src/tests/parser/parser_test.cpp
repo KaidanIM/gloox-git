@@ -314,7 +314,7 @@ class ParserTest : private TagHandler
       name = "> inside attrib value";
       data = "<tag1 name='foo>bar'>cdata3</tag1>";
       p->feed( data );
-      if( !m_tag )
+      if( m_tag == 0 )
       {
         ++fail;
         printf( "test '%s: %s' failed\n", name.c_str(), data.c_str() );
@@ -357,49 +357,12 @@ class ParserTest : private TagHandler
       m_tag = 0;
 
       //-------
-      name = "<![CDATA[ section 1";
-      data = "<tag1><![CDATA[abcdefg]]></tag1>";
-      int i = -1;
-      if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->cdata() != "abcdefg" )
-      {
-        ++fail;
-        printf( "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
-      }
-      delete m_tag;
-      m_tag = 0;
-
-
-      //-------
-      name = "<![CDATA[ section 2";
-      data = "<tag1>123<![CDATA[abcdefg]]>456</tag1>";
-      i = -1;
-      if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->cdata() != "123abcdefg456" )
-      {
-        ++fail;
-        printf( "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
-      }
-      delete m_tag;
-      m_tag = 0;
-
-      //-------
-      name = "<![CDATA[ section 3";
-      data = "<tag1><![CDATA[abc&amp;&&lt;]]defg]]></tag1>";
-      i = -1;
-      if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->cdata() != "abc&amp;&&lt;]]defg" )
-      {
-        ++fail;
-        printf( "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
-      }
-      delete m_tag;
-      m_tag = 0;
-
-      //-------
       name = "invalid name 1";
       data = "<tag1><!></tag1>";
-      if( p->feed( data ) == -1 )
+      if( p->feed( data ) )
       {
         ++fail;
-        printf( "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
+        printf( "test '%s' failed: %s\n", name.c_str(), data.c_str() );
       }
       delete m_tag;
       m_tag = 0;

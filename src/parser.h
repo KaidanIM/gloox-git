@@ -78,8 +78,7 @@ namespace gloox
         TagClosingSlash,
         TagValueApos,
         TagValue,
-        TagPreamble,
-        TagCDATASection
+        TagPreamble
       };
 
       TagHandler *m_tagHandler;
