@@ -17,6 +17,8 @@
 #include "util.h"
 #include "parser.h"
 
+#include <cstdlib>
+
 namespace gloox
 {
 
@@ -62,7 +64,7 @@ namespace gloox
             return DecodeInvalid;
 
           char *end;
-          const long int val = strtol( data.data() + pos + idx, &end, base );
+          const long int val = std::strtol( data.data() + pos + idx, &end, base );
           if( *end != ';' )
             return DecodeInvalid;
 
