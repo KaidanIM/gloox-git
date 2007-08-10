@@ -789,7 +789,7 @@ class ParserTest : private TagHandler
       //-------
       name = "escaping 6";
       data = "<tag1>&#x1234;&gt;&lt;&apos;&amp;&quot;</tag1>";
-      if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->cdata() != "><'&\"" )
+      if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->cdata() != "ሴ><'&\"" )
       {
         ++fail;
         printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
