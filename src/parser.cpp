@@ -34,29 +34,60 @@ namespace gloox
   Parser::DecodeState Parser::decode( std::string::size_type& pos, const std::string& data )
   {
     // FIXME
-    printf( "decode called at pos %d\n", pos );
-    std::string rep;
-    std::string::size_type p = data.find( pos, ';' );
-    if( p == std::string::npos )
+//     printf( "decode called at pos %d of %s\n", pos, data.c_str() );
+    std::string::size_type p = data.find( ';', pos );
+    std::string::size_type diff = p - pos;
+//     printf( "found ; at pos %d, %d from pos %d\n", p, diff, pos );
+    if( diff > 7 || diff < 3 )
+    {
+      return DecodeInvalid;
+    }
+    else if( p == std::string::npos )
     {
       m_backBuffer = data.substr( pos );
       return DecodeInsufficient;
+    }
+
+    std::string rep;
+    switch( data[pos + 1] )
+    {
+      case '#':
+      case 'l':
+        if( diff == 3 && data[pos + 2] == 't' )
+          rep += '<';
+        break;
+      case 'g':
+        if( diff == 3 && data[pos + 2] == 't' )
+          rep += '>';
+        break;
+      case 'a':
+        if( diff == 5 && data.compare( pos, 5, "apos;" ) )
+          rep += '\'';
+        else if( diff == 4 && data.compare( pos, 4, "amp;" ) )
+          rep += '&';
+        break;
+      case 'q':
+        if( diff == 5 && data.compare( pos, 5, "quot;" ) )
+          rep += '"';
+        break;
+      default:
+        return DecodeInvalid;
     }
     // ~FIXME
 
     switch( m_state )
     {
       case TagInside:
-      case TagCDATASection:
-        m_tag += rep;
+//       case TagCDATASection:
+        m_cdata += rep;
         break;
       case TagAttributeValue:
-        m_cdata += rep;
+        m_value += rep;
         break;
       default:
         break;
     }
-    pos += p;
+    pos += diff;
     return DecodeValid;
   }
 
@@ -91,7 +122,7 @@ namespace gloox
     }
 
     std::string::size_type count = data.length();
-    for( std::string::size_type i = 0 ; i <= count; ++i )
+    for( std::string::size_type i = 0 ; i < count; ++i )
     {
       const unsigned char c = data[i];
 //       printf( "found char:   %c, ", c );
@@ -181,17 +212,18 @@ namespace gloox
               }
               break;
             case '&':
-              switch( decode( i, data ) )
-              {
-                case DecodeValid:
-                  break;
-                case DecodeInvalid:
-                  cleanup();
-                  return i;
-                case DecodeInsufficient:
-                  return -1;
-              }
-              break;
+//               printf( "TagCDATASection, calling decode\n" );
+//               switch( decode( i, data ) )
+//               {
+//                 case DecodeValid:
+//                   break;
+//                 case DecodeInvalid:
+//                   cleanup();
+//                   return i;
+//                 case DecodeInsufficient:
+//                   return -1;
+//               }
+//               break;
             default:
               m_cdata += c;
               break;
@@ -236,6 +268,7 @@ namespace gloox
               m_state = TagOpening;
               break;
             case '&':
+//               printf( "TagInside, calling decode\n" );
               switch( decode( i, data ) )
               {
                 case DecodeValid:
@@ -438,6 +471,7 @@ namespace gloox
               m_quote = false;
               break;
             case '&':
+//               printf( "TagAttributeValue, calling decode\n" );
               switch( decode( i, data ) )
               {
                 case DecodeValid:
@@ -547,7 +581,7 @@ namespace gloox
   {
     if( m_current && !m_cdata.empty() )
     {
-      m_current->addCData( m_state == TagCDATASection ? m_cdata : m_cdata );
+      m_current->addCData( m_cdata );
 //       printf( "added cdata %s to %s: %s\n",
 //               m_cdata.c_str(), m_current->name().c_str(), m_current->xml().c_str() );
       m_cdata = "";
