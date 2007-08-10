@@ -10,10 +10,7 @@
   This software is distributed without any warranty.
 */
 
-
-
 #include "gloox.h"
-
 #include "util.h"
 #include "parser.h"
 
@@ -37,11 +34,11 @@ namespace gloox
   {
     std::string::size_type p = data.find( ';', pos );
     std::string::size_type diff = p - pos;
+
     if( diff > 9 || diff < 3 )
-    {
       return DecodeInvalid;
-    }
-    else if( p == std::string::npos )
+
+    if( p == std::string::npos )
     {
       m_backBuffer = data.substr( pos );
       return DecodeInsufficient;
