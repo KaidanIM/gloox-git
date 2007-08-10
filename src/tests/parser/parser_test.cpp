@@ -900,7 +900,7 @@ class ParserTest : private TagHandler
       //-------
       name = "escaping 9";
       data = "<tag1>&#2097151;</tag1>";
-      if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->cdata() != "ï¿¿" )
+      if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->cdata() != "÷¿¿¿" )
       {
         ++fail;
         printf( "test '%s' failed: \n%s\n%s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
