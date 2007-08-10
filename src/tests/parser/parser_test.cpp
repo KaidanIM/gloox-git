@@ -666,8 +666,63 @@ class ParserTest : private TagHandler
       m_tag = 0;
 
       //-------
-      name = "invalid escaping 2";
+      name = "invalid escaping 3";
       data = "<tag1>&tt;</tag1>";
+      if( p->feed( data ) == -1 )
+      {
+        ++fail;
+        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      //-------
+      name = "invalid escaping 4";
+      data = "<tag1>&lf;</tag1>";
+      if( p->feed( data ) == -1 )
+      {
+        ++fail;
+        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      //-------
+      name = "invalid escaping 5";
+      data = "<tag1>&gf;</tag1>";
+      if( p->feed( data ) == -1 )
+      {
+        ++fail;
+        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      //-------
+      name = "invalid escaping 6";
+      data = "<tag1>&add;</tag1>";
+      if( p->feed( data ) == -1 )
+      {
+        ++fail;
+        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      //-------
+      name = "invalid escaping 7";
+      data = "<tag1>&qitt;</tag1>";
+      if( p->feed( data ) == -1 )
+      {
+        ++fail;
+        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      //-------
+      name = "invalid escaping 8";
+      data = "<tag1>&apit;</tag1>";
       if( p->feed( data ) == -1 )
       {
         ++fail;
