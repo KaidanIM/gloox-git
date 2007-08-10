@@ -384,16 +384,6 @@ class ParserTest : private TagHandler
       m_tag = 0;
 
       //-------
-      name = "relax";
-      if ( Parser::relax( "&amp;&lt;&gt;&apos;&quot;&#60;&#62;&#39;&#34;""&#x3c;&#x3e;"
-                      "&#x3C;&#x3E;&#x27;&#x22;&#X3c;&#x3e;&#X3C;&#X3E;&#X27;&#X22;" )
-            != "&<>'\"<>'\"<><>'\"<><>'\"" )
-      {
-        ++fail;
-        printf( "test '%s' failed\n", name.c_str() );
-      }
-
-      //-------
       name = "more than one tag at a time";
       m_multiple = true;
       data = "<tag1/><tag2/><tag3/>";
