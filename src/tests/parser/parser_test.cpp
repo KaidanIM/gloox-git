@@ -908,7 +908,16 @@ class ParserTest : private TagHandler
       delete m_tag;
       m_tag = 0;
 
-
+      //-------
+      name = "escaping 10";
+      data = "<tag1>&x86 1;</tag1>";
+      if( ( i = p->feed( data ) ) < 0 || m_tag || data[i] != '&' )
+      {
+        ++fail;
+        printf( "test '%s' failed: \n%s\n", name.c_str(), data.c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
 
 
 
