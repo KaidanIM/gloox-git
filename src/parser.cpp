@@ -52,23 +52,32 @@ namespace gloox
     switch( data[pos + 1] )
     {
       case '#':
+        break;
       case 'l':
         if( diff == 3 && data[pos + 2] == 't' )
           rep += '<';
+        else
+          return DecodeInvalid;
         break;
       case 'g':
         if( diff == 3 && data[pos + 2] == 't' )
           rep += '>';
+        else
+          return DecodeInvalid;
         break;
       case 'a':
-        if( diff == 5 && data.compare( pos, 5, "apos;" ) )
+        if( diff == 5 && !data.compare( pos+1, 5, "apos;" ) )
           rep += '\'';
-        else if( diff == 4 && data.compare( pos, 4, "amp;" ) )
+        else if( diff == 4 && !data.compare( pos+1, 4, "amp;" ) )
           rep += '&';
+        else
+          return DecodeInvalid;
         break;
       case 'q':
-        if( diff == 5 && data.compare( pos, 5, "quot;" ) )
+        if( diff == 5 && !data.compare( pos+1, 5, "quot;" ) )
           rep += '"';
+        else
+          return DecodeInvalid;
         break;
       default:
         return DecodeInvalid;
