@@ -52,23 +52,19 @@ namespace gloox
         {
           int base = 10;
           int idx = 2;
-          if( std::isdigit( data[pos + 2] ) )
-          {
-            if( data.find_first_not_of( "0123456789", pos + 2 ) != p )
-              return DecodeInvalid;
-          }
-          else if( data[pos + 2] == 'x' || data[pos + 2] == 'X' )
+
+          if( data[pos + 2] == 'x' || data[pos + 2] == 'X' )
           {
             base = 16;
             idx = 3;
-
-            if( data.find_first_not_of( "0123456789ABCDEFabcdef", pos + 3 ) != p )
-              return DecodeInvalid;
           }
-          else
+          else if( !std::isdigit( data[pos + 2] ) )
             return DecodeInvalid;
 
-          const long int val = strtol( data.data() + pos + idx, 0, base );
+          char *end;
+          const long int val = strtol( data.data() + pos + idx, &end, base );
+          if( *end != ';' )
+            return DecodeInvalid;
 
           if( val >= 0 && val < 128 )
           {
