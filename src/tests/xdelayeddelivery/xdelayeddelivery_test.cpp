@@ -30,20 +30,6 @@ int main( int /*argc*/, char** /*argv*/ )
   d = 0;
 
   // -------
-  name = "parsing empty tag";
-  t = new Tag();
-  d = new XDelayedDelivery( t );
-  if( d->tag() != 0 )
-  {
-    ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
-  }
-  delete d;
-  delete t;
-  d = 0;
-  t = 0;
-
-  // -------
   name = "filled object/getters";
   d = new XDelayedDelivery( j, "invalidstamp", "reason" );
   if( d->reason() != "reason" || d->stamp() != "invalidstamp" || d->from() != j )
@@ -52,9 +38,7 @@ int main( int /*argc*/, char** /*argv*/ )
     printf( "test '%s' failed\n", name.c_str() );
   }
   delete d;
-  delete t;
   d = 0;
-  t = 0;
 
   // -------
   name = "filled object/tag()";
@@ -81,9 +65,7 @@ int main( int /*argc*/, char** /*argv*/ )
     printf( "test '%s' failed\n", name.c_str() );
   }
   delete d;
-  delete t;
   d = 0;
-  t = 0;
 
   // -------
   name = "from Tag/tag()";

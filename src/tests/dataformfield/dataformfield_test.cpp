@@ -56,19 +56,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   delete f;
   f = 0;
-
-  // -------
-  name = "parse empty Tag";
-  Tag *t = new Tag();
-  f = new DataFormField( t );
-  delete t;
-  if( f->type() != DataFormField::FieldTypeInvalid )
-  {
-    ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
-  }
-  delete f;
-  f = 0;
+  Tag*t;
 
   // -------
   name = "set name";

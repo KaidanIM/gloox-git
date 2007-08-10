@@ -49,8 +49,9 @@ namespace gloox
 
       /**
        * Creates an empty tag.
+       * @deprecated Will be removed in 1.0
        */
-      Tag();
+      GLOOX_DEPRECATED Tag();
 
       /**
        * Creates a new tag with a given name (and XML character data, if given).
