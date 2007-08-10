@@ -35,7 +35,7 @@ namespace gloox
   {
     std::string::size_type p = data.find( ';', pos );
     std::string::size_type diff = p - pos;
-    if( diff > 7 || diff < 3 )
+    if( diff > 9 || diff < 3 )
     {
       return DecodeInvalid;
     }
@@ -52,15 +52,21 @@ namespace gloox
         {
           int base = 10;
           int idx = 2;
-          if( data[pos + 2] == 'x' || data[pos + 2] == 'X' )
+          if( std::isdigit( data[pos + 2] ) )
+          {
+            if( data.find_first_not_of( "0123456789", pos + 2 ) != p )
+              return DecodeInvalid;
+          }
+          else if( data[pos + 2] == 'x' || data[pos + 2] == 'X' )
           {
             base = 16;
             idx = 3;
+
+            if( data.find_first_not_of( "0123456789ABCDEFabcdef", pos + 3 ) != p )
+              return DecodeInvalid;
           }
-          else if ( !std::isdigit( data[pos + 2] ) )
-          {
+          else
             return DecodeInvalid;
-          }
 
           const long int val = strtol( data.data() + pos + idx, 0, base );
 
