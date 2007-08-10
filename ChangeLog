@@ -21,6 +21,7 @@ v0.9.4 -- xx yyy 2007
 - MessageSession: added resetResource()
 - Search: made members protected
 - DNS: re-use server port if setsockopt() is available
+- XPath: accept any characters in string literals
 
 
 v0.9.3 -- 18 Jul 2007
