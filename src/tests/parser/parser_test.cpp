@@ -911,13 +911,11 @@ class ParserTest : private TagHandler
       //-------
       name = "escaping 10";
       data = "<tag1>&#0;</tag1>";
+      i = p->feed( data );
       std::string n;
       if( m_tag )
-      {
         n = m_tag->cdata();
-        printf( "cdata: %02X\n", n[0] );
-      }
-      if( ( i = p->feed( data ) ) >= 0 || !m_tag || n.size() != 1 || n[0] != '\0' )
+      if( i >= 0 || !m_tag || n.size() != 1 || n[0] != '\0' )
       {
         ++fail;
         printf( "test '%s' failed at %d: \n%s\n%s\n", name.c_str(), i, data.c_str(), m_tag->xml().c_str() );
