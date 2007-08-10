@@ -49,16 +49,46 @@ namespace gloox
     switch( data[pos + 1] )
     {
       case '#':
-        if( std::isdigit( data[pos + 2] ) )
         {
-          // FIXME
+          int base = 10;
+          int idx = 2;
+          if( data[pos + 2] == 'x' || data[pos + 2] == 'X' )
+          {
+            base = 16;
+            idx = 3;
+          }
+          else if ( !std::isdigit( data[pos + 2] ) )
+          {
+            return DecodeInvalid;
+          }
+
+          const long int val = strtol(data.data()+pos+idx, NULL, base );
+
+          if( val >= 0 && val < 128 )
+          {
+            rep += char(val);
+          }
+          else if( val < 2048)
+          {
+            rep += char( 192 + (val >> 6) );
+            rep += char( 128 + (val % 64) );
+          }
+          else if( val < 65536)
+          {
+            rep += char( 224 + ( val >> 12 ) );
+            rep += char( 128 + ( ( val >> 6 ) % 64 ) );
+            rep += char( 128 + ( val % 64 ) );
+          }
+          else if( val < 2097152)
+          {
+            rep += char( 240 + ( val >> 18) );
+            rep += char( 128 + ( ( val >> 12) % 64) );
+            rep += char( 128 + ( ( val >> 6) % 64) );
+            rep += char( 128 + ( val % 64) );
+          }
+          else
+            return DecodeInvalid;
         }
-        else if( data[pos + 2] == 'x' || data[pos + 2] == 'X' )
-        {
-          // FIXME
-        }
-        else
-          return DecodeInvalid;
         break;
       case 'l':
         if( diff == 3 && data[pos + 2] == 't' )
