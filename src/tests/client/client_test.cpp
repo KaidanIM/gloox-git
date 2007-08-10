@@ -105,7 +105,7 @@ class ConnectionImpl : public ConnectionBase
 const char* ConnectionImpl::m_msgs[4][9] =
   {
     { // connection/auth goes ok.
-      "<stream:stream from='jabber.cc' id='6kpid3u736sqjwd65n25wm57mzz10wz7hopvsj2w' version='1.0'"
+      "<stream:stream from='jabber.cc' id='6kpid3u736sqjwd65n25wm57mzz10wz7hopvsj2w' version='1.0' "
         "xmlns='jabber:client' xmlns:stream='http://etherx.jabber.org/streams'>"
       "<stream:features xmlns:stream='http://etherx.jabber.org/streams'>"
         "<mechanisms xmlns='urn:ietf:params:xml:ns:xmpp-sasl'>"
@@ -122,7 +122,7 @@ const char* ConnectionImpl::m_msgs[4][9] =
         "cnNwYXV0aD1mNGFhZTM0YWY0N2I1MmM0MmQ2NWQzY2NjMGNjN2YyNA=="
       "</challenge>",
       "<success xmlns='urn:ietf:params:xml:ns:xmpp-sasl'/>",
-      "<stream:stream from='jabber.cc' id='1o4p1gz2h0m1wvqutohs24d439nbv9zxx4nykm11' version='1.0'"
+      "<stream:stream from='jabber.cc' id='1o4p1gz2h0m1wvqutohs24d439nbv9zxx4nykm11' version='1.0' "
         "xmlns='jabber:client' xmlns:stream='http://etherx.jabber.org/streams'>"
       "<stream:features xmlns:stream='http://etherx.jabber.org/streams'>"
         "<bind xmlns='urn:ietf:params:xml:ns:xmpp-bind'/>"
@@ -138,7 +138,7 @@ const char* ConnectionImpl::m_msgs[4][9] =
       0
     },
     { // auth failure
-      "<stream:stream from='jabber.cc' id='6kpid3u736sqjwd65n25wm57mzz10wz7hopvsj2w' version='1.0'"
+      "<stream:stream from='jabber.cc' id='6kpid3u736sqjwd65n25wm57mzz10wz7hopvsj2w' version='1.0' "
         "xmlns='jabber:client' xmlns:stream='http://etherx.jabber.org/streams'>"
       "<stream:features xmlns:stream='http://etherx.jabber.org/streams'>"
         "<mechanisms xmlns='urn:ietf:params:xml:ns:xmpp-sasl'>"
@@ -155,7 +155,7 @@ const char* ConnectionImpl::m_msgs[4][9] =
       0,
     },
     { // chokes in the middle
-      "<stream:stream from='jabber.cc' id='6kpid3u736sqjwd65n25wm57mzz10wz7hopvsj2w' version='1.0'"
+      "<stream:stream from='jabber.cc' id='6kpid3u736sqjwd65n25wm57mzz10wz7hopvsj2w' version='1.0' "
         "xmlns='jabber:client' xmlns:stream='http://etherx.jabber.org/streams'>"
       "<stream:features xmlns:stream='http://etherx.jabber.org/streams'>"
         "<mechanisms xmlns='urn:ietf:params:xml:ns:xmpp-sasl'>"
@@ -171,7 +171,7 @@ const char* ConnectionImpl::m_msgs[4][9] =
       0,
     },
     { // chokes on the xml
-      "<stream:stream from='jabber.cc' id='6kpid3u736sqjwd65n25wm57mzz10wz7hopvsj2w' version='1.0'"
+      "<stream:stream from='jabber.cc' id='6kpid3u736sqjwd65n25wm57mzz10wz7hopvsj2w' version='1.0' "
         "xmlns='jabber:client' xmlns:stream='http://etherx.jabber.org/streams'>"
       "<stream:features xmlns:stream='http://etherx.jabber.org/streams'>"
         "<mechanisms xmlns='urn:ietf:params:xml:ns:xmpp-sasl'>"
