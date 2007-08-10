@@ -62,29 +62,29 @@ namespace gloox
             return DecodeInvalid;
           }
 
-          const long int val = strtol( data.data() + pos + idx, NULL, base );
+          const long int val = strtol( data.data() + pos + idx, 0, base );
 
           if( val >= 0 && val < 128 )
           {
-            rep += char(val);
+            rep += char( val );
           }
-          else if( val < 2048)
+          else if( val < 2048 )
           {
-            rep += char( 192 + (val >> 6) );
-            rep += char( 128 + (val % 64) );
+            rep += char( 192 + ( val >> 6 ) );
+            rep += char( 128 + ( val % 64 ) );
           }
-          else if( val < 65536)
+          else if( val < 65536 )
           {
             rep += char( 224 + ( val >> 12 ) );
             rep += char( 128 + ( ( val >> 6 ) % 64 ) );
             rep += char( 128 + ( val % 64 ) );
           }
-          else if( val < 2097152)
+          else if( val < 2097152 )
           {
-            rep += char( 240 + ( val >> 18) );
-            rep += char( 128 + ( ( val >> 12) % 64) );
-            rep += char( 128 + ( ( val >> 6) % 64) );
-            rep += char( 128 + ( val % 64) );
+            rep += char( 240 + ( val >> 18 ) );
+            rep += char( 128 + ( ( val >> 12 ) % 64 ) );
+            rep += char( 128 + ( ( val >> 6 ) % 64 ) );
+            rep += char( 128 + ( val % 64 ) );
           }
           else
             return DecodeInvalid;
