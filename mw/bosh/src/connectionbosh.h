@@ -92,9 +92,9 @@ namespace gloox
 
       enum ConnMode
       {
-        ModeLegacyHTTP             = 0, // HTTP 1.0 connections, closed after receiving a response
-        ModePersistentHTTP        = 1, // HTTP 1.1 connections, re-used after receiving a response
-        ModePipelining                 = 3 // HTTP Pipelining (implies HTTP 1.1) a single connection is used
+        ModeLegacyHTTP,		// HTTP 1.0 connections, closed after receiving a response
+	ModePersistentHTTP,	// HTTP 1.1 connections, re-used after receiving a response
+	ModePipelining		// HTTP Pipelining (implies HTTP 1.1) a single connection is used
       };
 
       // reimplemented from ConnectionBase

@@ -166,8 +166,6 @@ namespace gloox
 		sendRequest(requestBody.str(), true);
 
 		m_logInstance.log ( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh disconnection request sent" );
-		m_openRequests++;
-		printf ( "Incrementing m_openRequests to %d\n", m_openRequests );
 		
 		for ( uint i = 0; i < m_activeConnections.size(); i++ )
 		{
@@ -234,7 +232,6 @@ namespace gloox
 	/* Chooses the appropriate connection, or opens a new one if necessary. Wraps xml in HTTP and sends. */
 	bool ConnectionBOSH::sendRequest ( const std::string& xml, bool ignoreRequestLimit )
 	{
-		// TODO Fix this if()... no idea why I wrote it like this :/
 		if(!ignoreRequestLimit)
 		{
 			if ( m_connMode == ModePipelining && m_activeConnections.empty())
@@ -247,22 +244,28 @@ namespace gloox
 				m_logInstance.log ( LogLevelDebug, LogAreaClassConnectionBOSH, "No available connections to send on...");
 				return false;
 			}
-			else if(m_activeConnections.size() < m_maxOpenRequests)
+			else if(m_openRequests > 0 && m_openRequests >= m_maxOpenRequests)
 			{
-				m_logInstance.log ( LogLevelDebug, LogAreaClassConnectionBOSH, "sendRequest() called, but impossible to send (too many connections/requests open)");
+				m_logInstance.log ( LogLevelDebug, LogAreaClassConnectionBOSH, "sendRequest() called, but impossible to send (too many requests open)");
+				return false;
 			}
 		}
 		std::ostringstream request;
-		request << "POST " << m_path << " HTTP/1.1\r\n";
-		request << "Host: " << m_boshHost << "\r\n";
-		if ( m_connMode == ModeLegacyHTTP )
+		request << "POST " << m_path;
+		
+		if(m_connMode == ModeLegacyHTTP)
+		{
+			request << " HTTP/1.0\r\n";
 			request << "Connection: close\r\n";
+		}
+		else
+			request << " HTTP/1.1\r\n";
+		
+			
+		request << "Host: " << m_boshHost << "\r\n";
 		request << "Content-Type: text/xml; charset=utf-8\r\n";
 		request << "Content-Length: " << xml.length() << "\r\n\r\n";
 		request << xml << "\r\n";
-
-		m_openRequests++;
-		
 
 		bool bSendData = false;
 
@@ -317,6 +320,7 @@ namespace gloox
 			if ( ce )
 			{
 				printf("Request sent on %p (%s)\n", m_activeConnections.back(), request.str().c_str());
+				m_openRequests++;
 				printf ( "%d: Incrementing m_openRequests to %d (connections: %d)\n", ( int ) time ( NULL ), m_openRequests, m_activeConnections.size() );
 				return true;
 			}
@@ -336,13 +340,6 @@ namespace gloox
 	{
 		std::ostringstream requestBody;
 
-		m_rid++;
-
-		requestBody << "<body ";
-		requestBody << "rid='" << m_rid << "' ";
-		requestBody << "sid='" << m_sid << "' ";
-		requestBody << "xmlns='http://jabber.org/protocol/httpbind'";
-
 		
 		if ( data.empty() )
 		{
@@ -356,6 +353,13 @@ namespace gloox
 			m_logInstance.log ( LogLevelDebug, LogAreaClassConnectionBOSH, "sending empty request" );
 		}
 		
+		m_rid++;
+		
+		requestBody << "<body ";
+		requestBody << "rid='" << m_rid << "' ";
+		requestBody << "sid='" << m_sid << "' ";
+		requestBody << "xmlns='http://jabber.org/protocol/httpbind'";
+		
 		if ( m_streamRestart )
 		{
 			requestBody << " xmpp:restart='true' to='" << m_server << "' xml:lang='en' xmlns:xmpp='urn:xmpp:xbosh' />";
@@ -366,13 +370,14 @@ namespace gloox
 			requestBody << ">" << m_sendBuffer << data << "</body>";
 			m_sendBuffer = "";
 		}
-
-		if ( m_state != StateDisconnected && sendRequest ( requestBody.str(), !data.empty() ))
+		// Send a request. Force if we are not sending an empty request, or if there are no connections open
+		if ( m_state != StateDisconnected && sendRequest ( requestBody.str(), !data.empty() | m_activeConnections.empty() ))
 		{
 			m_sendBuffer.clear();
 		}
 		else
 		{
+			m_rid--; // I think... (may need to rethink when acks are implemented)
 			m_logInstance.log ( LogLevelDebug, LogAreaClassConnectionBOSH, "Unable to send. Connection not complete, or too many open requests, so added to buffer.\n");
 			m_sendBuffer += data;
 			printf("\n---------------Buffer---------------\n%s\n----------------EOB--------------\n", m_sendBuffer.c_str());
@@ -464,6 +469,10 @@ namespace gloox
 				m_bufferHeader = m_buffer.substr ( 0, headerLength );
 				m_buffer = m_buffer.substr ( headerLength + 4 ); // Remove header from m_buffer, and \r\n\r\n
 				m_bufferContentLength = atol ( GetHTTPField ( "Content-Length" ).c_str() );
+				if(m_connMode != ModeLegacyHTTP && GetHTTPField("Connection") == "close") // TODO || m_bufferHeader.substr( ) == "HTTP/1.0"
+				{
+					m_connMode = ModeLegacyHTTP;
+				}
 			}
 		}
 
@@ -545,8 +554,7 @@ namespace gloox
 			requestBody.addAttribute ( "to", m_server );
 
 			m_logInstance.log ( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh connection request sent" );
-			printf ( "Incrementing m_openRequests to %d\n", m_openRequests );
-			sendRequest ( requestBody.xml() );
+			sendRequest ( requestBody.xml(), true );
 		}
 		else
 		{
@@ -560,23 +568,19 @@ namespace gloox
 		switch ( m_connMode )
 		{
 			case ModePipelining:
-				// Disconnection is fatal to BOSH?
-				break;
+				m_connMode = ModeLegacyHTTP;
+			break;
 			case ModeLegacyHTTP:
 			case ModePersistentHTTP:
 				printf ( "A TCP connection %p was disconnected.\n", connection );
-				return;
+			break;
 		}
 
-		// I think... try to reconnect.
-		// If reconnection fails then disconnect the BOSH 'connection'
-		// Add a number of retries?
-
-		m_state = StateDisconnected;
+		/* m_state = StateDisconnected;
 		m_logInstance.log ( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh connection closed" );
 
 		if ( m_handler )
-			m_handler->handleDisconnect ( this, reason );
+			m_handler->handleDisconnect ( this, reason ); */
 	}
 
 	void ConnectionBOSH::handleTag ( Tag* tag )
