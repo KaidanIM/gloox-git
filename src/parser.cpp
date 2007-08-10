@@ -57,8 +57,6 @@ namespace gloox
             base = 16;
             idx = 3;
           }
-          else if( !std::isdigit( data[pos + 2] ) )
-            return DecodeInvalid;
 
           char *end;
           const long int val = std::strtol( data.data() + pos + idx, &end, base );
