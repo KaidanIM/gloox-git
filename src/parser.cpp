@@ -62,7 +62,7 @@ namespace gloox
             return DecodeInvalid;
           }
 
-          const long int val = strtol(data.data()+pos+idx, NULL, base );
+          const long int val = strtol( data.data() + pos + idx, NULL, base );
 
           if( val >= 0 && val < 128 )
           {
