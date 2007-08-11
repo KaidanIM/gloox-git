@@ -14,12 +14,14 @@
 #ifndef DISCOHANDLER_H__
 #define DISCOHANDLER_H__
 
-#include "stanza.h"
+#include "macros.h"
 
 #include <string>
 
 namespace gloox
 {
+
+  class IQ;
 
   /**
    * @brief A virtual interface that enables objects to receive Service Discovery (XEP-0030) events.
@@ -39,37 +41,37 @@ namespace gloox
       /**
        * Reimplement this function if you want to be notified about the result
        * of an disco#info query.
-       * @param stanza The full Stanza.
+       * @param iq The full IQ.
        * @param context A context identifier.
        * @todo Replace the stanza with decoded values.
        */
-      virtual void handleDiscoInfoResult( Stanza *stanza, int context ) = 0;
+      virtual void handleDiscoInfoResult( IQ *iq, int context ) = 0;
 
       /**
        * Reimplement this function if you want to be notified about the result
        * of an disco#items query.
-       * @param stanza The full Stanza.
+       * @param iq The full IQ.
        * @param context A context identifier.
        * @todo Replace the stanza with decoded values.
        */
-      virtual void handleDiscoItemsResult( Stanza *stanza, int context ) = 0;
+      virtual void handleDiscoItemsResult( IQ *iq, int context ) = 0;
 
       /**
        * Reimplement this function to receive disco error notifications.
-       * @param stanza The full Stanza.
+       * @param iq The full IQ.
        * @param context A context identifier.
        * @todo Replace the stanza with decoded values.
        */
-      virtual void handleDiscoError( Stanza *stanza, int context ) = 0;
+      virtual void handleDiscoError( IQ *iq, int context ) = 0;
 
       /**
        * Reimplement this function to receive notifications about incoming IQ
        * stanzas of type 'set' in the disco namespace.
-       * @param stanza The full Stanza.
+       * @param iq The full IQ.
        * @return Returns @b true if the stanza was handled and answered, @b false otherwise.
        * @todo Replace the stanza with decoded values.
        */
-      virtual bool handleDiscoSet( Stanza *stanza ) { (void) stanza; return false; }
+      virtual bool handleDiscoSet( IQ *iq ) { (void) iq; return false; }
 
   };
 

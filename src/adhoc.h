@@ -142,13 +142,13 @@ namespace gloox
       virtual void handleIqID( IQ* iq, int context );
 
       // reimplemented from DiscoHandler
-      virtual void handleDiscoInfoResult( Stanza *stanza, int context );
+      virtual void handleDiscoInfoResult( IQ *iq, int context );
 
       // reimplemented from DiscoHandler
-      virtual void handleDiscoItemsResult( Stanza *stanza, int context );
+      virtual void handleDiscoItemsResult( IQ *iq, int context );
 
       // reimplemented from DiscoHandler
-      virtual void handleDiscoError( Stanza *stanza, int context );
+      virtual void handleDiscoError( IQ *iq, int context );
 
       /**
        * Using this function, you can register a AdhocCommandProvider -derived object as

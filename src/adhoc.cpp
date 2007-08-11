@@ -192,7 +192,7 @@ namespace gloox
     m_items[command] = name;
   }
 
-  void Adhoc::handleDiscoInfoResult( Stanza *stanza, int context )
+  void Adhoc::handleDiscoInfoResult( IQ *iq, int context )
   {
     if( context != CheckAdhocSupport )
       return;
@@ -200,9 +200,9 @@ namespace gloox
     AdhocTrackMap::iterator it = m_adhocTrackMap.begin();
     for( ; it != m_adhocTrackMap.end(); ++it )
     {
-      if( (*it).second.context == context && (*it).second.remote == stanza->from() )
+      if( (*it).second.context == context && (*it).second.remote == iq->from() )
       {
-        Tag *q = stanza->findChild( "query", XMLNS, XMLNS_DISCO_INFO );
+        Tag *q = iq->findChild( "query", XMLNS, XMLNS_DISCO_INFO );
         if( q )
           (*it).second.ah->handleAdhocSupport( (*it).second.remote,
                   q->hasChild( "feature", "var", XMLNS_ADHOC_COMMANDS ) );
@@ -212,7 +212,7 @@ namespace gloox
     }
   }
 
-  void Adhoc::handleDiscoItemsResult( Stanza *stanza, int context )
+  void Adhoc::handleDiscoItemsResult( IQ *iq, int context )
   {
     if( context != FetchAdhocCommands )
       return;
@@ -220,9 +220,9 @@ namespace gloox
     AdhocTrackMap::iterator it = m_adhocTrackMap.begin();
     for( ; it != m_adhocTrackMap.end(); ++it )
     {
-      if( (*it).second.context == context && (*it).second.remote == stanza->from() )
+      if( (*it).second.context == context && (*it).second.remote == iq->from() )
       {
-        Tag *q = stanza->findChild( "query", XMLNS, XMLNS_DISCO_ITEMS );
+        Tag *q = iq->findChild( "query", XMLNS, XMLNS_DISCO_ITEMS );
         if( q )
         {
           StringMap commands;
@@ -246,14 +246,14 @@ namespace gloox
     }
   }
 
-  void Adhoc::handleDiscoError( Stanza *stanza, int context )
+  void Adhoc::handleDiscoError( IQ *iq, int context )
   {
     AdhocTrackMap::iterator it = m_adhocTrackMap.begin();
     for( ; it != m_adhocTrackMap.end(); ++it )
     {
-      if( (*it).second.context == context && (*it).second.remote == stanza->from() )
+      if( (*it).second.context == context && (*it).second.remote == iq->from() )
       {
-        (*it).second.ah->handleAdhocError( (*it).second.remote, stanza->error() );
+        (*it).second.ah->handleAdhocError( (*it).second.remote, iq->error() );
 
         m_adhocTrackMap.erase( it );
       }
