@@ -1269,7 +1269,14 @@ namespace gloox
     if( m_tls == TLSDisabled || !hasTls() )
       return 0;
 
-    return new TLSDefault( this, m_server );
+    TLSDefault* tls = new TLSDefault( this, m_server );
+    if( tls->init() )
+      return tls;
+    else
+    {
+      delete tls;
+      return 0;
+    }
   }
 
 }

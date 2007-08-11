@@ -74,6 +74,11 @@ namespace gloox
     delete m_impl;
   }
 
+  bool TLSDefault::init()
+  {
+    return m_impl ? m_impl->init() : false;
+  }
+
   int TLSDefault::types()
   {
     int types = 0;

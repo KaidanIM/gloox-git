@@ -54,6 +54,9 @@ namespace gloox
       virtual ~OpenSSL();
 
       // reimplemented from TLSBase
+      virtual bool init();
+
+      // reimplemented from TLSBase
       virtual bool encrypt( const std::string& data );
 
       // reimplemented from TLSBase
@@ -91,7 +94,6 @@ namespace gloox
       std::string m_sendBuffer;
       char *m_buf;
       const int m_bufsize;
-
   };
 
 }

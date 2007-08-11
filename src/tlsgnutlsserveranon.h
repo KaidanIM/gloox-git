@@ -55,11 +55,13 @@ namespace gloox
        */
       virtual ~GnuTLSServerAnon();
 
+      // reimplemented from TLSBase
+      virtual bool init();
+
       // re-implemented from TLSBase
       virtual void cleanup();
 
     private:
-      virtual void init();
       virtual void getCertInfo();
       void generateDH();
 

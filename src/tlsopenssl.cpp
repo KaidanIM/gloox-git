@@ -26,27 +26,33 @@ namespace gloox
     : TLSBase( th, server ), m_ssl( 0 ), m_ctx( 0 ), m_buf( 0 ), m_bufsize( 17000 )
   {
     m_buf = (char*)calloc( m_bufsize + 1, sizeof( char ) );
+  }
 
-    SSL_library_init();
+  bool OpenSSL::init()
+  {
+    if( m_initLib )
+      SSL_library_init();
 
     SSL_COMP_add_compression_method( 1, COMP_zlib() );
 
     m_ctx = SSL_CTX_new( TLSv1_client_method() );
     if( !m_ctx )
-      return;
+      return false;
 
     if( !SSL_CTX_set_cipher_list( m_ctx, "HIGH:MEDIUM:AES:@STRENGTH" ) )
-      return;
+      return false;
 
     m_ssl = SSL_new( m_ctx );
     SSL_set_connect_state( m_ssl );
 
     if( !BIO_new_bio_pair( &m_ibio, 0, &m_nbio, 0 ) )
-    {
-      return;
-    }
+      return false;
+
     SSL_set_bio( m_ssl, m_ibio, m_ibio );
     SSL_set_mode( m_ssl, SSL_MODE_AUTO_RETRY );
+
+    m_valid = true;
+    return true;
   }
 
   OpenSSL::~OpenSSL()
