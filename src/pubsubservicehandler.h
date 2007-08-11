@@ -47,9 +47,9 @@ namespace gloox
          * @param error Error describing the resolution of the request.
          * @see Manager::requestSubscriptionList
          */
-        virtual void handleSubscriptionListResult( const JID& service,
-                                                   const SubscriptionMap * subMap,
-                                                   const Error * error = 0) = 0;
+        virtual void handleSubscriptionList( const JID& service,
+                                             const SubscriptionMap * subMap,
+                                             const Error * error = 0) = 0;
 
         /**
          * Receives the Affiliation map for a specific service.
@@ -57,9 +57,9 @@ namespace gloox
          * @param subMap The map of node's affiliation. Check error if null.
          * @see Manager::requestAffiliationList
          */
-        virtual void handleAffiliationListResult( const JID& service,
-                                                  const AffiliationMap * affMap,
-                                                  const Error * error = 0 ) = 0;
+        virtual void handleAffiliationList( const JID& service,
+                                            const AffiliationMap * affMap,
+                                            const Error * error = 0 ) = 0;
 
         /**
          * Receives the default configuration for a specific node type.
