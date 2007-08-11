@@ -1054,11 +1054,18 @@ namespace gloox
             }
             case RequestItemList:
             {
-              Tag * items = query->findChild( "items" );
-              if( !items )
+              ItemHandlerTrackMap::iterator ith = m_itemHandlerTrackMap.find( iq->id() );
+              if( ith == m_itemHandlerTrackMap.end() )
                 return;
-              const std::string& node = items->findAttribute( "node" );
-              //handleRequestItemListError( service, node, errorType );
+
+              Tag * items = query->findChild( "items" );
+              if( items )
+              {
+                const std::string& node = items->findAttribute( "node" );
+                (*ith).second->handleItemList( service, node, 0, &error );
+              }
+
+              m_itemHandlerTrackMap.erase( ith );
               break;
             }
             case PublishItem:
