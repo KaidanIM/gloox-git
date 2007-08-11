@@ -24,7 +24,6 @@ namespace gloox
   GnuTLSClientAnon::GnuTLSClientAnon( TLSHandler *th )
     : GnuTLSBase( th )
   {
-    init();
   }
 
   GnuTLSClientAnon::~GnuTLSClientAnon()
@@ -38,7 +37,7 @@ namespace gloox
     init();
   }
 
-  void GnuTLSClientAnon::init()
+  bool GnuTLSClientAnon::init()
   {
     const int protocolPriority[] = { GNUTLS_TLS1, 0 };
     const int kxPriority[]       = { GNUTLS_KX_ANON_DH, 0 };
@@ -47,14 +46,14 @@ namespace gloox
     const int compPriority[]     = { GNUTLS_COMP_ZLIB, GNUTLS_COMP_NULL, 0 };
     const int macPriority[]      = { GNUTLS_MAC_SHA, GNUTLS_MAC_MD5, 0 };
 
-    if( gnutls_global_init() != 0 )
-      return;
+    if( m_initLib && gnutls_global_init() != 0 )
+      return false;
 
     if( gnutls_anon_allocate_client_credentials( &m_anoncred ) < 0 )
-      return;
+      return false;
 
     if( gnutls_init( m_session, GNUTLS_CLIENT ) != 0 )
-      return;
+      return false;
 
     gnutls_protocol_set_priority( *m_session, protocolPriority );
     gnutls_cipher_set_priority( *m_session, cipherPriority );
@@ -66,6 +65,9 @@ namespace gloox
     gnutls_transport_set_ptr( *m_session, (gnutls_transport_ptr_t)this );
     gnutls_transport_set_push_function( *m_session, pushFunc );
     gnutls_transport_set_pull_function( *m_session, pullFunc );
+
+    m_valid = true;
+    return true;
   }
 
   void GnuTLSClientAnon::getCertInfo()

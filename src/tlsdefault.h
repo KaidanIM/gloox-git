@@ -58,6 +58,9 @@ namespace gloox
        */
       virtual ~TLSDefault();
 
+      // reimplemented from TLSBase
+      virtual bool init();
+
       // re-implemented from TLSBase
       virtual bool encrypt( const std::string& data );
 

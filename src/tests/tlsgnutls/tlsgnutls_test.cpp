@@ -49,7 +49,9 @@ GnuTLSTest::GnuTLSTest()
    m_serverHandshake( false ), m_serverHandshakeResult( false )
 {
   m_client = new GnuTLSClientAnon( this );
+  m_client->init();
   m_server = new GnuTLSServerAnon( this );
+  m_server->init();
 }
 
 GnuTLSTest::~GnuTLSTest()

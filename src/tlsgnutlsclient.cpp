@@ -24,7 +24,6 @@ namespace gloox
   GnuTLSClient::GnuTLSClient( TLSHandler *th, const std::string& server )
     : GnuTLSBase( th, server )
   {
-    init();
   }
 
   GnuTLSClient::~GnuTLSClient()
@@ -37,7 +36,7 @@ namespace gloox
     init();
   }
 
-  void GnuTLSClient::init()
+  bool GnuTLSClient::init()
   {
     const int protocolPriority[] = { GNUTLS_TLS1, GNUTLS_SSL3, 0 };
     const int kxPriority[]       = { GNUTLS_KX_RSA, 0 };
@@ -46,23 +45,16 @@ namespace gloox
     const int compPriority[]     = { GNUTLS_COMP_ZLIB, GNUTLS_COMP_NULL, 0 };
     const int macPriority[]      = { GNUTLS_MAC_SHA, GNUTLS_MAC_MD5, 0 };
 
-    if( gnutls_global_init() != 0 )
-    {
-      m_valid = false;
-      return;
-    }
+    if( m_initLib && gnutls_global_init() != 0 )
+      return false;
 
     if( gnutls_certificate_allocate_credentials( &m_credentials ) < 0 )
-    {
-      m_valid = false;
-      return;
-    }
+      return false;
 
     if( gnutls_init( m_session, GNUTLS_CLIENT ) != 0 )
     {
       gnutls_certificate_free_credentials( m_credentials );
-      m_valid = false;
-      return;
+      return false;
     }
 
     gnutls_protocol_set_priority( *m_session, protocolPriority );
@@ -75,6 +67,9 @@ namespace gloox
     gnutls_transport_set_ptr( *m_session, (gnutls_transport_ptr_t)this );
     gnutls_transport_set_push_function( *m_session, pushFunc );
     gnutls_transport_set_pull_function( *m_session, pullFunc );
+
+    m_valid = true;
+    return true;
   }
 
   void GnuTLSClient::setCACerts( const StringList& cacerts )

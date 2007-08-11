@@ -57,6 +57,9 @@ namespace gloox
       virtual ~SChannel();
 
       // reimplemented from TLSBase
+      virtual bool init() { return true; }
+
+      // reimplemented from TLSBase
       virtual bool encrypt( const std::string& data );
 
       // reimplemented from TLSBase

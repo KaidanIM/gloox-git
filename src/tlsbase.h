@@ -36,12 +36,30 @@ namespace gloox
        * @param server The server to use in certificate verification.
        */
       TLSBase( TLSHandler *th, const std::string server )
-        : m_handler( th ), m_server( server ), m_secure( false ), m_valid( false ) {}
+        : m_handler( th ), m_server( server ), m_secure( false ), m_valid( false ), m_initLib( true )
+      {}
 
       /**
        * Virtual destructor.
        */
       virtual ~TLSBase() {}
+
+      /**
+       * Initializes the TLS module. This function must be called (and execute successfully)
+       * before the module can be used.
+       * @return @b False if initialization failed, @b true otherwise.
+       * @since 1.0
+       */
+      virtual bool init() = 0;
+
+      /**
+       * Enables/disables initialization of the underlying TLS library. By default,
+       * initialization is performed. You may want to switch it off if the TLS library
+       * is used elsewhere in your applicationas well and you have no control over the
+       * initialization.
+       * @param init Whether or not to intialize the underlying TLS library.
+       */
+      void setInitLib( bool init ) { m_initLib = init; }
 
       /**
        * Use this function to feed unencrypted data to the encryption implementation.
@@ -115,6 +133,7 @@ namespace gloox
       CertInfo m_certInfo;
       bool m_secure;
       bool m_valid;
+      bool m_initLib;
 
   };
 

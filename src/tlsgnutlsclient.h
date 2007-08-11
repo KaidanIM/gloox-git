@@ -57,6 +57,9 @@ namespace gloox
       virtual ~GnuTLSClient();
 
       // reimplemented from TLSBase
+      virtual bool init();
+
+      // reimplemented from TLSBase
       virtual void setCACerts( const StringList& cacerts );
 
       // reimplemented from TLSBase
@@ -66,7 +69,6 @@ namespace gloox
       virtual void cleanup();
 
     private:
-      virtual void init();
       virtual void getCertInfo();
 
       bool verifyAgainst( gnutls_x509_crt_t cert, gnutls_x509_crt_t issuer );
