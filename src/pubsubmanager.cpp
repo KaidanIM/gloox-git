@@ -418,9 +418,12 @@ namespace gloox
       m_parent->send( iq );
     }
 
-    void Manager::subscribe( const JID& service, const std::string& node,
-                             NodeHandler * handler, const JID& jid,
-                             SubscriptionObject type, int depth )
+    void Manager::subscribe( const JID& service,
+                             const std::string& node,
+                             NodeHandler * handler,
+                             const JID& jid,
+                             SubscriptionObject type,
+                             int depth )
     {
       if( !m_parent || !handler )
         return;
@@ -457,19 +460,23 @@ namespace gloox
       m_parent->send( iq );
     }
 
-    void Manager::unsubscribe( const JID& service, const std::string& node,
-                                                   NodeHandler * handler )
+    void Manager::unsubscribe( const JID& service,
+                               const std::string& node,
+                               NodeHandler * handler,
+                               const JID& jid )
     {
       if( !m_parent || !handler )
         return;
 
       const std::string& id = m_parent->getID();
+      const std::string& ujid = jid.empty() ? m_parent->jid().full() : jid.full();
       IQ* iq = new IQ( IQ::Set, service, id, XMLNS_PUBSUB, "pubsub" );
       Tag *sub = new Tag( iq->query(), "unsubscribe", "node", node );
-      sub->addAttribute( "jid", m_parent->jid().bare() );
+      sub->addAttribute( "jid", ujid );
 
       m_parent->trackID( this, id, Unsubscription );
       m_nodeHandlerTrackMap[id] = handler;
+      // need to track info for handler
       m_parent->send( iq );
     }
 
@@ -477,7 +484,11 @@ namespace gloox
                                Tag * item, ItemHandler* handler )
     {
       if( !m_parent || !handler )
+      {
+        if( item )
+          delete item;
         return;
+      }
 
       const std::string& id = m_parent->getID();
       IQ* iq = new IQ( IQ::Set, service, id, XMLNS_PUBSUB, "pubsub" );
@@ -485,7 +496,7 @@ namespace gloox
       publish->addChild( item );
 
       m_parent->trackID( this, id, PublishItem );
-//      m_iopTrackMap[id] = TrackedItem(node, item);
+      m_iopTrackMap[id] = std::make_pair( node, item->findAttribute( "id" ) );
       m_itemHandlerTrackMap[id] = handler;
       m_parent->send( iq );
     }
@@ -720,37 +731,53 @@ namespace gloox
           {
             case Subscription:
             {
-              Tag *sub = query->findChild( "subscription" );
-              if( sub )
+              NodeHandlerTrackMap::iterator ith = m_nodeHandlerTrackMap.find( id );
+              if( ith == m_nodeHandlerTrackMap.end() )
+                return;
+
+              Tag *s = query->findChild( "subscription" );
+              if( s )
               {
-                const std::string& node = sub->findAttribute( "node" ),
-                                   sid  = sub->findAttribute( "subid" ),
-                                   jid  = sub->findAttribute( "jid" );
-                SubscriptionType subType = subscriptionType( sub->findAttribute( "subsciption" ) );
-                NodeHandlerTrackMap::iterator it = m_nodeHandlerTrackMap.find( id );
-                if( it != m_nodeHandlerTrackMap.end() )
-                {
-                  (*it).second->handleSubscriptionResult( service, node, sid, subType );
-                  m_nodeHandlerTrackMap.erase( it );
-                }
+                const std::string& node = s->findAttribute( "node" ),
+                                   sid  = s->findAttribute( "subid" ),
+                                   jid  = s->findAttribute( "jid" ),
+                                   sub  = s->findAttribute( "subscription" );
+                SubscriptionType type = subscriptionType( sub );
+                (*ith).second->handleSubscriptionResult( service, node, sid, jid, type );
               }
+
+              m_nodeHandlerTrackMap.erase( ith );
               break;
             }
             case Unsubscription:
             {
-              /*
-              NodeHandlerTrackMap::iterator it = m_nodeHandlerTrackMap.find( id );
-              if( it != m_nodeHandlerTrackMap.end() )
+/*
+              NodeHandlerTrackMap::iterator ith = m_nodeHandlerTrackMap.find( id );
+              if( ith == m_nodeHandlerTrackMap.end() )
+                return;
+
+              SubscriptionOperationTrackMap::iterator it = m_sopTrackMap.find( id );
+              if( it != m_sopTrackMap.end() )
               {
-                (*ith).second->handleUnsubscriptionResult( service, node, jid );
-                m_nodeHandlerTrackMap.remove( it );
+                m_nodeHandlerTrackMap.erase( ith );
+                return;
               }
-              */
+
+              (*ith).second->handleUnsubscriptionResult( service,
+                                                         (*it).second.node,
+                                                         (*it).second.sid,
+                                                         (*it).second.jid );
+              m_sopTrackMap.erase( it );
+              m_nodeHandlerTrackMap.erase( ith );
               break;
+*/
             }
             case RequestSubscriptionList:
             {
               ServiceHandlerTrackMap::iterator ith = m_serviceHandlerTrackMap.find( iq->id() );
+              if( ith == m_serviceHandlerTrackMap.end() )
+                return;
+
               Tag *subscription = query->findChild( "subscriptions" );
               if( subscription )
               {
@@ -763,13 +790,17 @@ namespace gloox
                   subMap[node] = subscriptionType( sub );
                 }
                 (*ith).second->handleSubscriptionList( service, &subMap );
-                m_serviceHandlerTrackMap.erase( ith );
               }
+
+              m_serviceHandlerTrackMap.erase( ith );
               break;
             }
             case RequestAffiliationList:
             {
               ServiceHandlerTrackMap::iterator ith = m_serviceHandlerTrackMap.find( iq->id() );
+              if( ith != m_serviceHandlerTrackMap.end() )
+                return;
+
               Tag *affiliations = query->findChild( "affiliations" );
               if( affiliations )
               {
@@ -782,8 +813,9 @@ namespace gloox
                   affMap[node] = affiliationType( aff );
                 }
                 (*ith).second->handleAffiliationList( iq->from(), &affMap );
-                m_serviceHandlerTrackMap.erase( ith );
               }
+
+              m_serviceHandlerTrackMap.erase( ith );
               break;
             }
             case RequestSubscriptionOptions:
@@ -991,7 +1023,8 @@ namespace gloox
                 const std::string& node = sub->findAttribute( "node" ),
                                    jid  = sub->findAttribute( "jid" );
 
-                (*ith).second->handleSubscriptionResult( service, node, jid, SubscriptionNone, &error );
+                const SubscriptionType type = SubscriptionNone;
+                (*ith).second->handleSubscriptionResult( service, node, "", jid, type, &error );
               }
 
               m_nodeHandlerTrackMap.erase( ith );
@@ -1007,9 +1040,10 @@ namespace gloox
               if( unsub )
               {
                 const std::string& node = unsub->findAttribute( "node" ),
+                                   sid  = unsub->findAttribute( "sid" ),
                                    jid  = unsub->findAttribute( "jid" );
 
-                (*ith).second->handleUnsubscriptionResult( service, node, jid, &error );
+                (*ith).second->handleUnsubscriptionResult( service, node, sid, jid, &error );
               }
 
               m_nodeHandlerTrackMap.erase( ith );
@@ -1121,6 +1155,7 @@ namespace gloox
             }
             case PublishItem:
             {
+              m_iopTrackMap.erase( iq->id() );
               ItemHandlerTrackMap::iterator ith = m_itemHandlerTrackMap.find( iq->id() );
               if( ith == m_itemHandlerTrackMap.end() )
                 return;
