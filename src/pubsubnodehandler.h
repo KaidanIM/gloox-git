@@ -107,8 +107,9 @@ namespace gloox
          * @param se Subscription error.
          */
         virtual void handleSubscriptionResult( const JID& service,
-                                               const std::string& nodeID,
+                                               const std::string& node,
                                                const std::string& sid,
+                                               const JID& jid,
                                                const SubscriptionType subType,
                                                const Error * error = 0 ) = 0;
 
@@ -124,6 +125,7 @@ namespace gloox
         virtual void handleUnsubscriptionResult( const JID& service,
                                                  const std::string& nodeID,
                                                  const std::string& sid,
+                                                 const JID& jid,
                                                  const Error * error = 0 ) = 0;
 
         /**

@@ -136,9 +136,13 @@ public:
          * @param service Service hosting the node.
          * @param node ID of the node to unsubscribe from.
          * @param handler NodeHandler receiving the result notification.
+         * @param jid JID to unsubscribe. If empty, the client's JID will be
+         *            used (ie self unsubscription).
          */
-        void unsubscribe( const JID& service, const std::string& node,
-                                              NodeHandler* handler );
+        void unsubscribe( const JID& service,
+                          const std::string& node,
+                          NodeHandler* handler,
+                          const JID& jid = JID() );
 
         /**
          * Requests the subscription list from a service.
@@ -410,20 +414,6 @@ public:
          */
         void removeEventHandler( EventHandler * handler )
           { m_eventHandlerList.remove( handler ); }
-
-        /**
-         * Registers an handler to receive notification of (un)subscription events.
-         * @param handler SubscriptionHandler to register.
-         */
-//        void registerSubscriptionHandler( SubscriptionHandler * handler )
-//          { m_subscriptionTrackList.push_back( handler ); }
-
-        /**
-         * Removes an handler from the list of objects listening to (un)subscription events.
-         * @param handler SubscriptionHandler to remove.
-         */
-//        void removeSubscriptionHandler( SubscriptionHandler * handler )
-//          { m_subscriptionTrackList.remove( handler ); }
 
         // reimplemented from DiscoHandler
         virtual void handleDiscoInfoResult( IQ *iq, int context );
