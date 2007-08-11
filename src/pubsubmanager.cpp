@@ -1065,6 +1065,22 @@ namespace gloox
               m_nodeHandlerTrackMap.erase( ith );
               break;
             }
+            case SetNodeConfig:
+            {
+              NodeHandlerTrackMap::iterator ith = m_nodeHandlerTrackMap.find( iq->id() );
+              if( ith == m_nodeHandlerTrackMap.end() )
+                return;
+
+              Tag * configure = query->findChild( "configure" );
+              if( configure )
+              {
+                const std::string& node = configure->findAttribute( "node" );
+                (*ith).second->handleNodeConfigResult( iq->from(), node, &error );
+              }
+
+              m_nodeHandlerTrackMap.erase( ith );
+              break;
+            }
             case RequestItemList:
             {
               ItemHandlerTrackMap::iterator ith = m_itemHandlerTrackMap.find( iq->id() );
