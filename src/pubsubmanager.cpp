@@ -842,7 +842,7 @@ namespace gloox
                     switch( context )
                     {
                       case SetSubscriptionOptions:
-                        (*ith).second->handleSubscriptionOptionsResult( service, JID(  ), node );
+                        (*ith).second->handleSubscriptionOptionsResult( service, JID( /* FIXME */ ), node );
                         break;
                       case SetSubscriberList:
                         (*ith).second->handleSubscriberListResult( service, node );
@@ -1020,6 +1020,24 @@ namespace gloox
                 (*ith).second->handleSubscriptionOptions( iq->from(),
                                          JID( options->findAttribute( "jid" ) ),
                                          options->findAttribute( "node" ), 0, &error );
+              }
+
+              m_nodeHandlerTrackMap.erase( ith );
+              break;
+            }
+            case SetSubscriptionOptions:
+            {
+              NodeHandlerTrackMap::iterator ith = m_nodeHandlerTrackMap.find( iq->id() );
+              if( ith == m_nodeHandlerTrackMap.end() )
+                return;
+
+              Tag * options = query->findChild( "options" );
+              if( options )
+              {
+                const std::string& node = options->findAttribute( "node" );
+                (*ith).second->handleSubscriptionOptionsResult( iq->from(),
+                                         JID( options->findAttribute( "jid" ) ),
+                                         options->findAttribute( "node" ), &error );
               }
 
               m_nodeHandlerTrackMap.erase( ith );
