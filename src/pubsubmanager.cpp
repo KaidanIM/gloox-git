@@ -33,13 +33,13 @@ namespace gloox
   namespace PubSub
   {
 
-    static const std::string XMLNS_PUBSUB = "http://jabber.org/protocol/pubsub";
-    static const std::string XMLNS_PUBSUB_ERRORS = "http://jabber.org/protocol/pubsub#errors";
-    static const std::string XMLNS_PUBSUB_EVENT = "http://jabber.org/protocol/pubsub#event";
-    static const std::string XMLNS_PUBSUB_OWNER = "http://jabber.org/protocol/pubsub#owner";
-    static const std::string XMLNS_PUBSUB_NODE_CONFIG = "http://jabber.org/protocol/pubsub#node_config";
-    static const std::string XMLNS_PUBSUB_SUBSCRIBE_OPTIONS =
-        "http://jabber.org/protocol/pubsub#subscribe_options";
+    static const std::string
+    XMLNS_PUBSUB                   = "http://jabber.org/protocol/pubsub",
+    XMLNS_PUBSUB_ERRORS            = "http://jabber.org/protocol/pubsub#errors",
+    XMLNS_PUBSUB_EVENT             = "http://jabber.org/protocol/pubsub#event",
+    XMLNS_PUBSUB_OWNER             = "http://jabber.org/protocol/pubsub#owner",
+    XMLNS_PUBSUB_NODE_CONFIG       = "http://jabber.org/protocol/pubsub#node_config",
+    XMLNS_PUBSUB_SUBSCRIBE_OPTIONS = "http://jabber.org/protocol/pubsub#subscribe_options";
 
     enum Context
     {
