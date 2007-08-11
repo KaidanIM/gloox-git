@@ -12,3 +12,7 @@ Known Portability Issues
     void func( const std::list< T* >& l );
 
 - avoid std::string::clear(), it's not portable
+
+- when commenting out function arguments, avoid Foo */*bar*/
+  MSVC doesn't like that
+
