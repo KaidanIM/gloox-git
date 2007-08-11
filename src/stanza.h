@@ -123,10 +123,12 @@ namespace gloox
       Stanza( const std::string& name, const JID& to, const JID& from );
 
       StanzaExtensionList m_extensionList;
+/*
       StanzaError m_stanzaError;
       StanzaErrorType m_stanzaErrorType;
       Tag *m_stanzaErrorAppCondition;
       StringMap m_errorText;
+*/
       std::string m_id;
       std::string m_xmllang;
       JID m_from;
