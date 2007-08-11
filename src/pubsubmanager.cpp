@@ -1191,6 +1191,19 @@ namespace gloox
               m_nodeHandlerTrackMap.erase( ith );
               break;
             }
+            case DefaultNodeConfig:
+            {
+              ServiceHandlerTrackMap::iterator ith = m_serviceHandlerTrackMap.find( id );
+              if( ith == m_serviceHandlerTrackMap.end() )
+                return;
+
+              const Tag *deflt = query->findChild( "default" );
+              if( deflt )
+                (*ith).second->handleDefaultNodeConfig( service, 0, &error );
+
+              m_serviceHandlerTrackMap.erase( ith );
+              break;
+            }
             default:
               return;
           }
