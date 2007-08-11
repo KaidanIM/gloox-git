@@ -43,43 +43,44 @@ namespace gloox
          * Receives results for a PubSub service info query.
          * @param service JID of the queried service.
          * @param features PubSub::PubSubFeature supported by the service.
+         * @param error Describe the error if the request failed.
          * @see Manager::discoverServiceInfos
          */
-        virtual void handleServiceInfoResult( const JID& service, int features ) = 0;
+        virtual void handleServiceInfos( const JID& service,
+                                         int features,
+                                         const Error * error = 0 ) = 0;
 
         /**
-         * Receives results for a PubSub node info query.
+         * Receives results for a PubSub node info query. Either one of df or
+         * error will be null, depending on whether the request succeeded or
+         * not.
          * @param service JID of the queried service.
          * @param node Node ID of the queried node.
          * @param nodeType PubSub::NodeType of the queried node.
-         * @param df DataForm of the node meta-data (may be empty).
+         * @param df DataForm of the node meta-data (may be null).
+         * @param error Describe the error if the request failed.
          * @see Manager::discoverNodeInfos
          */
-        virtual void handleNodeInfoResult( const JID& service,
-                                           const std::string& node,
-                                           const NodeType nodeType,
-                                           const DataForm& df ) = 0;
+        virtual void handleNodeInfos( const JID& service,
+                                      const std::string& node,
+                                      const NodeType nodeType,
+                                      const DataForm * df,
+                                      const Error * error = 0 ) = 0;
 
         /**
-         * Receives results for a PubSub item query.
+         * Receives results for a PubSub item query. Either one of the children
+         * list or the error will be null, depending on whether the request
+         * succeeded or not.
          * @param service JID of the queried service.
          * @param parent Node ID of the node to query (empty if the root node
          *               has been queried).
+         * @param error Describe the error if the request failed.
          * @see Manager::discoverNodeItems
          */
-        virtual void handleNodeItemDiscovery( const JID& service,
-                                              const std::string& parent,
-                                              const DiscoNodeItemList& children ) = 0;
-
-       /**
-        * Receives error results for a PubSub Disco query.
-        * @param service JID of the queried service.
-        * @param node Node ID of the queried node (empty for the root node).
-        * @param error Error description.
-        */
-       virtual void handleDiscoError( const JID& service,
-                                      const std::string& node/*,
-                                      const Error& error*/ ) = 0;
+        virtual void handleNodeItems( const JID& service,
+                                      const std::string& parent,
+                                      const DiscoNodeItemList * children,
+                                      const Error * error = 0 ) = 0;
 
     };
 
