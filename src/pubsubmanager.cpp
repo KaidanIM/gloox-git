@@ -951,6 +951,7 @@ namespace gloox
                                                      (*it).second.second );
                 m_iopTrackMap.erase( it );
               }
+
               m_itemHandlerTrackMap.erase( ith );
               break;
             }
@@ -1112,6 +1113,38 @@ namespace gloox
             }
             case PurgeNodeItems:
             {
+              break;
+            }
+            case CreateNode:
+            {
+              NodeHandlerTrackMap::iterator ith = m_nodeHandlerTrackMap.find( iq->id() );
+              if( ith == m_nodeHandlerTrackMap.end() )
+                return;
+
+              Tag * create = query->findChild( "create" );
+              if( create )
+              {
+                const std::string& node = create->findAttribute( "node" );
+                (*ith).second->handleNodeCreationResult( iq->from(), node, &error );
+              }
+
+              m_nodeHandlerTrackMap.erase( ith );
+              break;
+            }
+            case DeleteNode:
+            {
+              NodeHandlerTrackMap::iterator ith = m_nodeHandlerTrackMap.find( iq->id() );
+              if( ith == m_nodeHandlerTrackMap.end() )
+                return;
+
+              Tag * del = query->findChild( "delete" );
+              if( del )
+              {
+                const std::string& node = del->findAttribute( "node" );
+                (*ith).second->handleNodeDeletationResult( iq->from(), node, &error );
+              }
+
+              m_nodeHandlerTrackMap.erase( ith );
               break;
             }
             default:
