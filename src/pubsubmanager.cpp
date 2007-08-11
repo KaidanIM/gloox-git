@@ -905,17 +905,18 @@ namespace gloox
             }
             case RequestItemList:
             {
-              Tag *items = query->findChild( "items" );
-              if( !items )
-                break;
-
-              const std::string& node = items->findAttribute( "node" );
               ItemHandlerTrackMap::iterator ith = m_itemHandlerTrackMap.find( id );
-              if( ith != m_itemHandlerTrackMap.end() )
+              if( ith == m_itemHandlerTrackMap.end() )
+                return;
+
+              Tag *items = query->findChild( "items" );
+              if( items )
               {
+                const std::string& node = items->findAttribute( "node" );
                 (*ith).second->handleItemList( iq->from(), node, &items->children() );
-                m_itemHandlerTrackMap.erase( ith );
               }
+
+              m_itemHandlerTrackMap.erase( ith );
               break;
             }
             case PublishItem:
@@ -932,6 +933,7 @@ namespace gloox
                                                             (*it).second.second );
                 m_iopTrackMap.erase( it );
               }
+
               m_itemHandlerTrackMap.erase( ith );
               break;
             }
