@@ -369,20 +369,23 @@ namespace gloox
       }
     }
 
-    void Manager::requestSubscriptionOptions( const JID& service,
-                                              const JID& jid,
-                                              const std::string& node,
-                                              NodeHandler * handler )
+    void Manager::subscriptionOptions( const JID& service,
+                                       const JID& jid,
+                                       const std::string& node,
+                                       NodeHandler * handler,
+                                       const DataForm *df )
     {
       if( !m_parent || !handler )
         return;
 
       const std::string& id = m_parent->getID();
       IQ* iq = new IQ( IQ::Get, service, id, XMLNS_PUBSUB, "pubsub" );
-      Tag *sub = new Tag( iq->query(), "options", "node", node );
-      sub->addAttribute( "jid", jid.empty() ? m_parent->jid().bare() : jid.bare() );
+      Tag *options = new Tag( iq->query(), "options", "node", node );
+      options->addAttribute( "jid", jid.empty() ? m_parent->jid().bare() : jid.bare() );
+      if( df )
+        options->addChild( df->tag() );
 
-      m_parent->trackID( this, id, RequestSubscriptionOptions );
+      m_parent->trackID( this, id, df ? SetSubscriptionOptions : RequestSubscriptionOptions );
       m_nodeHandlerTrackMap[id] = handler;
       m_parent->send( iq );
     }

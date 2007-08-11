@@ -154,6 +154,14 @@ public:
          */
         void requestAffiliationList( const JID& service, ServiceHandler* handler );
 
+private:
+        void subscriptionOptions( const JID& service,
+                                  const JID& jid,
+                                  const std::string& node,
+                                  NodeHandler * handler,
+                                  const DataForm *df );
+
+public:
         /**
          * Requests subscription options.
          * @param service Service to query.
@@ -162,8 +170,11 @@ public:
          * @param handler Node ID of the node.
          * @param slh The SubscriptionListHandler to handle the result.
          */
-        void requestSubscriptionOptions( const JID& service, const JID& jid,
-                                         const std::string& node, NodeHandler * );
+        void requestSubscriptionOptions( const JID& service,
+                                         const JID& jid,
+                                         const std::string& node,
+                                         NodeHandler * handler)
+        { subscriptionOptions( service, jid, node, handler, 0 ); }
 
         /**
          * Modifies subscription options.
@@ -172,9 +183,12 @@ public:
          * @param node Node ID of the node.
          * @param df New configuration.
          */
-        void setSubscriptionOptions( const JID& service, const JID& jid,
-                                     const std::string& node, const DataForm& df,
-                                     const NodeHandler* handler );
+        void setSubscriptionOptions( const JID& service,
+                                     const JID& jid,
+                                     const std::string& node,
+                                     const DataForm& df,
+                                     NodeHandler* handler )
+        { subscriptionOptions( service, jid, node, handler, &df ); }
 
         /**
          * Requests the affiliation list for a node.
