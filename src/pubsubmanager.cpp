@@ -1157,6 +1157,18 @@ namespace gloox
             }
             case PurgeNodeItems:
             {
+              NodeHandlerTrackMap::iterator ith = m_nodeHandlerTrackMap.find( iq->id() );
+              if( ith == m_nodeHandlerTrackMap.end() )
+                return;
+
+              Tag * purge = query->findChild( "purge" );
+              if( purge )
+              {
+                const std::string& node = purge->findAttribute( "node" );
+                (*ith).second->handleNodePurgeResult( iq->from(), node, &error );
+              }
+
+              m_nodeHandlerTrackMap.erase( ith );
               break;
             }
             case CreateNode:
