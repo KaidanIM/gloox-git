@@ -113,6 +113,20 @@ namespace gloox
                                                const Error * error = 0 ) = 0;
 
         /**
+         * Receives the unsubscription results. In case a problem occured, the
+         * error if not null.
+         *
+         * @param service PubSub service asked for subscription.
+         * @param node Node asked for subscription.
+         * @param sid Subscription ID.
+         * @param error Error describing the problem that occured (may be null).
+         */
+        virtual void handleUnsubscriptionResult( const JID& service,
+                                                 const std::string& nodeID,
+                                                 const std::string& sid,
+                                                 const Error * error = 0 ) = 0;
+
+        /**
          * Receives the configuration form of a node.
          * @param service Service hosting the queried node.
          * @param jid Subscribed entity.

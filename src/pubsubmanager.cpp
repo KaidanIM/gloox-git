@@ -65,60 +65,10 @@ namespace gloox
       NodeAssociation,
       NodeDisassociation,
       RequestFeatureList,
-      DiscoverNode
+      DiscoServiceInfos,
+      DiscoNodeInfos,
+      DiscoNodeItems
     };
-
-    Manager::Manager( ClientBase *parent )
-      : m_parent(parent)
-    {
-      m_parent->disco()->registerDiscoHandler( this );
-      m_parent->registerMessageHandler( this );
-    }
-
-    enum DiscoInfoContext
-    {
-      ServiceInfo,
-      NodeInfo
-    };
-
-    void Manager::discoverInfos( const JID& service, const std::string& node,
-                                 PubSub::DiscoHandler *handler )
-    {
-      if( !handler )
-        return;
-      const std::string& id = m_parent->getID();
-      m_discoHandlerTrackMap[id] = handler;
-      int context = node.empty() ? ServiceInfo : NodeInfo;
-      m_parent->disco()->getDiscoInfo( service, node, this, context, id );
-    }
-
-    void Manager::discoverNodeItems( const JID& service, const std::string& nodeid,
-                                     PubSub::DiscoHandler *handler )
-    {
-      if( !handler )
-        return;
-      const std::string& id = m_parent->getID();
-      m_discoHandlerTrackMap[id] = handler;
-      m_parent->disco()->getDiscoItems( service, nodeid, this, 0, id );
-    }
-
-    static const char * subscriptionValues[] = {
-      "none", "subscribed", "pending", "unconfigured"
-    };
-
-    static inline SubscriptionType subscriptionType( const std::string& subscription )
-    {
-      return (SubscriptionType)util::lookup( subscription, subscriptionValues );
-    }
-
-    static const char * affiliationValues[] = {
-      "none", "publisher", "owner", "outcast"
-    };
-
-    static inline AffiliationType affiliationType( const std::string& affiliation )
-    {
-      return (AffiliationType)util::lookup( affiliation, affiliationValues );
-    }
 
     /**
      * Finds the associated PubSubFeature for a feature tag 'type' attribute,
@@ -162,6 +112,168 @@ namespace gloox
         "event",
       };
       return static_cast< PubSubFeature >( util::lookup2( str, values ) );
+    }
+
+    Manager::Manager( ClientBase *parent )
+      : m_parent(parent)
+    {
+      m_parent->disco()->registerDiscoHandler( this );
+      m_parent->registerMessageHandler( this );
+    }
+
+    void Manager::discoverInfos( const JID& service, const std::string& node,
+                                 PubSub::DiscoHandler *handler )
+    {
+      if( !m_parent || !handler )
+        return;
+      const std::string& id = m_parent->getID();
+      m_discoHandlerTrackMap[id] = handler;
+      int context = node.empty() ? DiscoServiceInfos : DiscoNodeInfos;
+      m_parent->disco()->getDiscoInfo( service, node, this, context, id );
+    }
+
+    void Manager::discoverNodeItems( const JID& service, const std::string& nodeid,
+                                     PubSub::DiscoHandler *handler )
+    {
+      if( !m_parent || !handler )
+        return;
+      const std::string& id = m_parent->getID();
+      m_discoHandlerTrackMap[id] = handler;
+      m_parent->disco()->getDiscoItems( service, nodeid, this, DiscoNodeItems, id );
+    }
+
+    void Manager::handleDiscoInfoResult( Stanza * stanza, int context )
+    {
+      const Tag * query = stanza->findChild( "query" );
+      const Tag * identity = query->findChild( "identity" );
+      if( !identity )
+        return; // ejabberd...
+      const JID& service = stanza->from();
+      const std::string& id = stanza->id();
+      const std::string& type = identity->findAttribute( TYPE );
+
+      DiscoHandlerTrackMap::iterator ith = m_discoHandlerTrackMap.find( id );
+      if( ith == m_discoHandlerTrackMap.end() )
+        return;
+
+      switch( context )
+      {
+        case DiscoServiceInfos:
+        {
+          int features=0;
+          size_t pos;
+          const Tag::TagList& qchildren = query->children();
+
+          Tag::TagList::const_iterator it = qchildren.begin();
+          for( ; it != qchildren.end(); ++it )
+          {
+            if( (*it)->name() == "feature" )
+            {
+              const std::string& var = (*it)->findAttribute( "var" );
+
+              if( var.size() > XMLNS_PUBSUB.size()
+                  && !var.compare( 0, XMLNS_PUBSUB.size(), XMLNS_PUBSUB ) )
+              {
+                pos = var.find_last_of( '#' );
+                if( pos != std::string::npos )
+                  features |= featureType( var.substr( pos+1 ) );
+              }
+            }
+          }
+
+          (*ith).second->handleServiceInfos( service, features );
+          break;
+        }
+        case DiscoNodeInfos:
+        {
+          Tag * df = query->findChild( "x" );
+          const std::string& node = query->findAttribute( "node" );
+
+          NodeType nodeType = NodeInvalid;
+          if( type == "collection" )
+            nodeType = NodeCollection;
+          else if( type == "leaf" )
+            nodeType = NodeLeaf;
+
+          const DataForm dataform( df );
+          (*ith).second->handleNodeInfos( service, node, nodeType, &dataform );
+          break;
+        }
+      }
+      m_discoHandlerTrackMap.erase( ith );
+    }
+
+    void Manager::handleDiscoItemsResult( Stanza *stanza, int )
+    {
+      DiscoHandlerTrackMap::iterator ith = m_discoHandlerTrackMap.find( stanza->id() );
+      if( ith == m_discoHandlerTrackMap.end() )
+        return;
+
+      const Tag * query = stanza->findChild( "query" );
+      const Tag::TagList& content = query->children();
+
+
+      DiscoNodeItemList contentList;
+      Tag::TagList::const_iterator it = content.begin();
+      for( ; it != content.end(); ++it )
+      {
+        contentList.push_back( DiscoNodeItem ( (*it)->findAttribute( "node" ),
+                                               (*it)->findAttribute( "jid" ),
+                                               (*it)->findAttribute( "name" ) ) );
+      }
+
+      const JID& service = stanza->from();
+      const std::string& parentid = query->findAttribute( "node" );
+
+      (*ith).second->handleNodeItems( service, parentid, &contentList );
+      m_discoHandlerTrackMap.erase( ith );
+    }
+
+    void Manager::handleDiscoError( Stanza *stanza, int context )
+    {
+      DiscoHandlerTrackMap::iterator ith = m_discoHandlerTrackMap.find( stanza->id() );
+      if( ith == m_discoHandlerTrackMap.end() )
+        return;
+
+      const JID& service = stanza->from();
+      const Error * error ;//= stanza->getExtension( ExtError );
+
+      switch( context )
+      {
+        case DiscoServiceInfos:
+          (*ith).second->handleServiceInfos( service, 0, error );
+          break;
+        case DiscoNodeInfos:
+          //const std::string& node = stanza->query()->findAttribute( "node" ); 
+          //(*ith).second->handleNodeInfos( service, node, NodeInvalid, 0, error );
+          break;
+        case DiscoNodeItems:
+          //const std::string& node = stanza->query()->findAttribute( "node" ); 
+          //(*ith).second->handleNodeItems( service, node, 0, error );
+          break;
+        default:
+          break;
+      }
+
+      m_discoHandlerTrackMap.erase( ith );
+    }
+
+    static const char * subscriptionValues[] = {
+      "none", "subscribed", "pending", "unconfigured"
+    };
+
+    static inline SubscriptionType subscriptionType( const std::string& subscription )
+    {
+      return (SubscriptionType)util::lookup( subscription, subscriptionValues );
+    }
+
+    static const char * affiliationValues[] = {
+      "none", "publisher", "owner", "outcast"
+    };
+
+    static inline AffiliationType affiliationType( const std::string& affiliation )
+    {
+      return (AffiliationType)util::lookup( affiliation, affiliationValues );
     }
 
     enum EventType
@@ -257,105 +369,6 @@ namespace gloox
         }
       }
     }
-
-    void Manager::handleDiscoInfoResult( Stanza * stanza, int context )
-    {
-      const Tag * query = stanza->findChild( "query" );
-      const Tag * identity = query->findChild( "identity" );
-      if( !identity )
-        return; // ejabberd...
-      const JID& service = stanza->from();
-      const std::string& id = stanza->id();
-      const std::string& type = identity->findAttribute( TYPE );
-
-      DiscoHandlerTrackMap::iterator ith = m_discoHandlerTrackMap.find( id );
-      if( ith == m_discoHandlerTrackMap.end() )
-        return;
-
-      switch( context )
-      {
-        case ServiceInfo:
-        {
-          int features=0;
-          size_t pos;
-          const Tag::TagList& qchildren = query->children();
-
-          Tag::TagList::const_iterator it = qchildren.begin();
-          for( ; it != qchildren.end(); ++it )
-          {
-            if( (*it)->name() == "feature" )
-            {
-              const std::string& var = (*it)->findAttribute( "var" );
-
-              if( var.size() > XMLNS_PUBSUB.size()
-                  && !var.compare( 0, XMLNS_PUBSUB.size(), XMLNS_PUBSUB ) )
-              {
-                pos = var.find_last_of( '#' );
-                if( pos != std::string::npos )
-                  features |= featureType( var.substr( pos+1 ) );
-              }
-            }
-          }
-
-          (*ith).second->handleServiceInfoResult( service, features );
-          break;
-        }
-        case NodeInfo:
-        {
-          Tag * df = query->findChild( "x" );
-          const std::string& node = query->findAttribute( "node" );
-
-          NodeType nodeType = NodeInvalid;
-          if( type == "collection" )
-            nodeType = NodeCollection;
-          else if( type == "leaf" )
-            nodeType = NodeLeaf;
-
-          (*ith).second->handleNodeInfoResult( service, node, nodeType, DataForm( df ) );
-          break;
-        }
-      }
-      m_discoHandlerTrackMap.erase( ith );
-    }
-
-    void Manager::handleDiscoItemsResult( Stanza *stanza, int )
-    {
-      DiscoHandlerTrackMap::iterator ith = m_discoHandlerTrackMap.find( stanza->id() );
-      if( ith == m_discoHandlerTrackMap.end() )
-        return;
-
-      const Tag * query = stanza->findChild( "query" );
-      const Tag::TagList& content = query->children();
-
-
-      DiscoNodeItemList contentList;
-      Tag::TagList::const_iterator it = content.begin();
-      for( ; it != content.end(); ++it )
-      {
-        contentList.push_back( DiscoNodeItem ( (*it)->findAttribute( "node" ),
-                                               (*it)->findAttribute( "jid" ),
-                                               (*it)->findAttribute( "name" ) ) );
-      }
-
-      const JID& service = stanza->from();
-      const std::string& parentid = query->findAttribute( "node" );
-
-      (*ith).second->handleNodeItemDiscovery( service, parentid, contentList );
-      m_discoHandlerTrackMap.erase( ith );
-    }
-
-    void Manager::handleDiscoError( Stanza *stanza, int )
-    {
-      const JID& service = stanza->from();
-      DiscoHandlerTrackMap::iterator ith = m_discoHandlerTrackMap.find( stanza->id() );
-      if( ith != m_discoHandlerTrackMap.end() )
-      {
-        //if( (*ith).second )
-        //  (*ith).second->handleDiscoError( service, parentid, error );
-        m_discoHandlerTrackMap.erase( ith );
-      }
-    }
-
     void Manager::requestSubscriptionOptions( const JID& service,
                                               const JID& jid,
                                               const std::string& node,
@@ -687,8 +700,8 @@ namespace gloox
     }
 
     /**
-     * @todo Unsubscription does not retrieve the correct node id (needs a tracking map).
-     * 
+     * @todo Track context info for Unsubscription result.
+     * @todo
      */
     void Manager::handleIqID( IQ* iq, int context )
     {
@@ -722,12 +735,14 @@ namespace gloox
             }
             case Unsubscription:
             {
-              //NodeHandlerTrackMap::iterator it = m_nodeHandlerTrackMap.find( id );
-              //if( it != m_nodeHandlerTrackMap.end() )
-              //{
-              //  (*it).second->handleSubscription( service, node, sid, subType, SubscriptionErrorNone );
-              //  m_nodeHandlerTrackMap.remove( it );
-              //}
+              /*
+              NodeHandlerTrackMap::iterator it = m_nodeHandlerTrackMap.find( id );
+              if( it != m_nodeHandlerTrackMap.end() )
+              {
+                (*ith).second->handleUnsubscriptionResult( service, node, jid );
+                m_nodeHandlerTrackMap.remove( it );
+              }
+              */
               break;
             }
             case RequestSubscriptionList:
@@ -949,126 +964,37 @@ namespace gloox
                 return;
 
               Tag *sub = query->findChild( "subscribe" );
-              if( !sub )
-                return;
+              if( sub )
+              {
+                const std::string& node = sub->findAttribute( "node" ),
+                                   jid  = sub->findAttribute( "jid" );
 
-              const std::string& node = sub->findAttribute( "node" ),
-                                 jid  = sub->findAttribute( "jid" );
+                (*ith).second->handleSubscriptionResult( service, node, jid, SubscriptionNone, &error );
+              }
 
-/*
-              SubscriptionError errorType = SubscriptionErrorNone;
 
-              if( error->hasChild( "not-authorized", XMLNS, XMLNS_XMPP_STANZAS ) )
-              {
-                if( error->hasChild( "pending-subscription", XMLNS, XMLNS_PUBSUB_ERRORS ) )
-                  errorType = SubscriptionErrorPending;
-                else if ( error->hasChild( "presence-subscription-required", XMLNS, XMLNS_PUBSUB_ERRORS ) )
-                  errorType = SubscriptionErrorAccessPresence;
-                else if ( error->hasChild( "not-in-roster-group", XMLNS, XMLNS_PUBSUB_ERRORS ) )
-                  errorType = SubscriptionErrorAccessRoster;
-              }
-              else if( error->hasChild( "item-not-found", XMLNS, XMLNS_XMPP_STANZAS ) )
-              {
-                errorType = SubscriptionErrorItemNotFound;
-              }
-              else if( error->hasChild( "feature-not-implemented", XMLNS, XMLNS_XMPP_STANZAS ) &&
-                       error->hasChild( "unsupported", XMLNS, XMLNS_PUBSUB_ERRORS ) )
-                       //&& feature='subscribe'/> )
-              {
-                errorType = SubscriptionErrorUnsupported;
-              }
-              else if( error->hasChild( "not-allowed", XMLNS, XMLNS_XMPP_STANZAS ) &&
-                      error->hasChild( "closed-node", XMLNS, XMLNS_PUBSUB_ERRORS ) )
-              {
-                errorType = SubscriptionErrorAccessWhiteList;
-              }
-              else if ( error->hasChild( "forbidden", XMLNS, XMLNS_XMPP_STANZAS ) )
-              {
-                const std::string& type = error->findAttribute( TYPE );
-                if( type == "cancel" )
-                  errorType = SubscriptionErrorAnonymous;
-                else if( type == "auth" )
-                  errorType = SubscriptionErrorBlocked;
-              }
-              else if ( error->hasChild( "bad-request", XMLNS, XMLNS_XMPP_STANZAS ) &&
-                        error->hasChild( "invalid-jid", XMLNS, XMLNS_PUBSUB_ERRORS ) )
-              {
-                errorType = SubscriptionErrorJIDMismatch;
-              }
-              else if ( error->hasChild( "payment-required", XMLNS, XMLNS_XMPP_STANZAS ) )
-              {
-                errorType = SubscriptionErrorPayment;
-              }
-              else
-                return;
-*/
-              (*ith).second->handleSubscriptionResult( service, node, jid, SubscriptionNone, &error );
               break;
             }
             case Unsubscription:
             {
-              Tag *subscription = query->findChild( "subscribe" );
-              if( !subscription )
+              Tag *unsub = query->findChild( "unsubscribe" );
+              NodeHandlerTrackMap::iterator ith = m_nodeHandlerTrackMap.find( id );
+              if( !unsub || ith == m_nodeHandlerTrackMap.end() )
                 return;
-              const std::string& node = subscription->findAttribute( "node" ),
-                                 jid  = subscription->findAttribute( "jid" );
 
-/*
-              UnsubscriptionError errorType;
-              if( error->hasChild( "bad-request", XMLNS, XMLNS_XMPP_STANZAS ) &&
-                  error->hasChild( "subid-required", XMLNS, XMLNS_PUBSUB_ERRORS ) )
-              {
-                errorType = UnsubscriptionErrorMissingSID;
-              }
-              else if( error->hasChild( "unexpected-request", XMLNS, XMLNS_XMPP_STANZAS ) &&
-                       error->hasChild( "not-subscribed", XMLNS, XMLNS_PUBSUB_ERRORS ) )
-              {
-                errorType = UnsubscriptionErrorNotSubscriber;
-              }
-              else if( error->hasChild( "forbidden", XMLNS, XMLNS_XMPP_STANZAS ) )
-              {
-                errorType = UnsubscriptionErrorUnprivileged;
-              }
-              else if( error->hasChild( "item-not-found", XMLNS, XMLNS_XMPP_STANZAS ) )
-              {
-                errorType = UnsubscriptionErrorItemNotFound;
-              }
-              else if( error->hasChild( "not-acceptable", XMLNS, XMLNS_XMPP_STANZAS ) &&
-                       error->hasChild( "invalid-subid", XMLNS, XMLNS_PUBSUB_ERRORS ) )
-              {
-                errorType = UnsubscriptionErrorInvalidSID;
-              }
-              else
-                return;
-*/
-              //handleUnsubscriptionResult( service, node, errorType );
+              const std::string& node = unsub->findAttribute( "node" ),
+                                 jid  = unsub->findAttribute( "jid" );
+
+              (*ith).second->handleUnsubscriptionResult( service, node, jid, &error );
+
               break;
             }
             case RequestSubscriptionList:
             {
-/*
-              if( error->hasChild( "feature-not-implemented", XMLNS, XMLNS_XMPP_STANZAS ) &&
-                  error->hasChild( "unsupported", XMLNS, XMLNS_PUBSUB_ERRORS ) )
-                  // feature='retrieve-subscriptions'/>
-              {
-                //handleSubscriptionListError( service );
-              }
-              else
-                return;
-*/
               break;
             }
             case RequestAffiliationList:
             {
-/*              if( error->hasChild( "feature-not-implemented", XMLNS, XMLNS_XMPP_STANZAS ) &&
-                  error->hasChild( "unsupported", XMLNS, XMLNS_PUBSUB_ERRORS ) )
-                  // feature='retrieve-affiliations'/>
-              {
-                //handleAffiliationListError( service );
-              }
-              else
-                return;
-*/
               break;
             }
             case RequestSubscriptionOptions:
@@ -1078,46 +1004,6 @@ namespace gloox
                 return;
 
               const std::string& node = items->findAttribute( "node" );
-
-/*
-              OptionRequestError errorType = OptionRequestErrorNone;
-              if( error->hasChild( "forbidden", XMLNS, XMLNS_XMPP_STANZAS ) )
-              {
-                errorType = OptionRequestUnprivileged;
-              }
-              else if( error->hasChild( "unexpected-request", XMLNS, XMLNS_XMPP_STANZAS ) &&
-                       error->hasChild( "not-subscribed", XMLNS, XMLNS_PUBSUB_ERRORS ) )
-              {
-                errorType = OptionRequestUnsubscribed;
-              }
-              else if( error->hasChild( "bad-request", XMLNS, XMLNS_XMPP_STANZAS ) &&
-                       error->hasChild( "jid-required", XMLNS, XMLNS_PUBSUB_ERRORS ) )
-              {
-                errorType = OptionRequestMissingJID;
-              }
-              else if( error->hasChild( "bad-request", XMLNS, XMLNS_XMPP_STANZAS ) &&
-                       error->hasChild( "subid-required", XMLNS, XMLNS_PUBSUB_ERRORS ) )
-              {
-                errorType = OptionRequestMissingSID;
-              }
-              else if( error->hasChild( "not-acceptable", XMLNS, XMLNS_XMPP_STANZAS ) &&
-                       error->hasChild( "invalid-subid", XMLNS, XMLNS_PUBSUB_ERRORS ) )
-              {
-                errorType = OptionRequestInvalidSID;
-              }
-              else if( error->hasChild( "feature-not-implemented", XMLNS, XMLNS_XMPP_STANZAS ) &&
-                       error->hasChild( "unsupported", XMLNS, XMLNS_PUBSUB_ERRORS ) )
-                       // feature='subscription-options'
-              {
-                errorType = OptionRequestUnsupported;
-              }
-              else if( error->hasChild( "item-not-found", XMLNS, XMLNS_PUBSUB_ERRORS ) )
-              {
-                errorType = OptionRequestItemNotFound;
-              }
-              else
-                return;
-*/
               // handleOptionListError( "" );
               break;
             }
@@ -1131,145 +1017,16 @@ namespace gloox
               if( !items )
                 return;
               const std::string& node = items->findAttribute( "node" );
-
-/*
-              ItemRetrivalError errorType = ItemRequestErrorNone;
-              if( error->hasChild( "bad-request", XMLNS, XMLNS_XMPP_STANZAS ) &&
-                  error->hasChild( "subid-required", XMLNS, XMLNS_PUBSUB_ERRORS ) )
-              {
-                errorType = ItemRequestMissingSID;
-              }
-              else if( error->hasChild( "not-acceptable", XMLNS, XMLNS_XMPP_STANZAS ) &&
-                       error->hasChild( "invalid-subid", XMLNS, XMLNS_PUBSUB_ERRORS ) )
-              {
-                errorType = ItemRequestInvalidSID;
-              }
-              else if( error->hasChild( "not-authorized", XMLNS, XMLNS_XMPP_STANZAS ) )
-              {
-                if( error->hasChild( "not-subscribed", XMLNS, XMLNS_PUBSUB_ERRORS ) )
-                  errorType = ItemRequestNotSubscribed;
-                else if( error->hasChild( "presence-subscription-required", XMLNS, XMLNS_PUBSUB_ERRORS ) )
-                  errorType = ItemRequestAccessPresence;
-                else if( error->hasChild( "not-in-roster-group", XMLNS, XMLNS_PUBSUB_ERRORS ) )
-                  errorType = ItemRequestAccessRoster;
-                else
-                  return;
-              }
-              else if( error->hasChild( "feature-not-implemented", XMLNS, XMLNS_XMPP_STANZAS ) )
-              {
-                Tag * unsup = error->findChild( "unsupported", XMLNS, XMLNS_PUBSUB_ERRORS );
-                if( !unsup )
-                  return;
-                if( unsup->hasAttribute( "feature", "persistent-items" ) )
-                  errorType = ItemRequestNoPersistent;
-                else if( unsup->hasAttribute( "feature", "retrieve-items" ) )
-                  errorType = ItemRequestUnsupported;
-                else
-                  return;
-              }
-              else if( error->hasChild( "not-allowed", XMLNS, XMLNS_XMPP_STANZAS ) &&
-                       error->hasChild( "closed-node", XMLNS, XMLNS_PUBSUB_ERRORS ) )
-              {
-                errorType = ItemRequestAccessWhiteList;
-              }
-              else if( error->hasChild( "payment-required", XMLNS, XMLNS_XMPP_STANZAS ) )
-              {
-                errorType = ItemRequestPayment;
-              }
-              else if( error->hasChild( "forbidden", XMLNS, XMLNS_XMPP_STANZAS ) )
-              {
-                errorType = ItemRequestBlocked;
-              }
-              else if( error->hasChild( "item-not-found", XMLNS, XMLNS_XMPP_STANZAS ) )
-              {
-                errorType = ItemRetrievalItemNotFound;
-              }
-              else
-                return;
-*/
               //handleRequestItemListError( service, node, errorType );
               break;
             }
             case PublishItem:
             {
-/*
-              ItemPublicationError errorType = ItemPublicationErrorNone;
-              if( error->hasChild( "forbidden", XMLNS, XMLNS_XMPP_STANZAS ) )
-              {
-                errorType = ItemPublicationUnprivileged;
-              }
-              else if( error->hasChild( "feature-not-implemented", XMLNS, XMLNS_XMPP_STANZAS ) &&
-                       error->hasChild( "unsupported", XMLNS, XMLNS_PUBSUB_ERRORS ) )
-                       // feature='publish'
-              {
-                errorType = ItemPublicationUnsupported;
-              }
-              else if( error->hasChild( "item-not-found", XMLNS, XMLNS_XMPP_STANZAS ) )
-              {
-                errorType = ItemPublicationNodeNotFound;
-              }
-              else if( error->hasChild( "not-acceptable", XMLNS, XMLNS_XMPP_STANZAS ) &&
-                       error->hasChild( "payload-too-big", XMLNS, XMLNS_PUBSUB_ERRORS ) )
-              {
-                errorType = ItemPublicationPayloadSize;
-              }
-              else if( error->hasChild( "bad-request", XMLNS, XMLNS_XMPP_STANZAS ) )
-              {
-                // Configuration errors needs to be specified
-                if( error->hasChild( "invalid-payload", XMLNS, XMLNS_PUBSUB_ERRORS ) )
-                  errorType = ItemPublicationPayload;
-                else if( error->hasChild( "item-required", XMLNS, XMLNS_PUBSUB_ERRORS) )
-                  errorType = ItemPublicationConfiguration;
-                else if( error->hasChild( "payload-required", XMLNS, XMLNS_PUBSUB_ERRORS) )
-                  errorType = ItemPublicationConfiguration;
-                else if( error->hasChild( "item-forbidden", XMLNS, XMLNS_PUBSUB_ERRORS) )
-                  errorType = ItemPublicationConfiguration;
-                else
-                  return;
-              }
-              else
-                return;
-*/
               //handle
               break;
             }
             case DeleteItem:
             {
-/*
-              ItemDeletationError errorType = ItemDeletationErrorNone;
-              if( error->hasChild( "forbidden", XMLNS, XMLNS_XMPP_STANZAS ) )
-              {
-                errorType = ItemDeletationUnpriviledged;
-              }
-              else if( error->hasChild( "item-not-found", XMLNS, XMLNS_XMPP_STANZAS ) )
-              {
-                errorType = ItemDeletationItemNotFound;
-              }
-              else if( error->hasChild( "bad-request", XMLNS, XMLNS_XMPP_STANZAS ) &&
-                       error->hasChild( "node-required", XMLNS, XMLNS_PUBSUB_ERRORS ) )
-              {
-                errorType = ItemDeletationMissingNode;
-              }
-              else if( error->hasChild( "bad-request", XMLNS, XMLNS_XMPP_STANZAS ) &&
-                       error->hasChild( "item-required", XMLNS, XMLNS_PUBSUB_ERRORS ) )
-              {
-                errorType = ItemDeletationMissingItem;
-              }
-              else if( error->hasChild( "feature-not-implemented", XMLNS, XMLNS_XMPP_STANZAS ) )
-              {
-                Tag * unsup = error->findChild( "unsupported", XMLNS, XMLNS_PUBSUB_ERRORS );
-                if( !unsup )
-                  return;
-                if( unsup->hasAttribute( "feature", "persistent-items" ) )
-                  errorType = ItemDeletationNoPersistent;
-                else if( unsup->hasAttribute( "feature", "delete-nodes" ) )
-                  errorType = ItemDeletationUnsupported;
-                else
-                  return;
-              }
-              else
-                return;
-*/
               //handle
               break;
             }
