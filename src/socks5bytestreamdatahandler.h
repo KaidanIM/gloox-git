@@ -26,7 +26,8 @@ namespace gloox
 
   /**
    * @brief A virtual interface that allows implementors to receive data
-   * sent over a SOCKS5 Bytestream as defined in XEP-0066.
+   * sent over a SOCKS5 Bytestream as defined in XEP-0066. You'll also need it for
+   * sending of data.
    *
    * An SOCKS5BytestreamDataHandler is registered with a SOCKS5Bytestream.
    *
