@@ -69,8 +69,7 @@ namespace gloox
          * @see Manager::getDefaultNodeConfig
          */
         virtual void handleDefaultNodeConfig( const JID& service,
-                                              NodeType type,
-                                              DataForm * config,
+                                              const DataForm * config,
                                               const Error * error = 0 ) = 0;
 
     };

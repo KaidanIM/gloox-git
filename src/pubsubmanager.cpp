@@ -55,7 +55,7 @@ namespace gloox
           SetAffiliateList,
       RequestNodeConfig,
           SetNodeConfig,
-      RequestDefaultConfig,
+      DefaultNodeConfig,
       RequestItemList,
       PublishItem,
       DeleteItem,
@@ -593,7 +593,7 @@ namespace gloox
         def->addChild( df.tag() );
       }
 
-      m_parent->trackID( this, id, RequestDefaultConfig );
+      m_parent->trackID( this, id, DefaultNodeConfig );
       m_serviceHandlerTrackMap[id] = handler;
       m_parent->send( iq );
     }
@@ -953,6 +953,22 @@ namespace gloox
               }
 
               m_itemHandlerTrackMap.erase( ith );
+              break;
+            }
+            case DefaultNodeConfig:
+            {
+              ServiceHandlerTrackMap::iterator ith = m_serviceHandlerTrackMap.find( id );
+              if( ith == m_serviceHandlerTrackMap.end() )
+                return;
+
+              const Tag *deflt = query->findChild( "default" );
+              if( deflt )
+              {
+                const DataForm df( deflt->findChild( "x" ) );
+                (*ith).second->handleDefaultNodeConfig( service, &df );
+              }
+
+              m_serviceHandlerTrackMap.erase( ith );
               break;
             }
           }
