@@ -1106,7 +1106,7 @@ namespace gloox
                   (*ith).second->handleItemDeletation( service, node, id, &error );
                 }
               }
-             
+
               m_itemHandlerTrackMap.erase( ith );
               break;
             }
