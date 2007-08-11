@@ -1019,7 +1019,10 @@ namespace gloox
             {
               ServiceHandlerTrackMap::iterator ith = m_serviceHandlerTrackMap.find( iq->id() );
               if( ith != m_serviceHandlerTrackMap.end() )
+              {
                 (*ith).second->handleSubscriptionList( service, 0, &error );
+                m_serviceHandlerTrackMap.erase( ith );
+              }
               break;
             }
             case RequestAffiliationList:
@@ -1028,7 +1031,7 @@ namespace gloox
               if( ith != m_serviceHandlerTrackMap.end() )
               {
                 (*ith).second->handleAffiliationList( service, 0, &error );
-                m_serviceHandlerTrackMap.erase( it );
+                m_serviceHandlerTrackMap.erase( ith );
               }
               break;
             }
