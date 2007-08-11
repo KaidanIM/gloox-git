@@ -53,12 +53,6 @@ namespace gloox
        */
       int feed( std::string& data );
 
-      /**
-       * Reverses operation of escape(). (&amp; --> &).
-       * @param what A string to de-escape.
-       */
-      static const std::string relax( std::string what );
-
     private:
       enum ParserInternalState
       {
