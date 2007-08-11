@@ -759,7 +759,7 @@ namespace gloox
                                      sub  = (*it)->findAttribute( "subscription" );
                   subMap[node] = subscriptionType( sub );
                 }
-                (*ith).second->handleSubscriptionListResult( service, &subMap );
+                (*ith).second->handleSubscriptionList( service, &subMap );
                 m_serviceHandlerTrackMap.erase( ith );
               }
               break;
@@ -778,7 +778,7 @@ namespace gloox
                                      aff  = affiliations->findAttribute( "affiliation" );
                   affMap[node] = affiliationType( aff );
                 }
-                (*ith).second->handleAffiliationListResult( iq->from(), &affMap );
+                (*ith).second->handleAffiliationList( iq->from(), &affMap );
                 m_serviceHandlerTrackMap.erase( ith );
               }
               break;
@@ -991,10 +991,16 @@ namespace gloox
             }
             case RequestSubscriptionList:
             {
+              ServiceHandlerTrackMap::iterator ith = m_serviceHandlerTrackMap.find( iq->id() );
+              if( ith != m_serviceHandlerTrackMap.end() )
+                (*ith).second->handleSubscriptionList( service, 0, &error );
               break;
             }
             case RequestAffiliationList:
             {
+              ServiceHandlerTrackMap::iterator ith = m_serviceHandlerTrackMap.find( iq->id() );
+              if( ith != m_serviceHandlerTrackMap.end() )
+              (*ith).second->handleAffiliationList( service, 0, &error );
               break;
             }
             case RequestSubscriptionOptions:
