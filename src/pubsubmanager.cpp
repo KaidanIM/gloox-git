@@ -972,21 +972,25 @@ namespace gloox
                 (*ith).second->handleSubscriptionResult( service, node, jid, SubscriptionNone, &error );
               }
 
-
+              m_nodeHandlerTrackMap.erase( ith );
               break;
             }
             case Unsubscription:
             {
-              Tag *unsub = query->findChild( "unsubscribe" );
               NodeHandlerTrackMap::iterator ith = m_nodeHandlerTrackMap.find( id );
-              if( !unsub || ith == m_nodeHandlerTrackMap.end() )
+              if( ith == m_nodeHandlerTrackMap.end() )
                 return;
 
-              const std::string& node = unsub->findAttribute( "node" ),
-                                 jid  = unsub->findAttribute( "jid" );
+              Tag *unsub = query->findChild( "unsubscribe" );
+              if( unsub )
+              {
+                const std::string& node = unsub->findAttribute( "node" ),
+                                   jid  = unsub->findAttribute( "jid" );
 
-              (*ith).second->handleUnsubscriptionResult( service, node, jid, &error );
+                (*ith).second->handleUnsubscriptionResult( service, node, jid, &error );
+              }
 
+              m_nodeHandlerTrackMap.erase( ith );
               break;
             }
             case RequestSubscriptionList:
@@ -1000,17 +1004,25 @@ namespace gloox
             {
               ServiceHandlerTrackMap::iterator ith = m_serviceHandlerTrackMap.find( iq->id() );
               if( ith != m_serviceHandlerTrackMap.end() )
-              (*ith).second->handleAffiliationList( service, 0, &error );
+                (*ith).second->handleAffiliationList( service, 0, &error );
               break;
             }
             case RequestSubscriptionOptions:
             {
-              Tag * items = query->findChild( "items" );
-              if( !items )
+              NodeHandlerTrackMap::iterator ith = m_nodeHandlerTrackMap.find( iq->id() );
+              if( ith == m_nodeHandlerTrackMap.end() )
                 return;
 
-              const std::string& node = items->findAttribute( "node" );
-              // handleOptionListError( "" );
+              Tag * options = query->findChild( "options" );
+              if( options )
+              {
+                const std::string& node = options->findAttribute( "node" );
+                (*ith).second->handleSubscriptionOptions( iq->from(),
+                                         JID( options->findAttribute( "jid" ) ),
+                                         options->findAttribute( "node" ), 0, &error );
+              }
+
+              m_nodeHandlerTrackMap.erase( ith );
               break;
             }
             case RequestNodeConfig:
