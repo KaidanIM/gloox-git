@@ -68,17 +68,17 @@ class FlexOffTest : public DiscoHandler, MessageHandler, ConnectionListener, Fle
       return true;
     }
 
-    virtual void handleDiscoInfoResult( IQ */*iq*/, int /*context*/ )
+    virtual void handleDiscoInfoResult( IQ* /*iq*/, int /*context*/ )
     {
       printf( "handleDiscoInfoResult}\n" );
     }
 
-    virtual void handleDiscoItemsResult( IQ */*iq*/, int /*context*/ )
+    virtual void handleDiscoItemsResult( IQ* /*iq*/, int /*context*/ )
     {
       printf( "handleDiscoItemsResult\n" );
     }
 
-    virtual void handleDiscoError( IQ */*iq*/, int /*context*/ )
+    virtual void handleDiscoError( IQ* /*iq*/, int /*context*/ )
     {
       printf( "handleDiscoError\n" );
     }

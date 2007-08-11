@@ -1,3 +1,4 @@
+
 #include "../client.h"
 #include "../connectionlistener.h"
 #include "../discohandler.h"
@@ -52,17 +53,17 @@ class DiscoTest : public DiscoHandler, ConnectionListener, LogHandler
       return true;
     }
 
-    virtual void handleDiscoInfoResult( IQ */*iq*/, int /*context*/ )
+    virtual void handleDiscoInfoResult( IQ* /*iq*/, int /*context*/ )
     {
       printf( "handleDiscoInfoResult}\n" );
     }
 
-    virtual void handleDiscoItemsResult( IQ */*iq*/, int /*context*/ )
+    virtual void handleDiscoItemsResult( IQ* /*iq*/, int /*context*/ )
     {
       printf( "handleDiscoItemsResult\n" );
     }
 
-    virtual void handleDiscoError( IQ */*iq*/, int /*context*/ )
+    virtual void handleDiscoError( IQ* /*iq*/, int /*context*/ )
     {
       printf( "handleDiscoError\n" );
     }

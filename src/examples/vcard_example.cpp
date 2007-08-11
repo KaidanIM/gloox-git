@@ -1,3 +1,4 @@
+
 #include "../client.h"
 #include "../connectionlistener.h"
 #include "../disco.h"
@@ -56,21 +57,6 @@ class VCardTest : public ConnectionListener, LogHandler, VCardHandler
               info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
               info.compression.c_str() );
       return true;
-    }
-
-    virtual void handleDiscoInfoResult( Stanza */*stanza*/, int /*context*/ )
-    {
-      printf( "handleDiscoInfoResult}\n" );
-    }
-
-    virtual void handleDiscoItemsResult( Stanza */*stanza*/, int /*context*/ )
-    {
-      printf( "handleDiscoItemsResult\n" );
-    }
-
-    virtual void handleDiscoError( Stanza */*stanza*/, int /*context*/ )
-    {
-      printf( "handleDiscoError\n" );
     }
 
     virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
