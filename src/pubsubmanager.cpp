@@ -142,14 +142,14 @@ namespace gloox
       m_parent->disco()->getDiscoItems( service, nodeid, this, DiscoNodeItems, id );
     }
 
-    void Manager::handleDiscoInfoResult( Stanza * stanza, int context )
+    void Manager::handleDiscoInfoResult( IQ * iq, int context )
     {
-      const Tag * query = stanza->findChild( "query" );
+      const Tag * query = iq->query();
       const Tag * identity = query->findChild( "identity" );
       if( !identity )
         return; // ejabberd...
-      const JID& service = stanza->from();
-      const std::string& id = stanza->id();
+      const JID& service = iq->from();
+      const std::string& id = iq->id();
       const std::string& type = identity->findAttribute( TYPE );
 
       DiscoHandlerTrackMap::iterator ith = m_discoHandlerTrackMap.find( id );
@@ -203,15 +203,13 @@ namespace gloox
       m_discoHandlerTrackMap.erase( ith );
     }
 
-    void Manager::handleDiscoItemsResult( Stanza *stanza, int )
+    void Manager::handleDiscoItemsResult( IQ *iq, int )
     {
-      DiscoHandlerTrackMap::iterator ith = m_discoHandlerTrackMap.find( stanza->id() );
+      DiscoHandlerTrackMap::iterator ith = m_discoHandlerTrackMap.find( iq->id() );
       if( ith == m_discoHandlerTrackMap.end() )
         return;
 
-      const Tag * query = stanza->findChild( "query" );
-      const Tag::TagList& content = query->children();
-
+      const Tag::TagList& content = iq->query()->children();
 
       DiscoNodeItemList contentList;
       Tag::TagList::const_iterator it = content.begin();
@@ -222,20 +220,21 @@ namespace gloox
                                                (*it)->findAttribute( "name" ) ) );
       }
 
-      const JID& service = stanza->from();
-      const std::string& parentid = query->findAttribute( "node" );
+      const JID& service = iq->from();
+      const std::string& parentid = iq->query()->findAttribute( "node" );
 
       (*ith).second->handleNodeItems( service, parentid, &contentList );
       m_discoHandlerTrackMap.erase( ith );
     }
 
-    void Manager::handleDiscoError( Stanza *stanza, int context )
+    void Manager::handleDiscoError( IQ *iq, int context )
     {
-      DiscoHandlerTrackMap::iterator ith = m_discoHandlerTrackMap.find( stanza->id() );
+      DiscoHandlerTrackMap::iterator ith = m_discoHandlerTrackMap.find( iq->id() );
       if( ith == m_discoHandlerTrackMap.end() )
         return;
 
-      const JID& service = stanza->from();
+      const JID& service = iq->from();
+      const Tag *query = iq->query();
       const Error * error ;//= stanza->getExtension( ExtError );
 
       switch( context )
@@ -244,13 +243,17 @@ namespace gloox
           (*ith).second->handleServiceInfos( service, 0, error );
           break;
         case DiscoNodeInfos:
-          //const std::string& node = stanza->query()->findAttribute( "node" ); 
-          //(*ith).second->handleNodeInfos( service, node, NodeInvalid, 0, error );
+        {
+          const std::string& node = query->findAttribute( "node" ); 
+          (*ith).second->handleNodeInfos( service, node, NodeInvalid, 0, error );
           break;
+        }
         case DiscoNodeItems:
-          //const std::string& node = stanza->query()->findAttribute( "node" ); 
-          //(*ith).second->handleNodeItems( service, node, 0, error );
+        {
+          const std::string& node = query->findAttribute( "node" ); 
+          (*ith).second->handleNodeItems( service, node, 0, error );
           break;
+        }
         default:
           break;
       }
@@ -318,6 +321,7 @@ namespace gloox
         type = eventType( (*it)->name() );
         for( ; ith != m_eventHandlerList.end(); ++it )
         {
+          const std::string& node = (*it)->findAttribute( "node" );
           switch( type )
           {
             case EventCollection:
@@ -325,7 +329,6 @@ namespace gloox
               Tag * nodet = (*it)->findChild( "node" );
               Tag * df = (*it)->findChild( "x" );
               DataForm form( df );
-              const std::string& node = (*it)->findAttribute( "node" );
               (*ith)->handleNodeCreation( service, node, form );
               break;
             }
@@ -333,13 +336,11 @@ namespace gloox
             {
               Tag * df = (*it)->findChild( "x" );
               DataForm form( df );
-              const std::string& node = (*it)->findAttribute( "node" );
               (*ith)->handleConfigurationChange( service, node, form );
               break;
             }
             case EventDelete:
             {
-              const std::string& node = (*it)->findAttribute( "node" );
               (*ith)->handleNodeRemoval( service, node );
               break;
             }
@@ -350,13 +351,11 @@ namespace gloox
             }
             case EventPurge:
             {
-              const std::string& node = (*it)->findAttribute( "node" );
               (*ith)->handleNodePurge( service, node );
               break;
             }
             case EventSubscription:
             {
-              const std::string& node = (*it)->findAttribute( "node" );
               const std::string& jid  = (*it)->findAttribute( "jid" );
               const std::string& sub  = (*it)->findAttribute( "subscription" );
               const Tag * body = event->findChild( "body" );
@@ -369,6 +368,7 @@ namespace gloox
         }
       }
     }
+
     void Manager::requestSubscriptionOptions( const JID& service,
                                               const JID& jid,
                                               const std::string& node,

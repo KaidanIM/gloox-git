@@ -411,10 +411,10 @@ public:
 //          { m_subscriptionTrackList.remove( handler ); }
 
         // reimplemented from DiscoHandler
-        virtual void handleDiscoInfoResult( Stanza *stanza, int context );
-        virtual void handleDiscoItemsResult( Stanza *stanza, int context );
-        virtual void handleDiscoError( Stanza *stanza, int context );
-        virtual bool handleDiscoSet( Stanza * ) { return 0; }
+        virtual void handleDiscoInfoResult( IQ *iq, int context );
+        virtual void handleDiscoItemsResult( IQ *iq, int context );
+        virtual void handleDiscoError( IQ *iq, int context );
+        virtual bool handleDiscoSet( IQ * ) { return 0; }
 
         // reimplemented from MessageHandler
         virtual void handleMessage( Message* msg, MessageSession * );
