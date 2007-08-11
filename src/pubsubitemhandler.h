@@ -64,16 +64,16 @@ namespace gloox
                                      const Error * error = 0 ) = 0;
 
 
-        virtual void handleItemPublicationResult( const JID& service,
-                                                  const std::string& node,
-                                                  const std::string& item,
-                                                  const Error * error = 0 ) = 0;
+        virtual void handleItemPublication( const JID& service,
+                                            const std::string& node,
+                                            const std::string& item,
+                                            const Error * error = 0 ) = 0;
 
 
-        virtual void handleItemDeletationResult(  const JID& service,
-                                                  const std::string& node,
-                                                  const std::string& item,
-                                                  const Error * error = 0 ) = 0;
+        virtual void handleItemDeletation(  const JID& service,
+                                            const std::string& node,
+                                            const std::string& item,
+                                            const Error * error = 0 ) = 0;
 
 
     };

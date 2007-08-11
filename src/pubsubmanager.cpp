@@ -928,9 +928,9 @@ namespace gloox
               ItemOperationTrackMap::iterator it = m_iopTrackMap.find( id );
               if( it != m_iopTrackMap.end() )
               {
-                (*ith).second->handleItemPublicationResult( service,
-                                                            (*it).second.first,
-                                                            (*it).second.second );
+                (*ith).second->handleItemPublication( service,
+                                                      (*it).second.first,
+                                                      (*it).second.second );
                 m_iopTrackMap.erase( it );
               }
 
@@ -946,9 +946,9 @@ namespace gloox
               ItemOperationTrackMap::iterator it = m_iopTrackMap.find( id );
               if( it != m_iopTrackMap.end() )
               {
-                (*ith).second->handleItemDeletationResult( service,
-                                                           (*it).second.first,
-                                                           (*it).second.second );
+                (*ith).second->handleItemDeletation( service,
+                                                     (*it).second.first,
+                                                     (*it).second.second );
                 m_iopTrackMap.erase( it );
               }
               m_itemHandlerTrackMap.erase( ith );
@@ -1070,12 +1070,44 @@ namespace gloox
             }
             case PublishItem:
             {
-              //handle
+              ItemHandlerTrackMap::iterator ith = m_itemHandlerTrackMap.find( iq->id() );
+              if( ith == m_itemHandlerTrackMap.end() )
+                return;
+
+              Tag * publish = query->findChild( "publish" );
+              if( publish )
+              {
+                Tag * item = publish->findChild( "item" );
+                if( item )
+                {
+                  const std::string& node = publish->findAttribute( "node" );
+                  const std::string& id = item->findAttribute( "id" );
+                  (*ith).second->handleItemPublication( service, node, id, &error );
+                }
+              }
+
+              m_itemHandlerTrackMap.erase( ith );
               break;
             }
             case DeleteItem:
             {
-              //handle
+              ItemHandlerTrackMap::iterator ith = m_itemHandlerTrackMap.find( iq->id() );
+              if( ith == m_itemHandlerTrackMap.end() )
+                return;
+ 
+              Tag * retract = query->findChild( "retract" );
+              if( retract )
+              {
+                Tag * item = retract->findChild( "item" );
+                if( item )
+                {
+                  const std::string& node = retract->findAttribute( "node" );
+                  const std::string& id = item->findAttribute( "id" );
+                  (*ith).second->handleItemDeletation( service, node, id, &error );
+                }
+              }
+             
+              m_itemHandlerTrackMap.erase( ith );
               break;
             }
             case PurgeNodeItems:
