@@ -97,13 +97,13 @@ public:
       void removeFlexibleOfflineHandler();
 
       // reimplemented from DiscoHandler
-      virtual void handleDiscoInfoResult( Stanza *stanza, int context );
+      virtual void handleDiscoInfoResult( IQ *iq, int context );
 
       // reimplemented from DiscoHandler
-      virtual void handleDiscoItemsResult( Stanza *stanza, int context );
+      virtual void handleDiscoItemsResult( IQ *iq, int context );
 
       // reimplemented from DiscoHandler
-      virtual void handleDiscoError( Stanza *stanza, int context );
+      virtual void handleDiscoError( IQ *iq, int context );
 
       // reimplemented from IqHandler
       virtual bool handleIq( IQ* iq );

@@ -78,7 +78,7 @@ namespace gloox
     m_flexibleOfflineHandler = 0;
   }
 
-  void FlexibleOffline::handleDiscoInfoResult( Stanza *stanza, int context )
+  void FlexibleOffline::handleDiscoInfoResult( IQ *iq, int context )
   {
     if( !m_flexibleOfflineHandler )
       return;
@@ -87,12 +87,12 @@ namespace gloox
     {
       case FOCheckSupport:
         m_flexibleOfflineHandler->handleFlexibleOfflineSupport(
-            stanza->findChild( "query" )->hasChild( "feature", "var", XMLNS_OFFLINE ) );
+            iq->query()->hasChild( "feature", "var", XMLNS_OFFLINE ) );
         break;
 
       case FORequestNum:
         int num = -1;
-        DataForm f( stanza->findChild( "query" )->findChild( "x" ) );
+        DataForm f( iq->query()->findChild( "x" ) );
         if( f.hasField( "number_of_messages" ) )
           num = atoi( f.field( "number_of_messages" )->value().c_str() );
 
@@ -101,11 +101,11 @@ namespace gloox
     }
   }
 
-  void FlexibleOffline::handleDiscoItemsResult( Stanza *stanza, int context )
+  void FlexibleOffline::handleDiscoItemsResult( IQ *iq, int context )
   {
     if( context == FORequestHeaders && m_flexibleOfflineHandler )
     {
-      Tag *q = stanza->findChild( "query" );
+      Tag *q = iq->query();
       if( q && q->hasAttribute( XMLNS, XMLNS_DISCO_ITEMS ) && q->hasAttribute( "node", XMLNS_OFFLINE ) )
       {
         StringMap m;
@@ -120,7 +120,7 @@ namespace gloox
     }
   }
 
-  void FlexibleOffline::handleDiscoError( Stanza * /*stanza*/, int /*context*/ )
+  void FlexibleOffline::handleDiscoError( IQ * /*iq*/, int /*context*/ )
   {
   }
 

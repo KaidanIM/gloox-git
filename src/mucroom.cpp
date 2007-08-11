@@ -878,7 +878,7 @@ namespace gloox
     }
   }
 
-  void MUCRoom::handleDiscoInfoResult( Stanza *stanza, int context )
+  void MUCRoom::handleDiscoInfoResult( IQ *iq, int context )
   {
     switch( context )
     {
@@ -891,7 +891,7 @@ namespace gloox
 
         std::string name;
         DataForm *df = 0;
-        Tag *q = stanza->findChild( "query" );
+        Tag *q = iq->query();
         if( q )
         {
           const Tag::TagList& l = q->children();
@@ -947,7 +947,7 @@ namespace gloox
     }
   }
 
-  void MUCRoom::handleDiscoItemsResult( Stanza *stanza, int context )
+  void MUCRoom::handleDiscoItemsResult( IQ *iq, int context )
   {
     if( !m_roomHandler )
       return;
@@ -956,7 +956,7 @@ namespace gloox
     {
       case GetRoomItems:
       {
-        Tag *q = stanza->findChild( "query" );
+        Tag *q = iq->query();
         if( q )
         {
           StringMap items;
@@ -978,7 +978,7 @@ namespace gloox
     }
   }
 
-  void MUCRoom::handleDiscoError( Stanza * /*stanza*/, int context )
+  void MUCRoom::handleDiscoError( IQ * /*iq*/, int context )
   {
     if( !m_roomHandler )
       return;
