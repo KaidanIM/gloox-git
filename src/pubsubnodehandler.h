@@ -205,7 +205,7 @@ namespace gloox
                                        const Error * error = 0 ) = 0;
 
         /**
-         * Handle the configuration for a specific node.
+         * Handle the configuration modification for a specific node.
          * @param service Service hosting the node.
          * @param node ID of the node.
          * @param config Configuration DataForm.
