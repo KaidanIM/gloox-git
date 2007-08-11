@@ -1,0 +1,35 @@
+Abstract
+--------
+
+The idea is to avoid a myriad of managers and *handlers
+by using a single handler, FetchableHandler, and a coommon
+base class for all kinds of objects that have simple
+fetch/store kind of operations.
+
+
+Idea
+----
+
+class Fetchable
+{
+  public:
+    Fetchable( ClientBase* );
+
+  protected:
+    send( Tag* );
+};
+
+class FetchableHandler
+{
+  public:
+    void handleFechtable( Fetchable*, bool success ) = 0;
+};
+
+class VCard : public Fetchable
+{
+  public:
+    VCard( ClientBase* parent, const JID& jid ) : Fetchable( parent ) {}
+
+    bool fetch( FetchableHandler* );
+    bool store( FetchableHandler* );
+};
