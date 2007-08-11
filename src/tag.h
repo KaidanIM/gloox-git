@@ -361,12 +361,14 @@ namespace gloox
       /**
        * Does some fancy escaping. (& --> &amp;, etc).
        * @param what A string to escape.
+       * @deprecated Will be removed in 1.0.
        */
       static const std::string escape( std::string what );
 
       /**
        * Reverses operation of escape(). (&amp; --> &).
        * @param what A string to de-escape.
+       * @deprecated Will be removed in 1.0.
        */
       static const std::string relax( std::string what );
 
