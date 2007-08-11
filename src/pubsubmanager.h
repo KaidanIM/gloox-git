@@ -201,7 +201,8 @@ public:
                                      ServiceHandler* handler );
 
         /**
-         * Publish an item to a node.
+         * Publish an item to a node. The Tag to publish is destroyed
+         * by the function before returning.
          * @param service Service hosting the node.
          * @param node ID of the node to delete the item from.
          * @param item The item to publish.
