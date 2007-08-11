@@ -40,7 +40,7 @@ class AdhocTest : public ConnectionListener, AdhocCommandProvider, LogHandler
       delete( j );
     }
 
-    void handleAdhocCommand( const std::string& command, Tag */*tag*/, const JID& from,
+    void handleAdhocCommand( const std::string& command, Tag* /*tag*/, const JID& from,
                              const std::string& /*id*/ )
     {
       if( command == "helloworld" )
