@@ -1,12 +1,14 @@
 include( FindZLIB )
+include( CheckFunctionExists )
 
 file( GLOB gloox_SRCS *.cpp )
 
-option( SETSOCKOPTS_EXISTS "We have setsockopts()" ON )
+#option( SETSOCKOPTS_EXISTS "We have setsockopt()" ON )
+check_function_exists( setsockopt SETSOCKOPT_EXISTS )
 
-if( SETSOCKOPTS_EXISTS )
+if( SETSOCKOPT_EXISTS )
 	write_file( ${CMAKE_CURRENT_SOURCE_DIR}/config.h "#define HAVE_SETSOCKOPT 1")
-endif( SETSOCKOPTS_EXISTS )
+endif( SETSOCKOPT_EXISTS )
 
 if( ZLIB_FOUND )
     set( LIBS ${LIBS} ${ZLIB_LIBRARIES} )
