@@ -79,6 +79,10 @@ namespace gloox
        */
       MessageType subtype() const { return m_subtype; }
 
+      const std::string& body() const { return m_body; }
+
+      const std::string& subject() const { return m_subject; }
+
       /**
        * Returns the body of a message stanza for the given language if available.
        * If the requested language is not available, the default body (without a xml:lang
@@ -88,8 +92,7 @@ namespace gloox
        * will be returned, if any.
        * @return The body of a message stanza.
        */
-      virtual const std::string body( const std::string& lang = "default" ) const
-      { return findLang( m_body, lang ); }
+      const std::string body( const std::string& lang ) const;
 
       /**
        * Returns the subject of a message stanza for the given language if available.
@@ -100,8 +103,7 @@ namespace gloox
        * will be returned, if any.
        * @return The subject of a message stanza.
        */
-      virtual const std::string subject( const std::string& lang = "default" ) const
-      { return findLang( m_subject, lang ); }
+      const std::string subject( const std::string& lang ) const;
 
       /**
        * Returns the thread ID of a message stanza.
@@ -117,8 +119,10 @@ namespace gloox
 
     private:
       MessageType m_subtype;
-      StringMap m_body;
-      StringMap m_subject;
+      std::string m_body;
+      std::string m_subject;
+      StringMap * m_bodies;
+      StringMap * m_subjects;
       std::string m_thread;
   };
 
