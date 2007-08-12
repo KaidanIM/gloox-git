@@ -11,7 +11,7 @@ check: test
 
 test: ${SUBDIRS}
 	@for i in $?; do \
-	  ${MAKE} -C $$i all; \
+	  ${MAKE} -C $$i all || exit; \
 	done;
 	@for i in $?; do \
 	  $$i/$${i}_test;    \
@@ -21,7 +21,7 @@ leaktest: leakcheck
 
 leakcheck: ${SUBDIRS}
 	@for i in $?; do \
-	  ${MAKE} -C $$i all; \
+	  ${MAKE} -C $$i all || exit; \
 	done;
 	@for i in $?; do \
 	  valgrind -q --leak-check=full --show-reachable=yes $$i/$${i}_test;    \
