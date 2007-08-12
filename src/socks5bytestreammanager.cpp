@@ -57,8 +57,15 @@ namespace gloox
   bool SOCKS5BytestreamManager::requestSOCKS5Bytestream( const JID& to, S5BMode /*mode*/,
                                                          const std::string& sid )
   {
-    if( !m_parent || m_hosts.empty() )
+    if( !m_parent )
       return false;
+
+    if( m_hosts.empty() )
+    {
+      m_parent->logInstance().log( LogLevelWarning, LogAreaClassS5Managger,
+                                   "No stream hosts set, cannot request bytestream." );
+      return false;
+    }
 
     const std::string& msid = sid.empty() ? m_parent->getID() : sid;
     const std::string& id = m_parent->getID();
