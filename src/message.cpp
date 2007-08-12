@@ -24,7 +24,7 @@ namespace gloox
   };
 
   Message::Message( Tag *tag, bool rip )
-    : Stanza( tag, rip ), m_subtype( Invalid )
+    : Stanza( tag, rip ), m_subtype( Invalid ), m_bodies(0), m_subjects(0)
   {
     if( !tag || tag->name() != "message" )
     {
@@ -46,11 +46,31 @@ namespace gloox
     {
       if( (*it)->name() == "body" )
       {
-        setLang( m_body, (*it) );
+        const std::string& lang = (*it)->findAttribute( "xml:lang" );
+        if( lang.empty() )
+        {
+          m_body = (*it)->cdata();
+        }
+        else
+        {
+          if( !m_bodies )
+            m_bodies = new StringMap();
+          (*m_bodies)[lang] = (*it)->cdata();
+        }
       }
       else if( (*it)->name() == "subject" )
       {
-        setLang( m_subject, (*it) );
+        const std::string& lang = (*it)->findAttribute( "xml:lang" );
+        if( lang.empty() )
+        {
+          m_subject = (*it)->cdata();
+        }
+        else
+        {
+          if( !m_subjects )
+            m_subjects = new StringMap();
+          (*m_subjects)[lang] = (*it)->cdata();
+        }
       }
       else if( (*it)->name() == "thread" )
       {
@@ -68,7 +88,7 @@ namespace gloox
   Message::Message( MessageType type, const JID& to,
                     const std::string& body, const std::string& subject,
                     const std::string& thread, const std::string& xmllang, const JID& from )
-    : Stanza( "message", to, from ), m_subtype( type )
+    : Stanza( "message", to, from ), m_subtype( type ), m_bodies(0), m_subjects(0)
   {
     addAttribute( TYPE, util::lookup2( type, msgTypeStringValues ) );
 
@@ -88,8 +108,34 @@ namespace gloox
       new Tag( this, "thread", thread );
   }
 
+  const std::string Message::body( const std::string& lang ) const
+  {
+    if( m_bodies && lang != "default" )
+    {
+      StringMap::const_iterator it = m_bodies->find( lang );
+      if( it != m_bodies->end() )
+        return (*it).second;
+    }
+    return m_body;
+  }
+
+  const std::string Message::subject( const std::string& lang ) const
+  {
+    if( m_subjects && lang != "default" )
+    {
+      StringMap::const_iterator it = m_subjects->find( lang );
+      if( it != m_subjects->end() )
+        return (*it).second;
+    }
+    return m_subject;
+  }
+
   Message::~Message()
   {
+    if( m_bodies )
+      delete m_bodies;
+    if( m_subjects )
+      delete m_subjects;
   }
 
 }

@@ -167,10 +167,42 @@ int main( int /*argc*/, char** /*argv*/ )
   delete i;
   i = 0;
 
+  // -------
+  name = "lang test";
+  Tag * tag = new Tag( "message", "to", "you@there.org" );
 
+  Tag * body = new Tag( tag, "body", "xml:lang", "fr" );
+  body->setCData( "anglais" );
+  body = new Tag( tag, "body" );
+  body->setCData( "english" );
 
+  Tag * subject = new Tag( tag, "subject", "xml:lang", "fr" );
+  subject->setCData( "sujet" );
+  subject = new Tag( tag, "subject" );
+  subject->setCData( "subject" );
 
+  i = new Message( tag, true );
 
+  if( i->body() != "english"
+   || i->body( "default" ) != "english"
+   || i->body( "xyz" ) != "english"
+   || i->body( "fr" ) != "anglais"
+   || i->subject() != "subject"
+   || i->subject( "default" ) != "subject"
+   || i->subject( "xyz" ) != "subject"
+   || i->subject( "fr" ) != "sujet" )
+  {
+    ++fail;
+    printf( "test '%s' failed: %s, %s, %s, %s, %s, %s, %s, %s\n", name.c_str(), 
+            i->body().c_str(),  i->body( "default" ).c_str(), 
+            i->body( "xyz" ).c_str(),  i->body( "fr" ).c_str(), 
+            i->subject().c_str(),  i->subject( "default" ).c_str(), 
+            i->subject( "xyz" ).c_str(), i->subject( "fr" ).c_str() ); 
+  }
+  delete i;
+  i = 0;
+  delete tag;
+  tag = 0;
 
 
 
