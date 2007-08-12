@@ -35,7 +35,7 @@ namespace gloox
     std::string::size_type p = data.find( ';', pos );
     std::string::size_type diff = p - pos;
 
-    if( diff > 9 || diff < 3 )
+    if( diff < 3 || diff > 9 )
       return DecodeInvalid;
 
     if( p == std::string::npos )
@@ -58,27 +58,27 @@ namespace gloox
             idx = 3;
           }
 
-          char *end;
+          char* end;
           const long int val = std::strtol( data.data() + pos + idx, &end, base );
-          if( *end != ';' )
+          if( *end != ';' || val < 0 )
             return DecodeInvalid;
 
-          if( val >= 0 && val < 128 )
+          if( val == 0x9 || val == 0xA || val == 0xD || ( val >= 0x20 && val <= 0x7F ) )
           {
             rep += char( val );
           }
-          else if( val < 2048 )
+          else if( val >= 0x80 && val <= 0x7FF )
           {
             rep += char( 192 + ( val >> 6 ) );
             rep += char( 128 + ( val % 64 ) );
           }
-          else if( val < 65536 )
+          else if( ( val >= 0x800 && val <= 0xD7FF ) || ( val >= 0xE000 && val <= 0xFFFD ) )
           {
             rep += char( 224 + ( val >> 12 ) );
             rep += char( 128 + ( ( val >> 6 ) % 64 ) );
             rep += char( 128 + ( val % 64 ) );
           }
-          else if( val < 2097152 )
+          else if( val >= 0x100000 && val < 0x10FFFF )
           {
             rep += char( 240 + ( val >> 18 ) );
             rep += char( 128 + ( ( val >> 12 ) % 64 ) );
