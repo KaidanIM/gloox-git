@@ -799,6 +799,83 @@ class ParserTest : private TagHandler
       m_tag = 0;
 
       //-------
+      name = "invalid escaping 16";
+      data = "<tag1>&#0;</tag1>";
+      if( p->feed( data ) == -1 )
+      {
+        ++fail;
+        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      //-------
+      name = "invalid escaping 17";
+      data = "<tag1>&#X13;</tag1>";
+      if( p->feed( data ) == -1 )
+      {
+        ++fail;
+        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      //-------
+      name = "invalid escaping 18";
+      data = "<tag1>&#X110000;</tag1>";
+      if( p->feed( data ) == -1 )
+      {
+        ++fail;
+        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      //-------
+      name = "invalid escaping 19";
+      data = "<tag1>&#xFFFE;</tag1>";
+      if( p->feed( data ) == -1 )
+      {
+        ++fail;
+        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      //-------
+      name = "invalid escaping 20";
+      data = "<tag1>&#xFFFF;</tag1>";
+      if( p->feed( data ) == -1 )
+      {
+        ++fail;
+        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      //-------
+      name = "invalid escaping 21";
+      data = "<tag1>&#xD800;</tag1>";
+      if( p->feed( data ) == -1 )
+      {
+        ++fail;
+        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      //-------
+      name = "invalid escaping 22";
+      data = "<tag1>&#xDFFF;</tag1>";
+      if( p->feed( data ) == -1 )
+      {
+        ++fail;
+        printf( "test '%s' failed: %s -- %s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      //-------
       name = "escaping 1";
       data = "<tag1>&lt;</tag1>";
       if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->cdata() != "<" )
@@ -887,31 +964,6 @@ class ParserTest : private TagHandler
       delete m_tag;
       m_tag = 0;
 
-      //-------
-      name = "escaping 9";
-      data = "<tag1>&#2097151;</tag1>";
-      if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->cdata() != "÷¿¿¿" )
-      {
-        ++fail;
-        printf( "test '%s' failed: \n%s\n%s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
-      }
-      delete m_tag;
-      m_tag = 0;
-
-      //-------
-      name = "escaping 10";
-      data = "<tag1>&#0;</tag1>";
-      i = p->feed( data );
-      std::string n;
-      if( m_tag )
-        n = m_tag->cdata();
-      if( i >= 0 || !m_tag || n.size() != 1 || n[0] != '\0' )
-      {
-        ++fail;
-        printf( "test '%s' failed at %d: \n%s\n%s\n", name.c_str(), i, data.c_str(), m_tag->xml().c_str() );
-      }
-      delete m_tag;
-      m_tag = 0;
 
 
 
