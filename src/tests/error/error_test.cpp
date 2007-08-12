@@ -36,7 +36,10 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   // -------
 
-  
+  delete error;
+  delete e;
+
+
   if( fail == 0 )
   {
     printf( "Error: all tests passed\n" );
