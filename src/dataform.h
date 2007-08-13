@@ -74,7 +74,7 @@ namespace gloox
        * Constructs a new DataForm from an existing Tag/XML representation.
        * @param tag The existing form to parse.
        */
-      DataForm( Tag *tag );
+      DataForm( const Tag* tag );
 
       /**
        * Constructs an empty DataForm. Its type is FormTypeInvalid.
@@ -135,7 +135,7 @@ namespace gloox
        * @return @b True on success, @b false otherwise.
        * @since 0.9
        */
-      bool parse( Tag *tag );
+      bool parse( const Tag* tag );
 
     private:
       StringList m_instructions;

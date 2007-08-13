@@ -31,7 +31,7 @@ namespace gloox
   {
   }
 
-  DataForm::DataForm( Tag *tag )
+  DataForm::DataForm( const Tag* tag )
     : m_type( FormTypeInvalid )
   {
     parse( tag );
@@ -51,7 +51,7 @@ namespace gloox
     "form", "submit", "cancel", "result"
   };
 
-  bool DataForm::parse( Tag *tag )
+  bool DataForm::parse( const Tag* tag )
   {
     if( !tag || !tag->hasAttribute( XMLNS, XMLNS_X_DATA ) || tag->name() != "x" )
       return false;
