@@ -52,7 +52,7 @@ namespace gloox
    * void MyOtherClass::joinRoom( const std::string& room, const std::string& service,
    *                              const std::string& nick )
    * {
-   *   MyClass *myHandler = new MyClass(...);
+   *   MyClass* myHandler = new MyClass(...);
    *   JID roomJID( room + "@" + service + "/" + nick );
    *   m_room = new MUCRoom( m_clientbase, roomJID, myHandler, 0 );
    *   m_room->join();
@@ -114,7 +114,7 @@ namespace gloox
        * initially. However, at the latest you need one when you create a new room which is not an
        * instant room. You can set a MUCRoomConfigHandler using registerMUCRoomConfigHandler().
        */
-      MUCRoom( ClientBase *parent, const JID& nick, MUCRoomHandler *mrh, MUCRoomConfigHandler *mrch = 0 );
+      MUCRoom( ClientBase* parent, const JID& nick, MUCRoomHandler* mrh, MUCRoomConfigHandler* mrch = 0 );
 
       /**
        * Virtual Destructor.
@@ -240,7 +240,7 @@ namespace gloox
        * MUCRoomHandler per room at any one time.
        * @param mrl The MUCRoomHandler to register.
        */
-      void registerMUCRoomHandler( MUCRoomHandler *mrl ) { m_roomHandler = mrl; }
+      void registerMUCRoomHandler( MUCRoomHandler* mrl ) { m_roomHandler = mrl; }
 
       /**
        * Use this function to remove the registered MUCRoomHandler.
@@ -252,7 +252,7 @@ namespace gloox
        * be only one MUCRoomConfigHandler per room at any one time.
        * @param mrch The MUCRoomConfigHandler to register.
        */
-      void registerMUCRoomConfigHandler( MUCRoomConfigHandler *mrch ) { m_roomConfigHandler = mrch; }
+      void registerMUCRoomConfigHandler( MUCRoomConfigHandler* mrch ) { m_roomConfigHandler = mrch; }
 
       /**
        * Use this function to remove the registered MUCRoomConfigHandler.
@@ -465,19 +465,19 @@ namespace gloox
       int flags() const { return m_flags; }
 
       // reimplemented from DiscoHandler
-      virtual void handleDiscoInfoResult( IQ *iq, int context );
+      virtual void handleDiscoInfoResult( IQ* iq, int context );
 
       // reimplemented from DiscoHandler
-      virtual void handleDiscoItemsResult( IQ *iq, int context );
+      virtual void handleDiscoItemsResult( IQ* iq, int context );
 
       // reimplemented from DiscoHandler
-      virtual void handleDiscoError( IQ *iq, int context );
+      virtual void handleDiscoError( IQ* iq, int context );
 
       // reimplemented from PresenceHandler
       virtual void handlePresence( Presence* presence );
 
       // reimplemented from MessageHandler
-      virtual void handleMessage( Message* msg, MessageSession *session = 0 );
+      virtual void handleMessage( Message* msg, MessageSession* session = 0 );
 
       // reimplemented from IqHandler
       virtual bool handleIq( IQ* /*iq*/ ) { return false; }
@@ -498,7 +498,7 @@ namespace gloox
       void setName( const std::string& name ) { m_nick.setUsername( name ); }
       virtual bool instantRoomHook() const { return false; }
 
-      ClientBase *m_parent;
+      ClientBase* m_parent;
       JID m_nick;
 
       bool m_joined;
@@ -515,9 +515,9 @@ namespace gloox
       MUCRoomAffiliation getEnumAffiliation( const std::string& affiliation );
       MUCRoomRole getEnumRole( const std::string& role );
 
-      MUCRoomHandler *m_roomHandler;
-      MUCRoomConfigHandler *m_roomConfigHandler;
-      MUCMessageSession *m_session;
+      MUCRoomHandler* m_roomHandler;
+      MUCRoomConfigHandler* m_roomConfigHandler;
+      MUCMessageSession* m_session;
 
       typedef std::list<MUCRoomParticipant> ParticipantList;
       ParticipantList m_participants;

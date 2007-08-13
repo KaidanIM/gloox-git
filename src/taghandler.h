@@ -43,7 +43,7 @@ namespace gloox
         * If you need a copy afterwards, create it using Tag::clone().
         * @param tag The complete Tag.
         */
-       virtual void handleTag( Tag *tag ) = 0;
+       virtual void handleTag( Tag* tag ) = 0;
   };
 
 }

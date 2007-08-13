@@ -20,7 +20,7 @@
 namespace gloox
 {
 
-  FlexibleOffline::FlexibleOffline( ClientBase *parent )
+  FlexibleOffline::FlexibleOffline( ClientBase* parent )
     : m_parent( parent ), m_flexibleOfflineHandler( 0 )
   {
   }
@@ -49,7 +49,7 @@ namespace gloox
     const std::string& id = m_parent->getID();
     IQ::IqType iqType = context == FORequestMsgs ? IQ::Get : IQ::Set;
     IQ* iq = new IQ( iqType, JID(), id, XMLNS_OFFLINE, "offline" );
-    Tag *o = iq->query();
+    Tag* o = iq->query();
 
     if( msgs.empty() )
       new Tag( o, context == FORequestMsgs ? "fetch" : "purge" );
@@ -59,7 +59,7 @@ namespace gloox
       StringList::const_iterator it = msgs.begin();
       for( ; it != msgs.end(); ++it )
       {
-        Tag *i = new Tag( o, "item", "action", action );
+        Tag* i = new Tag( o, "item", "action", action );
         i->addAttribute( "node", (*it) );
       }
     }
@@ -68,7 +68,7 @@ namespace gloox
     m_parent->send( iq );
   }
 
-  void FlexibleOffline::registerFlexibleOfflineHandler( FlexibleOfflineHandler *foh )
+  void FlexibleOffline::registerFlexibleOfflineHandler( FlexibleOfflineHandler* foh )
   {
     m_flexibleOfflineHandler = foh;
   }
@@ -78,7 +78,7 @@ namespace gloox
     m_flexibleOfflineHandler = 0;
   }
 
-  void FlexibleOffline::handleDiscoInfoResult( IQ *iq, int context )
+  void FlexibleOffline::handleDiscoInfoResult( IQ* iq, int context )
   {
     if( !m_flexibleOfflineHandler )
       return;
@@ -101,11 +101,11 @@ namespace gloox
     }
   }
 
-  void FlexibleOffline::handleDiscoItemsResult( IQ *iq, int context )
+  void FlexibleOffline::handleDiscoItemsResult( IQ* iq, int context )
   {
     if( context == FORequestHeaders && m_flexibleOfflineHandler )
     {
-      Tag *q = iq->query();
+      Tag* q = iq->query();
       if( q && q->hasAttribute( XMLNS, XMLNS_DISCO_ITEMS ) && q->hasAttribute( "node", XMLNS_OFFLINE ) )
       {
         StringMap m;

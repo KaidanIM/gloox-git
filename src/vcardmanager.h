@@ -51,7 +51,7 @@ namespace gloox
    *       m_vcardManager->fetchVCard( jid, this );
    *     };
    *
-   *     virtual void handleVCard( const JID& jid, const VCard *vcard );
+   *     virtual void handleVCard( const JID& jid, const VCard* vcard );
    *     {
    *       printf( "received vcard\n" );
    *     };
@@ -65,7 +65,7 @@ namespace gloox
    *   ...
    *
    *   private:
-   *     VCardManager *m_vcardManager;
+   *     VCardManager* m_vcardManager;
    * };
    * @endcode
    *
@@ -79,7 +79,7 @@ namespace gloox
    * @code
    *     void storeMyVCard()
    *     {
-   *       VCard *v = new VCard();
+   *       VCard* v = new VCard();
    *       v->setFormattedname( "Me" );
    *       v->setNickname( "Myself" );
    *       ...
@@ -104,7 +104,7 @@ namespace gloox
        * Constructor.
        * @param parent The ClientBase object to use for communication.
        */
-      VCardManager( ClientBase *parent );
+      VCardManager( ClientBase* parent );
 
       /**
        * Virtual destructor.
@@ -117,7 +117,7 @@ namespace gloox
        * @param jid The entity's JID.
        * @param vch The VCardHandler that will receive the result of the VCard fetch.
        */
-      void fetchVCard( const JID& jid, VCardHandler *vch );
+      void fetchVCard( const JID& jid, VCardHandler* vch );
 
       /**
        * Use this function to store or update your own VCard on the server. Remember to
@@ -127,7 +127,7 @@ namespace gloox
        * @param vcard Your VCard to store.
        * @param vch The VCardHandler that will receive the result of the VCard store.
        */
-      void storeVCard( const VCard *vcard, VCardHandler *vch );
+      void storeVCard( const VCard* vcard, VCardHandler* vch );
 
       /**
        * Use this function, e.g. from your VCardHandler-derived class's dtor, to cancel any
@@ -136,7 +136,7 @@ namespace gloox
        * @param vch The VCardHandler to remove from any queues.
        * @since 0.9
        */
-      void cancelVCardOperations( VCardHandler *vch );
+      void cancelVCardOperations( VCardHandler* vch );
 
       // reimplemented from IqHandler
       virtual bool handleIq( IQ* iq );
@@ -146,7 +146,7 @@ namespace gloox
 
     private:
       typedef std::map<std::string, VCardHandler*> TrackMap;
-      ClientBase *m_parent;
+      ClientBase* m_parent;
       TrackMap m_trackMap;
 
   };

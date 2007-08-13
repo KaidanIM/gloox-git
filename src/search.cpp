@@ -20,7 +20,7 @@
 namespace gloox
 {
 
-  Search::Search( ClientBase *parent )
+  Search::Search( ClientBase* parent )
     : m_parent( parent )
   {
   }
@@ -29,7 +29,7 @@ namespace gloox
   {
   }
 
-  void Search::fetchSearchFields( const JID& directory, SearchHandler *sh )
+  void Search::fetchSearchFields( const JID& directory, SearchHandler* sh )
   {
     if( !m_parent || directory.empty() || !sh )
       return;
@@ -43,7 +43,7 @@ namespace gloox
     m_parent->send( iq );
   }
 
-  void Search::search( const JID& directory, const DataForm& form, SearchHandler *sh )
+  void Search::search( const JID& directory, const DataForm& form, SearchHandler* sh )
   {
     if( !m_parent || directory.empty() || !sh )
       return;
@@ -58,7 +58,7 @@ namespace gloox
     m_parent->send( iq );
   }
 
-  void Search::search( const JID& directory, int fields, const SearchFieldStruct& values, SearchHandler *sh )
+  void Search::search( const JID& directory, int fields, const SearchFieldStruct& values, SearchHandler* sh )
   {
     if( !m_parent || directory.empty() || !sh )
       return;
@@ -66,7 +66,7 @@ namespace gloox
     const std::string& id = m_parent->getID();
 
     IQ* iq = new IQ( IQ::Set, directory, id, XMLNS_SEARCH );
-    Tag *q = iq->query();
+    Tag* q = iq->query();
 
     if( fields & SearchFieldFirst )
       new Tag( q, "first", values.first );
@@ -82,7 +82,7 @@ namespace gloox
     m_parent->send( iq );
   }
 
-  void Search::handleIqID( IQ *iq, int context )
+  void Search::handleIqID( IQ* iq, int context )
   {
     TrackMap::iterator it = m_track.find( iq->id() );
     if( it != m_track.end() )
@@ -94,13 +94,13 @@ namespace gloox
           {
             case FetchSearchFields:
             {
-              Tag *q = iq->query();
+              Tag* q = iq->query();
               if( q && q->hasAttribute( XMLNS, XMLNS_SEARCH ) )
               {
-                Tag *x = q->findChild( "x", XMLNS, XMLNS_X_DATA );
+                Tag* x = q->findChild( "x", XMLNS, XMLNS_X_DATA );
                 if( x )
                 {
-                  DataForm *df = new DataForm( x );
+                  DataForm* df = new DataForm( x );
                   (*it).second->handleSearchFields( iq->from(), df );
                 }
                 else
@@ -126,13 +126,13 @@ namespace gloox
             }
             case DoSearch:
             {
-              Tag *q = iq->query();
+              Tag* q = iq->query();
               if( q && q->hasAttribute( XMLNS, XMLNS_SEARCH ) )
               {
-                Tag *x = q->findChild( "x", XMLNS, XMLNS_X_DATA );
+                Tag* x = q->findChild( "x", XMLNS, XMLNS_X_DATA );
                 if( x )
                 {
-                  DataForm *df = new DataForm( x );
+                  DataForm* df = new DataForm( x );
                   (*it).second->handleSearchResult( iq->from(), df );
                 }
                 else
@@ -146,7 +146,7 @@ namespace gloox
                     if( (*itl)->name() == "item" )
                     {
                       s.jid.setJID( (*itl)->findAttribute( "jid" ) );
-                      Tag *t = 0;
+                      Tag* t = 0;
                       if( ( t = (*itl)->findChild( "first" ) ) != 0 )
                         s.first = t->cdata();
                       if( ( t = (*itl)->findChild( "last" ) ) != 0 )

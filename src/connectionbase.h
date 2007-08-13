@@ -39,7 +39,7 @@ namespace gloox
        * @param cdh An object derived from @ref ConnectionDataHandler that will receive
        * received data.
        */
-      ConnectionBase( ConnectionDataHandler *cdh )
+      ConnectionBase( ConnectionDataHandler* cdh )
         : m_handler( cdh ), m_state( StateDisconnected ), m_port( -1 )
       {}
 
@@ -99,7 +99,7 @@ namespace gloox
        * ConnectionDataHandler at any one time.
        * @param cdh The new ConnectionDataHandler.
        */
-      void registerConnectionDataHandler( ConnectionDataHandler *cdh ) { m_handler = cdh; }
+      void registerConnectionDataHandler( ConnectionDataHandler* cdh ) { m_handler = cdh; }
 
       /**
        * Sets the server to connect to.
@@ -130,7 +130,7 @@ namespace gloox
       virtual ConnectionBase* newInstance() const = 0;
 
     protected:
-      ConnectionDataHandler *m_handler;
+      ConnectionDataHandler* m_handler;
       ConnectionState m_state;
       std::string m_server;
       int m_port;

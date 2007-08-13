@@ -36,7 +36,7 @@ namespace gloox
     m_values.push_back( value );
   }
 
-  DataFormField::DataFormField( Tag *tag )
+  DataFormField::DataFormField( Tag* tag )
     : m_type( FieldTypeInvalid ), m_required( false )
   {
     if( !tag )
@@ -74,7 +74,7 @@ namespace gloox
       }
       else if( (*it)->name() == "option" )
       {
-        Tag *v = (*it)->findChild( "value" );
+        Tag* v = (*it)->findChild( "value" );
         if( v )
           m_options[(*it)->findAttribute( "label" )] = v->cdata();
       }
@@ -91,7 +91,7 @@ namespace gloox
     if( m_type == FieldTypeInvalid )
       return 0;
 
-    Tag *field = new Tag( "field" );
+    Tag* field = new Tag( "field" );
     field->addAttribute( TYPE, util::lookup( m_type, fieldTypeValues ) );
     field->addAttribute( "var", m_name );
     field->addAttribute( "label", m_label );
@@ -106,7 +106,7 @@ namespace gloox
       StringMap::const_iterator it = m_options.begin();
       for( ; it != m_options.end(); ++it )
       {
-        Tag *option = new Tag( field, "option" );
+        Tag* option = new Tag( field, "option" );
         option->addAttribute( "label", (*it).first );
         new Tag( option, "value", (*it).second );
       }

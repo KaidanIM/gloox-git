@@ -34,7 +34,7 @@ namespace gloox
     }
   }
 
-  VCardUpdate::VCardUpdate( const Tag *tag )
+  VCardUpdate::VCardUpdate( const Tag* tag )
     : StanzaExtension( ExtVCardUpdate ),
       m_notReady( true ), m_noImage( true ), m_valid( false )
   {
@@ -60,10 +60,10 @@ namespace gloox
     if( !m_valid )
       return 0;
 
-    Tag *x = new Tag( "x", XMLNS, XMLNS_X_VCARD_UPDATE );
+    Tag* x = new Tag( "x", XMLNS, XMLNS_X_VCARD_UPDATE );
     if( !m_notReady )
     {
-      Tag *p = new Tag( x, "photo" );
+      Tag* p = new Tag( x, "photo" );
       if( !m_noImage )
         p->setCData( m_hash );
     }

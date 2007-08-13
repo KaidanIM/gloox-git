@@ -103,7 +103,7 @@ namespace gloox
     m_doAuth = true;
   }
 
-  bool Client::handleNormalNode( Tag *tag )
+  bool Client::handleNormalNode( Tag* tag )
   {
     if( tag->name() == "stream:features" )
     {
@@ -256,7 +256,7 @@ namespace gloox
     return true;
   }
 
-  int Client::getStreamFeatures( Tag *tag )
+  int Client::getStreamFeatures( Tag* tag )
   {
     if( tag->name() != "stream:features" )
       return 0;
@@ -290,7 +290,7 @@ namespace gloox
     return features;
   }
 
-  int Client::getSaslMechs( Tag *tag )
+  int Client::getSaslMechs( Tag* tag )
   {
     int mechs = SaslMechNone;
 
@@ -312,7 +312,7 @@ namespace gloox
     return mechs;
   }
 
-  int Client::getCompressionMethods( Tag *tag )
+  int Client::getCompressionMethods( Tag* tag )
   {
     int meths = 0;
 
@@ -325,7 +325,7 @@ namespace gloox
     return meths;
   }
 
-  void Client::handleIqID( IQ *iq, int context )
+  void Client::handleIqID( IQ* iq, int context )
   {
     switch( context )
     {
@@ -345,7 +345,7 @@ namespace gloox
     if( !m_resourceBound )
     {
       const std::string& id = getID();
-      IQ *iq = new IQ( IQ::Set, JID(), id, XMLNS_STREAM_BIND, "bind" );
+      IQ* iq = new IQ( IQ::Set, JID(), id, XMLNS_STREAM_BIND, "bind" );
       if( !resource().empty() )
         new Tag( iq->query(), "resource", resource() );
 
@@ -360,14 +360,14 @@ namespace gloox
     {
       case IQ::Result:
       {
-        Tag *bind = iq->query();
+        Tag* bind = iq->query();
         if( !bind )
         {
           notifyOnResourceBindError( RbErrorUnknownError );
           break;
         }
 
-        Tag *jid = bind->findChild( "jid" );
+        Tag* jid = bind->findChild( "jid" );
         if( !jid )
         {
           notifyOnResourceBindError( RbErrorUnknownError );
@@ -385,7 +385,7 @@ namespace gloox
       }
       case IQ::Error:
       {
-        Tag *error = iq->findChild( "error" );
+        Tag* error = iq->findChild( "error" );
         if( iq->hasChild( "error", TYPE, "modify" )
             && error->hasChild( "bad-request", XMLNS, XMLNS_XMPP_STANZAS ) )
         {
@@ -413,7 +413,7 @@ namespace gloox
   {
     notifyStreamEvent( StreamEventSessionCreation );
     const std::string& id = getID();
-    IQ *iq = new IQ( IQ::Set, JID(), id, XMLNS_STREAM_SESSION, "session" );
+    IQ* iq = new IQ( IQ::Set, JID(), id, XMLNS_STREAM_SESSION, "session" );
     trackID( this, id, SessionEstablishment );
     send( iq );
   }
@@ -429,7 +429,7 @@ namespace gloox
       }
       case IQ::Error:
       {
-        Tag *error = iq->findChild( "error" );
+        Tag* error = iq->findChild( "error" );
         if( iq->hasChild( "error", TYPE, "wait" )
             && error->hasChild( "internal-server-error", XMLNS, XMLNS_XMPP_STANZAS ) )
         {
@@ -456,7 +456,7 @@ namespace gloox
 
   void Client::negotiateCompression( StreamFeature method )
   {
-    Tag *t = new Tag( "compress" );
+    Tag* t = new Tag( "compress" );
     t->addAttribute( XMLNS, XMLNS_COMPRESSION );
 
     if( method == StreamFeatureCompressZlib )
@@ -468,7 +468,7 @@ namespace gloox
     send( t );
   }
 
-  void Client::addPresenceExtension( StanzaExtension *se )
+  void Client::addPresenceExtension( StanzaExtension* se )
   {
     m_presenceExtensions.push_back( se );
   }

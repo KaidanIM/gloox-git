@@ -21,13 +21,13 @@
 namespace gloox
 {
 
-  Registration::Registration( ClientBase *parent, const JID& to )
+  Registration::Registration( ClientBase* parent, const JID& to )
     : m_parent( parent ), m_to( to ), m_registrationHandler( 0 )
   {
     init();
   }
 
-  Registration::Registration( ClientBase *parent )
+  Registration::Registration( ClientBase* parent )
   : m_parent( parent ), m_registrationHandler( 0 )
   {
     init();
@@ -66,7 +66,7 @@ namespace gloox
     const std::string& id = m_parent->getID();
 
     IQ* iq = new IQ( IQ::Set, m_to, id, XMLNS_REGISTER );
-    Tag *q = iq->query();
+    Tag* q = iq->query();
 
     if( fields & FieldUsername )
       new Tag( q, "username", prep::nodeprep( values.username ) );
@@ -149,7 +149,7 @@ namespace gloox
     m_parent->send( iq );
   }
 
-  void Registration::registerRegistrationHandler( RegistrationHandler *rh )
+  void Registration::registerRegistrationHandler( RegistrationHandler* rh )
   {
     m_registrationHandler = rh;
   }
@@ -170,7 +170,7 @@ namespace gloox
       {
         case FetchRegistrationFields:
         {
-          Tag *q = iq->query();
+          Tag* q = iq->query();
           if( !q )
             return;
 
@@ -249,7 +249,7 @@ namespace gloox
     }
     else if( iq->subtype() == IQ::Error )
     {
-      Tag *e = iq->findChild( "error" );
+      Tag* e = iq->findChild( "error" );
 
       if( !e )
         return;

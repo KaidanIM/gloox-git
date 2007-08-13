@@ -84,7 +84,7 @@ namespace gloox
        * @param data The data to hash.
        * @param bytes The size of @c data in bytes.
        */
-      void feed( const unsigned char *data, int bytes );
+      void feed( const unsigned char* data, int bytes );
 
       /**
        * Use this function to feed the hash.
@@ -124,7 +124,7 @@ namespace gloox
       } m_state;
 
       void init();
-      void process( const unsigned char *data );
+      void process( const unsigned char* data );
 
       static const unsigned char pad[64];
 

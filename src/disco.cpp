@@ -20,7 +20,7 @@
 namespace gloox
 {
 
-  Disco::Disco( ClientBase *parent )
+  Disco::Disco( ClientBase* parent )
     : m_parent( parent )
   {
     addFeature( XMLNS_VERSION );
@@ -67,9 +67,9 @@ namespace gloox
         else if( iq->xmlns() == XMLNS_DISCO_INFO && iq->query() )
         {
           IQ* re = new IQ( IQ::Result, iq->from(), iq->id(), XMLNS_DISCO_INFO );
-          Tag *query = re->query();
+          Tag* query = re->query();
 
-          Tag *q = iq->query();
+          Tag* q = iq->query();
           const std::string& node = q->findAttribute( "node" );
           if( !node.empty() )
           {
@@ -87,7 +87,7 @@ namespace gloox
                 StringMap::const_iterator im = identities.begin();
                 for( ; im != identities.end(); ++im )
                 {
-                  Tag *i = new Tag( query, "identity" );
+                  Tag* i = new Tag( query, "identity" );
                   i->addAttribute( "category", (*im).first );
                   i->addAttribute( TYPE, (*im).second );
                   i->addAttribute( "name", name );
@@ -98,7 +98,7 @@ namespace gloox
           }
           else
           {
-            Tag *i = new Tag( query, "identity" );
+            Tag* i = new Tag( query, "identity" );
             i->addAttribute( "category", m_identityCategory );
             i->addAttribute( TYPE, m_identityType );
             i->addAttribute( "name", m_versionName );
@@ -111,10 +111,10 @@ namespace gloox
         else if( iq->xmlns() == XMLNS_DISCO_ITEMS && iq->query() )
         {
           IQ* re = new IQ( IQ::Result, iq->from(), iq->id(), XMLNS_DISCO_ITEMS );
-          Tag *query = re->query();
+          Tag* query = re->query();
 
           DiscoNodeHandlerMap::const_iterator it;
-          Tag *q = iq->query();
+          Tag* q = iq->query();
           const std::string& node = q->findAttribute( "node" );
           query->addAttribute( "node", node );
           it = m_nodeHandlers.find( node );
@@ -127,7 +127,7 @@ namespace gloox
               DiscoNodeItemList::const_iterator it = items.begin();
               for( ; it != items.end(); ++it )
               {
-                Tag *i = new Tag( query, "item" );
+                Tag* i = new Tag( query, "item" );
                 i->addAttribute( "jid",  (*it).jid.empty() ? m_parent->jid().full() : (*it).jid );
                 i->addAttribute( "node", (*it).node );
                 i->addAttribute( "name", (*it).name );
@@ -200,7 +200,7 @@ namespace gloox
     m_features.remove( feature );
   }
 
-  void Disco::getDisco( const JID& to, const std::string& node, DiscoHandler *dh, int context,
+  void Disco::getDisco( const JID& to, const std::string& node, DiscoHandler* dh, int context,
                         IdType idType, const std::string& tid )
   {
     const std::string& id = tid.empty() ? m_parent->getID() : tid;
@@ -231,22 +231,22 @@ namespace gloox
     m_identityType = type;
   }
 
-  void Disco::registerDiscoHandler( DiscoHandler *dh )
+  void Disco::registerDiscoHandler( DiscoHandler* dh )
   {
     m_discoHandlers.push_back( dh );
   }
 
-  void Disco::removeDiscoHandler( DiscoHandler *dh )
+  void Disco::removeDiscoHandler( DiscoHandler* dh )
   {
     m_discoHandlers.remove( dh );
   }
 
-  void Disco::registerNodeHandler( DiscoNodeHandler *nh, const std::string& node )
+  void Disco::registerNodeHandler( DiscoNodeHandler* nh, const std::string& node )
   {
     m_nodeHandlers[node].push_back( nh );
   }
 
-  void Disco::removeNodeHandler( DiscoNodeHandler *nh, const std::string& node )
+  void Disco::removeNodeHandler( DiscoNodeHandler* nh, const std::string& node )
   {
     DiscoNodeHandlerMap::iterator it = m_nodeHandlers.find( node );
     if( it != m_nodeHandlers.end() )

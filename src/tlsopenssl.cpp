@@ -22,7 +22,7 @@
 namespace gloox
 {
 
-  OpenSSL::OpenSSL( TLSHandler *th, const std::string& server )
+  OpenSSL::OpenSSL( TLSHandler* th, const std::string& server )
     : TLSBase( th, server ), m_ssl( 0 ), m_ctx( 0 ), m_buf( 0 ), m_bufsize( 17000 )
   {
     m_buf = (char*)calloc( m_bufsize + 1, sizeof( char ) );
@@ -187,7 +187,7 @@ namespace gloox
     else
       m_certInfo.status = CertOk;
 
-    X509 *peer = SSL_get_peer_certificate( m_ssl );
+    X509* peer = SSL_get_peer_certificate( m_ssl );
     if( peer )
     {
       char peer_CN[256];
@@ -211,7 +211,7 @@ namespace gloox
       m_certInfo.status = CertInvalid;
     }
 
-    const char *tmp;
+    const char* tmp;
     tmp = SSL_get_cipher_name( m_ssl );
     if( tmp )
       m_certInfo.cipher = tmp;

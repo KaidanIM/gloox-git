@@ -43,7 +43,7 @@ namespace gloox
        * with @c ClientBase.
        * @param parent The ClientBase used for XMPP communication
        */
-      PrivateXML( ClientBase *parent );
+      PrivateXML( ClientBase* parent );
 
       /**
        * Virtual destructor.
@@ -57,7 +57,7 @@ namespace gloox
        * @param pxh The handler to receive the result.
        * @return The ID of the sent query.
        */
-      std::string requestXML( const std::string& tag, const std::string& xmlns, PrivateXMLHandler *pxh );
+      std::string requestXML( const std::string& tag, const std::string& xmlns, PrivateXMLHandler* pxh );
 
       /**
        * Use this function to store private XML stored in the given namespace.
@@ -66,7 +66,7 @@ namespace gloox
        * @param pxh The handler to receive the result.
        * @return The ID of the sent query.
        */
-      std::string storeXML( Tag *tag, PrivateXMLHandler *pxh );
+      std::string storeXML( Tag* tag, PrivateXMLHandler* pxh );
 
       // reimplemented from IqHandler.
       virtual bool handleIq( IQ* iq );
@@ -75,7 +75,7 @@ namespace gloox
       virtual void handleIqID( IQ* iq, int context );
 
     protected:
-      ClientBase *m_parent;
+      ClientBase* m_parent;
 
     private:
       enum IdType

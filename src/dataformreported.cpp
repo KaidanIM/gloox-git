@@ -33,7 +33,7 @@ namespace gloox
     Tag::TagList::const_iterator it = l.begin();
     for( ; it != l.end(); ++it )
     {
-      DataFormField *f = new DataFormField( (*it) );
+      DataFormField* f = new DataFormField( (*it) );
       m_fields.push_back( f );
     }
   }
@@ -44,7 +44,7 @@ namespace gloox
 
   Tag* DataFormReported::tag() const
   {
-    Tag *r = new Tag ( "reported" );
+    Tag* r = new Tag ( "reported" );
     DataFormBase::FieldList::const_iterator it = m_fields.begin();
     for( ; it != m_fields.end(); ++it )
     {

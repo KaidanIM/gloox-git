@@ -52,7 +52,7 @@ namespace gloox
        * @param tag The Tag to parse.
        * @param rip Whether to rip off the original Tag.
        */
-      Message( Tag *tag, bool rip = false );
+      Message( Tag* tag, bool rip = false );
 
       /**
        * Creates a Message.

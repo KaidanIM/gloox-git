@@ -49,7 +49,7 @@ namespace gloox
        * @param th The TLSHandler to handle TLS-related events.
        * @param server The server to use in certificate verification.
        */
-      GnuTLSBase( TLSHandler *th, const std::string& server = "" );
+      GnuTLSBase( TLSHandler* th, const std::string& server = "" );
 
       /**
        * Virtual destructor.
@@ -80,14 +80,14 @@ namespace gloox
       gnutls_session_t* m_session;
 
       std::string m_recvBuffer;
-      char *m_buf;
+      char* m_buf;
       const int m_bufsize;
 
-      ssize_t pullFunc( void *data, size_t len );
-      static ssize_t pullFunc( gnutls_transport_ptr_t ptr, void *data, size_t len );
+      ssize_t pullFunc( void* data, size_t len );
+      static ssize_t pullFunc( gnutls_transport_ptr_t ptr, void* data, size_t len );
 
-      ssize_t pushFunc( const void *data, size_t len );
-      static ssize_t pushFunc( gnutls_transport_ptr_t ptr, const void *data, size_t len );
+      ssize_t pushFunc( const void* data, size_t len );
+      static ssize_t pushFunc( gnutls_transport_ptr_t ptr, const void* data, size_t len );
 
   };
 

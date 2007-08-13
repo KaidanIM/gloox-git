@@ -86,7 +86,8 @@ private:
          * @param node ID of the node to query. If empty, the service will be queried.
          * @param handler DiscoHandler to notify when receiving a response.
          */
-        void discoverInfos( const JID& service, const std::string& node, PubSub::DiscoHandler *handler );
+        void discoverInfos( const JID& service, const std::string& node,
+                                                PubSub::DiscoHandler* handler );
 
 public:
         /**
@@ -94,7 +95,7 @@ public:
          * @param service Service to query.
          * @param handler DiscoHandler to notify when receiving a response
          */
-        void discoverServiceInfos( const JID& service, PubSub::DiscoHandler *handler )
+        void discoverServiceInfos( const JID& service, PubSub::DiscoHandler* handler )
           { discoverInfos( service, "", handler ); }
 
         /**
@@ -104,7 +105,7 @@ public:
          * @param handler DiscoHandler to notify when receiving a response
          */
         void discoverNodeInfos( const JID& service, const std::string& node,
-                                PubSub::DiscoHandler *handler )
+                                PubSub::DiscoHandler* handler )
           { discoverInfos( service, node, handler ); }
 
         /**
@@ -115,7 +116,7 @@ public:
          * @param handler DiscoHandler to notify when receiving a response
          */
         void discoverNodeItems( const JID& service, const std::string& node,
-                                PubSub::DiscoHandler *handler );
+                                PubSub::DiscoHandler* handler );
 
         /**
          * Subscribe to a node.
@@ -162,8 +163,8 @@ private:
         void subscriptionOptions( const JID& service,
                                   const JID& jid,
                                   const std::string& node,
-                                  NodeHandler * handler,
-                                  const DataForm *df );
+                                  NodeHandler* handler,
+                                  const DataForm* df );
 
 public:
         /**
@@ -177,7 +178,7 @@ public:
         void requestSubscriptionOptions( const JID& service,
                                          const JID& jid,
                                          const std::string& node,
-                                         NodeHandler * handler)
+                                         NodeHandler* handler)
         { subscriptionOptions( service, jid, node, handler, 0 ); }
 
         /**
@@ -213,7 +214,7 @@ public:
          */
         void publishItem( const JID& service,
                           const std::string& node,
-                          Tag * item,
+                          Tag* item,
                           ItemHandler* handler );
 
         /**
@@ -297,7 +298,7 @@ public:
                                    const std::string& name,
                                    const std::string& parent = "",
                                    AccessModel access = AccessDefault,
-                                   const StringMap * config = 0 )
+                                   const StringMap* config = 0 )
           { createNode( NodeCollection, service, node, handler, name, parent, access, config ); }
 
         /**
@@ -324,15 +325,7 @@ public:
          * @param type NodeType to get default configuration for.
          * @param handler ServiceHandler.
          */
-        void getDefaultNodeConfig( const JID& service, NodeType type, ServiceHandler * handler );
-
-        /**
-         * Requests the subscriber list for a node.
-         * @param service Service to query.
-         * @param node Node ID of the node.
-         * @param handler NodeHandler .
-         */
-        void purgeNodeItems( const JID& service, const std::string& node, NodeHandler * handler );
+        void getDefaultNodeConfig( const JID& service, NodeType type, ServiceHandler* handler );
 
         /**
          * Requests the subscriber list for a node.
@@ -340,7 +333,15 @@ public:
          * @param node Node ID of the node.
          * @param handler NodeHandler.
          */
-        void requestSubscriberList( const JID& service, const std::string& node, NodeHandler * handler )
+        void purgeNodeItems( const JID& service, const std::string& node, NodeHandler* handler );
+
+        /**
+         * Requests the subscriber list for a node.
+         * @param service Service to query.
+         * @param node Node ID of the node.
+         * @param handler NodeHandler.
+         */
+        void requestSubscriberList( const JID& service, const std::string& node, NodeHandler* handler )
           { subscriberList( service, node, 0, handler ); }
 
         /**
@@ -352,7 +353,7 @@ public:
         void setSubscriberList( const JID& service,
                                 const std::string& node,
                                 const SubscriberList& list,
-                                NodeHandler * handler )
+                                NodeHandler* handler )
           { subscriberList( service, node, &list, handler ); }
 
         /**
@@ -363,7 +364,7 @@ public:
          */
         void requestAffiliateList( const JID& service,
                                    const std::string& node,
-                                   NodeHandler * handler )
+                                   NodeHandler* handler )
           { affiliateList( service, node, 0, handler ); }
 
         /**
@@ -375,7 +376,7 @@ public:
         void setAffiliateList( const JID& service,
                                const std::string& node,
                                const AffiliateList& list,
-                               NodeHandler * handler )
+                               NodeHandler* handler )
           { affiliateList( service, node, &list, handler ); }
 
         /**
@@ -386,7 +387,7 @@ public:
          */
         void requestNodeConfig( const JID& service,
                                 const std::string& node,
-                                NodeHandler * handler )
+                                NodeHandler* handler )
           { nodeConfig( service, node, 0, handler ); }
 
         /**
@@ -398,28 +399,28 @@ public:
         void setNodeConfig( const JID& service,
                             const std::string& node,
                             const DataForm& config,
-                            NodeHandler * handler  )
+                            NodeHandler* handler  )
           { nodeConfig( service, node, &config, handler ); }
 
         /**
          * Registers an handler to receive notification of events.
          * @param handler EventHandler to register.
          */
-        void registerEventHandler( EventHandler * handler )
+        void registerEventHandler( EventHandler* handler )
           { m_eventHandlerList.push_back( handler ); }
 
         /**
          * Removes an handler from the list of event handlers.
          * @param handler EventHandler to remove.
          */
-        void removeEventHandler( EventHandler * handler )
+        void removeEventHandler( EventHandler* handler )
           { m_eventHandlerList.remove( handler ); }
 
         // reimplemented from DiscoHandler
-        virtual void handleDiscoInfoResult( IQ *iq, int context );
-        virtual void handleDiscoItemsResult( IQ *iq, int context );
-        virtual void handleDiscoError( IQ *iq, int context );
-        virtual bool handleDiscoSet( IQ * ) { return 0; }
+        virtual void handleDiscoInfoResult( IQ* iq, int context );
+        virtual void handleDiscoItemsResult( IQ* iq, int context );
+        virtual void handleDiscoError( IQ* iq, int context );
+        virtual bool handleDiscoSet( IQ* ) { return 0; }
 
         // reimplemented from MessageHandler
         virtual void handleMessage( Message* msg, MessageSession * );
@@ -442,7 +443,7 @@ public:
          * @param handler NodeHandler responsible to handle the request result.
          */
         void nodeConfig( const JID& service, const std::string& node,
-                         const DataForm * config, NodeHandler * handler );
+                         const DataForm* config, NodeHandler* handler );
 
         /**
          * This function sets or requests a node's subscribers list form
@@ -456,7 +457,7 @@ public:
          * @param handler NodeHandler responsible to handle the request result.
          */
         void subscriberList( const JID& service, const std::string& node,
-                             const SubscriberList * config, NodeHandler * handler );
+                             const SubscriberList* config, NodeHandler* handler );
 
         /**
          * This function sets or requests a node's affiliates list
@@ -470,19 +471,19 @@ public:
          * @param handler NodeHandler responsible to handle the request result.
          */
         void affiliateList( const JID& service, const std::string& node,
-                            const AffiliateList * config, NodeHandler * handler );
+                            const AffiliateList* config, NodeHandler* handler );
 
         typedef std::pair< std::string, std::string > TrackedItem;
         typedef std::map < std::string, TrackedItem > ItemOperationTrackMap;
         typedef std::map < std::string, std::string > NodeOperationTrackMap;
 
         typedef std::map < std::string, PubSub::DiscoHandler* > DiscoHandlerTrackMap;
-        typedef std::map < std::string, ServiceHandler * > ServiceHandlerTrackMap;
+        typedef std::map < std::string, ServiceHandler* > ServiceHandlerTrackMap;
         typedef std::map < std::string, NodeHandler* > NodeHandlerTrackMap;
         typedef std::map < std::string, ItemHandler* > ItemHandlerTrackMap;
         typedef std::list< EventHandler* > EventHandlerList;
 
-        ClientBase *m_parent;
+        ClientBase* m_parent;
 
         ItemOperationTrackMap  m_iopTrackMap;
         NodeOperationTrackMap  m_nopTrackMap;

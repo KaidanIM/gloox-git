@@ -35,13 +35,13 @@ namespace gloox
     }
   }
 
-  void LogSink::registerLogHandler( LogLevel level, int areas, LogHandler *lh )
+  void LogSink::registerLogHandler( LogLevel level, int areas, LogHandler* lh )
   {
     LogInfo info = { level, areas };
     m_logHandlers[lh] = info;
   }
 
-  void LogSink::removeLogHandler( LogHandler *lh )
+  void LogSink::removeLogHandler( LogHandler* lh )
   {
     m_logHandlers.erase( lh );
   }

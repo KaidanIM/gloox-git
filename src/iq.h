@@ -53,7 +53,7 @@ namespace gloox
        * @param tag The Tag to parse.
        * @param rip Whether to rip off the original Tag.
        */
-      IQ( Tag *tag, bool rip = false );
+      IQ( Tag* tag, bool rip = false );
 
       /**
        * Creates an IQ Query.
@@ -76,7 +76,7 @@ namespace gloox
        * Returns the IQ's child tag (Only one is allowed, unless the IQ is of type 'error').
        * @return The IQ's child tag.
        */
-      Tag *query() const { return m_query; }
+      Tag* query() const { return m_query; }
 
       /**
        * Returns the IQ's type.
@@ -91,7 +91,7 @@ namespace gloox
       const std::string& xmlns() const { return m_xmlns; }
 
     private:
-      Tag *m_query;
+      Tag* m_query;
       std::string m_xmlns;
       IqType m_subtype;
   };

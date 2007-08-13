@@ -26,7 +26,7 @@
 namespace gloox
 {
 
-  SOCKS5BytestreamManager::SOCKS5BytestreamManager( ClientBase *parent, BytestreamHandler* s5bh )
+  SOCKS5BytestreamManager::SOCKS5BytestreamManager( ClientBase* parent, BytestreamHandler* s5bh )
     : m_parent( parent ), m_socks5BytestreamHandler( s5bh )
   {
     if( m_parent )
@@ -59,7 +59,7 @@ namespace gloox
     const std::string& msid = sid.empty() ? m_parent->getID() : sid;
     const std::string& id = m_parent->getID();
     IQ* iq = new IQ( IQ::Set, to, id, XMLNS_BYTESTREAMS );
-    Tag *q = iq->query();
+    Tag* q = iq->query();
     q->addAttribute( "sid", msid );
     q->addAttribute( "mode", /*( mode == S5BTCP ) ?*/ "tcp" /*: "udp"*/ );
 
@@ -101,7 +101,7 @@ namespace gloox
     if( it == m_asyncTrackMap.end() || !m_parent )
       return;
 
-    Tag *iq = new Tag( "iq" );
+    Tag* iq = new Tag( "iq" );
 
     if( (*it).second.incoming )
     {
@@ -255,7 +255,7 @@ namespace gloox
                                                         StanzaError reason )
   {
     IQ* iq = new IQ( IQ::Error, from, id );
-    Tag *e = new Tag( iq, "error" );
+    Tag* e = new Tag( iq, "error" );
     switch( reason )
     {
       case StanzaErrorForbidden:
@@ -263,7 +263,7 @@ namespace gloox
         new Tag( iq, "query", XMLNS, XMLNS_BYTESTREAMS );
         e->addAttribute( "code", "403" );
         e->addAttribute( TYPE, "auth" );
-        Tag *f = new Tag( e, "forbidden" );
+        Tag* f = new Tag( e, "forbidden" );
         f->addAttribute( XMLNS, XMLNS_XMPP_STANZAS );
         break;
       }
@@ -271,7 +271,7 @@ namespace gloox
       {
         e->addAttribute( "code", "404" );
         e->addAttribute( TYPE, "cancel" );
-        Tag *f = new Tag( e, "item-not-found" );
+        Tag* f = new Tag( e, "item-not-found" );
         f->addAttribute( XMLNS, XMLNS_XMPP_STANZAS );
         break;
       }
@@ -280,7 +280,7 @@ namespace gloox
         new Tag( iq, "query", XMLNS, XMLNS_BYTESTREAMS );
         e->addAttribute( "code", "405" );
         e->addAttribute( TYPE, "cancel" );
-        Tag *f = new Tag( e, "not-allowed" );
+        Tag* f = new Tag( e, "not-allowed" );
         f->addAttribute( XMLNS, XMLNS_XMPP_STANZAS );
         break;
       }
@@ -289,7 +289,7 @@ namespace gloox
       {
         e->addAttribute( "code", "406" );
         e->addAttribute( TYPE, "auth" );
-        Tag *f = new Tag( e, "not-acceptable" );
+        Tag* f = new Tag( e, "not-acceptable" );
         f->addAttribute( XMLNS, XMLNS_XMPP_STANZAS );
         break;
       }

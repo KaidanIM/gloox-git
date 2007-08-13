@@ -23,7 +23,7 @@
 namespace gloox
 {
 
-  MessageSession::MessageSession( ClientBase *parent, const JID& jid, bool wantUpgrade, int types )
+  MessageSession::MessageSession( ClientBase* parent, const JID& jid, bool wantUpgrade, int types )
     : m_parent( parent ), m_target( jid ), m_messageHandler( 0 ),
       m_types( types ), m_wantUpgrade( wantUpgrade ), m_hadMessages( false )
   {
@@ -79,12 +79,12 @@ namespace gloox
     m_parent->send( m );
   }
 
-  void MessageSession::send( Tag *tag )
+  void MessageSession::send( Tag* tag )
   {
     m_parent->send( tag );
   }
 
-  void MessageSession::decorate( Tag *tag )
+  void MessageSession::decorate( Tag* tag )
   {
     MessageFilterList::const_iterator it = m_messageFilterList.begin();
     for( ; it != m_messageFilterList.end(); ++it )
@@ -104,7 +104,7 @@ namespace gloox
     m_target.setResource( resource );
   }
 
-  void MessageSession::registerMessageHandler( MessageHandler *mh )
+  void MessageSession::registerMessageHandler( MessageHandler* mh )
   {
     m_messageHandler = mh;
   }
@@ -114,17 +114,17 @@ namespace gloox
     m_messageHandler = 0;
   }
 
-  void MessageSession::registerMessageFilter( MessageFilter *mf )
+  void MessageSession::registerMessageFilter( MessageFilter* mf )
   {
     m_messageFilterList.push_back( mf );
   }
 
-  void MessageSession::removeMessageFilter( MessageFilter *mf )
+  void MessageSession::removeMessageFilter( MessageFilter* mf )
   {
     m_messageFilterList.remove( mf );
   }
 
-  void MessageSession::disposeMessageFilter( MessageFilter *mf )
+  void MessageSession::disposeMessageFilter( MessageFilter* mf )
   {
     removeMessageFilter( mf );
     delete mf;

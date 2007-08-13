@@ -19,7 +19,7 @@
 namespace gloox
 {
 
-  InstantMUCRoom::InstantMUCRoom( ClientBase *parent, const JID& nick, MUCRoomHandler *mrh )
+  InstantMUCRoom::InstantMUCRoom( ClientBase* parent, const JID& nick, MUCRoomHandler* mrh )
     : MUCRoom( parent, nick, mrh, 0 )
   {
   }

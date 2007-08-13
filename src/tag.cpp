@@ -35,7 +35,7 @@ namespace gloox
     addCData( cdata );
   }
 
-  Tag::Tag( Tag *parent, const std::string& name, const std::string& cdata )
+  Tag::Tag( Tag* parent, const std::string& name, const std::string& cdata )
     : m_parent( parent ), m_children( new TagList() ), m_cdata( new StringPList() ),
       m_attribs( new AttributeList() ), m_nodes( new NodeList() ),
       m_type( StanzaUndefined ), m_name( name )
@@ -53,7 +53,7 @@ namespace gloox
     addAttribute( attrib, value );
   }
 
-  Tag::Tag( Tag *parent, const std::string& name, const std::string&  attrib, const std::string& value )
+  Tag::Tag( Tag* parent, const std::string& name, const std::string&  attrib, const std::string& value )
     : m_parent( parent ), m_children( new TagList() ), m_cdata( new StringPList() ),
       m_attribs( new AttributeList() ), m_nodes( new NodeList() ),
       m_type( StanzaUndefined ), m_name( name )
@@ -208,7 +208,7 @@ namespace gloox
     {
 #ifdef _WIN32_WCE
       const int len = 4 + (int)std::log10( value ? value : 1 ) + 1;
-      char *tmp = new char[len];
+      char* tmp = new char[len];
       sprintf( tmp, "%d", value );
       std::string ret( tmp, len );
       addAttribute( name, ret );
@@ -227,7 +227,7 @@ namespace gloox
     {
 #ifdef _WIN32_WCE
       const int len = 4 + (int)std::log10( value ? value : 1 ) + 1;
-      char *tmp = new char[len];
+      char* tmp = new char[len];
       sprintf( tmp, "%ld", value );
       std::string ret( tmp, len );
       addAttribute( name, ret );
@@ -246,7 +246,7 @@ namespace gloox
     *m_attribs = attributes;
   }
 
-  void Tag::addChild( Tag *child )
+  void Tag::addChild( Tag* child )
   {
     if( child )
     {
@@ -256,11 +256,11 @@ namespace gloox
     }
   }
 
-  void Tag::addChildCopy( const Tag *child )
+  void Tag::addChildCopy( const Tag* child )
   {
     if( child )
     {
-      Tag *t = child->clone();
+      Tag* t = child->clone();
       m_children->push_back( t );
       t->m_parent = this;
       m_nodes->push_back( new Node( TypeTag, t ) );
@@ -372,7 +372,7 @@ namespace gloox
 
   Tag* Tag::clone() const
   {
-    Tag *t = new Tag( name() );
+    Tag* t = new Tag( name() );
     t->m_type = m_type;
     t->m_xmlns = m_xmlns;
 
@@ -416,7 +416,7 @@ namespace gloox
     return ret;
   }
 
-  void Tag::removeChild( Tag *tag )
+  void Tag::removeChild( Tag* tag )
   {
     m_children->remove( tag );
 
@@ -432,7 +432,7 @@ namespace gloox
     }
   }
 
-  void Tag::ripoff( Tag *tag )
+  void Tag::ripoff( Tag* tag )
   {
     delete m_nodes;
     m_nodes = tag->m_nodes;
@@ -471,7 +471,7 @@ namespace gloox
       return m_parent->findTagList( expression );
 
     unsigned len = 0;
-    Tag *p = parse( expression, len );
+    Tag* p = parse( expression, len );
 //     if( p )
 //       printf( "parsed tree: %s\n", p->xml().c_str() );
     l = evaluateTagList( p );
@@ -479,7 +479,7 @@ namespace gloox
     return l;
   }
 
-  Tag::TagList Tag::evaluateTagList( Tag *token )
+  Tag::TagList Tag::evaluateTagList( Tag* token )
   {
     Tag::TagList result;
     if( !token )
@@ -558,7 +558,7 @@ namespace gloox
       case XTDoubleSlash:
       {
 //         printf( "in XTDoubleSlash\n" );
-        Tag *t = token->clone();
+        Tag* t = token->clone();
 //         printf( "original token: %s\ncloned token: %s\n", token->xml().c_str(), n->xml().c_str() );
         t->addAttribute( TYPE, XTElement );
         add( result, evaluateTagList( t ) );
@@ -590,14 +590,14 @@ namespace gloox
           const Tag::TagList& tokenChildren = token->children();
           if( tokenChildren.size() )
           {
-            Tag *testtoken = tokenChildren.front();
+            Tag* testtoken = tokenChildren.front();
             if( testtoken->name() == "*" )
             {
               add( result, m_parent->evaluateTagList( testtoken ) );
             }
             else
             {
-              Tag *t = token->clone();
+              Tag* t = token->clone();
               t->addAttribute( TYPE, XTElement );
               t->m_name = m_parent->m_name;
               add( result, m_parent->evaluateTagList( t ) );
@@ -637,7 +637,7 @@ namespace gloox
     return result;
   }
 
-  bool Tag::evaluateBoolean( Tag *token )
+  bool Tag::evaluateBoolean( Tag* token )
   {
     if( !token )
       return false;
@@ -666,7 +666,7 @@ namespace gloox
       case XTUnion:
       case XTElement:
       {
-        Tag *t = new Tag( "." );
+        Tag* t = new Tag( "." );
         t->addAttribute( TYPE, XTDot );
         t->addChild( token );
         result = !evaluateTagList( t ).empty();
@@ -681,15 +681,15 @@ namespace gloox
     return result;
   }
 
-  bool Tag::evaluateEquals( Tag *token )
+  bool Tag::evaluateEquals( Tag* token )
   {
     if( !token || token->children().size() != 2 )
       return false;
 
     bool result = false;
     Tag::TagList::const_iterator it = token->children().begin();
-    Tag *ch1 = (*it);
-    Tag *ch2 = (*++it);
+    Tag* ch1 = (*it);
+    Tag* ch2 = (*++it);
 
     TokenType tt1 = (TokenType)atoi( ch1->findAttribute( TYPE ).c_str() );
     TokenType tt2 = (TokenType)atoi( ch2->findAttribute( TYPE ).c_str() );
@@ -744,7 +744,7 @@ namespace gloox
     return result;
   }
 
-  Tag::TagList Tag::evaluateUnion( Tag *token )
+  Tag::TagList Tag::evaluateUnion( Tag* token )
   {
     Tag::TagList result;
     if( !token )
@@ -771,8 +771,8 @@ namespace gloox
 
   Tag* Tag::parse( const std::string& expression, unsigned& len, Tag::TokenType border )
   {
-    Tag *root = 0;
-    Tag *current = root;
+    Tag* root = 0;
+    Tag* current = root;
     std::string token;
 
 //     XPathError error = XPNoError;
@@ -817,7 +817,7 @@ namespace gloox
         case '[':
         {
           closePreviousToken( &root, &current, type, token );
-          Tag *t = parse( expression, ++len, XTRightBracket );
+          Tag* t = parse( expression, ++len, XTRightBracket );
           if( !addPredicate( &root, &current, t ) )
             delete t;
           break;
@@ -825,7 +825,7 @@ namespace gloox
         case '(':
         {
           closePreviousToken( &root, &current, type, token );
-          Tag *t = parse( expression, ++len, XTRightParenthesis );
+          Tag* t = parse( expression, ++len, XTRightParenthesis );
           if( current )
           {
 //             printf( "added %s to %s\n", t->xml().c_str(), current->xml().c_str() );
@@ -892,7 +892,7 @@ namespace gloox
           Tag::TokenType ttype = getType( s );
           if( ttype <= border )
             return root;
-          Tag *t = parse( expression, ++len, ttype );
+          Tag* t = parse( expression, ++len, ttype );
           addOperator( &root, &current, t, ttype, s );
           if( border == XTRightBracket )
             return root;
@@ -914,7 +914,7 @@ namespace gloox
   void Tag::addToken( Tag **root, Tag **current, Tag::TokenType type,
                       const std::string& token )
   {
-    Tag *t = new Tag( token );
+    Tag* t = new Tag( token );
     if( t->isNumber() && !t->children().size() )
       type = XTInteger;
     t->addAttribute( TYPE, type );
@@ -932,10 +932,10 @@ namespace gloox
     }
   }
 
-  void Tag::addOperator( Tag **root, Tag **current, Tag *arg,
+  void Tag::addOperator( Tag** root, Tag** current, Tag* arg,
                            Tag::TokenType type, const std::string& token )
   {
-    Tag *t = new Tag( token );
+    Tag* t = new Tag( token );
     t->addAttribute( TYPE, type );
 //     printf( "new operator: %s (arg1: %s, arg2: %s)\n", t->name().c_str(), (*root)->xml().c_str(),
 //                                                                           arg->xml().c_str() );
@@ -945,7 +945,7 @@ namespace gloox
     *current = *root = t;
   }
 
-  bool Tag::addPredicate( Tag **root, Tag **current, Tag *token )
+  bool Tag::addPredicate( Tag **root, Tag **current, Tag* token )
   {
     if( !*root || !*current )
       return false;

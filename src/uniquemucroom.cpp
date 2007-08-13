@@ -20,7 +20,7 @@
 namespace gloox
 {
 
-  UniqueMUCRoom::UniqueMUCRoom( ClientBase *parent, const JID& nick, MUCRoomHandler *mrh )
+  UniqueMUCRoom::UniqueMUCRoom( ClientBase* parent, const JID& nick, MUCRoomHandler* mrh )
     : InstantMUCRoom( parent, nick, mrh )
   {
   }
@@ -48,7 +48,7 @@ namespace gloox
       case IQ::Result:
         if( context == RequestUniqueName )
         {
-          Tag *u = iq->findChild( "unique", "xmlns", XMLNS_MUC_UNIQUE );
+          Tag* u = iq->findChild( "unique", "xmlns", XMLNS_MUC_UNIQUE );
           if( u )
           {
             const std::string& name = u->cdata();

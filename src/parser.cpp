@@ -19,7 +19,7 @@
 namespace gloox
 {
 
-  Parser::Parser( TagHandler *ph )
+  Parser::Parser( TagHandler* ph )
     : m_tagHandler( ph ), m_current( 0 ), m_root( 0 ), m_state( Initial ),
       m_preamble( 0 ), m_quote( false )
   {
@@ -668,7 +668,7 @@ namespace gloox
     return ( c == 0x09 || c == 0x0a || c == 0x0d || c == 0x20 );
   }
 
-  void Parser::streamEvent( Tag *tag )
+  void Parser::streamEvent( Tag* tag )
   {
     if( m_tagHandler )
       m_tagHandler->handleTag( tag );

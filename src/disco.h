@@ -84,7 +84,7 @@ namespace gloox
        * @param tid An optional id that is going to be used as the IQ request's id. Only
        * necessary if you need to know the request's id.
        */
-      void getDiscoInfo( const JID& to, const std::string& node, DiscoHandler *dh, int context,
+      void getDiscoInfo( const JID& to, const std::string& node, DiscoHandler* dh, int context,
                          const std::string& tid = "" )
         { getDisco( to, node, dh, context, GET_DISCO_INFO, tid ); }
 
@@ -99,7 +99,7 @@ namespace gloox
        * @param tid An optional id that is going to be used as the IQ request's id. Only
        * necessary if you need to know the request's id.
        */
-      void getDiscoItems( const JID& to, const std::string& node, DiscoHandler *dh, int context,
+      void getDiscoItems( const JID& to, const std::string& node, DiscoHandler* dh, int context,
                           const std::string& tid = "" )
         { getDisco( to, node, dh, context, GET_DISCO_ITEMS, tid ); }
 
@@ -142,13 +142,13 @@ namespace gloox
        * a one-time registration happens when calling getDiscoInfo() and getDiscoItems(), respectively.
        * @param dh The DiscoHandler-derived object to register.
        */
-      void registerDiscoHandler( DiscoHandler *dh );
+      void registerDiscoHandler( DiscoHandler* dh );
 
       /**
        * Unregisters the given DiscoHandler.
        * @param dh The DiscoHandler to unregister.
        */
-      void removeDiscoHandler( DiscoHandler *dh );
+      void removeDiscoHandler( DiscoHandler* dh );
 
       /**
        * Use this function to register a @ref DiscoNodeHandler with the Disco
@@ -158,7 +158,7 @@ namespace gloox
        * @param node The node name to associate with this handler. Use an empty string to
        * register for the root node.
        */
-      void registerNodeHandler( DiscoNodeHandler *nh, const std::string& node );
+      void registerNodeHandler( DiscoNodeHandler* nh, const std::string& node );
 
       /**
        * Removes the node handler for the given node.
@@ -166,7 +166,7 @@ namespace gloox
        * @param node The node for which the handler shall be removed. Use an empty string to
        * remove the root node's handler.
        */
-      void removeNodeHandler( DiscoNodeHandler *nh, const std::string& node );
+      void removeNodeHandler( DiscoNodeHandler* nh, const std::string& node );
 
       // reimplemented from IqHandler.
       virtual bool handleIq( IQ* iq );
@@ -175,7 +175,7 @@ namespace gloox
       virtual void handleIqID( IQ* iq, int context );
 
     private:
-      Disco( ClientBase *parent );
+      Disco( ClientBase* parent );
       virtual ~Disco();
 
       enum IdType
@@ -184,16 +184,16 @@ namespace gloox
         GET_DISCO_ITEMS
       };
 
-      void getDisco( const JID& to, const std::string& node, DiscoHandler *dh,
+      void getDisco( const JID& to, const std::string& node, DiscoHandler* dh,
                      int context, IdType idType, const std::string& tid );
 
       struct DiscoHandlerContext
       {
-        DiscoHandler *dh;
+        DiscoHandler* dh;
         int context;
       };
 
-      ClientBase *m_parent;
+      ClientBase* m_parent;
 
       typedef std::list<DiscoHandler*> DiscoHandlerList;
       typedef std::list<DiscoNodeHandler*> DiscoNodeHandlerList;

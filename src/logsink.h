@@ -63,13 +63,13 @@ namespace gloox
        * @param areas Bit-wise ORed LogAreas the LogHandler wants to be informed about.
        * @param lh The object to receive exchanged data.
        */
-      void registerLogHandler( LogLevel level, int areas, LogHandler *lh );
+      void registerLogHandler( LogLevel level, int areas, LogHandler* lh );
 
       /**
        * Removes the given object from the list of log handlers.
        * @param lh The object to remove from the list.
        */
-      void removeLogHandler( LogHandler *lh );
+      void removeLogHandler( LogHandler* lh );
 
     private:
       struct LogInfo

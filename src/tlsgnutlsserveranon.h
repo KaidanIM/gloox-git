@@ -48,7 +48,7 @@ namespace gloox
        * Constructor.
        * @param th The TLSHandler to handle TLS-related events.
        */
-      GnuTLSServerAnon( TLSHandler *th );
+      GnuTLSServerAnon( TLSHandler* th );
 
       /**
        * Virtual destructor.

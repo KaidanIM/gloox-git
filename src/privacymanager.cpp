@@ -22,7 +22,7 @@
 namespace gloox
 {
 
-  PrivacyManager::PrivacyManager( ClientBase *parent )
+  PrivacyManager::PrivacyManager( ClientBase* parent )
     : m_parent( parent ), m_privacyListHandler( 0 )
   {
     if( m_parent )
@@ -74,14 +74,14 @@ namespace gloox
     const std::string& id = m_parent->getID();
 
     IQ* iq = new IQ( IQ::Set, JID(), id, XMLNS_PRIVACY );
-    Tag *l = new Tag( iq->query(), "list" );
+    Tag* l = new Tag( iq->query(), "list" );
     l->addAttribute( "name", name );
 
     int count = 0;
     PrivacyListHandler::PrivacyList::iterator it = list.begin();
     for( ; it != list.end(); ++it )
     {
-      Tag *i = new Tag( l, "item" );
+      Tag* i = new Tag( l, "item" );
 
       switch( (*it).type() )
       {
@@ -135,7 +135,7 @@ namespace gloox
     if( iq->subtype() != IQ::Set || !m_privacyListHandler )
       return false;
 
-    Tag *l = iq->query()->findChild( "list" );
+    Tag* l = iq->query()->findChild( "list" );
     if( l->hasAttribute( "name" ) )
     {
       const std::string& name = l->findAttribute( "name" );
@@ -176,7 +176,7 @@ namespace gloox
             StringList lists;
             std::string def;
             std::string active;
-            Tag *q = iq->query();
+            Tag* q = iq->query();
             const Tag::TagList& l = q->children();
             Tag::TagList::const_iterator it = l.begin();
             for( ; it != l.end(); ++it )
@@ -199,7 +199,7 @@ namespace gloox
           {
             PrivacyListHandler::PrivacyList items;
 
-            Tag *list = iq->query()->findChild( "list" );
+            Tag* list = iq->query()->findChild( "list" );
             const std::string& name = list->findAttribute( "name" );
             const Tag::TagList& l = list->children();
             Tag::TagList::const_iterator it = l.begin();
@@ -277,7 +277,7 @@ namespace gloox
     }
   }
 
-  void PrivacyManager::registerPrivacyListHandler( PrivacyListHandler *plh )
+  void PrivacyManager::registerPrivacyListHandler( PrivacyListHandler* plh )
   {
     m_privacyListHandler = plh;
   }

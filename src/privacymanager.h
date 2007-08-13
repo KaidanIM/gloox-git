@@ -37,7 +37,7 @@ namespace gloox
        * Constructs a new PrivacyManager.
        * @param parent The ClientBase to use for communication.
        */
-      PrivacyManager( ClientBase *parent );
+      PrivacyManager( ClientBase* parent );
 
       /**
        * Virtual destructor.
@@ -105,7 +105,7 @@ namespace gloox
        * Only one PrivacyListHandler at a time is possible.
        * @param plh The object to register as handler for privacy list related events.
        */
-      void registerPrivacyListHandler( PrivacyListHandler *plh );
+      void registerPrivacyListHandler( PrivacyListHandler* plh );
 
       /**
        * Use this function to clear the registered PrivacyListHandler.
@@ -133,8 +133,8 @@ namespace gloox
 
       std::string operation( int context, const std::string& name );
 
-      ClientBase *m_parent;
-      PrivacyListHandler *m_privacyListHandler;
+      ClientBase* m_parent;
+      PrivacyListHandler* m_privacyListHandler;
   };
 
 }

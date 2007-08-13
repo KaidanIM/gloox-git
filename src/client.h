@@ -245,7 +245,7 @@ namespace gloox
        * @note Currently there is no way to selectively remove an extension. Use
        * removePresenceExtensions() to remove all extensions.
        */
-      void addPresenceExtension( StanzaExtension *se );
+      void addPresenceExtension( StanzaExtension* se );
 
       /**
        * Use this function to remove all extensions added using addPresenceExtension().
@@ -284,10 +284,10 @@ namespace gloox
       void disconnect();
 
       // re-implemented from IaHandler
-      virtual bool handleIq( IQ *iq ) { (void)iq; return false; }
+      virtual bool handleIq( IQ* iq ) { (void)iq; return false; }
 
       // re-implemented from IaHandler
-      virtual void handleIqID( IQ *iq, int context );
+      virtual void handleIqID( IQ* iq, int context );
 
     protected:
       /**
@@ -297,7 +297,7 @@ namespace gloox
 
     private:
       virtual void handleStartNode() {}
-      virtual bool handleNormalNode( Tag *tag );
+      virtual bool handleNormalNode( Tag* tag );
       virtual void disconnect( ConnectionError reason );
       int getStreamFeatures( Tag* tag );
       int getSaslMechs( Tag* tag );
@@ -319,8 +319,8 @@ namespace gloox
         SessionEstablishment
       };
 
-      RosterManager *m_rosterManager;
-      NonSaslAuth *m_auth;
+      RosterManager* m_rosterManager;
+      NonSaslAuth* m_auth;
 
       StanzaExtensionList m_presenceExtensions;
 

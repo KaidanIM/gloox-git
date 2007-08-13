@@ -18,7 +18,7 @@
 namespace gloox
 {
 
-  PrivateXML::PrivateXML( ClientBase *parent )
+  PrivateXML::PrivateXML( ClientBase* parent )
     : m_parent( parent )
   {
     if( m_parent )
@@ -32,12 +32,12 @@ namespace gloox
   }
 
   std::string PrivateXML::requestXML( const std::string& tag, const std::string& xmlns,
-                                      PrivateXMLHandler *pxh )
+                                      PrivateXMLHandler* pxh )
   {
     const std::string& id = m_parent->getID();
 
     IQ* iq = new IQ( IQ::Get, JID(), id, XMLNS_PRIVATE_XML );
-    Tag *x = new Tag( iq->query(), tag );
+    Tag* x = new Tag( iq->query(), tag );
     x->addAttribute( XMLNS, xmlns );
 
     m_track[id] = pxh;
@@ -47,7 +47,7 @@ namespace gloox
     return id;
   }
 
-  std::string PrivateXML::storeXML( Tag *tag, PrivateXMLHandler *pxh )
+  std::string PrivateXML::storeXML( Tag* tag, PrivateXMLHandler* pxh )
   {
     const std::string& id = m_parent->getID();
 
@@ -74,7 +74,7 @@ namespace gloox
           {
             case RequestXml:
             {
-              Tag *q = iq->query();
+              Tag* q = iq->query();
               if( q )
               {
                 const Tag::TagList& l = q->children();

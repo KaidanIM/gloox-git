@@ -50,7 +50,7 @@ namespace gloox
        * @param id The command's id. An opaque string which should be used only as the id of the
        * iq result or error stanza.
        */
-      virtual void handleAdhocCommand( const std::string& command, Tag *tag, const JID& from,
+      virtual void handleAdhocCommand( const std::string& command, Tag* tag, const JID& from,
                                        const std::string& id ) = 0;
 
   };

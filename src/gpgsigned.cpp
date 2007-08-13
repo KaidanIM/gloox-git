@@ -25,7 +25,7 @@ namespace gloox
       m_valid = false;
   }
 
-  GPGSigned::GPGSigned( const Tag *tag )
+  GPGSigned::GPGSigned( const Tag* tag )
     : StanzaExtension( ExtGPGSigned ),
       m_valid( false )
   {
@@ -45,7 +45,7 @@ namespace gloox
     if( !m_valid )
       return 0;
 
-    Tag *x = new Tag( "x", m_signature );
+    Tag* x = new Tag( "x", m_signature );
     x->addAttribute( XMLNS, XMLNS_X_GPGSIGNED );
 
     return x;

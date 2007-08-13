@@ -61,7 +61,7 @@ namespace gloox
     return true;
   }
 
-  void InBandBytestream::handleIqID( IQ *iq, int context )
+  void InBandBytestream::handleIqID( IQ* iq, int context )
   {
     switch( iq->subtype() )
     {

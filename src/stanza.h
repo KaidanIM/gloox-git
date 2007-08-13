@@ -98,7 +98,7 @@ namespace gloox
        * after using it.
        * @since 0.9
        */
-      void addExtension( StanzaExtension *se );
+      void addExtension( StanzaExtension* se );
 
       /**
        * Returns the list of the Stanza's extensions.
@@ -113,7 +113,7 @@ namespace gloox
        * @param rip Whether to rip off the original Tag.
        * @since 1.0
        */
-      Stanza( Tag *tag, bool rip = false );
+      Stanza( Tag* tag, bool rip = false );
 
       /**
        * Creates a new Stanza with given name.
@@ -125,7 +125,7 @@ namespace gloox
       StanzaExtensionList m_extensionList;
       StanzaError m_stanzaError;
       StanzaErrorType m_stanzaErrorType;
-      Tag *m_stanzaErrorAppCondition;
+      Tag* m_stanzaErrorAppCondition;
       StringMap m_errorText;
       std::string m_id;
       std::string m_xmllang;
@@ -133,7 +133,7 @@ namespace gloox
       JID m_to;
 
       static const std::string findLang( const StringMap& map, const std::string& lang );
-      static void setLang( StringMap& map, const Tag *tag );
+      static void setLang( StringMap& map, const Tag* tag );
   };
 
 }

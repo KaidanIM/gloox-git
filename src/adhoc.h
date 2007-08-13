@@ -49,7 +49,7 @@ namespace gloox
    * @code
    * MyClass::someFunc()
    * {
-   *   Adhoc *m_adhoc = new Adhoc( m_client );
+   *   Adhoc* m_adhoc = new Adhoc( m_client );
    *
    *   // this might be a bot monitoring a weather station, for example
    *   m_adhoc->registerAdhocCommandProvider( this, "getTemp", "Retrieve current temperature" );
@@ -119,7 +119,7 @@ namespace gloox
        * Creates a new Adhoc client that registers as IqHandler with a ClientBase.
        * @param parent The ClientBase used for XMPP communication.
        */
-      Adhoc( ClientBase *parent );
+      Adhoc( ClientBase* parent );
 
       /**
        * Virtual destructor.
@@ -142,13 +142,13 @@ namespace gloox
       virtual void handleIqID( IQ* iq, int context );
 
       // reimplemented from DiscoHandler
-      virtual void handleDiscoInfoResult( IQ *iq, int context );
+      virtual void handleDiscoInfoResult( IQ* iq, int context );
 
       // reimplemented from DiscoHandler
-      virtual void handleDiscoItemsResult( IQ *iq, int context );
+      virtual void handleDiscoItemsResult( IQ* iq, int context );
 
       // reimplemented from DiscoHandler
-      virtual void handleDiscoError( IQ *iq, int context );
+      virtual void handleDiscoError( IQ* iq, int context );
 
       /**
        * Using this function, you can register a AdhocCommandProvider -derived object as
@@ -157,7 +157,7 @@ namespace gloox
        * @param command The node name of the command. Will be announced in disco#items.
        * @param name The natural-language name of the command. Will be announced in disco#items.
        */
-      void registerAdhocCommandProvider( AdhocCommandProvider *acp, const std::string& command,
+      void registerAdhocCommandProvider( AdhocCommandProvider* acp, const std::string& command,
                                          const std::string& name );
 
       /**
@@ -165,7 +165,7 @@ namespace gloox
        * @param remote The remote entity's JID.
        * @param ah The object handling the result of this request.
        */
-      void checkSupport( const JID& remote, AdhocHandler *ah );
+      void checkSupport( const JID& remote, AdhocHandler* ah );
 
       /**
        * Retrieves a list of commands from the remote entity. You should check whether the remote
@@ -173,7 +173,7 @@ namespace gloox
        * @param remote The remote entity's JID.
        * @param ah The object handling the result of this request.
        */
-      void getCommands( const JID& remote, AdhocHandler *ah );
+      void getCommands( const JID& remote, AdhocHandler* ah );
 
       /**
        * Executes the given command on the given remote entity.
@@ -189,8 +189,8 @@ namespace gloox
        * on first request.
        * @param action The action to take, e.g. navigatte o the previous 'screen'.
        */
-      void execute( const JID& remote, const std::string& command, AdhocHandler *ah,
-                    const std::string& sessionid = "", DataForm *form = 0,
+      void execute( const JID& remote, const std::string& command, AdhocHandler* ah,
+                    const std::string& sessionid = "", DataForm* form = 0,
                     AdhocExecuteActions action = ActionDefault );
 
       /**
@@ -215,12 +215,12 @@ namespace gloox
       {
         JID remote;
         AdhocContext context;
-        AdhocHandler *ah;
+        AdhocHandler* ah;
       };
       typedef std::map<std::string, TrackStruct> AdhocTrackMap;
       AdhocTrackMap m_adhocTrackMap;
 
-      ClientBase *m_parent;
+      ClientBase* m_parent;
 
       StringMap m_items;
 

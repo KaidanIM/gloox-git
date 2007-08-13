@@ -41,7 +41,7 @@ namespace gloox
        * Constructor.
        * @param parent The @ref ClientBase which is used to authenticate.
        */
-      NonSaslAuth( Client *parent );
+      NonSaslAuth( Client* parent );
 
       /**
        * Virtual Destructor.
@@ -68,7 +68,7 @@ namespace gloox
         TRACK_SEND_AUTH
       };
 
-      Client *m_parent;
+      Client* m_parent;
       std::string m_sid;
 
   };

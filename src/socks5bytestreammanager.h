@@ -69,7 +69,7 @@ namespace gloox
        * @param s5bh A SOCKS5BytestreamManager -derived object that will receive
        * incoming and outgoing SOCKS5Bytestreams.
        */
-      SOCKS5BytestreamManager( ClientBase *parent, BytestreamHandler* s5bh );
+      SOCKS5BytestreamManager( ClientBase* parent, BytestreamHandler* s5bh );
 
       /**
        * Virtual destructor.
@@ -112,7 +112,7 @@ namespace gloox
        * The remote entity will be notified about the closing of the stream.
        * @param s5b The bytestream to dispose. It will be deleted here.
        */
-      bool dispose( SOCKS5Bytestream *s5b );
+      bool dispose( SOCKS5Bytestream* s5b );
 
       /**
        * Use this function to accept an incoming bytestream.
@@ -132,7 +132,7 @@ namespace gloox
        * registered at any one time.
        * @param s5bh The BytestreamHandler derived object to receive notifications.
        */
-      void registerBytestreamHandler( BytestreamHandler *s5bh )
+      void registerBytestreamHandler( BytestreamHandler* s5bh )
         { m_socks5BytestreamHandler = s5bh; }
 
       /**
@@ -186,7 +186,7 @@ namespace gloox
       typedef std::map<std::string, AsyncS5BItem> AsyncTrackMap;
       AsyncTrackMap m_asyncTrackMap;
 
-      ClientBase *m_parent;
+      ClientBase* m_parent;
       BytestreamHandler* m_socks5BytestreamHandler;
       SOCKS5BytestreamServer* m_server;
       StreamHostList m_hosts;

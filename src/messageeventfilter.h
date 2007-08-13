@@ -44,7 +44,7 @@ namespace gloox
        * @param defaultEvents Bit-wise ORed MessageEventType's which shall be requested
        * for every message sent. Default: all.
        */
-      MessageEventFilter( MessageSession *parent,
+      MessageEventFilter( MessageSession* parent,
                           int defaultEvents = MessageEventOffline | MessageEventDelivered
                                               | MessageEventDisplayed | MessageEventComposing );
 
@@ -70,7 +70,7 @@ namespace gloox
        * to XEP-0022.
        * @param meh The MessageEventHandler to register.
        */
-      void registerMessageEventHandler( MessageEventHandler *meh );
+      void registerMessageEventHandler( MessageEventHandler* meh );
 
       /**
        * This function clears the internal pointer to the MessageEventHandler.
@@ -80,13 +80,13 @@ namespace gloox
       void removeMessageEventHandler();
 
       // reimplemented from MessageFilter
-      virtual void decorate( Tag *tag );
+      virtual void decorate( Tag* tag );
 
       // reimplemented from MessageFilter
       virtual void filter( Message* msg );
 
     private:
-      MessageEventHandler *m_messageEventHandler;
+      MessageEventHandler* m_messageEventHandler;
       std::string m_lastID;
       int m_requestedEvents;
       int m_defaultEvents;

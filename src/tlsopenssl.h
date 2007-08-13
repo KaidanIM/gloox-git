@@ -46,7 +46,7 @@ namespace gloox
        * @param th The TLSHandler to handle TLS-related events.
        * @param server The server to use in certificate verification.
        */
-      OpenSSL( TLSHandler *th, const std::string& server );
+      OpenSSL( TLSHandler* th, const std::string& server );
 
       /**
        * Virtual destructor.
@@ -86,13 +86,13 @@ namespace gloox
 
       void doTLSOperation( TLSOperation op );
 
-      SSL *m_ssl;
-      SSL_CTX *m_ctx;
-      BIO *m_ibio;
-      BIO *m_nbio;
+      SSL* m_ssl;
+      SSL_CTX* m_ctx;
+      BIO* m_ibio;
+      BIO* m_nbio;
       std::string m_recvBuffer;
       std::string m_sendBuffer;
-      char *m_buf;
+      char* m_buf;
       const int m_bufsize;
   };
 

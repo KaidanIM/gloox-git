@@ -52,7 +52,7 @@ namespace gloox
        * Creates a new RosterManager.
        * @param parent The ClientBase which is used for communication.
        */
-      RosterManager( ClientBase *parent );
+      RosterManager( ClientBase* parent );
 
       /**
        * Virtual destructor.
@@ -161,7 +161,7 @@ namespace gloox
        * @param syncSubscribeReq Indicates whether (Un)SubscriptionRequests shall
        * be handled synchronous (@b true) or asynchronous (@b false). Default: synchronous.
        */
-      void registerRosterListener( RosterListener *rl, bool syncSubscribeReq = true );
+      void registerRosterListener( RosterListener* rl, bool syncSubscribeReq = true );
 
       /**
        * Complementary function to @ref registerRosterListener. Removes the current RosterListener.
@@ -182,7 +182,7 @@ namespace gloox
       virtual void handleSubscription( Subscription* subscription );
 
       // reimplemented from PrivateXMLHandler
-      virtual void handlePrivateXML( const std::string& tag, Tag *xml );
+      virtual void handlePrivateXML( const std::string& tag, Tag* xml );
 
       // reimplemented from PrivateXMLHandler
       virtual void handlePrivateXMLResult( const std::string& uid, PrivateXMLResult pxResult );
@@ -190,13 +190,13 @@ namespace gloox
     private:
       void add( const std::string& jid, const std::string& name,
                 const StringList& groups, const std::string& sub, bool ask );
-      void extractItems( Tag *tag, bool isPush );
+      void extractItems( Tag* tag, bool isPush );
 
-      RosterListener *m_rosterListener;
+      RosterListener* m_rosterListener;
       Roster m_roster;
-      ClientBase *m_parent;
-      PrivateXML *m_privateXML;
-      RosterItem *m_self;
+      ClientBase* m_parent;
+      PrivateXML* m_privateXML;
+      RosterItem* m_self;
 
       std::string m_delimiter;
       bool m_syncSubscribeReq;

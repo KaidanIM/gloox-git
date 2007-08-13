@@ -170,7 +170,7 @@ namespace gloox
   {
   }
 
-  void MD5::process( const unsigned char *data /*[64]*/ )
+  void MD5::process( const unsigned char* data /*[64]*/ )
   {
     unsigned int a = m_state.abcd[0];
     unsigned int b = m_state.abcd[1];
@@ -225,7 +225,7 @@ namespace gloox
         * On big-endian machines, we must arrange the bytes in the
         * right order.
         */
-        const unsigned char *xp = data;
+        const unsigned char* xp = data;
         int i;
 
 #  if BYTE_ORDER == 0
@@ -370,9 +370,9 @@ namespace gloox
     feed( (const unsigned char*)data.c_str(), data.length() );
   }
 
-  void MD5::feed( const unsigned char *data, int bytes )
+  void MD5::feed( const unsigned char* data, int bytes )
   {
-    const unsigned char *p = data;
+    const unsigned char* p = data;
     int left = bytes;
     int offset = ( m_state.count[0] >> 3 ) & 63;
     unsigned int nbits = (unsigned int)( bytes << 3 );

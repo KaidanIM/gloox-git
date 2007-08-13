@@ -59,7 +59,7 @@ namespace gloox
        *
        * @param session The new MessageSession.
        */
-      virtual void handleMessageSession( MessageSession *session ) = 0;
+      virtual void handleMessageSession( MessageSession* session ) = 0;
   };
 
 }

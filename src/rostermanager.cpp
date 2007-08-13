@@ -25,7 +25,7 @@
 namespace gloox
 {
 
-  RosterManager::RosterManager( ClientBase *parent )
+  RosterManager::RosterManager( ClientBase* parent )
     : m_rosterListener( 0 ), m_parent( parent ), m_privateXML( 0 ),
       m_syncSubscribeReq( false )
   {
@@ -177,7 +177,7 @@ namespace gloox
     const std::string& id = m_parent->getID();
 
     IQ* iq = new IQ( IQ::Set, JID(), id, XMLNS_ROSTER );
-    Tag *i = new Tag( iq->query(), "item", "jid", jid.bare() );
+    Tag* i = new Tag( iq->query(), "item", "jid", jid.bare() );
     if( !name.empty() )
       i->addAttribute( "name", name );
 
@@ -208,7 +208,7 @@ namespace gloox
     const std::string& id = m_parent->getID();
 
     IQ* iq = new IQ( IQ::Set, JID(), id, XMLNS_ROSTER );
-    Tag *i = new Tag( iq->query(), "item", "jid", jid.bare() );
+    Tag* i = new Tag( iq->query(), "item", "jid", jid.bare() );
     i->addAttribute( "subscription", "remove" );
 
     m_parent->send( iq );
@@ -224,7 +224,7 @@ namespace gloox
         const std::string& id = m_parent->getID();
 
         IQ* iq = new IQ( IQ::Set, JID(), id, XMLNS_ROSTER );
-        Tag *i = new Tag( iq->query(), "item", "jid", (*it).second->jid() );
+        Tag* i = new Tag( iq->query(), "item", "jid", (*it).second->jid() );
         if( !(*it).second->name().empty() )
           i->addAttribute( "name", (*it).second->name() );
 
@@ -297,7 +297,7 @@ namespace gloox
     }
   }
 
-  void RosterManager::registerRosterListener( RosterListener *rl, bool syncSubscribeReq )
+  void RosterManager::registerRosterListener( RosterListener* rl, bool syncSubscribeReq )
   {
     m_syncSubscribeReq = syncSubscribeReq;
     m_rosterListener = rl;
@@ -309,9 +309,9 @@ namespace gloox
     m_rosterListener = 0;
   }
 
-  void RosterManager::extractItems( Tag *tag, bool isPush )
+  void RosterManager::extractItems( Tag* tag, bool isPush )
   {
-    Tag *t = tag->findChild( "query" );
+    Tag* t = tag->findChild( "query" );
     const Tag::TagList& l = t->children();
     Tag::TagList::const_iterator it = l.begin();
     for( ; it != l.end(); ++it )
@@ -379,12 +379,12 @@ namespace gloox
   void RosterManager::setDelimiter( const std::string& delimiter )
   {
     m_delimiter = delimiter;
-    Tag *t = new Tag( "roster", m_delimiter );
+    Tag* t = new Tag( "roster", m_delimiter );
     t->addAttribute( XMLNS, XMLNS_ROSTER_DELIMITER );
     m_privateXML->storeXML( t, this );
   }
 
-  void RosterManager::handlePrivateXML( const std::string& /*tag*/, Tag *xml )
+  void RosterManager::handlePrivateXML( const std::string& /*tag*/, Tag* xml )
   {
     m_delimiter = xml->cdata();
   }

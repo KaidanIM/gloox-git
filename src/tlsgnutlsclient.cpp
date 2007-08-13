@@ -21,7 +21,7 @@
 namespace gloox
 {
 
-  GnuTLSClient::GnuTLSClient( TLSHandler *th, const std::string& server )
+  GnuTLSClient::GnuTLSClient( TLSHandler* th, const std::string& server )
     : GnuTLSBase( th, server )
   {
   }
@@ -117,7 +117,7 @@ namespace gloox
     if( !error && ( ( certList = gnutls_certificate_get_peers( *m_session, &certListSize ) ) == 0 ) )
       error = true;
 
-    gnutls_x509_crt_t *cert = new gnutls_x509_crt_t[certListSize+1];
+    gnutls_x509_crt_t* cert = new gnutls_x509_crt_t[certListSize+1];
     for( unsigned int i=0; !error && ( i<certListSize ); ++i )
     {
       if( gnutls_x509_crt_init( &cert[i] ) < 0
@@ -183,7 +183,7 @@ namespace gloox
     if( !gnutls_x509_crt_check_hostname( cert[0], m_server.c_str() ) )
       m_certInfo.status |= CertWrongPeer;
 
-    for( unsigned int i=0; i<certListSize; ++i )
+    for( unsigned int i = 0; i < certListSize; ++i )
       gnutls_x509_crt_deinit( cert[i] );
 
     delete[] cert;
@@ -205,7 +205,7 @@ namespace gloox
     return verifyCert( cert, result );
   }
 
-  bool GnuTLSClient::verifyAgainstCAs( gnutls_x509_crt_t cert, gnutls_x509_crt_t *CAList, int CAListSize )
+  bool GnuTLSClient::verifyAgainstCAs( gnutls_x509_crt_t cert, gnutls_x509_crt_t* CAList, int CAListSize )
   {
     unsigned int result;
     gnutls_x509_crt_verify( cert, CAList, CAListSize, GNUTLS_VERIFY_ALLOW_X509_V1_CA_CRT, &result );

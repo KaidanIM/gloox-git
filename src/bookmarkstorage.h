@@ -47,7 +47,7 @@ namespace gloox
    *     void handleBookmarks( const BookmarkList &bList, const ConferenceList &cList );
    *
    *   private:
-   *     BookmarkStorage *m_bs;
+   *     BookmarkStorage* m_bs;
    *     BookmarkList m_bList;
    *     ConferenceList m_cList;
    * };
@@ -101,7 +101,7 @@ namespace gloox
        * Constructs a new BookmarkStorage object.
        * @param parent The ClientBase to use for communication.
        */
-      BookmarkStorage( ClientBase *parent );
+      BookmarkStorage( ClientBase* parent );
 
       /**
        * Virtual destructor.
@@ -126,7 +126,7 @@ namespace gloox
        * Use this function to register a BookmarkHandler.
        * @param bmh The BookmarkHandler which shall receive retrieved bookmarks.
        */
-      void registerBookmarkHandler( BookmarkHandler *bmh )
+      void registerBookmarkHandler( BookmarkHandler* bmh )
         { m_bookmarkHandler = bmh; }
 
       /**
@@ -136,13 +136,13 @@ namespace gloox
         { m_bookmarkHandler = 0; }
 
       // reimplemented from PrivateXMLHandler
-      virtual void handlePrivateXML( const std::string& tag, Tag *xml );
+      virtual void handlePrivateXML( const std::string& tag, Tag* xml );
 
       // reimplemented from PrivateXMLHandler
       virtual void handlePrivateXMLResult( const std::string& uid, PrivateXMLResult pxResult );
 
     private:
-      BookmarkHandler *m_bookmarkHandler;
+      BookmarkHandler* m_bookmarkHandler;
   };
 
 }

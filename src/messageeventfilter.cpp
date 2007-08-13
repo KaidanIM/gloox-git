@@ -19,7 +19,7 @@
 namespace gloox
 {
 
-  MessageEventFilter::MessageEventFilter( MessageSession *parent, int defaultEvents )
+  MessageEventFilter::MessageEventFilter( MessageSession* parent, int defaultEvents )
     : MessageFilter( parent ), m_messageEventHandler( 0 ), m_requestedEvents( 0 ),
       m_defaultEvents( defaultEvents ), m_lastSent( MessageEventCancel ),
       m_disable( false )
@@ -43,7 +43,7 @@ namespace gloox
       return;
     }
 
-    Tag *x = msg->findChild( "x", XMLNS, XMLNS_X_EVENT );
+    Tag* x = msg->findChild( "x", XMLNS, XMLNS_X_EVENT );
     if( x && m_messageEventHandler )
     {
       if( msg->body().empty() )
@@ -63,7 +63,7 @@ namespace gloox
       {
         m_lastID = msg->findAttribute( "id" );
         m_requestedEvents = 0;
-        Tag *x = msg->findChild( "x" );
+        Tag* x = msg->findChild( "x" );
         if( x->hasChild( "offline" ) )
           m_requestedEvents |= MessageEventOffline;
         if( x->hasChild( "delivered" ) )
@@ -87,7 +87,7 @@ namespace gloox
       return;
 
     Message* m = new Message( Message::Normal, m_parent->target() );
-    Tag *x = new Tag( m, "x" );
+    Tag* x = new Tag( m, "x" );
     x->addAttribute( XMLNS, XMLNS_X_EVENT );
     new Tag( x, "id", m_lastID );
 
@@ -124,14 +124,14 @@ namespace gloox
       delete m;
   }
 
-  void MessageEventFilter::decorate( Tag *tag )
+  void MessageEventFilter::decorate( Tag* tag )
   {
     if( m_disable )
       return;
 
     if( m_defaultEvents != 0 )
     {
-      Tag *x = new Tag( tag, "x" );
+      Tag* x = new Tag( tag, "x" );
       x->addAttribute( XMLNS, XMLNS_X_EVENT );
 
       if( m_defaultEvents & MessageEventOffline )
@@ -146,7 +146,7 @@ namespace gloox
     m_lastSent = MessageEventCancel;
   }
 
-  void MessageEventFilter::registerMessageEventHandler( MessageEventHandler *meh )
+  void MessageEventFilter::registerMessageEventHandler( MessageEventHandler* meh )
   {
     m_messageEventHandler = meh;
   }

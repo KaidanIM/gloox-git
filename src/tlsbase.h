@@ -35,7 +35,7 @@ namespace gloox
        * @param th The TLSHandler to handle TLS-related events.
        * @param server The server to use in certificate verification.
        */
-      TLSBase( TLSHandler *th, const std::string server )
+      TLSBase( TLSHandler* th, const std::string server )
         : m_handler( th ), m_server( server ), m_secure( false ), m_valid( false ), m_initLib( true )
       {}
 
@@ -125,7 +125,7 @@ namespace gloox
       virtual void setClientCert( const std::string& clientKey, const std::string& clientCerts ) = 0;
 
     protected:
-      TLSHandler *m_handler;
+      TLSHandler* m_handler;
       StringList m_cacerts;
       std::string m_clientKey;
       std::string m_clientCerts;

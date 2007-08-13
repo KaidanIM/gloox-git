@@ -25,7 +25,7 @@ namespace gloox
       m_valid = false;
   }
 
-  GPGEncrypted::GPGEncrypted( const Tag *tag )
+  GPGEncrypted::GPGEncrypted( const Tag* tag )
     : StanzaExtension( ExtGPGEncrypted ),
       m_valid( false )
   {
@@ -45,7 +45,7 @@ namespace gloox
     if( !m_valid )
       return 0;
 
-    Tag *x = new Tag( "x", m_encrypted );
+    Tag* x = new Tag( "x", m_encrypted );
     x->addAttribute( XMLNS, XMLNS_X_GPGENCRYPTED );
 
     return x;

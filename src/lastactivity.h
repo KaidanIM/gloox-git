@@ -41,7 +41,7 @@ namespace gloox
        * Constructs a new LastActivity object.
        * @param parent The ClientBase object to use for communication.
        */
-      LastActivity( ClientBase *parent );
+      LastActivity( ClientBase* parent );
 
       /**
        * Virtual destructor.
@@ -60,7 +60,7 @@ namespace gloox
        * Only one handler is possible at a time.
        * @param lah The object to register as handler.
        */
-      void registerLastActivityHandler( LastActivityHandler *lah ) { m_lastActivityHandler = lah; }
+      void registerLastActivityHandler( LastActivityHandler* lah ) { m_lastActivityHandler = lah; }
 
       /**
        * Use this function to un-register the LastActivityHandler set earlier.
@@ -80,8 +80,8 @@ namespace gloox
       virtual void handleIqID( IQ* iq, int context );
 
     private:
-      LastActivityHandler *m_lastActivityHandler;
-      ClientBase *m_parent;
+      LastActivityHandler* m_lastActivityHandler;
+      ClientBase* m_parent;
 
       time_t m_active;
 

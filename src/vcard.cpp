@@ -24,7 +24,7 @@ namespace gloox
   {
   }
 
-  VCard::VCard( Tag *vcard )
+  VCard::VCard( Tag* vcard )
     : m_class( ClassNone ), m_prodid( "gloox" + GLOOX_VERSION ),
       m_N( false ), m_PHOTO( false ), m_LOGO( false )
   {
@@ -187,7 +187,7 @@ namespace gloox
 
   }
 
-  void VCard::checkField( Tag *vcard, const std::string& field, std::string& var )
+  void VCard::checkField( Tag* vcard, const std::string& field, std::string& var )
   {
     Tag* child = vcard->findChild( field );
     if( child )
@@ -349,7 +349,7 @@ namespace gloox
 
   Tag* VCard::tag() const
   {
-    Tag *v = new Tag( "vCard" );
+    Tag* v = new Tag( "vCard" );
     v->addAttribute( XMLNS, XMLNS_VCARD_TEMP );
     v->addAttribute( "version", "3.0" );
 
@@ -370,7 +370,7 @@ namespace gloox
 
     if( m_N )
     {
-      Tag *n = new Tag( v, "N" );
+      Tag* n = new Tag( v, "N" );
       insertField( n, "FAMILY", m_name.family );
       insertField( n, "GIVEN", m_name.given );
       insertField( n, "MIDDLE", m_name.middle );
@@ -380,7 +380,7 @@ namespace gloox
 
     if( m_PHOTO )
     {
-      Tag *p = new Tag( v, "PHOTO" );
+      Tag* p = new Tag( v, "PHOTO" );
       if( !m_photo.extval.empty() )
       {
         new Tag( p, "EXTVAL", m_photo.extval );
@@ -394,7 +394,7 @@ namespace gloox
 
     if( m_LOGO )
     {
-      Tag *l = new Tag( v, "LOGO" );
+      Tag* l = new Tag( v, "LOGO" );
       if( !m_logo.extval.empty() )
       {
         new Tag( l, "EXTVAL", m_logo.extval );
@@ -409,7 +409,7 @@ namespace gloox
     EmailList::const_iterator ite = m_emailList.begin();
     for( ; ite != m_emailList.end(); ++ite )
     {
-      Tag *e = new Tag( v, "EMAIL" );
+      Tag* e = new Tag( v, "EMAIL" );
       insertField( e, "INTERNET", (*ite).internet );
       insertField( e, "WORK", (*ite).work );
       insertField( e, "HOME", (*ite).home );
@@ -421,7 +421,7 @@ namespace gloox
     AddressList::const_iterator ita = m_addressList.begin();
     for( ; ita != m_addressList.end(); ++ita )
     {
-      Tag *a = new Tag( v, "ADR" );
+      Tag* a = new Tag( v, "ADR" );
       insertField( a, "POSTAL", (*ita).postal );
       insertField( a, "PARCEL", (*ita).parcel );
       insertField( a, "HOME", (*ita).home );
@@ -443,7 +443,7 @@ namespace gloox
     TelephoneList::const_iterator itt = m_telephoneList.begin();
     for( ; itt != m_telephoneList.end(); ++itt )
     {
-      Tag *t = new Tag( v, "TEL" );
+      Tag* t = new Tag( v, "TEL" );
       insertField( t, "NUMBER", (*itt).number );
       insertField( t, "HOME", (*itt).home );
       insertField( t, "WORK", (*itt).work );
@@ -462,14 +462,14 @@ namespace gloox
 
     if( !m_geo.latitude.empty() && !m_geo.longitude.empty() )
     {
-      Tag *g = new Tag( v, "GEO" );
+      Tag* g = new Tag( v, "GEO" );
       new Tag( g, "LAT", m_geo.latitude );
       new Tag( g, "LON", m_geo.longitude );
     }
 
     if( !m_org.name.empty() )
     {
-      Tag *o = new Tag( v, "ORG" );
+      Tag* o = new Tag( v, "ORG" );
       new Tag( o, "ORGNAME", m_org.name );
       StringList::const_iterator ito = m_org.units.begin();
       for( ; ito != m_org.units.end(); ++ito )
@@ -478,7 +478,7 @@ namespace gloox
 
     if( m_class != ClassNone )
     {
-      Tag *c = new Tag( v, "CLASS" );
+      Tag* c = new Tag( v, "CLASS" );
       switch( m_class )
       {
         case ClassPublic:
@@ -498,13 +498,13 @@ namespace gloox
     return v;
   }
 
-  void VCard::insertField( Tag *vcard, const std::string& field, const std::string& var ) const
+  void VCard::insertField( Tag* vcard, const std::string& field, const std::string& var ) const
   {
     if( !var.empty() )
       new Tag( vcard, field, var );
   }
 
-  void VCard::insertField( Tag *vcard, const std::string& field, bool var ) const
+  void VCard::insertField( Tag* vcard, const std::string& field, bool var ) const
   {
     if( var )
       new Tag( vcard, field );

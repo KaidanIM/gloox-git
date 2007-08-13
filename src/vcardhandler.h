@@ -56,7 +56,7 @@ namespace gloox
        * @param jid The JID to which this VCard belongs.
        * @param vcard The fetched VCard. Zero if there is no VCard for this contact.
        */
-      virtual void handleVCard( const JID& jid, VCard *vcard ) = 0;
+      virtual void handleVCard( const JID& jid, VCard* vcard ) = 0;
 
       /**
        * This function is called to indicate the result of a VCard store operation

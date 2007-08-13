@@ -21,7 +21,7 @@
 namespace gloox
 {
 
-  GnuTLSClientAnon::GnuTLSClientAnon( TLSHandler *th )
+  GnuTLSClientAnon::GnuTLSClientAnon( TLSHandler* th )
     : GnuTLSBase( th )
   {
   }

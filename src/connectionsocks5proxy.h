@@ -29,7 +29,7 @@ namespace gloox
    * To use with a SOCKS5 proxy:
    *
    * @code
-   * Client *c = new Client( ... );
+   * Client* c = new Client( ... );
    * c->setConnectionImpl( new ConnectionSOCKS5Proxy( c,
    *                                new ConnectionTCP( c->logInstance(), proxyHost, proxyPort ),
    *                                c->logInstance(), xmppHost, xmppPort ) );
@@ -67,7 +67,7 @@ namespace gloox
        * registerConnectionDataHandler(). This is not necessary if this object is
        * part of a 'connection chain', e.g. with ConnectionHTTPProxy.
        */
-      ConnectionSOCKS5Proxy( ConnectionBase *connection, const LogSink& logInstance,
+      ConnectionSOCKS5Proxy( ConnectionBase* connection, const LogSink& logInstance,
                              const std::string& server, int port = -1, bool ip = false );
 
       /**
@@ -82,7 +82,7 @@ namespace gloox
        * The default of -1 means that SRV records will be used to find out about the actual host:port.
        * @param ip Indicates whether @c server is an IP address (true) or a host name (false).
        */
-      ConnectionSOCKS5Proxy( ConnectionDataHandler *cdh, ConnectionBase *connection,
+      ConnectionSOCKS5Proxy( ConnectionDataHandler* cdh, ConnectionBase* connection,
                              const LogSink& logInstance,
                              const std::string& server, int port = -1, bool ip = false );
 

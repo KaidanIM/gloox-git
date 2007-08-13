@@ -43,7 +43,7 @@ namespace gloox
        * @brief Constructs a new object from the given Tag.
        * @param tag The AMP Tag to parse.
        */
-      AMP( const Tag *tag );
+      AMP( const Tag* tag );
 
       /**
        * @brief Virtual Destructor.

@@ -20,7 +20,7 @@
 namespace gloox
 {
 
-  NonSaslAuth::NonSaslAuth( Client *parent )
+  NonSaslAuth::NonSaslAuth( Client* parent )
     : m_parent( parent )
   {
     if( m_parent )
@@ -54,7 +54,7 @@ namespace gloox
         m_parent->setAuthed( false );
         m_parent->disconnect( ConnAuthenticationFailed );
 
-        Tag *t = iq->findChild( "error" );
+        Tag* t = iq->findChild( "error" );
         if( t )
         {
           if( t->hasChild( "conflict" ) || t->hasAttribute( "code", "409" ) )
@@ -74,11 +74,11 @@ namespace gloox
             const std::string& id = m_parent->getID();
 
             IQ* re = new IQ( IQ::Set, JID(), id, XMLNS_AUTH );
-            Tag *query = re->query();
+            Tag* query = re->query();
             new Tag( query, "username", m_parent->jid().username() );
             new Tag( query, "resource", m_parent->jid().resource() );
 
-            Tag *q = iq->query();
+            Tag* q = iq->query();
             if( q && q->hasChild( "digest" ) && !m_sid.empty() )
             {
               SHA sha;

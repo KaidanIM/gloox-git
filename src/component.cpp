@@ -43,7 +43,7 @@ namespace gloox
     sha.feed( m_sid + m_password );
     sha.finalize();
 
-    Tag *h = new Tag( "handshake", sha.hex() );
+    Tag* h = new Tag( "handshake", sha.hex() );
     send( h );
   }
 
