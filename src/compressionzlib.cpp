@@ -19,7 +19,7 @@
 namespace gloox
 {
 
-  CompressionZlib::CompressionZlib( CompressionDataHandler *cdh )
+  CompressionZlib::CompressionZlib( CompressionDataHandler* cdh )
     : CompressionBase( cdh )
   {
     int ret = Z_OK;
@@ -56,8 +56,8 @@ namespace gloox
       return;
 
     int CHUNK = data.length() + ( data.length() / 100 ) + 13;
-    Bytef *out = new Bytef[CHUNK];
-    char *in = const_cast<char*>( data.c_str() );
+    Bytef* out = new Bytef[CHUNK];
+    char* in = const_cast<char*>( data.c_str() );
 
     m_zdeflate.avail_in = data.length();
     m_zdeflate.next_in = (Bytef*)in;
@@ -83,8 +83,8 @@ namespace gloox
       return;
 
     int CHUNK = 50;
-    char *out = new char[CHUNK];
-    char *in = const_cast<char*>( data.c_str() );
+    char* out = new char[CHUNK];
+    char* in = const_cast<char*>( data.c_str() );
 
     m_zinflate.avail_in = data.length();
     m_zinflate.next_in = (Bytef*)in;

@@ -50,7 +50,7 @@ namespace gloox
        * have a name of 'x' in the @c vcard-temp:x:update namespace.
        * @param tag The Tag to parse.
        */
-      VCardUpdate( const Tag *tag );
+      VCardUpdate( const Tag* tag );
 
       /**
        * Virtual destructor.

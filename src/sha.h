@@ -69,7 +69,7 @@ namespace gloox
        * @param data The data to compute the digest of.
        * @param length The size of the data in bytes.
        */
-      void feed( const unsigned char *data, unsigned length );
+      void feed( const unsigned char* data, unsigned length );
 
       /**
        * Provide input to SHA1.

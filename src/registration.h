@@ -121,13 +121,13 @@ namespace gloox
        * @param to The server or service to authenticate with. If empty the currently connected
        * server will be used.
        */
-      Registration( ClientBase *parent, const JID& to );
+      Registration( ClientBase* parent, const JID& to );
 
       /**
        * Constructor. Registration will be attempted with the ClientBase's connected host.
        * @param parent The ClientBase which is used for establishing a connection.
        */
-      Registration( ClientBase *parent );
+      Registration( ClientBase* parent );
 
       /**
        * Virtual destructor.
@@ -178,7 +178,7 @@ namespace gloox
        * Registers the given @c rh as RegistrationHandler. Only one handler is possible at a time.
        * @param rh The RegistrationHandler to register.
        */
-      void registerRegistrationHandler( RegistrationHandler *rh );
+      void registerRegistrationHandler( RegistrationHandler* rh );
 
       /**
        * Un-registers the current RegistrationHandler.
@@ -202,9 +202,9 @@ namespace gloox
 
       void init();
 
-      ClientBase *m_parent;
+      ClientBase* m_parent;
       const JID m_to;
-      RegistrationHandler *m_registrationHandler;
+      RegistrationHandler* m_registrationHandler;
   };
 
 }

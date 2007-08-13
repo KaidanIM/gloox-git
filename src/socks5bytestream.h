@@ -114,7 +114,7 @@ namespace gloox
                         const std::string& sid );
       void activate();
 
-      SOCKS5BytestreamManager *m_manager;
+      SOCKS5BytestreamManager* m_manager;
       ConnectionBase* m_connection;
       ConnectionBase* m_socks5;
       JID m_proxy;

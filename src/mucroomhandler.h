@@ -32,7 +32,7 @@ namespace gloox
    */
   struct MUCRoomParticipant
   {
-    JID *nick;                      /**< Pointer to a JID holding the participant's full JID
+    JID* nick;                      /**< Pointer to a JID holding the participant's full JID
                                      * in the form @c room\@service/nick. <br>
                                      * @note The MUC server @b may change the chosen nickname.
                                      * If the @b self member of this struct is true, one should
@@ -40,7 +40,7 @@ namespace gloox
                                      * is important. */
     MUCRoomAffiliation affiliation; /**< The participant's affiliation with the room. */
     MUCRoomRole role;               /**< The participant's role with the room. */
-    JID *jid;                       /**< Pointer to the occupant's full JID in a non-anonymous room or
+    JID* jid;                       /**< Pointer to the occupant's full JID in a non-anonymous room or
                                      * in a semi-anonymous room if the user (of gloox) has a role of
                                      * moderator.
                                      * 0 if the MUC service doesn't provide the JID. */
@@ -52,7 +52,7 @@ namespace gloox
     std::string reason;             /**< If the presence change is the result of an action where the
                                      * actor can provide a reason for the action, this reason is stored
                                      * here. Examples: Kicking, banning, leaving the room. */
-    JID *actor;                     /**< If the presence change is the result of an action of a room
+    JID* actor;                     /**< If the presence change is the result of an action of a room
                                      * member, a pointer to the actor's JID is stored here, if the
                                      * actor chose to disclose his or her identity. Examples: Kicking
                                      * and banning.
@@ -102,7 +102,7 @@ namespace gloox
        * @param participant A struct describing the occupant's status and/or action.
        * @param presence The occupant's presence.
        */
-      virtual void handleMUCParticipantPresence( MUCRoom *room, const MUCRoomParticipant participant,
+      virtual void handleMUCParticipantPresence( MUCRoom* room, const MUCRoomParticipant participant,
                                                  Presence::PresenceType presence ) = 0;
 
       /**
@@ -119,7 +119,7 @@ namespace gloox
        * datetime the message was sent in a notation as described in XEP-0082.
        * @param privateMessage Indicates whether this is a private message.
        */
-      virtual void handleMUCMessage( MUCRoom *room, const std::string& nick,
+      virtual void handleMUCMessage( MUCRoom* room, const std::string& nick,
                                      const std::string& message, bool history,
                                      const std::string& when, bool privateMessage ) = 0;
 
@@ -140,7 +140,7 @@ namespace gloox
        * @return @b True to accept the default room configuration, @b false to keep the room locked
        * until configured manually by the room owner.
        */
-      virtual bool handleMUCRoomCreation( MUCRoom *room ) = 0;
+      virtual bool handleMUCRoomCreation( MUCRoom* room ) = 0;
 
       /**
        * This function is called when the room subject has been changed.
@@ -149,7 +149,7 @@ namespace gloox
        * @note With some MUC services the nick may be empty when a room is first entered.
        * @param subject The new room subject.
        */
-      virtual void handleMUCSubject( MUCRoom *room, const std::string& nick,
+      virtual void handleMUCSubject( MUCRoom* room, const std::string& nick,
                                      const std::string& subject ) = 0;
 
       /**
@@ -159,7 +159,7 @@ namespace gloox
        * @param invitee The JID if the person that declined the invitation.
        * @param reason An optional  reason for declining the invitation.
        */
-      virtual void handleMUCInviteDecline( MUCRoom *room, const JID& invitee,
+      virtual void handleMUCInviteDecline( MUCRoom* room, const JID& invitee,
                                            const std::string& reason ) = 0;
 
       /**
@@ -178,7 +178,7 @@ namespace gloox
        * @param room The room.
        * @param error The error.
        */
-      virtual void handleMUCError( MUCRoom *room, StanzaError error ) = 0;
+      virtual void handleMUCError( MUCRoom* room, StanzaError error ) = 0;
 
       /**
        * This function usually (see below) is called in response to a call to MUCRoom::getRoomInfo().
@@ -192,8 +192,8 @@ namespace gloox
        * @note This function may be called without a prior call to MUCRoom::getRoomInfo(). This
        * happens if the room config is changed, e.g. by a room admin.
        */
-      virtual void handleMUCInfo( MUCRoom *room, int features, const std::string& name,
-                                  const DataForm *infoForm ) = 0;
+      virtual void handleMUCInfo( MUCRoom* room, int features, const std::string& name,
+                                  const DataForm* infoForm ) = 0;
 
       /**
        * This function is called in response to a call to MUCRoom::getRoomItems().
@@ -201,7 +201,7 @@ namespace gloox
        * @param items A map of room participants. The key is the name, the value is the occupant's
        * room JID. The map may be empty if such info is private.
        */
-      virtual void handleMUCItems( MUCRoom *room, const StringMap& items ) = 0;
+      virtual void handleMUCItems( MUCRoom* room, const StringMap& items ) = 0;
 
   };
 

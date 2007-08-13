@@ -97,7 +97,7 @@ namespace gloox
     return rule;
   }
 
-  AMP::AMP( const Tag *tag )
+  AMP::AMP( const Tag* tag )
     : StanzaExtension( ExtAMP ), m_valid( false )
   {
     if( !tag || tag->name() != "amp" || !tag->hasAttribute( XMLNS, XMLNS_AMP ) )
@@ -119,7 +119,7 @@ namespace gloox
     if( !m_valid )
       return 0;
 
-    Tag *amp = new Tag( "amp" );
+    Tag* amp = new Tag( "amp" );
     amp->addAttribute( XMLNS, XMLNS_AMP );
     RuleList::const_iterator it = m_rules.begin();
     for( ; it != m_rules.end(); ++it )

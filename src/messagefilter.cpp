@@ -17,7 +17,7 @@
 namespace gloox
 {
 
-  MessageFilter::MessageFilter( MessageSession *parent )
+  MessageFilter::MessageFilter( MessageSession* parent )
     : m_parent( 0 )
   {
     if( parent )
@@ -28,7 +28,7 @@ namespace gloox
   {
   }
 
-  void MessageFilter::attachTo( MessageSession *session )
+  void MessageFilter::attachTo( MessageSession* session )
   {
     if( m_parent )
       m_parent->removeMessageFilter( this );

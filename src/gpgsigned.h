@@ -48,7 +48,7 @@ namespace gloox
        * have a name of 'x' in the @c jabber:x:signed namespace.
        * @param tag The Tag to parse.
        */
-      GPGSigned( const Tag *tag );
+      GPGSigned( const Tag* tag );
 
       /**
        * Virtual destructor.

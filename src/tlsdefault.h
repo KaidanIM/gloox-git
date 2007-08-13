@@ -51,7 +51,7 @@ namespace gloox
        * @param server The server to use in certificate verification.
        * @param type What you want to use this TLS object for.
        */
-      TLSDefault( TLSHandler *th, const std::string server, Type type = VerifyingClient );
+      TLSDefault( TLSHandler* th, const std::string server, Type type = VerifyingClient );
 
       /**
        * Virtual Destructor.

@@ -19,7 +19,7 @@
 namespace gloox
 {
 
-  BookmarkStorage::BookmarkStorage( ClientBase *parent )
+  BookmarkStorage::BookmarkStorage( ClientBase* parent )
     : PrivateXML( parent ),
       m_bookmarkHandler( 0 )
   {
@@ -31,13 +31,13 @@ namespace gloox
 
   void BookmarkStorage::storeBookmarks( const BookmarkList& bList, const ConferenceList& cList )
   {
-    Tag *s = new Tag( "storage" );
+    Tag* s = new Tag( "storage" );
     s->addAttribute( XMLNS, XMLNS_BOOKMARKS );
 
     BookmarkList::const_iterator itb = bList.begin();
     for( ; itb != bList.end(); ++itb )
     {
-      Tag *i = new Tag( s, "url" );
+      Tag* i = new Tag( s, "url" );
       i->addAttribute( "name", (*itb).name );
       i->addAttribute( "url", (*itb).url );
     }
@@ -45,7 +45,7 @@ namespace gloox
     ConferenceList::const_iterator itc = cList.begin();
     for( ; itc != cList.end(); ++itc )
     {
-      Tag *i = new Tag( s, "conference" );
+      Tag* i = new Tag( s, "conference" );
       i->addAttribute( "name", (*itc).name );
       i->addAttribute( "jid", (*itc).jid );
       i->addAttribute( "autojoin", (*itc).autojoin ? "true" : "false" );
@@ -62,7 +62,7 @@ namespace gloox
     requestXML( "storage", XMLNS_BOOKMARKS, this );
   }
 
-  void BookmarkStorage::handlePrivateXML( const std::string& /*tag*/, Tag *xml )
+  void BookmarkStorage::handlePrivateXML( const std::string& /*tag*/, Tag* xml )
   {
     BookmarkList bList;
     ConferenceList cList;

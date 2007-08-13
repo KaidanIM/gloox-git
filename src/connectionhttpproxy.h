@@ -29,7 +29,7 @@ namespace gloox
    * Usage:
    *
    * @code
-   * Client *c = new Client( ... );
+   * Client* c = new Client( ... );
    * c->setConnectionImpl( new ConnectionHTTPProxy( c,
    *                                new ConnectionTCP( c->logInstance(), proxyHost, proxyPort ),
    *                                c->logInstance(), xmppHost, xmppPort ) );
@@ -60,7 +60,7 @@ namespace gloox
        * registerConnectionDataHandler(). This is not necessary if this object is
        * part of a 'connection chain', e.g. with ConnectionSOCKS5Proxy.
        */
-      ConnectionHTTPProxy( ConnectionBase *connection, const LogSink& logInstance,
+      ConnectionHTTPProxy( ConnectionBase* connection, const LogSink& logInstance,
                            const std::string& server, int port = -1 );
 
       /**
@@ -74,7 +74,7 @@ namespace gloox
        * @param port The port to connect to. This is the XMPP server's port, @b not the proxy's.
        * The default of -1 means that SRV records will be used to find out about the actual host:port.
        */
-      ConnectionHTTPProxy( ConnectionDataHandler *cdh, ConnectionBase *connection,
+      ConnectionHTTPProxy( ConnectionDataHandler* cdh, ConnectionBase* connection,
                            const LogSink& logInstance,
                            const std::string& server, int port = -1 );
 
@@ -149,7 +149,7 @@ namespace gloox
    private:
       ConnectionHTTPProxy &operator=( const ConnectionHTTPProxy& );
 
-      ConnectionBase *m_connection;
+      ConnectionBase* m_connection;
       const LogSink& m_logInstance;
 
       std::string m_proxyUser;

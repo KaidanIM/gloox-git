@@ -45,7 +45,7 @@ namespace gloox
        * @param context A context identifier.
        * @todo Replace the stanza with decoded values.
        */
-      virtual void handleDiscoInfoResult( IQ *iq, int context ) = 0;
+      virtual void handleDiscoInfoResult( IQ* iq, int context ) = 0;
 
       /**
        * Reimplement this function if you want to be notified about the result
@@ -54,7 +54,7 @@ namespace gloox
        * @param context A context identifier.
        * @todo Replace the stanza with decoded values.
        */
-      virtual void handleDiscoItemsResult( IQ *iq, int context ) = 0;
+      virtual void handleDiscoItemsResult( IQ* iq, int context ) = 0;
 
       /**
        * Reimplement this function to receive disco error notifications.
@@ -62,7 +62,7 @@ namespace gloox
        * @param context A context identifier.
        * @todo Replace the stanza with decoded values.
        */
-      virtual void handleDiscoError( IQ *iq, int context ) = 0;
+      virtual void handleDiscoError( IQ* iq, int context ) = 0;
 
       /**
        * Reimplement this function to receive notifications about incoming IQ
@@ -71,7 +71,7 @@ namespace gloox
        * @return Returns @b true if the stanza was handled and answered, @b false otherwise.
        * @todo Replace the stanza with decoded values.
        */
-      virtual bool handleDiscoSet( IQ *iq ) { (void) iq; return false; }
+      virtual bool handleDiscoSet( IQ* iq ) { (void) iq; return false; }
 
   };
 

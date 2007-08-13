@@ -43,7 +43,7 @@ namespace gloox
        * Constructor.
        * @param parent The MessageSession to attach to.
        */
-      MessageFilter( MessageSession *parent );
+      MessageFilter( MessageSession* parent );
 
       /**
        * Virtual Destructor.
@@ -57,14 +57,14 @@ namespace gloox
        * unregistered there prior to registering it with the new session.
        * @param session The MessageSession to hook into.
        */
-      virtual void attachTo( MessageSession *session );
+      virtual void attachTo( MessageSession* session );
 
       /**
        * This function receives a message right before it is sent out (there may be other filters
        * which get to see the message after this filter, though).
        * @param tag The tag to decorate. It contains the message to be sent.
        */
-      virtual void decorate( Tag *tag ) = 0;
+      virtual void decorate( Tag* tag ) = 0;
 
       /**
        * This function receives a message stanza right after it was received (there may be other filters
@@ -76,7 +76,7 @@ namespace gloox
     protected:
       void send( Tag* tag ) { if( m_parent ) m_parent->send( tag ); }
 
-      MessageSession *m_parent;
+      MessageSession* m_parent;
 
   };
 

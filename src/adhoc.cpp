@@ -23,7 +23,7 @@
 namespace gloox
 {
 
-  Adhoc::Adhoc( ClientBase *parent )
+  Adhoc::Adhoc( ClientBase* parent )
     : m_parent( parent )
   {
     if( m_parent )
@@ -102,7 +102,7 @@ namespace gloox
 
     if( iq->hasChild( "command" ) )
     {
-      Tag *c = iq->findChild( "command" );
+      Tag* c = iq->findChild( "command" );
       const std::string& node = c->findAttribute( "node" );
       AdhocCommandProviderMap::const_iterator it = m_adhocCommandProviders.find( node );
       if( !node.empty() && ( it != m_adhocCommandProviders.end() ) )
@@ -125,12 +125,12 @@ namespace gloox
     {
       if( (*it).second.context == context && (*it).second.remote == iq->from() )
       {
-        Tag *c = iq->findChild( "command", XMLNS, XMLNS_ADHOC_COMMANDS );
+        Tag* c = iq->findChild( "command", XMLNS, XMLNS_ADHOC_COMMANDS );
         if( c )
         {
           const std::string& command = c->findAttribute( "node" );
           const std::string& id = c->findAttribute( "sessionid" );
-          Tag *a = c->findChild( "actions" );
+          Tag* a = c->findChild( "actions" );
           int actions = ActionCancel;
           Adhoc::AdhocExecuteActions def = ActionCancel;
           if( a )
@@ -149,7 +149,7 @@ namespace gloox
             else if( d == "complete" )
               def = ActionComplete;
           }
-          Tag *n = c->findChild( "note" );
+          Tag* n = c->findChild( "note" );
           std::string note;
           AdhocNoteType type = AdhocNoteInfo;
           if( n )
@@ -169,7 +169,7 @@ namespace gloox
           else if( s == "canceled" )
             status = AdhocCommandCanceled;
           DataForm form;
-          Tag *x = c->findChild( "x", XMLNS, XMLNS_X_DATA );
+          Tag* x = c->findChild( "x", XMLNS, XMLNS_X_DATA );
           if( x )
             form.parse( x );
 
@@ -184,7 +184,7 @@ namespace gloox
 
   }
 
-  void Adhoc::registerAdhocCommandProvider( AdhocCommandProvider *acp, const std::string& command,
+  void Adhoc::registerAdhocCommandProvider( AdhocCommandProvider* acp, const std::string& command,
                                             const std::string& name )
   {
     m_parent->disco()->registerNodeHandler( this, command );
@@ -192,7 +192,7 @@ namespace gloox
     m_items[command] = name;
   }
 
-  void Adhoc::handleDiscoInfoResult( IQ *iq, int context )
+  void Adhoc::handleDiscoInfoResult( IQ* iq, int context )
   {
     if( context != CheckAdhocSupport )
       return;
@@ -202,7 +202,7 @@ namespace gloox
     {
       if( (*it).second.context == context && (*it).second.remote == iq->from() )
       {
-        Tag *q = iq->findChild( "query", XMLNS, XMLNS_DISCO_INFO );
+        Tag* q = iq->findChild( "query", XMLNS, XMLNS_DISCO_INFO );
         if( q )
           (*it).second.ah->handleAdhocSupport( (*it).second.remote,
                   q->hasChild( "feature", "var", XMLNS_ADHOC_COMMANDS ) );
@@ -212,7 +212,7 @@ namespace gloox
     }
   }
 
-  void Adhoc::handleDiscoItemsResult( IQ *iq, int context )
+  void Adhoc::handleDiscoItemsResult( IQ* iq, int context )
   {
     if( context != FetchAdhocCommands )
       return;
@@ -222,7 +222,7 @@ namespace gloox
     {
       if( (*it).second.context == context && (*it).second.remote == iq->from() )
       {
-        Tag *q = iq->findChild( "query", XMLNS, XMLNS_DISCO_ITEMS );
+        Tag* q = iq->findChild( "query", XMLNS, XMLNS_DISCO_ITEMS );
         if( q )
         {
           StringMap commands;
@@ -246,7 +246,7 @@ namespace gloox
     }
   }
 
-  void Adhoc::handleDiscoError( IQ *iq, int context )
+  void Adhoc::handleDiscoError( IQ* iq, int context )
   {
     AdhocTrackMap::iterator it = m_adhocTrackMap.begin();
     for( ; it != m_adhocTrackMap.end(); ++it )
@@ -260,7 +260,7 @@ namespace gloox
     }
   }
 
-  void Adhoc::checkSupport( const JID& remote, AdhocHandler *ah )
+  void Adhoc::checkSupport( const JID& remote, AdhocHandler* ah )
   {
     if( remote.empty() || !ah )
       return;
@@ -273,7 +273,7 @@ namespace gloox
     m_parent->disco()->getDiscoInfo( remote, "", this, CheckAdhocSupport );
   }
 
-  void Adhoc::getCommands( const JID& remote, AdhocHandler *ah )
+  void Adhoc::getCommands( const JID& remote, AdhocHandler* ah )
   {
     if( remote.empty() || !ah )
       return;
@@ -286,8 +286,8 @@ namespace gloox
     m_parent->disco()->getDiscoItems( remote, XMLNS_ADHOC_COMMANDS, this, FetchAdhocCommands );
   }
 
-  void Adhoc::execute( const JID& remote, const std::string& command, AdhocHandler *ah,
-                       const std::string& sessionid, DataForm *form,
+  void Adhoc::execute( const JID& remote, const std::string& command, AdhocHandler* ah,
+                       const std::string& sessionid, DataForm* form,
                        AdhocExecuteActions action )
   {
     if( remote.empty() || command.empty() || !ah )

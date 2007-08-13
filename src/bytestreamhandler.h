@@ -73,7 +73,7 @@ namespace gloox
        * Use SIProfileFT::dispose() to get rid of the bytestream object after it has been closed.
        * @param bs The new bytestream.
        */
-      virtual void handleOutgoingBytestream( Bytestream *bs ) = 0;
+      virtual void handleOutgoingBytestream( Bytestream* bs ) = 0;
 
       /**
        * Notifies the handler of errors occuring when a bytestream was requested.

@@ -136,7 +136,7 @@ namespace gloox
        * @param name The name of the element.
        * @param cdata The XML character data of the element.
        */
-      Tag( Tag *parent, const std::string& name, const std::string& cdata = "" );
+      Tag( Tag* parent, const std::string& name, const std::string& cdata = "" );
 
       /**
        * Creates a new tag with a given name and an attribute.
@@ -158,7 +158,7 @@ namespace gloox
        * @note This constructor can not be used for an incoming Tag.
        * @since 1.0
        */
-      Tag( Tag *parent, const std::string& name, const std::string& attrib, const std::string& value );
+      Tag( Tag* parent, const std::string& name, const std::string& attrib, const std::string& value );
 
       /**
        * Virtual destructor.
@@ -206,14 +206,14 @@ namespace gloox
        * Use this function to add a child node to the tag. The Tag will be owned by Tag.
        * @param child The node to be inserted.
        */
-      virtual void addChild( Tag *child );
+      virtual void addChild( Tag* child );
 
       /**
        * Use this function to add a copy of the given element to the tag.
        * @param child The node to be inserted.
        * @since 0.9
        */
-      virtual void addChildCopy( const Tag *child );
+      virtual void addChildCopy( const Tag* child );
 
       /**
        * Sets the XML character data for this Tag.
@@ -343,7 +343,7 @@ namespace gloox
        * @param tag The Tag to remove from the list of child Tags.
        * @note The Tag @p tag is not deleted.
        */
-      void removeChild( Tag *tag );
+      void removeChild( Tag* tag );
 
       /**
        * Returns whether the Tag is considered empty, i.e. invalid.
@@ -423,7 +423,7 @@ namespace gloox
       static const std::string escape( std::string what );
 
     protected:
-      void ripoff( Tag *tag );
+      void ripoff( Tag* tag );
 
       /**
        * XPath error conditions.
@@ -507,13 +507,13 @@ namespace gloox
 
       void closePreviousToken( Tag**, Tag**, TokenType&, std::string& );
       void addToken( Tag **root, Tag **current, TokenType type, const std::string& token );
-      void addOperator( Tag **root, Tag **current, Tag *arg, TokenType type,
+      void addOperator( Tag **root, Tag **current, Tag* arg, TokenType type,
                         const std::string& token );
-      bool addPredicate( Tag **root, Tag **current, Tag *token );
+      bool addPredicate( Tag **root, Tag **current, Tag* token );
 
       TagList findChildren( const TagList& list, const std::string& name ) const;
-      Tag::TagList evaluateTagList( Tag *token );
-      Tag::TagList evaluateUnion( Tag *token );
+      Tag::TagList evaluateTagList( Tag* token );
+      Tag::TagList evaluateUnion( Tag* token );
       Tag::TagList allDescendants();
 
       static TokenType getType( const std::string& c );
@@ -521,9 +521,9 @@ namespace gloox
       static bool isWhitespace( const char c );
       bool isNumber();
 
-      bool evaluateBoolean( Tag *token );
-      bool evaluatePredicate( Tag *token ) { return evaluateBoolean( token ); }
-      bool evaluateEquals( Tag *token );
+      bool evaluateBoolean( Tag* token );
+      bool evaluatePredicate( Tag* token ) { return evaluateBoolean( token ); }
+      bool evaluateEquals( Tag* token );
 
       static void add( Tag::TagList& one, const Tag::TagList& two );
 

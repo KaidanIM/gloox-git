@@ -48,7 +48,7 @@ namespace gloox
        * @param session If this MessageHandler is used with a MessageSession, this parameter
        * holds a pointer to that MessageSession.
        */
-      virtual void handleMessage( Message* msg, MessageSession *session = 0 ) = 0;
+      virtual void handleMessage( Message* msg, MessageSession* session = 0 ) = 0;
   };
 
 }

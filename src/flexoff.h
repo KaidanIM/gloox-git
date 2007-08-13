@@ -37,7 +37,7 @@ namespace gloox
        * Creates a new FlexibleOffline object that manages retrieval of offline messages.
        * @param parent The ClientBase to use for communication.
        */
-      FlexibleOffline( ClientBase *parent );
+      FlexibleOffline( ClientBase* parent );
 
       /**
        * Virtual Destructor.
@@ -89,7 +89,7 @@ public:
        * Only one Handler at a time is possible.
        * @param foh The Handler object to register.
        */
-      void registerFlexibleOfflineHandler( FlexibleOfflineHandler *foh );
+      void registerFlexibleOfflineHandler( FlexibleOfflineHandler* foh );
 
       /**
        * Removes the registered handler.
@@ -97,13 +97,13 @@ public:
       void removeFlexibleOfflineHandler();
 
       // reimplemented from DiscoHandler
-      virtual void handleDiscoInfoResult( IQ *iq, int context );
+      virtual void handleDiscoInfoResult( IQ* iq, int context );
 
       // reimplemented from DiscoHandler
-      virtual void handleDiscoItemsResult( IQ *iq, int context );
+      virtual void handleDiscoItemsResult( IQ* iq, int context );
 
       // reimplemented from DiscoHandler
-      virtual void handleDiscoError( IQ *iq, int context );
+      virtual void handleDiscoError( IQ* iq, int context );
 
       // reimplemented from IqHandler
       virtual bool handleIq( IQ* iq );
@@ -121,8 +121,8 @@ public:
         FORemoveMsgs
       };
 
-      ClientBase *m_parent;
-      FlexibleOfflineHandler *m_flexibleOfflineHandler;
+      ClientBase* m_parent;
+      FlexibleOfflineHandler* m_flexibleOfflineHandler;
   };
 
 }

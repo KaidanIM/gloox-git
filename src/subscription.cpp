@@ -24,7 +24,7 @@ namespace gloox
   static inline const char* typeString( Subscription::S10nType type )
     { return msgTypeStringValues[type]; }
 
-  Subscription::Subscription( Tag *tag, bool rip )
+  Subscription::Subscription( Tag* tag, bool rip )
     : Stanza( tag, rip ), m_subtype( Invalid )
   {
     if( !tag || tag->name() != "presence" )
@@ -55,7 +55,7 @@ namespace gloox
 
     if( !status.empty() )
     {
-      Tag *t = new Tag( this, "status", status );
+      Tag* t = new Tag( this, "status", status );
       t->addAttribute( "xml:lang", xmllang );
     }
 

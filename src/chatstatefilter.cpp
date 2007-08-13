@@ -20,7 +20,7 @@
 namespace gloox
 {
 
-  ChatStateFilter::ChatStateFilter( MessageSession *parent )
+  ChatStateFilter::ChatStateFilter( MessageSession* parent )
     : MessageFilter( parent ), m_chatStateHandler( 0 ), m_lastSent( ChatStateGone ),
       m_enableChatStates( true )
   {
@@ -99,7 +99,7 @@ namespace gloox
     send( m );
   }
 
-  void ChatStateFilter::decorate( Tag *tag )
+  void ChatStateFilter::decorate( Tag* tag )
   {
     if( m_enableChatStates )
       new Tag( tag, "active", XMLNS, XMLNS_CHAT_STATES );

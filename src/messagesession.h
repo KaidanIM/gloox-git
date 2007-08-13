@@ -70,7 +70,7 @@ namespace gloox
    * ChatStateHandler, too. The handlers are registered with the session to receive the
    * respective events.
    * @code
-   * virtual void MyClass::handleMessageSession( MessageSession *session )
+   * virtual void MyClass::handleMessageSession( MessageSession* session )
    * {
    *   // for this example only, we delete any earlier session
    *   if( m_session )
@@ -129,7 +129,7 @@ namespace gloox
    * @code
    * MessageSession* MyClass::newSession( const JID& to )
    * {
-   *   MessageSession *session = new MessageSession( m_client, to );
+   *   MessageSession* session = new MessageSession( m_client, to );
    *   session->registerMessageHandler( this );
    *   return session;
    * }
@@ -165,7 +165,7 @@ namespace gloox
        * @param types ORed list of StanzaSubType values this MessageSession shall receive. Only the
        * StanzaMessage* types are valid. Defaults to 0 which means any type is received.
        */
-      MessageSession( ClientBase *parent, const JID& jid, bool wantUpgrade = true, int types = 0 );
+      MessageSession( ClientBase* parent, const JID& jid, bool wantUpgrade = true, int types = 0 );
 
       /**
        * Virtual destructor.
@@ -194,7 +194,7 @@ namespace gloox
        * remote contact.
        * @param mh The MessageHandler to register.
        */
-      void registerMessageHandler( MessageHandler *mh );
+      void registerMessageHandler( MessageHandler* mh );
 
       /**
        * This function clears the internal pointer to the MessageHandler and therefore
@@ -218,21 +218,21 @@ namespace gloox
        * use disposeMessageFilter().
        * @param mf The MessageFilter to add.
        */
-      void registerMessageFilter( MessageFilter *mf );
+      void registerMessageFilter( MessageFilter* mf );
 
       /**
        * Use this function to remove a MessageFilter from the MessageSession.
        * @param mf The MessageFilter to remove.
        * @note To remove and delete the MessageFilter in one step use disposeMessageFilter().
        */
-      void removeMessageFilter( MessageFilter *mf );
+      void removeMessageFilter( MessageFilter* mf );
 
       /**
        * Use this function to remove and delete a MessageFilter from the MessageSession.
        * @param mf The MessageFilter to remove and delete.
        * @note To just remove (and not delete) the MessageFilter use removeMessageFilter().
        */
-      void disposeMessageFilter( MessageFilter *mf );
+      void disposeMessageFilter( MessageFilter* mf );
 
       /**
        * Returns the message type this MessageSession wants to receive.
@@ -259,12 +259,12 @@ namespace gloox
       * Event requests are added).
       * @param tag A Tag to send.
       */
-      virtual void send( Tag *tag );
-      void decorate( Tag *tag );
+      virtual void send( Tag* tag );
+      void decorate( Tag* tag );
 
-      ClientBase *m_parent;
+      ClientBase* m_parent;
       JID m_target;
-      MessageHandler *m_messageHandler;
+      MessageHandler* m_messageHandler;
 
     private:
       void setResource( const std::string& resource );

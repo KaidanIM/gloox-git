@@ -164,7 +164,7 @@ namespace gloox
     return ret == ConnNoError;
   }
 
-  void ClientBase::handleTag( Tag *tag )
+  void ClientBase::handleTag( Tag* tag )
   {
     if( !tag )
     {
@@ -200,14 +200,14 @@ namespace gloox
       {
         if( tag->name() == "iq" )
         {
-          IQ *iq = new IQ( tag, true );
+          IQ* iq = new IQ( tag, true );
           notifyIqHandlers( iq );
           delete iq;
           ++m_stats.iqStanzasReceived;
         }
         else if( tag->name() == "message" )
         {
-          Message *msg = new Message( tag, true );
+          Message* msg = new Message( tag, true );
           notifyMessageHandlers( msg );
           delete msg;
           ++m_stats.messageStanzasReceived;
@@ -217,14 +217,14 @@ namespace gloox
           if( tag->hasAttribute( TYPE, "subscribe" ) || tag->hasAttribute( TYPE, "subscribed" )
               || tag->hasAttribute( TYPE, "unsubscribe" ) || tag->hasAttribute( TYPE, "unsubscribed" ) )
           {
-            Subscription *sub = new Subscription( tag, true );
+            Subscription* sub = new Subscription( tag, true );
             notifySubscriptionHandlers( sub );
             delete sub;
             ++m_stats.s10nStanzasReceived;
           }
           else
           {
-            Presence *pres = new Presence( tag, true );
+            Presence* pres = new Presence( tag, true );
             notifyPresenceHandlers( pres );
             delete pres;
             ++m_stats.presenceStanzasReceived;
@@ -354,7 +354,7 @@ namespace gloox
     if( m_parser && ( i = m_parser->feed( copy ) ) >= 0 )
     {
       const int len = 4 + (int)std::log10( i ? i : 1 ) + 1;
-      char *tmp = new char[len];
+      char* tmp = new char[len];
       tmp[len-1] = '\0';
       sprintf( tmp, "%d", i );
       std::string error = "parse error (at pos ";
@@ -389,7 +389,7 @@ namespace gloox
 
   void ClientBase::startTls()
   {
-    Tag *start = new Tag( "starttls" );
+    Tag* start = new Tag( "starttls" );
     start->addAttribute( XMLNS, XMLNS_STREAM_TLS );
     send( start );
   }
@@ -411,7 +411,7 @@ namespace gloox
   {
     m_selectedSaslMech = type;
 
-    Tag *a = new Tag( "auth" );
+    Tag* a = new Tag( "auth" );
     a->addAttribute( XMLNS, XMLNS_STREAM_SASL );
 
     switch( type )
@@ -429,7 +429,7 @@ namespace gloox
         else
           len = m_authzid.bare().length() + m_jid.username().length() + m_password.length() + 2;
 
-        char *tmp = (char*)malloc( len + 80 );
+        char* tmp = (char*)malloc( len + 80 );
 
         if( m_authzid.empty() )
           sprintf( tmp, "%c%s%c%s", 0, m_jid.username().c_str(), 0, m_password.c_str() );
@@ -483,7 +483,7 @@ namespace gloox
 
   void ClientBase::processSASLChallenge( const std::string& challenge )
   {
-    Tag *t = new Tag( "response" );
+    Tag* t = new Tag( "response" );
     t->addAttribute( XMLNS, XMLNS_STREAM_SASL );
 
     const std::string& decoded = Base64::decode64( challenge );
@@ -591,7 +591,7 @@ namespace gloox
     send( t );
   }
 
-  void ClientBase::processSASLError( Tag *tag )
+  void ClientBase::processSASLError( Tag* tag )
   {
     if( tag->hasChild( "aborted" ) )
       m_authError = SaslAborted;
@@ -611,7 +611,7 @@ namespace gloox
       m_authError = SaslTemporaryAuthFailure;
   }
 
-  void ClientBase::send( Tag *tag )
+  void ClientBase::send( Tag* tag )
   {
     if( !tag )
       return;
@@ -723,7 +723,7 @@ namespace gloox
     return m_logInstance;
   }
 
-  void ClientBase::setConnectionImpl( ConnectionBase *cb )
+  void ClientBase::setConnectionImpl( ConnectionBase* cb )
   {
     if( m_connection )
     {
@@ -732,7 +732,7 @@ namespace gloox
     m_connection = cb;
   }
 
-  void ClientBase::setEncryptionImpl( TLSBase *tb )
+  void ClientBase::setEncryptionImpl( TLSBase* tb )
   {
     if( m_encryption )
     {
@@ -741,7 +741,7 @@ namespace gloox
     m_encryption = tb;
   }
 
-  void ClientBase::setCompressionImpl( CompressionBase *cb )
+  void ClientBase::setCompressionImpl( CompressionBase* cb )
   {
     if( m_compression )
     {
@@ -750,7 +750,7 @@ namespace gloox
     m_compression = cb;
   }
 
-  void ClientBase::handleStreamError( Tag *tag )
+  void ClientBase::handleStreamError( Tag* tag )
   {
     StreamError err = StreamErrorUndefined;
     const Tag::TagList& c = tag->children();
@@ -830,7 +830,7 @@ namespace gloox
     return ( it != m_streamErrorText.end() ) ? (*it).second : std::string();
   }
 
-  void ClientBase::registerMessageSessionHandler( MessageSessionHandler *msh, int types )
+  void ClientBase::registerMessageSessionHandler( MessageSessionHandler* msh, int types )
   {
     if( types & Message::Chat || types == 0 )
       m_messageSessionHandlerChat = msh;
@@ -845,19 +845,19 @@ namespace gloox
       m_messageSessionHandlerHeadline = msh;
   }
 
-  void ClientBase::registerPresenceHandler( PresenceHandler *ph )
+  void ClientBase::registerPresenceHandler( PresenceHandler* ph )
   {
     if( ph )
       m_presenceHandlers.push_back( ph );
   }
 
-  void ClientBase::removePresenceHandler( PresenceHandler *ph )
+  void ClientBase::removePresenceHandler( PresenceHandler* ph )
   {
     if( ph )
       m_presenceHandlers.remove( ph );
   }
 
-  void ClientBase::registerPresenceHandler( const JID& jid, PresenceHandler *ph )
+  void ClientBase::registerPresenceHandler( const JID& jid, PresenceHandler* ph )
   {
     if( ph && !jid.empty() )
     {
@@ -868,7 +868,7 @@ namespace gloox
     }
   }
 
-  void ClientBase::removePresenceHandler( const JID& jid, PresenceHandler *ph )
+  void ClientBase::removePresenceHandler( const JID& jid, PresenceHandler* ph )
   {
     PresenceJidHandlerList::iterator t;
     PresenceJidHandlerList::iterator it = m_presenceJidHandlers.begin();
@@ -884,7 +884,7 @@ namespace gloox
     }
   }
 
-  void ClientBase::trackID( IqHandler *ih, const std::string& id, int context )
+  void ClientBase::trackID( IqHandler* ih, const std::string& id, int context )
   {
     if( ih && !id.empty() )
     {
@@ -895,7 +895,7 @@ namespace gloox
     }
   }
 
-  void ClientBase::removeIDHandler( IqHandler *ih )
+  void ClientBase::removeIDHandler( IqHandler* ih )
   {
     IqTrackMap::iterator t;
     IqTrackMap::iterator it = m_iqIDHandlers.begin();
@@ -908,7 +908,7 @@ namespace gloox
     }
   }
 
-  void ClientBase::registerIqHandler( IqHandler *ih, const std::string& xmlns )
+  void ClientBase::registerIqHandler( IqHandler* ih, const std::string& xmlns )
   {
     if( !ih || xmlns.empty() )
       return;
@@ -934,13 +934,13 @@ namespace gloox
         m_iqNSHandlers.erase( it );
   }
 
-  void ClientBase::registerMessageSession( MessageSession *session )
+  void ClientBase::registerMessageSession( MessageSession* session )
   {
     if( session )
       m_messageSessions.push_back( session );
   }
 
-  void ClientBase::disposeMessageSession( MessageSession *session )
+  void ClientBase::disposeMessageSession( MessageSession* session )
   {
     if( !session )
       return;
@@ -954,31 +954,31 @@ namespace gloox
     }
   }
 
-  void ClientBase::registerMessageHandler( MessageHandler *mh )
+  void ClientBase::registerMessageHandler( MessageHandler* mh )
   {
     if( mh )
       m_messageHandlers.push_back( mh );
   }
 
-  void ClientBase::removeMessageHandler( MessageHandler *mh )
+  void ClientBase::removeMessageHandler( MessageHandler* mh )
   {
     if( mh )
       m_messageHandlers.remove( mh );
   }
 
-  void ClientBase::registerSubscriptionHandler( SubscriptionHandler *sh )
+  void ClientBase::registerSubscriptionHandler( SubscriptionHandler* sh )
   {
     if( sh )
       m_subscriptionHandlers.push_back( sh );
   }
 
-  void ClientBase::removeSubscriptionHandler( SubscriptionHandler *sh )
+  void ClientBase::removeSubscriptionHandler( SubscriptionHandler* sh )
   {
     if( sh )
       m_subscriptionHandlers.remove( sh );
   }
 
-  void ClientBase::registerTagHandler( TagHandler *th, const std::string& tag, const std::string& xmlns )
+  void ClientBase::registerTagHandler( TagHandler* th, const std::string& tag, const std::string& xmlns )
   {
     if( th && !tag.empty() )
     {
@@ -990,7 +990,7 @@ namespace gloox
     }
   }
 
-  void ClientBase::removeTagHandler( TagHandler *th, const std::string& tag, const std::string& xmlns )
+  void ClientBase::removeTagHandler( TagHandler* th, const std::string& tag, const std::string& xmlns )
   {
     if( th )
     {
@@ -1003,7 +1003,7 @@ namespace gloox
     }
   }
 
-  void ClientBase::registerStatisticsHandler( StatisticsHandler *sh )
+  void ClientBase::registerStatisticsHandler( StatisticsHandler* sh )
   {
     if( sh )
       m_statisticsHandler = sh;
@@ -1014,7 +1014,7 @@ namespace gloox
     m_statisticsHandler = 0;
   }
 
-  void ClientBase::registerMUCInvitationHandler( MUCInvitationHandler *mih )
+  void ClientBase::registerMUCInvitationHandler( MUCInvitationHandler* mih )
   {
     if( mih )
     {
@@ -1029,13 +1029,13 @@ namespace gloox
     m_disco->removeFeature( XMLNS_MUC );
   }
 
-  void ClientBase::registerConnectionListener( ConnectionListener *cl )
+  void ClientBase::registerConnectionListener( ConnectionListener* cl )
   {
     if( cl )
       m_connectionListeners.push_back( cl );
   }
 
-  void ClientBase::removeConnectionListener( ConnectionListener *cl )
+  void ClientBase::removeConnectionListener( ConnectionListener* cl )
   {
     if( cl )
       m_connectionListeners.remove( cl );
@@ -1095,7 +1095,7 @@ namespace gloox
     }
   }
 
-  void ClientBase::notifyPresenceHandlers( Presence *pres )
+  void ClientBase::notifyPresenceHandlers( Presence* pres )
   {
     bool match = false;
     PresenceJidHandlerList::const_iterator itj = m_presenceJidHandlers.begin();
@@ -1117,7 +1117,7 @@ namespace gloox
     }
   }
 
-  void ClientBase::notifySubscriptionHandlers( Subscription *s10n )
+  void ClientBase::notifySubscriptionHandlers( Subscription* s10n )
   {
     SubscriptionHandlerList::const_iterator it = m_subscriptionHandlers.begin();
     for( ; it != m_subscriptionHandlers.end(); ++it )
@@ -1126,7 +1126,7 @@ namespace gloox
     }
   }
 
-  void ClientBase::notifyIqHandlers( IQ *iq )
+  void ClientBase::notifyIqHandlers( IQ* iq )
   {
     IqTrackMap::iterator it_id = m_iqIDHandlers.find( iq->id() );
     if( it_id != m_iqIDHandlers.end() &&
@@ -1151,22 +1151,22 @@ namespace gloox
     if( !res && ( iq->type() == StanzaIq ) &&
         ( ( iq->subtype() == IQ::Get ) || ( iq->subtype() == IQ::Set ) ) )
     {
-      Tag *re = new IQ( IQ::Error, iq->from(), iq->id() );
-      Tag *e = new Tag( re, "error", TYPE, "cancel" );
+      Tag* re = new IQ( IQ::Error, iq->from(), iq->id() );
+      Tag* e = new Tag( re, "error", TYPE, "cancel" );
       new Tag( e, "service-unavailable", XMLNS, XMLNS_XMPP_STANZAS );
       send( re );
       return;
     }
   }
 
-  void ClientBase::notifyMessageHandlers( Message *msg )
+  void ClientBase::notifyMessageHandlers( Message* msg )
   {
     if( m_mucInvitationHandler )
     {
-      Tag *x = msg->findChild( "x", XMLNS, XMLNS_MUC_USER );
+      Tag* x = msg->findChild( "x", XMLNS, XMLNS_MUC_USER );
       if( x && x->hasChild( "invite" ) )
       {
-        Tag *i = x->findChild( "invite" );
+        Tag* i = x->findChild( "invite" );
         JID invitee( i->findAttribute( "from" ) );
 
         Tag * t = i->findChild( "reason" );
@@ -1206,7 +1206,7 @@ namespace gloox
       }
     }
 
-    MessageSessionHandler *msHandler = 0;
+    MessageSessionHandler* msHandler = 0;
 
     switch( msg->subtype() )
     {
@@ -1228,7 +1228,7 @@ namespace gloox
 
     if( msHandler )
     {
-      MessageSession *session = new MessageSession( this, msg->from(), true, msg->subtype() );
+      MessageSession* session = new MessageSession( this, msg->from(), true, msg->subtype() );
       msHandler->handleMessageSession( session );
       session->handleMessage( msg );
     }
@@ -1242,7 +1242,7 @@ namespace gloox
     }
   }
 
-  void ClientBase::notifyTagHandlers( Tag *tag )
+  void ClientBase::notifyTagHandlers( Tag* tag )
   {
     TagHandlerList::const_iterator it = m_tagHandlers.begin();
     for( ; it != m_tagHandlers.end(); ++it )

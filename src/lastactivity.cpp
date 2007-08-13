@@ -23,7 +23,7 @@
 namespace gloox
 {
 
-  LastActivity::LastActivity( ClientBase *parent )
+  LastActivity::LastActivity( ClientBase* parent )
     : m_lastActivityHandler( 0 ), m_parent( parent ),
       m_active( time ( 0 ) )
   {
@@ -65,9 +65,9 @@ namespace gloox
       case IQ::Set:
       {
         IQ* t = new IQ( IQ::Error, iq->from(), iq->id() );
-        Tag *e = new Tag( t, "error" );
+        Tag* e = new Tag( t, "error" );
         e->addAttribute( TYPE, "cancel" );
-        Tag *f = new Tag( e, "feature-not-implemented" );
+        Tag* f = new Tag( e, "feature-not-implemented" );
         f->addAttribute( XMLNS, XMLNS_XMPP_STANZAS );
 
         m_parent->send( t );
@@ -90,7 +90,7 @@ namespace gloox
     {
       case IQ::Result:
       {
-        Tag *q = iq->query();
+        Tag* q = iq->query();
         if( q )
         {
           const std::string& seconds = q->findAttribute( "seconds" );

@@ -47,7 +47,7 @@ namespace gloox
    *     void handleAnnotations( const AnnotationsList &aList );
    *
    *   private:
-   *     Annotations *m_notes;
+   *     Annotations* m_notes;
    *     AnnotationsList m_list;
    * };
    *
@@ -98,7 +98,7 @@ namespace gloox
        * Constructs a new Annotations object.
        * @param parent The ClientBase to use for communication.
        */
-      Annotations( ClientBase *parent );
+      Annotations( ClientBase* parent );
 
       /**
        * Virtual destructor.
@@ -122,7 +122,7 @@ namespace gloox
        * Use this function to register a AnnotationsHandler.
        * @param ah The AnnotationsHandler which shall receive retrieved notes.
        */
-      void registerAnnotationsHandler( AnnotationsHandler *ah )
+      void registerAnnotationsHandler( AnnotationsHandler* ah )
         { m_annotationsHandler = ah; }
 
       /**
@@ -132,13 +132,13 @@ namespace gloox
         { m_annotationsHandler = 0; }
 
       // reimplemented from PrivateXMLHandler
-      virtual void handlePrivateXML( const std::string& tag, Tag *xml );
+      virtual void handlePrivateXML( const std::string& tag, Tag* xml );
 
       // reimplemented from PrivateXMLHandler
       virtual void handlePrivateXMLResult( const std::string& uid, PrivateXMLResult pxResult );
 
     private:
-      AnnotationsHandler *m_annotationsHandler;
+      AnnotationsHandler* m_annotationsHandler;
   };
 
 }

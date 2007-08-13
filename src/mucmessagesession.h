@@ -37,7 +37,7 @@ namespace gloox
        * @param parent The ClientBase to use for communication.
        * @param jid The @b bare JID of the MUC room.
        */
-      MUCMessageSession( ClientBase *parent, const JID& jid );
+      MUCMessageSession( ClientBase* parent, const JID& jid );
 
       /**
        * Virtual Destructor.

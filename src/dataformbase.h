@@ -82,7 +82,7 @@ namespace gloox
        * @param field The field to add.
        * @since 0.9
        */
-      virtual void addField( DataFormField *field ) { m_fields.push_back( field ); }
+      virtual void addField( DataFormField* field ) { m_fields.push_back( field ); }
 
       /**
        * Adds a single new Field and returns a pointer to that field.

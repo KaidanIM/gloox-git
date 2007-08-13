@@ -25,7 +25,7 @@ namespace gloox
       m_valid = true;
   }
 
-  XDelayedDelivery::XDelayedDelivery( const Tag *tag )
+  XDelayedDelivery::XDelayedDelivery( const Tag* tag )
     : StanzaExtension( ExtXDelay ), m_valid( false )
   {
     if( !tag || tag->name() != "x" || !tag->hasAttribute( XMLNS, XMLNS_X_DELAY )
@@ -47,7 +47,7 @@ namespace gloox
     if( !m_valid )
       return 0;
 
-    Tag *t = new Tag( "x" );
+    Tag* t = new Tag( "x" );
     t->addAttribute( XMLNS, XMLNS_X_DELAY );
     if( !m_from.empty() )
       t->addAttribute( "from", m_from.full() );

@@ -41,7 +41,7 @@
 namespace gloox
 {
 
-  ConnectionSOCKS5Proxy::ConnectionSOCKS5Proxy( ConnectionBase *connection, const LogSink& logInstance,
+  ConnectionSOCKS5Proxy::ConnectionSOCKS5Proxy( ConnectionBase* connection, const LogSink& logInstance,
                                                 const std::string& server, int port, bool ip )
     : ConnectionBase( 0 ), m_connection( connection ),
       m_logInstance( logInstance ), m_s5state( S5StateDisconnected ), m_ip( ip )
@@ -53,7 +53,7 @@ namespace gloox
       m_connection->registerConnectionDataHandler( this );
   }
 
-  ConnectionSOCKS5Proxy::ConnectionSOCKS5Proxy( ConnectionDataHandler *cdh, ConnectionBase *connection,
+  ConnectionSOCKS5Proxy::ConnectionSOCKS5Proxy( ConnectionDataHandler* cdh, ConnectionBase* connection,
                                                 const LogSink& logInstance,
                                                 const std::string& server, int port, bool ip )
     : ConnectionBase( cdh ), m_connection( connection ),
@@ -266,7 +266,7 @@ namespace gloox
   void ConnectionSOCKS5Proxy::negotiate()
   {
     m_s5state = S5StateNegotiating;
-    char *d = new char[m_ip ? 10 : 6 + m_server.length() + 1];
+    char* d = new char[m_ip ? 10 : 6 + m_server.length() + 1];
     int pos = 0;
     d[pos++] = 0x05; // SOCKS version 5
     d[pos++] = 0x01; // command CONNECT
@@ -345,7 +345,7 @@ namespace gloox
                          "attempting to negotiate socks5 proxy connection" );
 
       bool auth = !m_proxyUser.empty() && !m_proxyPassword.empty();
-      char *d = new char[auth ? 4 : 3];
+      char* d = new char[auth ? 4 : 3];
       d[0] = 0x05; // SOCKS version 5
       if( auth )
       {

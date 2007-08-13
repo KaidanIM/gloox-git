@@ -73,7 +73,7 @@ namespace gloox
       virtual bool handleIq( IQ* iq );
 
       // re-implemented from IqHandler
-      virtual void handleIqID( IQ *iq, int context );
+      virtual void handleIqID( IQ* iq, int context );
 
     private:
       enum TrackEnum
@@ -88,7 +88,7 @@ namespace gloox
       void closed(); // by remote entity
       void returnResult( const JID& to, const std::string& id );
 
-      ClientBase *m_clientbase;
+      ClientBase* m_clientbase;
       int m_blockSize;
       int m_sequence;
       int m_lastChunkReceived;

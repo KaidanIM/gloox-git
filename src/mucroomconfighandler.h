@@ -32,7 +32,7 @@ namespace gloox
    */
   struct MUCListItem
   {
-    JID *jid;                       /**< Pointer to the occupant's JID if available, 0 otherwise. */
+    JID* jid;                       /**< Pointer to the occupant's JID if available, 0 otherwise. */
     std::string nick;               /**< The occupant's nick in the room. */
     MUCRoomAffiliation affiliation; /**< The occupant's affiliation. */
     MUCRoomRole role;               /**< The occupant's role. */
@@ -101,7 +101,7 @@ namespace gloox
        * @param items The requestd list's items.
        * @param operation The type of the list.
        */
-      virtual void handleMUCConfigList( MUCRoom *room, const MUCListItemList& items,
+      virtual void handleMUCConfigList( MUCRoom* room, const MUCListItemList& items,
                                         MUCOperation operation ) = 0;
 
       /**
@@ -111,7 +111,7 @@ namespace gloox
        * @param room The room for which the config form arrived.
        * @param form The configuration form.
        */
-      virtual void handleMUCConfigForm( MUCRoom *room, const DataForm& form ) = 0;
+      virtual void handleMUCConfigForm( MUCRoom* room, const DataForm& form ) = 0;
 
       /**
        * This function is called in response to MUCRoom::kick(), MUCRoom::storeList(),
@@ -120,7 +120,7 @@ namespace gloox
        * @param success Whether or not the operation was successful.
        * @param operation The finished operation.
        */
-      virtual void handleMUCConfigResult( MUCRoom *room, bool success, MUCOperation operation ) = 0;
+      virtual void handleMUCConfigResult( MUCRoom* room, bool success, MUCOperation operation ) = 0;
 
       /**
        * This function is called when a Voice request or a Registration request arrive through
@@ -129,7 +129,7 @@ namespace gloox
        * @param room The room the request arrived from.
        * @param form A DataForm containing the request.
        */
-      virtual void handleMUCRequest( MUCRoom *room, const DataForm& form ) = 0;
+      virtual void handleMUCRequest( MUCRoom* room, const DataForm& form ) = 0;
 
   };
 

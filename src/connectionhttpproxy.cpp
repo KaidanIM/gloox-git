@@ -29,7 +29,7 @@
 namespace gloox
 {
 
-  ConnectionHTTPProxy::ConnectionHTTPProxy( ConnectionBase *connection, const LogSink& logInstance,
+  ConnectionHTTPProxy::ConnectionHTTPProxy( ConnectionBase* connection, const LogSink& logInstance,
                                             const std::string& server, int port )
     : ConnectionBase( 0 ), m_connection( connection ),
       m_logInstance( logInstance ), m_http11( false )
@@ -41,7 +41,7 @@ namespace gloox
       m_connection->registerConnectionDataHandler( this );
   }
 
-  ConnectionHTTPProxy::ConnectionHTTPProxy( ConnectionDataHandler *cdh, ConnectionBase *connection,
+  ConnectionHTTPProxy::ConnectionHTTPProxy( ConnectionDataHandler* cdh, ConnectionBase* connection,
                                             const LogSink& logInstance,
                                             const std::string& server, int port )
     : ConnectionBase( cdh ), m_connection( connection ),

@@ -118,7 +118,7 @@ namespace gloox
       here += strlen + NS_QFIXEDSZ;
     }
 
-    unsigned char *srv[NS_PACKETSZ];
+    unsigned char* srv[NS_PACKETSZ];
     int srvnum = 0;
     for( cnt = ntohs( hdr->ancount ); cnt>0; --cnt )
     {
@@ -158,10 +158,10 @@ namespace gloox
     bool error = false;
 
     DNS::HostMap servers;
-    DNS_RECORD *pRecord;
+    DNS_RECORD* pRecord;
     if( DnsQuery( dname.c_str(), DNS_TYPE_SRV, DNS_QUERY_STANDARD, NULL, &pRecord, NULL ) == ERROR_SUCCESS )
     {
-      DNS_RECORD *pRec = pRecord;
+      DNS_RECORD* pRec = pRecord;
       do
       {
         if( pRec->wType == DNS_TYPE_SRV )
@@ -261,7 +261,7 @@ namespace gloox
     if( fd < 0 )
       return fd;
 
-    struct hostent *h;
+    struct hostent* h;
     if( ( h = gethostbyname( domain.c_str() ) ) == 0 )
     {
       cleanup();

@@ -50,7 +50,7 @@ namespace gloox
        * jabber:iq:oob namespace.
        * @param tag The Tag to parse.
        */
-      OOB( const Tag *tag );
+      OOB( const Tag* tag );
 
       /**
        * Virtual destructor.

@@ -39,7 +39,7 @@ namespace gloox
        * @param cdh A CompressionDataHandler-derived object that will be notified
        * about finished de/compression.
        */
-      CompressionBase( CompressionDataHandler *cdh ) : m_handler( cdh ), m_valid( false ) {}
+      CompressionBase( CompressionDataHandler* cdh ) : m_handler( cdh ), m_valid( false ) {}
 
       /**
        * Virtual Destructor.
@@ -59,7 +59,7 @@ namespace gloox
       virtual void decompress( const std::string& data ) = 0;
 
     protected:
-      CompressionDataHandler *m_handler;
+      CompressionDataHandler* m_handler;
       bool m_valid;
 
   };

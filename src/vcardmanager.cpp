@@ -20,7 +20,7 @@
 namespace gloox
 {
 
-  VCardManager::VCardManager( ClientBase *parent )
+  VCardManager::VCardManager( ClientBase* parent )
     : m_parent( parent )
   {
     if( m_parent )
@@ -40,7 +40,7 @@ namespace gloox
     }
   }
 
-  void VCardManager::fetchVCard( const JID& jid, VCardHandler *vch )
+  void VCardManager::fetchVCard( const JID& jid, VCardHandler* vch )
   {
     if( !m_parent || !vch )
       return;
@@ -57,7 +57,7 @@ namespace gloox
     m_parent->send( iq );
   }
 
-  void VCardManager::cancelVCardOperations( VCardHandler *vch )
+  void VCardManager::cancelVCardOperations( VCardHandler* vch )
   {
     TrackMap::iterator t;
     TrackMap::iterator it = m_trackMap.begin();
@@ -70,7 +70,7 @@ namespace gloox
     }
   }
 
-  void VCardManager::storeVCard( const VCard *vcard, VCardHandler *vch )
+  void VCardManager::storeVCard( const VCard* vcard, VCardHandler* vch )
   {
     if( !m_parent || !vch )
       return;
@@ -102,7 +102,7 @@ namespace gloox
           {
             case VCardHandler::FetchVCard:
             {
-              Tag *v = iq->findChild( "vCard", XMLNS, XMLNS_VCARD_TEMP );
+              Tag* v = iq->findChild( "vCard", XMLNS, XMLNS_VCARD_TEMP );
               (*it).second->handleVCard( iq->from(), v ? new VCard( v ) : 0 );
               break;
             }

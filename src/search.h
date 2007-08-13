@@ -52,7 +52,7 @@ namespace gloox
        * Creates a new Search object.
        * @param parent The ClientBase to use.
        */
-      Search( ClientBase *parent );
+      Search( ClientBase* parent );
 
       /**
        * Virtual Destructor.
@@ -64,7 +64,7 @@ namespace gloox
        * @param directory The (user) directory to fetch the available/searchable fields from.
        * @param sh The SearchHandler to notify about the results.
        */
-      void fetchSearchFields( const JID& directory, SearchHandler *sh );
+      void fetchSearchFields( const JID& directory, SearchHandler* sh );
 
       /**
        * Initiates a search on the given directory, with the given data form. The given SearchHandler
@@ -73,7 +73,7 @@ namespace gloox
        * @param form The DataForm contains the phrases the user wishes to search for.
        * @param sh The SearchHandler to notify about the results.
        */
-      void search( const JID& directory, const DataForm& form, SearchHandler *sh );
+      void search( const JID& directory, const DataForm& form, SearchHandler* sh );
 
       /**
        * Initiates a search on the given directory, with the given phrases. The given SearchHandler
@@ -84,13 +84,13 @@ namespace gloox
        * @param values Contains the phrases to search for.
        * @param sh The SearchHandler to notify about the results.
        */
-      void search( const JID& directory, int fields, const SearchFieldStruct& values, SearchHandler *sh );
+      void search( const JID& directory, int fields, const SearchFieldStruct& values, SearchHandler* sh );
 
       // reimplemented from IqHandler
-      virtual bool handleIq( IQ *iq ) { (void) iq; return false; }
+      virtual bool handleIq( IQ* iq ) { (void) iq; return false; }
 
       // reimplemented from IqHandler
-      virtual void handleIqID( IQ *iq, int context );
+      virtual void handleIqID( IQ* iq, int context );
 
     protected:
       enum IdType
@@ -102,8 +102,8 @@ namespace gloox
       typedef std::map<std::string, SearchHandler*> TrackMap;
       TrackMap m_track;
 
-      ClientBase *m_parent;
-      Disco *m_disco;
+      ClientBase* m_parent;
+      Disco* m_disco;
 
   };
 

@@ -149,7 +149,7 @@ namespace gloox
         { m_handler = 0; }
 
     protected:
-      BytestreamDataHandler *m_handler;
+      BytestreamDataHandler* m_handler;
       const LogSink& m_logInstance;
       const JID m_initiator;
       const JID m_target;

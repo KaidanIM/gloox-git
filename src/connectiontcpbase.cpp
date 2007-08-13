@@ -54,7 +54,7 @@ namespace gloox
     init( server, port );
   }
 
-  ConnectionTCPBase::ConnectionTCPBase( ConnectionDataHandler *cdh, const LogSink& logInstance,
+  ConnectionTCPBase::ConnectionTCPBase( ConnectionDataHandler* cdh, const LogSink& logInstance,
                                         const std::string& server, int port )
     : ConnectionBase( cdh ),
       m_logInstance( logInstance ), m_buf( 0 ), m_socket( -1 ), m_totalBytesIn( 0 ),

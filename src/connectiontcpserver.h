@@ -44,7 +44,7 @@ namespace gloox
        * Leave this empty to listen on all local interfaces.
        * @param port The port to listen on.
        */
-      ConnectionTCPServer( ConnectionHandler *ch, const LogSink& logInstance,
+      ConnectionTCPServer( ConnectionHandler* ch, const LogSink& logInstance,
                            const std::string& ip, int port );
 
       /**

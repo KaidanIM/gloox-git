@@ -53,12 +53,12 @@
  * {
  *   public:
  *     // reimplemented from PresenceHandler
- *     virtual void handlePresence( Stanza *stanza );
+ *     virtual void handlePresence( Stanza* stanza );
  *
  *   [...]
  * };
  *
- * void MyClass::handlePresence( Stanza *stanza )
+ * void MyClass::handlePresence( Stanza* stanza )
  * {
  *   // extract further information from the stanza
  * }
@@ -68,9 +68,9 @@
  * @code
  * OtherClass::doSomething()
  * {
- *   Client *client = new Client( ... );
+ *   Client* client = new Client( ... );
  *   [...]
- *   MyClass *handler = new MyClass( ... );
+ *   MyClass* handler = new MyClass( ... );
  *   client->registerPresenceHandler( handler );
  * }
  * @endcode
@@ -120,7 +120,7 @@
  * The @link gloox::Component Component @endlink class supports this protocol and can be used to create
  * a new Jabber component. It's as simple as:
  * @code
- * Component *comp = new Component( ... );
+ * Component* comp = new Component( ... );
  * comp->connect();
  * @endcode
  *
@@ -145,7 +145,7 @@
  * void MyClass::doSomething()
  * {
  *   JID jid( "jid@server/resource" );
- *   Client *client = new Client( jid, "password" );
+ *   Client* client = new Client( jid, "password" );
  *   client->registerConnectionListener( this );
  *   client->registerPresenceHandler( this );
  *   client->connect();
@@ -161,7 +161,7 @@
  *   // examine certificate info
  * }
  *
- * void MyClass::handlePresence( Stanza *stanza )
+ * void MyClass::handlePresence( Stanza* stanza )
  * {
  *   // presence info
  * }
@@ -245,7 +245,7 @@
  * flexibility in Privacy List handling.
  *
  * @code
- * PrivacyManager *p = new PrivacyManager( ... );
+ * PrivacyManager* p = new PrivacyManager( ... );
  * [...]
  * PrivacyListHandler::PrivacyList list;
  * PrivacyItem item( PrivacyItem::TypeJid, PrivacyItem::ActionDeny,

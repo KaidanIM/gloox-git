@@ -34,7 +34,7 @@ namespace gloox
   static inline const char * showString( Presence::PresenceType type )
   { return msgShowStringValues[type]; }
 
-  Presence::Presence( Tag *tag, bool rip )
+  Presence::Presence( Tag* tag, bool rip )
     : Stanza( tag, rip ), m_subtype( Invalid ), m_priority( 0 )
   {
     if( !tag || tag->name() != "presence" )
@@ -71,7 +71,7 @@ namespace gloox
       }
       else
       {
-        StanzaExtension *se = StanzaExtensionFactory::create( (*it) );
+        StanzaExtension* se = StanzaExtensionFactory::create( (*it) );
         if( se )
           m_extensionList.push_back( se );
       }
@@ -91,7 +91,7 @@ namespace gloox
 
     if( !status.empty() )
     {
-      Tag *t = new Tag( this, "status", status );
+      Tag* t = new Tag( this, "status", status );
       t->addAttribute( "xml:lang", xmllang );
     }
 

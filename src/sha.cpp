@@ -80,7 +80,7 @@ namespace gloox
     }
   }
 
-  void SHA::feed( const unsigned char *data, unsigned length )
+  void SHA::feed( const unsigned char* data, unsigned length )
   {
     if( !length )
       return;

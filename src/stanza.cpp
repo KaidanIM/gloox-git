@@ -34,7 +34,7 @@ namespace gloox
       addAttribute( "from", m_from.full() );
   }
 
-  Stanza::Stanza( Tag *tag, bool rip )
+  Stanza::Stanza( Tag* tag, bool rip )
     : Tag( tag->name(), tag->cdata() ),
       m_stanzaError( StanzaErrorUndefined ), m_stanzaErrorType( StanzaErrorTypeUndefined ),
       m_stanzaErrorAppCondition( 0 ), m_xmllang( "default" )
@@ -73,7 +73,7 @@ namespace gloox
 //
 //     if( hasAttribute( TYPE, "error" ) && hasChild( "error" ) )
 //     {
-//       Tag *e = findChild( "error" );
+//       Tag* e = findChild( "error" );
 //
 //       if( e->hasAttribute( TYPE, "cancel" ) )
 //         m_stanzaErrorType = StanzaErrorTypeCancel;
@@ -149,13 +149,13 @@ namespace gloox
 //     }
 //   }
 
-  void Stanza::addExtension( StanzaExtension *se )
+  void Stanza::addExtension( StanzaExtension* se )
   {
     m_extensionList.push_back( se );
     addChild( se->tag() );
   }
 
-  void Stanza::setLang( StringMap& map, const Tag *tag )
+  void Stanza::setLang( StringMap& map, const Tag* tag )
   {
     const std::string& lang = tag->findAttribute( "xml:lang" );
     map[ lang.empty() ? "default" : lang ] = tag->cdata();

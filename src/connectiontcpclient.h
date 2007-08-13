@@ -56,7 +56,7 @@ namespace gloox
        * @param port The port to connect to. The default of -1 means that SRV records will be used
        * to find out about the actual host:port.
        */
-      ConnectionTCPClient( ConnectionDataHandler *cdh, const LogSink& logInstance,
+      ConnectionTCPClient( ConnectionDataHandler* cdh, const LogSink& logInstance,
                            const std::string& server, int port = -1 );
 
       /**

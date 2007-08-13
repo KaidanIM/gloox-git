@@ -41,7 +41,7 @@ namespace gloox
        * later using registerMUCRoomHandler(). However, without one, MUC is no joy.
        * @note To subsequently configure the room, use MUCRoom::registerMUCRoomConfigHandler().
        */
-      InstantMUCRoom( ClientBase *parent, const JID& nick, MUCRoomHandler *mrh );
+      InstantMUCRoom( ClientBase* parent, const JID& nick, MUCRoomHandler* mrh );
 
       /**
        * Virtual Destructor.

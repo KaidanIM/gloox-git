@@ -19,7 +19,7 @@
 namespace gloox
 {
 
-  Annotations::Annotations( ClientBase *parent )
+  Annotations::Annotations( ClientBase* parent )
     : PrivateXML( parent ),
       m_annotationsHandler( 0 )
   {
@@ -31,13 +31,13 @@ namespace gloox
 
   void Annotations::storeAnnotations( const AnnotationsList& aList )
   {
-    Tag *s = new Tag( "storage" );
+    Tag* s = new Tag( "storage" );
     s->addAttribute( XMLNS, XMLNS_ANNOTATIONS );
 
     AnnotationsList::const_iterator it = aList.begin();
     for( ; it != aList.end(); ++it )
     {
-      Tag *n = new Tag( s, "note", (*it).note );
+      Tag* n = new Tag( s, "note", (*it).note );
       n->addAttribute( "jid", (*it).jid );
       n->addAttribute( "cdate", (*it).cdate );
       n->addAttribute( "mdate", (*it).mdate );
@@ -51,7 +51,7 @@ namespace gloox
     requestXML( "storage", XMLNS_ANNOTATIONS, this );
   }
 
-  void Annotations::handlePrivateXML( const std::string& /*tag*/, Tag *xml )
+  void Annotations::handlePrivateXML( const std::string& /*tag*/, Tag* xml )
   {
     AnnotationsList aList;
     const Tag::TagList& l = xml->children();

@@ -84,7 +84,7 @@ namespace gloox
     if( m_type == FormTypeInvalid )
       return 0;
 
-    Tag *x = new Tag( "x", XMLNS, XMLNS_X_DATA );
+    Tag* x = new Tag( "x", XMLNS, XMLNS_X_DATA );
     x->addAttribute( TYPE, util::lookup( m_type, dfTypeValues ) );
     if( !m_title.empty() )
       new Tag( x, "title", m_title );
@@ -96,14 +96,14 @@ namespace gloox
     FieldList::const_iterator it = m_fields.begin();
     for( ; it != m_fields.end(); ++it )
     {
-      DataFormItem *i = dynamic_cast<DataFormItem*>( (*it) );
+      DataFormItem* i = dynamic_cast<DataFormItem*>( (*it) );
       if( i )
       {
         x->addChild( i->tag() );
         continue;
       }
 
-      DataFormReported *r = dynamic_cast<DataFormReported*>( (*it) );
+      DataFormReported* r = dynamic_cast<DataFormReported*>( (*it) );
       if( r )
       {
         x->addChild( r->tag() );

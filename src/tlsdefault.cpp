@@ -38,7 +38,7 @@
 namespace gloox
 {
 
-  TLSDefault::TLSDefault( TLSHandler *th, const std::string server, Type type )
+  TLSDefault::TLSDefault( TLSHandler* th, const std::string server, Type type )
     : TLSBase( th, server ), m_impl( 0 )
   {
     switch( type )

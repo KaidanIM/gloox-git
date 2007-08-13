@@ -21,7 +21,7 @@
 namespace gloox
 {
 
-  GnuTLSBase::GnuTLSBase( TLSHandler *th, const std::string& server )
+  GnuTLSBase::GnuTLSBase( TLSHandler* th, const std::string& server )
     : TLSBase( th, server ), m_session( new gnutls_session_t ), m_buf( 0 ), m_bufsize( 17000 )
   {
     m_buf = (char*)calloc( m_bufsize + 1, sizeof( char ) );
@@ -129,7 +129,7 @@ namespace gloox
     return true;
   }
 
-  ssize_t GnuTLSBase::pullFunc( void *data, size_t len )
+  ssize_t GnuTLSBase::pullFunc( void* data, size_t len )
   {
     ssize_t cpy = ( len > m_recvBuffer.length() ) ? ( m_recvBuffer.length() ) : ( len );
     if( cpy > 0 )
@@ -145,12 +145,12 @@ namespace gloox
     }
   }
 
-  ssize_t GnuTLSBase::pullFunc( gnutls_transport_ptr_t ptr, void *data, size_t len )
+  ssize_t GnuTLSBase::pullFunc( gnutls_transport_ptr_t ptr, void* data, size_t len )
   {
     return static_cast<GnuTLSBase*>( ptr )->pullFunc( data, len );
   }
 
-  ssize_t GnuTLSBase::pushFunc( const void *data, size_t len )
+  ssize_t GnuTLSBase::pushFunc( const void* data, size_t len )
   {
     if( m_handler )
       m_handler->handleEncryptedData( this, std::string( (const char*)data, len ) );
@@ -158,7 +158,7 @@ namespace gloox
     return len;
   }
 
-  ssize_t GnuTLSBase::pushFunc( gnutls_transport_ptr_t ptr, const void *data, size_t len )
+  ssize_t GnuTLSBase::pushFunc( gnutls_transport_ptr_t ptr, const void* data, size_t len )
   {
     return static_cast<GnuTLSBase*>( ptr )->pushFunc( data, len );
   }

@@ -137,7 +137,7 @@ namespace gloox
     if( it != m_track.end() )
       return false;
 
-    Tag *si = iq->findChild( "si", XMLNS, XMLNS_SI );
+    Tag* si = iq->findChild( "si", XMLNS, XMLNS_SI );
     if( si && si->hasAttribute( "profile" ) )
     {
       const std::string& profile = si->findAttribute( "profile" );

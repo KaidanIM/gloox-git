@@ -50,7 +50,7 @@ namespace gloox
        * @param tag The Tag to parse.
        * @param rip Whether to rip off the tag.
        */
-      Subscription( Tag *tag, bool rip = false );
+      Subscription( Tag* tag, bool rip = false );
 
       /**
        * Creates a Subscription request.

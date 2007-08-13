@@ -38,7 +38,7 @@ namespace gloox
        * Constructs a new Parser object.
        * @param ph The object to send incoming Tags to.
        */
-      Parser( TagHandler *ph );
+      Parser( TagHandler* ph );
 
       /**
        * Virtual destructor.
@@ -96,14 +96,14 @@ namespace gloox
       void cleanup();
       bool isWhitespace( unsigned char c );
       bool isValid( unsigned char c );
-      void streamEvent( Tag *tag );
+      void streamEvent( Tag* tag );
       ForwardScanState forwardScan( std::string::size_type& pos, const std::string& data,
                                     const std::string& needle );
       DecodeState decode( std::string::size_type& pos, const std::string& data );
 
-      TagHandler *m_tagHandler;
-      Tag *m_current;
-      Tag *m_root;
+      TagHandler* m_tagHandler;
+      Tag* m_current;
+      Tag* m_root;
 
       ParserInternalState m_state;
       Tag::AttributeList m_attribs;

@@ -23,7 +23,7 @@ namespace gloox
     "chat", "error", "groupchat", "headline", "normal"
   };
 
-  Message::Message( Tag *tag, bool rip )
+  Message::Message( Tag* tag, bool rip )
     : Stanza( tag, rip ), m_subtype( Invalid ), m_bodies(0), m_subjects(0)
   {
     if( !tag || tag->name() != "message" )
@@ -78,7 +78,7 @@ namespace gloox
       }
       else
       {
-        StanzaExtension *se = StanzaExtensionFactory::create( (*it) );
+        StanzaExtension* se = StanzaExtensionFactory::create( (*it) );
         if( se )
           m_extensionList.push_back( se );
       }
@@ -94,13 +94,13 @@ namespace gloox
 
     if( !body.empty() )
     {
-      Tag *t = new Tag( this, "body", body );
+      Tag* t = new Tag( this, "body", body );
       t->addAttribute( "xml:lang", xmllang );
     }
 
     if( !subject.empty() )
     {
-      Tag *t = new Tag( this, "subject", subject );
+      Tag* t = new Tag( this, "subject", subject );
       t->addAttribute( "xml:lang", xmllang );
     }
 

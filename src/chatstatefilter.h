@@ -44,7 +44,7 @@ namespace gloox
        * Contstructs a new Chat State filter for a MessageSession.
        * @param parent The MessageSession to decorate.
        */
-      ChatStateFilter( MessageSession *parent );
+      ChatStateFilter( MessageSession* parent );
 
       /**
        * Virtual destructor.
@@ -68,7 +68,7 @@ namespace gloox
        * to XEP-0085.
        * @param csh The ChatStateHandler to register.
        */
-      void registerChatStateHandler( ChatStateHandler *csh )
+      void registerChatStateHandler( ChatStateHandler* csh )
         { m_chatStateHandler = csh; }
 
       /**
@@ -80,13 +80,13 @@ namespace gloox
         { m_chatStateHandler = 0; }
 
       // reimplemented from MessageFilter
-      virtual void decorate( Tag *tag );
+      virtual void decorate( Tag* tag );
 
       // reimplemented from MessageFilter
       virtual void filter( Message* msg );
 
     protected:
-      ChatStateHandler *m_chatStateHandler;
+      ChatStateHandler* m_chatStateHandler;
       ChatStateType m_lastSent;
       bool m_enableChatStates;
 

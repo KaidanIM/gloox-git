@@ -49,7 +49,7 @@ namespace gloox
        * @param th The TLSHandler to handle TLS-related events.
        * @param server The server to use in certificate verification.
        */
-      GnuTLSClient( TLSHandler *th, const std::string& server );
+      GnuTLSClient( TLSHandler* th, const std::string& server );
 
       /**
        * Virtual destructor.

@@ -45,7 +45,7 @@ namespace gloox
        * Contructor.
        * @param cdh The CompressionDataHandler to receive de/compressed data.
        */
-      CompressionZlib( CompressionDataHandler *cdh );
+      CompressionZlib( CompressionDataHandler* cdh );
 
       /**
        * Virtual Destructor.

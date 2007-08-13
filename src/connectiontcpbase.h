@@ -57,7 +57,7 @@ namespace gloox
        * @param port The port to connect to. The default of -1 means that SRV records will be used
        * to find out about the actual host:port.
        */
-      ConnectionTCPBase( ConnectionDataHandler *cdh, const LogSink& logInstance,
+      ConnectionTCPBase( ConnectionDataHandler* cdh, const LogSink& logInstance,
                          const std::string& server, int port = -1 );
 
       /**
@@ -105,7 +105,7 @@ namespace gloox
       Mutex m_sendMutex;
       Mutex m_recvMutex;
 
-      char *m_buf;
+      char* m_buf;
       int m_socket;
       int m_totalBytesIn;
       int m_totalBytesOut;

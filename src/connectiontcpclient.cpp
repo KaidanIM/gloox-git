@@ -48,7 +48,7 @@ namespace gloox
   {
   }
 
-  ConnectionTCPClient::ConnectionTCPClient( ConnectionDataHandler *cdh, const LogSink& logInstance,
+  ConnectionTCPClient::ConnectionTCPClient( ConnectionDataHandler* cdh, const LogSink& logInstance,
                                             const std::string& server, int port )
     : ConnectionTCPBase( cdh, logInstance, server, port )
   {

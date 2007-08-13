@@ -232,7 +232,7 @@ namespace gloox
        * it after sending it, use Tag::clone() to create a deep copy.
        * @param tag The Tag to send.
        */
-      virtual void send( Tag *tag );
+      virtual void send( Tag* tag );
 
       /**
        * Returns whether authentication has taken place and was successful.
@@ -274,7 +274,7 @@ namespace gloox
        * @param cb The connection to use.
        * @since 0.9
        */
-      void setConnectionImpl( ConnectionBase *cb );
+      void setConnectionImpl( ConnectionBase* cb );
 
       /**
        * This function returns the concrete encryption implementation currently in use.
@@ -290,7 +290,7 @@ namespace gloox
        * @param tb The encryption implementation to use.
        * @since 0.9
        */
-      void setEncryptionImpl( TLSBase *tb );
+      void setEncryptionImpl( TLSBase* tb );
 
       /**
        * This function returns the concrete compression implementation currently in use.
@@ -306,7 +306,7 @@ namespace gloox
        * @param cb The compression implementation to use.
        * @since 0.9
        */
-      void setCompressionImpl( CompressionBase *cb );
+      void setCompressionImpl( CompressionBase* cb );
 
       /**
        * Sends a whitespace ping to the server.
@@ -347,7 +347,7 @@ namespace gloox
        * Registers @c cl as object that receives connection notifications.
        * @param cl The object to receive connection notifications.
        */
-      void registerConnectionListener( ConnectionListener *cl );
+      void registerConnectionListener( ConnectionListener* cl );
 
       /**
        * Registers @c ih as object that receives Iq stanza notifications for namespace
@@ -355,7 +355,7 @@ namespace gloox
        * @param ih The object to receive Iq stanza notifications.
        * @param xmlns The namespace the object handles.
        */
-      void registerIqHandler( IqHandler *ih, const std::string& xmlns );
+      void registerIqHandler( IqHandler* ih, const std::string& xmlns );
 
       /**
        * Use this function to be notified of incoming IQ stanzas with the given value of the @b id
@@ -365,7 +365,7 @@ namespace gloox
        * @param id The id to track.
        * @param context A value that allows for restoring context.
        */
-      void trackID( IqHandler *ih, const std::string& id, int context );
+      void trackID( IqHandler* ih, const std::string& id, int context );
 
       /**
        * Removes the given IqHandler from the list of handlers of pending operations, added
@@ -374,19 +374,19 @@ namespace gloox
        * @param ih The IqHandler to remove.
        * @since 0.8.7
        */
-      void removeIDHandler( IqHandler *ih );
+      void removeIDHandler( IqHandler* ih );
 
       /**
        * Registers @c mh as object that receives Message stanza notifications.
        * @param mh The object to receive Message stanza notifications.
        */
-      void registerMessageHandler( MessageHandler *mh );
+      void registerMessageHandler( MessageHandler* mh );
 
       /**
        * Removes the given object from the list of message handlers.
        * @param mh The object to remove from the list.
        */
-      void removeMessageHandler( MessageHandler *mh );
+      void removeMessageHandler( MessageHandler* mh );
 
       /**
        * Registers the given MessageSession to receive Messages incoming from the session's
@@ -397,19 +397,19 @@ namespace gloox
        * @note Since a MessageSession automatically registers itself with the ClientBase, there is no
        * need to call this function directly.
        */
-      void registerMessageSession( MessageSession *session );
+      void registerMessageSession( MessageSession* session );
 
       /**
        * Removes the given MessageSession from the  list of MessageSessions and deletes it.
        * @param session The MessageSession to be deleted.
        */
-      void disposeMessageSession( MessageSession *session );
+      void disposeMessageSession( MessageSession* session );
 
       /**
        * Registers @c ph as object that receives Presence stanza notifications.
        * @param ph The object to receive Presence stanza notifications.
        */
-      void registerPresenceHandler( PresenceHandler *ph );
+      void registerPresenceHandler( PresenceHandler* ph );
 
       /**
        * Registers a new PresenceHandler for the given JID. Presences received for this
@@ -420,13 +420,13 @@ namespace gloox
        * @param ph The PresenceHandler to inform about presence changes from @c jid.
        * @since 0.9
        */
-      void registerPresenceHandler( const JID& jid, PresenceHandler *ph );
+      void registerPresenceHandler( const JID& jid, PresenceHandler* ph );
 
       /**
        * Registers @c sh as object that receives Subscription stanza notifications.
        * @param sh The object to receive Subscription stanza notifications.
        */
-      void registerSubscriptionHandler( SubscriptionHandler *sh );
+      void registerSubscriptionHandler( SubscriptionHandler* sh );
 
       /**
        * Registers @c th as object that receives incoming packts with a given root tag
@@ -435,7 +435,7 @@ namespace gloox
        * @param tag The element's name.
        * @param xmlns The element's namespace.
        */
-      void registerTagHandler( TagHandler *th, const std::string& tag,
+      void registerTagHandler( TagHandler* th, const std::string& tag,
                                                const std::string& xmlns );
 
       /**
@@ -444,13 +444,13 @@ namespace gloox
        * Only one StatisticsHandler per ClientBase at a time is possible.
        * @param sh The StatisticsHandler to register.
        */
-      void registerStatisticsHandler( StatisticsHandler *sh );
+      void registerStatisticsHandler( StatisticsHandler* sh );
 
       /**
        * Removes the given object from the list of connection listeners.
        * @param cl The object to remove from the list.
        */
-      void removeConnectionListener( ConnectionListener *cl );
+      void removeConnectionListener( ConnectionListener* cl );
 
       /**
        * Removes the given IQ handler for the given namespace.
@@ -464,7 +464,7 @@ namespace gloox
        * Removes the given object from the list of presence handlers.
        * @param ph The object to remove from the list.
        */
-      void removePresenceHandler( PresenceHandler *ph );
+      void removePresenceHandler( PresenceHandler* ph );
 
       /**
        * Removes the given object from the list of presence handlers for the given JID.
@@ -472,13 +472,13 @@ namespace gloox
        * @param ph The PresenceHandler to remove from the list. If @c ph is 0,
        * all handlers for the given JID will be removed.
        */
-      void removePresenceHandler( const JID& jid, PresenceHandler *ph );
+      void removePresenceHandler( const JID& jid, PresenceHandler* ph );
 
       /**
        * Removes the given object from the list of subscription handlers.
        * @param sh The object to remove from the list.
        */
-      void removeSubscriptionHandler( SubscriptionHandler *sh );
+      void removeSubscriptionHandler( SubscriptionHandler* sh );
 
       /**
        * Removes the given object from the list of tag handlers for the given element and namespace.
@@ -486,7 +486,7 @@ namespace gloox
        * @param tag The element to remove the handler for.
        * @param xmlns The namespace qualifying the element.
        */
-      void removeTagHandler( TagHandler *th, const std::string& tag,
+      void removeTagHandler( TagHandler* th, const std::string& tag,
                                              const std::string& xmlns );
 
       /**
@@ -524,7 +524,7 @@ namespace gloox
        * @param types ORed StanzaSubType's that describe the desired message types the handler
        * shall receive. Only StanzaMessage* types are valid. A value of 0 means any type (default).
        */
-      void registerMessageSessionHandler( MessageSessionHandler *msh, int types = 0 );
+      void registerMessageSessionHandler( MessageSessionHandler* msh, int types = 0 );
 
       /**
        * Returns the LogSink instance for this ClientBase and all related objects.
@@ -584,7 +584,7 @@ namespace gloox
        * Registers a MUCInvitationHandler with the ClientBase.
        * @param mih The MUCInvitationHandler to register.
        */
-      void registerMUCInvitationHandler( MUCInvitationHandler *mih );
+      void registerMUCInvitationHandler( MUCInvitationHandler* mih );
 
       /**
        * Removes the currently registered MUCInvitationHandler.
@@ -592,7 +592,7 @@ namespace gloox
       void removeMUCInvitationHandler();
 
       // reimplemented from ParserHandler
-      virtual void handleTag( Tag *tag );
+      virtual void handleTag( Tag* tag );
 
       // reimplemented from CompressionDataHandler
       virtual void handleCompressedData( const std::string& data );
@@ -610,13 +610,13 @@ namespace gloox
       virtual void handleDisconnect( const ConnectionBase* connection, ConnectionError reason );
 
       // reimplemented from TLSHandler
-      virtual void handleEncryptedData( const TLSBase *base, const std::string& data );
+      virtual void handleEncryptedData( const TLSBase* base, const std::string& data );
 
       // reimplemented from TLSHandler
-      virtual void handleDecryptedData( const TLSBase *base, const std::string& data );
+      virtual void handleDecryptedData( const TLSBase* base, const std::string& data );
 
       // reimplemented from TLSHandler
-      virtual void handleHandshakeResult( const TLSBase *base, bool success, CertInfo &certinfo );
+      virtual void handleHandshakeResult( const TLSBase* base, bool success, CertInfo &certinfo );
 
     protected:
       void notifyOnResourceBindError( ResourceBindError error );
@@ -638,10 +638,10 @@ namespace gloox
 
       JID m_jid;
       JID m_authzid;
-      ConnectionBase *m_connection;
-      TLSBase *m_encryption;
-      CompressionBase *m_compression;
-      Disco *m_disco;
+      ConnectionBase* m_connection;
+      TLSBase* m_encryption;
+      CompressionBase* m_compression;
+      Disco* m_disco;
 
       std::string m_clientCerts;
       std::string m_clientKey;
@@ -663,39 +663,39 @@ namespace gloox
 
     private:
       virtual void handleStartNode() = 0;
-      virtual bool handleNormalNode( Tag *tag ) = 0;
+      virtual bool handleNormalNode( Tag* tag ) = 0;
       virtual void rosterFilled() = 0;
       virtual void cleanup() {}
       void parse( const std::string& data );
       void init();
-      void handleStreamError( Tag *tag );
+      void handleStreamError( Tag* tag );
       TLSBase* getDefaultEncryption();
       CompressionBase* getDefaultCompression();
 
-      void notifyIqHandlers( IQ *iq );
-      void notifyMessageHandlers( Message *msg );
-      void notifyPresenceHandlers( Presence *presence );
-      void notifySubscriptionHandlers( Subscription *s10n );
-      void notifyTagHandlers( Tag *tag );
+      void notifyIqHandlers( IQ* iq );
+      void notifyMessageHandlers( Message* msg );
+      void notifyPresenceHandlers( Presence* presence );
+      void notifySubscriptionHandlers( Subscription* s10n );
+      void notifyTagHandlers( Tag* tag );
       void notifyOnDisconnect( ConnectionError e );
       void send( const std::string& xml );
 
       struct TrackStruct
       {
-        IqHandler *ih;
+        IqHandler* ih;
         int context;
       };
 
       struct TagHandlerStruct
       {
-        TagHandler *th;
+        TagHandler* th;
         std::string xmlns;
         std::string tag;
       };
 
       struct JidPresHandlerStruct
       {
-        JID *jid;
+        JID* jid;
         PresenceHandler* ph;
       };
 
@@ -720,21 +720,21 @@ namespace gloox
       SubscriptionHandlerList  m_subscriptionHandlers;
       TagHandlerList           m_tagHandlers;
       StringList               m_cacerts;
-      StatisticsHandler       *m_statisticsHandler;
-      MUCInvitationHandler    *m_mucInvitationHandler;
-      MessageSessionHandler   *m_messageSessionHandlerChat;
-      MessageSessionHandler   *m_messageSessionHandlerGroupchat;
-      MessageSessionHandler   *m_messageSessionHandlerHeadline;
-      MessageSessionHandler   *m_messageSessionHandlerNormal;
+      StatisticsHandler      * m_statisticsHandler;
+      MUCInvitationHandler   * m_mucInvitationHandler;
+      MessageSessionHandler  * m_messageSessionHandlerChat;
+      MessageSessionHandler  * m_messageSessionHandlerGroupchat;
+      MessageSessionHandler  * m_messageSessionHandlerHeadline;
+      MessageSessionHandler  * m_messageSessionHandlerNormal;
 
-      Parser *m_parser;
+      Parser* m_parser;
       LogSink m_logInstance;
 
       AuthenticationError m_authError;
       StreamError m_streamError;
       StringMap m_streamErrorText;
       std::string m_streamErrorCData;
-      Tag *m_streamErrorAppCondition;
+      Tag* m_streamErrorAppCondition;
 
       StatisticsStruct m_stats;
 
