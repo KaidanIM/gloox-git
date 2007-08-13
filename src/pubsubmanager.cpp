@@ -78,7 +78,7 @@ namespace gloox
      */
     static PubSubFeature featureType( const std::string& str )
     {
-      static const char * values [] = {
+      static const char* values [] = {
         "collections",
         "config-node",
         "create-and-configure",
@@ -114,7 +114,7 @@ namespace gloox
       return static_cast< PubSubFeature >( util::lookup2( str, values ) );
     }
 
-    Manager::Manager( ClientBase *parent )
+    Manager::Manager( ClientBase* parent )
       : m_parent(parent)
     {
       m_parent->disco()->registerDiscoHandler( this );
@@ -122,7 +122,7 @@ namespace gloox
     }
 
     void Manager::discoverInfos( const JID& service, const std::string& node,
-                                 PubSub::DiscoHandler *handler )
+                                 PubSub::DiscoHandler* handler )
     {
       if( !m_parent || !handler )
         return;
@@ -133,7 +133,7 @@ namespace gloox
     }
 
     void Manager::discoverNodeItems( const JID& service, const std::string& nodeid,
-                                     PubSub::DiscoHandler *handler )
+                                     PubSub::DiscoHandler* handler )
     {
       if( !m_parent || !handler )
         return;
@@ -142,10 +142,10 @@ namespace gloox
       m_parent->disco()->getDiscoItems( service, nodeid, this, DiscoNodeItems, id );
     }
 
-    void Manager::handleDiscoInfoResult( IQ * iq, int context )
+    void Manager::handleDiscoInfoResult( IQ* iq, int context )
     {
-      const Tag * query = iq->query();
-      const Tag * identity = query->findChild( "identity" );
+      const Tag* query = iq->query();
+      const Tag* identity = query->findChild( "identity" );
       if( !identity )
         return; // ejabberd...
       const JID& service = iq->from();
@@ -186,16 +186,14 @@ namespace gloox
         }
         case DiscoNodeInfos:
         {
-          Tag * df = query->findChild( "x" );
-          const std::string& node = query->findAttribute( "node" );
-
           NodeType nodeType = NodeInvalid;
           if( type == "collection" )
             nodeType = NodeCollection;
           else if( type == "leaf" )
             nodeType = NodeLeaf;
 
-          const DataForm dataform( df );
+          const std::string& node = query->findAttribute( "node" );
+          const DataForm dataform( query->findChild( "x" ) );
           (*ith).second->handleNodeInfos( service, node, nodeType, &dataform );
           break;
         }
@@ -203,7 +201,7 @@ namespace gloox
       m_discoHandlerTrackMap.erase( ith );
     }
 
-    void Manager::handleDiscoItemsResult( IQ *iq, int )
+    void Manager::handleDiscoItemsResult( IQ* iq, int )
     {
       DiscoHandlerTrackMap::iterator ith = m_discoHandlerTrackMap.find( iq->id() );
       if( ith == m_discoHandlerTrackMap.end() )
@@ -227,15 +225,15 @@ namespace gloox
       m_discoHandlerTrackMap.erase( ith );
     }
 
-    void Manager::handleDiscoError( IQ *iq, int context )
+    void Manager::handleDiscoError( IQ* iq, int context )
     {
       DiscoHandlerTrackMap::iterator ith = m_discoHandlerTrackMap.find( iq->id() );
       if( ith == m_discoHandlerTrackMap.end() )
         return;
 
       const JID& service = iq->from();
-      const Tag *query = iq->query();
-      const Error * error ;//= stanza->getExtension( ExtError );
+      const Tag* query = iq->query();
+      const Error* error = 0;//= stanza->getExtension( ExtError );
 
       switch( context )
       {
@@ -261,7 +259,7 @@ namespace gloox
       m_discoHandlerTrackMap.erase( ith );
     }
 
-    static const char * subscriptionValues[] = {
+    static const char* subscriptionValues[] = {
       "none", "subscribed", "pending", "unconfigured"
     };
 
@@ -270,7 +268,7 @@ namespace gloox
       return (SubscriptionType)util::lookup( subscription, subscriptionValues );
     }
 
-    static const char * affiliationValues[] = {
+    static const char* affiliationValues[] = {
       "none", "publisher", "owner", "outcast"
     };
 
@@ -292,7 +290,7 @@ namespace gloox
 
     static EventType eventType( const std::string& event )
     {
-      static const char * values[] = {
+      static const char* values[] = {
         "collection",
         "configuration",
         "delete",
@@ -303,9 +301,9 @@ namespace gloox
       return (EventType)util::lookup( event, values );
     }
 
-    void Manager::handleMessage( Message* msg, MessageSession * )
+    void Manager::handleMessage( Message* msg, MessageSession* )
     {
-      Tag * event = msg->findChild( "event", XMLNS, XMLNS_PUBSUB_EVENT );
+      const Tag* event = msg->findChild( "event", XMLNS, XMLNS_PUBSUB_EVENT );
       if( !event || m_eventHandlerList.empty() )
         return;
 
@@ -326,16 +324,14 @@ namespace gloox
           {
             case EventCollection:
             {
-              Tag * nodet = (*it)->findChild( "node" );
-              Tag * df = (*it)->findChild( "x" );
-              DataForm form( df );
+              const Tag* nodet = (*it)->findChild( "node" );
+              const DataForm form( (*it)->findChild( "x" ) );
               (*ith)->handleNodeCreation( service, node, form );
               break;
             }
             case EventConfigure:
             {
-              Tag * df = (*it)->findChild( "x" );
-              DataForm form( df );
+              const DataForm form( (*it)->findChild( "x" ) );
               (*ith)->handleConfigurationChange( service, node, form );
               break;
             }
@@ -358,7 +354,7 @@ namespace gloox
             {
               const std::string& jid  = (*it)->findAttribute( "jid" );
               const std::string& sub  = (*it)->findAttribute( "subscription" );
-              const Tag * body = event->findChild( "body" );
+              const Tag* body = event->findChild( "body" );
               (*ith)->handleSubscriptionChange( service, jid, node,
                                                   body ? body->cdata() : std::string(),
                                                   subscriptionType( sub ) );
@@ -372,15 +368,15 @@ namespace gloox
     void Manager::subscriptionOptions( const JID& service,
                                        const JID& jid,
                                        const std::string& node,
-                                       NodeHandler * handler,
-                                       const DataForm *df )
+                                       NodeHandler* handler,
+                                       const DataForm* df )
     {
       if( !m_parent || !handler )
         return;
 
       const std::string& id = m_parent->getID();
       IQ* iq = new IQ( IQ::Get, service, id, XMLNS_PUBSUB, "pubsub" );
-      Tag *options = new Tag( iq->query(), "options", "node", node );
+      Tag* options = new Tag( iq->query(), "options", "node", node );
       options->addAttribute( "jid", jid.empty() ? m_parent->jid().bare() : jid.bare() );
       if( df )
         options->addChild( df->tag() );
@@ -390,7 +386,7 @@ namespace gloox
       m_parent->send( iq );
     }
 
-    void Manager::requestSubscriptionList( const JID& service, ServiceHandler * handler )
+    void Manager::requestSubscriptionList( const JID& service, ServiceHandler* handler )
     {
       if( !m_parent || !handler )
         return;
@@ -404,7 +400,7 @@ namespace gloox
       m_parent->send( iq );
     }
 
-    void Manager::requestAffiliationList( const JID& service, ServiceHandler * handler )
+    void Manager::requestAffiliationList( const JID& service, ServiceHandler* handler )
     {
       if( !m_parent || !handler  )
         return;
@@ -420,7 +416,7 @@ namespace gloox
 
     void Manager::subscribe( const JID& service,
                              const std::string& node,
-                             NodeHandler * handler,
+                             NodeHandler* handler,
                              const JID& jid,
                              SubscriptionObject type,
                              int depth )
@@ -436,7 +432,7 @@ namespace gloox
 
       if( type != SubscriptionNodes || depth != 1 )
       {
-        Tag * options = new Tag( ps, "options" );
+        Tag* options = new Tag( ps, "options" );
         DataForm df( DataForm::FormTypeSubmit );
         df.addField( DataFormField::FieldTypeHidden, "FORM_TYPE", XMLNS_PUBSUB_SUBSCRIBE_OPTIONS );
 
@@ -445,7 +441,7 @@ namespace gloox
 
         if( depth != 1 )
         {
-          DataFormField * field = df.addField( DataFormField::FieldTypeNone, "pubsub#subscription_depth" );
+          DataFormField* field = df.addField( DataFormField::FieldTypeNone, "pubsub#subscription_depth" );
           if( depth == 0 )
             field->setValue( "all" );
           //else
@@ -462,7 +458,7 @@ namespace gloox
 
     void Manager::unsubscribe( const JID& service,
                                const std::string& node,
-                               NodeHandler * handler,
+                               NodeHandler* handler,
                                const JID& jid )
     {
       if( !m_parent || !handler )
@@ -471,7 +467,7 @@ namespace gloox
       const std::string& id = m_parent->getID();
       const std::string& ujid = jid.empty() ? m_parent->jid().full() : jid.full();
       IQ* iq = new IQ( IQ::Set, service, id, XMLNS_PUBSUB, "pubsub" );
-      Tag *sub = new Tag( iq->query(), "unsubscribe", "node", node );
+      Tag* sub = new Tag( iq->query(), "unsubscribe", "node", node );
       sub->addAttribute( "jid", ujid );
 
       m_parent->trackID( this, id, Unsubscription );
@@ -481,7 +477,7 @@ namespace gloox
     }
 
     void Manager::publishItem( const JID& service, const std::string& node,
-                               Tag * item, ItemHandler* handler )
+                               Tag* item, ItemHandler* handler )
     {
       if( !m_parent || !handler )
       {
@@ -509,7 +505,7 @@ namespace gloox
 
       const std::string& id = m_parent->getID();
       IQ* iq = new IQ( IQ::Set, service, id, XMLNS_PUBSUB, "pubsub" );
-      Tag * retract = new Tag( iq->query(), "retract", "node", node );
+      Tag* retract = new Tag( iq->query(), "retract", "node", node );
       new Tag( retract, "item", "id", item );
 
       m_parent->trackID( this, id, DeleteItem );
@@ -525,9 +521,9 @@ namespace gloox
                               const std::string& name,
                               const std::string& parent,
                               AccessModel access,
-                              const StringMap * config )
+                              const StringMap* config )
     {
-      static const char * accessValues[] = {
+      static const char* accessValues[] = {
         "open",
         "presence",
         "roster",
@@ -591,7 +587,7 @@ namespace gloox
       m_parent->send( iq );
     }
 
-    void Manager::getDefaultNodeConfig( const JID& service, NodeType type, ServiceHandler * handler )
+    void Manager::getDefaultNodeConfig( const JID& service, NodeType type, ServiceHandler* handler )
     {
       const std::string& id = m_parent->getID();
       IQ* iq = new IQ( IQ::Set, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
@@ -610,14 +606,14 @@ namespace gloox
     }
 
     void Manager::nodeConfig( const JID& service, const std::string& node,
-                              const DataForm * config, NodeHandler * handler )
+                              const DataForm* config, NodeHandler* handler )
     {
       if( !m_parent )
         return;
 
       const std::string& id = m_parent->getID();
       IQ* iq = new IQ( config ? IQ::Set : IQ::Get, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
-      Tag *sub = new Tag( iq->query(), "configure", "node", node );
+      Tag* sub = new Tag( iq->query(), "configure", "node", node );
       if( config )
         sub->addChild( config->tag() );
 
@@ -628,18 +624,18 @@ namespace gloox
 
     void Manager::subscriberList( const JID& service,
                                   const std::string& node,
-                                  const SubscriberList * list,
-                                  NodeHandler * handler )
+                                  const SubscriberList* list,
+                                  NodeHandler* handler )
     {
       if( !m_parent || !handler )
         return;
 
       const std::string& id = m_parent->getID();
       IQ* iq = new IQ( list ? IQ::Set : IQ::Get, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
-      Tag *sub = new Tag( iq->query(), "subscriptions", "node", node );
+      Tag* sub = new Tag( iq->query(), "subscriptions", "node", node );
       if( list )
       {
-        Tag * s;
+        Tag* s;
         SubscriberList::const_iterator it = list->begin();
         for( ; it != list->end(); ++it )
         {
@@ -658,18 +654,18 @@ namespace gloox
 
     void Manager::affiliateList( const JID& service,
                                  const std::string& node,
-                                 const AffiliateList * list,
-                                 NodeHandler * handler )
+                                 const AffiliateList* list,
+                                 NodeHandler* handler )
     {
       if( !m_parent || !handler )
         return;
 
       const std::string& id = m_parent->getID();
       IQ* iq = new IQ( list ? IQ::Set : IQ::Get, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
-      Tag *aff = new Tag( iq->query(), "affiliations", "node", node );
+      Tag* aff = new Tag( iq->query(), "affiliations", "node", node );
       if( list )
       {
-        Tag * a;
+        Tag* a;
         AffiliateList::const_iterator it = list->begin();
         for( ; it != list->end(); ++it )
         {
@@ -686,7 +682,7 @@ namespace gloox
 
     void Manager::requestItems( const JID& service,
                                 const std::string& nodeid,
-                                ItemHandler * handler )
+                                ItemHandler* handler )
     {
       if( !m_parent || !handler )
         return;
@@ -701,7 +697,7 @@ namespace gloox
     }
 
     void Manager::purgeNodeItems( const JID& service, const std::string& node,
-                                                      NodeHandler * handler  )
+                                                      NodeHandler* handler  )
     {
       const std::string& id = m_parent->getID();
       IQ* iq = new IQ( IQ::Set, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
@@ -720,7 +716,7 @@ namespace gloox
     void Manager::handleIqID( IQ* iq, int context )
     {
       const JID& service = iq->from();
-      const Tag * query = iq->query();
+      const Tag* query = iq->query();
       const std::string& id = iq->id();
 
       switch( iq->subtype() )
@@ -735,7 +731,7 @@ namespace gloox
               if( ith == m_nodeHandlerTrackMap.end() )
                 return;
 
-              Tag *s = query->findChild( "subscription" );
+              const Tag* s = query->findChild( "subscription" );
               if( s )
               {
                 const std::string& node = s->findAttribute( "node" ),
@@ -778,7 +774,7 @@ namespace gloox
               if( ith == m_serviceHandlerTrackMap.end() )
                 return;
 
-              Tag *subscription = query->findChild( "subscriptions" );
+              const Tag* subscription = query->findChild( "subscriptions" );
               if( subscription )
               {
                 SubscriptionMap subMap;
@@ -801,7 +797,7 @@ namespace gloox
               if( ith != m_serviceHandlerTrackMap.end() )
                 return;
 
-              Tag *affiliations = query->findChild( "affiliations" );
+              const Tag* affiliations = query->findChild( "affiliations" );
               if( affiliations )
               {
                 AffiliationMap affMap;
@@ -834,9 +830,8 @@ namespace gloox
               {
                 case RequestSubscriptionOptions:
                 {
-                  Tag *options = query->findChild( "options" );
-                  Tag * x = options->findChild( "x" );
-                  const DataForm df( x );
+                  const Tag* options = query->findChild( "options" );
+                  const DataForm df( options->findChild( "x" ) );
                   (*ith).second->handleSubscriptionOptions( iq->from(),
                                          JID( options->findAttribute( "jid" ) ),
                                          options->findAttribute( "node" ), &df );
@@ -848,7 +843,7 @@ namespace gloox
                   if( ith == m_nodeHandlerTrackMap.end() )
                     return;
 
-                  Tag * subt = query->findChild( "subscriptions" );                  
+                  const Tag* subt = query->findChild( "subscriptions" );                  
                   SubscriberList list;
                   const Tag::TagList& subs = subt->children();
                   Tag::TagList::const_iterator it = subs.begin();
@@ -918,10 +913,10 @@ namespace gloox
                 }
                 case RequestNodeConfig:
                 {
-                  Tag *ps = iq->findChild( "pubsub", XMLNS, XMLNS_PUBSUB );
-                  Tag *options = ps->findChild( "configure" );
-                  Tag * x = options->findChild( "x" );
-                  const DataForm * df = x ? new DataForm( x ) : 0;
+                  const Tag* ps = iq->findChild( "pubsub", XMLNS, XMLNS_PUBSUB );
+                  const Tag* options = ps->findChild( "configure" );
+                  const Tag* x = options->findChild( "x" );
+                  const DataForm* df = x ? new DataForm( x ) : 0;
                   const std::string& node = options->findAttribute("node");
                   (*ith).second->handleNodeConfig( service, node, df );
                   if( df )
@@ -941,7 +936,7 @@ namespace gloox
               if( ith == m_itemHandlerTrackMap.end() )
                 return;
 
-              Tag *items = query->findChild( "items" );
+              const Tag* items = query->findChild( "items" );
               if( items )
               {
                 const std::string& node = items->findAttribute( "node" );
@@ -993,7 +988,7 @@ namespace gloox
               if( ith == m_serviceHandlerTrackMap.end() )
                 return;
 
-              const Tag *deflt = query->findChild( "default" );
+              const Tag* deflt = query->findChild( "default" );
               if( deflt )
               {
                 const DataForm df( deflt->findChild( "x" ) );
@@ -1017,7 +1012,7 @@ namespace gloox
               if( ith == m_nodeHandlerTrackMap.end() )
                 return;
 
-              Tag *sub = query->findChild( "subscribe" );
+              const Tag* sub = query->findChild( "subscribe" );
               if( sub )
               {
                 const std::string& node = sub->findAttribute( "node" ),
@@ -1036,7 +1031,7 @@ namespace gloox
               if( ith == m_nodeHandlerTrackMap.end() )
                 return;
 
-              Tag *unsub = query->findChild( "unsubscribe" );
+              const Tag* unsub = query->findChild( "unsubscribe" );
               if( unsub )
               {
                 const std::string& node = unsub->findAttribute( "node" ),
@@ -1075,7 +1070,7 @@ namespace gloox
               if( ith == m_nodeHandlerTrackMap.end() )
                 return;
 
-              Tag * options = query->findChild( "options" );
+              const Tag* options = query->findChild( "options" );
               if( options )
               {
                 const std::string& node = options->findAttribute( "node" );
@@ -1093,7 +1088,7 @@ namespace gloox
               if( ith == m_nodeHandlerTrackMap.end() )
                 return;
 
-              Tag * options = query->findChild( "options" );
+              const Tag* options = query->findChild( "options" );
               if( options )
               {
                 const std::string& node = options->findAttribute( "node" );
@@ -1111,7 +1106,7 @@ namespace gloox
               if( ith == m_nodeHandlerTrackMap.end() )
                 return;
 
-              Tag * configure = query->findChild( "configure" );
+              const Tag* configure = query->findChild( "configure" );
               if( configure )
               {
                 const std::string& node = configure->findAttribute( "node" );
@@ -1127,7 +1122,7 @@ namespace gloox
               if( ith == m_nodeHandlerTrackMap.end() )
                 return;
 
-              Tag * configure = query->findChild( "configure" );
+              const Tag* configure = query->findChild( "configure" );
               if( configure )
               {
                 const std::string& node = configure->findAttribute( "node" );
@@ -1143,7 +1138,7 @@ namespace gloox
               if( ith == m_itemHandlerTrackMap.end() )
                 return;
 
-              Tag * items = query->findChild( "items" );
+              const Tag* items = query->findChild( "items" );
               if( items )
               {
                 const std::string& node = items->findAttribute( "node" );
@@ -1160,10 +1155,10 @@ namespace gloox
               if( ith == m_itemHandlerTrackMap.end() )
                 return;
 
-              Tag * publish = query->findChild( "publish" );
+              const Tag* publish = query->findChild( "publish" );
               if( publish )
               {
-                Tag * item = publish->findChild( "item" );
+                const Tag* item = publish->findChild( "item" );
                 if( item )
                 {
                   const std::string& node = publish->findAttribute( "node" );
@@ -1181,10 +1176,10 @@ namespace gloox
               if( ith == m_itemHandlerTrackMap.end() )
                 return;
  
-              Tag * retract = query->findChild( "retract" );
+              const Tag* retract = query->findChild( "retract" );
               if( retract )
               {
-                Tag * item = retract->findChild( "item" );
+                const Tag* item = retract->findChild( "item" );
                 if( item )
                 {
                   const std::string& node = retract->findAttribute( "node" );
@@ -1202,7 +1197,7 @@ namespace gloox
               if( ith == m_nodeHandlerTrackMap.end() )
                 return;
 
-              Tag * purge = query->findChild( "purge" );
+              const Tag* purge = query->findChild( "purge" );
               if( purge )
               {
                 const std::string& node = purge->findAttribute( "node" );
@@ -1218,7 +1213,7 @@ namespace gloox
               if( ith == m_nodeHandlerTrackMap.end() )
                 return;
 
-              Tag * create = query->findChild( "create" );
+              const Tag* create = query->findChild( "create" );
               if( create )
               {
                 const std::string& node = create->findAttribute( "node" );
@@ -1234,7 +1229,7 @@ namespace gloox
               if( ith == m_nodeHandlerTrackMap.end() )
                 return;
 
-              Tag * del = query->findChild( "delete" );
+              const Tag* del = query->findChild( "delete" );
               if( del )
               {
                 const std::string& node = del->findAttribute( "node" );
@@ -1250,7 +1245,7 @@ namespace gloox
               if( ith == m_serviceHandlerTrackMap.end() )
                 return;
 
-              const Tag *deflt = query->findChild( "default" );
+              const Tag* deflt = query->findChild( "default" );
               if( deflt )
                 (*ith).second->handleDefaultNodeConfig( service, 0, &error );
 
