@@ -75,7 +75,7 @@ namespace gloox
          */
         virtual void handleNodeCreationResult( const JID& service,
                                                const std::string& node,
-                                               const Error * e = 0 ) = 0;
+                                               const Error* e = 0 ) = 0;
 
         /**
          * Receives the result of a node removal request.
@@ -84,7 +84,7 @@ namespace gloox
          */
         virtual void handleNodeDeletationResult( const JID& service,
                                                  const std::string& node,
-                                                 const Error * e = 0 ) = 0;
+                                                 const Error* e = 0 ) = 0;
 
         /**
          * Receives the result of a node purge request.
@@ -93,7 +93,7 @@ namespace gloox
          */
         virtual void handleNodePurgeResult( const JID& service,
                                             const std::string& node,
-                                            const Error * e = 0 ) = 0;
+                                            const Error* e = 0 ) = 0;
 
         /**
          * Receives the subscription results. In case a problem occured, the
@@ -111,7 +111,7 @@ namespace gloox
                                                const std::string& sid,
                                                const JID& jid,
                                                const SubscriptionType subType,
-                                               const Error * error = 0 ) = 0;
+                                               const Error* error = 0 ) = 0;
 
         /**
          * Receives the unsubscription results. In case a problem occured, the
@@ -126,7 +126,7 @@ namespace gloox
                                                  const std::string& nodeID,
                                                  const std::string& sid,
                                                  const JID& jid,
-                                                 const Error * error = 0 ) = 0;
+                                                 const Error* error = 0 ) = 0;
 
         /**
          * Receives the configuration form of a node.
@@ -138,8 +138,8 @@ namespace gloox
         virtual void handleSubscriptionOptions( const JID& service,
                                                 const JID& jid,
                                                 const std::string& node,
-                                                const DataForm * options,
-                                                const Error * error = 0 ) = 0;
+                                                const DataForm* options,
+                                                const Error* error = 0 ) = 0;
 
         /**
          * Receives the configuration form of a node.
@@ -151,7 +151,7 @@ namespace gloox
         virtual void handleSubscriptionOptionsResult( const JID& service,
                                                       const JID& jid,
                                                       const std::string& node,
-                                                      const Error * error = 0 ) = 0;
+                                                      const Error* error = 0 ) = 0;
 
         /**
          * Receives the list of subscribers to a node.
@@ -161,8 +161,8 @@ namespace gloox
          */
         virtual void handleSubscriberList( const JID& service,
                                            const std::string& node,
-                                           const SubscriberList * list,
-                                           const Error * error = 0 ) = 0;
+                                           const SubscriberList* list,
+                                           const Error* error = 0 ) = 0;
 
         /**
          * Handle the affiliate list for a specific node.
@@ -172,8 +172,8 @@ namespace gloox
          */
         virtual void handleAffiliateList( const JID& service,
                                           const std::string& node,
-                                          const AffiliateList * list,
-                                          const Error * error = 0 ) = 0;
+                                          const AffiliateList* list,
+                                          const Error* error = 0 ) = 0;
 
         /**
          * Receives the list of subscribers to a node.
@@ -183,7 +183,7 @@ namespace gloox
          */
         virtual void handleSubscriberListResult( const JID& service,
                                                  const std::string& node,
-                                                 const Error * error = 0 ) = 0;
+                                                 const Error* error = 0 ) = 0;
 
         /**
          * Handle the affiliate list for a specific node.
@@ -193,7 +193,7 @@ namespace gloox
          */
         virtual void handleAffiliateListResult( const JID& service,
                                                 const std::string& node,
-                                                const Error * error = 0 ) = 0;
+                                                const Error* error = 0 ) = 0;
 
         /**
          * Handle the configuration for a specific node.
@@ -203,8 +203,8 @@ namespace gloox
          */
         virtual void handleNodeConfig( const JID& service,
                                        const std::string& node,
-                                       const DataForm * config,
-                                       const Error * error = 0 ) = 0;
+                                       const DataForm* config,
+                                       const Error* error = 0 ) = 0;
 
         /**
          * Handle the configuration modification for a specific node.
@@ -214,7 +214,7 @@ namespace gloox
          */
         virtual void handleNodeConfigResult( const JID& service,
                                              const std::string& node,
-                                             const Error * error = 0 ) = 0;
+                                             const Error* error = 0 ) = 0;
 
     };
 

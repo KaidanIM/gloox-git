@@ -48,7 +48,7 @@ namespace gloox
          */
         virtual void handleServiceInfos( const JID& service,
                                          int features,
-                                         const Error * error = 0 ) = 0;
+                                         const Error* error = 0 ) = 0;
 
         /**
          * Receives results for a PubSub node info query. Either one of df or
@@ -64,8 +64,8 @@ namespace gloox
         virtual void handleNodeInfos( const JID& service,
                                       const std::string& node,
                                       const NodeType nodeType,
-                                      const DataForm * df,
-                                      const Error * error = 0 ) = 0;
+                                      const DataForm* df,
+                                      const Error* error = 0 ) = 0;
 
         /**
          * Receives results for a PubSub item query. Either one of the children
@@ -79,8 +79,8 @@ namespace gloox
          */
         virtual void handleNodeItems( const JID& service,
                                       const std::string& parent,
-                                      const DiscoNodeItemList * children,
-                                      const Error * error = 0 ) = 0;
+                                      const DiscoNodeItemList* children,
+                                      const Error* error = 0 ) = 0;
 
     };
 

@@ -48,7 +48,7 @@ namespace gloox
          */
         virtual void handleItem( const JID& service,
                                  const std::string& node,
-                                 const Tag * entry ) = 0;
+                                 const Tag* entry ) = 0;
 
         /**
          * Receives the list of Items for a node. Either one of the item list or the
@@ -60,20 +60,20 @@ namespace gloox
          */
         virtual void handleItemList( const JID& service,
                                      const std::string& node,
-                                     const Tag::TagList * itemList,
-                                     const Error * error = 0 ) = 0;
+                                     const Tag::TagList* itemList,
+                                     const Error* error = 0 ) = 0;
 
 
         virtual void handleItemPublication( const JID& service,
                                             const std::string& node,
                                             const std::string& item,
-                                            const Error * error = 0 ) = 0;
+                                            const Error* error = 0 ) = 0;
 
 
         virtual void handleItemDeletation(  const JID& service,
                                             const std::string& node,
                                             const std::string& item,
-                                            const Error * error = 0 ) = 0;
+                                            const Error* error = 0 ) = 0;
 
 
     };
