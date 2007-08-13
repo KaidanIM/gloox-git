@@ -67,7 +67,7 @@ namespace gloox
         virtual void handleItemPublication( const JID& service,
                                             const std::string& node,
                                             const std::string& item,
-                                            const Tag * entry ) = 0;
+                                            const Tag* entry ) = 0;
 
         /**
          * Receives notifications item removals.
