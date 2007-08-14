@@ -10,7 +10,6 @@ v0.9.4 -- 14 Aug 2007
 - DataFormBase: added addField( DataFormFieldType, ... )
 - DataFormField: added addOption( string, string )
 - MUCRoom: fix potential crash in dtor
-- Buildsystem: disabled implicit build of tests and examples; use 'make test' and 'make examples'
 - SHA: fix potential crash in hex()
 - MUCRoom: fix detection of nick changes
 - UniqueMUCRoom: fix creation of unique room names
