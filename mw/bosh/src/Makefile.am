@@ -10,22 +10,22 @@ AM_CPPFLAGS = -Wall -pedantic -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare
 
 lib_LTLIBRARIES = libgloox.la
 
-libgloox_la_SOURCES = jid.cpp parser.cpp connectiontcpclient.cpp clientbase.cpp tag.cpp stanza.cpp logsink.cpp \
-                        dns.cpp prep.cpp base64.cpp client.cpp component.cpp \
-                        disco.cpp adhoc.cpp privatexml.cpp registration.cpp \
-                        nonsaslauth.cpp rosteritem.cpp rostermanager.cpp privacyitem.cpp \
-                        bookmarkstorage.cpp annotations.cpp privacymanager.cpp lastactivity.cpp \
-                        flexoff.cpp dataform.cpp dataformfield.cpp dataformbase.cpp messagesession.cpp \
-                        messageeventfilter.cpp chatstatefilter.cpp gloox.cpp \
-                        inbandbytestream.cpp inbandbytestreammanager.cpp messagefilter.cpp vcard.cpp \
-                        vcardmanager.cpp md5.cpp sha.cpp search.cpp dataformreported.cpp dataformitem.cpp \
-                        mucroom.cpp mucmessagesession.cpp oob.cpp vcardupdate.cpp stanzaextensionfactory.cpp \
-                        delayeddelivery.cpp xdelayeddelivery.cpp gpgencrypted.cpp gpgsigned.cpp \
-                        uniquemucroom.cpp instantmucroom.cpp compressionzlib.cpp tlsgnutlsclient.cpp \
-                        tlsopenssl.cpp connectionhttpproxy.cpp tlsgnutlsserveranon.cpp tlsgnutlsbase.cpp \
-                        tlsgnutlsclientanon.cpp tlsschannel.cpp tlsdefault.cpp simanager.cpp siprofileft.cpp \
-                        mutex.cpp connectionsocks5proxy.cpp socks5bytestreammanager.cpp socks5bytestream.cpp \
-                        connectiontcpbase.cpp connectiontcpserver.cpp socks5bytestreamserver.cpp connectionbosh.cpp
+libgloox_la_SOURCES = adhoc.cpp annotations.cpp base64.cpp bookmarkstorage.cpp \
+	chatstatefilter.cpp client.cpp clientbase.cpp component.cpp compressionzlib.cpp \
+	connectionbosh.cpp connectionhttpproxy.cpp connectionsocks5proxy.cpp connectiontcpbase.cpp \
+	connectiontcpclient.cpp connectiontcpserver.cpp connectiontls.cpp dataform.cpp dataformbase.cpp \
+	dataformfield.cpp dataformitem.cpp dataformreported.cpp delayeddelivery.cpp disco.cpp \
+	dns.cpp flexoff.cpp gloox.cpp gpgencrypted.cpp gpgsigned.cpp \
+	inbandbytestream.cpp inbandbytestreammanager.cpp instantmucroom.cpp jid.cpp lastactivity.cpp \
+	logsink.cpp md5.cpp messageeventfilter.cpp messagefilter.cpp messagesession.cpp \
+	mucmessagesession.cpp mucroom.cpp mutex.cpp nonsaslauth.cpp oob.cpp parser.cpp prep.cpp \
+	privacyitem.cpp privacymanager.cpp privatexml.cpp registration.cpp rosteritem.cpp \
+	rostermanager.cpp search.cpp sha.cpp simanager.cpp siprofileft.cpp socks5bytestream.cpp \
+	socks5bytestreammanager.cpp socks5bytestreamserver.cpp stanza.cpp stanzaextensionfactory.cpp \
+	tag.cpp tlsdefault.cpp tlsgnutlsbase.cpp tlsgnutlsclient.cpp \
+	tlsgnutlsclientanon.cpp tlsgnutlsserveranon.cpp tlsopenssl.cpp tlsschannel.cpp \
+	uniquemucroom.cpp vcard.cpp vcardmanager.cpp vcardupdate.cpp xdelayeddelivery.cpp \
+	connectiontls.cpp
 
 libgloox_la_LDFLAGS = -version-info 7:0:0 -no-undefined -no-allow-shlib-undefined
 libgloox_la_LIBADD =
@@ -67,11 +67,12 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             socks5bytestreammanager.h connectionsocks5proxy.h socks5bytestreamdatahandler.h \
                             socks5bytestreamhandler.h socks5bytestream.h      socks5bytestreamserver.h \
                             mutex.h                   mutexguard.h            connectiontcpbase.h \
-                            connectiontcpserver.h     connectionhandler.h     connectionbosh.h
+                            connectiontcpserver.h     connectionhandler.h     connectionbosh.h \
+                            connectiontls.h
 
-noinst_HEADERS = prep.h dns.h nonsaslauth.h mucmessagesession.h stanzaextensionfactory.h tlsgnutlsclient.h \
-                   tlsgnutlsbase.h tlsgnutlsclientanon.h tlsgnutlsserveranon.h tlsopenssl.h tlsschannel.h \
-                   compressionzlib.h
+noinst_HEADERS = compressionzlib.h connectiontls.h dns.h mucmessagesession.h \
+	nonsaslauth.h prep.h stanzaextensionfactory.h tlsgnutlsbase.h tlsgnutlsclient.h \
+	tlsgnutlsclientanon.h tlsgnutlsserveranon.h tlsopenssl.h tlsschannel.h
 
 EXTRA_DIST = version.rc
 
