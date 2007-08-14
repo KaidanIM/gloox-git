@@ -24,8 +24,7 @@ libgloox_la_SOURCES = adhoc.cpp annotations.cpp base64.cpp bookmarkstorage.cpp \
 	socks5bytestreammanager.cpp socks5bytestreamserver.cpp stanza.cpp stanzaextensionfactory.cpp \
 	tag.cpp tlsdefault.cpp tlsgnutlsbase.cpp tlsgnutlsclient.cpp \
 	tlsgnutlsclientanon.cpp tlsgnutlsserveranon.cpp tlsopenssl.cpp tlsschannel.cpp \
-	uniquemucroom.cpp vcard.cpp vcardmanager.cpp vcardupdate.cpp xdelayeddelivery.cpp \
-	connectiontls.cpp
+	uniquemucroom.cpp vcard.cpp vcardmanager.cpp vcardupdate.cpp xdelayeddelivery.cpp
 
 libgloox_la_LDFLAGS = -version-info 7:0:0 -no-undefined -no-allow-shlib-undefined
 libgloox_la_LIBADD =
@@ -67,8 +66,7 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             socks5bytestreammanager.h connectionsocks5proxy.h socks5bytestreamdatahandler.h \
                             socks5bytestreamhandler.h socks5bytestream.h      socks5bytestreamserver.h \
                             mutex.h                   mutexguard.h            connectiontcpbase.h \
-                            connectiontcpserver.h     connectionhandler.h     connectionbosh.h \
-                            connectiontls.h
+                            connectiontcpserver.h     connectionhandler.h     connectionbosh.h
 
 noinst_HEADERS = compressionzlib.h connectiontls.h dns.h mucmessagesession.h \
 	nonsaslauth.h prep.h stanzaextensionfactory.h tlsgnutlsbase.h tlsgnutlsclient.h \

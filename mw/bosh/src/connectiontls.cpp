@@ -40,10 +40,7 @@ ConnectionError ConnectionTLS::connect()
 	{
 		m_state = StateConnecting;
 		m_log.log(LogLevelDebug, LogAreaClassConnectionTLS, "Beginning TLS handshake....");
-		m_tls->handshake();
-		while(m_state == StateConnecting)
-			recv(200); // Receive data until handshake complete
-		m_log.log(LogLevelDebug, LogAreaClassConnectionTLS, "Handshake complete.");
+		m_tls->handshake(); // Initiate handshake
 	}
 	return e;
 }
