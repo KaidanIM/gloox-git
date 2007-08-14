@@ -36,7 +36,7 @@ namespace gloox
     m_values.push_back( value );
   }
 
-  DataFormField::DataFormField( Tag* tag )
+  DataFormField::DataFormField( const Tag* tag )
     : m_type( FieldTypeInvalid ), m_required( false )
   {
     if( !tag )
