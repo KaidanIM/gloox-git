@@ -144,28 +144,34 @@ namespace gloox
 	void ConnectionBOSH::disconnect()
 	{
 		if ( (m_connMode == ModePipelining && m_activeConnections.empty()) || (m_connectionPool.empty() && m_activeConnections.empty()) )
-				return;
-
-		m_rid++;
-		
-		std::ostringstream requestBody;
-
-		requestBody << "<body ";
-		requestBody << "rid='" << m_rid << "' ";
-		requestBody << "sid='" << m_sid << "' ";
-		requestBody << "type='terminal' ";
-		requestBody << "xml:lang='en' ";
-		requestBody << "xmlns='http://jabber.org/protocol/httpbind'";
-		if ( m_sendBuffer.empty() ) // Make sure that any data in the send buffer gets sent
-			requestBody << "/>";
+			return;
+		if(m_state != StateDisconnected)
+		{
+			m_rid++;
+			
+			std::ostringstream requestBody;
+	
+			requestBody << "<body ";
+			requestBody << "rid='" << m_rid << "' ";
+			requestBody << "sid='" << m_sid << "' ";
+			requestBody << "type='terminal' ";
+			requestBody << "xml:lang='en' ";
+			requestBody << "xmlns='http://jabber.org/protocol/httpbind'";
+			if ( m_sendBuffer.empty() ) // Make sure that any data in the send buffer gets sent
+				requestBody << "/>";
+			else
+			{
+				requestBody << ">" << m_sendBuffer << "</body>";
+				m_sendBuffer = "";
+			}
+			sendRequest(requestBody.str(), true);
+	
+			m_logInstance.log ( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh disconnection request sent" );
+		}
 		else
 		{
-			requestBody << ">" << m_sendBuffer << "</body>";
-			m_sendBuffer = "";
+			m_logInstance.log ( LogLevelError, LogAreaClassConnectionBOSH, "disconnecting from server in a non-graceful fashion" );
 		}
-		sendRequest(requestBody.str(), true);
-
-		m_logInstance.log ( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh disconnection request sent" );
 		
 		for ( uint i = 0; i < m_activeConnections.size(); i++ )
 		{
@@ -236,17 +242,17 @@ namespace gloox
 		{
 			if ( m_connMode == ModePipelining && m_activeConnections.empty())
 			{
-				m_logInstance.log ( LogLevelDebug, LogAreaClassConnectionBOSH, "Pipelining selected, but no connection open.");
+				m_logInstance.log ( LogLevelWarning, LogAreaClassConnectionBOSH, "Pipelining selected, but no connection open.");
 				return false;
 			}
 			else if ( m_connectionPool.empty() && m_activeConnections.empty() )		
 			{
-				m_logInstance.log ( LogLevelDebug, LogAreaClassConnectionBOSH, "No available connections to send on...");
+				m_logInstance.log ( LogLevelWarning, LogAreaClassConnectionBOSH, "No available connections to send on...");
 				return false;
 			}
 			else if(m_openRequests > 0 && m_openRequests >= m_maxOpenRequests)
 			{
-				m_logInstance.log ( LogLevelDebug, LogAreaClassConnectionBOSH, "sendRequest() called, but impossible to send (too many requests open)");
+				m_logInstance.log ( LogLevelWarning, LogAreaClassConnectionBOSH, "impossible to send request (too many requests already open)");
 				return false;
 			}
 		}
@@ -446,9 +452,22 @@ namespace gloox
 
 	void ConnectionBOSH::getStatistics ( int &totalIn, int &totalOut )
 	{
-		// TODO...
-		if ( !m_activeConnections.empty() )
-			m_activeConnections.back()->getStatistics ( totalIn, totalOut );
+		if(!(m_activeConnections.empty() && m_connectionPool.empty()))
+		{
+			int tmpTotalIn, tmpTotalOut;
+			totalIn = totalOut = 0;
+			for ( uint i = 0; i < m_activeConnections.size(); i++ )
+			{
+				m_activeConnections[i]->getStatistics(tmpTotalIn, tmpTotalOut);
+				totalIn += tmpTotalIn; totalOut += tmpTotalOut;
+			}
+			
+			for ( uint i = 0; i < m_connectionPool.size(); i++ )
+			{
+				m_connectionPool[i]->getStatistics(tmpTotalIn, tmpTotalOut);
+				totalIn += tmpTotalIn; totalOut += tmpTotalOut;
+			}
+		}
 		else
 		{
 			totalIn = 0;
@@ -469,8 +488,18 @@ namespace gloox
 				m_bufferHeader = m_buffer.substr ( 0, headerLength );
 				m_buffer = m_buffer.substr ( headerLength + 4 ); // Remove header from m_buffer, and \r\n\r\n
 				m_bufferContentLength = atol ( GetHTTPField ( "Content-Length" ).c_str() );
-				if(m_connMode != ModeLegacyHTTP && GetHTTPField("Connection") == "close") // TODO || m_bufferHeader.substr( ) == "HTTP/1.0"
+				std::string statusCode = m_bufferHeader.substr(9, 3);
+				
+				if(statusCode != "200")
 				{
+					m_logInstance.log ( LogLevelWarning, LogAreaClassConnectionBOSH, "received error via legacy HTTP status code: " + statusCode );
+					m_state = StateDisconnected; // As per XEP, consider connection broken
+					disconnect();
+				}
+				
+				if(m_connMode != ModeLegacyHTTP && GetHTTPField("Connection") == "close" || m_bufferHeader.substr(0, 8) == "HTTP/1.0")
+				{
+					m_logInstance.log ( LogLevelDebug, LogAreaClassConnectionBOSH, "server indicated lack of support for HTTP/1.1 - falling back to HTTP/1.0" );
 					m_connMode = ModeLegacyHTTP;
 				}
 			}
@@ -489,8 +518,7 @@ namespace gloox
 			printf ( "\n-----------FULL RESPONSE BUFFER (after handling)---------------\n%s\n---------------END-------------\n", m_buffer.c_str() );
 			handleReceivedData ( connection, "" ); // In case there are more full responses in the buffer
 
-			ConnectionBase * pC = m_activeConnections.front();
-			if ( connection == pC )
+			if ( connection == m_activeConnections.front() )
 			{
 				switch ( m_connMode )
 				{
@@ -568,7 +596,8 @@ namespace gloox
 		switch ( m_connMode )
 		{
 			case ModePipelining:
-				m_connMode = ModeLegacyHTTP;
+				m_connMode = ModeLegacyHTTP; // Server seems not to support pieplining
+			m_logInstance.log ( LogLevelDebug, LogAreaClassConnectionBOSH, "connection closed - falling back to HTTP/1.0 connection method" );
 			break;
 			case ModeLegacyHTTP:
 			case ModePersistentHTTP:
@@ -635,7 +664,7 @@ namespace gloox
 			{
 				if ( tag->findAttribute ( "type" ) == "terminal" )
 				{
-					m_logInstance.log ( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh connection closed by server: " + tag->findAttribute ( "condition" ) );
+					m_logInstance.log ( LogLevelError, LogAreaClassConnectionBOSH, "bosh connection closed by server: " + tag->findAttribute ( "condition" ) );
 					m_state = StateDisconnected;
 					if ( m_handler )
 						m_handler->handleDisconnect ( this, ConnStreamClosed );
