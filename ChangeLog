@@ -1,4 +1,4 @@
-v0.9.4 -- xx yyy 2007
+v0.9.4 -- 14 Aug 2007
 ---------------------
 - ChatStateHandler: make sure to never send the same chat state twice in a row
 - Tag: make ctors explicit
@@ -21,6 +21,7 @@ v0.9.4 -- xx yyy 2007
 - Search: made members protected
 - DNS: re-use server port if setsockopt() is available
 - XPath: accept any characters in string literals
+- Tag: deprecated relax() and escape()
 
 
 v0.9.3 -- 18 Jul 2007
