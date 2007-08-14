@@ -62,7 +62,7 @@ namespace gloox
 
     if( m_hosts.empty() )
     {
-      m_parent->logInstance().log( LogLevelWarning, LogAreaClassS5Managger,
+      m_parent->logInstance().log( LogLevelWarning, LogAreaClassS5BManager,
                                    "No stream hosts set, cannot request bytestream." );
       return false;
     }
