@@ -96,7 +96,7 @@ namespace gloox
        * Constructs a new Data Form Field from an existing tag that describes a field.
        * @param tag The tag to parse.
        */
-      DataFormField( Tag* tag );
+      DataFormField( const Tag* tag );
 
       /**
        * Virtual destructor.
