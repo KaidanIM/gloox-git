@@ -1256,7 +1256,7 @@ namespace gloox
 
   TLSBase* ClientBase::getDefaultEncryption()
   {
-    if( !m_tls == TLSDisabled || !hasTls() )
+    if( m_tls == TLSDisabled || !hasTls() )
       return 0;
 
     return new TLSDefault( this, m_server );
