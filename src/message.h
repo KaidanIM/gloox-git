@@ -109,7 +109,7 @@ namespace gloox
        * Returns the thread ID of a message stanza.
        * @return The thread ID of a message stanza. Empty for non-message stanzas.
        */
-      virtual const std::string& thread() const { return m_thread; }
+      const std::string& thread() const { return m_thread; }
 
       /**
        * Sets the Stanza's thread ID. Only useful for message stanzas.
