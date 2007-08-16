@@ -1,3 +1,8 @@
+v0.9.4.1 -- 15 Aug 2007
+-----------------------
+- ClientBase: fix TLS wrapper instantiation
+
+
 v0.9.4 -- 14 Aug 2007
 ---------------------
 - ChatStateHandler: make sure to never send the same chat state twice in a row
