@@ -38,28 +38,70 @@ namespace gloox
     class EventHandler;
 
     /**
-     * @brief This manager is used to interact with PubSub services, along with
-     * 5 different handlers.
+     * @brief This manager is used to interact with PubSub services (XEP-0060).
      *
-     * DiscoHandler, NodeHandler, ItemHandler and ServiceHandler objects should
-     * respectivaly be passed to disco, node, item and service related requests
-     * for result notifications (null handlers are not allowed).
+     * This manager acts in concert with 5 different handlers:
      *
-     * EventHandler is used to receive actual PubSub event notifications. Register
-     * as much as you need to the Manager. Note that many PubSub queries will
-     * both trigger a notification from registered EventHandler's and from the
-     * handler specific to the query. In this regard,
+     * - EventHandler is responsible for receiving the PubSub event notifications.
+     *   Register as much as you need with the Manager.
+     *
+     * - DiscoHandler, ServiceHandler, NodeHandler and ItemHandler interfaces are
+     *   used to receive notifications of a request's result, depending on the
+     *   context.
+     *
+     * \note Many PubSub queries will both trigger a notification from registered
+     *       EventHandler's and from the handler specific to the query.
+     *
+     * To get started with PubSub in gloox, create a Manager, implement the
+     * PubSub::EventHandler virtuals and register an instance with a Manager.
+     * This will get you notified of PubSub events sent to you.
+     *
+     * Next, to be able to interact with PubSub services, you will need to
+     * implement the DiscoHandler, NodeHandler, ItemHandler and ServiceHandler
+     * interfaces to be notified of the result of disco, node, item and service
+     * related requests and pass these along to these requests (null handlers
+     * are not allowed).
+     *
+     * Here's an example.
+     *
+     * EventHandler::handleItemPublication() can be called with or without the actual
+     * tag, depending on if the notification actually includes the payload. From there
+     * you could only record the event and be done with it, or decide to retrieve the
+     * full payload. Eg:
      *
      * @code
      *
-     * psManager->deleteNode( service, nodeid, nodeHandler );
+     * class MyEventHandler : public gloox::EventHandler
+     * {
+     *   // ...
+     * };
+     *
+     * void MyEventHandler::handleItemPublication( const JID& service,
+     *                                             const std::string& node,
+     *                                             const std::string& item,
+     *                                             const Tag* entry )
+     * {
+     *   // we want to retrieve the payload everytime
+     *   if( !entry )
+     *   {
+     *     m_manager->requestItem( service, node, item, myItemHandler );
+     *   }
+     *   else
+     *   {
+     *     do_something_useful( entry );
+     *   }
+     * }
      *
      * @endcode
      *
-     * would then trigger NodeHandler::handleNodeDeletationResult and 
-     * EventHandler::handleNodeRemoval (if successfull).
+     * In response to this request, MyItemHandler::handleItem() will be called
+     * 
+     * \note PubSub support in gloox is still relatively young and you are most
+     *       welcome to ask questions, critique the API and so on. For contact
+     *       informations, see below.
      *
-     * @author Vincent Thomasset
+     *
+     * @author Vincent Thomasset <vthomasset@gmail.com>
      * @todo Subscription request management is currently missing.
      *
      * XEP Version: 1.9
@@ -417,17 +459,17 @@ public:
           { m_eventHandlerList.remove( handler ); }
 
         // reimplemented from DiscoHandler
-        virtual void handleDiscoInfoResult( IQ* iq, int context );
-        virtual void handleDiscoItemsResult( IQ* iq, int context );
-        virtual void handleDiscoError( IQ* iq, int context );
-        virtual bool handleDiscoSet( IQ* ) { return 0; }
+        void handleDiscoInfoResult( IQ* iq, int context );
+        void handleDiscoItemsResult( IQ* iq, int context );
+        void handleDiscoError( IQ* iq, int context );
+        bool handleDiscoSet( IQ* ) { return 0; }
 
         // reimplemented from MessageHandler
-        virtual void handleMessage( Message* msg, MessageSession * );
+        void handleMessage( Message* msg, MessageSession * );
 
         // reimplemented from IqHandler
-        virtual bool handleIq  ( IQ* ) { return 0; }
-        virtual void handleIqID( IQ* iq, int context );
+        bool handleIq  ( IQ* ) { return 0; }
+        void handleIqID( IQ* iq, int context );
 
       private:
 
