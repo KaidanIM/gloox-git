@@ -45,18 +45,18 @@ namespace gloox
     {
       Subscription,
       Unsubscription,
-      RequestSubscriptionOptions,
-          SetSubscriptionOptions,
-      RequestSubscriptionList,
-      RequestSubscriberList,
-          SetSubscriberList,
-      RequestAffiliationList,
-      RequestAffiliateList,
-          SetAffiliateList,
-      RequestNodeConfig,
-          SetNodeConfig,
+      GetSubscriptionOptions,
+      SetSubscriptionOptions,
+      GetSubscriptionList,
+      GetSubscriberList,
+      SetSubscriberList,
+      GetAffiliationList,
+      GetAffiliateList,
+      SetAffiliateList,
+      GetNodeConfig,
+      SetNodeConfig,
       DefaultNodeConfig,
-      RequestItemList,
+      GetItemList,
       PublishItem,
       DeleteItem,
       CreateNode,
@@ -64,7 +64,7 @@ namespace gloox
       PurgeNodeItems,
       NodeAssociation,
       NodeDisassociation,
-      RequestFeatureList,
+      GetFeatureList,
       DiscoServiceInfos,
       DiscoNodeInfos,
       DiscoNodeItems
@@ -324,16 +324,21 @@ namespace gloox
           {
             case EventCollection:
             {
-              const Tag* nodet = (*it)->findChild( "node" );
-              const DataForm form( (*it)->findChild( "x" ) );
-              (*ith)->handleNodeCreation( service, node, form );
+	      const Tag* x = (*it)->findChild( "x" );
+	      const DataForm* df = x ? new DataForm( x ) : 0;
+              (*ith)->handleNodeCreation( service, node, df );
+	      if( df )
+		delete df;
               break;
             }
             case EventConfigure:
             {
-              const DataForm form( (*it)->findChild( "x" ) );
-              (*ith)->handleConfigurationChange( service, node, form );
-              break;
+	      const Tag* x = (*it)->findChild( "x" );
+	      const DataForm* df = x ? new DataForm( x ) : 0;
+              (*ith)->handleConfigurationChange( service, node, df );
+	      if( df )
+		delete df;
+	      break;
             }
             case EventDelete:
             {
@@ -342,7 +347,13 @@ namespace gloox
             }
             case EventItems:
             {
-              // TODO
+	      const Tag* items = (*it)->findChild( "items" );
+	      const Tag* item = items->findChild( "item" );
+	      // This is the collection node responsible for the notification,
+	      // in case of a subscription type of 'items'. Currently unused.
+	      const Tag* headers = item->findChild( "headers", "xmlns", "shim" );
+	      const std::string& id= item->findAttribute( "id" );
+	      (*ith)->handleItemPublication( service, node, id, item );
               break;
             }
             case EventPurge:
@@ -381,7 +392,7 @@ namespace gloox
       if( df )
         options->addChild( df->tag() );
 
-      m_parent->trackID( this, id, df ? SetSubscriptionOptions : RequestSubscriptionOptions );
+      m_parent->trackID( this, id, df ? SetSubscriptionOptions : GetSubscriptionOptions );
       m_nodeHandlerTrackMap[id] = handler;
       m_parent->send( iq );
     }
@@ -395,7 +406,7 @@ namespace gloox
       IQ* iq = new IQ( IQ::Get, service, id, XMLNS_PUBSUB, "pubsub" );
       new Tag( iq->query(), "subscriptions" );
 
-      m_parent->trackID( this, id, RequestSubscriptionList );
+      m_parent->trackID( this, id, GetSubscriptionList );
       m_serviceHandlerTrackMap[id] = handler;
       m_parent->send( iq );
     }
@@ -409,7 +420,7 @@ namespace gloox
       IQ* iq = new IQ( IQ::Get, service, id, XMLNS_PUBSUB, "pubsub" );
       new Tag( iq->query(), "affiliations" );
 
-      m_parent->trackID( this, id, RequestAffiliationList );
+      m_parent->trackID( this, id, GetAffiliationList );
       m_serviceHandlerTrackMap[id] = handler;
       m_parent->send( iq );
     }
@@ -617,7 +628,7 @@ namespace gloox
       if( config )
         sub->addChild( config->tag() );
 
-      m_parent->trackID( this, id, config ? SetNodeConfig : RequestNodeConfig );
+      m_parent->trackID( this, id, config ? SetNodeConfig : GetNodeConfig );
       m_nodeHandlerTrackMap[id] = handler;
       m_parent->send( iq );
     }
@@ -647,7 +658,7 @@ namespace gloox
         m_nopTrackMap[id] = node;
       }
 
-      m_parent->trackID( this, id, list ? SetSubscriberList : RequestSubscriberList );
+      m_parent->trackID( this, id, list ? SetSubscriberList : GetSubscriberList );
       m_nodeHandlerTrackMap[id] = handler;
       m_parent->send( iq );
     }
@@ -675,7 +686,7 @@ namespace gloox
         m_nopTrackMap[id] = node;
       }
 
-      m_parent->trackID( this, id, list ? SetAffiliateList : RequestAffiliateList );
+      m_parent->trackID( this, id, list ? SetAffiliateList : GetAffiliateList );
       m_nodeHandlerTrackMap[id] = handler;
       m_parent->send( iq );
     }
@@ -691,7 +702,7 @@ namespace gloox
       IQ* iq = new IQ( IQ::Get, service, id, XMLNS_PUBSUB, "pubsub" );
       new Tag( iq->query(), "items", "node", nodeid );
 
-      m_parent->trackID( this, id, RequestItemList );
+      m_parent->trackID( this, id, GetItemList );
       m_itemHandlerTrackMap[id] = handler;
       m_parent->send( iq );
     }
@@ -768,7 +779,7 @@ namespace gloox
               break;
 */
             }
-            case RequestSubscriptionList:
+            case GetSubscriptionList:
             {
               ServiceHandlerTrackMap::iterator ith = m_serviceHandlerTrackMap.find( iq->id() );
               if( ith == m_serviceHandlerTrackMap.end() )
@@ -791,7 +802,7 @@ namespace gloox
               m_serviceHandlerTrackMap.erase( ith );
               break;
             }
-            case RequestAffiliationList:
+            case GetAffiliationList:
             {
               ServiceHandlerTrackMap::iterator ith = m_serviceHandlerTrackMap.find( iq->id() );
               if( ith != m_serviceHandlerTrackMap.end() )
@@ -814,12 +825,12 @@ namespace gloox
               m_serviceHandlerTrackMap.erase( ith );
               break;
             }
-            case RequestSubscriptionOptions:
-            case RequestSubscriberList:
+            case GetSubscriptionOptions:
+            case GetSubscriberList:
             case SetSubscriberList:
-            case RequestAffiliateList:
+            case GetAffiliateList:
             case SetAffiliateList:
-            case RequestNodeConfig:
+            case GetNodeConfig:
             case SetNodeConfig:
             {
               NodeHandlerTrackMap::iterator ith = m_nodeHandlerTrackMap.find( id );
@@ -828,7 +839,7 @@ namespace gloox
 
               switch( context )
               {
-                case RequestSubscriptionOptions:
+                case GetSubscriptionOptions:
                 {
                   const Tag* options = query->findChild( "options" );
                   const DataForm df( options->findChild( "x" ) );
@@ -837,7 +848,7 @@ namespace gloox
                                          options->findAttribute( "node" ), &df );
                   break;
                 }
-                case RequestSubscriberList:
+                case GetSubscriberList:
                 {
                   NodeHandlerTrackMap::iterator ith = m_nodeHandlerTrackMap.begin();
                   if( ith == m_nodeHandlerTrackMap.end() )
@@ -897,7 +908,7 @@ namespace gloox
                   }
                   break;
                 }
-                case RequestAffiliateList:
+                case GetAffiliateList:
                 {
                   const Tag::TagList& affiliates = query->children();
                   AffiliateList affList;
@@ -911,7 +922,7 @@ namespace gloox
                   (*ith).second->handleAffiliateList( service, query->findAttribute( "node" ), &affList );
                   break;
                 }
-                case RequestNodeConfig:
+                case GetNodeConfig:
                 {
                   const Tag* ps = iq->findChild( "pubsub", XMLNS, XMLNS_PUBSUB );
                   const Tag* options = ps->findChild( "configure" );
@@ -930,7 +941,7 @@ namespace gloox
               m_nodeHandlerTrackMap.erase( ith );
               break;
             }
-            case RequestItemList:
+            case GetItemList:
             {
               ItemHandlerTrackMap::iterator ith = m_itemHandlerTrackMap.find( id );
               if( ith == m_itemHandlerTrackMap.end() )
@@ -1044,7 +1055,7 @@ namespace gloox
               m_nodeHandlerTrackMap.erase( ith );
               break;
             }
-            case RequestSubscriptionList:
+            case GetSubscriptionList:
             {
               ServiceHandlerTrackMap::iterator ith = m_serviceHandlerTrackMap.find( iq->id() );
               if( ith != m_serviceHandlerTrackMap.end() )
@@ -1054,7 +1065,7 @@ namespace gloox
               }
               break;
             }
-            case RequestAffiliationList:
+            case GetAffiliationList:
             {
               ServiceHandlerTrackMap::iterator ith = m_serviceHandlerTrackMap.find( iq->id() );
               if( ith != m_serviceHandlerTrackMap.end() )
@@ -1064,7 +1075,7 @@ namespace gloox
               }
               break;
             }
-            case RequestSubscriptionOptions:
+            case GetSubscriptionOptions:
             {
               NodeHandlerTrackMap::iterator ith = m_nodeHandlerTrackMap.find( iq->id() );
               if( ith == m_nodeHandlerTrackMap.end() )
@@ -1100,7 +1111,7 @@ namespace gloox
               m_nodeHandlerTrackMap.erase( ith );
               break;
             }
-            case RequestNodeConfig:
+            case GetNodeConfig:
             {
               NodeHandlerTrackMap::iterator ith = m_nodeHandlerTrackMap.find( iq->id() );
               if( ith == m_nodeHandlerTrackMap.end() )
@@ -1132,7 +1143,7 @@ namespace gloox
               m_nodeHandlerTrackMap.erase( ith );
               break;
             }
-            case RequestItemList:
+            case GetItemList:
             {
               ItemHandlerTrackMap::iterator ith = m_itemHandlerTrackMap.find( iq->id() );
               if( ith == m_itemHandlerTrackMap.end() )

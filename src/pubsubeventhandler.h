@@ -42,11 +42,11 @@ namespace gloox
          * Receives notification of node creations.
          * @param service Service hosting the new node.
          * @param node Node ID of the new node.
-         * @param config Optional DataForm of the new configuration (may be empty).
+         * @param config Optional DataForm of the new configuration (may be null).
          */
         virtual void handleNodeCreation( const JID& service,
                                          const std::string& node,
-                                         const DataForm& config ) = 0;
+                                         const DataForm* config ) = 0;
 
         /**
          * Receives notification of node destructions.
@@ -61,8 +61,7 @@ namespace gloox
          * @param service Service hosting the parent node.
          * @param node Node ID of the parent node.
          * @param item Item ID of the new Item.
-         * @param entry Based on the parent node configuration,
-         *              Tag of the newly published item or NULL.
+         * @param entry Payload of the newly published item (may be null).
          */
         virtual void handleItemPublication( const JID& service,
                                             const std::string& node,
@@ -97,11 +96,11 @@ namespace gloox
          * Receives notifications of node configuration changes.
          * @param service Service hosting the node.
          * @param node Node ID of the node.
-         * @param config Optional DataForm of the new configuration (may be empty).
+         * @param config Optional DataForm of the new configuration (may be null).
          */
         virtual void handleConfigurationChange( const JID& service,
                                                 const std::string& node,
-                                                const DataForm& config ) = 0;
+                                                const DataForm* config ) = 0;
 
         /**
          * Receives notifications of node purges.
