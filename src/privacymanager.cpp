@@ -14,6 +14,7 @@
 
 #include "privacymanager.h"
 #include "clientbase.h"
+#include "error.h"
 
 #ifndef _WIN32_WCE
 # include <sstream>
@@ -254,7 +255,7 @@ namespace gloox
 
       case IQ::Error:
       {
-        switch( iq->error() )
+        switch( iq->error()->error() )
         {
           case StanzaErrorConflict:
             m_privacyListHandler->handlePrivacyListResult( iq->id(), ResultConflict );

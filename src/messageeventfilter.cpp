@@ -15,6 +15,7 @@
 #include "messageeventhandler.h"
 #include "messagesession.h"
 #include "message.h"
+#include "error.h"
 
 namespace gloox
 {
@@ -37,7 +38,7 @@ namespace gloox
 
     if( msg->subtype() == Message::Error )
     {
-      if( msg->error() == StanzaErrorFeatureNotImplemented )
+      if( msg->error()->error() == StanzaErrorFeatureNotImplemented )
         m_disable = true;
 
       return;

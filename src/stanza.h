@@ -17,16 +17,17 @@
 #include "gloox.h"
 #include "tag.h"
 #include "jid.h"
+#include "stanzaextension.h"
 
 namespace gloox
 {
 
-  class StanzaExtension;
+  class Error;
 
   /**
    * A list of StanzaExtensions.
    */
-  typedef std::list<StanzaExtension*> StanzaExtensionList;
+  typedef std::list< const StanzaExtension* > StanzaExtensionList;
 
   /**
    * @brief This is a base class for XMPP stanza abstractions.
@@ -46,44 +47,25 @@ namespace gloox
        * Returns the JID the stanza comes from.
        * @return The origin of the stanza.
        */
-      virtual const JID& from() const { return m_from; }
+      const JID& from() const { return m_from; }
 
       /**
        * Returns the receiver of the stanza.
        * @return The stanza's destination.
        */
-      virtual const JID& to() const { return m_to; }
+      const JID& to() const { return m_to; }
 
       /**
        * Returns the id of the stanza, if set.
        * @return The ID of the stanza.
        */
-      virtual const std::string& id() const { return m_id; }
-
-      /**
-       * Returns the text of a error stanza for the given language if available.
-       * If the requested language is not available, the default text (without a xml:lang
-       * attribute) will be returned.
-       * @param lang The language identifier for the desired language. It must conform to
-       * section 2.12 of the XML specification and RFC 3066. If empty, the default subject
-       * will be returned, if any.
-       * @return The text of an error stanza. Empty for non-error stanzas.
-       */
-      virtual const std::string errorText( const std::string& lang = "default" ) const
-        { return findLang( m_errorText, lang ); }
+      const std::string& id() const { return m_id; }
 
       /**
        * Returns the stanza error condition, if any.
        * @return The stanza error condition.
        */
-      virtual StanzaError error() const { return m_stanzaError; }
-
-      /**
-       * This function can be used to retrieve the application-specific error condition of a stanza error.
-       * @return The application-specific error element of a stanza error. 0 if no respective element was
-       * found or no error occured.
-       */
-      Tag* errorAppCondition() { return m_stanzaErrorAppCondition; }
+      const Error* error() const;
 
       /**
        * Retrieves the value of the xml:lang attribute of this stanza.
@@ -99,6 +81,13 @@ namespace gloox
        * @since 0.9
        */
       void addExtension( StanzaExtension* se );
+
+      /**
+       * Finds a StanzaExtension of a particular type.
+       * @param type StanzaExtensionType to search for.
+       * @return The StanzaExtension's address (or null if none was found).
+       */
+      const StanzaExtension* findExtension( StanzaExtensionType type ) const;
 
       /**
        * Returns the list of the Stanza's extensions.
@@ -123,10 +112,6 @@ namespace gloox
       Stanza( const std::string& name, const JID& to, const JID& from );
 
       StanzaExtensionList m_extensionList;
-      StanzaError m_stanzaError;
-      StanzaErrorType m_stanzaErrorType;
-      Tag* m_stanzaErrorAppCondition;
-      StringMap m_errorText;
       std::string m_id;
       std::string m_xmllang;
       JID m_from;

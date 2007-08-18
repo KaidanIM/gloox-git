@@ -14,6 +14,7 @@
 #include "flexoff.h"
 #include "dataform.h"
 #include "disco.h"
+#include "error.h"
 
 #include <cstdlib>
 
@@ -138,7 +139,7 @@ namespace gloox
             m_flexibleOfflineHandler->handleFlexibleOfflineResult( FomrRequestSuccess );
             break;
           case IQ::Error:
-            switch( iq->error() )
+            switch( iq->error()->error() )
             {
               case StanzaErrorForbidden:
                 m_flexibleOfflineHandler->handleFlexibleOfflineResult( FomrForbidden );
@@ -162,7 +163,7 @@ namespace gloox
             m_flexibleOfflineHandler->handleFlexibleOfflineResult( FomrRemoveSuccess );
             break;
           case IQ::Error:
-            switch( iq->error() )
+            switch( iq->error()->error() )
             {
               case StanzaErrorForbidden:
                 m_flexibleOfflineHandler->handleFlexibleOfflineResult( FomrForbidden );

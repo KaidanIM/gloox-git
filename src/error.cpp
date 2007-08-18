@@ -52,13 +52,13 @@ namespace gloox
     return (StanzaError)util::lookup( type, stanzaErrValues );
   }
 
-  Error::Error( const Tag * error )
+  Error::Error( const Tag* tag )
     : StanzaExtension( ExtError ),
-      m_type( stanzaErrorType( error->findAttribute( TYPE ) ) ),
+      m_type( stanzaErrorType( tag->findAttribute( TYPE ) ) ),
       m_error( StanzaErrorUndefined ), m_appError( 0 )
   {
-    Tag::TagList::const_iterator it = error->children().begin();
-    for( ; it != error->children().end(); ++it )
+    Tag::TagList::const_iterator it = tag->children().begin();
+    for( ; it != tag->children().end(); ++it )
     {
       StanzaError srt = gloox::stanzaError( (*it)->name() );
       if( srt != StanzaErrorUndefined )
@@ -103,7 +103,7 @@ namespace gloox
     return error;
   }
 
-  std::string Error::text( const std::string& lang ) const
+  const std::string Error::text( const std::string& lang ) const
   {
     StringMap::const_iterator it = m_text.find( lang );
     return it != m_text.end() ? (*it).second : std::string();

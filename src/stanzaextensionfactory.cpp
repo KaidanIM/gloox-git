@@ -23,6 +23,7 @@
 #include "gpgsigned.h"
 #include "gpgencrypted.h"
 #include "capabilities.h"
+#include "error.h"
 
 namespace gloox
 {
@@ -58,6 +59,11 @@ namespace gloox
     {
       return new Capabilities( tag );
     }
+    else if( name == "error" )
+    {
+      return new Error( tag );
+    }
+
 
     return 0;
   }
