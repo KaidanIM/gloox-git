@@ -12,6 +12,7 @@
 
 
 #include "stanza.h"
+#include "error.h"
 #include "jid.h"
 #include "util.h"
 #include "stanzaextension.h"
@@ -23,10 +24,7 @@ namespace gloox
 {
 
   Stanza::Stanza( const std::string& name, const JID& to, const JID& from )
-    : Tag( name ),
-      m_stanzaError( StanzaErrorUndefined ), m_stanzaErrorType( StanzaErrorTypeUndefined ),
-      m_stanzaErrorAppCondition( 0 ), m_xmllang( "default" ),
-      m_from( from ), m_to( to )
+    : Tag( name ), m_xmllang( "default" ), m_from( from ), m_to( to )
   {
     if( !m_to.empty() )
       addAttribute( "to", m_to.full() );
@@ -35,9 +33,7 @@ namespace gloox
   }
 
   Stanza::Stanza( Tag* tag, bool rip )
-    : Tag( tag->name(), tag->cdata() ),
-      m_stanzaError( StanzaErrorUndefined ), m_stanzaErrorType( StanzaErrorTypeUndefined ),
-      m_stanzaErrorAppCondition( 0 ), m_xmllang( "default" )
+    : Tag( tag->name(), tag->cdata() ), m_xmllang( "default" )
   {
     if( rip )
     {
@@ -149,10 +145,22 @@ namespace gloox
 //     }
 //   }
 
+  const Error* Stanza::error() const
+  {
+    return static_cast< const Error* >( findExtension( ExtError ) );
+  }
+
   void Stanza::addExtension( StanzaExtension* se )
   {
     m_extensionList.push_back( se );
     addChild( se->tag() );
+  }
+
+  const StanzaExtension* Stanza::findExtension( StanzaExtensionType type ) const
+  {
+    StanzaExtensionList::const_iterator it = m_extensionList.begin();
+    for( ; it != m_extensionList.end() && (*it)->type() != type; ++it ) ;
+    return it != m_extensionList.end() ? (*it) : 0;
   }
 
   void Stanza::setLang( StringMap& map, const Tag* tag )

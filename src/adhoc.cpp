@@ -15,6 +15,7 @@
 #include "adhochandler.h"
 #include "adhoccommandprovider.h"
 #include "disco.h"
+#include "error.h"
 #include "discohandler.h"
 #include "client.h"
 #include "dataform.h"
@@ -253,7 +254,7 @@ namespace gloox
     {
       if( (*it).second.context == context && (*it).second.remote == iq->from() )
       {
-        (*it).second.ah->handleAdhocError( (*it).second.remote, iq->error() );
+        (*it).second.ah->handleAdhocError( (*it).second.remote, iq->error()->error() );
 
         m_adhocTrackMap.erase( it );
       }

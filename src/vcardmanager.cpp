@@ -16,6 +16,7 @@
 #include "vcard.h"
 #include "clientbase.h"
 #include "disco.h"
+#include "error.h"
 
 namespace gloox
 {
@@ -115,7 +116,7 @@ namespace gloox
         case IQ::Error:
         {
           (*it).second->handleVCardResult( (VCardHandler::VCardContext)context,
-                                                   iq->from(), iq->error() );
+                                                   iq->from(), iq->error()->error() );
           break;
         }
         default:

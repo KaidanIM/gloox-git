@@ -102,16 +102,11 @@ namespace gloox
 
     std::string capsNode;
     std::string capsVer;
-    const StanzaExtensionList& ext = presence->extensions();
-    StanzaExtensionList::const_iterator it_e = ext.begin();
-    for( ; it_e != ext.end(); ++it_e )
+    const StanzaExtension* caps = presence->findExtension( ExtCaps );
+    if( caps )
     {
-      if( (*it_e)->type() == ExtCaps )
-      {
-        capsNode = static_cast<Capabilities*>( (*it_e) )->node();
-        capsVer = static_cast<Capabilities*>( (*it_e) )->ver();
-        break;
-      }
+      capsNode = static_cast<const Capabilities*>( caps )->node();
+      capsVer = static_cast<const Capabilities*>( caps )->ver();
     }
 
     Roster::iterator it = m_roster.find( presence->from().bare() );

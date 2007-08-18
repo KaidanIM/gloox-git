@@ -27,7 +27,7 @@ namespace gloox
   /**
    * 
    */
-  class Error : public StanzaExtension
+  class GLOOX_API Error : public StanzaExtension
   {
     public:
 
@@ -36,16 +36,14 @@ namespace gloox
           m_error( StanzaErrorUndefined ), m_appError( 0 )
       {}
 
-      Error( const Tag * );
-
-      Error( const Error& error );
+      Error( const Tag* tag );
 
       Error( StanzaErrorType type, StanzaError error, Tag * appError = 0 )
         : StanzaExtension( ExtError ), m_type( type ),
           m_error( error ), m_appError( appError )
       {}
 
-      ~Error();
+      virtual ~Error();
 
       /**
        * 
@@ -58,23 +56,30 @@ namespace gloox
       StanzaError error() const { return m_error; }
 
       /**
-       * Returns the specific application 
+       * This function can be used to retrieve the application-specific error
+       * condition of a stanza error.
+       * @return The application-specific error element of a stanza error.
+       * 0 if no respective element was found or no error occured.
        */
       const Tag * appError() const { return m_appError; }
 
       /**
-       * Returns The text associated with a specific lang.
-       * @param lang The lang for which the text has to be retrieved (empty for default lang)
-       * @return The text associated with a specific lang.
+       * Returns the text of a error stanza for the given language if available.
+       * If the requested language is not available, the default text (without
+       * a xml:lang attribute) will be returned.
+       * @param lang The language identifier for the desired language. It must
+       * conform to section 2.12 of the XML specification and RFC 3066. If
+       * empty, the default subject will be returned, if any.
+       * @return The text of an error stanza. Empty for non-error stanzas.
        */
-      std::string text( const std::string& lang = "default" ) const;
+      const std::string text( const std::string& lang = "default" ) const;
 
-      /**
-       * The 
-       */
+      // reimplemented from StanzaExtension
       Tag * tag() const;
 
     private:
+
+      Error( const Error& error );
 
       typedef std::map< std::string, std::string > StringMap;
 

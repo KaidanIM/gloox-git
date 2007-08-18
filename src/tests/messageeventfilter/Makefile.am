@@ -11,5 +11,5 @@ messageeventfilter_test_LDADD = ../../tag.o ../../stanza.o ../../stanzaextension
  				../../jid.o ../../prep.o ../../gloox.o ../../gpgencrypted.o ../../oob.o \
  				../../vcardupdate.o ../../delayeddelivery.o ../../xdelayeddelivery.o \
 				../../amp.o ../../message.o ../../util.o ../../capabilities.o \
-				../../sha.o ../../base64.o
+				../../sha.o ../../base64.o ../../error.o
 messageeventfilter_test_CPPFLAGS = $(CPPFLAGS)

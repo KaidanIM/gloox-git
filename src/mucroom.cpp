@@ -19,6 +19,7 @@
 #include "disco.h"
 #include "mucmessagesession.h"
 #include "message.h"
+#include "error.h"
 #include "util.h"
 
 namespace gloox
@@ -478,7 +479,7 @@ namespace gloox
     if( presence->subtype() == Presence::Error )
     {
       m_joined = false;
-      m_roomHandler->handleMUCError( this, presence->error() );
+      m_roomHandler->handleMUCError( this, presence->error()->error() );
     }
     else
     {
@@ -668,7 +669,7 @@ namespace gloox
 
     if( msg->subtype() == Message::Error )
     {
-      m_roomHandler->handleMUCError( this, msg->error() );
+      m_roomHandler->handleMUCError( this, msg->error()->error() );
     }
     else
     {

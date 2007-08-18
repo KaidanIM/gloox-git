@@ -16,6 +16,7 @@
 #include "disco.h"
 #include "discohandler.h"
 #include "client.h"
+#include "error.h"
 #include "lastactivityhandler.h"
 
 #include <cstdlib>
@@ -103,7 +104,7 @@ namespace gloox
         break;
       }
       case IQ::Error:
-        m_lastActivityHandler->handleLastActivityError( iq->from(), iq->error() );
+        m_lastActivityHandler->handleLastActivityError( iq->from(), iq->error()->error() );
         break;
       default:
         break;

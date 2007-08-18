@@ -19,5 +19,5 @@ chatstatefilter_test_LDADD = ../../tag.o ../../stanza.o ../../stanzaextensionfac
 			../../dns.o \
 			../../gloox.o ../../tlsgnutlsbase.o ../../tlsdefault.o \
 			../../tlsgnutlsclientanon.o ../../tlsgnutlsserveranon.o ../../mutex.o \
-			../../presence.o ../../subscription.o
+			../../presence.o ../../subscription.o ../../error.o
 chatstatefilter_test_CPPFLAGS = $(CPPFLAGS)

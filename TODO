@@ -48,6 +48,7 @@ optional for 1.0:
 - overhaul all XEP implementations (and note implemented version number)
 - RosterItem::status ::statusMsg for highest prio
 
+- move enum StanzaExtensionType to gloox.h and remove include in stanza.h
 - move stl/stdlib typedefs to types.h (?)
 - split send()/getID() to clientbasebase (??)
 - XEP-0020 (Feature Negotiation)
