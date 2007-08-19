@@ -10,9 +10,7 @@
   This software is distributed without any warranty.
 */
 
-
 #include "messagesession.h"
-
 #include "messagefilter.h"
 #include "messagehandler.h"
 #include "clientbase.h"
@@ -86,11 +84,7 @@ namespace gloox
 
   void MessageSession::decorate( Tag* tag )
   {
-    MessageFilterList::const_iterator it = m_messageFilterList.begin();
-    for( ; it != m_messageFilterList.end(); ++it )
-    {
-      (*it)->decorate( tag );
-    }
+    util::ForEach( m_messageFilterList, &MessageFilter::decorate, tag ); 
   }
 
   void MessageSession::resetResource()
@@ -102,26 +96,6 @@ namespace gloox
   void MessageSession::setResource( const std::string& resource )
   {
     m_target.setResource( resource );
-  }
-
-  void MessageSession::registerMessageHandler( MessageHandler* mh )
-  {
-    m_messageHandler = mh;
-  }
-
-  void MessageSession::removeMessageHandler()
-  {
-    m_messageHandler = 0;
-  }
-
-  void MessageSession::registerMessageFilter( MessageFilter* mf )
-  {
-    m_messageFilterList.push_back( mf );
-  }
-
-  void MessageSession::removeMessageFilter( MessageFilter* mf )
-  {
-    m_messageFilterList.remove( mf );
   }
 
   void MessageSession::disposeMessageFilter( MessageFilter* mf )

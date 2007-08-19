@@ -194,13 +194,15 @@ namespace gloox
        * remote contact.
        * @param mh The MessageHandler to register.
        */
-      void registerMessageHandler( MessageHandler* mh );
+      void registerMessageHandler( MessageHandler* mh )
+	{ m_messageHandler = mh; }
 
       /**
        * This function clears the internal pointer to the MessageHandler and therefore
        * disables message delivery.
        */
-      void removeMessageHandler();
+      void removeMessageHandler()
+        { m_messageHandler = 0; }
 
       /**
        * A convenience function to quickly send a message (optionally with subject). This is
@@ -218,14 +220,16 @@ namespace gloox
        * use disposeMessageFilter().
        * @param mf The MessageFilter to add.
        */
-      void registerMessageFilter( MessageFilter* mf );
+      void registerMessageFilter( MessageFilter* mf )
+        { m_messageFilterList.push_back( mf ); }
 
       /**
        * Use this function to remove a MessageFilter from the MessageSession.
        * @param mf The MessageFilter to remove.
        * @note To remove and delete the MessageFilter in one step use disposeMessageFilter().
        */
-      void removeMessageFilter( MessageFilter* mf );
+      void removeMessageFilter( MessageFilter* mf )
+        { m_messageFilterList.remove( mf ); }
 
       /**
        * Use this function to remove and delete a MessageFilter from the MessageSession.
