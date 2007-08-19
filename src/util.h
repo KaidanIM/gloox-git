@@ -63,6 +63,34 @@ namespace gloox
      */
     const std::string _lookup2( unsigned code, const char * values[], unsigned size );
 
+    template< typename T, typename F >
+    inline void ForEach( T& t, F f )
+    {
+      for( typename T::iterator it = t.begin(); it != t.end(); ++it )
+	((*it)->*f)();
+    }
+
+    template< typename T, typename F, typename D >
+    inline void ForEach( T& t, F f, D& d )
+    {
+      for( typename T::iterator it = t.begin(); it != t.end(); ++it )
+	( (*it)->*f )( d );
+    }
+
+    template< typename T, typename F, typename D1, typename D2 >
+    inline void ForEach( T& t, F f, D1& d1, D2& d2 )
+    {
+      for( typename T::iterator it = t.begin(); it != t.end(); ++it )
+	( (*it)->*f )( d1, d2 );
+    }
+
+    template< typename T, typename F, typename D1, typename D2, typename D3 >
+    inline void ForEach( T& t, F f, D1& d1, D2& d2, D3& d3 )
+    {
+      for( typename T::iterator it = t.begin(); it != t.end(); ++it )
+	( (*it)->*f )( d1, d2, d3 );
+    }
+
     /**
      * Delete all elements from a list of pointers.
      * @param L List of pointers to delete.
