@@ -195,7 +195,7 @@ namespace gloox
        * @param mh The MessageHandler to register.
        */
       void registerMessageHandler( MessageHandler* mh )
-	{ m_messageHandler = mh; }
+        { m_messageHandler = mh; }
 
       /**
        * This function clears the internal pointer to the MessageHandler and therefore
