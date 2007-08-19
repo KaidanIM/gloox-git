@@ -945,7 +945,8 @@ namespace gloox
     if( !session )
       return;
 
-    MessageSessionList::iterator it = std::find( m_messageSessions.begin(), m_messageSessions.end(),
+    MessageSessionList::iterator it = std::find( m_messageSessions.begin(),
+                                                 m_messageSessions.end(),
                                                  session );
     if( it != m_messageSessions.end() )
     {
@@ -1043,20 +1044,12 @@ namespace gloox
 
   void ClientBase::notifyOnConnect()
   {
-    ConnectionListenerList::const_iterator it = m_connectionListeners.begin();
-    for( ; it != m_connectionListeners.end(); ++it )
-    {
-      (*it)->onConnect();
-    }
+    util::ForEach( m_connectionListeners, &ConnectionListener::onConnect );
   }
 
   void ClientBase::notifyOnDisconnect( ConnectionError e )
   {
-    ConnectionListenerList::const_iterator it = m_connectionListeners.begin();
-    for( ; it != m_connectionListeners.end(); ++it )
-    {
-      (*it)->onDisconnect( e );
-    }
+    util::ForEach( m_connectionListeners, &ConnectionListener::onDisconnect, e );
     init();
   }
 
@@ -1070,29 +1063,17 @@ namespace gloox
 
   void ClientBase::notifyOnResourceBindError( ResourceBindError error )
   {
-    ConnectionListenerList::const_iterator it = m_connectionListeners.begin();
-    for( ; it != m_connectionListeners.end(); ++it )
-    {
-      (*it)->onResourceBindError( error );
-    }
+    util::ForEach( m_connectionListeners, &ConnectionListener::onResourceBindError, error );
   }
 
   void ClientBase::notifyOnSessionCreateError( SessionCreateError error )
   {
-    ConnectionListenerList::const_iterator it = m_connectionListeners.begin();
-    for( ; it != m_connectionListeners.end(); ++it )
-    {
-      (*it)->onSessionCreateError( error );
-    }
+    util::ForEach( m_connectionListeners, &ConnectionListener::onSessionCreateError, error );
   }
 
   void ClientBase::notifyStreamEvent( StreamEvent event )
   {
-    ConnectionListenerList::const_iterator it = m_connectionListeners.begin();
-    for( ; it != m_connectionListeners.end(); ++it )
-    {
-      (*it)->onStreamEvent( event );
-    }
+    util::ForEach( m_connectionListeners, &ConnectionListener::onStreamEvent, event );
   }
 
   void ClientBase::notifyPresenceHandlers( Presence* pres )
@@ -1110,20 +1091,12 @@ namespace gloox
     if( match )
       return;
 
-    PresenceHandlerList::const_iterator it = m_presenceHandlers.begin();
-    for( ; it != m_presenceHandlers.end(); ++it )
-    {
-      (*it)->handlePresence( pres );
-    }
+    util::ForEach( m_presenceHandlers, &PresenceHandler::handlePresence, pres );
   }
 
   void ClientBase::notifySubscriptionHandlers( Subscription* s10n )
   {
-    SubscriptionHandlerList::const_iterator it = m_subscriptionHandlers.begin();
-    for( ; it != m_subscriptionHandlers.end(); ++it )
-    {
-      (*it)->handleSubscription( s10n );
-    }
+    util::ForEach( m_subscriptionHandlers, &SubscriptionHandler::handleSubscription, s10n );
   }
 
   void ClientBase::notifyIqHandlers( IQ* iq )
@@ -1234,11 +1207,7 @@ namespace gloox
     }
     else
     {
-      MessageHandlerList::const_iterator it = m_messageHandlers.begin();
-      for( ; it != m_messageHandlers.end(); ++it )
-      {
-        (*it)->handleMessage( msg );
-      }
+      util::ForEach( m_messageHandlers, &MessageHandler::handleMessage, msg );
     }
   }
 
