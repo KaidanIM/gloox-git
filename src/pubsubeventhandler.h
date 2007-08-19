@@ -30,7 +30,7 @@ namespace gloox
      *
      * @author Vincent Thomasset
      */
-    class EventHandler
+    class GLOOX_API EventHandler
     {
       public:
         /**

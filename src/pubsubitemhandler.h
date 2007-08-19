@@ -35,7 +35,7 @@ namespace gloox
      *
      * @author Vincent Thomasset
      */
-    class ItemHandler
+    class GLOOX_API ItemHandler
     {
       public:
         /**

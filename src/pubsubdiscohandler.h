@@ -29,7 +29,7 @@ namespace gloox
      *
      * @author Vincent Thomasset
      */
-    class DiscoHandler
+    class GLOOX_API DiscoHandler
     {
 
       public:
