@@ -187,7 +187,7 @@ namespace gloox
         }
         else if( data[1] == 0x02 && !m_proxyUser.empty() && !m_proxyPassword.empty() ) // user/password auth
         {
-          m_logInstance.log( LogLevelDebug, LogAreaClassConnectionSOCKS5Proxy,
+          m_logInstance.dbg( LogAreaClassConnectionSOCKS5Proxy,
                              "authenticating to socks5 proxy as user " + m_proxyUser );
           m_s5state = S5StateAuthenticating;
           char* d = new char[3 + m_proxyUser.length() + m_proxyPassword.length()];
@@ -315,7 +315,7 @@ namespace gloox
 #ifndef _WIN32_WCE
     std::ostringstream oss;
     oss << "requesting socks5 proxy connection to " << server << ":" << port;
-    m_logInstance.log( LogLevelDebug, LogAreaClassConnectionSOCKS5Proxy, oss.str() );
+    m_logInstance.dbg( LogAreaClassConnectionSOCKS5Proxy, oss.str() );
 #endif
 
     if( !send( std::string( d, pos ) ) )
@@ -341,7 +341,7 @@ namespace gloox
           port = (*(servers.begin())).second;
         }
       }
-      m_logInstance.log( LogLevelDebug, LogAreaClassConnectionSOCKS5Proxy,
+      m_logInstance.dbg( LogAreaClassConnectionSOCKS5Proxy,
                          "attempting to negotiate socks5 proxy connection" );
 
       bool auth = !m_proxyUser.empty() && !m_proxyPassword.empty();
@@ -370,7 +370,7 @@ namespace gloox
                                                 ConnectionError reason )
   {
     cleanup();
-    m_logInstance.log( LogLevelDebug, LogAreaClassConnectionSOCKS5Proxy, "socks5 proxy connection closed" );
+    m_logInstance.dbg( LogAreaClassConnectionSOCKS5Proxy, "socks5 proxy connection closed" );
 
     if( m_handler )
       m_handler->handleDisconnect( this, reason );

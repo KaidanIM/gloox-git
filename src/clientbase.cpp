@@ -168,12 +168,12 @@ namespace gloox
   {
     if( !tag )
     {
-      logInstance().log( LogLevelDebug, LogAreaClassClientbase, "stream closed" );
+      logInstance().dbg( LogAreaClassClientbase, "stream closed" );
       disconnect( ConnStreamClosed );
       return;
     }
 
-    logInstance().log( LogLevelDebug, LogAreaXmlIncoming, tag->xml() );
+    logInstance().dbg( LogAreaXmlIncoming, tag->xml() );
     ++m_stats.totalStanzasReceived;
 
     if( tag->name() == "stream:stream" )
@@ -181,7 +181,7 @@ namespace gloox
       const std::string& version = tag->findAttribute( "version" );
       if( !checkStreamVersion( version ) )
       {
-        logInstance().log( LogLevelDebug, LogAreaClassClientbase, "This server is not XMPP-compliant"
+        logInstance().dbg( LogAreaClassClientbase, "This server is not XMPP-compliant"
             " (it does not send a 'version' attribute). Please fix it or try another one.\n" );
         disconnect( ConnStreamVersionError );
       }
@@ -248,7 +248,7 @@ namespace gloox
     else if( m_connection )
       m_connection->send( data );
     else
-      m_logInstance.log( LogLevelError, LogAreaClassClientbase, "Compression finished, but chain broken" );
+      m_logInstance.err( LogAreaClassClientbase, "Compression finished, but chain broken" );
   }
 
   void ClientBase::handleDecompressedData( const std::string& data )
@@ -256,7 +256,7 @@ namespace gloox
     if( m_parser )
       parse( data );
     else
-      m_logInstance.log( LogLevelError, LogAreaClassClientbase, "Decompression finished, but chain broken" );
+      m_logInstance.err( LogAreaClassClientbase, "Decompression finished, but chain broken" );
   }
 
   void ClientBase::handleEncryptedData( const TLSBase* /*base*/, const std::string& data )
@@ -264,7 +264,7 @@ namespace gloox
     if( m_connection )
       m_connection->send( data );
     else
-      m_logInstance.log( LogLevelError, LogAreaClassClientbase, "Encryption finished, but chain broken" );
+      m_logInstance.err( LogAreaClassClientbase, "Encryption finished, but chain broken" );
   }
 
   void ClientBase::handleDecryptedData( const TLSBase* /*base*/, const std::string& data )
@@ -274,7 +274,7 @@ namespace gloox
     else if( m_parser )
       parse( data );
     else
-      m_logInstance.log( LogLevelError, LogAreaClassClientbase, "Decryption finished, but chain broken" );
+      m_logInstance.err( LogAreaClassClientbase, "Decryption finished, but chain broken" );
   }
 
   void ClientBase::handleHandshakeResult( const TLSBase* /*base*/, bool success, CertInfo &certinfo )
@@ -283,18 +283,18 @@ namespace gloox
     {
       if( !notifyOnTLSConnect( certinfo ) )
       {
-        logInstance().log( LogLevelError, LogAreaClassClientbase, "Server's certificate rejected!" );
+        logInstance().err( LogAreaClassClientbase, "Server's certificate rejected!" );
         disconnect( ConnTlsFailed );
       }
       else
       {
-        logInstance().log( LogLevelDebug, LogAreaClassClientbase, "connection encryption active" );
+        logInstance().dbg( LogAreaClassClientbase, "connection encryption active" );
         header();
       }
     }
     else
     {
-      logInstance().log( LogLevelError, LogAreaClassClientbase, "TLS handshake failed!" );
+      logInstance().err( LogAreaClassClientbase, "TLS handshake failed!" );
       disconnect( ConnTlsFailed );
     }
   }
@@ -308,7 +308,7 @@ namespace gloox
     else if( m_parser )
       parse( data );
     else
-      m_logInstance.log( LogLevelError, LogAreaClassClientbase, "Received data, but chain broken" );
+      m_logInstance.err( LogAreaClassClientbase, "Received data, but chain broken" );
   }
 
   void ClientBase::handleConnect( const ConnectionBase* /*connection*/ )
@@ -360,7 +360,7 @@ namespace gloox
       std::string error = "parse error (at pos ";
       error += tmp;
       error += "): ";
-      m_logInstance.log( LogLevelError, LogAreaClassClientbase, error + copy );
+      m_logInstance.err( LogAreaClassClientbase, error + copy );
       Tag* e = new Tag( "stream:error" );
       new Tag( e, "restricted-xml", "xmlns", XMLNS_XMPP_STREAM );
       send( e );
@@ -469,7 +469,7 @@ namespace gloox
         a->setCData( Base64::encode64( token ) );
 //         etc... see gssapi-sasl-draft.txt
 #else
-        logInstance().log( LogLevelError, LogAreaClassClientbase,
+        logInstance().err( LogAreaClassClientbase,
                     "GSSAPI is not supported on this platform. You should never see this." );
 #endif
         break;
@@ -579,7 +579,7 @@ namespace gloox
 #ifdef _WIN32
         // see gssapi-sasl-draft.txt
 #else
-        m_logInstance.log( LogLevelError, LogAreaClassClientbase,
+        m_logInstance.err( LogAreaClassClientbase,
                            "Huh, received GSSAPI challenge?! This should have never happened!" );
 #endif
         break;
@@ -654,7 +654,7 @@ namespace gloox
       else
         m_connection->send( xml );
 
-      logInstance().log( LogLevelDebug, LogAreaXmlOutgoing, xml );
+      logInstance().dbg( LogAreaXmlOutgoing, xml );
     }
   }
 

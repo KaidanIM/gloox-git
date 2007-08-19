@@ -188,8 +188,8 @@ namespace gloox
   DNS::HostMap DNS::resolve( const std::string& service, const std::string& proto,
                              const std::string& domain, const LogSink& logInstance )
   {
-    logInstance.log( LogLevelWarning, LogAreaClassDns,
-                    "notice: gloox does not support SRV records on this platform. Using A records instead." );
+    logInstance.warn( LogAreaClassDns, "notice: gloox does not support SRV "
+                        "records on this platform. Using A records instead." );
     return defaultHostMap( domain, logInstance );
   }
 #endif
@@ -198,8 +198,8 @@ namespace gloox
   {
     HostMap server;
 
-    logInstance.log( LogLevelWarning, LogAreaClassDns, "notice: no SRV record found for " + domain
-                                                       + ", using default port." );
+    logInstance.warn( LogAreaClassDns, "notice: no SRV record found for "
+                                          + domain + ", using default port." );
 
     if( !domain.empty() )
       server[domain] = XMPP_PORT;
@@ -292,7 +292,7 @@ namespace gloox
 #ifndef _WIN32_WCE
       oss << "connecting to " << domain.c_str()
           << " (" << inet_ntoa( target.sin_addr ) << ":" << port << ")";
-      logInstance.log( LogLevelDebug, LogAreaClassDns, oss.str() );
+      logInstance.dbg( LogAreaClassDns, oss.str() );
 #endif
       return fd;
     }
@@ -300,7 +300,7 @@ namespace gloox
 #ifndef _WIN32_WCE
     oss << "connection to " << domain.c_str()
          << " (" << inet_ntoa( target.sin_addr ) << ":" << port << ") failed";
-    logInstance.log( LogLevelDebug, LogAreaClassDns, oss.str() );
+    logInstance.dbg( LogAreaClassDns, oss.str() );
 #endif
 
     closeSocket( fd );
