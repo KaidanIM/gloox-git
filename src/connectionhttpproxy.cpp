@@ -147,7 +147,7 @@ namespace gloox
       {
         m_proxyHandshakeBuffer = "";
         m_state = StateConnected;
-        m_logInstance.log( LogLevelDebug, LogAreaClassConnectionHTTPProxy,
+        m_logInstance.dbg( LogAreaClassConnectionHTTPProxy,
                            "http proxy connection established" );
         m_handler->handleConnect( this );
       }
@@ -185,7 +185,7 @@ namespace gloox
 #ifndef _WIN32_WCE
     std::ostringstream oss;
     oss << "requesting http proxy connection to " << server << ":" << port;
-    m_logInstance.log( LogLevelDebug, LogAreaClassConnectionHTTPProxy, oss.str() );
+    m_logInstance.dbg( LogAreaClassConnectionHTTPProxy, oss.str() );
 #endif
       std::ostringstream os;
       os << "CONNECT " << server << ":" << port << ( m_http11 ? " HTTP/1.1" : " HTTP/1.0" ) << "\r\n";
@@ -213,7 +213,7 @@ namespace gloox
                                               ConnectionError reason )
   {
     m_state = StateDisconnected;
-    m_logInstance.log( LogLevelDebug, LogAreaClassConnectionHTTPProxy, "http proxy connection closed" );
+    m_logInstance.dbg( LogAreaClassConnectionHTTPProxy, "http proxy connection closed" );
 
     if( m_handler )
       m_handler->handleDisconnect( this, reason );

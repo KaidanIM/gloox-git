@@ -97,15 +97,15 @@ namespace gloox
       switch( m_socket )
       {
         case -ConnConnectionRefused:
-          m_logInstance.log( LogLevelError, LogAreaClassConnectionTCPClient,
+          m_logInstance.err( LogAreaClassConnectionTCPClient,
                              m_server + ": connection refused" );
           break;
         case -ConnDnsError:
-          m_logInstance.log( LogLevelError, LogAreaClassConnectionTCPClient,
+          m_logInstance.err( LogAreaClassConnectionTCPClient,
                              m_server + ": host not found" );
           break;
         default:
-          m_logInstance.log( LogLevelError, LogAreaClassConnectionTCPClient,
+          m_logInstance.err( LogAreaClassConnectionTCPClient,
                              "Unknown error condition" );
           break;
       }

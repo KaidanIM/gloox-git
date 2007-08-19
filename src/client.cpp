@@ -112,9 +112,9 @@ namespace gloox
       if( m_tls == TLSRequired
           && ( !m_encryption || !( m_streamFeatures & StreamFeatureStartTls ) ) )
       {
-        logInstance().log( LogLevelError, LogAreaClassClient,
-                    "Client is configured to require TLS but either the server didn't offer TLS or "
-                    "TLS support is not compiled in." );
+        logInstance().err( LogAreaClassClient, "Client is configured to require"
+                                " TLS but either the server didn't offer TLS or"
+                                " TLS support is not compiled in." );
         disconnect( ConnTlsNotAvailable );
       }
       else if( m_tls > TLSDisabled && m_encryption && !m_encryptionActive
@@ -154,8 +154,8 @@ namespace gloox
           }
           else
           {
-            logInstance().log( LogLevelError, LogAreaClassClient,
-                                     "the server doesn't support any auth mechanisms we know about" );
+            logInstance().err( LogAreaClassClient, "the server doesn't support"
+                                           " any auth mechanisms we know about" );
             disconnect( ConnNoSupportedAuth );
           }
         }
@@ -202,14 +202,14 @@ namespace gloox
       }
       else
       {
-        logInstance().log( LogLevelError, LogAreaClassClient,
-                           "fallback: the server doesn't support any auth mechanisms we know about" );
+        logInstance().err( LogAreaClassClient, "fallback: the server doesn't "
+                                   "support any auth mechanisms we know about" );
         disconnect( ConnNoSupportedAuth );
       }
     }
     else if( ( tag->name() == "proceed" ) && tag->hasAttribute( XMLNS, XMLNS_STREAM_TLS ) )
     {
-      logInstance().log( LogLevelDebug, LogAreaClassClient, "starting TLS handshake..." );
+      logInstance().dbg( LogAreaClassClient, "starting TLS handshake..." );
 
       if( m_encryption )
       {
@@ -219,34 +219,34 @@ namespace gloox
     }
     else if( ( tag->name() == "failure" ) && tag->hasAttribute( XMLNS, XMLNS_STREAM_TLS ) )
     {
-      logInstance().log( LogLevelError, LogAreaClassClient, "TLS handshake failed (server-side)!" );
+      logInstance().err( LogAreaClassClient, "TLS handshake failed (server-side)!" );
       disconnect( ConnTlsFailed );
     }
     else if( ( tag->name() == "failure" ) && tag->hasAttribute( XMLNS, XMLNS_COMPRESSION ) )
     {
-      logInstance().log( LogLevelError, LogAreaClassClient, "stream compression init failed!" );
+      logInstance().err( LogAreaClassClient, "stream compression init failed!" );
       disconnect( ConnCompressionFailed );
     }
     else if( ( tag->name() == "compressed" ) && tag->hasAttribute( XMLNS, XMLNS_COMPRESSION ) )
     {
-      logInstance().log( LogLevelDebug, LogAreaClassClient, "stream compression inited" );
+      logInstance().dbg( LogAreaClassClient, "stream compression inited" );
       m_compressionActive = true;
       header();
     }
     else if( ( tag->name() == "challenge" ) && tag->hasAttribute( XMLNS, XMLNS_STREAM_SASL ) )
     {
-      logInstance().log( LogLevelDebug, LogAreaClassClient, "processing SASL challenge" );
+      logInstance().dbg( LogAreaClassClient, "processing SASL challenge" );
       processSASLChallenge( tag->cdata() );
     }
     else if( ( tag->name() == "failure" ) && tag->hasAttribute( XMLNS, XMLNS_STREAM_SASL ) )
     {
-      logInstance().log( LogLevelError, LogAreaClassClient, "SASL authentication failed!" );
+      logInstance().err( LogAreaClassClient, "SASL authentication failed!" );
       processSASLError( tag );
       disconnect( ConnAuthenticationFailed );
     }
     else if( ( tag->name() == "success" ) && tag->hasAttribute( XMLNS, XMLNS_STREAM_SASL ) )
     {
-      logInstance().log( LogLevelDebug, LogAreaClassClient, "SASL authentication successful" );
+      logInstance().dbg( LogAreaClassClient, "SASL authentication successful" );
       setAuthed( true );
       header();
     }
