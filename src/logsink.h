@@ -57,6 +57,30 @@ namespace gloox
       void log( LogLevel level, LogArea area, const std::string& message ) const;
 
       /**
+       * Use this function to log a debug message with given LogIdentifier.
+       * @param area The part of the program/library the message comes from.
+       * @param message The actual log message.
+       */
+      void dbg( LogArea area, const std::string& message ) const
+        { log( LogLevelDebug, area, message ); }
+
+      /**
+       * Use this function to log a warning message with given LogIdentifier.
+       * @param area The part of the program/library the message comes from.
+       * @param message The actual log message.
+       */
+      void warn( LogArea area, const std::string& message ) const
+        { log( LogLevelWarning, area, message ); }
+
+      /**
+       * Use this function to log a error message with given LogIdentifier.
+       * @param area The part of the program/library the message comes from.
+       * @param message The actual log message.
+       */
+      void err( LogArea area, const std::string& message ) const
+        { log( LogLevelError, area, message ); }
+
+      /**
        * Registers @c lh as object that receives all debug messages of the specified type.
        * Suitable for logging to a file, etc.
        * @param level The LogLevel for this handler.
