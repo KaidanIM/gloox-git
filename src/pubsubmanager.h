@@ -106,7 +106,9 @@ namespace gloox
      *
      * XEP Version: 1.9
      */
-    class Manager : public IqHandler, public gloox::DiscoHandler, public MessageHandler
+    class GLOOX_API Manager : public IqHandler,
+                              public gloox::DiscoHandler,
+                              public MessageHandler
     {
       public:
 

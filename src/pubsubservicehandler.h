@@ -32,7 +32,7 @@ namespace gloox
      *
      * @author Vincent Thomasset
      */
-    class ServiceHandler
+    class GLOOX_API ServiceHandler
     {
       public:
         /**

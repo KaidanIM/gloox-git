@@ -59,7 +59,7 @@ namespace gloox
      *
      * @author Vincent Thomasset
      */
-    class NodeHandler
+    class GLOOX_API NodeHandler
     {
       public:
 
