@@ -17,10 +17,10 @@
 namespace gloox
 {
 
-ConnectionTLS::ConnectionTLS(ConnectionBase* conn, ConnectionDataHandler* cdh, const LogSink& log) : ConnectionBase ( this ), m_connection ( conn ), m_handler( cdh ), m_log ( log ), m_handshaked ( false )
+ConnectionTLS::ConnectionTLS(ConnectionBase* conn, ConnectionDataHandler* cdh, const LogSink& log) : ConnectionBase ( this ), m_connection ( conn ), m_log ( log ), m_handshaked ( false )
 {
-	if(m_handler)
-		conn->registerConnectionDataHandler(m_handler);
+	m_handler = cdh;
+	conn->registerConnectionDataHandler(this);
 	m_tls = new TLSDefault(this, m_connection->server());
 }
 
@@ -30,30 +30,46 @@ ConnectionTLS::~ConnectionTLS()
 		delete m_tls;
 }
 
+bool ConnectionTLS::completeHandshake(int timeout)
+{
+	while(recv(200) == ConnNoError && !m_handshaked);
+	return true;
+}
+
 /**************** ConnectionBase methods ****************/
 
 ConnectionError ConnectionTLS::connect()
 {
 	m_state = StateConnecting;
-	ConnectionError e = m_connection->connect();
-	if(e == ConnNoError)
-	{
-		m_state = StateConnecting;
-		m_log.log(LogLevelDebug, LogAreaClassConnectionTLS, "Beginning TLS handshake....");
-		m_tls->handshake(); // Initiate handshake
-	}
-	return e;
+	return m_connection->connect();
 }
 
 ConnectionError ConnectionTLS::recv( int timeout )
 {
-	return m_connection->recv(timeout);
+ 	if(m_connection->state() == StateConnected)
+	{
+		return m_connection->recv(timeout);
+	}
+	else
+	{
+		m_log.log(LogLevelWarning, LogAreaClassConnectionTLS, "Attempt to receive data on a connection that is not connected (or is connecting)");
+		return ConnNotConnected;
+	}
 }
 
 bool ConnectionTLS::send( const std::string& data )
 {
-	m_log.log(LogLevelDebug, LogAreaClassConnectionTLS, "Encrypting data...");
-	m_tls->encrypt(data);
+	if(m_handshaked && m_state == StateConnected)
+	{
+		m_log.log(LogLevelDebug, LogAreaClassConnectionTLS, "Encrypting data...");
+		m_tls->encrypt(data);
+		return true;
+	}
+	else
+	{
+		m_log.log(LogLevelWarning, LogAreaClassConnectionTLS, "Attempt to send data on a connection that is not connected (or is connecting)");
+		return false;
+	}
 }
 
 ConnectionError ConnectionTLS::receive()
@@ -66,6 +82,8 @@ ConnectionError ConnectionTLS::receive()
 void ConnectionTLS::disconnect()
 {
 	m_connection->disconnect();
+	m_handshaked = false;
+	m_state = StateDisconnected;
 }
 
 void ConnectionTLS::cleanup()
@@ -76,7 +94,12 @@ void ConnectionTLS::cleanup()
 
 void ConnectionTLS::getStatistics(int& totalIn, int& totalOut)
 {
-	getStatistics(totalIn, totalOut);
+	m_connection->getStatistics(totalIn, totalOut);
+}
+
+ConnectionBase* ConnectionTLS::newInstance() const
+{
+	return new ConnectionTLS(m_connection->newInstance(), m_handler, m_log);
 }
 
 /************ ConnectionDataHandler methods *************/
@@ -89,19 +112,19 @@ void ConnectionTLS::handleReceivedData( const ConnectionBase* connection, const 
 
 void ConnectionTLS::handleConnect( const ConnectionBase* connection )
 {
-	if(m_handler)
-		m_handler->handleConnect(connection);
+	if(!m_handshaked)
+	{
+		m_log.log(LogLevelDebug, LogAreaClassConnectionTLS, "Beginning TLS handshake....");
+		m_tls->handshake(); // Initiate handshake
+	}
 }
 
 void ConnectionTLS::handleDisconnect( const ConnectionBase* connection, ConnectionError reason )
 {
 	if(m_handler)
-		m_handler->handleDisconnect(connection, reason);
-}
-
-ConnectionBase* ConnectionTLS::newInstance() const
-{
-	return new ConnectionTLS(m_connection->newInstance(), m_handler, m_log);
+		m_handler->handleDisconnect(this, reason);
+	m_handshaked = false;
+	m_state = StateDisconnected;
 }
 
 /***************** TLSHandler methods *******************/
@@ -117,7 +140,7 @@ void ConnectionTLS::handleDecryptedData(const TLSBase* tls, const std::string& d
 	if(m_handler)
 	{
 		m_log.log(LogLevelDebug, LogAreaClassConnectionTLS, "Handling decrypted data...");
-		m_handler->handleReceivedData(m_connection, data);
+		m_handler->handleReceivedData(this, data);
 	}
 	else
 	{
@@ -131,6 +154,8 @@ void ConnectionTLS::handleHandshakeResult (const TLSBase *base, bool success, Ce
 	{
 		m_state = StateConnected;
 		m_log.log(LogLevelDebug, LogAreaClassConnectionTLS, "TLS handshake succeeded");
+		if(m_handler)
+			m_handler->handleConnect(this);
 	}
 	else
 	{

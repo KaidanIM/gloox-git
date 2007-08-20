@@ -23,7 +23,7 @@
 namespace gloox
 {
 
-class GLOOX_API ConnectionTLS : public TLSHandler, ConnectionBase, ConnectionDataHandler
+class GLOOX_API ConnectionTLS : public TLSHandler, public ConnectionBase, ConnectionDataHandler
 {
 public:
 	ConnectionTLS(ConnectionBase* conn, ConnectionDataHandler* cdh, const LogSink& log);
@@ -70,7 +70,7 @@ public:
 private:
 	// Properties
 	ConnectionBase* m_connection;
-	ConnectionDataHandler* m_handler;
+	// ConnectionDataHandler* m_handler;
 	TLSDefault* m_tls;
 	const LogSink& m_log;
 	bool m_handshaked;

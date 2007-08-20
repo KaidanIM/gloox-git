@@ -220,8 +220,18 @@ namespace gloox
 					break;
 				case ModeLegacyHTTP:
 				case ModePersistentHTTP:
+				{
 					// Read from connection at front of queue
-					m_activeConnections.front()->recv ( timeout );
+					ConnectionError ce = m_activeConnections.front()->recv ( timeout );
+					if(ce != ConnNoError)
+					{
+
+						printf("Error %d occured during recv() %d\n", ce, m_activeConnections.size());
+						m_connectionPool.push_back(m_activeConnections.front());
+						m_activeConnections.pop_front();
+						m_connectionPool.back()->disconnect();
+					}
+				}
 					break;
 				default:
 					break;
@@ -296,22 +306,30 @@ namespace gloox
 							printf("Connection from pool was disconnected... connecting...\n");
 							ConnectionError ce = pConnection->connect();
 							if (ce != ConnNoError)
+							{
 								printf("An error occured while connecting: %d\n", ce);
+								m_state = StateDisconnected; // Assume the connection to the server is lost permanently
+								disconnect();
+							}
+								
 						}
+						while(pConnection->state() != StateConnected) pConnection->recv(200);
 						printf("Restoring a connection whose status is %d\n", pConnection->state());
 						// now stick it on the end of the list of active connections
 						m_activeConnections.push_back ( pConnection );
+						bSendData = true;
 					}
-					else
+					else if(!m_activeConnections.empty())
 					{
 						ConnectionBase* pConnection = m_activeConnections.back()->newInstance();
 						pConnection->registerConnectionDataHandler ( this );
 						if ( pConnection->connect() != ConnNoError )
 							printf ( "Failed to connect...\n" ); // TODO: Retry here
 						m_activeConnections.push_back ( pConnection );
+						bSendData = true;
 					}
 
-					bSendData = true;
+					
 				
 					
 			}
@@ -601,7 +619,7 @@ namespace gloox
 			break;
 			case ModeLegacyHTTP:
 			case ModePersistentHTTP:
-				printf ( "A TCP connection %p was disconnected.\n", connection );
+			printf ( "A TCP connection %p was disconnected (reason: %d).\n", connection, reason );
 			break;
 		}
 
