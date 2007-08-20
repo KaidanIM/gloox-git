@@ -91,7 +91,7 @@ class BoshTest : public MessageSessionHandler, ConnectionListener, LogHandler,
        conn1->setMode(ConnectionBOSH::ModeLegacyHTTP);    
 #endif
        
-	
+       j->setForceNonSasl(); // Needed for non XEP-0206 compliant connection managers (such as Openfire 3.3.2)
        
 
       if( j->connect( false ) )
