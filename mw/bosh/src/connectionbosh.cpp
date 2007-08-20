@@ -33,7 +33,7 @@ namespace gloox
 
 	ConnectionBOSH::ConnectionBOSH ( ConnectionBase *connection, const LogSink& logInstance, const std::string& boshHost, const std::string& xmppServer, int xmppPort )
 			: ConnectionBase ( 0 ),
-			m_logInstance ( logInstance ), m_boshHost ( boshHost ), m_path ( "/http-bind/" ), m_handler ( NULL ),
+	m_logInstance ( logInstance ), m_parser (this), m_boshHost ( boshHost ), m_path ( "/http-bind/" ), m_handler ( NULL ),
 			m_initialStreamSent ( false ), m_openRequests ( 0 ), m_maxOpenRequests ( 2 ), m_wait ( 30 ), m_hold ( 2 ), m_streamRestart ( false ),
 			m_lastRequestTime ( 0 ), m_minTimePerRequest ( 0 ), m_sendBuffer ( "" ),
 			m_connMode ( ModePipelining )
@@ -45,7 +45,7 @@ namespace gloox
 	                                 const LogSink& logInstance, const std::string& boshHost,
 	                                 const std::string& xmppServer, int xmppPort )
 			: ConnectionBase ( cdh ),
-			m_logInstance ( logInstance ), m_boshHost ( boshHost ), m_path ( "/http-bind/" ), m_handler ( cdh ),
+	m_logInstance ( logInstance ), m_parser (this), m_boshHost ( boshHost ), m_path ( "/http-bind/" ), m_handler ( cdh ),
 			m_initialStreamSent ( false ), m_openRequests ( 0 ), m_maxOpenRequests ( 2 ), m_wait ( 30 ), m_hold ( 2 ), m_streamRestart ( false ),
 			m_lastRequestTime ( 0 ), m_minTimePerRequest ( 0 ), m_sendBuffer ( "" ),
 			m_connMode ( ModePipelining )
@@ -63,8 +63,6 @@ namespace gloox
 			strBOSHHost << m_boshHost << ":" << m_port;
 			m_boshHost = strBOSHHost.str();
 		}
-
-		m_parser = new Parser ( this );
 
 		// drop this connection into our pool of available connections
 		printf ( "Added initial connection to connection pool\n" );
@@ -156,7 +154,7 @@ namespace gloox
 			requestBody << "sid='" << m_sid << "' ";
 			requestBody << "type='terminal' ";
 			requestBody << "xml:lang='en' ";
-			requestBody << "xmlns='http://jabber.org/protocol/httpbind'";
+			requestBody << "xmlns='" << XMLNS_HTTPBIND << "'";
 			if ( m_sendBuffer.empty() ) // Make sure that any data in the send buffer gets sent
 				requestBody << "/>";
 			else
@@ -173,12 +171,14 @@ namespace gloox
 			m_logInstance.log ( LogLevelError, LogAreaClassConnectionBOSH, "disconnecting from server in a non-graceful fashion" );
 		}
 		
-		for ( uint i = 0; i < m_activeConnections.size(); i++ )
+		int activeConnectionsCount = m_activeConnections.size();
+		for ( uint i = 0; i < activeConnectionsCount; i++ )
 		{
 			m_activeConnections[i]->disconnect();
 		}
 		
-		for ( uint i = 0; i < m_connectionPool.size(); i++ )
+		int connectionPoolCount = m_connectionPool.size();
+		for ( uint i = 0; i < connectionPoolCount; i++ )
 		{
 			m_connectionPool[i]->disconnect();
 		}
@@ -191,10 +191,10 @@ namespace gloox
 	ConnectionError ConnectionBOSH::recv ( int timeout )
 	{
 		ConnectionError eRet = ConnNoError;
-
+		
 		// If there are no open requests then the spec allows us to send an empty request...
 		// (Some CMs do not obey this, it seems)
-		if ( m_activeConnections.empty() || m_sendBuffer.size() > 0)
+		if ( (m_activeConnections.empty() || m_sendBuffer.size() > 0) && m_state == StateConnected)
 		{
 			m_logInstance.log ( LogLevelDebug, LogAreaClassConnectionBOSH, "Sending empty request (or there is data in the send buffer)");
 			sendXML ( m_sendBuffer );
@@ -207,7 +207,7 @@ namespace gloox
 			if ( m_handler && m_streamRestart )
 			{
 				m_logInstance.log ( LogLevelDebug, LogAreaClassConnectionBOSH, "sending spoofed <stream:stream>" );
-				m_handler->handleReceivedData ( this, "<?xml version='1.0' ?><stream:stream xmlns:stream='http://etherx.jabber.org/streams' xmlns='jabber:client' version='1.0' from='" + m_server + "' id ='" + m_sid + "' xml:lang='en' >" );
+				m_handler->handleReceivedData ( this, "<?xml version='1.0' ?><stream:stream xmlns:stream='http://etherx.jabber.org/streams' xmlns='" + XMLNS_CLIENT + "' version='" + XMPP_STREAM_VERSION_MAJOR + "." + XMPP_STREAM_VERSION_MINOR + "' from='" + m_server + "' id ='" + m_sid + "' xml:lang='en'>" );
 				m_logInstance.log ( LogLevelDebug, LogAreaClassConnectionBOSH, "sent spoofed <stream:stream>" );
 				m_streamRestart = false;
 			}
@@ -239,7 +239,20 @@ namespace gloox
 		}
 		else
 		{
-			m_logInstance.log ( LogLevelDebug, LogAreaClassConnectionBOSH, "No available connections open");
+			if(m_state == StateConnecting)
+			{
+				switch(m_connMode)
+				{
+				case ModePipelining:
+				case ModePersistentHTTP:
+				case ModeLegacyHTTP:
+					if(!m_connectionPool.empty())
+						return m_connectionPool.front()->recv(timeout);
+				default:break;
+				}
+			}
+			
+			m_logInstance.log ( LogLevelWarning, LogAreaClassConnectionBOSH, "No available connections open");
 			eRet = ConnNotConnected;
 		}
 		return eRet;
@@ -248,6 +261,7 @@ namespace gloox
 	/* Chooses the appropriate connection, or opens a new one if necessary. Wraps xml in HTTP and sends. */
 	bool ConnectionBOSH::sendRequest ( const std::string& xml, bool ignoreRequestLimit )
 	{
+		
 		if(!ignoreRequestLimit)
 		{
 			if ( m_connMode == ModePipelining && m_activeConnections.empty())
@@ -311,7 +325,10 @@ namespace gloox
 								m_state = StateDisconnected; // Assume the connection to the server is lost permanently
 								disconnect();
 							}
-								
+							 // Now return, as the connection may not be established
+							// We will get called again from handleConnect
+							/*m_logInstance.log ( LogLevelDebug, LogAreaClassConnectionBOSH, "waiting for connection to be established" );
+							return false;	*/
 						}
 						while(pConnection->state() != StateConnected) pConnection->recv(200);
 						printf("Restoring a connection whose status is %d\n", pConnection->state());
@@ -365,6 +382,12 @@ namespace gloox
 		std::ostringstream requestBody;
 
 		
+		if(m_state != StateConnected)
+		{
+			m_logInstance.log ( LogLevelDebug, LogAreaClassConnectionBOSH, "Data sent before connection established (will be buffered)");
+			return false;
+		}
+		
 		if ( data.empty() )
 		{
 			if ( ( time ( NULL ) - m_lastRequestTime ) < m_minTimePerRequest && m_openRequests > 0 )
@@ -382,11 +405,11 @@ namespace gloox
 		requestBody << "<body ";
 		requestBody << "rid='" << m_rid << "' ";
 		requestBody << "sid='" << m_sid << "' ";
-		requestBody << "xmlns='http://jabber.org/protocol/httpbind'";
+		requestBody << "xmlns='" << XMLNS_HTTPBIND << "'";
 		
 		if ( m_streamRestart )
 		{
-			requestBody << " xmpp:restart='true' to='" << m_server << "' xml:lang='en' xmlns:xmpp='urn:xmpp:xbosh' />";
+			requestBody << " xmpp:restart='true' to='" << m_server << "' xml:lang='en' xmlns:xmpp='"<< XMLNS_XMPP_BOSH << "' />";
 			m_logInstance.log ( LogLevelDebug, LogAreaClassConnectionBOSH, "restarting stream" );
 		}
 		else
@@ -456,13 +479,15 @@ namespace gloox
 	void ConnectionBOSH::cleanup()
 	{
 		m_state = StateDisconnected;
-
-		for ( uint i = 0; i < m_activeConnections.size(); i++ )
+		
+		int activeConnectionsCount = m_activeConnections.size();
+		for ( uint i = 0; i < activeConnectionsCount; i++ )
 		{
 			m_activeConnections[i]->cleanup();
 		}
-
-		for ( uint i = 0; i < m_connectionPool.size(); i++ )
+		
+		int connectionPoolCount = m_connectionPool.size();
+		for ( uint i = 0; i < connectionPoolCount; i++ )
 		{
 			m_connectionPool[i]->cleanup();
 		}
@@ -472,19 +497,12 @@ namespace gloox
 	{
 		if(!(m_activeConnections.empty() && m_connectionPool.empty()))
 		{
-			int tmpTotalIn, tmpTotalOut;
-			totalIn = totalOut = 0;
-			for ( uint i = 0; i < m_activeConnections.size(); i++ )
-			{
-				m_activeConnections[i]->getStatistics(tmpTotalIn, tmpTotalOut);
-				totalIn += tmpTotalIn; totalOut += tmpTotalOut;
-			}
-			
-			for ( uint i = 0; i < m_connectionPool.size(); i++ )
-			{
-				m_connectionPool[i]->getStatistics(tmpTotalIn, tmpTotalOut);
-				totalIn += tmpTotalIn; totalOut += tmpTotalOut;
-			}
+			int activeConnectionsCount = m_activeConnections.size();
+			for ( uint i = 0; i < activeConnectionsCount; i++ )
+				m_activeConnections[i]->getStatistics(totalIn, totalOut);
+			int connectionPoolCount = m_connectionPool.size();
+			for ( uint i = 0; i < connectionPoolCount; i++ )
+				m_connectionPool[i]->getStatistics(totalIn, totalOut);
 		}
 		else
 		{
@@ -573,7 +591,7 @@ namespace gloox
 	{
 		printf("On connection %p ", connection);
 		m_logInstance.log ( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh received XML:\n" + data + "\n" );
-		m_parser->feed ( data );
+		m_parser.feed ( data );
 	}
 
 	void ConnectionBOSH::handleConnect ( const ConnectionBase* connection )
@@ -595,8 +613,8 @@ namespace gloox
 			requestBody.addAttribute ( "route", "xmpp:" + m_server + ":5222" );
 			requestBody.addAttribute ( "xml:lang", "en" );
 			requestBody.addAttribute ( "xmpp:version", "1.0" );
-			requestBody.addAttribute ( "xmlns", "http://jabber.org/protocol/httpbind" );
-			requestBody.addAttribute ( "xmlns:xmpp", "urn:xmpp:xbosh" );
+			requestBody.addAttribute ( "xmlns", XMLNS_HTTPBIND );
+			requestBody.addAttribute ( "xmlns:xmpp", XMLNS_XMPP_BOSH );
 			requestBody.addAttribute ( "to", m_server );
 
 			m_logInstance.log ( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh connection request sent" );
@@ -605,6 +623,11 @@ namespace gloox
 		else
 		{
 			printf ( "New TCP connection %p established\n", connection );
+			/* if(!m_sendBuffer.empty())
+			{
+				m_logInstance.log ( LogLevelDebug, LogAreaClassConnectionBOSH, "sending request on new connection" );
+				sendXML(m_sendBuffer);
+			} */
 		}
 	}
 
@@ -675,7 +698,7 @@ namespace gloox
 				if ( m_handler )
 				{
 					m_handler->handleConnect ( this );
-					m_handler->handleReceivedData ( this, "<?xml version='1.0' ?><stream:stream xmlns:stream='http://etherx.jabber.org/streams' xmlns='jabber:client' version='1.0' from='localhost' id ='" + m_sid + "' xml:lang='en'>" );
+					m_handler->handleReceivedData ( this, "<?xml version='1.0' ?><stream:stream xmlns:stream='http://etherx.jabber.org/streams' xmlns='" + XMLNS_CLIENT + "' version='" + XMPP_STREAM_VERSION_MAJOR + "." + XMPP_STREAM_VERSION_MINOR + "' from='" + m_server + "' id ='" + m_sid + "' xml:lang='en'>" );
 				}
 			}
 			if ( tag->hasAttribute ( "type" ) )

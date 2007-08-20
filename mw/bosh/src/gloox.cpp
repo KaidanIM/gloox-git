@@ -84,6 +84,9 @@ namespace gloox
   const std::string XMLNS_STREAM_IQREGISTER = "http://jabber.org/features/iq-register";
   const std::string XMLNS_STREAM_COMPRESS   = "http://jabber.org/features/compress";
 
+  const std::string XMLNS_HTTPBIND          = "http://jabber.org/protocol/httpbind";
+  const std::string XMLNS_XMPP_BOSH         = "urn:xmpp:xbosh";
+
   const std::string XMPP_STREAM_VERSION_MAJOR = "1";
   const std::string XMPP_STREAM_VERSION_MINOR = "0";
   const std::string GLOOX_VERSION           = "0.9.4";

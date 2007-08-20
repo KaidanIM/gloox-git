@@ -165,7 +165,7 @@ namespace gloox
       //ConnectionBase *m_connection;
       const LogSink& m_logInstance;
    
-      Parser* m_parser; // Used for parsing XML section of responses
+      Parser m_parser; // Used for parsing XML section of responses
       std::string m_boshHost; // 
       std::string m_path; // The path part of the URL that we need to request
       ConnectionDataHandler* m_handler; // This is where data will be passed to when received

@@ -511,6 +511,14 @@ namespace gloox
   /** Stream Compression Feature namespace (XEP-0138) */
   GLOOX_API extern const std::string XMLNS_STREAM_COMPRESS;
 
+  /** General HTTP binding (BOSH) namespace (XEP-0124) */
+  GLOOX_API extern const std::string XMLNS_HTTPBIND;
+
+  /** XMPP-over-BOSH extensions (XEP-0206) */
+  GLOOX_API extern const std::string XMLNS_XMPP_BOSH;
+
+
+
   /** Supported stream version (major). */
   GLOOX_API extern const std::string XMPP_STREAM_VERSION_MAJOR;
 
