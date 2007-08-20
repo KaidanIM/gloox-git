@@ -123,8 +123,8 @@ int main( int /*argc*/, char** /*argv*/ )
 
   //-------
   name = "findChildren test";
-  Tag::TagList l = t->findChildren( "vie" );
-  Tag::TagList::const_iterator it = l.begin();
+  TagList l = t->findChildren( "vie" );
+  TagList::const_iterator it = l.begin();
   if( l.size() != 2 || (*it) != v || *(++it) != v2 )
   {
     ++fail;

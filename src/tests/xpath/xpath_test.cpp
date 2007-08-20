@@ -7,11 +7,11 @@ using namespace gloox;
 
 int fail = 0;
 
-void printResult( const std::string& name, Tag::TagList& result )
+void printResult( const std::string& name, TagList& result )
 {
   printf( ">-- %s --------------------------------------\n", name.c_str() );
   int i = 0;
-  Tag::TagList::const_iterator it = result.begin();
+  TagList::const_iterator it = result.begin();
   for( ; it != result.end(); ++it, ++i )
   {
     printf( "tag #%d: %s\n", i, (*it)->xml().c_str() );
@@ -46,8 +46,8 @@ int main( int /*argc*/, char** /*argv*/ )
   Tag *hhh = new Tag( bbb, "hhh" ); hhh->addAttribute( "name", "h1" );
   Tag *iii = new Tag( bbb, "bbb" ); iii->addAttribute( "name", "b2" );
   Tag *jjj = new Tag( hhh, "bbb" ); jjj->addAttribute( "name", "b3" );
-  Tag::TagList result;
-  Tag::TagList::const_iterator it;
+  TagList result;
+  TagList::const_iterator it;
 //   XPathToken *t = 0;
 
 // <aaa>

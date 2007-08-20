@@ -1008,7 +1008,7 @@ class ParserTest : private TagHandler
 
   private:
     Tag *m_tag;
-    Tag::TagList m_tags;
+    TagList m_tags;
     bool m_multiple;
 
 };

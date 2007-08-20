@@ -240,8 +240,8 @@ int main( int /*argc*/, char** /*argv*/ )
   }
 
   name = "parse Tag 2.8";
-  Tag::TagList l = r->children();
-  Tag::TagList::const_iterator it = l.begin();
+  TagList l = r->children();
+  TagList::const_iterator it = l.begin();
   for( ; it != l.end(); ++it )
   {
     if( (*it)->name() == "option" && ( !(*it)->hasChildWithCData( "value", "lock" ) &&
