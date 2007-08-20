@@ -23,9 +23,35 @@
 namespace gloox
 {
 
+  /**
+   * @brief This is an implementation of a TLS/SSL connection.
+   *
+   * Usage:
+   *
+   * @code
+   * Client *c = new Client( ... );
+   * c->setConnectionImpl( new ConnectionTLS( c,
+   *                                new ConnectionTCP( c->logInstance(), server, port ),
+   *                                c->logInstance()) );
+   * @endcode
+   *
+   * Due to the need for handshaking data to be sent/received before the connection is fully established, be sure not 
+   * to use the connection until ConnectionDataHandler::handleConnect() of the specified ConnectionDataHandler is called.
+   *
+   * @author Matthew Wild <mwild1@gmail.com>
+   */
+
 class GLOOX_API ConnectionTLS : public TLSHandler, public ConnectionBase, ConnectionDataHandler
 {
 public:
+     /**
+       * Constructs a new ConnectionTLS object.
+       * @param conn A transport connection. It should be configured to connect to
+       * the server and port you wish to make the encrypted connection to.
+       * ConnectionTLS will own the transport connection and delete it in its destructor.
+       * @param cdh The ConnectionDataHandler that will be notified of events from this connection
+       * @param logInstance The log target. Obtain it from ClientBase::logInstance().
+       */
 	ConnectionTLS(ConnectionBase* conn, ConnectionDataHandler* cdh, const LogSink& log);
 	~ConnectionTLS();
 	
@@ -70,12 +96,9 @@ public:
 private:
 	// Properties
 	ConnectionBase* m_connection;
-	// ConnectionDataHandler* m_handler;
 	TLSDefault* m_tls;
 	const LogSink& m_log;
 	bool m_handshaked;
-	
-	ConnectionError m_lastError;
 };
 
 }
