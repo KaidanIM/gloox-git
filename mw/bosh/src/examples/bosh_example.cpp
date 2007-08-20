@@ -15,8 +15,7 @@
 #include "../connectionsocks5proxy.h"
 #include "../messagehandler.h"
 #include "../connectionbosh.h"
-// #include "../connectionhttpproxy.h"
-#include "../connectiontls.h"
+#include "../connectionhttpproxy.h"
 
 using namespace gloox;
 
@@ -28,34 +27,22 @@ using namespace gloox;
 # include <windows.h>
 #endif
 
-// Below you can change the current profile (you will need to recompile the example with the 'make' command to test)
-// OPENFIRE - Connects to an Openfire server, running on localhost, port 8081
-// PYTHON - Connects to a python CM (you can download here: http://blog.bluendo.com/ff/bosh-connection-manager-update ) on localhost:8080
-// EJABBERD - Connects to an ejabberd server (currently doesn't work)
-// SSL - Connects to an Openfire server on the SSL port (currently doesn't work)
-
-#define PYTHON
-
-// Change the below to the JID and password to log into your server
-#define JID "mattj2@localhost/gloox/bosh"
-#define PASSWORD "pumpkin"
-
-class BoshTest : public MessageSessionHandler, ConnectionListener, LogHandler,
+class MessageTest : public MessageSessionHandler, ConnectionListener, LogHandler,
                     MessageEventHandler, MessageHandler, ChatStateHandler
 {
   public:
-    BoshTest() : m_session( 0 ), m_messageEventFilter( 0 ), m_chatStateFilter( 0 ) {}
+    MessageTest() : m_session( 0 ), m_messageEventFilter( 0 ), m_chatStateFilter( 0 ) {}
 
-    virtual ~BoshTest() {}
+    virtual ~MessageTest() {}
 
     void start()
     {
 
-      JID jid( JID );
-      j = new Client( jid, PASSWORD );
+      JID jid( "mattj2@localhost/bosh" );
+      j = new Client( jid, "pumpkin" );
       j->registerConnectionListener( this );
       j->registerMessageSessionHandler( this, 0 );
-      j->disco()->setVersion( "BoshTest", GLOOX_VERSION, "Linux" );
+      j->disco()->setVersion( "messageTest", GLOOX_VERSION, "Linux" );
       j->disco()->setIdentity( "client", "bot" );
       j->disco()->addFeature( XMLNS_CHAT_STATES );
       j->setCompression(false);
@@ -65,41 +52,22 @@ class BoshTest : public MessageSessionHandler, ConnectionListener, LogHandler,
 
       j->logInstance().registerLogHandler( LogLevelDebug, LogAreaAll, this );
 
-#if  defined(EJABBERD)
-       ConnectionTCPClient* conn0 = new ConnectionTCPClient( j->logInstance(), "localhost", 5280 );
-	ConnectionBOSH* conn1 = new ConnectionBOSH( j, conn0, j->logInstance(), "localhost", "localhost");
-#elif defined(OPENFIRE)
-	ConnectionTCPClient* conn0 = new ConnectionTCPClient( j->logInstance(), "localhost", 8081 );
-	ConnectionBOSH* conn1 = new ConnectionBOSH( j, conn0, j->logInstance(), "localhost", "localhost");
-	j->setForceNonSasl();
-#elif defined(SSL)
-	    ConnectionTCPClient* conn0 = new ConnectionTCPClient( j->logInstance(), "localhost", 8483 );
-	    ConnectionTLS* conn1 = new ConnectionTLS(conn0, NULL, j->logInstance());
-	    ConnectionBOSH* conn2 = new ConnectionBOSH( j, conn1, j->logInstance(), "localhost", "localhost");
-	    j->setConnectionImpl( conn2 );
-	    j->setForceNonSasl();
-	    conn2->setPath("/http-bind/");
-	    conn2->setMode(ConnectionBOSH::ModeLegacyHTTP);
-#elif defined(PYTHON)
-	ConnectionTCPClient* conn0 = new ConnectionTCPClient( j->logInstance(), "localhost", 8080 );
-	ConnectionBOSH* conn1 = new ConnectionBOSH( j, conn0, j->logInstance(), "localhost", "localhost");
-#endif
-	    
-#ifndef SSL
+// this code connects to a jabber server through a BOSH connection...
+
+       ConnectionTCPClient* conn0 = new ConnectionTCPClient( j->logInstance(), "localhost", 8180 );
+       ConnectionBOSH* conn1 = new ConnectionBOSH( j, conn0, j->logInstance(), "localhost", "localhost");
        j->setConnectionImpl( conn1 );
-       conn1->setPath("/http-bind/");
-       conn1->setMode(ConnectionBOSH::ModeLegacyHTTP);    
-#endif
        
-       j->setForceNonSasl(); // Needed for non XEP-0206 compliant connection managers (such as Openfire 3.3.2)
+       j->setForceNonSasl(); // Needed for non XEP-0206 compliant connection managers (such as Openfire 3.3.x)
        
+
 
       if( j->connect( false ) )
       {
         ConnectionError ce = ConnNoError;
         while( ce == ConnNoError )
         {
-          ce = j->recv(200);
+          ce = j->recv(20);
         }
         printf( "ce: %d\n", ce );
       }
@@ -201,7 +169,7 @@ class BoshTest : public MessageSessionHandler, ConnectionListener, LogHandler,
 
 int main( int /*argc*/, char** /*argv*/ )
 {
-  BoshTest *r = new BoshTest();
+  MessageTest *r = new MessageTest();
   r->start();
   delete( r );
   return 0;
