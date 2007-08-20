@@ -162,9 +162,9 @@ namespace gloox
         {
           int features=0;
           size_t pos;
-          const Tag::TagList& qchildren = query->children();
+          const TagList& qchildren = query->children();
 
-          Tag::TagList::const_iterator it = qchildren.begin();
+          TagList::const_iterator it = qchildren.begin();
           for( ; it != qchildren.end(); ++it )
           {
             if( (*it)->name() == "feature" )
@@ -207,10 +207,10 @@ namespace gloox
       if( ith == m_discoHandlerTrackMap.end() )
         return;
 
-      const Tag::TagList& content = iq->query()->children();
+      const TagList& content = iq->query()->children();
 
       DiscoNodeItemList contentList;
-      Tag::TagList::const_iterator it = content.begin();
+      TagList::const_iterator it = content.begin();
       for( ; it != content.end(); ++it )
       {
         contentList.push_back( DiscoNodeItem ( (*it)->findAttribute( "node" ),
@@ -308,12 +308,12 @@ namespace gloox
         return;
 
       const JID& service = msg->from();
-      const Tag::TagList& events = event->children();
+      const TagList& events = event->children();
       EventType type;
       EventHandlerList::iterator ith = m_eventHandlerList.begin();
 
       // in case an event may contain several different notifications
-      Tag::TagList::const_iterator it = events.begin();
+      TagList::const_iterator it = events.begin();
       for( ; it != events.end(); ++it )
       {
         type = eventType( (*it)->name() );
@@ -789,7 +789,7 @@ namespace gloox
               if( subscription )
               {
                 SubscriptionMap subMap;
-                Tag::TagList::const_iterator it = subscription->children().begin();
+                TagList::const_iterator it = subscription->children().begin();
                 for( ; it != subscription->children().end(); ++it )
                 {
                   const std::string& node = (*it)->findAttribute( "node" ),
@@ -812,7 +812,7 @@ namespace gloox
               if( affiliations )
               {
                 AffiliationMap affMap;
-                Tag::TagList::const_iterator it = affiliations->children().begin();
+                TagList::const_iterator it = affiliations->children().begin();
                 for( ; it != affiliations->children().end(); ++it )
                 {
                   const std::string& node = affiliations->findAttribute( "node" ),
@@ -856,8 +856,8 @@ namespace gloox
 
                   const Tag* subt = query->findChild( "subscriptions" );                  
                   SubscriberList list;
-                  const Tag::TagList& subs = subt->children();
-                  Tag::TagList::const_iterator it = subs.begin();
+                  const TagList& subs = subt->children();
+                  TagList::const_iterator it = subs.begin();
                   for( ; it != subs.end(); ++it )
                   {
                     const std::string& jid = (*it)->findAttribute( "jid" );
@@ -910,9 +910,9 @@ namespace gloox
                 }
                 case GetAffiliateList:
                 {
-                  const Tag::TagList& affiliates = query->children();
+                  const TagList& affiliates = query->children();
                   AffiliateList affList;
-                  Tag::TagList::const_iterator it = affiliates.begin();
+                  TagList::const_iterator it = affiliates.begin();
                   for( ; it != affiliates.end(); ++it )
                   {
                     Affiliate aff( (*it)->findAttribute( "jid" ),

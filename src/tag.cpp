@@ -399,15 +399,15 @@ namespace gloox
     return t;
   }
 
-  Tag::TagList Tag::findChildren( const std::string& name ) const
+  TagList Tag::findChildren( const std::string& name ) const
   {
     return findChildren( *m_children, name );
   }
 
-  Tag::TagList Tag::findChildren( const Tag::TagList& list, const std::string& name ) const
+  TagList Tag::findChildren( const TagList& list, const std::string& name ) const
   {
-    Tag::TagList ret;
-    Tag::TagList::const_iterator it = list.begin();
+    TagList ret;
+    TagList::const_iterator it = list.begin();
     for( ; it != list.end(); ++it )
     {
       if( (*it)->name() == name )
@@ -456,13 +456,13 @@ namespace gloox
 
   Tag* Tag::findTag( const std::string& expression )
   {
-    const Tag::TagList& l = findTagList( expression );
+    const TagList& l = findTagList( expression );
     return !l.empty() ? l.front() : 0;
   }
 
-  Tag::TagList Tag::findTagList( const std::string& expression )
+  TagList Tag::findTagList( const std::string& expression )
   {
-    Tag::TagList l;
+    TagList l;
     if( expression == "/" || expression == "//" )
       return l;
 
@@ -479,9 +479,9 @@ namespace gloox
     return l;
   }
 
-  Tag::TagList Tag::evaluateTagList( Tag* token )
+  TagList Tag::evaluateTagList( Tag* token )
   {
-    Tag::TagList result;
+    TagList result;
     if( !token )
       return result;
 
@@ -500,11 +500,11 @@ namespace gloox
         if( token->name() == name() || token->name() == "*" )
         {
 //           printf( "found %s\n", name().c_str() );
-          const Tag::TagList& tokenChildren = token->children();
+          const TagList& tokenChildren = token->children();
           if( tokenChildren.size() )
           {
             bool predicatesSucceeded = true;
-            Tag::TagList::const_iterator cit = tokenChildren.begin();
+            TagList::const_iterator cit = tokenChildren.begin();
             for( ; cit != tokenChildren.end(); ++cit )
             {
               if( (*cit)->hasAttribute( "predicate", "true" ) )
@@ -528,7 +528,7 @@ namespace gloox
 //               printf( "checking %d children of token %s\n", tokenChildren.size(), token->name().c_str() );
               if( !m_children->empty() )
               {
-                Tag::TagList::const_iterator it = m_children->begin();
+                TagList::const_iterator it = m_children->begin();
                 for( ; it != m_children->end(); ++it )
                 {
                   add( result, (*it)->evaluateTagList( (*cit) ) );
@@ -562,8 +562,8 @@ namespace gloox
 //         printf( "original token: %s\ncloned token: %s\n", token->xml().c_str(), n->xml().c_str() );
         t->addAttribute( TYPE, XTElement );
         add( result, evaluateTagList( t ) );
-        const Tag::TagList& res2 = allDescendants();
-        Tag::TagList::const_iterator it = res2.begin();
+        const TagList& res2 = allDescendants();
+        TagList::const_iterator it = res2.begin();
         for( ; it != res2.end(); ++it )
         {
           add( result, (*it)->evaluateTagList( t ) );
@@ -573,7 +573,7 @@ namespace gloox
       }
       case XTDot:
       {
-        const Tag::TagList& tokenChildren = token->children();
+        const TagList& tokenChildren = token->children();
         if( !tokenChildren.empty() )
         {
           add( result, evaluateTagList( tokenChildren.front() ) );
@@ -587,7 +587,7 @@ namespace gloox
 //         printf( "in XTDoubleDot\n" );
         if( m_parent )
         {
-          const Tag::TagList& tokenChildren = token->children();
+          const TagList& tokenChildren = token->children();
           if( tokenChildren.size() )
           {
             Tag* testtoken = tokenChildren.front();
@@ -612,17 +612,17 @@ namespace gloox
       }
       case XTInteger:
       {
-        const Tag::TagList& l = token->children();
+        const TagList& l = token->children();
         if( !l.size() )
           break;
 
-        const Tag::TagList& res = evaluateTagList( l.front() );
+        const TagList& res = evaluateTagList( l.front() );
 
         int pos = atoi( token->name().c_str() );
 //         printf( "checking index %d\n", pos );
         if( pos > 0 && pos <= (int)res.size() )
         {
-          Tag::TagList::const_iterator it = res.begin();
+          TagList::const_iterator it = res.begin();
           while ( --pos )
           {
             ++it;
@@ -687,7 +687,7 @@ namespace gloox
       return false;
 
     bool result = false;
-    Tag::TagList::const_iterator it = token->children().begin();
+    TagList::const_iterator it = token->children().begin();
     Tag* ch1 = (*it);
     Tag* ch2 = (*++it);
 
@@ -732,10 +732,10 @@ namespace gloox
     return result;
   }
 
-  Tag::TagList Tag::allDescendants()
+  TagList Tag::allDescendants()
   {
-    Tag::TagList result;
-    Tag::TagList::const_iterator it = m_children->begin();
+    TagList result;
+    TagList::const_iterator it = m_children->begin();
     for( ; it != m_children->end(); ++it )
     {
       result.push_back( (*it) );
@@ -744,14 +744,14 @@ namespace gloox
     return result;
   }
 
-  Tag::TagList Tag::evaluateUnion( Tag* token )
+  TagList Tag::evaluateUnion( Tag* token )
   {
-    Tag::TagList result;
+    TagList result;
     if( !token )
       return result;
 
-    const Tag::TagList& l = token->children();
-    Tag::TagList::const_iterator it = l.begin();
+    const TagList& l = token->children();
+    TagList::const_iterator it = l.begin();
     for( ; it != l.end(); ++it )
     {
       add( result, evaluateTagList( (*it) ) );
@@ -1015,9 +1015,9 @@ namespace gloox
     return i == l;
   }
 
-  void Tag::add( Tag::TagList& one, const Tag::TagList& two )
+  void Tag::add( TagList& one, const TagList& two )
   {
-    Tag::TagList::const_iterator it = two.begin();
+    TagList::const_iterator it = two.begin();
     for( ; it != two.end(); ++it )
       if( std::find( one.begin(), one.end(), (*it) ) == one.end() )
         one.push_back( (*it) );

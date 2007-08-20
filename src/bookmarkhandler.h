@@ -15,6 +15,8 @@
 #ifndef BOOKMARKHANDLER_H__
 #define BOOKMARKHANDLER_H__
 
+#include "macros.h"
+
 #include <string>
 #include <list>
 

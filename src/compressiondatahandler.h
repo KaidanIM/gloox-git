@@ -15,6 +15,8 @@
 #ifndef COMPRESSIONDATAHANDLER_H__
 #define COMPRESSIONDATAHANDLER_H__
 
+#include "macros.h"
+
 #include <string>
 
 namespace gloox

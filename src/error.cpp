@@ -57,7 +57,7 @@ namespace gloox
       m_type( stanzaErrorType( tag->findAttribute( TYPE ) ) ),
       m_error( StanzaErrorUndefined ), m_appError( 0 )
   {
-    Tag::TagList::const_iterator it = tag->children().begin();
+    TagList::const_iterator it = tag->children().begin();
     for( ; it != tag->children().end(); ++it )
     {
       StanzaError srt = gloox::stanzaError( (*it)->name() );

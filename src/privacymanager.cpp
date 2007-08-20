@@ -178,8 +178,8 @@ namespace gloox
             std::string def;
             std::string active;
             Tag* q = iq->query();
-            const Tag::TagList& l = q->children();
-            Tag::TagList::const_iterator it = l.begin();
+            const TagList& l = q->children();
+            TagList::const_iterator it = l.begin();
             for( ; it != l.end(); ++it )
             {
               if( (*it)->name() == "default" )
@@ -202,8 +202,8 @@ namespace gloox
 
             Tag* list = iq->query()->findChild( "list" );
             const std::string& name = list->findAttribute( "name" );
-            const Tag::TagList& l = list->children();
-            Tag::TagList::const_iterator it = l.begin();
+            const TagList& l = list->children();
+            TagList::const_iterator it = l.begin();
             for( ; it != l.end(); ++it )
             {
               PrivacyItem::ItemType type;
@@ -230,8 +230,8 @@ namespace gloox
 
               const std::string& value = (*it)->findAttribute( "value" );
 
-              const Tag::TagList& c = (*it)->children();
-              Tag::TagList::const_iterator it_c = c.begin();
+              const TagList& c = (*it)->children();
+              TagList::const_iterator it_c = c.begin();
               for( ; it_c != c.end(); ++it_c )
               {
                 if( (*it_c)->name() == "iq" )

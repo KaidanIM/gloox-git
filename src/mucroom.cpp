@@ -492,8 +492,8 @@ namespace gloox
         party.jid = 0;
         party.actor = 0;
         party.alternate = 0;
-        const Tag::TagList& l = x->children();
-        Tag::TagList::const_iterator it = l.begin();
+        const TagList& l = x->children();
+        TagList::const_iterator it = l.begin();
         for( ; it != l.end(); ++it )
         {
           if( (*it)->name() == "item" )
@@ -676,8 +676,8 @@ namespace gloox
       Tag* x;
       if( ( x = msg->findChild( "x", XMLNS, XMLNS_MUC_USER ) ) != 0 )
       {
-        const Tag::TagList& l = x->children();
-        Tag::TagList::const_iterator it = l.begin();
+        const TagList& l = x->children();
+        TagList::const_iterator it = l.begin();
         for( ; it != l.end(); ++it )
         {
           if( (*it)->name() == "status" )
@@ -819,8 +819,8 @@ namespace gloox
         if( x )
         {
           MUCListItemList itemList;
-          const Tag::TagList& items = x->findChildren( "item" );
-          Tag::TagList::const_iterator it = items.begin();
+          const TagList& items = x->findChildren( "item" );
+          TagList::const_iterator it = items.begin();
           for( ; it != items.end(); ++it )
           {
             MUCListItem item;
@@ -895,8 +895,8 @@ namespace gloox
         Tag* q = iq->query();
         if( q )
         {
-          const Tag::TagList& l = q->children();
-          Tag::TagList::const_iterator it = l.begin();
+          const TagList& l = q->children();
+          TagList::const_iterator it = l.begin();
           for( ; it != l.end(); ++it )
           {
             if( (*it)->name() == "feature" )
@@ -961,8 +961,8 @@ namespace gloox
         if( q )
         {
           StringMap items;
-          const Tag::TagList& l = q->children();
-          Tag::TagList::const_iterator it = l.begin();
+          const TagList& l = q->children();
+          TagList::const_iterator it = l.begin();
           for( ; it != l.end(); ++it )
           {
             if( (*it)->name() == "item" && (*it)->hasAttribute( "jid" ) )

@@ -23,7 +23,9 @@
 namespace gloox
 {
 
+  class DataForm;
   class MUCRoom;
+  class JID;
 
   /**
    * An item in a list of MUC room users. Lists of these items are

@@ -13,6 +13,9 @@
 #ifndef PUBSUBEVENTHANDLER_H__
 #define PUBSUBEVENTHANDLER_H__
 
+#include "macros.h"
+#include "pubsub.h"
+
 #include <string>
 
 namespace gloox

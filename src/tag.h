@@ -23,6 +23,13 @@
 namespace gloox
 {
 
+  class Tag;
+
+  /**
+   * A list of Tags.
+   */
+  typedef std::list<Tag*> TagList;
+
   /**
    * @brief This is an abstraction of an XML element.
    *
@@ -113,11 +120,6 @@ namespace gloox
        * A list of XML element attributes.
        */
       typedef std::list<Attribute*> AttributeList;
-
-      /**
-       * A list of Tags.
-       */
-      typedef std::list<Tag*> TagList;
 
       /**
        * Creates a new tag with a given name (and XML character data, if given).
@@ -400,7 +402,7 @@ namespace gloox
        * @return A list of matched Tags, or an empty TagList.
        * @since 0.9
        */
-      Tag::TagList findTagList( const std::string& expression );
+      TagList findTagList( const std::string& expression );
 
       /**
        * Checks two Tags for equality. Order of attributes and child tags does matter.
@@ -512,9 +514,9 @@ namespace gloox
       bool addPredicate( Tag **root, Tag **current, Tag* token );
 
       TagList findChildren( const TagList& list, const std::string& name ) const;
-      Tag::TagList evaluateTagList( Tag* token );
-      Tag::TagList evaluateUnion( Tag* token );
-      Tag::TagList allDescendants();
+      TagList evaluateTagList( Tag* token );
+      TagList evaluateUnion( Tag* token );
+      TagList allDescendants();
 
       static TokenType getType( const std::string& c );
 
@@ -525,7 +527,7 @@ namespace gloox
       bool evaluatePredicate( Tag* token ) { return evaluateBoolean( token ); }
       bool evaluateEquals( Tag* token );
 
-      static void add( Tag::TagList& one, const Tag::TagList& two );
+      static void add( TagList& one, const TagList& two );
 
   };
 

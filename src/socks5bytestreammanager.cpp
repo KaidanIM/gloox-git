@@ -163,8 +163,8 @@ namespace gloox
           return true;
         }
         AsyncS5BItem asi;
-        Tag::TagList& l = q->children();
-        Tag::TagList::const_iterator it = l.begin();
+        TagList& l = q->children();
+        TagList::const_iterator it = l.begin();
         for( ; it != l.end(); ++it )
         {
           if( (*it)->name() == "streamhost" && (*it)->hasAttribute( "jid" )

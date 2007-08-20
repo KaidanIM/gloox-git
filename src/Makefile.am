@@ -91,3 +91,12 @@ leaktest:
 	make -C tests leaktest
 
 leakcheck: leaktest
+
+includetest:
+	@for i in *.h; do \
+	  echo -e "#include \"$$i\"\nint main() {}" >tmp.cpp; \
+	  $(CXX) -I.. tmp.cpp 2>&1 | sed "s/^$$i://g" >$$i.test.log; \
+	  test -s $$i.test.log && echo "INC $$i: failed" || rm $$i.test.log; \
+	done
+	@rm tmp.cpp
+	@ls *.h.test.log &>/dev/null || echo "INC all: ok"

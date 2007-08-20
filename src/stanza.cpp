@@ -46,8 +46,8 @@ namespace gloox
       for( ; ia != al.end(); ++ia )
         m_attribs->push_back( new Tag::Attribute( *(*ia) ) );
 
-      const Tag::TagList& l = tag->children();
-      Tag::TagList::const_iterator it = l.begin();
+      const TagList& l = tag->children();
+      TagList::const_iterator it = l.begin();
       for( ; it != l.end(); ++it )
         m_children->push_back( (*it)->clone() );
     }
