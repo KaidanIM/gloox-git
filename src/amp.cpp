@@ -103,8 +103,8 @@ namespace gloox
     if( !tag || tag->name() != "amp" || !tag->hasAttribute( XMLNS, XMLNS_AMP ) )
       return;
 
-    const Tag::TagList& rules = tag->children();
-    Tag::TagList::const_iterator it = rules.begin();
+    const TagList& rules = tag->children();
+    TagList::const_iterator it = rules.begin();
     for( ; it != rules.end(); ++it )
     {
       m_rules.push_back( new Rule( tag->findAttribute( "condition" ),

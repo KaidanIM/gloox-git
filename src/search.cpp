@@ -139,8 +139,8 @@ namespace gloox
                 {
                   SearchResultList e;
                   SearchFieldStruct s;
-                  const Tag::TagList &l = q->children();
-                  Tag::TagList::const_iterator itl = l.begin();
+                  const TagList &l = q->children();
+                  TagList::const_iterator itl = l.begin();
                   for( ; itl != l.end(); ++itl )
                   {
                     if( (*itl)->name() == "item" )

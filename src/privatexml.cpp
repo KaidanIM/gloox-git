@@ -77,8 +77,8 @@ namespace gloox
               Tag* q = iq->query();
               if( q )
               {
-                const Tag::TagList& l = q->children();
-                Tag::TagList::const_iterator it = l.begin();
+                const TagList& l = q->children();
+                TagList::const_iterator it = l.begin();
                 if( it != l.end() )
                 {
                   (*t).second->handlePrivateXML( (*it)->name(), (*it) );

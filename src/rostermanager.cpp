@@ -307,8 +307,8 @@ namespace gloox
   void RosterManager::extractItems( Tag* tag, bool isPush )
   {
     Tag* t = tag->findChild( "query" );
-    const Tag::TagList& l = t->children();
-    Tag::TagList::const_iterator it = l.begin();
+    const TagList& l = t->children();
+    TagList::const_iterator it = l.begin();
     for( ; it != l.end(); ++it )
     {
       if( (*it)->name() == "item" )
@@ -316,8 +316,8 @@ namespace gloox
         StringList gl;
         if( (*it)->hasChild( "group" ) )
         {
-          const Tag::TagList& g = (*it)->children();
-          Tag::TagList::const_iterator it_g = g.begin();
+          const TagList& g = (*it)->children();
+          TagList::const_iterator it_g = g.begin();
           for( ; it_g != g.end(); ++it_g )
           {
             gl.push_back( (*it_g)->cdata() );

@@ -15,6 +15,8 @@
 #ifndef CONNECTIONDATAHANDLER_H__
 #define CONNECTIONDATAHANDLER_H__
 
+#include "gloox.h"
+
 #include <string>
 
 namespace gloox

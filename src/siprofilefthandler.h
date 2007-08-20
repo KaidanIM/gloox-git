@@ -23,6 +23,7 @@ namespace gloox
 
   class JID;
   class IQ;
+  class Bytestream;
 
   /**
    * @brief An abstract base class to handle file transfer (FT) requests.

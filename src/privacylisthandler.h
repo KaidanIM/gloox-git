@@ -15,6 +15,7 @@
 #define PRIVACYLISTHANDLER_H__
 
 #include "privacyitem.h"
+#include "gloox.h"
 
 #include <string>
 #include <list>

@@ -15,12 +15,16 @@
 
 #include "jid.h"
 #include "pubsub.h"
+#include "macros.h"
 
 #include <string>
 #include <map>
 
 namespace gloox
 {
+
+  class DataForm;
+  class Error;
 
   namespace PubSub
   {

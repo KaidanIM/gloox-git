@@ -13,6 +13,8 @@
 #ifndef PUBSUBITEMHANDLER_H__
 #define PUBSUBITEMHANDLER_H__
 
+#include "macros.h"
+
 #include <list>
 
 namespace gloox
@@ -23,6 +25,7 @@ namespace gloox
   class Error;
   class DiscoNodeItem;
 
+  typedef std::list<Tag*> TagList;
   typedef std::list<DiscoNodeItem> DiscoNodeItemList;
 
   namespace PubSub
@@ -60,7 +63,7 @@ namespace gloox
          */
         virtual void handleItemList( const JID& service,
                                      const std::string& node,
-                                     const Tag::TagList* itemList,
+                                     const TagList* itemList,
                                      const Error* error = 0 ) = 0;
 
 

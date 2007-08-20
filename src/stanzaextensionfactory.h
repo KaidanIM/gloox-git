@@ -14,10 +14,6 @@
 #ifndef STANZAEXTENSIONFACTORY_H__
 #define STANZAEXTENSIONFACTORY_H__
 
-#include "macros.h"
-
-#include <string>
-
 namespace gloox
 {
 

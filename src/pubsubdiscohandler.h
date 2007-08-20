@@ -13,13 +13,21 @@
 #ifndef PUBSUBDISCOHANDLER_H__
 #define PUBSUBDISCOHANDLER_H__
 
+#include "macros.h"
+#include "pubsub.h"
+
 #include <string>
+#include <list>
 
 namespace gloox
 {
 
   class JID;
+  class Error;
   class DataForm;
+  class DiscoNodeItem;
+
+  typedef std::list<DiscoNodeItem> DiscoNodeItemList;
 
   namespace PubSub
   {

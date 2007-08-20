@@ -66,8 +66,8 @@ namespace gloox
   {
     BookmarkList bList;
     ConferenceList cList;
-    const Tag::TagList& l = xml->children();
-    Tag::TagList::const_iterator it = l.begin();
+    const TagList& l = xml->children();
+    TagList::const_iterator it = l.begin();
     for( ; it != l.end(); ++it )
     {
       if( (*it)->name() == "url" )

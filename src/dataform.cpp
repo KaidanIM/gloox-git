@@ -60,8 +60,8 @@ namespace gloox
     if( m_type == FormTypeInvalid )
       return false;
 
-    const Tag::TagList& l = tag->children();
-    Tag::TagList::const_iterator it = l.begin();
+    const TagList& l = tag->children();
+    TagList::const_iterator it = l.begin();
     for( ; it != l.end(); ++it )
     {
       if( (*it)->name() == "title" )

@@ -29,8 +29,8 @@ namespace gloox
     if( tag->name() != "reported" )
       return;
 
-    Tag::TagList &l = tag->children();
-    Tag::TagList::const_iterator it = l.begin();
+    TagList &l = tag->children();
+    TagList::const_iterator it = l.begin();
     for( ; it != l.end(); ++it )
     {
       DataFormField* f = new DataFormField( (*it) );

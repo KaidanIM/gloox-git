@@ -15,6 +15,8 @@
 #ifndef TLSHANDLER_H__
 #define TLSHANDLER_H__
 
+#include "macros.h"
+
 #include <string>
 
 namespace gloox

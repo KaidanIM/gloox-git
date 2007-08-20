@@ -227,8 +227,8 @@ namespace gloox
         if( q )
         {
           StringMap commands;
-          const Tag::TagList& l = q->children();
-          Tag::TagList::const_iterator itt = l.begin();
+          const TagList& l = q->children();
+          TagList::const_iterator itt = l.begin();
           for( ; itt != l.end(); ++itt )
           {
             const std::string& name = (*itt)->findAttribute( "name" );

@@ -753,8 +753,8 @@ namespace gloox
   void ClientBase::handleStreamError( Tag* tag )
   {
     StreamError err = StreamErrorUndefined;
-    const Tag::TagList& c = tag->children();
-    Tag::TagList::const_iterator it = c.begin();
+    const TagList& c = tag->children();
+    TagList::const_iterator it = c.begin();
     for( ; it != c.end(); ++it )
     {
       if( (*it)->name() == "bad-format" )

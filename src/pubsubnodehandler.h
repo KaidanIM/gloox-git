@@ -14,7 +14,11 @@
 #define PUBSUBNODEHANDLER_H__
 
 #include <string>
+
+#include "pubsub.h"
 #include "error.h"
+#include "macros.h"
+#include "jid.h"
 
 namespace gloox
 {

@@ -44,7 +44,7 @@ namespace gloox
     checkField( vcard, "SORT-STRING", m_sortstring );
     checkField( vcard, "UID", m_uid );
 
-    Tag::TagList::const_iterator it = vcard->children().begin();
+    TagList::const_iterator it = vcard->children().begin();
     for( ; it != vcard->children().end(); ++it )
     {
       if( (*it)->name() == "N" )
@@ -123,7 +123,7 @@ namespace gloox
       else if( (*it)->name() == "LABEL" )
       {
         Label item;
-        Tag::TagList::const_iterator it2 = (*it)->children().begin();
+        TagList::const_iterator it2 = (*it)->children().begin();
         for( ; it2 != (*it)->children().end(); ++it2 )
         {
           if( (*it2)->name() == "LINE" )
@@ -159,7 +159,7 @@ namespace gloox
       }
       else if( (*it)->name() == "ORG" )
       {
-        Tag::TagList::const_iterator ito = (*it)->children().begin();
+        TagList::const_iterator ito = (*it)->children().begin();
         for( ; ito != (*it)->children().end(); ++ito )
         {
           if( (*ito)->name() == "ORGNAME" )

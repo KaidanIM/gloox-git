@@ -83,7 +83,7 @@ namespace gloox
        * Returns the presence's type.
        * @return The presence's type.
        */
-#warning FIXME return something useful (only 'show' values?) or kill this func
+//#warning FIXME return something useful (only 'show' values?) or kill this func
       PresenceType presence() const { return m_subtype; }
 
       /**
