@@ -326,21 +326,21 @@ namespace gloox
           {
             case EventCollection:
             {
-	      const Tag* x = (*it)->findChild( "x" );
-	      const DataForm* df = x ? new DataForm( x ) : 0;
+              const Tag* x = (*it)->findChild( "x" );
+              const DataForm* df = x ? new DataForm( x ) : 0;
               (*ith)->handleNodeCreation( service, node, df );
-	      if( df )
-		delete df;
+              if( df )
+                delete df;
               break;
             }
             case EventConfigure:
             {
-	      const Tag* x = (*it)->findChild( "x" );
-	      const DataForm* df = x ? new DataForm( x ) : 0;
+              const Tag* x = (*it)->findChild( "x" );
+              const DataForm* df = x ? new DataForm( x ) : 0;
               (*ith)->handleConfigurationChange( service, node, df );
-	      if( df )
-		delete df;
-	      break;
+              if( df )
+                delete df;
+              break;
             }
             case EventDelete:
             {
@@ -349,13 +349,13 @@ namespace gloox
             }
             case EventItems:
             {
-	      const Tag* items = (*it)->findChild( "items" );
-	      const Tag* item = items->findChild( "item" );
-	      // This is the collection node responsible for the notification,
-	      // in case of a subscription type of 'items'. Currently unused.
-	      const Tag* headers = item->findChild( "headers", "xmlns", "shim" );
-	      const std::string& id= item->findAttribute( "id" );
-	      (*ith)->handleItemPublication( service, node, id, item );
+              const Tag* items = (*it)->findChild( "items" );
+              const Tag* item = items->findChild( "item" );
+              // This is the collection node responsible for the notification,
+              // in case of a subscription type of 'items'. Currently unused.
+              const Tag* headers = item->findChild( "headers", "xmlns", "shim" );
+              const std::string& id= item->findAttribute( "id" );
+              (*ith)->handleItemPublication( service, node, id, item );
               break;
             }
             case EventPurge:
