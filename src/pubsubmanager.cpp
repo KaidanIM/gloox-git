@@ -121,7 +121,8 @@ namespace gloox
       m_parent->registerMessageHandler( this );
     }
 
-    void Manager::discoverInfos( const JID& service, const std::string& node,
+    void Manager::discoverInfos( const JID& service,
+                                 const std::string& node,
                                  PubSub::DiscoHandler* handler )
     {
       if( !m_parent || !handler )
@@ -132,14 +133,15 @@ namespace gloox
       m_parent->disco()->getDiscoInfo( service, node, this, context, id );
     }
 
-    void Manager::discoverNodeItems( const JID& service, const std::string& nodeid,
+    void Manager::discoverNodeItems( const JID& service,
+                                     const std::string& node,
                                      PubSub::DiscoHandler* handler )
     {
       if( !m_parent || !handler )
         return;
       const std::string& id = m_parent->getID();
       m_discoHandlerTrackMap[id] = handler;
-      m_parent->disco()->getDiscoItems( service, nodeid, this, DiscoNodeItems, id );
+      m_parent->disco()->getDiscoItems( service, node, this, DiscoNodeItems, id );
     }
 
     void Manager::handleDiscoInfoResult( IQ* iq, int context )
@@ -600,6 +602,9 @@ namespace gloox
 
     void Manager::getDefaultNodeConfig( const JID& service, NodeType type, ServiceHandler* handler )
     {
+      if( !m_parent || !handler )
+        return;
+
       const std::string& id = m_parent->getID();
       IQ* iq = new IQ( IQ::Set, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
       Tag* def = new Tag( iq->query(), "default" );
@@ -619,7 +624,7 @@ namespace gloox
     void Manager::nodeConfig( const JID& service, const std::string& node,
                               const DataForm* config, NodeHandler* handler )
     {
-      if( !m_parent )
+      if( !m_parent || !handler )
         return;
 
       const std::string& id = m_parent->getID();
@@ -692,7 +697,7 @@ namespace gloox
     }
 
     void Manager::requestItems( const JID& service,
-                                const std::string& nodeid,
+                                const std::string& node,
                                 ItemHandler* handler )
     {
       if( !m_parent || !handler )
@@ -700,16 +705,20 @@ namespace gloox
 
       const std::string& id = m_parent->getID();
       IQ* iq = new IQ( IQ::Get, service, id, XMLNS_PUBSUB, "pubsub" );
-      new Tag( iq->query(), "items", "node", nodeid );
+      new Tag( iq->query(), "items", "node", node );
 
       m_parent->trackID( this, id, GetItemList );
       m_itemHandlerTrackMap[id] = handler;
       m_parent->send( iq );
     }
 
-    void Manager::purgeNodeItems( const JID& service, const std::string& node,
-                                                      NodeHandler* handler  )
+    void Manager::purgeNodeItems( const JID& service,
+                                  const std::string& node,
+                                  NodeHandler* handler  )
     {
+      if( !m_parent || !handler )
+        return;
+
       const std::string& id = m_parent->getID();
       IQ* iq = new IQ( IQ::Set, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
       new Tag( iq->query(), "purge", "node", node );
