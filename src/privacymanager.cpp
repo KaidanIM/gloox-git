@@ -152,7 +152,7 @@ namespace gloox
 
   void PrivacyManager::handleIqID( IQ* iq, int context )
   {
-    if( iq->subtype() != IQ::Result || !m_privacyListHandler )
+    if( !m_privacyListHandler )
       return;
 
     switch( iq->subtype() )
