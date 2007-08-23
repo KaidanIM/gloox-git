@@ -95,7 +95,9 @@ namespace gloox
           item.jid = jid;
           item.name = name;
           item.nick = (*it)->findChild( "nick" )->cdata();
-          item.password = (*it)->findChild( "password" )->cdata();
+          const Tag* pwd = (*it)->findChild( "password" );
+          if( pwd )
+            item.password = pwd->cdata();
           item.autojoin = ( join == "true" || join == "1" );
           cList.push_back( item );
         }
