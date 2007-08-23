@@ -327,8 +327,8 @@ namespace gloox
 
     AttributeList::const_iterator it = m_attribs->begin();
     for( ; it != m_attribs->end(); ++it )
-      if( (*it)->name() == name && ( value.empty() || (*it)->value() == value ) )
-        return true;
+      if( (*it)->name() == name )
+        return value.empty() || (*it)->value() == value;
 
     return false;
   }
