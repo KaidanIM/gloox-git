@@ -56,14 +56,13 @@ namespace gloox
       std::string requestList( const std::string& name );
 
       /**
-       * Stores the given list on the server. If a list with the given name exists, the existing
-       * list is overwritten.
+       * Stores the given list on the server. If a list with the given name
+       * exists, the existing list is overwritten.
        * @param name The list's name.
        * @param list A list of privacy items which describe the list.
-       * @note If @c list is empty the privacy list with the given name will be removed
-       * if it exists on the server. (Same as @ref removeList().)
        */
-      std::string store( const std::string& name, PrivacyListHandler::PrivacyList& list );
+      std::string store( const std::string& name,
+                         const PrivacyListHandler::PrivacyList& list );
 
       /**
        * Removes a list by its name.
