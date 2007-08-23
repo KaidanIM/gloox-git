@@ -281,14 +281,4 @@ namespace gloox
     }
   }
 
-  void PrivacyManager::registerPrivacyListHandler( PrivacyListHandler* plh )
-  {
-    m_privacyListHandler = plh;
-  }
-
-  void PrivacyManager::removePrivacyListHandler()
-  {
-    m_privacyListHandler = 0;
-  }
-
 }
