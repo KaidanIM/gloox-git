@@ -94,7 +94,9 @@ namespace gloox
           ConferenceListItem item;
           item.jid = jid;
           item.name = name;
-          item.nick = (*it)->findChild( "nick" )->cdata();
+          const Tag* nick = (*it)->findChild( "nick" );
+          if( nick )
+            item.nick = nick->cdata();
           const Tag* pwd = (*it)->findChild( "password" );
           if( pwd )
             item.password = pwd->cdata();
