@@ -103,12 +103,14 @@ namespace gloox
        * Only one PrivacyListHandler at a time is possible.
        * @param plh The object to register as handler for privacy list related events.
        */
-      void registerPrivacyListHandler( PrivacyListHandler* plh );
+      void registerPrivacyListHandler( PrivacyListHandler* plh )
+        { m_privacyListHandler = plh; }
 
       /**
        * Use this function to clear the registered PrivacyListHandler.
        */
-      void removePrivacyListHandler();
+      void removePrivacyListHandler()
+        { m_privacyListHandler = 0; }
 
       // reimplemented from IqHandler
       virtual bool handleIq( IQ* iq );
