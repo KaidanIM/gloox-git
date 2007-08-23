@@ -52,7 +52,7 @@ namespace gloox
        * @note If @c list is empty the privacy list with the given name will be removed
        * if it exists on the server. (Same as @ref removeList().)
        */
-      std::string store( const std::string& name, PrivacyListHandler::PrivacyList& list );
+      std::string store( const std::string& name, const PrivacyListHandler::PrivacyList& list );
 
       /**
        * Triggers the request of the privacy lists currently stored on the server.

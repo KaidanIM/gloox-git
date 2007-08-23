@@ -70,8 +70,11 @@ namespace gloox
     return id;
   }
 
-  std::string PrivacyManager::store( const std::string& name, PrivacyListHandler::PrivacyList& list )
+  std::string PrivacyManager::store( const std::string& name, const PrivacyListHandler::PrivacyList& list )
   {
+    if( list.empty() )
+      return std::string();
+
     const std::string& id = m_parent->getID();
 
     IQ* iq = new IQ( IQ::Set, JID(), id, XMLNS_PRIVACY );
@@ -79,7 +82,7 @@ namespace gloox
     l->addAttribute( "name", name );
 
     int count = 0;
-    PrivacyListHandler::PrivacyList::iterator it = list.begin();
+    PrivacyListHandler::PrivacyList::const_iterator it = list.begin();
     for( ; it != list.end(); ++it )
     {
       Tag* i = new Tag( l, "item" );
