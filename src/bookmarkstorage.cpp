@@ -100,8 +100,14 @@ namespace gloox
         const std::string& join = (*it)->findAttribute( "autojoin" );
         if( ( join == "true" ) || ( join == "1" ) )
           autojoin = true;
-        const std::string& nick = (*it)->findChild( "nick" )->cdata();
-        const std::string& pwd = (*it)->findChild( "password" )->cdata();
+        std::string nick;
+        const Tag* nickname = (*it)->findChild( "nick" );
+        if( nickname )
+          nick = nickname->cdata();
+        std::string pwd;
+        const Tag* password = (*it)->findChild( "password" );
+        if( password )
+          pwd = password->cdata();
 
         if( !jid.empty() && !name.empty() )
         {
