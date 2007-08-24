@@ -272,15 +272,13 @@ namespace gloox
             Tag::TagList::const_iterator it = l.begin();
             for( ; it != l.end(); ++it )
             {
+              const std::string& name = (*it)->findAttribute( "name" );
               if( (*it)->name() == "default" )
-                def = (*it)->findAttribute( "name" );
-              if( (*it)->name() == "active" )
-                def = (*it)->findAttribute( "name" );
-              if( (*it)->name() == "list" )
-              {
-                const std::string& name = (*it)->findAttribute( "name" );
+                def = name;
+              else if( (*it)->name() == "active" )
+                active = name;
+              else if( (*it)->name() == "list" )
                 lists.push_back( name );
-              }
             }
 
             m_privacyListHandler->handlePrivacyListNames( def, active, lists );
