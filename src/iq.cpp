@@ -24,8 +24,8 @@ namespace gloox
   static inline const char * typeString( IQ::IqType type )
     { return iqTypeStringValues[type]; }
 
-  IQ::IQ( Tag* tag, bool rip )
-    : Stanza( tag, rip ), m_query( 0 ), m_subtype( Invalid )
+  IQ::IQ( Tag* tag )
+    : Stanza( tag ), m_query( 0 ), m_subtype( Invalid )
   {
     if( !tag || tag->name() != "iq" )
     {
