@@ -46,7 +46,8 @@ namespace gloox
     : ConnectionBase( 0 ), m_connection( connection ),
       m_logInstance( logInstance ), m_s5state( S5StateDisconnected ), m_ip( ip )
   {
-    m_server = prep::idna( server );
+#warning check return value?
+    prep::idna( server, m_server );
     m_port = port;
 
     if( m_connection )
@@ -59,7 +60,8 @@ namespace gloox
     : ConnectionBase( cdh ), m_connection( connection ),
       m_logInstance( logInstance ), m_s5state( S5StateDisconnected ), m_ip( ip )
   {
-    m_server = prep::idna( server );
+#warning check return value?
+    prep::idna( server, m_server );
     m_port = port;
 
     if( m_connection )
@@ -88,6 +90,14 @@ namespace gloox
 
   ConnectionError ConnectionSOCKS5Proxy::connect()
   {
+#warning CHECKME
+    if( m_connection && m_connection->state() == StateConnected && m_handler )
+    {
+      m_state = StateConnected;
+      m_s5state = S5StateConnected;
+      return ConnNoError;
+    }
+
     if( m_connection && m_handler )
     {
       m_state = StateConnecting;

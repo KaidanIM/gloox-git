@@ -34,7 +34,8 @@ namespace gloox
     : ConnectionBase( 0 ), m_connection( connection ),
       m_logInstance( logInstance ), m_http11( false )
   {
-    m_server = prep::idna( server );
+#warning check return value?
+    prep::idna( server, m_server );
     m_port = port;
 
     if( m_connection )
@@ -47,7 +48,8 @@ namespace gloox
     : ConnectionBase( cdh ), m_connection( connection ),
       m_logInstance( logInstance )
   {
-    m_server = prep::idna( server );
+#warning check return value?
+    prep::idna( server, m_server );
     m_port = port;
 
     if( m_connection )
@@ -56,8 +58,7 @@ namespace gloox
 
   ConnectionHTTPProxy::~ConnectionHTTPProxy()
   {
-    if( m_connection )
-      delete m_connection;
+    delete m_connection;
   }
 
   ConnectionBase* ConnectionHTTPProxy::newInstance() const
@@ -124,7 +125,7 @@ namespace gloox
       m_connection->cleanup();
   }
 
-  void ConnectionHTTPProxy::getStatistics( int &totalIn, int &totalOut )
+  void ConnectionHTTPProxy::getStatistics( int& totalIn, int& totalOut )
   {
     if( m_connection )
       m_connection->getStatistics( totalIn, totalOut );
