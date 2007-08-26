@@ -128,9 +128,7 @@ int main( int /*argc*/, char** /*argv*/ )
   new gloox::Tag( x, "delivered" );
   new gloox::Tag( x, "displayed" );
   new gloox::Tag( x, "composing" );
-  gloox::Message *s = new gloox::Message( m );
-  delete m;
-  f->filter( s );
+  f->filter( m );
 
   name = "raise offline event 1";
   ms->setTest( 0 );
@@ -223,9 +221,9 @@ int main( int /*argc*/, char** /*argv*/ )
   }
 
   delete f;
-  delete s;
+  delete m;
   f = 0;
-  s = 0;
+  m = 0;
 
 
 

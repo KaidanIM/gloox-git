@@ -30,6 +30,24 @@ int main( int /*argc*/, char** /*argv*/ )
   }
 
   // -------
+  name = "server + resource ctor";
+  j = JID( "server.dom/res" );
+  if( j.full() != "server.dom/res" )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+
+  // -------
+  name = "server ctor";
+  j = JID( "server.dom" );
+  if( j.full() != "server.dom" )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+
+  // -------
   name = "prepped node";
   j = JID( "ABC@server.dom" );
   if( j.bare() != "abc@server.dom" )
@@ -85,25 +103,33 @@ int main( int /*argc*/, char** /*argv*/ )
   }
 
   // -------
-  name = "full JID getter";
+  name = "clear jid";
   j = JID( "abc@serVer.dom/rEsOurCe" );
-  JID t2( "abc@serVer.dom/rEsOurCe");
-  if( j.fullJID() != t2.fullJID() )
+  j.setJID( "" );
+  if( j || !j.username().empty()
+        || !j.server().empty()
+        || !j.serverRaw().empty()
+        || !j.resource().empty()
+        || !j.bare().empty()
+        || !j.full().empty() )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
   }
 
   // -------
-  name = "clear jid";
-  j = JID( "abc@serVer.dom/rEsOurCe" );
-  j.setJID( "" );
-  if( !j.empty() || !j.username().empty()
-                 || !j.server().empty()
-                 || !j.serverRaw().empty()
-                 || !j.resource().empty()
-                 || !j.bare().empty()
-                 || !j.full().empty() )
+  name = "operator bool() 1";
+  JID jid1( "abc@serVer.dom/rEsOurCe" );
+  if( !jid1 )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+
+  // -------
+  name = "operator bool() 2";
+  JID jid2( "" );
+  if( jid2 )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );

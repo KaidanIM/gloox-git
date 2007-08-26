@@ -153,81 +153,71 @@ int main( int /*argc*/, char** /*argv*/ )
   name = "filter gone";
   m = new gloox::Message( gloox::Message::Chat, gloox::JID() );
   t = new gloox::Tag( m, "gone" ); t->addAttribute( "xmlns", gloox::XMLNS_CHAT_STATES );
-  s = new gloox::Message( m );
-  delete m;
   ms->setTest( 0 );
-  f->filter( s );
+  f->filter( m );
   if( !ms->ok() )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
   }
-  delete s;
-  s = 0;
+  delete m;
+  m = 0;
 
   // -------
   name = "filter inactive";
   m = new gloox::Message( gloox::Message::Chat, gloox::JID() );
   t = new gloox::Tag( m, "inactive" ); t->addAttribute( "xmlns", gloox::XMLNS_CHAT_STATES );
-  s = new gloox::Message( m );
-  delete m;
   ms->setTest( 1 );
-  f->filter( s );
+  f->filter( m );
   if( !ms->ok() )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
   }
-  delete s;
-  s = 0;
+  delete m;
+  m = 0;
 
   // -------
   name = "filter active";
   m = new gloox::Message( gloox::Message::Chat, gloox::JID() );
   t = new gloox::Tag( m, "active" ); t->addAttribute( "xmlns", gloox::XMLNS_CHAT_STATES );
-  s = new gloox::Message( m );
-  delete m;
   ms->setTest( 2 );
-  f->filter( s );
+  f->filter( m );
   if( !ms->ok() )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
   }
-  delete s;
-  s = 0;
+  delete m;
+  m = 0;
 
   // -------
   name = "filter composing";
   m = new gloox::Message( gloox::Message::Chat, gloox::JID() );
   t = new gloox::Tag( m, "composing" ); t->addAttribute( "xmlns", gloox::XMLNS_CHAT_STATES );
-  s = new gloox::Message( m );
-  delete m;
   ms->setTest( 3 );
-  f->filter( s );
+  f->filter( m );
   if( !ms->ok() )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
   }
-  delete s;
-  s = 0;
+  delete m;
+  m = 0;
 
   // -------
   name = "filter paused";
   m = new gloox::Message( gloox::Message::Chat, gloox::JID() );
   t = new gloox::Tag( m, "paused" ); t->addAttribute( "xmlns", gloox::XMLNS_CHAT_STATES );
-  s = new gloox::Message( m );
-  delete m;
   ms->setTest( 4 );
-  f->filter( s );
+  f->filter( m );
   if( !ms->ok() )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
   }
-  delete s;
-  s = 0;
+  delete m;
+  m = 0;
 
 
   // -------

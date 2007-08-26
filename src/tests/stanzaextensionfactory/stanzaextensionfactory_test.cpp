@@ -37,24 +37,6 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   {
-    name = "XDelayedDelivery test";
-    JID from( "abc@example.net" );
-    XDelayedDelivery *x = new XDelayedDelivery( from, "stamp", "reason" );
-    t = x->tag();
-    se = StanzaExtensionFactory::create( t );
-    if( se->type() != ExtXDelay )
-    {
-      ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
-    }
-    delete x;
-    delete t;
-    delete se;
-    t = 0;
-  }
-
-  // -------
-  {
     name = "DelayedDelivery test";
     JID from( "abc@example.net" );
     DelayedDelivery *d = new DelayedDelivery( from, "stamp", "reason" );

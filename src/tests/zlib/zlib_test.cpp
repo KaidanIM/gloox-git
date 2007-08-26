@@ -9,7 +9,7 @@ using namespace gloox;
 class ZlibTest : public CompressionDataHandler
 {
   public:
-    ZlibTest() : m_zlib( this ) {}
+    ZlibTest() : m_zlib( this ) { m_zlib.init(); }
     ~ZlibTest() {}
     virtual void handleCompressedData( const std::string& data );
     virtual void handleDecompressedData( const std::string& data );
