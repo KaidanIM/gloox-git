@@ -34,8 +34,8 @@ namespace gloox
   static inline const char * showString( Presence::PresenceType type )
   { return msgShowStringValues[type]; }
 
-  Presence::Presence( Tag* tag, bool rip )
-    : Stanza( tag, rip ), m_subtype( Invalid ), m_priority( 0 )
+  Presence::Presence( Tag* tag )
+    : Stanza( tag ), m_subtype( Invalid ), m_priority( 0 )
   {
     if( !tag || tag->name() != "presence" )
     {
