@@ -31,6 +31,8 @@ namespace gloox
   class Presence : public Stanza
   {
 
+    friend class ClientBase;
+
     public:
 
       /**
@@ -48,13 +50,6 @@ namespace gloox
         Error,                      /**< This is a presence error. */
         Invalid                     /**< The stanza is invalid. */
       };
-
-      /**
-       * Creates a Presence request from the given Tag.
-       * @param tag The Tag to parse.
-       * @param rip Whether to rip off the tag.
-       */
-      Presence( Tag* tag, bool rip = false );
 
       /**
        * Creates a Presence request.
@@ -106,6 +101,12 @@ namespace gloox
       int priority() const { return m_priority; }
 
     private:
+      /**
+       * Creates a Presence request from the given Tag. The original Tag will be ripped off.
+       * @param tag The Tag to parse.
+       */
+      Presence( Tag* tag );
+
       PresenceType m_subtype;
       StringMap m_status;
       int m_priority;
