@@ -68,8 +68,9 @@ namespace gloox
     IQ* iq = new IQ( IQ::Set, m_to, id, XMLNS_REGISTER );
     Tag* q = iq->query();
 
-    if( fields & FieldUsername )
-      new Tag( q, "username", prep::nodeprep( values.username ) );
+#warning FIXME need proper prepping here!
+//     if( fields & FieldUsername )
+//       new Tag( q, "username", prep::nodeprep( values.username ) );
     if( fields & FieldNick )
       new Tag( q, "nick", values.nick );
     if( fields & FieldPassword )
