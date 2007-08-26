@@ -24,8 +24,8 @@ namespace gloox
   static inline const char* typeString( Subscription::S10nType type )
     { return msgTypeStringValues[type]; }
 
-  Subscription::Subscription( Tag* tag, bool rip )
-    : Stanza( tag, rip ), m_subtype( Invalid )
+  Subscription::Subscription( Tag* tag )
+    : Stanza( tag ), m_subtype( Invalid )
   {
     if( !tag || tag->name() != "presence" )
     {
