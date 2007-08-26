@@ -35,14 +35,14 @@ namespace gloox
     std::string::size_type p = data.find( ';', pos );
     std::string::size_type diff = p - pos;
 
-    if( diff < 3 || diff > 9 )
-      return DecodeInvalid;
-
     if( p == std::string::npos )
     {
       m_backBuffer = data.substr( pos );
       return DecodeInsufficient;
     }
+
+    if( diff < 3 || diff > 9 )
+      return DecodeInvalid;
 
     std::string rep;
     switch( data[pos + 1] )
