@@ -30,37 +30,41 @@ namespace gloox
   Tag::Tag( const std::string& name, const std::string& cdata )
     : m_parent( 0 ), m_children( new TagList() ), m_cdata( new StringPList() ),
       m_attribs( new AttributeList() ), m_nodes( new NodeList() ),
-      m_type( StanzaUndefined ), m_name( name )
+      m_type( StanzaUndefined ), m_name( name ), m_valid( true )
   {
     addCData( cdata );
+    m_valid = !m_name.empty();
   }
 
   Tag::Tag( Tag* parent, const std::string& name, const std::string& cdata )
     : m_parent( parent ), m_children( new TagList() ), m_cdata( new StringPList() ),
       m_attribs( new AttributeList() ), m_nodes( new NodeList() ),
-      m_type( StanzaUndefined ), m_name( name )
+      m_type( StanzaUndefined ), m_name( name ), m_valid( true )
   {
     if( m_parent )
       m_parent->addChild( this );
     addCData( cdata );
+    m_valid = !m_name.empty();
   }
 
   Tag::Tag( const std::string& name, const std::string& attrib, const std::string& value )
     : m_parent( 0 ), m_children( new TagList() ), m_cdata( new StringPList() ),
       m_attribs( new AttributeList() ), m_nodes( new NodeList() ),
-      m_type( StanzaUndefined ), m_name( name )
+      m_type( StanzaUndefined ), m_name( name ), m_valid( true )
   {
     addAttribute( attrib, value );
+    m_valid = !m_name.empty();
   }
 
   Tag::Tag( Tag* parent, const std::string& name, const std::string&  attrib, const std::string& value )
     : m_parent( parent ), m_children( new TagList() ), m_cdata( new StringPList() ),
       m_attribs( new AttributeList() ), m_nodes( new NodeList() ),
-      m_type( StanzaUndefined ), m_name( name )
+      m_type( StanzaUndefined ), m_name( name ), m_valid( true )
   {
     if( m_parent )
       m_parent->addChild( this );
     addAttribute( attrib, value );
+    m_valid = !m_name.empty();
   }
 
   Tag::~Tag()
@@ -114,6 +118,9 @@ namespace gloox
 
   const std::string Tag::xml() const
   {
+    if( !m_valid )
+      return std::string();
+
     std::string xml = "<";
     xml += escape( m_name );
     if( !m_attribs->empty() )
@@ -155,15 +162,11 @@ namespace gloox
     return xml;
   }
 
-  static const char escape_chars[] = { '&', '<', '>', '\'', '"', '<', '>',
-  '\'', '"', '<', '>', '<', '>', '\'', '"', '<', '>', '<', '>', '\'', '"' };
+  static const char escape_chars[] = { '&', '<', '>', '\'', '"' };
 
-  static const std::string escape_seqs[] = { "amp;", "lt;", "gt;", "apos;",
-  "quot;", "#60;", "#62;", "#39;", "#34;", "#x3c;", "#x3e;", "#x3C;",
-  "#x3E;", "#x27;", "#x22;", "#X3c;", "#X3e;", "#X3C;", "#X3E;", "#X27;",
-  "#X22;" };
+  static const std::string escape_seqs[] = { "amp;", "lt;", "gt;", "apos;", "quot;" };
 
-  static const unsigned nb_escape = sizeof( escape_chars )/sizeof( char );
+  static const unsigned nb_escape = sizeof( escape_chars ) / sizeof( char );
   static const unsigned escape_size = 5;
 
   const std::string Tag::escape( std::string esc )
@@ -452,6 +455,12 @@ namespace gloox
     delete m_children;
     m_children = tag->m_children;
     tag->m_children = new TagList();
+  }
+
+  const std::string Tag::findCData( const std::string& expression )
+  {
+    const TagList& l = findTagList( expression );
+    return !l.empty() ? l.front()->cdata() : std::string();
   }
 
   Tag* Tag::findTag( const std::string& expression )

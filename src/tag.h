@@ -348,12 +348,6 @@ namespace gloox
       void removeChild( Tag* tag );
 
       /**
-       * Returns whether the Tag is considered empty, i.e. invalid.
-       * @return @b True if the Tag is valid, @b false if not.
-       */
-      virtual bool empty() const { return m_name.empty(); }
-
-      /**
        * This function checks whether a child element with given name exists and has
        * XML character data that equals the given cdata string.
        * @param name The name of the child element.
@@ -380,6 +374,18 @@ namespace gloox
        * @since 0.7
        */
       virtual Tag* clone() const;
+
+      /**
+       * Evaluates the given XPath expression and returns the result Tag's character data, if any.
+       * If more than one Tag match, only the first one's character data is returned.
+       * @note Currently, XPath support is somewhat limited. However, it should be useable
+       * for basic expressions. For now, see src/tests/xpath/xpath_test.cpp for supported
+       * expressions.
+       * @param expression An XPath expression to evaluate.
+       * @return A matched Tag's character data, or the empty string.
+       * @since 1.0
+       */
+      const std::string findCData( const std::string& expression );
 
       /**
        * Evaluates the given XPath expression and returns the result Tag. If more than one
@@ -423,6 +429,11 @@ namespace gloox
        * @param what A string to escape.
        */
       static const std::string escape( std::string what );
+
+      /**
+       * Returns @b true if the Tag is valid, @b false otherwise.
+       */
+      operator bool() const { return m_valid; }
 
     protected:
       void ripoff( Tag* tag );
@@ -529,6 +540,7 @@ namespace gloox
 
       static void add( TagList& one, const TagList& two );
 
+      bool m_valid;
   };
 
 }
