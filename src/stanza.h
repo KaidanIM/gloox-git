@@ -85,7 +85,7 @@ namespace gloox
       /**
        * Finds a StanzaExtension of a particular type.
        * @param type StanzaExtensionType to search for.
-       * @return The StanzaExtension's address (or null if none was found).
+       * @return The StanzaExtension's address (or 0 if none was found).
        */
       const StanzaExtension* findExtension( StanzaExtensionType type ) const;
 
@@ -102,7 +102,7 @@ namespace gloox
        * @param rip Whether to rip off the original Tag.
        * @since 1.0
        */
-      Stanza( Tag* tag, bool rip = false );
+      Stanza( Tag* tag );
 
       /**
        * Creates a new Stanza with given name.
