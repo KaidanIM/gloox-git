@@ -47,6 +47,13 @@ namespace gloox
       virtual ~CompressionBase() {}
 
       /**
+       * This function initializes the compression module.
+       * it is mandatory to be called.
+       * @return @b True if the module was initialized successfully, false otherwise.
+       */
+      virtual bool init() = 0;
+
+      /**
        * Compresses the given chunk of data.
        * @param data The original (uncompressed) data.
        */
