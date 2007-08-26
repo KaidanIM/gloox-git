@@ -244,13 +244,13 @@ namespace gloox
           break;
         case DiscoNodeInfos:
         {
-          const std::string& node = query->findAttribute( "node" ); 
+          const std::string& node = query->findAttribute( "node" );
           (*ith).second->handleNodeInfos( service, node, NodeInvalid, 0, error );
           break;
         }
         case DiscoNodeItems:
         {
-          const std::string& node = query->findAttribute( "node" ); 
+          const std::string& node = query->findAttribute( "node" );
           (*ith).second->handleNodeItems( service, node, 0, error );
           break;
         }
@@ -390,7 +390,7 @@ namespace gloox
       const std::string& id = m_parent->getID();
       IQ* iq = new IQ( IQ::Get, service, id, XMLNS_PUBSUB, "pubsub" );
       Tag* options = new Tag( iq->query(), "options", "node", node );
-      options->addAttribute( "jid", jid.empty() ? m_parent->jid().bare() : jid.bare() );
+      options->addAttribute( "jid", jid ? jid.bare() : m_parent->jid().bare() );
       if( df )
         options->addChild( df->tag() );
 
@@ -441,7 +441,7 @@ namespace gloox
       IQ* iq = new IQ( IQ::Set, service, id, XMLNS_PUBSUB, "pubsub" );
       Tag* ps = iq->query();
       Tag* sub = new Tag( ps, "subscribe", "node", node );
-      sub->addAttribute( "jid", jid.empty() ? m_parent->jid().full() : jid.full() );
+      sub->addAttribute( "jid", jid ? jid.full() : m_parent->jid().full() );
 
       if( type != SubscriptionNodes || depth != 1 )
       {
@@ -478,7 +478,7 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      const std::string& ujid = jid.empty() ? m_parent->jid().full() : jid.full();
+      const std::string& ujid = jid ? jid.full() : m_parent->jid().full();
       IQ* iq = new IQ( IQ::Set, service, id, XMLNS_PUBSUB, "pubsub" );
       Tag* sub = new Tag( iq->query(), "unsubscribe", "node", node );
       sub->addAttribute( "jid", ujid );
@@ -863,7 +863,7 @@ namespace gloox
                   if( ith == m_nodeHandlerTrackMap.end() )
                     return;
 
-                  const Tag* subt = query->findChild( "subscriptions" );                  
+                  const Tag* subt = query->findChild( "subscriptions" );
                   SubscriberList list;
                   const TagList& subs = subt->children();
                   TagList::const_iterator it = subs.begin();
@@ -1195,7 +1195,7 @@ namespace gloox
               ItemHandlerTrackMap::iterator ith = m_itemHandlerTrackMap.find( iq->id() );
               if( ith == m_itemHandlerTrackMap.end() )
                 return;
- 
+
               const Tag* retract = query->findChild( "retract" );
               if( retract )
               {
