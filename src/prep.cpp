@@ -42,68 +42,74 @@ namespace gloox
      * Applies a Stringprep profile to a string. This function does the actual
      * work behind nodeprep, nameprep and resourceprep.
      * @param s The string to apply the profile to.
+     * @param out Contains the prepped string if prepping was successful, else untouched.
      * @param profile The Stringprep profile to apply.
-     * @return Returns the prepped string. In case of an error an empty string
-     * is returned. If LibIDN is not available the string is returned unchanged.
+     * @return Returns @b true if prepping was successful, @b false otherwise.
      */
-    static std::string prepare( const std::string& s, const Stringprep_profile* profile )
+    static bool prepare( const std::string& s, std::string& out, const Stringprep_profile* profile )
     {
       if( s.empty() || s.length() > JID_PORTION_SIZE )
-        return std::string();
+        return false;
 
-      std::string preppedString;
       char* p = static_cast<char*>( calloc( JID_PORTION_SIZE, sizeof( char ) ) );
       strncpy( p, s.c_str(), s.length() );
-      if( stringprep( p, JID_PORTION_SIZE, (Stringprep_profile_flags)0, profile ) == STRINGPREP_OK )
-        preppedString = p;
+      int rc = stringprep( p, JID_PORTION_SIZE, (Stringprep_profile_flags)0, profile );
+      if( rc == STRINGPREP_OK )
+        out = p;
       free( p );
-      return preppedString;
+      return rc == STRINGPREP_OK;
     }
 #endif
 
-    std::string nodeprep( const std::string& node )
+    bool nodeprep( const std::string& node, std::string& out )
     {
 #ifdef HAVE_LIBIDN
-      return prepare( node, stringprep_xmpp_nodeprep );
+      return prepare( node, out, stringprep_xmpp_nodeprep );
 #else
-      return node;
+      out = node;
+      return false;
 #endif
     }
 
-    std::string nameprep( const std::string& domain )
+    bool nameprep( const std::string& domain, std::string& out )
     {
 #ifdef HAVE_LIBIDN
-      return prepare( domain, stringprep_nameprep );
+      return prepare( domain, out, stringprep_nameprep );
 #else
-      return domain;
+      out = domain;
+      return false;
 #endif
     }
 
-    std::string resourceprep( const std::string& resource )
+    bool resourceprep( const std::string& resource, std::string& out )
     {
 #ifdef HAVE_LIBIDN
-      return prepare( resource, stringprep_xmpp_resourceprep );
+      return prepare( resource, out, stringprep_xmpp_resourceprep );
 #else
-      return resource;
+      out = resource;
+      return false;
 #endif
     }
 
-    std::string idna( const std::string& domain )
+    bool idna( const std::string& domain, std::string& out )
     {
 #ifdef HAVE_LIBIDN
       if( domain.empty() || domain.length() > JID_PORTION_SIZE )
-        return std::string();
+        return false;
 
-      std::string preppedString;
       char* prepped;
       int rc = idna_to_ascii_8z( domain.c_str(), &prepped, (Idna_flags)0 );
       if( rc == IDNA_SUCCESS )
-        preppedString = prepped;
+      {
+        out = prepped;
+        return true;
+      }
       if( rc != IDNA_MALLOC_ERROR )
         free( prepped );
-      return preppedString;
+      return false;
 #else
-      return domain;
+      out = domain;
+      return false;
 #endif
     }
   }
