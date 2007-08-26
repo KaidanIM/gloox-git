@@ -16,46 +16,52 @@
 namespace gloox
 {
 
-  void JID::setJID( const std::string& jid )
+  bool JID::setJID( const std::string& jid )
   {
     if ( jid.empty() )
     {
       m_bare = m_full = m_server = m_username = m_serverRaw = m_resource = "";
-      return;
+      m_valid = false;
+      return false;
     }
 
     const size_t at = jid.find( '@' );
     const size_t slash = jid.rfind( '/' );
 
     if( at != std::string::npos )
-      m_username = prep::nodeprep( jid.substr( 0, at ) );
+      m_valid = prep::nodeprep( jid.substr( 0, at ), m_username );
 
     m_serverRaw = jid.substr( at == std::string::npos ? 0 : at + 1, slash - at - 1 );
-    m_server = prep::nameprep( m_serverRaw );
+    m_valid = prep::nameprep( m_serverRaw, m_server );
 
     if( slash != std::string::npos )
-      m_resource = prep::resourceprep( jid.substr( slash + 1 ) );
+      m_valid = prep::resourceprep( jid.substr( slash + 1 ), m_resource );
 
     setStrings();
+
+    return m_valid;
   }
 
-  void JID::setUsername( const std::string& uname )
+  bool JID::setUsername( const std::string& uname )
   {
-    m_username = prep::nodeprep( uname );
+    m_valid = prep::nodeprep( uname, m_username );
     setStrings();
+    return m_valid;
   }
 
-  void JID::setServer( const std::string& serv )
+  bool JID::setServer( const std::string& serv )
   {
     m_serverRaw = serv;
-    m_server = prep::nameprep( m_serverRaw );
+    m_valid = prep::nameprep( m_serverRaw, m_server );
     setStrings();
+    return m_valid;
   }
 
-  void JID::setResource( const std::string& res )
+  bool JID::setResource( const std::string& res )
   {
-    m_resource = prep::resourceprep( res );
+    m_valid = prep::resourceprep( res, m_resource );
     setFull();
+    return m_valid;
   }
 
   void JID::setFull()

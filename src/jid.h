@@ -34,13 +34,13 @@ namespace gloox
       /**
        * Constructs an empty JID.
        */
-      JID() {}
+      JID() : m_valid( false ) {}
 
       /**
        * Constructs a new JID from a string.
        * @param jid The string containing the JID.
        */
-      JID( const std::string& jid ) { setJID( jid ); }
+      JID( const std::string& jid ) : m_valid( true ) { setJID( jid ); }
 
       /**
        * Destructor.
@@ -50,8 +50,9 @@ namespace gloox
       /**
        * Sets the JID from a string.
        * @param jid The string containing the JID.
+       * @return @b True if the given JID was valid, @b false otherwise.
        */
-      void setJID( const std::string& jid );
+      bool setJID( const std::string& jid );
 
       /**
        * Returns the full (prepped) JID (user\@host/resource).
@@ -73,29 +74,22 @@ namespace gloox
       JID bareJID() const { return JID( bare() ); }
 
       /**
-       * Creates and returns a JID from this JID's node, server and resource parts.
-       * @return The full JID.
-       * @since 0.9
-       */
-      JID fullJID() const { return JID( full() ); }
-
-      /**
        * Sets the username.
        * @param username The new username.
        */
-      void setUsername( const std::string& username );
+      bool setUsername( const std::string& username );
 
       /**
        * Sets the server.
        * @param server The new server.
        */
-      void setServer( const std::string& server );
+      bool setServer( const std::string& server );
 
       /**
        * Sets the resource.
        * @param resource The new resource.
        */
-      void setResource( const std::string& resource );
+      bool setResource( const std::string& resource );
 
       /**
        * Returns the prepped username.
@@ -122,10 +116,16 @@ namespace gloox
       const std::string& resource() const { return m_resource; }
 
       /**
-       * A JID is empty as long as no server is set.
-       * @return @b True if the JID is empty, @b false otherwise.
+       * Compares a JID with a string.
+       * @param right The second JID in string representation.
        */
-      bool empty() const { return m_server.empty(); }
+      bool operator==( const std::string& right ) const { return full() == right; }
+
+      /**
+       * Compares a JID with a string.
+       * @param right The second JID in string representation.
+       */
+      bool operator!=( const std::string& right ) const { return full() != right; }
 
       /**
        * Compares two JIDs.
@@ -139,14 +139,12 @@ namespace gloox
        */
       bool operator!=( const JID& right ) const { return full() != right.full(); }
 
-    private:
-      std::string m_resource;
-      std::string m_username;
-      std::string m_server;
-      std::string m_serverRaw;
-      std::string m_bare;
-      std::string m_full;
+      /**
+       * Converts to  @b true if the JID is valid, @b false otherwise.
+       */
+      operator bool() const { return m_valid; }
 
+    private:
       /**
        * Utility function to rebuild both the bare and full jid.
        */
@@ -154,7 +152,7 @@ namespace gloox
 
       /**
        * Utility function rebuilding the bare jid.
-       * \note Do not use this function directly, instead use setStrings.
+       * @note Do not use this function directly, instead use setStrings.
        */
       void setBare();
 
@@ -162,6 +160,15 @@ namespace gloox
        * Utility function rebuilding the full jid.
        */
       void setFull();
+
+      std::string m_resource;
+      std::string m_username;
+      std::string m_server;
+      std::string m_serverRaw;
+      std::string m_bare;
+      std::string m_full;
+      bool m_valid;
+
   };
 
 }
