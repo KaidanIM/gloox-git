@@ -32,6 +32,7 @@ namespace gloox
    *
    * XEP Version: 1.2
    * @author Jakob Schroeter <js@camaya.net>
+   * @author Vincent Thomasset
    * @since 1.0
    */
   class AMP : public StanzaExtension
@@ -105,7 +106,7 @@ namespace gloox
       };
 
       /**
-       * @brief Describes an advanced message processing rule.
+       * @brief Describes an AMP rule.
        */
       struct Rule
       {
