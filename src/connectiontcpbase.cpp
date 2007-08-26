@@ -65,7 +65,8 @@ namespace gloox
 
   void ConnectionTCPBase::init( const std::string& server, int port )
   {
-    m_server = prep::idna( server );
+#warning check return value?
+    prep::idna( server, m_server );
     m_port = port;
     m_buf = (char*)calloc( m_bufsize + 1, sizeof( char ) );
   }

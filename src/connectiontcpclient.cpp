@@ -67,14 +67,14 @@ namespace gloox
   ConnectionError ConnectionTCPClient::connect()
   {
     m_sendMutex.lock();
-
-    if( !m_handler || m_socket >= 0 )
+#warning CHECKME
+    if( !m_handler )
     {
       m_sendMutex.unlock();
       return ConnNotConnected;
     }
 
-    if( m_state > StateDisconnected )
+    if( m_socket >= 0 && m_state > StateDisconnected )
     {
       m_sendMutex.unlock();
       return ConnNoError;
