@@ -162,8 +162,8 @@ namespace gloox
        * from a full JID to this MessageSession. If unsure, use the default. You probably only want to use
        * a non-default value if this MessageSession is supposed to talk directly to a server or component
        * JID that has no resource. This 'upgrade' will only happen once.
-       * @param types ORed list of StanzaSubType values this MessageSession shall receive. Only the
-       * StanzaMessage* types are valid. Defaults to 0 which means any type is received.
+       * @param types ORed list of Message::MessageType values this MessageSession shall receive.
+       * Defaults to 0 which means any type is received.
        */
       MessageSession( ClientBase* parent, const JID& jid, bool wantUpgrade = true, int types = 0 );
 
