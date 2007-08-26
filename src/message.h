@@ -32,6 +32,8 @@ namespace gloox
   class Message : public Stanza
   {
 
+    friend class ClientBase;
+
     public:
 
       /**
@@ -48,13 +50,6 @@ namespace gloox
       };
 
       /**
-       * Creates a message Stanza from the given Tag.
-       * @param tag The Tag to parse.
-       * @param rip Whether to rip off the original Tag.
-       */
-      Message( Tag* tag, bool rip = false );
-
-      /**
        * Creates a Message.
        * @param type The message type.
        * @param to The intended receiver.
@@ -68,6 +63,7 @@ namespace gloox
                const std::string& body = "", const std::string& subject = "",
                const std::string& thread = "", const std::string& xmllang = "",
                const JID& from = JID() );
+
       /**
        * Destructor.
        */
@@ -79,29 +75,37 @@ namespace gloox
        */
       MessageType subtype() const { return m_subtype; }
 
+      /**
+       * Convenience function that returns the default message body (no xml:lang set).
+       * @return The default message body.
+       */
       const std::string& body() const { return m_body; }
 
+      /**
+       * Convenience function that returns the default message subject (no xml:lang set).
+       * @return The default message subject.
+       */
       const std::string& subject() const { return m_subject; }
 
       /**
-       * Returns the body of a message stanza for the given language if available.
+       * Returns the message body for the given language if available.
        * If the requested language is not available, the default body (without a xml:lang
        * attribute) will be returned.
        * @param lang The language identifier for the desired language. It must conform to
        * section 2.12 of the XML specification and RFC 3066. If empty, the default body
        * will be returned, if any.
-       * @return The body of a message stanza.
+       * @return The message body.
        */
       const std::string body( const std::string& lang ) const;
 
       /**
-       * Returns the subject of a message stanza for the given language if available.
+       * Returns the message subject for the given language if available.
        * If the requested language is not available, the default subject (without a xml:lang
        * attribute) will be returned.
        * @param lang The language identifier for the desired language. It must conform to
        * section 2.12 of the XML specification and RFC 3066. If empty, the default subject
        * will be returned, if any.
-       * @return The subject of a message stanza.
+       * @return The message subject.
        */
       const std::string subject( const std::string& lang ) const;
 
@@ -118,11 +122,17 @@ namespace gloox
       void setThread( const std::string& thread ) { m_thread = thread; }
 
     private:
+      /**
+       * Creates a message Stanza from the given Tag. The original Tag will be ripped off.
+       * @param tag The Tag to parse.
+       */
+      Message( Tag* tag );
+
       MessageType m_subtype;
       std::string m_body;
       std::string m_subject;
-      StringMap * m_bodies;
-      StringMap * m_subjects;
+      StringMap* m_bodies;
+      StringMap* m_subjects;
       std::string m_thread;
   };
 

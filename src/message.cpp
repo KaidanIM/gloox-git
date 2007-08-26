@@ -23,8 +23,8 @@ namespace gloox
     "chat", "error", "groupchat", "headline", "normal"
   };
 
-  Message::Message( Tag* tag, bool rip )
-    : Stanza( tag, rip ), m_subtype( Invalid ), m_bodies(0), m_subjects(0)
+  Message::Message( Tag* tag )
+    : Stanza( tag ), m_subtype( Invalid ), m_bodies( 0 ), m_subjects( 0 )
   {
     if( !tag || tag->name() != "message" )
     {
@@ -88,7 +88,7 @@ namespace gloox
   Message::Message( MessageType type, const JID& to,
                     const std::string& body, const std::string& subject,
                     const std::string& thread, const std::string& xmllang, const JID& from )
-    : Stanza( "message", to, from ), m_subtype( type ), m_bodies(0), m_subjects(0)
+    : Stanza( "message", to, from ), m_subtype( type ), m_bodies( 0 ), m_subjects( 0 ), m_thread( thread )
   {
     addAttribute( TYPE, util::lookup2( type, msgTypeStringValues ) );
 
@@ -96,16 +96,36 @@ namespace gloox
     {
       Tag* t = new Tag( this, "body", body );
       t->addAttribute( "xml:lang", xmllang );
+      if( xmllang.empty() )
+        m_body = body;
+      else
+      {
+        m_bodies = new StringMap();
+        (*m_bodies)[xmllang] = body;
+      }
     }
 
     if( !subject.empty() )
     {
       Tag* t = new Tag( this, "subject", subject );
       t->addAttribute( "xml:lang", xmllang );
+      if( xmllang.empty() )
+        m_subject = subject;
+      else
+      {
+        m_subjects = new StringMap();
+        (*m_subjects)[xmllang] = subject;
+      }
     }
 
     if( !thread.empty() )
       new Tag( this, "thread", thread );
+  }
+
+  Message::~Message()
+  {
+    delete m_bodies;
+    delete m_subjects;
   }
 
   const std::string Message::body( const std::string& lang ) const
@@ -129,13 +149,4 @@ namespace gloox
     }
     return m_subject;
   }
-
-  Message::~Message()
-  {
-    if( m_bodies )
-      delete m_bodies;
-    if( m_subjects )
-      delete m_subjects;
-  }
-
 }
