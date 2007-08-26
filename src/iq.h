@@ -32,6 +32,8 @@ namespace gloox
   class IQ : public Stanza
   {
 
+    friend class ClientBase;
+
     public:
 
       /**
@@ -47,13 +49,6 @@ namespace gloox
                                      * previously-sent get or set (see Stanza Errors (Section 9.3)). */
         Invalid                     /**< The stanza is invalid */
       };
-
-      /**
-       * Creates an IQ from a tag.
-       * @param tag The Tag to parse.
-       * @param rip Whether to rip off the original Tag.
-       */
-      IQ( Tag* tag, bool rip = false );
 
       /**
        * Creates an IQ Query.
@@ -91,6 +86,13 @@ namespace gloox
       const std::string& xmlns() const { return m_xmlns; }
 
     private:
+      /**
+       * Creates an IQ from a tag. The original Tag will be ripped off.
+       * @param tag The Tag to parse.
+       * @param rip Whether to rip off the original Tag.
+       */
+      IQ( Tag* tag );
+
       Tag* m_query;
       std::string m_xmlns;
       IqType m_subtype;
