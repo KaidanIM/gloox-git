@@ -33,6 +33,8 @@ namespace gloox
 
     public:
 
+      friend class ClientBase;
+
       /**
        * Describes the different valid message types.
        */
@@ -44,13 +46,6 @@ namespace gloox
         Unsubscribed,               /**< An unsubscription notification. */
         Invalid                     /**< The stanza is invalid. */
       };
-
-      /**
-       * Creates a Subscription request from the given Tag.
-       * @param tag The Tag to parse.
-       * @param rip Whether to rip off the tag.
-       */
-      Subscription( Tag* tag, bool rip = false );
 
       /**
        * Creates a Subscription request.
@@ -87,6 +82,12 @@ namespace gloox
         { return findLang( m_status, lang ); }
 
     private:
+      /**
+       * Creates a Subscription request from the given Tag. The original Tag will be ripped off.
+       * @param tag The Tag to parse.
+       */
+      Subscription( Tag* tag );
+
       S10nType m_subtype;
       StringMap m_status;
 
