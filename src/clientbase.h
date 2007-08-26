@@ -130,7 +130,7 @@ namespace gloox
        * @note If you change the server part of the JID, the server of the connection is not synced.
        * You have to do that manually using @ref setServer().
        */
-      const JID& jid() { return m_authzid.empty() ? m_jid : m_authzid; }
+      const JID& jid() { return m_authzid ? m_authzid : m_jid; }
 
       /**
        * Switches usage of SASL on/off. Default: on. SASL should only be disabled if there are
@@ -224,6 +224,16 @@ namespace gloox
        * @return A unique string suitable for query IDs.
        */
       const std::string getID();
+
+      /**
+       * Sends a given Tag over an established connection.
+       * The ClientBase object becomes the owner of this Tag and will delete it after sending it.
+       * You should not rely on the existance of the Tag after it's been sent. If you still need
+       * it after sending it, use Tag::clone() to create a deep copy.
+       * @param tag The Tag to send.
+       * @since 1.0
+       */
+      void send( const Tag& tag );
 
       /**
        * Sends a given Tag over an established connection.
