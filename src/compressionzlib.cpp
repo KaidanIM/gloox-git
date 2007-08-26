@@ -22,6 +22,10 @@ namespace gloox
   CompressionZlib::CompressionZlib( CompressionDataHandler* cdh )
     : CompressionBase( cdh )
   {
+  }
+
+  bool CompressionZlib::init()
+  {
     int ret = Z_OK;
     m_zinflate.zalloc = Z_NULL;
     m_zinflate.zfree = Z_NULL;
@@ -29,19 +33,20 @@ namespace gloox
     m_zinflate.avail_in = 0;
     m_zinflate.next_in = Z_NULL;
     ret = inflateInit( &m_zinflate );
+    if( ret != Z_OK )
+      return false;
 
-    if( ret == Z_OK )
-    {
-      m_zdeflate.zalloc = Z_NULL;
-      m_zdeflate.zfree = Z_NULL;
-      m_zdeflate.opaque = Z_NULL;
-      m_zinflate.avail_in = 0;
-      m_zinflate.next_in = Z_NULL;
-      ret = deflateInit( &m_zdeflate, Z_BEST_COMPRESSION/*Z_DEFAULT_COMPRESSION*/ );
+    m_zdeflate.zalloc = Z_NULL;
+    m_zdeflate.zfree = Z_NULL;
+    m_zdeflate.opaque = Z_NULL;
+    m_zinflate.avail_in = 0;
+    m_zinflate.next_in = Z_NULL;
+    ret = deflateInit( &m_zdeflate, Z_BEST_COMPRESSION/*Z_DEFAULT_COMPRESSION*/ );
+    if( ret != Z_OK )
+      return false;
 
-      if( ret == Z_OK )
-        m_valid = true;
-    }
+    m_valid = true;
+    return true;
   }
 
   CompressionZlib::~CompressionZlib()

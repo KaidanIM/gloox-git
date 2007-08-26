@@ -53,6 +53,9 @@ namespace gloox
       virtual ~CompressionZlib();
 
       // reimplemented from CompressionBase
+      virtual bool init();
+
+      // reimplemented from CompressionBase
       virtual void compress( const std::string& data );
 
       // reimplemented from CompressionBase
