@@ -26,31 +26,16 @@ namespace gloox
   Stanza::Stanza( const std::string& name, const JID& to, const JID& from )
     : Tag( name ), m_xmllang( "default" ), m_from( from ), m_to( to )
   {
-    if( !m_to.empty() )
+    if( m_to )
       addAttribute( "to", m_to.full() );
-    if( !m_from.empty() )
+    if( m_from )
       addAttribute( "from", m_from.full() );
   }
 
-  Stanza::Stanza( Tag* tag, bool rip )
+  Stanza::Stanza( Tag* tag )
     : Tag( tag->name(), tag->cdata() ), m_xmllang( "default" )
   {
-    if( rip )
-    {
-      ripoff( tag );
-    }
-    else
-    {
-      const Tag::AttributeList& al = tag->attributes();
-      Tag::AttributeList::const_iterator ia = al.begin();
-      for( ; ia != al.end(); ++ia )
-        m_attribs->push_back( new Tag::Attribute( *(*ia) ) );
-
-      const TagList& l = tag->children();
-      TagList::const_iterator it = l.begin();
-      for( ; it != l.end(); ++it )
-        m_children->push_back( (*it)->clone() );
-    }
+    ripoff( tag );
 
     m_from.setJID( findAttribute( "from" ) );
     m_to.setJID( findAttribute( "to" ) );
