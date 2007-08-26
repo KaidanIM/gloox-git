@@ -263,6 +263,23 @@ int main( int /*argc*/, char** /*argv*/ )
   delete c;
   c = 0;
 
+  //-------
+  name = "operator bool()";
+  Tag tag1( "" );
+  if( tag1 )
+  {
+    ++fail;
+    printf( "test '%s' failed: %s\n", name.c_str(), tag1.xml().c_str() );
+  }
+
+  //-------
+  name = "bool operator!()";
+  Tag tag2( "abc" );
+  if( !tag2 )
+  {
+    ++fail;
+    printf( "test '%s' failed: %s\n", name.c_str(), d->xml().c_str() );
+  }
 
 
 
