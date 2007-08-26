@@ -200,16 +200,14 @@ namespace gloox
       {
         if( tag->name() == "iq" )
         {
-          IQ* iq = new IQ( tag, true );
-          notifyIqHandlers( iq );
-          delete iq;
+          IQ iq( tag );
+          notifyIqHandlers( &iq );
           ++m_stats.iqStanzasReceived;
         }
         else if( tag->name() == "message" )
         {
-          Message* msg = new Message( tag, true );
-          notifyMessageHandlers( msg );
-          delete msg;
+          Message msg( tag );
+          notifyMessageHandlers( &msg );
           ++m_stats.messageStanzasReceived;
         }
         else if( tag->name() == "presence" )
@@ -217,16 +215,14 @@ namespace gloox
           if( tag->hasAttribute( TYPE, "subscribe" ) || tag->hasAttribute( TYPE, "subscribed" )
               || tag->hasAttribute( TYPE, "unsubscribe" ) || tag->hasAttribute( TYPE, "unsubscribed" ) )
           {
-            Subscription* sub = new Subscription( tag, true );
-            notifySubscriptionHandlers( sub );
-            delete sub;
+            Subscription sub( tag );
+            notifySubscriptionHandlers( &sub );
             ++m_stats.s10nStanzasReceived;
           }
           else
           {
-            Presence* pres = new Presence( tag, true );
-            notifyPresenceHandlers( pres );
-            delete pres;
+            Presence pres( tag );
+            notifyPresenceHandlers( &pres );
             ++m_stats.presenceStanzasReceived;
           }
         }
@@ -424,18 +420,18 @@ namespace gloox
         a->addAttribute( "mechanism", "PLAIN" );
 
         size_t len = 0;
-        if( m_authzid.empty() )
-          len = m_jid.username().length() + m_password.length() + 2;
-        else
+        if( m_authzid )
           len = m_authzid.bare().length() + m_jid.username().length() + m_password.length() + 2;
+        else
+          len = m_jid.username().length() + m_password.length() + 2;
 
         char* tmp = (char*)malloc( len + 80 );
 
-        if( m_authzid.empty() )
-          sprintf( tmp, "%c%s%c%s", 0, m_jid.username().c_str(), 0, m_password.c_str() );
-        else
+        if( m_authzid )
           sprintf( tmp, "%s%c%s%c%s", m_authzid.bare().c_str(), 0, m_jid.username().c_str(), 0,
                    m_password.c_str() );
+        else
+          sprintf( tmp, "%c%s%c%s", 0, m_jid.username().c_str(), 0, m_password.c_str() );
 
         std::string dec( tmp, len );
         a->setCData( Base64::encode64( dec ) );
@@ -448,10 +444,10 @@ namespace gloox
         break;
       case SaslMechExternal:
         a->addAttribute( "mechanism", "EXTERNAL" );
-        if( m_authzid.empty() )
-          a->setCData( Base64::encode64( m_jid.bare() ) );
-        else
+        if( m_authzid )
           a->setCData( Base64::encode64( m_authzid.bare() ) );
+        else
+          a->setCData( Base64::encode64( m_jid.bare() ) );
         break;
       case SaslMechGssapi:
       {
@@ -568,7 +564,7 @@ namespace gloox
         response += response_value;
         response += ",charset=utf-8";
 
-        if( !m_authzid.empty() )
+        if( m_authzid )
           response += ",authzid=" + m_authzid.bare();
 
         t->setCData( Base64::encode64( response ) );
@@ -613,12 +609,17 @@ namespace gloox
 
   void ClientBase::send( Tag* tag )
   {
-    if( !tag )
-      return;
+    if( tag )
+      send( *tag );
 
-    send( tag->xml() );
+    delete tag;
+  }
 
-    switch( tag->type() )
+  void ClientBase::send( const Tag& tag )
+  {
+    send( tag.xml() );
+
+    switch( tag.type() )
     {
       case StanzaIq:
         ++m_stats.iqStanzasSent;
@@ -636,8 +637,6 @@ namespace gloox
         break;
     }
     ++m_stats.totalStanzasSent;
-
-    delete tag;
 
     if( m_statisticsHandler )
       m_statisticsHandler->handleStatistics( getStatistics() );
@@ -660,11 +659,9 @@ namespace gloox
 
   StatisticsStruct ClientBase::getStatistics()
   {
-//     if( m_connection )
-//       m_connection->getStatistics( m_stats.totalBytesReceived, m_stats.totalBytesSent,
-//                                    m_stats.compressedBytesReceived, m_stats.compressedBytesSent,
-//                                    m_stats.uncompressedBytesReceived, m_stats.uncompressedBytesSent,
-//                                    m_stats.compression );
+    if( m_connection )
+      m_connection->getStatistics( m_stats.totalBytesReceived, m_stats.totalBytesSent );
+
     return m_stats;
   }
 
@@ -859,7 +856,7 @@ namespace gloox
 
   void ClientBase::registerPresenceHandler( const JID& jid, PresenceHandler* ph )
   {
-    if( ph && !jid.empty() )
+    if( ph && jid )
     {
       JidPresHandlerStruct jph;
       jph.jid = new JID( jid.bare() );
@@ -929,9 +926,17 @@ namespace gloox
 
     typedef IqHandlerMap::iterator IQi;
     std::pair<IQi, IQi> g = m_iqNSHandlers.equal_range( xmlns );
-    for( IQi it = g.first; it != g.second; ++it )
+    IQi it_;
+    IQi it = g.first;
+    while( it != g.second )
+    {
       if( (*it).second == ih )
-        m_iqNSHandlers.erase( it );
+      {
+        m_iqNSHandlers.erase( it++ );
+      }
+      else
+        ++it;
+    }
   }
 
   void ClientBase::registerMessageSession( MessageSession* session )
@@ -1160,7 +1165,8 @@ namespace gloox
     {
       if( (*it1)->target().full() == msg->from().full() &&
             ( msg->thread().empty() || (*it1)->threadID() == msg->thread() ) &&
-            ( (*it1)->types() & msg->subtype() || (*it1)->types() == StanzaSubUndefined ) )
+#warning FIXME don't use '== 0' here
+            ( (*it1)->types() & msg->subtype() || (*it1)->types() == 0 ) )
       {
         (*it1)->handleMessage( msg );
         return;
@@ -1172,7 +1178,8 @@ namespace gloox
     {
       if( (*it1)->target().bare() == msg->from().bare() &&
             ( msg->thread().empty() || (*it1)->threadID() == msg->thread() ) &&
-            ( (*it1)->types() & msg->subtype() || (*it1)->types() == StanzaSubUndefined ) )
+#warning FIXME don't use '== 0' here
+            ( (*it1)->types() & msg->subtype() || (*it1)->types() == 0 ) )
       {
         (*it1)->handleMessage( msg );
         return;
@@ -1227,7 +1234,14 @@ namespace gloox
       return 0;
 
 #ifdef HAVE_ZLIB
-    return new CompressionZlib( this );
+    CompressionBase* cmp = new CompressionZlib( this );
+    if( cmp->init() )
+      return cmp;
+    else
+    {
+      delete cmp;
+      return 0;
+    }
 #else
     return 0;
 #endif
