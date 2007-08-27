@@ -436,7 +436,12 @@ namespace gloox
       operator bool() const { return m_valid; }
 
     protected:
-      void ripoff( Tag* tag );
+      /**
+       * Creates a new Tag by stealing the original Tag's body (elements, attributes). The
+       * original Tag is pretty much useless afterwards.
+       * @param tag The Tag to rip off.
+       */
+      Tag( Tag* tag );
 
       /**
        * XPath error conditions.

@@ -67,6 +67,27 @@ namespace gloox
     m_valid = !m_name.empty();
   }
 
+  Tag::Tag( Tag* tag )
+    : m_parent( 0 ), m_children( 0 ), m_cdata( 0 ), m_attribs( 0 ), m_nodes( 0 )
+  {
+    m_nodes = tag->m_nodes;
+    tag->m_nodes = new NodeList();
+
+    m_cdata = tag->m_cdata;
+    tag->m_cdata = new StringPList();
+
+    m_attribs = tag->m_attribs;
+    tag->m_attribs = new AttributeList();
+
+    m_children = tag->m_children;
+    tag->m_children = new TagList();
+
+    m_name = tag->m_name;
+    m_valid = tag->m_valid;
+    m_type = tag->m_type;
+    m_xmlns = tag->m_xmlns;
+  }
+
   Tag::~Tag()
   {
     util::clear( *m_cdata );
@@ -433,28 +454,6 @@ namespace gloox
         return;
       }
     }
-  }
-
-  void Tag::ripoff( Tag* tag )
-  {
-    delete m_nodes;
-    m_nodes = tag->m_nodes;
-    tag->m_nodes = new NodeList();
-
-    util::clear( *m_cdata );
-    delete m_cdata;
-    m_cdata = tag->m_cdata;
-    tag->m_cdata = new StringPList();
-
-    util::clear( *m_attribs );
-    delete m_attribs;
-    m_attribs = tag->m_attribs;
-    tag->m_attribs = new AttributeList();
-
-    util::clear( *m_children );
-    delete m_children;
-    m_children = tag->m_children;
-    tag->m_children = new TagList();
   }
 
   const std::string Tag::findCData( const std::string& expression )
