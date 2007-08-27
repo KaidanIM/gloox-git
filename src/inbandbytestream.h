@@ -58,7 +58,7 @@ namespace gloox
       void setBlockSize( int blockSize ) { m_blockSize = blockSize; }
 
       // re-implemented from Bytestream
-      virtual ConnectionError recv( int timeout = -1 ) { return ConnNoError; }
+      virtual ConnectionError recv( int timeout = -1 ) { (void)timeout; return ConnNoError; }
 
       // re-implemented from Bytestream
       bool send( const std::string& data );
