@@ -33,10 +33,8 @@ namespace gloox
   }
 
   Stanza::Stanza( Tag* tag )
-    : Tag( tag->name(), tag->cdata() ), m_xmllang( "default" )
+    : Tag( tag ), m_xmllang( "default" )
   {
-    ripoff( tag );
-
     m_from.setJID( findAttribute( "from" ) );
     m_to.setJID( findAttribute( "to" ) );
     m_id = findAttribute( "id" );
