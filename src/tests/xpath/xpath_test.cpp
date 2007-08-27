@@ -38,8 +38,8 @@ int main( int /*argc*/, char** /*argv*/ )
   std::string name;
   Tag *aaa = new Tag( "aaa" );
   Tag *bbb = new Tag( aaa, "bbb" ); bbb->addAttribute( "name", "b1" );
-  Tag *ccc = new Tag( aaa, "ccc" );
-  Tag *ddd = new Tag( ccc, "ddd" );
+  Tag *ccc = new Tag( aaa, "ccc" ); ccc->setCData( "abc" );
+  Tag *ddd = new Tag( ccc, "ddd" ); ddd->setCData( "bcd" );
   Tag *eee = new Tag( ccc, "eee" );
   Tag *fff = new Tag( aaa, "fff" );
   Tag *ggg = new Tag( fff, "ggg" );
@@ -841,6 +841,25 @@ int main( int /*argc*/, char** /*argv*/ )
 
 
   // -- predicates --
+
+
+  name = "cdata: //ccc";
+  if( aaa->findCData( "//ccc" ) != "abc" )
+  {
+    ++fail;
+    printResult( name, result );
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+//   printf( "--------------------------------------------------------------\n" );
+
+  name = "cdata: //ddd";
+  if( aaa->findCData( "//ddd" ) != "bcd" )
+  {
+    ++fail;
+    printResult( name, result );
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+//   printf( "--------------------------------------------------------------\n" );
 
 
 
