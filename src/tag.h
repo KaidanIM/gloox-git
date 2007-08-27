@@ -51,7 +51,7 @@ namespace gloox
        * Creates an empty tag.
        * @deprecated Will be removed in 1.0
        */
-      explicit GLOOX_DEPRECATED Tag();
+      GLOOX_DEPRECATED_CTOR Tag();
 
       /**
        * Creates a new tag with a given name (and XML character data, if given).
