@@ -290,8 +290,9 @@ namespace gloox
       /**
        * Returns whether the Tag is considered empty, i.e. invalid.
        * @return @b True if the Tag is valid, @b false if not.
+       * @deprecated Use operator bool() instead.
        */
-      virtual bool empty() const { return m_name.empty(); }
+      GLOOX_DEPRECATED virtual bool empty() const { return m_name.empty(); }
 
       /**
        * This function checks whether a child element with given name exists and has
@@ -357,6 +358,11 @@ namespace gloox
        * @since 0.9
        */
       bool operator!=( const Tag &right ) const { return !( *this == right ); }
+
+      /**
+       * Returns @b true if the Tag is valid, @b false otherwise.
+       */
+      operator bool() const { return m_valid; }
 
       /**
        * Does some fancy escaping. (& --> &amp;, etc).
@@ -452,6 +458,7 @@ namespace gloox
 
       static void add( Tag::TagList& one, const Tag::TagList& two );
 
+      bool m_valid;
   };
 
 }

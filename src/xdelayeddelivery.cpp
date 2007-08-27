@@ -49,7 +49,7 @@ namespace gloox
 
     Tag *t = new Tag( "x" );
     t->addAttribute( "xmlns", XMLNS_X_DELAY );
-    if( !m_from.empty() )
+    if( m_from )
       t->addAttribute( "from", m_from.full() );
     if( !m_stamp.empty() )
       t->addAttribute( "stamp", m_stamp );

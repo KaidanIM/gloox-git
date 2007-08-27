@@ -1,3 +1,19 @@
+v0.9.5 -- xx yyy 2007
+---------------------
+
+general changes and addtions:
+- JID: added operator bool()
+- Tag: added operator bool()
+- DelayedDelivery: added setReason()
+
+deprecated functions:
+- JID::fullJID(), use ctor
+- JID::empty(), use operator bool()
+- Tag::empty(), use operator bool()
+- XDelayedDelivery::XDelayedDelivery( JID, string, string ), the spec is deprecated, use DelayedDelivery
+- DelayedDelivery::setBody(), typo, use setReason()
+
+
 v0.9.4.1 -- 15 Aug 2007
 -----------------------
 - ClientBase: fix TLS wrapper instantiation

@@ -263,7 +263,7 @@ namespace gloox
 
   void Adhoc::checkSupport( const JID& remote, AdhocHandler *ah )
   {
-    if( remote.empty() || !ah )
+    if( !remote || !ah )
       return;
 
     TrackStruct track;
@@ -276,7 +276,7 @@ namespace gloox
 
   void Adhoc::getCommands( const JID& remote, AdhocHandler *ah )
   {
-    if( remote.empty() || !ah )
+    if( !remote || !ah )
       return;
 
     TrackStruct track;
@@ -291,7 +291,7 @@ namespace gloox
                        const std::string& sessionid, DataForm *form,
                        AdhocExecuteActions action )
   {
-    if( remote.empty() || command.empty() || !ah )
+    if( !remote || command.empty() || !ah )
       return;
 
     const std::string& id = m_parent->getID();
