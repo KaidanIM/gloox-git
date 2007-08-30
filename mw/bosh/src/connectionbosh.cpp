@@ -98,12 +98,22 @@ namespace gloox
 
 	ConnectionBase* ConnectionBOSH::newInstance() const
 	{
-		ConnectionBOSH * pNewConnection = new ConnectionBOSH ( m_handler, /*conn*/NULL, m_logInstance, m_boshHost, m_server, m_port );
-
-		pNewConnection->m_activeConnections = m_activeConnections;
-
-		pNewConnection->m_connectionPool = m_connectionPool;
-
+		ConnectionBase* pBaseConn = NULL;
+		if(!m_connectionPool.empty())
+		{
+			pBaseConn = m_connectionPool.front()->newInstance();
+		}
+		else if(!m_activeConnections.empty())
+		{
+			pBaseConn = m_activeConnections.front()->newInstance();
+		}
+		else
+		{
+			return NULL;
+		}
+			
+		ConnectionBOSH * pNewConnection = new ConnectionBOSH ( m_handler, pBaseConn, m_logInstance, m_boshHost, m_server, m_port );
+		
 		return ( pNewConnection );
 	}
 
