@@ -204,7 +204,7 @@ namespace gloox
 		
 		// If there are no open requests then the spec allows us to send an empty request...
 		// (Some CMs do not obey this, it seems)
-		if ( (m_activeConnections.empty() || m_sendBuffer.size() > 0) && m_state == StateConnected)
+		if ( (m_openRequests == 0 || m_sendBuffer.size() > 0) && m_state == StateConnected)
 		{
 			m_logInstance.log ( LogLevelDebug, LogAreaClassConnectionBOSH, "Sending empty request (or there is data in the send buffer)");
 			sendXML ( m_sendBuffer );
@@ -389,6 +389,7 @@ namespace gloox
 	/* Sends XML. Wraps data in a <body/> tag, and then passes to sendRequest(). */
 	bool ConnectionBOSH::sendXML ( const std::string& data )
 	{
+		printf("*SendXML(%s)\n", data.c_str());
 		std::ostringstream requestBody;
 
 		
