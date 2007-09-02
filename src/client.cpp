@@ -22,6 +22,7 @@
 #include "capabilities.h"
 #include "rostermanager.h"
 #include "disco.h"
+#include "error.h"
 #include "logsink.h"
 #include "nonsaslauth.h"
 #include "tag.h"
@@ -207,51 +208,59 @@ namespace gloox
         disconnect( ConnNoSupportedAuth );
       }
     }
-    else if( ( tag->name() == "proceed" ) && tag->hasAttribute( XMLNS, XMLNS_STREAM_TLS ) )
-    {
-      logInstance().dbg( LogAreaClassClient, "starting TLS handshake..." );
-
-      if( m_encryption )
-      {
-        m_encryptionActive = true;
-        m_encryption->handshake();
-      }
-    }
-    else if( ( tag->name() == "failure" ) && tag->hasAttribute( XMLNS, XMLNS_STREAM_TLS ) )
-    {
-      logInstance().err( LogAreaClassClient, "TLS handshake failed (server-side)!" );
-      disconnect( ConnTlsFailed );
-    }
-    else if( ( tag->name() == "failure" ) && tag->hasAttribute( XMLNS, XMLNS_COMPRESSION ) )
-    {
-      logInstance().err( LogAreaClassClient, "stream compression init failed!" );
-      disconnect( ConnCompressionFailed );
-    }
-    else if( ( tag->name() == "compressed" ) && tag->hasAttribute( XMLNS, XMLNS_COMPRESSION ) )
-    {
-      logInstance().dbg( LogAreaClassClient, "stream compression inited" );
-      m_compressionActive = true;
-      header();
-    }
-    else if( ( tag->name() == "challenge" ) && tag->hasAttribute( XMLNS, XMLNS_STREAM_SASL ) )
-    {
-      logInstance().dbg( LogAreaClassClient, "processing SASL challenge" );
-      processSASLChallenge( tag->cdata() );
-    }
-    else if( ( tag->name() == "failure" ) && tag->hasAttribute( XMLNS, XMLNS_STREAM_SASL ) )
-    {
-      logInstance().err( LogAreaClassClient, "SASL authentication failed!" );
-      processSASLError( tag );
-      disconnect( ConnAuthenticationFailed );
-    }
-    else if( ( tag->name() == "success" ) && tag->hasAttribute( XMLNS, XMLNS_STREAM_SASL ) )
-    {
-      logInstance().dbg( LogAreaClassClient, "SASL authentication successful" );
-      setAuthed( true );
-      header();
-    }
     else
-      return false;
+    {
+      const std::string& name  = tag->name(),
+                         xmlns = tag->findAttribute( XMLNS );
+      if( name == "proceed" && xmlns == XMLNS_STREAM_TLS )
+      {
+        logInstance().dbg( LogAreaClassClient, "starting TLS handshake..." );
+
+        if( m_encryption )
+        {
+          m_encryptionActive = true;
+          m_encryption->handshake();
+        }
+      }
+      else if( name == "failure" )
+      {
+        if( xmlns == XMLNS_STREAM_TLS )
+        {
+          logInstance().err( LogAreaClassClient, "TLS handshake failed (server-side)!" );
+          disconnect( ConnTlsFailed );
+        }
+        else if( xmlns == XMLNS_COMPRESSION )
+        {
+          logInstance().err( LogAreaClassClient, "stream compression init failed!" );
+          disconnect( ConnCompressionFailed );
+        }
+        else if( xmlns == XMLNS_STREAM_SASL )
+        {
+          logInstance().err( LogAreaClassClient, "SASL authentication failed!" );
+          processSASLError( tag );
+          disconnect( ConnAuthenticationFailed );
+        }
+      }
+      else if( name == "compressed" && xmlns == XMLNS_COMPRESSION )
+      {
+        logInstance().dbg( LogAreaClassClient, "stream compression inited" );
+        m_compressionActive = true;
+        header();
+      }
+      else if( name == "challenge" && xmlns == XMLNS_STREAM_SASL )
+      {
+        logInstance().dbg( LogAreaClassClient, "processing SASL challenge" );
+        processSASLChallenge( tag->cdata() );
+      }
+      else if( name == "success" && xmlns == XMLNS_STREAM_SASL )
+      {
+        logInstance().dbg( LogAreaClassClient, "SASL authentication successful" );
+        setAuthed( true );
+        header();
+      }
+      else
+        return false;
+    }
 
     return true;
   }
@@ -294,19 +303,21 @@ namespace gloox
   {
     int mechs = SaslMechNone;
 
-    if( tag->hasChildWithCData( "mechanism", "DIGEST-MD5" ) )
+    const std::string mech = "mechanism";
+
+    if( tag->hasChildWithCData( mech, "DIGEST-MD5" ) )
       mechs |= SaslMechDigestMd5;
 
-    if( tag->hasChildWithCData( "mechanism", "PLAIN" ) )
+    if( tag->hasChildWithCData( mech, "PLAIN" ) )
       mechs |= SaslMechPlain;
 
-    if( tag->hasChildWithCData( "mechanism", "ANONYMOUS" ) )
+    if( tag->hasChildWithCData( mech, "ANONYMOUS" ) )
       mechs |= SaslMechAnonymous;
 
-    if( tag->hasChildWithCData( "mechanism", "EXTERNAL" ) )
+    if( tag->hasChildWithCData( mech, "EXTERNAL" ) )
       mechs |= SaslMechExternal;
 
-    if( tag->hasChildWithCData( "mechanism", "GSSAPI" ) )
+    if( tag->hasChildWithCData( mech, "GSSAPI" ) )
       mechs |= SaslMechGssapi;
 
     return mechs;
@@ -360,15 +371,8 @@ namespace gloox
     {
       case IQ::Result:
       {
-        Tag* bind = iq->query();
-        if( !bind )
-        {
-          notifyOnResourceBindError( RbErrorUnknownError );
-          break;
-        }
-
-        Tag* jid = bind->findChild( "jid" );
-        if( !jid )
+        const Tag* jid;
+        if( !iq->query() || !(jid = iq->query()->findChild( "jid" )) )
         {
           notifyOnResourceBindError( RbErrorUnknownError );
           break;
@@ -385,23 +389,25 @@ namespace gloox
       }
       case IQ::Error:
       {
-        Tag* error = iq->findChild( "error" );
-        if( iq->hasChild( "error", TYPE, "modify" )
-            && error->hasChild( "bad-request", XMLNS, XMLNS_XMPP_STANZAS ) )
+        const Error* error = iq->error();
+        switch( error->type() )
         {
-          notifyOnResourceBindError( RbErrorBadRequest );
-        }
-        else if( iq->hasChild( "error", TYPE, "cancel" ) )
-        {
-          if( error->hasChild( "not-allowed", XMLNS, XMLNS_XMPP_STANZAS ) )
-            notifyOnResourceBindError( RbErrorNotAllowed );
-          else if( error->hasChild( "conflict", XMLNS, XMLNS_XMPP_STANZAS ) )
-            notifyOnResourceBindError( RbErrorConflict );
-          else
+          case StanzaErrorTypeModify:
+            if( error->error() == StanzaErrorBadRequest )
+              notifyOnResourceBindError( RbErrorBadRequest );
+            break;
+          case StanzaErrorTypeCancel:
+            if( error->error() == StanzaErrorNotAllowed )
+              notifyOnResourceBindError( RbErrorNotAllowed );
+            else if( error->error() == StanzaErrorConflict )
+              notifyOnResourceBindError( RbErrorConflict );
+            else
+              notifyOnResourceBindError( RbErrorUnknownError );
+            break;
+          default:
             notifyOnResourceBindError( RbErrorUnknownError );
+            break;
         }
-        else
-          notifyOnResourceBindError( RbErrorUnknownError );
         break;
       }
       default:
@@ -413,9 +419,8 @@ namespace gloox
   {
     notifyStreamEvent( StreamEventSessionCreation );
     const std::string& id = getID();
-    IQ* iq = new IQ( IQ::Set, JID(), id, XMLNS_STREAM_SESSION, "session" );
     trackID( this, id, SessionEstablishment );
-    send( iq );
+    send( new IQ( IQ::Set, JID(), id, XMLNS_STREAM_SESSION, "session" ) );
   }
 
   void Client::processCreateSession( IQ* iq )
@@ -429,24 +434,25 @@ namespace gloox
       }
       case IQ::Error:
       {
-        Tag* error = iq->findChild( "error" );
-        if( iq->hasChild( "error", TYPE, "wait" )
-            && error->hasChild( "internal-server-error", XMLNS, XMLNS_XMPP_STANZAS ) )
+        const Error* error = iq->error();
+        switch( error->type() )
         {
-          notifyOnSessionCreateError( ScErrorInternalServerError );
+          case StanzaErrorTypeWait:
+            if( error->error() == StanzaErrorInternalServerError )
+              notifyOnSessionCreateError( ScErrorInternalServerError );
+            break;
+          case StanzaErrorTypeAuth:
+            if( error->error() == StanzaErrorForbidden )
+              notifyOnSessionCreateError( ScErrorForbidden );
+            break;
+          case StanzaErrorTypeCancel:
+            if( error->error() == StanzaErrorConflict )
+              notifyOnSessionCreateError( ScErrorConflict );
+            break;
+          default:
+            notifyOnSessionCreateError( ScErrorUnknownError );
+            break;
         }
-        else if( iq->hasChild( "error", TYPE, "auth" )
-                 && error->hasChild( "forbidden", XMLNS, XMLNS_XMPP_STANZAS ) )
-        {
-          notifyOnSessionCreateError( ScErrorForbidden );
-        }
-        else if( iq->hasChild( "error", TYPE, "cancel" )
-                 && error->hasChild( "conflict", XMLNS, XMLNS_XMPP_STANZAS ) )
-        {
-          notifyOnSessionCreateError( ScErrorConflict );
-        }
-        else
-          notifyOnSessionCreateError( ScErrorUnknownError );
         break;
       }
       default:
@@ -456,8 +462,7 @@ namespace gloox
 
   void Client::negotiateCompression( StreamFeature method )
   {
-    Tag* t = new Tag( "compress" );
-    t->addAttribute( XMLNS, XMLNS_COMPRESSION );
+    Tag* t = new Tag( "compress", XMLNS, XMLNS_COMPRESSION );
 
     if( method == StreamFeatureCompressZlib )
       new Tag( t, "method", "zlib" );
