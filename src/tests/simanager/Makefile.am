@@ -9,5 +9,6 @@ noinst_PROGRAMS = simanager_test
 simanager_test_SOURCES = simanager_test.cpp
 simanager_test_LDADD = ../../jid.o ../../tag.o \
 			../../logsink.o ../../prep.o ../../util.o \
-			../../gloox.o ../../iq.o ../../stanza.o
+			../../gloox.o ../../iq.o ../../stanza.o \
+			../../error.o
 simanager_test_CFLAGS = $(CPPFLAGS)
