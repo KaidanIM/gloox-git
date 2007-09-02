@@ -168,27 +168,35 @@ namespace gloox
       std::string desc;
       long offset = 0;
       long length = -1;
-      if( ptag->hasChild( "desc" ) )
-        desc = ptag->findChild( "desc" )->cdata();
-      Tag* r = ptag->findChild( "range" );
-      if( r )
+
+      const Tag* t = ptag->findChild( "desc" );
+      if( t )
+        desc = t->cdata();
+
+      t = ptag->findChild( "range" );
+      if( t )
       {
-        if( r->hasAttribute( "offset" ) )
-          offset = atol( r->findAttribute( "offset" ).c_str() );
-        if( r->hasAttribute( "length" ) )
-          length = atol( r->findAttribute( "length" ).c_str() );
+        if( t->hasAttribute( "offset" ) )
+          offset = atol( t->findAttribute( "offset" ).c_str() );
+        if( t->hasAttribute( "length" ) )
+          length = atol( t->findAttribute( "length" ).c_str() );
       }
+
       const std::string& mt = si->findAttribute( "mime-type" );
       int types = 0;
       Tag* x = fneg ? fneg->findChild( "x", XMLNS, XMLNS_X_DATA ) : 0;
       DataForm df( x );
       DataFormField* dff = df.field( "stream-method" );
+
       if( dff && dff->value() == XMLNS_BYTESTREAMS )
         types |= FTTypeS5B;
+
       if( dff && dff->value() == XMLNS_IBB )
         types |= FTTypeIBB;
+
       if( dff && dff->value() == XMLNS_IQ_OOB )
         types |= FTTypeOOB;
+
       m_handler->handleFTRequest( from, id, si->findAttribute( "id" ), ptag->findAttribute( "name" ),
                                   atol( ptag->findAttribute( "size" ).c_str() ),
                                   ptag->findAttribute( "hash" ), ptag->findAttribute( "date" ),

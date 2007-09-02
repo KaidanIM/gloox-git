@@ -17,6 +17,7 @@
 #include "sihandler.h"
 #include "clientbase.h"
 #include "disco.h"
+#include "error.h"
 
 namespace gloox
 {
@@ -86,24 +87,19 @@ namespace gloox
     Tag* error = new Tag( iq, "error" );
     if( reason == NoValidStreams || reason == BadProfile )
     {
-      error->addAttribute( "error", "400" );
-      error->addAttribute( TYPE, "cancel" );
-      new Tag( error, "bad-request", XMLNS, XMLNS_XMPP_STANZAS );
+      Tag* appError = 0;
       if( reason == NoValidStreams )
-        new Tag( error, "no-valid-streams", XMLNS, XMLNS_SI );
+        appError = new Tag( "no-valid-streams", XMLNS, XMLNS_SI );
       else if( reason == BadProfile )
-        new Tag( error, "bad-profile", XMLNS, XMLNS_SI );
+        appError = new Tag( "bad-profile", XMLNS, XMLNS_SI );
+      iq->addExtension( new Error( StanzaErrorTypeCancel, StanzaErrorBadRequest, appError ) );
     }
     else
     {
-      error->addAttribute( "error", "403" );
-      error->addAttribute( TYPE, "cancel" );
-      new Tag( error, "forbidden", XMLNS, XMLNS_XMPP_STANZAS );
+      Error* error = new Error( StanzaErrorTypeCancel, StanzaErrorForbidden );
       if( !text.empty() )
-      {
-        Tag* t = new Tag( error, "text", XMLNS, XMLNS_XMPP_STANZAS );
-        t->setCData( text );
-      }
+        error->text( text );
+      iq->addExtension( error );
     }
 
     m_parent->send( iq );
