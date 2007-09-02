@@ -44,6 +44,7 @@
 #include "mucinvitationhandler.h"
 #include "jid.h"
 #include "base64.h"
+#include "error.h"
 #include "md5.h"
 #include "util.h"
 #include "tlsdefault.h"
@@ -212,8 +213,9 @@ namespace gloox
         }
         else if( tag->name() == "presence" )
         {
-          if( tag->hasAttribute( TYPE, "subscribe" ) || tag->hasAttribute( TYPE, "subscribed" )
-              || tag->hasAttribute( TYPE, "unsubscribe" ) || tag->hasAttribute( TYPE, "unsubscribed" ) )
+          const std::string& type = tag->findAttribute( TYPE );
+          if( type == "subscribe"  || type == "unsubscribe"  
+           || type == "subscribed" || type == "unsubscribed" )
           {
             Subscription sub( tag );
             notifySubscriptionHandlers( &sub );
@@ -407,8 +409,7 @@ namespace gloox
   {
     m_selectedSaslMech = type;
 
-    Tag* a = new Tag( "auth" );
-    a->addAttribute( XMLNS, XMLNS_STREAM_SASL );
+    Tag* a = new Tag( "auth", XMLNS, XMLNS_STREAM_SASL );
 
     switch( type )
     {
@@ -479,8 +480,7 @@ namespace gloox
 
   void ClientBase::processSASLChallenge( const std::string& challenge )
   {
-    Tag* t = new Tag( "response" );
-    t->addAttribute( XMLNS, XMLNS_STREAM_SASL );
+    Tag* t = new Tag( "response", XMLNS, XMLNS_STREAM_SASL );
 
     const std::string& decoded = Base64::decode64( challenge );
 
@@ -489,24 +489,21 @@ namespace gloox
       case SaslMechDigestMd5:
       {
         if( !decoded.compare( 0, 7, "rspauth" ) )
-        {
           break;
-        }
+
         std::string realm;
         size_t r_pos = decoded.find( "realm=" );
         if( r_pos != std::string::npos )
         {
-          size_t r_end = decoded.find( '"', r_pos + 7 );
-          realm = decoded.substr( r_pos + 7, r_end - (r_pos + 7 ) );
+          const size_t r_end = decoded.find( '"', r_pos + 7 );
+          realm = decoded.substr( r_pos + 7, r_end - r_pos + 7 );
         }
         else
           realm = m_jid.server();
 
-        size_t n_pos = decoded.find( "nonce=" );
+        const size_t n_pos = decoded.find( "nonce=" );
         if( n_pos == std::string::npos )
-        {
           return;
-        }
 
         size_t n_end = decoded.find( '"', n_pos + 7 );
         while( decoded[n_end-1] == '\\' )
@@ -610,9 +607,10 @@ namespace gloox
   void ClientBase::send( Tag* tag )
   {
     if( tag )
+    {
       send( *tag );
-
-    delete tag;
+      delete tag;
+    }
   }
 
   void ClientBase::send( const Tag& tag )
@@ -677,9 +675,7 @@ namespace gloox
 
   void ClientBase::xmppPing( const JID& to )
   {
-    const std::string& id = getID();
-    IQ* iq = new IQ( IQ::Get, to, id, XMLNS_XMPP_PING, "ping" );
-    send( iq );
+    send( new IQ( IQ::Get, to, getID(), XMLNS_XMPP_PING, "ping" ) );
   }
 
   const std::string ClientBase::getID()
@@ -754,58 +750,59 @@ namespace gloox
     TagList::const_iterator it = c.begin();
     for( ; it != c.end(); ++it )
     {
-      if( (*it)->name() == "bad-format" )
+      const std::string& name = (*it)->name();
+      if( name == "bad-format" )
         err = StreamErrorBadFormat;
-      else if( (*it)->name() == "bad-namespace-prefix" )
+      else if( name == "bad-namespace-prefix" )
         err = StreamErrorBadNamespacePrefix;
-      else if( (*it)->name() == "conflict" )
+      else if( name == "conflict" )
         err = StreamErrorConflict;
-      else if( (*it)->name() == "connection-timeout" )
+      else if( name == "connection-timeout" )
         err = StreamErrorConnectionTimeout;
-      else if( (*it)->name() == "host-gone" )
+      else if( name == "host-gone" )
         err = StreamErrorHostGone;
-      else if( (*it)->name() == "host-unknown" )
+      else if( name == "host-unknown" )
         err = StreamErrorHostUnknown;
-      else if( (*it)->name() == "improper-addressing" )
+      else if( name == "improper-addressing" )
         err = StreamErrorImproperAddressing;
-      else if( (*it)->name() == "internal-server-error" )
+      else if( name == "internal-server-error" )
         err = StreamErrorInternalServerError;
-      else if( (*it)->name() == "invalid-from" )
+      else if( name == "invalid-from" )
         err = StreamErrorInvalidFrom;
-      else if( (*it)->name() == "invalid-id" )
+      else if( name == "invalid-id" )
         err = StreamErrorInvalidId;
-      else if( (*it)->name() == "invalid-namespace" )
+      else if( name == "invalid-namespace" )
         err = StreamErrorInvalidNamespace;
-      else if( (*it)->name() == "invalid-xml" )
+      else if( name == "invalid-xml" )
         err = StreamErrorInvalidXml;
-      else if( (*it)->name() == "not-authorized" )
+      else if( name == "not-authorized" )
         err = StreamErrorNotAuthorized;
-      else if( (*it)->name() == "policy-violation" )
+      else if( name == "policy-violation" )
         err = StreamErrorPolicyViolation;
-      else if( (*it)->name() == "remote-connection-failed" )
+      else if( name == "remote-connection-failed" )
         err = StreamErrorRemoteConnectionFailed;
-      else if( (*it)->name() == "resource-constraint" )
+      else if( name == "resource-constraint" )
         err = StreamErrorResourceConstraint;
-      else if( (*it)->name() == "restricted-xml" )
+      else if( name == "restricted-xml" )
         err = StreamErrorRestrictedXml;
-      else if( (*it)->name() == "see-other-host" )
+      else if( name == "see-other-host" )
       {
         err = StreamErrorSeeOtherHost;
         m_streamErrorCData = tag->findChild( "see-other-host" )->cdata();
       }
-      else if( (*it)->name() == "system-shutdown" )
+      else if( name == "system-shutdown" )
         err = StreamErrorSystemShutdown;
-      else if( (*it)->name() == "undefined-condition" )
+      else if( name == "undefined-condition" )
         err = StreamErrorUndefinedCondition;
-      else if( (*it)->name() == "unsupported-encoding" )
+      else if( name == "unsupported-encoding" )
         err = StreamErrorUnsupportedEncoding;
-      else if( (*it)->name() == "unsupported-stanza-type" )
+      else if( name == "unsupported-stanza-type" )
         err = StreamErrorUnsupportedStanzaType;
-      else if( (*it)->name() == "unsupported-version" )
+      else if( name == "unsupported-version" )
         err = StreamErrorUnsupportedVersion;
-      else if( (*it)->name() == "xml-not-well-formed" )
+      else if( name == "xml-not-well-formed" )
         err = StreamErrorXmlNotWellFormed;
-      else if( (*it)->name() == "text" )
+      else if( name == "text" )
       {
         const std::string& lang = (*it)->findAttribute( "xml:lang" );
         if( !lang.empty() )
@@ -1107,8 +1104,7 @@ namespace gloox
   void ClientBase::notifyIqHandlers( IQ* iq )
   {
     IqTrackMap::iterator it_id = m_iqIDHandlers.find( iq->id() );
-    if( it_id != m_iqIDHandlers.end() &&
-        ( iq->subtype() == IQ::Result || iq->subtype() == IQ::Error ) )
+    if( it_id != m_iqIDHandlers.end() && iq->subtype() & ( IQ::Result | IQ::Error ) )
     {
       (*it_id).second.ih->handleIqID( iq, (*it_id).second.context );
       m_iqIDHandlers.erase( it_id );
@@ -1126,14 +1122,11 @@ namespace gloox
       if( (*it).second->handleIq( iq ) )
         res = true;
 
-    if( !res && ( iq->type() == StanzaIq ) &&
-        ( ( iq->subtype() == IQ::Get ) || ( iq->subtype() == IQ::Set ) ) )
+    if( !res && iq->type() == StanzaIq && iq->subtype() & ( IQ::Get | IQ::Set ) )
     {
-      Tag* re = new IQ( IQ::Error, iq->from(), iq->id() );
-      Tag* e = new Tag( re, "error", TYPE, "cancel" );
-      new Tag( e, "service-unavailable", XMLNS, XMLNS_XMPP_STANZAS );
+      IQ* re = new IQ( IQ::Error, iq->from(), iq->id() );
+      re->addExtension( new Error( StanzaErrorTypeCancel, StanzaErrorServiceUnavailable ) );
       send( re );
-      return;
     }
   }
 
@@ -1141,13 +1134,13 @@ namespace gloox
   {
     if( m_mucInvitationHandler )
     {
-      Tag* x = msg->findChild( "x", XMLNS, XMLNS_MUC_USER );
+      const Tag* x = msg->findChild( "x", XMLNS, XMLNS_MUC_USER );
       if( x && x->hasChild( "invite" ) )
       {
-        Tag* i = x->findChild( "invite" );
+        const Tag* i = x->findChild( "invite" );
         JID invitee( i->findAttribute( "from" ) );
 
-        Tag * t = i->findChild( "reason" );
+        const Tag * t = i->findChild( "reason" );
         std::string reason ( t ? t->cdata() : "" );
 
         t = x->findChild( "password" );
@@ -1237,14 +1230,10 @@ namespace gloox
     CompressionBase* cmp = new CompressionZlib( this );
     if( cmp->init() )
       return cmp;
-    else
-    {
-      delete cmp;
-      return 0;
-    }
-#else
-    return 0;
+
+    delete cmp;
 #endif
+    return 0;
   }
 
   TLSBase* ClientBase::getDefaultEncryption()

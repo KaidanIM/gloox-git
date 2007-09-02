@@ -17,6 +17,7 @@
 #include "socks5bytestream.h"
 #include "clientbase.h"
 #include "disco.h"
+#include "error.h"
 #include "connectionbase.h"
 #include "sha.h"
 #include "util.h"
@@ -101,25 +102,19 @@ namespace gloox
     if( it == m_asyncTrackMap.end() || !m_parent )
       return;
 
-    Tag* iq = new Tag( "iq" );
+    IQ* iq = 0;
 
     if( (*it).second.incoming )
     {
-      iq->addAttribute( "to", (*it).second.from.full() );
-      iq->addAttribute( "id", (*it).second.id );
-
       if( success )
       {
-        iq->addAttribute( TYPE, "result" );
-        Tag* q = new Tag( iq, "query", XMLNS, XMLNS_BYTESTREAMS );
-        new Tag( q, "streamhost-used", "jid", jid.full() );
+        iq = new IQ( IQ::Result, (*it).second.from.full(), (*it).second.id, XMLNS_BYTESTREAMS );
+        new Tag( iq->query(), "streamhost-used", "jid", jid.full() );
       }
       else
       {
-        iq->addAttribute( TYPE, "error" );
-        Tag* e = new Tag( iq, "error", "code", "404" );
-        e->addAttribute( TYPE, "cancel" );
-        new Tag( e, "item-not-found", XMLNS, XMLNS_XMPP_STANZAS );
+        iq = new IQ( IQ::Error, (*it).second.from.full(), (*it).second.id );
+        iq->addExtension( new Error( StanzaErrorTypeCancel, StanzaErrorItemNotFound ) );
       }
     }
     else
@@ -127,12 +122,9 @@ namespace gloox
       if( success )
       {
         const std::string& id = m_parent->getID();
-        iq->addAttribute( "to", jid.full() );
-        iq->addAttribute( "id", id );
-        iq->addAttribute( TYPE, "set" );
-        Tag* q = new Tag( iq, "query", XMLNS, XMLNS_BYTESTREAMS );
-        q->addAttribute( "sid", sid );
-        new Tag( q, "activate", (*it).second.from.full() );
+        iq = new IQ( IQ::Set, jid.full(), id, XMLNS_BYTESTREAMS );
+        iq->query()->addAttribute( "sid", sid );
+        new Tag( iq->query(), "activate", (*it).second.from.full() );
 
         m_trackMap[id] = sid;
         m_parent->trackID( this, id, S5BActivateStream );
@@ -251,49 +243,43 @@ namespace gloox
     }
   }
 
-  void SOCKS5BytestreamManager::rejectSOCKS5Bytestream( const JID& from, const std::string& id,
+  void SOCKS5BytestreamManager::rejectSOCKS5Bytestream( const JID& from,
+                                                        const std::string& id,
                                                         StanzaError reason )
   {
-    IQ* iq = new IQ( IQ::Error, from, id );
-    Tag* e = new Tag( iq, "error" );
+    IQ* iq;
+    Error* error;
+
     switch( reason )
     {
       case StanzaErrorForbidden:
       {
-        new Tag( iq, "query", XMLNS, XMLNS_BYTESTREAMS );
-        e->addAttribute( "code", "403" );
-        e->addAttribute( TYPE, "auth" );
-        Tag* f = new Tag( e, "forbidden" );
-        f->addAttribute( XMLNS, XMLNS_XMPP_STANZAS );
+        iq = new IQ( IQ::Error, from, id, XMLNS_BYTESTREAMS );
+        error = new Error( StanzaErrorTypeAuth, StanzaErrorForbidden );
         break;
       }
       case StanzaErrorFeatureNotImplemented:
       {
-        e->addAttribute( "code", "404" );
-        e->addAttribute( TYPE, "cancel" );
-        Tag* f = new Tag( e, "item-not-found" );
-        f->addAttribute( XMLNS, XMLNS_XMPP_STANZAS );
+        iq = new IQ( IQ::Error, from, id );
+        error = new Error( StanzaErrorTypeCancel, StanzaErrorItemNotFound );
         break;
       }
       case StanzaErrorNotAllowed:
       {
-        new Tag( iq, "query", XMLNS, XMLNS_BYTESTREAMS );
-        e->addAttribute( "code", "405" );
-        e->addAttribute( TYPE, "cancel" );
-        Tag* f = new Tag( e, "not-allowed" );
-        f->addAttribute( XMLNS, XMLNS_XMPP_STANZAS );
+        iq = new IQ( IQ::Error, from, id, XMLNS_BYTESTREAMS );
+        error = new Error( StanzaErrorTypeCancel, StanzaErrorNotAllowed );
         break;
       }
       case StanzaErrorNotAcceptable:
       default:
       {
-        e->addAttribute( "code", "406" );
-        e->addAttribute( TYPE, "auth" );
-        Tag* f = new Tag( e, "not-acceptable" );
-        f->addAttribute( XMLNS, XMLNS_XMPP_STANZAS );
+        iq = new IQ( IQ::Error, from, id );
+        error = new Error( StanzaErrorTypeAuth, StanzaErrorNotAcceptable );
         break;
       }
     }
+
+    iq->addExtension( error );
     m_parent->send( iq );
   }
 
