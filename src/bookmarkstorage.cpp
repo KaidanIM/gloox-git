@@ -37,16 +37,14 @@ namespace gloox
     BookmarkList::const_iterator itb = bList.begin();
     for( ; itb != bList.end(); ++itb )
     {
-      Tag* i = new Tag( s, "url" );
-      i->addAttribute( "name", (*itb).name );
+      Tag* i = new Tag( s, "url", "name", (*itb).name );
       i->addAttribute( "url", (*itb).url );
     }
 
     ConferenceList::const_iterator itc = cList.begin();
     for( ; itc != cList.end(); ++itc )
     {
-      Tag* i = new Tag( s, "conference" );
-      i->addAttribute( "name", (*itc).name );
+      Tag* i = new Tag( s, "conference", "name", (*itc).name );
       i->addAttribute( "jid", (*itc).jid );
       i->addAttribute( "autojoin", (*itc).autojoin ? "true" : "false" );
 
