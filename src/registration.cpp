@@ -171,7 +171,7 @@ namespace gloox
       {
         case FetchRegistrationFields:
         {
-          Tag* q = iq->query();
+          const Tag* q = iq->query();
           if( !q )
             return;
 
@@ -183,13 +183,13 @@ namespace gloox
 
           if( q->hasChild( "x", XMLNS, XMLNS_X_DATA ) )
           {
-            DataForm form( q->findChild( "x", XMLNS, XMLNS_X_DATA ) );
+            const DataForm form( q->findChild( "x", XMLNS, XMLNS_X_DATA ) );
             m_registrationHandler->handleDataForm( iq->from(), form );
           }
 
           if( q->hasChild( "x", XMLNS, XMLNS_X_OOB ) )
           {
-            OOB oob( q->findChild( "x", XMLNS, XMLNS_X_OOB ) );
+            const OOB oob( q->findChild( "x", XMLNS, XMLNS_X_OOB ) );
             m_registrationHandler->handleOOB( iq->from(), oob );
           }
 
@@ -250,8 +250,7 @@ namespace gloox
     }
     else if( iq->subtype() == IQ::Error )
     {
-      Tag* e = iq->findChild( "error" );
-
+      const Tag* e = iq->findChild( "error" );
       if( !e )
         return;
 
