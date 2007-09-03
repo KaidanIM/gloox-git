@@ -41,8 +41,10 @@
 namespace gloox
 {
 
-  ConnectionSOCKS5Proxy::ConnectionSOCKS5Proxy( ConnectionBase* connection, const LogSink& logInstance,
-                                                const std::string& server, int port, bool ip )
+  ConnectionSOCKS5Proxy::ConnectionSOCKS5Proxy( ConnectionBase* connection,
+                                                const LogSink& logInstance,
+                                                const std::string& server,
+                                                int port, bool ip )
     : ConnectionBase( 0 ), m_connection( connection ),
       m_logInstance( logInstance ), m_s5state( S5StateDisconnected ), m_ip( ip )
   {
@@ -54,9 +56,11 @@ namespace gloox
       m_connection->registerConnectionDataHandler( this );
   }
 
-  ConnectionSOCKS5Proxy::ConnectionSOCKS5Proxy( ConnectionDataHandler* cdh, ConnectionBase* connection,
+  ConnectionSOCKS5Proxy::ConnectionSOCKS5Proxy( ConnectionDataHandler* cdh,
+                                                ConnectionBase* connection,
                                                 const LogSink& logInstance,
-                                                const std::string& server, int port, bool ip )
+                                                const std::string& server,
+                                                int port, bool ip )
     : ConnectionBase( cdh ), m_connection( connection ),
       m_logInstance( logInstance ), m_s5state( S5StateDisconnected ), m_ip( ip )
   {
