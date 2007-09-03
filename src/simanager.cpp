@@ -84,7 +84,7 @@ namespace gloox
   void SIManager::declineSI( const JID& to, const std::string& id, SIError reason, const std::string& text )
   {
     IQ* iq = new IQ( IQ::Error, to, id );
-    Tag* error = new Tag( iq, "error" );
+    Error* error;
     if( reason == NoValidStreams || reason == BadProfile )
     {
       Tag* appError = 0;
@@ -92,16 +92,16 @@ namespace gloox
         appError = new Tag( "no-valid-streams", XMLNS, XMLNS_SI );
       else if( reason == BadProfile )
         appError = new Tag( "bad-profile", XMLNS, XMLNS_SI );
-      iq->addExtension( new Error( StanzaErrorTypeCancel, StanzaErrorBadRequest, appError ) );
+      error = new Error( StanzaErrorTypeCancel, StanzaErrorBadRequest, appError );
     }
     else
     {
-      Error* error = new Error( StanzaErrorTypeCancel, StanzaErrorForbidden );
+      error = new Error( StanzaErrorTypeCancel, StanzaErrorForbidden );
       if( !text.empty() )
         error->text( text );
-      iq->addExtension( error );
     }
 
+    iq->addExtension( error );
     m_parent->send( iq );
   }
 
