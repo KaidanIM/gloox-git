@@ -52,6 +52,7 @@ namespace gloox
     StringList features;
     features.push_back( XMLNS_ADHOC_COMMANDS );
     return features;
+//    return StringList( 1, XMLNS_ADHOC_COMMANDS );
   }
 
   DiscoNodeItemList Adhoc::handleDiscoNodeItems( const std::string& node )
@@ -122,67 +123,65 @@ namespace gloox
       return;
 
     AdhocTrackMap::iterator it = m_adhocTrackMap.begin();
-    for( ; it != m_adhocTrackMap.end(); ++it )
+    for( ; it != m_adhocTrackMap.end() && (*it).second.context != context
+                                       && (*it).second.remote  != iq->from(); ++it )
+    if( it == m_adhocTrackMap.end() )
+      return;
+
+    Tag* c = iq->findChild( "command", XMLNS, XMLNS_ADHOC_COMMANDS );
+    if( c )
     {
-      if( (*it).second.context == context && (*it).second.remote == iq->from() )
+      const std::string& command = c->findAttribute( "node" );
+      const std::string& id = c->findAttribute( "sessionid" );
+      const Tag* a = c->findChild( "actions" );
+      int actions = ActionCancel;
+      Adhoc::AdhocExecuteActions def = ActionCancel;
+      if( a )
       {
-        Tag* c = iq->findChild( "command", XMLNS, XMLNS_ADHOC_COMMANDS );
-        if( c )
-        {
-          const std::string& command = c->findAttribute( "node" );
-          const std::string& id = c->findAttribute( "sessionid" );
-          Tag* a = c->findChild( "actions" );
-          int actions = ActionCancel;
-          Adhoc::AdhocExecuteActions def = ActionCancel;
-          if( a )
-          {
-            if( a->hasChild( "prev" ) )
-              actions |= ActionPrevious;
-            if( a->hasChild( "next" ) )
-              actions |= ActionNext;
-            if( a->hasChild( "complete" ) )
-              actions |= ActionComplete;
-            const std::string& d = a->findAttribute( "execute" );
-            if( d == "next" )
-              def = ActionNext;
-            else if( d == "prev" )
-              def = ActionPrevious;
-            else if( d == "complete" )
-              def = ActionComplete;
-          }
-          Tag* n = c->findChild( "note" );
-          std::string note;
-          AdhocNoteType type = AdhocNoteInfo;
-          if( n )
-          {
-            note = n->cdata();
-            if( n->hasAttribute( TYPE, "warn" ) )
-              type = AdhocNoteWarn;
-            else if( n->hasAttribute( TYPE, "error" ) )
-              type = AdhocNoteError;
-          }
-          const std::string& s = c->findAttribute( "status" );
-          AdhocCommandStatus status = AdhocCommandStatusUnknown;
-          if( s == "executing" )
-            status = AdhocCommandExecuting;
-          else if( s == "completed" )
-            status = AdhocCommandCompleted;
-          else if( s == "canceled" )
-            status = AdhocCommandCanceled;
-          DataForm form;
-          Tag* x = c->findChild( "x", XMLNS, XMLNS_X_DATA );
-          if( x )
-            form.parse( x );
+        if( a->hasChild( "prev" ) )
+          actions |= ActionPrevious;
+        if( a->hasChild( "next" ) )
+          actions |= ActionNext;
+        if( a->hasChild( "complete" ) )
+          actions |= ActionComplete;
 
-          (*it).second.ah->handleAdhocExecutionResult( iq->from(), command, status, id, form,
-                                                       actions, def, note, type );
-        }
-
-        m_adhocTrackMap.erase( it );
-        return;
+        const std::string& d = a->findAttribute( "execute" );
+        if( d == "next" )
+          def = ActionNext;
+        else if( d == "prev" )
+          def = ActionPrevious;
+        else if( d == "complete" )
+          def = ActionComplete;
       }
+
+      const Tag* n = c->findChild( "note" );
+      std::string note;
+      AdhocNoteType type = AdhocNoteInfo;
+      if( n )
+      {
+        note = n->cdata();
+        if( n->hasAttribute( TYPE, "warn" ) )
+          type = AdhocNoteWarn;
+        else if( n->hasAttribute( TYPE, "error" ) )
+          type = AdhocNoteError;
+      }
+
+      const std::string& s = c->findAttribute( "status" );
+      AdhocCommandStatus status = AdhocCommandStatusUnknown;
+      if( s == "executing" )
+        status = AdhocCommandExecuting;
+      else if( s == "completed" )
+        status = AdhocCommandCompleted;
+      else if( s == "canceled" )
+        status = AdhocCommandCanceled;
+
+      const DataForm form( c->findChild( "x", XMLNS, XMLNS_X_DATA ) );
+
+      (*it).second.ah->handleAdhocExecutionResult( iq->from(), command, status, id, form,
+                                                   actions, def, note, type );
     }
 
+    m_adhocTrackMap.erase( it );
   }
 
   void Adhoc::registerAdhocCommandProvider( AdhocCommandProvider* acp, const std::string& command,
@@ -199,18 +198,19 @@ namespace gloox
       return;
 
     AdhocTrackMap::iterator it = m_adhocTrackMap.begin();
-    for( ; it != m_adhocTrackMap.end(); ++it )
+    for( ; it != m_adhocTrackMap.end() && (*it).second.context != context
+                                       && (*it).second.remote  != iq->from(); ++it )
+      ;
+    if( it == m_adhocTrackMap.end() )
+      return;
+
+    const Tag* query = iq->findChild( "query", XMLNS, XMLNS_DISCO_INFO );
+    if( query )
     {
-      if( (*it).second.context == context && (*it).second.remote == iq->from() )
-      {
-        Tag* q = iq->findChild( "query", XMLNS, XMLNS_DISCO_INFO );
-        if( q )
-          (*it).second.ah->handleAdhocSupport( (*it).second.remote,
-                  q->hasChild( "feature", "var", XMLNS_ADHOC_COMMANDS ) );
-        m_adhocTrackMap.erase( it );
-        break;
-      }
+      (*it).second.ah->handleAdhocSupport( (*it).second.remote,
+              query->hasChild( "feature", "var", XMLNS_ADHOC_COMMANDS ) );
     }
+    m_adhocTrackMap.erase( it );
   }
 
   void Adhoc::handleDiscoItemsResult( IQ* iq, int context )
