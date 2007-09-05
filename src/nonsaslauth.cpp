@@ -13,6 +13,7 @@
 
 #include "nonsaslauth.h"
 #include "client.h"
+#include "error.h"
 #include "sha.h"
 
 #include <string>
@@ -54,15 +55,23 @@ namespace gloox
         m_parent->setAuthed( false );
         m_parent->disconnect( ConnAuthenticationFailed );
 
-        Tag* t = iq->findChild( "error" );
-        if( t )
+        const Error* e = iq->error();
+        if( e )
         {
-          if( t->hasChild( "conflict" ) || t->hasAttribute( "code", "409" ) )
-            m_parent->setAuthFailure( NonSaslConflict );
-          else if( t->hasChild( "not-acceptable" ) || t->hasAttribute( "code", "406" ) )
-            m_parent->setAuthFailure( NonSaslNotAcceptable );
-          else if( t->hasChild( "not-authorized" ) || t->hasAttribute( "code", "401" ) )
-            m_parent->setAuthFailure( NonSaslNotAuthorized );
+          switch( e->error() )
+          {
+            case StanzaErrorConflict:
+              m_parent->setAuthFailure( NonSaslConflict );
+              break;
+            case StanzaErrorNotAcceptable:
+              m_parent->setAuthFailure( NonSaslNotAcceptable );
+              break;
+            case StanzaErrorNotAuthorized:
+              m_parent->setAuthFailure( NonSaslNotAuthorized );
+              break;
+            default:
+              break;
+          }
         }
         break;
       }
