@@ -38,7 +38,8 @@ namespace gloox
     ExtAMP                 = 128,   /**< An extension containing advanced message processing rules
                                      * (XEP-0079). */
     ExtError               = 256,   /**< An extension containing an error. */
-    ExtCaps                = 512    /**< An extension containing Entity Capabilities (XEP-0115). */
+    ExtCaps                = 512,   /**< An extension containing Entity Capabilities (XEP-0115). */
+    ExtChatState           = 1024   /**< An extension containing a chat state (XEP-0085). */
   };
 
   /**
