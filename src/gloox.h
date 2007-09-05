@@ -987,8 +987,9 @@ namespace gloox
     ChatStateComposing    =  2,     /**< User is composing a message. */
     ChatStatePaused       =  4,     /**< User had been composing but now has stopped. */
     ChatStateInactive     =  8,     /**< User has not been actively participating in the chat session. */
-    ChatStateGone         = 16      /**< User has effectively ended their participation in the chat
+    ChatStateGone         = 16,     /**< User has effectively ended their participation in the chat
                                      * session. */
+    ChatStateInvalid      = 32      /**< Invalid type. */
   };
 
   /**
