@@ -1023,7 +1023,7 @@ namespace gloox
         break;
         case IQ::Error:
         {
-          const Error error( iq->findChild( "error" ) );
+          const Error* error = iq->error();
           switch( context )
           {
             case Subscription:
@@ -1039,7 +1039,7 @@ namespace gloox
                                    jid  = sub->findAttribute( "jid" );
 
                 const SubscriptionType type = SubscriptionNone;
-                (*ith).second->handleSubscriptionResult( service, node, "", jid, type, &error );
+                (*ith).second->handleSubscriptionResult( service, node, "", jid, type, error );
               }
 
               m_nodeHandlerTrackMap.erase( ith );
@@ -1058,7 +1058,7 @@ namespace gloox
                                    sid  = unsub->findAttribute( "sid" ),
                                    jid  = unsub->findAttribute( "jid" );
 
-                (*ith).second->handleUnsubscriptionResult( service, node, sid, jid, &error );
+                (*ith).second->handleUnsubscriptionResult( service, node, sid, jid, error );
               }
 
               m_nodeHandlerTrackMap.erase( ith );
@@ -1069,7 +1069,7 @@ namespace gloox
               ServiceHandlerTrackMap::iterator ith = m_serviceHandlerTrackMap.find( iq->id() );
               if( ith != m_serviceHandlerTrackMap.end() )
               {
-                (*ith).second->handleSubscriptionList( service, 0, &error );
+                (*ith).second->handleSubscriptionList( service, 0, error );
                 m_serviceHandlerTrackMap.erase( ith );
               }
               break;
@@ -1079,7 +1079,7 @@ namespace gloox
               ServiceHandlerTrackMap::iterator ith = m_serviceHandlerTrackMap.find( iq->id() );
               if( ith != m_serviceHandlerTrackMap.end() )
               {
-                (*ith).second->handleAffiliationList( service, 0, &error );
+                (*ith).second->handleAffiliationList( service, 0, error );
                 m_serviceHandlerTrackMap.erase( ith );
               }
               break;
@@ -1096,7 +1096,7 @@ namespace gloox
                 const std::string& node = options->findAttribute( "node" );
                 (*ith).second->handleSubscriptionOptions( iq->from(),
                                          JID( options->findAttribute( "jid" ) ),
-                                         options->findAttribute( "node" ), 0, &error );
+                                         options->findAttribute( "node" ), 0, error );
               }
 
               m_nodeHandlerTrackMap.erase( ith );
@@ -1114,7 +1114,7 @@ namespace gloox
                 const std::string& node = options->findAttribute( "node" );
                 (*ith).second->handleSubscriptionOptionsResult( iq->from(),
                                          JID( options->findAttribute( "jid" ) ),
-                                         options->findAttribute( "node" ), &error );
+                                         options->findAttribute( "node" ), error );
               }
 
               m_nodeHandlerTrackMap.erase( ith );
@@ -1130,7 +1130,7 @@ namespace gloox
               if( configure )
               {
                 const std::string& node = configure->findAttribute( "node" );
-                (*ith).second->handleNodeConfig( iq->from(), node, 0, &error );
+                (*ith).second->handleNodeConfig( iq->from(), node, 0, error );
               }
 
               m_nodeHandlerTrackMap.erase( ith );
@@ -1146,7 +1146,7 @@ namespace gloox
               if( configure )
               {
                 const std::string& node = configure->findAttribute( "node" );
-                (*ith).second->handleNodeConfigResult( iq->from(), node, &error );
+                (*ith).second->handleNodeConfigResult( iq->from(), node, error );
               }
 
               m_nodeHandlerTrackMap.erase( ith );
@@ -1162,7 +1162,7 @@ namespace gloox
               if( items )
               {
                 const std::string& node = items->findAttribute( "node" );
-                (*ith).second->handleItemList( service, node, 0, &error );
+                (*ith).second->handleItemList( service, node, 0, error );
               }
 
               m_itemHandlerTrackMap.erase( ith );
@@ -1183,7 +1183,7 @@ namespace gloox
                 {
                   const std::string& node = publish->findAttribute( "node" );
                   const std::string& id = item->findAttribute( "id" );
-                  (*ith).second->handleItemPublication( service, node, id, &error );
+                  (*ith).second->handleItemPublication( service, node, id, error );
                 }
               }
 
@@ -1204,7 +1204,7 @@ namespace gloox
                 {
                   const std::string& node = retract->findAttribute( "node" );
                   const std::string& id = item->findAttribute( "id" );
-                  (*ith).second->handleItemDeletation( service, node, id, &error );
+                  (*ith).second->handleItemDeletation( service, node, id, error );
                 }
               }
 
@@ -1221,7 +1221,7 @@ namespace gloox
               if( purge )
               {
                 const std::string& node = purge->findAttribute( "node" );
-                (*ith).second->handleNodePurgeResult( iq->from(), node, &error );
+                (*ith).second->handleNodePurgeResult( iq->from(), node, error );
               }
 
               m_nodeHandlerTrackMap.erase( ith );
@@ -1237,7 +1237,7 @@ namespace gloox
               if( create )
               {
                 const std::string& node = create->findAttribute( "node" );
-                (*ith).second->handleNodeCreationResult( iq->from(), node, &error );
+                (*ith).second->handleNodeCreationResult( iq->from(), node, error );
               }
 
               m_nodeHandlerTrackMap.erase( ith );
@@ -1253,7 +1253,7 @@ namespace gloox
               if( del )
               {
                 const std::string& node = del->findAttribute( "node" );
-                (*ith).second->handleNodeDeletationResult( iq->from(), node, &error );
+                (*ith).second->handleNodeDeletationResult( iq->from(), node, error );
               }
 
               m_nodeHandlerTrackMap.erase( ith );
@@ -1267,7 +1267,7 @@ namespace gloox
 
               const Tag* deflt = query->findChild( "default" );
               if( deflt )
-                (*ith).second->handleDefaultNodeConfig( service, 0, &error );
+                (*ith).second->handleDefaultNodeConfig( service, 0, error );
 
               m_serviceHandlerTrackMap.erase( ith );
               break;
