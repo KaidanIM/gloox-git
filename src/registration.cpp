@@ -15,6 +15,7 @@
 
 #include "clientbase.h"
 #include "stanza.h"
+#include "error.h"
 #include "prep.h"
 #include "oob.h"
 
@@ -250,28 +251,41 @@ namespace gloox
     }
     else if( iq->subtype() == IQ::Error )
     {
-      const Tag* e = iq->findChild( "error" );
+      const Error* e = iq->error();
       if( !e )
         return;
 
-      if( e->hasChild( "conflict" ) || e->hasAttribute( "code", "409" ) )
-        m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationConflict );
-      else if( e->hasChild( "not-acceptable" ) || e->hasAttribute( "code", "406" ) )
-        m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationNotAcceptable );
-      else if( e->hasChild( "bad-request" ) || e->hasAttribute( "code", "400" ) )
-        m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationBadRequest );
-      else if( e->hasChild( "forbidden" ) || e->hasAttribute( "code", "403" ) )
-        m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationForbidden );
-      else if( e->hasChild( "registration-required" ) || e->hasAttribute( "code", "407" ) )
-        m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationRequired );
-      else if( e->hasChild( "unexpected-request" ) || e->hasAttribute( "code", "400" ) )
-        m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationUnexpectedRequest );
-      else if( e->hasChild( "not-authorized" ) || e->hasAttribute( "code", "401" ) )
-        m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationNotAuthorized );
-      else if( e->hasChild( "not-allowed" ) || e->hasAttribute( "code", "405" ) )
-        m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationNotAllowed );
-      else
-        m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationUnknownError );
+      switch( e->error() )
+      {
+        case StanzaErrorConflict:
+          m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationConflict );
+          break;
+        case StanzaErrorNotAcceptable:
+          m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationNotAcceptable );
+          break;
+        case StanzaErrorBadRequest:
+          m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationBadRequest );
+          break;
+        case StanzaErrorForbidden:
+          m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationForbidden );
+          break;
+        case StanzaErrorRegistrationRequired:
+          m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationRequired );
+          break;
+        case StanzaErrorUnexpectedRequest:
+          m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationUnexpectedRequest );
+          break;
+        case StanzaErrorNotAuthorized:
+          m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationNotAuthorized );
+          break;
+        case StanzaErrorNotAllowed:
+          m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationNotAllowed );
+          break;
+        default:
+          m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationUnknownError );
+          break;
+
+      }
     }
 
   }
