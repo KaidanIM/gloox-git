@@ -1,14 +1,30 @@
 v1.0 -- xx yyy 200z
 -------------------
+
+general changes and additions:
 - XEP-0060 (Publish-Subscribe)
+- XEP-0115 (Entity Capabilities)
 - integrated XEP-0047 (In-Band Bytestreams) with XEP-0096 (File Transfer)
 - integrated XEP-0066 (Out-of-Band Data) with XEP-0096 (File Transfer)
 - removed message-based IBB
 - added IQ, Message, Subscription, Presence classes
 - Parser: feed() returns -1 on success, parse error position otherwise
 - Parser and Tag: support mixed content xml
-- ClientBase: removed limit of one handler per xmlns
-- ClientBase: IQ ID handlers will be called first, only if none matched xmlns handlers will be called
+- ClientBase: removed limit of one IQ handler per xmlns
+- ClientBase: IQ ID handlers will be called first; xmlns handlers will be called only if no ID handler matched
+- added SASL error malformed-request from RFC 3920bis
+- ClientBase: added send( const Tag& )
+- Tag: added operator bool()
+- JID: added operator bool()
+- JID: made setters return success
+
+deprecated functions:
+
+removed functions:
+- JID::fullJID(), use ctor
+- JID::empty(), use operator bool()
+- Tag::empty(), use operator bool()
+- XDelayedDelivery::XDelayedDelivery( JID, string, string ), use DelayedDelivery
 
 
 v0.9 -- 17 Jun 2007
