@@ -214,7 +214,7 @@ namespace gloox
         else if( tag->name() == "presence" )
         {
           const std::string& type = tag->findAttribute( TYPE );
-          if( type == "subscribe"  || type == "unsubscribe"  
+          if( type == "subscribe"  || type == "unsubscribe"
            || type == "subscribed" || type == "unsubscribed" )
           {
             Subscription sub( tag );
@@ -617,23 +617,18 @@ namespace gloox
   {
     send( tag.xml() );
 
-    switch( tag.type() )
-    {
-      case StanzaIq:
-        ++m_stats.iqStanzasSent;
-        break;
-      case StanzaMessage:
-        ++m_stats.messageStanzasSent;
-        break;
-      case StanzaS10n:
-        ++m_stats.s10nStanzasSent;
-        break;
-      case StanzaPresence:
-        ++m_stats.presenceStanzasSent;
-        break;
-      default:
-        break;
-    }
+    if( tag.name() == "iq" )
+      ++m_stats.iqStanzasSent;
+    else if( tag.name() == "message" )
+      ++m_stats.messageStanzasSent;
+    else if( tag.name() == "presence" )
+#warning FIXME distinguish between presence and subscription stanzas
+#warning probably move the statistics counting stuff to client or some func
+#warning that takes Stanza-derived objects
+      ++m_stats.s10nStanzasSent;
+    else if( tag.name() == "presence" )
+      ++m_stats.presenceStanzasSent;
+
     ++m_stats.totalStanzasSent;
 
     if( m_statisticsHandler )
@@ -1122,7 +1117,7 @@ namespace gloox
       if( (*it).second->handleIq( iq ) )
         res = true;
 
-    if( !res && iq->type() == StanzaIq && iq->subtype() & ( IQ::Get | IQ::Set ) )
+    if( !res && iq->subtype() & ( IQ::Get | IQ::Set ) )
     {
       IQ* re = new IQ( IQ::Error, iq->from(), iq->id() );
       re->addExtension( new Error( StanzaErrorTypeCancel, StanzaErrorServiceUnavailable ) );
