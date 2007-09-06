@@ -15,7 +15,6 @@
 
 #include "pubsub.h"
 #include "iqhandler.h"
-#include "discohandler.h"
 #include "messagehandler.h"
 #include "pubsubnodehandler.h"
 
@@ -34,7 +33,6 @@ namespace gloox
     class ServiceHandler;
     class NodeHandler;
     class ItemHandler;
-    class DiscoHandler;
     class EventHandler;
 
     /**
@@ -107,7 +105,6 @@ namespace gloox
      * XEP Version: 1.9
      */
     class GLOOX_API Manager : public IqHandler,
-                              public gloox::DiscoHandler,
                               public MessageHandler
     {
       public:
@@ -122,45 +119,6 @@ namespace gloox
          * Default virtual destructor.
          */
         virtual ~Manager() {}
-
-private:
-        /**
-         * Performs a Disco query to a service or node.
-         * @param service Service to query.
-         * @param node ID of the node to query. If empty, the service will be queried.
-         * @param handler DiscoHandler to notify when receiving a response.
-         */
-        void discoverInfos( const JID& service, const std::string& node,
-                                                PubSub::DiscoHandler* handler );
-
-public:
-        /**
-         * Performs a Disco query to a service.
-         * @param service Service to query.
-         * @param handler DiscoHandler to notify when receiving a response
-         */
-        void discoverServiceInfos( const JID& service, PubSub::DiscoHandler* handler )
-          { discoverInfos( service, "", handler ); }
-
-        /**
-         * Performs a Disco query to a node.
-         * @param service Service hosting the node to query.
-         * @param node ID of the node to query. If empty, the root node will be queried.
-         * @param handler DiscoHandler to notify when receiving a response
-         */
-        void discoverNodeInfos( const JID& service, const std::string& node,
-                                PubSub::DiscoHandler* handler )
-          { discoverInfos( service, node, handler ); }
-
-        /**
-         * Ask for the list children of a node.
-         * @param service Service hosting the node.
-         * @param node ID of the node to ask for subnodes. If empty, the root node
-         * will be queried.
-         * @param handler DiscoHandler to notify when receiving a response
-         */
-        void discoverNodeItems( const JID& service, const std::string& node,
-                                PubSub::DiscoHandler* handler );
 
         /**
          * Subscribe to a node.
@@ -521,7 +479,6 @@ public:
         typedef std::map < std::string, TrackedItem > ItemOperationTrackMap;
         typedef std::map < std::string, std::string > NodeOperationTrackMap;
 
-        typedef std::map < std::string, PubSub::DiscoHandler* > DiscoHandlerTrackMap;
         typedef std::map < std::string, ServiceHandler* > ServiceHandlerTrackMap;
         typedef std::map < std::string, NodeHandler* > NodeHandlerTrackMap;
         typedef std::map < std::string, ItemHandler* > ItemHandlerTrackMap;
@@ -535,7 +492,6 @@ public:
         ServiceHandlerTrackMap m_serviceHandlerTrackMap;
         ItemHandlerTrackMap    m_itemHandlerTrackMap;
         NodeHandlerTrackMap    m_nodeHandlerTrackMap;
-        DiscoHandlerTrackMap   m_discoHandlerTrackMap;
         EventHandlerList       m_eventHandlerList;
     };
 
