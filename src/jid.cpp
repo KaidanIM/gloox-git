@@ -28,14 +28,16 @@ namespace gloox
     const size_t at = jid.find( '@' );
     const size_t slash = jid.rfind( '/', jid.size() - at );
 
-    if( at != std::string::npos )
-      m_valid = prep::nodeprep( jid.substr( 0, at ), m_username );
+    if( at != std::string::npos && !( m_valid = prep::nodeprep( jid.substr( 0, at ), m_username ) ) )
+      return false;
 
     m_serverRaw = jid.substr( at == std::string::npos ? 0 : at + 1, slash - at - 1 );
-    m_valid = prep::nameprep( m_serverRaw, m_server );
+    if( !( m_valid = prep::nameprep( m_serverRaw, m_server ) ) )
+      return false;
 
-    if( slash != std::string::npos )
-      m_valid = prep::resourceprep( jid.substr( slash + 1 ), m_resource );
+    if( slash != std::string::npos
+         && !( m_valid = prep::resourceprep( jid.substr( slash + 1 ), m_resource ) ) )
+      return false;
 
     setStrings();
 
