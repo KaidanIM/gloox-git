@@ -227,9 +227,6 @@ namespace gloox
 
       /**
        * Sends a given Tag over an established connection.
-       * The ClientBase object becomes the owner of this Tag and will delete it after sending it.
-       * You should not rely on the existance of the Tag after it's been sent. If you still need
-       * it after sending it, use Tag::clone() to create a deep copy.
        * @param tag The Tag to send.
        * @since 1.0
        */
