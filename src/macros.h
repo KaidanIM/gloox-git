@@ -42,6 +42,7 @@
 #  define GLOOX_DEPRECATED_CTOR explicit GLOOX_DEPRECATED
 #else
 #  define GLOOX_DEPRECATED
+#  define GLOOX_DEPRECATED_CTOR
 #endif
 
 
