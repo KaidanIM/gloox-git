@@ -202,7 +202,7 @@ namespace gloox
 
       /**
        * Returns the namespace for the given prefix, or the default namespace if
-       * @c prefix is empty. In that case, possibly existing prefixes will be resolved.
+       * @c prefix is empty. In that case, a possibly existing prefix will be resolved.
        * Parent tags will be queried recursively.
        * Consider the following XML:
        * @code
