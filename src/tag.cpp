@@ -374,6 +374,11 @@ namespace gloox
     }
   }
 
+  const std::string Tag::xmlns() const
+  {
+    return xmlns( m_prefix );
+  }
+
   const std::string Tag::xmlns( const std::string& prefix ) const
   {
     if( !prefix.empty() )
@@ -387,10 +392,9 @@ namespace gloox
 
       if( m_parent )
         return m_parent->xmlns( prefix );
-    }
 
-    if( !m_prefix.empty() )
-      return xmlns( m_prefix );
+      return std::string();
+    }
 
     return m_xmlns;
   }
