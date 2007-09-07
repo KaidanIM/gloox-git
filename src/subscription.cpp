@@ -33,7 +33,6 @@ namespace gloox
       return;
     }
 
-    m_type = StanzaS10n;
     m_subtype = (S10nType)util::lookup( findAttribute( TYPE ), msgTypeStringValues );
 
     const TagList& c = children();
