@@ -106,8 +106,7 @@ namespace gloox
       StringMap::const_iterator it = m_options.begin();
       for( ; it != m_options.end(); ++it )
       {
-        Tag* option = new Tag( field, "option" );
-        option->addAttribute( "label", (*it).first );
+        Tag* option = new Tag( field, "option", "label", (*it).first );
         new Tag( option, "value", (*it).second );
       }
     }
