@@ -729,18 +729,6 @@ namespace gloox
   };
 
   /**
-   * Describes the possible stanza types.
-   */
-  enum StanzaType
-  {
-    StanzaUndefined,                /**< Undefined. */
-    StanzaIq,                       /**< An Info/Query stanza. */
-    StanzaMessage,                  /**< A message stanza. */
-    StanzaS10n,                     /**< A presence/subscription stanza. */
-    StanzaPresence                  /**< A presence stanza. */
-  };
-
-  /**
    * Describes types of stanza errors.
    */
   enum StanzaErrorType
