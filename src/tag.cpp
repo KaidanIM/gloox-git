@@ -30,7 +30,7 @@ namespace gloox
   Tag::Tag( const std::string& name, const std::string& cdata )
     : m_parent( 0 ), m_children( new TagList() ), m_cdata( new StringPList() ),
       m_attribs( new AttributeList() ), m_nodes( new NodeList() ),
-      m_type( StanzaUndefined ), m_name( name ), m_xmlnss( 0 ), m_valid( true )
+      m_name( name ), m_xmlnss( 0 ), m_valid( true )
   {
     addCData( cdata );
     m_valid = !m_name.empty();
@@ -39,7 +39,7 @@ namespace gloox
   Tag::Tag( Tag* parent, const std::string& name, const std::string& cdata )
     : m_parent( parent ), m_children( new TagList() ), m_cdata( new StringPList() ),
       m_attribs( new AttributeList() ), m_nodes( new NodeList() ),
-      m_type( StanzaUndefined ), m_name( name ), m_xmlnss( 0 ), m_valid( true )
+      m_name( name ), m_xmlnss( 0 ), m_valid( true )
   {
     if( m_parent )
       m_parent->addChild( this );
@@ -50,7 +50,7 @@ namespace gloox
   Tag::Tag( const std::string& name, const std::string& attrib, const std::string& value )
     : m_parent( 0 ), m_children( new TagList() ), m_cdata( new StringPList() ),
       m_attribs( new AttributeList() ), m_nodes( new NodeList() ),
-      m_type( StanzaUndefined ), m_name( name ), m_xmlnss( 0 ), m_valid( true )
+      m_name( name ), m_xmlnss( 0 ), m_valid( true )
   {
     addAttribute( attrib, value );
     m_valid = !m_name.empty();
@@ -59,7 +59,7 @@ namespace gloox
   Tag::Tag( Tag* parent, const std::string& name, const std::string&  attrib, const std::string& value )
     : m_parent( parent ), m_children( new TagList() ), m_cdata( new StringPList() ),
       m_attribs( new AttributeList() ), m_nodes( new NodeList() ),
-      m_type( StanzaUndefined ), m_name( name ), m_xmlnss( 0 ), m_valid( true )
+      m_name( name ), m_xmlnss( 0 ), m_valid( true )
   {
     if( m_parent )
       m_parent->addChild( this );
@@ -87,7 +87,6 @@ namespace gloox
 
     m_name = tag->m_name;
     m_valid = tag->m_valid;
-    m_type = tag->m_type;
     m_xmlns = tag->m_xmlns;
   }
 
@@ -454,7 +453,6 @@ namespace gloox
   Tag* Tag::clone() const
   {
     Tag* t = new Tag( name() );
-    t->m_type = m_type;
     t->m_xmlns = m_xmlns;
     t->m_prefix = m_prefix;
 

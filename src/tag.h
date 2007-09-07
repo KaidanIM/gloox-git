@@ -397,12 +397,6 @@ namespace gloox
       Tag* parent() const { return m_parent; }
 
       /**
-       * Returns the stanza type.
-       * @return The type of the stanza.
-       */
-      virtual StanzaType type() const { return m_type; }
-
-      /**
        * This function creates a deep copy of this Tag.
        * @return An independent copy of the Tag.
        * @since 0.7
@@ -515,7 +509,6 @@ namespace gloox
       StringPList* m_cdata;
       AttributeList* m_attribs;
       NodeList* m_nodes;
-      StanzaType m_type;
       std::string m_name;
       std::string m_xmlns;
       StringMap* m_xmlnss;
