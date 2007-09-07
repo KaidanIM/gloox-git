@@ -208,22 +208,31 @@ namespace gloox
       void setXmlns( StringMap* xmlns ) { m_xmlnss = xmlns; }
 
       /**
+       * Returns the namespace for this element.
+       * Namespace declarations in parent tags as well as prefixes will be taken into account.
+       * @return The namespace for this element.
+       * @since 1.0
+       */
+      const std::string xmlns() const;
+
+      /**
        * Returns the namespace for the given prefix, or the default namespace if
-       * @c prefix is empty. In that case, a possibly existing prefix will be resolved.
-       * Parent tags will be queried recursively.
+       * @c prefix is empty. Namespace declarations in parent tags will be taken into account.
        * Consider the following XML:
        * @code
        * <foo:bar xmlns:foo='foobar'/>
        * @endcode
        * <foo/> is in the @c foobar namespace, having a prefix of @b foo. A call to prefix()
        * will return 'foo'. A call to xmlns( "foo" ) or xmlns( prefix() ) will return 'foobar'.
-       * A call to xmlns() will also return 'foobar' (it is more or less a shortcut to
+       * A call to xmlns() will also return 'foobar' (it is a shortcut to
        * xmlns( prefix() ).
-       * @param prefix The optional namespace prefix to look up.
+       * @param prefix The namespace prefix to look up, or an empty string to fetch the
+       * default namespace.
        * @return The namespace for the given prefix, or the empty string if no such prefix exists.
+       * The default namespace if an empty prefix is given.
        * @since 1.0
        */
-      const std::string xmlns( const std::string& prefix = "" ) const;
+      const std::string xmlns( const std::string& prefix ) const;
 
       /**
        * Use this function to add a new attribute to the tag.
