@@ -202,8 +202,17 @@ namespace gloox
 
       /**
        * Returns the namespace for the given prefix, or the default namespace if
-       * @c prefix is empty. Parent tags will be queried recursively.
-       * @param prefix The optional namespace prefix.
+       * @c prefix is empty. In that case, possibly existing prefixes will be resolved.
+       * Parent tags will be queried recursively.
+       * Consider the following XML:
+       * @code
+       * <foo:bar xmlns:foo='foobar'/>
+       * @endcode
+       * <foo/> is in the @c foobar namespace, having a prefix of @b foo. A call to prefix()
+       * will return 'foo'. A call to xmlns( "foo" ) or xmlns( prefix() ) will return 'foobar'.
+       * A call to xmlns() will also return 'foobar' (it is more or less a shortcut to
+       * xmlns( prefix() ).
+       * @param prefix The optional namespace prefix to look up.
        * @return The namespace for the given prefix, or the empty string if no such prefix exists.
        */
       const std::string xmlns( const std::string& prefix = "" ) const;
