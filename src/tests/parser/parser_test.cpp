@@ -167,10 +167,12 @@ class ParserTest : private TagHandler
 
       //-------
       name = "stream start";
-      data = "<stream:stream version='1.0' to='example.org' xmlns='jabber:client' id='abcdef'>";
+      data = "<stream:stream version='1.0' to='example.org' xmlns='jabber:client' id='abcdef' "
+               "xmlns:stream='http://etherx.jabber.org/streams'>";
       p->feed( data );
       if( m_tag == 0 ||
-            m_tag->name() != "stream:stream" ||
+            m_tag->name() != "stream" ||
+            m_tag->prefix() != "stream" ||
             !m_tag->hasAttribute( "version", "1.0" ) ||
             !m_tag->hasAttribute( "id", "abcdef" ) ||
             !m_tag->hasAttribute( "to", "example.org" ) ||
@@ -1032,6 +1034,93 @@ class ParserTest : private TagHandler
       delete m_tag;
       m_tag = 0;
 
+      //-------
+      name = "simple attribute prefix";
+      data = "<tag1 foo:attr='bar'/>";
+      if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->attributes().size() != 1
+            || m_tag->attributes().front().prefix() != "foo" )
+      {
+        ++fail;
+        printf( "test '%s' failed: \n%s\n%s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      //-------
+      name = "broken attribute prefix";
+      data = "<tag1 foo:bar:attr='bar'/>";
+      if( ( i = p->feed( data ) ) == -1 || m_tag )
+      {
+        ++fail;
+        printf( "test '%s' failed: \n%s\n%s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      //-------
+      name = "simple element prefix";
+      data = "<foo:tag1 attr='bar'/>";
+      if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->attributes().size() != 1
+            || m_tag->prefix() != "foo" )
+      {
+        ++fail;
+        printf( "test '%s' failed (%d): \n%s\ns\n", name.c_str(), i, data.c_str()/*, m_tag->xml().c_str()*/ );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      //-------
+      name = "broken element prefix";
+      data = "<foo:bar:tag1 attr='bar'/>";
+      if( ( i = p->feed( data ) ) == -1 || m_tag )
+      {
+        ++fail;
+        printf( "test '%s' failed: \n%s\n%s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      //-------
+      name = "default namespace";
+      data = "<tag xmlns='foobar'/>";
+      if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->xmlns() != "foobar" )
+      {
+        ++fail;
+        printf( "test '%s' failed: \n%s\n%s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      //-------
+      name = "one additional namespace";
+      data = "<tag xmlns:foo='bar'/>";
+      if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->xmlns( "foo" ) != "bar" )
+      {
+        ++fail;
+        printf( "test '%s' failed: \n%s\n%s\n", name.c_str(), data.c_str(), m_tag->xml().c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      //-------
+      name = "many additional namespaces";
+      data = "<abc xmlns='def' xmlns:xx='xyz' xmlns:foo='ggg' foo:attr='val'>"
+               "<xx:dff><foo:bar/></xx:dff>"
+               "</abc>";
+      if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->xmlns() != "def"
+            || m_tag->xmlns( "xx" ) != "xyz" || m_tag->xmlns( "foo" ) != "ggg"
+            || m_tag->attributes().size() != 4
+//             || m_tag->attributes().front()->prefix() != "foo"
+            || m_tag->xml() != data )
+      {
+        ++fail;
+        printf( "test '%s' failed (%d): \n%s\n%s\n", name.c_str(), i, data.c_str(), m_tag->xml().c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+
+// <abc xmlns='def' xmlns:xx='xyz' xmlns:foo='ggg' foo:attr='val'><xx:dff><foo:bar/></xx:dff></abc>
 
 
 
