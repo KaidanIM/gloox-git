@@ -104,7 +104,7 @@ namespace gloox
     m_parent = 0;
   }
 
-  bool Tag::operator==( const Tag &right ) const
+  bool Tag::operator==( const Tag& right ) const
   {
     if( m_name != right.m_name ||
         m_xmlns != right.m_xmlns || m_children->size() != right.m_children->size() )
