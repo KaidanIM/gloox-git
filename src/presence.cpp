@@ -43,7 +43,6 @@ namespace gloox
       return;
     }
 
-    m_type = StanzaPresence;
     const std::string& type = findAttribute( TYPE );
     if( type.empty() )
       m_subtype = Available;

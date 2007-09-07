@@ -32,8 +32,6 @@ namespace gloox
       return;
     }
 
-    m_type = StanzaMessage;
-
     const std::string& typestring = findAttribute( TYPE );
     if( typestring.empty() )
       m_subtype = Normal;

@@ -33,7 +33,6 @@ namespace gloox
       return;
     }
 
-    m_type = StanzaIq;
     m_subtype = ( IQ::IqType )util::lookup( findAttribute( TYPE ), iqTypeStringValues );
 
     m_query = findChildWithAttrib( XMLNS );
@@ -45,8 +44,6 @@ namespace gloox
           const std::string& childtag, const JID& from )
     : Stanza( "iq", to, from ), m_query( 0 ), m_subtype( type )
   {
-    m_type = StanzaIq;
-
     addAttribute( TYPE, typeString( type ) );
     addAttribute( "id", id );
     m_id = id;
