@@ -53,10 +53,10 @@ namespace gloox
            * Creates a new Attribute from name, value and optional xmlns.
            * @param name The attribute's name.
            * @param value The attribute's value.
-           * @param xmlns The attribute's namespace.
+           * @param prefix The attribute's namespace prefix.
            */
-          Attribute( const std::string& name, const std::string& value, const std::string& xmlns = "" )
-            : m_name( name ), m_value( value ), m_xmlns( xmlns )
+          Attribute( const std::string& name, const std::string& value, const std::string& prefix = "" )
+            : m_name( name ), m_value( value ), m_prefix( prefix )
             {}
 
           /**
@@ -64,7 +64,7 @@ namespace gloox
            * @param attr The Attribute to copy.
            */
           Attribute( const Attribute& attr )
-            : m_name( attr.m_name ), m_value( attr.m_value ), m_xmlns( attr.m_xmlns )
+            : m_name( attr.m_name ), m_value( attr.m_value ), m_prefix( attr.m_prefix )
             {}
 
           /**
@@ -91,17 +91,17 @@ namespace gloox
           void setValue( const std::string& value ) { m_value = value; }
 
           /**
-           * Returns the attribute's xmlns.
-           * @return The attribute's xmlns.
+           * Returns the attribute's namespace prefix.
+           * @return The attribute's namespace prefix.
            */
-          const std::string& xmlns() const { return m_xmlns; }
+          const std::string& prefix() const { return m_prefix; }
 
           /**
            * Checks two Attributes for equality.
            * @param right The Attribute to check against the current Attribute.
            */
           bool operator==( const Attribute &right ) const
-            { return m_name == right.m_name && m_value == right.m_value && m_xmlns == right.m_xmlns; }
+            { return m_name == right.m_name && m_value == right.m_value && m_prefix == right.m_prefix; }
 
           /**
            * Checks two Attributes for inequality.
@@ -113,7 +113,7 @@ namespace gloox
         private:
           std::string m_name;
           std::string m_value;
-          std::string m_xmlns;
+          std::string m_prefix;
       };
 
       /**
@@ -172,14 +172,48 @@ namespace gloox
        * It includes all the attributes, child nodes and character data.
        * @return The complete XML.
        */
-      virtual const std::string xml() const;
+      const std::string xml() const;
+
+      /**
+       * Sets a namespace prefix.
+       * @param prefix The namespace prefix.
+       */
+      void setPrefix( const std::string& prefix ) { m_prefix = prefix; }
+
+      /**
+       * Returns the namespace prefix for this Tag, if any.
+       * @return The namespace prefix.
+       */
+      const std::string& prefix() const { return m_prefix; }
+
+      /**
+       * Sets a XML namespace with a given prefix, or the default namespace if @c prefix
+       * is empty.
+       * @param xmlns The namespace value.
+       * @param prefix An optional namespace prefix.
+       */
+      void setXmlns( const std::string& xmlns, const std::string& prefix = "" );
+
+      /**
+       * Sets a list of namespaces.
+       * @param xmlnss The list of namespaces.
+       */
+      void setXmlns( StringMap* xmlns ) { m_xmlnss = xmlns; }
+
+      /**
+       * Returns the namespace for the given prefix, or the default namespace if
+       * @c prefix is empty. Parent tags will be queried recursively.
+       * @param prefix The optional namespace prefix.
+       * @return The namespace for the given prefix, or the empty string if no such prefix exists.
+       */
+      const std::string xmlns( const std::string& prefix = "" ) const;
 
       /**
        * Use this function to add a new attribute to the tag.
        * @param name The name of the attribute.
        * @param value The value of the attribute.
        */
-      virtual void addAttribute( const std::string& name, const std::string& value );
+      void addAttribute( const std::string& name, const std::string& value );
 
       /**
        * Use this function to add a new attribute to the tag. The value is an @c int here.
@@ -187,7 +221,7 @@ namespace gloox
        * @param value The value of the attribute.
        * @since 0.8
        */
-      virtual void addAttribute( const std::string& name, int value );
+      void addAttribute( const std::string& name, int value );
 
       /**
        * Use this function to add a new attribute to the tag. The value is a @c long here.
@@ -195,82 +229,82 @@ namespace gloox
        * @param value The value of the attribute.
        * @since 0.9
        */
-      virtual void addAttribute( const std::string& name, long value );
+      void addAttribute( const std::string& name, long value );
 
       /**
        * Sets the given attributes. Any existing attributes are lost.
        * @param attributes The attributes to set.
        * @since 0.9
        */
-      virtual void setAttributes( const AttributeList& attributes );
+      void setAttributes( const AttributeList& attributes );
 
       /**
        * Use this function to add a child node to the tag. The Tag will be owned by Tag.
        * @param child The node to be inserted.
        */
-      virtual void addChild( Tag* child );
+      void addChild( Tag* child );
 
       /**
        * Use this function to add a copy of the given element to the tag.
        * @param child The node to be inserted.
        * @since 0.9
        */
-      virtual void addChildCopy( const Tag* child );
+      void addChildCopy( const Tag* child );
 
       /**
        * Sets the XML character data for this Tag.
        * @param cdata The new cdata.
        */
-      virtual void setCData( const std::string& cdata );
+      void setCData( const std::string& cdata );
 
       /**
        * Adds the string to the existing XML character data for this Tag.
        * @param cdata The additional cdata.
        */
-      virtual void addCData( const std::string& cdata );
+      void addCData( const std::string& cdata );
 
       /**
        * Use this function to retrieve the name of an element.
        * @return The name of the tag.
        */
-      virtual const std::string& name() const { return m_name; }
+      const std::string& name() const { return m_name; }
 
       /**
        * Use this function to retrieve the XML character data of an element.
        * @return The cdata the element contains.
        */
-      virtual const std::string cdata() const;
+      const std::string cdata() const;
 
       /**
        * Use this function to manipulate the list of attributes.
        * @return A reference to the list of attributes.
        */
-      virtual AttributeList& attributes() { return *m_attribs; }
+      AttributeList& attributes() { return *m_attribs; }
 
       /**
        * Use this function to fetch a const list of attributes.
        * @return A constant reference to the list of attributes.
        */
-      virtual const AttributeList& attributes() const { return *m_attribs; }
+      const AttributeList& attributes() const { return *m_attribs; }
 
       /**
        * Use this function to manipulate the list of child elements.
        * @return A reference to the list of child elements.
        */
-      virtual TagList& children() { return *m_children; }
+      TagList& children() { return *m_children; }
 
       /**
        * Use this function to fetch a const list of child elements.
        * @return A constant reference to the list of child elements.
        */
-      virtual const TagList& children() const { return *m_children; }
+      const TagList& children() const { return *m_children; }
 
       /**
        * This function can be used to retrieve the value of a Tag's attribute.
        * @param name The name of the attribute to look for.
        * @return The value of the attribute if found, an empty string otherwise.
        */
-      virtual const std::string findAttribute( const std::string& name ) const;
+      const std::string findAttribute( const std::string& name ) const;
 
       /**
        * Checks whether the tag has a attribute with given name and optional value.
@@ -278,7 +312,7 @@ namespace gloox
        * @param value The value of the attribute to check for.
        * @return Whether the attribute exists (optionally with the given value).
        */
-      virtual bool hasAttribute( const std::string& name, const std::string& value = "" ) const;
+      bool hasAttribute( const std::string& name, const std::string& value = "" ) const;
 
       /**
        * This function finds and returns the @b first element within the child elements of the current tag
@@ -286,7 +320,7 @@ namespace gloox
        * @param name The name of the element to search for.
        * @return The found Tag, or NULL.
        */
-      virtual Tag* findChild( const std::string& name ) const;
+      Tag* findChild( const std::string& name ) const;
 
       /**
        * This function finds and returns the @b first element within the child elements of the current tag,
@@ -296,8 +330,8 @@ namespace gloox
        * @param value The value of the attribute of the child element.
        * @return The found Tag, or NULL.
        */
-      virtual Tag* findChild( const std::string& name, const std::string& attr,
-                              const std::string& value = "" ) const;
+      Tag* findChild( const std::string& name, const std::string& attr,
+                      const std::string& value = "" ) const;
 
       /**
        * This function checks whether the Tag has a child element with a given name, and optionally
@@ -307,8 +341,8 @@ namespace gloox
        * @param value The value of the attribute of the child element.
        * @return @b True if the given child element exists, @b false otherwise.
        */
-      virtual inline bool hasChild( const std::string& name, const std::string& attr = "",
-                                    const std::string& value = "" ) const
+      inline bool hasChild( const std::string& name, const std::string& attr = "",
+                            const std::string& value = "" ) const
         { return findChild( name, attr, value ) ? true : false; }
 
       /**
@@ -318,7 +352,7 @@ namespace gloox
        * @param value The value of the attribute of the child element.
        * @return The child if found, NULL otherwise.
        */
-      virtual Tag* findChildWithAttrib( const std::string& attr, const std::string& value = "" ) const;
+      Tag* findChildWithAttrib( const std::string& attr, const std::string& value = "" ) const;
 
       /**
        * This function checks whether the Tag has a child element which posesses a given attribute
@@ -327,7 +361,7 @@ namespace gloox
        * @param value The value of the attribute of the child element.
        * @return @b True if any such child element exists, @b false otherwise.
        */
-      virtual inline bool hasChildWithAttrib( const std::string& attr,
+      inline bool hasChildWithAttrib( const std::string& attr,
                                               const std::string& value = "" ) const
         { return findChildWithAttrib( attr, value ) ? true : false; }
 
@@ -484,6 +518,8 @@ namespace gloox
       StanzaType m_type;
       std::string m_name;
       std::string m_xmlns;
+      StringMap* m_xmlnss;
+      std::string m_prefix;
 
     private:
       enum TokenType
