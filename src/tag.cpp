@@ -30,7 +30,7 @@ namespace gloox
   Tag::Tag( const std::string& name, const std::string& cdata )
     : m_parent( 0 ), m_children( new TagList() ), m_cdata( new StringPList() ),
       m_attribs( new AttributeList() ), m_nodes( new NodeList() ),
-      m_type( StanzaUndefined ), m_name( name ), m_valid( true )
+      m_type( StanzaUndefined ), m_name( name ), m_xmlnss( 0 ), m_valid( true )
   {
     addCData( cdata );
     m_valid = !m_name.empty();
@@ -39,7 +39,7 @@ namespace gloox
   Tag::Tag( Tag* parent, const std::string& name, const std::string& cdata )
     : m_parent( parent ), m_children( new TagList() ), m_cdata( new StringPList() ),
       m_attribs( new AttributeList() ), m_nodes( new NodeList() ),
-      m_type( StanzaUndefined ), m_name( name ), m_valid( true )
+      m_type( StanzaUndefined ), m_name( name ), m_xmlnss( 0 ), m_valid( true )
   {
     if( m_parent )
       m_parent->addChild( this );
@@ -50,7 +50,7 @@ namespace gloox
   Tag::Tag( const std::string& name, const std::string& attrib, const std::string& value )
     : m_parent( 0 ), m_children( new TagList() ), m_cdata( new StringPList() ),
       m_attribs( new AttributeList() ), m_nodes( new NodeList() ),
-      m_type( StanzaUndefined ), m_name( name ), m_valid( true )
+      m_type( StanzaUndefined ), m_name( name ), m_xmlnss( 0 ), m_valid( true )
   {
     addAttribute( attrib, value );
     m_valid = !m_name.empty();
@@ -59,7 +59,7 @@ namespace gloox
   Tag::Tag( Tag* parent, const std::string& name, const std::string&  attrib, const std::string& value )
     : m_parent( parent ), m_children( new TagList() ), m_cdata( new StringPList() ),
       m_attribs( new AttributeList() ), m_nodes( new NodeList() ),
-      m_type( StanzaUndefined ), m_name( name ), m_valid( true )
+      m_type( StanzaUndefined ), m_name( name ), m_xmlnss( 0 ), m_valid( true )
   {
     if( m_parent )
       m_parent->addChild( this );
@@ -71,16 +71,19 @@ namespace gloox
     : m_parent( 0 ), m_children( 0 ), m_cdata( 0 ), m_attribs( 0 ), m_nodes( 0 )
   {
     m_nodes = tag->m_nodes;
-    tag->m_nodes = new NodeList();
+    tag->m_nodes = new NodeList(); // FIXME set to 0 and check usage accordingly
 
     m_cdata = tag->m_cdata;
-    tag->m_cdata = new StringPList();
+    tag->m_cdata = new StringPList(); // FIXME set to 0 and check usage accordingly
 
     m_attribs = tag->m_attribs;
-    tag->m_attribs = new AttributeList();
+    tag->m_attribs = new AttributeList(); // FIXME set to 0 and check usage accordingly
 
     m_children = tag->m_children;
-    tag->m_children = new TagList();
+    tag->m_children = new TagList(); // FIXME set to 0 and check usage accordingly
+
+    m_xmlnss = tag->m_xmlnss;
+    tag->m_xmlnss = 0;
 
     m_name = tag->m_name;
     m_valid = tag->m_valid;
@@ -143,17 +146,27 @@ namespace gloox
       return std::string();
 
     std::string xml = "<";
-    xml += escape( m_name );
+    if( !m_prefix.empty() )
+    {
+      xml += m_prefix;
+      xml += ':';
+    }
+    xml += m_name;
     if( !m_attribs->empty() )
     {
       AttributeList::const_iterator it_a = m_attribs->begin();
       for( ; it_a != m_attribs->end(); ++it_a )
       {
-        xml += " ";
-        xml += escape( (*it_a)->name() );
+        xml += ' ';
+        if( !(*it_a)->prefix().empty() )
+        {
+          xml += (*it_a)->prefix();
+          xml += ':';
+        }
+        xml += (*it_a)->name();
         xml += "='";
-        xml += escape( (*it_a)->value() );
-        xml += "'";
+        xml += (*it_a)->value();
+        xml += '\'';
       }
     }
 
@@ -161,7 +174,7 @@ namespace gloox
       xml += "/>";
     else
     {
-      xml += ">";
+      xml += '>';
       NodeList::const_iterator it_n = m_nodes->begin();
       for( ; it_n != m_nodes->end(); ++it_n )
       {
@@ -176,8 +189,13 @@ namespace gloox
         }
       }
       xml += "</";
-      xml += escape( m_name );
-      xml += ">";
+      if( !m_prefix.empty() )
+      {
+        xml += m_prefix;
+        xml += ':';
+      }
+      xml += m_name;
+      xml += '>';
     }
 
     return xml;
@@ -334,6 +352,45 @@ namespace gloox
     return str;
   }
 
+  void Tag::setXmlns( const std::string& xmlns, const std::string& prefix )
+  {
+    if( prefix.empty() )
+    {
+      m_xmlns = xmlns;
+      addAttribute( XMLNS, m_xmlns );
+    }
+    else
+    {
+      if( !m_xmlnss )
+        m_xmlnss = new StringMap();
+
+      (*m_xmlnss)[prefix] = xmlns;
+
+      addAttribute( XMLNS + ":" + prefix, xmlns );
+    }
+  }
+
+  const std::string Tag::xmlns( const std::string& prefix ) const
+  {
+    if( !prefix.empty() )
+    {
+      if( m_xmlnss )
+      {
+        StringMap::const_iterator it = m_xmlnss->find( prefix );
+        if( it != m_xmlnss->end() )
+          return (*it).second;
+      }
+
+      if( m_parent )
+        return m_parent->xmlns( prefix );
+    }
+
+    if( !m_prefix.empty() )
+      return xmlns( m_prefix );
+
+    return m_xmlns;
+  }
+
   const std::string Tag::findAttribute( const std::string& name ) const
   {
     AttributeList::const_iterator it = m_attribs->begin();
@@ -399,11 +456,22 @@ namespace gloox
     Tag* t = new Tag( name() );
     t->m_type = m_type;
     t->m_xmlns = m_xmlns;
+    t->m_prefix = m_prefix;
 
     Tag::AttributeList::const_iterator at = m_attribs->begin();
     for( ; at != m_attribs->end(); ++at )
     {
       t->m_attribs->push_back( new Attribute( *(*at) ) );
+    }
+
+    if( m_xmlnss )
+    {
+      t->m_xmlnss = new StringMap();
+      StringMap::const_iterator sm = m_xmlnss->begin();
+      for( ; sm != m_xmlnss->end(); ++sm )
+      {
+        t->m_xmlnss->insert( (*sm) );
+      }
     }
 
     Tag::NodeList::const_iterator nt = m_nodes->begin();
