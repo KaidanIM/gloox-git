@@ -76,12 +76,13 @@ namespace gloox
   const std::string XMLNS_CAPS              = "http://jabber.org/protocol/caps";
   const std::string XMLNS_FT_FASTMODE       = "http://affinix.com/jabber/stream";
 
+  const std::string XMLNS_STREAM            = "http://etherx.jabber.org/streams";
   const std::string XMLNS_XMPP_STREAM       = "urn:ietf:params:xml:ns:xmpp-streams";
   const std::string XMLNS_XMPP_STANZAS      = "urn:ietf:params:xml:ns:xmpp-stanzas";
   const std::string XMLNS_STREAM_TLS        = "urn:ietf:params:xml:ns:xmpp-tls";
   const std::string XMLNS_STREAM_SASL       = "urn:ietf:params:xml:ns:xmpp-sasl";
-  const std::string XMLNS_STREAM_BIND       = "urn:ietf:params:xml:ns:xmpp-bind";
 
+  const std::string XMLNS_STREAM_BIND       = "urn:ietf:params:xml:ns:xmpp-bind";
   const std::string XMLNS_STREAM_SESSION    = "urn:ietf:params:xml:ns:xmpp-session";
   const std::string XMLNS_STREAM_IQAUTH     = "http://jabber.org/features/iq-auth";
   const std::string XMLNS_STREAM_IQREGISTER = "http://jabber.org/features/iq-register";

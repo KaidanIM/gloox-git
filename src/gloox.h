@@ -487,6 +487,9 @@ namespace gloox
   GLOOX_API extern const std::string XMLNS_FT_FASTMODE;
 
   /** XMPP stream namespace (RFC 3920) */
+  GLOOX_API extern const std::string XMLNS_STREAM;
+
+  /** XMPP stream namespace (RFC 3920) */
   GLOOX_API extern const std::string XMLNS_XMPP_STREAM;
 
   /** XMPP stanzas namespace (RFC 3920) */
