@@ -106,7 +106,7 @@ namespace gloox
 
   bool Client::handleNormalNode( Tag* tag )
   {
-    if( tag->name() == "stream:features" )
+    if( tag->name() == "features" && tag->xmlns() == XMLNS_STREAM )
     {
       m_streamFeatures = getStreamFeatures( tag );
 
@@ -267,7 +267,7 @@ namespace gloox
 
   int Client::getStreamFeatures( Tag* tag )
   {
-    if( tag->name() != "stream:features" )
+    if( tag->name() != "features" || tag->xmlns() != XMLNS_STREAM )
       return 0;
 
     int features = 0;

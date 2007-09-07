@@ -177,7 +177,7 @@ namespace gloox
     logInstance().dbg( LogAreaXmlIncoming, tag->xml() );
     ++m_stats.totalStanzasReceived;
 
-    if( tag->name() == "stream:stream" )
+    if( tag->name() == "stream" && tag->xmlns() == XMLNS_STREAM )
     {
       const std::string& version = tag->findAttribute( "version" );
       if( !checkStreamVersion( version ) )
@@ -190,7 +190,8 @@ namespace gloox
       m_sid = tag->findAttribute( "id" );
       handleStartNode();
     }
-    else if( tag->name() == "stream:error" )
+    else if( tag->name() == "error" && tag->prefix() == "stream" )
+#warning FIXME don't hard-code the prefix!!!
     {
       handleStreamError( tag );
       disconnect( ConnStreamError );
@@ -215,7 +216,7 @@ namespace gloox
         {
           const std::string& type = tag->findAttribute( TYPE );
           if( type == "subscribe"  || type == "unsubscribe"
-           || type == "subscribed" || type == "unsubscribed" )
+              || type == "subscribed" || type == "unsubscribed" )
           {
             Subscription sub( tag );
             notifySubscriptionHandlers( &sub );
@@ -617,17 +618,21 @@ namespace gloox
   {
     send( tag.xml() );
 
+#warning move the statistics counting stuff to Client or some func \
+         that takes Stanza-derived objects
     if( tag.name() == "iq" )
       ++m_stats.iqStanzasSent;
     else if( tag.name() == "message" )
       ++m_stats.messageStanzasSent;
     else if( tag.name() == "presence" )
-#warning FIXME distinguish between presence and subscription stanzas
-#warning probably move the statistics counting stuff to client or some func
-#warning that takes Stanza-derived objects
-      ++m_stats.s10nStanzasSent;
-    else if( tag.name() == "presence" )
-      ++m_stats.presenceStanzasSent;
+    {
+      const std::string& type = tag.findAttribute( TYPE );
+      if( type == "subscribe"  || type == "unsubscribe" ||
+          type == "subscribed" || type == "unsubscribed" )
+        ++m_stats.s10nStanzasSent;
+      else
+        ++m_stats.presenceStanzasSent;
+    }
 
     ++m_stats.totalStanzasSent;
 
