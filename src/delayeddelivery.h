@@ -93,7 +93,7 @@ namespace gloox
        * Sets the reason for the delay.
        * @param reason The reason for the delay.
        */
-      void setBody( const std::string& reason ) { m_reason = reason; }
+      void setReason( const std::string& reason ) { m_reason = reason; }
 
       // reimplemented from StanzaExtension
       virtual Tag* tag() const;
