@@ -47,7 +47,7 @@ namespace gloox
 
       /**
        * Use this function to feed the parser with more XML.
-       * @param data Raw xml to parse.
+       * @param data Raw xml to parse. It may be modified if backbuffering is necessary.
        * @return Returns @b -1 if parsing was successful. If a parse error occured, the
        * character position where the error was occured is returned.
        */
@@ -104,6 +104,7 @@ namespace gloox
       TagHandler* m_tagHandler;
       Tag* m_current;
       Tag* m_root;
+      StringMap* m_xmlnss;
 
       ParserInternalState m_state;
       Tag::AttributeList m_attribs;
@@ -111,9 +112,15 @@ namespace gloox
       std::string m_cdata;
       std::string m_attrib;
       std::string m_value;
+      std::string m_xmlns;
+      std::string m_tagPrefix;
+      std::string m_attribPrefix;
       std::string m_backBuffer;
       int m_preamble;
       bool m_quote;
+      bool m_haveTagPrefix;
+      bool m_haveAttribPrefix;
+      bool m_attribIsXmlns;
 
   };
 

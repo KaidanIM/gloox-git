@@ -20,14 +20,15 @@ namespace gloox
 {
 
   Parser::Parser( TagHandler* ph )
-    : m_tagHandler( ph ), m_current( 0 ), m_root( 0 ), m_state( Initial ),
-      m_preamble( 0 ), m_quote( false )
+    : m_tagHandler( ph ), m_current( 0 ), m_root( 0 ), m_xmlnss( 0 ), m_state( Initial ),
+      m_preamble( 0 ), m_quote( false ), m_haveTagPrefix( false ), m_haveAttribPrefix( false )
   {
   }
 
   Parser::~Parser()
   {
     delete m_root;
+    delete m_xmlnss;
   }
 
   Parser::DecodeState Parser::decode( std::string::size_type& pos, const std::string& data )
@@ -283,6 +284,19 @@ namespace gloox
               addTag();
               m_state = TagInside;
               break;
+            case ':':
+              if( !m_haveTagPrefix )
+              {
+                m_haveTagPrefix = true;
+                m_tagPrefix = m_tag;
+                m_tag = "";
+              }
+              else
+              {
+                cleanup();
+                return i;
+              }
+              break;
             default:
               m_tag += c;
               break;
@@ -325,6 +339,7 @@ namespace gloox
             addTag();
             if( !closeTag() )
             {
+              printf( "noipe, here\n" );
               cleanup();
               return i;
             }
@@ -368,9 +383,23 @@ namespace gloox
               cleanup();
               return i;
               break;
+            case ':':
+              if( !m_haveTagPrefix )
+              {
+                m_haveTagPrefix = true;
+                m_tagPrefix = m_tag;
+                m_tag = "";
+              }
+              else
+              {
+                cleanup();
+                return i;
+              }
+              break;
             case '>':
               if( !closeTag() )
               {
+                printf( "here\n" );
                 cleanup();
                 return i;
               }
@@ -442,6 +471,24 @@ namespace gloox
               break;
             case '=':
               m_state = TagAttributeEqual;
+              break;
+            case ':':
+              if( !m_haveAttribPrefix && m_attrib != XMLNS )
+              {
+                m_haveAttribPrefix = true;
+                m_attribPrefix = m_attrib;
+                m_attrib = "";
+              }
+              else if( m_attrib == XMLNS )
+              {
+                m_attribIsXmlns = true;
+                m_attrib = "";
+              }
+              else
+              {
+                cleanup();
+                return i;
+              }
               break;
             default:
               m_attrib += c;
@@ -579,6 +626,13 @@ namespace gloox
       m_current = new Tag( m_current, m_tag );
     }
 
+    if( m_haveTagPrefix )
+    {
+//       printf( "setting tag prefix: %s\n", m_tagPrefix.c_str() );
+      m_current->setPrefix( m_tagPrefix );
+      m_haveTagPrefix = false;
+    }
+
     if( m_attribs.size() )
     {
       m_current->setAttributes( m_attribs );
@@ -586,7 +640,20 @@ namespace gloox
       m_attribs.clear();
     }
 
-    if( m_tag == "stream:stream" )
+    if( m_xmlnss )
+    {
+//       printf( "have ns decls\n" );
+      StringMap::const_iterator it = m_xmlnss->begin();
+//       for( ; it != m_xmlnss->end(); ++it )
+//         printf( "%s='%s'\n", (*it).first.c_str(), (*it).second.c_str() );
+      m_current->setXmlns( m_xmlnss );
+      m_xmlnss = 0;
+    }
+
+    m_current->setXmlns( m_xmlns );
+    m_xmlns = "";
+
+    if( m_tag == "stream" && m_tagPrefix == "stream" )
     {
       streamEvent( m_root );
       cleanup();
@@ -600,11 +667,26 @@ namespace gloox
 
   void Parser::addAttribute()
   {
-//     printf( "adding attribute: %s='%s', ", m_attrib.c_str(), m_value.c_str() );
-    m_attribs.push_back( new Tag::Attribute( m_attrib, m_value ) );
+    if( m_attribIsXmlns )
+    {
+      if( !m_xmlnss )
+        m_xmlnss = new StringMap();
+
+      (*m_xmlnss)[m_attrib] = m_value;
+      m_attribs.push_back( new Tag::Attribute( XMLNS + ":" + m_attrib, m_value, m_attribPrefix ) );
+    }
+    else
+    {
+//   printf( "adding attribute: %s:%s='%s'\n", m_attribPrefix.c_str(), m_attrib.c_str(), m_value.c_str() );
+      m_attribs.push_back( new Tag::Attribute( m_attrib, m_value, m_attribPrefix ) );
+      if( m_attrib == XMLNS )
+        m_xmlns = m_value;
+    }
     m_attrib = "";
     m_value = "";
-//     printf( "added, " );
+    m_attribPrefix = "";
+    m_haveAttribPrefix = false;
+    m_attribIsXmlns = false;
   }
 
   void Parser::addCData()
@@ -622,14 +704,23 @@ namespace gloox
   {
 //     printf( "about to close, " );
 
-    if( m_tag == "stream:stream" )
+    if( m_tag == "stream" && m_tagPrefix == "stream" )
       return true;
 
-    if( !m_current || m_current->name() != m_tag )
+    if( !m_current || m_current->name() != m_tag
+        || ( !m_current->prefix().empty() && m_current->prefix() != m_tagPrefix ) )
+    {
+      printf( "current xml: %s\n", m_current->xml().c_str() );
+      printf( "current name: %s, m_tag: %s\n", m_current->name().c_str(), m_tag.c_str() );
+      printf( "current prefix: %s, m_tagPrefix: %s\n", m_current->prefix().c_str(), m_tagPrefix.c_str() );
       return false;
+    }
 
 //       printf( "m_current: %s, ", m_current->name().c_str() );
 //       printf( "m_tag: %s, ", m_tag.c_str() );
+
+    m_tagPrefix = "";
+    m_haveTagPrefix = false;
 
     if( m_current->parent() )
       m_current = m_current->parent();
@@ -648,10 +739,17 @@ namespace gloox
     delete m_root;
     m_root = 0;
     m_current = 0;
+    delete m_xmlnss;
+    m_xmlnss = 0;
     m_cdata = "";
     m_tag = "";
     m_attrib = "";
+    m_attribPrefix = "";
+    m_tagPrefix = "";
+    m_haveAttribPrefix = false;
+    m_haveTagPrefix = false;
     m_value = "";
+    m_xmlns = "";
     util::clear( m_attribs );
     m_attribs.clear();
     m_state = Initial;
