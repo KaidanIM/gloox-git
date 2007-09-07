@@ -93,7 +93,6 @@ namespace gloox
   Tag::~Tag()
   {
     util::clear( *m_cdata );
-    util::clear( *m_attribs );
     util::clear( *m_children );
     util::clear( *m_nodes );
     delete m_cdata;
@@ -132,7 +131,7 @@ namespace gloox
 
     AttributeList::const_iterator at = m_attribs->begin();
     AttributeList::const_iterator at_r = right.m_attribs->begin();
-    while( at != m_attribs->end() && at_r != right.m_attribs->end() && *(*at) == *(*at_r) )
+    while( at != m_attribs->end() && at_r != right.m_attribs->end() && (*at) == (*at_r) )
     {
       ++at;
       ++at_r;
@@ -158,14 +157,14 @@ namespace gloox
       for( ; it_a != m_attribs->end(); ++it_a )
       {
         xml += ' ';
-        if( !(*it_a)->prefix().empty() )
+        if( !(*it_a).prefix().empty() )
         {
-          xml += (*it_a)->prefix();
+          xml += (*it_a).prefix();
           xml += ':';
         }
-        xml += (*it_a)->name();
+        xml += (*it_a).name();
         xml += "='";
-        xml += (*it_a)->value();
+        xml += (*it_a).value();
         xml += '\'';
       }
     }
@@ -226,22 +225,28 @@ namespace gloox
     return esc;
   }
 
+  void Tag::addAttribute( const Attribute& attr )
+  {
+    AttributeList::iterator it = m_attribs->begin();
+    for( ; it != m_attribs->end(); ++it )
+    {
+      if( (*it).name() == attr.name() )
+      {
+        (*it).setValue( attr.value() );
+        (*it).setPrefix( attr.prefix() );
+        return;
+      }
+    }
+
+    m_attribs->push_back( attr );
+  }
+
   void Tag::addAttribute( const std::string& name, const std::string& value )
   {
     if( name.empty() || value.empty() )
       return;
 
-    AttributeList::iterator it = m_attribs->begin();
-    for( ; it != m_attribs->end(); ++it )
-    {
-      if( (*it)->name() == name )
-      {
-        (*it)->setValue( value );
-        return;
-      }
-    }
-
-    m_attribs->push_back( new Attribute( name, value ) );
+    addAttribute( Attribute( name, value ) );
   }
 
   void Tag::addAttribute( const std::string& name, int value )
@@ -284,7 +289,6 @@ namespace gloox
 
   void Tag::setAttributes( const AttributeList& attributes )
   {
-    util::clear( *m_attribs );
     *m_attribs = attributes;
   }
 
@@ -395,8 +399,8 @@ namespace gloox
   {
     AttributeList::const_iterator it = m_attribs->begin();
     for( ; it != m_attribs->end(); ++it )
-      if( (*it)->name() == name )
-        return (*it)->value();
+      if( (*it).name() == name )
+        return (*it).value();
 
     return std::string();
   }
@@ -408,8 +412,8 @@ namespace gloox
 
     AttributeList::const_iterator it = m_attribs->begin();
     for( ; it != m_attribs->end(); ++it )
-      if( (*it)->name() == name )
-        return value.empty() || (*it)->value() == value;
+      if( (*it).name() == name )
+        return value.empty() || (*it).value() == value;
 
     return false;
   }
@@ -460,7 +464,7 @@ namespace gloox
     Tag::AttributeList::const_iterator at = m_attribs->begin();
     for( ; at != m_attribs->end(); ++at )
     {
-      t->m_attribs->push_back( new Attribute( *(*at) ) );
+      t->m_attribs->push_back( (*at) );
     }
 
     if( m_xmlnss )

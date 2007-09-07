@@ -33,6 +33,8 @@ namespace gloox
   /**
    * @brief This is an abstraction of an XML element.
    *
+   * @note Use setXmlns() to set namespaces and namespace prefixes.
+   *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.4
    */
@@ -97,6 +99,12 @@ namespace gloox
           const std::string& prefix() const { return m_prefix; }
 
           /**
+           * Sets the attribute's namespace prefix.
+           * @param value The new namespace prefix.
+           */
+          void setPrefix( const std::string& prefix ) { m_prefix = prefix; }
+
+           /**
            * Checks two Attributes for equality.
            * @param right The Attribute to check against the current Attribute.
            */
@@ -119,7 +127,7 @@ namespace gloox
       /**
        * A list of XML element attributes.
        */
-      typedef std::list<Attribute*> AttributeList;
+      typedef std::list<Attribute> AttributeList;
 
       /**
        * Creates a new tag with a given name (and XML character data, if given).
@@ -127,7 +135,6 @@ namespace gloox
        * @param cdata The XML character data of the element.
        * @param incoming Indicates whether tag names, attributes, attribute values, and cdata shall
        * be escaped (false, default) or not (true).
-       * @note This constructor can not be used for an incoming Tag.
        */
       Tag( const std::string& name, const std::string& cdata = "" );
 
@@ -145,8 +152,6 @@ namespace gloox
        * @param name The name of the element.
        * @param attrib The attribute name.
        * @param value The attribute value.
-       * @note This constructor can not be used for an incoming Tag.
-       * @since 1.0
        */
       Tag( const std::string& name, const std::string& attrib, const std::string& value );
 
@@ -157,8 +162,6 @@ namespace gloox
        * @param name The name of the element.
        * @param attrib The attribute name.
        * @param value The attribute value.
-       * @note This constructor can not be used for an incoming Tag.
-       * @since 1.0
        */
       Tag( Tag* parent, const std::string& name, const std::string& attrib, const std::string& value );
 
@@ -177,12 +180,14 @@ namespace gloox
       /**
        * Sets a namespace prefix.
        * @param prefix The namespace prefix.
+       * @since 1.0
        */
       void setPrefix( const std::string& prefix ) { m_prefix = prefix; }
 
       /**
        * Returns the namespace prefix for this Tag, if any.
        * @return The namespace prefix.
+       * @since 1.0
        */
       const std::string& prefix() const { return m_prefix; }
 
@@ -191,12 +196,14 @@ namespace gloox
        * is empty.
        * @param xmlns The namespace value.
        * @param prefix An optional namespace prefix.
+       * @since 1.0
        */
       void setXmlns( const std::string& xmlns, const std::string& prefix = "" );
 
       /**
        * Sets a list of namespaces.
        * @param xmlnss The list of namespaces.
+       * @since 1.0
        */
       void setXmlns( StringMap* xmlns ) { m_xmlnss = xmlns; }
 
@@ -214,13 +221,23 @@ namespace gloox
        * xmlns( prefix() ).
        * @param prefix The optional namespace prefix to look up.
        * @return The namespace for the given prefix, or the empty string if no such prefix exists.
+       * @since 1.0
        */
       const std::string xmlns( const std::string& prefix = "" ) const;
+
+      /**
+       * Use this function to add a new attribute to the tag. The Tag will own the Attribute and
+       * take care of deletion.
+       * @param attr A pointer to the attribute to add.
+       * @since 1.0
+       */
+      void addAttribute( const Attribute& attr );
 
       /**
        * Use this function to add a new attribute to the tag.
        * @param name The name of the attribute.
        * @param value The value of the attribute.
+       * @note Do not use this function to set XML namespaces, use setXmlns() instead.
        */
       void addAttribute( const std::string& name, const std::string& value );
 
@@ -228,6 +245,7 @@ namespace gloox
        * Use this function to add a new attribute to the tag. The value is an @c int here.
        * @param name The name of the attribute.
        * @param value The value of the attribute.
+       * @note Do not use this function to set XML namespaces, use setXmlns() instead.
        * @since 0.8
        */
       void addAttribute( const std::string& name, int value );
@@ -236,6 +254,7 @@ namespace gloox
        * Use this function to add a new attribute to the tag. The value is a @c long here.
        * @param name The name of the attribute.
        * @param value The value of the attribute.
+       * @note Do not use this function to set XML namespaces, use setXmlns() instead.
        * @since 0.9
        */
       void addAttribute( const std::string& name, long value );
@@ -243,6 +262,7 @@ namespace gloox
       /**
        * Sets the given attributes. Any existing attributes are lost.
        * @param attributes The attributes to set.
+       * @note Do not use this function to set XML namespaces, use setXmlns() instead.
        * @since 0.9
        */
       void setAttributes( const AttributeList& attributes );
