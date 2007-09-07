@@ -149,7 +149,8 @@ namespace gloox
       {
         const std::string& sid = q->findAttribute( "sid" );
         const std::string& mode = q->findAttribute( "mode" );
-        if( haveStream( iq->from() ) || sid.empty() || mode == "udp" )
+#warning What is haveStream() good for?
+        if( /*haveStream( iq->from() ) ||*/ sid.empty() || mode == "udp" )
         {
           rejectSOCKS5Bytestream( iq->from(), iq->id(), StanzaErrorNotAcceptable );
           return true;
@@ -247,8 +248,8 @@ namespace gloox
                                                         const std::string& id,
                                                         StanzaError reason )
   {
-    IQ* iq;
-    Error* error;
+    IQ* iq = 0;
+    Error* error = 0;
 
     switch( reason )
     {
