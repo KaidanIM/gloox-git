@@ -226,9 +226,8 @@ namespace gloox
       const std::string xmlns( const std::string& prefix = "" ) const;
 
       /**
-       * Use this function to add a new attribute to the tag. The Tag will own the Attribute and
-       * take care of deletion.
-       * @param attr A pointer to the attribute to add.
+       * Use this function to add a new attribute to the tag.
+       * @param attr The attribute to add.
        * @since 1.0
        */
       void addAttribute( const Attribute& attr );
