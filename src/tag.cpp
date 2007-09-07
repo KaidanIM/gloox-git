@@ -100,6 +100,7 @@ namespace gloox
     delete m_attribs;
     delete m_children;
     delete m_nodes;
+    delete m_xmlnss;
     m_parent = 0;
   }
 
