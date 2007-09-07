@@ -96,7 +96,8 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   name = "disconnected: handleTag(): start node: handleStartNode";
   c = new ClientBaseTest( "a", "b", 1 );
-  t = new Tag( "stream:stream" );
+  t = new Tag( "stream" );
+  t->setXmlns( XMLNS_STREAM );
   t->addAttribute( "id", "testsid" );
   c->handleTag( t );
   if( !c->handleStartNodeCalled() )
@@ -112,7 +113,8 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   name = "disconnected: handleTag(): start node: version";
   c = new ClientBaseTest( "a", "b", 1 );
-  t = new Tag( "stream:stream" );
+  t = new Tag( "stream" );
+  t->setXmlns( XMLNS_STREAM );
   t->addAttribute( "version", "1.0" );
   c->handleTag( t );
   if( !c->versionOK() )
@@ -128,7 +130,8 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   name = "disconnected: handleTag(): start node: version (fail 1)";
   c = new ClientBaseTest( "a", "b", 1 );
-  t = new Tag( "stream:stream" );
+  t = new Tag( "stream" );
+  t->setXmlns( XMLNS_STREAM );
   t->addAttribute( "version", "3.0" );
   c->handleTag( t );
   if( c->versionOK() )
@@ -159,7 +162,8 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   name = "disconnected: handleTag(): start node: session id";
   c = new ClientBaseTest( "a", "b", 1 );
-  t = new Tag( "stream:stream" );
+  t = new Tag( "stream" );
+  t->setXmlns( XMLNS_STREAM );
   t->addAttribute( "version", "1.0" );
   t->addAttribute( "id", "testsid" );
   c->handleTag( t );
