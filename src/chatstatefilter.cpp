@@ -16,6 +16,7 @@
 #include "messageeventhandler.h"
 #include "messagesession.h"
 #include "message.h"
+#include "chatstate.h"
 
 namespace gloox
 {
@@ -32,67 +33,24 @@ namespace gloox
 
   void ChatStateFilter::filter( Message* msg )
   {
-    if( m_chatStateHandler )
+    if( m_enableChatStates = m_chatStateHandler )
     {
-      if( msg->body().empty() )
-      {
-        m_enableChatStates = true;
-        if( msg->hasChild( "active" ) )
-          m_chatStateHandler->handleChatState( msg->from(), ChatStateActive );
-        else if( msg->hasChild( "composing" ) )
-          m_chatStateHandler->handleChatState( msg->from(), ChatStateComposing );
-        else if( msg->hasChild( "paused" ) )
-          m_chatStateHandler->handleChatState( msg->from(), ChatStatePaused );
-        else if( msg->hasChild( "inactive" ) )
-          m_chatStateHandler->handleChatState( msg->from(), ChatStateInactive );
-        else if( msg->hasChild( "gone" ) )
-          m_chatStateHandler->handleChatState( msg->from(), ChatStateGone );
-        else
-          m_enableChatStates = false;
-      }
-      else
-      {
-        if( msg->hasChild( "active", XMLNS, XMLNS_CHAT_STATES )
-            || msg->hasChild( "composing", XMLNS, XMLNS_CHAT_STATES )
-            || msg->hasChild( "paused", XMLNS, XMLNS_CHAT_STATES )
-            || msg->hasChild( "inactive", XMLNS, XMLNS_CHAT_STATES )
-            || msg->hasChild( "gone", XMLNS, XMLNS_CHAT_STATES ) )
-          m_enableChatStates = true;
-        else
-          m_enableChatStates = false;
-      }
-    }
-    else
-    {
-      m_enableChatStates = false;
+      const StanzaExtension* se = msg->findExtension( ExtChatState );
+      const ChatState* state = static_cast< const ChatState* >( se );
+
+      m_enableChatStates = state && state->type() != ChatStateInvalid;
+      if( m_enableChatStates && msg->body().empty() )
+        m_chatStateHandler->handleChatState( msg->from(), state->type() );
     }
   }
 
   void ChatStateFilter::setChatState( ChatStateType state )
   {
-    if( !m_enableChatStates || state == m_lastSent )
+    if( !m_enableChatStates || state == m_lastSent || state == ChatStateInvalid )
       return;
 
     Message* m = new Message( Message::Chat, m_parent->target() );
-
-    switch( state )
-    {
-      case ChatStateActive:
-        new Tag( m, "active", XMLNS, XMLNS_CHAT_STATES );
-        break;
-      case ChatStateComposing:
-        new Tag( m, "composing", XMLNS, XMLNS_CHAT_STATES );
-        break;
-      case ChatStatePaused:
-        new Tag( m, "paused", XMLNS, XMLNS_CHAT_STATES );
-        break;
-      case ChatStateInactive:
-        new Tag( m, "inactive", XMLNS, XMLNS_CHAT_STATES );
-        break;
-      case ChatStateGone:
-        new Tag( m, "gone", XMLNS, XMLNS_CHAT_STATES );
-        break;
-    }
+    m->addExtension( new ChatState( state ) );
 
     m_lastSent = state;
 

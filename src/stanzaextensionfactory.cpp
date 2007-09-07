@@ -23,6 +23,7 @@
 #include "gpgsigned.h"
 #include "gpgencrypted.h"
 #include "capabilities.h"
+#include "chatstate.h"
 #include "error.h"
 
 namespace gloox
@@ -32,6 +33,7 @@ namespace gloox
   {
     const std::string& name = tag->name();
     const std::string& xmlns = tag->findAttribute( XMLNS );
+
     if( name == "x" )
     {
       if( xmlns == XMLNS_X_DELAY )
@@ -63,7 +65,11 @@ namespace gloox
     {
       return new Error( tag );
     }
-
+    else if( name == "active" || name == "composing" || name == "paused" ||
+             name == "inactive" || name == "gone" )
+    {
+      return new ChatState( tag );
+    }
 
     return 0;
   }
