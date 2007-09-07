@@ -673,12 +673,12 @@ namespace gloox
         m_xmlnss = new StringMap();
 
       (*m_xmlnss)[m_attrib] = m_value;
-      m_attribs.push_back( new Tag::Attribute( XMLNS + ":" + m_attrib, m_value, m_attribPrefix ) );
+      m_attribs.push_back( Tag::Attribute( XMLNS + ":" + m_attrib, m_value, m_attribPrefix ) );
     }
     else
     {
 //   printf( "adding attribute: %s:%s='%s'\n", m_attribPrefix.c_str(), m_attrib.c_str(), m_value.c_str() );
-      m_attribs.push_back( new Tag::Attribute( m_attrib, m_value, m_attribPrefix ) );
+      m_attribs.push_back( Tag::Attribute( m_attrib, m_value, m_attribPrefix ) );
       if( m_attrib == XMLNS )
         m_xmlns = m_value;
     }
@@ -750,7 +750,6 @@ namespace gloox
     m_haveTagPrefix = false;
     m_value = "";
     m_xmlns = "";
-    util::clear( m_attribs );
     m_attribs.clear();
     m_state = Initial;
     m_preamble = 0;
