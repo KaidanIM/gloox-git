@@ -60,22 +60,15 @@ namespace gloox
     DiscoNodeItemList l;
     if( node.empty() )
     {
-      DiscoNodeItem item;
-      item.node = XMLNS_ADHOC_COMMANDS;
-      item.jid = m_parent->jid().full();
-      item.name = "Ad-Hoc Commands";
-      l.push_back( item );
+      l.push_back( DiscoNodeItem(
+            XMLNS_ADHOC_COMMANDS, m_parent->jid().full(), "Ad-Hoc Commands" ) );
     }
     else if( node == XMLNS_ADHOC_COMMANDS )
     {
       StringMap::const_iterator it = m_items.begin();
       for( ; it != m_items.end(); ++it )
       {
-        DiscoNodeItem item;
-        item.node = (*it).first;
-        item.jid = m_parent->jid().full();
-        item.name = (*it).second;
-        l.push_back( item );
+        l.push_back( DiscoNodeItem( (*it).first, m_parent->jid().full(), (*it).second ) );
       }
     }
     return l;
