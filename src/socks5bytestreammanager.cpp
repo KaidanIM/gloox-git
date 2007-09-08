@@ -102,20 +102,17 @@ namespace gloox
     if( it == m_asyncTrackMap.end() || !m_parent )
       return;
 
+    const AsyncS5BItem& item = (*it).second;
+
     IQ* iq = 0;
 
-    if( (*it).second.incoming )
+    if( item.incoming )
     {
+      iq = new IQ( IQ::Result, item.from.full(), item.id, success ? XMLNS_BYTESTREAMS : "" );
       if( success )
-      {
-        iq = new IQ( IQ::Result, (*it).second.from.full(), (*it).second.id, XMLNS_BYTESTREAMS );
         new Tag( iq->query(), "streamhost-used", "jid", jid.full() );
-      }
       else
-      {
-        iq = new IQ( IQ::Error, (*it).second.from.full(), (*it).second.id );
         iq->addExtension( new Error( StanzaErrorTypeCancel, StanzaErrorItemNotFound ) );
-      }
     }
     else
     {
@@ -124,7 +121,7 @@ namespace gloox
         const std::string& id = m_parent->getID();
         iq = new IQ( IQ::Set, jid.full(), id, XMLNS_BYTESTREAMS );
         iq->query()->addAttribute( "sid", sid );
-        new Tag( iq->query(), "activate", (*it).second.from.full() );
+        new Tag( iq->query(), "activate", item.from.full() );
 
         m_trackMap[id] = sid;
         m_parent->trackID( this, id, S5BActivateStream );
@@ -136,11 +133,8 @@ namespace gloox
 
   bool SOCKS5BytestreamManager::handleIq( IQ* iq )
   {
-    Tag* q = iq->findChild( "query", XMLNS, XMLNS_BYTESTREAMS );
-    if( !q || !m_socks5BytestreamHandler )
-      return false;
-
-    if( m_trackMap.find( iq->id() ) != m_trackMap.end() )
+    const Tag* q = iq->findChild( "query", XMLNS, XMLNS_BYTESTREAMS );
+    if( !q || !m_socks5BytestreamHandler || m_trackMap.find( iq->id() ) != m_trackMap.end() )
       return false;
 
     switch( iq->subtype() )
@@ -156,7 +150,7 @@ namespace gloox
           return true;
         }
         AsyncS5BItem asi;
-        TagList& l = q->children();
+        const TagList& l = q->children();
         TagList::const_iterator it = l.begin();
         for( ; it != l.end(); ++it )
         {
@@ -298,15 +292,15 @@ namespace gloox
         {
           case IQ::Result:
           {
-            Tag* q = iq->findChild( "query", XMLNS, XMLNS_BYTESTREAMS );
+            const Tag* q = iq->findChild( "query", XMLNS, XMLNS_BYTESTREAMS );
             if( !q || !m_socks5BytestreamHandler )
               return;
 
-            Tag* s = q->findChild( "streamhost-used" );
+            const Tag* s = q->findChild( "streamhost-used" );
             if( !s || !s->hasAttribute( "jid" ) )
               return;
 
-            const std::string & proxy = s->findAttribute( "jid" );
+            const std::string& proxy = s->findAttribute( "jid" );
             const StreamHost* sh = findProxy( iq->from(), proxy, (*it).second );
             if( sh )
             {
@@ -329,9 +323,7 @@ namespace gloox
                                             m_parent->logInstance(),
                                             m_parent->jid(), iq->from(),
                                             (*it).second );
-                StreamHostList shl;
-                shl.push_back( *sh );
-                s5b->setStreamHosts( shl );
+                s5b->setStreamHosts( StreamHostList( 1, *sh ) );
               }
               m_s5bMap[(*it).second] = s5b;
               m_socks5BytestreamHandler->handleOutgoingBytestream( s5b );
