@@ -109,11 +109,13 @@ namespace gloox
       capsVer = static_cast<const Capabilities*>( caps )->ver();
     }
 
+    bool self = false;
     Roster::iterator it = m_roster.find( presence->from().bare() );
-    if( it != m_roster.end() )
+    if( it != m_roster.end() || ( self = presence->from().bare() == m_self->jid() ) )
     {
+      RosterItem* ri = self ? m_self : (*it).second;
       const std::string& resource = presence->from().resource();
-      RosterItem* ri = (*it).second;
+
       if( presence->presence() == Presence::Unavailable )
         ri->removeResource( resource );
       else
@@ -127,22 +129,6 @@ namespace gloox
       if( m_rosterListener )
         m_rosterListener->handleRosterPresence( *ri, resource,
                                                 presence->presence(), presence->status() );
-    }
-    else if( presence->from().bare() == m_self->jid() )
-    {
-      if( presence->presence() == Presence::Unavailable )
-        m_self->removeResource( presence->from().resource() );
-      else
-      {
-        m_self->setPresence( presence->from().resource(), presence->presence() );
-        m_self->setStatus( presence->from().resource(), presence->status() );
-        m_self->setPriority( presence->from().resource(), presence->priority() );
-        m_self->setCaps( presence->from().resource(), capsNode, capsVer );
-      }
-
-      if( m_rosterListener )
-        m_rosterListener->handleSelfPresence( *m_self, presence->from().resource(),
-                                               presence->presence(), presence->status() );
     }
     else
     {
@@ -176,12 +162,9 @@ namespace gloox
     if( !name.empty() )
       i->addAttribute( "name", name );
 
-    if( groups.size() != 0 )
-    {
-      StringList::const_iterator it = groups.begin();
-      for( ; it != groups.end(); ++it )
-        new Tag( i, "group", (*it) );
-    }
+    StringList::const_iterator it = groups.begin();
+    for( ; it != groups.end(); ++it )
+      new Tag( i, "group", (*it) );
 
     m_parent->send( iq );
   }
@@ -223,12 +206,10 @@ namespace gloox
         if( !(*it).second->name().empty() )
           i->addAttribute( "name", (*it).second->name() );
 
-        if( (*it).second->groups().size() != 0 )
-        {
-          StringList::const_iterator g_it = (*it).second->groups().begin();
-          for( ; g_it != (*it).second->groups().end(); ++g_it )
-            new Tag( i, "group", (*g_it) );
-        }
+        const StringList& groups = (*it).second->groups();
+        StringList::const_iterator g_it = groups.begin();
+        for( ; g_it != groups.end(); ++g_it )
+          new Tag( i, "group", (*g_it) );
 
         m_parent->send( iq );
       }
@@ -237,8 +218,8 @@ namespace gloox
 
   void RosterManager::ackSubscriptionRequest( const JID& to, bool ack )
   {
-    Subscription* p = new Subscription( ack ? Subscription::Subscribed : Subscription::Unsubscribed,
-                                        to.bareJID() );
+    Subscription* p = new Subscription( ack ? Subscription::Subscribed
+                                            : Subscription::Unsubscribed, to.bareJID() );
     m_parent->send( p );
   }
 
