@@ -112,12 +112,10 @@ namespace gloox
         {
           IQ* re = new IQ( IQ::Result, iq->from(), iq->id(), XMLNS_DISCO_ITEMS );
           Tag* query = re->query();
-
-          DiscoNodeHandlerMap::const_iterator it;
-          Tag* q = iq->query();
+          const Tag* q = iq->query();
           const std::string& node = q->findAttribute( "node" );
           query->addAttribute( "node", node );
-          it = m_nodeHandlers.find( node );
+          DiscoNodeHandlerMap::const_iterator it = m_nodeHandlers.find( node );
           if( it != m_nodeHandlers.end() )
           {
             DiscoNodeHandlerList::const_iterator in = (*it).second.begin();
@@ -127,10 +125,11 @@ namespace gloox
               DiscoNodeItemList::const_iterator it = items.begin();
               for( ; it != items.end(); ++it )
               {
+                const DiscoNodeItem& item = (*it);
                 Tag* i = new Tag( query, "item" );
-                i->addAttribute( "jid",  (*it).jid.empty() ? m_parent->jid().full() : (*it).jid );
-                i->addAttribute( "node", (*it).node );
-                i->addAttribute( "name", (*it).name );
+                i->addAttribute( "jid",  item.jid.empty() ? m_parent->jid().full() : item.jid );
+                i->addAttribute( "node", item.node );
+                i->addAttribute( "name", item.name );
               }
             }
           }
@@ -190,16 +189,6 @@ namespace gloox
     }
   }
 
-  void Disco::addFeature( const std::string& feature )
-  {
-    m_features.push_back( feature );
-  }
-
-  void Disco::removeFeature( const std::string& feature )
-  {
-    m_features.remove( feature );
-  }
-
   void Disco::getDisco( const JID& to, const std::string& node, DiscoHandler* dh, int context,
                         IdType idType, const std::string& tid )
   {
@@ -231,16 +220,6 @@ namespace gloox
     m_identityType = type;
   }
 
-  void Disco::registerDiscoHandler( DiscoHandler* dh )
-  {
-    m_discoHandlers.push_back( dh );
-  }
-
-  void Disco::removeDiscoHandler( DiscoHandler* dh )
-  {
-    m_discoHandlers.remove( dh );
-  }
-
   void Disco::registerNodeHandler( DiscoNodeHandler* nh, const std::string& node )
   {
     m_nodeHandlers[node].push_back( nh );
@@ -252,10 +231,8 @@ namespace gloox
     if( it != m_nodeHandlers.end() )
     {
       (*it).second.remove( nh );
-      if( !(*it).second.size() )
-      {
+      if( (*it).second.empty() )
         m_nodeHandlers.erase( it );
-      }
     }
   }
 
