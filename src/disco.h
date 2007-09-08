@@ -58,14 +58,16 @@ namespace gloox
        * @note Use this function for non-queryable features. For nodes that shall
        * answer to @c disco\#info queries, use registerNodeHandler().
        */
-      void addFeature( const std::string& feature );
+      void addFeature( const std::string& feature )
+        { m_features.push_back( feature ); }
 
       /**
        * Removes the given feature from the list of advertised client features.
        * @param feature The feature to remove.
        * @since 0.9
        */
-      void removeFeature( const std::string& feature );
+      void removeFeature( const std::string& feature )
+        { m_features.remove( feature ); }
 
       /**
        * Lets you retrieve the features this Disco instance supports.
@@ -142,13 +144,15 @@ namespace gloox
        * a one-time registration happens when calling getDiscoInfo() and getDiscoItems(), respectively.
        * @param dh The DiscoHandler-derived object to register.
        */
-      void registerDiscoHandler( DiscoHandler* dh );
+      void registerDiscoHandler( DiscoHandler* dh )
+        { m_discoHandlers.push_back( dh ); }
 
       /**
        * Unregisters the given DiscoHandler.
        * @param dh The DiscoHandler to unregister.
        */
-      void removeDiscoHandler( DiscoHandler* dh );
+      void removeDiscoHandler( DiscoHandler* dh )
+        { m_discoHandlers.remove( dh ); }
 
       /**
        * Use this function to register a @ref DiscoNodeHandler with the Disco
