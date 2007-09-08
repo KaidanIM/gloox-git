@@ -60,8 +60,7 @@ namespace gloox
     m_session->registerMessageHandler( this );
 
     Presence* s = new Presence( Presence::Available, m_nick.full() );
-    Tag* x = new Tag( s, "x" );
-    x->addAttribute( XMLNS, XMLNS_MUC );
+    Tag* x = new Tag( s, "x", XMLNS, XMLNS_MUC );
     if( !m_password.empty() )
       new Tag( x, "password",  m_password );
 
@@ -86,17 +85,16 @@ namespace gloox
     if( !m_joined )
       return;
 
-    Presence* s = new Presence( Presence::Unavailable, m_nick.full(), msg );
-    Tag* x = new Tag( s, "x" );
-    x->addAttribute( XMLNS, XMLNS_MUC );
-
     if( m_parent )
+    {
+      Presence* s = new Presence( Presence::Unavailable, m_nick.full(), msg );
+      new Tag( s, "x", XMLNS, XMLNS_MUC );
       m_parent->send( s );
+    }
 
     m_parent->removePresenceHandler( m_nick.bareJID(), this );
     m_parent->disposeMessageSession( m_session );
     m_session = 0;
-
     m_joined = false;
   }
 
@@ -149,19 +147,13 @@ namespace gloox
   void MUCRoom::getRoomInfo()
   {
     if( m_parent )
-    {
-      JID j( m_nick.bare() );
-      m_parent->disco()->getDiscoInfo( j, "", this, GetRoomInfo );
-    }
+      m_parent->disco()->getDiscoInfo( m_nick.bare(), "", this, GetRoomInfo );
   }
 
   void MUCRoom::getRoomItems()
   {
     if( m_parent )
-    {
-      JID j( m_nick.bare() );
-      m_parent->disco()->getDiscoItems( j, "", this, GetRoomItems );
-    }
+      m_parent->disco()->getDiscoItems( m_nick.bare(), "", this, GetRoomItems );
   }
 
   void MUCRoom::setPresence( Presence::PresenceType presence, const std::string& msg )
@@ -245,7 +237,6 @@ namespace gloox
   {
     Message* m = new Message( Message::Normal, room.bare() );
     m->addChild( df.tag() );
-
     return m;
   }
 
@@ -255,52 +246,13 @@ namespace gloox
       return;
 
     DataForm df( DataForm::FormTypeSubmit );
-    DataFormField* field = new DataFormField( DataFormField::FieldTypeNone );
-    field->setName( "FORM_TYPE" );
-    field->setValue( XMLNS_MUC_REQUEST );
-    df.addField( field );
-    field = new DataFormField( DataFormField::FieldTypeTextSingle );
-    field->setName( "muc#role" );
-    field->setLabel( "Requested role" );
-    field->setValue( "participant" );
-    df.addField( field );
+    df.addField( DataFormField::FieldTypeNone, "FORM_TYPE", XMLNS_MUC_REQUEST );
+    df.addField( DataFormField::FieldTypeTextSingle, "muc#role", "participant", "Requested role" );
 
-    Tag* m = new Tag( "messsage" );
-    m->addAttribute( "to", m_nick.bare() );
+    Tag* m = new Tag( "messsage", "to", m_nick.bare() );
     m->addChild( df.tag() );
 
     m_parent->send( m );
-  }
-
-  void MUCRoom::kick( const std::string& nick, const std::string& reason )
-  {
-    setRole( nick, RoleNone, reason );
-  }
-
-  void MUCRoom::grantVoice( const std::string& nick, const std::string& reason )
-  {
-    setRole( nick, RoleParticipant, reason );
-  }
-
-  void MUCRoom::revokeVoice( const std::string& nick, const std::string& reason )
-  {
-    setRole( nick, RoleVisitor, reason );
-  }
-
-  void MUCRoom::ban( const std::string& nick, const std::string& reason )
-  {
-    setAffiliation( nick, AffiliationOutcast, reason );
-  }
-
-  void MUCRoom::setRole( const std::string& nick, MUCRoomRole role, const std::string& reason )
-  {
-    modifyOccupant( nick, role, "role", reason );
-  }
-
-  void MUCRoom::setAffiliation( const std::string& nick, MUCRoomAffiliation affiliation,
-                                const std::string& reason )
-  {
-    modifyOccupant( nick, affiliation, "affiliation", reason );
   }
 
   void MUCRoom::modifyOccupant( const std::string& nick, int state, const std::string& roa,
@@ -362,8 +314,7 @@ namespace gloox
 
     const std::string& id = m_parent->getID();
     IQ* k = new IQ( IQ::Set, m_nick.bareJID(), id, XMLNS_MUC_ADMIN );
-    Tag* i = new Tag( k->query(), "item" );
-    i->addAttribute( "nick", nick );
+    Tag* i = new Tag( k->query(), "item", "nick", nick );
     i->addAttribute( roa, newRoA );
     if( !reason.empty() )
       new Tag( i, "reason", reason );
@@ -460,8 +411,7 @@ namespace gloox
       if( (*it).nick.empty() )
         continue;
 
-      Tag* i = new Tag( q, "item" );
-      i->addAttribute( "nick", (*it).nick );
+      Tag* i = new Tag( q, "item", "nick", (*it).nick );
       i->addAttribute( roa, value );
       if( !(*it).reason.empty() )
         new Tag( i, "reason", (*it).reason );
@@ -492,48 +442,30 @@ namespace gloox
         party.jid = 0;
         party.actor = 0;
         party.alternate = 0;
+        const Tag* tag;
         const TagList& l = x->children();
         TagList::const_iterator it = l.begin();
         for( ; it != l.end(); ++it )
         {
           if( (*it)->name() == "item" )
           {
-            const std::string& affiliation = (*it)->findAttribute( "affiliation" );
-            if( affiliation == "owner" )
-              party.affiliation = AffiliationOwner;
-            else if( affiliation == "admin" )
-              party.affiliation = AffiliationAdmin;
-            else if( affiliation == "member" )
-              party.affiliation = AffiliationMember;
-            else if( affiliation == "outcast" )
-              party.affiliation = AffiliationOutcast;
-            else
-              party.affiliation = AffiliationNone;
-
-            const std::string& role = (*it)->findAttribute( "role" );
-            if( role == "moderator" )
-              party.role = RoleModerator;
-            else if( role == "participant" )
-              party.role = RoleParticipant;
-            else if( role == "visitor" )
-              party.role = RoleVisitor;
-            else
-              party.role = RoleNone;
+            party.affiliation = getEnumAffiliation( (*it)->findAttribute( "affiliation" ) );
+            party.role = getEnumRole( (*it)->findAttribute( "role" ) );
 
             const std::string& jid = (*it)->findAttribute( "jid" );
             if( !jid.empty() )
               party.jid = new JID( jid );
 
-            if( (*it)->hasChild( "actor" ) )
+            if( ( tag = (*it)->findChild( "actor" ) ) )
             {
-              const std::string& actor = (*it)->findChild( "actor" )->findAttribute( "jid" );
+              const std::string& actor = tag->findAttribute( "jid" );
               if( !actor.empty() )
                 party.actor = new JID( actor );
             }
-            if( (*it)->hasChild( "reason" ) )
-            {
-              party.reason = (*it)->findChild( "reason" )->cdata();
-            }
+
+            if( ( tag = (*it)->findChild( "reason" ) ) )
+              party.reason = tag->cdata();
+
             party.newNick = (*it)->findAttribute( "nick" );
           }
           else if( (*it)->name() == "status" )
@@ -573,8 +505,8 @@ namespace gloox
             if( (*it)->hasAttribute( "jid" ) )
               party.alternate = new JID( (*it)->findAttribute( "jid" ) );
 
-            if( (*it)->hasChild( "reason" ) )
-              party.reason = (*it)->findChild( "reason" )->cdata();
+            if( ( tag = (*it)->findChild( "reason" ) ) )
+              party.reason = tag->cdata();
 
             party.flags |= UserRoomDestroyed;
           }
@@ -606,24 +538,13 @@ namespace gloox
 
     const std::string& id = m_parent->getID();
     IQ* iq = new IQ( IQ::Set, m_nick.bareJID(), id, XMLNS_MUC_OWNER );
-    Tag* x = new Tag( iq->query(), "x" );
-    x->addAttribute( XMLNS, XMLNS_X_DATA );
+    Tag* x = new Tag( iq->query(), "x", XMLNS, XMLNS_X_DATA );
     x->addAttribute( TYPE, context == CreateInstantRoom ? "submit" :"cancel" );
 
     m_parent->trackID( this, id, context );
     m_parent->send( iq );
 
     m_creationInProgress = false;
-  }
-
-  void MUCRoom::acknowledgeInstantRoom()
-  {
-    instantRoom( CreateInstantRoom );
-  }
-
-  void MUCRoom::cancelRoomCreation()
-  {
-    instantRoom( CancelRoomCreation );
   }
 
   void MUCRoom::requestRoomConfig()
@@ -644,21 +565,18 @@ namespace gloox
   void MUCRoom::setNonAnonymous()
   {
     m_flags |= FlagNonAnonymous;
-    m_flags ^= FlagSemiAnonymous;
-    m_flags ^= FlagFullyAnonymous;
+    m_flags ^= FlagSemiAnonymous | FlagFullyAnonymous;
   }
 
   void MUCRoom::setSemiAnonymous()
   {
-    m_flags ^= FlagNonAnonymous;
+    m_flags ^= FlagNonAnonymous | FlagFullyAnonymous;
     m_flags |= FlagSemiAnonymous;
-    m_flags ^= FlagFullyAnonymous;
   }
 
   void MUCRoom::setFullyAnonymous()
   {
-    m_flags ^= FlagNonAnonymous;
-    m_flags ^= FlagSemiAnonymous;
+    m_flags ^= FlagNonAnonymous | FlagSemiAnonymous;
     m_flags |= FlagFullyAnonymous;
   }
 
@@ -720,8 +638,7 @@ namespace gloox
       }
       else if( m_roomConfigHandler && ( x = msg->findChild( "x", XMLNS, XMLNS_X_DATA ) ) != 0 )
       {
-        DataForm df( x );
-        m_roomConfigHandler->handleMUCRequest( this, df );
+        m_roomConfigHandler->handleMUCRequest( this, DataForm( x ) );
         return;
       }
 
@@ -741,8 +658,7 @@ namespace gloox
           when = x->findAttribute( "when" );
           history = true;
         }
-        if( msg->subtype() == Message::Chat ||
-            msg->subtype() == Message::Normal )
+        if( msg->subtype() & ( Message::Chat | Message::Normal ) )
           privMsg = true;
 
         m_roomHandler->handleMUCMessage( this, msg->from().resource(), msg->body(),
@@ -794,14 +710,15 @@ namespace gloox
         break;
       case RequestRoomConfig:
       {
-        Tag* x = 0;
-        Tag* q = iq->findChild( "query", XMLNS, XMLNS_MUC_OWNER );
+        const Tag* q = iq->findChild( "query", XMLNS, XMLNS_MUC_OWNER );
         if( q )
-          x = q->findChild( "x", XMLNS, XMLNS_X_DATA );
-        if( x )
         {
-          DataForm df( x );
-          m_roomConfigHandler->handleMUCConfigForm( this, df );
+          const Tag* x = q->findChild( "x", XMLNS, XMLNS_X_DATA );
+          if( x )
+          {
+            const DataForm df( x );
+            m_roomConfigHandler->handleMUCConfigForm( this, df );
+          }
         }
         break;
       }
@@ -812,31 +729,32 @@ namespace gloox
       case RequestOwnerList:
       case RequestAdminList:
       {
-        Tag* x = 0;
-        Tag* q = iq->findChild( "query", XMLNS, XMLNS_MUC_OWNER );
+        const Tag* q = iq->findChild( "query", XMLNS, XMLNS_MUC_OWNER );
         if( q )
-          x = q->findChild( "x", XMLNS, XMLNS_X_DATA );
-        if( x )
         {
-          MUCListItemList itemList;
-          const TagList& items = x->findChildren( "item" );
-          TagList::const_iterator it = items.begin();
-          for( ; it != items.end(); ++it )
+          const Tag* x = q->findChild( "x", XMLNS, XMLNS_X_DATA );
+          if( x )
           {
-            MUCListItem item;
-            item.jid = 0;
-            item.role = getEnumRole( (*it)->findAttribute( "role" ) );
-            item.affiliation = getEnumAffiliation( (*it)->findAttribute( "affiliation" ) );
-            if( (*it)->hasAttribute( "jid" ) )
-              item.jid = new JID( (*it)->findAttribute( "jid" ) );
-            item.nick = (*it)->findAttribute( "nick" );
-            itemList.push_back( item );
-          }
-          m_roomConfigHandler->handleMUCConfigList( this, itemList, (MUCOperation)context );
+            MUCListItemList itemList;
+            const TagList& items = x->findChildren( "item" );
+            TagList::const_iterator it = items.begin();
+            for( ; it != items.end(); ++it )
+            {
+              MUCListItem item;
+              item.jid = 0;
+              item.role = getEnumRole( (*it)->findAttribute( "role" ) );
+              item.affiliation = getEnumAffiliation( (*it)->findAttribute( "affiliation" ) );
+              if( (*it)->hasAttribute( "jid" ) )
+                item.jid = new JID( (*it)->findAttribute( "jid" ) );
+              item.nick = (*it)->findAttribute( "nick" );
+              itemList.push_back( item );
+            }
+            m_roomConfigHandler->handleMUCConfigList( this, itemList, (MUCOperation)context );
 
-          MUCListItemList::iterator itl = itemList.begin();
-          for( ; itl != itemList.end(); ++itl )
-            delete (*itl).jid;
+            MUCListItemList::iterator itl = itemList.begin();
+            for( ; itl != itemList.end(); ++itl )
+              delete (*itl).jid;
+          }
         }
         break;
       }
@@ -891,8 +809,8 @@ namespace gloox
           m_flags |= FlagPublicLogging;
 
         std::string name;
-        DataForm* df = 0;
-        Tag* q = iq->query();
+        const DataForm* df = 0;
+        const Tag* q = iq->query();
         if( q )
         {
           const TagList& l = q->children();
@@ -957,7 +875,7 @@ namespace gloox
     {
       case GetRoomItems:
       {
-        Tag* q = iq->query();
+        const Tag* q = iq->query();
         if( q )
         {
           StringMap items;
@@ -966,9 +884,7 @@ namespace gloox
           for( ; it != l.end(); ++it )
           {
             if( (*it)->name() == "item" && (*it)->hasAttribute( "jid" ) )
-            {
               items[(*it)->findAttribute( "name" )] = (*it)->findAttribute( "jid" );
-            }
           }
           m_roomHandler->handleMUCItems( this, items );
         }
@@ -1014,10 +930,7 @@ namespace gloox
   {
     DiscoNodeItemList l;
 
-    if( node != XMLNS_MUC_ROOMS )
-      return l;
-
-    if( m_publish )
+    if( node == XMLNS_MUC_ROOMS && m_publish )
     {
       DiscoNodeItem item;
       item.jid = m_nick.bare();

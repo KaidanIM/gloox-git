@@ -317,7 +317,8 @@ namespace gloox
        * @param nick The nick of the user to be kicked.
        * @param reason An optional reason for the kick.
        */
-      void kick( const std::string& nick, const std::string& reason = "" );
+      void kick( const std::string& nick, const std::string& reason = "" )
+        { setRole( nick, RoleNone, reason ); }
 
       /**
        * Use this function to ban a user from the room.
@@ -328,7 +329,8 @@ namespace gloox
        * @param nick The nick of the user to be banned.
        * @param reason An optional reason for the ban.
        */
-      void ban( const std::string& nick, const std::string& reason );
+      void ban( const std::string& nick, const std::string& reason )
+        { setAffiliation( nick, AffiliationOutcast, reason ); }
 
       /**
        * Use this function to grant voice to a user in a moderated room.
@@ -339,7 +341,8 @@ namespace gloox
        * @param nick The nick of the user to be granted voice.
        * @param reason An optional reason for the grant.
        */
-      void grantVoice( const std::string& nick, const std::string& reason );
+      void grantVoice( const std::string& nick, const std::string& reason )
+        { setRole( nick, RoleParticipant, reason ); }
 
       /**
        * Use this function to create a Tag that approves a voice request or registration request
@@ -360,7 +363,8 @@ namespace gloox
        * @param nick The nick of the user.
        * @param reason An optional reason for the revoke.
        */
-      void revokeVoice( const std::string& nick, const std::string& reason );
+      void revokeVoice( const std::string& nick, const std::string& reason )
+        { setRole( nick, RoleVisitor, reason ); }
 
       /**
        * Use this function to change the role of a user in the room.
@@ -369,7 +373,8 @@ namespace gloox
        * @param role The user's new role in the room.
        * @param reason An optional reason for the role change.
        */
-      void setRole( const std::string& nick, MUCRoomRole role, const std::string& reason = "" );
+      void setRole( const std::string& nick, MUCRoomRole role, const std::string& reason = "" )
+        { modifyOccupant( nick, role, "role", reason ); }
 
       /**
        * Use this function to change the affiliation of a user in the room.
@@ -379,7 +384,8 @@ namespace gloox
        * @param reason An optional reason for the affiliation change.
        */
       void setAffiliation( const std::string& nick, MUCRoomAffiliation affiliation,
-                           const std::string& reason );
+                           const std::string& reason )
+        { modifyOccupant( nick, affiliation, "affiliation", reason ); }
 
       /**
        * Use this function to request the room's configuration form.
@@ -397,13 +403,15 @@ namespace gloox
        * only after MUCRoomHandler::handleMUCRoomCreation() was called. This is a NOOP at
        * any other time.
        */
-      void acknowledgeInstantRoom();
+      void acknowledgeInstantRoom()
+        { instantRoom( CreateInstantRoom ); }
 
       /**
        * Use this function to cancel the creation of a room. This function is useful only after
        * MUCRoomHandler::handleMUCRoomCreation() was called. This is a NOOP at any other time.
        */
-      void cancelRoomCreation();
+      void cancelRoomCreation()
+        { instantRoom( CancelRoomCreation ); }
 
       /**
        * Use this function to destroy the room. All the occupants will be removed from the room.
