@@ -131,18 +131,19 @@ namespace gloox
   void SIProfileFT::declineFT( const JID& to, const std::string& id, SIManager::SIError reason,
                                const std::string& text )
   {
-    if( !m_manager )
-      return;
-
-    m_manager->declineSI( to, id, reason, text );
+    if( m_manager )
+      m_manager->declineSI( to, id, reason, text );
   }
 
   void SIProfileFT::dispose( Bytestream* bs )
   {
-    if( bs && bs->type() == Bytestream::S5B && m_socks5Manager )
-      m_socks5Manager->dispose( static_cast<SOCKS5Bytestream*>( bs ) );
-    else
-      delete bs;
+    if( bs )
+    {
+      if( bs->type() == Bytestream::S5B && m_socks5Manager )
+        m_socks5Manager->dispose( static_cast<SOCKS5Bytestream*>( bs ) );
+      else
+        delete bs;
+    }
   }
 
   void SIProfileFT::setStreamHosts( StreamHostList hosts )
@@ -173,8 +174,7 @@ namespace gloox
       if( t )
         desc = t->cdata();
 
-      t = ptag->findChild( "range" );
-      if( t )
+      if( ( t = ptag->findChild( "range" ) ) )
       {
         if( t->hasAttribute( "offset" ) )
           offset = atol( t->findAttribute( "offset" ).c_str() );
@@ -215,22 +215,25 @@ namespace gloox
       // check return value:
       m_socks5Manager->requestSOCKS5Bytestream( from, SOCKS5BytestreamManager::S5BTCP, sid );
     }
-    else if( m_handler && dff && dff->value() == XMLNS_IBB )
+    else if( m_handler && dff )
     {
-      InBandBytestream* ibb = new InBandBytestream( m_parent, m_parent->logInstance(), m_parent->jid(),
-                                                    from, sid );
-      m_handler->handleFTBytestream( ibb );
-    }
-    else if( m_handler && dff && dff->value() == XMLNS_IQ_OOB )
-    {
-      const std::string& url = m_handler->handleOOBRequestResult( from, sid );
-      if( !url.empty() )
+      if( dff->value() == XMLNS_IBB )
       {
-        const std::string& id = m_parent->getID();
-        IQ* iq = new IQ( IQ::Set, from, id, XMLNS_IQ_OOB );
-        new Tag( iq->query(), "url", url );
-        m_parent->trackID( this, id, OOBSent );
-        m_parent->send( iq );
+        InBandBytestream* ibb = new InBandBytestream( m_parent, m_parent->logInstance(),
+                                                      m_parent->jid(), from, sid );
+        m_handler->handleFTBytestream( ibb );
+      }
+      else if( dff->value() == XMLNS_IQ_OOB )
+      {
+        const std::string& url = m_handler->handleOOBRequestResult( from, sid );
+        if( !url.empty() )
+        {
+          const std::string& id = m_parent->getID();
+          IQ* iq = new IQ( IQ::Set, from, id, XMLNS_IQ_OOB );
+          new Tag( iq->query(), "url", url );
+          m_parent->trackID( this, id, OOBSent );
+          m_parent->send( iq );
+        }
       }
     }
   }
