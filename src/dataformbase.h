@@ -94,7 +94,11 @@ namespace gloox
        */
       DataFormField* addField( DataFormField::DataFormFieldType type, const std::string& name,
                                const std::string& value = "", const std::string& label = "" )
-      { m_fields.push_back( new DataFormField( name, value, label, type ) ); return m_fields.back(); }
+      {
+        DataFormField* field = new DataFormField( name, value, label, type );
+        m_fields.push_back( field );
+        return field;
+      }
 
     protected:
       FieldList m_fields;
