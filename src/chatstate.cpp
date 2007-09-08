@@ -31,7 +31,7 @@ namespace gloox
     if( m_type == ChatStateInvalid )
       return 0;
 
-    return new Tag( util::lookup( m_type, stateValues ), XMLNS, XMLNS_CHAT_STATES );
+    return new Tag( util::lookup2( m_type, stateValues ), XMLNS, XMLNS_CHAT_STATES );
   }
 
 }
