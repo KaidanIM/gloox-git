@@ -51,8 +51,7 @@ namespace gloox
     if( !xmlns.empty() )
     {
       m_xmlns = xmlns;
-      m_query = new Tag( this, childtag.empty() ? "query" : childtag );
-      m_query->addAttribute( XMLNS, xmlns );
+      m_query = new Tag( this, childtag.empty() ? "query" : childtag,  XMLNS, xmlns );
     }
   }
 
