@@ -906,11 +906,8 @@ namespace gloox
         m_roomHandler->handleMUCInfo( this, 0, "", 0 );
         break;
       case GetRoomItems:
-      {
-        StringMap items;
-        m_roomHandler->handleMUCItems( this, items );
+        m_roomHandler->handleMUCItems( this, StringMap() );
         break;
-      }
       default:
         break;
     }
