@@ -166,13 +166,11 @@ namespace gloox
 
     if( m_handler )
     {
-      std::string desc;
       long offset = 0;
       long length = -1;
 
       const Tag* t = ptag->findChild( "desc" );
-      if( t )
-        desc = t->cdata();
+      const std::string desc = t ? t->cdata() : "";
 
       if( ( t = ptag->findChild( "range" ) ) )
       {
