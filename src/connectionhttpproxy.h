@@ -131,7 +131,7 @@ namespace gloox
        * @param password The password to use for proxy authorization.
        */
       void setProxyAuth( const std::string& user, const std::string& password )
-        { m_proxyUser = user; m_proxyPassword = password; }
+        { m_proxyUser = user; m_proxyPwd = password; }
 
       /**
        * Sets the underlying transport connection. A possibly existing connection will be deleted.
@@ -153,7 +153,7 @@ namespace gloox
       const LogSink& m_logInstance;
 
       std::string m_proxyUser;
-      std::string m_proxyPassword;
+      std::string m_proxyPwd;
       std::string m_proxyHandshakeBuffer;
 
       bool m_http11;

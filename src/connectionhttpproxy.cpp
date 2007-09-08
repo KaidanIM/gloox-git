@@ -178,27 +178,30 @@ namespace gloox
       int port = m_port;
       if( port == -1 )
       {
-        DNS::HostMap servers = DNS::resolve( m_server, m_logInstance );
-        if( servers.size() )
+        const DNS::HostMap& servers = DNS::resolve( m_server, m_logInstance );
+        if( !servers.empty() )
         {
-          server = (*(servers.begin())).first;
-          port = (*(servers.begin())).second;
+          const std::pair< std::string, int >& host = *servers.begin();
+          server = host.first;
+          port = host.second;
         }
       }
 #ifndef _WIN32_WCE
-    std::ostringstream oss;
-    oss << "requesting http proxy connection to " << server << ":" << port;
-    m_logInstance.dbg( LogAreaClassConnectionHTTPProxy, oss.str() );
+      std::ostringstream oss;
+      oss << "requesting http proxy connection to " << server << ":" << port;
+      m_logInstance.dbg( LogAreaClassConnectionHTTPProxy, oss.str() );
 #endif
       std::ostringstream os;
-      os << "CONNECT " << server << ":" << port << ( m_http11 ? " HTTP/1.1" : " HTTP/1.0" ) << "\r\n";
+      os << "CONNECT " << server << ":" << port << " HTTP/1.";
+      os << ( m_http11 ? '1' : '0' ) << "\r\n";
       os << "Host: " << server << "\r\n";
       os << "Content-Length: 0\r\n";
       os << "Proxy-Connection: Keep-Alive\r\n";
       os << "Pragma: no-cache\r\n";
-      if( !m_proxyUser.empty() && !m_proxyPassword.empty() )
+
+      if( !m_proxyUser.empty() && !m_proxyPwd.empty() )
       {
-        os << "Proxy-Authorization: Basic " << Base64::encode64( m_proxyUser + ":" + m_proxyPassword )
+        os << "Proxy-Authorization: Basic " << Base64::encode64( m_proxyUser + ":" + m_proxyPwd )
             << "\r\n";
       }
       os << "\r\n";
