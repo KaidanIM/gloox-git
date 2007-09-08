@@ -20,8 +20,6 @@
 #include "pubsubservicehandler.h"
 #include "pubsubnodehandler.h"
 #include "pubsubitemhandler.h"
-#include "pubsubdiscohandler.h"
-#include "disco.h"
 #include "util.h"
 #include "error.h"
 
