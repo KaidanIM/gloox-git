@@ -97,26 +97,17 @@ namespace gloox
 
   ConnectionError ConnectionHTTPProxy::recv( int timeout )
   {
-    if( m_connection )
-      return m_connection->recv( timeout );
-    else
-      return ConnNotConnected;
+    return m_connection ? m_connection->recv( timeout ) : ConnNotConnected;
   }
 
   ConnectionError ConnectionHTTPProxy::receive()
   {
-    if( m_connection )
-      return m_connection->receive();
-    else
-      return ConnNotConnected;
+    return m_connection ? m_connection->receive() : ConnNotConnected;
   }
 
   bool ConnectionHTTPProxy::send( const std::string& data )
   {
-    if( m_connection )
-      return m_connection->send( data );
-
-    return false;
+    return m_connection && m_connection->send( data );
   }
 
   void ConnectionHTTPProxy::cleanup()
