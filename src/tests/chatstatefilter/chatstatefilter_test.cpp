@@ -4,6 +4,7 @@
 #include "../../gloox.h"
 #include "../../jid.h"
 #include "../../chatstatehandler.h"
+#include "../../chatstate.h"
 
 #include <stdio.h>
 #include <string>
@@ -152,7 +153,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   name = "filter gone";
   m = new gloox::Message( gloox::Message::Chat, gloox::JID() );
-  t = new gloox::Tag( m, "gone" ); t->addAttribute( "xmlns", gloox::XMLNS_CHAT_STATES );
+  m->addExtension( new gloox::ChatState( gloox::ChatStateGone ) );
   ms->setTest( 0 );
   f->filter( m );
   if( !ms->ok() )
@@ -166,7 +167,7 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   name = "filter inactive";
   m = new gloox::Message( gloox::Message::Chat, gloox::JID() );
-  t = new gloox::Tag( m, "inactive" ); t->addAttribute( "xmlns", gloox::XMLNS_CHAT_STATES );
+  m->addExtension( new gloox::ChatState( gloox::ChatStateInactive ) );
   ms->setTest( 1 );
   f->filter( m );
   if( !ms->ok() )
@@ -180,7 +181,7 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   name = "filter active";
   m = new gloox::Message( gloox::Message::Chat, gloox::JID() );
-  t = new gloox::Tag( m, "active" ); t->addAttribute( "xmlns", gloox::XMLNS_CHAT_STATES );
+  m->addExtension( new gloox::ChatState( gloox::ChatStateActive ) );
   ms->setTest( 2 );
   f->filter( m );
   if( !ms->ok() )
@@ -194,7 +195,7 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   name = "filter composing";
   m = new gloox::Message( gloox::Message::Chat, gloox::JID() );
-  t = new gloox::Tag( m, "composing" ); t->addAttribute( "xmlns", gloox::XMLNS_CHAT_STATES );
+  m->addExtension( new gloox::ChatState( gloox::ChatStateComposing ) );
   ms->setTest( 3 );
   f->filter( m );
   if( !ms->ok() )
@@ -208,7 +209,7 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   name = "filter paused";
   m = new gloox::Message( gloox::Message::Chat, gloox::JID() );
-  t = new gloox::Tag( m, "paused" ); t->addAttribute( "xmlns", gloox::XMLNS_CHAT_STATES );
+  m->addExtension( new gloox::ChatState( gloox::ChatStatePaused ) );
   ms->setTest( 4 );
   f->filter( m );
   if( !ms->ok() )
