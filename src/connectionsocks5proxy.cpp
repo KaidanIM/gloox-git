@@ -187,32 +187,32 @@ namespace gloox
     if( !m_connection || !m_handler )
       return;
 
+    ConnectionError connError = ConnNoError;
+
     switch( m_s5state  )
     {
       case S5StateConnecting:
         if( data.length() != 2 || data[0] != 0x05 )
-        {
-          m_connection->disconnect();
-          m_handler->handleDisconnect( this, ConnIoError );
-        }
+          connError = ConnIoError;
+
         if( data[1] == 0x00 ) // no auth
         {
           negotiate();
         }
-        else if( data[1] == 0x02 && !m_proxyUser.empty() && !m_proxyPassword.empty() ) // user/password auth
+        else if( data[1] == 0x02 && !m_proxyUser.empty() && !m_proxyPwd.empty() ) // user/password auth
         {
           m_logInstance.dbg( LogAreaClassConnectionSOCKS5Proxy,
                              "authenticating to socks5 proxy as user " + m_proxyUser );
           m_s5state = S5StateAuthenticating;
-          char* d = new char[3 + m_proxyUser.length() + m_proxyPassword.length()];
+          char* d = new char[3 + m_proxyUser.length() + m_proxyPwd.length()];
           int pos = 0;
           d[pos++] = 0x01;
           d[pos++] = m_proxyUser.length();
           strncpy( d + pos, m_proxyUser.c_str(), m_proxyUser.length() );
           pos += m_proxyUser.length();
-          d[pos++] = m_proxyPassword.length();
-          strncpy( d + pos, m_proxyPassword.c_str(), m_proxyPassword.length() );
-          pos += m_proxyPassword.length();
+          d[pos++] = m_proxyPwd.length();
+          strncpy( d + pos, m_proxyPwd.c_str(), m_proxyPwd.length() );
+          pos += m_proxyPwd.length();
 
           if( !send( std::string( d, pos ) ) )
           {
@@ -221,20 +221,12 @@ namespace gloox
           }
           delete[] d;
         }
-        else if( data[1] == (char)0xFF && !m_proxyUser.empty() && !m_proxyPassword.empty() )
-        {
-          m_connection->disconnect();
-          m_handler->handleDisconnect( this, ConnProxyNoSupportedAuth );
-        }
-        else if( data[1] == (char)0xFF && ( m_proxyUser.empty() || m_proxyPassword.empty() ) )
-        {
-          m_connection->disconnect();
-          m_handler->handleDisconnect( this, ConnProxyAuthRequired );
-        }
         else
         {
-          m_connection->disconnect();
-          m_handler->handleDisconnect( this, ConnProxyAuthRequired );
+          if( data[1] == (char)0xFF && !m_proxyUser.empty() && !m_proxyPwd.empty() )
+            connError = ConnProxyNoSupportedAuth;
+          else
+            connError = ConnProxyAuthRequired;
         }
         break;
       case S5StateNegotiating:
@@ -247,27 +239,16 @@ namespace gloox
             m_handler->handleConnect( this );
           }
           else // connection refused
-          {
-            m_connection->disconnect();
-            m_handler->handleDisconnect( this, ConnConnectionRefused );
-          }
+            connError = ConnConnectionRefused;
         }
         else
-        {
-          m_connection->disconnect();
-          m_handler->handleDisconnect( this, ConnIoError );
-        }
+          connError = ConnIoError;
         break;
       case S5StateAuthenticating:
         if( data.length() == 2 && data[0] == 0x01 && data[1] == 0x00 )
-        {
           negotiate();
-        }
         else
-        {
-          m_connection->disconnect();
-          m_handler->handleDisconnect( this, ConnProxyAuthFailed );
-        }
+          connError = ConnProxyAuthFailed;
         break;
       case S5StateConnected:
         m_handler->handleReceivedData( this, data );
@@ -275,6 +256,13 @@ namespace gloox
       default:
         break;
     }
+
+    if( connError != ConnNoError )
+    {
+      m_connection->disconnect();
+      m_handler->handleDisconnect( this, connError );
+    }
+
   }
 
   void ConnectionSOCKS5Proxy::negotiate()
@@ -291,7 +279,7 @@ namespace gloox
     {
       d[pos++] = 0x01; // IPv4 address
       std::string s;
-      int j = server.length();
+      const int j = server.length();
       int l = 0;
       for( int k = 0; k < j && l < 4; ++k )
       {
@@ -300,7 +288,7 @@ namespace gloox
 
         if( server[k] == '.' || k == j-1 )
         {
-          d[pos++] = atoi( s.c_str() ) & 0x0FF;
+          d[pos++] = atoi( s.c_str() ) & 0xFF;
           s = "";
           ++l;
         }
@@ -310,11 +298,12 @@ namespace gloox
     {
       if( port == -1 )
       {
-        DNS::HostMap servers = DNS::resolve( m_server, m_logInstance );
+        const DNS::HostMap& servers = DNS::resolve( m_server, m_logInstance );
         if( servers.size() )
         {
-          server = (*(servers.begin())).first;
-          port = (*(servers.begin())).second;
+          const std::pair< std::string, int >& host = *servers.begin();
+          server = host.first;
+          port = host.second;
         }
       }
       d[pos++] = 0x03; // hostname
@@ -348,27 +337,25 @@ namespace gloox
       int port = m_port;
       if( port == -1 )
       {
-        DNS::HostMap servers = DNS::resolve( m_server, m_logInstance );
-        if( servers.size() )
+        const DNS::HostMap& servers = DNS::resolve( m_server, m_logInstance );
+        if( !servers.empty() )
         {
-          server = (*(servers.begin())).first;
-          port = (*(servers.begin())).second;
+          const std::pair< std::string, int >& host = *servers.begin();
+          server = host.first;
+          port = host.second;
         }
       }
       m_logInstance.dbg( LogAreaClassConnectionSOCKS5Proxy,
                          "attempting to negotiate socks5 proxy connection" );
 
-      bool auth = !m_proxyUser.empty() && !m_proxyPassword.empty();
-      char* d = new char[auth ? 4 : 3];
-      d[0] = 0x05; // SOCKS version 5
-      if( auth )
-      {
-        d[1] = 0x02; // two methods
-        d[3] = 0x02; // method: username/password auth
-      }
-      else
-        d[1] = 0x01; // one method
-      d[2] = 0x00; // method: no auth
+      const bool auth = !m_proxyUser.empty() && !m_proxyPwd.empty();
+      const char d[4] = {
+        0x05,        // SOCKS version 5
+        auth ? 0x02  // two methods
+             : 0x01, // one methods
+        0x00,        // method: no auth
+        0x02         // method: username/password auth
+      };
 
       if( !send( std::string( d, auth ? 4 : 3 ) ) )
       {
@@ -376,7 +363,6 @@ namespace gloox
         if( m_handler )
           m_handler->handleDisconnect( this, ConnIoError );
       }
-      delete[] d;
     }
   }
 
