@@ -80,7 +80,7 @@ namespace gloox
 
     Tag* feature = new Tag( "feature", XMLNS, XMLNS_FEATURE_NEG );
     DataForm df( DataForm::FormTypeForm );
-    DataFormField* dff = df.addField( DataFOrmField::FieldTypeListSingle, "stream-method" );
+    DataFormField* dff = df.addField( DataFormField::FieldTypeListSingle, "stream-method" );
     StringMap sm;
     if( streamTypes & FTTypeS5B )
       sm["s5b"] = XMLNS_BYTESTREAMS;
