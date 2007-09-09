@@ -29,7 +29,7 @@ namespace gloox
     util::clear( m_fields );
   }
 
-  DataFormField* DataFormBase::field( const std::string& field )
+  DataFormField* DataFormBase::field( const std::string& field ) const
   {
     FieldList::const_iterator it = m_fields.begin();
     for( ; it != m_fields.end() && (*it)->name() != field; ++it )

@@ -158,8 +158,9 @@ namespace gloox
       m_socks5Manager->addStreamHost( jid, host, port );
   }
 
-  void SIProfileFT::handleSIRequest( const JID& from, const std::string& id, const std::string& profile,
-                                     Tag* si, Tag* ptag, Tag* fneg )
+  void SIProfileFT::handleSIRequest( const JID& from, const std::string& id,
+                                     const std::string& profile,
+                                     const Tag* si, const Tag* ptag, const Tag* fneg )
   {
     if( profile != XMLNS_SI_FT || !ptag || !si )
       return;
@@ -182,55 +183,69 @@ namespace gloox
 
       const std::string& mt = si->findAttribute( "mime-type" );
       int types = 0;
-      Tag* x = fneg ? fneg->findChild( "x", XMLNS, XMLNS_X_DATA ) : 0;
-      DataForm df( x );
-      DataFormField* dff = df.field( "stream-method" );
 
-      if( dff && dff->value() == XMLNS_BYTESTREAMS )
-        types |= FTTypeS5B;
+      if( fneg )
+      {
+        const DataForm df( fneg->findChild( "x", XMLNS, XMLNS_X_DATA ) );
+        const DataFormField* dff = df.field( "stream-method" );
 
-      if( dff && dff->value() == XMLNS_IBB )
-        types |= FTTypeIBB;
+        if( dff )
+        {
+          if( dff->value() == XMLNS_BYTESTREAMS )
+            types |= FTTypeS5B;
+          else if( dff->value() == XMLNS_IBB )
+            types |= FTTypeIBB;
+          else if( dff->value() == XMLNS_IQ_OOB )
+            types |= FTTypeOOB;
+        }
+      }
 
-      if( dff && dff->value() == XMLNS_IQ_OOB )
-        types |= FTTypeOOB;
-
-      m_handler->handleFTRequest( from, id, si->findAttribute( "id" ), ptag->findAttribute( "name" ),
+      m_handler->handleFTRequest( from, id, si->findAttribute( "id" ),
+                                  ptag->findAttribute( "name" ),
                                   atol( ptag->findAttribute( "size" ).c_str() ),
-                                  ptag->findAttribute( "hash" ), ptag->findAttribute( "date" ),
-                                  mt.empty() ? "binary/octet-stream" : mt, desc, types, offset, length );
+                                  ptag->findAttribute( "hash" ),
+                                  ptag->findAttribute( "date" ),
+                                  mt.empty() ? "binary/octet-stream" : mt,
+                                  desc, types, offset, length );
     }
   }
 
   void SIProfileFT::handleSIRequestResult( const JID& from, const std::string& sid,
-                                           Tag* /*si*/, Tag* /*ptag*/, Tag* fneg )
+                                           const Tag* /*si*/, const Tag* /*ptag*/,
+                                           const Tag* fneg )
   {
-    Tag* x = fneg ? fneg->findChild( "x", XMLNS, XMLNS_X_DATA ) : 0;
-    DataForm df( x );
-    DataFormField* dff = df.field( "stream-method" );
-    if( m_socks5Manager && dff && dff->value() == XMLNS_BYTESTREAMS )
+    if( fneg )
     {
-      // check return value:
-      m_socks5Manager->requestSOCKS5Bytestream( from, SOCKS5BytestreamManager::S5BTCP, sid );
-    }
-    else if( m_handler && dff )
-    {
-      if( dff->value() == XMLNS_IBB )
+      const DataForm df( fneg->findChild( "x", XMLNS, XMLNS_X_DATA ) );
+      const DataFormField* dff = df.field( "stream-method" );
+
+      if( dff )
       {
-        InBandBytestream* ibb = new InBandBytestream( m_parent, m_parent->logInstance(),
-                                                      m_parent->jid(), from, sid );
-        m_handler->handleFTBytestream( ibb );
-      }
-      else if( dff->value() == XMLNS_IQ_OOB )
-      {
-        const std::string& url = m_handler->handleOOBRequestResult( from, sid );
-        if( !url.empty() )
+        if( m_socks5Manager && dff->value() == XMLNS_BYTESTREAMS )
         {
-          const std::string& id = m_parent->getID();
-          IQ* iq = new IQ( IQ::Set, from, id, XMLNS_IQ_OOB );
-          new Tag( iq->query(), "url", url );
-          m_parent->trackID( this, id, OOBSent );
-          m_parent->send( iq );
+          // check return value:
+          m_socks5Manager->requestSOCKS5Bytestream( from, SOCKS5BytestreamManager::S5BTCP, sid );
+        }
+        else if( m_handler )
+        {
+          if( dff->value() == XMLNS_IBB )
+          {
+            InBandBytestream* ibb = new InBandBytestream( m_parent, m_parent->logInstance(),
+                                                          m_parent->jid(), from, sid );
+            m_handler->handleFTBytestream( ibb );
+          }
+          else if( dff->value() == XMLNS_IQ_OOB )
+          {
+            const std::string& url = m_handler->handleOOBRequestResult( from, sid );
+            if( !url.empty() )
+            {
+              const std::string& id = m_parent->getID();
+              IQ* iq = new IQ( IQ::Set, from, id, XMLNS_IQ_OOB );
+              new Tag( iq->query(), "url", url );
+              m_parent->trackID( this, id, OOBSent );
+              m_parent->send( iq );
+            }
+          }
         }
       }
     }

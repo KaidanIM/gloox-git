@@ -138,8 +138,8 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
-  class GLOOX_API SIProfileFT : public SIProfileHandler, public SIHandler, public BytestreamHandler,
-                                public IqHandler
+  class GLOOX_API SIProfileFT : public SIProfileHandler, public SIHandler,
+                                public BytestreamHandler, public IqHandler
   {
     public:
       /**
@@ -230,8 +230,8 @@ namespace gloox
       void dispose( Bytestream* bs );
 
       /**
-       * Registers a handler that will be informed about incoming file transfer requests,
-       * i.e. when a remote entity wishes to send a file.
+       * Registers a handler that will be informed about incoming file transfer
+       * requests, i.e. when a remote entity wishes to send a file.
        * @param sipfth A SIProfileFTHandler to register. Only one handler can be registered
        * at any one time.
        */
@@ -272,12 +272,14 @@ namespace gloox
         { if( m_socks5Manager ) m_socks5Manager->removeSOCKS5BytestreamServer(); }
 
       // re-implemented from SIProfileHandler
-      virtual void handleSIRequest( const JID& from, const std::string& id, const std::string& profile,
-                                    Tag* si, Tag* ptag, Tag* fneg );
+      virtual void handleSIRequest( const JID& from, const std::string& id,
+                                    const std::string& profile,
+                                    const Tag* si, const Tag* ptag, const Tag* fneg );
 
       // re-implemented from SIHandler
       virtual void handleSIRequestResult( const JID& from, const std::string& sid,
-                                          Tag* si, Tag* ptag, Tag* fneg );
+                                          const Tag* si, const Tag* ptag,
+                                          const Tag* fneg );
 
       // re-implemented from SIHandler
       virtual void handleSIRequestError( IQ* iq );
