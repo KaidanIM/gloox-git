@@ -54,7 +54,7 @@ namespace gloox
        * @param fneg The &lt;feature/&gt; child of the SI request. May be 0 (but should not be).
        */
       virtual void handleSIRequestResult( const JID& from, const std::string& sid,
-                                          Tag* si, Tag* ptag, Tag* fneg ) = 0;
+                                          const Tag* si, const Tag* ptag, const Tag* fneg ) = 0;
 
       /**
        * This function is called to handle a request error or decline.

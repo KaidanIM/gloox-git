@@ -45,10 +45,10 @@ namespace gloox
       void registerIqHandler( IqHandler *ih, const std::string& xmlns );
       void removeIqHandler( IqHandler* ih, const std::string& xmlns );
       virtual void handleSIRequestResult( const JID& from, const std::string& sid,
-                                          Tag* si, Tag* ptag, Tag* fneg );
+                                          const Tag* si, const Tag* ptag, const Tag* fneg );
       virtual void handleSIRequestError( IQ* iq );
       virtual void handleSIRequest( const JID& from, const std::string& id, const std::string& profile,
-                                    Tag* si, Tag* ptag, Tag* fneg );
+                                    const Tag* si, const Tag* ptag, const Tag* fneg );
       void setTest( int test );
       bool ok();
     private:
@@ -80,11 +80,11 @@ namespace gloox
   void ClientBase::registerIqHandler( IqHandler* /*ih*/, const std::string& /*xmlns*/ ) {}
   void ClientBase::removeIqHandler( IqHandler* /*ih*/, const std::string& /*xmlns*/ ) {}
   void ClientBase::handleSIRequestResult( const JID& /*from*/, const std::string& /*sid*/,
-                                          Tag* /*si*/, Tag* /*ptag*/, Tag* /*fneg*/ ) {}
+                                          const Tag* /*si*/, const Tag* /*ptag*/, const Tag* /*fneg*/ ) {}
   void ClientBase::handleSIRequestError( IQ* /*iq*/ ) {}
   void ClientBase::handleSIRequest( const JID& /*from*/, const std::string& /*id*/,
                                     const std::string& /*profile*/,
-                                    Tag* /*si*/, Tag* /*ptag*/, Tag* /*fneg*/ ) {}
+                                    const Tag* /*si*/, const Tag* /*ptag*/, const Tag* /*fneg*/ ) {}
   void ClientBase::setTest( int test ) { m_test = test; }
   bool ClientBase::ok() { bool t = m_ok; m_ok = false; return t; }
 }

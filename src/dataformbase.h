@@ -62,7 +62,7 @@ namespace gloox
        * @param field The name of the field (the content of the 'var' attribute).
        * @return A copy of the field with the given name if it exists, 0 otherwise.
        */
-      DataFormField* field( const std::string& field );
+      DataFormField* field( const std::string& field ) const;
 
       /**
        * Use this function to retrieve the list of fields of a form.
