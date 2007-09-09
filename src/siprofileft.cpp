@@ -79,7 +79,8 @@ namespace gloox
       new Tag( file, "range" );
 
     Tag* feature = new Tag( "feature", XMLNS, XMLNS_FEATURE_NEG );
-    DataFormField* dff = new DataFormField( "stream-method", "", "", DataFormField::FieldTypeListSingle );
+    DataForm df( DataForm::FormTypeForm );
+    DataFormField* dff = df.addField( DataFOrmField::FieldTypeListSingle, "stream-method" );
     StringMap sm;
     if( streamTypes & FTTypeS5B )
       sm["s5b"] = XMLNS_BYTESTREAMS;
@@ -88,8 +89,6 @@ namespace gloox
     if( streamTypes & FTTypeOOB )
       sm["oob"] = XMLNS_IQ_OOB;
     dff->setOptions( sm );
-    DataForm df( DataForm::FormTypeForm );
-    df.addField( dff );
     feature->addChild( df.tag() );
 
     return m_manager->requestSI( this, to, XMLNS_SI_FT, file, feature, mimetype );
