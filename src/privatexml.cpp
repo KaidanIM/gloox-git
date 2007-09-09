@@ -37,8 +37,7 @@ namespace gloox
     const std::string& id = m_parent->getID();
 
     IQ* iq = new IQ( IQ::Get, JID(), id, XMLNS_PRIVATE_XML );
-    Tag* x = new Tag( iq->query(), tag );
-    x->addAttribute( XMLNS, xmlns );
+    new Tag( iq->query(), tag, XMLNS, xmlns );
 
     m_track[id] = pxh;
     m_parent->trackID( this, id, RequestXml );
