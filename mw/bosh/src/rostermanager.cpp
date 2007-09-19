@@ -178,7 +178,7 @@ namespace gloox
   void RosterManager::subscribe( const JID& jid, const std::string& name,
                                  const StringList& groups, const std::string& msg )
   {
-    if( jid.empty() )
+    if( !jid )
       return;
 
     add( jid, name, groups );
@@ -196,7 +196,7 @@ namespace gloox
 
   void RosterManager::add( const JID& jid, const std::string& name, const StringList& groups )
   {
-    if( jid.empty() )
+    if( !jid )
       return;
 
     const std::string& id = m_parent->getID();

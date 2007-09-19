@@ -127,7 +127,7 @@ namespace gloox
        * @note If you change the server part of the JID, the server of the connection is not synced.
        * You have to do that manually using @ref setServer().
        */
-      const JID& jid() { return m_authzid.empty() ? m_jid : m_authzid; }
+      const JID& jid() { return m_authzid ? m_authzid : m_jid; }
 
       /**
        * Switches usage of SASL on/off. Default: on. SASL should only be disabled if there are

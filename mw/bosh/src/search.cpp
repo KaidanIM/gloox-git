@@ -31,7 +31,7 @@ namespace gloox
 
   void Search::fetchSearchFields( const JID& directory, SearchHandler *sh )
   {
-    if( !m_parent || directory.empty() || !sh )
+    if( !m_parent || !directory || !sh )
       return;
 
     const std::string& id = m_parent->getID();
@@ -50,7 +50,7 @@ namespace gloox
 
   void Search::search( const JID& directory, const DataForm& form, SearchHandler *sh )
   {
-    if( !m_parent || directory.empty() || !sh )
+    if( !m_parent || !directory || !sh )
       return;
 
     const std::string& id = m_parent->getID();
@@ -70,7 +70,7 @@ namespace gloox
 
   void Search::search( const JID& directory, int fields, const SearchFieldStruct& values, SearchHandler *sh )
   {
-    if( !m_parent || directory.empty() || !sh )
+    if( !m_parent || !directory || !sh )
       return;
 
     const std::string& id = m_parent->getID();

@@ -1,4 +1,25 @@
-v0.9.4 -- xx yyy 2007
+v0.9.5 -- xx yyy 2007
+---------------------
+
+general changes and addtions:
+- JID: added operator bool()
+- Tag: added operator bool()
+- DelayedDelivery: added setReason()
+
+deprecated functions:
+- JID::fullJID(), use ctor
+- JID::empty(), use operator bool()
+- Tag::empty(), use operator bool()
+- XDelayedDelivery::XDelayedDelivery( JID, string, string ), the spec is deprecated, use DelayedDelivery
+- DelayedDelivery::setBody(), typo, use setReason()
+
+
+v0.9.4.1 -- 15 Aug 2007
+-----------------------
+- ClientBase: fix TLS wrapper instantiation
+
+
+v0.9.4 -- 14 Aug 2007
 ---------------------
 - ChatStateHandler: make sure to never send the same chat state twice in a row
 - Tag: make ctors explicit
@@ -9,6 +30,18 @@ v0.9.4 -- xx yyy 2007
 - ConnectionTCPBase: reset byte counters on disconnect
 - DataFormBase: added addField( DataFormFieldType, ... )
 - DataFormField: added addOption( string, string )
+- MUCRoom: fix potential crash in dtor
+- SHA: fix potential crash in hex()
+- MUCRoom: fix detection of nick changes
+- UniqueMUCRoom: fix creation of unique room names
+- XPath: support expressions like /abc[@foo='bar']/def[@bar='foo']
+- MessageFilter: enabled writing of custom MessageFilters
+- ChatStateFilter: made members protected
+- MessageSession: added resetResource()
+- Search: made members protected
+- DNS: re-use server port if setsockopt() is available
+- XPath: accept any characters in string literals
+- Tag: deprecated relax() and escape()
 
 
 v0.9.3 -- 18 Jul 2007

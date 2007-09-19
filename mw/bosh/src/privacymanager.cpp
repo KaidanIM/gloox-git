@@ -150,8 +150,12 @@ namespace gloox
     return id;
   }
 
-  std::string PrivacyManager::store( const std::string& name, PrivacyListHandler::PrivacyList& list )
+  std::string PrivacyManager::store( const std::string& name,
+                                     const PrivacyListHandler::PrivacyList& list )
   {
+    if( list.empty() )
+      return std::string();
+
     const std::string& id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
@@ -163,7 +167,7 @@ namespace gloox
     l->addAttribute( "name", name );
 
     int count = 0;
-    PrivacyListHandler::PrivacyList::iterator it = list.begin();
+    PrivacyListHandler::PrivacyList::const_iterator it = list.begin();
     for( ; it != list.end(); ++it )
     {
       Tag *i = new Tag( l, "item" );
@@ -238,7 +242,7 @@ namespace gloox
 
   bool PrivacyManager::handleIqID( Stanza *stanza, int context )
   {
-    if( stanza->subtype() != StanzaIqResult || !m_privacyListHandler )
+    if( !m_privacyListHandler )
       return false;
 
     switch( stanza->subtype() )
@@ -268,15 +272,13 @@ namespace gloox
             Tag::TagList::const_iterator it = l.begin();
             for( ; it != l.end(); ++it )
             {
+              const std::string& name = (*it)->findAttribute( "name" );
               if( (*it)->name() == "default" )
-                def = (*it)->findAttribute( "name" );
-              if( (*it)->name() == "active" )
-                def = (*it)->findAttribute( "name" );
-              if( (*it)->name() == "list" )
-              {
-                const std::string& name = (*it)->findAttribute( "name" );
+                def = name;
+              else if( (*it)->name() == "active" )
+                active = name;
+              else if( (*it)->name() == "list" )
                 lists.push_back( name );
-              }
             }
 
             m_privacyListHandler->handlePrivacyListNames( def, active, lists );

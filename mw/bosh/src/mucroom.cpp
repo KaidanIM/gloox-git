@@ -30,10 +30,6 @@ namespace gloox
       m_creationInProgress( false ), m_configChanged( false ),
       m_publishNick( false ), m_publish( false ), m_unique( false )
   {
-    if( m_parent )
-    {
-      m_parent->registerPresenceHandler( m_nick.bareJID(), this );
-    }
   }
 
   MUCRoom::~MUCRoom()
@@ -41,17 +37,16 @@ namespace gloox
     if( m_joined )
       leave();
 
-    if( m_parent )
-    {
-      m_parent->removePresenceHandler( m_nick.bareJID(), this );
+    if( m_parent && m_publish )
       m_parent->disco()->removeNodeHandler( this, XMLNS_MUC_ROOMS );
-    }
   }
 
   void MUCRoom::join()
   {
-    if( m_joined )
+    if( m_joined || !m_parent )
       return;
+
+    m_parent->registerPresenceHandler( m_nick.bareJID(), this );
 
     m_session = new MUCMessageSession( m_parent, m_nick.bareJID() );
     m_session->registerMessageHandler( this );
@@ -112,7 +107,8 @@ namespace gloox
     if( m_parent )
       m_parent->send( s );
 
-    delete m_session;
+    m_parent->removePresenceHandler( m_nick.bareJID(), this );
+    m_parent->disposeMessageSession( m_session );
     m_session = 0;
 
     m_joined = false;
@@ -572,6 +568,7 @@ namespace gloox
             {
               party.reason = (*it)->findChild( "reason" )->cdata();
             }
+            party.newNick = (*it)->findAttribute( "nick" );
           }
           else if( (*it)->name() == "status" )
           {
@@ -599,23 +596,7 @@ namespace gloox
             else if( code == "301" )
               party.flags |= UserBanned;
             else if( code == "303" )
-            {
               party.flags |= UserNickChanged;
-
-              std::string newNick;
-              Tag *i = 0;
-              if( i && i->hasAttribute( "nick" ) )
-              {
-                newNick = i->findAttribute( "nick" );
-                party.newNick = newNick;
-              }
-
-              if( stanza->from().resource() == m_nick.resource()
-                  && !m_newNick.empty() && newNick == m_newNick )
-              {
-                party.flags |= UserSelf;
-              }
-            }
             else if( code == "307" )
               party.flags |= UserKicked;
             else if( code == "321" )
@@ -632,6 +613,14 @@ namespace gloox
             party.flags |= UserRoomDestroyed;
           }
         }
+
+        if( party.flags & UserNickChanged && !party.newNick.empty()
+            && m_nick.resource() == stanza->from().resource()
+            && party.newNick == m_newNick )
+          party.flags |= UserSelf;
+
+        if( party.flags & UserNickChanged && party.flags & UserSelf && !party.newNick.empty() )
+          m_nick.setResource( party.newNick );
 
         party.status = stanza->status();
 

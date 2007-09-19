@@ -21,17 +21,6 @@ int main( int /*argc*/, char** /*argv*/ )
   Tag *d = 0;
 
   // -------
-  name = "undefined tag";
-  c = new Tag();
-  if( c->type() != StanzaUndefined || c->name() != "" )
-  {
-    ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
-  }
-  delete c;
-  c = 0;
-
-  // -------
   name = "simple ctor";
   if( t->name() != "toe" )
   {
@@ -74,7 +63,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   //-------
   name = "operator== test 1";
-  c = new Tag();
+  c = new Tag( "name" );
   if( *t == *c )
   {
     ++fail;

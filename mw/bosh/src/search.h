@@ -92,7 +92,7 @@ namespace gloox
       // reimplemented from IqHandler
       virtual bool handleIqID( Stanza *stanza, int context );
 
-    private:
+    protected:
       enum IdType
       {
         FetchSearchFields,

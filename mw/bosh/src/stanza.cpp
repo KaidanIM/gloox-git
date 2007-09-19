@@ -365,7 +365,7 @@ namespace gloox
         break;
     }
 
-    if( !to.empty() )
+    if( to )
       s->addAttribute( "to", to.full() );
 
     if( !msg.empty() )

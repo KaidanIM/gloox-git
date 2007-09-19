@@ -53,7 +53,7 @@ namespace gloox
     const std::string& id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
-    if( !m_to.empty() )
+    if( m_to )
       iq->addAttribute( "to", m_to.full() );
     iq->addAttribute( "type", "get" );
     iq->addAttribute( "id", id );
@@ -72,7 +72,7 @@ namespace gloox
     const std::string& id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
-    if( !m_to.empty() )
+    if( m_to )
       iq->addAttribute( "to", m_to.full() );
     iq->addAttribute( "id", id );
     iq->addAttribute( "type", "set" );
@@ -124,7 +124,7 @@ namespace gloox
     const std::string& id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
-    if( !m_to.empty() )
+    if( m_to )
       iq->addAttribute( "to", m_to.full() );
     iq->addAttribute( "id", id );
     iq->addAttribute( "type", "set" );
@@ -144,7 +144,7 @@ namespace gloox
     const std::string& id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
-    if( !m_to.empty() )
+    if( m_to )
       iq->addAttribute( "to", m_to.full() );
     iq->addAttribute( "type", "set" );
     iq->addAttribute( "id", id );
@@ -165,7 +165,7 @@ namespace gloox
     const std::string& id = m_parent->getID();
 
     Tag *iq = new Tag( "iq" );
-    if( !m_to.empty() )
+    if( m_to )
       iq->addAttribute( "to", m_to.full() );
     iq->addAttribute( "type", "set" );
     iq->addAttribute( "id", id );

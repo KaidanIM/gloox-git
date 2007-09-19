@@ -326,7 +326,7 @@ class ParserTest : private TagHandler
       name = "> inside cdata";
       data = "<tag1 name='foobar'>cda>ta3</tag1>";
       p->feed( data );
-      if( m_tag != 0 )
+      if( !m_tag )
       {
         ++fail;
         printf( "test '%s: %s' failed\n", name.c_str(), data.c_str() );
@@ -338,11 +338,43 @@ class ParserTest : private TagHandler
       name = "quote inside cdata";
       data = "<tag1 name='foobar'>cda\"ta3</tag1>";
       p->feed( data );
-      if( m_tag != 0 )
+      if( !m_tag )
       {
         ++fail;
         printf( "test '%s: %s' failed\n", name.c_str(), data.c_str() );
       }
+
+      // -------
+      name = "apos inside cdata";
+      data = "<tag1 name='foobar'>cda'ta3</tag1>";
+      p->feed( data );
+      if( !m_tag )
+      {
+        ++fail;
+        printf( "test '%s: %s' failed\n", name.c_str(), data.c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+      //-------
+      name = "invalid name 1";
+      data = "<tag1><!></tag1>";
+      if( p->feed( data ) )
+      {
+        ++fail;
+        printf( "test '%s' failed: %s\n", name.c_str(), data.c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+
+
+
+
+
+
+
+
 
 
       delete p;

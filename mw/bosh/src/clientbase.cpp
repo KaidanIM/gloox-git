@@ -421,18 +421,18 @@ namespace gloox
         a->addAttribute( "mechanism", "PLAIN" );
 
         size_t len = 0;
-        if( m_authzid.empty() )
-          len = m_jid.username().length() + m_password.length() + 2;
-        else
+        if( m_authzid )
           len = m_authzid.bare().length() + m_jid.username().length() + m_password.length() + 2;
+        else
+          len = m_jid.username().length() + m_password.length() + 2;
 
         char *tmp = (char*)malloc( len + 80 );
 
-        if( m_authzid.empty() )
-          sprintf( tmp, "%c%s%c%s", 0, m_jid.username().c_str(), 0, m_password.c_str() );
-        else
+        if( m_authzid )
           sprintf( tmp, "%s%c%s%c%s", m_authzid.bare().c_str(), 0, m_jid.username().c_str(), 0,
                    m_password.c_str() );
+        else
+          sprintf( tmp, "%c%s%c%s", 0, m_jid.username().c_str(), 0, m_password.c_str() );
 
         std::string dec( tmp, len );
         a->setCData( Base64::encode64( dec ) );
@@ -445,10 +445,10 @@ namespace gloox
         break;
       case SaslMechExternal:
         a->addAttribute( "mechanism", "EXTERNAL" );
-        if( m_authzid.empty() )
-          a->setCData( Base64::encode64( m_jid.bare() ) );
-        else
+        if( m_authzid )
           a->setCData( Base64::encode64( m_authzid.bare() ) );
+        else
+          a->setCData( Base64::encode64( m_jid.bare() ) );
         break;
       case SaslMechGssapi:
       {
@@ -565,7 +565,7 @@ namespace gloox
         response += response_value;
         response += ",charset=utf-8";
 
-        if( !m_authzid.empty() )
+        if( m_authzid )
           response += ",authzid=" + m_authzid.bare();
 
         t->setCData( Base64::encode64( response ) );
@@ -861,7 +861,7 @@ namespace gloox
 
   void ClientBase::registerPresenceHandler( const JID& jid, PresenceHandler *ph )
   {
-    if( ph && !jid.empty() )
+    if( ph && jid )
     {
       JidPresHandlerStruct jph;
       jph.jid = new JID( jid.bare() );
@@ -1256,7 +1256,7 @@ namespace gloox
 
   TLSBase* ClientBase::getDefaultEncryption()
   {
-    if( !m_tls == TLSDisabled || !hasTls() )
+    if( m_tls == TLSDisabled || !hasTls() )
       return 0;
 
     return new TLSDefault( this, m_server );

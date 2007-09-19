@@ -26,41 +26,45 @@
 namespace gloox
 {
   Tag::Tag()
-    : m_parent( 0 ), m_type( StanzaUndefined ), m_incoming( false )
+    : m_parent( 0 ), m_type( StanzaUndefined ), m_incoming( false ), m_valid( false )
   {
   }
 
   Tag::Tag( const std::string& name, const std::string& cdata, bool incoming )
     : m_name( incoming ? relax( name ) : name ),
       m_cdata( incoming ? relax( cdata ) : cdata ),
-      m_parent( 0 ), m_type( StanzaUndefined ), m_incoming( incoming )
+      m_parent( 0 ), m_type( StanzaUndefined ), m_incoming( incoming ), m_valid( true )
   {
+    m_valid = !m_name.empty();
   }
 
   Tag::Tag( Tag *parent, const std::string& name, const std::string& cdata, bool incoming )
     : m_name( incoming ? relax( name ) : name ),
       m_cdata( incoming ? relax( cdata ) : cdata ),
-      m_parent( parent ), m_type( StanzaUndefined ), m_incoming( incoming )
+      m_parent( parent ), m_type( StanzaUndefined ), m_incoming( incoming ), m_valid( true )
   {
     if( m_parent )
       m_parent->addChild( this );
+    m_valid = !m_name.empty();
   }
 
   Tag::Tag( const std::string& name, const std::string& attrib, const std::string& value, bool incoming )
     : m_name( incoming ? relax( name ) : name ),
-      m_parent( 0 ), m_type( StanzaUndefined ), m_incoming( incoming )
+      m_parent( 0 ), m_type( StanzaUndefined ), m_incoming( incoming ), m_valid( true )
   {
     addAttribute( attrib, value );
+    m_valid = !m_name.empty();
   }
 
   Tag::Tag( Tag *parent, const std::string& name, const std::string&  attrib, const std::string& value,
             bool incoming )
     : m_name( incoming ? relax( name ) : name ),
-      m_parent( parent ), m_type( StanzaUndefined ), m_incoming( incoming )
+      m_parent( parent ), m_type( StanzaUndefined ), m_incoming( incoming ), m_valid( true )
   {
     if( m_parent )
       m_parent->addChild( this );
     addAttribute( attrib, value );
+    m_valid = !m_name.empty();
   }
 
   Tag::~Tag()
@@ -712,7 +716,14 @@ namespace gloox
     char c;
     for( ; len < expression.length(); ++len )
     {
-      switch( c = expression[len] )
+      c = expression[len];
+      if( type == XTLiteralInside && c != '\'' )
+      {
+        token += c;
+        continue;
+      }
+
+      switch( c )
       {
         case '/':
           closePreviousToken( &root, &current, type, token );
@@ -763,15 +774,16 @@ namespace gloox
           ++len;
           return root;
         case '\'':
-          type = XTLiteral;
-          if( expression[len-1] == '\\' )
-            token += c;
+          if( type == XTLiteralInside )
+            if( expression[len - 2] == '\\' )
+              token[token.length() - 2] = c;
+            else
+              type = XTLiteral;
+          else
+            type = XTLiteralInside;
           break;
         case '@':
-          if( type == XTLiteral )
-            token += c;
-          else
-            type = XTAttribute;
+          type = XTAttribute;
           break;
         case '.':
           token += c;
@@ -812,6 +824,8 @@ namespace gloox
             return root;
           Tag *t = parse( expression, ++len, ttype );
           addOperator( &root, &current, t, ttype, s );
+          if( border == XTRightBracket )
+            return root;
           break;
         }
         default:

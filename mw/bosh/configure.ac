@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.50)
-AC_INIT([gloox], [0.9.4], [js@camaya.net])
+AC_INIT([gloox], [0.9.5], [js@camaya.net])
 AC_CONFIG_SRCDIR([configure.ac])
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 
@@ -262,6 +262,7 @@ dnl Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS(unistd.h strings.h errno.h arpa/nameser.h)
 AC_CHECK_FUNCS(ns_get16 __ns_get16)
+AC_CHECK_FUNCS(setsockopt,,[AC_CHECK_LIB(socket,setsockopt)])
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST

@@ -89,33 +89,6 @@ int main( int /*argc*/, char** /*argv*/ )
   f = 0;
 
   // -------
-  name = "parse empty Tag (ctor)";
-  Tag *t = new Tag();
-  f = new DataForm( t );
-  delete t;
-  if( f->type() != DataForm::FormTypeInvalid )
-  {
-    ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
-  }
-  delete f;
-  f = 0;
-
-  // -------
-  name = "parse() empty Tag";
-  f = new DataForm();
-  t = new Tag();
-  f->parse( t );
-  delete t;
-  if( f->type() != DataForm::FormTypeInvalid )
-  {
-    ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
-  }
-  delete f;
-  f = 0;
-
-  // -------
   name = "parse 0";
   f = new DataForm();
   f->parse( 0 );

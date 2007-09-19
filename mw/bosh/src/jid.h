@@ -76,8 +76,9 @@ namespace gloox
        * Creates and returns a JID from this JID's node, server and resource parts.
        * @return The full JID.
        * @since 0.9
+       * @deprecated
        */
-      JID fullJID() const { return JID( full() ); }
+      GLOOX_DEPRECATED JID fullJID() const { return JID( full() ); }
 
       /**
        * Sets the username.
@@ -124,8 +125,9 @@ namespace gloox
       /**
        * A JID is empty as long as no server is set.
        * @return @b True if the JID is empty, @b false otherwise.
+       * @deprecated Use operator bool() instead
        */
-      bool empty() const { return m_server.empty(); }
+      GLOOX_DEPRECATED bool empty() const { return m_server.empty(); }
 
       /**
        * Compares two JIDs.
@@ -138,6 +140,11 @@ namespace gloox
        * @param right The second JID.
        */
       bool operator!=( const JID& right ) const { return full() != right.full(); }
+
+      /**
+       * Returns @b true if the Tag is valid, @b false otherwise.
+       */
+      operator bool() const { return !m_server.empty(); }
 
     private:
       std::string m_resource;

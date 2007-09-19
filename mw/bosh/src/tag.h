@@ -49,8 +49,9 @@ namespace gloox
 
       /**
        * Creates an empty tag.
+       * @deprecated Will be removed in 1.0
        */
-      Tag();
+      GLOOX_DEPRECATED_CTOR Tag();
 
       /**
        * Creates a new tag with a given name (and XML character data, if given).
@@ -289,8 +290,9 @@ namespace gloox
       /**
        * Returns whether the Tag is considered empty, i.e. invalid.
        * @return @b True if the Tag is valid, @b false if not.
+       * @deprecated Use operator bool() instead.
        */
-      virtual bool empty() const { return m_name.empty(); }
+      GLOOX_DEPRECATED virtual bool empty() const { return m_name.empty(); }
 
       /**
        * This function checks whether a child element with given name exists and has
@@ -358,14 +360,21 @@ namespace gloox
       bool operator!=( const Tag &right ) const { return !( *this == right ); }
 
       /**
+       * Returns @b true if the Tag is valid, @b false otherwise.
+       */
+      operator bool() const { return m_valid; }
+
+      /**
        * Does some fancy escaping. (& --> &amp;, etc).
        * @param what A string to escape.
+       * @deprecated Will be removed in 1.0.
        */
       static const std::string escape( std::string what );
 
       /**
        * Reverses operation of escape(). (&amp; --> &).
        * @param what A string to de-escape.
+       * @deprecated Will be removed in 1.0.
        */
       static const std::string relax( std::string what );
 
@@ -402,6 +411,7 @@ namespace gloox
         XTFunction,
         XTAsterisk,
         XTAttribute,
+        XTLiteralInside,
         XTLiteral,
         XTDot,
         XTDoubleDot,
@@ -448,6 +458,7 @@ namespace gloox
 
       static void add( Tag::TagList& one, const Tag::TagList& two );
 
+      bool m_valid;
   };
 
 }

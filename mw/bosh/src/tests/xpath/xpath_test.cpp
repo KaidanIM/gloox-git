@@ -9,14 +9,14 @@ int fail = 0;
 
 void printResult( const std::string& name, Tag::TagList& result )
 {
-  printf( ">-- %s -------------------------------------------\n", name.c_str() );
+  printf( ">-- %s --------------------------------------\n", name.c_str() );
   int i = 0;
   Tag::TagList::const_iterator it = result.begin();
   for( ; it != result.end(); ++it, ++i )
   {
     printf( "tag #%d: %s\n", i, (*it)->xml().c_str() );
   }
-  printf( "<-- %s -------------------------------------------\n", name.c_str() );
+  printf( "<-- %s --------------------------------------\n", name.c_str() );
 }
 
 // void testLexer( const std::string& name )
@@ -43,7 +43,7 @@ int main( int /*argc*/, char** /*argv*/ )
   Tag *eee = new Tag( ccc, "eee" );
   Tag *fff = new Tag( aaa, "fff" );
   Tag *ggg = new Tag( fff, "ggg" );
-  Tag *hhh = new Tag( bbb, "hhh" );
+  Tag *hhh = new Tag( bbb, "hhh" ); hhh->addAttribute( "name", "h1" );
   Tag *iii = new Tag( bbb, "bbb" ); iii->addAttribute( "name", "b2" );
   Tag *jjj = new Tag( hhh, "bbb" ); jjj->addAttribute( "name", "b3" );
   Tag::TagList result;
@@ -748,6 +748,64 @@ int main( int /*argc*/, char** /*argv*/ )
   result = aaa->findTagList( "//bbb[@blah='test@test2']" );
   it = result.begin();
   if( result.size() != 1 || (*it) != bbb )
+  {
+    ++fail;
+    printResult( name, result );
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+//   printf( "--------------------------------------------------------------\n" );
+
+  name = "deepsearch + predicate + literal + child: //bbb[@name='b1']/hhh";
+  bbb->addAttribute( "blah", "test@test2" );
+  result = aaa->findTagList( "//bbb[@blah='test@test2']/hhh" );
+  it = result.begin();
+  if( result.size() != 1 || (*it) != hhh )
+  {
+    ++fail;
+    printResult( name, result );
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+//   printf( "--------------------------------------------------------------\n" );
+
+  name = "deepsearch + predicate + literal + child + predicate 1: //bbb[@name='b1']/hhh[@name]";
+  bbb->addAttribute( "blah", "test@test2" );
+  result = aaa->findTagList( "//bbb[@blah='test@test2']/hhh[@name]" );
+  it = result.begin();
+  if( result.size() != 1 || (*it) != hhh )
+  {
+    ++fail;
+    printResult( name, result );
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+//   printf( "--------------------------------------------------------------\n" );
+
+  name = "deepsearch + predicate + literal + child + predicate 2: //bbb[@name='b1']/hhh[@name1]";
+  bbb->addAttribute( "blah", "test@test2" );
+  result = aaa->findTagList( "//bbb[@blah='test@test2']/hhh[@name1]" );
+  if( result.size() != 0 )
+  {
+    ++fail;
+    printResult( name, result );
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+//   printf( "--------------------------------------------------------------\n" );
+
+  name = "deepsearch + predicate + literal + child + predicate + literal: //bbb[@name='b1']/hhh[@name='h1']";
+  bbb->addAttribute( "blah", "test@test2" );
+  result = aaa->findTagList( "//bbb[@blah='test@test2']/hhh[@name='h1']" );
+  it = result.begin();
+  if( result.size() != 1 || (*it) != hhh )
+  {
+    ++fail;
+    printResult( name, result );
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+//   printf( "--------------------------------------------------------------\n" );
+
+  name = "deepsearch + predicate + literal + child + predicate + literal: //bbb[@name='b1']/hhh[@name='h2']";
+  bbb->addAttribute( "blah", "test@test2" );
+  result = aaa->findTagList( "//bbb[@blah='test@test2']/hhh[@name='h2']" );
+  if( result.size() != 0 )
   {
     ++fail;
     printResult( name, result );

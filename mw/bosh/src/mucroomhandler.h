@@ -35,7 +35,7 @@ namespace gloox
                                      * in the form @c room\@service/nick. <br>
                                      * @note The MUC server @b may change the chosen nickname.
                                      * If the @b self member of this struct is true, one should
-                                     * check the resource of of this member if the actual nickname
+                                     * check the resource of this member if the actual nickname
                                      * is important. */
     MUCRoomAffiliation affiliation; /**< The participant's affiliation with the room. */
     MUCRoomRole role;               /**< The participant's role with the room. */

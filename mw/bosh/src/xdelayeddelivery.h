@@ -41,7 +41,8 @@ namespace gloox
        * @param stamp The datetime stamp of the original send.
        * @param reason A natural language reason for the delay.
        */
-      XDelayedDelivery( const JID& from, const std::string stamp, const std::string& reason );
+      GLOOX_DEPRECATED_CTOR XDelayedDelivery( const JID& from, const std::string stamp,
+                                              const std::string& reason );
 
       /**
        * Constructs a new object from the given Tag.

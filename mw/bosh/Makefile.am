@@ -23,3 +23,6 @@ leakcheck: leaktest
 
 leaktest:
 	make -C src leaktest
+
+examples:
+	make -C src examples

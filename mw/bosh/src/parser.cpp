@@ -71,6 +71,7 @@ namespace gloox
           {
             case '<':
             case '>':
+            case '!':
               cleanup();
               return false;
               break;
@@ -98,6 +99,7 @@ namespace gloox
           {
             case '<':
             case '?':
+            case '!':
               cleanup();
               return false;
               break;
@@ -121,12 +123,6 @@ namespace gloox
               addCData();
               m_state = TagOpening;
               break;
-            case '"':
-            case '\'':
-            case '>':
-//               cleanup();
-//               return false;
-//               break;
             default:
               m_cdata += c;
               break;
