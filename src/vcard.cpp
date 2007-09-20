@@ -18,6 +18,28 @@
 namespace gloox
 {
 
+  void insertField( Tag* vcard, const char* field, const std::string& var )
+  {
+    if( field && !var.empty() )
+      new Tag( vcard, field, var );
+  }
+
+  void insertField( Tag* vcard, const char* field, bool var )
+  {
+    if( field && var )
+      new Tag( vcard, field );
+  }
+
+  void checkField( Tag* vcard, const char* field, std::string& var )
+  {
+    if( field )
+    {
+      Tag* child = vcard->findChild( field );
+      if( child )
+        var = child->cdata();
+    }
+  }
+
   VCard::VCard()
     : m_class( ClassNone ), m_prodid( "gloox" + GLOOX_VERSION ),
       m_N( false ), m_PHOTO( false ), m_LOGO( false )
@@ -185,13 +207,6 @@ namespace gloox
 
     }
 
-  }
-
-  void VCard::checkField( Tag* vcard, const std::string& field, std::string& var )
-  {
-    Tag* child = vcard->findChild( field );
-    if( child )
-      var = child->cdata();
   }
 
   void VCard::setName( const std::string& family, const std::string& given, const std::string& middle,
@@ -497,17 +512,4 @@ namespace gloox
 
     return v;
   }
-
-  void VCard::insertField( Tag* vcard, const std::string& field, const std::string& var ) const
-  {
-    if( !var.empty() )
-      new Tag( vcard, field, var );
-  }
-
-  void VCard::insertField( Tag* vcard, const std::string& field, bool var ) const
-  {
-    if( var )
-      new Tag( vcard, field );
-  }
-
 }
