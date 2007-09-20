@@ -28,12 +28,7 @@ namespace gloox
 
   ConnectionTLS::~ConnectionTLS()
   {
-
-    if( m_connection )
-    {
-      delete m_connection;
-      m_connection = NULL;
-    }
+    delete m_connection;
   }
 
 /**************** ConnectionBase methods ****************/
@@ -95,11 +90,8 @@ namespace gloox
   {
     m_connection->disconnect();
     m_handshaked = false;
-    if( m_tls )
-    {
-      delete m_tls;
-      m_tls = NULL;
-    }
+    delete m_tls;
+    m_tls = 0;
     m_state = StateDisconnected;
   }
 

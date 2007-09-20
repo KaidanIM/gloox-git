@@ -34,7 +34,7 @@ namespace gloox
                                   int xmppPort )
     : ConnectionBase( 0 ),
       m_logInstance( logInstance ), m_parser( this ), m_boshHost( boshHost ), m_path( "/http-bind/" ),
-      m_handler( NULL ), m_initialStreamSent( false ), m_openRequests( 0 ), m_maxOpenRequests( 2 ),
+      m_handler( 0 ), m_initialStreamSent( false ), m_openRequests( 0 ), m_maxOpenRequests( 2 ),
       m_wait( 30 ), m_hold( 2 ), m_streamRestart( false ), m_lastRequestTime( 0 ),
       m_minTimePerRequest( 0 ), m_sendBuffer( "" ), m_connMode( ModePipelining )
   {
@@ -99,7 +99,7 @@ namespace gloox
 
   ConnectionBase* ConnectionBOSH::newInstance() const
   {
-    ConnectionBase* pBaseConn = NULL;
+    ConnectionBase* pBaseConn = 0;
 
     if( !m_connectionPool.empty() )
     {
@@ -111,7 +111,7 @@ namespace gloox
     }
     else
     {
-      return NULL;
+      return 0;
     }
 
     ConnectionBOSH* pNewConnection = new ConnectionBOSH( m_handler, pBaseConn, m_logInstance, m_boshHost,
@@ -383,7 +383,7 @@ namespace gloox
       {
         printf( "Request sent on %p (%s)\n", m_activeConnections.back(), request.str().c_str() );
         m_openRequests++;
-        printf( "%d: Incrementing m_openRequests to %d (connections: %d)\n", (int)time( NULL ),
+        printf( "%d: Incrementing m_openRequests to %d (connections: %d)\n", (int)time( 0 ),
                m_openRequests, m_activeConnections.size() );
         return true;
       }
@@ -411,14 +411,14 @@ namespace gloox
 
     if( data.empty() )
     {
-      if( (time( NULL ) - m_lastRequestTime) < m_minTimePerRequest && m_openRequests > 0 )
+      if( (time( 0 ) - m_lastRequestTime) < m_minTimePerRequest && m_openRequests > 0 )
       {
         m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH,
              "too little time between requests, adding to send buffer" );
         return false;
       }
-      printf( "\n>>>>> %ld seconds since last empty request <<<<<\n", time( NULL ) - m_lastRequestTime );
-      m_lastRequestTime = time( NULL );
+      printf( "\n>>>>> %ld seconds since last empty request <<<<<\n", time( 0 ) - m_lastRequestTime );
+      m_lastRequestTime = time( 0 );
       m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "sending empty request" );
     }
 
