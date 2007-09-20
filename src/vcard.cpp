@@ -18,19 +18,19 @@
 namespace gloox
 {
 
-  void insertField( Tag* vcard, const char* field, const std::string& var )
+  void VCard::insertField( Tag* vcard, const char* field, const std::string& var )
   {
     if( field && !var.empty() )
       new Tag( vcard, field, var );
   }
 
-  void insertField( Tag* vcard, const char* field, bool var )
+  void VCard::insertField( Tag* vcard, const char* field, bool var )
   {
     if( field && var )
       new Tag( vcard, field );
   }
 
-  void checkField( Tag* vcard, const char* field, std::string& var )
+  void VCard::checkField( Tag* vcard, const char* field, std::string& var )
   {
     if( field )
     {
