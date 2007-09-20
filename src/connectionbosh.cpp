@@ -56,7 +56,8 @@ namespace gloox
   void ConnectionBOSH::initInstance( ConnectionBase* connection, const std::string& xmppServer,
                                      const int xmppPort )
   {
-    m_server = prep::idna( xmppServer );
+#warning FIXME: check return value
+    prep::idna( xmppServer, m_server );
     m_port = xmppPort;
     if( m_port != -1 )
     {
@@ -578,7 +579,8 @@ namespace gloox
       printf( "Decrementing m_openRequests to %d\n", m_openRequests );
       printf( "\n-----------FULL RESPONSE BUFFER---------------\n%s\n---------------END-------------\n",
              m_buffer.c_str() );
-      handleXMLData( connection, m_buffer.substr( 0, m_bufferContentLength ) );
+      std::string xml = m_buffer.substr( 0, m_bufferContentLength );
+      handleXMLData( connection, xml );
       m_buffer.erase( 0, m_bufferContentLength ); // Remove the handled response from the buffer,
                                                   // and reset variables for reuse
       m_bufferContentLength = -1;
@@ -622,7 +624,7 @@ namespace gloox
     }
   }
 
-  void ConnectionBOSH::handleXMLData( const ConnectionBase* connection, const std::string& data )
+  void ConnectionBOSH::handleXMLData( const ConnectionBase* connection, std::string& data )
   {
     printf( "On connection %p ", connection );
     m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh received XML:\n" + data + "\n" );
@@ -742,7 +744,7 @@ namespace gloox
           m_handler->handleConnect( this );
           m_handler->
           handleReceivedData( this, "<?xml version='1.0' ?>"
-                              "<stream:stream xmlns:stream='http://etherx.jabber.org/streams'
+                              "<stream:stream xmlns:stream='http://etherx.jabber.org/streams' "
                               "xmlns='" + XMLNS_CLIENT
                               + "' version='" + XMPP_STREAM_VERSION_MAJOR + "." + XMPP_STREAM_VERSION_MINOR
                               + "' from='" + m_server + "' id ='" + m_sid + "' xml:lang='en'>" );
@@ -761,8 +763,8 @@ namespace gloox
         }
       }
 
-      Tag::TagList stanzas = tag->children();
-      Tag::TagList::const_iterator i;
+      TagList stanzas = tag->children();
+      TagList::const_iterator i;
       for( i = stanzas.begin(); i != stanzas.end(); i++ )
       {
 

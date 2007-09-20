@@ -178,7 +178,7 @@ namespace gloox
     protected:
       ConnectionBOSH& operator=( const ConnectionBOSH& );
       void initInstance( ConnectionBase* connection, const std::string& xmppServer, const int xmppPort );
-      void handleXMLData( const ConnectionBase* connection, const std::string& data );
+      void handleXMLData( const ConnectionBase* connection, std::string& data );
       bool sendRequest( const std::string& xml, bool ignoreRequestLimit = false );
       bool sendXML( const std::string& data );
       std::string GetHTTPField( const std::string& field );
