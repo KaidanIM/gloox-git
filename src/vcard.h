@@ -567,10 +567,6 @@ namespace gloox
 
 
     private:
-      void checkField( Tag* vcard, const std::string& field, std::string& var );
-      void insertField( Tag* vcard, const std::string& field, const std::string& var ) const;
-      void insertField( Tag* vcard, const std::string& field, bool var ) const;
-
 
       EmailList m_emailList;
       TelephoneList m_telephoneList;
