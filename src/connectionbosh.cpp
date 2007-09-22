@@ -34,9 +34,10 @@ namespace gloox
                                   int xmppPort )
     : ConnectionBase( 0 ),
       m_logInstance( logInstance ), m_parser( this ), m_boshHost( boshHost ), m_path( "/http-bind/" ),
-      m_handler( 0 ), m_initialStreamSent( false ), m_openRequests( 0 ), m_maxOpenRequests( 2 ),
-      m_wait( 30 ), m_hold( 2 ), m_streamRestart( false ), m_lastRequestTime( 0 ),
-      m_minTimePerRequest( 0 ), m_sendBuffer( "" ), m_connMode( ModePipelining )
+      m_handler( 0 ), m_rid( 0 ), m_initialStreamSent( false ), m_openRequests( 0 ),
+      m_maxOpenRequests( 2 ), m_wait( 30 ), m_hold( 2 ), m_streamRestart( false ),
+      m_lastRequestTime( 0 ), m_minTimePerRequest( 0 ), m_bufferContentLength( -1 ),
+      m_connMode( ModePipelining )
   {
     initInstance( connection, xmppServer, xmppPort );
   }
@@ -46,9 +47,10 @@ namespace gloox
                                   const std::string& xmppServer, int xmppPort )
     : ConnectionBase( cdh ),
       m_logInstance( logInstance ), m_parser( this ), m_boshHost( boshHost ), m_path( "/http-bind/" ),
-      m_handler( cdh ),  m_initialStreamSent( false ), m_openRequests( 0 ), m_maxOpenRequests( 2 ),
-      m_wait( 30 ), m_hold( 2 ), m_streamRestart( false ), m_lastRequestTime( 0 ),
-      m_minTimePerRequest( 0 ), m_sendBuffer( "" ), m_connMode( ModePipelining )
+      m_handler( cdh ), m_rid( 0 ),  m_initialStreamSent( false ), m_openRequests( 0 ),
+      m_maxOpenRequests( 2 ), m_wait( 30 ), m_hold( 2 ), m_streamRestart( false ),
+      m_lastRequestTime( 0 ), m_minTimePerRequest( 0 ), m_bufferContentLength( -1 ),
+      m_connMode( ModePipelining )
   {
     initInstance( connection, xmppServer, xmppPort );
   }
@@ -631,7 +633,7 @@ namespace gloox
 
     if( m_state == StateConnecting )
     {
-      m_rid = (rand() % 100000 + 1728679472);
+      m_rid = rand() % 100000 + 1728679472;
 
       Tag requestBody( "body" );
 
