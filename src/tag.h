@@ -463,7 +463,7 @@ namespace gloox
        * Returns a list of child tags of the current tag with the given name.
        * @param name The name of the tags to look for.
        * @return A list of tags with the given name.
-       * @note The tags are still linked to the current Tag and should not be deleted from the TagList.
+       * @note The tags are still linked to the current Tag and should not be deleted.
        * @since 0.9
        */
       TagList findChildren( const std::string& name ) const;
@@ -650,7 +650,7 @@ namespace gloox
        * @since 1.0
        */
       void setXmlns( StringMap* xmlns )
-        { if( m_xmlnss ) delete m_xmlnss; m_xmlnss = xmlns; }
+        { delete m_xmlnss; m_xmlnss = xmlns; }
 
       Tag* parse( const std::string& expression, unsigned& len, TokenType border = XTNone );
 
