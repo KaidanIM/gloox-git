@@ -21,7 +21,8 @@ namespace gloox
 
   Parser::Parser( TagHandler* ph )
     : m_tagHandler( ph ), m_current( 0 ), m_root( 0 ), m_xmlnss( 0 ), m_state( Initial ),
-      m_preamble( 0 ), m_quote( false ), m_haveTagPrefix( false ), m_haveAttribPrefix( false )
+      m_preamble( 0 ), m_quote( false ), m_haveTagPrefix( false ), m_haveAttribPrefix( false ),
+      m_attribIsXmlns( false )
   {
   }
 
