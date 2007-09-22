@@ -1109,11 +1109,31 @@ class ParserTest : private TagHandler
       data = "<abc xmlns='def' xmlns:xx='xyz' xmlns:foo='ggg' foo:attr='val'>"
                "<xx:dff><foo:bar/></xx:dff>"
                "</abc>";
-      if( ( i = p->feed( data ) ) >= 0 || !m_tag /*|| m_tag->xmlns() != "def"
+      if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->xmlns() != "def"
             || m_tag->xmlns( "xx" ) != "xyz" || m_tag->xmlns( "foo" ) != "ggg"
             || m_tag->attributes().size() != 4
-            || m_tag->attributes().front()->xmlns() != "ggg"*/
+            || m_tag->attributes().front()->xmlns() != ""
             || m_tag->xml() != data )
+      {
+        ++fail;
+        printf( "test '%s' failed (%d): \n%s\n%s\n", name.c_str(), i, data.c_str(), m_tag->xml().c_str() );
+      }
+      delete m_tag;
+      m_tag = 0;
+
+
+      //-------
+      name = "nested namespaces";
+      data = "<foo:abc xmlns='def' xmlns:xx='xyz' xmlns:foo='ggg' foo:attr='val'>"
+          "<xx:dff><foo:bar/></xx:dff>"
+          "</foo:abc>";
+      if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->xmlns() != "ggg"
+            || m_tag->xmlns( "xx" ) != "xyz" || m_tag->xmlns( "foo" ) != "ggg"
+            || m_tag->attributes().size() != 4
+            || m_tag->attributes().front()->xmlns() != ""
+            || m_tag->xml() != data
+            || m_tag->children().front()->xmlns() != "xyz"
+            || m_tag->children().front()->children().front()->xmlns() != "ggg" )
       {
         ++fail;
         printf( "test '%s' failed (%d): \n%s\n%s\n", name.c_str(), i, data.c_str(), m_tag->xml().c_str() );
