@@ -24,11 +24,11 @@
 
 #include <string.h>
 
-#if !defined( WIN32 ) && !defined( _WIN32_WCE )
+#if !defined( _WIN32 ) && !defined( _WIN32_WCE )
 # include <netinet/in.h>
 #endif
 
-#ifdef WIN32
+#ifdef _WIN32
 # include <winsock.h>
 #elif defined( _WIN32_WCE )
 # include <winsock2.h>

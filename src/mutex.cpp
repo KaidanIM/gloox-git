@@ -13,11 +13,11 @@
 
 #include "mutex.h"
 
-#if !defined( WIN32 ) && !defined( _WIN32_WCE )
+#if !defined( _WIN32 ) && !defined( _WIN32_WCE )
 # include "config.h"
 #endif
 
-#ifdef WIN32
+#ifdef _WIN32
 # include <windows.h>
 #endif
 
