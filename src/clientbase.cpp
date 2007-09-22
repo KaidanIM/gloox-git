@@ -12,7 +12,7 @@
 
 
 
-#ifdef WIN32
+#ifdef _WIN32
 # include "../config.h.win"
 #elif defined( _WIN32_WCE )
 # include "../config.h.win"

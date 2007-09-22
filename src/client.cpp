@@ -10,7 +10,7 @@
   This software is distributed without any warranty.
 */
 
-#ifdef WIN32
+#ifdef _WIN32
 # include "../config.h.win"
 #elif defined( _WIN32_WCE )
 # include "../config.h.win"
@@ -28,7 +28,7 @@
 #include "stanzaextension.h"
 #include "tlsbase.h"
 
-#if !defined( WIN32 ) && !defined( _WIN32_WCE )
+#if !defined( _WIN32 ) && !defined( _WIN32_WCE )
 # include <unistd.h>
 #endif
 

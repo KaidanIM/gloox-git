@@ -26,7 +26,7 @@
 # include <winsock.h>
 #endif
 
-#if !defined( WIN32 ) && !defined( _WIN32_WCE )
+#if !defined( _WIN32 ) && !defined( _WIN32_WCE )
 # include <netinet/in.h>
 # include <arpa/nameser.h>
 # include <resolv.h>
@@ -38,7 +38,7 @@
 # include <unistd.h>
 #endif
 
-#ifdef WIN32
+#ifdef _WIN32
 # include <winsock.h>
 #elif defined( _WIN32_WCE )
 # include <winsock2.h>
@@ -120,7 +120,7 @@ namespace gloox
 
     struct sockaddr_in they;
     int sin_size = sizeof( struct sockaddr_in );
-#ifdef WIN32
+#ifdef _WIN32
     int newfd = accept( m_socket, (struct sockaddr*)&they, &sin_size );
 #else
     int newfd = accept( m_socket, (struct sockaddr*)&they, (socklen_t*)&sin_size );

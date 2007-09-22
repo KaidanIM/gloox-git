@@ -11,7 +11,7 @@
 */
 
 
-#ifdef WIN32
+#ifdef _WIN32
 # include "../config.h.win"
 #elif defined( _WIN32_WCE )
 # include "../config.h.win"
@@ -29,7 +29,7 @@
 
 #include <stdio.h>
 
-#if !defined( WIN32 ) && !defined( _WIN32_WCE )
+#if !defined( _WIN32 ) && !defined( _WIN32_WCE )
 # include <netinet/in.h>
 # include <arpa/nameser.h>
 # include <resolv.h>
@@ -40,7 +40,7 @@
 # include <unistd.h>
 #endif
 
-#ifdef WIN32
+#ifdef _WIN32
 # include <winsock.h>
 #elif defined( _WIN32_WCE )
 # include <winsock2.h>
@@ -226,7 +226,7 @@ namespace gloox
 
   int DNS::getSocket()
   {
-#ifdef WIN32
+#ifdef _WIN32
     WSADATA wsaData;
     if( WSAStartup( MAKEWORD( 1, 1 ), &wsaData ) != 0 )
       return -ConnDnsError;
@@ -308,7 +308,7 @@ namespace gloox
 
   void DNS::closeSocket( int fd )
   {
-#ifndef WIN32
+#ifndef _WIN32
     close( fd );
 #else
     closesocket( fd );
@@ -317,7 +317,7 @@ namespace gloox
 
   void DNS::cleanup()
   {
-#ifdef WIN32
+#ifdef _WIN32
     WSACleanup();
 #endif
   }
