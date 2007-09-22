@@ -281,6 +281,51 @@ int main( int /*argc*/, char** /*argv*/ )
     printf( "test '%s' failed: %s\n", name.c_str(), d->xml().c_str() );
   }
 
+  //-------
+  {
+    name = "simple xmlns";
+    Tag t( "abc" );
+    t.setXmlns( "foo" );
+    if( t.xml() != "<abc xmlns='foo'/>" )
+    {
+      ++fail;
+      printf( "test '%s' failed: %s\n", name.c_str(), t.xml().c_str() );
+    }
+  }
+
+  //-------
+  {
+    name = "simple nested xmlns 2";
+    Tag t( "abc" );
+    t.setXmlns( "foo" );
+    Tag* d = new Tag( &t, "def" );
+    d->setXmlns( "foobar", "xyz" );
+    d->setPrefix( "xyz" );
+    if( t.xml() != "<abc xmlns='foo'><xyz:def xmlns:xyz='foobar'/></abc>" )
+    {
+      ++fail;
+      printf( "test '%s' failed: %s\n", name.c_str(), t.xml().c_str() );
+    }
+  }
+
+  //-------
+  {
+    name = "attribute with xmlns";
+    Tag t( "abc" );
+    t.setXmlns( "foo", "xyz" );
+    Tag::Attribute* a = new Tag::Attribute( "foo", "bar", "foo" );
+    a->setPrefix( "xyz" );
+    t.addAttribute( a );
+    if( t.xml() != "<abc xmlns:xyz='foo' xyz:foo='bar'/>" )
+    {
+      ++fail;
+      printf( "test '%s' failed: %s\n", name.c_str(), t.xml().c_str() );
+    }
+  }
+
+
+
+
 
 
 
