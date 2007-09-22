@@ -118,7 +118,7 @@ class MessageTest : public ConnectionListener, LogHandler,
       xtlsSend();
     }
 
-    virtual void handleHandshakeResult( const TLSBase* /*base*/, bool success, CertInfo &certinfo )
+    virtual void handleHandshakeResult( const TLSBase* /*base*/, bool success, CertInfo& /*certinfo*/ )
     {
       if( success )
         printf( "xtls handshake successful, waiting for encrypted packets!\n" );
