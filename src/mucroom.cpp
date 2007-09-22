@@ -517,7 +517,7 @@ namespace gloox
     }
     else
     {
-      Tag *x;
+      Tag* x = 0;
       if( m_roomHandler && ( x = stanza->findChild( "x", "xmlns", XMLNS_MUC_USER ) ) != 0 )
       {
         MUCRoomParticipant party;
