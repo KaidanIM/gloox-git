@@ -40,6 +40,9 @@ namespace gloox
    */
   class GLOOX_API Tag
   {
+
+    friend class Parser;
+
     public:
 
       /**
@@ -50,15 +53,39 @@ namespace gloox
        */
       class Attribute
       {
+
+        friend class Parser;
+        friend class Tag;
+
         public:
           /**
-           * Creates a new Attribute from name, value and optional xmlns.
+           * Creates a new Attribute from @c name, @c value and optional @c xmlns and attaches
+           * it to the given Tag.
+           *
+           * In the future: If @c xmlns is not empty, and if it is different from the Tag's
+           * default namespace, an appropriate and unique namespace declaration (prefix) will
+           * be added to the Tag and the attribute will be prefixed accordingly.
+           * @param parent The Tag to attach the Attribute to.
            * @param name The attribute's name.
            * @param value The attribute's value.
-           * @param prefix The attribute's namespace prefix.
+           * @param xmlns The attribute's namespace.
            */
-          Attribute( const std::string& name, const std::string& value, const std::string& prefix = "" )
-            : m_name( name ), m_value( value ), m_prefix( prefix )
+          Attribute( Tag* parent, const std::string& name, const std::string& value,
+                     const std::string& xmlns = "" )
+            : m_parent( parent ), m_name( name ), m_value( value ), m_xmlns( xmlns )
+          {
+            if( m_parent )
+              m_parent->addAttribute( this );
+          }
+
+          /**
+           * Creates a new Attribute from @c name, @c value and optional @c xmlns.
+           * @param name The attribute's name.
+           * @param value The attribute's value.
+           * @param xmlns The attribute's namespace.
+           */
+          Attribute( const std::string& name, const std::string& value, const std::string& xmlns = "" )
+            : m_parent( 0 ), m_name( name ), m_value( value ), m_xmlns( xmlns )
             {}
 
           /**
@@ -66,13 +93,14 @@ namespace gloox
            * @param attr The Attribute to copy.
            */
           Attribute( const Attribute& attr )
-            : m_name( attr.m_name ), m_value( attr.m_value ), m_prefix( attr.m_prefix )
+            : m_parent( attr.m_parent ), m_name( attr.m_name ), m_value( attr.m_value ),
+              m_xmlns( attr.m_xmlns ), m_prefix( attr.m_prefix )
             {}
 
           /**
            * Destructor.
            */
-          ~Attribute() {}
+          virtual ~Attribute() {}
 
           /**
            * Returns the attribute's name.
@@ -93,23 +121,23 @@ namespace gloox
           void setValue( const std::string& value ) { m_value = value; }
 
           /**
-           * Returns the attribute's namespace prefix.
-           * @return The attribute's namespace prefix.
+           * Returns the attribute's namespace.
+           * @return The attribute's namespace.
            */
-          const std::string& prefix() const { return m_prefix; }
+          const std::string xmlns() const;
 
           /**
-           * Sets the attribute's namespace prefix.
-           * @param value The new namespace prefix.
+           * Sets the attribute's namespace.
+           * @param value The new namespace.
            */
-          void setPrefix( const std::string& prefix ) { m_prefix = prefix; }
+          void setXmlns( const std::string& xmlns ) { m_xmlns = xmlns; }
 
            /**
            * Checks two Attributes for equality.
            * @param right The Attribute to check against the current Attribute.
            */
           bool operator==( const Attribute &right ) const
-            { return m_name == right.m_name && m_value == right.m_value && m_prefix == right.m_prefix; }
+            { return m_name == right.m_name && m_value == right.m_value && m_xmlns == right.m_xmlns; }
 
           /**
            * Checks two Attributes for inequality.
@@ -119,15 +147,30 @@ namespace gloox
             { return !( *this == right ); }
 
         private:
+          /**
+           * Sets the attribute's namespace prefix.
+           * @param value The new namespace prefix.
+           */
+          void setPrefix( const std::string& prefix ) { m_prefix = prefix; }
+
+          /**
+           * Returns the attribute's namespace prefix.
+           * @return The namespace prefix.
+           */
+          const std::string prefix() const;
+
+          Tag* m_parent;
           std::string m_name;
           std::string m_value;
+          std::string m_xmlns;
           std::string m_prefix;
+
       };
 
       /**
        * A list of XML element attributes.
        */
-      typedef std::list<Attribute> AttributeList;
+      typedef std::list<Attribute*> AttributeList;
 
       /**
        * Creates a new tag with a given name (and XML character data, if given).
@@ -178,7 +221,7 @@ namespace gloox
       const std::string xml() const;
 
       /**
-       * Sets a namespace prefix.
+       * Sets the Tag's namespace prefix.
        * @param prefix The namespace prefix.
        * @since 1.0
        */
@@ -192,20 +235,31 @@ namespace gloox
       const std::string& prefix() const { return m_prefix; }
 
       /**
-       * Sets a XML namespace with a given prefix, or the default namespace if @c prefix
+       * Returns the namespace prefix for the given namespace.
+       * @return The namespace prefix for the given namespace.
+       * @since 1.0
+       */
+      const std::string prefix( const std::string& xmlns ) const;
+
+      /**
+       * Adds an XML namespace declaration to the Tag. If @b def is false, a unique prefix will
+       * be created, else the default namespace is set (no prefix).
+       * @param xmlns The namespace value.
+       * @param def If @b true, this sets the default namespace; if @b false, a unique namespace
+       * prefix will be created (unless one already exists for the namespace) and used for
+       * all subsequent references to the same namespace.
+       * @since 1.0
+       */
+//       const std::string addXmlns( const std::string& xmlns, bool def );
+
+      /**
+       * Sets an XML namespace with a given prefix, or the default namespace if @c prefix
        * is empty.
        * @param xmlns The namespace value.
        * @param prefix An optional namespace prefix.
        * @since 1.0
        */
       void setXmlns( const std::string& xmlns, const std::string& prefix = "" );
-
-      /**
-       * Sets a list of namespaces.
-       * @param xmlnss The list of namespaces.
-       * @since 1.0
-       */
-      void setXmlns( StringMap* xmlns ) { m_xmlnss = xmlns; }
 
       /**
        * Returns the namespace for this element.
@@ -222,7 +276,7 @@ namespace gloox
        * @code
        * <foo:bar xmlns:foo='foobar'/>
        * @endcode
-       * <foo/> is in the @c foobar namespace, having a prefix of @b foo. A call to prefix()
+       * <bar/> is in the @c foobar namespace, having a prefix of @b foo. A call to prefix()
        * will return 'foo'. A call to xmlns( "foo" ) or xmlns( prefix() ) will return 'foobar'.
        * A call to xmlns() will also return 'foobar' (it is a shortcut to
        * xmlns( prefix() ).
@@ -235,11 +289,14 @@ namespace gloox
       const std::string xmlns( const std::string& prefix ) const;
 
       /**
-       * Use this function to add a new attribute to the tag.
-       * @param attr The attribute to add.
+       * Use this function to add a new attribute to the tag. The Tag will become the owner of the
+       * Attribute and take care of deletion. If an Attribute with the same name already exists,
+       * it will be replaced by the new one.
+       * @param attr A pointer to the attribute to add.
        * @since 1.0
+       * @note Do not use this function to set XML namespaces, use setXmlns() instead.
        */
-      void addAttribute( const Attribute& attr );
+      void addAttribute( Attribute* attr );
 
       /**
        * Use this function to add a new attribute to the tag.
@@ -586,6 +643,14 @@ namespace gloox
         XTSlash,
         XTDoubleSlash
       };
+
+      /**
+       * Sets a list of namespaces.
+       * @param xmlnss The list of namespaces.
+       * @since 1.0
+       */
+      void setXmlns( StringMap* xmlns )
+        { if( m_xmlnss ) delete m_xmlnss; m_xmlnss = xmlns; }
 
       Tag* parse( const std::string& expression, unsigned& len, TokenType border = XTNone );
 
