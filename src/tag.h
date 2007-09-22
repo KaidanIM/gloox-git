@@ -54,7 +54,6 @@ namespace gloox
       class Attribute
       {
 
-        friend class Parser;
         friend class Tag;
 
         public:
@@ -132,7 +131,19 @@ namespace gloox
            */
           void setXmlns( const std::string& xmlns ) { m_xmlns = xmlns; }
 
-           /**
+          /**
+           * Sets the attribute's namespace prefix.
+           * @param value The new namespace prefix.
+           */
+          void setPrefix( const std::string& prefix ) { m_prefix = prefix; }
+
+          /**
+           * Returns the attribute's namespace prefix.
+           * @return The namespace prefix.
+           */
+          const std::string prefix() const;
+
+          /**
            * Checks two Attributes for equality.
            * @param right The Attribute to check against the current Attribute.
            */
@@ -147,18 +158,6 @@ namespace gloox
             { return !( *this == right ); }
 
         private:
-          /**
-           * Sets the attribute's namespace prefix.
-           * @param value The new namespace prefix.
-           */
-          void setPrefix( const std::string& prefix ) { m_prefix = prefix; }
-
-          /**
-           * Returns the attribute's namespace prefix.
-           * @return The namespace prefix.
-           */
-          const std::string prefix() const;
-
           Tag* m_parent;
           std::string m_name;
           std::string m_value;
