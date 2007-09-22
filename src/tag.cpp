@@ -253,7 +253,8 @@ namespace gloox
     AttributeList::iterator it = m_attribs->begin();
     for( ; it != m_attribs->end(); ++it )
     {
-      if( (*it)->name() == attr->name() )
+      if( (*it)->name() == attr->name()
+          && ( (*it)->xmlns() == attr->xmlns() || (*it)->prefix() == attr->prefix() ) )
       {
         delete (*it);
         (*it) = attr;
