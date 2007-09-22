@@ -18,6 +18,7 @@
 #include "prep.h"
 #include "base64.h"
 #include "tag.h"
+#include "util.h"
 
 #include <string>
 #include <stdlib.h>
@@ -78,19 +79,8 @@ namespace gloox
 
   ConnectionBOSH::~ConnectionBOSH()
   {
-    while( !m_activeConnections.empty() )
-    {
-      ConnectionBase* pConnection = m_activeConnections.front();
-      delete pConnection;
-      m_activeConnections.pop_front();
-    }
-
-    while( !m_connectionPool.empty() )
-    {
-      ConnectionBase* pConnection = m_connectionPool.front();
-      delete pConnection;
-      m_connectionPool.pop_front();
-    }
+    util::clear( m_activeConnections );
+    util::clear( m_connectionPool );
   }
 
   ConnectionBase* ConnectionBOSH::newInstance() const
@@ -183,17 +173,19 @@ namespace gloox
                          "disconnecting from server in a non-graceful fashion" );
     }
 
-    unsigned int activeConnectionsCount = m_activeConnections.size();
-    for( unsigned int i = 0; i < activeConnectionsCount; ++i )
-    {
-      m_activeConnections[i]->disconnect();
-    }
+    util::ForEach( m_activeConnections, &ConnectionBase::disconnect );
+//     unsigned int activeConnectionsCount = m_activeConnections.size();
+//     for( unsigned int i = 0; i < activeConnectionsCount; ++i )
+//     {
+//       m_activeConnections[i]->disconnect();
+//     }
 
-    unsigned int connectionPoolCount = m_connectionPool.size();
-    for( unsigned int i = 0; i < connectionPoolCount; ++i )
-    {
-      m_connectionPool[i]->disconnect();
-    }
+    util::ForEach( m_connectionPool, &ConnectionBase::disconnect );
+//     unsigned int connectionPoolCount = m_connectionPool.size();
+//     for( unsigned int i = 0; i < connectionPoolCount; ++i )
+//     {
+//       m_connectionPool[i]->disconnect();
+//     }
 
     m_state = StateDisconnected;
     if( m_handler )
@@ -503,35 +495,39 @@ namespace gloox
   {
     m_state = StateDisconnected;
 
-    unsigned int activeConnectionsCount = m_activeConnections.size();
-    for( unsigned int i = 0; i < activeConnectionsCount; ++i )
-    {
-      m_activeConnections[i]->cleanup();
-    }
+    util::ForEach( m_activeConnections, &ConnectionBase::cleanup );
+//     unsigned int activeConnectionsCount = m_activeConnections.size();
+//     for( unsigned int i = 0; i < activeConnectionsCount; ++i )
+//     {
+//       m_activeConnections[i]->cleanup();
+//     }
 
-    unsigned int connectionPoolCount = m_connectionPool.size();
-    for( unsigned int i = 0; i < connectionPoolCount; ++i )
-    {
-      m_connectionPool[i]->cleanup();
-    }
+    util::ForEach( m_connectionPool, &ConnectionBase::cleanup );
+//     unsigned int connectionPoolCount = m_connectionPool.size();
+//     for( unsigned int i = 0; i < connectionPoolCount; ++i )
+//     {
+//       m_connectionPool[i]->cleanup();
+//     }
   }
 
   void ConnectionBOSH::getStatistics( int& totalIn, int& totalOut )
   {
-    if( !( m_activeConnections.empty() && m_connectionPool.empty() ) )
-    {
-      unsigned int activeConnectionsCount = m_activeConnections.size();
-      for( unsigned int i = 0; i < activeConnectionsCount; ++i )
-        m_activeConnections[i]->getStatistics( totalIn, totalOut );
-      unsigned int connectionPoolCount = m_connectionPool.size();
-      for( unsigned int i = 0; i < connectionPoolCount; ++i )
-        m_connectionPool[i]->getStatistics( totalIn, totalOut );
-    }
-    else
-    {
-      totalIn = 0;
-      totalOut = 0;
-    }
+    util::ForEach( m_activeConnections, &ConnectionBase::getStatistics, totalIn, totalOut );
+    util::ForEach( m_connectionPool, &ConnectionBase::getStatistics, totalIn, totalOut );
+//     if( !( m_activeConnections.empty() && m_connectionPool.empty() ) )
+//     {
+//       unsigned int activeConnectionsCount = m_activeConnections.size();
+//       for( unsigned int i = 0; i < activeConnectionsCount; ++i )
+//         m_activeConnections[i]->getStatistics( totalIn, totalOut );
+//       unsigned int connectionPoolCount = m_connectionPool.size();
+//       for( unsigned int i = 0; i < connectionPoolCount; ++i )
+//         m_connectionPool[i]->getStatistics( totalIn, totalOut );
+//     }
+//     else
+//     {
+//       totalIn = 0;
+//       totalOut = 0;
+//     }
   }
 
   void ConnectionBOSH::handleReceivedData( const ConnectionBase* connection,
