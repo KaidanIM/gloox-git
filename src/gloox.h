@@ -516,6 +516,14 @@ namespace gloox
   /** Stream Compression Feature namespace (XEP-0138) */
   GLOOX_API extern const std::string XMLNS_STREAM_COMPRESS;
 
+  /** General HTTP binding (BOSH) namespace (XEP-0124) */
+  GLOOX_API extern const std::string XMLNS_HTTPBIND;
+
+  /** XMPP-over-BOSH extensions (XEP-0206) */
+  GLOOX_API extern const std::string XMLNS_XMPP_BOSH;
+
+
+
   /** Supported stream version (major). */
   GLOOX_API extern const std::string XMPP_STREAM_VERSION_MAJOR;
 
@@ -590,7 +598,7 @@ namespace gloox
                                      * handshake did not complete successfully. */
     ConnTlsNotAvailable,            /**< The server didn't offer TLS while it was set to be required
                                      * or TLS was not compiled in.
-                                    * @since 0.9.4 */
+                                     * @since 0.9.4 */
     ConnCompressionFailed,          /**< Negotiating/initializing compression failed.
                                      * @since 0.9 */
     ConnAuthenticationFailed,       /**< Authentication failed. Username/password wrong or account does
@@ -938,7 +946,9 @@ namespace gloox
     LogAreaClassConnectionTCPClient   = 0x00100, /**< Log messages from ConnectionTCPClient. */
     LogAreaClassConnectionTCPServer   = 0x00200, /**< Log messages from ConnectionTCPServer. */
     LogAreaClassSOCKS5Bytestream      = 0x00400, /**< Log messages from SOCKS5Bytestream. */
-    LogAreaAllClasses                 = 0x01FFF, /**< Log messages from all the classes. */
+    LogAreaClassConnectionBOSH        = 0x00800, /**< Log messages from ConnectionBOSH */
+    LogAreaClassConnectionTLS         = 0x01000, /**< Log messages from ConnectionTLS */
+    LogAreaAllClasses                 = 0x01FFF, /**< All log messages from all the classes. */
     LogAreaXmlIncoming                = 0x02000, /**< Incoming XML. */
     LogAreaXmlOutgoing                = 0x04000, /**< Outgoing XML. */
     LogAreaUser                       = 0x80000, /**< User-defined sources. */
