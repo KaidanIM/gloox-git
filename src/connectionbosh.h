@@ -20,7 +20,7 @@
 #include "parser.h"
 
 #include <string>
-#include <deque>
+#include <list>
 
 namespace gloox
 {
@@ -212,8 +212,8 @@ namespace gloox
 
       std::string m_sendBuffer;   // Data waiting to be sent
 
-      std::deque<ConnectionBase*> m_activeConnections;
-      std::deque<ConnectionBase*> m_connectionPool;
+      std::list<ConnectionBase*> m_activeConnections;
+      std::list<ConnectionBase*> m_connectionPool;
       ConnMode m_connMode;
 
   };
