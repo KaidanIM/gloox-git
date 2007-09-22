@@ -200,19 +200,19 @@ namespace gloox
     {
       if( !handleNormalNode( tag ) )
       {
-        if( tag->name() == "iq" )
+        if( tag->name() == "iq" && ( tag->xmlns().empty() || tag->xmlns() == XMLNS_CLIENT ) )
         {
           IQ iq( tag );
           notifyIqHandlers( &iq );
           ++m_stats.iqStanzasReceived;
         }
-        else if( tag->name() == "message" )
+        else if( tag->name() == "message" && ( tag->xmlns().empty() || tag->xmlns() == XMLNS_CLIENT ) )
         {
           Message msg( tag );
           notifyMessageHandlers( &msg );
           ++m_stats.messageStanzasReceived;
         }
-        else if( tag->name() == "presence" )
+        else if( tag->name() == "presence" && ( tag->xmlns().empty() || tag->xmlns() == XMLNS_CLIENT ) )
         {
           const std::string& type = tag->findAttribute( TYPE );
           if( type == "subscribe"  || type == "unsubscribe"
