@@ -181,10 +181,10 @@ namespace gloox
       void handleXMLData( const ConnectionBase* connection, std::string& data );
       bool sendRequest( const std::string& xml, bool ignoreRequestLimit = false );
       bool sendXML( const std::string& data );
-      std::string GetHTTPField( const std::string& field );
+      std::string getHTTPField( const std::string& field );
 
       //ConnectionBase *m_connection;
-      const LogSink & m_logInstance;
+      const LogSink& m_logInstance;
 
       Parser m_parser;   // Used for parsing XML section of responses
       std::string m_boshHost;   // The hostname of the BOSH connection manager
@@ -196,10 +196,10 @@ namespace gloox
       std::string m_sid;
 
       bool m_initialStreamSent;
-      unsigned int m_openRequests;
-      unsigned int m_maxOpenRequests;
-      unsigned int m_wait;
-      unsigned int m_hold;
+      int m_openRequests;
+      int m_maxOpenRequests;
+      int m_wait;
+      int m_hold;
 
       bool m_streamRestart;   // Set to true if we are waiting for an acknowledgement of a stream restart
 
