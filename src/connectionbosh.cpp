@@ -76,24 +76,18 @@ namespace gloox
 
   ConnectionBOSH::~ConnectionBOSH()
   {
-    if( !m_activeConnections.empty() )
+    while( !m_activeConnections.empty() )
     {
-      while( !m_activeConnections.empty() )
-      {
-        ConnectionBase* pConnection = m_activeConnections.front();
-        delete pConnection;
-        m_activeConnections.pop_front();
-      }
+      ConnectionBase* pConnection = m_activeConnections.front();
+      delete pConnection;
+      m_activeConnections.pop_front();
     }
 
-    if( !m_connectionPool.empty() )
+    while( !m_connectionPool.empty() )
     {
-      while( !m_connectionPool.empty() )
-      {
-        ConnectionBase* pConnection = m_connectionPool.front();
-        delete pConnection;
-        m_connectionPool.pop_front();
-      }
+      ConnectionBase* pConnection = m_connectionPool.front();
+      delete pConnection;
+      m_connectionPool.pop_front();
     }
   }
 
@@ -160,7 +154,7 @@ namespace gloox
       return;
     if( m_state != StateDisconnected )
     {
-      m_rid++;
+      ++m_rid;
 
       std::ostringstream requestBody;
 
@@ -188,13 +182,13 @@ namespace gloox
     }
 
     unsigned int activeConnectionsCount = m_activeConnections.size();
-    for( unsigned int i = 0; i < activeConnectionsCount; i++ )
+    for( unsigned int i = 0; i < activeConnectionsCount; ++i )
     {
       m_activeConnections[i]->disconnect();
     }
 
     unsigned int connectionPoolCount = m_connectionPool.size();
-    for( unsigned int i = 0; i < connectionPoolCount; i++ )
+    for( unsigned int i = 0; i < connectionPoolCount; ++i )
     {
       m_connectionPool[i]->disconnect();
     }
@@ -382,7 +376,7 @@ namespace gloox
       if( ce )
       {
 //         printf( "Request sent on %p (%s)\n", m_activeConnections.back(), request.str().c_str() );
-        m_openRequests++;
+        ++m_openRequests;
 //         printf( "%d: Incrementing m_openRequests to %d (connections: %d)\n", (int)time( 0 ),
 //                m_openRequests, m_activeConnections.size() );
         return true;
@@ -423,7 +417,7 @@ namespace gloox
       m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "sending empty request" );
     }
 
-    m_rid++;
+    ++m_rid;
 
     requestBody << "<body ";
     requestBody << "rid='" << m_rid << "' ";
@@ -508,13 +502,13 @@ namespace gloox
     m_state = StateDisconnected;
 
     unsigned int activeConnectionsCount = m_activeConnections.size();
-    for( unsigned int i = 0; i < activeConnectionsCount; i++ )
+    for( unsigned int i = 0; i < activeConnectionsCount; ++i )
     {
       m_activeConnections[i]->cleanup();
     }
 
     unsigned int connectionPoolCount = m_connectionPool.size();
-    for( unsigned int i = 0; i < connectionPoolCount; i++ )
+    for( unsigned int i = 0; i < connectionPoolCount; ++i )
     {
       m_connectionPool[i]->cleanup();
     }
@@ -525,10 +519,10 @@ namespace gloox
     if( !( m_activeConnections.empty() && m_connectionPool.empty() ) )
     {
       unsigned int activeConnectionsCount = m_activeConnections.size();
-      for( unsigned int i = 0; i < activeConnectionsCount; i++ )
+      for( unsigned int i = 0; i < activeConnectionsCount; ++i )
         m_activeConnections[i]->getStatistics( totalIn, totalOut );
       unsigned int connectionPoolCount = m_connectionPool.size();
-      for( unsigned int i = 0; i < connectionPoolCount; i++ )
+      for( unsigned int i = 0; i < connectionPoolCount; ++i )
         m_connectionPool[i]->getStatistics( totalIn, totalOut );
     }
     else
@@ -767,7 +761,7 @@ namespace gloox
 
       TagList stanzas = tag->children();
       TagList::const_iterator i;
-      for( i = stanzas.begin(); i != stanzas.end(); i++ )
+      for( i = stanzas.begin(); i != stanzas.end(); ++i )
       {
 
         if( m_handler && *i )
