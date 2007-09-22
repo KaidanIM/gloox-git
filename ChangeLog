@@ -1,10 +1,11 @@
 v0.9.5 -- xx yyy 2007
 ---------------------
 
-general changes and addtions:
+general changes and additions:
 - JID: added operator bool()
 - Tag: added operator bool()
 - DelayedDelivery: added setReason()
+- skip zlib tests if zlib is not available
 
 deprecated functions:
 - JID::fullJID(), use ctor

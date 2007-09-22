@@ -2,9 +2,19 @@
 #include "../../compressiondatahandler.h"
 using namespace gloox;
 
+#ifdef _WIN32
+# include "../../config.h.win"
+#elif defined( _WIN32_WCE )
+# include "../../config.h.win"
+#else
+# include "config.h"
+#endif
+
 #include <stdio.h>
 #include <locale.h>
 #include <string>
+
+#ifdef HAVE_ZLIB
 
 class ZlibTest : public CompressionDataHandler
 {
@@ -114,3 +124,10 @@ int main( int /*argc*/, char** /*argv*/ )
   }
 
 }
+
+#else
+int main( int /*argc*/, char** /*argv*/ )
+{
+  printf( "Zlib not available. Skipped tests.\n" );
+}
+#endif // HAVE_ZLIB
