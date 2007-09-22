@@ -27,6 +27,28 @@
 namespace gloox
 {
 
+  const std::string Tag::Attribute::xmlns() const
+  {
+    if( !m_xmlns.empty() )
+      return m_xmlns;
+
+    if( m_parent )
+      return m_parent->xmlns( m_prefix );
+
+    return std::string();
+  }
+
+  const std::string Tag::Attribute::prefix() const
+  {
+    if( !m_prefix.empty() )
+      return m_prefix;
+
+    if( m_parent )
+      return m_parent->prefix( m_xmlns );
+
+    return std::string();
+  }
+
   Tag::Tag( const std::string& name, const std::string& cdata )
     : m_parent( 0 ), m_children( new TagList() ), m_cdata( new StringPList() ),
       m_attribs( new AttributeList() ), m_nodes( new NodeList() ),
@@ -93,6 +115,7 @@ namespace gloox
   Tag::~Tag()
   {
     util::clear( *m_cdata );
+    util::clear( *m_attribs );
     util::clear( *m_children );
     util::clear( *m_nodes );
     delete m_cdata;
@@ -131,7 +154,7 @@ namespace gloox
 
     AttributeList::const_iterator at = m_attribs->begin();
     AttributeList::const_iterator at_r = right.m_attribs->begin();
-    while( at != m_attribs->end() && at_r != right.m_attribs->end() && (*at) == (*at_r) )
+    while( at != m_attribs->end() && at_r != right.m_attribs->end() && *(*at) == *(*at_r) )
     {
       ++at;
       ++at_r;
@@ -157,14 +180,14 @@ namespace gloox
       for( ; it_a != m_attribs->end(); ++it_a )
       {
         xml += ' ';
-        if( !(*it_a).prefix().empty() )
+        if( !((*it_a)->prefix().empty()) )
         {
-          xml += (*it_a).prefix();
+          xml += (*it_a)->prefix();
           xml += ':';
         }
-        xml += (*it_a).name();
+        xml += (*it_a)->name();
         xml += "='";
-        xml += (*it_a).value();
+        xml += (*it_a)->value();
         xml += '\'';
       }
     }
@@ -225,15 +248,15 @@ namespace gloox
     return esc;
   }
 
-  void Tag::addAttribute( const Attribute& attr )
+  void Tag::addAttribute( Attribute* attr )
   {
     AttributeList::iterator it = m_attribs->begin();
     for( ; it != m_attribs->end(); ++it )
     {
-      if( (*it).name() == attr.name() )
+      if( (*it)->name() == attr->name() )
       {
-        (*it).setValue( attr.value() );
-        (*it).setPrefix( attr.prefix() );
+        delete (*it);
+        (*it) = attr;
         return;
       }
     }
@@ -246,7 +269,7 @@ namespace gloox
     if( name.empty() || value.empty() )
       return;
 
-    addAttribute( Attribute( name, value ) );
+    addAttribute( new Attribute( name, value ) );
   }
 
   void Tag::addAttribute( const std::string& name, int value )
@@ -289,7 +312,11 @@ namespace gloox
 
   void Tag::setAttributes( const AttributeList& attributes )
   {
+    util::clear( *m_attribs );
     *m_attribs = attributes;
+    AttributeList::iterator it = m_attribs->begin();
+    for( ; it != m_attribs->end(); ++it )
+      (*it)->m_parent = this;
   }
 
   void Tag::addChild( Tag* child )
@@ -399,12 +426,27 @@ namespace gloox
     return m_xmlns;
   }
 
+  const std::string Tag::prefix( const std::string& xmlns ) const
+  {
+    if( xmlns.empty() || !m_xmlnss )
+      return std::string();
+
+    StringMap::const_iterator it = m_xmlnss->begin();
+    for( ; it != m_xmlnss->end(); ++it )
+    {
+      if( (*it).second == xmlns )
+        return (*it).first;
+    }
+
+    return std::string();
+  }
+
   const std::string Tag::findAttribute( const std::string& name ) const
   {
     AttributeList::const_iterator it = m_attribs->begin();
     for( ; it != m_attribs->end(); ++it )
-      if( (*it).name() == name )
-        return (*it).value();
+      if( (*it)->name() == name )
+        return (*it)->value();
 
     return std::string();
   }
@@ -416,8 +458,8 @@ namespace gloox
 
     AttributeList::const_iterator it = m_attribs->begin();
     for( ; it != m_attribs->end(); ++it )
-      if( (*it).name() == name )
-        return value.empty() || (*it).value() == value;
+      if( (*it)->name() == name )
+        return value.empty() || (*it)->value() == value;
 
     return false;
   }
@@ -468,7 +510,7 @@ namespace gloox
     Tag::AttributeList::const_iterator at = m_attribs->begin();
     for( ; at != m_attribs->end(); ++at )
     {
-      t->m_attribs->push_back( (*at) );
+      t->m_attribs->push_back( new Attribute( *(*at) ) );
     }
 
     if( m_xmlnss )
