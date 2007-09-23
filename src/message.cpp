@@ -12,8 +12,6 @@
 
 #include "util.h"
 #include "message.h"
-#include "stanzaextension.h"
-#include "stanzaextensionfactory.h"
 
 namespace gloox
 {
@@ -73,12 +71,6 @@ namespace gloox
       else if( (*it)->name() == "thread" )
       {
         m_thread = (*it)->cdata();
-      }
-      else
-      {
-        StanzaExtension* se = StanzaExtensionFactory::create( (*it) );
-        if( se )
-          m_extensionList.push_back( se );
       }
     }
   }
