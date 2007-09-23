@@ -84,8 +84,8 @@ namespace gloox
       void setFrom( const JID& from ) { m_from = from; }
 
       /**
-       * Returns a natural language reason fro the delay.
-       * @return A natural language reason fro the delay.
+       * Returns a natural language reason for the delay.
+       * @return A natural language reason for the delay.
        */
       const std::string& reason() const { return m_reason; }
 
