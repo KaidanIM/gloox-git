@@ -196,34 +196,39 @@ namespace gloox
     {
       if( !handleNormalNode( tag ) )
       {
-        if( tag->name() == "iq" && ( tag->xmlns().empty() || tag->xmlns() == XMLNS_CLIENT ) )
+        if( tag->xmlns().empty() || tag->xmlns() == XMLNS_CLIENT )
         {
-          IQ iq( tag );
-          notifyIqHandlers( &iq );
-          ++m_stats.iqStanzasReceived;
-        }
-        else if( tag->name() == "message" && ( tag->xmlns().empty() || tag->xmlns() == XMLNS_CLIENT ) )
-        {
-          Message msg( tag );
-          notifyMessageHandlers( &msg );
-          ++m_stats.messageStanzasReceived;
-        }
-        else if( tag->name() == "presence" && ( tag->xmlns().empty() || tag->xmlns() == XMLNS_CLIENT ) )
-        {
-          const std::string& type = tag->findAttribute( TYPE );
-          if( type == "subscribe"  || type == "unsubscribe"
-              || type == "subscribed" || type == "unsubscribed" )
+          if( tag->name() == "iq"  )
           {
-            Subscription sub( tag );
-            notifySubscriptionHandlers( &sub );
-            ++m_stats.s10nStanzasReceived;
+            IQ iq( tag );
+            notifyIqHandlers( &iq );
+            ++m_stats.iqStanzasReceived;
+          }
+          else if( tag->name() == "message" )
+          {
+            Message msg( tag );
+            notifyMessageHandlers( &msg );
+            ++m_stats.messageStanzasReceived;
+          }
+          else if( tag->name() == "presence" )
+          {
+            const std::string& type = tag->findAttribute( TYPE );
+            if( type == "subscribe"  || type == "unsubscribe"
+                || type == "subscribed" || type == "unsubscribed" )
+            {
+              Subscription sub( tag );
+              notifySubscriptionHandlers( &sub );
+              ++m_stats.s10nStanzasReceived;
+            }
+            else
+            {
+              Presence pres( tag );
+              notifyPresenceHandlers( &pres );
+              ++m_stats.presenceStanzasReceived;
+            }
           }
           else
-          {
-            Presence pres( tag );
-            notifyPresenceHandlers( &pres );
-            ++m_stats.presenceStanzasReceived;
-          }
+            m_logInstance.err( LogAreaClassClientbase, "Received invalid stanza." );
         }
         else
         {
