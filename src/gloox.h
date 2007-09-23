@@ -935,24 +935,25 @@ namespace gloox
    */
   enum LogArea
   {
-    LogAreaClassParser                = 0x00001, /**< Log messages from Parser. */
-    LogAreaClassConnectionTCPBase     = 0x00002, /**< Log messages from ConnectionTCPBase. */
-    LogAreaClassClient                = 0x00004, /**< Log messages from Client. */
-    LogAreaClassClientbase            = 0x00008, /**< Log messages from ClientBase. */
-    LogAreaClassComponent             = 0x00010, /**< Log messages from Component. */
-    LogAreaClassDns                   = 0x00020, /**< Log messages from DNS. */
-    LogAreaClassConnectionHTTPProxy   = 0x00040, /**< Log messages from ConnectionHTTPProxy */
-    LogAreaClassConnectionSOCKS5Proxy = 0x00080, /**< Log messages from ConnectionSOCKS5Proxy */
-    LogAreaClassConnectionTCPClient   = 0x00100, /**< Log messages from ConnectionTCPClient. */
-    LogAreaClassConnectionTCPServer   = 0x00200, /**< Log messages from ConnectionTCPServer. */
-    LogAreaClassSOCKS5Bytestream      = 0x00400, /**< Log messages from SOCKS5Bytestream. */
-    LogAreaClassConnectionBOSH        = 0x00800, /**< Log messages from ConnectionBOSH */
-    LogAreaClassConnectionTLS         = 0x01000, /**< Log messages from ConnectionTLS */
-    LogAreaAllClasses                 = 0x01FFF, /**< All log messages from all the classes. */
-    LogAreaXmlIncoming                = 0x02000, /**< Incoming XML. */
-    LogAreaXmlOutgoing                = 0x04000, /**< Outgoing XML. */
-    LogAreaUser                       = 0x80000, /**< User-defined sources. */
-    LogAreaAll                        = 0xFFFFF  /**< All log sources. */
+    LogAreaClassParser                = 0x000001, /**< Log messages from Parser. */
+    LogAreaClassConnectionTCPBase     = 0x000002, /**< Log messages from ConnectionTCPBase. */
+    LogAreaClassClient                = 0x000004, /**< Log messages from Client. */
+    LogAreaClassClientbase            = 0x000008, /**< Log messages from ClientBase. */
+    LogAreaClassComponent             = 0x000010, /**< Log messages from Component. */
+    LogAreaClassDns                   = 0x000020, /**< Log messages from DNS. */
+    LogAreaClassConnectionHTTPProxy   = 0x000040, /**< Log messages from ConnectionHTTPProxy */
+    LogAreaClassConnectionSOCKS5Proxy = 0x000080, /**< Log messages from ConnectionSOCKS5Proxy */
+    LogAreaClassConnectionTCPClient   = 0x000100, /**< Log messages from ConnectionTCPClient. */
+    LogAreaClassConnectionTCPServer   = 0x000200, /**< Log messages from ConnectionTCPServer. */
+    LogAreaClassS5BManager            = 0x000400, /**< Log messages from SOCKS5BytestreamManager. */
+    LogAreaClassSOCKS5Bytestream      = 0x000800, /**< Log messages from SOCKS5Bytestream. */
+    LogAreaClassConnectionBOSH        = 0x001000, /**< Log messages from ConnectionBOSH */
+    LogAreaClassConnectionTLS         = 0x002000, /**< Log messages from ConnectionTLS */
+    LogAreaAllClasses                 = 0x01FFFF, /**< All log messages from all the classes. */
+    LogAreaXmlIncoming                = 0x020000, /**< Incoming XML. */
+    LogAreaXmlOutgoing                = 0x040000, /**< Outgoing XML. */
+    LogAreaUser                       = 0x800000, /**< User-defined sources. */
+    LogAreaAll                        = 0xFFFFFF  /**< All log sources. */
   };
 
   /**
