@@ -27,7 +27,6 @@
 #include "connectiontcpclient.h"
 #include "disco.h"
 #include "messagesessionhandler.h"
-#include "parser.h"
 #include "tag.h"
 #include "iq.h"
 #include "message.h"
@@ -73,7 +72,7 @@ namespace gloox
       m_statisticsHandler( 0 ), m_mucInvitationHandler( 0 ),
       m_messageSessionHandlerChat( 0 ), m_messageSessionHandlerGroupchat( 0 ),
       m_messageSessionHandlerHeadline( 0 ), m_messageSessionHandlerNormal( 0 ),
-      m_parser( 0 ), m_authError( AuthErrorUndefined ), m_streamError( StreamErrorUndefined ),
+      m_parser( this ), m_authError( AuthErrorUndefined ), m_streamError( StreamErrorUndefined ),
       m_streamErrorAppCondition( 0 ), m_selectedSaslMech( SaslMechNone ),
       m_idCount( 0 ), m_autoMessageSession( false )
   {
@@ -90,7 +89,7 @@ namespace gloox
       m_statisticsHandler( 0 ), m_mucInvitationHandler( 0 ),
       m_messageSessionHandlerChat( 0 ), m_messageSessionHandlerGroupchat( 0 ),
       m_messageSessionHandlerHeadline( 0 ), m_messageSessionHandlerNormal( 0 ),
-      m_parser( 0 ), m_authError( AuthErrorUndefined ), m_streamError( StreamErrorUndefined ),
+      m_parser( this ), m_authError( AuthErrorUndefined ), m_streamError( StreamErrorUndefined ),
       m_streamErrorAppCondition( 0 ), m_selectedSaslMech( SaslMechNone ),
       m_idCount( 0 ), m_autoMessageSession( false )
   {
@@ -116,7 +115,6 @@ namespace gloox
     delete m_connection;
     delete m_encryption;
     delete m_compression;
-    delete m_parser;
     delete m_disco;
 
     util::clear( m_messageSessions );
@@ -139,9 +137,6 @@ namespace gloox
     if( m_server.empty() )
       return false;
 
-    if( !m_parser )
-      m_parser = new Parser( this );
-
     if( !m_connection )
       m_connection = new ConnectionTCPClient( this, m_logInstance, m_server, m_port );
 
@@ -160,6 +155,7 @@ namespace gloox
     if( !m_compression )
       m_compression = getDefaultCompression();
 
+    m_logInstance.dbg( LogAreaClassClientbase, "This is gloox " + GLOOX_VERSION + ", connecting..." );
     m_block = block;
     ConnectionError ret = m_connection->connect();
     return ret == ConnNoError;
@@ -252,10 +248,7 @@ namespace gloox
 
   void ClientBase::handleDecompressedData( const std::string& data )
   {
-    if( m_parser )
-      parse( data );
-    else
-      m_logInstance.err( LogAreaClassClientbase, "Decompression finished, but chain broken" );
+    parse( data );
   }
 
   void ClientBase::handleEncryptedData( const TLSBase* /*base*/, const std::string& data )
@@ -270,10 +263,8 @@ namespace gloox
   {
     if( m_compression && m_compressionActive )
       m_compression->decompress( data );
-    else if( m_parser )
-      parse( data );
     else
-      m_logInstance.err( LogAreaClassClientbase, "Decryption finished, but chain broken" );
+      parse( data );
   }
 
   void ClientBase::handleHandshakeResult( const TLSBase* /*base*/, bool success, CertInfo &certinfo )
@@ -304,10 +295,8 @@ namespace gloox
       m_encryption->decrypt( data );
     else if( m_compression && m_compressionActive )
       m_compression->decompress( data );
-    else if( m_parser )
-      parse( data );
     else
-      m_logInstance.err( LogAreaClassClientbase, "Received data, but chain broken" );
+      parse( data );
   }
 
   void ClientBase::handleConnect( const ConnectionBase* /*connection*/ )
@@ -350,7 +339,7 @@ namespace gloox
   {
     std::string copy = data;
     int i = 0;
-    if( m_parser && ( i = m_parser->feed( copy ) ) >= 0 )
+    if( ( i = m_parser.feed( copy ) ) >= 0 )
     {
       const int len = 4 + (int)std::log10( i ? i : 1 ) + 1;
       char* tmp = new char[len];

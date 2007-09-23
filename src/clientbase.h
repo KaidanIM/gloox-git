@@ -24,6 +24,7 @@
 #include "tlshandler.h"
 #include "compressiondatahandler.h"
 #include "connectiondatahandler.h"
+#include "parser.h"
 
 #include <string>
 #include <list>
@@ -38,7 +39,6 @@ namespace gloox
   class Message;
   class Presence;
   class Subscription;
-  class Parser;
   class MessageSessionHandler;
   class ConnectionListener;
   class IqHandler;
@@ -734,7 +734,7 @@ namespace gloox
       MessageSessionHandler  * m_messageSessionHandlerHeadline;
       MessageSessionHandler  * m_messageSessionHandlerNormal;
 
-      Parser* m_parser;
+      Parser m_parser;
       LogSink m_logInstance;
 
       AuthenticationError m_authError;
