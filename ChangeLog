@@ -2,6 +2,8 @@ v0.9.5 -- xx yyy 2007
 ---------------------
 
 general changes and additions:
+- do not allow store()'ing of empty PrivacyList (aka removeList)
+- do not return on error in PrivacyManager::handleIqID()
 - JID: added operator bool()
 - Tag: added operator bool()
 - DelayedDelivery: added setReason()
