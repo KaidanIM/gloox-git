@@ -14,14 +14,20 @@
 #ifndef STANZAEXTENSIONFACTORY_H__
 #define STANZAEXTENSIONFACTORY_H__
 
+#include <list>
+
 namespace gloox
 {
 
-  class StanzaExtension;
   class Tag;
+  class Stanza;
+  class StanzaExtension;
 
   /**
    * @brief A Factory that creates StanzaExtensions from Tags.
+   *
+   * To supply a custom StanzaExtension, reimplement StanzaExtension's
+   * virtuals and pass an instance to registerExtension().
    *
    * You should not need to use this class directly.
    *
@@ -30,15 +36,43 @@ namespace gloox
    */
   class StanzaExtensionFactory
   {
+
+    friend class ClientBase;
+
     public:
       /**
-       * This function tries to create a valid StanzaExtension (i.e., an object derived from
-       * StanzaExtension) from the given Tag.
-       * @param tag The Tag to parse and create the StanzaExtension from.
-       * @return A StanzaExtension-derived object if the Tag was recognized, or 0.
-       * @note To get rif of a StanzaExtension easily, you may use dispose().
+       * Use this function to inform StanzaExtensionFactory about available StanzaExtensions.
+       * By default, StanzaExtensionFactory does not know about any extensions.
+       * gloox-built-in extensions will usually be registered by their respective protocol
+       * implementations unless otherwise noted in the extension's API docs.
+       * @param ext An extension to register.
+       * @note The supplied StanzaExtension will be deleted in StanzaExtensionFactory's destructor.
+       * @note Only one instance per extension type can be registered. In case an extension is
+       * registered that is of the same type as an already registered extension, the new extension
+       * will replace the previously registered one.
        */
-      static StanzaExtension* create( const Tag* tag );
+      void registerExtension( StanzaExtension* ext );
+
+      /**
+       * Creates a new StanzaExtensionFactory.
+       */
+      StanzaExtensionFactory();
+
+      /**
+       * Non-virtual destructor.
+       */
+      ~StanzaExtensionFactory();
+
+      /**
+       * This function creates StanzaExtensions from the given Tag and attaches them to the given Stanza.
+       * @param stanza The Stanza to attach the extensions to.
+       * @param tag The Tag to parse and create the StanzaExtension from.
+       */
+      void addExtensions( Stanza& stanza, Tag* tag );
+
+    private:
+      typedef std::list<StanzaExtension*> SEList;
+      SEList m_extensions;
 
   };
 

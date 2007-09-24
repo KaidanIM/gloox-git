@@ -14,8 +14,9 @@
 #ifndef XDELAYEDDELIVERY_H__
 #define XDELAYEDDELIVERY_H__
 
-#include "stanzaextension.h"
+#include "gloox.h"
 #include "jid.h"
+#include "stanzaextension.h"
 
 #include <string>
 
@@ -65,6 +66,19 @@ namespace gloox
        * @return A natural language reason for the delay.
        */
       const std::string& reason() const { return m_reason; }
+
+      // reimplemented from StanzaExtension
+      virtual const std::string filterString() const
+      {
+        return "/presence/x[@" + XMLNS + "='" + XMLNS_X_DELAY + "']"
+               "|/message/x[@" + XMLNS + "='" + XMLNS_X_DELAY + "']";
+      }
+
+      // reimplemented from StanzaExtension
+        virtual StanzaExtension* newInstance( const Tag* tag ) const
+        {
+          return new XDelayedDelivery( tag );
+        }
 
       // reimplemented from StanzaExtension
       virtual Tag* tag() const;

@@ -14,8 +14,8 @@
 #ifndef OOB_H__
 #define OOB_H__
 
+#include "gloox.h"
 #include "stanzaextension.h"
-#include "macros.h"
 
 #include <string>
 
@@ -36,17 +36,17 @@ namespace gloox
   {
     public:
       /**
-       * Constructs an empty OOB object.
+       * Constructs an OOB StanzaExtension from teh given URL and description.
        * @param url The out-of-band URL.
        * @param description The URL's optional description.
-       * @param iqext Whether this object extends an IQ or a Presence stanza (results in
-       * either jabber:x:oob or jabber:iq:oob namespaced element).
+       * @param iqext Whether this object extends an IQ or a Presence/Message stanza (results in
+       * either jabber:iq:oob or jabber:x:oob namespaced element).
        */
       OOB( const std::string& url, const std::string& description, bool iqext );
 
       /**
-       * Constructs an OOB object from the given Tag. To be recognized properly, the Tag should
-       * either have a name 'x' of in the jabber:x:oob namespace, or a name of 'query' in the
+       * Constructs an OOB object from the given Tag. To be recognized properly, the Tag must
+       * have either a name of 'x' in the jabber:x:oob namespace, or a name of 'query' in the
        * jabber:iq:oob namespace.
        * @param tag The Tag to parse.
        */
@@ -68,6 +68,19 @@ namespace gloox
        * @return The URL's description.
        */
       const std::string& desc() const { return m_desc; }
+
+      // reimplemented from StanzaExtension
+      virtual const std::string filterString() const
+      {
+        return "/presence/x[@" + XMLNS + "='" + XMLNS_X_OOB + "']"
+               "|/message/x[@" + XMLNS + "='" + XMLNS_X_OOB + "']"
+               "|/iq/query[@" + XMLNS + "='" + XMLNS_IQ_OOB + "']"; }
+
+      // reimplemented from StanzaExtension
+      virtual StanzaExtension* newInstance( const Tag* tag ) const
+      {
+        return new OOB( tag );
+      }
 
       // reimplemented from StanzaExtension
       Tag* tag() const;

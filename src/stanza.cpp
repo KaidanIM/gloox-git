@@ -136,10 +136,10 @@ namespace gloox
   void Stanza::addExtension( StanzaExtension* se )
   {
     m_extensionList.push_back( se );
-    addChild( se->tag() );
+//     addChild( se->tag() );
   }
 
-  const StanzaExtension* Stanza::findExtension( StanzaExtensionType type ) const
+  const StanzaExtension* Stanza::findExtension( int type ) const
   {
     StanzaExtensionList::const_iterator it = m_extensionList.begin();
     for( ; it != m_extensionList.end() && (*it)->type() != type; ++it ) ;

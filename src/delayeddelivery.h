@@ -14,8 +14,9 @@
 #ifndef DELAYEDDELIVERY_H__
 #define DELAYEDDELIVERY_H__
 
-#include "stanzaextension.h"
+#include "gloox.h"
 #include "jid.h"
+#include "stanzaextension.h"
 
 #include <string>
 
@@ -94,6 +95,19 @@ namespace gloox
        * @param reason The reason for the delay.
        */
       void setReason( const std::string& reason ) { m_reason = reason; }
+
+      // reimplemented from StanzaExtension
+      virtual const std::string filterString() const
+      {
+        return "/presence/x[@" + XMLNS + "='" + XMLNS_DELAY + "']"
+               "|/message/x[@" + XMLNS + "='" + XMLNS_DELAY + "']";
+      }
+
+      // reimplemented from StanzaExtension
+      virtual StanzaExtension* newInstance( const Tag* tag ) const
+      {
+        return new DelayedDelivery( tag );
+      }
 
       // reimplemented from StanzaExtension
       virtual Tag* tag() const;

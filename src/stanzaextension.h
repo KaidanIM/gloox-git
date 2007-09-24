@@ -16,6 +16,8 @@
 
 #include "macros.h"
 
+#include <string>
+
 namespace gloox
 {
 
@@ -26,20 +28,22 @@ namespace gloox
    */
   enum StanzaExtensionType
   {
-    ExtNone                =   1,   /**< Invalid StanzaExtension. */
-    ExtVCardUpdate         =   2,   /**< Extension in the vcard-temp:x:update namespace, advertising
+    ExtNone                =     1, /**< Invalid StanzaExtension. */
+    ExtVCardUpdate         =     2, /**< Extension in the vcard-temp:x:update namespace, advertising
                                      * a user avatar's SHA1 hash (XEP-0153). */
-    ExtOOB                 =   4,   /**< An extension in the jabber:iq:oob or jabber:x:oob namespaces
+    ExtOOB                 =     4, /**< An extension in the jabber:iq:oob or jabber:x:oob namespaces
                                      * (XEP-0066). */
-    ExtGPGSigned           =   8,   /**< An extension containing a GPG/PGP signature (XEP-0027). */
-    ExtGPGEncrypted        =  16,   /**< An extension containing a GPG/PGP encrypted message (XEP-0027). */
-    ExtXDelay              =  32,   /**< An extension containing notice of delayed delivery (XEP-0091). */
-    ExtDelay               =  64,   /**< An extension containing notice of delayed delivery (XEP-0203). */
-    ExtAMP                 = 128,   /**< An extension containing advanced message processing rules
+    ExtGPGSigned           =     8, /**< An extension containing a GPG/PGP signature (XEP-0027). */
+    ExtGPGEncrypted        =    16, /**< An extension containing a GPG/PGP encrypted message (XEP-0027). */
+    ExtXDelay              =    32, /**< An extension containing notice of delayed delivery (XEP-0091). */
+    ExtDelay               =    64, /**< An extension containing notice of delayed delivery (XEP-0203). */
+    ExtAMP                 =   128, /**< An extension containing advanced message processing rules
                                      * (XEP-0079). */
-    ExtError               = 256,   /**< An extension containing an error. */
-    ExtCaps                = 512,   /**< An extension containing Entity Capabilities (XEP-0115). */
-    ExtChatState           = 1024   /**< An extension containing a chat state (XEP-0085). */
+    ExtError               =   256, /**< An extension containing an error. */
+    ExtCaps                =   512, /**< An extension containing Entity Capabilities (XEP-0115). */
+    ExtChatState           =  1024, /**< An extension containing a chat state (XEP-0085). */
+    ExtUser                = 16384  /**< User-supplied extensions must use IDs above this. Do not
+                                      * hard-code ExtUser's value anywhere, it is subject to change. */
   };
 
   /**
@@ -56,8 +60,10 @@ namespace gloox
     public:
       /**
        * Constructs an empty StanzaExtension.
+       * @param type Designates the extension's type. It should be one of StanzaExtensionType
+       * for built-in extensions, and it should be higher than ExtUser for custom types.
        */
-      StanzaExtension( StanzaExtensionType type ) : m_type( type ) {}
+      StanzaExtension( int type ) : m_type( type ) {}
 
       /**
        * Virtual destructor.
@@ -65,10 +71,25 @@ namespace gloox
       virtual ~StanzaExtension() {}
 
       /**
-       * Returns the extension's type.
+       * Returns an XPath expression that describes a path to child elements of a
+       * stanza that an extension handles.
+       *
        * @return The extension's type.
        */
-      StanzaExtensionType type() const { return m_type; }
+      virtual const std::string filterString() const = 0;
+
+      /**
+       * Returns a new Instance of the derived type. Usually, for a derived class FooExtension,
+       * the implementation of this function looks like:
+       * @code
+       * StanzaExtension* FooExtension::newInstance( const Tag* tag ) const
+       * {
+       *   return new FooExtension( tag );
+       * }
+       * @endcode
+       * @return The derived extension's new instance.
+       */
+      virtual StanzaExtension* newInstance( const Tag* tag ) const = 0;
 
       /**
        * Returns a Tag representation of the extension.
@@ -76,8 +97,14 @@ namespace gloox
        */
       virtual Tag* tag() const = 0;
 
+      /**
+       * Returns the extension's type.
+       * @return The extension's type.
+       */
+      int type() const { return m_type; }
+
     private:
-      StanzaExtensionType m_type;
+      int m_type;
 
   };
 

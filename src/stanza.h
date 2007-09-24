@@ -87,7 +87,7 @@ namespace gloox
        * @param type StanzaExtensionType to search for.
        * @return The StanzaExtension's address (or 0 if none was found).
        */
-      const StanzaExtension* findExtension( StanzaExtensionType type ) const;
+      const StanzaExtension* findExtension( int type ) const;
 
       /**
        * Returns the list of the Stanza's extensions.

@@ -14,6 +14,7 @@
 #ifndef VCARDUPDATE_H__
 #define VCARDUPDATE_H__
 
+#include "gloox.h"
 #include "stanzaextension.h"
 
 #include <string>
@@ -62,6 +63,18 @@ namespace gloox
        * @return The avatar's SHA hash.
        */
       const std::string& hash() const { return m_hash; }
+
+      // reimplemented from StanzaExtension
+      virtual const std::string filterString() const
+      {
+        return "/presence/x[@" + XMLNS + "='" + XMLNS_X_VCARD_UPDATE + "']";
+      }
+
+      // reimplemented from StanzaExtension
+      virtual StanzaExtension* newInstance( const Tag* tag ) const
+      {
+        return new VCardUpdate( tag );
+      }
 
       // reimplemented from StanzaExtension
       Tag* tag() const;
