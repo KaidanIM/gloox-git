@@ -21,16 +21,16 @@ namespace gloox
 
   ChatState::ChatState( const Tag* tag )
     : StanzaExtension( ExtChatState ),
-      m_csType( chatStateType( tag->name() ) )
+      m_state( chatStateType( tag->name() ) )
   {
   }
 
   Tag* ChatState::tag() const
   {
-    if( m_csType == ChatStateInvalid )
+    if( m_state == ChatStateInvalid )
       return 0;
 
-    return new Tag( util::lookup2( m_csType, stateValues ), XMLNS, XMLNS_CHAT_STATES );
+    return new Tag( util::lookup2( m_state, stateValues ), XMLNS, XMLNS_CHAT_STATES );
   }
 
 }

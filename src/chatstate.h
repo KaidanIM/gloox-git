@@ -37,12 +37,12 @@ namespace gloox
       ChatState( const Tag* tag );
 
       ChatState( ChatStateType type )
-        : StanzaExtension( ExtChatState ), m_csType( type )
+        : StanzaExtension( ExtChatState ), m_state( type )
       {}
 
       virtual ~ChatState() {}
 
-      ChatStateType state() const { return m_csType; }
+      ChatStateType state() const { return m_state; }
 
       // reimplemented from StanzaExtension
       virtual const std::string filterString() const
@@ -60,11 +60,11 @@ namespace gloox
         }
 
       // reimplemented from StanzaExtension
-      Tag * tag() const;
+      Tag* tag() const;
 
     private:
 
-      ChatStateType m_csType;
+      ChatStateType m_state;
 
   };
 
