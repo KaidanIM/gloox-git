@@ -72,9 +72,9 @@ namespace gloox
       // reimplemented from StanzaExtension
       virtual const std::string filterString() const
       {
-        return "/presence/x[@" + XMLNS + "='" + XMLNS_X_OOB + "']"
-               "|/message/x[@" + XMLNS + "='" + XMLNS_X_OOB + "']"
-               "|/iq/query[@" + XMLNS + "='" + XMLNS_IQ_OOB + "']"; }
+        return "/presence/x[@xmlns='" + XMLNS_X_OOB + "']"
+               "|/message/x[@xmlns='" + XMLNS_X_OOB + "']"
+               "|/iq/query[@xmlns='" + XMLNS_IQ_OOB + "']"; }
 
       // reimplemented from StanzaExtension
       virtual StanzaExtension* newInstance( const Tag* tag ) const
