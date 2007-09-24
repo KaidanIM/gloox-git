@@ -30,23 +30,23 @@ namespace gloox
         switch( m_test )
         {
           case 0:
-            if( cs->type() == ChatStateGone )
+            if( cs->state() == ChatStateGone )
               m_result = true;
             break;
           case 1:
-            if( cs->type() == ChatStateInactive )
+            if( cs->state() == ChatStateInactive )
               m_result = true;
             break;
           case 2:
-            if( cs->type() == ChatStateActive )
+            if( cs->state() == ChatStateActive )
               m_result = true;
             break;
           case 3:
-            if( cs->type() == ChatStateComposing )
+            if( cs->state() == ChatStateComposing )
               m_result = true;
             break;
           case 4:
-            if( cs->type() == ChatStatePaused )
+            if( cs->state() == ChatStatePaused )
               m_result = true;
             break;
           default:
@@ -90,7 +90,7 @@ namespace gloox
   };
 
   MessageSession::MessageSession( ClientBase*, const JID&, bool, int )
-  : m_jid( "abc@example.net/foo" ), m_test( 0 ), m_result( false ) {}
+    : m_jid( "abc@example.net/foo" ), m_test( 0 ), m_result( false ) {}
 
   class MessageFilter
   {
@@ -133,7 +133,7 @@ int main( int /*argc*/, char** /*argv*/ )
     t = new gloox::Tag( "dummy" );
     gloox::Message m( gloox::Message::Chat, gloox::JID() );
     f->decorate( m );
-    if( static_cast<const gloox::ChatState*>( m.findExtension( gloox::ExtChatState ) )->type()
+    if( static_cast<const gloox::ChatState*>( m.findExtension( gloox::ExtChatState ) )->state()
            != gloox::ChatStateActive )
     {
       ++fail;
