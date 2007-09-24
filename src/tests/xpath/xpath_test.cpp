@@ -592,8 +592,21 @@ int main( int /*argc*/, char** /*argv*/ )
   }
 //   printf( "--------------------------------------------------------------\n" );
 
+
   // -------
-  name = "empty union 3: /cde|/def";
+  name = "union + predicates: //bbb[@name='b1']|//hhh[@name='h1']";
+  result = aaa->findTagList( "//bbb[@name='b1']|//hhh[@name='h1']" );
+  it = result.begin();
+  if( result.size() != 2 || (*it) != bbb || (*++it) != hhh )
+  {
+    ++fail;
+    printResult( name, result );
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+//   printf( "--------------------------------------------------------------\n" );
+
+  // -------
+  name = "empty union 1: /cde|/def";
   result = aaa->findTagList( "/cde|/def" );
   it = result.begin();
   if( result.size() != 0 )
@@ -603,6 +616,7 @@ int main( int /*argc*/, char** /*argv*/ )
     printf( "test '%s' failed\n", name.c_str() );
   }
 //   printf( "--------------------------------------------------------------\n" );
+
 
   // ---- ~union ----
 
