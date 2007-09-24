@@ -14,64 +14,49 @@
 #include "stanzaextensionfactory.h"
 
 #include "gloox.h"
+#include "util.h"
+#include "stanza.h"
+#include "stanzaextension.h"
 #include "tag.h"
-#include "oob.h"
-#include "amp.h"
-#include "vcardupdate.h"
-#include "delayeddelivery.h"
-#include "xdelayeddelivery.h"
-#include "gpgsigned.h"
-#include "gpgencrypted.h"
-#include "capabilities.h"
-#include "chatstate.h"
-#include "error.h"
 
 namespace gloox
 {
 
-  StanzaExtension* StanzaExtensionFactory::create( const Tag* tag )
+  StanzaExtensionFactory::StanzaExtensionFactory()
   {
-    const std::string& name = tag->name();
-    const std::string& xmlns = tag->findAttribute( XMLNS );
+  }
 
-    if( name == "x" )
-    {
-      if( xmlns == XMLNS_X_DELAY )
-        return new XDelayedDelivery( tag );
-      else if( xmlns == XMLNS_X_OOB )
-        return new OOB( tag );
-      else if( xmlns == XMLNS_X_VCARD_UPDATE )
-        return new VCardUpdate( tag );
-      else if( xmlns == XMLNS_X_GPGSIGNED )
-        return new GPGSigned( tag );
-      else if( xmlns == XMLNS_X_GPGENCRYPTED )
-        return new GPGEncrypted( tag );
-      else if( xmlns == XMLNS_IQ_OOB )
-        return new OOB( tag );
-    }
-    else if( name == "delay" && xmlns == XMLNS_DELAY )
-    {
-      return new DelayedDelivery( tag );
-    }
-    else if( name == "amp" && xmlns == XMLNS_AMP )
-    {
-      return new AMP( tag );
-    }
-    else if( name == "c" && xmlns == XMLNS_CAPS )
-    {
-      return new Capabilities( tag );
-    }
-    else if( name == "error" )
-    {
-      return new Error( tag );
-    }
-    else if( name == "active" || name == "composing" || name == "paused" ||
-             name == "inactive" || name == "gone" )
-    {
-      return new ChatState( tag );
-    }
+  StanzaExtensionFactory::~StanzaExtensionFactory()
+  {
+    util::clear( m_extensions );
+  }
 
-    return 0;
+  void StanzaExtensionFactory::registerExtension( StanzaExtension* ext )
+  {
+    SEList::iterator it = m_extensions.begin();
+    for( ; it != m_extensions.end(); ++it )
+    {
+      if( ext->type() == (*it)->type() )
+      {
+        delete (*it);
+        m_extensions.erase( it );
+      }
+    }
+    m_extensions.push_back( ext );
+  }
+
+  void StanzaExtensionFactory::addExtensions( Stanza& stanza, Tag* tag )
+  {
+    TagList match;
+    TagList::const_iterator it;
+    SEList::const_iterator ite = m_extensions.begin();
+    for( ; ite != m_extensions.end(); ++ite )
+    {
+      match = tag->findTagList( (*ite)->filterString() );
+      it = match.begin();
+      for( ; it != match.end(); ++it )
+        stanza.addExtension( (*ite)->newInstance( (*it) ) );
+    }
   }
 
 }

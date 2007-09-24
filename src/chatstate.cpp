@@ -1,5 +1,4 @@
 #include "chatstate.h"
-#include "error.h"
 #include "tag.h"
 #include "util.h"
 
@@ -22,16 +21,16 @@ namespace gloox
 
   ChatState::ChatState( const Tag* tag )
     : StanzaExtension( ExtChatState ),
-      m_type( chatStateType( tag->name() ) )
+      m_csType( chatStateType( tag->name() ) )
   {
   }
 
   Tag * ChatState::tag() const
   {
-    if( m_type == ChatStateInvalid )
+    if( m_csType == ChatStateInvalid )
       return 0;
 
-    return new Tag( util::lookup2( m_type, stateValues ), XMLNS, XMLNS_CHAT_STATES );
+    return new Tag( util::lookup2( m_csType, stateValues ), XMLNS, XMLNS_CHAT_STATES );
   }
 
 }

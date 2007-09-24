@@ -25,7 +25,7 @@ namespace gloox
   class Tag;
 
   /**
-   * 
+   *
    */
   class GLOOX_API Error : public StanzaExtension
   {
@@ -46,7 +46,7 @@ namespace gloox
       virtual ~Error();
 
       /**
-       * 
+       *
        */
       StanzaErrorType type() const { return m_type; }
 
@@ -61,7 +61,7 @@ namespace gloox
        * @return The application-specific error element of a stanza error.
        * 0 if no respective element was found or no error occured.
        */
-      const Tag * appError() const { return m_appError; }
+      const Tag* appError() const { return m_appError; }
 
       /**
        * Returns the text of a error stanza for the given language if available.
@@ -75,7 +75,22 @@ namespace gloox
       const std::string text( const std::string& lang = "default" ) const;
 
       // reimplemented from StanzaExtension
-      Tag * tag() const;
+      virtual const std::string filterString() const
+      {
+        return "/iq/error"
+               "|/message/error"
+               "|/presence/error"
+               "|/subscription/error";
+      }
+
+      // reimplemented from StanzaExtension
+      virtual StanzaExtension* newInstance( const Tag* tag ) const
+      {
+        return new Error( tag );
+      }
+
+      // reimplemented from StanzaExtension
+      virtual Tag* tag() const;
 
     private:
 
@@ -83,10 +98,10 @@ namespace gloox
 
       typedef std::map< std::string, std::string > StringMap;
 
-      void setValues( const Tag * tag );
+      void setValues( const Tag* tag );
       StanzaErrorType m_type;
       StanzaError m_error;
-      Tag * m_appError;
+      Tag* m_appError;
       StringMap m_text;
   };
 

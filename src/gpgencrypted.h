@@ -14,6 +14,7 @@
 #ifndef GPGENCRYPTED_H__
 #define GPGENCRYPTED_H__
 
+#include "gloox.h"
 #include "stanzaextension.h"
 
 #include <string>
@@ -60,6 +61,18 @@ namespace gloox
        * @return The encrypted message.
        */
       const std::string& encrypted() const { return m_encrypted; }
+
+      // reimplemented from StanzaExtension
+      virtual const std::string filterString() const
+      {
+        return "/message/x[@" + XMLNS + "='" + XMLNS_X_GPGENCRYPTED + "']";
+      }
+
+      // reimplemented from StanzaExtension
+      virtual StanzaExtension* newInstance( const Tag* tag ) const
+      {
+        return new GPGEncrypted( tag );
+      }
 
       // reimplemented from StanzaExtension
       Tag* tag() const;

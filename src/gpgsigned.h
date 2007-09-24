@@ -14,6 +14,7 @@
 #ifndef GPGSIGNED_H__
 #define GPGSIGNED_H__
 
+#include "gloox.h"
 #include "stanzaextension.h"
 
 #include <string>
@@ -60,6 +61,19 @@ namespace gloox
        * @return The signature.
        */
       const std::string& signature() const { return m_signature; }
+
+      // reimplemented from StanzaExtension
+      virtual const std::string filterString() const
+      {
+        return "/presence/x[@" + XMLNS + "='" + XMLNS_X_GPGSIGNED + "']"
+               "|/message/x[@" + XMLNS + "='" + XMLNS_X_GPGSIGNED + "']";
+      }
+
+      // reimplemented from StanzaExtension
+      virtual StanzaExtension* newInstance( const Tag* tag ) const
+      {
+        return new GPGSigned( tag );
+      }
 
       // reimplemented from StanzaExtension
       Tag* tag() const;
