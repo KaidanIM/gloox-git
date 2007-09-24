@@ -21,41 +21,37 @@ namespace gloox
                       m_result( false ) {}*/
       virtual ~MessageSession() {}
       const JID& target() const { return m_jid; }
-      void send( Tag* tag )
+      void send( Message& msg )
       {
-        if( !tag )
+        if( msg.to() != m_jid )
           return;
-        if( tag->name() != "message" || !tag->hasAttribute( "to", m_jid.full() ) )
-        {
-          delete tag;
-          return;
-        }
+
+        const ChatState* cs = static_cast<const ChatState*>( msg.findExtension( ExtChatState ) );
         switch( m_test )
         {
           case 0:
-            if( tag->hasChild( "gone", "xmlns", XMLNS_CHAT_STATES ) )
+            if( cs->type() == ChatStateGone )
               m_result = true;
             break;
           case 1:
-            if( tag->hasChild( "inactive", "xmlns", XMLNS_CHAT_STATES ) )
+            if( cs->type() == ChatStateInactive )
               m_result = true;
             break;
           case 2:
-            if( tag->hasChild( "active", "xmlns", XMLNS_CHAT_STATES ) )
+            if( cs->type() == ChatStateActive )
               m_result = true;
             break;
           case 3:
-            if( tag->hasChild( "composing", "xmlns", XMLNS_CHAT_STATES ) )
+            if( cs->type() == ChatStateComposing )
               m_result = true;
             break;
           case 4:
-            if( tag->hasChild( "paused", "xmlns", XMLNS_CHAT_STATES ) )
+            if( cs->type() == ChatStatePaused )
               m_result = true;
             break;
           default:
             break;
         }
-        delete tag;
       }
       void setTest( int test ) { m_test = test; }
       bool ok() { bool ok = m_result; m_result = false; return ok; }
@@ -102,8 +98,8 @@ namespace gloox
       MessageFilter( MessageSession *parent );
       virtual ~MessageFilter();
       void attachTo( MessageSession *session );
-      virtual void decorate( Tag *tag );
-      void send( Tag* tag );
+      virtual void decorate( Message& msg );
+      void send( Message& msg );
     protected:
       MessageSession *m_parent;
   };
@@ -111,8 +107,8 @@ namespace gloox
   MessageFilter::MessageFilter( MessageSession *parent ) : m_parent( parent ) {}
   MessageFilter::~MessageFilter() { delete m_parent; }
   void MessageFilter::attachTo( MessageSession *session ) {}
-  void MessageFilter::decorate( Tag *tag ) {}
-  void MessageFilter::send( Tag* tag ) { m_parent->send( tag ); }
+  void MessageFilter::decorate( Message& msg ) {}
+  void MessageFilter::send( Message& msg ) { m_parent->send( msg ); }
 }
 
 #define MESSAGEFILTER_H__
@@ -128,98 +124,99 @@ int main( int /*argc*/, char** /*argv*/ )
   gloox::MessageSession *ms;
   gloox::Tag *t = 0;
   gloox::Tag *x = 0;
-  gloox::Message *m = 0;
   gloox::Message *s = 0;
 
   // -------
-  name = "simple decorate";
-  f = new gloox::ChatStateFilter( new gloox::MessageSession() );
-  t = new gloox::Tag( "dummy" );
-  f->decorate( t );
-  if( !t->hasChild( "active", "xmlns", gloox::XMLNS_CHAT_STATES ) )
   {
-    ++fail;
-    printf( "test '%s' failed:s %s\n", name.c_str(), t->xml().c_str() );
+    name = "simple decorate";
+    f = new gloox::ChatStateFilter( new gloox::MessageSession() );
+    t = new gloox::Tag( "dummy" );
+    gloox::Message m( gloox::Message::Chat, gloox::JID() );
+    f->decorate( m );
+    if( static_cast<const gloox::ChatState*>( m.findExtension( gloox::ExtChatState ) )->type()
+           != gloox::ChatStateActive )
+    {
+      ++fail;
+      printf( "test '%s' failed:s %s\n", name.c_str(), t->xml().c_str() );
+    }
+    delete f;
+    delete t;
+    f = 0;
+    t = 0;
   }
-  delete f;
-  delete t;
-  f = 0;
-  t = 0;
-
   // -------
   ms = new gloox::MessageSession();
   f = new gloox::ChatStateFilter( ms );
   f->registerChatStateHandler( ms );
 
-  name = "filter gone";
-  m = new gloox::Message( gloox::Message::Chat, gloox::JID() );
-  m->addExtension( new gloox::ChatState( gloox::ChatStateGone ) );
-  ms->setTest( 0 );
-  f->filter( m );
-  if( !ms->ok() )
   {
-    ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    name = "filter gone";
+    gloox::Message m( gloox::Message::Chat, gloox::JID() );
+    m.addExtension( new gloox::ChatState( gloox::ChatStateGone ) );
+    ms->setTest( 0 );
+    f->filter( m );
+    if( !ms->ok() )
+    {
+      ++fail;
+      printf( "test '%s' failed\n", name.c_str() );
+    }
   }
-  delete m;
-  m = 0;
 
   // -------
-  name = "filter inactive";
-  m = new gloox::Message( gloox::Message::Chat, gloox::JID() );
-  m->addExtension( new gloox::ChatState( gloox::ChatStateInactive ) );
-  ms->setTest( 1 );
-  f->filter( m );
-  if( !ms->ok() )
   {
-    ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    name = "filter inactive";
+    gloox::Message m( gloox::Message::Chat, gloox::JID() );
+    m.addExtension( new gloox::ChatState( gloox::ChatStateInactive ) );
+    ms->setTest( 1 );
+    f->filter( m );
+    if( !ms->ok() )
+    {
+      ++fail;
+      printf( "test '%s' failed\n", name.c_str() );
+    }
   }
-  delete m;
-  m = 0;
 
   // -------
-  name = "filter active";
-  m = new gloox::Message( gloox::Message::Chat, gloox::JID() );
-  m->addExtension( new gloox::ChatState( gloox::ChatStateActive ) );
-  ms->setTest( 2 );
-  f->filter( m );
-  if( !ms->ok() )
   {
-    ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    name = "filter active";
+    gloox::Message m( gloox::Message::Chat, gloox::JID() );
+    m.addExtension( new gloox::ChatState( gloox::ChatStateActive ) );
+    ms->setTest( 2 );
+    f->filter( m );
+    if( !ms->ok() )
+    {
+      ++fail;
+      printf( "test '%s' failed\n", name.c_str() );
+    }
   }
-  delete m;
-  m = 0;
 
   // -------
-  name = "filter composing";
-  m = new gloox::Message( gloox::Message::Chat, gloox::JID() );
-  m->addExtension( new gloox::ChatState( gloox::ChatStateComposing ) );
-  ms->setTest( 3 );
-  f->filter( m );
-  if( !ms->ok() )
   {
-    ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    name = "filter composing";
+    gloox::Message m( gloox::Message::Chat, gloox::JID() );
+    m.addExtension( new gloox::ChatState( gloox::ChatStateComposing ) );
+    ms->setTest( 3 );
+    f->filter( m );
+    if( !ms->ok() )
+    {
+      ++fail;
+      printf( "test '%s' failed\n", name.c_str() );
+    }
   }
-  delete m;
-  m = 0;
 
   // -------
-  name = "filter paused";
-  m = new gloox::Message( gloox::Message::Chat, gloox::JID() );
-  m->addExtension( new gloox::ChatState( gloox::ChatStatePaused ) );
-  ms->setTest( 4 );
-  f->filter( m );
-  if( !ms->ok() )
   {
-    ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    name = "filter paused";
+    gloox::Message m( gloox::Message::Chat, gloox::JID() );
+    m.addExtension( new gloox::ChatState( gloox::ChatStatePaused ) );
+    ms->setTest( 4 );
+    f->filter( m );
+    if( !ms->ok() )
+    {
+      ++fail;
+      printf( "test '%s' failed\n", name.c_str() );
+    }
   }
-  delete m;
-  m = 0;
-
 
   // -------
   name = "set inactive state";
