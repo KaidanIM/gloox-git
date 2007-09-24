@@ -938,7 +938,6 @@ namespace gloox
           break;
         case ']':
           closePreviousToken( &root, &current, type, token );
-          ++len;
           return root;
         case '[':
         {
