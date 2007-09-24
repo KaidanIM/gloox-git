@@ -42,7 +42,7 @@ namespace gloox
 
       virtual ~ChatState() {}
 
-      ChatStateType type() const { return m_csType; }
+      ChatStateType state() const { return m_csType; }
 
       // reimplemented from StanzaExtension
       virtual const std::string filterString() const

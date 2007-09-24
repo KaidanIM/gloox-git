@@ -31,40 +31,40 @@ namespace gloox
   {
   }
 
-  void MessageEventFilter::filter( Message* msg )
+  void MessageEventFilter::filter( Message& msg )
   {
     if( m_disable )
       return;
 
-    if( msg->subtype() == Message::Error )
+    if( msg.subtype() == Message::Error )
     {
-      if( msg->error()->error() == StanzaErrorFeatureNotImplemented )
+      if( msg.error()->error() == StanzaErrorFeatureNotImplemented )
         m_disable = true;
 
       return;
     }
 
-    Tag* x = msg->findChild( "x", XMLNS, XMLNS_X_EVENT );
+    Tag* x = msg.findChild( "x", XMLNS, XMLNS_X_EVENT );
     if( x && m_messageEventHandler )
     {
-      if( msg->body().empty() )
+      if( msg.body().empty() )
       {
         if( x->hasChild( "offline" ) )
-          m_messageEventHandler->handleMessageEvent( msg->from(), MessageEventOffline );
+          m_messageEventHandler->handleMessageEvent( msg.from(), MessageEventOffline );
         else if( x->hasChild( "delivered" ) )
-          m_messageEventHandler->handleMessageEvent( msg->from(), MessageEventDelivered );
+          m_messageEventHandler->handleMessageEvent( msg.from(), MessageEventDelivered );
         else if( x->hasChild( "displayed" ) )
-          m_messageEventHandler->handleMessageEvent( msg->from(), MessageEventDisplayed );
+          m_messageEventHandler->handleMessageEvent( msg.from(), MessageEventDisplayed );
         else if( x->hasChild( "composing" ) )
-          m_messageEventHandler->handleMessageEvent( msg->from(), MessageEventComposing );
+          m_messageEventHandler->handleMessageEvent( msg.from(), MessageEventComposing );
         else
-          m_messageEventHandler->handleMessageEvent( msg->from(), MessageEventCancel );
+          m_messageEventHandler->handleMessageEvent( msg.from(), MessageEventCancel );
       }
       else
       {
-        m_lastID = msg->findAttribute( "id" );
+        m_lastID = msg.findAttribute( "id" );
         m_requestedEvents = 0;
-        Tag* x = msg->findChild( "x" );
+        Tag* x = msg.findChild( "x" );
         if( x->hasChild( "offline" ) )
           m_requestedEvents |= MessageEventOffline;
         if( x->hasChild( "delivered" ) )
@@ -75,7 +75,7 @@ namespace gloox
           m_requestedEvents |= MessageEventComposing;
       }
     }
-    else if( msg->body().empty() )
+    else if( msg.body().empty() )
     {
       m_requestedEvents = 0;
       m_lastID = "";
@@ -87,8 +87,8 @@ namespace gloox
     if( m_disable || ( !( m_requestedEvents & event ) && ( event != MessageEventCancel ) ) )
       return;
 
-    Message* m = new Message( Message::Normal, m_parent->target() );
-    Tag* x = new Tag( m, "x" );
+    Message m( Message::Normal, m_parent->target() );
+    Tag* x = new Tag( &m, "x" );
     x->addAttribute( XMLNS, XMLNS_X_EVENT );
     new Tag( x, "id", m_lastID );
 
@@ -121,18 +121,16 @@ namespace gloox
 
     if( used )
       send( m );
-    else
-      delete m;
   }
 
-  void MessageEventFilter::decorate( Tag* tag )
+  void MessageEventFilter::decorate( Message& msg )
   {
     if( m_disable )
       return;
 
     if( m_defaultEvents != 0 )
     {
-      Tag* x = new Tag( tag, "x" );
+      Tag* x = new Tag( &msg, "x" );
       x->addAttribute( XMLNS, XMLNS_X_EVENT );
 
       if( m_defaultEvents & MessageEventOffline )

@@ -6,7 +6,7 @@ namespace gloox
 {
 
   /* chat state type values */
-  static const char * stateValues [] = {
+  static const char* stateValues [] = {
     "active",
     "composing",
     "paused",
@@ -25,7 +25,7 @@ namespace gloox
   {
   }
 
-  Tag * ChatState::tag() const
+  Tag* ChatState::tag() const
   {
     if( m_csType == ChatStateInvalid )
       return 0;

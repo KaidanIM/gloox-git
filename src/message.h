@@ -121,6 +121,12 @@ namespace gloox
        */
       void setThread( const std::string& thread ) { m_thread = thread; }
 
+      /**
+       * Sets the Message's ID. Optional.
+       * @param thread The thread ID.
+       */
+      void setID( const std::string& id ) { m_id = id; }
+
     private:
       /**
        * Creates a message Stanza from the given Tag. The original Tag will be ripped off.
