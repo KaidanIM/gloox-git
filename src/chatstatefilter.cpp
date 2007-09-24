@@ -31,16 +31,16 @@ namespace gloox
   {
   }
 
-  void ChatStateFilter::filter( Message* msg )
+  void ChatStateFilter::filter( Message& msg )
   {
     if( m_enableChatStates = m_chatStateHandler )
     {
-      const StanzaExtension* se = msg->findExtension( ExtChatState );
+      const StanzaExtension* se = msg.findExtension( ExtChatState );
       const ChatState* state = static_cast< const ChatState* >( se );
 
       m_enableChatStates = state && state->type() != ChatStateInvalid;
-      if( m_enableChatStates && msg->body().empty() )
-        m_chatStateHandler->handleChatState( msg->from(), state->type() );
+      if( m_enableChatStates && msg.body().empty() )
+        m_chatStateHandler->handleChatState( msg.from(), state->state() );
     }
   }
 
@@ -49,18 +49,18 @@ namespace gloox
     if( !m_enableChatStates || state == m_lastSent || state == ChatStateInvalid )
       return;
 
-    Message* m = new Message( Message::Chat, m_parent->target() );
-    m->addExtension( new ChatState( state ) );
+    Message m( Message::Chat, m_parent->target() );
+    m.addExtension( new ChatState( state ) );
 
     m_lastSent = state;
 
     send( m );
   }
 
-  void ChatStateFilter::decorate( Tag* tag )
+  void ChatStateFilter::decorate( Message& msg )
   {
     if( m_enableChatStates )
-      new Tag( tag, "active", XMLNS, XMLNS_CHAT_STATES );
+      msg.addExtension( new ChatState( ChatStateActive ) );
   }
 
 }

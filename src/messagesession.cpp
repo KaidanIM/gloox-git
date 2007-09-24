@@ -54,7 +54,7 @@ namespace gloox
     MessageFilterList::const_iterator it = m_messageFilterList.begin();
     for( ; it != m_messageFilterList.end(); ++it )
     {
-      (*it)->filter( msg );
+      (*it)->filter( *msg );
     }
 
     if( m_messageHandler && !msg->body().empty() )
@@ -69,22 +69,22 @@ namespace gloox
       m_hadMessages = true;
     }
 
-    Message* m = new Message( Message::Chat, m_target.full(), message, subject, m_thread );
-    m->addAttribute( "id", m_parent->getID() );
+    Message m( Message::Chat, m_target.full(), message, subject, m_thread );
+    m.setID( m_parent->getID() );
 
     decorate( m );
 
     m_parent->send( m );
   }
 
-  void MessageSession::send( Tag* tag )
+  void MessageSession::send( const Message& msg )
   {
-    m_parent->send( tag );
+    m_parent->send( msg );
   }
 
-  void MessageSession::decorate( Tag* tag )
+  void MessageSession::decorate( Message& msg )
   {
-    util::ForEach( m_messageFilterList, &MessageFilter::decorate, tag ); 
+    util::ForEach( m_messageFilterList, &MessageFilter::decorate, msg );
   }
 
   void MessageSession::resetResource()

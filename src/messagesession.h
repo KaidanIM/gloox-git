@@ -23,7 +23,6 @@ namespace gloox
 {
 
   class ClientBase;
-  class Tag;
   class MessageFilter;
   class MessageHandler;
   class Message;
@@ -263,8 +262,8 @@ namespace gloox
       * Event requests are added).
       * @param tag A Tag to send.
       */
-      virtual void send( Tag* tag );
-      void decorate( Tag* tag );
+      virtual void send( const Message& msg );
+      void decorate( Message& msg );
 
       ClientBase* m_parent;
       JID m_target;
