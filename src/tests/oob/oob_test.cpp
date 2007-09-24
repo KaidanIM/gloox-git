@@ -1,5 +1,7 @@
 #include "../../tag.h"
 #include "../../oob.h"
+#include "../../iq.h"
+#include "../../stanzaextensionfactory.h"
 using namespace gloox;
 
 #include <stdio.h>
@@ -155,9 +157,30 @@ int main( int /*argc*/, char** /*argv*/ )
   t = 0;
 
 
-
   delete x;
   x = 0;
+
+
+  StanzaExtensionFactory sef;
+
+  // -------
+  name = "OOB/SEFactory test";
+  OOB* oob = new OOB( 0 ); // deleted by StanzaExtensionFactory sef;
+  sef.registerExtension( oob );
+  Tag* f = new Tag( "iq" );
+  Tag* b = new Tag( f, "query", "xmlns", XMLNS_IQ_OOB );
+  new Tag( b, "url", "url" );
+  new Tag( b, "desc", "desc" );
+  IQ iq( IQ::Set, JID(), "" );
+  sef.addExtensions( iq, f );
+  const OOB* se = static_cast<const OOB*>( iq.findExtension( ExtOOB ) );
+  if( se == 0 || se->url() != "url" || se->desc() != "desc" )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+  delete f;
+
 
   if( fail == 0 )
   {
