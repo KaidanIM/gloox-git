@@ -47,11 +47,11 @@ namespace gloox
       // reimplemented from StanzaExtension
       virtual const std::string filterString() const
       {
-        return "/message/active[@" + XMLNS + "='" + XMLNS_CHAT_STATES + "']"
-               "|/message/composing[@" + XMLNS + "='" + XMLNS_CHAT_STATES + "']"
-               "|/message/paused[@" + XMLNS + "='" + XMLNS_CHAT_STATES + "']"
-               "|/message/inactive[@" + XMLNS + "='" + XMLNS_CHAT_STATES + "']"
-               "|/message/gone[@" + XMLNS + "='" + XMLNS_CHAT_STATES + "']"; }
+        return "/message/active[@xmlns='" + XMLNS_CHAT_STATES + "']"
+               "|/message/composing[@xmlns='" + XMLNS_CHAT_STATES + "']"
+               "|/message/paused[@xmlns='" + XMLNS_CHAT_STATES + "']"
+               "|/message/inactive[@xmlns='" + XMLNS_CHAT_STATES + "']"
+               "|/message/gone[@xmlns='" + XMLNS_CHAT_STATES + "']"; }
 
       // reimplemented from StanzaExtension
         virtual StanzaExtension* newInstance( const Tag* tag ) const
