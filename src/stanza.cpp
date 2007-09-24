@@ -38,95 +38,12 @@ namespace gloox
     m_from.setJID( findAttribute( "from" ) );
     m_to.setJID( findAttribute( "to" ) );
     m_id = findAttribute( "id" );
-
   }
 
   Stanza::~Stanza()
   {
     util::clear( m_extensionList );
   }
-
-//   void Stanza::init()
-//   {
-//     m_xmllang = findAttribute( "xml:lang" );
-//
-//     if( hasAttribute( TYPE, "error" ) && hasChild( "error" ) )
-//     {
-//       Tag* e = findChild( "error" );
-//
-//       if( e->hasAttribute( TYPE, "cancel" ) )
-//         m_stanzaErrorType = StanzaErrorTypeCancel;
-//       else if( e->hasAttribute( TYPE, "continue" ) )
-//         m_stanzaErrorType = StanzaErrorTypeContinue;
-//       else if( e->hasAttribute( TYPE, "modify" ) )
-//         m_stanzaErrorType = StanzaErrorTypeModify;
-//       else if( e->hasAttribute( TYPE, "auth" ) )
-//         m_stanzaErrorType = StanzaErrorTypeAuth;
-//       else if( e->hasAttribute( TYPE, "wait" ) )
-//         m_stanzaErrorType = StanzaErrorTypeWait;
-//
-//       const TagList& c = e->children();
-//       TagList::const_iterator it = c.begin();
-//       StanzaError err = StanzaErrorUndefined;
-//       for( ; it != c.end(); ++it )
-//       {
-//         if( (*it)->name() == "bad-request" )
-//           err = StanzaErrorBadRequest;
-//         else if( (*it)->name() == "conflict" )
-//           err = StanzaErrorConflict;
-//         else if( (*it)->name() == "feature-not-implemented" )
-//           err = StanzaErrorFeatureNotImplemented;
-//         else if( (*it)->name() == "forbidden" )
-//           err = StanzaErrorForbidden;
-//         else if( (*it)->name() == "gone" )
-//           err = StanzaErrorGone;
-//         else if( (*it)->name() == "internal-server-error" )
-//           err = StanzaErrorInternalServerError;
-//         else if( (*it)->name() == "item-not-found" )
-//           err = StanzaErrorItemNotFound;
-//         else if( (*it)->name() == "jid-malformed" )
-//           err = StanzaErrorJidMalformed;
-//         else if( (*it)->name() == "not-acceptable" )
-//           err = StanzaErrorNotAcceptable;
-//         else if( (*it)->name() == "not-allowed" )
-//           err = StanzaErrorNotAllowed;
-//         else if( (*it)->name() == "not-authorized" )
-//           err = StanzaErrorNotAuthorized;
-//         else if( (*it)->name() == "recipient-unavailable" )
-//           err = StanzaErrorRecipientUnavailable;
-//         else if( (*it)->name() == "redirect" )
-//           err = StanzaErrorRedirect;
-//         else if( (*it)->name() == "registration-required" )
-//           err = StanzaErrorRegistrationRequired;
-//         else if( (*it)->name() == "remote-server-not-found" )
-//           err = StanzaErrorRemoteServerNotFound;
-//         else if( (*it)->name() == "remote-server-timeout" )
-//           err = StanzaErrorRemoteServerTimeout;
-//         else if( (*it)->name() == "resource-constraint" )
-//           err = StanzaErrorResourceConstraint;
-//         else if( (*it)->name() == "service-unavailable" )
-//           err = StanzaErrorServiceUnavailable;
-//         else if( (*it)->name() == "subscription-required" )
-//           err = StanzaErrorSubscribtionRequired;
-//         else if( (*it)->name() == "undefined-condition" )
-//           err = StanzaErrorUndefinedCondition;
-//         else if( (*it)->name() == "unexpected-request" )
-//           err = StanzaErrorUnexpectedRequest;
-//         else if( (*it)->name() == "text" )
-//         {
-//           setLang( m_errorText, (*it) );
-//         }
-//         else {
-//           m_stanzaErrorAppCondition = (*it);
-//         }
-//
-//         if( err != StanzaErrorUndefined && (*it)->hasAttribute( XMLNS, XMLNS_XMPP_STANZAS ) )
-//         {
-//           m_stanzaError = err;
-//         }
-//       }
-//     }
-//   }
 
   const Error* Stanza::error() const
   {
