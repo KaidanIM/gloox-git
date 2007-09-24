@@ -7,8 +7,6 @@ AM_CPPFLAGS = -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare
 noinst_PROGRAMS = iq_test
 
 iq_test_SOURCES = iq_test.cpp
-iq_test_LDADD = ../../tag.o ../../iq.o ../../stanza.o ../../stanzaextensionfactory.o ../../oob.o \
-                ../../gpgencrypted.o ../../gpgsigned.o ../../vcardupdate.o ../../delayeddelivery.o \
-                ../../xdelayeddelivery.o ../../amp.o ../../jid.o ../../prep.o ../../gloox.o ../../util.o \
-                ../../capabilities.o ../../sha.o ../../base64.o ../../error.o ../../chatstate.o
+iq_test_LDADD = ../../tag.o ../../iq.o ../../stanza.o ../../jid.o ../../prep.o ../../gloox.o ../../util.o \
+                ../../sha.o ../../base64.o
 iq_test_CFLAGS = $(CPPFLAGS)

@@ -11,10 +11,9 @@ clientbase_test_LDADD = ../../clientbase.o ../../jid.o ../../connectiontcpclient
 			../../disco.o ../../parser.o ../../tag.o ../../stanza.o ../../base64.o \
 			../../md5.o ../../tlsgnutlsclient.o ../../tlsopenssl.o ../../tlsschannel.o \
 			../../logsink.o ../../messagesession.o ../../prep.o ../../compressionzlib.o \
-			../../dns.o ../../stanzaextensionfactory.o ../../oob.o ../../gpgencrypted.o \
-			../../gpgsigned.o ../../vcardupdate.o ../../delayeddelivery.o \
-			../../xdelayeddelivery.o ../../gloox.o ../../tlsgnutlsbase.o ../../tlsdefault.o \
-			../../tlsgnutlsclientanon.o ../../tlsgnutlsserveranon.o ../../mutex.o ../../amp.o \
+			../../dns.o ../../stanzaextensionfactory.o \
+			../../gloox.o ../../tlsgnutlsbase.o ../../tlsdefault.o \
+			../../tlsgnutlsclientanon.o ../../tlsgnutlsserveranon.o ../../mutex.o \
 			../../iq.o ../../presence.o ../../message.o ../../subscription.o ../../util.o \
-			../../capabilities.o ../../sha.o ../../error.o ../../chatstate.o
+			../../sha.o ../../error.o
 clientbase_test_CFLAGS = $(CPPFLAGS)

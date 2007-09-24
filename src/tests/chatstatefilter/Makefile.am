@@ -7,10 +7,9 @@ AM_CPPFLAGS = -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare
 noinst_PROGRAMS = chatstatefilter_test
 
 chatstatefilter_test_SOURCES = chatstatefilter_test.cpp
-chatstatefilter_test_LDADD = ../../tag.o ../../stanza.o ../../stanzaextensionfactory.o ../../gpgsigned.o \
- 				../../jid.o ../../prep.o ../../gpgencrypted.o ../../oob.o \
- 				../../vcardupdate.o ../../delayeddelivery.o ../../xdelayeddelivery.o \
-				../../amp.o ../../message.o ../../util.o ../../capabilities.o ../../disco.o \
+chatstatefilter_test_LDADD = ../../tag.o ../../stanza.o ../../stanzaextensionfactory.o \
+ 				../../jid.o ../../prep.o \
+				../../message.o ../../util.o ../../disco.o \
 				../../sha.o ../../base64.o ../../iq.o \
 			../../clientbase.o ../../connectiontcpclient.o ../../connectiontcpbase.o \
 			../../parser.o \
