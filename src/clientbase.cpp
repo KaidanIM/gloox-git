@@ -201,12 +201,14 @@ namespace gloox
           if( tag->name() == "iq"  )
           {
             IQ iq( tag );
+            m_seFactory.addExtensions( iq, tag );
             notifyIqHandlers( &iq );
             ++m_stats.iqStanzasReceived;
           }
           else if( tag->name() == "message" )
           {
             Message msg( tag );
+            m_seFactory.addExtensions( msg, tag );
             notifyMessageHandlers( &msg );
             ++m_stats.messageStanzasReceived;
           }
@@ -217,12 +219,14 @@ namespace gloox
                 || type == "subscribed" || type == "unsubscribed" )
             {
               Subscription sub( tag );
+              m_seFactory.addExtensions( sub, tag );
               notifySubscriptionHandlers( &sub );
               ++m_stats.s10nStanzasReceived;
             }
             else
             {
               Presence pres( tag );
+              m_seFactory.addExtensions( pres, tag );
               notifyPresenceHandlers( &pres );
               ++m_stats.presenceStanzasReceived;
             }
