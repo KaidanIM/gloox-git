@@ -1,11 +1,6 @@
-#include "../../oob.h"
-#include "../../xdelayeddelivery.h"
-#include "../../delayeddelivery.h"
-#include "../../vcardupdate.h"
-#include "../../gpgsigned.h"
-#include "../../gpgencrypted.h"
 #include "../../stanzaextension.h"
 #include "../../stanzaextensionfactory.h"
+#include "../../iq.h"
 #include "../../tag.h"
 using namespace gloox;
 
@@ -13,96 +8,47 @@ using namespace gloox;
 #include <locale.h>
 #include <string>
 
+class SETest : public StanzaExtension
+{
+  public:
+    SETest( const Tag* tag ) : StanzaExtension( ExtUser + 1 ), m_tag( const_cast<Tag*>( tag ) ) {}
+    ~SETest() {}
+
+    virtual const std::string filterString() const
+    { return "/foo/bar"; }
+
+    virtual StanzaExtension* newInstance( const Tag* tag ) const
+    { return new SETest( tag ); }
+
+    virtual Tag* tag() const
+    { return m_tag; }
+
+  private:
+    Tag* m_tag;
+
+};
+
 int main( int /*argc*/, char** /*argv*/ )
 {
   int fail = 0;
   std::string name;
-  StanzaExtension *se;
-  Tag *t;
+  StanzaExtensionFactory sef;
 
   // -------
-  name = "OOB test";
-  OOB *o = new OOB( "url", "desc", false );
-  t = o->tag();
-  se = StanzaExtensionFactory::create( t );
-  if( se->type() != ExtOOB )
+  name = "SEFactory test";
+  SETest* set = new SETest( 0 ); // deleted by StanzaExtensionFactory sef;
+  sef.registerExtension( set );
+  Tag* f = new Tag( "foo" );
+  Tag* b = new Tag( f, "bar", "attr", "value" );
+  IQ iq( IQ::Set, JID(), "" );
+  sef.addExtensions( iq, f );
+  const StanzaExtension* se = iq.findExtension( ExtUser + 1 );
+  if( se == 0 || se->tag() != b )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
   }
-  delete o;
-  delete t;
-  delete se;
-  t = 0;
-
-  // -------
-  {
-    name = "DelayedDelivery test";
-    JID from( "abc@example.net" );
-    DelayedDelivery *d = new DelayedDelivery( from, "stamp", "reason" );
-    t = d->tag();
-    se = StanzaExtensionFactory::create( t );
-    if( se->type() != ExtDelay )
-    {
-      ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
-    }
-    delete d;
-    delete t;
-    delete se;
-    t = 0;
-  }
-
-  // -------
-  {
-    name = "VCardUpdate test";
-    VCardUpdate *d = new VCardUpdate( "hash" );
-    t = d->tag();
-    se = StanzaExtensionFactory::create( t );
-    if( se->type() != ExtVCardUpdate )
-    {
-      ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
-    }
-    delete d;
-    delete t;
-    delete se;
-    t = 0;
-  }
-
-  // -------
-  {
-    name = "GPGSigned test";
-    GPGSigned *d = new GPGSigned( "signature" );
-    t = d->tag();
-    se = StanzaExtensionFactory::create( t );
-    if( se->type() != ExtGPGSigned )
-    {
-      ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
-    }
-    delete d;
-    delete t;
-    delete se;
-    t = 0;
-  }
-
-  // -------
-  {
-    name = "GPGEncrypted test";
-    GPGEncrypted *d = new GPGEncrypted( "encrypted" );
-    t = d->tag();
-    se = StanzaExtensionFactory::create( t );
-    if( se->type() != ExtGPGEncrypted )
-    {
-      ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
-    }
-    delete d;
-    delete t;
-    delete se;
-    t = 0;
-  }
+  delete f;
 
 
 

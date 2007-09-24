@@ -7,8 +7,6 @@ AM_CPPFLAGS = -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare
 noinst_PROGRAMS = presence_test
 
 presence_test_SOURCES = presence_test.cpp
-presence_test_LDADD = ../../tag.o ../../presence.o ../../stanza.o ../../stanzaextensionfactory.o \
-                ../../oob.o ../../gpgencrypted.o ../../gpgsigned.o ../../vcardupdate.o ../../delayeddelivery.o \
-                ../../xdelayeddelivery.o ../../amp.o ../../jid.o ../../prep.o ../../gloox.o ../../util.o \
-                ../../capabilities.o ../../sha.o ../../base64.o ../../error.o ../../chatstate.o
+presence_test_LDADD = ../../tag.o ../../presence.o ../../stanza.o ../../jid.o ../../prep.o ../../gloox.o \
+                      ../../util.o ../../sha.o ../../base64.o
 presence_test_CFLAGS = $(CPPFLAGS)
