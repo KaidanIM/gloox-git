@@ -186,8 +186,7 @@ namespace gloox
               const Tag* x = (*it)->findChild( "x" );
               const DataForm* df = x ? new DataForm( x ) : 0;
               (*ith)->handleNodeCreation( service, node, df );
-              if( df )
-                delete df;
+              delete df;
               break;
             }
             case EventConfigure:
@@ -195,8 +194,7 @@ namespace gloox
               const Tag* x = (*it)->findChild( "x" );
               const DataForm* df = x ? new DataForm( x ) : 0;
               (*ith)->handleConfigurationChange( service, node, df );
-              if( df )
-                delete df;
+              delete df;
               break;
             }
             case EventDelete:
@@ -351,8 +349,7 @@ namespace gloox
     {
       if( !m_parent || !handler )
       {
-        if( item )
-          delete item;
+        delete item;
         return;
       }
 
@@ -796,8 +793,7 @@ namespace gloox
                   const DataForm* df = x ? new DataForm( x ) : 0;
                   const std::string& node = options->findAttribute("node");
                   (*ith).second->handleNodeConfig( service, node, df );
-                  if( df )
-                    delete df;
+                  delete df;
                   break;
                 }
                 default:
