@@ -118,10 +118,31 @@ namespace gloox
        * @param when This is only used if @c history is @b true and then contains the
        * datetime the message was sent in a notation as described in XEP-0082.
        * @param privateMessage Indicates whether this is a private message.
+       * @deprecated
        */
-      virtual void handleMUCMessage( MUCRoom* room, const std::string& nick,
-                                     const std::string& message, bool history,
-                                     const std::string& when, bool privateMessage ) = 0;
+      GLOOX_DEPRECATED virtual void handleMUCMessage( MUCRoom* room, const std::string& nick,
+                                                      const std::string& message, bool history,
+                                                      const std::string& when, bool privateMessage ) {};
+
+      /**
+       * This function is called when a message arrives through the room.
+       * @note This may be a private message! If the message is private, and you want to answer
+       * it privately, you should create a new MessageSession to the user's full room nick and use
+       * that for any further private communication with the user.
+       * @param room The room the message came from.
+       * @param msg The entire Message.
+       * @param privateMessage Indicates whether this is a private message.
+       * @note The sender's nick name can be obtains with this call:
+       * @code
+       *   const std::string = msg.from().resource();
+       * @endcode
+       * @note The message may contain an extension describing the date/time when the message
+       * was originally sent. This extension can be obtained with this call:
+       * @code
+       *   DelayedDelivery* dd = msg.when(); // may be 0 if no such extension exists
+       * @endcode
+       */
+      virtual void handleMUCMessage( MUCRoom* room, const Message& msg, bool privateMessage ) = 0;
 
       /**
        * This function is called if the room that was just joined didn't exist prior to the attempted

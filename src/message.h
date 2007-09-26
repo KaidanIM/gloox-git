@@ -13,6 +13,7 @@
 #ifndef MESSAGE_H__
 #define MESSAGE_H__
 
+#include "delayeddelivery.h"
 #include "stanza.h"
 
 #include <string>
@@ -126,6 +127,16 @@ namespace gloox
        * @param thread The thread ID.
        */
       void setID( const std::string& id ) { m_id = id; }
+
+      /**
+       * Convenience function that returns a pointer to an DelayedDelivery StanzaExtension, if the
+       * message contains one.
+       * @return A pointer to a DelayedDelivery object, or 0.
+       */
+      const DelayedDelivery* when() const
+      {
+        return static_cast<const DelayedDelivery*>( findExtension( ExtDelay ) );
+      }
 
     private:
       /**
