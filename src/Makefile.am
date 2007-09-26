@@ -20,7 +20,7 @@ libgloox_la_SOURCES = jid.cpp parser.cpp connectiontcpclient.cpp clientbase.cpp 
                         inbandbytestream.cpp messagefilter.cpp vcard.cpp \
                         vcardmanager.cpp md5.cpp sha.cpp search.cpp dataformreported.cpp dataformitem.cpp \
                         mucroom.cpp mucmessagesession.cpp oob.cpp vcardupdate.cpp stanzaextensionfactory.cpp \
-                        delayeddelivery.cpp xdelayeddelivery.cpp gpgencrypted.cpp gpgsigned.cpp \
+                        delayeddelivery.cpp gpgencrypted.cpp gpgsigned.cpp \
                         uniquemucroom.cpp instantmucroom.cpp compressionzlib.cpp tlsgnutlsclient.cpp \
                         tlsopenssl.cpp connectionhttpproxy.cpp tlsgnutlsserveranon.cpp tlsgnutlsbase.cpp \
                         tlsgnutlsclientanon.cpp tlsschannel.cpp tlsdefault.cpp simanager.cpp siprofileft.cpp \
@@ -59,7 +59,7 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             mucroomconfighandler.h    parser.h                \
                             mucinvitationhandler.h    stanzaextension.h       oob.h \
                             vcardupdate.h             delayeddelivery.h       base64.h \
-                            xdelayeddelivery.h        gpgencrypted.h          gpgsigned.h \
+                            gpgencrypted.h          gpgsigned.h \
                             md5.h                     sha.h                   uniquemucroom.h \
                             instantmucroom.h          tlsbase.h               tlshandler.h \
                             connectionbase.h          connectiondatahandler.h compressiondatahandler.h \
