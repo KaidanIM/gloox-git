@@ -663,6 +663,7 @@ namespace gloox
 
         m_roomHandler->handleMUCMessage( this, msg->from().resource(), msg->body(),
                                           history, when, privMsg );
+        m_roomHandler->handleMUCMessage( this, *msg, privMsg );
       }
     }
   }
