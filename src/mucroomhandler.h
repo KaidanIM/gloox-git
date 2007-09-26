@@ -122,7 +122,15 @@ namespace gloox
        */
       GLOOX_DEPRECATED virtual void handleMUCMessage( MUCRoom* room, const std::string& nick,
                                                       const std::string& message, bool history,
-                                                      const std::string& when, bool privateMessage ) {};
+                                                      const std::string& when, bool privateMessage )
+      {
+        (void)room;
+        (void)nick;
+        (void)message;
+        (void)history;
+        (void)when;
+        (void)privateMessage;
+      };
 
       /**
        * This function is called when a message arrives through the room.
@@ -137,7 +145,8 @@ namespace gloox
        *   const std::string = msg.from().resource();
        * @endcode
        * @note The message may contain an extension describing the date/time when the message
-       * was originally sent. This extension can be obtained with this call:
+       * was originally sent. The presence of such an extension usually indicates that the message
+       * is sent as part of the room history. This extension can be obtained with this call:
        * @code
        *   DelayedDelivery* dd = msg.when(); // may be 0 if no such extension exists
        * @endcode
