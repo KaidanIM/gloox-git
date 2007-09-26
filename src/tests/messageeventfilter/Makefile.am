@@ -10,5 +10,5 @@ messageeventfilter_test_SOURCES = messageeventfilter_test.cpp
 messageeventfilter_test_LDADD = ../../tag.o ../../stanza.o \
  				../../jid.o ../../prep.o ../../gloox.o \
 				../../message.o ../../util.o \
-				../../sha.o ../../base64.o
+				../../sha.o ../../base64.o ../../messageevent.o
 messageeventfilter_test_CPPFLAGS = $(CPPFLAGS)
