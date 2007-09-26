@@ -44,8 +44,8 @@ namespace gloox
        * Constructs a new object of the given type.
        * @param type The chat state.
        */
-      ChatState( ChatStateType type )
-        : StanzaExtension( ExtChatState ), m_state( type )
+      ChatState( ChatStateType state )
+        : StanzaExtension( ExtChatState ), m_state( state )
       {}
 
       /**
@@ -69,10 +69,10 @@ namespace gloox
                "|/message/gone[@xmlns='" + XMLNS_CHAT_STATES + "']"; }
 
       // reimplemented from StanzaExtension
-        virtual StanzaExtension* newInstance( const Tag* tag ) const
-        {
-          return new ChatState( tag );
-        }
+      virtual StanzaExtension* newInstance( const Tag* tag ) const
+      {
+        return new ChatState( tag );
+      }
 
       // reimplemented from StanzaExtension
       Tag* tag() const;

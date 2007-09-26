@@ -100,11 +100,10 @@ class MessageTest : public ConnectionListener, LogHandler, MUCRoomHandler
         printf( "Presence is %d of %s\n", presence, participant.nick->resource().c_str() );
     }
 
-    virtual void handleMUCMessage( MUCRoom* /*room*/, const std::string& nick, const std::string& message,
-                                   bool history, const std::string& /*when*/, bool priv )
+    virtual void handleMUCMessage( MUCRoom* /*room*/, const Message& msg, bool priv )
     {
-      printf( "%s said: '%s' (history: %s, private: %s)\n", nick.c_str(), message.c_str(),
-              history ? "yes" : "no", priv ? "yes" : "no" );
+      printf( "%s said: '%s' (history: %s, private: %s)\n", msg.from().resource().c_str(), msg.body().c_str(),
+              msg.when() ? "yes" : "no", priv ? "yes" : "no" );
     }
 
     virtual void handleMUCSubject( MUCRoom * /*room*/, const std::string& nick, const std::string& subject )
