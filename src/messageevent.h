@@ -41,7 +41,7 @@ namespace gloox
 
       /**
        * Constructs a new object of the given type, with an optional message ID.
-       * @param type One or more MessageEventType's.
+       * @param type One or more MessageEventType.
        * @param id An optional message ID. Links this Event to the message it is generated for.
        */
       MessageEvent( int type, const std::string& id = "" )
