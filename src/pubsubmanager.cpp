@@ -144,7 +144,7 @@ namespace gloox
       EventItems,
       EventPurge,
       EventSubscription,
-      EventUnkown
+      EventUnknown
     };
 
     static EventType eventType( const std::string& event )
