@@ -144,9 +144,10 @@ namespace gloox
        * @code
        *   const std::string = msg.from().resource();
        * @endcode
-       * @note The message may contain an extension describing the date/time when the message
-       * was originally sent. The presence of such an extension usually indicates that the message
-       * is sent as part of the room history. This extension can be obtained with this call:
+       * @note The message may contain an extension of type DelayedDelivery describing the
+       * date/time when the message was originally sent. The presence of such an extension
+       * usually indicates that the message is sent as part of the room history. This extension
+       * can be obtained with this call:
        * @code
        *   DelayedDelivery* dd = msg.when(); // may be 0 if no such extension exists
        * @endcode
