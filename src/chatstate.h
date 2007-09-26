@@ -34,14 +34,29 @@ namespace gloox
   {
     public:
 
+      /**
+       * Constructs a new object from the given Tag.
+       * @param tag A Tag to parse.
+       */
       ChatState( const Tag* tag );
 
+      /**
+       * Constructs a new object of the given type.
+       * @param type The chat state.
+       */
       ChatState( ChatStateType type )
         : StanzaExtension( ExtChatState ), m_state( type )
       {}
 
+      /**
+       * Virtual destructor.
+       */
       virtual ~ChatState() {}
 
+      /**
+       * Returns the object's state.
+       * @return The object's state.
+       */
       ChatStateType state() const { return m_state; }
 
       // reimplemented from StanzaExtension
@@ -63,7 +78,6 @@ namespace gloox
       Tag* tag() const;
 
     private:
-
       ChatStateType m_state;
 
   };

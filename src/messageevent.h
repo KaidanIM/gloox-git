@@ -33,14 +33,30 @@ namespace gloox
   {
     public:
 
+      /**
+       * Constructs a new object from the given Tag.
+       * @param tag A Tag to parse.
+       */
       MessageEvent( const Tag* tag );
 
+      /**
+       * Constructs a new object of the given type, with an optional message ID.
+       * @param type One or more MessageEventType's.
+       * @param id An optional message ID. Links this Event to the message it is generated for.
+       */
       MessageEvent( int type, const std::string& id = "" )
         : StanzaExtension( ExtMessageEvent ), m_id( id ), m_event( type )
       {}
 
+      /**
+       * Virtual destructor.
+       */
       virtual ~MessageEvent() {}
 
+      /**
+       * Returns the object's event or events.
+       * @return The object's event or events.
+       */
       int event() const { return m_event; }
 
       // reimplemented from StanzaExtension
@@ -59,7 +75,6 @@ namespace gloox
       Tag* tag() const;
 
     private:
-
       std::string m_id;
       int m_event;
 
