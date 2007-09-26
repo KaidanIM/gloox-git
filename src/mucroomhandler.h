@@ -118,7 +118,7 @@ namespace gloox
        * @param when This is only used if @c history is @b true and then contains the
        * datetime the message was sent in a notation as described in XEP-0082.
        * @param privateMessage Indicates whether this is a private message.
-       * @deprecated
+       * @deprecated Will be removed in gloox 1.1. Use handleMUCMessage( MUCRoom*, const Message&, bool ).
        */
       GLOOX_DEPRECATED virtual void handleMUCMessage( MUCRoom* room, const std::string& nick,
                                                       const std::string& message, bool history,
