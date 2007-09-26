@@ -31,8 +31,8 @@ using namespace gloox;
 #ifdef HAVE_GNUTLS
 
 /*
- * Using TLS to encrypt end-to-end traffic is not a recommended prectice, nor is
- * it standardized in any way. Use this code at your own risk.
+ * Using TLS to encrypt end-to-end traffic is not a recommended practice in XMPP,
+ * nor is it standardized in any way. Use this code at your own risk.
  */
 
 class MessageTest : public ConnectionListener, LogHandler,
