@@ -41,8 +41,6 @@ namespace gloox
       /**
        * Contstructs a new Message Event filter for a MessageSession.
        * @param parent The MessageSession to decorate.
-       * @param defaultEvents Bit-wise ORed MessageEventType's which shall be requested
-       * for every message sent. Default: all.
        */
       MessageEventFilter( MessageSession* parent );
 
