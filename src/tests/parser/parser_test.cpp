@@ -14,6 +14,7 @@ class ParserTest : private TagHandler
 
     virtual void handleTag( Tag *tag )
     {
+      delete m_tag;
       m_tag = tag->clone();
     }
 
