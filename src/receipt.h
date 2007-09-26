@@ -10,8 +10,8 @@
   This software is distributed without any warranty.
 */
 
-#ifndef MESSAGEEVENT_H__
-#define MESSAGEEVENT_H__
+#ifndef RECEIPT_H__
+#define RECEIPT_H__
 
 #include "gloox.h"
 #include "stanzaextension.h"
@@ -24,12 +24,22 @@ namespace gloox
   class Tag;
 
   /**
-   * @brief An implementation of Message Events (XEP-0022) as a StanzaExtension.
+   * Contains valid receipt types (XEP-0184).
+   */
+  enum ReceiptType
+  {
+    ReceiptRequest,                 /**< Requests a receipt. */
+    ReceiptReceived,                /**< The receipt. */
+    ReceiptInvalid                  /**< Invalid type. */
+  };
+
+  /**
+   * @brief An implementation of Message Receipts (XEP-0184) as a StanzaExtension.
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 1.0
    */
-  class GLOOX_API MessageEvent : public StanzaExtension
+  class GLOOX_API Receipt : public StanzaExtension
   {
     public:
 
@@ -37,49 +47,48 @@ namespace gloox
        * Constructs a new object from the given Tag.
        * @param tag A Tag to parse.
        */
-      MessageEvent( const Tag* tag );
+      Receipt( const Tag* tag );
 
       /**
-       * Constructs a new object of the given type, with an optional message ID.
-       * @param type One or more @link gloox::MessageEventType MessageEventType @endlink.
-       * @param id An optional message ID. Links this Event to the message it is generated for.
+       * Constructs a new object of the given type.
+       * @param type The chat state.
        */
-      MessageEvent( int type, const std::string& id = "" )
-        : StanzaExtension( ExtMessageEvent ), m_id( id ), m_event( type )
+      Receipt( ReceiptType rcpt )
+        : StanzaExtension( ExtReceipt ), m_rcpt( rcpt )
       {}
 
       /**
        * Virtual destructor.
        */
-      virtual ~MessageEvent() {}
+      virtual ~Receipt() {}
 
       /**
-       * Returns the object's event or events.
-       * @return The object's event or events.
+       * Returns the object's state.
+       * @return The object's state.
        */
-      int event() const { return m_event; }
+      ReceiptType rcpt() const { return m_rcpt; }
 
       // reimplemented from StanzaExtension
       virtual const std::string filterString() const
       {
-        return "/message/x[@xmlns='" + XMLNS_X_EVENT + "']";
+        return "/message/request[@xmlns='" + XMLNS_RECEIPTS + "']"
+               "|/message/received[@xmlns='" + XMLNS_RECEIPTS + "']";
       }
 
       // reimplemented from StanzaExtension
       virtual StanzaExtension* newInstance( const Tag* tag ) const
       {
-        return new MessageEvent( tag );
+        return new Receipt( tag );
       }
 
       // reimplemented from StanzaExtension
       Tag* tag() const;
 
     private:
-      std::string m_id;
-      int m_event;
+      ReceiptType m_rcpt;
 
   };
 
 }
 
-#endif // MESSAGEEVENT_H__
+#endif // RECEIPT_H__

@@ -28,7 +28,7 @@ libgloox_la_SOURCES = jid.cpp parser.cpp connectiontcpclient.cpp clientbase.cpp 
                         connectiontcpbase.cpp connectiontcpserver.cpp socks5bytestreamserver.cpp amp.cpp \
                         pubsubmanager.cpp error.cpp util.cpp iq.cpp message.cpp presence.cpp \
                         subscription.cpp capabilities.cpp chatstate.cpp connectionbosh.cpp connectiontls.cpp \
-                        messageevent.cpp
+                        messageevent.cpp receipt.cpp
 
 libgloox_la_LDFLAGS = -version-info 8:0:0 -no-undefined -no-allow-shlib-undefined
 libgloox_la_LIBADD =
@@ -59,7 +59,7 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             mucroomconfighandler.h    parser.h                \
                             mucinvitationhandler.h    stanzaextension.h       oob.h \
                             vcardupdate.h             delayeddelivery.h       base64.h \
-                            gpgencrypted.h          gpgsigned.h \
+                            gpgencrypted.h            gpgsigned.h \
                             md5.h                     sha.h                   uniquemucroom.h \
                             instantmucroom.h          tlsbase.h               tlshandler.h \
                             connectionbase.h          connectiondatahandler.h compressiondatahandler.h \
@@ -76,7 +76,7 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             message.h                 presence.h              subscription.h \
                             bytestream.h              bytestreamdatahandler.h bytestreamhandler.h \
                             capabilities.h            pubsubnodehandler.h     connectionbosh.h \
-                            connectiontls.h           messageevent.h
+                            connectiontls.h           messageevent.h          receipt.h
 
 noinst_HEADERS = prep.h dns.h nonsaslauth.h mucmessagesession.h stanzaextensionfactory.h tlsgnutlsclient.h \
                    tlsgnutlsbase.h tlsgnutlsclientanon.h tlsgnutlsserveranon.h tlsopenssl.h tlsschannel.h \

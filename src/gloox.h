@@ -522,6 +522,9 @@ namespace gloox
   /** XMPP-over-BOSH extensions (XEP-0206) */
   GLOOX_API extern const std::string XMLNS_XMPP_BOSH;
 
+  /** Message Receipt namespace (XEP-0184) */
+  GLOOX_API extern const std::string XMLNS_RECEIPTS;
+
 
 
   /** Supported stream version (major). */
