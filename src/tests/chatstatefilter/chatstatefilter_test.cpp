@@ -27,6 +27,9 @@ namespace gloox
           return;
 
         const ChatState* cs = static_cast<const ChatState*>( msg.findExtension( ExtChatState ) );
+        if( !cs )
+          return;
+
         switch( m_test )
         {
           case 0:
@@ -130,7 +133,6 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     name = "simple decorate";
     f = new gloox::ChatStateFilter( new gloox::MessageSession() );
-    t = new gloox::Tag( "dummy" );
     gloox::Message m( gloox::Message::Chat, gloox::JID() );
     f->decorate( m );
     if( static_cast<const gloox::ChatState*>( m.findExtension( gloox::ExtChatState ) )->state()
@@ -140,9 +142,7 @@ int main( int /*argc*/, char** /*argv*/ )
       printf( "test '%s' failed:s %s\n", name.c_str(), t->xml().c_str() );
     }
     delete f;
-    delete t;
     f = 0;
-    t = 0;
   }
   // -------
   ms = new gloox::MessageSession();

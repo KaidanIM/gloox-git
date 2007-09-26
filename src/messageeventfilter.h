@@ -44,9 +44,7 @@ namespace gloox
        * @param defaultEvents Bit-wise ORed MessageEventType's which shall be requested
        * for every message sent. Default: all.
        */
-      MessageEventFilter( MessageSession* parent,
-                          int defaultEvents = MessageEventOffline | MessageEventDelivered
-                                              | MessageEventDisplayed | MessageEventComposing );
+      MessageEventFilter( MessageSession* parent );
 
       /**
        * Virtual destructor.
@@ -89,7 +87,6 @@ namespace gloox
       MessageEventHandler* m_messageEventHandler;
       std::string m_lastID;
       int m_requestedEvents;
-      int m_defaultEvents;
       MessageEventType m_lastSent;
       bool m_disable;
 

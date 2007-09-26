@@ -4,6 +4,8 @@
 #include "../../gloox.h"
 #include "../../jid.h"
 #include "../../messageeventhandler.h"
+#include "../../message.h"
+#include "../../messageevent.h"
 
 #include <stdio.h>
 #include <string>
@@ -16,43 +18,37 @@ namespace gloox
       MessageSession() : m_jid( "abc@example.net/foo" ), m_test( 0 ), m_result( false ) {}
       virtual ~MessageSession() {}
       const JID& target() const { return m_jid; }
-      void send( Tag* tag )
+      void send( Message& msg )
       {
-        if( !tag )
+        const MessageEvent* me = static_cast<const MessageEvent*>( msg.findExtension( ExtMessageEvent ) );
+        if( !me )
           return;
-        Tag *x = tag->findChild( "x", "xmlns", XMLNS_X_EVENT );
-        if( !x || tag->name() != "message" || !tag->hasAttribute( "to", m_jid.full() )
-             || !x->hasChild( "id" ) )
-        {
-          delete tag;
-          return;
-        }
+
         switch( m_test )
         {
           case 0:
-            if( x->hasChild( "offline" ) )
+            if( me->event() == MessageEventOffline )
               m_result = true;
             break;
           case 1:
-            if( x->hasChild( "delivered" ) )
+            if( me->event() == MessageEventDelivered )
               m_result = true;
             break;
           case 2:
-            if( x->hasChild( "displayed" ) )
+            if( me->event() == MessageEventDisplayed )
               m_result = true;
             break;
           case 3:
-            if( x->hasChild( "composing" ) )
+            if( me->event() == MessageEventComposing )
               m_result = true;
             break;
           case 4:
-            if( x->children().size() == 1 )
+            if( me->event() == MessageEventCancel )
               m_result = true;
             break;
           default:
             break;
         }
-        delete tag;
       }
       void setTest( int test ) { m_test = test; }
       bool ok() { bool ok = m_result; m_result = false; return ok; }
@@ -72,8 +68,8 @@ namespace gloox
       MessageFilter( MessageSession *parent );
       virtual ~MessageFilter();
       void attachTo( MessageSession *session );
-      virtual void decorate( Tag *tag );
-      void send( Tag* tag );
+      virtual void decorate( Message& msg );
+      void send( Message& msg );
     protected:
       MessageSession *m_parent;
   };
@@ -81,8 +77,8 @@ namespace gloox
   MessageFilter::MessageFilter( MessageSession *parent ) : m_parent( parent ) {}
   MessageFilter::~MessageFilter() { delete m_parent; }
   void MessageFilter::attachTo( MessageSession *session ) {}
-  void MessageFilter::decorate( Tag *tag ) {}
-  void MessageFilter::send( Tag* tag ) { m_parent->send( tag ); }
+  void MessageFilter::decorate( Message& msg ) {}
+  void MessageFilter::send( Message& msg ) { m_parent->send( msg ); }
 }
 
 #define MESSAGEFILTER_H__
@@ -96,38 +92,35 @@ int main( int /*argc*/, char** /*argv*/ )
   std::string name;
   gloox::MessageEventFilter *f;
   gloox::MessageSession *ms;
-  gloox::Tag *t = 0;
   gloox::Tag *x = 0;
 
   // -------
-  name = "simple decorate";
-  f = new gloox::MessageEventFilter( new gloox::MessageSession() );
-  t = new gloox::Tag( "dummy" );
-  f->decorate( t );
-  x = t->findChild( "x", "xmlns", gloox::XMLNS_X_EVENT );
-  if( !x || !x->hasChild( "offline" ) || !x->hasChild( "delivered" )
-      || !x->hasChild( "displayed" ) || !x->hasChild( "composing" ) )
   {
-    ++fail;
-    printf( "test '%s' failed:s %s\n", name.c_str(), t->xml().c_str() );
+    name = "simple decorate";
+    f = new gloox::MessageEventFilter( new gloox::MessageSession() );
+    gloox::Message m( gloox::Message::Chat, gloox::JID() );
+    f->decorate( m );
+    const gloox::MessageEvent* me =
+        static_cast<const gloox::MessageEvent*>( m.findExtension( gloox::ExtMessageEvent ) );
+    if( me->event() != ( gloox::MessageEventOffline | gloox::MessageEventDelivered
+                         | gloox::MessageEventDisplayed | gloox::MessageEventComposing ) )
+    {
+      ++fail;
+      printf( "test '%s' failed\n", name.c_str() );
+    }
+    delete f;
+    f = 0;
   }
-  delete f;
-  delete t;
-  f = 0;
-  t = 0;
 
   // -------
   ms = new gloox::MessageSession();
   f = new gloox::MessageEventFilter( ms );
   f->registerMessageEventHandler( ms );
 
-  gloox::Message *m = new gloox::Message( gloox::Message::Chat, gloox::JID(), "my message" );
-  x = new gloox::Tag( m, "x" );
-  x->addAttribute( "xmlns", gloox::XMLNS_X_EVENT );
-  new gloox::Tag( x, "offline" );
-  new gloox::Tag( x, "delivered" );
-  new gloox::Tag( x, "displayed" );
-  new gloox::Tag( x, "composing" );
+  gloox::Message m( gloox::Message::Chat, gloox::JID(), "my message" );
+  m.addExtension( new gloox::MessageEvent( gloox::MessageEventOffline | gloox::MessageEventDelivered
+                                           | gloox::MessageEventDisplayed | gloox::MessageEventComposing
+                                           | gloox::MessageEventCancel) );
   f->filter( m );
 
   name = "raise offline event 1";
@@ -221,9 +214,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
 
   delete f;
-  delete m;
   f = 0;
-  m = 0;
 
 
 

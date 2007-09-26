@@ -971,13 +971,14 @@ namespace gloox
    */
   enum MessageEventType
   {
-    MessageEventCancel    = 0,      /**< Cancels the 'Composing' event. */
-    MessageEventOffline   = 1,      /**< Indicates that the message has been stored offline by the
+    MessageEventOffline   =  1,     /**< Indicates that the message has been stored offline by the
                                      * intended recipient's server. */
-    MessageEventDelivered = 2,      /**< Indicates that the message has been delivered to the
+    MessageEventDelivered =  2,     /**< Indicates that the message has been delivered to the
                                      * recipient. */
-    MessageEventDisplayed = 4,      /**< Indicates that the message has been displayed */
-    MessageEventComposing = 8       /**< Indicates that a reply is being composed. */
+    MessageEventDisplayed =  4,     /**< Indicates that the message has been displayed */
+    MessageEventComposing =  8,     /**< Indicates that a reply is being composed. */
+    MessageEventInvalid   = 16,     /**< Invalid type. */
+    MessageEventCancel    = 32      /**< Cancels the 'Composing' event. */
   };
 
   /**
