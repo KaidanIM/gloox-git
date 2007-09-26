@@ -20,7 +20,10 @@ class ParserTest : private TagHandler
         m_tags.push_back( tag->clone() );
       }
       else
+      {
+        delete m_tag;
         m_tag = tag->clone();
+      }
     }
 
     int run()
