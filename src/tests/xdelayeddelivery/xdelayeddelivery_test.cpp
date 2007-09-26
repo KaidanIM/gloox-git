@@ -1,5 +1,5 @@
 #include "../../tag.h"
-#include "../../xdelayeddelivery.h"
+#include "../../delayeddelivery.h"
 using namespace gloox;
 
 #include <stdio.h>
@@ -11,7 +11,7 @@ int main( int /*argc*/, char** /*argv*/ )
   int fail = 0;
   std::string name;
   Tag *t;
-  XDelayedDelivery *d;
+  DelayedDelivery *d;
   JID j( "abc@def/ghi" );
   Tag *x = new Tag( "x", "reason" );
   x->addAttribute( "stamp", "invalidstamp" );
@@ -20,7 +20,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "parsing 0 tag";
-  d = new XDelayedDelivery( 0 );
+  d = new DelayedDelivery( 0 );
   if( d->tag() != 0 )
   {
     ++fail;
@@ -31,7 +31,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "from Tag/getters";
-  d = new XDelayedDelivery( x );
+  d = new DelayedDelivery( x );
   if( d->reason() != "reason" || d->stamp() != "invalidstamp" || d->from() != j )
   {
     ++fail;
@@ -39,22 +39,6 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   delete d;
   d = 0;
-
-  // -------
-  name = "from Tag/tag()";
-  d = new XDelayedDelivery( x );
-  t = d->tag();
-  if( !t || t->name() != "x" || !t->hasAttribute( "xmlns", XMLNS_X_DELAY )
-       || !t->hasAttribute( "from", j.full() ) || !t->hasAttribute( "stamp", "invalidstamp" )
-       || t->cdata() != "reason" )
-  {
-    ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
-  }
-  delete d;
-  delete t;
-  d = 0;
-  t = 0;
 
 
 
@@ -65,12 +49,12 @@ int main( int /*argc*/, char** /*argv*/ )
 
   if( fail == 0 )
   {
-    printf( "XDelayedDelivery: all tests passed\n" );
+    printf( "DelayedDelivery: all tests passed\n" );
     return 0;
   }
   else
   {
-    printf( "XDelayedDelivery: %d test(s) failed\n", fail );
+    printf( "DelayedDelivery: %d test(s) failed\n", fail );
     return 1;
   }
 

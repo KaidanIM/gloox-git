@@ -28,6 +28,9 @@ namespace gloox
   /**
    * @brief This is an implementation of XEP-0203 (Delayed Delivery).
    *
+   * The class also implements the deprecated XEP-0091 (Delayed Delivery) in a read-only fashion.
+   * It understands both XEP formats for input, but any output will conform to XEP-0203.
+   *
    * XEP Version: 0.1
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
@@ -100,7 +103,9 @@ namespace gloox
       virtual const std::string filterString() const
       {
         return "/presence/x[@xmlns='" + XMLNS_DELAY + "']"
-               "|/message/x[@xmlns='" + XMLNS_DELAY + "']";
+               "|/message/x[@xmlns='" + XMLNS_DELAY + "']"
+               "|/presence/x[@xmlns='" + XMLNS_X_DELAY + "']"
+               "|/message/x[@xmlns='" + XMLNS_X_DELAY + "']";
       }
 
       // reimplemented from StanzaExtension

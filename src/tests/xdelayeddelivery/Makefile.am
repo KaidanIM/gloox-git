@@ -7,6 +7,6 @@ AM_CPPFLAGS = -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare
 noinst_PROGRAMS = xdelayeddelivery_test
 
 xdelayeddelivery_test_SOURCES = xdelayeddelivery_test.cpp
-xdelayeddelivery_test_LDADD = ../../xdelayeddelivery.o ../../tag.o \
+xdelayeddelivery_test_LDADD = ../../delayeddelivery.o ../../tag.o \
 		../../jid.o ../../prep.o ../../gloox.o
 xdelayeddelivery_test_CFLAGS = $(CPPFLAGS)
