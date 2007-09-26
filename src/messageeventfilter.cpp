@@ -79,6 +79,7 @@ namespace gloox
           return;
         break;
       case MessageEventCancel:
+      default:
         break;
     }
 
