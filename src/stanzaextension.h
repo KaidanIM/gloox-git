@@ -65,7 +65,7 @@ namespace gloox
        * @param type Designates the extension's type. It should be one of StanzaExtensionType
        * for built-in extensions, and it should be higher than ExtUser for custom types.
        */
-      StanzaExtension( int type ) : m_type( type ) {}
+      StanzaExtension( int type ) : m_extensionType( type ) {}
 
       /**
        * Virtual destructor.
@@ -103,10 +103,10 @@ namespace gloox
        * Returns the extension's type.
        * @return The extension's type.
        */
-      int type() const { return m_type; }
+      int extensionType() const { return m_extensionType; }
 
     private:
-      int m_type;
+      int m_extensionType;
 
   };
 

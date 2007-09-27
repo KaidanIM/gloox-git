@@ -59,7 +59,7 @@ namespace gloox
   const StanzaExtension* Stanza::findExtension( int type ) const
   {
     StanzaExtensionList::const_iterator it = m_extensionList.begin();
-    for( ; it != m_extensionList.end() && (*it)->type() != type; ++it ) ;
+    for( ; it != m_extensionList.end() && (*it)->extensionType() != type; ++it ) ;
     return it != m_extensionList.end() ? (*it) : 0;
   }
 
