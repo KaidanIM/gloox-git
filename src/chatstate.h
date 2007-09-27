@@ -42,7 +42,7 @@ namespace gloox
 
       /**
        * Constructs a new object of the given type.
-       * @param type The chat state.
+       * @param state The chat state.
        */
       ChatState( ChatStateType state )
         : StanzaExtension( ExtChatState ), m_state( state )

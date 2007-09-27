@@ -36,7 +36,7 @@ namespace gloox
     SEList::iterator it = m_extensions.begin();
     for( ; it != m_extensions.end(); ++it )
     {
-      if( ext->type() == (*it)->type() )
+      if( ext->extensionType() == (*it)->extensionType() )
       {
         delete (*it);
         m_extensions.erase( it );

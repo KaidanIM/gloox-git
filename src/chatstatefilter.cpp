@@ -38,7 +38,7 @@ namespace gloox
       const StanzaExtension* se = msg.findExtension( ExtChatState );
       const ChatState* state = static_cast< const ChatState* >( se );
 
-      m_enableChatStates = state && state->type() != ChatStateInvalid;
+      m_enableChatStates = state && state->state() != ChatStateInvalid;
       if( m_enableChatStates && msg.body().empty() )
         m_chatStateHandler->handleChatState( msg.from(), state->state() );
     }
