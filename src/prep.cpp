@@ -12,10 +12,6 @@
 
 #include "prep.h"
 
-#include <cstdlib>
-#include <string>
-#include <string.h>
-
 #ifdef _WIN32
 # include "../config.h.win"
 #elif defined( _WIN32_WCE )
@@ -28,6 +24,10 @@
 # include <stringprep.h>
 # include <idna.h>
 #endif
+
+#include <cstdlib>
+#include <string>
+#include <algorithm>
 
 #define JID_PORTION_SIZE 1023
 
@@ -66,7 +66,7 @@ namespace gloox
 #ifdef HAVE_LIBIDN
       return prepare( node, out, stringprep_xmpp_nodeprep );
 #else
-      out = node;
+      std::transform( node.begin(), node.end(), out.begin(), std::tolower );
       return false;
 #endif
     }
@@ -76,7 +76,7 @@ namespace gloox
 #ifdef HAVE_LIBIDN
       return prepare( domain, out, stringprep_nameprep );
 #else
-      out = domain;
+      std::transform( domain.begin(), domain.end(), out.begin(), std::tolower );
       return false;
 #endif
     }
@@ -86,7 +86,7 @@ namespace gloox
 #ifdef HAVE_LIBIDN
       return prepare( resource, out, stringprep_xmpp_resourceprep );
 #else
-      out = resource;
+      std::transform( resource.begin(), resource.end(), out.begin(), std::tolower );
       return false;
 #endif
     }
@@ -108,7 +108,7 @@ namespace gloox
         free( prepped );
       return false;
 #else
-      out = domain;
+      std::transform( domain.begin(), domain.end(), out.begin(), std::tolower );
       return false;
 #endif
     }
