@@ -10,8 +10,8 @@
   This software is distributed without any warranty.
 */
 
-#ifndef UTIL_H_
-#define UTIL_H_
+#ifndef UTIL_H__
+#define UTIL_H__
 
 #include <string>
 #include <list>
@@ -67,28 +67,28 @@ namespace gloox
     inline void ForEach( T& t, F f )
     {
       for( typename T::iterator it = t.begin(); it != t.end(); ++it )
-	((*it)->*f)();
+        ((*it)->*f)();
     }
 
     template< typename T, typename F, typename D >
     inline void ForEach( T& t, F f, D& d )
     {
       for( typename T::iterator it = t.begin(); it != t.end(); ++it )
-	( (*it)->*f )( d );
+        ( (*it)->*f )( d );
     }
 
     template< typename T, typename F, typename D1, typename D2 >
     inline void ForEach( T& t, F f, D1& d1, D2& d2 )
     {
       for( typename T::iterator it = t.begin(); it != t.end(); ++it )
-	( (*it)->*f )( d1, d2 );
+        ( (*it)->*f )( d1, d2 );
     }
 
     template< typename T, typename F, typename D1, typename D2, typename D3 >
     inline void ForEach( T& t, F f, D1& d1, D2& d2, D3& d3 )
     {
       for( typename T::iterator it = t.begin(); it != t.end(); ++it )
-	( (*it)->*f )( d1, d2, d3 );
+        ( (*it)->*f )( d1, d2, d3 );
     }
 
     /**
@@ -132,4 +132,4 @@ namespace gloox
 
 }
 
-#endif /* UTIL_H_ */
+#endif // UTIL_H__
