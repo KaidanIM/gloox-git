@@ -292,7 +292,7 @@ namespace gloox
        * @return @b True if the Tag is valid, @b false if not.
        * @deprecated Use operator bool() instead.
        */
-      GLOOX_DEPRECATED virtual bool empty() const { return m_name.empty(); }
+      virtual GLOOX_DEPRECATED bool empty() const { return m_name.empty(); }
 
       /**
        * This function checks whether a child element with given name exists and has
