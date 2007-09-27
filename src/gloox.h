@@ -58,9 +58,9 @@
  *   [...]
  * };
  *
- * void MyClass::handlePresence( Stanza* stanza )
+ * void MyClass::handlePresence( Presence* presence )
  * {
- *   // extract further information from the stanza
+ *   // extract further information from the Presence object
  * }
  * @endcode
  *
@@ -161,7 +161,7 @@
  *   // examine certificate info
  * }
  *
- * void MyClass::handlePresence( Stanza* stanza )
+ * void MyClass::handlePresence( Presence* presence )
  * {
  *   // presence info
  * }
