@@ -15,6 +15,7 @@
 #define DATAFORM_H__
 
 #include "dataformbase.h"
+#include "stanzaextension.h"
 
 #include <string>
 #include <list>
@@ -32,7 +33,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.7
    */
-  class GLOOX_API DataForm : public DataFormBase
+  class GLOOX_API DataForm : public StanzaExtension, public DataFormBase
   {
     public:
       /**
@@ -87,14 +88,6 @@ namespace gloox
       virtual ~DataForm();
 
       /**
-       * Use this function to create a Tag representation of the form.
-       * @return A Tag hierarchically describing the form, or NULL if the form is invalid (i.e.
-       * created from a Tag not correctly describing a Data Form).
-       * @note The caller is responsible for deleting the Tag.
-       */
-      Tag* tag() const;
-
-      /**
        * Use this function to retrieve the title of the form.
        * @return The title of the form.
        */
@@ -136,6 +129,21 @@ namespace gloox
        * @since 0.9
        */
       bool parse( const Tag* tag );
+
+      // reimplemented from StanzaExtension
+      virtual const std::string filterString() const
+      {
+        return "/message/x[@xmlns='" + XMLNS_X_DATA + "']";
+      }
+
+      // reimplemented from StanzaExtension
+      virtual StanzaExtension* newInstance( const Tag* tag ) const
+      {
+        return new DataForm( tag );
+      }
+
+      // reimplemented from StanzaExtension
+      virtual Tag* tag() const;
 
     private:
       StringList m_instructions;
