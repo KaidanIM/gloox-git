@@ -22,23 +22,27 @@ namespace gloox
 {
 
   DataForm::DataForm( DataFormType type, const StringList& instructions, const std::string& title )
-    : m_instructions( instructions ), m_type( type ), m_title( title )
+    : StanzaExtension( ExtDataForm ),
+      m_instructions( instructions ), m_type( type ), m_title( title )
   {
   }
 
   DataForm::DataForm( DataFormType type, const std::string& title )
-    : m_type( type ), m_title( title )
+    : StanzaExtension( ExtDataForm ),
+      m_type( type ), m_title( title )
   {
   }
 
   DataForm::DataForm( const Tag* tag )
-    : m_type( FormTypeInvalid )
+    : StanzaExtension( ExtDataForm ),
+      m_type( FormTypeInvalid )
   {
     parse( tag );
   }
 
   DataForm::DataForm()
-  : m_type( FormTypeInvalid )
+    : StanzaExtension( ExtDataForm ),
+      m_type( FormTypeInvalid )
   {
   }
 
