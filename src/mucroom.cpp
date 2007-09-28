@@ -245,7 +245,7 @@ namespace gloox
     if( !m_parent || !m_joined )
       return;
 
-    DataForm df( DataForm::FormTypeSubmit );
+    DataForm df( DataForm::Submit );
     df.addField( DataFormField::FieldTypeNone, "FORM_TYPE", XMLNS_MUC_REQUEST );
     df.addField( DataFormField::FieldTypeTextSingle, "muc#role", "participant", "Requested role" );
 

@@ -35,14 +35,14 @@ namespace gloox
 
   DataForm::DataForm( const Tag* tag )
     : StanzaExtension( ExtDataForm ),
-      m_type( FormTypeInvalid )
+      m_type( Invalid )
   {
     parse( tag );
   }
 
   DataForm::DataForm()
     : StanzaExtension( ExtDataForm ),
-      m_type( FormTypeInvalid )
+      m_type( Invalid )
   {
   }
 
@@ -61,7 +61,7 @@ namespace gloox
       return false;
 
     m_type = (DataFormType)util::lookup(tag->findAttribute( TYPE ), dfTypeValues );
-    if( m_type == FormTypeInvalid )
+    if( m_type == Invalid )
       return false;
 
     const TagList& l = tag->children();
@@ -85,7 +85,7 @@ namespace gloox
 
   Tag* DataForm::tag() const
   {
-    if( m_type == FormTypeInvalid )
+    if( m_type == Invalid )
       return 0;
 
     Tag* x = new Tag( "x", XMLNS, XMLNS_X_DATA );

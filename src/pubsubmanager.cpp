@@ -301,7 +301,7 @@ namespace gloox
       if( type != SubscriptionNodes || depth != 1 )
       {
         Tag* options = new Tag( ps, "options" );
-        DataForm df( DataForm::FormTypeSubmit );
+        DataForm df( DataForm::Submit );
         df.addField( DataFormField::FieldTypeHidden, "FORM_TYPE", XMLNS_PUBSUB_SUBSCRIBE_OPTIONS );
 
         if( type == SubscriptionItems )
@@ -409,7 +409,7 @@ namespace gloox
 
       if( !parent.empty() || config || type == NodeCollection || access != AccessDefault )
       {
-        DataForm df( DataForm::FormTypeSubmit );
+        DataForm df( DataForm::Submit );
         df.addField( DataFormField::FieldTypeHidden, "FORM_TYPE", XMLNS_PUBSUB_NODE_CONFIG );
 
         if( !parent.empty() )
@@ -464,7 +464,7 @@ namespace gloox
       Tag* def = new Tag( iq->query(), "default" );
       if( type == NodeCollection )
       {
-        DataForm df( DataForm::FormTypeSubmit );
+        DataForm df( DataForm::Submit );
         df.addField( DataFormField::FieldTypeHidden, "FORM_TYPE", XMLNS_PUBSUB_NODE_CONFIG );
         df.addField( DataFormField::FieldTypeNone, "pubsub#node_type", "collection" );
         def->addChild( df.tag() );
