@@ -93,7 +93,7 @@ namespace gloox
 
       case FORequestNum:
         int num = -1;
-        DataForm f( iq->query()->findChild( "x" ) );
+        DataForm::FormBase f( iq->query()->findChild( "x" ) );
         if( f.hasField( "number_of_messages" ) )
           num = atoi( f.field( "number_of_messages" )->value().c_str() );
 

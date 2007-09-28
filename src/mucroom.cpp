@@ -233,7 +233,7 @@ namespace gloox
     m_historyValue = 0;
   }
 
-  Stanza* MUCRoom::createDataForm( const JID& room, const DataForm& df )
+  Stanza* MUCRoom::createDataForm( const JID& room, const DataForm::FormBase& df )
   {
     Message* m = new Message( Message::Normal, room.bare() );
     m->addChild( df.tag() );
@@ -245,9 +245,9 @@ namespace gloox
     if( !m_parent || !m_joined )
       return;
 
-    DataForm df( DataForm::Submit );
-    df.addField( DataFormField::FieldTypeNone, "FORM_TYPE", XMLNS_MUC_REQUEST );
-    df.addField( DataFormField::FieldTypeTextSingle, "muc#role", "participant", "Requested role" );
+    DataForm::Submit df;
+    df.addField( DataForm::Field::TypeNone, "FORM_TYPE", XMLNS_MUC_REQUEST );
+    df.addField( DataForm::Field::TypeTextSingle, "muc#role", "participant", "Requested role" );
 
     Tag* m = new Tag( "messsage", "to", m_nick.bare() );
     m->addChild( df.tag() );
@@ -638,7 +638,7 @@ namespace gloox
       }
       else if( m_roomConfigHandler && ( x = msg->findChild( "x", XMLNS, XMLNS_X_DATA ) ) != 0 )
       {
-        m_roomConfigHandler->handleMUCRequest( this, DataForm( x ) );
+        m_roomConfigHandler->handleMUCRequest( this, DataForm::FormBase( x ) );
         return;
       }
 
@@ -717,7 +717,7 @@ namespace gloox
           const Tag* x = q->findChild( "x", XMLNS, XMLNS_X_DATA );
           if( x )
           {
-            const DataForm df( x );
+            const DataForm::FormBase df( x );
             m_roomConfigHandler->handleMUCConfigForm( this, df );
           }
         }
@@ -810,7 +810,7 @@ namespace gloox
           m_flags |= FlagPublicLogging;
 
         std::string name;
-        const DataForm* df = 0;
+        const DataForm::FormBase* df = 0;
         const Tag* q = iq->query();
         if( q )
         {
@@ -854,7 +854,7 @@ namespace gloox
             }
             else if( (*it)->name() == "x" && (*it)->hasAttribute( XMLNS, XMLNS_X_DATA ) )
             {
-              df = new DataForm( (*it) );
+              df = new DataForm::FormBase( (*it) );
             }
           }
         }

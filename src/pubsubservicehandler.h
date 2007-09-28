@@ -23,8 +23,12 @@
 namespace gloox
 {
 
-  class DataForm;
   class Error;
+
+  namespace DataForm
+  {
+    class FormBase;
+  }
 
   namespace PubSub
   {
@@ -52,8 +56,8 @@ namespace gloox
          * @see Manager::requestSubscriptionList
          */
         virtual void handleSubscriptionList( const JID& service,
-                                             const SubscriptionMap * subMap,
-                                             const Error * error = 0) = 0;
+                                             const SubscriptionMap* subMap,
+                                             const Error* error = 0) = 0;
 
         /**
          * Receives the Affiliation map for a specific service.
@@ -62,8 +66,8 @@ namespace gloox
          * @see Manager::requestAffiliationList
          */
         virtual void handleAffiliationList( const JID& service,
-                                            const AffiliationMap * affMap,
-                                            const Error * error = 0 ) = 0;
+                                            const AffiliationMap* affMap,
+                                            const Error* error = 0 ) = 0;
 
         /**
          * Receives the default configuration for a specific node type.
@@ -73,8 +77,8 @@ namespace gloox
          * @see Manager::getDefaultNodeConfig
          */
         virtual void handleDefaultNodeConfig( const JID& service,
-                                              const DataForm * config,
-                                              const Error * error = 0 ) = 0;
+                                              const DataForm::FormBase* config,
+                                              const Error* error = 0 ) = 0;
 
     };
 

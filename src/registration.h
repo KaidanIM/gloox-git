@@ -159,7 +159,7 @@ namespace gloox
        * implementations SHOULD prefer data forms.
        * @param form The DataForm containing the registration credentials.
        */
-      void createAccount( const DataForm& form );
+      void createAccount( const DataForm::Submit& form );
 
       /**
        * Tells the server to remove the currently authenticated account from the server.

@@ -13,111 +13,108 @@
 
 #include "dataform.h"
 #include "dataformfield.h"
-#include "dataformreported.h"
 #include "dataformitem.h"
+#include "dataformreported.h"
 #include "util.h"
 #include "tag.h"
 
 namespace gloox
 {
 
-  DataForm::DataForm( DataFormType type, const StringList& instructions, const std::string& title )
-    : StanzaExtension( ExtDataForm ),
-      m_instructions( instructions ), m_type( type ), m_title( title )
+  namespace DataForm
   {
-  }
 
-  DataForm::DataForm( DataFormType type, const std::string& title )
-    : StanzaExtension( ExtDataForm ),
-      m_type( type ), m_title( title )
-  {
-  }
-
-  DataForm::DataForm( const Tag* tag )
-    : StanzaExtension( ExtDataForm ),
-      m_type( Invalid )
-  {
-    parse( tag );
-  }
-
-  DataForm::DataForm()
-    : StanzaExtension( ExtDataForm ),
-      m_type( Invalid )
-  {
-  }
-
-  DataForm::~DataForm()
-  {
-  }
-
-  static const char * dfTypeValues[] =
-  {
-    "form", "submit", "cancel", "result"
-  };
-
-  bool DataForm::parse( const Tag* tag )
-  {
-    if( !tag || !tag->hasAttribute( XMLNS, XMLNS_X_DATA ) || tag->name() != "x" )
-      return false;
-
-    m_type = (DataFormType)util::lookup(tag->findAttribute( TYPE ), dfTypeValues );
-    if( m_type == Invalid )
-      return false;
-
-    const TagList& l = tag->children();
-    TagList::const_iterator it = l.begin();
-    for( ; it != l.end(); ++it )
+    FormBase::FormBase( FormType type, const StringList& instructions, const std::string& title )
+      : StanzaExtension( ExtDataForm ),
+        m_type( type ), m_instructions( instructions ), m_title( title )
     {
-      if( (*it)->name() == "title" )
-        m_title = (*it)->cdata();
-      else if( (*it)->name() == "instructions" )
-        m_instructions.push_back( (*it)->cdata() );
-      else if( (*it)->name() == "field" )
-        m_fields.push_back( new DataFormField( (*it) ) );
-      else if( (*it)->name() == "reported" )
-        m_fields.push_back( new DataFormReported( (*it) ) );
-      else if( (*it)->name() == "item" )
-        m_fields.push_back( new DataFormItem( (*it) ) );
     }
 
-    return true;
-  }
-
-  Tag* DataForm::tag() const
-  {
-    if( m_type == Invalid )
-      return 0;
-
-    Tag* x = new Tag( "x", XMLNS, XMLNS_X_DATA );
-    x->addAttribute( TYPE, util::lookup( m_type, dfTypeValues ) );
-    if( !m_title.empty() )
-      new Tag( x, "title", m_title );
-
-    StringList::const_iterator it_i = m_instructions.begin();
-    for( ; it_i != m_instructions.end(); ++it_i )
-      new Tag( x, "instructions", (*it_i) );
-
-    FieldList::const_iterator it = m_fields.begin();
-    for( ; it != m_fields.end(); ++it )
+    FormBase::FormBase( FormType type, const std::string& title )
+      : StanzaExtension( ExtDataForm ),
+        m_type( type ), m_title( title )
     {
-      DataFormItem* i = dynamic_cast<DataFormItem*>( (*it) );
-      if( i )
-      {
-        x->addChild( i->tag() );
-        continue;
-      }
-
-      DataFormReported* r = dynamic_cast<DataFormReported*>( (*it) );
-      if( r )
-      {
-        x->addChild( r->tag() );
-        continue;
-      }
-
-      x->addChild( (*it)->tag() );
     }
 
-    return x;
+    FormBase::FormBase( const Tag* tag )
+      : StanzaExtension( ExtDataForm ),
+        m_type( TypeInvalid )
+    {
+      parse( tag );
+    }
+
+    FormBase::~FormBase()
+    {
+    }
+
+    static const char* dfTypeValues[] =
+    {
+      "form", "submit", "cancel", "result"
+    };
+
+    bool FormBase::parse( const Tag* tag )
+    {
+      if( !tag || tag->xmlns() != XMLNS_X_DATA || tag->name() != "x" )
+        return false;
+
+      m_type = (FormType)util::lookup(tag->findAttribute( TYPE ), dfTypeValues );
+      if( m_type == TypeInvalid )
+        return false;
+
+      const TagList& l = tag->children();
+      TagList::const_iterator it = l.begin();
+      for( ; it != l.end(); ++it )
+      {
+        if( (*it)->name() == "title" )
+          m_title = (*it)->cdata();
+        else if( (*it)->name() == "instructions" )
+          m_instructions.push_back( (*it)->cdata() );
+        else if( (*it)->name() == "field" )
+          m_fields.push_back( new Field( (*it) ) );
+      }
+
+      return true;
+    }
+
+    Tag* FormBase::tag() const
+    {
+      if( m_type == TypeInvalid )
+        return 0;
+
+      Tag* x = new Tag( "x" );
+      x->setXmlns( XMLNS_X_DATA );
+      x->addAttribute( TYPE, util::lookup( m_type, dfTypeValues ) );
+      if( !m_title.empty() )
+        new Tag( x, "title", m_title );
+
+      StringList::const_iterator it_i = m_instructions.begin();
+      for( ; it_i != m_instructions.end(); ++it_i )
+        new Tag( x, "instructions", (*it_i) );
+
+      FieldList::const_iterator it = m_fields.begin();
+      for( ; it != m_fields.end(); ++it )
+        x->addChild( (*it)->tag() );
+
+      return x;
+    }
+
+    Result::Result( const Tag* tag )
+      : FormBase( tag )
+    {
+      if( m_type != TypeResult )
+        return;
+
+      const TagList& l = tag->children();
+      TagList::const_iterator it = l.begin();
+      for( ; it != l.end(); ++it )
+      {
+        if( (*it)->name() == "reported" )
+          m_reported = new Reported( (*it) );
+        else if( (*it)->name() == "item" )
+          m_items.push_back( new Item( (*it) ) );
+      }
+    }
+
   }
 
 }

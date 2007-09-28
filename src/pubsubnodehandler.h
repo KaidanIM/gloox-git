@@ -24,7 +24,11 @@ namespace gloox
 {
 
   class JID;
-  class DataForm;
+
+  namespace DataForm
+  {
+    class FormBase;
+  }
 
   namespace PubSub
   {
@@ -43,7 +47,7 @@ namespace gloox
     };
 
     /**
-     * 
+     *
      */
     struct Affiliate
     {
@@ -142,7 +146,7 @@ namespace gloox
         virtual void handleSubscriptionOptions( const JID& service,
                                                 const JID& jid,
                                                 const std::string& node,
-                                                const DataForm* options,
+                                                const DataForm::FormBase* options,
                                                 const Error* error = 0 ) = 0;
 
         /**
@@ -207,7 +211,7 @@ namespace gloox
          */
         virtual void handleNodeConfig( const JID& service,
                                        const std::string& node,
-                                       const DataForm* config,
+                                       const DataForm::FormBase* config,
                                        const Error* error = 0 ) = 0;
 
         /**

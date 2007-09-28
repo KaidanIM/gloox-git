@@ -33,6 +33,11 @@ namespace gloox
   class MUCMessageSession;
   class Message;
 
+  namespace DataForm
+  {
+    class FormBase;
+  }
+
   /**
    * @brief This is an implementation of XEP-0045 (Multi-User Chat).
    *
@@ -352,7 +357,7 @@ namespace gloox
        * room context (e.g, if the admin is not in the room).
        * @param df The filled-in DataForm from the voice/registration request.
        */
-      static Stanza* createDataForm( const JID& room, const DataForm& df );
+      static Stanza* createDataForm( const JID& room, const DataForm::FormBase& df );
 
       /**
        * Use this function to revoke voice from a user in a moderated room.

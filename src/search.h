@@ -29,6 +29,11 @@ namespace gloox
   class IQ;
   class Disco;
 
+  namespace DataForm
+  {
+    class FormBase;
+  }
+
   /**
    * @brief An implementation of XEP-0055 (Jabber Search)
    *
@@ -73,7 +78,7 @@ namespace gloox
        * @param form The DataForm contains the phrases the user wishes to search for.
        * @param sh The SearchHandler to notify about the results.
        */
-      void search( const JID& directory, const DataForm& form, SearchHandler* sh );
+      void search( const JID& directory, const DataForm::FormBase& form, SearchHandler* sh );
 
       /**
        * Initiates a search on the given directory, with the given phrases. The given SearchHandler

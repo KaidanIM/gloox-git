@@ -18,39 +18,42 @@
 namespace gloox
 {
 
-  DataFormItem::DataFormItem()
-    : DataFormField( FieldTypeItem )
+  namespace DataForm
   {
-  }
 
-  DataFormItem::DataFormItem( Tag* tag )
-    : DataFormField( FieldTypeItem )
-  {
-    if( tag->name() != "item" )
-      return;
-
-    TagList &l = tag->children();
-    TagList::const_iterator it = l.begin();
-    for( ; it != l.end(); ++it )
+    Item::Item()
     {
-      DataFormField* f = new DataFormField( (*it) );
-      m_fields.push_back( f );
     }
-  }
 
-  DataFormItem::~DataFormItem()
-  {
-  }
-
-  Tag* DataFormItem::tag() const
-  {
-    Tag* i = new Tag ( "item" );
-    DataFormBase::FieldList::const_iterator it = m_fields.begin();
-    for( ; it != m_fields.end(); ++it )
+    Item::Item( Tag* tag )
     {
-      i->addChild( (*it)->tag() );
+      if( tag->name() != "item" )
+        return;
+
+      TagList &l = tag->children();
+      TagList::const_iterator it = l.begin();
+      for( ; it != l.end(); ++it )
+      {
+        Field* f = new Field( (*it) );
+        m_fields.push_back( f );
+      }
     }
-    return i;
+
+    Item::~Item()
+    {
+    }
+
+    Tag* Item::tag() const
+    {
+      Tag* i = new Tag ( "item" );
+      FieldContainer::FieldList::const_iterator it = m_fields.begin();
+      for( ; it != m_fields.end(); ++it )
+      {
+        i->addChild( (*it)->tag() );
+      }
+      return i;
+    }
+
   }
 
 }
