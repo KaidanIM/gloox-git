@@ -26,11 +26,15 @@
 namespace gloox
 {
 
-  class DataForm;
   class ClientBase;
   class Stanza;
   class AdhocHandler;
   class AdhocCommandProvider;
+
+  namespace DataForm
+  {
+    class FormBase;
+  }
 
   /**
    * @brief This class implements a provider for XEP-0050 (Ad-hoc Commands).
@@ -190,7 +194,7 @@ namespace gloox
        * @param action The action to take, e.g. navigatte o the previous 'screen'.
        */
       void execute( const JID& remote, const std::string& command, AdhocHandler* ah,
-                    const std::string& sessionid = "", DataForm* form = 0,
+                    const std::string& sessionid = "", DataForm::FormBase* form = 0,
                     AdhocExecuteActions action = ActionDefault );
 
       /**

@@ -15,6 +15,7 @@
 #include "search.h"
 
 #include "clientbase.h"
+#include "dataform.h"
 #include "iq.h"
 
 namespace gloox
@@ -43,7 +44,7 @@ namespace gloox
     m_parent->send( iq );
   }
 
-  void Search::search( const JID& directory, const DataForm& form, SearchHandler* sh )
+  void Search::search( const JID& directory, const DataForm::FormBase& form, SearchHandler* sh )
   {
     if( !m_parent || !directory || !sh )
       return;
@@ -100,7 +101,7 @@ namespace gloox
                 Tag* x = q->findChild( "x", XMLNS, XMLNS_X_DATA );
                 if( x )
                 {
-                  DataForm* df = new DataForm( x );
+                  DataForm::FormBase* df = new DataForm::FormBase( x );
                   (*it).second->handleSearchFields( iq->from(), df );
                 }
                 else
@@ -132,7 +133,7 @@ namespace gloox
                 Tag* x = q->findChild( "x", XMLNS, XMLNS_X_DATA );
                 if( x )
                 {
-                  DataForm* df = new DataForm( x );
+                  DataForm::FormBase* df = new DataForm::FormBase( x );
                   (*it).second->handleSearchResult( iq->from(), df );
                 }
                 else

@@ -18,39 +18,42 @@
 namespace gloox
 {
 
-  DataFormReported::DataFormReported()
-    : DataFormField( FieldTypeReported )
+  namespace DataForm
   {
-  }
 
-  DataFormReported::DataFormReported( Tag* tag )
-    : DataFormField( FieldTypeReported )
-  {
-    if( tag->name() != "reported" )
-      return;
-
-    TagList &l = tag->children();
-    TagList::const_iterator it = l.begin();
-    for( ; it != l.end(); ++it )
+    Reported::Reported()
     {
-      DataFormField* f = new DataFormField( (*it) );
-      m_fields.push_back( f );
     }
-  }
 
-  DataFormReported::~DataFormReported()
-  {
-  }
-
-  Tag* DataFormReported::tag() const
-  {
-    Tag* r = new Tag ( "reported" );
-    DataFormBase::FieldList::const_iterator it = m_fields.begin();
-    for( ; it != m_fields.end(); ++it )
+    Reported::Reported( Tag* tag )
     {
-      r->addChild( (*it)->tag() );
+      if( tag->name() != "reported" )
+        return;
+
+      TagList &l = tag->children();
+      TagList::const_iterator it = l.begin();
+      for( ; it != l.end(); ++it )
+      {
+        Field* f = new Field( (*it) );
+        m_fields.push_back( f );
+      }
     }
-    return r;
+
+    Reported::~Reported()
+    {
+    }
+
+    Tag* Reported::tag() const
+    {
+      Tag* r = new Tag ( "reported" );
+      FieldContainer::FieldList::const_iterator it = m_fields.begin();
+      for( ; it != m_fields.end(); ++it )
+      {
+        r->addChild( (*it)->tag() );
+      }
+      return r;
+    }
+
   }
 
 }

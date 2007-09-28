@@ -23,7 +23,11 @@ namespace gloox
 
   class JID;
   class Tag;
-  class DataForm;
+
+  namespace DataForm
+  {
+    class FormBase;
+  }
 
   namespace PubSub
   {
@@ -49,7 +53,7 @@ namespace gloox
          */
         virtual void handleNodeCreation( const JID& service,
                                          const std::string& node,
-                                         const DataForm* config ) = 0;
+                                         const DataForm::FormBase* config ) = 0;
 
         /**
          * Receives notification of node destructions.
@@ -103,7 +107,7 @@ namespace gloox
          */
         virtual void handleConfigurationChange( const JID& service,
                                                 const std::string& node,
-                                                const DataForm* config ) = 0;
+                                                const DataForm::FormBase* config ) = 0;
 
         /**
          * Receives notifications of node purges.

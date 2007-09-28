@@ -11,125 +11,129 @@
 */
 
 #include "dataformfield.h"
-#include "dataformbase.h"
 #include "util.h"
 #include "tag.h"
 
 namespace gloox
 {
 
-  static const char * fieldTypeValues[] =
+  namespace DataForm
   {
-    "boolean", "fixed", "hidden", "jid-multi", "jid-single",
-    "list-multi", "list-single", "text-multi", "text-private", "text-single", ""
-  };
 
-  DataFormField::DataFormField( DataFormFieldType type )
-    : m_type( type ), m_required( false )
-  {
-  }
-
-  DataFormField::DataFormField( const std::string& name, const std::string& value,
-                                const std::string& label, DataFormFieldType type )
-    : m_name( name ), m_label( label ), m_type( type ), m_required( false )
-  {
-    m_values.push_back( value );
-  }
-
-  DataFormField::DataFormField( const Tag* tag )
-    : m_type( FieldTypeInvalid ), m_required( false )
-  {
-    if( !tag )
-      return;
-
-    const std::string& type = tag->findAttribute( TYPE );
-    if( type.empty() )
+    static const char * fieldTypeValues[] =
     {
-      if( !tag->name().empty() )
-        m_type = FieldTypeNone;
-    }
-    else
-      m_type = (DataFormFieldType)util::lookup( type, fieldTypeValues );
+      "boolean", "fixed", "hidden", "jid-multi", "jid-single",
+      "list-multi", "list-single", "text-multi", "text-private", "text-single", ""
+    };
 
-    if( tag->hasAttribute( "var" ) )
-      m_name = tag->findAttribute( "var" );
-
-    if( tag->hasAttribute( "label" ) )
-      m_label = tag->findAttribute( "label" );
-
-    const TagList& l = tag->children();
-    TagList::const_iterator it = l.begin();
-    for( ; it != l.end(); ++it )
+    Field::Field( FieldType type )
+      : m_type( type ), m_required( false )
     {
-      if( (*it)->name() == "desc" )
-        m_desc = (*it)->cdata();
-      else if( (*it)->name() == "required" )
-        m_required = true;
-      else if( (*it)->name() == "value" )
-      {
-        if( m_type == FieldTypeTextMulti || m_type == FieldTypeListMulti || m_type == FieldTypeJidMulti )
-          addValue( (*it)->cdata() );
-        else
-          setValue( (*it)->cdata() );
-      }
-      else if( (*it)->name() == "option" )
-      {
-        Tag* v = (*it)->findChild( "value" );
-        if( v )
-          m_options[(*it)->findAttribute( "label" )] = v->cdata();
-      }
     }
 
-  }
-
-  DataFormField::~DataFormField()
-  {
-  }
-
-  Tag* DataFormField::tag() const
-  {
-    if( m_type == FieldTypeInvalid )
-      return 0;
-
-    Tag* field = new Tag( "field" );
-    field->addAttribute( TYPE, util::lookup( m_type, fieldTypeValues ) );
-    field->addAttribute( "var", m_name );
-    field->addAttribute( "label", m_label );
-    if( m_required )
-      new Tag( field, "required" );
-
-    if( !m_desc.empty() )
-      new Tag( field, "desc", m_desc );
-
-    if( m_type == FieldTypeListSingle || m_type == FieldTypeListMulti )
+    Field::Field( const std::string& name, const std::string& value,
+                          const std::string& label, FieldType type )
+      : m_type( type ), m_name( name ), m_label( label ), m_required( false )
     {
-      StringMap::const_iterator it = m_options.begin();
-      for( ; it != m_options.end(); ++it )
-      {
-        Tag* option = new Tag( field, "option", "label", (*it).first );
-        new Tag( option, "value", (*it).second );
-      }
+      m_values.push_back( value );
     }
-    else if( m_type == FieldTypeBoolean )
+
+    Field::Field( const Tag* tag )
+      : m_type( TypeInvalid ), m_required( false )
     {
-      if( m_values.size() == 0 || m_values.front() == "false" || m_values.front() == "0" )
-        new Tag( field, "value", "0" );
+      if( !tag )
+        return;
+
+      const std::string& type = tag->findAttribute( TYPE );
+      if( type.empty() )
+      {
+        if( !tag->name().empty() )
+          m_type = TypeNone;
+      }
       else
-        new Tag( field, "value", "1" );
+        m_type = (FieldType)util::lookup( type, fieldTypeValues );
+
+      if( tag->hasAttribute( "var" ) )
+        m_name = tag->findAttribute( "var" );
+
+      if( tag->hasAttribute( "label" ) )
+        m_label = tag->findAttribute( "label" );
+
+      const TagList& l = tag->children();
+      TagList::const_iterator it = l.begin();
+      for( ; it != l.end(); ++it )
+      {
+        if( (*it)->name() == "desc" )
+          m_desc = (*it)->cdata();
+        else if( (*it)->name() == "required" )
+          m_required = true;
+        else if( (*it)->name() == "value" )
+        {
+          if( m_type == TypeTextMulti || m_type == TypeListMulti || m_type == TypeJidMulti )
+            addValue( (*it)->cdata() );
+          else
+            setValue( (*it)->cdata() );
+        }
+        else if( (*it)->name() == "option" )
+        {
+          Tag* v = (*it)->findChild( "value" );
+          if( v )
+            m_options[(*it)->findAttribute( "label" )] = v->cdata();
+        }
+      }
+
     }
 
-    if( m_type == FieldTypeTextMulti || m_type == FieldTypeListMulti || m_type == FieldTypeJidMulti )
+    Field::~Field()
     {
-      StringList::const_iterator it = m_values.begin();
-      for( ; it != m_values.end() ; ++it )
-        new Tag( field, "value", (*it) );
     }
 
-    if( m_values.size() && !( m_type == FieldTypeTextMulti || m_type == FieldTypeListMulti
-                              || m_type == FieldTypeBoolean || m_type == FieldTypeJidMulti ) )
-      new Tag( field, "value", m_values.front() );
+    Tag* Field::tag() const
+    {
+      if( m_type == TypeInvalid )
+        return 0;
 
-    return field;
+      Tag* field = new Tag( "field" );
+      field->addAttribute( TYPE, util::lookup( m_type, fieldTypeValues ) );
+      field->addAttribute( "var", m_name );
+      field->addAttribute( "label", m_label );
+      if( m_required )
+        new Tag( field, "required" );
+
+      if( !m_desc.empty() )
+        new Tag( field, "desc", m_desc );
+
+      if( m_type == TypeListSingle || m_type == TypeListMulti )
+      {
+        StringMap::const_iterator it = m_options.begin();
+        for( ; it != m_options.end(); ++it )
+        {
+          Tag* option = new Tag( field, "option", "label", (*it).first );
+          new Tag( option, "value", (*it).second );
+        }
+      }
+      else if( m_type == TypeBoolean )
+      {
+        if( m_values.size() == 0 || m_values.front() == "false" || m_values.front() == "0" )
+          new Tag( field, "value", "0" );
+        else
+          new Tag( field, "value", "1" );
+      }
+
+      if( m_type == TypeTextMulti || m_type == TypeListMulti || m_type == TypeJidMulti )
+      {
+        StringList::const_iterator it = m_values.begin();
+        for( ; it != m_values.end() ; ++it )
+          new Tag( field, "value", (*it) );
+      }
+
+      if( m_values.size() && !( m_type == TypeTextMulti || m_type == TypeListMulti
+                                || m_type == TypeBoolean || m_type == TypeJidMulti ) )
+        new Tag( field, "value", m_values.front() );
+
+      return field;
+    }
+
   }
 
 }

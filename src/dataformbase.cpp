@@ -12,29 +12,31 @@
 
 
 #include "dataformbase.h"
-#include "dataformitem.h"
 #include "util.h"
-#include "dataformreported.h"
 
 
 namespace gloox
 {
 
-  DataFormBase::DataFormBase()
+  namespace DataForm
   {
-  }
+    FieldContainer::FieldContainer()
+    {
+    }
 
-  DataFormBase::~DataFormBase()
-  {
-    util::clear( m_fields );
-  }
+    FieldContainer::~FieldContainer()
+    {
+      util::clear( m_fields );
+    }
 
-  DataFormField* DataFormBase::field( const std::string& field ) const
-  {
-    FieldList::const_iterator it = m_fields.begin();
-    for( ; it != m_fields.end() && (*it)->name() != field; ++it )
-      ;
-    return it != m_fields.end() ? (*it) : 0;
+    Field* FieldContainer::field( const std::string& field ) const
+    {
+      FieldList::const_iterator it = m_fields.begin();
+      for( ; it != m_fields.end() && (*it)->name() != field; ++it )
+        ;
+      return it != m_fields.end() ? (*it) : 0;
+    }
+
   }
 
 }

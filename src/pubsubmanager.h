@@ -25,7 +25,11 @@ namespace gloox
 {
 
   class ClientBase;
-  class DataForm;
+
+  namespace DataForm
+  {
+    class FormBase;
+  }
 
   namespace PubSub
   {
@@ -93,7 +97,7 @@ namespace gloox
      * @endcode
      *
      * In response to this request, MyItemHandler::handleItem() will be called
-     * 
+     *
      * \note PubSub support in gloox is still relatively young and you are most
      *       welcome to ask questions, critique the API and so on. For contact
      *       informations, see below.
@@ -166,7 +170,7 @@ private:
                                   const JID& jid,
                                   const std::string& node,
                                   NodeHandler* handler,
-                                  const DataForm* df );
+                                  const DataForm::FormBase* df );
 
 public:
         /**
@@ -193,7 +197,7 @@ public:
         void setSubscriptionOptions( const JID& service,
                                      const JID& jid,
                                      const std::string& node,
-                                     const DataForm& df,
+                                     const DataForm::FormBase& df,
                                      NodeHandler* handler )
         { subscriptionOptions( service, jid, node, handler, &df ); }
 
@@ -400,7 +404,7 @@ public:
          */
         void setNodeConfig( const JID& service,
                             const std::string& node,
-                            const DataForm& config,
+                            const DataForm::FormBase& config,
                             NodeHandler* handler  )
           { nodeConfig( service, node, &config, handler ); }
 
@@ -445,7 +449,7 @@ public:
          * @param handler NodeHandler responsible to handle the request result.
          */
         void nodeConfig( const JID& service, const std::string& node,
-                         const DataForm* config, NodeHandler* handler );
+                         const DataForm::FormBase* config, NodeHandler* handler );
 
         /**
          * This function sets or requests a node's subscribers list form
