@@ -79,7 +79,7 @@ namespace gloox
       new Tag( file, "range" );
 
     Tag* feature = new Tag( "feature", XMLNS, XMLNS_FEATURE_NEG );
-    DataForm df( DataForm::FormTypeForm );
+    DataForm df( DataForm::Form );
     DataFormField* dff = df.addField( DataFormField::FieldTypeListSingle, "stream-method" );
     StringMap sm;
     if( streamTypes & FTTypeS5B )
@@ -120,7 +120,7 @@ namespace gloox
         dff->setValue( XMLNS_IQ_OOB );
         break;
     }
-    DataForm df( DataForm::FormTypeSubmit );
+    DataForm df( DataForm::Submit );
     df.addField( dff );
     feature->addChild( df.tag() );
 

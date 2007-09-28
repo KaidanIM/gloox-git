@@ -17,7 +17,7 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   name = "empty form";
   f = new DataForm();
-  if( f->type() != DataForm::FormTypeInvalid )
+  if( f->type() != DataForm::Invalid )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
@@ -69,7 +69,7 @@ int main( int /*argc*/, char** /*argv*/ )
   name = "form type, title, instructions";
   // using StringList instructions from previous test case
   // using std::string title from pre-previous test case
-  f = new DataForm( DataForm::FormTypeForm, instructions, title );
+  f = new DataForm( DataForm::Form, instructions, title );
   if( f->instructions() != instructions )
   {
     ++fail;
@@ -80,7 +80,7 @@ int main( int /*argc*/, char** /*argv*/ )
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
   }
-  if( f->type() != DataForm::FormTypeForm )
+  if( f->type() != DataForm::Form )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
@@ -92,7 +92,7 @@ int main( int /*argc*/, char** /*argv*/ )
   name = "parse 0";
   f = new DataForm();
   f->parse( 0 );
-  if( f->type() != DataForm::FormTypeInvalid )
+  if( f->type() != DataForm::Invalid )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );

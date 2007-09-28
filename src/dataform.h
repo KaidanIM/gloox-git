@@ -41,16 +41,17 @@ namespace gloox
        */
       enum DataFormType
       {
-        FormTypeForm,        /**< The forms-processing entity is asking the forms-submitting entity to
-                              * complete a form. */
-        FormTypeSubmit,      /**< The forms-submitting entity is submitting data to the
-                              * forms-processing entity. */
-        FormTypeCancel,      /**< The forms-submitting entity has cancelled submission of data to the
-                              * forms-processing entity. */
-        FormTypeResult,      /**< The forms-processing entity is returning data (e.g., search results)
-                              * to the forms-submitting entity, or the data is a generic data set. */
-        FormTypeInvalid      /**< The form is invalid. Only possible if the form was created from an
-                              * Tag which doesn't correctly describe a Data Form. */
+        Form,                       /**< The forms-processing entity is asking the forms-submitting
+                                     * entity to complete a form. */
+        Submit,                     /**< The forms-submitting entity is submitting data to the
+                                     * forms-processing entity. */
+        Cancel,                     /**< The forms-submitting entity has cancelled submission of data
+                                     * to the forms-processing entity. */
+        Result,                     /**< The forms-processing entity is returning data (e.g., search
+                                     * results) to the forms-submitting entity, or the data is a
+                                     * generic data set. */
+        Invalid                     /**< The form is invalid. Only possible if the form was created
+                                     * from an Tag which doesn't correctly describe a Data Form. */
       };
 
       /**

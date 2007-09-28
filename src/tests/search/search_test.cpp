@@ -259,7 +259,7 @@ int main( int /*argc*/, char** /*argv*/ )
   name = "receive fields (dataform)";
   iq = new gloox::IQ( gloox::IQ::Result, gloox::JID( "searchtest" ), "id",
                       gloox::XMLNS_SEARCH, "query", gloox::JID( g_dir ) );
-  gloox::DataForm df( gloox::DataForm::FormTypeForm );
+  gloox::DataForm df( gloox::DataForm::Form );
   iq->query()->addChild( df.tag() );
   t.setTest( 6 );
   t.feed( iq );
@@ -285,7 +285,7 @@ int main( int /*argc*/, char** /*argv*/ )
   name = "search result (dataform)";
   iq = new gloox::IQ( gloox::IQ::Result, gloox::JID( "searchtest" ), "id",
                       gloox::XMLNS_SEARCH, "query", gloox::JID( g_dir ) );
-  gloox::DataForm df2( gloox::DataForm::FormTypeResult );
+  gloox::DataForm df2( gloox::DataForm::Result );
   iq->query()->addChild( df2.tag() );
   t.setTest( 8 );
   t.feed( iq );
