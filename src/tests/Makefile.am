@@ -2,7 +2,8 @@
 ## Process this file with automake to produce Makefile.in
 ##
 
-SUBDIRS = base64 chatstatefilter client clientbase dataform dataformfield delayeddelivery error \
+SUBDIRS = base64 chatstatefilter client clientbase dataform dataformfield dataformreported dataformitem \
+          delayeddelivery error \
           gpgencrypted gpgsigned iq jid md5 message messageeventfilter oob parser prep presence search \
           sha simanager stanzaextensionfactory subscription tag tlsgnutls vcardupdate xdelayeddelivery \
           xpath zlib util
