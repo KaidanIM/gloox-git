@@ -20,6 +20,7 @@ namespace gloox
 
   namespace DataForm
   {
+
     FieldContainer::FieldContainer()
     {
     }
