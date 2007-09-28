@@ -25,6 +25,12 @@ namespace gloox
 
   class Tag;
 
+  /**
+   * @brief A namespace holding classes that together implement Data Forms (XEP-0004).
+   *
+   * @author Jakob Schroeter <js@camaya.net>
+   * @since 1.0
+   */
   namespace DataForm
   {
 
