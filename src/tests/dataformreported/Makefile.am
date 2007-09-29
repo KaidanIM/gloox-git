@@ -8,6 +8,6 @@ noinst_PROGRAMS = dataformreported_test
 
 dataformreported_test_SOURCES = dataformreported_test.cpp
 dataformreported_test_LDADD = ../../dataformreported.o ../../tag.o \
-		../../dataform.o ../../gloox.o ../../dataformbase.o ../../dataformfield.o ../../dataformitem.o \
+		../../dataform.o ../../gloox.o ../../dataformfieldcontainer.o ../../dataformfield.o ../../dataformitem.o \
 		../../util.o
 dataformreported_test_CFLAGS = $(CPPFLAGS)

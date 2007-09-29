@@ -7,7 +7,7 @@ AM_CPPFLAGS = -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare
 noinst_PROGRAMS = search_test
 
 search_test_SOURCES = search_test.cpp
-search_test_LDADD = ../../stanza.o ../../jid.o ../../dataform.o ../../dataformbase.o \
+search_test_LDADD = ../../stanza.o ../../jid.o ../../dataform.o ../../dataformfieldcontainer.o \
  		../../dataformreported.o ../../dataformitem.o ../../dataformfield.o ../../tag.o ../../prep.o \
  		../../gloox.o ../../stanzaextensionfactory.o ../../oob.o ../../vcardupdate.o \
 		../../delayeddelivery.o ../../xdelayeddelivery.o ../../gpgsigned.o ../../gpgencrypted.o \
