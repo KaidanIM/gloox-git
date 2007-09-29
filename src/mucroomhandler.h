@@ -25,6 +25,7 @@ namespace gloox
 
   class JID;
   class MUCRoom;
+  class Message;
 
   namespace DataForm
   {
