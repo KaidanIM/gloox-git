@@ -15,8 +15,8 @@ libgloox_la_SOURCES = jid.cpp parser.cpp connectiontcpclient.cpp clientbase.cpp 
                         disco.cpp adhoc.cpp privatexml.cpp registration.cpp \
                         nonsaslauth.cpp rosteritem.cpp rostermanager.cpp privacyitem.cpp \
                         bookmarkstorage.cpp annotations.cpp privacymanager.cpp lastactivity.cpp \
-                        flexoff.cpp dataform.cpp dataformfield.cpp dataformbase.cpp messagesession.cpp \
-                        messageeventfilter.cpp chatstatefilter.cpp gloox.cpp \
+                        flexoff.cpp dataform.cpp dataformfield.cpp dataformfieldcontainer.cpp \
+                        messagesession.cpp messageeventfilter.cpp chatstatefilter.cpp gloox.cpp \
                         inbandbytestream.cpp messagefilter.cpp vcard.cpp \
                         vcardmanager.cpp md5.cpp sha.cpp search.cpp dataformreported.cpp dataformitem.cpp \
                         mucroom.cpp mucmessagesession.cpp oob.cpp vcardupdate.cpp stanzaextensionfactory.cpp \
@@ -48,7 +48,7 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             disconodehandler.h        privacylisthandler.h    loghandler.h \
                             lastactivity.h            lastactivityhandler.h   flexoff.h \
                             flexoffhandler.h          dataform.h              dataformfield.h \
-                            dataformitem.h            dataformbase.h          dataformreported.h \
+                            dataformitem.h            dataformfieldcontaoner.h dataformreported.h \
                             macros.h                  logsink.h               messagesession.h \
                             messageeventhandler.h     messagesessionhandler.h chatstatehandler.h \
                             chatstatefilter.h         messageeventfilter.h    inbandbytestream.h \
