@@ -11,8 +11,8 @@
 */
 
 
-#ifndef DATAFORMBASE_H__
-#define DATAFORMBASE_H__
+#ifndef DATAFORMFIELDCONTAINER_H__
+#define DATAFORMFIELDCONTAINER_H__
 
 #include "dataformfield.h"
 
@@ -114,4 +114,4 @@ namespace gloox
 
 }
 
-#endif // DATAFORMBASE_H__
+#endif // DATAFORMFIELDCONTAINER_H__
