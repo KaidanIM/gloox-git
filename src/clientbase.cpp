@@ -420,23 +420,15 @@ namespace gloox
       {
         a->addAttribute( "mechanism", "PLAIN" );
 
-        size_t len = 0;
+        std::string tmp;
         if( m_authzid )
-          len = m_authzid.bare().length() + m_jid.username().length() + m_password.length() + 2;
-        else
-          len = m_jid.username().length() + m_password.length() + 2;
+          tmp += m_authzid.bare();
 
-        char *tmp = (char*)malloc( len + 80 );
-
-        if( m_authzid )
-          sprintf( tmp, "%s%c%s%c%s", m_authzid.bare().c_str(), 0, m_jid.username().c_str(), 0,
-                   m_password.c_str() );
-        else
-          sprintf( tmp, "%c%s%c%s", 0, m_jid.username().c_str(), 0, m_password.c_str() );
-
-        std::string dec( tmp, len );
-        a->setCData( Base64::encode64( dec ) );
-        free( tmp );
+        tmp += '\0';
+        tmp += m_jid.username();
+        tmp += '\0';
+        tmp += m_password;
+        a->setCData( Base64::encode64( tmp ) );
         break;
       }
       case SaslMechAnonymous:
