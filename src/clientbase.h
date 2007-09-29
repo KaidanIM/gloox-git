@@ -25,7 +25,6 @@
 #include "compressiondatahandler.h"
 #include "connectiondatahandler.h"
 #include "parser.h"
-#include "stanzaextensionfactory.h"
 
 #include <string>
 #include <list>
@@ -52,6 +51,7 @@ namespace gloox
   class TLSBase;
   class ConnectionBase;
   class CompressionBase;
+  class StanzaExtensionFactory;
 
   /**
    * @brief This is the common base class for a jabber Client and a jabber Component.
@@ -737,7 +737,7 @@ namespace gloox
 
       Parser m_parser;
       LogSink m_logInstance;
-      StanzaExtensionFactory m_seFactory;
+      StanzaExtensionFactory* m_seFactory;
 
       AuthenticationError m_authError;
       StreamError m_streamError;
