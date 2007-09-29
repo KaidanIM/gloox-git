@@ -48,6 +48,7 @@
 #include "util.h"
 #include "tlsdefault.h"
 #include "compressionzlib.h"
+#include "stanzaextensionfactory.h"
 
 #include <cstdlib>
 #include <string>
@@ -104,6 +105,7 @@ namespace gloox
       m_disco->setVersion( "based on gloox", GLOOX_VERSION );
     }
 
+    m_seFactory = new StanzaExtensionFactory();
     m_streamError = StreamErrorUndefined;
     m_block = false;
     memset( &m_stats, 0, sizeof( m_stats ) );
@@ -116,6 +118,7 @@ namespace gloox
     delete m_encryption;
     delete m_compression;
     delete m_disco;
+    delete m_seFactory;
 
     util::clear( m_messageSessions );
 
@@ -201,14 +204,14 @@ namespace gloox
           if( tag->name() == "iq"  )
           {
             IQ iq( tag );
-            m_seFactory.addExtensions( iq, tag );
+            m_seFactory->addExtensions( iq, tag );
             notifyIqHandlers( &iq );
             ++m_stats.iqStanzasReceived;
           }
           else if( tag->name() == "message" )
           {
             Message msg( tag );
-            m_seFactory.addExtensions( msg, tag );
+            m_seFactory->addExtensions( msg, tag );
             notifyMessageHandlers( &msg );
             ++m_stats.messageStanzasReceived;
           }
@@ -219,14 +222,14 @@ namespace gloox
                 || type == "subscribed" || type == "unsubscribed" )
             {
               Subscription sub( tag );
-              m_seFactory.addExtensions( sub, tag );
+              m_seFactory->addExtensions( sub, tag );
               notifySubscriptionHandlers( &sub );
               ++m_stats.s10nStanzasReceived;
             }
             else
             {
               Presence pres( tag );
-              m_seFactory.addExtensions( pres, tag );
+              m_seFactory->addExtensions( pres, tag );
               notifyPresenceHandlers( &pres );
               ++m_stats.presenceStanzasReceived;
             }
