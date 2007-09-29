@@ -14,7 +14,7 @@
 #ifndef DATAFORMITEM_H__
 #define DATAFORMITEM_H__
 
-#include "dataformbase.h"
+#include "dataformfieldcontainer.h"
 
 namespace gloox
 {

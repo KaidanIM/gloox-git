@@ -14,7 +14,7 @@
 #ifndef DATAFORMREPORTED_H__
 #define DATAFORMREPORTED_H__
 
-#include "dataformbase.h"
+#include "dataformfieldcontainer.h"
 
 namespace gloox
 {

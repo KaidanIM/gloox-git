@@ -14,7 +14,7 @@
 #ifndef DATAFORM_H__
 #define DATAFORM_H__
 
-#include "dataformbase.h"
+#include "dataformfieldcontainer.h"
 #include "stanzaextension.h"
 
 #include <string>
