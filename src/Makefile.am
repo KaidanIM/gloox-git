@@ -48,7 +48,7 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             disconodehandler.h        privacylisthandler.h    loghandler.h \
                             lastactivity.h            lastactivityhandler.h   flexoff.h \
                             flexoffhandler.h          dataform.h              dataformfield.h \
-                            dataformitem.h            dataformfieldcontaoner.h dataformreported.h \
+                            dataformitem.h            dataformfieldcontainer.h dataformreported.h \
                             macros.h                  logsink.h               messagesession.h \
                             messageeventhandler.h     messagesessionhandler.h chatstatehandler.h \
                             chatstatefilter.h         messageeventfilter.h    inbandbytestream.h \
