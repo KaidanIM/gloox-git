@@ -53,7 +53,7 @@
  * {
  *   public:
  *     // reimplemented from PresenceHandler
- *     virtual void handlePresence( Stanza* stanza );
+ *     virtual void handlePresence( Presence* presence );
  *
  *   [...]
  * };
