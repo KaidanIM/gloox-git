@@ -190,7 +190,8 @@ namespace gloox
       handleStartNode();
     }
     else if( tag->name() == "error" && tag->prefix() == "stream" )
-#warning FIXME don't hard-code the prefix!!!
+      // hard-coding the prefix is fine for now. it eeds to be adjusted should RFC3920's
+      // successors ever decide to allow custom stream prefixes.
     {
       handleStreamError( tag );
       disconnect( ConnStreamError );
