@@ -27,7 +27,6 @@
 
 #include <cstdlib>
 #include <string>
-#include <algorithm>
 
 #define JID_PORTION_SIZE 1023
 
@@ -66,7 +65,7 @@ namespace gloox
 #ifdef HAVE_LIBIDN
       return prepare( node, out, stringprep_xmpp_nodeprep );
 #else
-      std::transform( node.begin(), node.end(), out.begin(), std::tolower );
+      out = node;
       return false;
 #endif
     }
@@ -76,7 +75,7 @@ namespace gloox
 #ifdef HAVE_LIBIDN
       return prepare( domain, out, stringprep_nameprep );
 #else
-      std::transform( domain.begin(), domain.end(), out.begin(), std::tolower );
+      out = domain;
       return false;
 #endif
     }
@@ -86,7 +85,7 @@ namespace gloox
 #ifdef HAVE_LIBIDN
       return prepare( resource, out, stringprep_xmpp_resourceprep );
 #else
-      std::transform( resource.begin(), resource.end(), out.begin(), std::tolower );
+      out = resource;
       return false;
 #endif
     }
@@ -108,7 +107,7 @@ namespace gloox
         free( prepped );
       return false;
 #else
-      std::transform( domain.begin(), domain.end(), out.begin(), std::tolower );
+      out = domain;
       return false;
 #endif
     }
