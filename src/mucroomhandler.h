@@ -144,20 +144,20 @@ namespace gloox
        * that for any further private communication with the user.
        * @param room The room the message came from.
        * @param msg The entire Message.
-       * @param privateMessage Indicates whether this is a private message.
+       * @param private Indicates whether this is a private message.
        * @note The sender's nick name can be obtains with this call:
        * @code
-       *   const std::string = msg.from().resource();
+       * const std::string = msg.from().resource();
        * @endcode
        * @note The message may contain an extension of type DelayedDelivery describing the
        * date/time when the message was originally sent. The presence of such an extension
        * usually indicates that the message is sent as part of the room history. This extension
        * can be obtained with this call:
        * @code
-       *   DelayedDelivery* dd = msg.when(); // may be 0 if no such extension exists
+       * const DelayedDelivery* dd = msg.when(); // may be 0 if no such extension exists
        * @endcode
        */
-      virtual void handleMUCMessage( MUCRoom* room, const Message& msg, bool privateMessage ) = 0;
+      virtual void handleMUCMessage( MUCRoom* room, const Message& msg, bool private ) = 0;
 
       /**
        * This function is called if the room that was just joined didn't exist prior to the attempted
