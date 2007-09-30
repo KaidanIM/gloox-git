@@ -29,14 +29,25 @@ Building gloox on MSVC
 ----------------------
 
 - use the included project file or create your own
-- don't forget to switch 'include RTTI information' on
+- adjust include + library paths if necessary
 - to receive any debug output you should use the LogSink facilities (this is not win32-specific)
 - build
-- if you get C4541 warnings, you forgot RTTI ;)
 
 
-Linking against gloox
----------------------
+Building libidn in Win32
+------------------------
+
+- install mingw + msys from http://www.mingw.org, including mingw-utils
+- build libidn 1.1 or above in msys/mingw
+
+if you want to use libidn in MSVC:
+- create msvc import libs:
+  pexports libidn-11.dll > libidn-11.def
+  lib /def:libidn-11.def
+
+
+Linking your application against gloox
+--------------------------------------
 
 - When building a program that links against gloox, make sure you have GLOOX_IMPORTS defined.
 - Make sure you use the same runtime library for both gloox and your app.
