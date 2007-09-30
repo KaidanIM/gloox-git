@@ -1,0 +1,110 @@
+/**
+ * @page upgrading Upgrading from earlier versions
+ *
+ * This page contains information about upgrading gloox from an earlier version to the current one.
+ * It lists the API changes that were made and how to change your code to achieve the same
+ * (or better) functionality as with the earlier version.
+ *
+ * @section upgrading_09_10 1. Upgrading from 0.9.x to 1.0
+ *
+ * @subsection deprecated_10 1.1 Deprecated classes and functions
+ *
+ * @subsubsection func_MUCRoomHandler_handleMucMessage 1.1.1 MUCRoomHandler::handleMUCMessage( MUCRoom*, string, string, bool, string, bool ),
+ *
+ * Use @link gloox::MUCRoomHandler::handleMUCMessage( MUCRoom*, const Message&, bool ) handleMUCMessage( MUCRoom*, Message&, bool ) @endlink instead.
+ *
+ * Due to the newly available StanzaExtensions, some of handleMUCMessage()'s arguments are obsolete:
+ * Instead of single values, all of these are included in the new @c msg parameter, which is the
+ * full Message stanza:
+ *
+ * @li the speaker's nick name,
+ * @code const std::string nick = msg.from().resource(); @endcode
+ * @li the message body,
+ * @code const std::string body = msg.body(); @endcode
+ * @li whether this message is part of the room history,
+ * @code
+ * bool history;
+ * if( msg.findExtension( ExtDelay ) )
+ *   history = true;
+ * @endcode
+ * @li the message's time stamp.
+ * @code
+ * const DelayedDelivery* dd = msg.when();
+ * if( dd )
+ *   printf( "message was sent at %s\n", dd->stamp().c_str() );
+ * @endcode
+ *
+ * @subsection removed_10 1.2 Removed classes and functions
+ *
+ * @subsubsection class_XDelayedDelivery 1.2.1 XDelayedDelivery
+ *
+ * The XSF has replaced XEP-0091 with XEP-0203. The class
+ * @link gloox::DelayedDelivery DelayedDelivery @endlink covers both XEPs.
+ *
+ * @subsubsection func_JID_fullJID 1.2.2 JID::fullJID()
+ *
+ * Use the copy constructor instead. E.g.:
+ *
+ * Old code:
+ * @code
+ * JID j( "somejid" );
+ * JID copy = j.fullJID();
+ * @endcode
+ *
+ * New code:
+ * @code
+ * JID j( "somejid" );
+ * JID copy( j );
+ * @endcode
+ *
+ * @subsubsection func_JID_empty 1.2.3 JID::empty()
+ *
+ * This function has bee replaced by JID::operator bool(). This has the added benefit of validity
+ * checking. E.g.:
+ *
+ * Old code:
+ * @code
+ * JID j;
+ * // ...
+ * if( !j.empty() )
+ * {
+ *   // do something
+ * }
+ * @endcode
+ *
+ * New code:
+ * @code
+ * JID j;
+ * // ...
+ * if( j ) // this evaluates to true only if the JID is not empty and if the contained JID
+ *         // is in fact valid, i.e. if no prepping operation failed.
+ * {
+ *   // do something
+ * }
+ * @endcode
+ *
+ * @subsubsection func_Tag_empty 1.2.4 Tag::empty()
+ *
+ * This function has bee replaced by Tag::operator bool(). This has the added benefit of validity
+ * checking. E.g.:
+ *
+ * Old code:
+ * @code
+ * Tag t;
+ * // ...
+ * if( !t.empty() )
+ * {
+ *   // do something
+ * }
+ * @endcode
+ *
+ * New code:
+ * @code
+ * Tag t;
+ * // ...
+ * if( t )
+ * {
+ *   // do something
+ * }
+ * @endcode
+ */
