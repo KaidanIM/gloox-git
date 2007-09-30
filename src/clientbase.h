@@ -50,7 +50,7 @@ namespace gloox
   class CompressionBase;
 
   /**
-   * @brief This is the common base class for a jabber Client and a jabber Component.
+   * @brief This is the common base class for a Jabber/XMPP Client and a jabber Component.
    *
    * It manages connection establishing, authentication, filter registration and invocation.
    *
@@ -664,6 +664,9 @@ namespace gloox
       int m_availableSaslMechs;
 
     private:
+      ClientBase( const ClientBase& );
+      ClientBase& operator=( const ClientBase& );
+
       virtual void handleStartNode() = 0;
       virtual bool handleNormalNode( Stanza *stanza ) = 0;
       virtual void rosterFilled() = 0;
