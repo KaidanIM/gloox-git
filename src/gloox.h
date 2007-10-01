@@ -25,6 +25,7 @@
  * @ref xeps_sec <br>
  * @ref filetransfer_sec <br>
  * @ref proxy_sec <br>
+ * @ref upgrading_sec <br>
  * <br>
  *
  * @section intro_sec Introduction
@@ -320,6 +321,11 @@
  * gloox is capable of traversing HTTP as well as SOCKS5 proxies, even chained. See
  * @link gloox::ConnectionHTTPProxy ConnectionHTTPProxy @endlink and
  * @link gloox::ConnectionSOCKS5Proxy ConnectionSOCKS5Proxy @endlink.
+ *
+ * @section upgrading_sec Upgrading from earlier versions
+ *
+ * See <a href='upgrading.html'>Upgrading</a>.
+ *
  */
 
 #ifndef GLOOX_H__
