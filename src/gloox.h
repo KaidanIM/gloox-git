@@ -299,7 +299,7 @@
  * @link gloox::RosterManager::delimiter() RosterManager @endlink)
  * @li XEP-0085 Chat State Notifications (see @link gloox::MessageSession MessageSession @endlink for
  * examples)
- * @li XEP-0091 @link gloox::XDelayedDelivery Delayed Delivery @endlink (old spec)
+ * @li XEP-0091 @link gloox::DelayedDelivery Delayed Delivery @endlink (old spec)
  * @li XEP-0092 Software Version (integrated into @link gloox::Disco Service Discovery @endlink)
  * @li XEP-0095 @link gloox::SIManager Stream Initiation @endlink, used with @ref filetransfer_sec
  * @li XEP-0096 @ref filetransfer_sec
