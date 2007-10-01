@@ -144,7 +144,7 @@ namespace gloox
        * that for any further private communication with the user.
        * @param room The room the message came from.
        * @param msg The entire Message.
-       * @param private Indicates whether this is a private message.
+       * @param priv Indicates whether this is a private message.
        * @note The sender's nick name can be obtains with this call:
        * @code
        * const std::string = msg.from().resource();
@@ -157,7 +157,7 @@ namespace gloox
        * const DelayedDelivery* dd = msg.when(); // may be 0 if no such extension exists
        * @endcode
        */
-      virtual void handleMUCMessage( MUCRoom* room, const Message& msg, bool private ) = 0;
+      virtual void handleMUCMessage( MUCRoom* room, const Message& msg, bool priv ) = 0;
 
       /**
        * This function is called if the room that was just joined didn't exist prior to the attempted
