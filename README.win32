@@ -41,7 +41,7 @@ Building libidn in Win32
 - build libidn 1.1 or above in msys/mingw
 
 if you want to use libidn in MSVC:
-- create msvc import libsby typing at a command line:
+- create msvc import libs by entering at a command line:
   pexports libidn-11.dll > libidn-11.def
   lib /def:libidn-11.def
 
