@@ -149,8 +149,11 @@ namespace gloox
        * @param fields The fields to use to generate the registration request. OR'ed
        * @ref fieldEnum values.
        * @param values The struct contains the values which shall be used for the registration.
+       * @return Returns @b true if the registration request was sent successfully, @b false
+       * otherwise. In that case either there's no connected ClientBase available, or
+       * prepping of the username failed (i.e. the username is not valid for use in XMPP).
        */
-      void createAccount( int fields, const RegistrationFields& values );
+      bool createAccount( int fields, const RegistrationFields& values );
 
       /**
        * Attempts to register an account with the given credentials. This can only be called with an
