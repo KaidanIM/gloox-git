@@ -59,19 +59,20 @@ namespace gloox
     m_parent->send( iq );
   }
 
-  void Registration::createAccount( int fields, const RegistrationFields& values )
+  bool Registration::createAccount( int fields, const RegistrationFields& values )
   {
-    if( !m_parent || m_parent->state() != StateConnected )
-      return;
+    std::string username;
+    if( !m_parent || m_parent->state() != StateConnected
+         || !prep::nodeprep( values.username, username ) )
+      return false;
 
     const std::string& id = m_parent->getID();
 
     IQ* iq = new IQ( IQ::Set, m_to, id, XMLNS_REGISTER );
     Tag* q = iq->query();
 
-#warning FIXME need proper prepping here!
-//     if( fields & FieldUsername )
-//       new Tag( q, "username", prep::nodeprep( values.username ) );
+    if( fields & FieldUsername )
+      new Tag( q, "username", username );
     if( fields & FieldNick )
       new Tag( q, "nick", values.nick );
     if( fields & FieldPassword )
@@ -105,6 +106,8 @@ namespace gloox
 
     m_parent->trackID( this, id, CreateAccount );
     m_parent->send( iq );
+
+    return true;
   }
 
   void Registration::createAccount( const DataForm::Submit& form )
