@@ -5,7 +5,7 @@
 SUBDIRS = base64 chatstatefilter client clientbase dataform dataformfield dataformreported dataformitem \
           delayeddelivery error \
           gpgencrypted gpgsigned iq jid md5 message messageeventfilter oob parser prep presence search \
-          sha simanager stanzaextensionfactory subscription tag tlsgnutls vcardupdate xdelayeddelivery \
+          sha simanager stanzaextensionfactory subscription tag tlsgnutls vcardupdate \
           xpath zlib util
 
 check: test
