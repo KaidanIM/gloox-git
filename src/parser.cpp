@@ -754,7 +754,7 @@ namespace gloox
     m_haveTagPrefix = false;
     m_value = "";
     m_xmlns = "";
-    util::clear( m_attribs );
+    util::clearList( m_attribs );
     m_attribs.clear();
     m_state = Initial;
     m_preamble = 0;

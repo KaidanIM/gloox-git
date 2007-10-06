@@ -27,7 +27,7 @@ namespace gloox
 
     FieldContainer::~FieldContainer()
     {
-      util::clear( m_fields );
+      util::clearList( m_fields );
     }
 
     Field* FieldContainer::field( const std::string& field ) const

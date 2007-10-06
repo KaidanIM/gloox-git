@@ -120,7 +120,7 @@ namespace gloox
     delete m_disco;
     delete m_seFactory;
 
-    util::clear( m_messageSessions );
+    util::clearList( m_messageSessions );
 
     PresenceJidHandlerList::const_iterator it1 = m_presenceJidHandlers.begin();
     for( ; it1 != m_presenceJidHandlers.end(); ++it1 )

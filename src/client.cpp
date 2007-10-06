@@ -480,7 +480,7 @@ namespace gloox
 
   void Client::removePresenceExtensions()
   {
-    util::clear( m_presenceExtensions );
+    util::clearList( m_presenceExtensions );
   }
 
   void Client::setPresence( const JID& to, Presence::PresenceType presence, int priority,

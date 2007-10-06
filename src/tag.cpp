@@ -114,10 +114,10 @@ namespace gloox
 
   Tag::~Tag()
   {
-    util::clear( *m_cdata );
-    util::clear( *m_attribs );
-    util::clear( *m_children );
-    util::clear( *m_nodes );
+    util::clearList( *m_cdata );
+    util::clearList( *m_attribs );
+    util::clearList( *m_children );
+    util::clearList( *m_nodes );
     delete m_cdata;
     delete m_attribs;
     delete m_children;
@@ -313,7 +313,7 @@ namespace gloox
 
   void Tag::setAttributes( const AttributeList& attributes )
   {
-    util::clear( *m_attribs );
+    util::clearList( *m_attribs );
     *m_attribs = attributes;
     AttributeList::iterator it = m_attribs->begin();
     for( ; it != m_attribs->end(); ++it )
@@ -346,7 +346,7 @@ namespace gloox
     if( cdata.empty() )
       return;
 
-    util::clear( *m_cdata );
+    util::clearList( *m_cdata );
     m_cdata->clear();
     NodeList::iterator it = m_nodes->begin();
     NodeList::iterator t;

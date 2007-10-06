@@ -31,7 +31,7 @@ namespace gloox
 
   MessageSession::~MessageSession()
   {
-    util::clear( m_messageFilterList );
+    util::clearList( m_messageFilterList );
   }
 
   void MessageSession::handleMessage( Message* msg )

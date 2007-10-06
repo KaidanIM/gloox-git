@@ -51,7 +51,7 @@ namespace gloox
       delete m_privateXML;
     }
 
-    util::clear( m_roster );
+    util::clearMap( m_roster );
   }
 
   Roster* RosterManager::roster()

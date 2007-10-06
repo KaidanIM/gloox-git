@@ -79,8 +79,8 @@ namespace gloox
 
   ConnectionBOSH::~ConnectionBOSH()
   {
-    util::clear( m_activeConnections );
-    util::clear( m_connectionPool );
+    util::clearList( m_activeConnections );
+    util::clearList( m_connectionPool );
   }
 
   ConnectionBase* ConnectionBOSH::newInstance() const

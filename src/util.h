@@ -96,7 +96,7 @@ namespace gloox
      * @param L List of pointers to delete.
      */
     template< typename T >
-    inline void clear( std::list< T* >& L )
+    inline void clearList( std::list< T* >& L )
     {
       typename std::list< T* >::iterator it = L.begin();
       for( ; it != L.end(); ++it )
@@ -108,7 +108,7 @@ namespace gloox
      * @param M Map of pointer values to delete.
      */
     template< typename Key, typename T >
-    inline void clear( std::map< Key, T* >& M )
+    inline void clearMap( std::map< Key, T* >& M )
     {
       typename std::map< Key, T* >::iterator it = M.begin();
       for( ; it != M.end(); ++it )
@@ -121,7 +121,7 @@ namespace gloox
      * @param M Map of pointer values to delete.
      */
     template< typename Key, typename T >
-    inline void clear( std::map< const Key, T* >& M )
+    inline void clearMap( std::map< const Key, T* >& M )
     {
       typename std::map< const Key, T* >::iterator it = M.begin();
       for( ; it != M.end(); ++it )

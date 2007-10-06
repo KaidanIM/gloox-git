@@ -25,7 +25,7 @@ namespace gloox
 
   RosterItem::~RosterItem()
   {
-    util::clear( m_resources );
+    util::clearMap( m_resources );
   }
 
   void RosterItem::setName( const std::string& name )
