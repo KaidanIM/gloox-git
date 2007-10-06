@@ -28,7 +28,7 @@ namespace gloox
 
   StanzaExtensionFactory::~StanzaExtensionFactory()
   {
-    util::clear( m_extensions );
+    util::clearList( m_extensions );
   }
 
   void StanzaExtensionFactory::registerExtension( StanzaExtension* ext )

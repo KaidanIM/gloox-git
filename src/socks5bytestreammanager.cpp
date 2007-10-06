@@ -39,7 +39,7 @@ namespace gloox
     if( m_parent )
       m_parent->removeIqHandler( this, XMLNS_BYTESTREAMS );
 
-    util::clear( m_s5bMap );
+    util::clearMap( m_s5bMap );
   }
 
   void SOCKS5BytestreamManager::addStreamHost( const JID& jid, const std::string& host, int port )

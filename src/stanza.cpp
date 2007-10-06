@@ -42,7 +42,7 @@ namespace gloox
 
   Stanza::~Stanza()
   {
-    util::clear( m_extensionList );
+    util::clearList( m_extensionList );
   }
 
   const Error* Stanza::error() const

@@ -130,7 +130,7 @@ namespace gloox
 
   AMP::~AMP()
   {
-    util::clear( m_rules );
+    util::clearList( m_rules );
   }
 
 }
