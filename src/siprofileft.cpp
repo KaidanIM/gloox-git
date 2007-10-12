@@ -79,8 +79,8 @@ namespace gloox
       new Tag( file, "range" );
 
     Tag* feature = new Tag( "feature", XMLNS, XMLNS_FEATURE_NEG );
-    DataForm::Form df;
-    DataForm::Field* dff = df.addField( DataForm::Field::TypeListSingle, "stream-method" );
+    DataForm df( TypeForm );
+    DataFormField* dff = df.addField( DataFormField::TypeListSingle, "stream-method" );
     StringMap sm;
     if( streamTypes & FTTypeS5B )
       sm["s5b"] = XMLNS_BYTESTREAMS;
@@ -100,7 +100,7 @@ namespace gloox
       return;
 
     Tag* feature = new Tag( "feature", XMLNS, XMLNS_FEATURE_NEG );
-    DataForm::Field* dff = new DataForm::Field( "stream-method" );
+    DataFormField* dff = new DataFormField( "stream-method" );
     switch( type )
     {
       case FTTypeAll:
@@ -120,7 +120,7 @@ namespace gloox
         dff->setValue( XMLNS_IQ_OOB );
         break;
     }
-    DataForm::Submit df;
+    DataForm df( TypeSubmit );
     df.addField( dff );
     feature->addChild( df.tag() );
 
@@ -185,8 +185,8 @@ namespace gloox
 
       if( fneg )
       {
-        const DataForm::FormBase df( fneg->findChild( "x", XMLNS, XMLNS_X_DATA ) );
-        const DataForm::Field* dff = df.field( "stream-method" );
+        const DataForm df( fneg->findChild( "x", XMLNS, XMLNS_X_DATA ) );
+        const DataFormField* dff = df.field( "stream-method" );
 
         if( dff )
         {
@@ -215,8 +215,8 @@ namespace gloox
   {
     if( fneg )
     {
-      const DataForm::FormBase df( fneg->findChild( "x", XMLNS, XMLNS_X_DATA ) );
-      const DataForm::Field* dff = df.field( "stream-method" );
+      const DataForm df( fneg->findChild( "x", XMLNS, XMLNS_X_DATA ) );
+      const DataFormField* dff = df.field( "stream-method" );
 
       if( dff )
       {

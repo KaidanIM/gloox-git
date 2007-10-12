@@ -11,12 +11,12 @@ int main( int /*argc*/, char** /*argv*/ )
 {
   int fail = 0;
   std::string name;
-  DataForm::Item *f;
+  DataFormItem *f;
   Tag* t;
 
   // -------
   name = "empty form";
-  f = new DataForm::Item();
+  f = new DataFormItem();
   t = f->tag();
   if( t->xml() != "<item/>" )
   {
@@ -30,8 +30,8 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "one child";
-  f = new DataForm::Item();
-  f->addField( DataForm::Field::TypeTextSingle, "name", "value", "label" );
+  f = new DataFormItem();
+  f->addField( DataFormField::TypeTextSingle, "name", "value", "label" );
   t = f->tag();
   if( !t || t->xml() != "<item><field type='text-single' var='name' label='label'>"
        "<value>value</value></field></item>" )
@@ -46,19 +46,19 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "many children";
-  f = new DataForm::Item();
-  f->addField( DataForm::Field::TypeTextSingle, "name", "value", "label" );
-  f->addField( DataForm::Field::TypeJidSingle, "name", "value", "label" );
-  f->addField( DataForm::Field::TypeTextSingle, "name", "value", "label" );
-  f->addField( DataForm::Field::TypeTextMulti, "name", "value", "label" );
-  f->addField( DataForm::Field::TypeTextSingle, "name", "value", "label" );
-  f->addField( DataForm::Field::TypeJidMulti, "name", "value", "label" );
-  f->addField( DataForm::Field::TypeTextSingle, "name", "value", "label" );
-  f->addField( DataForm::Field::TypeListSingle, "name", "value", "label" );
-  f->addField( DataForm::Field::TypeTextSingle, "name", "value", "label" );
-  f->addField( DataForm::Field::TypeListMulti, "name", "value", "label" );
-  f->addField( DataForm::Field::TypeTextSingle, "name", "value", "label" );
-  f->addField( DataForm::Field::TypeTextSingle, "name", "value", "label" );
+  f = new DataFormItem();
+  f->addField( DataFormField::TypeTextSingle, "name", "value", "label" );
+  f->addField( DataFormField::TypeJidSingle, "name", "value", "label" );
+  f->addField( DataFormField::TypeTextSingle, "name", "value", "label" );
+  f->addField( DataFormField::TypeTextMulti, "name", "value", "label" );
+  f->addField( DataFormField::TypeTextSingle, "name", "value", "label" );
+  f->addField( DataFormField::TypeJidMulti, "name", "value", "label" );
+  f->addField( DataFormField::TypeTextSingle, "name", "value", "label" );
+  f->addField( DataFormField::TypeListSingle, "name", "value", "label" );
+  f->addField( DataFormField::TypeTextSingle, "name", "value", "label" );
+  f->addField( DataFormField::TypeListMulti, "name", "value", "label" );
+  f->addField( DataFormField::TypeTextSingle, "name", "value", "label" );
+  f->addField( DataFormField::TypeTextSingle, "name", "value", "label" );
   t = f->tag();
   if( !t || t->xml() != "<item>"
        "<field type='text-single' var='name' label='label'><value>value</value></field>"
@@ -92,12 +92,12 @@ int main( int /*argc*/, char** /*argv*/ )
 
   if( fail == 0 )
   {
-    printf( "DataForm::Item: all tests passed\n" );
+    printf( "DataFormItem: all tests passed\n" );
     return 0;
   }
   else
   {
-    printf( "DataForm::Item: %d test(s) failed\n", fail );
+    printf( "DataFormItem: %d test(s) failed\n", fail );
     return 1;
   }
 

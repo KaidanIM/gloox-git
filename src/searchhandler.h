@@ -21,10 +21,7 @@
 namespace gloox
 {
 
-  namespace DataForm
-  {
-    class FormBase;
-  }
+  class DataForm;
 
   /**
    * Holds all the possible fields a server may require for searching according
@@ -88,7 +85,7 @@ namespace gloox
        * @param directory The directory that was queried.
        * @param form A DataForm describing the valid searchable fields.
        */
-      virtual void handleSearchFields( const JID& directory, DataForm::FormBase* form ) = 0;
+      virtual void handleSearchFields( const JID& directory, DataForm* form ) = 0;
 
      /**
       * This function is called to let the SearchHandler know about the results of the search.
@@ -103,7 +100,7 @@ namespace gloox
        * @param directory The searched directory.
        * @param form A DataForm containing the search results.
        */
-      virtual void handleSearchResult( const JID& directory, const DataForm::FormBase* form ) = 0;
+      virtual void handleSearchResult( const JID& directory, const DataForm* form ) = 0;
 
       /**
        * This function is called if a error occured as a result to a search or search field request.

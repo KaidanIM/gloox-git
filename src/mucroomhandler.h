@@ -26,11 +26,7 @@ namespace gloox
   class JID;
   class MUCRoom;
   class Message;
-
-  namespace DataForm
-  {
-    class FormBase;
-  }
+  class DataForm;
 
   /**
    * Describes a participant in a MUC room.
@@ -229,7 +225,7 @@ namespace gloox
        * happens if the room config is changed, e.g. by a room admin.
        */
       virtual void handleMUCInfo( MUCRoom* room, int features, const std::string& name,
-                                  const DataForm::FormBase* infoForm ) = 0;
+                                  const DataForm* infoForm ) = 0;
 
       /**
        * This function is called in response to a call to MUCRoom::getRoomItems().

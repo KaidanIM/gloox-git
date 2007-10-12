@@ -24,11 +24,7 @@ namespace gloox
 
   class OOB;
   class JID;
-
-  namespace DataForm
-  {
-    class FormBase;
-  }
+  class DataForm;
 
   /**
    * Possible results of a XEP-0077 operation.
@@ -115,7 +111,7 @@ namespace gloox
        * @param from The server or service the data form came from.
        * @param form The DataForm containing registration information.
        */
-      virtual void handleDataForm( const JID& from, const DataForm::FormBase& form ) = 0;
+      virtual void handleDataForm( const JID& from, const DataForm& form ) = 0;
 
       /**
        * This function is called if the server does not offer in-band registration

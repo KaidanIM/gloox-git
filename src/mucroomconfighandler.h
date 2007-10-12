@@ -25,11 +25,7 @@ namespace gloox
 
   class MUCRoom;
   class JID;
-
-  namespace DataForm
-  {
-    class FormBase;
-  }
+  class DataForm;
 
   /**
    * An item in a list of MUC room users. Lists of these items are
@@ -117,7 +113,7 @@ namespace gloox
        * @param room The room for which the config form arrived.
        * @param form The configuration form.
        */
-      virtual void handleMUCConfigForm( MUCRoom* room, const DataForm::FormBase& form ) = 0;
+      virtual void handleMUCConfigForm( MUCRoom* room, const DataForm& form ) = 0;
 
       /**
        * This function is called in response to MUCRoom::kick(), MUCRoom::storeList(),
@@ -135,7 +131,7 @@ namespace gloox
        * @param room The room the request arrived from.
        * @param form A DataForm containing the request.
        */
-      virtual void handleMUCRequest( MUCRoom* room, const DataForm::FormBase& form ) = 0;
+      virtual void handleMUCRequest( MUCRoom* room, const DataForm& form ) = 0;
 
   };
 

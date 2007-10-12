@@ -184,7 +184,7 @@ namespace gloox
             case EventCollection:
             {
               const Tag* x = (*it)->findChild( "x" );
-              const DataForm::FormBase* df = x ? new DataForm::FormBase( x ) : 0;
+              const DataForm* df = x ? new DataForm( x ) : 0;
               (*ith)->handleNodeCreation( service, node, df );
               delete df;
               break;
@@ -192,7 +192,7 @@ namespace gloox
             case EventConfigure:
             {
               const Tag* x = (*it)->findChild( "x" );
-              const DataForm::FormBase* df = x ? new DataForm::FormBase( x ) : 0;
+              const DataForm* df = x ? new DataForm( x ) : 0;
               (*ith)->handleConfigurationChange( service, node, df );
               delete df;
               break;
@@ -237,7 +237,7 @@ namespace gloox
                                        const JID& jid,
                                        const std::string& node,
                                        NodeHandler* handler,
-                                       const DataForm::FormBase* df )
+                                       const DataForm* df )
     {
       if( !m_parent || !handler )
         return;
@@ -301,15 +301,15 @@ namespace gloox
       if( type != SubscriptionNodes || depth != 1 )
       {
         Tag* options = new Tag( ps, "options" );
-        DataForm::Submit df;
-        df.addField( DataForm::Field::TypeHidden, "FORM_TYPE", XMLNS_PUBSUB_SUBSCRIBE_OPTIONS );
+        DataForm df( TypeSubmit );
+        df.addField( DataFormField::TypeHidden, "FORM_TYPE", XMLNS_PUBSUB_SUBSCRIBE_OPTIONS );
 
         if( type == SubscriptionItems )
-          df.addField( DataForm::Field::TypeNone, "pubsub#subscription_type", "items" );
+          df.addField( DataFormField::TypeNone, "pubsub#subscription_type", "items" );
 
         if( depth != 1 )
         {
-          DataForm::Field* field = df.addField( DataForm::Field::TypeNone, "pubsub#subscription_depth" );
+          DataFormField* field = df.addField( DataFormField::TypeNone, "pubsub#subscription_depth" );
           if( depth == 0 )
             field->setValue( "all" );
           //else
@@ -409,26 +409,26 @@ namespace gloox
 
       if( !parent.empty() || config || type == NodeCollection || access != AccessDefault )
       {
-        DataForm::Submit df;
-        df.addField( DataForm::Field::TypeHidden, "FORM_TYPE", XMLNS_PUBSUB_NODE_CONFIG );
+        DataForm df( TypeSubmit );
+        df.addField( DataFormField::TypeHidden, "FORM_TYPE", XMLNS_PUBSUB_NODE_CONFIG );
 
         if( !parent.empty() )
-          df.addField( DataForm::Field::TypeNone, "pubsub#collection", parent );
+          df.addField( DataFormField::TypeNone, "pubsub#collection", parent );
 
         if( !name.empty() )
-          df.addField( DataForm::Field::TypeNone, "pubsub#title", name );
+          df.addField( DataFormField::TypeNone, "pubsub#title", name );
 
         if( type == NodeCollection )
-          df.addField( DataForm::Field::TypeNone, "pubsub#node_type", "collection" );
+          df.addField( DataFormField::TypeNone, "pubsub#node_type", "collection" );
 
         if( access != AccessDefault )
-          df.addField( DataForm::Field::TypeNone, "pubsub#access_model",
+          df.addField( DataFormField::TypeNone, "pubsub#access_model",
                             util::lookup( access, accessValues ) );
         if( config )
         {
           StringMap::const_iterator it = config->begin();
           for( ; it != config->end(); ++it )
-            df.addField( DataForm::Field::TypeNone, (*it).first, (*it).first );
+            df.addField( DataFormField::TypeNone, (*it).first, (*it).first );
         }
         configure->addChild( df.tag() );
       }
@@ -464,9 +464,9 @@ namespace gloox
       Tag* def = new Tag( iq->query(), "default" );
       if( type == NodeCollection )
       {
-        DataForm::Submit df;
-        df.addField( DataForm::Field::TypeHidden, "FORM_TYPE", XMLNS_PUBSUB_NODE_CONFIG );
-        df.addField( DataForm::Field::TypeNone, "pubsub#node_type", "collection" );
+        DataForm df( TypeSubmit );
+        df.addField( DataFormField::TypeHidden, "FORM_TYPE", XMLNS_PUBSUB_NODE_CONFIG );
+        df.addField( DataFormField::TypeNone, "pubsub#node_type", "collection" );
         def->addChild( df.tag() );
       }
 
@@ -476,7 +476,7 @@ namespace gloox
     }
 
     void Manager::nodeConfig( const JID& service, const std::string& node,
-                              const DataForm::FormBase* config, NodeHandler* handler )
+                              const DataForm* config, NodeHandler* handler )
     {
       if( !m_parent || !handler )
         return;
@@ -705,7 +705,7 @@ namespace gloox
                 case GetSubscriptionOptions:
                 {
                   const Tag* options = query->findChild( "options" );
-                  const DataForm::FormBase df( options->findChild( "x" ) );
+                  const DataForm df( options->findChild( "x" ) );
                   (*ith).second->handleSubscriptionOptions( iq->from(),
                                          JID( options->findAttribute( "jid" ) ),
                                          options->findAttribute( "node" ), &df );
@@ -790,7 +790,7 @@ namespace gloox
                   const Tag* ps = iq->findChild( "pubsub", XMLNS, XMLNS_PUBSUB );
                   const Tag* options = ps->findChild( "configure" );
                   const Tag* x = options->findChild( "x" );
-                  const DataForm::FormBase* df = x ? new DataForm::FormBase( x ) : 0;
+                  const DataForm* df = x ? new DataForm( x ) : 0;
                   const std::string& node = options->findAttribute("node");
                   (*ith).second->handleNodeConfig( service, node, df );
                   delete df;
@@ -864,7 +864,7 @@ namespace gloox
               const Tag* deflt = query->findChild( "default" );
               if( deflt )
               {
-                const DataForm::FormBase df( deflt->findChild( "x" ) );
+                const DataForm df( deflt->findChild( "x" ) );
                 (*ith).second->handleDefaultNodeConfig( service, &df );
               }
 

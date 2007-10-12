@@ -21,45 +21,40 @@ namespace gloox
 
   class Tag;
 
-  namespace DataForm
+  /**
+   * @brief An abstraction of a &lt;reported&gt; element in a XEP-0004 Data Form of type result.
+   *
+   * There are some constraints regarding usage of this element you should be aware of. Check XEP-0004
+   * section 3.4. This class does not enforce correct usage at this point.
+   *
+   * @author Jakob Schroeter <js@camaya.net>
+   * @since 0.7
+   */
+  class GLOOX_API DataFormReported : public DataFormFieldContainer
   {
+    public:
+      /**
+       * Creates an empty 'reported' element you can add fields to.
+       */
+      DataFormReported();
 
-    /**
-     * @brief An abstraction of a &lt;reported&gt; element in a XEP-0004 Data Form of type result.
-     *
-     * There are some constraints regarding usage of this element you should be aware of. Check XEP-0004
-     * section 3.4. This class does not enforce correct usage at this point.
-     *
-     * @author Jakob Schroeter <js@camaya.net>
-     * @since 0.7
-     */
-    class GLOOX_API Reported : public FieldContainer
-    {
-      public:
-        /**
-         * Creates an empty 'reported' element you can add fields to.
-         */
-        Reported();
+      /**
+       * Creates a 'reported' element and fills it with the 'field' elements contained in the given Tag.
+       * The Tag's root element must be a 'reported' element. Its child element should be 'field' elements.
+       * @param tag The tag to read the 'field' elements from.
+       * @since 0.8.5
+       */
+      DataFormReported( Tag* tag );
 
-        /**
-         * Creates a 'reported' element and fills it with the 'field' elements contained in the given Tag.
-         * The Tag's root element must be a 'reported' element. Its child element should be 'field' elements.
-         * @param tag The tag to read the 'field' elements from.
-         * @since 0.8.5
-         */
-        Reported( Tag* tag );
+      /**
+       * Virtual destructor.
+       */
+      virtual ~DataFormReported();
 
-        /**
-         * Virtual destructor.
-         */
-        virtual ~Reported();
+      // reimplemented from DataFormField
+      virtual Tag* tag() const;
 
-        // reimplemented from DataFormField
-        virtual Tag* tag() const;
-
-    };
-
-  }
+  };
 
 }
 

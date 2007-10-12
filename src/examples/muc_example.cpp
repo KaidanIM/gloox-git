@@ -120,7 +120,7 @@ class MessageTest : public ConnectionListener, LogHandler, MUCRoomHandler
     }
 
     virtual void handleMUCInfo( MUCRoom * /*room*/, int features, const std::string& name,
-                                    const DataForm::FormBase *infoForm )
+                                    const DataForm* infoForm )
     {
       printf( "features: %d, name: %s, form xml: %s\n", features, name.c_str(), infoForm->tag()->xml().c_str() );
     }

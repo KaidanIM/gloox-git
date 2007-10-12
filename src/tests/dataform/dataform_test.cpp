@@ -2,7 +2,6 @@
 #include "../../dataform.h"
 #include "../../tag.h"
 using namespace gloox;
-using namespace gloox::DataForm;
 
 #include <stdio.h>
 #include <locale.h>
@@ -12,7 +11,7 @@ int main( int /*argc*/, char** /*argv*/ )
 {
   int fail = 0;
   std::string name;
-  DataForm::FormBase *f;
+  DataForm *f;
 
   std::string title = "form test title";
   StringList instructions;
@@ -23,7 +22,7 @@ int main( int /*argc*/, char** /*argv*/ )
   name = "form type, title, instructions";
   // using StringList instructions from previous test case
   // using std::string title from pre-previous test case
-  f = new DataForm::Form( instructions, title );
+  f = new DataForm( TypeForm, instructions, title );
   if( f->instructions() != instructions )
   {
     ++fail;
@@ -34,7 +33,7 @@ int main( int /*argc*/, char** /*argv*/ )
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
   }
-  if( f->type() != DataForm::TypeForm )
+  if( f->type() != TypeForm )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );

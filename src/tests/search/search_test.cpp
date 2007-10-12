@@ -47,7 +47,7 @@ class SearchTest : public gloox::SearchHandler, public gloox::ClientBase
       if( directory.full() == g_dir && instructions == g_inst && fields == 15 )
         m_result = true;
     }
-    virtual void handleSearchFields( const gloox::JID& directory, gloox::DataForm::FormBase *form )
+    virtual void handleSearchFields( const gloox::JID& directory, gloox::DataForm* form )
     {
       if( m_test != 6 )
         return;
@@ -78,7 +78,7 @@ class SearchTest : public gloox::SearchHandler, public gloox::ClientBase
           break;
       }
     }
-    virtual void handleSearchResult( const gloox::JID& directory, const gloox::DataForm::FormBase *form )
+    virtual void handleSearchResult( const gloox::JID& directory, const gloox::DataForm* form )
     {
       if( m_test != 8 )
         return;
@@ -132,7 +132,7 @@ class SearchTest : public gloox::SearchHandler, public gloox::ClientBase
     virtual void trackID( gloox::IqHandler* /*ih*/, const std::string& /*id*/, int context )
       { m_context = context; }
     void search( const gloox::SearchFieldStruct& fields ) { m_search.search( g_dir, 15, fields, this ); }
-    void search( const gloox::DataForm::FormBase& form ) { m_search.search( g_dir, form, this ); }
+    void search( const gloox::DataForm& form ) { m_search.search( g_dir, form, this ); }
   private:
     gloox::Search m_search;
     int m_test;
@@ -259,7 +259,7 @@ int main( int /*argc*/, char** /*argv*/ )
   name = "receive fields (dataform)";
   iq = new gloox::IQ( gloox::IQ::Result, gloox::JID( "searchtest" ), "id",
                       gloox::XMLNS_SEARCH, "query", gloox::JID( g_dir ) );
-  gloox::DataForm::Form df;
+  gloox::DataForm df( gloox::TypeForm );
   iq->query()->addChild( df.tag() );
   t.setTest( 6 );
   t.feed( iq );
@@ -285,7 +285,7 @@ int main( int /*argc*/, char** /*argv*/ )
   name = "search result (dataform)";
   iq = new gloox::IQ( gloox::IQ::Result, gloox::JID( "searchtest" ), "id",
                       gloox::XMLNS_SEARCH, "query", gloox::JID( g_dir ) );
-  gloox::DataForm::Result df2;
+  gloox::DataForm df2( gloox::TypeResult );
   iq->query()->addChild( df2.tag() );
   t.setTest( 8 );
   t.feed( iq );

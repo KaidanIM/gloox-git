@@ -83,7 +83,7 @@ namespace gloox
       virtual void handleAdhocExecutionResult( const JID& remote, const std::string& command,
                                                Adhoc::AdhocCommandStatus status,
                                                const std::string& sessionid,
-                                               const DataForm::FormBase& form, int actions,
+                                               const DataForm& form, int actions,
                                                Adhoc::AdhocExecuteActions defaultAction,
                                                const std::string& note, Adhoc::AdhocNoteType type ) = 0;
   };

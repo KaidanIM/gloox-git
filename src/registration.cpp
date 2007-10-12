@@ -110,7 +110,7 @@ namespace gloox
     return true;
   }
 
-  void Registration::createAccount( const DataForm::Submit& form )
+  void Registration::createAccount( const DataForm& form )
   {
     if( !m_parent || m_parent->state() != StateConnected )
       return;
@@ -187,7 +187,7 @@ namespace gloox
 
           if( q->hasChild( "x", XMLNS, XMLNS_X_DATA ) )
           {
-            const DataForm::FormBase form( q->findChild( "x", XMLNS, XMLNS_X_DATA ) );
+            const DataForm form( q->findChild( "x", XMLNS, XMLNS_X_DATA ) );
             m_registrationHandler->handleDataForm( iq->from(), form );
           }
 
