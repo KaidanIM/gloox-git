@@ -18,26 +18,21 @@
 namespace gloox
 {
 
-  namespace DataForm
+  DataFormFieldContainer::DataFormFieldContainer()
   {
+  }
 
-    FieldContainer::FieldContainer()
-    {
-    }
+  DataFormFieldContainer::~DataFormFieldContainer()
+  {
+    util::clearList( m_fields );
+  }
 
-    FieldContainer::~FieldContainer()
-    {
-      util::clearList( m_fields );
-    }
-
-    Field* FieldContainer::field( const std::string& field ) const
-    {
-      FieldList::const_iterator it = m_fields.begin();
-      for( ; it != m_fields.end() && (*it)->name() != field; ++it )
-        ;
-      return it != m_fields.end() ? (*it) : 0;
-    }
-
+  DataFormField* DataFormFieldContainer::field( const std::string& field ) const
+  {
+    FieldList::const_iterator it = m_fields.begin();
+    for( ; it != m_fields.end() && (*it)->name() != field; ++it )
+      ;
+    return it != m_fields.end() ? (*it) : 0;
   }
 
 }

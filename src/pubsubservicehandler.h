@@ -24,11 +24,7 @@ namespace gloox
 {
 
   class Error;
-
-  namespace DataForm
-  {
-    class FormBase;
-  }
+  class DataForm;
 
   namespace PubSub
   {
@@ -77,7 +73,7 @@ namespace gloox
          * @see Manager::getDefaultNodeConfig
          */
         virtual void handleDefaultNodeConfig( const JID& service,
-                                              const DataForm::FormBase* config,
+                                              const DataForm* config,
                                               const Error* error = 0 ) = 0;
 
     };

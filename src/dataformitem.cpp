@@ -18,42 +18,37 @@
 namespace gloox
 {
 
-  namespace DataForm
+  DataFormItem::DataFormItem()
   {
+  }
 
-    Item::Item()
+  DataFormItem::DataFormItem( Tag* tag )
+  {
+    if( tag->name() != "item" )
+      return;
+
+    TagList &l = tag->children();
+    TagList::const_iterator it = l.begin();
+    for( ; it != l.end(); ++it )
     {
+      DataFormField* f = new DataFormField( (*it) );
+      m_fields.push_back( f );
     }
+  }
 
-    Item::Item( Tag* tag )
+  DataFormItem::~DataFormItem()
+  {
+  }
+
+  Tag* DataFormItem::tag() const
+  {
+    Tag* i = new Tag ( "item" );
+    DataFormFieldContainer::FieldList::const_iterator it = m_fields.begin();
+    for( ; it != m_fields.end(); ++it )
     {
-      if( tag->name() != "item" )
-        return;
-
-      TagList &l = tag->children();
-      TagList::const_iterator it = l.begin();
-      for( ; it != l.end(); ++it )
-      {
-        Field* f = new Field( (*it) );
-        m_fields.push_back( f );
-      }
+      i->addChild( (*it)->tag() );
     }
-
-    Item::~Item()
-    {
-    }
-
-    Tag* Item::tag() const
-    {
-      Tag* i = new Tag ( "item" );
-      FieldContainer::FieldList::const_iterator it = m_fields.begin();
-      for( ; it != m_fields.end(); ++it )
-      {
-        i->addChild( (*it)->tag() );
-      }
-      return i;
-    }
-
+    return i;
   }
 
 }

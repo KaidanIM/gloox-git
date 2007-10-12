@@ -25,11 +25,7 @@ namespace gloox
 {
 
   class ClientBase;
-
-  namespace DataForm
-  {
-    class FormBase;
-  }
+  class DataForm;
 
   namespace PubSub
   {
@@ -170,7 +166,7 @@ private:
                                   const JID& jid,
                                   const std::string& node,
                                   NodeHandler* handler,
-                                  const DataForm::FormBase* df );
+                                  const DataForm* df );
 
 public:
         /**
@@ -197,7 +193,7 @@ public:
         void setSubscriptionOptions( const JID& service,
                                      const JID& jid,
                                      const std::string& node,
-                                     const DataForm::FormBase& df,
+                                     const DataForm& df,
                                      NodeHandler* handler )
         { subscriptionOptions( service, jid, node, handler, &df ); }
 
@@ -404,7 +400,7 @@ public:
          */
         void setNodeConfig( const JID& service,
                             const std::string& node,
-                            const DataForm::FormBase& config,
+                            const DataForm& config,
                             NodeHandler* handler  )
           { nodeConfig( service, node, &config, handler ); }
 
@@ -449,7 +445,7 @@ public:
          * @param handler NodeHandler responsible to handle the request result.
          */
         void nodeConfig( const JID& service, const std::string& node,
-                         const DataForm::FormBase* config, NodeHandler* handler );
+                         const DataForm* config, NodeHandler* handler );
 
         /**
          * This function sets or requests a node's subscribers list form

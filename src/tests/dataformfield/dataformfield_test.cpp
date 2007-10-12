@@ -10,12 +10,12 @@ int main( int /*argc*/, char** /*argv*/ )
 {
   int fail = 0;
   std::string name;
-  DataForm::Field *f;
+  DataFormField *f;
 
   // -------
   name = "empty field";
-  f = new DataForm::Field();
-  if( f->type() != DataForm::Field::TypeTextSingle )
+  f = new DataFormField();
+  if( f->type() != DataFormField::TypeTextSingle )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
@@ -25,8 +25,8 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "TypeBoolean field";
-  f = new DataForm::Field( DataForm::Field::TypeBoolean );
-  if( f->type() != DataForm::Field::TypeBoolean )
+  f = new DataFormField( DataFormField::TypeBoolean );
+  if( f->type() != DataFormField::TypeBoolean )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
@@ -36,8 +36,8 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "2nd ctor";
-  f = new DataForm::Field( "fieldName", "fieldValue", "fieldLabel", DataForm::Field::TypeBoolean );
-  if( f->type() != DataForm::Field::TypeBoolean || f->name() != "fieldName" ||
+  f = new DataFormField( "fieldName", "fieldValue", "fieldLabel", DataFormField::TypeBoolean );
+  if( f->type() != DataFormField::TypeBoolean || f->name() != "fieldName" ||
       f->value() != "fieldValue" || f->label() != "fieldLabel" )
   {
     ++fail;
@@ -48,8 +48,8 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "parse 0";
-  f = new DataForm::Field( 0 );
-  if( f->type() != DataForm::Field::TypeInvalid )
+  f = new DataFormField( 0 );
+  if( f->type() != DataFormField::TypeInvalid )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
@@ -60,7 +60,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "set name";
-  f = new DataForm::Field();
+  f = new DataFormField();
   f->setName( name );
   if( f->name() != name )
   {
@@ -72,7 +72,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "set required";
-  f = new DataForm::Field();
+  f = new DataFormField();
   bool req = true;
   f->setRequired( req );
   if( f->required() != req )
@@ -85,7 +85,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "set label";
-  f = new DataForm::Field();
+  f = new DataFormField();
   f->setLabel( name );
   if( f->label() != name )
   {
@@ -97,7 +97,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "set value";
-  f = new DataForm::Field();
+  f = new DataFormField();
   f->setValue( name );
   if( f->value() != name )
   {
@@ -109,7 +109,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "set values";
-  f = new DataForm::Field();
+  f = new DataFormField();
   StringList val;
   val.push_back( "val 1" );
   val.push_back( "val 2" );
@@ -125,7 +125,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "set values";
-  f = new DataForm::Field();
+  f = new DataFormField();
   StringMap opt;
   opt["lock"] = "1";
   opt["stock"] = "1";
@@ -144,7 +144,7 @@ int main( int /*argc*/, char** /*argv*/ )
   t = new Tag( "field");
   t->addAttribute( "type", "fixed" );
   new Tag( t, "value", "abc" );
-  f = new DataForm::Field( t );
+  f = new DataFormField( t );
   Tag *ft = f->tag();
   if( ft->xml() != t->xml() )
   {
@@ -174,7 +174,7 @@ int main( int /*argc*/, char** /*argv*/ )
   new Tag( o, "value", "smoking barrel" );
   new Tag( t, "value", "lock" );
   new Tag( t, "value", "stock" );
-  f = new DataForm::Field( t );
+  f = new DataFormField( t );
   Tag *r = f->tag();
   name = "parse Tag 2.1";
   if( r->name() != "field" || !r->hasAttribute( "type", "list-multi" ) )
@@ -272,7 +272,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "boolean duplicate <value/>";
-  f = new DataForm::Field( DataForm::Field::TypeBoolean );
+  f = new DataFormField( DataFormField::TypeBoolean );
   f->setName( "name" );
   f->setValue( "1" );
   f->setLabel( "label" );
@@ -298,12 +298,12 @@ int main( int /*argc*/, char** /*argv*/ )
 
   if( fail == 0 )
   {
-    printf( "DataForm::Field: all tests passed\n" );
+    printf( "DataFormField: all tests passed\n" );
     return 0;
   }
   else
   {
-    printf( "DataForm::Field: %d test(s) failed\n", fail );
+    printf( "DataFormField: %d test(s) failed\n", fail );
     return 1;
   }
 

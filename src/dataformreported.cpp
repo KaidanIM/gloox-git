@@ -18,42 +18,37 @@
 namespace gloox
 {
 
-  namespace DataForm
+  DataFormReported::DataFormReported()
   {
+  }
 
-    Reported::Reported()
+  DataFormReported::DataFormReported( Tag* tag )
+  {
+    if( tag->name() != "reported" )
+      return;
+
+    TagList &l = tag->children();
+    TagList::const_iterator it = l.begin();
+    for( ; it != l.end(); ++it )
     {
+      DataFormField* f = new DataFormField( (*it) );
+      m_fields.push_back( f );
     }
+  }
 
-    Reported::Reported( Tag* tag )
+  DataFormReported::~DataFormReported()
+  {
+  }
+
+  Tag* DataFormReported::tag() const
+  {
+    Tag* r = new Tag ( "reported" );
+    DataFormFieldContainer::FieldList::const_iterator it = m_fields.begin();
+    for( ; it != m_fields.end(); ++it )
     {
-      if( tag->name() != "reported" )
-        return;
-
-      TagList &l = tag->children();
-      TagList::const_iterator it = l.begin();
-      for( ; it != l.end(); ++it )
-      {
-        Field* f = new Field( (*it) );
-        m_fields.push_back( f );
-      }
+      r->addChild( (*it)->tag() );
     }
-
-    Reported::~Reported()
-    {
-    }
-
-    Tag* Reported::tag() const
-    {
-      Tag* r = new Tag ( "reported" );
-      FieldContainer::FieldList::const_iterator it = m_fields.begin();
-      for( ; it != m_fields.end(); ++it )
-      {
-        r->addChild( (*it)->tag() );
-      }
-      return r;
-    }
-
+    return r;
   }
 
 }

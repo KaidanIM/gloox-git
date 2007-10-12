@@ -62,9 +62,7 @@ namespace gloox
        * The result is announced through the FlexibleOfflineHandler.
        */
       void fetchHeaders();
-private:
-      void messageOperation( int context, const StringList& msgs );
-public:
+
       /**
        * Initiates fetching of one or more specific messages, or all messages.
        * The result is announced through the FlexibleOfflineHandler.
@@ -112,6 +110,8 @@ public:
       virtual void handleIqID( IQ* iq, int context );
 
     private:
+      void messageOperation( int context, const StringList& msgs );
+
       enum FOContext
       {
         FOCheckSupport,

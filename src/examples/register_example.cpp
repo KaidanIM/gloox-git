@@ -92,7 +92,7 @@ class RegTest : public RegistrationHandler, ConnectionListener, LogHandler
       printf( "the account already exists.\n" );
     }
 
-    virtual void handleDataForm( const JID& /*from*/, const DataForm::FormBase& /*form*/ )
+    virtual void handleDataForm( const JID& /*from*/, const DataForm& /*form*/ )
     {
       printf( "datForm received\n" );
     }

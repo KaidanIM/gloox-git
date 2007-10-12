@@ -168,7 +168,7 @@ namespace gloox
       else if( s == "canceled" )
         status = AdhocCommandCanceled;
 
-      const DataForm::FormBase form( c->findChild( "x", XMLNS, XMLNS_X_DATA ) );
+      const DataForm form( c->findChild( "x", XMLNS, XMLNS_X_DATA ) );
 
       (*it).second.ah->handleAdhocExecutionResult( iq->from(), command, status, id, form,
                                                    actions, def, note, type );
@@ -281,7 +281,7 @@ namespace gloox
   }
 
   void Adhoc::execute( const JID& remote, const std::string& command, AdhocHandler* ah,
-                       const std::string& sessionid, DataForm::FormBase* form,
+                       const std::string& sessionid, DataForm* form,
                        AdhocExecuteActions action )
   {
     if( !remote || command.empty() || !ah )
