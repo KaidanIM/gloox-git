@@ -25,8 +25,8 @@ namespace gloox
       return false;
     }
 
-    const size_t at = jid.find( '@' );
-    const size_t slash = jid.rfind( '/', jid.size() - at );
+    const std::string::size_type at = jid.find( '@' );
+    const std::string::size_type slash = jid.find( '/', at == std::string::npos ? 0 : at );
 
     if( at != std::string::npos && !( m_valid = prep::nodeprep( jid.substr( 0, at ), m_username ) ) )
       return false;
