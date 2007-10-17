@@ -28,6 +28,9 @@ namespace gloox
     : Bytestream( Bytestream::S5B, logInstance, initiator, target, sid ),
       m_manager( manager ), m_connection( 0 ), m_socks5( 0 )
   {
+    if( connection && connection->state() == StateConnected )
+      m_open = true;
+
     setConnectionImpl( connection );
   }
 
