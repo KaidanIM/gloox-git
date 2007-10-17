@@ -106,9 +106,7 @@ namespace gloox
 
   bool Client::handleNormalNode( Tag* tag )
   {
-    if( tag->name() == "features" && tag->prefix() == "stream" )
-      // hard-coding the prefix is fine for now. it needs to be adjusted should RFC3920's
-      // successors ever decide to allow custom stream prefixes.
+    if( tag->name() == "features" && tag->xmlns() == XMLNS_STREAM )
     {
       m_streamFeatures = getStreamFeatures( tag );
 
@@ -269,9 +267,7 @@ namespace gloox
 
   int Client::getStreamFeatures( Tag* tag )
   {
-    // hard-coding the prefix is fine for now. it needs to be adjusted should RFC3920's
-    // successors ever decide to allow custom stream prefixes.
-    if( tag->name() != "features" || tag->prefix() != "stream" )
+    if( tag->name() != "features" || tag->xmlns() != XMLNS_STREAM )
       return 0;
 
     int features = 0;

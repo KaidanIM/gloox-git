@@ -189,9 +189,7 @@ namespace gloox
       m_sid = tag->findAttribute( "id" );
       handleStartNode();
     }
-    else if( tag->name() == "error" && tag->prefix() == "stream" )
-      // hard-coding the prefix is fine for now. it needs to be adjusted should RFC3920's
-      // successors ever decide to allow custom stream prefixes.
+    else if( tag->name() == "error" && tag->xmlns() == XMLNS_STREAM )
     {
       handleStreamError( tag );
       disconnect( ConnStreamError );

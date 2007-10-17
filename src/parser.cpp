@@ -654,13 +654,17 @@ namespace gloox
     m_current->setXmlns( m_xmlns );
     m_xmlns = "";
 
-    if( m_tag == "stream" && m_tagPrefix == "stream" )
+    if( m_tag == "stream" && m_root->xmlns() == XMLNS_STREAM )
     {
       streamEvent( m_root );
       cleanup();
+      return;
     }
 //     else
 //       printf( "%s, ", m_root->xml().c_str() );
+
+    if( m_root && m_root == m_current && m_tagPrefix == "stream" )
+      m_root->setXmlns( XMLNS_STREAM, m_tagPrefix );
 
     if( m_tag == "xml" && m_preamble == 2 )
       cleanup();
