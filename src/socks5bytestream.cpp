@@ -29,6 +29,9 @@ namespace gloox
       m_socks5BytestreamDataHandler( 0 ), m_initiator( initiator ), m_target( target ),
       m_sid( sid ), m_open( false )
   {
+    if( connection && connection->state() == StateConnected )
+      m_open = true;
+
     setConnectionImpl( connection );
   }
 
