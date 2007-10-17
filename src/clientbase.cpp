@@ -482,23 +482,24 @@ namespace gloox
           break;
 
         std::string realm;
-        size_t r_pos = decoded.find( "realm=" );
-        if( r_pos != std::string::npos )
+        std::string::size_type end = 0;
+        std::string::size_type pos = decoded.find( "realm=" );
+        if( pos != std::string::npos )
         {
-          const size_t r_end = decoded.find( '"', r_pos + 7 );
-          realm = decoded.substr( r_pos + 7, r_end - r_pos + 7 );
+          end = decoded.find( '"', pos + 7 );
+          realm = decoded.substr( pos + 7, end - ( pos + 7 ) );
         }
         else
           realm = m_jid.server();
 
-        const size_t n_pos = decoded.find( "nonce=" );
-        if( n_pos == std::string::npos )
+        pos = decoded.find( "nonce=" );
+        if( pos == std::string::npos )
           return;
 
-        size_t n_end = decoded.find( '"', n_pos + 7 );
-        while( decoded[n_end-1] == '\\' )
-          n_end = decoded.find( '"', n_end + 1 );
-        std::string nonce = decoded.substr( n_pos + 7, n_end - ( n_pos + 7 ) );
+        end = decoded.find( '"', pos + 7 );
+        while( decoded[end-1] == '\\' )
+          end = decoded.find( '"', end + 1 );
+        std::string nonce = decoded.substr( pos + 7, end - ( pos + 7 ) );
 
         std::string cnonce;
 #ifdef _WIN32_WCE
@@ -543,12 +544,11 @@ namespace gloox
         md5.feed( ":auth:" );
         md5.feed( a2 );
         md5.finalize();
-        const std::string& response_value = md5.hex();
 
         std::string response = "username=\"" + m_jid.username() + "\",realm=\"" + realm;
         response += "\",nonce=\""+ nonce + "\",cnonce=\"" + cnonce;
         response += "\",nc=00000001,qop=auth,digest-uri=\"xmpp/" + m_jid.server() + "\",response=";
-        response += response_value;
+        response += md5.hex();
         response += ",charset=utf-8";
 
         if( m_authzid )
