@@ -14,7 +14,7 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   name = "bare JID ctor";
   j = JID( "abc@server.dom" );
-  if( j.bare() != "abc@server.dom" )
+  if( j.bare() != "abc@server.dom" || j.username() != "abc" || j.server() != "server.dom" )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
@@ -23,7 +23,8 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   name = "full JID ctor";
   j = JID( "abc@server.dom/res" );
-  if( j.full() != "abc@server.dom/res" )
+  if( j.full() != "abc@server.dom/res" || j.username() != "abc" || j.server() != "server.dom"
+      || j.resource() != "res" )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
@@ -32,7 +33,7 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   name = "server + resource ctor";
   j = JID( "server.dom/res" );
-  if( j.full() != "server.dom/res" )
+  if( j.full() != "server.dom/res" || j.server() != "server.dom" || j.resource() != "res" )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
@@ -41,7 +42,7 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   name = "server ctor";
   j = JID( "server.dom" );
-  if( j.full() != "server.dom" )
+  if( j.full() != "server.dom" || j.server() != "server.dom" )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
