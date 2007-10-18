@@ -45,20 +45,4 @@ namespace gloox
     return new Tag( util::lookup2( m_state, stateValues ), XMLNS, XMLNS_CHAT_STATES );
   }
 
-  const std::string ChatState::filterString() const
-  {
-    std::string str = "/message/active[@xmlns='";
-    str += XMLNS_CHAT_STATES;
-    str += "']|/message/composing[@xmlns='";
-    str += XMLNS_CHAT_STATES;
-    str += "']|/message/paused[@xmlns='";
-    str += XMLNS_CHAT_STATES;
-    str += "']|/message/inactive[@xmlns='";
-    str += XMLNS_CHAT_STATES;
-    str += "']|/message/gone[@xmlns='";
-    str += XMLNS_CHAT_STATES;
-    str += "']";
-    return str;
-  }
-
 }

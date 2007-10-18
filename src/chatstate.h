@@ -66,7 +66,8 @@ namespace gloox
                "|/message/composing[@xmlns='" + XMLNS_CHAT_STATES + "']"
                "|/message/paused[@xmlns='" + XMLNS_CHAT_STATES + "']"
                "|/message/inactive[@xmlns='" + XMLNS_CHAT_STATES + "']"
-               "|/message/gone[@xmlns='" + XMLNS_CHAT_STATES + "']"; }
+               "|/message/gone[@xmlns='" + XMLNS_CHAT_STATES + "']";
+      }
 
       // reimplemented from StanzaExtension
       virtual StanzaExtension* newInstance( const Tag* tag ) const
