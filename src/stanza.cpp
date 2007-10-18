@@ -69,10 +69,10 @@ namespace gloox
     map[ lang.empty() ? "default" : lang ] = tag->cdata();
   }
 
-  const std::string Stanza::findLang( const StringMap& map, const std::string& lang )
+  const std::string& Stanza::findLang( const StringMap& map, const std::string& lang )
   {
     StringMap::const_iterator it = map.find( lang );
-    return ( it != map.end() ) ? (*it).second : std::string();
+    return ( it != map.end() ) ? (*it).second : EmptyString;
   }
 
 }

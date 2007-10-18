@@ -72,7 +72,7 @@ namespace gloox
        * empty, the default subject will be returned, if any.
        * @return The text of an error stanza. Empty for non-error stanzas.
        */
-      const std::string text( const std::string& lang = "default" ) const;
+      const std::string& text( const std::string& lang = "default" ) const;
 
       // reimplemented from StanzaExtension
       virtual const std::string filterString() const

@@ -103,10 +103,10 @@ namespace gloox
     return error;
   }
 
-  const std::string Error::text( const std::string& lang ) const
+  const std::string& Error::text( const std::string& lang ) const
   {
     StringMap::const_iterator it = m_text.find( lang );
-    return it != m_text.end() ? (*it).second : std::string();
+    return it != m_text.end() ? (*it).second : EmptyString;
   }
 
 }

@@ -76,7 +76,7 @@ namespace gloox
       }
     }
 
-    m_manager->acknowledgeStreamHost( false, JID(), std::string() );
+    m_manager->acknowledgeStreamHost( false, JID(), EmptyString );
     return false;
   }
 

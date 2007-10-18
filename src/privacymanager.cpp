@@ -73,7 +73,7 @@ namespace gloox
   std::string PrivacyManager::store( const std::string& name, const PrivacyListHandler::PrivacyList& list )
   {
     if( list.empty() )
-      return std::string();
+      return EmptyString;
 
     const std::string& id = m_parent->getID();
 

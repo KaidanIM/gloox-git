@@ -807,10 +807,10 @@ namespace gloox
     }
   }
 
-  const std::string ClientBase::streamErrorText( const std::string& lang ) const
+  const std::string& ClientBase::streamErrorText( const std::string& lang ) const
   {
     StringMap::const_iterator it = m_streamErrorText.find( lang );
-    return ( it != m_streamErrorText.end() ) ? (*it).second : std::string();
+    return ( it != m_streamErrorText.end() ) ? (*it).second : EmptyString;
   }
 
   void ClientBase::registerMessageSessionHandler( MessageSessionHandler* msh, int types )
@@ -1130,10 +1130,10 @@ namespace gloox
         JID invitee( i->findAttribute( "from" ) );
 
         const Tag * t = i->findChild( "reason" );
-        std::string reason ( t ? t->cdata() : EmptyString );
+        const std::string& reason( t ? t->cdata() : EmptyString );
 
         t = x->findChild( "password" );
-        std::string password ( t ? t->cdata() : EmptyString );
+        const std::string& password( t ? t->cdata() : EmptyString );
 
         m_mucInvitationHandler->handleMUCInvitation( msg->from(), invitee,
                                                      reason, msg->body(), password,

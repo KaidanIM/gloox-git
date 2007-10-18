@@ -47,7 +47,7 @@ namespace gloox
                                           Tag* child1, Tag* child2, const std::string& mimetype )
   {
     if( !m_parent || !sih )
-      return std::string();
+      return EmptyString;
 
     const std::string& id = m_parent->getID();
     const std::string& id2 = m_parent->getID();
