@@ -258,13 +258,13 @@ namespace gloox
 
     protected:
       /**
-      * A wrapper around ClientBase::send(). You should @b not use this function to send a
-      * chat message because the Tag is not prepared accordingly (neither Thread ID nor Message
-      * Event requests are added).
-      * @param tag A Tag to send.
-      */
-      virtual void send( const Message& msg );
-      void decorate( Message& msg );
+       * A wrapper around ClientBase::send(). You should @b not use this function to send a
+       * chat message because the Tag is not prepared accordingly (neither Thread ID nor is
+       * the mesage ran through the message filters).
+       * @param tag A Tag to send.
+       */
+      virtual void send( const Message* msg );
+      void decorate( Message* msg );
 
       ClientBase* m_parent;
       JID m_target;

@@ -18,9 +18,9 @@ namespace gloox
       MessageSession() : m_jid( "abc@example.net/foo" ), m_test( 0 ), m_result( false ) {}
       virtual ~MessageSession() {}
       const JID& target() const { return m_jid; }
-      void send( Message& msg )
+      void send( Message* msg )
       {
-        const MessageEvent* me = static_cast<const MessageEvent*>( msg.findExtension( ExtMessageEvent ) );
+        const MessageEvent* me = static_cast<const MessageEvent*>( msg->findExtension( ExtMessageEvent ) );
         if( !me )
           return;
 
@@ -69,7 +69,7 @@ namespace gloox
       virtual ~MessageFilter();
       void attachTo( MessageSession *session );
       virtual void decorate( Message& msg );
-      void send( Message& msg );
+      void send( Message* msg );
     protected:
       MessageSession *m_parent;
   };
@@ -78,7 +78,7 @@ namespace gloox
   MessageFilter::~MessageFilter() { delete m_parent; }
   void MessageFilter::attachTo( MessageSession *session ) {}
   void MessageFilter::decorate( Message& msg ) {}
-  void MessageFilter::send( Message& msg ) { m_parent->send( msg ); }
+  void MessageFilter::send( Message* msg ) { m_parent->send( msg ); }
 }
 
 #define MESSAGEFILTER_H__
@@ -98,16 +98,17 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     name = "simple decorate";
     f = new gloox::MessageEventFilter( new gloox::MessageSession() );
-    gloox::Message m( gloox::Message::Chat, gloox::JID() );
+    gloox::Message* m = new gloox::Message( gloox::Message::Chat, gloox::JID() );
     f->decorate( m );
     const gloox::MessageEvent* me =
-        static_cast<const gloox::MessageEvent*>( m.findExtension( gloox::ExtMessageEvent ) );
+        static_cast<const gloox::MessageEvent*>( m->findExtension( gloox::ExtMessageEvent ) );
     if( me->event() != ( gloox::MessageEventOffline | gloox::MessageEventDelivered
                          | gloox::MessageEventDisplayed | gloox::MessageEventComposing ) )
     {
       ++fail;
       printf( "test '%s' failed\n", name.c_str() );
     }
+    delete m;
     delete f;
     f = 0;
   }
@@ -117,10 +118,10 @@ int main( int /*argc*/, char** /*argv*/ )
   f = new gloox::MessageEventFilter( ms );
   f->registerMessageEventHandler( ms );
 
-  gloox::Message m( gloox::Message::Chat, gloox::JID(), "my message" );
-  m.addExtension( new gloox::MessageEvent( gloox::MessageEventOffline | gloox::MessageEventDelivered
-                                           | gloox::MessageEventDisplayed | gloox::MessageEventComposing
-                                           | gloox::MessageEventCancel) );
+  gloox::Message* m = new gloox::Message( gloox::Message::Chat, gloox::JID(), "my message" );
+  m->addExtension( new gloox::MessageEvent( gloox::MessageEventOffline | gloox::MessageEventDelivered
+                                            | gloox::MessageEventDisplayed | gloox::MessageEventComposing
+                                            | gloox::MessageEventCancel) );
   f->filter( m );
 
   name = "raise offline event 1";
@@ -213,6 +214,7 @@ int main( int /*argc*/, char** /*argv*/ )
     printf( "test '%s' failed\n", name.c_str() );
   }
 
+  delete m;
   delete f;
   f = 0;
 

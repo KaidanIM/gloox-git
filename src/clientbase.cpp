@@ -594,28 +594,22 @@ namespace gloox
       m_authError = SaslTemporaryAuthFailure;
   }
 
-  void ClientBase::send( Tag* tag )
+  void ClientBase::send( const Tag* tag )
   {
-    if( tag )
-    {
-      send( *tag );
-      delete tag;
-    }
-  }
+    if( !tag )
+      return;
 
-  void ClientBase::send( const Tag& tag )
-  {
-    send( tag.xml() );
+    send( tag->xml() );
 
 #warning move the statistics counting stuff to Client or some func \
          that takes Stanza-derived objects
-    if( tag.name() == "iq" )
+    if( tag->name() == "iq" )
       ++m_stats.iqStanzasSent;
-    else if( tag.name() == "message" )
+    else if( tag->name() == "message" )
       ++m_stats.messageStanzasSent;
-    else if( tag.name() == "presence" )
+    else if( tag->name() == "presence" )
     {
-      const std::string& type = tag.findAttribute( TYPE );
+      const std::string& type = tag->findAttribute( TYPE );
       if( type == "subscribe"  || type == "unsubscribe" ||
           type == "subscribed" || type == "unsubscribed" )
         ++m_stats.s10nStanzasSent;
@@ -627,6 +621,8 @@ namespace gloox
 
     if( m_statisticsHandler )
       m_statisticsHandler->handleStatistics( getStatistics() );
+
+    delete tag;
   }
 
   void ClientBase::send( const std::string& xml )

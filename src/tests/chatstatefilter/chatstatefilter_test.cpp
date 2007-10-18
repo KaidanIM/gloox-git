@@ -21,12 +21,12 @@ namespace gloox
                       m_result( false ) {}*/
       virtual ~MessageSession() {}
       const JID& target() const { return m_jid; }
-      void send( Message& msg )
+      void send( Message* msg )
       {
-        if( msg.to() != m_jid )
+        if( msg->to() != m_jid )
           return;
 
-        const ChatState* cs = static_cast<const ChatState*>( msg.findExtension( ExtChatState ) );
+        const ChatState* cs = static_cast<const ChatState*>( msg->findExtension( ExtChatState ) );
         if( !cs )
           return;
 
@@ -102,7 +102,7 @@ namespace gloox
       virtual ~MessageFilter();
       void attachTo( MessageSession *session );
       virtual void decorate( Message& msg );
-      void send( Message& msg );
+      void send( Message* msg );
     protected:
       MessageSession *m_parent;
   };
@@ -111,7 +111,7 @@ namespace gloox
   MessageFilter::~MessageFilter() { delete m_parent; }
   void MessageFilter::attachTo( MessageSession *session ) {}
   void MessageFilter::decorate( Message& msg ) {}
-  void MessageFilter::send( Message& msg ) { m_parent->send( msg ); }
+  void MessageFilter::send( Message* msg ) { m_parent->send( msg ); }
 }
 
 #define MESSAGEFILTER_H__
@@ -133,14 +133,15 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     name = "simple decorate";
     f = new gloox::ChatStateFilter( new gloox::MessageSession() );
-    gloox::Message m( gloox::Message::Chat, gloox::JID() );
+    gloox::Message* m = new gloox::Message( gloox::Message::Chat, gloox::JID() );
     f->decorate( m );
-    if( static_cast<const gloox::ChatState*>( m.findExtension( gloox::ExtChatState ) )->state()
+    if( static_cast<const gloox::ChatState*>( m->findExtension( gloox::ExtChatState ) )->state()
            != gloox::ChatStateActive )
     {
       ++fail;
       printf( "test '%s' failed:s %s\n", name.c_str(), t->xml().c_str() );
     }
+    delete m;
     delete f;
     f = 0;
   }
@@ -151,8 +152,8 @@ int main( int /*argc*/, char** /*argv*/ )
 
   {
     name = "filter gone";
-    gloox::Message m( gloox::Message::Chat, gloox::JID() );
-    m.addExtension( new gloox::ChatState( gloox::ChatStateGone ) );
+    gloox::Message* m = new gloox::Message( gloox::Message::Chat, gloox::JID() );
+    m->addExtension( new gloox::ChatState( gloox::ChatStateGone ) );
     ms->setTest( 0 );
     f->filter( m );
     if( !ms->ok() )
@@ -160,13 +161,14 @@ int main( int /*argc*/, char** /*argv*/ )
       ++fail;
       printf( "test '%s' failed\n", name.c_str() );
     }
+    delete m;
   }
 
   // -------
   {
     name = "filter inactive";
-    gloox::Message m( gloox::Message::Chat, gloox::JID() );
-    m.addExtension( new gloox::ChatState( gloox::ChatStateInactive ) );
+    gloox::Message* m = new gloox::Message( gloox::Message::Chat, gloox::JID() );
+    m->addExtension( new gloox::ChatState( gloox::ChatStateInactive ) );
     ms->setTest( 1 );
     f->filter( m );
     if( !ms->ok() )
@@ -174,13 +176,14 @@ int main( int /*argc*/, char** /*argv*/ )
       ++fail;
       printf( "test '%s' failed\n", name.c_str() );
     }
+    delete m;
   }
 
   // -------
   {
     name = "filter active";
-    gloox::Message m( gloox::Message::Chat, gloox::JID() );
-    m.addExtension( new gloox::ChatState( gloox::ChatStateActive ) );
+    gloox::Message* m = new gloox::Message( gloox::Message::Chat, gloox::JID() );
+    m->addExtension( new gloox::ChatState( gloox::ChatStateActive ) );
     ms->setTest( 2 );
     f->filter( m );
     if( !ms->ok() )
@@ -188,13 +191,14 @@ int main( int /*argc*/, char** /*argv*/ )
       ++fail;
       printf( "test '%s' failed\n", name.c_str() );
     }
+    delete m;
   }
 
   // -------
   {
     name = "filter composing";
-    gloox::Message m( gloox::Message::Chat, gloox::JID() );
-    m.addExtension( new gloox::ChatState( gloox::ChatStateComposing ) );
+    gloox::Message* m = new gloox::Message( gloox::Message::Chat, gloox::JID() );
+    m->addExtension( new gloox::ChatState( gloox::ChatStateComposing ) );
     ms->setTest( 3 );
     f->filter( m );
     if( !ms->ok() )
@@ -202,13 +206,14 @@ int main( int /*argc*/, char** /*argv*/ )
       ++fail;
       printf( "test '%s' failed\n", name.c_str() );
     }
+    delete m;
   }
 
   // -------
   {
     name = "filter paused";
-    gloox::Message m( gloox::Message::Chat, gloox::JID() );
-    m.addExtension( new gloox::ChatState( gloox::ChatStatePaused ) );
+    gloox::Message* m = new gloox::Message( gloox::Message::Chat, gloox::JID() );
+    m->addExtension( new gloox::ChatState( gloox::ChatStatePaused ) );
     ms->setTest( 4 );
     f->filter( m );
     if( !ms->ok() )
@@ -216,6 +221,7 @@ int main( int /*argc*/, char** /*argv*/ )
       ++fail;
       printf( "test '%s' failed\n", name.c_str() );
     }
+    delete m;
   }
 
   // -------

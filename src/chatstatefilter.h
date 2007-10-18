@@ -80,10 +80,10 @@ namespace gloox
         { m_chatStateHandler = 0; }
 
       // reimplemented from MessageFilter
-      virtual void decorate( Message& msg );
+      virtual void decorate( Message* msg );
 
       // reimplemented from MessageFilter
-      virtual void filter( Message& msg );
+      virtual void filter( Message* msg );
 
     protected:
       ChatStateHandler* m_chatStateHandler;
