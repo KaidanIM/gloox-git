@@ -91,6 +91,7 @@ namespace gloox
   const std::string XMLNS_HTTPBIND          = "http://jabber.org/protocol/httpbind";
   const std::string XMLNS_XMPP_BOSH         = "urn:xmpp:xbosh";
   const std::string XMLNS_RECEIPTS          = "urn:xmpp:receipts";
+  const std::string XMLNS_NICKNAME          = "http://jabber.org/protocol/nick";
 
   const std::string XMPP_STREAM_VERSION_MAJOR = "1";
   const std::string XMPP_STREAM_VERSION_MINOR = "0";
