@@ -32,9 +32,10 @@ namespace gloox
   }
 
   ChatState::ChatState( const Tag* tag )
-    : StanzaExtension( ExtChatState ),
-      m_state( chatStateType( tag->name() ) )
+    : StanzaExtension( ExtChatState )
   {
+    if( tag )
+      m_state = chatStateType( tag->name() );
   }
 
   Tag* ChatState::tag() const
