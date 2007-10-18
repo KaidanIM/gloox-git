@@ -557,7 +557,7 @@ namespace gloox
        * will be returned, if any.
        * @return The describing text of a stream error. Empty if no stream error occured.
        */
-      const std::string streamErrorText( const std::string& lang = "default" ) const;
+      const std::string& streamErrorText( const std::string& lang = "default" ) const;
 
       /**
        * In case the defined-condition element of an stream error contains XML character data you can

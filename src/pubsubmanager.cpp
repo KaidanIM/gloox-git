@@ -224,7 +224,7 @@ namespace gloox
               const std::string& sub  = (*it)->findAttribute( "subscription" );
               const Tag* body = event->findChild( "body" );
               (*ith)->handleSubscriptionChange( service, jid, node,
-                                                  body ? body->cdata() : std::string(),
+                                                  body ? body->cdata() : EmptyString,
                                                   subscriptionType( sub ) );
               break;
             }

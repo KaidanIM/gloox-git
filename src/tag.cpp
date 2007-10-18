@@ -27,7 +27,7 @@
 namespace gloox
 {
 
-  const std::string Tag::Attribute::xmlns() const
+  const std::string& Tag::Attribute::xmlns() const
   {
     if( !m_xmlns.empty() )
       return m_xmlns;
@@ -35,10 +35,10 @@ namespace gloox
     if( m_parent )
       return m_parent->xmlns( m_prefix );
 
-    return std::string();
+    return EmptyString;
   }
 
-  const std::string Tag::Attribute::prefix() const
+  const std::string& Tag::Attribute::prefix() const
   {
     if( !m_prefix.empty() )
       return m_prefix;
@@ -46,7 +46,7 @@ namespace gloox
     if( m_parent )
       return m_parent->prefix( m_xmlns );
 
-    return std::string();
+    return EmptyString;
   }
 
   Tag::Tag( const std::string& name, const std::string& cdata )
@@ -165,7 +165,7 @@ namespace gloox
   const std::string Tag::xml() const
   {
     if( !m_valid )
-      return std::string();
+      return EmptyString;
 
     std::string xml = "<";
     if( !m_prefix.empty() )
@@ -402,12 +402,12 @@ namespace gloox
     }
   }
 
-  const std::string Tag::xmlns() const
+  const std::string& Tag::xmlns() const
   {
     return xmlns( m_prefix );
   }
 
-  const std::string Tag::xmlns( const std::string& prefix ) const
+  const std::string& Tag::xmlns( const std::string& prefix ) const
   {
     if( !prefix.empty() )
     {
@@ -421,16 +421,16 @@ namespace gloox
       if( m_parent )
         return m_parent->xmlns( prefix );
 
-      return std::string();
+      return EmptyString;
     }
 
     return m_xmlns;
   }
 
-  const std::string Tag::prefix( const std::string& xmlns ) const
+  const std::string& Tag::prefix( const std::string& xmlns ) const
   {
     if( xmlns.empty() || !m_xmlnss )
-      return std::string();
+      return EmptyString;
 
     StringMap::const_iterator it = m_xmlnss->begin();
     for( ; it != m_xmlnss->end(); ++it )
@@ -439,17 +439,17 @@ namespace gloox
         return (*it).first;
     }
 
-    return std::string();
+    return EmptyString;
   }
 
-  const std::string Tag::findAttribute( const std::string& name ) const
+  const std::string& Tag::findAttribute( const std::string& name ) const
   {
     AttributeList::const_iterator it = m_attribs->begin();
     for( ; it != m_attribs->end(); ++it )
       if( (*it)->name() == name )
         return (*it)->value();
 
-    return std::string();
+    return EmptyString;
   }
 
   bool Tag::hasAttribute( const std::string& name, const std::string& value ) const
@@ -577,7 +577,7 @@ namespace gloox
   const std::string Tag::findCData( const std::string& expression )
   {
     const TagList& l = findTagList( expression );
-    return !l.empty() ? l.front()->cdata() : std::string();
+    return !l.empty() ? l.front()->cdata() : EmptyString;
   }
 
   Tag* Tag::findTag( const std::string& expression )

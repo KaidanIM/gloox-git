@@ -64,7 +64,7 @@ namespace gloox
                                             int streamTypes )
   {
     if( name.empty() || size <= 0 || !m_manager )
-      return std::string();
+      return EmptyString;
 
     Tag* file = new Tag( "file", XMLNS, XMLNS_SI_FT );
     file->addAttribute( "name", name );
@@ -170,7 +170,7 @@ namespace gloox
       long length = -1;
 
       const Tag* t = ptag->findChild( "desc" );
-      const std::string desc = t ? t->cdata() : EmptyString;
+      const std::string& desc = t ? t->cdata() : EmptyString;
 
       if( ( t = ptag->findChild( "range" ) ) )
       {

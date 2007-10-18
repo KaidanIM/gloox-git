@@ -37,7 +37,7 @@ namespace gloox
   void RosterItem::setPresence( const std::string& resource, Presence::PresenceType presence )
   {
     if( m_resources.find( resource ) == m_resources.end() )
-      m_resources[resource] = new Resource( 0, std::string(), presence );
+      m_resources[resource] = new Resource( 0, EmptyString, presence );
     else
       m_resources[resource]->setStatus( presence );
   }
@@ -53,7 +53,7 @@ namespace gloox
   void RosterItem::setPriority( const std::string& resource, int priority )
   {
     if( m_resources.find( resource ) == m_resources.end() )
-      m_resources[resource] = new Resource( priority, std::string(), Presence::Unavailable );
+      m_resources[resource] = new Resource( priority, EmptyString, Presence::Unavailable );
     else
       m_resources[resource]->setPriority( priority );
   }
@@ -61,7 +61,7 @@ namespace gloox
   void RosterItem::setCaps( const std::string& resource, const std::string& node, const std::string& ver )
   {
     if( m_resources.find( resource ) == m_resources.end() )
-      m_resources[resource] = new Resource( 0, std::string(), Presence::Unavailable );
+      m_resources[resource] = new Resource( 0, EmptyString, Presence::Unavailable );
 
     if( !node.empty() && !ver.empty() )
       m_resources[resource]->setCaps( node, ver );

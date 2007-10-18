@@ -117,7 +117,7 @@ namespace gloox
       JID m_from;
       JID m_to;
 
-      static const std::string findLang( const StringMap& map, const std::string& lang );
+      static const std::string& findLang( const StringMap& map, const std::string& lang );
       static void setLang( StringMap& map, const Tag* tag );
   };
 

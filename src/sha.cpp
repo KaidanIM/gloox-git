@@ -11,6 +11,7 @@
 */
 
 #include "sha.h"
+#include "gloox.h"
 
 namespace gloox
 {
@@ -48,7 +49,7 @@ namespace gloox
   const std::string SHA::hex()
   {
     if( m_corrupted )
-      return std::string();
+      return EmptyString;
 
     finalize();
 

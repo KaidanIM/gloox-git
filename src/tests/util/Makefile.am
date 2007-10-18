@@ -7,5 +7,5 @@ AM_CPPFLAGS = -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare
 noinst_PROGRAMS = util_test
 
 util_test_SOURCES = util_test.cpp
-util_test_LDADD = ../../util.o
+util_test_LDADD = ../../util.o ../../gloox.o
 util_test_CFLAGS = $(CPPFLAGS)

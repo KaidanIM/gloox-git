@@ -123,7 +123,7 @@ namespace gloox
            * Returns the attribute's namespace.
            * @return The attribute's namespace.
            */
-          const std::string xmlns() const;
+          const std::string& xmlns() const;
 
           /**
            * Sets the attribute's namespace.
@@ -141,7 +141,7 @@ namespace gloox
            * Returns the attribute's namespace prefix.
            * @return The namespace prefix.
            */
-          const std::string prefix() const;
+          const std::string& prefix() const;
 
           /**
            * Checks two Attributes for equality.
@@ -238,7 +238,7 @@ namespace gloox
        * @return The namespace prefix for the given namespace.
        * @since 1.0
        */
-      const std::string prefix( const std::string& xmlns ) const;
+      const std::string& prefix( const std::string& xmlns ) const;
 
       /**
        * Adds an XML namespace declaration to the Tag. If @b def is false, a unique prefix will
@@ -266,7 +266,7 @@ namespace gloox
        * @return The namespace for this element.
        * @since 1.0
        */
-      const std::string xmlns() const;
+      const std::string& xmlns() const;
 
       /**
        * Returns the namespace for the given prefix, or the default namespace if
@@ -285,7 +285,7 @@ namespace gloox
        * The default namespace if an empty prefix is given.
        * @since 1.0
        */
-      const std::string xmlns( const std::string& prefix ) const;
+      const std::string& xmlns( const std::string& prefix ) const;
 
       /**
        * Use this function to add a new attribute to the tag. The Tag will become the owner of the
@@ -397,7 +397,7 @@ namespace gloox
        * @param name The name of the attribute to look for.
        * @return The value of the attribute if found, an empty string otherwise.
        */
-      const std::string findAttribute( const std::string& name ) const;
+      const std::string& findAttribute( const std::string& name ) const;
 
       /**
        * Checks whether the tag has a attribute with given name and optional value.

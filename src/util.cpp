@@ -11,6 +11,7 @@
 */
 
 #include "util.h"
+#include "gloox.h"
 #include <cmath>
 
 namespace gloox
@@ -28,13 +29,13 @@ namespace gloox
 
     const std::string _lookup( unsigned code, const char * values[], unsigned size )
     {
-      return code < size ? std::string(values[code]) : std::string();
+      return code < size ? std::string(values[code]) : EmptyString;
     }
 
     const std::string _lookup2( unsigned code, const char * values[], unsigned size )
     {
       const unsigned i = (unsigned)log2(code);
-      return i < size ? std::string(values[i]) : std::string();
+      return i < size ? std::string(values[i]) : EmptyString;
     }
 
   }
