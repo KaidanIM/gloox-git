@@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.50)
 AC_INIT([gloox], [1.0-svn], [js@camaya.net])
-AC_CONFIG_SRCDIR([configure.ac])
+AC_CONFIG_SRCDIR(src/gloox.cpp)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 
 dnl create a config.h file (Automake will add -DHAVE_CONFIG_H)
@@ -300,6 +300,7 @@ src/tests/jid/Makefile
 src/tests/md5/Makefile
 src/tests/message/Makefile
 src/tests/messageeventfilter/Makefile
+src/tests/nickname/Makefile
 src/tests/oob/Makefile
 src/tests/parser/Makefile
 src/tests/prep/Makefile
@@ -313,7 +314,6 @@ src/tests/tag/Makefile
 src/tests/tlsgnutls/Makefile
 src/tests/util/Makefile
 src/tests/vcardupdate/Makefile
-src/tests/xdelayeddelivery/Makefile
 src/tests/xpath/Makefile
 src/tests/zlib/Makefile
 ])
