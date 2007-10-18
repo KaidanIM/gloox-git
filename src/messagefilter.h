@@ -63,17 +63,17 @@ namespace gloox
        * which get to see the message after this filter, though).
        * @param tag The tag to decorate. It contains the message to be sent.
        */
-      virtual void decorate( Message& msg ) = 0;
+      virtual void decorate( Message* msg ) = 0;
 
       /**
        * This function receives a message stanza right after it was received (there may be other filters
        * which got to see the stanza before this filter, though).
        * @param msg The complete message stanza.
        */
-      virtual void filter( Message& msg ) = 0;
+      virtual void filter( Message* msg ) = 0;
 
     protected:
-      void send( Message& msg ) { if( m_parent ) m_parent->send( msg ); }
+      void send( Message* msg ) { if( m_parent ) m_parent->send( msg ); }
 
       MessageSession* m_parent;
 
