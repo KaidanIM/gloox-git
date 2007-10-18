@@ -110,6 +110,9 @@ namespace gloox
       typedef std::map<ConnectionBase*, ConnectionInfo> ConnectionMap;
       ConnectionMap m_connections;
 
+      typedef std::list<const ConnectionBase*> ConnectionList;
+      ConnectionList m_oldConnections;
+
       typedef std::list<std::string> HashMap;
       HashMap m_hashes;
 
