@@ -83,7 +83,7 @@ namespace gloox
    *   ci.name = "jabber/xmpp development room";
    *   ci.jid = "jdev@conference.jabber.org";
    *   ci.nick = "myNick";
-   *   ci.password = "";
+   *   ci.password = EmptyString;
    *   ci.autojoin = true;
    *   m_cList.push_back( ci );
    *

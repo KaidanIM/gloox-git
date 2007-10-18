@@ -87,7 +87,7 @@ namespace gloox
        * necessary if you need to know the request's id.
        */
       void getDiscoInfo( const JID& to, const std::string& node, DiscoHandler* dh, int context,
-                         const std::string& tid = "" )
+                         const std::string& tid = EmptyString )
         { getDisco( to, node, dh, context, GET_DISCO_INFO, tid ); }
 
       /**
@@ -102,7 +102,7 @@ namespace gloox
        * necessary if you need to know the request's id.
        */
       void getDiscoItems( const JID& to, const std::string& node, DiscoHandler* dh, int context,
-                          const std::string& tid = "" )
+                          const std::string& tid = EmptyString )
         { getDisco( to, node, dh, context, GET_DISCO_ITEMS, tid ); }
 
       /**
@@ -113,7 +113,7 @@ namespace gloox
        * @param version The version to be returned to inquireing clients.
        * @param os The operating system to announce. Default: don't include.
        */
-      void setVersion( const std::string& name, const std::string& version, const std::string& os = "" );
+      void setVersion( const std::string& name, const std::string& version, const std::string& os = EmptyString );
 
       /**
        * Sets the identity of this entity.

@@ -892,7 +892,7 @@ namespace gloox
                                    jid  = sub->findAttribute( "jid" );
 
                 const SubscriptionType type = SubscriptionNone;
-                (*ith).second->handleSubscriptionResult( service, node, "", jid, type, error );
+                (*ith).second->handleSubscriptionResult( service, node, EmptyString, jid, type, error );
               }
 
               m_nodeHandlerTrackMap.erase( ith );

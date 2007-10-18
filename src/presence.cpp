@@ -37,7 +37,7 @@ namespace gloox
   {
     if( !tag || tag->name() != "presence" )
     {
-      m_name = "";
+      m_name = EmptyString;
       return;
     }
 

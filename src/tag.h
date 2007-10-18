@@ -70,7 +70,7 @@ namespace gloox
            * @param xmlns The attribute's namespace.
            */
           Attribute( Tag* parent, const std::string& name, const std::string& value,
-                     const std::string& xmlns = "" )
+                     const std::string& xmlns = EmptyString )
             : m_parent( parent ), m_name( name ), m_value( value ), m_xmlns( xmlns )
           {
             if( m_parent )
@@ -83,7 +83,7 @@ namespace gloox
            * @param value The attribute's value.
            * @param xmlns The attribute's namespace.
            */
-          Attribute( const std::string& name, const std::string& value, const std::string& xmlns = "" )
+          Attribute( const std::string& name, const std::string& value, const std::string& xmlns = EmptyString )
             : m_parent( 0 ), m_name( name ), m_value( value ), m_xmlns( xmlns )
             {}
 
@@ -178,7 +178,7 @@ namespace gloox
        * @param incoming Indicates whether tag names, attributes, attribute values, and cdata shall
        * be escaped (false, default) or not (true).
        */
-      Tag( const std::string& name, const std::string& cdata = "" );
+      Tag( const std::string& name, const std::string& cdata = EmptyString );
 
       /**
        * Creates a new tag as a child tag of the given parent, with a given name (and
@@ -187,7 +187,7 @@ namespace gloox
        * @param name The name of the element.
        * @param cdata The XML character data of the element.
        */
-      Tag( Tag* parent, const std::string& name, const std::string& cdata = "" );
+      Tag( Tag* parent, const std::string& name, const std::string& cdata = EmptyString );
 
       /**
        * Creates a new tag with a given name and an attribute.
@@ -258,7 +258,7 @@ namespace gloox
        * @param prefix An optional namespace prefix.
        * @since 1.0
        */
-      void setXmlns( const std::string& xmlns, const std::string& prefix = "" );
+      void setXmlns( const std::string& xmlns, const std::string& prefix = EmptyString );
 
       /**
        * Returns the namespace for this element.
@@ -405,7 +405,7 @@ namespace gloox
        * @param value The value of the attribute to check for.
        * @return Whether the attribute exists (optionally with the given value).
        */
-      bool hasAttribute( const std::string& name, const std::string& value = "" ) const;
+      bool hasAttribute( const std::string& name, const std::string& value = EmptyString ) const;
 
       /**
        * This function finds and returns the @b first element within the child elements of the current tag
@@ -424,7 +424,7 @@ namespace gloox
        * @return The found Tag, or NULL.
        */
       Tag* findChild( const std::string& name, const std::string& attr,
-                      const std::string& value = "" ) const;
+                      const std::string& value = EmptyString ) const;
 
       /**
        * This function checks whether the Tag has a child element with a given name, and optionally
@@ -434,8 +434,8 @@ namespace gloox
        * @param value The value of the attribute of the child element.
        * @return @b True if the given child element exists, @b false otherwise.
        */
-      inline bool hasChild( const std::string& name, const std::string& attr = "",
-                            const std::string& value = "" ) const
+      inline bool hasChild( const std::string& name, const std::string& attr = EmptyString,
+                            const std::string& value = EmptyString ) const
         { return findChild( name, attr, value ) ? true : false; }
 
       /**
@@ -445,7 +445,7 @@ namespace gloox
        * @param value The value of the attribute of the child element.
        * @return The child if found, NULL otherwise.
        */
-      Tag* findChildWithAttrib( const std::string& attr, const std::string& value = "" ) const;
+      Tag* findChildWithAttrib( const std::string& attr, const std::string& value = EmptyString ) const;
 
       /**
        * This function checks whether the Tag has a child element which posesses a given attribute
@@ -455,7 +455,7 @@ namespace gloox
        * @return @b True if any such child element exists, @b false otherwise.
        */
       inline bool hasChildWithAttrib( const std::string& attr,
-                                              const std::string& value = "" ) const
+                                              const std::string& value = EmptyString ) const
         { return findChildWithAttrib( attr, value ) ? true : false; }
 
       /**

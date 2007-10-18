@@ -29,7 +29,7 @@ namespace gloox
   {
     if( !tag || tag->name() != "iq" )
     {
-      m_name = "";
+      m_name = EmptyString;
       return;
     }
 

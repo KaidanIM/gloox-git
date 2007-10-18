@@ -46,7 +46,7 @@ namespace gloox
        * @param port The local port to listen on.
        * @param ip The local IP to bind to. If empty, the server will listen on all local interfaces.
        */
-      SOCKS5BytestreamServer( const LogSink& logInstance, int port, const std::string& ip = "" );
+      SOCKS5BytestreamServer( const LogSink& logInstance, int port, const std::string& ip = EmptyString );
 
       /**
        * Destructor.

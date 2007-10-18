@@ -193,8 +193,8 @@ namespace gloox
        * are not met.
        */
       const std::string requestFT( const JID& to, const std::string& name, long size,
-                                   const std::string& hash = "", const std::string& desc = "",
-                                   const std::string& date = "", const std::string& mimetype = "",
+                                   const std::string& hash = EmptyString, const std::string& desc = "",
+                                   const std::string& date = EmptyString, const std::string& mimetype = "",
                                    int streamTypes = FTTypeAll );
 
       /**
@@ -218,7 +218,7 @@ namespace gloox
        * @param text An optional human-readable text explaining the decline.
        */
       void declineFT( const JID& to, const std::string& id, SIManager::SIError reason,
-                      const std::string& text = "" );
+                      const std::string& text = EmptyString );
 
       /**
        * Enables or disables offering of ranged file transfers.

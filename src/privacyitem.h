@@ -15,6 +15,7 @@
 #define PRIVACYITEM_H__
 
 #include "macros.h"
+#include "gloox.h"
 
 #include <string>
 
@@ -75,7 +76,7 @@ namespace gloox
        * @param value The value to check for and match.
        */
       PrivacyItem( const ItemType type = TypeUndefined, const ItemAction action = ActionAllow,
-                   const int packetType = 0, const std::string& value = "" );
+                   const int packetType = 0, const std::string& value = EmptyString );
 
       /**
        * Virtual destructor.

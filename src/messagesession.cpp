@@ -90,7 +90,7 @@ namespace gloox
   void MessageSession::resetResource()
   {
     m_wantUpgrade = true;
-    m_target.setResource( "" );
+    m_target.setResource( EmptyString );
   }
 
   void MessageSession::setResource( const std::string& resource )

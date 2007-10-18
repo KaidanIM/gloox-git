@@ -161,7 +161,7 @@ namespace gloox
       else
       {
         requestBody << ">" << m_sendBuffer << "</body>";
-        m_sendBuffer = "";
+        m_sendBuffer = EmptyString;
       }
       sendRequest( requestBody.str(), true );
 
@@ -416,7 +416,7 @@ namespace gloox
     else
     {
       requestBody << ">" << m_sendBuffer << data << "</body>";
-      m_sendBuffer = "";
+      m_sendBuffer = EmptyString;
     }
     // Send a request. Force if we are not sending an empty request, or if there are no connections open
     if( m_state != StateDisconnected &&
@@ -541,11 +541,11 @@ namespace gloox
       m_buffer.erase( 0, m_bufferContentLength ); // Remove the handled response from the buffer,
                                                   // and reset variables for reuse
       m_bufferContentLength = -1;
-      m_bufferHeader = "";
+      m_bufferHeader = EmptyString;
 //       printf( "\n-----------FULL RESPONSE BUFFER (after handling)"
 //               "---------------\n%s\n---------------END-------------\n",
 //               m_buffer.c_str() );
-      handleReceivedData( connection, "" ); // In case there are more full responses in the buffer
+      handleReceivedData( connection, EmptyString ); // In case there are more full responses in the buffer
 
       if( connection == m_activeConnections.front() )
       {

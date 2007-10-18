@@ -15,6 +15,7 @@
 #define MESSAGESESSION_H__
 
 #include "jid.h"
+#include "gloox.h"
 
 #include <string>
 #include <list>
@@ -209,7 +210,7 @@ namespace gloox
        * @param message The message to send.
        * @param subject The optional subject to send.
        */
-      virtual void send( const std::string& message, const std::string& subject = "" );
+      virtual void send( const std::string& message, const std::string& subject = EmptyString );
 
       /**
        * Use this function to hook a new MessageFilter into a MessageSession.

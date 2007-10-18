@@ -170,7 +170,7 @@ namespace gloox
       long length = -1;
 
       const Tag* t = ptag->findChild( "desc" );
-      const std::string desc = t ? t->cdata() : "";
+      const std::string desc = t ? t->cdata() : EmptyString;
 
       if( ( t = ptag->findChild( "range" ) ) )
       {

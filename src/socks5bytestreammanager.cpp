@@ -115,7 +115,7 @@ namespace gloox
 
     if( item.incoming )
     {
-      iq = new IQ( IQ::Result, item.from.full(), item.id, success ? XMLNS_BYTESTREAMS : "" );
+      iq = new IQ( IQ::Result, item.from.full(), item.id, success ? XMLNS_BYTESTREAMS : EmptyString );
       if( success )
         new Tag( iq->query(), "streamhost-used", "jid", jid.full() );
       else

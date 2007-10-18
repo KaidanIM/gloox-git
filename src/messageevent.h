@@ -44,7 +44,7 @@ namespace gloox
        * @param type One or more @link gloox::MessageEventType MessageEventType @endlink.
        * @param id An optional message ID. Links this Event to the message it is generated for.
        */
-      MessageEvent( int type, const std::string& id = "" )
+      MessageEvent( int type, const std::string& id = EmptyString )
         : StanzaExtension( ExtMessageEvent ), m_id( id ), m_event( type )
       {}
 
