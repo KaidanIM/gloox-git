@@ -141,9 +141,9 @@ namespace gloox
        * @param room The room the message came from.
        * @param msg The entire Message.
        * @param priv Indicates whether this is a private message.
-       * @note The sender's nick name can be obtains with this call:
+       * @note The sender's nick name can be obtained with this call:
        * @code
-       * const std::string = msg.from().resource();
+       * const std::string nick = msg.from().resource();
        * @endcode
        * @note The message may contain an extension of type DelayedDelivery describing the
        * date/time when the message was originally sent. The presence of such an extension
