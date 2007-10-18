@@ -14,6 +14,7 @@
 #include "socks5bytestreamserver.h"
 #include "connectiontcpserver.h"
 #include "mutexguard.h"
+#include "util.h"
 
 namespace gloox
 {
@@ -53,10 +54,14 @@ namespace gloox
       return ce;
 
     ConnectionMap::const_iterator it = m_connections.begin();
-    for( ; it != m_connections.end(); ++it )
+    ConnectionMap::const_iterator it2;
+    while( it != m_connections.end() )
     {
-      (*it).first->recv( timeout );
+      it2 = it++;
+      (*it2).first->recv( timeout );
     }
+
+    util::clearList( m_oldConnections );
     return ConnNoError;
   }
 
@@ -193,7 +198,7 @@ namespace gloox
                                                        ConnectionError /*reason*/ )
   {
     m_connections.erase( const_cast<ConnectionBase*>( connection ) );
-    delete connection;
+    m_oldConnections.push_back( connection );
   }
 
 }
