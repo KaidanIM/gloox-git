@@ -61,8 +61,8 @@ namespace gloox
        * @param from An optional sender address. Usually not needed. Cannot be forged.
        */
       Message( MessageType type, const JID& to,
-               const std::string& body = EmptyString, const std::string& subject = "",
-               const std::string& thread = EmptyString, const std::string& xmllang = "",
+               const std::string& body = EmptyString, const std::string& subject = EmptyString,
+               const std::string& thread = EmptyString, const std::string& xmllang = EmptyString,
                const JID& from = JID() );
 
       /**

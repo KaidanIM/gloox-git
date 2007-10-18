@@ -193,8 +193,8 @@ namespace gloox
        * are not met.
        */
       const std::string requestFT( const JID& to, const std::string& name, long size,
-                                   const std::string& hash = EmptyString, const std::string& desc = "",
-                                   const std::string& date = EmptyString, const std::string& mimetype = "",
+                                   const std::string& hash = EmptyString, const std::string& desc = EmptyString,
+                                   const std::string& date = EmptyString, const std::string& mimetype = EmptyString,
                                    int streamTypes = FTTypeAll );
 
       /**

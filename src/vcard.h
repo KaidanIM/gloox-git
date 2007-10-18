@@ -250,7 +250,7 @@ namespace gloox
        * @param suffix A name suffix.
        */
       void setName( const std::string& family, const std::string& given, const std::string& middle = EmptyString,
-                    const std::string& prefix = EmptyString, const std::string& suffix = "" );
+                    const std::string& prefix = EmptyString, const std::string& suffix = EmptyString );
 
       /**
        * Returns a full name.
