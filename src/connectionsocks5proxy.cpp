@@ -289,7 +289,7 @@ namespace gloox
         if( server[k] == '.' || k == j-1 )
         {
           d[pos++] = atoi( s.c_str() ) & 0xFF;
-          s = "";
+          s = EmptyString;
           ++l;
         }
       }

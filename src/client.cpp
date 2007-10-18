@@ -57,7 +57,7 @@ namespace gloox
   }
 
   Client::Client( const JID& jid, const std::string& password, int port )
-    : ClientBase( XMLNS_CLIENT, password, "", port ),
+    : ClientBase( XMLNS_CLIENT, password, EmptyString, port ),
       m_rosterManager( 0 ), m_auth( 0 ),
       m_presence( Presence::Available ), m_capabilities( 0 ), m_resourceBound( false ),
       m_forceNonSasl( false ), m_manageRoster( true ), m_doAuth( true ),

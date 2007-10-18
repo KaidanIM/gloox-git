@@ -549,6 +549,8 @@ namespace gloox
 
   extern const std::string TYPE;
 
+  GLOOX_API extern const std::string EmptyString;
+
   /**
    * This describes the possible states of a stream.
    */

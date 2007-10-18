@@ -158,7 +158,7 @@ namespace gloox
        * Leave this room.
        * @param msg An optional msg indicating the reason for leaving the room. Default: empty.
        */
-      void leave( const std::string& msg = "" );
+      void leave( const std::string& msg = EmptyString );
 
       /**
        * Sends a chat message to the room.
@@ -200,7 +200,7 @@ namespace gloox
        * @param presence The user's new presence.
        * @param msg An optional status message. Default: empty.
        */
-      void setPresence( Presence::PresenceType presence, const std::string& msg = "" );
+      void setPresence( Presence::PresenceType presence, const std::string& msg = EmptyString );
 
       /**
        * Use this function to invite another user to this room.
@@ -302,7 +302,7 @@ namespace gloox
        * @param reason An optional reason for the decline.
        */
       static Message* declineInvitation( const JID& room, const JID& invitor,
-                                        const std::string& reason = "");
+                                        const std::string& reason = EmptyString);
 
       /**
        * It is not possible for a visitor to speak in a moderated room. Use this function to request
@@ -318,7 +318,7 @@ namespace gloox
        * @param nick The nick of the user to be kicked.
        * @param reason An optional reason for the kick.
        */
-      void kick( const std::string& nick, const std::string& reason = "" )
+      void kick( const std::string& nick, const std::string& reason = EmptyString )
         { setRole( nick, RoleNone, reason ); }
 
       /**
@@ -374,7 +374,7 @@ namespace gloox
        * @param role The user's new role in the room.
        * @param reason An optional reason for the role change.
        */
-      void setRole( const std::string& nick, MUCRoomRole role, const std::string& reason = "" )
+      void setRole( const std::string& nick, MUCRoomRole role, const std::string& reason = EmptyString )
         { modifyOccupant( nick, role, "role", reason ); }
 
       /**
@@ -423,8 +423,8 @@ namespace gloox
        *
        * Usually owner privileges are required for this action to succeed.
        */
-      void destroy( const std::string& reason = "",
-                    const JID* alternate = 0, const std::string& password = "" );
+      void destroy( const std::string& reason = EmptyString,
+                    const JID* alternate = 0, const std::string& password = EmptyString );
 
       /**
        * Use this function to request a particluar list of room occupants.
@@ -501,7 +501,7 @@ namespace gloox
       virtual StringMap handleDiscoNodeIdentities( const std::string& node, std::string& name );
 
       // reimplemented from DiscoNodeHandler
-      virtual DiscoNodeItemList handleDiscoNodeItems( const std::string& node = "" );
+      virtual DiscoNodeItemList handleDiscoNodeItems( const std::string& node = EmptyString );
 
     protected:
       void setName( const std::string& name ) { m_nick.setUsername( name ); }

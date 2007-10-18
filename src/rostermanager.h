@@ -79,8 +79,8 @@ namespace gloox
        * @param groups A list of groups the contact belongs to.
        * @param msg A message sent along with the request.
        */
-      void subscribe( const JID& jid, const std::string& name = "", const StringList& groups = StringList(),
-                      const std::string& msg = "" );
+      void subscribe( const JID& jid, const std::string& name = EmptyString, const StringList& groups = StringList(),
+                      const std::string& msg = EmptyString );
 
       /**
        * Synchronizes locally modified RosterItems back to the server.
@@ -104,7 +104,7 @@ namespace gloox
        * @since 0.9
        * @note Use remove() to remove a contact from the roster and to cancel its subscriptions.
        */
-      void unsubscribe( const JID& jid, const std::string& msg = "" );
+      void unsubscribe( const JID& jid, const std::string& msg = EmptyString );
 
       /**
        * Use this function to cancel the contact's subscription to your presence. The contact will
@@ -114,7 +114,7 @@ namespace gloox
        * @since 0.9
        * @note Use remove() to remove a contact from the roster and to cancel its subscriptions.
        */
-      void cancel( const JID& jid, const std::string& msg = "" );
+      void cancel( const JID& jid, const std::string& msg = EmptyString );
 
       /**
        * Use this function to remove a contact from the roster. Subscription is implicitely

@@ -63,7 +63,7 @@ namespace gloox
        * newlines (\\n, \\r).
        * @param title The natural-language title of the form. Should not contain newlines (\\n, \\r).
        */
-      DataForm( FormType type, const StringList& instructions, const std::string& title = "" );
+      DataForm( FormType type, const StringList& instructions, const std::string& title = EmptyString );
 
       /**
        * Constructs a new, empty form without any instructions or title set. Probably best suited for
@@ -72,7 +72,7 @@ namespace gloox
        * @param title The natural-language title of the form. Should not contain newlines (\\n, \\r).
        * @since 0.9
        */
-      DataForm( FormType type, const std::string& title = "" );
+      DataForm( FormType type, const std::string& title = EmptyString );
 
       /**
        * Constructs a new DataForm from an existing Tag/XML representation.
@@ -170,7 +170,7 @@ namespace gloox
       /**
        *
        */
-      Form( const StringList& instructions, const std::string& title = "" )
+      Form( const StringList& instructions, const std::string& title = EmptyString )
         : DataForm( TypeForm, instructions, title ) {}
 
       /**
@@ -193,7 +193,7 @@ namespace gloox
       /**
        *
        */
-      Submit( const StringList& instructions, const std::string& title = "" )
+      Submit( const StringList& instructions, const std::string& title = EmptyString )
         : DataForm( TypeSubmit, instructions, title ) {}
 
       /**
@@ -216,7 +216,7 @@ namespace gloox
       /**
        *
        */
-      Cancel( const StringList& instructions, const std::string& title = "" )
+      Cancel( const StringList& instructions, const std::string& title = EmptyString )
         : DataForm( TypeCancel, instructions, title ) {}
 
       /**
@@ -245,7 +245,7 @@ namespace gloox
       /**
         *
         */
-      Result( const StringList& instructions, const std::string& title = "" )
+      Result( const StringList& instructions, const std::string& title = EmptyString )
         : DataForm( TypeResult, instructions, title ) {}
 
       /**

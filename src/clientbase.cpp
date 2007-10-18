@@ -1130,10 +1130,10 @@ namespace gloox
         JID invitee( i->findAttribute( "from" ) );
 
         const Tag * t = i->findChild( "reason" );
-        std::string reason ( t ? t->cdata() : "" );
+        std::string reason ( t ? t->cdata() : EmptyString );
 
         t = x->findChild( "password" );
-        std::string password ( t ? t->cdata() : "" );
+        std::string password ( t ? t->cdata() : EmptyString );
 
         m_mucInvitationHandler->handleMUCInvitation( msg->from(), invitee,
                                                      reason, msg->body(), password,

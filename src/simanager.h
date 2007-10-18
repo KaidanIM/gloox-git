@@ -95,7 +95,7 @@ namespace gloox
        * @param reason The reason for the reject.
        * @param text An optional human-readable text explaining the decline.
        */
-      void declineSI( const JID& to, const std::string& id, SIError reason, const std::string& text = "" );
+      void declineSI( const JID& to, const std::string& id, SIError reason, const std::string& text = EmptyString );
 
       /**
        * Registers the given SIProfileHandler to handle requests for the

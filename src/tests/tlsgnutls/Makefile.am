@@ -7,5 +7,5 @@ AM_CPPFLAGS = -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare
 noinst_PROGRAMS = tlsgnutls_test
 
 tlsgnutls_test_SOURCES = tlsgnutls_test.cpp
-tlsgnutls_test_LDADD = ../../tlsgnutlsclientanon.o ../../tlsgnutlsserveranon.o ../../tlsgnutlsbase.o
+tlsgnutls_test_LDADD = ../../tlsgnutlsclientanon.o ../../tlsgnutlsserveranon.o ../../tlsgnutlsbase.o ../../gloox.o
 tlsgnutls_test_CFLAGS = $(CPPFLAGS)

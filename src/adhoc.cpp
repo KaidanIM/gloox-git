@@ -264,7 +264,7 @@ namespace gloox
     track.context = CheckAdhocSupport;
     track.ah = ah;
     m_adhocTrackMap[m_parent->getID()] = track;
-    m_parent->disco()->getDiscoInfo( remote, "", this, CheckAdhocSupport );
+    m_parent->disco()->getDiscoInfo( remote, EmptyString, this, CheckAdhocSupport );
   }
 
   void Adhoc::getCommands( const JID& remote, AdhocHandler* ah )

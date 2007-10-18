@@ -183,7 +183,7 @@ namespace gloox
        * @param status The optional status message to include.
        */
       void setPresence( const JID& to, Presence::PresenceType presence, int priority,
-                        const std::string& status = "" );
+                        const std::string& status = EmptyString );
 
       /**
        * Use this function to set the entity's presence, that is, to broadcast presence to all
@@ -198,7 +198,7 @@ namespace gloox
        * @param status An optional message describing the presence state.
        * @since 0.9
        */
-      void setPresence( Presence::PresenceType presence, int priority, const std::string& status = "" )
+      void setPresence( Presence::PresenceType presence, int priority, const std::string& status = EmptyString )
         { setPresence( JID(), presence, priority, status ); }
 
       /**

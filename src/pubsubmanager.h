@@ -256,8 +256,8 @@ public:
         void createNode( NodeType type, const JID& service,
                                         const std::string& node,
                                         NodeHandler* handler,
-                                        const std::string& name = "",
-                                        const std::string& parent = "",
+                                        const std::string& name = EmptyString,
+                                        const std::string& parent = EmptyString,
                                         AccessModel access = AccessDefault,
                                         const StringMap* config = 0 );
 
@@ -277,7 +277,7 @@ public:
                              const std::string& node,
                              NodeHandler* handler,
                              const std::string& name,
-                             const std::string& parent = "",
+                             const std::string& parent = EmptyString,
                              AccessModel access = AccessDefault,
                              const StringMap* config = 0 )
           { createNode( NodeLeaf, service, node, handler, name, parent, access, config ); }
@@ -298,7 +298,7 @@ public:
                                    const std::string& node,
                                    NodeHandler* handler,
                                    const std::string& name,
-                                   const std::string& parent = "",
+                                   const std::string& parent = EmptyString,
                                    AccessModel access = AccessDefault,
                                    const StringMap* config = 0 )
           { createNode( NodeCollection, service, node, handler, name, parent, access, config ); }

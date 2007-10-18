@@ -12,6 +12,7 @@
 
 #include "jid.h"
 #include "prep.h"
+#include "gloox.h"
 
 namespace gloox
 {
@@ -20,7 +21,7 @@ namespace gloox
   {
     if ( jid.empty() )
     {
-      m_bare = m_full = m_server = m_username = m_serverRaw = m_resource = "";
+      m_bare = m_full = m_server = m_username = m_serverRaw = m_resource = EmptyString;
       m_valid = false;
       return false;
     }
@@ -78,7 +79,7 @@ namespace gloox
     if( !m_username.empty() )
       m_bare = m_username + '@';
     else
-      m_bare = "";
+      m_bare = EmptyString;
     m_bare += m_server;
   }
 

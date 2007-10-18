@@ -32,7 +32,7 @@ namespace gloox
 
   void FlexibleOffline::checkSupport()
   {
-    m_parent->disco()->getDiscoInfo( m_parent->jid().server(), "", this, FOCheckSupport );
+    m_parent->disco()->getDiscoInfo( m_parent->jid().server(), EmptyString, this, FOCheckSupport );
   }
 
   void FlexibleOffline::getMsgCount()

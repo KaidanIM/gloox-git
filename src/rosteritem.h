@@ -78,7 +78,7 @@ namespace gloox
        * @param jid The JID of the contact.
        * @param name The displayed name of the contact.
        */
-      RosterItem( const JID& jid, const std::string& name = "" );
+      RosterItem( const JID& jid, const std::string& name = EmptyString );
 
       /**
        * Virtual destructor.

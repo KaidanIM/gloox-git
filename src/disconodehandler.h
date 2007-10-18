@@ -95,7 +95,7 @@ namespace gloox
        * @param node The node this handler is supposed to handle.
        * @return A list of items supported by this node.
        */
-      virtual DiscoNodeItemList handleDiscoNodeItems( const std::string& node = "" ) = 0;
+      virtual DiscoNodeItemList handleDiscoNodeItems( const std::string& node = EmptyString ) = 0;
 
   };
 

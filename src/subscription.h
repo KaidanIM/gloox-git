@@ -55,8 +55,8 @@ namespace gloox
        * @param xmllang An optional xml:lang for the status message.
        * @param from An optional sender address. Usually not needed. Cannot be forged.
        */
-      Subscription( S10nType type, const JID& to, const std::string& status = "",
-                     const std::string& xmllang = "", const JID& from = JID() );
+      Subscription( S10nType type, const JID& to, const std::string& status = EmptyString,
+                     const std::string& xmllang = EmptyString, const JID& from = JID() );
       /**
        * Destructor.
        */

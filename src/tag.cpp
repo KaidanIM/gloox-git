@@ -891,7 +891,7 @@ namespace gloox
     {
       addToken( root, current, type, tok );
       type = XTElement;
-      tok = "";
+      tok = EmptyString;
     }
   }
 

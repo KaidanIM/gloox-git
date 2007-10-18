@@ -48,7 +48,7 @@ namespace gloox
     if( !me && msg.body().empty() )
     {
       m_requestedEvents = 0;
-      m_lastID = "";
+      m_lastID = EmptyString;
       return;
     }
 

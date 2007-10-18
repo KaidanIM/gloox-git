@@ -163,7 +163,7 @@ namespace gloox
     if( !m_backBuffer.empty() )
     {
       data.insert( 0, m_backBuffer );
-      m_backBuffer = "";
+      m_backBuffer = EmptyString;
     }
 
     std::string::size_type count = data.length();
@@ -182,7 +182,7 @@ namespace gloox
       {
         case Initial:
 //           printf( "Initial: %c\n", c );
-          m_tag = "";
+          m_tag = EmptyString;
           if( isWhitespace( c ) )
             break;
 
@@ -290,7 +290,7 @@ namespace gloox
               {
                 m_haveTagPrefix = true;
                 m_tagPrefix = m_tag;
-                m_tag = "";
+                m_tag = EmptyString;
               }
               else
               {
@@ -305,7 +305,7 @@ namespace gloox
           break;
         case TagInside:                // we're inside a tag, expecting a child tag or cdata
 //           printf( "TagInside: %c\n", c );
-          m_tag = "";
+          m_tag = EmptyString;
           switch( c )
           {
             case '<':
@@ -389,7 +389,7 @@ namespace gloox
               {
                 m_haveTagPrefix = true;
                 m_tagPrefix = m_tag;
-                m_tag = "";
+                m_tag = EmptyString;
               }
               else
               {
@@ -478,12 +478,12 @@ namespace gloox
               {
                 m_haveAttribPrefix = true;
                 m_attribPrefix = m_attrib;
-                m_attrib = "";
+                m_attrib = EmptyString;
               }
               else if( m_attrib == XMLNS )
               {
                 m_attribIsXmlns = true;
-                m_attrib = "";
+                m_attrib = EmptyString;
               }
               else
               {
@@ -652,7 +652,7 @@ namespace gloox
     }
 
     m_current->setXmlns( m_xmlns );
-    m_xmlns = "";
+    m_xmlns = EmptyString;
 
     if( m_tag == "stream" && m_root->xmlns() == XMLNS_STREAM )
     {
@@ -690,9 +690,9 @@ namespace gloox
         m_xmlns = m_value;
     }
     m_attribs.push_back( attr );
-    m_attrib = "";
-    m_value = "";
-    m_attribPrefix = "";
+    m_attrib = EmptyString;
+    m_value = EmptyString;
+    m_attribPrefix = EmptyString;
     m_haveAttribPrefix = false;
     m_attribIsXmlns = false;
   }
@@ -704,7 +704,7 @@ namespace gloox
       m_current->addCData( m_cdata );
 //       printf( "added cdata %s to %s: %s\n",
 //               m_cdata.c_str(), m_current->name().c_str(), m_current->xml().c_str() );
-      m_cdata = "";
+      m_cdata = EmptyString;
     }
   }
 
@@ -727,7 +727,7 @@ namespace gloox
 //       printf( "m_current: %s, ", m_current->name().c_str() );
 //       printf( "m_tag: %s, ", m_tag.c_str() );
 
-    m_tagPrefix = "";
+    m_tagPrefix = EmptyString;
     m_haveTagPrefix = false;
 
     if( m_current->parent() )
@@ -749,15 +749,15 @@ namespace gloox
     m_current = 0;
     delete m_xmlnss;
     m_xmlnss = 0;
-    m_cdata = "";
-    m_tag = "";
-    m_attrib = "";
-    m_attribPrefix = "";
-    m_tagPrefix = "";
+    m_cdata = EmptyString;
+    m_tag = EmptyString;
+    m_attrib = EmptyString;
+    m_attribPrefix = EmptyString;
+    m_tagPrefix = EmptyString;
     m_haveAttribPrefix = false;
     m_haveTagPrefix = false;
-    m_value = "";
-    m_xmlns = "";
+    m_value = EmptyString;
+    m_xmlns = EmptyString;
     util::clearList( m_attribs );
     m_attribs.clear();
     m_state = Initial;

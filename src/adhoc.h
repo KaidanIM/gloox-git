@@ -190,7 +190,7 @@ namespace gloox
        * @param action The action to take, e.g. navigatte o the previous 'screen'.
        */
       void execute( const JID& remote, const std::string& command, AdhocHandler* ah,
-                    const std::string& sessionid = "", DataForm* form = 0,
+                    const std::string& sessionid = EmptyString, DataForm* form = 0,
                     AdhocExecuteActions action = ActionDefault );
 
       /**

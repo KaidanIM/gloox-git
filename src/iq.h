@@ -59,7 +59,7 @@ namespace gloox
        * @param childtag The child tag's name. Defaults to "query".
        * @param from An optional sender address. Usually not needed. Cannot be forged.
        */
-      IQ ( IqType type, const JID& to, const std::string& id, const std::string& xmlns = "",
+      IQ ( IqType type, const JID& to, const std::string& id, const std::string& xmlns = EmptyString,
            const std::string& childtag = "query", const JID& from = JID() );
 
       /**

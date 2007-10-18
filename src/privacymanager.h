@@ -56,7 +56,7 @@ namespace gloox
        * Triggers the request of the privacy lists currently stored on the server.
        */
       std::string requestListNames()
-        { return operation( PLRequestNames, "" ); }
+        { return operation( PLRequestNames, EmptyString ); }
 
       /**
        * Triggers the retrieval of the named privacy lists.
@@ -83,7 +83,7 @@ namespace gloox
        * This function declines the use of any default list.
        */
       std::string unsetDefault()
-        { return operation( PLUnsetDefault, "" ); }
+        { return operation( PLUnsetDefault, EmptyString ); }
 
       /**
        * Sets the named list as active, i.e. active for this session
@@ -96,7 +96,7 @@ namespace gloox
        * This function declines the use of any active list.
        */
       std::string unsetActive()
-        { return operation( PLUnsetActivate, "" ); }
+        { return operation( PLUnsetActivate, EmptyString ); }
 
       /**
        * Use this function to register an object as PrivacyListHandler.

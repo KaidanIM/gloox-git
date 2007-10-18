@@ -99,6 +99,7 @@ namespace gloox
 
   const std::string XMLNS = "xmlns";
   const std::string TYPE = "type";
+  const std::string EmptyString = "";
 }
 
 const char* gloox_version()

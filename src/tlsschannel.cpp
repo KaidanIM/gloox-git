@@ -64,7 +64,7 @@ namespace gloox
       {
         data_copy = data_copy.substr( m_sizes.cbMaximumMessage - 1 );
       }
-      else data_copy = "";
+      else data_copy = EmptyString;
 
       // copy data chunk from tmp string into encryption memory buffer
       memcpy( e_message, tmp.data(), tmp.size() );
@@ -93,7 +93,7 @@ namespace gloox
         std::string encrypted( reinterpret_cast<const char*>(e_iobuffer),
                                buffer[0].cbBuffer + buffer[1].cbBuffer + buffer[2].cbBuffer );
         m_handler->handleEncryptedData( this, encrypted );
-        //if (data_copy.size() <= m_sizes.cbMaximumMessage) data_copy = "";
+        //if (data_copy.size() <= m_sizes.cbMaximumMessage) data_copy = EmptyString;
       }
       else
       {
@@ -383,7 +383,7 @@ namespace gloox
         }
         else
         {
-          m_buffer = "";
+          m_buffer = EmptyString;
         }
         setSizes();
         setCertinfos();
@@ -414,13 +414,13 @@ namespace gloox
         }
         else
         {
-          m_buffer = "";
+          m_buffer = EmptyString;
         }
         return;
       }
       else if( error == SEC_I_INCOMPLETE_CREDENTIALS )
       {
-        handshakeStage( "" );
+        handshakeStage( EmptyString );
       }
       else if( error == SEC_E_INCOMPLETE_MESSAGE )
       {
@@ -615,7 +615,7 @@ namespace gloox
           m_certInfo.cipher = "RC4";
           break;
         default:
-          m_certInfo.cipher = "";
+          m_certInfo.cipher = EmptyString;
       }
 
       switch( conn_info.aiHash )
@@ -627,7 +627,7 @@ namespace gloox
           m_certInfo.mac = "SHA";
           break;
         default:
-          m_certInfo.mac = "";
+          m_certInfo.mac = EmptyString;
       }
     }
   }

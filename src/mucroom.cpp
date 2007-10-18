@@ -147,13 +147,13 @@ namespace gloox
   void MUCRoom::getRoomInfo()
   {
     if( m_parent )
-      m_parent->disco()->getDiscoInfo( m_nick.bare(), "", this, GetRoomInfo );
+      m_parent->disco()->getDiscoInfo( m_nick.bare(), EmptyString, this, GetRoomInfo );
   }
 
   void MUCRoom::getRoomItems()
   {
     if( m_parent )
-      m_parent->disco()->getDiscoItems( m_nick.bare(), "", this, GetRoomItems );
+      m_parent->disco()->getDiscoItems( m_nick.bare(), EmptyString, this, GetRoomItems );
   }
 
   void MUCRoom::setPresence( Presence::PresenceType presence, const std::string& msg )
@@ -222,7 +222,7 @@ namespace gloox
   void MUCRoom::setRequestHistory( int value, MUCRoom::HistoryRequestType type )
   {
     m_historyType = type;
-    m_historySince = "";
+    m_historySince = EmptyString;
     m_historyValue = value;
   }
 
@@ -904,7 +904,7 @@ namespace gloox
     switch( context )
     {
       case GetRoomInfo:
-        m_roomHandler->handleMUCInfo( this, 0, "", 0 );
+        m_roomHandler->handleMUCInfo( this, 0, EmptyString, 0 );
         break;
       case GetRoomItems:
         m_roomHandler->handleMUCItems( this, StringMap() );

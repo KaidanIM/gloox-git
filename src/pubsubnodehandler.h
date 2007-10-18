@@ -35,7 +35,7 @@ namespace gloox
     struct Subscriber
     {
       Subscriber( const std::string& _jid, SubscriptionType _type,
-                                           const std::string& _subid = "")
+                                           const std::string& _subid = EmptyString)
         : jid( _jid ), type( _type ), subid( _subid ) {}
       const JID jid;
       SubscriptionType type;
