@@ -34,6 +34,9 @@ removed:
 - JID::fullJID(), use ctor
 - JID::empty(), use operator bool()
 - Tag::empty(), use operator bool()
+- Stanza::createMessageStanza(), Stanza::createPresenceStanza(),
+  Stanza::createIqStanza(), Stanza::createSubscriptionStanza(),
+  use Message, Presence, IQ, Subscription instead
 
 
 v0.9 -- 17 Jun 2007
