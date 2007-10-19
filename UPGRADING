@@ -8,7 +8,10 @@
  * @section upgrading_09_10 1. Upgrading from 0.9.x to 1.0
  *
  * Besides the changes detailed below, a major change is that the Stanza class now is an abstract
- * base for more specialized Message, Presence, IQ and Subscription classes. Therefore,
+ * base for more specialized
+ * @link gloox::Message Message @endlink, @link gloox::Presence Presence @endlink,
+ * @link gloox::IQ IQ @endlink, and @link gloox::Subscription Subscription @endlink classes.
+ * Therefore,
  * @link gloox::PresenceHandler PresenceHandler @endlink,
  * @link gloox::MessageHandler MessageHandler @endlink,
  * @link gloox::SubscriptionHandler SubscriptionHandler @endlink, and
