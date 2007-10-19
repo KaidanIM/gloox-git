@@ -149,6 +149,7 @@
  *
  * @subsubsection func_createStanzas 1.2.5 Stanza::createMessageStanza(), Stanza::createPresenceStanza(), Stanza::createIqStanza(), Stanza::createSubscriptionStanza()
  *
- * These functions have been removed in favour of the more specialized classes Message, Presence, IQ,
- * and Subscription.
+ * These functions have been removed in favour of the more specialized classes
+ * @link gloox::Message Message @endlink, @link gloox::Presence Presence @endlink,
+ * @link gloox::IQ IQ @endlink, and @link gloox::Subscription Subscription @endlink.
  */
