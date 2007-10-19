@@ -97,12 +97,30 @@
  *   // do something
  * }
  * @endcode
+ * Or:
+ * @code
+ * Tag* t = new Tag( "foo" );
+ * // ...
+ * if( !t->empty() )
+ * {
+ *   // do something
+ * }
+ * @endcode
  *
  * New code:
  * @code
  * Tag t;
  * // ...
  * if( t )
+ * {
+ *   // do something
+ * }
+ * @endcode
+ * Or:
+ * @code
+ * Tag* t = new Tag( "foo" );
+ * // ...
+ * if( *t )
  * {
  *   // do something
  * }
