@@ -147,8 +147,7 @@
  * }
  * @endcode
  *
- * @subsubsection func_createStanzas 1.2.5 Stanza::createMessageStanza(), Stanza::createPresenceStanza(),
- * Stanza::createIqStanza(), Stanza::createSubscriptionStanza()
+ * @subsubsection func_createStanzas 1.2.5 Stanza::createMessageStanza(), Stanza::createPresenceStanza(), Stanza::createIqStanza(), Stanza::createSubscriptionStanza()
  *
  * These functions have been removed in favour of the more specialized classes Message, Presence, IQ,
  * and Subscription.
