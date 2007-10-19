@@ -4,6 +4,7 @@ v1.0 -- xx yyy 200z
 general changes and additions:
 - XEP-0060 (Publish-Subscribe)
 - XEP-0115 (Entity Capabilities)
+- XEP-0172 (User Nickname)
 - XEP-0184 (Message Receipts)
 - integrated XEP-0047 (In-Band Bytestreams) with XEP-0096 (File Transfer)
 - integrated XEP-0066 (Out-of-Band Data) with XEP-0096 (File Transfer)
@@ -12,7 +13,6 @@ general changes and additions:
 - added SASL error malformed-request from RFC 3920bis
 - ClientBase: removed limit of one IQ handler per xmlns
 - ClientBase: IQ ID handlers will be called first; xmlns handlers will be called only if no ID handler matched
-- ClientBase: added send( const Tag& )
 - DataForm: moved all DataForm-related classes to DataForm namespace
 - DataForm: removed 'Form' prefix from DataForm::DataFormType enum members
 - DataForm: removed 'Field' prefix from DataForm::FieldType enum members
@@ -21,7 +21,6 @@ general changes and additions:
 - DataFormRepoerted: renamed to DataForm::Reported
 - DataFormItem: renamed to DataForm::Item
 - JID: made setters return success/failure
-- MessageSession/MessageFilter: take Message& instead of Tag*/Message*
 - Parser: feed() returns -1 on success, parse error position otherwise
 - Parser and Tag: support mixed content xml
 - Parser: XML namespace support

@@ -31,13 +31,12 @@ for 1.0
 - unify error recognition (Error class)
 - check serverRaw() use (ClientBase::m_server)
 - ClientBase: Tag queueing?
-- (more) namespaces? e.g. DataForm
 - comply with RFC2831, Section 7.2, i.e. escape SASL-special chars in usernames
 - stanza size limitations?
 - Tag: check input for invalid characters
 - don't inherit stanza from tag?
 - make clientbase a friend of iqhandler etc?
-- check Openfire/no-SSL + gloox. seems to cause problems after requesting the roster.
+- check Openfire/no-SSL + gloox. seems to cause problems after requesting the roster. -- not reproducible
 
 
 optional for 1.0:
