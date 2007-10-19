@@ -7,6 +7,27 @@
  *
  * @section upgrading_09_10 1. Upgrading from 0.9.x to 1.0
  *
+ * Besides the changes detailed below, a major change is that the Stanza class now is an abstract
+ * base for more specialized Message, Presence, IQ and Subscription classes. Therefore, PresenceHandler,
+ * MessageHandler, SubscriptionHandler and IqHandler no longer take a Stanza* argument, but receive
+ * a pointer to the respective specialized class. For example:
+ *
+ * Old code:
+ * @code
+ * void MyClass::handlePresence( Stanza* stanza )
+ * {
+ *   // ...
+ * }
+ * @endcode
+ *
+ * New code:
+ * @code
+ * void MyClass::handlePresence( Presence* pres )
+ * {
+ *   // ...
+ * }
+ * @endcode
+ *
  * @subsection deprecated_10 1.1 Deprecated classes and functions
  *
  * @subsubsection func_MUCRoomHandler_handleMucMessage 1.1.1 MUCRoomHandler::handleMUCMessage( MUCRoom*, string, string, bool, string, bool ),
@@ -125,4 +146,10 @@
  *   // do something
  * }
  * @endcode
+ *
+ * @subsubsection func_createStanzas 1.2.5 Stanza::createMessageStanza(), Stanza::createPresenceStanza(),
+ * Stanza::createIqStanza(), Stanza::createSubscriptionStanza()
+ *
+ * These functions have been removed in favour of the more specialized classes Message, Presence, IQ,
+ * and Subscription.
  */
