@@ -42,6 +42,7 @@ namespace gloox
 
       /**
        * Constructs a new Nickname object.
+       * @param nick The nickname to include.
        */
       Nickname( const std::string& nick )
         : StanzaExtension( ExtNickname ), m_nick( nick )

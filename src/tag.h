@@ -83,7 +83,8 @@ namespace gloox
            * @param value The attribute's value.
            * @param xmlns The attribute's namespace.
            */
-          Attribute( const std::string& name, const std::string& value, const std::string& xmlns = EmptyString )
+          Attribute( const std::string& name, const std::string& value,
+                     const std::string& xmlns = EmptyString )
             : m_parent( 0 ), m_name( name ), m_value( value ), m_xmlns( xmlns )
             {}
 
