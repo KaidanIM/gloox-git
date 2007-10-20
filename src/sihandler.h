@@ -57,8 +57,9 @@ namespace gloox
       /**
        * This function is called to handle a request error or decline.
        * @param stanza The complete error stanza.
+       * @param sid The request's SID.
        */
-      virtual void handleSIRequestError( Stanza* stanza ) = 0;
+      virtual void handleSIRequestError( Stanza* stanza, const std::string& sid ) = 0;
 
   };
 

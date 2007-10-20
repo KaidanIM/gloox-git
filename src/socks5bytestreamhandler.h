@@ -79,7 +79,7 @@ namespace gloox
        * For example, if the remote entity does not implement SOCKS5 bytestreams.
        * @param stanza The error stanza.
        */
-      virtual void handleSOCKS5BytestreamError( Stanza* stanza ) = 0;
+      virtual void handleSOCKS5BytestreamError( Stanza* stanza, const std::string& sid ) = 0;
 
   };
 

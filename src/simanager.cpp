@@ -199,7 +199,7 @@ namespace gloox
           TrackMap::iterator it = m_track.find( stanza->id() );
           if( it != m_track.end() )
           {
-            (*it).second.sih->handleSIRequestError( stanza );
+            (*it).second.sih->handleSIRequestError( stanza, (*it).second.sid );
           }
           return true;
         }

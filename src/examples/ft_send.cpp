@@ -164,7 +164,7 @@ class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, SOCKS5
 //     {
 //     }
 
-    virtual void handleFTRequestError( Stanza* /*stanza*/ )
+    virtual void handleFTRequestError( Stanza* /*stanza*/, const std::string& /*sid*/ )
     {
       printf( "ft request error\n" );
       m_quit = true;

@@ -76,8 +76,9 @@ namespace gloox
       /**
        * This function is called to handle a request error or decline.
        * @param stanza The complete error stanza.
+       * @param sid The request's SID.
        */
-      virtual void handleFTRequestError( Stanza* stanza ) = 0;
+      virtual void handleFTRequestError( Stanza* stanza, const std::string& sid ) = 0;
 
       /**
        * This function is called to pass a negotiated SOCKS5 bytestream.

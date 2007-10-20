@@ -46,7 +46,7 @@ namespace gloox
       void removeIqHandler( const std::string& xmlns );
       virtual void handleSIRequestResult( const JID& from, const std::string& sid,
                                           Tag* si, Tag* ptag, Tag* fneg );
-      virtual void handleSIRequestError( Stanza* stanza );
+      virtual void handleSIRequestError( Stanza* stanza, const std::string& sid );
       virtual void handleSIRequest( const JID& from, const std::string& id, const std::string& profile,
                                     Tag* si, Tag* ptag, Tag* fneg );
       void setTest( int test );
@@ -81,7 +81,7 @@ namespace gloox
   void ClientBase::removeIqHandler( const std::string& /*xmlns*/ ) {}
   void ClientBase::handleSIRequestResult( const JID& /*from*/, const std::string& /*sid*/,
                                           Tag* /*si*/, Tag* /*ptag*/, Tag* /*fneg*/ ) {}
-  void ClientBase::handleSIRequestError( Stanza* /*stanza*/ ) {}
+  void ClientBase::handleSIRequestError( Stanza* /*stanza*/, const std::string& /*sid*/ ) {}
   void ClientBase::handleSIRequest( const JID& /*from*/, const std::string& /*id*/,
                                     const std::string& /*profile*/,
                                     Tag* /*si*/, Tag* /*ptag*/, Tag* /*fneg*/ ) {}

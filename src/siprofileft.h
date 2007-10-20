@@ -259,7 +259,7 @@ namespace gloox
                                           Tag* si, Tag* ptag, Tag* fneg );
 
       // re-implemented from SIHandler
-      virtual void handleSIRequestError( Stanza* stanza );
+      virtual void handleSIRequestError( Stanza* stanza, const std::string& sid );
 
       // re-implemented from SOCKS5BytestreamHandler
       virtual void handleIncomingSOCKS5BytestreamRequest( const std::string& sid, const JID& from );
@@ -271,7 +271,7 @@ namespace gloox
       virtual void handleOutgoingSOCKS5Bytestream( SOCKS5Bytestream *s5b );
 
       // re-implemented from SOCKS5BytestreamHandler
-      virtual void handleSOCKS5BytestreamError( Stanza* stanza );
+      virtual void handleSOCKS5BytestreamError( Stanza* stanza, const std::string& sid );
 
     private:
       ClientBase* m_parent;

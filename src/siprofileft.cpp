@@ -189,10 +189,10 @@ namespace gloox
 //       m_handler->handleFTRequestResult( from, sid );
   }
 
-  void SIProfileFT::handleSIRequestError( Stanza* stanza )
+  void SIProfileFT::handleSIRequestError( Stanza* stanza, const std::string& sid )
   {
     if( m_handler )
-      m_handler->handleFTRequestError( stanza );
+      m_handler->handleFTRequestError( stanza, sid );
   }
 
   void SIProfileFT::handleIncomingSOCKS5BytestreamRequest( const std::string& sid, const JID& /*from*/ )
@@ -213,10 +213,10 @@ namespace gloox
       m_handler->handleFTSOCKS5Bytestream( s5b );
   }
 
-  void SIProfileFT::handleSOCKS5BytestreamError( Stanza* stanza )
+  void SIProfileFT::handleSOCKS5BytestreamError( Stanza* stanza, const std::string& sid )
   {
     if( m_handler )
-      m_handler->handleFTRequestError( stanza );
+      m_handler->handleFTRequestError( stanza, sid );
   }
 
 }
