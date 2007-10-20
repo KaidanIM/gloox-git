@@ -178,7 +178,7 @@ namespace gloox
           TrackMap::iterator it = m_track.find( iq->id() );
           if( it != m_track.end() )
           {
-            (*it).second.sih->handleSIRequestError( iq );
+            (*it).second.sih->handleSIRequestError( iq, (*it).second.sid );
           }
         }
         break;

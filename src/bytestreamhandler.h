@@ -79,8 +79,9 @@ namespace gloox
        * Notifies the handler of errors occuring when a bytestream was requested.
        * For example, if the remote entity does not implement SOCKS5 bytestreams.
        * @param iq The error stanza.
+       * @param sid The request's SID.
        */
-      virtual void handleBytestreamError( IQ* iq ) = 0;
+      virtual void handleBytestreamError( IQ* iq, const std::string& sid ) = 0;
 
   };
 

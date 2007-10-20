@@ -179,7 +179,7 @@ namespace gloox
         break;
       }
       case IQ::Error:
-        m_socks5BytestreamHandler->handleBytestreamError( iq );
+        m_socks5BytestreamHandler->handleBytestreamError( iq, EmptyString );
         break;
       default:
         break;
@@ -340,7 +340,7 @@ namespace gloox
             break;
           }
           case IQ::Error:
-            m_socks5BytestreamHandler->handleBytestreamError( iq );
+            m_socks5BytestreamHandler->handleBytestreamError( iq, (*it).second );
             break;
           default:
             break;
@@ -359,7 +359,7 @@ namespace gloox
             break;
           }
           case IQ::Error:
-            m_socks5BytestreamHandler->handleBytestreamError( iq );
+            m_socks5BytestreamHandler->handleBytestreamError( iq, (*it).second );
             break;
           default:
             break;
