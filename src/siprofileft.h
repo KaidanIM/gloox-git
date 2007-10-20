@@ -193,8 +193,10 @@ namespace gloox
        * are not met.
        */
       const std::string requestFT( const JID& to, const std::string& name, long size,
-                                   const std::string& hash = EmptyString, const std::string& desc = EmptyString,
-                                   const std::string& date = EmptyString, const std::string& mimetype = EmptyString,
+                                   const std::string& hash = EmptyString,
+                                   const std::string& desc = EmptyString,
+                                   const std::string& date = EmptyString,
+                                   const std::string& mimetype = EmptyString,
                                    int streamTypes = FTTypeAll );
 
       /**
@@ -287,7 +289,7 @@ namespace gloox
                                           const Tag* fneg );
 
       // re-implemented from SIHandler
-      virtual void handleSIRequestError( IQ* iq );
+      virtual void handleSIRequestError( IQ* iq, const std::string& sid );
 
       // re-implemented from BytestreamHandler
       virtual void handleIncomingBytestreamRequest( const std::string& sid, const JID& from );
@@ -299,12 +301,12 @@ namespace gloox
       virtual void handleOutgoingBytestream( Bytestream* bs );
 
       // re-implemented from BytestreamHandler
-      virtual void handleBytestreamError( IQ* iq );
+      virtual void handleBytestreamError( IQ* iq, const std::string& sid );
 
-      //re-implemented from IqHandler
+      // re-implemented from IqHandler
       virtual bool handleIq( IQ* /*iq*/ ) { return false; }
 
-      //re-implemented from IqHandler
+      // re-implemented from IqHandler
       virtual void handleIqID( IQ* iq, int context );
 
     private:

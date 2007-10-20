@@ -261,10 +261,10 @@ namespace gloox
     }
   }
 
-  void SIProfileFT::handleSIRequestError( IQ* iq )
+  void SIProfileFT::handleSIRequestError( IQ* iq, const std::string& sid )
   {
     if( m_handler )
-      m_handler->handleFTRequestError( iq );
+      m_handler->handleFTRequestError( iq, sid );
   }
 
   void SIProfileFT::handleIncomingBytestreamRequest( const std::string& sid, const JID& /*from*/ )
@@ -285,10 +285,10 @@ namespace gloox
       m_handler->handleFTBytestream( bs );
   }
 
-  void SIProfileFT::handleBytestreamError( IQ* iq )
+  void SIProfileFT::handleBytestreamError( IQ* iq, const std::string& sid )
   {
     if( m_handler )
-      m_handler->handleFTRequestError( iq );
+      m_handler->handleFTRequestError( iq, sid );
   }
 
 }

@@ -166,7 +166,7 @@ class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, Bytest
 //     {
 //     }
 
-    virtual void handleFTRequestError( IQ* /*iq*/ )
+    virtual void handleFTRequestError( IQ* /*iq*/, const std::string& /*sid*/ )
     {
       printf( "ft request error\n" );
       m_quit = true;
