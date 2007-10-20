@@ -102,7 +102,7 @@ namespace gloox
     Tag* error = new Tag( iq, "error" );
     if( reason == NoValidStreams || reason == BadProfile )
     {
-      error->addAttribute( "error", "400" );
+      error->addAttribute( "code", "400" );
       error->addAttribute( "type", "cancel" );
       new Tag( error, "bad-request", "xmlns", XMLNS_XMPP_STANZAS );
       if( reason == NoValidStreams )
@@ -112,7 +112,7 @@ namespace gloox
     }
     else
     {
-      error->addAttribute( "error", "403" );
+      error->addAttribute( "code", "403" );
       error->addAttribute( "type", "cancel" );
       new Tag( error, "forbidden", "xmlns", XMLNS_XMPP_STANZAS );
       if( !text.empty() )
