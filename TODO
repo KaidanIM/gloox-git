@@ -18,7 +18,7 @@ for 1.0
   - testing
 - in FT, add Fast Mode:
     http://delta.affinix.com/specs/stream.html
-- comply with rfc3920bis/rfc3921bis (or current drafts), which icnludes at least:
+- comply with rfc3920bis/rfc3921bis (or current drafts), which includes at least:
   - 3.2: nameprep: set UseSTD3ASCIIRules to true
   - support optional binding of multiple resources
   - recognize <unknown-sender/> stanza error for multiple resource binding
@@ -28,7 +28,6 @@ for 1.0
   - handle roster get failures
 - more XPath
   - XPath stanza filter
-- unify error recognition (Error class)
 - check serverRaw() use (ClientBase::m_server)
 - ClientBase: Tag queueing?
 - comply with RFC2831, Section 7.2, i.e. escape SASL-special chars in usernames
@@ -37,6 +36,9 @@ for 1.0
 - don't inherit stanza from tag?
 - make clientbase a friend of iqhandler etc?
 - check Openfire/no-SSL + gloox. seems to cause problems after requesting the roster. -- not reproducible
+- add Tag::removeAttribute( string, string ) & removeAttribute( Attribute )
+- add Tag::removeChild( string )
+- add Attribute::xml() (protected/private?) and use it in Tag::xml()
 
 
 optional for 1.0:
