@@ -580,7 +580,7 @@ namespace gloox
     m_flags |= FlagFullyAnonymous;
   }
 
-  void MUCRoom::handleMessage( Message* msg, MessageSession * /*session*/ )
+  void MUCRoom::handleMessage( Message* msg, MessageSession* /*session*/ )
   {
     if( !m_roomHandler )
       return;
@@ -648,21 +648,19 @@ namespace gloox
       }
       else if( !msg->body().empty() )
       {
-        JID from;
         std::string when;
         bool privMsg = false;
         bool history = false;
-        if( ( x = msg->findChild( "x", XMLNS, XMLNS_X_DELAY ) ) != 0 )
+        if( msg->when() )
         {
-          from.setJID( x->findAttribute( "from" ) );
-          when = x->findAttribute( "when" );
+          when = msg->when()->stamp();
           history = true;
         }
         if( msg->subtype() & ( Message::Chat | Message::Normal ) )
           privMsg = true;
 
         m_roomHandler->handleMUCMessage( this, msg->from().resource(), msg->body(),
-                                          history, when, privMsg );
+                                         history, when, privMsg );
         m_roomHandler->handleMUCMessage( this, *msg, privMsg );
       }
     }
