@@ -370,28 +370,16 @@ namespace gloox
       const std::string cdata() const;
 
       /**
-       * Use this function to manipulate the list of attributes.
-       * @return A reference to the list of attributes.
-       */
-      AttributeList& attributes() { return *m_attribs; }
-
-      /**
        * Use this function to fetch a const list of attributes.
        * @return A constant reference to the list of attributes.
        */
-      const AttributeList& attributes() const { return *m_attribs; }
-
-      /**
-       * Use this function to manipulate the list of child elements.
-       * @return A reference to the list of child elements.
-       */
-      TagList& children() { return *m_children; }
+      const AttributeList& attributes() const;
 
       /**
        * Use this function to fetch a const list of child elements.
        * @return A constant reference to the list of child elements.
        */
-      const TagList& children() const { return *m_children; }
+      const TagList& children() const;
 
       /**
        * This function can be used to retrieve the value of a Tag's attribute.
@@ -412,7 +400,7 @@ namespace gloox
        * This function finds and returns the @b first element within the child elements of the current tag
        * that has a matching tag name.
        * @param name The name of the element to search for.
-       * @return The found Tag, or NULL.
+       * @return The found Tag, or 0.
        */
       Tag* findChild( const std::string& name ) const;
 
@@ -422,7 +410,7 @@ namespace gloox
        * @param name The name of the element to search for.
        * @param attr The name of the attribute of the child element.
        * @param value The value of the attribute of the child element.
-       * @return The found Tag, or NULL.
+       * @return The found Tag, or 0.
        */
       Tag* findChild( const std::string& name, const std::string& attr,
                       const std::string& value = EmptyString ) const;
@@ -435,16 +423,15 @@ namespace gloox
        * @param value The value of the attribute of the child element.
        * @return @b True if the given child element exists, @b false otherwise.
        */
-      inline bool hasChild( const std::string& name, const std::string& attr = EmptyString,
-                            const std::string& value = EmptyString ) const
-        { return findChild( name, attr, value ) ? true : false; }
+      bool hasChild( const std::string& name, const std::string& attr = EmptyString,
+                     const std::string& value = EmptyString ) const;
 
       /**
        * This function checks whether the Tag has a child element which posesses a given attribute
        * with an optional value. The name of the child element does not matter.
        * @param attr The name of the attribute of the child element.
        * @param value The value of the attribute of the child element.
-       * @return The child if found, NULL otherwise.
+       * @return The child if found, 0 otherwise.
        */
       Tag* findChildWithAttrib( const std::string& attr, const std::string& value = EmptyString ) const;
 
@@ -456,7 +443,7 @@ namespace gloox
        * @return @b True if any such child element exists, @b false otherwise.
        */
       inline bool hasChildWithAttrib( const std::string& attr,
-                                              const std::string& value = EmptyString ) const
+                                      const std::string& value = EmptyString ) const
         { return findChildWithAttrib( attr, value ) ? true : false; }
 
       /**
