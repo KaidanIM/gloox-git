@@ -101,7 +101,7 @@ namespace gloox
       MessageFilter( MessageSession *parent );
       virtual ~MessageFilter();
       void attachTo( MessageSession *session );
-      virtual void decorate( Message& msg );
+      virtual void decorate( Message* msg );
       void send( Message* msg );
     protected:
       MessageSession *m_parent;
@@ -110,8 +110,8 @@ namespace gloox
   MessageFilter::MessageFilter( MessageSession *parent ) : m_parent( parent ) {}
   MessageFilter::~MessageFilter() { delete m_parent; }
   void MessageFilter::attachTo( MessageSession *session ) {}
-  void MessageFilter::decorate( Message& msg ) {}
-  void MessageFilter::send( Message* msg ) { m_parent->send( msg ); }
+  void MessageFilter::decorate( Message* msg ) {}
+  void MessageFilter::send( Message* msg ) { m_parent->send( msg ); delete msg; }
 }
 
 #define MESSAGEFILTER_H__

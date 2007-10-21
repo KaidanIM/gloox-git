@@ -73,9 +73,9 @@ namespace gloox
       m_statisticsHandler( 0 ), m_mucInvitationHandler( 0 ),
       m_messageSessionHandlerChat( 0 ), m_messageSessionHandlerGroupchat( 0 ),
       m_messageSessionHandlerHeadline( 0 ), m_messageSessionHandlerNormal( 0 ),
-      m_parser( this ), m_authError( AuthErrorUndefined ), m_streamError( StreamErrorUndefined ),
-      m_streamErrorAppCondition( 0 ), m_selectedSaslMech( SaslMechNone ),
-      m_idCount( 0 ), m_autoMessageSession( false )
+      m_parser( this ), m_seFactory( 0 ), m_authError( AuthErrorUndefined ),
+      m_streamError( StreamErrorUndefined ), m_streamErrorAppCondition( 0 ),
+      m_selectedSaslMech( SaslMechNone ), m_idCount( 0 ), m_autoMessageSession( false )
   {
     init();
   }
@@ -90,9 +90,9 @@ namespace gloox
       m_statisticsHandler( 0 ), m_mucInvitationHandler( 0 ),
       m_messageSessionHandlerChat( 0 ), m_messageSessionHandlerGroupchat( 0 ),
       m_messageSessionHandlerHeadline( 0 ), m_messageSessionHandlerNormal( 0 ),
-      m_parser( this ), m_authError( AuthErrorUndefined ), m_streamError( StreamErrorUndefined ),
-      m_streamErrorAppCondition( 0 ), m_selectedSaslMech( SaslMechNone ),
-      m_idCount( 0 ), m_autoMessageSession( false )
+      m_parser( this ), m_seFactory( 0 ), m_authError( AuthErrorUndefined ),
+      m_streamError( StreamErrorUndefined ), m_streamErrorAppCondition( 0 ),
+      m_selectedSaslMech( SaslMechNone ), m_idCount( 0 ), m_autoMessageSession( false )
   {
     init();
   }
@@ -105,7 +105,9 @@ namespace gloox
       m_disco->setVersion( "based on gloox", GLOOX_VERSION );
     }
 
-    m_seFactory = new StanzaExtensionFactory();
+    if( !m_seFactory )
+      m_seFactory = new StanzaExtensionFactory();
+
     m_streamError = StreamErrorUndefined;
     m_block = false;
     memset( &m_stats, 0, sizeof( m_stats ) );
