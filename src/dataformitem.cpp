@@ -27,7 +27,7 @@ namespace gloox
     if( tag->name() != "item" )
       return;
 
-    TagList &l = tag->children();
+    const TagList &l = tag->children();
     TagList::const_iterator it = l.begin();
     for( ; it != l.end(); ++it )
     {
