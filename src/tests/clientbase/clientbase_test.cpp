@@ -23,6 +23,7 @@ class ClientBaseTest : public ClientBase, /*LogHandler,*/ ConnectionListener
 //       logInstance().registerLogHandler( LogLevelDebug, LogAreaAll, this );
       registerConnectionListener( this );
     }
+    virtual ~ClientBaseTest() {}
     virtual void handleStartNode() { m_handleStartNodeCalled = true; }
     virtual bool handleNormalNode(gloox::Tag*) { return true; }
     virtual void rosterFilled() {}

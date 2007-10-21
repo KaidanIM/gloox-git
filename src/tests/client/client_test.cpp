@@ -20,6 +20,7 @@ class ClientTest : public Client, /*LogHandler,*/ ConnectionListener
 //       logInstance().registerLogHandler( LogLevelDebug, LogAreaAll, this );
       registerConnectionListener( this );
     }
+    virtual ~ClientTest() {}
 //     virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
 //     {
 //       printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
