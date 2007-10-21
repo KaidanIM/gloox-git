@@ -151,14 +151,25 @@
  * }
  * @endcode
  *
- * @subsubsection func_createStanzas 1.2.5 Stanza::createMessageStanza(), Stanza::createPresenceStanza(), Stanza::createIqStanza(), Stanza::createSubscriptionStanza()
+ * @subsubsection func_Tag_attributes 1.2.5 Tag::attributes() (non-const)
+ *
+ * This function has been removed. Use the const version instead. To delete an attribute,
+ * use the new @link gloox::Tag::removeAttribute() removeAttribute() @endlink.
+ *
+ * @subsubsection func_Tag_attributes 1.2.6 Tag::children() (non-const)
+ *
+ * This function has been removed. Use the const version instead. To delete a child element,
+ * use @link gloox::Tag::removeChild() removeChild() @endlink.
+ *
+ * @subsubsection func_createStanzas 1.2.7 Stanza::createMessageStanza(), Stanza::createPresenceStanza(), Stanza::createIqStanza(), Stanza::createSubscriptionStanza()
  *
  * These functions have been removed in favour of the more specialized classes
  * @link gloox::Message Message @endlink, @link gloox::Presence Presence @endlink,
  * @link gloox::IQ IQ @endlink, and @link gloox::Subscription Subscription @endlink.
  *
- * @subsubsection class_InBandBytestreamManager 1.2.6 InBandBytestreamManager
+ * @subsubsection class_InBandBytestreamManager 1.2.8 InBandBytestreamManager
  *
  * The Message-based Inband Bytestream implementation has been removed in favour of an IQ-based one.
  * Also, Inband Bytestreams are now handled by @link gloox::SIProfileFT SIProfileFT @endlink.
+ *
  */
