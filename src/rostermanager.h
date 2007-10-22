@@ -79,7 +79,8 @@ namespace gloox
        * @param groups A list of groups the contact belongs to.
        * @param msg A message sent along with the request.
        */
-      void subscribe( const JID& jid, const std::string& name = EmptyString, const StringList& groups = StringList(),
+      void subscribe( const JID& jid, const std::string& name = EmptyString,
+                      const StringList& groups = StringList(),
                       const std::string& msg = EmptyString );
 
       /**
