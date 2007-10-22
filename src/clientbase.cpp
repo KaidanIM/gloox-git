@@ -596,7 +596,7 @@ namespace gloox
       m_authError = SaslTemporaryAuthFailure;
   }
 
-  void ClientBase::send( const Tag* tag )
+  void ClientBase::send( Tag* tag )
   {
     if( !tag )
       return;
