@@ -79,7 +79,9 @@ namespace gloox
 
   void MessageSession::send( const Message* msg )
   {
-    m_parent->send( msg );
+    // FIXME temporary build fix due to non const send argument
+    m_parent->send( msg->clone() );
+    delete msg;
   }
 
   void MessageSession::decorate( Message* msg )
