@@ -117,7 +117,8 @@ namespace gloox
         {
           (*it).second->handleVCardResult( (VCardHandler::VCardContext)context,
                                            iq->from(),
-                                           iq->error() ? iq->error()->error() : 0 );
+                                           iq->error() ? iq->error()->error()
+                                                       : StanzaErrorUndefined );
           break;
         }
         default:
