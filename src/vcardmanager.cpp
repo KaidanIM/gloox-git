@@ -116,7 +116,8 @@ namespace gloox
         case IQ::Error:
         {
           (*it).second->handleVCardResult( (VCardHandler::VCardContext)context,
-                                                   iq->from(), iq->error()->error() );
+                                           iq->from(),
+                                           iq->error() ? iq->error()->error() : 0 );
           break;
         }
         default:
