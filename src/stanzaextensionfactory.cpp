@@ -33,6 +33,9 @@ namespace gloox
 
   void StanzaExtensionFactory::registerExtension( StanzaExtension* ext )
   {
+    if( !ext )
+      return;
+
     SEList::iterator it = m_extensions.begin();
     for( ; it != m_extensions.end(); ++it )
     {
