@@ -233,7 +233,7 @@ namespace gloox
        * it after sending it, use Tag::clone() to create a deep copy.
        * @param tag The Tag to send.
        */
-      void send( const Tag* tag );
+      void send( Tag* tag );
 
       /**
        * Returns whether authentication has taken place and was successful.
