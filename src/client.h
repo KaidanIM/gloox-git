@@ -198,7 +198,8 @@ namespace gloox
        * @param status An optional message describing the presence state.
        * @since 0.9
        */
-      void setPresence( Presence::PresenceType presence, int priority, const std::string& status = EmptyString )
+      void setPresence( Presence::PresenceType presence, int priority,
+                        const std::string& status = EmptyString )
         { setPresence( JID(), presence, priority, status ); }
 
       /**
