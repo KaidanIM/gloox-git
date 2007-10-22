@@ -28,26 +28,27 @@ namespace gloox
    */
   enum StanzaExtensionType
   {
-    ExtNone                =     1, /**< Invalid StanzaExtension. */
-    ExtVCardUpdate         =     2, /**< Extension in the vcard-temp:x:update namespace, advertising
+    ExtNone                = 1<< 1, /**< Invalid StanzaExtension. */
+    ExtVCardUpdate         = 1<< 2, /**< Extension in the vcard-temp:x:update namespace, advertising
                                      * a user avatar's SHA1 hash (XEP-0153). */
-    ExtOOB                 =     4, /**< An extension in the jabber:iq:oob or jabber:x:oob namespaces
+    ExtOOB                 = 1<< 3, /**< An extension in the jabber:iq:oob or jabber:x:oob namespaces
                                      * (XEP-0066). */
-    ExtGPGSigned           =     8, /**< An extension containing a GPG/PGP signature (XEP-0027). */
-    ExtGPGEncrypted        =    16, /**< An extension containing a GPG/PGP encrypted message (XEP-0027). */
-    ExtReceipt             =    32, /**< An extension containing a Message Receipt/Request (XEP-0184). */
-    ExtDelay               =    64, /**< An extension containing notice of delayed delivery (XEP-0203
+    ExtGPGSigned           = 1<< 4, /**< An extension containing a GPG/PGP signature (XEP-0027). */
+    ExtGPGEncrypted        = 1<< 5, /**< An extension containing a GPG/PGP encrypted message (XEP-0027). */
+    ExtReceipt             = 1<< 6, /**< An extension containing a Message Receipt/Request (XEP-0184). */
+    ExtDelay               = 1<< 7, /**< An extension containing notice of delayed delivery (XEP-0203
                                      * & XEP-0091). */
-    ExtAMP                 =   128, /**< An extension containing advanced message processing rules
+    ExtAMP                 = 1<< 8, /**< An extension containing advanced message processing rules
                                      * (XEP-0079). */
-    ExtError               =   256, /**< An extension containing an error. */
-    ExtCaps                =   512, /**< An extension containing Entity Capabilities (XEP-0115). */
-    ExtChatState           =  1024, /**< An extension containing a chat state (XEP-0085). */
-    ExtMessageEvent        =  2048, /**< An extension containing a message event (XEP-0022). */
-    ExtDataForm            =  4096, /**< An extension containing a Data Form (XEP-0004). */
-    ExtNickname            =  8192, /**< An extension containing a User Nickname (XEP-0172). */
-    ExtResourceBind        = 16384, /**< A resource bind SE (RFC3921). */
-    ExtUser                = 32768  /**< User-supplied extensions must use IDs above this. Do not
+    ExtError               = 1<< 9, /**< An extension containing an error. */
+    ExtCaps                = 1<<10, /**< An extension containing Entity Capabilities (XEP-0115). */
+    ExtChatState           = 1<<11, /**< An extension containing a chat state (XEP-0085). */
+    ExtMessageEvent        = 1<<12, /**< An extension containing a message event (XEP-0022). */
+    ExtDataForm            = 1<<13, /**< An extension containing a Data Form (XEP-0004). */
+    ExtNickname            = 1<<14, /**< An extension containing a User Nickname (XEP-0172). */
+    ExtResourceBind        = 1<<15, /**< A resource bind SE (RFC3921). */
+    ExtVersion             = 1<<16, /**< An extension containing a Version request/reply (XEP-0092). */
+    ExtUser                = 1<<17  /**< User-supplied extensions must use IDs above this. Do not
                                       * hard-code ExtUser's value anywhere, it is subject to change. */
   };
 
