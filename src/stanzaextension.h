@@ -46,7 +46,8 @@ namespace gloox
     ExtMessageEvent        =  2048, /**< An extension containing a message event (XEP-0022). */
     ExtDataForm            =  4096, /**< An extension containing a Data Form (XEP-0004). */
     ExtNickname            =  8192, /**< An extension containing a User Nickname (XEP-0172). */
-    ExtUser                = 16384  /**< User-supplied extensions must use IDs above this. Do not
+    ExtResourceBind        = 16384, /**< A resource bind SE (RFC3921). */
+    ExtUser                = 32768  /**< User-supplied extensions must use IDs above this. Do not
                                       * hard-code ExtUser's value anywhere, it is subject to change. */
   };
 
