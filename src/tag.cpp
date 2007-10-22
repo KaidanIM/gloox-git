@@ -489,22 +489,17 @@ namespace gloox
 
   const std::string& Tag::xmlns( const std::string& prefix ) const
   {
-    if( !prefix.empty() )
+    if( prefix.empty() )
+      return m_xmlns;
+
+    if( m_xmlnss )
     {
-      if( m_xmlnss )
-      {
-        StringMap::const_iterator it = m_xmlnss->find( prefix );
-        if( it != m_xmlnss->end() )
-          return (*it).second;
-      }
-
-      if( m_parent )
-        return m_parent->xmlns( prefix );
-
-      return EmptyString;
+      StringMap::const_iterator it = m_xmlnss->find( prefix );
+      if( it != m_xmlnss->end() )
+        return (*it).second;
     }
 
-    return m_xmlns;
+    return m_parent ? m_parent->xmlns( prefix ) : EmptyString;
   }
 
   const std::string& Tag::prefix( const std::string& xmlns ) const
