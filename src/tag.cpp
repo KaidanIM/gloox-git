@@ -608,20 +608,18 @@ namespace gloox
     {
       t->m_attribs = new AttributeList();
       Tag::AttributeList::const_iterator at = m_attribs->begin();
+      Attribute* attr;
       for( ; at != m_attribs->end(); ++at )
       {
-        t->m_attribs->push_back( new Attribute( *(*at) ) );
+        attr = new Attribute( *(*at) );
+        attr->m_parent = t;
+        t->m_attribs->push_back( attr );
       }
     }
 
     if( m_xmlnss )
     {
-      t->m_xmlnss = new StringMap();
-      StringMap::const_iterator sm = m_xmlnss->begin();
-      for( ; sm != m_xmlnss->end(); ++sm )
-      {
-        t->m_xmlnss->insert( std::make_pair( (*sm).first, (*sm).second ) );
-      }
+      t->m_xmlnss = new StringMap( *m_xmlnss );
     }
 
     if( m_nodes )
