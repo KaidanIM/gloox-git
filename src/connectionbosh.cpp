@@ -100,10 +100,8 @@ namespace gloox
       return 0;
     }
 
-    ConnectionBOSH* pNewConnection = new ConnectionBOSH( m_handler, pBaseConn, m_logInstance, m_boshHost,
-                                                         m_server, m_port );
-
-    return pNewConnection;
+    return new ConnectionBOSH( m_handler, pBaseConn, m_logInstance,
+                               m_boshHost, m_server, m_port );
   }
 
   ConnectionError ConnectionBOSH::connect()
