@@ -96,16 +96,21 @@ namespace gloox
   }
 
   Tag::Tag( Tag* tag )
-    : m_parent( 0 ),
-      m_children( tag->m_children ),
-      m_cdata( tag->m_cdata ),
-      m_attribs( tag->m_attribs ),
-      m_nodes( tag->m_nodes ),
-      m_name( tag->m_name ),
-      m_xmlns( tag->m_xmlns ),
-      m_xmlnss( tag->m_xmlnss ),
-      m_valid( tag->m_valid )
+    : m_parent( 0 ), m_children( 0 ), m_cdata( 0 ), m_attribs( 0 ),
+      m_nodes( 0 ), m_xmlnss( 0 ), m_valid( false )
   {
+    if( !tag )
+      return;
+
+    m_children = tag->m_children;
+    m_cdata = tag->m_cdata;
+    m_attribs = tag->m_attribs;
+    m_nodes = tag->m_nodes;
+    m_name = tag->m_name;
+    m_xmlns = tag->m_xmlns;
+    m_xmlnss = tag->m_xmlnss;
+    m_valid = tag->m_valid;
+
     tag->m_nodes = 0;
     tag->m_cdata = 0;
     tag->m_attribs = 0;
