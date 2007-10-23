@@ -390,9 +390,7 @@ namespace gloox
 
   void ClientBase::startTls()
   {
-    Tag* start = new Tag( "starttls" );
-    start->addAttribute( XMLNS, XMLNS_STREAM_TLS );
-    send( start );
+    send( new Tag( "starttls", XMLNS, XMLNS_STREAM_TLS ) );
   }
 
   void ClientBase::setServer( const std::string &server )
