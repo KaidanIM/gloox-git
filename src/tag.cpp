@@ -71,7 +71,9 @@ namespace gloox
     m_valid = !m_name.empty();
   }
 
-  Tag::Tag( const std::string& name, const std::string& attrib, const std::string& value )
+  Tag::Tag( const std::string& name,
+            const std::string& attrib,
+            const std::string& value )
     : m_parent( 0 ), m_children( 0 ), m_cdata( 0 ),
       m_attribs( 0 ), m_nodes( 0 ),
       m_name( name ), m_xmlnss( 0 ), m_valid( true )
@@ -80,7 +82,9 @@ namespace gloox
     m_valid = !m_name.empty();
   }
 
-  Tag::Tag( Tag* parent, const std::string& name, const std::string&  attrib, const std::string& value )
+  Tag::Tag( Tag* parent, const std::string& name,
+                         const std::string& attrib,
+                         const std::string& value )
     : m_parent( parent ), m_children( 0 ), m_cdata( 0 ),
       m_attribs( 0 ), m_nodes( 0 ),
       m_name( name ), m_xmlnss( 0 ), m_valid( true )
@@ -92,26 +96,35 @@ namespace gloox
   }
 
   Tag::Tag( Tag* tag )
-    : m_parent( 0 ), m_children( 0 ), m_cdata( 0 ), m_attribs( 0 ), m_nodes( 0 ), m_xmlnss( 0 )
+    : m_parent( 0 ),
+      m_children( tag->m_children ),
+      m_cdata( tag->m_cdata ),
+      m_attribs( tag->m_attribs ),
+      m_nodes( tag->m_nodes ),
+      m_name( tag->m_name ),
+      m_xmlns( tag->m_xmlns ),
+      m_xmlnss( tag->m_xmlnss ),
+      m_valid( tag->m_valid )
   {
-    m_nodes = tag->m_nodes;
     tag->m_nodes = 0;
-
-    m_cdata = tag->m_cdata;
     tag->m_cdata = 0;
-
-    m_attribs = tag->m_attribs;
     tag->m_attribs = 0;
-
-    m_children = tag->m_children;
     tag->m_children = 0;
-
-    m_xmlnss = tag->m_xmlnss;
     tag->m_xmlnss = 0;
 
-    m_name = tag->m_name;
-    m_valid = tag->m_valid;
-    m_xmlns = tag->m_xmlns;
+    if( m_attribs )
+    {
+      AttributeList::iterator it = m_attribs->begin();
+      while( it != m_attribs->end() )
+        (*it++)->m_parent = this;
+    }
+
+    if( m_children )
+    {
+      TagList::iterator it = m_children->begin();
+      while( it != m_children->end() )
+        (*it++)->m_parent = this;
+    }
   }
 
   Tag::~Tag()
@@ -124,11 +137,13 @@ namespace gloox
       util::clearList( *m_children );
     if( m_nodes )
       util::clearList( *m_nodes );
+
     delete m_cdata;
     delete m_attribs;
     delete m_children;
     delete m_nodes;
     delete m_xmlnss;
+
     m_parent = 0;
   }
 
