@@ -35,14 +35,14 @@ namespace gloox
     const TagList& c = tag->findTagList( "/presence/status" );
     TagList::const_iterator it = c.begin();
     for( ; it != c.end(); ++it )
-      setLang( m_stati, m_status, (*it) );
+      setLang( &m_stati, m_status, (*it) );
   }
 
   Subscription::Subscription( S10nType type, const JID& to, const std::string& status,
                               const std::string& xmllang, const JID& from )
     : Stanza( to, from ), m_subtype( type ), m_stati( 0 )
   {
-    setLang( m_stati, m_status, status, xmllang );
+    setLang( &m_stati, m_status, status, xmllang );
   }
 
   Subscription::~Subscription()

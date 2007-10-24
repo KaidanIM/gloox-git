@@ -57,7 +57,7 @@ namespace gloox
     for( ; it != c.end(); ++it )
     {
       if( (*it)->name() == "status" )
-        setLang( m_stati, m_status, (*it) );
+        setLang( &m_stati, m_status, (*it) );
       else if( (*it)->name() == "priority" )
         m_priority = atoi( (*it)->cdata().c_str() );
     }
@@ -67,7 +67,7 @@ namespace gloox
                       int priority, const std::string& xmllang, const JID& from )
     : Stanza( to, from ), m_subtype( type ), m_stati( 0 )
   {
-    setLang( m_stati, m_status, status, xmllang );
+    setLang( &m_stati, m_status, status, xmllang );
 
     if( priority < -128 )
       m_priority = -128;
