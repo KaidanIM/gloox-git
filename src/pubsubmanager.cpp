@@ -162,6 +162,7 @@ namespace gloox
 
     void Manager::handleMessage( Message* msg, MessageSession* )
     {
+      /* Temporarily comment handleMessage until i can retrieve events w/o tag
       const Tag* event = msg->findChild( "event", XMLNS, XMLNS_PUBSUB_EVENT );
       if( !event || m_eventHandlerList.empty() )
         return;
@@ -231,6 +232,7 @@ namespace gloox
           }
         }
       }
+      */
     }
 
     void Manager::subscriptionOptions( const JID& service,
@@ -243,15 +245,14 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      IQ* iq = new IQ( IQ::Get, service, id, XMLNS_PUBSUB, "pubsub" );
-      Tag* options = new Tag( iq->query(), "options", "node", node );
+      IQ iq( IQ::Get, service, id, XMLNS_PUBSUB, "pubsub" );
+      Tag* options = new Tag( iq.query(), "options", "node", node );
       options->addAttribute( "jid", jid ? jid.bare() : m_parent->jid().bare() );
       if( df )
         options->addChild( df->tag() );
 
-      m_parent->trackID( this, id, df ? SetSubscriptionOptions : GetSubscriptionOptions );
       m_nodeHandlerTrackMap[id] = handler;
-      m_parent->send( iq );
+      m_parent->send( iq, this, df ? SetSubscriptionOptions : GetSubscriptionOptions );
     }
 
     void Manager::requestSubscriptionList( const JID& service, ServiceHandler* handler )
@@ -260,12 +261,11 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      IQ* iq = new IQ( IQ::Get, service, id, XMLNS_PUBSUB, "pubsub" );
-      new Tag( iq->query(), "subscriptions" );
+      IQ iq( IQ::Get, service, id, XMLNS_PUBSUB, "pubsub" );
+      new Tag( iq.query(), "subscriptions" );
 
-      m_parent->trackID( this, id, GetSubscriptionList );
       m_serviceHandlerTrackMap[id] = handler;
-      m_parent->send( iq );
+      m_parent->send( iq, this, GetSubscriptionList );
     }
 
     void Manager::requestAffiliationList( const JID& service, ServiceHandler* handler )
@@ -274,12 +274,11 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      IQ* iq = new IQ( IQ::Get, service, id, XMLNS_PUBSUB, "pubsub" );
-      new Tag( iq->query(), "affiliations" );
+      IQ iq( IQ::Get, service, id, XMLNS_PUBSUB, "pubsub" );
+      new Tag( iq.query(), "affiliations" );
 
-      m_parent->trackID( this, id, GetAffiliationList );
       m_serviceHandlerTrackMap[id] = handler;
-      m_parent->send( iq );
+      m_parent->send( iq, this, GetAffiliationList );
     }
 
     void Manager::subscribe( const JID& service,
@@ -293,8 +292,8 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      IQ* iq = new IQ( IQ::Set, service, id, XMLNS_PUBSUB, "pubsub" );
-      Tag* ps = iq->query();
+      IQ iq( IQ::Set, service, id, XMLNS_PUBSUB, "pubsub" );
+      Tag* ps = iq.query();
       Tag* sub = new Tag( ps, "subscribe", "node", node );
       sub->addAttribute( "jid", jid ? jid.full() : m_parent->jid().full() );
 
@@ -318,10 +317,9 @@ namespace gloox
         options->addChild( df.tag() );
       }
 
-      m_parent->trackID( this, id, Subscription );
       m_nodeHandlerTrackMap[id] = handler;
       m_nopTrackMap[id] = node;
-      m_parent->send( iq );
+      m_parent->send( iq, this, Subscription);
     }
 
     void Manager::unsubscribe( const JID& service,
@@ -334,14 +332,13 @@ namespace gloox
 
       const std::string& id = m_parent->getID();
       const std::string& ujid = jid ? jid.full() : m_parent->jid().full();
-      IQ* iq = new IQ( IQ::Set, service, id, XMLNS_PUBSUB, "pubsub" );
-      Tag* sub = new Tag( iq->query(), "unsubscribe", "node", node );
+      IQ iq( IQ::Set, service, id, XMLNS_PUBSUB, "pubsub" );
+      Tag* sub = new Tag( iq.query(), "unsubscribe", "node", node );
       sub->addAttribute( "jid", ujid );
 
-      m_parent->trackID( this, id, Unsubscription );
       m_nodeHandlerTrackMap[id] = handler;
       // need to track info for handler
-      m_parent->send( iq );
+      m_parent->send( iq, this, Unsubscription );
     }
 
     void Manager::publishItem( const JID& service, const std::string& node,
@@ -354,14 +351,13 @@ namespace gloox
       }
 
       const std::string& id = m_parent->getID();
-      IQ* iq = new IQ( IQ::Set, service, id, XMLNS_PUBSUB, "pubsub" );
-      Tag* publish = new Tag( iq->query(), "publish", "node", node );
+      IQ iq( IQ::Set, service, id, XMLNS_PUBSUB, "pubsub" );
+      Tag* publish = new Tag( iq.query(), "publish", "node", node );
       publish->addChild( item );
 
-      m_parent->trackID( this, id, PublishItem );
       m_iopTrackMap[id] = std::make_pair( node, item->findAttribute( "id" ) );
       m_itemHandlerTrackMap[id] = handler;
-      m_parent->send( iq );
+      m_parent->send( iq, this, PublishItem );
     }
 
     void Manager::deleteItem( const JID& service, const std::string& node,
@@ -371,14 +367,13 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      IQ* iq = new IQ( IQ::Set, service, id, XMLNS_PUBSUB, "pubsub" );
-      Tag* retract = new Tag( iq->query(), "retract", "node", node );
+      IQ iq( IQ::Set, service, id, XMLNS_PUBSUB, "pubsub" );
+      Tag* retract = new Tag( iq.query(), "retract", "node", node );
       new Tag( retract, "item", "id", item );
 
-      m_parent->trackID( this, id, DeleteItem );
       m_iopTrackMap[id] = TrackedItem( node, item );
       m_itemHandlerTrackMap[id] = handler;
-      m_parent->send( iq );
+      m_parent->send( iq, this, DeleteItem );
     }
 
     void Manager::createNode( NodeType type,
@@ -402,8 +397,8 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      IQ* iq = new IQ( IQ::Set, service, id, XMLNS_PUBSUB, "pubsub" );
-      Tag* pubsub = iq->query();
+      IQ iq( IQ::Set, service, id, XMLNS_PUBSUB, "pubsub" );
+      Tag* pubsub = iq.query();
       new Tag( pubsub, "create", "node", node );
       Tag* configure = new Tag( pubsub, "configure" );
 
@@ -433,10 +428,9 @@ namespace gloox
         configure->addChild( df.tag() );
       }
 
-      m_parent->trackID( this, id, CreateNode );
       m_nopTrackMap[id] = node;
       m_nodeHandlerTrackMap[id] = handler;
-      m_parent->send( iq );
+      m_parent->send( iq, this, CreateNode );
     }
 
     void Manager::deleteNode( const JID& service, const std::string& node, NodeHandler* handler )
@@ -445,13 +439,12 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      IQ* iq = new IQ( IQ::Set, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
-      new Tag( iq->query(), "delete", "node", node );
+      IQ iq( IQ::Set, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
+      new Tag( iq.query(), "delete", "node", node );
 
-      m_parent->trackID( this, id, DeleteNode );
       m_nopTrackMap[id] = node;
       m_nodeHandlerTrackMap[id] = handler;
-      m_parent->send( iq );
+      m_parent->send( iq, this, DeleteNode );
     }
 
     void Manager::getDefaultNodeConfig( const JID& service, NodeType type, ServiceHandler* handler )
@@ -460,8 +453,8 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      IQ* iq = new IQ( IQ::Set, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
-      Tag* def = new Tag( iq->query(), "default" );
+      IQ iq( IQ::Set, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
+      Tag* def = new Tag( iq.query(), "default" );
       if( type == NodeCollection )
       {
         DataForm df( TypeSubmit );
@@ -470,9 +463,8 @@ namespace gloox
         def->addChild( df.tag() );
       }
 
-      m_parent->trackID( this, id, DefaultNodeConfig );
       m_serviceHandlerTrackMap[id] = handler;
-      m_parent->send( iq );
+      m_parent->send( iq, this, DefaultNodeConfig );
     }
 
     void Manager::nodeConfig( const JID& service, const std::string& node,
@@ -482,14 +474,13 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      IQ* iq = new IQ( config ? IQ::Set : IQ::Get, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
-      Tag* sub = new Tag( iq->query(), "configure", "node", node );
+      IQ iq( config ? IQ::Set : IQ::Get, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
+      Tag* sub = new Tag( iq.query(), "configure", "node", node );
       if( config )
         sub->addChild( config->tag() );
 
-      m_parent->trackID( this, id, config ? SetNodeConfig : GetNodeConfig );
       m_nodeHandlerTrackMap[id] = handler;
-      m_parent->send( iq );
+      m_parent->send( iq, this, config ? SetNodeConfig : GetNodeConfig );
     }
 
     void Manager::subscriberList( const JID& service,
@@ -501,8 +492,8 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      IQ* iq = new IQ( list ? IQ::Set : IQ::Get, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
-      Tag* sub = new Tag( iq->query(), "subscriptions", "node", node );
+      IQ iq( list ? IQ::Set : IQ::Get, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
+      Tag* sub = new Tag( iq.query(), "subscriptions", "node", node );
       if( list )
       {
         Tag* s;
@@ -517,9 +508,8 @@ namespace gloox
         m_nopTrackMap[id] = node;
       }
 
-      m_parent->trackID( this, id, list ? SetSubscriberList : GetSubscriberList );
       m_nodeHandlerTrackMap[id] = handler;
-      m_parent->send( iq );
+      m_parent->send( iq, this, list ? SetSubscriberList : GetSubscriberList );
     }
 
     void Manager::affiliateList( const JID& service,
@@ -531,8 +521,8 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      IQ* iq = new IQ( list ? IQ::Set : IQ::Get, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
-      Tag* aff = new Tag( iq->query(), "affiliations", "node", node );
+      IQ iq( list ? IQ::Set : IQ::Get, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
+      Tag* aff = new Tag( iq.query(), "affiliations", "node", node );
       if( list )
       {
         Tag* a;
@@ -545,9 +535,8 @@ namespace gloox
         m_nopTrackMap[id] = node;
       }
 
-      m_parent->trackID( this, id, list ? SetAffiliateList : GetAffiliateList );
       m_nodeHandlerTrackMap[id] = handler;
-      m_parent->send( iq );
+      m_parent->send( iq, this, list ? SetAffiliateList : GetAffiliateList );
     }
 
     void Manager::requestItems( const JID& service,
@@ -558,12 +547,11 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      IQ* iq = new IQ( IQ::Get, service, id, XMLNS_PUBSUB, "pubsub" );
-      new Tag( iq->query(), "items", "node", node );
+      IQ iq( IQ::Get, service, id, XMLNS_PUBSUB, "pubsub" );
+      new Tag( iq.query(), "items", "node", node );
 
-      m_parent->trackID( this, id, GetItemList );
       m_itemHandlerTrackMap[id] = handler;
-      m_parent->send( iq );
+      m_parent->send( iq, this, GetItemList );
     }
 
     void Manager::purgeNodeItems( const JID& service,
@@ -574,13 +562,12 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      IQ* iq = new IQ( IQ::Set, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
-      new Tag( iq->query(), "purge", "node", node );
+      IQ iq( IQ::Set, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
+      new Tag( iq.query(), "purge", "node", node );
 
-      m_parent->trackID( this, id, PurgeNodeItems );
       m_nodeHandlerTrackMap[id] = handler;
       m_nopTrackMap[id] = node;
-      m_parent->send( iq );
+      m_parent->send( iq, this, PurgeNodeItems );
     }
 
     /**
@@ -787,13 +774,16 @@ namespace gloox
                 }
                 case GetNodeConfig:
                 {
-                  const Tag* ps = iq->findChild( "pubsub", XMLNS, XMLNS_PUBSUB );
-                  const Tag* options = ps->findChild( "configure" );
-                  const Tag* x = options->findChild( "x" );
-                  const DataForm* df = x ? new DataForm( x ) : 0;
-                  const std::string& node = options->findAttribute("node");
-                  (*ith).second->handleNodeConfig( service, node, df );
-                  delete df;
+                  Tag* ps = iq->query();
+                  if( ps )
+                  {
+                    const Tag* options = ps->findTag( "pubsub/configure" );
+                    const Tag* x = options->findChild( "x" );
+                    const DataForm* df = x ? new DataForm( x ) : 0;
+                    const std::string& node = options->findAttribute("node");
+                    (*ith).second->handleNodeConfig( service, node, df );
+                    delete df;
+                  }
                   break;
                 }
                 default:
