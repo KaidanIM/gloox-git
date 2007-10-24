@@ -57,17 +57,13 @@ namespace gloox
     PBYTE e_message = e_iobuffer + m_sizes.cbHeader;
     do
     {
-      std::string tmp = data_copy.
-                        substr( 0, data_copy.size() > m_sizes.cbMaximumMessage ? m_sizes.
-                               cbMaximumMessage : data_copy.size() );
+      memcpy( e_message, data_copy.data(), data_copy.size() > m_sizes.cbMaximumMessage
+                                            ? m_sizes.cbMaximumMessage
+                                            : data_copy.size() );
       if( data_copy.size() > m_sizes.cbMaximumMessage )
-      {
-        data_copy = data_copy.substr( m_sizes.cbMaximumMessage - 1 );
-      }
-      else data_copy = "";
-
-      // copy data chunk from tmp string into encryption memory buffer
-      memcpy( e_message, tmp.data(), tmp.size() );
+        data_copy.erase( 0, m_sizes.cbMaximumMessage );
+      else
+        data_copy = "";
 
       buffer[0].pvBuffer     = e_iobuffer;
       buffer[0].cbBuffer     = m_sizes.cbHeader;
