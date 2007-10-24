@@ -16,10 +16,15 @@
 namespace gloox
 {
 
-  static const char * msgTypeStringValues[] =
+  static const char* msgTypeStringValues[] =
   {
     "chat", "error", "groupchat", "headline", "normal"
   };
+
+  static inline const std::string typeString( Message::MessageType type )
+  {
+    return util::lookup2( type, msgTypeStringValues );
+  }
 
   Message::Message( Tag* tag )
     : Stanza( tag ), m_subtype( Invalid ), m_bodies( 0 ), m_subjects( 0 )
@@ -31,16 +36,16 @@ namespace gloox
     if( typestring.empty() )
       m_subtype = Normal;
     else
-      m_subtype = (MessageType)util::lookup2( typestring , msgTypeStringValues );
+      m_subtype = (MessageType)util::lookup2( typestring, msgTypeStringValues );
 
     const TagList& c = tag->children();
     TagList::const_iterator it = c.begin();
     for( ; it != c.end(); ++it )
     {
       if( (*it)->name() == "body" )
-        setLang( m_bodies, m_body, (*it) );
+        setLang( &m_bodies, m_body, (*it) );
       else if( (*it)->name() == "subject" )
-        setLang( m_subjects, m_subject, (*it) );
+        setLang( &m_subjects, m_subject, (*it) );
       else if( (*it)->name() == "thread" )
         m_thread = (*it)->cdata();
     }
@@ -51,8 +56,8 @@ namespace gloox
                     const std::string& thread, const std::string& xmllang, const JID& from )
     : Stanza( to, from ), m_subtype( type ), m_bodies( 0 ), m_subjects( 0 ), m_thread( thread )
   {
-    setLang( m_bodies, m_body, body, xmllang );
-    setLang( m_subjects, m_subject, subject, xmllang );
+    setLang( &m_bodies, m_body, body, xmllang );
+    setLang( &m_subjects, m_subject, subject, xmllang );
   }
 
   Message::~Message()
@@ -63,12 +68,25 @@ namespace gloox
 
   Tag* Message::tag() const
   {
-#warning FIXME implement!
     Tag* t = new Tag( "message" );
     if( m_to )
       t->addAttribute( "to", m_to.full() );
     if( m_from )
       t->addAttribute( "from", m_from.full() );
+    if( !m_id.empty() )
+      t->addAttribute( "id", m_id );
+    t->addAttribute( TYPE, typeString( m_subtype ) );
+
+    getLangs( m_bodies, m_body, "body", t );
+    getLangs( m_subjects, m_subject, "subject", t );
+
+    if( !m_thread.empty() )
+      new Tag( t, "thread", m_thread );
+
+    StanzaExtensionList::const_iterator it = m_extensionList.begin();
+    for( ; it != m_extensionList.end(); ++it )
+      t->addChild( (*it)->tag() );
+
     return t;
   }
 

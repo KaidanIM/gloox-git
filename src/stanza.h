@@ -126,9 +126,11 @@ namespace gloox
 
       static const std::string& findLang( const StringMap* map, const std::string& defaultData,
                                           const std::string& lang );
-      static void setLang( StringMap* map, std::string& defaultLang, const Tag* tag );
-      static void setLang( StringMap* map, std::string& defaultLang,
+      static void setLang( StringMap** map, std::string& defaultLang, const Tag* tag );
+      static void setLang( StringMap** map, std::string& defaultLang,
                            const std::string& data, const std::string& xmllang );
+      static void getLangs( const StringMap* map, const std::string& defaultData,
+                            const std::string& name, Tag* tag );
   };
 
 }
