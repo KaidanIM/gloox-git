@@ -545,9 +545,17 @@ namespace gloox
         md5.feed( a2 );
         md5.finalize();
 
-        std::string response = "username=\"" + m_jid.username() + "\",realm=\"" + realm;
-        response += "\",nonce=\""+ nonce + "\",cnonce=\"" + cnonce;
-        response += "\",nc=00000001,qop=auth,digest-uri=\"xmpp/" + m_jid.server() + "\",response=";
+        std::string response = "username=\"";
+        response += m_jid.username();
+        response += "\",realm=\"";
+        response += realm;
+        response += "\",nonce=\"";
+        response += nonce;
+        response += "\",cnonce=\"";
+        response += cnonce;
+        response += "\",nc=00000001,qop=auth,digest-uri=\"xmpp/";
+        response += m_jid.server();
+        response += "\",response=";
         response += md5.hex();
         response += ",charset=utf-8";
 
@@ -694,11 +702,6 @@ namespace gloox
     }
 
     return myMajor >= major;
-  }
-
-  LogSink& ClientBase::logInstance()
-  {
-    return m_logInstance;
   }
 
   void ClientBase::setConnectionImpl( ConnectionBase* cb )
