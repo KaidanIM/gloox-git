@@ -60,11 +60,11 @@ namespace gloox
     if( !m_valid || !m_handler || data.empty() )
       return;
 
-    m_compressMutex.lock();
-
     int CHUNK = data.length() + ( data.length() / 100 ) + 13;
     Bytef* out = new Bytef[CHUNK];
     char* in = const_cast<char*>( data.c_str() );
+
+    m_compressMutex.lock();
 
     m_zdeflate.avail_in = data.length();
     m_zdeflate.next_in = (Bytef*)in;
@@ -79,9 +79,9 @@ namespace gloox
       result.append( (char*)out, CHUNK - m_zdeflate.avail_out );
     } while( m_zdeflate.avail_out == 0 );
 
-    delete[] out;
-
     m_compressMutex.unlock();
+
+    delete[] out;
 
     m_handler->handleCompressedData( result );
   }
