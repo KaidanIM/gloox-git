@@ -15,6 +15,7 @@
 #define COMPRESSIONZLIB_H__
 
 #include "compressionbase.h"
+#include "mutex.h"
 
 #ifdef _WIN32
 # include "../config.h.win"
@@ -64,6 +65,8 @@ namespace gloox
     private:
       z_stream m_zinflate;
       z_stream m_zdeflate;
+
+      Mutex m_compressMutex;
 
   };
 
