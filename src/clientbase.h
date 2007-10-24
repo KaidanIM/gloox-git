@@ -531,7 +531,7 @@ namespace gloox
        * Returns the LogSink instance for this ClientBase and all related objects.
        * @return The LogSink instance used in the current ClientBase.
        */
-      LogSink& logInstance();
+      LogSink& logInstance() { return m_logInstance; }
 
       /**
        * Use this function to retrieve the type of the stream error after it occurs and you received a
