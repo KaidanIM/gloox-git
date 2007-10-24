@@ -67,6 +67,14 @@ namespace gloox
       t->addAttribute( "to", m_to.full() );
     if( m_from )
       t->addAttribute( "from", m_from.full() );
+    if( !m_id.empty() )
+      t->addAttribute( "id", m_id );
+    t->addAttribute( TYPE, typeString( m_subtype ) );
+
+    StanzaExtensionList::const_iterator it = m_extensionList.begin();
+    for( ; it != m_extensionList.end(); ++it )
+      t->addChild( (*it)->tag() );
+
     return t;
   }
 
