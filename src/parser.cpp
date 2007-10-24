@@ -644,7 +644,7 @@ namespace gloox
     if( m_xmlnss )
     {
 //       printf( "have ns decls\n" );
-      StringMap::const_iterator it = m_xmlnss->begin();
+//       StringMap::const_iterator it = m_xmlnss->begin();
 //       for( ; it != m_xmlnss->end(); ++it )
 //         printf( "%s='%s'\n", (*it).first.c_str(), (*it).second.c_str() );
       m_current->setXmlns( m_xmlnss );
