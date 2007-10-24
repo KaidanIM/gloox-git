@@ -53,10 +53,9 @@ namespace gloox
 
     const std::string& id = m_parent->getID();
 
-    IQ* iq = new IQ( IQ::Get, m_to, id, XMLNS_REGISTER );
+    IQ iq( IQ::Get, m_to, id, XMLNS_REGISTER );
 
-    m_parent->trackID( this, id, FetchRegistrationFields );
-    m_parent->send( iq );
+    m_parent->send( iq, this, FetchRegistrationFields );
   }
 
   bool Registration::createAccount( int fields, const RegistrationFields& values )
@@ -68,8 +67,8 @@ namespace gloox
 
     const std::string& id = m_parent->getID();
 
-    IQ* iq = new IQ( IQ::Set, m_to, id, XMLNS_REGISTER );
-    Tag* q = iq->query();
+    IQ iq( IQ::Set, m_to, id, XMLNS_REGISTER );
+    Tag* q = iq.query();
 
     if( fields & FieldUsername )
       new Tag( q, "username", username );
@@ -104,8 +103,7 @@ namespace gloox
     if( fields & FieldText )
       new Tag( q, "text", values.text );
 
-    m_parent->trackID( this, id, CreateAccount );
-    m_parent->send( iq );
+    m_parent->send( iq, this, CreateAccount );
 
     return true;
   }
@@ -117,11 +115,10 @@ namespace gloox
 
     const std::string& id = m_parent->getID();
 
-    IQ* iq = new IQ( IQ::Set, m_to, id, XMLNS_REGISTER );
-    iq->query()->addChild( form.tag() );
+    IQ iq( IQ::Set, m_to, id, XMLNS_REGISTER );
+    iq.query()->addChild( form.tag() );
 
-    m_parent->trackID( this, id, CreateAccount );
-    m_parent->send( iq );
+    m_parent->send( iq, this, CreateAccount );
   }
 
   void Registration::removeAccount()
@@ -131,12 +128,10 @@ namespace gloox
 
     const std::string& id = m_parent->getID();
 
-    IQ* iq = new IQ( IQ::Set, m_to, id, XMLNS_REGISTER );
-    iq->addAttribute( "from", m_parent->jid().full() );
-    new Tag( iq->query(), "remove" );
+    IQ iq( IQ::Set, m_to, id, XMLNS_REGISTER, "query", m_parent->jid() );
+    new Tag( iq.query(), "remove" );
 
-    m_parent->trackID( this, id, RemoveAccount );
-    m_parent->send( iq );
+    m_parent->send( iq, this, RemoveAccount );
   }
 
   void Registration::changePassword( const std::string& username, const std::string& password )
@@ -146,12 +141,11 @@ namespace gloox
 
     const std::string& id = m_parent->getID();
 
-    IQ* iq = new IQ( IQ::Set, m_to, id, XMLNS_REGISTER );
-    new Tag( iq->query(), "username", username );
-    new Tag( iq->query(), "password", password );
+    IQ iq( IQ::Set, m_to, id, XMLNS_REGISTER );
+    new Tag( iq.query(), "username", username );
+    new Tag( iq.query(), "password", password );
 
-    m_parent->trackID( this, id, ChangePassword );
-    m_parent->send( iq );
+    m_parent->send( iq, this, ChangePassword );
   }
 
   void Registration::registerRegistrationHandler( RegistrationHandler* rh )

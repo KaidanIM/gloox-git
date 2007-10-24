@@ -36,12 +36,11 @@ namespace gloox
   {
     const std::string& id = m_parent->getID();
 
-    IQ* iq = new IQ( IQ::Get, JID(), id, XMLNS_PRIVATE_XML );
-    new Tag( iq->query(), tag, XMLNS, xmlns );
+    IQ iq( IQ::Get, JID(), id, XMLNS_PRIVATE_XML );
+    new Tag( iq.query(), tag, XMLNS, xmlns );
 
     m_track[id] = pxh;
-    m_parent->trackID( this, id, RequestXml );
-    m_parent->send( iq );
+    m_parent->send( iq, this, RequestXml );
 
     return id;
   }
@@ -50,12 +49,11 @@ namespace gloox
   {
     const std::string& id = m_parent->getID();
 
-    IQ* iq = new IQ( IQ::Set, JID(), id, XMLNS_PRIVATE_XML );
-    iq->query()->addChild( tag );
+    IQ iq( IQ::Set, JID(), id, XMLNS_PRIVATE_XML );
+    iq.query()->addChild( tag );
 
     m_track[id] = pxh;
-    m_parent->trackID( this, id, StoreXml );
-    m_parent->send( iq );
+    m_parent->send( iq, this, StoreXml );
 
     return id;
   }

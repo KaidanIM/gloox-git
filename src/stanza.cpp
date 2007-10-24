@@ -23,21 +23,20 @@
 namespace gloox
 {
 
-  Stanza::Stanza( const std::string& name, const JID& to, const JID& from )
-    : Tag( name ), m_xmllang( "default" ), m_from( from ), m_to( to )
+  Stanza::Stanza( const JID& to, const JID& from )
+    : m_xmllang( "default" ), m_from( from ), m_to( to )
   {
-    if( m_to )
-      addAttribute( "to", m_to.full() );
-    if( m_from )
-      addAttribute( "from", m_from.full() );
   }
 
   Stanza::Stanza( Tag* tag )
-    : Tag( tag ), m_xmllang( "default" )
+    : m_xmllang( "default" )
   {
-    m_from.setJID( findAttribute( "from" ) );
-    m_to.setJID( findAttribute( "to" ) );
-    m_id = findAttribute( "id" );
+    if( tag )
+    {
+      m_from.setJID( tag->findAttribute( "from" ) );
+      m_to.setJID( tag->findAttribute( "to" ) );
+      m_id = tag->findAttribute( "id" );
+    }
   }
 
   Stanza::~Stanza()
@@ -50,7 +49,7 @@ namespace gloox
     return static_cast< const Error* >( findExtension( ExtError ) );
   }
 
-  void Stanza::addExtension( StanzaExtension* se )
+  void Stanza::addExtension( const StanzaExtension* se )
   {
     m_extensionList.push_back( se );
 //     addChild( se->tag() );
@@ -63,16 +62,39 @@ namespace gloox
     return it != m_extensionList.end() ? (*it) : 0;
   }
 
-  void Stanza::setLang( StringMap& map, const Tag* tag )
+  void Stanza::setLang( StringMap* map, std::string& defaultLang, const Tag* tag )
   {
     const std::string& lang = tag->findAttribute( "xml:lang" );
-    map[ lang.empty() ? "default" : lang ] = tag->cdata();
+    setLang( map, defaultLang, tag ? tag->cdata() : EmptyString, lang );
   }
 
-  const std::string& Stanza::findLang( const StringMap& map, const std::string& lang )
+  void Stanza::setLang( StringMap* map, std::string& defaultLang,
+                        const std::string& data, const std::string& xmllang )
   {
-    StringMap::const_iterator it = map.find( lang );
-    return ( it != map.end() ) ? (*it).second : EmptyString;
+    if( data.empty() )
+      return;
+
+    if( xmllang.empty() )
+      defaultLang = data;
+    else
+    {
+      if( !map )
+        map = new StringMap();
+      (*map)[xmllang] = data;
+    }
+  }
+
+  const std::string& Stanza::findLang( const StringMap* map, const std::string& defaultData,
+                                       const std::string& lang )
+  {
+    if( map && lang != "default")
+    {
+      StringMap::const_iterator it = map->find( lang );
+      if( it != map->end() )
+        return (*it).second;
+    }
+    return defaultData;
+
   }
 
 }

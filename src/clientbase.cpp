@@ -106,7 +106,7 @@ namespace gloox
     }
 
     if( !m_seFactory )
-      m_seFactory = new StanzaExtensionFactory();
+      registerStanzaExtension( new Error() );
 
     m_streamError = StreamErrorUndefined;
     m_block = false;
@@ -602,6 +602,24 @@ namespace gloox
       m_authError = SaslTemporaryAuthFailure;
   }
 
+  void ClientBase::send( const IQ& iq, IqHandler* ih, int context )
+  {
+    if( ( iq.subtype() == IQ::Set || iq.subtype() == IQ::Get ) && ih && !iq.id().empty() )
+    {
+      TrackStruct track;
+      track.ih = ih;
+      track.context = context;
+      m_iqIDHandlers[iq.id()] = track;
+    }
+
+    send( iq );
+  }
+
+  void ClientBase::send( const Stanza& stanza )
+  {
+    send( stanza.tag() );
+  }
+
   void ClientBase::send( Tag* tag )
   {
     if( !tag )
@@ -648,6 +666,14 @@ namespace gloox
     }
   }
 
+  void ClientBase::registerStanzaExtension( StanzaExtension* ext )
+  {
+    if( !m_seFactory )
+      m_seFactory = new StanzaExtensionFactory();
+
+    m_seFactory->registerExtension( ext );
+  }
+
   StatisticsStruct ClientBase::getStatistics()
   {
     if( m_connection )
@@ -668,7 +694,7 @@ namespace gloox
 
   void ClientBase::xmppPing( const JID& to )
   {
-    send( new IQ( IQ::Get, to, getID(), XMLNS_XMPP_PING, "ping" ) );
+    send( IQ( IQ::Get, to, getID(), XMLNS_XMPP_PING, "ping" ) );
   }
 
   const std::string ClientBase::getID()
@@ -1112,8 +1138,8 @@ namespace gloox
 
     if( !res && iq->subtype() & ( IQ::Get | IQ::Set ) )
     {
-      IQ* re = new IQ( IQ::Error, iq->from(), iq->id() );
-      re->addExtension( new Error( StanzaErrorTypeCancel, StanzaErrorServiceUnavailable ) );
+      IQ re( IQ::Error, iq->from(), iq->id() );
+      re.addExtension( new Error( StanzaErrorTypeCancel, StanzaErrorServiceUnavailable ) );
       send( re );
     }
   }
@@ -1122,7 +1148,7 @@ namespace gloox
   {
     if( m_mucInvitationHandler )
     {
-      const Tag* x = msg->findChild( "x", XMLNS, XMLNS_MUC_USER );
+      const Tag* x = msg->tag()->findChild( "x", XMLNS, XMLNS_MUC_USER ); // FIXME !!!
       if( x && x->hasChild( "invite" ) )
       {
         const Tag* i = x->findChild( "invite" );

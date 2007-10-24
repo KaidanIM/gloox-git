@@ -18,8 +18,6 @@ int main( int /*argc*/, char** /*argv*/ )
   msg->addAttribute( "id", "id1" );
   new Tag( msg, "body", "the body" );
 
-  Message *i = 0;
-
 #warning FIXME fix the following 5 tests. how to test private functions, ctors, etc?
 //   // -------
 //   name = "parse Message normal 1";
@@ -105,59 +103,65 @@ int main( int /*argc*/, char** /*argv*/ )
 //   i = 0;
 
   // -------
-  name = "new simple Message error";
-  i = new Message( Message::Error, JID( "xyz@example.org/blah" ), "the body", "the subject",
-                   "the thread", "the xmllang", JID( "foo@bar.com" ) );
-  if( !i->hasAttribute( "type", "error" )
-      || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
-      || !i->hasChildWithCData( "body", "the body" ) || !i->hasChildWithCData( "thread", "the thread" )
-      || !i->hasChildWithCData( "subject", "the subject" ) || !i->hasChild( "body", "xml:lang", "the xmllang" )
-      || !i->hasChild( "subject", "xml:lang", "the xmllang" ) )
   {
-    ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    name = "new simple Message error";
+    Message m( Message::Error, JID( "xyz@example.org/blah" ), "the body", "the subject",
+                    "the thread", "the xmllang", JID( "foo@bar.com" ) );
+    Tag* i = m.tag();
+    if( !i->hasAttribute( "type", "error" )
+        || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
+        || !i->hasChildWithCData( "body", "the body" ) || !i->hasChildWithCData( "thread", "the thread" )
+        || !i->hasChildWithCData( "subject", "the subject" ) || !i->hasChild( "body", "xml:lang", "the xmllang" )
+        || !i->hasChild( "subject", "xml:lang", "the xmllang" ) )
+    {
+      ++fail;
+      printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    }
+    delete i;
   }
-  delete i;
-  i = 0;
 
   // -------
-  name = "new simple Message chat";
-  i = new Message( Message::Chat, JID( "xyz@example.org/blah" ), "the body", "the subject",
-                   "the thread", "the xmllang", JID( "foo@bar.com" ) );
-  if( !i->hasAttribute( "type", "chat" )
-      || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
-      || !i->hasChildWithCData( "body", "the body" ) || !i->hasChildWithCData( "thread", "the thread" )
-      || !i->hasChildWithCData( "subject", "the subject" ) || !i->hasChild( "body", "xml:lang", "the xmllang" )
-      || !i->hasChild( "subject", "xml:lang", "the xmllang" ) || i->body( "the xmllang" ) !=  "the body"
-      || i->subject( "the xmllang" ) != "the subject" || i->thread() != "the thread"
-      || i->from() != "foo@bar.com" )
   {
-    ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    name = "new simple Message chat";
+    Message m( Message::Chat, JID( "xyz@example.org/blah" ), "the body", "the subject",
+                    "the thread", "the xmllang", JID( "foo@bar.com" ) );
+    Tag* i = m.tag();
+    if( !i->hasAttribute( "type", "chat" )
+        || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
+        || !i->hasChildWithCData( "body", "the body" ) || !i->hasChildWithCData( "thread", "the thread" )
+        || !i->hasChildWithCData( "subject", "the subject" ) || !i->hasChild( "body", "xml:lang", "the xmllang" )
+        || !i->hasChild( "subject", "xml:lang", "the xmllang" ) || m.body( "the xmllang" ) !=  "the body"
+        || m.subject( "the xmllang" ) != "the subject" || m.thread() != "the thread"
+        || m.from() != "foo@bar.com" )
+    {
+      ++fail;
+      printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    }
+    delete i;
   }
-  delete i;
-  i = 0;
 
   // -------
-  name = "new simple Message normal";
-  i = new Message( Message::Normal, JID( "xyz@example.org/blah" ), "the body", "the subject",
-                   "the thread", "the xmllang", JID( "foo@bar.com" ) );
-  if( !i->hasAttribute( "type", "normal" )
-      || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
-      || !i->hasChildWithCData( "body", "the body" ) || !i->hasChildWithCData( "thread", "the thread" )
-      || !i->hasChildWithCData( "subject", "the subject" ) || !i->hasChild( "body", "xml:lang", "the xmllang" )
-      || !i->hasChild( "subject", "xml:lang", "the xmllang" ) )
   {
-    ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    name = "new simple Message normal";
+    Message m( Message::Normal, JID( "xyz@example.org/blah" ), "the body", "the subject",
+                    "the thread", "the xmllang", JID( "foo@bar.com" ) );
+    Tag* i = m.tag();
+    if( !i->hasAttribute( "type", "normal" )
+        || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
+        || !i->hasChildWithCData( "body", "the body" ) || !i->hasChildWithCData( "thread", "the thread" )
+        || !i->hasChildWithCData( "subject", "the subject" ) || !i->hasChild( "body", "xml:lang", "the xmllang" )
+        || !i->hasChild( "subject", "xml:lang", "the xmllang" ) )
+    {
+      ++fail;
+      printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    }
+    delete i;
   }
-  delete i;
-  i = 0;
 
 #warning FIXME fix the following 2 tests. how to test private functions, ctors, etc?
 //   // -------
 //   name = "new simple Message groupchat";
-//   i = new Message( Message::Groupchat, JID( "xyz@example.org/blah" ), "the body", "the subject",
+//   Message m( Message::Groupchat, JID( "xyz@example.org/blah" ), "the body", "the subject",
 //                    "the thread", "the xmllang", JID( "foo@bar.com" ) );
 //   if( !i->hasAttribute( "type", "groupchat" )
 //       || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )

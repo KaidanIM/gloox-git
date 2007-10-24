@@ -25,9 +25,10 @@
 #include "error.h"
 #include "logsink.h"
 #include "nonsaslauth.h"
-#include "tag.h"
+#include "seresourcebind.h"
 #include "stanzaextensionfactory.h"
 #include "stanzaextension.h"
+#include "tag.h"
 #include "tlsbase.h"
 #include "util.h"
 
@@ -96,6 +97,7 @@ namespace gloox
     m_disco->setIdentity( "client", "bot" );
     m_capabilities = new Capabilities( m_disco );
     addPresenceExtension( m_capabilities );
+    registerStanzaExtension( new Capabilities( m_disco ) );
   }
 
   void Client::setUsername( const std::string &username )
@@ -355,13 +357,11 @@ namespace gloox
   {
     if( !m_resourceBound )
     {
-      const std::string& id = getID();
-      IQ* iq = new IQ( IQ::Set, JID(), id, XMLNS_STREAM_BIND, "bind" );
+      IQ iq( IQ::Set, JID(), getID() );
       if( !resource().empty() )
-        new Tag( iq->query(), "resource", resource() );
+        iq.addExtension( new SEResourceBind( resource() ) );
 
-      trackID( this, id, ResourceBind );
-      send( iq );
+      send( iq, this, ResourceBind );
     }
   }
 
@@ -371,14 +371,14 @@ namespace gloox
     {
       case IQ::Result:
       {
-        const Tag* jid;
-        if( !iq->query() || !(jid = iq->query()->findChild( "jid" )) )
+        const SEResourceBind* rb = static_cast<const SEResourceBind*>( iq->findExtension( ExtResourceBind ) );
+        if( !rb || !rb->jid() )
         {
           notifyOnResourceBindError( RbErrorUnknownError );
           break;
         }
 
-        m_jid.setJID( jid->cdata() );
+        m_jid = rb->jid();
         m_resourceBound = true;
 
         if( m_streamFeatures & StreamFeatureSession )
@@ -418,9 +418,8 @@ namespace gloox
   void Client::createSession()
   {
     notifyStreamEvent( StreamEventSessionCreation );
-    const std::string& id = getID();
-    trackID( this, id, SessionEstablishment );
-    send( new IQ( IQ::Set, JID(), id, XMLNS_STREAM_SESSION, "session" ) );
+    send( IQ( IQ::Set, JID(), getID(), XMLNS_STREAM_SESSION, "session" ),
+          this, SessionEstablishment );
   }
 
   void Client::processCreateSession( IQ* iq )
@@ -518,13 +517,12 @@ namespace gloox
     if( m_presence != Presence::Invalid &&
         state() >= StateConnected )
     {
-      Presence* p = new Presence( m_presence, to, m_status, m_priority );
+      Presence p( m_presence, to, m_status, m_priority );
 
-      StanzaExtensionList::const_iterator it = m_presenceExtensions.begin();
-      for( ; it != m_presenceExtensions.end(); ++it )
-      {
-        p->addChild( (*it)->tag() );
-      }
+//       StanzaExtensionList::const_iterator it = m_presenceExtensions.begin();
+//       for( ; it != m_presenceExtensions.end(); ++it )
+//         p.addExtension( (*it) ); // FIXME: we need a new newInstance version (or clone()),
+//        that clones an SE
 
       send( p );
     }

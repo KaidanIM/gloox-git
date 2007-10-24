@@ -85,6 +85,9 @@ namespace gloox
        */
       const std::string& xmlns() const { return m_xmlns; }
 
+      // reimplemented from Stanza
+      virtual Tag* tag() const;
+
     private:
       /**
        * Creates an IQ from a tag. The original Tag will be ripped off.

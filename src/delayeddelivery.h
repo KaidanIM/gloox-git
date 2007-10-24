@@ -43,9 +43,10 @@ namespace gloox
        * Constructs a new object and fills it according to the parameters.
        * @param from The JID of the original sender or the entity that delayed the sending.
        * @param stamp The datetime stamp of the original send.
-       * @param reason A natural language reason for the delay.
+       * @param reason An optional natural language reason for the delay.
        */
-      DelayedDelivery( const JID& from, const std::string stamp, const std::string& reason );
+      DelayedDelivery( const JID& from, const std::string stamp,
+                       const std::string& reason = "" );
 
       /**
        * Constructs a new object from the given Tag.

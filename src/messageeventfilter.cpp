@@ -31,32 +31,32 @@ namespace gloox
   {
   }
 
-  void MessageEventFilter::filter( Message* msg )
+  void MessageEventFilter::filter( Message& msg )
   {
     if( m_disable || !m_messageEventHandler )
       return;
 
-    if( msg->subtype() == Message::Error )
+    if( msg.subtype() == Message::Error )
     {
-      if( msg->error()->error() == StanzaErrorFeatureNotImplemented )
+      if( msg.error() && msg.error()->error() == StanzaErrorFeatureNotImplemented )
         m_disable = true;
 
       return;
     }
 
-    const MessageEvent* me = static_cast<const MessageEvent*>( msg->findExtension( ExtMessageEvent ) );
-    if( !me && msg->body().empty() )
+    const MessageEvent* me = static_cast<const MessageEvent*>( msg.findExtension( ExtMessageEvent ) );
+    if( !me && msg.body().empty() )
     {
       m_requestedEvents = 0;
       m_lastID = EmptyString;
       return;
     }
 
-    if( msg->body().empty() )
-      m_messageEventHandler->handleMessageEvent( msg->from(), (MessageEventType)me->event() );
+    if( msg.body().empty() )
+      m_messageEventHandler->handleMessageEvent( msg.from(), (MessageEventType)me->event() );
     else
     {
-      m_lastID = msg->id();
+      m_lastID = msg.id();
       m_requestedEvents = 0;
       m_requestedEvents = me->event();
     }
@@ -84,18 +84,18 @@ namespace gloox
     }
 
     m_lastSent = event;
-    Message* m = new Message( Message::Normal, m_parent->target() );
-    m->addExtension( new MessageEvent( event, m_lastID ) );
+    Message m( Message::Normal, m_parent->target() );
+    m.addExtension( new MessageEvent( event, m_lastID ) );
     send( m );
   }
 
-  void MessageEventFilter::decorate( Message* msg )
+  void MessageEventFilter::decorate( Message& msg )
   {
     if( m_disable )
       return;
 
-    msg->addExtension( new MessageEvent( MessageEventOffline | MessageEventDelivered |
-                                         MessageEventDisplayed | MessageEventComposing ) );
+    msg.addExtension( new MessageEvent( MessageEventOffline | MessageEventDelivered |
+                                        MessageEventDisplayed | MessageEventComposing ) );
     m_lastSent = MessageEventCancel;
   }
 

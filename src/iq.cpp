@@ -28,35 +28,46 @@ namespace gloox
     : Stanza( tag ), m_query( 0 ), m_subtype( Invalid )
   {
     if( !tag || tag->name() != "iq" )
-    {
-      m_name = EmptyString;
       return;
-    }
 
-    m_subtype = ( IQ::IqType )util::lookup( findAttribute( TYPE ), iqTypeStringValues );
+    m_subtype = ( IQ::IqType )util::lookup( tag->findAttribute( TYPE ), iqTypeStringValues );
 
-    m_query = findChildWithAttrib( XMLNS );
+    m_query = tag->findChildWithAttrib( XMLNS );
+
+    if( m_query )
+      m_query = m_query->clone(); // FIXME this needs to be removed once all code is
+                                  // ported to Tag-less Stanzas
+
     if( m_query )
       m_xmlns = m_query->findAttribute( XMLNS );
   }
 
   IQ::IQ( IqType type, const JID& to, const std::string& id, const std::string& xmlns,
           const std::string& childtag, const JID& from )
-    : Stanza( "iq", to, from ), m_query( 0 ), m_subtype( type )
+    : Stanza( to, from ), m_query( 0 ), m_subtype( type )
   {
-    addAttribute( TYPE, typeString( type ) );
-    addAttribute( "id", id );
     m_id = id;
 
     if( !xmlns.empty() )
     {
       m_xmlns = xmlns;
-      m_query = new Tag( this, childtag.empty() ? "query" : childtag,  XMLNS, xmlns );
+      m_query = new Tag( childtag.empty() ? "query" : childtag,  XMLNS, xmlns );
     }
   }
 
   IQ::~IQ()
   {
+  }
+
+  Tag* IQ::tag() const
+  {
+#warning FIXME implement!
+    Tag* t = new Tag( "iq" );
+    if( m_to )
+      t->addAttribute( "to", m_to.full() );
+    if( m_from )
+      t->addAttribute( "from", m_from.full() );
+    return t;
   }
 
 }

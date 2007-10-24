@@ -95,9 +95,9 @@ namespace gloox
     if( iq->subtype() != IQ::Set )
       return false;
 
-    if( iq->hasChild( "command" ) )
+    Tag* c = iq->query();
+    if( c && c->name() == "command" )
     {
-      Tag* c = iq->findChild( "command" );
       const std::string& node = c->findAttribute( "node" );
       AdhocCommandProviderMap::const_iterator it = m_adhocCommandProviders.find( node );
       if( !node.empty() && ( it != m_adhocCommandProviders.end() ) )
@@ -121,8 +121,8 @@ namespace gloox
     if( it == m_adhocTrackMap.end() )
       return;
 
-    Tag* c = iq->findChild( "command", XMLNS, XMLNS_ADHOC_COMMANDS );
-    if( c )
+    Tag* c = iq->query();
+    if( c && c->name() == "command" && c->xmlns() == XMLNS_ADHOC_COMMANDS )
     {
       const std::string& command = c->findAttribute( "node" );
       const std::string& id = c->findAttribute( "sessionid" );
@@ -197,8 +197,8 @@ namespace gloox
     if( it == m_adhocTrackMap.end() )
       return;
 
-    const Tag* query = iq->findChild( "query", XMLNS, XMLNS_DISCO_INFO );
-    if( query )
+    const Tag* query = iq->query();
+    if( query && query->name() == "query" && query->xmlns() == XMLNS_DISCO_INFO )
     {
       (*it).second.ah->handleAdhocSupport( (*it).second.remote,
               query->hasChild( "feature", "var", XMLNS_ADHOC_COMMANDS ) );
@@ -216,8 +216,8 @@ namespace gloox
     {
       if( (*it).second.context == context && (*it).second.remote == iq->from() )
       {
-        Tag* q = iq->findChild( "query", XMLNS, XMLNS_DISCO_ITEMS );
-        if( q )
+        Tag* q = iq->query();
+        if( q && q->name() == "query" && q->xmlns() == XMLNS_DISCO_ITEMS )
         {
           StringMap commands;
           const TagList& l = q->children();
@@ -288,8 +288,8 @@ namespace gloox
       return;
 
     const std::string& id = m_parent->getID();
-    IQ* iq = new IQ( IQ::Set, remote, id, XMLNS_ADHOC_COMMANDS, "command" );
-    Tag* c = iq->query();
+    IQ iq( IQ::Set, remote, id, XMLNS_ADHOC_COMMANDS, "command" );
+    Tag* c = iq.query();
     c->addAttribute( "node", command );
     c->addAttribute( "action", "execute" );
     if( !sessionid.empty() )
@@ -323,8 +323,7 @@ namespace gloox
     track.ah = ah;
     m_adhocTrackMap[id] = track;
 
-    m_parent->trackID( this, id, ExecuteAdhocCommand );
-    m_parent->send( iq );
+    m_parent->send( iq, this, ExecuteAdhocCommand );
   }
 
   void Adhoc::removeAdhocCommandProvider( const std::string& command )

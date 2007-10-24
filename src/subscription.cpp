@@ -25,43 +25,40 @@ namespace gloox
     { return msgTypeStringValues[type]; }
 
   Subscription::Subscription( Tag* tag )
-    : Stanza( tag ), m_subtype( Invalid )
+    : Stanza( tag ), m_subtype( Invalid ), m_stati( 0 )
   {
     if( !tag || tag->name() != "presence" )
-    {
-      m_name = EmptyString;
       return;
-    }
 
-    m_subtype = (S10nType)util::lookup( findAttribute( TYPE ), msgTypeStringValues );
+    m_subtype = (S10nType)util::lookup( tag->findAttribute( TYPE ), msgTypeStringValues );
 
-    const TagList& c = children();
+    const TagList& c = tag->findTagList( "/presence/status" );
     TagList::const_iterator it = c.begin();
     for( ; it != c.end(); ++it )
-    {
-      if( (*it)->name() == "status" )
-      {
-        setLang( m_status, (*it) );
-      }
-    }
+      setLang( m_stati, m_status, (*it) );
   }
 
   Subscription::Subscription( S10nType type, const JID& to, const std::string& status,
                               const std::string& xmllang, const JID& from )
-    : Stanza( "presence", to, from ), m_subtype( type )
+    : Stanza( to, from ), m_subtype( type ), m_stati( 0 )
   {
-    addAttribute( TYPE, typeString( type ) );
-
-    if( !status.empty() )
-    {
-      Tag* t = new Tag( this, "status", status );
-      t->addAttribute( "xml:lang", xmllang );
-    }
-
+    setLang( m_stati, m_status, status, xmllang );
   }
 
   Subscription::~Subscription()
   {
+    delete m_stati;
+  }
+
+  Tag* Subscription::tag() const
+  {
+#warning FIXME implement!
+    Tag* t = new Tag( "subscription" );
+    if( m_to )
+      t->addAttribute( "to", m_to.full() );
+    if( m_from )
+      t->addAttribute( "from", m_from.full() );
+    return t;
   }
 
 }

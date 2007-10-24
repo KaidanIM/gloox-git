@@ -33,15 +33,12 @@ namespace gloox
   { return msgShowStringValues[type]; }
 
   Presence::Presence( Tag* tag )
-    : Stanza( tag ), m_subtype( Invalid ), m_priority( 0 )
+    : Stanza( tag ), m_subtype( Invalid ), m_stati( 0 ), m_priority( 0 )
   {
     if( !tag || tag->name() != "presence" )
-    {
-      m_name = EmptyString;
       return;
-    }
 
-    const std::string& type = findAttribute( TYPE );
+    const std::string& type = tag->findAttribute( TYPE );
     if( type.empty() )
       m_subtype = Available;
     else
@@ -49,42 +46,28 @@ namespace gloox
 
     if( m_subtype == Available )
     {
-      Tag* t = findChild( "show" );
+#warning CHECKME write unit test for the Available types
+      Tag* t = tag->findChild( "show" );
       if( t )
         m_subtype = (PresenceType)util::lookup( t->cdata(), msgShowStringValues );
     }
 
-    const TagList& c = children();
+    const TagList& c = tag->children();
     TagList::const_iterator it = c.begin();
     for( ; it != c.end(); ++it )
     {
       if( (*it)->name() == "status" )
-      {
-        setLang( m_status, (*it) );
-      }
+        setLang( m_stati, m_status, (*it) );
       else if( (*it)->name() == "priority" )
-      {
         m_priority = atoi( (*it)->cdata().c_str() );
-      }
     }
   }
 
   Presence::Presence( PresenceType type, const JID& to, const std::string& status,
                       int priority, const std::string& xmllang, const JID& from )
-    : Stanza( "presence", to, from ), m_subtype( type )
+    : Stanza( to, from ), m_subtype( type ), m_stati( 0 )
   {
-    if( type != Available )
-      addAttribute( TYPE, typeString( type ) );
-
-    const std::string& show = showString( type );
-    if( !show.empty() )
-      new Tag( this, "show", show );
-
-    if( !status.empty() )
-    {
-      Tag* t = new Tag( this, "status", status );
-      t->addAttribute( "xml:lang", xmllang );
-    }
+    setLang( m_stati, m_status, status, xmllang );
 
     if( priority < -128 )
       m_priority = -128;
@@ -92,18 +75,22 @@ namespace gloox
       m_priority = 127;
     else
       m_priority = priority;
-
-    if( type != Unavailable )
-    {
-      char tmp[5];
-      tmp[4] = '\0';
-      sprintf( tmp, "%d", m_priority );
-      new Tag( this, "priority", tmp );
-    }
   }
 
   Presence::~Presence()
   {
+    delete m_stati;
+  }
+
+  Tag* Presence::tag() const
+  {
+#warning FIXME implement!
+    Tag* t = new Tag( "presence" );
+    if( m_to )
+      t->addAttribute( "to", m_to.full() );
+    if( m_from )
+      t->addAttribute( "from", m_from.full() );
+    return t;
   }
 
 }

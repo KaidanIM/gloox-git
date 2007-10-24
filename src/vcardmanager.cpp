@@ -51,11 +51,10 @@ namespace gloox
       return;
 
     const std::string& id = m_parent->getID();
-    IQ* iq = new IQ( IQ::Get, jid.bareJID(), id, XMLNS_VCARD_TEMP, "vCard" );
+    IQ iq ( IQ::Get, jid.bareJID(), id, XMLNS_VCARD_TEMP, "vCard" );
 
-    m_parent->trackID( this, id, VCardHandler::FetchVCard );
     m_trackMap[id] = vch;
-    m_parent->send( iq );
+    m_parent->send( iq, this,VCardHandler::FetchVCard  );
   }
 
   void VCardManager::cancelVCardOperations( VCardHandler* vch )
@@ -77,12 +76,13 @@ namespace gloox
       return;
 
     const std::string& id = m_parent->getID();
-    IQ* iq = new IQ( IQ::Set, JID(), id );
-    iq->addChild( vcard->tag() );
+    IQ iq( IQ::Set, JID(), id );
+    Tag* q = iq.query();
+    delete q; // FIXME somewhat dirty...
+    q = vcard->tag();
 
-    m_parent->trackID( this, id, VCardHandler::StoreVCard );
     m_trackMap[id] = vch;
-    m_parent->send( iq );
+    m_parent->send( iq, this, VCardHandler::StoreVCard );
   }
 
   bool VCardManager::handleIq( IQ* /*iq*/ )
@@ -103,8 +103,11 @@ namespace gloox
           {
             case VCardHandler::FetchVCard:
             {
-              Tag* v = iq->findChild( "vCard", XMLNS, XMLNS_VCARD_TEMP );
-              (*it).second->handleVCard( iq->from(), v ? new VCard( v ) : 0 );
+              Tag* v = iq->query();
+              if( v && v->name() == "vCard" && v->xmlns() == XMLNS_VCARD_TEMP )
+                (*it).second->handleVCard( iq->from(), new VCard( v ) );
+              else
+                (*it).second->handleVCard( iq->from(), 0 );
               break;
             }
             case VCardHandler::StoreVCard:

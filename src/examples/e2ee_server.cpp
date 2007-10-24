@@ -131,13 +131,15 @@ class MessageTest : public ConnectionListener, LogHandler,
 
     virtual void handleMessage( Message* msg, MessageSession * /*session*/ )
     {
-      Tag *x = msg->findChild( "xtls", "xmlns", "test:xtls" );
+      Tag* m = msg->tag();
+      Tag *x = m->findChild( "xtls", "xmlns", "test:xtls" );
       if( x )
       {
         printf( "decrypting: %d\n", x->cdata().length() );
         m_tls->decrypt( Base64::decode64( x->cdata() ) );
         xtlsSend();
       }
+      delete m;
     }
 
     virtual void handleLog( LogLevel level, LogArea area, const std::string& message )

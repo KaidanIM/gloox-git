@@ -52,12 +52,11 @@ namespace gloox
       return true;
 
     const std::string& id = m_clientbase->getID();
-    IQ* iq = new IQ( IQ::Set, m_target, id, XMLNS_IBB, "open" );
-    iq->query()->addAttribute( "sid", m_sid );
-    iq->query()->addAttribute( "block-size", m_blockSize );
+    IQ iq( IQ::Set, m_target, id, XMLNS_IBB, "open" );
+    iq.query()->addAttribute( "sid", m_sid );
+    iq.query()->addAttribute( "block-size", m_blockSize );
 
-    m_clientbase->trackID( this, id, IBBOpen );
-    m_clientbase->send( iq );
+    m_clientbase->send( iq, this, IBBOpen );
     return true;
   }
 
@@ -126,7 +125,7 @@ namespace gloox
 
   void InBandBytestream::returnResult( const JID& to, const std::string& id )
   {
-    IQ* iq = new IQ( IQ::Result, to, id );
+    IQ iq( IQ::Result, to, id );
     m_clientbase->send( iq );
   }
 
@@ -140,13 +139,12 @@ namespace gloox
     do
     {
       const std::string& id = m_clientbase->getID();
-      IQ* iq = new IQ( IQ::Set, m_target, id, XMLNS_IBB, "data" );
-      iq->query()->setCData( Base64::encode64( data.substr( pos, m_blockSize ) ) );
-      iq->query()->addAttribute( "sid", m_sid );
-      iq->query()->addAttribute( "seq", ++m_sequence );
+      IQ iq( IQ::Set, m_target, id, XMLNS_IBB, "data" );
+      iq.query()->setCData( Base64::encode64( data.substr( pos, m_blockSize ) ) );
+      iq.query()->addAttribute( "sid", m_sid );
+      iq.query()->addAttribute( "seq", ++m_sequence );
 
-      m_clientbase->trackID( this, id, IBBData );
-      m_clientbase->send( iq );
+      m_clientbase->send( iq, this, IBBData );
 
       pos += m_blockSize;
       if( m_sequence == 65535 )
@@ -176,11 +174,10 @@ namespace gloox
       return;
 
     const std::string& id = m_clientbase->getID();
-    IQ* iq = new IQ( IQ::Set, m_target, id, XMLNS_IBB, "close" );
-    iq->query()->addAttribute( "sid", m_sid );
+    IQ iq( IQ::Set, m_target, id, XMLNS_IBB, "close" );
+    iq.query()->addAttribute( "sid", m_sid );
 
-    m_clientbase->trackID( this, id, IBBClose );
-    m_clientbase->send( iq );
+    m_clientbase->send( iq, this, IBBClose );
 
     if( m_handler )
       m_handler->handleBytestreamClose( this );

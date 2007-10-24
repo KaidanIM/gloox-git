@@ -77,18 +77,6 @@ namespace gloox
       MessageType subtype() const { return m_subtype; }
 
       /**
-       * Convenience function that returns the default message body (no xml:lang set).
-       * @return The default message body.
-       */
-      const std::string& body() const { return m_body; }
-
-      /**
-       * Convenience function that returns the default message subject (no xml:lang set).
-       * @return The default message subject.
-       */
-      const std::string& subject() const { return m_subject; }
-
-      /**
        * Returns the message body for the given language if available.
        * If the requested language is not available, the default body (without a xml:lang
        * attribute) will be returned.
@@ -97,7 +85,10 @@ namespace gloox
        * will be returned, if any.
        * @return The message body.
        */
-      const std::string body( const std::string& lang ) const;
+      const std::string body( const std::string& lang = "default" ) const
+      {
+        return findLang( m_bodies, m_body, lang );
+      }
 
       /**
        * Returns the message subject for the given language if available.
@@ -108,7 +99,10 @@ namespace gloox
        * will be returned, if any.
        * @return The message subject.
        */
-      const std::string subject( const std::string& lang ) const;
+      const std::string subject( const std::string& lang = "default" ) const
+      {
+        return findLang( m_subjects, m_subject, lang );
+      }
 
       /**
        * Returns the thread ID of a message stanza.
@@ -137,6 +131,9 @@ namespace gloox
       {
         return static_cast<const DelayedDelivery*>( findExtension( ExtDelay ) );
       }
+
+      // reimplemented from Stanza
+      virtual Tag* tag() const;
 
     private:
       /**

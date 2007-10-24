@@ -36,12 +36,9 @@ namespace gloox
       return;
 
     const std::string& id = m_parent->getID();
-
-    IQ* iq = new IQ( IQ::Get, directory, id, XMLNS_SEARCH );
-
+    IQ iq( IQ::Get, directory, id, XMLNS_SEARCH );
     m_track[id] = sh;
-    m_parent->trackID( this, id, FetchSearchFields );
-    m_parent->send( iq );
+    m_parent->send( iq, this, FetchSearchFields );
   }
 
   void Search::search( const JID& directory, const DataForm& form, SearchHandler* sh )
@@ -50,13 +47,11 @@ namespace gloox
       return;
 
     const std::string& id = m_parent->getID();
-
-    IQ* iq = new IQ( IQ::Set, directory, id, XMLNS_SEARCH );
-    iq->query()->addChild( form.tag() );
+    IQ iq( IQ::Set, directory, id, XMLNS_SEARCH );
+    iq.query()->addChild( form.tag() );
 
     m_track[id] = sh;
-    m_parent->trackID( this, id, DoSearch );
-    m_parent->send( iq );
+    m_parent->send( iq, this, DoSearch );
   }
 
   void Search::search( const JID& directory, int fields, const SearchFieldStruct& values, SearchHandler* sh )
@@ -66,8 +61,8 @@ namespace gloox
 
     const std::string& id = m_parent->getID();
 
-    IQ* iq = new IQ( IQ::Set, directory, id, XMLNS_SEARCH );
-    Tag* q = iq->query();
+    IQ iq( IQ::Set, directory, id, XMLNS_SEARCH );
+    Tag* q = iq.query();
 
     if( fields & SearchFieldFirst )
       new Tag( q, "first", values.first );
@@ -79,8 +74,7 @@ namespace gloox
       new Tag( q, "email", values.email );
 
     m_track[id] = sh;
-    m_parent->trackID( this, id, DoSearch );
-    m_parent->send( iq );
+    m_parent->send( iq, this, DoSearch );
   }
 
   void Search::handleIqID( IQ* iq, int context )

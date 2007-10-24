@@ -40,7 +40,7 @@ namespace gloox
       ~ClientBase();
       const std::string getID();
       Disco* disco();
-      void send( Tag *tag );
+      void send( IQ& iq, IqHandler* = 0 , int = 0 );
       void trackID( IqHandler *ih, const std::string& id, int context );
       void registerIqHandler( IqHandler *ih, const std::string& xmlns );
       void removeIqHandler( IqHandler* ih, const std::string& xmlns );
@@ -60,8 +60,9 @@ namespace gloox
   ClientBase::~ClientBase() { delete m_disco; }
   const std::string ClientBase::getID() { return "id"; }
   Disco* ClientBase::disco() { return m_disco; }
-  void ClientBase::send( Tag *tag )
+  void ClientBase::send( IQ& iq, IqHandler*, int )
   {
+    Tag* tag = iq.tag();
     switch( m_test )
     {
       case 1:

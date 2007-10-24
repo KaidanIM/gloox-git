@@ -91,7 +91,9 @@ namespace gloox
        * @return The status text set by the sender.
        */
       const std::string status( const std::string& lang = "default" ) const
-        { return findLang( m_status, lang ); }
+      {
+        return findLang( m_stati, m_status, lang );
+      }
 
       /**
          * Returns the remote entity resource's presence priority if the stanza is a presence stanza.
@@ -99,6 +101,9 @@ namespace gloox
          * @return The priority information contained in the stanza, if any, or 0.
        */
       int priority() const { return m_priority; }
+
+      // reimplemented from Stanza
+      virtual Tag* tag() const;
 
     private:
       /**
@@ -108,7 +113,8 @@ namespace gloox
       Presence( Tag* tag );
 
       PresenceType m_subtype;
-      StringMap m_status;
+      StringMap* m_stati;
+      std::string m_status;
       int m_priority;
 
   };

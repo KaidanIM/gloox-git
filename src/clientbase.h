@@ -227,13 +227,28 @@ namespace gloox
       const std::string getID();
 
       /**
-       * Sends a given Tag over an established connection.
+       * Sends the given Tag over an established connection.
        * The ClientBase object becomes the owner of this Tag and will delete it after sending it.
        * You should not rely on the existance of the Tag after it's been sent. If you still need
        * it after sending it, use Tag::clone() to create a deep copy.
        * @param tag The Tag to send.
        */
       void send( Tag* tag );
+
+      /**
+       * Sends the given Stanza over an established connection.
+       * @param tag The Stanza to send.
+       */
+      void send( const Stanza& tag );
+
+      /**
+       * Sends the given IQ stanza. The given IqHandler is registered to be notified of replies. This,
+       * of course, only works for IQs of type get or set.
+       * @param iq The IQ stanza to send.
+       * @param ih The handler to register for replies.
+       * @param context A value that allows for restoring context.
+       */
+      void send( const IQ& iq, IqHandler* ih, int context );
 
       /**
        * Returns whether authentication has taken place and was successful.
@@ -345,6 +360,12 @@ namespace gloox
       void setSASLMechanisms( int mechanisms ) { m_availableSaslMechs = mechanisms; }
 
       /**
+       * Registers a new StanzaExtension with the StanzaExtensionFactory.
+       * @param ext The extension to register.
+       */
+      void registerStanzaExtension( StanzaExtension* ext );
+
+      /**
        * Registers @c cl as object that receives connection notifications.
        * @param cl The object to receive connection notifications.
        */
@@ -365,8 +386,9 @@ namespace gloox
        * @param ih The IqHandler to receive notifications.
        * @param id The id to track.
        * @param context A value that allows for restoring context.
+       * @deprecated Use send( const IQ&, IqHandler*, int ) instead.
        */
-      void trackID( IqHandler* ih, const std::string& id, int context );
+      GLOOX_DEPRECATED void trackID( IqHandler* ih, const std::string& id, int context );
 
       /**
        * Removes the given IqHandler from the list of handlers of pending operations, added

@@ -20,8 +20,6 @@ int main( int /*argc*/, char** /*argv*/ )
   Tag *q = new Tag( iq, "query" );
   q->addAttribute( "xmlns", "mynamespace" );
 
-  IQ *i = 0;
-
 #warning FIXME fix the following 4 tests. how to test private functions, ctors, etc?
 //   // -------
 //   name = "parse IQ set";
@@ -81,90 +79,105 @@ int main( int /*argc*/, char** /*argv*/ )
 //   i = 0;
 
   // -------
-  name = "new simple IQ error";
-  i = new IQ( IQ::Error, JID( "xyz@example.org/blah" ), "id2" );
-  if( !i->hasAttribute( "type", "error" ) || !i->hasAttribute( "id", "id2" )
-       || !i->hasAttribute( "to", "xyz@example.org/blah" ) )
   {
-    ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    name = "new simple IQ error";
+    IQ iq( IQ::Error, JID( "xyz@example.org/blah" ), "id2" );
+    Tag* i = iq.tag();
+    if( !i->hasAttribute( "type", "error" ) || !i->hasAttribute( "id", "id2" )
+        || !i->hasAttribute( "to", "xyz@example.org/blah" ) )
+    {
+      ++fail;
+      printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    }
+    delete i;
   }
-  delete i;
-  i = 0;
 
   // -------
-  name = "new simple IQ result";
-  i = new IQ( IQ::Result, JID( "xyz@example.org/blah" ), "id2" );
-  if( !i->hasAttribute( "type", "result" ) || !i->hasAttribute( "id", "id2" )
-       || !i->hasAttribute( "to", "xyz@example.org/blah" ) )
   {
-    ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    name = "new simple IQ result";
+    IQ iq( IQ::Result, JID( "xyz@example.org/blah" ), "id2" );
+    Tag* i = iq.tag();
+    if( !i->hasAttribute( "type", "result" ) || !i->hasAttribute( "id", "id2" )
+        || !i->hasAttribute( "to", "xyz@example.org/blah" ) )
+    {
+      ++fail;
+      printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    }
+    delete i;
   }
-  delete i;
-  i = 0;
 
   // -------
-  name = "new simple IQ get";
-  i = new IQ( IQ::Get, JID( "xyz@example.org/blah" ), "id2" );
-  if( !i->hasAttribute( "type", "get" ) || !i->hasAttribute( "id", "id2" )
-       || !i->hasAttribute( "to", "xyz@example.org/blah" ) )
   {
-    ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    name = "new simple IQ get";
+    IQ iq( IQ::Get, JID( "xyz@example.org/blah" ), "id2" );
+    Tag* i = iq.tag();
+    if( !i->hasAttribute( "type", "get" ) || !i->hasAttribute( "id", "id2" )
+        || !i->hasAttribute( "to", "xyz@example.org/blah" ) )
+    {
+      ++fail;
+      printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    }
+    delete i;
   }
-  delete i;
-  i = 0;
 
   // -------
-  name = "new simple IQ set 1";
-  i = new IQ( IQ::Set, JID( "xyz@example.org/blah" ), "id2" );
-  if( !i->hasAttribute( "type", "set" ) || !i->hasAttribute( "id", "id2" )
-       || !i->hasAttribute( "to", "xyz@example.org/blah" ) )
   {
-    ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    name = "new simple IQ set 1";
+    IQ iq( IQ::Set, JID( "xyz@example.org/blah" ), "id2" );
+    Tag* i = iq.tag();
+    if( !i->hasAttribute( "type", "set" ) || !i->hasAttribute( "id", "id2" )
+        || !i->hasAttribute( "to", "xyz@example.org/blah" ) )
+    {
+      ++fail;
+      printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    }
+    delete i;
   }
-  delete i;
-  i = 0;
 
   // -------
-  name = "new simple IQ set 2";
-  i = new IQ( IQ::Set, JID( "xyz@example.org/blah" ), "id2", "mynamespace" );
-  if( !i->hasAttribute( "type", "set" ) || !i->hasAttribute( "id", "id2" )
-       || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasChild( "query", "xmlns", "mynamespace" ) )
   {
-    ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    name = "new simple IQ set 2";
+    IQ iq( IQ::Set, JID( "xyz@example.org/blah" ), "id2", "mynamespace" );
+    Tag* i = iq.tag();
+    if( !i->hasAttribute( "type", "set" ) || !i->hasAttribute( "id", "id2" )
+        || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasChild( "query", "xmlns", "mynamespace" ) )
+    {
+      ++fail;
+      printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    }
+    delete i;
   }
-  delete i;
-  i = 0;
 
   // -------
-  name = "new simple IQ set 3";
-  i = new IQ( IQ::Set, JID( "xyz@example.org/blah" ), "id2", "mynamespace", "testtag" );
-  if( !i->hasAttribute( "type", "set" ) || !i->hasAttribute( "id", "id2" )
-       || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasChild( "testtag", "xmlns", "mynamespace" ) )
   {
-    ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    name = "new simple IQ set 3";
+    IQ iq( IQ::Set, JID( "xyz@example.org/blah" ), "id2", "mynamespace", "testtag" );
+    Tag* i = iq.tag();
+    if( !i->hasAttribute( "type", "set" ) || !i->hasAttribute( "id", "id2" )
+        || !i->hasAttribute( "to", "xyz@example.org/blah" )
+        || !i->hasChild( "testtag", "xmlns", "mynamespace" ) )
+    {
+      ++fail;
+      printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    }
+    delete i;
   }
-  delete i;
-  i = 0;
 
   // -------
-  name = "new simple IQ set 4";
-  i = new IQ( IQ::Set, JID( "xyz@example.org/blah" ), "id2", "mynamespace", "testtag",
-              JID( "blah@example.net/foo" ) );
-  if( !i->hasAttribute( "type", "set" ) || !i->hasAttribute( "id", "id2" )
-       || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasChild( "testtag", "xmlns", "mynamespace" )
-       || !i->hasAttribute( "from", "blah@example.net/foo" ) )
   {
-    ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    name = "new simple IQ set 4";
+    IQ iq( IQ::Set, JID( "xyz@example.org/blah" ), "id2", "mynamespace", "testtag",
+                JID( "blah@example.net/foo" ) );
+    Tag* i = iq.tag();
+    if( !i->hasAttribute( "type", "set" ) || !i->hasAttribute( "id", "id2" )
+        || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasChild( "testtag", "xmlns", "mynamespace" )
+        || !i->hasAttribute( "from", "blah@example.net/foo" ) )
+    {
+      ++fail;
+      printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    }
+    delete i;
   }
-  delete i;
-  i = 0;
 
 #warning FIXME fix the following test. how to test private functions, ctors, etc?
 //   // -------

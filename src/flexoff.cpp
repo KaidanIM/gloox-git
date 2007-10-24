@@ -49,8 +49,8 @@ namespace gloox
   {
     const std::string& id = m_parent->getID();
     IQ::IqType iqType = context == FORequestMsgs ? IQ::Get : IQ::Set;
-    IQ* iq = new IQ( iqType, JID(), id, XMLNS_OFFLINE, "offline" );
-    Tag* o = iq->query();
+    IQ iq( iqType, JID(), id, XMLNS_OFFLINE, "offline" );
+    Tag* o = iq.query();
 
     if( msgs.empty() )
       new Tag( o, context == FORequestMsgs ? "fetch" : "purge" );
@@ -65,8 +65,7 @@ namespace gloox
       }
     }
 
-    m_parent->trackID( this, id, context );
-    m_parent->send( iq );
+    m_parent->send( iq, this, context );
   }
 
   void FlexibleOffline::registerFlexibleOfflineHandler( FlexibleOfflineHandler* foh )

@@ -42,10 +42,10 @@ namespace gloox
     IQ::IqType iqType = IQ::Set;
     if( context == PLRequestNames || context == PLRequestList )
       iqType = IQ::Get;
-    IQ* iq = new IQ( iqType, JID(), id, XMLNS_PRIVACY );
+    IQ iq( iqType, JID(), id, XMLNS_PRIVACY );
     if( context != PLRequestNames )
     {
-      const char * child = 0;
+      std::string child;
       switch( context )
       {
         case PLRequestList:
@@ -61,12 +61,11 @@ namespace gloox
           child = "active";
           break;
       }
-      Tag* l = new Tag( iq->query(), child );
+      Tag* l = new Tag( iq.query(), child );
       if( !name.empty() )
         l->addAttribute( "name", name );
     }
-    m_parent->trackID( this, id, context );
-    m_parent->send( iq );
+    m_parent->send( iq, this, context );
     return id;
   }
 
@@ -77,8 +76,8 @@ namespace gloox
 
     const std::string& id = m_parent->getID();
 
-    IQ* iq = new IQ( IQ::Set, JID(), id, XMLNS_PRIVACY );
-    Tag* l = new Tag( iq->query(), "list" );
+    IQ iq( IQ::Set, JID(), id, XMLNS_PRIVACY );
+    Tag* l = new Tag( iq.query(), "list" );
     l->addAttribute( "name", name );
 
     int count = 0;
@@ -129,8 +128,7 @@ namespace gloox
       i->addAttribute( "order", ++count );
     }
 
-    m_parent->trackID( this, id, PLStore );
-    m_parent->send( iq );
+    m_parent->send( iq, this, PLStore );
     return id;
   }
 
@@ -145,7 +143,7 @@ namespace gloox
       const std::string& name = l->findAttribute( "name" );
       m_privacyListHandler->handlePrivacyListChanged( name );
 
-      IQ* re = new IQ( IQ::Result, JID(), iq->id() );
+      IQ re( IQ::Result, JID(), iq->id() );
       m_parent->send( re );
       return true;
     }

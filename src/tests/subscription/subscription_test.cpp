@@ -17,8 +17,6 @@ int main( int /*argc*/, char** /*argv*/ )
   s10n->addAttribute( "to", "you@example.net/gloox" );
   new Tag( s10n, "status", "the status" );
 
-  Subscription *i = 0;
-
 #warning FIXME fix the following 4 tests. how to test private functions, ctors, etc?
 //   // -------
 //   name = "parse Subscription subscribe";
@@ -86,65 +84,72 @@ int main( int /*argc*/, char** /*argv*/ )
 //   i = 0;
 
   // -------
-  name = "new simple Subscription subscribe";
-  i = new Subscription( Subscription::Subscribe, JID( "xyz@example.org/blah" ), "the status",
-                        "the xmllang", JID( "foo@bar.com" ) );
-  if( !i->hasAttribute( "type", "subscribe" )
-      || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
-      || !i->hasChildWithCData( "status", "the status" )
-      || !i->hasChild( "status", "xml:lang", "the xmllang" ) )
   {
-    ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    name = "new simple Subscription subscribe";
+    Subscription s( Subscription::Subscribe, JID( "xyz@example.org/blah" ), "the status",
+                          "the xmllang", JID( "foo@bar.com" ) );
+    Tag* i = s.tag();
+    if( !i->hasAttribute( "type", "subscribe" )
+        || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
+        || !i->hasChildWithCData( "status", "the status" )
+        || !i->hasChild( "status", "xml:lang", "the xmllang" ) )
+    {
+      ++fail;
+      printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    }
+    delete i;
   }
-  delete i;
-  i = 0;
 
   // -------
-  name = "new simple Subscription subscribed";
-  i = new Subscription( Subscription::Subscribed, JID( "xyz@example.org/blah" ), "the status",
-                        "the xmllang", JID( "foo@bar.com" ) );
-  if( !i->hasAttribute( "type", "subscribed" )
-      || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
-      || !i->hasChildWithCData( "status", "the status" )
-      || !i->hasChild( "status", "xml:lang", "the xmllang" ) )
   {
-    ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    name = "new simple Subscription subscribed";
+    Subscription s( Subscription::Subscribed, JID( "xyz@example.org/blah" ), "the status",
+                          "the xmllang", JID( "foo@bar.com" ) );
+    Tag* i = s.tag();
+    if( !i->hasAttribute( "type", "subscribed" )
+        || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
+        || !i->hasChildWithCData( "status", "the status" )
+        || !i->hasChild( "status", "xml:lang", "the xmllang" ) )
+    {
+      ++fail;
+      printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    }
+    delete i;
   }
-  delete i;
-  i = 0;
 
   // -------
-  name = "new simple Subscription unsubscribe";
-  i = new Subscription( Subscription::Unsubscribe, JID( "xyz@example.org/blah" ), "the status",
-                        "the xmllang", JID( "foo@bar.com" ) );
-  if( !i->hasAttribute( "type", "unsubscribe" )
-      || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
-      || !i->hasChildWithCData( "status", "the status" )
-      || !i->hasChild( "status", "xml:lang", "the xmllang" ) )
   {
-    ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
-  }
-  delete i;
-  i = 0;
+    name = "new simple Subscription unsubscribe";
+    Subscription s( Subscription::Unsubscribe, JID( "xyz@example.org/blah" ), "the status",
+                          "the xmllang", JID( "foo@bar.com" ) );
+    Tag* i = s.tag();
+    if( !i->hasAttribute( "type", "unsubscribe" )
+        || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
+        || !i->hasChildWithCData( "status", "the status" )
+        || !i->hasChild( "status", "xml:lang", "the xmllang" ) )
+    {
+      ++fail;
+      printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    }
+    delete i;
+    }
 
   // -------
-  name = "new simple Subscription unsubscribed";
-  i = new Subscription( Subscription::Unsubscribed, JID( "xyz@example.org/blah" ), "the status",
-                        "the xmllang", JID( "foo@bar.com" ) );
-  if( !i->hasAttribute( "type", "unsubscribed" )
-      || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
-      || !i->hasChildWithCData( "status", "the status" )
-      || !i->hasChild( "status", "xml:lang", "the xmllang" ) )
   {
-    ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    name = "new simple Subscription unsubscribed";
+    Subscription s( Subscription::Unsubscribed, JID( "xyz@example.org/blah" ), "the status",
+                          "the xmllang", JID( "foo@bar.com" ) );
+    Tag* i = s.tag();
+    if( !i->hasAttribute( "type", "unsubscribed" )
+        || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
+        || !i->hasChildWithCData( "status", "the status" )
+        || !i->hasChild( "status", "xml:lang", "the xmllang" ) )
+    {
+      ++fail;
+      printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    }
+    delete i;
   }
-  delete i;
-  i = 0;
-
 
 
 

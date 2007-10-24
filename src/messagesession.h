@@ -263,8 +263,8 @@ namespace gloox
        * the mesage ran through the message filters).
        * @param tag A Tag to send.
        */
-      virtual void send( const Message* msg );
-      void decorate( Message* msg );
+      virtual void send( const Message& msg );
+      void decorate( Message& msg );
 
       ClientBase* m_parent;
       JID m_target;

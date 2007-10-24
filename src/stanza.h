@@ -35,7 +35,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.4
    */
-  class GLOOX_API Stanza : public Tag
+  class GLOOX_API Stanza
   {
     public:
       /**
@@ -80,7 +80,7 @@ namespace gloox
        * after using it.
        * @since 0.9
        */
-      void addExtension( StanzaExtension* se );
+      void addExtension( const StanzaExtension* se );
 
       /**
        * Finds a StanzaExtension of a particular type.
@@ -94,6 +94,13 @@ namespace gloox
        * @return The list of the Stanza's extensions.
        */
       const StanzaExtensionList& extensions() const { return m_extensionList; }
+
+      /**
+       * Creates a Tag representation of the Stanza. The Tag is completely independent of the
+       * Stanza and will not be updated when the Stanza is modified.
+       * @return A pointer to a Tag representation. It is the job of the caller to delete the Tag.
+       */
+      virtual Tag* tag() const = 0;
 
     protected:
       /**
@@ -109,7 +116,7 @@ namespace gloox
        * @param name The name of the root tag.
        * @since 1.0
        */
-      Stanza( const std::string& name, const JID& to, const JID& from );
+      Stanza( const JID& to, const JID& from );
 
       StanzaExtensionList m_extensionList;
       std::string m_id;
@@ -117,8 +124,11 @@ namespace gloox
       JID m_from;
       JID m_to;
 
-      static const std::string& findLang( const StringMap& map, const std::string& lang );
-      static void setLang( StringMap& map, const Tag* tag );
+      static const std::string& findLang( const StringMap* map, const std::string& defaultData,
+                                          const std::string& lang );
+      static void setLang( StringMap* map, std::string& defaultLang, const Tag* tag );
+      static void setLang( StringMap* map, std::string& defaultLang,
+                           const std::string& data, const std::string& xmllang );
   };
 
 }

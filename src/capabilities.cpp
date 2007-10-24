@@ -28,7 +28,6 @@ namespace gloox
       m_valid = true;
   }
 
-
   Capabilities::Capabilities( const Tag* tag )
     : StanzaExtension( ExtCaps ), m_disco( 0 ), m_valid( false )
   {
