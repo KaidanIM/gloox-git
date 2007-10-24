@@ -79,7 +79,12 @@ namespace gloox
        * @return The status text set by the sender.
        */
       virtual const std::string status( const std::string& lang = "default" ) const
-        { return findLang( m_status, lang ); }
+      {
+        return findLang( m_stati, m_status, lang );
+      }
+
+      // reimplemented from Stanza
+      virtual Tag* tag() const;
 
     private:
       /**
@@ -89,7 +94,8 @@ namespace gloox
       Subscription( Tag* tag );
 
       S10nType m_subtype;
-      StringMap m_status;
+      StringMap* m_stati;
+      std::string m_status;
 
   };
 

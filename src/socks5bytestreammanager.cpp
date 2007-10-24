@@ -66,8 +66,8 @@ namespace gloox
 
     const std::string& msid = sid.empty() ? m_parent->getID() : sid;
     const std::string& id = m_parent->getID();
-    IQ* iq = new IQ( IQ::Set, to, id, XMLNS_BYTESTREAMS );
-    Tag* q = iq->query();
+    IQ iq( IQ::Set, to, id, XMLNS_BYTESTREAMS );
+    Tag* q = iq.query();
     q->addAttribute( "sid", msid );
     q->addAttribute( "mode", /*( mode == S5BTCP ) ?*/ "tcp" /*: "udp"*/ );
 
@@ -96,8 +96,7 @@ namespace gloox
     m_asyncTrackMap[msid] = asi;
 
     m_trackMap[id] = msid;
-    m_parent->trackID( this, id, S5BOpenStream );
-    m_parent->send( iq );
+    m_parent->send( iq, this, S5BOpenStream );
 
     return true;
   }
@@ -135,13 +134,15 @@ namespace gloox
       }
     }
 
-    m_parent->send( iq );
+    m_parent->send( *iq );
+    delete iq;
   }
 
   bool SOCKS5BytestreamManager::handleIq( IQ* iq )
   {
-    const Tag* q = iq->findChild( "query", XMLNS, XMLNS_BYTESTREAMS );
-    if( !q || !m_socks5BytestreamHandler || m_trackMap.find( iq->id() ) != m_trackMap.end() )
+    const Tag* q = iq->query();
+    if( !q || q->xmlns() != XMLNS_BYTESTREAMS || !m_socks5BytestreamHandler
+          || m_trackMap.find( iq->id() ) != m_trackMap.end() )
       return false;
 
     switch( iq->subtype() )
@@ -282,7 +283,8 @@ namespace gloox
     }
 
     iq->addExtension( error );
-    m_parent->send( iq );
+    m_parent->send( *iq );
+    delete iq;
   }
 
   void SOCKS5BytestreamManager::handleIqID( IQ* iq, int context )
@@ -299,8 +301,8 @@ namespace gloox
         {
           case IQ::Result:
           {
-            const Tag* q = iq->findChild( "query", XMLNS, XMLNS_BYTESTREAMS );
-            if( !q || !m_socks5BytestreamHandler )
+            const Tag* q = iq->query();
+            if( !q || q->xmlns() != XMLNS_BYTESTREAMS || !m_socks5BytestreamHandler )
               return;
 
             const Tag* s = q->findChild( "streamhost-used" );

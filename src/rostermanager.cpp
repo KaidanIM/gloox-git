@@ -62,14 +62,14 @@ namespace gloox
   void RosterManager::fill()
   {
     m_privateXML->requestXML( "roster", XMLNS_ROSTER_DELIMITER, this );
-    m_parent->send( new IQ( IQ::Get, JID(), m_parent->getID(), XMLNS_ROSTER ) );
+    m_parent->send( IQ( IQ::Get, JID(), m_parent->getID(), XMLNS_ROSTER ) );
   }
 
   bool RosterManager::handleIq( IQ* iq )
   {
     if( iq->subtype() == IQ::Result ) // initial roster
     {
-      extractItems( iq, false );
+      extractItems( iq->query(), false );
 
       if( m_rosterListener )
         m_rosterListener->handleRoster( m_roster );
@@ -78,8 +78,8 @@ namespace gloox
     }
     else if( iq->subtype() == IQ::Set ) // roster item push
     {
-      extractItems( iq, true );
-      m_parent->send( new IQ( IQ::Result, JID(), iq->id() ) );
+      extractItems( iq->query(), true );
+      m_parent->send( IQ( IQ::Result, JID(), iq->id() ) );
     }
     else if( iq->subtype() == IQ::Error )
     {
@@ -145,7 +145,7 @@ namespace gloox
 
     add( jid, name, groups );
 
-    Subscription* s = new Subscription( Subscription::Subscribe, jid.bareJID(), msg );
+    Subscription s( Subscription::Subscribe, jid.bareJID(), msg );
     m_parent->send( s );
   }
 
@@ -157,8 +157,8 @@ namespace gloox
 
     const std::string& id = m_parent->getID();
 
-    IQ* iq = new IQ( IQ::Set, JID(), id, XMLNS_ROSTER );
-    Tag* i = new Tag( iq->query(), "item", "jid", jid.bare() );
+    IQ iq( IQ::Set, JID(), id, XMLNS_ROSTER );
+    Tag* i = new Tag( iq.query(), "item", "jid", jid.bare() );
     if( !name.empty() )
       i->addAttribute( "name", name );
 
@@ -171,13 +171,13 @@ namespace gloox
 
   void RosterManager::unsubscribe( const JID& jid, const std::string& msg )
   {
-    Subscription* p = new Subscription( Subscription::Unsubscribe, jid.bareJID(), msg );
+    Subscription p( Subscription::Unsubscribe, jid.bareJID(), msg );
     m_parent->send( p );
   }
 
   void RosterManager::cancel( const JID& jid, const std::string& msg )
   {
-    Subscription* p = new Subscription( Subscription::Unsubscribed, jid.bareJID(), msg );
+    Subscription p( Subscription::Unsubscribed, jid.bareJID(), msg );
     m_parent->send( p );
   }
 
@@ -185,8 +185,8 @@ namespace gloox
   {
     const std::string& id = m_parent->getID();
 
-    IQ* iq = new IQ( IQ::Set, JID(), id, XMLNS_ROSTER );
-    Tag* i = new Tag( iq->query(), "item", "jid", jid.bare() );
+    IQ iq( IQ::Set, JID(), id, XMLNS_ROSTER );
+    Tag* i = new Tag( iq.query(), "item", "jid", jid.bare() );
     i->addAttribute( "subscription", "remove" );
 
     m_parent->send( iq );
@@ -201,8 +201,8 @@ namespace gloox
       {
         const std::string& id = m_parent->getID();
 
-        IQ* iq = new IQ( IQ::Set, JID(), id, XMLNS_ROSTER );
-        Tag* i = new Tag( iq->query(), "item", "jid", (*it).second->jid() );
+        IQ iq( IQ::Set, JID(), id, XMLNS_ROSTER );
+        Tag* i = new Tag( iq.query(), "item", "jid", (*it).second->jid() );
         if( !(*it).second->name().empty() )
           i->addAttribute( "name", (*it).second->name() );
 
@@ -218,7 +218,7 @@ namespace gloox
 
   void RosterManager::ackSubscriptionRequest( const JID& to, bool ack )
   {
-    Subscription* p = new Subscription( ack ? Subscription::Subscribed
+    Subscription p( ack ? Subscription::Subscribed
                                             : Subscription::Unsubscribed, to.bareJID() );
     m_parent->send( p );
   }
@@ -250,7 +250,7 @@ namespace gloox
 
       case Subscription::Unsubscribe:
       {
-        Subscription* p = new Subscription( Subscription::Unsubscribed, s10n->from().bareJID() );
+        Subscription p( Subscription::Unsubscribed, s10n->from().bareJID() );
         m_parent->send( p );
 
         bool answer = m_rosterListener->handleUnsubscriptionRequest( s10n->from(), s10n->status() );
@@ -287,8 +287,10 @@ namespace gloox
 
   void RosterManager::extractItems( Tag* tag, bool isPush )
   {
-    Tag* t = tag->findChild( "query" );
-    const TagList& l = t->children();
+    if( !tag )
+      return;
+
+    const TagList& l = tag->children();
     TagList::const_iterator it = l.begin();
     for( ; it != l.end(); ++it )
     {

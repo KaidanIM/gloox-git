@@ -239,10 +239,9 @@ namespace gloox
             if( !url.empty() )
             {
               const std::string& id = m_parent->getID();
-              IQ* iq = new IQ( IQ::Set, from, id, XMLNS_IQ_OOB );
-              new Tag( iq->query(), "url", url );
-              m_parent->trackID( this, id, OOBSent );
-              m_parent->send( iq );
+              IQ iq( IQ::Set, from, id, XMLNS_IQ_OOB );
+              new Tag( iq.query(), "url", url );
+              m_parent->send( iq, this, OOBSent );
             }
           }
         }

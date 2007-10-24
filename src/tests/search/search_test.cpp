@@ -22,7 +22,7 @@ namespace gloox
       ClientBase() {}
       virtual ~ClientBase() {}
       const std::string getID() { return "id"; }
-      virtual void send( Tag *tag ) = 0;
+      virtual void send( IQ& iq, IqHandler*, int ) = 0;
       virtual void trackID( IqHandler *ih, const std::string& id, int context ) = 0;
   };
 
@@ -89,8 +89,10 @@ class SearchTest : public gloox::SearchHandler, public gloox::ClientBase
       delete form;
     }
     virtual void handleSearchError( const gloox::JID& /*directory*/, gloox::Stanza* /*stanza*/ ) {}
-    virtual void send( gloox::Tag* tag )
+    virtual void send( gloox::IQ& iq, gloox::IqHandler*, int )
     {
+      gloox::Tag* tag = iq.tag();
+
       switch( m_test )
       {
         case 1:
@@ -128,7 +130,7 @@ class SearchTest : public gloox::SearchHandler, public gloox::ClientBase
     void setTest( int test ) { m_test = test; }
     void fetchSearchFields() { m_search.fetchSearchFields( g_dir, this ); }
     bool result() { bool t = m_result; m_result = false; return t; }
-    void feed( gloox::IQ *s ) { m_search.handleIqID( s, m_context ); }
+    void feed( gloox::IQ& s ) { m_search.handleIqID( &s, m_context ); }
     virtual void trackID( gloox::IqHandler* /*ih*/, const std::string& /*id*/, int context )
       { m_context = context; }
     void search( const gloox::SearchFieldStruct& fields ) { m_search.search( g_dir, 15, fields, this ); }
@@ -160,23 +162,23 @@ int main( int /*argc*/, char** /*argv*/ )
   }
 
   // -------
-  name = "receive fields (old-style)";
-  gloox::IQ *iq = new gloox::IQ( gloox::IQ::Result, gloox::JID( "searchtest" ), "id",
-                                 gloox::XMLNS_SEARCH, "query", gloox::JID( g_dir ) );
-  new gloox::Tag( iq->query(), "instructions", g_inst );
-  new gloox::Tag( iq->query(), "first" );
-  new gloox::Tag( iq->query(), "last" );
-  new gloox::Tag( iq->query(), "nick" );
-  new gloox::Tag( iq->query(), "email" );
-  t.setTest( 2 );
-  t.feed( iq );
-  if( !t.result() )
   {
-    ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    name = "receive fields (old-style)";
+    gloox::IQ iq( gloox::IQ::Result, gloox::JID( "searchtest" ), "id",
+                                  gloox::XMLNS_SEARCH, "query", gloox::JID( g_dir ) );
+    new gloox::Tag( iq.query(), "instructions", g_inst );
+    new gloox::Tag( iq.query(), "first" );
+    new gloox::Tag( iq.query(), "last" );
+    new gloox::Tag( iq.query(), "nick" );
+    new gloox::Tag( iq.query(), "email" );
+    t.setTest( 2 );
+    t.feed( iq );
+    if( !t.result() )
+    {
+      ++fail;
+      printf( "test '%s' failed\n", name.c_str() );
+    }
   }
-  delete iq;
-  iq = 0;
 
   // -------
   name = "search request (old-style)";
@@ -194,28 +196,28 @@ int main( int /*argc*/, char** /*argv*/ )
   }
 
   // -------
-  name = "search result (old-style)";
-  iq = new gloox::IQ( gloox::IQ::Result, gloox::JID( "searchtest" ), "id",
-                      gloox::XMLNS_SEARCH, "query", gloox::JID( g_dir ) );
-  gloox::Tag *i = new gloox::Tag( iq->query(), "item" );
-  new gloox::Tag( i, "first", "f1" );
-  new gloox::Tag( i, "last", "l1" );
-  new gloox::Tag( i, "nick", "n1" );
-  new gloox::Tag( i, "email", "e1" );
-  i = new gloox::Tag( iq->query(), "item" );
-  new gloox::Tag( i, "first", "f2" );
-  new gloox::Tag( i, "last", "l2" );
-  new gloox::Tag( i, "nick", "n2" );
-  new gloox::Tag( i, "email", "e2" );
-  t.setTest( 4 );
-  t.feed( iq );
-  if( !t.result() )
   {
-    ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    name = "search result (old-style)";
+    gloox::IQ iq( gloox::IQ::Result, gloox::JID( "searchtest" ), "id",
+                        gloox::XMLNS_SEARCH, "query", gloox::JID( g_dir ) );
+    gloox::Tag *i = new gloox::Tag( iq.query(), "item" );
+    new gloox::Tag( i, "first", "f1" );
+    new gloox::Tag( i, "last", "l1" );
+    new gloox::Tag( i, "nick", "n1" );
+    new gloox::Tag( i, "email", "e1" );
+    i = new gloox::Tag( iq.query(), "item" );
+    new gloox::Tag( i, "first", "f2" );
+    new gloox::Tag( i, "last", "l2" );
+    new gloox::Tag( i, "nick", "n2" );
+    new gloox::Tag( i, "email", "e2" );
+    t.setTest( 4 );
+    t.feed( iq );
+    if( !t.result() )
+    {
+      ++fail;
+      printf( "test '%s' failed\n", name.c_str() );
+    }
   }
-  delete iq;
-  iq = 0;
 
   // -------
   name = "intermediary search request (old-style)";
@@ -232,18 +234,18 @@ int main( int /*argc*/, char** /*argv*/ )
   }
 
   // -------
-  name = "search result (old-style), empty";
-  iq = new gloox::IQ( gloox::IQ::Result, gloox::JID( "searchtest" ), "id",
-                      gloox::XMLNS_SEARCH, "query", gloox::JID( g_dir ) );
-  t.setTest( 5 );
-  t.feed( iq );
-  if( !t.result() )
   {
-    ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    name = "search result (old-style), empty";
+    gloox::IQ iq( gloox::IQ::Result, gloox::JID( "searchtest" ), "id",
+                        gloox::XMLNS_SEARCH, "query", gloox::JID( g_dir ) );
+    t.setTest( 5 );
+    t.feed( iq );
+    if( !t.result() )
+    {
+      ++fail;
+      printf( "test '%s' failed\n", name.c_str() );
+    }
   }
-  delete iq;
-  iq = 0;
 
   // -------
   name = "fetch fields (dataform)";
@@ -256,24 +258,24 @@ int main( int /*argc*/, char** /*argv*/ )
   }
 
   // -------
-  name = "receive fields (dataform)";
-  iq = new gloox::IQ( gloox::IQ::Result, gloox::JID( "searchtest" ), "id",
-                      gloox::XMLNS_SEARCH, "query", gloox::JID( g_dir ) );
-  gloox::DataForm df( gloox::TypeForm );
-  iq->query()->addChild( df.tag() );
-  t.setTest( 6 );
-  t.feed( iq );
-  if( !t.result() )
   {
-    ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    name = "receive fields (dataform)";
+    gloox::IQ iq( gloox::IQ::Result, gloox::JID( "searchtest" ), "id",
+                        gloox::XMLNS_SEARCH, "query", gloox::JID( g_dir ) );
+    iq.addExtension( new gloox::DataForm( gloox::TypeForm ) );
+    t.setTest( 6 );
+    t.feed( iq );
+    if( !t.result() )
+    {
+      ++fail;
+      printf( "test '%s' failed\n", name.c_str() );
+    }
   }
-  delete iq;
-  iq = 0;
 
   // -------
   name = "search request (dataform)";
   t.setTest( 7 );
+  gloox::DataForm df( gloox::TypeForm );
   t.search( df );
   if( !t.result() )
   {
@@ -282,20 +284,19 @@ int main( int /*argc*/, char** /*argv*/ )
   }
 
   // -------
-  name = "search result (dataform)";
-  iq = new gloox::IQ( gloox::IQ::Result, gloox::JID( "searchtest" ), "id",
-                      gloox::XMLNS_SEARCH, "query", gloox::JID( g_dir ) );
-  gloox::DataForm df2( gloox::TypeResult );
-  iq->query()->addChild( df2.tag() );
-  t.setTest( 8 );
-  t.feed( iq );
-  if( !t.result() )
   {
-    ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
-  }
-  delete iq;
-  iq = 0;
+    name = "search result (dataform)";
+    gloox::IQ iq( gloox::IQ::Result, gloox::JID( "searchtest" ), "id",
+                        gloox::XMLNS_SEARCH, "query", gloox::JID( g_dir ) );
+    iq.addExtension( new gloox::DataForm( gloox::TypeResult ) );
+    t.setTest( 8 );
+    t.feed( iq );
+    if( !t.result() )
+    {
+      ++fail;
+      printf( "test '%s' failed\n", name.c_str() );
+    }
+    }
 
 
 

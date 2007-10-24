@@ -76,10 +76,10 @@ namespace gloox
       void removeMessageEventHandler();
 
       // reimplemented from MessageFilter
-      virtual void decorate( Message* msg );
+      virtual void decorate( Message& msg );
 
       // reimplemented from MessageFilter
-      virtual void filter( Message* msg );
+      virtual void filter( Message& msg );
 
     private:
       MessageEventHandler* m_messageEventHandler;

@@ -15,6 +15,7 @@
 #include "discohandler.h"
 #include "clientbase.h"
 #include "disconodehandler.h"
+#include "seversion.h"
 
 
 namespace gloox
@@ -58,16 +59,14 @@ namespace gloox
       case IQ::Get:
         if( iq->xmlns() == XMLNS_VERSION )
         {
-          IQ* re = new IQ( IQ::Result, iq->from(), iq->id(), XMLNS_VERSION );
-          new Tag( re->query(), "name", m_versionName );
-          new Tag( re->query(), "version", m_versionVersion );
-          new Tag( re->query(), "os", m_versionOs );
+          IQ re( IQ::Result, iq->from(), iq->id(), XMLNS_VERSION );
+          re.addExtension( new SEVersion( m_versionName, m_versionVersion, m_versionOs ) );
           m_parent->send( re );
         }
         else if( iq->xmlns() == XMLNS_DISCO_INFO && iq->query() )
         {
-          IQ* re = new IQ( IQ::Result, iq->from(), iq->id(), XMLNS_DISCO_INFO );
-          Tag* query = re->query();
+          IQ re( IQ::Result, iq->from(), iq->id(), XMLNS_DISCO_INFO );
+          Tag* query = re.query();
 
           Tag* q = iq->query();
           const std::string& node = q->findAttribute( "node" );
@@ -110,8 +109,8 @@ namespace gloox
         }
         else if( iq->xmlns() == XMLNS_DISCO_ITEMS && iq->query() )
         {
-          IQ* re = new IQ( IQ::Result, iq->from(), iq->id(), XMLNS_DISCO_ITEMS );
-          Tag* query = re->query();
+          IQ re( IQ::Result, iq->from(), iq->id(), XMLNS_DISCO_ITEMS );
+          Tag* query = re.query();
           const Tag* q = iq->query();
           const std::string& node = q->findAttribute( "node" );
           query->addAttribute( "node", node );
@@ -194,17 +193,15 @@ namespace gloox
   {
     const std::string& id = tid.empty() ? m_parent->getID() : tid;
 
-    IQ* iq = new IQ( IQ::Get, to, id, idType == GET_DISCO_INFO ? XMLNS_DISCO_INFO
-                                                               : XMLNS_DISCO_ITEMS );
+    IQ iq( IQ::Get, to, id, idType == GET_DISCO_INFO ? XMLNS_DISCO_INFO : XMLNS_DISCO_ITEMS );
     if( !node.empty() )
-      iq->query()->addAttribute( "node", node );
+      iq.query()->addAttribute( "node", node );
 
     DiscoHandlerContext ct;
     ct.dh = dh;
     ct.context = context;
     m_track[id] = ct;
-    m_parent->trackID( this, id, idType );
-    m_parent->send( iq );
+    m_parent->send( iq, this, idType );
   }
 
   void Disco::setVersion( const std::string& name, const std::string& version, const std::string& os )

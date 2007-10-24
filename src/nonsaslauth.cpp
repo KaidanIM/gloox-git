@@ -39,11 +39,10 @@ namespace gloox
     m_sid = sid;
     const std::string& id = m_parent->getID();
 
-    IQ* iq = new IQ( IQ::Get, m_parent->jid().server(), id, XMLNS_AUTH );
-    new Tag( iq->query(), "username", m_parent->username() );
+    IQ iq( IQ::Get, m_parent->jid().server(), id, XMLNS_AUTH );
+    new Tag( iq.query(), "username", m_parent->username() );
 
-    m_parent->trackID( this, id, TRACK_REQUEST_AUTH_FIELDS );
-    m_parent->send( iq );
+    m_parent->send( iq, this, TRACK_REQUEST_AUTH_FIELDS );
   }
 
   void NonSaslAuth::handleIqID( IQ* iq, int context )
@@ -82,8 +81,8 @@ namespace gloox
           {
             const std::string& id = m_parent->getID();
 
-            IQ* re = new IQ( IQ::Set, JID(), id, XMLNS_AUTH );
-            Tag* query = re->query();
+            IQ re( IQ::Set, JID(), id, XMLNS_AUTH );
+            Tag* query = re.query();
             new Tag( query, "username", m_parent->jid().username() );
             new Tag( query, "resource", m_parent->jid().resource() );
 
@@ -101,8 +100,7 @@ namespace gloox
               new Tag( query, "password", m_parent->password() );
             }
 
-            m_parent->trackID( this, id, TRACK_SEND_AUTH );
-            m_parent->send( re );
+            m_parent->send( re, this, TRACK_SEND_AUTH );
             break;
           }
           case TRACK_SEND_AUTH:

@@ -37,7 +37,7 @@ namespace gloox
 
   void MUCMessageSession::send( const std::string& message )
   {
-    Message* m = new Message( Message::Groupchat, m_target, message );
+    Message m( Message::Groupchat, m_target, message );
 
 //     decorate( m );
 
@@ -46,7 +46,7 @@ namespace gloox
 
   void MUCMessageSession::setSubject( const std::string& subject )
   {
-    Message* m = new Message( Message::Groupchat, m_target.bareJID(), EmptyString, subject );
+    Message m( Message::Groupchat, m_target.bareJID(), EmptyString, subject );
     m_parent->send( m );
   }
 

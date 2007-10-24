@@ -40,12 +40,7 @@ namespace gloox
 
   void LastActivity::query( const JID& jid )
   {
-    const std::string& id = m_parent->getID();
-
-    IQ* t = new IQ( IQ::Get, jid, id, XMLNS_LAST );
-
-    m_parent->trackID( this, id, 0 );
-    m_parent->send( t );
+    m_parent->send( IQ( IQ::Get, jid, m_parent->getID(), XMLNS_LAST ), this, 0 );
   }
 
   bool LastActivity::handleIq( IQ* iq )
@@ -56,8 +51,8 @@ namespace gloox
       {
         time_t now = time( 0 );
 
-        IQ* t = new IQ( IQ::Result, iq->from(), iq->id(), XMLNS_LAST );
-        t->query()->addAttribute( "seconds", (long)( now - m_active ) );
+        IQ t( IQ::Result, iq->from(), iq->id(), XMLNS_LAST );
+        t.query()->addAttribute( "seconds", (long)( now - m_active ) );
 
         m_parent->send( t );
         break;
@@ -65,12 +60,8 @@ namespace gloox
 
       case IQ::Set:
       {
-        IQ* t = new IQ( IQ::Error, iq->from(), iq->id() );
-        Tag* e = new Tag( t, "error" );
-        e->addAttribute( TYPE, "cancel" );
-        Tag* f = new Tag( e, "feature-not-implemented" );
-        f->addAttribute( XMLNS, XMLNS_XMPP_STANZAS );
-
+        IQ t( IQ::Error, iq->from(), iq->id() );
+        t.addExtension( new Error( StanzaErrorTypeCancel, StanzaErrorFeatureNotImplemented ) );
         m_parent->send( t );
         break;
       }

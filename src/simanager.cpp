@@ -52,8 +52,8 @@ namespace gloox
     const std::string& id = m_parent->getID();
     const std::string& id2 = m_parent->getID();
 
-    IQ* iq = new IQ( IQ::Set, to, id, XMLNS_SI, "si" );
-    Tag* si = iq->query();
+    IQ iq( IQ::Set, to, id, XMLNS_SI, "si" );
+    Tag* si = iq.query();
     si->addAttribute( "id", id2 );
     si->addAttribute( "mime-type", mimetype.empty() ? "binary/octet-stream" : mimetype );
     si->addAttribute( "profile", profile );
@@ -66,24 +66,23 @@ namespace gloox
     t.profile = profile;
     t.sih = sih;
     m_track[id] = t;
-    m_parent->trackID( this, id, OfferSI );
-    m_parent->send( iq );
+    m_parent->send( iq, this, OfferSI );
 
     return id2;
   }
 
   void SIManager::acceptSI( const JID& to, const std::string& id, Tag* child1, Tag* child2 )
   {
-    IQ* iq = new IQ( IQ::Result, to, id, XMLNS_SI, "si" );
-    iq->query()->addChild( child1 );
-    iq->query()->addChild( child2 );
+    IQ iq( IQ::Result, to, id, XMLNS_SI, "si" );
+    iq.query()->addChild( child1 );
+    iq.query()->addChild( child2 );
 
     m_parent->send( iq );
   }
 
   void SIManager::declineSI( const JID& to, const std::string& id, SIError reason, const std::string& text )
   {
-    IQ* iq = new IQ( IQ::Error, to, id );
+    IQ iq( IQ::Error, to, id );
     Error* error;
     if( reason == NoValidStreams || reason == BadProfile )
     {
@@ -101,7 +100,7 @@ namespace gloox
         error->text( text );
     }
 
-    iq->addExtension( error );
+    iq.addExtension( error );
     m_parent->send( iq );
   }
 
@@ -133,8 +132,8 @@ namespace gloox
     if( it != m_track.end() )
       return false;
 
-    Tag* si = iq->findChild( "si", XMLNS, XMLNS_SI );
-    if( si && si->hasAttribute( "profile" ) )
+    Tag* si = iq->query();
+    if( si && si->name() == "si" && si->xmlns() == XMLNS_SI && si->hasAttribute( "profile" ) )
     {
       const std::string& profile = si->findAttribute( "profile" );
       HandlerMap::const_iterator it = m_handlers.find( profile );
@@ -160,10 +159,10 @@ namespace gloox
           TrackMap::iterator it = m_track.find( iq->id() );
           if( it != m_track.end() )
           {
-            Tag* si = iq->findChild( "si", XMLNS, XMLNS_SI );
+            Tag* si = iq->query();
             Tag* ptag = 0;
             Tag* fneg = 0;
-            if( si )
+            if( si && si->name() == "si" && si->xmlns() == XMLNS_SI )
             {
               ptag = si->findChildWithAttrib( XMLNS, (*it).second.profile );
               fneg = si->findChild( "feature", XMLNS, XMLNS_FEATURE_NEG );

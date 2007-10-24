@@ -35,10 +35,8 @@ namespace gloox
       return;
 
     const std::string& id = m_parent->getID();
-    IQ* iq = new IQ( IQ::Get, m_nick.server(), id, XMLNS_MUC_UNIQUE, "unique" );
-
-    m_parent->trackID( this, id, RequestUniqueName );
-    m_parent->send( iq );
+    IQ iq( IQ::Get, m_nick.server(), id, XMLNS_MUC_UNIQUE, "unique" );
+    m_parent->send( iq, this, RequestUniqueName );
   }
 
   void UniqueMUCRoom::handleIqID( IQ* iq, int context )
@@ -48,8 +46,8 @@ namespace gloox
       case IQ::Result:
         if( context == RequestUniqueName )
         {
-          Tag* u = iq->findChild( "unique", "xmlns", XMLNS_MUC_UNIQUE );
-          if( u )
+          Tag* u = iq->query();
+          if( u && u->name() == "unique" && u->xmlns() == XMLNS_MUC_UNIQUE )
           {
             const std::string& name = u->cdata();
             if( !name.empty() )

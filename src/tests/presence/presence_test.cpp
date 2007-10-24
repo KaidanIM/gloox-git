@@ -18,8 +18,6 @@ int main( int /*argc*/, char** /*argv*/ )
   new Tag( pres, "status", "the status" );
   new Tag( pres, "priority", "10" );
 
-  Presence* i = 0;
-
 #warning FIXME fix the following 9 tests. how to test private functions, ctors, etc?
 //   // -------
 //   name = "parse Presence implicit available";
@@ -170,130 +168,146 @@ int main( int /*argc*/, char** /*argv*/ )
 //   i = 0;
 
   // -------
-  name = "new simple Presence available";
-  i = new Presence( Presence::Available, JID( "xyz@example.org/blah" ), "the status",
-                        10, "the xmllang", JID( "foo@bar.com" ) );
-  if( !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
-      || !i->hasChildWithCData( "status", "the status" )
-      || !i->hasChild( "status", "xml:lang", "the xmllang" )
-      || !i->hasChildWithCData( "priority", "10" ) )
   {
-    ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    name = "new simple Presence available";
+    Presence p( Presence::Available, JID( "xyz@example.org/blah" ), "the status",
+                          10, "the xmllang", JID( "foo@bar.com" ) );
+    Tag* i = p.tag();
+    if( !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
+        || !i->hasChildWithCData( "status", "the status" )
+        || !i->hasChild( "status", "xml:lang", "the xmllang" )
+        || !i->hasChildWithCData( "priority", "10" ) )
+    {
+      ++fail;
+      printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    }
+    delete i;
   }
-  delete i;
-  i = 0;
 
   // -------
-  name = "new simple Presence unavailable";
-  i = new Presence( Presence::Unavailable, JID( "xyz@example.org/blah" ), "the status",
-                        10, "the xmllang", JID( "foo@bar.com" ) );
-  if( !i->hasAttribute( "type", "unavailable" )
-      || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
-      || !i->hasChildWithCData( "status", "the status" )
-      || !i->hasChild( "status", "xml:lang", "the xmllang" ) )
   {
-    ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    name = "new simple Presence unavailable";
+    Presence p( Presence::Unavailable, JID( "xyz@example.org/blah" ), "the status",
+                          10, "the xmllang", JID( "foo@bar.com" ) );
+    Tag* i = p.tag();
+    if( !i->hasAttribute( "type", "unavailable" )
+        || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
+        || !i->hasChildWithCData( "status", "the status" )
+        || !i->hasChild( "status", "xml:lang", "the xmllang" ) )
+    {
+      ++fail;
+      printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    }
+    delete i;
   }
-  delete i;
-  i = 0;
 
   // -------
-  name = "new simple Presence chat";
-  i = new Presence( Presence::Chat, JID( "xyz@example.org/blah" ), "the status",
-                        10, "the xmllang", JID( "foo@bar.com" ) );
-  if( !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
-      || !i->hasChildWithCData( "status", "the status" )
-      || !i->hasChild( "status", "xml:lang", "the xmllang" )
-      || !i->hasChildWithCData( "priority", "10" )
-      || !i->hasChildWithCData( "show", "chat" ) )
   {
-    ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    name = "new simple Presence chat";
+    Presence p( Presence::Chat, JID( "xyz@example.org/blah" ), "the status",
+                          10, "the xmllang", JID( "foo@bar.com" ) );
+    Tag* i = p.tag();
+    if( !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
+        || !i->hasChildWithCData( "status", "the status" )
+        || !i->hasChild( "status", "xml:lang", "the xmllang" )
+        || !i->hasChildWithCData( "priority", "10" )
+        || !i->hasChildWithCData( "show", "chat" ) )
+    {
+      ++fail;
+      printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    }
+    delete i;
   }
-  delete i;
-  i = 0;
 
   // -------
-  name = "new simple Presence away";
-  i = new Presence( Presence::Away, JID( "xyz@example.org/blah" ), "the status",
-                        10, "the xmllang", JID( "foo@bar.com" ) );
-  if( !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
-      || !i->hasChildWithCData( "status", "the status" )
-      || !i->hasChild( "status", "xml:lang", "the xmllang" )
-      || !i->hasChildWithCData( "priority", "10" )
-      || !i->hasChildWithCData( "show", "away" ) )
   {
-    ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    name = "new simple Presence away";
+    Presence p( Presence::Away, JID( "xyz@example.org/blah" ), "the status",
+                          10, "the xmllang", JID( "foo@bar.com" ) );
+    Tag* i = p.tag();
+    if( !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
+        || !i->hasChildWithCData( "status", "the status" )
+        || !i->hasChild( "status", "xml:lang", "the xmllang" )
+        || !i->hasChildWithCData( "priority", "10" )
+        || !i->hasChildWithCData( "show", "away" ) )
+    {
+      ++fail;
+      printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    }
+    delete i;
   }
-  delete i;
-  i = 0;
 
   // -------
-  name = "new simple Presence dnd";
-  i = new Presence( Presence::DND, JID( "xyz@example.org/blah" ), "the status",
-                        10, "the xmllang", JID( "foo@bar.com" ) );
-  if( !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
-      || !i->hasChildWithCData( "status", "the status" )
-      || !i->hasChild( "status", "xml:lang", "the xmllang" )
-      || !i->hasChildWithCData( "priority", "10" )
-      || !i->hasChildWithCData( "show", "dnd" ) )
   {
-    ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    name = "new simple Presence dnd";
+    Presence p( Presence::DND, JID( "xyz@example.org/blah" ), "the status",
+                          10, "the xmllang", JID( "foo@bar.com" ) );
+    Tag* i = p.tag();
+    if( !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
+        || !i->hasChildWithCData( "status", "the status" )
+        || !i->hasChild( "status", "xml:lang", "the xmllang" )
+        || !i->hasChildWithCData( "priority", "10" )
+        || !i->hasChildWithCData( "show", "dnd" ) )
+    {
+      ++fail;
+      printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    }
+    delete i;
   }
-  delete i;
-  i = 0;
 
   // -------
-  name = "new simple Presence xa";
-  i = new Presence( Presence::XA, JID( "xyz@example.org/blah" ), "the status",
-                        10, "the xmllang", JID( "foo@bar.com" ) );
-  if( !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
-      || !i->hasChildWithCData( "status", "the status" )
-      || !i->hasChild( "status", "xml:lang", "the xmllang" )
-      || !i->hasChildWithCData( "priority", "10" )
-      || !i->hasChildWithCData( "show", "xa" ) )
   {
-    ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    name = "new simple Presence xa";
+    Presence p( Presence::XA, JID( "xyz@example.org/blah" ), "the status",
+                          10, "the xmllang", JID( "foo@bar.com" ) );
+    Tag* i = p.tag();
+    if( !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
+        || !i->hasChildWithCData( "status", "the status" )
+        || !i->hasChild( "status", "xml:lang", "the xmllang" )
+        || !i->hasChildWithCData( "priority", "10" )
+        || !i->hasChildWithCData( "show", "xa" ) )
+    {
+      ++fail;
+      printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    }
+    delete i;
   }
-  delete i;
-  i = 0;
 
   // -------
-  name = "new simple Presence probe";
-  i = new Presence( Presence::Probe, JID( "xyz@example.org/blah" ), "the status",
-                        10, "the xmllang", JID( "foo@bar.com" ) );
-  if( !i->hasAttribute( "type", "probe" )
-      || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
-      || !i->hasChildWithCData( "status", "the status" )
-      || !i->hasChild( "status", "xml:lang", "the xmllang" )
-      || !i->hasChildWithCData( "priority", "10" ) )
   {
-    ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    name = "new simple Presence probe";
+    Presence p( Presence::Probe, JID( "xyz@example.org/blah" ), "the status",
+                          10, "the xmllang", JID( "foo@bar.com" ) );
+    Tag* i = p.tag();
+    if( !i->hasAttribute( "type", "probe" )
+        || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
+        || !i->hasChildWithCData( "status", "the status" )
+        || !i->hasChild( "status", "xml:lang", "the xmllang" )
+        || !i->hasChildWithCData( "priority", "10" ) )
+    {
+      ++fail;
+      printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    }
+    delete i;
   }
-  delete i;
-  i = 0;
 
   // -------
-  name = "new simple Presence error";
-  i = new Presence( Presence::Error, JID( "xyz@example.org/blah" ), "the status",
-                        10, "the xmllang", JID( "foo@bar.com" ) );
-  if( !i->hasAttribute( "type", "error" )
-      || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
-      || !i->hasChildWithCData( "status", "the status" )
-      || !i->hasChild( "status", "xml:lang", "the xmllang" )
-      || !i->hasChildWithCData( "priority", "10" ) )
   {
-    ++fail;
-    printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    name = "new simple Presence error";
+    Presence p( Presence::Error, JID( "xyz@example.org/blah" ), "the status",
+                          10, "the xmllang", JID( "foo@bar.com" ) );
+    Tag* i = p.tag();
+    if( !i->hasAttribute( "type", "error" )
+        || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
+        || !i->hasChildWithCData( "status", "the status" )
+        || !i->hasChild( "status", "xml:lang", "the xmllang" )
+        || !i->hasChildWithCData( "priority", "10" ) )
+    {
+      ++fail;
+      printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
+    }
+    delete i;
   }
-  delete i;
-  i = 0;
 
 
 

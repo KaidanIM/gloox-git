@@ -300,9 +300,10 @@ namespace gloox
        * @param room The JID of the room the invitation came from.
        * @param invitor The JID of the invitor.
        * @param reason An optional reason for the decline.
+       * @todo Return a Message.
        */
-      static Message* declineInvitation( const JID& room, const JID& invitor,
-                                        const std::string& reason = EmptyString);
+      static Tag* declineInvitation( const JID& room, const JID& invitor,
+                                     const std::string& reason = EmptyString);
 
       /**
        * It is not possible for a visitor to speak in a moderated room. Use this function to request
@@ -351,9 +352,10 @@ namespace gloox
        * Tag off manually using Client/ClientBase.
        * @param room The room's JID. This is needed because you can use this function outside of
        * room context (e.g, if the admin is not in the room).
-       * @param df The filled-in DataForm from the voice/registration request.
+       * @param df The filled-in DataForm from the voice/registration request. The form object
+       * will be owned by the returned Message.
        */
-      static Stanza* createDataForm( const JID& room, const DataForm& df );
+      static Message* createDataForm( const JID& room, const DataForm* df );
 
       /**
        * Use this function to revoke voice from a user in a moderated room.
