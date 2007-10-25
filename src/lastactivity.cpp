@@ -40,7 +40,8 @@ namespace gloox
 
   void LastActivity::query( const JID& jid )
   {
-    m_parent->send( IQ( IQ::Get, jid, m_parent->getID(), XMLNS_LAST ), this, 0 );
+    IQ iq( IQ::Get, jid, m_parent->getID(), XMLNS_LAST );
+    m_parent->send( iq, this, 0 );
   }
 
   bool LastActivity::handleIq( IQ* iq )

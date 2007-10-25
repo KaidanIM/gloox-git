@@ -62,7 +62,8 @@ namespace gloox
   void RosterManager::fill()
   {
     m_privateXML->requestXML( "roster", XMLNS_ROSTER_DELIMITER, this );
-    m_parent->send( IQ( IQ::Get, JID(), m_parent->getID(), XMLNS_ROSTER ) );
+    IQ iq( IQ::Get, JID(), m_parent->getID(), XMLNS_ROSTER );
+    m_parent->send( iq );
   }
 
   bool RosterManager::handleIq( IQ* iq )
@@ -79,7 +80,8 @@ namespace gloox
     else if( iq->subtype() == IQ::Set ) // roster item push
     {
       extractItems( iq->query(), true );
-      m_parent->send( IQ( IQ::Result, JID(), iq->id() ) );
+      IQ re( IQ::Result, JID(), iq->id() );
+      m_parent->send( re );
     }
     else if( iq->subtype() == IQ::Error )
     {

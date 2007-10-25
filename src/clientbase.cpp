@@ -697,7 +697,8 @@ namespace gloox
 
   void ClientBase::xmppPing( const JID& to )
   {
-    send( IQ( IQ::Get, to, getID(), XMLNS_XMPP_PING, "ping" ) );
+    IQ iq( IQ::Get, to, getID(), XMLNS_XMPP_PING, "ping" );
+    send( iq );
   }
 
   const std::string ClientBase::getID()
