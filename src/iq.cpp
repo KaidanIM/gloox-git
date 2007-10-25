@@ -21,8 +21,10 @@ namespace gloox
     "get", "set", "result", "error"
   };
 
-  static inline const char * typeString( IQ::IqType type )
-    { return iqTypeStringValues[type]; }
+  static inline const char* typeString( IQ::IqType type )
+  {
+    return iqTypeStringValues[type];
+  }
 
   IQ::IQ( Tag* tag )
     : Stanza( tag ), m_query( 0 ), m_subtype( Invalid )
@@ -61,7 +63,6 @@ namespace gloox
 
   Tag* IQ::tag() const
   {
-#warning FIXME implement!
     Tag* t = new Tag( "iq" );
     if( m_to )
       t->addAttribute( "to", m_to.full() );
@@ -70,6 +71,9 @@ namespace gloox
     if( !m_id.empty() )
       t->addAttribute( "id", m_id );
     t->addAttribute( TYPE, typeString( m_subtype ) );
+
+    if( m_query ) // FIXME this should be temporary
+      t->addChild( m_query->clone() );
 
     StanzaExtensionList::const_iterator it = m_extensionList.begin();
     for( ; it != m_extensionList.end(); ++it )
