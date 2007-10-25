@@ -109,9 +109,11 @@ namespace gloox
        */
       int extensionType() const { return m_extensionType; }
 
+    protected:
+      bool m_valid;
+
     private:
       int m_extensionType;
-      bool m_valid;
 
   };
 
