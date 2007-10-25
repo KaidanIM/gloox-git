@@ -78,7 +78,7 @@ namespace gloox
        * will be returned, if any.
        * @return The status text set by the sender.
        */
-      virtual const std::string status( const std::string& lang = "default" ) const
+      const std::string status( const std::string& lang = "default" ) const
       {
         return findLang( m_stati, m_status, lang );
       }
