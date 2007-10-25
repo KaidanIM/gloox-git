@@ -84,6 +84,13 @@ namespace gloox
     delete m_stati;
   }
 
+  void Presence::resetStatus()
+  {
+    delete m_stati;
+    m_stati = 0;
+    m_status = "";
+  }
+
   void Presence::setPriority( int priority )
   {
     if( priority < -128 )
