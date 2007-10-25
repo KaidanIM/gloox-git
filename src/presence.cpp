@@ -91,6 +91,9 @@ namespace gloox
 
   Tag* Presence::tag() const
   {
+    if( m_subtype == Invalid )
+      return 0;
+
     Tag* t = new Tag( "presence" );
     if( m_to )
       t->addAttribute( "to", m_to.full() );

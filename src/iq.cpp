@@ -64,6 +64,9 @@ namespace gloox
 
   Tag* IQ::tag() const
   {
+    if( m_subtype == Invalid )
+      return 0;
+
     Tag* t = new Tag( "iq" );
     if( m_to )
       t->addAttribute( "to", m_to.full() );
