@@ -108,10 +108,15 @@ namespace gloox
        * @param lang The language identifier for the desired language. It must conform to
        * section 2.12 of the XML specification and RFC 3066.
        */
-      void addStatus( const std::string& status, const std::string& lang )
+      void addStatus( const std::string& status, const std::string& lang = EmptyString )
       {
         setLang( &m_stati, m_status, status, lang );
       }
+
+      /**
+       * Resets the default status message as well as all language-specific ones.
+       */
+      void resetStatus();
 
       /**
        * Returns the presence priority in the legal range: -128 to +127.
