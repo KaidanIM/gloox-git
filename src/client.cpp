@@ -49,7 +49,7 @@ namespace gloox
   Client::Client( const std::string& server )
     : ClientBase( XMLNS_CLIENT, server ),
       m_rosterManager( 0 ), m_auth( 0 ),
-      m_presence( Presence::Available ), m_capabilities( 0 ), m_resourceBound( false ),
+      m_presence( Presence::Available, JID() ), m_resourceBound( false ),
       m_forceNonSasl( false ), m_manageRoster( true ), m_doAuth( false ),
       m_streamFeatures( 0 ), m_priority( 0 )
   {
@@ -60,7 +60,7 @@ namespace gloox
   Client::Client( const JID& jid, const std::string& password, int port )
     : ClientBase( XMLNS_CLIENT, password, EmptyString, port ),
       m_rosterManager( 0 ), m_auth( 0 ),
-      m_presence( Presence::Available ), m_capabilities( 0 ), m_resourceBound( false ),
+      m_presence( Presence::Available, JID() ), m_resourceBound( false ),
       m_forceNonSasl( false ), m_manageRoster( true ), m_doAuth( true ),
       m_streamFeatures( 0 ), m_priority( 0 )
   {
@@ -73,7 +73,7 @@ namespace gloox
                   const std::string& server, const std::string& resource, int port )
     : ClientBase( XMLNS_CLIENT, password, server, port ),
       m_rosterManager( 0 ), m_auth( 0 ),
-      m_presence( Presence::Available ), m_capabilities( 0 ), m_resourceBound( false ),
+      m_presence( Presence::Available, JID() ), m_resourceBound( false ),
       m_forceNonSasl( false ), m_manageRoster( true ), m_doAuth( true ),
       m_streamFeatures( 0 ), m_priority( 0 )
   {
@@ -86,7 +86,6 @@ namespace gloox
 
   Client::~Client()
   {
-    removePresenceExtensions();
     delete m_rosterManager;
     delete m_auth;
   }
@@ -95,10 +94,9 @@ namespace gloox
   {
     m_rosterManager = new RosterManager( this );
     m_disco->setIdentity( "client", "bot" );
-    m_capabilities = new Capabilities( m_disco );
-    addPresenceExtension( m_capabilities );
-    registerStanzaExtension( new Capabilities( m_disco ) );
     registerStanzaExtension( new SEResourceBind( 0 ) );
+    registerStanzaExtension( new Capabilities( m_disco ) );
+    m_presence.addExtension( new Capabilities( m_disco ) );
   }
 
   void Client::setUsername( const std::string &username )
@@ -419,8 +417,8 @@ namespace gloox
   void Client::createSession()
   {
     notifyStreamEvent( StreamEventSessionCreation );
-    send( IQ( IQ::Set, JID(), getID(), XMLNS_STREAM_SESSION, "session" ),
-          this, SessionEstablishment );
+    IQ iq( IQ::Set, JID(), getID(), XMLNS_STREAM_SESSION, "session" );
+    send( iq, this, SessionEstablishment );
   }
 
   void Client::processCreateSession( IQ* iq )
@@ -473,30 +471,17 @@ namespace gloox
     send( t );
   }
 
-  void Client::addPresenceExtension( StanzaExtension* se )
-  {
-    m_presenceExtensions.push_back( se );
-  }
-
-  void Client::removePresenceExtensions()
-  {
-    util::clearList( m_presenceExtensions );
-  }
-
-  void Client::setPresence( const JID& to, Presence::PresenceType presence, int priority,
+  void Client::setPresence( const JID& to, Presence::PresenceType pres, int priority,
                             const std::string& status )
   {
-    m_presence = presence;
-    m_status = status;
+    Presence p( pres, to, status, priority );
+    sendPresence( p );
+  }
 
-    if( priority < -128 )
-      m_priority = -128;
-    else if( priority > 127 )
-      m_priority = 127;
-    else
-      m_priority = priority;
-
-    sendPresence( to );
+  void Client::sendPresence( const Presence& pres )
+  {
+    if( state() >= StateConnected )
+      send( pres );
   }
 
   void Client::disableRoster()
@@ -511,22 +496,6 @@ namespace gloox
     if( !m_auth )
       m_auth = new NonSaslAuth( this );
     m_auth->doAuth( m_sid );
-  }
-
-  void Client::sendPresence( const JID& to )
-  {
-    if( m_presence != Presence::Invalid &&
-        state() >= StateConnected )
-    {
-      Presence p( m_presence, to, m_status, m_priority );
-
-//       StanzaExtensionList::const_iterator it = m_presenceExtensions.begin();
-//       for( ; it != m_presenceExtensions.end(); ++it )
-//         p.addExtension( (*it) ); // FIXME: we need a new newInstance version (or clone()),
-//        that clones an SE
-
-      send( p );
-    }
   }
 
   void Client::connected()
@@ -550,7 +519,7 @@ namespace gloox
 
   void Client::rosterFilled()
   {
-    sendPresence( JID() );
+    sendPresence( m_presence );
     notifyStreamEvent( StreamEventFinished );
     notifyOnConnect();
   }

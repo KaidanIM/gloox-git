@@ -181,8 +181,10 @@ namespace gloox
        * @param presence The presence to send.
        * @param priority The priority to include. Legal values: -128 <= priority <= 127
        * @param status The optional status message to include.
+       * @note This function does not include any presence extensions (as added by
+       * means of addPresenceExtension()) to the stanza.
        */
-      void setPresence( const JID& to, Presence::PresenceType presence, int priority,
+      void setPresence( const JID& to, Presence::PresenceType pres, int priority,
                         const std::string& status = EmptyString );
 
       /**
@@ -198,66 +200,27 @@ namespace gloox
        * @param status An optional message describing the presence state.
        * @since 0.9
        */
-      void setPresence( Presence::PresenceType presence, int priority,
-                        const std::string& status = EmptyString )
-        { setPresence( JID(), presence, priority, status ); }
+      void setPresence( Presence::PresenceType pres, int priority,
+                        const std::string& status = EmptyString );
 
       /**
-       * A convenience function that only changes the presence type.
-       * @param presence The new presence.
+       * Use this function to broadcast the entity's presence to all
+       * subscribed entities. This is a NOOP if there's no active connection.
+       * To send directed presence, use
+       * setPresence( const JID&, Presence::PresenceType, int, const std::string& ).
+       * If used while a connection already is established a repective presence stanza will be
+       * sent out immediately. Use presence() to modify the Presence object.
+       * @note When login is finished, initial presence will be sent automatically.
+       * So you do not need to call this function after login.
+       * @since 1.0
        */
-      void setPresence( Presence::PresenceType presence )
-        { setPresence( presence, m_priority, m_status ); }
-
-      /**
-       * A convenience function that only changes the priority.
-       * @param priority The new priority.
-       */
-      void setPresence( int priority )
-        { setPresence( m_presence, priority, m_status ); }
-
-      /**
-       * A convenience function that only changes the status message.
-       * @param status The new status message.
-       */
-      void setPresence( const std::string& status )
-        { setPresence( m_presence, m_priority, status ); }
+      void setPresence() { sendPresence( m_presence ); }
 
       /**
        * Returns the current presence.
        * @return The current presence.
        */
-      Presence::PresenceType presence() const { return m_presence; }
-
-      /**
-       * Returns the current status message.
-       * @return The current status message.
-       */
-      const std::string& status() const { return m_status; }
-
-      /**
-       * Use this function to add a StanzaExtension which will be sent with each and every
-       * Presence Stanza that is sent out. Use cases include
-       * signed presence (@link gloox::GPGSigned GPGSigned @endlink, XEP-0027),
-       * VCard avatar notifications (@link gloox::VCardUpdate VCardUpdate @endlink, XEP-0153),
-       * and others (see @link gloox::StanzaExtension StanzaExtension @endlink for derived classes.
-       * @param se The StanzaExtension to add. Client will become the owner of the given
-       * StanzaExtension.
-       * @note Currently there is no way to selectively remove an extension. Use
-       * removePresenceExtensions() to remove all extensions.
-       */
-      void addPresenceExtension( StanzaExtension* se );
-
-      /**
-       * Use this function to remove all extensions added using addPresenceExtension().
-       */
-      void removePresenceExtensions();
-
-      /**
-       * Returns a pointer to the Client's capabilities (XEP-0115). Do not delete it.
-       * @return A pointer to the Client's capabilities.
-       */
-      Capabilities* capabilities() const { return m_capabilities; }
+      Presence presence() const { return m_presence; }
 
       /**
        * This is a temporary hack to enforce Non-SASL login. You should not need to use it.
@@ -305,7 +268,7 @@ namespace gloox
       int getCompressionMethods( Tag* tag );
       void processResourceBind( IQ* iq );
       void processCreateSession( IQ* iq );
-      void sendPresence( const JID& to );
+      void sendPresence( const Presence& pres );
       void createSession();
       void negotiateCompression( StreamFeature method );
       void connected();
@@ -323,12 +286,7 @@ namespace gloox
       RosterManager* m_rosterManager;
       NonSaslAuth* m_auth;
 
-      StanzaExtensionList m_presenceExtensions;
-
-      Presence::PresenceType m_presence;
-      std::string m_status;
-
-      Capabilities* m_capabilities;
+      Presence m_presence;
 
       bool m_resourceBound;
       bool m_forceNonSasl;
