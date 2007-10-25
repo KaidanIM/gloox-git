@@ -45,6 +45,16 @@ namespace gloox
   {
   }
 
+  const std::string& DelayedDelivery::filterString() const
+  {
+    static const std::string filter =
+           "/presence/x[@xmlns='" + XMLNS_DELAY + "']"
+           "|/message/x[@xmlns='" + XMLNS_DELAY + "']"
+           "|/presence/x[@xmlns='" + XMLNS_X_DELAY + "']"
+           "|/message/x[@xmlns='" + XMLNS_X_DELAY + "']";
+    return filter;
+  }
+
   Tag* DelayedDelivery::tag() const
   {
     if( !m_valid )

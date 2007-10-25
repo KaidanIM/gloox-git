@@ -55,6 +55,12 @@ namespace gloox
   {
   }
 
+  const std::string& VCardUpdate::filterString() const
+  {
+    static const std::string filter = "/presence/x[@xmlns='" + XMLNS_X_VCARD_UPDATE + "']";
+    return filter;
+  }
+
   Tag* VCardUpdate::tag() const
   {
     if( !m_valid )

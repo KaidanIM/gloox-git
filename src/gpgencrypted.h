@@ -63,10 +63,7 @@ namespace gloox
       const std::string& encrypted() const { return m_encrypted; }
 
       // reimplemented from StanzaExtension
-      virtual const std::string filterString() const
-      {
-        return "/message/x[@xmlns='" + XMLNS_X_GPGENCRYPTED + "']";
-      }
+      virtual const std::string& filterString() const;
 
       // reimplemented from StanzaExtension
       virtual StanzaExtension* newInstance( const Tag* tag ) const

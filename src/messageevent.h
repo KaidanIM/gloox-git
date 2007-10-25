@@ -60,10 +60,7 @@ namespace gloox
       int event() const { return m_event; }
 
       // reimplemented from StanzaExtension
-      virtual const std::string filterString() const
-      {
-        return "/message/x[@xmlns='" + XMLNS_X_EVENT + "']";
-      }
+      virtual const std::string& filterString() const;
 
       // reimplemented from StanzaExtension
       virtual StanzaExtension* newInstance( const Tag* tag ) const

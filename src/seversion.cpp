@@ -46,6 +46,12 @@ namespace gloox
   {
   }
 
+  const std::string& SEVersion::filterString() const
+  {
+    static const std::string filter = "/iq/query[@xmlns='" + XMLNS_VERSION + "']";
+    return filter;
+  }
+
   Tag* SEVersion::tag() const
   {
     Tag* t = new Tag( "query" );

@@ -60,14 +60,7 @@ namespace gloox
       ChatStateType state() const { return m_state; }
 
       // reimplemented from StanzaExtension
-      virtual const std::string filterString() const
-      {
-        return "/message/active[@xmlns='" + XMLNS_CHAT_STATES + "']"
-               "|/message/composing[@xmlns='" + XMLNS_CHAT_STATES + "']"
-               "|/message/paused[@xmlns='" + XMLNS_CHAT_STATES + "']"
-               "|/message/inactive[@xmlns='" + XMLNS_CHAT_STATES + "']"
-               "|/message/gone[@xmlns='" + XMLNS_CHAT_STATES + "']";
-      }
+      virtual const std::string& filterString() const;
 
       // reimplemented from StanzaExtension
       virtual StanzaExtension* newInstance( const Tag* tag ) const

@@ -38,6 +38,17 @@ namespace gloox
       m_state = chatStateType( tag->name() );
   }
 
+  const std::string& ChatState::filterString() const
+  {
+    static const std::string filter =
+           "/message/active[@xmlns='" + XMLNS_CHAT_STATES + "']"
+           "|/message/composing[@xmlns='" + XMLNS_CHAT_STATES + "']"
+           "|/message/paused[@xmlns='" + XMLNS_CHAT_STATES + "']"
+           "|/message/inactive[@xmlns='" + XMLNS_CHAT_STATES + "']"
+           "|/message/gone[@xmlns='" + XMLNS_CHAT_STATES + "']";
+    return filter;
+  }
+
   Tag* ChatState::tag() const
   {
     if( m_state == ChatStateInvalid )

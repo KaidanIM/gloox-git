@@ -50,6 +50,15 @@ namespace gloox
   {
   }
 
+  const std::string& OOB::filterString() const
+  {
+    static const std::string filter =
+           "/presence/x[@xmlns='" + XMLNS_X_OOB + "']"
+           "|/message/x[@xmlns='" + XMLNS_X_OOB + "']"
+           "|/iq/query[@xmlns='" + XMLNS_IQ_OOB + "']";
+    return filter;
+  }
+
   Tag* OOB::tag() const
   {
     if( !m_valid )

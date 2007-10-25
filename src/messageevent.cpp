@@ -37,6 +37,12 @@ namespace gloox
       m_event = event;
   }
 
+  const std::string& MessageEvent::filterString() const
+  {
+    static const std::string filter = "/message/x[@xmlns='" + XMLNS_X_EVENT + "']";
+    return filter;
+  }
+
   Tag* MessageEvent::tag() const
   {
     Tag* x = new Tag( "x", XMLNS, XMLNS_X_EVENT );

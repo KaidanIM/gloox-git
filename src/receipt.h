@@ -69,11 +69,7 @@ namespace gloox
       ReceiptType rcpt() const { return m_rcpt; }
 
       // reimplemented from StanzaExtension
-      virtual const std::string filterString() const
-      {
-        return "/message/request[@xmlns='" + XMLNS_RECEIPTS + "']"
-               "|/message/received[@xmlns='" + XMLNS_RECEIPTS + "']";
-      }
+      virtual const std::string& filterString() const;
 
       // reimplemented from StanzaExtension
       virtual StanzaExtension* newInstance( const Tag* tag ) const

@@ -65,10 +65,7 @@ namespace gloox
       virtual ~SEResourceBind();
 
       // reimplemented from StanzaExtension
-      virtual const std::string filterString() const
-      {
-        return "/iq/bind[@xmlns='" + XMLNS_STREAM_BIND + "']";
-      }
+      virtual const std::string& filterString() const;
 
       // reimplemented from StanzaExtension
       virtual StanzaExtension* newInstance( const Tag* tag ) const

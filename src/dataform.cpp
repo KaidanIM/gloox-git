@@ -73,6 +73,12 @@ namespace gloox
     return true;
   }
 
+  const std::string& DataForm::filterString() const
+  {
+    static const std::string filter = "/message/x[@xmlns='" + XMLNS_X_DATA + "']";
+    return filter;
+  }
+
   Tag* DataForm::tag() const
   {
     if( m_type == TypeInvalid )

@@ -34,6 +34,12 @@ namespace gloox
   {
   }
 
+  const std::string& SEResourceBind::filterString() const
+  {
+    static const std::string filter = "/iq/bind[@xmlns='" + XMLNS_STREAM_BIND + "']";
+    return filter;
+  }
+
   Tag* SEResourceBind::tag() const
   {
     if( m_resource.empty() )

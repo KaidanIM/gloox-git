@@ -23,6 +23,14 @@ namespace gloox
       m_nick = tag->cdata();
   }
 
+  const std::string& Nickname::filterString() const
+  {
+    static const std::string filter =
+           "/presence/nick[@xmlns='" + XMLNS_NICKNAME + "']"
+           "|/message/nick[@xmlns='" + XMLNS_NICKNAME + "']";
+    return filter;
+  }
+
   Tag* Nickname::tag() const
   {
     if( m_nick.empty() )

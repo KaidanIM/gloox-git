@@ -81,6 +81,16 @@ namespace gloox
       delete m_appError;
   }
 
+  const std::string& Error::filterString() const
+  {
+    static const std::string filter = "/iq/error"
+                                      "|/message/error"
+                                      "|/presence/error"
+                                      "|/subscription/error";
+    return filter;
+  }
+
+
   Tag * Error::tag() const
   {
     if( m_type == StanzaErrorTypeUndefined || m_error == StanzaErrorUndefined )

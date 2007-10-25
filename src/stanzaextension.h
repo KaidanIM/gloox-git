@@ -83,7 +83,7 @@ namespace gloox
        *
        * @return The extension's type.
        */
-      virtual const std::string filterString() const = 0;
+      virtual const std::string& filterString() const = 0;
 
       /**
        * Returns a new Instance of the derived type. Usually, for a derived class FooExtension,

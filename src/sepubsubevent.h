@@ -58,7 +58,7 @@ namespace gloox
       const std::string& node() { return m_node; }
 
       // reimplemented from StanzaExtension
-      const std::string filterString() const;
+      const std::string& filterString() const;
 
       // reimplemented from StanzaExtension
       StanzaExtension* newInstance( const Tag* tag ) const

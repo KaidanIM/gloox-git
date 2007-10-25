@@ -34,6 +34,14 @@ namespace gloox
   {
   }
 
+  const std::string& Receipt::filterString() const
+  {
+    static const std::string filter =
+           "/message/request[@xmlns='" + XMLNS_RECEIPTS + "']"
+           "|/message/received[@xmlns='" + XMLNS_RECEIPTS + "']";
+    return filter;
+  }
+
   Tag* Receipt::tag() const
   {
     if( m_rcpt == ReceiptInvalid )

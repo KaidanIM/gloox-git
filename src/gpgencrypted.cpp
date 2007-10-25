@@ -40,6 +40,12 @@ namespace gloox
   {
   }
 
+  const std::string& GPGEncrypted::filterString() const
+  {
+    static const std::string filter = "/message/x[@xmlns='" + XMLNS_X_GPGENCRYPTED + "']";
+    return filter;
+  }
+
   Tag* GPGEncrypted::tag() const
   {
     if( !m_valid )
