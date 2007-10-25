@@ -615,9 +615,28 @@ namespace gloox
     send( iq );
   }
 
-  void ClientBase::send( const Stanza& stanza )
+  void ClientBase::send( const IQ& iq )
   {
-    send( stanza.tag() );
+    ++m_stats.iqStanzasSent;
+    send( iq.tag() );
+  }
+
+  void ClientBase::send( const Message& msg )
+  {
+    ++m_stats.messageStanzasSent;
+    send( msg.tag() );
+  }
+
+  void ClientBase::send( const Subscription& sub )
+  {
+    ++m_stats.s10nStanzasSent;
+    send( sub.tag() );
+  }
+
+  void ClientBase::send( const Presence& pres )
+  {
+    ++m_stats.presenceStanzasSent;
+    send( pres.tag() );
   }
 
   void ClientBase::send( Tag* tag )
@@ -626,22 +645,6 @@ namespace gloox
       return;
 
     send( tag->xml() );
-
-#warning move the statistics counting stuff to Client or some func \
-         that takes Stanza-derived objects
-    if( tag->name() == "iq" )
-      ++m_stats.iqStanzasSent;
-    else if( tag->name() == "message" )
-      ++m_stats.messageStanzasSent;
-    else if( tag->name() == "presence" )
-    {
-      const std::string& type = tag->findAttribute( TYPE );
-      if( type == "subscribe"  || type == "unsubscribe" ||
-          type == "subscribed" || type == "unsubscribed" )
-        ++m_stats.s10nStanzasSent;
-      else
-        ++m_stats.presenceStanzasSent;
-    }
 
     ++m_stats.totalStanzasSent;
 

@@ -236,12 +236,6 @@ namespace gloox
       void send( Tag* tag );
 
       /**
-       * Sends the given Stanza over an established connection.
-       * @param tag The Stanza to send.
-       */
-      void send( const Stanza& tag );
-
-      /**
        * Sends the given IQ stanza. The given IqHandler is registered to be notified of replies. This,
        * of course, only works for IQs of type get or set.
        * @param iq The IQ stanza to send.
@@ -249,6 +243,30 @@ namespace gloox
        * @param context A value that allows for restoring context.
        */
       void send( const IQ& iq, IqHandler* ih, int context );
+
+      /**
+       * A convenience function that sends the given IQ stanza.
+       * @param msg The IQ stanza to send.
+       */
+      void send( const IQ& iq );
+
+      /**
+       * A convenience function that sends the given Message stanza.
+       * @param msg The Message stanza to send.
+       */
+      void send( const Message& msg );
+
+      /**
+       * A convenience function that sends the given Subscription stanza.
+       * @param msg The Subscription stanza to send.
+       */
+      void send( const Subscription& sub );
+
+      /**
+       * A convenience function that sends the given Presence stanza.
+       * @param msg The Presence stanza to send.
+       */
+      void send( const Presence& pres );
 
       /**
        * Returns whether authentication has taken place and was successful.
