@@ -74,7 +74,8 @@ namespace gloox
       {
         return "/presence/x[@xmlns='" + XMLNS_X_OOB + "']"
                "|/message/x[@xmlns='" + XMLNS_X_OOB + "']"
-               "|/iq/query[@xmlns='" + XMLNS_IQ_OOB + "']"; }
+               "|/iq/query[@xmlns='" + XMLNS_IQ_OOB + "']";
+      }
 
       // reimplemented from StanzaExtension
       virtual StanzaExtension* newInstance( const Tag* tag ) const
