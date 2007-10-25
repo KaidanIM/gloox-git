@@ -45,7 +45,7 @@ namespace gloox
     }
 
     const MessageEvent* me = static_cast<const MessageEvent*>( msg.findExtension( ExtMessageEvent ) );
-    if( !me && msg.body().empty() )
+    if( !me )
     {
       m_requestedEvents = 0;
       m_lastID = EmptyString;
