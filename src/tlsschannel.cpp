@@ -57,9 +57,10 @@ namespace gloox
     PBYTE e_message = e_iobuffer + m_sizes.cbHeader;
     do
     {
-      memcpy( e_message, data_copy.data(), data_copy.size() > m_sizes.cbMaximumMessage
-                                            ? m_sizes.cbMaximumMessage
-                                            : data_copy.size() );
+      const int size = data_copy.size() > m_sizes.cbMaximumMessage
+                                  ? m_sizes.cbMaximumMessage
+                                  : data_copy.size();
+      memcpy( e_message, data_copy.data(), size );
       if( data_copy.size() > m_sizes.cbMaximumMessage )
         data_copy.erase( 0, m_sizes.cbMaximumMessage );
       else
@@ -70,7 +71,7 @@ namespace gloox
       buffer[0].BufferType   = SECBUFFER_STREAM_HEADER;
 
       buffer[1].pvBuffer     = e_message;
-      buffer[1].cbBuffer     = tmp.size();
+      buffer[1].cbBuffer     = size;
       buffer[1].BufferType   = SECBUFFER_DATA;
 
       buffer[2].pvBuffer     = static_cast<char*>(buffer[1].pvBuffer) + buffer[1].cbBuffer;
