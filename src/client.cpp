@@ -477,6 +477,7 @@ namespace gloox
     m_presence.setPresence( pres );
     m_presence.setPriority( priority );
     m_presence.addStatus( status );
+    sendPresence( m_presence );
   }
 
   void Client::setPresence( const JID& to, Presence::PresenceType pres, int priority,
