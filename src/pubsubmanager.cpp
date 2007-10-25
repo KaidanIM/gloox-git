@@ -31,14 +31,6 @@ namespace gloox
   namespace PubSub
   {
 
-    static const std::string
-    XMLNS_PUBSUB                   = "http://jabber.org/protocol/pubsub",
-    XMLNS_PUBSUB_ERRORS            = "http://jabber.org/protocol/pubsub#errors",
-    XMLNS_PUBSUB_EVENT             = "http://jabber.org/protocol/pubsub#event",
-    XMLNS_PUBSUB_OWNER             = "http://jabber.org/protocol/pubsub#owner",
-    XMLNS_PUBSUB_NODE_CONFIG       = "http://jabber.org/protocol/pubsub#node_config",
-    XMLNS_PUBSUB_SUBSCRIBE_OPTIONS = "http://jabber.org/protocol/pubsub#subscribe_options";
-
     enum Context
     {
       Subscription,
@@ -135,17 +127,6 @@ namespace gloox
     {
       return (AffiliationType)util::lookup( affiliation, affiliationValues );
     }
-
-    enum EventType
-    {
-      EventCollection,
-      EventConfigure,
-      EventDelete,
-      EventItems,
-      EventPurge,
-      EventSubscription,
-      EventUnknown
-    };
 
     static EventType eventType( const std::string& event )
     {

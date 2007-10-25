@@ -73,6 +73,11 @@ namespace gloox
   const std::string XMLNS_MUC_ROOMS         = "http://jabber.org/protocol/muc#rooms";
   const std::string XMLNS_MUC_REQUEST       = "http://jabber.org/protocol/muc#request";
 
+  const std::string XMLNS_PUBSUB            = "http://jabber.org/protocol/pubsub";
+  const std::string XMLNS_PUBSUB_ERRORS     = "http://jabber.org/protocol/pubsub#errors";
+  const std::string XMLNS_PUBSUB_EVENT      = "http://jabber.org/protocol/pubsub#event";
+  const std::string XMLNS_PUBSUB_OWNER      = "http://jabber.org/protocol/pubsub#owner";
+
   const std::string XMLNS_CAPS              = "http://jabber.org/protocol/caps";
   const std::string XMLNS_FT_FASTMODE       = "http://affinix.com/jabber/stream";
 
