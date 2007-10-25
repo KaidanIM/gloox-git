@@ -63,7 +63,7 @@ namespace gloox
 
       /**
        * Returns the stanza error condition, if any.
-       * @return The stanza error condition.
+       * @return The stanza error condition, may be 0.
        */
       const Error* error() const;
 
@@ -85,7 +85,7 @@ namespace gloox
       /**
        * Finds a StanzaExtension of a particular type.
        * @param type StanzaExtensionType to search for.
-       * @return The StanzaExtension's address (or 0 if none was found).
+       * @return A pointer to the StanzaExtension, or 0 if none was found.
        */
       const StanzaExtension* findExtension( int type ) const;
 
@@ -106,7 +106,6 @@ namespace gloox
       /**
        * Creates a new Stanza from a deep copy of the given Tag.
        * @param tag The Tag to create the Stanza from.
-       * @param rip Whether to rip off the original Tag.
        * @since 1.0
        */
       Stanza( Tag* tag );
@@ -131,6 +130,10 @@ namespace gloox
                            const std::string& data, const std::string& xmllang );
       static void getLangs( const StringMap* map, const std::string& defaultData,
                             const std::string& name, Tag* tag );
+
+    private:
+      Stanza( const Stanza& );
+
   };
 
 }
