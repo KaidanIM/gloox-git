@@ -58,7 +58,11 @@ namespace gloox
       match = tag->findTagList( (*ite)->filterString() );
       it = match.begin();
       for( ; it != match.end(); ++it )
-        stanza.addExtension( (*ite)->newInstance( (*it) ) );
+      {
+        StanzaExtension* se = (*ite)->newInstance( (*it) );
+        if( se )
+          stanza.addExtension( se );
+      }
     }
   }
 
