@@ -1,18 +1,21 @@
-v0.9.6 -- xx Oct 2007
+v0.9.6 -- 25 Oct 2007
 ---------------------
 - fixed position of GLOOX_DEPRECATED macro in tag.h
 - ClientBase: added private copy & assignment ctors
 - SOCKS5Bytestream: recognize established connections (when using local streamhost)
 - SOCKS5BytestreamServer: avoid a crash when a connection is closed prematurely
 - SIProfileFTHandler, SIHandler, SOCKS5BytestreamHandler: pass SID to handle*Error() functions
+- CompressionZlib: made thread-safe
+- ConnectionTCPBase: avoid multi-threading issue in recv()/disconnect()/cleanup()
+- TLSSChannel: fixed off-by-one error
 
 
 v0.9.5 -- 27 Sep 2007
 ---------------------
 
 general changes and additions:
-- do not allow store()'ing of empty PrivacyList (aka removeList)
-- do not return on error in PrivacyManager::handleIqID()
+- PrivacyManager: do not allow store()'ing of empty lists (aka removeList)
+- PrivacyManager: properly handle the error case in handleIqID()
 - JID: added operator bool()
 - Tag: added operator bool()
 - DelayedDelivery: added setReason()
