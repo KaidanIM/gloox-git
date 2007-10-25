@@ -1149,9 +1149,10 @@ namespace gloox
 
   void ClientBase::notifyMessageHandlers( Message* msg )
   {
-    if( m_mucInvitationHandler )
+    Tag* m = msg->tag();
+    if( m_mucInvitationHandler && m )
     {
-      const Tag* x = msg->tag()->findChild( "x", XMLNS, XMLNS_MUC_USER ); // FIXME !!!
+      const Tag* x = m->findChild( "x", XMLNS, XMLNS_MUC_USER ); // FIXME !!!
       if( x && x->hasChild( "invite" ) )
       {
         const Tag* i = x->findChild( "invite" );
@@ -1169,6 +1170,7 @@ namespace gloox
         return;
       }
     }
+    delete m;
 
     MessageSessionList::const_iterator it1 = m_messageSessions.begin();
     for( ; it1 != m_messageSessions.end(); ++it1 )
