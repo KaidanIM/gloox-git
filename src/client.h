@@ -220,7 +220,7 @@ namespace gloox
        * Returns the current presence.
        * @return The current presence.
        */
-      Presence presence() const { return m_presence; }
+      Presence& presence() const { return m_presence; }
 
       /**
        * This is a temporary hack to enforce Non-SASL login. You should not need to use it.
