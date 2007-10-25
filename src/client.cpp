@@ -471,6 +471,14 @@ namespace gloox
     send( t );
   }
 
+  void Client::setPresence( Presence::PresenceType pres, int priority,
+                            const std::string& status )
+  {
+    m_presence.setPresence( pres );
+    m_presence.setPriority( priority );
+    m_presence.addStatus( status );
+  }
+
   void Client::setPresence( const JID& to, Presence::PresenceType pres, int priority,
                             const std::string& status )
   {
