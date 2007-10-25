@@ -31,6 +31,10 @@ namespace gloox
   namespace PubSub
   {
 
+    static const std::string
+      XMLNS_PUBSUB_NODE_CONFIG = "http://jabber.org/protocol/pubsub#node_config",
+      XMLNS_PUBSUB_SUBSCRIBE_OPTIONS = "http://jabber.org/protocol/pubsub#subscribe_options";
+
     enum Context
     {
       Subscription,

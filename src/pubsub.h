@@ -79,9 +79,8 @@ namespace gloox
       EventConfigure,          /**< A node's configuration has changed. */
       EventDelete,             /**< A node has been deleted. */
       EventItems,              /**< An item has been created or modified. */
-      EventItemRetract,        /**< An item has been deleted. */
+      EventItemsRetract,       /**< An item has been deleted. */
       EventPurge,              /**< A Leaf node has been purged. */
-      EventSubscription,       /**< A subsciption typei has changed. */
       EventUnknown             /**< Unknown event. */
     };
 
