@@ -17,11 +17,10 @@ namespace gloox
     : StanzaExtension( ExtPSEvent ), m_type( PubSub::EventUnknown ),
       m_subscriptionIDs( 0 ), m_config( 0 ), m_itemOperations( 0 )
   {
-    const TagList& events = event->children();
-
-    if( !event || event->name() != "event" || events.empty() )
+    if( !event || event->name() != "event" )
       return;
 
+    const TagList& events = event->children();
     TagList::const_iterator it = events.begin();
     for( ; it != events.end(); ++it )
     {
