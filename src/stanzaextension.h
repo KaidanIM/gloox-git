@@ -48,7 +48,8 @@ namespace gloox
     ExtNickname            = 1<<14, /**< An extension containing a User Nickname (XEP-0172). */
     ExtResourceBind        = 1<<15, /**< A resource bind SE (RFC3921). */
     ExtVersion             = 1<<16, /**< An extension containing a Version request/reply (XEP-0092). */
-    ExtUser                = 1<<17  /**< User-supplied extensions must use IDs above this. Do not
+    ExtPSEvent             = 1<<17, /**< An extension for PubSub event notifications (XEP-0060) */
+    ExtUser                = 1<<18  /**< User-supplied extensions must use IDs above this. Do not
                                       * hard-code ExtUser's value anywhere, it is subject to change. */
   };
 
@@ -69,7 +70,7 @@ namespace gloox
        * @param type Designates the extension's type. It should be one of StanzaExtensionType
        * for built-in extensions, and it should be higher than ExtUser for custom types.
        */
-      StanzaExtension( int type ) : m_extensionType( type ), m_valid( false ) {}
+      StanzaExtension( int type ) : m_valid( false ), m_extensionType( type ) {}
 
       /**
        * Virtual destructor.
