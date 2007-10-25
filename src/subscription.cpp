@@ -21,8 +21,10 @@ namespace gloox
     "subscribe", "subscribed", "unsubscribe", "unsubscribed"
   };
 
-  static inline const char* typeString( Subscription::S10nType type )
-    { return msgTypeStringValues[type]; }
+  static inline const std::string typeString( Subscription::S10nType type )
+  {
+    return util::lookup( type, msgTypeStringValues );
+  }
 
   Subscription::Subscription( Tag* tag )
     : Stanza( tag ), m_subtype( Invalid ), m_stati( 0 )
@@ -52,12 +54,20 @@ namespace gloox
 
   Tag* Subscription::tag() const
   {
-#warning FIXME implement!
     Tag* t = new Tag( "subscription" );
     if( m_to )
       t->addAttribute( "to", m_to.full() );
     if( m_from )
       t->addAttribute( "from", m_from.full() );
+
+    t->addAttribute( "type", typeString( m_subtype ) );
+
+    getLangs( m_stati, m_status, "status", t );
+
+    StanzaExtensionList::const_iterator it = m_extensionList.begin();
+    for( ; it != m_extensionList.end(); ++it )
+      t->addChild( (*it)->tag() );
+
     return t;
   }
 
