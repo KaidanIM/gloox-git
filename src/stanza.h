@@ -70,6 +70,7 @@ namespace gloox
       /**
        * Retrieves the value of the xml:lang attribute of this stanza.
        * Default is 'en'.
+       * @return The stanza's default language.
        */
       const std::string& xmlLang() const { return m_xmllang; }
 
