@@ -76,17 +76,22 @@ namespace gloox
   {
     setLang( &m_stati, m_status, status, xmllang );
 
+    setPriority( priority );
+  }
+
+  Presence::~Presence()
+  {
+    delete m_stati;
+  }
+
+  void Presence::setPriority( int priority )
+  {
     if( priority < -128 )
       m_priority = -128;
     else if( priority > 127 )
       m_priority = 127;
     else
       m_priority = priority;
-  }
-
-  Presence::~Presence()
-  {
-    delete m_stati;
   }
 
   Tag* Presence::tag() const
