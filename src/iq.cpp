@@ -59,6 +59,7 @@ namespace gloox
 
   IQ::~IQ()
   {
+    delete m_query;
   }
 
   Tag* IQ::tag() const
