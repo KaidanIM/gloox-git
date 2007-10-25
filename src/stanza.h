@@ -133,7 +133,7 @@ namespace gloox
                             const std::string& name, Tag* tag );
 
     private:
-//       Stanza( const Stanza& ); // FIXME needs to be re-introduced
+      Stanza( const Stanza& ); // FIXME needs to be re-introduced
 
   };
 
