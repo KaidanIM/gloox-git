@@ -1,3 +1,8 @@
+v0.9.6.1 -- 25 Oct 2007
+---------------------
+- win32 build fix
+
+
 v0.9.6 -- 25 Oct 2007
 ---------------------
 - fixed position of GLOOX_DEPRECATED macro in tag.h
