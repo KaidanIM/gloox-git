@@ -33,7 +33,7 @@ namespace gloox
      * @param size The array's size.
      * @return The associated enum code.
      */
-    unsigned _lookup( const std::string& str, const char * values[], unsigned size );
+    unsigned _lookup( const std::string& str, const char* values[], unsigned size );
 
     /**
      * Finds the string associated with an enumerated type.
@@ -42,7 +42,7 @@ namespace gloox
      * @param size The array's size.
      * @return The associated string (empty in case there's no match).
      */
-    const std::string _lookup( unsigned code, const char * values[], unsigned size );
+    const std::string _lookup( unsigned code, const char* values[], unsigned size );
 
     /**
      * Finds the ORable enumerated value associated with a string value.
@@ -51,7 +51,7 @@ namespace gloox
      * @param size The array's size.
      * @return The associated enum code.
      */
-    inline unsigned _lookup2( const std::string& str, const char * values[], unsigned size )
+    inline unsigned _lookup2( const std::string& str, const char* values[], unsigned size )
       {  return 1 << _lookup( str, values, size ); }
 
     /**
@@ -61,7 +61,7 @@ namespace gloox
      * @param size The array's size.
      * @return The associated string (empty in case there's no match).
      */
-    const std::string _lookup2( unsigned code, const char * values[], unsigned size );
+    const std::string _lookup2( unsigned code, const char* values[], unsigned size );
 
     template< typename T, typename F >
     inline void ForEach( T& t, F f )
