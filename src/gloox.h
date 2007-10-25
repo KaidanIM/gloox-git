@@ -486,6 +486,18 @@ namespace gloox
   /** Multi-User Chat namespace (request) (XEP-0045) */
   GLOOX_API extern const std::string XMLNS_MUC_REQUEST;
 
+  /** PubSub namespace (XEP-0060) */
+  GLOOX_API extern const std::string XMLNS_PUBSUB;
+
+  /** PubSub namespace (errors) (XEP-0060) */
+  GLOOX_API extern const std::string XMLNS_PUBSUB_ERRORS;
+
+  /** PubSub namespace (event) (XEP-0060) */
+  GLOOX_API extern const std::string XMLNS_PUBSUB_EVENT;
+
+  /** PubSub namespace (owner) (XEP-0060) */
+  GLOOX_API extern const std::string XMLNS_PUBSUB_OWNER;
+
   /** Entity Capabilities namespace (XEP-0115) */
   GLOOX_API extern const std::string XMLNS_CAPS;
 

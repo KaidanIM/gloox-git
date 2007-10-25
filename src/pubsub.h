@@ -73,6 +73,18 @@ namespace gloox
       SubscriptionInvalid           /**< Invalid subscription type. */
     };
 
+    enum EventType
+    {
+      EventCollection,         /**< A Collection node has been created. */
+      EventConfigure,          /**< A node's configuration has changed. */
+      EventDelete,             /**< A node has been deleted. */
+      EventItems,              /**< An item has been created or modified. */
+      EventItemRetract,        /**< An item has been deleted. */
+      EventPurge,              /**< A Leaf node has been purged. */
+      EventSubscription,       /**< A subsciption typei has changed. */
+      EventUnknown             /**< Unknown event. */
+    };
+
     /**
      * Describes the different subscription types.
      */
