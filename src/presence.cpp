@@ -13,24 +13,32 @@
 #include "presence.h"
 #include "util.h"
 
+#include <cmath>
+#include <algorithm>
+#include <sstream>
+
 namespace gloox
 {
 
-  static const char * msgTypeStringValues[] =
+  static const char* msgTypeStringValues[] =
   {
     "available", "", "", "", "", "unavailable", "probe", "error"
   };
 
-  static inline const char * typeString( Presence::PresenceType type )
-    { return msgTypeStringValues[type]; }
+  static inline const std::string typeString( Presence::PresenceType type )
+  {
+    return util::lookup( type, msgTypeStringValues );
+  }
 
-  static const char * msgShowStringValues[] =
+  static const char* msgShowStringValues[] =
   {
     "", "chat", "away", "dnd", "xa", "", "", ""
   };
 
-  static inline const char * showString( Presence::PresenceType type )
-  { return msgShowStringValues[type]; }
+  static inline const std::string showString( Presence::PresenceType type )
+  {
+    return util::lookup( type, msgShowStringValues );
+  }
 
   Presence::Presence( Tag* tag )
     : Stanza( tag ), m_subtype( Invalid ), m_stati( 0 ), m_priority( 0 )
@@ -46,7 +54,6 @@ namespace gloox
 
     if( m_subtype == Available )
     {
-#warning CHECKME write unit test for the Available types
       Tag* t = tag->findChild( "show" );
       if( t )
         m_subtype = (PresenceType)util::lookup( t->cdata(), msgShowStringValues );
@@ -84,12 +91,42 @@ namespace gloox
 
   Tag* Presence::tag() const
   {
-#warning FIXME implement!
     Tag* t = new Tag( "presence" );
     if( m_to )
       t->addAttribute( "to", m_to.full() );
     if( m_from )
       t->addAttribute( "from", m_from.full() );
+
+    const std::string& type = typeString( m_subtype );
+    if( !type.empty() )
+    {
+      if( type != "available" )
+        t->addAttribute( "type", type );
+    }
+    else
+    {
+      const std::string& show = showString( m_subtype );
+      if( !show.empty() )
+        new Tag( t, "show", show );
+    }
+
+//     const int len = 4 + (int)std::log10( m_priority ? m_priority : 1 ) + 1;
+//     char* tmp = new char[len];
+//     sprintf( tmp, "%d", m_priority );
+//     std::string ret( tmp, len );
+//     new Tag( t, "priority", ret );
+//     delete[] tmp;
+
+    std::ostringstream oss;
+    oss << m_priority;
+    new Tag( t, "priority", oss.str() );
+
+    getLangs( m_stati, m_status, "status", t );
+
+    StanzaExtensionList::const_iterator it = m_extensionList.begin();
+    for( ; it != m_extensionList.end(); ++it )
+      t->addChild( (*it)->tag() );
+
     return t;
   }
 

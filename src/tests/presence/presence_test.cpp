@@ -176,7 +176,8 @@ int main( int /*argc*/, char** /*argv*/ )
     if( !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
         || !i->hasChildWithCData( "status", "the status" )
         || !i->hasChild( "status", "xml:lang", "the xmllang" )
-        || !i->hasChildWithCData( "priority", "10" ) )
+        || !i->hasChildWithCData( "priority", "10" )
+        || i->hasAttribute( "type" ) )
     {
       ++fail;
       printf( "test '%s' failed: %s\n", name.c_str(), i->xml().c_str() );
