@@ -31,12 +31,12 @@ namespace gloox
   Stanza::Stanza( Tag* tag )
     : m_xmllang( "default" )
   {
-    if( tag )
-    {
-      m_from.setJID( tag->findAttribute( "from" ) );
-      m_to.setJID( tag->findAttribute( "to" ) );
-      m_id = tag->findAttribute( "id" );
-    }
+    if( !tag )
+      return;
+
+    m_from.setJID( tag->findAttribute( "from" ) );
+    m_to.setJID( tag->findAttribute( "to" ) );
+    m_id = tag->findAttribute( "id" );
   }
 
   Stanza::~Stanza()
@@ -52,7 +52,6 @@ namespace gloox
   void Stanza::addExtension( const StanzaExtension* se )
   {
     m_extensionList.push_back( se );
-//     addChild( se->tag() );
   }
 
   const StanzaExtension* Stanza::findExtension( int type ) const
