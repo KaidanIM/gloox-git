@@ -63,6 +63,7 @@ namespace gloox
        */
       Presence( PresenceType type, const JID& to, const std::string& status = EmptyString,
                 int priority = 0, const std::string& xmllang = EmptyString, const JID& from = JID() );
+
       /**
        * Destructor.
        */
@@ -82,6 +83,12 @@ namespace gloox
       PresenceType presence() const { return m_subtype; }
 
       /**
+       * Sets the presence type.
+       * @param type The presence type.
+       */
+      void setPresence( PresenceType type ) { m_subtype = type; }
+
+      /**
        * Returns the status text of a presence stanza for the given language if available.
        * If the requested language is not available, the default status text (without a xml:lang
        * attribute) will be returned.
@@ -96,11 +103,27 @@ namespace gloox
       }
 
       /**
-         * Returns the remote entity resource's presence priority if the stanza is a presence stanza.
-         * Legal range is between -128 and +127.
-         * @return The priority information contained in the stanza, if any, or 0.
+       * Adds a (possibly translated) status message.
+       * @param status The status message.
+       * @param lang The language identifier for the desired language. It must conform to
+       * section 2.12 of the XML specification and RFC 3066.
+       */
+      void addStatus( const std::string& status, const std::string& lang )
+      {
+        setLang( &m_stati, m_status, status, lang );
+      }
+
+      /**
+       * Returns the presence priority in the legal range: -128 to +127.
+       * @return The priority information contained in the stanza, defaults to 0.
        */
       int priority() const { return m_priority; }
+
+      /**
+       * Sets the priority. Legal range: -128 to +127.
+       * @param priority The priority to set.
+       */
+      void setPriority( int priority );
 
       // reimplemented from Stanza
       virtual Tag* tag() const;
