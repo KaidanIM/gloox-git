@@ -26,8 +26,8 @@ namespace gloox
   SEResourceBind::SEResourceBind( const Tag* tag )
     : StanzaExtension( ExtResourceBind ), m_resource( EmptyString )
   {
-    if( tag )
-      m_jid.setJID( tag->cdata() );
+    if( tag && tag->hasChild( "jid" ))
+      m_jid.setJID( tag->findChild( "jid" )->cdata() );
   }
 
   SEResourceBind::~SEResourceBind()
