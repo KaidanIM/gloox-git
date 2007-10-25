@@ -482,7 +482,7 @@ namespace gloox
        * @return An independent copy of the Tag.
        * @since 0.7
        */
-      virtual Tag* clone() const;
+      Tag* clone() const;
 
       /**
        * Evaluates the given XPath expression and returns the result Tag's character data, if any.
