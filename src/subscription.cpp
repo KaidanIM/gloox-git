@@ -54,6 +54,9 @@ namespace gloox
 
   Tag* Subscription::tag() const
   {
+    if( m_subtype == Invalid )
+      return 0;
+
     Tag* t = new Tag( "subscription" );
     if( m_to )
       t->addAttribute( "to", m_to.full() );

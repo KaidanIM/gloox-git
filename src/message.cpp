@@ -68,6 +68,9 @@ namespace gloox
 
   Tag* Message::tag() const
   {
+    if( m_subtype == Invalid )
+      return 0;
+
     Tag* t = new Tag( "message" );
     if( m_to )
       t->addAttribute( "to", m_to.full() );
