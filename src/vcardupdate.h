@@ -65,10 +65,7 @@ namespace gloox
       const std::string& hash() const { return m_hash; }
 
       // reimplemented from StanzaExtension
-      virtual const std::string filterString() const
-      {
-        return "/presence/x[@xmlns='" + XMLNS_X_VCARD_UPDATE + "']";
-      }
+      virtual const std::string& filterString() const;
 
       // reimplemented from StanzaExtension
       virtual StanzaExtension* newInstance( const Tag* tag ) const

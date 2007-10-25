@@ -14,8 +14,11 @@ class SETest : public StanzaExtension
     SETest( const Tag* tag ) : StanzaExtension( ExtUser + 1 ), m_tag( const_cast<Tag*>( tag ) ) {}
     ~SETest() {}
 
-    virtual const std::string filterString() const
-    { return "/foo/bar"; }
+    virtual const std::string& filterString() const
+    {
+      static const std::string filter = "/foo/bar";
+      return filter;
+    }
 
     virtual StanzaExtension* newInstance( const Tag* tag ) const
     { return new SETest( tag ); }

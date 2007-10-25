@@ -60,11 +60,7 @@ namespace gloox
       const std::string nick() const { return m_nick; }
 
       // reimplemented from StanzaExtension
-      virtual const std::string filterString() const
-      {
-        return "/presence/nick[@xmlns='" + XMLNS_NICKNAME + "']"
-               "|/message/nick[@xmlns='" + XMLNS_NICKNAME + "']";
-      }
+      virtual const std::string& filterString() const;
 
       // reimplemented from StanzaExtension
       virtual StanzaExtension* newInstance( const Tag* tag ) const

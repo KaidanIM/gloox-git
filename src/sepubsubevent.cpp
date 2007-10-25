@@ -107,7 +107,7 @@ namespace gloox
     }
   }
 
-  const std::string SEPubSubEvent::filterString() const
+  const std::string& SEPubSubEvent::filterString() const
   {
     static const std::string filter = "/message/event";
     return filter;

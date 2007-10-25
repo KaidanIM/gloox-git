@@ -134,10 +134,7 @@ namespace gloox
       operator bool() const { return m_type != TypeInvalid; }
 
       // reimplemented from StanzaExtension
-      virtual const std::string filterString() const
-      {
-        return "/message/x[@xmlns='" + XMLNS_X_DATA + "']";
-      }
+      virtual const std::string& filterString() const;
 
       // reimplemented from StanzaExtension
       virtual StanzaExtension* newInstance( const Tag* tag ) const

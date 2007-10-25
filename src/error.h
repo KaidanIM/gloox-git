@@ -75,13 +75,7 @@ namespace gloox
       const std::string& text( const std::string& lang = "default" ) const;
 
       // reimplemented from StanzaExtension
-      virtual const std::string filterString() const
-      {
-        return "/iq/error"
-               "|/message/error"
-               "|/presence/error"
-               "|/subscription/error";
-      }
+      virtual const std::string& filterString() const;
 
       // reimplemented from StanzaExtension
       virtual StanzaExtension* newInstance( const Tag* tag ) const

@@ -70,10 +70,7 @@ namespace gloox
       virtual ~SEVersion();
 
       // reimplemented from StanzaExtension
-      virtual const std::string filterString() const
-      {
-        return "/iq/query[@xmlns='" + XMLNS_VERSION + "']";
-      }
+      virtual const std::string& filterString() const;
 
       // reimplemented from StanzaExtension
       virtual StanzaExtension* newInstance( const Tag* tag ) const

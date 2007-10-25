@@ -72,10 +72,7 @@ namespace gloox
       const std::string ver() const;
 
       // reimplemented from StanzaExtension
-      virtual const std::string filterString() const
-      {
-        return "/presence/c[@xmlns='" + XMLNS_CAPS + "']";
-      }
+      virtual const std::string& filterString() const;
 
       // reimplemented from StanzaExtension
       virtual StanzaExtension* newInstance( const Tag* tag ) const

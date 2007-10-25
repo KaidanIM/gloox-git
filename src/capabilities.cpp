@@ -69,6 +69,12 @@ namespace gloox
       return m_ver;
   }
 
+  const std::string& Capabilities::filterString() const
+  {
+    static const std::string filter = "/presence/c[@xmlns='" + XMLNS_CAPS + "']";
+    return filter;
+  }
+
   Tag* Capabilities::tag() const
   {
     if( !m_valid || m_node.empty() )

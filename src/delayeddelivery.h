@@ -101,13 +101,7 @@ namespace gloox
       void setReason( const std::string& reason ) { m_reason = reason; }
 
       // reimplemented from StanzaExtension
-      virtual const std::string filterString() const
-      {
-        return "/presence/x[@xmlns='" + XMLNS_DELAY + "']"
-               "|/message/x[@xmlns='" + XMLNS_DELAY + "']"
-               "|/presence/x[@xmlns='" + XMLNS_X_DELAY + "']"
-               "|/message/x[@xmlns='" + XMLNS_X_DELAY + "']";
-      }
+      virtual const std::string& filterString() const;
 
       // reimplemented from StanzaExtension
       virtual StanzaExtension* newInstance( const Tag* tag ) const
