@@ -98,6 +98,7 @@ namespace gloox
     m_capabilities = new Capabilities( m_disco );
     addPresenceExtension( m_capabilities );
     registerStanzaExtension( new Capabilities( m_disco ) );
+    registerStanzaExtension( new SEResourceBind( 0 ) );
   }
 
   void Client::setUsername( const std::string &username )
