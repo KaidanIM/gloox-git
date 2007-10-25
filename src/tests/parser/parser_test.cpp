@@ -1115,7 +1115,7 @@ class ParserTest : private TagHandler
       if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->xmlns() != "def"
             || m_tag->xmlns( "xx" ) != "xyz" || m_tag->xmlns( "foo" ) != "ggg"
             || m_tag->attributes().size() != 4
-            || m_tag->attributes().front()->xmlns() != ""
+            || m_tag->attributes().front()->xmlns() != "def"
             || m_tag->xml() != data )
       {
         ++fail;
@@ -1133,7 +1133,7 @@ class ParserTest : private TagHandler
       if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->xmlns() != "ggg"
             || m_tag->xmlns( "xx" ) != "xyz" || m_tag->xmlns( "foo" ) != "ggg"
             || m_tag->attributes().size() != 4
-            || m_tag->attributes().front()->xmlns() != ""
+            || m_tag->attributes().front()->xmlns() != "def"
             || m_tag->xml() != data
             || m_tag->children().front()->xmlns() != "xyz"
             || m_tag->children().front()->children().front()->xmlns() != "ggg" )
