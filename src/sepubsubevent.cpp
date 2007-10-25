@@ -108,7 +108,7 @@ namespace gloox
 
   const std::string& SEPubSubEvent::filterString() const
   {
-    static const std::string filter = "/message/event";
+    static const std::string filter = "/message/event[@xmlns='" + XMLNS_PUBSUB_EVENT + "']";
     return filter;
   }
 
