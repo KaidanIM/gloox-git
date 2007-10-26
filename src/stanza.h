@@ -62,7 +62,7 @@ namespace gloox
       const std::string& id() const { return m_id; }
 
       /**
-       * Returns the stanza error condition, if any.
+       * A convenience function that returns the stanza error condition, if any.
        * @return The stanza error condition, may be 0.
        */
       const Error* error() const;
@@ -77,8 +77,8 @@ namespace gloox
       /**
        * Use this function to add a StanzaExtension to this Stanza.
        * @param se The StanzaExtension to add.
-       * @note The Stanza will become the owner of the StanzaExtension and will delete it
-       * after using it.
+       * @note The Stanza will become the owner of the StanzaExtension and willtake care
+       * of deletion.
        * @since 0.9
        */
       void addExtension( const StanzaExtension* se );
@@ -97,6 +97,11 @@ namespace gloox
       const StanzaExtensionList& extensions() const { return m_extensionList; }
 
       /**
+       * Removes (deletes) all the stanza's extensions.
+       */
+      void removeExtensions();
+
+      /**
        * Creates a Tag representation of the Stanza. The Tag is completely independent of the
        * Stanza and will not be updated when the Stanza is modified.
        * @return A pointer to a Tag representation. It is the job of the caller to delete the Tag.
@@ -105,7 +110,7 @@ namespace gloox
 
     protected:
       /**
-       * Creates a new Stanza from a deep copy of the given Tag.
+       * Creates a new Stanza, taking from and to addresses from the given Tag.
        * @param tag The Tag to create the Stanza from.
        * @since 1.0
        */
@@ -113,7 +118,8 @@ namespace gloox
 
       /**
        * Creates a new Stanza with given name.
-       * @param name The name of the root tag.
+       * @param to The receipient of the Stanza.
+       * @param from The sender of the Stanza.
        * @since 1.0
        */
       Stanza( const JID& to, const JID& from );
@@ -133,7 +139,7 @@ namespace gloox
                             const std::string& name, Tag* tag );
 
     private:
-      Stanza( const Stanza& ); // FIXME needs to be re-introduced
+      Stanza( const Stanza& );
 
   };
 

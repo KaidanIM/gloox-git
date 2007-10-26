@@ -41,7 +41,7 @@ namespace gloox
 
   Stanza::~Stanza()
   {
-    util::clearList( m_extensionList );
+    removeExtensions();
   }
 
   const Error* Stanza::error() const
@@ -59,6 +59,11 @@ namespace gloox
     StanzaExtensionList::const_iterator it = m_extensionList.begin();
     for( ; it != m_extensionList.end() && (*it)->extensionType() != type; ++it ) ;
     return it != m_extensionList.end() ? (*it) : 0;
+  }
+
+  void Stanza::removeExtensions()
+  {
+    util::clearList( m_extensionList );
   }
 
   void Stanza::setLang( StringMap** map, std::string& defaultLang, const Tag* tag )
