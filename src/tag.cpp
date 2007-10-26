@@ -44,11 +44,26 @@ namespace gloox
       return m_prefix;
 
     if( m_parent )
-    {
       return m_parent->prefix( m_xmlns );
-    }
 
     return EmptyString;
+  }
+
+  const std::string Tag::Attribute::xml() const
+  {
+    std::string xml;
+    xml += ' ';
+    if( !m_prefix.empty() )
+    {
+      xml += m_prefix;
+      xml += ':';
+    }
+    xml += m_name;
+    xml += "='";
+    xml += util::escape( m_value );
+    xml += '\'';
+
+    return xml;
   }
 
   Tag::Tag( const std::string& name, const std::string& cdata )
@@ -222,16 +237,7 @@ namespace gloox
       AttributeList::const_iterator it_a = m_attribs->begin();
       for( ; it_a != m_attribs->end(); ++it_a )
       {
-        xml += ' ';
-        if( !((*it_a)->prefix().empty()) )
-        {
-          xml += (*it_a)->prefix();
-          xml += ':';
-        }
-        xml += (*it_a)->name();
-        xml += "='";
-        xml += (*it_a)->value();
-        xml += '\'';
+        xml += (*it_a)->xml();
       }
     }
 
@@ -249,7 +255,7 @@ namespace gloox
             xml += (*it_n)->tag->xml();
             break;
           case TypeString:
-            xml += escape( *((*it_n)->str) );
+            xml += util::escape( *((*it_n)->str) );
             break;
         }
       }
@@ -264,31 +270,6 @@ namespace gloox
     }
 
     return xml;
-  }
-
-  static const char escape_chars[] = { '&', '<', '>', '\'', '"' };
-
-  static const std::string escape_seqs[] = { "amp;", "lt;", "gt;", "apos;", "quot;" };
-
-  static const unsigned nb_escape = sizeof( escape_chars ) / sizeof( char );
-  static const unsigned escape_size = 5;
-
-  const std::string Tag::escape( std::string esc )
-  {
-    for( unsigned val, i = 0; i < esc.length(); ++i )
-    {
-      for( val = 0; val < escape_size; ++val )
-      {
-        if( esc[i] == escape_chars[val] )
-        {
-          esc[i] = '&';
-          esc.insert( i+1, escape_seqs[val] );
-          i += escape_seqs[val].length();
-          break;
-        }
-      }
-    }
-    return esc;
   }
 
   void Tag::addAttribute( Attribute* attr )
