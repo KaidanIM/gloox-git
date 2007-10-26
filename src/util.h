@@ -143,6 +143,13 @@ namespace gloox
       }
     }
 
+    /**
+     * Does some fancy escaping. (& --> &amp;, etc).
+     * @param what A string to escape.
+     * @return The escaped string.
+     */
+    const std::string escape( std::string what );
+
   }
 
 }

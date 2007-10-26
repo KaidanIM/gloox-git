@@ -1,4 +1,5 @@
 #include "../../tag.h"
+#include "../../util.h"
 using namespace gloox;
 
 #include <stdio.h>
@@ -134,8 +135,8 @@ int main( int /*argc*/, char** /*argv*/ )
   c = 0;
 
   //-------
-  name = "escape";
-  if ( Tag::escape( "&<>'\"" ) != "&amp;&lt;&gt;&apos;&quot;" )
+  name = "util::escape";
+  if ( util::escape( "&<>'\"" ) != "&amp;&lt;&gt;&apos;&quot;" )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
@@ -323,7 +324,16 @@ int main( int /*argc*/, char** /*argv*/ )
     }
   }
 
-
+  //-------
+  {
+    name = "escape attribute value";
+    Tag t( "foo", "abc", "&amp;" );
+    if( t.xml() != "<foo abc='&amp;amp;'/>" )
+    {
+      ++fail;
+      printf( "test '%s' failed: %s\n", name.c_str(), t.xml().c_str() );
+    }
+  }
 
 
 

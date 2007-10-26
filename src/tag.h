@@ -145,6 +145,12 @@ namespace gloox
           const std::string& prefix() const;
 
           /**
+           * Returns a string representation of the attribute.
+           * @return A string representation.
+           */
+          const std::string xml() const;
+
+          /**
            * Checks two Attributes for equality.
            * @param right The Attribute to check against the current Attribute.
            */
@@ -534,17 +540,11 @@ namespace gloox
       bool operator!=( const Tag &right ) const { return !( *this == right ); }
 
       /**
-       * Does some fancy escaping. (& --> &amp;, etc).
-       * @param what A string to escape.
-       */
-      static const std::string escape( std::string what );
-
-      /**
        * Returns @b true if the Tag is valid, @b false otherwise.
        */
       operator bool() const { return m_valid; }
 
-    protected:
+    private:
       /**
        * Creates a new Tag by stealing the original Tag's body (elements, attributes). The
        * original Tag is pretty much useless afterwards.
@@ -595,7 +595,6 @@ namespace gloox
       StringMap* m_xmlnss;
       std::string m_prefix;
 
-    private:
       enum TokenType
       {
         XTNone,
