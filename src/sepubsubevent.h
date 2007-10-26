@@ -1,5 +1,17 @@
-#ifndef SEPUBSUBEVENT_H_
-#define SEPUBSUBEVENT_H_
+/*
+  Copyright (c) 2004-2007 by Jakob Schroeter <js@camaya.net>
+  This file is part of the gloox library. http://camaya.net/gloox
+
+  This software is distributed under a license. The full license
+  agreement can be found in the file LICENSE in this distribution.
+  This software may not be copied, modified, sold or distributed
+  other than expressed in the named license agreement.
+
+  This software is distributed without any warranty.
+*/
+
+#ifndef SEPUBSUBEVENT_H__
+#define SEPUBSUBEVENT_H__
 
 #include "stanzaextension.h"
 #include "pubsub.h"
@@ -13,8 +25,14 @@ namespace gloox
   {
     public:
 
+      /**
+       *
+       */
       struct ItemOperation
       {
+        /**
+         *
+         */
         ItemOperation( bool _remove, const std::string& _item, const Tag* _payload = 0)
           : remove( _remove ), item( _item ), payload( _payload ) {}
 
@@ -23,37 +41,45 @@ namespace gloox
         const Tag* payload;
       };
 
-      typedef std::list< ItemOperation* > ItemOperationList;
-      typedef std::list< std::string > StringList;
+      /**
+       * A list of ItemOperations.
+       */
+      typedef std::list<ItemOperation*> ItemOperationList;
 
       /**
        * PubSub event notification Stanza Extension.
+       * @param event A tag to parse.
        */
       SEPubSubEvent( const Tag* event );
 
       /**
-       * Virtual dtor.
+       * Virtual destructor.
        */
       virtual ~SEPubSubEvent();
 
       /**
-       * Virtual dtor.
+       * Returns the event's type.
+       * @return The event's type.
        */
       PubSub::EventType type() const { return m_type; }
 
       /**
-       * Returns the list of subscription ID's for which this notification
-       * is valid (maybe be null).
+       * Returns the list of subscription IDs for which this notification
+       * is valid. May be 0.
+       * @return The list of subscription IDs.
        */
       const StringList* subscriptions() const { return m_subscriptionIDs; }
 
       /**
-       * Returns the list of ItemOperation's for EventItems(Retract) notification.
+       * Returns the list of ItemOperations for EventItems(Retract) notification.
+       * May be 0.
+       * @return The list of ItemOperations.
        */
       const ItemOperationList* items() const { return m_itemOperations; }
 
       /**
-       * Returns the node ID of the node for which the notification is sent.
+       * Returns the node's ID for which the notification is sent.
+       * @return The node's ID.
        */
       const std::string& node() { return m_node; }
 
@@ -81,4 +107,4 @@ namespace gloox
 
 }
 
-#endif /* SEPPUBSUBEVENT_H_ */
+#endif // SEPPUBSUBEVENT_H__
