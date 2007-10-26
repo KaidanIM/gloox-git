@@ -11,10 +11,9 @@
 */
 
 #include "presence.h"
+#include "capabilities.h"
 #include "util.h"
 
-#include <cmath>
-#include <algorithm>
 #include <sstream>
 
 namespace gloox
@@ -99,6 +98,11 @@ namespace gloox
       m_priority = 127;
     else
       m_priority = priority;
+  }
+
+  const Capabilities* Presence::capabilities() const
+  {
+    return static_cast<const Capabilities*>( findExtension( ExtCaps ) );
   }
 
   Tag* Presence::tag() const
