@@ -89,7 +89,7 @@ int main( int /*argc*/, char** /*argv*/ )
     Subscription s( Subscription::Subscribe, JID( "xyz@example.org/blah" ), "the status",
                           "the xmllang", JID( "foo@bar.com" ) );
     Tag* i = s.tag();
-    if( !i->hasAttribute( "type", "subscribe" )
+    if( i->name() != "presence" || !i->hasAttribute( "type", "subscribe" )
         || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
         || !i->hasChildWithCData( "status", "the status" )
         || !i->hasChild( "status", "xml:lang", "the xmllang" ) )
@@ -106,7 +106,7 @@ int main( int /*argc*/, char** /*argv*/ )
     Subscription s( Subscription::Subscribed, JID( "xyz@example.org/blah" ), "the status",
                           "the xmllang", JID( "foo@bar.com" ) );
     Tag* i = s.tag();
-    if( !i->hasAttribute( "type", "subscribed" )
+    if( i->name() != "presence" || !i->hasAttribute( "type", "subscribed" )
         || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
         || !i->hasChildWithCData( "status", "the status" )
         || !i->hasChild( "status", "xml:lang", "the xmllang" ) )
@@ -123,7 +123,7 @@ int main( int /*argc*/, char** /*argv*/ )
     Subscription s( Subscription::Unsubscribe, JID( "xyz@example.org/blah" ), "the status",
                           "the xmllang", JID( "foo@bar.com" ) );
     Tag* i = s.tag();
-    if( !i->hasAttribute( "type", "unsubscribe" )
+    if( i->name() != "presence" || !i->hasAttribute( "type", "unsubscribe" )
         || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
         || !i->hasChildWithCData( "status", "the status" )
         || !i->hasChild( "status", "xml:lang", "the xmllang" ) )
@@ -140,7 +140,7 @@ int main( int /*argc*/, char** /*argv*/ )
     Subscription s( Subscription::Unsubscribed, JID( "xyz@example.org/blah" ), "the status",
                           "the xmllang", JID( "foo@bar.com" ) );
     Tag* i = s.tag();
-    if( !i->hasAttribute( "type", "unsubscribed" )
+    if( i->name() != "presence" || !i->hasAttribute( "type", "unsubscribed" )
         || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
         || !i->hasChildWithCData( "status", "the status" )
         || !i->hasChild( "status", "xml:lang", "the xmllang" ) )
