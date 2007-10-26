@@ -33,12 +33,10 @@ for 1.0
 - comply with RFC2831, Section 7.2, i.e. escape SASL-special chars in usernames
 - stanza size limitations?
 - Tag: check input for invalid characters
-- don't inherit stanza from tag?
 - make clientbase a friend of iqhandler etc?
 - check Openfire/no-SSL + gloox. seems to cause problems after requesting the roster. -- not reproducible
 - add Tag::removeAttribute( string, string ) & removeAttribute( Attribute )
 - add Tag::removeChild( string )
-- add Attribute::xml() (protected/private?) and use it in Tag::xml()
 
 
 optional for 1.0:
