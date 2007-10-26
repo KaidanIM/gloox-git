@@ -20,6 +20,7 @@
 namespace gloox
 {
 
+  class Capabilities;
   class JID;
 
   /**
@@ -74,6 +75,12 @@ namespace gloox
        * @return The presence's type.
        */
       PresenceType subtype() const { return m_subtype; }
+
+      /**
+       * A convenience function returning the stanza's Capabilities, if any. May be 0.
+       * @return A pointer to a Capabilities object, or 0.
+       */
+      const Capabilities* capabilities() const;
 
       /**
        * Returns the presence's type.
