@@ -21,6 +21,12 @@ namespace gloox
 {
   class Tag;
 
+  /**
+   * @brief This is an implementation of a PubSub Notification StanzaExtension.
+   *
+   * @author Vincent Thomasset <vthomasset@gmail.com>
+   * @since 1.0
+   */
   class SEPubSubEvent : public StanzaExtension
   {
     public:
