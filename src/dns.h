@@ -75,7 +75,7 @@ namespace gloox
 
       /**
        * This is a convenience funtion which uses @ref resolve() to resolve SRV records
-       * for a given domain, using a service of @b xmpp and a proto of @b tcp.
+       * for a given domain, using a service of @b xmpp-client and a proto of @b tcp.
        * @param domain The domain to resolve SRV records for.
        * @param logInstance A LogSink to use for logging.
        * @return A list of weighted hostname/port pairs from SRV records, or A records if no SRV
@@ -87,21 +87,21 @@ namespace gloox
       /**
        * This is a convenience function which uses @ref resolve() to get a list of hosts
        * and connects to one of them.
-       * @param domain The domain to resolve SRV records for.
+       * @param host The host to resolve SRV records for.
        * @param logInstance A LogSink to use for logging.
        * @return A file descriptor for the established connection.
        */
-      static int connect( const std::string& domain, const LogSink& logInstance );
+      static int connect( const std::string& host, const LogSink& logInstance );
 
       /**
-       * This is a convenience function which uses connects to the given host and port. No SRV
+       * This is a convenience function which connects to the given host and port. No SRV
        * records are resolved. Use this function for special setups.
-       * @param domain The domain to connect to.
+       * @param host The host/IP address to connect to.
        * @param port A custom port to connect to.
        * @param logInstance A LogSink to use for logging.
        * @return A file descriptor for the established connection.
        */
-      static int connect( const std::string& domain, unsigned short port, const LogSink& logInstance );
+      static int connect( const std::string& host, unsigned short port, const LogSink& logInstance );
 
       /**
        * Prepares and returnes a simple socket.
