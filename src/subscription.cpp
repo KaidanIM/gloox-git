@@ -57,7 +57,7 @@ namespace gloox
     if( m_subtype == Invalid )
       return 0;
 
-    Tag* t = new Tag( "subscription" );
+    Tag* t = new Tag( "presence" );
     if( m_to )
       t->addAttribute( "to", m_to.full() );
     if( m_from )
