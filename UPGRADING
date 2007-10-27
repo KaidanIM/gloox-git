@@ -59,6 +59,30 @@
  *   printf( "message was sent at %s\n", dd->stamp().c_str() );
  * @endcode
  *
+ * @subsubsection func_ClientBase_trackID ClientBase::trackID()
+ *
+ * The functionality provided by this function really makes sense only for IQ stanzas of type
+ * get or set. As a result, there is a new function
+ * @link gloox::ClientBase::send( const IQ&, IqHandler*, int ) ClientBase::send( const IQ&, IqHandler*, int ) @endlink
+ * that combines trackID()'s and send()'s functionality.
+ *
+ * Old code:
+ * @code
+ * const std::string& id = m_client->getID();
+ * Tag* iq = ...
+ * iq->addAtrribute( "id", id );
+ * ...
+ * m_client->trackID( this, id, SomeContext );
+ * m_client->send( iq );
+ * @endcode
+ *
+ * New code:
+ * @code
+ * IQ iq( IQ::Set, recipientJID, m_client->getID(), ... );
+ * ...
+ * m_client->send( iq, this, SomeContext );
+ * @endcode
+ *
  * @subsection removed_10 1.2 Removed classes and functions
  *
  * @subsubsection class_XDelayedDelivery 1.2.1 XDelayedDelivery

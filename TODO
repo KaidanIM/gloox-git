@@ -53,17 +53,12 @@ optional for 1.0:
 - overhaul all XEP implementations (and note implemented version number)
 - RosterItem::status ::statusMsg for highest prio
 
-- move enum StanzaExtensionType to gloox.h and remove include in stanza.h
-- move stl/stdlib typedefs to types.h (?)
-- split send()/getID() to clientbasebase (??)
 - XEP-0020 (Feature Negotiation)
 - XEP-0166 (Jingle Signaling)
 - XEP-0175 (Best Practices for Use of SASL ANONYMOUS)
 - XEP-0186 (Invisible Command)
 - XEP-0198 (Stanza Acknowledgements)
 - XEP-0199 (XMPP Ping)
-- sort SRV records by weight & cost
-- state p. for Stanza types
 - vcard-temp: support AGENT, CATEGORIES, SOUND, KEY
 - make socket tunable (keepalive)
 - allow for registration and immediate connection from within the same Client object
@@ -75,7 +70,6 @@ optional for 1.0:
 - check subjectAltName for JIDs (core sec. 5.1 rule 8)
 - introduce some 'randomness' for IDs
 - introduce return values for *Handlers to indicate whether following handlers should be invoked as well
-- look into IPv6 support
 - empty passwords allowed?
 
 
