@@ -110,7 +110,7 @@ namespace gloox
       static int connect( const std::string& host, unsigned short port, const LogSink& logInstance );
 
       /**
-       * A convenience function that prepares and returnes a simple TCP socket.
+       * A convenience function that prepares and returnes a simple, unconnected TCP socket.
        * @return A TCP socket.
        */
       static int getSocket();
@@ -141,15 +141,15 @@ namespace gloox
        * @param res A pointer to a pointer holding the query results.
        * @param domain The domain to resolve SRV records for.
        * @param logInstance A LogSink to use for logging.
-       * @return A list of weighted hostname/port pairs from SRV records, or A records if no SRV
-       * records where found.
-       *
        */
       static void resolve( struct addrinfo** res, const std::string& domain, const LogSink& logInstance )
         { resolve( res, "xmpp-client", "tcp", domain, logInstance ); }
 
       /**
-       *
+       * Tries to connect to the host/address contained in the addrinfo structure.
+       * @param res The connection parameters.
+       * @param logInstance A LogSink to use for logging.
+       * @return A file descriptor for the established connection.
        */
       static int connect( struct addrinfo* res, const LogSink& logInstance );
 #endif
