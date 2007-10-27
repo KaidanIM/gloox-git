@@ -38,6 +38,12 @@
 # define NS_PACKETSZ 512
 #endif
 
+#ifdef HAVE_GETADDRINFO
+# include <sys/types.h>
+# include <sys/socket.h>
+# include <netdb.h>
+#endif
+
 #include <string>
 #include <map>
 
@@ -62,7 +68,7 @@ namespace gloox
       typedef std::map<std::string, int> HostMap;
 
       /**
-       * This funtion resolves a service/protocol/domain tuple.
+       * This function resolves a service/protocol/domain tuple.
        * @param service The SRV service type.
        * @param proto The SRV protocol.
        * @param domain The domain to search for SRV records.
@@ -104,8 +110,8 @@ namespace gloox
       static int connect( const std::string& host, unsigned short port, const LogSink& logInstance );
 
       /**
-       * Prepares and returnes a simple socket.
-       * @return A simple socket.
+       * A convenience function that prepares and returnes a simple TCP socket.
+       * @return A TCP socket.
        */
       static int getSocket();
 
@@ -116,6 +122,46 @@ namespace gloox
       static void closeSocket( int fd );
 
     private:
+#ifdef HAVE_GETADDRINFO
+      /**
+       * Resolves the given service for the given domain and protocol, using the IPv6-ready
+       * getaddrinfo(). The result is put into the first parameter.
+       * @param res A pointer to a pointer holding the query results.
+       * @param service A service string to query for, e.g. xmpp-client.
+       * @param proto A protocol name.
+       * @param domain The domain to query for.
+       * @param logInstance A LogSink to use for logging.
+       */
+      static void resolve( struct addrinfo** res, const std::string& service, const std::string& proto,
+                           const std::string& domain, const LogSink& logInstance );
+
+      /**
+       * This is a convenience funtion which uses @ref resolve() to resolve SRV records
+       * for a given domain, using a service of @b xmpp-client and a proto of @b tcp.
+       * @param res A pointer to a pointer holding the query results.
+       * @param domain The domain to resolve SRV records for.
+       * @param logInstance A LogSink to use for logging.
+       * @return A list of weighted hostname/port pairs from SRV records, or A records if no SRV
+       * records where found.
+       *
+       */
+      static void resolve( struct addrinfo** res, const std::string& domain, const LogSink& logInstance )
+        { resolve( res, "xmpp-client", "tcp", domain, logInstance ); }
+
+      /**
+       *
+       */
+      static int connect( struct addrinfo* res, const LogSink& logInstance );
+#endif
+
+      /**
+       * This function prepares and returns a socket with the given parameters.
+       * @param af The address family. E.g. PF_INET.
+       * @param socktype The socket type. E.g. SOCK_STREAM.
+       * @param proto The protocol number. E.g. 6 (TCP).
+       */
+      static int getSocket( int af, int socktype, int proto );
+
       static HostMap defaultHostMap( const std::string& domain, const LogSink& logInstance );
       static void cleanup();
 
