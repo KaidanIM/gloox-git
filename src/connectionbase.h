@@ -130,9 +130,16 @@ namespace gloox
       virtual ConnectionBase* newInstance() const = 0;
 
     protected:
+      /** A handler for incoming data and connect/disconnect events. */
       ConnectionDataHandler* m_handler;
+
+      /** Holds the current connection state. */
       ConnectionState m_state;
+
+      /** Holds the server's name/address. */
       std::string m_server;
+
+      /** Holds the port to connect to. */
       int m_port;
 
   };

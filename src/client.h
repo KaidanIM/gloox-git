@@ -178,7 +178,7 @@ namespace gloox
        * Sends directed presence to the given JID. This is a NOOP if there's no active connection.
        * To broadcast presence use setPresence( Presence::PresenceType, int, const std::string& ).
        * @param to The JID to send directed Presence to.
-       * @param presence The presence to send.
+       * @param pres The presence to send.
        * @param priority The priority to include. Legal values: -128 <= priority <= 127
        * @param status The optional status message to include.
        * @note This function does not include any presence extensions (as added by
@@ -195,7 +195,7 @@ namespace gloox
        * the initial presence stanza.
        * If used while a connection already is established a repective presence stanza will be
        * sent out immediately.
-       * @param presence The Presence value to set.
+       * @param pres The Presence value to set.
        * @param priority An optional priority value. Legal values: -128 <= priority <= 127
        * @param status An optional message describing the presence state.
        * @since 0.9

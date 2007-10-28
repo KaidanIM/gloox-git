@@ -86,8 +86,13 @@ namespace gloox
       virtual void filter( Message& msg );
 
     protected:
+      /** A handler for incoming chat state changes. */
       ChatStateHandler* m_chatStateHandler;
+
+      /** Holds the state sent last. */
       ChatStateType m_lastSent;
+
+      /** Indicates whether or not chat states are currently enabled. */
       bool m_enableChatStates;
 
   };

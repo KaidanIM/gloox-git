@@ -149,12 +149,25 @@ namespace gloox
         { m_handler = 0; }
 
     protected:
+      /** A handler for incoming data and open/close events. */
       BytestreamDataHandler* m_handler;
+
+      /** A LogSink instance to use for logging. */
       const LogSink& m_logInstance;
+
+      /** The initiator's JID. */
       const JID m_initiator;
+
+      /** The target's JID. */
       const JID m_target;
+
+      /** The stream type. */
       StreamType m_type;
+
+      /** The stream ID. */
       std::string m_sid;
+
+      /** Indicates whether or not the stream is open. */
       bool m_open;
 
   };

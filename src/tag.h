@@ -463,8 +463,10 @@ namespace gloox
       TagList findChildren( const std::string& name, const std::string& xmlns = EmptyString ) const;
 
       /**
-       * Removes and deletes all child tags that have the given name.
+       * Removes and deletes all child tags that have the given name and are, optionally,
+       * within the given namespace.
        * @param tag The name of the tag(s) to remove from the list of child tags.
+       * @param xmlns An optional namespace to check for.
        */
       void removeChild( const std::string& name, const std::string& xmlns = EmptyString );
 
@@ -479,6 +481,7 @@ namespace gloox
        * Removes the attribute with the given name and optional value from this Tag.
        * @param attr The attribute's name.
        * @param value The attribute's optional value.
+       * @param xmlns An optional namespace to check for.
        */
       void removeAttribute( const std::string& attr, const std::string& value = EmptyString,
                             const std::string& xmlns = EmptyString );

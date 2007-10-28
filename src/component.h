@@ -57,8 +57,13 @@ namespace gloox
       void disconnect() { ClientBase::disconnect( ConnUserDisconnected ); }
 
     protected:
+      // reimplemented from ClientBase
       virtual void handleStartNode();
+
+      // reimplemented from ClientBase
       virtual bool handleNormalNode( Tag* tag );
+
+      // reimplemented from ClientBase
       virtual bool checkStreamVersion( const std::string& /*version*/ ) { return true; }
 
     private:
