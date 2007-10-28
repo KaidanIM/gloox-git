@@ -246,7 +246,7 @@ namespace gloox
 
       /**
        * A convenience function that sends the given IQ stanza.
-       * @param msg The IQ stanza to send.
+       * @param iq The IQ stanza to send.
        */
       void send( const IQ& iq );
 
@@ -258,13 +258,13 @@ namespace gloox
 
       /**
        * A convenience function that sends the given Subscription stanza.
-       * @param msg The Subscription stanza to send.
+       * @param sub The Subscription stanza to send.
        */
       void send( const Subscription& sub );
 
       /**
        * A convenience function that sends the given Presence stanza.
-       * @param msg The Presence stanza to send.
+       * @param pres The Presence stanza to send.
        */
       void send( const Presence& pres );
 
@@ -660,15 +660,44 @@ namespace gloox
       virtual void handleHandshakeResult( const TLSBase* base, bool success, CertInfo &certinfo );
 
     protected:
+      /**
+       * This function is called when resource binding yieled an error.
+       * @param error The specific error condition.
+       */
       void notifyOnResourceBindError( ResourceBindError error );
+
+      /**
+       * This function is called when session creation yieled an error.
+       * @param error The specific error condition.
+       */
       void notifyOnSessionCreateError( SessionCreateError error );
+
+      /**
+       * This function is called when the TLS handshake completed correctly. The return
+       * value is used to determine whether or not the client accepted the server's
+       * certificate. If @b false is returned the connection is closed.
+       * @param info Information on the server's certificate.
+       * @return @b True if the certificate seems trustworthy, @b false otherwise.
+       */
       bool notifyOnTLSConnect( const CertInfo& info );
+
+      /**
+       * This function is called to notify about successful connection.
+       */
       void notifyOnConnect();
       void notifyStreamEvent( StreamEvent event );
       virtual void disconnect( ConnectionError reason );
       void header();
       void setAuthed( bool authed ) { m_authed = authed; }
       void setAuthFailure( AuthenticationError e ) { m_authError = e; }
+
+      /**
+       * Implementors of this function can check if they support the advertized stream version.
+       * The return value indicates whether or not the stream can be handled. A default
+       * implementation is provided.
+       * @param version The advertized stream version.
+       * @return @b True if the stream can be handled, @b false otherwise.
+       */
       virtual bool checkStreamVersion( const std::string& version );
 
       void startSASL( SaslMechanism type );
@@ -706,6 +735,9 @@ namespace gloox
       ClientBase( const ClientBase& );
       ClientBase& operator=( const ClientBase& );
 
+      /**
+       * This function is called right after the opening &lt;stream:stream&gt; was received.
+       */
       virtual void handleStartNode() = 0;
       virtual bool handleNormalNode( Tag* tag ) = 0;
       virtual void rosterFilled() = 0;

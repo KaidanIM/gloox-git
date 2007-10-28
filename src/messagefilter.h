@@ -61,7 +61,7 @@ namespace gloox
       /**
        * This function receives a message right before it is sent out (there may be other filters
        * which get to see the message after this filter, though).
-       * @param tag The tag to decorate. It contains the message to be sent.
+       * @param msg The tag to decorate. It contains the message to be sent.
        */
       virtual void decorate( Message& msg ) = 0;
 

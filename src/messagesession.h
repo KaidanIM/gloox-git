@@ -240,8 +240,7 @@ namespace gloox
 
       /**
        * Returns the message type this MessageSession wants to receive.
-       * @return ORed list of StanzaSubType values this MessageSession wants to receive. Only the
-       * StanzaMessage* types are valid.
+       * @return ORed list of Message::MessageType values this MessageSession wants to receive.
        */
       int types() const { return m_types; }
 

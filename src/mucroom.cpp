@@ -44,7 +44,8 @@ namespace gloox
       m_parent->disco()->removeNodeHandler( this, XMLNS_MUC_ROOMS );
   }
 
-  const char * historyTypeValues[] =
+  /** Strings indicating the type of history to request. */
+  const char* historyTypeValues[] =
   {
     "maxchars", "maxstanzas", "seconds", "since"
   };
