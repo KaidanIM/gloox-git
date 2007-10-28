@@ -335,6 +335,47 @@ int main( int /*argc*/, char** /*argv*/ )
     }
   }
 
+  //-------
+  {
+    name = "remove child 1";
+    Tag t( "foo" );
+    t.addChild( new Tag( "test", "xmlns", "foo" ) );
+    t.addChild( new Tag( "abc", "xmlns", "foobar" ) );
+    t.addAttribute( "attr1", "value1" );
+    t.addAttribute( "attr2", "value2" );
+    t.removeChild( "test" );
+    if( t.hasChild( "test" ) )
+    {
+      ++fail;
+      printf( "test '%s' failed: %s\n", name.c_str(), t.xml().c_str() );
+    }
+
+    name = "remove child 2";
+    t.removeChild( "abc", "foobar" );
+    if( t.hasChild( "abc", "xmlns", "foobar" ) )
+    {
+      ++fail;
+      printf( "test '%s' failed: %s\n", name.c_str(), t.xml().c_str() );
+    }
+
+    name = "remove attrib 1";
+    t.removeAttribute( "attr1" );
+    if( t.hasAttribute( "attr1", "value1") )
+    {
+      ++fail;
+      printf( "test '%s' failed: %s\n", name.c_str(), t.xml().c_str() );
+    }
+
+    name = "remove attrib 2";
+    t.removeAttribute( "attr2", "value2" );
+    if( t.hasAttribute( "attr2", "value2") )
+    {
+      ++fail;
+      printf( "test '%s' failed: %s\n", name.c_str(), t.xml().c_str() );
+    }
+  }
+
+
 
 
 

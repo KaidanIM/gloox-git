@@ -455,11 +455,18 @@ namespace gloox
       /**
        * Returns a list of child tags of the current tag with the given name.
        * @param name The name of the tags to look for.
+       * @param xmlns An optional namespace to check for.
        * @return A list of tags with the given name.
        * @note The tags are still linked to the current Tag and should not be deleted.
        * @since 0.9
        */
-      TagList findChildren( const std::string& name ) const;
+      TagList findChildren( const std::string& name, const std::string& xmlns = EmptyString ) const;
+
+      /**
+       * Removes and deletes all child tags that have the given name.
+       * @param tag The name of the tag(s) to remove from the list of child tags.
+       */
+      void removeChild( const std::string& name, const std::string& xmlns = EmptyString );
 
       /**
        * Removes the given Tag from the list of child Tags.
@@ -467,6 +474,14 @@ namespace gloox
        * @note The Tag @p tag is not deleted.
        */
       void removeChild( Tag* tag );
+
+      /**
+       * Removes the attribute with the given name and optional value from this Tag.
+       * @param attr The attribute's name.
+       * @param value The attribute's optional value.
+       */
+      void removeAttribute( const std::string& attr, const std::string& value = EmptyString,
+                            const std::string& xmlns = EmptyString );
 
       /**
        * This function checks whether a child element with given name exists and has
@@ -646,7 +661,8 @@ namespace gloox
                         const std::string& token );
       bool addPredicate( Tag **root, Tag **current, Tag* token );
 
-      TagList findChildren( const TagList& list, const std::string& name ) const;
+      TagList findChildren( const TagList& list, const std::string& name,
+                            const std::string& xmlns = EmptyString ) const;
       TagList evaluateTagList( Tag* token );
       TagList evaluateUnion( Tag* token );
       TagList allDescendants();
