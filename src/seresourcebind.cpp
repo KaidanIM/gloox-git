@@ -42,19 +42,12 @@ namespace gloox
 
   Tag* SEResourceBind::tag() const
   {
-    if( m_resource.empty() )
-    {
-      if( !m_jid)
-        return 0;
-
-      Tag* t = new Tag( "bind" );
-      t->setXmlns( XMLNS_STREAM_BIND );
-      new Tag( t, "jid", m_jid.full() );
-      return t;
-    }
-
     Tag* t = new Tag( "bind", m_resource );
     t->setXmlns( XMLNS_STREAM_BIND );
+
+    if( m_resource.empty() && m_jid )
+      new Tag( t, "jid", m_jid.full() );
+
     return t;
   }
 
