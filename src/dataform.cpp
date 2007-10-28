@@ -101,21 +101,4 @@ namespace gloox
     return x;
   }
 
-  Result::Result( const Tag* tag )
-    : DataForm( tag )
-  {
-    if( m_type != TypeResult )
-      return;
-
-    const TagList& l = tag->children();
-    TagList::const_iterator it = l.begin();
-    for( ; it != l.end(); ++it )
-    {
-      if( (*it)->name() == "reported" )
-        m_reported = new DataFormReported( (*it) );
-      else if( (*it)->name() == "item" )
-        m_items.push_back( new DataFormItem( (*it) ) );
-    }
-  }
-
 }
