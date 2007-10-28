@@ -357,8 +357,7 @@ namespace gloox
     if( !m_resourceBound )
     {
       IQ iq( IQ::Set, JID(), getID() );
-      if( !resource().empty() )
-        iq.addExtension( new SEResourceBind( resource() ) );
+      iq.addExtension( new SEResourceBind( resource() ) );
 
       send( iq, this, ResourceBind );
     }
