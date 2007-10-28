@@ -376,15 +376,7 @@ namespace gloox
     if( !child )
       return;
 
-    if( !m_nodes )
-      m_nodes = new NodeList();
-    if( !m_children )
-      m_children = new TagList();
-
-    Tag* t = child->clone();
-    m_children->push_back( t );
-    t->m_parent = this;
-    m_nodes->push_back( new Node( TypeTag, t ) );
+    addChild( child->clone() );
   }
 
   void Tag::setCData( const std::string& cdata )
@@ -491,7 +483,12 @@ namespace gloox
   const std::string& Tag::xmlns( const std::string& prefix ) const
   {
     if( prefix.empty() )
+    {
+      if( hasAttribute( XMLNS ) )
+        return findAttribute( XMLNS );
+
       return m_xmlns;
+    }
 
     if( m_xmlnss )
     {
@@ -643,24 +640,52 @@ namespace gloox
     return t;
   }
 
-  TagList Tag::findChildren( const std::string& name ) const
+  TagList Tag::findChildren( const std::string& name,
+                             const std::string& xmlns ) const
   {
     if( !m_children )
       return TagList();
 
-    return findChildren( *m_children, name );
+    return findChildren( *m_children, name, xmlns );
   }
 
-  TagList Tag::findChildren( const TagList& list, const std::string& name ) const
+  TagList Tag::findChildren( const TagList& list, const std::string& name,
+                             const std::string& xmlns ) const
   {
     TagList ret;
     TagList::const_iterator it = list.begin();
     for( ; it != list.end(); ++it )
     {
-      if( (*it)->name() == name )
+      if( (*it)->name() == name && ( xmlns.empty() || (*it)->xmlns() == xmlns ) )
         ret.push_back( (*it) );
     }
     return ret;
+  }
+
+  void Tag::removeChild( const std::string& name, const std::string& xmlns )
+  {
+    if( name.empty() || !m_children || !m_nodes )
+      return;
+
+    TagList l = findChildren( name, xmlns );
+    TagList::iterator it = l.begin();
+    TagList::iterator it2;
+    while( it != l.end() )
+    {
+      it2 = it++;
+      NodeList::iterator itn = m_nodes->begin();
+      for( ; itn != m_nodes->end(); ++itn )
+      {
+        if( (*itn)->type == TypeTag && (*itn)->tag == (*it2) )
+        {
+          delete (*itn);
+          m_nodes->erase( itn );
+          break;
+        }
+      }
+      m_children->remove( (*it2) );
+      delete (*it2);
+    }
   }
 
   void Tag::removeChild( Tag* tag )
@@ -677,8 +702,28 @@ namespace gloox
       if( (*it)->type == TypeTag && (*it)->tag == tag )
       {
         delete (*it);
-        m_nodes->remove( (*it) );
+        m_nodes->erase( it );
         return;
+      }
+    }
+  }
+
+  void Tag::removeAttribute( const std::string& attr, const std::string& value,
+                             const std::string& xmlns )
+  {
+    if( attr.empty() || !m_attribs )
+      return;
+
+    AttributeList::iterator it = m_attribs->begin();
+    AttributeList::iterator it2;
+    while( it != m_attribs->end() )
+    {
+      it2 = it++;
+      if( (*it2)->name() == attr && ( value.empty() || (*it2)->value() == value )
+                                 && ( xmlns.empty() || (*it2)->xmlns() == xmlns ) )
+      {
+        delete (*it2);
+        m_attribs->erase( it2 );
       }
     }
   }
