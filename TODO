@@ -35,8 +35,6 @@ for 1.0
 - Tag: check input for invalid characters
 - make clientbase a friend of iqhandler etc?
 - check Openfire/no-SSL + gloox. seems to cause problems after requesting the roster. -- not reproducible
-- add Tag::removeAttribute( string, string ) & removeAttribute( Attribute )
-- add Tag::removeChild( string )
 
 
 optional for 1.0:
