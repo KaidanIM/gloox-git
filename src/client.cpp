@@ -132,7 +132,7 @@ namespace gloox
           if( m_streamFeatures & StreamFeatureBind )
           {
             notifyStreamEvent( StreamEventResourceBinding );
-            bindResource();
+            bindResource( resource() );
           }
         }
         else if( m_doAuth && !username().empty() && !password().empty() )
@@ -282,6 +282,9 @@ namespace gloox
     if( tag->hasChild( "bind", XMLNS, XMLNS_STREAM_BIND ) )
       features |= StreamFeatureBind;
 
+    if( tag->hasChild( "unbind", XMLNS, XMLNS_STREAM_BIND ) )
+      features |= StreamFeatureUnbind;
+
     if( tag->hasChild( "session", XMLNS, XMLNS_STREAM_SESSION ) )
       features |= StreamFeatureSession;
 
@@ -352,15 +355,16 @@ namespace gloox
     }
   }
 
-  void Client::bindResource()
+  bool Client::bindResource( const std::string& resource )
   {
-    if( !m_resourceBound )
-    {
-      IQ iq( IQ::Set, JID(), getID() );
-      iq.addExtension( new SEResourceBind( resource() ) );
+    if( !( m_streamFeatures & StreamFeatureUnbind ) && m_resourceBound )
+      return false;
 
-      send( iq, this, ResourceBind );
-    }
+    IQ iq( IQ::Set, JID(), getID() );
+    iq.addExtension( new SEResourceBind( resource ) );
+
+    send( iq, this, ResourceBind );
+    return true;
   }
 
   void Client::processResourceBind( IQ* iq )
