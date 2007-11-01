@@ -10,94 +10,79 @@
   This software is distributed without any warranty.
 */
 
-#ifndef PUBSUBNODEHANDLER_H__
-#define PUBSUBNODEHANDLER_H__
+#ifndef PUBSUBRESULTHANDLER_H__
+#define PUBSUBRESULTHANDLER_H__
 
-#include <string>
-
+#include "macros.h"
 #include "pubsub.h"
 #include "error.h"
-#include "macros.h"
 #include "jid.h"
+
+#include <string>
+#include <list>
+#include <map>
 
 namespace gloox
 {
 
-  class JID;
+  class Tag;
+  class Error;
+//  class DiscoNodeItem;
   class DataForm;
+
+  typedef std::list<Tag*> TagList;
+//  typedef std::list<DiscoNodeItem> DiscoNodeItemList;
 
   namespace PubSub
   {
-
     /**
-     * Describes a subscribed entity.
-     */
-    struct Subscriber
-    {
-      Subscriber( const std::string& _jid, SubscriptionType _type,
-                                           const std::string& _subid = EmptyString)
-        : jid( _jid ), type( _type ), subid( _subid ) {}
-      const JID jid;
-      SubscriptionType type;
-      const std::string subid;
-    };
-
-    /**
-     *
-     */
-    struct Affiliate
-    {
-      Affiliate( const std::string& _jid, AffiliationType _type )
-        : jid( _jid ), type( _type ) {}
-      const JID jid;
-      AffiliationType type;
-    };
-
-    typedef std::list< Subscriber > SubscriberList;
-    typedef std::list<  Affiliate > AffiliateList;
-
-    /**
-     * @brief A virtual interface for receiving node related requests results.
+     * @brief A virtual interface to receive item related requests results.
      *
      * Derive from this interface and pass it to item related requests.
      *
      * @author Vincent Thomasset
      */
-    class GLOOX_API NodeHandler
+    class GLOOX_API ResultHandler
     {
       public:
+        /**
+         * Virtual destructor.
+         */
+        virtual ~ResultHandler() {}
 
         /**
-         * Default virtual destructor.
+         * 
          */
-        virtual ~NodeHandler() {}
+        virtual void handleItem( const JID& service,
+                                 const std::string& node,
+                                 const Tag* entry ) = 0;
 
         /**
-         * Receives the result of a node creation request.
-         * @param service Service hosting the node.
-         * @param node ID of the node.
+         * Receives the list of Items for a node. Either one of the item list or the
+         * error will be null.
+         * @param service Service hosting the queried node.
+         * @param nodeid ID of the queried node. If empty, the root node has been queried.
+         * @param itemList List of contained items.
+         * @param error Describes the error case if the request failed.
          */
-        virtual void handleNodeCreationResult( const JID& service,
-                                               const std::string& node,
-                                               const Error* e = 0 ) = 0;
+        virtual void handleItemList( const JID& service,
+                                     const std::string& node,
+                                     const TagList* itemList,
+                                     const Error* error = 0 ) = 0;
 
-        /**
-         * Receives the result of a node removal request.
-         * @param service Service hosting the node.
-         * @param node ID of the node.
-         */
-        virtual void handleNodeDeletationResult( const JID& service,
-                                                 const std::string& node,
-                                                 const Error* e = 0 ) = 0;
 
-        /**
-         * Receives the result of a node purge request.
-         * @param service Service hosting the node.
-         * @param node ID of the node.
-         */
-        virtual void handleNodePurgeResult( const JID& service,
+        virtual void handleItemPublication( const JID& service,
                                             const std::string& node,
-                                            const Error* e = 0 ) = 0;
+                                            const std::string& item,
+                                            const Error* error = 0 ) = 0;
+
+
+        virtual void handleItemDeletation(  const JID& service,
+                                            const std::string& node,
+                                            const std::string& item,
+                                            const Error* error = 0 ) = 0;
+
+//        virtual void handleResult( int context, const TrackedItem& item, const Error* error ) = 0;
 
         /**
          * Receives the subscription results. In case a problem occured, the
@@ -118,16 +103,18 @@ namespace gloox
                                                const Error* error = 0 ) = 0;
 
         /**
-         * Receives the unsubscription results. In case a problem occured, the
-         * error if not null.
+         * Receives the subscription results. In case a problem occured, the
+         * SubscriptionError is set accordingly and the Subscription ID and
+         * SubscriptionType becomes irrelevant.
          *
          * @param service PubSub service asked for subscription.
          * @param node Node asked for subscription.
          * @param sid Subscription ID.
-         * @param error Error describing the problem that occured (may be null).
+         * @param subType Type of the subscription.
+         * @param se Subscription error.
          */
         virtual void handleUnsubscriptionResult( const JID& service,
-                                                 const std::string& nodeID,
+                                                 const std::string& node,
                                                  const std::string& sid,
                                                  const JID& jid,
                                                  const Error* error = 0 ) = 0;
@@ -157,6 +144,7 @@ namespace gloox
                                                       const std::string& node,
                                                       const Error* error = 0 ) = 0;
 
+
         /**
          * Receives the list of subscribers to a node.
          * @param service Service hosting the node.
@@ -167,6 +155,17 @@ namespace gloox
                                            const std::string& node,
                                            const SubscriberList* list,
                                            const Error* error = 0 ) = 0;
+
+        /**
+         * Receives the list of subscribers to a node.
+         * @param service Service hosting the node.
+         * @param node ID of the queried node.
+         * @param list Subscriber list.
+         */
+        virtual void handleSubscriberListResult( const JID& service,
+                                                 const std::string& node,
+                                                 const Error* error = 0 ) = 0;
+
 
         /**
          * Handle the affiliate list for a specific node.
@@ -180,16 +179,6 @@ namespace gloox
                                           const Error* error = 0 ) = 0;
 
         /**
-         * Receives the list of subscribers to a node.
-         * @param service Service hosting the node.
-         * @param node ID of the queried node.
-         * @param list Subscriber list.
-         */
-        virtual void handleSubscriberListResult( const JID& service,
-                                                 const std::string& node,
-                                                 const Error* error = 0 ) = 0;
-
-        /**
          * Handle the affiliate list for a specific node.
          * @param service Service hosting the node.
          * @param node ID of the node.
@@ -198,6 +187,7 @@ namespace gloox
         virtual void handleAffiliateListResult( const JID& service,
                                                 const std::string& node,
                                                 const Error* error = 0 ) = 0;
+
 
         /**
          * Handle the configuration for a specific node.
@@ -211,7 +201,7 @@ namespace gloox
                                        const Error* error = 0 ) = 0;
 
         /**
-         * Handle the configuration modification for a specific node.
+         * Handle the configuration for a specific node.
          * @param service Service hosting the node.
          * @param node ID of the node.
          * @param config Configuration DataForm.
@@ -220,10 +210,75 @@ namespace gloox
                                              const std::string& node,
                                              const Error* error = 0 ) = 0;
 
+        /**
+         * Handle the configuration for a specific node.
+         * @param service Service hosting the node.
+         * @param node ID of the node.
+         * @param config Configuration DataForm.
+         */
+        virtual void handleNodeCreationResult( const JID& service,
+                                               const std::string& node,
+                                               const Error* error = 0 ) = 0;
+
+        /**
+         * Handle the configuration for a specific node.
+         * @param service Service hosting the node.
+         * @param node ID of the node.
+         * @param config Configuration DataForm.
+         */
+        virtual void handleNodeDeletationResult( const JID& service,
+                                                 const std::string& node,
+                                                 const Error* error = 0 ) = 0;
+
+
+        /**
+         * Handle the configuration for a specific node.
+         * @param service Service hosting the node.
+         * @param node ID of the node.
+         * @param config Configuration DataForm.
+         */
+        virtual void handleNodePurgeResult( const JID& service,
+                                            const std::string& node,
+                                            const Error* error = 0 ) = 0;
+
+        /**
+         * Receives the Subscription map for a specific service.
+         * @param service The queried service.
+         * @param subMap The map of node's subscription. Check error if null.
+         * @param error Error describing the resolution of the request.
+         * @see Manager::requestSubscriptionList
+         */
+        virtual void handleSubscriptionList( const JID& service,
+                                             const SubscriptionMap * subMap,
+                                             const Error * error = 0) = 0;
+
+        /**
+         * Receives the Affiliation map for a specific service.
+         * @param service The queried service.
+         * @param subMap The map of node's affiliation. Check error if null.
+         * @see Manager::requestAffiliationList
+         */
+        virtual void handleAffiliationList( const JID& service,
+                                            const AffiliationMap * affMap,
+                                            const Error * error = 0 ) = 0;
+
+        /**
+         * Receives the default configuration for a specific node type.
+         * @param service The queried service.
+         * @param type The type of the NodeType requested.
+         * @param config Configuration form for the node type.
+         * @see Manager::getDefaultNodeConfig
+         */
+        virtual void handleDefaultNodeConfig( const JID& service,
+                                              const DataForm * config,
+                                              const Error * error = 0 ) = 0;
+
+
     };
 
   }
 
 }
 
-#endif /* PUBSUBNODEHANDLER_H__ */
+#endif /* PUBSUBRESULTHANDLER_H__ */
+

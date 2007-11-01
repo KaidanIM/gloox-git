@@ -16,6 +16,9 @@
 #include <map>
 #include <string>
 
+#include "gloox.h"
+#include "jid.h"
+
 namespace gloox
 {
   /**
@@ -392,6 +395,46 @@ namespace gloox
 
 // [Transient - Payload]
 /**< Publisher MUST include an <item/> element that contains the payload, but the item ID is OPTIONAL */
+
+    /**
+     * Describes a subscribed entity.
+     */
+    struct Subscriber
+    {
+      Subscriber( const std::string& _jid, SubscriptionType _type,
+                                           const std::string& _subid = EmptyString)
+        : jid( _jid ), type( _type ), subid( _subid ) {}
+      const JID jid;
+      SubscriptionType type;
+      const std::string subid;
+    };
+
+    /**
+     * 
+     */
+    struct Affiliate
+    {
+      Affiliate( const std::string& _jid, AffiliationType _type )
+        : jid( _jid ), type( _type ) {}
+      const JID jid;
+      AffiliationType type;
+    };
+
+    typedef std::list< Subscriber > SubscriberList;
+    typedef std::list<  Affiliate > AffiliateList;
+
+    /**
+     * Struct used to track info between requests.
+     *
+     */
+    struct TrackedInfo
+    {
+      JID service;
+      std::string node;
+      std::string item;
+      std::string sid;
+    };
+
 
     typedef std::map< std::string, SubscriptionType > SubscriptionMap;
     typedef std::map< std::string, AffiliationType  > AffiliationMap;

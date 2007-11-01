@@ -16,7 +16,7 @@
 #include "../connectionhttpproxy.h"
 #include "../messagehandler.h"
 #include "../pubsubmanager.h"
-#include "../pubsubnodehandler.h"
+#include "../pubsubresulthandler.h"
 using namespace gloox;
 
 #include <unistd.h>
@@ -28,7 +28,7 @@ using namespace gloox;
 #endif
 /*
 class PubsubExample : public MessageSessionHandler, ConnectionListener, LogHandler,
-                    MessageEventHandler, MessageHandler, ChatStateHandler, PubSub::NodeHandler
+                    MessageEventHandler, MessageHandler, ChatStateHandler, PubSub::ResultHandler
 {
   public:
     PubsubExample() : m_session( 0 ), m_messageEventFilter( 0 ), m_chatStateFilter( 0 ) {}

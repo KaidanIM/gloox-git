@@ -72,11 +72,11 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             mutex.h                   mutexguard.h            connectiontcpbase.h \
                             connectiontcpserver.h     amp.h                   pubsubmanager.h \
                             iq.h                      pubsub.h                \
-                            pubsubitemhandler.h       error.h                 \
+                            pubsubresulthandler.h     error.h                 \
                             pubsubeventhandler.h      connectionhandler.h     iq.h \
                             message.h                 presence.h              subscription.h \
                             bytestream.h              bytestreamdatahandler.h bytestreamhandler.h \
-                            capabilities.h            pubsubnodehandler.h     connectionbosh.h \
+                            capabilities.h            connectionbosh.h        \
                             connectiontls.h           messageevent.h          receipt.h \
                             nickname.h
 
