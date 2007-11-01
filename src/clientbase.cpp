@@ -176,6 +176,8 @@ namespace gloox
     if( !m_compression )
       m_compression = getDefaultCompression();
 
+    m_logInstance.log( LogLevelDebug, LogAreaClassClientbase, "This is gloox " + GLOOX_VERSION
+                                                              + ", connecting..." );
     m_block = block;
     ConnectionError ret = m_connection->connect();
     return ret == ConnNoError;
