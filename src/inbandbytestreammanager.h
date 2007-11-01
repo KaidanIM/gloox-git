@@ -173,6 +173,8 @@ namespace gloox
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.8
+   * @deprecated Functionality will be merged with SI-based file transfer (SIProfileFT).
+   * InBandBytestreamManager will go away in 1.0.
    */
   class GLOOX_API InBandBytestreamManager : public IqHandler
   {
@@ -180,8 +182,10 @@ namespace gloox
       /**
        * Constructs a new InBandBytestreamManager.
        * @param parent The ClientBase to use for sending data.
+       * @deprecated Functionality will be merged with SI-based file transfer (SIProfileFT).
+       * InBandBytestreamManager will go away in 1.0.
        */
-      InBandBytestreamManager( ClientBase *parent );
+      GLOOX_DEPRECATED_CTOR InBandBytestreamManager( ClientBase *parent );
 
       /**
        * Virtual destructor.

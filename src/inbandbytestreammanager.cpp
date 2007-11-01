@@ -43,7 +43,6 @@ namespace gloox
     for( ; it != m_ibbMap.end(); ++it )
     {
       delete (*it).second;
-      m_ibbMap.erase( it );
     }
   }
 
@@ -202,7 +201,6 @@ namespace gloox
               ibb->setBlockSize( m_blockSize );
               m_ibbMap[(*it).second.sid] = ibb;
               InBandBytestreamHandler *t = (*it).second.ibbh;
-              m_trackMap.erase( it );
               t->handleOutgoingInBandBytestream( stanza->from(), ibb );
               break;
             }
