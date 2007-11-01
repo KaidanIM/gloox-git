@@ -19,7 +19,6 @@ for 1.0
 - in FT, add Fast Mode:
     http://delta.affinix.com/specs/stream.html
 - comply with rfc3920bis/rfc3921bis (or current drafts), which includes at least:
-  - 3.2: nameprep: set UseSTD3ASCIIRules to true
   - support optional binding of multiple resources
   - recognize <unknown-sender/> stanza error for multiple resource binding
   - recognize <not-modified/> stanza error for future ETags usage
@@ -63,6 +62,7 @@ optional for 1.0:
 - bindings (C, ...) (SWIG)
 - add prePresenceHook (for XEP-0182 (Invisible Command))
 - fix STLport support/configure check (broken on autoconf 2.61?)
+- IPv6 support
 
 
 - check subjectAltName for JIDs (core sec. 5.1 rule 8)

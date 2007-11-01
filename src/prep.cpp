@@ -97,7 +97,7 @@ namespace gloox
         return false;
 
       char* prepped;
-      int rc = idna_to_ascii_8z( domain.c_str(), &prepped, (Idna_flags)0 );
+      int rc = idna_to_ascii_8z( domain.c_str(), &prepped, (Idna_flags)IDNA_USE_STD3_ASCII_RULES );
       if( rc == IDNA_SUCCESS )
       {
         out = prepped;
