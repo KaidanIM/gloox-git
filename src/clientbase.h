@@ -667,6 +667,12 @@ namespace gloox
       void notifyOnResourceBindError( ResourceBindError error );
 
       /**
+       * This function is called when binding a resource succeeded.
+       * @param resource The bound resource.
+       */
+      void notifyOnResourceBind( const std::string& resource );
+
+      /**
        * This function is called when session creation yieled an error.
        * @param error The specific error condition.
        */
@@ -713,6 +719,7 @@ namespace gloox
       CompressionBase* m_compression;
       Disco* m_disco;
 
+      std::string m_selectedResource;
       std::string m_clientCerts;
       std::string m_clientKey;
       std::string m_namespace;
@@ -755,6 +762,7 @@ namespace gloox
       void notifyTagHandlers( Tag* tag );
       void notifyOnDisconnect( ConnectionError e );
       void send( const std::string& xml );
+      void addFrom( Tag* tag );
 
       struct TrackStruct
       {
