@@ -59,7 +59,7 @@
  *   printf( "message was sent at %s\n", dd->stamp().c_str() );
  * @endcode
  *
- * @subsubsection func_ClientBase_trackID ClientBase::trackID()
+ * @subsubsection func_ClientBase_trackID 1.1.2 ClientBase::trackID()
  *
  * The functionality provided by this function really makes sense only for IQ stanzas of type
  * get or set. As a result, there is a new function
@@ -194,6 +194,6 @@
  * @subsubsection class_InBandBytestreamManager 1.2.8 InBandBytestreamManager
  *
  * The Message-based Inband Bytestream implementation has been removed in favour of an IQ-based one.
- * Also, Inband Bytestreams are now handled by @link gloox::SIProfileFT SIProfileFT @endlink.
+ * Also, Inband Bytestreams are now handled (transparently) by @link gloox::SIProfileFT SIProfileFT @endlink.
  *
  */
