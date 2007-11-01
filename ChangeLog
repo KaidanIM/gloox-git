@@ -2,7 +2,6 @@ v1.0 -- xx yyy 200z
 -------------------
 
 general changes and additions:
-- IPv6 support
 - XEP-0060 (Publish-Subscribe)
 - XEP-0115 (Entity Capabilities)
 - XEP-0172 (User Nickname)
