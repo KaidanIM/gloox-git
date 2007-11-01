@@ -367,6 +367,16 @@ namespace gloox
     return true;
   }
 
+  bool Client::selectResource( const std::string& resource )
+  {
+    if( !( m_streamFeatures & StreamFeatureUnbind ) )
+      return false;
+
+    m_selectedResource = resource;
+
+    return true;
+  }
+
   void Client::processResourceBind( IQ* iq )
   {
     switch( iq->subtype() )
@@ -382,6 +392,7 @@ namespace gloox
 
         m_jid = rb->jid();
         m_resourceBound = true;
+        notifyOnResourceBind( m_jid.resource() );
 
         if( m_streamFeatures & StreamFeatureSession )
           createSession();

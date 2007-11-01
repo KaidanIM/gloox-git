@@ -146,14 +146,38 @@ namespace gloox
       /**
        * Use this function to bind an additional resource or to @b re-try to bind a
        * resource in case previous binding failed and you were notified by means of
-       * ConnectionListener::onResourceBindError(). This is a NOOP if the server doesn't
-       * support binding of multiple resources.
+       * ConnectionListener::onResourceBindError(). Use hasResourceBind() to find out if the
+       * server supports binding of multiple resources. bindResource() is a NOOP if it doesn't.
+       * @note ConnectionListener::onResourceBound() and ConnectionListener::onResourceBindError()
+       * will be called in case of success and failure, respectively.
        * @param resource The resource identifier to bind. May be empty. In that case
        * the server will assign a unique resource identifier.
+       * @return Returns @b true if binding of multiple resources is supported, @b false
+       * otherwise. A return value of @b true does not indicate that the resource was
+       * successfully bound.
        * @note It is not necessary to call this function to bind the initial, main, resource.
        * @since 1.0
        */
       bool bindResource( const std::string& resource );
+
+      /**
+       * Use this function to select a resource identifier that has been bound
+       * previously by means of bindResource(). It is not necessary to call this function
+       * if only one resource is bound. Use hasResourceBind() to find out if the
+       * server supports binding of multiple resources. selectResource() is a NOOP if it doesn't.
+       * @param resource A resource string that has been bound previously.
+       * @note If the resource string has not been bound previously, future sending of
+       * stanzas will fail.
+       */
+      bool selectResource( const std::string& resource );
+
+      /**
+       * This function can be used to find out whether the server supports binding of multiple
+       * resources.
+       * @return @b True if binding of multiple resources is supported by the server,
+       * @b false otherwise.
+       */
+      bool hasResourceBind() const { return m_streamFeatures & StreamFeatureUnbind; }
 
       /**
        * Returns the current prepped main resource.

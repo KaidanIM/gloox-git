@@ -618,25 +618,33 @@ namespace gloox
   void ClientBase::send( const IQ& iq )
   {
     ++m_stats.iqStanzasSent;
-    send( iq.tag() );
+    Tag* tag = iq.tag();
+    addFrom( tag );
+    send( tag );
   }
 
   void ClientBase::send( const Message& msg )
   {
     ++m_stats.messageStanzasSent;
-    send( msg.tag() );
+    Tag* tag = msg.tag();
+    addFrom( tag );
+    send( tag );
   }
 
   void ClientBase::send( const Subscription& sub )
   {
     ++m_stats.s10nStanzasSent;
-    send( sub.tag() );
+    Tag* tag = sub.tag();
+    addFrom( tag );
+    send( tag );
   }
 
   void ClientBase::send( const Presence& pres )
   {
     ++m_stats.presenceStanzasSent;
-    send( pres.tag() );
+    Tag* tag = pres.tag();
+    addFrom( tag );
+    send( tag );
   }
 
   void ClientBase::send( Tag* tag )
@@ -667,6 +675,14 @@ namespace gloox
 
       logInstance().dbg( LogAreaXmlOutgoing, xml );
     }
+  }
+
+  void ClientBase::addFrom( Tag* tag )
+  {
+    if( !tag || m_selectedResource.empty() )
+      return;
+
+    tag->addAttribute( "from", m_jid.bare() + '/' + m_selectedResource );
   }
 
   void ClientBase::registerStanzaExtension( StanzaExtension* ext )
@@ -1084,6 +1100,11 @@ namespace gloox
   void ClientBase::notifyOnResourceBindError( ResourceBindError error )
   {
     util::ForEach( m_connectionListeners, &ConnectionListener::onResourceBindError, error );
+  }
+
+  void ClientBase::notifyOnResourceBind( const std::string& resource )
+  {
+    util::ForEach( m_connectionListeners, &ConnectionListener::onResourceBind, resource );
   }
 
   void ClientBase::notifyOnSessionCreateError( SessionCreateError error )
