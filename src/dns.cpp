@@ -207,76 +207,6 @@ namespace gloox
     return server;
   }
 
-#ifdef HAVE_GETADDRINFO
-  void DNS::resolve( struct addrinfo** res, const std::string& service, const std::string& proto,
-                     const std::string& domain, const LogSink& logInstance )
-  {
-    logInstance.dbg( LogAreaClassDns, "Resolving: _" +  service + "._" + proto + "." + domain );
-    struct addrinfo hints;
-    if( proto == "tcp" )
-      hints.ai_socktype = SOCK_STREAM;
-    else if( proto == "udp" )
-      hints.ai_socktype = SOCK_DGRAM;
-    else
-    {
-      logInstance.err( LogAreaClassDns, "Unknown/Invalid protocol: " + proto );
-    }
-    memset( &hints, '\0', sizeof( hints ) );
-    hints.ai_flags = AI_ADDRCONFIG;
-    hints.ai_socktype = SOCK_STREAM;
-    int e = getaddrinfo( domain.c_str(), service.c_str(), &hints, res );
-    if( e )
-      logInstance.err( LogAreaClassDns, "getaddrinfo() failed" );
-  }
-
-  int DNS::connect( const std::string& host, const LogSink& logInstance )
-  {
-    struct addrinfo* results = 0;
-
-    resolve( &results, host, logInstance );
-    if( !results )
-    {
-      logInstance.err( LogAreaClassDns, "host not found: " + host );
-      return -ConnDnsError;
-    }
-
-    struct addrinfo* runp = results;
-    while( runp )
-    {
-      int fd = DNS::connect( runp, logInstance );
-      if( fd >= 0 )
-        return fd;
-
-      runp = runp->ai_next;
-    }
-
-    freeaddrinfo( results );
-
-    return -ConnConnectionRefused;
-  }
-
-  int DNS::connect( struct addrinfo* res, const LogSink& logInstance )
-  {
-    if( !res )
-      return -1;
-
-    int fd = getSocket( res->ai_family, res->ai_socktype, res->ai_protocol );
-    if( fd < 0 )
-      return fd;
-
-    if( ::connect( fd, res->ai_addr, res->ai_addrlen ) == 0 )
-    {
-      logInstance.dbg( LogAreaClassDns, "Connecting to "
-          + ( res->ai_canonname ? std::string( res->ai_canonname ) : EmptyString ) );
-      return fd;
-    }
-
-    closeSocket( fd );
-    return -ConnConnectionRefused;
-  }
-
-#else
-
   int DNS::connect( const std::string& host, const LogSink& logInstance )
   {
     HostMap hosts = resolve( host, logInstance );
@@ -293,7 +223,6 @@ namespace gloox
 
     return -ConnConnectionRefused;
   }
-#endif
 
   int DNS::getSocket()
   {
