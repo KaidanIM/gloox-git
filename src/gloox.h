@@ -653,7 +653,8 @@ namespace gloox
   enum StreamFeature
   {
     StreamFeatureBind             =    1, /**< The server supports resource binding. */
-    StreamFeatureSession          =    2, /**< The server supports sessions. */
+    StreamFeatureUnbind           =    2, /**< The server supports binding multiple resources. */
+    StreamFeatureSession          =    4, /**< The server supports sessions. */
     StreamFeatureStartTls         =    8, /**< The server supports &lt;starttls&gt;. */
     StreamFeatureIqRegister       =   16, /**< The server supports XEP-0077 (In-Band
                                            * Registration). */

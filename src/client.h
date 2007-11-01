@@ -144,14 +144,19 @@ namespace gloox
       virtual ~Client();
 
       /**
-       * Use this function to @b re-try to bind a resource only in case you were notified about an
-       * error by means of ConnectionListener::onResourceBindError().
-       * You may (or should) use setResource() before.
+       * Use this function to bind an additional resource or to @b re-try to bind a
+       * resource in case previous binding failed and you were notified by means of
+       * ConnectionListener::onResourceBindError(). This is a NOOP if the server doesn't
+       * support binding of multiple resources.
+       * @param resource The resource identifier to bind. May be empty. In that case
+       * the server will assign a unique resource identifier.
+       * @note It is not necessary to call this function to bind the initial, main, resource.
+       * @since 1.0
        */
-      void bindResource();
+      bool bindResource( const std::string& resource );
 
       /**
-       * Returns the current prepped resource.
+       * Returns the current prepped main resource.
        * @return The resource used to connect.
        */
       const std::string& resource() const { return m_jid.resource(); }
@@ -169,7 +174,7 @@ namespace gloox
       void setUsername( const std::string &username );
 
       /**
-       * Sets the resource to use to connect to the XMPP server.
+       * Sets the main resource to use to connect to the XMPP server.
        * @param resource The resource to use to log into the server.
        */
       void setResource( const std::string &resource ) { m_jid.setResource( resource ); }
