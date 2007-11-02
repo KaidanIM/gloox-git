@@ -131,7 +131,7 @@ namespace gloox
          * @param node ID of the node to subscribe to.
          * @param jid JID to subscribe. If empty, the client's JID will be used
          *        (ie self subscription).
-         * @param type SibscriptionType of the subscription (Collections only).
+         * @param type SubscriptionType of the subscription (Collections only).
          * @param depth Subscription depth. For 'all', use 0 (Collections only!).
          */
         void subscribe( const JID& service, const std::string& node,
