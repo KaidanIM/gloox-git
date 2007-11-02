@@ -141,9 +141,9 @@ namespace gloox
       void setSasl( bool sasl ) { m_sasl = sasl; }
 
       /**
-       * Switches usage of TLS on/off (if available), or enforces its usage. Default: on if available.
-       * TLS should only be disabled if there are problems with using it.
-       * @param tls Whether to switch TLS usage on or off.
+       * Sets the TLS policy. Default: TLS will be used if available. TLS should only be
+       * disabled if there are problems with using it.
+       * @param tls The TLS policy.
        */
       void setTls( TLSPolicy tls ) { m_tls = tls; }
 
@@ -662,9 +662,10 @@ namespace gloox
     protected:
       /**
        * This function is called when resource binding yieled an error.
-       * @param error The specific error condition.
+       * @param error A pointer to an Error object that contains more
+       * information. May be 0.
        */
-      void notifyOnResourceBindError( ResourceBindError error );
+      void notifyOnResourceBindError( const Error* error );
 
       /**
        * This function is called when binding a resource succeeded.
@@ -674,9 +675,10 @@ namespace gloox
 
       /**
        * This function is called when session creation yieled an error.
-       * @param error The specific error condition.
+       * @param error A pointer to an Error object that contains more
+       * information. May be 0.
        */
-      void notifyOnSessionCreateError( SessionCreateError error );
+      void notifyOnSessionCreateError( const Error* error );
 
       /**
        * This function is called when the TLS handshake completed correctly. The return
