@@ -232,7 +232,10 @@ namespace gloox
       Tag* options = new Tag( iq.query(), "options", "node", node );
       options->addAttribute( "jid", jid ? jid.bare() : m_parent->jid().bare() );
       if( df )
+      {
         options->addChild( df->tag() );
+        delete df;
+      }
 
       m_resultHandlerTrackMap[id] = handler;
       m_parent->send( iq, this, df ? SetSubscriptionOptions : GetSubscriptionOptions );
@@ -324,8 +327,10 @@ namespace gloox
       m_parent->send( iq, this, Unsubscription );
     }
 
-    void Manager::publishItem( const JID& service, const std::string& node,
-                               Tag* item, ResultHandler* handler )
+    void Manager::publishItem( const JID& service,
+                               const std::string& node,
+                               Tag* item,
+                               ResultHandler* handler )
     {
       if( !m_parent || !handler )
       {
@@ -343,8 +348,10 @@ namespace gloox
       m_parent->send( iq, this, PublishItem );
     }
 
-    void Manager::deleteItem( const JID& service, const std::string& node,
-                              const std::string& item, ResultHandler* handler )
+    void Manager::deleteItem( const JID& service,
+                              const std::string& node,
+                              const std::string& item,
+                              ResultHandler* handler )
     {
       if( !m_parent || !handler )
         return;
@@ -407,6 +414,7 @@ namespace gloox
           StringMap::const_iterator it = config->begin();
           for( ; it != config->end(); ++it )
             df.addField( DataFormField::TypeNone, (*it).first, (*it).first );
+          delete config;
         }
         configure->addChild( df.tag() );
       }
@@ -416,7 +424,9 @@ namespace gloox
       m_parent->send( iq, this, CreateNode );
     }
 
-    void Manager::deleteNode( const JID& service, const std::string& node, ResultHandler* handler )
+    void Manager::deleteNode( const JID& service,
+                              const std::string& node,
+                              ResultHandler* handler )
     {
       if( !m_parent || !handler )
         return;
@@ -430,7 +440,9 @@ namespace gloox
       m_parent->send( iq, this, DeleteNode );
     }
 
-    void Manager::getDefaultNodeConfig( const JID& service, NodeType type, ResultHandler* handler )
+    void Manager::getDefaultNodeConfig( const JID& service,
+                                        NodeType type,
+                                        ResultHandler* handler )
     {
       if( !m_parent || !handler )
         return;
@@ -450,8 +462,10 @@ namespace gloox
       m_parent->send( iq, this, DefaultNodeConfig );
     }
 
-    void Manager::nodeConfig( const JID& service, const std::string& node,
-                              const DataForm* config, ResultHandler* handler )
+    void Manager::nodeConfig( const JID& service,
+                              const std::string& node,
+                              const DataForm* config,
+                              ResultHandler* handler )
     {
       if( !m_parent || !handler )
         return;
@@ -460,7 +474,10 @@ namespace gloox
       IQ iq( config ? IQ::Set : IQ::Get, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
       Tag* sub = new Tag( iq.query(), "configure", "node", node );
       if( config )
+      {
         sub->addChild( config->tag() );
+        delete config;
+      }
 
       m_resultHandlerTrackMap[id] = handler;
       m_parent->send( iq, this, config ? SetNodeConfig : GetNodeConfig );
@@ -468,20 +485,20 @@ namespace gloox
 
     void Manager::subscriberList( const JID& service,
                                   const std::string& node,
-                                  const SubscriberList* list,
+                                  const SubscriberList* subList,
                                   ResultHandler* handler )
     {
       if( !m_parent || !handler )
         return;
 
       const std::string& id = m_parent->getID();
-      IQ iq( list ? IQ::Set : IQ::Get, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
+      IQ iq( subList ? IQ::Set : IQ::Get, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
       Tag* sub = new Tag( iq.query(), "subscriptions", "node", node );
-      if( list )
+      if( subList )
       {
         Tag* s;
-        SubscriberList::const_iterator it = list->begin();
-        for( ; it != list->end(); ++it )
+        SubscriberList::const_iterator it = subList->begin();
+        for( ; it != subList->end(); ++it )
         {
           s = new Tag( sub, "subscription", "jid", (*it).jid.full() );
           s->addAttribute( "subscription", util::lookup( (*it).type, subscriptionValues ) );
@@ -489,37 +506,39 @@ namespace gloox
             s->addAttribute( "subid", (*it).subid );
         }
         m_nopTrackMap[id] = node;
+        delete subList;
       }
 
       m_resultHandlerTrackMap[id] = handler;
-      m_parent->send( iq, this, list ? SetSubscriberList : GetSubscriberList );
+      m_parent->send( iq, this, subList ? SetSubscriberList : GetSubscriberList );
     }
 
     void Manager::affiliateList( const JID& service,
                                  const std::string& node,
-                                 const AffiliateList* list,
+                                 const AffiliateList* affList,
                                  ResultHandler* handler )
     {
       if( !m_parent || !handler )
         return;
 
       const std::string& id = m_parent->getID();
-      IQ iq( list ? IQ::Set : IQ::Get, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
+      IQ iq( affList ? IQ::Set : IQ::Get, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
       Tag* aff = new Tag( iq.query(), "affiliations", "node", node );
-      if( list )
+      if( affList )
       {
         Tag* a;
-        AffiliateList::const_iterator it = list->begin();
-        for( ; it != list->end(); ++it )
+        AffiliateList::const_iterator it = affList->begin();
+        for( ; it != affList->end(); ++it )
         {
           a = new Tag( aff, "affiliation", "jid", (*it).jid.full() );
           a->addAttribute( "affiliation", util::lookup( (*it).type, affiliationValues ) );
         }
         m_nopTrackMap[id] = node;
+        delete affList;
       }
 
       m_resultHandlerTrackMap[id] = handler;
-      m_parent->send( iq, this, list ? SetAffiliateList : GetAffiliateList );
+      m_parent->send( iq, this, affList ? SetAffiliateList : GetAffiliateList );
     }
 
     void Manager::requestItems( const JID& service,
