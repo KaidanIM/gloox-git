@@ -146,7 +146,7 @@ namespace gloox
       /**
        * Sets the TLS policy. Default: TLS will be used if available. TLS should only be
        * disabled if there are problems with using it.
-       * @param tls Whether to switch TLS usage on or off.
+       * @param tls The TLS policy.
        */
       void setTls( TLSPolicy tls ) { m_tls = tls; }
 
