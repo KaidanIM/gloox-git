@@ -27,11 +27,9 @@ namespace gloox
 
   class Tag;
   class Error;
-//  class DiscoNodeItem;
   class DataForm;
 
-  typedef std::list<Tag*> TagList;
-//  typedef std::list<DiscoNodeItem> DiscoNodeItemList;
+  typedef std::list< Tag* > TagList;
 
   namespace PubSub
   {
@@ -40,7 +38,14 @@ namespace gloox
      *
      * Derive from this interface and pass it to item related requests.
      *
-     * @author Vincent Thomasset
+     * As a general rule, methods receive an Error pointer which will be null
+     * (when the request was successful) or describe the problem. Request
+     * asking for information will have it's "pointer to information" set to
+     * null when an error occured (that is they're mutually exclusive). In both
+     * cases, gloox takes care of deleting these objects.
+     *
+     * @author Vincent Thomasset <vthomasset@gmail.com>
+     * @since 1.0
      */
     class GLOOX_API ResultHandler
     {
@@ -51,19 +56,25 @@ namespace gloox
         virtual ~ResultHandler() {}
 
         /**
-         * 
+         * Receives the payload for an item.
+         *
+         * @param service Service hosting the queried node.
+         * @param node ID of the parent node.
+         * @param entry The complete item Tag (do not delete).
          */
         virtual void handleItem( const JID& service,
                                  const std::string& node,
                                  const Tag* entry ) = 0;
 
         /**
-         * Receives the list of Items for a node. Either one of the item list or the
-         * error will be null.
+         * Receives the list of Items for a node.
+         *
          * @param service Service hosting the queried node.
-         * @param nodeid ID of the queried node. If empty, the root node has been queried.
+         * @param node ID of the queried node (empty for the root node).
          * @param itemList List of contained items.
          * @param error Describes the error case if the request failed.
+         *
+         * @see Manager::requestItems
          */
         virtual void handleItemList( const JID& service,
                                      const std::string& node,
@@ -71,29 +82,48 @@ namespace gloox
                                      const Error* error = 0 ) = 0;
 
 
+        /**
+         * Receives the result for an item publication.
+         *
+         * @param service Service hosting the queried node.
+         * @param node ID of the queried node. If empty, the root node has been queried.
+         * @param itemList List of contained items.
+         * @param error Describes the error case if the request failed.
+         *
+         * @see Manager::publishItem
+         */
         virtual void handleItemPublication( const JID& service,
                                             const std::string& node,
                                             const std::string& item,
                                             const Error* error = 0 ) = 0;
 
 
+        /**
+         * Receives the result of an item removal.
+         *
+         * @param service Service hosting the queried node.
+         * @param node ID of the queried node. If empty, the root node has been queried.
+         * @param itemList List of contained items.
+         * @param error Describes the error case if the request failed.
+         *
+         * @see Manager::deleteItem
+         */
         virtual void handleItemDeletation(  const JID& service,
                                             const std::string& node,
                                             const std::string& item,
                                             const Error* error = 0 ) = 0;
 
-//        virtual void handleResult( int context, const TrackedItem& item, const Error* error ) = 0;
-
         /**
          * Receives the subscription results. In case a problem occured, the
-         * SubscriptionError is set accordingly and the Subscription ID and
-         * SubscriptionType becomes irrelevant.
+         * Subscription ID and SubscriptionType becomes irrelevant.
          *
          * @param service PubSub service asked for subscription.
          * @param node Node asked for subscription.
          * @param sid Subscription ID.
          * @param subType Type of the subscription.
-         * @param se Subscription error.
+         * @param error Subscription Error.
+         *
+         * @see Manager::subscribe
          */
         virtual void handleSubscriptionResult( const JID& service,
                                                const std::string& node,
@@ -103,15 +133,15 @@ namespace gloox
                                                const Error* error = 0 ) = 0;
 
         /**
-         * Receives the subscription results. In case a problem occured, the
-         * SubscriptionError is set accordingly and the Subscription ID and
-         * SubscriptionType becomes irrelevant.
+         * Receives the unsubscription results. In case a problem occured, the
+         * subscription ID becomes irrelevant.
          *
-         * @param service PubSub service asked for subscription.
-         * @param node Node asked for subscription.
+         * @param service PubSub service.
+         * @param node Node to unsubscribe from.
          * @param sid Subscription ID.
-         * @param subType Type of the subscription.
-         * @param se Subscription error.
+         * @param error Unsubscription Error.
+         *
+         * @see Manager::unsubscribe
          */
         virtual void handleUnsubscriptionResult( const JID& service,
                                                  const std::string& node,
@@ -120,11 +150,15 @@ namespace gloox
                                                  const Error* error = 0 ) = 0;
 
         /**
-         * Receives the configuration form of a node.
+         * Receives the subscription options for a node.
+         *
          * @param service Service hosting the queried node.
          * @param jid Subscribed entity.
-         * @param node ID of the queried node.
+         * @param node ID of the node.
          * @param options Options DataForm.
+         * @param error Subscription options retrieval Error.
+         *
+         * @see requestSubscriptionOptions
          */
         virtual void handleSubscriptionOptions( const JID& service,
                                                 const JID& jid,
@@ -133,11 +167,14 @@ namespace gloox
                                                 const Error* error = 0 ) = 0;
 
         /**
-         * Receives the configuration form of a node.
+         * Receives the result for a subscription options modification.
+         *
          * @param service Service hosting the queried node.
          * @param jid Subscribed entity.
          * @param node ID of the queried node.
-         * @param options Options DataForm.
+         * @param error Subscription options modification Error.
+         *
+         * @see Manager::setSubscriptionOptions
          */
         virtual void handleSubscriptionOptionsResult( const JID& service,
                                                       const JID& jid,
@@ -147,9 +184,13 @@ namespace gloox
 
         /**
          * Receives the list of subscribers to a node.
+         *
          * @param service Service hosting the node.
          * @param node ID of the queried node.
          * @param list Subscriber list.
+         * @param error Subscription options modification Error.
+         *
+         * @see Manager::requestSubscriberList
          */
         virtual void handleSubscriberList( const JID& service,
                                            const std::string& node,
@@ -157,21 +198,27 @@ namespace gloox
                                            const Error* error = 0 ) = 0;
 
         /**
-         * Receives the list of subscribers to a node.
+         * Receives the result of a subscriber list modification.
+         *
          * @param service Service hosting the node.
          * @param node ID of the queried node.
-         * @param list Subscriber list.
+         * @param error Subscriber list modification Error.
+         *
+         * @see Manager::setSubscriberList
          */
         virtual void handleSubscriberListResult( const JID& service,
                                                  const std::string& node,
                                                  const Error* error = 0 ) = 0;
 
-
         /**
-         * Handle the affiliate list for a specific node.
+         * Receives the affiliate list for a node.
+         *
          * @param service Service hosting the node.
-         * @param node ID of the node.
+         * @param node ID of the queried node.
          * @param list Affiliation list.
+         * @param error Affiliation list retrieval Error.
+         *
+         * @see Manager::requestAffiliationList
          */
         virtual void handleAffiliateList( const JID& service,
                                           const std::string& node,
@@ -180,9 +227,12 @@ namespace gloox
 
         /**
          * Handle the affiliate list for a specific node.
+         *
          * @param service Service hosting the node.
          * @param node ID of the node.
-         * @param list Affiliation list.
+         * @param error Affiliation list modification Error.
+         *
+         * @see Manager::setAffiliationList
          */
         virtual void handleAffiliateListResult( const JID& service,
                                                 const std::string& node,
@@ -190,10 +240,14 @@ namespace gloox
 
 
         /**
-         * Handle the configuration for a specific node.
+         * Receives the configuration for a specific node.
+         *
          * @param service Service hosting the node.
          * @param node ID of the node.
          * @param config Configuration DataForm.
+         * @param error Configuration retrieval Error.
+         *
+         * @see Manager::requestNodeConfig
          */
         virtual void handleNodeConfig( const JID& service,
                                        const std::string& node,
@@ -201,30 +255,39 @@ namespace gloox
                                        const Error* error = 0 ) = 0;
 
         /**
-         * Handle the configuration for a specific node.
+         * Receives the result of a node's configuration modification.
+         *
          * @param service Service hosting the node.
          * @param node ID of the node.
-         * @param config Configuration DataForm.
+         * @param error Configuration modification Error.
+         *
+         * @see Manager::setNodeConfig
          */
         virtual void handleNodeConfigResult( const JID& service,
                                              const std::string& node,
                                              const Error* error = 0 ) = 0;
 
         /**
-         * Handle the configuration for a specific node.
+         * Receives the result of a node creation.
+         *
          * @param service Service hosting the node.
          * @param node ID of the node.
-         * @param config Configuration DataForm.
+         * @param error Node creation Error.
+         *
+         * @see Manager::setNodeConfig
          */
         virtual void handleNodeCreationResult( const JID& service,
                                                const std::string& node,
                                                const Error* error = 0 ) = 0;
 
         /**
-         * Handle the configuration for a specific node.
+         * Receives the result for a node removal.
+         *
          * @param service Service hosting the node.
          * @param node ID of the node.
-         * @param config Configuration DataForm.
+         * @param error Node removal Error.
+         *
+         * @see Manager::setNodeConfig
          */
         virtual void handleNodeDeletationResult( const JID& service,
                                                  const std::string& node,
@@ -232,47 +295,57 @@ namespace gloox
 
 
         /**
-         * Handle the configuration for a specific node.
+         * Receives the result of a node purge request.
+         *
          * @param service Service hosting the node.
          * @param node ID of the node.
-         * @param config Configuration DataForm.
+         * @param error Node purge Error.
+         *
+         * @see Manager::purgeNode
          */
         virtual void handleNodePurgeResult( const JID& service,
                                             const std::string& node,
                                             const Error* error = 0 ) = 0;
 
         /**
-         * Receives the Subscription map for a specific service.
+         * Receives the Subscription list for a specific service.
+         *
          * @param service The queried service.
-         * @param subMap The map of node's subscription. Check error if null.
-         * @param error Error describing the resolution of the request.
+         * @param subMap The map of node's subscription.
+         * @param error Subscription list retrieval Error.
+         *
          * @see Manager::requestSubscriptionList
          */
         virtual void handleSubscriptionList( const JID& service,
-                                             const SubscriptionMap * subMap,
-                                             const Error * error = 0) = 0;
+                                             const SubscriptionMap* subMap,
+                                             const Error* error = 0) = 0;
 
         /**
          * Receives the Affiliation map for a specific service.
+         *
          * @param service The queried service.
-         * @param subMap The map of node's affiliation. Check error if null.
+         * @param subMap The map of node's affiliation.
+         * @param error Affiliation list retrieval Error.
+         *
          * @see Manager::requestAffiliationList
          */
         virtual void handleAffiliationList( const JID& service,
-                                            const AffiliationMap * affMap,
-                                            const Error * error = 0 ) = 0;
+                                            const AffiliationMap* affMap,
+                                            const Error* error = 0 ) = 0;
 
         /**
          * Receives the default configuration for a specific node type.
+         *
          * @param service The queried service.
          * @param type The type of the NodeType requested.
          * @param config Configuration form for the node type.
+         * @param error Default node config retrieval Error.
+         *
          * @see Manager::getDefaultNodeConfig
          */
         virtual void handleDefaultNodeConfig( const JID& service,
-                                              const DataForm * config,
-                                              const Error * error = 0 ) = 0;
-
+                                              const DataForm* config,
+                                              const Error* error = 0 ) = 0;
 
     };
 

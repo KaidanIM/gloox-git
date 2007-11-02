@@ -65,7 +65,7 @@ namespace gloox
   };
 
   /**
-   * @brief A virtual interface that receives events from an @ref Registration object.
+   * @brief A virtual interface that receives events from an Registration object.
    *
    * Derived classes can be registered as RegistrationHandlers with an
    * Registration object. Incoming results for operations initiated through
