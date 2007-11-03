@@ -611,6 +611,8 @@ namespace gloox
             case Unsubscription:
             {
 /*
+              FIXME: info tracking for subscription ID...
+
               SubscriptionOperationTrackMap::iterator it = m_sopTrackMap.find( id );
               if( it != m_sopTrackMap.end() )
               {
@@ -670,7 +672,7 @@ namespace gloox
                 {
                   const Tag* options = query->findChild( "options" );
                   const DataForm df( options->findChild( "x" ) );
-                  rh->handleSubscriptionOptions( iq->from(),
+                  rh->handleSubscriptionOptions( service,
                                          JID( options->findAttribute( "jid" ) ),
                                          options->findAttribute( "node" ), &df );
                   break;
@@ -762,7 +764,6 @@ namespace gloox
                   break;
               }
 
-              m_resultHandlerTrackMap.erase( ith );
               break;
             }
             case GetItemList:
@@ -791,9 +792,8 @@ namespace gloox
               ItemOperationTrackMap::iterator it = m_iopTrackMap.find( id );
               if( it != m_iopTrackMap.end() )
               {
-                (*ith).second->handleItemDeletation( service,
-                                                     (*it).second.first,
-                                                     (*it).second.second );
+                rh->handleItemDeletation( service, (*it).second.first,
+                                                   (*it).second.second );
                 m_iopTrackMap.erase( it );
               }
               break;
@@ -804,7 +804,7 @@ namespace gloox
               if( deflt )
               {
                 const DataForm df( deflt->findChild( "x" ) );
-                (*ith).second->handleDefaultNodeConfig( service, &df );
+                rh->handleDefaultNodeConfig( service, &df );
               }
               break;
             }
@@ -976,14 +976,18 @@ namespace gloox
               break;
             }
             default:
-              return;
+              break;
           }
           break;
         }
         default:
           break;
       }
+
+      m_resultHandlerTrackMap.erase( ith );
     }
+
   }
+
 }
 
