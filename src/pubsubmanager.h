@@ -107,8 +107,7 @@ namespace gloox
      * - Write tests and examples.
      * - Check for possible ways to have generic handleResult method(s) in
      *   ResultHandler.
-     * - Cleanup the info tracking code, ensure that all informations are
-     *   discarded from the track map even if the request failed (!).
+     * - Implement unsubscription result notification (aka sub id tracking)
      */
     class GLOOX_API Manager : public IqHandler
     {
