@@ -241,7 +241,7 @@ namespace gloox
       m_parent->send( iq, this, df ? SetSubscriptionOptions : GetSubscriptionOptions );
     }
 
-    void Manager::requestSubscriptionList( const JID& service, ResultHandler* handler )
+    void Manager::getSubscriptions( const JID& service, ResultHandler* handler )
     {
       if( !m_parent || !handler )
         return;
@@ -254,7 +254,7 @@ namespace gloox
       m_parent->send( iq, this, GetSubscriptionList );
     }
 
-    void Manager::requestAffiliationList( const JID& service, ResultHandler* handler )
+    void Manager::getAffiliations( const JID& service, ResultHandler* handler )
     {
       if( !m_parent || !handler  )
         return;
@@ -541,7 +541,7 @@ namespace gloox
       m_parent->send( iq, this, affList ? SetAffiliateList : GetAffiliateList );
     }
 
-    void Manager::requestItems( const JID& service,
+    void Manager::getItems( const JID& service,
                                 const std::string& node,
                                 ResultHandler* handler )
     {
@@ -556,9 +556,9 @@ namespace gloox
       m_parent->send( iq, this, GetItemList );
     }
 
-    void Manager::purgeNodeItems( const JID& service,
-                                  const std::string& node,
-                                  ResultHandler* handler  )
+    void Manager::purgeNode( const JID& service,
+                             const std::string& node,
+                             ResultHandler* handler  )
     {
       if( !m_parent || !handler )
         return;
@@ -635,7 +635,7 @@ namespace gloox
                                      sub  = (*it)->findAttribute( "subscription" );
                   subMap[node] = subscriptionType( sub );
                 }
-                (*ith).second->handleSubscriptionList( service, &subMap );
+                rh->handleSubscriptions( service, &subMap );
               }
               break;
             }
@@ -652,7 +652,7 @@ namespace gloox
                                      aff  = affiliations->findAttribute( "affiliation" );
                   affMap[node] = affiliationType( aff );
                 }
-                (*ith).second->handleAffiliationList( iq->from(), &affMap );
+                rh->handleAffiliations( service, &affMap );
               }
               break;
             }
@@ -688,7 +688,7 @@ namespace gloox
                     const std::string& subid = (*it)->findAttribute( "subid" );
                     list.push_back( Subscriber( jid, subscriptionType( sub ), subid ) );
                   }
-                  rh->handleSubscriberList( service, subt->findAttribute( "node" ), &list );
+                  rh->handleSubscribers( service, subt->findAttribute( "node" ), &list );
                   break;
                 }
                 case SetSubscriptionOptions:
@@ -709,22 +709,22 @@ namespace gloox
                         rh->handleSubscriptionOptionsResult( service, JID( /* FIXME */ ), node );
                         break;
                       case SetSubscriberList:
-                        rh->handleSubscriberListResult( service, node );
+                        rh->handleSubscribersResult( service, node );
                         break;
                       case SetAffiliateList:
-                        rh->handleAffiliateListResult( service, node );
+                        rh->handleAffiliatesResult( service, node );
                         break;
                       case SetNodeConfig:
                         rh->handleNodeConfigResult( service, node );
                         break;
                       case CreateNode:
-                        rh->handleNodeCreationResult( service, node );
+                        rh->handleNodeCreation( service, node );
                         break;
                       case DeleteNode:
-                        rh->handleNodeDeletationResult( service, node );
+                        rh->handleNodeDeletation( service, node );
                         break;
                       case PurgeNodeItems:
-                        rh->handleNodePurgeResult( service, node );
+                        rh->handleNodePurge( service, node );
                         break;
                     }
                     m_nopTrackMap.erase( it );
@@ -742,7 +742,7 @@ namespace gloox
                                    affiliationType( (*it)->findAttribute( "affiliation" ) ) );
                     affList.push_back( aff );
                   }
-                  (*ith).second->handleAffiliateList( service, query->findAttribute( "node" ), &affList );
+                  rh->handleAffiliates( service, query->findAttribute( "node" ), &affList );
                   break;
                 }
                 case GetNodeConfig:
@@ -753,7 +753,7 @@ namespace gloox
                     const Tag* const options = ps->findTag( "pubsub/configure" );
                     const Tag* const x = options->findChild( "x" );
                     const DataForm* const df = x ? new DataForm( x ) : 0;
-                    (*ith).second->handleNodeConfig( service, options->findAttribute("node"), df );
+                    rh->handleNodeConfig( service, options->findAttribute("node"), df );
                     delete df;
                   }
                   break;
@@ -771,7 +771,7 @@ namespace gloox
               if( items )
               {
                 const std::string& node = items->findAttribute( "node" );
-                (*ith).second->handleItemList( iq->from(), node, &items->children() );
+                rh->handleItems( service, node, &items->children() );
               }
               break;
             }
@@ -780,9 +780,8 @@ namespace gloox
               ItemOperationTrackMap::iterator it = m_iopTrackMap.find( id );
               if( it != m_iopTrackMap.end() )
               {
-                (*ith).second->handleItemPublication( service,
-                                                      (*it).second.first,
-                                                      (*it).second.second );
+                rh->handleItemPublication( service, (*it).second.first,
+                                                    (*it).second.second );
                 m_iopTrackMap.erase( it );
               }
               break;
@@ -839,19 +838,18 @@ namespace gloox
                 const std::string& node = unsub->findAttribute( "node" ),
                                    sid  = unsub->findAttribute( "sid" ),
                                    jid  = unsub->findAttribute( "jid" );
-
                 rh->handleUnsubscriptionResult( service, node, sid, jid, error );
               }
               break;
             }
             case GetSubscriptionList:
             {
-              rh->handleSubscriptionList( service, 0, error );
+              rh->handleSubscriptions( service, 0, error );
               break;
             }
             case GetAffiliationList:
             {
-              rh->handleAffiliationList( service, 0, error );
+              rh->handleAffiliations( service, 0, error );
               break;
             }
             case GetSubscriptionOptions:
@@ -859,10 +857,9 @@ namespace gloox
               const Tag* options = query->findChild( "options" );
               if( options )
               {
-                const std::string& node = options->findAttribute( "node" );
-                rh->handleSubscriptionOptions( iq->from(),
-                                         JID( options->findAttribute( "jid" ) ),
-                                         options->findAttribute( "node" ), 0, error );
+                const std::string& jid  = options->findAttribute( "jid" ),
+                                   node = options->findAttribute( "node" );
+                rh->handleSubscriptionOptions( service, jid, node, 0, error );
               }
               break;
             }
@@ -871,10 +868,9 @@ namespace gloox
               const Tag* options = query->findChild( "options" );
               if( options )
               {
-                const std::string& node = options->findAttribute( "node" );
-                rh->handleSubscriptionOptionsResult( iq->from(),
-                                         JID( options->findAttribute( "jid" ) ),
-                                         options->findAttribute( "node" ), error );
+                const std::string& jid  = options->findAttribute( "jid" ),
+                                   node = options->findAttribute( "node" );
+                rh->handleSubscriptionOptionsResult( service, JID( jid ), node, error );
               }
               break;
             }
@@ -884,7 +880,7 @@ namespace gloox
               if( configure )
               {
                 const std::string& node = configure->findAttribute( "node" );
-                rh->handleNodeConfig( iq->from(), node, 0, error );
+                rh->handleNodeConfig( service, node, 0, error );
               }
               break;
             }
@@ -894,7 +890,7 @@ namespace gloox
               if( configure )
               {
                 const std::string& node = configure->findAttribute( "node" );
-                rh->handleNodeConfigResult( iq->from(), node, error );
+                rh->handleNodeConfigResult( service, node, error );
               }
               break;
             }
@@ -904,7 +900,7 @@ namespace gloox
               if( items )
               {
                 const std::string& node = items->findAttribute( "node" );
-                rh->handleItemList( service, node, 0, error );
+                rh->handleItems( service, node, 0, error );
               }
               break;
             }
@@ -914,7 +910,7 @@ namespace gloox
               if( purge )
               {
                 const std::string& node = purge->findAttribute( "node" );
-                rh->handleNodePurgeResult( iq->from(), node, error );
+                rh->handleNodePurge( service, node, error );
               }
               break;
             }
@@ -924,7 +920,7 @@ namespace gloox
               if( create )
               {
                 const std::string& node = create->findAttribute( "node" );
-                rh->handleNodeCreationResult( iq->from(), node, error );
+                rh->handleNodeCreation( service, node, error );
               }
               break;
             }
@@ -934,11 +930,10 @@ namespace gloox
               if( del )
               {
                 const std::string& node = del->findAttribute( "node" );
-                rh->handleNodeDeletationResult( iq->from(), node, error );
+                rh->handleNodeDeletation( service, node, error );
               }
               break;
             }
-
             case PublishItem:
             {
               m_iopTrackMap.erase( iq->id() );

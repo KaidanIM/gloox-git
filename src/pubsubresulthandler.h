@@ -74,13 +74,12 @@ namespace gloox
          * @param itemList List of contained items.
          * @param error Describes the error case if the request failed.
          *
-         * @see Manager::requestItems
+         * @see Manager::getItems
          */
-        virtual void handleItemList( const JID& service,
-                                     const std::string& node,
-                                     const TagList* itemList,
-                                     const Error* error = 0 ) = 0;
-
+        virtual void handleItems( const JID& service,
+                                  const std::string& node,
+                                  const TagList* itemList,
+                                  const Error* error = 0 ) = 0;
 
         /**
          * Receives the result for an item publication.
@@ -96,7 +95,6 @@ namespace gloox
                                             const std::string& node,
                                             const std::string& item,
                                             const Error* error = 0 ) = 0;
-
 
         /**
          * Receives the result of an item removal.
@@ -158,7 +156,7 @@ namespace gloox
          * @param options Options DataForm.
          * @param error Subscription options retrieval Error.
          *
-         * @see requestSubscriptionOptions
+         * @see Manager::getSubscriptionOptions
          */
         virtual void handleSubscriptionOptions( const JID& service,
                                                 const JID& jid,
@@ -190,12 +188,12 @@ namespace gloox
          * @param list Subscriber list.
          * @param error Subscription options modification Error.
          *
-         * @see Manager::requestSubscriberList
+         * @see Manager::getSubscribers
          */
-        virtual void handleSubscriberList( const JID& service,
-                                           const std::string& node,
-                                           const SubscriberList* list,
-                                           const Error* error = 0 ) = 0;
+        virtual void handleSubscribers( const JID& service,
+                                        const std::string& node,
+                                        const SubscriberList* list,
+                                        const Error* error = 0 ) = 0;
 
         /**
          * Receives the result of a subscriber list modification.
@@ -204,11 +202,11 @@ namespace gloox
          * @param node ID of the queried node.
          * @param error Subscriber list modification Error.
          *
-         * @see Manager::setSubscriberList
+         * @see Manager::setSubscribers
          */
-        virtual void handleSubscriberListResult( const JID& service,
-                                                 const std::string& node,
-                                                 const Error* error = 0 ) = 0;
+        virtual void handleSubscribersResult( const JID& service,
+                                              const std::string& node,
+                                              const Error* error = 0 ) = 0;
 
         /**
          * Receives the affiliate list for a node.
@@ -218,12 +216,12 @@ namespace gloox
          * @param list Affiliation list.
          * @param error Affiliation list retrieval Error.
          *
-         * @see Manager::requestAffiliationList
+         * @see Manager::getAffiliations
          */
-        virtual void handleAffiliateList( const JID& service,
-                                          const std::string& node,
-                                          const AffiliateList* list,
-                                          const Error* error = 0 ) = 0;
+        virtual void handleAffiliates( const JID& service,
+                                       const std::string& node,
+                                       const AffiliateList* list,
+                                       const Error* error = 0 ) = 0;
 
         /**
          * Handle the affiliate list for a specific node.
@@ -232,11 +230,11 @@ namespace gloox
          * @param node ID of the node.
          * @param error Affiliation list modification Error.
          *
-         * @see Manager::setAffiliationList
+         * @see Manager::setAffiliations
          */
-        virtual void handleAffiliateListResult( const JID& service,
-                                                const std::string& node,
-                                                const Error* error = 0 ) = 0;
+        virtual void handleAffiliatesResult( const JID& service,
+                                             const std::string& node,
+                                             const Error* error = 0 ) = 0;
 
 
         /**
@@ -247,7 +245,7 @@ namespace gloox
          * @param config Configuration DataForm.
          * @param error Configuration retrieval Error.
          *
-         * @see Manager::requestNodeConfig
+         * @see Manager::getNodeConfig
          */
         virtual void handleNodeConfig( const JID& service,
                                        const std::string& node,
@@ -276,9 +274,9 @@ namespace gloox
          *
          * @see Manager::setNodeConfig
          */
-        virtual void handleNodeCreationResult( const JID& service,
-                                               const std::string& node,
-                                               const Error* error = 0 ) = 0;
+        virtual void handleNodeCreation( const JID& service,
+                                         const std::string& node,
+                                         const Error* error = 0 ) = 0;
 
         /**
          * Receives the result for a node removal.
@@ -287,11 +285,11 @@ namespace gloox
          * @param node ID of the node.
          * @param error Node removal Error.
          *
-         * @see Manager::setNodeConfig
+         * @see Manager::deleteNode
          */
-        virtual void handleNodeDeletationResult( const JID& service,
-                                                 const std::string& node,
-                                                 const Error* error = 0 ) = 0;
+        virtual void handleNodeDeletation( const JID& service,
+                                           const std::string& node,
+                                           const Error* error = 0 ) = 0;
 
 
         /**
@@ -303,9 +301,9 @@ namespace gloox
          *
          * @see Manager::purgeNode
          */
-        virtual void handleNodePurgeResult( const JID& service,
-                                            const std::string& node,
-                                            const Error* error = 0 ) = 0;
+        virtual void handleNodePurge( const JID& service,
+                                      const std::string& node,
+                                      const Error* error = 0 ) = 0;
 
         /**
          * Receives the Subscription list for a specific service.
@@ -314,11 +312,11 @@ namespace gloox
          * @param subMap The map of node's subscription.
          * @param error Subscription list retrieval Error.
          *
-         * @see Manager::requestSubscriptionList
+         * @see Manager::getSubscriptions
          */
-        virtual void handleSubscriptionList( const JID& service,
-                                             const SubscriptionMap* subMap,
-                                             const Error* error = 0) = 0;
+        virtual void handleSubscriptions( const JID& service,
+                                          const SubscriptionMap* subMap,
+                                          const Error* error = 0) = 0;
 
         /**
          * Receives the Affiliation map for a specific service.
@@ -327,11 +325,11 @@ namespace gloox
          * @param subMap The map of node's affiliation.
          * @param error Affiliation list retrieval Error.
          *
-         * @see Manager::requestAffiliationList
+         * @see Manager::getAffiliations
          */
-        virtual void handleAffiliationList( const JID& service,
-                                            const AffiliationMap* affMap,
-                                            const Error* error = 0 ) = 0;
+        virtual void handleAffiliations( const JID& service,
+                                         const AffiliationMap* affMap,
+                                         const Error* error = 0 ) = 0;
 
         /**
          * Receives the default configuration for a specific node type.

@@ -44,7 +44,7 @@ namespace gloox
       /**
        * Reimplement this function if you want to be notified about
        * incoming messages.
-       * @param msg The complete Stanza.
+       * @param msg The complete Message.
        * @param session If this MessageHandler is used with a MessageSession, this parameter
        * holds a pointer to that MessageSession.
        */

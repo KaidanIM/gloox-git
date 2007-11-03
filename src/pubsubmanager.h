@@ -127,12 +127,15 @@ namespace gloox
 
         /**
          * Subscribe to a node.
+         *
          * @param service Service hosting the node.
          * @param node ID of the node to subscribe to.
          * @param jid JID to subscribe. If empty, the client's JID will be used
          *        (ie self subscription).
          * @param type SubscriptionType of the subscription (Collections only).
          * @param depth Subscription depth. For 'all', use 0 (Collections only!).
+         *
+         * @see ResultHandler::handleSubscriptionResult
          */
         void subscribe( const JID& service, const std::string& node,
                         ResultHandler* handler, const JID& jid = JID(),
@@ -141,11 +144,14 @@ namespace gloox
 
         /**
          * Unsubscribe from a node.
+         *
          * @param service Service hosting the node.
          * @param node ID of the node to unsubscribe from.
          * @param handler ResultHandler receiving the result notification.
          * @param jid JID to unsubscribe. If empty, the client's JID will be
          *        used (ie self unsubscription).
+         *
+         * @see ResultHandler::handleUnsubscriptionResult
          */
         void unsubscribe( const JID& service,
                           const std::string& node,
@@ -154,17 +160,23 @@ namespace gloox
 
         /**
          * Requests the subscription list from a service.
+         *
          * @param service Service to query.
          * @param handler The ResultHandler to handle the result.
+         *
+         * @see ResultHandler::handleSubscriptions
          */
-        void requestSubscriptionList( const JID& service, ResultHandler* handler );
+        void getSubscriptions( const JID& service, ResultHandler* handler );
 
         /**
          * Requests the affiliation list from a service.
+         *
          * @param service Service to query.
          * @param handler The ResultHandler to handle the result.
+         *
+         * @see ResultHandler::handleAffiliations
          */
-        void requestAffiliationList( const JID& service, ResultHandler* handler );
+        void getAffiliations( const JID& service, ResultHandler* handler );
 
 private:
         void subscriptionOptions( const JID& service,
@@ -176,24 +188,30 @@ private:
 public:
         /**
          * Requests subscription options.
+         *
          * @param service Service to query.
          * @param jid Subscribed entity.
          * @param node Node ID of the node.
          * @param handler Node ID of the node.
          * @param slh The SubscriptionListHandler to handle the result.
+         *
+         * @see ResultHandler::handleSubscriptionOptions
          */
-        void requestSubscriptionOptions( const JID& service,
-                                         const JID& jid,
-                                         const std::string& node,
-                                         ResultHandler* handler)
+        void getSubscriptionOptions( const JID& service,
+                                     const JID& jid,
+                                     const std::string& node,
+                                     ResultHandler* handler)
           { subscriptionOptions( service, jid, node, handler, 0 ); }
 
         /**
          * Modifies subscription options.
+         *
          * @param service Service to query.
          * @param jid Subscribed entity.
          * @param node Node ID of the node.
          * @param df New configuration.
+         *
+         * @see ResultHandler::handleSubscriptionOptionsResult
          */
         void setSubscriptionOptions( const JID& service,
                                      const JID& jid,
@@ -204,20 +222,26 @@ public:
 
         /**
          * Requests the affiliation list for a node.
+         *
          * @param service Service to query.
          * @param node Node ID of the node.
          * @param handler The AffiliationListHandler to handle the result.
+         *
+         * @see ResultHandler::handleAffiliations
          */
-        void requestAffiliationList( const JID& service,
-                                     const std::string& node,
-                                     ResultHandler* handler );
+        void getAffiliations( const JID& service,
+                              const std::string& node,
+                              ResultHandler* handler );
 
         /**
          * Publish an item to a node. The Tag to publish is destroyed
          * by the function before returning.
+         *
          * @param service Service hosting the node.
          * @param node ID of the node to delete the item from.
          * @param item The item to publish.
+         *
+         * @see ResultHandler::handleItemPublication
          */
         void publishItem( const JID& service,
                           const std::string& node,
@@ -226,9 +250,12 @@ public:
 
         /**
          * Delete an item from a node.
+         *
          * @param service Service hosting the node.
          * @param node ID of the node to delete the item from.
          * @param item ID of the item in the node.
+         *
+         * @see ResultHandler::handleItemDeletation
          */
         void deleteItem( const JID& service,
                          const std::string& node,
@@ -237,27 +264,35 @@ public:
 
         /**
          * Ask for the item list of a specific node.
+         *
          * @param service Service hosting the node.
          * @param node ID of the node.
          * @param handler ResultHandler to send the result to.
-         * @see ResultHandler::handleItemList
+         *
+         * @see ResultHandler::handleItems
          */
-        void requestItems( const JID& service,
-                           const std::string& node,
-                           ResultHandler* handler );
+        void getItems( const JID& service,
+                       const std::string& node,
+                       ResultHandler* handler );
 
         /**
          * Creates a new node.
+         *
          * @param type The type of the new node.
          * @param service Service where to create the new node.
          * @param node The ID of the new node.
          * @param name The name of the new node.
-         * @param parent ID of the parent node. If empty, the node will be located at the root of
-         * the service.
+         * @param parent ID of the parent node. If empty, the node will be
+         * located at the root of the service.
          * @param access The node's access model.
-         * @param config A map of further node configuration options. The keys of the map should be in
-         * the form of 'pubsub#name', where 'name' is a valid pubsub option. Do not use this map to
-         * include an access model config option, use the @c access parameter instead.
+         * @param config A map of further node configuration options. The keys
+         * of the map should be in the form of 'pubsub#name', where 'name' is a
+         * valid pubsub option. Do not use this map to include an access model
+         * config option, use the @c access parameter instead. See
+         * <a href='http://www.xmpp.org/registrar/formtypes.html#http:--jabber.org-protocol-pubsubnode_config'>XEP-0068 Sect. 8</a> for
+         * valid options.
+         *
+         * @see ResultHandler::handleNodeCreation
          */
         void createNode( NodeType type, const JID& service,
                                         const std::string& node,
@@ -269,15 +304,21 @@ public:
 
         /**
          * Creates a new leaf node.
+         *
          * @param service Service where to create the new node.
          * @param node The ID of the new node.
          * @param name The name of the new node.
-         * @param parent ID of the parent node. If empty, the node will be located at the root of
-         * the service.
+         * @param parent ID of the parent node. If empty, the node will be
+         * located at the root of the service.
          * @param access The node's access model.
-         * @param config A map of further node configuration options. The keys of the map should be in
-         * the form of 'pubsub#name', where 'name' is a valid pubsub option. Do not use this map to
-         * include an access model config option, use the @c access parameter instead.
+         * @param config A map of further node configuration options. The keys
+         * of the map must be in the form of 'pubsub#name', where 'name' is
+         * a valid pubsub option. Do not use this map to include an access
+         * model config option, use the @c access parameter instead. See
+         * <a href='http://www.xmpp.org/registrar/formtypes.html#http:--jabber.org-protocol-pubsubnode_config'>XEP-0068 Sect. 8</a> for
+         * valid options.
+         *
+         * @see ResultHandler::handleNodeCreation
          */
         void createLeafNode( const JID& service,
                              const std::string& node,
@@ -290,15 +331,21 @@ public:
 
         /**
          * Creates a new collection node.
+         *
          * @param service Service where to create the new node.
          * @param node The ID of the new node.
          * @param name The name of the new node.
-         * @param parent ID of the parent node. If empty, the node will be located at the root of
-         * the service.
+         * @param parent ID of the parent node. If empty, the node will be
+         * located at the root of the service.
          * @param access The node's access model.
-         * @param config A map of further node configuration options. The keys of the map should be in
-         * the form of 'pubsub#name', where 'name' is a valid pubsub option. It is not necessary to
-         * include an access model config option. Use the @c access parameter instead.
+         * @param config A map of further node configuration options. The keys
+         * of the map must be in the form of 'pubsub#name', where 'name' is
+         * a valid pubsub option. It is not necessary to include an access
+         * model config option. Use the @c access parameter instead. See
+         * <a href='http://www.xmpp.org/registrar/formtypes.html#http:--jabber.org-protocol-pubsubnode_config'>XEP-0068 Sect. 8</a> for
+         * valid options.
+         *
+         * @see ResultHandler::handleNodeCreation
          */
         void createCollectionNode( const JID& service,
                                    const std::string& node,
@@ -311,8 +358,11 @@ public:
 
         /**
          * Deletes a node.
+         *
          * @param service Service where to create the new node.
          * @param node Node ID of the new node.
+         *
+         * @see ResultHandler::handleNodeDeletation
          */
         void deleteNode( const JID& service,
                          const std::string& node,
@@ -329,86 +379,111 @@ public:
 */
         /**
          * Retrieves the default configuration for a specific NodeType.
+         *
          * @param service The queried service.
          * @param type NodeType to get default configuration for.
          * @param handler ResultHandler.
+         *
+         * @see ResultHandler::handleDefaultNodeConfig
          */
         void getDefaultNodeConfig( const JID& service,
                                    NodeType type,
                                    ResultHandler* handler );
 
         /**
-         * Requests the subscriber list for a node.
+         * Removes all the items from a node.
+         *
          * @param service Service to query.
          * @param node Node ID of the node.
          * @param handler ResultHandler.
+         *
+         * @see ResultHandler::handleNodePurge
          */
-        void purgeNodeItems( const JID& service,
-                             const std::string& node,
-                             ResultHandler* handler );
+        void purgeNode( const JID& service,
+                        const std::string& node,
+                        ResultHandler* handler );
 
         /**
          * Requests the subscriber list for a node.
+         *
          * @param service Service to query.
          * @param node Node ID of the node.
          * @param handler ResultHandler.
+         *
+         * @see ResultHandler::handleSubscribers
          */
-        void requestSubscriberList( const JID& service,
-                                    const std::string& node,
-                                    ResultHandler* handler )
+        void getSubscribers( const JID& service,
+                             const std::string& node,
+                             ResultHandler* handler )
           { subscriberList( service, node, 0, handler ); }
 
         /**
          * Modifies the subscriber list for a node. This function SHOULD only set the
+         * subscriber list to those which needs modification.
+         *
          * @param service Service to query.
          * @param node Node ID of the node.
          * @param list ResultHandler.
+         *
+         * @see ResultHandler::handleSubscribers
          */
-        void setSubscriberList( const JID& service,
-                                const std::string& node,
-                                const SubscriberList& list,
-                                ResultHandler* handler )
+        void setSubscribers( const JID& service,
+                             const std::string& node,
+                             const SubscriberList& list,
+                             ResultHandler* handler )
           { subscriberList( service, node, &list, handler ); }
 
         /**
          * Requests the affiliate list for a node.
+         *
          * @param service Service to query.
          * @param node Node ID of the node.
          * @param handler ResultHandler.
+         *
+         * @see ResultHandler::handleAffiliates
          */
-        void requestAffiliateList( const JID& service,
-                                   const std::string& node,
-                                   ResultHandler* handler )
+        void getAffiliates( const JID& service,
+                            const std::string& node,
+                            ResultHandler* handler )
           { affiliateList( service, node, 0, handler ); }
 
         /**
          * Modifies the affiliate list for a node.
+         *
          * @param service Service to query.
          * @param node Node ID of the node.
          * @param list ResultHandler.
+         *
+         * @see ResultHandler::handleAffiliatesResult
          */
-        void setAffiliateList( const JID& service,
-                               const std::string& node,
-                               const AffiliateList& list,
-                               ResultHandler* handler )
+        void setAffiliates( const JID& service,
+                            const std::string& node,
+                            const AffiliateList& list,
+                            ResultHandler* handler )
           { affiliateList( service, node, &list, handler ); }
 
         /**
          * Retrieve the configuration (options) of a node.
+         *
          * @param service Service hosting the node.
          * @param node ID of the node.
          * @param handler ResultHandler responsible to handle the request result.
+         *
+         * @see ResultHandler::handleNodeConfig
          */
-        void requestNodeConfig( const JID& service,
-                                const std::string& node,
-                                ResultHandler* handler )
+        void getNodeConfig( const JID& service,
+                            const std::string& node,
+                            ResultHandler* handler )
           { nodeConfig( service, node, 0, handler ); }
 
         /**
          * Changes a node's configuration (options).
+         *
          * @param service Service to query.
          * @param node Node ID of the node.
          * @param handler ResultHandler responsible to handle the request result.
+         *
+         * @see ResultHandler::handleNodeConfigResult
          */
         void setNodeConfig( const JID& service,
                             const std::string& node,
@@ -418,6 +493,7 @@ public:
 
         /**
          * Registers an handler to receive notification of events.
+         *
          * @param handler EventHandler to register.
          */
         void registerEventHandler( EventHandler* handler )
