@@ -440,21 +440,13 @@ namespace gloox
   const TagList& Tag::children() const
   {
     static const TagList empty;
-
-    if( !m_children )
-      return empty;
-
-    return *m_children;
+    return m_children ? *m_children : empty;
   }
 
   const Tag::AttributeList& Tag::attributes() const
   {
     static const AttributeList empty;
-
-    if( !m_attribs )
-      return empty;
-
-    return *m_attribs;
+    return m_attribs ? *m_attribs : empty;
   }
 
   void Tag::setXmlns( const std::string& xmlns, const std::string& prefix )
@@ -484,10 +476,7 @@ namespace gloox
   {
     if( prefix.empty() )
     {
-      if( hasAttribute( XMLNS ) )
-        return findAttribute( XMLNS );
-
-      return m_xmlns;
+      return hasAttribute( XMLNS ) ? findAttribute( XMLNS ) : m_xmlns;
     }
 
     if( m_xmlnss )
@@ -643,10 +632,7 @@ namespace gloox
   TagList Tag::findChildren( const std::string& name,
                              const std::string& xmlns ) const
   {
-    if( !m_children )
-      return TagList();
-
-    return findChildren( *m_children, name, xmlns );
+    return m_children ? findChildren( *m_children, name, xmlns ) : TagList();
   }
 
   TagList Tag::findChildren( const TagList& list, const std::string& name,
