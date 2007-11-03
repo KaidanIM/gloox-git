@@ -122,6 +122,13 @@ namespace gloox
       void setConnectionImpl( ConnectionBase* connection );
 
       /**
+       * This function returns the concrete connection implementation currently in use.
+       * @return The concrete connection implementation.
+       * @since 0.9.7
+       */
+      ConnectionBase* connectionImpl( ) { return m_connection; }
+
+      /**
        * Use this function to set the available StreamHosts. Usually you should not need to
        * use this function directly.
        */
