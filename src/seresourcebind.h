@@ -37,9 +37,11 @@ namespace gloox
     public:
       /**
        * Constructs a new object with the given resource string.
-       * @param tag The Tag to parse.
+       * @param resource The resource to set.
+       * @param bind Indicates whether this is an bind or unbind request request.
+       * Defaults to @b true (bind).
        */
-      SEResourceBind( const std::string& resource );
+      SEResourceBind( const std::string& resource, bool bind = true );
 
       /**
        * Constructs a new object from the given Tag.
@@ -60,6 +62,13 @@ namespace gloox
       const JID& jid() const { return m_jid; }
 
       /**
+       * Use this function to find out whether the extension contains a
+       * bind or unbind request.
+       * @return @b True if the extension contains an unbind request, @b false otherwise.
+       */
+      bool unbind() const { return !m_bind; }
+
+      /**
        * Virtual Destructor.
        */
       virtual ~SEResourceBind();
@@ -77,8 +86,9 @@ namespace gloox
       virtual Tag* tag() const;
 
     private:
-      const std::string m_resource;
+      std::string m_resource;
       JID m_jid;
+      bool m_bind;
   };
 
 }

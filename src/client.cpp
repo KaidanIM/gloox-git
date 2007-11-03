@@ -355,15 +355,15 @@ namespace gloox
     }
   }
 
-  bool Client::bindResource( const std::string& resource )
+  bool Client::bindOperation( const std::string& resource, bool bind )
   {
     if( !( m_streamFeatures & StreamFeatureUnbind ) && m_resourceBound )
       return false;
 
     IQ iq( IQ::Set, JID(), getID() );
-    iq.addExtension( new SEResourceBind( resource ) );
+    iq.addExtension( new SEResourceBind( resource, bind ) );
 
-    send( iq, this, ResourceBind );
+    send( iq, this, bind ? ResourceBind : ResourceUnbind );
     return true;
   }
 
@@ -386,7 +386,7 @@ namespace gloox
         const SEResourceBind* rb = static_cast<const SEResourceBind*>( iq->findExtension( ExtResourceBind ) );
         if( !rb || !rb->jid() )
         {
-          notifyOnResourceBindError( RbErrorUnknownError );
+          notifyOnResourceBindError( 0 );
           break;
         }
 
@@ -402,25 +402,7 @@ namespace gloox
       }
       case IQ::Error:
       {
-        const Error* error = iq->error();
-        switch( error->type() )
-        {
-          case StanzaErrorTypeModify:
-            if( error->error() == StanzaErrorBadRequest )
-              notifyOnResourceBindError( RbErrorBadRequest );
-            break;
-          case StanzaErrorTypeCancel:
-            if( error->error() == StanzaErrorNotAllowed )
-              notifyOnResourceBindError( RbErrorNotAllowed );
-            else if( error->error() == StanzaErrorConflict )
-              notifyOnResourceBindError( RbErrorConflict );
-            else
-              notifyOnResourceBindError( RbErrorUnknownError );
-            break;
-          default:
-            notifyOnResourceBindError( RbErrorUnknownError );
-            break;
-        }
+        notifyOnResourceBindError( iq->error() );
         break;
       }
       default:
@@ -440,33 +422,11 @@ namespace gloox
     switch( iq->subtype() )
     {
       case IQ::Result:
-      {
         connected();
         break;
-      }
       case IQ::Error:
-      {
-        const Error* error = iq->error();
-        switch( error->type() )
-        {
-          case StanzaErrorTypeWait:
-            if( error->error() == StanzaErrorInternalServerError )
-              notifyOnSessionCreateError( ScErrorInternalServerError );
-            break;
-          case StanzaErrorTypeAuth:
-            if( error->error() == StanzaErrorForbidden )
-              notifyOnSessionCreateError( ScErrorForbidden );
-            break;
-          case StanzaErrorTypeCancel:
-            if( error->error() == StanzaErrorConflict )
-              notifyOnSessionCreateError( ScErrorConflict );
-            break;
-          default:
-            notifyOnSessionCreateError( ScErrorUnknownError );
-            break;
-        }
+        notifyOnSessionCreateError( iq->error() );
         break;
-      }
       default:
         break;
     }
