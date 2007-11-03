@@ -19,6 +19,8 @@
 namespace gloox
 {
 
+  class Error;
+
   /**
    * @brief Derived classes can be registered as ConnectionListeners with the Client.
    *
@@ -67,16 +69,18 @@ namespace gloox
 
       /**
        * This function is called (by a Client object) if an error occurs while trying to bind a resource.
-       * @param error Describes the error condition.
+       * @param error A pointer to an Error object that contains more
+       * information. May be 0.
        */
-      virtual void onResourceBindError( ResourceBindError error ) { (void) (error); }
+      virtual void onResourceBindError( const Error* error ) { (void) (error); }
 
       /**
        * This function is called (by a Client object) if an error occurs while trying to establish
        * a session.
-       * @param error Describes the error condition.
+       * @param error A pointer to an Error object that contains more
+       * information. May be 0.
        */
-      virtual void onSessionCreateError( SessionCreateError error ) { (void) (error); }
+      virtual void onSessionCreateError( const Error* error ) { (void) (error); }
 
       /**
        * This function is called when the connection was TLS/SSL secured.

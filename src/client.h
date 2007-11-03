@@ -158,7 +158,8 @@ namespace gloox
        * @note It is not necessary to call this function to bind the initial, main, resource.
        * @since 1.0
        */
-      bool bindResource( const std::string& resource );
+      bool bindResource( const std::string& resource )
+        { return bindOperation( resource, true ); }
 
       /**
        * Use this function to select a resource identifier that has been bound
@@ -178,6 +179,17 @@ namespace gloox
        * @b false otherwise.
        */
       bool hasResourceBind() const { return m_streamFeatures & StreamFeatureUnbind; }
+
+      /**
+       * Use this function to unbind a resource identifier that has been bound
+       * previously by means of bindResource(). Use hasResourceBind() to find out if the
+       * server supports binding of multiple resources. unbindResource() is a NOOP if it doesn't.
+       * @param resource A resource string that has been bound previously.
+       * @note Servers are encouraged to terminate the connection should the only bound
+       * resource be unbound.
+       */
+      bool unbindResource( const std::string& resource )
+        { return bindOperation( resource, false ); }
 
       /**
        * Returns the current prepped main resource.
@@ -303,12 +315,14 @@ namespace gloox
       void connected();
       virtual void rosterFilled();
       virtual void cleanup();
+      bool bindOperation( const std::string& resource, bool bind );
 
       void init();
 
       enum TrackContext
       {
         ResourceBind,
+        ResourceUnbind,
         SessionEstablishment
       };
 

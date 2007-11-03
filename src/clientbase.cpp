@@ -1097,7 +1097,7 @@ namespace gloox
     return m_stats.encryption = ( it == m_connectionListeners.end() );
   }
 
-  void ClientBase::notifyOnResourceBindError( ResourceBindError error )
+  void ClientBase::notifyOnResourceBindError( const Error* error )
   {
     util::ForEach( m_connectionListeners, &ConnectionListener::onResourceBindError, error );
   }
@@ -1107,7 +1107,7 @@ namespace gloox
     util::ForEach( m_connectionListeners, &ConnectionListener::onResourceBind, resource );
   }
 
-  void ClientBase::notifyOnSessionCreateError( SessionCreateError error )
+  void ClientBase::notifyOnSessionCreateError( const Error* error )
   {
     util::ForEach( m_connectionListeners, &ConnectionListener::onSessionCreateError, error );
   }
