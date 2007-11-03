@@ -27,7 +27,7 @@ namespace gloox
   }
 
   SEResourceBind::SEResourceBind( const Tag* tag )
-    : StanzaExtension( ExtResourceBind ), m_resource( EmptyString )
+    : StanzaExtension( ExtResourceBind ), m_resource( EmptyString ), m_bind( true )
   {
     if( !tag )
       return;
