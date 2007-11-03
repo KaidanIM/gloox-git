@@ -41,15 +41,16 @@ namespace gloox
      *
      * This manager acts in concert with 2 different handlers:
      *
-     * - EventHandler is responsible for receiving the PubSub event notifications.
-     *   Register as much as you need with the Manager.
+     * - EventHandler is responsible for receiving the PubSub event
+     *   notifications. Register as much as you need with the Manager.
      *
      * - ResultHandler is used to receive a request's result. Depending on the
      *   context, this can be a notification that an item has been succesfully
      *   deleted (or not), or the default node configuration for a service.
      *
-     * \note Several PubSub queries will both trigger a notification from registered
-     *       EventHandler's and from the ResultHandler specific to the query.
+     * Note that many PubSub queries will both trigger a notification from
+     * registered EventHandler's and from the ResultHandler specific to the
+     * query.
      *
      * To get started with PubSub in gloox, create a Manager, implement the
      * PubSub::EventHandler virtuals and register an instance with a Manager.
@@ -64,10 +65,10 @@ namespace gloox
      *
      * Here's an example.
      *
-     * EventHandler::handleItemPublication() can be called with or without the actual
-     * tag, depending on if the notification actually includes the payload. From there
-     * you could only record the event and be done with it, or decide to retrieve the
-     * full payload. Eg:
+     * EventHandler::handleItemPublication() can be called with or without
+     * the actual tag, depending on if the notification actually includes
+     * the payload. From there you could only record the event and be done
+     * with it, or decide to retrieve the full payload. Eg:
      *
      * @code
      *
@@ -104,10 +105,11 @@ namespace gloox
      * @todo
      * - Implement Subscription request management.
      * - Update to XEP version 1.10.
-     * - Document all methods.
      * - Write tests and examples.
      * - Check for possible ways to have generic handleResult method(s) in
      *   ResultHandler.
+     * - Cleanup the info tracking code, ensure that all informations are
+     *   discarded from the track map even if the request failed (!).
      */
     class GLOOX_API Manager : public IqHandler,
                               public MessageHandler
