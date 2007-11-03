@@ -15,7 +15,6 @@
 
 #include "pubsub.h"
 #include "iqhandler.h"
-#include "messagehandler.h"
 
 #include <map>
 #include <string>
@@ -111,8 +110,7 @@ namespace gloox
      * - Cleanup the info tracking code, ensure that all informations are
      *   discarded from the track map even if the request failed (!).
      */
-    class GLOOX_API Manager : public IqHandler,
-                              public MessageHandler
+    class GLOOX_API Manager : public IqHandler
     {
       public:
 
@@ -513,9 +511,6 @@ public:
         void handleDiscoItemsResult( IQ* iq, int context );
         void handleDiscoError( IQ* iq, int context );
         bool handleDiscoSet( IQ* ) { return 0; }
-
-        // reimplemented from MessageHandler
-        void handleMessage( Message* msg, MessageSession * );
 
         // reimplemented from IqHandler
         bool handleIq  ( IQ* ) { return 0; }
