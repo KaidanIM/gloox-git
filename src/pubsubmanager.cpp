@@ -13,7 +13,6 @@
 #include "pubsubmanager.h"
 #include "clientbase.h"
 #include "dataform.h"
-#include "message.h"
 #include "iq.h"
 #include "pubsub.h"
 #include "pubsubeventhandler.h"
@@ -68,7 +67,7 @@ namespace gloox
      * @param feat Feature string to search for.
      * @return the associated PubSubFeature.
      */
-    static PubSubFeature featureType( const std::string& str )
+/*    static PubSubFeature featureType( const std::string& str )
     {
       static const char* values [] = {
         "collections",
@@ -105,12 +104,10 @@ namespace gloox
       };
       return static_cast< PubSubFeature >( util::lookup2( str, values ) );
     }
-
+*/
     Manager::Manager( ClientBase* parent )
       : m_parent(parent)
-    {
-      m_parent->registerMessageHandler( this );
-    }
+    {}
 
     static const char* subscriptionValues[] = {
       "none", "subscribed", "pending", "unconfigured"
@@ -129,7 +126,7 @@ namespace gloox
     {
       return (AffiliationType)util::lookup( affiliation, affiliationValues );
     }
-
+/*
     static EventType eventType( const std::string& event )
     {
       static const char* values[] = {
@@ -142,10 +139,11 @@ namespace gloox
       };
       return (EventType)util::lookup( event, values );
     }
+*/
 
+/*
     void Manager::handleMessage( Message* msg, MessageSession* )
     {
-      /* Temporarily comment handleMessage until i can retrieve events w/o tag
       const Tag* event = msg->findChild( "event", XMLNS, XMLNS_PUBSUB_EVENT );
       if( !event || m_eventHandlerList.empty() )
         return;
@@ -215,9 +213,8 @@ namespace gloox
           }
         }
       }
-      */
     }
-
+*/
     void Manager::subscriptionOptions( const JID& service,
                                        const JID& jid,
                                        const std::string& node,
@@ -813,6 +810,8 @@ namespace gloox
         break;
         case IQ::Error:
         {
+          m_nopTrackMap.erase( id );
+          m_iopTrackMap.erase( id );
           const Error* error = iq->error();
 
           switch( context )
