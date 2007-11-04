@@ -20,7 +20,11 @@ general changes and additions:
 - Parser and Tag: support mixed content xml
 - Parser: XML namespace support
 - ConnectionListener: added onResourceBind( resource ) to notify about successfuly bound resources
+- ConnectionListener: onResourceBindError() takes pointer to Error object
+- ConnectionListener: onSessionCreateError() takes pointer to Error object
 - Client: support for binding and unbinding of additional resources
+- SIProfileFTHandler: handleFTRequest() doesn't pass a id naymore, just a sid
+- SIProfileFT: acceptFTRequest() and declineFTRequest() don't take an id argument anymore, just a sid
 
 deprecated:
 - MUCRoomHandler::handleMUCMessage( MUCRoom*, string, string, bool, string, bool ),

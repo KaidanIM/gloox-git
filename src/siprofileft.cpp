@@ -22,6 +22,7 @@
 #include "socks5bytestreammanager.h"
 
 #include <cstdlib>
+#include <map>
 
 namespace gloox
 {
@@ -94,10 +95,15 @@ namespace gloox
     return m_manager->requestSI( this, to, XMLNS_SI_FT, file, feature, mimetype );
   }
 
-  void SIProfileFT::acceptFT( const JID& to, const std::string& id, const std::string& sid, StreamType type )
+  void SIProfileFT::acceptFT( const JID& to, const std::string& sid, StreamType type )
   {
     if( !m_manager )
       return;
+
+    if( m_id2sid.find( sid ) == m_id2sid.end() )
+      return;
+
+    const std::string& id = m_id2sid[sid];
 
     Tag* feature = new Tag( "feature", XMLNS, XMLNS_FEATURE_NEG );
     DataFormField* dff = new DataFormField( "stream-method" );
@@ -127,11 +133,13 @@ namespace gloox
     m_manager->acceptSI( to, id, 0, feature );
   }
 
-  void SIProfileFT::declineFT( const JID& to, const std::string& id, SIManager::SIError reason,
+  void SIProfileFT::declineFT( const JID& to, const std::string& sid, SIManager::SIError reason,
                                const std::string& text )
   {
-    if( m_manager )
-      m_manager->declineSI( to, id, reason, text );
+    if( m_id2sid.find( sid ) == m_id2sid.end() || !m_manager )
+      return;
+
+    m_manager->declineSI( to, m_id2sid[sid], reason, text );
   }
 
   void SIProfileFT::dispose( Bytestream* bs )
@@ -199,8 +207,9 @@ namespace gloox
         }
       }
 
-      m_handler->handleFTRequest( from, id, si->findAttribute( "id" ),
-                                  ptag->findAttribute( "name" ),
+      const std::string& sid = si->findAttribute( "id" );
+      m_id2sid[sid] = id;
+      m_handler->handleFTRequest( from, sid, ptag->findAttribute( "name" ),
                                   atol( ptag->findAttribute( "size" ).c_str() ),
                                   ptag->findAttribute( "hash" ),
                                   ptag->findAttribute( "date" ),
