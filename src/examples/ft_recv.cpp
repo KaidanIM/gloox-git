@@ -97,7 +97,7 @@ class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, Bytest
       printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
     }
 
-    virtual void handleFTRequest( const JID& from, const std::string& id, const std::string& sid,
+    virtual void handleFTRequest( const JID& from, const std::string& sid,
                                   const std::string& name, long size, const std::string& hash,
                                   const std::string& date, const std::string& mimetype,
                                   const std::string& desc, int /*stypes*/, long /*offset*/, long /*length*/ )
@@ -106,7 +106,7 @@ class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, Bytest
               "desc: %s\n",
               from.full().c_str(), name.c_str(), size, sid.c_str(), hash.c_str(), date.c_str(),
               mimetype.c_str(), desc.c_str() );
-      f->acceptFT( from, id, sid, SIProfileFT::FTTypeIBB );
+      f->acceptFT( from, sid, SIProfileFT::FTTypeIBB );
     }
 
 //     virtual void handleFTRequestResult( const JID& /*from*/, const std::string& /*sid*/ )

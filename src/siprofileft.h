@@ -22,6 +22,7 @@
 #include "bytestreamhandler.h"
 
 #include <string>
+#include <map>
 
 namespace gloox
 {
@@ -203,23 +204,22 @@ namespace gloox
        * Call this function to accept a file transfer request previously announced by means of
        * @link gloox::SIProfileFTHandler::handleFTRequest() SIProfileFTHandler::handleFTRequest() @endlink.
        * @param to The requestor.
-       * @param id The request's id, as passed to SIProfileHandler::handleFTRequest().
        * @param sid The request's sid, as passed to SIProfileHandler::handleFTRequest().
        * @param type The desired stream type to use for this file transfer. Defaults to
        * SOCKS5 Bytestream. You should not use @c FTTypeAll here.
        */
-      void acceptFT( const JID& to, const std::string& id, const std::string& sid,
+      void acceptFT( const JID& to, const std::string& sid,
                      StreamType type = FTTypeS5B );
 
       /**
        * Call this function to decline a FT request previously announced by means of
        * @link gloox::SIProfileFTHandler::handleFTRequest() SIProfileFTHandler::handleFTRequest() @endlink.
        * @param to The requestor.
-       * @param id The request's id, as passed to SIProfileFTHandler::handleFTRequest().
+       * @param sid The request's sid, as passed to SIProfileFTHandler::handleFTRequest().
        * @param reason The reason for the reject.
        * @param text An optional human-readable text explaining the decline.
        */
-      void declineFT( const JID& to, const std::string& id, SIManager::SIError reason,
+      void declineFT( const JID& to, const std::string& sid, SIManager::SIError reason,
                       const std::string& text = EmptyString );
 
       /**
@@ -321,6 +321,7 @@ namespace gloox
       SIProfileFTHandler* m_handler;
       SOCKS5BytestreamManager* m_socks5Manager;
       StreamHostList m_hosts;
+      StringMap m_id2sid;
       bool m_delManager;
       bool m_delS5Manager;
       bool m_ranged;

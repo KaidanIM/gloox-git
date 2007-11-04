@@ -47,9 +47,8 @@ namespace gloox
        * to send a file to you. You should use either SIProfileFT::acceptFT() or
        * SIProfileFT::declineFT() to accept or reject the request, respectively.
        * @param from The file transfer requestor.
-       * @param id The request's id. This id MUST be supplied to either SIProfileFT::acceptFT() or
-       * SIProfileFT::declineFT().
-       * @param sid The requested stream's ID.
+       * @param sid The requested stream's ID. This sid MUST be supplied to SIProfileFT::acceptFT()
+       * and SIProfileFT::declineFT(), respectively.
        * @param name The file name.
        * @param size The file size.
        * @param hash The file content's MD5 sum.
@@ -62,7 +61,7 @@ namespace gloox
        * @param length The number of bytes to send, starting from the given offset. A value of -1
        * indicates that the entire file is to be transmitted (taking the offset into account).
        */
-      virtual void handleFTRequest( const JID& from, const std::string& id, const std::string& sid,
+      virtual void handleFTRequest( const JID& from, const std::string& sid,
                                     const std::string& name, long size, const std::string& hash,
                                     const std::string& date, const std::string& mimetype,
                                     const std::string& desc, int stypes, long offset, long length ) = 0;
