@@ -225,13 +225,12 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      IQ iq( IQ::Get, service, id, XMLNS_PUBSUB, "pubsub" );
+      IQ iq( df ? IQ::Set : IQ::Get, service, id, XMLNS_PUBSUB, "pubsub" );
       Tag* options = new Tag( iq.query(), "options", "node", node );
       options->addAttribute( "jid", jid ? jid.bare() : m_parent->jid().bare() );
       if( df )
       {
         options->addChild( df->tag() );
-        delete df;
       }
 
       m_resultHandlerTrackMap[id] = handler;
@@ -314,10 +313,10 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      const std::string& ujid = jid ? jid.full() : m_parent->jid().full();
       IQ iq( IQ::Set, service, id, XMLNS_PUBSUB, "pubsub" );
       Tag* sub = new Tag( iq.query(), "unsubscribe", "node", node );
-      sub->addAttribute( "jid", ujid );
+      if( jid )
+        sub->addAttribute( "jid", jid.full() );
 
       m_resultHandlerTrackMap[id] = handler;
       // need to track info for handler
@@ -503,7 +502,6 @@ namespace gloox
             s->addAttribute( "subid", (*it).subid );
         }
         m_nopTrackMap[id] = node;
-        delete subList;
       }
 
       m_resultHandlerTrackMap[id] = handler;
