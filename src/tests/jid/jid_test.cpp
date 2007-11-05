@@ -149,7 +149,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   if( fail == 0 )
   {
-    printf( "JID: all tests passed\n" );
+    printf( "JID: OK\n" );
     return 0;
   }
   else

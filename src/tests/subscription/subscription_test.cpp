@@ -174,7 +174,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   if( fail == 0 )
   {
-    printf( "Subscription: all tests passed\n" );
+    printf( "Subscription: OK\n" );
     return 0;
   }
   else

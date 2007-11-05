@@ -92,7 +92,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   if( fail == 0 )
   {
-    printf( "DataFormItem: all tests passed\n" );
+    printf( "DataFormItem: OK\n" );
     return 0;
   }
   else

@@ -89,7 +89,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   if( fail == 0 )
   {
-    printf( "GPGSigned: all tests passed\n" );
+    printf( "GPGSigned: OK\n" );
     return 0;
   }
   else

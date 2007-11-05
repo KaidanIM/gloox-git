@@ -242,7 +242,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   if( fail == 0 )
   {
-    printf( "TLSGnuTLS: all tests passed\n" );
+    printf( "TLSGnuTLS: OK\n" );
     return 0;
   }
   else

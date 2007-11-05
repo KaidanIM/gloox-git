@@ -88,7 +88,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   if( fail == 0 )
   {
-    printf( "VCardUpdate: all tests passed\n" );
+    printf( "VCardUpdate: OK\n" );
     return 0;
   }
   else

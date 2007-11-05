@@ -57,7 +57,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   if( fail == 0 )
   {
-    printf( "StanzaExtensionFactory: all tests passed\n" );
+    printf( "StanzaExtensionFactory: OK\n" );
     return 0;
   }
   else

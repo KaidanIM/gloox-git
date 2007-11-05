@@ -231,7 +231,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   if( fail == 0 )
   {
-    printf( "Message: all tests passed\n" );
+    printf( "Message: OK\n" );
     return 0;
   }
   else

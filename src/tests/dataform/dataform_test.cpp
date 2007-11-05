@@ -46,7 +46,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   if( fail == 0 )
   {
-    printf( "DataForm: all tests passed\n" );
+    printf( "DataForm: OK\n" );
     return 0;
   }
   else

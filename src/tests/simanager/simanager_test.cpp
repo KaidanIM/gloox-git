@@ -137,7 +137,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   if( fail == 0 )
   {
-    printf( "SIManager: all tests passed\n" );
+    printf( "SIManager: OK\n" );
     return 0;
   }
   else

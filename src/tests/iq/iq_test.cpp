@@ -206,7 +206,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   if( fail == 0 )
   {
-    printf( "IQ: all tests passed\n" );
+    printf( "IQ: OK\n" );
     return 0;
   }
   else

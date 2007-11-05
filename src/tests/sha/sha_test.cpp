@@ -77,7 +77,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   if( fail == 0 )
   {
-    printf( "SHA: all tests passed\n" );
+    printf( "SHA: OK\n" );
     return 0;
   }
   else
