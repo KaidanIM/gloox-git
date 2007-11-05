@@ -401,8 +401,9 @@ namespace gloox
      */
     struct Subscriber
     {
-      Subscriber( const std::string& _jid, SubscriptionType _type,
-                                           const std::string& _subid = EmptyString)
+      Subscriber( const JID& _jid,
+                  SubscriptionType _type,
+                  const std::string& _subid = EmptyString)
         : jid( _jid ), type( _type ), subid( _subid ) {}
       const JID jid;
       SubscriptionType type;
@@ -414,7 +415,7 @@ namespace gloox
      */
     struct Affiliate
     {
-      Affiliate( const std::string& _jid, AffiliationType _type )
+      Affiliate( const JID& _jid, AffiliationType _type )
         : jid( _jid ), type( _type ) {}
       const JID jid;
       AffiliationType type;
