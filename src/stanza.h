@@ -77,8 +77,8 @@ namespace gloox
       /**
        * Use this function to add a StanzaExtension to this Stanza.
        * @param se The StanzaExtension to add.
-       * @note The Stanza will become the owner of the StanzaExtension and willtake care
-       * of deletion.
+       * @note The Stanza will become the owner of the StanzaExtension and
+       * will take care of deletion.
        * @since 0.9
        */
       void addExtension( const StanzaExtension* se );
@@ -102,9 +102,11 @@ namespace gloox
       void removeExtensions();
 
       /**
-       * Creates a Tag representation of the Stanza. The Tag is completely independent of the
-       * Stanza and will not be updated when the Stanza is modified.
-       * @return A pointer to a Tag representation. It is the job of the caller to delete the Tag.
+       * Creates a Tag representation of the Stanza. The Tag is completely
+       * independent of the Stanza and will not be updated when the Stanza
+       * is modified.
+       * @return A pointer to a Tag representation. It is the job of the
+       * caller to delete the Tag.
        */
       virtual Tag* tag() const = 0;
 
@@ -130,12 +132,21 @@ namespace gloox
       JID m_from;
       JID m_to;
 
-      static const std::string& findLang( const StringMap* map, const std::string& defaultData,
+      static const std::string& findLang( const StringMap* map,
+                                          const std::string& defaultData,
                                           const std::string& lang );
-      static void setLang( StringMap** map, std::string& defaultLang, const Tag* tag );
-      static void setLang( StringMap** map, std::string& defaultLang,
-                           const std::string& data, const std::string& xmllang );
-      static void getLangs( const StringMap* map, const std::string& defaultData,
+
+      static void setLang( StringMap** map,
+                           std::string& defaultLang,
+                           const Tag* tag );
+
+      static void setLang( StringMap** map,
+                           std::string& defaultLang,
+                           const std::string& data,
+                           const std::string& xmllang );
+
+      static void getLangs( const StringMap* map,
+                            const std::string& defaultData,
                             const std::string& name, Tag* tag );
 
     private:

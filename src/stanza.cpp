@@ -66,14 +66,18 @@ namespace gloox
     util::clearList( m_extensionList );
   }
 
-  void Stanza::setLang( StringMap** map, std::string& defaultLang, const Tag* tag )
+  void Stanza::setLang( StringMap** map,
+                        std::string& defaultLang,
+                        const Tag* tag )
   {
     const std::string& lang = tag->findAttribute( "xml:lang" );
     setLang( map, defaultLang, tag ? tag->cdata() : EmptyString, lang );
   }
 
-  void Stanza::setLang( StringMap** map, std::string& defaultLang,
-                        const std::string& data, const std::string& xmllang )
+  void Stanza::setLang( StringMap** map,
+                        std::string& defaultLang,
+                        const std::string& data,
+                        const std::string& xmllang )
   {
     if( data.empty() )
       return;
@@ -88,7 +92,8 @@ namespace gloox
     }
   }
 
-  const std::string& Stanza::findLang( const StringMap* map, const std::string& defaultData,
+  const std::string& Stanza::findLang( const StringMap* map,
+                                       const std::string& defaultData,
                                        const std::string& lang )
   {
     if( map && lang != "default")
@@ -100,8 +105,10 @@ namespace gloox
     return defaultData;
   }
 
-  void Stanza::getLangs( const StringMap* map, const std::string& defaultData,
-                                const std::string& name, Tag* tag )
+  void Stanza::getLangs( const StringMap* map,
+                         const std::string& defaultData,
+                         const std::string& name,
+                         Tag* tag )
   {
     if( !defaultData.empty() )
       new Tag( tag, name, defaultData );
