@@ -317,7 +317,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   if( fail == 0 )
   {
-    printf( "Presence: all tests passed\n" );
+    printf( "Presence: OK\n" );
     return 0;
   }
   else

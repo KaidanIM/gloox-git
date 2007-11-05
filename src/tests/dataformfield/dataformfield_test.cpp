@@ -298,7 +298,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   if( fail == 0 )
   {
-    printf( "DataFormField: all tests passed\n" );
+    printf( "DataFormField: OK\n" );
     return 0;
   }
   else

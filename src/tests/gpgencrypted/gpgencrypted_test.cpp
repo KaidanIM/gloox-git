@@ -88,7 +88,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   if( fail == 0 )
   {
-    printf( "GPGEncrypted: all tests passed\n" );
+    printf( "GPGEncrypted: OK\n" );
     return 0;
   }
   else

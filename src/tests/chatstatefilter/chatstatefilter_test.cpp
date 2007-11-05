@@ -285,7 +285,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   if( fail == 0 )
   {
-    printf( "ChatStateFilter: all tests passed\n" );
+    printf( "ChatStateFilter: OK\n" );
     return 0;
   }
   else

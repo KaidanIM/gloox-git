@@ -1177,7 +1177,7 @@ class ParserTest : private TagHandler
 
       if( fail == 0 )
       {
-        printf( "Parser: all tests passed\n" );
+        printf( "Parser: OK\n" );
         return 0;
       }
       else

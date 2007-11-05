@@ -43,7 +43,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   if( fail == 0 )
   {
-    printf( "Base64: all tests passed\n" );
+    printf( "Base64: OK\n" );
     return 0;
   }
   else

@@ -42,7 +42,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   if( fail == 0 )
   {
-    printf( "Error: all tests passed\n" );
+    printf( "Error: OK\n" );
     return 0;
   }
   else

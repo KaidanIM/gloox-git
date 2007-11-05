@@ -228,7 +228,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   if( fail == 0 )
   {
-    printf( "MessageEventFilter: all tests passed\n" );
+    printf( "MessageEventFilter: OK\n" );
     return 0;
   }
   else

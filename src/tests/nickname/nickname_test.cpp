@@ -53,7 +53,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   if( fail == 0 )
   {
-    printf( "Nickname: all tests passed\n" );
+    printf( "Nickname: OK\n" );
     return 0;
   }
   else

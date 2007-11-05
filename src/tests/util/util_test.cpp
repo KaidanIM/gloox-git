@@ -94,7 +94,7 @@ int main()
 
   if( fail == 0 )
   {
-    printf( "Util: all tests passed\n" );
+    printf( "Util: OK\n" );
     return 0;
   }
   else

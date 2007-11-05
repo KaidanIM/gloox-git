@@ -82,7 +82,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   if( fail == 0 )
   {
-    printf( "MD5: all tests passed\n" );
+    printf( "MD5: OK\n" );
     return 0;
   }
   else

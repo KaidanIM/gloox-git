@@ -136,7 +136,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   if( fail == 0 )
   {
-    printf( "Prep: all tests passed\n" );
+    printf( "Prep: OK\n" );
     return 0;
   }
   else

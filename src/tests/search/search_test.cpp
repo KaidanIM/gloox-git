@@ -308,7 +308,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   if( fail == 0 )
   {
-    printf( "Search: all tests passed\n" );
+    printf( "Search: OK\n" );
     return 0;
   }
   else

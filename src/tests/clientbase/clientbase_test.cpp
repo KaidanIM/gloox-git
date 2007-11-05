@@ -190,7 +190,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   if( fail == 0 )
   {
-    printf( "ClientBase: all tests passed\n" );
+    printf( "ClientBase: OK\n" );
     return 0;
   }
   else
