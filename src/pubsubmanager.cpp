@@ -444,7 +444,7 @@ namespace gloox
         return;
 
       const std::string& id = m_parent->getID();
-      IQ iq( IQ::Set, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
+      IQ iq( IQ::Get, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
       Tag* def = new Tag( iq.query(), "default" );
       if( type == NodeCollection )
       {
@@ -472,7 +472,6 @@ namespace gloox
       if( config )
       {
         sub->addChild( config->tag() );
-        delete config;
       }
 
       m_resultHandlerTrackMap[id] = handler;
@@ -529,7 +528,6 @@ namespace gloox
           a->addAttribute( "affiliation", util::lookup( (*it).type, affiliationValues ) );
         }
         m_nopTrackMap[id] = node;
-        delete affList;
       }
 
       m_resultHandlerTrackMap[id] = handler;
