@@ -96,7 +96,7 @@ namespace gloox
                                        const std::string& defaultData,
                                        const std::string& lang )
   {
-    if( map && lang != "default")
+    if( map && lang != "default" )
     {
       StringMap::const_iterator it = map->find( lang );
       if( it != map->end() )
