@@ -32,17 +32,22 @@ namespace gloox
     public:
 
       /**
-       *
+       * Stores a retract or item notification.
        */
       struct ItemOperation
       {
         /**
+         * Constructor.
          *
+         * @param remove Whether this is a retract operation or not (ie item).
+         * @param item Item ID of this item.
+         * @param pld Payload for this object (in the case of a non transient
+         * item notification).
          */
-        ItemOperation( bool _remove, const std::string& _item, const Tag* _payload = 0)
-          : remove( _remove ), item( _item ), payload( _payload ) {}
+        ItemOperation( bool remove, const std::string& itemid, const Tag* pld = 0)
+          : retract( remove ), item( itemid ), payload( pld ) {}
 
-        bool remove;
+        bool retract;
         std::string item;
         const Tag* payload;
       };
@@ -71,17 +76,18 @@ namespace gloox
 
       /**
        * Returns the list of subscription IDs for which this notification
-       * is valid. May be 0.
+       * is valid.
        * @return The list of subscription IDs.
        */
-      const StringList* subscriptions() const { return m_subscriptionIDs; }
+      const StringList& subscriptions() const
+        { return m_subscriptionIDs ? *m_subscriptionIDs : m_emptyStringList; }
 
       /**
        * Returns the list of ItemOperations for EventItems(Retract) notification.
-       * May be 0.
        * @return The list of ItemOperations.
        */
-      const ItemOperationList* items() const { return m_itemOperations; }
+      const ItemOperationList& items() const
+        { return m_itemOperations ? *m_itemOperations : m_emptyOperationList; }
 
       /**
        * Returns the node's ID for which the notification is sent.
@@ -108,6 +114,10 @@ namespace gloox
       StringList* m_subscriptionIDs;
       Tag* m_config;
       ItemOperationList* m_itemOperations;
+      std::string m_collection;
+
+      static const ItemOperationList m_emptyOperationList;
+      static const StringList m_emptyStringList;
 
   };
 

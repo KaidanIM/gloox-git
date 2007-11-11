@@ -18,7 +18,7 @@ namespace gloox
 {
   static const char* eventTypeValues[] = {
     "collection",
-    "configure",
+    "configuration",
     "delete",
     "items",
     "items",
@@ -34,19 +34,21 @@ namespace gloox
 
     const TagList& events = event->children();
     TagList::const_iterator it = events.begin();
+    const Tag* tag = 0;
     for( ; it != events.end(); ++it )
     {
-      const Tag* tag = (*it);
-      m_type = (PubSub::EventType)util::lookup( tag->name(), eventTypeValues );
+      tag = (*it);
+      PubSub::EventType type = (PubSub::EventType)util::lookup( tag->name(), eventTypeValues );
 
-      switch( m_type )
+      switch( type )
       {
         case PubSub::EventCollection:
           tag = tag->findChild( "node" );
           if( tag )
           {
             m_node = tag->findAttribute( "id" );
-            m_config = tag->findChild( "x" );
+            if( ( m_config = tag->findChild( "x" ) ) )
+              m_config = m_config->clone();
           }
           break;
 
@@ -54,15 +56,16 @@ namespace gloox
         case PubSub::EventDelete:
         case PubSub::EventPurge:
           m_node = tag->findAttribute( "node" );
-          m_config = tag->findChild( "x" );
-          if( m_config )
+          if( type == PubSub::EventConfigure
+              && ( m_config = tag->findChild( "x" ) ) )
             m_config = m_config->clone();
           break;
 
         case PubSub::EventItems:
         case PubSub::EventItemsRetract:
         {
-          m_itemOperations = new ItemOperationList();
+          if( !m_itemOperations )
+            m_itemOperations = new ItemOperationList();
 
           m_node = tag->findAttribute( "node" );
           const TagList& items = tag->children();
@@ -71,7 +74,7 @@ namespace gloox
           {
             tag = (*itt);
 
-            const Tag* x = tag->findChild( "x" );
+            const Tag* x = tag->findChild( "entry" );
             ItemOperation* op = new ItemOperation( tag->name() == "retract",
                                                    tag->findAttribute( "id" ),
                                                    x ? x->clone() : 0 );
@@ -81,8 +84,7 @@ namespace gloox
         }
 
         case PubSub::EventUnknown:
-        {
-          if( m_type == PubSub::EventUnknown )
+          if( type == PubSub::EventUnknown )
           {
             if( tag->name() != "headers" || m_subscriptionIDs != 0 )
             {
@@ -96,12 +98,18 @@ namespace gloox
             TagList::const_iterator ith = headers.begin();
             for( ; ith != headers.end(); ++ith )
             {
-              if( (*ith)->hasAttribute( "name", "pubsub#subid" ) )
+              const std::string& name = (*ith)->findAttribute( "name" );
+              if( name == "pubsub#subid" )
                 m_subscriptionIDs->push_back( (*ith)->cdata() );
+              else if( name == "pubsub#collection" )
+                m_collection = (*ith)->cdata();
             }
           }
-        }
+
+        default:
+          continue;
       }
+      m_type = type;
     }
 
     m_valid = true;
@@ -113,7 +121,12 @@ namespace gloox
     delete m_config;
     if( m_itemOperations )
     {
-      util::clearList( *m_itemOperations );
+      ItemOperationList::iterator it = m_itemOperations->begin();
+      for( ; it != m_itemOperations->end(); ++it )
+      {
+        delete (*it)->payload;
+        delete (*it);
+      }
       delete m_itemOperations;
     }
   }
@@ -139,28 +152,17 @@ namespace gloox
       case PubSub::EventCollection:
       {
         item = new Tag( child, "node", "id", m_node );
-        if( m_config )
-          item->addChildCopy( item );
-        break;
-      }
-
-      case PubSub::EventDelete:
-      {
-        child->addAttribute( "node", m_node );
+        item->addChildCopy( m_config );
         break;
       }
 
       case PubSub::EventPurge:
-      {
-        child->addAttribute( "node", m_node );
-        break;
-      }
-
+      case PubSub::EventDelete:
       case PubSub::EventConfigure:
-      {
-        item = new Tag( child, "node", m_node );
+        child->addAttribute( "node", m_node );
+        if( m_type == PubSub::EventConfigure )
+          child->addChildCopy( m_config );
         break;
-      }
 
       case PubSub::EventItems:
       case PubSub::EventItemsRetract:
@@ -174,7 +176,7 @@ namespace gloox
           for( ; itt != m_itemOperations->end(); ++itt )
           {
             op = (*itt);
-            item = new Tag( child, op->remove ? "retract" : "item", "id", op->item );
+            item = new Tag( child, op->retract ? "retract" : "item", "id", op->item );
             if( op->payload )
               item->addChildCopy( op->payload );
           }
@@ -187,7 +189,7 @@ namespace gloox
         return 0;
     }
 
-    if( m_subscriptionIDs )
+    if( m_subscriptionIDs || !m_collection.empty() )
     {
       Tag* headers = new Tag( event, "headers", XMLNS, "http://jabber.org/protocol/shim" );
       StringList::const_iterator it = m_subscriptionIDs->begin();
@@ -196,6 +198,9 @@ namespace gloox
         (new Tag( headers, "header", "name", "pubsub#subid" ))->setCData( (*it) );
       }
 
+      if( !m_collection.empty() )
+        (new Tag( headers, "header", "name", "pubsub#collection" ) )
+          ->setCData( m_collection );
     }
 
     return event;
