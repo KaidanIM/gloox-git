@@ -307,6 +307,7 @@ src/tests/prep/Makefile
 src/tests/presence/Makefile
 src/tests/pubsubmanager/Makefile
 src/tests/search/Makefile
+src/tests/sepubsubevent/Makefile
 src/tests/sha/Makefile
 src/tests/simanager/Makefile
 src/tests/stanzaextensionfactory/Makefile
