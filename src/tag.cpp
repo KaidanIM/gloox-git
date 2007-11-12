@@ -27,6 +27,69 @@
 namespace gloox
 {
 
+  Tag::Attribute::Attribute( Tag* parent, const std::string& name, const std::string& value,
+                             const std::string& xmlns )
+    : m_parent( parent )
+  {
+    if( m_parent )
+      m_parent->addAttribute( this );
+
+    init( name, value, xmlns );
+  }
+
+  Tag::Attribute::Attribute( const std::string& name, const std::string& value,
+                             const std::string& xmlns )
+    : m_parent( 0 )
+  {
+    init( name, value, xmlns );
+  }
+
+  Tag::Attribute::Attribute( const Attribute& attr )
+    : m_parent( attr.m_parent ), m_name( attr.m_name ), m_value( attr.m_value ),
+      m_xmlns( attr.m_xmlns ), m_prefix( attr.m_prefix )
+  {
+  }
+
+  void Tag::Attribute::init( const std::string& name, const std::string& value,
+                             const std::string& xmlns )
+  {
+    if( util::checkUTF8( name ) )
+      m_name = name;
+
+    if( util::checkUTF8( value ) )
+      m_value = value;
+
+    if( util::checkUTF8( xmlns ) )
+      m_xmlns = xmlns;
+  }
+
+  bool Tag::Attribute::setValue( const std::string& value )
+  {
+    if( !util::checkUTF8( value ) )
+      return false;
+
+    m_value = value;
+    return true;
+  }
+
+  bool Tag::Attribute::setXmlns( const std::string& xmlns )
+  {
+    if( !util::checkUTF8( xmlns ) )
+      return false;
+
+    m_xmlns = m_xmlns;
+    return true;
+  }
+
+  bool Tag::Attribute::setPrefix( const std::string& prefix )
+  {
+    if( !util::checkUTF8( prefix ) )
+      return false;
+
+    m_prefix = prefix;
+    return true;
+  }
+
   const std::string& Tag::Attribute::xmlns() const
   {
     if( !m_xmlns.empty() )
@@ -51,6 +114,9 @@ namespace gloox
 
   const std::string Tag::Attribute::xml() const
   {
+    if( m_name.empty() )
+      return EmptyString;
+
     std::string xml;
     xml += ' ';
     if( !m_prefix.empty() )
@@ -66,24 +132,35 @@ namespace gloox
     return xml;
   }
 
+  /*
+   * Tag
+   */
+
   Tag::Tag( const std::string& name, const std::string& cdata )
     : m_parent( 0 ), m_children( 0 ), m_cdata( 0 ),
       m_attribs( 0 ), m_nodes( 0 ),
-      m_name( name ), m_xmlnss( 0 ), m_valid( true )
+      m_xmlnss( 0 )
   {
-    addCData( cdata );
-    m_valid = !m_name.empty();
+    if( util::checkUTF8( cdata ) )
+      addCData( cdata );
+
+    if( util::checkUTF8( name ) )
+      m_name = name;
   }
 
   Tag::Tag( Tag* parent, const std::string& name, const std::string& cdata )
     : m_parent( parent ), m_children( 0 ), m_cdata( 0 ),
       m_attribs( 0 ), m_nodes( 0 ),
-      m_name( name ), m_xmlnss( 0 ), m_valid( true )
+      m_xmlnss( 0 )
   {
     if( m_parent )
       m_parent->addChild( this );
-    addCData( cdata );
-    m_valid = !m_name.empty();
+
+    if( util::checkUTF8( cdata ) )
+      addCData( cdata );
+
+    if( util::checkUTF8( name ) )
+      m_name = name;
   }
 
   Tag::Tag( const std::string& name,
@@ -91,10 +168,12 @@ namespace gloox
             const std::string& value )
     : m_parent( 0 ), m_children( 0 ), m_cdata( 0 ),
       m_attribs( 0 ), m_nodes( 0 ),
-      m_name( name ), m_xmlnss( 0 ), m_valid( true )
+      m_name( name ), m_xmlnss( 0 )
   {
-    addAttribute( attrib, value );
-    m_valid = !m_name.empty();
+    addAttribute( attrib, value ); // implicitly UTF-8 checked
+
+    if( util::checkUTF8( name ) )
+      m_name = name;
   }
 
   Tag::Tag( Tag* parent, const std::string& name,
@@ -102,17 +181,20 @@ namespace gloox
                          const std::string& value )
     : m_parent( parent ), m_children( 0 ), m_cdata( 0 ),
       m_attribs( 0 ), m_nodes( 0 ),
-      m_name( name ), m_xmlnss( 0 ), m_valid( true )
+      m_name( name ), m_xmlnss( 0 )
   {
     if( m_parent )
       m_parent->addChild( this );
-    addAttribute( attrib, value );
-    m_valid = !m_name.empty();
+
+    addAttribute( attrib, value ); // implicitly UTF-8 checked
+
+    if( util::checkUTF8( name ) )
+      m_name = name;
   }
 
   Tag::Tag( Tag* tag )
     : m_parent( 0 ), m_children( 0 ), m_cdata( 0 ), m_attribs( 0 ),
-      m_nodes( 0 ), m_xmlnss( 0 ), m_valid( false )
+      m_nodes( 0 ), m_xmlnss( 0 )
   {
     if( !tag )
       return;
@@ -124,7 +206,6 @@ namespace gloox
     m_name = tag->m_name;
     m_xmlns = tag->m_xmlns;
     m_xmlnss = tag->m_xmlnss;
-    m_valid = tag->m_valid;
 
     tag->m_nodes = 0;
     tag->m_cdata = 0;
@@ -222,7 +303,7 @@ namespace gloox
 
   const std::string Tag::xml() const
   {
-    if( !m_valid )
+    if( m_name.empty() )
       return EmptyString;
 
     std::string xml = "<";
@@ -272,10 +353,16 @@ namespace gloox
     return xml;
   }
 
-  void Tag::addAttribute( Attribute* attr )
+  bool Tag::addAttribute( Attribute* attr )
   {
     if( !attr )
-      return;
+      return false;
+
+    if( !(*attr) )
+    {
+      delete attr;
+      return false;
+    }
 
     if( !m_attribs )
       m_attribs = new AttributeList();
@@ -288,57 +375,59 @@ namespace gloox
       {
         delete (*it);
         (*it) = attr;
-        return;
+        return true;
       }
     }
 
     m_attribs->push_back( attr );
+
+    return true;
   }
 
-  void Tag::addAttribute( const std::string& name, const std::string& value )
+  bool Tag::addAttribute( const std::string& name, const std::string& value )
   {
     if( name.empty() || value.empty() )
-      return;
+      return false;
 
-    addAttribute( new Attribute( name, value ) );
+    return addAttribute( new Attribute( name, value ) );
   }
 
-  void Tag::addAttribute( const std::string& name, int value )
+  bool Tag::addAttribute( const std::string& name, int value )
   {
-    if( !name.empty() )
-    {
+    if( name.empty() )
+      return false;
+
 #ifdef _WIN32_WCE
-      const int len = 4 + (int)std::log10( value ? value : 1 ) + 1;
-      char* tmp = new char[len];
-      sprintf( tmp, "%d", value );
-      std::string ret( tmp, len );
-      addAttribute( name, ret );
-      delete[] tmp;
+    const int len = 4 + (int)std::log10( value ? value : 1 ) + 1;
+    char* tmp = new char[len];
+    sprintf( tmp, "%d", value );
+    std::string ret( tmp, len );
+    delete[] tmp;
+    return addAttribute( name, ret );
 #else
-      std::ostringstream oss;
-      oss << value;
-      addAttribute( name, oss.str() );
+    std::ostringstream oss;
+    oss << value;
+    return addAttribute( name, oss.str() );
 #endif
-    }
   }
 
-  void Tag::addAttribute( const std::string& name, long value )
+  bool Tag::addAttribute( const std::string& name, long value )
   {
-    if( !name.empty() )
-    {
+    if( name.empty() )
+      return false;
+
 #ifdef _WIN32_WCE
-      const int len = 4 + (int)std::log10( value ? value : 1 ) + 1;
-      char* tmp = new char[len];
-      sprintf( tmp, "%ld", value );
-      std::string ret( tmp, len );
-      addAttribute( name, ret );
-      delete[] tmp;
+    const int len = 4 + (int)std::log10( value ? value : 1 ) + 1;
+    char* tmp = new char[len];
+    sprintf( tmp, "%ld", value );
+    std::string ret( tmp, len );
+    delete[] tmp;
+    return addAttribute( name, ret );
 #else
-      std::ostringstream oss;
-      oss << value;
-      addAttribute( name, oss.str() );
+    std::ostringstream oss;
+    oss << value;
+    return addAttribute( name, oss.str() );
 #endif
-    }
   }
 
   void Tag::setAttributes( const AttributeList& attributes )
@@ -379,10 +468,10 @@ namespace gloox
     addChild( child->clone() );
   }
 
-  void Tag::setCData( const std::string& cdata )
+  bool Tag::setCData( const std::string& cdata )
   {
-    if( cdata.empty() )
-      return;
+    if( cdata.empty() || !util::checkUTF8( cdata ) )
+      return false;
 
     if( !m_cdata )
       m_cdata = new StringPList();
@@ -406,13 +495,13 @@ namespace gloox
       }
     }
 
-    addCData( cdata );
+    return addCData( cdata );
   }
 
-  void Tag::addCData( const std::string& cdata )
+  bool Tag::addCData( const std::string& cdata )
   {
-    if( cdata.empty() )
-      return;
+    if( cdata.empty() || !util::checkUTF8( cdata ) )
+      return false;
 
     if( !m_cdata )
       m_cdata = new StringPList();
@@ -422,6 +511,7 @@ namespace gloox
     std::string* str = new std::string( cdata );
     m_cdata->push_back( str );
     m_nodes->push_back( new Node( TypeString, str ) );
+    return true;
   }
 
   const std::string Tag::cdata() const
@@ -449,12 +539,15 @@ namespace gloox
     return m_attribs ? *m_attribs : empty;
   }
 
-  void Tag::setXmlns( const std::string& xmlns, const std::string& prefix )
+  bool Tag::setXmlns( const std::string& xmlns, const std::string& prefix )
   {
+    if( !util::checkUTF8( xmlns ) || !util::checkUTF8( prefix ) )
+      return false;
+
     if( prefix.empty() )
     {
       m_xmlns = xmlns;
-      addAttribute( XMLNS, m_xmlns );
+      return addAttribute( XMLNS, m_xmlns );
     }
     else
     {
@@ -463,7 +556,7 @@ namespace gloox
 
       (*m_xmlnss)[prefix] = xmlns;
 
-      addAttribute( XMLNS + ":" + prefix, xmlns );
+      return addAttribute( XMLNS + ":" + prefix, xmlns );
     }
   }
 
@@ -487,6 +580,15 @@ namespace gloox
     }
 
     return m_parent ? m_parent->xmlns( prefix ) : EmptyString;
+  }
+
+  bool Tag::setPrefix( const std::string& prefix )
+  {
+    if( !util::checkUTF8( prefix ) )
+      return false;
+
+    m_prefix = prefix;
+    return true;
   }
 
   const std::string& Tag::prefix( const std::string& xmlns ) const
@@ -587,7 +689,7 @@ namespace gloox
 
   Tag* Tag::clone() const
   {
-    Tag* t = new Tag( name() );
+    Tag* t = new Tag( m_name );
     t->m_xmlns = m_xmlns;
     t->m_prefix = m_prefix;
 

@@ -150,6 +150,13 @@ namespace gloox
      */
     const std::string escape( std::string what );
 
+    /**
+     * Checks whether the given input is valid UTF-8.
+     * @param data The data to check for validity.
+     * @return @@b True if the input is valid UTF-8, @b false otherwise.
+     */
+    bool checkUTF8( const std::string& data );
+
   }
 
 }
