@@ -65,37 +65,27 @@ namespace gloox
            * default namespace, an appropriate and unique namespace declaration (prefix) will
            * be added to the Tag and the attribute will be prefixed accordingly.
            * @param parent The Tag to attach the Attribute to.
-           * @param name The attribute's name.
-           * @param value The attribute's value.
-           * @param xmlns The attribute's namespace.
+           * @param name The attribute's name. Invalid (non-UTF-8) input will be ignored.
+           * @param value The attribute's value. Invalid (non-UTF-8) input will be ignored.
+           * @param xmlns The attribute's namespace. Invalid (non-UTF-8) input will be ignored.
            */
           Attribute( Tag* parent, const std::string& name, const std::string& value,
-                     const std::string& xmlns = EmptyString )
-            : m_parent( parent ), m_name( name ), m_value( value ), m_xmlns( xmlns )
-          {
-            if( m_parent )
-              m_parent->addAttribute( this );
-          }
+                     const std::string& xmlns = EmptyString );
 
           /**
            * Creates a new Attribute from @c name, @c value and optional @c xmlns.
-           * @param name The attribute's name.
-           * @param value The attribute's value.
-           * @param xmlns The attribute's namespace.
+           * @param name The attribute's name. Invalid (non-UTF-8) input will be ignored.
+           * @param value The attribute's value. Invalid (non-UTF-8) input will be ignored.
+           * @param xmlns The attribute's namespace. Invalid (non-UTF-8) input will be ignored.
            */
           Attribute( const std::string& name, const std::string& value,
-                     const std::string& xmlns = EmptyString )
-            : m_parent( 0 ), m_name( name ), m_value( value ), m_xmlns( xmlns )
-            {}
+                     const std::string& xmlns = EmptyString );
 
           /**
            * Copy constructor.
            * @param attr The Attribute to copy.
            */
-          Attribute( const Attribute& attr )
-            : m_parent( attr.m_parent ), m_name( attr.m_name ), m_value( attr.m_value ),
-              m_xmlns( attr.m_xmlns ), m_prefix( attr.m_prefix )
-            {}
+          Attribute( const Attribute& attr );
 
           /**
            * Destructor.
@@ -117,8 +107,10 @@ namespace gloox
           /**
            * Sets the attribute's value.
            * @param value The new value.
+           * @return @b True if the input is valid UTF-8, @b false otherwise. Invalid
+           * input will be ignored.
            */
-          void setValue( const std::string& value ) { m_value = value; }
+          bool setValue( const std::string& value );
 
           /**
            * Returns the attribute's namespace.
@@ -129,14 +121,18 @@ namespace gloox
           /**
            * Sets the attribute's namespace.
            * @param value The new namespace.
+           * @return @b True if the input is valid UTF-8, @b false otherwise. Invalid
+           * input will be ignored.
            */
-          void setXmlns( const std::string& xmlns ) { m_xmlns = xmlns; }
+          bool setXmlns( const std::string& xmlns );
 
           /**
            * Sets the attribute's namespace prefix.
            * @param value The new namespace prefix.
+           * @return @b True if the input is valid UTF-8, @b false otherwise. Invalid
+           * input will be ignored.
            */
-          void setPrefix( const std::string& prefix ) { m_prefix = prefix; }
+          bool setPrefix( const std::string& prefix );
 
           /**
            * Returns the attribute's namespace prefix.
@@ -164,7 +160,14 @@ namespace gloox
           bool operator!=( const Attribute &right ) const
             { return !( *this == right ); }
 
+          /**
+           * Returns @b true if the Attribute is valid, @b false otherwise.
+           */
+          operator bool() const { return !m_name.empty(); }
+
         private:
+          void init( const std::string& name, const std::string& value,
+                     const std::string& xmlns );
           Tag* m_parent;
           std::string m_name;
           std::string m_value;
@@ -229,9 +232,11 @@ namespace gloox
       /**
        * Sets the Tag's namespace prefix.
        * @param prefix The namespace prefix.
+       * @return @b True if the input is valid UTF-8, @b false otherwise. Invalid
+       * input will be ignored.
        * @since 1.0
        */
-      void setPrefix( const std::string& prefix ) { m_prefix = prefix; }
+      bool setPrefix( const std::string& prefix );
 
       /**
        * Returns the namespace prefix for this Tag, if any.
@@ -263,9 +268,11 @@ namespace gloox
        * is empty.
        * @param xmlns The namespace value.
        * @param prefix An optional namespace prefix.
+       * @return @b True if the input is valid UTF-8, @b false otherwise. Invalid
+       * input will be ignored.
        * @since 1.0
        */
-      void setXmlns( const std::string& xmlns, const std::string& prefix = EmptyString );
+      bool setXmlns( const std::string& xmlns, const std::string& prefix = EmptyString );
 
       /**
        * Returns the namespace for this element.
@@ -299,40 +306,50 @@ namespace gloox
        * Attribute and take care of deletion. If an Attribute with the same name already exists,
        * it will be replaced by the new one.
        * @param attr A pointer to the attribute to add.
+       * @return @b True if the input is valid UTF-8, @b false otherwise. Invalid
+       * input will be ignored.
        * @since 1.0
        * @note Do not use this function to set XML namespaces, use setXmlns() instead.
        */
-      void addAttribute( Attribute* attr );
+      bool addAttribute( Attribute* attr );
 
       /**
        * Use this function to add a new attribute to the tag.
        * @param name The name of the attribute.
        * @param value The value of the attribute.
        * @note Do not use this function to set XML namespaces, use setXmlns() instead.
+       * @return @b True if the input is valid UTF-8, @b false otherwise. Invalid
+       * input will be ignored.
        */
-      void addAttribute( const std::string& name, const std::string& value );
+      bool addAttribute( const std::string& name, const std::string& value );
 
       /**
        * Use this function to add a new attribute to the tag. The value is an @c int here.
        * @param name The name of the attribute.
        * @param value The value of the attribute.
        * @note Do not use this function to set XML namespaces, use setXmlns() instead.
+       * @return @b True if the input is valid UTF-8, @b false otherwise. Invalid
+       * input will be ignored.
        * @since 0.8
        */
-      void addAttribute( const std::string& name, int value );
+      bool addAttribute( const std::string& name, int value );
 
       /**
        * Use this function to add a new attribute to the tag. The value is a @c long here.
        * @param name The name of the attribute.
        * @param value The value of the attribute.
+       * @return @b True if the input is valid UTF-8, @b false otherwise. Invalid
+       * input will be ignored.
        * @note Do not use this function to set XML namespaces, use setXmlns() instead.
        * @since 0.9
        */
-      void addAttribute( const std::string& name, long value );
+      bool addAttribute( const std::string& name, long value );
 
       /**
        * Sets the given attributes. Any existing attributes are lost.
        * @param attributes The attributes to set.
+       * @return @b True if the input is valid UTF-8, @b false otherwise. Invalid
+       * input will be ignored.
        * @note Do not use this function to set XML namespaces, use setXmlns() instead.
        * @since 0.9
        */
@@ -354,14 +371,18 @@ namespace gloox
       /**
        * Sets the XML character data for this Tag.
        * @param cdata The new cdata.
+       * @return @b True if the input is valid UTF-8, @b false otherwise. Invalid
+       * input will be ignored.
        */
-      void setCData( const std::string& cdata );
+      bool setCData( const std::string& cdata );
 
       /**
        * Adds the string to the existing XML character data for this Tag.
        * @param cdata The additional cdata.
+       * @return @b True if the input is valid UTF-8, @b false otherwise. Invalid
+       * input will be ignored.
        */
-      void addCData( const std::string& cdata );
+      bool addCData( const std::string& cdata );
 
       /**
        * Use this function to retrieve the name of an element.
@@ -560,7 +581,7 @@ namespace gloox
       /**
        * Returns @b true if the Tag is valid, @b false otherwise.
        */
-      operator bool() const { return m_valid; }
+      operator bool() const { return !m_name.empty(); }
 
     private:
       /**
@@ -680,8 +701,6 @@ namespace gloox
       bool evaluateEquals( Tag* token );
 
       static void add( TagList& one, const TagList& two );
-
-      bool m_valid;
   };
 
 }

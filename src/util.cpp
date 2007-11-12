@@ -63,6 +63,17 @@ namespace gloox
       return what;
     }
 
+    bool checkUTF8( const std::string& data )
+    {
+      if( data.empty() )
+        return true;
+
+      std::string::const_iterator it = data.begin();
+      for( ; it != data.end() && (*it) != 0xc0 && (*it) != 0xc1 && (*it) < 0xf5; ++it );
+
+      return ( it == data.end() );
+    }
+
   }
 
 }
