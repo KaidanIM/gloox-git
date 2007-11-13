@@ -141,8 +141,7 @@ namespace gloox
       m_attribs( 0 ), m_nodes( 0 ),
       m_xmlnss( 0 )
   {
-    if( util::checkUTF8( cdata ) )
-      addCData( cdata );
+    addCData( cdata ); // implicitly UTF-8 checked
 
     if( util::checkUTF8( name ) )
       m_name = name;
@@ -156,8 +155,7 @@ namespace gloox
     if( m_parent )
       m_parent->addChild( this );
 
-    if( util::checkUTF8( cdata ) )
-      addCData( cdata );
+    addCData( cdata ); // implicitly UTF-8 checked
 
     if( util::checkUTF8( name ) )
       m_name = name;
