@@ -77,15 +77,13 @@ if test "$schannel" == "yes"; then
   ssl=yes
   case "$host_os" in
     *mingw*)
-        SSL_LIBS="-lwsock32 -lgdi32 -lcrypt32 -lsecur32 -ldnsapi";;
+        LIBS="${LIBS} -lwsock32 -lgdi32 -lcrypt32 -lsecur32 -ldnsapi";;
     *)
         echo "*"
         echo "* You provided the '--with-schannel' switch. SChannel is only available in MinGW. Aborting."
         echo "*"
         exit;;
   esac
-  LIBS_TMP=${LIBS}
-  LIBS="${LIBS} ${SSL_LIBS}"
   AC_MSG_CHECKING([if SChannel should be used])
   AC_MSG_RESULT($schannel)
 fi
@@ -125,19 +123,12 @@ if test "$ssl" == "no"; then
       LDFLAGS="${LDFLAGS} -L$openssl/lib"
       CPPFLAGS="${CPPFLAGS} -I$openssl/include"
     fi
-dnl OpenSSL on MinGW requires additional Windows libraries to compile
-    case "$host_os" in
-      *mingw*)
-         SSL_LIBS="-lcrypto -lwsock32 -lgdi32";;
-      *)
-         SSL_LIBS="-lcrypto";;
-    esac
     LIBS_TMP=${LIBS}
-    LIBS="${LIBS} -lssl ${SSL_LIBS}"
+    LIBS="${LIBS} -lssl -lcrypto"
     AC_CHECK_HEADER(openssl/ssl.h,
     AC_CHECK_LIB(ssl, SSL_library_init,
             [openssl=yes], openssl=no),
-            [openssl=no LIBS=${TMP_LIBS}])
+            [openssl=no LIBS=${LIBS_TMP}])
   fi
   if test "$openssl" != "no" ; then
     AC_DEFINE(HAVE_OPENSSL, 1, [Define to 1 if you want TLS support (OpenSSL). Undefine HAVE_GNUTLS.])
@@ -296,7 +287,7 @@ AC_C_INLINE
 
 case "$host_os" in
   *mingw*)
-     LIBS="-lwsock32 -lgdi32";;
+     LIBS="${LIBS} -lwsock32 -lgdi32";;
   *)
      ;;
 esac
