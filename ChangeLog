@@ -3,6 +3,7 @@ v0.9.7 -- xx yyy 2007
 - InbandBytestreamManager: marked as deprecated
 - InbandBytestreamManager: fixed ID tracking
 - MessageSession: added setThreadID()
+- confogure: support schannel
 
 
 v0.9.6.1 -- 25 Oct 2007
