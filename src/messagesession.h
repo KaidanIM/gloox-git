@@ -189,6 +189,13 @@ namespace gloox
       const std::string& threadID() const { return m_thread; }
 
       /**
+       * Use this function to set the session's thread ID if e.g. a specific thread is
+       * continued. It shpuld not normally be needed to set the thread ID manually.
+       * @param thread The new thread ID.
+       */
+      void setThreadID( const std::string& thread ) { m_thread = thread; }
+
+      /**
        * Use this function to associate a MessageHandler with this MessageSession.
        * The MessageHandler will receive all messages sent from this MessageSession's
        * remote contact.
