@@ -3,7 +3,7 @@ v0.9.7 -- 13 Nov 2007
 - InbandBytestreamManager: marked as deprecated
 - InbandBytestreamManager: fixed ID tracking
 - MessageSession: added setThreadID()
-- confogure: support schannel
+- better overall MinGW support
 
 
 v0.9.6.1 -- 25 Oct 2007
