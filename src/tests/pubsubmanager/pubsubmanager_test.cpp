@@ -120,11 +120,11 @@ class ClientBase
     int m_context;
 };
 
-static const std::string setheader = 
+static const std::string setheader =
     "<iq to='aaa@bbb.ccc' id='id' type='set'>"
       "<pubsub xmlns='http://jabber.org/protocol/pubsub'>";
 
-static const std::string getheader = 
+static const std::string getheader =
     "<iq to='aaa@bbb.ccc' id='id' type='get'>"
       "<pubsub xmlns='http://jabber.org/protocol/pubsub'>";
 
@@ -228,7 +228,7 @@ static const std::string testValues [][2] =
                     "<field var='pubsub#title'><value>Princely Musings (Atom)</value></field>"
                 "</x>"
             "</configure>"
-        "</pubsub></iq>" }, 
+        "</pubsub></iq>" },
 
   { "get default node config",
     "<iq to='aaa@bbb.ccc' id='id' type='get'>"
@@ -240,7 +240,7 @@ static const std::string testValues [][2] =
     void ClientBase::send( const IQ& iq, IqHandler*, int )
     {
       tag = iq.tag();
-      if( !tag || tag->xml() != testValues[m_context][1] ) 
+      if( !tag || tag->xml() != testValues[m_context][1] )
       {
         printf( "test failed: %s\n", testValues[m_context][0].c_str() );
         printf( "- %s\n", testValues[m_context][1].c_str() );
@@ -285,7 +285,7 @@ int main()
 
   cb->setTest( GetSubscriptionOptions );
   psm->getSubscriptionOptions( jid, jid2, node, rh );
-  
+
   DataForm* df = new DataForm( TypeSubmit );
   df->addField( DataFormField::TypeHidden, "FORM_TYPE",
       "http://jabber.org/protocol/pubsub#subscribe_options" );
@@ -330,6 +330,8 @@ int main()
   psm->getDefaultNodeConfig( jid, PubSub::NodeLeaf, rh );
 
 
+  delete rh;
+  delete psm;
 
 
 
@@ -338,6 +340,8 @@ int main()
     printf( "PubSub::Manager: %d test(s) failed\n", cb->failed );
   else
     printf( "PubSub::Manager: OK\n" );
+
+  delete cb;
 
 }
 

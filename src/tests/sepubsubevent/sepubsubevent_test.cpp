@@ -131,23 +131,26 @@ int main()
   t = 0;
   tag = 0;
 
+  Tag* tmp = 0;
   tag = new Tag( "event", XMLNS, XMLNS_PUBSUB_EVENT );
   t = new Tag( tag, "configuration", "node", "princely_musings" );
 
   pse = new SEPubSubEvent( tag );
-  if( !pse || !(t = pse->tag()) || *t != *tag )
+  if( !pse || !(tmp = pse->tag()) || *tmp != *tag )
   {
     ++failed;
-    if( t )
-      printf( "t1: %s\n", t->xml().c_str() );
+    if( tmp )
+      printf( "t1: %s\n", tmp->xml().c_str() );
     printf( "t2: %s\n", tag->xml().c_str() );
-    printf( "retract w/ subscription id test failed\n" );
+    printf( "configuration w/o payload failed\n" );
   }
+  delete tmp;
   delete pse;
+  tmp = 0;
   pse = 0;
 
 
-  
+
   t = new Tag( t, "x", XMLNS, "jabber:x:data" );
   t->addAttribute( "type", "result" );
   t3 = new Tag( t, "field", "var", "FORM_TYPE" );
@@ -210,19 +213,21 @@ int main()
   t3 = new Tag( t, "node", "id", "princely_musings" );
 
   pse = new SEPubSubEvent( tag );
-  if( !pse || !(t = pse->tag()) || *t != *tag )
+  if( !pse || !(tmp = pse->tag()) || *tmp != *tag )
   {
     ++failed;
-    if( t )
-      printf( "t1: %s\n", t->xml().c_str() );
+    if( tmp )
+      printf( "t1: %s\n", tmp->xml().c_str() );
     printf( "t2: %s\n", tag->xml().c_str() );
     printf( "collection test failed\n" );
   }
+  delete tmp;
   delete pse;
+  tmp = 0;
   pse = 0;
 
 
-  
+
   t = new Tag( t3, "x", XMLNS, "jabber:x:data" );
   t->addAttribute( "type", "result" );
   t3 = new Tag( t, "field", "var", "FORM_TYPE" );
