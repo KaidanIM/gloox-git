@@ -67,30 +67,54 @@ fi
 AC_MSG_CHECKING([if Libidn should be used])
 AC_MSG_RESULT($libidn)
 
+ssl=no
+
+dnl schannel
+AC_ARG_WITH(schannel, AC_HELP_STRING([--with-schannel],
+      [Support Stream Encryption (win32 only)]),
+      schannel=yes, schannel=no)
+if test "$schannel" == "yes"; then
+  ssl=yes
+  case "$host_os" in
+    *mingw*)
+        LIBS="${LIBS} -lwsock32 -lgdi32 -lcrypt32 -lsecur32 -ldnsapi";;
+    *)
+        echo "*"
+        echo "* You provided the '--with-schannel' switch. SChannel is only available in MinGW. Aborting."
+        echo "*"
+        exit;;
+  esac
+  AC_MSG_CHECKING([if SChannel should be used])
+  AC_MSG_RESULT($schannel)
+fi
+
 dnl GnuTLS
-AC_ARG_WITH(gnutls, AC_HELP_STRING([--with-gnutls=[DIR]],
-      [Support Stream Encryption (needs GnuTLS)]),
-      gnutls=$withval, gnutls=yes)
-if test "$gnutls" != "no"; then
-  if test "$gnutls" != "yes"; then
-    LDFLAGS="${LDFLAGS} -L$gnutls/lib"
-    CPPFLAGS="${CPPFLAGS} -I$gnutls/include"
+if test "$ssl" == "no"; then
+  AC_ARG_WITH(gnutls, AC_HELP_STRING([--with-gnutls=[DIR]],
+        [Support Stream Encryption (needs GnuTLS)]),
+        gnutls=$withval, gnutls=yes)
+  if test "$gnutls" != "no"; then
+    if test "$gnutls" != "yes"; then
+      LDFLAGS="${LDFLAGS} -L$gnutls/lib"
+      CPPFLAGS="${CPPFLAGS} -I$gnutls/include"
+    fi
+    AC_CHECK_HEADER(gnutls/gnutls.h,
+    AC_CHECK_LIB(gnutls, gnutls_check_version,
+            [gnutls=yes LIBS="${LIBS} `libgnutls-config --libs`"], gnutls=no),
+            gnutls=no)
   fi
-  AC_CHECK_HEADER(gnutls/gnutls.h,
-  AC_CHECK_LIB(gnutls, gnutls_check_version,
-           [gnutls=yes LIBS="${LIBS} `libgnutls-config --libs`"], gnutls=no),
-           gnutls=no)
+  if test "$gnutls" != "no" ; then
+    AC_DEFINE(HAVE_GNUTLS, 1, [Define to 1 if you want TLS support (GnuTLS). Undefine HAVE_OPENSSL.])
+    ssl=yes
+  else
+    AC_MSG_WARN([GnuTLS not found])
+  fi
+  AC_MSG_CHECKING([if GnuTLS should be used])
+  AC_MSG_RESULT($gnutls)
 fi
-if test "$gnutls" != "no" ; then
-  AC_DEFINE(HAVE_GNUTLS, 1, [Define to 1 if you want TLS support (GnuTLS). Undefine HAVE_OPENSSL.])
-else
-  AC_MSG_WARN([GnuTLS not found])
-fi
-AC_MSG_CHECKING([if GnuTLS should be used])
-AC_MSG_RESULT($gnutls)
 
 dnl OpenSSL
-if test "$gnutls" == "no"; then
+if test "$ssl" == "no"; then
   AC_ARG_WITH(openssl, AC_HELP_STRING([--with-openssl=[DIR]],
         [Support Stream Encryption (needs OpenSSL)]),
         openssl=$withval, openssl=yes)
@@ -99,19 +123,12 @@ if test "$gnutls" == "no"; then
       LDFLAGS="${LDFLAGS} -L$openssl/lib"
       CPPFLAGS="${CPPFLAGS} -I$openssl/include"
     fi
-dnl OpenSSL on MinGW requires additional Windows libraries to compile
-    case "$host_os" in
-      *mingw*)
-         SSL_LIBS="-lcrypto -lwsock32 -lgdi32";;
-      *)
-         SSL_LIBS="-lcrypto";;
-    esac
     LIBS_TMP=${LIBS}
-    LIBS="${LIBS} -lssl ${SSL_LIBS}"
+    LIBS="${LIBS} -lssl -lcrypto"
     AC_CHECK_HEADER(openssl/ssl.h,
     AC_CHECK_LIB(ssl, SSL_library_init,
             [openssl=yes], openssl=no),
-            [openssl=no LIBS=${TMP_LIBS}])
+            [openssl=no LIBS=${LIBS_TMP}])
   fi
   if test "$openssl" != "no" ; then
     AC_DEFINE(HAVE_OPENSSL, 1, [Define to 1 if you want TLS support (OpenSSL). Undefine HAVE_GNUTLS.])
@@ -270,7 +287,7 @@ AC_C_INLINE
 
 case "$host_os" in
   *mingw*)
-     LIBS="-lwsock32 -lgdi32";;
+     LIBS="${LIBS} -lwsock32 -lgdi32";;
   *)
      ;;
 esac

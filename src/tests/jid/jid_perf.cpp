@@ -1,3 +1,5 @@
+#ifndef _WIN32
+
 #include "../../jid.h"
 using namespace gloox;
 
@@ -111,3 +113,6 @@ int main( int /*argc*/, char** /*argv*/ )
 
   return 0;
 }
+#else
+int main( int, char** ) { return 0; }
+#endif
