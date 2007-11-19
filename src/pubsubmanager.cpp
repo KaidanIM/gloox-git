@@ -301,7 +301,7 @@ namespace gloox
 
       m_resultHandlerTrackMap[id] = handler;
       m_nopTrackMap[id] = node;
-      m_parent->send( iq, this, Subscription);
+      m_parent->send( iq, this, Subscription );
     }
 
     void Manager::unsubscribe( const JID& service,
