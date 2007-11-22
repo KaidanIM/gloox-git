@@ -465,6 +465,7 @@ namespace gloox
     {
       delete (*it);
     }
+    m_presenceExtensions.clear();
   }
 
   void Client::setPresence( Presence presence, int priority, const std::string& status )
