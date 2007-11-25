@@ -35,7 +35,7 @@ namespace gloox
     : ConnectionBase( 0 ), m_connection( connection ),
       m_logInstance( logInstance ), m_http11( false )
   {
-#warning check return value?
+// FIXME check return value?
     prep::idna( server, m_server );
     m_port = port;
 
@@ -50,7 +50,7 @@ namespace gloox
     : ConnectionBase( cdh ), m_connection( connection ),
       m_logInstance( logInstance )
   {
-#warning check return value?
+// FIXME check return value?
     prep::idna( server, m_server );
     m_port = port;
 

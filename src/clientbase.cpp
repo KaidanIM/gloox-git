@@ -1199,7 +1199,7 @@ namespace gloox
     {
       if( (*it1)->target().full() == msg->from().full() &&
             ( msg->thread().empty() || (*it1)->threadID() == msg->thread() ) &&
-#warning FIXME don't use '== 0' here
+// FIXME don't use '== 0' here
             ( (*it1)->types() & msg->subtype() || (*it1)->types() == 0 ) )
       {
         (*it1)->handleMessage( msg );
@@ -1212,7 +1212,7 @@ namespace gloox
     {
       if( (*it1)->target().bare() == msg->from().bare() &&
             ( msg->thread().empty() || (*it1)->threadID() == msg->thread() ) &&
-#warning FIXME don't use '== 0' here
+// FIXME don't use '== 0' here
             ( (*it1)->types() & msg->subtype() || (*it1)->types() == 0 ) )
       {
         (*it1)->handleMessage( msg );
