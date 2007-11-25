@@ -151,7 +151,7 @@ namespace gloox
       {
         const std::string& sid = q->findAttribute( "sid" );
         const std::string& mode = q->findAttribute( "mode" );
-#warning What is haveStream() good for?
+// FIXME What is haveStream() good for?
         if( /*haveStream( iq->from() ) ||*/ sid.empty() || mode == "udp" )
         {
           rejectSOCKS5Bytestream( iq->from(), iq->id(), StanzaErrorNotAcceptable );

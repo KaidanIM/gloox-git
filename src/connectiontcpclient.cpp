@@ -67,7 +67,7 @@ namespace gloox
   ConnectionError ConnectionTCPClient::connect()
   {
     m_sendMutex.lock();
-#warning CHECKME
+// FIXME CHECKME
     if( !m_handler )
     {
       m_sendMutex.unlock();
