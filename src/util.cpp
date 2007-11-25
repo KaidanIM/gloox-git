@@ -63,7 +63,7 @@ namespace gloox
       return what;
     }
 
-    bool checkUTF8( const std::string& data )
+    bool checkValidXMLChars( const std::string& data )
     {
       if( data.empty() )
         return true;
