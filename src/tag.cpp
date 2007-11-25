@@ -53,19 +53,19 @@ namespace gloox
   void Tag::Attribute::init( const std::string& name, const std::string& value,
                              const std::string& xmlns )
   {
-    if( util::checkUTF8( name ) )
+    if( util::checkValidXMLChars( name ) )
       m_name = name;
 
-    if( util::checkUTF8( value ) )
+    if( util::checkValidXMLChars( value ) )
       m_value = value;
 
-    if( util::checkUTF8( xmlns ) )
+    if( util::checkValidXMLChars( xmlns ) )
       m_xmlns = xmlns;
   }
 
   bool Tag::Attribute::setValue( const std::string& value )
   {
-    if( !util::checkUTF8( value ) )
+    if( !util::checkValidXMLChars( value ) )
       return false;
 
     m_value = value;
@@ -74,7 +74,7 @@ namespace gloox
 
   bool Tag::Attribute::setXmlns( const std::string& xmlns )
   {
-    if( !util::checkUTF8( xmlns ) )
+    if( !util::checkValidXMLChars( xmlns ) )
       return false;
 
     m_xmlns = m_xmlns;
@@ -83,7 +83,7 @@ namespace gloox
 
   bool Tag::Attribute::setPrefix( const std::string& prefix )
   {
-    if( !util::checkUTF8( prefix ) )
+    if( !util::checkValidXMLChars( prefix ) )
       return false;
 
     m_prefix = prefix;
@@ -143,7 +143,7 @@ namespace gloox
   {
     addCData( cdata ); // implicitly UTF-8 checked
 
-    if( util::checkUTF8( name ) )
+    if( util::checkValidXMLChars( name ) )
       m_name = name;
   }
 
@@ -157,7 +157,7 @@ namespace gloox
 
     addCData( cdata ); // implicitly UTF-8 checked
 
-    if( util::checkUTF8( name ) )
+    if( util::checkValidXMLChars( name ) )
       m_name = name;
   }
 
@@ -170,7 +170,7 @@ namespace gloox
   {
     addAttribute( attrib, value ); // implicitly UTF-8 checked
 
-    if( util::checkUTF8( name ) )
+    if( util::checkValidXMLChars( name ) )
       m_name = name;
   }
 
@@ -186,7 +186,7 @@ namespace gloox
 
     addAttribute( attrib, value ); // implicitly UTF-8 checked
 
-    if( util::checkUTF8( name ) )
+    if( util::checkValidXMLChars( name ) )
       m_name = name;
   }
 
@@ -468,7 +468,7 @@ namespace gloox
 
   bool Tag::setCData( const std::string& cdata )
   {
-    if( cdata.empty() || !util::checkUTF8( cdata ) )
+    if( cdata.empty() || !util::checkValidXMLChars( cdata ) )
       return false;
 
     if( !m_cdata )
@@ -498,7 +498,7 @@ namespace gloox
 
   bool Tag::addCData( const std::string& cdata )
   {
-    if( cdata.empty() || !util::checkUTF8( cdata ) )
+    if( cdata.empty() || !util::checkValidXMLChars( cdata ) )
       return false;
 
     if( !m_cdata )
@@ -539,7 +539,7 @@ namespace gloox
 
   bool Tag::setXmlns( const std::string& xmlns, const std::string& prefix )
   {
-    if( !util::checkUTF8( xmlns ) || !util::checkUTF8( prefix ) )
+    if( !util::checkValidXMLChars( xmlns ) || !util::checkValidXMLChars( prefix ) )
       return false;
 
     if( prefix.empty() )
@@ -582,7 +582,7 @@ namespace gloox
 
   bool Tag::setPrefix( const std::string& prefix )
   {
-    if( !util::checkUTF8( prefix ) )
+    if( !util::checkValidXMLChars( prefix ) )
       return false;
 
     m_prefix = prefix;
