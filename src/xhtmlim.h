@@ -65,4 +65,4 @@ namespace gloox
 
 }
 
-#endif // SERESOURCEBIND_H__
+#endif // XHTMLIM_H__
