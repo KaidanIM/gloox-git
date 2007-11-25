@@ -133,7 +133,7 @@ namespace gloox
    *
    * @li Finally, gloox must be able to serialize the StanzaExtension back
    * into string'ified XML. This is done by means of the tag() function which
-   * must re-implemented. The output Tag should -- like the input Tag -- be embeddable
+   * must be re-implemented. The output Tag should -- like the input Tag -- be embeddable
    * into the respective stanza.
    *
    * @author Jakob Schroeter <js@camaya.net>

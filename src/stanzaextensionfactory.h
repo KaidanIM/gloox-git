@@ -29,7 +29,9 @@ namespace gloox
    * To supply a custom StanzaExtension, reimplement StanzaExtension's
    * virtuals and pass an instance to registerExtension().
    *
-   * You should not need to use this class directly.
+   * You should not need to use this class directly. Use ClientBase::registerStanzaExtension()
+   * instead. See StanzaExtension for more information about adding protocol implementations
+   * to gloox.
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
