@@ -271,7 +271,7 @@
  * of messages as well as message events and chat states (such as typing notifications, etc.). See
  * @link gloox::MessageSession MessageSession @endlink for more details.
  *
- * @section xeps_sec Protocol Enhancements (XEPs)
+ * @section xeps_sec Protocol Extensions (XEPs)
  *
  * The XMPP Standards Foundation has published a number of extensions to the core protocols, called
  * XMPP Extension Protocols (XEPs). A couple of these XEPs are implemented in gloox:
@@ -309,7 +309,9 @@
  * @li XEP-0145 @link gloox::Annotations Annotations @endlink
  * @li XEP-0153 @link gloox::VCardUpdate vCard-based Avatars @endlink
  * @li XEP-0203 @link gloox::DelayedDelivery Delayed Delivery @endlink (new spec)
-
+ *
+ * Further extensions can easily be implemented using StanzaExtension.
+ *
  * @section filetransfer_sec File Transfer
  *
  * For file transfer, gloox implements XEP-0095 (Stream Initiation) as well XEP-0096 (File Transfer)
