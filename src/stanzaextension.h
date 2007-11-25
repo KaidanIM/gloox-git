@@ -119,7 +119,7 @@ namespace gloox
    * @endcode
    * The purpose of newInstance() is to return a new instance of your specialized
    * StanzaExtension (implicitly cast to StanzaExtension). This way, gloox can deal
-   * entirely with the abstarct base, StanzaExtension, and never ever needs to know
+   * entirely with the abstract base, StanzaExtension, and never ever needs to know
    * which kind of extension it deals with. The most common implementation of
    * newInstance() looks like this:
    * @code
