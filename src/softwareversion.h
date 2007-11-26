@@ -44,7 +44,7 @@ namespace gloox
        * Constructs a new object from the given Tag.
        * @param tag The Tag to parse.
        */
-      SoftwareVersion( const Tag* tag );
+      SoftwareVersion( const Tag* tag = 0 );
 
       /**
        * Returns the application's name.
