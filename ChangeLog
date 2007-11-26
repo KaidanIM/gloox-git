@@ -3,6 +3,7 @@ v1.0 -- xx yyy 200z
 
 general changes and additions:
 - XEP-0060 (Publish-Subscribe)
+- XEP-0071 (XHTML-IM) wrapper
 - XEP-0115 (Entity Capabilities)
 - XEP-0172 (User Nickname)
 - XEP-0184 (Message Receipts)
@@ -25,6 +26,7 @@ general changes and additions:
 - Client: support for binding and unbinding of additional resources
 - SIProfileFTHandler: handleFTRequest() doesn't pass a id naymore, just a sid
 - SIProfileFT: acceptFTRequest() and declineFTRequest() don't take an id argument anymore, just a sid
+- Tag: check input for XML conformance
 
 deprecated:
 - MUCRoomHandler::handleMUCMessage( MUCRoom*, string, string, bool, string, bool ),
