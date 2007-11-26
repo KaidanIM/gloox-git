@@ -57,6 +57,8 @@ namespace gloox
                                      * (XEP-0060) */
     ExtXHtmlIM,                     /**< An extension containing an XHTML message
                                      * representation (XEP-0071) */
+    ExtDiscoInfo,                   /**< An extension containing a disco#info element (XEP-0030). */
+    ExtDiscoItems,                  /**< An extension containing a disco#items element (XEP-0030). */
     ExtUser                         /**< User-supplied extensions must use IDs above this. Do
                                      * not hard-code ExtUser's value anywhere, it is subject
                                      * to change. */
