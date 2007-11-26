@@ -53,14 +53,20 @@ namespace gloox
   void Tag::Attribute::init( const std::string& name, const std::string& value,
                              const std::string& xmlns )
   {
-    if( util::checkValidXMLChars( name ) )
-      m_name = name;
+    if( util::checkValidXMLChars( xmlns ) )
+      m_xmlns = xmlns;
+    else
+      return;
 
     if( util::checkValidXMLChars( value ) )
       m_value = value;
+    else
+      return;
 
-    if( util::checkValidXMLChars( xmlns ) )
-      m_xmlns = xmlns;
+    if( util::checkValidXMLChars( name ) )
+      m_name = name;
+    else
+      return;
   }
 
   bool Tag::Attribute::setValue( const std::string& value )
