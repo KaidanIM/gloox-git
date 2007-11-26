@@ -375,10 +375,17 @@ int main( int /*argc*/, char** /*argv*/ )
     }
   }
 
-
-
-
-
+  //-------
+  {
+    name = "invalid chars 1";
+    Tag t( "foo" );
+    bool check = t.addAttribute( "nul", std::string( 1, '\0' ) );
+    if( check || t.hasAttribute( "nul" ) )
+    {
+      ++fail;
+      printf( "test '%s' failed:%s\n", name.c_str(), t.xml().c_str() );
+    }
+  }
 
 
 
