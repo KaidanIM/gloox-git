@@ -70,8 +70,13 @@ namespace gloox
 
       std::string::const_iterator it = data.begin();
       for( ; it != data.end()
-             && (unsigned char)(*it) >= 0x0a && (unsigned char)(*it) != 0xc0
-             && (unsigned char)(*it) != 0xc1 && (unsigned char)(*it) < 0xf5; ++it );
+             && ( (unsigned char)(*it) == 0x09
+                  || (unsigned char)(*it) == 0x0a
+                  || (unsigned char)(*it) == 0x0d
+                  || ( (unsigned char)(*it) >= 0x20
+                     && (unsigned char)(*it) != 0xc0
+                     && (unsigned char)(*it) != 0xc1
+                     && (unsigned char)(*it) < 0xf5 ) ); ++it );
 
       return ( it == data.end() );
     }
