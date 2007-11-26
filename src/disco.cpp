@@ -135,7 +135,7 @@ namespace gloox
 
   // ---- Disco::Items ----
   Disco::Items::Items( const std::string& node )
-  : StanzaExtension( ExtDiscoItems ), m_node( node )
+    : StanzaExtension( ExtDiscoItems ), m_node( node )
   {
   }
 
