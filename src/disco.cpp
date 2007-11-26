@@ -15,7 +15,7 @@
 #include "discohandler.h"
 #include "clientbase.h"
 #include "disconodehandler.h"
-#include "seversion.h"
+#include "softwareversion.h"
 #include "util.h"
 
 
@@ -197,6 +197,7 @@ namespace gloox
       m_parent->registerIqHandler( this, XMLNS_VERSION );
       m_parent->registerStanzaExtension( new Disco::Info() );
       m_parent->registerStanzaExtension( new Disco::Items() );
+      m_parent->registerStanzaExtension( new SoftwareVersion( 0 ) );
     }
   }
 
@@ -225,7 +226,7 @@ namespace gloox
         if( iq->xmlns() == XMLNS_VERSION )
         {
           IQ re( IQ::Result, iq->from(), iq->id(), XMLNS_VERSION );
-          re.addExtension( new SEVersion( m_versionName, m_versionVersion, m_versionOs ) );
+          re.addExtension( new SoftwareVersion( m_versionName, m_versionVersion, m_versionOs ) );
           m_parent->send( re );
         }
         else if( iq->xmlns() == XMLNS_DISCO_INFO && iq->query() )

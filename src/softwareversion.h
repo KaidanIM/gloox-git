@@ -30,7 +30,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 1.0
    */
-  class SEVersion : public StanzaExtension
+  class SoftwareVersion : public StanzaExtension
   {
 
     public:
@@ -38,13 +38,13 @@ namespace gloox
        * Constructs a new object with the given resource string.
        * @param tag The Tag to parse.
        */
-      SEVersion( const std::string& name, const std::string& version, const std::string& os );
+      SoftwareVersion( const std::string& name, const std::string& version, const std::string& os );
 
       /**
        * Constructs a new object from the given Tag.
        * @param tag The Tag to parse.
        */
-      SEVersion( const Tag* tag );
+      SoftwareVersion( const Tag* tag );
 
       /**
        * Returns the application's name.
@@ -67,7 +67,7 @@ namespace gloox
       /**
        * Virtual Destructor.
        */
-      virtual ~SEVersion();
+      virtual ~SoftwareVersion();
 
       // reimplemented from StanzaExtension
       virtual const std::string& filterString() const;
@@ -75,7 +75,7 @@ namespace gloox
       // reimplemented from StanzaExtension
       virtual StanzaExtension* newInstance( const Tag* tag ) const
       {
-        return new SEVersion( tag );
+        return new SoftwareVersion( tag );
       }
 
       // reimplemented from StanzaExtension
