@@ -196,6 +196,7 @@ namespace gloox
       m_parent->registerIqHandler( this, XMLNS_DISCO_ITEMS );
       m_parent->registerIqHandler( this, XMLNS_VERSION );
       m_parent->registerStanzaExtension( new Disco::Info() );
+      m_parent->registerStanzaExtension( new Disco::Items() );
     }
   }
 
