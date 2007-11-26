@@ -11,19 +11,21 @@
 */
 
 
-#include "seversion.h"
+#include "softwareversion.h"
 
 #include "tag.h"
 
 namespace gloox
 {
 
-  SEVersion::SEVersion( const std::string& name, const std::string& version, const std::string& os )
+  SoftwareVersion::SoftwareVersion( const std::string& name,
+                                    const std::string& version,
+                                    const std::string& os )
     : StanzaExtension( ExtVersion ), m_name( name ), m_version( version ), m_os( os )
   {
   }
 
-  SEVersion::SEVersion( const Tag* tag )
+  SoftwareVersion::SoftwareVersion( const Tag* tag )
     : StanzaExtension( ExtVersion )
   {
     if( !tag )
@@ -42,17 +44,17 @@ namespace gloox
       m_os = t->cdata();
   }
 
-  SEVersion::~SEVersion()
+  SoftwareVersion::~SoftwareVersion()
   {
   }
 
-  const std::string& SEVersion::filterString() const
+  const std::string& SoftwareVersion::filterString() const
   {
     static const std::string filter = "/iq/query[@xmlns='" + XMLNS_VERSION + "']";
     return filter;
   }
 
-  Tag* SEVersion::tag() const
+  Tag* SoftwareVersion::tag() const
   {
     Tag* t = new Tag( "query" );
     t->setXmlns( XMLNS_VERSION );
