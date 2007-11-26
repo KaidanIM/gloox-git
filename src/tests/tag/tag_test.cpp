@@ -379,11 +379,36 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     name = "invalid chars 1";
     Tag t( "foo" );
-    bool check = t.addAttribute( "nul", std::string( 1, '\0' ) );
+    bool check = t.addAttribute( "nul", std::string( 1, 0x00 ) );
     if( check || t.hasAttribute( "nul" ) )
     {
       ++fail;
       printf( "test '%s' failed:%s\n", name.c_str(), t.xml().c_str() );
+    }
+  }
+
+  //-------
+  {
+    name = "invalid chars 2";
+    for( int i = 0; i <= 0xff; ++i )
+    {
+      Tag::Attribute a( "test", std::string( 1, i ) );
+
+      if( ( i < 0x09 || i == 0x0b || i == 0x0c
+          || ( i > 0x0d && i < 0x20 ) || i == 0xc0
+          || i == 0xc1 || i >= 0xf5 ) && a )
+      {
+        ++fail;
+        printf( "test '%s' (branch 1) failed (i == %02X)\n", name.c_str(), i );
+      }
+      else if( ( i == 0x09 || i == 0x0a || i == 0x0d
+                 || ( i >= 0x20 && i < 0xc0 )
+                 || ( i > 0xc1 && i < 0xf5 ) ) && !a )
+      {
+        ++fail;
+        printf( "test '%s' (branch 2) failed (i == %02X)\n", name.c_str(), i );
+      }
+//       printf( "i: 0x%02X, a: %d, value: %s\n", i, (bool)a, std::string( 1, i ).c_str() );
     }
   }
 
