@@ -20,6 +20,7 @@
 #include "iqhandler.h"
 #include "disconodehandler.h"
 #include "jid.h"
+#include "util.h"
 
 #include <string>
 #include <list>
@@ -47,67 +48,7 @@ namespace gloox
 
     public:
 
-      /**
-       * @brief An abstraction of a Disco identity (Service Discovery, XEP-0030).
-       *
-       * @author Jakob Schroeter <js@camaya.net>
-       * @since 1.0
-       */
-      class Identity
-      {
-        public:
-          /**
-           * Constructs a Disco Identity from a category, type and name.
-           * @param category The identity's category.
-           * @param type The identity's type.
-           * @param name The identity's name.
-           */
-          Identity( const std::string& category,
-                    const std::string& type,
-                    const std::string& name )
-            : m_category( category ), m_type( type ), m_name( name ) {}
-
-          /**
-           * Creates a Disco Identity from the given Tag.
-           * @param tag A Tag representation of a disco identity.
-           */
-          Identity( const Tag* tag );
-
-          /**
-           * Destructor.
-           */
-          ~Identity() {}
-
-          /**
-           * Returns the identity's category.
-           * @return The identity's category.
-           */
-          const std::string& category() const { return m_category; }
-
-          /**
-           * Returns the identity's type.
-           * @return The identity's type.
-           */
-          const std::string& type() const { return m_type; }
-
-          /**
-           * Returns the identity's name.
-           * @return The identity's name.
-           */
-          const std::string& name() const { return m_name; }
-
-          /**
-           * Creates and returns a Tag representation of this identity.
-           * @return A Tag, or 0.
-           */
-          Tag* tag() const;
-
-        private:
-          std::string m_category;   /**< The identity's category. */
-          std::string m_type;       /**< The identity's type. */
-          std::string m_name;       /**< The identity's name. */
-
-      };
+      class Identity; // declared below class Info
 
       /**
        * A list of pointers to Identity objects. Used with Disco::Info.
@@ -123,25 +64,9 @@ namespace gloox
        */
       class Info : public StanzaExtension
       {
+        friend class Disco;
+
         public:
-          /**
-           * Creates a empty Info object, suitable for making disco#info requests.
-           * @param node The node identifier to query (optional).
-           */
-          Info( const std::string& node = EmptyString );
-
-          /**
-           * Creates an Info object from the given Tag.
-           * @param tag A &lt;query&gt; tag in the disco#info namespace, (possibly) containing
-           * a disco#info reply.
-           */
-          Info( const Tag* tag );
-
-          /**
-           * Virtual destructor.
-           */
-          virtual ~Info();
-
           /**
            * Returns the queried node identifier, if any.
            * @return The node identifier. May be empty.
@@ -187,53 +112,56 @@ namespace gloox
           virtual Tag* tag() const;
 
         private:
+          /**
+           * Creates a empty Info object, suitable for making disco#info requests.
+           * @param node The node identifier to query (optional).
+           */
+          Info( const std::string& node = EmptyString );
+
+          /**
+           * Creates an Info object from the given Tag.
+           * @param tag A &lt;query&gt; tag in the disco#info namespace, (possibly) containing
+           * a disco#info reply.
+           */
+          Info( const Tag* tag );
+
+          /**
+           * Virtual destructor.
+           */
+          virtual ~Info();
+
           std::string m_node;
           StringList m_features;
           IdentityList m_identities;
       };
 
       /**
-       * @brief An abstraction of a Disco item (Service Discovery, XEP-0030).
+       * @brief An abstraction of a Disco identity (Service Discovery, XEP-0030).
        *
        * @author Jakob Schroeter <js@camaya.net>
        * @since 1.0
        */
-      class Item
+      class Identity
       {
+        friend class Info;
+
         public:
-          /**
-           * Constructs a Disco Item from a JID, node and name.
-           * @param jid The item's JID.
-           * @param node The item's type.
-           * @param name The item's name.
-           */
-          Item( const JID& jid,
-                const std::string& node,
-                const std::string& name )
-          : m_jid( jid ), m_node( node ), m_name( name ) {}
-
-          /**
-           * Creates a Disco Item from the given Tag.
-           * @param tag A Tag representation of a Disco item.
-           */
-          Item( const Tag* tag );
-
           /**
            * Destructor.
            */
-          ~Item() {}
+          ~Identity() {}
 
           /**
-           * Returns the item's category.
-           * @return The item's category.
+           * Returns the identity's category.
+           * @return The identity's category.
            */
-          const JID& jid() const { return m_jid; }
+          const std::string& category() const { return m_category; }
 
           /**
-           * Returns the item's node.
-           * @return The item's node.
+           * Returns the identity's type.
+           * @return The identity's type.
            */
-          const std::string& node() const { return m_node; }
+          const std::string& type() const { return m_type; }
 
           /**
            * Returns the identity's name.
@@ -242,17 +170,37 @@ namespace gloox
           const std::string& name() const { return m_name; }
 
           /**
-           * Creates and returns a Tag representation of this item.
+           * Creates and returns a Tag representation of this identity.
            * @return A Tag, or 0.
            */
           Tag* tag() const;
 
         private:
-          JID m_jid;                /**< The item's jid. */
-          std::string m_node;       /**< The item's type. */
-          std::string m_name;       /**< The item's name. */
+          /**
+           * Constructs a Disco Identity from a category, type and name.
+           * See http://www.xmpp.org/registrar/disco-categories.html for more info.
+           * @param category The identity's category.
+           * @param type The identity's type.
+           * @param name The identity's name.
+           */
+          Identity( const std::string& category,
+                    const std::string& type,
+                    const std::string& name )
+            : m_category( category ), m_type( type ), m_name( name ) {}
+
+          /**
+           * Creates a Disco Identity from the given Tag.
+           * @param tag A Tag representation of a disco identity.
+           */
+          Identity( const Tag* tag );
+
+          std::string m_category;   /**< The identity's category. */
+          std::string m_type;       /**< The identity's type. */
+          std::string m_name;       /**< The identity's name. */
 
       };
+
+      class Item; // declared below class Items
 
       /**
        * A list of pointers to Item objects. Used with Disco::Items.
@@ -268,25 +216,9 @@ namespace gloox
        */
       class Items : public StanzaExtension
       {
+        friend class Disco;
+
         public:
-          /**
-           * Creates a empty Items object, suitable for making disco#info requests.
-           * @param node The node identifier to query (optional).
-           */
-          Items( const std::string& node = EmptyString );
-
-          /**
-           * Creates an Items object from the given Tag.
-           * @param tag A &lt;query&gt; tag in the disco#items namespace, (possibly) containing
-           * a disco#items reply.
-           */
-          Items( const Tag* tag );
-
-          /**
-           * Virtual destructor.
-           */
-          virtual ~Items();
-
           /**
            * Returns the queried node identifier, if any.
            * @return The node identifier. May be empty.
@@ -320,8 +252,90 @@ namespace gloox
           virtual Tag* tag() const;
 
         private:
+          /**
+           * Creates a empty Items object, suitable for making disco#items requests.
+           * @param node The node identifier to query (optional).
+           */
+          Items( const std::string& node = EmptyString );
+
+          /**
+           * Creates an Items object from the given Tag.
+           * @param tag A &lt;query&gt; tag in the disco#items namespace, (possibly) containing
+           * a disco#items reply.
+           */
+          Items( const Tag* tag );
+
+          /**
+           * Virtual destructor.
+           */
+          virtual ~Items();
+
           std::string m_node;
           ItemList m_items;
+      };
+
+      /**
+       * @brief An abstraction of a Disco item (Service Discovery, XEP-0030).
+       *
+       * @author Jakob Schroeter <js@camaya.net>
+       * @since 1.0
+       */
+      class Item
+      {
+        friend class Items;
+
+        public:
+          /**
+           * Destructor.
+           */
+          ~Item() {}
+
+          /**
+           * Returns the item's JID.
+           * @return The item's JID.
+           */
+          const JID& jid() const { return m_jid; }
+
+          /**
+           * Returns the item's node.
+           * @return The item's node.
+           */
+          const std::string& node() const { return m_node; }
+
+          /**
+           * Returns the identity's name.
+           * @return The identity's name.
+           */
+          const std::string& name() const { return m_name; }
+
+          /**
+           * Creates and returns a Tag representation of this item.
+           * @return A Tag, or 0.
+           */
+          Tag* tag() const;
+
+        private:
+          /**
+           * Constructs a Disco Item from a JID, node and name.
+           * @param jid The item's JID.
+           * @param node The item's type.
+           * @param name The item's name.
+           */
+          Item( const JID& jid,
+                const std::string& node,
+                const std::string& name )
+            : m_jid( jid ), m_node( node ), m_name( name ) {}
+
+          /**
+           * Creates a Disco Item from the given Tag.
+           * @param tag A Tag representation of a Disco item.
+           */
+          Item( const Tag* tag );
+
+          JID m_jid;                /**< The item's jid. */
+          std::string m_node;       /**< The item's type. */
+          std::string m_name;       /**< The item's name. */
+
       };
 
       /**
