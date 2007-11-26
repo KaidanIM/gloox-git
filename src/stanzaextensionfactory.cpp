@@ -37,12 +37,14 @@ namespace gloox
       return;
 
     SEList::iterator it = m_extensions.begin();
-    for( ; it != m_extensions.end(); ++it )
+    SEList::iterator it2;
+    while( it != m_extensions.end() )
     {
-      if( ext->extensionType() == (*it)->extensionType() )
+      it2 = it++;
+      if( ext->extensionType() == (*it2)->extensionType() )
       {
-        delete (*it);
-        m_extensions.erase( it );
+        delete (*it2);
+        m_extensions.erase( it2 );
       }
     }
     m_extensions.push_back( ext );
