@@ -8,7 +8,7 @@ noinst_PROGRAMS = chatstatefilter_test
 
 chatstatefilter_test_SOURCES = chatstatefilter_test.cpp
 chatstatefilter_test_LDADD = ../../tag.o ../../stanza.o ../../stanzaextensionfactory.o \
- 				../../jid.o ../../prep.o ../../seversion.o \
+ 				../../jid.o ../../prep.o ../../softwareversion.o \
 				../../message.o ../../util.o ../../disco.o \
 				../../sha.o ../../base64.o ../../iq.o \
 			../../clientbase.o ../../connectiontcpclient.o ../../connectiontcpbase.o \
