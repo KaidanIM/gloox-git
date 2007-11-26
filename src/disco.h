@@ -19,6 +19,7 @@
 
 #include "iqhandler.h"
 #include "disconodehandler.h"
+#include "jid.h"
 
 #include <string>
 #include <list>
@@ -29,7 +30,6 @@ namespace gloox
 
   class ClientBase;
   class DiscoHandler;
-  class DiscoItem;
   class IQ;
 
   /**
@@ -46,6 +46,284 @@ namespace gloox
     friend class ClientBase;
 
     public:
+
+      /**
+       * @brief An abstraction of a Disco identity (Service Discovery, XEP-0030).
+       *
+       * @author Jakob Schroeter <js@camaya.net>
+       * @since 1.0
+       */
+      class Identity
+      {
+        public:
+          /**
+           * Constructs a Disco Identity from a category, type and name.
+           * @param category The identity's category.
+           * @param type The identity's type.
+           * @param name The identity's name.
+           */
+          Identity( const std::string& category,
+                    const std::string& type,
+                    const std::string& name )
+            : m_category( category ), m_type( type ), m_name( name ) {}
+
+          /**
+           * Creates a Disco Identity from the given Tag.
+           * @param tag A Tag representation of a disco identity.
+           */
+          Identity( const Tag* tag );
+
+          /**
+           * Destructor.
+           */
+          ~Identity() {}
+
+          /**
+           * Returns the identity's category.
+           * @return The identity's category.
+           */
+          const std::string& category() const { return m_category; }
+
+          /**
+           * Returns the identity's type.
+           * @return The identity's type.
+           */
+          const std::string& type() const { return m_type; }
+
+          /**
+           * Returns the identity's name.
+           * @return The identity's name.
+           */
+          const std::string& name() const { return m_name; }
+
+          /**
+           * Creates and returns a Tag representation of this identity.
+           * @return A Tag, or 0.
+           */
+          Tag* tag() const;
+
+        private:
+          std::string m_category;   /**< The identity's category. */
+          std::string m_type;       /**< The identity's type. */
+          std::string m_name;       /**< The identity's name. */
+
+      };
+
+      /**
+       * A list of pointers to Identity objects. Used with Disco::Info.
+       */
+      typedef std::list<Identity*> IdentityList;
+
+      /**
+       * @brief An abstraction of a Disco Info element (from Service Discovery, XEP-0030)
+       * as a StanzaExtension.
+       *
+       * @author Jakob Schroeter <js@camaya.net>
+       * @since 1.0
+       */
+      class Info : public StanzaExtension
+      {
+        public:
+          /**
+           * Creates a empty Info object, suitable for making disco#info requests.
+           * @param node The node identifier to query (optional).
+           */
+          Info( const std::string& node = EmptyString );
+
+          /**
+           * Creates an Info object from the given Tag.
+           * @param tag A &lt;query&gt; tag in the disco#info namespace, (possibly) containing
+           * a disco#info reply.
+           */
+          Info( const Tag* tag );
+
+          /**
+           * Virtual destructor.
+           */
+          virtual ~Info();
+
+          /**
+           * Returns the queried node identifier, if any.
+           * @return The node identifier. May be empty.
+           */
+          const std::string& node() const { return m_node; }
+
+          /**
+           * This function can be used to set the entity's features.
+           * @param features A list of supported features/namespaces.
+           */
+          void setFeatures( const StringList& features ) { m_features = features; }
+
+          /**
+           * Returns the entity's supported features.
+           * @return A list of supported features/namespaces.
+           */
+          const StringList& features() const { return m_features; }
+
+          /**
+           * This function can be used to set the entity's identities.
+           * @param identities A list of pointers to the entity's identities.
+           * @note The Identity objects pointed to will be owned by the Info object. The
+           * list should neither be used again nor should the Identity objects be deleted.
+           */
+          void setIdentities( const IdentityList& identities ) { m_identities = identities; }
+
+          /**
+           * Returns the entity's identities.
+           * @return A list of pointers to Identity objects.
+           */
+          const IdentityList& identities() const { return m_identities; }
+
+          // reimplemented from StanzaExtension
+          virtual const std::string& filterString() const;
+
+          // reimplemented from StanzaExtension
+          virtual StanzaExtension* newInstance( const Tag* tag ) const
+          {
+            return new Info( tag );
+          }
+
+          // reimplemented from StanzaExtension
+          virtual Tag* tag() const;
+
+        private:
+          std::string m_node;
+          StringList m_features;
+          IdentityList m_identities;
+      };
+
+      /**
+       * @brief An abstraction of a Disco item (Service Discovery, XEP-0030).
+       *
+       * @author Jakob Schroeter <js@camaya.net>
+       * @since 1.0
+       */
+      class Item
+      {
+        public:
+          /**
+           * Constructs a Disco Item from a JID, node and name.
+           * @param jid The item's JID.
+           * @param node The item's type.
+           * @param name The item's name.
+           */
+          Item( const JID& jid,
+                const std::string& node,
+                const std::string& name )
+          : m_jid( jid ), m_node( node ), m_name( name ) {}
+
+          /**
+           * Creates a Disco Item from the given Tag.
+           * @param tag A Tag representation of a Disco item.
+           */
+          Item( const Tag* tag );
+
+          /**
+           * Destructor.
+           */
+          ~Item() {}
+
+          /**
+           * Returns the item's category.
+           * @return The item's category.
+           */
+          const JID& jid() const { return m_jid; }
+
+          /**
+           * Returns the item's node.
+           * @return The item's node.
+           */
+          const std::string& node() const { return m_node; }
+
+          /**
+           * Returns the identity's name.
+           * @return The identity's name.
+           */
+          const std::string& name() const { return m_name; }
+
+          /**
+           * Creates and returns a Tag representation of this item.
+           * @return A Tag, or 0.
+           */
+          Tag* tag() const;
+
+        private:
+          JID m_jid;                /**< The item's jid. */
+          std::string m_node;       /**< The item's type. */
+          std::string m_name;       /**< The item's name. */
+
+      };
+
+      /**
+       * A list of pointers to Item objects. Used with Disco::Items.
+       */
+      typedef std::list<Item*> ItemList;
+
+      /**
+       * @brief An abstraction of a Disco query element (from Service Discovery, XEP-0030)
+       * in the disco#items namespace, implemented as a StanzaExtension.
+       *
+       * @author Jakob Schroeter <js@camaya.net>
+       * @since 1.0
+       */
+      class Items : public StanzaExtension
+      {
+        public:
+          /**
+           * Creates a empty Items object, suitable for making disco#info requests.
+           * @param node The node identifier to query (optional).
+           */
+          Items( const std::string& node = EmptyString );
+
+          /**
+           * Creates an Items object from the given Tag.
+           * @param tag A &lt;query&gt; tag in the disco#items namespace, (possibly) containing
+           * a disco#items reply.
+           */
+          Items( const Tag* tag );
+
+          /**
+           * Virtual destructor.
+           */
+          virtual ~Items();
+
+          /**
+           * Returns the queried node identifier, if any.
+           * @return The node identifier. May be empty.
+           */
+          const std::string& node() const { return m_node; }
+
+          /**
+           * This function can be used to set the entity's/node's items.
+           * @param items A list of pointers to the entity's/node's items.
+           * @note The Item objects pointed to will be owned by the Items object. The
+           * list should neither be used again nor should the Item objects be deleted.
+           */
+          void setItems( const ItemList& items ) { m_items = items; }
+
+          /**
+           * Returns the entity's/node's items.
+           * @return A list of pointers to Item objects.
+           */
+          const ItemList& items() const { return m_items; }
+
+          // reimplemented from StanzaExtension
+          virtual const std::string& filterString() const;
+
+          // reimplemented from StanzaExtension
+          virtual StanzaExtension* newInstance( const Tag* tag ) const
+          {
+            return new Items( tag );
+          }
+
+          // reimplemented from StanzaExtension
+          virtual Tag* tag() const;
+
+        private:
+          std::string m_node;
+          ItemList m_items;
+      };
+
       /**
        * Adds a feature to the list of supported Jabber features.
        * The list will be posted as an answer to IQ queries in the
@@ -113,7 +391,8 @@ namespace gloox
        * @param version The version to be returned to inquireing clients.
        * @param os The operating system to announce. Default: don't include.
        */
-      void setVersion( const std::string& name, const std::string& version, const std::string& os = EmptyString );
+      void setVersion( const std::string& name, const std::string& version,
+                       const std::string& os = EmptyString );
 
       /**
        * Sets the identity of this entity.
@@ -203,12 +482,12 @@ namespace gloox
       typedef std::list<DiscoNodeHandler*> DiscoNodeHandlerList;
       typedef std::map<std::string, DiscoNodeHandlerList> DiscoNodeHandlerMap;
       typedef std::map<std::string, DiscoHandlerContext> DiscoHandlerMap;
-      typedef std::list<DiscoItem*> ItemList;
+//       typedef std::list<DiscoItem*> ItemList;
 
       DiscoHandlerList m_discoHandlers;
       DiscoNodeHandlerMap m_nodeHandlers;
       DiscoHandlerMap m_track;
-      ItemList m_items;
+//       ItemList m_items;
       StringList m_features;
       StringMap  m_queryIDs;
 
