@@ -259,8 +259,12 @@ namespace gloox
        */
       void resetResource();
 
-      // re-implemented from MessageHandler
-      virtual void handleMessage( Message* msg );
+      /**
+       * This function can be used to feed a message into the session. Ususally, only
+       * ClientBase should call this function.
+       * @param msg A Message to feed into the session.
+       */
+      void handleMessage( Message& msg );
 
     protected:
       /**

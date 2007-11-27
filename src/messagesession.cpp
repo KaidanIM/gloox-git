@@ -34,31 +34,34 @@ namespace gloox
     util::clearList( m_messageFilterList );
   }
 
-  void MessageSession::handleMessage( Message* msg )
+  void MessageSession::handleMessage( Message& msg )
   {
-    if( m_wantUpgrade && msg->from().bare() == m_target.full() )
-      setResource( msg->from().resource() );
+    if( m_wantUpgrade && msg.from().bare() == m_target.full() )
+      setResource( msg.from().resource() );
 
     if( !m_hadMessages )
     {
       m_hadMessages = true;
-      if( msg->thread().empty() )
+      if( msg.thread().empty() )
       {
         m_thread = "gloox" + m_parent->getID();
-        msg->setThread( m_thread );
+        msg.setThread( m_thread );
       }
       else
-        m_thread = msg->thread();
+        m_thread = msg.thread();
     }
 
     MessageFilterList::const_iterator it = m_messageFilterList.begin();
     for( ; it != m_messageFilterList.end(); ++it )
     {
-      (*it)->filter( *msg );
+      (*it)->filter( msg );
     }
 
-    if( m_messageHandler && !msg->body().empty() )
+    if( m_messageHandler && !msg.body().empty() )
+    {
       m_messageHandler->handleMessage( msg, this );
+      m_messageHandler->handleMessage( &msg, this ); // FIXME remove this for 1.1
+    }
   }
 
   void MessageSession::send( const std::string& message, const std::string& subject )

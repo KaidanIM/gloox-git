@@ -1125,6 +1125,7 @@ namespace gloox
     {
       if( (*itj).jid->bare() == pres->from().bare() && (*itj).ph )
       {
+        (*itj).ph->handlePresence( *pres );
         (*itj).ph->handlePresence( pres );
         match = true;
       }
@@ -1132,12 +1133,28 @@ namespace gloox
     if( match )
       return;
 
-    util::ForEach( m_presenceHandlers, &PresenceHandler::handlePresence, pres );
+    // FIXME remove this for() for 1.1:
+    PresenceHandlerList::const_iterator it = m_presenceHandlers.begin();
+    for( ; it != m_presenceHandlers.end(); ++it )
+    {
+      (*it)->handlePresence( *pres );
+      (*it)->handlePresence( pres );
+    }
+      // FIXME and reinstantiate this:
+//     util::ForEach( m_presenceHandlers, &PresenceHandler::handlePresence, pres );
   }
 
   void ClientBase::notifySubscriptionHandlers( Subscription* s10n )
   {
-    util::ForEach( m_subscriptionHandlers, &SubscriptionHandler::handleSubscription, s10n );
+    // FIXME remove this for() for 1.1:
+    SubscriptionHandlerList::const_iterator it = m_subscriptionHandlers.begin();
+    for( ; it != m_subscriptionHandlers.end(); ++it )
+    {
+      (*it)->handleSubscription( *s10n );
+      (*it)->handleSubscription( s10n );
+    }
+      // FIXME and reinstantiate this:
+//     util::ForEach( m_subscriptionHandlers, &SubscriptionHandler::handleSubscription, s10n );
   }
 
   void ClientBase::notifyIqHandlers( IQ* iq )
@@ -1145,7 +1162,8 @@ namespace gloox
     IqTrackMap::iterator it_id = m_iqIDHandlers.find( iq->id() );
     if( it_id != m_iqIDHandlers.end() && iq->subtype() & ( IQ::Result | IQ::Error ) )
     {
-      (*it_id).second.ih->handleIqID( iq, (*it_id).second.context );
+      (*it_id).second.ih->handleIqID( *iq, (*it_id).second.context );
+      (*it_id).second.ih->handleIqID( iq, (*it_id).second.context ); // FIXME remove for 1.1
       m_iqIDHandlers.erase( it_id );
       return;
     }
@@ -1158,8 +1176,12 @@ namespace gloox
     typedef IqHandlerMap::const_iterator IQci;
     std::pair<IQci, IQci> g = m_iqNSHandlers.equal_range( iq->xmlns() );
     for( IQci it = g.first; it != g.second; ++it )
-      if( (*it).second->handleIq( iq ) )
+    {
+      if( (*it).second->handleIq( *iq ) )
         res = true;
+      if( (*it).second->handleIq( iq ) ) // FIXME remove for 1.1
+        res = true;
+    }
 
     if( !res && iq->subtype() & ( IQ::Get | IQ::Set ) )
     {
@@ -1202,7 +1224,7 @@ namespace gloox
 // FIXME don't use '== 0' here
             ( (*it1)->types() & msg->subtype() || (*it1)->types() == 0 ) )
       {
-        (*it1)->handleMessage( msg );
+        (*it1)->handleMessage( *msg );
         return;
       }
     }
@@ -1215,7 +1237,7 @@ namespace gloox
 // FIXME don't use '== 0' here
             ( (*it1)->types() & msg->subtype() || (*it1)->types() == 0 ) )
       {
-        (*it1)->handleMessage( msg );
+        (*it1)->handleMessage( *msg );
         return;
       }
     }
@@ -1244,11 +1266,20 @@ namespace gloox
     {
       MessageSession* session = new MessageSession( this, msg->from(), true, msg->subtype() );
       msHandler->handleMessageSession( session );
-      session->handleMessage( msg );
+      session->handleMessage( *msg );
     }
     else
     {
-      util::ForEach( m_messageHandlers, &MessageHandler::handleMessage, msg );
+      // FIXME remove this for() for 1.1:
+      MessageHandlerList::const_iterator it = m_messageHandlers.begin();
+      for( ; it != m_messageHandlers.end(); ++it )
+      {
+        (*it)->handleMessage( *msg );
+        (*it)->handleMessage( msg );
+      }
+      // FIXME and reinstantiate this:
+//       util::ForEach( m_messageHandlers, &MessageHandler::handleMessage, *msg );
+//       util::ForEach( m_messageHandlers, &MessageHandler::handleMessage, msg ); // FIXME remove for 1.1
     }
   }
 
