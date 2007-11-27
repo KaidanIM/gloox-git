@@ -168,6 +168,7 @@ namespace gloox
               fneg = si->findChild( "feature", XMLNS, XMLNS_FEATURE_NEG );
             }
             (*it).second.sih->handleSIRequestResult( iq->from(), (*it).second.sid, si, ptag, fneg );
+            m_track.erase( it );
           }
         }
         break;
@@ -178,11 +179,10 @@ namespace gloox
           if( it != m_track.end() )
           {
             (*it).second.sih->handleSIRequestError( iq, (*it).second.sid );
+            m_track.erase( it );
           }
         }
         break;
-      case IQ::Set:
-      case IQ::Get:
       default:
         break;
     }
