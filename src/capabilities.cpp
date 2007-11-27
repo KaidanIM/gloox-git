@@ -46,27 +46,35 @@ namespace gloox
 
   const std::string Capabilities::ver() const
   {
-    if( m_disco )
-    {
-      std::string s;
-      s += m_disco->category();
-      s += '/';
-      s += m_disco->type();
-      s += '<';
-      StringList f = m_disco->features();
-      f.sort();
-      StringList::const_iterator it = f.begin();
-      for( ; it != f.end(); ++it )
-      {
-        s += (*it);
-        s += '<';
-      }
-      SHA sha;
-      sha.feed( s );
-      return Base64::encode64( sha.binary() );
-    }
-    else
+    if( !m_disco )
       return m_ver;
+
+    StringList sl;
+    const Disco::IdentityList& il = m_disco->identities();
+    Disco::IdentityList::const_iterator it = il.begin();
+    for( ; it != il.end(); ++it )
+      sl.push_back( (*it)->category() + '/' + (*it)->type() );
+    sl.sort();
+
+    std::string s;
+    StringList::const_iterator it2 = sl.begin();
+    for( ; it2 != sl.end(); ++it2 )
+    {
+      s += (*it2);
+      s += '<';
+    }
+
+    StringList f = m_disco->features();
+    f.sort();
+    it2 = f.begin();
+    for( ; it2 != f.end(); ++it2 )
+    {
+      s += (*it2);
+      s += '<';
+    }
+    SHA sha;
+    sha.feed( s );
+    return Base64::encode64( sha.binary() );
   }
 
   const std::string& Capabilities::filterString() const

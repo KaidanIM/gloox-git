@@ -15,6 +15,7 @@
 #define DISCOHANDLER_H__
 
 #include "macros.h"
+#include "disco.h"
 
 #include <string>
 
@@ -41,11 +42,31 @@ namespace gloox
       /**
        * Reimplement this function if you want to be notified about the result
        * of an disco#info query.
+       * @param from The sender of the disco#info result.
+       * @param info The Info.
+       * @param context A context identifier.
+       */
+      virtual void handleDiscoInfo( const JID& from, const Disco::Info& info, int context ) {};
+
+      /**
+       * Reimplement this function if you want to be notified about the result
+       * of an disco#info query.
        * @param iq The full IQ.
        * @param context A context identifier.
        * @todo Replace the stanza with decoded values.
+       * @deprecated Use handleDiscoInfo( const JID&, const Disco::Info&, int ) instead.
+       * This function will be gone in the next major release.
        */
-      virtual void handleDiscoInfoResult( IQ* iq, int context ) = 0;
+      GLOOX_DEPRECATED virtual void handleDiscoInfoResult( IQ* iq, int context ) = 0;
+
+      /**
+       * Reimplement this function if you want to be notified about the result
+       * of an disco#items query.
+       * @param from The sender of the disco#items result.
+       * @param info The Items.
+       * @param context A context identifier.
+       */
+      virtual void handleDiscoItems( const JID& from, const Disco::Items& items, int context ) {};
 
       /**
        * Reimplement this function if you want to be notified about the result
@@ -53,16 +74,28 @@ namespace gloox
        * @param iq The full IQ.
        * @param context A context identifier.
        * @todo Replace the stanza with decoded values.
+       * @deprecated Use handleDiscoItems( const JID&, const Disco::Items&, int ) instead.
+       * This function will be gone in the next major release.
        */
-      virtual void handleDiscoItemsResult( IQ* iq, int context ) = 0;
+      GLOOX_DEPRECATED virtual void handleDiscoItemsResult( IQ* iq, int context ) = 0;
+
+      /**
+       * Reimplement this function to receive disco error notifications.
+       * @param from The sender of the error result.
+       * @param error The Error.
+       * @param context A context identifier.
+       */
+      virtual void handleDiscoError( const JID& from, const Error& error, int context ) {};
 
       /**
        * Reimplement this function to receive disco error notifications.
        * @param iq The full IQ.
        * @param context A context identifier.
        * @todo Replace the stanza with decoded values.
+       * @deprecated Use handleDiscoError( const JID&, const Error&, int ) instead.
+       * This function will be gone in the next major release.
        */
-      virtual void handleDiscoError( IQ* iq, int context ) = 0;
+      GLOOX_DEPRECATED virtual void handleDiscoError( IQ* iq, int context ) = 0;
 
       /**
        * Reimplement this function to receive notifications about incoming IQ

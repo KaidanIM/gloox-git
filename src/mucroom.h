@@ -497,13 +497,15 @@ namespace gloox
       virtual void handleIqID( IQ* iq, int context );
 
       // reimplemented from DiscoNodeHandler
-      virtual StringList handleDiscoNodeFeatures( const std::string& node );
+      virtual StringList handleDiscoNodeFeatures( const JID& from, const std::string& node );
 
       // reimplemented from DiscoNodeHandler
-      virtual StringMap handleDiscoNodeIdentities( const std::string& node, std::string& name );
+      virtual Disco::IdentityList handleDiscoNodeIdentities( const JID& from,
+                                                             const std::string& node );
 
       // reimplemented from DiscoNodeHandler
-      virtual DiscoNodeItemList handleDiscoNodeItems( const std::string& node = EmptyString );
+      virtual Disco::ItemList handleDiscoNodeItems( const JID& from,
+                                                    const std::string& node = EmptyString );
 
     protected:
       void setName( const std::string& name ) { m_nick.setUsername( name ); }

@@ -910,27 +910,23 @@ namespace gloox
     }
   }
 
-  StringList MUCRoom::handleDiscoNodeFeatures( const std::string& /*node*/ )
+  StringList MUCRoom::handleDiscoNodeFeatures( const JID& /*from*/, const std::string& /*node*/ )
   {
     return StringList();
   }
 
-  StringMap MUCRoom::handleDiscoNodeIdentities( const std::string& /*node*/, std::string& /*name*/ )
+  Disco::IdentityList MUCRoom::handleDiscoNodeIdentities( const JID& /*from*/, const std::string& /*node*/ )
   {
-    return StringMap();
+    return Disco::IdentityList();
   }
 
-  DiscoNodeItemList MUCRoom::handleDiscoNodeItems( const std::string& node )
+  Disco::ItemList MUCRoom::handleDiscoNodeItems( const JID& /*from*/, const std::string& node )
   {
-    DiscoNodeItemList l;
-
+    Disco::ItemList l;
     if( node == XMLNS_MUC_ROOMS && m_publish )
     {
-      DiscoNodeItem item;
-      item.jid = m_nick.bare();
-      if( m_publishNick )
-        item.name = m_nick.resource();
-      l.push_back( item );
+      l.push_back( new Disco::Item( m_nick.bareJID(), EmptyString,
+                                    m_publishNick ? m_nick.resource() : EmptyString ) );
     }
     return l;
   }
