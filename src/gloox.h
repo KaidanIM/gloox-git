@@ -362,6 +362,9 @@ namespace gloox
   /** Service Discovery Items namespace (XEP-0030) */
   GLOOX_API extern const std::string XMLNS_DISCO_ITEMS;
 
+  /** Service Discovery Publish namespace (XEP-0030) */
+  GLOOX_API extern const std::string XMLNS_DISCO_PUBLISH;
+
   /** Adhoc Commands namespace (XEP-0050) */
   GLOOX_API extern const std::string XMLNS_ADHOC_COMMANDS;
 

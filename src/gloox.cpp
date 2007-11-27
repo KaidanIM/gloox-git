@@ -22,6 +22,7 @@ namespace gloox
 
   const std::string XMLNS_DISCO_INFO        = "http://jabber.org/protocol/disco#info";
   const std::string XMLNS_DISCO_ITEMS       = "http://jabber.org/protocol/disco#items";
+  const std::string XMLNS_DISCO_PUBLISH     = "http://jabber.org/protocol/disco#publish";
   const std::string XMLNS_ADHOC_COMMANDS    = "http://jabber.org/protocol/commands";
   const std::string XMLNS_COMPRESSION       = "http://jabber.org/protocol/compress";
   const std::string XMLNS_OFFLINE           = "http://jabber.org/protocol/offline";
