@@ -310,7 +310,8 @@
  * @li XEP-0153 @link gloox::VCardUpdate vCard-based Avatars @endlink
  * @li XEP-0203 @link gloox::DelayedDelivery Delayed Delivery @endlink (new spec)
  *
- * Further extensions can easily be implemented using StanzaExtension.
+ * Further extensions can easily be implemented using
+ * @link gloox::StanzaExtension StanzaExtensions @endlink.
  *
  * @section filetransfer_sec File Transfer
  *
