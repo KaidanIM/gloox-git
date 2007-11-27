@@ -62,7 +62,17 @@ namespace gloox
        * @param remote The queried remote entity's JID.
        * @param error The error condition.
        */
-      virtual void handleAdhocError( const JID& remote, StanzaError error ) = 0;
+      virtual void handleAdhocError( const JID& remote, const Error& error ) {};
+
+      /**
+       * This function is called in response to a call to Adhoc::getCommands() or
+       * Adhoc::checkSupport() in case the respective request returned an error.
+       * @param remote The queried remote entity's JID.
+       * @param error The error condition.
+       * @deprecated Use handleAdhocError( const JID&, const Error& ) inseatd.
+       * This function will be gone in the next major release.
+       */
+      GLOOX_DEPRECATED virtual void handleAdhocError( const JID& remote, StanzaError error ) = 0;
 
       /**
        * This function is called in response to a remote command execution.

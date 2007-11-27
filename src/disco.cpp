@@ -80,6 +80,14 @@ namespace gloox
     util::clearList( m_identities );
   }
 
+  bool Disco::Info::hasFeature( const std::string& feature ) const
+  {
+    StringList::const_iterator it = m_features.begin();
+    for( ; it != m_features.end() && (*it) != feature; ++it )
+      ;
+    return it != m_features.end();
+  }
+
   const std::string& Disco::Info::filterString() const
   {
     static const std::string filter = "/iq/query[@xmlns='" + XMLNS_DISCO_INFO + "']";
@@ -211,98 +219,81 @@ namespace gloox
     }
   }
 
-  static void addFeatures( const StringList& features, Tag* parent )
-  {
-    StringList::const_iterator it = features.begin();
-    for( ; it != features.end(); ++it )
-      new Tag( parent, "feature", "var", (*it) );
-  }
-
   bool Disco::handleIq( IQ* iq )
   {
     switch( iq->subtype() )
     {
       case IQ::Get:
-        if( iq->xmlns() == XMLNS_VERSION )
+      {
+        IQ re( IQ::Result, iq->from(), iq->id() );
+
+        const SoftwareVersion* sv = static_cast<const SoftwareVersion*>( iq->findExtension( ExtVersion ) );
+        if( sv )
         {
-          IQ re( IQ::Result, iq->from(), iq->id(), XMLNS_VERSION );
           re.addExtension( new SoftwareVersion( m_versionName, m_versionVersion, m_versionOs ) );
           m_parent->send( re );
+          return true;
         }
-        else if( iq->xmlns() == XMLNS_DISCO_INFO && iq->query() )
+
+        const Info *info = static_cast<const Info*>( iq->findExtension( ExtDiscoInfo ) );
+        if( info )
         {
-          IQ re( IQ::Result, iq->from(), iq->id(), XMLNS_DISCO_INFO );
-          Tag* query = re.query();
-
-          Tag* q = iq->query();
-          const std::string& node = q->findAttribute( "node" );
-          if( !node.empty() )
+          Info *i = new Info();
+          if( !info->node().empty() )
           {
-            query->addAttribute( "node", node );
-            new Tag( query, "feature", "var", XMLNS_DISCO_INFO );
-
-            DiscoNodeHandlerMap::const_iterator it = m_nodeHandlers.find( node );
+            i->setNode( info->node() );
+            IdentityList identities;
+            StringList features;
+            DiscoNodeHandlerMap::const_iterator it = m_nodeHandlers.find( info->node() );
             if( it != m_nodeHandlers.end() )
             {
-              std::string name;
               DiscoNodeHandlerList::const_iterator in = (*it).second.begin();
               for( ; in != (*it).second.end(); ++in )
               {
-                const StringMap& identities = (*in)->handleDiscoNodeIdentities( node, name );
-                StringMap::const_iterator im = identities.begin();
-                for( ; im != identities.end(); ++im )
-                {
-                  Tag* i = new Tag( query, "identity" );
-                  i->addAttribute( "category", (*im).first );
-                  i->addAttribute( TYPE, (*im).second );
-                  i->addAttribute( "name", name );
-                }
-                addFeatures( (*in)->handleDiscoNodeFeatures( node ), query );
+                IdentityList il = (*in)->handleDiscoNodeIdentities( iq->from(), info->node() );
+                identities.merge( il );
+                StringList fl = (*in)->handleDiscoNodeFeatures( iq->from(), info->node() );
+                features.merge( fl );
               }
             }
+            i->setIdentities( identities );
+            i->setFeatures( features );
           }
           else
           {
-            Tag* i = new Tag( query, "identity" );
-            i->addAttribute( "category", m_identityCategory );
-            i->addAttribute( TYPE, m_identityType );
-            i->addAttribute( "name", m_versionName );
-
-            addFeatures( m_features, query );
+            i->setIdentities( m_identities );
+            i->setFeatures( m_features );
           }
 
+          re.addExtension( i );
           m_parent->send( re );
+          return true;
         }
-        else if( iq->xmlns() == XMLNS_DISCO_ITEMS && iq->query() )
+
+        const Items *items = static_cast<const Items*>( iq->findExtension( ExtDiscoItems ) );
+        if( items )
         {
-          IQ re( IQ::Result, iq->from(), iq->id(), XMLNS_DISCO_ITEMS );
-          Tag* query = re.query();
-          const Tag* q = iq->query();
-          const std::string& node = q->findAttribute( "node" );
-          query->addAttribute( "node", node );
-          DiscoNodeHandlerMap::const_iterator it = m_nodeHandlers.find( node );
+          Items *i = new Items( items->node() );
+          ItemList itemlist;
+          DiscoNodeHandlerMap::const_iterator it = m_nodeHandlers.find( items->node() );
           if( it != m_nodeHandlers.end() )
           {
             DiscoNodeHandlerList::const_iterator in = (*it).second.begin();
             for( ; in != (*it).second.end(); ++in )
             {
-              const DiscoNodeItemList& items = (*in)->handleDiscoNodeItems( node );
-              DiscoNodeItemList::const_iterator it = items.begin();
-              for( ; it != items.end(); ++it )
-              {
-                const DiscoNodeItem& item = (*it);
-                Tag* i = new Tag( query, "item" );
-                i->addAttribute( "jid",  item.jid.empty() ? m_parent->jid().full() : item.jid );
-                i->addAttribute( "node", item.node );
-                i->addAttribute( "name", item.name );
-              }
+              ItemList il = (*in)->handleDiscoNodeItems( iq->from(), items->node() );
+              itemlist.merge( il );
             }
           }
 
+          i->setItems( itemlist );
+
+          re.addExtension( i );
           m_parent->send( re );
+          return true;
         }
-        return true;
         break;
+      }
 
       case IQ::Set:
       {
@@ -333,18 +324,33 @@ namespace gloox
         case IQ::Result:
           switch( context )
           {
-            case GET_DISCO_INFO:
+            case GetDiscoInfo:
+            {
+              const Info* di = static_cast<const Info*>( iq->findExtension( ExtDiscoInfo ) );
+              if( di )
+                (*it).second.dh->handleDiscoInfo( iq->from(), *di, (*it).second.context );
               (*it).second.dh->handleDiscoInfoResult( iq, (*it).second.context );
               break;
-            case GET_DISCO_ITEMS:
+            }
+            case GetDiscoItems:
+            {
+              const Items* di = static_cast<const Items*>( iq->findExtension( ExtDiscoItems ) );
+              if( di )
+                (*it).second.dh->handleDiscoItems( iq->from(), *di, (*it).second.context );
               (*it).second.dh->handleDiscoItemsResult( iq, (*it).second.context );
               break;
-           }
-        break;
+            }
+          }
+          break;
 
         case IQ::Error:
+        {
+          const Error* error = iq->error();
+          if( error )
+            (*it).second.dh->handleDiscoError( iq->from(), *error, (*it).second.context );
           (*it).second.dh->handleDiscoError( iq, (*it).second.context );
           break;
+        }
 
         default:
           break;
@@ -359,9 +365,11 @@ namespace gloox
   {
     const std::string& id = tid.empty() ? m_parent->getID() : tid;
 
-    IQ iq( IQ::Get, to, id, idType == GET_DISCO_INFO ? XMLNS_DISCO_INFO : XMLNS_DISCO_ITEMS );
-    if( !node.empty() )
-      iq.query()->addAttribute( "node", node );
+    IQ iq( IQ::Get, to, id );
+    if( idType == GetDiscoInfo )
+      iq.addExtension( new Info( node ) );
+    else
+      iq.addExtension( new Items( node ) );
 
     DiscoHandlerContext ct;
     ct.dh = dh;
@@ -377,10 +385,11 @@ namespace gloox
     m_versionOs = os;
   }
 
-  void Disco::setIdentity( const std::string& category, const std::string& type )
+  void Disco::setIdentity( const std::string& category, const std::string& type,
+                           const std::string& name )
   {
-    m_identityCategory = category;
-    m_identityType = type;
+    util::clearList( m_identities );
+    addIdentity( category, type, name );
   }
 
   void Disco::registerNodeHandler( DiscoNodeHandler* nh, const std::string& node )

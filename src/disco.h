@@ -18,7 +18,6 @@
 #include "gloox.h"
 
 #include "iqhandler.h"
-#include "disconodehandler.h"
 #include "jid.h"
 #include "util.h"
 
@@ -31,6 +30,7 @@ namespace gloox
 
   class ClientBase;
   class DiscoHandler;
+  class DiscoNodeHandler;
   class IQ;
 
   /**
@@ -68,6 +68,12 @@ namespace gloox
 
         public:
           /**
+           * Sets the current info node.
+           * @param node The info node.
+           */
+          void setNode( const std::string& node ) { m_node = node; }
+
+          /**
            * Returns the queried node identifier, if any.
            * @return The node identifier. May be empty.
            */
@@ -84,6 +90,13 @@ namespace gloox
            * @return A list of supported features/namespaces.
            */
           const StringList& features() const { return m_features; }
+
+          /**
+           * Use this function to check if the entity the Info came from supports agiven feature.
+           * @param feature The feature to check for.
+           * @return @b True if the entity announces support for the feature, @b false otherwise.
+           */
+          bool hasFeature( const std::string& feature ) const;
 
           /**
            * This function can be used to set the entity's identities.
@@ -144,8 +157,21 @@ namespace gloox
       class Identity
       {
         friend class Info;
+        friend class Disco;
 
         public:
+          /**
+           * Constructs a Disco Identity from a category, type and name.
+           * See http://www.xmpp.org/registrar/disco-categories.html for more info.
+           * @param category The identity's category.
+           * @param type The identity's type.
+           * @param name The identity's name.
+           */
+          Identity( const std::string& category,
+                    const std::string& type,
+                    const std::string& name )
+            : m_category( category ), m_type( type ), m_name( name ) {}
+
           /**
            * Destructor.
            */
@@ -176,18 +202,6 @@ namespace gloox
           Tag* tag() const;
 
         private:
-          /**
-           * Constructs a Disco Identity from a category, type and name.
-           * See http://www.xmpp.org/registrar/disco-categories.html for more info.
-           * @param category The identity's category.
-           * @param type The identity's type.
-           * @param name The identity's name.
-           */
-          Identity( const std::string& category,
-                    const std::string& type,
-                    const std::string& name )
-            : m_category( category ), m_type( type ), m_name( name ) {}
-
           /**
            * Creates a Disco Identity from the given Tag.
            * @param tag A Tag representation of a disco identity.
@@ -286,6 +300,17 @@ namespace gloox
 
         public:
           /**
+           * Constructs a Disco Item from a JID, node and name.
+           * @param jid The item's JID.
+           * @param node The item's type.
+           * @param name The item's name.
+           */
+          Item( const JID& jid,
+                const std::string& node,
+                const std::string& name )
+          : m_jid( jid ), m_node( node ), m_name( name ) {}
+
+          /**
            * Destructor.
            */
           ~Item() {}
@@ -315,17 +340,6 @@ namespace gloox
           Tag* tag() const;
 
         private:
-          /**
-           * Constructs a Disco Item from a JID, node and name.
-           * @param jid The item's JID.
-           * @param node The item's type.
-           * @param name The item's name.
-           */
-          Item( const JID& jid,
-                const std::string& node,
-                const std::string& name )
-            : m_jid( jid ), m_node( node ), m_name( name ) {}
-
           /**
            * Creates a Disco Item from the given Tag.
            * @param tag A Tag representation of a Disco item.
@@ -380,7 +394,7 @@ namespace gloox
        */
       void getDiscoInfo( const JID& to, const std::string& node, DiscoHandler* dh, int context,
                          const std::string& tid = EmptyString )
-        { getDisco( to, node, dh, context, GET_DISCO_INFO, tid ); }
+        { getDisco( to, node, dh, context, GetDiscoInfo, tid ); }
 
       /**
        * Queries the given JID for its items according to
@@ -395,7 +409,7 @@ namespace gloox
        */
       void getDiscoItems( const JID& to, const std::string& node, DiscoHandler* dh, int context,
                           const std::string& tid = EmptyString )
-        { getDisco( to, node, dh, context, GET_DISCO_ITEMS, tid ); }
+        { getDisco( to, node, dh, context, GetDiscoItems, tid ); }
 
       /**
        * Sets the version of the host application using this library.
@@ -414,22 +428,43 @@ namespace gloox
        * with a correct identity.
        * XEP-0030 requires an entity to have at least one identity. See XEP-0030
        * for more information on categories and types.
-       * @param category The entity category of this client. Default: client
-       * @param type The type of this entity. Default: bot
+       * @param category The entity category of this client. Default: client.
+       * @param type The type of this entity. Default: bot.
+       * @param name The name of the entity. Default: empty.
+       * @note An entity can have more than one identity. You cann add more identities
+       * using addIdentity(). A call to setIdentity() will clear the list of identities
+       * and, after that, add the new identity given by the arguments to setIdentity().
        */
-      void setIdentity( const std::string& category, const std::string& type );
+      void setIdentity( const std::string& category, const std::string& type,
+                        const std::string& name = EmptyString );
+
+      /**
+       * Adds another identity to the list of identities.
+       * @param category The entity category of this client. Default: client.
+       * @param type The type of this entity. Default: bot.
+       * @param name The name of the entity. Default: empty.
+       */
+      void addIdentity( const std::string& category, const std::string& type,
+                        const std::string& name = EmptyString )
+        { m_identities.push_back( new Identity( category, type, name ) ); }
+
+      /**
+       * Returns the entity's identities.
+       * @return The entity's identities.
+       */
+      const IdentityList& identities() const { return m_identities; }
 
       /**
        * Returns the set identity category, e.g. 'client'.
        * @return The identity category.
        */
-      const std::string& category() const { return m_identityCategory; }
+//       const std::string& category() const { return m_identityCategory; }
 
       /**
        * Returns the set identity type, e.g. 'bot'.
        * @return The identity type.
        */
-      const std::string& type() const { return m_identityType; }
+//       const std::string& type() const { return m_identityType; }
 
       /**
        * Use this function to register an @ref DiscoHandler with the Disco
@@ -477,8 +512,8 @@ namespace gloox
 
       enum IdType
       {
-        GET_DISCO_INFO,
-        GET_DISCO_ITEMS
+        GetDiscoInfo,
+        GetDiscoItems
       };
 
       void getDisco( const JID& to, const std::string& node, DiscoHandler* dh,
@@ -501,6 +536,7 @@ namespace gloox
       DiscoHandlerList m_discoHandlers;
       DiscoNodeHandlerMap m_nodeHandlers;
       DiscoHandlerMap m_track;
+      IdentityList m_identities;
 //       ItemList m_items;
       StringList m_features;
       StringMap  m_queryIDs;
@@ -508,8 +544,6 @@ namespace gloox
       std::string m_versionName;
       std::string m_versionVersion;
       std::string m_versionOs;
-      std::string m_identityCategory;
-      std::string m_identityType;
 
   };
 

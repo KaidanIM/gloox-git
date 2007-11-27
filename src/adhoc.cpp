@@ -47,7 +47,7 @@ namespace gloox
     }
   }
 
-  StringList Adhoc::handleDiscoNodeFeatures( const std::string& /*node*/ )
+  StringList Adhoc::handleDiscoNodeFeatures( const JID& from, const std::string& /*node*/ )
   {
     StringList features;
     features.push_back( XMLNS_ADHOC_COMMANDS );
@@ -55,39 +55,32 @@ namespace gloox
 //    return StringList( 1, XMLNS_ADHOC_COMMANDS );
   }
 
-  DiscoNodeItemList Adhoc::handleDiscoNodeItems( const std::string& node )
+  Disco::ItemList Adhoc::handleDiscoNodeItems( const JID& from, const std::string& node )
   {
-    DiscoNodeItemList l;
+    Disco::ItemList l;
     if( node.empty() )
     {
-      l.push_back( DiscoNodeItem(
-            XMLNS_ADHOC_COMMANDS, m_parent->jid().full(), "Ad-Hoc Commands" ) );
+      l.push_back( new Disco::Item( m_parent->jid(), XMLNS_ADHOC_COMMANDS, "Ad-Hoc Commands" ) );
     }
     else if( node == XMLNS_ADHOC_COMMANDS )
     {
       StringMap::const_iterator it = m_items.begin();
       for( ; it != m_items.end(); ++it )
       {
-        l.push_back( DiscoNodeItem( (*it).first, m_parent->jid().full(), (*it).second ) );
+        l.push_back( new Disco::Item( m_parent->jid(), (*it).first, (*it).second ) );
       }
     }
     return l;
   }
 
-  StringMap Adhoc::handleDiscoNodeIdentities( const std::string& node, std::string& name )
+  Disco::IdentityList Adhoc::handleDiscoNodeIdentities( const JID& from, const std::string& node )
   {
+    Disco::IdentityList l;
     StringMap::const_iterator it = m_items.find( node );
-    if( it != m_items.end() )
-      name = (*it).second;
-    else
-      name = "Ad-Hoc Commands";
-
-    StringMap ident;
-    if( node == XMLNS_ADHOC_COMMANDS )
-      ident["automation"] = "command-list";
-    else
-      ident["automation"] = "command-node";
-    return ident;
+    l.push_back( new Disco::Identity( "automation",
+                               node == XMLNS_ADHOC_COMMANDS ? "command-list" : "command-node",
+                               it == m_items.end() ? "Ad-Hoc Commands" : (*it).second ) );
+    return l;
   }
 
   bool Adhoc::handleIq( IQ* iq )
@@ -185,28 +178,23 @@ namespace gloox
     m_items[command] = name;
   }
 
-  void Adhoc::handleDiscoInfoResult( IQ* iq, int context )
+  void Adhoc::handleDiscoInfo( const JID& from, const Disco::Info& info, int context )
   {
     if( context != CheckAdhocSupport )
       return;
 
     AdhocTrackMap::iterator it = m_adhocTrackMap.begin();
     for( ; it != m_adhocTrackMap.end() && (*it).second.context != context
-                                       && (*it).second.remote  != iq->from(); ++it )
+                                       && (*it).second.remote  != from; ++it )
       ;
     if( it == m_adhocTrackMap.end() )
       return;
 
-    const Tag* query = iq->query();
-    if( query && query->name() == "query" && query->xmlns() == XMLNS_DISCO_INFO )
-    {
-      (*it).second.ah->handleAdhocSupport( (*it).second.remote,
-              query->hasChild( "feature", "var", XMLNS_ADHOC_COMMANDS ) );
-    }
+    (*it).second.ah->handleAdhocSupport( (*it).second.remote, info.hasFeature( XMLNS_ADHOC_COMMANDS ) );
     m_adhocTrackMap.erase( it );
   }
 
-  void Adhoc::handleDiscoItemsResult( IQ* iq, int context )
+  void Adhoc::handleDiscoItems( const JID& from, const Disco::Items& items, int context )
   {
     if( context != FetchAdhocCommands )
       return;
@@ -214,25 +202,16 @@ namespace gloox
     AdhocTrackMap::iterator it = m_adhocTrackMap.begin();
     for( ; it != m_adhocTrackMap.end(); ++it )
     {
-      if( (*it).second.context == context && (*it).second.remote == iq->from() )
+      if( (*it).second.context == context && (*it).second.remote == from )
       {
-        Tag* q = iq->query();
-        if( q && q->name() == "query" && q->xmlns() == XMLNS_DISCO_ITEMS )
+        StringMap commands;
+        const Disco::ItemList& l = items.items();
+        Disco::ItemList::const_iterator it2 = l.begin();
+        for( ; it2 != l.end(); ++it2 )
         {
-          StringMap commands;
-          const TagList& l = q->children();
-          TagList::const_iterator itt = l.begin();
-          for( ; itt != l.end(); ++itt )
-          {
-            const std::string& name = (*itt)->findAttribute( "name" );
-            const std::string& node = (*itt)->findAttribute( "node" );
-            if( (*itt)->name() == "item" && !name.empty() && !node.empty() )
-            {
-              commands[node] = name;
-            }
-          }
-          (*it).second.ah->handleAdhocCommands( (*it).second.remote, commands );
+          commands[(*it2)->node()] = (*it2)->name();
         }
+        (*it).second.ah->handleAdhocCommands( from, commands );
 
         m_adhocTrackMap.erase( it );
         break;
@@ -240,14 +219,14 @@ namespace gloox
     }
   }
 
-  void Adhoc::handleDiscoError( IQ* iq, int context )
+  void Adhoc::handleDiscoError( const JID& from, const Error& error, int context )
   {
     AdhocTrackMap::iterator it = m_adhocTrackMap.begin();
     for( ; it != m_adhocTrackMap.end(); ++it )
     {
-      if( (*it).second.context == context && (*it).second.remote == iq->from() )
+      if( (*it).second.context == context && (*it).second.remote == from )
       {
-        (*it).second.ah->handleAdhocError( (*it).second.remote, iq->error()->error() );
+        (*it).second.ah->handleAdhocError( from, error );
 
         m_adhocTrackMap.erase( it );
       }
@@ -263,8 +242,9 @@ namespace gloox
     track.remote = remote;
     track.context = CheckAdhocSupport;
     track.ah = ah;
-    m_adhocTrackMap[m_parent->getID()] = track;
-    m_parent->disco()->getDiscoInfo( remote, EmptyString, this, CheckAdhocSupport );
+    const std::string& id = m_parent->getID();
+    m_adhocTrackMap[id] = track;
+    m_parent->disco()->getDiscoInfo( remote, EmptyString, this, CheckAdhocSupport, id );
   }
 
   void Adhoc::getCommands( const JID& remote, AdhocHandler* ah )
@@ -276,8 +256,9 @@ namespace gloox
     track.remote = remote;
     track.context = FetchAdhocCommands;
     track.ah = ah;
-    m_adhocTrackMap[m_parent->getID()] = track;
-    m_parent->disco()->getDiscoItems( remote, XMLNS_ADHOC_COMMANDS, this, FetchAdhocCommands );
+    const std::string& id = m_parent->getID();
+    m_adhocTrackMap[id] = track;
+    m_parent->disco()->getDiscoItems( remote, XMLNS_ADHOC_COMMANDS, this, FetchAdhocCommands, id );
   }
 
   void Adhoc::execute( const JID& remote, const std::string& command, AdhocHandler* ah,

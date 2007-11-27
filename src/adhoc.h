@@ -15,6 +15,7 @@
 #ifndef ADHOC_H__
 #define ADHOC_H__
 
+#include "disco.h"
 #include "disconodehandler.h"
 #include "discohandler.h"
 #include "iqhandler.h"
@@ -127,13 +128,14 @@ namespace gloox
       virtual ~Adhoc();
 
       // reimplemented from DiscoNodeHandler
-      virtual StringList handleDiscoNodeFeatures( const std::string& node );
+      virtual StringList handleDiscoNodeFeatures( const JID& from, const std::string& node );
 
       // reimplemented from DiscoNodeHandler
-      virtual StringMap handleDiscoNodeIdentities( const std::string& node, std::string& name );
+      virtual Disco::IdentityList handleDiscoNodeIdentities( const JID& from,
+                                                             const std::string& node );
 
       // reimplemented from DiscoNodeHandler
-      virtual DiscoNodeItemList handleDiscoNodeItems( const std::string& node );
+      virtual Disco::ItemList handleDiscoNodeItems( const JID& from, const std::string& node );
 
       // reimplemented from IqHandler
       virtual bool handleIq( IQ* iq );
@@ -142,13 +144,22 @@ namespace gloox
       virtual void handleIqID( IQ* iq, int context );
 
       // reimplemented from DiscoHandler
-      virtual void handleDiscoInfoResult( IQ* iq, int context );
+      virtual void handleDiscoInfo( const JID& from, const Disco::Info& info, int context );
 
       // reimplemented from DiscoHandler
-      virtual void handleDiscoItemsResult( IQ* iq, int context );
+      virtual void handleDiscoItems( const JID& from, const Disco::Items& items, int context );
 
       // reimplemented from DiscoHandler
-      virtual void handleDiscoError( IQ* iq, int context );
+      virtual void handleDiscoError( const JID& from, const Error& error, int context );
+
+      // reimplemented from DiscoHandler, FIXME remove
+      virtual void handleDiscoInfoResult( IQ* iq, int context ) { (void) iq; (void) context; };
+
+      // reimplemented from DiscoHandler, FIXME remove
+      virtual void handleDiscoItemsResult( IQ* iq, int context ) { (void) iq; (void) context; };
+
+      // reimplemented from DiscoHandler, FIXME remove
+      virtual void handleDiscoError( IQ* iq, int context ) { (void) iq; (void) context; };
 
       /**
        * Using this function, you can register a AdhocCommandProvider -derived object as
