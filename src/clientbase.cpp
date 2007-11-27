@@ -206,14 +206,14 @@ namespace gloox
           {
             IQ iq( tag );
             m_seFactory->addExtensions( iq, tag );
-            notifyIqHandlers( &iq );
+            notifyIqHandlers( iq );
             ++m_stats.iqStanzasReceived;
           }
           else if( tag->name() == "message" )
           {
             Message msg( tag );
             m_seFactory->addExtensions( msg, tag );
-            notifyMessageHandlers( &msg );
+            notifyMessageHandlers( msg );
             ++m_stats.messageStanzasReceived;
           }
           else if( tag->name() == "presence" )
@@ -224,14 +224,14 @@ namespace gloox
             {
               Subscription sub( tag );
               m_seFactory->addExtensions( sub, tag );
-              notifySubscriptionHandlers( &sub );
+              notifySubscriptionHandlers( sub );
               ++m_stats.s10nStanzasReceived;
             }
             else
             {
               Presence pres( tag );
               m_seFactory->addExtensions( pres, tag );
-              notifyPresenceHandlers( &pres );
+              notifyPresenceHandlers( pres );
               ++m_stats.presenceStanzasReceived;
             }
           }
@@ -1117,16 +1117,16 @@ namespace gloox
     util::ForEach( m_connectionListeners, &ConnectionListener::onStreamEvent, event );
   }
 
-  void ClientBase::notifyPresenceHandlers( Presence* pres )
+  void ClientBase::notifyPresenceHandlers( Presence& pres )
   {
     bool match = false;
     PresenceJidHandlerList::const_iterator itj = m_presenceJidHandlers.begin();
     for( ; itj != m_presenceJidHandlers.end(); ++itj )
     {
-      if( (*itj).jid->bare() == pres->from().bare() && (*itj).ph )
+      if( (*itj).jid->bare() == pres.from().bare() && (*itj).ph )
       {
-        (*itj).ph->handlePresence( *pres );
         (*itj).ph->handlePresence( pres );
+        (*itj).ph->handlePresence( &pres ); // FIXME remove for 1.1
         match = true;
       }
     }
@@ -1137,63 +1137,63 @@ namespace gloox
     PresenceHandlerList::const_iterator it = m_presenceHandlers.begin();
     for( ; it != m_presenceHandlers.end(); ++it )
     {
-      (*it)->handlePresence( *pres );
       (*it)->handlePresence( pres );
+      (*it)->handlePresence( &pres ); // FIXME remove for 1.1
     }
       // FIXME and reinstantiate this:
 //     util::ForEach( m_presenceHandlers, &PresenceHandler::handlePresence, pres );
   }
 
-  void ClientBase::notifySubscriptionHandlers( Subscription* s10n )
+  void ClientBase::notifySubscriptionHandlers( Subscription& s10n )
   {
     // FIXME remove this for() for 1.1:
     SubscriptionHandlerList::const_iterator it = m_subscriptionHandlers.begin();
     for( ; it != m_subscriptionHandlers.end(); ++it )
     {
-      (*it)->handleSubscription( *s10n );
       (*it)->handleSubscription( s10n );
+      (*it)->handleSubscription( &s10n ); // FIXME remove for 1.1
     }
       // FIXME and reinstantiate this:
 //     util::ForEach( m_subscriptionHandlers, &SubscriptionHandler::handleSubscription, s10n );
   }
 
-  void ClientBase::notifyIqHandlers( IQ* iq )
+  void ClientBase::notifyIqHandlers( IQ& iq )
   {
-    IqTrackMap::iterator it_id = m_iqIDHandlers.find( iq->id() );
-    if( it_id != m_iqIDHandlers.end() && iq->subtype() & ( IQ::Result | IQ::Error ) )
+    IqTrackMap::iterator it_id = m_iqIDHandlers.find( iq.id() );
+    if( it_id != m_iqIDHandlers.end() && iq.subtype() & ( IQ::Result | IQ::Error ) )
     {
-      (*it_id).second.ih->handleIqID( *iq, (*it_id).second.context );
-      (*it_id).second.ih->handleIqID( iq, (*it_id).second.context ); // FIXME remove for 1.1
+      (*it_id).second.ih->handleIqID( iq, (*it_id).second.context );
+      (*it_id).second.ih->handleIqID( &iq, (*it_id).second.context ); // FIXME remove for 1.1
       m_iqIDHandlers.erase( it_id );
       return;
     }
 
-    if( !iq->query() )
+    if( !iq.query() )
       return;
 
     bool res = false;
 
     typedef IqHandlerMap::const_iterator IQci;
-    std::pair<IQci, IQci> g = m_iqNSHandlers.equal_range( iq->xmlns() );
+    std::pair<IQci, IQci> g = m_iqNSHandlers.equal_range( iq.xmlns() );
     for( IQci it = g.first; it != g.second; ++it )
     {
-      if( (*it).second->handleIq( *iq ) )
+      if( (*it).second->handleIq( iq ) )
         res = true;
-      if( (*it).second->handleIq( iq ) ) // FIXME remove for 1.1
+      if( (*it).second->handleIq( &iq ) ) // FIXME remove for 1.1
         res = true;
     }
 
-    if( !res && iq->subtype() & ( IQ::Get | IQ::Set ) )
+    if( !res && iq.subtype() & ( IQ::Get | IQ::Set ) )
     {
-      IQ re( IQ::Error, iq->from(), iq->id() );
+      IQ re( IQ::Error, iq.from(), iq.id() );
       re.addExtension( new Error( StanzaErrorTypeCancel, StanzaErrorServiceUnavailable ) );
       send( re );
     }
   }
 
-  void ClientBase::notifyMessageHandlers( Message* msg )
+  void ClientBase::notifyMessageHandlers( Message& msg )
   {
-    Tag* m = msg->tag();
+    Tag* m = msg.tag();
     if( m_mucInvitationHandler && m )
     {
       const Tag* x = m->findChild( "x", XMLNS, XMLNS_MUC_USER ); // FIXME !!!
@@ -1208,8 +1208,8 @@ namespace gloox
         t = x->findChild( "password" );
         const std::string& password( t ? t->cdata() : EmptyString );
 
-        m_mucInvitationHandler->handleMUCInvitation( msg->from(), invitee,
-                                                     reason, msg->body(), password,
+        m_mucInvitationHandler->handleMUCInvitation( msg.from(), invitee,
+                                                     reason, msg.body(), password,
                                                      i->hasChild( "continue" ) );
         return;
       }
@@ -1219,12 +1219,12 @@ namespace gloox
     MessageSessionList::const_iterator it1 = m_messageSessions.begin();
     for( ; it1 != m_messageSessions.end(); ++it1 )
     {
-      if( (*it1)->target().full() == msg->from().full() &&
-            ( msg->thread().empty() || (*it1)->threadID() == msg->thread() ) &&
+      if( (*it1)->target().full() == msg.from().full() &&
+            ( msg.thread().empty() || (*it1)->threadID() == msg.thread() ) &&
 // FIXME don't use '== 0' here
-            ( (*it1)->types() & msg->subtype() || (*it1)->types() == 0 ) )
+            ( (*it1)->types() & msg.subtype() || (*it1)->types() == 0 ) )
       {
-        (*it1)->handleMessage( *msg );
+        (*it1)->handleMessage( msg );
         return;
       }
     }
@@ -1232,19 +1232,19 @@ namespace gloox
     it1 = m_messageSessions.begin();
     for( ; it1 != m_messageSessions.end(); ++it1 )
     {
-      if( (*it1)->target().bare() == msg->from().bare() &&
-            ( msg->thread().empty() || (*it1)->threadID() == msg->thread() ) &&
+      if( (*it1)->target().bare() == msg.from().bare() &&
+            ( msg.thread().empty() || (*it1)->threadID() == msg.thread() ) &&
 // FIXME don't use '== 0' here
-            ( (*it1)->types() & msg->subtype() || (*it1)->types() == 0 ) )
+            ( (*it1)->types() & msg.subtype() || (*it1)->types() == 0 ) )
       {
-        (*it1)->handleMessage( *msg );
+        (*it1)->handleMessage( msg );
         return;
       }
     }
 
     MessageSessionHandler* msHandler = 0;
 
-    switch( msg->subtype() )
+    switch( msg.subtype() )
     {
       case Message::Chat:
         msHandler = m_messageSessionHandlerChat;
@@ -1264,9 +1264,9 @@ namespace gloox
 
     if( msHandler )
     {
-      MessageSession* session = new MessageSession( this, msg->from(), true, msg->subtype() );
+      MessageSession* session = new MessageSession( this, msg.from(), true, msg.subtype() );
       msHandler->handleMessageSession( session );
-      session->handleMessage( *msg );
+      session->handleMessage( msg );
     }
     else
     {
@@ -1274,8 +1274,8 @@ namespace gloox
       MessageHandlerList::const_iterator it = m_messageHandlers.begin();
       for( ; it != m_messageHandlers.end(); ++it )
       {
-        (*it)->handleMessage( *msg );
         (*it)->handleMessage( msg );
+        (*it)->handleMessage( &msg );
       }
       // FIXME and reinstantiate this:
 //       util::ForEach( m_messageHandlers, &MessageHandler::handleMessage, *msg );
