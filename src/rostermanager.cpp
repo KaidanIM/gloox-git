@@ -66,24 +66,24 @@ namespace gloox
     m_parent->send( iq );
   }
 
-  bool RosterManager::handleIq( IQ* iq )
+  bool RosterManager::handleIq( const IQ& iq )
   {
-    if( iq->subtype() == IQ::Result ) // initial roster
+    if( iq.subtype() == IQ::Result ) // initial roster
     {
-      extractItems( iq->query(), false );
+      extractItems( iq.query(), false );
 
       if( m_rosterListener )
         m_rosterListener->handleRoster( m_roster );
 
       m_parent->rosterFilled();
     }
-    else if( iq->subtype() == IQ::Set ) // roster item push
+    else if( iq.subtype() == IQ::Set ) // roster item push
     {
-      extractItems( iq->query(), true );
-      IQ re( IQ::Result, JID(), iq->id() );
+      extractItems( iq.query(), true );
+      IQ re( IQ::Result, JID(), iq.id() );
       m_parent->send( re );
     }
-    else if( iq->subtype() == IQ::Error )
+    else if( iq.subtype() == IQ::Error )
     {
       if( m_rosterListener )
         m_rosterListener->handleRosterError( iq );
@@ -93,7 +93,7 @@ namespace gloox
     return true;
   }
 
-  void RosterManager::handleIqID( IQ* /*iq*/, int /*context*/ )
+  void RosterManager::handleIqID( const IQ& /*iq*/, int /*context*/ )
   {
   }
 

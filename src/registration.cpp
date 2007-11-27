@@ -158,37 +158,37 @@ namespace gloox
     m_registrationHandler = 0;
   }
 
-  void Registration::handleIqID( IQ* iq, int context )
+  void Registration::handleIqID( const IQ& iq, int context )
   {
     if( !m_registrationHandler )
       return;
 
-    if( iq->subtype() == IQ::Result )
+    if( iq.subtype() == IQ::Result )
     {
       switch( context )
       {
         case FetchRegistrationFields:
         {
-          const Tag* q = iq->query();
+          const Tag* q = iq.query();
           if( !q )
             return;
 
           if( q->hasChild( "registered" ) )
           {
-            m_registrationHandler->handleAlreadyRegistered( iq->from() );
+            m_registrationHandler->handleAlreadyRegistered( iq.from() );
             break;
           }
 
           if( q->hasChild( "x", XMLNS, XMLNS_X_DATA ) )
           {
             const DataForm form( q->findChild( "x", XMLNS, XMLNS_X_DATA ) );
-            m_registrationHandler->handleDataForm( iq->from(), form );
+            m_registrationHandler->handleDataForm( iq.from(), form );
           }
 
           if( q->hasChild( "x", XMLNS, XMLNS_X_OOB ) )
           {
             const OOB oob( q->findChild( "x", XMLNS, XMLNS_X_OOB ) );
-            m_registrationHandler->handleOOB( iq->from(), oob );
+            m_registrationHandler->handleOOB( iq.from(), oob );
           }
 
           int fields = 0;
@@ -229,57 +229,57 @@ namespace gloox
           if( q->hasChild( "instructions" ) )
             instructions = q->findChild( "instructions" )->cdata();
 
-          m_registrationHandler->handleRegistrationFields( iq->from(), fields, instructions );
+          m_registrationHandler->handleRegistrationFields( iq.from(), fields, instructions );
           break;
         }
 
         case CreateAccount:
-          m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationSuccess );
+          m_registrationHandler->handleRegistrationResult( iq.from(), RegistrationSuccess );
           break;
 
         case ChangePassword:
-          m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationSuccess );
+          m_registrationHandler->handleRegistrationResult( iq.from(), RegistrationSuccess );
           break;
 
         case RemoveAccount:
-          m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationSuccess );
+          m_registrationHandler->handleRegistrationResult( iq.from(), RegistrationSuccess );
           break;
       }
     }
-    else if( iq->subtype() == IQ::Error )
+    else if( iq.subtype() == IQ::Error )
     {
-      const Error* e = iq->error();
+      const Error* e = iq.error();
       if( !e )
         return;
 
       switch( e->error() )
       {
         case StanzaErrorConflict:
-          m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationConflict );
+          m_registrationHandler->handleRegistrationResult( iq.from(), RegistrationConflict );
           break;
         case StanzaErrorNotAcceptable:
-          m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationNotAcceptable );
+          m_registrationHandler->handleRegistrationResult( iq.from(), RegistrationNotAcceptable );
           break;
         case StanzaErrorBadRequest:
-          m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationBadRequest );
+          m_registrationHandler->handleRegistrationResult( iq.from(), RegistrationBadRequest );
           break;
         case StanzaErrorForbidden:
-          m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationForbidden );
+          m_registrationHandler->handleRegistrationResult( iq.from(), RegistrationForbidden );
           break;
         case StanzaErrorRegistrationRequired:
-          m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationRequired );
+          m_registrationHandler->handleRegistrationResult( iq.from(), RegistrationRequired );
           break;
         case StanzaErrorUnexpectedRequest:
-          m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationUnexpectedRequest );
+          m_registrationHandler->handleRegistrationResult( iq.from(), RegistrationUnexpectedRequest );
           break;
         case StanzaErrorNotAuthorized:
-          m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationNotAuthorized );
+          m_registrationHandler->handleRegistrationResult( iq.from(), RegistrationNotAuthorized );
           break;
         case StanzaErrorNotAllowed:
-          m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationNotAllowed );
+          m_registrationHandler->handleRegistrationResult( iq.from(), RegistrationNotAllowed );
           break;
         default:
-          m_registrationHandler->handleRegistrationResult( iq->from(), RegistrationUnknownError );
+          m_registrationHandler->handleRegistrationResult( iq.from(), RegistrationUnknownError );
           break;
 
       }

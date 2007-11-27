@@ -81,7 +81,7 @@ namespace gloox
        * @param iq The error stanza.
        * @param sid The request's SID.
        */
-      virtual void handleBytestreamError( IQ* iq, const std::string& sid ) = 0;
+      virtual void handleBytestreamError( const IQ& iq, const std::string& sid ) = 0;
 
   };
 

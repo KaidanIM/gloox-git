@@ -288,11 +288,17 @@ namespace gloox
        */
       void disconnect();
 
-      // re-implemented from IaHandler
-      virtual bool handleIq( IQ* iq ) { (void)iq; return false; }
+      // re-implemented from IqHandler
+      virtual bool handleIq( const IQ& iq ) { (void)iq; return false; }
 
-      // re-implemented from IaHandler
-      virtual void handleIqID( IQ* iq, int context );
+      // re-implemented from IqHandler
+      virtual void handleIqID( const IQ& iq, int context );
+
+      // re-implemented from IqHandler
+      virtual bool handleIq( IQ* iq ) { (void)iq; return false; } // FIXME remove for 1.1
+
+      // re-implemented from IqHandler
+      virtual void handleIqID( IQ* iq, int context ) { (void)iq; (void)context; } // FIXME remove for 1.1
 
     protected:
       /**
@@ -307,8 +313,8 @@ namespace gloox
       int getStreamFeatures( Tag* tag );
       int getSaslMechs( Tag* tag );
       int getCompressionMethods( Tag* tag );
-      void processResourceBind( IQ* iq );
-      void processCreateSession( IQ* iq );
+      void processResourceBind( const IQ& iq );
+      void processCreateSession( const IQ& iq );
       void sendPresence( const Presence& pres );
       void createSession();
       void negotiateCompression( StreamFeature method );

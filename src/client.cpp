@@ -340,7 +340,7 @@ namespace gloox
     return meths;
   }
 
-  void Client::handleIqID( IQ* iq, int context )
+  void Client::handleIqID( const IQ& iq, int context )
   {
     switch( context )
     {
@@ -377,13 +377,13 @@ namespace gloox
     return true;
   }
 
-  void Client::processResourceBind( IQ* iq )
+  void Client::processResourceBind( const IQ& iq )
   {
-    switch( iq->subtype() )
+    switch( iq.subtype() )
     {
       case IQ::Result:
       {
-        const SEResourceBind* rb = static_cast<const SEResourceBind*>( iq->findExtension( ExtResourceBind ) );
+        const SEResourceBind* rb = static_cast<const SEResourceBind*>( iq.findExtension( ExtResourceBind ) );
         if( !rb || !rb->jid() )
         {
           notifyOnResourceBindError( 0 );
@@ -402,7 +402,7 @@ namespace gloox
       }
       case IQ::Error:
       {
-        notifyOnResourceBindError( iq->error() );
+        notifyOnResourceBindError( iq.error() );
         break;
       }
       default:
@@ -417,15 +417,15 @@ namespace gloox
     send( iq, this, SessionEstablishment );
   }
 
-  void Client::processCreateSession( IQ* iq )
+  void Client::processCreateSession( const IQ& iq )
   {
-    switch( iq->subtype() )
+    switch( iq.subtype() )
     {
       case IQ::Result:
         connected();
         break;
       case IQ::Error:
-        notifyOnSessionCreateError( iq->error() );
+        notifyOnSessionCreateError( iq.error() );
         break;
       default:
         break;

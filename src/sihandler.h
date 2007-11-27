@@ -61,7 +61,7 @@ namespace gloox
        * @param stanza The complete error stanza.
        * @param sid The request's SID.
        */
-      virtual void handleSIRequestError( IQ* iq, const std::string& sid ) = 0;
+      virtual void handleSIRequestError( const IQ& iq, const std::string& sid ) = 0;
 
   };
 

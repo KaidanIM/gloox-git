@@ -60,9 +60,9 @@ namespace gloox
     return true;
   }
 
-  void InBandBytestream::handleIqID( IQ* iq, int context )
+  void InBandBytestream::handleIqID( const IQ& iq, int context )
   {
-    switch( iq->subtype() )
+    switch( iq.subtype() )
     {
       case IQ::Result:
         if( context == IBBOpen && m_handler )
@@ -79,17 +79,17 @@ namespace gloox
     }
   }
 
-  bool InBandBytestream::handleIq( IQ* iq ) // data or open request, always 'set'
+  bool InBandBytestream::handleIq( const IQ& iq ) // data or open request, always 'set'
   {
-    Tag* q = iq->query();
-    if( !q || !q->hasAttribute( "sid", m_sid ) || !m_handler || iq->subtype() != IQ::Set )
+    Tag* q = iq.query();
+    if( !q || !q->hasAttribute( "sid", m_sid ) || !m_handler || iq.subtype() != IQ::Set )
       return false;
 
     if( !m_open )
     {
       if( q->name() == "open" )
       {
-        returnResult( iq->from(), iq->id() );
+        returnResult( iq.from(), iq.id() );
         m_open = true;
         m_handler->handleBytestreamOpen( this );
         return true;
@@ -99,7 +99,7 @@ namespace gloox
 
     if( q->name() == "close" )
     {
-      returnResult( iq->from(), iq->id() );
+      returnResult( iq.from(), iq.id() );
       closed();
       return true;
     }
@@ -118,7 +118,7 @@ namespace gloox
       return false;
     }
 
-    returnResult( iq->from(), iq->id() );
+    returnResult( iq.from(), iq.id() );
     m_handler->handleBytestreamData( this, Base64::decode64( data ) );
     return true;
   }

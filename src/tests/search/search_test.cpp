@@ -88,7 +88,7 @@ class SearchTest : public gloox::SearchHandler, public gloox::ClientBase
 
       delete form;
     }
-    virtual void handleSearchError( const gloox::JID& /*directory*/, gloox::Stanza* /*stanza*/ ) {}
+    virtual void handleSearchError( const gloox::JID& /*directory*/, const gloox::Error* /*error*/ ) {}
     virtual void send( gloox::IQ& iq, gloox::IqHandler*, int context )
     {
       m_context = context;

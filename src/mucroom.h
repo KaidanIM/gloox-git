@@ -491,10 +491,16 @@ namespace gloox
       virtual void handleMessage( Message* msg, MessageSession* session = 0 );
 
       // reimplemented from IqHandler
-      virtual bool handleIq( IQ* /*iq*/ ) { return false; }
+      virtual bool handleIq( const IQ& iq ) { (void)iq; return false; }
 
       // reimplemented from IqHandler
-      virtual void handleIqID( IQ* iq, int context );
+      virtual void handleIqID( const IQ& iq, int context );
+
+      // reimplemented from IqHandler
+      virtual bool handleIq( IQ* iq ) { (void)iq; return false; } // FIXME remove for 1.1
+
+      // reimplemented from IqHandler
+      virtual void handleIqID( IQ* iq, int context ){ (void)iq; (void)context; } // FIXME remove for 1.1
 
       // reimplemented from DiscoNodeHandler
       virtual StringList handleDiscoNodeFeatures( const JID& from, const std::string& node );
@@ -517,8 +523,8 @@ namespace gloox
       bool m_joined;
 
     private:
-      void handleIqResult( IQ* iq, int context );
-      void handleIqError( IQ* iq, int context );
+      void handleIqResult( const IQ& iq, int context );
+      void handleIqError( const IQ& iq, int context );
       void setNonAnonymous();
       void setSemiAnonymous();
       void setFullyAnonymous();

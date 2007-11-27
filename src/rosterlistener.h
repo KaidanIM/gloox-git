@@ -165,7 +165,7 @@ namespace gloox
        * This function is called if the server returned an error.
        * @param iq The error stanza.
        */
-      virtual void handleRosterError( IQ* iq ) = 0;
+      virtual void handleRosterError( const IQ& iq ) = 0;
   };
 
 }

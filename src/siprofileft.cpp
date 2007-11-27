@@ -258,7 +258,7 @@ namespace gloox
     }
   }
 
-  void SIProfileFT::handleIqID( IQ* /*iq*/, int context )
+  void SIProfileFT::handleIqID( const IQ& /*iq*/, int context )
   {
     switch( context )
     {
@@ -269,7 +269,7 @@ namespace gloox
     }
   }
 
-  void SIProfileFT::handleSIRequestError( IQ* iq, const std::string& sid )
+  void SIProfileFT::handleSIRequestError( const IQ& iq, const std::string& sid )
   {
     if( m_handler )
       m_handler->handleFTRequestError( iq, sid );
@@ -293,7 +293,7 @@ namespace gloox
       m_handler->handleFTBytestream( bs );
   }
 
-  void SIProfileFT::handleBytestreamError( IQ* iq, const std::string& sid )
+  void SIProfileFT::handleBytestreamError( const IQ& iq, const std::string& sid )
   {
     if( m_handler )
       m_handler->handleFTRequestError( iq, sid );

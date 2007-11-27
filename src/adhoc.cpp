@@ -208,19 +208,19 @@ namespace gloox
     return l;
   }
 
-  bool Adhoc::handleIq( IQ* iq )
+  bool Adhoc::handleIq( const IQ& iq )
   {
-    if( iq->subtype() != IQ::Set )
+    if( iq.subtype() != IQ::Set )
       return false;
 
-    Tag* c = iq->query();
+    Tag* c = iq.query();
     if( c && c->name() == "command" )
     {
       const std::string& node = c->findAttribute( "node" );
       AdhocCommandProviderMap::const_iterator it = m_adhocCommandProviders.find( node );
       if( !node.empty() && ( it != m_adhocCommandProviders.end() ) )
       {
-        (*it).second->handleAdhocCommand( node, c, iq->from(), iq->id() );
+        (*it).second->handleAdhocCommand( node, c, iq.from(), iq.id() );
         return true;
       }
     }
@@ -228,22 +228,22 @@ namespace gloox
     return false;
   }
 
-  void Adhoc::handleIqID( IQ* iq, int context )
+  void Adhoc::handleIqID( const IQ& iq, int context )
   {
-    if( context != Adhoc::Command::Execute || iq->subtype() != IQ::Result )
+    if( context != Adhoc::Command::Execute || iq.subtype() != IQ::Result )
       return;
 
-    AdhocTrackMap::iterator it = m_adhocTrackMap.find( iq->id() );
+    AdhocTrackMap::iterator it = m_adhocTrackMap.find( iq.id() );
     if( it == m_adhocTrackMap.end() || (*it).second.context != context
-        || (*it).second.remote != iq->from() )
+        || (*it).second.remote != iq.from() )
       return;
 
-    const Adhoc::Command* ac = static_cast<const Adhoc::Command*>( iq->findExtension( ExtAdhocCommand ) );
+    const Adhoc::Command* ac = static_cast<const Adhoc::Command*>( iq.findExtension( ExtAdhocCommand ) );
     if( !ac )
       return;
 
     m_adhocTrackMap.erase( it );
-    (*it).second.ah->handleAdhocExecutionResult( iq->from(), *ac );
+    (*it).second.ah->handleAdhocExecutionResult( iq.from(), *ac );
   }
 
   void Adhoc::registerAdhocCommandProvider( AdhocCommandProvider* acp, const std::string& command,

@@ -85,17 +85,12 @@ namespace gloox
     m_parent->send( iq, this, VCardHandler::StoreVCard );
   }
 
-  bool VCardManager::handleIq( IQ* /*iq*/ )
+  void VCardManager::handleIqID( const IQ& iq, int context )
   {
-    return false;
-  }
-
-  void VCardManager::handleIqID( IQ* iq, int context )
-  {
-    TrackMap::iterator it = m_trackMap.find( iq->id() );
+    TrackMap::iterator it = m_trackMap.find( iq.id() );
     if( it != m_trackMap.end() )
     {
-      switch( iq->subtype() )
+      switch( iq.subtype() )
       {
         case IQ::Result:
         {
@@ -103,15 +98,15 @@ namespace gloox
           {
             case VCardHandler::FetchVCard:
             {
-              Tag* v = iq->query();
+              Tag* v = iq.query();
               if( v && v->name() == "vCard" && v->xmlns() == XMLNS_VCARD_TEMP )
-                (*it).second->handleVCard( iq->from(), new VCard( v ) );
+                (*it).second->handleVCard( iq.from(), new VCard( v ) );
               else
-                (*it).second->handleVCard( iq->from(), 0 );
+                (*it).second->handleVCard( iq.from(), 0 );
               break;
             }
             case VCardHandler::StoreVCard:
-              (*it).second->handleVCardResult( VCardHandler::StoreVCard, iq->from() );
+              (*it).second->handleVCardResult( VCardHandler::StoreVCard, iq.from() );
               break;
           }
         }
@@ -119,8 +114,8 @@ namespace gloox
         case IQ::Error:
         {
           (*it).second->handleVCardResult( (VCardHandler::VCardContext)context,
-                                           iq->from(),
-                                           iq->error() ? iq->error()->error()
+                                           iq.from(),
+                                           iq.error() ? iq.error()->error()
                                                        : StanzaErrorUndefined );
           break;
         }
