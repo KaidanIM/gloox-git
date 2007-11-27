@@ -7,11 +7,11 @@ using namespace gloox;
 
 int fail = 0;
 
-void printResult( const std::string& name, TagList& result )
+void printResult( const std::string& name, ConstTagList& result )
 {
   printf( ">-- %s --------------------------------------\n", name.c_str() );
   int i = 0;
-  TagList::const_iterator it = result.begin();
+  ConstTagList::const_iterator it = result.begin();
   for( ; it != result.end(); ++it, ++i )
   {
     printf( "tag #%d: %s\n", i, (*it)->xml().c_str() );
@@ -46,8 +46,8 @@ int main( int /*argc*/, char** /*argv*/ )
   Tag *hhh = new Tag( bbb, "hhh" ); hhh->addAttribute( "name", "h1" );
   Tag *iii = new Tag( bbb, "bbb" ); iii->addAttribute( "name", "b2" );
   Tag *jjj = new Tag( hhh, "bbb" ); jjj->addAttribute( "name", "b3" );
-  TagList result;
-  TagList::const_iterator it;
+  ConstTagList result;
+  ConstTagList::const_iterator it;
 //   XPathToken *t = 0;
 
 // <aaa>
@@ -292,7 +292,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
 
   // -------
-  name = "find TagList: //bbb";
+  name = "find ConstTagList: //bbb";
   result = aaa->findTagList( "//bbb" );
   it = result.begin();
   if( result.size() != 3 || (*it) != bbb || (*++it) != jjj || (*++it) != iii )
@@ -303,7 +303,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
 
   // -------
-  name = "find TagList: //ggg";
+  name = "find ConstTagList: //ggg";
   result = aaa->findTagList( "//ggg" );
   it = result.begin();
   if( result.size() != 1 || (*it) != ggg )
