@@ -757,10 +757,10 @@ namespace gloox
       TLSBase* getDefaultEncryption();
       CompressionBase* getDefaultCompression();
 
-      void notifyIqHandlers( IQ* iq );
-      void notifyMessageHandlers( Message* msg );
-      void notifyPresenceHandlers( Presence* presence );
-      void notifySubscriptionHandlers( Subscription* s10n );
+      void notifyIqHandlers( IQ& iq );
+      void notifyMessageHandlers( Message& msg );
+      void notifyPresenceHandlers( Presence& presence );
+      void notifySubscriptionHandlers( Subscription& s10n );
       void notifyTagHandlers( Tag* tag );
       void notifyOnDisconnect( ConnectionError e );
       void send( const std::string& xml );
