@@ -107,7 +107,7 @@ namespace gloox
        * @param directory The queried/searched directory.
        * @param stanza The full error stanza.
        */
-      virtual void handleSearchError( const JID& directory, Stanza* stanza ) = 0;
+      virtual void handleSearchError( const JID& directory, const Error* error ) = 0;
 
   };
 

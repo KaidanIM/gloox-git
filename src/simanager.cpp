@@ -126,13 +126,13 @@ namespace gloox
       m_parent->disco()->removeFeature( profile );
   }
 
-  bool SIManager::handleIq( IQ* iq )
+  bool SIManager::handleIq( const IQ& iq )
   {
-    TrackMap::iterator it = m_track.find( iq->id() );
+    TrackMap::iterator it = m_track.find( iq.id() );
     if( it != m_track.end() )
       return false;
 
-    Tag* si = iq->query();
+    Tag* si = iq.query();
     if( si && si->name() == "si" && si->xmlns() == XMLNS_SI && si->hasAttribute( "profile" ) )
     {
       const std::string& profile = si->findAttribute( "profile" );
@@ -141,7 +141,7 @@ namespace gloox
       {
         Tag* p = si->findChildWithAttrib( XMLNS, profile );
         Tag* f = si->findChild( "feature", XMLNS, XMLNS_FEATURE_NEG );
-        (*it).second->handleSIRequest( iq->from(), iq->id(), profile, si, p, f );
+        (*it).second->handleSIRequest( iq.from(), iq.id(), profile, si, p, f );
         return true;
       }
     }
@@ -149,17 +149,17 @@ namespace gloox
     return false;
   }
 
-  void SIManager::handleIqID( IQ* iq, int context )
+  void SIManager::handleIqID( const IQ& iq, int context )
   {
-    switch( iq->subtype() )
+    switch( iq.subtype() )
     {
       case IQ::Result:
         if( context == OfferSI )
         {
-          TrackMap::iterator it = m_track.find( iq->id() );
+          TrackMap::iterator it = m_track.find( iq.id() );
           if( it != m_track.end() )
           {
-            Tag* si = iq->query();
+            Tag* si = iq.query();
             Tag* ptag = 0;
             Tag* fneg = 0;
             if( si && si->name() == "si" && si->xmlns() == XMLNS_SI )
@@ -167,7 +167,7 @@ namespace gloox
               ptag = si->findChildWithAttrib( XMLNS, (*it).second.profile );
               fneg = si->findChild( "feature", XMLNS, XMLNS_FEATURE_NEG );
             }
-            (*it).second.sih->handleSIRequestResult( iq->from(), (*it).second.sid, si, ptag, fneg );
+            (*it).second.sih->handleSIRequestResult( iq.from(), (*it).second.sid, si, ptag, fneg );
             m_track.erase( it );
           }
         }
@@ -175,7 +175,7 @@ namespace gloox
       case IQ::Error:
         if( context == OfferSI )
         {
-          TrackMap::iterator it = m_track.find( iq->id() );
+          TrackMap::iterator it = m_track.find( iq.id() );
           if( it != m_track.end() )
           {
             (*it).second.sih->handleSIRequestError( iq, (*it).second.sid );

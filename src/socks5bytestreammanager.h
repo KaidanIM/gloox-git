@@ -153,11 +153,17 @@ namespace gloox
        */
       void removeSOCKS5BytestreamServer() { m_server = 0; }
 
-      // reimplemented from IqHandler
-      virtual bool handleIq( IQ* iq );
+      // reimplemented from IqHandler.
+      virtual bool handleIq( const IQ& iq );
 
-      // reimplemented from IqHandler
-      virtual void handleIqID( IQ* iq, int context );
+      // reimplemented from IqHandler.
+      virtual void handleIqID( const IQ& iq, int context );
+
+      // reimplemented from IqHandler.
+      virtual bool handleIq( IQ* iq ) { (void)iq; return false; } // FIXME  remove for 1.1.
+
+      // reimplemented from IqHandler.
+      virtual void handleIqID( IQ* iq, int context ) { (void)iq; (void)context; } // FIXME remove for 1.1
 
     private:
       void rejectSOCKS5Bytestream( const JID& from, const std::string& id, StanzaError reason );

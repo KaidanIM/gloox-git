@@ -107,7 +107,7 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler, Messag
       }
     }
 
-    virtual void handleRosterError( IQ* /*iq*/ )
+    virtual void handleRosterError( const IQ& /*iq*/ )
     {
       printf( "a roster-related error occured\n" );
     }

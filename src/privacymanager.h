@@ -112,11 +112,17 @@ namespace gloox
       void removePrivacyListHandler()
         { m_privacyListHandler = 0; }
 
-      // reimplemented from IqHandler
-      virtual bool handleIq( IQ* iq );
+      // reimplemented from IqHandler.
+      virtual bool handleIq( const IQ& iq );
 
-      // reimplemented from IqHandler
-      virtual void handleIqID( IQ* iq, int context );
+      // reimplemented from IqHandler.
+      virtual void handleIqID( const IQ& iq, int context );
+
+      // reimplemented from IqHandler.
+      virtual bool handleIq( IQ* iq ) { (void)iq; return false; } // FIXME  remove for 1.1.
+
+      // reimplemented from IqHandler.
+      virtual void handleIqID( IQ* iq, int context ) { (void)iq; (void)context; } // FIXME remove for 1.1
 
     private:
       enum IdType

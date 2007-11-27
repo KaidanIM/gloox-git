@@ -339,10 +339,16 @@ namespace gloox
       virtual Disco::ItemList handleDiscoNodeItems( const JID& from, const std::string& node );
 
       // reimplemented from IqHandler
-      virtual bool handleIq( IQ* iq );
+      virtual bool handleIq( IQ* iq ) { (void)iq; return false; } // FIXME remove for 1.1
 
       // reimplemented from IqHandler
-      virtual void handleIqID( IQ* iq, int context );
+      virtual void handleIqID( IQ* iq, int context ) { (void)iq; (void)context; } // FIXME remove for 1.1
+
+      // reimplemented from IqHandler
+      virtual bool handleIq( const IQ& iq );
+
+      // reimplemented from IqHandler
+      virtual void handleIqID( const IQ& iq, int context );
 
       // reimplemented from DiscoHandler
       virtual void handleDiscoInfo( const JID& from, const Disco::Info& info, int context );

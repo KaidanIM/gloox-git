@@ -103,11 +103,17 @@ namespace gloox
       // reimplemented from DiscoHandler
       virtual void handleDiscoError( IQ* iq, int context );
 
-      // reimplemented from IqHandler
-      virtual bool handleIq( IQ* iq );
+      // reimplemented from IqHandler.
+      virtual bool handleIq( const IQ& iq ) { (void)iq; return false; }
 
-      // reimplemented from IqHandler
-      virtual void handleIqID( IQ* iq, int context );
+      // reimplemented from IqHandler.
+      virtual void handleIqID( const IQ& iq, int context );
+
+      // reimplemented from IqHandler.
+      virtual bool handleIq( IQ* iq ) { (void)iq; return false; } // FIXME  remove for 1.1.
+
+      // reimplemented from IqHandler.
+      virtual void handleIqID( IQ* iq, int context ) { (void)iq; (void)context; } // FIXME remove for 1.1
 
     private:
       void messageOperation( int context, const StringList& msgs );

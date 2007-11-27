@@ -58,12 +58,12 @@ namespace gloox
     return id;
   }
 
-  void PrivateXML::handleIqID( IQ* iq, int context )
+  void PrivateXML::handleIqID( const IQ& iq, int context )
   {
-    TrackMap::iterator t = m_track.find( iq->id() );
+    TrackMap::iterator t = m_track.find( iq.id() );
     if( t != m_track.end() )
     {
-      switch( iq->subtype() )
+      switch( iq.subtype() )
       {
         case IQ::Result:
         {
@@ -71,7 +71,7 @@ namespace gloox
           {
             case RequestXml:
             {
-              Tag* q = iq->query();
+              Tag* q = iq.query();
               if( q )
               {
                 const TagList& l = q->children();
@@ -86,7 +86,7 @@ namespace gloox
 
             case StoreXml:
             {
-              (*t).second->handlePrivateXMLResult( iq->id(), PrivateXMLHandler::PxmlStoreOk );
+              (*t).second->handlePrivateXMLResult( iq.id(), PrivateXMLHandler::PxmlStoreOk );
               break;
             }
           }
@@ -100,13 +100,13 @@ namespace gloox
           {
             case RequestXml:
             {
-              (*t).second->handlePrivateXMLResult( iq->id(), PrivateXMLHandler::PxmlRequestError );
+              (*t).second->handlePrivateXMLResult( iq.id(), PrivateXMLHandler::PxmlRequestError );
               break;
             }
 
             case StoreXml:
             {
-              (*t).second->handlePrivateXMLResult( iq->id(), PrivateXMLHandler::PxmlStoreError );
+              (*t).second->handlePrivateXMLResult( iq.id(), PrivateXMLHandler::PxmlStoreError );
               break;
             }
           }
@@ -118,11 +118,6 @@ namespace gloox
 
       m_track.erase( t );
     }
-  }
-
-  bool PrivateXML::handleIq( IQ* /*iq*/ )
-  {
-    return false;
   }
 
 }

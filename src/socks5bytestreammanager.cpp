@@ -138,23 +138,23 @@ namespace gloox
     delete iq;
   }
 
-  bool SOCKS5BytestreamManager::handleIq( IQ* iq )
+  bool SOCKS5BytestreamManager::handleIq( const IQ& iq )
   {
-    const Tag* q = iq->query();
+    const Tag* q = iq.query();
     if( !q || q->xmlns() != XMLNS_BYTESTREAMS || !m_socks5BytestreamHandler
-          || m_trackMap.find( iq->id() ) != m_trackMap.end() )
+          || m_trackMap.find( iq.id() ) != m_trackMap.end() )
       return false;
 
-    switch( iq->subtype() )
+    switch( iq.subtype() )
     {
       case IQ::Set:
       {
         const std::string& sid = q->findAttribute( "sid" );
         const std::string& mode = q->findAttribute( "mode" );
 // FIXME What is haveStream() good for?
-        if( /*haveStream( iq->from() ) ||*/ sid.empty() || mode == "udp" )
+        if( /*haveStream( iq.from() ) ||*/ sid.empty() || mode == "udp" )
         {
-          rejectSOCKS5Bytestream( iq->from(), iq->id(), StanzaErrorNotAcceptable );
+          rejectSOCKS5Bytestream( iq.from(), iq.id(), StanzaErrorNotAcceptable );
           return true;
         }
         AsyncS5BItem asi;
@@ -172,11 +172,11 @@ namespace gloox
             asi.sHosts.push_back( sh );
           }
         }
-        asi.id = iq->id();
-        asi.from = iq->from();
+        asi.id = iq.id();
+        asi.from = iq.from();
         asi.incoming = true;
         m_asyncTrackMap[sid] = asi;
-        m_socks5BytestreamHandler->handleIncomingBytestreamRequest( sid, iq->from() );
+        m_socks5BytestreamHandler->handleIncomingBytestreamRequest( sid, iq.from() );
         break;
       }
       case IQ::Error:
@@ -287,9 +287,9 @@ namespace gloox
     delete iq;
   }
 
-  void SOCKS5BytestreamManager::handleIqID( IQ* iq, int context )
+  void SOCKS5BytestreamManager::handleIqID( const IQ& iq, int context )
   {
-    StringMap::iterator it = m_trackMap.find( iq->id() );
+    StringMap::iterator it = m_trackMap.find( iq.id() );
     if( it == m_trackMap.end() )
       return;
 
@@ -297,11 +297,11 @@ namespace gloox
     {
       case S5BOpenStream:
       {
-        switch( iq->subtype() )
+        switch( iq.subtype() )
         {
           case IQ::Result:
           {
-            const Tag* q = iq->query();
+            const Tag* q = iq.query();
             if( !q || q->xmlns() != XMLNS_BYTESTREAMS || !m_socks5BytestreamHandler )
               return;
 
@@ -310,7 +310,7 @@ namespace gloox
               return;
 
             const std::string& proxy = s->findAttribute( "jid" );
-            const StreamHost* sh = findProxy( iq->from(), proxy, (*it).second );
+            const StreamHost* sh = findProxy( iq.from(), proxy, (*it).second );
             if( sh )
             {
               SOCKS5Bytestream* s5b = 0;
@@ -320,17 +320,17 @@ namespace gloox
                 SHA sha;
                 sha.feed( (*it).second );
                 sha.feed( m_parent->jid().full() );
-                sha.feed( iq->from().full() );
+                sha.feed( iq.from().full() );
                 s5b = new SOCKS5Bytestream( this, m_server->getConnection( sha.hex() ),
                                             m_parent->logInstance(),
-                                            m_parent->jid(), iq->from(),
+                                            m_parent->jid(), iq.from(),
                                             (*it).second );
               }
               else
               {
                 s5b = new SOCKS5Bytestream( this, m_parent->connectionImpl()->newInstance(),
                                             m_parent->logInstance(),
-                                            m_parent->jid(), iq->from(),
+                                            m_parent->jid(), iq.from(),
                                             (*it).second );
                 s5b->setStreamHosts( StreamHostList( 1, *sh ) );
               }
@@ -351,7 +351,7 @@ namespace gloox
       }
       case S5BActivateStream:
       {
-        switch( iq->subtype() )
+        switch( iq.subtype() )
         {
           case IQ::Result:
           {

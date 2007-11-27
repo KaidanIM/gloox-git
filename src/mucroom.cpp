@@ -664,12 +664,12 @@ namespace gloox
     }
   }
 
-  void MUCRoom::handleIqID( IQ* iq, int context )
+  void MUCRoom::handleIqID( const IQ& iq, int context )
   {
     if( !m_roomConfigHandler )
       return;
 
-    switch( iq->subtype() )
+    switch( iq.subtype() )
     {
       case IQ::Result:
         handleIqResult( iq, context );
@@ -682,7 +682,7 @@ namespace gloox
     }
   }
 
-  void MUCRoom::handleIqResult( IQ* iq, int context )
+  void MUCRoom::handleIqResult( const IQ& iq, int context )
   {
     switch( context )
     {
@@ -707,7 +707,7 @@ namespace gloox
         break;
       case RequestRoomConfig:
       {
-        const Tag* q = iq->query();
+        const Tag* q = iq.query();
         if( q && q->name() == "query" && q->xmlns() == XMLNS_MUC_OWNER )
         {
           const Tag* x = q->findChild( "x", XMLNS, XMLNS_X_DATA );
@@ -726,7 +726,7 @@ namespace gloox
       case RequestOwnerList:
       case RequestAdminList:
       {
-        const Tag* q = iq->query();
+        const Tag* q = iq.query();
         if( q && q->name() == "query" && q->xmlns() == XMLNS_MUC_OWNER )
         {
           const Tag* x = q->findChild( "x", XMLNS, XMLNS_X_DATA );
@@ -760,7 +760,7 @@ namespace gloox
     }
   }
 
-  void MUCRoom::handleIqError( IQ* /*iq*/, int context )
+  void MUCRoom::handleIqError( const IQ& /*iq*/, int context )
   {
     switch( context )
     {

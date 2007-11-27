@@ -77,26 +77,26 @@ namespace gloox
     m_parent->send( iq, this, DoSearch );
   }
 
-  void Search::handleIqID( IQ* iq, int context )
+  void Search::handleIqID( const IQ& iq, int context )
   {
-    TrackMap::iterator it = m_track.find( iq->id() );
+    TrackMap::iterator it = m_track.find( iq.id() );
     if( it != m_track.end() )
     {
-      switch( iq->subtype() )
+      switch( iq.subtype() )
       {
         case IQ::Result:
           switch( context )
           {
             case FetchSearchFields:
             {
-              Tag* q = iq->query();
+              Tag* q = iq.query();
               if( q && q->hasAttribute( XMLNS, XMLNS_SEARCH ) )
               {
                 Tag* x = q->findChild( "x", XMLNS, XMLNS_X_DATA );
                 if( x )
                 {
                   DataForm* df = new DataForm( x );
-                  (*it).second->handleSearchFields( iq->from(), df );
+                  (*it).second->handleSearchFields( iq.from(), df );
                 }
                 else
                 {
@@ -114,21 +114,21 @@ namespace gloox
                   if( q->hasChild( "instructions" ) )
                     instructions = q->findChild( "instructions" )->cdata();
 
-                  (*it).second->handleSearchFields( iq->from(), fields, instructions );
+                  (*it).second->handleSearchFields( iq.from(), fields, instructions );
                 }
               }
               break;
             }
             case DoSearch:
             {
-              Tag* q = iq->query();
+              Tag* q = iq.query();
               if( q && q->hasAttribute( XMLNS, XMLNS_SEARCH ) )
               {
                 Tag* x = q->findChild( "x", XMLNS, XMLNS_X_DATA );
                 if( x )
                 {
                   DataForm* df = new DataForm( x );
-                  (*it).second->handleSearchResult( iq->from(), df );
+                  (*it).second->handleSearchResult( iq.from(), df );
                 }
                 else
                 {
@@ -154,7 +154,7 @@ namespace gloox
                     }
                   }
 
-                  (*it).second->handleSearchResult( iq->from(), e );
+                  (*it).second->handleSearchResult( iq.from(), e );
                 }
               }
               break;
@@ -162,7 +162,7 @@ namespace gloox
           }
           break;
         case IQ::Error:
-          (*it).second->handleSearchError( iq->from(), iq );
+          (*it).second->handleSearchError( iq.from(), iq.error() );
           break;
 
         default:

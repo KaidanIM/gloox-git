@@ -71,7 +71,7 @@ namespace gloox
        * @param stanza The complete error stanza.
        * @param sid The request's SID.
        */
-      virtual void handleFTRequestError( IQ* iq, const std::string& sid ) = 0;
+      virtual void handleFTRequestError( const IQ& iq, const std::string& sid ) = 0;
 
       /**
        * This function is called to pass a negotiated SOCKS5 bytestream.

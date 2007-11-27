@@ -44,15 +44,15 @@ namespace gloox
     m_parent->send( iq, this, 0 );
   }
 
-  bool LastActivity::handleIq( IQ* iq )
+  bool LastActivity::handleIq( const IQ& iq )
   {
-    switch( iq->subtype() )
+    switch( iq.subtype() )
     {
       case IQ::Get:
       {
         time_t now = time( 0 );
 
-        IQ t( IQ::Result, iq->from(), iq->id(), XMLNS_LAST );
+        IQ t( IQ::Result, iq.from(), iq.id(), XMLNS_LAST );
         t.query()->addAttribute( "seconds", (long)( now - m_active ) );
 
         m_parent->send( t );
@@ -61,7 +61,7 @@ namespace gloox
 
       case IQ::Set:
       {
-        IQ t( IQ::Error, iq->from(), iq->id() );
+        IQ t( IQ::Error, iq.from(), iq.id() );
         t.addExtension( new Error( StanzaErrorTypeCancel, StanzaErrorFeatureNotImplemented ) );
         m_parent->send( t );
         break;
@@ -74,29 +74,29 @@ namespace gloox
     return true;
   }
 
-  void LastActivity::handleIqID( IQ* iq, int /*context*/ )
+  void LastActivity::handleIqID( const IQ& iq, int /*context*/ )
   {
     if( !m_lastActivityHandler )
       return;
 
-    switch( iq->subtype() )
+    switch( iq.subtype() )
     {
       case IQ::Result:
       {
-        Tag* q = iq->query();
+        Tag* q = iq.query();
         if( q )
         {
           const std::string& seconds = q->findAttribute( "seconds" );
           if( !seconds.empty() )
           {
             int secs = atoi( seconds.c_str() );
-            m_lastActivityHandler->handleLastActivityResult( iq->from(), secs );
+            m_lastActivityHandler->handleLastActivityResult( iq.from(), secs );
           }
         }
         break;
       }
       case IQ::Error:
-        m_lastActivityHandler->handleLastActivityError( iq->from(), iq->error()->error() );
+        m_lastActivityHandler->handleLastActivityError( iq.from(), iq.error()->error() );
         break;
       default:
         break;

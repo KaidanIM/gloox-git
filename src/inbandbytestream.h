@@ -70,10 +70,16 @@ namespace gloox
       virtual void close();
 
       // re-implemented from IqHandler
-      virtual bool handleIq( IQ* iq );
+      virtual bool handleIq( const IQ& iq );
 
       // re-implemented from IqHandler
-      virtual void handleIqID( IQ* iq, int context );
+      virtual void handleIqID( const IQ& iq, int context );
+
+      // re-implemented from IqHandler
+      virtual bool handleIq( IQ* iq ) { (void)iq; return false; }
+
+      // re-implemented from IqHandler
+      virtual void handleIqID( IQ* iq, int context ) { (void)iq; (void)context; }
 
     private:
       enum TrackEnum

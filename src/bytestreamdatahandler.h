@@ -59,7 +59,7 @@ namespace gloox
        * @param bs The bytestream.
        * @param iq The error stanza.
        */
-      virtual void handleBytestreamError( Bytestream* bs, IQ* iq ) = 0;
+      virtual void handleBytestreamError( Bytestream* bs, const IQ& iq ) = 0;
 
       /**
        * Notifies the handler that the given bytestream has been acknowledged

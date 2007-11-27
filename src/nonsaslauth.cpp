@@ -45,16 +45,16 @@ namespace gloox
     m_parent->send( iq, this, TRACK_REQUEST_AUTH_FIELDS );
   }
 
-  void NonSaslAuth::handleIqID( IQ* iq, int context )
+  void NonSaslAuth::handleIqID( const IQ& iq, int context )
   {
-    switch( iq->subtype() )
+    switch( iq.subtype() )
     {
       case IQ::Error:
       {
         m_parent->setAuthed( false );
         m_parent->disconnect( ConnAuthenticationFailed );
 
-        const Error* e = iq->error();
+        const Error* e = iq.error();
         if( e )
         {
           switch( e->error() )
@@ -86,7 +86,7 @@ namespace gloox
             new Tag( query, "username", m_parent->jid().username() );
             new Tag( query, "resource", m_parent->jid().resource() );
 
-            Tag* q = iq->query();
+            Tag* q = iq.query();
             if( q && q->hasChild( "digest" ) && !m_sid.empty() )
             {
               SHA sha;
@@ -113,11 +113,6 @@ namespace gloox
       default:
         break;
     }
-  }
-
-  bool NonSaslAuth::handleIq( IQ* /*iq*/ )
-  {
-    return false;
   }
 
 }
