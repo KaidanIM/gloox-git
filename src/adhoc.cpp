@@ -47,7 +47,7 @@ namespace gloox
     }
   }
 
-  StringList Adhoc::handleDiscoNodeFeatures( const JID& from, const std::string& /*node*/ )
+  StringList Adhoc::handleDiscoNodeFeatures( const JID& /*from*/, const std::string& /*node*/ )
   {
     StringList features;
     features.push_back( XMLNS_ADHOC_COMMANDS );
@@ -55,7 +55,7 @@ namespace gloox
 //    return StringList( 1, XMLNS_ADHOC_COMMANDS );
   }
 
-  Disco::ItemList Adhoc::handleDiscoNodeItems( const JID& from, const std::string& node )
+  Disco::ItemList Adhoc::handleDiscoNodeItems( const JID& /*from*/, const std::string& node )
   {
     Disco::ItemList l;
     if( node.empty() )
@@ -73,7 +73,7 @@ namespace gloox
     return l;
   }
 
-  Disco::IdentityList Adhoc::handleDiscoNodeIdentities( const JID& from, const std::string& node )
+  Disco::IdentityList Adhoc::handleDiscoNodeIdentities( const JID& /*from*/, const std::string& node )
   {
     Disco::IdentityList l;
     StringMap::const_iterator it = m_items.find( node );

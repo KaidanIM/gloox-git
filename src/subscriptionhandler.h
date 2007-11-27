@@ -37,9 +37,20 @@ namespace gloox
       /**
        * Reimplement this function if you want to be notified about incoming
        * subscriptions/subscription requests.
-       * @param subscription The complete Stanza.
+       * @param subscription The complete Subscription stanza.
+       * @since 1.0
        */
-      virtual void handleSubscription( Subscription* subscription ) = 0;
+      virtual void handleSubscription( const Subscription& subscription ) { (void)subscription; }
+
+      /**
+       * Reimplement this function if you want to be notified about incoming
+       * subscriptions/subscription requests.
+       * @param subscription The complete Subscription stanza.
+       * @deprecated Use handleSubscription( const Subscription& ) instead.
+       * This function will be gone in the next major release.
+       */
+      GLOOX_DEPRECATED virtual void handleSubscription( Subscription* subscription ) = 0; // FIXME remove for 1.1
+
   };
 
 }

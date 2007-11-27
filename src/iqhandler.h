@@ -41,8 +41,19 @@ namespace gloox
        * @param iq The complete IQ stanza.
        * @return Indicates whether a request of type 'get' or 'set' has been handled. This includes
        * the obligatory 'result' answer. If you return @b false, a 'error' will be sent.
+       * @since 1.0
        */
-      virtual bool handleIq( IQ* iq ) = 0;
+      virtual bool handleIq( const IQ& iq ) { (void) iq; return false; }
+
+      /**
+       * Reimplement this function if you want to be notified about incoming IQs.
+       * @param iq The complete IQ stanza.
+       * @return Indicates whether a request of type 'get' or 'set' has been handled. This includes
+       * the obligatory 'result' answer. If you return @b false, a 'error' will be sent.
+       * @deprecated Use handleIq( const IQ& ) instead.
+       * This function will be gone in the next major release.
+       */
+      GLOOX_DEPRECATED virtual bool handleIq( IQ* iq ) = 0;
 
       /**
        * Reimplement this function if you want to be notified about
@@ -54,8 +65,24 @@ namespace gloox
        * @param iq The complete IQ stanza.
        * @param context A value to restore context, stored with ClientBase::trackID().
        * @note Only IQ stanzas of type 'result' or 'error' can arrive here.
+       * @since 1.0
        */
-      virtual void handleIqID( IQ* iq, int context ) = 0;
+      virtual void handleIqID( const IQ& iq, int context ) { (void) iq; (void) context; }
+
+      /**
+       * Reimplement this function if you want to be notified about
+       * incoming IQs with a specific value of the @c id attribute. You
+       * have to enable tracking of those IDs using Client::trackID().
+       * This is usually useful for IDs that generate a positive reply, i.e.
+       * &lt;iq type='result' id='reg'/&gt; where a namespace filter wouldn't
+       * work.
+       * @param iq The complete IQ stanza.
+       * @param context A value to restore context, stored with ClientBase::trackID().
+       * @note Only IQ stanzas of type 'result' or 'error' can arrive here.
+       * @deprecated Use handleIqID( const IQ&, int ) instead.
+       * This function will be gone in the next major release.
+       */
+      GLOOX_DEPRECATED virtual void handleIqID( IQ* iq, int context ) = 0;
   };
 
 }
