@@ -139,7 +139,7 @@ namespace gloox
 
     return i;
   }
-  // ---- Disco::Item ----
+  // ---- ~Disco::Item ----
 
   // ---- Disco::Items ----
   Disco::Items::Items( const std::string& node )
@@ -189,7 +189,7 @@ namespace gloox
 
     return t;
   }
-  // ---- Disco::Items ----
+  // ---- ~Disco::Items ----
 
   // ---- Disco ----
   Disco::Disco( ClientBase* parent )
