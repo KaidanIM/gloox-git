@@ -27,24 +27,24 @@ namespace gloox
   Adhoc::Adhoc( ClientBase* parent )
     : m_parent( parent )
   {
-    if( m_parent )
-    {
-      m_parent->registerIqHandler( this, XMLNS_ADHOC_COMMANDS );
-      m_parent->disco()->addFeature( XMLNS_ADHOC_COMMANDS );
-      m_parent->disco()->registerNodeHandler( this, XMLNS_ADHOC_COMMANDS );
-      m_parent->disco()->registerNodeHandler( this, EmptyString );
-    }
+    if( !m_parent || !m_parent->disco() )
+      return;
+
+    m_parent->registerIqHandler( this, XMLNS_ADHOC_COMMANDS );
+    m_parent->disco()->addFeature( XMLNS_ADHOC_COMMANDS );
+    m_parent->disco()->registerNodeHandler( this, XMLNS_ADHOC_COMMANDS );
+    m_parent->disco()->registerNodeHandler( this, EmptyString );
   }
 
   Adhoc::~Adhoc()
   {
-    if( m_parent )
-    {
-      m_parent->disco()->removeFeature( XMLNS_ADHOC_COMMANDS );
-      m_parent->disco()->removeNodeHandler( this, XMLNS_ADHOC_COMMANDS );
-      m_parent->disco()->removeNodeHandler( this, EmptyString );
-      m_parent->removeIqHandler( this, XMLNS_ADHOC_COMMANDS );
-    }
+    if( !m_parent || !m_parent->disco() )
+      return;
+
+    m_parent->disco()->removeFeature( XMLNS_ADHOC_COMMANDS );
+    m_parent->disco()->removeNodeHandler( this, XMLNS_ADHOC_COMMANDS );
+    m_parent->disco()->removeNodeHandler( this, EmptyString );
+    m_parent->removeIqHandler( this, XMLNS_ADHOC_COMMANDS );
   }
 
   StringList Adhoc::handleDiscoNodeFeatures( const JID& /*from*/, const std::string& /*node*/ )
@@ -173,6 +173,9 @@ namespace gloox
   void Adhoc::registerAdhocCommandProvider( AdhocCommandProvider* acp, const std::string& command,
                                             const std::string& name )
   {
+    if( !m_parent || !m_parent->disco() )
+      return;
+
     m_parent->disco()->registerNodeHandler( this, command );
     m_adhocCommandProviders[command] = acp;
     m_items[command] = name;
@@ -235,7 +238,7 @@ namespace gloox
 
   void Adhoc::checkSupport( const JID& remote, AdhocHandler* ah )
   {
-    if( !remote || !ah )
+    if( !remote || !ah || !m_parent || !m_parent->disco() )
       return;
 
     TrackStruct track;
@@ -249,7 +252,7 @@ namespace gloox
 
   void Adhoc::getCommands( const JID& remote, AdhocHandler* ah )
   {
-    if( !remote || !ah )
+    if( !remote || !ah || !m_parent || !m_parent->disco() )
       return;
 
     TrackStruct track;
@@ -265,7 +268,7 @@ namespace gloox
                        const std::string& sessionid, DataForm* form,
                        AdhocExecuteActions action )
   {
-    if( !remote || command.empty() || !ah )
+    if( !remote || command.empty() || !m_parent || !ah )
       return;
 
     const std::string& id = m_parent->getID();
@@ -309,6 +312,9 @@ namespace gloox
 
   void Adhoc::removeAdhocCommandProvider( const std::string& command )
   {
+    if( !m_parent || !m_parent->disco() )
+      return;
+
     m_parent->disco()->removeNodeHandler( this, command );
     m_adhocCommandProviders.erase( command );
     m_items.erase( command );
