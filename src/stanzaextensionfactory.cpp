@@ -52,8 +52,8 @@ namespace gloox
 
   void StanzaExtensionFactory::addExtensions( Stanza& stanza, Tag* tag )
   {
-    TagList match;
-    TagList::const_iterator it;
+    ConstTagList match;
+    ConstTagList::const_iterator it;
     SEList::const_iterator ite = m_extensions.begin();
     for( ; ite != m_extensions.end(); ++ite )
     {

@@ -822,19 +822,19 @@ namespace gloox
 
   const std::string Tag::findCData( const std::string& expression )
   {
-    const TagList& l = findTagList( expression );
+    const ConstTagList& l = findTagList( expression );
     return !l.empty() ? l.front()->cdata() : EmptyString;
   }
 
-  Tag* Tag::findTag( const std::string& expression )
+  const Tag* Tag::findTag( const std::string& expression )
   {
-    const TagList& l = findTagList( expression );
+    const ConstTagList& l = findTagList( expression );
     return !l.empty() ? l.front() : 0;
   }
 
-  TagList Tag::findTagList( const std::string& expression )
+  ConstTagList Tag::findTagList( const std::string& expression ) const
   {
-    TagList l;
+    ConstTagList l;
     if( expression == "/" || expression == "//" )
       return l;
 
@@ -851,9 +851,9 @@ namespace gloox
     return l;
   }
 
-  TagList Tag::evaluateTagList( Tag* token )
+  ConstTagList Tag::evaluateTagList( Tag* token ) const
   {
-    TagList result;
+    ConstTagList result;
     if( !token )
       return result;
 
@@ -934,8 +934,8 @@ namespace gloox
 //         printf( "original token: %s\ncloned token: %s\n", token->xml().c_str(), n->xml().c_str() );
         t->addAttribute( TYPE, XTElement );
         add( result, evaluateTagList( t ) );
-        const TagList& res2 = allDescendants();
-        TagList::const_iterator it = res2.begin();
+        const ConstTagList& res2 = allDescendants();
+        ConstTagList::const_iterator it = res2.begin();
         for( ; it != res2.end(); ++it )
         {
           add( result, (*it)->evaluateTagList( t ) );
@@ -988,13 +988,13 @@ namespace gloox
         if( !l.size() )
           break;
 
-        const TagList& res = evaluateTagList( l.front() );
+        const ConstTagList& res = evaluateTagList( l.front() );
 
         int pos = atoi( token->name().c_str() );
 //         printf( "checking index %d\n", pos );
         if( pos > 0 && pos <= (int)res.size() )
         {
-          TagList::const_iterator it = res.begin();
+          ConstTagList::const_iterator it = res.begin();
           while ( --pos )
           {
             ++it;
@@ -1009,7 +1009,7 @@ namespace gloox
     return result;
   }
 
-  bool Tag::evaluateBoolean( Tag* token )
+  bool Tag::evaluateBoolean( Tag* token ) const
   {
     if( !token )
       return false;
@@ -1053,7 +1053,7 @@ namespace gloox
     return result;
   }
 
-  bool Tag::evaluateEquals( Tag* token )
+  bool Tag::evaluateEquals( Tag* token ) const
   {
     if( !token || token->children().size() != 2 )
       return false;
@@ -1104,9 +1104,9 @@ namespace gloox
     return result;
   }
 
-  TagList Tag::allDescendants()
+  ConstTagList Tag::allDescendants() const
   {
-    TagList result;
+    ConstTagList result;
 
     if( !m_children )
       return result;
@@ -1120,9 +1120,9 @@ namespace gloox
     return result;
   }
 
-  TagList Tag::evaluateUnion( Tag* token )
+  ConstTagList Tag::evaluateUnion( Tag* token ) const
   {
-    TagList result;
+    ConstTagList result;
     if( !token )
       return result;
 
@@ -1135,7 +1135,7 @@ namespace gloox
     return result;
   }
 
-  void Tag::closePreviousToken( Tag** root, Tag** current, Tag::TokenType& type, std::string& tok )
+  void Tag::closePreviousToken( Tag** root, Tag** current, Tag::TokenType& type, std::string& tok ) const
   {
     if( !tok.empty() )
     {
@@ -1145,7 +1145,7 @@ namespace gloox
     }
   }
 
-  Tag* Tag::parse( const std::string& expression, unsigned& len, Tag::TokenType border )
+  Tag* Tag::parse( const std::string& expression, unsigned& len, Tag::TokenType border ) const
   {
     Tag* root = 0;
     Tag* current = root;
@@ -1287,7 +1287,7 @@ namespace gloox
   }
 
   void Tag::addToken( Tag **root, Tag **current, Tag::TokenType type,
-                      const std::string& token )
+                      const std::string& token ) const
   {
     Tag* t = new Tag( token );
     if( t->isNumber() && !t->children().size() )
@@ -1308,7 +1308,7 @@ namespace gloox
   }
 
   void Tag::addOperator( Tag** root, Tag** current, Tag* arg,
-                           Tag::TokenType type, const std::string& token )
+                           Tag::TokenType type, const std::string& token ) const
   {
     Tag* t = new Tag( token );
     t->addAttribute( TYPE, type );
@@ -1320,7 +1320,7 @@ namespace gloox
     *current = *root = t;
   }
 
-  bool Tag::addPredicate( Tag **root, Tag **current, Tag* token )
+  bool Tag::addPredicate( Tag **root, Tag **current, Tag* token ) const
   {
     if( !*root || !*current )
       return false;
@@ -1378,7 +1378,7 @@ namespace gloox
     return ( c == 0x09 || c == 0x0a || c == 0x0d || c == 0x20 );
   }
 
-  bool Tag::isNumber()
+  bool Tag::isNumber() const
   {
     if( m_name.empty() )
       return false;
@@ -1390,9 +1390,9 @@ namespace gloox
     return i == l;
   }
 
-  void Tag::add( TagList& one, const TagList& two )
+  void Tag::add( ConstTagList& one, const ConstTagList& two )
   {
-    TagList::const_iterator it = two.begin();
+    ConstTagList::const_iterator it = two.begin();
     for( ; it != two.end(); ++it )
       if( std::find( one.begin(), one.end(), (*it) ) == one.end() )
         one.push_back( (*it) );

@@ -34,8 +34,8 @@ namespace gloox
 
     m_subtype = (S10nType)util::lookup( tag->findAttribute( TYPE ), msgTypeStringValues );
 
-    const TagList& c = tag->findTagList( "/presence/status" );
-    TagList::const_iterator it = c.begin();
+    const ConstTagList& c = tag->findTagList( "/presence/status" );
+    ConstTagList::const_iterator it = c.begin();
     for( ; it != c.end(); ++it )
       setLang( &m_stati, m_status, (*it) );
   }

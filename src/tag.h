@@ -31,6 +31,11 @@ namespace gloox
   typedef std::list<Tag*> TagList;
 
   /**
+   * A list of const Tags.
+   */
+  typedef std::list<const Tag*> ConstTagList;
+
+  /**
    * @brief This is an abstraction of an XML element.
    *
    * @note Use setXmlns() to set namespaces and namespace prefixes.
@@ -551,7 +556,7 @@ namespace gloox
        * @return A matched Tag, or 0.
        * @since 0.9
        */
-      Tag* findTag( const std::string& expression );
+      const Tag* findTag( const std::string& expression );
 
       /**
        * Evaluates the given XPath expression and returns the matched Tags.
@@ -562,7 +567,7 @@ namespace gloox
        * @return A list of matched Tags, or an empty TagList.
        * @since 0.9
        */
-      TagList findTagList( const std::string& expression );
+      ConstTagList findTagList( const std::string& expression ) const;
 
       /**
        * Checks two Tags for equality. Order of attributes and child tags does matter.
@@ -677,30 +682,30 @@ namespace gloox
       void setXmlns( StringMap* xmlns )
         { delete m_xmlnss; m_xmlnss = xmlns; }
 
-      Tag* parse( const std::string& expression, unsigned& len, TokenType border = XTNone );
+      Tag* parse( const std::string& expression, unsigned& len, TokenType border = XTNone ) const;
 
-      void closePreviousToken( Tag**, Tag**, TokenType&, std::string& );
-      void addToken( Tag **root, Tag **current, TokenType type, const std::string& token );
+      void closePreviousToken( Tag**, Tag**, TokenType&, std::string& ) const;
+      void addToken( Tag **root, Tag **current, TokenType type, const std::string& token ) const;
       void addOperator( Tag **root, Tag **current, Tag* arg, TokenType type,
-                        const std::string& token );
-      bool addPredicate( Tag **root, Tag **current, Tag* token );
+                        const std::string& token ) const;
+      bool addPredicate( Tag **root, Tag **current, Tag* token ) const;
 
       TagList findChildren( const TagList& list, const std::string& name,
                             const std::string& xmlns = EmptyString ) const;
-      TagList evaluateTagList( Tag* token );
-      TagList evaluateUnion( Tag* token );
-      TagList allDescendants();
+      ConstTagList evaluateTagList( Tag* token ) const;
+      ConstTagList evaluateUnion( Tag* token ) const;
+      ConstTagList allDescendants() const;
 
       static TokenType getType( const std::string& c );
 
       static bool isWhitespace( const char c );
-      bool isNumber();
+      bool isNumber() const;
 
-      bool evaluateBoolean( Tag* token );
-      bool evaluatePredicate( Tag* token ) { return evaluateBoolean( token ); }
-      bool evaluateEquals( Tag* token );
+      bool evaluateBoolean( Tag* token ) const;
+      bool evaluatePredicate( Tag* token ) const { return evaluateBoolean( token ); }
+      bool evaluateEquals( Tag* token ) const;
 
-      static void add( TagList& one, const TagList& two );
+      static void add( ConstTagList& one, const ConstTagList& two );
   };
 
 }
