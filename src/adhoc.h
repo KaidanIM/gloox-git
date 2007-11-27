@@ -19,6 +19,7 @@
 #include "disconodehandler.h"
 #include "discohandler.h"
 #include "iqhandler.h"
+#include "stanzaextension.h"
 
 #include <string>
 #include <list>
@@ -80,39 +81,199 @@ namespace gloox
   {
     public:
       /**
-       * The current status of a command.
+       * @brief An abstraction of an Adhoc Command element (from Adhoc Commands, XEP-0050)
+       * as a StanzaExtension.
+       *
+       * @author Jakob Schroeter <js@camaya.net>
+       * @since 1.0
        */
-      enum AdhocCommandStatus
+      class Command : public StanzaExtension
       {
-        AdhocCommandExecuting,      /**< The command is being executed. */
-        AdhocCommandCompleted,      /**< The command has completed. The command session has ended. */
-        AdhocCommandCanceled,       /**< The command has been canceled. The command session has ended. */
-        AdhocCommandStatusUnknown   /**< None or unknown status. */
-      };
+        friend class Adhoc;
 
-      /**
-       * Describes actions to jump between execution stages and dataform pages.
-       */
-      enum AdhocExecuteActions
-      {
-        ActionDefault    =  0,      /**< The default action is being executed. */
-        ActionPrevious   =  1,      /**< Request previous page. */
-        ActionNext       =  2,      /**< Request next page. */
-        ActionComplete   =  4,      /**< Complete or finish the execution. */
-        ActionCancel     =  8       /**< Cancel command execution. */
-      };
+        public:
 
-      /**
-       * Describes the type of a note attached to a execution stage.
-       */
-      enum AdhocNoteType
-      {
-        AdhocNoteInfo,              /**< The note is informational only. This is not really
-                                     * an exceptional condition. */
-        AdhocNoteWarn,              /**< The note indicates a warning. Possibly due to
-                                     * illogical (yet valid) data. */
-        AdhocNoteError              /**< The note indicates an error. The text should indicate
-                                     * the reason for the error. */
+          /**
+           * Specifies the action to undertake with the given command.
+           */
+          enum Action
+          {
+            Execute       =  1,     /**< The command should be executed or continue to be executed.
+                                     * This is the default value. */
+            Cancel        =  2,     /**< The command should be canceled. */
+            Previous      =  4,     /**< The command should be digress to the previous stage of
+                                     * execution. */
+            Next          =  8,     /**< The command should progress to the next stage of
+                                     * execution. */
+            Complete      = 16,     /**< The command should be completed (if possible). */
+            InvalidAction = 32      /**< The action is unknown or invalid. */
+          };
+
+          /**
+           * Describes the current status of a command.
+           */
+          enum Status
+          {
+            Executing,              /**< The command is being executed. */
+            Completed,              /**< The command has completed. The command session has ended. */
+            Canceled,               /**< The command has been canceled. The command session has ended. */
+            InvalidStatus           /**< The status is unknown or invalid. */
+          };
+
+          /**
+           * Specifies the severity of a note.
+           */
+          enum Severity
+          {
+            Info,                   /**< The note is informational only. This is not really an
+                                     * exceptional condition. */
+            Warning,                /**< The note indicates a warning. Possibly due to illogical
+                                     * (yet valid) data. */
+            Error,                  /**< The note indicates an error. The text should indicate the
+                                     * reason for the error. */
+            InvalidSeverity         /**< The note type is unknown or invalid. */
+          };
+
+          /**
+           * An abstraction of a command note.
+           *
+           * @author Jakob Schroeter <js@camaya.net>
+           * @since 1.0
+           */
+          class Note
+          {
+            public:
+              /**
+               * A convenience constructor.
+               * @param sev The note's severity.
+               * @param note The note's content.
+               */
+              Note( Severity sev, const std::string& note )
+                : m_severity( sev ), m_note( note ) {}
+
+              /**
+               * Destructor.
+               */
+              ~Note() {}
+
+              /**
+               * Returns the note's severity.
+               * @return The note's severity.
+               */
+              Severity severity() const { return m_severity; }
+
+              /**
+               * Returns the note's content.
+               * @return The note's content.
+               */
+              const std::string& content() const { return m_note; }
+
+              /**
+               * Returns a Tag representation of the Note.
+               * @return A Tag representation.
+               */
+              Tag* tag() const;
+
+            private:
+              Severity m_severity;      /**< The note's severity. */
+              std::string m_note;       /**< The note's content. */
+          };
+
+          /**
+           * A list of command notes.
+           */
+          typedef std::list<const Note*> NoteList;
+
+          /**
+           * Creates a Command object that can be used to perform the provided Action.
+           * This constructor is used best to continue execution of a multi stage command
+           * (for which the session ID must be known).
+           * @param node The node (command) to perform the action on.
+           * @param sessionid The session ID of an already running adhoc command session.
+           * @param action The action to perform.
+           */
+          Command( const std::string& node, const std::string& sessionid, Action action );
+
+          /**
+           * Creates a Command object that can be used to perform the provided Action.
+           * This constructor is used best to execute the initial step of a command
+           * (single or multi stage).
+           * @param node The node (command) to perform the action on.
+           * @param action The action to perform.
+           */
+          Command( const std::string& node, Action action );
+
+          /**
+           * Returns the command's session ID, if any.
+           * @return The command's session ID.
+           */
+          const std::string& sessionID() const { return m_sessionid; }
+
+          /**
+           * Returns the execution status for a command. Only valid for execution
+           * results.
+           * @return The execution status for a command.
+           */
+          Status status() const { return m_status; }
+
+          /**
+           * Returns The command's action.
+           * @return The command's action.
+           */
+          Action action() const { return m_action; }
+
+          /**
+           * Returns the ORed actions that are allowed to be executed on the
+           * current stage.
+           * @return An int containing the ORed actions.
+           */
+          int actions() const { return m_actions; }
+
+          /**
+           * Returns the list of notes associated with the command.
+           * @return The list of notes.
+           */
+          const NoteList& notes() const { return m_notes; }
+
+          /**
+           * Use this function to add a note to the command.
+           * @param note A pointer to a Note object. The Command will own
+           * the Note.
+           */
+          void addNote( const Note* note ) { m_notes.push_back( note ); }
+
+          // reimplemented from StanzaExtension
+          virtual const std::string& filterString() const;
+
+          // reimplemented from StanzaExtension
+          virtual StanzaExtension* newInstance( const Tag* tag ) const
+          {
+            return new Command( tag );
+          }
+
+          // reimplemented from StanzaExtension
+          virtual Tag* tag() const;
+
+        private:
+          /**
+           * Creates a Command object from the given Tag.
+           * @param tag A &lt;command&gt; tag in the adhoc commands' namespace.
+           */
+          Command( const Tag* tag = 0 );
+
+          /**
+           * Virtual destructor.
+           */
+          virtual ~Command();
+
+          NoteList m_notes;
+
+          std::string m_node;
+          std::string m_sessionid;
+          DataForm* m_form;
+          Action m_action;
+          Status m_status;
+          int m_actions;
       };
 
       /**
@@ -127,12 +288,52 @@ namespace gloox
        */
       virtual ~Adhoc();
 
+      /**
+       * This function queries the given remote entity for Adhoc Commands support.
+       * @param remote The remote entity's JID.
+       * @param ah The object handling the result of this request.
+       */
+      void checkSupport( const JID& remote, AdhocHandler* ah );
+
+      /**
+       * Retrieves a list of commands from the remote entity. You should check whether the remote
+       * entity actually supports Adhoc Commands by means of checkSupport().
+       * @param remote The remote entity's JID.
+       * @param ah The object handling the result of this request.
+       */
+      void getCommands( const JID& remote, AdhocHandler* ah );
+
+      /**
+       * Executes the given command on the given remote entity.
+       * @param remote The remote entity's JID.
+       * @param command The command to execute.
+       * @param ah The object handling the result of this request.
+       */
+      void execute( const JID& remote, Adhoc::Command* command, AdhocHandler* ah );
+
+      /**
+       * Using this function, you can register a AdhocCommandProvider -derived object as
+       * handler for a specific Ad-hoc Command as defined in XEP-0050.
+       * @param acp The obejct to register as handler for the specified command.
+       * @param command The node name of the command. Will be announced in disco#items.
+       * @param name The natural-language name of the command. Will be announced in disco#items.
+       */
+      void registerAdhocCommandProvider( AdhocCommandProvider* acp, const std::string& command,
+                                         const std::string& name );
+
+      /**
+       * Use this function to unregister an adhoc command previously registered using
+       * registerAdhocCommandProvider().
+       * @param command The command to unregister.
+       */
+      void removeAdhocCommandProvider( const std::string& command );
+
       // reimplemented from DiscoNodeHandler
       virtual StringList handleDiscoNodeFeatures( const JID& from, const std::string& node );
 
       // reimplemented from DiscoNodeHandler
       virtual Disco::IdentityList handleDiscoNodeIdentities( const JID& from,
-                                                             const std::string& node );
+          const std::string& node );
 
       // reimplemented from DiscoNodeHandler
       virtual Disco::ItemList handleDiscoNodeItems( const JID& from, const std::string& node );
@@ -152,6 +353,7 @@ namespace gloox
       // reimplemented from DiscoHandler
       virtual void handleDiscoError( const JID& from, const Error& error, int context );
 
+    private:
       // reimplemented from DiscoHandler, FIXME remove
       virtual void handleDiscoInfoResult( IQ* iq, int context ) { (void) iq; (void) context; };
 
@@ -161,57 +363,6 @@ namespace gloox
       // reimplemented from DiscoHandler, FIXME remove
       virtual void handleDiscoError( IQ* iq, int context ) { (void) iq; (void) context; };
 
-      /**
-       * Using this function, you can register a AdhocCommandProvider -derived object as
-       * handler for a specific Ad-hoc Command as defined in XEP-0050.
-       * @param acp The obejct to register as handler for the specified command.
-       * @param command The node name of the command. Will be announced in disco#items.
-       * @param name The natural-language name of the command. Will be announced in disco#items.
-       */
-      void registerAdhocCommandProvider( AdhocCommandProvider* acp, const std::string& command,
-                                         const std::string& name );
-
-      /**
-       * This function queries the given remote entity for Adhoc Commands support.
-       * @param remote The remote entity's JID.
-       * @param ah The object handling the result of this request.
-       */
-      void checkSupport( const JID& remote, AdhocHandler* ah );
-
-      /**
-       * Retrieves a list of commands from the remote entity. You should check whether the remote
-       * entity actually supports Adhoc Commands by means of checkSupport().
-       * @param remote The remote entity's JID.
-       * @param ah The object handling the result of this request.
-       */
-      void getCommands( const JID& remote, AdhocHandler* ah );
-
-      /**
-       * Executes the given command on the given remote entity.
-       * For initial execution requests, only the first three parameters are required. For
-       * subsequent requests (of a multiple stages request) at least @b sessionid and
-       * @b form should be provided (depending on the command being executed, of course).
-       * @param remote The remote entity's JID.
-       * @param command The command to execute.
-       * @param ah The object handling the result of this request.
-       * @param sessionid The sessionid identifying the command currenly being executed. Must be
-       * empty on first request.
-       * @param form A DataForm containing the result of a previous response. Must be left empty
-       * on first request.
-       * @param action The action to take, e.g. navigatte o the previous 'screen'.
-       */
-      void execute( const JID& remote, const std::string& command, AdhocHandler* ah,
-                    const std::string& sessionid = EmptyString, DataForm* form = 0,
-                    AdhocExecuteActions action = ActionDefault );
-
-      /**
-       * Use this function to unregister an adhoc command previously registered using
-       * registerAdhocCommandProvider().
-       * @param command The command to unregister.
-       */
-      void removeAdhocCommandProvider( const std::string& command );
-
-    private:
       typedef std::map<const std::string, AdhocCommandProvider*> AdhocCommandProviderMap;
       AdhocCommandProviderMap m_adhocCommandProviders;
 

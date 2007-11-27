@@ -19,11 +19,135 @@
 #include "discohandler.h"
 #include "client.h"
 #include "dataform.h"
-
+#include "util.h"
 
 namespace gloox
 {
 
+  static const char* cmdActionStringValues[] =
+  {
+    "execute", "cancel", "prev", "next", "complete"
+  };
+
+  static inline const std::string actionString( Adhoc::Command::Action action )
+  {
+    return util::lookup2( action, cmdActionStringValues );
+  }
+
+  static const char* cmdStatusStringValues[] =
+  {
+    "executing", "completed", "canceled"
+  };
+
+  static inline const std::string statusString( Adhoc::Command::Status status )
+  {
+    return util::lookup( status, cmdStatusStringValues );
+  }
+
+  static const char* cmdNoteStringValues[] =
+  {
+    "info", "warn", "error"
+  };
+
+  static inline const std::string noteString( Adhoc::Command::Severity sev )
+  {
+    return util::lookup( sev, cmdNoteStringValues );
+  }
+
+  // ---- Adhoc::Command::Note ----
+  Tag* Adhoc::Command::Note::tag() const
+  {
+    if( m_note.empty() )
+      return 0;
+
+    Tag* n = new Tag( "note", m_note );
+    n->addAttribute( TYPE, noteString( m_severity ) );
+    return n;
+  }
+  // ---- ~Adhoc::Command::Note ----
+
+  // ---- Adhoc::Command ----
+  Adhoc::Command::Command( const std::string& node, Adhoc::Command::Action action )
+    : StanzaExtension( ExtAdhocCommand ), m_node( node ), m_form( 0 ), m_action( action )
+  {
+  }
+
+  Adhoc::Command::Command( const std::string& node, const std::string& sessionid,
+                           Adhoc::Command::Action action )
+    : StanzaExtension( ExtAdhocCommand ), m_node( node ), m_sessionid( sessionid ),
+      m_form( 0 ), m_action( action )
+  {
+  }
+
+  Adhoc::Command::Command( const Tag* tag )
+    : StanzaExtension( ExtAdhocCommand ), m_actions( 0 )
+  {
+    if( !tag || tag->name() != "command" || tag->xmlns() != XMLNS_ADHOC_COMMANDS )
+      return;
+
+    m_node = tag->findAttribute( "node" );
+    m_sessionid = tag->findAttribute( "sessionid" );
+    m_action = (Action)util::lookup2( tag->findAttribute( "action" ), cmdActionStringValues );
+    m_status = (Status)util::lookup( tag->findAttribute( "status" ), cmdStatusStringValues );
+
+    Tag* a = tag->findChild( "actions" );
+    if( a )
+    {
+      if( a->hasChild( "prev" ) )
+        m_actions |= Previous;
+      if( a->hasChild( "next" ) )
+        m_actions |= Next;
+      if( a->hasChild( "complete" ) )
+        m_actions |= Complete;
+    }
+
+    const ConstTagList& l = tag->findTagList( "/command/note" );
+    ConstTagList::const_iterator it = l.begin();
+    for( ; it != l.end(); ++it )
+    {
+      Severity s = Info;
+      if( (*it)->hasAttribute( TYPE ) )
+        s = (Severity)util::lookup( tag->findAttribute( TYPE ), cmdNoteStringValues );
+      m_notes.push_back( new Note( s, (*it)->cdata() ) );
+    }
+  }
+
+  Adhoc::Command::~Command()
+  {
+    util::clearList( m_notes );
+  }
+
+  const std::string& Adhoc::Command::filterString() const
+  {
+    static const std::string filter = "/iq/command[@xmlns='" + XMLNS_ADHOC_COMMANDS + "']";
+    return filter;
+  }
+
+  Tag* Adhoc::Command::tag() const
+  {
+    if( m_node.empty() )
+      return 0;
+
+    Tag* c = new Tag( "command" );
+    c->setXmlns( XMLNS_ADHOC_COMMANDS );
+    c->addAttribute( "node", m_node );
+    if( m_action != InvalidAction )
+      c->addAttribute( "action", actionString( m_action ) );
+    if( m_status != InvalidStatus )
+      c->addAttribute( "status", statusString( m_status ) );
+
+    if( m_form && *m_form )
+      c->addChild( m_form->tag() );
+
+    NoteList::const_iterator it = m_notes.begin();
+    for( ; it != m_notes.end(); ++it )
+      c->addChild( (*it)->tag() );
+
+    return c;
+  }
+  // ---- ~Adhoc::Command ----
+
+  // ---- Adhoc ----
   Adhoc::Adhoc( ClientBase* parent )
     : m_parent( parent )
   {
@@ -34,6 +158,7 @@ namespace gloox
     m_parent->disco()->addFeature( XMLNS_ADHOC_COMMANDS );
     m_parent->disco()->registerNodeHandler( this, XMLNS_ADHOC_COMMANDS );
     m_parent->disco()->registerNodeHandler( this, EmptyString );
+    m_parent->registerStanzaExtension( new Adhoc::Command() );
   }
 
   Adhoc::~Adhoc()
@@ -105,69 +230,20 @@ namespace gloox
 
   void Adhoc::handleIqID( IQ* iq, int context )
   {
-    if( context != ExecuteAdhocCommand || iq->subtype() != IQ::Result )
+    if( context != Adhoc::Command::Execute || iq->subtype() != IQ::Result )
       return;
 
-    AdhocTrackMap::iterator it = m_adhocTrackMap.begin();
-    for( ; it != m_adhocTrackMap.end() && (*it).second.context != context
-                                       && (*it).second.remote  != iq->from(); ++it )
-    if( it == m_adhocTrackMap.end() )
+    AdhocTrackMap::iterator it = m_adhocTrackMap.find( iq->id() );
+    if( it == m_adhocTrackMap.end() || (*it).second.context != context
+        || (*it).second.remote != iq->from() )
       return;
 
-    Tag* c = iq->query();
-    if( c && c->name() == "command" && c->xmlns() == XMLNS_ADHOC_COMMANDS )
-    {
-      const std::string& command = c->findAttribute( "node" );
-      const std::string& id = c->findAttribute( "sessionid" );
-      const Tag* a = c->findChild( "actions" );
-      int actions = ActionCancel;
-      Adhoc::AdhocExecuteActions def = ActionCancel;
-      if( a )
-      {
-        if( a->hasChild( "prev" ) )
-          actions |= ActionPrevious;
-        if( a->hasChild( "next" ) )
-          actions |= ActionNext;
-        if( a->hasChild( "complete" ) )
-          actions |= ActionComplete;
-
-        const std::string& d = a->findAttribute( "execute" );
-        if( d == "next" )
-          def = ActionNext;
-        else if( d == "prev" )
-          def = ActionPrevious;
-        else if( d == "complete" )
-          def = ActionComplete;
-      }
-
-      const Tag* n = c->findChild( "note" );
-      std::string note;
-      AdhocNoteType type = AdhocNoteInfo;
-      if( n )
-      {
-        note = n->cdata();
-        if( n->hasAttribute( TYPE, "warn" ) )
-          type = AdhocNoteWarn;
-        else if( n->hasAttribute( TYPE, "error" ) )
-          type = AdhocNoteError;
-      }
-
-      const std::string& s = c->findAttribute( "status" );
-      AdhocCommandStatus status = AdhocCommandStatusUnknown;
-      if( s == "executing" )
-        status = AdhocCommandExecuting;
-      else if( s == "completed" )
-        status = AdhocCommandCompleted;
-      else if( s == "canceled" )
-        status = AdhocCommandCanceled;
-
-      const DataForm form( c->findChild( "x", XMLNS, XMLNS_X_DATA ) );
-
-      (*it).second.ah->handleAdhocExecutionResult( iq->from(), command, status, id, form,
-                                                   actions, def, note, type );
-    }
+    const Adhoc::Command* ac = static_cast<const Adhoc::Command*>( iq->findExtension( ExtAdhocCommand ) );
+    if( !ac )
+      return;
 
     m_adhocTrackMap.erase( it );
+    (*it).second.ah->handleAdhocExecutionResult( iq->from(), *ac );
   }
 
   void Adhoc::registerAdhocCommandProvider( AdhocCommandProvider* acp, const std::string& command,
@@ -264,42 +340,14 @@ namespace gloox
     m_parent->disco()->getDiscoItems( remote, XMLNS_ADHOC_COMMANDS, this, FetchAdhocCommands, id );
   }
 
-  void Adhoc::execute( const JID& remote, const std::string& command, AdhocHandler* ah,
-                       const std::string& sessionid, DataForm* form,
-                       AdhocExecuteActions action )
+  void Adhoc::execute( const JID& remote, Adhoc::Command* command, AdhocHandler* ah )
   {
-    if( !remote || command.empty() || !m_parent || !ah )
+    if( !remote || !command || !m_parent || !ah )
       return;
 
     const std::string& id = m_parent->getID();
-    IQ iq( IQ::Set, remote, id, XMLNS_ADHOC_COMMANDS, "command" );
-    Tag* c = iq.query();
-    c->addAttribute( "node", command );
-    c->addAttribute( "action", "execute" );
-    if( !sessionid.empty() )
-      c->addAttribute( "sessionid", sessionid );
-    if( action != ActionDefault )
-    {
-      switch( action )
-      {
-        case ActionPrevious:
-          c->addAttribute( "action", "prev" );
-          break;
-        case ActionNext:
-          c->addAttribute( "action", "next" );
-          break;
-        case ActionCancel:
-          c->addAttribute( "action", "cancel" );
-          break;
-        case ActionComplete:
-          c->addAttribute( "action", "complete" );
-          break;
-        default:
-          break;
-      }
-    }
-    if( form )
-      c->addChild( form->tag() );
+    IQ iq( IQ::Set, remote, id );
+    iq.addExtension( command );
 
     TrackStruct track;
     track.remote = remote;
