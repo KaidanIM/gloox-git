@@ -190,7 +190,7 @@ namespace gloox
     if( it == m_adhocTrackMap.end() )
       return;
 
-    (*it).second.ah->handleAdhocSupport( (*it).second.remote, info.hasFeature( XMLNS_ADHOC_COMMANDS ) );
+    (*it).second.ah->handleAdhocSupport( from, info.hasFeature( XMLNS_ADHOC_COMMANDS ) );
     m_adhocTrackMap.erase( it );
   }
 
