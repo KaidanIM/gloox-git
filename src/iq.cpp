@@ -32,7 +32,7 @@ namespace gloox
     if( !tag || tag->name() != "iq" )
       return;
 
-    m_subtype = ( IQ::IqType )util::lookup( tag->findAttribute( TYPE ), iqTypeStringValues );
+    m_subtype = (IQ::IqType)util::lookup( tag->findAttribute( TYPE ), iqTypeStringValues );
 
     m_query = tag->findChildWithAttrib( XMLNS );
 
@@ -44,13 +44,19 @@ namespace gloox
       m_xmlns = m_query->findAttribute( XMLNS );
   }
 
+  IQ::IQ( IqType type, const JID& to, const std::string& id, const JID& from )
+    : Stanza( to, from ), m_query( 0 ), m_subtype( type )
+  {
+    m_id = id;
+  }
+
   IQ::IQ( IqType type, const JID& to, const std::string& id, const std::string& xmlns,
           const std::string& childtag, const JID& from )
     : Stanza( to, from ), m_query( 0 ), m_subtype( type )
   {
     m_id = id;
 
-    if( !xmlns.empty() )
+    if( !xmlns.empty() ) // FIXME needs to be removed
     {
       m_xmlns = xmlns;
       m_query = new Tag( childtag.empty() ? "query" : childtag,  XMLNS, xmlns );

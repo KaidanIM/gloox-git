@@ -59,8 +59,18 @@ namespace gloox
        * @param childtag The child tag's name. Defaults to "query".
        * @param from An optional sender address. Usually not needed. Cannot be forged.
        */
-      IQ ( IqType type, const JID& to, const std::string& id, const std::string& xmlns = EmptyString,
-           const std::string& childtag = "query", const JID& from = JID() );
+      GLOOX_DEPRECATED_CTOR IQ ( IqType type, const JID& to, const std::string& id,
+                                 const std::string& xmlns,
+                                 const std::string& childtag = "query", const JID& from = JID() );
+
+      /**
+       * Creates an IQ Query.
+       * @param type The desired IqType.
+       * @param to The intended receiver.
+       * @param id The request's ID. Usually obtained from ClientBase::getID()
+       * @param from An optional sender address. Usually not needed. Cannot be forged.
+       */
+      IQ ( IqType type, const JID& to, const std::string& id, const JID& from = JID() );
 
       /**
        * Virtual destructor.
@@ -83,7 +93,7 @@ namespace gloox
        * Returns the value of the xmlns attribute of the first child node.
        * @return The namespace of the IQ stanza.
        */
-      const std::string& xmlns() const { return m_xmlns; }
+      GLOOX_DEPRECATED const std::string& xmlns() const { return m_xmlns; }
 
       // reimplemented from Stanza
       virtual Tag* tag() const;
