@@ -59,7 +59,7 @@ namespace gloox
        * @param remote The queried remote entity's JID.
        * @param error The error condition. May be 0.
        */
-      virtual void handleAdhocError( const JID& remote, const Error* error ) {};
+      virtual void handleAdhocError( const JID& remote, const Error* error ) = 0;
 
       /**
        * This function is called in response to a remote command execution.
