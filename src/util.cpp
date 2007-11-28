@@ -25,7 +25,7 @@ namespace gloox
       unsigned i = 0;
       for( ; i < size && str != values[i]; ++i )
         ;
-      return ( i == size && def != -1 ) ? (unsigned)def : i;
+      return ( i == size && def < 0 ) ? (unsigned)def : i;
     }
 
     const std::string _lookup( unsigned code, const char* values[], unsigned size, const std::string& def )
@@ -36,7 +36,7 @@ namespace gloox
     unsigned _lookup2( const std::string& str, const char* values[],
                        unsigned size, int def )
     {
-      return 1 << _lookup( str, values, size, def == -1 ? -1 : (int)log2( def ) );
+      return 1 << _lookup( str, values, size, def <= 0 ? def : (int)log2( def ) );
     }
 
     const std::string _lookup2( unsigned code, const char* values[], unsigned size, const std::string& def )
