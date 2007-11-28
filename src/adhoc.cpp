@@ -298,7 +298,7 @@ namespace gloox
     }
   }
 
-  void Adhoc::handleDiscoError( const JID& from, const Error& error, int context )
+  void Adhoc::handleDiscoError( const JID& from, const Error* error, int context )
   {
     AdhocTrackMap::iterator it = m_adhocTrackMap.begin();
     for( ; it != m_adhocTrackMap.end(); ++it )
