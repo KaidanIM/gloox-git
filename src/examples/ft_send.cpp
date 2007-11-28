@@ -166,7 +166,7 @@ class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, Bytest
 //     {
 //     }
 
-    virtual void handleFTRequestError( IQ* /*iq*/, const std::string& /*sid*/ )
+    virtual void handleFTRequestError( const IQ& /*iq*/, const std::string& /*sid*/ )
     {
       printf( "ft request error\n" );
       m_quit = true;
@@ -196,7 +196,7 @@ class FTTest : public LogHandler, ConnectionListener, SIProfileFTHandler, Bytest
       printf( "received %d bytes of data:\n%s\n", data.length(), data.c_str() );
     }
 
-    virtual void handleBytestreamError( Bytestream* /*bs*/, IQ* /*iq*/ )
+    virtual void handleBytestreamError( Bytestream* /*bs*/, const IQ& /*iq*/ )
     {
       printf( "bytestream error\n" );
     }
