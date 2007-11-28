@@ -70,10 +70,9 @@ using namespace gloox;
     t = 0;
   }
 
-  StanzaExtensionFactory sef;
-
   // -------
   name = "Disco::Items/SEFactory test";
+  StanzaExtensionFactory sef;
   sef.registerExtension( new Disco::Items() );
   Tag* f = new Tag( "iq" );
   new Tag( f, "query", "xmlns", XMLNS_DISCO_ITEMS );

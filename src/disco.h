@@ -68,28 +68,10 @@ namespace gloox
 
         public:
           /**
-           * Creates a empty Info object, suitable for making disco#info requests.
-           * @param node The node identifier to query (optional).
-           */
-          Info( const std::string& node = EmptyString );
-
-          /**
-           * Sets the current info node.
-           * @param node The info node.
-           */
-          void setNode( const std::string& node ) { m_node = node; }
-
-          /**
            * Returns the queried node identifier, if any.
            * @return The node identifier. May be empty.
            */
           const std::string& node() const { return m_node; }
-
-          /**
-           * This function can be used to set the entity's features.
-           * @param features A list of supported features/namespaces.
-           */
-          void setFeatures( const StringList& features ) { m_features = features; }
 
           /**
            * Returns the entity's supported features.
@@ -103,14 +85,6 @@ namespace gloox
            * @return @b True if the entity announces support for the feature, @b false otherwise.
            */
           bool hasFeature( const std::string& feature ) const;
-
-          /**
-           * This function can be used to set the entity's identities.
-           * @param identities A list of pointers to the entity's identities.
-           * @note The Identity objects pointed to will be owned by the Info object. The
-           * list should neither be used again nor should the Identity objects be deleted.
-           */
-          void setIdentities( const IdentityList& identities ) { m_identities = identities; }
 
           /**
            * Returns the entity's identities.
@@ -131,7 +105,16 @@ namespace gloox
           virtual Tag* tag() const;
 
         private:
+#ifdef DISCO_INFO_TEST
+        public:
+#endif
           /**
+           * Creates a empty Info object, suitable for making disco#info requests.
+           * @param node The node identifier to query (optional).
+           */
+          Info( const std::string& node = EmptyString );
+
+           /**
            * Creates an Info object from the given Tag.
            * @param tag A &lt;query&gt; tag in the disco#info namespace, (possibly) containing
            * a disco#info reply.
@@ -142,6 +125,26 @@ namespace gloox
            * Virtual destructor.
            */
           virtual ~Info();
+
+          /**
+           * Sets the current info node.
+           * @param node The info node.
+           */
+          void setNode( const std::string& node ) { m_node = node; }
+
+          /**
+           * This function can be used to set the entity's features.
+           * @param features A list of supported features/namespaces.
+           */
+          void setFeatures( const StringList& features ) { m_features = features; }
+
+          /**
+           * This function can be used to set the entity's identities.
+           * @param identities A list of pointers to the entity's identities.
+           * @note The Identity objects pointed to will be owned by the Info object. The
+           * list should neither be used again nor should the Identity objects be deleted.
+           */
+          void setIdentities( const IdentityList& identities ) { m_identities = identities; }
 
           std::string m_node;
           StringList m_features;
@@ -233,17 +236,18 @@ namespace gloox
         friend class Disco;
 
         public:
+          // This needs to be public so one can proactively send a list of adhoc commands
+          // see XEP-0050
           /**
-           * Creates a empty Items object, suitable for making disco#items requests.
+           * Creates an empty Items object, suitable for making disco#items requests.
            * @param node The node identifier to query (optional).
            */
           Items( const std::string& node = EmptyString );
 
           /**
-           * Returns the queried node identifier, if any.
-           * @return The node identifier. May be empty.
+           * Virtual destructor.
            */
-          const std::string& node() const { return m_node; }
+          virtual ~Items();
 
           /**
            * This function can be used to set the entity's/node's items.
@@ -252,6 +256,12 @@ namespace gloox
            * list should neither be used again nor should the Item objects be deleted.
            */
           void setItems( const ItemList& items ) { m_items = items; }
+
+          /**
+           * Returns the queried node identifier, if any.
+           * @return The node identifier. May be empty.
+           */
+          const std::string& node() const { return m_node; }
 
           /**
            * Returns the entity's/node's items.
@@ -272,17 +282,15 @@ namespace gloox
           virtual Tag* tag() const;
 
         private:
+#ifdef DISCO_ITEMS_TEST
+        public:
+#endif
           /**
            * Creates an Items object from the given Tag.
            * @param tag A &lt;query&gt; tag in the disco#items namespace, (possibly) containing
            * a disco#items reply.
            */
           Items( const Tag* tag );
-
-          /**
-           * Virtual destructor.
-           */
-          virtual ~Items();
 
           std::string m_node;
           ItemList m_items;

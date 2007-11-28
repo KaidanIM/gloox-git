@@ -86,19 +86,10 @@ int main( int /*argc*/, char** /*argv*/ )
     t = 0;
   }
 
-
-
-
-
-
-
-
-  StanzaExtensionFactory sef;
-
   // -------
   name = "Disco::Info/SEFactory test";
+  StanzaExtensionFactory sef;
   sef.registerExtension( new Disco::Info() );
-
   Tag* f = new Tag( "iq" );
   new Tag( f, "query", "xmlns", XMLNS_DISCO_INFO );
   IQ iq( IQ::Set, JID(), "" );
