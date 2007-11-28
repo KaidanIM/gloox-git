@@ -46,7 +46,7 @@ int main( int /*argc*/, char** /*argv*/ )
   IQ iq( IQ::Set, JID(), "" );
   sef.addExtensions( iq, f );
   const StanzaExtension* se = iq.findExtension( ExtUser + 1 );
-  if( se == 0 || se->tag() != b )
+  if( se == 0 || se == set || se->tag() != b )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
