@@ -16,7 +16,10 @@
  * @link gloox::MessageHandler MessageHandler @endlink,
  * @link gloox::SubscriptionHandler SubscriptionHandler @endlink, and
  * @link gloox::IqHandler IqHandler @endlink no longer take a Stanza* argument, but receive
- * a pointer to the respective specialized class. For example:
+ * a pointer to the respective specialized class. Additionally, in a move to get away from
+ * unsafe pointers to safer references, these pointer-taking functions have been deprecated
+ * (but will continue to be available throughout the 1.0.x cycle).
+ * The recommended usage looks as follows:
  *
  * Old code:
  * @code
@@ -26,9 +29,17 @@
  * }
  * @endcode
  *
- * New code:
+ * New code (deprecated):
  * @code
  * void MyClass::handlePresence( Presence* pres )
+ * {
+ *   // ...
+ * }
+ * @endcode
+ * or
+ * New code (recommended):
+ * @code
+ * void MyClass::handlePresence( const Presence& pres )
  * {
  *   // ...
  * }
@@ -82,6 +93,27 @@
  * ...
  * m_client->send( iq, this, SomeContext );
  * @endcode
+ *
+ * @subsubsection func_DiscoHandler_handleDiscoInfoResult 1.1.3 DiscoHandler::handleDiscoInfoResult()
+ *
+ * The
+ * @link gloox::DiscoHandler::handleDiscoInfoResult() DiscoHandler::handleDiscoInfoResult() @endlink
+ * function is now deprecated in favor of
+ * @link gloox::DiscoHandler::handleDiscoInfo() DiscoHandler::handleDiscoInfo() @endlink.
+ *
+ * @subsubsection func_DiscoHandler_handleDiscoError 1.1.4 DiscoHandler::handleDiscoItemsResult()
+ *
+ * The
+ * @link gloox::DiscoHandler::handleDiscoItemsResult() DiscoHandler::handleDiscoItemsResult() @endlink
+ * function is now deprecated in favor of
+ * @link gloox::DiscoHandler::handleDiscoItems() DiscoHandler::handleDiscoItems() @endlink.
+ *
+ * @subsubsection func_DiscoHandler_handleDiscoError 1.1.5 DiscoHandler::handleDiscoError()
+ *
+ * The
+ * @link gloox::DiscoHandler::handleDiscoError( IQ*, int ) DiscoHandler::handleDiscoError( IQ*, int ) @endlink
+ * function is now deprecated in favor of
+ * @link gloox::DiscoHandler::handleDiscoError( const JID&, const Error*, int ) DiscoHandler::handleDiscoError( const JID&, const Error*, int ) @endlink.
  *
  * @subsection removed_10 1.2 Removed classes and functions
  *
@@ -195,5 +227,25 @@
  *
  * The Message-based Inband Bytestream implementation has been removed in favour of an IQ-based one.
  * Also, Inband Bytestreams are now handled (transparently) by @link gloox::SIProfileFT SIProfileFT @endlink.
+ *
+ * @subsubsection func_AdhocHandler_handleAdhocError 1.2.9 AdhocHandler::handleAdhocError( const JID&, StanzaError )
+ *
+ * This function has been removed in favor of
+ * @link gloox::AdhocHandler::handleAdhocError( const JID&, const Error* ) handleAdhocError( const JID&, const Error* ) @endlink.
+ *
+ * @subsubsection func_SIProfileFTHandler_handleFTRequestError 1.2.10 SIProfileFTHandler::handleFTRequestError( IQ*, const std::string& )
+ *
+ * This function has been removed in favor of
+ * @link gloox::SIProfileFTHandler::handleFTRequestError( const IQ&, const std::string& ) handleFTRequestError( const IQ&, const std::string& ) @endlink.
+ *
+ * @subsubsection func_BytestreamHandler_handelBytestreamError 1.2.11 BytestreamHandler::handleBytestreamError( IQ* iq, const std::string& sid )
+ *
+ * This function has been removed in favor of
+ * @link gloox::BytestreamHandler::handleBytestreamError( const IQ& iq, const std::string& ) handleBytestreamError( const IQ& iq, const std::string& sid ) @endlink.
+ *
+ * @subsubsection func_BytestreamDataHandler_handelBytestreamError 1.2.12 BytestreamDataHandler::handleBytestreamError( Bytestream* bs, IQ* )
+ *
+ * This function has been removed in favor of
+ * @link gloox::BytestreamDataHandler::handleBytestreamError( Bytestream* bs, const IQ& ) handleBytestreamError( Bytestream* bs, const IQ& ) @endlink.
  *
  */
