@@ -131,7 +131,7 @@ class SearchTest : public gloox::SearchHandler, public gloox::ClientBase
     void setTest( int test ) { m_test = test; }
     void fetchSearchFields() { m_search.fetchSearchFields( g_dir, this ); }
     bool result() { bool t = m_result; m_result = false; return t; }
-    void feed( gloox::IQ& s ) { m_search.handleIqID( &s, m_context ); }
+    void feed( gloox::IQ& s ) { m_search.handleIqID( s, m_context ); }
     virtual void trackID( gloox::IqHandler* /*ih*/, const std::string& /*id*/, int /*context*/ ) {}
     void search( const gloox::SearchFieldStruct& fields ) { m_search.search( g_dir, 15, fields, this ); }
     void search( const gloox::DataForm& form ) { m_search.search( g_dir, form, this ); }
