@@ -68,6 +68,12 @@ namespace gloox
 
         public:
           /**
+           * Creates a empty Info object, suitable for making disco#info requests.
+           * @param node The node identifier to query (optional).
+           */
+          Info( const std::string& node = EmptyString );
+
+          /**
            * Sets the current info node.
            * @param node The info node.
            */
@@ -125,12 +131,6 @@ namespace gloox
           virtual Tag* tag() const;
 
         private:
-          /**
-           * Creates a empty Info object, suitable for making disco#info requests.
-           * @param node The node identifier to query (optional).
-           */
-          Info( const std::string& node = EmptyString );
-
           /**
            * Creates an Info object from the given Tag.
            * @param tag A &lt;query&gt; tag in the disco#info namespace, (possibly) containing
@@ -234,6 +234,12 @@ namespace gloox
 
         public:
           /**
+           * Creates a empty Items object, suitable for making disco#items requests.
+           * @param node The node identifier to query (optional).
+           */
+          Items( const std::string& node = EmptyString );
+
+          /**
            * Returns the queried node identifier, if any.
            * @return The node identifier. May be empty.
            */
@@ -266,12 +272,6 @@ namespace gloox
           virtual Tag* tag() const;
 
         private:
-          /**
-           * Creates a empty Items object, suitable for making disco#items requests.
-           * @param node The node identifier to query (optional).
-           */
-          Items( const std::string& node = EmptyString );
-
           /**
            * Creates an Items object from the given Tag.
            * @param tag A &lt;query&gt; tag in the disco#items namespace, (possibly) containing
@@ -501,10 +501,10 @@ namespace gloox
       void removeNodeHandler( DiscoNodeHandler* nh, const std::string& node );
 
       // reimplemented from IqHandler.
-      virtual bool handleIq( IQ* iq );
+      virtual bool handleIq( IQ* iq ); // FIXME remove for 1.1
 
       // reimplemented from IqHandler.
-      virtual void handleIqID( IQ* iq, int context );
+      virtual void handleIqID( IQ* iq, int context ); // FIXME remove for 1.1
 
     private:
       Disco( ClientBase* parent );
