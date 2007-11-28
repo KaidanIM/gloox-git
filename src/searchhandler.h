@@ -105,7 +105,7 @@ namespace gloox
       /**
        * This function is called if a error occured as a result to a search or search field request.
        * @param directory The queried/searched directory.
-       * @param stanza The full error stanza.
+       * @param error The error. May be 0.
        */
       virtual void handleSearchError( const JID& directory, const Error* error ) = 0;
 
