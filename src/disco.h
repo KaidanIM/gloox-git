@@ -455,18 +455,6 @@ namespace gloox
       const IdentityList& identities() const { return m_identities; }
 
       /**
-       * Returns the set identity category, e.g. 'client'.
-       * @return The identity category.
-       */
-//       const std::string& category() const { return m_identityCategory; }
-
-      /**
-       * Returns the set identity type, e.g. 'bot'.
-       * @return The identity type.
-       */
-//       const std::string& type() const { return m_identityType; }
-
-      /**
        * Use this function to register an @ref DiscoHandler with the Disco
        * object. This is only necessary if you want to receive Disco-set requests. Else
        * a one-time registration happens when calling getDiscoInfo() and getDiscoItems(), respectively.
