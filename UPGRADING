@@ -120,6 +120,9 @@
  * function is now deprecated in favor of
  * @link gloox::DiscoHandler::handleDiscoError( const JID&, const Error*, int ) DiscoHandler::handleDiscoError( const JID&, const Error*, int ) @endlink.
  *
+ *
+ *
+ *
  * @subsection removed_10 1.2 Removed classes and functions
  *
  * @subsubsection class_XDelayedDelivery 1.2.1 XDelayedDelivery
@@ -252,5 +255,15 @@
  *
  * This function has been removed in favor of
  * @link gloox::BytestreamDataHandler::handleBytestreamError( Bytestream* bs, const IQ& ) handleBytestreamError( Bytestream* bs, const IQ& ) @endlink.
+ *
+ * @subsubsection func_Disco_category 1.2.13 Disco::category()
+ *
+ * This function has been removed. Use @link gloox::Disco::identities() Disco::identities() @endlink
+ * instead.
+ *
+ * @subsubsection func_Disco_type 1.2.14 Disco::type()
+ *
+ * This function has been removed. Use @link gloox::Disco::type() Disco::type() @endlink
+ * instead.
  *
  */
