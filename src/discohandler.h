@@ -69,7 +69,7 @@ namespace gloox
        * Reimplement this function if you want to be notified about the result
        * of an disco#items query.
        * @param from The sender of the disco#items result.
-       * @param info The Items.
+       * @param items The Items.
        * @param context A context identifier.
        * @since 1.0
        */
