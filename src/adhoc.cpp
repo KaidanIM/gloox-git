@@ -49,15 +49,25 @@ namespace gloox
     "info", "warn", "error"
   };
 
-  static inline const std::string noteString( Adhoc::Command::Severity sev )
+  static inline const std::string noteString( Adhoc::Command::Note::Severity sev )
   {
     return util::lookup( sev, cmdNoteStringValues );
   }
 
   // ---- Adhoc::Command::Note ----
+  Adhoc::Command::Note::Note( const Tag* tag )
+    : m_severity( InvalidSeverity )
+  {
+    if( !tag || tag->name() != "note" )
+      return;
+
+    m_severity = (Severity)util::deflookup( tag->findAttribute( "type" ), cmdNoteStringValues, Info );
+    m_note = tag->cdata();
+  }
+
   Tag* Adhoc::Command::Note::tag() const
   {
-    if( m_note.empty() )
+    if( m_note.empty() || m_severity == InvalidSeverity )
       return 0;
 
     Tag* n = new Tag( "note", m_note );
@@ -68,26 +78,27 @@ namespace gloox
 
   // ---- Adhoc::Command ----
   Adhoc::Command::Command( const std::string& node, Adhoc::Command::Action action )
-    : StanzaExtension( ExtAdhocCommand ), m_node( node ), m_form( 0 ), m_action( action )
+    : StanzaExtension( ExtAdhocCommand ), m_node( node ), m_form( 0 ), m_action( action ),
+      m_actions( 0 )
   {
   }
 
   Adhoc::Command::Command( const std::string& node, const std::string& sessionid,
                            Adhoc::Command::Action action )
     : StanzaExtension( ExtAdhocCommand ), m_node( node ), m_sessionid( sessionid ),
-      m_form( 0 ), m_action( action )
+      m_form( 0 ), m_action( action ), m_actions( 0 )
   {
   }
 
   Adhoc::Command::Command( const Tag* tag )
-    : StanzaExtension( ExtAdhocCommand ), m_actions( 0 )
+    : StanzaExtension( ExtAdhocCommand ), m_form( 0 ), m_actions( 0 )
   {
     if( !tag || tag->name() != "command" || tag->xmlns() != XMLNS_ADHOC_COMMANDS )
       return;
 
     m_node = tag->findAttribute( "node" );
     m_sessionid = tag->findAttribute( "sessionid" );
-    m_action = (Action)util::lookup2( tag->findAttribute( "action" ), cmdActionStringValues );
+    m_action = (Action)util::deflookup2( tag->findAttribute( "action" ), cmdActionStringValues, Execute );
     m_status = (Status)util::lookup( tag->findAttribute( "status" ), cmdStatusStringValues );
 
     Tag* a = tag->findChild( "actions" );
@@ -104,17 +115,17 @@ namespace gloox
     const ConstTagList& l = tag->findTagList( "/command/note" );
     ConstTagList::const_iterator it = l.begin();
     for( ; it != l.end(); ++it )
-    {
-      Severity s = Info;
-      if( (*it)->hasAttribute( TYPE ) )
-        s = (Severity)util::lookup( tag->findAttribute( TYPE ), cmdNoteStringValues );
-      m_notes.push_back( new Note( s, (*it)->cdata() ) );
-    }
+      m_notes.push_back( new Note( (*it) ) );
+
+    Tag* x = tag->findChild( "x", "xmlns", XMLNS_X_DATA );
+    if( x )
+      m_form = new DataForm( x );
   }
 
   Adhoc::Command::~Command()
   {
     util::clearList( m_notes );
+    delete m_form;
   }
 
   const std::string& Adhoc::Command::filterString() const

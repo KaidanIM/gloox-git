@@ -55,9 +55,11 @@ int main( int /*argc*/, char** /*argv*/ )
     t->addAttribute( "node", "somecmd" );
     t->addAttribute( "sessionid", "somesession" );
     t->addAttribute( "action", "execute" );
+    Tag* f = new Tag( t, "x" );
+    f->setXmlns( XMLNS_X_DATA );
     Adhoc::Command ac( t );
     if( ac.node() != "somecmd" || ac.sessionID() != "somesession"
-        || ac.action() != Adhoc::Command::Execute )
+        || ac.action() != Adhoc::Command::Execute || ac.form() == 0 )
     {
       ++fail;
       printf( "test '%s' failed\n", name.c_str() );

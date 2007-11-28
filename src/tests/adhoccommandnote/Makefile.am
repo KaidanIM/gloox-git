@@ -4,10 +4,10 @@
 
 AM_CPPFLAGS = -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare -Wpointer-arith -Wswitch -Wunknown-pragmas -Wconversion -Wundef -Wcast-qual -ansi
 
-noinst_PROGRAMS = adhoccommand_test
+noinst_PROGRAMS = adhoccommandnote_test
 
-adhoccommand_test_SOURCES = adhoccommand_test.cpp
-adhoccommand_test_LDADD = ../../adhoc.o ../../connectiontcpclient.o ../../connectiontcpbase.o \
+adhoccommandnote_test_SOURCES = adhoccommandnote_test.cpp
+adhoccommandnote_test_LDADD = ../../adhoc.o ../../connectiontcpclient.o ../../connectiontcpbase.o \
 			../../disco.o ../../parser.o ../../tag.o ../../stanza.o ../../base64.o \
 			../../md5.o ../../tlsgnutlsclient.o ../../tlsopenssl.o ../../tlsschannel.o \
 			../../logsink.o ../../messagesession.o ../../prep.o ../../compressionzlib.o \
@@ -18,4 +18,4 @@ adhoccommand_test_LDADD = ../../adhoc.o ../../connectiontcpclient.o ../../connec
 			../../sha.o ../../error.o ../../clientbase.o ../../jid.o \
 			../../dataform.o ../../dataformfieldcontainer.o ../../dataformreported.o \
 			../../dataformitem.o ../../dataformfield.o
-adhoccommand_test_CFLAGS = $(CPPFLAGS)
+adhoccommandnote_test_CFLAGS = $(CPPFLAGS)

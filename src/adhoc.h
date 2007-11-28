@@ -121,20 +121,6 @@ namespace gloox
           };
 
           /**
-           * Specifies the severity of a note.
-           */
-          enum Severity
-          {
-            Info,                   /**< The note is informational only. This is not really an
-                                     * exceptional condition. */
-            Warning,                /**< The note indicates a warning. Possibly due to illogical
-                                     * (yet valid) data. */
-            Error,                  /**< The note indicates an error. The text should indicate the
-                                     * reason for the error. */
-            InvalidSeverity         /**< The note type is unknown or invalid. */
-          };
-
-          /**
            * An abstraction of a command note.
            *
            * @author Jakob Schroeter <js@camaya.net>
@@ -143,8 +129,21 @@ namespace gloox
           class Note
           {
             friend class Command;
-
             public:
+              /**
+               * Specifies the severity of a note.
+               */
+              enum Severity
+              {
+                Info,               /**< The note is informational only. This is not really an
+                                     * exceptional condition. */
+                Warning,            /**< The note indicates a warning. Possibly due to illogical
+                                     * (yet valid) data. */
+                Error,              /**< The note indicates an error. The text should indicate the
+                                     * reason for the error. */
+                InvalidSeverity     /**< The note type is unknown or invalid. */
+              };
+
               /**
                * A convenience constructor.
                * @param sev The note's severity.
@@ -152,6 +151,11 @@ namespace gloox
                */
               Note( Severity sev, const std::string& note )
                 : m_severity( sev ), m_note( note ) {}
+
+              /**
+               * Destructor.
+               */
+              ~Note() {}
 
               /**
                * Returns the note's severity.
@@ -172,10 +176,14 @@ namespace gloox
               Tag* tag() const;
 
             private:
+#ifdef ADHOC_COMMANDS_TEST
+            public:
+#endif
               /**
-               * Destructor.
+               * Constructs a new Note from the given Tag.
+               * @param tag The Tag to parse.
                */
-              ~Note() {}
+              Note( const Tag* tag );
 
               Severity m_severity;      /**< The note's severity. */
               std::string m_note;       /**< The note's content. */
@@ -249,6 +257,12 @@ namespace gloox
            * the Note.
            */
           void addNote( const Note* note ) { m_notes.push_back( note ); }
+
+          /**
+           * Returns the command's embedded DataForm.
+           * @return The command's embedded DataForm. May be 0.
+           */
+          const DataForm* form() const { return m_form; }
 
           // reimplemented from StanzaExtension
           virtual const std::string& filterString() const;

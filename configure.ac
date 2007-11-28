@@ -301,6 +301,7 @@ src/Makefile
 src/examples/Makefile
 src/tests/Makefile
 src/tests/adhoccommand/Makefile
+src/tests/adhoccommandnote/Makefile
 src/tests/base64/Makefile
 src/tests/chatstatefilter/Makefile
 src/tests/client/Makefile
