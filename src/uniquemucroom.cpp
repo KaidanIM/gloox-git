@@ -39,14 +39,14 @@ namespace gloox
     m_parent->send( iq, this, RequestUniqueName );
   }
 
-  void UniqueMUCRoom::handleIqID( IQ* iq, int context )
+  void UniqueMUCRoom::handleIqID( const IQ& iq, int context )
   {
-    switch( iq->subtype() )
+    switch( iq.subtype() )
     {
       case IQ::Result:
         if( context == RequestUniqueName )
         {
-          Tag* u = iq->query();
+          Tag* u = iq.query();
           if( u && u->name() == "unique" && u->xmlns() == XMLNS_MUC_UNIQUE )
           {
             const std::string& name = u->cdata();
