@@ -101,7 +101,7 @@
  * function is now deprecated in favor of
  * @link gloox::DiscoHandler::handleDiscoInfo() DiscoHandler::handleDiscoInfo() @endlink.
  *
- * @subsubsection func_DiscoHandler_handleDiscoError 1.1.4 DiscoHandler::handleDiscoItemsResult()
+ * @subsubsection func_DiscoHandler_handleDiscoItemsResult 1.1.4 DiscoHandler::handleDiscoItemsResult()
  *
  * The
  * @link gloox::DiscoHandler::handleDiscoItemsResult() DiscoHandler::handleDiscoItemsResult() @endlink
