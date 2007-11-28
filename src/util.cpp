@@ -20,22 +20,29 @@ namespace gloox
   namespace util
   {
 
-    unsigned _lookup( const std::string& str, const char * values[], unsigned size )
+    unsigned _lookup( const std::string& str, const char* values[], unsigned size, int def )
     {
       unsigned i = 0;
-      for( ; i < size && str != values[i]; ++i ) ;
-      return i;
+      for( ; i < size && str != values[i]; ++i )
+        ;
+      return ( i == ( size ) && def != -1 ) ? (unsigned)def : i;
     }
 
-    const std::string _lookup( unsigned code, const char * values[], unsigned size )
+    const std::string _lookup( unsigned code, const char* values[], unsigned size, const std::string& def )
     {
-      return code < size ? std::string(values[code]) : EmptyString;
+      return code < size ? std::string(values[code]) : def;
     }
 
-    const std::string _lookup2( unsigned code, const char * values[], unsigned size )
+    unsigned _lookup2( const std::string& str, const char* values[],
+                       unsigned size, int def )
     {
-      const unsigned i = (unsigned)log2(code);
-      return i < size ? std::string(values[i]) : EmptyString;
+      return 1 << _lookup( str, values, size, def == -1 ? -1 : (int)log2( def ) );
+    }
+
+    const std::string _lookup2( unsigned code, const char* values[], unsigned size, const std::string& def )
+    {
+      const unsigned i = (unsigned)log2( code );
+      return i < size ? std::string( values[i] ) : def;
     }
 
     static const char escape_chars[] = { '&', '<', '>', '\'', '"' };

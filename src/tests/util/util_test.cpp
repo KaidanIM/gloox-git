@@ -7,11 +7,12 @@ using namespace gloox;
 int main()
 {
   enum { A, B, C, Inval };
-  static const char * values[] = { "a", "b", "c" };
+  static const char* values[] = { "a", "b", "c" };
   enum { D = 1<<0, E = 1<<1, F = 1<<2, Inval2 = 1<<3 };
-  static const char * values2[] = { "d", "e", "f" };
+  static const char* values2[] = { "d", "e", "f" };
   int fail = 0;
 
+  // -------
   std::string name = "string lookup";
   if( util::lookup( "a", values ) != A )
   {
@@ -19,7 +20,7 @@ int main()
     ++fail;
   }
 
-
+  // -------
   name = "invalid string lookup";
   if( util::lookup( "", values ) != Inval )
   {
@@ -27,7 +28,7 @@ int main()
     ++fail;
   }
 
-
+  // -------
   name = "code lookup";
   if( util::lookup( A, values ) != "a" )
   {
@@ -35,6 +36,7 @@ int main()
     ++fail;
   }
 
+  // -------
   name = "invalid code lookup";
   if( !util::lookup( Inval, values ).empty() )
   {
@@ -42,7 +44,7 @@ int main()
     ++fail;
   }
 
-
+  // -------
   name = "out-of-range code lookup";
   if( !util::lookup( 700, values ).empty() )
   {
@@ -50,6 +52,7 @@ int main()
     ++fail;
   }
 
+  // -------
   name = "string lookup (ORable)";
   if( util::lookup2( "d", values2 ) != D )
   {
@@ -57,7 +60,7 @@ int main()
     ++fail;
   }
 
-
+  // -------
   name = "invalid string lookup (ORable)";
   if( util::lookup2( "", values2 ) != Inval2 )
   {
@@ -65,7 +68,7 @@ int main()
     ++fail;
   }
 
-
+  // -------
   name = "code lookup (ORable)";
   if( util::lookup2( D, values2 ) != "d" )
   {
@@ -73,7 +76,7 @@ int main()
     ++fail;
   }
 
-
+  // -------
   name = "invalid code lookup (ORable)";
   if( !util::lookup2( Inval2, values2 ).empty() )
   {
@@ -81,9 +84,89 @@ int main()
     ++fail;
   }
 
-
+  // -------
   name = "out-of-range code lookup (ORable)";
   if( !util::lookup2( 700, values2 ).empty() )
+  {
+    printf( "test '%s' failed\n", name.c_str() );
+    ++fail;
+  }
+
+  // -------
+  name = "string lookup w/ default";
+  if( util::deflookup( "a", values, B ) != A )
+  {
+    printf( "test '%s' failed\n", name.c_str() );
+    ++fail;
+  }
+
+  // -------
+  name = "invalid string lookup w/ default";
+  if( util::deflookup( "", values, B ) != B )
+  {
+    printf( "test '%s' failed\n", name.c_str() );
+    ++fail;
+  }
+
+  // -------
+  name = "code lookup w/ default";
+  if( util::deflookup( A, values, "foo" ) != "a" )
+  {
+    printf( "test '%s' failed\n", name.c_str() );
+    ++fail;
+  }
+
+  // -------
+  name = "invalid code lookup w/ default";
+  if( util::deflookup( Inval, values, "foo" ) != "foo" )
+  {
+    printf( "test '%s' failed\n", name.c_str() );
+    ++fail;
+  }
+
+  // -------
+  name = "out-of-range code lookup w/ default";
+  if( util::deflookup( 700, values, "foo" ) != "foo" )
+  {
+    printf( "test '%s' failed\n", name.c_str() );
+    ++fail;
+  }
+
+  // -------
+  name = "string lookup (ORable) w/ default";
+  if( util::deflookup2( "d", values2, A ) != D )
+  {
+    printf( "test '%s' failed\n", name.c_str() );
+    ++fail;
+  }
+
+  // -------
+  name = "invalid string lookup (ORable) w/ default";
+  if( util::deflookup2( "", values2, E ) != E )
+  {
+    printf( "test '%s' failed: %d\n", name.c_str(), util::deflookup2( "", values2, E ) );
+    ++fail;
+  }
+
+  // -------
+  name = "code lookup (ORable) w/ default";
+  if( util::deflookup2( D, values2, "foo" ) != "d" )
+  {
+    printf( "test '%s' failed\n", name.c_str() );
+    ++fail;
+  }
+
+  // -------
+  name = "invalid code lookup (ORable) w/ default";
+  if( util::deflookup2( Inval2, values2, "foo" ) != "foo" )
+  {
+    printf( "test '%s' failed\n", name.c_str() );
+    ++fail;
+  }
+
+  // -------
+  name = "out-of-range code lookup (ORable) w/ default";
+  if( util::deflookup2( 700, values2, "foo" ) != "foo" )
   {
     printf( "test '%s' failed\n", name.c_str() );
     ++fail;
