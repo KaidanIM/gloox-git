@@ -1,4 +1,5 @@
 #include "../../tag.h"
+#define DISCO_ITEMS_TEST
 #include "../../disco.h"
 #include "../../iq.h"
 #include "../../stanzaextensionfactory.h"
@@ -14,6 +15,60 @@ using namespace gloox;
   std::string name;
   Tag *t;
 
+  // -------
+  {
+    name = "empty disco#items request";
+    Disco::Items di;
+    t = di.tag();
+    if( t->xml() != "<query xmlns='" + XMLNS_DISCO_ITEMS + "'/>"
+        || !di.node().empty() )
+    {
+      ++fail;
+      printf( "test '%s' failed\n", name.c_str() );
+    }
+    delete t;
+    t = 0;
+  }
+
+  // -------
+  {
+    name = "empty disco#items request + node";
+    Disco::Items di( "somenode" );
+    t = di.tag();
+    if( t->xml() != "<query xmlns='" + XMLNS_DISCO_ITEMS + "' node='somenode'/>"
+        || di.node() != "somenode" )
+    {
+      ++fail;
+      printf( "test '%s' failed\n", name.c_str() );
+    }
+    delete t;
+    t = 0;
+  }
+
+  // -------
+  {
+    name = "Tag ctor";
+    t = new Tag( "query" );
+    t->setXmlns( XMLNS_DISCO_ITEMS );
+    t->addAttribute( "node", "somenode" );
+    Tag* i = new Tag( t, "item", "jid", "jid1" );
+    i->addAttribute( "node", "node1" );
+    i->addAttribute( "name", "name1" );
+    i = new Tag( t, "item", "jid", "jid2" );
+    i->addAttribute( "node", "node2" );
+    i->addAttribute( "name", "name2" );
+    i = new Tag( t, "item", "jid", "jid3" );
+    i->addAttribute( "node", "node3" );
+    i->addAttribute( "name", "name3" );
+    Disco::Items di( t );
+    if( di.node() != "somenode" || di.items().size() != 3 )
+    {
+      ++fail;
+      printf( "test '%s' failed\n", name.c_str() );
+    }
+    delete t;
+    t = 0;
+  }
 
   StanzaExtensionFactory sef;
 
@@ -21,9 +76,7 @@ using namespace gloox;
   name = "Disco::Items/SEFactory test";
   sef.registerExtension( new Disco::Items() );
   Tag* f = new Tag( "iq" );
-  Tag* b = new Tag( f, "query", "xmlns", XMLNS_DISCO_ITEMS );
-  new Tag( b, "url", "url" );
-  new Tag( b, "desc", "desc" );
+  new Tag( f, "query", "xmlns", XMLNS_DISCO_ITEMS );
   IQ iq( IQ::Set, JID(), "" );
   sef.addExtensions( iq, f );
   const Disco::Items* se = static_cast<const Disco::Items*>( iq.findExtension( ExtDiscoItems ) );
