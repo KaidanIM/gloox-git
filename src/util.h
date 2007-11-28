@@ -63,6 +63,11 @@ namespace gloox
      */
     const std::string _lookup2( unsigned code, const char* values[], unsigned size );
 
+    /**
+     * A convenience function that executes the given function on each object in a given list.
+     * @param t The obejct to execute the function on.
+     * @param f The function to execute.
+     */
     template< typename T, typename F >
     inline void ForEach( T& t, F f )
     {
@@ -70,6 +75,13 @@ namespace gloox
         ((*it)->*f)();
     }
 
+    /**
+     * A convenience function that executes the given function on each object in a given list,
+     * passing the given argument.
+     * @param t The obejct to execute the function on.
+     * @param f The function to execute.
+     * @param d An argument to pass to the function.
+     */
     template< typename T, typename F, typename D >
     inline void ForEach( T& t, F f, D& d )
     {
@@ -77,6 +89,14 @@ namespace gloox
         ( (*it)->*f )( d );
     }
 
+    /**
+     * A convenience function that executes the given function on each object in a given list,
+     * passing the given arguments.
+     * @param t The obejct to execute the function on.
+     * @param f The function to execute.
+     * @param d1 An argument to pass to the function.
+     * @param d2 An argument to pass to the function.
+     */
     template< typename T, typename F, typename D1, typename D2 >
     inline void ForEach( T& t, F f, D1& d1, D2& d2 )
     {
@@ -84,6 +104,15 @@ namespace gloox
         ( (*it)->*f )( d1, d2 );
     }
 
+    /**
+     * A convenience function that executes the given function on each object in a given list,
+     * passing the given arguments.
+     * @param t The obejct to execute the function on.
+     * @param f The function to execute.
+     * @param d1 An argument to pass to the function.
+     * @param d2 An argument to pass to the function.
+     * @param d3 An argument to pass to the function.
+     */
     template< typename T, typename F, typename D1, typename D2, typename D3 >
     inline void ForEach( T& t, F f, D1& d1, D2& d2, D3& d3 )
     {
@@ -144,7 +173,7 @@ namespace gloox
     }
 
     /**
-     * Does some fancy escaping. (& --> &amp;, etc).
+     * Does some fancy escaping. (& --> &amp;amp;, etc).
      * @param what A string to escape.
      * @return The escaped string.
      */
