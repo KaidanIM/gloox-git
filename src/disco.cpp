@@ -345,9 +345,7 @@ namespace gloox
 
         case IQ::Error:
         {
-          const Error* error = iq->error();
-          if( error )
-            (*it).second.dh->handleDiscoError( iq->from(), *error, (*it).second.context );
+          (*it).second.dh->handleDiscoError( iq->from(), iq->error(), (*it).second.context );
           (*it).second.dh->handleDiscoError( iq, (*it).second.context );
           break;
         }

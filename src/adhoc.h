@@ -357,16 +357,16 @@ namespace gloox
       virtual void handleDiscoItems( const JID& from, const Disco::Items& items, int context );
 
       // reimplemented from DiscoHandler
-      virtual void handleDiscoError( const JID& from, const Error& error, int context );
+      virtual void handleDiscoError( const JID& from, const Error* error, int context );
 
     private:
-      // reimplemented from DiscoHandler, FIXME remove
+      // reimplemented from DiscoHandler, FIXME remove for 1.1
       virtual void handleDiscoInfoResult( IQ* iq, int context ) { (void) iq; (void) context; };
 
-      // reimplemented from DiscoHandler, FIXME remove
+      // reimplemented from DiscoHandler, FIXME remove for 1.1
       virtual void handleDiscoItemsResult( IQ* iq, int context ) { (void) iq; (void) context; };
 
-      // reimplemented from DiscoHandler, FIXME remove
+      // reimplemented from DiscoHandler, FIXME remove for 1.1
       virtual void handleDiscoError( IQ* iq, int context ) { (void) iq; (void) context; };
 
       typedef std::map<const std::string, AdhocCommandProvider*> AdhocCommandProviderMap;

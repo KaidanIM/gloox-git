@@ -94,11 +94,11 @@ namespace gloox
       /**
        * Reimplement this function to receive disco error notifications.
        * @param from The sender of the error result.
-       * @param error The Error.
+       * @param error The Error. May be 0.
        * @param context A context identifier.
        * @since 1.0
        */
-      virtual void handleDiscoError( const JID& from, const Error& error, int context )
+      virtual void handleDiscoError( const JID& from, const Error* error, int context )
       {
         (void)from;
         (void)error;
@@ -110,7 +110,7 @@ namespace gloox
        * @param iq The full IQ.
        * @param context A context identifier.
        * @todo Replace the stanza with decoded values.
-       * @deprecated Use handleDiscoError( const JID&, const Error&, int ) instead.
+       * @deprecated Use handleDiscoError( const JID&, const Error*, int ) instead.
        * This function will be gone in the next major release.
        */
       GLOOX_DEPRECATED virtual void handleDiscoError( IQ* iq, int context ) = 0; // FIXME remove for 1.1
