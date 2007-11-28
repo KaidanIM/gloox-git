@@ -13,6 +13,8 @@
 #ifndef UTIL_H__
 #define UTIL_H__
 
+#include "gloox.h"
+
 #include <string>
 #include <list>
 #include <map>
@@ -25,6 +27,8 @@ namespace gloox
 
     #define lookup( a, b ) _lookup( a, b, sizeof(b)/sizeof(char*) )
     #define lookup2( a, b ) _lookup2( a, b, sizeof(b)/sizeof(char*) )
+    #define deflookup( a, b, c ) _lookup( a, b, sizeof(b)/sizeof(char*), c )
+    #define deflookup2( a, b, c ) _lookup2( a, b, sizeof(b)/sizeof(char*), c )
 
     /**
      * Finds the enumerated value associated with a string value.
@@ -33,7 +37,8 @@ namespace gloox
      * @param size The array's size.
      * @return The associated enum code.
      */
-    unsigned _lookup( const std::string& str, const char* values[], unsigned size );
+    unsigned _lookup( const std::string& str, const char* values[],
+                      unsigned size, int def = -1 );
 
     /**
      * Finds the string associated with an enumerated type.
@@ -42,7 +47,8 @@ namespace gloox
      * @param size The array's size.
      * @return The associated string (empty in case there's no match).
      */
-    const std::string _lookup( unsigned code, const char* values[], unsigned size );
+    const std::string _lookup( unsigned code, const char* values[],
+                               unsigned size, const std::string& def = EmptyString );
 
     /**
      * Finds the ORable enumerated value associated with a string value.
@@ -51,8 +57,8 @@ namespace gloox
      * @param size The array's size.
      * @return The associated enum code.
      */
-    inline unsigned _lookup2( const std::string& str, const char* values[], unsigned size )
-      {  return 1 << _lookup( str, values, size ); }
+    unsigned _lookup2( const std::string& str, const char* values[],
+                              unsigned size, int def = -1 );
 
     /**
      * Finds the string associated with an ORable enumerated type.
@@ -61,7 +67,8 @@ namespace gloox
      * @param size The array's size.
      * @return The associated string (empty in case there's no match).
      */
-    const std::string _lookup2( unsigned code, const char* values[], unsigned size );
+    const std::string _lookup2( unsigned code, const char* values[],
+                                unsigned size, const std::string& def = EmptyString );
 
     /**
      * A convenience function that executes the given function on each object in a given list.
