@@ -799,9 +799,9 @@ namespace gloox
     StanzaErrorConflict,            /**< Access cannot be granted because an existing resource or session
                                      * exists with the same name or address; the associated error type
                                      * SHOULD be "cancel". */
-    StanzaErrorFeatureNotImplemented,/**< The feature requested is not implemented by the recipient or server
-                                     * and therefore cannot be processed; the associated error type SHOULD be
-                                     * "cancel". */
+    StanzaErrorFeatureNotImplemented,/**< The feature requested is not implemented by the recipient or
+                                      * server and therefore cannot be processed; the associated error
+                                      * type SHOULD be "cancel". */
     StanzaErrorForbidden,           /**< The requesting entity does not possess the required permissions to
                                      * perform the action; the associated error type SHOULD be "auth". */
     StanzaErrorGone,                /**< The recipient or server can no longer be contacted at this address
@@ -833,15 +833,15 @@ namespace gloox
                                      * service because payment is required; the associated error type SHOULD
                                      * be "auth". */
     StanzaErrorRecipientUnavailable,/**< The intended recipient is temporarily unavailable; the associated
-                                     * error type SHOULD be "wait" (note: an application MUST NOT return this
-                                     * error if doing so would provide information about the intended
+                                     * error type SHOULD be "wait" (note: an application MUST NOT return
+                                     * this error if doing so would provide information about the intended
                                      * recipient's network availability to an entity that is not authorized
                                      * to know such information). */
-    StanzaErrorRedirect,            /**< The recipient or server is redirecting requests for this information
-                                     * to another entity, usually temporarily (the error stanza SHOULD
-                                     * contain the alternate address, which MUST be a valid JID, in the XML
-                                     * character data of the &lt;redirect/&gt; element); the associated
-                                     * error type SHOULD be "modify". */
+    StanzaErrorRedirect,            /**< The recipient or server is redirecting requests for this
+                                     * information to another entity, usually temporarily (the error
+                                     * stanza SHOULD contain the alternate address, which MUST be a valid
+                                     * JID, in the XML character data of the &lt;redirect/&gt; element);
+                                     * the associated error type SHOULD be "modify". */
     StanzaErrorRegistrationRequired,/**< The requesting entity is not authorized to access the requested
                                      * service because registration is required; the associated error type
                                      * SHOULD be "auth". */
@@ -849,8 +849,8 @@ namespace gloox
                                      * the intended recipient does not exist; the associated error type
                                      * SHOULD be "cancel". */
     StanzaErrorRemoteServerTimeout, /**< A remote server or service specified as part or all of the JID of
-                                     * the intended recipient (or required to fulfill a request) could not be
-                                     * contacted within a reasonable amount of time; the associated error
+                                     * the intended recipient (or required to fulfill a request) could not
+                                     * be contacted within a reasonable amount of time; the associated error
                                      * type SHOULD be "wait". */
     StanzaErrorResourceConstraint,  /**< The server or recipient lacks the system resources necessary to
                                      * service the request; the associated error type SHOULD be "wait". */
@@ -863,9 +863,9 @@ namespace gloox
                                      * conditions in this list; any error type may be associated with this
                                      * condition, and it SHOULD be used only in conjunction with an
                                      * application-specific condition. */
-    StanzaErrorUnexpectedRequest,   /**< The recipient or server understood the request but was not expecting
-                                     * it at this time (e.g., the request was out of order); the associated
-                                     * error type SHOULD be "wait". */
+    StanzaErrorUnexpectedRequest,   /**< The recipient or server understood the request but was not
+                                     * expecting it at this time (e.g., the request was out of order);
+                                     * the associated error type SHOULD be "wait". */
     StanzaErrorUnknownSender,       /**< The stanza 'from' address specified by a connected client is not
                                      * valid for the stream (e.g., the stanza does not include a 'from'
                                      * address when multiple resources are bound to the stream); the
