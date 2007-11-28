@@ -519,13 +519,11 @@ namespace gloox
       typedef std::list<DiscoNodeHandler*> DiscoNodeHandlerList;
       typedef std::map<std::string, DiscoNodeHandlerList> DiscoNodeHandlerMap;
       typedef std::map<std::string, DiscoHandlerContext> DiscoHandlerMap;
-//       typedef std::list<DiscoItem*> ItemList;
 
       DiscoHandlerList m_discoHandlers;
       DiscoNodeHandlerMap m_nodeHandlers;
       DiscoHandlerMap m_track;
       IdentityList m_identities;
-//       ItemList m_items;
       StringList m_features;
       StringMap  m_queryIDs;
 

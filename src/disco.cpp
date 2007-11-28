@@ -211,6 +211,8 @@ namespace gloox
 
   Disco::~Disco()
   {
+    util::clearList( m_identities );
+
     if( m_parent )
     {
       m_parent->removeIqHandler( this, XMLNS_DISCO_INFO );
