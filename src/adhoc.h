@@ -142,6 +142,8 @@ namespace gloox
            */
           class Note
           {
+            friend class Command;
+
             public:
               /**
                * A convenience constructor.
@@ -150,11 +152,6 @@ namespace gloox
                */
               Note( Severity sev, const std::string& note )
                 : m_severity( sev ), m_note( note ) {}
-
-              /**
-               * Destructor.
-               */
-              ~Note() {}
 
               /**
                * Returns the note's severity.
@@ -175,6 +172,11 @@ namespace gloox
               Tag* tag() const;
 
             private:
+              /**
+               * Destructor.
+               */
+              ~Note() {}
+
               Severity m_severity;      /**< The note's severity. */
               std::string m_note;       /**< The note's content. */
           };
@@ -204,6 +206,12 @@ namespace gloox
           Command( const std::string& node, Action action );
 
           /**
+           * Returns the node identifier (the command).
+           * @return The node identifier.
+           */
+          const std::string& node() const { return m_node; }
+
+          /**
            * Returns the command's session ID, if any.
            * @return The command's session ID.
            */
@@ -217,7 +225,7 @@ namespace gloox
           Status status() const { return m_status; }
 
           /**
-           * Returns The command's action.
+           * Returns the command's action.
            * @return The command's action.
            */
           Action action() const { return m_action; }
@@ -255,6 +263,9 @@ namespace gloox
           virtual Tag* tag() const;
 
         private:
+#ifdef ADHOC_COMMANDS_TEST
+        public:
+#endif
           /**
            * Creates a Command object from the given Tag.
            * @param tag A &lt;command&gt; tag in the adhoc commands' namespace.
