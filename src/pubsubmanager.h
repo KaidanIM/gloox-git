@@ -97,7 +97,7 @@ namespace gloox
      * In response to this request, MyResultHandler::handleItem() will be called.
      *
      * XEP Version: 1.9
-     * 
+     *
      * @author Vincent Thomasset <vthomasset@gmail.com>
      * @since 1.0
      *
@@ -511,9 +511,17 @@ public:
         void handleDiscoError( IQ* iq, int context );
         bool handleDiscoSet( IQ* ) { return 0; }
 
-        // reimplemented from IqHandler
-        bool handleIq  ( IQ* ) { return 0; }
-        void handleIqID( IQ* iq, int context );
+      // reimplemented from IqHandler.
+        virtual bool handleIq( const IQ& iq ) { (void)iq; return false; }
+
+      // reimplemented from IqHandler.
+        virtual void handleIqID( const IQ& iq, int context );
+
+      // reimplemented from IqHandler.
+        virtual bool handleIq( IQ* iq ) { (void)iq; return false; } // FIXME  remove for 1.1.
+
+      // reimplemented from IqHandler.
+        virtual void handleIqID( IQ* iq, int context ) { (void)iq; (void)context; } // FIXME remove for 1.1
 
       private:
 

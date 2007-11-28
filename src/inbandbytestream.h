@@ -76,10 +76,10 @@ namespace gloox
       virtual void handleIqID( const IQ& iq, int context );
 
       // re-implemented from IqHandler
-      virtual bool handleIq( IQ* iq ) { (void)iq; return false; }
+      virtual bool handleIq( IQ* iq ) { (void)iq; return false; } // FIXME remove for 1.1
 
       // re-implemented from IqHandler
-      virtual void handleIqID( IQ* iq, int context ) { (void)iq; (void)context; }
+      virtual void handleIqID( IQ* iq, int context ) { (void)iq; (void)context; } // FIXME remove for 1.1
 
     private:
       enum TrackEnum

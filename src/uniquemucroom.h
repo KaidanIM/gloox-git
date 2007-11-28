@@ -56,7 +56,7 @@ namespace gloox
 
     private:
       // reimplemented from MUCRoom (IqHandler)
-      void handleIqID( IQ* iq, int context );
+      void handleIqID( const IQ& iq, int context );
 
   };
 

@@ -569,11 +569,11 @@ namespace gloox
      * @todo Track context info for Unsubscription result.
      * @todo
      */
-    void Manager::handleIqID( IQ* iq, int context )
+    void Manager::handleIqID( const IQ& iq, int context )
     {
-      const JID& service = iq->from();
-      const Tag* query = iq->query();
-      const std::string& id = iq->id();
+      const JID& service = iq.from();
+      const Tag* query = iq.query();
+      const std::string& id = iq.id();
 
       ResultHandlerTrackMap::iterator ith = m_resultHandlerTrackMap.find( id );
       if( ith == m_resultHandlerTrackMap.end() )
@@ -581,7 +581,7 @@ namespace gloox
 
       ResultHandler* rh = (*ith).second;
 
-      switch( iq->subtype() )
+      switch( iq.subtype() )
       {
         case IQ::Result:
         {
@@ -742,7 +742,7 @@ namespace gloox
                 }
                 case GetNodeConfig:
                 {
-                  Tag* ps = iq->query();
+                  Tag* ps = iq.query();
                   if( ps )
                   {
                     const Tag* const options = ps->findTag( "pubsub/configure" );
@@ -808,7 +808,7 @@ namespace gloox
         {
           m_nopTrackMap.erase( id );
           m_iopTrackMap.erase( id );
-          const Error* error = iq->error();
+          const Error* error = iq.error();
 
           switch( context )
           {
@@ -931,7 +931,7 @@ namespace gloox
             }
             case PublishItem:
             {
-              m_iopTrackMap.erase( iq->id() );
+              m_iopTrackMap.erase( iq.id() );
 
               const Tag* publish = query->findChild( "publish" );
               if( publish )
