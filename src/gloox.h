@@ -1129,6 +1129,11 @@ namespace gloox
    */
   typedef std::map<std::string, std::string> StringMap;
 
+  class StanzaExtension;
+  /**
+   * A list of StanzaExtensions.
+   */
+  typedef std::list<const StanzaExtension*> StanzaExtensionList;
 }
 
 extern "C"
