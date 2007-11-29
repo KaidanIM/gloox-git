@@ -503,6 +503,9 @@ namespace gloox
       virtual void handleIqID( IQ* iq, int context ); // FIXME remove for 1.1
 
     private:
+#ifdef DISCO_TEST
+    public:
+#endif
       Disco( ClientBase* parent );
       virtual ~Disco();
 
