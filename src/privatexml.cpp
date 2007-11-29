@@ -20,7 +20,7 @@ namespace gloox
 
   // ---- PrivateXML::Query ----
   PrivateXML::Query::Query( const Tag* tag )
-    : StanzaExtension( ExtPrivateXML )
+    : StanzaExtension( ExtPrivateXML ), m_privateXML( 0 )
   {
     if( !tag )
       return;
