@@ -26,9 +26,7 @@ namespace gloox
       return;
 
     if( tag->name() == "query" && tag->xmlns() == XMLNS_PRIVATE_XML && tag->children().size() )
-    {
-      m_privateXML = tag->children().front();
-    }
+      m_privateXML = tag->children().front()->clone();
     else
       m_privateXML = tag;
   }
