@@ -25,6 +25,7 @@
 #include "error.h"
 #include "logsink.h"
 #include "nonsaslauth.h"
+#include "prep.h"
 #include "seresourcebind.h"
 #include "stanzaextensionfactory.h"
 #include "stanzaextension.h"
@@ -46,6 +47,64 @@
 namespace gloox
 {
 
+  // ---- Client::ResourceBind ----
+  Client::ResourceBind::ResourceBind( const std::string& resource, bool bind )
+  : StanzaExtension( ExtResourceBind ), m_jid( JID() ), m_bind( bind )
+  {
+    prep::resourceprep( resource, m_resource );
+    m_valid = true;
+  }
+
+  Client::ResourceBind::ResourceBind( const Tag* tag )
+  : StanzaExtension( ExtResourceBind ), m_resource( EmptyString ), m_bind( true )
+  {
+    if( !tag )
+      return;
+
+    if( tag->name() == "unbind" )
+      m_bind = false;
+    else if( tag->name() == "bind" )
+      m_bind = true;
+    else
+      return;
+
+    if( tag->hasChild( "jid" ) )
+      m_jid.setJID( tag->findChild( "jid" )->cdata() );
+    else if( tag->hasChild( "resource" ) )
+      m_resource = tag->findChild( "resource" )->cdata();
+
+    m_valid = true;
+  }
+
+  Client::ResourceBind::~ResourceBind()
+  {
+  }
+
+  const std::string& Client::ResourceBind::filterString() const
+  {
+    static const std::string filter = "/iq/bind[@xmlns='" + XMLNS_STREAM_BIND + "']"
+        "|/iq/unbind[@xmlns='" + XMLNS_STREAM_BIND + "']";
+    return filter;
+  }
+
+  Tag* Client::ResourceBind::tag() const
+  {
+    if( !m_valid )
+      return 0;
+
+    Tag* t = new Tag( m_bind ? "bind" : "unbind" );
+    t->setXmlns( XMLNS_STREAM_BIND );
+
+    if( m_bind && m_resource.empty() && m_jid )
+      new Tag( t, "jid", m_jid.full() );
+    else
+      new Tag( t, "resource", m_resource );
+
+    return t;
+  }
+  // ---- ~Client::ResourceBind ----
+
+  // ---- Client ----
   Client::Client( const std::string& server )
     : ClientBase( XMLNS_CLIENT, server ),
       m_rosterManager( 0 ), m_auth( 0 ),
@@ -94,7 +153,7 @@ namespace gloox
   {
     m_rosterManager = new RosterManager( this );
     m_disco->setIdentity( "client", "bot" );
-    registerStanzaExtension( new SEResourceBind( 0 ) );
+    registerStanzaExtension( new ResourceBind( 0 ) );
     registerStanzaExtension( new Capabilities( m_disco ) );
     m_presence.addExtension( new Capabilities( m_disco ) );
   }
@@ -344,10 +403,13 @@ namespace gloox
   {
     switch( context )
     {
-      case ResourceBind:
+      case CtxResourceUnbind:
+        // we don't store known resources anyway
+        break;
+      case CtxResourceBind:
         processResourceBind( iq );
         break;
-      case SessionEstablishment:
+      case CtxSessionEstablishment:
         processCreateSession( iq );
         break;
       default:
@@ -361,9 +423,9 @@ namespace gloox
       return false;
 
     IQ iq( IQ::Set, JID(), getID() );
-    iq.addExtension( new SEResourceBind( resource, bind ) );
+    iq.addExtension( new ResourceBind( resource, bind ) );
 
-    send( iq, this, bind ? ResourceBind : ResourceUnbind );
+    send( iq, this, bind ? CtxResourceBind : CtxResourceUnbind );
     return true;
   }
 
@@ -383,7 +445,7 @@ namespace gloox
     {
       case IQ::Result:
       {
-        const SEResourceBind* rb = iq.findExtension<SEResourceBind>( ExtResourceBind );
+        const ResourceBind* rb = iq.findExtension<ResourceBind>( ExtResourceBind );
         if( !rb || !rb->jid() )
         {
           notifyOnResourceBindError( 0 );
@@ -414,7 +476,7 @@ namespace gloox
   {
     notifyStreamEvent( StreamEventSessionCreation );
     IQ iq( IQ::Set, JID(), getID(), XMLNS_STREAM_SESSION, "session" );
-    send( iq, this, SessionEstablishment );
+    send( iq, this, CtxSessionEstablishment );
   }
 
   void Client::processCreateSession( const IQ& iq )
