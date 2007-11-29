@@ -15,7 +15,7 @@
 #include "lastactivity.h"
 #include "disco.h"
 #include "discohandler.h"
-#include "client.h"
+#include "clientbase.h"
 #include "error.h"
 #include "lastactivityhandler.h"
 
