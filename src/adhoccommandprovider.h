@@ -17,6 +17,7 @@
 
 #include "tag.h"
 #include "jid.h"
+#include "adhoc.h"
 
 #include <list>
 #include <map>
