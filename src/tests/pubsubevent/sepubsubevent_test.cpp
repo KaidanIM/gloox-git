@@ -1,4 +1,4 @@
-#include "../../sepubsubevent.h"
+#include "../../pubsubevent.h"
 #include "../../tag.h"
 
 static int failed = 0;
@@ -11,7 +11,7 @@ int main()
   Tag* t   = new Tag( tag, "items", "node", "princely_musings" );
   new Tag( t, "item", "id", "id" );
 
-  SEPubSubEvent* pse = new SEPubSubEvent( tag );
+  PubSub::Event* pse = new PubSub::Event( tag );
   if( !pse || !(t = pse->tag()) || *t != *tag )
   {
     ++failed;
@@ -31,7 +31,7 @@ int main()
   Tag* t3 = new Tag( t, "header", "name", "pubsub#collection" );
   t3->setCData( "collection" );
 
-  pse = new SEPubSubEvent( tag );
+  pse = new PubSub::Event( tag );
   if( !pse || !(t = pse->tag()) || *t != *tag )
   {
     ++failed;
@@ -61,7 +61,7 @@ int main()
   new Tag( t, "published", "2003-12-13T18:30:02Z" );
   new Tag( t, "updated", "2003-12-13T18:30:02Z" );
 
-  pse = new SEPubSubEvent( tag );
+  pse = new PubSub::Event( tag );
   if( !pse || !(t = pse->tag()) || *t != *tag )
   {
     ++failed;
@@ -83,7 +83,7 @@ int main()
   t3 = new Tag( t, "header", "name", "pubsub#subid" );
   t3->setCData( "004-yyy" );
 
-  pse = new SEPubSubEvent( tag );
+  pse = new PubSub::Event( tag );
   if( !pse || !(t = pse->tag()) || *t != *tag )
   {
     ++failed;
@@ -101,7 +101,7 @@ int main()
   t   = new Tag( tag, "items", "node", "princely_musings" );
   new Tag( t, "retract", "id", "id" );
 
-  pse = new SEPubSubEvent( tag );
+  pse = new PubSub::Event( tag );
   if( !pse || !(t = pse->tag()) || *t != *tag )
   {
     ++failed;
@@ -118,7 +118,7 @@ int main()
   t3 = new Tag( t, "header", "name", "pubsub#subid" );
   t3->setCData( "004-yyy" );
 
-  pse = new SEPubSubEvent( tag );
+  pse = new PubSub::Event( tag );
   if( !pse || !(t = pse->tag()) || *t != *tag )
   {
     ++failed;
@@ -135,7 +135,7 @@ int main()
   tag = new Tag( "event", XMLNS, XMLNS_PUBSUB_EVENT );
   t = new Tag( tag, "configuration", "node", "princely_musings" );
 
-  pse = new SEPubSubEvent( tag );
+  pse = new PubSub::Event( tag );
   if( !pse || !(tmp = pse->tag()) || *tmp != *tag )
   {
     ++failed;
@@ -160,7 +160,7 @@ int main()
   new Tag( t3, "value", "Princely Musings (Atom)" );
 
 
-  pse = new SEPubSubEvent( tag );
+  pse = new PubSub::Event( tag );
   if( !pse || !(t = pse->tag()) || *t != *tag )
   {
     ++failed;
@@ -177,7 +177,7 @@ int main()
   tag = new Tag( "event", XMLNS, XMLNS_PUBSUB_EVENT );
   t = new Tag( tag, "delete", "node", "princely_musings" );
 
-  pse = new SEPubSubEvent( tag );
+  pse = new PubSub::Event( tag );
   if( !pse || !(t = pse->tag()) || *t != *tag )
   {
     ++failed;
@@ -194,7 +194,7 @@ int main()
   tag = new Tag( "event", XMLNS, XMLNS_PUBSUB_EVENT );
   t = new Tag( tag, "purge", "node", "princely_musings" );
 
-  pse = new SEPubSubEvent( tag );
+  pse = new PubSub::Event( tag );
   if( !pse || !(t = pse->tag()) || *t != *tag )
   {
     ++failed;
@@ -212,7 +212,7 @@ int main()
   t = new Tag( tag, "collection" );
   t3 = new Tag( t, "node", "id", "princely_musings" );
 
-  pse = new SEPubSubEvent( tag );
+  pse = new PubSub::Event( tag );
   if( !pse || !(tmp = pse->tag()) || *tmp != *tag )
   {
     ++failed;
@@ -236,7 +236,7 @@ int main()
   t3 = new Tag( t, "field", "var", "pubsub#description" );
   new Tag( t3, "value", "Atom feed for my blog" );
 
-  pse = new SEPubSubEvent( tag );
+  pse = new PubSub::Event( tag );
   if( !pse || !(t = pse->tag()) || *t != *tag )
   {
     ++failed;
@@ -263,12 +263,12 @@ int main()
 
   if( failed )
   {
-    printf( "SEPubSubEvent: %d test(s) failed\n", failed );
+    printf( "PubSub::Event: %d test(s) failed\n", failed );
     return 1;
   }
   else
   {
-    printf( "SEPubSubEvent: OK\n" );
+    printf( "PubSub::Event: OK\n" );
     return 0;
   }
 
