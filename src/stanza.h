@@ -25,11 +25,6 @@ namespace gloox
   class Error;
 
   /**
-   * A list of StanzaExtensions.
-   */
-  typedef std::list< const StanzaExtension* > StanzaExtensionList;
-
-  /**
    * @brief This is a base class for XMPP stanza abstractions.
    *
    * @author Jakob Schroeter <js@camaya.net>

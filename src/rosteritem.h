@@ -174,7 +174,7 @@ namespace gloox
        * @param node The capabilities node.
        * @param ver The capabilities ver string.
        */
-      virtual void setCaps( const std::string& resource, const std::string& node, const std::string& ver );
+      virtual void setExtensions( const std::string& resource, const StanzaExtensionList& exts );
 
       /**
        * Sets the current subscription status of the contact.

@@ -70,31 +70,28 @@ namespace gloox
       const Presence::PresenceType presence() const { return m_presence; }
 
       /**
-       * Returns the entity's capabilities node. This should uniquely identify the contact's
-       * client. Also, it should ususally not be needed. See Capabilities for more info.
-       * @return The resource's capabilities node.
+       * Returns the StanzaExtensions that were sent with the last presence stanza
+       * by the resource.
+       * @return A list of stanza extensions.
        */
-      const std::string& node() const { return m_node; }
-
-      /**
-       * Returns the entity's capabilities @c ver string. This uniquely identifies the contact's
-       * client's features. See Capabilities for more info.
-       * @return The resource's capabilities @c ver string.
-       */
-      const std::string& ver() const { return m_ver; }
+      const StanzaExtensionList& extensions() const { return m_extensions; }
 
     private:
       void setPriority( int priority ) { m_priority = priority; }
       void setMessage( std::string message ) { m_message = message; }
       void setStatus( Presence::PresenceType presence ) { m_presence = presence; }
-      void setCaps( const std::string& node, const std::string& ver ) { m_node = node; m_ver = ver; }
+      void setExtensions( const StanzaExtensionList& exts )
+      {
+        StanzaExtensionList::const_iterator it = exts.begin();
+        for( ; it != exts.end(); ++it )
+          m_extensions.push_back( (*it)->newInstance( (*it)->tag() ) ); // FIXME suboptimal at best
+      }
 
       int m_priority;
       std::string m_message;
       std::string m_name;
       Presence::PresenceType m_presence;
-      std::string m_node;
-      std::string m_ver;
+      StanzaExtensionList m_extensions;
 
   };
 

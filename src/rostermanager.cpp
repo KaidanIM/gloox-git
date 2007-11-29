@@ -125,7 +125,7 @@ namespace gloox
         ri->setPresence( resource, presence->presence() );
         ri->setStatus( resource, presence->status() );
         ri->setPriority( resource, presence->priority() );
-        ri->setCaps( resource, capsNode, capsVer );
+        ri->setExtensions( resource, presence->extensions() );
       }
 
       if( m_rosterListener )
