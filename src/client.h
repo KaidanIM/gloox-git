@@ -332,6 +332,11 @@ namespace gloox
           ResourceBind( const Tag* tag );
 
           /**
+           * Destructor.
+           */
+          ~ResourceBind();
+
+          /**
            * Returns the requested resource.
            * @return The requested resource.
            */
@@ -350,11 +355,6 @@ namespace gloox
            */
           bool unbind() const { return !m_bind; }
 
-          /**
-           * Virtual Destructor.
-           */
-          virtual ~ResourceBind();
-
           // reimplemented from StanzaExtension
           virtual const std::string& filterString() const;
 
@@ -371,6 +371,38 @@ namespace gloox
           std::string m_resource;
           JID m_jid;
           bool m_bind;
+      };
+
+      /**
+       * @brief This is an implementation of a session creating StanzaExtension.
+       *
+       * @author Jakob Schroeter <js@camaya.net>
+       * @since 1.0
+       */
+      class SessionCreation : public StanzaExtension
+      {
+
+        public:
+          /**
+           * Constructs a new object.
+           */
+          SessionCreation() : StanzaExtension( ExtSessionCreation ) {}
+
+          /**
+           * Destructor.
+           */
+          ~SessionCreation() {}
+
+          // reimplemented from StanzaExtension
+          virtual const std::string& filterString() const { return EmptyString; }
+
+          // reimplemented from StanzaExtension
+          virtual StanzaExtension* newInstance( const Tag* tag ) const
+            { (void)tag; return 0; }
+
+          // reimplemented from StanzaExtension
+          virtual Tag* tag() const;
+
       };
 
       virtual void handleStartNode() {}

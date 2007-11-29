@@ -26,7 +26,6 @@
 #include "logsink.h"
 #include "nonsaslauth.h"
 #include "prep.h"
-#include "seresourcebind.h"
 #include "stanzaextensionfactory.h"
 #include "stanzaextension.h"
 #include "tag.h"
@@ -103,6 +102,15 @@ namespace gloox
     return t;
   }
   // ---- ~Client::ResourceBind ----
+
+  // ---- Client::ResourceBind ----
+  Tag* Client::SessionCreation::tag() const
+  {
+    Tag* t = new Tag( "session" );
+    t->setXmlns( XMLNS_STREAM_SESSION );
+    return t;
+  }
+  // ---- Client::SessionCreation ----
 
   // ---- Client ----
   Client::Client( const std::string& server )
@@ -475,7 +483,8 @@ namespace gloox
   void Client::createSession()
   {
     notifyStreamEvent( StreamEventSessionCreation );
-    IQ iq( IQ::Set, JID(), getID(), XMLNS_STREAM_SESSION, "session" );
+    IQ iq( IQ::Set, JID(), getID() );
+    iq.addExtension( new SessionCreation() );
     send( iq, this, CtxSessionEstablishment );
   }
 

@@ -51,6 +51,7 @@ namespace gloox
     ExtDataForm,                    /**< An extension containing a Data Form (XEP-0004). */
     ExtNickname,                    /**< An extension containing a User Nickname (XEP-0172). */
     ExtResourceBind,                /**< A resource bind SE (RFC3921). */
+    ExtSessionCreation,             /**< A session establishing SE (RFC3921). */
     ExtVersion,                     /**< An extension containing a Version request/reply
                                      * (XEP-0092). */
     ExtPSEvent,                     /**< An extension for PubSub event notifications
