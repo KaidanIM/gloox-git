@@ -50,7 +50,7 @@ namespace gloox
     requestXML( "storage", XMLNS_ANNOTATIONS, this );
   }
 
-  void Annotations::handlePrivateXML( const std::string& /*tag*/, Tag* xml )
+  void Annotations::handlePrivateXML( const Tag* xml )
   {
     AnnotationsList aList;
     const TagList& l = xml->children();

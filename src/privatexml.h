@@ -66,7 +66,7 @@ namespace gloox
        * @param pxh The handler to receive the result.
        * @return The ID of the sent query.
        */
-      std::string storeXML( Tag* tag, PrivateXMLHandler* pxh );
+      std::string storeXML( const Tag* tag, PrivateXMLHandler* pxh );
 
       // reimplemented from IqHandler.
       virtual bool handleIq( const IQ& iq ) { (void)iq; return false; }
@@ -84,6 +84,63 @@ namespace gloox
       ClientBase* m_parent;
 
     private:
+      /**
+       * @brief An implementation of the Private XML Storage protocol as StanzaExtension.
+       *
+       * @author Jakob Schroeter <js@camaya.net>
+       * @since 1.0
+       */
+      class Query : public StanzaExtension
+      {
+        public:
+          /**
+           * Constructs a new Query object suitable for use with Private XML Storage.
+           * @param tag The private XML's element name.
+           * @param xmlns The private XML's namespace.
+           */
+          Query( const std::string& tag, const std::string& xmlns )
+            : StanzaExtension( ExtPrivateXML )
+          {
+            Tag* t = new Tag( tag );
+            t->setXmlns( xmlns );
+            m_privateXML = t;
+          }
+
+          /**
+           * Constructs a new Query object suitable for storing an XML fragment in
+           * Private XML Storage.
+           * @param tag The private XML element to store. The Query object will own the Tag.
+           */
+          Query( const Tag* tag = 0 );
+
+          /**
+           * Destructor.
+           */
+          ~Query() { delete m_privateXML; }
+
+          /**
+           * Returns the private XML fragment. The Tag is owned by the Query object.
+           * @return The stored private XML fragment.
+           */
+          const Tag* privateXML() const { return m_privateXML; }
+
+          // reimplemented from StanzaExtension
+          virtual const std::string& filterString() const;
+
+          // reimplemented from StanzaExtension
+          virtual StanzaExtension* newInstance( const Tag* tag ) const
+          {
+            return new Query( tag );
+          }
+
+          // reimplemented from StanzaExtension
+          virtual Tag* tag() const;
+
+        private:
+          const Tag* m_privateXML;
+
+      };
+
       enum IdType
       {
         RequestXml,

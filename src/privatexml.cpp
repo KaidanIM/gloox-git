@@ -18,11 +18,45 @@
 namespace gloox
 {
 
+  // ---- PrivateXML::Query ----
+  PrivateXML::Query::Query( const Tag* tag )
+    : StanzaExtension( ExtPrivateXML )
+  {
+    if( !tag )
+      return;
+
+    if( tag->name() == "query" && tag->xmlns() == XMLNS_PRIVATE_XML && tag->children().size() )
+    {
+      m_privateXML = tag->children().front();
+    }
+    else
+      m_privateXML = tag;
+  }
+
+  const std::string& PrivateXML::Query::filterString() const
+  {
+    static const std::string filter = "/iq/query[@xmlns='" + XMLNS_PRIVATE_XML + "']";
+    return filter;
+  }
+
+  Tag* PrivateXML::Query::tag() const
+  {
+    Tag* t = new Tag( "query" );
+    t->setXmlns( XMLNS_PRIVATE_XML );
+    t->addChild( m_privateXML->clone() );
+    return t;
+  }
+  // ---- ~PrivateXML::Query ----
+
+  // ---- PrivateXML ----
   PrivateXML::PrivateXML( ClientBase* parent )
     : m_parent( parent )
   {
-    if( m_parent )
-      m_parent->registerIqHandler( this, XMLNS_PRIVATE_XML );
+    if( !m_parent )
+      return;
+
+    m_parent->registerIqHandler( this, XMLNS_PRIVATE_XML );
+    m_parent->registerStanzaExtension( new Query() );
   }
 
   PrivateXML::~PrivateXML()
@@ -36,8 +70,8 @@ namespace gloox
   {
     const std::string& id = m_parent->getID();
 
-    IQ iq( IQ::Get, JID(), id, XMLNS_PRIVATE_XML );
-    new Tag( iq.query(), tag, XMLNS, xmlns );
+    IQ iq( IQ::Get, JID(), id );
+    iq.addExtension( new Query( tag, xmlns ) );
 
     m_track[id] = pxh;
     m_parent->send( iq, this, RequestXml );
@@ -45,12 +79,12 @@ namespace gloox
     return id;
   }
 
-  std::string PrivateXML::storeXML( Tag* tag, PrivateXMLHandler* pxh )
+  std::string PrivateXML::storeXML( const Tag* tag, PrivateXMLHandler* pxh )
   {
     const std::string& id = m_parent->getID();
 
-    IQ iq( IQ::Set, JID(), id, XMLNS_PRIVATE_XML );
-    iq.query()->addChild( tag );
+    IQ iq( IQ::Set, JID(), id );
+    iq.addExtension( new Query( tag ) );
 
     m_track[id] = pxh;
     m_parent->send( iq, this, StoreXml );
@@ -61,63 +95,29 @@ namespace gloox
   void PrivateXML::handleIqID( const IQ& iq, int context )
   {
     TrackMap::iterator t = m_track.find( iq.id() );
-    if( t != m_track.end() )
+    if( t == m_track.end() )
+      return;
+
+    if( iq.subtype() == IQ::Result )
     {
-      switch( iq.subtype() )
+      if( context == RequestXml )
       {
-        case IQ::Result:
-        {
-          switch( context )
-          {
-            case RequestXml:
-            {
-              Tag* q = iq.query();
-              if( q )
-              {
-                const TagList& l = q->children();
-                TagList::const_iterator it = l.begin();
-                if( it != l.end() )
-                {
-                  (*t).second->handlePrivateXML( (*it)->name(), (*it) );
-                }
-              }
-              break;
-            }
-
-            case StoreXml:
-            {
-              (*t).second->handlePrivateXMLResult( iq.id(), PrivateXMLHandler::PxmlStoreOk );
-              break;
-            }
-          }
-          m_track.erase( t );
-          return;
-          break;
-        }
-        case IQ::Error:
-        {
-          switch( context )
-          {
-            case RequestXml:
-            {
-              (*t).second->handlePrivateXMLResult( iq.id(), PrivateXMLHandler::PxmlRequestError );
-              break;
-            }
-
-            case StoreXml:
-            {
-              (*t).second->handlePrivateXMLResult( iq.id(), PrivateXMLHandler::PxmlStoreError );
-              break;
-            }
-          }
-          break;
-        }
-        default:
-          break;
+        const Query* q = iq.findExtension<Query>( ExtPrivateXML );
+        if( q )
+          (*t).second->handlePrivateXML( q->privateXML() );
       }
-
-      m_track.erase( t );
+      else if( context == StoreXml )
+        (*t).second->handlePrivateXMLResult( iq.id(), PrivateXMLHandler::PxmlStoreOk );
     }
+    else if( iq.subtype() == IQ::Error )
+    {
+      if( context == RequestXml )
+        (*t).second->handlePrivateXMLResult( iq.id(), PrivateXMLHandler::PxmlRequestError );
+      else if( context == StoreXml )
+        (*t).second->handlePrivateXMLResult( iq.id(), PrivateXMLHandler::PxmlStoreError );
+    }
+
+    m_track.erase( t );
   }
 
 }

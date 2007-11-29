@@ -364,9 +364,10 @@ namespace gloox
     m_privateXML->storeXML( t, this );
   }
 
-  void RosterManager::handlePrivateXML( const std::string& /*tag*/, Tag* xml )
+  void RosterManager::handlePrivateXML( const Tag* xml )
   {
-    m_delimiter = xml->cdata();
+    if( xml )
+      m_delimiter = xml->cdata();
   }
 
   void RosterManager::handlePrivateXMLResult( const std::string& /*uid*/, PrivateXMLResult /*result*/ )

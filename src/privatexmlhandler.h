@@ -53,10 +53,10 @@ namespace gloox
       /**
        * Reimplement this function to receive the private XML that was requested earlier using
        * @c PrivateXML::requestXML().
-       * @param tag The tag of the storage packet.
        * @param xml The private xml, i.e. the first child of the &lt;query&gt; tag.
+       * May be 0. You should not delete the object.
        */
-      virtual void handlePrivateXML( const std::string& tag, Tag* xml ) = 0;
+      virtual void handlePrivateXML( const Tag* xml ) = 0;
 
       /**
        * This function is called to notify about the result of a 'store' or 'request' operation
