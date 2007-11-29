@@ -46,7 +46,7 @@ namespace gloox
 
   const Error* Stanza::error() const
   {
-    return static_cast< const Error* >( findExtension( ExtError ) );
+    return findExtension<Error>( ExtError );
   }
 
   void Stanza::addExtension( const StanzaExtension* se )

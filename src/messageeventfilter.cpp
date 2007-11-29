@@ -44,7 +44,7 @@ namespace gloox
       return;
     }
 
-    const MessageEvent* me = static_cast<const MessageEvent*>( msg.findExtension( ExtMessageEvent ) );
+    const MessageEvent* me = msg.findExtension<MessageEvent>( ExtMessageEvent );
     if( !me )
     {
       m_requestedEvents = 0;

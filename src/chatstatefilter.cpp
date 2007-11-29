@@ -35,7 +35,7 @@ namespace gloox
   {
     if( m_enableChatStates = m_chatStateHandler )
     {
-      const ChatState* state = static_cast<const ChatState*>( msg.findExtension( ExtChatState ) );
+      const ChatState* state = msg.findExtension<ChatState>( ExtChatState );
 
       m_enableChatStates = state && state->state() != ChatStateInvalid;
       if( m_enableChatStates && msg.body().empty() )
