@@ -17,7 +17,7 @@
 #include "disco.h"
 #include "error.h"
 #include "discohandler.h"
-#include "client.h"
+#include "clientbase.h"
 #include "dataform.h"
 #include "util.h"
 
@@ -79,7 +79,14 @@ namespace gloox
   // ---- Adhoc::Command ----
   Adhoc::Command::Command( const std::string& node, Adhoc::Command::Action action )
     : StanzaExtension( ExtAdhocCommand ), m_node( node ), m_form( 0 ), m_action( action ),
-      m_actions( 0 )
+      m_status( InvalidStatus ), m_actions( 0 )
+  {
+  }
+
+  Adhoc::Command::Command( const std::string& node, const std::string& sessionid, Status status,
+                           DataForm* form )
+  : StanzaExtension( ExtAdhocCommand ), m_node( node ), m_sessionid( sessionid ),
+    m_form( form ), m_action( InvalidAction ), m_status( status ), m_actions( 0 )
   {
   }
 
@@ -224,16 +231,17 @@ namespace gloox
     if( iq.subtype() != IQ::Set )
       return false;
 
-    Tag* c = iq.query();
-    if( c && c->name() == "command" )
+    const Adhoc::Command* ac = iq.findExtension<Adhoc::Command>( ExtAdhocCommand );
+    if( !ac || ac->node().empty())
+      return false;
+
+    AdhocCommandProviderMap::const_iterator it = m_adhocCommandProviders.find( ac->node() );
+    if( it != m_adhocCommandProviders.end() )
     {
-      const std::string& node = c->findAttribute( "node" );
-      AdhocCommandProviderMap::const_iterator it = m_adhocCommandProviders.find( node );
-      if( !node.empty() && ( it != m_adhocCommandProviders.end() ) )
-      {
-        (*it).second->handleAdhocCommand( node, c, iq.from(), iq.id() );
-        return true;
-      }
+      const std::string& sess = ac->sessionID().empty() ? m_parent->getID() : ac->sessionID();
+      m_activeSessions[sess] = iq.id();
+      (*it).second->handleAdhocCommand( iq.from(), *ac, sess );
+      return true;
     }
 
     return false;
@@ -241,7 +249,7 @@ namespace gloox
 
   void Adhoc::handleIqID( const IQ& iq, int context )
   {
-    if( context != Adhoc::Command::Execute || iq.subtype() != IQ::Result )
+    if( context != ExecuteAdhocCommand )
       return;
 
     AdhocTrackMap::iterator it = m_adhocTrackMap.find( iq.id() );
@@ -249,12 +257,20 @@ namespace gloox
         || (*it).second.remote != iq.from() )
       return;
 
-    const Adhoc::Command* ac = static_cast<const Adhoc::Command*>( iq.findExtension( ExtAdhocCommand ) );
-    if( !ac )
-      return;
-
+    switch( iq.subtype() )
+    {
+      case IQ::Error:
+        (*it).second.ah->handleAdhocError( iq.from(), iq.error() );
+        break;
+      case IQ::Result:
+        const Adhoc::Command* ac = iq.findExtension<Adhoc::Command>( ExtAdhocCommand );
+        if( ac )
+          (*it).second.ah->handleAdhocExecutionResult( iq.from(), *ac );
+        break;
+      default:
+        break;
+    }
     m_adhocTrackMap.erase( it );
-    (*it).second.ah->handleAdhocExecutionResult( iq.from(), *ac );
   }
 
   void Adhoc::registerAdhocCommandProvider( AdhocCommandProvider* acp, const std::string& command,
@@ -351,7 +367,7 @@ namespace gloox
     m_parent->disco()->getDiscoItems( remote, XMLNS_ADHOC_COMMANDS, this, FetchAdhocCommands, id );
   }
 
-  void Adhoc::execute( const JID& remote, Adhoc::Command* command, AdhocHandler* ah )
+  void Adhoc::execute( const JID& remote, const Adhoc::Command* command, AdhocHandler* ah )
   {
     if( !remote || !command || !m_parent || !ah )
       return;
@@ -363,10 +379,26 @@ namespace gloox
     TrackStruct track;
     track.remote = remote;
     track.context = ExecuteAdhocCommand;
+    track.session = command->sessionID();
     track.ah = ah;
     m_adhocTrackMap[id] = track;
 
     m_parent->send( iq, this, ExecuteAdhocCommand );
+  }
+
+  void Adhoc::respond( const JID& remote, const Adhoc::Command* command )
+  {
+    if( !remote || !command || !m_parent )
+      return;
+
+    StringMap::iterator it = m_activeSessions.find( command->sessionID() );
+    if( it == m_activeSessions.end() )
+      return;
+
+    IQ re( IQ::Result, remote, (*it).second );
+    re.addExtension( command );
+    m_parent->send( re );
+    m_activeSessions.erase( it );
   }
 
   void Adhoc::removeAdhocCommandProvider( const std::string& command )

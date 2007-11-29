@@ -2,7 +2,7 @@
 ## Process this file with automake to produce Makefile.in
 ##
 
-SUBDIRS = adhoccommand adhoccommandnote base64 chatstatefilter client clientbase dataform dataformfield \
+SUBDIRS = adhoc adhoccommand adhoccommandnote base64 chatstatefilter client clientbase dataform dataformfield \
           dataformreported \
           dataformitem delayeddelivery discoinfo discoitems error gpgencrypted gpgsigned iq jid md5 message \
           messageeventfilter nickname oob parser prep presence pubsubmanager search sepubsubevent \
