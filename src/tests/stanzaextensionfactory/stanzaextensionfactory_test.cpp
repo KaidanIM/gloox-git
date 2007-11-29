@@ -53,6 +53,13 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   delete f;
 
+  // -------
+  name = "remove ext";
+  if( !sef.removeExtension( ExtUser + 1 ) )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+  }
 
 
   if( fail == 0 )

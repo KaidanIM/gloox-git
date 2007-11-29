@@ -384,6 +384,13 @@ namespace gloox
       void registerStanzaExtension( StanzaExtension* ext );
 
       /**
+       * Removes the given StanzaExtension type from the StanzaExtensionFactory.
+       * @param ext The extension type.
+       * @return @b True if the given type was found (and removed), @b false otherwise.
+       */
+      bool removeStanzaExtension( int ext );
+
+      /**
        * Registers @c cl as object that receives connection notifications.
        * @param cl The object to receive connection notifications.
        */

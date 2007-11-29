@@ -27,6 +27,7 @@ namespace gloox
       void removeIqHandler( IqHandler* ih, const std::string& xmlns );
       void registerIqHandler( IqHandler* ih, const std::string& xmlns );
       void registerStanzaExtension( StanzaExtension* ext );
+      void removeStanzaExtension( int ext );
     protected:
       Disco* m_disco;
     private:
@@ -35,6 +36,7 @@ namespace gloox
   void ClientBase::removeIqHandler( IqHandler*, const std::string& ) {}
   void ClientBase::registerIqHandler( IqHandler*, const std::string& ) {}
   void ClientBase::registerStanzaExtension( StanzaExtension* se ) { delete se; }
+  void ClientBase::removeStanzaExtension( int ) {}
   const std::string ClientBase::getID() { return "id"; }
 }
 using namespace gloox;

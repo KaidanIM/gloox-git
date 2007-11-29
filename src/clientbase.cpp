@@ -693,6 +693,14 @@ namespace gloox
     m_seFactory->registerExtension( ext );
   }
 
+  bool ClientBase::removeStanzaExtension( int ext )
+  {
+    if( !m_seFactory )
+      return false;
+
+    return m_seFactory->removeExtension( ext );
+  }
+
   StatisticsStruct ClientBase::getStatistics()
   {
     if( m_connection )
@@ -714,6 +722,7 @@ namespace gloox
   void ClientBase::xmppPing( const JID& to )
   {
     IQ iq( IQ::Get, to, getID(), XMLNS_XMPP_PING, "ping" );
+//     iq.addExtensions( new Ping() );
     send( iq );
   }
 
