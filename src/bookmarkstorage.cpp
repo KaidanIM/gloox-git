@@ -60,7 +60,7 @@ namespace gloox
     requestXML( "storage", XMLNS_BOOKMARKS, this );
   }
 
-  void BookmarkStorage::handlePrivateXML( const std::string& /*tag*/, Tag* xml )
+  void BookmarkStorage::handlePrivateXML( const Tag* xml )
   {
     BookmarkList bList;
     ConferenceList cList;

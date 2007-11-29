@@ -189,7 +189,7 @@ namespace gloox
       virtual void handleSubscription( Subscription* subscription );
 
       // reimplemented from PrivateXMLHandler
-      virtual void handlePrivateXML( const std::string& tag, Tag* xml );
+      virtual void handlePrivateXML( const Tag* xml );
 
       // reimplemented from PrivateXMLHandler
       virtual void handlePrivateXMLResult( const std::string& uid, PrivateXMLResult pxResult );
