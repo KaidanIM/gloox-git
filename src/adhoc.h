@@ -341,6 +341,10 @@ namespace gloox
 
       /**
        * Executes or continues the given command on the given remote entity.
+       * To construct the @c command object, it is recommended to use either
+       * Command( const std::string&, Action ) to begin execution of a command, or
+       * Command( const std::string&, const std::string&, Action ) to continue execution
+       * of a command.
        * @param remote The remote entity's JID.
        * @param command The command to execute.
        * @param ah The object handling the result of this request.
@@ -350,6 +354,9 @@ namespace gloox
       /**
        * Use this function to respond to an execution request submitted by means
        * of AdhocCommandProvider::handleAdhocCommand().
+       * It is recommended to use
+       * Command( const std::string&, const std::string&, Status, DataForm* )
+       * to construct the @c command object.
        * @param remote The requester's JID.
        * @param command The response. The Adhoc object will own and delete the
        * command object pointed to.

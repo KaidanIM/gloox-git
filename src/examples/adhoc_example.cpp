@@ -40,14 +40,14 @@ class AdhocTest : public ConnectionListener, AdhocCommandProvider, LogHandler
       delete( j );
     }
 
-    void handleAdhocCommand( const std::string& command, Tag* /*tag*/, const JID& from,
-                             const std::string& /*id*/ )
+    virtual void handleAdhocCommand( const JID& from, const Adhoc::Command& command,
+                                     const std::string& /*sess*/ )
     {
-      if( command == "helloworld" )
+      if( command.node() == "helloworld" )
         printf( "Hello World!, by %s\n", from.full().c_str() );
-      else if( command == "config" )
+      else if( command.node() == "config" )
         printf( "configuration command called by %s\n", from.full().c_str() );
-      else if( command == "shutdown" )
+      else if( command.node() == "shutdown" )
       {
         printf( "shutting down, by %s\n", from.full().c_str() );
       }
