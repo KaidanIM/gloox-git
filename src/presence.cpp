@@ -102,7 +102,7 @@ namespace gloox
 
   const Capabilities* Presence::capabilities() const
   {
-    return static_cast<const Capabilities*>( findExtension( ExtCaps ) );
+    return findExtension<Capabilities>( ExtCaps );
   }
 
   Tag* Presence::tag() const

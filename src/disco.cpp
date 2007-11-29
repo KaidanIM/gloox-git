@@ -229,7 +229,7 @@ namespace gloox
       {
         IQ re( IQ::Result, iq->from(), iq->id() );
 
-        const SoftwareVersion* sv = static_cast<const SoftwareVersion*>( iq->findExtension( ExtVersion ) );
+        const SoftwareVersion* sv = iq->findExtension<SoftwareVersion>( ExtVersion );
         if( sv )
         {
           re.addExtension( new SoftwareVersion( m_versionName, m_versionVersion, m_versionOs ) );
@@ -237,7 +237,7 @@ namespace gloox
           return true;
         }
 
-        const Info *info = static_cast<const Info*>( iq->findExtension( ExtDiscoInfo ) );
+        const Info *info = iq->findExtension<Info>( ExtDiscoInfo );
         if( info )
         {
           Info *i = new Info();
@@ -272,7 +272,7 @@ namespace gloox
           return true;
         }
 
-        const Items *items = static_cast<const Items*>( iq->findExtension( ExtDiscoItems ) );
+        const Items *items = iq->findExtension<Items>( ExtDiscoItems );
         if( items )
         {
           Items *i = new Items( items->node() );
@@ -328,7 +328,7 @@ namespace gloox
           {
             case GetDiscoInfo:
             {
-              const Info* di = static_cast<const Info*>( iq->findExtension( ExtDiscoInfo ) );
+              const Info* di = iq->findExtension<Info>( ExtDiscoInfo );
               if( di )
                 (*it).second.dh->handleDiscoInfo( iq->from(), *di, (*it).second.context );
               (*it).second.dh->handleDiscoInfoResult( iq, (*it).second.context );
@@ -336,7 +336,7 @@ namespace gloox
             }
             case GetDiscoItems:
             {
-              const Items* di = static_cast<const Items*>( iq->findExtension( ExtDiscoItems ) );
+              const Items* di = iq->findExtension<Items>( ExtDiscoItems );
               if( di )
                 (*it).second.dh->handleDiscoItems( iq->from(), *di, (*it).second.context );
               (*it).second.dh->handleDiscoItemsResult( iq, (*it).second.context );

@@ -383,7 +383,7 @@ namespace gloox
     {
       case IQ::Result:
       {
-        const SEResourceBind* rb = static_cast<const SEResourceBind*>( iq.findExtension( ExtResourceBind ) );
+        const SEResourceBind* rb = iq.findExtension<SEResourceBind>( ExtResourceBind );
         if( !rb || !rb->jid() )
         {
           notifyOnResourceBindError( 0 );

@@ -104,11 +104,11 @@ namespace gloox
 
     std::string capsNode;
     std::string capsVer;
-    const StanzaExtension* caps = presence->findExtension( ExtCaps );
+    const Capabilities* caps = presence->findExtension<Capabilities>( ExtCaps );
     if( caps )
     {
-      capsNode = static_cast<const Capabilities*>( caps )->node();
-      capsVer = static_cast<const Capabilities*>( caps )->ver();
+      capsNode = caps->node();
+      capsVer = caps->ver();
     }
 
     bool self = false;
