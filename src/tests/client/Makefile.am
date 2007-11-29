@@ -12,7 +12,7 @@ client_test_LDADD = ../../client.o ../../clientbase.o ../../connectiontcpbase.o 
 			../../md5.o ../../tlsgnutlsclient.o ../../tlsopenssl.o ../../tlsschannel.o \
 			../../logsink.o ../../messagesession.o ../../prep.o ../../compressionzlib.o \
 			../../dns.o ../../stanzaextensionfactory.o ../../softwareversion.o \
-			../../rostermanager.o ../../nonsaslauth.o ../../sha.o ../../seresourcebind.o \
+			../../rostermanager.o ../../nonsaslauth.o ../../sha.o \
 			../../rosteritem.o ../../privatexml.o ../../gloox.o ../../tlsgnutlsbase.o \
 			../../tlsdefault.o ../../tlsgnutlsclientanon.o ../../tlsgnutlsserveranon.o \
 			../../mutex.o ../../iq.o ../../presence.o ../../message.o ../../subscription.o \
