@@ -206,6 +206,17 @@ namespace gloox
 
           /**
            * Creates a Command object that can be used to perform the provided Action.
+           * This constructor is used best to reply to an execute request.
+           * @param node The node (command) to perform the action on.
+           * @param sessionid The (possibly newly created) session ID of the adhoc command session.
+           * @param status The execution status.
+           * @param form An optional DataForm to include in the reply.
+           */
+          Command( const std::string& node, const std::string& sessionid, Status status,
+                   DataForm* form );
+
+          /**
+           * Creates a Command object that can be used to perform the provided Action.
            * This constructor is used best to execute the initial step of a command
            * (single or multi stage).
            * @param node The node (command) to perform the action on.
@@ -329,12 +340,21 @@ namespace gloox
       void getCommands( const JID& remote, AdhocHandler* ah );
 
       /**
-       * Executes the given command on the given remote entity.
+       * Executes or continues the given command on the given remote entity.
        * @param remote The remote entity's JID.
        * @param command The command to execute.
        * @param ah The object handling the result of this request.
        */
-      void execute( const JID& remote, Adhoc::Command* command, AdhocHandler* ah );
+      void execute( const JID& remote, const Adhoc::Command* command, AdhocHandler* ah );
+
+      /**
+       * Use this function to respond to an execution request submitted by means
+       * of AdhocCommandProvider::handleAdhocCommand().
+       * @param remote The requester's JID.
+       * @param command The response. The Adhoc object will own and delete the
+       * command object pointed to.
+       */
+      void respond( const JID& remote, const Adhoc::Command* command );
 
       /**
        * Using this function, you can register a AdhocCommandProvider -derived object as
@@ -385,6 +405,9 @@ namespace gloox
       virtual void handleDiscoError( const JID& from, const Error* error, int context );
 
     private:
+#ifdef ADHOC_TEST
+    public:
+#endif
       // reimplemented from DiscoHandler, FIXME remove for 1.1
       virtual void handleDiscoInfoResult( IQ* iq, int context ) { (void) iq; (void) context; };
 
@@ -408,6 +431,7 @@ namespace gloox
       {
         JID remote;
         AdhocContext context;
+        std::string session;
         AdhocHandler* ah;
       };
       typedef std::map<std::string, TrackStruct> AdhocTrackMap;
@@ -416,6 +440,7 @@ namespace gloox
       ClientBase* m_parent;
 
       StringMap m_items;
+      StringMap m_activeSessions;
 
   };
 

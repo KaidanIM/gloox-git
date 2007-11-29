@@ -44,14 +44,13 @@ namespace gloox
        * This function is called when an Ad-hoc Command needs to be handled.
        * The callee is responsible for the whole command execution, i.e. session
        * handling etc.
-       * @param command The name of the command to be executed.
-       * @param tag The complete command tag.
        * @param from The sender of the command request.
-       * @param id The command's id. An opaque string which should be used only as the id of the
-       * iq result or error stanza.
+       * @param command The name of the command to be executed.
+       * @param sessionID The session ID. Either newly generated or taken from the command.
+       * When responding, its value must be passed to Adhoc::Command's constructor.
        */
-      virtual void handleAdhocCommand( const std::string& command, Tag* tag, const JID& from,
-                                       const std::string& id ) = 0;
+      virtual void handleAdhocCommand( const JID& from, const Adhoc::Command& command,
+                                       const std::string& sessionID ) = 0;
 
   };
 
