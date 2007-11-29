@@ -266,4 +266,16 @@
  * This function has been removed. Use @link gloox::Disco::type() Disco::type() @endlink
  * instead.
  *
+ * @subsubsection func_PrivateXMLHandler_handlePrivateXML 1.2.15 PrivateXMLHandler::handlePrivateXML( const std::string&, Tag* )
+ *
+ * This function has been removed in favor of
+ * @link gloox::PrivateXMLHandler::handlePrivateXML() PrivateXMLHandler::handlePrivateXML( const Tag* ) @endlink.
+ *
+ * @subsubsection func_PrivateXMLHandler_handlePrivateXML 1.2.16 PrivateXML::storeXML( Tag*, PrivateXMLHandler* )
+ *
+ * This function has been removed in favor of
+ * @link gloox::PrivateXML::storeXML() PrivateXML::storeXML( const Tag*, PrivateXMLHandler* ) @endlink.
+ *
+ *
+ *
  */
