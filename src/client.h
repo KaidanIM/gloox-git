@@ -307,6 +307,72 @@ namespace gloox
       void nonSaslLogin();
 
     private:
+      /**
+       * @brief This is an implementation of a resource binding StanzaExtension.
+       *
+       * @author Jakob Schroeter <js@camaya.net>
+       * @since 1.0
+       */
+      class ResourceBind : public StanzaExtension
+      {
+
+        public:
+          /**
+           * Constructs a new object with the given resource string.
+           * @param resource The resource to set.
+           * @param bind Indicates whether this is an bind or unbind request request.
+           * Defaults to @b true (bind).
+           */
+          ResourceBind( const std::string& resource, bool bind = true );
+
+          /**
+           * Constructs a new object from the given Tag.
+           * @param tag The Tag to parse.
+           */
+          ResourceBind( const Tag* tag );
+
+          /**
+           * Returns the requested resource.
+           * @return The requested resource.
+           */
+          const std::string& resource() const { return m_resource; }
+
+          /**
+           * Returns the assigned JID.
+           * @return The assigned JID.
+           */
+          const JID& jid() const { return m_jid; }
+
+          /**
+           * Use this function to find out whether the extension contains a
+           * bind or unbind request.
+           * @return @b True if the extension contains an unbind request, @b false otherwise.
+           */
+          bool unbind() const { return !m_bind; }
+
+          /**
+           * Virtual Destructor.
+           */
+          virtual ~ResourceBind();
+
+          // reimplemented from StanzaExtension
+          virtual const std::string& filterString() const;
+
+         // reimplemented from StanzaExtension
+          virtual StanzaExtension* newInstance( const Tag* tag ) const
+          {
+            return new ResourceBind( tag );
+          }
+
+          // reimplemented from StanzaExtension
+          virtual Tag* tag() const;
+
+        private:
+          std::string m_resource;
+          JID m_jid;
+          bool m_bind;
+      };
+
       virtual void handleStartNode() {}
       virtual bool handleNormalNode( Tag* tag );
       virtual void disconnect( ConnectionError reason );
@@ -327,9 +393,9 @@ namespace gloox
 
       enum TrackContext
       {
-        ResourceBind,
-        ResourceUnbind,
-        SessionEstablishment
+        CtxResourceBind,
+        CtxResourceUnbind,
+        CtxSessionEstablishment
       };
 
       RosterManager* m_rosterManager;
