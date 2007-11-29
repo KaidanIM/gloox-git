@@ -29,7 +29,7 @@ libgloox_la_SOURCES = jid.cpp parser.cpp connectiontcpclient.cpp clientbase.cpp 
                         pubsubmanager.cpp error.cpp util.cpp iq.cpp message.cpp presence.cpp \
                         subscription.cpp capabilities.cpp chatstate.cpp connectionbosh.cpp connectiontls.cpp \
                         messageevent.cpp receipt.cpp nickname.cpp softwareversion.cpp \
-                        sepubsubevent.cpp xhtmlim.cpp
+                        pubsubevent.cpp xhtmlim.cpp
 
 libgloox_la_LDFLAGS = -version-info 8:0:0 -no-undefined -no-allow-shlib-undefined
 libgloox_la_LIBADD =
@@ -78,7 +78,7 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             bytestream.h              bytestreamdatahandler.h bytestreamhandler.h \
                             capabilities.h            connectionbosh.h        \
                             connectiontls.h           messageevent.h          receipt.h \
-                            nickname.h                sepubsubevent.h         xhtmlim.h
+                            nickname.h                pubsubevent.h         xhtmlim.h
 
 noinst_HEADERS = prep.h dns.h nonsaslauth.h mucmessagesession.h stanzaextensionfactory.h tlsgnutlsclient.h \
                    tlsgnutlsbase.h tlsgnutlsclientanon.h tlsgnutlsserveranon.h tlsopenssl.h tlsschannel.h \
