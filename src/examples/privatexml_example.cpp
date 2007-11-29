@@ -49,7 +49,7 @@ class PrivateXMLTest : public PrivateXMLHandler, ConnectionListener
       return true;
     }
 
-    virtual void handlePrivateXML( const std::string& /*tag*/, Tag* /*xml*/ )
+    virtual void handlePrivateXML( const Tag* /*xml*/ )
     {
       printf( "received privatexml...\n" );
       Tag *x = new Tag( "test" );
