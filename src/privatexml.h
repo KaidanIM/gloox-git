@@ -101,9 +101,7 @@ namespace gloox
           Query( const std::string& tag, const std::string& xmlns )
             : StanzaExtension( ExtPrivateXML )
           {
-            Tag* t = new Tag( tag );
-            t->setXmlns( xmlns );
-            m_privateXML = t;
+            m_privateXML = new Tag( tag, XMLNS, xmlns );
           }
 
           /**
