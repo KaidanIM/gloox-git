@@ -91,6 +91,21 @@ namespace gloox
       const StanzaExtension* findExtension( int type ) const;
 
       /**
+       * Finds a StanzaExtension of a particular type.
+       * Example:
+       * @code
+       * const MyExention* c = presence.findExtension<MyExtension>( ExtMyExt );
+       * @endcode
+       * @param type The extension type to look for.
+       * @return The static_cast' type, or 0 if none was found.
+       */
+      template< class T >
+      inline const T* findExtension( int type ) const
+      {
+        return static_cast<const T*>( findExtension( type ) );
+      }
+
+      /**
        * Returns the list of the Stanza's extensions.
        * @return The list of the Stanza's extensions.
        */
