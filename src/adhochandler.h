@@ -55,7 +55,8 @@ namespace gloox
 
       /**
        * This function is called in response to a call to Adhoc::getCommands() or
-       * Adhoc::checkSupport() in case the respective request returned an error.
+       * Adhoc::checkSupport() or Adhoc::execute() in case the respective request returned
+       * an error.
        * @param remote The queried remote entity's JID.
        * @param error The error condition. May be 0.
        */
