@@ -50,6 +50,21 @@ namespace gloox
     m_extensions.push_back( ext );
   }
 
+  bool StanzaExtensionFactory::removeExtension( int ext )
+  {
+    SEList::iterator it = m_extensions.begin();
+    for( ; it != m_extensions.end(); ++it )
+    {
+      if( (*it)->extensionType() == ext )
+      {
+        delete (*it);
+        m_extensions.erase( it );
+        return true;
+      }
+    }
+    return false;
+  }
+
   void StanzaExtensionFactory::addExtensions( Stanza& stanza, Tag* tag )
   {
     ConstTagList match;

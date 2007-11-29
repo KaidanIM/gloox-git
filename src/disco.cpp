@@ -218,6 +218,8 @@ namespace gloox
       m_parent->removeIqHandler( this, XMLNS_DISCO_INFO );
       m_parent->removeIqHandler( this, XMLNS_DISCO_ITEMS );
       m_parent->removeIqHandler( this, XMLNS_VERSION );
+      m_parent->removeStanzaExtension( ExtDiscoInfo );
+      m_parent->removeStanzaExtension( ExtDiscoItems );
     }
   }
 

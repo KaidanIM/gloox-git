@@ -56,6 +56,13 @@ namespace gloox
       void registerExtension( StanzaExtension* ext );
 
       /**
+       * Removes the given extension type.
+       * @param ext The extension type.
+       * @return @b True if the given type was found (and removed), @b false otherwise.
+       */
+      bool removeExtension( int ext );
+
+      /**
        * Creates a new StanzaExtensionFactory.
        */
       StanzaExtensionFactory();
