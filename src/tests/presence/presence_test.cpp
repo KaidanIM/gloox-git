@@ -18,7 +18,7 @@ int main( int /*argc*/, char** /*argv*/ )
   new Tag( pres, "status", "the status" );
   new Tag( pres, "priority", "10" );
 
-#warning FIXME fix the following 9 tests. how to test private functions, ctors, etc?
+// FIXME fix the following 9 tests. how to test private functions, ctors, etc?
 //   // -------
 //   name = "parse Presence implicit available";
 //   i = new Presence( pres );

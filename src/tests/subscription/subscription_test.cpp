@@ -17,7 +17,7 @@ int main( int /*argc*/, char** /*argv*/ )
   s10n->addAttribute( "to", "you@example.net/gloox" );
   new Tag( s10n, "status", "the status" );
 
-#warning FIXME fix the following 4 tests. how to test private functions, ctors, etc?
+// FIXME fix the following 4 tests. how to test private functions, ctors, etc?
 //   // -------
 //   name = "parse Subscription subscribe";
 //   s10n->addAttribute( "type", "subscribe" );
