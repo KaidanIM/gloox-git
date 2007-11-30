@@ -18,7 +18,7 @@ int main( int /*argc*/, char** /*argv*/ )
   msg->addAttribute( "id", "id1" );
   new Tag( msg, "body", "the body" );
 
-#warning FIXME fix the following 5 tests. how to test private functions, ctors, etc?
+// FIXME fix the following 5 tests. how to test private functions, ctors, etc?
 //   // -------
 //   name = "parse Message normal 1";
 //   i = new Message( msg );
@@ -158,7 +158,7 @@ int main( int /*argc*/, char** /*argv*/ )
     delete i;
   }
 
-#warning FIXME fix the following 2 tests. how to test private functions, ctors, etc?
+// FIXME fix the following 2 tests. how to test private functions, ctors, etc?
 //   // -------
 //   name = "new simple Message groupchat";
 //   Message m( Message::Groupchat, JID( "xyz@example.org/blah" ), "the body", "the subject",

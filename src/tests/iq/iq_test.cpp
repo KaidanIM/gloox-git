@@ -20,7 +20,7 @@ int main( int /*argc*/, char** /*argv*/ )
   Tag *q = new Tag( iq, "query" );
   q->addAttribute( "xmlns", "mynamespace" );
 
-#warning FIXME fix the following 4 tests. how to test private functions, ctors, etc?
+// FIXME fix the following 4 tests. how to test private functions, ctors, etc?
 //   // -------
 //   name = "parse IQ set";
 //   i = new IQ( iq );
@@ -134,7 +134,7 @@ int main( int /*argc*/, char** /*argv*/ )
     delete i;
   }
 
-#warning // FIXME these need to use SEs, as IQ::query() will go away eventually
+// FIXME these need to use SEs, as IQ::query() will go away eventually
 //   // -------
 //   {
 //     name = "new simple IQ set 2";
@@ -180,7 +180,7 @@ int main( int /*argc*/, char** /*argv*/ )
 //     delete i;
 //   }
 
-#warning FIXME fix the following test. how to test private functions, ctors, etc?
+// FIXME fix the following test. how to test private functions, ctors, etc?
 //   // -------
 //   name = "rip off";
 //   i = new IQ( iq );
