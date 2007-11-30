@@ -271,7 +271,7 @@
  * This function has been removed in favor of
  * @link gloox::PrivateXMLHandler::handlePrivateXML() PrivateXMLHandler::handlePrivateXML( const Tag* ) @endlink.
  *
- * @subsubsection func_PrivateXMLHandler_handlePrivateXML 1.2.16 PrivateXML::storeXML( Tag*, PrivateXMLHandler* )
+ * @subsubsection func_PrivateXML_storeXML 1.2.16 PrivateXML::storeXML( Tag*, PrivateXMLHandler* )
  *
  * This function has been removed in favor of
  * @link gloox::PrivateXML::storeXML() PrivateXML::storeXML( const Tag*, PrivateXMLHandler* ) @endlink.
