@@ -22,7 +22,8 @@ Project files for Code::Blocks (gloox.cbp) and MSVC 6 (gloox.dsp) are included.
 Building gloox in MinGW and Code::Blocks
 ----------------------------------------
 
-gloox should build out of the box on MinGW.
+gloox should build out of the box on MinGW. If using MSys, you shoud run configure with
+the --with-schannel flag.
 
 
 Building gloox on MSVC
