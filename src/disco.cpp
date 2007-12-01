@@ -220,6 +220,7 @@ namespace gloox
       m_parent->removeIqHandler( this, XMLNS_VERSION );
       m_parent->removeStanzaExtension( ExtDiscoInfo );
       m_parent->removeStanzaExtension( ExtDiscoItems );
+      m_parent->removeStanzaExtension( ExtVersion );
     }
   }
 
