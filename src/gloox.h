@@ -1120,7 +1120,7 @@ namespace gloox
   };
 
   /**
-   * Describes possible subscribtion types according to RFC 3921, Section 9.
+   * Describes possible subscription types according to RFC 3921, Section 9.
    */
   enum SubscriptionType
   {
