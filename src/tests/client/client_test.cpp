@@ -1,3 +1,4 @@
+#define CLIENTBASE_TEST
 #include "../../client.h"
 #include "../../jid.h"
 #include "../../connectionbase.h"
@@ -303,6 +304,8 @@ int main( int /*argc*/, char** /*argv*/ )
               c->disconnectReason() );
       break;
     }
+    c->m_idCount = 0; // FIXME re-using this variable in subsequent connection attempts
+                      // causes inconsistencies with the hard-coded replies.
   }
   delete c;
   c = 0;

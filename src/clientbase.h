@@ -748,6 +748,9 @@ namespace gloox
       int m_availableSaslMechs;
 
     private:
+#ifdef CLIENTBASE_TEST
+    public:
+#endif
       ClientBase( const ClientBase& );
       ClientBase& operator=( const ClientBase& );
 
