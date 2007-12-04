@@ -31,6 +31,7 @@ namespace gloox
   class Stanza;
   class PrivateXML;
   class RosterItem;
+  class RosterItemData;
 
   /**
    * @brief This class implements Jabber/XMPP roster handling in the @b jabber:iq:roster namespace.
@@ -195,9 +196,72 @@ namespace gloox
       virtual void handlePrivateXMLResult( const std::string& uid, PrivateXMLResult pxResult );
 
     private:
-      void add( const std::string& jid, const std::string& name,
-                const StringList& groups, const std::string& sub, bool ask );
-      void extractItems( Tag* tag, bool isPush );
+#ifdef ROSTERMANAGER_TEST
+    public:
+#endif
+      typedef std::list<RosterItemData*> RosterData;
+
+      /**
+       * @brief An implementation of StanzaExtension that helps in roster management.
+       *
+       * @author Jakob Schroeter <js@camaya.net>
+       * @since 1.0
+       */
+      class Query : public StanzaExtension
+      {
+        public:
+          /**
+           * Constructs a new object that can be used to add a contact to the roster.
+           * @param jid The contact's JID.
+           * @param name The contact's optional user-defined name.
+           * @param groups An optional list of groups the contact belongs to.
+           */
+          Query( const JID& jid, const std::string& name, const StringList& groups );
+
+          /**
+           * Constructs a new object that can be used to remove a contact from the roster.
+           * @param jid The contact's JID.
+           */
+          Query( const JID& jid );
+
+          /**
+           * Creates a new Query object from teh given Tag.
+           * @param tag The Tag to parse.
+           */
+          Query( const Tag* tag = 0 );
+
+          /**
+           * Destructor.
+           */
+          ~Query();
+
+          /**
+           * Retruns the internal roster that was created by the ctors (either from an
+           * incoming packet or passed arguments).
+           * This is not necessarily the full roster, but may be a single item.
+           * @return The (possibly partial) roster).
+           */
+          const RosterData& roster() const { return m_roster; }
+
+          // reimplemented from StanzaExtension
+          virtual const std::string& filterString() const;
+
+          // reimplemented from StanzaExtension
+          virtual StanzaExtension* newInstance( const Tag* tag ) const
+          {
+            return new Query( tag );
+          }
+
+          // reimplemented from StanzaExtension
+          virtual Tag* tag() const;
+
+        private:
+          RosterData m_roster;
+
+      };
+
+      void mergePush( const RosterData& data );
+      void mergeRoster( const RosterData& data );
 
       RosterListener* m_rosterListener;
       Roster m_roster;
