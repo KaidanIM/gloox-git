@@ -13,25 +13,90 @@
 
 
 #include "rosteritem.h"
+#include "rosteritemdata.h"
 #include "util.h"
 
 namespace gloox
 {
 
-  RosterItem::RosterItem( const JID& jid, const std::string& name )
-    : m_subscription( S10nNone ), m_name( name ), m_jid( jid.bare() ), m_changed( false )
+  RosterItem::RosterItem( const std::string& jid, const std::string& name )
+    : m_data( new RosterItemData( jid, name, StringList() ) )
+  {
+  }
+
+  RosterItem::RosterItem( const RosterItemData& data )
+    : m_data( new RosterItemData( data ) )
   {
   }
 
   RosterItem::~RosterItem()
   {
+    delete m_data;
     util::clearMap( m_resources );
   }
 
   void RosterItem::setName( const std::string& name )
   {
-    m_name = name;
-    m_changed = true;
+    if( m_data )
+      m_data->setName( name );
+  }
+
+  const std::string& RosterItem::name() const
+  {
+    if( m_data )
+      return m_data->name();
+    else
+      return EmptyString;
+  }
+
+  const std::string& RosterItem::jid() const
+  {
+    if( m_data )
+      return m_data->jid();
+    else
+      return EmptyString;
+  }
+
+  void RosterItem::setSubscription( const std::string& subscription, const std::string& ask )
+  {
+    if( m_data )
+      m_data->setSubscription( subscription, ask );
+  }
+
+  SubscriptionType RosterItem::subscription() const
+  {
+    if( m_data )
+      return m_data->subscription();
+    else
+      return S10nNone;
+  }
+
+  void RosterItem::setGroups( const StringList& groups )
+  {
+    if( m_data )
+      m_data->setGroups( groups );
+  }
+
+  const StringList RosterItem::groups() const
+  {
+    if( m_data )
+      return m_data->groups();
+    else
+      return StringList();
+  }
+
+  bool RosterItem::changed() const
+  {
+    if( m_data )
+      return m_data->changed();
+    else
+      return false;
+  }
+
+  void RosterItem::setSynchronized()
+  {
+    if( m_data )
+      m_data->setSynchronized();
   }
 
   void RosterItem::setPresence( const std::string& resource, Presence::PresenceType presence )
@@ -66,30 +131,6 @@ namespace gloox
     m_resources[resource]->setExtensions( exts );
   }
 
-  void RosterItem::setSubscription( const std::string& subscription, bool ask )
-  {
-    if( subscription == "from" && !ask )
-      m_subscription = S10nFrom;
-    else if( subscription == "from" && ask )
-      m_subscription = S10nFromOut;
-    else if( subscription == "to" && !ask )
-      m_subscription = S10nTo;
-    else if( subscription == "to" && ask )
-      m_subscription = S10nToIn;
-    else if( subscription == "none" && !ask )
-      m_subscription = S10nNone;
-    else if( subscription == "none" && ask )
-      m_subscription = S10nNoneOut;
-    else if( subscription == "both" )
-      m_subscription = S10nBoth;
-  }
-
-  void RosterItem::setGroups( const StringList& groups )
-  {
-    m_groups = groups;
-    m_changed = true;
-  }
-
   void RosterItem::removeResource( const std::string& resource )
   {
     ResourceMap::iterator it = m_resources.find( resource );
@@ -109,6 +150,12 @@ namespace gloox
   {
     ResourceMap::const_iterator it = m_resources.find( res );
     return it != m_resources.end() ? (*it).second : 0;
+  }
+
+  void RosterItem::setData( const RosterItemData& rid )
+  {
+    delete m_data;
+    m_data = new RosterItemData( rid );
   }
 
 }

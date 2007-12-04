@@ -1120,6 +1120,34 @@ namespace gloox
   };
 
   /**
+   * Describes possible subscribtion types according to RFC 3921, Section 9.
+   */
+  enum SubscriptionType
+  {
+    S10nNone,                       /**< Contact and user are not subscribed to each other, and
+                                     * neither has requested a subscription from the other. */
+    S10nNoneOut,                    /**< Contact and user are not subscribed to each other, and
+                                     * user has sent contact a subscription request but contact
+                                     * has not replied yet. */
+    S10nNoneIn,                     /**< Contact and user are not subscribed to each other, and
+                                     * contact has sent user a subscription request but user has
+                                     * not replied yet (note: contact's server SHOULD NOT push or
+                                     * deliver roster items in this state, but instead SHOULD wait
+                                     * until contact has approved subscription request from user). */
+    S10nNoneOutIn,                  /**< Contact and user are not subscribed to each other, contact
+                                     * has sent user a subscription request but user has not replied
+                                     * yet, and user has sent contact a subscription request but
+                                     * contact has not replied yet. */
+    S10nTo,                         /**< User is subscribed to contact (one-way). */
+    S10nToIn,                       /**< User is subscribed to contact, and contact has sent user a
+                                     * subscription request but user has not replied yet. */
+    S10nFrom,                       /**< Contact is subscribed to user (one-way). */
+    S10nFromOut,                    /**< Contact is subscribed to user, and user has sent contact a
+                                     * subscription request but contact has not replied yet. */
+    S10nBoth                        /**< User and contact are subscribed to each other (two-way). */
+  };
+
+  /**
    * A list of strings.
    */
   typedef std::list<std::string> StringList;

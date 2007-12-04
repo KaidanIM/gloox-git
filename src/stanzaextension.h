@@ -62,6 +62,7 @@ namespace gloox
     ExtDiscoItems,                  /**< An extension containing a disco#items element (XEP-0030). */
     ExtAdhocCommand,                /**< An extension containing a Adhoc Command (XEP-0050). */
     ExtPrivateXML,                  /**< An extension used for Private XML Storage (XEP-0048). */
+    ExtRoster,                      /**< An extension dealing with the user's roster (RFC-3921). */
     ExtUser                         /**< User-supplied extensions must use IDs above this. Do
                                      * not hard-code ExtUser's value anywhere, it is subject
                                      * to change. */
