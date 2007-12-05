@@ -22,6 +22,9 @@
 namespace gloox
 {
 
+  /**
+   * @brief A namespace holding a couple utility functions.
+   */
   namespace util
   {
 
