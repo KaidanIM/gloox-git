@@ -394,7 +394,8 @@ namespace gloox
         {
           if( m_rosterListener )
             m_rosterListener->handleItemRemoved( (*it)->jid() );
-//           m_roster.erase( itr );
+          delete (*itr).second;
+          m_roster.erase( itr );
         }
         else
         {
