@@ -187,7 +187,11 @@ namespace gloox
       virtual void handlePresence( Presence* presence );
 
       // reimplemented from SubscriptionHandler.
-      virtual void handleSubscription( Subscription* subscription );
+      virtual void handleSubscription( const Subscription& subscription );
+
+      // reimplemented from SubscriptionHandler.
+      virtual void handleSubscription( Subscription* subscription ) // FIXME remove for 1.1.
+        { (void)subscription; }
 
       // reimplemented from PrivateXMLHandler
       virtual void handlePrivateXML( const Tag* xml );

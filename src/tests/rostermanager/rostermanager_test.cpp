@@ -177,12 +177,12 @@ void RosterManagerTest::send( const Subscription& s10n )
   if( m_test == 5 )
   {
     Subscription s( Subscription::Subscribed, s10n.from() );
-    m_rm->handleSubscription( &s );
+    m_rm->handleSubscription( s );
   }
   else if( m_test == 6 )
   {
     Subscription s( Subscription::Unsubscribed, s10n.from() );
-    m_rm->handleSubscription( &s );
+    m_rm->handleSubscription( s );
 
     IQ iq( IQ::Set, JID(), getID() );
     Tag* q = new Tag( "query" );
@@ -354,7 +354,7 @@ int main( int /*argc*/, char** /*argv*/ )
     name = "receive subscribe request (accept)";
     rmt->setTest( 7 );
     Subscription s( Subscription::Subscribe, JID(), EmptyString, EmptyString, JID( "foobar" ) );
-    rm->handleSubscription( &s );
+    rm->handleSubscription( s );
     if( !rmt->checkResult() || !rmt->checkResult2() )
     {
       ++fail;
@@ -367,7 +367,7 @@ int main( int /*argc*/, char** /*argv*/ )
     name = "receive unsubscribe request";
     rmt->setTest( 8 );
     Subscription s( Subscription::Unsubscribe, JID(), EmptyString, EmptyString, JID( "foobar" ) );
-    rm->handleSubscription( &s );
+    rm->handleSubscription( s );
     if( !rmt->checkResult() || !rmt->checkResult2() )
     {
       ++fail;
@@ -380,7 +380,7 @@ int main( int /*argc*/, char** /*argv*/ )
     name = "receive subscribe request (reject)";
     rmt->setTest( 9 );
     Subscription s( Subscription::Subscribe, JID(), EmptyString, EmptyString, JID( "foobar" ) );
-    rm->handleSubscription( &s );
+    rm->handleSubscription( s );
     if( !rmt->checkResult() || !rmt->checkResult2() )
     {
       ++fail;

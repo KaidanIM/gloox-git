@@ -485,10 +485,20 @@ namespace gloox
       virtual void handleDiscoError( IQ* iq, int context );
 
       // reimplemented from PresenceHandler
-      virtual void handlePresence( Presence* presence );
+      virtual void handlePresence( const Presence& presence );
+
+      // reimplemented from PresenceHandler
+      virtual void handlePresence( Presence* presence ) { (void)presence; } // FIXME remove for 1.1
 
       // reimplemented from MessageHandler
-      virtual void handleMessage( Message* msg, MessageSession* session = 0 );
+      virtual void handleMessage( const Message& msg, MessageSession* session = 0 );
+
+      // reimplemented from MessageHandler
+      virtual void handleMessage( Message* msg, MessageSession* session = 0 ) // FIXME remove for 1.1
+      {
+        (void)msg;
+        (void)session;
+      }
 
       // reimplemented from IqHandler
       virtual bool handleIq( const IQ& iq ) { (void)iq; return false; }

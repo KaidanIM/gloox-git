@@ -29,7 +29,7 @@ namespace gloox
   {
   }
 
-  void MUCMessageSession::handleMessage( Message* msg )
+  void MUCMessageSession::handleMessage( Message& msg )
   {
     if( m_messageHandler )
       m_messageHandler->handleMessage( msg );
