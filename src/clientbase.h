@@ -402,7 +402,7 @@ namespace gloox
        * @param ih The object to receive Iq stanza notifications.
        * @param xmlns The namespace the object handles.
        */
-      void registerIqHandler( IqHandler* ih, const std::string& xmlns );
+      GLOOX_DEPRECATED void registerIqHandler( IqHandler* ih, const std::string& xmlns );
 
       /**
        * Use this function to be notified of incoming IQ stanzas with the given value of the @b id
@@ -796,7 +796,7 @@ namespace gloox
       };
 
       typedef std::list<ConnectionListener*>               ConnectionListenerList;
-      typedef std::multimap<const std::string, IqHandler*> IqHandlerMap;
+      typedef std::multimap<const std::string, IqHandler*> IqHandlerMapXmlns;
       typedef std::map<const std::string, TrackStruct>     IqTrackMap;
       typedef std::map<const std::string, MessageHandler*> MessageHandlerMap;
       typedef std::list<MessageSession*>                   MessageSessionList;
@@ -807,7 +807,7 @@ namespace gloox
       typedef std::list<TagHandlerStruct>                  TagHandlerList;
 
       ConnectionListenerList   m_connectionListeners;
-      IqHandlerMap             m_iqNSHandlers;
+      IqHandlerMapXmlns             m_iqNSHandlers;
       IqTrackMap               m_iqIDHandlers;
       MessageSessionList       m_messageSessions;
       MessageHandlerList       m_messageHandlers;
