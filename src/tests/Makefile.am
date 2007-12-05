@@ -6,7 +6,7 @@ SUBDIRS = adhoc adhoccommand adhoccommandnote base64 chatstatefilter client clie
           dataformreported \
           dataformitem delayeddelivery discoinfo discoitems error gpgencrypted gpgsigned iq jid md5 message \
           messageeventfilter nickname oob parser prep presence pubsubevent pubsubmanager \
-          rostermanagerquery search \
+          rostermanagerquery rostermanager search \
           sha simanager stanzaextensionfactory subscription tag tlsgnutls vcardupdate \
           xpath zlib util
 
