@@ -18,28 +18,48 @@
 namespace gloox
 {
 
-  static const char * conditionValues[] =
+  static const char* conditionValues[] =
   {
     "deliver", "expire-at", "match-resource"
   };
 
-  static const char * actionValues[] =
+  static const char* actionValues[] =
   {
     "alert", "error", "drop", "notify"
   };
 
-  static const char * deliverValues[] =
+  static const char* deliverValues[] =
   {
     "direct", "forward", "gateway", "none", "stored"
   };
 
-  static const char * matchResourceValues[] =
+  static const char* matchResourceValues[] =
   {
     "any", "exact", "other"
   };
 
-  AMP::Rule::Rule( const std::string& condition,
-                   const std::string& action,
+  static const char* statusValues[] =
+  {
+    "alert", "notify"
+  };
+
+  // ---- AMP::Rule ----
+  AMP::Rule::Rule( DeliverType deliver, ActionType action )
+    : m_condition( ConditionDeliver ), m_deliver( deliver ), m_action( action )
+  {
+  }
+
+  AMP::Rule::Rule( const std::string& date, ActionType action )
+    : m_condition( ConditionExpireAt ), m_expireat( new std::string( date ) ), m_action( action )
+  {
+  }
+
+  AMP::Rule::Rule( MatchResourceType match, ActionType action )
+    : m_condition( ConditionMatchResource ), m_matchresource( match ), m_action( action )
+  {
+  }
+
+  AMP::Rule::Rule( const std::string& condition, const std::string& action,
                    const std::string& value )
   {
     m_condition = (ConditionType)util::lookup( condition, conditionValues );
@@ -47,13 +67,13 @@ namespace gloox
     switch( m_condition )
     {
       case ConditionDeliver:
-        deliver = (DeliverType)util::lookup( value, deliverValues );
+        m_deliver = (DeliverType)util::lookup( value, deliverValues );
+        break;
       case ConditionExpireAt:
-        // parse time
-        //  expireat.tm_ = val;
+        m_expireat = new std::string( value );
         break;
       case ConditionMatchResource:
-        matchresource = (MatchResourceType)util::lookup( value, matchResourceValues );
+        m_matchresource = (MatchResourceType)util::lookup( value, matchResourceValues );
         break;
       default:
       case ConditionInvalid: // shouldn't happen
@@ -61,10 +81,18 @@ namespace gloox
     }
   }
 
+  AMP::Rule::~Rule()
+  {
+    if( m_condition == ConditionExpireAt && m_expireat )
+      delete m_expireat;
+  }
+
   Tag* AMP::Rule::tag() const
   {
     if( m_condition == ConditionInvalid || m_action == ActionInvalid
-       || deliver == DeliverInvalid )
+        || ( m_condition == ConditionDeliver && m_deliver == DeliverInvalid )
+        || ( m_condition == ConditionMatchResource && m_matchresource == MatchResourceInvalid )
+        || ( m_condition == ConditionExpireAt && !m_expireat ) )
      return 0;
 
     Tag* rule = new Tag( "rule" );
@@ -74,63 +102,88 @@ namespace gloox
     switch( m_condition )
     {
       case ConditionDeliver:
-        if( deliver == DeliverInvalid )
-        {
-          delete rule;
-          return 0;
-        }
-        rule->addAttribute( "value", util::lookup( deliver, deliverValues ) );
+        rule->addAttribute( "value", util::lookup( m_deliver, deliverValues ) );
         break;
       case ConditionExpireAt:
-          // parse time
-          //expireat.tm_ = val;
+        rule->addAttribute( "value", *m_expireat );
         break;
       case ConditionMatchResource:
-        if( matchresource == MatchResourceInvalid )
-        {
-          delete rule;
-          return 0;
-        }
-        rule->addAttribute( "value", "any" );
+        rule->addAttribute( "value", util::lookup( m_matchresource, matchResourceValues ) );
+        break;
+      default:
         break;
     }
     return rule;
   }
+  // ---- AMP::Rule ----
 
-  AMP::AMP( const Tag* tag )
-    : StanzaExtension( ExtAMP ), m_valid( false )
+  // ---- AMP ----
+  AMP::AMP( bool perhop )
+    : StanzaExtension( ExtAMP ), m_perhop( perhop ), m_status( StatusInvalid )
   {
-    if( !tag || tag->name() != "amp" || !tag->hasAttribute( XMLNS, XMLNS_AMP ) )
-      return;
-
-    const TagList& rules = tag->children();
-    TagList::const_iterator it = rules.begin();
-    for( ; it != rules.end(); ++it )
-    {
-      m_rules.push_back( new Rule( tag->findAttribute( "condition" ),
-                                   tag->findAttribute( "action" ),
-                                   tag->findAttribute( "value" ) ) );
-    }
     m_valid = true;
   }
 
-  Tag* AMP::tag() const
+  AMP::AMP( const Tag* tag )
+    : StanzaExtension( ExtAMP ), m_perhop( false )
   {
-    if( !m_valid )
-      return 0;
+    if( !tag || tag->name() != "amp" || tag->xmlns() != XMLNS_AMP )
+      return;
 
-    Tag* amp = new Tag( "amp" );
-    amp->addAttribute( XMLNS, XMLNS_AMP );
-    RuleList::const_iterator it = m_rules.begin();
-    for( ; it != m_rules.end(); ++it )
-      amp->addChild( (*it)->tag() );
+    const ConstTagList& rules = tag->findTagList( "/amp/rule" );
+    ConstTagList::const_iterator it = rules.begin();
+    for( ; it != rules.end(); ++it )
+    {
+      m_rules.push_back( new Rule( (*it)->findAttribute( "condition" ),
+                                   (*it)->findAttribute( "action" ),
+                                   (*it)->findAttribute( "value" ) ) );
+    }
 
-    return amp;
+    m_from = tag->findAttribute( "from" );
+    m_to = tag->findAttribute( "to" );
+    m_status = (Status)util::lookup( tag->findAttribute( "status" ), statusValues );
+    if( tag->hasAttribute( "per-hop", "true" ) || tag->hasAttribute( "per-hop", "1" ) )
+      m_perhop = true;
+    m_valid = true;
   }
 
   AMP::~AMP()
   {
     util::clearList( m_rules );
+  }
+
+  void AMP::addRule( const Rule* rule )
+  {
+    if( rule )
+      m_rules.push_back( rule );
+  }
+
+  const std::string& AMP::filterString() const
+  {
+    static const std::string filter = "/message/amp[@xmlns='" + XMLNS_AMP + "']";
+    return filter;
+  }
+
+  Tag* AMP::tag() const
+  {
+    if( !m_valid || !m_rules.size() )
+      return 0;
+
+    Tag* amp = new Tag( "amp" );
+    amp->setXmlns( XMLNS_AMP );
+    if( m_from )
+      amp->addAttribute( "from", m_from.full() );
+    if( m_to )
+      amp->addAttribute( "to", m_to.full() );
+    if( m_status != StatusInvalid )
+      amp->addAttribute( "status", util::lookup( m_status, statusValues ) );
+    if( m_perhop )
+      amp->addAttribute( "per-hop", "true" );
+    RuleList::const_iterator it = m_rules.begin();
+    for( ; it != m_rules.end(); ++it )
+      amp->addChild( (*it)->tag() );
+
+    return amp;
   }
 
 }

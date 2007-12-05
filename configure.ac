@@ -303,6 +303,8 @@ src/tests/Makefile
 src/tests/adhoc/Makefile
 src/tests/adhoccommand/Makefile
 src/tests/adhoccommandnote/Makefile
+src/tests/amprule/Makefile
+src/tests/amp/Makefile
 src/tests/base64/Makefile
 src/tests/chatstatefilter/Makefile
 src/tests/client/Makefile
