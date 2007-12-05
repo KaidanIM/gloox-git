@@ -63,7 +63,7 @@ class RosterManagerTest : public ClientBase, public RosterListener
     virtual void send( const Subscription& );
     virtual void rosterFilled() { if( m_test == 1 ) m_result = true; }
     virtual void trackID( IqHandler *ih, const std::string& id, int context );
-    bool checkResult() {   m_test = 0; bool t = m_result; m_result = false; return t; }
+    bool checkResult() { bool t = m_result; m_result = false; return t; }
     bool checkResult2() { bool t = m_result2; m_result2 = false; return t; }
     void setRM( RosterManager* rm ) { m_rm = rm; }
     virtual void handleItemAdded( const JID& jid )
@@ -151,6 +151,7 @@ void RosterManagerTest::send( const IQ& iq, IqHandler*, int ctx )
       re.addExtension( new RosterManager::Query( q ) );
       delete q;
       m_rm->handleIqID( re, ctx );
+      m_test = 0;
       break;
     }
     case 2: // add item
@@ -167,6 +168,7 @@ void RosterManagerTest::send( const IQ& iq, IqHandler*, int ctx )
       set.addExtension( new RosterManager::Query( t ) );
       delete t;
       m_rm->handleIq( set );
+      m_test = 0;
       break;
     }
   }
