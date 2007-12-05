@@ -168,7 +168,6 @@ void RosterManagerTest::send( const IQ& iq, IqHandler*, int ctx )
       set.addExtension( new RosterManager::Query( t ) );
       delete t;
       m_rm->handleIq( set );
-      m_test = 0;
       break;
     }
   }
