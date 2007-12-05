@@ -114,6 +114,12 @@ namespace gloox
    * of it. For our @e stats protocol, filterString() would return something like
    * "/iq/stats[@xmlns='ext:stats']" (without the double quotes).
    *
+   * @li When subclassing StanzaExtension, you have to init it with an int, the extension's
+   * type. You should choose a value that is not yet used in gloox, and unique to
+   * the given extension you implement. In general, you are free to use values
+   * above @link gloox::ExtUser ExtUser @endlink. See
+   * @link gloox::StanzaExtensionType StanzaExtensionType @endlink for existing values.
+   *
    * @li The next step is to implement newInstance(). Whenever filterString()'s
    * XPath expression matches a child element of an incoming stanza, newInstance()
    * is called with the matched Tag. For our example above, this is the &lt;stats&gt;
