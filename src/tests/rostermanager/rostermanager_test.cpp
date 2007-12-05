@@ -28,10 +28,10 @@ namespace gloox
       virtual void trackID( IqHandler *ih, const std::string& id, int context ) = 0;
       void removeIqHandler( IqHandler* ih, const std::string& xmlns );
       void registerIqHandler( IqHandler* ih, const std::string& xmlns );
-      void registerPresenceHandler( PresenceHandler* ph ) {}
-      void removePresenceHandler( PresenceHandler* ph ) {}
-      void registerSubscriptionHandler( SubscriptionHandler* ph ) {}
-      void removeSubscriptionHandler( SubscriptionHandler* ph ) {}
+      void registerPresenceHandler( PresenceHandler* /*ph*/ ) {}
+      void removePresenceHandler( PresenceHandler* /*ph*/ ) {}
+      void registerSubscriptionHandler( SubscriptionHandler* /*ph*/ ) {}
+      void removeSubscriptionHandler( SubscriptionHandler* /*ph*/ ) {}
       void registerStanzaExtension( StanzaExtension* ext );
       void removeStanzaExtension( int ext );
     private:
@@ -71,7 +71,7 @@ class RosterManagerTest : public ClientBase, public RosterListener
       if( m_test == 2 && jid.full() == "foo" )
         m_result = true;
     }
-    virtual void handleItemSubscribed( const JID& jid )
+    virtual void handleItemSubscribed( const JID& /*jid*/ )
     {
       if( m_test == 5 )
         m_result = true;
@@ -86,7 +86,7 @@ class RosterManagerTest : public ClientBase, public RosterListener
       if( m_test == 3 && jid.full() == "foo" )
         m_result = true;
     }
-    virtual void handleItemUnsubscribed( const JID& jid )
+    virtual void handleItemUnsubscribed( const JID& /*jid*/ )
     {
       if( m_test == 6 )
         m_result = true;
@@ -96,11 +96,11 @@ class RosterManagerTest : public ClientBase, public RosterListener
       if( m_test == 1 && roster.size() == 3 )
         m_result2 = true;
     }
-    virtual void handleRosterPresence( const RosterItem& item, const std::string& resource,
-                                       Presence::PresenceType presence, const std::string& msg ) {}
-    virtual void handleSelfPresence( const RosterItem& item, const std::string& resource,
-                                     Presence::PresenceType presence, const std::string& msg ) {}
-    virtual bool handleSubscriptionRequest( const JID& jid, const std::string& msg )
+    virtual void handleRosterPresence( const RosterItem& /*item*/, const std::string& /*resource*/,
+                                       Presence::PresenceType /*presence*/, const std::string& /*msg*/ ) {}
+    virtual void handleSelfPresence( const RosterItem& /*item*/, const std::string& /*resource*/,
+                                     Presence::PresenceType /*presence*/, const std::string& /*msg*/ ) {}
+    virtual bool handleSubscriptionRequest( const JID& /*jid*/, const std::string& /*msg*/ )
     {
       if( m_test == 7 )
       {
@@ -114,7 +114,7 @@ class RosterManagerTest : public ClientBase, public RosterListener
       }
       return false;
     }
-    virtual bool handleUnsubscriptionRequest( const JID& jid, const std::string& msg )
+    virtual bool handleUnsubscriptionRequest( const JID& /*jid*/, const std::string& /*msg*/ )
     {
       if( m_test == 8 )
       {
@@ -123,8 +123,8 @@ class RosterManagerTest : public ClientBase, public RosterListener
       }
       return false;
     }
-    virtual void handleNonrosterPresence( Presence* presence ) {}
-    virtual void handleRosterError( const IQ& iq ) {}
+    virtual void handleNonrosterPresence( Presence* /*presence*/ ) {}
+    virtual void handleRosterError( const IQ& /*iq*/ ) {}
   private:
     RosterManager* m_rm;
     int m_test;
