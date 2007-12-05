@@ -264,7 +264,7 @@ namespace gloox
        * ClientBase should call this function.
        * @param msg A Message to feed into the session.
        */
-      void handleMessage( Message& msg );
+      virtual void handleMessage( Message& msg );
 
     protected:
       /**

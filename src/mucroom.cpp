@@ -417,27 +417,27 @@ namespace gloox
     m_parent->send( iq, this, operation );
   }
 
-  void MUCRoom::handlePresence( Presence* presence )
+  void MUCRoom::handlePresence( const Presence& presence )
   {
-    if( ( presence->from().bare() != m_nick.bare() ) || !m_roomHandler )
+    if( ( presence.from().bare() != m_nick.bare() ) || !m_roomHandler )
       return;
 
-    if( presence->subtype() == Presence::Error  )
+    if( presence.subtype() == Presence::Error  )
     {
       m_joined = false;
-      m_roomHandler->handleMUCError( this, presence->error()
-                                             ? presence->error()->error()
+      m_roomHandler->handleMUCError( this, presence.error()
+                                             ? presence.error()->error()
                                              : StanzaErrorUndefined );
     }
     else
     {
-      Tag* p = presence->tag();
+      Tag* p = presence.tag();
       Tag* x = 0;
       if( m_roomHandler && p && ( x = p->findChild( "x", XMLNS, XMLNS_MUC_USER ) ) != 0 )
       {
         MUCRoomParticipant party;
         party.flags = 0;
-        party.nick = new JID( presence->from() );
+        party.nick = new JID( presence.from() );
         party.jid = 0;
         party.actor = 0;
         party.alternate = 0;
@@ -489,7 +489,7 @@ namespace gloox
                 acknowledgeInstantRoom();
             }
             else if( code == "210" )
-              m_nick.setResource( presence->from().resource() );
+              m_nick.setResource( presence.from().resource() );
             else if( code == "301" )
               party.flags |= UserBanned;
             else if( code == "303" )
@@ -512,16 +512,16 @@ namespace gloox
         }
 
         if( party.flags & UserNickChanged && !party.newNick.empty()
-            && m_nick.resource() == presence->from().resource()
+            && m_nick.resource() == presence.from().resource()
             && party.newNick == m_newNick )
           party.flags |= UserSelf;
 
         if( party.flags & UserNickChanged && party.flags & UserSelf && !party.newNick.empty() )
           m_nick.setResource( party.newNick );
 
-        party.status = presence->status();
+        party.status = presence.status();
 
-        m_roomHandler->handleMUCParticipantPresence( this, party, presence->presence() );
+        m_roomHandler->handleMUCParticipantPresence( this, party, presence.presence() );
         delete party.jid;
         delete party.nick;
         delete party.actor;
@@ -577,18 +577,19 @@ namespace gloox
     m_flags |= FlagFullyAnonymous;
   }
 
-  void MUCRoom::handleMessage( Message* msg, MessageSession* /*session*/ )
+  void MUCRoom::handleMessage( const Message& msg, MessageSession* /*session*/ )
   {
     if( !m_roomHandler )
       return;
 
-    if( msg->subtype() == Message::Error )
+    if( msg.subtype() == Message::Error )
     {
-      m_roomHandler->handleMUCError( this, msg->error()->error() );
+      if( msg.error() )
+        m_roomHandler->handleMUCError( this, msg.error()->error() );
     }
     else
     {
-      Tag* m = msg->tag();
+      Tag* m = msg.tag();
       Tag* x = 0;
       if( m && ( x = m->findChild( "x", XMLNS, XMLNS_MUC_USER ) ) != 0 )
       {
@@ -640,26 +641,26 @@ namespace gloox
         return;
       }
 
-      if( !msg->subject().empty() )
+      if( !msg.subject().empty() )
       {
-        m_roomHandler->handleMUCSubject( this, msg->from().resource(), msg->subject() );
+        m_roomHandler->handleMUCSubject( this, msg.from().resource(), msg.subject() );
       }
-      else if( !msg->body().empty() )
+      else if( !msg.body().empty() )
       {
         std::string when;
         bool privMsg = false;
         bool history = false;
-        if( msg->when() )
+        if( msg.when() )
         {
-          when = msg->when()->stamp();
+          when = msg.when()->stamp();
           history = true;
         }
-        if( msg->subtype() & ( Message::Chat | Message::Normal ) )
+        if( msg.subtype() & ( Message::Chat | Message::Normal ) )
           privMsg = true;
 
-        m_roomHandler->handleMUCMessage( this, msg->from().resource(), msg->body(),
+        m_roomHandler->handleMUCMessage( this, msg.from().resource(), msg.body(),
                                          history, when, privMsg );
-        m_roomHandler->handleMUCMessage( this, *msg, privMsg );
+        m_roomHandler->handleMUCMessage( this, msg, privMsg );
       }
     }
   }

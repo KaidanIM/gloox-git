@@ -296,48 +296,48 @@ namespace gloox
     m_parent->send( p );
   }
 
-  void RosterManager::handleSubscription( Subscription* s10n )
+  void RosterManager::handleSubscription( const Subscription& s10n )
   {
     if( !m_rosterListener )
       return;
 
-    switch( s10n->subtype() )
+    switch( s10n.subtype() )
     {
       case Subscription::Subscribe:
       {
-        bool answer = m_rosterListener->handleSubscriptionRequest( s10n->from(), s10n->status() );
+        bool answer = m_rosterListener->handleSubscriptionRequest( s10n.from(), s10n.status() );
         if( m_syncSubscribeReq )
         {
-          ackSubscriptionRequest( s10n->from(), answer );
+          ackSubscriptionRequest( s10n.from(), answer );
         }
         break;
       }
       case Subscription::Subscribed:
       {
-//         Subscription* p = new Subscription( Subscription::Subscribe, s10n->from().bareJID() );
+//         Subscription* p = new Subscription( Subscription::Subscribe, s10n.from().bareJID() );
 //         m_parent->send( p );
 
-        m_rosterListener->handleItemSubscribed( s10n->from() );
+        m_rosterListener->handleItemSubscribed( s10n.from() );
         break;
       }
 
       case Subscription::Unsubscribe:
       {
-        Subscription p( Subscription::Unsubscribed, s10n->from().bareJID() );
+        Subscription p( Subscription::Unsubscribed, s10n.from().bareJID() );
         m_parent->send( p );
 
-        bool answer = m_rosterListener->handleUnsubscriptionRequest( s10n->from(), s10n->status() );
+        bool answer = m_rosterListener->handleUnsubscriptionRequest( s10n.from(), s10n.status() );
         if( m_syncSubscribeReq && answer )
-          remove( s10n->from().bare() );
+          remove( s10n.from().bare() );
         break;
       }
 
       case Subscription::Unsubscribed:
       {
-//         Subscription* p = new Subscription( Subscription::Unsubscribe, s10n->from().bareJID() );
+//         Subscription* p = new Subscription( Subscription::Unsubscribe, s10n.from().bareJID() );
 //         m_parent->send( p );
 
-        m_rosterListener->handleItemUnsubscribed( s10n->from() );
+        m_rosterListener->handleItemUnsubscribed( s10n.from() );
         break;
       }
 
