@@ -950,7 +950,7 @@ namespace gloox
     if( !ih || xmlns.empty() )
       return;
 
-    typedef IqHandlerMap::const_iterator IQci;
+    typedef IqHandlerMapXmlns::const_iterator IQci;
     std::pair<IQci, IQci> g = m_iqNSHandlers.equal_range( xmlns );
     for( IQci it = g.first; it != g.second; ++it )
       if( (*it).second == ih )
@@ -964,7 +964,7 @@ namespace gloox
     if( !ih || xmlns.empty() )
       return;
 
-    typedef IqHandlerMap::iterator IQi;
+    typedef IqHandlerMapXmlns::iterator IQi;
     std::pair<IQi, IQi> g = m_iqNSHandlers.equal_range( xmlns );
     IQi it_;
     IQi it = g.first;
@@ -1182,7 +1182,7 @@ namespace gloox
 
     bool res = false;
 
-    typedef IqHandlerMap::const_iterator IQci;
+    typedef IqHandlerMapXmlns::const_iterator IQci;
     std::pair<IQci, IQci> g = m_iqNSHandlers.equal_range( iq.xmlns() );
     for( IQci it = g.first; it != g.second; ++it )
     {
