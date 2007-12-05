@@ -584,8 +584,7 @@ namespace gloox
 
     if( msg.subtype() == Message::Error )
     {
-      if( msg.error() )
-        m_roomHandler->handleMUCError( this, msg.error()->error() );
+      m_roomHandler->handleMUCError( this, msg.error() ? msg.error()->error() : StanzaErrorUndefined );
     }
     else
     {
