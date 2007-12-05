@@ -87,6 +87,7 @@ int main( int /*argc*/, char** /*argv*/ )
     }
     delete t;
     t = 0;
+    delete q;
   }
 
   // -------
@@ -110,6 +111,7 @@ int main( int /*argc*/, char** /*argv*/ )
     }
     delete t;
     t = 0;
+    delete q;
   }
 
 
