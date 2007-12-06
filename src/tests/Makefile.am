@@ -5,7 +5,8 @@
 SUBDIRS = adhoc adhoccommand adhoccommandnote amprule amp base64 \
           chatstatefilter client clientbase dataform dataformfield \
           dataformreported \
-          dataformitem delayeddelivery discoinfo discoitems error gpgencrypted gpgsigned iq jid md5 message \
+          dataformitem delayeddelivery discoinfo discoitems disco \
+          error gpgencrypted gpgsigned iq jid md5 message \
           messageeventfilter nickname oob parser prep presence pubsubevent pubsubmanager \
           rostermanagerquery rostermanager search \
           sha simanager stanzaextensionfactory subscription tag tlsgnutls vcardupdate \
