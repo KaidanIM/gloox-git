@@ -1,3 +1,15 @@
+/*
+  Copyright (c) 2007 by Jakob Schroeter <js@camaya.net>
+  This file is part of the gloox library. http://camaya.net/gloox
+
+  This software is distributed under a license. The full license
+  agreement can be found in the file LICENSE in this distribution.
+  This software may not be copied, modified, sold or distributed
+  other than expressed in the named license agreement.
+
+  This software is distributed without any warranty.
+*/
+
 #include "error.h"
 #include "tag.h"
 #include "util.h"
@@ -6,7 +18,7 @@ namespace gloox
 {
 
   /* Error type values */
-  static const char * errValues [] = {
+  static const char* errValues [] = {
     "auth",
     "cancel",
     "continue",
@@ -54,9 +66,13 @@ namespace gloox
 
   Error::Error( const Tag* tag )
     : StanzaExtension( ExtError ),
-      m_type( stanzaErrorType( tag->findAttribute( TYPE ) ) ),
       m_error( StanzaErrorUndefined ), m_appError( 0 )
   {
+    if( !tag || tag->name() != "error" )
+      return;
+
+    m_type = stanzaErrorType( tag->findAttribute( TYPE ) );
+
     TagList::const_iterator it = tag->children().begin();
     for( ; it != tag->children().end(); ++it )
     {
@@ -72,13 +88,12 @@ namespace gloox
 
   Error::Error( const Error& error )
         : StanzaExtension( ExtError ), m_type( error.m_type ),
-          m_error( error.m_error ), m_appError( error.m_appError ? m_appError->clone() : 0)
+          m_error( error.m_error ), m_appError( error.m_appError ? m_appError->clone() : 0 )
   {}
 
   Error::~Error()
   {
-    if( m_appError )
-      delete m_appError;
+    delete m_appError;
   }
 
   const std::string& Error::filterString() const
@@ -91,18 +106,19 @@ namespace gloox
   }
 
 
-  Tag * Error::tag() const
+  Tag* Error::tag() const
   {
     if( m_type == StanzaErrorTypeUndefined || m_error == StanzaErrorUndefined )
       return 0;
 
-    Tag * error = new Tag( "error", TYPE, util::lookup( m_type, errValues ) );
+    Tag* error = new Tag( "error", TYPE, util::lookup( m_type, errValues ) );
     new Tag( error, util::lookup( m_error, stanzaErrValues ), XMLNS, XMLNS_XMPP_STANZAS );
 
     StringMap::const_iterator it = m_text.begin();
     for( ; it != m_text.end(); ++it )
     {
-      Tag * txt = new Tag( error, "text", XMLNS, XMLNS_XMPP_STANZAS );
+      Tag* txt = new Tag( error, "text" );
+      txt->setXmlns( XMLNS_XMPP_STANZAS );
       txt->addAttribute( "xml:lang", (*it).first );
       txt->setCData( (*it).second );
     }
