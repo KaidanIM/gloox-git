@@ -956,7 +956,21 @@ namespace gloox
       if( (*it).second == ih )
         return;
 
-    m_iqNSHandlers.insert( make_pair( xmlns, ih ) );
+    m_iqNSHandlers.insert( std::make_pair( xmlns, ih ) );
+  }
+
+  void ClientBase::registerIqHandler( IqHandler* ih, int exttype )
+  {
+    if( !ih )
+      return;
+
+    typedef IqHandlerMap::const_iterator IQci;
+    std::pair<IQci, IQci> g = m_iqExtHandlers.equal_range( exttype );
+    for( IQci it = g.first; it != g.second; ++it )
+      if( (*it).second == ih )
+        return;
+
+    m_iqExtHandlers.insert( std::make_pair( exttype, ih ) );
   }
 
   void ClientBase::removeIqHandler( IqHandler* ih, const std::string& xmlns )
@@ -966,16 +980,30 @@ namespace gloox
 
     typedef IqHandlerMapXmlns::iterator IQi;
     std::pair<IQi, IQi> g = m_iqNSHandlers.equal_range( xmlns );
-    IQi it_;
+    IQi it2;
     IQi it = g.first;
     while( it != g.second )
     {
-      if( (*it).second == ih )
-      {
-        m_iqNSHandlers.erase( it++ );
-      }
-      else
-        ++it;
+      it2 = it++;
+      if( (*it2).second == ih )
+        m_iqNSHandlers.erase( it2 );
+    }
+  }
+
+  void ClientBase::removeIqHandler( IqHandler* ih, int exttype )
+  {
+    if( !ih )
+      return;
+
+    typedef IqHandlerMap::iterator IQi;
+    std::pair<IQi, IQi> g = m_iqExtHandlers.equal_range( exttype );
+    IQi it2;
+    IQi it = g.first;
+    while( it != g.second )
+    {
+      it2 = it++;
+      if( (*it2).second == ih )
+        m_iqExtHandlers.erase( it2 );
     }
   }
 
@@ -1182,14 +1210,30 @@ namespace gloox
 
     bool res = false;
 
-    typedef IqHandlerMapXmlns::const_iterator IQci;
-    std::pair<IQci, IQci> g = m_iqNSHandlers.equal_range( iq.xmlns() );
-    for( IQci it = g.first; it != g.second; ++it )
+    // FIXME remove for 1.1
+    typedef IqHandlerMapXmlns::const_iterator IQciXmlns;
+    std::pair<IQciXmlns, IQciXmlns> g = m_iqNSHandlers.equal_range( iq.xmlns() );
+    for( IQciXmlns it = g.first; it != g.second; ++it )
     {
       if( (*it).second->handleIq( iq ) )
         res = true;
       if( (*it).second->handleIq( &iq ) ) // FIXME remove for 1.1
         res = true;
+    }
+
+    typedef IqHandlerMap::const_iterator IQci;
+    const StanzaExtensionList& sel = iq.extensions();
+    StanzaExtensionList::const_iterator itse = sel.begin();
+    for( ; itse != sel.end(); ++itse )
+    {
+      std::pair<IQci, IQci> g = m_iqExtHandlers.equal_range( (*itse)->extensionType() );
+      for( IQci it = g.first; it != g.second; ++it )
+      {
+        if( (*it).second->handleIq( iq ) )
+          res = true;
+        if( (*it).second->handleIq( &iq ) ) // FIXME remove for 1.1
+          res = true;
+      }
     }
 
     if( !res && iq.subtype() & ( IQ::Get | IQ::Set ) )
