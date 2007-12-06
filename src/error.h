@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2006-2007 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2007 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -10,8 +10,8 @@
   This software is distributed without any warranty.
 */
 
-#ifndef __ERROR_H__
-#define __ERROR_H__
+#ifndef ERROR_H__
+#define ERROR_H__
 
 #include "gloox.h"
 #include "stanzaextension.h"
@@ -25,33 +25,52 @@ namespace gloox
   class Tag;
 
   /**
+   * @brief A stanza error abstraction implemented as a StanzaExtension.
    *
+   * @author Vincent Thomasset
+   * @author Jakob Schroeter <js@camaya.net>
+   * @since 1.0
    */
   class GLOOX_API Error : public StanzaExtension
   {
     public:
 
-      Error()
-        : StanzaExtension( ExtError ), m_type( StanzaErrorTypeUndefined ),
-          m_error( StanzaErrorUndefined ), m_appError( 0 )
-      {}
+//       Error()
+//         : StanzaExtension( ExtError ), m_type( StanzaErrorTypeUndefined ),
+//           m_error( StanzaErrorUndefined ), m_appError( 0 )
+//       {}
 
-      Error( const Tag* tag );
+      /**
+       * Creates a new Error object from the given Tag.
+       * @param tag The Tag to parse.
+       */
+      Error( const Tag* tag = 0 );
 
-      Error( StanzaErrorType type, StanzaError error, Tag * appError = 0 )
+      /**
+       * Creates a new Error object.
+       * @param type The error type.
+       * @param error The actual stanza error.
+       * @param appError An optional application-specific error.
+       */
+      Error( StanzaErrorType type, StanzaError error, Tag* appError = 0 )
         : StanzaExtension( ExtError ), m_type( type ),
           m_error( error ), m_appError( appError )
       {}
 
+      /**
+       * Virtual destructor.
+       */
       virtual ~Error();
 
       /**
-       *
+       * Returns the error type.
+       * @return The error type.
        */
       StanzaErrorType type() const { return m_type; }
 
       /**
-       *
+       * Return the stanza error.
+       * @return The actual error.
        */
       StanzaError error() const { return m_error; }
 
@@ -70,7 +89,7 @@ namespace gloox
        * @param lang The language identifier for the desired language. It must
        * conform to section 2.12 of the XML specification and RFC 3066. If
        * empty, the default subject will be returned, if any.
-       * @return The text of an error stanza. Empty for non-error stanzas.
+       * @return The text of an error stanza.
        */
       const std::string& text( const std::string& lang = "default" ) const;
 
@@ -87,10 +106,7 @@ namespace gloox
       virtual Tag* tag() const;
 
     private:
-
       Error( const Error& error );
-
-      typedef std::map< std::string, std::string > StringMap;
 
       void setValues( const Tag* tag );
       StanzaErrorType m_type;
@@ -101,4 +117,4 @@ namespace gloox
 
 }
 
-#endif /* __ERROR_H__ */
+#endif /* ERROR_H__ */
