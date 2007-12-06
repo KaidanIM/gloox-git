@@ -69,14 +69,30 @@ namespace gloox
    * The second techniques is using an in-band bytestream, i.e. the data is encapsulated in XMPP stanzas
    * and sent through the server.
    *
-   * @li To be able to send files using the former method (SOCKS5 bytestreams), you will need
-   * access to a SOCKS5 bytestream proxy (called StreamHost). You should use Disco to query it
-   * for its host and port and feed that information into SIProfileFT:
+   * @li To be able to send files using the former method (SOCKS5 bytestreams), you may need
+   * access to a SOCKS5 bytestream proxy (called StreamHost). This is especially true if either
+   * or both of sender and receiver are behind NATs or are otherwise blocked from establishing
+   * direct TCP connections. You should use Disco to query a potential SOCKS5 proxy
+   * for its host and port parameters and feed that information into SIProfileFT:
    * @code
    * ft->addStreamHost( JID( "proxy.server.dom" ), "101.102.103.104", 6677 );
    * @endcode
    * You should @b not hard-code this information (esp. host/IP and port) into your app since
    * the proxy may go down occasionally or vanish completely.
+   *
+   * @li In addition to (or even instead of) using external SOCKS5 proxies, you can use a
+   * SOCKS5BytestreamServer object that gloox provides:
+   * @code
+   * SOCKS5BytestreamServer* server = new SOCKS5BytestreamServer( client->logInstance(), 1234 );
+   * if( server->listen() != ConnNoError )
+   *   printf( "port in use\n" );
+   *
+   * ft->addStreamHost( client->jid(), my_ip, 1234 );
+   * ft->registerSOCKS5BytestreamServer( server );
+   * @endcode
+   * This listening server should then be integrated into your mainloop to have its
+   * @link gloox::SOCKS5BytestreamServer::recv() recv() @endlink method called from time to time.
+   * It is safe to put the server into its own thread.
    *
    * @li When you finally receive a Bytestream via the SIProfileFTHandler, you will need
    * to integrate this bytestream with your mainloop, or put it into a separate thread (if
@@ -105,20 +121,6 @@ namespace gloox
    * override the above default connection(s).
    *
    * @li Do @b not delete Bytestream objects manually. Use dispose() instead.
-   *
-   * @li Additionally to using external SOCKS5 proxies, you can use a SOCKS5BytestreamServer object
-   * that gloox provides:
-   * @code
-   * SOCKS5BytestreamServer* server = new SOCKS5BytestreamServer( client->logInstance(), 1234 );
-   * if( server->listen() != ConnNoError )
-   *   printf( "port in use\n" );
-   *
-   * ft->addStreamHost( client->jid(), my_ip, 1234 );
-   * ft->registerSOCKS5BytestreamServer( server );
-   * @endcode
-   * This listening server should then be integrated into your mainloop to have its
-   * @link gloox::SOCKS5BytestreamServer::recv() recv() @endlink method called from time to time.
-   * It is safe to put the server into its own thread.
    *
    * @li When using the Client's JID as the first argument to addStreamHost() as in the code snippet
    * above, make sure the JID is actually a full JID. If you let the server pick a resource, the call
