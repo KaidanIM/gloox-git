@@ -263,7 +263,7 @@
  *
  * @subsubsection func_Disco_type 1.2.14 Disco::type()
  *
- * This function has been removed. Use @link gloox::Disco::type() Disco::type() @endlink
+ * This function has been removed. Use @link gloox::Disco::identities() Disco::identities() @endlink
  * instead.
  *
  * @subsubsection func_PrivateXMLHandler_handlePrivateXML 1.2.15 PrivateXMLHandler::handlePrivateXML( const std::string&, Tag* )
