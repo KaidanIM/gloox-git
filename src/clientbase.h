@@ -405,13 +405,23 @@ namespace gloox
       GLOOX_DEPRECATED void registerIqHandler( IqHandler* ih, const std::string& xmlns );
 
       /**
+       * Registers @c ih as object that receives notifications for IQ stanzas
+       * that contain StanzaExtensions of the given type. The number of handlers
+       * per extension type is not limited.
+       * @param ih The object to receive IQ stanza notifications.
+       * @param exttype The extension type. See
+       * @link gloox::StanzaExtensionType StanzaExtensionType @endlink.
+       */
+      void registerIqHandler( IqHandler* ih, int exttype );
+
+      /**
        * Use this function to be notified of incoming IQ stanzas with the given value of the @b id
        * attribute.
        * Since IDs are supposed to be unique, this notification works only once.
        * @param ih The IqHandler to receive notifications.
        * @param id The id to track.
        * @param context A value that allows for restoring context.
-       * @deprecated Use send( const IQ&, IqHandler*, int ) instead.
+       * @deprecated Will be removed for 1.1. Use send( const IQ&, IqHandler*, int ) instead.
        */
       GLOOX_DEPRECATED void trackID( IqHandler* ih, const std::string& id, int context );
 
@@ -504,9 +514,20 @@ namespace gloox
        * Removes the given IQ handler for the given namespace.
        * @param ih The IqHandler.
        * @param xmlns The namespace to remove from the list.
+       * @deprecated Will be removed for 1.1. Use removeIqHandler( IqHandler*, int )
+       * instead.
        * @since 1.0
        */
-      void removeIqHandler( IqHandler* ih, const std::string& xmlns );
+      GLOOX_DEPRECATED void removeIqHandler( IqHandler* ih, const std::string& xmlns );
+
+      /**
+       * Removes the given IQ handler for the given extension type.
+       * @param ih The IqHandler.
+       * @param exttype The extension type. See
+       * @link gloox::StanzaExtensionType StanzaExtensionType @endlink.
+       * @since 1.0
+       */
+      void removeIqHandler( IqHandler* ih, int exttype );
 
       /**
        * Removes the given object from the list of presence handlers.
@@ -797,6 +818,7 @@ namespace gloox
 
       typedef std::list<ConnectionListener*>               ConnectionListenerList;
       typedef std::multimap<const std::string, IqHandler*> IqHandlerMapXmlns;
+      typedef std::multimap<const int, IqHandler*>         IqHandlerMap;
       typedef std::map<const std::string, TrackStruct>     IqTrackMap;
       typedef std::map<const std::string, MessageHandler*> MessageHandlerMap;
       typedef std::list<MessageSession*>                   MessageSessionList;
@@ -807,7 +829,8 @@ namespace gloox
       typedef std::list<TagHandlerStruct>                  TagHandlerList;
 
       ConnectionListenerList   m_connectionListeners;
-      IqHandlerMapXmlns             m_iqNSHandlers;
+      IqHandlerMapXmlns        m_iqNSHandlers;
+      IqHandlerMap             m_iqExtHandlers;
       IqTrackMap               m_iqIDHandlers;
       MessageSessionList       m_messageSessions;
       MessageHandlerList       m_messageHandlers;
