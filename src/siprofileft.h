@@ -125,7 +125,8 @@ namespace gloox
    * @li When using the Client's JID as the first argument to addStreamHost() as in the code snippet
    * above, make sure the JID is actually a full JID. If you let the server pick a resource, the call
    * to Client::jid() needs to be made @b after the connection has been established and authenticated,
-   * because only then Client knows its full JID.
+   * because only then Client knows its full JID. This is generally a good idea, since the server
+   * may choose to change the resource, even if you provided one at login.
    *
    * @li The interal SOCKS5BytestreamServer will obviously not work across NATs.
    *
