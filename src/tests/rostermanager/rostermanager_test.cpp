@@ -26,8 +26,10 @@ namespace gloox
       virtual void send( const Subscription& ) = 0;
       virtual void send( const IQ&, IqHandler*, int ) = 0;
       virtual void trackID( IqHandler *ih, const std::string& id, int context ) = 0;
-      void removeIqHandler( IqHandler* ih, const std::string& xmlns );
-      void registerIqHandler( IqHandler* ih, const std::string& xmlns );
+      void removeIqHandler( IqHandler* ih, const std::string& xmlns ); // FIXME remove as soon as PrivateXML is ported to SE
+      void registerIqHandler( IqHandler* ih, const std::string& xmlns ); // FIXME remove as soon as PrivateXML is ported to SE
+      void removeIqHandler( IqHandler* ih, int exttype );
+      void registerIqHandler( IqHandler* ih, int exttype );
       void registerPresenceHandler( PresenceHandler* /*ph*/ ) {}
       void removePresenceHandler( PresenceHandler* /*ph*/ ) {}
       void registerSubscriptionHandler( SubscriptionHandler* /*ph*/ ) {}
@@ -37,8 +39,10 @@ namespace gloox
     private:
       JID m_jid;
   };
-  void ClientBase::removeIqHandler( IqHandler*, const std::string& ) {}
-  void ClientBase::registerIqHandler( IqHandler*, const std::string& ) {}
+  void ClientBase::removeIqHandler( IqHandler*, const std::string& ) {} // FIXME remove as soon as PrivateXML is ported to SE
+  void ClientBase::registerIqHandler( IqHandler*, const std::string& ) {} // FIXME remove as soon as PrivateXML is ported to SE
+  void ClientBase::removeIqHandler( IqHandler*, int ) {}
+  void ClientBase::registerIqHandler( IqHandler*, int ) {}
   void ClientBase::registerStanzaExtension( StanzaExtension* se ) { delete se; }
   void ClientBase::removeStanzaExtension( int ) {}
   const std::string ClientBase::getID() { return "id"; }
