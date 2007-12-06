@@ -266,7 +266,13 @@ namespace gloox
           }
           else
           {
-            i->setIdentities( m_identities );
+            IdentityList il;
+            IdentityList::const_iterator it = m_identities.begin();
+            for( ; it != m_identities.end(); ++it )
+            {
+              il.push_back( new Identity( *(*it) ) );
+            }
+            i->setIdentities( il );
             i->setFeatures( m_features );
           }
 

@@ -56,8 +56,7 @@ namespace gloox
        * arrives with a node attribute that matches the one registered for this handler.
        * @param from The sender of the request.
        * @param node The node this handler is supposed to handle.
-       * @return A map of identities for the given node. The first string is the
-       * category specifier, the second string is the type specifier.
+       * @return A list of identities for the given node. The caller will own the identities.
        */
       virtual Disco::IdentityList handleDiscoNodeIdentities( const JID& from,
                                                              const std::string& node ) = 0;
