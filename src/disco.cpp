@@ -200,9 +200,9 @@ namespace gloox
     addFeature( XMLNS_DISCO_ITEMS );
     if( m_parent )
     {
-      m_parent->registerIqHandler( this, XMLNS_DISCO_INFO );
-      m_parent->registerIqHandler( this, XMLNS_DISCO_ITEMS );
-      m_parent->registerIqHandler( this, XMLNS_VERSION );
+      m_parent->registerIqHandler( this, ExtDiscoInfo );
+      m_parent->registerIqHandler( this, ExtDiscoItems );
+      m_parent->registerIqHandler( this, ExtVersion );
       m_parent->registerStanzaExtension( new Disco::Info() );
       m_parent->registerStanzaExtension( new Disco::Items() );
       m_parent->registerStanzaExtension( new SoftwareVersion() );
@@ -215,9 +215,9 @@ namespace gloox
 
     if( m_parent )
     {
-      m_parent->removeIqHandler( this, XMLNS_DISCO_INFO );
-      m_parent->removeIqHandler( this, XMLNS_DISCO_ITEMS );
-      m_parent->removeIqHandler( this, XMLNS_VERSION );
+      m_parent->removeIqHandler( this, ExtDiscoInfo );
+      m_parent->removeIqHandler( this, ExtDiscoItems );
+      m_parent->removeIqHandler( this, ExtVersion );
       m_parent->removeStanzaExtension( ExtDiscoInfo );
       m_parent->removeStanzaExtension( ExtDiscoItems );
       m_parent->removeStanzaExtension( ExtVersion );

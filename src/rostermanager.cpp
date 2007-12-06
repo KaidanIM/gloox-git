@@ -100,7 +100,7 @@ namespace gloox
   {
     if( m_parent )
     {
-      m_parent->registerIqHandler( this, XMLNS_ROSTER );
+      m_parent->registerIqHandler( this, ExtRoster );
       m_parent->registerPresenceHandler( this );
       m_parent->registerSubscriptionHandler( this );
       m_parent->registerStanzaExtension( new Query() );
@@ -114,7 +114,7 @@ namespace gloox
   {
     if( m_parent )
     {
-      m_parent->removeIqHandler( this, XMLNS_ROSTER );
+      m_parent->removeIqHandler( this, ExtRoster );
       m_parent->removePresenceHandler( this );
       m_parent->removeSubscriptionHandler( this );
       m_parent->removeStanzaExtension( ExtRoster );

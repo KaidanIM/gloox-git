@@ -172,10 +172,10 @@ namespace gloox
     if( !m_parent || !m_parent->disco() )
       return;
 
-    m_parent->registerIqHandler( this, XMLNS_ADHOC_COMMANDS );
     m_parent->disco()->addFeature( XMLNS_ADHOC_COMMANDS );
     m_parent->disco()->registerNodeHandler( this, XMLNS_ADHOC_COMMANDS );
     m_parent->disco()->registerNodeHandler( this, EmptyString );
+    m_parent->registerIqHandler( this, ExtAdhocCommand );
     m_parent->registerStanzaExtension( new Adhoc::Command() );
   }
 
@@ -187,7 +187,7 @@ namespace gloox
     m_parent->disco()->removeFeature( XMLNS_ADHOC_COMMANDS );
     m_parent->disco()->removeNodeHandler( this, XMLNS_ADHOC_COMMANDS );
     m_parent->disco()->removeNodeHandler( this, EmptyString );
-    m_parent->removeIqHandler( this, XMLNS_ADHOC_COMMANDS );
+    m_parent->removeIqHandler( this, ExtAdhocCommand );
     m_parent->removeStanzaExtension( ExtAdhocCommand );
   }
 
