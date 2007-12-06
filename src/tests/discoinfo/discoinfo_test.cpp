@@ -20,7 +20,9 @@ int main( int /*argc*/, char** /*argv*/ )
     name = "empty disco#info request";
     Disco::Info di;
     t = di.tag();
-    if( t->xml() != "<query xmlns='" + XMLNS_DISCO_INFO + "'/>"
+    if( t->xml() != "<query xmlns='" + XMLNS_DISCO_INFO + "'>"
+                    "<feature var='" + XMLNS_DISCO_INFO + "'/>"
+                    "</query>"
         || !di.node().empty() )
     {
       ++fail;
@@ -35,7 +37,9 @@ int main( int /*argc*/, char** /*argv*/ )
     name = "empty disco#info request + node";
     Disco::Info di( "somenode" );
     t = di.tag();
-    if( t->xml() != "<query xmlns='" + XMLNS_DISCO_INFO + "' node='somenode'/>"
+    if( t->xml() != "<query xmlns='" + XMLNS_DISCO_INFO + "' node='somenode'>"
+                    "<feature var='" + XMLNS_DISCO_INFO + "'/>"
+                    "</query>"
         || di.node() != "somenode" )
     {
       ++fail;
