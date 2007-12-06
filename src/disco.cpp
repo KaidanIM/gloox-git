@@ -13,6 +13,7 @@
 
 #include "disco.h"
 #include "discohandler.h"
+#include "error.h"
 #include "clientbase.h"
 #include "disconodehandler.h"
 #include "softwareversion.h"
@@ -53,6 +54,7 @@ namespace gloox
   Disco::Info::Info( const std::string& node )
     : StanzaExtension( ExtDiscoInfo ), m_node( node )
   {
+    m_features.push_back( XMLNS_DISCO_INFO );
   }
 
   Disco::Info::Info( const Tag* tag )
@@ -250,7 +252,15 @@ namespace gloox
             IdentityList identities;
             StringList features;
             DiscoNodeHandlerMap::const_iterator it = m_nodeHandlers.find( info->node() );
-            if( it != m_nodeHandlers.end() )
+            if( it == m_nodeHandlers.end() )
+            {
+              delete i;
+              IQ re( IQ::Error, iq->from(), iq->id() );
+              re.addExtension( new Error( StanzaErrorTypeCancel, StanzaErrorItemNotFound ) );
+              m_parent->send( re );
+              return true;
+            }
+            else
             {
               DiscoNodeHandlerList::const_iterator in = (*it).second.begin();
               for( ; in != (*it).second.end(); ++in )
@@ -285,19 +295,29 @@ namespace gloox
         if( items )
         {
           Items *i = new Items( items->node() );
-          ItemList itemlist;
-          DiscoNodeHandlerMap::const_iterator it = m_nodeHandlers.find( items->node() );
-          if( it != m_nodeHandlers.end() )
+          if( !items->node().empty() )
           {
-            DiscoNodeHandlerList::const_iterator in = (*it).second.begin();
-            for( ; in != (*it).second.end(); ++in )
+            DiscoNodeHandlerMap::const_iterator it = m_nodeHandlers.find( items->node() );
+            if( it == m_nodeHandlers.end() )
             {
-              ItemList il = (*in)->handleDiscoNodeItems( iq->from(), items->node() );
-              itemlist.merge( il );
+              delete i;
+              IQ re( IQ::Error, iq->from(), iq->id() );
+              re.addExtension( new Error( StanzaErrorTypeCancel, StanzaErrorItemNotFound ) );
+              m_parent->send( re );
+              return true;
+            }
+            else
+            {
+              ItemList itemlist;
+              DiscoNodeHandlerList::const_iterator in = (*it).second.begin();
+              for( ; in != (*it).second.end(); ++in )
+              {
+                ItemList il = (*in)->handleDiscoNodeItems( iq->from(), items->node() );
+                itemlist.merge( il );
+              }
+              i->setItems( itemlist );
             }
           }
-
-          i->setItems( itemlist );
 
           re.addExtension( i );
           m_parent->send( re );

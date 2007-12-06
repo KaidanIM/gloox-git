@@ -136,7 +136,8 @@ namespace gloox
            * This function can be used to set the entity's features.
            * @param features A list of supported features/namespaces.
            */
-          void setFeatures( const StringList& features ) { m_features = features; }
+          void setFeatures( const StringList& features )
+            { StringList fl( features ); m_features.merge( fl ); } // FIXME is this really necessary?
 
           /**
            * This function can be used to set the entity's identities.
