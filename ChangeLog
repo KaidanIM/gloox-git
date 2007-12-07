@@ -1,4 +1,4 @@
-v0.9.8 -- xx yyy 2007
+v0.9.8 -- 07 Dec 2007
 ---------------------
 - Client: clear list of presence exts in removePresenceExtensions()
 - SIManager: fixed ID tracking
@@ -15,7 +15,7 @@ v0.9.7 -- 13 Nov 2007
 
 
 v0.9.6.1 -- 25 Oct 2007
----------------------
+-----------------------
 - win32 build fix
 
 

@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.50)
-AC_INIT([gloox], [0.9.7], [js@camaya.net])
+AC_INIT([gloox], [0.9.8], [js@camaya.net])
 AC_CONFIG_SRCDIR([configure.ac])
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 
@@ -69,6 +69,13 @@ AC_MSG_RESULT($libidn)
 
 ssl=no
 
+case "$host_os" in
+  *mingw*)
+      LIBS="${LIBS} -lwsock32 -lgdi32 -ldnsapi";;
+  *)
+      ;;
+esac
+
 dnl schannel
 AC_ARG_WITH(schannel, AC_HELP_STRING([--with-schannel],
       [Support Stream Encryption (win32 only)]),
@@ -77,7 +84,7 @@ if test "$schannel" == "yes"; then
   ssl=yes
   case "$host_os" in
     *mingw*)
-        LIBS="${LIBS} -lwsock32 -lgdi32 -lcrypt32 -lsecur32 -ldnsapi";;
+        LIBS="${LIBS} -lcrypt32 -lsecur32";;
     *)
         echo "*"
         echo "* You provided the '--with-schannel' switch. SChannel is only available in MinGW. Aborting."
