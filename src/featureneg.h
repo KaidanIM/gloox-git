@@ -37,7 +37,7 @@ namespace gloox
     public:
       /**
        * Creates a new wrapper object using the given DataForm.
-       * @param form The DataForm to embed.
+       * @param form The DataForm to embed. The FeatureNeg object will own the DataForm.
        */
       FeatureNeg( DataForm* form );
 
