@@ -36,6 +36,7 @@ namespace gloox
    */
   class GLOOX_API InBandBytestream : public Bytestream, public IqHandler
   {
+
     friend class SIProfileFT;
 
     public:
@@ -57,36 +58,132 @@ namespace gloox
        */
       void setBlockSize( int blockSize ) { m_blockSize = blockSize; }
 
-      // re-implemented from Bytestream
+      // reimplemented from Bytestream
       virtual ConnectionError recv( int timeout = -1 ) { (void)timeout; return ConnNoError; }
 
-      // re-implemented from Bytestream
+      // reimplemented from Bytestream
       bool send( const std::string& data );
 
-      // re-implemented from Bytestream
+      // reimplemented from Bytestream
       virtual bool connect();
 
-      // re-implemented from Bytestream
+      // reimplemented from Bytestream
       virtual void close();
 
-      // re-implemented from IqHandler
+      // reimplemented from IqHandler
       virtual bool handleIq( const IQ& iq );
 
-      // re-implemented from IqHandler
+      // reimplemented from IqHandler
       virtual void handleIqID( const IQ& iq, int context );
 
-      // re-implemented from IqHandler
+      // reimplemented from IqHandler
       virtual bool handleIq( IQ* iq ) { (void)iq; return false; } // FIXME remove for 1.1
 
-      // re-implemented from IqHandler
+      // reimplemented from IqHandler
       virtual void handleIqID( IQ* iq, int context ) { (void)iq; (void)context; } // FIXME remove for 1.1
 
     private:
-      enum TrackEnum
+#ifdef INBANDBYTESTREAM_TEST
+    public:
+#endif
+      enum IBBType
       {
         IBBOpen,
         IBBData,
-        IBBClose
+        IBBClose,
+        IBBInvalid
+      };
+
+      /**
+       * @brief An abstraction of IBB elements, implemented as as StanzaExtension.
+       *
+       * @author Jakob Schroeter <js@camaya.net>
+       * @since 1.0
+       */
+      class IBB : public StanzaExtension
+      {
+        public:
+          /**
+           * Constructs a new IBB object that opens an IBB, using the given SID and block size.
+           * @param sid The SID of the IBB to open.
+           * @param blocksize The streams block size.
+           */
+          IBB( const std::string& sid, int blocksize );
+
+          /**
+           * Constructs a new IBB object that can be used to send a single block of data,
+           * using the given SID and sequence number.
+           * @param sid The SID of the IBB.
+           * @param seq The block's sequence number.
+           * @param data The block data, not base64 encoded.
+           */
+          IBB( const std::string& sid, int seq, const std::string& data );
+
+          /**
+           * Constructs a new IBB object that closes an IBB, using the given SID.
+           * @param sid The SID of the IBB to close.
+           */
+          IBB( const std::string& sid );
+
+          /**
+           * Constructs a new IBB object from the given Tag.
+           * @param tag The Tag to parse.
+           */
+          IBB( const Tag* tag = 0 );
+
+          /**
+           * Virtual destructor.
+           */
+          virtual ~IBB();
+
+          /**
+           * Returns the IBB's type.
+           * @return The IBB's type.
+           */
+          IBBType type() const { return m_type; }
+
+          /**
+           * Returns the IBB's block size. Only meaningful if the IBB is of type() IBBOpen.
+           * @return The IBB's block size.
+           */
+          int blocksize() const { return m_blockSize; }
+
+          /**
+           * Returns the current block's sequence number.
+           * @return The current block's sequence number.
+           */
+          int seq() const { return m_seq; }
+
+          /**
+           * Returns the current block's SID.
+           * @return The current block's SID.
+           */
+          const std::string sid() const { return m_sid; }
+
+          /**
+           * Returns the current block's data (not base64 encoded).
+           * @return The current block's data.
+           */
+          const std::string& data() const { return m_data; }
+
+          // reimplemented from StanzaExtension
+          virtual const std::string& filterString() const;
+
+          // reimplemented from StanzaExtension
+          virtual StanzaExtension* newInstance( const Tag* tag ) const
+          {
+            return new IBB( tag );
+          }
+
+          // reimplemented from StanzaExtension
+          virtual Tag* tag() const;
+
+        private:
+          std::string m_sid;
+          int m_seq;
+          int m_blockSize;
+          std::string m_data;
+          IBBType m_type;
       };
 
       InBandBytestream( ClientBase* clientbase, LogSink& logInstance, const JID& initiator,
