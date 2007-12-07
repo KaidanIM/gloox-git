@@ -562,18 +562,18 @@ namespace gloox
   void MUCRoom::setNonAnonymous()
   {
     m_flags |= FlagNonAnonymous;
-    m_flags ^= FlagSemiAnonymous | FlagFullyAnonymous;
+    m_flags &= ~( FlagSemiAnonymous | FlagFullyAnonymous );
   }
 
   void MUCRoom::setSemiAnonymous()
   {
-    m_flags ^= FlagNonAnonymous | FlagFullyAnonymous;
+    m_flags &= ~( FlagNonAnonymous | FlagFullyAnonymous );
     m_flags |= FlagSemiAnonymous;
   }
 
   void MUCRoom::setFullyAnonymous()
   {
-    m_flags ^= FlagNonAnonymous | FlagSemiAnonymous;
+    m_flags &= ~( FlagNonAnonymous | FlagSemiAnonymous );
     m_flags |= FlagFullyAnonymous;
   }
 
@@ -608,7 +608,7 @@ namespace gloox
             else if( code == "170" )
               m_flags |= FlagPublicLogging;
             else if( code == "171" )
-              m_flags ^= FlagPublicLogging;
+              m_flags &= ~FlagPublicLogging;
             else if( code == "172" )
             {
               setNonAnonymous();

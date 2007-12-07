@@ -72,7 +72,7 @@ namespace gloox
       case MessageEventOffline:
       case MessageEventDelivered:
       case MessageEventDisplayed:
-        m_requestedEvents ^= event;
+        m_requestedEvents &= ~event;
         break;
       case MessageEventComposing:
         if( m_lastSent == MessageEventComposing )
