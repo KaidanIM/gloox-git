@@ -58,7 +58,7 @@ namespace gloox
       // reimplemented from TLSBase
       virtual bool init();
 
-      // re-implemented from TLSBase
+      // reimplemented from TLSBase
       virtual void cleanup();
 
     private:

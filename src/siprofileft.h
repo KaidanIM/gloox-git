@@ -281,29 +281,29 @@ namespace gloox
       void removeSOCKS5BytestreamServer()
         { if( m_socks5Manager ) m_socks5Manager->removeSOCKS5BytestreamServer(); }
 
-      // re-implemented from SIProfileHandler
+      // reimplemented from SIProfileHandler
       virtual void handleSIRequest( const JID& from, const std::string& id,
                                     const std::string& profile,
                                     const Tag* si, const Tag* ptag, const Tag* fneg );
 
-      // re-implemented from SIHandler
+      // reimplemented from SIHandler
       virtual void handleSIRequestResult( const JID& from, const std::string& sid,
                                           const Tag* si, const Tag* ptag,
                                           const Tag* fneg );
 
-      // re-implemented from SIHandler
+      // reimplemented from SIHandler
       virtual void handleSIRequestError( const IQ& iq, const std::string& sid );
 
-      // re-implemented from BytestreamHandler
+      // reimplemented from BytestreamHandler
       virtual void handleIncomingBytestreamRequest( const std::string& sid, const JID& from );
 
-      // re-implemented from BytestreamHandler
+      // reimplemented from BytestreamHandler
       virtual void handleIncomingBytestream( Bytestream* bs );
 
-      // re-implemented from BytestreamHandler
+      // reimplemented from BytestreamHandler
       virtual void handleOutgoingBytestream( Bytestream* bs );
 
-      // re-implemented from BytestreamHandler
+      // reimplemented from BytestreamHandler
       virtual void handleBytestreamError( const IQ& iq, const std::string& sid );
 
       // reimplemented from IqHandler.

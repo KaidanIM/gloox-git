@@ -106,13 +106,13 @@ namespace gloox
        */
       void setStreamHosts( const StreamHostList& hosts ) { m_hosts = hosts; }
 
-      // re-implemented from ConnectionDataHandler
+      // reimplemented from ConnectionDataHandler
       virtual void handleReceivedData( const ConnectionBase* connection, const std::string& data );
 
-      // re-implemented from ConnectionDataHandler
+      // reimplemented from ConnectionDataHandler
       virtual void handleConnect( const ConnectionBase* connection );
 
-      // re-implemented from ConnectionDataHandler
+      // reimplemented from ConnectionDataHandler
       virtual void handleDisconnect( const ConnectionBase* connection, ConnectionError reason );
 
     private:

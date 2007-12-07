@@ -61,28 +61,28 @@ namespace gloox
       // reimplemented from TLSBase
       virtual bool init();
 
-      // re-implemented from TLSBase
+      // reimplemented from TLSBase
       virtual bool encrypt( const std::string& data );
 
-      // re-implemented from TLSBase
+      // reimplemented from TLSBase
       virtual int decrypt( const std::string& data );
 
-      // re-implemented from TLSBase
+      // reimplemented from TLSBase
       virtual void cleanup();
 
-      // re-implemented from TLSBase
+      // reimplemented from TLSBase
       virtual bool handshake();
 
-      // re-implemented from TLSBase
+      // reimplemented from TLSBase
       virtual bool isSecure() const;
 
-      // re-implemented from TLSBase
+      // reimplemented from TLSBase
       virtual void setCACerts( const StringList& cacerts );
 
-      // re-implemented from TLSBase
+      // reimplemented from TLSBase
       virtual const CertInfo& fetchTLSInfo() const;
 
-      // re-implemented from TLSBase
+      // reimplemented from TLSBase
       virtual void setClientCert( const std::string& clientKey, const std::string& clientCerts );
 
       /**

@@ -288,16 +288,16 @@ namespace gloox
        */
       void disconnect();
 
-      // re-implemented from IqHandler
+      // reimplemented from IqHandler
       virtual bool handleIq( const IQ& iq ) { (void)iq; return false; }
 
-      // re-implemented from IqHandler
+      // reimplemented from IqHandler
       virtual void handleIqID( const IQ& iq, int context );
 
-      // re-implemented from IqHandler
+      // reimplemented from IqHandler
       virtual bool handleIq( IQ* iq ) { (void)iq; return false; } // FIXME remove for 1.1
 
-      // re-implemented from IqHandler
+      // reimplemented from IqHandler
       virtual void handleIqID( IQ* iq, int context ) { (void)iq; (void)context; } // FIXME remove for 1.1
 
     protected:
