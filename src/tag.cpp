@@ -820,13 +820,13 @@ namespace gloox
     }
   }
 
-  const std::string Tag::findCData( const std::string& expression )
+  const std::string Tag::findCData( const std::string& expression ) const
   {
     const ConstTagList& l = findTagList( expression );
     return !l.empty() ? l.front()->cdata() : EmptyString;
   }
 
-  const Tag* Tag::findTag( const std::string& expression )
+  const Tag* Tag::findTag( const std::string& expression ) const
   {
     const ConstTagList& l = findTagList( expression );
     return !l.empty() ? l.front() : 0;
