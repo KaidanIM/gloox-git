@@ -20,13 +20,83 @@
 namespace gloox
 {
 
+  // ---- InBandBytestream::IBB ----
+  static const char* typeValues[] =
+  {
+    "open", "data", "close"
+  };
+
+  InBandBytestream::IBB::IBB( const std::string& sid, int blocksize )
+    : StanzaExtension( ExtIBB ), m_sid ( sid ), m_seq( 0 ), m_blockSize( blocksize ),
+      m_type( IBBOpen )
+  {
+  }
+
+  InBandBytestream::IBB::IBB( const std::string& sid, int seq, const std::string& data )
+    : StanzaExtension( ExtIBB ), m_sid ( sid ), m_seq( seq ), m_blockSize( 0 ),
+      m_data( data ), m_type( IBBData )
+  {
+  }
+
+  InBandBytestream::IBB::IBB( const std::string& sid )
+    : StanzaExtension( ExtIBB ), m_sid ( sid ), m_seq( 0 ), m_blockSize( 0 ),
+      m_type( IBBClose )
+  {
+  }
+
+  InBandBytestream::IBB::IBB( const Tag* tag )
+    : StanzaExtension( ExtIBB ), m_type( IBBInvalid )
+  {
+    if( !tag || tag->xmlns() != XMLNS_IBB )
+      return;
+
+    m_type = (IBBType)util::lookup( tag->name(), typeValues );
+    m_blockSize = atoi( tag->findAttribute( "block-size" ).c_str() );
+    m_seq = atoi( tag->findAttribute( "seq" ).c_str() );
+    m_sid = tag->findAttribute( "sid" );
+    m_data = Base64::decode64( tag->cdata() );
+  }
+
+  InBandBytestream::IBB::~IBB()
+  {
+  }
+
+  const std::string& InBandBytestream::IBB::filterString() const
+  {
+    static const std::string filter = "/iq/open[@xmlns='" + XMLNS_IBB + "']"
+                                      "|/iq/data[@xmlns='" + XMLNS_IBB + "']"
+                                      "|/iq/close[@xmlns='" + XMLNS_IBB + "']";
+    return filter;
+  }
+
+  Tag* InBandBytestream::IBB::tag() const
+  {
+    if( m_type == IBBInvalid )
+      return 0;
+
+    Tag* t = new Tag( util::lookup( m_type, typeValues ) );
+    t->setXmlns( XMLNS_IBB );
+    t->addAttribute( "sid", m_sid );
+    if( m_type == IBBData )
+    {
+      t->setCData( Base64::encode64( m_data ) );
+      t->addAttribute( "seq", m_seq );
+    }
+    else if( m_type == IBBOpen )
+      t->addAttribute( "block-size", m_blockSize );
+
+    return t;
+  }
+  // ---- ~InBandBytestream::IBB ----
+
+  // ---- InBandBytestream ----
   InBandBytestream::InBandBytestream( ClientBase* clientbase, LogSink& logInstance, const JID& initiator,
                                       const JID& target, const std::string& sid )
     : Bytestream( Bytestream::IBB, logInstance, initiator, target, sid ),
       m_clientbase( clientbase ), m_blockSize( 4096 ), m_sequence( -1 ), m_lastChunkReceived( -1 )
   {
     if( m_clientbase )
-      m_clientbase->registerIqHandler( this, XMLNS_IBB );
+      m_clientbase->registerIqHandler( this, ExtIBB );
 
     m_open = false;
   }
@@ -38,7 +108,7 @@ namespace gloox
 
     if( m_clientbase )
     {
-      m_clientbase->removeIqHandler( this, XMLNS_IBB );
+      m_clientbase->removeIqHandler( this, ExtIBB );
       m_clientbase->removeIDHandler( this );
     }
   }
@@ -52,10 +122,8 @@ namespace gloox
       return true;
 
     const std::string& id = m_clientbase->getID();
-    IQ iq( IQ::Set, m_target, id, XMLNS_IBB, "open" );
-    iq.query()->addAttribute( "sid", m_sid );
-    iq.query()->addAttribute( "block-size", m_blockSize );
-
+    IQ iq( IQ::Set, m_target, id );
+    iq.addExtension( new IBB( m_sid, m_blockSize ) );
     m_clientbase->send( iq, this, IBBOpen );
     return true;
   }
@@ -81,13 +149,13 @@ namespace gloox
 
   bool InBandBytestream::handleIq( const IQ& iq ) // data or open request, always 'set'
   {
-    Tag* q = iq.query();
-    if( !q || !q->hasAttribute( "sid", m_sid ) || !m_handler || iq.subtype() != IQ::Set )
+    const IBB* i = iq.findExtension<IBB>( ExtIBB );
+    if( !i || !m_handler || iq.subtype() != IQ::Set )
       return false;
 
     if( !m_open )
     {
-      if( q->name() == "open" )
+      if( i->type() == IBBOpen )
       {
         returnResult( iq.from(), iq.id() );
         m_open = true;
@@ -97,29 +165,27 @@ namespace gloox
       return false;
     }
 
-    if( q->name() == "close" )
+    if( i->type() == IBBClose )
     {
       returnResult( iq.from(), iq.id() );
       closed();
       return true;
     }
 
-    const std::string& seq = q->findAttribute( "seq" );
-    if( seq.empty() || ++m_lastChunkReceived != atoi( seq.c_str() ) )
+    if( ++m_lastChunkReceived != i->seq() )
     {
       m_open = false;
       return false;
     }
 
-    const std::string& data = q->cdata();
-    if( data.empty() )
+    if( i->data().empty() )
     {
       m_open = false;
       return false;
     }
 
     returnResult( iq.from(), iq.id() );
-    m_handler->handleBytestreamData( this, Base64::decode64( data ) );
+    m_handler->handleBytestreamData( this, i->data() );
     return true;
   }
 
@@ -139,11 +205,8 @@ namespace gloox
     do
     {
       const std::string& id = m_clientbase->getID();
-      IQ iq( IQ::Set, m_target, id, XMLNS_IBB, "data" );
-      iq.query()->setCData( Base64::encode64( data.substr( pos, m_blockSize ) ) );
-      iq.query()->addAttribute( "sid", m_sid );
-      iq.query()->addAttribute( "seq", ++m_sequence );
-
+      IQ iq( IQ::Set, m_target, id );
+      iq.addExtension( new IBB( m_sid, ++m_sequence, data.substr( pos, m_blockSize ) ) );
       m_clientbase->send( iq, this, IBBData );
 
       pos += m_blockSize;
@@ -174,9 +237,8 @@ namespace gloox
       return;
 
     const std::string& id = m_clientbase->getID();
-    IQ iq( IQ::Set, m_target, id, XMLNS_IBB, "close" );
-    iq.query()->addAttribute( "sid", m_sid );
-
+    IQ iq( IQ::Set, m_target, id );
+    iq.addExtension( new IBB( m_sid ) );
     m_clientbase->send( iq, this, IBBClose );
 
     if( m_handler )

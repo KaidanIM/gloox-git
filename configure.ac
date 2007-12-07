@@ -321,6 +321,8 @@ src/tests/error/Makefile
 src/tests/featureneg/Makefile
 src/tests/gpgencrypted/Makefile
 src/tests/gpgsigned/Makefile
+src/tests/inbandbytestreamibb/Makefile
+src/tests/inbandbytestream/Makefile
 src/tests/iq/Makefile
 src/tests/jid/Makefile
 src/tests/md5/Makefile
