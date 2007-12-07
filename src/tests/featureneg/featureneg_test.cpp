@@ -1,5 +1,6 @@
 #include "../../tag.h"
 #include "../../iq.h"
+#include "../../message.h"
 #include "../../featureneg.h"
 #include "../../dataform.h"
 #include "../../stanzaextensionfactory.h"
@@ -60,7 +61,7 @@ using namespace gloox;
   }
 
   // -------
-  name = "FeatureNeg/SEFactory test";
+  name = "FeatureNeg/SEFactory test (IQ)";
   StanzaExtensionFactory sef;
   sef.registerExtension( new FeatureNeg() );
   Tag* f = new Tag( "iq" );
@@ -75,6 +76,19 @@ using namespace gloox;
   }
   delete f;
 
+  // -------
+  name = "FeatureNeg/SEFactory test (Message)";
+  f = new Tag( "message" );
+  new Tag( f, "feature", "xmlns", XMLNS_FEATURE_NEG );
+  Message msg( Message::Normal, JID() );
+  sef.addExtensions( msg, f );
+  se = msg.findExtension<FeatureNeg>( ExtFeatureNeg );
+  if( se == 0 )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+  delete f;
 
   if( fail == 0 )
   {
