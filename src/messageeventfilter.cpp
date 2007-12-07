@@ -97,15 +97,15 @@ namespace gloox
     {
       case MessageEventOffline:
         new Tag( x, "offline" );
-        m_requestedEvents ^= event;
+        m_requestedEvents &= ~event;
         break;
       case MessageEventDelivered:
         new Tag( x, "delivered" );
-        m_requestedEvents ^= event;
+        m_requestedEvents &= ~event;
         break;
       case MessageEventDisplayed:
         new Tag( x, "displayed" );
-        m_requestedEvents ^= event;
+        m_requestedEvents &= ~event;
         break;
       case MessageEventComposing:
         if( m_lastSent != MessageEventComposing )
