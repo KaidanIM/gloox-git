@@ -76,7 +76,7 @@ int main( int /*argc*/, char** /*argv*/ )
   new Tag( f, "command", "xmlns", XMLNS_ADHOC_COMMANDS );
   IQ iq( IQ::Set, JID(), "" );
   sef.addExtensions( iq, f );
-  const Adhoc::Command* se = static_cast<const Adhoc::Command*>( iq.findExtension( ExtAdhocCommand ) );
+  const Adhoc::Command* se = iq.findExtension<Adhoc::Command>( ExtAdhocCommand );
   if( se == 0 )
   {
     ++fail;

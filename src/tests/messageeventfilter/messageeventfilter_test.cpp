@@ -20,7 +20,7 @@ namespace gloox
       const JID& target() const { return m_jid; }
       void send( Message& msg )
       {
-        const MessageEvent* me = static_cast<const MessageEvent*>( msg.findExtension( ExtMessageEvent ) );
+        const MessageEvent* me = msg.findExtension<MessageEvent>( ExtMessageEvent );
         if( !me )
           return;
 
@@ -100,9 +100,8 @@ int main( int /*argc*/, char** /*argv*/ )
     f = new gloox::MessageEventFilter( new gloox::MessageSession() );
     gloox::Message m( gloox::Message::Chat, gloox::JID() );
     f->decorate( m );
-    const gloox::MessageEvent* me =
-        static_cast<const gloox::MessageEvent*>( m.findExtension( gloox::ExtMessageEvent ) );
-    if( me->event() != ( gloox::MessageEventOffline | gloox::MessageEventDelivered
+    const gloox::MessageEvent* me = m.findExtension<gloox::MessageEvent>( gloox::ExtMessageEvent );
+    if( me && me->event() != ( gloox::MessageEventOffline | gloox::MessageEventDelivered
                          | gloox::MessageEventDisplayed | gloox::MessageEventComposing ) )
     {
       ++fail;
