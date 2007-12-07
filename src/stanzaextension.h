@@ -65,6 +65,7 @@ namespace gloox
     ExtRoster,                      /**< An extension dealing with the user's roster (RFC-3921). */
     ExtFeatureNeg,                  /**< An extension abstracting a Feature Negotiation element
                                      * (XEP-0020). */
+    ExtIBB,                         /**< An extension opening an IBB (XEP-0047). */
     ExtUser                         /**< User-supplied extensions must use IDs above this. Do
                                      * not hard-code ExtUser's value anywhere, it is subject
                                      * to change. */
@@ -147,7 +148,7 @@ namespace gloox
    *
    * @li Finally, gloox must be able to serialize the StanzaExtension back
    * into string'ified XML. This is done by means of the tag() function which
-   * must be re-implemented. The output Tag should -- like the input Tag -- be embeddable
+   * must be reimplemented. The output Tag should -- like the input Tag -- be embeddable
    * into the respective stanza.
    *
    * @author Jakob Schroeter <js@camaya.net>
