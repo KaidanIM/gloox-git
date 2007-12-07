@@ -65,7 +65,7 @@ namespace gloox
       // reimplemented from TLSBase
       virtual void setClientCert( const std::string& clientKey, const std::string& clientCerts );
 
-      // re-implemented from TLSBase
+      // reimplemented from TLSBase
       virtual void cleanup();
 
     private:
