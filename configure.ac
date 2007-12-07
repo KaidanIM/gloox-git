@@ -318,6 +318,7 @@ src/tests/discoinfo/Makefile
 src/tests/discoitems/Makefile
 src/tests/disco/Makefile
 src/tests/error/Makefile
+src/tests/featureneg/Makefile
 src/tests/gpgencrypted/Makefile
 src/tests/gpgsigned/Makefile
 src/tests/iq/Makefile

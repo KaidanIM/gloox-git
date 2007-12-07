@@ -63,6 +63,8 @@ namespace gloox
     ExtAdhocCommand,                /**< An extension containing a Adhoc Command (XEP-0050). */
     ExtPrivateXML,                  /**< An extension used for Private XML Storage (XEP-0048). */
     ExtRoster,                      /**< An extension dealing with the user's roster (RFC-3921). */
+    ExtFeatureNeg,                  /**< An extension abstracting a Feature Negotiation element
+                                     * (XEP-0020). */
     ExtUser                         /**< User-supplied extensions must use IDs above this. Do
                                      * not hard-code ExtUser's value anywhere, it is subject
                                      * to change. */

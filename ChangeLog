@@ -2,6 +2,7 @@ v1.0 -- xx yyy 200z
 -------------------
 
 general changes and additions:
+- XEP-0020 (Feature Negotiation) wrapper
 - XEP-0060 (Publish-Subscribe)
 - XEP-0071 (XHTML-IM) wrapper
 - XEP-0115 (Entity Capabilities)
@@ -12,6 +13,7 @@ general changes and additions:
 - removed message-based IBB
 - added IQ, Message, Subscription, Presence classes
 - added SASL error malformed-request from RFC 3920bis
+- added StanzaExtension and ported most XEPs
 - ClientBase: removed limit of one IQ handler per xmlns
 - ClientBase: IQ ID handlers will be called first; xmlns handlers will be called only if no ID handler matched
 - DataForm: removed 'Form' prefix from DataForm::DataFormType enum members
@@ -20,13 +22,14 @@ general changes and additions:
 - Parser: feed() returns -1 on success, parse error position otherwise
 - Parser and Tag: support mixed content xml
 - Parser: XML namespace support
-- ConnectionListener: added onResourceBind( resource ) to notify about successfuly bound resources
+- ConnectionListener: added onResourceBind( resource ) to notify about successfully bound resources
 - ConnectionListener: onResourceBindError() takes pointer to Error object
 - ConnectionListener: onSessionCreateError() takes pointer to Error object
 - Client: support for binding and unbinding of additional resources
-- SIProfileFTHandler: handleFTRequest() doesn't pass a id naymore, just a sid
+- SIProfileFTHandler: handleFTRequest() doesn't pass an id anymore, just a sid
 - SIProfileFT: acceptFTRequest() and declineFTRequest() don't take an id argument anymore, just a sid
 - Tag: check input for XML conformance
+- RosterItem: SubscriptionEnum moved to gloox namespace; renamed to SubscriptionType
 
 deprecated:
 - MUCRoomHandler::handleMUCMessage( MUCRoom*, string, string, bool, string, bool ),
