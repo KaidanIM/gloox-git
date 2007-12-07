@@ -81,8 +81,8 @@ namespace gloox
    * of StanzaExtension. For protocols which require keeping of state, an additional
    * persistent object acting like a manager may be needed.
    *
-   * A Stanza can be extended by additional namespaced child elements. It is not
-   * vaiable to include all the kinds of extensions possible. To avoid requiring
+   * A Stanza can be extended by additional namespaced child elements. Obviously,
+   * it is not vaiable to include all the kinds of extensions possible. To avoid
    * hard-coding of such extensions into gloox, StanzaExtension can be used to
    * inform the core of gloox about additional supported extensions without it
    * needing to know about the exact implementation.
@@ -93,7 +93,7 @@ namespace gloox
    * the encapsulation, some getters may be necessary. Note that the object you will be
    * dealing with usually is const.
    * For sending StanzaExtensions, a custom constructor (as well as some setters,
-   * possibly) is needed. Additionally, an implementtaion of tag() is required.
+   * possibly) is needed. Additionally, an implementation of tag() is required.
    *
    * @li Sub-class StanzaExtension and re-implement filterString(). filterString()
    * is supposed to return an XPath expression that matches the child element
