@@ -124,7 +124,7 @@ int main( int /*argc*/, char** /*argv*/ )
     r->addAttribute( "value", "forward" );
     AMP a( q );
     t = a.tag();
-    if( t->xml() != q->xml() )
+    if( *t != *q )
     {
       ++fail;
       printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );

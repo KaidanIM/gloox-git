@@ -146,7 +146,7 @@ int main( int /*argc*/, char** /*argv*/ )
   new Tag( t, "value", "abc" );
   f = new DataFormField( t );
   Tag *ft = f->tag();
-  if( ft->xml() != t->xml() )
+  if( *ft != *t )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );

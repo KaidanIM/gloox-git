@@ -238,7 +238,7 @@ int main( int /*argc*/, char** /*argv*/ )
   c->addAttribute( "abc", "def" );
   c->addAttribute( "xyz", "123" );
   d = c->clone();
-  if( c->xml() != d->xml() )
+  if( *c != *d )
   {
     ++fail;
     printf( "test '%s' failed: %s\n", name.c_str(), d->xml().c_str() );

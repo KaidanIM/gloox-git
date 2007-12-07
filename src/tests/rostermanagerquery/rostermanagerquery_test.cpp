@@ -80,7 +80,7 @@ int main( int /*argc*/, char** /*argv*/ )
     i->addAttribute( "subscription", "both" );
     RosterManager::Query rq( q );
     t = rq.tag();
-    if( t->xml() != q->xml() || rq.roster().size() != 2 )
+    if( *t != *q || rq.roster().size() != 2 )
     {
       ++fail;
       printf( "test '%s' failed\n", name.c_str() );
@@ -102,7 +102,7 @@ int main( int /*argc*/, char** /*argv*/ )
     new Tag( i, "group", "group2" );
     RosterManager::Query rq( q );
     t = rq.tag();
-    if( t->xml() != q->xml() )
+    if( *t != *q )
     {
       ++fail;
       printf( "test '%s' failed\n", name.c_str() );
