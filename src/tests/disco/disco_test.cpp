@@ -57,23 +57,23 @@ class DiscoTest : public ClientBase, public DiscoHandler, public DiscoNodeHandle
     virtual void send( const IQ& iq );
     virtual void send( const IQ& iq, IqHandler*, int );
     virtual void trackID( IqHandler *ih, const std::string& id, int context );
-    virtual StringList handleDiscoNodeFeatures( const JID& from, const std::string& node )
+    virtual StringList handleDiscoNodeFeatures( const JID&, const std::string& )
     {
       StringList sl;
       if( m_test == 6 )
         sl.push_back( "test6-feature" );
       return sl;
     }
-    virtual Disco::IdentityList handleDiscoNodeIdentities( const JID& from,
-        const std::string& node )
+    virtual Disco::IdentityList handleDiscoNodeIdentities( const JID&,
+        const std::string& )
     {
       Disco::IdentityList dil;
       if( m_test == 6 )
         dil.push_back( new Disco::Identity( "6cat", "6type", "6name" ) );
       return dil;
     }
-    virtual Disco::ItemList handleDiscoNodeItems( const JID& from,
-        const std::string& node = EmptyString )
+    virtual Disco::ItemList handleDiscoNodeItems( const JID&,
+        const std::string& = EmptyString )
     {
       Disco::ItemList dil;
       if( m_test == 7 )
@@ -209,7 +209,7 @@ void DiscoTest::send( const IQ& iq, IqHandler*, int ctx )
 
   delete q;
 }
-void DiscoTest::trackID( IqHandler *ih, const std::string& id, int context ) {}
+void DiscoTest::trackID( IqHandler*, const std::string&, int ) {}
 
 int main( int /*argc*/, char** /*argv*/ )
 {
