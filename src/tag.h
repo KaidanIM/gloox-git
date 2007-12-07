@@ -544,7 +544,7 @@ namespace gloox
        * @return A matched Tag's character data, or the empty string.
        * @since 1.0
        */
-      const std::string findCData( const std::string& expression );
+      const std::string findCData( const std::string& expression ) const;
 
       /**
        * Evaluates the given XPath expression and returns the result Tag. If more than one
@@ -556,7 +556,7 @@ namespace gloox
        * @return A matched Tag, or 0.
        * @since 0.9
        */
-      const Tag* findTag( const std::string& expression );
+      const Tag* findTag( const std::string& expression ) const;
 
       /**
        * Evaluates the given XPath expression and returns the matched Tags.
