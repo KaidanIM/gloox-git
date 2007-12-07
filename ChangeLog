@@ -1,7 +1,9 @@
-v0.9.z -- xx yyy 2007
+v0.9.8 -- xx yyy 2007
 ---------------------
 - Client: clear list of presence exts in removePresenceExtensions()
 - SIManager: fixed ID tracking
+- MUCRoom: fixed bit clearing
+- MessageEventFilter: fixed bit clearing
 
 
 v0.9.7 -- 13 Nov 2007
