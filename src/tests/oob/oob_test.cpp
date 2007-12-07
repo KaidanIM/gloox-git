@@ -173,7 +173,7 @@ int main( int /*argc*/, char** /*argv*/ )
   new Tag( b, "desc", "desc" );
   IQ iq( IQ::Set, JID(), "" );
   sef.addExtensions( iq, f );
-  const OOB* se = static_cast<const OOB*>( iq.findExtension( ExtOOB ) );
+  const OOB* se = iq.findExtension<OOB>( ExtOOB );
   if( se == 0 || se->url() != "url" || se->desc() != "desc" )
   {
     ++fail;

@@ -98,7 +98,7 @@ int main( int /*argc*/, char** /*argv*/ )
   new Tag( f, "query", "xmlns", XMLNS_DISCO_INFO );
   IQ iq( IQ::Set, JID(), "" );
   sef.addExtensions( iq, f );
-  const Disco::Info* se = static_cast<const Disco::Info*>( iq.findExtension( ExtDiscoInfo ) );
+  const Disco::Info* se = iq.findExtension<Disco::Info>( ExtDiscoInfo );
   if( se == 0 )
   {
     ++fail;

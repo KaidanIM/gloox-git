@@ -26,7 +26,7 @@ namespace gloox
         if( msg.to() != m_jid )
           return;
 
-        const ChatState* cs = static_cast<const ChatState*>( msg.findExtension( ExtChatState ) );
+        const ChatState* cs = msg.findExtension<ChatState>( ExtChatState );
         if( !cs )
           return;
 
@@ -135,7 +135,7 @@ int main( int /*argc*/, char** /*argv*/ )
     f = new gloox::ChatStateFilter( new gloox::MessageSession() );
     gloox::Message m( gloox::Message::Chat, gloox::JID() );
     f->decorate( m );
-    if( static_cast<const gloox::ChatState*>( m.findExtension( gloox::ExtChatState ) )->state()
+    if( m.findExtension<gloox::ChatState>( gloox::ExtChatState )->state()
            != gloox::ChatStateActive )
     {
       ++fail;

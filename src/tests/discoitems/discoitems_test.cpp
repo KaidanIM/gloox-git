@@ -78,7 +78,7 @@ using namespace gloox;
   new Tag( f, "query", "xmlns", XMLNS_DISCO_ITEMS );
   IQ iq( IQ::Set, JID(), "" );
   sef.addExtensions( iq, f );
-  const Disco::Items* se = static_cast<const Disco::Items*>( iq.findExtension( ExtDiscoItems ) );
+  const Disco::Items* se = iq.findExtension<Disco::Items>( ExtDiscoItems );
   if( se == 0 )
   {
     ++fail;
