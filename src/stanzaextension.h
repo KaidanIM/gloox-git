@@ -65,7 +65,8 @@ namespace gloox
     ExtRoster,                      /**< An extension dealing with the user's roster (RFC-3921). */
     ExtFeatureNeg,                  /**< An extension abstracting a Feature Negotiation element
                                      * (XEP-0020). */
-    ExtIBB,                         /**< An extension opening an IBB (XEP-0047). */
+    ExtIBB,                         /**< An extension dealing with IBBs (XEP-0047). */
+    ExtNonSaslAuth,                 /**< An extension for doing Non-SASL Authentication (XEP-0078). */
     ExtUser                         /**< User-supplied extensions must use IDs above this. Do
                                      * not hard-code ExtUser's value anywhere, it is subject
                                      * to change. */

@@ -21,17 +21,85 @@
 namespace gloox
 {
 
+  // ---- NonSaslAuth::Query ----
+  NonSaslAuth::Query::Query( const std::string& user )
+    : StanzaExtension( ExtNonSaslAuth ), m_user( user ), m_digest( true )
+  {
+  }
+
+  NonSaslAuth::Query::Query( const Tag* tag )
+    : StanzaExtension( ExtNonSaslAuth )
+  {
+    if( !tag || tag->name() != "query" || tag->xmlns() != XMLNS_AUTH )
+      return;
+
+    m_digest = tag->hasChild( "digest" );
+  }
+
+  NonSaslAuth::Query* NonSaslAuth::Query::newInstance( const std::string& user,
+                                                       const std::string& sid,
+                                                       const std::string& pwd,
+                                                       const std::string& resource ) const
+  {
+    Query* q = new Query( user );
+    if( m_digest && !sid.empty() )
+    {
+      SHA sha;
+      sha.feed( sid );
+      sha.feed( pwd );
+      q->m_pwd = sha.hex();
+    }
+    else
+      q->m_pwd = pwd;
+
+    q->m_resource = resource;
+    q->m_digest = m_digest;
+    return q;
+  }
+
+  const std::string& NonSaslAuth::Query::filterString() const
+  {
+    static const std::string filter = "/iq/query[@xmlns='" + XMLNS_AUTH + "']";
+    return filter;
+  }
+
+  Tag* NonSaslAuth::Query::tag() const
+  {
+    if( m_user.empty() )
+      return 0;
+
+    Tag* t = new Tag( "query" );
+    t->setXmlns( XMLNS_AUTH );
+    new Tag( t, "username", m_user );
+
+    if( !m_pwd.empty() && !m_resource.empty() )
+    {
+      new Tag( t, m_digest ? "digest" : "password", m_pwd );
+      new Tag( t, "resource", m_resource );
+    }
+
+    return t;
+  }
+  // ---- ~NonSaslAuth::Query ----
+
+  // ---- NonSaslAuth ----
   NonSaslAuth::NonSaslAuth( Client* parent )
     : m_parent( parent )
   {
     if( m_parent )
-      m_parent->registerIqHandler( this, XMLNS_AUTH );
+    {
+      m_parent->registerStanzaExtension( new Query() );
+      m_parent->registerIqHandler( this, ExtNonSaslAuth );
+    }
   }
 
   NonSaslAuth::~NonSaslAuth()
   {
     if( m_parent )
-      m_parent->removeIqHandler( this, XMLNS_AUTH );
+    {
+      m_parent->removeStanzaExtension( ExtNonSaslAuth );
+      m_parent->removeIqHandler( this, ExtNonSaslAuth );
+    }
   }
 
   void NonSaslAuth::doAuth( const std::string& sid )
@@ -39,10 +107,9 @@ namespace gloox
     m_sid = sid;
     const std::string& id = m_parent->getID();
 
-    IQ iq( IQ::Get, m_parent->jid().server(), id, XMLNS_AUTH );
-    new Tag( iq.query(), "username", m_parent->username() );
-
-    m_parent->send( iq, this, TRACK_REQUEST_AUTH_FIELDS );
+    IQ iq( IQ::Get, m_parent->jid().server(), id );
+    iq.addExtension( new Query( m_parent->username() ) );
+    m_parent->send( iq, this, TrackRequestAuthFields );
   }
 
   void NonSaslAuth::handleIqID( const IQ& iq, int context )
@@ -51,9 +118,6 @@ namespace gloox
     {
       case IQ::Error:
       {
-        m_parent->setAuthed( false );
-        m_parent->disconnect( ConnAuthenticationFailed );
-
         const Error* e = iq.error();
         if( e )
         {
@@ -72,38 +136,29 @@ namespace gloox
               break;
           }
         }
+        m_parent->setAuthed( false );
+        m_parent->disconnect( ConnAuthenticationFailed );
         break;
       }
       case IQ::Result:
         switch( context )
         {
-          case TRACK_REQUEST_AUTH_FIELDS:
+          case TrackRequestAuthFields:
           {
+            const Query* q = iq.findExtension<Query>( ExtNonSaslAuth );
+            if( !q )
+              return;
+
             const std::string& id = m_parent->getID();
 
-            IQ re( IQ::Set, JID(), id, XMLNS_AUTH );
-            Tag* query = re.query();
-            new Tag( query, "username", m_parent->jid().username() );
-            new Tag( query, "resource", m_parent->jid().resource() );
-
-            Tag* q = iq.query();
-            if( q && q->hasChild( "digest" ) && !m_sid.empty() )
-            {
-              SHA sha;
-              sha.feed( m_sid );
-              sha.feed( m_parent->password() );
-              sha.finalize();
-              new Tag( query, "digest", sha.hex() );
-            }
-            else
-            {
-              new Tag( query, "password", m_parent->password() );
-            }
-
-            m_parent->send( re, this, TRACK_SEND_AUTH );
+            IQ re( IQ::Set, JID(), id );
+            re.addExtension( q->newInstance( m_parent->username(), m_sid,
+                                             m_parent->password(),
+                                             m_parent->jid().resource() ) );
+            m_parent->send( re, this, TrackSendAuth );
             break;
           }
-          case TRACK_SEND_AUTH:
+          case TrackSendAuth:
             m_parent->setAuthed( true );
             m_parent->connected();
             break;
