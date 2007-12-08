@@ -87,7 +87,7 @@ namespace gloox
        * @author Jakob Schroeter <js@camaya.net>
        * @since 1.0
        */
-      class Command : public StanzaExtension
+      class GLOOX_API Command : public StanzaExtension
       {
         friend class Adhoc;
 
@@ -126,9 +126,11 @@ namespace gloox
            * @author Jakob Schroeter <js@camaya.net>
            * @since 1.0
            */
-          class Note
+          class GLOOX_API Note
           {
+
             friend class Command;
+
             public:
               /**
                * Specifies the severity of a note.

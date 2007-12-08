@@ -32,7 +32,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 1.0
    */
-  class Capabilities : public StanzaExtension
+  class GLOOX_API Capabilities : public StanzaExtension
   {
 
     public:

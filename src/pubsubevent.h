@@ -31,7 +31,7 @@ namespace gloox
      * @author Vincent Thomasset <vthomasset@gmail.com>
      * @since 1.0
      */
-    class Event : public StanzaExtension
+    class GLOOX_API Event : public StanzaExtension
     {
       public:
 

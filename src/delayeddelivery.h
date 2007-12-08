@@ -35,7 +35,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
-  class DelayedDelivery : public StanzaExtension
+  class GLOOX_API DelayedDelivery : public StanzaExtension
   {
 
     public:

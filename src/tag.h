@@ -56,7 +56,7 @@ namespace gloox
        * @author Jakob Schroeter <js@camaya.net>
        * @since 1.0
        */
-      class Attribute
+      class GLOOX_API Attribute
       {
 
         friend class Tag;

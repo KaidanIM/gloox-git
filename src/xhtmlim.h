@@ -31,7 +31,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 1.0
    */
-  class XHtmlIM : public StanzaExtension
+  class GLOOX_API XHtmlIM : public StanzaExtension
   {
 
     public:
