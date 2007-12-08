@@ -29,8 +29,8 @@ using namespace gloox;
       void registerStanzaExtension( StanzaExtension* ext );
       void removeStanzaExtension( int ext );
       void removeIDHandler( IqHandler* ) {}
-      void setAuthFailure( AuthenticationError ae ) {}
-      void setAuthed( bool a ) {}
+      void setAuthFailure( AuthenticationError ) {}
+      void setAuthed( bool ) {}
       void connected() {}
       void disconnect( ConnectionError ) {}
       const std::string password() const { return EmptyString; }
@@ -68,7 +68,7 @@ using namespace gloox;
 void NonSaslAuthTest::send( IQ& )
 {
 }
-void NonSaslAuthTest::send( const IQ& iq, IqHandler* ih, int ctx )
+void NonSaslAuthTest::send( const IQ&, IqHandler*, int )
 {
 }
 
@@ -114,6 +114,8 @@ int main( int /*argc*/, char** /*argv*/ )
       ++fail;
       printf( "test '%s' failed\n", name.c_str() );
     }
+    delete nq;
+    delete q;
     delete t;
     t = 0;
   }
@@ -142,6 +144,8 @@ int main( int /*argc*/, char** /*argv*/ )
       ++fail;
       printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
     }
+    delete nq;
+    delete q;
     delete t;
     t = 0;
   }
