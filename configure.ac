@@ -278,6 +278,7 @@ AC_MSG_RESULT($debug)
 dnl Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS(unistd.h strings.h errno.h arpa/nameser.h)
+AC_CHECK_FUNCS(getaddrinfo)
 AC_CHECK_FUNCS(ns_get16 __ns_get16)
 AC_CHECK_FUNCS(setsockopt,,[AC_CHECK_LIB(socket,setsockopt)])
 
@@ -329,6 +330,8 @@ src/tests/md5/Makefile
 src/tests/message/Makefile
 src/tests/messageeventfilter/Makefile
 src/tests/nickname/Makefile
+src/tests/nonsaslauthquery/Makefile
+src/tests/nonsaslauth/Makefile
 src/tests/oob/Makefile
 src/tests/parser/Makefile
 src/tests/prep/Makefile

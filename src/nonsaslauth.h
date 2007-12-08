@@ -31,6 +31,8 @@ namespace gloox
    * It is invoked by @ref Client automatically if supported by the server and if SASL authentication
    * is not supported.
    * You should not need to use this class manually.
+   *
+   * XEP Version: 2.3
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.3
    */
@@ -68,10 +70,71 @@ namespace gloox
       virtual void handleIqID( IQ* iq, int context ) { (void)iq; (void)context; } // FIXME remove for 1.1
 
     private:
+#ifdef NONSASLAUTH_TEST
+    public:
+#endif
+      /**
+       * @brief An abstraction of an IQ extension used for Non-SASL authentication (XEP-0078).
+       *
+       * @author Jakob Schroeter <js@camaya.net>
+       * @since 1.0
+       */
+      class Query : public StanzaExtension
+      {
+        public:
+          /**
+           * Creates a new object that can be used to query the server for
+           * authentication filds for the given user.
+           * @param user The user name to fetch authentication fields for.
+           */
+          Query( const std::string& user );
+
+          /**
+           * Creates a now object from the given Tag.
+           * @param tag The Tag to parse.
+           */
+          Query( const Tag* tag = 0 );
+
+          /**
+           * Creates a new object on the heap that can be used to
+           * authenticate, based on the current reply.
+           * @param user The uset o authenticate as.
+           * @param sid The stream's ID.
+           * @param pwd The password to use.
+           * @param resource The desired resource identifier.
+           */
+          Query* newInstance( const std::string& user, const std::string& sid,
+                              const std::string& pwd, const std::string& resource ) const;
+
+          /**
+           * Virtual destructor.
+           */
+          virtual ~Query() {}
+
+          // reimplemented from StanzaExtension
+          virtual const std::string& filterString() const;
+
+          // reimplemented from StanzaExtension
+          virtual StanzaExtension* newInstance( const Tag* tag ) const
+          {
+            return new Query( tag );
+          }
+
+          // reimplemented from StanzaExtension
+          virtual Tag* tag() const;
+
+        private:
+          std::string m_user;
+          std::string m_pwd;
+          std::string m_resource;
+          bool m_digest;
+
+      };
+
       enum NonSaslAuthTrack
       {
-        TRACK_REQUEST_AUTH_FIELDS,
-        TRACK_SEND_AUTH
+        TrackRequestAuthFields,
+        TrackSendAuth
       };
 
       Client* m_parent;

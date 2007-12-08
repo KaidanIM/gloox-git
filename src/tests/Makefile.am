@@ -7,7 +7,8 @@ SUBDIRS = adhoc adhoccommand adhoccommandnote amprule amp base64 \
           dataformreported dataformitem delayeddelivery discoinfo discoitems disco \
           error featureneg gpgencrypted gpgsigned \
           inbandbytestreamibb inbandbytestream iq jid md5 message \
-          messageeventfilter nickname oob parser prep presence pubsubevent pubsubmanager \
+          messageeventfilter nickname nonsaslauthquery nonsaslauth \
+          oob parser prep presence pubsubevent pubsubmanager \
           rostermanagerquery rostermanager search \
           sha simanager stanzaextensionfactory subscription tag tlsgnutls vcardupdate \
           xpath zlib util
