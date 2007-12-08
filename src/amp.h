@@ -36,7 +36,7 @@ namespace gloox
    * @author Vincent Thomasset
    * @since 1.0
    */
-  class AMP : public StanzaExtension
+  class GLOOX_API AMP : public StanzaExtension
   {
 
     public:
@@ -109,8 +109,11 @@ namespace gloox
 
       /**
        * Describes an AMP rule.
+       *
+       * @author Jakob Schroeter <js@camaya.net>
+       * @since 1.0
        */
-      class Rule
+      class GLOOX_API Rule
       {
         public:
           /**

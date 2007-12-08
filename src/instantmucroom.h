@@ -27,7 +27,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
-  class InstantMUCRoom : public MUCRoom
+  class GLOOX_API InstantMUCRoom : public MUCRoom
   {
     public:
       /**

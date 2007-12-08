@@ -62,7 +62,7 @@ namespace gloox
        * @author Jakob Schroeter <js@camaya.net>
        * @since 1.0
        */
-      class Info : public StanzaExtension
+      class GLOOX_API Info : public StanzaExtension
       {
         friend class Disco;
 
@@ -158,7 +158,7 @@ namespace gloox
        * @author Jakob Schroeter <js@camaya.net>
        * @since 1.0
        */
-      class Identity
+      class GLOOX_API Identity
       {
         friend class Info;
         friend class Disco;
@@ -232,7 +232,7 @@ namespace gloox
        * @author Jakob Schroeter <js@camaya.net>
        * @since 1.0
        */
-      class Items : public StanzaExtension
+      class GLOOX_API Items : public StanzaExtension
       {
         friend class Disco;
 
@@ -303,7 +303,7 @@ namespace gloox
        * @author Jakob Schroeter <js@camaya.net>
        * @since 1.0
        */
-      class Item
+      class GLOOX_API Item
       {
         friend class Items;
 

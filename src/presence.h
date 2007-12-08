@@ -29,7 +29,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 1.0
    */
-  class Presence : public Stanza
+  class GLOOX_API Presence : public Stanza
   {
 
     friend class ClientBase;
