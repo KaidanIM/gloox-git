@@ -21,11 +21,9 @@
 #include "util.h"
 
 #include <string>
-#include <stdlib.h>
-
-#ifndef _WIN32_WCE
 #include <sstream>
-#endif
+
+#include <cstdlib>
 
 namespace gloox
 {
@@ -59,22 +57,22 @@ namespace gloox
   void ConnectionBOSH::initInstance( ConnectionBase* connection, const std::string& xmppServer,
                                      const int xmppPort )
   {
-#warning FIXME: check return value
+// FIXME: check return value
     prep::idna( xmppServer, m_server );
     m_port = xmppPort;
     if( m_port != -1 )
     {
       std::ostringstream strBOSHHost;
       strBOSHHost << m_boshHost << ":" << m_port;
-      m_boshHost = strBOSHHost.str();
+      m_boshedHost = strBOSHHost.str();
     }
 
     // drop this connection into our pool of available connections
-//     printf( "Added initial connection to connection pool\n" );
-//     printf( "Connections in pool: %d\n", m_connectionPool.size() );
+    printf( "Added initial connection to connection pool\n" );
+    printf( "Connections in pool: %d\n", m_connectionPool.size() );
     connection->registerConnectionDataHandler( this );
     m_connectionPool.push_back( connection );
-//     printf( "Connections in pool: %d\n", m_connectionPool.size() );
+    printf( "Connections in pool: %d\n", m_connectionPool.size() );
   }
 
   ConnectionBOSH::~ConnectionBOSH()
@@ -112,11 +110,11 @@ namespace gloox
      * in the queue of active connections */
     if( m_handler )
     {
+      m_state = StateConnecting;
+      m_logInstance.dbg( LogAreaClassConnectionBOSH,
+                         "bosh initiating connection to server" );
       if( m_connMode == ModePipelining )
       {
-        m_state = StateConnecting;
-        m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH,
-                           "bosh initiating connection to server" );
         if( m_activeConnections.empty() && m_connectionPool.size() > 0 )
         {
           m_activeConnections.push_back( m_connectionPool.front() );
@@ -126,10 +124,7 @@ namespace gloox
       }
       else
       {
-        m_state = StateConnecting;
-        m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH,
-                           "bosh initiating connection to server" );
-//         printf( "Connections in pool: %d\n", m_connectionPool.size() );
+        printf( "Connections in pool: %d\n", m_connectionPool.size() );
         eRet = m_connectionPool.back()->connect();
       }
     }
@@ -163,11 +158,11 @@ namespace gloox
       }
       sendRequest( requestBody.str(), true );
 
-      m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh disconnection request sent" );
+      m_logInstance.dbg( LogAreaClassConnectionBOSH, "bosh disconnection request sent" );
     }
     else
     {
-      m_logInstance.log( LogLevelError, LogAreaClassConnectionBOSH,
+      m_logInstance.err( LogAreaClassConnectionBOSH,
                          "disconnecting from server in a non-graceful fashion" );
     }
 
@@ -187,8 +182,8 @@ namespace gloox
     // (Some CMs do not obey this, it seems)
     if( ( m_openRequests == 0 || m_sendBuffer.size() > 0 ) && m_state == StateConnected )
     {
-      m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH,
-           "Sending empty request (or there is data in the send buffer)" );
+      m_logInstance.dbg( LogAreaClassConnectionBOSH,
+                         "Sending empty request (or there is data in the send buffer)" );
       sendXML( m_sendBuffer );
     }
 
@@ -197,15 +192,14 @@ namespace gloox
       // If this the first recv() after a stream restart, pass to gloox a stream:stream tag
       if( m_handler && m_streamRestart )
       {
-        m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "sending spoofed <stream:stream>" );
-        m_handler->
-        handleReceivedData( this,
+        m_logInstance.dbg( LogAreaClassConnectionBOSH, "sending spoofed <stream:stream>" );
+        m_handler->handleReceivedData( this,
                             "<?xml version='1.0' ?>"
                             "<stream:stream xmlns:stream='http://etherx.jabber.org/streams'"
                             " xmlns='" + XMLNS_CLIENT +
                             "' version='" + XMPP_STREAM_VERSION_MAJOR + "." + XMPP_STREAM_VERSION_MINOR +
                             "' from='" + m_server + "' id ='" + m_sid + "' xml:lang='en'>" );
-        m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "sent spoofed <stream:stream>" );
+        m_logInstance.dbg( LogAreaClassConnectionBOSH, "sent spoofed <stream:stream>" );
         m_streamRestart = false;
       }
 
@@ -223,7 +217,7 @@ namespace gloox
           if( ce != ConnNoError )
           {
 
-//             printf( "Error %d occured during recv() %d\n", ce, m_activeConnections.size() );
+            printf( "Error %d occured during recv() %d\n", ce, m_activeConnections.size() );
             m_connectionPool.push_back( m_activeConnections.front() );
             m_activeConnections.pop_front();
             m_connectionPool.back()->disconnect();
@@ -245,11 +239,12 @@ namespace gloox
           case ModeLegacyHTTP:
             if( !m_connectionPool.empty() )
               return m_connectionPool.front()->recv( timeout );
-          default: break;
+          default:
+            break;
         }
       }
 
-      m_logInstance.log( LogLevelWarning, LogAreaClassConnectionBOSH, "No available connections open" );
+      m_logInstance.warn( LogAreaClassConnectionBOSH, "No available connections open" );
       eRet = ConnNotConnected;
     }
     return eRet;
@@ -263,20 +258,20 @@ namespace gloox
     {
       if( m_connMode == ModePipelining && m_activeConnections.empty() )
       {
-        m_logInstance.log( LogLevelWarning, LogAreaClassConnectionBOSH,
+        m_logInstance.warn( LogAreaClassConnectionBOSH,
                            "Pipelining selected, but no connection open." );
         return false;
       }
       else if( m_connectionPool.empty() && m_activeConnections.empty() )
       {
-        m_logInstance.log( LogLevelWarning, LogAreaClassConnectionBOSH,
+        m_logInstance.warn( LogAreaClassConnectionBOSH,
                            "No available connections to send on..." );
         return false;
       }
       else if( m_openRequests > 0 && m_openRequests >= m_maxOpenRequests )
       {
-        m_logInstance.log( LogLevelWarning, LogAreaClassConnectionBOSH,
-             "impossible to send request (too many requests already open)" );
+        m_logInstance.warn( LogAreaClassConnectionBOSH,
+                           "impossible to send request (too many requests already open)" );
         return false;
       }
     }
@@ -291,7 +286,7 @@ namespace gloox
     else
       request << " HTTP/1.1\r\n";
 
-    request << "Host: " << m_boshHost << "\r\n";
+    request << "Host: " << m_boshedHost << "\r\n";
     request << "Content-Type: text/xml; charset=utf-8\r\n";
     request << "Content-Length: " << xml.length() << "\r\n\r\n";
     request << xml << "\r\n";
@@ -316,11 +311,11 @@ namespace gloox
           m_connectionPool.pop_front();
           if( pConnection->state() == StateDisconnected )
           {
-//             printf( "Connection from pool was disconnected... connecting...\n" );
+            printf( "Connection from pool was disconnected... connecting...\n" );
             ConnectionError ce = pConnection->connect();
             if( ce != ConnNoError )
             {
-//               printf( "An error occured while connecting: %d\n", ce );
+              printf( "An error occured while connecting: %d\n", ce );
               m_state = StateDisconnected;   // Assume the connection to the server is lost permanently
               disconnect();
             }
@@ -330,8 +325,9 @@ namespace gloox
                                   "waiting for connection to be established" );
              * return false;	*/
           }
-          while( pConnection->state() != StateConnected ) pConnection->recv( 200 );
-//           printf( "Restoring a connection whose status is %d\n", pConnection->state() );
+          while( pConnection->state() != StateConnected )
+            pConnection->recv( 200 );
+          printf( "Restoring a connection whose status is %d\n", pConnection->state() );
           // now stick it on the end of the list of active connections
           m_activeConnections.push_back( pConnection );
           bSendData = true;
@@ -340,8 +336,8 @@ namespace gloox
         {
           ConnectionBase* pConnection = m_activeConnections.back()->newInstance();
           pConnection->registerConnectionDataHandler( this );
-//           if( pConnection->connect() != ConnNoError )
-//             printf( "Failed to connect...\n" );  // TODO: Retry here
+          if( pConnection->connect() != ConnNoError )
+            printf( "Failed to connect...\n" );  // TODO: Retry here
           m_activeConnections.push_back( pConnection );
           bSendData = true;
         }
@@ -356,32 +352,32 @@ namespace gloox
       bool ce = m_activeConnections.back()->send( request.str() );
       if( ce )
       {
-//         printf( "Request sent on %p (%s)\n", m_activeConnections.back(), request.str().c_str() );
+        printf( "Request sent on %p (%s)\n", m_activeConnections.back(), request.str().c_str() );
         ++m_openRequests;
-//         printf( "%d: Incrementing m_openRequests to %d (connections: %d)\n", (int)time( 0 ),
-//                m_openRequests, m_activeConnections.size() );
+        printf( "%d: Incrementing m_openRequests to %d (connections: %d)\n", (int)time( 0 ),
+               m_openRequests, m_activeConnections.size() );
         return true;
       }
       else
       {
-#warning What to do in this case?
+// FIXME What to do in this case?
         printf( "Error while trying to send on socket (state: %d)\n", m_activeConnections.back()->state() );
       }
     }
-    m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "Unable to send request\n" );
+    m_logInstance.dbg( LogAreaClassConnectionBOSH, "Unable to send request\n" );
     return false;
   }
 
   /* Sends XML. Wraps data in a <body/> tag, and then passes to sendRequest(). */
   bool ConnectionBOSH::sendXML( const std::string& data )
   {
-//     printf( "*SendXML(%s)\n", data.c_str() );
+    printf( "*SendXML(%s)\n", data.c_str() );
     std::ostringstream requestBody;
 
     if( m_state != StateConnected )
     {
-      m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH,
-           "Data sent before connection established (will be buffered)" );
+      m_logInstance.dbg( LogAreaClassConnectionBOSH,
+                         "Data sent before connection established (will be buffered)" );
       return false;
     }
 
@@ -389,13 +385,13 @@ namespace gloox
     {
       if( (time( 0 ) - m_lastRequestTime) < m_minTimePerRequest && m_openRequests > 0 )
       {
-        m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH,
-             "too little time between requests, adding to send buffer" );
+        m_logInstance.dbg( LogAreaClassConnectionBOSH,
+                           "too little time between requests, adding to send buffer" );
         return false;
       }
-//       printf( "\n>>>>> %ld seconds since last empty request <<<<<\n", time( 0 ) - m_lastRequestTime );
+      printf( "\n>>>>> %ld seconds since last empty request <<<<<\n", time( 0 ) - m_lastRequestTime );
       m_lastRequestTime = time( 0 );
-      m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "sending empty request" );
+      m_logInstance.dbg( LogAreaClassConnectionBOSH, "sending empty request" );
     }
 
     ++m_rid;
@@ -409,7 +405,7 @@ namespace gloox
     {
       requestBody << " xmpp:restart='true' to='" << m_server << "' xml:lang='en' xmlns:xmpp='"
                   << XMLNS_XMPP_BOSH << "' />";
-      m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "restarting stream" );
+      m_logInstance.dbg( LogAreaClassConnectionBOSH, "restarting stream" );
     }
     else
     {
@@ -425,11 +421,11 @@ namespace gloox
     else
     {
       m_rid--; // I think... (may need to rethink when acks are implemented)
-      m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH,
+      m_logInstance.dbg( LogAreaClassConnectionBOSH,
            "Unable to send. Connection not complete, or too many open requests, so added to buffer.\n" );
       m_sendBuffer += data;
-//       printf( "\n---------------Buffer---------------\n%s\n----------------EOB--------------\n",
-//              m_sendBuffer.c_str() );
+      printf( "\n---------------Buffer---------------\n%s\n----------------EOB--------------\n",
+             m_sendBuffer.c_str() );
     }
 
     return true;
@@ -455,7 +451,7 @@ namespace gloox
     if( m_state == StateDisconnected )
       return false;
 
-//     printf( "\nTold to send: %s\n", data.c_str() );
+    printf( "\nTold to send: %s\n", data.c_str() );
 
     if( data.substr( 0, 2 ) == "<?" )
     {
@@ -466,7 +462,7 @@ namespace gloox
       else
       {
         m_initialStreamSent = true;
-        m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "initial <stream:stream> dropped" );
+        m_logInstance.dbg( LogAreaClassConnectionBOSH, "initial <stream:stream> dropped" );
         return true;
       }
     }
@@ -509,8 +505,8 @@ namespace gloox
 
         if( statusCode != "200" )
         {
-          m_logInstance.log( LogLevelWarning, LogAreaClassConnectionBOSH,
-               "received error via legacy HTTP status code: " + statusCode );
+          m_logInstance.warn( LogAreaClassConnectionBOSH,
+                             "received error via legacy HTTP status code: " + statusCode );
           m_state = StateDisconnected; // As per XEP, consider connection broken
           disconnect();
         }
@@ -518,8 +514,8 @@ namespace gloox
         if( m_connMode != ModeLegacyHTTP && getHTTPField( "Connection" ) == "close"
             || m_bufferHeader.substr( 0, 8 ) == "HTTP/1.0" )
         {
-          m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH,
-               "server indicated lack of support for HTTP/1.1 - falling back to HTTP/1.0" );
+          m_logInstance.dbg( LogAreaClassConnectionBOSH,
+                             "server indicated lack of support for HTTP/1.1 - falling back to HTTP/1.0" );
           m_connMode = ModeLegacyHTTP;
         }
       }
@@ -528,21 +524,21 @@ namespace gloox
     if( (long)( m_buffer.length() ) >= m_bufferContentLength && !m_buffer.empty() ) // We have at least
                                                                                     // one full response
     {
-//       printf( "Response length is %d but I think it is at least %ld\n", m_buffer.length(),
-//               m_bufferContentLength );
+      printf( "Response length is %d but I think it is at least %ld\n", m_buffer.length(),
+              m_bufferContentLength );
       m_openRequests--;
-//       printf( "Decrementing m_openRequests to %d\n", m_openRequests );
-//       printf( "\n-----------FULL RESPONSE BUFFER---------------\n%s\n---------------END-------------\n",
-//              m_buffer.c_str() );
+      printf( "Decrementing m_openRequests to %d\n", m_openRequests );
+      printf( "\n-----------FULL RESPONSE BUFFER---------------\n%s\n---------------END-------------\n",
+             m_buffer.c_str() );
       std::string xml = m_buffer.substr( 0, m_bufferContentLength );
       handleXMLData( connection, xml );
       m_buffer.erase( 0, m_bufferContentLength ); // Remove the handled response from the buffer,
                                                   // and reset variables for reuse
       m_bufferContentLength = -1;
       m_bufferHeader = EmptyString;
-//       printf( "\n-----------FULL RESPONSE BUFFER (after handling)"
-//               "---------------\n%s\n---------------END-------------\n",
-//               m_buffer.c_str() );
+      printf( "\n-----------FULL RESPONSE BUFFER (after handling)"
+              "---------------\n%s\n---------------END-------------\n",
+              m_buffer.c_str() );
       handleReceivedData( connection, EmptyString ); // In case there are more full responses in the buffer
 
       if( connection == m_activeConnections.front() )
@@ -573,20 +569,20 @@ namespace gloox
       }
       else
       {
-        m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH,
-             "data has been received on a connection that is not the oldest" );
+        m_logInstance.dbg( LogAreaClassConnectionBOSH,
+                           "data has been received on a connection that is not the oldest" );
       }
     }
   }
 
-  void ConnectionBOSH::handleXMLData( const ConnectionBase* /*connection*/, std::string& data )
+  void ConnectionBOSH::handleXMLData( const ConnectionBase* connection, std::string& data )
   {
-//     printf( "On connection %p ", connection );
-//     m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh received XML:\n" + data + "\n" );
+    printf( "On connection %p ", connection );
+    m_logInstance.dbg( LogAreaClassConnectionBOSH, "bosh received XML:\n" + data + "\n" );
     m_parser.feed( data );
   }
 
-  void ConnectionBOSH::handleConnect( const ConnectionBase* /*connection*/ )
+  void ConnectionBOSH::handleConnect( const ConnectionBase* connection )
   {
 
     if( m_state == StateConnecting )
@@ -609,12 +605,12 @@ namespace gloox
       requestBody.addAttribute( "xmlns:xmpp", XMLNS_XMPP_BOSH );
       requestBody.addAttribute( "to", m_server );
 
-      m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH, "bosh connection request sent" );
+      m_logInstance.dbg( LogAreaClassConnectionBOSH, "bosh connection request sent" );
       sendRequest( requestBody.xml(), true );
     }
     else
     {
-//       printf( "New TCP connection %p established\n", connection );
+      printf( "New TCP connection %p established\n", connection );
       /* if(!m_sendBuffer.empty())
        * {
        * m_logInstance.log ( LogLevelDebug, LogAreaClassConnectionBOSH, "sending request on new connection" );
@@ -623,20 +619,20 @@ namespace gloox
     }
   }
 
-  void ConnectionBOSH::handleDisconnect( const ConnectionBase* /*connection*/,
-                                         ConnectionError /*reason*/ )
+  void ConnectionBOSH::handleDisconnect( const ConnectionBase* connection,
+                                         ConnectionError reason )
   {
     switch( m_connMode )
     {
       case ModePipelining:
         m_connMode = ModeLegacyHTTP; // Server seems not to support pipelining
-        m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH,
-             "connection closed - falling back to HTTP/1.0 connection method" );
+        m_logInstance.dbg( LogAreaClassConnectionBOSH,
+                           "connection closed - falling back to HTTP/1.0 connection method" );
         break;
       case ModeLegacyHTTP:
       case ModePersistentHTTP:
-#warning do we need to do anything here?
-//         printf( "A TCP connection %p was disconnected (reason: %d).\n", connection, reason );
+// FIXME do we need to do anything here?
+        printf( "A TCP connection %p was disconnected (reason: %d).\n", connection, reason );
         break;
     }
 
@@ -662,7 +658,7 @@ namespace gloox
           if( serverRequests < m_maxOpenRequests )
           {
             m_maxOpenRequests = serverRequests;
-            m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH,
+            m_logInstance.dbg( LogAreaClassConnectionBOSH,
                                "bosh parameter 'requests' now set to " + tag->findAttribute( "requests" ) );
           }
         }
@@ -672,7 +668,7 @@ namespace gloox
           if( maxHold < m_hold )
           {
             m_hold = maxHold;
-            m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH,
+            m_logInstance.dbg( LogAreaClassConnectionBOSH,
                                "bosh parameter 'hold' now set to " + tag->findAttribute( "hold" ) );
           }
         }
@@ -682,7 +678,7 @@ namespace gloox
           if( maxWait < m_wait )
           {
             m_wait = maxWait;
-            m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH,
+            m_logInstance.dbg( LogAreaClassConnectionBOSH,
                                "bosh parameter 'wait' now set to " + tag-> findAttribute( "wait" )
                                    + " seconds" );
           }
@@ -691,15 +687,14 @@ namespace gloox
         {
           int minTime = atoi( tag->findAttribute( "polling" ).c_str() );
           m_minTimePerRequest = minTime;
-          m_logInstance.log( LogLevelDebug, LogAreaClassConnectionBOSH,
+          m_logInstance.dbg( LogAreaClassConnectionBOSH,
                              "bosh parameter 'polling' now set to " + tag-> findAttribute( "polling" )
                                  + " seconds" );
         }
         if( m_handler )
         {
           m_handler->handleConnect( this );
-          m_handler->
-          handleReceivedData( this, "<?xml version='1.0' ?>"
+          m_handler->handleReceivedData( this, "<?xml version='1.0' ?>"
                               "<stream:stream xmlns:stream='http://etherx.jabber.org/streams' "
                               "xmlns='" + XMLNS_CLIENT
                               + "' version='" + XMPP_STREAM_VERSION_MAJOR + "." + XMPP_STREAM_VERSION_MINOR
@@ -710,7 +705,7 @@ namespace gloox
       {
         if( tag->findAttribute( "type" ) == "terminal" )
         {
-          m_logInstance.log( LogLevelError, LogAreaClassConnectionBOSH,
+          m_logInstance.dbg( LogAreaClassConnectionBOSH,
                              "bosh connection closed by server: " + tag->findAttribute( "condition" ) );
           m_state = StateDisconnected;
           if( m_handler )
