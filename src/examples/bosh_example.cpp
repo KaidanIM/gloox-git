@@ -6,7 +6,7 @@
 #include "../chatstatefilter.h"
 #include "../connectionlistener.h"
 #include "../disco.h"
-#include "../stanza.h"
+#include "../message.h"
 #include "../gloox.h"
 #include "../lastactivity.h"
 #include "../loghandler.h"
@@ -38,8 +38,8 @@ class MessageTest : public MessageSessionHandler, ConnectionListener, LogHandler
     void start()
     {
 
-      JID jid( "mattj2@localhost/bosh" );
-      j = new Client( jid, "pumpkin" );
+      JID jid( "js@example.net/bosh" );
+      j = new Client( jid, "test" );
       j->registerConnectionListener( this );
       j->registerMessageSessionHandler( this, 0 );
       j->disco()->setVersion( "messageTest", GLOOX_VERSION, "Linux" );
@@ -54,8 +54,9 @@ class MessageTest : public MessageSessionHandler, ConnectionListener, LogHandler
 
 // this code connects to a jabber server through a BOSH connection...
 
-       ConnectionTCPClient* conn0 = new ConnectionTCPClient( j->logInstance(), "localhost", 8180 );
-       ConnectionBOSH* conn1 = new ConnectionBOSH( j, conn0, j->logInstance(), "localhost", "localhost");
+       ConnectionTCPClient* conn0 = new ConnectionTCPClient( j->logInstance(), "example.net", 8080 );
+       ConnectionBOSH* conn1 = new ConnectionBOSH( j, conn0, j->logInstance(), "example.net", "example.net" );
+       conn1->setMode( ConnectionBOSH::ModeLegacyHTTP );
        j->setConnectionImpl( conn1 );
 
        j->setForceNonSasl(); // Needed for non XEP-0206 compliant connection managers (such as Openfire 3.3.x)
@@ -100,22 +101,22 @@ class MessageTest : public MessageSessionHandler, ConnectionListener, LogHandler
       return true;
     }
 
-    virtual void handleMessage( Stanza *stanza, MessageSession * /*session*/ )
+    virtual void handleMessage( Message* msg, MessageSession * /*session*/ )
     {
-      printf( "type: %d, subject: %s, message: %s, thread id: %s\n", stanza->subtype(),
-              stanza->subject().c_str(), stanza->body().c_str(), stanza->thread().c_str() );
+      printf( "type: %d, subject: %s, message: %s, thread id: %s\n", msg->subtype(),
+              msg->subject().c_str(), msg->body().c_str(), msg->thread().c_str() );
 
-      std::string msg = "You said:\n> " + stanza->body() + "\nI like that statement.";
+      std::string re = "You said:\n> " + msg->body() + "\nI like that statement.";
       std::string sub;
-      if( !stanza->subject().empty() )
-        sub = "Re: " +  stanza->subject();
+      if( !msg->subject().empty() )
+        sub = "Re: " +  msg->subject();
 
       m_messageEventFilter->raiseMessageEvent( MessageEventDisplayed );
       m_messageEventFilter->raiseMessageEvent( MessageEventComposing );
       m_chatStateFilter->setChatState( ChatStateComposing );
-      m_session->send( msg, sub );
+      m_session->send( re, sub );
 
-      if( stanza->body() == "quit" )
+      if( msg->body() == "quit" )
         j->disconnect();
     }
 
@@ -144,7 +145,7 @@ class MessageTest : public MessageSessionHandler, ConnectionListener, LogHandler
 
     virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
     {
-	printf("%d: ", time(NULL));
+	printf("%d: ", int( time( 0 ) ) );
 	switch(area)
 	{
           case LogAreaXmlIncoming:

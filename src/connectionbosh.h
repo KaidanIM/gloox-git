@@ -81,8 +81,8 @@ namespace gloox
        * registerConnectionDataHandler(). This is not necessary if this object is
        * part of a 'connection chain', e.g. with ConnectionSOCKS5Proxy.
        */
-      ConnectionBOSH( ConnectionBase * connection, const LogSink & logInstance, const std::string & boshHost,
-                      const std::string & xmppServer, int xmppPort = 5222 );
+      ConnectionBOSH( ConnectionBase* connection, const LogSink& logInstance, const std::string& boshHost,
+                      const std::string& xmppServer, int xmppPort = 5222 );
 
       /**
        * Constructs a new ConnectionBOSH object.
@@ -92,13 +92,14 @@ namespace gloox
        * will own the transport connection and delete it in its destructor.
        * @param logInstance The log target. Obtain it from ClientBase::logInstance().
        * @param boshHost The hostname of the BOSH connection manager (not any intermediate proxy)
-       * @param server A server to connect to. This is the XMPP server's address, @b not the connection
+       * @param xmppServer A server to connect to. This is the XMPP server's address, @b not the connection
        * manager's.
-       * @param port The port to connect to. This is the XMPP server's port, @b not the connection manager's.
+       * @param xmppPort The port to connect to. This is the XMPP server's port, @b not the connection
+       * manager's.
        */
-      ConnectionBOSH( ConnectionDataHandler * cdh, ConnectionBase * connection,
-                      const LogSink & logInstance, const std::string & boshHost,
-                      const std::string & xmppServer, int xmppPort = 5222 );
+      ConnectionBOSH( ConnectionDataHandler* cdh, ConnectionBase* connection,
+                      const LogSink& logInstance, const std::string& boshHost,
+                      const std::string& xmppServer, int xmppPort = 5222 );
 
       /**
        * Virtual destructor
@@ -106,7 +107,7 @@ namespace gloox
       virtual ~ConnectionBOSH();
 
       /**
-       *
+       * The supported connection modes. Usually auto-detected.
        */
       enum ConnMode
       {
@@ -117,17 +118,17 @@ namespace gloox
 
       /**
        * Sets the XMPP server to proxy to.
-       * @param host The XMPP server hostname (IP address).
-       * @param port The XMPP server port.
+       * @param xmppHost The XMPP server hostname (IP address).
+       * @param xmppPort The XMPP server port.
        */
       void setServer( const std::string& xmppHost, unsigned short xmppPort = 5222 )
-      { m_server = xmppHost; m_port = xmppPort; }
+        { m_server = xmppHost; m_port = xmppPort; }
 
       /**
-      * Sets the path on the connection manager to request
-      * @param path The path, the default is "/http-bind/", which is the default for
-      * many connection managers.
-      */
+       * Sets the path on the connection manager to request
+       * @param path The path, the default is "/http-bind/", which is the default for
+       * many connection managers.
+       */
       void setPath( const std::string& path ) { m_path = path; }
 
       /**
@@ -175,7 +176,7 @@ namespace gloox
       // reimplemented from TagHandler
       virtual void handleTag( Tag* tag );
 
-    protected:
+    private:
       ConnectionBOSH& operator=( const ConnectionBOSH& );
       void initInstance( ConnectionBase* connection, const std::string& xmppServer, const int xmppPort );
       void handleXMLData( const ConnectionBase* connection, std::string& data );
@@ -188,6 +189,7 @@ namespace gloox
 
       Parser m_parser;   // Used for parsing XML section of responses
       std::string m_boshHost;   // The hostname of the BOSH connection manager
+      std::string m_boshedHost;   // The hostname of the BOSH connection manager + : + port
       std::string m_path;   // The path part of the URL that we need to request
       ConnectionDataHandler* m_handler;   // This is where data will be passed to when received
 
