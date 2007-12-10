@@ -75,20 +75,20 @@ namespace gloox
 
     /**
      * A convenience function that executes the given function on each object in a given list.
-     * @param t The obejct to execute the function on.
+     * @param t The object to execute the function on.
      * @param f The function to execute.
      */
     template< typename T, typename F >
     inline void ForEach( T& t, F f )
     {
       for( typename T::iterator it = t.begin(); it != t.end(); ++it )
-        ((*it)->*f)();
+        ( (*it)->*f )();
     }
 
     /**
      * A convenience function that executes the given function on each object in a given list,
      * passing the given argument.
-     * @param t The obejct to execute the function on.
+     * @param t The object to execute the function on.
      * @param f The function to execute.
      * @param d An argument to pass to the function.
      */
@@ -102,7 +102,7 @@ namespace gloox
     /**
      * A convenience function that executes the given function on each object in a given list,
      * passing the given arguments.
-     * @param t The obejct to execute the function on.
+     * @param t The object to execute the function on.
      * @param f The function to execute.
      * @param d1 An argument to pass to the function.
      * @param d2 An argument to pass to the function.
@@ -117,7 +117,7 @@ namespace gloox
     /**
      * A convenience function that executes the given function on each object in a given list,
      * passing the given arguments.
-     * @param t The obejct to execute the function on.
+     * @param t The object to execute the function on.
      * @param f The function to execute.
      * @param d1 An argument to pass to the function.
      * @param d2 An argument to pass to the function.
