@@ -179,10 +179,12 @@ namespace gloox
     private:
       ConnectionBOSH& operator=( const ConnectionBOSH& );
       void initInstance( ConnectionBase* connection, const std::string& xmppServer, const int xmppPort );
-      void handleXMLData( const ConnectionBase* connection, std::string& data );
-      bool sendRequest( const std::string& xml, bool ignoreRequestLimit = false );
-      bool sendXML( const std::string& data );
-      std::string getHTTPField( const std::string& field );
+      bool sendRequest( const std::string& xml );
+      bool sendXML();
+      const std::string getHTTPField( const std::string& field );
+      ConnectionBase* getConnection();
+      ConnectionBase* activateConnection();
+      void putConnection();
 
       //ConnectionBase *m_connection;
       const LogSink& m_logInstance;
@@ -191,7 +193,6 @@ namespace gloox
       std::string m_boshHost;   // The hostname of the BOSH connection manager
       std::string m_boshedHost;   // The hostname of the BOSH connection manager + : + port
       std::string m_path;   // The path part of the URL that we need to request
-      ConnectionDataHandler* m_handler;   // This is where data will be passed to when received
 
       // BOSH parameters
       unsigned long m_rid;
@@ -209,13 +210,14 @@ namespace gloox
       unsigned long m_minTimePerRequest;
 
       std::string m_buffer;   // Buffer of received data
-      std::string m_bufferHeader;   // HTTP header of data currently in buffer
-      long m_bufferContentLength;   // Length of the data in the current response
+      std::string m_bufferHeader;   // HTTP header of data currently in buffer // FIXME doens't need to be member
+      std::string::size_type m_bufferContentLength;   // Length of the data in the current response
 
       std::string m_sendBuffer;   // Data waiting to be sent
 
-      std::list<ConnectionBase*> m_activeConnections;
-      std::list<ConnectionBase*> m_connectionPool;
+      typedef std::list<ConnectionBase*> ConnectionList;
+      ConnectionList m_activeConnections;
+      ConnectionList m_connectionPool;
       ConnMode m_connMode;
 
   };
