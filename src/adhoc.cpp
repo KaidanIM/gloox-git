@@ -264,10 +264,12 @@ namespace gloox
         (*it).second.ah->handleAdhocError( iq.from(), iq.error() );
         break;
       case IQ::Result:
+      {
         const Adhoc::Command* ac = iq.findExtension<Adhoc::Command>( ExtAdhocCommand );
         if( ac )
           (*it).second.ah->handleAdhocExecutionResult( iq.from(), *ac );
         break;
+      }
       default:
         break;
     }
