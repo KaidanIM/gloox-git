@@ -55,6 +55,7 @@ namespace gloox
     : StanzaExtension( ExtDiscoInfo ), m_node( node )
   {
     m_features.push_back( XMLNS_DISCO_INFO );
+    m_features.push_back( XMLNS_DISCO_ITEMS );
   }
 
   Disco::Info::Info( const Tag* tag )
@@ -198,8 +199,8 @@ namespace gloox
     : m_parent( parent )
   {
     addFeature( XMLNS_VERSION );
-    addFeature( XMLNS_DISCO_INFO );
-    addFeature( XMLNS_DISCO_ITEMS );
+//     addFeature( XMLNS_DISCO_INFO ); //handled by Disco::Info now
+//     addFeature( XMLNS_DISCO_ITEMS ); //handled by Disco::Info now
     if( m_parent )
     {
       m_parent->registerIqHandler( this, ExtDiscoInfo );
