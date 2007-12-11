@@ -72,6 +72,7 @@ namespace gloox
       return 0;
 
     Tag* t = new Tag( "message" );
+    t->setXmlns( XMLNS_CLIENT );
     if( m_to )
       t->addAttribute( "to", m_to.full() );
     if( m_from )
