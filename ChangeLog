@@ -1,3 +1,8 @@
+v0.9.9 -- xx yyy 200z
+---------------------
+- MUCRoom: fixed finding the 'delayed delivery' stamp
+
+
 v0.9.8 -- 07 Dec 2007
 ---------------------
 - Client: clear list of presence exts in removePresenceExtensions()
