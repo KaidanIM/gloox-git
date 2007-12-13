@@ -30,7 +30,8 @@ namespace gloox
    *
    * @code
    * Client* c = new Client( ... );
-   * ConnectionTCP* conn0 = new ConnectionTCP( c->logInstance(), proxyHost, proxyPort );
+   * ConnectionTCPClient* conn0 = new ConnectionTCPClient( c->logInstance(),
+   *                                                       proxyHost, proxyPort );
    * ConnectionHTTPProxy* conn1 = new ConnectionHTTPProxy( c, conn0, c->logInstance(),
    *                                                       xmppHost, xmppPort );
    * c->setConnectionImpl( conn1 );
