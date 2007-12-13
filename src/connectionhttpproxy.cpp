@@ -210,7 +210,7 @@ namespace gloox
                                               ConnectionError reason )
   {
     m_state = StateDisconnected;
-    m_logInstance.dbg( LogAreaClassConnectionHTTPProxy, "http proxy connection closed" );
+    m_logInstance.dbg( LogAreaClassConnectionHTTPProxy, "HTTP Proxy connection closed" );
 
     if( m_handler )
       m_handler->handleDisconnect( this, reason );
