@@ -786,7 +786,7 @@ namespace gloox
         if( ( x = stanza->findChild( "x", "xmlns", XMLNS_X_DELAY ) ) != 0 )
         {
           from.setJID( x->findAttribute( "from" ) );
-          when = x->findAttribute( "when" );
+          when = x->findAttribute( "stamp" );
           history = true;
         }
         if( stanza->subtype() == StanzaMessageChat ||
