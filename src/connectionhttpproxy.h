@@ -38,6 +38,10 @@ namespace gloox
    * Make sure to pass the proxy host/port to the transport connection (ConnectionTCP in this case),
    * and the XMPP host/port to the proxy connection.
    *
+   * ConnectionHTTPProxy uses the CONNECT method to pass through the proxy. If your proxy does not
+   * allow this kind of connections, or if it kills connections after some time, you may want to use
+   * ConnectionBOSH instead.
+   *
    * The reason why ConnectionHTTPProxy doesn't manage its own ConnectionTCP is that it allows it
    * to be used with other transports (like IPv6 or chained SOCKS5/HTTP proxies).
    *
