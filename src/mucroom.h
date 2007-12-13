@@ -266,7 +266,7 @@ namespace gloox
        * one-to-one chat to a multi-user chat.
        * @param message A reason for declining the invitation.
        * @param from The JID of the original author of this part of the history.
-       * @param stamp The datetime of the original message in the format: 20061224T12:15:23
+       * @param stamp The datetime of the original message in the format: 20061224T12:15:23Z
        * @note You should not attempt to use this function before
        * MUCRoomHandler::handleMUCParticipantPresence() was called for the first time.
        */
