@@ -213,7 +213,7 @@ namespace gloox
     if( !m_joined || !m_parent )
       return;
 
-    Message m( Message::Normal, m_nick.bareJID(), message );
+    Message m( Message::Groupchat, m_nick.bareJID(), message );
     m.addExtension( new DelayedDelivery( from, stamp ) );
     m_parent->send( m );
   }
