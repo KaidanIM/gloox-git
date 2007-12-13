@@ -68,8 +68,11 @@ namespace gloox
     // drop this connection into our pool of available connections
     printf( "Added initial connection to connection pool\n" );
     printf( "Connections in pool: %d\n", m_connectionPool.size() );
-    connection->registerConnectionDataHandler( this );
-    m_connectionPool.push_back( connection );
+    if( connection )
+    {
+      connection->registerConnectionDataHandler( this );
+      m_connectionPool.push_back( connection );
+    }
     printf( "Connections in pool: %d\n", m_connectionPool.size() );
   }
 
@@ -167,6 +170,11 @@ namespace gloox
     if( m_state == StateDisconnected )
       return ConnNotConnected;
 
+    printf( "recv, before\n" );
+    printf( "active connections:   %d\n", m_activeConnections.size() );
+    printf( "inactive connections: %d\n", m_connectionPool.size() );
+    if( !m_connectionPool.empty() )
+      m_connectionPool.front()->recv( 0 );
     if( !m_activeConnections.empty() )
       m_activeConnections.front()->recv( timeout );
 
@@ -177,20 +185,6 @@ namespace gloox
       m_logInstance.dbg( LogAreaClassConnectionBOSH,
                          "Sending empty request (or there is data in the send buffer)" );
       sendXML();
-    }
-
-    // If this the first recv() after a stream restart, pass to gloox a stream:stream tag
-    if( m_handler && m_streamRestart )
-    {
-      m_logInstance.dbg( LogAreaClassConnectionBOSH, "sending spoofed <stream:stream>" );
-      m_handler->handleReceivedData( this,
-                          "<?xml version='1.0' ?>"
-                          "<stream:stream xmlns:stream='http://etherx.jabber.org/streams'"
-                          " xmlns='" + XMLNS_CLIENT +
-                          "' version='" + XMPP_STREAM_VERSION_MAJOR + "." + XMPP_STREAM_VERSION_MINOR +
-                          "' from='" + m_server + "' id ='" + m_sid + "' xml:lang='en'>" );
-      m_logInstance.dbg( LogAreaClassConnectionBOSH, "sent spoofed <stream:stream>" );
-      m_streamRestart = false;
     }
 
     return ConnNoError; // FIXME?
@@ -209,6 +203,8 @@ namespace gloox
       if( m_initialStreamSent )
       {
         m_streamRestart = true;
+        sendXML();
+        return true;
       }
       else
       {
@@ -266,7 +262,7 @@ namespace gloox
     {
       requestBody << " xmpp:restart='true' to='" << m_server << "' xml:lang='en' xmlns:xmpp='"
           << XMLNS_XMPP_BOSH << "' />";
-      m_logInstance.dbg( LogAreaClassConnectionBOSH, "restarting stream" );
+      m_logInstance.dbg( LogAreaClassConnectionBOSH, "Restarting stream" );
     }
     else
     {
@@ -403,21 +399,21 @@ namespace gloox
     while( ( headerLength = m_buffer.find( "\r\n\r\n" ) ) != std::string::npos )
     {
       m_bufferHeader = m_buffer.substr( 0, headerLength );
-      m_bufferContentLength = atol( getHTTPField( "Content-Length" ).c_str() );
-      if( !m_bufferContentLength || m_bufferContentLength > m_buffer.length() - headerLength - 4 )
-        return;
 
-      m_buffer.erase( 0, headerLength + 4 ); // Remove header from m_buffer, and \r\n\r\n
-
-      std::string statusCode = m_bufferHeader.substr( 9, 3 );
-
+      const std::string& statusCode = m_bufferHeader.substr( 9, 3 );
+      printf( "status code: %s\n", statusCode.c_str() );
       if( statusCode != "200" )
       {
         m_logInstance.warn( LogAreaClassConnectionBOSH,
-                            "Received error via legacy HTTP status code: " + statusCode );
+                            "Received error via legacy HTTP status code: " + statusCode
+                                + ". Disconnecting." );
         m_state = StateDisconnected; // As per XEP, consider connection broken
         disconnect();
       }
+
+      m_bufferContentLength = atol( getHTTPField( "Content-Length" ).c_str() );
+      if( !m_bufferContentLength )
+        return;
 
       if( m_connMode != ModeLegacyHTTP && ( getHTTPField( "Connection" ) == "close"
                                             || m_bufferHeader.substr( 0, 8 ) == "HTTP/1.0" ) )
@@ -427,18 +423,24 @@ namespace gloox
         m_connMode = ModeLegacyHTTP;
       }
 
-      if( m_buffer.length() >= m_bufferContentLength && !m_buffer.empty() ) // We have at least
-                                                                                      // one full response
+      printf( "buffer: %d\nheader: %d\ncontent: %d\n", m_buffer.length(), headerLength,
+              m_bufferContentLength );
+
+      if( m_buffer.length() >= ( headerLength + 4 + m_bufferContentLength ) )
       {
         putConnection();
         m_openRequests--;
         printf( "Decrementing m_openRequests to %d\n", m_openRequests );
-        std::string xml = m_buffer.substr( 0, m_bufferContentLength );
+        std::string xml = m_buffer.substr( headerLength + 4, m_bufferContentLength );
         m_parser.feed( xml );
-        m_buffer.erase( 0, m_bufferContentLength ); // Remove the handled response from the buffer,
-                                                    // and reset variables for reuse
+        m_buffer.erase( 0, headerLength + 4 + m_bufferContentLength );
         m_bufferContentLength = 0;
         m_bufferHeader = EmptyString;
+      }
+      else
+      {
+        printf( "buffer length mismatch\n" );
+        break;
       }
     }
 
@@ -476,6 +478,14 @@ namespace gloox
   void ConnectionBOSH::handleDisconnect( const ConnectionBase* connection,
                                          ConnectionError reason )
   {
+    printf( "disconnected: %d\n", reason );
+    if( m_handler && m_state == StateConnecting )
+    {
+      m_state = StateDisconnected;
+      m_handler->handleDisconnect( this, reason );
+      return;
+    }
+
     switch( m_connMode ) // FIXME avoid that if we're disconnecting on purpose
     {
       case ModePipelining:
@@ -493,8 +503,19 @@ namespace gloox
 
   void ConnectionBOSH::handleTag( Tag* tag )
   {
-    if( tag->name() != "body" || !m_handler )
+    if( !m_handler || tag->name() != "body" )
       return;
+
+    if( m_streamRestart )
+    {
+      m_logInstance.dbg( LogAreaClassConnectionBOSH, "sending spoofed <stream:stream>" );
+      m_handler->handleReceivedData( this, "<?xml version='1.0' ?>"
+          "<stream:stream xmlns:stream='http://etherx.jabber.org/streams'"
+          " xmlns='" + XMLNS_CLIENT + "' version='" + XMPP_STREAM_VERSION_MAJOR
+          + "." + XMPP_STREAM_VERSION_MINOR + "' from='" + m_server + "' id ='"
+          + m_sid + "' xml:lang='en'>" );
+      m_streamRestart = false;
+    }
 
     if( tag->hasAttribute( "sid" ) )
     {
@@ -551,13 +572,12 @@ namespace gloox
                           + "' from='" + m_server + "' id ='" + m_sid + "' xml:lang='en'>" );
     }
 
-    if( tag->findAttribute( "type" ) == "terminal" )
+    if( tag->findAttribute( "type" ) == "terminate" )
     {
       m_logInstance.dbg( LogAreaClassConnectionBOSH,
                          "bosh connection closed by server: " + tag->findAttribute( "condition" ) );
       m_state = StateDisconnected;
-      if( m_handler )
-        m_handler->handleDisconnect( this, ConnStreamClosed );
+      m_handler->handleDisconnect( this, ConnStreamClosed );
       return;
     }
 
