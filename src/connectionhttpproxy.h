@@ -30,9 +30,10 @@ namespace gloox
    *
    * @code
    * Client* c = new Client( ... );
-   * c->setConnectionImpl( new ConnectionHTTPProxy( c,
-   *                                new ConnectionTCP( c->logInstance(), proxyHost, proxyPort ),
-   *                                c->logInstance(), xmppHost, xmppPort ) );
+   * ConnectionTCP* conn0 = new ConnectionTCP( c->logInstance(), proxyHost, proxyPort );
+   * ConnectionHTTPProxy* conn1 = new ConnectionHTTPProxy( c, conn0, c->logInstance(),
+   *                                                       xmppHost, xmppPort );
+   * c->setConnectionImpl( conn1 );
    * @endcode
    *
    * Make sure to pass the proxy host/port to the transport connection (ConnectionTCP in this case),
