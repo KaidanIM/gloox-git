@@ -1,6 +1,7 @@
 v0.9.9 -- xx yyy 200z
 ---------------------
 - MUCRoom: fixed finding the 'delayed delivery' stamp
+- MUCRoom: fixed adding of chat history to rooms
 
 
 v0.9.8 -- 07 Dec 2007

@@ -247,6 +247,7 @@ namespace gloox
 
     Tag *m = new Tag( "message" );
     m->addAttribute( "to", m_nick.bare() );
+    m->addAttribute( "type", "groupchat" );
     new Tag( m, "body", message );
     Tag *x = new Tag( m, "x" );
     x->addAttribute( "xmlns", XMLNS_X_DELAY );
