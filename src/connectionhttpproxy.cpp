@@ -189,6 +189,7 @@ namespace gloox
       os << "Content-Length: 0\r\n";
       os << "Proxy-Connection: Keep-Alive\r\n";
       os << "Pragma: no-cache\r\n";
+      os << "User-Agent: gloox/" << GLOOX_VERSION << "\r\n";
 
       if( !m_proxyUser.empty() && !m_proxyPwd.empty() )
       {
