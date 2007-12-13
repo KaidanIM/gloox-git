@@ -316,7 +316,8 @@ namespace gloox
 
     request << "Host: " << m_boshedHost << "\r\n";
     request << "Content-Type: text/xml; charset=utf-8\r\n";
-    request << "Content-Length: " << xml.length() << "\r\n\r\n";
+    request << "Content-Length: " << xml.length() << "\r\n";
+    request << "User-Agent: " << "gloox/" << GLOOX_VERSION << "\r\n\r\n";
     request << xml;
 
 
