@@ -93,14 +93,14 @@ namespace gloox
    * of custom protocols. When receiving, gloox requires an appropriate implementation
    * of the pure virtuals filterString() and newInstance(). To be able to properly use
    * the encapsulation, some getters may be necessary. Note that the object you will be
-   * dealing with usually is const.
+   * dealing with usually is @em const.
    * For sending StanzaExtensions, a custom constructor (as well as some setters,
    * possibly) is needed. Additionally, an implementation of tag() is required.
    *
    * @li Sub-class StanzaExtension and re-implement filterString(). filterString()
    * is supposed to return an XPath expression that matches the child element
    * of a stanza that the protocol-to-implement uses. For example, consider this
-   * hypothetical XML format: The protocol is encapsulated inside an &lt;stats&gt;
+   * hypothetical XML format: The protocol is encapsulated inside a &lt;stats&gt;
    * element in the 'ext:stats' namespace. It uses IQ stanzas for transmission.
    * @code
    * <iq from='...' to='...' id='id1' type='get'>
@@ -119,7 +119,7 @@ namespace gloox
    * of it. For our @e stats protocol, filterString() would return something like:
    * <em>/iq/stats[\@xmlns='ext:stats']</em>
    *
-   * @li When subclassing StanzaExtension, you have to init it with an int, the extension's
+   * @li When subclassing StanzaExtension, you have to initialize it with an int, the extension's
    * type. You should choose a value that is not yet used in gloox, and unique to
    * the given extension you implement. In general, you are free to use values
    * above @link gloox::ExtUser ExtUser @endlink. See
@@ -145,7 +145,7 @@ namespace gloox
    *   return new StatsExtension( tag );
    * }
    * @endcode
-   * This of course implies that a constructor exists that takes a const Tag* as the
+   * This of course implies that a constructor exists that takes a <em>const Tag*</em> as the
    * only parameter.
    *
    * @li Finally, gloox must be able to serialize the StanzaExtension back
