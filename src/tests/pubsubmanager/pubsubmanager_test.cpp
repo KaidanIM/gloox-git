@@ -121,11 +121,11 @@ class ClientBase
 };
 
 static const std::string setheader =
-    "<iq to='aaa@bbb.ccc' id='id' type='set'>"
+    "<iq xmlns='jabber:client' to='aaa@bbb.ccc' id='id' type='set'>"
       "<pubsub xmlns='http://jabber.org/protocol/pubsub'>";
 
 static const std::string getheader =
-    "<iq to='aaa@bbb.ccc' id='id' type='get'>"
+    "<iq xmlns='jabber:client' to='aaa@bbb.ccc' id='id' type='get'>"
       "<pubsub xmlns='http://jabber.org/protocol/pubsub'>";
 
 static const std::string testValues [][2] =
@@ -181,13 +181,13 @@ static const std::string testValues [][2] =
     getheader + "<subscriptions/></pubsub></iq>" },
 
   { "subscriber list get",
-    "<iq to='aaa@bbb.ccc' id='id' type='get'>"
+    "<iq xmlns='jabber:client' to='aaa@bbb.ccc' id='id' type='get'>"
       "<pubsub xmlns='http://jabber.org/protocol/pubsub#owner'>"
           "<subscriptions node='node'/>"
       "</pubsub></iq>" },
 
   { "subscriber list set",
-    "<iq to='aaa@bbb.ccc' id='id' type='set'>"
+    "<iq xmlns='jabber:client' to='aaa@bbb.ccc' id='id' type='set'>"
         "<pubsub xmlns='http://jabber.org/protocol/pubsub#owner'>"
             "<subscriptions node='node'>"
                 "<subscription jid='some@jid.com' subscription='none' subid='abc'/>"
@@ -198,13 +198,13 @@ static const std::string testValues [][2] =
     getheader + "<affiliations/></pubsub></iq>" },
 
   { "affiliate list get",
-    "<iq to='aaa@bbb.ccc' id='id' type='get'>"
+    "<iq xmlns='jabber:client' to='aaa@bbb.ccc' id='id' type='get'>"
       "<pubsub xmlns='http://jabber.org/protocol/pubsub#owner'>"
           "<affiliations node='node'/>"
       "</pubsub></iq>" },
 
   { "affiliate list set",
-    "<iq to='aaa@bbb.ccc' id='id' type='set'>"
+    "<iq xmlns='jabber:client' to='aaa@bbb.ccc' id='id' type='set'>"
         "<pubsub xmlns='http://jabber.org/protocol/pubsub#owner'>"
             "<affiliations node='node'>"
                 "<affiliation jid='some@jid.com' affiliation='owner'/>"
@@ -212,13 +212,13 @@ static const std::string testValues [][2] =
         "</pubsub></iq>" },
 
   { "get node config",
-    "<iq to='aaa@bbb.ccc' id='id' type='get'>"
+    "<iq xmlns='jabber:client' to='aaa@bbb.ccc' id='id' type='get'>"
         "<pubsub xmlns='http://jabber.org/protocol/pubsub#owner'>"
             "<configure node='node'/>"
         "</pubsub></iq>" },
 
   { "set node config",
-    "<iq to='aaa@bbb.ccc' id='id' type='set'>"
+    "<iq xmlns='jabber:client' to='aaa@bbb.ccc' id='id' type='set'>"
         "<pubsub xmlns='http://jabber.org/protocol/pubsub#owner'>"
             "<configure node='node'>"
                 "<x xmlns='jabber:x:data' type='submit'>"
@@ -231,7 +231,7 @@ static const std::string testValues [][2] =
         "</pubsub></iq>" },
 
   { "get default node config",
-    "<iq to='aaa@bbb.ccc' id='id' type='get'>"
+    "<iq xmlns='jabber:client' to='aaa@bbb.ccc' id='id' type='get'>"
         "<pubsub xmlns='http://jabber.org/protocol/pubsub#owner'>"
             "<default/>"
         "</pubsub></iq>" }
