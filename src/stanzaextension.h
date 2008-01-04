@@ -117,7 +117,7 @@ namespace gloox
    * &lt;stats&gt; element such that it can be fed to your
    * StanzaExtension-derived class' constructor when creating a new instance
    * of it. For our @e stats protocol, filterString() would return something like:
-   * <em>/iq/stats[\@xmlns='ext:stats']</em>.
+   * <em>/iq/stats[\@xmlns='ext:stats']</em>
    *
    * @li When subclassing StanzaExtension, you have to init it with an int, the extension's
    * type. You should choose a value that is not yet used in gloox, and unique to
