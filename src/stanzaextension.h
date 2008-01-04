@@ -67,6 +67,7 @@ namespace gloox
                                      * (XEP-0020). */
     ExtIBB,                         /**< An extension dealing with IBBs (XEP-0047). */
     ExtNonSaslAuth,                 /**< An extension for doing Non-SASL Authentication (XEP-0078). */
+    ExtMUCOwner,                    /**< An extension dealing with the muc#owner namespace of XEP-0045. */
     ExtUser                         /**< User-supplied extensions must use IDs above this. Do
                                      * not hard-code ExtUser's value anywhere, it is subject
                                      * to change. */
@@ -83,7 +84,7 @@ namespace gloox
    * persistent object acting like a manager may be needed.
    *
    * A Stanza can be extended by additional namespaced child elements. Obviously,
-   * it is not vaiable to include all the kinds of extensions possible. To avoid
+   * it is not viable to include all the kinds of extensions possible. To avoid
    * hard-coding of such extensions into gloox, StanzaExtension can be used to
    * inform the core of gloox about additional supported extensions without it
    * needing to know about the exact implementation.
