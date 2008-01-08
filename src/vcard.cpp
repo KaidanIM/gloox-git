@@ -30,7 +30,7 @@ namespace gloox
       new Tag( vcard, field );
   }
 
-  void VCard::checkField( Tag* vcard, const char* field, std::string& var )
+  void VCard::checkField( const Tag* vcard, const char* field, std::string& var )
   {
     if( field )
     {
@@ -67,86 +67,87 @@ namespace gloox
     checkField( vcard, "UID", m_uid );
 
     TagList::const_iterator it = vcard->children().begin();
-    for( ; it != vcard->children().end(); ++it )
+    for( const Tag* tag; it != vcard->children().end(); ++it )
     {
-      if( (*it)->name() == "N" )
+      tag = (*it);
+      if( tag->name() == "N" )
       {
         m_N = true;
-        const Tag * child = (*it)->findChild( "FAMILY" );
+        const Tag * child = tag->findChild( "FAMILY" );
         if( child )
           m_name.family = child->cdata();
-        if( ( child = (*it)->findChild( "GIVEN" ) ) )
+        if( ( child = tag->findChild( "GIVEN" ) ) )
           m_name.given = child->cdata();
-        if( ( child = (*it)->findChild( "MIDDLE" ) ) )
+        if( ( child = tag->findChild( "MIDDLE" ) ) )
           m_name.middle = child->cdata();
-        if( ( child = (*it)->findChild( "PREFIX" ) ) )
+        if( ( child = tag->findChild( "PREFIX" ) ) )
           m_name.prefix = child->cdata();
-        if( ( child = (*it)->findChild( "SUFFIX" ) ) )
+        if( ( child = tag->findChild( "SUFFIX" ) ) )
           m_name.suffix = child->cdata();
       }
-      else if( (*it)->name() == "PHOTO" )
+      else if( tag->name() == "PHOTO" )
       {
-        if( (*it)->hasChild( "EXTVAL" ) )
+        if( tag->hasChild( "EXTVAL" ) )
         {
-          m_photo.extval = (*it)->findChild( "EXTVAL" )->cdata();
+          m_photo.extval = tag->findChild( "EXTVAL" )->cdata();
           m_PHOTO = true;
         }
-        else if( (*it)->hasChild( "TYPE" ) && (*it)->hasChild( "BINVAL" ) )
+        else if( tag->hasChild( "TYPE" ) && tag->hasChild( "BINVAL" ) )
         {
-          m_photo.type = (*it)->findChild( "TYPE" )->cdata();
-          m_photo.binval = Base64::decode64( (*it)->findChild( "BINVAL" )->cdata() );
+          m_photo.type = tag->findChild( "TYPE" )->cdata();
+          m_photo.binval = Base64::decode64( tag->findChild( "BINVAL" )->cdata() );
           m_PHOTO = true;
         }
       }
-      else if( (*it)->name() == "LOGO" )
+      else if( tag->name() == "LOGO" )
       {
-        if( (*it)->hasChild( "EXTVAL" ) )
+        if( tag->hasChild( "EXTVAL" ) )
         {
-          m_logo.extval = (*it)->findChild( "EXTVAL" )->cdata();
+          m_logo.extval = tag->findChild( "EXTVAL" )->cdata();
           m_LOGO = true;
         }
-        else if( (*it)->hasChild( "TYPE" ) && (*it)->hasChild( "BINVAL" ) )
+        else if( tag->hasChild( "TYPE" ) && tag->hasChild( "BINVAL" ) )
         {
-          m_logo.type = (*it)->findChild( "TYPE" )->cdata();
-          m_logo.binval = Base64::decode64( (*it)->findChild( "BINVAL" )->cdata() );
+          m_logo.type = tag->findChild( "TYPE" )->cdata();
+          m_logo.binval = Base64::decode64( tag->findChild( "BINVAL" )->cdata() );
           m_LOGO = true;
         }
       }
-      else if( (*it)->name() == "EMAIL" && (*it)->hasChild( "USERID" ) )
+      else if( tag->name() == "EMAIL" && tag->hasChild( "USERID" ) )
       {
         Email item;
-        item.userid = (*it)->findChild( "USERID" )->cdata();
-        item.internet = (*it)->hasChild( "INTERNET" );
-        item.x400 = (*it)->hasChild( "X400" );
-        item.work = (*it)->hasChild( "WORK" );
-        item.home = (*it)->hasChild( "HOME" );
-        item.pref = (*it)->hasChild( "PREF" );
+        item.userid = tag->findChild( "USERID" )->cdata();
+        item.internet = tag->hasChild( "INTERNET" );
+        item.x400 = tag->hasChild( "X400" );
+        item.work = tag->hasChild( "WORK" );
+        item.home = tag->hasChild( "HOME" );
+        item.pref = tag->hasChild( "PREF" );
         m_emailList.push_back( item );
       }
-      else if( (*it)->name() == "ADR" )
+      else if( tag->name() == "ADR" )
       {
         Address item;
-        checkField( (*it), "POBOX", item.pobox );
-        checkField( (*it), "EXTADD", item.extadd );
-        checkField( (*it), "STREET", item.street );
-        checkField( (*it), "LOCALITY", item.locality );
-        checkField( (*it), "REGION", item.region );
-        checkField( (*it), "PCODE", item.pcode );
-        checkField( (*it), "CTRY", item.ctry );
-        item.postal = (*it)->hasChild( "POSTAL" );
-        item.parcel = (*it)->hasChild( "PARCEL" );
-        item.work = (*it)->hasChild( "WORK" );
-        item.home = (*it)->hasChild( "HOME" );
-        item.pref = (*it)->hasChild( "PREF" );
-        item.dom = (*it)->hasChild( "DOM" );
-        item.intl = !item.dom && (*it)->hasChild( "INTL" );
+        checkField( tag, "POBOX", item.pobox );
+        checkField( tag, "EXTADD", item.extadd );
+        checkField( tag, "STREET", item.street );
+        checkField( tag, "LOCALITY", item.locality );
+        checkField( tag, "REGION", item.region );
+        checkField( tag, "PCODE", item.pcode );
+        checkField( tag, "CTRY", item.ctry );
+        item.postal = tag->hasChild( "POSTAL" );
+        item.parcel = tag->hasChild( "PARCEL" );
+        item.work = tag->hasChild( "WORK" );
+        item.home = tag->hasChild( "HOME" );
+        item.pref = tag->hasChild( "PREF" );
+        item.dom = tag->hasChild( "DOM" );
+        item.intl = !item.dom && tag->hasChild( "INTL" );
         m_addressList.push_back( item );
       }
-      else if( (*it)->name() == "LABEL" )
+      else if( tag->name() == "LABEL" )
       {
         Label item;
-        TagList::const_iterator it2 = (*it)->children().begin();
-        for( ; it2 != (*it)->children().end(); ++it2 )
+        TagList::const_iterator it2 = tag->children().begin();
+        for( ; it2 != tag->children().end(); ++it2 )
         {
           if( (*it2)->name() == "LINE" )
             item.lines.push_back( (*it)->cdata() );
@@ -160,29 +161,29 @@ namespace gloox
         }
         m_labelList.push_back( item );
       }
-      else if( (*it)->name() == "TEL" && (*it)->hasChild( "NUMBER" ) )
+      else if( tag->name() == "TEL" && tag->hasChild( "NUMBER" ) )
       {
         Telephone item;
-        item.number = (*it)->findChild( "NUMBER" )->cdata();
-        item.work = (*it)->hasChild( "WORK" );
-        item.home = (*it)->hasChild( "HOME" );
-        item.voice = (*it)->hasChild( "VOICE" );
-        item.fax = (*it)->hasChild( "FAX" );
-        item.pager = (*it)->hasChild( "PAGER" );
-        item.msg = (*it)->hasChild( "MSG" );
-        item.cell = (*it)->hasChild( "CELL" );
-        item.video = (*it)->hasChild( "VIDEO" );
-        item.bbs = (*it)->hasChild( "BBS" );
-        item.modem = (*it)->hasChild( "MODEM" );
-        item.isdn = (*it)->hasChild( "ISDN" );
-        item.pcs = (*it)->hasChild( "PCS" );
-        item.pref = (*it)->hasChild( "PREF" );
+        item.number = tag->findChild( "NUMBER" )->cdata();
+        item.work = tag->hasChild( "WORK" );
+        item.home = tag->hasChild( "HOME" );
+        item.voice = tag->hasChild( "VOICE" );
+        item.fax = tag->hasChild( "FAX" );
+        item.pager = tag->hasChild( "PAGER" );
+        item.msg = tag->hasChild( "MSG" );
+        item.cell = tag->hasChild( "CELL" );
+        item.video = tag->hasChild( "VIDEO" );
+        item.bbs = tag->hasChild( "BBS" );
+        item.modem = tag->hasChild( "MODEM" );
+        item.isdn = tag->hasChild( "ISDN" );
+        item.pcs = tag->hasChild( "PCS" );
+        item.pref = tag->hasChild( "PREF" );
         m_telephoneList.push_back( item );
       }
-      else if( (*it)->name() == "ORG" )
+      else if( tag->name() == "ORG" )
       {
-        TagList::const_iterator ito = (*it)->children().begin();
-        for( ; ito != (*it)->children().end(); ++ito )
+        TagList::const_iterator ito = tag->children().begin();
+        for( ; ito != tag->children().end(); ++ito )
         {
           if( (*ito)->name() == "ORGNAME" )
             m_org.name = (*ito)->cdata();
@@ -190,18 +191,18 @@ namespace gloox
             m_org.units.push_back( (*ito)->cdata() );
         }
       }
-      else if( (*it)->name() == "GEO" )
+      else if( tag->name() == "GEO" )
       {
-        checkField( (*it), "LON", m_geo.longitude );
-        checkField( (*it), "LAT", m_geo.latitude );
+        checkField( tag, "LON", m_geo.longitude );
+        checkField( tag, "LAT", m_geo.latitude );
       }
-      else if( (*it)->name() == "CLASS" )
+      else if( tag->name() == "CLASS" )
       {
-        if( (*it)->hasChild( "PRIVATE" ) )
+        if( tag->hasChild( "PRIVATE" ) )
           m_class = ClassPrivate;
-        else if( (*it)->hasChild( "PUBLIC" ) )
+        else if( tag->hasChild( "PUBLIC" ) )
           m_class = ClassPublic;
-        else if( (*it)->hasChild( "CONFIDENTIAL" ) )
+        else if( tag->hasChild( "CONFIDENTIAL" ) )
           m_class = ClassConfidential;
       }
 

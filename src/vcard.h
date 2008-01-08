@@ -570,7 +570,7 @@ namespace gloox
 
       static void insertField( Tag* vcard, const char* field, const std::string& var );
       static void insertField( Tag* vcard, const char* field, bool var );
-      static void checkField ( Tag* vcard, const char* field, std::string& var );
+      static void checkField ( const Tag* vcard, const char* field, std::string& var );
 
       EmailList m_emailList;
       TelephoneList m_telephoneList;
