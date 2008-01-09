@@ -29,6 +29,7 @@ namespace gloox
 {
 
   class ClientBase;
+  class DataForm;
   class DiscoHandler;
   class DiscoNodeHandler;
   class IQ;
@@ -92,6 +93,12 @@ namespace gloox
            */
           const IdentityList& identities() const { return m_identities; }
 
+          /**
+           * Returns an optionally included data form. This is used by e.g. MUC (XEP-0045).
+           * @return An optional data form included in the disco#info. May be 0.
+           */
+           const DataForm* form() const { return m_form; }
+
           // reimplemented from StanzaExtension
           virtual const std::string& filterString() const;
 
@@ -150,6 +157,7 @@ namespace gloox
           std::string m_node;
           StringList m_features;
           IdentityList m_identities;
+          DataForm* m_form;
       };
 
       /**
@@ -337,8 +345,8 @@ namespace gloox
           const std::string& node() const { return m_node; }
 
           /**
-           * Returns the identity's name.
-           * @return The identity's name.
+           * Returns the item's name.
+           * @return The item's name.
            */
           const std::string& name() const { return m_name; }
 

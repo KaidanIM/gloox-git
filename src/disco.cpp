@@ -13,6 +13,7 @@
 
 #include "disco.h"
 #include "discohandler.h"
+#include "dataform.h"
 #include "error.h"
 #include "clientbase.h"
 #include "disconodehandler.h"
@@ -52,14 +53,14 @@ namespace gloox
 
   // ---- Disco::Info ----
   Disco::Info::Info( const std::string& node )
-    : StanzaExtension( ExtDiscoInfo ), m_node( node )
+    : StanzaExtension( ExtDiscoInfo ), m_node( node ), m_form( 0 )
   {
     m_features.push_back( XMLNS_DISCO_INFO );
     m_features.push_back( XMLNS_DISCO_ITEMS );
   }
 
   Disco::Info::Info( const Tag* tag )
-    : StanzaExtension( ExtDiscoInfo )
+    : StanzaExtension( ExtDiscoInfo ), m_form( 0 )
   {
     if( !tag || tag->name() != "query" || tag->xmlns() != XMLNS_DISCO_INFO )
       return;
@@ -75,11 +76,14 @@ namespace gloox
         m_identities.push_back( new Identity( (*it) ) );
       else if( name == "feature" && (*it)->hasAttribute( "var" ) )
         m_features.push_back( (*it)->findAttribute( "var" ) );
+      else if( !m_form && name == "x" && (*it)->xmlns() == XMLNS_X_DATA )
+        m_form = new DataForm( (*it) );
     }
   }
 
   Disco::Info::~Info()
   {
+    delete m_form;
     util::clearList( m_identities );
   }
 
