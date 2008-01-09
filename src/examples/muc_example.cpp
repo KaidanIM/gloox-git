@@ -122,15 +122,16 @@ class MessageTest : public ConnectionListener, LogHandler, MUCRoomHandler
     virtual void handleMUCInfo( MUCRoom * /*room*/, int features, const std::string& name,
                                     const DataForm* infoForm )
     {
-      printf( "features: %d, name: %s, form xml: %s\n", features, name.c_str(), infoForm->tag()->xml().c_str() );
+      printf( "features: %d, name: %s, form xml: %s\n",
+              features, name.c_str(), infoForm->tag()->xml().c_str() );
     }
 
-    virtual void handleMUCItems( MUCRoom * /*room*/, const StringMap& items )
+    virtual void handleMUCItems( MUCRoom * /*room*/, const Disco::ItemList& items )
     {
-      StringMap::const_iterator it = items.begin();
+      Disco::ItemList::const_iterator it = items.begin();
       for( ; it != items.end(); ++it )
       {
-        printf( "%s -- %s is an item here\n", (*it).first.c_str(), (*it).second.c_str() );
+        printf( "%s -- %s is an item here\n", (*it)->jid().full().c_str(), (*it)->name().c_str() );
       }
     }
 
