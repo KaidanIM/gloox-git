@@ -23,6 +23,7 @@
 #include "mucroomhandler.h"
 #include "mucroomconfighandler.h"
 #include "jid.h"
+#include "stanzaextension.h"
 
 #include <string>
 
@@ -426,7 +427,7 @@ namespace gloox
        * Usually owner privileges are required for this action to succeed.
        */
       void destroy( const std::string& reason = EmptyString,
-                    const JID* alternate = 0, const std::string& password = EmptyString );
+                    const JID& alternate = JID(), const std::string& password = EmptyString );
 
       /**
        * Use this function to request a particluar list of room occupants.
@@ -470,19 +471,40 @@ namespace gloox
       void storeList( const MUCListItemList items, MUCOperation operation );
 
       /**
-       * Returns the currently know room flags.
+       * Returns the currently known room flags.
        * @return ORed MUCRoomFlag's describing the current room configuration.
        */
       int flags() const { return m_flags; }
 
       // reimplemented from DiscoHandler
-      virtual void handleDiscoInfoResult( IQ* iq, int context );
+      virtual void handleDiscoInfoResult( IQ* iq, int context ) // FIXME remove for 1.1
+      {
+        (void)iq;
+        (void)context;
+      }
 
       // reimplemented from DiscoHandler
-      virtual void handleDiscoItemsResult( IQ* iq, int context );
+      virtual void handleDiscoInfo( const JID& from, const Disco::Info& info, int context );
 
       // reimplemented from DiscoHandler
-      virtual void handleDiscoError( IQ* iq, int context );
+      virtual void handleDiscoItemsResult( IQ* iq, int context ) // FIXME remove for 1.1
+      {
+        (void)iq;
+        (void)context;
+      }
+
+      // reimplemented from DiscoHandler
+      virtual void handleDiscoItems( const JID& from, const Disco::Items& items, int context );
+
+      // reimplemented from DiscoHandler
+      virtual void handleDiscoError( IQ* iq, int context ) // FIXME remove for 1.1
+      {
+        (void)iq;
+        (void)context;
+      }
+
+      // reimplemented from DiscoHandler
+      virtual void handleDiscoError( const JID& from, const Error* error, int context );
 
       // reimplemented from PresenceHandler
       virtual void handlePresence( const Presence& presence );
@@ -533,6 +555,76 @@ namespace gloox
       bool m_joined;
 
     private:
+#ifdef MUCROOM_TEST
+    public:
+#endif
+      /**
+       * @brief An abstraction of a MUC query.
+       *
+       * @author Jakob Schroeter <js@camaya.net>
+       * @since 1.0
+       */
+      class MUCOwner : public StanzaExtension
+      {
+        public:
+
+          /**
+           * Describes available query types for the muc#owner namespace.
+           */
+          enum QueryType
+          {
+            TypeCreate,             /**< Create a room. */
+            TypeRequestConfig,      /**< Request room config. */
+            TypeSendConfig,         /**< Submit configuration form to MUC service. */
+            TypeCancelConfig,       /**< Cancel room configuration. */
+            TypeInstantRoom,        /**< Request an instant room */
+            TypeDestroy,            /**< Destroy the room. */
+            TypeIncomingTag         /**< The Query has been created from an incoming Tag. */
+          };
+
+          /**
+           *
+           */
+          MUCOwner( QueryType type, DataForm* form = 0 );
+
+          /**
+           * Creates a new query that destroys the current room.
+           * @param alternate An alternate discussion venue.
+           * @param reason An optional reason for the room destruction.
+           * @param password An optional password for the new room.
+           */
+          MUCOwner( const JID& alternate, const std::string& reason, const std::string& password );
+
+          /**
+           *
+           */
+          MUCOwner( const Tag* tag = 0 );
+
+          /**
+           * Virtual destructor.
+           */
+          virtual ~MUCOwner();
+
+          // reimplemented from StanzaExtension
+          const std::string& filterString() const;
+
+          // reimplemented from StanzaExtension
+          StanzaExtension* newInstance( const Tag* tag ) const
+          {
+            return new MUCOwner( tag );
+          }
+
+          // reimplemented from StanzaExtension
+          Tag* tag() const;
+
+        private:
+          QueryType m_type;
+          JID m_jid;
+          std::string m_reason;
+          std::string m_pwd;
+          DataForm* m_form;
+      };
+
       void handleIqResult( const IQ& iq, int context );
       void handleIqError( const IQ& iq, int context );
       void setNonAnonymous();

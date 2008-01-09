@@ -17,6 +17,7 @@
 
 #include "gloox.h"
 #include "presence.h"
+#include "disco.h"
 
 #include <string>
 
@@ -219,7 +220,7 @@ namespace gloox
        * @param name The room's name as returned by Service Discovery.
        * @param infoForm A DataForm containing extended room information. May be 0 if the service
        * doesn't support extended room information. See Section 15.5 of XEP-0045 for defined
-       * field types.
+       * field types. You should not delete the form.
        *
        * @note This function may be called without a prior call to MUCRoom::getRoomInfo(). This
        * happens if the room config is changed, e.g. by a room admin.
@@ -233,7 +234,7 @@ namespace gloox
        * @param items A map of room participants. The key is the name, the value is the occupant's
        * room JID. The map may be empty if such info is private.
        */
-      virtual void handleMUCItems( MUCRoom* room, const StringMap& items ) = 0;
+      virtual void handleMUCItems( MUCRoom* room, const Disco::ItemList& items ) = 0;
 
   };
 
