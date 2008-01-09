@@ -9,7 +9,7 @@ using namespace gloox;
 #include <locale.h>
 #include <string>
 
-             int main( int /*argc*/, char** /*argv*/ )
+int main( int /*argc*/, char** /*argv*/ )
 {
   int fail = 0;
   std::string name;
@@ -20,7 +20,7 @@ using namespace gloox;
     name = "empty disco#items request";
     Disco::Items di;
     t = di.tag();
-    if( t->xml() != "<query xmlns='" + XMLNS_DISCO_ITEMS + "'/>"
+    if( !t || t->xml() != "<query xmlns='" + XMLNS_DISCO_ITEMS + "'/>"
         || !di.node().empty() )
     {
       ++fail;

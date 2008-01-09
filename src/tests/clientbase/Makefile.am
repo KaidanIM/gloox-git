@@ -12,7 +12,9 @@ clientbase_test_LDADD = ../../clientbase.o ../../jid.o ../../connectiontcpclient
 			../../md5.o ../../tlsgnutlsclient.o ../../tlsopenssl.o ../../tlsschannel.o \
 			../../logsink.o ../../messagesession.o ../../prep.o ../../compressionzlib.o \
 			../../dns.o ../../stanzaextensionfactory.o ../../softwareversion.o \
-			../../gloox.o ../../tlsgnutlsbase.o ../../tlsdefault.o \
+			../../gloox.o ../../tlsgnutlsbase.o ../../tlsdefault.o ../../dataform.o \
+			../../dataformfieldcontainer.o ../../dataformreported.o ../../dataformitem.o \
+			../../dataformfield.o \
 			../../tlsgnutlsclientanon.o ../../tlsgnutlsserveranon.o ../../mutex.o \
 			../../iq.o ../../presence.o ../../message.o ../../subscription.o ../../util.o \
 			../../sha.o ../../error.o

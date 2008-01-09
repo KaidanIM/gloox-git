@@ -157,7 +157,8 @@ void DiscoTest::send( const IQ& iq )
   {
     const Disco::Info* se = iq.findExtension<Disco::Info>( ExtDiscoInfo );
     if( se && se->node() == "foonode" && se->hasFeature( XMLNS_DISCO_INFO )
-        && se->hasFeature( "test6-feature" ) && se->features().size() == 2 )
+        && se->hasFeature( XMLNS_DISCO_ITEMS )
+        && se->hasFeature( "test6-feature" ) && se->features().size() == 3 )
     {
       m_result = true;
     }

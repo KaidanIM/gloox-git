@@ -15,5 +15,7 @@ discoinfo_test_LDADD =../../connectiontcpclient.o ../../connectiontcpbase.o \
 			../../gloox.o ../../tlsgnutlsbase.o ../../tlsdefault.o \
 			../../tlsgnutlsclientanon.o ../../tlsgnutlsserveranon.o ../../mutex.o \
 			../../iq.o ../../presence.o ../../message.o ../../subscription.o ../../util.o \
-			../../sha.o ../../error.o ../../clientbase.o ../../jid.o
+			../../sha.o ../../error.o ../../clientbase.o ../../jid.o ../../dataform.o \
+			../../dataformfieldcontainer.o ../../dataformreported.o ../../dataformitem.o \
+			../../dataformfield.o
 discoinfo_test_CFLAGS = $(CPPFLAGS)

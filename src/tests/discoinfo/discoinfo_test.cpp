@@ -22,7 +22,8 @@ int main( int /*argc*/, char** /*argv*/ )
     t = di.tag();
     if( t->xml() != "<query xmlns='" + XMLNS_DISCO_INFO + "'>"
                     "<feature var='" + XMLNS_DISCO_INFO + "'/>"
-                    "</query>"
+                    "<feature var='" + XMLNS_DISCO_ITEMS + "'/>"
+        "</query>"
         || !di.node().empty() )
     {
       ++fail;
@@ -39,6 +40,7 @@ int main( int /*argc*/, char** /*argv*/ )
     t = di.tag();
     if( t->xml() != "<query xmlns='" + XMLNS_DISCO_INFO + "' node='somenode'>"
                     "<feature var='" + XMLNS_DISCO_INFO + "'/>"
+                    "<feature var='" + XMLNS_DISCO_ITEMS + "'/>"
                     "</query>"
         || di.node() != "somenode" )
     {

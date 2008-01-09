@@ -4,19 +4,18 @@
 
 AM_CPPFLAGS = -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare -Wpointer-arith -Wswitch -Wunknown-pragmas -Wconversion -Wundef -Wcast-qual -ansi
 
-noinst_PROGRAMS = rostermanagerquery_test
+noinst_PROGRAMS = mucroommucowner_test
 
-rostermanagerquery_test_SOURCES = rostermanagerquery_test.cpp
-rostermanagerquery_test_LDADD = ../../rostermanager.o ../../connectiontcpclient.o ../../connectiontcpbase.o \
+mucroommucowner_test_SOURCES = mucroommucowner_test.cpp
+mucroommucowner_test_LDADD =../../connectiontcpclient.o ../../connectiontcpbase.o \
 			../../disco.o ../../parser.o ../../tag.o ../../stanza.o ../../base64.o \
 			../../md5.o ../../tlsgnutlsclient.o ../../tlsopenssl.o ../../tlsschannel.o \
 			../../logsink.o ../../messagesession.o ../../prep.o ../../compressionzlib.o \
 			../../dns.o ../../stanzaextensionfactory.o ../../softwareversion.o \
-			../../gloox.o ../../tlsgnutlsbase.o ../../tlsdefault.o ../../privatexml.o \
+			../../gloox.o ../../tlsgnutlsbase.o ../../tlsdefault.o \
 			../../tlsgnutlsclientanon.o ../../tlsgnutlsserveranon.o ../../mutex.o \
 			../../iq.o ../../presence.o ../../message.o ../../subscription.o ../../util.o \
-			../../sha.o ../../error.o ../../clientbase.o ../../jid.o ../../rosteritem.o \
-			../../capabilities.o ../../dataform.o \
+			../../sha.o ../../error.o ../../clientbase.o ../../jid.o ../../dataform.o \
 			../../dataformfieldcontainer.o ../../dataformreported.o ../../dataformitem.o \
-			../../dataformfield.o
-rostermanagerquery_test_CFLAGS = $(CPPFLAGS)
+			../../dataformfield.o ../../mucroom.o ../../delayeddelivery.o ../../mucmessagesession.o
+mucroommucowner_test_CFLAGS = $(CPPFLAGS)
