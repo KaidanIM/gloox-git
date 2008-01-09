@@ -21,10 +21,124 @@
 #include "message.h"
 #include "error.h"
 #include "util.h"
+#include "tag.h"
 
 namespace gloox
 {
 
+  // ---- MUCRoom::MUCOwner ----
+  MUCRoom::MUCOwner::MUCOwner( QueryType type, DataForm* form )
+    : StanzaExtension( ExtMUCOwner ), m_type( type ), m_form( form )
+  {
+    m_valid = true;
+
+    if( m_form )
+      return;
+
+    switch( type )
+    {
+      case TypeCancelConfig:
+        m_form = new DataForm( TypeCancel );
+        break;
+      case TypeInstantRoom:
+        m_form = new DataForm( TypeSubmit );
+        break;
+      default:
+        break;
+    }
+  }
+
+  MUCRoom::MUCOwner::MUCOwner( const JID& alternate, const std::string& reason,
+                               const std::string& password )
+    : StanzaExtension( ExtMUCOwner ), m_type( TypeDestroy ), m_jid( alternate ),
+      m_reason( reason ), m_pwd( password ), m_form( 0 )
+  {
+    if( m_jid )
+      m_valid = true;
+  }
+
+  MUCRoom::MUCOwner::MUCOwner( const Tag* tag )
+    : StanzaExtension( ExtMUCOwner ), m_type( TypeIncomingTag ), m_form( 0 )
+  {
+    if( !tag || tag->name() != "query" || tag->xmlns() != XMLNS_MUC_OWNER )
+      return;
+
+    const TagList& l = tag->children();
+    TagList::const_iterator it = l.begin();
+    for( ; it != l.end(); ++it )
+    {
+      const std::string& name = (*it)->name();
+      if( name == "x" && (*it)->xmlns() == XMLNS_X_DATA )
+      {
+        m_form = new DataForm( (*it) );
+        break;
+      }
+      else if( name == "destroy" )
+      {
+        m_type = TypeDestroy;
+        m_jid = (*it)->findAttribute( "jid" );
+        m_pwd = (*it)->findCData( "/query/destroy/password" );
+        m_reason = (*it)->findCData( "/query/destroy/reason" );
+        break;
+      }
+    }
+    m_valid = true;
+  }
+
+  MUCRoom::MUCOwner::~MUCOwner()
+  {
+    delete m_form;
+  }
+
+  const std::string& MUCRoom::MUCOwner::filterString() const
+  {
+    static const std::string filter = "/iq/query[@xmlns='" + XMLNS_MUC_OWNER + "']";
+    return filter;
+  }
+
+  Tag* MUCRoom::MUCOwner::tag() const
+  {
+    if( !m_valid )
+      return 0;
+
+    Tag* t = new Tag( "query" );
+    t->setXmlns( XMLNS_MUC_OWNER );
+
+    switch( m_type )
+    {
+      case TypeInstantRoom:
+      case TypeSendConfig:
+      case TypeCancelConfig:
+      case TypeIncomingTag:
+        if( m_form )
+          t->addChild( m_form->tag() );
+        break;
+      case TypeDestroy:
+      {
+        Tag* d = new Tag( t, "destroy" );
+        if( m_jid )
+          d->addAttribute( "jid", m_jid.bare() );
+
+        if( !m_reason.empty() )
+          new Tag( d, "reason", m_reason );
+
+        if( !m_pwd.empty() )
+          new Tag( d, "password", m_pwd );
+
+        break;
+      }
+      case TypeRequestConfig:
+      case TypeCreate:
+      default:
+        break;
+    }
+
+    return t;
+  }
+
+  // ---- MUCRoom::MUCOwner ----
+
+  // --- MUCRoom ----
   MUCRoom::MUCRoom( ClientBase* parent, const JID& nick, MUCRoomHandler* mrh,
                     MUCRoomConfigHandler* mrch )
     : m_parent( parent ), m_nick( nick ), m_joined( false ), m_roomHandler( mrh ),
@@ -99,23 +213,14 @@ namespace gloox
     m_joined = false;
   }
 
-  void MUCRoom::destroy( const std::string& reason, const JID* alternate, const std::string& password )
+  void MUCRoom::destroy( const std::string& reason, const JID& alternate, const std::string& password )
   {
     if( !m_parent || !m_joined )
       return;
 
     const std::string& id = m_parent->getID();
-    IQ iq( IQ::Set, m_nick.bareJID(), id, XMLNS_MUC_OWNER );
-    Tag* d = new Tag( iq.query(), "destroy" );
-    if( alternate )
-      d->addAttribute( "jid", alternate->bare() );
-
-    if( !reason.empty() )
-      new Tag( d, "reason", reason );
-
-    if( !password.empty() )
-      new Tag( d, "password", password );
-
+    IQ iq( IQ::Set, m_nick.bareJID(), id );
+    iq.addExtension( new MUCOwner( alternate, reason, password ) );
     m_parent->send( iq, this, DestroyRoom );
   }
 
@@ -794,7 +899,7 @@ namespace gloox
     }
   }
 
-  void MUCRoom::handleDiscoInfoResult( IQ* iq, int context )
+  void MUCRoom::handleDiscoInfo( const JID& /*from*/, const Disco::Info& info, int context )
   {
     switch( context )
     {
@@ -806,56 +911,44 @@ namespace gloox
           m_flags |= FlagPublicLogging;
 
         std::string name;
-        const DataForm* df = 0;
-        const Tag* q = iq->query();
-        if( q )
+        const StringList& l = info.features();
+        StringList::const_iterator it = l.begin();
+        for( ; it != l.end(); ++it )
         {
-          const TagList& l = q->children();
-          TagList::const_iterator it = l.begin();
-          for( ; it != l.end(); ++it )
-          {
-            if( (*it)->name() == "feature" )
-            {
-              const std::string& var = (*it)->findAttribute( "var" );
-              if( var == "muc_hidden" )
-                m_flags |= FlagHidden;
-              else if( var == "muc_membersonly" )
-                m_flags |= FlagMembersOnly;
-              else if( var == "muc_moderated" )
-                m_flags |= FlagModerated;
-              else if( var == "muc_nonanonymous" )
-                setNonAnonymous();
-              else if( var == "muc_open" )
-                m_flags |= FlagOpen;
-              else if( var == "muc_passwordprotected" )
-                m_flags |= FlagPasswordProtected;
-              else if( var == "muc_persistent" )
-                m_flags |= FlagPersistent;
-              else if( var == "muc_public" )
-                m_flags |= FlagPublic;
-              else if( var == "muc_semianonymous" )
-                setSemiAnonymous();
-              else if( var == "muc_temporary" )
-                m_flags |= FlagTemporary;
-              else if( var == "muc_fullyanonymous" )
-                setFullyAnonymous();
-              else if( var == "muc_unmoderated" )
-                m_flags |= FlagUnmoderated;
-              else if( var == "muc_unsecured" )
-                m_flags |= FlagUnsecured;
-            }
-            else if( (*it)->name() == "identity" )
-            {
-              name = (*it)->findAttribute( "name" );
-            }
-            else if( (*it)->name() == "x" && (*it)->hasAttribute( XMLNS, XMLNS_X_DATA ) )
-            {
-              df = new DataForm( (*it) );
-            }
-          }
+          if( (*it) == "muc_hidden" )
+            m_flags |= FlagHidden;
+          else if( (*it) == "muc_membersonly" )
+            m_flags |= FlagMembersOnly;
+          else if( (*it) == "muc_moderated" )
+            m_flags |= FlagModerated;
+          else if( (*it) == "muc_nonanonymous" )
+            setNonAnonymous();
+          else if( (*it) == "muc_open" )
+            m_flags |= FlagOpen;
+          else if( (*it) == "muc_passwordprotected" )
+            m_flags |= FlagPasswordProtected;
+          else if( (*it) == "muc_persistent" )
+            m_flags |= FlagPersistent;
+          else if( (*it) == "muc_public" )
+            m_flags |= FlagPublic;
+          else if( (*it) == "muc_semianonymous" )
+            setSemiAnonymous();
+          else if( (*it) == "muc_temporary" )
+            m_flags |= FlagTemporary;
+          else if( (*it) == "muc_fullyanonymous" )
+            setFullyAnonymous();
+          else if( (*it) == "muc_unmoderated" )
+            m_flags |= FlagUnmoderated;
+          else if( (*it) == "muc_unsecured" )
+            m_flags |= FlagUnsecured;
         }
+
+        const Disco::IdentityList& il = info.identities();
+        if( il.size() )
+          name = il.front()->name();
+
         if( m_roomHandler )
-          m_roomHandler->handleMUCInfo( this, m_flags, name, df );
+          m_roomHandler->handleMUCInfo( this, m_flags, name, info.form() );
         break;
       }
       default:
@@ -863,7 +956,7 @@ namespace gloox
     }
   }
 
-  void MUCRoom::handleDiscoItemsResult( IQ* iq, int context )
+  void MUCRoom::handleDiscoItems( const JID& /*from*/, const Disco::Items& items, int context )
   {
     if( !m_roomHandler )
       return;
@@ -872,19 +965,7 @@ namespace gloox
     {
       case GetRoomItems:
       {
-        const Tag* q = iq->query();
-        if( q )
-        {
-          StringMap items;
-          const TagList& l = q->children();
-          TagList::const_iterator it = l.begin();
-          for( ; it != l.end(); ++it )
-          {
-            if( (*it)->name() == "item" && (*it)->hasAttribute( "jid" ) )
-              items[(*it)->findAttribute( "name" )] = (*it)->findAttribute( "jid" );
-          }
-          m_roomHandler->handleMUCItems( this, items );
-        }
+        m_roomHandler->handleMUCItems( this, items.items() );
         break;
       }
       default:
@@ -892,7 +973,7 @@ namespace gloox
     }
   }
 
-  void MUCRoom::handleDiscoError( IQ * /*iq*/, int context )
+  void MUCRoom::handleDiscoError( const JID& /*from*/, const Error* /*error*/, int context )
   {
     if( !m_roomHandler )
       return;
@@ -903,7 +984,7 @@ namespace gloox
         m_roomHandler->handleMUCInfo( this, 0, EmptyString, 0 );
         break;
       case GetRoomItems:
-        m_roomHandler->handleMUCItems( this, StringMap() );
+        m_roomHandler->handleMUCItems( this, Disco::ItemList() );
         break;
       default:
         break;
