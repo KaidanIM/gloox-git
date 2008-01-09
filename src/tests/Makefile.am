@@ -3,11 +3,13 @@
 ##
 
 SUBDIRS = adhoc adhoccommand adhoccommandnote amprule amp base64 \
-          chatstatefilter client clientbase dataform dataformfield \
+          chatstatefilter client clientbase connectionbosh dataform dataformfield \
           dataformreported dataformitem delayeddelivery discoinfo discoitems disco \
           error featureneg gpgencrypted gpgsigned \
-          inbandbytestreamibb inbandbytestream iq jid md5 message \
-          messageeventfilter nickname nonsaslauthquery nonsaslauth \
+          inbandbytestreamibb inbandbytestream iq jid \
+          md5 message messageeventfilter \
+          mucroommucowner \
+          nickname nonsaslauthquery nonsaslauth \
           oob parser prep presence pubsubevent pubsubmanager \
           rostermanagerquery rostermanager search \
           sha simanager stanzaextensionfactory subscription tag tlsgnutls vcardupdate \

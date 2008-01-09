@@ -11,5 +11,7 @@ rostermanager_test_LDADD = ../../tag.o ../../stanza.o ../../capabilities.o ../..
 			../../prep.o \
 			../../gloox.o \
 			../../iq.o ../../presence.o ../../message.o ../../subscription.o ../../util.o \
-			../../sha.o ../../error.o ../../jid.o ../../rosteritem.o
+			../../sha.o ../../error.o ../../jid.o ../../rosteritem.o ../../dataform.o \
+			../../dataformfieldcontainer.o ../../dataformreported.o ../../dataformitem.o \
+			../../dataformfield.o
 rostermanager_test_CFLAGS = $(CPPFLAGS)
