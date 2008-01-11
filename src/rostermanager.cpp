@@ -225,7 +225,6 @@ namespace gloox
   {
     Tag *s = new Tag( "presence" );
     s->addAttribute( "type", "unsubscribe" );
-    s->addAttribute( "from", m_parent->jid().bare() );
     s->addAttribute( "to", jid.bare() );
     if( !msg.empty() )
       new Tag( s, "status", msg );
@@ -238,7 +237,6 @@ namespace gloox
   {
     Tag *s = new Tag( "presence" );
     s->addAttribute( "type", "unsubscribed" );
-    s->addAttribute( "from", m_parent->jid().bare() );
     s->addAttribute( "to", jid.bare() );
     if( !msg.empty() )
       new Tag( s, "status", msg );
@@ -302,7 +300,6 @@ namespace gloox
     else
       p->addAttribute( "type", "unsubscribed" );
 
-    p->addAttribute( "from", m_parent->jid().bare() );
     p->addAttribute( "to", to.bare() );
     m_parent->send( p );
   }
@@ -327,7 +324,6 @@ namespace gloox
       {
 //         Tag *p = new Tag( "presence" );
 //         p->addAttribute( "type", "subscribe" );
-//         p->addAttribute( "from", m_parent->jid().bare() );
 //         p->addAttribute( "to", stanza->from().bare() );
 //         m_parent->send( p );
 
@@ -339,7 +335,6 @@ namespace gloox
       {
         Tag *p = new Tag( "presence" );
         p->addAttribute( "type", "unsubscribed" );
-        p->addAttribute( "from", m_parent->jid().bare() );
         p->addAttribute( "to", stanza->from().bare() );
         m_parent->send( p );
 
@@ -353,7 +348,6 @@ namespace gloox
       {
 //         Tag *p = new Tag( "presence" );
 //         p->addAttribute( "type", "unsubscribe" );
-//         p->addAttribute( "from", m_parent->jid().bare() );
 //         p->addAttribute( "to", stanza->from().bare() );
 //         m_parent->send( p );
 
