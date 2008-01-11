@@ -1,4 +1,5 @@
 #define JID_TEST
+#define GLOOX_TESTS
 #include "../../iq.h"
 #include "../../iqhandler.h"
 #include "../../jid.h"
@@ -123,7 +124,8 @@ void AdhocTest::send( const IQ& iq, IqHandler*, int ctx )
     }
     case 4: // execute single stage command
     {
-      IQ re( IQ::Result, iq.from(), iq.id(), g_jid );
+      IQ re( IQ::Result, iq.from(), iq.id() );
+      re.setFrom( g_jid );
       re.addExtension( new Adhoc::Command( "foocmd", "somesess", Adhoc::Command::Completed, 0 ) );
       m_adhoc->handleIqID( re, ctx );
       break;
@@ -188,7 +190,8 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     name = "execute local command";
     at->setTest( 5 );
-    IQ iq( IQ::Set, g_jid, at->getID(), g_jid );
+    IQ iq( IQ::Set, g_jid, at->getID() );
+    iq.setFrom( g_jid );
     iq.addExtension( new Adhoc::Command( "foocmd", Adhoc::Command::Execute ) );
     ah->handleIq( iq );
     if( !at->checkResult() )

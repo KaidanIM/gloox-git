@@ -120,6 +120,10 @@ namespace gloox
        */
       virtual Tag* tag() const = 0;
 
+#ifdef GLOOX_TESTS
+      void setFrom( const JID& from ) { m_from = from; }
+#endif
+
     protected:
 #ifdef JID_TEST
     public:
@@ -132,12 +136,11 @@ namespace gloox
       Stanza( Tag* tag );
 
       /**
-       * Creates a new Stanza with given name.
+       * Creates a new Stanza object and initializes the receiver's JID.
        * @param to The receipient of the Stanza.
-       * @param from The sender of the Stanza.
        * @since 1.0
        */
-      Stanza( const JID& to, const JID& from );
+      Stanza( const JID& to );
 
       StanzaExtensionList m_extensionList;
       std::string m_id;

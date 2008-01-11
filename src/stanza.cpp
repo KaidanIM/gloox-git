@@ -23,8 +23,8 @@
 namespace gloox
 {
 
-  Stanza::Stanza( const JID& to, const JID& from )
-    : m_xmllang( "default" ), m_from( from ), m_to( to )
+  Stanza::Stanza( const JID& to )
+    : m_xmllang( "default" ), m_to( to )
   {
   }
 

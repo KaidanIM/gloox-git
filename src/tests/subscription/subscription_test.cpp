@@ -1,3 +1,4 @@
+#define GLOOX_TESTS
 #include "../../tag.h"
 #include "../../subscription.h"
 #include "../../stanza.h"
@@ -87,7 +88,8 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     name = "new simple Subscription subscribe";
     Subscription s( Subscription::Subscribe, JID( "xyz@example.org/blah" ), "the status",
-                          "the xmllang", JID( "foo@bar.com" ) );
+                          "the xmllang" );
+    s.setFrom( JID( "foo@bar.com" ) );
     Tag* i = s.tag();
     if( i->name() != "presence" || !i->hasAttribute( "type", "subscribe" )
         || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
@@ -104,7 +106,8 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     name = "new simple Subscription subscribed";
     Subscription s( Subscription::Subscribed, JID( "xyz@example.org/blah" ), "the status",
-                          "the xmllang", JID( "foo@bar.com" ) );
+                          "the xmllang" );
+    s.setFrom( JID( "foo@bar.com" ) );
     Tag* i = s.tag();
     if( i->name() != "presence" || !i->hasAttribute( "type", "subscribed" )
         || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
@@ -121,7 +124,8 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     name = "new simple Subscription unsubscribe";
     Subscription s( Subscription::Unsubscribe, JID( "xyz@example.org/blah" ), "the status",
-                          "the xmllang", JID( "foo@bar.com" ) );
+                          "the xmllang" );
+    s.setFrom( JID( "foo@bar.com" ) );
     Tag* i = s.tag();
     if( i->name() != "presence" || !i->hasAttribute( "type", "unsubscribe" )
         || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
@@ -138,7 +142,8 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     name = "new simple Subscription unsubscribed";
     Subscription s( Subscription::Unsubscribed, JID( "xyz@example.org/blah" ), "the status",
-                          "the xmllang", JID( "foo@bar.com" ) );
+                          "the xmllang" );
+    s.setFrom( JID( "foo@bar.com" ) );
     Tag* i = s.tag();
     if( i->name() != "presence" || !i->hasAttribute( "type", "unsubscribed" )
         || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )

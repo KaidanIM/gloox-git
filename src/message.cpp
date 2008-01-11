@@ -53,8 +53,8 @@ namespace gloox
 
   Message::Message( MessageType type, const JID& to,
                     const std::string& body, const std::string& subject,
-                    const std::string& thread, const std::string& xmllang, const JID& from )
-    : Stanza( to, from ), m_subtype( type ), m_bodies( 0 ), m_subjects( 0 ), m_thread( thread )
+                    const std::string& thread, const std::string& xmllang )
+    : Stanza( to ), m_subtype( type ), m_bodies( 0 ), m_subjects( 0 ), m_thread( thread )
   {
     setLang( &m_bodies, m_body, body, xmllang );
     setLang( &m_subjects, m_subject, subject, xmllang );

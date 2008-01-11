@@ -53,10 +53,9 @@ namespace gloox
        * @param to The intended receiver. Use an empty JID to create a broadcast packet.
        * @param status An optional status message (e.g. "please authorize me").
        * @param xmllang An optional xml:lang for the status message.
-       * @param from An optional sender address. Usually not needed. Cannot be forged.
        */
       Subscription( S10nType type, const JID& to, const std::string& status = EmptyString,
-                     const std::string& xmllang = EmptyString, const JID& from = JID() );
+                     const std::string& xmllang = EmptyString );
       /**
        * Destructor.
        */

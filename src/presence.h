@@ -60,10 +60,9 @@ namespace gloox
        * @param priority An optional presence priority. Legal range is between -128 and +127.
        * Defaults to 0.
        * @param xmllang An optional xml:lang for the status message.
-       * @param from An optional sender address. Usually not needed. Cannot be forged.
        */
       Presence( PresenceType type, const JID& to, const std::string& status = EmptyString,
-                int priority = 0, const std::string& xmllang = EmptyString, const JID& from = JID() );
+                int priority = 0, const std::string& xmllang = EmptyString );
 
       /**
        * Destructor.

@@ -44,15 +44,15 @@ namespace gloox
       m_xmlns = m_query->findAttribute( XMLNS );
   }
 
-  IQ::IQ( IqType type, const JID& to, const std::string& id, const JID& from )
-    : Stanza( to, from ), m_query( 0 ), m_subtype( type )
+  IQ::IQ( IqType type, const JID& to, const std::string& id )
+    : Stanza( to ), m_query( 0 ), m_subtype( type )
   {
     m_id = id;
   }
 
   IQ::IQ( IqType type, const JID& to, const std::string& id, const std::string& xmlns,
-          const std::string& childtag, const JID& from )
-    : Stanza( to, from ), m_query( 0 ), m_subtype( type )
+          const std::string& childtag )
+    : Stanza( to ), m_query( 0 ), m_subtype( type )
   {
     m_id = id;
 
