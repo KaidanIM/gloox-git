@@ -105,7 +105,7 @@ namespace gloox
     {
       m_streamFeatures = getStreamFeatures( stanza );
 
-      if( m_tls == TLSRequired
+      if( m_tls == TLSRequired && !m_encryptionActive
           && ( !m_encryption || !( m_streamFeatures & StreamFeatureStartTls ) ) )
       {
         logInstance().log( LogLevelError, LogAreaClassClient,
