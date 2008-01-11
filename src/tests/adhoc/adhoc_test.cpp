@@ -1,4 +1,3 @@
-#define JID_TEST
 #define GLOOX_TESTS
 #include "../../iq.h"
 #include "../../iqhandler.h"
