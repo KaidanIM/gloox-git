@@ -314,7 +314,7 @@ namespace gloox
       }
       case Subscription::Subscribed:
       {
-//         Subscription* p = new Subscription( Subscription::Subscribe, s10n.from().bareJID() );
+//         Subscription p( Subscription::Subscribe, s10n.from().bareJID() );
 //         m_parent->send( p );
 
         m_rosterListener->handleItemSubscribed( s10n.from() );
@@ -334,7 +334,7 @@ namespace gloox
 
       case Subscription::Unsubscribed:
       {
-//         Subscription* p = new Subscription( Subscription::Unsubscribe, s10n.from().bareJID() );
+//         Subscription p( Subscription::Unsubscribe, s10n.from().bareJID() );
 //         m_parent->send( p );
 
         m_rosterListener->handleItemUnsubscribed( s10n.from() );
