@@ -178,7 +178,7 @@ namespace gloox
     {
       m_streamFeatures = getStreamFeatures( tag );
 
-      if( m_tls == TLSRequired
+      if( m_tls == TLSRequired && !m_encryptionActive
           && ( !m_encryption || !( m_streamFeatures & StreamFeatureStartTls ) ) )
       {
         logInstance().err( LogAreaClassClient, "Client is configured to require"
