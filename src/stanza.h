@@ -125,9 +125,6 @@ namespace gloox
 #endif
 
     protected:
-#ifdef JID_TEST
-    public:
-#endif
       /**
        * Creates a new Stanza, taking from and to addresses from the given Tag.
        * @param tag The Tag to create the Stanza from.
