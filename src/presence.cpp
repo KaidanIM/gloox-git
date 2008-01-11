@@ -70,8 +70,8 @@ namespace gloox
   }
 
   Presence::Presence( PresenceType type, const JID& to, const std::string& status,
-                      int priority, const std::string& xmllang, const JID& from )
-    : Stanza( to, from ), m_subtype( type ), m_stati( 0 )
+                      int priority, const std::string& xmllang )
+    : Stanza( to ), m_subtype( type ), m_stati( 0 )
   {
     setLang( &m_stati, m_status, status, xmllang );
 

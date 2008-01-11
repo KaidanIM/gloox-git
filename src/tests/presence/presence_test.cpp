@@ -1,3 +1,4 @@
+#define GLOOX_TESTS
 #include "../../tag.h"
 #include "../../presence.h"
 #include "../../stanza.h"
@@ -171,7 +172,8 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     name = "new simple Presence available";
     Presence p( Presence::Available, JID( "xyz@example.org/blah" ), "the status",
-                          10, "the xmllang", JID( "foo@bar.com" ) );
+                          10, "the xmllang" );
+    p.setFrom( JID( "foo@bar.com" ) );
     Tag* i = p.tag();
     if( !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
         || !i->hasChildWithCData( "status", "the status" )
@@ -189,7 +191,8 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     name = "new simple Presence unavailable";
     Presence p( Presence::Unavailable, JID( "xyz@example.org/blah" ), "the status",
-                          10, "the xmllang", JID( "foo@bar.com" ) );
+                          10, "the xmllang" );
+    p.setFrom( JID( "foo@bar.com" ) );
     Tag* i = p.tag();
     if( !i->hasAttribute( "type", "unavailable" )
         || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
@@ -206,7 +209,8 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     name = "new simple Presence chat";
     Presence p( Presence::Chat, JID( "xyz@example.org/blah" ), "the status",
-                          10, "the xmllang", JID( "foo@bar.com" ) );
+                          10, "the xmllang" );
+    p.setFrom( JID( "foo@bar.com" ) );
     Tag* i = p.tag();
     if( !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
         || !i->hasChildWithCData( "status", "the status" )
@@ -224,7 +228,8 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     name = "new simple Presence away";
     Presence p( Presence::Away, JID( "xyz@example.org/blah" ), "the status",
-                          10, "the xmllang", JID( "foo@bar.com" ) );
+                          10, "the xmllang" );
+    p.setFrom( JID( "foo@bar.com" ) );
     Tag* i = p.tag();
     if( !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
         || !i->hasChildWithCData( "status", "the status" )
@@ -242,7 +247,8 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     name = "new simple Presence dnd";
     Presence p( Presence::DND, JID( "xyz@example.org/blah" ), "the status",
-                          10, "the xmllang", JID( "foo@bar.com" ) );
+                          10, "the xmllang" );
+    p.setFrom( JID( "foo@bar.com" ) );
     Tag* i = p.tag();
     if( !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
         || !i->hasChildWithCData( "status", "the status" )
@@ -260,7 +266,8 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     name = "new simple Presence xa";
     Presence p( Presence::XA, JID( "xyz@example.org/blah" ), "the status",
-                          10, "the xmllang", JID( "foo@bar.com" ) );
+                          10, "the xmllang" );
+    p.setFrom( JID( "foo@bar.com" ) );
     Tag* i = p.tag();
     if( !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
         || !i->hasChildWithCData( "status", "the status" )
@@ -278,7 +285,8 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     name = "new simple Presence probe";
     Presence p( Presence::Probe, JID( "xyz@example.org/blah" ), "the status",
-                          10, "the xmllang", JID( "foo@bar.com" ) );
+                          10, "the xmllang" );
+    p.setFrom( JID( "foo@bar.com" ) );
     Tag* i = p.tag();
     if( !i->hasAttribute( "type", "probe" )
         || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
@@ -296,7 +304,8 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     name = "new simple Presence error";
     Presence p( Presence::Error, JID( "xyz@example.org/blah" ), "the status",
-                          10, "the xmllang", JID( "foo@bar.com" ) );
+                          10, "the xmllang" );
+    p.setFrom( JID( "foo@bar.com" ) );
     Tag* i = p.tag();
     if( !i->hasAttribute( "type", "error" )
         || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )

@@ -1,3 +1,4 @@
+#define GLOOX_TESTS
 #include "../../iq.h"
 #include "../../iqhandler.h"
 #include "../../presencehandler.h"
@@ -358,7 +359,8 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     name = "receive subscribe request (accept)";
     rmt->setTest( 7 );
-    Subscription s( Subscription::Subscribe, JID(), EmptyString, EmptyString, JID( "foobar" ) );
+    Subscription s( Subscription::Subscribe, JID(), EmptyString, EmptyString );
+    s.setFrom( JID( "foobar" ) );
     rm->handleSubscription( s );
     if( !rmt->checkResult() || !rmt->checkResult2() )
     {
@@ -371,7 +373,8 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     name = "receive unsubscribe request";
     rmt->setTest( 8 );
-    Subscription s( Subscription::Unsubscribe, JID(), EmptyString, EmptyString, JID( "foobar" ) );
+    Subscription s( Subscription::Unsubscribe, JID(), EmptyString, EmptyString );
+    s.setFrom( JID( "foobar" ) );
     rm->handleSubscription( s );
     if( !rmt->checkResult() || !rmt->checkResult2() )
     {
@@ -384,7 +387,8 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     name = "receive subscribe request (reject)";
     rmt->setTest( 9 );
-    Subscription s( Subscription::Subscribe, JID(), EmptyString, EmptyString, JID( "foobar" ) );
+    Subscription s( Subscription::Subscribe, JID(), EmptyString, EmptyString );
+    s.setFrom( JID( "foobar" ) );
     rm->handleSubscription( s );
     if( !rmt->checkResult() || !rmt->checkResult2() )
     {

@@ -57,21 +57,19 @@ namespace gloox
        * @param id The request's ID. Usually obtained from ClientBase::getID()
        * @param xmlns The child tag's xmlns. Optional. If omitted, no child tag is added.
        * @param childtag The child tag's name. Defaults to "query".
-       * @param from An optional sender address. Usually not needed. Cannot be forged.
        * @deprecated Don't use, will be removed for 1.0
        */
       GLOOX_DEPRECATED_CTOR IQ( IqType type, const JID& to, const std::string& id, // FIXME remove for 1.0
                                  const std::string& xmlns,
-                                 const std::string& childtag = "query", const JID& from = JID() );
+                                 const std::string& childtag = "query" );
 
       /**
        * Creates an IQ Query.
        * @param type The desired IqType.
        * @param to The intended receiver.
        * @param id The request's ID. Usually obtained from ClientBase::getID()
-       * @param from An optional sender address. Usually not needed. Cannot be forged.
        */
-      IQ( IqType type, const JID& to, const std::string& id, const JID& from = JID() );
+      IQ( IqType type, const JID& to, const std::string& id );
 
       /**
        * Virtual destructor.

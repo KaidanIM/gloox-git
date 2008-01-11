@@ -58,12 +58,10 @@ namespace gloox
        * @param subject The message's optional subject.
        * @param thread The message's optional thread ID.
        * @param xmllang An optional xml:lang for the message body.
-       * @param from An optional sender address. Usually not needed. Cannot be forged.
        */
       Message( MessageType type, const JID& to,
                const std::string& body = EmptyString, const std::string& subject = EmptyString,
-               const std::string& thread = EmptyString, const std::string& xmllang = EmptyString,
-               const JID& from = JID() );
+               const std::string& thread = EmptyString, const std::string& xmllang = EmptyString );
 
       /**
        * Destructor.

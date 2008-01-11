@@ -128,7 +128,7 @@ namespace gloox
 
     const std::string& id = m_parent->getID();
 
-    IQ iq( IQ::Set, m_to, id, XMLNS_REGISTER, "query", m_parent->jid() );
+    IQ iq( IQ::Set, m_to, id, XMLNS_REGISTER, "query" );
     new Tag( iq.query(), "remove" );
 
     m_parent->send( iq, this, RemoveAccount );

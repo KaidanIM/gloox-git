@@ -1,3 +1,4 @@
+#define GLOOX_TESTS
 #include "../../tag.h"
 #include "../../message.h"
 #include "../../stanza.h"
@@ -106,7 +107,8 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     name = "new simple Message error";
     Message m( Message::Error, JID( "xyz@example.org/blah" ), "the body", "the subject",
-                    "the thread", "the xmllang", JID( "foo@bar.com" ) );
+                    "the thread", "the xmllang" );
+    m.setFrom( JID( "foo@bar.com" ) );
     Tag* i = m.tag();
     if( !i->hasAttribute( "type", "error" )
         || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
@@ -124,7 +126,8 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     name = "new simple Message chat";
     Message m( Message::Chat, JID( "xyz@example.org/blah" ), "the body", "the subject",
-                    "the thread", "the xmllang", JID( "foo@bar.com" ) );
+                    "the thread", "the xmllang" );
+    m.setFrom( JID( "foo@bar.com" ) );
     Tag* i = m.tag();
     if( !i->hasAttribute( "type", "chat" )
         || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
@@ -144,7 +147,8 @@ int main( int /*argc*/, char** /*argv*/ )
   {
     name = "new simple Message normal";
     Message m( Message::Normal, JID( "xyz@example.org/blah" ), "the body", "the subject",
-                    "the thread", "the xmllang", JID( "foo@bar.com" ) );
+                    "the thread", "the xmllang" );
+    m.setFrom( JID( "foo@bar.com" ) );
     Tag* i = m.tag();
     if( !i->hasAttribute( "type", "normal" )
         || !i->hasAttribute( "to", "xyz@example.org/blah" ) || !i->hasAttribute( "from", "foo@bar.com" )
