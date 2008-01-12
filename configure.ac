@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.50)
-AC_INIT([gloox], [1.0-svn], [js@camaya.net])
+AC_INIT([gloox], [1.0-alpha1], [js@camaya.net])
 AC_CONFIG_SRCDIR(src/gloox.cpp)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 
@@ -310,6 +310,7 @@ src/tests/base64/Makefile
 src/tests/chatstatefilter/Makefile
 src/tests/client/Makefile
 src/tests/clientbase/Makefile
+src/tests/connectionbosh/Makefile
 src/tests/dataform/Makefile
 src/tests/dataformfield/Makefile
 src/tests/dataformitem/Makefile
@@ -329,6 +330,7 @@ src/tests/jid/Makefile
 src/tests/md5/Makefile
 src/tests/message/Makefile
 src/tests/messageeventfilter/Makefile
+src/tests/mucroommucowner/Makefile
 src/tests/nickname/Makefile
 src/tests/nonsaslauthquery/Makefile
 src/tests/nonsaslauth/Makefile
