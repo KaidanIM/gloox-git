@@ -42,7 +42,7 @@ namespace gloox
 
   Registration::~Registration()
   {
-    if( m_parent
+    if( m_parent )
     {
       m_parent->removeIqHandler( this, XMLNS_REGISTER );
       m_parent->removeIDHandler( this );
