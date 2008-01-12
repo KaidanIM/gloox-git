@@ -37,7 +37,10 @@ namespace gloox
   SOCKS5BytestreamManager::~SOCKS5BytestreamManager()
   {
     if( m_parent )
+    {
       m_parent->removeIqHandler( this, XMLNS_BYTESTREAMS );
+      m_parent->removeIDHandler( this );
+    }
 
     util::clearMap( m_s5bMap );
   }

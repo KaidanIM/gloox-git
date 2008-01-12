@@ -188,6 +188,7 @@ namespace gloox
     m_parent->disco()->removeNodeHandler( this, XMLNS_ADHOC_COMMANDS );
     m_parent->disco()->removeNodeHandler( this, EmptyString );
     m_parent->removeIqHandler( this, ExtAdhocCommand );
+    m_parent->removeIDHandler( this );
     m_parent->removeStanzaExtension( ExtAdhocCommand );
   }
 

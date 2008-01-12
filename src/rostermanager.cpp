@@ -115,6 +115,7 @@ namespace gloox
     if( m_parent )
     {
       m_parent->removeIqHandler( this, ExtRoster );
+      m_parent->removeIDHandler( this );
       m_parent->removePresenceHandler( this );
       m_parent->removeSubscriptionHandler( this );
       m_parent->removeStanzaExtension( ExtRoster );

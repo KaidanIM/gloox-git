@@ -33,7 +33,10 @@ namespace gloox
   PrivacyManager::~PrivacyManager()
   {
     if( m_parent )
+    {
       m_parent->removeIqHandler( this, XMLNS_PRIVACY );
+      m_parent->removeIDHandler( this );
+    }
   }
 
   std::string PrivacyManager::operation( int context, const std::string& name )

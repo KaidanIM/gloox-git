@@ -228,6 +228,7 @@ namespace gloox
       m_parent->removeStanzaExtension( ExtDiscoInfo );
       m_parent->removeStanzaExtension( ExtDiscoItems );
       m_parent->removeStanzaExtension( ExtVersion );
+      m_parent->removeIDHandler( this );
     }
   }
 
