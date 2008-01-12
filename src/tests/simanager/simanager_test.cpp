@@ -44,6 +44,7 @@ namespace gloox
       void trackID( IqHandler *ih, const std::string& id, int context );
       void registerIqHandler( IqHandler *ih, const std::string& xmlns );
       void removeIqHandler( IqHandler* ih, const std::string& xmlns );
+      void removeIDHandler( IqHandler* ) {}
       virtual void handleSIRequestResult( const JID& from, const std::string& sid,
                                           const Tag* si, const Tag* ptag, const Tag* fneg );
       virtual void handleSIRequestError( const IQ& iq, const std::string& /*sid*/ );

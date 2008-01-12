@@ -23,6 +23,7 @@ namespace gloox
       virtual void send( const IQ& iq, IqHandler*, int ) = 0;
       virtual void trackID( IqHandler *ih, const std::string& id, int context ) = 0;
       void removeIqHandler( IqHandler* ih, int exttype );
+      void removeIDHandler( IqHandler* ih );
       void registerIqHandler( IqHandler* ih, int exttype );
       void registerStanzaExtension( StanzaExtension* ext );
       void removeStanzaExtension( int ext );
@@ -32,6 +33,7 @@ namespace gloox
       JID m_jid;
   };
   void ClientBase::removeIqHandler( IqHandler*, int ) {}
+  void ClientBase::removeIDHandler( IqHandler* ) {}
   void ClientBase::registerIqHandler( IqHandler*, int ) {}
   void ClientBase::registerStanzaExtension( StanzaExtension* ext ) { delete ext; }
   void ClientBase::removeStanzaExtension( int ) {}
