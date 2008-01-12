@@ -237,12 +237,12 @@ namespace gloox
 
       /**
        * Sends the given IQ stanza. The given IqHandler is registered to be notified of replies. This,
-       * of course, only works for IQs of type get or set.
+       * of course, only works for IQs of type get or set. An ID is added if necessary.
        * @param iq The IQ stanza to send.
        * @param ih The handler to register for replies.
        * @param context A value that allows for restoring context.
        */
-      void send( const IQ& iq, IqHandler* ih, int context );
+      void send( IQ& iq, IqHandler* ih, int context );
 
       /**
        * A convenience function that sends the given IQ stanza.

@@ -67,7 +67,10 @@ namespace gloox
        * Creates an IQ Query.
        * @param type The desired IqType.
        * @param to The intended receiver.
-       * @param id The request's ID. Usually obtained from ClientBase::getID()
+       * @param id The request's ID. Usually obtained from ClientBase::getID(). Optional,
+       * will be added by ClientBase if the IQ is sent by means of
+       * @link gloox::ClientBase::send( IQ&, IqHandler*, int ) send( IQ&, IqHandler*, int ) @endlink.
+       * You should only need to pass this when creating a reply (i.e. an IQ of type Result or Error).
        */
       IQ( IqType type, const JID& to, const std::string& id );
 
@@ -106,9 +109,10 @@ namespace gloox
       /**
        * Creates an IQ from a tag. The original Tag will be ripped off.
        * @param tag The Tag to parse.
-       * @param rip Whether to rip off the original Tag.
        */
       IQ( Tag* tag );
+
+      void setID( const std::string& id ) { m_id = id; }
 
       Tag* m_query;
       std::string m_xmlns;
