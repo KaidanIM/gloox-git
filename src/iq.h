@@ -100,6 +100,9 @@ namespace gloox
       virtual Tag* tag() const;
 
     private:
+#ifdef IQ_TEST
+    public:
+#endif
       /**
        * Creates an IQ from a tag. The original Tag will be ripped off.
        * @param tag The Tag to parse.

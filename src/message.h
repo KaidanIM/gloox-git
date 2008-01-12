@@ -134,6 +134,9 @@ namespace gloox
       virtual Tag* tag() const;
 
     private:
+#ifdef MESSAGE_TEST
+    public:
+#endif
       /**
        * Creates a message Stanza from the given Tag. The original Tag will be ripped off.
        * @param tag The Tag to parse.
