@@ -42,7 +42,6 @@ class MessageTest : public MessageSessionHandler, ConnectionListener, LogHandler
       j = new Client( jid, "test" );
       j->registerConnectionListener( this );
       j->registerMessageSessionHandler( this, 0 );
-      j->disco()->setVersion( "messageTest", GLOOX_VERSION, "Linux" );
       j->disco()->setIdentity( "client", "bot" );
       j->disco()->addFeature( XMLNS_CHAT_STATES );
       j->setCompression(false);
@@ -52,14 +51,25 @@ class MessageTest : public MessageSessionHandler, ConnectionListener, LogHandler
 
       j->logInstance().registerLogHandler( LogLevelDebug, LogAreaAll, this );
 
-// this code connects to a jabber server through a BOSH connection...
 
-       ConnectionTCPClient* conn0 = new ConnectionTCPClient( j->logInstance(), "example.net", 8080 );
-       ConnectionBOSH* conn1 = new ConnectionBOSH( j, conn0, j->logInstance(), "example.net", "example.net" );
-       conn1->setMode( ConnectionBOSH::ModeLegacyHTTP );
-       j->setConnectionImpl( conn1 );
+/*
+      ConnectionTCPClient* conn0 = new ConnectionTCPClient( j->logInstance(), "example.net", 8081 );
+      ConnectionHTTPProxy* conn1 = new ConnectionHTTPProxy( conn0, j->logInstance(), "foo", 8080 );
+      ConnectionBOSH* conn2 = new ConnectionBOSH( j, conn1, j->logInstance(), "camaya.net", "camaya.net" );
+      conn2->setMode( ConnectionBOSH::ModeLegacyHTTP );
+//        conn2->setMode( ConnectionBOSH::ModePersistentHTTP );
+      j->setConnectionImpl( conn2 );
+*/
 
-       j->setForceNonSasl(); // Needed for non XEP-0206 compliant connection managers (such as Openfire 3.3.x)
+      // this code connects to a jabber server through a BOSH connection...
+      ConnectionTCPClient* conn0 = new ConnectionTCPClient( j->logInstance(), "example.net", 8080 );
+      ConnectionBOSH* conn1 = new ConnectionBOSH( j, conn0, j->logInstance(), "example.net", "example.net" );
+//       conn1->setMode( ConnectionBOSH::ModeLegacyHTTP );
+//        conn1->setMode( ConnectionBOSH::ModePersistentHTTP );
+      j->setConnectionImpl( conn1 );
+
+      j->setForceNonSasl( true );
+
 
 
 
@@ -68,7 +78,7 @@ class MessageTest : public MessageSessionHandler, ConnectionListener, LogHandler
         ConnectionError ce = ConnNoError;
         while( ce == ConnNoError )
         {
-          ce = j->recv(20);
+          ce = j->recv();
         }
         printf( "ce: %d\n", ce );
       }
