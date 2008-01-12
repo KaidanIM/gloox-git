@@ -43,6 +43,7 @@ namespace gloox
     if( m_parent )
     {
       m_parent->removeIqHandler( XMLNS_ROSTER );
+      m_parent->removeIDHandler( this );
       m_parent->removePresenceHandler( this );
       m_parent->removeSubscriptionHandler( this );
       delete m_self;

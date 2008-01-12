@@ -37,6 +37,7 @@ namespace gloox
     {
       m_parent->disco()->removeFeature( XMLNS_IBB );
       m_parent->removeIqHandler( XMLNS_IBB );
+      m_parent->removeIDHandler( this );
     }
 
     IBBMap::iterator it = m_ibbMap.begin();

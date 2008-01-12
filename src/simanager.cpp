@@ -37,6 +37,7 @@ namespace gloox
     if( m_parent && m_advertise )
     {
       m_parent->removeIqHandler( XMLNS_SI );
+      m_parent->removeIDHandler( this );
       if( m_parent->disco() )
         m_parent->disco()->removeFeature( XMLNS_SI );
     }

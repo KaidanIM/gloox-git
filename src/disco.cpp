@@ -41,6 +41,7 @@ namespace gloox
       m_parent->removeIqHandler( XMLNS_DISCO_INFO );
       m_parent->removeIqHandler( XMLNS_DISCO_ITEMS );
       m_parent->removeIqHandler( XMLNS_VERSION );
+      m_parent->removeIDHandler( this );
     }
   }
 
