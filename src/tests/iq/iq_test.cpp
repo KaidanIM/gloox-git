@@ -20,7 +20,6 @@ int main( int /*argc*/, char** /*argv*/ )
   iq->addAttribute( "type", "set" );
   IQ* i = 0;
 
-// FIXME fix the following 4 tests. how to test private functions, ctors, etc?
   // -------
   name = "parse IQ set";
   i = new IQ( iq );

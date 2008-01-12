@@ -21,7 +21,6 @@ int main( int /*argc*/, char** /*argv*/ )
   new Tag( msg, "body", "the body" );
   Message* i = 0;
 
-// FIXME fix the following 5 tests. how to test private functions, ctors, etc?
   // -------
   name = "parse Message normal 1";
   i = new Message( msg );
