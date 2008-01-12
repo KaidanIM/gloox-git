@@ -140,6 +140,9 @@ namespace gloox
       virtual Tag* tag() const;
 
     private:
+#ifdef PRESENCE_TEST
+    public:
+#endif
       /**
        * Creates a Presence request from the given Tag. The original Tag will be ripped off.
        * @param tag The Tag to parse.
