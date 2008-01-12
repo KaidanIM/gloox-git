@@ -1,7 +1,10 @@
-v0.9.9 -- xx yyy 200z
+v0.9.9 -- 12 Jan 2008
 ---------------------
 - MUCRoom: fixed finding the 'delayed delivery' stamp
 - MUCRoom: fixed adding of chat history to rooms
+- Client: fixed TLSRequired policy
+- RosterManager: fixed (removed) 'from' attribute for subscription stanzas
+- call removeIDHandler() from more places
 
 
 v0.9.8 -- 07 Dec 2007
