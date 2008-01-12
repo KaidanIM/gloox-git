@@ -27,6 +27,7 @@ namespace gloox
 
   UniqueMUCRoom::~UniqueMUCRoom()
   {
+    m_parent->removeIDHandler( this );
   }
 
   void UniqueMUCRoom::join()

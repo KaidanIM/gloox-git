@@ -99,6 +99,7 @@ namespace gloox
     {
       m_parent->removeStanzaExtension( ExtNonSaslAuth );
       m_parent->removeIqHandler( this, ExtNonSaslAuth );
+      m_parent->removeIDHandler( this );
     }
   }
 

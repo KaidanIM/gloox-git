@@ -28,6 +28,7 @@ namespace gloox
 
   Search::~Search()
   {
+    m_parent->removeIDHandler( this );
   }
 
   void Search::fetchSearchFields( const JID& directory, SearchHandler* sh )

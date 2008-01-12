@@ -28,6 +28,7 @@ namespace gloox
 
   FlexibleOffline::~FlexibleOffline()
   {
+    m_parent->removeIDHandler( this );
   }
 
   void FlexibleOffline::checkSupport()

@@ -154,8 +154,13 @@ namespace gloox
     if( m_joined )
       leave();
 
-    if( m_parent && m_publish )
-      m_parent->disco()->removeNodeHandler( this, XMLNS_MUC_ROOMS );
+    if( m_parent )
+    {
+      if( m_publish )
+        m_parent->disco()->removeNodeHandler( this, XMLNS_MUC_ROOMS );
+
+      m_parent->removeIDHandler( this );
+    }
   }
 
   /** Strings indicating the type of history to request. */

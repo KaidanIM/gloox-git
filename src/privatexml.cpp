@@ -63,6 +63,7 @@ namespace gloox
       return;
 
     m_parent->removeIqHandler( this, XMLNS_PRIVATE_XML );
+    m_parent->removeIDHandler( this );
     m_parent->removeStanzaExtension( ExtPrivateXML );
   }
 
