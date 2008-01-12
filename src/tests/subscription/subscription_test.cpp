@@ -20,7 +20,6 @@ int main( int /*argc*/, char** /*argv*/ )
   new Tag( s10n, "status", "the status" );
   Subscription* i = 0;
 
-// FIXME fix the following 4 tests. how to test private functions, ctors, etc?
   // -------
   name = "parse Subscription subscribe";
   s10n->addAttribute( "type", "subscribe" );
