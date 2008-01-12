@@ -602,10 +602,13 @@ namespace gloox
       m_authError = SaslTemporaryAuthFailure;
   }
 
-  void ClientBase::send( const IQ& iq, IqHandler* ih, int context )
+  void ClientBase::send( IQ& iq, IqHandler* ih, int context )
   {
-    if( ( iq.subtype() == IQ::Set || iq.subtype() == IQ::Get ) && ih && !iq.id().empty() )
+    if( ih && ( iq.subtype() == IQ::Set || iq.subtype() == IQ::Get ) )
     {
+      if( iq.id().empty() )
+        iq.setID( getID() );
+
       TrackStruct track;
       track.ih = ih;
       track.context = context;
