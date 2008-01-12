@@ -30,6 +30,7 @@ namespace gloox
       void removeIqHandler( IqHandler* ih, const std::string& xmlns ); // FIXME remove as soon as PrivateXML is ported to SE
       void registerIqHandler( IqHandler* ih, const std::string& xmlns ); // FIXME remove as soon as PrivateXML is ported to SE
       void removeIqHandler( IqHandler* ih, int exttype );
+      void removeIDHandler( IqHandler* ih );
       void registerIqHandler( IqHandler* ih, int exttype );
       void registerPresenceHandler( PresenceHandler* /*ph*/ ) {}
       void removePresenceHandler( PresenceHandler* /*ph*/ ) {}
@@ -43,6 +44,7 @@ namespace gloox
   void ClientBase::removeIqHandler( IqHandler*, const std::string& ) {} // FIXME remove as soon as PrivateXML is ported to SE
   void ClientBase::registerIqHandler( IqHandler*, const std::string& ) {} // FIXME remove as soon as PrivateXML is ported to SE
   void ClientBase::removeIqHandler( IqHandler*, int ) {}
+  void ClientBase::removeIDHandler( IqHandler* ) {}
   void ClientBase::registerIqHandler( IqHandler*, int ) {}
   void ClientBase::registerStanzaExtension( StanzaExtension* se ) { delete se; }
   void ClientBase::removeStanzaExtension( int ) {}
