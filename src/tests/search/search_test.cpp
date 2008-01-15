@@ -23,6 +23,7 @@ namespace gloox
       const std::string getID() { return "id"; }
       virtual void send( Tag *tag ) = 0;
       virtual void trackID( IqHandler *ih, const std::string& id, int context ) = 0;
+      void removeIDHandler( IqHandler* ) {}
   };
 
 }

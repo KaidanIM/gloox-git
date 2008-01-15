@@ -49,6 +49,7 @@ namespace gloox
       virtual void handleSIRequestError( Stanza* stanza, const std::string& sid );
       virtual void handleSIRequest( const JID& from, const std::string& id, const std::string& profile,
                                     Tag* si, Tag* ptag, Tag* fneg );
+      void removeIDHandler( IqHandler* ) {}
       void setTest( int test );
       bool ok();
     private:
