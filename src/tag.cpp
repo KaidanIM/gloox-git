@@ -184,7 +184,7 @@ namespace gloox
       for( val = 0; val < nb_escape; ++val )
       {
         if( ( i + escape_seqs[val].length() <= l )
-        && !std::strncmp( esc.data()+i+1, escape_seqs[val].data(),
+        && !strncmp( esc.data()+i+1, escape_seqs[val].data(),
                                           escape_seqs[val].length() ) )
         {
           esc[i] = escape_chars[val];
