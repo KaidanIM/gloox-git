@@ -85,7 +85,7 @@ namespace gloox
       };
 
       void doTLSOperation( TLSOperation op );
-
+      int openSSLTime2UnixTime( char *time_string );
       SSL* m_ssl;
       SSL_CTX* m_ctx;
       BIO* m_ibio;
