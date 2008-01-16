@@ -18,6 +18,8 @@
 
 #include <algorithm>
 #include <cctype>
+#include <ctime>
+#include <cstdlib>
 
 namespace gloox
 {
@@ -167,6 +169,34 @@ namespace gloox
     while( ( onceAgain || m_recvBuffer.length() ) && ( !m_secure || op == TLSRead ) );
   }
 
+  int OpenSSL::openSSLTime2UnixTime( const char* time_string )
+  {
+    char tstring[19];
+
+    // making seperate c string out of time string
+    int m = 0;
+    for( int n = 0; n < 12; n += 2 )
+    {
+      tstring[m] = time_string[n];
+      tstring[m + 1] = time_string[n + 1];
+      tstring[m + 2] = 0;
+      m += 3;
+    }
+
+    // converting to struct tm
+    tm time_st;
+    time_st.tm_year = ( atoi( &tstring[3 * 0] ) >= 70 ) ? atoi( &tstring[3 * 0] )
+                                                        : atoi( &tstring[3 * 0] ) + 100;
+    time_st.tm_mon = atoi( &tstring[3 * 1] ) - 1;
+    time_st.tm_mday = atoi( &tstring[3 * 2] );
+    time_st.tm_hour = atoi( &tstring[3 * 3] );
+    time_st.tm_min = atoi( &tstring[3 * 4] );
+    time_st.tm_sec = atoi( &tstring[3 * 5] );
+
+    time_t unixt = mktime( &time_st );
+    return unixt;
+  }
+
   bool OpenSSL::handshake()
   {
 
@@ -189,6 +219,8 @@ namespace gloox
       m_certInfo.issuer = peer_CN;
       X509_NAME_get_text_by_NID( X509_get_subject_name( peer ), NID_commonName, peer_CN, sizeof( peer_CN ) );
       m_certInfo.server = peer_CN;
+      m_certInfo.date_from = openSSLTime2UnixTime( (char*)(peer->cert_info->validity->notBefore->data) );
+      m_certInfo.date_to = openSSLTime2UnixTime( (char*)(peer->cert_info->validity->notAfter->data) );
       std::string p;
       p.assign( peer_CN );
       std::transform( p.begin(), p.end(), p.begin(), std::tolower );

@@ -6,6 +6,7 @@ v0.9.9 -- 16 Jan 2008
 - RosterManager: fixed (removed) 'from' attribute for subscription stanzas
 - call removeIDHandler() from more places
 - VCard: work around MIME-like photo/logo formatting
+- TLSOpenSSL: provide date_from/date_to in certinfo
 
 
 v0.9.8 -- 07 Dec 2007
