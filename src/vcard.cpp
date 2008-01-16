@@ -94,8 +94,12 @@ namespace gloox
         }
         else if( tag.hasChild( "TYPE" ) && tag.hasChild( "BINVAL" ) )
         {
+          std::string binval = tag.findChild( "BINVAL" )->cdata();
+          std::string::size_type pos = 0;
+          while( ( pos = binval.find( '\n' ) ) != std::string::npos )
+            binval.erase( pos, 1 );
           m_photo.type = tag.findChild( "TYPE" )->cdata();
-          m_photo.binval = Base64::decode64( tag.findChild( "BINVAL" )->cdata() );
+          m_photo.binval = Base64::decode64( binval );
           m_PHOTO = true;
         }
       }
@@ -108,8 +112,12 @@ namespace gloox
         }
         else if( tag.hasChild( "TYPE" ) && tag.hasChild( "BINVAL" ) )
         {
+          std::string binval = tag.findChild( "BINVAL" )->cdata();
+          std::string::size_type pos = 0;
+          while( ( pos = binval.find( '\n' ) ) != std::string::npos )
+            binval.erase( pos, 1 );
           m_logo.type = tag.findChild( "TYPE" )->cdata();
-          m_logo.binval = Base64::decode64( tag.findChild( "BINVAL" )->cdata() );
+          m_logo.binval = Base64::decode64( binval );
           m_LOGO = true;
         }
       }
@@ -212,7 +220,7 @@ namespace gloox
 
   void VCard::setName( const std::string& family, const std::string& given,
                        const std::string& middle, const std::string& prefix,
-		       const std::string& suffix )
+                       const std::string& suffix )
   {
     m_name.family = family;
     m_name.given = given;
@@ -236,7 +244,7 @@ namespace gloox
     if( !type.empty() && !binval.empty() )
     {
       m_photo.type = type;
-      m_photo.binval = Base64::encode64( binval );
+      m_photo.binval = binval;
       m_PHOTO = true;
     }
   }
@@ -255,7 +263,7 @@ namespace gloox
     if( !type.empty() && !binval.empty() )
     {
       m_logo.type = type;
-      m_logo.binval = Base64::encode64( binval );
+      m_logo.binval = binval;
       m_LOGO = true;
     }
   }
@@ -405,7 +413,7 @@ namespace gloox
       else if( !m_photo.type.empty() && !m_photo.binval.empty() )
       {
         new Tag( p, "TYPE", m_photo.type );
-        new Tag( p, "BINVAL", m_photo.binval );
+        new Tag( p, "BINVAL", Base64::encode64( m_photo.binval ) );
       }
     }
 
@@ -419,7 +427,7 @@ namespace gloox
       else if( !m_logo.type.empty() && !m_logo.binval.empty() )
       {
         new Tag( l, "TYPE", m_logo.type );
-        new Tag( l, "BINVAL", m_logo.binval );
+        new Tag( l, "BINVAL", Base64::encode64( m_logo.binval ) );
       }
     }
 
