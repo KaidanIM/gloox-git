@@ -22,6 +22,7 @@
 #endif
 
 #include <algorithm>
+#include <cstring>
 
 namespace gloox
 {
@@ -183,8 +184,8 @@ namespace gloox
       for( val = 0; val < nb_escape; ++val )
       {
         if( ( i + escape_seqs[val].length() <= l )
-        && !strncmp( esc.data()+i+1, escape_seqs[val].data(),
-                                     escape_seqs[val].length() ) )
+        && !std::strncmp( esc.data()+i+1, escape_seqs[val].data(),
+                                          escape_seqs[val].length() ) )
         {
           esc[i] = escape_chars[val];
           for( p=1; p <= escape_seqs[val].length(); ++p )
