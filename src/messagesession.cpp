@@ -31,7 +31,17 @@ namespace gloox
 
   MessageSession::~MessageSession()
   {
-    util::clearList( m_messageFilterList );
+//     util::clearList( m_messageFilterList );
+    // FIXME
+    MessageFilterList::iterator it = m_messageFilterList.begin();
+    MessageFilterList::iterator it2;
+    while( it != m_messageFilterList.end() )
+    {
+      it2 = it++;
+      delete (*it2);
+      m_messageFilterList.erase( it2 );
+    }
+    // ~
   }
 
   void MessageSession::handleMessage( Message& msg )

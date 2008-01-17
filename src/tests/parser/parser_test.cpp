@@ -400,7 +400,19 @@ class ParserTest : private TagHandler
         printf( "test '%s' failed at pos %d: %s\n", name.c_str(), i, data.c_str() );
       }
       m_multiple = false;
-      util::clearList( m_tags );
+//       util::clearList( m_tags );
+      // FIXME
+      {
+        TagList::iterator it = m_tags.begin();
+        TagList::iterator it2;
+        while( it != m_tags.end() )
+        {
+          it2 = it++;
+          delete (*it2);
+          m_tags.erase( it2 );
+        }
+      }
+      // ~
 
       //-------
       name = "<![CDATA[ section 1";

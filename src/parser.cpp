@@ -758,7 +758,17 @@ namespace gloox
     m_haveTagPrefix = false;
     m_value = EmptyString;
     m_xmlns = EmptyString;
-    util::clearList( m_attribs );
+//     util::clearList( m_attribs );
+    // FIXME
+    Tag::AttributeList::iterator it = m_attribs.begin();
+    Tag::AttributeList::iterator it2;
+    while( it != m_attribs.end() )
+    {
+      it2 = it++;
+      delete (*it2);
+      m_attribs.erase( it2 );
+    }
+    // ~
     m_attribs.clear();
     m_state = Initial;
     m_preamble = 0;

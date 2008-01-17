@@ -122,7 +122,17 @@ namespace gloox
     delete m_disco;
     delete m_seFactory;
 
-    util::clearList( m_messageSessions );
+//     util::clearList( m_messageSessions );
+    // FIXME
+    MessageSessionList::iterator it = m_messageSessions.begin();
+    MessageSessionList::iterator it2;
+    while( it != m_messageSessions.end() )
+    {
+      it2 = it++;
+      delete (*it2);
+      m_messageSessions.erase( it2 );
+    }
+    // ~
 
     PresenceJidHandlerList::const_iterator it1 = m_presenceJidHandlers.begin();
     for( ; it1 != m_presenceJidHandlers.end(); ++it1 )
