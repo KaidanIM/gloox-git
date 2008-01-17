@@ -20,14 +20,12 @@
 		<Compiler>
 			<Add option="-Os" />
 			<Add option="-DBUILDING_DLL=1" />
-			<Add directory="C:\Dokumente und Einstellungen\Administrator\Desktop\libidn-0.6.12\libidn-0.6.12\lib" />
 		</Compiler>
 		<Linker>
 			<Add option="-s" />
 			<Add option="--no-export-all-symbols" />
 			<Add option="--add-stdcall-alias" />
 			<Add option="c:\mingw\lib\libz.a" />
-			<Add option='&quot;C:\Dokumente und Einstellungen\Administrator\Desktop\ll-sow3\libidn\libidn.a&quot;' />
 			<Add library="wsock32" />
 			<Add library="dnsapi" />
 			<Add library="gdi32" />
