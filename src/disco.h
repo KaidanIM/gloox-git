@@ -19,7 +19,6 @@
 
 #include "iqhandler.h"
 #include "jid.h"
-#include "util.h"
 
 #include <string>
 #include <list>
