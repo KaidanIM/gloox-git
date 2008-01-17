@@ -82,7 +82,7 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
 
 noinst_HEADERS = prep.h dns.h nonsaslauth.h mucmessagesession.h stanzaextensionfactory.h tlsgnutlsclient.h \
                    tlsgnutlsbase.h tlsgnutlsclientanon.h tlsgnutlsserveranon.h tlsopenssl.h tlsschannel.h \
-                   compressionzlib.h softwareversion.h rosteritemdata.h
+                   compressionzlib.h softwareversion.h rosteritemdata.h util.h
 
 EXTRA_DIST = version.rc
 
