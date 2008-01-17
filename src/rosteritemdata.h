@@ -16,6 +16,7 @@
 
 #include "gloox.h"
 #include "jid.h"
+#include "tag.h"
 
 #include <string>
 #include <list>
