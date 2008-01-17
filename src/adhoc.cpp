@@ -131,7 +131,18 @@ namespace gloox
 
   Adhoc::Command::~Command()
   {
-    util::clearList( m_notes );
+//     util::clearList( m_notes );
+    // FIXME
+    NoteList::iterator it = m_notes.begin();
+    NoteList::iterator it2;
+    while( it != m_notes.end() )
+    {
+      it2 = it++;
+      delete (*it2);
+      m_notes.erase( it2 );
+    }
+    // ~
+
     delete m_form;
   }
 

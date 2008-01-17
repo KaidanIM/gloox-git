@@ -71,7 +71,17 @@ namespace gloox
 
   RosterManager::Query::~Query()
   {
-    util::clearList( m_roster );
+//     util::clearList( m_roster );
+    // FIXME
+    RosterData::iterator it = m_roster.begin();
+    RosterData::iterator it2;
+    while( it != m_roster.end() )
+    {
+      it2 = it++;
+      delete (*it2);
+      m_roster.erase( it2 );
+    }
+    // ~
   }
 
   const std::string& RosterManager::Query::filterString() const
@@ -123,7 +133,17 @@ namespace gloox
       delete m_privateXML;
     }
 
-    util::clearMap( m_roster );
+//     util::clearMap( m_roster );
+    // FIXME
+    Roster::iterator it = m_roster.begin();
+    Roster::iterator it2;
+    while( it != m_roster.end() )
+    {
+      it2 = it++;
+      delete (*it2).second;
+      m_roster.erase( it2 );
+    }
+    // ~
   }
 
   Roster* RosterManager::roster()

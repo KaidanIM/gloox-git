@@ -24,7 +24,17 @@ namespace gloox
 
   DataFormFieldContainer::~DataFormFieldContainer()
   {
-    util::clearList( m_fields );
+//     util::clearList( m_fields );
+    // FIXME
+    FieldList::iterator it = m_fields.begin();
+    FieldList::iterator it2;
+    while( it != m_fields.end() )
+    {
+      it2 = it++;
+      delete (*it2);
+      m_fields.erase( it2 );
+    }
+    // ~
   }
 
   DataFormField* DataFormFieldContainer::field( const std::string& field ) const

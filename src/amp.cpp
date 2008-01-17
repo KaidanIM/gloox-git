@@ -149,7 +149,17 @@ namespace gloox
 
   AMP::~AMP()
   {
-    util::clearList( m_rules );
+//     util::clearList( m_rules );
+    // FIXME
+    RuleList::iterator it = m_rules.begin();
+    RuleList::iterator it2;
+    while( it != m_rules.end() )
+    {
+      it2 = it++;
+      delete (*it2);
+      m_rules.erase( it2 );
+    }
+    // ~
   }
 
   void AMP::addRule( const Rule* rule )

@@ -84,7 +84,17 @@ namespace gloox
   Disco::Info::~Info()
   {
     delete m_form;
-    util::clearList( m_identities );
+//     util::clearList( m_identities );
+    // FIXME
+    IdentityList::iterator it = m_identities.begin();
+    IdentityList::iterator it2;
+    while( it != m_identities.end() )
+    {
+      it2 = it++;
+      delete (*it2);
+      m_identities.erase( it2 );
+    }
+    // ~
   }
 
   bool Disco::Info::hasFeature( const std::string& feature ) const
@@ -174,7 +184,17 @@ namespace gloox
 
   Disco::Items::~Items()
   {
-    util::clearList( m_items );
+//     util::clearList( m_items );
+    // FIXME
+    ItemList::iterator it = m_items.begin();
+    ItemList::iterator it2;
+    while( it != m_items.end() )
+    {
+      it2 = it++;
+      delete (*it2);
+      m_items.erase( it2 );
+    }
+    // ~
   }
 
   const std::string& Disco::Items::filterString() const
@@ -218,7 +238,17 @@ namespace gloox
 
   Disco::~Disco()
   {
-    util::clearList( m_identities );
+//     util::clearList( m_identities );
+    // FIXME
+    IdentityList::iterator it = m_identities.begin();
+    IdentityList::iterator it2;
+    while( it != m_identities.end() )
+    {
+      it2 = it++;
+      delete (*it2);
+      m_identities.erase( it2 );
+    }
+    // ~
 
     if( m_parent )
     {
@@ -423,7 +453,18 @@ namespace gloox
   void Disco::setIdentity( const std::string& category, const std::string& type,
                            const std::string& name )
   {
-    util::clearList( m_identities );
+//     util::clearList( m_identities );
+    // FIXME
+    IdentityList::iterator it = m_identities.begin();
+    IdentityList::iterator it2;
+    while( it != m_identities.end() )
+    {
+      it2 = it++;
+      delete (*it2);
+      m_identities.erase( it2 );
+    }
+    // ~
+
     addIdentity( category, type, name );
   }
 

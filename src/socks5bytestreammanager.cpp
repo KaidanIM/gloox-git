@@ -42,7 +42,17 @@ namespace gloox
       m_parent->removeIDHandler( this );
     }
 
-    util::clearMap( m_s5bMap );
+//     util::clearMap( m_s5bMap );
+    // FIXME
+    S5BMap::iterator it = m_s5bMap.begin();
+    S5BMap::iterator it2;
+    while( it != m_s5bMap.end() )
+    {
+      it2 = it++;
+      delete (*it2).second;
+      m_s5bMap.erase( it2 );
+    }
+    // ~
   }
 
   void SOCKS5BytestreamManager::addStreamHost( const JID& jid, const std::string& host, int port )

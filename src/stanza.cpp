@@ -63,7 +63,17 @@ namespace gloox
 
   void Stanza::removeExtensions()
   {
-    util::clearList( m_extensionList );
+//     util::clearList( m_extensionList );
+    // FIXME
+    StanzaExtensionList::iterator it = m_extensionList.begin();
+    StanzaExtensionList::iterator it2;
+    while( it != m_extensionList.end() )
+    {
+      it2 = it++;
+      delete (*it2);
+      m_extensionList.erase( it2 );
+    }
+    // ~
   }
 
   void Stanza::setLang( StringMap** map,
