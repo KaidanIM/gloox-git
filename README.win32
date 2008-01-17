@@ -1,11 +1,13 @@
 Building on Win32
 -----------------
 
-gloox compiles (at least) on
+gloox compiles (at least) on:
 - MinGW (http://mingw.org)
+
+As of 1.0-alpha1, it DOES NOT currently compile on:
 - MSVC 6
-No other compilers have been tested.
-However, successful compilation has been reported for VS2003, VS2005, and VS2005 .NET Express.
+
+No other compilers have been tested so far.
 
 See README.wince for info on building gloox for Win CE/Mobile
 
@@ -33,6 +35,8 @@ Building gloox on MSVC
 - adjust include + library paths if necessary
 - to receive any debug output you should use the LogSink facilities (this is not win32-specific)
 - build
+- gloox 1.0-alpha1 DOES NOT currently compile in MSVC6 due to template-bugs in MSVC.
+  Any hints as to how to make it work are greatly appreciated.
 
 
 Building libidn in Win32
