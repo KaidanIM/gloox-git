@@ -89,7 +89,7 @@ namespace gloox
        * Finds a StanzaExtension of a particular type.
        * Example:
        * @code
-       * const MyExention* c = presence.findExtension<MyExtension>( ExtMyExt );
+       * const MyExtension* c = presence.findExtension<MyExtension>( ExtMyExt );
        * @endcode
        * @param type The extension type to look for.
        * @return The static_cast' type, or 0 if none was found.
