@@ -364,6 +364,21 @@ int main( int /*argc*/, char** /*argv*/ )
     }
   }
 
+  // -------
+  {
+    name = "remove node handlers";
+    dt->setTest( 7 ); // intentional
+    d->removeNodeHandlers( dt );
+    IQ iq( IQ::Get, JID(), dt->getID() );
+    iq.addExtension( new Disco::Items( "foonode" ) );
+    d->handleIq( &iq );
+    if( dt->checkResult() ) // should fail, as there's no handler for foonode anymore
+    {
+      ++fail;
+      printf( "test '%s' failed\n", name.c_str() );
+    }
+  }
+
 
 
 
