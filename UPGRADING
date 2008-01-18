@@ -6,10 +6,10 @@
  * (or better) functionality as with the earlier version.
  *
  * @section contents Contents
- * @ref upgrading_09_10 <br/>
- * @ref deprecated_10 <br/>
- * @ref removed_10 <br/>
- * @ref semantics_10 <br/>
+ * @ref upgrading_09_10 <br>
+ * @ref deprecated_10 <br>
+ * @ref removed_10 <br>
+ * @ref semantics_10 <br>
  *
  * @section upgrading_09_10 1. Upgrading from 0.9.x to 1.0
  *
