@@ -95,10 +95,14 @@
  *
  * New code:
  * @code
- * IQ iq( IQ::Set, recipientJID, m_client->getID(), ... );
+ * IQ iq( IQ::Set, recipientJID );
  * ...
  * m_client->send( iq, this, SomeContext );
  * @endcode
+ *
+ * Further, it is no longer necessary to explicitely add an ID to the IQ (for requests of type
+ * 'get' or 'set; 'result' and 'error' IQs need to have the IQ's ID passed they are supposed
+ * to answer). send() will take care of this.
  *
  * @subsubsection func_DiscoHandler_handleDiscoInfoResult 1.1.3 DiscoHandler::handleDiscoInfoResult()
  *
