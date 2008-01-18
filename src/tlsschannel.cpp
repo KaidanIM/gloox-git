@@ -212,10 +212,12 @@ namespace gloox
 
   void SChannel::cleanup()
   {
+    m_buffer = "";
     if( !m_cleanedup )
     {
       m_valid = false;
       m_secure = false;
+      m_cleanedup = true;
       DeleteSecurityContext( &m_context );
       FreeCredentialsHandle( &m_credHandle );
     }

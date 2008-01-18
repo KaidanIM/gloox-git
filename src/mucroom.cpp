@@ -534,7 +534,10 @@ namespace gloox
 
     if( presence.subtype() == Presence::Error  )
     {
-      m_joined = false;
+      if( m_newNick.empty() )
+        m_joined = false;
+      else
+        m_newNick = "";
       m_roomHandler->handleMUCError( this, presence.error()
                                              ? presence.error()->error()
                                              : StanzaErrorUndefined );
