@@ -49,7 +49,7 @@ namespace gloox
        * @deprecated Use handleSubscription( const Subscription& ) instead.
        * This function will be gone in the next major release.
        */
-      GLOOX_DEPRECATED virtual void handleSubscription( Subscription* subscription ) = 0; // FIXME remove for 1.1
+      virtual GLOOX_DEPRECATED void handleSubscription( Subscription* subscription ) = 0; // FIXME remove for 1.1
 
   };
 
