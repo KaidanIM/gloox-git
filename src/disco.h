@@ -219,6 +219,17 @@ namespace gloox
            */
           Identity( const Tag* tag );
 
+          /**
+           * Copy Contructor.
+           * @param id An Identity to create a new Identity object from.
+           */
+          Identity( const Identity& id )
+          {
+            this->m_category = id.m_category;
+            this->m_type = id.m_type;
+            this->m_name = id.m_name;
+          }
+
           std::string m_category;   /**< The identity's category. */
           std::string m_type;       /**< The identity's type. */
           std::string m_name;       /**< The identity's name. */
