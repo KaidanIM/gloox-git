@@ -76,7 +76,7 @@ namespace gloox
     }
     SHA sha;
     sha.feed( s );
-    const std::string hash = Base64::encode64( sha.binary() );
+    const std::string& hash = Base64::encode64( sha.binary() );
     m_disco->registerNodeHandler( const_cast<Capabilities*>( this ), m_node + '#' + hash );
     return hash;
   }
