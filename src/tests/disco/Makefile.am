@@ -8,7 +8,7 @@ noinst_PROGRAMS = disco_test
 
 disco_test_SOURCES = disco_test.cpp
 disco_test_LDADD = ../../tag.o ../../stanza.o \
-			../../prep.o ../../softwareversion.o \
+			../../prep.o \
 			../../gloox.o \
 			../../iq.o ../../util.o \
 			../../error.o ../../jid.o ../../dataform.o \

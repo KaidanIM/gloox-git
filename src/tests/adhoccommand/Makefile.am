@@ -11,7 +11,7 @@ adhoccommand_test_LDADD = ../../adhoc.o ../../connectiontcpclient.o ../../connec
 			../../disco.o ../../parser.o ../../tag.o ../../stanza.o ../../base64.o \
 			../../md5.o ../../tlsgnutlsclient.o ../../tlsopenssl.o ../../tlsschannel.o \
 			../../logsink.o ../../messagesession.o ../../prep.o ../../compressionzlib.o \
-			../../dns.o ../../stanzaextensionfactory.o ../../softwareversion.o \
+			../../dns.o ../../stanzaextensionfactory.o \
 			../../gloox.o ../../tlsgnutlsbase.o ../../tlsdefault.o \
 			../../tlsgnutlsclientanon.o ../../tlsgnutlsserveranon.o ../../mutex.o \
 			../../iq.o ../../presence.o ../../message.o ../../subscription.o ../../util.o \
