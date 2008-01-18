@@ -42,6 +42,8 @@ namespace gloox
 
   Capabilities::~Capabilities()
   {
+    if( m_disco )
+      m_disco->removeNodeHandlers( const_cast<Capabilities*>( this ) );
   }
 
   const std::string Capabilities::ver() const
@@ -74,7 +76,9 @@ namespace gloox
     }
     SHA sha;
     sha.feed( s );
-    return Base64::encode64( sha.binary() );
+    const std::string hash = Base64::encode64( sha.binary() );
+    m_disco->registerNodeHandler( const_cast<Capabilities*>( this ), m_node + '#' + hash );
+    return hash;
   }
 
   const std::string& Capabilities::filterString() const
@@ -93,6 +97,21 @@ namespace gloox
     t->addAttribute( "node", m_node );
     t->addAttribute( "ver", ver() );
     return t;
+  }
+
+  StringList Capabilities::handleDiscoNodeFeatures( const JID&, const std::string& )
+  {
+    return m_disco->features();
+  }
+
+  Disco::IdentityList Capabilities::handleDiscoNodeIdentities( const JID&, const std::string& )
+  {
+    return m_disco->identities();
+  }
+
+  Disco::ItemList Capabilities::handleDiscoNodeItems( const JID&, const std::string& )
+  {
+    return Disco::ItemList();
   }
 
 }
