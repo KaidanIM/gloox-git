@@ -364,19 +364,25 @@ namespace gloox
     int i = 0;
     if( ( i = m_parser.feed( copy ) ) >= 0 )
     {
+      std::string error = "parse error (at pos ";
+#ifdef _WIN32_WCE
       const int len = 4 + (int)std::log10( i ? i : 1 ) + 1;
       char* tmp = new char[len];
       tmp[len-1] = '\0';
       sprintf( tmp, "%d", i );
-      std::string error = "parse error (at pos ";
       error += tmp;
+      delete[] tmp;
+#else
+      std::ostringstream oss;
+      oss << i;
+      error += oss.str();
+#endif
       error += "): ";
       m_logInstance.err( LogAreaClassClientbase, error + copy );
       Tag* e = new Tag( "stream:error" );
       new Tag( e, "restricted-xml", "xmlns", XMLNS_XMPP_STREAM );
       send( e );
       disconnect( ConnParseError );
-      delete[] tmp;
     }
   }
 
