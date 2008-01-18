@@ -16,6 +16,7 @@
 #include "disco.h"
 #include "clientbase.h"
 #include "base64.h"
+#include "util.h"
 
 namespace gloox
 {
