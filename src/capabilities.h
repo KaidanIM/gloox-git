@@ -72,6 +72,24 @@ namespace gloox
        */
       const std::string ver() const;
 
+      /**
+       * Returns the application's advertised name.
+       * @return The application's advertised name.
+       */
+      const std::string& n() const;
+
+      /**
+       * Returns the application's advertised version.
+       * @return The application's advertised version.
+       */
+      const std::string& v() const;
+
+      /**
+       * Returns the application's advertised operating system.
+       * @return The application's advertised operating system.
+       */
+      const std::string& os() const;
+
       // reimplemented from StanzaExtension
       virtual const std::string& filterString() const;
 
@@ -99,6 +117,9 @@ namespace gloox
       Disco* m_disco;
       std::string m_node;
       std::string m_ver;
+      std::string m_n;
+      std::string m_v;
+      std::string m_os;
       bool m_valid;
   };
 
