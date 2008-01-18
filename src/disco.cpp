@@ -17,12 +17,66 @@
 #include "error.h"
 #include "clientbase.h"
 #include "disconodehandler.h"
-#include "softwareversion.h"
 #include "util.h"
 
 
 namespace gloox
 {
+
+  // ---- Disco::SoftwareVersion ----
+  Disco::SoftwareVersion::SoftwareVersion( const std::string& name,
+                                    const std::string& version,
+                                    const std::string& os )
+    : StanzaExtension( ExtVersion ), m_name( name ), m_version( version ), m_os( os )
+                                    {
+                                    }
+
+  Disco::SoftwareVersion::SoftwareVersion( const Tag* tag )
+    : StanzaExtension( ExtVersion )
+  {
+    if( !tag )
+      return;
+
+    Tag* t = tag->findChild( "name" );
+    if( t )
+      m_name = t->cdata();
+
+    t = tag->findChild( "version" );
+    if( t )
+      m_version = t->cdata();
+
+    t = tag->findChild( "os" );
+    if( t )
+      m_os = t->cdata();
+  }
+
+  Disco::SoftwareVersion::~SoftwareVersion()
+  {
+  }
+
+  const std::string& Disco::SoftwareVersion::filterString() const
+  {
+    static const std::string filter = "/iq/query[@xmlns='" + XMLNS_VERSION + "']";
+    return filter;
+  }
+
+  Tag* Disco::SoftwareVersion::tag() const
+  {
+    Tag* t = new Tag( "query" );
+    t->setXmlns( XMLNS_VERSION );
+
+    if( !m_name.empty() )
+      new Tag( t, "name", m_name );
+
+    if( !m_version.empty() )
+      new Tag( t, "version", m_version );
+
+    if( !m_os.empty() )
+      new Tag( t, "os", m_os );
+
+    return t;
+  }
+  // ---- Disco::SoftwareVersion ----
 
   // ---- Disco::Identity ----
   Disco::Identity::Identity( const Tag* tag )
