@@ -6,6 +6,7 @@
 #include "../../tag.h"
 #include "../../iqhandler.h"
 #include "../../iq.h"
+#include "../../stanzaextension.h"
 
 #include <stdio.h>
 #include <locale.h>
@@ -16,6 +17,15 @@ const std::string& g_inst = "the instructions";
 
 namespace gloox
 {
+
+  class Disco;
+  class Capabilities : public StanzaExtension
+  {
+    public:
+      Capabilities() : StanzaExtension( ExtUser + 1 ) {}
+      const std::string& ver() const { return EmptyString; }
+      const std::string& node() const { return EmptyString; }
+  };
 
   class ClientBase
   {
@@ -30,6 +40,7 @@ namespace gloox
 
 }
 
+#define CAPABILITIES_H__
 #define CLIENTBASE_H__
 #include "../../search.h"
 #include "../../search.cpp"
