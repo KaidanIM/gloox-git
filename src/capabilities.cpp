@@ -93,7 +93,8 @@ namespace gloox
       return 0;
 
     Tag* t = new Tag( "c" );
-    t->addAttribute( XMLNS, XMLNS_CAPS );
+    t->setXmlns( XMLNS_CAPS );
+    t->addAttribute( "hash", "sha-1" );
     t->addAttribute( "node", m_node );
     t->addAttribute( "ver", ver() );
     return t;
