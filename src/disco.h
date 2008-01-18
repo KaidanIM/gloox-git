@@ -439,6 +439,24 @@ namespace gloox
                        const std::string& os = EmptyString );
 
       /**
+       * Returns the application's advertised name.
+       * @return The application's advertised name.
+       */
+      const std::string& name() const { return m_versionName; }
+
+      /**
+       * Returns the application's advertised version.
+       * @return The application's advertised version.
+       */
+      const std::string& version() const { return m_versionVersion; }
+
+      /**
+       * Returns the application's advertised operating system.
+       * @return The application's advertised operating system.
+       */
+      const std::string& os() const { return m_versionOs; }
+
+      /**
        * Sets the identity of this entity.
        * The library uses this information to answer disco#info requests
        * with a correct identity.
