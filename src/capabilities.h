@@ -14,6 +14,7 @@
 #ifndef CAPABILITIES_H__
 #define CAPABILITIES_H__
 
+#include "disconodehandler.h"
 #include "stanzaextension.h"
 #include "tag.h"
 
@@ -28,11 +29,11 @@ namespace gloox
   /**
    * @brief This is an implementation of XEP-0115 (Entity Capabilities).
    *
-   * XEP Version: 1.4
+   * XEP Version: 1.5-15
    * @author Jakob Schroeter <js@camaya.net>
    * @since 1.0
    */
-  class GLOOX_API Capabilities : public StanzaExtension
+  class GLOOX_API Capabilities : public StanzaExtension, public DiscoNodeHandler
   {
 
     public:
@@ -82,6 +83,17 @@ namespace gloox
 
       // reimplemented from StanzaExtension
       virtual Tag* tag() const;
+
+      // reimplemented from DiscoNodeHandler
+      virtual StringList handleDiscoNodeFeatures( const JID& from, const std::string& node );
+
+      // reimplemented from DiscoNodeHandler
+      virtual Disco::IdentityList handleDiscoNodeIdentities( const JID& from,
+                                                             const std::string& node );
+
+      // reimplemented from DiscoNodeHandler
+      virtual Disco::ItemList handleDiscoNodeItems( const JID& from,
+                                                    const std::string& node = EmptyString );
 
     private:
       Disco* m_disco;
