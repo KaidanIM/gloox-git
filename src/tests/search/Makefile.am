@@ -9,8 +9,7 @@ noinst_PROGRAMS = search_test
 search_test_SOURCES = search_test.cpp
 search_test_LDADD = ../../stanza.o ../../jid.o ../../dataform.o ../../dataformfieldcontainer.o \
  		../../dataformreported.o ../../dataformitem.o ../../dataformfield.o ../../tag.o ../../prep.o \
- 		../../gloox.o ../../stanzaextensionfactory.o ../../oob.o ../../vcardupdate.o \
-		../../delayeddelivery.o ../../gpgsigned.o ../../gpgencrypted.o \
-		../../amp.o ../../iq.o ../../util.o ../../capabilities.o ../../sha.o ../../base64.o \
-		../../error.o ../../chatstate.o
+ 		../../gloox.o ../../stanzaextensionfactory.o \
+		../../iq.o ../../util.o ../../sha.o ../../base64.o \
+		../../error.o
 search_test_CFLAGS = $(CPPFLAGS)

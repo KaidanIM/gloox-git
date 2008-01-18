@@ -4,6 +4,7 @@
 #include "../../presencehandler.h"
 #include "../../subscriptionhandler.h"
 #include "../../jid.h"
+#include "../../stanzaextension.h"
 
 #include <stdio.h>
 #include <locale.h>
@@ -14,6 +15,13 @@ gloox::JID g_jid( "foof" );
 namespace gloox
 {
   class Disco;
+  class Capabilities : public StanzaExtension
+  {
+    public:
+      Capabilities() : StanzaExtension( ExtUser + 1 ) {}
+      const std::string& ver() const { return EmptyString; }
+      const std::string& node() const { return EmptyString; }
+  };
 
   class ClientBase
   {
@@ -25,7 +33,8 @@ namespace gloox
       virtual void send( IQ& ) = 0;
       virtual void rosterFilled() = 0;
       virtual void send( const Subscription& ) = 0;
-      virtual void send( const IQ&, IqHandler*, int ) = 0;
+      virtual void send( const IQ& ) {};
+      virtual void send( const IQ&, IqHandler*, int ) {};
       virtual void trackID( IqHandler *ih, const std::string& id, int context ) = 0;
       void removeIqHandler( IqHandler* ih, const std::string& xmlns ); // FIXME remove as soon as PrivateXML is ported to SE
       void registerIqHandler( IqHandler* ih, const std::string& xmlns ); // FIXME remove as soon as PrivateXML is ported to SE
@@ -53,6 +62,7 @@ namespace gloox
 using namespace gloox;
 
 #define CLIENTBASE_H__
+#define CAPABILITIES_H__
 #define ROSTERMANAGER_TEST
 #include "../../privatexml.h"
 #include "../../privatexml.cpp"

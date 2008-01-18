@@ -7,7 +7,7 @@ AM_CPPFLAGS = -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare
 noinst_PROGRAMS = rostermanager_test
 
 rostermanager_test_SOURCES = rostermanager_test.cpp
-rostermanager_test_LDADD = ../../tag.o ../../stanza.o ../../capabilities.o ../../base64.o \
+rostermanager_test_LDADD = ../../tag.o ../../stanza.o ../../base64.o \
 			../../prep.o \
 			../../gloox.o \
 			../../iq.o ../../presence.o ../../message.o ../../subscription.o ../../util.o \
