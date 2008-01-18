@@ -50,7 +50,7 @@ namespace gloox
        * @deprecated Use handlePresence( const Presence& ) instead.
        * This function will be gone in the next major release.
        */
-      GLOOX_DEPRECATED virtual void handlePresence( Presence* presence ) = 0; // FIXME remove for 1.1
+      virtual GLOOX_DEPRECATED void handlePresence( Presence* presence ) = 0; // FIXME remove for 1.1
 
   };
 

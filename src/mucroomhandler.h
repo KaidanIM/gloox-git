@@ -122,7 +122,7 @@ namespace gloox
        * @param privateMessage Indicates whether this is a private message.
        * @deprecated Will be removed in gloox 1.1. Use handleMUCMessage( MUCRoom*, const Message&, bool ).
        */
-      GLOOX_DEPRECATED virtual void handleMUCMessage( MUCRoom* room, const std::string& nick,
+      virtual GLOOX_DEPRECATED void handleMUCMessage( MUCRoom* room, const std::string& nick,
                                                       const std::string& message, bool history,
                                                       const std::string& when, bool privateMessage )
       {

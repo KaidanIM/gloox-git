@@ -53,7 +53,7 @@ namespace gloox
        * @deprecated Use handleIq( const IQ& ) instead.
        * This function will be gone in the next major release.
        */
-      GLOOX_DEPRECATED virtual bool handleIq( IQ* iq ) = 0;
+      virtual GLOOX_DEPRECATED bool handleIq( IQ* iq ) = 0;
 
       /**
        * Reimplement this function if you want to be notified about
@@ -82,7 +82,7 @@ namespace gloox
        * @deprecated Use handleIqID( const IQ&, int ) instead.
        * This function will be gone in the next major release.
        */
-      GLOOX_DEPRECATED virtual void handleIqID( IQ* iq, int context ) = 0;
+      virtual GLOOX_DEPRECATED void handleIqID( IQ* iq, int context ) = 0;
   };
 
 }

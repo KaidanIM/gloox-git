@@ -64,7 +64,7 @@ namespace gloox
        * @deprecated Use handleMessage( const Message&, MessageSession* ) instead.
        * This function will be gone in the next major release.
        */
-      GLOOX_DEPRECATED virtual void handleMessage( Message* msg, MessageSession* session = 0 ) = 0; // FIXME remove for 1.1
+      virtual GLOOX_DEPRECATED void handleMessage( Message* msg, MessageSession* session = 0 ) = 0; // FIXME remove for 1.1
   };
 
 }

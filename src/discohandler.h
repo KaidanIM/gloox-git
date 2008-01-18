@@ -63,7 +63,7 @@ namespace gloox
        * @deprecated Use handleDiscoInfo( const JID&, const Disco::Info&, int ) instead.
        * This function will be gone in the next major release.
        */
-      GLOOX_DEPRECATED virtual void handleDiscoInfoResult( IQ* iq, int context ) = 0; // FIXME remove for 1.1
+      virtual GLOOX_DEPRECATED void handleDiscoInfoResult( IQ* iq, int context ) = 0; // FIXME remove for 1.1
 
       /**
        * Reimplement this function if you want to be notified about the result
@@ -89,7 +89,7 @@ namespace gloox
        * @deprecated Use handleDiscoItems( const JID&, const Disco::Items&, int ) instead.
        * This function will be gone in the next major release.
        */
-      GLOOX_DEPRECATED virtual void handleDiscoItemsResult( IQ* iq, int context ) = 0; // FIXME remove for 1.1
+      virtual GLOOX_DEPRECATED void handleDiscoItemsResult( IQ* iq, int context ) = 0; // FIXME remove for 1.1
 
       /**
        * Reimplement this function to receive disco error notifications.
@@ -113,7 +113,7 @@ namespace gloox
        * @deprecated Use handleDiscoError( const JID&, const Error*, int ) instead.
        * This function will be gone in the next major release.
        */
-      GLOOX_DEPRECATED virtual void handleDiscoError( IQ* iq, int context ) = 0; // FIXME remove for 1.1
+      virtual GLOOX_DEPRECATED void handleDiscoError( IQ* iq, int context ) = 0; // FIXME remove for 1.1
 
       /**
        * Reimplement this function to receive notifications about incoming IQ
