@@ -484,4 +484,15 @@ namespace gloox
     }
   }
 
+  void Disco::removeNodeHandlers( DiscoNodeHandler* nh )
+  {
+    DiscoNodeHandlerMap::iterator it = m_nodeHandlers.begin();
+    DiscoNodeHandlerMap::iterator it2;
+    while( it != m_nodeHandlers.end() )
+    {
+      it2 = it++;
+      removeNodeHandler( nh, (*it2).first );
+    }
+  }
+
 }

@@ -504,6 +504,12 @@ namespace gloox
        */
       void removeNodeHandler( DiscoNodeHandler* nh, const std::string& node );
 
+      /**
+       * Removes all registered nodes of the given node handler.
+       * @param nh The NodeHandler to unregister.
+       */
+      void removeNodeHandlers( DiscoNodeHandler* nh );
+
       // reimplemented from IqHandler.
       virtual bool handleIq( IQ* iq ); // FIXME remove for 1.1
 
