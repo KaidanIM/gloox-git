@@ -49,6 +49,8 @@
 #include "tlsdefault.h"
 #include "compressionzlib.h"
 #include "stanzaextensionfactory.h"
+#include "eventhandler.h"
+#include "event.h"
 
 #include <cstdlib>
 #include <string>
@@ -65,6 +67,15 @@
 namespace gloox
 {
 
+  // ---- ClientBase::Ping ----
+  const std::string& ClientBase::Ping::filterString() const
+  {
+    static const std::string filter = "/iq/[@xmlns='" + XMLNS_XMPP_PING + "']";
+    return filter;
+  }
+  // ----~ClientBase::Ping ----
+
+  // ---- ClientBase ----
   ClientBase::ClientBase( const std::string& ns, const std::string& server, int port )
     : m_connection( 0 ), m_encryption( 0 ), m_compression( 0 ), m_disco( 0 ), m_namespace( ns ),
       m_xmllang( "en" ), m_server( server ), m_compressionActive( false ), m_encryptionActive( false ),
@@ -106,7 +117,11 @@ namespace gloox
     }
 
     if( !m_seFactory )
+    {
       registerStanzaExtension( new Error() );
+      registerStanzaExtension( new Ping() );
+    }
+    registerIqHandler( this, ExtPing );
 
     m_streamError = StreamErrorUndefined;
     m_block = false;
@@ -738,11 +753,57 @@ namespace gloox
     send( " " );
   }
 
-  void ClientBase::xmppPing( const JID& to )
+  void ClientBase::xmppPing( const JID& to, EventHandler* eh )
   {
-    IQ iq( IQ::Get, to, getID(), XMLNS_XMPP_PING, "ping" );
-//     iq.addExtensions( new Ping() );
-    send( iq );
+    const std::string& id = getID();
+    IQ iq( IQ::Get, to, id );
+    iq.addExtension( new Ping() );
+    if( eh )
+      m_eventHandlers[id] = eh;
+    send( iq, this, XMPPPing );
+  }
+
+  bool ClientBase::handleIq( const IQ& iq )
+  {
+    const Ping* p = iq.findExtension<Ping>( ExtPing );
+    if( !p )
+      return false;
+
+    IQ re( IQ::Result, iq.from(), iq.id() );
+    send( re );
+
+    return true;
+  }
+
+  void ClientBase::handleIqID( const IQ& iq, int context )
+  {
+    switch( context )
+    {
+      case XMPPPing:
+      {
+        EventHandler* eh = getEventHandler( iq.id() );
+        if( !eh )
+          return;
+
+        eh->handleEvent( Event( ( iq.subtype() == IQ::Result ) ? Event::PingPong : Event::PingError ) );
+        break;
+      }
+      default:
+        handleIqIDForward( iq, context );
+        break;
+    }
+  }
+
+  EventHandler* ClientBase::getEventHandler( const std::string& id )
+  {
+    if( id.empty() )
+      return 0;
+
+    EventHandlerMap::iterator it = m_eventHandlers.find( id );
+    if( it != m_eventHandlers.end() )
+      return (*it).second;
+    else
+      return 0;
   }
 
   const std::string ClientBase::getID()
