@@ -407,7 +407,7 @@ namespace gloox
     return meths;
   }
 
-  void Client::handleIqID( const IQ& iq, int context )
+  void Client::handleIqIDForward( const IQ& iq, int context )
   {
     switch( context )
     {

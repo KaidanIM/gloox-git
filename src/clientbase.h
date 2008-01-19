@@ -17,6 +17,7 @@
 
 #include "macros.h"
 #include "gloox.h"
+#include "iqhandler.h"
 #include "jid.h"
 #include "logsink.h"
 #include "taghandler.h"
@@ -34,6 +35,7 @@ namespace gloox
 {
 
   class Disco;
+  class EventHandler;
   class Tag;
   class IQ;
   class Message;
@@ -41,7 +43,6 @@ namespace gloox
   class Subscription;
   class MessageSessionHandler;
   class ConnectionListener;
-  class IqHandler;
   class MessageHandler;
   class MessageSession;
   class PresenceHandler;
@@ -62,7 +63,8 @@ namespace gloox
    * @since 0.3
    */
   class GLOOX_API ClientBase : public TagHandler, public ConnectionDataHandler,
-                               public CompressionDataHandler, public TLSHandler
+                               public CompressionDataHandler, public TLSHandler,
+                               public IqHandler
   {
 
     friend class RosterManager;
@@ -349,12 +351,12 @@ namespace gloox
       void whitespacePing();
 
       /**
-       * Sends a XMPP Ping (XEP-0199) to the given JID. There is currently no way to know
-       * whether the remote entity answered (other than registering an IQ handler for the
-       * urn:xmpp:ping namespace).
+       * Sends a XMPP Ping (XEP-0199) to the given JID.
+       * @param to Then entity to ping.
+       * @param eh An EventHandler to inform about the reply.
        * @since 0.9
        */
-      void xmppPing( const JID& to );
+      void xmppPing( const JID& to, EventHandler* eh );
 
       /**
        * Use this function to set an authorization ID (authzid). Provided the server supports it
@@ -772,6 +774,44 @@ namespace gloox
 #ifdef CLIENTBASE_TEST
     public:
 #endif
+      /**
+       * @brief This is an implementation of an XMPP Ping (XEP-199).
+       *
+       * @author Jakob Schroeter <js@camaya.net>
+       * @since 1.0
+       */
+      class Ping : public StanzaExtension
+      {
+
+        public:
+          /**
+           * Constructs a new object.
+           */
+          Ping() : StanzaExtension( ExtPing ) {}
+
+          /**
+           * Destructor.
+           */
+          ~Ping() {}
+
+          // reimplemented from StanzaExtension
+          virtual const std::string& filterString() const;
+
+          // reimplemented from StanzaExtension
+          virtual StanzaExtension* newInstance( const Tag* tag ) const
+          {
+            (void)tag;
+            return new Ping();
+          }
+
+          // reimplemented from StanzaExtension
+          virtual Tag* tag() const
+          {
+            return new Tag( "ping", "xmlns", XMLNS_XMPP_PING );
+          }
+
+      };
+
       ClientBase( const ClientBase& );
       ClientBase& operator=( const ClientBase& );
 
@@ -782,6 +822,8 @@ namespace gloox
       virtual bool handleNormalNode( Tag* tag ) = 0;
       virtual void rosterFilled() = 0;
       virtual void cleanup() {}
+      virtual void handleIqIDForward( const IQ& iq, int context ) { (void) iq; (void) context; }
+
       void parse( const std::string& data );
       void init();
       void handleStreamError( Tag* tag );
@@ -796,6 +838,19 @@ namespace gloox
       void notifyOnDisconnect( ConnectionError e );
       void send( const std::string& xml );
       void addFrom( Tag* tag );
+      EventHandler* getEventHandler( const std::string& id );
+
+      // reimplemented from IqHandler
+      virtual bool handleIq( const IQ& iq );
+
+      // reimplemented from IqHandler
+      virtual bool handleIq( IQ* iq ) { (void) iq; return false; } // FIXME remove for 1.1
+
+      // reimplemented from IqHandler
+      virtual void handleIqID( const IQ& iq, int context );
+
+      // reimplemented from IqHandler
+      virtual void handleIqID( IQ* iq, int context ) { (void) iq; (void) context; } // FIXME remove for 1.1
 
       struct TrackStruct
       {
@@ -816,11 +871,17 @@ namespace gloox
         PresenceHandler* ph;
       };
 
+      enum TrackContext
+      {
+        XMPPPing
+      };
+
       typedef std::list<ConnectionListener*>               ConnectionListenerList;
       typedef std::multimap<const std::string, IqHandler*> IqHandlerMapXmlns;
       typedef std::multimap<const int, IqHandler*>         IqHandlerMap;
       typedef std::map<const std::string, TrackStruct>     IqTrackMap;
       typedef std::map<const std::string, MessageHandler*> MessageHandlerMap;
+      typedef std::map<const std::string, EventHandler*>   EventHandlerMap;
       typedef std::list<MessageSession*>                   MessageSessionList;
       typedef std::list<MessageHandler*>                   MessageHandlerList;
       typedef std::list<PresenceHandler*>                  PresenceHandlerList;
@@ -832,6 +893,7 @@ namespace gloox
       IqHandlerMapXmlns        m_iqNSHandlers;
       IqHandlerMap             m_iqExtHandlers;
       IqTrackMap               m_iqIDHandlers;
+      EventHandlerMap          m_eventHandlers;
       MessageSessionList       m_messageSessions;
       MessageHandlerList       m_messageHandlers;
       PresenceHandlerList      m_presenceHandlers;

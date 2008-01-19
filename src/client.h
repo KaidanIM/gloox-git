@@ -15,7 +15,6 @@
 #define CLIENT_H__
 
 #include "clientbase.h"
-#include "iqhandler.h"
 #include "presence.h"
 
 #include <string>
@@ -96,7 +95,7 @@ namespace gloox
    *
    * @author Jakob Schroeter <js@camaya.net>
    */
-  class GLOOX_API Client : public ClientBase, public IqHandler
+  class GLOOX_API Client : public ClientBase
   {
     public:
 
@@ -288,18 +287,6 @@ namespace gloox
        */
       void disconnect();
 
-      // reimplemented from IqHandler
-      virtual bool handleIq( const IQ& iq ) { (void)iq; return false; }
-
-      // reimplemented from IqHandler
-      virtual void handleIqID( const IQ& iq, int context );
-
-      // reimplemented from IqHandler
-      virtual bool handleIq( IQ* iq ) { (void)iq; return false; } // FIXME remove for 1.1
-
-      // reimplemented from IqHandler
-      virtual void handleIqID( IQ* iq, int context ) { (void)iq; (void)context; } // FIXME remove for 1.1
-
     protected:
       /**
        * Initiates non-SASL login.
@@ -408,6 +395,8 @@ namespace gloox
       virtual void handleStartNode() {}
       virtual bool handleNormalNode( Tag* tag );
       virtual void disconnect( ConnectionError reason );
+      virtual void handleIqIDForward( const IQ& iq, int context );
+
       int getStreamFeatures( Tag* tag );
       int getSaslMechs( Tag* tag );
       int getCompressionMethods( Tag* tag );
