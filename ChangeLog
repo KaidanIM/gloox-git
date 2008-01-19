@@ -1,4 +1,4 @@
-v1.0 -- xx yyy 200z
+v1.0 -- xx yyy 2008
 -------------------
 
 general changes and additions:
@@ -9,6 +9,7 @@ general changes and additions:
 - XEP-0124 (BOSH)
 - XEP-0172 (User Nickname)
 - XEP-0184 (Message Receipts)
+- XEP-0199 (XMPP Ping)
 - XEP-0206 (XMPP Over BOSH)
 - integrated XEP-0047 (In-Band Bytestreams) with XEP-0096 (File Transfer)
 - integrated XEP-0066 (Out-of-Band Data) with XEP-0096 (File Transfer)
