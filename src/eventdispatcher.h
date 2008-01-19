@@ -35,7 +35,7 @@ namespace gloox
 
     public:
       /**
-       *
+       * Creates a new EventDispatcher object. You should not need to use this class directly.
        */
       EventDispatcher();
 
