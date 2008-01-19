@@ -758,8 +758,7 @@ namespace gloox
     const std::string& id = getID();
     IQ iq( IQ::Get, to, id );
     iq.addExtension( new Ping() );
-    if( eh )
-      m_eventHandlers[id] = eh;
+    m_dispatcher.registerEventHandler( eh, id );
     send( iq, this, XMPPPing );
   }
 
@@ -777,33 +776,11 @@ namespace gloox
 
   void ClientBase::handleIqID( const IQ& iq, int context )
   {
-    switch( context )
-    {
-      case XMPPPing:
-      {
-        EventHandler* eh = getEventHandler( iq.id() );
-        if( !eh )
-          return;
-
-        eh->handleEvent( Event( ( iq.subtype() == IQ::Result ) ? Event::PingPong : Event::PingError ) );
-        break;
-      }
-      default:
-        handleIqIDForward( iq, context );
-        break;
-    }
-  }
-
-  EventHandler* ClientBase::getEventHandler( const std::string& id )
-  {
-    if( id.empty() )
-      return 0;
-
-    EventHandlerMap::iterator it = m_eventHandlers.find( id );
-    if( it != m_eventHandlers.end() )
-      return (*it).second;
+    if( context == XMPPPing )
+      m_dispatcher.dispatch( Event( ( iq.subtype() == IQ::Result ) ? Event::PingPong : Event::PingError ),
+                             iq.id(), true );
     else
-      return 0;
+      handleIqIDForward( iq, context );
   }
 
   const std::string ClientBase::getID()

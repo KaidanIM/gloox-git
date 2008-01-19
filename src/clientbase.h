@@ -17,6 +17,7 @@
 
 #include "macros.h"
 #include "gloox.h"
+#include "eventdispatcher.h"
 #include "iqhandler.h"
 #include "jid.h"
 #include "logsink.h"
@@ -839,7 +840,6 @@ namespace gloox
       void notifyOnDisconnect( ConnectionError e );
       void send( const std::string& xml );
       void addFrom( Tag* tag );
-      EventHandler* getEventHandler( const std::string& id );
 
       // reimplemented from IqHandler
       virtual bool handleIq( const IQ& iq );
@@ -882,7 +882,6 @@ namespace gloox
       typedef std::multimap<const int, IqHandler*>         IqHandlerMap;
       typedef std::map<const std::string, TrackStruct>     IqTrackMap;
       typedef std::map<const std::string, MessageHandler*> MessageHandlerMap;
-      typedef std::map<const std::string, EventHandler*>   EventHandlerMap;
       typedef std::list<MessageSession*>                   MessageSessionList;
       typedef std::list<MessageHandler*>                   MessageHandlerList;
       typedef std::list<PresenceHandler*>                  PresenceHandlerList;
@@ -894,7 +893,6 @@ namespace gloox
       IqHandlerMapXmlns        m_iqNSHandlers;
       IqHandlerMap             m_iqExtHandlers;
       IqTrackMap               m_iqIDHandlers;
-      EventHandlerMap          m_eventHandlers;
       MessageSessionList       m_messageSessions;
       MessageHandlerList       m_messageHandlers;
       PresenceHandlerList      m_presenceHandlers;
@@ -912,6 +910,7 @@ namespace gloox
       Parser m_parser;
       LogSink m_logInstance;
       StanzaExtensionFactory* m_seFactory;
+      EventDispatcher m_dispatcher;
 
       AuthenticationError m_authError;
       StreamError m_streamError;

@@ -1,3 +1,4 @@
+
 ##
 ## Process this file with automake to produce Makefile.in
 ##
@@ -18,5 +19,5 @@ rostermanagerquery_test_LDADD = ../../rostermanager.o ../../connectiontcpclient.
 			../../sha.o ../../error.o ../../clientbase.o ../../jid.o ../../rosteritem.o \
 			../../capabilities.o ../../dataform.o \
 			../../dataformfieldcontainer.o ../../dataformreported.o ../../dataformitem.o \
-			../../dataformfield.o
+			../../dataformfield.o ../../eventdispatcher.o
 rostermanagerquery_test_CFLAGS = $(CPPFLAGS)
