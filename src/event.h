@@ -11,6 +11,9 @@
 */
 
 
+#ifndef EVENT_H__
+#define EVENT_H__
+
 namespace gloox
 {
 
@@ -31,6 +34,7 @@ namespace gloox
        */
       enum EventType
       {
+        PingPing,                     /**< */
         PingPong,                     /**< */
         PingError                     /**< */
       };
@@ -51,7 +55,7 @@ namespace gloox
       EventType eventType() const { return m_eventType; }
 
       /**
-       * Return a pointer to a Stanza-derived object.
+       * Returns a pointer to a Stanza-derived object.
        * @return A pointer to a Stanza that caused the event. May be 0.
        * @note You should @b not delete the Stanza object.
        */
@@ -64,3 +68,5 @@ namespace gloox
   };
 
 }
+
+#endif // EVENT_H__
