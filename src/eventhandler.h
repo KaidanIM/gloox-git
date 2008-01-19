@@ -32,6 +32,8 @@ namespace gloox
       virtual ~EventHandler() {}
 
       /**
+       * This function gets called for Events this handler was registered for.
+       * @param event The Event.
        */
       virtual void handleEvent( const Event& event ) = 0;
 
