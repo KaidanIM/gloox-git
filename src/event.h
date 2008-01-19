@@ -34,15 +34,23 @@ namespace gloox
        */
       enum EventType
       {
-        PingPing,                     /**< */
-        PingPong,                     /**< */
-        PingError                     /**< */
+        PingPing,                     /**< Incoming Ping (XEP-0199). */
+        PingPong,                     /**< Incoming Pong (XEP-0199). */
+        PingError                     /**< Incoming Error Pong (XEP-0199). */
       };
 
       /**
-       *
+       * Creates a new Event of the given type.
+       * @param type The Event type.
        */
       Event( EventType type ) : m_eventType( type ), m_stanza( 0 ) {}
+
+      /**
+       * Creates a new Event of the given type, referencing the given Stanza.
+       * @param type The Event type.
+       * @param stanza A Stanza to point at. No copy of the Stanza is taken, just its address.
+       */
+      Event( EventType type, const Stanza& stanza ) : m_eventType( type ), m_stanza( &stanza ) {}
 
       /**
        * Virtual Destructor.
@@ -50,7 +58,8 @@ namespace gloox
       virtual ~Event() {}
 
       /**
-       *
+       * Returns the Event's type.
+       * @return The Event's type.
        */
       EventType eventType() const { return m_eventType; }
 
@@ -63,7 +72,7 @@ namespace gloox
 
     protected:
       EventType m_eventType;
-      Stanza* m_stanza;
+      const Stanza* m_stanza;
 
   };
 

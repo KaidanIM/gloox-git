@@ -768,7 +768,7 @@ namespace gloox
     if( !p )
       return false;
 
-    m_dispatcher.dispatch( Event( Event::PingPing ) );
+    m_dispatcher.dispatch( Event( Event::PingPing, iq ) );
     IQ re( IQ::Result, iq.from(), iq.id() );
     send( re );
 
@@ -778,7 +778,8 @@ namespace gloox
   void ClientBase::handleIqID( const IQ& iq, int context )
   {
     if( context == XMPPPing )
-      m_dispatcher.dispatch( Event( ( iq.subtype() == IQ::Result ) ? Event::PingPong : Event::PingError ),
+      m_dispatcher.dispatch( Event( ( iq.subtype() == IQ::Result ) ? Event::PingPong : Event::PingError,
+                                    iq ),
                              iq.id(), true );
     else
       handleIqIDForward( iq, context );
