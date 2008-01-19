@@ -134,8 +134,8 @@ namespace gloox
     delete m_connection;
     delete m_encryption;
     delete m_compression;
-    delete m_disco;
     delete m_seFactory;
+    delete m_disco;
 
 //     util::clearList( m_messageSessions );
     // FIXME
@@ -778,8 +778,8 @@ namespace gloox
   void ClientBase::handleIqID( const IQ& iq, int context )
   {
     if( context == XMPPPing )
-      m_dispatcher.dispatch( Event( ( iq.subtype() == IQ::Result ) ? Event::PingPong : Event::PingError,
-                                    iq ),
+      m_dispatcher.dispatch( Event( ( iq.subtype() == IQ::Result ) ? Event::PingPong
+                                                                   : Event::PingError, iq ),
                              iq.id(), true );
     else
       handleIqIDForward( iq, context );
