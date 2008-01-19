@@ -403,6 +403,7 @@ namespace gloox
        * @c xmlns. As of 1.0, the number of handlers per namespace is not limited.
        * @param ih The object to receive Iq stanza notifications.
        * @param xmlns The namespace the object handles.
+       * @deprecated Will be removed for 1.1. Use registerIqHandler( IqHandler*, int ) instead.
        */
       GLOOX_DEPRECATED void registerIqHandler( IqHandler* ih, const std::string& xmlns );
 
@@ -411,7 +412,7 @@ namespace gloox
        * that contain StanzaExtensions of the given type. The number of handlers
        * per extension type is not limited.
        * @param ih The object to receive IQ stanza notifications.
-       * @param exttype The extension type. See
+       * @param exttype The extension type. See StanzaExtension and
        * @link gloox::StanzaExtensionType StanzaExtensionType @endlink.
        */
       void registerIqHandler( IqHandler* ih, int exttype );
