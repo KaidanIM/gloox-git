@@ -17,5 +17,5 @@ clientbase_test_LDADD = ../../clientbase.o ../../jid.o ../../connectiontcpclient
 			../../dataformfield.o \
 			../../tlsgnutlsclientanon.o ../../tlsgnutlsserveranon.o ../../mutex.o \
 			../../iq.o ../../presence.o ../../message.o ../../subscription.o ../../util.o \
-			../../sha.o ../../error.o
+			../../sha.o ../../error.o ../../eventdispatcher.o
 clientbase_test_CFLAGS = $(CPPFLAGS)

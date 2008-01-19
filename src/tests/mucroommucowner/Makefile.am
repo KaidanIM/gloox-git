@@ -11,7 +11,7 @@ mucroommucowner_test_LDADD =../../connectiontcpclient.o ../../connectiontcpbase.
 			../../disco.o ../../parser.o ../../tag.o ../../stanza.o ../../base64.o \
 			../../md5.o ../../tlsgnutlsclient.o ../../tlsopenssl.o ../../tlsschannel.o \
 			../../logsink.o ../../messagesession.o ../../prep.o ../../compressionzlib.o \
-			../../dns.o ../../stanzaextensionfactory.o \
+			../../dns.o ../../stanzaextensionfactory.o ../../eventdispatcher.o \
 			../../gloox.o ../../tlsgnutlsbase.o ../../tlsdefault.o \
 			../../tlsgnutlsclientanon.o ../../tlsgnutlsserveranon.o ../../mutex.o \
 			../../iq.o ../../presence.o ../../message.o ../../subscription.o ../../util.o \
