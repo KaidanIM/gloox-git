@@ -177,6 +177,8 @@ int main( int /*argc*/, char** /*argv*/ )
   }
 
 
+  delete cb;
+  delete fcb;
 
 
   if( fail == 0 )
