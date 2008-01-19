@@ -135,7 +135,9 @@ namespace gloox
     delete m_encryption;
     delete m_compression;
     delete m_seFactory;
+    m_seFactory = 0; // to avoid usage when Disco gets deleted below
     delete m_disco;
+    m_disco = 0;
 
 //     util::clearList( m_messageSessions );
     // FIXME
