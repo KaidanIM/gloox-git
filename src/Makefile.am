@@ -67,8 +67,8 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             compressionbase.h         connectiontcpclient.h   connectionhttpproxy.h \
                             tlsdefault.h              simanager.h             siprofilehandler.h \
                             sihandler.h               siprofileft.h           siprofilefthandler.h \
-                            socks5bytestreammanager.h connectionsocks5proxy.h \
-                            socks5bytestream.h        socks5bytestreamserver.h \
+                            socks5bytestreammanager.h connectionsocks5proxy.h event.h \
+                            socks5bytestream.h        socks5bytestreamserver.h eventhandler.h \
                             mutex.h                   mutexguard.h            connectiontcpbase.h \
                             connectiontcpserver.h     amp.h                   pubsubmanager.h \
                             iq.h                      pubsub.h                \
