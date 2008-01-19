@@ -11,6 +11,9 @@
 */
 
 
+#ifndef EVENTHANDLER_H__
+#define EVENTHANDLER_H__
+
 namespace gloox
 {
 
@@ -40,3 +43,5 @@ namespace gloox
   };
 
 }
+
+#endif // EVENTHANDLER_H__

@@ -37,6 +37,7 @@ namespace gloox
 
   class Disco;
   class EventHandler;
+  class Event;
   class Tag;
   class IQ;
   class Message;

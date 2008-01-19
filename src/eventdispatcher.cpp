@@ -27,8 +27,8 @@ namespace gloox
 
   void EventDispatcher::dispatch( const Event& event, const std::string& context, bool remove )
   {
-    typedef EventHandlerMap::iterator Ei;
-    std::pair<Ei, Ei> g = m_eventHandlers.equal_range( context );
+    typedef ContextHandlerMap::iterator Ei;
+    std::pair<Ei, Ei> g = m_contextHandlers.equal_range( context );
     Ei it = g.first;
     Ei it2;
     while( it != g.second )
@@ -36,7 +36,17 @@ namespace gloox
       it2 = it++;
       (*it2).second->handleEvent( event );
       if( remove )
-        m_eventHandlers.erase( it2 );
+        m_contextHandlers.erase( it2 );
+    }
+  }
+
+  void EventDispatcher::dispatch( const Event& event )
+  {
+    TypeHandlerMap::iterator it = m_typeHandlers.begin();
+    for( ; it != m_typeHandlers.end(); ++it )
+    {
+      if( (*it).first == event.eventType() )
+        (*it).second->handleEvent( event );
     }
   }
 
@@ -45,18 +55,18 @@ namespace gloox
     if( !eh || context.empty() )
       return;
 
-    m_eventHandlers.insert( std::make_pair( context, eh ) );
+    m_contextHandlers.insert( std::make_pair( context, eh ) );
   }
 
   void EventDispatcher::removeEventHandler( EventHandler* eh )
   {
-    EventHandlerMap::iterator it = m_eventHandlers.begin();
-    EventHandlerMap::iterator it2;
-    while( it != m_eventHandlers.end() )
+    ContextHandlerMap::iterator it = m_contextHandlers.begin();
+    ContextHandlerMap::iterator it2;
+    while( it != m_contextHandlers.end() )
     {
       it2 = it++;
       if( (*it2).second == eh )
-        m_eventHandlers.erase( it2 );
+        m_contextHandlers.erase( it2 );
     }
   }
 

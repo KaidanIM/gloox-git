@@ -11,13 +11,17 @@
 */
 
 
+#ifndef EVENTDISPATCHER_H__
+#define EVENTDISPATCHER_H__
+
+#include "event.h"
+
 #include <map>
 #include <string>
 
 namespace gloox
 {
 
-  class Event;
   class EventHandler;
 
   /**
@@ -51,6 +55,12 @@ namespace gloox
       void dispatch( const Event& event, const std::string& context, bool remove );
 
       /**
+       * Looks for handlers for the given Event, identified by its type.
+       * @param event The event to dispatch.
+       */
+      void dispatch( const Event& event );
+
+      /**
        * Registers the given EventHandler to be notified about Events with the given context.
        * The context will usually be an IQ ID.
        * @param eh The EventHandler to register.
@@ -65,10 +75,14 @@ namespace gloox
       void removeEventHandler( EventHandler* eh );
 
     private:
-      typedef std::multimap<const std::string, EventHandler*> EventHandlerMap;
+      typedef std::multimap<const std::string, EventHandler*> ContextHandlerMap;
+      typedef std::multimap<Event::EventType, EventHandler*> TypeHandlerMap;
 
-      EventHandlerMap m_eventHandlers;
+      ContextHandlerMap m_contextHandlers;
+      TypeHandlerMap m_typeHandlers;
 
   };
 
 }
+
+#endif // EVENTDISPATCHER_H__

@@ -768,6 +768,7 @@ namespace gloox
     if( !p )
       return false;
 
+    m_dispatcher.dispatch( Event( Event::PingPing ) );
     IQ re( IQ::Result, iq.from(), iq.id() );
     send( re );
 
