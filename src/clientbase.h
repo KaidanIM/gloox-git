@@ -55,7 +55,7 @@ namespace gloox
   class StanzaExtensionFactory;
 
   /**
-   * @brief This is the common base class for a Jabber/XMPP Client and a jabber Component.
+   * @brief This is the common base class for a Jabber/XMPP Client and a Jabber Component.
    *
    * It manages connection establishing, authentication, filter registration and invocation.
    *
