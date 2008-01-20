@@ -66,7 +66,7 @@ namespace gloox
       return prepare( node, out, stringprep_xmpp_nodeprep );
 #else
       out = node;
-      return false;
+      return true;
 #endif
     }
 
@@ -76,7 +76,7 @@ namespace gloox
       return prepare( domain, out, stringprep_nameprep );
 #else
       out = domain;
-      return false;
+      return true;
 #endif
     }
 
@@ -86,7 +86,7 @@ namespace gloox
       return prepare( resource, out, stringprep_xmpp_resourceprep );
 #else
       out = resource;
-      return false;
+      return true;
 #endif
     }
 
@@ -108,8 +108,10 @@ namespace gloox
       return false;
 #else
       out = domain;
-      return false;
+      return true;
 #endif
     }
+
   }
+
 }
