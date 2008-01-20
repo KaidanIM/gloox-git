@@ -123,6 +123,7 @@ namespace gloox
     {
       m_disco = new Disco( this );
       m_disco->setVersion( "based on gloox", GLOOX_VERSION );
+      m_disco->addFeature( XMLNS_XMPP_PING );
     }
 
     registerStanzaExtension( new Error() );
