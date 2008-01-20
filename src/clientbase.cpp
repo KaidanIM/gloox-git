@@ -70,7 +70,7 @@ namespace gloox
   // ---- ClientBase::Ping ----
   const std::string& ClientBase::Ping::filterString() const
   {
-    static const std::string filter = "/iq/[@xmlns='" + XMLNS_XMPP_PING + "']";
+    static const std::string filter = "/iq/ping[@xmlns='" + XMLNS_XMPP_PING + "']";
     return filter;
   }
   // ----~ClientBase::Ping ----
