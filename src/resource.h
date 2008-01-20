@@ -49,7 +49,20 @@ namespace gloox
       /**
        * Virtual destrcutor.
        */
-      virtual ~Resource() {}
+      virtual ~Resource()
+      {
+//         util::clearList( m_extensionList );
+        // FIXME
+        StanzaExtensionList::iterator it = m_extensions.begin();
+        StanzaExtensionList::iterator it2;
+        while( it != m_extensions.end() )
+        {
+          it2 = it++;
+          delete (*it2);
+          m_extensions.erase( it2 );
+        }
+        // ~
+      }
 
       /**
        * Lets you fetch the resource's priority.
@@ -84,7 +97,11 @@ namespace gloox
       {
         StanzaExtensionList::const_iterator it = exts.begin();
         for( ; it != exts.end(); ++it )
-          m_extensions.push_back( (*it)->newInstance( (*it)->tag() ) ); // FIXME suboptimal at best
+        {
+          Tag* t = (*it)->tag();
+          m_extensions.push_back( (*it)->newInstance( t ) ); // FIXME suboptimal at best
+          delete t;
+        }
       }
 
       int m_priority;
