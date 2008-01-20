@@ -790,12 +790,12 @@ namespace gloox
           /**
            * Constructs a new object.
            */
-          Ping() : StanzaExtension( ExtPing ) {}
+          Ping();
 
           /**
            * Destructor.
            */
-          ~Ping() {}
+          virtual ~Ping();
 
           // reimplemented from StanzaExtension
           virtual const std::string& filterString() const;

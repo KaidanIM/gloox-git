@@ -68,12 +68,21 @@ namespace gloox
 {
 
   // ---- ClientBase::Ping ----
+  ClientBase::Ping::Ping()
+    : StanzaExtension( ExtPing )
+  {
+  }
+
+  ClientBase::Ping::~Ping()
+  {
+  }
+
   const std::string& ClientBase::Ping::filterString() const
   {
     static const std::string filter = "/iq/ping[@xmlns='" + XMLNS_XMPP_PING + "']";
     return filter;
   }
-  // ----~ClientBase::Ping ----
+  // ---- ~ClientBase::Ping ----
 
   // ---- ClientBase ----
   ClientBase::ClientBase( const std::string& ns, const std::string& server, int port )
@@ -116,11 +125,8 @@ namespace gloox
       m_disco->setVersion( "based on gloox", GLOOX_VERSION );
     }
 
-    if( !m_seFactory )
-    {
-      registerStanzaExtension( new Error() );
-      registerStanzaExtension( new Ping() );
-    }
+    registerStanzaExtension( new Error() );
+    registerStanzaExtension( new Ping() );
     registerIqHandler( this, ExtPing );
 
     m_streamError = StreamErrorUndefined;
