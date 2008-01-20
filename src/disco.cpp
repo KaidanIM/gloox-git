@@ -28,8 +28,8 @@ namespace gloox
                                     const std::string& version,
                                     const std::string& os )
     : StanzaExtension( ExtVersion ), m_name( name ), m_version( version ), m_os( os )
-                                    {
-                                    }
+  {
+  }
 
   Disco::SoftwareVersion::SoftwareVersion( const Tag* tag )
     : StanzaExtension( ExtVersion )
@@ -79,6 +79,14 @@ namespace gloox
   // ---- Disco::SoftwareVersion ----
 
   // ---- Disco::Identity ----
+
+  Disco::Identity::Identity( const std::string& category,
+                             const std::string& type,
+                             const std::string& name )
+    : m_category( category ), m_type( type ), m_name( name )
+  {
+  }
+
   Disco::Identity::Identity( const Tag* tag )
   {
     if( !tag || tag->name() != "identity" )
@@ -87,6 +95,15 @@ namespace gloox
     m_category = tag->findAttribute( "category" );
     m_type = tag->findAttribute( "type" );
     m_name = tag->findAttribute( "name" );
+  }
+
+  Disco::Identity::Identity( const Identity& id )
+    : m_category( id.m_category ), m_type( id.m_type ), m_name( id.m_name )
+  {
+  }
+
+  Disco::Identity::~Identity()
+  {
   }
 
   Tag* Disco::Identity::tag() const
