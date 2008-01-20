@@ -767,7 +767,7 @@ namespace gloox
   bool ClientBase::handleIq( const IQ& iq )
   {
     const Ping* p = iq.findExtension<Ping>( ExtPing );
-    if( !p )
+    if( !p || iq.subtype() != IQ::Get )
       return false;
 
     m_dispatcher.dispatch( Event( Event::PingPing, iq ) );
