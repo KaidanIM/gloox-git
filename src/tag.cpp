@@ -27,6 +27,7 @@
 namespace gloox
 {
 
+  // ---- Tag::Attribute ----
   Tag::Attribute::Attribute( Tag* parent, const std::string& name, const std::string& value,
                              const std::string& xmlns )
     : m_parent( parent )
@@ -137,11 +138,9 @@ namespace gloox
 
     return xml;
   }
+  // ---- ~Tag::Attribute ----
 
-  /*
-   * Tag
-   */
-
+  // ---- Tag ----
   Tag::Tag( const std::string& name, const std::string& cdata )
     : m_parent( 0 ), m_children( 0 ), m_cdata( 0 ),
       m_attribs( 0 ), m_nodes( 0 ),
