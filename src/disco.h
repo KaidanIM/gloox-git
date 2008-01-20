@@ -180,13 +180,12 @@ namespace gloox
            */
           Identity( const std::string& category,
                     const std::string& type,
-                    const std::string& name )
-            : m_category( category ), m_type( type ), m_name( name ) {}
+                    const std::string& name );
 
           /**
            * Destructor.
            */
-          ~Identity() {}
+          ~Identity();
 
           /**
            * Returns the identity's category.
@@ -223,12 +222,7 @@ namespace gloox
            * Copy Contructor.
            * @param id An Identity to create a new Identity object from.
            */
-          Identity( const Identity& id )
-          {
-            this->m_category = id.m_category;
-            this->m_type = id.m_type;
-            this->m_name = id.m_name;
-          }
+          Identity( const Identity& id );
 
           std::string m_category;   /**< The identity's category. */
           std::string m_type;       /**< The identity's type. */
