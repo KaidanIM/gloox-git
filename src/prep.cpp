@@ -65,6 +65,8 @@ namespace gloox
 #ifdef HAVE_LIBIDN
       return prepare( node, out, stringprep_xmpp_nodeprep );
 #else
+      if( node.length() > JID_PORTION_SIZE )
+        return false;
       out = node;
       return true;
 #endif
@@ -75,6 +77,8 @@ namespace gloox
 #ifdef HAVE_LIBIDN
       return prepare( domain, out, stringprep_nameprep );
 #else
+      if( domain.length() > JID_PORTION_SIZE )
+        return false;
       out = domain;
       return true;
 #endif
@@ -85,6 +89,8 @@ namespace gloox
 #ifdef HAVE_LIBIDN
       return prepare( resource, out, stringprep_xmpp_resourceprep );
 #else
+      if( resource.length() > JID_PORTION_SIZE )
+        return false;
       out = resource;
       return true;
 #endif
@@ -107,6 +113,8 @@ namespace gloox
         free( prepped );
       return false;
 #else
+      if( domain.length() > JID_PORTION_SIZE )
+        return false;
       out = domain;
       return true;
 #endif
