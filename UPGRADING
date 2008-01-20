@@ -286,6 +286,12 @@
  * This function has been removed in favor of
  * @link gloox::PrivateXML::storeXML() PrivateXML::storeXML( const Tag*, PrivateXMLHandler* ) @endlink.
  *
+ * @subsubsection func_Client 1.2.17 Client::Client( string, string, string, string, int )
+ *
+ * This function has been removed. The only recommended alternative is
+ * @link gloox::Client::Client() Client::Client( const JID&, const std::string&, int ) @endlink.
+ *
+ *
  *
  *
  *

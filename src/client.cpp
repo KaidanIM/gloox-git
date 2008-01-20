@@ -48,14 +48,14 @@ namespace gloox
 
   // ---- Client::ResourceBind ----
   Client::ResourceBind::ResourceBind( const std::string& resource, bool bind )
-  : StanzaExtension( ExtResourceBind ), m_jid( JID() ), m_bind( bind )
+    : StanzaExtension( ExtResourceBind ), m_jid( JID() ), m_bind( bind )
   {
     prep::resourceprep( resource, m_resource );
     m_valid = true;
   }
 
   Client::ResourceBind::ResourceBind( const Tag* tag )
-  : StanzaExtension( ExtResourceBind ), m_resource( EmptyString ), m_bind( true )
+    : StanzaExtension( ExtResourceBind ), m_resource( EmptyString ), m_bind( true )
   {
     if( !tag )
       return;
@@ -133,21 +133,6 @@ namespace gloox
   {
     m_jid = jid;
     m_server = m_jid.serverRaw();
-    init();
-  }
-
-  Client::Client( const std::string& username, const std::string& password,
-                  const std::string& server, const std::string& resource, int port )
-    : ClientBase( XMLNS_CLIENT, password, server, port ),
-      m_rosterManager( 0 ), m_auth( 0 ),
-      m_presence( Presence::Available, JID() ), m_resourceBound( false ),
-      m_forceNonSasl( false ), m_manageRoster( true ), m_doAuth( true ),
-      m_streamFeatures( 0 ), m_priority( 0 )
-  {
-    m_jid.setUsername( username );
-    m_jid.setServer( server );
-    m_jid.setResource( resource );
-
     init();
   }
 
