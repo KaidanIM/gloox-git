@@ -308,7 +308,7 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   name = "re-check item";
   ri = rm->getRosterItem( JID( "foo" ) );
-  if( ri->name() != "foof" || ri->groups().size() != 3 )
+  if( !ri || ri->name() != "foof" || ri->groups().size() != 3 )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
