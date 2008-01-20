@@ -278,18 +278,22 @@ int main( int /*argc*/, char** /*argv*/ )
   }
 
   // -------
-  name = "update item";
-  ri->setName( "foof" );
-  gl.clear();
-  gl.push_back( "f1" );
-  gl.push_back( "f2" );
-  gl.push_back( "f3" );
-  ri->setGroups( gl );
-  if( ri->name() != "foof" )
+  if( ri )
+  {
+    name = "update item";
+    ri->setName( "foof" );
+    gl.clear();
+    gl.push_back( "f1" );
+    gl.push_back( "f2" );
+    gl.push_back( "f3" );
+    ri->setGroups( gl );
+  }
+  if( !ri || ri->name() != "foof" )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
   }
+
 
   // -------
   name = "synchronize item";
