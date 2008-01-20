@@ -123,21 +123,6 @@ namespace gloox
       Client( const JID& jid, const std::string& password, int port = -1 );
 
       /**
-       * Constructs a new Client.
-       * SASL and TLS are on by default.
-       * The actual host will be resolved using SRV records. The server value is used as a fallback
-       * in case no SRV record is found.
-       * @param username The username/local part of the JID.
-       * @param resource The resource part of the JID.
-       * @param password The password to use for authentication.
-       * @param server The Jabber ID's server part and the host name to connect to. If those are different
-       * for your setup, use the second constructor instead.
-       * @param port The port to connect to. The default of -1 means to look up the port via DNS SRV.
-       */
-      Client( const std::string& username, const std::string& password,
-              const std::string& server, const std::string& resource, int port = -1 );
-
-      /**
        * Virtual destructor.
        */
       virtual ~Client();
@@ -414,7 +399,7 @@ namespace gloox
 
       enum TrackContext
       {
-        CtxResourceBind,
+        CtxResourceBind = 1000,  // must be higher than the last element in ClientBase's TrackContext
         CtxResourceUnbind,
         CtxSessionEstablishment
       };
