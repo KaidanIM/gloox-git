@@ -651,7 +651,7 @@ namespace gloox
     const std::string& id = m_parent->getID();
     IQ iq( IQ::Set, m_nick.bareJID(), id, XMLNS_MUC_OWNER );
     Tag* x = new Tag( iq.query(), "x", XMLNS, XMLNS_X_DATA );
-    x->addAttribute( TYPE, context == CreateInstantRoom ? "submit" :"cancel" );
+    x->addAttribute( TYPE, context == CreateInstantRoom ? "submit" : "cancel" );
 
     m_parent->send( iq, this, context );
 
