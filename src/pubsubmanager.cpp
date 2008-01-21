@@ -658,6 +658,9 @@ namespace gloox
             case SetAffiliateList:
             case GetNodeConfig:
             case SetNodeConfig:
+            case CreateNode:
+            case DeleteNode:
+            case PurgeNodeItems:
             {
               switch( context )
               {
