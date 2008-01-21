@@ -400,8 +400,6 @@ namespace gloox
        */
       void requestRoomConfig();
 
-      void instantRoom( int context );
-
       /**
        * Use this function to accept the room's default configuration. This function is useful
        * only after MUCRoomHandler::handleMUCRoomCreation() was called. This is a NOOP at
@@ -583,7 +581,10 @@ namespace gloox
           };
 
           /**
-           *
+           * Creates a new MUCOwner object for the given query, possibly including
+           * the given DataForm.
+           * @param type The intended query type.
+           * @param form An optional pointer to a DataForm. Necessity depends on the query type.
            */
           MUCOwner( QueryType type, DataForm* form = 0 );
 
@@ -596,7 +597,8 @@ namespace gloox
           MUCOwner( const JID& alternate, const std::string& reason, const std::string& password );
 
           /**
-           *
+           * Creates a new MUCOwner object from the given Tag.
+           * @param tag A Tag to parse.
            */
           MUCOwner( const Tag* tag = 0 );
 
@@ -633,6 +635,7 @@ namespace gloox
       void modifyOccupant( const std::string& nick, int state, const std::string& roa,
                            const std::string& reason );
       void acknowledgeRoomCreation();
+      void instantRoom( int context );
       MUCRoomAffiliation getEnumAffiliation( const std::string& affiliation );
       MUCRoomRole getEnumRole( const std::string& role );
 
