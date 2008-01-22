@@ -139,7 +139,14 @@ namespace gloox
 
   Disco::IdentityList Capabilities::handleDiscoNodeIdentities( const JID&, const std::string& )
   {
-    return m_disco->identities();
+    const Disco::IdentityList& il = m_disco->identities();
+    Disco::IdentityList ret;
+    Disco::IdentityList::const_iterator it = il.begin();
+    for( ; it != il.end(); ++it )
+    {
+      ret.push_back( new Disco::Identity( *(*it) ) );
+    }
+    return ret;
   }
 
   Disco::ItemList Capabilities::handleDiscoNodeItems( const JID&, const std::string& )

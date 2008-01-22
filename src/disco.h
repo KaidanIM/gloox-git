@@ -183,6 +183,12 @@ namespace gloox
                     const std::string& name );
 
           /**
+           * Copy Contructor.
+           * @param id An Identity to create a new Identity object from.
+           */
+          Identity( const Identity& id );
+
+          /**
            * Destructor.
            */
           ~Identity();
@@ -217,12 +223,6 @@ namespace gloox
            * @param tag A Tag representation of a disco identity.
            */
           Identity( const Tag* tag );
-
-          /**
-           * Copy Contructor.
-           * @param id An Identity to create a new Identity object from.
-           */
-          Identity( const Identity& id );
 
           std::string m_category;   /**< The identity's category. */
           std::string m_type;       /**< The identity's type. */
