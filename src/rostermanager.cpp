@@ -45,7 +45,7 @@ namespace gloox
     if( !tag || tag->name() != "query" || tag->xmlns() != XMLNS_ROSTER )
       return;
 
-    const ConstTagList& l = tag->findTagList( "/query/item" );
+    const ConstTagList& l = tag->findTagList( "query/item" );
     ConstTagList::const_iterator it = l.begin();
     for( ; it != l.end(); ++it )
     {
@@ -205,18 +205,9 @@ namespace gloox
     if( presence->subtype() == Presence::Error )
       return;
 
-    std::string capsNode;
-    std::string capsVer;
-    const Capabilities* caps = presence->findExtension<Capabilities>( ExtCaps );
-    if( caps )
-    {
-      capsNode = caps->node();
-      capsVer = caps->ver();
-    }
-
     bool self = false;
     Roster::iterator it = m_roster.find( presence->from().bare() );
-    if( it != m_roster.end() || ( self = presence->from().bare() == m_self->jid() ) )
+    if( it != m_roster.end() || ( self = ( presence->from().bare() == m_self->jid() ) ) )
     {
       RosterItem* ri = self ? m_self : (*it).second;
       const std::string& resource = presence->from().resource();
@@ -231,9 +222,12 @@ namespace gloox
         ri->setExtensions( resource, presence->extensions() );
       }
 
-      if( m_rosterListener )
+      if( m_rosterListener && !self )
         m_rosterListener->handleRosterPresence( *ri, resource,
                                                 presence->presence(), presence->status() );
+      else if( m_rosterListener && self )
+        m_rosterListener->handleSelfPresence( *ri, resource,
+                                              presence->presence(), presence->status() );
     }
     else
     {
