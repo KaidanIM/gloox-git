@@ -604,18 +604,25 @@ namespace gloox
       std::string::size_type size() const
       {
         std::string::size_type s = m_name.size() + 5;
-        AttributeList::const_iterator ita = m_attribs->begin();
-        for( ; ita != m_attribs->end(); ++ita )
-          s += (*ita)->size();
-
-        NodeList::const_iterator itn = m_nodes->begin();
-        for( ; itn != m_nodes->end(); ++itn )
+        if( m_attribs )
         {
-          if( (*itn)->type == TypeTag )
-            s += (*itn)->tag->size();
-          else
-            s += (*itn)->str->size();
+          AttributeList::const_iterator ita = m_attribs->begin();
+          for( ; ita != m_attribs->end(); ++ita )
+            s += (*ita)->size();
         }
+
+        if( m_nodes )
+        {
+          NodeList::const_iterator itn = m_nodes->begin();
+          for( ; itn != m_nodes->end(); ++itn )
+          {
+            if( (*itn)->type == TypeTag )
+              s += (*itn)->tag->size();
+            else
+              s += (*itn)->str->size();
+          }
+        }
+
         return s;
       }
 
