@@ -404,12 +404,12 @@ namespace gloox
 
         if( access != AccessDefault )
           df.addField( DataFormField::TypeNone, "pubsub#access_model",
-                            util::lookup( access, accessValues ) );
+                       util::lookup( access, accessValues ) );
         if( config )
         {
           StringMap::const_iterator it = config->begin();
           for( ; it != config->end(); ++it )
-            df.addField( DataFormField::TypeNone, (*it).first, (*it).first );
+            df.addField( DataFormField::TypeNone, (*it).first, (*it).second );
           delete config;
         }
         configure->addChild( df.tag() );
