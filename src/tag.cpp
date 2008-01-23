@@ -125,7 +125,6 @@ namespace gloox
       return EmptyString;
 
     std::string xml;
-    xml.reserve( size() );
     xml += ' ';
     if( !m_prefix.empty() )
     {
@@ -358,9 +357,7 @@ namespace gloox
     if( m_name.empty() )
       return EmptyString;
 
-    std::string xml;
-    xml.reserve( size() );
-    xml += '<';
+    std::string xml = "<";
     if( !m_prefix.empty() )
     {
       xml += m_prefix;

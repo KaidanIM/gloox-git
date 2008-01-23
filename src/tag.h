@@ -173,11 +173,6 @@ namespace gloox
         private:
           void init( const std::string& name, const std::string& value,
                      const std::string& xmlns );
-          std::string::size_type size() const
-          {
-            return m_name.size() + m_value.size() + m_prefix.size() + 5;
-          }
-
           Tag* m_parent;
           std::string m_name;
           std::string m_value;
@@ -600,31 +595,6 @@ namespace gloox
        * @param tag The Tag to rip off.
        */
       Tag( Tag* tag );
-
-      std::string::size_type size() const
-      {
-        std::string::size_type s = m_name.size() + 5;
-        if( m_attribs )
-        {
-          AttributeList::const_iterator ita = m_attribs->begin();
-          for( ; ita != m_attribs->end(); ++ita )
-            s += (*ita)->size();
-        }
-
-        if( m_nodes )
-        {
-          NodeList::const_iterator itn = m_nodes->begin();
-          for( ; itn != m_nodes->end(); ++itn )
-          {
-            if( (*itn)->type == TypeTag )
-              s += (*itn)->tag->size();
-            else
-              s += (*itn)->str->size();
-          }
-        }
-
-        return s;
-      }
 
       /**
        * XPath error conditions.
