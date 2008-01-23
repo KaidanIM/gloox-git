@@ -102,12 +102,12 @@ namespace gloox
      * @since 1.0
      *
      * @todo
-     * - Implement Subscription request management.
-     * - Update to XEP version 1.10.
-     * - Write tests and examples.
-     * - Check for possible ways to have generic handleResult method(s) in
+     * @li Implement Subscription request management.
+     * @li Update to XEP version 1.10.
+     * @li Write tests and examples.
+     * @li Check for possible ways to have generic handleResult method(s) in
      *   ResultHandler.
-     * - Implement unsubscription result notification (aka sub id tracking)
+     * @li Implement unsubscription result notification (aka sub id tracking)
      */
     class GLOOX_API Manager : public IqHandler
     {
