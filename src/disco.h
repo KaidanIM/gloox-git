@@ -96,7 +96,7 @@ namespace gloox
            * Returns an optionally included data form. This is used by e.g. MUC (XEP-0045).
            * @return An optional data form included in the disco#info. May be 0.
            */
-           const DataForm* form() const { return m_form; }
+          const DataForm* form() const { return m_form; }
 
           // reimplemented from StanzaExtension
           virtual const std::string& filterString() const;
