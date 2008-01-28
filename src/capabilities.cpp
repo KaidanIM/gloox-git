@@ -37,9 +37,6 @@ namespace gloox
 
     m_node = tag->findAttribute( "node" );
     m_ver = tag->findAttribute( "ver" );
-    m_n = tag->findAttribute( "n" );
-    m_v = tag->findAttribute( "v" );
-    m_os = tag->findAttribute( "os" );
     m_valid = true;
   }
 
@@ -83,29 +80,6 @@ namespace gloox
     m_disco->registerNodeHandler( const_cast<Capabilities*>( this ), m_node + '#' + hash );
     return hash;
   }
-  const std::string& Capabilities::n() const
-  {
-    if( m_disco )
-      return m_disco->name();
-    else
-      return m_n;
-  }
-
-  const std::string& Capabilities::v() const
-  {
-    if( m_disco )
-      return m_disco->version();
-    else
-      return m_v;
-  }
-
-  const std::string& Capabilities::os() const
-  {
-    if( m_disco )
-      return m_disco->os();
-    else
-      return m_os;
-  }
 
   const std::string& Capabilities::filterString() const
   {
@@ -123,12 +97,6 @@ namespace gloox
     t->addAttribute( "hash", "sha-1" );
     t->addAttribute( "node", m_node );
     t->addAttribute( "ver", ver() );
-    if( m_disco )
-    {
-      t->addAttribute( "n", m_disco->name() );
-      t->addAttribute( "v", m_disco->version() );
-      t->addAttribute( "os", m_disco->os() );
-    }
     return t;
   }
 
