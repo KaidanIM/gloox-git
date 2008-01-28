@@ -377,8 +377,7 @@ namespace gloox
        * @param role The user's new role in the room.
        * @param reason An optional reason for the role change.
        */
-      void setRole( const std::string& nick, MUCRoomRole role, const std::string& reason = EmptyString )
-        { modifyOccupant( nick, role, "role", reason ); }
+      void setRole( const std::string& nick, MUCRoomRole role, const std::string& reason = EmptyString );
 
       /**
        * Use this function to change the affiliation of a user in the room.
@@ -388,8 +387,7 @@ namespace gloox
        * @param reason An optional reason for the affiliation change.
        */
       void setAffiliation( const std::string& nick, MUCRoomAffiliation affiliation,
-                           const std::string& reason )
-        { modifyOccupant( nick, affiliation, "affiliation", reason ); }
+                           const std::string& reason );
 
       /**
        * Use this function to request the room's configuration form.
@@ -607,6 +605,11 @@ namespace gloox
            */
           virtual ~MUCOwner();
 
+          /**
+           *
+           */
+          const DataForm* form() const { return m_form; }
+
           // reimplemented from StanzaExtension
           const std::string& filterString() const;
 
@@ -639,24 +642,19 @@ namespace gloox
           /**
            *
            */
-          MUCAdmin( MUCRoomRole role, const std::string& nick = EmptyString,
+          MUCAdmin( MUCRoomRole role, const std::string& nick,
                     const std::string& reason = EmptyString );
 
           /**
            *
            */
-          MUCAdmin( MUCRoomAffiliation affiliation, const std::string& nick = EmptyString,
+          MUCAdmin( MUCRoomAffiliation affiliation, const std::string& nick,
                     const std::string& reason = EmptyString );
 
           /**
            *
            */
-          MUCAdmin( MUCRoomAffiliation affiliation, const MUCListItemList& jids );
-
-          /**
-           *
-           */
-          MUCAdmin( MUCRoomRole role, const MUCListItemList& jids );
+          MUCAdmin( MUCOperation operation, const MUCListItemList& jids = MUCListItemList() );
 
           /**
            * Constructs a new MUCAdmin object from the given Tag.
@@ -697,8 +695,6 @@ namespace gloox
       void setNonAnonymous();
       void setSemiAnonymous();
       void setFullyAnonymous();
-      void modifyOccupant( const std::string& nick, int state, const std::string& roa,
-                           const std::string& reason );
       void acknowledgeRoomCreation();
       void instantRoom( int context );
       MUCRoomAffiliation getEnumAffiliation( const std::string& affiliation );

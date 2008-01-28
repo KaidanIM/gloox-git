@@ -164,14 +164,14 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   {
     name = "request role list: 'participant'";
-    MUCRoom::MUCAdmin ma( RoleParticipant );
+    MUCRoom::MUCAdmin ma( RequestVoiceList );
     t = ma.tag();
     if( !t || t->xml() != "<query xmlns='" + XMLNS_MUC_ADMIN + "'>"
          "<item role='participant'/>"
          "</query>" )
     {
       ++fail;
-      printf( "test '%s' failed\n", name.c_str() );
+      printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
     }
     delete t;
   }
@@ -179,7 +179,7 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   {
     name = "request role list: 'moderator'";
-    MUCRoom::MUCAdmin ma( RoleModerator );
+    MUCRoom::MUCAdmin ma( RequestModeratorList );
     t = ma.tag();
     if( !t || t->xml() != "<query xmlns='" + XMLNS_MUC_ADMIN + "'>"
          "<item role='moderator'/>"
@@ -194,7 +194,7 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   {
     name = "request affiliation list: 'outcast'";
-    MUCRoom::MUCAdmin ma( AffiliationOutcast );
+    MUCRoom::MUCAdmin ma( RequestBanList );
     t = ma.tag();
     if( !t || t->xml() != "<query xmlns='" + XMLNS_MUC_ADMIN + "'>"
          "<item affiliation='outcast'/>"
@@ -209,7 +209,7 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   {
     name = "request affiliation list: 'member'";
-    MUCRoom::MUCAdmin ma( AffiliationMember );
+    MUCRoom::MUCAdmin ma( RequestMemberList );
     t = ma.tag();
     if( !t || t->xml() != "<query xmlns='" + XMLNS_MUC_ADMIN + "'>"
          "<item affiliation='member'/>"
@@ -227,7 +227,7 @@ int main( int /*argc*/, char** /*argv*/ )
     MUCListItemList list;
     list.push_back( MUCListItem( JID( "foo@bar" ) ) );
     list.push_back( MUCListItem( JID( "bar@foo" ) ) );
-    MUCRoom::MUCAdmin ma( AffiliationMember, list );
+    MUCRoom::MUCAdmin ma( StoreMemberList, list );
     t = ma.tag();
     if( !t || t->xml() != "<query xmlns='" + XMLNS_MUC_ADMIN + "'>"
          "<item jid='foo@bar' affiliation='member'/>"
@@ -246,7 +246,7 @@ int main( int /*argc*/, char** /*argv*/ )
     MUCListItemList list;
     list.push_back( MUCListItem( JID( "foo@bar" ) ) );
     list.push_back( MUCListItem( JID( "bar@foo" ) ) );
-    MUCRoom::MUCAdmin ma( RoleParticipant, list );
+    MUCRoom::MUCAdmin ma( StoreVoiceList, list );
     t = ma.tag();
     if( !t || t->xml() != "<query xmlns='" + XMLNS_MUC_ADMIN + "'>"
          "<item jid='foo@bar' role='participant'/>"
