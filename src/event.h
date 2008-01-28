@@ -20,7 +20,7 @@ namespace gloox
   class Stanza;
 
   /**
-   * @brief An abstract base class for events.
+   * @brief A base class for events.
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 1.0
