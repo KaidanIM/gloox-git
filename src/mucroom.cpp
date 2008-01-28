@@ -68,16 +68,43 @@ namespace gloox
     m_list.push_back( MUCListItem( nick, affiliation, reason ) );
   }
 
-  MUCRoom::MUCAdmin::MUCAdmin( MUCRoomAffiliation affiliation, const MUCListItemList& jids )
-    : StanzaExtension( ExtMUCAdmin ), m_list( jids ), m_affiliation( affiliation ),
+  MUCRoom::MUCAdmin::MUCAdmin( MUCOperation operation, const MUCListItemList& jids )
+    : StanzaExtension( ExtMUCAdmin ), m_list( jids ), m_affiliation( AffiliationInvalid ),
       m_role( RoleInvalid )
   {
-  }
+    switch( operation )
+    {
+      case StoreVoiceList:
+      case RequestVoiceList:
+        m_role = RoleParticipant;
+        break;
+      case StoreModeratorList:
+      case RequestModeratorList:
+        m_role = RoleModerator;
+        break;
+      case StoreBanList:
+      case RequestBanList:
+        m_affiliation = AffiliationOutcast;
+        break;
+      case StoreMemberList:
+      case RequestMemberList:
+        m_affiliation = AffiliationMember;
+        break;
+      case StoreOwnerList:
+      case RequestOwnerList:
+        m_affiliation = AffiliationOwner;
+        break;
+      case StoreAdminList:
+      case RequestAdminList:
+        m_affiliation = AffiliationAdmin;
+        break;
+      default:
+        return;
+        break;
+    }
 
-  MUCRoom::MUCAdmin::MUCAdmin( MUCRoomRole role, const MUCListItemList& jids )
-    : StanzaExtension( ExtMUCAdmin ), m_list( jids ), m_affiliation( AffiliationInvalid  ),
-      m_role( role )
-  {
+    if( m_list.empty() )
+      m_list.push_back( MUCListItem( JID() ) );
   }
 
   MUCRoom::MUCAdmin::MUCAdmin( const Tag* tag )
@@ -477,71 +504,69 @@ namespace gloox
     m_parent->send( m );
   }
 
-  void MUCRoom::modifyOccupant( const std::string& nick, int state, const std::string& roa,
-                                const std::string& reason )
+  void MUCRoom::setRole( const std::string& nick, MUCRoomRole role,
+                         const std::string& reason )
   {
-    if( !m_parent || !m_joined || nick.empty() || roa.empty() )
+    if( !m_parent || !m_joined || nick.empty() || role == RoleInvalid )
       return;
 
-    std::string newRoA;
-    MUCOperation action = SetRNone;
-    if( roa == "role" )
+    MUCOperation action = InvalidOperation;
+    switch( role )
     {
-      switch( state )
-      {
-        case RoleNone:
-          newRoA = "none";
-          action = SetRNone;
-          break;
-        case RoleVisitor:
-          newRoA = "visitor";
-          action = SetVisitor;
-          break;
-        case RoleParticipant:
-          newRoA = "participant";
-          action = SetParticipant;
-          break;
-        case RoleModerator:
-          newRoA = "moderator";
-          action = SetModerator;
-          break;
-      }
-    }
-    else
-    {
-      switch( state )
-      {
-        case AffiliationOutcast:
-          newRoA = "outcast";
-          action = SetOutcast;
-          break;
-        case AffiliationNone:
-          newRoA = "none";
-          action = SetANone;
-          break;
-        case AffiliationMember:
-          newRoA = "member";
-          action = SetMember;
-          break;
-        case AffiliationAdmin:
-          newRoA = "admin";
-          action = SetAdmin;
-          break;
-        case AffiliationOwner:
-          newRoA = "owner";
-          action = SetOwner;
-          break;
-      }
+      case RoleNone:
+        action = SetRNone;
+        break;
+      case RoleVisitor:
+        action = SetVisitor;
+        break;
+      case RoleParticipant:
+        action = SetParticipant;
+        break;
+      case RoleModerator:
+        action = SetModerator;
+        break;
+      default:
+        break;
     }
 
-    const std::string& id = m_parent->getID();
-    IQ k( IQ::Set, m_nick.bareJID(), id, XMLNS_MUC_ADMIN );
-    Tag* i = new Tag( k.query(), "item", "nick", nick );
-    i->addAttribute( roa, newRoA );
-    if( !reason.empty() )
-      new Tag( i, "reason", reason );
+    IQ iq( IQ::Set, m_nick.bareJID() );
+    iq.addExtension( new MUCAdmin( role, nick, reason ) );
 
-    m_parent->send( k, this, action );
+    m_parent->send( iq, this, action );
+  }
+
+  void MUCRoom::setAffiliation( const std::string& nick, MUCRoomAffiliation affiliation,
+                                const std::string& reason )
+  {
+    if( !m_parent || !m_joined || nick.empty() || affiliation == AffiliationInvalid )
+      return;
+
+    MUCOperation action = InvalidOperation;
+    switch( affiliation )
+    {
+      case AffiliationOutcast:
+        action = SetOutcast;
+        break;
+      case AffiliationNone:
+        action = SetANone;
+        break;
+      case AffiliationMember:
+        action = SetMember;
+        break;
+      case AffiliationAdmin:
+        action = SetAdmin;
+        break;
+      case AffiliationOwner:
+        action = SetOwner;
+        break;
+      default:
+        break;
+    }
+
+    IQ iq( IQ::Set, m_nick.bareJID() );
+    iq.addExtension( new MUCAdmin( affiliation, nick, reason ) );
+
+    m_parent->send( iq, this, action );
   }
 
   void MUCRoom::requestList( MUCOperation operation )
@@ -549,37 +574,8 @@ namespace gloox
     if( !m_parent || !m_joined || !m_roomConfigHandler )
       return;
 
-    const std::string& id = m_parent->getID();
-    IQ iq( IQ::Get, m_nick.bareJID(), id, XMLNS_MUC_ADMIN );
-    Tag* i = new Tag( iq.query(), "item" );
-
-    switch( operation )
-    {
-      case RequestVoiceList:
-        i->addAttribute( "role", "participant" );
-        break;
-      case RequestBanList:
-        i->addAttribute( "affiliation", "outcast" );
-        break;
-      case RequestMemberList:
-        i->addAttribute( "affiliation", "member" );
-        break;
-      case RequestModeratorList:
-        i->addAttribute( "role", "moderator" );
-        break;
-      case RequestOwnerList:
-        i->addAttribute( "affiliation", "owner" );
-        break;
-      case RequestAdminList:
-        i->addAttribute( "affiliation", "admin" );
-        break;
-      default:
-        delete i;
-        return;
-        break;
-    }
-
-    m_parent->send( iq, this, operation );
+    IQ iq( IQ::Get, m_nick.bareJID() );
+    iq.addExtension( new MUCAdmin( operation ) );
   }
 
   void MUCRoom::storeList( const MUCListItemList items, MUCOperation operation )
@@ -587,56 +583,8 @@ namespace gloox
     if( !m_parent || !m_joined )
       return;
 
-    std::string roa;
-    std::string value;
-    switch( operation )
-    {
-      case RequestVoiceList:
-        roa = "role";
-        value = "participant";
-        break;
-      case RequestBanList:
-        roa = "affiliation";
-        value = "outcast";
-        break;
-      case RequestMemberList:
-        roa = "affiliation";
-        value = "member";
-        break;
-      case RequestModeratorList:
-        roa = "role";
-        value = "moderator";
-        break;
-      case RequestOwnerList:
-        roa = "affiliation";
-        value = "owner";
-        break;
-      case RequestAdminList:
-        roa = "affiliation";
-        value = "admin";
-        break;
-      default:
-        return;
-        break;
-    }
-
-    const std::string& id = m_parent->getID();
-    IQ iq( IQ::Set, m_nick.bareJID(), id, XMLNS_MUC_ADMIN );
-    Tag* q = iq.query();
-    q->addAttribute( XMLNS, XMLNS_MUC_ADMIN );
-
-    MUCListItemList::const_iterator it = items.begin();
-    for( ; it != items.end(); ++it )
-    {
-      if( (*it).nick().empty() )
-        continue;
-
-      Tag* i = new Tag( q, "item", "nick", (*it).nick() );
-      i->addAttribute( roa, value );
-      if( !(*it).reason().empty() )
-        new Tag( i, "reason", (*it).reason() );
-    }
-
+    IQ iq( IQ::Set, m_nick.bareJID() );
+    iq.addExtension( new MUCAdmin( operation , items ) );
     m_parent->send( iq, this, operation );
   }
 
@@ -761,10 +709,9 @@ namespace gloox
     if( !m_creationInProgress || !m_parent || !m_joined )
       return;
 
-    const std::string& id = m_parent->getID();
-    IQ iq( IQ::Set, m_nick.bareJID(), id, XMLNS_MUC_OWNER );
-    Tag* x = new Tag( iq.query(), "x", XMLNS, XMLNS_X_DATA );
-    x->addAttribute( TYPE, context == CreateInstantRoom ? "submit" : "cancel" );
+    IQ iq( IQ::Set, m_nick.bareJID() );
+    iq.addExtension( new MUCOwner( context == CreateInstantRoom
+                                     ? MUCOwner::TypeInstantRoom : MUCOwner::TypeCancelConfig ) );
 
     m_parent->send( iq, this, context );
 
@@ -776,8 +723,8 @@ namespace gloox
     if( !m_parent || !m_joined )
       return;
 
-    const std::string& id = m_parent->getID();
-    IQ iq( IQ::Get, m_nick.bareJID(), id, XMLNS_MUC_OWNER );
+    IQ iq( IQ::Get, m_nick.bareJID() );
+    iq.addExtension( new MUCOwner() );
 
     m_parent->send( iq, this, RequestRoomConfig );
 
@@ -933,16 +880,12 @@ namespace gloox
         break;
       case RequestRoomConfig:
       {
-        const Tag* q = iq.query();
-        if( q && q->name() == "query" && q->xmlns() == XMLNS_MUC_OWNER )
-        {
-          const Tag* x = q->findChild( "x", XMLNS, XMLNS_X_DATA );
-          if( x )
-          {
-            const DataForm df( x );
-            m_roomConfigHandler->handleMUCConfigForm( this, df );
-          }
-        }
+        const MUCOwner* mo = iq.findExtension<MUCOwner>( ExtMUCOwner );
+        if( !mo )
+          break;
+
+        if( mo->form() )
+          m_roomConfigHandler->handleMUCConfigForm( this, *(mo->form()) );
         break;
       }
       case RequestVoiceList:
