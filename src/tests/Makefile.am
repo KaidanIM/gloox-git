@@ -8,7 +8,7 @@ SUBDIRS = adhoc adhoccommand adhoccommandnote amprule amp base64 \
           error featureneg gpgencrypted gpgsigned \
           inbandbytestreamibb inbandbytestream iq jid \
           md5 message messageeventfilter \
-          mucroommucowner \
+          mucroommucadmin mucroommucowner \
           nickname nonsaslauthquery nonsaslauth \
           oob parser prep presence pubsubevent pubsubmanager \
           rostermanagerquery rostermanager search \

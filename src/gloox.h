@@ -1071,7 +1071,8 @@ namespace gloox
     AffiliationOutcast,             /**< The user has been banned from the room. */
     AffiliationMember,              /**< The user is a member of the room. */
     AffiliationOwner,               /**< The user is a room owner. */
-    AffiliationAdmin                /**< The user is a room admin. */
+    AffiliationAdmin,               /**< The user is a room admin. */
+    AffiliationInvalid              /**< Invalid affiliation. */
   };
 
   /**
@@ -1082,7 +1083,8 @@ namespace gloox
     RoleNone,                       /**< Not present in room. */
     RoleVisitor,                    /**< The user visits a room. */
     RoleParticipant,                /**< The user has voice in a moderatd room. */
-    RoleModerator                   /**< The user is a room moderator. */
+    RoleModerator,                  /**< The user is a room moderator. */
+    RoleInvalid                     /**< Invalid role. */
   };
 
   /**

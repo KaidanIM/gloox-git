@@ -31,14 +31,80 @@ namespace gloox
    * An item in a list of MUC room users. Lists of these items are
    * used when manipulating the lists of members, admins, owners, etc.
    * of a room.
+   *
+   * @author Jakob Schroeter <js@camaya.net>
+   * @since 1.0
    */
-  struct MUCListItem
+  class MUCListItem
   {
-    JID* jid;                       /**< Pointer to the occupant's JID if available, 0 otherwise. */
-    std::string nick;               /**< The occupant's nick in the room. */
-    MUCRoomAffiliation affiliation; /**< The occupant's affiliation. */
-    MUCRoomRole role;               /**< The occupant's role. */
-    std::string reason;             /**< Use this only when **setting** the item's role/affiliation to
+    public:
+      /**
+       *
+       */
+      MUCListItem( const JID& jid )
+        : m_jid( jid ), m_affiliation( AffiliationInvalid ), m_role( RoleInvalid )
+      {}
+
+      /**
+       *
+       */
+      MUCListItem( const JID& jid, MUCRoomRole role, MUCRoomAffiliation affiliation,
+                   const std::string& nick )
+        : m_jid( jid ), m_nick( nick ), m_affiliation( affiliation ), m_role( role )
+      {}
+
+      /**
+       *
+       */
+      MUCListItem( const std::string& nick, MUCRoomAffiliation affiliation, const std::string& reason )
+        : m_nick( nick ), m_affiliation( affiliation ), m_role( RoleInvalid ),
+          m_reason( reason )
+      {}
+
+      /**
+       *
+       */
+      MUCListItem( const std::string& nick, MUCRoomRole role, const std::string& reason )
+        : m_nick( nick ), m_affiliation( AffiliationInvalid ), m_role( role ),
+          m_reason( reason )
+      {}
+
+      /**
+       * Destructor. Deletes the @c jid member.
+       */
+      ~MUCListItem() {}
+
+      /**
+       *
+       */
+      const JID& jid() const { return m_jid; }
+
+      /**
+       *
+       */
+      const std::string& nick() const { return m_nick; }
+
+      /**
+       *
+       */
+      MUCRoomAffiliation affiliation() const { return m_affiliation; }
+
+      /**
+       *
+       */
+      MUCRoomRole role() const { return m_role; }
+
+      /**
+       *
+       */
+      const std::string& reason() const { return m_reason; }
+
+    private:
+      JID m_jid;                   /**< Pointer to the occupant's JID if available, 0 otherwise. */
+      std::string m_nick;           /**< The occupant's nick in the room. */
+      MUCRoomAffiliation m_affiliation; /**< The occupant's affiliation. */
+      MUCRoomRole m_role;           /**< The occupant's role. */
+      std::string m_reason;         /**< Use this only when **setting** the item's role/affiliation to
                                      * specify a reason for the role/affiliation change. This field is
                                      * empty in items fetched from the MUC service. */
   };
@@ -63,7 +129,7 @@ namespace gloox
     SetRNone,                       /**< Set a user's role to None. */
     SetVisitor,                     /**< Set a user's role to Visitor. */
     SetParticipant,                 /**< Set a user's role to Participant. */
-    SetModerator,                   /**< Set a suer's role to Moderator. */
+    SetModerator,                   /**< Set a user's role to Moderator. */
     SetANone,                       /**< Set a user's affiliation to None. */
     SetOutcast,                     /**< Set a user's affiliation to Outcast. */
     SetMember,                      /**< Set a user's affiliation to Member. */
@@ -80,10 +146,12 @@ namespace gloox
     RequestOwnerList,               /**< Request the room's Owner List. */
     StoreOwnerList,                 /**< Store the room's Owner List. */
     RequestAdminList,               /**< Request the room's Admin List. */
-    StoreAdminList                  /**< Store the room's Admin List. */
+    StoreAdminList,                 /**< Store the room's Admin List. */
+    InvalidOperation                /**< Invalid operation. */
   };
 
   /**
+   * @brief An abstract interface that can be implemented for MUC room configuration.
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
