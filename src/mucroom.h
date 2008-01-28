@@ -557,7 +557,7 @@ namespace gloox
     public:
 #endif
       /**
-       * @brief An abstraction of a MUC query.
+       * @brief An abstraction of a MUC owner query.
        *
        * @author Jakob Schroeter <js@camaya.net>
        * @since 1.0
@@ -625,6 +625,71 @@ namespace gloox
           std::string m_reason;
           std::string m_pwd;
           DataForm* m_form;
+      };
+
+      /**
+       * @brief An abstraction of a MUC admin query.
+       *
+       * @author Jakob Schroeter <js@camaya.net>
+       * @since 1.0
+       */
+      class MUCAdmin : public StanzaExtension
+      {
+        public:
+          /**
+           *
+           */
+          MUCAdmin( MUCRoomRole role, const std::string& nick = EmptyString,
+                    const std::string& reason = EmptyString );
+
+          /**
+           *
+           */
+          MUCAdmin( MUCRoomAffiliation affiliation, const std::string& nick = EmptyString,
+                    const std::string& reason = EmptyString );
+
+          /**
+           *
+           */
+          MUCAdmin( MUCRoomAffiliation affiliation, const MUCListItemList& jids );
+
+          /**
+           *
+           */
+          MUCAdmin( MUCRoomRole role, const MUCListItemList& jids );
+
+          /**
+           * Constructs a new MUCAdmin object from the given Tag.
+           * @param tag The Tag to parse.
+           */
+          MUCAdmin( const Tag* tag = 0 );
+
+          /**
+           * Virtual destructor.
+           */
+          virtual ~MUCAdmin();
+
+          /**
+           *
+           */
+          const MUCListItemList& list() const { return m_list; }
+
+          // reimplemented from StanzaExtension
+          const std::string& filterString() const;
+
+          // reimplemented from StanzaExtension
+          StanzaExtension* newInstance( const Tag* tag ) const
+          {
+            return new MUCAdmin( tag );
+          }
+
+          // reimplemented from StanzaExtension
+          Tag* tag() const;
+
+        private:
+          MUCListItemList m_list;
+          MUCRoomAffiliation m_affiliation;
+          MUCRoomRole m_role;
       };
 
       void handleIqResult( const IQ& iq, int context );

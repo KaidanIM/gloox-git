@@ -68,6 +68,7 @@ namespace gloox
     ExtIBB,                         /**< An extension dealing with IBBs (XEP-0047). */
     ExtNonSaslAuth,                 /**< An extension for doing Non-SASL Authentication (XEP-0078). */
     ExtMUCOwner,                    /**< An extension dealing with the muc#owner namespace of XEP-0045. */
+    ExtMUCAdmin,                    /**< An extension dealing with the muc#admin namespace of XEP-0045. */
     ExtPing,                        /**< An XMPP Ping (XEP-0199). */
     ExtUser                         /**< User-supplied extensions must use IDs above this. Do
                                      * not hard-code ExtUser's value anywhere, it is subject

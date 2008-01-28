@@ -26,6 +26,119 @@
 namespace gloox
 {
 
+  // ---- MUCRoom::MUCAdmin ----
+  /* Error type values */
+  static const char* affiliationValues [] = {
+    "none",
+    "outcast",
+    "member",
+    "owner",
+    "admin"
+  };
+
+  /* Stanza error values */
+  static const char* roleValues [] = {
+    "none",
+    "visitor",
+    "participant",
+    "moderator",
+  };
+
+  static inline MUCRoomAffiliation affiliationType( const std::string& type )
+  {
+    return (MUCRoomAffiliation)util::lookup( type, affiliationValues );
+  }
+
+  static inline MUCRoomRole roleType( const std::string& type )
+  {
+    return (MUCRoomRole)util::lookup( type, roleValues );
+  }
+
+  MUCRoom::MUCAdmin::MUCAdmin( MUCRoomRole role, const std::string& nick,
+                               const std::string& reason )
+    : StanzaExtension( ExtMUCAdmin ), m_affiliation( AffiliationInvalid ), m_role( role )
+  {
+    m_list.push_back( MUCListItem( nick, role, reason ) );
+  }
+
+  MUCRoom::MUCAdmin::MUCAdmin( MUCRoomAffiliation affiliation, const std::string& nick,
+                               const std::string& reason )
+    : StanzaExtension( ExtMUCAdmin ), m_affiliation( affiliation ), m_role( RoleInvalid )
+  {
+    m_list.push_back( MUCListItem( nick, affiliation, reason ) );
+  }
+
+  MUCRoom::MUCAdmin::MUCAdmin( MUCRoomAffiliation affiliation, const MUCListItemList& jids )
+    : StanzaExtension( ExtMUCAdmin ), m_list( jids ), m_affiliation( affiliation ),
+      m_role( RoleInvalid )
+  {
+  }
+
+  MUCRoom::MUCAdmin::MUCAdmin( MUCRoomRole role, const MUCListItemList& jids )
+    : StanzaExtension( ExtMUCAdmin ), m_list( jids ), m_affiliation( AffiliationInvalid  ),
+      m_role( role )
+  {
+  }
+
+  MUCRoom::MUCAdmin::MUCAdmin( const Tag* tag )
+    : StanzaExtension( ExtMUCAdmin ), m_affiliation( AffiliationInvalid ), m_role( RoleInvalid )
+  {
+    if( !tag || tag->name() != "query" || tag->xmlns() != XMLNS_MUC_ADMIN )
+      return;
+
+    const TagList& items = tag->findChildren( "item" );
+    TagList::const_iterator it = items.begin();
+    for( ; it != items.end(); ++it )
+    {
+      m_list.push_back( MUCListItem( JID( (*it)->findAttribute( "jid" ) ),
+                        roleType( (*it)->findAttribute( "role" ) ),
+                        affiliationType( (*it)->findAttribute( "affiliation" ) ),
+                        (*it)->findAttribute( "nick" ) ) );
+      if( m_role == RoleInvalid )
+        m_role = roleType( (*it)->findAttribute( "role" ) );
+      if( m_affiliation == AffiliationInvalid )
+        m_affiliation = affiliationType( (*it)->findAttribute( "affiliation" ) );
+    }
+  }
+
+  MUCRoom::MUCAdmin::~MUCAdmin()
+  {
+  }
+
+  const std::string& MUCRoom::MUCAdmin::filterString() const
+  {
+    static const std::string filter = "/iq/query[@xmlns='" + XMLNS_MUC_ADMIN + "']";
+    return filter;
+  }
+
+  Tag* MUCRoom::MUCAdmin::tag() const
+  {
+    Tag* t = new Tag( "query" );
+    t->setXmlns( XMLNS_MUC_ADMIN );
+
+    if( m_list.empty() || ( m_affiliation == AffiliationInvalid && m_role == RoleInvalid ) )
+      return t;
+
+    MUCListItemList::const_iterator it = m_list.begin();
+    for( ; it != m_list.end(); ++it )
+    {
+      Tag* i = new Tag( t, "item" );
+      if( (*it).jid() )
+        i->addAttribute( "jid", (*it).jid().bare() );
+      if( !(*it).nick().empty() )
+        i->addAttribute( "nick", (*it).nick() );
+      if( m_role != RoleInvalid )
+        i->addAttribute( "role", util::lookup( m_role, roleValues ) );
+      if( m_affiliation != AffiliationInvalid )
+        i->addAttribute( "affiliation", util::lookup( m_affiliation, affiliationValues ) );
+      if( !(*it).reason().empty() )
+        new Tag( i, "reason", (*it).reason() );
+    }
+
+    return t;
+  }
+  // ---- ~MUCRoom::MUCAdmin ----
+
   // ---- MUCRoom::MUCOwner ----
   MUCRoom::MUCOwner::MUCOwner( QueryType type, DataForm* form )
     : StanzaExtension( ExtMUCOwner ), m_type( type ), m_form( form )
@@ -515,13 +628,13 @@ namespace gloox
     MUCListItemList::const_iterator it = items.begin();
     for( ; it != items.end(); ++it )
     {
-      if( (*it).nick.empty() )
+      if( (*it).nick().empty() )
         continue;
 
-      Tag* i = new Tag( q, "item", "nick", (*it).nick );
+      Tag* i = new Tag( q, "item", "nick", (*it).nick() );
       i->addAttribute( roa, value );
-      if( !(*it).reason.empty() )
-        new Tag( i, "reason", (*it).reason );
+      if( !(*it).reason().empty() )
+        new Tag( i, "reason", (*it).reason() );
     }
 
     m_parent->send( iq, this, operation );
@@ -839,33 +952,11 @@ namespace gloox
       case RequestOwnerList:
       case RequestAdminList:
       {
-        const Tag* q = iq.query();
-        if( q && q->name() == "query" && q->xmlns() == XMLNS_MUC_OWNER )
-        {
-          const Tag* x = q->findChild( "x", XMLNS, XMLNS_X_DATA );
-          if( x )
-          {
-            MUCListItemList itemList;
-            const TagList& items = x->findChildren( "item" );
-            TagList::const_iterator it = items.begin();
-            for( ; it != items.end(); ++it )
-            {
-              MUCListItem item;
-              item.jid = 0;
-              item.role = getEnumRole( (*it)->findAttribute( "role" ) );
-              item.affiliation = getEnumAffiliation( (*it)->findAttribute( "affiliation" ) );
-              if( (*it)->hasAttribute( "jid" ) )
-                item.jid = new JID( (*it)->findAttribute( "jid" ) );
-              item.nick = (*it)->findAttribute( "nick" );
-              itemList.push_back( item );
-            }
-            m_roomConfigHandler->handleMUCConfigList( this, itemList, (MUCOperation)context );
+        const MUCAdmin* ma = iq.findExtension<MUCAdmin>( ExtMUCAdmin );
+        if( !ma )
+          break;
 
-            MUCListItemList::iterator itl = itemList.begin();
-            for( ; itl != itemList.end(); ++itl )
-              delete (*itl).jid;
-          }
-        }
+        m_roomConfigHandler->handleMUCConfigList( this, ma->list(), (MUCOperation)context );
         break;
       }
       default:
