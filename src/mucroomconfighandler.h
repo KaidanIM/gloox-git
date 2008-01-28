@@ -16,6 +16,7 @@
 #define MUCROOMCONFIGHANDLER_H__
 
 #include "gloox.h"
+#include "jid.h"
 
 #include <string>
 #include <list>
@@ -24,7 +25,6 @@ namespace gloox
 {
 
   class MUCRoom;
-  class JID;
   class DataForm;
 
   /**
