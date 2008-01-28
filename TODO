@@ -25,7 +25,6 @@ for 1.0
 - comply with RFC2831, Section 7.2, i.e. escape SASL-special chars in usernames
 - check Openfire/no-SSL + gloox. seems to cause problems after requesting the roster. -- not reproducible
 - get rid of IQ::m_tag/IQ::query()/IQ::xmlns()
-- multiple SEs of the same type per stanza? how to access?
 - add inspector?
 
 
