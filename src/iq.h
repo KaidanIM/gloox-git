@@ -14,6 +14,7 @@
 #define IQ_H__
 
 #include "stanza.h"
+#include "gloox.h"
 
 #include <string>
 
@@ -72,7 +73,7 @@ namespace gloox
        * @link gloox::ClientBase::send( IQ&, IqHandler*, int ) send( IQ&, IqHandler*, int ) @endlink.
        * You should only need to pass this when creating a reply (i.e. an IQ of type Result or Error).
        */
-      IQ( IqType type, const JID& to, const std::string& id );
+      IQ( IqType type, const JID& to, const std::string& id = EmptyString );
 
       /**
        * Virtual destructor.
