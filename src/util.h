@@ -185,9 +185,9 @@ namespace gloox
     /**
      * Does some fancy escaping. (& --> &amp;, etc).
      * @param what A string to escape.
-     * @return The escaped string.
+     * @param buf Output buffer for the escaped string.
      */
-    const std::string escape( std::string what );
+    void escape( const std::string& what, std::string& buf );
 
     /**
      * Checks whether the given input is valid UTF-8.

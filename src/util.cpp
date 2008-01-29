@@ -45,29 +45,22 @@ namespace gloox
       return i < size ? std::string( values[i] ) : def;
     }
 
-    static const char escape_chars[] = { '&', '<', '>', '\'', '"' };
-
-    static const std::string escape_seqs[] = { "amp;", "lt;", "gt;", "apos;", "quot;" };
-
-    static const unsigned nb_escape = sizeof( escape_chars ) / sizeof( char );
-    static const unsigned escape_size = 5;
-
-    const std::string escape( std::string what )
+    void escape( const std::string& what, std::string& buf )
     {
-      for( unsigned val, i = 0; i < what.length(); ++i )
+      const std::string::size_type len = what.length();
+      for( std::string::size_type i = 0; i < len; ++i )
       {
-        for( val = 0; val < escape_size; ++val )
+        switch( what[i] )
         {
-          if( what[i] == escape_chars[val] )
-          {
-            what[i] = '&';
-            what.insert( i+1, escape_seqs[val] );
-            i += escape_seqs[val].length();
-            break;
-          }
+          case '\'': buf.append( "&apos;", 6 ); break;
+          case '"':  buf.append( "&quot;", 6 ); break;
+          case '&':  buf.append( "&amp;",  5 ); break;
+          case '<':  buf.append( "&lt;",   4 ); break;
+          case '>':  buf.append( "&gt;",   4 ); break;
+          default:
+            buf += what[i];
         }
       }
-      return what;
     }
 
     bool checkValidXMLChars( const std::string& data )
