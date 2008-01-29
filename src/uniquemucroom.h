@@ -16,6 +16,7 @@
 #define UNIQUEMUCROOM_H__
 
 #include "instantmucroom.h"
+#include "stanzaextension.h"
 
 namespace gloox
 {
@@ -55,6 +56,52 @@ namespace gloox
       virtual void join();
 
     private:
+#ifdef UNIQUEMUCROOM_TEST
+    public:
+#endif
+      /**
+       * @brief A stanza extension wrapping MUC's &lt;unique&gt; element.
+       *
+       * @author Jakob Schroeter <js@camaya.net>
+       * @since 1.0
+       */
+      class Unique : public StanzaExtension
+      {
+        public:
+          /**
+           * Creates a new object from the given Tag.
+           * @param tag The Tag to parse.
+           */
+          Unique( const Tag* tag = 0 );
+
+          /**
+           *Virtual Destructor.
+           */
+          virtual ~Unique() {}
+
+          /**
+           * Returns the unique name created by the server.
+           * @return The server-created unique room name.
+           */
+          const std::string& name() const { return m_name; }
+
+          // reimplemented from StanzaExtension
+          virtual const std::string& filterString() const;
+
+          // reimplemented from StanzaExtension
+          virtual StanzaExtension* newInstance( const Tag* tag ) const
+          {
+            (void) tag;
+            return new Unique();
+          }
+
+          // reimplemented from StanzaExtension
+          virtual Tag* tag() const;
+
+        private:
+          std::string m_name;
+      };
+
       // reimplemented from MUCRoom (IqHandler)
       void handleIqID( const IQ& iq, int context );
 

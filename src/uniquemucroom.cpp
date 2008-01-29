@@ -20,14 +20,49 @@
 namespace gloox
 {
 
+  // ---- UniqueMUCRoom::Unique ----
+  UniqueMUCRoom::Unique::Unique( const Tag* tag )
+    : StanzaExtension( ExtMUCUnique )
+  {
+    if( !tag || tag->name() != "unique" || tag->xmlns() != XMLNS_MUC_UNIQUE )
+      return;
+
+    m_name = tag->cdata();
+  }
+
+  const std::string& UniqueMUCRoom::Unique::filterString() const
+  {
+    static const std::string filter = "/iq/unique[@xmlns='" + XMLNS_MUC_UNIQUE + "']";
+    return filter;
+  }
+
+  Tag* UniqueMUCRoom::Unique::tag() const
+  {
+    Tag* t = new Tag( "unique" );
+    t->setXmlns( XMLNS_MUC_UNIQUE );
+    if( !m_name.empty() )
+      t->setCData( m_name );
+    return t;
+  }
+  // ---- ~UniqueMUCRoom::Unique ----
+
+  // ---- UniqueMUCRoom ----
   UniqueMUCRoom::UniqueMUCRoom( ClientBase* parent, const JID& nick, MUCRoomHandler* mrh )
     : InstantMUCRoom( parent, nick, mrh )
   {
+    if( m_parent )
+    {
+      m_parent->registerStanzaExtension( new Unique() );
+    }
   }
 
   UniqueMUCRoom::~UniqueMUCRoom()
   {
-    m_parent->removeIDHandler( this );
+    if( m_parent )
+    {
+      m_parent->removeIDHandler( this );
+//       m_parent->removeStanzaExtension( ExtMUCUnique ); // don't remove, other rooms might need it
+    }
   }
 
   void UniqueMUCRoom::join()
@@ -35,8 +70,8 @@ namespace gloox
     if( !m_parent || m_joined )
       return;
 
-    const std::string& id = m_parent->getID();
-    IQ iq( IQ::Get, m_nick.server(), id, XMLNS_MUC_UNIQUE, "unique" );
+    IQ iq( IQ::Get, m_nick.server() );
+    iq.addExtension( new Unique() );
     m_parent->send( iq, this, RequestUniqueName );
   }
 
@@ -47,12 +82,11 @@ namespace gloox
       case IQ::Result:
         if( context == RequestUniqueName )
         {
-          Tag* u = iq.query();
-          if( u && u->name() == "unique" && u->xmlns() == XMLNS_MUC_UNIQUE )
+          const Unique* u = iq.findExtension<Unique>( ExtMUCUnique );
+          if( u )
           {
-            const std::string& name = u->cdata();
-            if( !name.empty() )
-              setName( name );
+            if( !u->name().empty() )
+              setName( u->name() );
           }
         }
         break;

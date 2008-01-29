@@ -12,7 +12,8 @@ SUBDIRS = adhoc adhoccommand adhoccommandnote amprule amp base64 \
           nickname nonsaslauthquery nonsaslauth \
           oob parser prep presence pubsubevent pubsubmanager \
           rostermanagerquery rostermanager search \
-          sha simanager stanzaextensionfactory subscription tag tlsgnutls vcardupdate \
+          sha simanager stanzaextensionfactory subscription tag tlsgnutls \
+          uniquemucroomunique vcardupdate \
           xpath zlib util
 
 check: test
