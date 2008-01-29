@@ -287,6 +287,11 @@ namespace gloox
       m_creationInProgress( false ), m_configChanged( false ),
       m_publishNick( false ), m_publish( false ), m_unique( false )
   {
+    if( m_parent )
+    {
+      m_parent->registerStanzaExtension( new MUCAdmin() );
+      m_parent->registerStanzaExtension( new MUCOwner() );
+    }
   }
 
   MUCRoom::~MUCRoom()
@@ -300,6 +305,8 @@ namespace gloox
         m_parent->disco()->removeNodeHandler( this, XMLNS_MUC_ROOMS );
 
       m_parent->removeIDHandler( this );
+//       m_parent->removeStanzaExtension( ExtMUCAdmin ); // don't remove, other rooms might need it
+//       m_parent->removeStanzaExtension( ExtMUCOwner );
     }
   }
 
