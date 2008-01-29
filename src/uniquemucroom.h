@@ -91,8 +91,7 @@ namespace gloox
           // reimplemented from StanzaExtension
           virtual StanzaExtension* newInstance( const Tag* tag ) const
           {
-            (void) tag;
-            return new Unique();
+            return new Unique( tag );
           }
 
           // reimplemented from StanzaExtension
