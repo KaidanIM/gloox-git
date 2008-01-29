@@ -119,12 +119,11 @@ namespace gloox
     return EmptyString;
   }
 
-  const std::string Tag::Attribute::xml() const
+  void Tag::Attribute::xmlify( std::string& xml ) const
   {
     if( m_name.empty() )
-      return EmptyString;
+      return;
 
-    std::string xml;
     xml += ' ';
     if( !m_prefix.empty() )
     {
@@ -133,10 +132,8 @@ namespace gloox
     }
     xml += m_name;
     xml += "='";
-    xml += util::escape( m_value );
+    util::escape( m_value, xml );
     xml += '\'';
-
-    return xml;
   }
   // ---- ~Tag::Attribute ----
 
@@ -354,10 +351,18 @@ namespace gloox
 
   const std::string Tag::xml() const
   {
-    if( m_name.empty() )
-      return EmptyString;
+    std::string buf;
+    buf.reserve( 2500 );
+    xmlify( buf );
+    return buf;
+  }
 
-    std::string xml = "<";
+  void Tag::xmlify( std::string& xml ) const
+  {
+    if( m_name.empty() )
+      return;
+
+    xml += '<';
     if( !m_prefix.empty() )
     {
       xml += m_prefix;
@@ -369,7 +374,7 @@ namespace gloox
       AttributeList::const_iterator it_a = m_attribs->begin();
       for( ; it_a != m_attribs->end(); ++it_a )
       {
-        xml += (*it_a)->xml();
+        (*it_a)->xmlify( xml );
       }
     }
 
@@ -384,10 +389,10 @@ namespace gloox
         switch( (*it_n)->type )
         {
           case TypeTag:
-            xml += (*it_n)->tag->xml();
+            (*it_n)->tag->xmlify( xml );
             break;
           case TypeString:
-            xml += util::escape( *((*it_n)->str) );
+            util::escape( *((*it_n)->str), xml );
             break;
         }
       }
@@ -400,8 +405,6 @@ namespace gloox
       xml += m_name;
       xml += '>';
     }
-
-    return xml;
   }
 
   bool Tag::addAttribute( Attribute* attr )
