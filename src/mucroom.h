@@ -606,7 +606,8 @@ namespace gloox
           virtual ~MUCOwner();
 
           /**
-           *
+           * Returns a pointer to a DataForm, included in the MUCOwner object. May be 0.
+           * @return A pointer to a configuration form.
            */
           const DataForm* form() const { return m_form; }
 
@@ -640,19 +641,31 @@ namespace gloox
       {
         public:
           /**
-           *
+           * Creates a new object that can be used to change the role of a room participant.
+           * @param role The participant's new role.
+           * @param nick The participant's nick.
+           * @param reason An optional reason for the role change.
            */
           MUCAdmin( MUCRoomRole role, const std::string& nick,
                     const std::string& reason = EmptyString );
 
           /**
-           *
+           * Creates a new object that can be used to change the affiliation of a room participant.
+           * @param affiliation The participant's new affiliation.
+           * @param nick The participant's nick.
+           * @param reason An optional reason for the role change.
            */
           MUCAdmin( MUCRoomAffiliation affiliation, const std::string& nick,
                     const std::string& reason = EmptyString );
 
           /**
-           *
+           * Creates a new object that can be used to request or store a role/affiliation
+           * list.
+           * @param operation The MUCOperation to carry out. Only the Request* and Store*
+           * operations are valid. Any other value will be ignored.
+           * @param jids A list of bare JIDs. Only the JID member of the MUCListItem
+           * structure should be set. The type of the list will be determined from the
+           * @c operation parameter.
            */
           MUCAdmin( MUCOperation operation, const MUCListItemList& jids = MUCListItemList() );
 
@@ -668,7 +681,8 @@ namespace gloox
           virtual ~MUCAdmin();
 
           /**
-           *
+           * Returns the contained list of MUC items.
+           * @return The contained list of MUC items.
            */
           const MUCListItemList& list() const { return m_list; }
 
