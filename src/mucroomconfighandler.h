@@ -39,14 +39,19 @@ namespace gloox
   {
     public:
       /**
-       *
+       * Constructs a new object using the given JID.
+       * @param jid The item's JID.
        */
       MUCListItem( const JID& jid )
         : m_jid( jid ), m_affiliation( AffiliationInvalid ), m_role( RoleInvalid )
       {}
 
       /**
-       *
+       * Creates a new object, setting JID, affiliation, role, and nick.
+       * @param jid The item's JID.
+       * @param role The item's role.
+       * @param affiliation The item's affiliation.
+       * @param nick The item's nick.
        */
       MUCListItem( const JID& jid, MUCRoomRole role, MUCRoomAffiliation affiliation,
                    const std::string& nick )
@@ -54,7 +59,10 @@ namespace gloox
       {}
 
       /**
-       *
+       * Creates a new object, using nick, affiliation and a reason.
+       * @param nick The item's nick.
+       * @param affiliation The item's affiliation.
+       * @param reason A reason.
        */
       MUCListItem( const std::string& nick, MUCRoomAffiliation affiliation, const std::string& reason )
         : m_nick( nick ), m_affiliation( affiliation ), m_role( RoleInvalid ),
@@ -62,7 +70,10 @@ namespace gloox
       {}
 
       /**
-       *
+       * Creates a new object, using nick, role and a reason.
+       * @param nick The item's nick.
+       * @param role The item's role.
+       * @param reason A reason.
        */
       MUCListItem( const std::string& nick, MUCRoomRole role, const std::string& reason )
         : m_nick( nick ), m_affiliation( AffiliationInvalid ), m_role( role ),
@@ -75,27 +86,32 @@ namespace gloox
       ~MUCListItem() {}
 
       /**
-       *
+       * Returns the item's JID.
+       * @return The item's JID.
        */
       const JID& jid() const { return m_jid; }
 
       /**
-       *
+       * Returns the item's nick.
+       * @return The item's nick.
        */
       const std::string& nick() const { return m_nick; }
 
       /**
-       *
+       * Returns the item's affiliation.
+       * @return The item's affiliation.
        */
       MUCRoomAffiliation affiliation() const { return m_affiliation; }
 
       /**
-       *
+       * Returns the item's role.
+       * @return The item's role.
        */
       MUCRoomRole role() const { return m_role; }
 
       /**
-       *
+       * Returns the reason.
+       * @return The reason.
        */
       const std::string& reason() const { return m_reason; }
 
