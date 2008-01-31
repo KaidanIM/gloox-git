@@ -1321,7 +1321,7 @@ namespace gloox
       if( x && x->hasChild( "invite" ) )
       {
         const Tag* i = x->findChild( "invite" );
-        JID invitee( i->findAttribute( "from" ) );
+        JID from( i->findAttribute( "from" ) );
 
         const Tag * t = i->findChild( "reason" );
         const std::string& reason( t ? t->cdata() : EmptyString );
@@ -1329,7 +1329,7 @@ namespace gloox
         t = x->findChild( "password" );
         const std::string& password( t ? t->cdata() : EmptyString );
 
-        m_mucInvitationHandler->handleMUCInvitation( msg.from(), invitee,
+        m_mucInvitationHandler->handleMUCInvitation( msg.from(), from,
                                                      reason, msg.body(), password,
                                                      i->hasChild( "continue" ) );
         return;

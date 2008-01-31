@@ -42,13 +42,13 @@ namespace gloox
       /**
        * This function is called for incoming invitations to MUC rooms.
        * @param room The JID of the room you being invited to.
-       * @param inviter The JID of the inviter.
+       * @param from The JID of the inviter.
        * @param reason A reason for the invitation.
        * @param body The body of the message. May contain a MUC-service generated invitation message.
        * @param password Optionally, a password for the room.
        * @param cont Indicates whether or not the multi-user chat is a continuation of a private chat.
        */
-      virtual void handleMUCInvitation( const JID& room, const JID& inviter, const std::string& reason,
+      virtual void handleMUCInvitation( const JID& room, const JID& from, const std::string& reason,
                                         const std::string& body, const std::string& password,
                                         bool cont ) = 0;
 
