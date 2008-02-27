@@ -136,9 +136,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   //-------
   name = "util::escape";
-  std::string s;
-  util::escape( "&<>'\"", s );
-  if ( s != "&amp;&lt;&gt;&apos;&quot;" )
+  if ( util::escape( "&<>'\"" ) != "&amp;&lt;&gt;&apos;&quot;" )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
