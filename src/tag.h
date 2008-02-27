@@ -146,6 +146,12 @@ namespace gloox
           const std::string& prefix() const;
 
           /**
+           * Returns a string representation of the attribute.
+           * @return A string representation.
+           */
+          const std::string xml() const;
+
+          /**
            * Checks two Attributes for equality.
            * @param right The Attribute to check against the current Attribute.
            */
@@ -165,12 +171,6 @@ namespace gloox
           operator bool() const { return !m_name.empty(); }
 
         private:
-          /**
-           * Appends a string representation of the attribute to a string.
-           * @param buf Buffer string to append the string representation to.
-           */
-          void xmlify( std::string& buf ) const;
-
           void init( const std::string& name, const std::string& value,
                      const std::string& xmlns );
           Tag* m_parent;
@@ -595,12 +595,6 @@ namespace gloox
        * @param tag The Tag to rip off.
        */
       Tag( Tag* tag );
-
-      /**
-       * Appends the XML representation of the tag to a string.
-       * @param buffer String to output the XML to.
-       */
-      void xmlify( std::string& buffer ) const;
 
       /**
        * XPath error conditions.
