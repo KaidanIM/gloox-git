@@ -341,8 +341,10 @@ src/tests/prep/Makefile
 src/tests/presence/Makefile
 src/tests/pubsubevent/Makefile
 src/tests/pubsubmanager/Makefile
+src/tests/registrationquery/Makefile
 src/tests/rostermanagerquery/Makefile
 src/tests/rostermanager/Makefile
+src/tests/searchquery/Makefile
 src/tests/search/Makefile
 src/tests/sha/Makefile
 src/tests/simanager/Makefile

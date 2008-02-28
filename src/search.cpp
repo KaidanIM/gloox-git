@@ -21,6 +21,88 @@
 namespace gloox
 {
 
+  // Search::Query ----
+  Search::Query::Query( DataForm* form )
+    : StanzaExtension( ExtSearch ), m_form( form ), m_fields( 0 )
+  {
+    printf( "form: %s\n", m_form->tag()->xml().c_str() );
+  }
+
+  Search::Query::Query( int fields, const SearchFieldStruct& values, const std::string& instructions )
+    : StanzaExtension( ExtSearch ), m_form( 0 ), m_fields( fields ), m_values( values ),
+      m_instructions( instructions )
+  {
+  }
+
+  Search::Query::Query( const Tag* tag )
+    : StanzaExtension( ExtSearch ), m_form( 0 ), m_fields( 0 )
+  {
+    if( !tag || tag->name() != "query" || tag->xmlns() != XMLNS_SEARCH )
+      return;
+
+    const TagList& l = tag->children();
+    TagList::const_iterator it = l.begin();
+    for( ; it != l.end(); ++it )
+    {
+      if( (*it)->name() == "instructions" )
+      {
+        m_instructions = (*it)->cdata();
+      }
+      else if( (*it)->name() == "item" )
+      {
+        m_srl.push_back( new SearchFieldStruct( (*it) ) );
+      }
+      else if( (*it)->name() == "first" )
+        m_fields |= SearchFieldFirst;
+      else if( (*it)->name() == "last" )
+        m_fields |= SearchFieldLast;
+      else if( (*it)->name() == "email" )
+        m_fields |= SearchFieldEmail;
+      else if( (*it)->name() == "nick" )
+        m_fields |= SearchFieldNick;
+      else if( !m_form && (*it)->name() == "x" && (*it)->xmlns() == XMLNS_X_DATA )
+        m_form = new DataForm( (*it) );
+    }
+  }
+
+  const std::string& Search::Query::filterString() const
+  {
+    static const std::string filter = "/iq/query[@xmlns='" + XMLNS_SEARCH + "']";
+    return filter;
+  }
+
+  Tag* Search::Query::tag() const
+  {
+    Tag* t = new Tag( "query" );
+    t->setXmlns( XMLNS_SEARCH );
+    if( m_form )
+      t->addChild( m_form->tag() );
+    else if( m_fields )
+    {
+      if( !m_instructions.empty() )
+        new Tag( t, "instructions", m_instructions );
+      if( m_fields & SearchFieldFirst )
+        new Tag( t, "first", m_values.first() );
+      if( m_fields & SearchFieldLast )
+        new Tag( t, "last", m_values.last() );
+      if( m_fields & SearchFieldNick )
+        new Tag( t, "nick", m_values.nick() );
+      if( m_fields & SearchFieldEmail )
+        new Tag( t, "email", m_values.email() );
+    }
+    else if( !m_srl.empty() )
+    {
+      SearchResultList::const_iterator it = m_srl.begin();
+      for( ; it != m_srl.end(); ++it )
+      {
+        t->addChild( (*it)->tag() );
+      }
+    }
+    return t;
+  }
+  // ---- ~Search::Query ----
+
+  // ---- Search ----
   Search::Search( ClientBase* parent )
     : m_parent( parent )
   {
@@ -66,13 +148,13 @@ namespace gloox
     Tag* q = iq.query();
 
     if( fields & SearchFieldFirst )
-      new Tag( q, "first", values.first );
+      new Tag( q, "first", values.first() );
     if( fields & SearchFieldLast )
-      new Tag( q, "last", values.last );
+      new Tag( q, "last", values.last() );
     if( fields & SearchFieldNick )
-      new Tag( q, "nick", values.nick );
+      new Tag( q, "nick", values.nick() );
     if( fields & SearchFieldEmail )
-      new Tag( q, "email", values.email );
+      new Tag( q, "email", values.email() );
 
     m_track[id] = sh;
     m_parent->send( iq, this, DoSearch );
@@ -86,82 +168,40 @@ namespace gloox
       switch( iq.subtype() )
       {
         case IQ::Result:
+        {
+          const Query* q = iq.findExtension<Query>( ExtSearch );
+          if( !q )
+            return;
+
           switch( context )
           {
             case FetchSearchFields:
             {
-              Tag* q = iq.query();
-              if( q && q->hasAttribute( XMLNS, XMLNS_SEARCH ) )
+              if( q->form() )
               {
-                Tag* x = q->findChild( "x", XMLNS, XMLNS_X_DATA );
-                if( x )
-                {
-                  DataForm* df = new DataForm( x );
-                  (*it).second->handleSearchFields( iq.from(), df );
-                }
-                else
-                {
-                  int fields = 0;
-                  std::string instructions;
-
-                  if( q->hasChild( "first" ) )
-                    fields |= SearchFieldFirst;
-                  if( q->hasChild( "last" ) )
-                    fields |= SearchFieldLast;
-                  if( q->hasChild( "nick" ) )
-                    fields |= SearchFieldNick;
-                  if( q->hasChild( "email" ) )
-                    fields |= SearchFieldEmail;
-                  if( q->hasChild( "instructions" ) )
-                    instructions = q->findChild( "instructions" )->cdata();
-
-                  (*it).second->handleSearchFields( iq.from(), fields, instructions );
-                }
+                (*it).second->handleSearchFields( iq.from(), q->form() );
+              }
+              else
+              {
+                (*it).second->handleSearchFields( iq.from(), q->fields(), q->instructions() );
               }
               break;
             }
             case DoSearch:
             {
-              Tag* q = iq.query();
-              if( q && q->hasAttribute( XMLNS, XMLNS_SEARCH ) )
+              if( q->form() )
               {
-                Tag* x = q->findChild( "x", XMLNS, XMLNS_X_DATA );
-                if( x )
-                {
-                  DataForm* df = new DataForm( x );
-                  (*it).second->handleSearchResult( iq.from(), df );
-                }
-                else
-                {
-                  SearchResultList e;
-                  SearchFieldStruct s;
-                  const TagList &l = q->children();
-                  TagList::const_iterator itl = l.begin();
-                  for( ; itl != l.end(); ++itl )
-                  {
-                    if( (*itl)->name() == "item" )
-                    {
-                      s.jid.setJID( (*itl)->findAttribute( "jid" ) );
-                      Tag* t = 0;
-                      if( ( t = (*itl)->findChild( "first" ) ) != 0 )
-                        s.first = t->cdata();
-                      if( ( t = (*itl)->findChild( "last" ) ) != 0 )
-                        s.last = t->cdata();
-                      if( ( t = (*itl)->findChild( "nick" ) ) != 0 )
-                        s.nick = t->cdata();
-                      if( ( t = (*itl)->findChild( "email" ) ) != 0 )
-                        s.email = t->cdata();
-                      e.push_back( s );
-                    }
-                  }
-
-                  (*it).second->handleSearchResult( iq.from(), e );
-                }
+                (*it).second->handleSearchResult( iq.from(), q->form() );
+              }
+              else
+              {
+                (*it).second->handleSearchResult( iq.from(), q->result() );
               }
               break;
             }
           }
           break;
+        }
         case IQ::Error:
           (*it).second->handleSearchError( iq.from(), iq.error() );
           break;

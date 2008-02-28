@@ -26,14 +26,95 @@ namespace gloox
   /**
    * Holds all the possible fields a server may require for searching according
    * to Section 7, XEP-0055.
+   *
+   * @author Jakob Schroeter <js@camaya.net>
+   * @since 1.0
    */
-  struct SearchFieldStruct
+  class SearchFieldStruct
   {
-    std::string first;              /**< User's first name. */
-    std::string last;               /**< User's last name. */
-    std::string nick;               /**< User's nickname. */
-    std::string email;              /**< User's email. */
-    JID jid;                        /**< User's JID. */
+    public:
+      /**
+       *
+       */
+      SearchFieldStruct() {}
+
+      /**
+       *
+       */
+      SearchFieldStruct( const std::string& first, const std::string& last, const std::string& nick,
+                         const std::string& email )
+        : m_first( first ), m_last( last ), m_nick( nick ), m_email( email )
+      {}
+
+      /**
+       *
+       */
+      SearchFieldStruct( const Tag* tag )
+      {
+        if( !tag || tag->name() != "item" || !tag->hasAttribute( "jid" ) )
+          return;
+
+        m_jid.setJID( tag->findAttribute( "jid" ) );
+        const TagList& l = tag->children();
+        TagList::const_iterator it = l.begin();
+        for( ; it != l.end(); ++it )
+        {
+          if( (*it)->name() == "first" )
+            m_first = (*it)->cdata();
+          else if( (*it)->name() == "last" )
+            m_last = (*it)->cdata();
+          else if( (*it)->name() == "email" )
+            m_email = (*it)->cdata();
+          else if( (*it)->name() == "nick" )
+            m_nick = (*it)->cdata();
+        }
+      }
+
+      /**
+       *
+       */
+      ~SearchFieldStruct() {}
+
+      /**
+       *
+       */
+      const std::string first() const { return m_first; }
+
+      /**
+       *
+       */
+      const std::string last() const { return m_last; }
+
+      /**
+       *
+       */
+      const std::string email() const { return m_email; }
+
+      /**
+       *
+       */
+      const std::string nick() const { return m_nick; }
+
+      /**
+       *
+       */
+      Tag* tag() const
+      {
+        Tag* t = new Tag( "item" );
+        t->addAttribute( "jid", m_jid.bare() );
+        new Tag( t, "first", m_first );
+        new Tag( t, "last", m_last );
+        new Tag( t, "nick", m_nick );
+        new Tag( t, "email", m_email );
+        return t;
+      }
+
+    private:
+      std::string m_first;              /**< User's first name. */
+      std::string m_last;               /**< User's last name. */
+      std::string m_nick;               /**< User's nickname. */
+      std::string m_email;              /**< User's email. */
+      JID m_jid;                        /**< User's JID. */
   };
 
   /**
@@ -50,7 +131,7 @@ namespace gloox
   /**
    * A list of directory entries returned by a search.
    */
-  typedef std::list<SearchFieldStruct> SearchResultList;
+  typedef std::list<const SearchFieldStruct*> SearchResultList;
 
   /**
    * @brief A virtual interface that enables objects to receive Jabber Search (XEP-0055) results.
@@ -85,7 +166,7 @@ namespace gloox
        * @param directory The directory that was queried.
        * @param form A DataForm describing the valid searchable fields.
        */
-      virtual void handleSearchFields( const JID& directory, DataForm* form ) = 0;
+      virtual void handleSearchFields( const JID& directory, const DataForm* form ) = 0;
 
      /**
       * This function is called to let the SearchHandler know about the results of the search.
