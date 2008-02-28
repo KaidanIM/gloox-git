@@ -64,6 +64,14 @@ namespace gloox
     }
   }
 
+  Search::Query::~Query()
+  {
+    delete m_form;
+    SearchResultList::iterator it = m_srl.begin();
+    for( ; it != m_srl.end(); ++it )
+      delete (*it);
+  }
+
   const std::string& Search::Query::filterString() const
   {
     static const std::string filter = "/iq/query[@xmlns='" + XMLNS_SEARCH + "']";

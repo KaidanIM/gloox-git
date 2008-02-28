@@ -153,7 +153,7 @@ namespace gloox
           /**
            * Virtual Destructor.
            */
-          virtual ~Query() { delete m_form; }
+          virtual ~Query();
 
           /**
            * Returns the contained search form, if any.

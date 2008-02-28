@@ -66,11 +66,11 @@ int main( int /*argc*/, char** /*argv*/ )
     name = "receive search fields";
     Tag* d = new Tag( "query" );
     d->setXmlns( XMLNS_SEARCH );
-    d->addChild( new Tag( "instructions", "foobar" ) );
-    d->addChild( new Tag( "first" ) );
-    d->addChild( new Tag( "last" ) );
-    d->addChild( new Tag( "email" ) );
-    d->addChild( new Tag( "nick" ) );
+    new Tag( d, "instructions", "foobar" );
+    new Tag( d, "first" );
+    new Tag( d, "last" );
+    new Tag( d, "email" );
+    new Tag( d, "nick" );
     Search::Query sq( d );
     Tag* t = sq.tag();
     if( !t || t->xml() != "<query xmlns='" + XMLNS_SEARCH + "'>"
@@ -175,16 +175,16 @@ int main( int /*argc*/, char** /*argv*/ )
     d->setXmlns( XMLNS_SEARCH );
     Tag* i = new Tag( d, "item" );
     i->addAttribute( "jid", "foo@bar" );
-    i->addChild( new Tag( "first", "first1" ) );
-    i->addChild( new Tag( "last", "last1" ) );
-    i->addChild( new Tag( "email", "email1" ) );
-    i->addChild( new Tag( "nick", "nick1" ) );
+    new Tag( i, "first", "first1" );
+    new Tag( i, "last", "last1" );
+    new Tag( i, "email", "email1" );
+    new Tag( i, "nick", "nick1" );
     i = new Tag( d, "item" );
     i->addAttribute( "jid", "foo@bar2" );
-    i->addChild( new Tag( "first", "first2" ) );
-    i->addChild( new Tag( "last", "last2" ) );
-    i->addChild( new Tag( "nick", "nick2" ) );
-    i->addChild( new Tag( "email", "email2" ) );
+    new Tag( i, "first", "first2" );
+    new Tag( i, "last", "last2" );
+    new Tag( i, "nick", "nick2" );
+    new Tag( i, "email", "email2" );
     Search::Query sq( d );
     Tag* t = sq.tag();
     SearchResultList srl = sq.result();
@@ -206,6 +206,7 @@ int main( int /*argc*/, char** /*argv*/ )
       printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
     }
     delete t;
+    delete d;
   }
 
 

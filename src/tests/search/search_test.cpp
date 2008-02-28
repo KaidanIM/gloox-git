@@ -229,6 +229,7 @@ int main( int /*argc*/, char** /*argv*/ )
       ++fail;
       printf( "test '%s' failed\n", name.c_str() );
     }
+    delete q;
   }
 
   // -------
