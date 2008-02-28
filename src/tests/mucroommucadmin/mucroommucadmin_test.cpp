@@ -275,6 +275,7 @@ int main( int /*argc*/, char** /*argv*/ )
       ++fail;
       printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
     }
+    delete t;
   }
 
   // -------
