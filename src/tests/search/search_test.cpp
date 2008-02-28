@@ -42,6 +42,7 @@ namespace gloox
 
 #define CAPABILITIES_H__
 #define CLIENTBASE_H__
+#define SEARCH_TEST
 #include "../../search.h"
 #include "../../search.cpp"
 #include "../../searchhandler.h"
@@ -60,7 +61,7 @@ class SearchTest : public gloox::SearchHandler, public gloox::ClientBase
       if( directory.full() == g_dir && instructions == g_inst && fields == 15 )
         m_result = true;
     }
-    virtual void handleSearchFields( const gloox::JID& directory, gloox::DataForm* form )
+    virtual void handleSearchFields( const gloox::JID& directory, const gloox::DataForm* form )
     {
       if( m_test != 6 )
         return;
@@ -78,8 +79,10 @@ class SearchTest : public gloox::SearchHandler, public gloox::ClientBase
         {
           gloox::SearchResultList::const_iterator it = resultList.begin();
           if( directory.full() == g_dir && resultList.size() == 2
-              && (*it).first == "f1" && (*it).last == "l1" && (*it).nick == "n1" && (*it).email == "e1"
-              && (*++it).first == "f2" && (*it).last == "l2" && (*it).nick == "n2" && (*it).email == "e2" )
+              && (*it)->first() == "f1" && (*it)->last() == "l1" && (*it)->nick() == "n1"
+              && (*it)->email() == "e1"
+              && (*++it)->first() == "f2" && (*it)->last() == "l2" && (*it)->nick() == "n2"
+              && (*it)->email() == "e2" )
             m_result = true;
           break;
         }
@@ -177,14 +180,12 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   {
     name = "receive fields (old-style)";
-    gloox::IQ iq( gloox::IQ::Result, gloox::JID( "searchtest" ), "id",
-                                  gloox::XMLNS_SEARCH, "query" );
+    gloox::IQ iq( gloox::IQ::Result, gloox::JID( "searchtest" ), "id" );
+    gloox::SearchFieldStruct sfs( "first", "last", "nick", "email" );
+    iq.addExtension( new gloox::Search::Query( gloox::SearchFieldFirst | gloox::SearchFieldLast
+                                               | gloox::SearchFieldEmail | gloox::SearchFieldNick,
+                                               sfs, g_inst ) );
     iq.setFrom( gloox::JID( g_dir ) );
-    new gloox::Tag( iq.query(), "instructions", g_inst );
-    new gloox::Tag( iq.query(), "first" );
-    new gloox::Tag( iq.query(), "last" );
-    new gloox::Tag( iq.query(), "nick" );
-    new gloox::Tag( iq.query(), "email" );
     t.setTest( 2 );
     t.feed( iq );
     if( !t.result() )
@@ -197,11 +198,7 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   name = "search request (old-style)";
   t.setTest( 3 );
-  gloox::SearchFieldStruct sf;
-  sf.first = "first";
-  sf.last = "last";
-  sf.nick = "nick";
-  sf.email = "email";
+  gloox::SearchFieldStruct sf( "first", "last", "nick", "email" );
   t.search( sf );
   if( !t.result() )
   {
@@ -212,19 +209,23 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   {
     name = "search result (old-style)";
-    gloox::IQ iq( gloox::IQ::Result, gloox::JID( "searchtest" ), "id",
-                        gloox::XMLNS_SEARCH, "query" );
+    gloox::IQ iq( gloox::IQ::Result, gloox::JID( "searchtest" ), "id" );
     iq.setFrom( gloox::JID( g_dir ) );
-    gloox::Tag *i = new gloox::Tag( iq.query(), "item" );
+    gloox::Tag *q = new gloox::Tag( "query" );
+    q->setXmlns( gloox::XMLNS_SEARCH );
+    gloox::Tag *i = new gloox::Tag( q, "item" );
+    i->addAttribute( "jid", "foo@bar" );
     new gloox::Tag( i, "first", "f1" );
     new gloox::Tag( i, "last", "l1" );
     new gloox::Tag( i, "nick", "n1" );
     new gloox::Tag( i, "email", "e1" );
-    i = new gloox::Tag( iq.query(), "item" );
+    i = new gloox::Tag( q, "item" );
+    i->addAttribute( "jid", "foo@bar2" );
     new gloox::Tag( i, "first", "f2" );
     new gloox::Tag( i, "last", "l2" );
     new gloox::Tag( i, "nick", "n2" );
     new gloox::Tag( i, "email", "e2" );
+    iq.addExtension( new gloox::Search::Query( q ) );
     t.setTest( 4 );
     t.feed( iq );
     if( !t.result() )
@@ -235,24 +236,23 @@ int main( int /*argc*/, char** /*argv*/ )
   }
 
   // -------
-  name = "intermediary search request (old-style)";
-  t.setTest( 3 );
-  sf.first = "first";
-  sf.last = "last";
-  sf.nick = "nick";
-  sf.email = "email";
-  t.search( sf );
-  if( !t.result() )
   {
-    ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+    name = "intermediary search request (old-style)";
+    t.setTest( 3 );
+    gloox::SearchFieldStruct sf( "first", "last", "nick", "email" );
+    t.search( sf );
+    if( !t.result() )
+    {
+      ++fail;
+      printf( "test '%s' failed\n", name.c_str() );
+    }
   }
 
   // -------
   {
     name = "search result (old-style), empty";
-    gloox::IQ iq( gloox::IQ::Result, gloox::JID( "searchtest" ), "id",
-                        gloox::XMLNS_SEARCH, "query" );
+    gloox::IQ iq( gloox::IQ::Result, gloox::JID( "searchtest" ), "id" );
+    iq.addExtension( new gloox::Search::Query() );
     iq.setFrom( gloox::JID( g_dir ) );
     t.setTest( 5 );
     t.feed( iq );
@@ -276,11 +276,9 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   {
     name = "receive fields (dataform)";
-    gloox::IQ iq( gloox::IQ::Result, gloox::JID( "searchtest" ), "id",
-                        gloox::XMLNS_SEARCH, "query" );
+    gloox::IQ iq( gloox::IQ::Result, gloox::JID( "searchtest" ), "id" );
     iq.setFrom( gloox::JID( g_dir ) );
-    gloox::DataForm df( gloox::TypeForm );
-    iq.query()->addChild( df.tag() );
+    iq.addExtension( new gloox::Search::Query( new gloox::DataForm( gloox::TypeForm ) ) );
     t.setTest( 6 );
     t.feed( iq );
     if( !t.result() )
@@ -304,11 +302,9 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   {
     name = "search result (dataform)";
-    gloox::IQ iq( gloox::IQ::Result, gloox::JID( "searchtest" ), "id",
-                        gloox::XMLNS_SEARCH, "query" );
+    gloox::IQ iq( gloox::IQ::Result, gloox::JID( "searchtest" ), "id" );
     iq.setFrom( gloox::JID( g_dir ) );
-    gloox::DataForm df( gloox::TypeResult );
-    iq.query()->addChild( df.tag() );
+    iq.addExtension( new gloox::Search::Query( new gloox::DataForm( gloox::TypeResult ) ) );
     t.setTest( 8 );
     t.feed( iq );
     if( !t.result() )

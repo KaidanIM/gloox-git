@@ -19,6 +19,8 @@
 #include "searchhandler.h"
 #include "discohandler.h"
 #include "iqhandler.h"
+#include "stanzaextension.h"
+#include "dataform.h"
 
 #include <string>
 
@@ -28,7 +30,7 @@ namespace gloox
   class ClientBase;
   class IQ;
   class Disco;
-  class DataForm;
+//   class DataForm;
 
   /**
    * @brief An implementation of XEP-0055 (Jabber Search)
@@ -111,6 +113,91 @@ namespace gloox
 
       ClientBase* m_parent;
       Disco* m_disco;
+
+    private:
+#ifdef SEARCH_TEST
+    public:
+#endif
+      /**
+       * @brief A wrapping class for the XEP-0055 &lt;query&gt; element.
+       *
+       * @author Jakob Schroeter <js@camaya.net>
+       * @since 1.0
+       */
+      class Query : public StanzaExtension
+      {
+        public:
+          /**
+           * Creates a new object that can be used to carry out a search.
+           * @param form A DataForm containing the search terms.
+           */
+          Query( DataForm* form );
+
+          /**
+           * Creates a new object that can be used to carry out a search.
+           * @param fields Bit-wise ORed FieldEnum values describing the valid (i.e., set)
+           * fields in the @b values parameter.
+           * @param values Contains the phrases to search for.
+           * @param instructions Optional instructions.
+           */
+          Query( int fields, const SearchFieldStruct& values,
+                 const std::string& instructions = EmptyString );
+
+          /**
+           * Creates a new object that can be used to request search fields.
+           * Optionally, it can parse the given Tag.
+           * @param tag The Tag to parse.
+           */
+          Query( const Tag* tag = 0 );
+
+          /**
+           * Virtual Destructor.
+           */
+          virtual ~Query() { if( m_form) printf( "form2: %s\n", m_form->tag()->xml().c_str() ); delete m_form; }
+
+          /**
+           * Returns the contained search form, if any.
+           * @return The search form. May be 0.
+           */
+          const DataForm* form() const { return m_form; }
+
+          /**
+           * Returns the search instructions, if given
+           * @return The search instructions.
+           */
+          const std::string& instructions() const { return m_instructions; }
+
+          /**
+           * Returns the search fields, if set.
+           * @return The search fields.
+           */
+          int fields() const { return m_fields; }
+
+          /**
+           * Returns the search's result, if available in legacy form. Use form() otherwise.
+           * @return The search's result.
+           */
+          const SearchResultList& result() const { return m_srl; }
+
+          // reimplemented from StanzaExtension
+          virtual const std::string& filterString() const;
+
+          // reimplemented from StanzaExtension
+          virtual StanzaExtension* newInstance( const Tag* tag ) const
+          {
+            return new Query( tag );
+          }
+
+          // reimplemented from StanzaExtension
+          virtual Tag* tag() const;
+
+        private:
+          DataForm* m_form;
+          int m_fields;
+          SearchFieldStruct m_values;
+          std::string m_instructions;
+          SearchResultList m_srl;
+      };
 
   };
 
