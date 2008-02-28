@@ -25,7 +25,6 @@ namespace gloox
   Search::Query::Query( DataForm* form )
     : StanzaExtension( ExtSearch ), m_form( form ), m_fields( 0 )
   {
-    printf( "form: %s\n", m_form->tag()->xml().c_str() );
   }
 
   Search::Query::Query( int fields, const SearchFieldStruct& values, const std::string& instructions )

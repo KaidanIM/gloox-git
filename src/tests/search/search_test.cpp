@@ -68,8 +68,6 @@ class SearchTest : public gloox::SearchHandler, public gloox::ClientBase
 
       if( directory.full() == g_dir && form != 0 )
         m_result = true;
-
-      delete form;
     }
     virtual void handleSearchResult( const gloox::JID& directory, const gloox::SearchResultList& resultList )
     {
@@ -101,8 +99,6 @@ class SearchTest : public gloox::SearchHandler, public gloox::ClientBase
 
       if( directory.full() == g_dir && form != 0 )
         m_result = true;
-
-      delete form;
     }
     virtual void handleSearchError( const gloox::JID& /*directory*/, const gloox::Error* /*error*/ ) {}
     virtual void send( gloox::IQ& iq, gloox::IqHandler*, int context )

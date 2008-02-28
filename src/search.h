@@ -153,7 +153,7 @@ namespace gloox
           /**
            * Virtual Destructor.
            */
-          virtual ~Query() { if( m_form) printf( "form2: %s\n", m_form->tag()->xml().c_str() ); delete m_form; }
+          virtual ~Query() { delete m_form; }
 
           /**
            * Returns the contained search form, if any.
