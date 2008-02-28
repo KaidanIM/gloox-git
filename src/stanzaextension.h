@@ -71,6 +71,7 @@ namespace gloox
     ExtMUCAdmin,                    /**< An extension dealing with the muc#admin namespace of XEP-0045. */
     ExtMUCUnique,                   /**< An extension dealing with the muc#unique namespace of XEP-0045. */
     ExtPing,                        /**< An XMPP Ping (XEP-0199). */
+    ExtSearch,                      /**< A XEP-0055 (Jabber Search) wrapper. */
     ExtUser                         /**< User-supplied extensions must use IDs above this. Do
                                      * not hard-code ExtUser's value anywhere, it is subject
                                      * to change. */
