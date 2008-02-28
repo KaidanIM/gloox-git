@@ -642,7 +642,7 @@ namespace gloox
       m_authError = SaslTemporaryAuthFailure;
   }
 
-  void ClientBase::send( IQ& iq, IqHandler* ih, int context )
+  void ClientBase::send( IQ& iq, IqHandler* ih, int context, bool del )
   {
     if( ih && ( iq.subtype() == IQ::Set || iq.subtype() == IQ::Get ) )
     {
@@ -652,6 +652,7 @@ namespace gloox
       TrackStruct track;
       track.ih = ih;
       track.context = context;
+      track.del = del;
       m_iqIDHandlers[iq.id()] = track;
     }
 
@@ -1269,6 +1270,8 @@ namespace gloox
     {
       (*it_id).second.ih->handleIqID( iq, (*it_id).second.context );
       (*it_id).second.ih->handleIqID( &iq, (*it_id).second.context ); // FIXME remove for 1.1
+      if( (*it_id).second.del )
+        delete (*it_id).second.ih;
       m_iqIDHandlers.erase( it_id );
       return;
     }

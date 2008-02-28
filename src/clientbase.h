@@ -245,8 +245,10 @@ namespace gloox
        * @param iq The IQ stanza to send.
        * @param ih The handler to register for replies.
        * @param context A value that allows for restoring context.
+       * @param del Whether or not delete the IqHandler object after its being called.
+       * Default: @b false.
        */
-      void send( IQ& iq, IqHandler* ih, int context );
+      void send( IQ& iq, IqHandler* ih, int context, bool del = false );
 
       /**
        * A convenience function that sends the given IQ stanza.
@@ -416,6 +418,7 @@ namespace gloox
        * @param ih The object to receive IQ stanza notifications.
        * @param exttype The extension type. See StanzaExtension and
        * @link gloox::StanzaExtensionType StanzaExtensionType @endlink.
+       * @since 1.0
        */
       void registerIqHandler( IqHandler* ih, int exttype );
 
@@ -426,7 +429,7 @@ namespace gloox
        * @param ih The IqHandler to receive notifications.
        * @param id The id to track.
        * @param context A value that allows for restoring context.
-       * @deprecated Will be removed for 1.1. Use send( const IQ&, IqHandler*, int ) instead.
+       * @deprecated Will be removed for 1.1. Use send( const IQ&, IqHandler*, int, bool ) instead.
        */
       GLOOX_DEPRECATED void trackID( IqHandler* ih, const std::string& id, int context );
 
@@ -858,6 +861,7 @@ namespace gloox
       {
         IqHandler* ih;
         int context;
+        bool del;
       };
 
       struct TagHandlerStruct
