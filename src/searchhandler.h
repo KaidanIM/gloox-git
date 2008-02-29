@@ -162,9 +162,8 @@ namespace gloox
       /**
        * This function is called to announce the searchable fields a directory supports. It is the result
        * of a call to @link gloox::Search::fetchSearchFields Search::fetchSearchFields() @endlink.
-       * @note The SearchHandler is responsible for deleting the DataForm.
        * @param directory The directory that was queried.
-       * @param form A DataForm describing the valid searchable fields.
+       * @param form A DataForm describing the valid searchable fields. Do not delete the form.
        */
       virtual void handleSearchFields( const JID& directory, const DataForm* form ) = 0;
 
@@ -177,9 +176,8 @@ namespace gloox
 
       /**
        * This function is called to let the SearchHandler know about the result of the search.
-       * @note The SearchHandler is responsible for deleting the DataForm.
        * @param directory The searched directory.
-       * @param form A DataForm containing the search results.
+       * @param form A DataForm containing the search results. Do not delete the form.
        */
       virtual void handleSearchResult( const JID& directory, const DataForm* form ) = 0;
 
