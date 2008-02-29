@@ -27,9 +27,8 @@ namespace gloox
   {
   }
 
-  Search::Query::Query( int fields, const SearchFieldStruct& values, const std::string& instructions )
-    : StanzaExtension( ExtSearch ), m_form( 0 ), m_fields( fields ), m_values( values ),
-      m_instructions( instructions )
+  Search::Query::Query( int fields, const SearchFieldStruct& values )
+    : StanzaExtension( ExtSearch ), m_form( 0 ), m_fields( fields ), m_values( values )
   {
   }
 

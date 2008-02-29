@@ -178,9 +178,10 @@ int main( int /*argc*/, char** /*argv*/ )
     name = "receive fields (old-style)";
     gloox::IQ iq( gloox::IQ::Result, gloox::JID( "searchtest" ), "id" );
     gloox::SearchFieldStruct sfs( "first", "last", "nick", "email" );
-    iq.addExtension( new gloox::Search::Query( gloox::SearchFieldFirst | gloox::SearchFieldLast
-                                               | gloox::SearchFieldEmail | gloox::SearchFieldNick,
-                                               sfs, g_inst ) );
+    gloox::Search::Query* sq = new gloox::Search::Query( gloox::SearchFieldFirst | gloox::SearchFieldLast
+        | gloox::SearchFieldEmail | gloox::SearchFieldNick, sfs );
+    sq->m_instructions = g_inst;
+    iq.addExtension( sq );
     iq.setFrom( gloox::JID( g_dir ) );
     t.setTest( 2 );
     t.feed( iq );
