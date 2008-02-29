@@ -138,10 +138,8 @@ namespace gloox
            * @param fields Bit-wise ORed FieldEnum values describing the valid (i.e., set)
            * fields in the @b values parameter.
            * @param values Contains the phrases to search for.
-           * @param instructions Optional instructions.
            */
-          Query( int fields, const SearchFieldStruct& values,
-                 const std::string& instructions = EmptyString );
+          Query( int fields, const SearchFieldStruct& values );
 
           /**
            * Creates a new object that can be used to request search fields.
@@ -192,6 +190,9 @@ namespace gloox
           virtual Tag* tag() const;
 
         private:
+#ifdef SEARCH_TEST
+        public:
+#endif
           DataForm* m_form;
           int m_fields;
           SearchFieldStruct m_values;
