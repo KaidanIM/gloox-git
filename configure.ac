@@ -342,6 +342,7 @@ src/tests/presence/Makefile
 src/tests/pubsubevent/Makefile
 src/tests/pubsubmanager/Makefile
 src/tests/registrationquery/Makefile
+src/tests/registration/Makefile
 src/tests/rostermanagerquery/Makefile
 src/tests/rostermanager/Makefile
 src/tests/searchquery/Makefile

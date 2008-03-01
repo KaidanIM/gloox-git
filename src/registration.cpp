@@ -22,6 +22,197 @@
 namespace gloox
 {
 
+  // Registration::Query ----
+  Registration::Query::Query( DataForm* form )
+    : StanzaExtension( ExtRegistration ), m_form( form ), m_fields( 0 ), m_oob( 0 ),
+      m_del( false ), m_reg( false )
+  {
+  }
+
+  Registration::Query::Query( bool del )
+    : StanzaExtension( ExtRegistration ), m_form( 0 ), m_fields( 0 ), m_oob( 0 ), m_del( del ),
+      m_reg( false )
+  {
+  }
+
+  Registration::Query::Query( int fields, const RegistrationFields& values )
+    : StanzaExtension( ExtRegistration ), m_form( 0 ), m_fields( fields ), m_values( values ),
+      m_oob( 0 ), m_del( false ), m_reg( false )
+  {
+  }
+
+  Registration::Query::Query( const Tag* tag )
+    : StanzaExtension( ExtRegistration ), m_form( 0 ), m_fields( 0 ), m_oob( 0 ), m_del( false ),
+      m_reg( false )
+  {
+    if( !tag || tag->name() != "query" || tag->xmlns() != XMLNS_REGISTER )
+      return;
+
+    const TagList& l = tag->children();
+    TagList::const_iterator it = l.begin();
+    for( ; it != l.end(); ++it )
+    {
+      const std::string& name = (*it)->name();
+      if( name == "instructions" )
+        m_instructions = (*it)->cdata();
+      else if( name == "remove" )
+        m_del = true;
+      else if( name == "registered" )
+        m_reg = true;
+      else if( name == "username" )
+      {
+        m_fields |= FieldUsername;
+        m_values.username = (*it)->cdata();
+      }
+      else if( name == "nick" )
+      {
+        m_fields |= FieldNick;
+        m_values.nick = (*it)->cdata();
+      }
+      else if( name == "password" )
+      {
+        m_fields |= FieldPassword;
+        m_values.password = (*it)->cdata();
+      }
+      else if( name == "name" )
+      {
+        m_fields |= FieldName;
+        m_values.name = (*it)->cdata();
+      }
+      else if( name == "first" )
+      {
+        m_fields |= FieldFirst;
+        m_values.first = (*it)->cdata();
+      }
+      else if( name == "last" )
+      {
+        m_fields |= FieldLast;
+        m_values.last = (*it)->cdata();
+      }
+      else if( name == "email" )
+      {
+        m_fields |= FieldEmail;
+        m_values.email = (*it)->cdata();
+      }
+      else if( name == "address" )
+      {
+        m_fields |= FieldAddress;
+        m_values.address = (*it)->cdata();
+      }
+      else if( name == "city" )
+      {
+        m_fields |= FieldCity;
+        m_values.city = (*it)->cdata();
+      }
+      else if( name == "state" )
+      {
+        m_fields |= FieldState;
+        m_values.state = (*it)->cdata();
+      }
+      else if( name == "zip" )
+      {
+        m_fields |= FieldZip;
+        m_values.zip = (*it)->cdata();
+      }
+      else if( name == "phone" )
+      {
+        m_fields |= FieldPhone;
+        m_values.phone = (*it)->cdata();
+      }
+      else if( name == "url" )
+      {
+        m_fields |= FieldUrl;
+        m_values.url = (*it)->cdata();
+      }
+      else if( name == "date" )
+      {
+        m_fields |= FieldDate;
+        m_values.date = (*it)->cdata();
+      }
+      else if( name == "misc" )
+      {
+        m_fields |= FieldMisc;
+        m_values.misc = (*it)->cdata();
+      }
+      else if( name == "text" )
+      {
+        m_fields |= FieldText;
+        m_values.text = (*it)->cdata();
+      }
+      else if( !m_form && name == "x" && (*it)->xmlns() == XMLNS_X_DATA )
+        m_form = new DataForm( (*it) );
+      else if( !m_oob && name == "x" && (*it)->xmlns() == XMLNS_X_OOB )
+        m_oob = new OOB( (*it) );
+    }
+  }
+
+  Registration::Query::~Query()
+  {
+    delete m_form;
+    delete m_oob;
+  }
+
+  const std::string& Registration::Query::filterString() const
+  {
+    static const std::string filter = "/iq/query[@xmlns='" + XMLNS_REGISTER + "']";
+    return filter;
+  }
+
+  Tag* Registration::Query::tag() const
+  {
+    Tag* t = new Tag( "query" );
+    t->setXmlns( XMLNS_REGISTER );
+
+    if( !m_instructions.empty() )
+      new Tag( t, "instructions", m_instructions );
+
+    if( m_form )
+      t->addChild( m_form->tag() );
+    else if( m_oob )
+      t->addChild( m_oob->tag() );
+    else if( m_del )
+      new Tag( t, "remove" );
+    else if( m_fields )
+    {
+      if( m_fields & FieldUsername )
+        new Tag( t, "username", m_values.username );
+      if( m_fields & FieldNick )
+        new Tag( t, "nick", m_values.nick );
+      if( m_fields & FieldPassword )
+        new Tag( t, "password", m_values.password );
+      if( m_fields & FieldName )
+        new Tag( t, "name", m_values.name );
+      if( m_fields & FieldFirst )
+        new Tag( t, "first", m_values.first );
+      if( m_fields & FieldLast )
+        new Tag( t, "last", m_values.last );
+      if( m_fields & FieldEmail )
+        new Tag( t, "email", m_values.email );
+      if( m_fields & FieldAddress )
+        new Tag( t, "address", m_values.address );
+      if( m_fields & FieldCity )
+        new Tag( t, "city", m_values.city );
+      if( m_fields & FieldState )
+        new Tag( t, "state", m_values.state );
+      if( m_fields & FieldZip )
+        new Tag( t, "zip", m_values.zip );
+      if( m_fields & FieldPhone )
+        new Tag( t, "phone", m_values.phone );
+      if( m_fields & FieldUrl )
+        new Tag( t, "url", m_values.url );
+      if( m_fields & FieldDate )
+        new Tag( t, "date", m_values.date );
+      if( m_fields & FieldMisc )
+        new Tag( t, "misc", m_values.misc );
+      if( m_fields & FieldText )
+        new Tag( t, "text", m_values.text );
+    }
+
+    return t;
+  }
+  // ---- ~Registration::Query ----
+
+  // ---- Registration ----
   Registration::Registration( ClientBase* parent, const JID& to )
     : m_parent( parent ), m_to( to ), m_registrationHandler( 0 )
   {
@@ -37,7 +228,10 @@ namespace gloox
   void Registration::init()
   {
     if( m_parent )
+    {
       m_parent->registerIqHandler( this, XMLNS_REGISTER );
+      m_parent->registerStanzaExtension( new Query() );
+    }
   }
 
   Registration::~Registration()
@@ -46,6 +240,7 @@ namespace gloox
     {
       m_parent->removeIqHandler( this, XMLNS_REGISTER );
       m_parent->removeIDHandler( this );
+      m_parent->removeStanzaExtension( ExtRegistration );
     }
   }
 
@@ -172,78 +367,28 @@ namespace gloox
       {
         case FetchRegistrationFields:
         {
-          const Tag* q = iq.query();
+          const Query* q = iq.findExtension<Query>( ExtRegistration );
           if( !q )
             return;
 
-          if( q->hasChild( "registered" ) )
+          if( q->registered() )
           {
             m_registrationHandler->handleAlreadyRegistered( iq.from() );
             break;
           }
 
-          if( q->hasChild( "x", XMLNS, XMLNS_X_DATA ) )
-          {
-            const DataForm form( q->findChild( "x", XMLNS, XMLNS_X_DATA ) );
-            m_registrationHandler->handleDataForm( iq.from(), form );
-          }
+          if( q->form() )
+            m_registrationHandler->handleDataForm( iq.from(), *(q->form()) );
 
-          if( q->hasChild( "x", XMLNS, XMLNS_X_OOB ) )
-          {
-            const OOB oob( q->findChild( "x", XMLNS, XMLNS_X_OOB ) );
-            m_registrationHandler->handleOOB( iq.from(), oob );
-          }
+          if( q->oob() )
+            m_registrationHandler->handleOOB( iq.from(), *(q->oob()) );
 
-          int fields = 0;
-          std::string instructions;
-
-          if( q->hasChild( "username" ) )
-            fields |= FieldUsername;
-          if( q->hasChild( "nick" ) )
-            fields |= FieldNick;
-          if( q->hasChild( "password" ) )
-            fields |= FieldPassword;
-          if( q->hasChild( "name" ) )
-            fields |= FieldName;
-          if( q->hasChild( "first" ) )
-            fields |= FieldFirst;
-          if( q->hasChild( "last" ) )
-              fields |= FieldLast;
-          if( q->hasChild( "email" ) )
-            fields |= FieldEmail;
-          if( q->hasChild( "address" ) )
-            fields |= FieldAddress;
-          if( q->hasChild( "city" ) )
-            fields |= FieldCity;
-          if( q->hasChild( "state" ) )
-            fields |= FieldState;
-          if( q->hasChild( "zip" ) )
-            fields |= FieldZip;
-          if( q->hasChild( "phone" ) )
-            fields |= FieldPhone;
-          if( q->hasChild( "url" ) )
-            fields |= FieldUrl;
-          if( q->hasChild( "date" ) )
-            fields |= FieldDate;
-          if( q->hasChild( "misc" ) )
-            fields |= FieldMisc;
-          if( q->hasChild( "text" ) )
-            fields |= FieldText;
-          if( q->hasChild( "instructions" ) )
-            instructions = q->findChild( "instructions" )->cdata();
-
-          m_registrationHandler->handleRegistrationFields( iq.from(), fields, instructions );
+          m_registrationHandler->handleRegistrationFields( iq.from(), q->fields(), q->instructions() );
           break;
         }
 
         case CreateAccount:
-          m_registrationHandler->handleRegistrationResult( iq.from(), RegistrationSuccess );
-          break;
-
         case ChangePassword:
-          m_registrationHandler->handleRegistrationResult( iq.from(), RegistrationSuccess );
-          break;
-
         case RemoveAccount:
           m_registrationHandler->handleRegistrationResult( iq.from(), RegistrationSuccess );
           break;
