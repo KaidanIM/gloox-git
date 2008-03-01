@@ -229,7 +229,7 @@ namespace gloox
   {
     if( m_parent )
     {
-      m_parent->registerIqHandler( this, XMLNS_REGISTER );
+      m_parent->registerIqHandler( this, ExtRegistration );
       m_parent->registerStanzaExtension( new Query() );
     }
   }
@@ -238,7 +238,7 @@ namespace gloox
   {
     if( m_parent )
     {
-      m_parent->removeIqHandler( this, XMLNS_REGISTER );
+      m_parent->removeIqHandler( this, ExtRegistration );
       m_parent->removeIDHandler( this );
       m_parent->removeStanzaExtension( ExtRegistration );
     }
@@ -249,10 +249,8 @@ namespace gloox
     if( !m_parent || m_parent->state() != StateConnected )
       return;
 
-    const std::string& id = m_parent->getID();
-
-    IQ iq( IQ::Get, m_to, id, XMLNS_REGISTER );
-
+    IQ iq( IQ::Get, m_to );
+    iq.addExtension( new Query() );
     m_parent->send( iq, this, FetchRegistrationFields );
   }
 
@@ -263,44 +261,8 @@ namespace gloox
          || !prep::nodeprep( values.username, username ) )
       return false;
 
-    const std::string& id = m_parent->getID();
-
-    IQ iq( IQ::Set, m_to, id, XMLNS_REGISTER );
-    Tag* q = iq.query();
-
-    if( fields & FieldUsername )
-      new Tag( q, "username", username );
-    if( fields & FieldNick )
-      new Tag( q, "nick", values.nick );
-    if( fields & FieldPassword )
-      new Tag( q, "password", values.password );
-    if( fields & FieldName )
-      new Tag( q, "name", values.name );
-    if( fields & FieldFirst )
-      new Tag( q, "first", values.first );
-    if( fields & FieldLast )
-      new Tag( q, "last", values.last );
-    if( fields & FieldEmail )
-      new Tag( q, "email", values.email );
-    if( fields & FieldAddress )
-      new Tag( q, "address", values.address );
-    if( fields & FieldCity )
-      new Tag( q, "city", values.city );
-    if( fields & FieldState )
-      new Tag( q, "state", values.state );
-    if( fields & FieldZip )
-      new Tag( q, "zip", values.zip );
-    if( fields & FieldPhone )
-      new Tag( q, "phone", values.phone );
-    if( fields & FieldUrl )
-      new Tag( q, "url", values.url );
-    if( fields & FieldDate )
-      new Tag( q, "date", values.date );
-    if( fields & FieldMisc )
-      new Tag( q, "misc", values.misc );
-    if( fields & FieldText )
-      new Tag( q, "text", values.text );
-
+    IQ iq( IQ::Set, m_to );
+    iq.addExtension( new Query( fields, values ) );
     m_parent->send( iq, this, CreateAccount );
 
     return true;
@@ -308,14 +270,11 @@ namespace gloox
 
   void Registration::createAccount( const DataForm& form )
   {
-    if( !m_parent || m_parent->state() != StateConnected )
+    if( !m_parent || m_parent->state() != StateConnected || !form )
       return;
 
-    const std::string& id = m_parent->getID();
-
-    IQ iq( IQ::Set, m_to, id, XMLNS_REGISTER );
-    iq.query()->addChild( form.tag() );
-
+    IQ iq( IQ::Set, m_to );
+    iq.addExtension( new Query( form ) );
     m_parent->send( iq, this, CreateAccount );
   }
 
@@ -324,26 +283,21 @@ namespace gloox
     if( !m_parent || !m_parent->authed() )
       return;
 
-    const std::string& id = m_parent->getID();
-
-    IQ iq( IQ::Set, m_to, id, XMLNS_REGISTER, "query" );
-    new Tag( iq.query(), "remove" );
-
+    IQ iq( IQ::Set, m_to );
+    iq.addExtension( new Query( true ) );
     m_parent->send( iq, this, RemoveAccount );
   }
 
   void Registration::changePassword( const std::string& username, const std::string& password )
   {
-    if( !m_parent || !m_parent->authed() )
+    if( !m_parent || !m_parent->authed() || username.empty() )
       return;
 
-    const std::string& id = m_parent->getID();
-
-    IQ iq( IQ::Set, m_to, id, XMLNS_REGISTER );
-    new Tag( iq.query(), "username", username );
-    new Tag( iq.query(), "password", password );
-
-    m_parent->send( iq, this, ChangePassword );
+    int fields = FieldUsername | FieldPassword;
+    RegistrationFields rf;
+    rf.username = username;
+    rf.password = password;
+    createAccount( fields, rf );
   }
 
   void Registration::registerRegistrationHandler( RegistrationHandler* rh )

@@ -37,8 +37,8 @@ namespace gloox
       virtual void send( IQ& iq, IqHandler*, int ) = 0;
       virtual void trackID( IqHandler *ih, const std::string& id, int context ) = 0;
       void removeIDHandler( IqHandler* ) {}
-      void registerIqHandler( IqHandler*, const std::string& ) {}
-      void removeIqHandler( IqHandler*, const std::string& ) {}
+      void registerIqHandler( IqHandler*, int ) {}
+      void removeIqHandler( IqHandler*, int ) {}
       void registerStanzaExtension( StanzaExtension* ext ) { delete ext; }
       void removeStanzaExtension( int ) {}
       ConnectionState state() const { return StateConnected; }

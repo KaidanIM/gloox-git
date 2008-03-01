@@ -74,9 +74,10 @@ namespace gloox
        * is notified about the results.
        * @param directory The (user) directory to search.
        * @param form The DataForm contains the phrases the user wishes to search for.
+       * Search will delete the form eventually.
        * @param sh The SearchHandler to notify about the results.
        */
-      void search( const JID& directory, const DataForm& form, SearchHandler* sh );
+      void search( const JID& directory, DataForm* form, SearchHandler* sh );
 
       /**
        * Initiates a search on the given directory, with the given phrases. The given SearchHandler

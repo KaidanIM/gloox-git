@@ -148,7 +148,7 @@ class SearchTest : public gloox::SearchHandler, public gloox::ClientBase
     void feed( gloox::IQ& s ) { m_search.handleIqID( s, m_context ); }
     virtual void trackID( gloox::IqHandler* /*ih*/, const std::string& /*id*/, int /*context*/ ) {}
     void search( const gloox::SearchFieldStruct& fields ) { m_search.search( g_dir, 15, fields, this ); }
-    void search( const gloox::DataForm& form ) { m_search.search( g_dir, form, this ); }
+    void search( gloox::DataForm* form ) { m_search.search( g_dir, form, this ); }
   private:
     gloox::Search m_search;
     int m_test;
@@ -291,7 +291,7 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   name = "search request (dataform)";
   t.setTest( 7 );
-  gloox::DataForm df( gloox::TypeForm );
+  gloox::DataForm* df = new gloox::DataForm( gloox::TypeForm );
   t.search( df );
   if( !t.result() )
   {
