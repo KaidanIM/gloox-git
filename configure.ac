@@ -332,6 +332,7 @@ src/tests/message/Makefile
 src/tests/messageeventfilter/Makefile
 src/tests/mucroommucadmin/Makefile
 src/tests/mucroommucowner/Makefile
+src/tests/mucroommucuser/Makefile
 src/tests/nickname/Makefile
 src/tests/nonsaslauthquery/Makefile
 src/tests/nonsaslauth/Makefile
