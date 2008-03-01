@@ -74,7 +74,7 @@ namespace gloox
       virtual void handleFTRequestError( const IQ& iq, const std::string& sid ) = 0;
 
       /**
-       * This function is called to pass a negotiated SOCKS5 bytestream.
+       * This function is called to pass a negotiated bytestream (SOCKS5 or IBB).
        * The bytestream is not yet open and not ready to send/receive data.
        * @note To initialize the bytestream and to prepare it for data transfer
        * do the following, preferable in that order:
