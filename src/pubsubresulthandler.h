@@ -206,6 +206,7 @@ namespace gloox
          */
         virtual void handleSubscribersResult( const JID& service,
                                               const std::string& node,
+                                              const SubscriberList* list,
                                               const Error* error = 0 ) = 0;
 
         /**
@@ -234,6 +235,7 @@ namespace gloox
          */
         virtual void handleAffiliatesResult( const JID& service,
                                              const std::string& node,
+                                             const AffiliateList* list,
                                              const Error* error = 0 ) = 0;
 
 

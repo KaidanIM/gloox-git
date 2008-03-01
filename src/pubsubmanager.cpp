@@ -707,10 +707,10 @@ namespace gloox
                         rh->handleSubscriptionOptionsResult( service, JID( /* FIXME */ ), node );
                         break;
                       case SetSubscriberList:
-                        rh->handleSubscribersResult( service, node );
+                        rh->handleSubscribersResult( service, node, 0 );
                         break;
                       case SetAffiliateList:
-                        rh->handleAffiliatesResult( service, node );
+                        rh->handleAffiliatesResult( service, node, 0 );
                         break;
                       case SetNodeConfig:
                         rh->handleNodeConfigResult( service, node );
@@ -971,6 +971,68 @@ namespace gloox
               {
                 rh->handleDefaultNodeConfig( service, 0, error );
               }
+              break;
+            }
+            case GetAffiliateList:
+            {
+              const Tag* aff = query->findChild( "affiliations" );
+              AffiliateList list;
+              const TagList& affiliates = aff->children();
+              TagList::const_iterator it = affiliates.begin();
+              for( ; it != affiliates.end(); ++it )
+              {
+                const std::string& jid = (*it)->findAttribute( "jid" );
+                const std::string& afft = (*it)->findAttribute( "affiliation" );
+                list.push_back( Affiliate( jid, affiliationType( afft ) ) );
+              }
+              rh->handleAffiliates( service, aff->findAttribute( "node" ), &list, error);
+              break;
+            }
+            case SetAffiliateList:
+            {
+              const Tag* aff = query->findChild( "affiliations" );
+              AffiliateList list;
+              const TagList& affiliates = aff->children();
+              TagList::const_iterator it = affiliates.begin();
+              for( ; it != affiliates.end(); ++it )
+              {
+                const std::string& jid = (*it)->findAttribute( "jid" );
+                const std::string& afft = (*it)->findAttribute( "affiliation" );
+                list.push_back( Affiliate( jid, affiliationType( afft ) ) );
+              }
+              rh->handleAffiliatesResult( service, aff->findAttribute( "node" ), &list, error);
+              break;
+            }
+            case GetSubscriberList:
+            {
+              const Tag* subt = query->findChild( "subscriptions" );
+              SubscriberList list;
+              const TagList& subs = subt->children();
+              TagList::const_iterator it = subs.begin();
+              for( ; it != subs.end(); ++it )
+              {
+                const std::string& jid = (*it)->findAttribute( "jid" );
+                const std::string& sub = (*it)->findAttribute( "subscription" );
+                const std::string& subid = (*it)->findAttribute( "subid" );
+                list.push_back( Subscriber( jid, subscriptionType( sub ), subid ) );
+              }
+              rh->handleSubscribers( service, subt->findAttribute( "node" ), &list, error);
+              break;
+            }
+            case SetSubscriberList:
+            {
+              const Tag* subt = query->findChild( "subscriptions" );
+              SubscriberList list;
+              const TagList& subs = subt->children();
+              TagList::const_iterator it = subs.begin();
+              for( ; it != subs.end(); ++it )
+              {
+                const std::string& jid = (*it)->findAttribute( "jid" );
+                const std::string& sub = (*it)->findAttribute( "subscription" );
+                const std::string& subid = (*it)->findAttribute( "subid" );
+                list.push_back( Subscriber( jid, subscriptionType( sub ), subid ) );
+              }
+              rh->handleSubscribersResult( service, subt->findAttribute( "node" ), &list, error);
               break;
             }
             default:
