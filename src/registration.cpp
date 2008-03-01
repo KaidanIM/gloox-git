@@ -268,7 +268,7 @@ namespace gloox
     return true;
   }
 
-  void Registration::createAccount( const DataForm& form )
+  void Registration::createAccount( DataForm* form )
   {
     if( !m_parent || m_parent->state() != StateConnected || !form )
       return;
