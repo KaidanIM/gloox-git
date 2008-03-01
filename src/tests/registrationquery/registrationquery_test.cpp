@@ -35,8 +35,13 @@ namespace gloox
       virtual void send( IQ& iq, IqHandler*, int ) = 0;
       virtual void trackID( IqHandler *ih, const std::string& id, int context ) = 0;
       void removeIDHandler( IqHandler* ) {}
+      void registerIqHandler( IqHandler*, const std::string& ) {}
+      void removeIqHandler( IqHandler*, const std::string& ) {}
+      void registerStanzaExtension( StanzaExtension* ext ) { delete ext; }
+      void removeStanzaExtension( int ) {}
+      ConnectionState state() const { return StateConnected; }
+      bool authed() { return false; }
   };
-
 }
 
 #define CLIENTBASE_H__
@@ -63,31 +68,52 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   {
-    name = "receive search fields";
+    name = "receive reg fields";
     Tag* d = new Tag( "query" );
     d->setXmlns( XMLNS_REGISTER );
-    d->addChild( new Tag( "instructions", "foobar" ) );
-    d->addChild( new Tag( "first" ) );
-    d->addChild( new Tag( "last" ) );
-    d->addChild( new Tag( "email" ) );
-    d->addChild( new Tag( "nick" ) );
+    new Tag( d, "instructions", "foobar" );
+    new Tag( d, "username" );
+    new Tag( d, "password" );
+    new Tag( d, "email" );
     Registration::Query sq( d );
     Tag* t = sq.tag();
     if( !t || t->xml() != "<query xmlns='" + XMLNS_REGISTER + "'>"
          "<instructions>foobar</instructions>"
-         "<first/>"
-         "<last/>"
-         "<nick/>"
+         "<username/>"
+         "<password/>"
          "<email/>"
          "</query>"
          || sq.instructions() != "foobar"
-         || sq.fields() != ( SearchFieldFirst | SearchFieldLast | SearchFieldNick | SearchFieldEmail ) )
+         || sq.fields() != ( Registration::FieldUsername | Registration::FieldPassword
+                             | Registration::FieldEmail ) )
     {
       ++fail;
       printf( "test '%s' failed\n", name.c_str() );
     }
     delete t;
     delete d;
+  }
+
+  // -------
+  {
+    name = "reg by fields";
+    RegistrationFields rf;
+    rf.username = "foo";
+    rf.password = "bar";
+    rf.email = "email";
+    Registration::Query sq( Registration::FieldUsername | Registration::FieldPassword
+                            | Registration::FieldEmail, rf );
+    Tag* t = sq.tag();
+    if( !t || t->xml() != "<query xmlns='" + XMLNS_REGISTER + "'>"
+         "<username>foo</username>"
+         "<password>bar</password>"
+         "<email>email</email>"
+         "</query>" )
+    {
+      ++fail;
+      printf( "test '%s' failed\n", name.c_str() );
+    }
+    delete t;
   }
 
   // -------
@@ -114,7 +140,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   {
-    name = "search by form";
+    name = "reg by form";
     DataForm* form = new DataForm( TypeSubmit );
     Registration::Query sq( form );
     Tag* t = sq.tag();
@@ -130,15 +156,11 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   {
-    name = "search by fields";
-    SearchFieldStruct sfs( "first", "last", "nick", "email" );
-    Registration::Query sq( SearchFieldFirst | SearchFieldLast | SearchFieldNick | SearchFieldEmail, sfs );
+    name = "remove account";
+    Registration::Query sq( true );
     Tag* t = sq.tag();
     if( !t || t->xml() != "<query xmlns='" + XMLNS_REGISTER + "'>"
-         "<first>first</first>"
-         "<last>last</last>"
-         "<nick>nick</nick>"
-         "<email>email</email>"
+         "<remove/>"
          "</query>" )
     {
       ++fail;
@@ -149,63 +171,48 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   {
-    name = "receive form result";
+    name = "change password";
+    RegistrationFields rf;
+    rf.username = "foobar";
+    rf.password = "newpwd";
+    Registration::Query sq( Registration::FieldUsername | Registration::FieldPassword, rf );
+    Tag* t = sq.tag();
+    if( !t || t->xml() != "<query xmlns='" + XMLNS_REGISTER + "'>"
+         "<username>foobar</username>"
+         "<password>newpwd</password>"
+         "</query>" )
+    {
+      ++fail;
+      printf( "test '%s' failed\n", name.c_str() );
+    }
+    delete t;
+  }
+
+  // -------
+  {
+    name = "redirection";
     Tag* d = new Tag( "query" );
     d->setXmlns( XMLNS_REGISTER );
-    Tag* f = new Tag( d, "x" );
-    f->setXmlns( XMLNS_X_DATA );
-    f->addAttribute( "type", "result" );
+    new Tag( d, "instructions", "foobar" );
+    Tag* x = new Tag( d, "x" );
+    x->setXmlns( XMLNS_X_OOB );
+    new Tag( x, "url", "http://camaya.net/gloox" );
     Registration::Query sq( d );
     Tag* t = sq.tag();
     if( !t || t->xml() != "<query xmlns='" + XMLNS_REGISTER + "'>"
-         "<x xmlns='" + XMLNS_X_DATA + "' type='result'/>"
-         "</query>" )
+         "<instructions>foobar</instructions>"
+         "<x xmlns='" + XMLNS_X_OOB + "'>"
+         "<url>http://camaya.net/gloox</url>"
+         "</x>"
+         "</query>"
+         || sq.instructions() != "foobar"
+         || sq.oob()->url() != "http://camaya.net/gloox" )
     {
       ++fail;
       printf( "test '%s' failed\n", name.c_str() );
     }
     delete t;
     delete d;
-  }
-
-  // -------
-  {
-    name = "receive fields result";
-    Tag* d = new Tag( "query" );
-    d->setXmlns( XMLNS_REGISTER );
-    Tag* i = new Tag( d, "item" );
-    i->addAttribute( "jid", "foo@bar" );
-    i->addChild( new Tag( "first", "first1" ) );
-    i->addChild( new Tag( "last", "last1" ) );
-    i->addChild( new Tag( "email", "email1" ) );
-    i->addChild( new Tag( "nick", "nick1" ) );
-    i = new Tag( d, "item" );
-    i->addAttribute( "jid", "foo@bar2" );
-    i->addChild( new Tag( "first", "first2" ) );
-    i->addChild( new Tag( "last", "last2" ) );
-    i->addChild( new Tag( "nick", "nick2" ) );
-    i->addChild( new Tag( "email", "email2" ) );
-    Registration::Query sq( d );
-    Tag* t = sq.tag();
-    SearchResultList srl = sq.result();
-    if( !t || t->xml() != "<query xmlns='" + XMLNS_REGISTER + "'>"
-         "<item jid='foo@bar'>"
-         "<first>first1</first>"
-         "<last>last1</last>"
-         "<nick>nick1</nick>"
-         "<email>email1</email></item>"
-         "<item jid='foo@bar2'>"
-         "<first>first2</first>"
-         "<last>last2</last>"
-         "<nick>nick2</nick>"
-         "<email>email2</email></item>"
-         "</query>"
-       || srl.size() != 2 )
-    {
-      ++fail;
-      printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
-    }
-    delete t;
   }
 
 

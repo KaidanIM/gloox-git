@@ -35,6 +35,8 @@ namespace gloox
       virtual void send( IQ& iq, IqHandler*, int ) = 0;
       virtual void trackID( IqHandler *ih, const std::string& id, int context ) = 0;
       void removeIDHandler( IqHandler* ) {}
+      void registerStanzaExtension( StanzaExtension* ext ) { delete ext; }
+      void removeStanzaExtension( int ) {}
   };
 
 }

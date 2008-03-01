@@ -112,11 +112,17 @@ namespace gloox
   Search::Search( ClientBase* parent )
     : m_parent( parent )
   {
+    if( m_parent )
+      m_parent->registerStanzaExtension( new Query() );
   }
 
   Search::~Search()
   {
-    m_parent->removeIDHandler( this );
+    if( m_parent )
+    {
+      m_parent->removeIDHandler( this );
+      m_parent->removeStanzaExtension( ExtRoster );
+    }
   }
 
   void Search::fetchSearchFields( const JID& directory, SearchHandler* sh )

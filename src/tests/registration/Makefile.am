@@ -1,16 +1,15 @@
-
 ##
 ## Process this file with automake to produce Makefile.in
 ##
 
 AM_CPPFLAGS = -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare -Wpointer-arith -Wswitch -Wunknown-pragmas -Wconversion -Wundef -Wcast-qual -ansi
 
-noinst_PROGRAMS = registrationquery_test
+noinst_PROGRAMS = registration_test
 
-registrationquery_test_SOURCES = registrationquery_test.cpp
-registrationquery_test_LDADD = ../../stanza.o ../../jid.o ../../dataform.o ../../dataformfieldcontainer.o \
+registration_test_SOURCES = registration_test.cpp
+registration_test_LDADD = ../../stanza.o ../../jid.o ../../dataform.o ../../dataformfieldcontainer.o \
  		../../dataformreported.o ../../dataformitem.o ../../dataformfield.o ../../tag.o ../../prep.o \
- 		../../gloox.o ../../stanzaextensionfactory.o \
+ 		../../gloox.o ../../stanzaextensionfactory.o ../../oob.o \
 		../../iq.o ../../util.o ../../sha.o ../../base64.o \
-		../../error.o ../../oob.o
-registrationquery_test_CFLAGS = $(CPPFLAGS)
+		../../error.o
+registration_test_CFLAGS = $(CPPFLAGS)
