@@ -1118,7 +1118,13 @@ namespace gloox
     UserKicked             =   4,   /**< The user has been kicked. */
     UserBanned             =   8,   /**< The user has been banned. */
     UserAffiliationChanged =  16,   /**< The user's affiliation with the room changed. */
-    UserRoomDestroyed      =  32    /**< The room has been destroyed. */
+    UserRoomDestroyed      =  32,   /**< The room has been destroyed. */
+    UserInitialPresence    =  64,   /**< This is initial presence after a join. */
+    UserNewRoom            = 128,   /**< The room has been newly created. */
+    UserMembershipRequired = 256,   /**< User is being removed from the room because the room has
+                                     * been changed to members-only and the user is not a member. */
+    UserRoomShutdown       = 512    /**< User is being removed from the room because of a system
+                                     * shutdown. */
   };
 
   /**

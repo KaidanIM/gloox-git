@@ -275,8 +275,166 @@ namespace gloox
 
     return t;
   }
+  // ---- ~MUCRoom::MUCOwner ----
 
-  // ---- MUCRoom::MUCOwner ----
+  // ---- MUCRoom::MUCUser ----
+  MUCRoom::MUCUser::MUCUser( const Tag* tag )
+    : StanzaExtension( ExtMUCUser ), m_affiliation( AffiliationInvalid ), m_role( RoleInvalid ),
+      m_userFlags( 0 ), m_roomFlags( 0 ), m_del( false )
+  {
+    if( !tag || tag->name() != "x" || tag->xmlns() != XMLNS_MUC_USER )
+      return;
+
+    const Tag* t = 0;
+    const TagList& l = tag->children();
+    TagList::const_iterator it = l.begin();
+    for( ; it != l.end(); ++it )
+    {
+      if( (*it)->name() == "item" )
+      {
+        m_affiliation = getEnumAffiliation( (*it)->findAttribute( "affiliation" ) );
+        m_role = getEnumRole( (*it)->findAttribute( "role" ) );
+
+        m_jid = (*it)->findAttribute( "jid" );
+
+        if( ( t = (*it)->findChild( "actor" ) ) )
+          m_actor = t->findAttribute( "jid" );
+
+        if( ( t = (*it)->findChild( "reason" ) ) )
+          m_reason = t->cdata();
+
+        m_newNick = (*it)->findAttribute( "nick" );
+      }
+      else if( (*it)->name() == "status" )
+      {
+        const std::string& code = (*it)->findAttribute( "code" );
+        if( code == "100" )
+          m_roomFlags |= FlagNonAnonymous;
+        else if( code == "101" )
+        {
+              // affiliation changed while not in the room. not to be handled here, I guess
+        }
+        else if( code == "110" )
+          m_userFlags |= UserSelf;
+        else if( code == "170" )
+          m_roomFlags |= FlagPublicLogging;
+        else if( code == "201" )
+          m_userFlags |= UserNewRoom;
+        else if( code == "210" )
+          m_userFlags |= UserInitialPresence;
+        else if( code == "301" )
+          m_userFlags |= UserBanned;
+        else if( code == "303" )
+          m_userFlags |= UserNickChanged;
+        else if( code == "307" )
+          m_userFlags |= UserKicked;
+        else if( code == "321" )
+          m_userFlags |= UserAffiliationChanged;
+        else if( code == "322" )
+          m_userFlags |= UserMembershipRequired;
+        else if( code == "332" )
+          m_userFlags |= UserRoomShutdown;
+      }
+      else if( (*it)->name() == "destroy" )
+      {
+        m_del = true;
+        if( (*it)->hasAttribute( "jid" ) )
+          m_alternate = (*it)->findAttribute( "jid" );
+
+        if( ( t = (*it)->findChild( "reason" ) ) )
+          m_reason = t->cdata();
+
+        m_userFlags  |= UserRoomDestroyed;
+      }
+    }
+  }
+
+  MUCRoom::MUCUser::~MUCUser()
+  {
+  }
+
+  MUCRoomRole MUCRoom::MUCUser::getEnumRole( const std::string& role )
+  {
+    if( role == "moderator" )
+      return RoleModerator;
+    if( role == "participant" )
+      return RoleParticipant;
+    if( role == "visitor" )
+      return RoleVisitor;
+    return RoleNone;
+  }
+
+  MUCRoomAffiliation MUCRoom::MUCUser::getEnumAffiliation( const std::string& affiliation )
+  {
+    if( affiliation == "owner" )
+      return AffiliationOwner;
+    if( affiliation == "admin" )
+      return AffiliationAdmin;
+    if( affiliation == "member" )
+      return AffiliationMember;
+    if( affiliation == "outcast" )
+      return AffiliationOutcast;
+    return AffiliationNone;
+  }
+
+  const std::string& MUCRoom::MUCUser::filterString() const
+  {
+    static const std::string filter = "/presence/x[@xmlns='" + XMLNS_MUC_USER + "']"
+                                      "|/message/x[@xmlns='" + XMLNS_MUC_USER + "']";
+    return filter;
+  }
+
+  Tag* MUCRoom::MUCUser::tag() const
+  {
+    Tag* t = new Tag( "x" );
+    t->setXmlns( XMLNS_MUC_USER );
+
+    if( m_affiliation != AffiliationInvalid || m_role != RoleInvalid )
+    {
+      Tag* i = new Tag( t, "item" );
+      if( !m_jid.empty() )
+        i->addAttribute( "jid", m_jid );
+      if( m_role != RoleInvalid )
+        i->addAttribute( "role", util::lookup( m_role, roleValues ) );
+      if( m_affiliation != AffiliationInvalid )
+        i->addAttribute( "affiliation", util::lookup( m_affiliation, affiliationValues ) );
+
+      if( m_roomFlags & FlagNonAnonymous )
+        new Tag( t, "status", "code", "100" );
+//       else if( ??? )
+//         new Tag( t, "status", "code", "100" );
+      if( m_userFlags & UserSelf )
+        new Tag( t, "status", "code", "110" );
+      if( m_roomFlags & FlagPublicLogging )
+        new Tag( t, "status", "code", "170" );
+      if( m_userFlags & UserNewRoom )
+        new Tag( t, "status", "code", "201" );
+      if( m_userFlags & UserInitialPresence )
+        new Tag( t, "status", "code", "210" );
+      if( m_userFlags & UserBanned )
+        new Tag( t, "status", "code", "301" );
+      if( m_userFlags & UserNickChanged )
+        new Tag( t, "status", "code", "303" );
+      if( m_userFlags & UserKicked )
+        new Tag( t, "status", "code", "307" );
+      if( m_userFlags & UserAffiliationChanged )
+        new Tag( t, "status", "code", "321" );
+      if( m_userFlags & UserMembershipRequired )
+        new Tag( t, "status", "code", "322" );
+      if( m_userFlags & UserRoomShutdown )
+        new Tag( t, "status", "code", "332" );
+    }
+    else if( m_del )
+    {
+      Tag* d = new Tag( t, "destroy" );
+      if( !m_alternate.empty() )
+        d->addAttribute( "jid", m_alternate );
+      if( !m_reason.empty() )
+        new Tag( d, "reason", m_reason );
+    }
+    return t;
+  }
+  // ---- ~MUCRoom::MUCUser ----
 
   // --- MUCRoom ----
   MUCRoom::MUCRoom( ClientBase* parent, const JID& nick, MUCRoomHandler* mrh,
@@ -634,8 +792,8 @@ namespace gloox
         {
           if( (*it)->name() == "item" )
           {
-            party.affiliation = getEnumAffiliation( (*it)->findAttribute( "affiliation" ) );
-            party.role = getEnumRole( (*it)->findAttribute( "role" ) );
+            party.affiliation = MUCUser::getEnumAffiliation( (*it)->findAttribute( "affiliation" ) );
+            party.role = MUCUser::getEnumRole( (*it)->findAttribute( "role" ) );
 
             const std::string& jid = (*it)->findAttribute( "jid" );
             if( !jid.empty() )
@@ -1064,30 +1222,6 @@ namespace gloox
                                     m_publishNick ? m_nick.resource() : EmptyString ) );
     }
     return l;
-  }
-
-  MUCRoomRole MUCRoom::getEnumRole( const std::string& role )
-  {
-    if( role == "moderator" )
-      return RoleModerator;
-    if( role == "participant" )
-      return RoleParticipant;
-    if( role == "visitor" )
-      return RoleVisitor;
-    return RoleNone;
-  }
-
-  MUCRoomAffiliation MUCRoom::getEnumAffiliation( const std::string& affiliation )
-  {
-    if( affiliation == "owner" )
-      return AffiliationOwner;
-    if( affiliation == "admin" )
-      return AffiliationAdmin;
-    if( affiliation == "member" )
-      return AffiliationMember;
-    if( affiliation == "outcast" )
-      return AffiliationOutcast;
-    return AffiliationNone;
   }
 
 }

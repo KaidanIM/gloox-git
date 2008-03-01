@@ -668,6 +668,61 @@ namespace gloox
           MUCRoomRole m_role;
       };
 
+      /**
+       * @brief An abstraction of a MUC user query.
+       *
+       * @author Jakob Schroeter <js@camaya.net>
+       * @since 1.0
+       */
+      class MUCUser : public StanzaExtension
+      {
+        public:
+          /**
+           * Constructs a new MUCUser object from the given Tag.
+           * @param tag The Tag to parse.
+           */
+          MUCUser( const Tag* tag = 0 );
+
+          /**
+           * Virtual destructor.
+           */
+          virtual ~MUCUser();
+
+          /**
+           *
+           */
+          static MUCRoomAffiliation getEnumAffiliation( const std::string& affiliation );
+
+          /**
+           *
+           */
+          static MUCRoomRole getEnumRole( const std::string& role );
+
+          // reimplemented from StanzaExtension
+          const std::string& filterString() const;
+
+          // reimplemented from StanzaExtension
+          StanzaExtension* newInstance( const Tag* tag ) const
+          {
+            return new MUCUser( tag );
+          }
+
+          // reimplemented from StanzaExtension
+          Tag* tag() const;
+
+        private:
+          MUCRoomAffiliation m_affiliation;
+          MUCRoomRole m_role;
+          std::string m_jid;
+          std::string m_actor;
+          std::string m_reason;
+          std::string m_newNick;
+          std::string m_alternate;
+          int m_userFlags;
+          int m_roomFlags;
+          bool m_del;
+      };
+
       void handleIqResult( const IQ& iq, int context );
       void handleIqError( const IQ& iq, int context );
       void setNonAnonymous();
@@ -675,8 +730,6 @@ namespace gloox
       void setFullyAnonymous();
       void acknowledgeRoomCreation();
       void instantRoom( int context );
-      MUCRoomAffiliation getEnumAffiliation( const std::string& affiliation );
-      MUCRoomRole getEnumRole( const std::string& role );
 
       MUCRoomHandler* m_roomHandler;
       MUCRoomConfigHandler* m_roomConfigHandler;
