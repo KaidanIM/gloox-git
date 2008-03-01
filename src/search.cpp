@@ -131,19 +131,20 @@ namespace gloox
       return;
 
     const std::string& id = m_parent->getID();
-    IQ iq( IQ::Get, directory, id, XMLNS_SEARCH );
+    IQ iq( IQ::Get, directory );
+    iq.addExtension( new Query() );
     m_track[id] = sh;
     m_parent->send( iq, this, FetchSearchFields );
   }
 
-  void Search::search( const JID& directory, const DataForm& form, SearchHandler* sh )
+  void Search::search( const JID& directory, DataForm* form, SearchHandler* sh )
   {
     if( !m_parent || !directory || !sh )
       return;
 
     const std::string& id = m_parent->getID();
-    IQ iq( IQ::Set, directory, id, XMLNS_SEARCH );
-    iq.query()->addChild( form.tag() );
+    IQ iq( IQ::Set, directory );
+    iq.addExtension( new Query( form ) );
 
     m_track[id] = sh;
     m_parent->send( iq, this, DoSearch );
@@ -156,17 +157,8 @@ namespace gloox
 
     const std::string& id = m_parent->getID();
 
-    IQ iq( IQ::Set, directory, id, XMLNS_SEARCH );
-    Tag* q = iq.query();
-
-    if( fields & SearchFieldFirst )
-      new Tag( q, "first", values.first() );
-    if( fields & SearchFieldLast )
-      new Tag( q, "last", values.last() );
-    if( fields & SearchFieldNick )
-      new Tag( q, "nick", values.nick() );
-    if( fields & SearchFieldEmail )
-      new Tag( q, "email", values.email() );
+    IQ iq( IQ::Set, directory );
+    iq.addExtension( new Query( fields, values ) );
 
     m_track[id] = sh;
     m_parent->send( iq, this, DoSearch );
