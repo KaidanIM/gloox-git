@@ -521,7 +521,12 @@ namespace gloox
     if( stanza->subtype() == StanzaPresenceError )
     {
       if( m_newNick.empty() )
+      {
+        m_parent->removePresenceHandler( m_nick.bareJID(), this );
+        m_parent->disposeMessageSession( m_session );
         m_joined = false;
+        m_session = 0;
+      }
       else
         m_newNick = "";
       m_roomHandler->handleMUCError( this, stanza->error() );
@@ -874,31 +879,29 @@ namespace gloox
       case RequestAdminList:
       {
         Tag *x = 0;
-        Tag *q = stanza->findChild( "query", "xmlns", XMLNS_MUC_OWNER );
-        if( q )
-          x = q->findChild( "x", "xmlns", XMLNS_X_DATA );
-        if( x )
+        Tag *q = stanza->findChild( "query", "xmlns", XMLNS_MUC_ADMIN );
+        if( !q )
+          break;
+        MUCListItemList itemList;
+        const Tag::TagList& items = x->findChildren( "item" );
+        Tag::TagList::const_iterator it = items.begin();
+        for( ; it != items.end(); ++it )
         {
-          MUCListItemList itemList;
-          const Tag::TagList& items = x->findChildren( "item" );
-          Tag::TagList::const_iterator it = items.begin();
-          for( ; it != items.end(); ++it )
-          {
-            MUCListItem item;
-            item.jid = 0;
-            item.role = getEnumRole( (*it)->findAttribute( "role" ) );
-            item.affiliation = getEnumAffiliation( (*it)->findAttribute( "affiliation" ) );
-            if( (*it)->hasAttribute( "jid" ) )
-              item.jid = new JID( (*it)->findAttribute( "jid" ) );
-            item.nick = (*it)->findAttribute( "nick" );
-            itemList.push_back( item );
-          }
-          m_roomConfigHandler->handleMUCConfigList( this, itemList, (MUCOperation)context );
-
-          MUCListItemList::iterator itl = itemList.begin();
-          for( ; itl != itemList.end(); ++itl )
-            delete (*itl).jid;
+          MUCListItem item;
+          item.jid = 0;
+          item.role = getEnumRole( (*it)->findAttribute( "role" ) );
+          item.affiliation = getEnumAffiliation( (*it)->findAttribute( "affiliation" ) );
+          if( (*it)->hasAttribute( "jid" ) )
+            item.jid = new JID( (*it)->findAttribute( "jid" ) );
+          item.nick = (*it)->findAttribute( "nick" );
+          itemList.push_back( item );
         }
+        m_roomConfigHandler->handleMUCConfigList( this, itemList, (MUCOperation)context );
+
+        MUCListItemList::iterator itl = itemList.begin();
+        for( ; itl != itemList.end(); ++itl )
+          delete (*itl).jid;
+
         return true;
         break;
       }
