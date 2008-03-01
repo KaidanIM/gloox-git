@@ -449,6 +449,7 @@ namespace gloox
     {
       m_parent->registerStanzaExtension( new MUCAdmin() );
       m_parent->registerStanzaExtension( new MUCOwner() );
+      m_parent->registerStanzaExtension( new DelayedDelivery() );
     }
   }
 
