@@ -104,6 +104,8 @@ class RegistrationTest : public gloox::RegistrationHandler, public gloox::Client
     {
       m_context = context;
       gloox::Tag* tag = iq.tag();
+      if( !tag->hasAttribute( "id" ) )
+        tag->addAttribute( "id", "id" );
 
       switch( m_test )
       {
@@ -178,7 +180,7 @@ class RegistrationTest : public gloox::RegistrationHandler, public gloox::Client
     void fetchRegistrationFields() { m_reg.fetchRegistrationFields(); }
     void createAccount( int fields, const gloox::RegistrationFields& values )
       { m_reg.createAccount( fields, values ); }
-    void createAccount( gloox::DataForm& form )
+    void createAccount( gloox::DataForm* form )
       { m_reg.createAccount( form ); }
     void removeAccount() { m_reg.removeAccount(); }
     void changePassword( const std::string& username, const std::string& password )
@@ -316,7 +318,7 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   {
     name = "register (form)";
-    gloox::DataForm form( gloox::TypeSubmit );
+    gloox::DataForm* form = new gloox::DataForm( gloox::TypeSubmit );
     t.setTest( 6 );
     t.createAccount( form );
     if( !t.result() )

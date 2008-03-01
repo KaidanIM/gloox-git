@@ -107,6 +107,8 @@ class SearchTest : public gloox::SearchHandler, public gloox::ClientBase
     {
       m_context = context;
       gloox::Tag* tag = iq.tag();
+      if( !tag->hasAttribute( "id" ) )
+        tag->addAttribute( "id", "id" );
 
       switch( m_test )
       {
