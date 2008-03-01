@@ -603,12 +603,17 @@ namespace gloox
     if( presence.subtype() == Presence::Error  )
     {
       if( m_newNick.empty() )
+      {
+        m_parent->removePresenceHandler( m_nick.bareJID(), this );
+        m_parent->disposeMessageSession( m_session );
         m_joined = false;
+        m_session = 0;
+      }
       else
         m_newNick = "";
       m_roomHandler->handleMUCError( this, presence.error()
-                                             ? presence.error()->error()
-                                             : StanzaErrorUndefined );
+                                           ? presence.error()->error()
+                                           : StanzaErrorUndefined );
     }
     else
     {
