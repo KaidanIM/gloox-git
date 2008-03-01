@@ -1232,7 +1232,6 @@ namespace gloox
       if( (*itj).jid->bare() == pres.from().bare() && (*itj).ph )
       {
         (*itj).ph->handlePresence( pres );
-        (*itj).ph->handlePresence( &pres ); // FIXME remove for 1.1
         match = true;
       }
     }
@@ -1244,7 +1243,6 @@ namespace gloox
     for( ; it != m_presenceHandlers.end(); ++it )
     {
       (*it)->handlePresence( pres );
-      (*it)->handlePresence( &pres ); // FIXME remove for 1.1
     }
       // FIXME and reinstantiate this:
 //     util::ForEach( m_presenceHandlers, &PresenceHandler::handlePresence, pres );
@@ -1257,7 +1255,6 @@ namespace gloox
     for( ; it != m_subscriptionHandlers.end(); ++it )
     {
       (*it)->handleSubscription( s10n );
-      (*it)->handleSubscription( &s10n ); // FIXME remove for 1.1
     }
       // FIXME and reinstantiate this:
 //     util::ForEach( m_subscriptionHandlers, &SubscriptionHandler::handleSubscription, s10n );
@@ -1269,7 +1266,6 @@ namespace gloox
     if( it_id != m_iqIDHandlers.end() && iq.subtype() & ( IQ::Result | IQ::Error ) )
     {
       (*it_id).second.ih->handleIqID( iq, (*it_id).second.context );
-      (*it_id).second.ih->handleIqID( &iq, (*it_id).second.context ); // FIXME remove for 1.1
       if( (*it_id).second.del )
         delete (*it_id).second.ih;
       m_iqIDHandlers.erase( it_id );
@@ -1288,8 +1284,6 @@ namespace gloox
     {
       if( (*it).second->handleIq( iq ) )
         res = true;
-      if( (*it).second->handleIq( &iq ) ) // FIXME remove for 1.1
-        res = true;
     }
 
     typedef IqHandlerMap::const_iterator IQci;
@@ -1301,8 +1295,6 @@ namespace gloox
       for( IQci it = g.first; it != g.second; ++it )
       {
         if( (*it).second->handleIq( iq ) )
-          res = true;
-        if( (*it).second->handleIq( &iq ) ) // FIXME remove for 1.1
           res = true;
       }
     }
@@ -1399,10 +1391,8 @@ namespace gloox
       for( ; it != m_messageHandlers.end(); ++it )
       {
         (*it)->handleMessage( msg );
-        (*it)->handleMessage( &msg );
       }
       // FIXME and reinstantiate this:
-//       util::ForEach( m_messageHandlers, &MessageHandler::handleMessage, *msg );
 //       util::ForEach( m_messageHandlers, &MessageHandler::handleMessage, msg ); // FIXME remove for 1.1
     }
   }

@@ -534,10 +534,10 @@ namespace gloox
       void removeNodeHandlers( DiscoNodeHandler* nh );
 
       // reimplemented from IqHandler.
-      virtual bool handleIq( IQ* iq ); // FIXME remove for 1.1
+      virtual bool handleIq( const IQ& iq );
 
       // reimplemented from IqHandler.
-      virtual void handleIqID( IQ* iq, int context ); // FIXME remove for 1.1
+      virtual void handleIqID( const IQ& iq, int context );
 
     private:
 #ifdef DISCO_TEST

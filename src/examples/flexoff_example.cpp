@@ -1,7 +1,6 @@
 #include "../client.h"
 #include "../messagehandler.h"
 #include "../connectionlistener.h"
-#include "../discohandler.h"
 #include "../disco.h"
 #include "../message.h"
 #include "../gloox.h"
@@ -16,7 +15,7 @@ using namespace gloox;
 #include <locale.h>
 #include <string>
 
-class FlexOffTest : public DiscoHandler, MessageHandler, ConnectionListener, FlexibleOfflineHandler,
+class FlexOffTest : public MessageHandler, ConnectionListener, FlexibleOfflineHandler,
                            LogHandler
 {
   public:
@@ -30,7 +29,6 @@ class FlexOffTest : public DiscoHandler, MessageHandler, ConnectionListener, Fle
       j = new Client( jid, "hurkhurks" );
       j->registerConnectionListener( this );
       j->registerMessageHandler( this );
-      j->disco()->registerDiscoHandler( this );
       j->disco()->setVersion( "messageTest", GLOOX_VERSION, "Linux" );
       j->disco()->setIdentity( "client", "bot" );
       StringList ca;
@@ -66,21 +64,6 @@ class FlexOffTest : public DiscoHandler, MessageHandler, ConnectionListener, Fle
               info.protocol.c_str(), info.mac.c_str(), info.cipher.c_str(),
               info.compression.c_str() );
       return true;
-    }
-
-    virtual void handleDiscoInfoResult( IQ* /*iq*/, int /*context*/ )
-    {
-      printf( "handleDiscoInfoResult}\n" );
-    }
-
-    virtual void handleDiscoItemsResult( IQ* /*iq*/, int /*context*/ )
-    {
-      printf( "handleDiscoItemsResult\n" );
-    }
-
-    virtual void handleDiscoError( IQ* /*iq*/, int /*context*/ )
-    {
-      printf( "handleDiscoError\n" );
     }
 
     virtual void handleMessage( Message* msg, MessageSession * /*session*/ )
@@ -121,12 +104,12 @@ class FlexOffTest : public DiscoHandler, MessageHandler, ConnectionListener, Fle
       f->fetchHeaders();
     }
 
-    virtual void handleFlexibleOfflineMessageHeaders( StringMap& headers )
+    virtual void handleFlexibleOfflineMessageHeaders( const Disco::ItemList& headers )
     {
       printf( "FlexOff: %d headers received.\n", headers.size() );
       StringList l;
       l.push_back( "Fdd" );
-      l.push_back( (*(headers.begin())).first );
+      l.push_back( (*(headers.begin()))->node() );
       f->fetchMessages( l );
       f->removeMessages( l );
     }

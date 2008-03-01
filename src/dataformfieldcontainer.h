@@ -55,7 +55,7 @@ namespace gloox
         * @param field The name of the field (the content of the 'var' attribute).
         * @return Whether or not the form contains the named field.
         */
-      bool hasField( const std::string& field )
+      bool hasField( const std::string& field ) const
         { return DataFormFieldContainer::field( field ) != 0; }
 
       /**

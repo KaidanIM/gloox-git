@@ -333,15 +333,15 @@ namespace gloox
     }
   }
 
-  bool Disco::handleIq( IQ* iq )
+  bool Disco::handleIq( const IQ& iq )
   {
-    switch( iq->subtype() )
+    switch( iq.subtype() )
     {
       case IQ::Get:
       {
-        IQ re( IQ::Result, iq->from(), iq->id() );
+        IQ re( IQ::Result, iq.from(), iq.id() );
 
-        const SoftwareVersion* sv = iq->findExtension<SoftwareVersion>( ExtVersion );
+        const SoftwareVersion* sv = iq.findExtension<SoftwareVersion>( ExtVersion );
         if( sv )
         {
           re.addExtension( new SoftwareVersion( m_versionName, m_versionVersion, m_versionOs ) );
@@ -349,7 +349,7 @@ namespace gloox
           return true;
         }
 
-        const Info *info = iq->findExtension<Info>( ExtDiscoInfo );
+        const Info *info = iq.findExtension<Info>( ExtDiscoInfo );
         if( info )
         {
           Info *i = new Info();
@@ -362,7 +362,7 @@ namespace gloox
             if( it == m_nodeHandlers.end() )
             {
               delete i;
-              IQ re( IQ::Error, iq->from(), iq->id() );
+              IQ re( IQ::Error, iq.from(), iq.id() );
               re.addExtension( new Error( StanzaErrorTypeCancel, StanzaErrorItemNotFound ) );
               m_parent->send( re );
               return true;
@@ -372,9 +372,9 @@ namespace gloox
               DiscoNodeHandlerList::const_iterator in = (*it).second.begin();
               for( ; in != (*it).second.end(); ++in )
               {
-                IdentityList il = (*in)->handleDiscoNodeIdentities( iq->from(), info->node() );
+                IdentityList il = (*in)->handleDiscoNodeIdentities( iq.from(), info->node() );
                 identities.merge( il );
-                StringList fl = (*in)->handleDiscoNodeFeatures( iq->from(), info->node() );
+                StringList fl = (*in)->handleDiscoNodeFeatures( iq.from(), info->node() );
                 features.merge( fl );
               }
             }
@@ -398,7 +398,7 @@ namespace gloox
           return true;
         }
 
-        const Items *items = iq->findExtension<Items>( ExtDiscoItems );
+        const Items *items = iq.findExtension<Items>( ExtDiscoItems );
         if( items )
         {
           Items *i = new Items( items->node() );
@@ -408,7 +408,7 @@ namespace gloox
             if( it == m_nodeHandlers.end() )
             {
               delete i;
-              IQ re( IQ::Error, iq->from(), iq->id() );
+              IQ re( IQ::Error, iq.from(), iq.id() );
               re.addExtension( new Error( StanzaErrorTypeCancel, StanzaErrorItemNotFound ) );
               m_parent->send( re );
               return true;
@@ -419,7 +419,7 @@ namespace gloox
               DiscoNodeHandlerList::const_iterator in = (*it).second.begin();
               for( ; in != (*it).second.end(); ++in )
               {
-                ItemList il = (*in)->handleDiscoNodeItems( iq->from(), items->node() );
+                ItemList il = (*in)->handleDiscoNodeItems( iq.from(), items->node() );
                 itemlist.merge( il );
               }
               i->setItems( itemlist );
@@ -452,30 +452,28 @@ namespace gloox
     return false;
   }
 
-  void Disco::handleIqID( IQ* iq, int context )
+  void Disco::handleIqID( const IQ& iq, int context )
   {
-    DiscoHandlerMap::iterator it = m_track.find( iq->id() );
+    DiscoHandlerMap::iterator it = m_track.find( iq.id() );
     if( it != m_track.end() )
     {
-      switch( iq->subtype() )
+      switch( iq.subtype() )
       {
         case IQ::Result:
           switch( context )
           {
             case GetDiscoInfo:
             {
-              const Info* di = iq->findExtension<Info>( ExtDiscoInfo );
+              const Info* di = iq.findExtension<Info>( ExtDiscoInfo );
               if( di )
-                (*it).second.dh->handleDiscoInfo( iq->from(), *di, (*it).second.context );
-              (*it).second.dh->handleDiscoInfoResult( iq, (*it).second.context );
+                (*it).second.dh->handleDiscoInfo( iq.from(), *di, (*it).second.context );
               break;
             }
             case GetDiscoItems:
             {
-              const Items* di = iq->findExtension<Items>( ExtDiscoItems );
+              const Items* di = iq.findExtension<Items>( ExtDiscoItems );
               if( di )
-                (*it).second.dh->handleDiscoItems( iq->from(), *di, (*it).second.context );
-              (*it).second.dh->handleDiscoItemsResult( iq, (*it).second.context );
+                (*it).second.dh->handleDiscoItems( iq.from(), *di, (*it).second.context );
               break;
             }
           }
@@ -483,8 +481,7 @@ namespace gloox
 
         case IQ::Error:
         {
-          (*it).second.dh->handleDiscoError( iq->from(), iq->error(), (*it).second.context );
-          (*it).second.dh->handleDiscoError( iq, (*it).second.context );
+          (*it).second.dh->handleDiscoError( iq.from(), iq.error(), (*it).second.context );
           break;
         }
 

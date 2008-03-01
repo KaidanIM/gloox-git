@@ -55,16 +55,6 @@ namespace gloox
         (void)session;
       }
 
-      /**
-       * Reimplement this function if you want to be notified about
-       * incoming messages.
-       * @param msg The complete Message.
-       * @param session If this MessageHandler is used with a MessageSession, this parameter
-       * holds a pointer to that MessageSession.
-       * @deprecated Use handleMessage( const Message&, MessageSession* ) instead.
-       * This function will be gone in the next major release.
-       */
-      virtual GLOOX_DEPRECATED void handleMessage( Message* msg, MessageSession* session = 0 ) = 0; // FIXME remove for 1.1
   };
 
 }

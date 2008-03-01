@@ -47,23 +47,7 @@ namespace gloox
        * @param context A context identifier.
        * @since 1.0
        */
-      virtual void handleDiscoInfo( const JID& from, const Disco::Info& info, int context )
-      {
-        (void)from;
-        (void)info;
-        (void)context;
-      }
-
-      /**
-       * Reimplement this function if you want to be notified about the result
-       * of an disco#info query.
-       * @param iq The full IQ.
-       * @param context A context identifier.
-       * @todo Replace the stanza with decoded values.
-       * @deprecated Use handleDiscoInfo( const JID&, const Disco::Info&, int ) instead.
-       * This function will be gone in the next major release.
-       */
-      virtual GLOOX_DEPRECATED void handleDiscoInfoResult( IQ* iq, int context ) = 0; // FIXME remove for 1.1
+      virtual void handleDiscoInfo( const JID& from, const Disco::Info& info, int context ) = 0;
 
       /**
        * Reimplement this function if you want to be notified about the result
@@ -73,23 +57,7 @@ namespace gloox
        * @param context A context identifier.
        * @since 1.0
        */
-      virtual void handleDiscoItems( const JID& from, const Disco::Items& items, int context )
-      {
-        (void)from;
-        (void)items;
-        (void)context;
-      }
-
-      /**
-       * Reimplement this function if you want to be notified about the result
-       * of an disco#items query.
-       * @param iq The full IQ.
-       * @param context A context identifier.
-       * @todo Replace the stanza with decoded values.
-       * @deprecated Use handleDiscoItems( const JID&, const Disco::Items&, int ) instead.
-       * This function will be gone in the next major release.
-       */
-      virtual GLOOX_DEPRECATED void handleDiscoItemsResult( IQ* iq, int context ) = 0; // FIXME remove for 1.1
+      virtual void handleDiscoItems( const JID& from, const Disco::Items& items, int context ) = 0;
 
       /**
        * Reimplement this function to receive disco error notifications.
@@ -98,22 +66,7 @@ namespace gloox
        * @param context A context identifier.
        * @since 1.0
        */
-      virtual void handleDiscoError( const JID& from, const Error* error, int context )
-      {
-        (void)from;
-        (void)error;
-        (void)context;
-      }
-
-      /**
-       * Reimplement this function to receive disco error notifications.
-       * @param iq The full IQ.
-       * @param context A context identifier.
-       * @todo Replace the stanza with decoded values.
-       * @deprecated Use handleDiscoError( const JID&, const Error*, int ) instead.
-       * This function will be gone in the next major release.
-       */
-      virtual GLOOX_DEPRECATED void handleDiscoError( IQ* iq, int context ) = 0; // FIXME remove for 1.1
+      virtual void handleDiscoError( const JID& from, const Error* error, int context ) = 0;
 
       /**
        * Reimplement this function to receive notifications about incoming IQ
@@ -122,7 +75,7 @@ namespace gloox
        * @return Returns @b true if the stanza was handled and answered, @b false otherwise.
        * @todo Replace the stanza with decoded values.
        */
-      virtual bool handleDiscoSet( IQ* iq ) { (void)iq; return false; }
+      virtual bool handleDiscoSet( const IQ& iq ) { (void)iq; return false; }
 
   };
 

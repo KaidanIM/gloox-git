@@ -47,17 +47,17 @@ class ComponentTest : public DiscoHandler, ConnectionListener, LogHandler
       return true;
     }
 
-    virtual void handleDiscoInfoResult( IQ* /*iq*/, int /*context*/ )
+    virtual void handleDiscoInfo( const JID& /*iq*/, const Disco::Info&, int /*context*/ )
     {
       printf( "handleDiscoInfoResult}\n" );
     }
 
-    virtual void handleDiscoItemsResult( IQ* /*iq*/, int /*context*/ )
+    virtual void handleDiscoItems( const JID& /*iq*/, const Disco::Items&, int /*context*/ )
     {
       printf( "handleDiscoItemsResult\n" );
     }
 
-    virtual void handleDiscoError( IQ* /*iq*/, int /*context*/ )
+    virtual void handleDiscoError( const JID& /*iq*/, const Error*, int /*context*/ )
     {
       printf( "handleDiscoError\n" );
     }

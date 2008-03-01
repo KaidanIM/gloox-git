@@ -42,15 +42,6 @@ namespace gloox
        */
       virtual void handleSubscription( const Subscription& subscription ) { (void)subscription; }
 
-      /**
-       * Reimplement this function if you want to be notified about incoming
-       * subscriptions/subscription requests.
-       * @param subscription The complete Subscription stanza.
-       * @deprecated Use handleSubscription( const Subscription& ) instead.
-       * This function will be gone in the next major release.
-       */
-      virtual GLOOX_DEPRECATED void handleSubscription( Subscription* subscription ) = 0; // FIXME remove for 1.1
-
   };
 
 }

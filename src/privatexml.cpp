@@ -53,7 +53,7 @@ namespace gloox
     if( !m_parent )
       return;
 
-    m_parent->registerIqHandler( this, XMLNS_PRIVATE_XML );
+    m_parent->registerIqHandler( this, ExtPrivateXML );
     m_parent->registerStanzaExtension( new Query() );
   }
 
@@ -62,7 +62,7 @@ namespace gloox
     if( !m_parent )
       return;
 
-    m_parent->removeIqHandler( this, XMLNS_PRIVATE_XML );
+    m_parent->removeIqHandler( this, ExtPrivateXML );
     m_parent->removeIDHandler( this );
     m_parent->removeStanzaExtension( ExtPrivateXML );
   }

@@ -43,15 +43,6 @@ namespace gloox
        */
       virtual void handlePresence( const Presence& presence ) { (void)presence; }
 
-      /**
-       * Reimplement this function if you want to be updated on
-       * incoming presence notifications.
-       * @param presence The complete stanza.
-       * @deprecated Use handlePresence( const Presence& ) instead.
-       * This function will be gone in the next major release.
-       */
-      virtual GLOOX_DEPRECATED void handlePresence( Presence* presence ) = 0; // FIXME remove for 1.1
-
   };
 
 }
