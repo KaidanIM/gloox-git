@@ -79,7 +79,7 @@ namespace gloox
     m_flexibleOfflineHandler = 0;
   }
 
-  void FlexibleOffline::handleDiscoInfoResult( IQ* iq, int context )
+  void FlexibleOffline::handleDiscoInfo( const JID& /*from*/, const Disco::Info& info, int context )
   {
     if( !m_flexibleOfflineHandler )
       return;
@@ -87,41 +87,29 @@ namespace gloox
     switch( context )
     {
       case FOCheckSupport:
-        m_flexibleOfflineHandler->handleFlexibleOfflineSupport(
-            iq->query()->hasChild( "feature", "var", XMLNS_OFFLINE ) );
+        m_flexibleOfflineHandler->handleFlexibleOfflineSupport( info.hasFeature( XMLNS_OFFLINE ) );
         break;
 
       case FORequestNum:
         int num = -1;
-        DataForm f( iq->query()->findChild( "x" ) );
-        if( f.hasField( "number_of_messages" ) )
-          num = atoi( f.field( "number_of_messages" )->value().c_str() );
+        if( info.form() && info.form()->hasField( "number_of_messages" ) )
+          num = atoi( info.form()->field( "number_of_messages" )->value().c_str() );
 
         m_flexibleOfflineHandler->handleFlexibleOfflineMsgNum( num );
         break;
     }
   }
 
-  void FlexibleOffline::handleDiscoItemsResult( IQ* iq, int context )
+  void FlexibleOffline::handleDiscoItems( const JID& /*from*/, const Disco::Items& items, int context )
   {
     if( context == FORequestHeaders && m_flexibleOfflineHandler )
     {
-      Tag* q = iq->query();
-      if( q && q->hasAttribute( XMLNS, XMLNS_DISCO_ITEMS ) && q->hasAttribute( "node", XMLNS_OFFLINE ) )
-      {
-        StringMap m;
-        const TagList& l = q->children();
-        TagList::const_iterator it = l.begin();
-        for( ; it != l.end(); ++it )
-        {
-          m[(*it)->findAttribute( "node" )] = (*it)->findAttribute( "name" );
-        }
-        m_flexibleOfflineHandler->handleFlexibleOfflineMessageHeaders( m );
-      }
+      if( items.node() == XMLNS_OFFLINE )
+        m_flexibleOfflineHandler->handleFlexibleOfflineMessageHeaders( items.items() );
     }
   }
 
-  void FlexibleOffline::handleDiscoError( IQ * /*iq*/, int /*context*/ )
+  void FlexibleOffline::handleDiscoError( const JID& /*from*/, const Error* /*error*/, int /*context*/ )
   {
   }
 

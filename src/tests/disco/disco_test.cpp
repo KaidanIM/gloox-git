@@ -186,7 +186,7 @@ void DiscoTest::send( const IQ& iq, IqHandler*, int ctx )
     new Tag( q, "feature", "var", "foofeature" );
     new Tag( q, "feature", "var", "foofeature2" );
     re.addExtension( new Disco::Info( q ) );
-    m_disco->handleIqID( &re, ctx );
+    m_disco->handleIqID( re, ctx );
   }
   else if( m_test == 9 )
   {
@@ -201,13 +201,13 @@ void DiscoTest::send( const IQ& iq, IqHandler*, int ctx )
     i->addAttribute( "node", "node2" );
     i->addAttribute( "name", "name2" );
     re.addExtension( new Disco::Items( q ) );
-    m_disco->handleIqID( &re, ctx );
+    m_disco->handleIqID( re, ctx );
   }
   else if( m_test == 10 )
   {
     IQ re( IQ::Error, iq.from(), iq.id() );
     re.addExtension( new Error( StanzaErrorTypeCancel, StanzaErrorItemNotFound ) );
-    m_disco->handleIqID( &re, ctx );
+    m_disco->handleIqID( re, ctx );
   }
 
   delete q;
@@ -233,7 +233,7 @@ int main( int /*argc*/, char** /*argv*/ )
     d->addIdentity( "foocat2", "footype2", "fooname2" );
     IQ iq( IQ::Get, JID(), dt->getID() );
     iq.addExtension( new Disco::Info() );
-    d->handleIq( &iq );
+    d->handleIq( iq );
     if( !dt->checkResult() )
     {
       ++fail;
@@ -249,7 +249,7 @@ int main( int /*argc*/, char** /*argv*/ )
     d->setIdentity( "foocat", "footype", "fooname" );
     IQ iq( IQ::Get, JID(), dt->getID() );
     iq.addExtension( new Disco::Info() );
-    d->handleIq( &iq );
+    d->handleIq( iq );
     if( !dt->checkResult() )
     {
       ++fail;
@@ -263,7 +263,7 @@ int main( int /*argc*/, char** /*argv*/ )
     dt->setTest( 3 );
     IQ iq( IQ::Get, JID(), dt->getID() );
     iq.addExtension( new Disco::Items() );
-    d->handleIq( &iq );
+    d->handleIq( iq );
     if( !dt->checkResult() )
     {
       ++fail;
@@ -277,7 +277,7 @@ int main( int /*argc*/, char** /*argv*/ )
     dt->setTest( 4 );
     IQ iq( IQ::Get, JID(), dt->getID() );
     iq.addExtension( new Disco::Info( "foonode" ) );
-    d->handleIq( &iq );
+    d->handleIq( iq );
     if( !dt->checkResult() )
     {
       ++fail;
@@ -291,7 +291,7 @@ int main( int /*argc*/, char** /*argv*/ )
     dt->setTest( 5 );
     IQ iq( IQ::Get, JID(), dt->getID() );
     iq.addExtension( new Disco::Items( "foonode" ) );
-    d->handleIq( &iq );
+    d->handleIq( iq );
     if( !dt->checkResult() )
     {
       ++fail;
@@ -306,7 +306,7 @@ int main( int /*argc*/, char** /*argv*/ )
     d->registerNodeHandler( dt, "foonode" );
     IQ iq( IQ::Get, JID(), dt->getID() );
     iq.addExtension( new Disco::Info( "foonode" ) );
-    d->handleIq( &iq );
+    d->handleIq( iq );
     if( !dt->checkResult() )
     {
       ++fail;
@@ -320,7 +320,7 @@ int main( int /*argc*/, char** /*argv*/ )
     dt->setTest( 7 );
     IQ iq( IQ::Get, JID(), dt->getID() );
     iq.addExtension( new Disco::Items( "foonode" ) );
-    d->handleIq( &iq );
+    d->handleIq( iq );
     if( !dt->checkResult() )
     {
       ++fail;
@@ -371,7 +371,7 @@ int main( int /*argc*/, char** /*argv*/ )
     d->removeNodeHandlers( dt );
     IQ iq( IQ::Get, JID(), dt->getID() );
     iq.addExtension( new Disco::Items( "foonode" ) );
-    d->handleIq( &iq );
+    d->handleIq( iq );
     if( dt->checkResult() ) // should fail, as there's no handler for foonode anymore
     {
       ++fail;

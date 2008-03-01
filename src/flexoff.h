@@ -95,25 +95,19 @@ namespace gloox
       void removeFlexibleOfflineHandler();
 
       // reimplemented from DiscoHandler
-      virtual void handleDiscoInfoResult( IQ* iq, int context );
+      virtual void handleDiscoInfo( const JID& from, const Disco::Info& info, int context );
 
       // reimplemented from DiscoHandler
-      virtual void handleDiscoItemsResult( IQ* iq, int context );
+      virtual void handleDiscoItems( const JID& from, const Disco::Items& items, int context );
 
       // reimplemented from DiscoHandler
-      virtual void handleDiscoError( IQ* iq, int context );
+      virtual void handleDiscoError( const JID& from, const Error* error, int context );
 
       // reimplemented from IqHandler.
       virtual bool handleIq( const IQ& iq ) { (void)iq; return false; }
 
       // reimplemented from IqHandler.
       virtual void handleIqID( const IQ& iq, int context );
-
-      // reimplemented from IqHandler.
-      virtual bool handleIq( IQ* iq ) { (void)iq; return false; } // FIXME  remove for 1.1.
-
-      // reimplemented from IqHandler.
-      virtual void handleIqID( IQ* iq, int context ) { (void)iq; (void)context; } // FIXME remove for 1.1
 
     private:
       void messageOperation( int context, const StringList& msgs );

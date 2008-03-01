@@ -473,31 +473,11 @@ namespace gloox
       int flags() const { return m_flags; }
 
       // reimplemented from DiscoHandler
-      virtual void handleDiscoInfoResult( IQ* iq, int context ) // FIXME remove for 1.1
-      {
-        (void)iq;
-        (void)context;
-      }
-
-      // reimplemented from DiscoHandler
       virtual void handleDiscoInfo( const JID& from, const Disco::Info& info, int context );
 
       // reimplemented from DiscoHandler
-      virtual void handleDiscoItemsResult( IQ* iq, int context ) // FIXME remove for 1.1
-      {
-        (void)iq;
-        (void)context;
-      }
-
       // reimplemented from DiscoHandler
       virtual void handleDiscoItems( const JID& from, const Disco::Items& items, int context );
-
-      // reimplemented from DiscoHandler
-      virtual void handleDiscoError( IQ* iq, int context ) // FIXME remove for 1.1
-      {
-        (void)iq;
-        (void)context;
-      }
 
       // reimplemented from DiscoHandler
       virtual void handleDiscoError( const JID& from, const Error* error, int context );
@@ -505,30 +485,14 @@ namespace gloox
       // reimplemented from PresenceHandler
       virtual void handlePresence( const Presence& presence );
 
-      // reimplemented from PresenceHandler
-      virtual void handlePresence( Presence* presence ) { (void)presence; } // FIXME remove for 1.1
-
       // reimplemented from MessageHandler
       virtual void handleMessage( const Message& msg, MessageSession* session = 0 );
-
-      // reimplemented from MessageHandler
-      virtual void handleMessage( Message* msg, MessageSession* session = 0 ) // FIXME remove for 1.1
-      {
-        (void)msg;
-        (void)session;
-      }
 
       // reimplemented from IqHandler
       virtual bool handleIq( const IQ& iq ) { (void)iq; return false; }
 
       // reimplemented from IqHandler
       virtual void handleIqID( const IQ& iq, int context );
-
-      // reimplemented from IqHandler
-      virtual bool handleIq( IQ* iq ) { (void)iq; return false; } // FIXME remove for 1.1
-
-      // reimplemented from IqHandler
-      virtual void handleIqID( IQ* iq, int context ){ (void)iq; (void)context; } // FIXME remove for 1.1
 
       // reimplemented from DiscoNodeHandler
       virtual StringList handleDiscoNodeFeatures( const JID& from, const std::string& node );

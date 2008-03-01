@@ -68,10 +68,7 @@ namespace gloox
     }
 
     if( m_messageHandler && !msg.body().empty() )
-    {
       m_messageHandler->handleMessage( msg, this );
-      m_messageHandler->handleMessage( &msg, this ); // FIXME remove this for 1.1
-    }
   }
 
   void MessageSession::send( const std::string& message, const std::string& subject )

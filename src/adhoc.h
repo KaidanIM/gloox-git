@@ -393,12 +393,6 @@ namespace gloox
       virtual Disco::ItemList handleDiscoNodeItems( const JID& from, const std::string& node );
 
       // reimplemented from IqHandler
-      virtual bool handleIq( IQ* iq ) { (void)iq; return false; } // FIXME remove for 1.1
-
-      // reimplemented from IqHandler
-      virtual void handleIqID( IQ* iq, int context ) { (void)iq; (void)context; } // FIXME remove for 1.1
-
-      // reimplemented from IqHandler
       virtual bool handleIq( const IQ& iq );
 
       // reimplemented from IqHandler
@@ -417,15 +411,6 @@ namespace gloox
 #ifdef ADHOC_TEST
     public:
 #endif
-      // reimplemented from DiscoHandler, FIXME remove for 1.1
-      virtual void handleDiscoInfoResult( IQ* iq, int context ) { (void) iq; (void) context; };
-
-      // reimplemented from DiscoHandler, FIXME remove for 1.1
-      virtual void handleDiscoItemsResult( IQ* iq, int context ) { (void) iq; (void) context; };
-
-      // reimplemented from DiscoHandler, FIXME remove for 1.1
-      virtual void handleDiscoError( IQ* iq, int context ) { (void) iq; (void) context; };
-
       typedef std::map<const std::string, AdhocCommandProvider*> AdhocCommandProviderMap;
       AdhocCommandProviderMap m_adhocCommandProviders;
 
