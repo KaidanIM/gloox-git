@@ -34,12 +34,14 @@ class RH : public PubSub::ResultHandler
                                         const PubSub::SubscriberList*,
                                         const Error* ) {}
     void handleSubscribersResult( const JID&, const std::string&,
-                                              const Error* ) {}
+                                  const PubSub::SubscriberList*,
+                                  const Error* ) {}
     void handleAffiliates( const JID&, const std::string&,
                                        const PubSub::AffiliateList*,
                                        const Error* ) {}
     void handleAffiliatesResult( const JID&, const std::string&,
-                                             const Error* ) {}
+                                 const PubSub::AffiliateList*,
+                                 const Error* ) {}
     void handleNodeConfig( const JID&, const std::string&,
                                        const DataForm*,
                                        const Error* ) {}
