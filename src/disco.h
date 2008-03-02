@@ -117,8 +117,11 @@ namespace gloox
           /**
            * Creates a empty Info object, suitable for making disco#info requests.
            * @param node The node identifier to query (optional).
+           * @param defaultFeatures Indicates whether or not the default features should be
+           * included in the Info. Should be @b false for requests, @b true for replies.
+           * Defaults to @b false.
            */
-          Info( const std::string& node = EmptyString );
+          Info( const std::string& node = EmptyString, bool defaultFeatures = false );
 
            /**
            * Creates an Info object from the given Tag.
