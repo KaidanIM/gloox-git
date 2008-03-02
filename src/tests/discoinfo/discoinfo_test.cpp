@@ -20,6 +20,21 @@ int main( int /*argc*/, char** /*argv*/ )
     name = "empty disco#info request";
     Disco::Info di;
     t = di.tag();
+    if( t->xml() != "<query xmlns='" + XMLNS_DISCO_INFO + "'/>"
+        || !di.node().empty() )
+    {
+      ++fail;
+      printf( "test '%s' failed\n", name.c_str() );
+    }
+    delete t;
+    t = 0;
+  }
+
+  // -------
+  {
+    name = "empty (default) disco#info reply";
+    Disco::Info di( EmptyString, true );
+    t = di.tag();
     if( t->xml() != "<query xmlns='" + XMLNS_DISCO_INFO + "'>"
                     "<feature var='" + XMLNS_DISCO_INFO + "'/>"
                     "<feature var='" + XMLNS_DISCO_ITEMS + "'/>"
@@ -35,13 +50,28 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   {
-    name = "empty disco#info request + node";
-    Disco::Info di( "somenode" );
+    name = "empty disco#info request + node + default features";
+    Disco::Info di( "somenode", true );
     t = di.tag();
     if( t->xml() != "<query xmlns='" + XMLNS_DISCO_INFO + "' node='somenode'>"
                     "<feature var='" + XMLNS_DISCO_INFO + "'/>"
                     "<feature var='" + XMLNS_DISCO_ITEMS + "'/>"
                     "</query>"
+        || di.node() != "somenode" )
+    {
+      ++fail;
+      printf( "test '%s' failed\n", name.c_str() );
+    }
+    delete t;
+    t = 0;
+  }
+
+  // -------
+  {
+    name = "empty disco#info request + node - default features";
+    Disco::Info di( "somenode" );
+    t = di.tag();
+    if( t->xml() != "<query xmlns='" + XMLNS_DISCO_INFO + "' node='somenode'/>"
         || di.node() != "somenode" )
     {
       ++fail;

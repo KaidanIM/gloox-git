@@ -123,11 +123,14 @@ namespace gloox
   // ---- ~Disco::Identity ----
 
   // ---- Disco::Info ----
-  Disco::Info::Info( const std::string& node )
+  Disco::Info::Info( const std::string& node, bool defaultFeatures )
     : StanzaExtension( ExtDiscoInfo ), m_node( node ), m_form( 0 )
   {
-    m_features.push_back( XMLNS_DISCO_INFO );
-    m_features.push_back( XMLNS_DISCO_ITEMS );
+    if( defaultFeatures )
+    {
+      m_features.push_back( XMLNS_DISCO_INFO );
+      m_features.push_back( XMLNS_DISCO_ITEMS );
+    }
   }
 
   Disco::Info::Info( const Tag* tag )
@@ -352,7 +355,7 @@ namespace gloox
         const Info *info = iq.findExtension<Info>( ExtDiscoInfo );
         if( info )
         {
-          Info *i = new Info();
+          Info *i = new Info( EmptyString, true );
           if( !info->node().empty() )
           {
             i->setNode( info->node() );
