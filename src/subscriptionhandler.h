@@ -40,7 +40,7 @@ namespace gloox
        * @param subscription The complete Subscription stanza.
        * @since 1.0
        */
-      virtual void handleSubscription( const Subscription& subscription ) { (void)subscription; }
+      virtual void handleSubscription( const Subscription& subscription ) = 0;
 
   };
 

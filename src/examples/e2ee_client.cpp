@@ -134,9 +134,9 @@ class MessageTest : public ConnectionListener, LogHandler,
       }
     }
 
-    virtual void handleMessage( Message* msg, MessageSession * /*session*/ )
+    virtual void handleMessage( const Message& msg, MessageSession * /*session*/ )
     {
-      Tag* m = msg->tag();
+      Tag* m = msg.tag();
       Tag *x = m->findChild( "xtls", "xmlns", "test:xtls" );
       if( x )
       {

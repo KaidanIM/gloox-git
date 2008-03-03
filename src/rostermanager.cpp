@@ -200,34 +200,34 @@ namespace gloox
     }
   }
 
-  void RosterManager::handlePresence( Presence* presence )
+  void RosterManager::handlePresence( const Presence& presence )
   {
-    if( presence->subtype() == Presence::Error )
+    if( presence.subtype() == Presence::Error )
       return;
 
     bool self = false;
-    Roster::iterator it = m_roster.find( presence->from().bare() );
-    if( it != m_roster.end() || ( self = ( presence->from().bare() == m_self->jid() ) ) )
+    Roster::iterator it = m_roster.find( presence.from().bare() );
+    if( it != m_roster.end() || ( self = ( presence.from().bare() == m_self->jid() ) ) )
     {
       RosterItem* ri = self ? m_self : (*it).second;
-      const std::string& resource = presence->from().resource();
+      const std::string& resource = presence.from().resource();
 
-      if( presence->presence() == Presence::Unavailable )
+      if( presence.presence() == Presence::Unavailable )
         ri->removeResource( resource );
       else
       {
-        ri->setPresence( resource, presence->presence() );
-        ri->setStatus( resource, presence->status() );
-        ri->setPriority( resource, presence->priority() );
-        ri->setExtensions( resource, presence->extensions() );
+        ri->setPresence( resource, presence.presence() );
+        ri->setStatus( resource, presence.status() );
+        ri->setPriority( resource, presence.priority() );
+        ri->setExtensions( resource, presence.extensions() );
       }
 
       if( m_rosterListener && !self )
         m_rosterListener->handleRosterPresence( *ri, resource,
-                                                presence->presence(), presence->status() );
+                                                presence.presence(), presence.status() );
       else if( m_rosterListener && self )
         m_rosterListener->handleSelfPresence( *ri, resource,
-                                              presence->presence(), presence->status() );
+                                              presence.presence(), presence.status() );
     }
     else
     {

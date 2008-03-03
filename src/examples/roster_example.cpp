@@ -139,9 +139,9 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler, Messag
       return true;
     }
 
-    virtual void handleNonrosterPresence( Presence* presence )
+    virtual void handleNonrosterPresence( const Presence& presence )
     {
-      printf( "received presence from entity not in the roster: %s\n", presence->from().full().c_str() );
+      printf( "received presence from entity not in the roster: %s\n", presence.from().full().c_str() );
     }
 
     virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
@@ -149,20 +149,20 @@ class RosterTest : public RosterListener, ConnectionListener, LogHandler, Messag
       printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
     }
 
-    virtual void handleMessage( Message* msg, MessageSession * /*session*/ )
+    virtual void handleMessage( const Message& msg, MessageSession * /*session*/ )
     {
-      if( msg->body() == "quit" )
+      if( msg.body() == "quit" )
         j->disconnect();
-      else if( msg->body() == "subscribe" )
-        j->rosterManager()->subscribe( msg->from() );
-      else if( msg->body() == "unsubscribe" )
-        j->rosterManager()->unsubscribe( msg->from() );
-      else if( msg->body() == "cancel" )
-        j->rosterManager()->cancel( msg->from() );
-      else if( msg->body() == "remove" )
-        j->rosterManager()->remove( msg->from() );
+      else if( msg.body() == "subscribe" )
+        j->rosterManager()->subscribe( msg.from() );
+      else if( msg.body() == "unsubscribe" )
+        j->rosterManager()->unsubscribe( msg.from() );
+      else if( msg.body() == "cancel" )
+        j->rosterManager()->cancel( msg.from() );
+      else if( msg.body() == "remove" )
+        j->rosterManager()->remove( msg.from() );
       else
-        printf( "msg: %s\n", msg->body().c_str() );
+        printf( "msg: %s\n", msg.body().c_str() );
     }
 
   private:

@@ -178,7 +178,7 @@ namespace gloox
       virtual void handleIqID( const IQ& iq, int context );
 
       // reimplemented from PresenceHandler.
-      virtual void handlePresence( Presence* presence );
+      virtual void handlePresence( const Presence& presence );
 
       // reimplemented from SubscriptionHandler.
       virtual void handleSubscription( const Subscription& subscription );
