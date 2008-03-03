@@ -1092,39 +1092,47 @@ namespace gloox
    */
   enum MUCRoomFlag
   {
-    FlagPasswordProtected  =    1,  /**< Password-protected room.*/
-    FlagPublicLogging      =    2,  /**< Room conversation is publicly logged. */
-    FlagHidden             =    4,  /**< Hidden room. */
-    FlagMembersOnly        =    8,  /**< Members-only room. */
-    FlagModerated          =   16,  /**< Moderated room. */
-    FlagNonAnonymous       =   32,  /**< Non-anonymous room. */
-    FlagOpen               =   64,  /**< Open room. */
-    FlagPersistent         =  128,  /**< Persistent room .*/
-    FlagPublic             =  256,  /**< Public room. */
-    FlagSemiAnonymous      =  512,  /**< Semi-anonymous room. */
-    FlagTemporary          = 1024,  /**< Temporary room. */
-    FlagUnmoderated        = 2048,  /**< Unmoderated room. */
-    FlagUnsecured          = 4096,  /**< Unsecured room. */
-    FlagFullyAnonymous     = 8192   /**< Fully anonymous room. */
+    FlagPasswordProtected  = 1<< 1, /**< Password-protected room. */
+    FlagPublicLogging      = 1<< 2, /**< Room conversation is logged. Code: 170 */
+    FlagPublicLoggingOff   = 1<< 3, /**< Room conversation is not logged. Code: 171 */
+    FlagHidden             = 1<< 4, /**< Hidden room. */
+    FlagMembersOnly        = 1<< 5, /**< Members-only room. */
+    FlagModerated          = 1<< 6, /**< Moderated room. */
+    FlagNonAnonymous       = 1<< 7, /**< Non-anonymous room. Code: 100, 172 */
+    FlagOpen               = 1<< 8, /**< Open room. */
+    FlagPersistent         = 1<< 9, /**< Persistent room .*/
+    FlagPublic             = 1<<10, /**< Public room. */
+    FlagSemiAnonymous      = 1<<11, /**< Semi-anonymous room. Code: 173 */
+    FlagTemporary          = 1<<12, /**< Temporary room. */
+    FlagUnmoderated        = 1<<13, /**< Unmoderated room. */
+    FlagUnsecured          = 1<<14, /**< Unsecured room. */
+    FlagFullyAnonymous     = 1<<15  /**< Fully anonymous room. Code: 174 */
+    // keep in sync with MUCUserFlag below
   };
 
   /**
    * Configuration flags for a user.
    */
+  // keep in sync with MUCRoomFlag above
   enum MUCUserFlag
   {
-    UserSelf               =   1,   /**< Other flags relate to the current user him/herself. */
-    UserNickChanged        =   2,   /**< The user changed his/her nickname. */
-    UserKicked             =   4,   /**< The user has been kicked. */
-    UserBanned             =   8,   /**< The user has been banned. */
-    UserAffiliationChanged =  16,   /**< The user's affiliation with the room changed. */
-    UserRoomDestroyed      =  32,   /**< The room has been destroyed. */
-    UserInitialPresence    =  64,   /**< This is initial presence after a join. */
-    UserNewRoom            = 128,   /**< The room has been newly created. */
-    UserMembershipRequired = 256,   /**< User is being removed from the room because the room has
-                                     * been changed to members-only and the user is not a member. */
-    UserRoomShutdown       = 512    /**< User is being removed from the room because of a system
-                                     * shutdown. */
+    UserSelf               = 1<<16, /**< Other flags relate to the current user him/herself. Code: 110 */
+    UserNickChanged        = 1<<17, /**< The user changed his/her nickname. Code: 303 */
+    UserKicked             = 1<<18, /**< The user has been kicked. Code: 307 */
+    UserBanned             = 1<<19, /**< The user has been banned. Code: 301 */
+    UserAffiliationChanged = 1<<20, /**< The user's affiliation with the room changed and as a result
+                                     * he/she has been removed from the room. Code: 321 */
+    UserRoomDestroyed      = 1<<21, /**< The room has been destroyed. */
+    UserNickAssigned       = 1<<22, /**< Service has assigned or modified occupant's roomnick.
+                                     * Code: 210*/
+    UserNewRoom            = 1<<23, /**< The room has been newly created. Code: 201*/
+    UserMembershipRequired = 1<<24, /**< User is being removed from the room because the room has
+                                     * been changed to members-only and the user is not a member.
+                                     * Code: 322 */
+    UserRoomShutdown       = 1<<25, /**< User is being removed from the room because of a system
+                                     * shutdown. Code: 332 */
+    UserAffiliationChangedWNR = 1<<26 /**< The user's affiliation changed While Not in the Room.
+                                       * Code: 101 */
   };
 
   /**

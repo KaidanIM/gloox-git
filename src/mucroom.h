@@ -207,10 +207,11 @@ namespace gloox
        * Use this function to invite another user to this room.
        * @param invitee The (bare) JID of the user to invite.
        * @param reason The user-supplied reason for the invitation.
-       * @param cont Whether this invitation is part of a transformation of a
-       * one-to-one chat to a MUC. Default: false.
+       * @param thread If this invitation is part of a transformation of a
+       * one-to-one chat to a MUC, include the one-to-one chat's thread ID here. Defaults
+       * to the empty string (i.e. not a continuation).
        */
-      void invite( const JID& invitee, const std::string& reason, bool cont = false );
+      void invite( const JID& invitee, const std::string& reason, const std::string& thread = EmptyString );
 
       /**
        * Use this function to request basic room info, possibly prior to joining it.
@@ -301,9 +302,9 @@ namespace gloox
        * @param room The JID of the room the invitation came from.
        * @param invitor The JID of the invitor.
        * @param reason An optional reason for the decline.
-       * @todo Return a Message.
+       * @return A pointer to a Message.
        */
-      static Tag* declineInvitation( const JID& room, const JID& invitor,
+      static Message* declineInvitation( const JID& room, const JID& invitor,
                                      const std::string& reason = EmptyString);
 
       /**
@@ -677,6 +678,29 @@ namespace gloox
       class MUCUser : public StanzaExtension
       {
         public:
+
+          /**
+           *
+           */
+          enum MUCUserOperation
+          {
+            OpNone,                 /**< */
+            OpInvite,               /**< */
+            OpDecline               /**< */
+          };
+
+          /**
+           *
+           */
+          MUCUser( const std::string& password, HistoryRequestType historyType = HistoryUnknown,
+                   const std::string& historySince = EmptyString, int historyValue = 0 );
+
+          /**
+           *
+           */
+          MUCUser( MUCUserOperation operation, const std::string& to, const std::string& reason,
+                   const std::string& thread = EmptyString );
+
           /**
            * Constructs a new MUCUser object from the given Tag.
            * @param tag The Tag to parse.
@@ -691,12 +715,72 @@ namespace gloox
           /**
            *
            */
+          int flags() const { return m_flags; }
+
+          /**
+           *
+           */
           static MUCRoomAffiliation getEnumAffiliation( const std::string& affiliation );
 
           /**
            *
            */
           static MUCRoomRole getEnumRole( const std::string& role );
+
+          /**
+           *
+           */
+          MUCRoomAffiliation affiliation() const { return m_affiliation; }
+
+          /**
+           *
+           */
+          MUCRoomRole role() const { return m_role; }
+
+          /**
+           *
+           */
+          const std::string* jid() const { return m_jid; }
+
+          /**
+           *
+           */
+          const std::string* actor() const { return m_actor; }
+
+          /**
+           *
+           */
+          const std::string* thread() const { return m_thread; }
+
+          /**
+           *
+           */
+          const std::string* reason() const { return m_reason; }
+
+          /**
+           *
+           */
+          const std::string* newNick() const { return m_newNick; }
+
+          /**
+           *
+           */
+          const std::string* password() const { return m_password; }
+
+          /**
+           *
+           */
+          const std::string* alternate() const { return m_alternate; }
+
+          /**
+           *
+           */
+          const std::string* historySince() const { return m_historySince; }
+
+          /**
+           *
+           */
+          MUCUserOperation operation() const { return m_operation; }
 
           // reimplemented from StanzaExtension
           const std::string& filterString() const;
@@ -713,13 +797,18 @@ namespace gloox
         private:
           MUCRoomAffiliation m_affiliation;
           MUCRoomRole m_role;
-          std::string m_jid;
-          std::string m_actor;
-          std::string m_reason;
-          std::string m_newNick;
-          std::string m_alternate;
-          int m_userFlags;
-          int m_roomFlags;
+          std::string* m_jid;
+          std::string* m_actor;
+          std::string* m_thread;
+          std::string* m_reason;
+          std::string* m_newNick;
+          std::string* m_password;
+          std::string* m_alternate;
+          std::string* m_historySince;
+          MUCUserOperation m_operation;
+          HistoryRequestType m_historyType;
+          int m_historyValue;
+          int m_flags;
           bool m_del;
       };
 
