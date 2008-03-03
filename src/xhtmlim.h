@@ -46,6 +46,13 @@ namespace gloox
        */
       virtual ~XHtmlIM();
 
+      /**
+       * Returns a pointer to the internally stored XHTML, as opposed to tag(),
+       * which returns a copy (which you need to delete manually).
+       * @return A pointer to the XHTML. Do not delete this Tag.
+       */
+      const Tag* xhtml() const { return m_xhtml; }
+
       // reimplemented from StanzaExtension
       virtual const std::string& filterString() const;
 
