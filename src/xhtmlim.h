@@ -39,7 +39,7 @@ namespace gloox
        * Constructs a new object with the given resource string.
        * @param xhtml XHTML to include.
        */
-      XHtmlIM( const Tag* xhtml );
+      XHtmlIM( const Tag* xhtml = 0 );
 
       /**
        * Virtual Destructor.
