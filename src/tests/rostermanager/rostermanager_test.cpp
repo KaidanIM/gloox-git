@@ -36,8 +36,6 @@ namespace gloox
       virtual void send( const IQ& ) {};
       virtual void send( const IQ&, IqHandler*, int ) {};
       virtual void trackID( IqHandler *ih, const std::string& id, int context ) = 0;
-      void removeIqHandler( IqHandler* ih, const std::string& xmlns ); // FIXME remove as soon as PrivateXML is ported to SE
-      void registerIqHandler( IqHandler* ih, const std::string& xmlns ); // FIXME remove as soon as PrivateXML is ported to SE
       void removeIqHandler( IqHandler* ih, int exttype );
       void removeIDHandler( IqHandler* ih );
       void registerIqHandler( IqHandler* ih, int exttype );
@@ -50,8 +48,6 @@ namespace gloox
     private:
       JID m_jid;
   };
-  void ClientBase::removeIqHandler( IqHandler*, const std::string& ) {} // FIXME remove as soon as PrivateXML is ported to SE
-  void ClientBase::registerIqHandler( IqHandler*, const std::string& ) {} // FIXME remove as soon as PrivateXML is ported to SE
   void ClientBase::removeIqHandler( IqHandler*, int ) {}
   void ClientBase::removeIDHandler( IqHandler* ) {}
   void ClientBase::registerIqHandler( IqHandler*, int ) {}
@@ -140,7 +136,7 @@ class RosterManagerTest : public ClientBase, public RosterListener
       }
       return false;
     }
-    virtual void handleNonrosterPresence( Presence* /*presence*/ ) {}
+    virtual void handleNonrosterPresence( const Presence& /*presence*/ ) {}
     virtual void handleRosterError( const IQ& /*iq*/ ) {}
   private:
     RosterManager* m_rm;

@@ -41,7 +41,7 @@ namespace gloox
        * @param presence The complete stanza.
        * @since 1.0
        */
-      virtual void handlePresence( const Presence& presence ) { (void)presence; }
+      virtual void handlePresence( const Presence& presence ) = 0;
 
   };
 

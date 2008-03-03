@@ -43,7 +43,7 @@ namespace gloox
        * the obligatory 'result' answer. If you return @b false, a 'error' will be sent.
        * @since 1.0
        */
-      virtual bool handleIq( const IQ& iq ) { (void) iq; return false; }
+      virtual bool handleIq( const IQ& iq ) = 0;
 
       /**
        * Reimplement this function if you want to be notified about
@@ -57,7 +57,7 @@ namespace gloox
        * @note Only IQ stanzas of type 'result' or 'error' can arrive here.
        * @since 1.0
        */
-      virtual void handleIqID( const IQ& iq, int context ) { (void) iq; (void) context; }
+      virtual void handleIqID( const IQ& iq, int context ) = 0;
 
   };
 

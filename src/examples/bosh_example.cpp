@@ -111,22 +111,22 @@ class MessageTest : public MessageSessionHandler, ConnectionListener, LogHandler
       return true;
     }
 
-    virtual void handleMessage( Message* msg, MessageSession * /*session*/ )
+    virtual void handleMessage( const Message& msg, MessageSession * /*session*/ )
     {
-      printf( "type: %d, subject: %s, message: %s, thread id: %s\n", msg->subtype(),
-              msg->subject().c_str(), msg->body().c_str(), msg->thread().c_str() );
+      printf( "type: %d, subject: %s, message: %s, thread id: %s\n", msg.subtype(),
+              msg.subject().c_str(), msg.body().c_str(), msg.thread().c_str() );
 
-      std::string re = "You said:\n> " + msg->body() + "\nI like that statement.";
+      std::string re = "You said:\n> " + msg.body() + "\nI like that statement.";
       std::string sub;
-      if( !msg->subject().empty() )
-        sub = "Re: " +  msg->subject();
+      if( !msg.subject().empty() )
+        sub = "Re: " +  msg.subject();
 
       m_messageEventFilter->raiseMessageEvent( MessageEventDisplayed );
       m_messageEventFilter->raiseMessageEvent( MessageEventComposing );
       m_chatStateFilter->setChatState( ChatStateComposing );
       m_session->send( re, sub );
 
-      if( msg->body() == "quit" )
+      if( msg.body() == "quit" )
         j->disconnect();
     }
 

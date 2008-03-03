@@ -159,7 +159,7 @@ namespace gloox
        * the roster.
        * @param presence The full presence stanza.
        */
-      virtual void handleNonrosterPresence( Presence* presence ) = 0;
+      virtual void handleNonrosterPresence( const Presence& presence ) = 0;
 
       /**
        * This function is called if the server returned an error.
