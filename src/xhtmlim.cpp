@@ -43,7 +43,7 @@ namespace gloox
 
   Tag* XHtmlIM::tag() const
   {
-    return m_xhtml;
+    return m_xhtml->clone();
   }
 
 }
