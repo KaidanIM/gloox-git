@@ -44,6 +44,12 @@ namespace gloox
     "moderator",
   };
 
+  /** Strings indicating the type of history to request. */
+  const char* historyTypeValues[] =
+  {
+    "maxchars", "maxstanzas", "seconds", "since"
+  };
+
   static inline MUCRoomAffiliation affiliationType( const std::string& type )
   {
     return (MUCRoomAffiliation)util::lookup( type, affiliationValues );
@@ -278,9 +284,33 @@ namespace gloox
   // ---- ~MUCRoom::MUCOwner ----
 
   // ---- MUCRoom::MUCUser ----
+  MUCRoom::MUCUser::MUCUser( const std::string& password, MUCRoom::HistoryRequestType historyType,
+                             const std::string& historySince, int historyValue )
+    : StanzaExtension( ExtMUCUser ), m_affiliation( AffiliationInvalid ), m_role( RoleInvalid ),
+      m_jid( 0 ), m_actor( 0 ), m_thread( 0 ), m_reason( 0 ), m_newNick( 0 ),
+      m_password( password.empty() ? 0 : new std::string( password ) ), m_alternate( 0 ),
+      m_historySince( new std::string( historySince ) ), m_operation( OpNone ),
+      m_historyType( historyType ), m_historyValue( historyValue ),
+      m_flags( 0 ), m_del( false )
+  {
+  }
+
+  MUCRoom::MUCUser::MUCUser( MUCUserOperation operation, const std::string& to,
+                             const std::string& reason, const std::string& thread )
+    : StanzaExtension( ExtMUCUser ), m_affiliation( AffiliationInvalid ), m_role( RoleInvalid ),
+      m_jid( new std::string( to ) ), m_actor( 0 ),
+      m_thread( thread.empty() ? 0 : new std::string( thread ) ),
+      m_reason( new std::string( reason ) ), m_newNick( 0 ), m_password( 0 ), m_alternate( 0 ),
+      m_historySince( 0 ), m_operation( operation ), m_historyType( HistoryUnknown ),
+      m_historyValue( 0 ), m_flags( 0 ), m_del( false )
+  {
+  }
+
   MUCRoom::MUCUser::MUCUser( const Tag* tag )
     : StanzaExtension( ExtMUCUser ), m_affiliation( AffiliationInvalid ), m_role( RoleInvalid ),
-      m_userFlags( 0 ), m_roomFlags( 0 ), m_del( false )
+      m_jid( 0 ), m_actor( 0 ), m_thread( 0 ), m_reason( 0 ), m_newNick( 0 ),
+      m_password( 0 ), m_alternate( 0 ), m_historySince( 0 ), m_operation( OpNone ),
+      m_historyType( HistoryUnknown ), m_historyValue( 0 ), m_flags( 0 ), m_del( false )
   {
     if( !tag || tag->name() != "x" || tag->xmlns() != XMLNS_MUC_USER )
       return;
@@ -295,62 +325,90 @@ namespace gloox
         m_affiliation = getEnumAffiliation( (*it)->findAttribute( "affiliation" ) );
         m_role = getEnumRole( (*it)->findAttribute( "role" ) );
 
-        m_jid = (*it)->findAttribute( "jid" );
+        if( (*it)->hasAttribute( "jid" ) )
+          m_jid = new std::string( (*it)->findAttribute( "jid" ) );
 
         if( ( t = (*it)->findChild( "actor" ) ) )
-          m_actor = t->findAttribute( "jid" );
+          m_actor = new std::string( t->findAttribute( "jid" ) );
 
         if( ( t = (*it)->findChild( "reason" ) ) )
-          m_reason = t->cdata();
+          m_reason = new std::string( t->cdata() );
 
-        m_newNick = (*it)->findAttribute( "nick" );
+        if( (*it)->hasAttribute( "nick" ) )
+          m_newNick = new std::string( (*it)->findAttribute( "nick" ) );
       }
       else if( (*it)->name() == "status" )
       {
         const std::string& code = (*it)->findAttribute( "code" );
         if( code == "100" )
-          m_roomFlags |= FlagNonAnonymous;
+          m_flags |= FlagNonAnonymous;
         else if( code == "101" )
-        {
-              // affiliation changed while not in the room. not to be handled here, I guess
-        }
+          m_flags |= UserAffiliationChangedWNR;
         else if( code == "110" )
-          m_userFlags |= UserSelf;
+          m_flags |= UserSelf;
         else if( code == "170" )
-          m_roomFlags |= FlagPublicLogging;
+          m_flags |= FlagPublicLogging;
         else if( code == "201" )
-          m_userFlags |= UserNewRoom;
+          m_flags |= UserNewRoom;
         else if( code == "210" )
-          m_userFlags |= UserInitialPresence;
+          m_flags |= UserNickAssigned;
         else if( code == "301" )
-          m_userFlags |= UserBanned;
+          m_flags |= UserBanned;
         else if( code == "303" )
-          m_userFlags |= UserNickChanged;
+          m_flags |= UserNickChanged;
         else if( code == "307" )
-          m_userFlags |= UserKicked;
+          m_flags |= UserKicked;
         else if( code == "321" )
-          m_userFlags |= UserAffiliationChanged;
+          m_flags |= UserAffiliationChanged;
         else if( code == "322" )
-          m_userFlags |= UserMembershipRequired;
+          m_flags |= UserMembershipRequired;
         else if( code == "332" )
-          m_userFlags |= UserRoomShutdown;
+          m_flags |= UserRoomShutdown;
       }
       else if( (*it)->name() == "destroy" )
       {
         m_del = true;
         if( (*it)->hasAttribute( "jid" ) )
-          m_alternate = (*it)->findAttribute( "jid" );
+          m_alternate = new std::string( (*it)->findAttribute( "jid" ) );
 
         if( ( t = (*it)->findChild( "reason" ) ) )
-          m_reason = t->cdata();
+          m_reason = new std::string( t->cdata() );
 
-        m_userFlags  |= UserRoomDestroyed;
+        m_flags  |= UserRoomDestroyed;
+      }
+      else if( (*it)->name() == "invite" )
+      {
+        m_operation = OpInvite;
+        m_jid = new std::string( (*it)->findAttribute( "to" ) );
+        if( (*it)->hasChild( "reason" ) )
+          m_reason = new std::string( (*it)->findChild( "reason" )->cdata() );
+        if( (*it)->hasChild( "continue" ) )
+          m_thread = new std::string( (*it)->findChild( "continue" )->findAttribute( "thread" ) );
+      }
+      else if( (*it)->name() == "decline" )
+      {
+        m_operation = OpDecline;
+        m_jid = new std::string( (*it)->findAttribute( "from" ) );
+        if( (*it)->hasChild( "reason" ) )
+          m_reason = new std::string( (*it)->findChild( "reason" )->cdata() );
+      }
+      else if( (*it)->name() == "password" )
+      {
+        m_password = new std::string( (*it)->cdata() );
       }
     }
   }
 
   MUCRoom::MUCUser::~MUCUser()
   {
+    delete m_jid;
+    delete m_actor;
+    delete m_thread;
+    delete m_reason;
+    delete m_newNick;
+    delete m_password;
+    delete m_alternate;
+    delete m_historySince;
   }
 
   MUCRoomRole MUCRoom::MUCUser::getEnumRole( const std::string& role )
@@ -392,46 +450,75 @@ namespace gloox
     if( m_affiliation != AffiliationInvalid || m_role != RoleInvalid )
     {
       Tag* i = new Tag( t, "item" );
-      if( !m_jid.empty() )
-        i->addAttribute( "jid", m_jid );
+      if( m_jid )
+        i->addAttribute( "jid", *m_jid );
       if( m_role != RoleInvalid )
         i->addAttribute( "role", util::lookup( m_role, roleValues ) );
       if( m_affiliation != AffiliationInvalid )
         i->addAttribute( "affiliation", util::lookup( m_affiliation, affiliationValues ) );
 
-      if( m_roomFlags & FlagNonAnonymous )
+      if( m_actor )
+        new Tag( i, "actor", "jid", *m_actor );
+
+      if( m_flags & FlagNonAnonymous )
         new Tag( t, "status", "code", "100" );
-//       else if( ??? )
-//         new Tag( t, "status", "code", "100" );
-      if( m_userFlags & UserSelf )
+      if( m_flags & UserAffiliationChangedWNR )
+        new Tag( t, "status", "code", "101" );
+      if( m_flags & UserSelf )
         new Tag( t, "status", "code", "110" );
-      if( m_roomFlags & FlagPublicLogging )
+      if( m_flags & FlagPublicLogging )
         new Tag( t, "status", "code", "170" );
-      if( m_userFlags & UserNewRoom )
+      if( m_flags & UserNewRoom )
         new Tag( t, "status", "code", "201" );
-      if( m_userFlags & UserInitialPresence )
+      if( m_flags & UserNickAssigned )
         new Tag( t, "status", "code", "210" );
-      if( m_userFlags & UserBanned )
+      if( m_flags & UserBanned )
         new Tag( t, "status", "code", "301" );
-      if( m_userFlags & UserNickChanged )
+      if( m_flags & UserNickChanged )
         new Tag( t, "status", "code", "303" );
-      if( m_userFlags & UserKicked )
+      if( m_flags & UserKicked )
         new Tag( t, "status", "code", "307" );
-      if( m_userFlags & UserAffiliationChanged )
+      if( m_flags & UserAffiliationChanged )
         new Tag( t, "status", "code", "321" );
-      if( m_userFlags & UserMembershipRequired )
+      if( m_flags & UserMembershipRequired )
         new Tag( t, "status", "code", "322" );
-      if( m_userFlags & UserRoomShutdown )
+      if( m_flags & UserRoomShutdown )
         new Tag( t, "status", "code", "332" );
     }
     else if( m_del )
     {
       Tag* d = new Tag( t, "destroy" );
-      if( !m_alternate.empty() )
-        d->addAttribute( "jid", m_alternate );
-      if( !m_reason.empty() )
-        new Tag( d, "reason", m_reason );
+      if( m_alternate )
+        d->addAttribute( "jid", *m_alternate );
+      if( m_reason )
+        new Tag( d, "reason", *m_reason );
     }
+    else if( m_historyType != HistoryUnknown )
+    {
+      const std::string& histStr = util::lookup( m_historyType, historyTypeValues );
+      Tag* h = new Tag( t, "history" );
+      if( m_historyType == HistorySince && m_historySince )
+        h->addAttribute( histStr, *m_historySince );
+      else
+        h->addAttribute( histStr, m_historyValue );
+    }
+    else if( m_operation != OpNone && m_jid )
+    {
+      Tag* d = 0;
+      if( m_operation == OpInvite )
+        d = new Tag( t, "invite", "to", *m_jid );
+      else
+        d = new Tag( t, "decline", "from", *m_jid );
+
+      if( m_reason )
+        new Tag( d, "reason", *m_reason );
+      if( m_thread )
+        new Tag( d, "continue", "thread", *m_thread );
+    }
+
+    if( m_password )
+      new Tag( t, "password",  *m_password );
+
     return t;
   }
   // ---- ~MUCRoom::MUCUser ----
@@ -469,12 +556,6 @@ namespace gloox
     }
   }
 
-  /** Strings indicating the type of history to request. */
-  const char* historyTypeValues[] =
-  {
-    "maxchars", "maxstanzas", "seconds", "since"
-  };
-
   void MUCRoom::join()
   {
     if( m_joined || !m_parent )
@@ -486,23 +567,9 @@ namespace gloox
     m_session->registerMessageHandler( this );
 
     Presence pres( Presence::Available, m_nick.full() );
-    Tag* p = pres.tag(); // FIXME temporary
-    Tag* x = new Tag( p, "x", XMLNS, XMLNS_MUC );
-    if( !m_password.empty() )
-      new Tag( x, "password",  m_password );
-
-    if( m_historyType != HistoryUnknown )
-    {
-      const std::string& histStr = util::lookup( m_historyType, historyTypeValues );
-      Tag* h = new Tag( x, "history" );
-      if( m_historyType == HistorySince )
-        h->addAttribute( histStr, m_historySince );
-      else
-        h->addAttribute( histStr, m_historyValue );
-    }
-
+    pres.addExtension( new MUCUser( m_password, m_historyType, m_historySince, m_historyValue ) );
     m_joined = true;
-    m_parent->send( p );
+    m_parent->send( pres );
   }
 
   void MUCRoom::leave( const std::string& msg )
@@ -513,9 +580,7 @@ namespace gloox
     if( m_parent )
     {
       Presence pres( Presence::Unavailable, m_nick.full(), msg );
-      Tag* p = pres.tag(); // FIXME temporary
-      new Tag( p, "x", XMLNS, XMLNS_MUC );
-      m_parent->send( p );
+      m_parent->send( pres );
       m_parent->removePresenceHandler( m_nick.bareJID(), this );
       m_parent->disposeMessageSession( m_session );
     }
@@ -581,33 +646,21 @@ namespace gloox
     }
   }
 
-  void MUCRoom::invite( const JID& invitee, const std::string& reason, bool cont )
+  void MUCRoom::invite( const JID& invitee, const std::string& reason, const std::string& thread )
   {
     if( !m_parent || !m_joined )
       return;
 
     Message msg( Message::Normal, m_nick.bareJID() );
-    Tag* m = msg.tag(); // FIXME temporary
-    Tag* x = new Tag( m, "x", XMLNS, XMLNS_MUC_USER );
-    Tag* i = new Tag( x, "invite", "to", invitee.bare() );
-    if( !reason.empty() )
-      new Tag( i, "reason", reason );
-    if( cont )
-      new Tag( i, "continue" );
-
-    m_parent->send( m );
+    msg.addExtension( new MUCUser( MUCUser::OpInvite, invitee.bare(), reason, thread ) );
+    m_parent->send( msg );
   }
 
-  Tag* MUCRoom::declineInvitation( const JID& room, const JID& invitor, const std::string& reason )
+  Message* MUCRoom::declineInvitation( const JID& room, const JID& invitor, const std::string& reason )
   {
-    Message msg( Message::Normal, room.bare() );
-    Tag* m = msg.tag();
-    Tag* x = new Tag( m, "x", XMLNS, XMLNS_MUC_USER );
-    Tag* d = new Tag( x, "decline", "to", invitor.bare() );
-    if( !reason.empty() )
-      new Tag( d, "reason", reason );
-
-    return m;
+    Message* msg = new Message( Message::Normal, room.bare() );
+    msg->addExtension( new MUCUser( MUCUser::OpDecline, invitor.bare(), reason ) );
+    return msg;
   }
 
   void MUCRoom::setPublish( bool publish, bool publishNick )
@@ -770,108 +823,59 @@ namespace gloox
       }
       else
         m_newNick = "";
+
       m_roomHandler->handleMUCError( this, presence.error()
                                            ? presence.error()->error()
                                            : StanzaErrorUndefined );
     }
     else
     {
-      Tag* p = presence.tag();
-      Tag* x = 0;
-      if( m_roomHandler && p && ( x = p->findChild( "x", XMLNS, XMLNS_MUC_USER ) ) != 0 )
+      const MUCUser* mu = presence.findExtension<MUCUser>( ExtMUCUser );
+      if( !mu )
+        return;
+
+      MUCRoomParticipant party;
+      party.nick = new JID( presence.from() );
+      party.status = presence.status();
+      party.affiliation = mu->affiliation();
+      party.role = mu->role();
+      party.jid = mu->jid() ? new JID( *(mu->jid()) ) : 0;
+      party.actor = mu->actor() ? new JID( *(mu->actor()) ) : 0;
+      party.reason = mu->reason() ? *(mu->reason()) : EmptyString;
+      party.newNick = mu->newNick() ? *(mu->newNick()) : EmptyString;
+      party.alternate = mu->alternate() ? new JID( *(mu->alternate()) ) : 0;
+      party.flags = mu->flags();
+
+      if( party.flags & FlagNonAnonymous )
+        setNonAnonymous();
+
+      if( party.flags & UserSelf )
       {
-        MUCRoomParticipant party;
-        party.flags = 0;
-        party.nick = new JID( presence.from() );
-        party.jid = 0;
-        party.actor = 0;
-        party.alternate = 0;
-        const Tag* tag;
-        const TagList& l = x->children();
-        TagList::const_iterator it = l.begin();
-        for( ; it != l.end(); ++it )
-        {
-          if( (*it)->name() == "item" )
-          {
-            party.affiliation = MUCUser::getEnumAffiliation( (*it)->findAttribute( "affiliation" ) );
-            party.role = MUCUser::getEnumRole( (*it)->findAttribute( "role" ) );
-
-            const std::string& jid = (*it)->findAttribute( "jid" );
-            if( !jid.empty() )
-              party.jid = new JID( jid );
-
-            if( ( tag = (*it)->findChild( "actor" ) ) )
-            {
-              const std::string& actor = tag->findAttribute( "jid" );
-              if( !actor.empty() )
-                party.actor = new JID( actor );
-            }
-
-            if( ( tag = (*it)->findChild( "reason" ) ) )
-              party.reason = tag->cdata();
-
-            party.newNick = (*it)->findAttribute( "nick" );
-          }
-          else if( (*it)->name() == "status" )
-          {
-            const std::string& code = (*it)->findAttribute( "code" );
-            if( code == "100" )
-              setNonAnonymous();
-            else if( code == "101" )
-            {
-              // affiliation changed while not in the room. not to be handled here, I guess
-            }
-            else if( code == "110" )
-            {
-              party.flags |= UserSelf;
-              m_role = party.role;
-              m_affiliation = party.affiliation;
-            }
-            else if( code == "201" )
-            {
-              m_creationInProgress = true;
-              if( instantRoomHook() || m_roomHandler->handleMUCRoomCreation( this ) )
-                acknowledgeInstantRoom();
-            }
-            else if( code == "210" )
-              m_nick.setResource( presence.from().resource() );
-            else if( code == "301" )
-              party.flags |= UserBanned;
-            else if( code == "303" )
-              party.flags |= UserNickChanged;
-            else if( code == "307" )
-              party.flags |= UserKicked;
-            else if( code == "321" )
-              party.flags |= UserAffiliationChanged;
-          }
-          else if( (*it)->name() == "destroy" )
-          {
-            if( (*it)->hasAttribute( "jid" ) )
-              party.alternate = new JID( (*it)->findAttribute( "jid" ) );
-
-            if( ( tag = (*it)->findChild( "reason" ) ) )
-              party.reason = tag->cdata();
-
-            party.flags |= UserRoomDestroyed;
-          }
-        }
-
-        if( party.flags & UserNickChanged && !party.newNick.empty()
-            && m_nick.resource() == presence.from().resource()
-            && party.newNick == m_newNick )
-          party.flags |= UserSelf;
-
-        if( party.flags & UserNickChanged && party.flags & UserSelf && !party.newNick.empty() )
-          m_nick.setResource( party.newNick );
-
-        party.status = presence.status();
-
-        m_roomHandler->handleMUCParticipantPresence( this, party, presence.presence() );
-        delete party.jid;
-        delete party.nick;
-        delete party.actor;
-        delete party.alternate;
+        m_role = party.role;
+        m_affiliation = party.affiliation;
       }
+      if( party.flags & UserNewRoom )
+      {
+        m_creationInProgress = true;
+        if( instantRoomHook() || m_roomHandler->handleMUCRoomCreation( this ) )
+          acknowledgeInstantRoom();
+      }
+      if( party.flags & UserNickAssigned )
+        m_nick.setResource( presence.from().resource() );
+
+      if( party.flags & UserNickChanged && !party.newNick.empty()
+          && m_nick.resource() == presence.from().resource()
+          && party.newNick == m_newNick )
+        party.flags |= UserSelf;
+
+      if( party.flags & UserNickChanged && party.flags & UserSelf && !party.newNick.empty() )
+        m_nick.setResource( party.newNick );
+
+
+      if( m_roomHandler )
+        m_roomHandler->handleMUCParticipantPresence( this, party, presence.presence() );
+
+      delete party.nick;
     }
   }
 
@@ -932,55 +936,36 @@ namespace gloox
     }
     else
     {
-      Tag* m = msg.tag();
-      Tag* x = 0;
-      if( m && ( x = m->findChild( "x", XMLNS, XMLNS_MUC_USER ) ) != 0 )
+      const MUCUser* mu = msg.findExtension<MUCUser>( ExtMUCUser );
+      if( mu )
       {
-        const TagList& l = x->children();
-        TagList::const_iterator it = l.begin();
-        for( ; it != l.end(); ++it )
+        const int flags = mu->flags();
+        if( flags & FlagNonAnonymous )
+          setNonAnonymous();
+        if( flags & FlagPublicLogging )
         {
-          if( (*it)->name() == "status" )
-          {
-            const std::string& code = (*it)->findAttribute( "code" );
-            if( code == "100" )
-            {
-              setNonAnonymous();
-            }
-            else if( code == "104" )
-              /*m_configChanged =*/ (void)true;
-            else if( code == "170" )
-              m_flags |= FlagPublicLogging;
-            else if( code == "171" )
-              m_flags &= ~FlagPublicLogging;
-            else if( code == "172" )
-            {
-              setNonAnonymous();
-            }
-            else if( code == "173" )
-            {
-              setSemiAnonymous();
-            }
-            else if( code == "174" )
-            {
-              setFullyAnonymous();
-            }
-          }
-          else if( (*it)->name() == "decline" )
-          {
-            std::string reason;
-            JID invitee( (*it)->findAttribute( "from" ) );
-            if( (*it)->hasChild( "reason" ) )
-              reason = (*it)->findChild( "reason" )->cdata();
-            m_roomHandler->handleMUCInviteDecline( this, invitee, reason );
-            return;
-          }
-          // call some handler?
+          m_flags &= ~FlagPublicLoggingOff;
+          m_flags |= FlagPublicLogging;
         }
+        if( flags & FlagPublicLoggingOff )
+        {
+          m_flags &= ~FlagPublicLogging;
+          m_flags |= FlagPublicLoggingOff;
+        }
+        if( flags & FlagSemiAnonymous )
+          setSemiAnonymous();
+        if( flags & FlagFullyAnonymous )
+          setFullyAnonymous();
+
+        if( mu->operation() == MUCUser::OpDecline && mu->jid() )
+          m_roomHandler->handleMUCInviteDecline( this, JID( *(mu->jid()) ),
+                                                 mu->reason() ? *(mu->reason()) : EmptyString );
       }
-      else if( m_roomConfigHandler && m && ( x = m->findChild( "x", XMLNS, XMLNS_X_DATA ) ) != 0 )
+
+      const DataForm* df = msg.findExtension<DataForm>( ExtDataForm );
+      if( m_roomConfigHandler && df )
       {
-        m_roomConfigHandler->handleMUCRequest( this, DataForm( x ) );
+        m_roomConfigHandler->handleMUCRequest( this, *df );
         return;
       }
 
@@ -1209,7 +1194,8 @@ namespace gloox
     return StringList();
   }
 
-  Disco::IdentityList MUCRoom::handleDiscoNodeIdentities( const JID& /*from*/, const std::string& /*node*/ )
+  Disco::IdentityList MUCRoom::handleDiscoNodeIdentities( const JID& /*from*/,
+                                                          const std::string& /*node*/ )
   {
     return Disco::IdentityList();
   }

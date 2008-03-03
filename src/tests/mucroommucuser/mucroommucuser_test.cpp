@@ -49,7 +49,9 @@ int main( int /*argc*/, char** /*argv*/ )
     i->addAttribute( "jid", "foo@bar" );
     i->addAttribute( "role", "participant" );
     i->addAttribute( "affiliation", "member" );
+    new Tag( i, "actor", "jid", "foojid" );
     new Tag( x, "status", "code", "100" );
+    new Tag( x, "status", "code", "101" );
     new Tag( x, "status", "code", "110" );
     new Tag( x, "status", "code", "170" );
     new Tag( x, "status", "code", "201" );
@@ -62,19 +64,140 @@ int main( int /*argc*/, char** /*argv*/ )
     new Tag( x, "status", "code", "332" );
     MUCRoom::MUCUser mu( x );
     t = mu.tag();
+    if( !t || *t != *x )
+    {
+      ++fail;
+      printf( "test '%s' failed:\n%s\n%s\n", name.c_str(), x->xml().c_str(), t->xml().c_str() );
+    }
+    delete t;
+    delete x;
+  }
+
+  // -------
+  {
+    name = "joining a room";
+    MUCRoom::MUCUser mu;
+    t = mu.tag();
+    if( !t || t->xml() != "<x xmlns='" + XMLNS_MUC_USER + "'/>" )
+    {
+      ++fail;
+      printf( "test '%s' failed:%s \n", name.c_str(), t->xml().c_str() );
+    }
+    delete t;
+  }
+
+  // -------
+  {
+    name = "joining a password-protected room";
+    MUCRoom::MUCUser mu( "foopwd" );
+    t = mu.tag();
     if( !t || t->xml() != "<x xmlns='" + XMLNS_MUC_USER + "'>"
-         "<item jid='foo@bar' role='participant' affiliation='member'/>"
-         "<status code='100'/>"
-         "<status code='110'/>"
-         "<status code='170'/>"
-         "<status code='201'/>"
-         "<status code='210'/>"
-         "<status code='301'/>"
-         "<status code='303'/>"
-         "<status code='307'/>"
-         "<status code='321'/>"
-         "<status code='322'/>"
-         "<status code='332'/>"
+                          "<password>foopwd</password>"
+                          "</x>" )
+    {
+      ++fail;
+      printf( "test '%s' failed:%s \n", name.c_str(), t->xml().c_str() );
+    }
+    delete t;
+  }
+
+  // -------
+  {
+    name = "joining room, requesting room history 1";
+    MUCRoom::MUCUser mu( EmptyString, MUCRoom::HistorySince, "foodate" );
+    t = mu.tag();
+    if( !t || t->xml() != "<x xmlns='" + XMLNS_MUC_USER + "'>"
+         "<history since='foodate'/>"
+         "</x>" )
+    {
+      ++fail;
+      printf( "test '%s' failed:%s \n", name.c_str(), t->xml().c_str() );
+    }
+    delete t;
+  }
+
+  // -------
+  {
+    name = "joining room, requesting room history 2";
+    MUCRoom::MUCUser mu( EmptyString, MUCRoom::HistoryMaxChars, EmptyString, 100 );
+    t = mu.tag();
+    if( !t || t->xml() != "<x xmlns='" + XMLNS_MUC_USER + "'>"
+         "<history maxchars='100'/>"
+         "</x>" )
+    {
+      ++fail;
+      printf( "test '%s' failed:%s \n", name.c_str(), t->xml().c_str() );
+    }
+    delete t;
+  }
+
+  // -------
+  {
+    name = "joining room, requesting room history 3";
+    MUCRoom::MUCUser mu( EmptyString, MUCRoom::HistoryMaxStanzas, EmptyString, 100 );
+    t = mu.tag();
+    if( !t || t->xml() != "<x xmlns='" + XMLNS_MUC_USER + "'>"
+         "<history maxstanzas='100'/>"
+         "</x>" )
+    {
+      ++fail;
+      printf( "test '%s' failed:%s \n", name.c_str(), t->xml().c_str() );
+    }
+    delete t;
+  }
+
+  // -------
+  {
+    name = "joining room, requesting room history 4 + password";
+    MUCRoom::MUCUser mu( "foopwd", MUCRoom::HistorySeconds, EmptyString, 100 );
+    t = mu.tag();
+    if( !t || t->xml() != "<x xmlns='" + XMLNS_MUC_USER + "'>"
+         "<history seconds='100'/>"
+         "<password>foopwd</password>"
+         "</x>" )
+    {
+      ++fail;
+      printf( "test '%s' failed:%s \n", name.c_str(), t->xml().c_str() );
+    }
+    delete t;
+  }
+
+  // -------
+  {
+    name = "inviting someone";
+    MUCRoom::MUCUser mu( MUCRoom::MUCUser::OpInvite, "foo@bar", "why not?", "somethread" );
+    t = mu.tag();
+    if( !t || t->xml() != "<x xmlns='" + XMLNS_MUC_USER + "'>"
+         "<invite to='foo@bar'>"
+         "<reason>why not?</reason>"
+         "<continue thread='somethread'/>"
+         "</invite>"
+         "</x>" )
+    {
+      ++fail;
+      printf( "test '%s' failed:%s \n", name.c_str(), t->xml().c_str() );
+    }
+    delete t;
+  }
+
+  // -------
+  {
+    name = "parse invitation";
+    Tag* x = new Tag( "x" );
+    x->setXmlns( XMLNS_MUC_USER );
+    Tag* i = new Tag( x, "invite" );
+    i->addAttribute( "to", "foo@bar" );
+    new Tag( i, "reason", "why not?" );
+    new Tag( i, "continue", "thread", "somethread" );
+    new Tag( x, "password", "foopwd" );
+    MUCRoom::MUCUser mu( x );
+    t = mu.tag();
+    if( !t || t->xml() != "<x xmlns='" + XMLNS_MUC_USER + "'>"
+         "<invite to='foo@bar'>"
+         "<reason>why not?</reason>"
+         "<continue thread='somethread'/>"
+         "</invite>"
+         "<password>foopwd</password>"
          "</x>" )
     {
       ++fail;
@@ -84,9 +207,50 @@ int main( int /*argc*/, char** /*argv*/ )
     delete x;
   }
 
+  // -------
+  {
+    name = "decline invitation";
+    MUCRoom::MUCUser mu( MUCRoom::MUCUser::OpDecline, "bar@foo", "because." );
+    t = mu.tag();
+    if( !t || t->xml() != "<x xmlns='" + XMLNS_MUC_USER + "'>"
+         "<decline from='bar@foo'>"
+         "<reason>because.</reason>"
+         "</decline>"
+         "</x>" )
+    {
+      ++fail;
+      printf( "test '%s' failed:%s \n", name.c_str(), t->xml().c_str() );
+    }
+    delete t;
+  }
 
   // -------
   {
+    name = "parse decline";
+    Tag* x = new Tag( "x" );
+    x->setXmlns( XMLNS_MUC_USER );
+    Tag* i = new Tag( x, "decline" );
+    i->addAttribute( "from", "foo@bar" );
+    new Tag( i, "reason", "because." );
+    MUCRoom::MUCUser mu( x );
+    t = mu.tag();
+    if( !t || t->xml() != "<x xmlns='" + XMLNS_MUC_USER + "'>"
+         "<decline from='foo@bar'>"
+         "<reason>because.</reason>"
+         "</decline>"
+         "</x>" )
+    {
+      ++fail;
+      printf( "test '%s' failed:%s \n", name.c_str(), t->xml().c_str() );
+    }
+    delete t;
+    delete x;
+  }
+
+  // -------
+  {
+    // this is for parsing incoming stanzas only.
+    // for actively destroying a room (as the owner), see MUCOwner
     name = "destroying a room";
     Tag* x = new Tag( "x" );
     x->setXmlns( XMLNS_MUC_USER );
