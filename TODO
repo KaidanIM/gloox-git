@@ -45,7 +45,6 @@ optional for 1.0:
 - XEP-0175 (Best Practices for Use of SASL ANONYMOUS)
 - XEP-0186 (Invisible Command)
 - XEP-0198 (Stanza Acknowledgements)
-- XEP-0199 (XMPP Ping)
 - vcard-temp: support AGENT, CATEGORIES, SOUND, KEY
 - make socket tunable (keepalive)
 - allow for registration and immediate connection from within the same Client object
