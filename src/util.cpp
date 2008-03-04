@@ -36,7 +36,7 @@ namespace gloox
 
     const std::string _lookup( unsigned code, const char* values[], unsigned size, const std::string& def )
     {
-      return code < size ? std::string(values[code]) : def;
+      return code < size ? std::string( values[code] ) : def;
     }
 
     unsigned _lookup2( const std::string& str, const char* values[],
