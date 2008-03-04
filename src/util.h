@@ -198,11 +198,10 @@ namespace gloox
 
     /**
      * Custom log2() implementation.
-     * @param x Figure to take the logarithm from.
+     * @param n Figure to take the logarithm from.
      * @return The logarithm to the basis of 2.
      */
-    double log2( double x );
-
+    int log2( unsigned int n );
   }
 
 }

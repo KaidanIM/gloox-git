@@ -12,7 +12,6 @@
 
 #include "util.h"
 #include "gloox.h"
-#include <cmath>
 
 namespace gloox
 {
@@ -20,10 +19,15 @@ namespace gloox
   namespace util
   {
 
-    double log2( double x )
+    int log2( unsigned int n )
     {
-      static double l2 = log( 2.0 );
-      return log( x ) / l2;
+      int pos = 0;
+      if ( n >= 1<<16 ) { n >>= 16; pos += 16; }
+      if ( n >= 1<< 8 ) { n >>=  8; pos +=  8; }
+      if ( n >= 1<< 4 ) { n >>=  4; pos +=  4; }
+      if ( n >= 1<< 2 ) { n >>=  2; pos +=  2; }
+      if ( n >= 1<< 1 ) {           pos +=  1; }
+      return ( (n == 0) ? (-1) : pos );
     }
 
     unsigned _lookup( const std::string& str, const char* values[], unsigned size, int def )
