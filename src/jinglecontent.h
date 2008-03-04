@@ -11,8 +11,8 @@
 */
 
 
-#ifndef JINGLEDESCRIPTION_H__
-#define JINGLEDESCRIPTION_H__
+#ifndef JINGLECONTENT_H__
+#define JINGLECONTENT_H__
 
 
 #include "jingleplugin.h"
@@ -68,4 +68,4 @@ namespace gloox
 
 }
 
-#endif // JINGLEDESCRIPTION_H__
+#endif // JINGLECONTENT_H__
