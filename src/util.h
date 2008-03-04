@@ -196,6 +196,13 @@ namespace gloox
      */
     bool checkValidXMLChars( const std::string& data );
 
+    /**
+     * Custom log2() implementation.
+     * @param x Figure to take the logarithm from.
+     * @return The logarithm to the basis of 2.
+     */
+    double log2( double x );
+
   }
 
 }

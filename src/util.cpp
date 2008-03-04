@@ -20,6 +20,12 @@ namespace gloox
   namespace util
   {
 
+    double log2( double x )
+    {
+      static double l2 = log( 2.0 );
+      return log( x ) / l2;
+    }
+
     unsigned _lookup( const std::string& str, const char* values[], unsigned size, int def )
     {
       unsigned i = 0;
@@ -36,7 +42,7 @@ namespace gloox
     unsigned _lookup2( const std::string& str, const char* values[],
                        unsigned size, int def )
     {
-      return 1 << _lookup( str, values, size, def <= 0 ? def : (int)log2( def ) );
+        return 1 << _lookup( str, values, size, def <= 0 ? def : (int)log2( def ) );
     }
 
     const std::string _lookup2( unsigned code, const char* values[], unsigned size, const std::string& def )
