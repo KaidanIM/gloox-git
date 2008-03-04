@@ -182,7 +182,7 @@ namespace gloox
        * Returns an XPath expression that describes a path to child elements of a
        * stanza that an extension handles.
        *
-       * @return The extension's type.
+       * @return The extension's filter string.
        */
       virtual const std::string& filterString() const = 0;
 
