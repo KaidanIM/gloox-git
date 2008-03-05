@@ -65,6 +65,10 @@ namespace gloox
     /**
      * @brief This is an implementation of a Jingle Session (XEP-0166).
      *
+     * Beware! The classes in the Jingle namespace implement the signaling part of Jingle only.
+     * At this point, there is no support for actually establishing any connection to a remote entity,
+     * nor for transfering any media in any way whatsoever.
+     *
      * XEP Version: 0.25
      * @author Jakob Schroeter <js@camaya.net>
      * @since 1.0

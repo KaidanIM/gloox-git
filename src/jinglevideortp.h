@@ -42,10 +42,10 @@ namespace gloox
         virtual ~VideoRTP() {}
 
         // reimplemented from Plugin
-        virtual const std::string& filterString() const = 0;
+        virtual const std::string& filterString() const { return EmptyString; }
 
         // reimplemented from Plugin
-        virtual Tag* tag() const = 0;
+        virtual Tag* tag() const { return 0; }
 
     };
 
