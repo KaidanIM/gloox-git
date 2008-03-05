@@ -555,6 +555,12 @@ namespace gloox
   /** Jingle namespace (XEP-0166) */
   GLOOX_API extern const std::string XMLNS_JINGLE;
 
+  /** Jingle Audio via RTP namespace (XEP-0167) */
+  GLOOX_API extern const std::string XMLNS_JINGLE_AUDIO_RTP;
+
+  /** Jingle Video via RTP namespace (XEP-0180) */
+  GLOOX_API extern const std::string XMLNS_JINGLE_VIDEO_RTP;
+
 
   /** Supported stream version (major). */
   GLOOX_API extern const std::string XMPP_STREAM_VERSION_MAJOR;

@@ -100,6 +100,8 @@ namespace gloox
   const std::string XMLNS_NICKNAME          = "http://jabber.org/protocol/nick";
 
   const std::string XMLNS_JINGLE            = "urn:xmpp:tmp:jingle";
+  const std::string XMLNS_JINGLE_AUDIO_RTP  = "urn:xmpp:tmp:jingle:apps:audio-rtp";
+  const std::string XMLNS_JINGLE_VIDEO_RTP  = "urn:xmpp:tmp:jingle:apps:video-rtp";
 
   const std::string XMPP_STREAM_VERSION_MAJOR = "1";
   const std::string XMPP_STREAM_VERSION_MINOR = "0";

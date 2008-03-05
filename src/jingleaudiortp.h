@@ -37,15 +37,20 @@ namespace gloox
     {
       public:
         /**
+         * Creates a new wrapper for the Audio via RTP Application Format defined in XEP-0167.
+         * @param payload A list of acceptable Payload Types.
+         */
+        AudioRTP( const PayloadList& payload )
+          : Description( payload )
+        {}
+
+        /**
          * Virtual destructor.
          */
         virtual ~AudioRTP() {}
 
-        // reimplemented from Plugin
-        virtual const std::string& filterString() const { return EmptyString; }
-
-        // reimplemented from Plugin
-        virtual Tag* tag() const { return 0; }
+        // reimplemented from Description
+        virtual const std::string& xmlns() const { return XMLNS_JINGLE_AUDIO_RTP; }
 
     };
 

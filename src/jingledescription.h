@@ -16,9 +16,12 @@
 
 
 #include "jingleplugin.h"
+#include "gloox.h"
 
 namespace gloox
 {
+
+  class Tag;
 
   namespace Jingle
   {
@@ -34,6 +37,67 @@ namespace gloox
      */
     class Description : public Plugin
     {
+      public:
+        /**
+         *
+         * @author Jakob Schroeter <js@camaya.net>
+         * @since 1.0
+         */
+        class Payload
+        {
+          public:
+            /**
+             *
+             */
+            Payload( const StringMap& attribs, const StringMap& parameters )
+              : m_attribs( attribs ), m_parameters( parameters )
+            {}
+
+            /**
+             *
+             */
+            ~Payload() {}
+
+            /**
+             *
+             */
+            Tag* tag() const;
+
+          private:
+            StringMap m_attribs;
+            StringMap m_parameters;
+
+        };
+
+        /**
+         *
+         */
+        typedef std::list<const Description::Payload*> PayloadList;
+
+        /**
+         *
+         */
+        Description( const PayloadList& payload )
+          : m_payload( payload )
+        {}
+
+        virtual ~Description();
+
+        // reimplemented from Plugin
+        virtual const std::string& filterString() const;
+
+        // reimplemented from Plugin
+        virtual Tag* tag() const;
+
+      protected:
+        /**
+         *
+         */
+        virtual const std::string& xmlns() const = 0;
+
+      private:
+        PayloadList m_payload;
+
     };
 
   }
