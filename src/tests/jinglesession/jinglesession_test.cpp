@@ -61,7 +61,7 @@ class JingleSessionTest : public ClientBase, public Jingle::SessionHandler
     {
       m_js = new Jingle::Session( this, JID( "foo@bar" ), this );
     }
-    ~JingleSessionTest() {}
+    ~JingleSessionTest() { delete m_js; }
     void setTest( int test ) { m_test = test; }
     virtual void send( IQ& iq );
     virtual void send( const IQ& iq, IqHandler*, int );
