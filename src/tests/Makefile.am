@@ -7,7 +7,7 @@ SUBDIRS = adhoc adhoccommand adhoccommandnote amprule amp base64 \
           dataformreported dataformitem delayeddelivery discoinfo discoitems disco \
           error featureneg gpgencrypted gpgsigned \
           inbandbytestreamibb inbandbytestream iq \
-          jid jinglesession \
+          jid jinglesessionjingle jinglesession \
           md5 message messageeventfilter \
           mucroommucadmin mucroommucowner mucroommucuser \
           nickname nonsaslauthquery nonsaslauth \

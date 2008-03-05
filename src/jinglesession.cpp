@@ -19,6 +19,7 @@
 #include "jingletransport.h"
 #include "jinglesessionhandler.h"
 #include "tag.h"
+#include "util.h"
 
 namespace gloox
 {
@@ -26,16 +27,32 @@ namespace gloox
   namespace Jingle
   {
 
-    const std::string XMLNS_JINGLE = "urn:xmpp:tmp:jingle";
+    static const char* actionValues [] = {
+      "content-accept",
+      "content-add",
+      "content-modify",
+      "content-remove",
+      "content-replace",
+      "session-accept",
+      "session-info",
+      "session-initiate",
+      "session-terminate",
+      "transport-info"
+    };
+
+    static inline Action actionType( const std::string& type )
+    {
+      return (Action)util::lookup( type, actionValues );
+    }
 
     // ---- Session::Jingle ----
-    Session::Jingle::Jingle( const ContentList& contents, Action action )
-      : StanzaExtension( ExtJingle ), m_action( action ), m_contents( contents )
+    Session::Jingle::Jingle( Action action, const ContentList& contents, const std::string& sid )
+      : StanzaExtension( ExtJingle ), m_action( action ), m_sid( sid ), m_contents( contents )
     {
     }
 
-    Session::Jingle::Jingle( const Content* content, Action action )
-      : StanzaExtension( ExtJingle ), m_action( action )
+    Session::Jingle::Jingle( Action action, const Content* content, const std::string& sid )
+      : StanzaExtension( ExtJingle ), m_action( action ), m_sid( sid )
     {
       if( content )
         m_contents.push_back( content );
@@ -58,11 +75,17 @@ namespace gloox
 
     Tag* Session::Jingle::tag() const
     {
-      if( !m_valid )
+      if( m_action == InvalidAction || m_sid.empty() || m_initiator.empty() )
         return 0;
 
       Tag* t = new Tag( "jingle" );
       t->setXmlns( XMLNS_JINGLE );
+      t->addAttribute( "action", util::lookup( m_action, actionValues ) );
+      t->addAttribute( "initiator", m_initiator );
+      if( !m_responder.empty() )
+        t->addAttribute( "responder", m_responder );
+      t->addAttribute( "sid", m_sid );
+
       return t;
     }
     // ---- ~Session::Jingle ----
@@ -104,14 +127,14 @@ namespace gloox
 
       m_state = Pending;
       IQ init( IQ::Set, m_callee, m_parent->getID() );
-      init.addExtension( new Jingle( m_contents, SessionInitiate ) );
+      init.addExtension( new Jingle( SessionInitiate, m_contents, m_sid ) );
       m_parent->send( init, this, SessionInitiate );
 
       ContentList::const_iterator it = m_contents.begin();
       for( ; it != m_contents.end(); ++it )
       {
         IQ t( IQ::Set, m_callee, m_parent->getID() );
-        t.addExtension( new Jingle( (*it), TransportInfo ) );
+        t.addExtension( new Jingle( TransportInfo, (*it), m_sid ) );
         m_parent->send( t, this, TransportInfo );
       }
 
@@ -145,6 +168,17 @@ namespace gloox
 
     void Session::handleIqID( const IQ& iq, int context )
     {
+      if( iq.subtype() == IQ::Result )
+      {
+        switch( context )
+        {
+          default:
+            break;
+        }
+      }
+      else if( iq.subtype() == IQ::Error )
+      {
+      }
     }
 
   }

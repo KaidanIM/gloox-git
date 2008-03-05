@@ -552,6 +552,9 @@ namespace gloox
   /** Message Receipt namespace (XEP-0172) */
   GLOOX_API extern const std::string XMLNS_NICKNAME;
 
+  /** Jingle namespace (XEP-0166) */
+  GLOOX_API extern const std::string XMLNS_JINGLE;
+
 
   /** Supported stream version (major). */
   GLOOX_API extern const std::string XMPP_STREAM_VERSION_MAJOR;
