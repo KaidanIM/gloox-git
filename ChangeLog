@@ -1,7 +1,7 @@
 v0.9.9.4 -- 05 Mar 2008
 -----------------------
 - MUCRoom: don't leak a MessageSession on presence error
-- compile fix for gcc 4.3
+- compile fix for gcc 4.3 (thanks to Cyril Brulebois)
 
 
 v0.9.9.3 -- 18 Jan 2008
