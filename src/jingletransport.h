@@ -19,6 +19,8 @@
 namespace gloox
 {
 
+  class Tag;
+
   namespace Jingle
   {
 
@@ -33,6 +35,30 @@ namespace gloox
      */
     class Transport : public Plugin
     {
+      public:
+        /**
+         * Virtual destructor.
+         */
+        virtual ~Transport() {}
+
+        // reimplemented from Plugin
+        virtual const std::string& filterString() const;
+
+        // reimplemented from Plugin
+        virtual Tag* tag() const;
+
+      protected:
+        /**
+         * Returns the Transport's namespace.
+         * @return The namespace being handled by the Transport.
+         */
+        virtual const std::string& xmlns() const = 0;
+
+        /**
+         *
+         */
+        virtual Tag* childTag() const = 0;
+
     };
 
   }

@@ -14,6 +14,7 @@
 #ifndef FLEXOFFHANDLER_H__
 #define FLEXOFFHANDLER_H__
 
+#include "disco.h"
 #include "gloox.h"
 
 namespace gloox

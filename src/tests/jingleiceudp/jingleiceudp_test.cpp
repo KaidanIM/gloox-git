@@ -20,7 +20,9 @@ int main( int /*argc*/, char** /*argv*/ )
     name = "invalid Jingle 1";
     Jingle::ICEUDP a;
     Tag* t = a.tag();
-    if( t )
+    if( !t || t->xml() != "<transport xmlns='" + XMLNS_JINGLE_ICE_UDP + "'>"
+         "<candidate/>"
+         "</transport>" )
     {
       ++fail;
       printf( "test '%s' failed\n", name.c_str() );
