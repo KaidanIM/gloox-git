@@ -29,7 +29,8 @@ libgloox_la_SOURCES = jid.cpp parser.cpp connectiontcpclient.cpp clientbase.cpp 
                         pubsubmanager.cpp error.cpp util.cpp iq.cpp message.cpp presence.cpp \
                         subscription.cpp capabilities.cpp chatstate.cpp connectionbosh.cpp connectiontls.cpp \
                         messageevent.cpp receipt.cpp nickname.cpp eventdispatcher.cpp \
-                        pubsubevent.cpp xhtmlim.cpp featureneg.cpp jinglesession.cpp jinglecontent.cpp
+                        pubsubevent.cpp xhtmlim.cpp featureneg.cpp jinglesession.cpp jinglecontent.cpp \
+                        jingledescription.cpp
 
 libgloox_la_LDFLAGS = -version-info 8:0:0 -no-undefined -no-allow-shlib-undefined
 libgloox_la_LIBADD =
@@ -81,7 +82,8 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             nickname.h                pubsubevent.h           xhtmlim.h \
                             eventdispatcher.h         jinglesession.h         jingletransport.h \
                             jingledescription.h       jinglesessionhandler.h  jingleplugin.h \
-                            jinglecontent.h
+                            jinglecontent.h           jinglevideortp.h        jingleaudiortp.h \
+                            jingleiceudp.h            jinglerawudp.h
 
 noinst_HEADERS = prep.h dns.h nonsaslauth.h mucmessagesession.h stanzaextensionfactory.h tlsgnutlsclient.h \
                    tlsgnutlsbase.h tlsgnutlsclientanon.h tlsgnutlsserveranon.h tlsopenssl.h tlsschannel.h \

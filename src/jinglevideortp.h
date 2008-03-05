@@ -15,13 +15,12 @@
 #define JINGLEVIDEORTP_H__
 
 #include "jingledescription.h"
+#include "gloox.h"
 
 #include <string>
 
 namespace gloox
 {
-
-  class Tag;
 
   namespace Jingle
   {
@@ -37,15 +36,20 @@ namespace gloox
     {
       public:
         /**
+         * Creates a new wrapper for the Video via RTP Application Format defined in XEP-0180.
+         * @param payload A list of acceptable Payload Types.
+         */
+        VideoRTP( const PayloadList& payload )
+          : Description( payload )
+        {}
+
+        /**
          * Virtual destructor.
          */
         virtual ~VideoRTP() {}
 
-        // reimplemented from Plugin
-        virtual const std::string& filterString() const { return EmptyString; }
-
-        // reimplemented from Plugin
-        virtual Tag* tag() const { return 0; }
+        // reimplemented from Description
+        virtual const std::string& xmlns() const { return XMLNS_JINGLE_VIDEO_RTP; }
 
     };
 
