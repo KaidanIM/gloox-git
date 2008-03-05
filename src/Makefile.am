@@ -30,7 +30,7 @@ libgloox_la_SOURCES = jid.cpp parser.cpp connectiontcpclient.cpp clientbase.cpp 
                         subscription.cpp capabilities.cpp chatstate.cpp connectionbosh.cpp connectiontls.cpp \
                         messageevent.cpp receipt.cpp nickname.cpp eventdispatcher.cpp \
                         pubsubevent.cpp xhtmlim.cpp featureneg.cpp jinglesession.cpp jinglecontent.cpp \
-                        jingledescription.cpp
+                        jingledescription.cpp jingletransport.cpp
 
 libgloox_la_LDFLAGS = -version-info 8:0:0 -no-undefined -no-allow-shlib-undefined
 libgloox_la_LIBADD =

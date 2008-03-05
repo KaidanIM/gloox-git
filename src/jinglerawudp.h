@@ -15,13 +15,13 @@
 #define JINGLERAWUDP_H__
 
 #include "jingletransport.h"
+#include "gloox.h"
+#include "tag.h"
 
 #include <string>
 
 namespace gloox
 {
-
-  class Tag;
 
   namespace Jingle
   {
@@ -41,11 +41,16 @@ namespace gloox
          */
         virtual ~RawUDP() {}
 
-        // reimplemented from Plugin
-        virtual const std::string& filterString() const { return EmptyString; }
+        // reimplemented from Transport
+        virtual const std::string& xmlns() const { return XMLNS_JINGLE_RAW_UDP; }
 
-        // reimplemented from Plugin
-        virtual Tag* tag() const { return 0; }
+        // reimplemented from Transport
+        virtual Tag* childTag() const
+        {
+          Tag* t = new Tag( "candidate" );
+          // FIXME
+          return t;
+        }
 
     };
 

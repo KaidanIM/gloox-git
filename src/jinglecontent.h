@@ -39,7 +39,7 @@ namespace gloox
     {
       public:
         /**
-         * Virtual destructor.
+         * Creates a new Content wrapper.
          */
         Content();
 
@@ -48,18 +48,10 @@ namespace gloox
          */
         virtual ~Content();
 
-        /**
-         * Returns an XPath expression that describes a path to child elements of a
-         * jingle element that a plugin handles.
-         *
-         * @return The plugin's filter string.
-         */
+        // reimplemented from Plugin
         virtual const std::string& filterString() const;
 
-        /**
-         * Returns a Tag representation of the plugin.
-         * @return A Tag representation of the plugin.
-         */
+        // reimplemented from Plugin
         virtual Tag* tag() const;
 
     };
