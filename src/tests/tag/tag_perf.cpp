@@ -9,6 +9,8 @@ using namespace gloox;
 
 #include <sys/time.h>
 
+#include <cstdlib>
+
 static double divider = 1000000;
 static int num = 2500;
 static double t;

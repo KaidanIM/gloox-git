@@ -11,6 +11,8 @@ using namespace gloox;
 #include <string>
 #include <sys/time.h>
 
+#include <cstdlib>
+
 #ifdef HAVE_ZLIB
 
 class ZlibTest : public CompressionDataHandler

@@ -38,6 +38,8 @@
 # include <sstream>
 #endif
 
+#include <cstdlib>
+
 namespace gloox
 {
 
