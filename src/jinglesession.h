@@ -45,6 +45,24 @@ namespace gloox
     typedef std::list<const Content*> ContentList;
 
     /**
+     * Jingle Session actions.
+     */
+    enum Action
+    {
+      ContentAccept,                /**< */
+      ContentAdd,                   /**< */
+      ContentModify,                /**< */
+      ContentRemove,                /**< */
+      ContentReplace,               /**< */
+      SessionAccept,                /**< */
+      SessionInfo,                  /**< */
+      SessionInitiate,              /**< */
+      SessionTerminate,             /**< */
+      TransportInfo,                /**< */
+      InvalidAction                 /**< */
+    };
+
+    /**
      * @brief This is an implementation of a Jingle Session (XEP-0166).
      *
      * XEP Version: 0.25
@@ -63,6 +81,91 @@ namespace gloox
           Ended,                    /**< */
           Pending,                  /**< */
           Active                    /**< */
+        };
+
+        /**
+         * @brief This is an implementation of XEP-0166 (Jingle) as a StanzaExtension.
+         *
+         * XEP Version: 0.25
+         * @author Jakob Schroeter <js@camaya.net>
+         * @since 1.1
+         */
+        class Jingle : public StanzaExtension
+        {
+
+          friend class Session;
+
+          public:
+            /**
+             * Constructs a new object from the given Tag.
+             * @param tag The Tag to parse.
+             */
+            Jingle( const Tag* tag = 0 );
+
+            /**
+             * Virtual Destructor.
+             */
+            virtual ~Jingle();
+
+            /**
+             *
+             */
+            void addContent( const Content* content, Action action );
+
+            /**
+             *
+             */
+            const std::string& sid() const { return m_sid; }
+
+            /**
+             *
+             */
+            void setInitiator( const std::string& initiator ) { m_initiator = initiator; }
+
+            /**
+             *
+             */
+            void setResponder( const std::string& responder ) { m_responder = responder; }
+
+            /**
+             *
+             */
+            Action action() const { return m_action; }
+
+            // reimplemented from StanzaExtension
+            virtual const std::string& filterString() const;
+
+            // reimplemented from StanzaExtension
+            virtual StanzaExtension* newInstance( const Tag* tag ) const
+            {
+              return new Jingle( tag );
+            }
+
+            // reimplemented from StanzaExtension
+            virtual Tag* tag() const;
+
+#ifdef JINGLE_TEST
+          public:
+#else
+          private:
+#endif
+            /**
+             * Constructs a new object and fills it according to the parameters.
+             * @param action The Action to carry out.
+             */
+            Jingle( Action action, const ContentList& contents, const std::string& sid );
+
+            /**
+             *
+             */
+            Jingle( Action action, const Content* content, const std::string& sid );
+
+            Action m_action;
+            std::string m_sid;
+            std::string m_initiator;
+            std::string m_responder;
+            ContentList m_contents;
+
         };
 
         /**
@@ -109,93 +212,11 @@ namespace gloox
         // reimplemented from IqHandler
         virtual void handleIqID( const IQ& iq, int context );
 
-#ifdef JINGLESESSION_TEST
+#ifdef JINGLE_TEST
       public:
 #else
       private:
 #endif
-        enum Action
-        {
-          ContentAccept,
-          ContentAdd,
-          ContentModify,
-          ContentRemove,
-          ContentReplace,
-          SessionAccept,
-          SessionInfo,
-          SessionInitiate,
-          SessionTerminate,
-          TransportInfo,
-          InvalidAction
-        };
-
-        /**
-         * @brief This is an implementation of XEP-0166 (Jingle) as a StanzaExtension.
-         *
-         * XEP Version: 0.25
-         * @author Jakob Schroeter <js@camaya.net>
-         * @since 1.1
-         */
-        class Jingle : public StanzaExtension
-        {
-
-          public:
-            /**
-             * Constructs a new object and fills it according to the parameters.
-             * @param action The Action to carry out.
-             */
-            Jingle( const ContentList& contents, Action action );
-
-            /**
-             *
-             */
-            Jingle( const Content* content, Action action );
-
-            /**
-             * Constructs a new object from the given Tag.
-             * @param tag The Tag to parse.
-             */
-            Jingle( const Tag* tag = 0 );
-
-            /**
-             * Virtual Destructor.
-             */
-            virtual ~Jingle();
-
-            /**
-             *
-             */
-            void addContent( const Content* content, Action action );
-
-            /**
-             *
-             */
-            const std::string& sid() const { return m_sid; }
-
-            /**
-             *
-             */
-            Action action() const { return m_action; }
-
-            // reimplemented from StanzaExtension
-            virtual const std::string& filterString() const;
-
-            // reimplemented from StanzaExtension
-            virtual StanzaExtension* newInstance( const Tag* tag ) const
-            {
-              return new Jingle( tag );
-            }
-
-            // reimplemented from StanzaExtension
-            virtual Tag* tag() const;
-
-          private:
-            Action m_action;
-            std::string m_sid;
-            ContentList m_contents;
-
-        };
-
         ClientBase* m_parent;
         State m_state;
         JID m_callee;

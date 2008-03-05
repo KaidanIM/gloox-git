@@ -327,6 +327,8 @@ src/tests/inbandbytestreamibb/Makefile
 src/tests/inbandbytestream/Makefile
 src/tests/iq/Makefile
 src/tests/jid/Makefile
+src/tests/jinglesessionjingle/Makefile
+src/tests/jinglesession/Makefile
 src/tests/md5/Makefile
 src/tests/message/Makefile
 src/tests/messageeventfilter/Makefile
