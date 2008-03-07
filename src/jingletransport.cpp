@@ -22,7 +22,7 @@ namespace gloox
 
     const std::string& Transport::filterString() const
     {
-      static const std::string& filter = "./transport[@xmlns='" + xmlns() + "']";
+      static const std::string filter = "./transport[@xmlns='" + xmlns() + "']";
       return filter;
     }
 
