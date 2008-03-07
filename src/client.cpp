@@ -103,7 +103,7 @@ namespace gloox
   }
   // ---- ~Client::ResourceBind ----
 
-  // ---- Client::ResourceBind ----
+  // ---- Client::SessionCreation ----
   Tag* Client::SessionCreation::tag() const
   {
     Tag* t = new Tag( "session" );
