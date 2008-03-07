@@ -42,7 +42,7 @@ namespace gloox
 
   const std::string& GPGSigned::filterString() const
   {
-    static const std::string& filter =
+    static const std::string filter =
            "/presence/x[@xmlns='" + XMLNS_X_GPGSIGNED + "']"
            "|/message/x[@xmlns='" + XMLNS_X_GPGSIGNED + "']";
     return filter;

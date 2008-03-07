@@ -61,7 +61,7 @@ namespace gloox
 
     const std::string& Description::filterString() const
     {
-      static const std::string& filter = "./description[@xmlns='" + xmlns() + "']";
+      static const std::string filter = "./description[@xmlns='" + xmlns() + "']";
       return filter;
     }
 
