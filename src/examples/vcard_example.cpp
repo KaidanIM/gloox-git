@@ -37,8 +37,8 @@ class VCardTest : public ConnectionListener, LogHandler, VCardHandler
 
       j->connect();
 
-      delete( j );
       delete( m_vManager );
+      delete( j );
     }
 
     virtual void onConnect()
@@ -64,14 +64,16 @@ class VCardTest : public ConnectionListener, LogHandler, VCardHandler
       printf("log: level: %d, area: %d, %s\n", level, area, message.c_str() );
     }
 
-    virtual void handleVCard( const JID& jid, VCard *vcard )
+    virtual void handleVCard( const JID& jid, const VCard *v )
     {
       ++m_count;
-      if( !vcard )
+      if( !v )
       {
         printf( "empty vcard!\n" );
         return;
       }
+
+      VCard* vcard = new VCard( *v );
       printf( "received vcard for %s: %s, %d\n", jid.full().c_str(), vcard->tag()->xml().c_str(), m_count );
       VCard::AddressList::const_iterator it = vcard->addresses().begin();
       for( ; it != vcard->addresses().end(); ++it )
