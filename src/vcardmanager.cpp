@@ -26,8 +26,9 @@ namespace gloox
   {
     if( m_parent )
     {
-      m_parent->registerIqHandler( this, XMLNS_VCARD_TEMP );
+      m_parent->registerIqHandler( this, ExtVCard );
       m_parent->disco()->addFeature( XMLNS_VCARD_TEMP );
+      m_parent->registerStanzaExtension( new VCard() );
     }
   }
 
@@ -36,7 +37,7 @@ namespace gloox
     if( m_parent )
     {
       m_parent->disco()->removeFeature( XMLNS_VCARD_TEMP );
-      m_parent->removeIqHandler( this, XMLNS_VCARD_TEMP );
+      m_parent->removeIqHandler( this, ExtVCard );
       m_parent->removeIDHandler( this );
     }
   }
@@ -51,7 +52,8 @@ namespace gloox
       return;
 
     const std::string& id = m_parent->getID();
-    IQ iq ( IQ::Get, jid.bareJID(), id, XMLNS_VCARD_TEMP, "vCard" );
+    IQ iq ( IQ::Get, jid.bareJID(), id );
+    iq.addExtension( new VCard() );
 
     m_trackMap[id] = vch;
     m_parent->send( iq, this,VCardHandler::FetchVCard  );
@@ -70,16 +72,14 @@ namespace gloox
     }
   }
 
-  void VCardManager::storeVCard( const VCard* vcard, VCardHandler* vch )
+  void VCardManager::storeVCard( VCard* vcard, VCardHandler* vch )
   {
     if( !m_parent || !vch )
       return;
 
     const std::string& id = m_parent->getID();
     IQ iq( IQ::Set, JID(), id );
-    Tag* q = iq.query();
-    delete q; // FIXME somewhat dirty...
-    q = vcard->tag();
+    iq.addExtension( vcard );
 
     m_trackMap[id] = vch;
     m_parent->send( iq, this, VCardHandler::StoreVCard );
@@ -98,9 +98,10 @@ namespace gloox
           {
             case VCardHandler::FetchVCard:
             {
-              Tag* v = iq.query();
-              if( v && v->name() == "vCard" && v->xmlns() == XMLNS_VCARD_TEMP )
-                (*it).second->handleVCard( iq.from(), new VCard( v ) );
+              const VCard* v = iq.findExtension<VCard>( ExtVCard );
+
+              if( v )
+                (*it).second->handleVCard( iq.from(), v );
               else
                 (*it).second->handleVCard( iq.from(), 0 );
               break;

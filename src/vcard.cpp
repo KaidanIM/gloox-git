@@ -41,15 +41,20 @@ namespace gloox
   }
 
   VCard::VCard()
-    : m_class( ClassNone ), m_prodid( "gloox" + GLOOX_VERSION ),
+    : StanzaExtension( ExtVCard ), m_class( ClassNone ), m_prodid( "gloox" + GLOOX_VERSION ),
       m_N( false ), m_PHOTO( false ), m_LOGO( false )
   {
   }
 
-  VCard::VCard( Tag* vcard )
-    : m_class( ClassNone ), m_prodid( "gloox" + GLOOX_VERSION ),
+  VCard::VCard( const Tag* vcard )
+    : StanzaExtension( ExtVCard ), m_class( ClassNone ), m_prodid( "gloox" + GLOOX_VERSION ),
       m_N( false ), m_PHOTO( false ), m_LOGO( false )
   {
+    if( !vcard || vcard->name() != "vCard" || vcard->xmlns() != XMLNS_VCARD_TEMP )
+      return;
+
+    m_valid = true;
+
     checkField( vcard, "FN", m_formattedname );
     checkField( vcard, "NICKNAME", m_nickname );
     checkField( vcard, "URL", m_url );
@@ -372,10 +377,20 @@ namespace gloox
     }
   }
 
+  const std::string& VCard::filterString() const
+  {
+    static const std::string filter = "/iq/vCard[@xmlns='" + XMLNS_VCARD_TEMP + "']";
+    return filter;
+  }
+
   Tag* VCard::tag() const
   {
     Tag* v = new Tag( "vCard" );
     v->addAttribute( XMLNS, XMLNS_VCARD_TEMP );
+
+    if( !m_valid )
+      return v;
+
     v->addAttribute( "version", "3.0" );
 
     insertField( v, "FN", m_formattedname );

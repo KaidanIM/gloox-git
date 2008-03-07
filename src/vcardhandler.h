@@ -55,8 +55,9 @@ namespace gloox
        * The VCardHandler becomes owner of the VCard object and is responsible for deleting it.
        * @param jid The JID to which this VCard belongs.
        * @param vcard The fetched VCard. Zero if there is no VCard for this contact.
+       * Do @b not delete the VCard. It will be deleted after this function returned.
        */
-      virtual void handleVCard( const JID& jid, VCard* vcard ) = 0;
+      virtual void handleVCard( const JID& jid, const VCard* vcard ) = 0;
 
       /**
        * This function is called to indicate the result of a VCard store operation

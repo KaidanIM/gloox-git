@@ -15,7 +15,7 @@ SUBDIRS = adhoc adhoccommand adhoccommandnote amprule amp base64 \
           registrationquery registration \
           rostermanagerquery rostermanager searchquery search \
           sha simanager stanzaextensionfactory subscription tag tlsgnutls \
-          uniquemucroomunique vcardupdate \
+          uniquemucroomunique vcard vcardupdate \
           xpath zlib util
 
 check: test

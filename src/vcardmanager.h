@@ -127,7 +127,7 @@ namespace gloox
        * @param vcard Your VCard to store.
        * @param vch The VCardHandler that will receive the result of the VCard store.
        */
-      void storeVCard( const VCard* vcard, VCardHandler* vch );
+      void storeVCard( VCard* vcard, VCardHandler* vch );
 
       /**
        * Use this function, e.g. from your VCardHandler-derived class's dtor, to cancel any
