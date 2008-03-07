@@ -61,7 +61,9 @@ int main( int /*argc*/, char** /*argv*/ )
     i->addAttribute( "node", "node3" );
     i->addAttribute( "name", "name3" );
     Disco::Items di( t );
-    if( di.node() != "somenode" || di.items().size() != 3 )
+    Disco::Item* item = 0;
+    if( di.node() != "somenode" || di.items().size() != 3 || !( item = *(di.items().begin()) )
+        || item->name() != "name1" || item->node() != "node1" || item->jid() != "jid1" )
     {
       ++fail;
       printf( "test '%s' failed\n", name.c_str() );

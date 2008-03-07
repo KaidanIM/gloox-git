@@ -211,7 +211,7 @@ namespace gloox
       return;
 
     m_jid = tag->findAttribute( "jid" );
-    m_jid = tag->findAttribute( "node" );
+    m_node = tag->findAttribute( "node" );
     m_name = tag->findAttribute( "name" );
   }
 
