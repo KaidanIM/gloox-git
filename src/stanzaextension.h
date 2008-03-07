@@ -74,7 +74,8 @@ namespace gloox
     ExtPing,                        /**< An XMPP Ping (XEP-0199). */
     ExtSearch,                      /**< A XEP-0055 (Jabber Search) wrapper. */
     ExtRegistration,                /**< A XEP-0077 (In-Band Registration) wrapper. */
-    ExtJingle,                      /**< XEP-0166 */
+    ExtJingle,                      /**< An extension dealing with Jingle (XEP-0166) */
+    ExtVCard,                       /**< An extension dealing with vcard-temp (XEP-0054) */
     ExtUser                         /**< User-supplied extensions must use IDs above this. Do
                                      * not hard-code ExtUser's value anywhere, it is subject
                                      * to change. */
