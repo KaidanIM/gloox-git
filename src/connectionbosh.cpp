@@ -22,6 +22,9 @@
 #include <sstream>
 
 #include <cstdlib>
+#include <ctime>
+#include <cctype>
+#include <algorithm>
 
 namespace gloox
 {
@@ -33,7 +36,7 @@ namespace gloox
       m_logInstance( logInstance ), m_parser( this ), m_boshHost( boshHost ), m_path( "/http-bind/" ),
       m_rid( 0 ), m_initialStreamSent( false ), m_openRequests( 0 ),
       m_maxOpenRequests( 2 ), m_wait( 30 ), m_hold( 2 ), m_streamRestart( false ),
-      m_lastRequestTime( time( 0 ) ), m_minTimePerRequest( 0 ), m_bufferContentLength( 0 ),
+      m_lastRequestTime( std::time( 0 ) ), m_minTimePerRequest( 0 ), m_bufferContentLength( 0 ),
       m_connMode( ModePipelining )
   {
     initInstance( connection, xmppServer, xmppPort );
@@ -46,7 +49,7 @@ namespace gloox
       m_logInstance( logInstance ), m_parser( this ), m_boshHost( boshHost ), m_path( "/http-bind/" ),
       m_rid( 0 ),  m_initialStreamSent( false ), m_openRequests( 0 ),
       m_maxOpenRequests( 2 ), m_wait( 30 ), m_hold( 2 ), m_streamRestart( false ),
-      m_lastRequestTime( time( 0 ) ), m_minTimePerRequest( 0 ), m_bufferContentLength( 0 ),
+      m_lastRequestTime( std::time( 0 ) ), m_minTimePerRequest( 0 ), m_bufferContentLength( 0 ),
       m_connMode( ModePipelining )
   {
     initInstance( connection, xmppServer, xmppPort );
