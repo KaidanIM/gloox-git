@@ -120,8 +120,8 @@ namespace gloox
         ItemOperationList* m_itemOperations;
         std::string m_collection;
 
-        static const ItemOperationList m_emptyOperationList;
-        static const StringList m_emptyStringList;
+        const ItemOperationList m_emptyOperationList;
+        const StringList m_emptyStringList;
 
     };
 
