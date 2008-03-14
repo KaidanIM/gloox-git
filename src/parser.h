@@ -52,6 +52,11 @@ namespace gloox
        */
       bool feed( const std::string& data );
 
+      /**
+       * Rests the parser's internal state.
+       */
+      void reset() { cleanup(); }
+
     private:
       void addTag();
       void addAttribute();

@@ -345,6 +345,7 @@ namespace gloox
 
       m_connection->disconnect();
       m_connection->cleanup();
+      m_parser->reset();
 
       if( m_encryption )
         m_encryption->cleanup();
