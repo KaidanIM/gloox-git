@@ -332,6 +332,31 @@ namespace gloox
     return meths;
   }
 
+  bool Client::login() // FIXME this is c'n'p from above
+  {
+    bool retval = true;
+    notifyStreamEvent( StreamEventAuthentication );
+
+    if( m_streamFeatures & SaslMechDigestMd5 && m_availableSaslMechs & SaslMechDigestMd5
+        && !m_forceNonSasl )
+    {
+      startSASL( SaslMechDigestMd5 );
+    }
+    else if( m_streamFeatures & SaslMechPlain && m_availableSaslMechs & SaslMechPlain
+             && !m_forceNonSasl )
+    {
+      startSASL( SaslMechPlain );
+    }
+    else if( m_streamFeatures & StreamFeatureIqAuth || m_forceNonSasl )
+    {
+      nonSaslLogin();
+    }
+    else
+      retval = false;
+
+    return retval;
+  }
+
   void Client::bindResource()
   {
     if( !m_resourceBound )
