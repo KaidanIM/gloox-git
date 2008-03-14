@@ -248,7 +248,7 @@ else
       AC_MSG_CHECKING([for res_query in -lresolv (alternate version)])
       save_libs="$LIBS"
       LIBS="-lresolv $LIBS"
-      AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <resolv.h>]], [[res_query(0,0)]])],
+      AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <resolv.h>]], [[res_query(0,0,0,0,0)]])],
                      [AC_MSG_RESULT(yes)
                       AC_DEFINE(HAVE_RES_QUERY)
                       have_res_query=yes],

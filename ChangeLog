@@ -2,6 +2,7 @@ v0.9.9.5 -- xx yyy 2008
 -----------------------
 - added Parser::reset()
 - added Client::login()
+- fixed detection of res_query (Gentoo bug #212316)
 
 
 v0.9.9.4 -- 05 Mar 2008
