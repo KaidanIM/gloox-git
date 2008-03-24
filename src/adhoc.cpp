@@ -401,7 +401,7 @@ namespace gloox
     m_parent->send( iq, this, ExecuteAdhocCommand );
   }
 
-  void Adhoc::respond( const JID& remote, const Adhoc::Command* command )
+  void Adhoc::respond( const JID& remote, const Adhoc::Command* command, const Error* error )
   {
     if( !remote || !command || !m_parent )
       return;
@@ -410,8 +410,10 @@ namespace gloox
     if( it == m_activeSessions.end() )
       return;
 
-    IQ re( IQ::Result, remote, (*it).second );
+    IQ re( error ? IQ::Error : IQ::Result, remote, (*it).second );
     re.addExtension( command );
+    if( error )
+      re.addExtension( error );
     m_parent->send( re );
     m_activeSessions.erase( it );
   }
