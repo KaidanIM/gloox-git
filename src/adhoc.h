@@ -359,11 +359,13 @@ namespace gloox
        * It is recommended to use
        * Command( const std::string&, const std::string&, Status, DataForm* )
        * to construct the @c command object.
+       * Optionally, an Error object can be included. In that case the IQ sent is of type @c error.
        * @param remote The requester's JID.
        * @param command The response. The Adhoc object will own and delete the
        * command object pointed to.
+       * @param error An optional Error obejct to include.
        */
-      void respond( const JID& remote, const Adhoc::Command* command );
+      void respond( const JID& remote, const Adhoc::Command* command, const Error* error = 0 );
 
       /**
        * Using this function, you can register a AdhocCommandProvider -derived object as
