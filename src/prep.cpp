@@ -28,6 +28,8 @@
 #include <cstdlib>
 #include <string>
 
+#include <string.h>
+
 #define JID_PORTION_SIZE 1023
 
 namespace gloox

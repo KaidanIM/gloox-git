@@ -18,6 +18,8 @@
 #include "base64.h"
 #include "util.h"
 
+#include <cstdlib>
+
 namespace gloox
 {
 
