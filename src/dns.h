@@ -133,7 +133,7 @@ namespace gloox
       static HostMap defaultHostMap( const std::string& domain, const LogSink& logInstance );
       static void cleanup();
 
-      typedef struct buffer
+      struct buffer
       {
         unsigned char buf[NS_PACKETSZ];
         int len;

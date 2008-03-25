@@ -59,6 +59,8 @@
 #include <algorithm>
 #include <cmath>
 
+#include <string.h> // for memset()
+
 #ifndef _WIN32_WCE
 # include <sstream>
 # include <iomanip>

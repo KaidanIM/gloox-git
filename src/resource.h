@@ -80,7 +80,7 @@ namespace gloox
        * Lets you fetch the resource's last presence.
        * @return The resource's presence status.
        */
-      const Presence::PresenceType presence() const { return m_presence; }
+      Presence::PresenceType presence() const { return m_presence; }
 
       /**
        * Returns the StanzaExtensions that were sent with the last presence stanza
