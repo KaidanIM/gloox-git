@@ -121,6 +121,12 @@ namespace gloox
       FormType type() const { return m_type; }
 
       /**
+       * Sets the form's type.
+       * @param type The form's new type.
+       */
+      void setType( FormType type ) { m_type = type; }
+
+      /**
        * Parses the given Tag and creates an appropriate DataForm representation.
        * @param tag The Tag to parse.
        * @return @b True on success, @b false otherwise.
