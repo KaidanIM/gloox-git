@@ -40,6 +40,13 @@ namespace gloox
     parse( tag );
   }
 
+  DataForm::DataForm( const DataForm& form )
+    : StanzaExtension( ExtDataForm ), DataFormFieldContainer( form ),
+      m_type( form.m_type ), m_instructions( form.m_instructions ),
+      m_title( form.m_title )
+  {
+  }
+
   DataForm::~DataForm()
   {
   }
