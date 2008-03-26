@@ -212,7 +212,8 @@ namespace gloox
            * @param node The node (command) to perform the action on.
            * @param sessionid The (possibly newly created) session ID of the adhoc command session.
            * @param status The execution status.
-           * @param form An optional DataForm to include in the reply.
+           * @param form An optional DataForm to include in the reply. Will be deleted in Command's
+           * destructor.
            */
           Command( const std::string& node, const std::string& sessionid, Status status,
                    DataForm* form );
