@@ -216,7 +216,7 @@ namespace gloox
            * destructor.
            */
           Command( const std::string& node, const std::string& sessionid, Status status,
-                   DataForm* form );
+                   DataForm* form = 0 );
 
           /**
            * Creates a Command object that can be used to perform the provided Action.
