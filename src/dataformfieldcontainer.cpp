@@ -22,6 +22,15 @@ namespace gloox
   {
   }
 
+  DataFormFieldContainer::DataFormFieldContainer( const DataFormFieldContainer& dffc )
+  {
+    FieldList::const_iterator it = dffc.m_fields.begin();
+    for( ; it != dffc.m_fields.end(); ++it )
+    {
+      m_fields.push_back( new DataFormField( *(*it) ) );
+    }
+  }
+
   DataFormFieldContainer::~DataFormFieldContainer()
   {
 //     util::clearList( m_fields );

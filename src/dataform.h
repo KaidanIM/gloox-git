@@ -81,6 +81,12 @@ namespace gloox
       DataForm( const Tag* tag );
 
       /**
+       * Creates a new DataForm, copying the given one.
+       * @param form The form to copy.
+       */
+      DataForm( const DataForm& form );
+
+      /**
        * Virtual destructor.
        */
       virtual ~DataForm();

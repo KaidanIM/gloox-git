@@ -36,9 +36,15 @@ namespace gloox
   {
     public:
       /**
-        * Creates a new FieldContainer.
-        */
+       * Creates a new FieldContainer.
+       */
       DataFormFieldContainer();
+
+      /**
+       * Creates a new FieldContainer, copying all fields from the given FieldContainer.
+       * @param dffc The FieldContainer to copy.
+       */
+      DataFormFieldContainer( const DataFormFieldContainer& dffc );
 
       /**
         * Virtual destructor.
@@ -95,7 +101,8 @@ namespace gloox
         * @since 0.9.4
         */
       DataFormField* addField( DataFormField::FieldType type, const std::string& name,
-                               const std::string& value = EmptyString, const std::string& label = EmptyString )
+                               const std::string& value = EmptyString,
+                               const std::string& label = EmptyString )
       {
         DataFormField* field = new DataFormField( name, value, label, type );
         m_fields.push_back( field );

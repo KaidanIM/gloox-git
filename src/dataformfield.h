@@ -59,7 +59,8 @@ namespace gloox
         TypeTextMulti,            /**< The field enables an entity to gather or provide multiple lines of
                                     * text. */
         TypeTextPrivate,          /**< The field enables an entity to gather or provide a single line or
-                                    * word of text, which shall be obscured in an interface (e.g., *****). */
+                                    * word of text, which shall be obscured in an interface
+                                    * (e.g., *****). */
         TypeTextSingle,           /**< The field enables an entity to gather or provide a single line or
                                     * word of text, which may be shown in an interface. This field type is
                                     * the default and MUST be assumed if an entity receives a field type it
