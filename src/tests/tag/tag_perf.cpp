@@ -5,6 +5,7 @@ using namespace gloox;
 
 #include <stdio.h>
 #include <locale.h>
+#include <cstdlib>
 #include <string>
 
 #include <sys/time.h>
