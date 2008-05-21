@@ -223,7 +223,7 @@ namespace gloox
       m_certInfo.date_to = openSSLTime2UnixTime( (char*)(peer->cert_info->validity->notAfter->data) );
       std::string p;
       p.assign( peer_CN );
-      std::transform( p.begin(), p.end(), p.begin(), std::tolower );
+      std::transform( p.begin(), p.end(), p.begin(), tolower );
       if( p != m_server )
         m_certInfo.status |= CertWrongPeer;
 
