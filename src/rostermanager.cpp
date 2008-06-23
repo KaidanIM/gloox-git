@@ -63,6 +63,13 @@ namespace gloox
 
   void RosterManager::fill()
   {
+    Roster::iterator it = m_roster.begin();
+    for( ; it != m_roster.end(); ++it )
+    {
+      delete (*it).second;
+      m_roster.erase( it );
+    }
+
     m_privateXML->requestXML( "roster", XMLNS_ROSTER_DELIMITER, this );
 
     Tag *iq = new Tag( "iq" );
