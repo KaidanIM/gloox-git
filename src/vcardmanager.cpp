@@ -100,10 +100,9 @@ namespace gloox
             {
               const VCard* v = iq.findExtension<VCard>( ExtVCard );
 
+              (*it).second->handleVCard( iq.from(), v );
               if( v )
-                (*it).second->handleVCard( iq.from(), v );
-              else
-                (*it).second->handleVCard( iq.from(), 0 );
+                delete v;
               break;
             }
             case VCardHandler::StoreVCard:
