@@ -99,10 +99,7 @@ namespace gloox
             case VCardHandler::FetchVCard:
             {
               const VCard* v = iq.findExtension<VCard>( ExtVCard );
-
               (*it).second->handleVCard( iq.from(), v );
-              if( v )
-                delete v;
               break;
             }
             case VCardHandler::StoreVCard:
