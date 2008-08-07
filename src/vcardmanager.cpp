@@ -111,7 +111,11 @@ namespace gloox
             {
               Tag *v = stanza->findChild( "vCard", "xmlns", XMLNS_VCARD_TEMP );
               if( v )
-                (*it).second->handleVCard( stanza->from(), new VCard( v ) );
+              {
+                VCard *vcard = new VCard( v );
+                (*it).second->handleVCard( stanza->from(), vcard );
+                delete vcard;
+              }
               else
                 (*it).second->handleVCard( stanza->from(), 0 );
               break;
