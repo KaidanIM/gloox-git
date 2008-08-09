@@ -52,7 +52,6 @@ namespace gloox
 
       /**
        * This function is called when a VCard has been successfully fetched.
-       * The VCardHandler becomes owner of the VCard object and is responsible for deleting it.
        * @param jid The JID to which this VCard belongs.
        * @param vcard The fetched VCard. Zero if there is no VCard for this contact.
        * Do @b not delete the VCard. It will be deleted after this function returned.
