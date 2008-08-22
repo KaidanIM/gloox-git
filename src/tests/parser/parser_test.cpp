@@ -1161,6 +1161,16 @@ class ParserTest : private TagHandler
 
 
 
+      //-------
+      name = "invalid toplevel elements";
+      data = "</dff>";
+      if( ( i = p->feed( data ) ) < 0 )
+      {
+        ++fail;
+        printf( "test '%s' failed (%d)", name.c_str(), i );
+      }
+      delete m_tag;
+      m_tag = 0;
 
 
 

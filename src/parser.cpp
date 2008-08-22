@@ -340,7 +340,7 @@ namespace gloox
             addTag();
             if( !closeTag() )
             {
-              printf( "noipe, here\n" );
+//               printf( "noipe, here\n" );
               cleanup();
               return i;
             }
@@ -400,7 +400,7 @@ namespace gloox
             case '>':
               if( !closeTag() )
               {
-                printf( "here\n" );
+//                 printf( "here\n" );
                 cleanup();
                 return i;
               }
@@ -718,9 +718,9 @@ namespace gloox
     if( !m_current || m_current->name() != m_tag
         || ( !m_current->prefix().empty() && m_current->prefix() != m_tagPrefix ) )
     {
-      printf( "current xml: %s\n", m_current->xml().c_str() );
-      printf( "current name: %s, m_tag: %s\n", m_current->name().c_str(), m_tag.c_str() );
-      printf( "current prefix: %s, m_tagPrefix: %s\n", m_current->prefix().c_str(), m_tagPrefix.c_str() );
+//       printf( "current xml: %s\n", m_current->xml().c_str() );
+//       printf( "current name: %s, m_tag: %s\n", m_current->name().c_str(), m_tag.c_str() );
+//       printf( "current prefix: %s, m_tagPrefix: %s\n", m_current->prefix().c_str(), m_tagPrefix.c_str() );
       return false;
     }
 
