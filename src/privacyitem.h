@@ -87,19 +87,19 @@ namespace gloox
        * Returns the item type.
        * @return The type of the item.
        */
-      const ItemType type() const { return m_type; }
+      ItemType type() const { return m_type; }
 
       /**
        * Returns the item's action.
        * @return The action of the item.
        */
-      const ItemAction action() const { return m_action; }
+      ItemAction action() const { return m_action; }
 
       /**
        * Returns the packet type the item affects.
        * @return An OR'ed list of affected packet types.
        */
-      const int packetType() const { return m_packetType; }
+      int packetType() const { return m_packetType; }
 
       /**
        * Returns the value of the item's 'value' attribute.
