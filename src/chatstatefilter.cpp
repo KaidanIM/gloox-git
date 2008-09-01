@@ -33,7 +33,7 @@ namespace gloox
 
   void ChatStateFilter::filter( Message& msg )
   {
-    if( m_enableChatStates = m_chatStateHandler )
+    if( m_enableChatStates && m_chatStateHandler )
     {
       const ChatState* state = msg.findExtension<ChatState>( ExtChatState );
 
