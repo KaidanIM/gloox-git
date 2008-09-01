@@ -5,18 +5,26 @@
 SUBDIRS = adhoc adhoccommand adhoccommandnote amprule amp base64 \
           chatstatefilter client clientbase connectionbosh dataform dataformfield \
           dataformreported dataformitem delayeddelivery discoinfo discoitems disco \
-          error featureneg gpgencrypted gpgsigned \
+          error \
+          featureneg flexoffline flexofflineoffline \
+          gpgencrypted gpgsigned \
           inbandbytestreamibb inbandbytestream iq \
           jid jinglesessionjingle jingleaudiortp jingleiceudp jinglerawudp jinglevideortp jinglesession \
+          lastactivity lastactivityquery \
           md5 message messageeventfilter \
           mucroommucadmin mucroommucowner mucroommucuser \
           nickname nonsaslauthquery nonsaslauth \
-          oob parser prep presence pubsubevent pubsubmanager \
+          oob \
+          parser prep presence privacymanager privacymanagerquery pubsubevent pubsubmanager \
           registrationquery registration \
-          rostermanagerquery rostermanager searchquery search \
-          sha simanager stanzaextensionfactory subscription tag tlsgnutls \
-          uniquemucroomunique vcard vcardupdate \
-          xpath zlib util
+          rostermanagerquery rostermanager \
+          searchquery search \
+          sha stanzaextensionfactory subscription \
+          tag tlsgnutls \
+          uniquemucroomunique \
+          vcard vcardupdate \
+          xpath \
+          zlib util
 
 check: test
 
