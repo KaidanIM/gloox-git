@@ -53,8 +53,7 @@ namespace gloox
 
     Tag* t = new Tag( "feature" );
     t->setXmlns( XMLNS_FEATURE_NEG );
-    if( m_form )
-      t->addChild( m_form->tag() );
+    t->addChild( m_form->tag() );
     return t;
   }
 
