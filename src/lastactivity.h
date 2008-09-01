@@ -80,6 +80,53 @@ namespace gloox
       virtual void handleIqID( const IQ& iq, int context );
 
     private:
+#ifdef LASTACTIVITY_TEST
+    public:
+#endif
+      class Query : public StanzaExtension
+      {
+        public:
+          /**
+           * Constructs a new Query object from the given Tag.
+           * @param tag The Tag to parse.
+           */
+          Query( const Tag* tag = 0 );
+
+          /**
+           * Constructs a new Query object from the given long.
+           * @param dummy Ignored.
+           * @param seconds The number of seconds since last activity.
+           */
+          Query( int dummy, long seconds );
+
+          /**
+           * Virtual destructor.
+           */
+          virtual ~Query();
+
+          /**
+           * Returns the number of seconds since last activity.
+           * @return The number of seconds since last activity.
+           */
+          long seconds() const { return m_seconds; }
+
+          // reimplemented from StanzaExtension
+          virtual const std::string& filterString() const;
+
+          // reimplemented from StanzaExtension
+          virtual StanzaExtension* newInstance( const Tag* tag ) const
+          {
+            return new Query( tag );
+          }
+
+          // reimplemented from StanzaExtension
+          virtual Tag* tag() const;
+
+        private:
+          long m_seconds;
+
+      };
+
       LastActivityHandler* m_lastActivityHandler;
       ClientBase* m_parent;
 
