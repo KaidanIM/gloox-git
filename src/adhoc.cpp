@@ -164,6 +164,8 @@ namespace gloox
       c->addAttribute( "action", actionString( m_action ) );
     if( m_status != InvalidStatus )
       c->addAttribute( "status", statusString( m_status ) );
+    if ( !m_sessionid.empty() )
+      c->addAttribute( "sessionid", m_sessionid );
 
     if( m_form && *m_form )
       c->addChild( m_form->tag() );
