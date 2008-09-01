@@ -76,6 +76,10 @@ namespace gloox
     ExtRegistration,                /**< A XEP-0077 (In-Band Registration) wrapper. */
     ExtJingle,                      /**< An extension dealing with Jingle (XEP-0166) */
     ExtVCard,                       /**< An extension dealing with vcard-temp (XEP-0054) */
+    ExtPrivacy,                     /**< An extension dealing with Privacy Lists (XEP-0016) */
+    ExtLastActivity,                /**< An extension dealing with Last Activity (XEP-0012).  */
+    ExtFlexOffline,                 /**< An extension dealing with Flexible Offline Messages (XEP-0013). */
+    ExtSI,                          /**< An extension dealing with Stream Initiation (XEP-0095). */
     ExtUser                         /**< User-supplied extensions must use IDs above this. Do
                                      * not hard-code ExtUser's value anywhere, it is subject
                                      * to change. */
