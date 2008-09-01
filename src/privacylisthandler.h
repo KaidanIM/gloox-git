@@ -77,7 +77,7 @@ namespace gloox
        * @param name The name of the list.
        * @param items A list of PrivacyItem's.
        */
-      virtual void handlePrivacyList( const std::string& name, PrivacyList& items ) = 0;
+      virtual void handlePrivacyList( const std::string& name, const PrivacyList& items ) = 0;
 
       /**
        * Reimplement this function to be notified about new or changed lists.
