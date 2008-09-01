@@ -321,6 +321,8 @@ src/tests/discoitems/Makefile
 src/tests/disco/Makefile
 src/tests/error/Makefile
 src/tests/featureneg/Makefile
+src/tests/flexofflineoffline/Makefile
+src/tests/flexoffline/Makefile
 src/tests/gpgencrypted/Makefile
 src/tests/gpgsigned/Makefile
 src/tests/inbandbytestreamibb/Makefile
@@ -333,6 +335,8 @@ src/tests/jingleiceudp/Makefile
 src/tests/jinglerawudp/Makefile
 src/tests/jinglevideortp/Makefile
 src/tests/jinglesession/Makefile
+src/tests/lastactivityquery/Makefile
+src/tests/lastactivity/Makefile
 src/tests/md5/Makefile
 src/tests/message/Makefile
 src/tests/messageeventfilter/Makefile
@@ -346,6 +350,8 @@ src/tests/oob/Makefile
 src/tests/parser/Makefile
 src/tests/prep/Makefile
 src/tests/presence/Makefile
+src/tests/privacymanagerquery/Makefile
+src/tests/privacymanager/Makefile
 src/tests/pubsubevent/Makefile
 src/tests/pubsubmanager/Makefile
 src/tests/registrationquery/Makefile
