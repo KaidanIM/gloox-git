@@ -23,71 +23,120 @@
 namespace gloox
 {
 
-  PrivacyManager::PrivacyManager( ClientBase* parent )
-    : m_parent( parent ), m_privacyListHandler( 0 )
+  // ---- PrivacyManager::Query ----
+  PrivacyManager::Query::Query( const Tag* tag )
+    : StanzaExtension( ExtPrivacy )
   {
-    if( m_parent )
-      m_parent->registerIqHandler( this, XMLNS_PRIVACY );
-  }
-
-  PrivacyManager::~PrivacyManager()
-  {
-    if( m_parent )
+    const TagList& l = tag->children();
+    TagList::const_iterator it = l.begin();
+    for( ; it != l.end(); ++it )
     {
-      m_parent->removeIqHandler( this, XMLNS_PRIVACY );
-      m_parent->removeIDHandler( this );
-    }
-  }
-
-  std::string PrivacyManager::operation( int context, const std::string& name )
-  {
-    const std::string& id = m_parent->getID();
-    IQ::IqType iqType = IQ::Set;
-    if( context == PLRequestNames || context == PLRequestList )
-      iqType = IQ::Get;
-    IQ iq( iqType, JID(), id, XMLNS_PRIVACY );
-    if( context != PLRequestNames )
-    {
-      std::string child;
-      switch( context )
+      const std::string& name = (*it)->findAttribute( "name" );
+      if( (*it)->name() == "default" )
+        m_default = name;
+      else if( (*it)->name() == "active" )
+        m_active = name;
+      else if( (*it)->name() == "list" )
       {
-        case PLRequestList:
-        case PLRemove:
-          child = "list";
-          break;
-        case PLDefault:
-        case PLUnsetDefault:
-          child = "default";
-          break;
-        case PLActivate:
-        case PLUnsetActivate:
-          child = "active";
-          break;
+        m_names.push_back( name );
+
+        const TagList& l = (*it)->children();
+        TagList::const_iterator it_l = l.begin();
+        for( ; it_l != l.end(); ++it_l )
+        {
+          PrivacyItem::ItemType type;
+          PrivacyItem::ItemAction action;
+          int packetType = 0;
+
+          const std::string& t = (*it_l)->findAttribute( TYPE );
+          if( t == "jid" )
+            type = PrivacyItem::TypeJid;
+          else if( t == "group" )
+            type = PrivacyItem::TypeGroup;
+          else if( t == "subscription" )
+            type = PrivacyItem::TypeSubscription;
+          else
+            type = PrivacyItem::TypeUndefined;
+
+          const std::string& a = (*it_l)->findAttribute( "action" );
+          if( a == "allow" )
+            action = PrivacyItem::ActionAllow;
+          else if( a == "deny" )
+            action = PrivacyItem::ActionDeny;
+          else
+            action = PrivacyItem::ActionAllow;
+
+          const std::string& value = (*it_l)->findAttribute( "value" );
+
+          const TagList& c = (*it_l)->children();
+          TagList::const_iterator it_c = c.begin();
+          for( ; it_c != c.end(); ++it_c )
+          {
+            if( (*it_c)->name() == "iq" )
+              packetType |= PrivacyItem::PacketIq;
+            else if( (*it_c)->name() == "presence-out" )
+              packetType |= PrivacyItem::PacketPresenceOut;
+            else if( (*it_c)->name() == "presence-in" )
+              packetType |= PrivacyItem::PacketPresenceIn;
+            else if( (*it_c)->name() == "message" )
+              packetType |= PrivacyItem::PacketMessage;
+          }
+
+          PrivacyItem item( type, action, packetType, value );
+          m_items.push_back( item );
+        }
       }
-      Tag* l = new Tag( iq.query(), child );
-      if( !name.empty() )
-        l->addAttribute( "name", name );
     }
-    m_parent->send( iq, this, context );
-    return id;
   }
 
-  std::string PrivacyManager::store( const std::string& name, const PrivacyListHandler::PrivacyList& list )
+  PrivacyManager::Query::Query( int context, const std::string& name,
+                                const PrivacyListHandler::PrivacyList& list )
+    : StanzaExtension( ExtPrivacy ), m_context( context ), m_items( list )
   {
-    if( list.empty() )
-      return EmptyString;
+    m_names.push_back( name );
+  }
 
-    const std::string& id = m_parent->getID();
+  PrivacyManager::Query::~Query()
+  {
+  }
 
-    IQ iq( IQ::Set, JID(), id, XMLNS_PRIVACY );
-    Tag* l = new Tag( iq.query(), "list" );
-    l->addAttribute( "name", name );
+  const std::string& PrivacyManager::Query::filterString() const
+  {
+    static const std::string filter = "/iq/query[@xmlns='" + XMLNS_PRIVACY + "']";
+    return filter;
+  }
+
+  Tag* PrivacyManager::Query::tag() const
+  {
+    Tag* t = 0;
+
+    std::string child;
+    switch( m_context )
+    {
+      case PLRequestList:
+      case PLRemove:
+      case PLStore:
+        child = "list";
+        break;
+      case PLDefault:
+      case PLUnsetDefault:
+        child = "default";
+        break;
+      case PLActivate:
+      case PLUnsetActivate:
+        child = "active";
+        break;
+    }
+    t = new Tag( child );
+    t->setXmlns( XMLNS_PRIVACY );
+    if( !m_names.empty() )
+      t->addAttribute( "name", (*m_names.begin()) );
 
     int count = 0;
-    PrivacyListHandler::PrivacyList::const_iterator it = list.begin();
-    for( ; it != list.end(); ++it )
+    PrivacyListHandler::PrivacyList::const_iterator it = m_items.begin();
+    for( ; it != m_items.end(); ++it )
     {
-      Tag* i = new Tag( l, "item" );
+      Tag* i = new Tag( t, "item" );
 
       switch( (*it).type() )
       {
@@ -131,27 +180,66 @@ namespace gloox
       i->addAttribute( "order", ++count );
     }
 
+    return t;
+  }
+  // ---- ~PrivacyManager::Query ----
+
+  // ---- PrivacyManager ----
+  PrivacyManager::PrivacyManager( ClientBase* parent )
+    : m_parent( parent ), m_privacyListHandler( 0 )
+  {
+    if( m_parent )
+    {
+      m_parent->registerStanzaExtension( new Query() );
+      m_parent->registerIqHandler( this, ExtPrivacy );
+    }
+  }
+
+  PrivacyManager::~PrivacyManager()
+  {
+    if( m_parent )
+    {
+      m_parent->removeIqHandler( this, ExtPrivacy );
+      m_parent->removeIDHandler( this );
+    }
+  }
+
+  std::string PrivacyManager::operation( int context, const std::string& name )
+  {
+    const std::string& id = m_parent->getID();
+    IQ::IqType iqType = IQ::Set;
+    if( context == PLRequestNames || context == PLRequestList )
+      iqType = IQ::Get;
+    IQ iq( iqType, JID(), id );
+    iq.addExtension( new Query( context, name ) );
+    m_parent->send( iq, this, context );
+    return id;
+  }
+
+  std::string PrivacyManager::store( const std::string& name, const PrivacyListHandler::PrivacyList& list )
+  {
+    if( list.empty() )
+      return EmptyString;
+
+    const std::string& id = m_parent->getID();
+
+    IQ iq( IQ::Set, JID(), id );
+    iq.addExtension( new Query( PLStore, name, list ) );
     m_parent->send( iq, this, PLStore );
     return id;
   }
 
   bool PrivacyManager::handleIq( const IQ& iq )
   {
-    if( iq.subtype() != IQ::Set || !m_privacyListHandler )
+    const Query* q = iq.findExtension<Query>( ExtPrivacy );
+    if( iq.subtype() != IQ::Set || !m_privacyListHandler
+        || !q || q->name().empty() )
       return false;
 
-    Tag* l = iq.query()->findChild( "list" );
-    if( l->hasAttribute( "name" ) )
-    {
-      const std::string& name = l->findAttribute( "name" );
-      m_privacyListHandler->handlePrivacyListChanged( name );
-
-      IQ re( IQ::Result, JID(), iq.id() );
-      m_parent->send( re );
-      return true;
-    }
-
-    return false;
+    m_privacyListHandler->handlePrivacyListChanged( q->name() );
+    IQ re( IQ::Result, JID(), iq.id() );
+    m_parent->send( re );
+    return true;
   }
 
   void PrivacyManager::handleIqID( const IQ& iq, int context )
@@ -178,78 +266,19 @@ namespace gloox
             break;
           case PLRequestNames:
           {
-            StringList lists;
-            std::string def;
-            std::string active;
-            Tag* q = iq.query();
-            const TagList& l = q->children();
-            TagList::const_iterator it = l.begin();
-            for( ; it != l.end(); ++it )
-            {
-              const std::string& name = (*it)->findAttribute( "name" );
-              if( (*it)->name() == "default" )
-                def = name;
-              else if( (*it)->name() == "active" )
-                active = name;
-              else if( (*it)->name() == "list" )
-                lists.push_back( name );
-            }
-
-            m_privacyListHandler->handlePrivacyListNames( def, active, lists );
+            const Query* q = iq.findExtension<Query>( ExtPrivacy );
+            if( !q )
+              return;
+            m_privacyListHandler->handlePrivacyListNames( q->def(), q->active(),
+                                                          q->names() );
             break;
           }
           case PLRequestList:
           {
-            PrivacyListHandler::PrivacyList items;
-
-            Tag* list = iq.query()->findChild( "list" );
-            const std::string& name = list->findAttribute( "name" );
-            const TagList& l = list->children();
-            TagList::const_iterator it = l.begin();
-            for( ; it != l.end(); ++it )
-            {
-              PrivacyItem::ItemType type;
-              PrivacyItem::ItemAction action;
-              int packetType = 0;
-
-              const std::string& t = (*it)->findAttribute( TYPE );
-              if( t == "jid" )
-                type = PrivacyItem::TypeJid;
-              else if( t == "group" )
-                type = PrivacyItem::TypeGroup;
-              else if( t == "subscription" )
-                type = PrivacyItem::TypeSubscription;
-              else
-                type = PrivacyItem::TypeUndefined;
-
-              const std::string& a = (*it)->findAttribute( "action" );
-              if( a == "allow" )
-                action = PrivacyItem::ActionAllow;
-              else if( a == "deny" )
-                action = PrivacyItem::ActionDeny;
-              else
-                action = PrivacyItem::ActionAllow;
-
-              const std::string& value = (*it)->findAttribute( "value" );
-
-              const TagList& c = (*it)->children();
-              TagList::const_iterator it_c = c.begin();
-              for( ; it_c != c.end(); ++it_c )
-              {
-                if( (*it_c)->name() == "iq" )
-                  packetType |= PrivacyItem::PacketIq;
-                else if( (*it_c)->name() == "presence-out" )
-                  packetType |= PrivacyItem::PacketPresenceOut;
-                else if( (*it_c)->name() == "presence-in" )
-                  packetType |= PrivacyItem::PacketPresenceIn;
-                else if( (*it_c)->name() == "message" )
-                  packetType |= PrivacyItem::PacketMessage;
-              }
-
-              PrivacyItem item( type, action, packetType, value );
-              items.push_back( item );
-            }
-            m_privacyListHandler->handlePrivacyList( name, items );
+            const Query* q = iq.findExtension<Query>( ExtPrivacy );
+            if( !q )
+              return;
+            m_privacyListHandler->handlePrivacyList( q->name(), q->items() );
             break;
           }
         }

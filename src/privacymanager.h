@@ -16,6 +16,7 @@
 
 #include "iqhandler.h"
 #include "privacylisthandler.h"
+#include "stanzaextension.h"
 
 #include <string>
 
@@ -119,6 +120,88 @@ namespace gloox
       virtual void handleIqID( const IQ& iq, int context );
 
     private:
+      class Query : public StanzaExtension
+      {
+        public:
+          /**
+           * Creates a new query for storing or requesting a
+           * privacy list.
+           * @param context The context of the list.
+           * @param name The list's name.
+           * @param list The list's (optional) content.
+           */
+          Query( int context, const std::string& name,
+                 const PrivacyListHandler::PrivacyList& list = PrivacyListHandler::PrivacyList() );
+
+          /**
+           * Creates a new query from the given Tag.
+           * @param tag The Tag to parse.
+           */
+          Query( const Tag* tag = 0 );
+
+          /**
+           * Virtual destructor.
+           */
+          virtual ~Query();
+
+          /**
+           * Returns the name of the active list, if given.
+           * @return The active list's name.
+           */
+          const std::string& active() const { return m_active; }
+
+          /**
+           * Returns the name of the default list, if given.
+           * @return The default list's name.
+           */
+          const std::string& def() const { return m_default; }
+
+          /**
+           * Returns a list of privacy items, if given.
+           * @return A list of PrivacyItems.
+           */
+          const PrivacyListHandler::PrivacyList& items() const
+            { return m_items; }
+
+          /**
+           * Returns a list of list names.
+           * @return A list of list names.
+           */
+          const StringList& names() const { return m_names; }
+
+          /**
+           * A convenience function that returns the first name of the list that
+           * names() would return, or an empty string.
+           * @return A list name.
+           */
+          const std::string& name() const
+          {
+            if( m_names.empty())
+              return EmptyString;
+            else
+              return (*m_names.begin());
+          }
+
+          // reimplemented from StanzaExtension
+          virtual const std::string& filterString() const;
+
+          // reimplemented from StanzaExtension
+          virtual StanzaExtension* newInstance( const Tag* tag ) const
+          {
+            return new Query( tag );
+          }
+
+          // reimplemented from StanzaExtension
+          virtual Tag* tag() const;
+
+        private:
+          int m_context;
+          StringList m_names;
+          std::string m_default;
+          std::string m_active;
+          PrivacyListHandler::PrivacyList m_items;
+      };
+
       enum IdType
       {
         PLRequestNames,
