@@ -21,14 +21,61 @@
 namespace gloox
 {
 
+  // ---- FlexibleOffline::Offline ----
+  FlexibleOffline::Offline::Offline( const Tag* tag )
+    : StanzaExtension( ExtFlexOffline )
+  {
+    // FIXME what to do here?
+  }
+
+  FlexibleOffline::Offline::Offline( int context, const StringList& msgs )
+    : StanzaExtension( ExtFlexOffline ), m_context( context ), m_msgs( msgs )
+  {
+  }
+
+  FlexibleOffline::Offline::~Offline()
+  {
+  }
+
+  const std::string& FlexibleOffline::Offline::filterString() const
+  {
+    static const std::string& filter = "/iq/offline[@xmlns='" + XMLNS_OFFLINE + "']";
+    return filter;
+  }
+
+  Tag* FlexibleOffline::Offline::tag() const
+  {
+    Tag* t = new Tag( "offline" );
+    t->setXmlns( XMLNS_OFFLINE );
+
+    if( m_msgs.empty() )
+      new Tag( t, m_context == FORequestMsgs ? "fetch" : "purge" );
+    else
+    {
+      const std::string action = m_context == FORequestMsgs ? "view" : "remove";
+      StringList::const_iterator it = m_msgs.begin();
+      for( ; it != m_msgs.end(); ++it )
+      {
+        Tag* i = new Tag( t, "item", "action", action );
+        i->addAttribute( "node", (*it) );
+      }
+    }
+    return t;
+  }
+  // ---- ~FlexibleOffline::Offline ----
+
+  // ---- FlexibleOffline ----
   FlexibleOffline::FlexibleOffline( ClientBase* parent )
     : m_parent( parent ), m_flexibleOfflineHandler( 0 )
   {
+    if( m_parent )
+      m_parent->registerStanzaExtension( new Offline() );
   }
 
   FlexibleOffline::~FlexibleOffline()
   {
-    m_parent->removeIDHandler( this );
+    if( m_parent )
+      m_parent->removeIDHandler( this );
   }
 
   void FlexibleOffline::checkSupport()
@@ -50,22 +97,8 @@ namespace gloox
   {
     const std::string& id = m_parent->getID();
     IQ::IqType iqType = context == FORequestMsgs ? IQ::Get : IQ::Set;
-    IQ iq( iqType, JID(), id, XMLNS_OFFLINE, "offline" );
-    Tag* o = iq.query();
-
-    if( msgs.empty() )
-      new Tag( o, context == FORequestMsgs ? "fetch" : "purge" );
-    else
-    {
-      const std::string action = context == FORequestMsgs ? "view" : "remove";
-      StringList::const_iterator it = msgs.begin();
-      for( ; it != msgs.end(); ++it )
-      {
-        Tag* i = new Tag( o, "item", "action", action );
-        i->addAttribute( "node", (*it) );
-      }
-    }
-
+    IQ iq( iqType, JID(), id );
+    iq.addExtension( new Offline( context, msgs ) );
     m_parent->send( iq, this, context );
   }
 

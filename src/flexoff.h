@@ -18,6 +18,7 @@
 #include "discohandler.h"
 #include "flexoffhandler.h"
 #include "iqhandler.h"
+#include "stanzaextension.h"
 
 namespace gloox
 {
@@ -110,6 +111,47 @@ namespace gloox
       virtual void handleIqID( const IQ& iq, int context );
 
     private:
+#ifdef FLEXOFF_TEST
+    public:
+#endif
+      class Offline : public StanzaExtension
+      {
+        public:
+          /**
+           * Constructs a new Offline object from the given Tag.
+           * @param tag The Tag to parse.
+           */
+          Offline( const Tag* tag = 0 );
+
+          /**
+           * Constructs a new Offline object for the given context and messages.
+           * @param context The context.
+           * @param msgs The messages.
+           */
+          Offline( int context, const StringList& msgs );
+
+          /**
+           * Virtual destructor.
+           */
+          virtual ~Offline();
+
+          // reimplemented from StanzaExtension
+          virtual const std::string& filterString() const;
+
+          // reimplemented from StanzaExtension
+          virtual StanzaExtension* newInstance( const Tag* tag ) const
+          {
+            return new Offline( tag );
+          }
+
+          // reimplemented from StanzaExtension
+          virtual Tag* tag() const;
+
+        private:
+          int m_context;
+          StringList m_msgs;
+      };
+
       void messageOperation( int context, const StringList& msgs );
 
       enum FOContext
