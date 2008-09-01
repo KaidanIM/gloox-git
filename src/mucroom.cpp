@@ -508,7 +508,7 @@ namespace gloox
       if( m_operation == OpInvite )
         d = new Tag( t, "invite", "to", *m_jid );
       else
-        d = new Tag( t, "decline", "from", *m_jid );
+        d = new Tag( t, "decline", "to", *m_jid );
 
       if( m_reason )
         new Tag( d, "reason", *m_reason );
