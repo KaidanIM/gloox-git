@@ -24,12 +24,52 @@
 namespace gloox
 {
 
+  // ---- LastActivity::Query ----
+  LastActivity::Query::Query( const Tag* tag )
+    : StanzaExtension( ExtLastActivity )
+  {
+    if( tag->name() == "query" && tag->xmlns() == XMLNS_LAST
+         && tag->hasAttribute( "seconds" ) )
+    {
+      m_seconds = atoi( tag->findAttribute( "seconds" ).c_str() );
+    }
+  }
+
+  LastActivity::Query::Query( int, long seconds )
+    : StanzaExtension( ExtLastActivity ), m_seconds( seconds )
+  {
+  }
+
+  LastActivity::Query::~Query()
+  {
+  }
+
+  const std::string& LastActivity::Query::filterString() const
+  {
+    static const std::string filter = "/iq/query[@xmlns='" + XMLNS_LAST + "']";
+    return filter;
+  }
+
+  Tag* LastActivity::Query::tag() const
+  {
+    Tag* t = new Tag( "query" );
+    t->setXmlns( XMLNS_LAST );
+    t->addAttribute( "seconds", m_seconds );
+    return t;
+  }
+  // ---- ~LastActivity::Query ----
+
+  // ---- LastActivity ----
   LastActivity::LastActivity( ClientBase* parent )
     : m_lastActivityHandler( 0 ), m_parent( parent ),
       m_active( time ( 0 ) )
   {
     if( m_parent )
+    {
+      m_parent->registerStanzaExtension( new Query() );
+      m_parent->registerIqHandler( this, ExtLastActivity );
       m_parent->disco()->addFeature( XMLNS_LAST );
+    }
   }
 
   LastActivity::~LastActivity()
@@ -37,42 +77,27 @@ namespace gloox
     if( m_parent )
     {
       m_parent->disco()->removeFeature( XMLNS_LAST );
+      m_parent->removeIqHandler( this, ExtLastActivity );
       m_parent->removeIDHandler( this );
     }
   }
 
   void LastActivity::query( const JID& jid )
   {
-    IQ iq( IQ::Get, jid, m_parent->getID(), XMLNS_LAST );
+    IQ iq( IQ::Get, jid, m_parent->getID() );
+    iq.addExtension( new Query() );
     m_parent->send( iq, this, 0 );
   }
 
   bool LastActivity::handleIq( const IQ& iq )
   {
-    switch( iq.subtype() )
-    {
-      case IQ::Get:
-      {
-        time_t now = time( 0 );
+    const Query* q = iq.findExtension<Query>( ExtLastActivity );
+    if( !q || iq.subtype() != IQ::Get )
+      return false;
 
-        IQ t( IQ::Result, iq.from(), iq.id(), XMLNS_LAST );
-        t.query()->addAttribute( "seconds", (long)( now - m_active ) );
-
-        m_parent->send( t );
-        break;
-      }
-
-      case IQ::Set:
-      {
-        IQ t( IQ::Error, iq.from(), iq.id() );
-        t.addExtension( new Error( StanzaErrorTypeCancel, StanzaErrorFeatureNotImplemented ) );
-        m_parent->send( t );
-        break;
-      }
-
-      default:
-        break;
-    }
+    IQ re( IQ::Result, iq.from(), iq.id() );
+    re.addExtension( new Query( 0, (long)( time( 0 ) - m_active ) ) );
+    m_parent->send( re );
 
     return true;
   }
@@ -82,28 +107,16 @@ namespace gloox
     if( !m_lastActivityHandler )
       return;
 
-    switch( iq.subtype() )
+    if( iq.subtype() == IQ::Result )
     {
-      case IQ::Result:
-      {
-        Tag* q = iq.query();
-        if( q )
-        {
-          const std::string& seconds = q->findAttribute( "seconds" );
-          if( !seconds.empty() )
-          {
-            int secs = atoi( seconds.c_str() );
-            m_lastActivityHandler->handleLastActivityResult( iq.from(), secs );
-          }
-        }
-        break;
-      }
-      case IQ::Error:
-        m_lastActivityHandler->handleLastActivityError( iq.from(), iq.error()->error() );
-        break;
-      default:
-        break;
+      const Query* q = iq.findExtension<Query>( ExtLastActivity );
+      if( !q || q->seconds() < 0 )
+        return;
+
+      m_lastActivityHandler->handleLastActivityResult( iq.from(), q->seconds() );
     }
+    else if( iq.subtype() == IQ::Error && iq.error() )
+      m_lastActivityHandler->handleLastActivityError( iq.from(), iq.error()->error() );
   }
 
   void LastActivity::resetIdleTimer()
