@@ -166,6 +166,9 @@ namespace gloox
     if( !m_instructions.empty() )
       new Tag( t, "instructions", m_instructions );
 
+    if ( m_reg )
+      new Tag( t, "registered" );
+
     if( m_form )
       t->addChild( m_form->tag() );
     else if( m_oob )
