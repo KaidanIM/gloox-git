@@ -585,4 +585,4 @@ public:
 
 }
 
-#endif /* PUBSUBMANAGER_H__ */
+#endif // PUBSUBMANAGER_H__
