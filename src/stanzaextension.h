@@ -80,6 +80,7 @@ namespace gloox
     ExtLastActivity,                /**< An extension dealing with Last Activity (XEP-0012).  */
     ExtFlexOffline,                 /**< An extension dealing with Flexible Offline Messages (XEP-0013). */
     ExtSI,                          /**< An extension dealing with Stream Initiation (XEP-0095). */
+    ExtS5BQuery,                    /**< An extension dealing with stream host offers (XEP-00??) */
     ExtUser                         /**< User-supplied extensions must use IDs above this. Do
                                      * not hard-code ExtUser's value anywhere, it is subject
                                      * to change. */

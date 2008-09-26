@@ -18,6 +18,7 @@
 #include "simanager.h"
 #include "dataform.h"
 #include "inbandbytestream.h"
+#include "oob.h"
 #include "socks5bytestream.h"
 #include "socks5bytestreammanager.h"
 
@@ -248,8 +249,8 @@ namespace gloox
             if( !url.empty() )
             {
               const std::string& id = m_parent->getID();
-              IQ iq( IQ::Set, from, id, XMLNS_IQ_OOB );
-              new Tag( iq.query(), "url", url );
+              IQ iq( IQ::Set, from, id );
+              iq.addExtension( new OOB( url, EmptyString, true ) );
               m_parent->send( iq, this, OOBSent );
             }
           }

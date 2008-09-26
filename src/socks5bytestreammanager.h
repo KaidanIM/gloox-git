@@ -16,6 +16,7 @@
 
 #include "iqhandler.h"
 #include "jid.h"
+#include "stanzaextension.h"
 
 namespace gloox
 {
@@ -59,8 +60,9 @@ namespace gloox
        */
       enum S5BMode
       {
-        S5BTCP/*,*/                     /**< Use TCP on the transport layer. */
-        /*S5BUDP*/                      /**< Use UDP on the transport layer. */
+        S5BTCP,                     /**< Use TCP on the transport layer. */
+        S5BUDP,                     /**< Use UDP on the transport layer. Not currently supported. */
+        S5BInvalid                  /**< Invalid mode. */
       };
 
       /**
@@ -160,6 +162,100 @@ namespace gloox
       virtual void handleIqID( const IQ& iq, int context );
 
     private:
+#ifdef SOCKS5BYTESTREAMMANAGER_TEST
+    public:
+#endif
+
+      class Query : public StanzaExtension
+      {
+        public:
+          /**
+           * Constructs a new empty Query object.
+           */
+          Query();
+
+          /**
+           * Constructs a new Query (streamhost) object from the given parameters.
+           * @param sid The stream ID.
+           * @param mode The stream mode (TCP or UDP).
+           * @param hosts A list of stream hosts.
+           */
+          Query( const std::string& sid, S5BMode mode,
+                 const StreamHostList& hosts );
+
+          /**
+           * Constructs a new Query (streamhost-used or activate) object, including the given JID.
+           * @param jid The JID.
+           * @param sid The stream ID.
+           * @param activate Determines whether the object will be an &apos;activate&apos; (@b true) or
+           * &apos;streamhost-used&apos; (@b false) one.
+           */
+          Query( const JID& jid, const std::string& sid, bool activate );
+
+          /**
+           * Constructs a new Query object from the given Tag.
+           * @param tag The Tag to parse.
+           */
+          Query( const Tag* tag );
+
+          /**
+           * Virtual destructor.
+           */
+          virtual ~Query();
+
+          /**
+           * Returns the current stream ID.
+           * @return The current stream ID.
+           */
+          const std::string& sid() const { return m_sid; }
+
+          /**
+           * Returns the current JID.
+           * @return The current JID.
+           */
+          const JID& jid() const { return m_jid; }
+
+          /**
+           * Returns the current mode.
+           * @return The current mode.
+           */
+          S5BMode mode() const { return m_mode; }
+
+          /**
+           * Returns the current list of stream hosts.
+           * @return The current list of stream hosts.
+           */
+          const StreamHostList& hosts() const { return m_hosts; }
+
+          // reimplemented from StanzaExtension
+          virtual const std::string& filterString() const;
+
+          // reimplemented from StanzaExtension
+          virtual StanzaExtension* newInstance( const Tag* tag ) const
+          {
+            return new Query( tag );
+          }
+
+          // reimplemented from StanzaExtension
+          virtual Tag* tag() const;
+
+        private:
+          enum QueryType
+          {
+            TypeSH,
+            TypeSHU,
+            TypeA,
+            TypeInvalid
+          };
+
+          std::string m_sid;
+          JID m_jid;
+          SOCKS5BytestreamManager::S5BMode m_mode;
+          StreamHostList m_hosts;
+          QueryType m_type;
+
+      };
+
       void rejectSOCKS5Bytestream( const JID& from, const std::string& id, StanzaError reason );
       bool haveStream( const JID& from );
       const StreamHost* findProxy( const JID& from, const std::string& hostjid, const std::string& sid );
