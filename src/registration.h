@@ -195,6 +195,7 @@ namespace gloox
       // reimplemented from IqHandler.
       virtual void handleIqID( const IQ& iq, int context );
 
+    private:
 #ifdef REGISTRATION_TEST
     public:
 #endif
