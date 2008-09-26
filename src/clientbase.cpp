@@ -999,6 +999,7 @@ namespace gloox
       TrackStruct track;
       track.ih = ih;
       track.context = context;
+      track.del = false;
       m_iqIDHandlers[id] = track;
     }
   }
@@ -1274,7 +1275,7 @@ namespace gloox
       return;
     }
 
-    if( !iq.query() )
+    if( iq.extensions().empty() )
       return;
 
     bool res = false;
