@@ -121,6 +121,72 @@ namespace gloox
       virtual void handleIqID( const IQ& iq, int context );
 
     private:
+#ifdef SIMANAGER_TEST
+    public:
+#endif
+      class SI : public StanzaExtension
+      {
+        public:
+          /**
+           * Constructs a new SI object from the given Tag.
+           * @param tag The Tag to parse.
+           */
+          SI( const Tag* tag = 0 );
+
+          /**
+           * Constructs a new SI object, wrapping the given Tags.
+           * @param tag1 Tag 1.
+           * @param tag2 Tag 2.
+           */
+          SI( Tag* tag1, Tag* tag2, const std::string& id = EmptyString,
+              const std::string& mimetype = EmptyString,
+              const std::string& profile = EmptyString );
+
+          /**
+           * Virtual destructor.
+           */
+          virtual ~SI();
+
+          /**
+           * Returns the current profile namespace.
+           * @return The profile namespace.
+           */
+          const std::string& profile() const { return m_profile; };
+
+          /**
+           * Returns the first SI child tag.
+           * @return The first SI child tag.
+           * @todo Use real objects.
+           */
+          const Tag* tag1() const { return m_tag1; };
+
+          /**
+           * Returns the second SI child tag.
+           * @return The second SI child tag.
+           * @todo Use real objects.
+           */
+          const Tag* tag2() const { return m_tag2; };
+
+          // reimplemented from StanzaExtension
+          virtual const std::string& filterString() const;
+
+          // reimplemented from StanzaExtension
+          virtual StanzaExtension* newInstance( const Tag* tag ) const
+          {
+            return new SI( tag );
+          }
+
+          // reimplemented from StanzaExtension
+          virtual Tag* tag() const;
+
+        private:
+          Tag* m_tag1;
+          Tag* m_tag2;
+          std::string m_id;
+          std::string m_mimetype;
+          std::string m_profile;
+      };
+
       enum TrackContext
       {
         OfferSI

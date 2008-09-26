@@ -22,24 +22,70 @@
 namespace gloox
 {
 
+  // ---- SIManager::SI ----
+  SIManager::SI::SI( const Tag* tag )
+    : StanzaExtension( ExtSI ), m_tag1( 0 ), m_tag2( 0 )
+  {
+  }
+
+  SIManager::SI::SI( Tag* tag1, Tag* tag2, const std::string& id,
+                     const std::string& mimetype, const std::string& profile )
+    : StanzaExtension( ExtSI ), m_tag1( tag1 ), m_tag2( tag2 ),
+      m_id( id ), m_mimetype( mimetype ), m_profile( profile )
+  {
+  }
+
+  SIManager::SI::~SI()
+  {
+    delete m_tag1;
+    delete m_tag2;
+  }
+
+  const std::string& SIManager::SI::filterString() const
+  {
+    static const std::string& filter = "/iq/query[@xmlns='" + XMLNS_SI + "']";
+    return filter;
+  }
+
+  Tag* SIManager::SI::tag() const
+  {
+    Tag* t = new Tag( "si" );
+    t->setXmlns( XMLNS_SI );
+    if( !m_id.empty() )
+      t->addAttribute( "id", m_id );
+    if( !m_mimetype.empty() )
+      t->addAttribute( "mime-type", m_mimetype.empty() ? "binary/octet-stream" : m_mimetype );
+    if( !m_profile.empty() )
+      t->addAttribute( "profile", m_profile );
+    if( m_tag1 )
+      t->addChildCopy( m_tag1 );
+    if( m_tag2 )
+      t->addChildCopy( m_tag2 );
+
+    return 0;
+  }
+  // ---- ~SIManager::SI ----
+
+  // ---- SIManager ----
   SIManager::SIManager( ClientBase* parent, bool advertise )
     : m_parent( parent ), m_advertise( advertise )
   {
-    if( m_parent && m_advertise )
+    if( m_parent )
     {
-      m_parent->registerIqHandler( this, XMLNS_SI );
-      if( m_parent->disco() )
+      m_parent->registerStanzaExtension( new SI() );
+      m_parent->registerIqHandler( this, ExtSI );
+      if( m_parent->disco() && m_advertise )
         m_parent->disco()->addFeature( XMLNS_SI );
     }
   }
 
   SIManager::~SIManager()
   {
-    if( m_parent && m_advertise )
+    if( m_parent )
     {
-      m_parent->removeIqHandler( this, XMLNS_SI );
+      m_parent->removeIqHandler( this, ExtSI );
       m_parent->removeIDHandler( this );
-      if( m_parent->disco() )
+      if( m_parent->disco() && m_advertise )
         m_parent->disco()->removeFeature( XMLNS_SI );
     }
   }
@@ -53,14 +99,8 @@ namespace gloox
     const std::string& id = m_parent->getID();
     const std::string& id2 = m_parent->getID();
 
-    IQ iq( IQ::Set, to, id, XMLNS_SI, "si" );
-    Tag* si = iq.query();
-    si->addAttribute( "id", id2 );
-    si->addAttribute( "mime-type", mimetype.empty() ? "binary/octet-stream" : mimetype );
-    si->addAttribute( "profile", profile );
-
-    si->addChild( child1 );
-    si->addChild( child2 );
+    IQ iq( IQ::Set, to, id );
+    iq.addExtension( new SI( child1, child2, id2, mimetype, profile ) );
 
     TrackStruct t;
     t.sid = id2;
@@ -74,10 +114,8 @@ namespace gloox
 
   void SIManager::acceptSI( const JID& to, const std::string& id, Tag* child1, Tag* child2 )
   {
-    IQ iq( IQ::Result, to, id, XMLNS_SI, "si" );
-    iq.query()->addChild( child1 );
-    iq.query()->addChild( child2 );
-
+    IQ iq( IQ::Result, to, id );
+    iq.addExtension( new SI( child1, child2 ) );
     m_parent->send( iq );
   }
 
@@ -129,22 +167,21 @@ namespace gloox
 
   bool SIManager::handleIq( const IQ& iq )
   {
-    TrackMap::iterator it = m_track.find( iq.id() );
-    if( it != m_track.end() )
+    TrackMap::iterator itt = m_track.find( iq.id() );
+    if( itt != m_track.end() )
       return false;
 
-    Tag* si = iq.query();
-    if( si && si->name() == "si" && si->xmlns() == XMLNS_SI && si->hasAttribute( "profile" ) )
+    const SI* si = iq.findExtension<SI>( ExtSI );
+    if( !si || si->profile().empty() )
+      return false;
+
+    HandlerMap::const_iterator it = m_handlers.find( si->profile() );
+    if( it != m_handlers.end() && (*it).second )
     {
-      const std::string& profile = si->findAttribute( "profile" );
-      HandlerMap::const_iterator it = m_handlers.find( profile );
-      if( it != m_handlers.end() && (*it).second )
-      {
-        Tag* p = si->findChildWithAttrib( XMLNS, profile );
-        Tag* f = si->findChild( "feature", XMLNS, XMLNS_FEATURE_NEG );
-        (*it).second->handleSIRequest( iq.from(), iq.id(), profile, si, p, f );
-        return true;
-      }
+      // FIXME: don't pass si->tag()!
+      (*it).second->handleSIRequest( iq.from(), iq.id(), si->profile(),
+                                     si->tag(), si->tag1(), si->tag2() );
+      return true;
     }
 
     return false;
@@ -160,15 +197,22 @@ namespace gloox
           TrackMap::iterator it = m_track.find( iq.id() );
           if( it != m_track.end() )
           {
-            Tag* si = iq.query();
-            Tag* ptag = 0;
-            Tag* fneg = 0;
-            if( si && si->name() == "si" && si->xmlns() == XMLNS_SI )
-            {
-              ptag = si->findChildWithAttrib( XMLNS, (*it).second.profile );
-              fneg = si->findChild( "feature", XMLNS, XMLNS_FEATURE_NEG );
-            }
-            (*it).second.sih->handleSIRequestResult( iq.from(), (*it).second.sid, si, ptag, fneg );
+            const SI* si = iq.findExtension<SI>( ExtSI );
+            if( !si || si->profile().empty() )
+              return;
+
+//             Tag* si = iq.query();
+//             Tag* ptag = 0;
+//             Tag* fneg = 0;
+//             if( si && si->name() == "si" && si->xmlns() == XMLNS_SI )
+//             {
+//               ptag = si->findChildWithAttrib( XMLNS, (*it).second.profile );
+//               fneg = si->findChild( "feature", XMLNS, XMLNS_FEATURE_NEG );
+//             }
+
+            // FIXME: remove above commented code and
+            // check corectness of last 3 params!
+            (*it).second.sih->handleSIRequestResult( iq.from(), (*it).second.sid, si->tag(), si->tag(), si->tag2() );
             m_track.erase( it );
           }
         }
