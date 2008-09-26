@@ -41,7 +41,7 @@ namespace gloox
      * This manager acts in concert with 2 different handlers:
      *
      * - EventHandler is responsible for receiving the PubSub event
-     *   notifications. Register as much as you need with the Manager.
+     *   notifications. Register as many as you need with the Manager.
      *
      * - ResultHandler is used to receive a request's result. Depending on the
      *   context, this can be a notification that an item has been succesfully
@@ -56,7 +56,7 @@ namespace gloox
      * This will get you notified of PubSub events sent to you.
      *
      * Next, to be able to interact with PubSub services, you will need to
-     * implement the ResultHandler virtuals interfaces to be notified of the
+     * implement the ResultHandler virtual interfaces to be notified of the
      * result of requests and pass these along to these requests (null handlers
      * are not allowed).
      *
@@ -71,7 +71,7 @@ namespace gloox
      *
      * @code
      *
-     * class MyEventHandler : public gloox::EventHandler
+     * class MyEventHandler : public gloox::PubSub::EventHandler
      * {
      *   // ...
      * };
