@@ -17,6 +17,8 @@
 #ifdef HAVE_GNUTLS
 
 #include <errno.h>
+#include <stdlib.h>
+#include <string.h>
 
 namespace gloox
 {
