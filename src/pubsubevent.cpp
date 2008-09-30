@@ -30,7 +30,7 @@ namespace gloox
     };
 
     Event::Event( const Tag* event )
-      : StanzaExtension( ExtPSEvent ), m_type( PubSub::EventUnknown ),
+      : StanzaExtension( ExtPubSubEvent ), m_type( PubSub::EventUnknown ),
         m_subscriptionIDs( 0 ), m_config( 0 ), m_itemOperations( 0 )
     {
       if( !event || event->name() != "event" )
