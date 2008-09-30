@@ -54,8 +54,6 @@ namespace gloox
     ExtSessionCreation,             /**< A session establishing SE (RFC3921). */
     ExtVersion,                     /**< An extension containing a Version request/reply
                                      * (XEP-0092). */
-    ExtPSEvent,                     /**< An extension for PubSub event notifications
-                                     * (XEP-0060) */
     ExtXHtmlIM,                     /**< An extension containing an XHTML message
                                      * representation (XEP-0071) */
     ExtDiscoInfo,                   /**< An extension containing a disco#info element (XEP-0030). */
@@ -80,7 +78,11 @@ namespace gloox
     ExtLastActivity,                /**< An extension dealing with Last Activity (XEP-0012).  */
     ExtFlexOffline,                 /**< An extension dealing with Flexible Offline Messages (XEP-0013). */
     ExtSI,                          /**< An extension dealing with Stream Initiation (XEP-0095). */
-    ExtS5BQuery,                    /**< An extension dealing with stream host offers (XEP-00??) */
+    ExtS5BQuery,                    /**< An extension dealing with stream host offers (XEP-0065) */
+    ExtPubSub,                      /**< An extension dealing with PubSub requests (XEP-0060). */
+    ExtPubSubOwner,                 /**< An extension dealing with PubSub owner requests (XEP-0060). */
+    ExtPubSubEvent,                 /**< An extension for PubSub event notifications
+                                     * (XEP-0060) */
     ExtUser                         /**< User-supplied extensions must use IDs above this. Do
                                      * not hard-code ExtUser's value anywhere, it is subject
                                      * to change. */
