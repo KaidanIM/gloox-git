@@ -28,7 +28,7 @@ namespace gloox
   LastActivity::Query::Query( const Tag* tag )
     : StanzaExtension( ExtLastActivity )
   {
-    if( tag->name() == "query" && tag->xmlns() == XMLNS_LAST
+    if( tag && tag->name() == "query" && tag->xmlns() == XMLNS_LAST
          && tag->hasAttribute( "seconds" ) )
     {
       m_seconds = atoi( tag->findAttribute( "seconds" ).c_str() );
