@@ -387,8 +387,13 @@ namespace gloox
       }
       else if( (*it)->name() == "decline" )
       {
-        m_operation = OpDecline;
+        m_operation = OpDeclineFrom;
         m_jid = new std::string( (*it)->findAttribute( "from" ) );
+        if( m_jid->empty() )
+        {
+          m_operation = OpDeclineTo;
+          m_jid->assign( (*it)->findAttribute( "from" ) );
+        }
         if( (*it)->hasChild( "reason" ) )
           m_reason = new std::string( (*it)->findChild( "reason" )->cdata() );
       }
@@ -507,8 +512,10 @@ namespace gloox
       Tag* d = 0;
       if( m_operation == OpInvite )
         d = new Tag( t, "invite", "to", *m_jid );
-      else
+      else if( m_operation == OpDeclineTo )
         d = new Tag( t, "decline", "to", *m_jid );
+      else if( m_operation == OpDeclineFrom )
+        d = new Tag( t, "decline", "from", *m_jid );
 
       if( m_reason )
         new Tag( d, "reason", *m_reason );
@@ -660,7 +667,7 @@ namespace gloox
   Message* MUCRoom::declineInvitation( const JID& room, const JID& invitor, const std::string& reason )
   {
     Message* msg = new Message( Message::Normal, room.bare() );
-    msg->addExtension( new MUCUser( MUCUser::OpDecline, invitor.bare(), reason ) );
+    msg->addExtension( new MUCUser( MUCUser::OpDeclineTo, invitor.bare(), reason ) );
     return msg;
   }
 
@@ -958,7 +965,7 @@ namespace gloox
         if( flags & FlagFullyAnonymous )
           setFullyAnonymous();
 
-        if( mu->operation() == MUCUser::OpDecline && mu->jid() )
+        if( mu->operation() == MUCUser::OpDeclineFrom && mu->jid() )
           m_roomHandler->handleMUCInviteDecline( this, JID( *(mu->jid()) ),
                                                  mu->reason() ? *(mu->reason()) : EmptyString );
       }
