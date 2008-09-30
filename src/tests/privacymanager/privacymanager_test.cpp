@@ -2,8 +2,7 @@
 #include "../../jid.h"
 #include "../../tag.h"
 #include "../../iqhandler.h"
-#include "../../sihandler.h"
-#include "../../siprofilehandler.h"
+#include "../../privacylisthandler.h"
 
 #include <stdio.h>
 #include <locale.h>
@@ -33,7 +32,7 @@ namespace gloox
   void Disco::addFeature( const std::string& /*feature*/ ) {}
   void Disco::removeFeature( const std::string& /*feature*/ ) {}
 
-  class ClientBase : public SIHandler, public SIProfileHandler
+  class ClientBase : public PrivacyListHandler
   {
     public:
       ClientBase();
@@ -41,17 +40,21 @@ namespace gloox
       const std::string getID();
       Disco* disco();
       void send( IQ& iq, IqHandler* = 0 , int = 0 );
+      void registerIqHandler( IqHandler* ih, int exttype );
+      void registerStanzaExtension( StanzaExtension* ext );
+      void removeStanzaExtension( int ext );
       void trackID( IqHandler *ih, const std::string& id, int context );
-      void registerIqHandler( IqHandler *ih, const std::string& xmlns );
-      void removeIqHandler( IqHandler* ih, const std::string& xmlns );
+      void removeIqHandler( IqHandler* ih, int exttype );
       void removeIDHandler( IqHandler* ) {}
-      virtual void handleSIRequestResult( const JID& from, const std::string& sid,
-                                          const Tag* si, const Tag* ptag, const Tag* fneg );
-      virtual void handleSIRequestError( const IQ& iq, const std::string& /*sid*/ );
-      virtual void handleSIRequest( const JID& from, const std::string& id, const std::string& profile,
-                                    const Tag* si, const Tag* ptag, const Tag* fneg );
       void setTest( int test );
       bool ok();
+
+      virtual void handlePrivacyListNames( const std::string& active, const std::string& def,
+                                           const StringList& lists ) {}
+      virtual void handlePrivacyList( const std::string& name, const PrivacyList& items ) {}
+      virtual void handlePrivacyListChanged( const std::string& name ) {}
+      virtual void handlePrivacyListResult( const std::string& id, PrivacyListResult plResult ) {}
+
     private:
       Disco* m_disco;
       int m_test;
@@ -79,45 +82,29 @@ namespace gloox
     delete tag;
   }
   void ClientBase::trackID( IqHandler* /*ih*/, const std::string& /*id*/, int /*context*/ ) {}
-  void ClientBase::registerIqHandler( IqHandler* /*ih*/, const std::string& /*xmlns*/ ) {}
-  void ClientBase::removeIqHandler( IqHandler* /*ih*/, const std::string& /*xmlns*/ ) {}
-  void ClientBase::handleSIRequestResult( const JID& /*from*/, const std::string& /*sid*/,
-                                          const Tag* /*si*/, const Tag* /*ptag*/, const Tag* /*fneg*/ ) {}
-  void ClientBase::handleSIRequestError( const IQ& /*iq*/, const std::string& /*sid*/ ) {}
-  void ClientBase::handleSIRequest( const JID& /*from*/, const std::string& /*id*/,
-                                    const std::string& /*profile*/,
-                                    const Tag* /*si*/, const Tag* /*ptag*/, const Tag* /*fneg*/ ) {}
+  void ClientBase::removeIqHandler( IqHandler*, int ) {}
+  void ClientBase::registerIqHandler( IqHandler*, int ) {}
+  void ClientBase::registerStanzaExtension( StanzaExtension* se ) { delete se; }
+  void ClientBase::removeStanzaExtension( int ) {}
   void ClientBase::setTest( int test ) { m_test = test; }
   bool ClientBase::ok() { bool t = m_ok; m_ok = false; return t; }
 }
 
 #define CLIENTBASE_H__
 #define DISCO_H__
-#include "../../simanager.h"
-#include "../../simanager.cpp"
+#include "../../privacymanager.h"
+#include "../../privacymanager.cpp"
 int main( int /*argc*/, char** /*argv*/ )
 {
   int fail = 0;
   std::string name;
-  t1 = new gloox::Tag( "file", "xmlns", gloox::XMLNS_SI_FT );
-  t1->addAttribute( "name", "filename" );
-  t1->addAttribute( "size", "1022" );
-
-  t2 = new gloox::Tag( "feature", "xmlns", gloox::XMLNS_FEATURE_NEG );
-  t2->addAttribute( "abc", "def" );
-  t2->addAttribute( "ghi", "jkl" );
-
-  gloox::SIManager* sim = 0;
 
   gloox::ClientBase* cb = new gloox::ClientBase();
-  sim = new gloox::SIManager( cb, true );
 
 
   // -------
-  name = "request si";
-  cb->setTest( 1 );
-  sim->requestSI( cb, to, g_profile, t1->clone(), t2->clone() );
-  if( !cb->ok() )
+  name = "dummy test";
+  if( 0 )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
@@ -129,21 +116,16 @@ int main( int /*argc*/, char** /*argv*/ )
 
 
 
-
-
-  delete t1;
-  delete t2;
-  delete sim;
   delete cb;
 
   if( fail == 0 )
   {
-    printf( "SIManager: OK\n" );
+    printf( "PrivacyManager: OK\n" );
     return 0;
   }
   else
   {
-    printf( "SIManager: %d test(s) failed\n", fail );
+    printf( "PrivacyManager: %d test(s) failed\n", fail );
     return 1;
   }
 

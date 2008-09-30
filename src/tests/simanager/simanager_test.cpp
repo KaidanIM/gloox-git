@@ -42,8 +42,10 @@ namespace gloox
       Disco* disco();
       void send( IQ& iq, IqHandler* = 0 , int = 0 );
       void trackID( IqHandler *ih, const std::string& id, int context );
-      void registerIqHandler( IqHandler *ih, const std::string& xmlns );
-      void removeIqHandler( IqHandler* ih, const std::string& xmlns );
+      void registerIqHandler( IqHandler* ih, int exttype );
+      void removeIqHandler( IqHandler* ih, int exttype );
+      void registerStanzaExtension( StanzaExtension* ext );
+      void removeStanzaExtension( int ext );
       void removeIDHandler( IqHandler* ) {}
       virtual void handleSIRequestResult( const JID& from, const std::string& sid,
                                           const Tag* si, const Tag* ptag, const Tag* fneg );
@@ -79,8 +81,10 @@ namespace gloox
     delete tag;
   }
   void ClientBase::trackID( IqHandler* /*ih*/, const std::string& /*id*/, int /*context*/ ) {}
-  void ClientBase::registerIqHandler( IqHandler* /*ih*/, const std::string& /*xmlns*/ ) {}
-  void ClientBase::removeIqHandler( IqHandler* /*ih*/, const std::string& /*xmlns*/ ) {}
+  void ClientBase::removeIqHandler( IqHandler*, int ) {}
+  void ClientBase::registerIqHandler( IqHandler*, int ) {}
+  void ClientBase::registerStanzaExtension( StanzaExtension* se ) { delete se; }
+  void ClientBase::removeStanzaExtension( int ) {}
   void ClientBase::handleSIRequestResult( const JID& /*from*/, const std::string& /*sid*/,
                                           const Tag* /*si*/, const Tag* /*ptag*/, const Tag* /*fneg*/ ) {}
   void ClientBase::handleSIRequestError( const IQ& /*iq*/, const std::string& /*sid*/ ) {}
