@@ -729,10 +729,13 @@ namespace gloox
 
   void ClientBase::addFrom( Tag* tag )
   {
-    if( !tag || m_selectedResource.empty() )
+    if( !tag || tag->hasAttribute( "from" ) )
       return;
 
-    tag->addAttribute( "from", m_jid.bare() + '/' + m_selectedResource );
+    if ( m_selectedResource.empty() )
+      tag->addAttribute( "from", m_jid.bare() );
+    else
+      tag->addAttribute( "from", m_jid.bare() + '/' + m_selectedResource );
   }
 
   void ClientBase::addNamespace( Tag* tag )
