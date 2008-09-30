@@ -19,7 +19,7 @@ SUBDIRS = adhoc adhoccommand adhoccommandnote amprule amp base64 \
           registrationquery registration \
           rostermanagerquery rostermanager \
           searchquery search \
-          sha stanzaextensionfactory subscription \
+          sha simanager simanagersi stanzaextensionfactory subscription \
           tag tlsgnutls \
           uniquemucroomunique \
           vcard vcardupdate \
