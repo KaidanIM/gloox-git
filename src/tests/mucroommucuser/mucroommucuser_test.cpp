@@ -210,10 +210,10 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   {
     name = "decline invitation";
-    MUCRoom::MUCUser mu( MUCRoom::MUCUser::OpDecline, "bar@foo", "because." );
+    MUCRoom::MUCUser mu( MUCRoom::MUCUser::OpDeclineTo, "bar@foo", "because." );
     t = mu.tag();
     if( !t || t->xml() != "<x xmlns='" + XMLNS_MUC_USER + "'>"
-         "<decline from='bar@foo'>"
+         "<decline to='bar@foo'>"
          "<reason>because.</reason>"
          "</decline>"
          "</x>" )

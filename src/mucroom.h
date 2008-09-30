@@ -686,7 +686,8 @@ namespace gloox
           {
             OpNone,                 /**< */
             OpInvite,               /**< */
-            OpDecline               /**< */
+            OpDeclineTo,            /**< */
+            OpDeclineFrom           /**< */
           };
 
           /**
