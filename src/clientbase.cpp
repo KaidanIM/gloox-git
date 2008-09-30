@@ -666,6 +666,7 @@ namespace gloox
     ++m_stats.iqStanzasSent;
     Tag* tag = iq.tag();
     addFrom( tag );
+    addNamespace( tag );
     send( tag );
   }
 
@@ -674,6 +675,7 @@ namespace gloox
     ++m_stats.messageStanzasSent;
     Tag* tag = msg.tag();
     addFrom( tag );
+    addNamespace( tag );
     send( tag );
   }
 
@@ -682,6 +684,7 @@ namespace gloox
     ++m_stats.s10nStanzasSent;
     Tag* tag = sub.tag();
     addFrom( tag );
+    addNamespace( tag );
     send( tag );
   }
 
@@ -690,6 +693,7 @@ namespace gloox
     ++m_stats.presenceStanzasSent;
     Tag* tag = pres.tag();
     addFrom( tag );
+    addNamespace( tag );
     send( tag );
   }
 
@@ -729,6 +733,14 @@ namespace gloox
       return;
 
     tag->addAttribute( "from", m_jid.bare() + '/' + m_selectedResource );
+  }
+
+  void ClientBase::addNamespace( Tag* tag )
+  {
+    if( !tag || !tag->xmlns().empty() )
+      return;
+
+    tag->setXmlns( m_namespace );
   }
 
   void ClientBase::registerStanzaExtension( StanzaExtension* ext )
