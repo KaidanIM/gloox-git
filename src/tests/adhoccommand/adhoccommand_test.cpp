@@ -33,10 +33,10 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   {
-    name = "execute specific command";
+    name = "execute specific command /w session";
     Adhoc::Command ac( "somecmd", "somesession", Adhoc::Command::Execute );
     t = ac.tag();
-    if( t->xml() != "<command xmlns='" + XMLNS_ADHOC_COMMANDS + "' node='somecmd' action='execute'/>"
+    if( t->xml() != "<command xmlns='" + XMLNS_ADHOC_COMMANDS + "' node='somecmd' action='execute' sessionid='somesession'/>"
         || ac.node() != "somecmd" || ac.sessionID() != "somesession"
         || ac.action() != Adhoc::Command::Execute )
     {
