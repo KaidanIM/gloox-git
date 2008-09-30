@@ -73,9 +73,9 @@ int main( int /*argc*/, char** /*argv*/ )
   sef.registerExtension( new FlexibleOffline::Offline() );
   // -------
   {
-    name = "FlexibleOffline::Offline/SEFactory test (open)";
+    name = "FlexibleOffline::Offline/SEFactory test";
     Tag* f = new Tag( "iq" );
-    new Tag( f, "open", "xmlns", XMLNS_IBB );
+    new Tag( f, "offline", "xmlns", XMLNS_OFFLINE );
     IQ iq( IQ::Set, JID(), "" );
     sef.addExtensions( iq, f );
     const FlexibleOffline::Offline* se = iq.findExtension<FlexibleOffline::Offline>( ExtFlexOffline );
@@ -88,7 +88,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
 
 
-  printf( "FlexibleOffline::Offline: \n" );
+  printf( "FlexibleOffline::Offline: " );
   if( fail == 0 )
   {
     printf( "OK\n" );

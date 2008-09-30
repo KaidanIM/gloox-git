@@ -73,12 +73,12 @@ int main( int /*argc*/, char** /*argv*/ )
   sef.registerExtension( new LastActivity::Query() );
   // -------
   {
-    name = "LastActivity::Query/SEFactory test (open)";
+    name = "LastActivity::Query/SEFactory test";
     Tag* f = new Tag( "iq" );
-    new Tag( f, "open", "xmlns", XMLNS_IBB );
+    new Tag( f, "query", "xmlns", XMLNS_LAST );
     IQ iq( IQ::Set, JID(), "" );
     sef.addExtensions( iq, f );
-    const LastActivity::Query* se = iq.findExtension<LastActivity::Query>( ExtFlexOffline );
+    const LastActivity::Query* se = iq.findExtension<LastActivity::Query>( ExtLastActivity );
     if( se == 0 )
     {
       ++fail;
@@ -88,7 +88,7 @@ int main( int /*argc*/, char** /*argv*/ )
   }
 
 
-  printf( "LastActivity::Query: \n" );
+  printf( "LastActivity::Query: " );
   if( fail == 0 )
   {
     printf( "OK\n" );
