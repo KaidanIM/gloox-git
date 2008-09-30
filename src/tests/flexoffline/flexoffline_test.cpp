@@ -119,7 +119,7 @@ int main( int /*argc*/, char** /*argv*/ )
   delete fo;
   delete cb;
 
-  printf( "FlexOffline: \n" );
+  printf( "FlexOffline: " );
   if( fail == 0 )
   {
     printf( "OK\n" );

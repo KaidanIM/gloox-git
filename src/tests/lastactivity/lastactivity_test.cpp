@@ -115,7 +115,7 @@ int main( int /*argc*/, char** /*argv*/ )
   delete la;
   delete cb;
 
-  printf( "SIManager: \n" );
+  printf( "LastActivity: " );
   if( fail == 0 )
   {
     printf( "OK\n" );
