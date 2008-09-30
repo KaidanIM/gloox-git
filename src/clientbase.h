@@ -844,6 +844,7 @@ namespace gloox
       void notifyOnDisconnect( ConnectionError e );
       void send( const std::string& xml );
       void addFrom( Tag* tag );
+      void addNamespace( Tag* tag );
 
       // reimplemented from IqHandler
       virtual bool handleIq( const IQ& iq );
