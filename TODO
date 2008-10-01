@@ -27,6 +27,8 @@ for 1.0
 - get rid of IQ::m_tag/IQ::query()/IQ::xmlns()
 - add inspector?
 
+- unit tests for: PrivacyManager, LastActivity, FlexOff
+
 
 optional for 1.0:
 - XEP-0174 (Link-Local Messaging)
