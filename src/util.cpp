@@ -59,7 +59,6 @@ namespace gloox
 
     static const std::string escape_seqs[] = { "amp;", "lt;", "gt;", "apos;", "quot;" };
 
-    static const unsigned nb_escape = sizeof( escape_chars ) / sizeof( char );
     static const unsigned escape_size = 5;
 
     const std::string escape( std::string what )
@@ -93,9 +92,27 @@ namespace gloox
                   || ( (unsigned char)(*it) >= 0x20
                      && (unsigned char)(*it) != 0xc0
                      && (unsigned char)(*it) != 0xc1
-                     && (unsigned char)(*it) < 0xf5 ) ); ++it );
+                     && (unsigned char)(*it) < 0xf5 ) ); ++it )
+        ;
 
       return ( it == data.end() );
+    }
+
+    void replaceAll( std::string& target, const std::string& find, const std::string& replace )
+    {
+      std::string::size_type findSize = find.size();
+      std::string::size_type replaceSize = replace.size();
+
+      if( findSize == 0 )
+        return;
+
+      std::string::size_type index = target.find( find, 0 );
+
+      while( index != std::string::npos )
+      {
+        target.replace( index, findSize, replace );
+        index = target.find( find, index+replaceSize );
+      }
     }
 
   }

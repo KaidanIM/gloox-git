@@ -202,6 +202,17 @@ namespace gloox
      * @return The logarithm to the basis of 2.
      */
     int log2( unsigned int n );
+
+    /**
+     * Replace all instances of one substring of arbitrary length
+     * with another substring of arbitrary length. Replacement happens
+     * in place (so make a copy first if you don't want the original modified).
+     * @param target The string to process. Changes are made "in place".
+     * @param find The sub-string to find within the target string
+     * @param replace The sub-string to substitute for the find string.
+     * @todo Look into merging with util::escape() and Parser::decode().
+     */
+    void replaceAll( std::string& target, const std::string& find, const std::string& replace );
   }
 
 }
