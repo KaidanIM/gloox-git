@@ -44,6 +44,7 @@ namespace gloox
     : StanzaExtension( ExtVCard ), m_class( ClassNone ), m_prodid( "gloox" + GLOOX_VERSION ),
       m_N( false ), m_PHOTO( false ), m_LOGO( false )
   {
+    m_valid = true;
   }
 
   VCard::VCard( const Tag* vcard )
