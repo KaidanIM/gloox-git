@@ -117,6 +117,109 @@ namespace gloox
       };
 
       /**
+       * @brief A wrapping class for the XEP-0077 &lt;query&gt; element.
+       *
+       * @author Jakob Schroeter <js@camaya.net>
+       * @since 1.0
+       */
+      class Query : public StanzaExtension
+      {
+        public:
+          /**
+           * Creates a new object that can be used to carry out a registration.
+           * @param form A DataForm containing the registration terms.
+           */
+          Query( DataForm* form );
+
+          /**
+           * Creates a new object that can be used to carry out a registration.
+           * @param del Whether or not to remove the account.
+           */
+          Query( bool del = false );
+
+          /**
+           * Creates a new object that can be used to carry out a registration.
+           * @param fields Bit-wise ORed fieldEnum values describing the valid (i.e., set)
+           * fields in the @b values parameter.
+           * @param values Contains the registration fields.
+           */
+          Query( int fields, const RegistrationFields& values );
+
+          /**
+           * Creates a new object from the given Tag.
+           * @param tag The Tag to parse.
+           */
+          Query( const Tag* tag );
+
+          /**
+           * Virtual Destructor.
+           */
+          virtual ~Query();
+
+          /**
+           * Returns the contained registration form, if any.
+           * @return The registration form. May be 0.
+           */
+          const DataForm* form() const { return m_form; }
+
+          /**
+           * Returns the registration instructions, if given
+           * @return The registration instructions.
+           */
+          const std::string& instructions() const { return m_instructions; }
+
+          /**
+           * Returns the registration fields, if set.
+           * @return The registration fields.
+           */
+          int fields() const { return m_fields; }
+
+          /**
+           *
+           */
+          const RegistrationFields& values() const { return m_values; }
+
+          /**
+           * Indicates whether the account is already registered.
+           * @return @b True if the &lt;registered&gt; element is present, @b false otherwise.
+           */
+          bool registered() const { return m_reg; }
+
+          /**
+           * Indicates whether the account shall be removed.
+           * @return @b True if the &lt;remove&gt; element is present, @b false otherwise.
+           */
+          bool remove() const { return m_del; }
+
+          /**
+           * Returns an optional OOB object.
+           * @return A pointer to an OOB object, if present, 0 otherwise.
+           */
+          const OOB* oob() const { return m_oob; }
+
+          // reimplemented from StanzaExtension
+          virtual const std::string& filterString() const;
+
+          // reimplemented from StanzaExtension
+          virtual StanzaExtension* newInstance( const Tag* tag ) const
+          {
+            return new Query( tag );
+          }
+
+          // reimplemented from StanzaExtension
+          virtual Tag* tag() const;
+
+        private:
+          DataForm* m_form;
+          int m_fields;
+          RegistrationFields m_values;
+          std::string m_instructions;
+          OOB* m_oob;
+          bool m_del;
+          bool m_reg;
+      };
+
+      /**
        * Constructor.
        * @param parent The ClientBase which is used for establishing a connection.
        * @param to The server or service to authenticate with. If empty the currently connected
@@ -199,101 +302,6 @@ namespace gloox
 #ifdef REGISTRATION_TEST
     public:
 #endif
-      /**
-       * @brief A wrapping class for the XEP-0077 &lt;query&gt; element.
-       *
-       * @author Jakob Schroeter <js@camaya.net>
-       * @since 1.0
-       */
-      class Query : public StanzaExtension
-      {
-        public:
-          /**
-           * Creates a new object that can be used to carry out a search.
-           * @param form A DataForm containing the search terms.
-           */
-          Query( DataForm* form );
-
-          /**
-           * Creates a new object that can be used to carry out a search.
-           * @param del Whether or not to remove the account.
-           */
-          Query( bool del = false );
-
-          /**
-           * Creates a new object that can be used to carry out a search.
-           * @param fields Bit-wise ORed FieldEnum values describing the valid (i.e., set)
-           * fields in the @b values parameter.
-           * @param values Contains the phrases to search for.
-           */
-          Query( int fields, const RegistrationFields& values );
-
-          /**
-           * Creates a new object that can be used to request search fields.
-           * Optionally, it can parse the given Tag.
-           * @param tag The Tag to parse.
-           */
-          Query( const Tag* tag );
-
-          /**
-           * Virtual Destructor.
-           */
-          virtual ~Query();
-
-          /**
-           * Returns the contained search form, if any.
-           * @return The search form. May be 0.
-           */
-          const DataForm* form() const { return m_form; }
-
-          /**
-           * Returns the search instructions, if given
-           * @return The search instructions.
-           */
-          const std::string& instructions() const { return m_instructions; }
-
-          /**
-           * Returns the search fields, if set.
-           * @return The search fields.
-           */
-          int fields() const { return m_fields; }
-
-          /**
-           *
-           */
-          const RegistrationFields& values() const { return m_values; }
-
-          /**
-           *
-           */
-          bool registered() const { return m_reg; }
-
-          /**
-           *
-           */
-          const OOB* oob() const { return m_oob; }
-
-          // reimplemented from StanzaExtension
-          virtual const std::string& filterString() const;
-
-          // reimplemented from StanzaExtension
-          virtual StanzaExtension* newInstance( const Tag* tag ) const
-          {
-            return new Query( tag );
-          }
-
-          // reimplemented from StanzaExtension
-          virtual Tag* tag() const;
-
-        private:
-          DataForm* m_form;
-          int m_fields;
-          RegistrationFields m_values;
-          std::string m_instructions;
-          OOB* m_oob;
-          bool m_del;
-          bool m_reg;
-      };
 
       enum IdType
       {
