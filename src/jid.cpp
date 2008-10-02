@@ -13,6 +13,7 @@
 #include "jid.h"
 #include "prep.h"
 #include "gloox.h"
+#include "util.h"
 
 namespace gloox
 {
@@ -81,6 +82,42 @@ namespace gloox
     else
       m_bare = EmptyString;
     m_bare += m_server;
+  }
+
+  std::string JID::escapeNode( const std::string& node )
+  {
+    std::string escaped = node;
+
+    util::replaceAll( escaped, "\\", "\\5c" );
+    util::replaceAll( escaped, " ", "\\20" );
+    util::replaceAll( escaped, "\"", "\\22" );
+    util::replaceAll( escaped, "&", "\\26" );
+    util::replaceAll( escaped, "'", "\\27" );
+    util::replaceAll( escaped, "/", "\\2f" );
+    util::replaceAll( escaped, ":", "\\3a" );
+    util::replaceAll( escaped, "<", "\\3c" );
+    util::replaceAll( escaped, ">", "\\3e" );
+    util::replaceAll( escaped, "@", "\\40" );
+
+    return escaped;
+  }
+
+  std::string JID::unescapeNode( const std::string& node )
+  {
+    std::string unescaped = node;
+
+    util::replaceAll( unescaped, "\\20", " " );
+    util::replaceAll( unescaped, "\\22", "\"" );
+    util::replaceAll( unescaped, "\\26", "&" );
+    util::replaceAll( unescaped, "\\27", "'" );
+    util::replaceAll( unescaped, "\\2f", "/" );
+    util::replaceAll( unescaped, "\\3a", ":" );
+    util::replaceAll( unescaped, "\\3c", "<" );
+    util::replaceAll( unescaped, "\\3e", ">" );
+    util::replaceAll( unescaped, "\\40", "@" );
+    util::replaceAll( unescaped, "\\5c", "\\" );
+
+    return unescaped;
   }
 
 }
