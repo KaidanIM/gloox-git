@@ -226,6 +226,12 @@ namespace gloox
 
   int DNS::getSocket()
   {
+#ifdef _WIN32
+    WSADATA wsaData;
+    if( WSAStartup( MAKEWORD( 1, 1 ), &wsaData ) != 0 )
+      return -ConnDnsError;
+#endif
+
     struct protoent* prot;
     if( ( prot = getprotobyname( "tcp" ) ) == 0 )
     {
@@ -237,12 +243,6 @@ namespace gloox
 
   int DNS::getSocket( int af, int socktype, int proto )
   {
-#ifdef _WIN32
-    WSADATA wsaData;
-    if( WSAStartup( MAKEWORD( 1, 1 ), &wsaData ) != 0 )
-      return -ConnDnsError;
-#endif
-
     int fd;
     if( ( fd = socket( af, socktype, proto ) ) == -1 )
     {
