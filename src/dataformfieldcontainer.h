@@ -79,6 +79,12 @@ namespace gloox
       FieldList& fields() { return m_fields; }
 
       /**
+        * Use this function to retrieve the const list of fields of a form.
+        * @return The const list of fields the form contains.
+        */
+      const FieldList& fields() const { return m_fields; }
+
+      /**
         * Use this function to set the fields the form contains.
         * @param fields The list of fields.
         * @note Any previously set fields will be deleted. Always set all fields, not a delta.
