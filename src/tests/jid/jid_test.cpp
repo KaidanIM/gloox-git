@@ -136,7 +136,23 @@ int main( int /*argc*/, char** /*argv*/ )
     printf( "test '%s' failed\n", name.c_str() );
   }
 
+  // -------
+  name = "JID\20Escaping";
+  const std::string e = JID::escapeNode( "1 2\"3&4'5/6:7<8>9@10\\" );
+  if( e != "1\\202\\223\\264\\275\\2f6\\3a7\\3c8\\3e9\\4010\\5c" )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+  }
 
+  // -------
+  name = "JID\20Unescaping";
+  const std::string f = JID::unescapeNode( "1\\202\\223\\264\\275\\2f6\\3a7\\3c8\\3e9\\4010\\5c" );
+  if( f != "1 2\"3&4'5/6:7<8>9@10\\" )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+  }
 
 
 
