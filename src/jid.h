@@ -144,6 +144,20 @@ namespace gloox
        */
       operator bool() const { return m_valid; }
 
+      /**
+       * XEP-0106: JID Escaping (JID\20Escaping)
+       * @param right The node to escape.
+       * @return The escaped node.
+       */
+      static std::string escapeNode( const std::string& node );
+
+      /**
+       * XEP-0106: JID Escaping (JID\20Escaping)
+       * @param right The node to unescape.
+       * @return The unescaped node.
+       */
+      static std::string unescapeNode( const std::string& node );
+
     private:
       /**
        * Utility function to rebuild both the bare and full jid.
