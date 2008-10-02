@@ -372,6 +372,16 @@ namespace gloox
       void setAuthzid( const JID& authzid ) { m_authzid = authzid; }
 
       /**
+       * Use this function to set an authentication ID (authcid) for SASL PLAIN.
+       * The default authcid is the username, i.e. the JID's node part. This should work in most cases.
+       * If this is not what you want to use for authentication, use this function.
+       * @param authcid The authentication ID.
+       * @since 1.0
+       * @note Right now this is used for SASL PLAIN authentication only.
+       */
+      void setAuthcid( const std::string& authcid ) { m_authcid = authcid; }
+
+      /**
        * Use this function to limit SASL mechanisms gloox can use. By default, all
        * supported mechanisms are allowed. To exclude one (or more) mechanisms, remove
        * it from SaslMechAll like so:
@@ -752,6 +762,7 @@ namespace gloox
 
       JID m_jid;
       JID m_authzid;
+      std::string m_authcid;
       ConnectionBase* m_connection;
       TLSBase* m_encryption;
       CompressionBase* m_compression;

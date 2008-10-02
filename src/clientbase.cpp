@@ -468,7 +468,10 @@ namespace gloox
           tmp += m_authzid.bare();
 
         tmp += '\0';
-        tmp += m_jid.username();
+        if( !m_authcid.empty() )
+          tmp += m_authcid;
+        else
+          tmp += m_jid.username();
         tmp += '\0';
         tmp += m_password;
         a->setCData( Base64::encode64( tmp ) );
