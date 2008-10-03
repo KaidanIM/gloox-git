@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.50)
-AC_INIT([gloox], [1.0-beta2], [js@camaya.net])
+AC_INIT([gloox], [1.0-beta3], [js@camaya.net])
 AC_CONFIG_SRCDIR(src/gloox.cpp)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 
@@ -362,6 +362,7 @@ src/tests/searchquery/Makefile
 src/tests/search/Makefile
 src/tests/sha/Makefile
 src/tests/simanager/Makefile
+src/tests/simanagersi/Makefile
 src/tests/stanzaextensionfactory/Makefile
 src/tests/subscription/Makefile
 src/tests/tag/Makefile
