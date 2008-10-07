@@ -105,6 +105,157 @@ namespace gloox
       };
 
       /**
+       * @brief An abstraction of a MUC user query.
+       *
+       * @author Jakob Schroeter <js@camaya.net>
+       * @since 1.0
+       */
+      class MUCUser : public StanzaExtension
+      {
+        public:
+
+          /**
+           *
+           */
+          enum MUCUserOperation
+          {
+            OpNone,                 /**< */
+            OpInviteTo,             /**< */
+            OpInviteFrom,           /**< */
+            OpDeclineTo,            /**< */
+            OpDeclineFrom           /**< */
+          };
+
+          /**
+           *
+           */
+          MUCUser( const std::string& password, HistoryRequestType historyType = HistoryUnknown,
+                   const std::string& historySince = EmptyString, int historyValue = 0 );
+
+          /**
+           *
+           */
+          MUCUser( MUCUserOperation operation, const std::string& to, const std::string& reason,
+                   const std::string& thread = EmptyString );
+
+          /**
+           * Constructs a new MUCUser object from the given Tag.
+           * @param tag The Tag to parse.
+           */
+          MUCUser( const Tag* tag = 0 );
+
+          /**
+           * Virtual destructor.
+           */
+          virtual ~MUCUser();
+
+          /**
+           *
+           */
+          int flags() const { return m_flags; }
+
+          /**
+           *
+           */
+          static MUCRoomAffiliation getEnumAffiliation( const std::string& affiliation );
+
+          /**
+           *
+           */
+          static MUCRoomRole getEnumRole( const std::string& role );
+
+          /**
+           *
+           */
+          MUCRoomAffiliation affiliation() const { return m_affiliation; }
+
+          /**
+           *
+           */
+          MUCRoomRole role() const { return m_role; }
+
+          /**
+           *
+           */
+          const std::string* jid() const { return m_jid; }
+
+          /**
+           *
+           */
+          const std::string* actor() const { return m_actor; }
+
+          /**
+           *
+           */
+          const std::string* thread() const { return m_thread; }
+
+          /**
+           *
+           */
+          const std::string* reason() const { return m_reason; }
+
+          /**
+           *
+           */
+          const std::string* newNick() const { return m_newNick; }
+
+          /**
+           *
+           */
+          const std::string* password() const { return m_password; }
+
+          /**
+           *
+           */
+          const std::string* alternate() const { return m_alternate; }
+
+          /**
+           *
+           */
+          const std::string* historySince() const { return m_historySince; }
+
+          /**
+           *
+           */
+          bool continued() const { return m_continue; }
+
+          /**
+           *
+           */
+          MUCUserOperation operation() const { return m_operation; }
+
+          // reimplemented from StanzaExtension
+          const std::string& filterString() const;
+
+          // reimplemented from StanzaExtension
+          StanzaExtension* newInstance( const Tag* tag ) const
+          {
+            return new MUCUser( tag );
+          }
+
+          // reimplemented from StanzaExtension
+          Tag* tag() const;
+
+        private:
+          MUCRoomAffiliation m_affiliation;
+          MUCRoomRole m_role;
+          std::string* m_jid;
+          std::string* m_actor;
+          std::string* m_thread;
+          std::string* m_reason;
+          std::string* m_newNick;
+          std::string* m_password;
+          std::string* m_alternate;
+          std::string* m_historySince;
+          MUCUserOperation m_operation;
+          HistoryRequestType m_historyType;
+          int m_historyValue;
+          int m_flags;
+          bool m_del;
+          bool m_continue;
+      };
+
+      /**
        * Creates a new abstraction of a Multi-User Chat room. The room is not joined automatically.
        * Use join() to join the room, use leave() to leave it.
        * @param parent The ClientBase object to use for the communication.
@@ -667,150 +818,6 @@ namespace gloox
           MUCListItemList m_list;
           MUCRoomAffiliation m_affiliation;
           MUCRoomRole m_role;
-      };
-
-      /**
-       * @brief An abstraction of a MUC user query.
-       *
-       * @author Jakob Schroeter <js@camaya.net>
-       * @since 1.0
-       */
-      class MUCUser : public StanzaExtension
-      {
-        public:
-
-          /**
-           *
-           */
-          enum MUCUserOperation
-          {
-            OpNone,                 /**< */
-            OpInvite,               /**< */
-            OpDeclineTo,            /**< */
-            OpDeclineFrom           /**< */
-          };
-
-          /**
-           *
-           */
-          MUCUser( const std::string& password, HistoryRequestType historyType = HistoryUnknown,
-                   const std::string& historySince = EmptyString, int historyValue = 0 );
-
-          /**
-           *
-           */
-          MUCUser( MUCUserOperation operation, const std::string& to, const std::string& reason,
-                   const std::string& thread = EmptyString );
-
-          /**
-           * Constructs a new MUCUser object from the given Tag.
-           * @param tag The Tag to parse.
-           */
-          MUCUser( const Tag* tag = 0 );
-
-          /**
-           * Virtual destructor.
-           */
-          virtual ~MUCUser();
-
-          /**
-           *
-           */
-          int flags() const { return m_flags; }
-
-          /**
-           *
-           */
-          static MUCRoomAffiliation getEnumAffiliation( const std::string& affiliation );
-
-          /**
-           *
-           */
-          static MUCRoomRole getEnumRole( const std::string& role );
-
-          /**
-           *
-           */
-          MUCRoomAffiliation affiliation() const { return m_affiliation; }
-
-          /**
-           *
-           */
-          MUCRoomRole role() const { return m_role; }
-
-          /**
-           *
-           */
-          const std::string* jid() const { return m_jid; }
-
-          /**
-           *
-           */
-          const std::string* actor() const { return m_actor; }
-
-          /**
-           *
-           */
-          const std::string* thread() const { return m_thread; }
-
-          /**
-           *
-           */
-          const std::string* reason() const { return m_reason; }
-
-          /**
-           *
-           */
-          const std::string* newNick() const { return m_newNick; }
-
-          /**
-           *
-           */
-          const std::string* password() const { return m_password; }
-
-          /**
-           *
-           */
-          const std::string* alternate() const { return m_alternate; }
-
-          /**
-           *
-           */
-          const std::string* historySince() const { return m_historySince; }
-
-          /**
-           *
-           */
-          MUCUserOperation operation() const { return m_operation; }
-
-          // reimplemented from StanzaExtension
-          const std::string& filterString() const;
-
-          // reimplemented from StanzaExtension
-          StanzaExtension* newInstance( const Tag* tag ) const
-          {
-            return new MUCUser( tag );
-          }
-
-          // reimplemented from StanzaExtension
-          Tag* tag() const;
-
-        private:
-          MUCRoomAffiliation m_affiliation;
-          MUCRoomRole m_role;
-          std::string* m_jid;
-          std::string* m_actor;
-          std::string* m_thread;
-          std::string* m_reason;
-          std::string* m_newNick;
-          std::string* m_password;
-          std::string* m_alternate;
-          std::string* m_historySince;
-          MUCUserOperation m_operation;
-          HistoryRequestType m_historyType;
-          int m_historyValue;
-          int m_flags;
-          bool m_del;
       };
 
       void handleIqResult( const IQ& iq, int context );

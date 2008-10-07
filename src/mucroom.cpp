@@ -302,7 +302,7 @@ namespace gloox
       m_thread( thread.empty() ? 0 : new std::string( thread ) ),
       m_reason( new std::string( reason ) ), m_newNick( 0 ), m_password( 0 ), m_alternate( 0 ),
       m_historySince( 0 ), m_operation( operation ), m_historyType( HistoryUnknown ),
-      m_historyValue( 0 ), m_flags( 0 ), m_del( false )
+      m_historyValue( 0 ), m_flags( 0 ), m_del( false ), m_continue( false )
   {
   }
 
@@ -310,7 +310,7 @@ namespace gloox
     : StanzaExtension( ExtMUCUser ), m_affiliation( AffiliationInvalid ), m_role( RoleInvalid ),
       m_jid( 0 ), m_actor( 0 ), m_thread( 0 ), m_reason( 0 ), m_newNick( 0 ),
       m_password( 0 ), m_alternate( 0 ), m_historySince( 0 ), m_operation( OpNone ),
-      m_historyType( HistoryUnknown ), m_historyValue( 0 ), m_flags( 0 ), m_del( false )
+      m_historyType( HistoryUnknown ), m_historyValue( 0 ), m_flags( 0 ), m_del( false ), m_continue( false )
   {
     if( !tag || tag->name() != "x" || tag->xmlns() != XMLNS_MUC_USER )
       return;
@@ -378,12 +378,20 @@ namespace gloox
       }
       else if( (*it)->name() == "invite" )
       {
-        m_operation = OpInvite;
-        m_jid = new std::string( (*it)->findAttribute( "to" ) );
+        m_operation = OpInviteFrom;
+        m_jid = new std::string( (*it)->findAttribute( "from" ) );
+        if( m_jid->empty() )
+        {
+          m_operation = OpInviteTo;
+          m_jid->assign( (*it)->findAttribute( "to" ) );
+        }
         if( (*it)->hasChild( "reason" ) )
           m_reason = new std::string( (*it)->findChild( "reason" )->cdata() );
         if( (*it)->hasChild( "continue" ) )
+        {
+          m_continue = true;
           m_thread = new std::string( (*it)->findChild( "continue" )->findAttribute( "thread" ) );
+        }
       }
       else if( (*it)->name() == "decline" )
       {
@@ -510,8 +518,10 @@ namespace gloox
     else if( m_operation != OpNone && m_jid )
     {
       Tag* d = 0;
-      if( m_operation == OpInvite )
+      if( m_operation == OpInviteTo )
         d = new Tag( t, "invite", "to", *m_jid );
+      else if( m_operation == OpInviteFrom )
+        d = new Tag( t, "invite", "from", *m_jid );
       else if( m_operation == OpDeclineTo )
         d = new Tag( t, "decline", "to", *m_jid );
       else if( m_operation == OpDeclineFrom )
@@ -519,8 +529,12 @@ namespace gloox
 
       if( m_reason )
         new Tag( d, "reason", *m_reason );
-      if( m_thread )
-        new Tag( d, "continue", "thread", *m_thread );
+      if( m_continue )
+      {
+        Tag* c = new Tag( d, "continue" );
+        if( m_thread )
+          c->addAttribute( "thread", *m_thread );
+      }
     }
 
     if( m_password )
@@ -660,7 +674,7 @@ namespace gloox
       return;
 
     Message msg( Message::Normal, m_nick.bareJID() );
-    msg.addExtension( new MUCUser( MUCUser::OpInvite, invitee.bare(), reason, thread ) );
+    msg.addExtension( new MUCUser( MUCUser::OpInviteTo, invitee.bare(), reason, thread ) );
     m_parent->send( msg );
   }
 
