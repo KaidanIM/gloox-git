@@ -21,9 +21,9 @@
 namespace gloox
 {
 
-  MessageSession::MessageSession( ClientBase* parent, const JID& jid, bool wantUpgrade, int types )
+  MessageSession::MessageSession( ClientBase* parent, const JID& jid, bool wantUpgrade, int types, bool honorTID )
     : m_parent( parent ), m_target( jid ), m_messageHandler( 0 ),
-      m_types( types ), m_wantUpgrade( wantUpgrade ), m_hadMessages( false )
+      m_types( types ), m_wantUpgrade( wantUpgrade ), m_hadMessages( false ), m_honorThreadID( honorTID )
   {
     if( m_parent )
       m_parent->registerMessageSession( this );

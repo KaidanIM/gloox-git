@@ -21,7 +21,8 @@ namespace gloox
 
   MUCMessageSession::MUCMessageSession( ClientBase* parent, const JID& jid )
     : MessageSession( parent, jid, false, Message::Groupchat | Message::Chat
-                                          | Message::Normal | Message::Error )
+                                          | Message::Normal | Message::Error,
+                      false )
   {
   }
 
