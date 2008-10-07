@@ -41,6 +41,7 @@
 #include "loghandler.h"
 #include "taghandler.h"
 #include "mucinvitationhandler.h"
+#include "mucroom.h"
 #include "jid.h"
 #include "base64.h"
 #include "error.h"
@@ -1330,28 +1331,22 @@ namespace gloox
 
   void ClientBase::notifyMessageHandlers( Message& msg )
   {
-    Tag* m = msg.tag();
-    if( m_mucInvitationHandler && m )
+    if( m_mucInvitationHandler )
     {
-      const Tag* x = m->findChild( "x", XMLNS, XMLNS_MUC_USER ); // FIXME !!!
-      if( x && x->hasChild( "invite" ) )
+      const MUCRoom::MUCUser* mu = msg.findExtension<MUCRoom::MUCUser>( ExtMUCUser );
+      if( mu && mu->operation() != MUCRoom::MUCUser::OpInviteTo )
       {
-        const Tag* i = x->findChild( "invite" );
-        JID from( i->findAttribute( "from" ) );
 
-        const Tag * t = i->findChild( "reason" );
-        const std::string& reason( t ? t->cdata() : EmptyString );
-
-        t = x->findChild( "password" );
-        const std::string& password( t ? t->cdata() : EmptyString );
-
-        m_mucInvitationHandler->handleMUCInvitation( msg.from(), from,
-                                                     reason, msg.body(), password,
-                                                     i->hasChild( "continue" ) );
+        m_mucInvitationHandler->handleMUCInvitation( msg.from(),
+            mu->jid() ? JID( *(mu->jid()) ) : JID(),
+            mu->reason() ? *(mu->reason()) : EmptyString,
+            msg.body(),
+            mu->password() ? *(mu->password()) : EmptyString,
+            mu->continued(),
+            mu->thread() ? *(mu->thread()) : EmptyString );
         return;
       }
     }
-    delete m;
 
     MessageSessionList::const_iterator it1 = m_messageSessions.begin();
     for( ; it1 != m_messageSessions.end(); ++it1 )
