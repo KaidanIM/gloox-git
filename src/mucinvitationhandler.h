@@ -17,11 +17,14 @@
 
 #include "macros.h"
 #include "jid.h"
+#include "mucroom.h"
 
 #include <string>
 
 namespace gloox
 {
+
+  class ClientBase;
 
   /**
    * @brief A handler that can be used to receive invitations to MUC rooms.
@@ -34,6 +37,12 @@ namespace gloox
   class GLOOX_API MUCInvitationHandler
   {
     public:
+      MUCInvitationHandler( ClientBase* parent )
+      {
+        if( parent )
+          parent->registerStanzaExtension( new MUCRoom::MUCUser() );
+      }
+
       /**
        * Virtual Destructor.
        */
@@ -47,11 +56,12 @@ namespace gloox
        * @param body The body of the message. May contain a MUC-service generated invitation message.
        * @param password Optionally, a password for the room.
        * @param cont Indicates whether or not the multi-user chat is a continuation of a private chat.
+       * @param thread An optional thread identifier in case this is a
+       * continued chat.
        */
       virtual void handleMUCInvitation( const JID& room, const JID& from, const std::string& reason,
                                         const std::string& body, const std::string& password,
-                                        bool cont ) = 0;
-
+                                        bool cont, const std::string& thread ) = 0;
   };
 
 }
