@@ -165,10 +165,28 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   {
     name = "inviting someone";
-    MUCRoom::MUCUser mu( MUCRoom::MUCUser::OpInvite, "foo@bar", "why not?", "somethread" );
+    MUCRoom::MUCUser mu( MUCRoom::MUCUser::OpInviteTo, "foo@bar", "why not?", "somethread" );
     t = mu.tag();
     if( !t || t->xml() != "<x xmlns='" + XMLNS_MUC_USER + "'>"
          "<invite to='foo@bar'>"
+         "<reason>why not?</reason>"
+         "<continue thread='somethread'/>"
+         "</invite>"
+         "</x>" )
+    {
+      ++fail;
+      printf( "test '%s' failed:%s \n", name.c_str(), t->xml().c_str() );
+    }
+    delete t;
+  }
+
+  // -------
+  {
+    name = "being invited";
+    MUCRoom::MUCUser mu( MUCRoom::MUCUser::OpInviteFrom, "foo@bar", "why not?", "somethread" );
+    t = mu.tag();
+    if( !t || t->xml() != "<x xmlns='" + XMLNS_MUC_USER + "'>"
+         "<invite from='foo@bar'>"
          "<reason>why not?</reason>"
          "<continue thread='somethread'/>"
          "</invite>"
@@ -214,6 +232,23 @@ int main( int /*argc*/, char** /*argv*/ )
     t = mu.tag();
     if( !t || t->xml() != "<x xmlns='" + XMLNS_MUC_USER + "'>"
          "<decline to='bar@foo'>"
+         "<reason>because.</reason>"
+         "</decline>"
+         "</x>" )
+    {
+      ++fail;
+      printf( "test '%s' failed:%s \n", name.c_str(), t->xml().c_str() );
+    }
+    delete t;
+  }
+
+  // -------
+  {
+    name = "decline invitation";
+    MUCRoom::MUCUser mu( MUCRoom::MUCUser::OpDeclineFrom, "bar@foo", "because." );
+    t = mu.tag();
+    if( !t || t->xml() != "<x xmlns='" + XMLNS_MUC_USER + "'>"
+         "<decline from='bar@foo'>"
          "<reason>because.</reason>"
          "</decline>"
          "</x>" )
