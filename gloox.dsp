@@ -53,7 +53,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386
-# ADD LINK32 wsock32.lib /nologo /dll /machine:I386 /nodefaultlib:"libc"
+# ADD LINK32 wsock32.lib crypt32.lib secur32.lib dnsapi.lib /nologo /dll /machine:I386 /nodefaultlib:"libc"
 
 !ELSEIF  "$(CFG)" == "gloox - Win32 Debug"
 
@@ -79,7 +79,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 wsock32.lib /nologo /dll /debug /machine:I386 /nodefaultlib:"libcd" /pdbtype:sept
+# ADD LINK32 wsock32.lib crypt32.lib secur32.lib dnsapi.lib /nologo /dll /debug /machine:I386 /nodefaultlib:"libcd" /pdbtype:sept
 # SUBTRACT LINK32 /pdb:none
 
 !ENDIF 
@@ -205,6 +205,10 @@ SOURCE=.\src\error.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\eventdispatcher.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\featureneg.cpp
 # End Source File
 # Begin Source File
@@ -238,6 +242,22 @@ SOURCE=.\src\iq.cpp
 # Begin Source File
 
 SOURCE=.\src\jid.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\jinglecontent.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\jingledescription.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\jinglesession.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\jingletransport.cpp
 # End Source File
 # Begin Source File
 
@@ -370,10 +390,6 @@ SOURCE=.\src\socks5bytestreammanager.cpp
 # Begin Source File
 
 SOURCE=.\src\socks5bytestreamserver.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\softwareversion.cpp
 # End Source File
 # Begin Source File
 
@@ -633,6 +649,14 @@ SOURCE=.\src\error.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\event.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\eventdispatcher.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\featureneg.h
 # End Source File
 # Begin Source File
@@ -674,6 +698,46 @@ SOURCE=.\src\iqhandler.h
 # Begin Source File
 
 SOURCE=.\src\jid.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\jingleaudiortp.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\jinglecontent.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\jingledescription.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\jingleiceudp.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\jingleplugin.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\jinglerawudp.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\jinglesession.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\jinglesessionhandler.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\jingletransport.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\jinglevideortp.h
 # End Source File
 # Begin Source File
 
