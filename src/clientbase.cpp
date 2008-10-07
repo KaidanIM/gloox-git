@@ -1352,7 +1352,9 @@ namespace gloox
     for( ; it1 != m_messageSessions.end(); ++it1 )
     {
       if( (*it1)->target().full() == msg.from().full() &&
-            ( msg.thread().empty() || (*it1)->threadID() == msg.thread() ) &&
+            ( msg.thread().empty()
+              || (*it1)->threadID() == msg.thread()
+              || (*it1)->honorThreadID() ) &&
 // FIXME don't use '== 0' here
             ( (*it1)->types() & msg.subtype() || (*it1)->types() == 0 ) )
       {
@@ -1365,7 +1367,9 @@ namespace gloox
     for( ; it1 != m_messageSessions.end(); ++it1 )
     {
       if( (*it1)->target().bare() == msg.from().bare() &&
-            ( msg.thread().empty() || (*it1)->threadID() == msg.thread() ) &&
+            ( msg.thread().empty()
+              || (*it1)->threadID() == msg.thread()
+              || (*it1)->honorThreadID() ) &&
 // FIXME don't use '== 0' here
             ( (*it1)->types() & msg.subtype() || (*it1)->types() == 0 ) )
       {

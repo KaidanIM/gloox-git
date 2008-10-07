@@ -163,9 +163,10 @@ namespace gloox
        * a non-default value if this MessageSession is supposed to talk directly to a server or component
        * JID that has no resource. This 'upgrade' will only happen once.
        * @param types ORed list of Message::MessageType values this MessageSession shall receive.
+       * @param honorTID Indicates whether thread IDs should be honored when matching incoming messages to MessageSessions. The default is usually fine.
        * Defaults to 0 which means any type is received.
        */
-      MessageSession( ClientBase* parent, const JID& jid, bool wantUpgrade = true, int types = 0 );
+      MessageSession( ClientBase* parent, const JID& jid, bool wantUpgrade = true, int types = 0, bool honorTID = true );
 
       /**
        * Virtual destructor.
@@ -194,6 +195,13 @@ namespace gloox
        * @param thread The new thread ID.
        */
       void setThreadID( const std::string& thread ) { m_thread = thread; }
+
+      /**
+       * Indicates whether thread IDs are honored when matching incoming
+       * messages to MessageSessions.
+       * @return Whether thread IDs are honored.
+       */
+      bool honorThreadID() const { return m_honorThreadID; }
 
       /**
        * Use this function to associate a MessageHandler with this MessageSession.
@@ -290,6 +298,7 @@ namespace gloox
       int m_types;
       bool m_wantUpgrade;
       bool m_hadMessages;
+      bool m_honorThreadID;
 
   };
 
