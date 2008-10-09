@@ -81,13 +81,59 @@ int main( int /*argc*/, char** /*argv*/ )
     t = 0;
   }
 
+  // -------
+  {
+    name = "full ctor";
+    Tag* t1 = new Tag( "foo" );
+    Tag* t2 = new Tag( "bar" );
+    SIManager::SI si( t1, t2, "id", "mime", "prof" );
+    t = si.tag();
+    if( !t || t->name() != "si" || t->xmlns() != XMLNS_SI
+        || !t->hasAttribute( "id", "id" )
+        || !t->hasAttribute( "mime-type", "mime" )
+        || !t->hasAttribute( "profile", "prof" )
+        || !t->hasChild( "foo" )
+        || !t->hasChild( "bar" ) )
+    {
+      ++fail;
+      printf( "test '%s' failed: %s\n", name.c_str(), t->xml().c_str() );
+    }
+    delete t;
+    t = 0;
+  }
+
+  // -------
+  {
+    name = "tag ctor";
+    Tag* s = new Tag( "si" );
+    s->setXmlns( XMLNS_SI );
+    s->addAttribute( "id", "id" );
+    s->addAttribute( "mime-type", "mime" );
+    s->addAttribute( "profile", "prof" );
+    Tag* f1 = new Tag( s, "file" );
+    f1->setXmlns( XMLNS_SI_FT );
+    Tag* f2 = new Tag( s, "feature" );
+    f2->setXmlns( XMLNS_FEATURE_NEG );
+
+    SIManager::SI si( s );
+    t = si.tag();
+    if( !t || *t != *s )
+    {
+      ++fail;
+      printf( "test '%s' failed:\n%s\n%s\n", name.c_str(), t->xml().c_str(), s->xml().c_str() );
+    }
+    delete s;
+    delete t;
+    t = 0;
+  }
+
   StanzaExtensionFactory sef;
   sef.registerExtension( new SIManager::SI() );
   // -------
   {
     name = "SIManager::SI/SEFactory test";
     Tag* f = new Tag( "iq" );
-    new Tag( f, "query", "xmlns", XMLNS_SI );
+    new Tag( f, "si", "xmlns", XMLNS_SI );
     IQ iq( IQ::Set, JID(), "" );
     sef.addExtensions( iq, f );
     const SIManager::SI* se = iq.findExtension<SIManager::SI>( ExtSI );

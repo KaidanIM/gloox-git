@@ -26,6 +26,21 @@ namespace gloox
   SIManager::SI::SI( const Tag* tag )
     : StanzaExtension( ExtSI ), m_tag1( 0 ), m_tag2( 0 )
   {
+    if( !tag || tag->name() != "si" || tag->xmlns() != XMLNS_SI )
+      return;
+
+    m_valid = true;
+
+    m_id = tag->findAttribute( "id" );
+    m_mimetype = tag->findAttribute( "mime-type" );
+    m_profile = tag->findAttribute( "profile" );
+
+    Tag* c = tag->findChild( "file", "xmlns", XMLNS_SI_FT );
+    if ( c )
+      m_tag1 = c->clone();
+    c = tag->findChild( "feature", "xmlns", XMLNS_FEATURE_NEG );
+    if( c )
+      m_tag2 = c->clone();
   }
 
   SIManager::SI::SI( Tag* tag1, Tag* tag2, const std::string& id,
@@ -33,6 +48,7 @@ namespace gloox
     : StanzaExtension( ExtSI ), m_tag1( tag1 ), m_tag2( tag2 ),
       m_id( id ), m_mimetype( mimetype ), m_profile( profile )
   {
+    m_valid = true;
   }
 
   SIManager::SI::~SI()
@@ -43,12 +59,15 @@ namespace gloox
 
   const std::string& SIManager::SI::filterString() const
   {
-    static const std::string& filter = "/iq/query[@xmlns='" + XMLNS_SI + "']";
+    static const std::string& filter = "/iq/si[@xmlns='" + XMLNS_SI + "']";
     return filter;
   }
 
   Tag* SIManager::SI::tag() const
   {
+    if( !m_valid )
+      return 0;
+
     Tag* t = new Tag( "si" );
     t->setXmlns( XMLNS_SI );
     if( !m_id.empty() )
@@ -62,7 +81,7 @@ namespace gloox
     if( m_tag2 )
       t->addChildCopy( m_tag2 );
 
-    return 0;
+    return t;
   }
   // ---- ~SIManager::SI ----
 
