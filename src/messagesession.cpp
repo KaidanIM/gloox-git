@@ -46,7 +46,6 @@ namespace gloox
 
   void MessageSession::handleMessage( Message& msg )
   {
-    printf( "MessageSession::handleMessage\n" );
     if( m_wantUpgrade && msg.from().bare() == m_target.full() )
       setResource( msg.from().resource() );
 
@@ -64,17 +63,10 @@ namespace gloox
 
     MessageFilterList::const_iterator it = m_messageFilterList.begin();
     for( ; it != m_messageFilterList.end(); ++it )
-    {
       (*it)->filter( msg );
-    }
-printf( "body: %s\n", msg.body().c_str() );
-if( !m_messageHandler )
-  printf( "got no m_messageHandler\n ");
+
     if( m_messageHandler && !msg.body().empty() )
-    {
-      printf( "calling messagehandler\n" );
       m_messageHandler->handleMessage( msg, this );
-    }
   }
 
   void MessageSession::send( const std::string& message, const std::string& subject )
