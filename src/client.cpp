@@ -447,6 +447,7 @@ namespace gloox
 
         m_jid = rb->jid();
         m_resourceBound = true;
+        m_selectedResource = m_jid.resource();
         notifyOnResourceBind( m_jid.resource() );
 
         if( m_streamFeatures & StreamFeatureSession )
