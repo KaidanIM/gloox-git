@@ -271,7 +271,7 @@ namespace gloox
            * @note The Item objects pointed to will be owned by the Items object. The
            * list should neither be used again nor should the Item objects be deleted.
            */
-          void setItems( const ItemList& items ) { m_items = items; }
+          void setItems( const ItemList& items );
 
           /**
            * Returns the queried node identifier, if any.

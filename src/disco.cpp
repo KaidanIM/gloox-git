@@ -271,6 +271,23 @@ namespace gloox
     // ~
   }
 
+  void Disco::Items::setItems( const ItemList& items )
+  {
+//     util::clearList( m_items );
+    // FIXME
+    ItemList::iterator it = m_items.begin();
+    ItemList::iterator it2;
+    while( it != m_items.end() )
+    {
+      it2 = it++;
+      delete (*it2);
+      m_items.erase( it2 );
+    }
+    // ~
+    m_items = items;
+  }
+
+
   const std::string& Disco::Items::filterString() const
   {
     static const std::string filter = "/iq/query[@xmlns='" + XMLNS_DISCO_ITEMS + "']";
