@@ -15,6 +15,7 @@
 #define SIPROFILEHANDLER_H__
 
 #include "jid.h"
+#include "simanager.h"
 
 #include <string>
 
@@ -49,13 +50,9 @@ namespace gloox
        * @param from The SI requestor.
        * @param id The request's id (@b not the stream's id). This id MUST be supplied to either
        * SIManager::acceptSI() or SIManager::declineSI().
-       * @param profile The requested stream profile.
-       * @param si The request's complete &lt;si/&gt; Tag.
-       * @param ptag The profile-specific child of the SI request. May be 0, but should not be.
-       * @param fneg The &lt;feature/&gt; child of the SI request. May be 0.
+       * @param si The request's complete SI.
        */
-      virtual void handleSIRequest( const JID& from, const std::string& id, const std::string& profile,
-                                    const Tag* si, const Tag* ptag, const Tag* fneg ) = 0;
+      virtual void handleSIRequest( const JID& from, const std::string& id, const SIManager::SI& si ) = 0;
 
   };
 

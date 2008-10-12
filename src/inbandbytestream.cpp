@@ -99,7 +99,10 @@ namespace gloox
       m_clientbase( clientbase ), m_blockSize( 4096 ), m_sequence( -1 ), m_lastChunkReceived( -1 )
   {
     if( m_clientbase )
+    {
+      m_clientbase->registerStanzaExtension( new IBB() );
       m_clientbase->registerIqHandler( this, ExtIBB );
+    }
 
     m_open = false;
   }

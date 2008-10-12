@@ -198,8 +198,7 @@ namespace gloox
     if( it != m_handlers.end() && (*it).second )
     {
       // FIXME: don't pass si->tag()!
-      (*it).second->handleSIRequest( iq.from(), iq.id(), si->profile(),
-                                     si->tag(), si->tag1(), si->tag2() );
+      (*it).second->handleSIRequest( iq.from(), iq.id(), *si );
       return true;
     }
 
@@ -217,7 +216,7 @@ namespace gloox
           if( it != m_track.end() )
           {
             const SI* si = iq.findExtension<SI>( ExtSI );
-            if( !si || si->profile().empty() )
+            if( !si /*|| si->profile().empty()*/ )
               return;
 
 //             Tag* si = iq.query();
@@ -231,7 +230,7 @@ namespace gloox
 
             // FIXME: remove above commented code and
             // check corectness of last 3 params!
-            (*it).second.sih->handleSIRequestResult( iq.from(), (*it).second.sid, si->tag(), si->tag(), si->tag2() );
+            (*it).second.sih->handleSIRequestResult( iq.from(), (*it).second.sid, *si );
             m_track.erase( it );
           }
         }
