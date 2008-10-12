@@ -167,10 +167,9 @@ namespace gloox
   }
 
   void SIProfileFT::handleSIRequest( const JID& from, const std::string& id,
-                                     const std::string& profile,
-                                     const Tag* si, const Tag* ptag, const Tag* fneg )
+                                     const SIManager::SI& si )
   {
-    if( profile != XMLNS_SI_FT || !ptag || !si )
+    if( si.profile() != XMLNS_SI_FT || !si.tag1() )
       return;
 
     if( m_handler )
@@ -178,10 +177,10 @@ namespace gloox
       long offset = 0;
       long length = -1;
 
-      const Tag* t = ptag->findChild( "desc" );
+      const Tag* t = si.tag1()->findChild( "desc" );
       const std::string& desc = t ? t->cdata() : EmptyString;
 
-      if( ( t = ptag->findChild( "range" ) ) )
+      if( ( t = si.tag1()->findChild( "range" ) ) )
       {
         if( t->hasAttribute( "offset" ) )
           offset = atol( t->findAttribute( "offset" ).c_str() );
@@ -189,12 +188,12 @@ namespace gloox
           length = atol( t->findAttribute( "length" ).c_str() );
       }
 
-      const std::string& mt = si->findAttribute( "mime-type" );
+      const std::string& mt = si.mimetype();
       int types = 0;
 
-      if( fneg )
+      if( si.tag2() )
       {
-        const DataForm df( fneg->findChild( "x", XMLNS, XMLNS_X_DATA ) );
+        const DataForm df( si.tag2()->findChild( "x", XMLNS, XMLNS_X_DATA ) );
         const DataFormField* dff = df.field( "stream-method" );
 
         if( dff )
@@ -208,24 +207,23 @@ namespace gloox
         }
       }
 
-      const std::string& sid = si->findAttribute( "id" );
+      const std::string& sid = si.id();
       m_id2sid[sid] = id;
-      m_handler->handleFTRequest( from, sid, ptag->findAttribute( "name" ),
-                                  atol( ptag->findAttribute( "size" ).c_str() ),
-                                  ptag->findAttribute( "hash" ),
-                                  ptag->findAttribute( "date" ),
+      m_handler->handleFTRequest( from, sid, si.tag1()->findAttribute( "name" ),
+                                  atol( si.tag1()->findAttribute( "size" ).c_str() ),
+                                        si.tag1()->findAttribute( "hash" ),
+                                            si.tag1()->findAttribute( "date" ),
                                   mt.empty() ? "binary/octet-stream" : mt,
                                   desc, types, offset, length );
     }
   }
 
   void SIProfileFT::handleSIRequestResult( const JID& from, const std::string& sid,
-                                           const Tag* /*si*/, const Tag* /*ptag*/,
-                                           const Tag* fneg )
+                                           const SIManager::SI& si )
   {
-    if( fneg )
+    if( si.tag2() )
     {
-      const DataForm df( fneg->findChild( "x", XMLNS, XMLNS_X_DATA ) );
+      const DataForm df( si.tag2()->findChild( "x", XMLNS, XMLNS_X_DATA ) );
       const DataFormField* dff = df.field( "stream-method" );
 
       if( dff )
@@ -241,6 +239,7 @@ namespace gloox
           {
             InBandBytestream* ibb = new InBandBytestream( m_parent, m_parent->logInstance(),
                                                           m_parent->jid(), from, sid );
+
             m_handler->handleFTBytestream( ibb );
           }
           else if( dff->value() == XMLNS_IQ_OOB )

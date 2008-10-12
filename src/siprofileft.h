@@ -283,13 +283,11 @@ namespace gloox
 
       // reimplemented from SIProfileHandler
       virtual void handleSIRequest( const JID& from, const std::string& id,
-                                    const std::string& profile,
-                                    const Tag* si, const Tag* ptag, const Tag* fneg );
+                                    const SIManager::SI& si );
 
       // reimplemented from SIHandler
       virtual void handleSIRequestResult( const JID& from, const std::string& sid,
-                                          const Tag* si, const Tag* ptag,
-                                          const Tag* fneg );
+                                          const SIManager::SI& si );
 
       // reimplemented from SIHandler
       virtual void handleSIRequestError( const IQ& iq, const std::string& sid );

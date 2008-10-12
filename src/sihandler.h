@@ -15,6 +15,7 @@
 #define SIHANDLER_H__
 
 #include "macros.h"
+#include "simanager.h"
 
 #include <string>
 
@@ -49,12 +50,10 @@ namespace gloox
        * (using SIManager::requestSI()) to send a file to a remote entity.
        * @param from The SI receiver.
        * @param sid The stream ID.
-       * @param si The request's complete &lt;si/&gt; Tag.
-       * @param ptag The profile-specific child of the SI request. May be 0.
-       * @param fneg The &lt;feature/&gt; child of the SI request. May be 0 (but should not be).
+       * @param si The request's complete SI.
        */
       virtual void handleSIRequestResult( const JID& from, const std::string& sid,
-                                          const Tag* si, const Tag* ptag, const Tag* fneg ) = 0;
+                                          const SIManager::SI& si ) = 0;
 
       /**
        * This function is called to handle a request error or decline.
