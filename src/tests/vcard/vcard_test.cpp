@@ -20,7 +20,7 @@ int main( int /*argc*/, char** /*argv*/ )
     name = "empty vcard request";
     VCard v;
     t = v.tag();
-    if( !t || t->xml() != "<vCard xmlns='" + XMLNS_VCARD_TEMP + "'/>" )
+    if( !t || t->xml() != "<vCard xmlns='" + XMLNS_VCARD_TEMP + "' version='3.0'/>" )
     {
       ++fail;
       printf( "test '%s' failed\n", name.c_str() );
