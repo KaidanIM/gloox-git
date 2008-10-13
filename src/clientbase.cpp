@@ -200,7 +200,13 @@ namespace gloox
     m_logInstance.dbg( LogAreaClassClientbase, "This is gloox " + GLOOX_VERSION + ", connecting..." );
     m_block = block;
     ConnectionError ret = m_connection->connect();
-    return ret == ConnNoError;
+    if( ret != ConnNoError )
+      return false;
+
+    if( m_block )
+      m_connection->receive();
+
+    return true;
   }
 
   void ClientBase::handleTag( Tag* tag )
@@ -352,10 +358,6 @@ namespace gloox
   void ClientBase::handleConnect( const ConnectionBase* /*connection*/ )
   {
     header();
-    if( m_block && m_connection )
-    {
-      m_connection->receive();
-    }
   }
 
   void ClientBase::handleDisconnect( const ConnectionBase* /*connection*/, ConnectionError reason )
