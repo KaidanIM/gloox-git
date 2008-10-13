@@ -302,7 +302,7 @@ namespace gloox
       m_thread( thread.empty() ? 0 : new std::string( thread ) ),
       m_reason( new std::string( reason ) ), m_newNick( 0 ), m_password( 0 ), m_alternate( 0 ),
       m_historySince( 0 ), m_operation( operation ), m_historyType( HistoryUnknown ),
-      m_historyValue( 0 ), m_flags( 0 ), m_del( false ), m_continue( false )
+      m_historyValue( 0 ), m_flags( 0 ), m_del( false ), m_continue( !thread.empty() )
   {
   }
 
