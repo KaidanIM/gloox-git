@@ -211,21 +211,21 @@ void RosterManagerTest::send( const Subscription& s10n )
   else if( m_test == 7 )
   {
     Tag* s = s10n.tag();
-    if( s->xml() == "<presence xmlns='jabber:client' to='foobar' type='subscribed'/>" )
+    if( s->xml() == "<presence to='foobar' type='subscribed'/>" )
       m_result2 = true;
     delete s;
   }
   else if( m_test == 8 )
   {
     Tag* s = s10n.tag();
-    if( s->xml() == "<presence xmlns='jabber:client' to='foobar' type='unsubscribed'/>" )
+    if( s->xml() == "<presence to='foobar' type='unsubscribed'/>" )
       m_result2 = true;
     delete s;
   }
   else if( m_test == 9 )
   {
     Tag* s = s10n.tag();
-    if( s->xml() == "<presence xmlns='jabber:client' to='foobar' type='unsubscribed'/>" )
+    if( s->xml() == "<presence to='foobar' type='unsubscribed'/>" )
       m_result2 = true;
     delete s;
   }
