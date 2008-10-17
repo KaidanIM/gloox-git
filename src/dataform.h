@@ -57,6 +57,11 @@ namespace gloox
   {
     public:
       /**
+       * A list of DataFormItems.
+       */
+      typedef std::list<DataFormItem*> ItemList;
+
+      /**
        * Constructs a new, empty form.
        * @param type The form type.
        * @param instructions Natural-language instructions for filling out the form. Should not contain
@@ -120,6 +125,12 @@ namespace gloox
       void setInstructions( const StringList& instructions ) { m_instructions = instructions; }
 
       /**
+       * Returns a list of items in a DataForm.
+       * @return A list of items.
+       */
+      const ItemList& items() const { return m_items; }
+
+      /**
        * Returns the form's type.
        * @return The form's type.
        * @since 0.9
@@ -164,6 +175,7 @@ namespace gloox
       StringList m_instructions;
 
       std::string m_title;
+      ItemList m_items;
 
   };
 

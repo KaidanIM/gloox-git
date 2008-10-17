@@ -10,5 +10,6 @@ lastactivityquery_test_SOURCES = lastactivityquery_test.cpp
 lastactivityquery_test_LDADD = ../../tag.o ../../stanza.o ../../prep.o ../../stanzaextensionfactory.o \
                         ../../gloox.o ../../message.o ../../util.o ../../error.o ../../jid.o \
                         ../../iq.o ../../base64.o ../../dataformfieldcontainer.o \
-                        ../../dataform.o ../../dataformfield.o
+                        ../../dataform.o ../../dataformfield.o \
+                        ../../dataformitem.o
 lastactivityquery_test_CFLAGS = $(CPPFLAGS)

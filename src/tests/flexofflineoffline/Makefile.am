@@ -10,5 +10,6 @@ flexofflineoffline_test_SOURCES = flexofflineoffline_test.cpp
 flexofflineoffline_test_LDADD = ../../tag.o ../../stanza.o ../../prep.o ../../stanzaextensionfactory.o \
                         ../../gloox.o ../../message.o ../../util.o ../../error.o ../../jid.o \
                         ../../iq.o ../../base64.o ../../dataformfieldcontainer.o \
-                        ../../dataform.o ../../dataformfield.o
+                        ../../dataform.o ../../dataformfield.o \
+                        ../../dataformitem.o
 flexofflineoffline_test_CFLAGS = $(CPPFLAGS)
