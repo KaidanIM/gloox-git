@@ -49,6 +49,17 @@ namespace gloox
 
   DataForm::~DataForm()
   {
+//     util::clearList( m_items );
+    // FIXME
+    ItemList::iterator it = m_items.begin();
+    ItemList::iterator it2;
+    while( it != m_items.end() )
+    {
+      it2 = it++;
+      delete (*it2);
+      m_items.erase( it2 );
+    }
+    // ~
   }
 
   static const char* dfTypeValues[] =
@@ -75,6 +86,8 @@ namespace gloox
         m_instructions.push_back( (*it)->cdata() );
       else if( (*it)->name() == "field" )
         m_fields.push_back( new DataFormField( (*it) ) );
+      else if( (*it)->name() == "item" )
+        m_items.push_back( new DataFormItem( (*it) ) );
     }
 
     return true;
@@ -104,6 +117,10 @@ namespace gloox
     FieldList::const_iterator it = m_fields.begin();
     for( ; it != m_fields.end(); ++it )
       x->addChild( (*it)->tag() );
+
+    ItemList::const_iterator iti = m_items.begin();
+    for( ; iti != m_items.end(); ++iti )
+      x->addChild( (*iti)->tag() );
 
     return x;
   }
