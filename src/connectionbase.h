@@ -28,7 +28,7 @@ namespace gloox
    *
    * You should not need to use this class directly.
    *
-   * @author Jakob Schröter <js@camaya.net>
+   * @author Jakob Schrï¿½ter <js@camaya.net>
    * @since 0.9
    */
   class GLOOX_API ConnectionBase
@@ -55,7 +55,7 @@ namespace gloox
       virtual ConnectionError connect() = 0;
 
       /**
-       * Use this periodically to receive data from the socket and to feed the parser.
+       * Use this periodically to receive data from the socket.
        * @param timeout The timeout to use for select in microseconds. Default of -1 means blocking.
        * @return The state of the connection.
        */
