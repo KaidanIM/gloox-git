@@ -42,7 +42,7 @@ namespace gloox
        * @param tag The tag to read the 'field' elements from.
        * @since 0.8.5
        */
-      DataFormItem( Tag* tag );
+      DataFormItem( const Tag* tag );
 
       /**
        * Virtual destructor.

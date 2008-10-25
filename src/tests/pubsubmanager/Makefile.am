@@ -8,9 +8,9 @@ noinst_PROGRAMS = pubsubmanager_test
 
 pubsubmanager_test_SOURCES = pubsubmanager_test.cpp
 pubsubmanager_test_LDADD = ../../gloox.o ../../tag.o ../../iq.o \
-													 ../../jid.o ../../prep.o \
-													 ../../stanza.o ../../util.o ../../error.o \
-													 ../../dataform.o ../../dataformfield.o \
-													 ../../dataformfieldcontainer.o
+				 ../../jid.o ../../prep.o \
+				 ../../stanza.o ../../util.o ../../error.o \
+				 ../../dataform.o ../../dataformfield.o \
+				 ../../dataformfieldcontainer.o ../../dataformitem.o
 
 pubsubmanager_test_CFLAGS = $(CPPFLAGS)
