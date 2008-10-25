@@ -22,7 +22,7 @@ namespace gloox
   {
   }
 
-  DataFormItem::DataFormItem( Tag* tag )
+  DataFormItem::DataFormItem( const Tag* tag )
   {
     if( tag->name() != "item" )
       return;
