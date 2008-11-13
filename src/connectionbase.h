@@ -115,6 +115,12 @@ namespace gloox
       const std::string& server() const { return m_server; }
 
       /**
+       * Returns the currently set port.
+       * @return The server port.
+       */
+      int port() const { return m_port; }
+
+      /**
        * Returns current connection statistics.
        * @param totalIn The total number of bytes received.
        * @param totalOut The total number of bytes sent.
