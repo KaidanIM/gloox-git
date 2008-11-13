@@ -387,7 +387,7 @@ namespace gloox
   Tag* VCard::tag() const
   {
     Tag* v = new Tag( "vCard" );
-    v->addAttribute( XMLNS, XMLNS_VCARD_TEMP );
+    v->setXmlns( XMLNS_VCARD_TEMP );
 
     if( !m_valid )
       return v;
