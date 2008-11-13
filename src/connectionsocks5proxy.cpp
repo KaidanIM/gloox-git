@@ -353,7 +353,7 @@ namespace gloox
       const char d[4] = {
         0x05,        // SOCKS version 5
         auth ? 0x02  // two methods
-             : 0x01, // one methods
+             : 0x01, // one method
         0x00,        // method: no auth
         0x02         // method: username/password auth
       };
