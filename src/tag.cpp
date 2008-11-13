@@ -84,7 +84,7 @@ namespace gloox
     if( !util::checkValidXMLChars( xmlns ) )
       return false;
 
-    m_xmlns = m_xmlns;
+    m_xmlns = xmlns;
     return true;
   }
 
