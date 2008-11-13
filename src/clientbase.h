@@ -417,7 +417,7 @@ namespace gloox
        * @c xmlns. As of 1.0, the number of handlers per namespace is not limited.
        * @param ih The object to receive Iq stanza notifications.
        * @param xmlns The namespace the object handles.
-       * @deprecated Will be removed for 1.1. Use registerIqHandler( IqHandler*, int ) instead.
+       * @deprecated Will be removed for 1.0. Use registerIqHandler( IqHandler*, int ) instead.
        */
       GLOOX_DEPRECATED void registerIqHandler( IqHandler* ih, const std::string& xmlns );
 
@@ -439,7 +439,7 @@ namespace gloox
        * @param ih The IqHandler to receive notifications.
        * @param id The id to track.
        * @param context A value that allows for restoring context.
-       * @deprecated Will be removed for 1.1. Use send( const IQ&, IqHandler*, int, bool ) instead.
+       * @deprecated Will be removed for 1.0. Use send( const IQ&, IqHandler*, int, bool ) instead.
        */
       GLOOX_DEPRECATED void trackID( IqHandler* ih, const std::string& id, int context );
 
@@ -532,7 +532,7 @@ namespace gloox
        * Removes the given IQ handler for the given namespace.
        * @param ih The IqHandler.
        * @param xmlns The namespace to remove from the list.
-       * @deprecated Will be removed for 1.1. Use removeIqHandler( IqHandler*, int )
+       * @deprecated Will be removed for 1.0. Use removeIqHandler( IqHandler*, int )
        * instead.
        * @since 1.0
        */
