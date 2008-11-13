@@ -274,7 +274,8 @@ namespace gloox
                        port, sizeof( port ),
                        NI_NUMERICHOST | NI_NUMERICSERV ) )
       {
-        printf( "could not get numeric hostname");
+        //FIXME do we need to handle this? How? Can it actually happen at all?
+//         printf( "could not get numeric hostname");
       }
 
       std::ostringstream oss;
