@@ -509,8 +509,7 @@ namespace gloox
        * Unregisters the given DiscoHandler.
        * @param dh The DiscoHandler to unregister.
        */
-      void removeDiscoHandler( DiscoHandler* dh )
-        { m_discoHandlers.remove( dh ); }
+      void removeDiscoHandler( DiscoHandler* dh );
 
       /**
        * Use this function to register a @ref DiscoNodeHandler with the Disco

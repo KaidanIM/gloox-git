@@ -575,6 +575,8 @@ namespace gloox
       m_parent->removeIDHandler( this );
 //       m_parent->removeStanzaExtension( ExtMUCAdmin ); // don't remove, other rooms might need it
 //       m_parent->removeStanzaExtension( ExtMUCOwner );
+      m_parent->removePresenceHandler( m_nick.bareJID(), this );
+      m_parent->disco()->removeDiscoHandler( this );
     }
   }
 
