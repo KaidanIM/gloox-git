@@ -291,6 +291,17 @@ namespace gloox
   void Disco::removeDiscoHandler( DiscoHandler *dh )
   {
     m_discoHandlers.remove( dh );
+    DiscoHandlerMap::iterator t;
+    DiscoHandlerMap::iterator it = m_track.begin();
+    while( it != m_track.end() )
+    {
+      t = it;
+      ++it;
+      if( dh == (*t).second.dh )
+      {
+        m_track.erase( t );
+      }
+    }
   }
 
   void Disco::registerNodeHandler( DiscoNodeHandler *nh, const std::string& node )

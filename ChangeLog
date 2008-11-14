@@ -1,4 +1,9 @@
-v0.9.9.5 -- xx yyy 2008
+v0.9.9.6 -- xx yyy 2008
+-----------------------
+- prevent crashes when closing a MUCRoom
+
+
+v0.9.9.5 -- 22 Mar 2008
 -----------------------
 - added Parser::reset()
 - added Client::login()

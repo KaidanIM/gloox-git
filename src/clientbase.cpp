@@ -1081,12 +1081,14 @@ namespace gloox
   void ClientBase::notifyPresenceHandlers( Stanza *stanza )
   {
     bool match = false;
+    PresenceJidHandlerList::const_iterator t;
     PresenceJidHandlerList::const_iterator itj = m_presenceJidHandlers.begin();
-    for( ; itj != m_presenceJidHandlers.end(); ++itj )
+    while( itj != m_presenceJidHandlers.end() )
     {
-      if( (*itj).jid->bare() == stanza->from().bare() && (*itj).ph )
+      t = itj++;
+      if( (*t).jid->bare() == stanza->from().bare() && (*t).ph )
       {
-        (*itj).ph->handlePresence( stanza );
+        (*t).ph->handlePresence( stanza );
         match = true;
       }
     }

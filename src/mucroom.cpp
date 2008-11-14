@@ -43,6 +43,8 @@ namespace gloox
         m_parent->disco()->removeNodeHandler( this, XMLNS_MUC_ROOMS );
 
       m_parent->removeIDHandler( this );
+      m_parent->removePresenceHandler( m_nick.bareJID(), this );
+      m_parent->disco()->removeDiscoHandler( this );
     }
   }
 
