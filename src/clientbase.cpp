@@ -1250,12 +1250,14 @@ namespace gloox
   void ClientBase::notifyPresenceHandlers( Presence& pres )
   {
     bool match = false;
+    PresenceJidHandlerList::const_iterator t;
     PresenceJidHandlerList::const_iterator itj = m_presenceJidHandlers.begin();
-    for( ; itj != m_presenceJidHandlers.end(); ++itj )
+    while( itj != m_presenceJidHandlers.end() )
     {
-      if( (*itj).jid->bare() == pres.from().bare() && (*itj).ph )
+      t = itj++;
+      if( (*t).jid->bare() == pres.from().bare() && (*t).ph )
       {
-        (*itj).ph->handlePresence( pres );
+        (*t).ph->handlePresence( pres );
         match = true;
       }
     }
@@ -1302,13 +1304,13 @@ namespace gloox
     bool res = false;
 
     // FIXME remove for 1.1
-    typedef IqHandlerMapXmlns::const_iterator IQciXmlns;
-    std::pair<IQciXmlns, IQciXmlns> g = m_iqNSHandlers.equal_range( iq.xmlns() );
-    for( IQciXmlns it = g.first; it != g.second; ++it )
-    {
-      if( (*it).second->handleIq( iq ) )
-        res = true;
-    }
+//     typedef IqHandlerMapXmlns::const_iterator IQciXmlns;
+//     std::pair<IQciXmlns, IQciXmlns> g = m_iqNSHandlers.equal_range( iq.xmlns() );
+//     for( IQciXmlns it = g.first; it != g.second; ++it )
+//     {
+//       if( (*it).second->handleIq( iq ) )
+//         res = true;
+//     }
 
     typedef IqHandlerMap::const_iterator IQci;
     const StanzaExtensionList& sel = iq.extensions();
