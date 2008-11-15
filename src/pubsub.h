@@ -200,7 +200,7 @@ namespace gloox
     };
 
     /**
-     * 
+     *
      */
     struct Affiliate
     {
@@ -225,7 +225,16 @@ namespace gloox
       std::string sid;
     };
 
-    typedef std::map< std::string, SubscriptionType > SubscriptionMap;
+    /**
+     * Struct used for subscription info.
+     */
+    struct SubscriptionInfo
+    {
+      SubscriptionType type;
+      JID jid;
+    };
+
+    typedef std::map< std::string, SubscriptionInfo > SubscriptionMap;
     typedef std::map< std::string, AffiliationType  > AffiliationMap;
 
   }
