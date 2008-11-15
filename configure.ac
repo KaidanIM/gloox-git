@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.50)
-AC_INIT([gloox], [1.0-beta3], [js@camaya.net])
+AC_INIT([gloox], [1.0-beta4], [js@camaya.net])
 AC_CONFIG_SRCDIR(src/gloox.cpp)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 
@@ -275,10 +275,20 @@ fi
 AC_MSG_CHECKING([whether to enable debug])
 AC_MSG_RESULT($debug)
 
+dnl getaddrinfo
+getaddrinfo="yes"
+AC_ARG_ENABLE( getaddrinfo,
+               [  --enable-getaddrinfo      use getaddrinfo for dns lookups [default=yes]],
+               [debug="yes"] )
+if test "x$debug" = "xyes"; then
+    AC_CHECK_FUNCS(getaddrinfo,,getaddrinfo="no")
+fi
+AC_MSG_CHECKING([whether to use getaddrinfo])
+AC_MSG_RESULT($getaddrinfo)
+
 dnl Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS(unistd.h strings.h errno.h arpa/nameser.h)
-AC_CHECK_FUNCS(getaddrinfo)
 AC_CHECK_FUNCS(ns_get16 __ns_get16)
 AC_CHECK_FUNCS(setsockopt,,[AC_CHECK_LIB(socket,setsockopt)])
 
@@ -352,8 +362,6 @@ src/tests/prep/Makefile
 src/tests/presence/Makefile
 src/tests/privacymanagerquery/Makefile
 src/tests/privacymanager/Makefile
-src/tests/pubsubevent/Makefile
-src/tests/pubsubmanager/Makefile
 src/tests/registrationquery/Makefile
 src/tests/registration/Makefile
 src/tests/rostermanagerquery/Makefile
