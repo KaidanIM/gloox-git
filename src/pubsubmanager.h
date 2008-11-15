@@ -48,11 +48,11 @@ namespace gloox
      *   deleted (or not), or the default node configuration for a service.
      *
      * Note that many PubSub queries will both trigger a notification from
-     * registered EventHandler's and from the ResultHandler specific to the
+     * registered EventHandlers and from the ResultHandler specific to the
      * query.
      *
      * To get started with PubSub in gloox, create a Manager, implement the
-     * PubSub::EventHandler virtuals and register an instance with a Manager.
+     * PubSub::EventHandler virtuals and register an instance with the Manager.
      * This will get you notified of PubSub events sent to you.
      *
      * Next, to be able to interact with PubSub services, you will need to
@@ -99,11 +99,13 @@ namespace gloox
      * XEP Version: 1.9
      *
      * @author Vincent Thomasset <vthomasset@gmail.com>
+     * @author Jakob Schroeter <js@camaya.net>
+     *
      * @since 1.0
      *
      * @todo
      * @li Implement Subscription request management.
-     * @li Update to XEP version 1.10.
+     * @li Update to XEP version 1.12.
      * @li Write tests and examples.
      * @li Check for possible ways to have generic handleResult method(s) in
      *   ResultHandler.
@@ -518,6 +520,88 @@ public:
         virtual void handleIqID( const IQ& iq, int context );
 
       private:
+#ifdef PUBSUBMANAGER_TEST
+      public:
+#endif
+
+        enum TrackContext
+        {
+          Subscription,
+          Unsubscription,
+          GetSubscriptionOptions,
+          SetSubscriptionOptions,
+          GetSubscriptionList,
+          GetSubscriberList,
+          SetSubscriberList,
+          GetAffiliationList,
+          GetAffiliateList,
+          SetAffiliateList,
+          GetNodeConfig,
+          SetNodeConfig,
+          DefaultNodeConfig,
+          GetItemList,
+          PublishItem,
+          DeleteItem,
+          CreateNode,
+          DeleteNode,
+          PurgeNodeItems,
+          NodeAssociation,
+          NodeDisassociation,
+          GetFeatureList,
+          DiscoServiceInfos,
+          DiscoNodeInfos,
+          DiscoNodeItems,
+          InvalidContext
+        };
+
+        class PubSub : public StanzaExtension
+        {
+          public:
+            /**
+             * Creates a new, empty PubSub object.
+             */
+            PubSub();
+
+            /**
+             * Creates a new PubSub object that can be used to request the given type.
+             * @param context The requets type.
+             */
+            PubSub( TrackContext context );
+
+            /**
+             * Creates a new PubSub object by parsing the given Tag.
+             * @param tag The Tag to parse.
+             */
+            PubSub( const Tag* tag );
+
+            /**
+             * Virtual destructor.
+             */
+            virtual ~PubSub();
+
+            /**
+             * Returns the list of subscriptions.
+             * @return The list of subscriptions.
+             */
+            const SubscriptionMap& subscriptionMap() const
+              { return m_subscriptionMap; }
+
+            // re-implemented from StanzaExtension
+            virtual const std::string& filterString() const;
+
+            // re-implemented from StanzaExtension
+            virtual StanzaExtension* newInstance( const Tag* tag ) const
+            {
+              return new PubSub( tag );
+            }
+
+            // re-implemented from StanzaExtension
+            virtual Tag* tag() const;
+
+          private:
+            SubscriptionMap m_subscriptionMap;
+            TrackContext m_ctx;
+        };
 
         /**
          * This function sets or requests a node's configuration form

@@ -32,35 +32,6 @@ namespace gloox
       XMLNS_PUBSUB_NODE_CONFIG = "http://jabber.org/protocol/pubsub#node_config",
       XMLNS_PUBSUB_SUBSCRIBE_OPTIONS = "http://jabber.org/protocol/pubsub#subscribe_options";
 
-    enum Context
-    {
-      Subscription,
-      Unsubscription,
-      GetSubscriptionOptions,
-      SetSubscriptionOptions,
-      GetSubscriptionList,
-      GetSubscriberList,
-      SetSubscriberList,
-      GetAffiliationList,
-      GetAffiliateList,
-      SetAffiliateList,
-      GetNodeConfig,
-      SetNodeConfig,
-      DefaultNodeConfig,
-      GetItemList,
-      PublishItem,
-      DeleteItem,
-      CreateNode,
-      DeleteNode,
-      PurgeNodeItems,
-      NodeAssociation,
-      NodeDisassociation,
-      GetFeatureList,
-      DiscoServiceInfos,
-      DiscoNodeInfos,
-      DiscoNodeItems
-    };
-
     /**
      * Finds the associated PubSubFeature for a feature tag 'type' attribute,
      * as received from a disco info query on a pubsub service (XEP-0060 sect. 10).
@@ -105,9 +76,6 @@ namespace gloox
       return static_cast< PubSubFeature >( util::lookup2( str, values ) );
     }
 */
-    Manager::Manager( ClientBase* parent )
-      : m_parent(parent)
-    {}
 
     static const char* subscriptionValues[] = {
       "none", "subscribed", "pending", "unconfigured"
@@ -116,6 +84,11 @@ namespace gloox
     static inline SubscriptionType subscriptionType( const std::string& subscription )
     {
       return (SubscriptionType)util::lookup( subscription, subscriptionValues );
+    }
+
+    static inline const std::string subscriptionValue( SubscriptionType subscription )
+    {
+      return util::lookup( subscription, subscriptionValues );
     }
 
     static const char* affiliationValues[] = {
@@ -129,92 +102,173 @@ namespace gloox
 /*
     static EventType eventType( const std::string& event )
     {
-      static const char* values[] = {
-        "collection",
-        "configuration",
-        "delete",
-        "items",
-        "purge",
-        "subscription"
-      };
-      return (EventType)util::lookup( event, values );
-    }
+    static const char* values[] = {
+    "collection",
+    "configuration",
+    "delete",
+    "items",
+    "purge",
+    "subscription"
+  };
+    return (EventType)util::lookup( event, values );
+  }
 */
 
 /*
     void Manager::handleMessage( Message* msg, MessageSession* )
     {
-      const Tag* event = msg->findChild( "event", XMLNS, XMLNS_PUBSUB_EVENT );
-      if( !event || m_eventHandlerList.empty() )
-        return;
+    const Tag* event = msg->findChild( "event", XMLNS, XMLNS_PUBSUB_EVENT );
+    if( !event || m_eventHandlerList.empty() )
+    return;
 
-      const JID& service = msg->from();
-      const TagList& events = event->children();
-      EventType type;
-      EventHandlerList::iterator ith = m_eventHandlerList.begin();
+    const JID& service = msg->from();
+    const TagList& events = event->children();
+    EventType type;
+    EventHandlerList::iterator ith = m_eventHandlerList.begin();
 
       // in case an event may contain several different notifications
-      TagList::const_iterator it = events.begin();
-      for( ; it != events.end(); ++it )
-      {
-        type = eventType( (*it)->name() );
-        for( ; ith != m_eventHandlerList.end(); ++it )
-        {
-          const std::string& node = (*it)->findAttribute( "node" );
-          switch( type )
-          {
-            case EventCollection:
-            {
-              const Tag* x = (*it)->findChild( "x" );
-              const DataForm* df = x ? new DataForm( x ) : 0;
-              (*ith)->handleNodeCreation( service, node, df );
-              delete df;
-              break;
-            }
-            case EventConfigure:
-            {
-              const Tag* x = (*it)->findChild( "x" );
-              const DataForm* df = x ? new DataForm( x ) : 0;
-              (*ith)->handleConfigurationChange( service, node, df );
-              delete df;
-              break;
-            }
-            case EventDelete:
-            {
-              (*ith)->handleNodeRemoval( service, node );
-              break;
-            }
-            case EventItems:
-            {
-              const Tag* items = (*it)->findChild( "items" );
-              const Tag* item = items->findChild( "item" );
+    TagList::const_iterator it = events.begin();
+    for( ; it != events.end(); ++it )
+    {
+    type = eventType( (*it)->name() );
+    for( ; ith != m_eventHandlerList.end(); ++it )
+    {
+    const std::string& node = (*it)->findAttribute( "node" );
+    switch( type )
+    {
+    case EventCollection:
+    {
+    const Tag* x = (*it)->findChild( "x" );
+    const DataForm* df = x ? new DataForm( x ) : 0;
+    (*ith)->handleNodeCreation( service, node, df );
+    delete df;
+    break;
+  }
+    case EventConfigure:
+    {
+    const Tag* x = (*it)->findChild( "x" );
+    const DataForm* df = x ? new DataForm( x ) : 0;
+    (*ith)->handleConfigurationChange( service, node, df );
+    delete df;
+    break;
+  }
+    case EventDelete:
+    {
+    (*ith)->handleNodeRemoval( service, node );
+    break;
+  }
+    case EventItems:
+    {
+    const Tag* items = (*it)->findChild( "items" );
+    const Tag* item = items->findChild( "item" );
               // This is the collection node responsible for the notification,
               // in case of a subscription type of 'items'. Currently unused.
-              const Tag* headers = item->findChild( "headers", "xmlns", "shim" );
-              const std::string& id= item->findAttribute( "id" );
-              (*ith)->handleItemPublication( service, node, id, item );
-              break;
-            }
-            case EventPurge:
-            {
-              (*ith)->handleNodePurge( service, node );
-              break;
-            }
-            case EventSubscription:
-            {
-              const std::string& jid  = (*it)->findAttribute( "jid" );
-              const std::string& sub  = (*it)->findAttribute( "subscription" );
-              const Tag* body = event->findChild( "body" );
-              (*ith)->handleSubscriptionChange( service, jid, node,
-                                                  body ? body->cdata() : EmptyString,
-                                                  subscriptionType( sub ) );
-              break;
-            }
-          }
+    const Tag* headers = item->findChild( "headers", "xmlns", "shim" );
+    const std::string& id= item->findAttribute( "id" );
+    (*ith)->handleItemPublication( service, node, id, item );
+    break;
+  }
+    case EventPurge:
+    {
+    (*ith)->handleNodePurge( service, node );
+    break;
+  }
+    case EventSubscription:
+    {
+    const std::string& jid  = (*it)->findAttribute( "jid" );
+    const std::string& sub  = (*it)->findAttribute( "subscription" );
+    const Tag* body = event->findChild( "body" );
+    (*ith)->handleSubscriptionChange( service, jid, node,
+    body ? body->cdata() : EmptyString,
+    subscriptionType( sub ) );
+    break;
+  }
+  }
+  }
+  }
+  }
+*/
+
+    // ---- Manager::PubSub ----
+    Manager::PubSub::PubSub()
+      : StanzaExtension( ExtPubSub ), m_ctx( InvalidContext )
+    {
+    }
+
+    Manager::PubSub::PubSub( TrackContext context )
+      : StanzaExtension( ExtPubSub ), m_ctx( context )
+    {
+    }
+
+    Manager::PubSub::PubSub( const Tag* tag )
+      : StanzaExtension( ExtPubSub ), m_ctx( InvalidContext )
+    {
+      if( !tag )
+        return;
+
+      ConstTagList l = tag->findTagList( "pubsub/subscriptions/subscription" );
+      if( l.size() )
+      {
+        m_ctx = GetSubscriptionList;
+        ConstTagList::const_iterator it = l.begin();
+        for( ; it != l.end(); ++it )
+        {
+          const std::string& node = (*it)->findAttribute( "node" );
+          const std::string& sub  = (*it)->findAttribute( "subscription" );
+          SubscriptionInfo si;
+          si.jid.setJID( (*it)->findAttribute( "jid" ) );
+          si.type = subscriptionType( sub );
+          m_subscriptionMap[node] = si;
         }
+        return;
       }
     }
-*/
+
+    Manager::PubSub::~PubSub()
+    {
+    }
+
+    const std::string& Manager::PubSub::filterString() const
+    {
+      static const std::string filter = "/iq/pubsub[@xmlns='" + XMLNS_PUBSUB + "']";
+      return filter;
+    }
+
+    Tag* Manager::PubSub::tag() const
+    {
+      if( m_ctx == InvalidContext )
+        return 0;
+
+      Tag* t = new Tag( "pubsub" );
+      t->setXmlns( XMLNS_PUBSUB );
+
+      if( m_subscriptionMap.size() )
+      {
+        Tag* sub = new Tag( t, "subscriptions" );
+        SubscriptionMap::const_iterator it = m_subscriptionMap.begin();
+        for( ; it != m_subscriptionMap.end(); ++it )
+        {
+          Tag* s = new Tag( sub, "subscription" );
+          s->addAttribute( "node", (*it).first );
+          s->addAttribute( "jid", (*it).second.jid );
+          s->addAttribute( "subscription", subscriptionValue( (*it).second.type ) );
+        }
+      }
+      return t;
+    }
+
+    // ---- ~Manager::PubSub ----
+
+    // ---- Manager ----
+    Manager::Manager( ClientBase* parent )
+      : m_parent( parent )
+    {
+      if( m_parent )
+      {
+        m_parent->registerStanzaExtension( new PubSub() );
+      }
+    }
+
     void Manager::subscriptionOptions( const JID& service,
                                        const JID& jid,
                                        const std::string& node,
@@ -239,12 +293,12 @@ namespace gloox
 
     void Manager::getSubscriptions( const JID& service, ResultHandler* handler )
     {
-      if( !m_parent || !handler )
+      if( !m_parent || !handler || !service )
         return;
 
       const std::string& id = m_parent->getID();
-      IQ iq( IQ::Get, service, id, XMLNS_PUBSUB, "pubsub" );
-      new Tag( iq.query(), "subscriptions" );
+      IQ iq( IQ::Get, service, id );
+      iq.addExtension( new PubSub( GetSubscriptionList ) );
 
       m_resultHandlerTrackMap[id] = handler;
       m_parent->send( iq, this, GetSubscriptionList );
@@ -619,19 +673,11 @@ namespace gloox
             }
             case GetSubscriptionList:
             {
-              const Tag* subscription = query->findChild( "subscriptions" );
-              if( subscription )
-              {
-                SubscriptionMap subMap;
-                TagList::const_iterator it = subscription->children().begin();
-                for( ; it != subscription->children().end(); ++it )
-                {
-                  const std::string& node = (*it)->findAttribute( "node" ),
-                                     sub  = (*it)->findAttribute( "subscription" );
-                  subMap[node] = subscriptionType( sub );
-                }
-                rh->handleSubscriptions( service, &subMap );
-              }
+              const PubSub* ps = iq.findExtension<PubSub>( ExtPubSub );
+              if( !ps )
+                return;
+
+              rh->handleSubscriptions( service, ps->subscriptions() );
               break;
             }
             case GetAffiliationList:
