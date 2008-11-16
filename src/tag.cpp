@@ -448,18 +448,7 @@ namespace gloox
     if( name.empty() )
       return false;
 
-#ifdef _WIN32_WCE
-    const int len = 4 + (int)std::log10( value ? value : 1 ) + 1;
-    char* tmp = new char[len];
-    sprintf( tmp, "%d", value );
-    std::string ret( tmp, len );
-    delete[] tmp;
-    return addAttribute( name, ret );
-#else
-    std::ostringstream oss;
-    oss << value;
-    return addAttribute( name, oss.str() );
-#endif
+    return addAttribute( name, util::int2string( value ) );
   }
 
   bool Tag::addAttribute( const std::string& name, long value )
