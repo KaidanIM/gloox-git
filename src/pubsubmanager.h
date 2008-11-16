@@ -135,10 +135,11 @@ namespace gloox
          *        (ie self subscription).
          * @param type SubscriptionType of the subscription (Collections only).
          * @param depth Subscription depth. For 'all', use 0 (Collections only!).
+         * @return The IQ ID used in the request.
          *
          * @see ResultHandler::handleSubscriptionResult
          */
-        void subscribe( const JID& service, const std::string& node,
+        const std::string& subscribe( const JID& service, const std::string& node,
                         ResultHandler* handler, const JID& jid = JID(),
                         SubscriptionObject type = SubscriptionNodes,
                         int depth = 1 );
@@ -164,29 +165,33 @@ namespace gloox
          *
          * @param service Service to query.
          * @param handler The ResultHandler to handle the result.
+         * @return The IQ ID used in the request.
          *
          * @see ResultHandler::handleSubscriptions
          */
-        void getSubscriptions( const JID& service, ResultHandler* handler );
+        const std::string& getSubscriptions( const JID& service, ResultHandler* handler )
+        {
+          return getSubscriptionsOrAffiliations( service,
+                                                 handler,
+                                                 GetSubscriptionList );
+        }
 
         /**
          * Requests the affiliation list from a service.
          *
          * @param service Service to query.
          * @param handler The ResultHandler to handle the result.
+         * @return The IQ ID used in the request.
          *
          * @see ResultHandler::handleAffiliations
          */
-        void getAffiliations( const JID& service, ResultHandler* handler );
+        const std::string& getAffiliations( const JID& service, ResultHandler* handler )
+        {
+          return getSubscriptionsOrAffiliations( service,
+                                                 handler,
+                                                 GetAffiliationList );
+        }
 
-private:
-        void subscriptionOptions( const JID& service,
-                                  const JID& jid,
-                                  const std::string& node,
-                                  ResultHandler* handler,
-                                  const DataForm* df );
-
-public:
         /**
          * Requests subscription options.
          *
@@ -558,15 +563,10 @@ public:
         {
           public:
             /**
-             * Creates a new, empty PubSub object.
-             */
-            PubSub();
-
-            /**
              * Creates a new PubSub object that can be used to request the given type.
              * @param context The requets type.
              */
-            PubSub( TrackContext context );
+            PubSub( TrackContext context = InvalidContext );
 
             /**
              * Creates a new PubSub object by parsing the given Tag.
@@ -586,6 +586,51 @@ public:
             const SubscriptionMap& subscriptionMap() const
               { return m_subscriptionMap; }
 
+            /**
+             * Returns the list of subscriptions.
+             * @return The list of subscriptions.
+             */
+            const AffiliationMap& affiliationMap() const
+             { return m_affiliationMap; }
+
+            /**
+             * Sets the JID to use in e.g. subscription requests.
+             * @param jid The JID to use.
+             */
+            void setJID( const JID& jid ) { m_jid = jid; }
+
+            /**
+             * Returns the pubsub JID (not the service JID).
+             * @return The pubsub JID.
+             */
+            const JID& jid() const { return m_jid; }
+
+            /**
+             * Sets the node to use in e.g. subscription requests.
+             * @param node The node to use.
+             */
+            void setNode( const std::string& node ) { m_node = node; }
+
+            /**
+             * Returns the pubsub node.
+             * @return The pubsub node.
+             */
+            const std::string& node() const { return m_node; }
+
+            /**
+             * Sets the subscription options.
+             * @param jid The JID to set the options for.
+             * @param node The node to set the options for.
+             * @param df The DataForm holding the subscription options.
+             * Will be owned and deleted by the PubSub object
+             */
+            void setOptions( const JID& jid, const std::string& node, DataForm* df )
+            {
+              m_options.jid = jid;
+              m_options.node = node;
+              m_options.df = df;
+            }
+
             // re-implemented from StanzaExtension
             virtual const std::string& filterString() const;
 
@@ -599,8 +644,19 @@ public:
             virtual Tag* tag() const;
 
           private:
+            AffiliationMap m_affiliationMap;
             SubscriptionMap m_subscriptionMap;
             TrackContext m_ctx;
+
+            struct Options
+            {
+              JID jid;
+              std::string node;
+              DataForm* df;
+            };
+            Options m_options;
+            JID m_jid;
+            std::string m_node;
         };
 
         /**
@@ -644,11 +700,21 @@ public:
          *               Otherwise, it will set the config based on the form.
          * @param handler ResultHandler responsible to handle the request result.
          */
+
         void affiliateList( const JID& service,
                             const std::string& node,
                             const AffiliateList* config,
                             ResultHandler* handler );
 
+        void subscriptionOptions( const JID& service,
+                                  const JID& jid,
+                                  const std::string& node,
+                                  ResultHandler* handler,
+                                  const DataForm* df );
+
+        const std::string& getSubscriptionsOrAffiliations( const JID& service,
+            ResultHandler* handler,
+            TrackContext context );
         typedef std::pair< std::string, std::string > TrackedItem;
         typedef std::map < std::string, TrackedItem > ItemOperationTrackMap;
         typedef std::map < std::string, std::string > NodeOperationTrackMap;

@@ -15,6 +15,13 @@
 
 #include "gloox.h"
 
+#ifdef _WIN32_WCE
+# include <cmath>
+#else
+# include <sstream>
+#endif
+
+#include <algorithm>
 #include <string>
 #include <list>
 #include <map>
@@ -213,6 +220,28 @@ namespace gloox
      * @todo Look into merging with util::escape() and Parser::decode().
      */
     void replaceAll( std::string& target, const std::string& find, const std::string& replace );
+
+    /**
+     * Converts an int to its string representation.
+     * @param value The integer value.
+     * @return The int#s string represenation.
+     */
+    static inline const std::string int2string( int value )
+    {
+#ifdef _WIN32_WCE
+      const int len = 4 + (int)std::log10( value ? value : 1 ) + 1;
+      char* tmp = new char[len];
+      sprintf( tmp, "%d", value );
+      std::string ret( tmp, len );
+      delete[] tmp;
+      return ret;
+#else
+      std::ostringstream oss;
+      oss << value;
+      return oss.str();
+#endif
+    }
+
   }
 
 }
