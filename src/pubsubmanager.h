@@ -149,16 +149,19 @@ namespace gloox
          *
          * @param service Service hosting the node.
          * @param node ID of the node to unsubscribe from.
+         * @param subid An optional, additional subscription ID.
          * @param handler ResultHandler receiving the result notification.
          * @param jid JID to unsubscribe. If empty, the client's JID will be
-         *        used (ie self unsubscription).
+         * used (ie self unsubscription).
+         * @return The IQ ID used in the request.
          *
          * @see ResultHandler::handleUnsubscriptionResult
          */
-        void unsubscribe( const JID& service,
-                          const std::string& node,
-                          ResultHandler* handler,
-                          const JID& jid = JID() );
+        const std::string& unsubscribe( const JID& service,
+                                        const std::string& node,
+                                        const std::string& subid,
+                                        ResultHandler* handler,
+                                        const JID& jid = JID() );
 
         /**
          * Requests the subscription list from a service.
@@ -618,6 +621,13 @@ namespace gloox
             const std::string& node() const { return m_node; }
 
             /**
+             * Sets the Subscription ID to use.
+             * @param subid The Subscription ID to use.
+             */
+            void setSubscriptionID( const std::string& subid )
+              { m_subid = subid; }
+
+            /**
              * Sets the subscription options.
              * @param jid The JID to set the options for.
              * @param node The node to set the options for.
@@ -657,6 +667,7 @@ namespace gloox
             Options m_options;
             JID m_jid;
             std::string m_node;
+            std::string m_subid;
         };
 
         /**

@@ -241,8 +241,17 @@ namespace gloox
       const Tag* s = tag->findTag( "pubsub/subscribe" );
       if( s )
       {
+        m_ctx = Subscription;
         m_node = s->findAttribute( "node" );
         m_jid = s->findAttribute( "jid" );
+      }
+      const Tag* u = tag->findTag( "pubsub/unsubscribe" );
+      if( u )
+      {
+        m_ctx = Unsubscription;
+        m_node = u->findAttribute( "node" );
+        m_jid = u->findAttribute( "jid" );
+        m_subid = u->findAttribute( "subid" );
       }
       const Tag* o = tag->findTag( "pubsub/options" );
       if( o )
@@ -317,6 +326,13 @@ namespace gloox
           o->addAttribute( "jid", m_jid.full() );
           o->addChild( m_options.df->tag() );
         }
+      }
+      else if( m_ctx == Unsubscription )
+      {
+        Tag* u = new Tag( t, "unsubscribe" );
+        u->addAttribute( "node", m_node );
+        u->addAttribute( "jid", m_jid.full() );
+        u->addAttribute( "subid", m_subid );
       }
       return t;
     }
@@ -399,23 +415,27 @@ namespace gloox
       return id;
     }
 
-    void Manager::unsubscribe( const JID& service,
-                               const std::string& node,
-                               ResultHandler* handler,
-                               const JID& jid )
+    const std::string& Manager::unsubscribe( const JID& service,
+                                              const std::string& node,
+                                              const std::string& subid,
+                                              ResultHandler* handler,
+                                              const JID& jid )
     {
-      if( !m_parent || !handler )
-        return;
+      if( !m_parent || !handler || !service )
+        return EmptyString;
 
       const std::string& id = m_parent->getID();
-      IQ iq( IQ::Set, service, id, XMLNS_PUBSUB, "pubsub" );
-      Tag* sub = new Tag( iq.query(), "unsubscribe", "node", node );
-      if( jid )
-        sub->addAttribute( "jid", jid.full() );
+      IQ iq( IQ::Set, service, id );
+      PubSub* ps = new PubSub( Unsubscription );
+      ps->setNode( node );
+      ps->setJID( jid ? jid : m_parent->jid() );
+      ps->setSubscriptionID( subid );
+      iq.addExtension( ps );
 
       m_resultHandlerTrackMap[id] = handler;
       // need to track info for handler
       m_parent->send( iq, this, Unsubscription );
+      return id;
     }
 
     void Manager::subscriptionOptions( const JID& service,

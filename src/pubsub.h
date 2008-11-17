@@ -232,6 +232,7 @@ namespace gloox
     {
       SubscriptionType type;
       JID jid;
+      std::string subid;
     };
 
     typedef std::map< std::string, SubscriptionInfo > SubscriptionMap;
