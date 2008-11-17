@@ -256,6 +256,8 @@ namespace gloox
       const Tag* o = tag->findTag( "pubsub/options" );
       if( o )
       {
+        if( m_ctx == InvalidContext )
+          m_ctx = GetSubscriptionOptions;
         m_options.jid.setJID( o->findAttribute( "jid" ) );
         m_options.node = o->findAttribute( "node" );
         m_options.df = new DataForm( o->findChild( "x", "xmlns", XMLNS_X_DATA ) );
@@ -319,13 +321,6 @@ namespace gloox
         Tag* s = new Tag( t, "subscribe" );
         s->addAttribute( "node", m_node );
         s->addAttribute( "jid", m_jid.full() );
-        if( m_options.df )
-        {
-          Tag* o = new Tag( t, "options" );
-          o->addAttribute( "node", m_node );
-          o->addAttribute( "jid", m_jid.full() );
-          o->addChild( m_options.df->tag() );
-        }
       }
       else if( m_ctx == Unsubscription )
       {
@@ -333,6 +328,16 @@ namespace gloox
         u->addAttribute( "node", m_node );
         u->addAttribute( "jid", m_jid.full() );
         u->addAttribute( "subid", m_subid );
+      }
+      else if( m_ctx == GetSubscriptionOptions
+               || m_ctx == SetSubscriptionOptions
+               || ( m_ctx == Subscription && m_options.df ) )
+      {
+        Tag* o = new Tag( t, "options" );
+        o->addAttribute( "node", m_node );
+        o->addAttribute( "jid", m_jid.full() );
+        if( m_options.df )
+          o->addChild( m_options.df->tag() );
       }
       return t;
     }
@@ -400,15 +405,6 @@ namespace gloox
       }
       iq.addExtension( ps  );
 
-      /*
-      const std::string& id = m_parent->getID();
-      IQ iq( IQ::Set, service, id, XMLNS_PUBSUB, "pubsub" );
-      Tag* ps = iq.query();
-      Tag* sub = new Tag( ps, "subscribe", "node", node );
-      sub->addAttribute( "jid", jid ? jid.full() : m_parent->jid().full() );
-
-      */
-
       m_resultHandlerTrackMap[id] = handler;
       m_nopTrackMap[id] = node;
       m_parent->send( iq, this, Subscription );
@@ -438,26 +434,25 @@ namespace gloox
       return id;
     }
 
-    void Manager::subscriptionOptions( const JID& service,
+    const std::string& Manager::subscriptionOptions( TrackContext context,
+                                       const JID& service,
                                        const JID& jid,
                                        const std::string& node,
                                        ResultHandler* handler,
-                                       const DataForm* df )
+                                       DataForm* df )
     {
-      if( !m_parent || !handler )
-        return;
+      if( !m_parent || !handler || !service )
+        return EmptyString;
 
       const std::string& id = m_parent->getID();
-      IQ iq( df ? IQ::Set : IQ::Get, service, id, XMLNS_PUBSUB, "pubsub" );
-      Tag* options = new Tag( iq.query(), "options", "node", node );
-      options->addAttribute( "jid", jid ? jid.bare() : m_parent->jid().bare() );
-      if( df )
-      {
-        options->addChild( df->tag() );
-      }
+      IQ iq( df ? IQ::Set : IQ::Get, service, id );
+      PubSub* ps = new PubSub( context );
+      ps->setOptions( jid ? jid : m_parent->jid(), node, df );
+      iq.addExtension( ps );
 
       m_resultHandlerTrackMap[id] = handler;
-      m_parent->send( iq, this, df ? SetSubscriptionOptions : GetSubscriptionOptions );
+      m_parent->send( iq, this, context );
+      return id;
     }
 
     void Manager::publishItem( const JID& service,

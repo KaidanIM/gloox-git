@@ -140,9 +140,9 @@ namespace gloox
          * @see ResultHandler::handleSubscriptionResult
          */
         const std::string& subscribe( const JID& service, const std::string& node,
-                        ResultHandler* handler, const JID& jid = JID(),
-                        SubscriptionObject type = SubscriptionNodes,
-                        int depth = 1 );
+                                      ResultHandler* handler, const JID& jid = JID(),
+                                      SubscriptionObject type = SubscriptionNodes,
+                                      int depth = 1 );
 
         /**
          * Unsubscribe from a node.
@@ -172,7 +172,8 @@ namespace gloox
          *
          * @see ResultHandler::handleSubscriptions
          */
-        const std::string& getSubscriptions( const JID& service, ResultHandler* handler )
+        const std::string& getSubscriptions( const JID& service,
+                                             ResultHandler* handler )
         {
           return getSubscriptionsOrAffiliations( service,
                                                  handler,
@@ -188,7 +189,8 @@ namespace gloox
          *
          * @see ResultHandler::handleAffiliations
          */
-        const std::string& getAffiliations( const JID& service, ResultHandler* handler )
+        const std::string& getAffiliations( const JID& service,
+                                            ResultHandler* handler )
         {
           return getSubscriptionsOrAffiliations( service,
                                                  handler,
@@ -203,14 +205,15 @@ namespace gloox
          * @param node Node ID of the node.
          * @param handler Node ID of the node.
          * @param slh The SubscriptionListHandler to handle the result.
+         * @return The IQ ID used in the request.
          *
          * @see ResultHandler::handleSubscriptionOptions
          */
-        void getSubscriptionOptions( const JID& service,
-                                     const JID& jid,
-                                     const std::string& node,
-                                     ResultHandler* handler)
-          { subscriptionOptions( service, jid, node, handler, 0 ); }
+        const std::string& getSubscriptionOptions( const JID& service,
+                                                   const JID& jid,
+                                                   const std::string& node,
+                                                   ResultHandler* handler)
+          { return subscriptionOptions( GetSubscriptionOptions, service, jid, node, handler, 0 ); }
 
         /**
          * Modifies subscription options.
@@ -218,16 +221,17 @@ namespace gloox
          * @param service Service to query.
          * @param jid Subscribed entity.
          * @param node Node ID of the node.
-         * @param df New configuration.
+         * @param df New configuration. The DataForm will be owned and deleted by the Manager.
+         * @return The IQ ID used in the request.
          *
          * @see ResultHandler::handleSubscriptionOptionsResult
          */
-        void setSubscriptionOptions( const JID& service,
-                                     const JID& jid,
-                                     const std::string& node,
-                                     const DataForm& df,
-                                     ResultHandler* handler )
-          { subscriptionOptions( service, jid, node, handler, &df ); }
+        const std::string& setSubscriptionOptions( const JID& service,
+                                                   const JID& jid,
+                                                   const std::string& node,
+                                                   DataForm* df,
+                                                   ResultHandler* handler )
+          { return subscriptionOptions( SetSubscriptionOptions, service, jid, node, handler, df ); }
 
         /**
          * Requests the affiliation list for a node.
@@ -717,11 +721,12 @@ namespace gloox
                             const AffiliateList* config,
                             ResultHandler* handler );
 
-        void subscriptionOptions( const JID& service,
-                                  const JID& jid,
-                                  const std::string& node,
-                                  ResultHandler* handler,
-                                  const DataForm* df );
+        const std::string& subscriptionOptions( TrackContext context,
+                                                const JID& service,
+                                                const JID& jid,
+                                                const std::string& node,
+                                                ResultHandler* handler,
+                                                DataForm* df );
 
         const std::string& getSubscriptionsOrAffiliations( const JID& service,
             ResultHandler* handler,
