@@ -21,12 +21,12 @@ namespace gloox
   {
 
     Item::Item()
-      : m_child( 0 )
+      : m_payload( 0 )
     {
     }
 
     Item::Item( const Tag* tag )
-      : m_child( 0 )
+      : m_payload( 0 )
     {
       if( !tag || tag->name() != "item" )
         return;
@@ -34,20 +34,20 @@ namespace gloox
       m_id = tag->findAttribute( "id" );
 
       if( tag->children().size() )
-        m_child = tag->children().front();
+        m_payload = tag->children().front();
     }
 
     Item::~Item()
     {
-      delete m_child;
+      delete m_payload;
     }
 
     Tag* Item::tag() const
     {
       Tag* t = new Tag( "item" );
       t->addAttribute( "id", m_id );
-      if( m_child )
-        t->addChild( m_child->clone() );
+      if( m_payload )
+        t->addChild( m_payload->clone() );
 
       return t;
     }

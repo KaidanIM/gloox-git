@@ -732,21 +732,6 @@ namespace gloox
       m_parent->send( iq, this, affList ? SetAffiliateList : GetAffiliateList );
     }
 
-    void Manager::getItems( const JID& service,
-                                const std::string& node,
-                                ResultHandler* handler )
-    {
-      if( !m_parent || !handler )
-        return;
-
-      const std::string& id = m_parent->getID();
-      IQ iq( IQ::Get, service, id, XMLNS_PUBSUB, "pubsub" );
-      new Tag( iq.query(), "items", "node", node );
-
-      m_resultHandlerTrackMap[id] = handler;
-      m_parent->send( iq, this, GetItemList );
-    }
-
     void Manager::purgeNode( const JID& service,
                              const std::string& node,
                              ResultHandler* handler  )
@@ -770,7 +755,7 @@ namespace gloox
     void Manager::handleIqID( const IQ& iq, int context )
     {
       const JID& service = iq.from();
-      const Tag* query = iq.query();
+//       const Tag* query = iq.query();
       const std::string& id = iq.id();
 
       ResultHandlerTrackMap::iterator ith = m_resultHandlerTrackMap.find( id );
@@ -831,6 +816,47 @@ namespace gloox
                 return;
 
               rh->handleAffiliations( service, ps->affiliations() );
+              break;
+            }
+            case RequestItems:
+            {
+              const PubSub* ps = iq.findExtension<PubSub>( ExtPubSub );
+              if( !ps )
+                return;
+
+              rh->handleItems( service, ps->node(), ps->items() );
+              break;
+            }
+            case PublishItem:
+            {
+              ItemOperationTrackMap::iterator it = m_iopTrackMap.find( id );
+              if( it != m_iopTrackMap.end() )
+              {
+                rh->handleItemPublication( service, (*it).second.first,
+                                           (*it).second.second );
+                m_iopTrackMap.erase( it );
+              }
+              break;
+            }
+            case DeleteItem:
+            {
+              ItemOperationTrackMap::iterator it = m_iopTrackMap.find( id );
+              if( it != m_iopTrackMap.end() )
+              {
+                rh->handleItemDeletation( service, (*it).second.first,
+                                          (*it).second.second );
+                m_iopTrackMap.erase( it );
+              }
+              break;
+            }
+            case DefaultNodeConfig:
+            {
+              const Tag* deflt = query->findChild( "default" );
+              if( deflt )
+              {
+                const DataForm df( deflt->findChild( "x" ) );
+                rh->handleDefaultNodeConfig( service, &df );
+              }
               break;
             }
             case GetSubscriptionOptions:
@@ -944,51 +970,9 @@ namespace gloox
 
               break;
             }
-            case GetItemList:
-            {
-              const Tag* items = query->findChild( "items" );
-              if( items )
-              {
-                const std::string& node = items->findAttribute( "node" );
-                rh->handleItems( service, node, &items->children() );
-              }
-              break;
-            }
-            case PublishItem:
-            {
-              ItemOperationTrackMap::iterator it = m_iopTrackMap.find( id );
-              if( it != m_iopTrackMap.end() )
-              {
-                rh->handleItemPublication( service, (*it).second.first,
-                                                    (*it).second.second );
-                m_iopTrackMap.erase( it );
-              }
-              break;
-            }
-            case DeleteItem:
-            {
-              ItemOperationTrackMap::iterator it = m_iopTrackMap.find( id );
-              if( it != m_iopTrackMap.end() )
-              {
-                rh->handleItemDeletation( service, (*it).second.first,
-                                                   (*it).second.second );
-                m_iopTrackMap.erase( it );
-              }
-              break;
-            }
-            case DefaultNodeConfig:
-            {
-              const Tag* deflt = query->findChild( "default" );
-              if( deflt )
-              {
-                const DataForm df( deflt->findChild( "x" ) );
-                rh->handleDefaultNodeConfig( service, &df );
-              }
-              break;
-            }
           }
+          break;
         }
-        break;
         case IQ::Error:
         {
           m_nopTrackMap.erase( id );
@@ -1074,13 +1058,14 @@ namespace gloox
               }
               break;
             }
-            case GetItemList:
+            case RequestItems:
             {
-              const Tag* items = query->findChild( "items" );
-              if( items )
-              {
-                const std::string& node = items->findAttribute( "node" );
-                rh->handleItems( service, node, 0, error );
+              const PubSub* ps = iq.findExtension<PubSub>( ExtPubSub );
+              if( !ps )
+                return;
+
+                rh->handleItems( service, ps->node(),
+                                 ItemList(), error );
               }
               break;
             }
