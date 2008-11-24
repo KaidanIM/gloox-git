@@ -17,6 +17,7 @@
 #include "pubsub.h"
 #include "pubsubeventhandler.h"
 #include "pubsubresulthandler.h"
+#include "pubsubitem.h"
 #include "util.h"
 #include "error.h"
 
@@ -197,13 +198,13 @@ namespace gloox
 
     // ---- Manager::PubSub ----
     Manager::PubSub::PubSub( TrackContext context )
-      : StanzaExtension( ExtPubSub ), m_ctx( context )
+      : StanzaExtension( ExtPubSub ), m_ctx( context ), m_maxItems( 0 )
     {
       m_options.df = 0;
     }
 
     Manager::PubSub::PubSub( const Tag* tag )
-      : StanzaExtension( ExtPubSub ), m_ctx( InvalidContext )
+      : StanzaExtension( ExtPubSub ), m_ctx( InvalidContext ), m_maxItems( 0 )
     {
       m_options.df = 0;
       if( !tag )
@@ -270,6 +271,16 @@ namespace gloox
         si.subid = su->findAttribute( "subid" );
         si.type = subscriptionType( su->findAttribute( "type" ) );
         m_subscriptionMap[su->findAttribute( "node" )] = si;
+      }
+      const Tag* i = tag->findTag( "pubsub/items" );
+      {
+        m_node = i->findAttribute( "node" );
+        m_subid = i->findAttribute( "subid" );
+        m_maxItems = atoi( i->findAttribute( "max_items" ).c_str() );
+        const TagList& l = i->children();
+        TagList::const_iterator it = l.begin();
+        for( ; it != l.end(); ++it )
+          m_items.push_back( new Item( (*it) ) );
       }
     }
 
@@ -338,6 +349,17 @@ namespace gloox
         o->addAttribute( "jid", m_jid.full() );
         if( m_options.df )
           o->addChild( m_options.df->tag() );
+      }
+      else if( m_ctx == RequestItems )
+      {
+        Tag* i = new Tag( t, "items" );
+        i->addAttribute( "node", m_node );
+        if( m_maxItems )
+          i->addAttribute( "max_items", m_maxItems );
+        i->addAttribute( "subid", m_subid );
+        ItemList::const_iterator it = m_items.begin();
+        for( ; it != m_items.end(); ++it )
+          i->addChild( (*it)->tag() );
       }
       return t;
     }
@@ -452,6 +474,50 @@ namespace gloox
 
       m_resultHandlerTrackMap[id] = handler;
       m_parent->send( iq, this, context );
+      return id;
+    }
+
+    const std::string& Manager::requestItems( const JID& service,
+                                              const std::string& node,
+                                              const std::string& subid,
+                                              int maxItems,
+                                              ResultHandler* handler )
+    {
+      if( !m_parent || !service || !handler )
+        return EmptyString;
+
+      const std::string& id = m_parent->getID();
+      IQ iq( IQ::Get, service, id );
+      PubSub* ps = new PubSub( RequestItems );
+      ps->setNode( node );
+      ps->setSubscriptionID( subid );
+      ps->setMaxItems( maxItems );
+      iq.addExtension( ps );
+
+      m_resultHandlerTrackMap[id] = handler;
+      m_parent->send( iq, this, RequestItems );
+      return id;
+    }
+
+    const std::string& Manager::requestItems( const JID& service,
+                                              const std::string& node,
+                                              const std::string& subid,
+                                              const ItemList& items,
+                                              ResultHandler* handler )
+    {
+      if( !m_parent || !service || !handler )
+        return EmptyString;
+
+      const std::string& id = m_parent->getID();
+      IQ iq( IQ::Get, service, id );
+      PubSub* ps = new PubSub( RequestItems );
+      ps->setNode( node );
+      ps->setSubscriptionID( subid );
+      ps->setItems( items );
+      iq.addExtension( ps );
+
+      m_resultHandlerTrackMap[id] = handler;
+      m_parent->send( iq, this, RequestItems );
       return id;
     }
 
