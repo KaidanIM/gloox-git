@@ -39,8 +39,8 @@ namespace gloox
      * Derive from this interface and pass it to item related requests.
      *
      * As a general rule, methods receive an Error pointer which will be null
-     * (when the request was successful) or describe the problem. Request
-     * asking for information will have it's "pointer to information" set to
+     * (when the request was successful) or describe the problem. Requests
+     * asking for information will have their "pointer to information" set to
      * null when an error occured (that is they're mutually exclusive). In both
      * cases, gloox takes care of deleting these objects.
      *
@@ -74,11 +74,11 @@ namespace gloox
          * @param itemList List of contained items.
          * @param error Describes the error case if the request failed.
          *
-         * @see Manager::getItems
+         * @see Manager::requestItems()
          */
         virtual void handleItems( const JID& service,
                                   const std::string& node,
-                                  const TagList* itemList,
+                                  const ItemList& itemList,
                                   const Error* error = 0 ) = 0;
 
         /**

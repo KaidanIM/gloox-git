@@ -306,19 +306,6 @@ namespace gloox
                          ResultHandler* handler );
 
         /**
-         * Ask for the item list of a specific node.
-         *
-         * @param service Service hosting the node.
-         * @param node ID of the node.
-         * @param handler ResultHandler to send the result to.
-         *
-         * @see ResultHandler::handleItems
-         */
-        void getItems( const JID& service,
-                       const std::string& node,
-                       ResultHandler* handler );
-
-        /**
          * Creates a new node.
          *
          * @param type The type of the new node.
@@ -675,6 +662,12 @@ namespace gloox
               m_options.node = node;
               m_options.df = df;
             }
+
+            /**
+             * Returns the current Items.
+             * @return The current items.
+             */
+            const ItemList& items() const { return m_items; }
 
             /**
              * Sets the subscription IDs.

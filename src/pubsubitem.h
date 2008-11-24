@@ -55,13 +55,19 @@ namespace gloox
         ~Item();
 
         /**
+         * Returns the Item's payload.
+         * @return The layload.
+         */
+        const Tag* payload() const { return m_payload; }
+
+        /**
          * Creates and returns a Tag representation of the Item.
          * @return An XML representation of the Item.
          */
         Tag* tag() const;
 
       private:
-        Tag* m_child;
+        Tag* m_payload;
         std::string m_id;
 
     };
