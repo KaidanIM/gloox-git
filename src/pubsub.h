@@ -30,6 +30,8 @@ namespace gloox
   namespace PubSub
   {
 
+    class Item;
+
     /**
      * Describes the different node types.
      */
@@ -237,6 +239,7 @@ namespace gloox
 
     typedef std::map< std::string, SubscriptionInfo > SubscriptionMap;
     typedef std::map< std::string, AffiliationType  > AffiliationMap;
+    typedef std::list<Item*> ItemList;
 
   }
 

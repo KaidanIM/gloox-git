@@ -96,10 +96,10 @@ namespace gloox
      *
      * In response to this request, MyResultHandler::handleItem() will be called.
      *
-     * XEP Version: 1.9
+     * XEP Version: 1.9 (Incomplete), 1.12 (WiP)
      *
-     * @author Vincent Thomasset <vthomasset@gmail.com>
      * @author Jakob Schroeter <js@camaya.net>
+     * @author Vincent Thomasset <vthomasset@gmail.com>
      *
      * @since 1.0
      *
@@ -203,8 +203,7 @@ namespace gloox
          * @param service Service to query.
          * @param jid Subscribed entity.
          * @param node Node ID of the node.
-         * @param handler Node ID of the node.
-         * @param slh The SubscriptionListHandler to handle the result.
+         * @param handler The SubscriptionListHandler to handle the result.
          * @return The IQ ID used in the request.
          *
          * @see ResultHandler::handleSubscriptionOptions
@@ -222,6 +221,7 @@ namespace gloox
          * @param jid Subscribed entity.
          * @param node Node ID of the node.
          * @param df New configuration. The DataForm will be owned and deleted by the Manager.
+         * @param handler The handler to handle the result.
          * @return The IQ ID used in the request.
          *
          * @see ResultHandler::handleSubscriptionOptionsResult
@@ -245,6 +245,36 @@ namespace gloox
         void getAffiliations( const JID& service,
                               const std::string& node,
                               ResultHandler* handler );
+
+        /**
+         * Requests items from a node.
+         * @param service Service to query.
+         * @param node Node ID of the node.
+         * @param subid An optional subscription ID.
+         * @param maxItems The optional maximum number of items to return.
+         * @param handler The handler to handle the result.
+         * @return The ID used in the request.
+         */
+        const std::string& requestItems( const JID& service,
+                                         const std::string& node,
+                                         const std::string& subid,
+                                         int maxItems,
+                                         ResultHandler* handler);
+
+        /**
+         * Requests specific items from a node.
+         * @param service Service to query.
+         * @param node Node ID of the node.
+         * @param subid An optional subscription ID.
+         * @param items The list of item IDs to request.
+         * @param handler The handler to handle the result.
+         * @return The ID used in the request.
+         */
+        const std::string& requestItems( const JID& service,
+                                         const std::string& node,
+                                         const std::string& subid,
+                                         const ItemList& items,
+                                         ResultHandler* handler);
 
         /**
          * Publish an item to a node. The Tag to publish is destroyed
@@ -563,6 +593,7 @@ namespace gloox
           DiscoServiceInfos,
           DiscoNodeInfos,
           DiscoNodeItems,
+          RequestItems,
           InvalidContext
         };
 
@@ -645,6 +676,20 @@ namespace gloox
               m_options.df = df;
             }
 
+            /**
+             * Sets the subscription IDs.
+             * @param ids Subscription IDs.
+             */
+            void setItems( const ItemList& items )
+             { m_items = items; }
+
+            /**
+             * Sets the maximum number of items to request.
+             * @param maxItems The maximum number of items to request.
+             */
+            void setMaxItems( int maxItems )
+              { m_maxItems = maxItems; }
+
             // re-implemented from StanzaExtension
             virtual const std::string& filterString() const;
 
@@ -672,6 +717,8 @@ namespace gloox
             JID m_jid;
             std::string m_node;
             std::string m_subid;
+            ItemList m_items;
+            int m_maxItems;
         };
 
         /**
