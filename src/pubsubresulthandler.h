@@ -106,7 +106,7 @@ namespace gloox
          *
          * @see Manager::deleteItem
          */
-        virtual void handleItemDeletation(  const JID& service,
+        virtual void handleItemDeletion(  const JID& service,
                                             const std::string& node,
                                             const std::string& item,
                                             const Error* error = 0 ) = 0;
@@ -289,7 +289,7 @@ namespace gloox
          *
          * @see Manager::deleteNode
          */
-        virtual void handleNodeDeletation( const JID& service,
+        virtual void handleNodeDeletion( const JID& service,
                                            const std::string& node,
                                            const Error* error = 0 ) = 0;
 
