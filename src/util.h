@@ -141,53 +141,53 @@ namespace gloox
      * Delete all elements from a list of pointers.
      * @param L List of pointers to delete.
      */
-//     template< typename T >
-//     inline void clearList( std::list< T* >& L )
-//     {
-//       typename std::list< T* >::iterator it = L.begin();
-//       typename std::list< T* >::iterator it2;
-//       while( it != L.end() )
-//       {
-//         it2 = it++;
-//         delete (*it2);
-//         L.erase( it2 );
-//       }
-//     }
+    template< typename T >
+    inline void clearList( std::list< T* >& L )
+    {
+      typename std::list< T* >::iterator it = L.begin();
+      typename std::list< T* >::iterator it2;
+      while( it != L.end() )
+      {
+        it2 = it++;
+        delete (*it2);
+        L.erase( it2 );
+      }
+    }
 
     /**
      * Delete all associated values from a map (not the key elements).
      * @param M Map of pointer values to delete.
      */
-//     template< typename Key, typename T >
-//     inline void clearMap( std::map< Key, T* >& M )
-//     {
-//       typename std::map< Key, T* >::iterator it = M.begin();
-//       typename std::map< Key, T* >::iterator it2;
-//       while( it != M.end() )
-//       {
-//         it2 = it++;
-//         delete (*it2).second;
-//         M.erase( it2 );
-//       }
-//     }
+    template< typename Key, typename T >
+    inline void clearMap( std::map< Key, T* >& M )
+    {
+      typename std::map< Key, T* >::iterator it = M.begin();
+      typename std::map< Key, T* >::iterator it2;
+      while( it != M.end() )
+      {
+        it2 = it++;
+        delete (*it2).second;
+        M.erase( it2 );
+      }
+    }
 
     /**
      * Delete all associated values from a map (not the key elements).
      * Const key type version.
      * @param M Map of pointer values to delete.
      */
-//     template< typename Key, typename T >
-//     inline void clearMap( std::map< const Key, T* >& M )
-//     {
-//       typename std::map< const Key, T* >::iterator it = M.begin();
-//       typename std::map< Key, T* >::iterator it2;
-//       while( it != M.end() )
-//       {
-//         it2 = it++;
-//         delete (*it2).second;
-//         M.erase( it2 );
-//       }
-//     }
+    template< typename Key, typename T >
+    inline void clearMap( std::map< const Key, T* >& M )
+    {
+      typename std::map< const Key, T* >::iterator it = M.begin();
+      typename std::map< Key, T* >::iterator it2;
+      while( it != M.end() )
+      {
+        it2 = it++;
+        delete (*it2).second;
+        M.erase( it2 );
+      }
+    }
 
     /**
      * Does some fancy escaping. (& --> &amp;, etc).

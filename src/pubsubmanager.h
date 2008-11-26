@@ -282,28 +282,37 @@ namespace gloox
          *
          * @param service Service hosting the node.
          * @param node ID of the node to delete the item from.
-         * @param item The item to publish.
+         * @param items One or more items to publish. The items will be owned and deleted by the Manager,
+         * even in the error case (empty string returned).
+         * @param options An optional DataForm containing publish options. The DataForm will be owned and deleted by the Manager.
+         * @param handler The handler to handle the result.
+         * @return The ID used in the request.
          *
          * @see ResultHandler::handleItemPublication
          */
-        void publishItem( const JID& service,
-                          const std::string& node,
-                          Tag* item,
-                          ResultHandler* handler );
+        const std::string& publishItem( const JID& service,
+                                        const std::string& node,
+                                        ItemList& items,
+                                        DataForm* options,
+                                        ResultHandler* handler );
 
         /**
          * Delete an item from a node.
          *
          * @param service Service hosting the node.
          * @param node ID of the node to delete the item from.
-         * @param item ID of the item in the node.
+         * @param items A list of items to delete (only ID filled in).
+         * @param notify Whether or not to notify subscribers about the deletion.
+         * @param handler The handler to handle the result.
+         * @return The ID used in the request.
          *
          * @see ResultHandler::handleItemDeletation
          */
-        void deleteItem( const JID& service,
-                         const std::string& node,
-                         const std::string& item,
-                         ResultHandler* handler );
+        const std::string& deleteItem( const JID& service,
+                                       const std::string& node,
+                                       const ItemList& items,
+                                       bool notify,
+                                       ResultHandler* handler );
 
         /**
          * Creates a new node.
@@ -311,92 +320,31 @@ namespace gloox
          * @param type The type of the new node.
          * @param service Service where to create the new node.
          * @param node The ID of the new node.
-         * @param name The name of the new node.
-         * @param parent ID of the parent node. If empty, the node will be
-         * located at the root of the service.
-         * @param access The node's access model.
-         * @param config A map of further node configuration options. The keys
-         * of the map should be in the form of 'pubsub#name', where 'name' is a
-         * valid pubsub option. Do not use this map to include an access model
-         * config option, use the @c access parameter instead. See
-         * <a href='http://www.xmpp.org/registrar/formtypes.html#http:--jabber.org-protocol-pubsubnode_config'>XEP-0068 Sect. 8</a> for
-         * valid options.
+         * @param config An optional DataForm that holds the node configuration.
+         * The DataForm will be owned and deleted by the Manager.
+         * @param handler The handler to handle the result.
+         * @return The ID used in the request.
          *
          * @see ResultHandler::handleNodeCreation
          */
-        void createNode( NodeType type, const JID& service,
-                                        const std::string& node,
-                                        ResultHandler* handler,
-                                        const std::string& name = EmptyString,
-                                        const std::string& parent = EmptyString,
-                                        AccessModel access = AccessDefault,
-                                        const StringMap* config = 0 );
-
-        /**
-         * Creates a new leaf node.
-         *
-         * @param service Service where to create the new node.
-         * @param node The ID of the new node.
-         * @param name The name of the new node.
-         * @param parent ID of the parent node. If empty, the node will be
-         * located at the root of the service.
-         * @param access The node's access model.
-         * @param config A map of further node configuration options. The keys
-         * of the map must be in the form of 'pubsub#name', where 'name' is
-         * a valid pubsub option. Do not use this map to include an access
-         * model config option, use the @c access parameter instead. See
-         * <a href='http://www.xmpp.org/registrar/formtypes.html#http:--jabber.org-protocol-pubsubnode_config'>XEP-0068 Sect. 8</a> for
-         * valid options.
-         *
-         * @see ResultHandler::handleNodeCreation
-         */
-        void createLeafNode( const JID& service,
-                             const std::string& node,
-                             ResultHandler* handler,
-                             const std::string& name,
-                             const std::string& parent = EmptyString,
-                             AccessModel access = AccessDefault,
-                             const StringMap* config = 0 )
-          { createNode( NodeLeaf, service, node, handler, name, parent, access, config ); }
-
-        /**
-         * Creates a new collection node.
-         *
-         * @param service Service where to create the new node.
-         * @param node The ID of the new node.
-         * @param name The name of the new node.
-         * @param parent ID of the parent node. If empty, the node will be
-         * located at the root of the service.
-         * @param access The node's access model.
-         * @param config A map of further node configuration options. The keys
-         * of the map must be in the form of 'pubsub#name', where 'name' is
-         * a valid pubsub option. It is not necessary to include an access
-         * model config option. Use the @c access parameter instead. See
-         * <a href='http://www.xmpp.org/registrar/formtypes.html#http:--jabber.org-protocol-pubsubnode_config'>XEP-0068 Sect. 8</a> for
-         * valid options.
-         *
-         * @see ResultHandler::handleNodeCreation
-         */
-        void createCollectionNode( const JID& service,
-                                   const std::string& node,
-                                   ResultHandler* handler,
-                                   const std::string& name,
-                                   const std::string& parent = EmptyString,
-                                   AccessModel access = AccessDefault,
-                                   const StringMap* config = 0 )
-          { createNode( NodeCollection, service, node, handler, name, parent, access, config ); }
+        const std::string& createNode( const JID& service,
+                                       const std::string& node,
+                                       DataForm* config,
+                                       ResultHandler* handler );
 
         /**
          * Deletes a node.
          *
          * @param service Service where to create the new node.
          * @param node Node ID of the new node.
+         * @param handler The handler to handle the result.
+         * @return The ID used in the request.
          *
-         * @see ResultHandler::handleNodeDeletation
+         * @see ResultHandler::handleNodeDeletion
          */
-        void deleteNode( const JID& service,
-                         const std::string& node,
-                         ResultHandler* handler );
+        const std::string& deleteNode( const JID& service,
+                                       const std::string& node,
+                                       ResultHandler* handler );
 
 /*
         void associateNode( const JID& service,
@@ -584,6 +532,55 @@ namespace gloox
           InvalidContext
         };
 
+        class PubSubOwner : public StanzaExtension
+        {
+          public:
+            /**
+             * Creates a new PubSubOwner object that can be used to request the given type.
+             * @param context The requets type.
+             */
+            PubSubOwner( TrackContext context = InvalidContext );
+
+            /**
+             * Creates a new PubSubOwner object by parsing the given Tag.
+             * @param tag The Tag to parse.
+             */
+            PubSubOwner( const Tag* tag );
+
+            /**
+             * Virtual destructor.
+             */
+            virtual ~PubSubOwner();
+
+            /**
+             * Sets the node to use in e.g. subscription requests.
+             * @param node The node to use.
+             */
+            void setNode( const std::string& node ) { m_node = node; }
+
+            /**
+             * Returns the pubsub node.
+             * @return The pubsub node.
+             */
+            const std::string& node() const { return m_node; }
+
+            // re-implemented from StanzaExtension
+            virtual const std::string& filterString() const;
+
+            // re-implemented from StanzaExtension
+            virtual StanzaExtension* newInstance( const Tag* tag ) const
+            {
+              return new PubSubOwner( tag );
+            }
+
+            // re-implemented from StanzaExtension
+            virtual Tag* tag() const;
+
+          private:
+            std::string m_node;
+            TrackContext m_ctx;
+        };
+
         class PubSub : public StanzaExtension
         {
           public:
@@ -683,6 +680,12 @@ namespace gloox
             void setMaxItems( int maxItems )
               { m_maxItems = maxItems; }
 
+            /**
+             * Sets whether or not a notify element should be included in a 'retract'.
+             * @param notify Indicates whether a notify attribute is included.
+             */
+            void setNotify( bool notify ) { m_notify = notify; }
+
             // re-implemented from StanzaExtension
             virtual const std::string& filterString() const;
 
@@ -712,6 +715,7 @@ namespace gloox
             std::string m_subid;
             ItemList m_items;
             int m_maxItems;
+            bool m_notify;
         };
 
         /**
@@ -771,17 +775,17 @@ namespace gloox
         const std::string& getSubscriptionsOrAffiliations( const JID& service,
             ResultHandler* handler,
             TrackContext context );
-        typedef std::pair< std::string, std::string > TrackedItem;
-        typedef std::map < std::string, TrackedItem > ItemOperationTrackMap;
-        typedef std::map < std::string, std::string > NodeOperationTrackMap;
+//         typedef std::pair< std::string, std::string > TrackedItem;
+//         typedef std::map < std::string, TrackedItem > ItemOperationTrackMap;
+//         typedef std::map < std::string, std::string > NodeOperationTrackMap;
 
         typedef std::map < std::string, ResultHandler* > ResultHandlerTrackMap;
         typedef std::list< EventHandler* > EventHandlerList;
 
         ClientBase* m_parent;
 
-        ItemOperationTrackMap  m_iopTrackMap;
-        NodeOperationTrackMap  m_nopTrackMap;
+//         ItemOperationTrackMap  m_iopTrackMap;
+//         NodeOperationTrackMap  m_nopTrackMap;
 
         ResultHandlerTrackMap  m_resultHandlerTrackMap;
         EventHandlerList       m_eventHandlerList;
