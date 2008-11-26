@@ -50,18 +50,18 @@ namespace gloox
     m_id = id;
   }
 
-  IQ::IQ( IqType type, const JID& to, const std::string& id, const std::string& xmlns,
-          const std::string& childtag )
-    : Stanza( to ), m_query( 0 ), m_subtype( type )
-  {
-    m_id = id;
-
-    if( !xmlns.empty() ) // FIXME needs to be removed
-    {
-      m_xmlns = xmlns;
-      m_query = new Tag( childtag.empty() ? "query" : childtag,  XMLNS, xmlns );
-    }
-  }
+//   IQ::IQ( IqType type, const JID& to, const std::string& id, const std::string& xmlns,
+//           const std::string& childtag )
+//     : Stanza( to ), m_query( 0 ), m_subtype( type )
+//   {
+//     m_id = id;
+//
+//     if( !xmlns.empty() ) // FIXME needs to be removed
+//     {
+//       m_xmlns = xmlns;
+//       m_query = new Tag( childtag.empty() ? "query" : childtag,  XMLNS, xmlns );
+//     }
+//   }
 
   IQ::~IQ()
   {

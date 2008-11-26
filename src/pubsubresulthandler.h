@@ -106,10 +106,10 @@ namespace gloox
          *
          * @see Manager::deleteItem
          */
-        virtual void handleItemDeletion(  const JID& service,
-                                            const std::string& node,
-                                            const std::string& item,
-                                            const Error* error = 0 ) = 0;
+        virtual void handleItemDeletion( const JID& service,
+                                         const std::string& node,
+                                         const ItemList& itemList,
+                                         const Error* error = 0 ) = 0;
 
         /**
          * Receives the subscription results. In case a problem occured, the
@@ -290,8 +290,8 @@ namespace gloox
          * @see Manager::deleteNode
          */
         virtual void handleNodeDeletion( const JID& service,
-                                           const std::string& node,
-                                           const Error* error = 0 ) = 0;
+                                         const std::string& node,
+                                         const Error* error = 0 ) = 0;
 
 
         /**
@@ -317,7 +317,7 @@ namespace gloox
          * @see Manager::getSubscriptions
          */
         virtual void handleSubscriptions( const JID& service,
-                                          const SubscriptionMap* subMap,
+                                          const SubscriptionMap& subMap,
                                           const Error* error = 0) = 0;
 
         /**
@@ -330,14 +330,13 @@ namespace gloox
          * @see Manager::getAffiliations
          */
         virtual void handleAffiliations( const JID& service,
-                                         const AffiliationMap* affMap,
+                                         const AffiliationMap& affMap,
                                          const Error* error = 0 ) = 0;
 
         /**
          * Receives the default configuration for a specific node type.
          *
          * @param service The queried service.
-         * @param type The type of the NodeType requested.
          * @param config Configuration form for the node type.
          * @param error Default node config retrieval Error.
          *
@@ -353,5 +352,5 @@ namespace gloox
 
 }
 
-#endif /* PUBSUBRESULTHANDLER_H__ */
+#endif // PUBSUBRESULTHANDLER_H__
 

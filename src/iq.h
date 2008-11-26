@@ -60,9 +60,9 @@ namespace gloox
        * @param childtag The child tag's name. Defaults to "query".
        * @deprecated Don't use, will be removed for 1.0
        */
-      GLOOX_DEPRECATED_CTOR IQ( IqType type, const JID& to, const std::string& id, // FIXME remove for 1.0
-                                 const std::string& xmlns,
-                                 const std::string& childtag = "query" );
+//       GLOOX_DEPRECATED_CTOR IQ( IqType type, const JID& to, const std::string& id, // FIXME remove for 1.0
+//                                  const std::string& xmlns,
+//                                  const std::string& childtag = "query" );
 
       /**
        * Creates an IQ Query.
@@ -85,7 +85,7 @@ namespace gloox
        * @return The IQ's child tag.
        * @deprecated Don't use, will be removed for 1.0
        */
-      GLOOX_DEPRECATED Tag* query() const { return m_query; } // FIXME remove for 1.0
+//       GLOOX_DEPRECATED Tag* query() const { return m_query; } // FIXME remove for 1.0
 
       /**
        * Returns the IQ's type.
@@ -98,7 +98,7 @@ namespace gloox
        * @return The namespace of the IQ stanza.
        * @deprecated Don't use, will be removed for 1.0
        */
-      GLOOX_DEPRECATED const std::string& xmlns() const { return m_xmlns; } // FIXME remove for 1.0
+//       GLOOX_DEPRECATED const std::string& xmlns() const { return m_xmlns; } // FIXME remove for 1.0
 
       // reimplemented from Stanza
       virtual Tag* tag() const;
