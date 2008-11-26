@@ -361,12 +361,13 @@ namespace gloox
          * @param service The queried service.
          * @param type NodeType to get default configuration for.
          * @param handler ResultHandler.
+         * @return The ID used in the request.
          *
          * @see ResultHandler::handleDefaultNodeConfig
          */
-        void getDefaultNodeConfig( const JID& service,
-                                   NodeType type,
-                                   ResultHandler* handler );
+        const std::string& getDefaultNodeConfig( const JID& service,
+                                                 NodeType type,
+                                                 ResultHandler* handler );
 
         /**
          * Removes all the items from a node.
@@ -374,12 +375,13 @@ namespace gloox
          * @param service Service to query.
          * @param node Node ID of the node.
          * @param handler ResultHandler.
+         * @return The ID used in the request.
          *
          * @see ResultHandler::handleNodePurge
          */
-        void purgeNode( const JID& service,
-                        const std::string& node,
-                        ResultHandler* handler );
+        const std::string& purgeNode( const JID& service,
+                                      const std::string& node,
+                                      ResultHandler* handler );
 
         /**
          * Requests the subscriber list for a node.
@@ -387,13 +389,14 @@ namespace gloox
          * @param service Service to query.
          * @param node Node ID of the node.
          * @param handler ResultHandler.
+         * @return The ID used in the request.
          *
          * @see ResultHandler::handleSubscribers
          */
-        void getSubscribers( const JID& service,
-                             const std::string& node,
-                             ResultHandler* handler )
-          { subscriberList( service, node, 0, handler ); }
+        const std::string& getSubscribers( const JID& service,
+                                           const std::string& node,
+                                           ResultHandler* handler )
+          { return subscriberList( service, node, 0, handler ); }
 
         /**
          * Modifies the subscriber list for a node. This function SHOULD only set the
@@ -402,14 +405,15 @@ namespace gloox
          * @param service Service to query.
          * @param node Node ID of the node.
          * @param list ResultHandler.
+         * @return The ID used in the request.
          *
          * @see ResultHandler::handleSubscribers
          */
-        void setSubscribers( const JID& service,
-                             const std::string& node,
-                             const SubscriberList& list,
-                             ResultHandler* handler )
-          { subscriberList( service, node, &list, handler ); }
+        const std::string& setSubscribers( const JID& service,
+                                           const std::string& node,
+                                           SubscriberList& list,
+                                           ResultHandler* handler )
+          { return subscriberList( service, node, &list, handler ); }
 
         /**
          * Requests the affiliate list for a node.
@@ -417,13 +421,14 @@ namespace gloox
          * @param service Service to query.
          * @param node Node ID of the node.
          * @param handler ResultHandler.
+         * @return The ID used in the request.
          *
          * @see ResultHandler::handleAffiliates
          */
-        void getAffiliates( const JID& service,
-                            const std::string& node,
-                            ResultHandler* handler )
-          { affiliateList( service, node, 0, handler ); }
+        const std::string& getAffiliates( const JID& service,
+                                          const std::string& node,
+                                          ResultHandler* handler )
+          { return affiliateList( service, node, 0, handler ); }
 
         /**
          * Modifies the affiliate list for a node.
@@ -431,14 +436,15 @@ namespace gloox
          * @param service Service to query.
          * @param node Node ID of the node.
          * @param list ResultHandler.
+         * @return The ID used in the request.
          *
          * @see ResultHandler::handleAffiliatesResult
          */
-        void setAffiliates( const JID& service,
-                            const std::string& node,
-                            const AffiliateList& list,
-                            ResultHandler* handler )
-          { affiliateList( service, node, &list, handler ); }
+        const std::string& setAffiliates( const JID& service,
+                                          const std::string& node,
+                                          AffiliateList& list,
+                                          ResultHandler* handler )
+          { return affiliateList( service, node, &list, handler ); }
 
         /**
          * Retrieve the configuration (options) of a node.
@@ -446,13 +452,14 @@ namespace gloox
          * @param service Service hosting the node.
          * @param node ID of the node.
          * @param handler ResultHandler responsible to handle the request result.
+         * @return The ID used in the request.
          *
          * @see ResultHandler::handleNodeConfig
          */
-        void getNodeConfig( const JID& service,
-                            const std::string& node,
-                            ResultHandler* handler )
-          { nodeConfig( service, node, 0, handler ); }
+        const std::string& getNodeConfig( const JID& service,
+                                          const std::string& node,
+                                          ResultHandler* handler )
+          { return nodeConfig( service, node, 0, handler ); }
 
         /**
          * Changes a node's configuration (options).
@@ -460,14 +467,15 @@ namespace gloox
          * @param service Service to query.
          * @param node Node ID of the node.
          * @param handler ResultHandler responsible to handle the request result.
+         * @return The ID used in the request.
          *
          * @see ResultHandler::handleNodeConfigResult
          */
-        void setNodeConfig( const JID& service,
-                            const std::string& node,
-                            const DataForm& config,
-                            ResultHandler* handler  )
-          { nodeConfig( service, node, &config, handler ); }
+        const std::string& setNodeConfig( const JID& service,
+                                          const std::string& node,
+                                          DataForm* config,
+                                          ResultHandler* handler  )
+          { return nodeConfig( service, node, config, handler ); }
 
         /**
          * Registers an handler to receive notification of events.
@@ -564,6 +572,26 @@ namespace gloox
              */
             const std::string& node() const { return m_node; }
 
+            /**
+             * Sets an options DataForm.
+             * @param options The DataForm.
+             */
+            void setConfig( DataForm* config )
+              { m_form = config; }
+
+            /**
+             * Returns the config DataForm.
+             * @return The config DataForm.
+             */
+            const DataForm* config() const { return m_form; }
+
+            /**
+             * Sets the subscriber list.
+             * @param subList The subscriber list.
+             */
+            void setSubscriberList( SubscriberList* subList )
+              { m_subList = subList; }
+
             // re-implemented from StanzaExtension
             virtual const std::string& filterString() const;
 
@@ -579,6 +607,8 @@ namespace gloox
           private:
             std::string m_node;
             TrackContext m_ctx;
+            DataForm* m_form;
+            SubscriberList* m_subList;
         };
 
         class PubSub : public StanzaExtension
@@ -600,20 +630,6 @@ namespace gloox
              * Virtual destructor.
              */
             virtual ~PubSub();
-
-            /**
-             * Returns the list of subscriptions.
-             * @return The list of subscriptions.
-             */
-            const SubscriptionMap& subscriptionMap() const
-              { return m_subscriptionMap; }
-
-            /**
-             * Returns the list of subscriptions.
-             * @return The list of subscriptions.
-             */
-            const AffiliationMap& affiliationMap() const
-             { return m_affiliationMap; }
 
             /**
              * Sets the JID to use in e.g. subscription requests.
@@ -648,17 +664,22 @@ namespace gloox
 
             /**
              * Sets the subscription options.
-             * @param jid The JID to set the options for.
              * @param node The node to set the options for.
              * @param df The DataForm holding the subscription options.
              * Will be owned and deleted by the PubSub object
              */
-            void setOptions( const JID& jid, const std::string& node, DataForm* df )
+            void setOptions( const std::string& node, DataForm* df )
             {
-              m_options.jid = jid;
               m_options.node = node;
               m_options.df = df;
             }
+
+            /**
+             * Returns the subscription options.
+             * @return The subscription options.
+             */
+            const DataForm* options() const
+              { return m_options.df; }
 
             /**
              * Returns the current Items.
@@ -679,6 +700,20 @@ namespace gloox
              */
             void setMaxItems( int maxItems )
               { m_maxItems = maxItems; }
+
+            /**
+             * Returns the subscriptions.
+             * @param The subscriptions.
+             */
+            const SubscriptionMap& subscriptions() const
+              { return m_subscriptionMap; }
+
+            /**
+             * Returns the affiliations.
+             * @param The affiliations.
+             */
+            const AffiliationMap& affiliations() const
+              { return m_affiliationMap; }
 
             /**
              * Sets whether or not a notify element should be included in a 'retract'.
@@ -705,7 +740,6 @@ namespace gloox
 
             struct Options
             {
-              JID jid;
               std::string node;
               DataForm* df;
             };
@@ -729,8 +763,10 @@ namespace gloox
          *               Otherwise, it will set the config based on the form.
          * @param handler ResultHandler responsible to handle the request result.
          */
-        void nodeConfig( const JID& service, const std::string& node,
-                         const DataForm* config, ResultHandler* handler );
+        const std::string& nodeConfig( const JID& service,
+                                       const std::string& node,
+                                       DataForm* config,
+                                       ResultHandler* handler );
 
         /**
          * This function sets or requests a node's subscribers list form
@@ -742,11 +778,12 @@ namespace gloox
          * @param config If not NULL, the function will request the node config.
          *               Otherwise, it will set the config based on the form.
          * @param handler ResultHandler responsible to handle the request result.
+         * @return The ID used in the request.
          */
-        void subscriberList( const JID& service,
-                             const std::string& node,
-                             const SubscriberList* config,
-                             ResultHandler* handler );
+        const std::string& subscriberList( const JID& service,
+                                           const std::string& node,
+                                           SubscriberList* config,
+                                           ResultHandler* handler );
 
         /**
          * This function sets or requests a node's affiliates list
@@ -758,12 +795,13 @@ namespace gloox
          * @param config If not NULL, the function will request the node config.
          *               Otherwise, it will set the config based on the form.
          * @param handler ResultHandler responsible to handle the request result.
+         * @return The ID used in the request.
          */
 
-        void affiliateList( const JID& service,
-                            const std::string& node,
-                            const AffiliateList* config,
-                            ResultHandler* handler );
+        const std::string& affiliateList( const JID& service,
+                                          const std::string& node,
+                                          AffiliateList* config,
+                                          ResultHandler* handler );
 
         const std::string& subscriptionOptions( TrackContext context,
                                                 const JID& service,
@@ -777,7 +815,7 @@ namespace gloox
             TrackContext context );
 //         typedef std::pair< std::string, std::string > TrackedItem;
 //         typedef std::map < std::string, TrackedItem > ItemOperationTrackMap;
-//         typedef std::map < std::string, std::string > NodeOperationTrackMap;
+        typedef std::map < std::string, std::string > NodeOperationTrackMap;
 
         typedef std::map < std::string, ResultHandler* > ResultHandlerTrackMap;
         typedef std::list< EventHandler* > EventHandlerList;
@@ -785,7 +823,7 @@ namespace gloox
         ClientBase* m_parent;
 
 //         ItemOperationTrackMap  m_iopTrackMap;
-//         NodeOperationTrackMap  m_nopTrackMap;
+        NodeOperationTrackMap  m_nopTrackMap;
 
         ResultHandlerTrackMap  m_resultHandlerTrackMap;
         EventHandlerList       m_eventHandlerList;

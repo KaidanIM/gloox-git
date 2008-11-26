@@ -198,12 +198,14 @@ namespace gloox
 
     // ---- Manager::PubSubOwner ----
     Manager::PubSubOwner::PubSubOwner( TrackContext context )
-      : StanzaExtension( ExtPubSubOwner ), m_ctx( context )
+      : StanzaExtension( ExtPubSubOwner ), m_ctx( context ), m_form( 0 ),
+        m_subList( 0 )
     {
     }
 
     Manager::PubSubOwner::PubSubOwner( const Tag* tag )
-      : StanzaExtension( ExtPubSubOwner ), m_ctx( InvalidContext )
+      : StanzaExtension( ExtPubSubOwner ), m_ctx( InvalidContext ), m_form( 0 ),
+        m_subList( 0 )
     {
       const Tag* d = tag->findTag( "pubsub/delete" );
       if( d )
@@ -212,17 +214,18 @@ namespace gloox
         m_node = d->findAttribute( "node" );
         return;
       }
-      const Tag* d = tag->findTag( "pubsub/delete" );
-      if( d )
+      const Tag* p = tag->findTag( "pubsub/purge" );
+      if( p )
       {
         m_ctx = PurgeNodeItems;
-        m_node = d->findAttribute( "node" );
+        m_node = p->findAttribute( "node" );
         return;
       }
     }
 
     Manager::PubSubOwner::~PubSubOwner()
     {
+      delete m_form;
     }
 
     const std::string& Manager::PubSubOwner::filterString() const
@@ -251,6 +254,8 @@ namespace gloox
           new Tag( "purge", "node", m_node );
           break;
         }
+        default:
+          break;
       }
 
       return t;
@@ -266,8 +271,8 @@ namespace gloox
     }
 
     Manager::PubSub::PubSub( const Tag* tag )
-      : StanzaExtension( ExtPubSub ), m_ctx( InvalidContext ), m_maxItems( 0 ),
-        m_notify( false )
+      : StanzaExtension( ExtPubSub ), m_ctx( InvalidContext ),
+        m_maxItems( 0 ), m_notify( false )
     {
       m_options.df = 0;
       if( !tag )
@@ -322,7 +327,7 @@ namespace gloox
       {
         if( m_ctx == InvalidContext )
           m_ctx = GetSubscriptionOptions;
-        m_options.jid.setJID( o->findAttribute( "jid" ) );
+        m_jid.setJID( o->findAttribute( "jid" ) );
         m_options.node = o->findAttribute( "node" );
         m_options.df = new DataForm( o->findChild( "x", "xmlns", XMLNS_X_DATA ) );
       }
@@ -554,12 +559,13 @@ namespace gloox
           else
            field->setValue( util::int2string( depth ) );
         }
-        ps->setOptions( jid, node, &df );
+        ps->setJID( jid );
+        ps->setOptions( node, &df );
       }
       iq.addExtension( ps  );
 
       m_resultHandlerTrackMap[id] = handler;
-//       m_nopTrackMap[id] = node;
+      m_nopTrackMap[id] = node;
       m_parent->send( iq, this, Subscription );
       return id;
     }
@@ -600,7 +606,8 @@ namespace gloox
       const std::string& id = m_parent->getID();
       IQ iq( df ? IQ::Set : IQ::Get, service, id );
       PubSub* ps = new PubSub( context );
-      ps->setOptions( jid ? jid : m_parent->jid(), node, df );
+      ps->setJID( jid ? jid : m_parent->jid() );
+      ps->setOptions( node, df );
       iq.addExtension( ps );
 
       m_resultHandlerTrackMap[id] = handler;
@@ -669,11 +676,12 @@ namespace gloox
       PubSub* ps = new PubSub( PublishItem );
       ps->setNode( node );
       ps->setItems( items );
-      ps->setOptions( JID(), EmptyString, options );
+      ps->setOptions( EmptyString, options );
       iq.addExtension( ps );
 
       m_resultHandlerTrackMap[id] = handler;
       m_parent->send( iq, this, PublishItem );
+      return id;
     }
 
     const std::string& Manager::deleteItem( const JID& service,
@@ -710,10 +718,10 @@ namespace gloox
       IQ iq( IQ::Set, service, id );
       PubSub* ps = new PubSub( CreateNode );
       ps->setNode( node );
-      ps->setOptions( JID(), EmptyString, config );
+      ps->setOptions( EmptyString, config );
       iq.addExtension( ps );
 
-//       m_nopTrackMap[id] = node;
+      m_nopTrackMap[id] = node;
       m_resultHandlerTrackMap[id] = handler;
       m_parent->send( iq, this, CreateNode );
       return id;
@@ -732,108 +740,115 @@ namespace gloox
       pso->setNode( node );
       iq.addExtension( pso );
 
-//       m_nopTrackMap[id] = node;
+      m_nopTrackMap[id] = node;
       m_resultHandlerTrackMap[id] = handler;
       m_parent->send( iq, this, DeleteNode );
       return id;
     }
 
-    void Manager::getDefaultNodeConfig( const JID& service,
-                                        NodeType type,
-                                        ResultHandler* handler )
+    const std::string& Manager::getDefaultNodeConfig( const JID& service,
+                                                      NodeType type,
+                                                      ResultHandler* handler )
     {
-      if( !m_parent || !handler )
-        return;
+      if( !m_parent || !handler || !service )
+        return EmptyString;
 
       const std::string& id = m_parent->getID();
-      IQ iq( IQ::Get, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
-      Tag* def = new Tag( iq.query(), "default" );
+      IQ iq( IQ::Get, service, id );
+      PubSubOwner* pso = new PubSubOwner( DefaultNodeConfig );
       if( type == NodeCollection )
       {
-        DataForm df( TypeSubmit );
-        df.addField( DataFormField::TypeHidden, "FORM_TYPE", XMLNS_PUBSUB_NODE_CONFIG );
-        df.addField( DataFormField::TypeNone, "pubsub#node_type", "collection" );
-        def->addChild( df.tag() );
+        DataForm* df = new DataForm( TypeSubmit );
+        df->addField( DataFormField::TypeHidden, "FORM_TYPE", XMLNS_PUBSUB_NODE_CONFIG );
+        df->addField( DataFormField::TypeNone, "pubsub#node_type", "collection" );
+        pso->setConfig( df );
       }
+      iq.addExtension( pso );
 
       m_resultHandlerTrackMap[id] = handler;
       m_parent->send( iq, this, DefaultNodeConfig );
+      return id;
     }
 
-    void Manager::nodeConfig( const JID& service,
-                              const std::string& node,
-                              const DataForm* config,
-                              ResultHandler* handler )
+    const std::string& Manager::nodeConfig( const JID& service,
+                                            const std::string& node,
+                                            DataForm* config,
+                                            ResultHandler* handler )
     {
-      if( !m_parent || !handler )
-        return;
+      if( !m_parent || !handler || !service || node.empty() )
+        return EmptyString;
 
       const std::string& id = m_parent->getID();
-      IQ iq( config ? IQ::Set : IQ::Get, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
-      Tag* sub = new Tag( iq.query(), "configure", "node", node );
+      IQ iq( config ? IQ::Set : IQ::Get, service, id );
+      PubSubOwner* pso = new PubSubOwner( config ? SetNodeConfig : GetNodeConfig );
       if( config )
-      {
-        sub->addChild( config->tag() );
-      }
+        pso->setConfig( config );
+      iq.addExtension( pso );
 
       m_resultHandlerTrackMap[id] = handler;
       m_parent->send( iq, this, config ? SetNodeConfig : GetNodeConfig );
+      return id;
     }
 
-    void Manager::subscriberList( const JID& service,
-                                  const std::string& node,
-                                  const SubscriberList* subList,
-                                  ResultHandler* handler )
+    const std::string& Manager::subscriberList( const JID& service,
+                                                const std::string& node,
+                                                SubscriberList* subList,
+                                                ResultHandler* handler )
     {
-      if( !m_parent || !handler )
-        return;
+      if( !m_parent || !handler || !service || node.empty() )
+        return EmptyString;
 
       const std::string& id = m_parent->getID();
-      IQ iq( subList ? IQ::Set : IQ::Get, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
-      Tag* sub = new Tag( iq.query(), "subscriptions", "node", node );
-      if( subList )
-      {
-        Tag* s;
-        SubscriberList::const_iterator it = subList->begin();
-        for( ; it != subList->end(); ++it )
-        {
-          s = new Tag( sub, "subscription", "jid", (*it).jid.full() );
-          s->addAttribute( "subscription", util::lookup( (*it).type, subscriptionValues ) );
-          if( !(*it).subid.empty() )
-            s->addAttribute( "subid", (*it).subid );
-        }
+      IQ iq( subList ? IQ::Set : IQ::Get, service, id );
+      PubSubOwner* pso = new PubSubOwner( subList ? SetSubscriberList : GetSubscriberList );
+      pso->setSubscriberList( subList );
+      iq.addExtension( pso );
+//       if( subList )
+//       {
+//         Tag* s;
+//         SubscriberList::const_iterator it = subList->begin();
+//         for( ; it != subList->end(); ++it )
+//         {
+//           s = new Tag( sub, "subscription", "jid", (*it).jid.full() );
+//           s->addAttribute( "subscription", util::lookup( (*it).type, subscriptionValues ) );
+//           if( !(*it).subid.empty() )
+//             s->addAttribute( "subid", (*it).subid );
+//         }
 //         m_nopTrackMap[id] = node;
-      }
+//       }
 
       m_resultHandlerTrackMap[id] = handler;
       m_parent->send( iq, this, subList ? SetSubscriberList : GetSubscriberList );
+      return id;
     }
 
-    void Manager::affiliateList( const JID& service,
-                                 const std::string& node,
-                                 const AffiliateList* affList,
-                                 ResultHandler* handler )
+    const std::string& Manager::affiliateList( const JID& service,
+                                               const std::string& node,
+                                               AffiliateList* affList,
+                                               ResultHandler* handler )
     {
-      if( !m_parent || !handler )
-        return;
+      if( !m_parent || !handler || !service || node.empty() )
+        return EmptyString;
 
       const std::string& id = m_parent->getID();
-      IQ iq( affList ? IQ::Set : IQ::Get, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
-      Tag* aff = new Tag( iq.query(), "affiliations", "node", node );
-      if( affList )
-      {
-        Tag* a;
-        AffiliateList::const_iterator it = affList->begin();
-        for( ; it != affList->end(); ++it )
-        {
-          a = new Tag( aff, "affiliation", "jid", (*it).jid.full() );
-          a->addAttribute( "affiliation", util::lookup( (*it).type, affiliationValues ) );
-        }
+      IQ iq( affList ? IQ::Set : IQ::Get, service, id );
+      PubSubOwner* pso = new PubSubOwner( affList ? SetAffiliateList : GetAffiliateList );
+//       if( affList )
+//       {
+//         Tag* a;
+//         AffiliateList::const_iterator it = affList->begin();
+//         for( ; it != affList->end(); ++it )
+//         {
+//           a = new Tag( aff, "affiliation", "jid", (*it).jid.full() );
+//           a->addAttribute( "affiliation", util::lookup( (*it).type, affiliationValues ) );
+//         }
 //         m_nopTrackMap[id] = node;
-      }
+//       }
+      iq.addExtension( pso );
 
       m_resultHandlerTrackMap[id] = handler;
       m_parent->send( iq, this, affList ? SetAffiliateList : GetAffiliateList );
+      return id;
     }
 
     const std::string& Manager::purgeNode( const JID& service,
@@ -850,7 +865,7 @@ namespace gloox
       iq.addExtension( pso );
 
       m_resultHandlerTrackMap[id] = handler;
-//       m_nopTrackMap[id] = node;
+      m_nopTrackMap[id] = node;
       m_parent->send( iq, this, PurgeNodeItems );
       return id;
     }
@@ -873,8 +888,10 @@ namespace gloox
 
       switch( iq.subtype() )
       {
+        case IQ::Error:
         case IQ::Result:
         {
+          const Error* error = iq.error();
           switch( context )
           {
             case Subscription:
@@ -882,12 +899,13 @@ namespace gloox
               const PubSub* ps = iq.findExtension<PubSub>( ExtPubSub );
               if( ps )
               {
-                SubscriptionMap sm = ps->subscriptionMap();
+                SubscriptionMap sm = ps->subscriptions();
                 SubscriptionMap::const_iterator it = sm.begin();
                 rh->handleSubscriptionResult( service, (*it).first,
                                               (*it).second.subid,
                                               (*it).second.jid,
-                                              (*it).second.type );
+                                              (*it).second.type,
+                                              error );
               }
               break;
             }
@@ -913,7 +931,9 @@ namespace gloox
               if( !ps )
                 return;
 
-              rh->handleSubscriptions( service, ps->subscriptions() );
+              rh->handleSubscriptions( service,
+                                       ps->subscriptions(),
+                                       error );
               break;
             }
             case GetAffiliationList:
@@ -922,7 +942,9 @@ namespace gloox
               if( !ps )
                 return;
 
-              rh->handleAffiliations( service, ps->affiliations() );
+              rh->handleAffiliations( service,
+                                      ps->affiliations(),
+                                      error );
               break;
             }
             case RequestItems:
@@ -931,7 +953,8 @@ namespace gloox
               if( !ps )
                 return;
 
-              rh->handleItems( service, ps->node(), ps->items() );
+              rh->handleItems( service, ps->node(),
+                               ps->items(), error );
               break;
             }
             case PublishItem:
@@ -944,29 +967,31 @@ namespace gloox
                 for( ; it != il.end(); ++it )
                 {
                   rh->handleItemPublication( service, ps->node(),
-                                             (*it)->id() );
+                                             (*it)->id(), error );
                 }
               }
               break;
             }
             case DeleteItem:
             {
-              ItemOperationTrackMap::iterator it = m_iopTrackMap.find( id );
-              if( it != m_iopTrackMap.end() )
+              const PubSub* ps = iq.findExtension<PubSub>( ExtPubSub );
+              if( ps )
               {
-                rh->handleItemDeletion( service, (*it).second.first,
-                                          (*it).second.second );
-                m_iopTrackMap.erase( it );
+                rh->handleItemDeletion( service,
+                                        ps->node(),
+                                        ps->items(),
+                                        error );
               }
               break;
             }
             case DefaultNodeConfig:
             {
-              const Tag* deflt = query->findChild( "default" );
-              if( deflt )
+              const PubSubOwner* pso = iq.findExtension<PubSubOwner>( ExtPubSubOwner );
+              if( pso )
               {
-                const DataForm df( deflt->findChild( "x" ) );
-                rh->handleDefaultNodeConfig( service, &df );
+                rh->handleDefaultNodeConfig( service,
+                                             pso->config(),
+                                             error );
               }
               break;
             }
@@ -985,29 +1010,26 @@ namespace gloox
               {
                 case GetSubscriptionOptions:
                 {
-                  const Tag* options = query->findChild( "options" );
-                  const DataForm df( options->findChild( "x" ) );
-                  rh->handleSubscriptionOptions( service,
-                                         JID( options->findAttribute( "jid" ) ),
-                                         options->findAttribute( "node" ), &df );
-                  break;
-                }
-                case GetSubscriberList:
-                {
-                  const Tag* subt = query->findChild( "subscriptions" );
-                  SubscriberList list;
-                  const TagList& subs = subt->children();
-                  TagList::const_iterator it = subs.begin();
-                  for( ; it != subs.end(); ++it )
+                  const PubSub* ps = iq.findExtension<PubSub>( ExtPubSub );
+                  if( ps )
                   {
-                    const std::string& jid = (*it)->findAttribute( "jid" );
-                    const std::string& sub = (*it)->findAttribute( "subscription" );
-                    const std::string& subid = (*it)->findAttribute( "subid" );
-                    list.push_back( Subscriber( jid, subscriptionType( sub ), subid ) );
+                    rh->handleSubscriptionOptions( service,
+                                                   ps->jid(),
+                                                   ps->node(),
+                                                   ps->options(),
+                                                   error );
                   }
-                  rh->handleSubscribers( service, subt->findAttribute( "node" ), &list );
                   break;
                 }
+//                 case GetSubscriberList:
+//                 {
+//                   const PubSub* ps = iq.findExtension<PubSub>( ExtPubSub );
+//                   if( ps )
+//                   {
+//                     rh->handleSubscribers( service, ps->node(), ps->subscriptions() );
+//                   }
+//                   break;
+//                 }
                 case SetSubscriptionOptions:
                 case SetSubscriberList:
                 case SetAffiliateList:
@@ -1023,25 +1045,25 @@ namespace gloox
                     switch( context )
                     {
                       case SetSubscriptionOptions:
-                        rh->handleSubscriptionOptionsResult( service, JID( /* FIXME */ ), node );
+                        rh->handleSubscriptionOptionsResult( service, JID( /* FIXME */ ), node, error );
                         break;
                       case SetSubscriberList:
-                        rh->handleSubscribersResult( service, node, 0 );
+                        rh->handleSubscribersResult( service, node, 0, error );
                         break;
                       case SetAffiliateList:
-                        rh->handleAffiliatesResult( service, node, 0 );
+                        rh->handleAffiliatesResult( service, node, 0, error );
                         break;
                       case SetNodeConfig:
-                        rh->handleNodeConfigResult( service, node );
+                        rh->handleNodeConfigResult( service, node, error );
                         break;
                       case CreateNode:
-                        rh->handleNodeCreation( service, node );
+                        rh->handleNodeCreation( service, node, error );
                         break;
                       case DeleteNode:
-                        rh->handleNodeDeletion( service, node );
+                        rh->handleNodeDeletion( service, node, error );
                         break;
                       case PurgeNodeItems:
-                        rh->handleNodePurge( service, node );
+                        rh->handleNodePurge( service, node, error );
                         break;
                     }
                     m_nopTrackMap.erase( it );
@@ -1050,7 +1072,9 @@ namespace gloox
                 }
                 case GetAffiliateList:
                 {
-                  const TagList& affiliates = query->children();
+//                   const PubSub
+
+                 /* const TagList& affiliates = query->children();
                   AffiliateList affList;
                   TagList::const_iterator it = affiliates.begin();
                   for( ; it != affiliates.end(); ++it )
@@ -1060,18 +1084,18 @@ namespace gloox
                     affList.push_back( aff );
                   }
                   rh->handleAffiliates( service, query->findAttribute( "node" ), &affList );
+                 */
                   break;
                 }
                 case GetNodeConfig:
                 {
-                  Tag* ps = iq.query();
-                  if( ps )
+                  const PubSubOwner* pso = iq.findExtension<PubSubOwner>( ExtPubSubOwner );
+                  if( pso )
                   {
-                    const Tag* const options = ps->findTag( "pubsub/configure" );
-                    const Tag* const x = options->findChild( "x" );
-                    const DataForm* const df = x ? new DataForm( x ) : 0;
-                    rh->handleNodeConfig( service, options->findAttribute("node"), df );
-                    delete df;
+                    rh->handleNodeConfig( service,
+                                          pso->node(),
+                                          pso->config(),
+                                          error );
                   }
                   break;
                 }
@@ -1084,243 +1108,10 @@ namespace gloox
           }
           break;
         }
-        case IQ::Error:
-        {
-          m_nopTrackMap.erase( id );
-          m_iopTrackMap.erase( id );
-          const Error* error = iq.error();
-
-          switch( context )
-          {
-            case Subscription:
-            {
-              const Tag* sub = query->findChild( "subscribe" );
-              if( sub )
-              {
-                const std::string& node = sub->findAttribute( "node" ),
-                                   jid  = sub->findAttribute( "jid" );
-
-                const SubscriptionType type = SubscriptionNone;
-                rh->handleSubscriptionResult( service, node, EmptyString, jid, type, error );
-              }
-              break;
-            }
-            case Unsubscription:
-            {
-              const Tag* unsub = query->findChild( "unsubscribe" );
-              if( unsub )
-              {
-                const std::string& node = unsub->findAttribute( "node" ),
-                                   sid  = unsub->findAttribute( "sid" ),
-                                   jid  = unsub->findAttribute( "jid" );
-                rh->handleUnsubscriptionResult( service, node, sid, jid, error );
-              }
-              break;
-            }
-            case GetSubscriptionList:
-            {
-              rh->handleSubscriptions( service, 0, error );
-              break;
-            }
-            case GetAffiliationList:
-            {
-              rh->handleAffiliations( service, 0, error );
-              break;
-            }
-            case GetSubscriptionOptions:
-            {
-              const Tag* options = query->findChild( "options" );
-              if( options )
-              {
-                const std::string& jid  = options->findAttribute( "jid" ),
-                                   node = options->findAttribute( "node" );
-                rh->handleSubscriptionOptions( service, jid, node, 0, error );
-              }
-              break;
-            }
-            case SetSubscriptionOptions:
-            {
-              const Tag* options = query->findChild( "options" );
-              if( options )
-              {
-                const std::string& jid  = options->findAttribute( "jid" ),
-                                   node = options->findAttribute( "node" );
-                rh->handleSubscriptionOptionsResult( service, JID( jid ), node, error );
-              }
-              break;
-            }
-            case GetNodeConfig:
-            {
-              const Tag* configure = query->findChild( "configure" );
-              if( configure )
-              {
-                const std::string& node = configure->findAttribute( "node" );
-                rh->handleNodeConfig( service, node, 0, error );
-              }
-              break;
-            }
-            case SetNodeConfig:
-            {
-              const Tag* configure = query->findChild( "configure" );
-              if( configure )
-              {
-                const std::string& node = configure->findAttribute( "node" );
-                rh->handleNodeConfigResult( service, node, error );
-              }
-              break;
-            }
-            case RequestItems:
-            {
-              const PubSub* ps = iq.findExtension<PubSub>( ExtPubSub );
-              if( !ps )
-                return;
-
-                rh->handleItems( service, ps->node(),
-                                 ItemList(), error );
-              }
-              break;
-            }
-            case PurgeNodeItems:
-            {
-              const Tag* purge = query->findChild( "purge" );
-              if( purge )
-              {
-                const std::string& node = purge->findAttribute( "node" );
-                rh->handleNodePurge( service, node, error );
-              }
-              break;
-            }
-            case CreateNode:
-            {
-              const Tag* create = query->findChild( "create" );
-              if( create )
-              {
-                const std::string& node = create->findAttribute( "node" );
-                rh->handleNodeCreation( service, node, error );
-              }
-              break;
-            }
-            case DeleteNode:
-            {
-              const Tag* del = query->findChild( "delete" );
-              if( del )
-              {
-                const std::string& node = del->findAttribute( "node" );
-                rh->handleNodeDeletion( service, node, error );
-              }
-              break;
-            }
-            case PublishItem:
-            {
-              const Tag* publish = query->findChild( "publish" );
-              if( publish )
-              {
-                const Tag* item = publish->findChild( "item" );
-                if( item )
-                {
-                  const std::string& node = publish->findAttribute( "node" );
-                  const std::string& id = item->findAttribute( "id" );
-                  rh->handleItemPublication( service, node, id, error );
-                }
-              }
-              break;
-            }
-            case DeleteItem:
-            {
-              const Tag* retract = query->findChild( "retract" );
-              if( retract )
-              {
-                const Tag* item = retract->findChild( "item" );
-                if( item )
-                {
-                  const std::string& node = retract->findAttribute( "node" );
-                  const std::string& id = item->findAttribute( "id" );
-                  rh->handleItemDeletion( service, node, id, error );
-                }
-              }
-              break;
-            }
-            case DefaultNodeConfig:
-            {
-              const Tag* deflt = query->findChild( "default" );
-              if( deflt )
-              {
-                rh->handleDefaultNodeConfig( service, 0, error );
-              }
-              break;
-            }
-            case GetAffiliateList:
-            {
-              const Tag* aff = query->findChild( "affiliations" );
-              AffiliateList list;
-              const TagList& affiliates = aff->children();
-              TagList::const_iterator it = affiliates.begin();
-              for( ; it != affiliates.end(); ++it )
-              {
-                const std::string& jid = (*it)->findAttribute( "jid" );
-                const std::string& afft = (*it)->findAttribute( "affiliation" );
-                list.push_back( Affiliate( jid, affiliationType( afft ) ) );
-              }
-              rh->handleAffiliates( service, aff->findAttribute( "node" ), &list, error);
-              break;
-            }
-            case SetAffiliateList:
-            {
-              const Tag* aff = query->findChild( "affiliations" );
-              AffiliateList list;
-              const TagList& affiliates = aff->children();
-              TagList::const_iterator it = affiliates.begin();
-              for( ; it != affiliates.end(); ++it )
-              {
-                const std::string& jid = (*it)->findAttribute( "jid" );
-                const std::string& afft = (*it)->findAttribute( "affiliation" );
-                list.push_back( Affiliate( jid, affiliationType( afft ) ) );
-              }
-              rh->handleAffiliatesResult( service, aff->findAttribute( "node" ), &list, error);
-              break;
-            }
-            case GetSubscriberList:
-            {
-              const Tag* subt = query->findChild( "subscriptions" );
-              SubscriberList list;
-              const TagList& subs = subt->children();
-              TagList::const_iterator it = subs.begin();
-              for( ; it != subs.end(); ++it )
-              {
-                const std::string& jid = (*it)->findAttribute( "jid" );
-                const std::string& sub = (*it)->findAttribute( "subscription" );
-                const std::string& subid = (*it)->findAttribute( "subid" );
-                list.push_back( Subscriber( jid, subscriptionType( sub ), subid ) );
-              }
-              rh->handleSubscribers( service, subt->findAttribute( "node" ), &list, error);
-              break;
-            }
-            case SetSubscriberList:
-            {
-              const Tag* subt = query->findChild( "subscriptions" );
-              SubscriberList list;
-              const TagList& subs = subt->children();
-              TagList::const_iterator it = subs.begin();
-              for( ; it != subs.end(); ++it )
-              {
-                const std::string& jid = (*it)->findAttribute( "jid" );
-                const std::string& sub = (*it)->findAttribute( "subscription" );
-                const std::string& subid = (*it)->findAttribute( "subid" );
-                list.push_back( Subscriber( jid, subscriptionType( sub ), subid ) );
-              }
-              rh->handleSubscribersResult( service, subt->findAttribute( "node" ), &list, error);
-              break;
-            }
-            default:
-              break;
-          }
-          break;
-        }
         default:
           break;
       }
 
-      m_resultHandlerTrackMap.erase( ith );
     }
 
   }
