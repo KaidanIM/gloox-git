@@ -61,6 +61,12 @@ namespace gloox
         const Tag* payload() const { return m_payload; }
 
         /**
+         * Returns the item ID.
+         * @return The item ID.
+         */
+        const std::string& id() const { return m_id; }
+
+        /**
          * Creates and returns a Tag representation of the Item.
          * @return An XML representation of the Item.
          */

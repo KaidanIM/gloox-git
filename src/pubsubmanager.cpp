@@ -196,15 +196,78 @@ namespace gloox
   }
 */
 
+    // ---- Manager::PubSubOwner ----
+    Manager::PubSubOwner::PubSubOwner( TrackContext context )
+      : StanzaExtension( ExtPubSubOwner ), m_ctx( context )
+    {
+    }
+
+    Manager::PubSubOwner::PubSubOwner( const Tag* tag )
+      : StanzaExtension( ExtPubSubOwner ), m_ctx( InvalidContext )
+    {
+      const Tag* d = tag->findTag( "pubsub/delete" );
+      if( d )
+      {
+        m_ctx = DeleteNode;
+        m_node = d->findAttribute( "node" );
+        return;
+      }
+      const Tag* d = tag->findTag( "pubsub/delete" );
+      if( d )
+      {
+        m_ctx = PurgeNodeItems;
+        m_node = d->findAttribute( "node" );
+        return;
+      }
+    }
+
+    Manager::PubSubOwner::~PubSubOwner()
+    {
+    }
+
+    const std::string& Manager::PubSubOwner::filterString() const
+    {
+      static const std::string filter = "/iq/pubsub[@xmlns='" + XMLNS_PUBSUB_OWNER + "']";
+      return filter;
+    }
+
+    Tag* Manager::PubSubOwner::tag() const
+    {
+      if( m_ctx == InvalidContext )
+        return 0;
+
+      Tag* t = new Tag( "pubsub" );
+      t->setXmlns( XMLNS_PUBSUB_OWNER );
+
+      switch( m_ctx )
+      {
+        case DeleteNode:
+        {
+          new Tag( "delete", "node", m_node );
+          break;
+        }
+        case PurgeNodeItems:
+        {
+          new Tag( "purge", "node", m_node );
+          break;
+        }
+      }
+
+      return t;
+    }
+    // ---- ~Manager::PubSubOwner ----
+
     // ---- Manager::PubSub ----
     Manager::PubSub::PubSub( TrackContext context )
-      : StanzaExtension( ExtPubSub ), m_ctx( context ), m_maxItems( 0 )
+      : StanzaExtension( ExtPubSub ), m_ctx( context ), m_maxItems( 0 ),
+        m_notify( false )
     {
       m_options.df = 0;
     }
 
     Manager::PubSub::PubSub( const Tag* tag )
-      : StanzaExtension( ExtPubSub ), m_ctx( InvalidContext ), m_maxItems( 0 )
+      : StanzaExtension( ExtPubSub ), m_ctx( InvalidContext ), m_maxItems( 0 ),
+        m_notify( false )
     {
       m_options.df = 0;
       if( !tag )
@@ -271,9 +334,12 @@ namespace gloox
         si.subid = su->findAttribute( "subid" );
         si.type = subscriptionType( su->findAttribute( "type" ) );
         m_subscriptionMap[su->findAttribute( "node" )] = si;
+        return;
       }
       const Tag* i = tag->findTag( "pubsub/items" );
+      if( i )
       {
+        m_ctx = RequestItems;
         m_node = i->findAttribute( "node" );
         m_subid = i->findAttribute( "subid" );
         m_maxItems = atoi( i->findAttribute( "max_items" ).c_str() );
@@ -281,12 +347,46 @@ namespace gloox
         TagList::const_iterator it = l.begin();
         for( ; it != l.end(); ++it )
           m_items.push_back( new Item( (*it) ) );
+        return;
+      }
+      const Tag* p = tag->findTag( "pubsub/publish" );
+      if( p )
+      {
+        m_ctx = PublishItem;
+        m_node = p->findAttribute( "node" );
+        const TagList& l = p->children();
+        TagList::const_iterator it = l.begin();
+        for( ; it != l.end(); ++it )
+          m_items.push_back( new Item( (*it) ) );
+        return;
+      }
+      const Tag* r = tag->findTag( "pubsub/retract" );
+      if( r )
+      {
+        m_ctx = DeleteItem;
+        m_node = r->findAttribute( "node" );
+        m_notify = r->hasAttribute( "notify", "1" ) || r->hasAttribute( "notify", "true" );
+        const TagList& l = p->children();
+        TagList::const_iterator it = l.begin();
+        for( ; it != l.end(); ++it )
+          m_items.push_back( new Item( (*it) ) );
+        return;
+      }
+      const Tag* c = tag->findTag( "pubsub/create" );
+      if( c )
+      {
+        m_ctx = CreateNode;
+        m_node = c->findAttribute( "node" );
+        const Tag* config = tag->findTag( "pubsub/configure" );
+        if( config && config->hasChild( "x", XMLNS_X_DATA ) )
+          m_options.df = new DataForm( config->findChild( "x", XMLNS_X_DATA ) );
       }
     }
 
     Manager::PubSub::~PubSub()
     {
       delete m_options.df;
+      util::clearList( m_items );
     }
 
     const std::string& Manager::PubSub::filterString() const
@@ -361,6 +461,37 @@ namespace gloox
         for( ; it != m_items.end(); ++it )
           i->addChild( (*it)->tag() );
       }
+      else if( m_ctx == PublishItem )
+      {
+        Tag* p = new Tag( t, "publish" );
+        p->addAttribute( "node", m_node );
+        ItemList::const_iterator it = m_items.begin();
+        for( ; it != m_items.end(); ++it )
+          p->addChild( (*it)->tag() );
+        if( m_options.df )
+        {
+          Tag* po = new Tag( "publish-options" );
+          po->addChild( m_options.df->tag() );
+        }
+      }
+      else if( m_ctx == DeleteItem )
+      {
+        Tag* r = new Tag( t, "retract" );
+        r->addAttribute( "node", m_node );
+        if( m_notify )
+          r->addAttribute( "notify", "true" );
+        ItemList::const_iterator it = m_items.begin();
+        for( ; it != m_items.end(); ++it )
+          r->addChild( (*it)->tag() );
+      }
+      else if( m_ctx == CreateNode )
+      {
+        Tag* c = new Tag( t, "create" );
+        c->addAttribute( "node", m_node );
+        Tag* config = new Tag( t, "configure" );
+        if( m_options.df )
+          config->addChild( m_options.df->tag() );
+      }
       return t;
     }
 
@@ -428,7 +559,7 @@ namespace gloox
       iq.addExtension( ps  );
 
       m_resultHandlerTrackMap[id] = handler;
-      m_nopTrackMap[id] = node;
+//       m_nopTrackMap[id] = node;
       m_parent->send( iq, this, Subscription );
       return id;
     }
@@ -521,117 +652,90 @@ namespace gloox
       return id;
     }
 
-    void Manager::publishItem( const JID& service,
-                               const std::string& node,
-                               Tag* item,
-                               ResultHandler* handler )
+    const std::string& Manager::publishItem( const JID& service,
+                                            const std::string& node,
+                                            ItemList& items,
+                                            DataForm* options,
+                                            ResultHandler* handler )
     {
       if( !m_parent || !handler )
       {
-        delete item;
-        return;
+        util::clearList( items );
+        return EmptyString;
       }
 
       const std::string& id = m_parent->getID();
-      IQ iq( IQ::Set, service, id, XMLNS_PUBSUB, "pubsub" );
-      Tag* publish = new Tag( iq.query(), "publish", "node", node );
-      publish->addChild( item );
+      IQ iq( IQ::Set, service, id );
+      PubSub* ps = new PubSub( PublishItem );
+      ps->setNode( node );
+      ps->setItems( items );
+      ps->setOptions( JID(), EmptyString, options );
+      iq.addExtension( ps );
 
-      m_iopTrackMap[id] = std::make_pair( node, item->findAttribute( "id" ) );
       m_resultHandlerTrackMap[id] = handler;
       m_parent->send( iq, this, PublishItem );
     }
 
-    void Manager::deleteItem( const JID& service,
-                              const std::string& node,
-                              const std::string& item,
-                              ResultHandler* handler )
+    const std::string& Manager::deleteItem( const JID& service,
+                                            const std::string& node,
+                                            const ItemList& items,
+                                            bool notify,
+                                            ResultHandler* handler )
     {
-      if( !m_parent || !handler )
-        return;
+      if( !m_parent || !handler || !service )
+        return EmptyString;
 
       const std::string& id = m_parent->getID();
-      IQ iq( IQ::Set, service, id, XMLNS_PUBSUB, "pubsub" );
-      Tag* retract = new Tag( iq.query(), "retract", "node", node );
-      new Tag( retract, "item", "id", item );
+      IQ iq( IQ::Set, service, id );
+      PubSub* ps = new PubSub( DeleteItem );
+      ps->setNode( node );
+      ps->setItems( items );
+      ps->setNotify( notify );
+      iq.addExtension( ps );
 
-      m_iopTrackMap[id] = TrackedItem( node, item );
       m_resultHandlerTrackMap[id] = handler;
       m_parent->send( iq, this, DeleteItem );
+      return id;
     }
 
-    void Manager::createNode( NodeType type,
-                              const JID& service,
-                              const std::string& node,
-                              ResultHandler* handler,
-                              const std::string& name,
-                              const std::string& parent,
-                              AccessModel access,
-                              const StringMap* config )
+    const std::string& Manager::createNode( const JID& service,
+                                            const std::string& node,
+                                            DataForm* config,
+                                            ResultHandler* handler )
     {
-      static const char* accessValues[] = {
-        "open",
-        "presence",
-        "roster",
-        "authorize",
-        "whitelist"
-      };
-
-      if( !m_parent || !handler )
-        return;
+      if( !m_parent || !handler || !service || node.empty() )
+        return EmptyString;
 
       const std::string& id = m_parent->getID();
-      IQ iq( IQ::Set, service, id, XMLNS_PUBSUB, "pubsub" );
-      Tag* pubsub = iq.query();
-      new Tag( pubsub, "create", "node", node );
-      Tag* configure = new Tag( pubsub, "configure" );
+      IQ iq( IQ::Set, service, id );
+      PubSub* ps = new PubSub( CreateNode );
+      ps->setNode( node );
+      ps->setOptions( JID(), EmptyString, config );
+      iq.addExtension( ps );
 
-      if( !parent.empty() || config || type == NodeCollection || access != AccessDefault )
-      {
-        DataForm df( TypeSubmit );
-        df.addField( DataFormField::TypeHidden, "FORM_TYPE", XMLNS_PUBSUB_NODE_CONFIG );
-
-        if( !parent.empty() )
-          df.addField( DataFormField::TypeNone, "pubsub#collection", parent );
-
-        if( !name.empty() )
-          df.addField( DataFormField::TypeNone, "pubsub#title", name );
-
-        if( type == NodeCollection )
-          df.addField( DataFormField::TypeNone, "pubsub#node_type", "collection" );
-
-        if( access != AccessDefault )
-          df.addField( DataFormField::TypeNone, "pubsub#access_model",
-                       util::lookup( access, accessValues ) );
-        if( config )
-        {
-          StringMap::const_iterator it = config->begin();
-          for( ; it != config->end(); ++it )
-            df.addField( DataFormField::TypeNone, (*it).first, (*it).second );
-          delete config;
-        }
-        configure->addChild( df.tag() );
-      }
-
-      m_nopTrackMap[id] = node;
+//       m_nopTrackMap[id] = node;
       m_resultHandlerTrackMap[id] = handler;
       m_parent->send( iq, this, CreateNode );
+      return id;
     }
 
-    void Manager::deleteNode( const JID& service,
-                              const std::string& node,
-                              ResultHandler* handler )
+    const std::string& Manager::deleteNode( const JID& service,
+                                            const std::string& node,
+                                            ResultHandler* handler )
     {
-      if( !m_parent || !handler )
-        return;
+      if( !m_parent || !handler || !service || node.empty() )
+        return EmptyString;
 
       const std::string& id = m_parent->getID();
-      IQ iq( IQ::Set, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
-      new Tag( iq.query(), "delete", "node", node );
+      IQ iq( IQ::Set, service, id );
+      PubSubOwner* pso = new PubSubOwner( DeleteNode );
+      pso->setNode( node );
+      iq.addExtension( pso );
 
-      m_nopTrackMap[id] = node;
+//       m_nopTrackMap[id] = node;
       m_resultHandlerTrackMap[id] = handler;
       m_parent->send( iq, this, DeleteNode );
+      return id;
     }
 
     void Manager::getDefaultNodeConfig( const JID& service,
@@ -698,7 +802,7 @@ namespace gloox
           if( !(*it).subid.empty() )
             s->addAttribute( "subid", (*it).subid );
         }
-        m_nopTrackMap[id] = node;
+//         m_nopTrackMap[id] = node;
       }
 
       m_resultHandlerTrackMap[id] = handler;
@@ -725,27 +829,30 @@ namespace gloox
           a = new Tag( aff, "affiliation", "jid", (*it).jid.full() );
           a->addAttribute( "affiliation", util::lookup( (*it).type, affiliationValues ) );
         }
-        m_nopTrackMap[id] = node;
+//         m_nopTrackMap[id] = node;
       }
 
       m_resultHandlerTrackMap[id] = handler;
       m_parent->send( iq, this, affList ? SetAffiliateList : GetAffiliateList );
     }
 
-    void Manager::purgeNode( const JID& service,
-                             const std::string& node,
-                             ResultHandler* handler  )
+    const std::string& Manager::purgeNode( const JID& service,
+                                           const std::string&  node,
+                                           ResultHandler* handler  )
     {
-      if( !m_parent || !handler )
-        return;
+      if( !m_parent || !handler || !service || node.empty() )
+        return EmptyString;
 
       const std::string& id = m_parent->getID();
-      IQ iq( IQ::Set, service, id, XMLNS_PUBSUB_OWNER, "pubsub" );
-      new Tag( iq.query(), "purge", "node", node );
+      IQ iq( IQ::Set, service, id );
+      PubSubOwner* pso = new PubSubOwner( PurgeNodeItems );
+      pso->setNode( node );
+      iq.addExtension( pso );
 
       m_resultHandlerTrackMap[id] = handler;
-      m_nopTrackMap[id] = node;
+//       m_nopTrackMap[id] = node;
       m_parent->send( iq, this, PurgeNodeItems );
+      return id;
     }
 
     /**
@@ -829,12 +936,16 @@ namespace gloox
             }
             case PublishItem:
             {
-              ItemOperationTrackMap::iterator it = m_iopTrackMap.find( id );
-              if( it != m_iopTrackMap.end() )
+              const PubSub* ps = iq.findExtension<PubSub>( ExtPubSub );
+              if( ps && ps->items().size())
               {
-                rh->handleItemPublication( service, (*it).second.first,
-                                           (*it).second.second );
-                m_iopTrackMap.erase( it );
+                const ItemList& il = ps->items();
+                ItemList::const_iterator it = il.begin();
+                for( ; it != il.end(); ++it )
+                {
+                  rh->handleItemPublication( service, ps->node(),
+                                             (*it)->id() );
+                }
               }
               break;
             }
@@ -843,7 +954,7 @@ namespace gloox
               ItemOperationTrackMap::iterator it = m_iopTrackMap.find( id );
               if( it != m_iopTrackMap.end() )
               {
-                rh->handleItemDeletation( service, (*it).second.first,
+                rh->handleItemDeletion( service, (*it).second.first,
                                           (*it).second.second );
                 m_iopTrackMap.erase( it );
               }
@@ -927,7 +1038,7 @@ namespace gloox
                         rh->handleNodeCreation( service, node );
                         break;
                       case DeleteNode:
-                        rh->handleNodeDeletation( service, node );
+                        rh->handleNodeDeletion( service, node );
                         break;
                       case PurgeNodeItems:
                         rh->handleNodePurge( service, node );
@@ -1095,14 +1206,12 @@ namespace gloox
               if( del )
               {
                 const std::string& node = del->findAttribute( "node" );
-                rh->handleNodeDeletation( service, node, error );
+                rh->handleNodeDeletion( service, node, error );
               }
               break;
             }
             case PublishItem:
             {
-              m_iopTrackMap.erase( iq.id() );
-
               const Tag* publish = query->findChild( "publish" );
               if( publish )
               {
@@ -1126,7 +1235,7 @@ namespace gloox
                 {
                   const std::string& node = retract->findAttribute( "node" );
                   const std::string& id = item->findAttribute( "id" );
-                  rh->handleItemDeletation( service, node, id, error );
+                  rh->handleItemDeletion( service, node, id, error );
                 }
               }
               break;
