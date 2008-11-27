@@ -14,6 +14,7 @@
 #define SHIM_H__
 
 #include "stanzaextension.h"
+#include "macros.h"
 
 #include <map>
 #include <string>
@@ -31,7 +32,7 @@ namespace gloox
    * @author Jakob Schroeter <js@camaya.net>
    * @since 1.0
    */
-  class SHIM : public StanzaExtension
+  class GLOOX_API SHIM : public StanzaExtension
   {
     public:
       /**
