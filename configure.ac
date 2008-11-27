@@ -372,6 +372,7 @@ src/tests/rostermanager/Makefile
 src/tests/searchquery/Makefile
 src/tests/search/Makefile
 src/tests/sha/Makefile
+src/tests/shim/Makefile
 src/tests/simanager/Makefile
 src/tests/simanagersi/Makefile
 src/tests/stanzaextensionfactory/Makefile
