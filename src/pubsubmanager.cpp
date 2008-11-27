@@ -18,6 +18,7 @@
 #include "pubsubeventhandler.h"
 #include "pubsubresulthandler.h"
 #include "pubsubitem.h"
+#include "shim.h"
 #include "util.h"
 #include "error.h"
 
@@ -566,6 +567,8 @@ namespace gloox
       if( m_parent )
       {
         m_parent->registerStanzaExtension( new PubSub() );
+        m_parent->registerStanzaExtension( new PubSubOwner() );
+        m_parent->registerStanzaExtension( new SHIM() );
       }
     }
 

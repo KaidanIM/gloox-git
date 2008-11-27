@@ -567,6 +567,9 @@ namespace gloox
   /** Jingle Video via RTP namespace (XEP-0180) */
   GLOOX_API extern const std::string XMLNS_JINGLE_VIDEO_RTP;
 
+  /** Stanza Headers and Internet Metadata (SHIM) namespace (XEP-0131) */
+  GLOOX_API extern const std::string XMLNS_SHIM;
+
 
   /** Supported stream version (major). */
   GLOOX_API extern const std::string XMPP_STREAM_VERSION_MAJOR;
