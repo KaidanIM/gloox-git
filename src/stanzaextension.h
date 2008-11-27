@@ -83,6 +83,7 @@ namespace gloox
     ExtPubSubOwner,                 /**< An extension dealing with PubSub owner requests (XEP-0060). */
     ExtPubSubEvent,                 /**< An extension for PubSub event notifications
                                      * (XEP-0060) */
+    ExtSHIM,                        /**< An extension dealing with Stanza Headers and Internet Metadata (XEP-0131). */
     ExtUser                         /**< User-supplied extensions must use IDs above this. Do
                                      * not hard-code ExtUser's value anywhere, it is subject
                                      * to change. */
