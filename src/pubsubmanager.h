@@ -592,6 +592,13 @@ namespace gloox
             void setSubscriberList( SubscriberList* subList )
               { m_subList = subList; }
 
+            /**
+             * Sets the affiliate list.
+             * @param affList The affiliate list.
+             */
+            void setAffiliateList( AffiliateList* affList )
+              { m_affList = affList; }
+
             // re-implemented from StanzaExtension
             virtual const std::string& filterString() const;
 
@@ -609,6 +616,7 @@ namespace gloox
             TrackContext m_ctx;
             DataForm* m_form;
             SubscriberList* m_subList;
+            AffiliateList* m_affList;
         };
 
         class PubSub : public StanzaExtension
