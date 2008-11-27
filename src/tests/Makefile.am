@@ -16,7 +16,7 @@ SUBDIRS = adhoc adhoccommand adhoccommandnote amprule amp base64 \
           nickname nonsaslauthquery nonsaslauth \
           oob \
           parser prep presence privacymanager privacymanagerquery \
-          pubsubmanagerpubsub pubsubmanager \
+          pubsubmanagerpubsub pubsubmanager pubsubevent\
           registrationquery registration \
           rostermanagerquery rostermanager \
           searchquery search \

@@ -96,7 +96,7 @@ namespace gloox
      *
      * In response to this request, MyResultHandler::handleItem() will be called.
      *
-     * XEP Version: 1.9 (Incomplete), 1.12 (WiP)
+     * XEP Version: 1.12
      *
      * @author Jakob Schroeter <js@camaya.net>
      * @author Vincent Thomasset <vthomasset@gmail.com>
@@ -104,11 +104,6 @@ namespace gloox
      * @since 1.0
      *
      * @todo
-     * @li Implement Subscription request management.
-     * @li Update to XEP version 1.12.
-     * @li Write tests and examples.
-     * @li Check for possible ways to have generic handleResult method(s) in
-     *   ResultHandler.
      * @li Implement unsubscription result notification (aka sub id tracking)
      */
     class GLOOX_API Manager : public IqHandler
