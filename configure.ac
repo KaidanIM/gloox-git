@@ -362,6 +362,8 @@ src/tests/prep/Makefile
 src/tests/presence/Makefile
 src/tests/privacymanagerquery/Makefile
 src/tests/privacymanager/Makefile
+src/tests/pubsubmanagerpubsub/Makefile
+src/tests/pubsubmanager/Makefile
 src/tests/registrationquery/Makefile
 src/tests/registration/Makefile
 src/tests/rostermanagerquery/Makefile

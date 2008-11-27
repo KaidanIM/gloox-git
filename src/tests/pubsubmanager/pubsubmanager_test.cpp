@@ -7,13 +7,13 @@ class RH : public PubSub::ResultHandler
 {
   public:
     void handleItem( const JID&, const std::string&, const Tag* ) {}
-    void handleItems( const JID&, const std::string&, const TagList*, const Error* ) {}
+    void handleItems( const JID&, const std::string&, const PubSub::ItemList&, const Error* ) {}
     void handleItemPublication( const JID&, const std::string&,
                                             const std::string&,
                                             const Error* ) {}
-    void handleItemDeletation(  const JID&, const std::string&,
-                                            const std::string&,
-                                            const Error* ) {}
+    void handleItemDeletion(  const JID&, const std::string&,
+                                          const PubSub::ItemList&,
+                                          const Error* ) {}
     void handleSubscriptionResult( const JID&, const std::string&,
                                                const std::string&,
                                                const JID&,
@@ -47,11 +47,11 @@ class RH : public PubSub::ResultHandler
                                        const Error* ) {}
     void handleNodeConfigResult( const JID&, const std::string&, const Error* ) {}
     void handleNodeCreation( const JID&, const std::string&, const Error* ) {}
-    void handleNodeDeletation( const JID&, const std::string&, const Error* ) {}
+    void handleNodeDeletion( const JID&, const std::string&, const Error* ) {}
 
     void handleNodePurge( const JID&, const std::string&, const Error* ) {}
-    void handleSubscriptions( const JID&, const PubSub::SubscriptionMap*, const Error* ) {}
-    void handleAffiliations( const JID&, const PubSub::AffiliationMap*, const Error* ) {}
+    void handleSubscriptions( const JID&, const PubSub::SubscriptionMap&, const Error* ) {}
+    void handleAffiliations( const JID&, const PubSub::AffiliationMap&, const Error* ) {}
     void handleDefaultNodeConfig( const JID&, const DataForm*, const Error*) {}
 
 };
@@ -96,6 +96,7 @@ enum
 
 static const JID jid( "aaa@bbb.ccc" );
 static const std::string node( "node" );
+static const std::string subid( "subid" );
 
 static const Tag* tag;
 
@@ -116,6 +117,9 @@ class ClientBase
 
     void send( const IQ& iq, IqHandler* = 0, int context = 0 );
 
+    void registerStanzaExtension( StanzaExtension* se )
+      { delete se; }
+
     int failed;
 
   protected:
@@ -123,13 +127,20 @@ class ClientBase
 };
 
 static const std::string setheader =
-    "<iq xmlns='jabber:client' to='aaa@bbb.ccc' id='id' type='set'>"
+    "<iq to='aaa@bbb.ccc' id='id' type='set'>"
       "<pubsub xmlns='http://jabber.org/protocol/pubsub'>";
 
 static const std::string getheader =
-    "<iq xmlns='jabber:client' to='aaa@bbb.ccc' id='id' type='get'>"
+    "<iq to='aaa@bbb.ccc' id='id' type='get'>"
       "<pubsub xmlns='http://jabber.org/protocol/pubsub'>";
 
+static const std::string setheaderOwner =
+    "<iq to='aaa@bbb.ccc' id='id' type='set'>"
+    "<pubsub xmlns='http://jabber.org/protocol/pubsub#owner'>";
+
+static const std::string getheaderOwner =
+    "<iq to='aaa@bbb.ccc' id='id' type='get'>"
+    "<pubsub xmlns='http://jabber.org/protocol/pubsub#owner'>";
 static const std::string testValues [][2] =
 {
   { "subscription basic",
@@ -162,10 +173,10 @@ static const std::string testValues [][2] =
     "</options></pubsub></iq>" },
 
   { "unsubscription default",
-    setheader + "<unsubscribe node='node'/></pubsub></iq>" },
+    setheader + "<unsubscribe node='node' jid='aaa@bbb.ccc' subid='subid'/></pubsub></iq>" },
 
   { "unsubsription other",
-    setheader + "<unsubscribe node='node' jid='some@jid.com'/></pubsub></iq>" },
+  setheader + "<unsubscribe node='node' jid='some@jid.com' subid='subid'/></pubsub></iq>" },
 
   { "subscription options get",
     getheader + "<options node='node' jid='some@jid.com'/></pubsub></iq>" },
@@ -183,15 +194,11 @@ static const std::string testValues [][2] =
     getheader + "<subscriptions/></pubsub></iq>" },
 
   { "subscriber list get",
-    "<iq xmlns='jabber:client' to='aaa@bbb.ccc' id='id' type='get'>"
-      "<pubsub xmlns='http://jabber.org/protocol/pubsub#owner'>"
-          "<subscriptions node='node'/>"
+    getheaderOwner + "<subscriptions node='node'/>"
       "</pubsub></iq>" },
 
   { "subscriber list set",
-    "<iq xmlns='jabber:client' to='aaa@bbb.ccc' id='id' type='set'>"
-        "<pubsub xmlns='http://jabber.org/protocol/pubsub#owner'>"
-            "<subscriptions node='node'>"
+    setheaderOwner + "<subscriptions node='node'>"
                 "<subscription jid='some@jid.com' subscription='none' subid='abc'/>"
             "</subscriptions>"
         "</pubsub></iq>" },
@@ -200,29 +207,21 @@ static const std::string testValues [][2] =
     getheader + "<affiliations/></pubsub></iq>" },
 
   { "affiliate list get",
-    "<iq xmlns='jabber:client' to='aaa@bbb.ccc' id='id' type='get'>"
-      "<pubsub xmlns='http://jabber.org/protocol/pubsub#owner'>"
-          "<affiliations node='node'/>"
+    getheaderOwner + "<affiliations node='node'/>"
       "</pubsub></iq>" },
 
   { "affiliate list set",
-    "<iq xmlns='jabber:client' to='aaa@bbb.ccc' id='id' type='set'>"
-        "<pubsub xmlns='http://jabber.org/protocol/pubsub#owner'>"
-            "<affiliations node='node'>"
+    setheaderOwner + "<affiliations node='node'>"
                 "<affiliation jid='some@jid.com' affiliation='owner'/>"
             "</affiliations>"
         "</pubsub></iq>" },
 
   { "get node config",
-    "<iq xmlns='jabber:client' to='aaa@bbb.ccc' id='id' type='get'>"
-        "<pubsub xmlns='http://jabber.org/protocol/pubsub#owner'>"
-            "<configure node='node'/>"
+    getheaderOwner + "<configure node='node'/>"
         "</pubsub></iq>" },
 
   { "set node config",
-    "<iq xmlns='jabber:client' to='aaa@bbb.ccc' id='id' type='set'>"
-        "<pubsub xmlns='http://jabber.org/protocol/pubsub#owner'>"
-            "<configure node='node'>"
+    setheaderOwner + "<configure node='node'>"
                 "<x xmlns='jabber:x:data' type='submit'>"
                     "<field type='hidden' var='FORM_TYPE'>"
                         "<value>http://jabber.org/protocol/pubsub#node_config</value>"
@@ -233,9 +232,7 @@ static const std::string testValues [][2] =
         "</pubsub></iq>" },
 
   { "get default node config",
-    "<iq xmlns='jabber:client' to='aaa@bbb.ccc' id='id' type='get'>"
-        "<pubsub xmlns='http://jabber.org/protocol/pubsub#owner'>"
-            "<default/>"
+    getheaderOwner + "<default/>"
         "</pubsub></iq>" }
     };
 
@@ -280,10 +277,10 @@ int main()
   psm->subscribe( jid, node, rh, jid2, PubSub::SubscriptionItems, 0 );
 
   cb->setTest( UnsubscriptionDefault );
-  psm->unsubscribe( jid, node, rh );
+  psm->unsubscribe( jid, node, subid, rh );
 
   cb->setTest( UnsubscriptionJID );
-  psm->unsubscribe( jid, node, rh, jid2 );
+  psm->unsubscribe( jid, node, subid, rh, jid2 );
 
   cb->setTest( GetSubscriptionOptions );
   psm->getSubscriptionOptions( jid, jid2, node, rh );
@@ -292,8 +289,7 @@ int main()
   df->addField( DataFormField::TypeHidden, "FORM_TYPE",
       "http://jabber.org/protocol/pubsub#subscribe_options" );
   cb->setTest( SetSubscriptionOptions );
-  psm->setSubscriptionOptions( jid, jid2, node, *df, rh );
-  delete df;
+  psm->setSubscriptionOptions( jid, jid2, node, df, rh );
 
   cb->setTest( GetSubscriptionList );
   psm->getSubscriptions( jid, rh );
@@ -325,8 +321,7 @@ int main()
       "http://jabber.org/protocol/pubsub#node_config" );
   df->addField( DataFormField::TypeNone, "pubsub#title", "Princely Musings (Atom)" );
   cb->setTest( SetNodeConfig );
-  psm->setNodeConfig( jid, node, *df, rh );
-  delete df;
+  psm->setNodeConfig( jid, node, df, rh );
 
   cb->setTest( DefaultNodeConfig );
   psm->getDefaultNodeConfig( jid, PubSub::NodeLeaf, rh );

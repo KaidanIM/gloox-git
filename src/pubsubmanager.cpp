@@ -199,13 +199,13 @@ namespace gloox
     // ---- Manager::PubSubOwner ----
     Manager::PubSubOwner::PubSubOwner( TrackContext context )
       : StanzaExtension( ExtPubSubOwner ), m_ctx( context ), m_form( 0 ),
-        m_subList( 0 )
+        m_subList( 0 ), m_affList( 0 )
     {
     }
 
     Manager::PubSubOwner::PubSubOwner( const Tag* tag )
       : StanzaExtension( ExtPubSubOwner ), m_ctx( InvalidContext ), m_form( 0 ),
-        m_subList( 0 )
+        m_subList( 0 ), m_affList( 0 )
     {
       const Tag* d = tag->findTag( "pubsub/delete" );
       if( d )
@@ -252,6 +252,58 @@ namespace gloox
         case PurgeNodeItems:
         {
           new Tag( "purge", "node", m_node );
+          break;
+        }
+        case GetNodeConfig:
+        case SetNodeConfig:
+        {
+          Tag* c = new Tag( t, "configure" );
+          c->addAttribute( "node", m_node );
+          if( m_form )
+            c->addChild( m_form->tag() );
+          break;
+        }
+        case GetSubscriberList:
+        case SetSubscriberList:
+
+        {
+          Tag* sub = new Tag( t, "subscriptions" );
+          sub->addAttribute( "node", m_node );
+          if( m_subList )
+          {
+            Tag* s;
+            SubscriberList::const_iterator it = m_subList->begin();
+            for( ; it != m_subList->end(); ++it )
+            {
+              s = new Tag( sub, "subscription" );
+              s->addAttribute( "jid", (*it).jid.full() );
+              s->addAttribute( "subscription", util::lookup( (*it).type, subscriptionValues ) );
+              if( !(*it).subid.empty() )
+                s->addAttribute( "subid", (*it).subid );
+            }
+          }
+          break;
+        }
+        case GetAffiliateList:
+        case SetAffiliateList:
+        {
+          Tag* aff = new Tag( t, "affiliations" );
+          aff->addAttribute( "node", m_node );
+          if( m_affList )
+          {
+            Tag* a;
+            AffiliateList::const_iterator it = m_affList->begin();
+            for( ; it != m_affList->end(); ++it )
+            {
+              a = new Tag( aff, "affiliation", "jid", (*it).jid.full() );
+              a->addAttribute( "affiliation", util::lookup( (*it).type, affiliationValues ) );
+            }
+          }
+          break;
+        }
+        case DefaultNodeConfig:
+        {
+          new Tag( t, "default" );
           break;
         }
         default:
@@ -408,7 +460,7 @@ namespace gloox
       Tag* t = new Tag( "pubsub" );
       t->setXmlns( XMLNS_PUBSUB );
 
-      if( m_ctx == GetSubscriptionList && m_subscriptionMap.size() )
+      if( m_ctx == GetSubscriptionList )
       {
         Tag* sub = new Tag( t, "subscriptions" );
         SubscriptionMap::const_iterator it = m_subscriptionMap.begin();
@@ -420,7 +472,7 @@ namespace gloox
           s->addAttribute( "subscription", subscriptionValue( (*it).second.type ) );
         }
       }
-      else if( m_ctx == GetAffiliationList && m_affiliationMap.size() )
+      else if( m_ctx == GetAffiliationList )
       {
 
         Tag* aff = new Tag( t, "affiliations" );
@@ -437,6 +489,11 @@ namespace gloox
         Tag* s = new Tag( t, "subscribe" );
         s->addAttribute( "node", m_node );
         s->addAttribute( "jid", m_jid.full() );
+        if( m_options.df )
+        {
+          Tag* o = new Tag( t, "options" );
+          o->addChild( m_options.df->tag() );
+        }
       }
       else if( m_ctx == Unsubscription )
       {
@@ -450,7 +507,7 @@ namespace gloox
                || ( m_ctx == Subscription && m_options.df ) )
       {
         Tag* o = new Tag( t, "options" );
-        o->addAttribute( "node", m_node );
+        o->addAttribute( "node", m_options.node );
         o->addAttribute( "jid", m_jid.full() );
         if( m_options.df )
           o->addChild( m_options.df->tag() );
@@ -529,13 +586,13 @@ namespace gloox
     }
 
     const std::string& Manager::subscribe( const JID& service,
-                             const std::string& node,
-                             ResultHandler* handler,
-                             const JID& jid,
-                             SubscriptionObject type,
-                             int depth )
+                                           const std::string& node,
+                                           ResultHandler* handler,
+                                           const JID& jid,
+                                           SubscriptionObject type,
+                                           int depth )
     {
-      if( !m_parent || !handler )
+      if( !m_parent || !handler || !service || node.empty() )
         return EmptyString;
 
       const std::string& id = m_parent->getID();
@@ -545,22 +602,22 @@ namespace gloox
       ps->setNode( node );
       if( type != SubscriptionNodes || depth != 1 )
       {
-        DataForm df( TypeSubmit );
-        df.addField( DataFormField::TypeHidden, "FORM_TYPE", XMLNS_PUBSUB_SUBSCRIBE_OPTIONS );
+        DataForm* df = new DataForm( TypeSubmit );
+        df->addField( DataFormField::TypeHidden, "FORM_TYPE", XMLNS_PUBSUB_SUBSCRIBE_OPTIONS );
 
         if( type == SubscriptionItems )
-          df.addField( DataFormField::TypeNone, "pubsub#subscription_type", "items" );
+          df->addField( DataFormField::TypeNone, "pubsub#subscription_type", "items" );
 
         if( depth != 1 )
         {
-          DataFormField* field = df.addField( DataFormField::TypeNone, "pubsub#subscription_depth" );
+          DataFormField* field = df->addField( DataFormField::TypeNone, "pubsub#subscription_depth" );
           if( depth == 0 )
             field->setValue( "all" );
           else
            field->setValue( util::int2string( depth ) );
         }
         ps->setJID( jid );
-        ps->setOptions( node, &df );
+        ps->setOptions( node, df );
       }
       iq.addExtension( ps  );
 
@@ -588,7 +645,7 @@ namespace gloox
       iq.addExtension( ps );
 
       m_resultHandlerTrackMap[id] = handler;
-      // need to track info for handler
+      // FIXME? need to track info for handler
       m_parent->send( iq, this, Unsubscription );
       return id;
     }
@@ -781,6 +838,7 @@ namespace gloox
       const std::string& id = m_parent->getID();
       IQ iq( config ? IQ::Set : IQ::Get, service, id );
       PubSubOwner* pso = new PubSubOwner( config ? SetNodeConfig : GetNodeConfig );
+      pso->setNode( node );
       if( config )
         pso->setConfig( config );
       iq.addExtension( pso );
@@ -801,21 +859,10 @@ namespace gloox
       const std::string& id = m_parent->getID();
       IQ iq( subList ? IQ::Set : IQ::Get, service, id );
       PubSubOwner* pso = new PubSubOwner( subList ? SetSubscriberList : GetSubscriberList );
+      pso->setNode( node );
       pso->setSubscriberList( subList );
       iq.addExtension( pso );
-//       if( subList )
-//       {
-//         Tag* s;
-//         SubscriberList::const_iterator it = subList->begin();
-//         for( ; it != subList->end(); ++it )
-//         {
-//           s = new Tag( sub, "subscription", "jid", (*it).jid.full() );
-//           s->addAttribute( "subscription", util::lookup( (*it).type, subscriptionValues ) );
-//           if( !(*it).subid.empty() )
-//             s->addAttribute( "subid", (*it).subid );
-//         }
-//         m_nopTrackMap[id] = node;
-//       }
+      m_nopTrackMap[id] = node;
 
       m_resultHandlerTrackMap[id] = handler;
       m_parent->send( iq, this, subList ? SetSubscriberList : GetSubscriberList );
@@ -833,17 +880,9 @@ namespace gloox
       const std::string& id = m_parent->getID();
       IQ iq( affList ? IQ::Set : IQ::Get, service, id );
       PubSubOwner* pso = new PubSubOwner( affList ? SetAffiliateList : GetAffiliateList );
-//       if( affList )
-//       {
-//         Tag* a;
-//         AffiliateList::const_iterator it = affList->begin();
-//         for( ; it != affList->end(); ++it )
-//         {
-//           a = new Tag( aff, "affiliation", "jid", (*it).jid.full() );
-//           a->addAttribute( "affiliation", util::lookup( (*it).type, affiliationValues ) );
-//         }
-//         m_nopTrackMap[id] = node;
-//       }
+      pso->setNode( node );
+      pso->setAffiliateList( affList );
+      m_nopTrackMap[id] = node;
       iq.addExtension( pso );
 
       m_resultHandlerTrackMap[id] = handler;
