@@ -23,9 +23,9 @@ namespace gloox
     "received"
   };
 
-  static inline ReceiptType receiptType( const std::string& type )
+  static inline Receipt::ReceiptType receiptType( const std::string& type )
   {
-    return (ReceiptType)util::lookup2( type, receiptValues );
+    return (Receipt::ReceiptType)util::lookup( type, receiptValues );
   }
 
   Receipt::Receipt( const Tag* tag )
@@ -44,10 +44,10 @@ namespace gloox
 
   Tag* Receipt::tag() const
   {
-    if( m_rcpt == ReceiptInvalid )
+    if( m_rcpt == Invalid )
       return 0;
 
-    return new Tag( util::lookup2( m_rcpt, receiptValues ), XMLNS, XMLNS_RECEIPTS );
+    return new Tag( util::lookup( m_rcpt, receiptValues ), XMLNS, XMLNS_RECEIPTS );
   }
 
 }
