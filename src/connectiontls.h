@@ -100,7 +100,6 @@ namespace gloox
       virtual void handleHandshakeResult( const TLSBase* base, bool success, CertInfo& certinfo );
 
     private:
-      // Properties
       ConnectionBase* m_connection;
       TLSDefault* m_tls;
       const LogSink & m_log;
