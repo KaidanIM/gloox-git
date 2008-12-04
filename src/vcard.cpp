@@ -201,7 +201,7 @@ namespace gloox
         {
           if( (*ito)->name() == "ORGNAME" )
             m_org.name = (*ito)->cdata();
-          else if( (*ito)->name() == "ORGUNIT" )
+          else if( (*ito)->name() == "ORGUNITS" )
             m_org.units.push_back( (*ito)->cdata() );
         }
       }
