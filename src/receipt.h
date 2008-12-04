@@ -24,16 +24,6 @@ namespace gloox
   class Tag;
 
   /**
-   * Contains valid receipt types (XEP-0184).
-   */
-  enum ReceiptType
-  {
-    ReceiptRequest,                 /**< Requests a receipt. */
-    ReceiptReceived,                /**< The receipt. */
-    ReceiptInvalid                  /**< Invalid type. */
-  };
-
-  /**
    * @brief An implementation of Message Receipts (XEP-0184) as a StanzaExtension.
    *
    * @author Jakob Schroeter <js@camaya.net>
@@ -42,6 +32,15 @@ namespace gloox
   class GLOOX_API Receipt : public StanzaExtension
   {
     public:
+      /**
+       * Contains valid receipt types (XEP-0184).
+       */
+      enum ReceiptType
+      {
+        Request,                    /**< Requests a receipt. */
+        Received,                   /**< The receipt. */
+        Invalid                     /**< Invalid type. */
+      };
 
       /**
        * Constructs a new object from the given Tag.
