@@ -114,7 +114,7 @@ namespace gloox
       /**
        * Use this function to fetch the VCard of a remote entity or yourself.
        * The result will be announced by calling handleVCard() the VCardHandler.
-       * @param jid The entity's JID.
+       * @param jid The entity's JID. Should be a bare JID unless you want to fetch the VCard of, e.g., a MUC item.
        * @param vch The VCardHandler that will receive the result of the VCard fetch.
        */
       void fetchVCard( const JID& jid, VCardHandler* vch );

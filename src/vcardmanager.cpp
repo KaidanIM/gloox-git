@@ -52,7 +52,7 @@ namespace gloox
       return;
 
     const std::string& id = m_parent->getID();
-    IQ iq ( IQ::Get, jid.bareJID(), id );
+    IQ iq ( IQ::Get, jid, id );
     iq.addExtension( new VCard() );
 
     m_trackMap[id] = vch;
