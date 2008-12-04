@@ -201,7 +201,7 @@ namespace gloox
         {
           if( (*ito)->name() == "ORGNAME" )
             m_org.name = (*ito)->cdata();
-          else if( (*ito)->name() == "ORGUNITS" )
+          else if( (*ito)->name() == "ORGUNIT" )
             m_org.units.push_back( (*ito)->cdata() );
         }
       }
@@ -514,7 +514,7 @@ namespace gloox
       new Tag( o, "ORGNAME", m_org.name );
       StringList::const_iterator ito = m_org.units.begin();
       for( ; ito != m_org.units.end(); ++ito )
-        new Tag( o, "ORGUNITS", (*ito) );
+        new Tag( o, "ORGUNIT", (*ito) );
     }
 
     if( m_class != ClassNone )
