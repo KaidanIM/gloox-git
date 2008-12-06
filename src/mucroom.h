@@ -105,6 +105,73 @@ namespace gloox
       };
 
       /**
+       *
+       */
+      enum MUCUserOperation
+      {
+        OpNone,                 /**< */
+        OpInviteTo,             /**< */
+        OpInviteFrom,           /**< */
+        OpDeclineTo,            /**< */
+        OpDeclineFrom           /**< */
+      };
+
+      /**
+       * @brief An abstraction of a MUC user query.
+       *
+       * @author Jakob Schroeter <js@camaya.net>
+       * @since 1.0
+       */
+      class MUC : public StanzaExtension
+      {
+        public:
+          /**
+           *
+           */
+          MUC( const std::string& password, HistoryRequestType historyType = HistoryUnknown,
+               const std::string& historySince = EmptyString, int historyValue = 0 );
+
+          /**
+           * Constructs a new MUCUser object from the given Tag.
+           * @param tag The Tag to parse.
+           */
+          MUC( const Tag* tag = 0 );
+
+          /**
+           * Virtual destructor.
+           */
+          virtual ~MUC();
+
+          /**
+           *
+           */
+          const std::string* password() const { return m_password; }
+
+          /**
+           *
+           */
+          const std::string* historySince() const { return m_historySince; }
+
+          // reimplemented from StanzaExtension
+          const std::string& filterString() const;
+
+          // reimplemented from StanzaExtension
+          StanzaExtension* newInstance( const Tag* tag ) const
+          {
+            return new MUC( tag );
+          }
+
+          // reimplemented from StanzaExtension
+          Tag* tag() const;
+
+        private:
+          std::string* m_password;
+          std::string* m_historySince;
+          HistoryRequestType m_historyType;
+          int m_historyValue;
+      };
+
+      /**
        * @brief An abstraction of a MUC user query.
        *
        * @author Jakob Schroeter <js@camaya.net>
@@ -113,25 +180,6 @@ namespace gloox
       class MUCUser : public StanzaExtension
       {
         public:
-
-          /**
-           *
-           */
-          enum MUCUserOperation
-          {
-            OpNone,                 /**< */
-            OpInviteTo,             /**< */
-            OpInviteFrom,           /**< */
-            OpDeclineTo,            /**< */
-            OpDeclineFrom           /**< */
-          };
-
-          /**
-           *
-           */
-          MUCUser( const std::string& password, HistoryRequestType historyType = HistoryUnknown,
-                   const std::string& historySince = EmptyString, int historyValue = 0 );
-
           /**
            *
            */
@@ -187,6 +235,11 @@ namespace gloox
           /**
            *
            */
+          const std::string* password() const { return m_password; }
+
+          /**
+           *
+           */
           const std::string* thread() const { return m_thread; }
 
           /**
@@ -202,17 +255,7 @@ namespace gloox
           /**
            *
            */
-          const std::string* password() const { return m_password; }
-
-          /**
-           *
-           */
           const std::string* alternate() const { return m_alternate; }
-
-          /**
-           *
-           */
-          const std::string* historySince() const { return m_historySince; }
 
           /**
            *
@@ -246,10 +289,7 @@ namespace gloox
           std::string* m_newNick;
           std::string* m_password;
           std::string* m_alternate;
-          std::string* m_historySince;
           MUCUserOperation m_operation;
-          HistoryRequestType m_historyType;
-          int m_historyValue;
           int m_flags;
           bool m_del;
           bool m_continue;

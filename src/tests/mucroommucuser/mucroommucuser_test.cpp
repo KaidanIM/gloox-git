@@ -75,97 +75,8 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   {
-    name = "joining a room";
-    MUCRoom::MUCUser mu;
-    t = mu.tag();
-    if( !t || t->xml() != "<x xmlns='" + XMLNS_MUC_USER + "'/>" )
-    {
-      ++fail;
-      printf( "test '%s' failed:%s \n", name.c_str(), t->xml().c_str() );
-    }
-    delete t;
-  }
-
-  // -------
-  {
-    name = "joining a password-protected room";
-    MUCRoom::MUCUser mu( "foopwd" );
-    t = mu.tag();
-    if( !t || t->xml() != "<x xmlns='" + XMLNS_MUC_USER + "'>"
-                          "<password>foopwd</password>"
-                          "</x>" )
-    {
-      ++fail;
-      printf( "test '%s' failed:%s \n", name.c_str(), t->xml().c_str() );
-    }
-    delete t;
-  }
-
-  // -------
-  {
-    name = "joining room, requesting room history 1";
-    MUCRoom::MUCUser mu( EmptyString, MUCRoom::HistorySince, "foodate" );
-    t = mu.tag();
-    if( !t || t->xml() != "<x xmlns='" + XMLNS_MUC_USER + "'>"
-         "<history since='foodate'/>"
-         "</x>" )
-    {
-      ++fail;
-      printf( "test '%s' failed:%s \n", name.c_str(), t->xml().c_str() );
-    }
-    delete t;
-  }
-
-  // -------
-  {
-    name = "joining room, requesting room history 2";
-    MUCRoom::MUCUser mu( EmptyString, MUCRoom::HistoryMaxChars, EmptyString, 100 );
-    t = mu.tag();
-    if( !t || t->xml() != "<x xmlns='" + XMLNS_MUC_USER + "'>"
-         "<history maxchars='100'/>"
-         "</x>" )
-    {
-      ++fail;
-      printf( "test '%s' failed:%s \n", name.c_str(), t->xml().c_str() );
-    }
-    delete t;
-  }
-
-  // -------
-  {
-    name = "joining room, requesting room history 3";
-    MUCRoom::MUCUser mu( EmptyString, MUCRoom::HistoryMaxStanzas, EmptyString, 100 );
-    t = mu.tag();
-    if( !t || t->xml() != "<x xmlns='" + XMLNS_MUC_USER + "'>"
-         "<history maxstanzas='100'/>"
-         "</x>" )
-    {
-      ++fail;
-      printf( "test '%s' failed:%s \n", name.c_str(), t->xml().c_str() );
-    }
-    delete t;
-  }
-
-  // -------
-  {
-    name = "joining room, requesting room history 4 + password";
-    MUCRoom::MUCUser mu( "foopwd", MUCRoom::HistorySeconds, EmptyString, 100 );
-    t = mu.tag();
-    if( !t || t->xml() != "<x xmlns='" + XMLNS_MUC_USER + "'>"
-         "<history seconds='100'/>"
-         "<password>foopwd</password>"
-         "</x>" )
-    {
-      ++fail;
-      printf( "test '%s' failed:%s \n", name.c_str(), t->xml().c_str() );
-    }
-    delete t;
-  }
-
-  // -------
-  {
     name = "inviting someone";
-    MUCRoom::MUCUser mu( MUCRoom::MUCUser::OpInviteTo, "foo@bar", "why not?", "somethread" );
+    MUCRoom::MUCUser mu( MUCRoom::OpInviteTo, "foo@bar", "why not?", "somethread" );
     t = mu.tag();
     if( !t || t->xml() != "<x xmlns='" + XMLNS_MUC_USER + "'>"
          "<invite to='foo@bar'>"
@@ -183,7 +94,7 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   {
     name = "being invited";
-    MUCRoom::MUCUser mu( MUCRoom::MUCUser::OpInviteFrom, "foo@bar", "why not?", "somethread" );
+    MUCRoom::MUCUser mu( MUCRoom::OpInviteFrom, "foo@bar", "why not?", "somethread" );
     t = mu.tag();
     if( !t || t->xml() != "<x xmlns='" + XMLNS_MUC_USER + "'>"
          "<invite from='foo@bar'>"
@@ -228,7 +139,7 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   {
     name = "decline invitation";
-    MUCRoom::MUCUser mu( MUCRoom::MUCUser::OpDeclineTo, "bar@foo", "because." );
+    MUCRoom::MUCUser mu( MUCRoom::OpDeclineTo, "bar@foo", "because." );
     t = mu.tag();
     if( !t || t->xml() != "<x xmlns='" + XMLNS_MUC_USER + "'>"
          "<decline to='bar@foo'>"
@@ -245,7 +156,7 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   {
     name = "decline invitation";
-    MUCRoom::MUCUser mu( MUCRoom::MUCUser::OpDeclineFrom, "bar@foo", "because." );
+    MUCRoom::MUCUser mu( MUCRoom::OpDeclineFrom, "bar@foo", "because." );
     t = mu.tag();
     if( !t || t->xml() != "<x xmlns='" + XMLNS_MUC_USER + "'>"
          "<decline from='bar@foo'>"

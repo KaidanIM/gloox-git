@@ -350,6 +350,7 @@ src/tests/lastactivity/Makefile
 src/tests/md5/Makefile
 src/tests/message/Makefile
 src/tests/messageeventfilter/Makefile
+src/tests/mucroommuc/Makefile
 src/tests/mucroommucadmin/Makefile
 src/tests/mucroommucowner/Makefile
 src/tests/mucroommucuser/Makefile

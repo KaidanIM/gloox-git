@@ -284,33 +284,22 @@ namespace gloox
   // ---- ~MUCRoom::MUCOwner ----
 
   // ---- MUCRoom::MUCUser ----
-  MUCRoom::MUCUser::MUCUser( const std::string& password, MUCRoom::HistoryRequestType historyType,
-                             const std::string& historySince, int historyValue )
-    : StanzaExtension( ExtMUCUser ), m_affiliation( AffiliationInvalid ), m_role( RoleInvalid ),
-      m_jid( 0 ), m_actor( 0 ), m_thread( 0 ), m_reason( 0 ), m_newNick( 0 ),
-      m_password( password.empty() ? 0 : new std::string( password ) ), m_alternate( 0 ),
-      m_historySince( new std::string( historySince ) ), m_operation( OpNone ),
-      m_historyType( historyType ), m_historyValue( historyValue ),
-      m_flags( 0 ), m_del( false )
-  {
-  }
-
   MUCRoom::MUCUser::MUCUser( MUCUserOperation operation, const std::string& to,
                              const std::string& reason, const std::string& thread )
     : StanzaExtension( ExtMUCUser ), m_affiliation( AffiliationInvalid ), m_role( RoleInvalid ),
       m_jid( new std::string( to ) ), m_actor( 0 ),
       m_thread( thread.empty() ? 0 : new std::string( thread ) ),
       m_reason( new std::string( reason ) ), m_newNick( 0 ), m_password( 0 ), m_alternate( 0 ),
-      m_historySince( 0 ), m_operation( operation ), m_historyType( HistoryUnknown ),
-      m_historyValue( 0 ), m_flags( 0 ), m_del( false ), m_continue( !thread.empty() )
+      m_operation( operation ),
+      m_flags( 0 ), m_del( false ), m_continue( !thread.empty() )
   {
   }
 
   MUCRoom::MUCUser::MUCUser( const Tag* tag )
     : StanzaExtension( ExtMUCUser ), m_affiliation( AffiliationInvalid ), m_role( RoleInvalid ),
       m_jid( 0 ), m_actor( 0 ), m_thread( 0 ), m_reason( 0 ), m_newNick( 0 ),
-      m_password( 0 ), m_alternate( 0 ), m_historySince( 0 ), m_operation( OpNone ),
-      m_historyType( HistoryUnknown ), m_historyValue( 0 ), m_flags( 0 ), m_del( false ), m_continue( false )
+      m_password( 0 ), m_alternate( 0 ), m_operation( OpNone ),
+      m_flags( 0 ), m_del( false ), m_continue( false )
   {
     if( !tag || tag->name() != "x" || tag->xmlns() != XMLNS_MUC_USER )
       return;
@@ -421,7 +410,6 @@ namespace gloox
     delete m_newNick;
     delete m_password;
     delete m_alternate;
-    delete m_historySince;
   }
 
   MUCRoomRole MUCRoom::MUCUser::getEnumRole( const std::string& role )
@@ -506,15 +494,6 @@ namespace gloox
       if( m_reason )
         new Tag( d, "reason", *m_reason );
     }
-    else if( m_historyType != HistoryUnknown )
-    {
-      const std::string& histStr = util::lookup( m_historyType, historyTypeValues );
-      Tag* h = new Tag( t, "history" );
-      if( m_historyType == HistorySince && m_historySince )
-        h->addAttribute( histStr, *m_historySince );
-      else
-        h->addAttribute( histStr, m_historyValue );
-    }
     else if( m_operation != OpNone && m_jid )
     {
       Tag* d = 0;
@@ -529,20 +508,98 @@ namespace gloox
 
       if( m_reason )
         new Tag( d, "reason", *m_reason );
+
       if( m_continue )
       {
         Tag* c = new Tag( d, "continue" );
         if( m_thread )
           c->addAttribute( "thread", *m_thread );
       }
-    }
 
-    if( m_password )
-      new Tag( t, "password",  *m_password );
+      if( m_password )
+        new Tag( t, "password", *m_password );
+
+    }
 
     return t;
   }
   // ---- ~MUCRoom::MUCUser ----
+
+  // ---- MUCRoom::MUC ----
+  MUCRoom::MUC::MUC( const std::string& password,
+                             MUCRoom::HistoryRequestType historyType,
+                             const std::string& historySince,
+                             int historyValue )
+    : StanzaExtension( ExtMUC ),
+      m_password( password.empty() ? 0 : new std::string( password ) ),
+      m_historySince( new std::string( historySince ) ),
+      m_historyType( historyType ), m_historyValue( historyValue )
+  {
+  }
+
+  MUCRoom::MUC::MUC( const Tag* tag )
+    : StanzaExtension( ExtMUC ),
+      m_password( 0 ), m_historySince( 0 ),
+      m_historyType( HistoryUnknown ), m_historyValue( 0 )
+  {
+    if( !tag || tag->name() != "x" || tag->xmlns() != XMLNS_MUC_USER )
+      return;
+
+    const TagList& l = tag->children();
+    TagList::const_iterator it = l.begin();
+    for( ; it != l.end(); ++it )
+    {
+      if( (*it)->name() == "history" )
+      {
+        if( (*it)->hasAttribute( "seconds" ) )
+          m_historyValue = atoi( (*it)->findAttribute( "seconds" ).c_str() );
+        else if( (*it)->hasAttribute( "maxstanzas" ) )
+          m_historyValue = atoi( (*it)->findAttribute( "maxstanzas" ).c_str() );
+        else if( (*it)->hasAttribute( "maxchars" ) )
+          m_historyValue = atoi( (*it)->findAttribute( "maxchars" ).c_str() );
+        else if( (*it)->hasAttribute( "since" ) )
+          m_historySince = new std::string( (*it)->findAttribute( "since" ) );
+      }
+      else if( (*it)->name() == "password" )
+      {
+        m_password = new std::string( (*it)->cdata() );
+      }
+    }
+  }
+
+  MUCRoom::MUC::~MUC()
+  {
+    delete m_password;
+    delete m_historySince;
+  }
+
+  const std::string& MUCRoom::MUC::filterString() const
+  {
+    static const std::string filter = "/presence/x[@xmlns='" + XMLNS_MUC + "']";
+    return filter;
+  }
+
+  Tag* MUCRoom::MUC::tag() const
+  {
+    Tag* t = new Tag( "x" );
+    t->setXmlns( XMLNS_MUC );
+
+    if( m_historyType != HistoryUnknown )
+    {
+      const std::string& histStr = util::lookup( m_historyType, historyTypeValues );
+      Tag* h = new Tag( t, "history" );
+      if( m_historyType == HistorySince && m_historySince )
+        h->addAttribute( histStr, *m_historySince );
+      else
+        h->addAttribute( histStr, m_historyValue );
+    }
+
+    if( m_password )
+      new Tag( t, "password", *m_password );
+
+    return t;
+  }
+  // ---- ~MUCRoom::MUC ----
 
   // --- MUCRoom ----
   MUCRoom::MUCRoom( ClientBase* parent, const JID& nick, MUCRoomHandler* mrh,
@@ -558,6 +615,7 @@ namespace gloox
       m_parent->registerStanzaExtension( new MUCAdmin() );
       m_parent->registerStanzaExtension( new MUCOwner() );
       m_parent->registerStanzaExtension( new MUCUser() );
+      m_parent->registerStanzaExtension( new MUC() );
       m_parent->registerStanzaExtension( new DelayedDelivery() );
     }
   }
@@ -591,7 +649,7 @@ namespace gloox
     m_session->registerMessageHandler( this );
 
     Presence pres( Presence::Available, m_nick.full() );
-    pres.addExtension( new MUCUser( m_password, m_historyType, m_historySince, m_historyValue ) );
+    pres.addExtension( new MUC( m_password, m_historyType, m_historySince, m_historyValue ) );
     m_joined = true;
     m_parent->send( pres );
   }
@@ -676,14 +734,14 @@ namespace gloox
       return;
 
     Message msg( Message::Normal, m_nick.bareJID() );
-    msg.addExtension( new MUCUser( MUCUser::OpInviteTo, invitee.bare(), reason, thread ) );
+    msg.addExtension( new MUCUser( OpInviteTo, invitee.bare(), reason, thread ) );
     m_parent->send( msg );
   }
 
   Message* MUCRoom::declineInvitation( const JID& room, const JID& invitor, const std::string& reason )
   {
     Message* msg = new Message( Message::Normal, room.bare() );
-    msg->addExtension( new MUCUser( MUCUser::OpDeclineTo, invitor.bare(), reason ) );
+    msg->addExtension( new MUCUser( OpDeclineTo, invitor.bare(), reason ) );
     return msg;
   }
 
@@ -895,7 +953,6 @@ namespace gloox
       if( party.flags & UserNickChanged && party.flags & UserSelf && !party.newNick.empty() )
         m_nick.setResource( party.newNick );
 
-
       if( m_roomHandler )
         m_roomHandler->handleMUCParticipantPresence( this, party, presence.presence() );
 
@@ -981,7 +1038,7 @@ namespace gloox
         if( flags & FlagFullyAnonymous )
           setFullyAnonymous();
 
-        if( mu->operation() == MUCUser::OpDeclineFrom && mu->jid() )
+        if( mu->operation() == OpDeclineFrom && mu->jid() )
           m_roomHandler->handleMUCInviteDecline( this, JID( *(mu->jid()) ),
                                                  mu->reason() ? *(mu->reason()) : EmptyString );
       }

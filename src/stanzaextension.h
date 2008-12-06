@@ -65,6 +65,7 @@ namespace gloox
                                      * (XEP-0020). */
     ExtIBB,                         /**< An extension dealing with IBBs (XEP-0047). */
     ExtNonSaslAuth,                 /**< An extension for doing Non-SASL Authentication (XEP-0078). */
+    ExtMUC,                         /**< An extension dealing with the muc namespace of XEP-0045. */
     ExtMUCOwner,                    /**< An extension dealing with the muc#owner namespace of XEP-0045. */
     ExtMUCAdmin,                    /**< An extension dealing with the muc#admin namespace of XEP-0045. */
     ExtMUCUser,                     /**< An extension dealing with the muc#user namespace of XEP-0045. */
