@@ -222,11 +222,73 @@ namespace gloox
         m_node = p->findAttribute( "node" );
         return;
       }
+      const Tag* c = tag->findTag( "pubsub/configure" );
+      if( c )
+      {
+        m_ctx = SetNodeConfig;
+        m_node = c->findAttribute( "node" );
+        if( c->hasChild( "x", "xmlns", XMLNS_X_DATA ) )
+        {
+          m_ctx = GetNodeConfig;
+          m_form = new DataForm( c->findChild( "x", "xmlns", XMLNS_X_DATA ) );
+        }
+        return;
+      }
+      const Tag* de = tag->findTag( "pubsub/default" );
+      if( de )
+      {
+        m_ctx = DefaultNodeConfig;
+        return;
+      }
+      const Tag* s = tag->findTag( "pubsub/subscriptions" );
+      if( s )
+      {
+        m_ctx = GetSubscriberList;
+        m_node = s->findAttribute( "node" );
+        const TagList& l = s->children();
+        TagList::const_iterator it =l.begin();
+        for( ; it != l.end(); ++it )
+        {
+          if( (*it)->name() == "subscription" )
+          {
+            if( !m_subList )
+              m_subList = new SubscriberList();
+
+            Subscriber sub( JID( (*it)->findAttribute( "jid" ) ),
+                            subscriptionType( (*it)->findAttribute( "subscription" ) ),
+                            (*it)->findAttribute( "subid" ) );
+            m_subList->push_back( sub );
+          }
+        }
+        return;
+      }
+      const Tag* a = tag->findTag( "pubsub/affiliations" );
+      if( a )
+      {
+        m_ctx = GetAffiliateList;
+        m_node = a->findAttribute( "node" );
+        const TagList& l = a->children();
+        TagList::const_iterator it =l.begin();
+        for( ; it != l.end(); ++it )
+        {
+          if( (*it)->name() == "affiliation" )
+          {
+            if( !m_affList )
+              m_affList = new AffiliateList();
+
+            Affiliate aff( JID( (*it)->findAttribute( "jid" ) ),
+                            affiliationType( (*it)->findAttribute( "affiliation" ) ) );
+            m_affList->push_back( aff );
+          }
+        }
+        return;
+      }
     }
 
     Manager::PubSubOwner::~PubSubOwner()
     {
       delete m_form;
+      delete m_subList;
     }
 
     const std::string& Manager::PubSubOwner::filterString() const
