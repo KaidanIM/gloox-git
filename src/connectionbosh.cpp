@@ -81,33 +81,8 @@ namespace gloox
 
   ConnectionBOSH::~ConnectionBOSH()
   {
-//     util::clearList( m_activeConnections );
-    // FIXME
-    {
-      ConnectionList::iterator it = m_activeConnections.begin();
-      ConnectionList::iterator it2;
-      while( it != m_activeConnections.end() )
-      {
-        it2 = it++;
-        delete (*it2);
-        m_activeConnections.erase( it2 );
-      }
-    }
-    // ~
-
-//     util::clearList( m_connectionPool );
-    // FIXME
-    {
-      ConnectionList::iterator it = m_connectionPool.begin();
-      ConnectionList::iterator it2;
-      while( it != m_connectionPool.end() )
-      {
-        it2 = it++;
-        delete (*it2);
-        m_connectionPool.erase( it2 );
-      }
-    }
-    // ~
+    util::clearList( m_activeConnections );
+    util::clearList( m_connectionPool );
   }
 
   ConnectionBase* ConnectionBOSH::newInstance() const

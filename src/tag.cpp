@@ -234,61 +234,13 @@ namespace gloox
   Tag::~Tag()
   {
     if( m_cdata )
-    {
-//       util::clearList( *m_cdata );
-      // FIXME
-      StringPList::iterator it = m_cdata->begin();
-      StringPList::iterator it2;
-      while( it != m_cdata->end() )
-      {
-        it2 = it++;
-        delete (*it2);
-        m_cdata->erase( it2 );
-      }
-      // ~
-    }
+      util::clearList( *m_cdata );
     if( m_attribs )
-    {
-//       util::clearList( *m_attribs );
-      // FIXME
-      AttributeList::iterator it = m_attribs->begin();
-      AttributeList::iterator it2;
-      while( it != m_attribs->end() )
-      {
-        it2 = it++;
-        delete (*it2);
-        m_attribs->erase( it2 );
-      }
-      // ~
-    }
+      util::clearList( *m_attribs );
     if( m_children )
-    {
-//       util::clearList( *m_children );
-      // FIXME
-      TagList::iterator it = m_children->begin();
-      TagList::iterator it2;
-      while( it != m_children->end() )
-      {
-        it2 = it++;
-        delete (*it2);
-        m_children->erase( it2 );
-      }
-      // ~
-    }
+      util::clearList( *m_children );
     if( m_nodes )
-    {
-//       util::clearList( *m_nodes );
-      // FIXME
-      NodeList::iterator it = m_nodes->begin();
-      NodeList::iterator it2;
-      while( it != m_nodes->end() )
-      {
-        it2 = it++;
-        delete (*it2);
-        m_nodes->erase( it2 );
-      }
-      // ~
-    }
+      util::clearList( *m_nodes );
 
     delete m_cdata;
     delete m_attribs;
@@ -476,18 +428,7 @@ namespace gloox
       m_attribs = new AttributeList( attributes );
     else
     {
-//       util::clearList( *m_attribs );
-      // FIXME
-      AttributeList::iterator it = m_attribs->begin();
-      AttributeList::iterator it2;
-      while( it != m_attribs->end() )
-      {
-        it2 = it++;
-        delete (*it2);
-        m_attribs->erase( it2 );
-      }
-      // ~
-
+      util::clearList( *m_attribs );
       *m_attribs = attributes;
     }
 
@@ -527,19 +468,7 @@ namespace gloox
     if( !m_cdata )
       m_cdata = new StringPList();
     else
-    {
-//       util::clearList( *m_cdata );
-      // FIXME
-      StringPList::iterator it = m_cdata->begin();
-      StringPList::iterator it2;
-      while( it != m_cdata->end() )
-      {
-        it2 = it++;
-        delete (*it2);
-        m_cdata->erase( it2 );
-      }
-      // ~
-    }
+      util::clearList( *m_cdata );
 
     if( !m_nodes )
       m_nodes = new NodeList();

@@ -61,19 +61,7 @@ namespace gloox
       (*it2).first->recv( timeout );
     }
 
-//     util::clearList( m_oldConnections );
-    // FIXME
-    {
-      ConnectionList::iterator it = m_oldConnections.begin();
-      ConnectionList::iterator it2;
-      while( it != m_oldConnections.end() )
-      {
-        it2 = it++;
-        delete (*it2);
-        m_oldConnections.erase( it2 );
-      }
-    }
-    // ~
+    util::clearList( m_oldConnections );
     return ConnNoError;
   }
 
