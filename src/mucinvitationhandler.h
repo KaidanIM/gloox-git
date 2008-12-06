@@ -15,6 +15,7 @@
 #ifndef MUCINVITATIONHANDLER_H__
 #define MUCINVITATIONHANDLER_H__
 
+#include "clientbase.h"
 #include "macros.h"
 #include "jid.h"
 #include "mucroom.h"
@@ -23,8 +24,6 @@
 
 namespace gloox
 {
-
-  class ClientBase;
 
   /**
    * @brief A handler that can be used to receive invitations to MUC rooms.
@@ -50,7 +49,7 @@ namespace gloox
 
       /**
        * This function is called for incoming invitations to MUC rooms.
-       * @param room The JID of the room you being invited to.
+       * @param room The JID of the room you're being invited to.
        * @param from The JID of the inviter.
        * @param reason A reason for the invitation.
        * @param body The body of the message. May contain a MUC-service generated invitation message.
