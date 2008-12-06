@@ -289,6 +289,7 @@ namespace gloox
     {
       delete m_form;
       delete m_subList;
+      delete m_affList;
     }
 
     const std::string& Manager::PubSubOwner::filterString() const
