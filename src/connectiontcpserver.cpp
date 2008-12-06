@@ -73,7 +73,7 @@ namespace gloox
 
   ConnectionError ConnectionTCPServer::connect()
   {
-    MutexGuard mg( &m_sendMutex );
+    util::MutexGuard mg( &m_sendMutex );
 
     if( m_socket >= 0 || m_state > StateDisconnected )
       return ConnNoError;

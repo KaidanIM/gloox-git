@@ -19,45 +19,50 @@
 namespace gloox
 {
 
-  /**
-   * @brief A simple implementation of mutex as a wrapper around a pthread mutex
-   * or a win32 critical section.
-   *
-   * If you locked a mutex you MUST unlock it within the same thread.
-   *
-   * @author Jakob Schroeter <js@camaya.net>
-   * @since 0.9
-   */
-  class GLOOX_API Mutex
+  namespace util
   {
-    public:
-      /**
-       * Contructs a new simple mutex.
-       */
-      Mutex();
+    /**
+     * @brief A simple implementation of mutex as a wrapper around a pthread mutex
+     * or a win32 critical section.
+     *
+     * If you locked a mutex you MUST unlock it within the same thread.
+     *
+     * @author Jakob Schroeter <js@camaya.net>
+     * @since 0.9
+     */
+    class GLOOX_API Mutex
+    {
+      public:
+        /**
+         * Contructs a new simple mutex.
+         */
+        Mutex();
 
-      /**
-       * Destructor
-       */
-      ~Mutex();
+        /**
+         * Destructor
+         */
+        ~Mutex();
 
-      /**
-       * Locks the mutex.
-       */
-      void lock();
+        /**
+         * Locks the mutex.
+         */
+        void lock();
 
-      /**
-       * Releases the mutex.
-       */
-      void unlock();
+        /**
+         * Releases the mutex.
+         */
+        void unlock();
 
-    private:
-      class MutexImpl;
+      private:
+        class MutexImpl;
 
-      Mutex& operator=( const Mutex& );
-      MutexImpl* m_mutex;
+        Mutex& operator=( const Mutex& );
+        MutexImpl* m_mutex;
 
-  };
+    };
+
+  }
+
 }
 
 #endif // MUTEX_H__

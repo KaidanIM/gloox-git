@@ -76,7 +76,7 @@ namespace gloox
 
   ConnectionBase* SOCKS5BytestreamServer::getConnection( const std::string& hash )
   {
-    MutexGuard mg( m_mutex );
+    util::MutexGuard mg( m_mutex );
 
     ConnectionMap::iterator it = m_connections.begin();
     for( ; it != m_connections.end(); ++it )
@@ -95,13 +95,13 @@ namespace gloox
 
   void SOCKS5BytestreamServer::registerHash( const std::string& hash )
   {
-    MutexGuard mg( m_mutex );
+    util::MutexGuard mg( m_mutex );
     m_hashes.push_back( hash );
   }
 
   void SOCKS5BytestreamServer::removeHash( const std::string& hash )
   {
-    MutexGuard mg( m_mutex );
+    util::MutexGuard mg( m_mutex );
     m_hashes.remove( hash );
   }
 

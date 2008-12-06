@@ -66,7 +66,7 @@ namespace gloox
       z_stream m_zinflate;
       z_stream m_zdeflate;
 
-      Mutex m_compressMutex;
+      util::Mutex m_compressMutex;
 
   };
 

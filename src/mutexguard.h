@@ -19,36 +19,42 @@
 namespace gloox
 {
 
-  /**
-   * @brief A simple implementation of a mutex guard.
-   *
-   * @author Jakob Schroeter <js@camaya.net>
-   * @since 0.9
-   */
-  class GLOOX_API MutexGuard
+  namespace util
   {
-    public:
-      /**
-       * Contructs a new simple mutex guard and locks the supplied Mutex.
-       * @param mutex The Mutex to guard.
-       */
-      MutexGuard( Mutex* mutex ) : m_mutex( *mutex ) { if( mutex ) m_mutex.lock(); }
 
-      /**
-       * Contructs a new simple mutex guard and locks the supplied Mutex.
-       * @param mutex The Mutex to guard.
-       */
-      MutexGuard( Mutex& mutex ) : m_mutex( mutex ) { m_mutex.lock(); }
+    /**
+     * @brief A simple implementation of a mutex guard.
+     *
+     * @author Jakob Schroeter <js@camaya.net>
+     * @since 0.9
+     */
+    class GLOOX_API MutexGuard
+    {
+      public:
+        /**
+         * Contructs a new simple mutex guard and locks the supplied Mutex.
+         * @param mutex The Mutex to guard.
+         */
+        MutexGuard( Mutex* mutex ) : m_mutex( *mutex ) { if( mutex ) m_mutex.lock(); }
 
-      /**
-       * Destructor. Releases the guarded Mutex.
-       */
-      ~MutexGuard() { m_mutex.unlock(); }
+        /**
+         * Contructs a new simple mutex guard and locks the supplied Mutex.
+         * @param mutex The Mutex to guard.
+         */
+        MutexGuard( Mutex& mutex ) : m_mutex( mutex ) { m_mutex.lock(); }
 
-    private:
-      Mutex& m_mutex;
+        /**
+         * Destructor. Releases the guarded Mutex.
+         */
+        ~MutexGuard() { m_mutex.unlock(); }
+
+      private:
+        Mutex& m_mutex;
 
   };
+
+  }
+
 }
 
 #endif // MUTEXGUARD_H__
