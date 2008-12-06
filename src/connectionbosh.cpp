@@ -512,12 +512,12 @@ namespace gloox
     if( m_streamRestart )
     {
       m_logInstance.dbg( LogAreaClassConnectionBOSH, "sending spoofed <stream:stream>" );
+      m_streamRestart = false;
       m_handler->handleReceivedData( this, "<?xml version='1.0' ?>"
           "<stream:stream xmlns:stream='http://etherx.jabber.org/streams'"
           " xmlns='" + XMLNS_CLIENT + "' version='" + XMPP_STREAM_VERSION_MAJOR
           + "." + XMPP_STREAM_VERSION_MINOR + "' from='" + m_server + "' id ='"
           + m_sid + "' xml:lang='en'>" );
-      m_streamRestart = false;
     }
 
     if( tag->hasAttribute( "sid" ) )
