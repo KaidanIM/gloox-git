@@ -118,7 +118,7 @@ namespace gloox
 
       ConnectionTCPServer* m_tcpServer;
 
-      Mutex m_mutex;
+      util::Mutex m_mutex;
       const LogSink& m_logInstance;
       std::string m_ip;
       int m_port;

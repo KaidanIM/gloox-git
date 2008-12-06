@@ -80,7 +80,7 @@ namespace gloox
 
   void ConnectionTCPBase::disconnect()
   {
-    MutexGuard rm( m_recvMutex );
+    util::MutexGuard rm( m_recvMutex );
     m_cancel = true;
   }
 
@@ -157,8 +157,8 @@ namespace gloox
       m_socket = -1;
     }
 
-    MutexGuard sm( m_sendMutex );
-    MutexGuard rm( m_recvMutex );
+    util::MutexGuard sm( m_sendMutex );
+    util::MutexGuard rm( m_recvMutex );
     m_state = StateDisconnected;
     m_cancel = true;
     m_totalBytesIn = 0;

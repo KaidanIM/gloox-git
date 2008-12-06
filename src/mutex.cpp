@@ -32,79 +32,84 @@
 namespace gloox
 {
 
-  class Mutex::MutexImpl
+  namespace util
   {
-    public:
-      MutexImpl();
-      ~MutexImpl();
-      void lock();
-      void unlock();
-    private:
-      MutexImpl( const MutexImpl& );
-      MutexImpl& operator=( const MutexImpl& );
 
-#ifdef _WIN32
-      CRITICAL_SECTION m_cs;
-#elif defined( HAVE_PTHREAD )
-      pthread_mutex_t m_mutex;
-#endif
+    class Mutex::MutexImpl
+    {
+      public:
+        MutexImpl();
+        ~MutexImpl();
+        void lock();
+        void unlock();
+      private:
+        MutexImpl( const MutexImpl& );
+        MutexImpl& operator=( const MutexImpl& );
 
-  };
+  #ifdef _WIN32
+        CRITICAL_SECTION m_cs;
+  #elif defined( HAVE_PTHREAD )
+        pthread_mutex_t m_mutex;
+  #endif
 
-  Mutex::MutexImpl::MutexImpl()
-  {
-#ifdef _WIN32
-    InitializeCriticalSection( &m_cs );
-#elif defined( HAVE_PTHREAD )
-    pthread_mutex_init( &m_mutex, 0 );
-#endif
-  }
+    };
 
-  Mutex::MutexImpl::~MutexImpl()
-  {
-#ifdef _WIN32
-    DeleteCriticalSection( &m_cs );
-#elif defined( HAVE_PTHREAD )
-    pthread_mutex_destroy( &m_mutex );
-#endif
-  }
+    Mutex::MutexImpl::MutexImpl()
+    {
+  #ifdef _WIN32
+      InitializeCriticalSection( &m_cs );
+  #elif defined( HAVE_PTHREAD )
+      pthread_mutex_init( &m_mutex, 0 );
+  #endif
+    }
 
-  void Mutex::MutexImpl::lock()
-  {
-#ifdef _WIN32
-    EnterCriticalSection( &m_cs );
-#elif defined( HAVE_PTHREAD )
-    pthread_mutex_lock( &m_mutex );
-#endif
-  }
+    Mutex::MutexImpl::~MutexImpl()
+    {
+  #ifdef _WIN32
+      DeleteCriticalSection( &m_cs );
+  #elif defined( HAVE_PTHREAD )
+      pthread_mutex_destroy( &m_mutex );
+  #endif
+    }
 
-  void Mutex::MutexImpl::unlock()
-  {
-#ifdef _WIN32
-    LeaveCriticalSection( &m_cs );
-#elif defined( HAVE_PTHREAD )
-    pthread_mutex_unlock( &m_mutex );
-#endif
-  }
+    void Mutex::MutexImpl::lock()
+    {
+  #ifdef _WIN32
+      EnterCriticalSection( &m_cs );
+  #elif defined( HAVE_PTHREAD )
+      pthread_mutex_lock( &m_mutex );
+  #endif
+    }
 
-  Mutex::Mutex()
-    : m_mutex( new MutexImpl() )
-  {
-  }
+    void Mutex::MutexImpl::unlock()
+    {
+  #ifdef _WIN32
+      LeaveCriticalSection( &m_cs );
+  #elif defined( HAVE_PTHREAD )
+      pthread_mutex_unlock( &m_mutex );
+  #endif
+    }
 
-  Mutex::~Mutex()
-  {
-    delete m_mutex;
-  }
+    Mutex::Mutex()
+      : m_mutex( new MutexImpl() )
+    {
+    }
 
-  void Mutex::lock()
-  {
-    m_mutex->lock();
-  }
+    Mutex::~Mutex()
+    {
+      delete m_mutex;
+    }
 
-  void Mutex::unlock()
-  {
-    m_mutex->unlock();
+    void Mutex::lock()
+    {
+      m_mutex->lock();
+    }
+
+    void Mutex::unlock()
+    {
+      m_mutex->unlock();
+    }
+
   }
 
 }

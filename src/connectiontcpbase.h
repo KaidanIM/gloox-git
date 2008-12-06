@@ -24,7 +24,10 @@
 namespace gloox
 {
 
-  class Mutex;
+  namespace util
+  {
+    class Mutex;
+  }
 
   /**
    * @brief This is a base class for a simple TCP connection.
@@ -102,8 +105,8 @@ namespace gloox
       void cancel();
 
       const LogSink& m_logInstance;
-      Mutex m_sendMutex;
-      Mutex m_recvMutex;
+      util::Mutex m_sendMutex;
+      util::Mutex m_recvMutex;
 
       char* m_buf;
       int m_socket;

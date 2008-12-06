@@ -86,11 +86,11 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             jingledescription.h       jinglesessionhandler.h  jingleplugin.h \
                             jinglecontent.h           jinglevideortp.h        jingleaudiortp.h \
                             jingleiceudp.h            jinglerawudp.h \
-                            pubsubitem.h shim.h
+                            pubsubitem.h shim.h util.h
 
 noinst_HEADERS = prep.h dns.h nonsaslauth.h mucmessagesession.h stanzaextensionfactory.h tlsgnutlsclient.h \
                    tlsgnutlsbase.h tlsgnutlsclientanon.h tlsgnutlsserveranon.h tlsopenssl.h tlsschannel.h \
-                   compressionzlib.h rosteritemdata.h util.h
+                   compressionzlib.h rosteritemdata.h
 
 EXTRA_DIST = version.rc
 
