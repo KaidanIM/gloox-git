@@ -52,6 +52,9 @@ namespace gloox
 
   void Annotations::handlePrivateXML( const Tag* xml )
   {
+    if( !xml )
+      return;
+
     AnnotationsList aList;
     const TagList& l = xml->children();
     TagList::const_iterator it = l.begin();
