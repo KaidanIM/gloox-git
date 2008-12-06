@@ -62,6 +62,9 @@ namespace gloox
 
   void BookmarkStorage::handlePrivateXML( const Tag* xml )
   {
+    if( !xml )
+      return;
+
     BookmarkList bList;
     ConferenceList cList;
     const TagList& l = xml->children();
