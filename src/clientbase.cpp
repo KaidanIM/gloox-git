@@ -1338,7 +1338,7 @@ namespace gloox
     if( m_mucInvitationHandler )
     {
       const MUCRoom::MUCUser* mu = msg.findExtension<MUCRoom::MUCUser>( ExtMUCUser );
-      if( mu && mu->operation() != MUCRoom::MUCUser::OpInviteTo )
+      if( mu && mu->operation() != MUCRoom::OpInviteTo )
       {
 
         m_mucInvitationHandler->handleMUCInvitation( msg.from(),
