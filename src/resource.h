@@ -15,6 +15,7 @@
 #define RESOURCE_H__
 
 #include "presence.h"
+#include "util.h"
 
 #include <string>
 
@@ -51,17 +52,7 @@ namespace gloox
        */
       virtual ~Resource()
       {
-//         util::clearList( m_extensionList );
-        // FIXME
-        StanzaExtensionList::iterator it = m_extensions.begin();
-        StanzaExtensionList::iterator it2;
-        while( it != m_extensions.end() )
-        {
-          it2 = it++;
-          delete (*it2);
-          m_extensions.erase( it2 );
-        }
-        // ~
+        util::clearList( m_extensions );
       }
 
       /**
