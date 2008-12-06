@@ -32,17 +32,7 @@ namespace gloox
   RosterItem::~RosterItem()
   {
     delete m_data;
-//     util::clearMap( m_resources );
-    // FIXME
-    ResourceMap::iterator it = m_resources.begin();
-    ResourceMap::iterator it2;
-    while( it != m_resources.end() )
-    {
-      it2 = it++;
-      delete (*it2).second;
-      m_resources.erase( it2 );
-    }
-    // ~
+    util::clearMap( m_resources );
   }
 
   void RosterItem::setName( const std::string& name )

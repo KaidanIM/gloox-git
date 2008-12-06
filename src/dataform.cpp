@@ -49,17 +49,7 @@ namespace gloox
 
   DataForm::~DataForm()
   {
-//     util::clearList( m_items );
-    // FIXME
-    ItemList::iterator it = m_items.begin();
-    ItemList::iterator it2;
-    while( it != m_items.end() )
-    {
-      it2 = it++;
-      delete (*it2);
-      m_items.erase( it2 );
-    }
-    // ~
+    util::clearList( m_items );
   }
 
   static const char* dfTypeValues[] =

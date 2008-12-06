@@ -107,17 +107,7 @@ namespace gloox
       if( m_parent )
         m_parent->removeIDHandler( this );
 
-//       util::clearList( m_contents );
-      // FIXME:
-      ContentList::iterator it1 = m_contents.begin();
-      ContentList::iterator it2;
-      while( it1 != m_contents.end() )
-      {
-        it2 = it1++;
-        delete (*it2);
-        m_contents.erase( it2 );
-      }
-      // ~
+      util::clearList( m_contents );
     }
 
     bool Session::initiate()

@@ -13,6 +13,7 @@
 
 #include "jingledescription.h"
 #include "tag.h"
+#include "util.h"
 
 namespace gloox
 {
@@ -46,17 +47,7 @@ namespace gloox
     // ---- Jingle::Description ----
     Description::~Description()
     {
-//       util::clearList( m_payload );
-      // FIXME:
-      PayloadList::iterator it1 = m_payload.begin();
-      PayloadList::iterator it2;
-      while( it1 != m_payload.end() )
-      {
-        it2 = it1++;
-        delete (*it2);
-        m_payload.erase( it2 );
-      }
-      // ~
+      util::clearList( m_payload );
     }
 
     const std::string& Description::filterString() const

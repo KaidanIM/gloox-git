@@ -28,17 +28,7 @@ namespace gloox
 
   StanzaExtensionFactory::~StanzaExtensionFactory()
   {
-//     util::clearList( m_extensions );
-    // FIXME
-    SEList::iterator it = m_extensions.begin();
-    SEList::iterator it2;
-    while( it != m_extensions.end() )
-    {
-      it2 = it++;
-      delete (*it2);
-      m_extensions.erase( it2 );
-    }
-    // ~
+    util::clearList( m_extensions );
   }
 
   void StanzaExtensionFactory::registerExtension( StanzaExtension* ext )
