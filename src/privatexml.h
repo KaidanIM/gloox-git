@@ -78,6 +78,9 @@ namespace gloox
       ClientBase* m_parent;
 
     private:
+#ifdef PRIVATEXML_TEST
+    public:
+#endif
       /**
        * @brief An implementation of the Private XML Storage protocol as StanzaExtension.
        *
