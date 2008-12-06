@@ -25,8 +25,11 @@ namespace gloox
     if( !tag )
       return;
 
-    if( tag->name() == "query" && tag->xmlns() == XMLNS_PRIVATE_XML && tag->children().size() )
-      m_privateXML = tag->children().front()->clone();
+    if( tag->name() == "query" && tag->xmlns() == XMLNS_PRIVATE_XML )
+    {
+      if( tag->children().size() )
+        m_privateXML = tag->children().front()->clone();
+    }
     else
       m_privateXML = tag;
   }
@@ -41,7 +44,8 @@ namespace gloox
   {
     Tag* t = new Tag( "query" );
     t->setXmlns( XMLNS_PRIVATE_XML );
-    t->addChild( m_privateXML->clone() );
+    if( m_privateXML )
+      t->addChild( m_privateXML->clone() );
     return t;
   }
   // ---- ~PrivateXML::Query ----
