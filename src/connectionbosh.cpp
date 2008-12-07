@@ -203,18 +203,18 @@ namespace gloox
 
     if( data.substr( 0, 2 ) == "<?" )
     {
-      if( m_initialStreamSent )
+//       if( m_initialStreamSent )
       {
         m_streamRestart = true;
         sendXML();
         return true;
       }
-      else
-      {
-        m_initialStreamSent = true;
-        m_logInstance.dbg( LogAreaClassConnectionBOSH, "initial <stream:stream> dropped" );
-        return true;
-      }
+//       else
+//       {
+//         m_initialStreamSent = true;
+//         m_logInstance.dbg( LogAreaClassConnectionBOSH, "initial <stream:stream> dropped" );
+//         return true;
+//       }
     }
     else if( data == "</stream:stream>" )
       return true;
@@ -263,6 +263,7 @@ namespace gloox
 
     if( m_streamRestart )
     {
+      m_streamRestart = false;
       requestBody << " xmpp:restart='true' to='" << m_server << "' xml:lang='en' xmlns:xmpp='"
           << XMLNS_XMPP_BOSH << "' />";
       m_logInstance.dbg( LogAreaClassConnectionBOSH, "Restarting stream" );
@@ -511,8 +512,8 @@ namespace gloox
 
     if( m_streamRestart )
     {
-      m_logInstance.dbg( LogAreaClassConnectionBOSH, "sending spoofed <stream:stream>" );
       m_streamRestart = false;
+      m_logInstance.dbg( LogAreaClassConnectionBOSH, "sending spoofed <stream:stream>" );
       m_handler->handleReceivedData( this, "<?xml version='1.0' ?>"
           "<stream:stream xmlns:stream='http://etherx.jabber.org/streams'"
           " xmlns='" + XMLNS_CLIENT + "' version='" + XMPP_STREAM_VERSION_MAJOR
@@ -565,7 +566,9 @@ namespace gloox
                                 + " seconds" );
       }
 
-      m_handler->handleConnect( this );
+      if( m_state < StateConnected )
+        m_handler->handleConnect( this );
+
       m_handler->handleReceivedData( this, "<?xml version='1.0' ?>" // FIXME move to send() so that
                                                                     // it is more clearly a response
                                                                     // to the initial stream opener?
