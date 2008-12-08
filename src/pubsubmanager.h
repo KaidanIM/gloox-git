@@ -391,7 +391,9 @@ namespace gloox
         const std::string& getSubscribers( const JID& service,
                                            const std::string& node,
                                            ResultHandler* handler )
-          { return subscriberList( service, node, 0, handler ); }
+          { return subscriberList( GetSubscriberList, service,
+                                   node, SubscriberList(),
+                                   handler ); }
 
         /**
          * Modifies the subscriber list for a node. This function SHOULD only set the
@@ -406,9 +408,10 @@ namespace gloox
          */
         const std::string& setSubscribers( const JID& service,
                                            const std::string& node,
-                                           SubscriberList& list,
+                                           const SubscriberList& list,
                                            ResultHandler* handler )
-          { return subscriberList( service, node, &list, handler ); }
+          { return subscriberList( SetSubscriberList, service,
+                                   node, list, handler ); }
 
         /**
          * Requests the affiliate list for a node.
@@ -423,7 +426,9 @@ namespace gloox
         const std::string& getAffiliates( const JID& service,
                                           const std::string& node,
                                           ResultHandler* handler )
-          { return affiliateList( service, node, 0, handler ); }
+          { return affiliateList( GetAffiliateList, service,
+                                  node, AffiliateList(),
+                                  handler ); }
 
         /**
          * Modifies the affiliate list for a node.
@@ -437,9 +442,10 @@ namespace gloox
          */
         const std::string& setAffiliates( const JID& service,
                                           const std::string& node,
-                                          AffiliateList& list,
+                                          const AffiliateList& list,
                                           ResultHandler* handler )
-          { return affiliateList( service, node, &list, handler ); }
+          { return affiliateList( SetAffiliateList, service,
+                                  node, list, handler ); }
 
         /**
          * Retrieve the configuration (options) of a node.
@@ -584,14 +590,14 @@ namespace gloox
              * Sets the subscriber list.
              * @param subList The subscriber list.
              */
-            void setSubscriberList( SubscriberList* subList )
+            void setSubscriberList( const SubscriberList& subList )
               { m_subList = subList; }
 
             /**
              * Sets the affiliate list.
              * @param affList The affiliate list.
              */
-            void setAffiliateList( AffiliateList* affList )
+            void setAffiliateList( const AffiliateList& affList )
               { m_affList = affList; }
 
             // re-implemented from StanzaExtension
@@ -610,8 +616,8 @@ namespace gloox
             std::string m_node;
             TrackContext m_ctx;
             DataForm* m_form;
-            SubscriberList* m_subList;
-            AffiliateList* m_affList;
+            SubscriberList m_subList;
+            AffiliateList m_affList;
         };
 
         class PubSub : public StanzaExtension
@@ -763,7 +769,7 @@ namespace gloox
          * @param service Service to query.
          * @param node Node ID of the node.
          * @param config If not NULL, the function will request the node config.
-         *               Otherwise, it will set the config based on the form.
+         * Otherwise, it will set the config based on the form.
          * @param handler ResultHandler responsible to handle the request result.
          */
         const std::string& nodeConfig( const JID& service,
@@ -776,16 +782,18 @@ namespace gloox
          * (depending on arguments). Does the actual work for
          * requestSubscriberList and setSubscriberList.
          * Requests or changes a node's configuration.
+         * @param ctx The operation to be performed.
          * @param service Service to query.
          * @param node Node ID of the node.
          * @param config If not NULL, the function will request the node config.
-         *               Otherwise, it will set the config based on the form.
+         * Otherwise, it will set the config based on the form.
          * @param handler ResultHandler responsible to handle the request result.
          * @return The ID used in the request.
          */
-        const std::string& subscriberList( const JID& service,
+        const std::string& subscriberList( TrackContext ctx,
+                                           const JID& service,
                                            const std::string& node,
-                                           SubscriberList* config,
+                                           const SubscriberList& config,
                                            ResultHandler* handler );
 
         /**
@@ -793,17 +801,19 @@ namespace gloox
          * (depending on arguments). Does the actual work for
          * requestAffiliateList and setAffiliateList.
          * Requests or changes a node's configuration.
+         * @param ctx The operation to be performed.
          * @param service Service to query.
          * @param node Node ID of the node.
          * @param config If not NULL, the function will request the node config.
-         *               Otherwise, it will set the config based on the form.
+         * Otherwise, it will set the config based on the form.
          * @param handler ResultHandler responsible to handle the request result.
          * @return The ID used in the request.
          */
 
-        const std::string& affiliateList( const JID& service,
+        const std::string& affiliateList( TrackContext ctx,
+                                          const JID& service,
                                           const std::string& node,
-                                          AffiliateList* config,
+                                          const AffiliateList& config,
                                           ResultHandler* handler );
 
         const std::string& subscriptionOptions( TrackContext context,
@@ -816,6 +826,7 @@ namespace gloox
         const std::string& getSubscriptionsOrAffiliations( const JID& service,
             ResultHandler* handler,
             TrackContext context );
+
 //         typedef std::pair< std::string, std::string > TrackedItem;
 //         typedef std::map < std::string, TrackedItem > ItemOperationTrackMap;
         typedef std::map < std::string, std::string > NodeOperationTrackMap;
