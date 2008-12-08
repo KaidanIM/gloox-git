@@ -288,8 +288,9 @@ namespace gloox
     Manager::PubSubOwner::~PubSubOwner()
     {
       delete m_form;
-      delete m_subList;
-      delete m_affList;
+      // FIXME do these need to be deleted???
+//       delete m_subList;
+//       delete m_affList;
     }
 
     const std::string& Manager::PubSubOwner::filterString() const
