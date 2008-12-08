@@ -55,19 +55,6 @@ namespace gloox
        * Creates an IQ Query.
        * @param type The desired IqType.
        * @param to The intended receiver.
-       * @param id The request's ID. Usually obtained from ClientBase::getID()
-       * @param xmlns The child tag's xmlns. Optional. If omitted, no child tag is added.
-       * @param childtag The child tag's name. Defaults to "query".
-       * @deprecated Don't use, will be removed for 1.0
-       */
-//       GLOOX_DEPRECATED_CTOR IQ( IqType type, const JID& to, const std::string& id, // FIXME remove for 1.0
-//                                  const std::string& xmlns,
-//                                  const std::string& childtag = "query" );
-
-      /**
-       * Creates an IQ Query.
-       * @param type The desired IqType.
-       * @param to The intended receiver.
        * @param id The request's ID. Usually obtained from ClientBase::getID(). Optional,
        * will be added by ClientBase if the IQ is sent by means of
        * @link gloox::ClientBase::send( IQ&, IqHandler*, int ) send( IQ&, IqHandler*, int ) @endlink.
@@ -81,24 +68,10 @@ namespace gloox
       virtual ~IQ();
 
       /**
-       * Returns the IQ's child tag (Only one is allowed, unless the IQ is of type 'error').
-       * @return The IQ's child tag.
-       * @deprecated Don't use, will be removed for 1.0
-       */
-//       GLOOX_DEPRECATED Tag* query() const { return m_query; } // FIXME remove for 1.0
-
-      /**
        * Returns the IQ's type.
        * @return The IQ's type.
        */
       IqType subtype() const { return m_subtype; }
-
-      /**
-       * Returns the value of the xmlns attribute of the first child node.
-       * @return The namespace of the IQ stanza.
-       * @deprecated Don't use, will be removed for 1.0
-       */
-//       GLOOX_DEPRECATED const std::string& xmlns() const { return m_xmlns; } // FIXME remove for 1.0
 
       // reimplemented from Stanza
       virtual Tag* tag() const;
@@ -115,8 +88,6 @@ namespace gloox
 
       void setID( const std::string& id ) { m_id = id; }
 
-      Tag* m_query;
-      std::string m_xmlns;
       IqType m_subtype;
   };
 
