@@ -27,45 +27,22 @@ namespace gloox
   }
 
   IQ::IQ( Tag* tag )
-    : Stanza( tag ), m_query( 0 ), m_subtype( Invalid )
+    : Stanza( tag ), m_subtype( Invalid )
   {
     if( !tag || tag->name() != "iq" )
       return;
 
     m_subtype = (IQ::IqType)util::lookup( tag->findAttribute( TYPE ), iqTypeStringValues );
-
-    m_query = tag->findChildWithAttrib( XMLNS );
-
-    if( m_query )
-      m_query = m_query->clone(); // FIXME this needs to be removed once all code is
-                                  // ported to Tag-less Stanzas
-
-    if( m_query )
-      m_xmlns = m_query->findAttribute( XMLNS );
   }
 
   IQ::IQ( IqType type, const JID& to, const std::string& id )
-    : Stanza( to ), m_query( 0 ), m_subtype( type )
+    : Stanza( to ), m_subtype( type )
   {
     m_id = id;
   }
 
-//   IQ::IQ( IqType type, const JID& to, const std::string& id, const std::string& xmlns,
-//           const std::string& childtag )
-//     : Stanza( to ), m_query( 0 ), m_subtype( type )
-//   {
-//     m_id = id;
-//
-//     if( !xmlns.empty() ) // FIXME needs to be removed
-//     {
-//       m_xmlns = xmlns;
-//       m_query = new Tag( childtag.empty() ? "query" : childtag,  XMLNS, xmlns );
-//     }
-//   }
-
   IQ::~IQ()
   {
-    delete m_query;
   }
 
   Tag* IQ::tag() const
@@ -81,9 +58,6 @@ namespace gloox
     if( !m_id.empty() )
       t->addAttribute( "id", m_id );
     t->addAttribute( TYPE, typeString( m_subtype ) );
-
-    if( m_query ) // FIXME this should be temporary
-      t->addChild( m_query->clone() );
 
     StanzaExtensionList::const_iterator it = m_extensionList.begin();
     for( ; it != m_extensionList.end(); ++it )
