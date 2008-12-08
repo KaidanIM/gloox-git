@@ -199,14 +199,12 @@ namespace gloox
 
     // ---- Manager::PubSubOwner ----
     Manager::PubSubOwner::PubSubOwner( TrackContext context )
-      : StanzaExtension( ExtPubSubOwner ), m_ctx( context ), m_form( 0 ),
-        m_subList( 0 ), m_affList( 0 )
+      : StanzaExtension( ExtPubSubOwner ), m_ctx( context ), m_form( 0 )
     {
     }
 
     Manager::PubSubOwner::PubSubOwner( const Tag* tag )
-      : StanzaExtension( ExtPubSubOwner ), m_ctx( InvalidContext ), m_form( 0 ),
-        m_subList( 0 ), m_affList( 0 )
+      : StanzaExtension( ExtPubSubOwner ), m_ctx( InvalidContext ), m_form( 0 )
     {
       const Tag* d = tag->findTag( "pubsub/delete" );
       if( d )
@@ -251,13 +249,10 @@ namespace gloox
         {
           if( (*it)->name() == "subscription" )
           {
-            if( !m_subList )
-              m_subList = new SubscriberList();
-
-            Subscriber sub( JID( (*it)->findAttribute( "jid" ) ),
+            Subscriber sub( (*it)->findAttribute( "jid" ),
                             subscriptionType( (*it)->findAttribute( "subscription" ) ),
                             (*it)->findAttribute( "subid" ) );
-            m_subList->push_back( sub );
+            m_subList.push_back( sub );
           }
         }
         return;
@@ -273,12 +268,9 @@ namespace gloox
         {
           if( (*it)->name() == "affiliation" )
           {
-            if( !m_affList )
-              m_affList = new AffiliateList();
-
-            Affiliate aff( JID( (*it)->findAttribute( "jid" ) ),
+            Affiliate aff( (*it)->findAttribute( "jid" ),
                             affiliationType( (*it)->findAttribute( "affiliation" ) ) );
-            m_affList->push_back( aff );
+            m_affList.push_back( aff );
           }
         }
         return;
@@ -288,9 +280,6 @@ namespace gloox
     Manager::PubSubOwner::~PubSubOwner()
     {
       delete m_form;
-      // FIXME do these need to be deleted???
-//       delete m_subList;
-//       delete m_affList;
     }
 
     const std::string& Manager::PubSubOwner::filterString() const
@@ -334,11 +323,11 @@ namespace gloox
         {
           Tag* sub = new Tag( t, "subscriptions" );
           sub->addAttribute( "node", m_node );
-          if( m_subList )
+          if( m_subList.size() )
           {
             Tag* s;
-            SubscriberList::const_iterator it = m_subList->begin();
-            for( ; it != m_subList->end(); ++it )
+            SubscriberList::const_iterator it = m_subList.begin();
+            for( ; it != m_subList.end(); ++it )
             {
               s = new Tag( sub, "subscription" );
               s->addAttribute( "jid", (*it).jid.full() );
@@ -354,11 +343,11 @@ namespace gloox
         {
           Tag* aff = new Tag( t, "affiliations" );
           aff->addAttribute( "node", m_node );
-          if( m_affList )
+          if( m_affList.size() )
           {
             Tag* a;
-            AffiliateList::const_iterator it = m_affList->begin();
-            for( ; it != m_affList->end(); ++it )
+            AffiliateList::const_iterator it = m_affList.begin();
+            for( ; it != m_affList.end(); ++it )
             {
               a = new Tag( aff, "affiliation", "jid", (*it).jid.full() );
               a->addAttribute( "affiliation", util::lookup( (*it).type, affiliationValues ) );
@@ -915,45 +904,47 @@ namespace gloox
       return id;
     }
 
-    const std::string& Manager::subscriberList( const JID& service,
+    const std::string& Manager::subscriberList( TrackContext ctx,
+                                                const JID& service,
                                                 const std::string& node,
-                                                SubscriberList* subList,
+                                                const SubscriberList& subList,
                                                 ResultHandler* handler )
     {
       if( !m_parent || !handler || !service || node.empty() )
         return EmptyString;
 
       const std::string& id = m_parent->getID();
-      IQ iq( subList ? IQ::Set : IQ::Get, service, id );
-      PubSubOwner* pso = new PubSubOwner( subList ? SetSubscriberList : GetSubscriberList );
+      IQ iq( ctx == SetSubscriberList ? IQ::Set : IQ::Get, service, id );
+      PubSubOwner* pso = new PubSubOwner( ctx );
       pso->setNode( node );
       pso->setSubscriberList( subList );
       iq.addExtension( pso );
       m_nopTrackMap[id] = node;
 
       m_resultHandlerTrackMap[id] = handler;
-      m_parent->send( iq, this, subList ? SetSubscriberList : GetSubscriberList );
+      m_parent->send( iq, this, ctx );
       return id;
     }
 
-    const std::string& Manager::affiliateList( const JID& service,
+    const std::string& Manager::affiliateList( TrackContext ctx,
+                                               const JID& service,
                                                const std::string& node,
-                                               AffiliateList* affList,
+                                               const AffiliateList& affList,
                                                ResultHandler* handler )
     {
       if( !m_parent || !handler || !service || node.empty() )
         return EmptyString;
 
       const std::string& id = m_parent->getID();
-      IQ iq( affList ? IQ::Set : IQ::Get, service, id );
-      PubSubOwner* pso = new PubSubOwner( affList ? SetAffiliateList : GetAffiliateList );
+      IQ iq( ctx == SetAffiliateList ? IQ::Set : IQ::Get, service, id );
+      PubSubOwner* pso = new PubSubOwner( ctx );
       pso->setNode( node );
       pso->setAffiliateList( affList );
       m_nopTrackMap[id] = node;
       iq.addExtension( pso );
 
       m_resultHandlerTrackMap[id] = handler;
-      m_parent->send( iq, this, affList ? SetAffiliateList : GetAffiliateList );
+      m_parent->send( iq, this, ctx );
       return id;
     }
 

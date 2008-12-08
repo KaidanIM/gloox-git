@@ -196,9 +196,9 @@ namespace gloox
                   SubscriptionType _type,
                   const std::string& _subid = EmptyString)
         : jid( _jid ), type( _type ), subid( _subid ) {}
-      const JID jid;
+      JID jid;
       SubscriptionType type;
-      const std::string subid;
+      std::string subid;
     };
 
     /**
@@ -208,7 +208,7 @@ namespace gloox
     {
       Affiliate( const JID& _jid, AffiliationType _type )
         : jid( _jid ), type( _type ) {}
-      const JID jid;
+      JID jid;
       AffiliationType type;
     };
 
