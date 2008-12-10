@@ -180,7 +180,7 @@ namespace gloox
     inline void clearMap( std::map< const Key, T* >& M )
     {
       typename std::map< const Key, T* >::iterator it = M.begin();
-      typename std::map< Key, T* >::iterator it2;
+      typename std::map< const Key, T* >::iterator it2;
       while( it != M.end() )
       {
         it2 = it++;
