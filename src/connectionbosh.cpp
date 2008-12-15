@@ -355,10 +355,12 @@ namespace gloox
 
   const std::string ConnectionBOSH::getHTTPField( const std::string& field )
   {
-    const std::string::size_type fp = ci_find( m_bufferHeader, "\r\n" + field + ": " )
-                                        + field.length() + 4;
+    std::string::size_type fp = ci_find( m_bufferHeader, "\r\n" + field + ": " );
+
     if( fp == std::string::npos )
       return EmptyString;
+
+    fp += field.length() + 4;
 
     const std::string::size_type fp2 = m_bufferHeader.find( "\r\n", fp );
     if( fp2 == std::string::npos )
@@ -402,7 +404,7 @@ namespace gloox
     std::string::size_type headerLength = 0;
     while( ( headerLength = m_buffer.find( "\r\n\r\n" ) ) != std::string::npos )
     {
-      m_bufferHeader = m_buffer.substr( 0, headerLength );
+      m_bufferHeader = m_buffer.substr( 0, headerLength+2 );
 
       const std::string& statusCode = m_bufferHeader.substr( 9, 3 );
       printf( "status code: %s\n", statusCode.c_str() );
