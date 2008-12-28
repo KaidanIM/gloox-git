@@ -68,6 +68,13 @@ namespace gloox
         Event( const Tag* event );
 
         /**
+         * PubSub event notification Stanza Extension.
+         * @param node The node's ID for which the notification is sent.
+         * @param type The event's type.
+         */
+        Event( const std::string& node, PubSub::EventType type );
+
+        /**
          * Virtual destructor.
          */
         virtual ~Event();
@@ -92,6 +99,13 @@ namespace gloox
          */
         const ItemOperationList& items() const
           { return m_itemOperations ? *m_itemOperations : m_emptyOperationList; }
+
+        /**
+         * Add an item to the list of ItemOperations for EventItems(Retract) notification.
+         * After calling, the PubSub::Event object owns the ItemOperation and will free it.
+         * @param op An ItemOperation to add.
+         */
+        void addItem( ItemOperation* op );
 
         /**
          * Returns the node's ID for which the notification is sent.
