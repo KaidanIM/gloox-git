@@ -119,6 +119,15 @@ namespace gloox
       m_valid = true;
     }
 
+    Event::Event( const std::string& node, PubSub::EventType type )
+     : StanzaExtension( ExtPubSubEvent ), m_type( type ),
+        m_node( node ), m_subscriptionIDs( 0 ), m_config( 0 ),
+        m_itemOperations( 0 )
+    {
+      if( type != PubSub::EventUnknown )
+        m_valid = true;
+    }
+
     Event::~Event()
     {
       delete m_subscriptionIDs;
@@ -135,6 +144,14 @@ namespace gloox
       }
     }
 
+    void Event::addItem( ItemOperation* op )
+    {
+      if( !m_itemOperations )
+        m_itemOperations = new ItemOperationList();
+
+      m_itemOperations->push_back( op );
+    }
+
     const std::string& Event::filterString() const
     {
       static const std::string filter = "/message/event[@xmlns='" + XMLNS_PUBSUB_EVENT + "']";
@@ -147,7 +164,7 @@ namespace gloox
         return 0;
 
       Tag* event = new Tag( "event", XMLNS, XMLNS_PUBSUB_EVENT );
-      Tag* child = new Tag(  event , util::lookup( m_type, eventTypeValues ) );
+      Tag* child = new Tag( event, util::lookup( m_type, eventTypeValues ) );
 
       Tag* item = 0;
 
