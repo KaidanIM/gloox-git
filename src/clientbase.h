@@ -21,6 +21,7 @@
 #include "iqhandler.h"
 #include "jid.h"
 #include "logsink.h"
+#include "mutex.h"
 #include "taghandler.h"
 #include "statisticshandler.h"
 #include "tlshandler.h"
@@ -917,6 +918,8 @@ namespace gloox
       MessageSessionHandler  * m_messageSessionHandlerGroupchat;
       MessageSessionHandler  * m_messageSessionHandlerHeadline;
       MessageSessionHandler  * m_messageSessionHandlerNormal;
+
+      util::Mutex m_iqHandlerMapMutex;
 
       Parser m_parser;
       LogSink m_logInstance;

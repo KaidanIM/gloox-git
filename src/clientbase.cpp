@@ -651,7 +651,9 @@ namespace gloox
       track.ih = ih;
       track.context = context;
       track.del = del;
+      m_iqHandlerMapMutex.lock();
       m_iqIDHandlers[iq.id()] = track;
+      m_iqHandlerMapMutex.unlock();
     }
 
     send( iq );
@@ -1011,13 +1013,16 @@ namespace gloox
       track.ih = ih;
       track.context = context;
       track.del = false;
+      m_iqHandlerMapMutex.lock();
       m_iqIDHandlers[id] = track;
+      m_iqHandlerMapMutex.unlock();
     }
   }
 
   void ClientBase::removeIDHandler( IqHandler* ih )
   {
     IqTrackMap::iterator t;
+    m_iqHandlerMapMutex.lock();
     IqTrackMap::iterator it = m_iqIDHandlers.begin();
     while( it != m_iqIDHandlers.end() )
     {
@@ -1026,6 +1031,7 @@ namespace gloox
       if( ih == (*t).second.ih )
         m_iqIDHandlers.erase( t );
     }
+    m_iqHandlerMapMutex.unlock();
   }
 
   void ClientBase::registerIqHandler( IqHandler* ih, const std::string& xmlns )
@@ -1284,7 +1290,9 @@ namespace gloox
       (*it_id).second.ih->handleIqID( iq, (*it_id).second.context );
       if( (*it_id).second.del )
         delete (*it_id).second.ih;
+      m_iqHandlerMapMutex.lock();
       m_iqIDHandlers.erase( it_id );
+      m_iqHandlerMapMutex.unlock();
       return;
     }
 
