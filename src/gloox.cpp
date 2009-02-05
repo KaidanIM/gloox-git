@@ -108,7 +108,7 @@ namespace gloox
 
   const std::string XMPP_STREAM_VERSION_MAJOR = "1";
   const std::string XMPP_STREAM_VERSION_MINOR = "0";
-  const std::string GLOOX_VERSION           = "1.0-beta4";
+  const std::string GLOOX_VERSION           = "1.0-beta5";
   const std::string GLOOX_CAPS_NODE         = "http://camaya.net/gloox";
 
   const std::string XMLNS = "xmlns";
