@@ -5,21 +5,21 @@
 # TARGTYPE "Win32 (x86) Dynamic-Link Library" 0x0102
 
 CFG=gloox - Win32 Debug
-!MESSAGE Dies ist kein gültiges Makefile. Zum Erstellen dieses Projekts mit NMAKE
-!MESSAGE verwenden Sie den Befehl "Makefile exportieren" und führen Sie den Befehl
-!MESSAGE 
+!MESSAGE Dies ist kein gï¿½ltiges Makefile. Zum Erstellen dieses Projekts mit NMAKE
+!MESSAGE verwenden Sie den Befehl "Makefile exportieren" und fï¿½hren Sie den Befehl
+!MESSAGE
 !MESSAGE NMAKE /f "gloox.mak".
-!MESSAGE 
-!MESSAGE Sie können beim Ausführen von NMAKE eine Konfiguration angeben
+!MESSAGE
+!MESSAGE Sie kï¿½nnen beim Ausfï¿½hren von NMAKE eine Konfiguration angeben
 !MESSAGE durch Definieren des Makros CFG in der Befehlszeile. Zum Beispiel:
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "gloox.mak" CFG="gloox - Win32 Debug"
-!MESSAGE 
-!MESSAGE Für die Konfiguration stehen zur Auswahl:
-!MESSAGE 
+!MESSAGE
+!MESSAGE Fï¿½r die Konfiguration stehen zur Auswahl:
+!MESSAGE
 !MESSAGE "gloox - Win32 Release" (basierend auf  "Win32 (x86) Dynamic-Link Library")
 !MESSAGE "gloox - Win32 Debug" (basierend auf  "Win32 (x86) Dynamic-Link Library")
-!MESSAGE 
+!MESSAGE
 
 # Begin Project
 # PROP AllowPerConfigDependencies 0
@@ -345,6 +345,10 @@ SOURCE=.\src\pubsubevent.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\pubsubitem.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\pubsubmanager.cpp
 # End Source File
 # Begin Source File
@@ -370,6 +374,10 @@ SOURCE=.\src\search.cpp
 # Begin Source File
 
 SOURCE=.\src\sha.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\shim.cpp
 # End Source File
 # Begin Source File
 
@@ -889,6 +897,10 @@ SOURCE=.\src\pubsubevent.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\pubsubitem.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\pubsubeventhandler.h
 # End Source File
 # Begin Source File
@@ -942,6 +954,10 @@ SOURCE=.\src\searchhandler.h
 # Begin Source File
 
 SOURCE=.\src\sha.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\shim.h
 # End Source File
 # Begin Source File
 
