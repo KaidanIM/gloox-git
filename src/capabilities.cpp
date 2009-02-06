@@ -55,7 +55,16 @@ namespace gloox
     const Disco::IdentityList& il = m_disco->identities();
     Disco::IdentityList::const_iterator it = il.begin();
     for( ; it != il.end(); ++it )
-      sl.push_back( (*it)->category() + '/' + (*it)->type() );
+    {
+      std::string id = (*it)->category();
+      id += '/';
+      id += (*it)->type();
+      id += '/';
+      // FIXME add xml:lang caps here. see XEP-0015 Section 5
+      id += '/';
+      id += (*it)->name();
+      sl.push_back( id );
+    }
     sl.sort();
 
     std::string s;
