@@ -172,6 +172,36 @@ int main()
     ++fail;
   }
 
+  // -------
+  name = "long2string 1";
+  int ex = 2147483647;
+  std::string re = util::long2string( ex );
+  if( "2147483647" != re )
+  {
+    printf( "test '%s' failed, expected: %d, result: '%s'\n", name.c_str(), ex, re.c_str() );
+    ++fail;
+  }
+
+  // -------
+  name = "long2string 2";
+  ex = 0;
+  re = util::long2string( ex );
+  if( "0" != re )
+  {
+    printf( "test '%s' failed, expected: %d, result: '%s'\n", name.c_str(), ex, re.c_str() );
+    ++fail;
+  }
+
+  // -------
+  name = "int2string";
+  ex = 2147483647;
+  re = util::int2string( ex );
+  if( "2147483647" != re )
+  {
+    printf( "test '%s' failed, expected: %d, result: '%s'\n", name.c_str(), ex, re.c_str() );
+    ++fail;
+  }
+
 
 
 
