@@ -60,7 +60,7 @@ namespace gloox
       id += '/';
       id += (*it)->type();
       id += '/';
-      // FIXME add xml:lang caps here. see XEP-0015 Section 5
+      // FIXME add xml:lang caps here. see XEP-0115 Section 5
       id += '/';
       id += (*it)->name();
       sl.push_back( id );
