@@ -61,13 +61,13 @@ int main( int /*argc*/, char** /*argv*/ )
   sef.registerExtension( new Receipt( Receipt::Invalid ) );
   // -------
   {
-    name = "Receipt/SEFactory test";
+    name = "Receipt::Request/SEFactory test";
     Tag* f = new Tag( "message" );
     new Tag( f, "request", "xmlns", XMLNS_RECEIPTS );
     Message msg( Message::Normal, JID(), "" );
     sef.addExtensions( msg, f );
     const Receipt* se = msg.findExtension<Receipt>( ExtReceipt );
-    if( se == 0 )
+    if( se == 0 || se->rcpt() != Receipt::Request )
     {
       ++fail;
       printf( "test '%s' failed\n", name.c_str() );
@@ -75,6 +75,21 @@ int main( int /*argc*/, char** /*argv*/ )
     delete f;
   }
 
+  // -------
+  {
+    name = "Receipt::Received/SEFactory test";
+    Tag* f = new Tag( "message" );
+    new Tag( f, "received", "xmlns", XMLNS_RECEIPTS );
+    Message msg( Message::Normal, JID(), "" );
+    sef.addExtensions( msg, f );
+    const Receipt* se = msg.findExtension<Receipt>( ExtReceipt );
+    if( se == 0 || se->rcpt() != Receipt::Received )
+    {
+      ++fail;
+      printf( "test '%s' failed\n", name.c_str() );
+    }
+    delete f;
+  }
 
   printf( "Receipt: " );
   if( fail == 0 )
