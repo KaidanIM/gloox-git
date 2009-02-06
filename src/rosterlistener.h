@@ -28,7 +28,7 @@ namespace gloox
   /**
    * A map of JID/RosterItem pairs.
    */
-  typedef std::map<const std::string, RosterItem*> Roster;
+  typedef std::map< std::string, RosterItem*> Roster;
 
   /**
    * @brief A virtual interface which can be reimplemented to receive roster updates.
