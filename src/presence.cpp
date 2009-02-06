@@ -130,16 +130,7 @@ namespace gloox
         new Tag( t, "show", show );
     }
 
-//     const int len = 4 + (int)std::log10( m_priority ? m_priority : 1 ) + 1;
-//     char* tmp = new char[len];
-//     sprintf( tmp, "%d", m_priority );
-//     std::string ret( tmp, len );
-//     new Tag( t, "priority", ret );
-//     delete[] tmp;
-
-    std::ostringstream oss;
-    oss << m_priority;
-    new Tag( t, "priority", oss.str() );
+    new Tag( t, "priority", util::int2string( m_priority ) );
 
     getLangs( m_stati, m_status, "status", t );
 

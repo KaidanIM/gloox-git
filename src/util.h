@@ -176,18 +176,18 @@ namespace gloox
      * Const key type version.
      * @param M Map of pointer values to delete.
      */
-    template< typename Key, typename T >
-    inline void clearMap( std::map< const Key, T* >& M )
-    {
-      typename std::map< const Key, T* >::iterator it = M.begin();
-      typename std::map< const Key, T* >::iterator it2;
-      while( it != M.end() )
-      {
-        it2 = it++;
-        delete (*it2).second;
-        M.erase( it2 );
-      }
-    }
+//     template< typename Key, typename T >
+//     inline void clearMap( std::map< const Key, T* >& M )
+//     {
+//       typename std::map< const Key, T* >::iterator it = M.begin();
+//       typename std::map< const Key, T* >::iterator it2;
+//       while( it != M.end() )
+//       {
+//         it2 = it++;
+//         delete (*it2).second;
+//         M.erase( it2 );
+//       }
+//     }
 
     /**
      * Does some fancy escaping. (& --> &amp;, etc).
@@ -222,16 +222,18 @@ namespace gloox
     void replaceAll( std::string& target, const std::string& find, const std::string& replace );
 
     /**
-     * Converts an int to its string representation.
-     * @param value The integer value.
-     * @return The int#s string represenation.
+     * Converts a long int to its string representation.
+     * @param value The long integer value.
+     * @return The long int's string represenation.
      */
-    static inline const std::string int2string( int value )
+    static inline const std::string long2string( long int value )
     {
 #ifdef _WIN32_WCE
+      if( value < 0 )
+        value = 0;
       const int len = 4 + (int)std::log10( value ? value : 1 ) + 1;
       char* tmp = new char[len];
-      sprintf( tmp, "%d", value );
+      sprintf( tmp, "%ld", value );
       std::string ret( tmp, len );
       delete[] tmp;
       return ret;
@@ -240,6 +242,16 @@ namespace gloox
       oss << value;
       return oss.str();
 #endif
+    }
+
+    /**
+     * Converts an int to its string representation.
+     * @param value The integer value.
+     * @return The int's string represenation.
+     */
+    static inline const std::string int2string( int value )
+    {
+      return long2string( value );
     }
 
   }
