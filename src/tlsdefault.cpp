@@ -22,14 +22,14 @@
 # include "config.h"
 #endif
 
-#if defined( HAVE_OPENSSL )
-# define HAVE_TLS
-# include "tlsopenssl.h"
-#elif defined( HAVE_GNUTLS )
+#if defined( HAVE_GNUTLS )
 # define HAVE_TLS
 # include "tlsgnutlsclient.h"
 # include "tlsgnutlsclientanon.h"
 # include "tlsgnutlsserveranon.h"
+#elif defined( HAVE_OPENSSL )
+# define HAVE_TLS
+# include "tlsopenssl.h"
 #elif defined( HAVE_WINTLS )
 # define HAVE_TLS
 # include "tlsschannel.h"
