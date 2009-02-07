@@ -176,18 +176,18 @@ namespace gloox
      * Const key type version.
      * @param M Map of pointer values to delete.
      */
-//     template< typename Key, typename T >
-//     inline void clearMap( std::map< const Key, T* >& M )
-//     {
-//       typename std::map< const Key, T* >::iterator it = M.begin();
-//       typename std::map< const Key, T* >::iterator it2;
-//       while( it != M.end() )
-//       {
-//         it2 = it++;
-//         delete (*it2).second;
-//         M.erase( it2 );
-//       }
-//     }
+    template< typename Key, typename T >
+    inline void clearMap( std::map< const Key, T* >& M )
+    {
+      typename std::map< const Key, T* >::iterator it = M.begin();
+      typename std::map< const Key, T* >::iterator it2;
+      while( it != M.end() )
+      {
+        it2 = it++;
+        delete (*it2).second;
+        M.erase( it2 );
+      }
+    }
 
     /**
      * Does some fancy escaping. (& --> &amp;, etc).
