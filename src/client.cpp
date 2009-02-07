@@ -177,6 +177,13 @@ namespace gloox
         notifyStreamEvent( StreamEventEncryption );
         startTls();
       }
+      else if( m_compress && m_compression && !m_compressionActive
+          && ( m_streamFeatures & StreamFeatureCompressZlib ) )
+      {
+        notifyStreamEvent( StreamEventCompression );
+        logInstance().warn( LogAreaClassClient, "The server offers compression, but negotiating Compression at this stage is not recommended. See XEP-0170 for details. We'll continue anyway." );
+        negotiateCompression( StreamFeatureCompressZlib );
+      }
       else if( m_sasl )
       {
         if( m_authed )
