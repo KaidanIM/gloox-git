@@ -260,8 +260,7 @@ namespace gloox
   bool Registration::createAccount( int fields, const RegistrationFields& values )
   {
     std::string username;
-    if( !m_parent || m_parent->state() != StateConnected
-         || !prep::nodeprep( values.username, username ) )
+    if( !m_parent || !prep::nodeprep( values.username, username ) )
       return false;
 
     IQ iq( IQ::Set, m_to );
@@ -273,7 +272,7 @@ namespace gloox
 
   void Registration::createAccount( DataForm* form )
   {
-    if( !m_parent || m_parent->state() != StateConnected || !form )
+    if( !m_parent || !form )
       return;
 
     IQ iq( IQ::Set, m_to );
@@ -329,10 +328,7 @@ namespace gloox
             return;
 
           if( q->registered() )
-          {
             m_registrationHandler->handleAlreadyRegistered( iq.from() );
-            break;
-          }
 
           if( q->form() )
             m_registrationHandler->handleDataForm( iq.from(), *(q->form()) );
