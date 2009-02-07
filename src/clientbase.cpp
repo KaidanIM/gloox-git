@@ -716,7 +716,7 @@ namespace gloox
 
   void ClientBase::addFrom( Tag* tag )
   {
-    if( !tag || tag->hasAttribute( "from" ) )
+    if( !m_authed /*for IQ Auth */ || !tag || tag->hasAttribute( "from" ) )
       return;
 
     if ( m_selectedResource.empty() )
