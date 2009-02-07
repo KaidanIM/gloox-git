@@ -147,7 +147,7 @@ namespace gloox
     m_rosterManager = new RosterManager( this );
     m_disco->setIdentity( "client", "bot" );
     registerStanzaExtension( new ResourceBind( 0 ) );
-    registerStanzaExtension( new Capabilities( m_disco ) );
+    registerStanzaExtension( new Capabilities() );
     m_presence.addExtension( new Capabilities( m_disco ) );
   }
 
