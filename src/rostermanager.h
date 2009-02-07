@@ -284,7 +284,7 @@ namespace gloox
         AddRosterItem,
         RemoveRosterItem,
         SynchronizeRoster
-      }
+      };
 
   };
 
