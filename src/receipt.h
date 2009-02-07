@@ -79,6 +79,12 @@ namespace gloox
       // reimplemented from StanzaExtension
       Tag* tag() const;
 
+      // reimplemented from StanzaExtension
+      virtual StanzaExtension* clone() const
+      {
+        return new Receipt( *this );
+      }
+
     private:
       ReceiptType m_rcpt;
 

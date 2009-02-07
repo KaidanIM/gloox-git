@@ -81,6 +81,12 @@ namespace gloox
       // reimplemented from StanzaExtension
       Tag* tag() const;
 
+      // reimplemented from StanzaExtension
+      virtual StanzaExtension* clone() const
+      {
+        return new OOB( *this );
+      }
+
     private:
       std::string m_xmlns;
       std::string m_url;

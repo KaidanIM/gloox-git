@@ -108,6 +108,12 @@ namespace gloox
           }
 
           // reimplemented from StanzaExtension
+          virtual StanzaExtension* clone() const
+          {
+            return new Info( *this );
+          }
+
+          // reimplemented from StanzaExtension
           virtual Tag* tag() const;
 
         private:
@@ -296,6 +302,12 @@ namespace gloox
 
           // reimplemented from StanzaExtension
           virtual Tag* tag() const;
+
+          // reimplemented from StanzaExtension
+          virtual StanzaExtension* clone() const
+          {
+            return new Items( *this );
+          }
 
         private:
 #ifdef DISCO_ITEMS_TEST
@@ -601,6 +613,12 @@ namespace gloox
 
           // reimplemented from StanzaExtension
           virtual Tag* tag() const;
+
+          // reimplemented from StanzaExtension
+          virtual StanzaExtension* clone() const
+          {
+            return new SoftwareVersion( *this );
+          }
 
         private:
           std::string m_name;

@@ -29,6 +29,12 @@ namespace gloox
       "purge"
     };
 
+    Event::ItemOperation::ItemOperation( const ItemOperation& right )
+      : retract( right.retract ), item( right.item ),
+        payload( right.payload ? right.payload->clone() : 0 )
+    {
+    }
+
     Event::Event( const Tag* event )
       : StanzaExtension( ExtPubSubEvent ), m_type( PubSub::EventUnknown ),
         m_subscriptionIDs( 0 ), m_config( 0 ), m_itemOperations( 0 )
@@ -225,6 +231,25 @@ namespace gloox
       }
 
       return event;
+    }
+
+    StanzaExtension* Event::clone() const
+    {
+      Event* e = new Event( m_node, m_type );
+      e->m_subscriptionIDs = m_subscriptionIDs ? new StringList( *m_subscriptionIDs ) : 0;
+      e->m_config = m_config ? m_config->clone() : 0;
+      if( m_itemOperations )
+      {
+        e->m_itemOperations = new ItemOperationList();
+        ItemOperationList::const_iterator it = m_itemOperations->begin();
+        for( ; it != m_itemOperations->end(); ++it )
+          e->m_itemOperations->push_back( new ItemOperation( *(*it) ) );
+      }
+      else
+        e->m_itemOperations = 0;
+
+      e->m_collection = m_collection;
+      return e;
     }
 
   }

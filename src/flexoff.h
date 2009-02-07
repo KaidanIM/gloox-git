@@ -147,6 +147,12 @@ namespace gloox
           // reimplemented from StanzaExtension
           virtual Tag* tag() const;
 
+          // reimplemented from StanzaExtension
+          virtual StanzaExtension* clone() const
+          {
+            return new Offline( *this );
+          }
+
         private:
           int m_context;
           StringList m_msgs;

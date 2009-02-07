@@ -65,6 +65,9 @@ namespace gloox
       // reimplemented from StanzaExtension
       virtual Tag* tag() const;
 
+      // reimplemented from StanzaExtension
+      virtual StanzaExtension* clone() const;
+
     private:
       Tag* m_xhtml;
 

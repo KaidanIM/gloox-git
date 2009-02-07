@@ -46,4 +46,11 @@ namespace gloox
     return m_xhtml->clone();
   }
 
+  StanzaExtension* XHtmlIM::clone() const
+  {
+    XHtmlIM* x = new XHtmlIM();
+    x->m_xhtml = m_xhtml ? m_xhtml->clone() : 0;
+    return 0;
+  }
+
 }

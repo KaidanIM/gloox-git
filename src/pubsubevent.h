@@ -49,7 +49,14 @@ namespace gloox
            * item notification).
            */
           ItemOperation( bool remove, const std::string& itemid, const Tag* pld = 0)
-            : retract( remove ), item( itemid ), payload( pld ) {}
+            : retract( remove ), item( itemid ), payload( pld )
+            {}
+
+          /**
+           * Copy constructor.
+           * @param right The ItemOperation to copy from.
+           */
+          ItemOperation( const ItemOperation& right );
 
           bool retract;
           std::string item;
@@ -125,8 +132,10 @@ namespace gloox
         // reimplemented from StanzaExtension
         Tag* tag() const;
 
-      private:
+        // reimplemented from StanzaExtension
+        virtual StanzaExtension* clone() const;
 
+      private:
         PubSub::EventType m_type;
         std::string m_node;
         StringList* m_subscriptionIDs;

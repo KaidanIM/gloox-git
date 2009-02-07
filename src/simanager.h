@@ -112,6 +112,18 @@ namespace gloox
           // reimplemented from StanzaExtension
           virtual Tag* tag() const;
 
+          // reimplemented from StanzaExtension
+          virtual StanzaExtension* clone() const
+          {
+            SI* s = new SI();
+            s->m_tag1 = m_tag1 ? m_tag1->clone() : 0;
+            s->m_tag2 = m_tag2 ? m_tag2->clone() : 0;
+            s->m_id = m_id;
+            s->m_mimetype = m_mimetype;
+            s->m_profile = m_profile;
+            return s;
+          }
+
         private:
           Tag* m_tag1;
           Tag* m_tag2;

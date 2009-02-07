@@ -26,6 +26,9 @@ class SETest : public StanzaExtension
     virtual Tag* tag() const
     { return m_tag; }
 
+    virtual StanzaExtension* clone() const
+    { return new SETest( m_tag ? m_tag->clone() : 0 ); }
+
   private:
     Tag* m_tag;
 

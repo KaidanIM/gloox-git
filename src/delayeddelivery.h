@@ -112,6 +112,12 @@ namespace gloox
       // reimplemented from StanzaExtension
       virtual Tag* tag() const;
 
+      // reimplemented from StanzaExtension
+      virtual StanzaExtension* clone() const
+      {
+        return new DelayedDelivery( *this );
+      }
+
     private:
       JID m_from;
       std::string m_stamp;

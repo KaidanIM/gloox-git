@@ -216,6 +216,20 @@ namespace gloox
       // reimplemented from StanzaExtension
       virtual Tag* tag() const;
 
+      // reimplemented from StanzaExtension
+      virtual StanzaExtension* clone() const
+      {
+        AMP* a = new AMP();
+        a->m_perhop = m_perhop;
+        RuleList::const_iterator it = m_rules.begin();
+        for( ; it != m_rules.end(); ++it )
+          a->m_rules.push_back( new Rule( *(*it) ) );
+        a->m_status = m_status;
+        a->m_from = m_from;
+        a->m_to = m_to;
+        return a;
+      }
+
     private:
       bool m_perhop;
       RuleList m_rules;

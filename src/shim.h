@@ -75,6 +75,12 @@ namespace gloox
       // re-implemented from StanzaExtension
       virtual Tag* tag() const;
 
+      // reimplemented from StanzaExtension
+      virtual StanzaExtension* clone() const
+      {
+        return new SHIM( *this );
+      }
+
     private:
       HeaderList m_headers;
 

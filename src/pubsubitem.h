@@ -50,6 +50,12 @@ namespace gloox
         Item( const Tag* tag );
 
         /**
+         * Copy constructor.
+         * @param item The Item to be copied.
+         */
+        Item( const Item& item );
+
+        /**
         * Destructor.
         */
         ~Item();

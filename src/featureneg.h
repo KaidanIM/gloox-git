@@ -70,6 +70,12 @@ namespace gloox
       // reimplemented from StanzaExtension
       virtual Tag* tag() const;
 
+      // reimplemented from StanzaExtension
+      virtual StanzaExtension* clone() const
+      {
+        return new FeatureNeg( m_form );
+      }
+
     private:
       DataForm* m_form;
 

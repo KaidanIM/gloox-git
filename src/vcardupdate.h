@@ -76,6 +76,12 @@ namespace gloox
       // reimplemented from StanzaExtension
       Tag* tag() const;
 
+      // reimplemented from StanzaExtension
+      virtual StanzaExtension* clone() const
+      {
+        return new VCardUpdate( *this );
+      }
+
     private:
       std::string m_hash;
       bool m_notReady;

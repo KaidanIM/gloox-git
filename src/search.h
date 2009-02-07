@@ -30,7 +30,6 @@ namespace gloox
   class ClientBase;
   class IQ;
   class Disco;
-//   class DataForm;
 
   /**
    * @brief An implementation of XEP-0055 (Jabber Search)
@@ -183,6 +182,20 @@ namespace gloox
 
           // reimplemented from StanzaExtension
           virtual Tag* tag() const;
+
+          // reimplemented from StanzaExtension
+          virtual StanzaExtension* clone() const
+          {
+            Query* q = new Query();
+            q->m_form = m_form ? new DataForm( *m_form ) : 0;
+            q->m_fields = m_fields;
+            q->m_values = m_values;
+            q->m_instructions = m_instructions;
+            SearchResultList::const_iterator it = m_srl.begin();
+            for( ; it != m_srl.end(); ++it )
+              q->m_srl.push_back( new SearchFieldStruct( *(*it) ) );
+            return q;
+          }
 
         private:
 #ifdef SEARCH_TEST

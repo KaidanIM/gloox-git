@@ -679,6 +679,28 @@ namespace gloox
        */
       void removeMUCInvitationHandler();
 
+      /**
+       * Adds a StanzaExtension that will be sent with every Presence stanza
+       * sent. Capabilities are included by default if you are using a Client.
+       * @param se A StanzaExtension to add. If an extension of the same type
+       * has been added previously it will be replaced by the new one.
+       * Use removePresenceExtension() to remove an extension.
+       */
+      void addPresenceExtension( StanzaExtension* se );
+
+      /**
+       * Removes the StanzaExtension of the given type from the list of Presence
+       * StanzaExtensions.
+       * Use addPresenceExtension() to replace an already added type.
+       */
+      bool removePresenceExtension( int type );
+
+      /**
+       * Returns the current list of Presence StanzaExtensions.
+       * @return The current list of Presence StanzaExtensions.
+       */
+      const StanzaExtensionList& presenceExtensions() const { return m_presenceExtensions; }
+
       // reimplemented from ParserHandler
       virtual void handleTag( Tag* tag );
 
@@ -769,6 +791,8 @@ namespace gloox
       CompressionBase* m_compression;
       Disco* m_disco;
 
+      StanzaExtensionList m_presenceExtensions;
+
       std::string m_selectedResource;
       std::string m_clientCerts;
       std::string m_clientKey;
@@ -826,6 +850,12 @@ namespace gloox
           virtual Tag* tag() const
           {
             return new Tag( "ping", "xmlns", XMLNS_XMPP_PING );
+          }
+
+          // reimplemented from StanzaExtension
+          virtual StanzaExtension* clone() const
+          {
+            return new Ping();
           }
 
       };

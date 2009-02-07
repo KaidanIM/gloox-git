@@ -122,6 +122,12 @@ namespace gloox
           // reimplemented from StanzaExtension
           virtual Tag* tag() const;
 
+          // reimplemented from StanzaExtension
+          virtual StanzaExtension* clone() const
+          {
+            return new Query( *this );
+          }
+
         private:
           long m_seconds;
 
