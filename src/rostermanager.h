@@ -278,6 +278,14 @@ namespace gloox
       std::string m_delimiter;
       bool m_syncSubscribeReq;
 
+      enum RosterContext
+      {
+        RequestRoster,
+        AddRosterItem,
+        RemoveRosterItem,
+        SynchronizeRoster
+      }
+
   };
 
 }

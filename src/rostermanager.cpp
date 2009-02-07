@@ -139,7 +139,7 @@ namespace gloox
     m_privateXML->requestXML( "roster", XMLNS_ROSTER_DELIMITER, this );
     IQ iq( IQ::Get, JID(), m_parent->getID() );
     iq.addExtension( new Query() );
-    m_parent->send( iq, this, 0 ); // FIXME pass real context
+    m_parent->send( iq, this, RequestRoster );
   }
 
   bool RosterManager::handleIq( const IQ& iq )
@@ -160,7 +160,7 @@ namespace gloox
     return true;
   }
 
-  void RosterManager::handleIqID( const IQ& iq, int /*context*/ )
+  void RosterManager::handleIqID( const IQ& iq, int context )
   {
     if( iq.subtype() == IQ::Result ) // initial roster
     {
@@ -168,10 +168,13 @@ namespace gloox
       if( q )
         mergeRoster( q->roster() );
 
-      m_parent->rosterFilled();
+      if( context == RequestRoster )
+      {
+        m_parent->rosterFilled();
 
-      if( m_rosterListener )
-        m_rosterListener->handleRoster( m_roster );
+        if( m_rosterListener )
+          m_rosterListener->handleRoster( m_roster );
+      }
     }
     else if( iq.subtype() == IQ::Error )
     {
@@ -244,7 +247,7 @@ namespace gloox
 //     for( ; it != groups.end(); ++it )
 //       new Tag( i, "group", (*it) );
 
-    m_parent->send( iq, this, 0 ); // FIXME pass real context
+    m_parent->send( iq, this, AddRosterItem );
   }
 
   void RosterManager::unsubscribe( const JID& jid, const std::string& msg )
@@ -267,7 +270,7 @@ namespace gloox
     IQ iq( IQ::Set, JID(), m_parent->getID() );
     iq.addExtension( new Query( jid ) );
 
-    m_parent->send( iq, this, 0 ); // FIXME pass real context
+    m_parent->send( iq, this, RemoveRosterItem );
   }
 
   void RosterManager::synchronize()
@@ -280,7 +283,7 @@ namespace gloox
 
       IQ iq( IQ::Set, JID(), m_parent->getID() );
       iq.addExtension( new Query( (*it).second->jid(), (*it).second->name(), (*it).second->groups() ) );
-      m_parent->send( iq, this, 0 ); // FIXME pass real context
+      m_parent->send( iq, this, SynchronizeRoster );
     }
   }
 
