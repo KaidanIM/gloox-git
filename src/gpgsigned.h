@@ -74,6 +74,12 @@ namespace gloox
       // reimplemented from StanzaExtension
       Tag* tag() const;
 
+      // reimplemented from StanzaExtension
+      virtual StanzaExtension* clone() const
+      {
+        return new GPGSigned( *this );
+      }
+
     private:
       std::string m_signature;
       bool m_valid;

@@ -131,6 +131,14 @@ namespace gloox
           // reimplemented from StanzaExtension
           virtual Tag* tag() const;
 
+          // reimplemented from StanzaExtension
+          virtual StanzaExtension* clone() const
+          {
+            Query* q = new Query();
+            q->m_privateXML = m_privateXML ? m_privateXML->clone() : 0;
+            return q;
+          }
+
         private:
           const Tag* m_privateXML;
 

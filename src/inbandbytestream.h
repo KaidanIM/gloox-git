@@ -172,6 +172,12 @@ namespace gloox
           // reimplemented from StanzaExtension
           virtual Tag* tag() const;
 
+          // reimplemented from StanzaExtension
+          virtual StanzaExtension* clone() const
+          {
+            return new IBB( *this );
+          }
+
         private:
           std::string m_sid;
           int m_seq;

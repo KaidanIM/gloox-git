@@ -384,18 +384,7 @@ namespace gloox
     if( ( i = m_parser.feed( copy ) ) >= 0 )
     {
       std::string error = "parse error (at pos ";
-#ifdef _WIN32_WCE
-      const int len = 4 + (int)std::log10( i ? i : 1 ) + 1;
-      char* tmp = new char[len];
-      tmp[len-1] = '\0';
-      sprintf( tmp, "%d", i );
-      error += tmp;
-      delete[] tmp;
-#else
-      std::ostringstream oss;
-      oss << i;
-      error += oss.str();
-#endif
+      error += util::int2string( i );
       error += "): ";
       m_logInstance.err( LogAreaClassClientbase, error + copy );
       Tag* e = new Tag( "stream:error" );
@@ -1427,6 +1416,31 @@ namespace gloox
       if( (*it).tag == tag->name() && tag->hasAttribute( XMLNS, (*it).xmlns ) )
         (*it).th->handleTag( tag );
     }
+  }
+
+  void ClientBase::addPresenceExtension( StanzaExtension* se )
+  {
+    if( !se )
+      return;
+
+    removePresenceExtension( se->extensionType() );
+    m_presenceExtensions.push_back( se );
+  }
+
+  bool ClientBase::removePresenceExtension( int type )
+  {
+    StanzaExtensionList::iterator it = m_presenceExtensions.begin();
+    for( ; it != m_presenceExtensions.end(); ++it )
+    {
+      if( (*it)->extensionType() == type )
+      {
+        delete (*it);
+        m_presenceExtensions.erase( it );
+        return true;
+      }
+    }
+
+    return false;
   }
 
   CompressionBase* ClientBase::getDefaultCompression()

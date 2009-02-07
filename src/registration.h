@@ -18,6 +18,7 @@
 #include "registrationhandler.h"
 #include "dataform.h"
 #include "jid.h"
+#include "oob.h"
 
 #include <string>
 #include <map>
@@ -27,7 +28,6 @@ namespace gloox
 
   class ClientBase;
   class Stanza;
-  class OOB;
 
   /**
    * Holds all the possible fields a server may require for registration according
@@ -208,6 +208,20 @@ namespace gloox
 
           // reimplemented from StanzaExtension
           virtual Tag* tag() const;
+
+          // reimplemented from StanzaExtension
+          virtual StanzaExtension* clone() const
+          {
+            Query* q = new Query();
+            q->m_form = m_form ? new DataForm( *m_form ) : 0;
+            q->m_fields = m_fields;
+            q->m_values = m_values;
+            q->m_instructions = m_instructions;
+            q->m_oob = new OOB( *m_oob );
+            q->m_del = m_del;
+            q->m_reg = m_reg;
+            return q;
+          }
 
         private:
           DataForm* m_form;

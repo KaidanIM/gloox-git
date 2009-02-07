@@ -88,6 +88,21 @@ namespace gloox
 
       return t;
     }
+
+    StanzaExtension* Session::Jingle::clone() const
+    {
+      Jingle* j = new Jingle();
+      j->m_action = m_action;
+      j->m_sid = m_sid;
+      j->m_initiator = m_initiator;
+      j->m_responder = m_responder;
+
+      ContentList::const_iterator it = m_contents.begin();
+      for( ; it != m_contents.end(); ++it )
+        j->m_contents.push_back( new Content( *(*it) ) );
+
+      return j;
+    }
     // ---- ~Session::Jingle ----
 
     // ---- Session ----

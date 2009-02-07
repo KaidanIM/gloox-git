@@ -19,6 +19,7 @@
 #include "iqhandler.h"
 #include "presencehandler.h"
 #include "rosterlistener.h"
+#include "rosteritemdata.h"
 
 #include <map>
 #include <string>
@@ -31,7 +32,6 @@ namespace gloox
   class Stanza;
   class PrivateXML;
   class RosterItem;
-  class RosterItemData;
 
   /**
    * @brief This class implements Jabber/XMPP roster handling in the @b jabber:iq:roster namespace.
@@ -248,6 +248,18 @@ namespace gloox
 
           // reimplemented from StanzaExtension
           virtual Tag* tag() const;
+
+          // reimplemented from StanzaExtension
+          virtual StanzaExtension* clone() const
+          {
+            Query* q = new Query();
+            RosterData::const_iterator it = m_roster.begin();
+            for( ; it != m_roster.end(); ++it )
+            {
+              q->m_roster.push_back( new RosterItemData( *(*it) ) );
+            }
+            return q;
+          }
 
         private:
           RosterData m_roster;

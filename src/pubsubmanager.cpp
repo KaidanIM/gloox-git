@@ -611,6 +611,27 @@ namespace gloox
       return t;
     }
 
+    StanzaExtension* Manager::PubSub::clone() const
+    {
+      PubSub* p = new PubSub();
+      p->m_affiliationMap = m_affiliationMap;
+      p->m_subscriptionMap = m_subscriptionMap;
+      p->m_ctx = m_ctx;
+
+      p->m_options.node = m_options.node;
+      p->m_options.df = m_options.df ? new DataForm( *(m_options.df) ) : 0;
+
+      p->m_jid = m_jid;
+      p->m_node = m_node;
+      p->m_subid = m_subid;
+      ItemList::const_iterator it = m_items.begin();
+      for( ; it != m_items.end(); ++it )
+        p->m_items.push_back( new Item( *(*it) ) );
+
+      p->m_maxItems = m_maxItems;
+      p->m_notify = m_notify;
+      return p;
+    }
     // ---- ~Manager::PubSub ----
 
     // ---- Manager ----

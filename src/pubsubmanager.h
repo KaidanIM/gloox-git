@@ -14,6 +14,7 @@
 #define PUBSUBMANAGER_H__
 
 #include "pubsub.h"
+#include "dataform.h"
 #include "iqhandler.h"
 
 #include <map>
@@ -23,7 +24,6 @@ namespace gloox
 {
 
   class ClientBase;
-  class DataForm;
 
   namespace PubSub
   {
@@ -612,6 +612,18 @@ namespace gloox
             // re-implemented from StanzaExtension
             virtual Tag* tag() const;
 
+            // reimplemented from StanzaExtension
+            virtual StanzaExtension* clone() const
+            {
+              PubSubOwner* p = new PubSubOwner();
+              p->m_node = m_node;
+              p->m_ctx = m_ctx;
+              p->m_form = m_form ? new DataForm( *m_form ) : 0;
+              p->m_subList = m_subList;
+              p->m_affList = m_affList;
+              return p;
+            }
+
           private:
             std::string m_node;
             TrackContext m_ctx;
@@ -741,6 +753,9 @@ namespace gloox
 
             // re-implemented from StanzaExtension
             virtual Tag* tag() const;
+
+            // reimplemented from StanzaExtension
+            virtual StanzaExtension* clone() const;
 
           private:
             AffiliationMap m_affiliationMap;

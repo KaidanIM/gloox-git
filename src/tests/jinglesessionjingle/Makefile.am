@@ -10,5 +10,6 @@ noinst_PROGRAMS = jinglesessionjingle_test
 jinglesessionjingle_test_SOURCES = jinglesessionjingle_test.cpp
 jinglesessionjingle_test_LDADD = ../../stanza.o ../../jid.o ../../tag.o ../../prep.o \
  		../../gloox.o ../../stanzaextensionfactory.o \
-		../../iq.o ../../util.o ../../sha.o ../../base64.o
+		../../iq.o ../../util.o ../../sha.o ../../base64.o \
+		../../jinglecontent.o
 jinglesessionjingle_test_CFLAGS = $(CPPFLAGS)

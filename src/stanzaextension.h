@@ -216,6 +216,12 @@ namespace gloox
       virtual Tag* tag() const = 0;
 
       /**
+       * Returns an identical copy of the current StanzaExtension.
+       * @return An identical copy of the current StanzaExtension.
+       */
+      virtual StanzaExtension* clone() const = 0;
+
+      /**
        * Returns the extension's type.
        * @return The extension's type.
        */

@@ -84,6 +84,12 @@ namespace gloox
       // reimplemented from StanzaExtension
       virtual Tag* tag() const;
 
+      // reimplemented from StanzaExtension
+      virtual StanzaExtension* clone() const
+      {
+        return new Capabilities( *this );
+      }
+
       // reimplemented from DiscoNodeHandler
       virtual StringList handleDiscoNodeFeatures( const JID& from, const std::string& node );
 

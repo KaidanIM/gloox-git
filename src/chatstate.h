@@ -71,6 +71,12 @@ namespace gloox
       // reimplemented from StanzaExtension
       Tag* tag() const;
 
+      // reimplemented from StanzaExtension
+      virtual StanzaExtension* clone() const
+      {
+        return new ChatState( *this );
+      }
+
     private:
       ChatStateType m_state;
 

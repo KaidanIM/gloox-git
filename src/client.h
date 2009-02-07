@@ -330,7 +330,7 @@ namespace gloox
           // reimplemented from StanzaExtension
           virtual const std::string& filterString() const;
 
-         // reimplemented from StanzaExtension
+          // reimplemented from StanzaExtension
           virtual StanzaExtension* newInstance( const Tag* tag ) const
           {
             return new ResourceBind( tag );
@@ -338,6 +338,12 @@ namespace gloox
 
           // reimplemented from StanzaExtension
           virtual Tag* tag() const;
+
+          // reimplemented from StanzaExtension
+          virtual StanzaExtension* clone() const
+          {
+            return new ResourceBind( *this );
+          }
 
         private:
           std::string m_resource;
@@ -375,6 +381,10 @@ namespace gloox
           // reimplemented from StanzaExtension
           virtual Tag* tag() const;
 
+          // reimplemented from StanzaExtension
+          virtual StanzaExtension* clone() const
+            { return 0; }
+
       };
 
       virtual void handleStartNode() {}
@@ -387,7 +397,7 @@ namespace gloox
       int getCompressionMethods( Tag* tag );
       void processResourceBind( const IQ& iq );
       void processCreateSession( const IQ& iq );
-      void sendPresence( const Presence& pres );
+      void sendPresence( Presence& pres );
       void createSession();
       void negotiateCompression( StreamFeature method );
       void connected();

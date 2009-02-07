@@ -37,6 +37,12 @@ namespace gloox
         m_payload = tag->children().front();
     }
 
+    Item::Item( const Item& item )
+      : m_payload( item.m_payload ? item.m_payload->clone() : 0 )
+    {
+      m_id = item.m_id;
+    }
+
     Item::~Item()
     {
       delete m_payload;

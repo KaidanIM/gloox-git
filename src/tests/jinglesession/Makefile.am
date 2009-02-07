@@ -10,5 +10,6 @@ jinglesession_test_SOURCES = jinglesession_test.cpp
 jinglesession_test_LDADD = ../../tag.o ../../stanza.o ../../base64.o \
 			../../prep.o ../../gloox.o \
 			../../iq.o ../../util.o \
-			../../sha.o ../../error.o ../../jid.o
+			../../sha.o ../../error.o ../../jid.o \
+			../../jinglecontent.o
 jinglesession_test_CFLAGS = $(CPPFLAGS)

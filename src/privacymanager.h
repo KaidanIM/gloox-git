@@ -194,6 +194,12 @@ namespace gloox
           // reimplemented from StanzaExtension
           virtual Tag* tag() const;
 
+          // reimplemented from StanzaExtension
+          virtual StanzaExtension* clone() const
+          {
+            return new Query( *this );
+          }
+
         private:
           int m_context;
           StringList m_names;

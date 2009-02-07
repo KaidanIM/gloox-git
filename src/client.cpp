@@ -518,10 +518,16 @@ namespace gloox
     sendPresence( p );
   }
 
-  void Client::sendPresence( const Presence& pres )
+  void Client::sendPresence( Presence& pres )
   {
-    if( state() >= StateConnected )
-      send( pres );
+    if( state() < StateConnected )
+      return;
+
+    StanzaExtensionList::const_iterator it = m_presenceExtensions.begin();
+    for( ; it != m_presenceExtensions.end(); ++it )
+      pres.addExtension( (*it)->clone() );
+
+    send( pres );
   }
 
   void Client::disableRoster()

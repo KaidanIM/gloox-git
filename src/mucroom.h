@@ -17,6 +17,7 @@
 
 #include "discohandler.h"
 #include "disconodehandler.h"
+#include "dataform.h"
 #include "presencehandler.h"
 #include "iqhandler.h"
 #include "messagehandler.h"
@@ -33,7 +34,6 @@ namespace gloox
   class ClientBase;
   class MUCMessageSession;
   class Message;
-  class DataForm;
 
   /**
    * @brief This is an implementation of XEP-0045 (Multi-User Chat).
@@ -126,7 +126,11 @@ namespace gloox
       {
         public:
           /**
-           *
+           * Creates a new MUC object.
+           * @param password An optional room password.
+           * @param historyType The type of room history to request.
+           * @param historySince A string describing the amount of room history.
+           * @param historyValue The amount of requested room history.
            */
           MUC( const std::string& password, HistoryRequestType historyType = HistoryUnknown,
                const std::string& historySince = EmptyString, int historyValue = 0 );
@@ -143,26 +147,39 @@ namespace gloox
           virtual ~MUC();
 
           /**
-           *
+           * Returns a pointer to the current password, or 0.
+           * @return A pointer to the current password, or 0.
            */
           const std::string* password() const { return m_password; }
 
           /**
-           *
+           * Returns a pointer to the description of the amount of room history requested.
+           * @return A pointer to the description of the amount of room history requested.
            */
           const std::string* historySince() const { return m_historySince; }
 
           // reimplemented from StanzaExtension
-          const std::string& filterString() const;
+          virtual const std::string& filterString() const;
 
           // reimplemented from StanzaExtension
-          StanzaExtension* newInstance( const Tag* tag ) const
+          virtual StanzaExtension* newInstance( const Tag* tag ) const
           {
             return new MUC( tag );
           }
 
           // reimplemented from StanzaExtension
-          Tag* tag() const;
+          virtual Tag* tag() const;
+
+          // reimplemented from StanzaExtension
+          virtual StanzaExtension* clone() const
+          {
+            MUC* m = new MUC();
+            m->m_password = m_password ? new std::string( *m_password ) : 0;
+            m->m_historySince = m_historySince ? new std::string( *m_historySince ) : 0;
+            m->m_historyType = m_historyType;
+            m->m_historyValue = m_historyValue;
+            return m;
+          }
 
         private:
           std::string* m_password;
@@ -268,16 +285,36 @@ namespace gloox
           MUCUserOperation operation() const { return m_operation; }
 
           // reimplemented from StanzaExtension
-          const std::string& filterString() const;
+          virtual const std::string& filterString() const;
 
           // reimplemented from StanzaExtension
-          StanzaExtension* newInstance( const Tag* tag ) const
+          virtual StanzaExtension* newInstance( const Tag* tag ) const
           {
             return new MUCUser( tag );
           }
 
           // reimplemented from StanzaExtension
-          Tag* tag() const;
+          virtual Tag* tag() const;
+
+          // reimplemented from StanzaExtension
+          virtual StanzaExtension* clone() const
+          {
+            MUCUser* m = new MUCUser();
+            m->m_affiliation = m_affiliation;
+            m->m_role = m_role;
+            m->m_jid = m_jid ? new std::string( *m_jid ) : 0;
+            m->m_actor = m_actor ? new std::string( *m_actor ) : 0;
+            m->m_thread = m_thread ? new std::string( *m_thread ) : 0;
+            m->m_reason = m_reason ? new std::string( *m_reason ) : 0;
+            m->m_newNick = m_newNick ? new std::string( *m_newNick ) : 0;
+            m->m_password = m_password ? new std::string( *m_password ) : 0;
+            m->m_alternate = m_alternate ? new std::string( *m_alternate ) : 0;
+            m->m_operation = m_operation;
+            m->m_flags = m_flags;
+            m->m_del = m_del;
+            m->m_continue = m_continue;
+            return m;
+          }
 
         private:
           MUCRoomAffiliation m_affiliation;
@@ -779,6 +816,18 @@ namespace gloox
           // reimplemented from StanzaExtension
           Tag* tag() const;
 
+          // reimplemented from StanzaExtension
+          virtual StanzaExtension* clone() const
+          {
+            MUCOwner* m = new MUCOwner();
+            m->m_type = m_type;
+            m->m_jid = m_jid;
+            m->m_reason = m_reason;
+            m->m_pwd = m_pwd;
+            m->m_form = m_form ? new DataForm( *m_form ) : 0;
+            return m;
+          }
+
         private:
           QueryType m_type;
           JID m_jid;
@@ -853,6 +902,12 @@ namespace gloox
 
           // reimplemented from StanzaExtension
           Tag* tag() const;
+
+          // reimplemented from StanzaExtension
+          virtual StanzaExtension* clone() const
+          {
+            return new MUCAdmin( *this );
+          }
 
         private:
           MUCListItemList m_list;

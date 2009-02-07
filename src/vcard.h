@@ -574,6 +574,12 @@ namespace gloox
       // reimplemented from StanzaExtension
       virtual Tag* tag() const;
 
+      // reimplemented from StanzaExtension
+      virtual StanzaExtension* clone() const
+      {
+        return new VCard( *this );
+      }
+
     private:
 
       static void insertField( Tag* vcard, const char* field, const std::string& var );

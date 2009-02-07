@@ -15,6 +15,7 @@
 #ifndef ADHOC_H__
 #define ADHOC_H__
 
+#include "dataform.h"
 #include "disco.h"
 #include "disconodehandler.h"
 #include "discohandler.h"
@@ -32,7 +33,6 @@ namespace gloox
   class Stanza;
   class AdhocHandler;
   class AdhocCommandProvider;
-  class DataForm;
 
   /**
    * @brief This class implements a provider for XEP-0050 (Ad-hoc Commands).
@@ -289,6 +289,25 @@ namespace gloox
 
           // reimplemented from StanzaExtension
           virtual Tag* tag() const;
+
+          // reimplemented from StanzaExtension
+          virtual StanzaExtension* clone() const
+          {
+            Command* c = new Command();
+
+            NoteList::const_iterator it = m_notes.begin();
+            for( ; it != m_notes.end(); ++it )
+              c->m_notes.push_back( new Note( *(*it) ) );
+
+            c->m_node = m_node;
+            c->m_sessionid = m_sessionid;
+            c->m_form = m_form ? new DataForm( *m_form ) : 0;
+            c->m_action = m_action;
+            c->m_status = m_status;
+            c->m_actions = m_actions;
+
+            return c;
+          }
 
         private:
 #ifdef ADHOC_COMMANDS_TEST

@@ -105,10 +105,17 @@ namespace gloox
       // reimplemented from StanzaExtension
       virtual Tag* tag() const;
 
+      // reimplemented from StanzaExtension
+      virtual StanzaExtension* clone() const
+      {
+        return new Error( *this );
+      }
+
     private:
       Error( const Error& error );
 
       void setValues( const Tag* tag );
+
       StanzaErrorType m_type;
       StanzaError m_error;
       Tag* m_appError;
