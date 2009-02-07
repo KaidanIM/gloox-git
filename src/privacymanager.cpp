@@ -27,6 +27,9 @@ namespace gloox
   PrivacyManager::Query::Query( const Tag* tag )
     : StanzaExtension( ExtPrivacy )
   {
+    if( !tag )
+      return;
+
     const TagList& l = tag->children();
     TagList::const_iterator it = l.begin();
     for( ; it != l.end(); ++it )
