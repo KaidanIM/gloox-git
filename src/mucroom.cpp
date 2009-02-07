@@ -638,7 +638,7 @@ namespace gloox
     }
   }
 
-  void MUCRoom::join()
+  void MUCRoom::join( Presence::PresenceType type )
   {
     if( m_joined || !m_parent )
       return;
@@ -648,7 +648,7 @@ namespace gloox
     m_session = new MUCMessageSession( m_parent, m_nick.bareJID() );
     m_session->registerMessageHandler( this );
 
-    Presence pres( Presence::Available, m_nick.full() );
+    Presence pres( type, m_nick.full() );
     pres.addExtension( new MUC( m_password, m_historyType, m_historySince, m_historyValue ) );
     m_joined = true;
     m_parent->send( pres );

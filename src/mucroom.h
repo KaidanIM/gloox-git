@@ -380,8 +380,11 @@ namespace gloox
 
       /**
        * Join this room.
+       * @param type The presence to join with, defaults to Available.
+       * ClientBase will automatically include the default Presence extensions added using
+       * @link gloox::ClientBase::addPresenceExtension() ClientBase::addPresenceExtension() @endlink.
        */
-      virtual void join();
+      virtual void join( Presence::PresenceType type = Presence::Available );
 
       /**
        * Leave this room.
