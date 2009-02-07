@@ -381,10 +381,14 @@ namespace gloox
       /**
        * Join this room.
        * @param type The presence to join with, defaults to Available.
+       * @param status The presence's optional status text.
+       * @param priority The presence's optional priority, defaults to 0.
        * ClientBase will automatically include the default Presence extensions added using
        * @link gloox::ClientBase::addPresenceExtension() ClientBase::addPresenceExtension() @endlink.
        */
-      virtual void join( Presence::PresenceType type = Presence::Available );
+      virtual void join( Presence::PresenceType type = Presence::Available,
+                         const std::string& status = EmptyString,
+                         int priority = 0 );
 
       /**
        * Leave this room.
