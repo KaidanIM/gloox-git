@@ -84,10 +84,9 @@ namespace gloox
             {
               tag = (*itt);
 
-              const Tag* x = tag->findChild( "entry" );
               ItemOperation* op = new ItemOperation( tag->name() == "retract",
                                                     tag->findAttribute( "id" ),
-                                                    x ? x->clone() : 0 );
+                                                    tag->clone() );
               m_itemOperations->push_back( op );
             }
             break;
@@ -203,9 +202,9 @@ namespace gloox
             for( ; itt != m_itemOperations->end(); ++itt )
             {
               op = (*itt);
-              item = new Tag( child, op->retract ? "retract" : "item", "id", op->item );
+//               item = new Tag( child, op->retract ? "retract" : "item", "id", op->item );
               if( op->payload )
-                item->addChildCopy( op->payload );
+                child->addChildCopy( op->payload );
             }
           }
           break;
