@@ -13,5 +13,5 @@ disco_test_LDADD = ../../tag.o ../../stanza.o \
 			../../iq.o ../../util.o \
 			../../error.o ../../jid.o ../../dataform.o \
 			../../dataformfieldcontainer.o ../../dataformreported.o ../../dataformitem.o \
-			../../dataformfield.o
+			../../dataformfield.o ../../softwareversion.o
 disco_test_CFLAGS = $(CPPFLAGS)
