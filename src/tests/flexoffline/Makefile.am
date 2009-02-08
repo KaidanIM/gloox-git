@@ -12,5 +12,5 @@ flexoffline_test_LDADD = ../../jid.o ../../tag.o \
                         ../../gloox.o ../../iq.o ../../stanza.o \
                         ../../error.o ../../dataformfieldcontainer.o \
                         ../../dataform.o ../../dataformfield.o \
-                        ../../dataformitem.o
+                        ../../dataformitem.o ../../softwareversion.o
 flexoffline_test_CFLAGS = $(CPPFLAGS)

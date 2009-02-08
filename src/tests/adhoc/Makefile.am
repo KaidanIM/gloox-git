@@ -10,5 +10,6 @@ adhoc_test_SOURCES = adhoc_test.cpp
 adhoc_test_LDADD = ../../tag.o ../../stanza.o ../../gloox.o ../../iq.o ../../util.o \
 			../../error.o ../../jid.o ../../prep.o \
 			../../dataform.o ../../dataformfieldcontainer.o ../../dataformreported.o \
-			../../dataformitem.o ../../dataformfield.o
+			../../dataformitem.o ../../dataformfield.o \
+			../../softwareversion.o
 adhoc_test_CFLAGS = $(CPPFLAGS)

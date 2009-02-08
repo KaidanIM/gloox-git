@@ -17,5 +17,6 @@ mucroommucowner_test_LDADD =../../connectiontcpclient.o ../../connectiontcpbase.
 			../../iq.o ../../presence.o ../../message.o ../../subscription.o ../../util.o \
 			../../sha.o ../../error.o ../../clientbase.o ../../jid.o ../../dataform.o \
 			../../dataformfieldcontainer.o ../../dataformreported.o ../../dataformitem.o \
-			../../dataformfield.o ../../mucroom.o ../../delayeddelivery.o ../../mucmessagesession.o
+			../../dataformfield.o ../../mucroom.o ../../delayeddelivery.o ../../mucmessagesession.o \
+			../../softwareversion.o
 mucroommucowner_test_CFLAGS = $(CPPFLAGS)
