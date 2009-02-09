@@ -118,7 +118,7 @@ namespace gloox
          * Returns the node's ID for which the notification is sent.
          * @return The node's ID.
          */
-        const std::string& node() { return m_node; }
+        const std::string& node() const { return m_node; }
 
         // reimplemented from StanzaExtension
         const std::string& filterString() const;
