@@ -352,7 +352,7 @@ namespace gloox
     return fd;
   }
 
-  int DNS::connect( const std::string& host, unsigned short port, const LogSink& logInstance )
+  int DNS::connect( const std::string& host, int port, const LogSink& logInstance )
   {
     int fd = getSocket();
     if( fd < 0 )

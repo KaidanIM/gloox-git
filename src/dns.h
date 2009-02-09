@@ -107,7 +107,7 @@ namespace gloox
        * @param logInstance A LogSink to use for logging.
        * @return A file descriptor for the established connection.
        */
-      static int connect( const std::string& host, unsigned short port, const LogSink& logInstance );
+      static int connect( const std::string& host, int port, const LogSink& logInstance );
 
       /**
        * A convenience function that prepares and returnes a simple, unconnected TCP socket.
