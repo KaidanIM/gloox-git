@@ -82,7 +82,7 @@ LINK32=link.exe
 # ADD LINK32 wsock32.lib crypt32.lib secur32.lib dnsapi.lib /nologo /dll /debug /machine:I386 /nodefaultlib:"libcd" /pdbtype:sept
 # SUBTRACT LINK32 /pdb:none
 
-!ENDIF 
+!ENDIF
 
 # Begin Target
 
@@ -102,6 +102,10 @@ SOURCE=.\src\amp.cpp
 # Begin Source File
 
 SOURCE=.\src\annotations.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\attention.cpp
 # End Source File
 # Begin Source File
 
@@ -401,6 +405,10 @@ SOURCE=.\src\socks5bytestreamserver.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\softwareversion.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\stanza.cpp
 # End Source File
 # Begin Source File
@@ -498,6 +506,10 @@ SOURCE=.\src\annotations.h
 # Begin Source File
 
 SOURCE=.\src\annotationshandler.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\attention.h
 # End Source File
 # Begin Source File
 
