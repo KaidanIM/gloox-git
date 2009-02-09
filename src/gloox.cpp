@@ -104,7 +104,9 @@ namespace gloox
   const std::string XMLNS_JINGLE_ICE_UDP    = "urn:xmpp:tmp:jingle:transports:ice-udp";
   const std::string XMLNS_JINGLE_RAW_UDP    = "urn:xmpp:tmp:jingle:transports:raw-udp";
   const std::string XMLNS_JINGLE_VIDEO_RTP  = "urn:xmpp:tmp:jingle:apps:video-rtp";
-  const std::string XMLNS_SHIM = "http://jabber.org/protocol/shim";
+
+  const std::string XMLNS_SHIM              = "http://jabber.org/protocol/shim";
+  const std::string XMLNS_ATTENTION         = "urn:xmpp:attention:0";
 
   const std::string XMPP_STREAM_VERSION_MAJOR = "1";
   const std::string XMPP_STREAM_VERSION_MINOR = "0";

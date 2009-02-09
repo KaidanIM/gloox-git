@@ -32,7 +32,7 @@ libgloox_la_SOURCES = jid.cpp parser.cpp connectiontcpclient.cpp clientbase.cpp 
                         messageevent.cpp receipt.cpp nickname.cpp eventdispatcher.cpp \
                         pubsubevent.cpp xhtmlim.cpp featureneg.cpp jinglesession.cpp jinglecontent.cpp \
                         jingledescription.cpp jingletransport.cpp \
-                        shim.cpp softwareversion.cpp
+                        shim.cpp softwareversion.cpp attention.cpp
 
 libgloox_la_LDFLAGS = -version-info 8:0:0 -no-undefined -no-allow-shlib-undefined
 libgloox_la_LIBADD =
@@ -40,7 +40,7 @@ libgloox_la_CFLAGS = $(CPPFLAGS)
 
 libglooxincludedir = $(includedir)/gloox
 libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        tag.h \
-                            adhoc.h                   iqhandler.h             privatexml.h \
+                            adhoc.h attention.h iqhandler.h             privatexml.h \
                             annotations.h             client.h                privatexmlhandler.h \
                             annotationshandler.h      component.h             registration.h \
                             bookmarkhandler.h         registrationhandler.h   jid.h \

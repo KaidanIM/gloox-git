@@ -46,7 +46,8 @@ namespace gloox
 
   const std::string& LastActivity::Query::filterString() const
   {
-    static const std::string filter = "/iq/query[@xmlns='" + XMLNS_LAST + "']";
+    static const std::string filter = "/iq/query[@xmlns='" + XMLNS_LAST + "']"
+        "|/presence/query[@xmlns='" + XMLNS_LAST + "']";
     return filter;
   }
 

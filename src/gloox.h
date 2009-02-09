@@ -570,6 +570,9 @@ namespace gloox
   /** Stanza Headers and Internet Metadata (SHIM) namespace (XEP-0131) */
   GLOOX_API extern const std::string XMLNS_SHIM;
 
+  /** Attention namespace (XEP-0224) */
+  GLOOX_API extern const std::string XMLNS_ATTENTION;
+
 
   /** Supported stream version (major). */
   GLOOX_API extern const std::string XMPP_STREAM_VERSION_MAJOR;
