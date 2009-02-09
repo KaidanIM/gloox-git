@@ -15,12 +15,7 @@
 
 #include "gloox.h"
 
-#ifdef _WIN32_WCE
-# include <cmath>
-#else
-# include <sstream>
-#endif
-
+#include <cmath>
 #include <algorithm>
 #include <string>
 #include <list>
@@ -224,24 +219,31 @@ namespace gloox
     /**
      * Converts a long int to its string representation.
      * @param value The long integer value.
+     * @param base The integer's base.
      * @return The long int's string represenation.
      */
-    static inline const std::string long2string( long int value )
+    static inline const std::string long2string( long int value, const int base = 10 )
     {
-#ifdef _WIN32_WCE
-      if( value < 0 )
-        value = 0;
-      const int len = 4 + (int)std::log10( value ? value : 1 ) + 1;
-      char* tmp = new char[len];
-      sprintf( tmp, "%ld", value );
-      std::string ret( tmp, len );
-      delete[] tmp;
-      return ret;
-#else
-      std::ostringstream oss;
-      oss << value;
-      return oss.str();
-#endif
+      int add = 0;
+      if( base < 2 || base > 16 || value == 0 )
+        return "0";
+      else if( value < 0 )
+      {
+        ++add;
+        value = -value;
+      }
+      int len = (int)( log( value ? value : 1 ) / log( base ) ) + 1;
+      const char* digits = "0123456789ABCDEF";
+      char* num = (char*)malloc( len + 1 + add );
+      num[len--] = '\0';
+      if( add )
+        num[0] = '-';
+      while( value && len > -1 )
+      {
+        num[len-- + add] = digits[(int)( value % base )];
+        value /= base;
+      }
+      return num;
     }
 
     /**
