@@ -315,7 +315,7 @@
  * @li XEP-0153 @link gloox::VCardUpdate vCard-based Avatars @endlink
  * @li XEP-0172 @link gloox::Nickname User Nickname @endlink
  * @li XEP-0184 @link gloox::Receipt Message Receipts @endlink
- * @li XEP-0199 @link gloox::Ping XMPP Ping @endlink
+ * @li XEP-0199 @link gloox::ClientBase::XMPPpING() XMPP Ping @endlink
  * @li XEP-0203 @link gloox::DelayedDelivery Delayed Delivery @endlink (new spec)
  * @li XEP-0206 @link gloox::ConnectionBOSH see BOSH @endlink
  * @li XEP-0224 @link gloox::Attention Attention @endlink
