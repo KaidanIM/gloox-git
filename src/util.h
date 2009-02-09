@@ -233,8 +233,8 @@ namespace gloox
         value = -value;
       }
       int len = (int)( log( value ? value : 1 ) / log( base ) ) + 1;
-      const char* digits = "0123456789ABCDEF";
-      char* num = (char*)malloc( len + 1 + add );
+      const char digits[] = "0123456789ABCDEF";
+      char* num = (char*)calloc( len + 1 + add, sizeof( char ) );
       num[len--] = '\0';
       if( add )
         num[0] = '-';
@@ -243,7 +243,9 @@ namespace gloox
         num[len-- + add] = digits[(int)( value % base )];
         value /= base;
       }
-      return num;
+      const std::string result( num );
+      free( num );
+      return result;
     }
 
     /**
