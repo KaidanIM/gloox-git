@@ -90,14 +90,14 @@ class MessageTest : public ConnectionListener, LogHandler, MUCRoomHandler
     }
 
     virtual void handleMUCParticipantPresence( MUCRoom * /*room*/, const MUCRoomParticipant participant,
-                                            Presence::PresenceType presence )
+                                            const Presence& presence )
     {
-      if( presence == Presence::Available )
+      if( presence.presence() == Presence::Available )
         printf( "!!!!!!!!!!!!!!!! %s is in the room, too\n", participant.nick->resource().c_str() );
-      else if( presence == Presence::Unavailable )
+      else if( presence.presence() == Presence::Unavailable )
         printf( "!!!!!!!!!!!!!!!! %s left the room\n", participant.nick->resource().c_str() );
       else
-        printf( "Presence is %d of %s\n", presence, participant.nick->resource().c_str() );
+        printf( "Presence is %d of %s\n", presence.presence(), participant.nick->resource().c_str() );
     }
 
     virtual void handleMUCMessage( MUCRoom* /*room*/, const Message& msg, bool priv )

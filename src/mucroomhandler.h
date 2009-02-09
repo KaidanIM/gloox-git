@@ -102,37 +102,10 @@ namespace gloox
        * this function returned.
        * @param room The room.
        * @param participant A struct describing the occupant's status and/or action.
-       * @param presence The occupant's presence.
+       * @param presence The occupant's full presence.
        */
       virtual void handleMUCParticipantPresence( MUCRoom* room, const MUCRoomParticipant participant,
-                                                 Presence::PresenceType presence ) = 0;
-
-      /**
-       * This function is called when a message arrives through the room.
-       * @note This may be a private message! If the message is private, and you want to answer
-       * it privately, you should create a new MessageSession to the user's full room nick and use
-       * that for any further private communication with the user.
-       * @param room The room the message came from.
-       * @param nick The sending user's nickname in the room.
-       * @param message The message.
-       * @param history Indicates whether or not this is a message that was sent prior to
-       * entering the room and is part of the room history the room sends after joining.
-       * @param when This is only used if @c history is @b true and then contains the
-       * datetime the message was sent in a notation as described in XEP-0082.
-       * @param privateMessage Indicates whether this is a private message.
-       * @deprecated Will be removed in gloox 1.1. Use handleMUCMessage( MUCRoom*, const Message&, bool ).
-       */
-      virtual GLOOX_DEPRECATED void handleMUCMessage( MUCRoom* room, const std::string& nick,
-                                                      const std::string& message, bool history,
-                                                      const std::string& when, bool privateMessage )
-      {
-        (void)room;
-        (void)nick;
-        (void)message;
-        (void)history;
-        (void)when;
-        (void)privateMessage;
-      };
+          const Presence& presence ) = 0;
 
       /**
        * This function is called when a message arrives through the room.

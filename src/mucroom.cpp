@@ -954,7 +954,7 @@ namespace gloox
         m_nick.setResource( party.newNick );
 
       if( m_roomHandler )
-        m_roomHandler->handleMUCParticipantPresence( this, party, presence.presence() );
+        m_roomHandler->handleMUCParticipantPresence( this, party, presence );
 
       delete party.nick;
     }
@@ -1067,8 +1067,6 @@ namespace gloox
         if( msg.subtype() & ( Message::Chat | Message::Normal ) )
           privMsg = true;
 
-        m_roomHandler->handleMUCMessage( this, msg.from().resource(), msg.body(),
-                                         history, when, privMsg );
         m_roomHandler->handleMUCMessage( this, msg, privMsg );
       }
     }
