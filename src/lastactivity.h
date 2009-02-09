@@ -38,52 +38,16 @@ namespace gloox
   {
     public:
       /**
-       * Constructs a new LastActivity object.
-       * @param parent The ClientBase object to use for communication.
+       * @brief This is an abstraction of a LastActivity Query that
+       * can be used in XEP-0012 as well as XEP-0256.
+       *
+       * XEP-Version: 2.0 (XEP-0012)
+       * XEP-Version: 0.1 (XEP-0256)
+       *
+       * @author Jakob Schroeter <js@camaya.net>
+       * @since 1.0
        */
-      LastActivity( ClientBase* parent );
-
-      /**
-       * Virtual destructor.
-       */
-      virtual ~LastActivity();
-
-      /**
-       * Queries the given JID for their last activity. The result can be received by reimplementing
-       * @ref LastActivityHandler::handleLastActivityResult() and
-       * @ref LastActivityHandler::handleLastActivityError().
-       */
-      void query( const JID& jid );
-
-      /**
-       * Use this function to register an object as handler for incoming results of Last-Activity queries.
-       * Only one handler is possible at a time.
-       * @param lah The object to register as handler.
-       */
-      void registerLastActivityHandler( LastActivityHandler* lah ) { m_lastActivityHandler = lah; }
-
-      /**
-       * Use this function to un-register the LastActivityHandler set earlier.
-       */
-      void removeLastActivityHandler() { m_lastActivityHandler = 0; }
-
-      /**
-       * Use this function to reset the idle timer. By default the number of seconds since the
-       * instantiation will be used.
-       */
-      void resetIdleTimer();
-
-       // reimplemented from IqHandler
-      virtual bool handleIq( const IQ& iq );
-
-      // reimplemented from IqHandler
-      virtual void handleIqID( const IQ& iq, int context );
-
-    private:
-#ifdef LASTACTIVITY_TEST
-    public:
-#endif
-      class Query : public StanzaExtension
+      class GLOOX_API Query : public StanzaExtension
       {
         public:
           /**
@@ -133,6 +97,52 @@ namespace gloox
 
       };
 
+      /**
+       * Constructs a new LastActivity object.
+       * @param parent The ClientBase object to use for communication.
+       */
+      LastActivity( ClientBase* parent );
+
+      /**
+       * Virtual destructor.
+       */
+      virtual ~LastActivity();
+
+      /**
+       * Queries the given JID for their last activity. The result can be received by reimplementing
+       * @ref LastActivityHandler::handleLastActivityResult() and
+       * @ref LastActivityHandler::handleLastActivityError().
+       */
+      void query( const JID& jid );
+
+      /**
+       * Use this function to register an object as handler for incoming results of Last-Activity queries.
+       * Only one handler is possible at a time.
+       * @param lah The object to register as handler.
+       */
+      void registerLastActivityHandler( LastActivityHandler* lah ) { m_lastActivityHandler = lah; }
+
+      /**
+       * Use this function to un-register the LastActivityHandler set earlier.
+       */
+      void removeLastActivityHandler() { m_lastActivityHandler = 0; }
+
+      /**
+       * Use this function to reset the idle timer. By default the number of seconds since the
+       * instantiation will be used.
+       */
+      void resetIdleTimer();
+
+       // reimplemented from IqHandler
+      virtual bool handleIq( const IQ& iq );
+
+      // reimplemented from IqHandler
+      virtual void handleIqID( const IQ& iq, int context );
+
+    private:
+#ifdef LASTACTIVITY_TEST
+    public:
+#endif
       LastActivityHandler* m_lastActivityHandler;
       ClientBase* m_parent;
 

@@ -85,6 +85,7 @@ namespace gloox
     ExtPubSubEvent,                 /**< An extension for PubSub event notifications
                                      * (XEP-0060) */
     ExtSHIM,                        /**< An extension dealing with Stanza Headers and Internet Metadata (XEP-0131). */
+    ExtAttention,                   /**< An extension dealing with Attention (XEP-0224). */
     ExtUser                         /**< User-supplied extensions must use IDs above this. Do
                                      * not hard-code ExtUser's value anywhere, it is subject
                                      * to change. */
