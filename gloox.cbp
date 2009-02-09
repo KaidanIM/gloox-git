@@ -42,6 +42,8 @@
 		<Unit filename="src\annotations.cpp" />
 		<Unit filename="src\annotations.h" />
 		<Unit filename="src\annotationshandler.h" />
+                <Unit filename="src\attention.cpp" />
+                <Unit filename="src\attention.h" />
 		<Unit filename="src\base64.cpp" />
 		<Unit filename="src\base64.h" />
 		<Unit filename="src\bookmarkhandler.h" />
