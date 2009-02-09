@@ -42,7 +42,7 @@ namespace gloox
    * You must also pass to BOSH the address of the BOSH server you are dealing with, this is used
    * in the HTTP Host header.
    *
-   * In the case of using COnnectionBOSH through a HTTP proxy, supply httpServer and httpPort as
+   * In the case of using ConnectionBOSH through a HTTP proxy, supply httpServer and httpPort as
    * those of the proxy. In all cases, boshHost should be set to the hostname (not IP address) of
    * the server running the BOSH connection manager.
    *
@@ -50,17 +50,11 @@ namespace gloox
    * to be used with other transports (like IPv6 or chained SOCKS5/HTTP proxies, or ConnectionTLS
    * for HTTPS).
    *
-   * ConnectionBOSH has currently been tested and proven to work with the Openfire implementation
-   * (working best with setMode(ModeLegacyHTTP) ), and a standalone connection manager found here:
-   * http://blog.bluendo.com/ff/bosh-connection-manager-update
-   *
    * Sample configurations for different servers can be found in the bosh_example.cpp file included
    * with gloox in the @b src/examples directory.
    *
-   * @note HTTPS (through the use of ConnectionTLS) is not currently supported, but work is ongoing
-   * to correct this.
-   *
    * @author Matthew Wild <mwild1@gmail.com>
+   * @author Jakob Schroeter <js@camaya.net>
    * @since 1.0
    */
   class GLOOX_API ConnectionBOSH : public ConnectionBase, ConnectionDataHandler, TagHandler
