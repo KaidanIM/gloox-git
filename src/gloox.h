@@ -295,6 +295,7 @@
  * @li XEP-0066 @link gloox::OOB Out of Band Data @endlink, also used with @ref filetransfer_sec
  * @li XEP-0077 @link gloox::Registration In-Band Registration @endlink
  * @li XEP-0078 Non-SASL Authentication (automatically used if the server does not support SASL)
+ * @li XEP-0079 @link gloox::AMP Advanced Message Processing @endlink
  * @li XEP-0083 Nested Roster Groups (automatically used if supported by the server. see
  * @link gloox::RosterManager::delimiter() RosterManager @endlink)
  * @li XEP-0085 Chat State Notifications (see @link gloox::MessageSession MessageSession @endlink for
@@ -303,12 +304,22 @@
  * @li XEP-0092 Software Version (integrated into @link gloox::Disco Service Discovery @endlink)
  * @li XEP-0095 @link gloox::SIManager Stream Initiation @endlink, used with @ref filetransfer_sec
  * @li XEP-0096 @ref filetransfer_sec
+ * @li XEP-0106 @link gloox::JID::escapeNode() JID Escaping @endlink
  * @li XEP-0114 @link gloox::Component Jabber Component Protocol @endlink
+ * @li XEP-0115 @link gloox::Capabilities Entity Capabilities @endlink (used automatically internally)
+ * @li XEP-0124 @link gloox::ConnectionBOSH Bidirectional-streams Over Synchronous HTTP (BOSH) @endlink
+ * @li XEP-0131 @link gloox::SHIM Stanza Headers and Internet Metadata @endlink
  * @li XEP-0138 Stream Compression (used automatically if gloox is compiled with zlib and if the server
  * supports it)
  * @li XEP-0145 @link gloox::Annotations Annotations @endlink
  * @li XEP-0153 @link gloox::VCardUpdate vCard-based Avatars @endlink
+ * @li XEP-0172 @link gloox::Nickname User Nickname @endlink
+ * @li XEP-0184 @link gloox::Receipt Message Receipts @endlink
+ * @li XEP-0199 @link gloox::Ping XMPP Ping @endlink
  * @li XEP-0203 @link gloox::DelayedDelivery Delayed Delivery @endlink (new spec)
+ * @li XEP-0206 @link gloox::ConnectionBOSH see BOSH @endlink
+ * @li XEP-0224 @link gloox::Attention Attention @endlink
+ * @li XEP-0256 @link gloox::LastActivity::Query Last Activity in Presence @endlink
  *
  * Further extensions can easily be implemented using
  * @link gloox::StanzaExtension StanzaExtensions @endlink.
