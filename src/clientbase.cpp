@@ -182,6 +182,7 @@ namespace gloox
     {
       m_encryption->setCACerts( m_cacerts );
       m_encryption->setClientCert( m_clientKey, m_clientCerts );
+//       m_encryption->setCredentials();
     }
 
     if( !m_compression )
@@ -354,27 +355,34 @@ namespace gloox
   {
     if( m_connection )
       m_connection->cleanup();
+
+    if( m_encryption )
+      m_encryption->cleanup();
+
+    m_encryptionActive = false;
+    m_compressionActive = false;
+
     notifyOnDisconnect( reason );
   }
 
   void ClientBase::disconnect( ConnectionError reason )
   {
-    if( m_connection && m_connection->state() >= StateConnecting )
-    {
-      if( reason != ConnTlsFailed )
-        send( "</stream:stream>" );
+    if( !m_connection || m_connection->state() < StateConnecting )
+      return;
 
-      m_connection->disconnect();
-      m_connection->cleanup();
+    if( reason != ConnTlsFailed )
+      send( "</stream:stream>" );
 
-      if( m_encryption )
-        m_encryption->cleanup();
+    m_connection->disconnect();
+    m_connection->cleanup();
 
-      m_encryptionActive = false;
-      m_compressionActive = false;
+    if( m_encryption )
+      m_encryption->cleanup();
 
-      notifyOnDisconnect( reason );
-    }
+    m_encryptionActive = false;
+    m_compressionActive = false;
+
+    notifyOnDisconnect( reason );
   }
 
   void ClientBase::parse( const std::string& data )
