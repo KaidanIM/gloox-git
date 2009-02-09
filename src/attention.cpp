@@ -29,7 +29,7 @@ namespace gloox
 
   const std::string& Attention::filterString() const
   {
-    static const std::string filter = "/message/query[@xmlns='" + XMLNS_ATTENTION + "']";
+    static const std::string filter = "/message/attention[@xmlns='" + XMLNS_ATTENTION + "']";
     return filter;
   }
 
