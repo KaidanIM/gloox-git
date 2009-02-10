@@ -21,17 +21,19 @@ namespace gloox
 {
 
   RAP::RAP( const Tag* tag )
-    : StanzaExtension( ExtRAP )
+    : StanzaExtension( ExtRAP ), m_primary( false )
   {
     if( !tag || tag->name() != "rap" || tag->xmlns() != XMLNS_RAP )
       return;
 
     m_ns = tag->findAttribute( "ns" );
     m_num = strtol( tag->findAttribute( "num" ).c_str(), 0, 10 );
+
+    m_primary = tag->hasChild( "primary" );
   }
 
   RAP::RAP( const std::string& ns, int num )
-    : StanzaExtension( ExtRAP ), m_ns( ns ), m_num( num )
+    : StanzaExtension( ExtRAP ), m_ns( ns ), m_num( num ), m_primary( false )
   {
   }
 
@@ -51,6 +53,9 @@ namespace gloox
     t->setXmlns( XMLNS_RAP );
     t->addAttribute( "ns", m_ns );
     t->addAttribute( "num", m_num );
+    if( m_primary )
+      new Tag( t, "primary" );
+
     return t;
   }
 
