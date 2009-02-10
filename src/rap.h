@@ -74,6 +74,7 @@ namespace gloox
     private:
       std::string m_ns;
       int m_num;
+      bool m_primary;
 
   };
 
