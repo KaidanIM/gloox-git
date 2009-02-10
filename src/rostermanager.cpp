@@ -91,6 +91,17 @@ namespace gloox
 
     return t;
   }
+
+  StanzaExtension* RosterManager::Query::clone() const
+  {
+    Query* q = new Query();
+    RosterData::const_iterator it = m_roster.begin();
+    for( ; it != m_roster.end(); ++it )
+    {
+      q->m_roster.push_back( new RosterItemData( *(*it) ) );
+    }
+    return q;
+  }
   // ---- ~RosterManager::Query ----
 
   // ---- RosterManager ----
