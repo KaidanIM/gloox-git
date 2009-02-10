@@ -250,16 +250,7 @@ namespace gloox
           virtual Tag* tag() const;
 
           // reimplemented from StanzaExtension
-          virtual StanzaExtension* clone() const
-          {
-            Query* q = new Query();
-            RosterData::const_iterator it = m_roster.begin();
-            for( ; it != m_roster.end(); ++it )
-            {
-              q->m_roster.push_back( new RosterItemData( *(*it) ) );
-            }
-            return q;
-          }
+          virtual StanzaExtension* clone() const;
 
         private:
           RosterData m_roster;
