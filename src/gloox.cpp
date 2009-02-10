@@ -99,7 +99,7 @@ namespace gloox
   const std::string XMLNS_RECEIPTS          = "urn:xmpp:receipts";
   const std::string XMLNS_NICKNAME          = "http://jabber.org/protocol/nick";
 
-  const std::string XMLNS_JINGLE            = "urn:xmpp:tmp:jingle";
+  const std::string XMLNS_JINGLE            = "urn:xmpp:jingle:0";
   const std::string XMLNS_JINGLE_AUDIO_RTP  = "urn:xmpp:tmp:jingle:apps:audio-rtp";
   const std::string XMLNS_JINGLE_ICE_UDP    = "urn:xmpp:tmp:jingle:transports:ice-udp";
   const std::string XMLNS_JINGLE_RAW_UDP    = "urn:xmpp:tmp:jingle:transports:raw-udp";
@@ -107,6 +107,7 @@ namespace gloox
 
   const std::string XMLNS_SHIM              = "http://jabber.org/protocol/shim";
   const std::string XMLNS_ATTENTION         = "urn:xmpp:attention:0";
+  const std::string XMLNS_RAP               = "urn:xmpp:rap:0";
 
   const std::string XMPP_STREAM_VERSION_MAJOR = "1";
   const std::string XMPP_STREAM_VERSION_MINOR = "0";

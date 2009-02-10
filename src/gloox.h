@@ -313,6 +313,7 @@
  * supports it)
  * @li XEP-0145 @link gloox::Annotations Annotations @endlink
  * @li XEP-0153 @link gloox::VCardUpdate vCard-based Avatars @endlink
+ * @li XEP-0168 @link gloox::RAP Resource Application Priority @endlink
  * @li XEP-0172 @link gloox::Nickname User Nickname @endlink
  * @li XEP-0184 @link gloox::Receipt Message Receipts @endlink
  * @li XEP-0199 @link gloox::ClientBase::xmppPing() XMPP Ping @endlink
@@ -583,6 +584,9 @@ namespace gloox
 
   /** Attention namespace (XEP-0224) */
   GLOOX_API extern const std::string XMLNS_ATTENTION;
+
+  /** Resource Application Priority namespace (XEP-0168) */
+  GLOOX_API extern const std::string XMLNS_RAP;
 
 
   /** Supported stream version (major). */
