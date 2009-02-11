@@ -31,7 +31,7 @@ namespace gloox
      * @link gloox::Jingle::Session Jingle::Session @endlink for more info on Jingle.
      *
      * @author Jakob Schroeter <js@camaya.net>
-     * @since 1.0
+     * @since 1.1
      */
     class Transport : public Plugin
     {

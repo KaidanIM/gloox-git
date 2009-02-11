@@ -32,6 +32,7 @@ libgloox_la_SOURCES = jid.cpp parser.cpp connectiontcpclient.cpp clientbase.cpp 
                         messageevent.cpp receipt.cpp nickname.cpp eventdispatcher.cpp \
                         pubsubevent.cpp xhtmlim.cpp featureneg.cpp jinglesession.cpp jinglecontent.cpp \
                         jingletransport.cpp \
+                        jingleaudiortp.cpp \
                         shim.cpp softwareversion.cpp attention.cpp \
                         rap.cpp
 
