@@ -105,7 +105,7 @@ namespace gloox
        * Use this function to retrieve the optional values of a field.
        * @return The options of a field.
        */
-      StringMap& options() { return m_options; }
+      const StringMultiMap& options() const { return m_options; }
 
       /**
        * Use this function to create a Tag representation of the form field. This is usually called by
@@ -135,7 +135,7 @@ namespace gloox
        * value. ;)
        * @param options The optional values of a list* or *multi type of field.
        */
-      void setOptions( const StringMap& options ) { m_options = options; }
+      void setOptions( const StringMultiMap& options ) { m_options = options; }
 
       /**
        * Adds a single option to the list of options.
@@ -227,7 +227,7 @@ namespace gloox
     private:
       FieldType m_type;
 
-      StringMap m_options;
+      StringMultiMap m_options;
       StringList m_values;
 
       std::string m_name;

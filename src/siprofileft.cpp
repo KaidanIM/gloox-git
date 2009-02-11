@@ -83,13 +83,13 @@ namespace gloox
     Tag* feature = new Tag( "feature", XMLNS, XMLNS_FEATURE_NEG );
     DataForm df( TypeForm );
     DataFormField* dff = df.addField( DataFormField::TypeListSingle, "stream-method" );
-    StringMap sm;
+    StringMultiMap sm;
     if( streamTypes & FTTypeS5B )
-      sm["s5b"] = XMLNS_BYTESTREAMS;
+      sm.insert( std::make_pair( "s5b", XMLNS_BYTESTREAMS ) );
     if( streamTypes & FTTypeIBB )
-      sm["ibb"] = XMLNS_IBB;
+      sm.insert( std::make_pair( "ibb", XMLNS_IBB ) );
     if( streamTypes & FTTypeOOB )
-      sm["oob"] = XMLNS_IQ_OOB;
+      sm.insert( std::make_pair( "oob", XMLNS_IQ_OOB ) );
     dff->setOptions( sm );
     feature->addChild( df.tag() );
 
@@ -198,12 +198,17 @@ namespace gloox
 
         if( dff )
         {
-          if( dff->value() == XMLNS_BYTESTREAMS )
-            types |= FTTypeS5B;
-          else if( dff->value() == XMLNS_IBB )
-            types |= FTTypeIBB;
-          else if( dff->value() == XMLNS_IQ_OOB )
-            types |= FTTypeOOB;
+          const StringMultiMap& options = dff->options();
+          StringMultiMap::const_iterator it = options.begin();
+          for( ; it != options.end(); ++it )
+          {
+            if( (*it).second == XMLNS_BYTESTREAMS )
+              types |= FTTypeS5B;
+            else if( (*it).second == XMLNS_IBB )
+              types |= FTTypeIBB;
+            else if( (*it).second == XMLNS_IQ_OOB )
+              types |= FTTypeOOB;
+          }
         }
       }
 
