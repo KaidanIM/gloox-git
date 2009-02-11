@@ -126,10 +126,10 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   name = "set values";
   f = new DataFormField();
-  StringMap opt;
-  opt["lock"] = "1";
-  opt["stock"] = "1";
-  opt["smoking barrel"] = "2";
+  StringMultiMap opt;
+  opt.insert( std::make_pair( "lock", "1" ) );
+  opt.insert( std::make_pair( "stock", "1" ) );
+  opt.insert( std::make_pair( "smoking barrel", "2" ) );
   f->setOptions( opt );
   if( f->options() != opt )
   {
