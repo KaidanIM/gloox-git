@@ -75,7 +75,7 @@ namespace gloox
       {
         Tag* v = (*it)->findChild( "value" );
         if( v )
-          m_options[(*it)->findAttribute( "label" )] = v->cdata();
+          m_options.insert( std::make_pair( (*it)->findAttribute( "label" ), v->cdata() ) );
       }
     }
 
@@ -102,7 +102,7 @@ namespace gloox
 
     if( m_type == TypeListSingle || m_type == TypeListMulti )
     {
-      StringMap::const_iterator it = m_options.begin();
+      StringMultiMap::const_iterator it = m_options.begin();
       for( ; it != m_options.end(); ++it )
       {
         Tag* option = new Tag( field, "option", "label", (*it).first );
