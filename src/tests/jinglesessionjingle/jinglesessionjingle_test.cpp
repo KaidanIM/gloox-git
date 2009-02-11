@@ -12,7 +12,6 @@ using namespace gloox;
 #include <locale.h>
 #include <string>
 
-
 namespace gloox
 {
 
@@ -28,10 +27,11 @@ namespace gloox
   class ClientBase
   {
     public:
-      ClientBase() {}
+      ClientBase() : m_jid( "fooqbar/foobar" ) {}
       virtual ~ClientBase() {}
       const std::string getID() { return "id"; }
       virtual void send( IQ& iq, IqHandler*, int ) = 0;
+      virtual void send( IQ& iq ) = 0;
       virtual void trackID( IqHandler *ih, const std::string& id, int context ) = 0;
       void removeIDHandler( IqHandler* ) {}
       void registerIqHandler( IqHandler*, int ) {}
@@ -40,6 +40,9 @@ namespace gloox
       void removeStanzaExtension( int ) {}
       ConnectionState state() const { return StateConnected; }
       bool authed() { return false; }
+      const JID& jid() const { return m_jid; }
+    private:
+      JID m_jid;
   };
 }
 
@@ -51,6 +54,7 @@ int main( int /*argc*/, char** /*argv*/ )
 {
   int fail = 0;
   std::string name;
+  JID jid( "foo@bar/barfoo" );
 
   // -------
   {
@@ -68,7 +72,7 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   {
     name = "invalid Jingle 2";
-    Jingle::Session::Jingle js( Jingle::ContentAccept, 0, "somesid" );
+    Jingle::Session::Jingle js( Jingle::ContentAccept, jid, 0, "somesid" );
     Tag* t = js.tag();
     if( t )
     {
@@ -81,8 +85,8 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   {
     name = "empty Jingle, content-accept";
-    Jingle::Session::Jingle js( Jingle::ContentAccept, 0, "somesid" );
-    js.setInitiator( "someinitiator" );
+    Jingle::Session::Jingle js( Jingle::ContentAccept, jid, 0, "somesid" );
+    js.setInitiator( jid );
     Tag* t = js.tag();
     if( !t || t->xml() != "<jingle xmlns='" + XMLNS_JINGLE + "' "
          "action='content-accept' initiator='someinitiator' sid='somesid'/>" )
@@ -96,8 +100,8 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   {
     name = "empty Jingle, transport-info";
-    Jingle::Session::Jingle js( Jingle::TransportInfo, 0, "somesid" );
-    js.setInitiator( "someinitiator" );
+    Jingle::Session::Jingle js( Jingle::TransportInfo, jid, 0, "somesid" );
+    js.setInitiator( jid );
     Tag* t = js.tag();
     if( !t || t->xml() != "<jingle xmlns='" + XMLNS_JINGLE + "' "
          "action='transport-info' initiator='someinitiator' sid='somesid'/>" )
@@ -111,8 +115,8 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   {
     name = "empty Jingle, session-initiate";
-    Jingle::Session::Jingle js( Jingle::SessionInitiate, 0, "somesid" );
-    js.setInitiator( "someinitiator" );
+    Jingle::Session::Jingle js( Jingle::SessionInitiate, jid, 0, "somesid" );
+    js.setInitiator( jid );
     Tag* t = js.tag();
     if( !t || t->xml() != "<jingle xmlns='" + XMLNS_JINGLE + "' "
          "action='session-initiate' initiator='someinitiator' sid='somesid'/>" )
@@ -126,8 +130,8 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   {
     name = "empty Jingle, content-replace";
-    Jingle::Session::Jingle js( Jingle::ContentRemove, 0, "somesid" );
-    js.setInitiator( "someinitiator" );
+    Jingle::Session::Jingle js( Jingle::ContentRemove, jid, 0, "somesid" );
+    js.setInitiator( jid );
     Tag* t = js.tag();
     if( !t || t->xml() != "<jingle xmlns='" + XMLNS_JINGLE + "' "
          "action='content-remove' initiator='someinitiator' sid='somesid'/>" )
@@ -141,8 +145,8 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   {
     name = "empty Jingle w/ initiator & responder";
-    Jingle::Session::Jingle js( Jingle::ContentAccept, 0, "somesid" );
-    js.setInitiator( "someinitiator" );
+    Jingle::Session::Jingle js( Jingle::ContentAccept, jid, 0, "somesid" );
+    js.setInitiator( jid );
     js.setResponder( "someresponder" );
     Tag* t = js.tag();
     if( !t || t->xml() != "<jingle xmlns='" + XMLNS_JINGLE + "' "
