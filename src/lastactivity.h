@@ -41,8 +41,8 @@ namespace gloox
        * @brief This is an abstraction of a LastActivity Query that
        * can be used in XEP-0012 as well as XEP-0256.
        *
-       * XEP-Version: 2.0 (XEP-0012)
-       * XEP-Version: 0.1 (XEP-0256)
+       * XEP Version: 2.0 (XEP-0012)
+       * XEP Version: 0.1 (XEP-0256)
        *
        * @author Jakob Schroeter <js@camaya.net>
        * @since 1.0
