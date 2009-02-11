@@ -100,9 +100,13 @@ namespace gloox
   const std::string XMLNS_NICKNAME          = "http://jabber.org/protocol/nick";
 
   const std::string XMLNS_JINGLE            = "urn:xmpp:jingle:0";
+  const std::string XMLNS_JINGLE_ERROR      = "urn:xmpp:jingle:errors:0";
   const std::string XMLNS_JINGLE_RTP  = "urn:xmpp:jingle:apps:rtp:1";
-  const std::string XMLNS_JINGLE_ICE_UDP    = "urn:xmpp:tmp:jingle:transports:ice-udp";
-  const std::string XMLNS_JINGLE_RAW_UDP    = "urn:xmpp:tmp:jingle:transports:raw-udp";
+  const std::string XMLNS_JINGLE_ICE_UDP    = "urn:xmpp:jingle:transports:ice-udp:0";
+
+  const std::string XMLNS_JINGLE_RAW_UDP    = "urn:xmpp:jingle:transports:raw-udp:1";
+  const std::string XMLNS_JINGLE_DTMF       = "urn:xmpp:jingle:dtmf:0";
+  const std::string XMLNS_JINGLE_FILE_TRANSFER= "urn:xmpp:jingle:apps:file-transfer:0";
 
   const std::string XMLNS_SHIM              = "http://jabber.org/protocol/shim";
   const std::string XMLNS_ATTENTION         = "urn:xmpp:attention:0";

@@ -14,6 +14,9 @@
 #ifndef JINGLESESSIONHANDLER_H__
 #define JINGLESESSIONHANDLER_H__
 
+#include "macros.h"
+#include "jinglesession.h"
+
 namespace gloox
 {
 
@@ -25,13 +28,18 @@ namespace gloox
      * @author Jakob Schroeter <js@camaya.net>
      * @since 1.0
      */
-    class SessionHandler
+    class GLOOX_API SessionHandler
     {
       public:
         /**
          * Virtual destructor.
          */
         virtual ~SessionHandler() {}
+
+        /**
+         *
+         */
+        virtual void handleSessionStateChange( const Session* session, const Session::Jingle* jingle ) = 0;
 
     };
 

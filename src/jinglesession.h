@@ -29,6 +29,9 @@ namespace gloox
   /**
    * @brief The namespace containing Jingle-related (XEP-0166 et. al.) classes.
    *
+   * See @link gloox::Jingle::Session Session @endlink for more information
+   * about Jingle in gloox.
+   *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 1.1
    */
@@ -103,7 +106,7 @@ namespace gloox
         {
           public:
             /**
-             * Reasons for terminating a Jingle Session.
+             * Defied reasons for terminating a Jingle Session.
              */
             enum Reasons
             {
@@ -128,8 +131,16 @@ namespace gloox
              * Constructor.
              * @param reason The reason for the termination of the session.
              * @param sid An optional session ID (only used if reason is AlternativeSession).
+             * @param text An optional human-readable text explaining the reason for the session termination.
              */
-            Reason( Reasons reason, const std::string& sid = EmptyString );
+            Reason( Reasons reason, const std::string& sid = EmptyString,
+                    const std::string& text = EmptyString );
+
+            /**
+             * Constructs a new element by parsing the given Tag.
+             * @param tag A tag to parse.
+             */
+            Reason( const Tag* tag = 0 );
 
             /**
              * Virtual destructor.
@@ -149,6 +160,13 @@ namespace gloox
              */
             const std::string& sid() const { return m_sid; }
 
+            /**
+             * Returns the content of an optional, human-readable
+             * &lt;text&gt; element.
+             * @return An optional text describing the reason for the action.
+             */
+            const std::string& text() const { return m_text; }
+
             // reimplemented from Jingle::Plugin
             virtual const std::string& filterString() const;
 
@@ -161,6 +179,7 @@ namespace gloox
           private:
             Reasons m_reason;
             std::string m_sid;
+            std::string m_text;
 
         };
 
@@ -189,19 +208,21 @@ namespace gloox
             virtual ~Jingle();
 
             /**
-             *
-             */
-            void addPlugin( const Plugin* plugin, Action action );
-
-            /**
-             *
+             * Returns the session ID.
+             * @return The session ID.
              */
             const std::string& sid() const { return m_sid; }
 
             /**
              *
              */
-            void setInitiator( const std::string& initiator ) { m_initiator = initiator; }
+            void setInitiator( const JID& jid ) { m_initiator = jid; }
+
+            /**
+             * Returns the initiator.
+             * @return The initiator.
+             */
+            const JID& initiator() const { return m_initiator; }
 
             /**
              *
@@ -236,20 +257,24 @@ namespace gloox
             /**
              * Constructs a new object and fills it according to the parameters.
              * @param action The Action to carry out.
+             * @param initiator The full JID initiator of the session flow.
              * @param plugins A list of contents (plugins) for the &lt;jingle&gt;
              * element. Usually, this will be Content objects.
              * @param sid The session ID:
              */
-            Jingle( Action action, const PluginList& plugins, const std::string& sid );
+            Jingle( Action action, const JID& initiator,
+                    const PluginList& plugins, const std::string& sid );
 
             /**
              * Constructs a new object and fills it according to the parameters.
              * @param action The Action to carry out.
+             * @param initiator The full JID initiator of the session flow.
              * @param plugin A single content (plugin) for the &lt;jingle&gt;
              * element. This may be Content object, but can be any Plugin-derived object.
              * @param sid The session ID:
              */
-            Jingle( Action action, const Plugin* plugin, const std::string& sid );
+            Jingle( Action action, const JID& initiator,
+                    const Plugin* plugin, const std::string& sid );
 
             /**
              * Copy constructor.
@@ -259,8 +284,8 @@ namespace gloox
 
             Action m_action;
             std::string m_sid;
-            std::string m_initiator;
-            std::string m_responder;
+            JID m_initiator;
+            JID m_responder;
             PluginList m_plugins;
 
         };
@@ -272,6 +297,16 @@ namespace gloox
          * @param jsh The handler to receive events and results.
          */
         Session( ClientBase* parent, const JID& callee, SessionHandler* jsh );
+
+        /**
+         * Creates a new Session from the incoming Jingle object.
+         * This is a NOOP for Jingles that have an action() different from SessionInitiate.
+         * @param param The ClientBase to use for communication.
+         * @param jingle The Jingle object to init the Session from.
+         * @param jsh The handler to receive events and results.
+         */
+        Session( ClientBase* parent, const Session::Jingle* jingle,
+                 SessionHandler* jsh );
 
         /**
          * Virtual Destructor.
@@ -297,7 +332,7 @@ namespace gloox
          * Sends an informational message (DescriptionInfo,
          * TransportInfo, SessionInfo) to the remote party.
          * @param action The type of message to send.
-         * @param plugin The payload.
+         * @param plugin The payload. May be 0.
          * @return @b False if a prerequisite is not met, @b true otherwise.
          */
         bool inform( Action action, const Plugin* plugin );
@@ -305,10 +340,9 @@ namespace gloox
         /**
          * Terminates the current session, if it is at least in Pending state, with the given reason. The sid parameter is ignored unless the reason is AlternativeSession.
          * @param reason The reason for terminating the session.
-         * @param sid The session ID of an alternative session.
          * @return @b False if a prerequisite is not met, @b true otherwise.
          */
-        bool terminate( Reason* reason, const std::string& sid = EmptyString );
+        bool terminate( Reason* reason );
 
         /**
          * Returns the session's state.
@@ -336,6 +370,7 @@ namespace gloox
         ClientBase* m_parent;
         State m_state;
         JID m_callee;
+        JID m_initiator;
         SessionHandler* m_handler;
         std::string m_sid;
         bool m_valid;

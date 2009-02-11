@@ -14,6 +14,7 @@
 #include "jinglesession.h"
 
 #include "clientbase.h"
+#include "error.h"
 #include "jinglecontent.h"
 #include "jingledescription.h"
 #include "jingletransport.h"
@@ -72,6 +73,29 @@ namespace gloox
       return (Session::Reason::Reasons)util::lookup( type, reasonValues );
     }
 
+    Session::Reason::Reason( Reasons reason,
+                             const std::string& sid,
+                             const std::string& text)
+      : m_reason( reason ), m_sid( sid ), m_text( text )
+    {
+    }
+
+    Session::Reason::Reason( const Tag* tag )
+    {
+      if( !tag || tag->name() != "reason" )
+        return;
+
+      const TagList& l = tag->children();
+      TagList::const_iterator it = l.begin();
+      for( ; it != l.end(); ++it )
+      {
+        if( (*it)->name() == "text" )
+          m_text = (*it)->cdata();
+        else if( (*it)->xmlns() == XMLNS_JINGLE )
+          m_reason = reasonType( (*it)->name() );
+      }
+    }
+
     const std::string& Session::Reason::filterString() const
     {
       static const std::string filter = "reason";
@@ -88,6 +112,9 @@ namespace gloox
       if( m_reason == AlternativeSession && !m_sid.empty() )
         new Tag( r, "sid", m_sid );
 
+      if( !m_text.empty() )
+        new Tag( t, "text", m_text );
+
       return t;
     }
 
@@ -98,13 +125,17 @@ namespace gloox
     // ---- ~Session::Reason ----
 
     // ---- Session::Jingle ----
-    Session::Jingle::Jingle( Action action, const PluginList& plugins, const std::string& sid )
-      : StanzaExtension( ExtJingle ), m_action( action ), m_sid( sid ), m_plugins( plugins )
+    Session::Jingle::Jingle( Action action, const JID& initiator,
+                             const PluginList& plugins, const std::string& sid )
+      : StanzaExtension( ExtJingle ), m_action( action ), m_sid( sid ),
+        m_initiator( initiator ), m_plugins( plugins )
     {
     }
 
-    Session::Jingle::Jingle( Action action, const Plugin* plugin, const std::string& sid )
-      : StanzaExtension( ExtJingle ), m_action( action ), m_sid( sid )
+    Session::Jingle::Jingle( Action action, const JID& initiator,
+                             const Plugin* plugin, const std::string& sid )
+      : StanzaExtension( ExtJingle ), m_action( action ), m_sid( sid ),
+        m_initiator( initiator )
     {
       if( plugin )
         m_plugins.push_back( plugin );
@@ -113,7 +144,15 @@ namespace gloox
     Session::Jingle::Jingle( const Tag* tag )
       : StanzaExtension( ExtJingle ), m_action( InvalidAction )
     {
-      // TBD
+      if( !tag || tag->name() != "jingle" )
+        return;
+
+      m_action = actionType( tag->findAttribute( "action" ) );
+      m_initiator.setJID( tag->findAttribute( "initiator" ) );
+      m_responder.setJID( tag->findAttribute( "responder" ) );
+      m_sid = tag->findAttribute( "sid" );
+
+      // FIXME parse child elements
     }
 
     Session::Jingle::Jingle( const Jingle& right )
@@ -138,14 +177,14 @@ namespace gloox
 
     Tag* Session::Jingle::tag() const
     {
-      if( m_action == InvalidAction || m_sid.empty() || m_initiator.empty() )
+      if( m_action == InvalidAction || m_sid.empty() || !m_initiator )
         return 0;
 
       Tag* t = new Tag( "jingle" );
       t->setXmlns( XMLNS_JINGLE );
       t->addAttribute( "action", util::lookup( m_action, actionValues ) );
       t->addAttribute( "initiator", m_initiator );
-      if( !m_responder.empty() )
+      if( m_responder )
         t->addAttribute( "responder", m_responder );
       t->addAttribute( "sid", m_sid );
 
@@ -164,12 +203,29 @@ namespace gloox
 
     // ---- Session ----
     Session::Session( ClientBase* parent, const JID& callee, SessionHandler* jsh )
-      : m_parent( parent ), m_state( Ended ), m_handler( jsh ), m_valid( false )
+      : m_parent( parent ), m_state( Ended ), m_callee( callee ),
+        m_handler( jsh ), m_valid( false )
     {
-      if( !m_parent || !m_handler )
+      if( !m_parent || !m_handler || !m_callee )
         return;
 
+      m_initiator = m_parent->jid();
+
       m_parent->registerStanzaExtension( new Jingle() );
+
+      m_valid = true;
+    }
+
+    Session::Session( ClientBase* parent, const Session::Jingle* jingle, SessionHandler* jsh )
+      : m_parent( parent ), m_state( Ended ), m_handler( jsh ), m_valid( false )
+    {
+      if( !m_parent || !m_handler || !jingle || jingle->action() != SessionInitiate )
+        return;
+
+      m_callee = m_parent->jid();
+      m_initiator = jingle->initiator();
+      m_state = Pending;
+      m_sid = jingle->sid();
 
       m_valid = true;
     }
@@ -182,12 +238,13 @@ namespace gloox
 
     bool Session::initiate( const PluginList& plugins )
     {
-      if( !m_valid || !m_parent || !plugins.empty() || m_state >= Pending )
+      if( !m_valid || !m_parent || !plugins.empty() || !m_initiator
+          || m_state >= Pending )
         return false;
 
       m_state = Pending;
       IQ init( IQ::Set, m_callee, m_parent->getID() );
-      init.addExtension( new Jingle( SessionInitiate, plugins, m_sid ) );
+      init.addExtension( new Jingle( SessionInitiate, m_initiator, plugins, m_sid ) );
       m_parent->send( init, this, SessionInitiate );
 
       return true;
@@ -195,12 +252,13 @@ namespace gloox
 
     bool Session::accept( const Content* content )
     {
-      if( !m_valid || !m_parent || !content || m_state > Pending )
+      if( !m_valid || !m_parent || !content || !m_initiator
+          || m_state > Pending )
         return false;
 
       m_state = Active;
       IQ init( IQ::Set, m_callee, m_parent->getID() );
-      init.addExtension( new Jingle( SessionAccept, content, m_sid ) );
+      init.addExtension( new Jingle( SessionAccept, m_initiator, content, m_sid ) );
       m_parent->send( init, this, SessionAccept );
 
       return true;
@@ -208,27 +266,27 @@ namespace gloox
 
     bool Session::inform( Action action, const Plugin* plugin )
     {
-      if( !m_valid || !m_parent || m_state < Pending
+      if( !m_valid || !m_parent || m_state < Pending || !m_initiator
           || action != DescriptionInfo || action != SessionInfo
           || action != TransportInfo )
         return false;
 
       IQ init( IQ::Set, m_callee, m_parent->getID() );
-      init.addExtension( new Jingle( action, plugin, m_sid ) );
+      init.addExtension( new Jingle( action, m_initiator, plugin, m_sid ) );
       m_parent->send( init, this, action );
 
       return true;
     }
 
-    bool Session::terminate( Session::Reason* reason, const std::string& sid )
+    bool Session::terminate( Session::Reason* reason )
     {
-      if( !m_valid || !m_parent || m_state < Pending )
+      if( !m_valid || !m_parent || m_state < Pending || !m_initiator )
         return false;
 
       m_state = Ended;
 
       IQ init( IQ::Set, m_callee, m_parent->getID() );
-      init.addExtension( new Jingle( SessionTerminate, reason, m_sid ) );
+      init.addExtension( new Jingle( SessionTerminate, m_initiator, reason, m_sid ) );
       m_parent->send( init, this, SessionTerminate );
 
       return true;
@@ -237,11 +295,60 @@ namespace gloox
     bool Session::handleIq( const IQ& iq )
     {
       const Jingle* j = iq.findExtension<Jingle>( ExtJingle );
-      if( !j || j->sid() != m_sid )
+      if( !j || j->sid() != m_sid || !m_handler )
         return false;
 
       switch( j->action() )
       {
+        case ContentAccept:
+          break;
+        case ContentAdd:
+          break;
+        case ContentModify:
+          break;
+        case ContentReject:
+          break;
+        case ContentRemove:
+          break;
+        case DescriptionInfo:
+          break;
+        case SessionAccept:
+        {
+          m_state = Active;
+          m_handler->handleSessionStateChange( this, j );
+          IQ re( IQ::Result, iq.from(), iq.id() );
+          m_parent->send( re );
+          break;
+        }
+        case SessionInfo:
+          break;
+        case SessionInitiate:
+        {
+          IQ re( IQ::Error, iq.from(), iq.id() );
+          Tag* e = new Tag( "unknown-session" );
+          e->setXmlns( XMLNS_JINGLE_ERROR );
+          re.addExtension( new Error( StanzaErrorTypeCancel, StanzaErrorItemNotFound, e) );
+          m_parent->send( re );
+          break;
+        }
+        case SessionTerminate:
+        {
+          m_state = Ended;
+          m_handler->handleSessionStateChange( this, j );
+          IQ re( IQ::Result, iq.from(), iq.id() );
+          m_parent->send( re );
+          break;
+        }
+        case TransportAccept:
+          break;
+        case TransportInfo:
+          break;
+        case TransportReject:
+          break;
+        case TransportReplace:
+          break;
+        case InvalidAction:
+          break;
         default:
           break;
       }
@@ -251,16 +358,43 @@ namespace gloox
 
     void Session::handleIqID( const IQ& iq, int context )
     {
-      if( iq.subtype() == IQ::Result )
+      if( iq.subtype() == IQ::Error )
       {
         switch( context )
         {
+          case ContentAccept:
+            break;
+          case ContentAdd:
+            break;
+          case ContentModify:
+            break;
+          case ContentReject:
+            break;
+          case ContentRemove:
+            break;
+          case DescriptionInfo:
+            break;
+          case SessionAccept:
+            break;
+          case SessionInfo:
+            break;
+          case SessionInitiate:
+            break;
+          case SessionTerminate:
+            break;
+          case TransportAccept:
+            break;
+          case TransportInfo:
+            break;
+          case TransportReject:
+            break;
+          case TransportReplace:
+            break;
+          case InvalidAction:
+            break;
           default:
             break;
         }
-      }
-      else if( iq.subtype() == IQ::Error )
-      {
       }
     }
 

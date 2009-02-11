@@ -567,6 +567,9 @@ namespace gloox
   /** Jingle namespace (XEP-0166) */
   GLOOX_API extern const std::string XMLNS_JINGLE;
 
+  /** Jingle error namespace (XEP-0166) */
+  GLOOX_API extern const std::string XMLNS_JINGLE_ERROR;
+
   /** Jingle Audio via RTP namespace (XEP-0167) */
   GLOOX_API extern const std::string XMLNS_JINGLE_RTP;
 
@@ -575,6 +578,15 @@ namespace gloox
 
   /** Jingle Raw UDP Transport namespace (XEP-0177) */
   GLOOX_API extern const std::string XMLNS_JINGLE_RAW_UDP;
+
+  /** Jingle DTMF namespace (XEP-0181) */
+  GLOOX_API extern const std::string XMLNS_JINGLE_DTMF;
+
+  /** Jingle File Transfer namespace (XEP-0234) */
+  GLOOX_API extern const std::string XMLNS_JINGLE_FILE_TRANSFER;
+
+  /** Jingle XML Streams namespace (XEP-0247) */
+  GLOOX_API extern const std::string XMLNS_JINGLE_XML_STREAMS;
 
   /** Stanza Headers and Internet Metadata (SHIM) namespace (XEP-0131) */
   GLOOX_API extern const std::string XMLNS_SHIM;
