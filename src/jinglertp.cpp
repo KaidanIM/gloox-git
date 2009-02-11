@@ -11,7 +11,7 @@
 */
 
 
-#include "jingleaudiortp.h"
+#include "jinglertp.h"
 #include "tag.h"
 #include "util.h"
 
@@ -21,8 +21,8 @@ namespace gloox
   namespace Jingle
   {
 
-    // ---- Jingle::AudioRTP::Payload ----
-    Tag* AudioRTP::Payload::tag() const
+    // ---- Jingle::RTP::Payload ----
+    Tag* RTP::Payload::tag() const
     {
       if( m_attribs.empty() )
         return 0;
@@ -42,24 +42,24 @@ namespace gloox
 
       return t;
     }
-    // ---- ~Jingle::AudioRTP::Payload ----
+    // ---- ~Jingle::RTP::Payload ----
 
-    // ---- Jingle::AudioRTP ----
-    AudioRTP::AudioRTP( const PayloadList& payload )
+    // ---- Jingle::RTP ----
+    RTP::RTP( const PayloadList& payload )
     {
     }
 
-    AudioRTP::~AudioRTP()
+    RTP::~RTP()
     {
     }
 
-    const std::string& AudioRTP::filterString() const
+    const std::string& RTP::filterString() const
     {
       static const std::string filter = "description[@xmlns='" + XMLNS_JINGLE_RTP +"']";
       return filter;
     }
 
-    Tag* AudioRTP::tag() const
+    Tag* RTP::tag() const
     {
       return 0;
     }
