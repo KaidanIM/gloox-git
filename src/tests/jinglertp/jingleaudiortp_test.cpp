@@ -17,9 +17,9 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   {
-    name = "empty AudioRTP";
-    Jingle::AudioRTP::PayloadList l;
-    Jingle::AudioRTP a( l );
+    name = "empty RTP";
+    Jingle::RTP::PayloadList l;
+    Jingle::RTP a( l );
     Tag* t = a.tag();
     if( !t || t->xml() != "<description xmlns='" + XMLNS_JINGLE_RTP + "'/>" )
     {
@@ -31,14 +31,14 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   {
-    name = "AudioRTP w/ simple payload";
-    Jingle::AudioRTP::PayloadList l;
+    name = "RTP w/ simple payload";
+    Jingle::RTP::PayloadList l;
     StringMap attrs;
     attrs.insert( std::make_pair( "id", "96" ) );
     attrs.insert( std::make_pair( "name", "speex" ) );
     attrs.insert( std::make_pair( "clockrate", "16000" ) );
-    l.push_back( new Jingle::AudioRTP::Payload( attrs, StringMap() ) );
-    Jingle::AudioRTP a( l );
+    l.push_back( new Jingle::RTP::Payload( attrs, StringMap() ) );
+    Jingle::RTP a( l );
     Tag* t = a.tag();
     if( !t || t->xml() != "<description xmlns='" + XMLNS_JINGLE_RTP + "'>"
          "<payload-type clockrate='16000' id='96' name='speex'/>"
@@ -52,7 +52,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
 
 
-  printf( "Jingle::AudioRTP: " );
+  printf( "Jingle::RTP: " );
   if( fail == 0 )
   {
     printf( "OK\n" );

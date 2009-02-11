@@ -11,8 +11,8 @@
 */
 
 
-#ifndef JINGLEAUDIORTP_H__
-#define JINGLEAUDIORTP_H__
+#ifndef JINGLERTP_H__
+#define JINGLERTP_H__
 
 #include "jingledescription.h"
 
@@ -34,7 +34,7 @@ namespace gloox
      * @author Jakob Schroeter <js@camaya.net>
      * @since 1.1
      */
-    class GLOOX_API AudioRTP : public Description
+    class GLOOX_API RTP : public Description
     {
       public:
         /**
@@ -80,18 +80,18 @@ namespace gloox
         /**
          * A list of payloads.
          */
-        typedef std::list<const AudioRTP::Payload*> PayloadList;
+        typedef std::list<const RTP::Payload*> PayloadList;
 
         /**
          * Creates a new wrapper for the Audio via RTP Application Format defined in XEP-0167.
          * @param payload A list of acceptable Payload Types.
          */
-        AudioRTP( const PayloadList& payload );
+        RTP( const PayloadList& payload );
 
         /**
          * Virtual destructor.
          */
-        virtual ~AudioRTP();
+        virtual ~RTP();
 
         // reimplemented from Description
         virtual const std::string& xmlns() const { return XMLNS_JINGLE_RTP; }
@@ -105,7 +105,7 @@ namespace gloox
         // reimplemented from Plugin
         virtual Plugin* clone() const
         {
-          return new AudioRTP( *this );
+          return new RTP( *this );
         }
 
     };
@@ -114,4 +114,4 @@ namespace gloox
 
 }
 
-#endif // JINGLEAUDIORTP_H__
+#endif // JINGLERTP_H__
