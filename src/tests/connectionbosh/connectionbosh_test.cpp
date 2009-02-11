@@ -77,7 +77,7 @@ namespace gloox
     printf( "FakeConnection::send(): %d\n", g_test );
     return true;
   }
-  ConnectionError FakeConnection::receive() { printf( "FakeConnection::receive(): %d\n", g_test ); }
+  ConnectionError FakeConnection::receive() { printf( "FakeConnection::receive(): %d\n", g_test ); return ConnNoError; }
   void FakeConnection::disconnect() { printf( "FakeConnection::disconnect(): %d\n", g_test ); }
 
   class FakeClientBase : public ConnectionDataHandler, public LogHandler
