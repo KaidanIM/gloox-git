@@ -14,6 +14,8 @@
 #ifndef JINGLEPLUGIN_H__
 #define JINGLEPLUGIN_H__
 
+#include "macros.h"
+
 #include <string>
 
 namespace gloox
@@ -33,7 +35,7 @@ namespace gloox
      * @author Jakob Schroeter <js@camaya.net>
      * @since 1.0
      */
-    class Plugin
+    class GLOOX_API Plugin
     {
       public:
         /**
@@ -55,6 +57,11 @@ namespace gloox
          */
         virtual Tag* tag() const = 0;
 
+        /**
+         * Creates an identical deep copy of the current instance.
+         * @return An identical deep copy of the current instance.
+         */
+        virtual Plugin* clone() const = 0;
     };
 
   }

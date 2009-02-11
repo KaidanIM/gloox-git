@@ -17,6 +17,7 @@
 #include "stanzaextension.h"
 #include "tag.h"
 #include "iqhandler.h"
+#include "jingleplugin.h"
 
 #include <string>
 
@@ -29,7 +30,7 @@ namespace gloox
    * @brief The namespace containing Jingle-related (XEP-0166 et. al.) classes.
    *
    * @author Jakob Schroeter <js@camaya.net>
-   * @since 1.0
+   * @since 1.1
    */
   namespace Jingle
   {
@@ -42,24 +43,28 @@ namespace gloox
     /**
      * A list of Jingle Content Types.
      */
-    typedef std::list<const Content*> ContentList;
+    typedef std::list<const Plugin*> PluginList;
 
     /**
      * Jingle Session actions.
      */
     enum Action
     {
-      ContentAccept,                /**< */
-      ContentAdd,                   /**< */
-      ContentModify,                /**< */
-      ContentRemove,                /**< */
-      ContentReplace,               /**< */
-      SessionAccept,                /**< */
-      SessionInfo,                  /**< */
-      SessionInitiate,              /**< */
-      SessionTerminate,             /**< */
-      TransportInfo,                /**< */
-      InvalidAction                 /**< */
+      ContentAccept,                /**< Accept a content-add action received from another party. */
+      ContentAdd,                   /**< Add one or more new content definitions to the session. */
+      ContentModify,                /**< Change the directionality of media sending. */
+      ContentReject,                /**< Reject a content-add action received from another party. */
+      ContentRemove,                /**< Remove one or more content definitions from the session. */
+      DescriptionInfo,              /**< Exchange information about parameters for an application type. */
+      SessionAccept,                /**< Definitively accept a session negotiation. */
+      SessionInfo,                  /**< Send session-level information, such as a ping or a ringing message. */
+      SessionInitiate,              /**< Request negotiation of a new Jingle session. */
+      SessionTerminate,             /**< End an existing session. */
+      TransportAccept,              /**< Accept a transport-replace action received from another party. */
+      TransportInfo,                /**< Exchange transport candidates. */
+      TransportReject,              /**< Reject a transport-replace action received from another party. */
+      TransportReplace,             /**< Redefine a transport method or replace it with a different method. */
+      InvalidAction                 /**< Invalid action. */
     };
 
     /**
@@ -69,9 +74,9 @@ namespace gloox
      * At this point, there is no support for actually establishing any connection to a remote entity,
      * nor for transfering any media in any way whatsoever.
      *
-     * XEP Version: 0.25
+     * XEP Version: 0.33
      * @author Jakob Schroeter <js@camaya.net>
-     * @since 1.0
+     * @since 1.1
      */
     class GLOOX_API Session : public IqHandler
     {
@@ -88,11 +93,83 @@ namespace gloox
         };
 
         /**
-         * @brief This is an implementation of XEP-0166 (Jingle) as a StanzaExtension.
+         * @brief An abstraction of a terminate reason.
          *
-         * XEP Version: 0.25
+         * XEP Version: 0.33
          * @author Jakob Schroeter <js@camaya.net>
          * @since 1.1
+         */
+        class GLOOX_API Reason : public Plugin
+        {
+          public:
+            /**
+             * Reasons for terminating a Jingle Session.
+             */
+            enum Reasons
+            {
+              AlternativeSession,   /**< An alternative session exists that should be used. */
+              Busy,                 /**< The terminating party is busy. */
+              Cancel,               /**< The session has been canceled. */
+              ConnectivityError,    /**< Connectivity error. */
+              Decline,              /**< The terminating party formally declines the request. */
+              Expired,              /**< The session has expired. */
+              GeneralError,         /**< General error. */
+              Gone,                 /**< Participant went away. */
+              MediaError,           /**< Media error. */
+              SecurityError,        /**< Security error. */
+              Success,              /**< Session terminated after successful call. */
+              Timeout,              /**< A timeout occured. */
+              UnsupportedApplications,/**< The terminating party does not support any of the offered application formats. */
+              UnsupportedTransports,/**< The terminating party does not support any of the offered transport methods. */
+              InvalidReason         /**< Invalid reason. */
+            };
+
+            /**
+             * Constructor.
+             * @param reason The reason for the termination of the session.
+             * @param sid An optional session ID (only used if reason is AlternativeSession).
+             */
+            Reason( Reasons reason, const std::string& sid = EmptyString );
+
+            /**
+             * Virtual destructor.
+             */
+            virtual ~Reason() {}
+
+            /**
+             * Returns the reason for the session termination.
+             * @return The reason for the session termination.
+             */
+            Reasons reason() const { return m_reason; }
+
+            /**
+             * Returns the session ID of the alternate session, if given (only applicable
+             * if reason() returns AlternativeSession).
+             * @return The session ID of the alternative session, or the empty string.
+             */
+            const std::string& sid() const { return m_sid; }
+
+            // reimplemented from Jingle::Plugin
+            virtual const std::string& filterString() const;
+
+            // reimplemented from Jingle::Plugin
+            virtual Tag* tag() const;
+
+            // reimplemented from Jingle::Plugin
+            virtual Plugin* clone() const;
+
+          private:
+            Reasons m_reason;
+            std::string m_sid;
+
+        };
+
+        /**
+         * @brief This is an abstraction of the XEP-0166 (Jingle) &lt;jingle&gt; element as a StanzaExtension.
+         *
+         * XEP Version: 0.33
+         * @author Jakob Schroeter <js@camaya.net>
+         * @since 1.0
          */
         class Jingle : public StanzaExtension
         {
@@ -114,7 +191,7 @@ namespace gloox
             /**
              *
              */
-            void addContent( const Content* content, Action action );
+            void addPlugin( const Plugin* plugin, Action action );
 
             /**
              *
@@ -159,23 +236,40 @@ namespace gloox
             /**
              * Constructs a new object and fills it according to the parameters.
              * @param action The Action to carry out.
+             * @param plugins A list of contents (plugins) for the &lt;jingle&gt;
+             * element. Usually, this will be Content objects.
+             * @param sid The session ID:
              */
-            Jingle( Action action, const ContentList& contents, const std::string& sid );
+            Jingle( Action action, const PluginList& plugins, const std::string& sid );
 
             /**
-             *
+             * Constructs a new object and fills it according to the parameters.
+             * @param action The Action to carry out.
+             * @param plugin A single content (plugin) for the &lt;jingle&gt;
+             * element. This may be Content object, but can be any Plugin-derived object.
+             * @param sid The session ID:
              */
-            Jingle( Action action, const Content* content, const std::string& sid );
+            Jingle( Action action, const Plugin* plugin, const std::string& sid );
+
+            /**
+             * Copy constructor.
+             * @param right The instance to copy.
+             */
+            Jingle( const Jingle& right );
 
             Action m_action;
             std::string m_sid;
             std::string m_initiator;
             std::string m_responder;
-            ContentList m_contents;
+            PluginList m_plugins;
 
         };
 
         /**
+         * Creates a new Jingle Session.
+         * @param parent The ClientBase to use for communication.
+         * @param callee The remote end of the session.
+         * @param jsh The handler to receive events and results.
          */
         Session( ClientBase* parent, const JID& callee, SessionHandler* jsh );
 
@@ -185,32 +279,48 @@ namespace gloox
         virtual ~Session();
 
         /**
-         *
+         * Initiates a session with a remote entity.
          */
         bool initiate();
 
         /**
-         *
+         * Accepts an incoming session with the given content.
+         * @param content A pair of Description and Transport that describe the accepted session
+         * parameters.
          */
-        bool terminate();
+        bool accept( const Content* content );
 
         /**
-         *
+         * Terminates the current session, if it is at least in Pending state, with the given reason. The sid parameter is ignored unless the reason is AlternativeSession.
+         * @param reason The reason for terminating the session.
+         * @param sid The session ID of an alternative session.
+         */
+        bool terminate( Reason* reason, const std::string& sid = EmptyString );
+
+        /**
+         * Returns the session's state.
+         * @return The session's state.
          */
         State state() const { return m_state; }
 
         /**
-         * Use this function to add a new Jingle Content Type to
+         * Returns the session's ID.
+         * @return The session's ID.
+         */
+        const std::string& sid() const { return m_sid; }
+
+        /**
+         * Use this function to add a new Jingle Content to
          * this Session.
          * A Content Type consists of a Description (Application Format), e.g. AudioRTP,
          * and a Transport, e.g. ICEUDP.
          * This enables the Session to offer that Content Type to the peer.
          * @param content A ContentType to add.
          */
-        void addContent( Content* content )
+        void addContent( Plugin* plugin )
         {
-          if( content )
-            m_contents.push_back( content );
+          if( plugin )
+            m_plugins.push_back( plugin );
         }
 
         // reimplemented from IqHandler
@@ -228,7 +338,7 @@ namespace gloox
         State m_state;
         JID m_callee;
         SessionHandler* m_handler;
-        ContentList m_contents;
+        PluginList m_plugins;
         std::string m_sid;
         bool m_valid;
 

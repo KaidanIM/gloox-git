@@ -52,6 +52,11 @@ namespace gloox
           return t;
         }
 
+        // reimplemented from Plugin
+        virtual Plugin* clone() const
+        {
+          return new RawUDP( *this );
+        }
     };
 
   }

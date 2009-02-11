@@ -26,6 +26,9 @@ namespace gloox
   namespace Jingle
   {
 
+    class Description;
+    class Transport;
+
     /**
      * @brief An abstraction of a Jingle Content Type.
      *
@@ -33,15 +36,43 @@ namespace gloox
      * @link gloox::Jingle::Session Jingle::Session @endlink for more info on Jingle.
      *
      * @author Jakob Schroeter <js@camaya.net>
-     * @since 1.0
+     * @since 1.1
      */
-    class Content : public Plugin
+    class GLOOX_API Content : public Plugin
     {
       public:
         /**
+         * The original creator of the content type.
+         */
+        enum Creator
+        {
+          CInitiator,                /**< The creator is the initiator of the session. */
+          CResponder,                /**< The creator is the responder. */
+          InvalidCreator             /**< Invalid value. */
+        };
+
+        /**
+         * The parties in the session that will be generating content.
+         */
+        enum Senders
+        {
+          SInitiator,                /**< The initiator sends content. */
+          SResponder,                /**< The responder sends content. */
+          SBoth,                     /**< Both parties send content( default). */
+          InvalidSender             /**< Invalid value. */
+        };
+
+        /**
          * Creates a new Content wrapper.
          */
-        Content();
+        Content( Description* desc, Transport* trans,
+                 const std::string& name, Creator creator = CInitiator,
+                 Senders senders = SBoth, const std::string& disposition = EmptyString );
+
+        /**
+         *
+         */
+        Content( const Tag* tag = 0 );
 
         /**
          * Virtual destructor.
@@ -53,6 +84,14 @@ namespace gloox
 
         // reimplemented from Plugin
         virtual Tag* tag() const;
+
+      private:
+        Description* m_description;
+        Transport* m_transport;
+        Creator m_creator;
+        std::string m_disposition;
+        std::string m_name;
+        Senders m_senders;
 
     };
 

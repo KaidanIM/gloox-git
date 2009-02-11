@@ -568,16 +568,13 @@ namespace gloox
   GLOOX_API extern const std::string XMLNS_JINGLE;
 
   /** Jingle Audio via RTP namespace (XEP-0167) */
-  GLOOX_API extern const std::string XMLNS_JINGLE_AUDIO_RTP;
+  GLOOX_API extern const std::string XMLNS_JINGLE_RTP;
 
   /** Jingle ICE-UDP Transport namespace (XEP-0176) */
   GLOOX_API extern const std::string XMLNS_JINGLE_ICE_UDP;
 
   /** Jingle Raw UDP Transport namespace (XEP-0177) */
   GLOOX_API extern const std::string XMLNS_JINGLE_RAW_UDP;
-
-  /** Jingle Video via RTP namespace (XEP-0180) */
-  GLOOX_API extern const std::string XMLNS_JINGLE_VIDEO_RTP;
 
   /** Stanza Headers and Internet Metadata (SHIM) namespace (XEP-0131) */
   GLOOX_API extern const std::string XMLNS_SHIM;

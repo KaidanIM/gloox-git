@@ -126,11 +126,11 @@ int main( int /*argc*/, char** /*argv*/ )
   // -------
   {
     name = "empty Jingle, content-replace";
-    Jingle::Session::Jingle js( Jingle::ContentReplace, 0, "somesid" );
+    Jingle::Session::Jingle js( Jingle::ContentRemove, 0, "somesid" );
     js.setInitiator( "someinitiator" );
     Tag* t = js.tag();
     if( !t || t->xml() != "<jingle xmlns='" + XMLNS_JINGLE + "' "
-         "action='content-replace' initiator='someinitiator' sid='somesid'/>" )
+         "action='content-remove' initiator='someinitiator' sid='somesid'/>" )
     {
       ++fail;
       printf( "test '%s' failed\n", name.c_str() );
