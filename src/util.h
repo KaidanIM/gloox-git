@@ -232,7 +232,7 @@ namespace gloox
         ++add;
         value = -value;
       }
-      int len = (int)( log( value ? value : 1 ) / log( base ) ) + 1;
+      int len = (int)( log( (double)( value ? value : 1 ) ) / log( (double)base ) ) + 1;
       const char digits[] = "0123456789ABCDEF";
       char* num = (char*)calloc( len + 1 + add, sizeof( char ) );
       num[len--] = '\0';
