@@ -41,7 +41,7 @@ namespace gloox
     class Content;
 
     /**
-     * A list of Jingle Content Types.
+     * A list of Jingle Plugins.
      */
     typedef std::list<const Plugin*> PluginList;
 
@@ -87,9 +87,9 @@ namespace gloox
          */
         enum State
         {
-          Ended,                    /**< */
-          Pending,                  /**< */
-          Active                    /**< */
+          Ended,                    /**< The session has ended or was not active yet. */
+          Pending,                  /**< The session has been initiated but has not yet been accepted by the remote party. */
+          Active                    /**< The session is empty. */
         };
 
         /**
@@ -280,20 +280,33 @@ namespace gloox
 
         /**
          * Initiates a session with a remote entity.
+         * @param plugins A list of Content-derived objects.
+         * @return @b False if a prerequisite is not met, @b true otherwise.
          */
-        bool initiate();
+        bool initiate( const PluginList& plugins );
 
         /**
          * Accepts an incoming session with the given content.
          * @param content A pair of Description and Transport that describe the accepted session
          * parameters.
+         * @return @b False if a prerequisite is not met, @b true otherwise.
          */
         bool accept( const Content* content );
+
+        /**
+         * Sends an informational message (DescriptionInfo,
+         * TransportInfo, SessionInfo) to the remote party.
+         * @param action The type of message to send.
+         * @param plugin The payload.
+         * @return @b False if a prerequisite is not met, @b true otherwise.
+         */
+        bool inform( Action action, const Plugin* plugin );
 
         /**
          * Terminates the current session, if it is at least in Pending state, with the given reason. The sid parameter is ignored unless the reason is AlternativeSession.
          * @param reason The reason for terminating the session.
          * @param sid The session ID of an alternative session.
+         * @return @b False if a prerequisite is not met, @b true otherwise.
          */
         bool terminate( Reason* reason, const std::string& sid = EmptyString );
 
@@ -308,20 +321,6 @@ namespace gloox
          * @return The session's ID.
          */
         const std::string& sid() const { return m_sid; }
-
-        /**
-         * Use this function to add a new Jingle Content to
-         * this Session.
-         * A Content Type consists of a Description (Application Format), e.g. AudioRTP,
-         * and a Transport, e.g. ICEUDP.
-         * This enables the Session to offer that Content Type to the peer.
-         * @param content A ContentType to add.
-         */
-        void addContent( Plugin* plugin )
-        {
-          if( plugin )
-            m_plugins.push_back( plugin );
-        }
 
         // reimplemented from IqHandler
         virtual bool handleIq( const IQ& iq );
@@ -338,7 +337,6 @@ namespace gloox
         State m_state;
         JID m_callee;
         SessionHandler* m_handler;
-        PluginList m_plugins;
         std::string m_sid;
         bool m_valid;
 

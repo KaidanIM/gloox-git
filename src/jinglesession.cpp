@@ -178,18 +178,16 @@ namespace gloox
     {
       if( m_parent )
         m_parent->removeIDHandler( this );
-
-      util::clearList( m_plugins );
     }
 
-    bool Session::initiate()
+    bool Session::initiate( const PluginList& plugins )
     {
-      if( !m_valid || !m_parent || !m_plugins.empty() || m_state >= Pending )
+      if( !m_valid || !m_parent || !plugins.empty() || m_state >= Pending )
         return false;
 
       m_state = Pending;
       IQ init( IQ::Set, m_callee, m_parent->getID() );
-      init.addExtension( new Jingle( SessionInitiate, m_plugins, m_sid ) );
+      init.addExtension( new Jingle( SessionInitiate, plugins, m_sid ) );
       m_parent->send( init, this, SessionInitiate );
 
       return true;
@@ -197,10 +195,10 @@ namespace gloox
 
     bool Session::accept( const Content* content )
     {
-      if( !m_valid || !m_parent || !m_plugins.empty() || m_state > Pending )
+      if( !m_valid || !m_parent || !content || m_state > Pending )
         return false;
 
-      m_state = Pending;
+      m_state = Active;
       IQ init( IQ::Set, m_callee, m_parent->getID() );
       init.addExtension( new Jingle( SessionAccept, content, m_sid ) );
       m_parent->send( init, this, SessionAccept );
@@ -208,9 +206,23 @@ namespace gloox
       return true;
     }
 
+    bool Session::inform( Action action, const Plugin* plugin )
+    {
+      if( !m_valid || !m_parent || m_state < Pending
+          || action != DescriptionInfo || action != SessionInfo
+          || action != TransportInfo )
+        return false;
+
+      IQ init( IQ::Set, m_callee, m_parent->getID() );
+      init.addExtension( new Jingle( action, plugin, m_sid ) );
+      m_parent->send( init, this, action );
+
+      return true;
+    }
+
     bool Session::terminate( Session::Reason* reason, const std::string& sid )
     {
-      if( !m_valid )
+      if( !m_valid || !m_parent || m_state < Pending )
         return false;
 
       m_state = Ended;

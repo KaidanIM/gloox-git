@@ -28,9 +28,9 @@ namespace gloox
   {
 
     /**
-     * @brief An abstraction of the signaling part of Jingle Audio via RTP (XEP-0167).
+     * @brief An abstraction of the signaling part of Jingle RTP Sessions (XEP-0167).
      *
-     * XEP Version: 0.17
+     * XEP Version: 0.25
      * @author Jakob Schroeter <js@camaya.net>
      * @since 1.1
      */
