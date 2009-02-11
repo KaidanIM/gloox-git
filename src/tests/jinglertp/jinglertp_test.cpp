@@ -2,7 +2,7 @@
 #include "../../gloox.h"
 #include "../../jid.h"
 #include "../../tag.h"
-#include "../../jingleaudiortp.h"
+#include "../../jinglertp.h"
 using namespace gloox;
 
 #include <stdio.h>
