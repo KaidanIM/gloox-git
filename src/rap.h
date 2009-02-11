@@ -53,6 +53,12 @@ namespace gloox
        */
       virtual ~RAP();
 
+      /**
+       * Indicates whether this is the primary resource for the given namespace.
+       * @return @b True if the server flagged this resource as primary for the given namespace, @b false otherwise.
+       */
+      bool primary() const { return m_primary; }
+
       // reimplemented from StanzaExtension
       virtual const std::string& filterString() const;
 
