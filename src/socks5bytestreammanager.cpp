@@ -146,7 +146,7 @@ namespace gloox
 
   // ---- SOCKS5BytestreamManager ----
   SOCKS5BytestreamManager::SOCKS5BytestreamManager( ClientBase* parent, BytestreamHandler* s5bh )
-    : m_parent( parent ), m_socks5BytestreamHandler( s5bh )
+    : m_parent( parent ), m_socks5BytestreamHandler( s5bh ), m_server( 0 )
   {
     if( m_parent )
     {
