@@ -84,6 +84,12 @@ namespace gloox
 
       return t;
     }
+
+    Plugin* Content::clone() const
+    {
+      return 0;
+    }
+
   }
 
 }

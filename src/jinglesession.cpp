@@ -17,6 +17,7 @@
 #include "error.h"
 #include "jinglecontent.h"
 #include "jingledescription.h"
+#include "jingledtmf.h"
 #include "jingletransport.h"
 #include "jinglesessionhandler.h"
 #include "tag.h"
@@ -152,7 +153,16 @@ namespace gloox
       m_responder.setJID( tag->findAttribute( "responder" ) );
       m_sid = tag->findAttribute( "sid" );
 
-      // FIXME parse child elements
+      const TagList& l = tag->children();
+      TagList::const_iterator it = l.begin();
+      for( ; it != l.end(); ++it )
+      {
+        const std::string& name = (*it)->name();
+        if( name == "content" )
+          m_plugins.push_back( new Content( (*it) ) );
+        else if( name == "dtmf" && (*it)->xmlns() == XMLNS_JINGLE_DTMF )
+          m_plugins.push_back( new DTMF( (*it) ) );
+      }
     }
 
     Session::Jingle::Jingle( const Jingle& right )
@@ -321,7 +331,12 @@ namespace gloox
           break;
         }
         case SessionInfo:
+        {
+          m_handler->handleSessionInfo( this, j );
+          IQ re( IQ::Result, iq.from(), iq.id() );
+          m_parent->send( re );
           break;
+        }
         case SessionInitiate:
         {
           IQ re( IQ::Error, iq.from(), iq.id() );
@@ -342,14 +357,17 @@ namespace gloox
         case TransportAccept:
           break;
         case TransportInfo:
+        {
+          m_handler->handleTransportInfo( this, j );
+          IQ re( IQ::Result, iq.from(), iq.id() );
+          m_parent->send( re );
           break;
+        }
         case TransportReject:
           break;
         case TransportReplace:
           break;
         case InvalidAction:
-          break;
-        default:
           break;
       }
 

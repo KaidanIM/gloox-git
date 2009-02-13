@@ -11,5 +11,5 @@ jinglesession_test_LDADD = ../../tag.o ../../stanza.o ../../base64.o \
 			../../prep.o ../../gloox.o \
 			../../iq.o ../../util.o \
 			../../sha.o ../../error.o ../../jid.o \
-			../../jinglecontent.o
+			../../jinglecontent.o ../../jingledtmf.o
 jinglesession_test_CFLAGS = $(CPPFLAGS)
