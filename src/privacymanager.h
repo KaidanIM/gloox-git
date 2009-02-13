@@ -120,6 +120,18 @@ namespace gloox
       virtual void handleIqID( const IQ& iq, int context );
 
     private:
+      enum IdType
+      {
+        PLRequestNames,
+        PLRequestList,
+        PLActivate,
+        PLDefault,
+        PLUnsetActivate,
+        PLUnsetDefault,
+        PLRemove,
+        PLStore
+      };
+
       class Query : public StanzaExtension
       {
         public:
@@ -130,7 +142,7 @@ namespace gloox
            * @param name The list's name.
            * @param list The list's (optional) content.
            */
-          Query( int context, const std::string& name,
+          Query( IdType context, const std::string& name,
                  const PrivacyListHandler::PrivacyList& list = PrivacyListHandler::PrivacyList() );
 
           /**
@@ -201,26 +213,14 @@ namespace gloox
           }
 
         private:
-          int m_context;
+          IdType m_context;
           StringList m_names;
           std::string m_default;
           std::string m_active;
           PrivacyListHandler::PrivacyList m_items;
       };
 
-      enum IdType
-      {
-        PLRequestNames,
-        PLRequestList,
-        PLActivate,
-        PLDefault,
-        PLUnsetActivate,
-        PLUnsetDefault,
-        PLRemove,
-        PLStore
-      };
-
-      std::string operation( int context, const std::string& name );
+      std::string operation( IdType context, const std::string& name );
 
       ClientBase* m_parent;
       PrivacyListHandler* m_privacyListHandler;
