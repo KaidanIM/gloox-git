@@ -16,16 +16,16 @@
 
 #include "jingleplugin.h"
 
+#include <string>
+
 namespace gloox
 {
-
-  class Tag;
 
   namespace Jingle
   {
 
     /**
-     * @brief An abstraction of a Jingle Transport.
+     * @brief An abstract base class of a Jingle Transport.
      *
      * You should not need to use this class directly. See
      * @link gloox::Jingle::Session Jingle::Session @endlink for more info on Jingle.
@@ -41,23 +41,9 @@ namespace gloox
          */
         virtual ~Transport() {}
 
-        // reimplemented from Plugin
-        virtual const std::string& filterString() const;
-
-        // reimplemented from Plugin
-        virtual Tag* tag() const;
-
       protected:
-        /**
-         * Returns the Transport's namespace.
-         * @return The namespace being handled by the Transport.
-         */
-        virtual const std::string& xmlns() const = 0;
-
-        /**
-         *
-         */
-        virtual Tag* childTag() const = 0;
+        /** The Transport's namespace. */
+        const std::string m_xmlns;
 
     };
 
