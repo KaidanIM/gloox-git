@@ -278,7 +278,7 @@ namespace gloox
       /* negotiate security */
       SEC_CHAR* hname = const_cast<char*>( m_server.c_str() );
 
-      error = InitializeSecurityContext( &m_credHandle,
+      error = InitializeSecurityContextA( &m_credHandle,
                                          0,
                                          hname,
                                          request,
@@ -360,7 +360,7 @@ namespace gloox
        */
 
       /* negotiate security */
-      error = InitializeSecurityContext( &m_credHandle,
+      error = InitializeSecurityContextA( &m_credHandle,
                                          &m_context,
                                          hname,
                                          request,
@@ -647,7 +647,7 @@ namespace gloox
     m_certInfo.date_from = filetime2int( remoteCertContext->pCertInfo->NotBefore );
     m_certInfo.date_to = filetime2int( remoteCertContext->pCertInfo->NotAfter );
 
-    if( !CertNameToStr( remoteCertContext->dwCertEncodingType,
+    if( !CertNameToStrA( remoteCertContext->dwCertEncodingType,
                         &remoteCertContext->pCertInfo->Subject,
                         CERT_X500_NAME_STR | CERT_NAME_STR_NO_PLUS_FLAG,
                         certString, sizeof( certString ) ) )
@@ -656,7 +656,7 @@ namespace gloox
     }
     m_certInfo.server = certString;
 
-    if( !CertNameToStr( remoteCertContext->dwCertEncodingType,
+    if( !CertNameToStrA( remoteCertContext->dwCertEncodingType,
                        &remoteCertContext->pCertInfo->Issuer,
                        CERT_X500_NAME_STR | CERT_NAME_STR_NO_PLUS_FLAG,
                        certString, sizeof( certString ) ) )
