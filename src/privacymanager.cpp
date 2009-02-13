@@ -92,7 +92,7 @@ namespace gloox
     }
   }
 
-  PrivacyManager::Query::Query( int context, const std::string& name,
+  PrivacyManager::Query::Query( IdType context, const std::string& name,
                                 const PrivacyListHandler::PrivacyList& list )
     : StanzaExtension( ExtPrivacy ), m_context( context ), m_items( list )
   {
@@ -128,6 +128,9 @@ namespace gloox
       case PLActivate:
       case PLUnsetActivate:
         child = "active";
+        break;
+      case PLRequestNames:
+        child = "query";
         break;
     }
     t = new Tag( child );
@@ -207,7 +210,7 @@ namespace gloox
     }
   }
 
-  std::string PrivacyManager::operation( int context, const std::string& name )
+  std::string PrivacyManager::operation( IdType context, const std::string& name )
   {
     const std::string& id = m_parent->getID();
     IQ::IqType iqType = IQ::Set;
