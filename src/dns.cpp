@@ -158,10 +158,14 @@ namespace gloox
     bool error = false;
 
     DNS::HostMap servers;
-    DNS_RECORD* pRecord;
-    if( DnsQuery( dname.c_str(), DNS_TYPE_SRV, DNS_QUERY_STANDARD, NULL, &pRecord, NULL ) == ERROR_SUCCESS )
+    DNS_RECORD* pRecord = NULL;
+    DNS_STATUS status = DnsQuery_UTF8( dname.c_str(), DNS_TYPE_SRV, DNS_QUERY_STANDARD, NULL, &pRecord, NULL );
+    if( status == ERROR_SUCCESS )
     {
-      DNS_RECORD* pRec = pRecord;
+      // NOTE: DnsQuery_UTF8 and DnsQuery_A really should have been defined with
+      // PDNS_RECORDA instead of PDNS_RECORD, since that's what it is (even with _UNICODE defined).
+      // We'll correct for that mistake with a cast.
+      DNS_RECORDA* pRec = (DNS_RECORDA*)pRecord;
       do
       {
         if( pRec->wType == DNS_TYPE_SRV )
