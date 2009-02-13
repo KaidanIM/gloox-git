@@ -54,6 +54,18 @@ namespace gloox
       ~SOCKS5BytestreamServer();
 
       /**
+       * Use this function to use a different server implementation.
+       * The default is a ConnectionTCPServer.
+       * @param An alternate server.
+       */
+      void setServerImpl( ConnectionBase *server );
+
+      /**
+       * Removes the current server implementation.
+       */
+      void removeServerImpl();
+
+      /**
        * Starts listening on the specified interface and port.
        * @return Returns @c ConnNoError on success, @c ConnIoError on failure (e.g. if the port
        * is already in use).
@@ -116,7 +128,7 @@ namespace gloox
       typedef std::list<std::string> HashMap;
       HashMap m_hashes;
 
-      ConnectionTCPServer* m_tcpServer;
+      ConnectionBase* m_server;
 
       util::Mutex m_mutex;
       const LogSink& m_logInstance;
