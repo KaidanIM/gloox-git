@@ -177,6 +177,7 @@ namespace gloox
 
     Session::Jingle::~Jingle()
     {
+      util::clearList( m_plugins );
     }
 
     const std::string& Session::Jingle::filterString() const

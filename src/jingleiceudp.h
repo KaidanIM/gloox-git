@@ -29,7 +29,7 @@ namespace gloox
     /**
      * @brief An abstraction of the signaling part of Jingle ICE-UDP Transport Method (XEP-0176).
      *
-     * XEP Version: 0.16
+     * XEP Version: 0.23
      * @author Jakob Schroeter <js@camaya.net>
      * @since 1.0
      */
@@ -37,20 +37,20 @@ namespace gloox
     {
       public:
         /**
+         *
+         */
+        ICEUDP();
+
+        /**
          * Virtual destructor.
          */
         virtual ~ICEUDP() {}
 
-        // reimplemented from Transport
-        virtual const std::string& xmlns() const { return XMLNS_JINGLE_ICE_UDP; }
+        // reimplemented from Plugin
+        virtual const std::string& filterString() const;
 
-        // reimplemented from Transport
-        virtual Tag* childTag() const
-        {
-          Tag* t = new Tag( "candidate" );
-          // FIXME
-          return t;
-        }
+        // reimplemented from Plugin
+        virtual Tag* tag() const;
 
         // reimplemented from Plugin
         virtual Plugin* clone() const

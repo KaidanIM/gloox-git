@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2008-2009 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2009 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -11,8 +11,7 @@
 */
 
 
-#include "jingletransport.h"
-#include "tag.h"
+#include "jingleiceudp.h"
 
 namespace gloox
 {
@@ -20,18 +19,19 @@ namespace gloox
   namespace Jingle
   {
 
-    const std::string& Transport::filterString() const
+    ICEUDP::ICEUDP()
     {
-      static const std::string filter = "./transport[@xmlns='" + xmlns() + "']";
+    }
+
+    const std::string& ICEUDP::filterString() const
+    {
+      static const std::string filter = "transport[@xmlns='" + XMLNS_JINGLE_ICE_UDP + "']";
       return filter;
     }
 
-    Tag* Transport::tag() const
+    Tag* ICEUDP::tag() const
     {
-      Tag* t = new Tag( "transport" );
-      t->setXmlns( xmlns() );
-      t->addChild( childTag() );
-      return t;
+      return 0;
     }
 
   }
