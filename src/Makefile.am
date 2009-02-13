@@ -32,7 +32,7 @@ libgloox_la_SOURCES = jid.cpp parser.cpp connectiontcpclient.cpp clientbase.cpp 
                         messageevent.cpp receipt.cpp nickname.cpp eventdispatcher.cpp \
                         pubsubevent.cpp xhtmlim.cpp featureneg.cpp jinglesession.cpp jinglecontent.cpp \
                         jingletransport.cpp \
-                        jinglertp.cpp \
+                        jinglertp.cpp jingledtmf.cpp \
                         shim.cpp softwareversion.cpp attention.cpp \
                         rap.cpp
 
@@ -89,7 +89,8 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             eventdispatcher.h         jinglesession.h         jingletransport.h \
                             jingledescription.h       jinglesessionhandler.h  jingleplugin.h \
                             jinglecontent.h           jinglertp.h \
-                            jingleiceudp.h            jinglerawudp.h \
+                            jingleiceudp.h jinglerawudp.h \
+                            jingledtmf.h \
                             pubsubitem.h shim.h util.h rap.h
 
 noinst_HEADERS = prep.h dns.h nonsaslauth.h mucmessagesession.h stanzaextensionfactory.h tlsgnutlsclient.h \

@@ -70,6 +70,8 @@ class JingleSessionTest : public ClientBase, public Jingle::SessionHandler
     bool checkResult2() { bool t = m_result2; m_result2 = false; return t; }
     Jingle::Session* js() { return m_js; }
     virtual void handleSessionStateChange( const Jingle::Session* /*session*/, const Jingle::Session::Jingle* /*jingle*/ ) {}
+    virtual void handleSessionInfo( const Jingle::Session* /*session*/, const Jingle::Session::Jingle* /*jingle*/ ) {}
+    virtual void handleTransportInfo( const Jingle::Session* /*session*/, const Jingle::Session::Jingle* /*jingle*/ ) {}
   private:
     Jingle::Session* m_js;
     int m_test;

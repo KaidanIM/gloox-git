@@ -85,6 +85,9 @@ namespace gloox
         // reimplemented from Plugin
         virtual Tag* tag() const;
 
+        // reimplemented from Plugin
+        virtual Plugin* clone() const;
+
       private:
         Description* m_description;
         Transport* m_transport;
