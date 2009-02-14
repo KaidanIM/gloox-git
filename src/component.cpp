@@ -52,6 +52,7 @@ namespace gloox
     if( tag->name() != "handshake" )
       return false;
 
+    m_authed = true;
     notifyStreamEvent( StreamEventFinished );
     notifyOnConnect();
 
