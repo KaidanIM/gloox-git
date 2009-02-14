@@ -597,6 +597,9 @@ namespace gloox
   /** Resource Application Priority namespace (XEP-0168) */
   GLOOX_API extern const std::string XMLNS_RAP;
 
+  /** Bits of Binary namespace (XEP-0231) */
+  GLOOX_API extern const std::string XMLNS_BOB;
+
 
   /** Supported stream version (major). */
   GLOOX_API extern const std::string XMPP_STREAM_VERSION_MAJOR;

@@ -87,6 +87,7 @@ namespace gloox
     ExtSHIM,                        /**< An extension dealing with Stanza Headers and Internet Metadata (XEP-0131). */
     ExtAttention,                   /**< An extension dealing with Attention (XEP-0224). */
     ExtRAP,                         /**< An extension dealing with Resource Application Priority (XEP-0168). */
+    ExtBOB,                         /**< An extension dealing with Bits of Binary (XEP-0231). */
     ExtUser                         /**< User-supplied extensions must use IDs above this. Do
                                      * not hard-code ExtUser's value anywhere, it is subject
                                      * to change. */

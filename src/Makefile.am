@@ -34,7 +34,7 @@ libgloox_la_SOURCES = jid.cpp parser.cpp connectiontcpclient.cpp clientbase.cpp 
                         jingleiceudp.cpp jinglerawudp.cpp \
                         jinglertp.cpp jingledtmf.cpp \
                         shim.cpp softwareversion.cpp attention.cpp \
-                        rap.cpp
+                        rap.cpp bob.cpp
 
 libgloox_la_LDFLAGS = -version-info 8:0:0 -no-undefined -no-allow-shlib-undefined
 libgloox_la_LIBADD =
@@ -91,7 +91,7 @@ libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        ta
                             jinglecontent.h           jinglertp.h \
                             jingleiceudp.h jinglerawudp.h \
                             jingledtmf.h \
-                            pubsubitem.h shim.h util.h rap.h
+                            pubsubitem.h shim.h util.h rap.h bob.h
 
 noinst_HEADERS = prep.h dns.h nonsaslauth.h mucmessagesession.h stanzaextensionfactory.h tlsgnutlsclient.h \
                    tlsgnutlsbase.h tlsgnutlsclientanon.h tlsgnutlsserveranon.h tlsopenssl.h tlsschannel.h \
