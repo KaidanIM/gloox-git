@@ -35,7 +35,7 @@ namespace gloox
   /**
    * This class implements a TLS backend using OpenSSL.
    *
-   * @author Jakob Schröter <js@camaya.net>
+   * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
   class OpenSSL : public TLSBase

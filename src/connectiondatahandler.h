@@ -29,7 +29,7 @@ namespace gloox
    *
    * You should not need to use this class directly.
    *
-   * @author Jakob Schröter <js@camaya.net>
+   * @author Jakob Schroewter <js@camaya.net>
    * @since 0.9
    */
   class GLOOX_API ConnectionDataHandler

@@ -38,7 +38,7 @@ namespace gloox
    *
    * You should not need to use this class directly.
    *
-   * @author Jakob Schröter <js@camaya.net>
+   * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
   class GnuTLSClient : public GnuTLSBase

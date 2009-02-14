@@ -24,7 +24,7 @@ namespace gloox
   /**
    * @brief An abstract base class for TLS implementations.
    *
-   * @author Jakob Schröter <js@camaya.net>
+   * @author Jakob Schroeter <js@camaya.net>
    * @since 0.9
    */
   class GLOOX_API TLSBase
