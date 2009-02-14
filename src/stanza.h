@@ -25,7 +25,7 @@ namespace gloox
   class Error;
 
   /**
-   * @brief This is a base class for XMPP stanza abstractions.
+   * @brief This is the base class for XMPP stanza abstractions.
    *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.4
@@ -37,6 +37,12 @@ namespace gloox
        * Virtual destructor.
        */
       virtual ~Stanza();
+
+      /**
+       * Sets the 'from' address of the Stanza. This useful for @link gloox::Component Components @link.
+       * @param from The from address.
+       */
+      void setFrom( const JID& from ) { m_from = from; }
 
       /**
        * Returns the JID the stanza comes from.
@@ -119,10 +125,6 @@ namespace gloox
        * caller to delete the Tag.
        */
       virtual Tag* tag() const = 0;
-
-#ifdef GLOOX_TESTS
-      void setFrom( const JID& from ) { m_from = from; }
-#endif
 
     protected:
       /**
