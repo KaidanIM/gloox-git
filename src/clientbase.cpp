@@ -469,7 +469,6 @@ namespace gloox
       }
       case SaslMechAnonymous:
         a->addAttribute( "mechanism", "ANONYMOUS" );
-        a->setCData( getID() );
         break;
       case SaslMechExternal:
         a->addAttribute( "mechanism", "EXTERNAL" );
