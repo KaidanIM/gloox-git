@@ -125,6 +125,7 @@ namespace gloox
       ConnectionBase* m_connection;
       ConnectionBase* m_socks5;
       JID m_proxy;
+      bool m_connected;
 
       StreamHostList m_hosts;
 

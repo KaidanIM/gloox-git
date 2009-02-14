@@ -26,7 +26,7 @@ namespace gloox
                                       LogSink& logInstance, const JID& initiator, const JID& target,
                                       const std::string& sid )
     : Bytestream( Bytestream::S5B, logInstance, initiator, target, sid ),
-      m_manager( manager ), m_connection( 0 ), m_socks5( 0 )
+      m_manager( manager ), m_connection( 0 ), m_socks5( 0 ), m_connected( false )
   {
     if( connection && connection->state() == StateConnected )
       m_open = true;
@@ -68,10 +68,14 @@ namespace gloox
     StreamHostList::const_iterator it = m_hosts.begin();
     for( ; it != m_hosts.end(); ++it )
     {
+      if( ++it == m_hosts.end() )
+        m_connected = true;
+      --it; // FIXME ++it followed by --it is kinda ugly
       m_connection->setServer( (*it).host, (*it).port );
       if( m_socks5->connect() == ConnNoError )
       {
         m_proxy = (*it).jid;
+        m_connected = true;
         return true;
       }
     }
@@ -108,6 +112,7 @@ namespace gloox
     if( m_open && m_handler )
     {
       m_open = false;
+      m_connected = false;
       m_socks5->disconnect();
       m_handler->handleBytestreamClose( this );
     }
@@ -143,7 +148,7 @@ namespace gloox
 
   void SOCKS5Bytestream::handleDisconnect( const ConnectionBase* /*connection*/, ConnectionError /*reason*/ )
   {
-    if( m_handler )
+    if( m_handler && m_connected )
       m_handler->handleBytestreamClose( this );
   }
 
