@@ -28,6 +28,7 @@ namespace gloox
   /**
    * @brief This is an implementation of XEP-0231 as a StanzaExtension.
    *
+   * XEP Version: 1.0
    * @author Jakob Schroeter <js@camaya.net>
    * @since 1.1
    */
