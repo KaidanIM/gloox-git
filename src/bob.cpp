@@ -55,7 +55,7 @@ namespace gloox
 
   Tag* BOB::tag() const
   {
-    if( m_data.empty() || m_cid.empty() || m_type.empty() )
+    if( m_cid.empty() || m_type.empty() )
       return 0;
 
     Tag* t = new Tag( "data" );
