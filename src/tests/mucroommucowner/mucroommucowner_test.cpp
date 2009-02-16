@@ -94,6 +94,20 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // ------
   {
+    name = "destroy room w/o alternate venue";
+    MUCRoom::MUCOwner mo;
+    t = mo.tag();
+    if( !t || t->xml() != "<query xmlns='" + XMLNS_MUC_OWNER + "'>"
+         "<destroy/></query>" )
+    {
+      ++fail;
+      printf( "test '%s' failed\n", name.c_str() );
+    }
+    delete t;
+  }
+
+  // ------
+  {
     name = "from Tag: request room config";
     Tag* d = new Tag( "query" );
     d->setXmlns( XMLNS_MUC_OWNER );
