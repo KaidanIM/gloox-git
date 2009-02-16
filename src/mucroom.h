@@ -788,17 +788,18 @@ namespace gloox
 
           /**
            * Creates a new query that destroys the current room.
-           * @param alternate An alternate discussion venue.
+           * @param alternate An optional alternate discussion venue.
            * @param reason An optional reason for the room destruction.
            * @param password An optional password for the new room.
            */
-          MUCOwner( const JID& alternate, const std::string& reason, const std::string& password );
+          MUCOwner( const JID& alternate = JID(), const std::string& reason = EmptyString,
+                    const std::string& password = EmptyString);
 
           /**
            * Creates a new MUCOwner object from the given Tag.
            * @param tag A Tag to parse.
            */
-          MUCOwner( const Tag* tag = 0 );
+          MUCOwner( const Tag* tag );
 
           /**
            * Virtual destructor.
