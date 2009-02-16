@@ -199,8 +199,7 @@ namespace gloox
     : StanzaExtension( ExtMUCOwner ), m_type( TypeDestroy ), m_jid( alternate ),
       m_reason( reason ), m_pwd( password ), m_form( 0 )
   {
-    if( m_jid )
-      m_valid = true;
+    m_valid = true;
   }
 
   MUCRoom::MUCOwner::MUCOwner( const Tag* tag )
