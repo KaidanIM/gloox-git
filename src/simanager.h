@@ -101,7 +101,7 @@ namespace gloox
           const Tag* tag2() const { return m_tag2; };
 
           // reimplemented from StanzaExtension
-          virtual const std::string filterString() const;
+          virtual const std::string& filterString() const;
 
           // reimplemented from StanzaExtension
           virtual StanzaExtension* newInstance( const Tag* tag ) const
