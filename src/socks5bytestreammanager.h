@@ -228,7 +228,7 @@ namespace gloox
           const StreamHostList& hosts() const { return m_hosts; }
 
           // reimplemented from StanzaExtension
-          virtual const std::string filterString() const;
+          virtual const std::string& filterString() const;
 
           // reimplemented from StanzaExtension
           virtual StanzaExtension* newInstance( const Tag* tag ) const
