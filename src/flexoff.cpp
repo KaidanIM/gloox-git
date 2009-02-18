@@ -37,7 +37,7 @@ namespace gloox
   {
   }
 
-  const std::string& FlexibleOffline::Offline::filterString() const
+  const std::string FlexibleOffline::Offline::filterString() const
   {
     static const std::string& filter = "/iq/offline[@xmlns='" + XMLNS_OFFLINE + "']";
     return filter;
