@@ -57,7 +57,7 @@ namespace gloox
     delete m_tag2;
   }
 
-  const std::string& SIManager::SI::filterString() const
+  const std::string SIManager::SI::filterString() const
   {
     static const std::string& filter = "/iq/si[@xmlns='" + XMLNS_SI + "']";
     return filter;

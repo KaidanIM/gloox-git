@@ -95,7 +95,7 @@ namespace gloox
   {
   }
 
-  const std::string& SOCKS5BytestreamManager::Query::filterString() const
+  const std::string SOCKS5BytestreamManager::Query::filterString() const
   {
     static const std::string& filter = "/iq/query[@xmlns='" + XMLNS_BYTESTREAMS + "']";
     return filter;
