@@ -136,7 +136,7 @@ namespace gloox
           virtual ~Offline();
 
           // reimplemented from StanzaExtension
-          virtual const std::string filterString() const;
+          virtual const std::string& filterString() const;
 
           // reimplemented from StanzaExtension
           virtual StanzaExtension* newInstance( const Tag* tag ) const
