@@ -28,20 +28,16 @@ namespace gloox
   namespace PubSub
   {
 
-    class EventHandler;
     class ResultHandler;
 
     /**
      * @brief This manager is used to interact with PubSub services (XEP-0060).
      *
-     * \note PubSub support in gloox is still relatively young and you are most
-     *       welcome to ask questions, criticize the API and so on. For contact
-     *       informations, see below.
+     * @note PubSub support in gloox is still relatively young and you are most
+     * welcome to ask questions, criticize the API and so on. For contact
+     * information, see below.
      *
      * This manager acts in concert with 2 different handlers:
-     *
-     * - EventHandler is responsible for receiving the PubSub event
-     *   notifications. Register as many as you need with the Manager.
      *
      * - ResultHandler is used to receive a request's result. Depending on the
      *   context, this can be a notification that an item has been succesfully
@@ -51,50 +47,32 @@ namespace gloox
      * registered EventHandlers and from the ResultHandler specific to the
      * query.
      *
-     * To get started with PubSub in gloox, create a Manager, implement the
-     * PubSub::EventHandler virtuals and register an instance with the Manager.
-     * This will get you notified of PubSub events sent to you.
+     * To receive PubSub events in gloox:
+     * @li Tell ClientBase that you are interested in PubSub events by registering
+     * an empty PubSub::Event StanzaExtension
+     * @code
+     * m_client->registerStanzaExtension( new PubSub::Event() );
+     * @endcode
+     * @li Implement and register a MessageHandler and register it with ClientBase, or use the MessageSession interface, at your choice,
+     * @li When receiving a Message, check it for a PubSub::Event
+     * @code
+     * const PubSub::Event* pse = msg.findExtension<PubSub::Event>( ExtPubSubEvent );
+     * if( pse )
+     * {
+     *   // use the Event
+     * }
+     * else
+     * {
+     *   // no Event
+     * }
+     * @endcode
      *
      * Next, to be able to interact with PubSub services, you will need to
      * implement the ResultHandler virtual interfaces to be notified of the
      * result of requests and pass these along to these requests (null handlers
      * are not allowed).
      *
-     * \note A null ResultHandler to a query is not allowed and is a no-op.
-     *
-     * Here's an example.
-     *
-     * EventHandler::handleItemPublication() can be called with or without
-     * the actual tag, depending on if the notification actually includes
-     * the payload. From there you could only record the event and be done
-     * with it, or decide to retrieve the full payload. Eg:
-     *
-     * @code
-     *
-     * class MyEventHandler : public gloox::PubSub::EventHandler
-     * {
-     *   // ...
-     * };
-     *
-     * void MyEventHandler::handleItemPublication( const JID& service,
-     *                                             const std::string& node,
-     *                                             const std::string& item,
-     *                                             const Tag* entry )
-     * {
-     *   // we want to retrieve the payload everytime
-     *   if( !entry )
-     *   {
-     *     m_manager->requestItem( service, node, item, this );
-     *   }
-     *   else
-     *   {
-     *     do_something_useful( entry );
-     *   }
-     * }
-     *
-     * @endcode
-     *
-     * In response to this request, MyResultHandler::handleItem() will be called.
+     * @note A null ResultHandler to a query is not allowed and is a no-op.
      *
      * XEP Version: 1.12
      *
@@ -102,9 +80,6 @@ namespace gloox
      * @author Vincent Thomasset <vthomasset@gmail.com>
      *
      * @since 1.0
-     *
-     * @todo
-     * @li Implement unsubscription result notification (aka sub id tracking)
      */
     class GLOOX_API Manager : public IqHandler
     {
@@ -483,15 +458,15 @@ namespace gloox
          *
          * @param handler EventHandler to register.
          */
-        void registerEventHandler( EventHandler* handler )
-          { m_eventHandlerList.push_back( handler ); }
+//         void registerEventHandler( EventHandler* handler )
+//           { m_eventHandlerList.push_back( handler ); }
 
         /**
          * Removes an handler from the list of event handlers.
          * @param handler EventHandler to remove.
          */
-        void removeEventHandler( EventHandler* handler )
-          { m_eventHandlerList.remove( handler ); }
+//         void removeEventHandler( EventHandler* handler )
+//           { m_eventHandlerList.remove( handler ); }
 
         // reimplemented from DiscoHandler
         void handleDiscoInfoResult( IQ* iq, int context );
@@ -842,20 +817,13 @@ namespace gloox
             ResultHandler* handler,
             TrackContext context );
 
-//         typedef std::pair< std::string, std::string > TrackedItem;
-//         typedef std::map < std::string, TrackedItem > ItemOperationTrackMap;
         typedef std::map < std::string, std::string > NodeOperationTrackMap;
-
         typedef std::map < std::string, ResultHandler* > ResultHandlerTrackMap;
-        typedef std::list< EventHandler* > EventHandlerList;
 
         ClientBase* m_parent;
 
-//         ItemOperationTrackMap  m_iopTrackMap;
         NodeOperationTrackMap  m_nopTrackMap;
-
         ResultHandlerTrackMap  m_resultHandlerTrackMap;
-        EventHandlerList       m_eventHandlerList;
     };
 
   }
