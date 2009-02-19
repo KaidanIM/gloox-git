@@ -69,14 +69,11 @@ namespace gloox
     }
 
     // drop this connection into our pool of available connections
-    printf( "Added initial connection to connection pool\n" );
-    printf( "Connections in pool: %d\n", m_connectionPool.size() );
     if( connection )
     {
       connection->registerConnectionDataHandler( this );
       m_connectionPool.push_back( connection );
     }
-    printf( "Connections in pool: %d\n", m_connectionPool.size() );
   }
 
   ConnectionBOSH::~ConnectionBOSH()
@@ -121,7 +118,6 @@ namespace gloox
                          : ( ( m_connMode == ModeLegacyHTTP ) ? std::string( "LegacyHTTP" )
                                                               : std::string( "PersistentHTTP" ) ) ) );
     getConnection();
-    printf( "XXXXXXXXXXXXXXX connect() about to return\n" );
     return ConnNoError; // FIXME?
   }
 
@@ -173,9 +169,6 @@ namespace gloox
     if( m_state == StateDisconnected )
       return ConnNotConnected;
 
-    printf( "recv, before\n" );
-    printf( "active connections:   %d\n", m_activeConnections.size() );
-    printf( "inactive connections: %d\n", m_connectionPool.size() );
     if( !m_connectionPool.empty() )
       m_connectionPool.front()->recv( 0 );
     if( !m_activeConnections.empty() )
@@ -198,8 +191,6 @@ namespace gloox
 
     if( m_state == StateDisconnected )
       return false;
-
-    printf( "\nTold to send: %s\n", data.c_str() );
 
     if( data.substr( 0, 2 ) == "<?" )
     {
@@ -228,13 +219,10 @@ namespace gloox
   /* Sends XML. Wraps data in a <body/> tag, and then passes to sendRequest(). */
   bool ConnectionBOSH::sendXML()
   {
-    printf( "ConnectionBOSH::sendXML()\n" );
-
     if( m_state != StateConnected )
     {
       m_logInstance.warn( LogAreaClassConnectionBOSH,
                          "Data sent before connection established (will be buffered)" );
-      printf( "~ConnectionBOSH::sendXML() not connected\n" );
       return false;
     }
 
@@ -244,13 +232,10 @@ namespace gloox
       unsigned int delta = now - m_lastRequestTime;
       if( delta < m_minTimePerRequest && m_openRequests > 0 )
       {
-        m_logInstance.dbg( LogAreaClassConnectionBOSH, "too little time between requests" );
-        printf( "~ConnectionBOSH::sendXML() send buffer empty\n" );
+        m_logInstance.dbg( LogAreaClassConnectionBOSH, "Too little time between requests: " + util::int2string( delta ) + " seconds" );
         return false;
       }
-      printf( "\n>>>>> %ld seconds since last empty request (m_minTimePerRequest: %d) <<<<<\n",
-              delta, m_minTimePerRequest );
-      m_logInstance.dbg( LogAreaClassConnectionBOSH, "sending empty request" );
+      m_logInstance.dbg( LogAreaClassConnectionBOSH, "Send buffer is empty, sending empty request" );
     }
 
     ++m_rid;
@@ -280,28 +265,21 @@ namespace gloox
     }
     else
     {
-      m_rid--; // I think... (may need to rethink when acks are implemented)
+      --m_rid; // I think... (may need to rethink when acks are implemented)
       m_logInstance.warn( LogAreaClassConnectionBOSH,
                          "Unable to send. Connection not complete, or too many open requests,"
                          " so added to buffer.\n" );
-      printf( "---------------Buffer---------------\n%s\n----------------EOB--------------\n",
-              m_sendBuffer.c_str() );
     }
 
-    printf( "~ConnectionBOSH::sendXML()\n" );
     return true;
   }
 
   /* Chooses the appropriate connection, or opens a new one if necessary. Wraps xml in HTTP and sends. */
   bool ConnectionBOSH::sendRequest( const std::string& xml )
   {
-    printf( "ConnectionBOSH::sendRequest()\n" );
     ConnectionBase* conn = getConnection();
     if( !conn )
-    {
-      printf( "ConnectionBOSH::sendRequest() no conn\n" );
       return false;
-    }
 
     std::ostringstream request;
     request << "POST " << m_path;
@@ -324,17 +302,12 @@ namespace gloox
     if( conn->send( request.str() ) )
     {
       m_lastRequestTime = time( 0 );
-      printf( "Request sent on %p:\n%s\n", conn, request.str().c_str() );
       ++m_openRequests;
-      printf( "%d: Incrementing m_openRequests to %d (connections: %d)\n", (int)time( 0 ),
-              m_openRequests, m_activeConnections.size() );
-      printf( "~ConnectionBOSH::sendRequest() send suceeded\n" );
       return true;
     }
-    else // FIXME What to do in this case?
-      printf( "Error while trying to send on socket (state: %d)\n", conn->state() );
+//     else // FIXME What to do in this case?
+//       printf( "Error while trying to send on socket (state: %d)\n", conn->state() );
 
-    printf( "~ConnectionBOSH::sendRequest()\n" );
     return false;
   }
 
@@ -371,11 +344,9 @@ namespace gloox
 
   ConnectionError ConnectionBOSH::receive()
   {
-    printf( "put in receive mode\n" );
     ConnectionError err = ConnNoError;
     while( m_state != StateDisconnected && ( err = recv( 10 ) ) == ConnNoError )
       ;
-    printf( "err: %d, m_state: %d\n", err, m_state );
     return err == ConnNoError ? ConnNotConnected : err;
   }
 
@@ -393,21 +364,16 @@ namespace gloox
     util::ForEach( m_connectionPool, &ConnectionBase::getStatistics, totalIn, totalOut );
   }
 
-  void ConnectionBOSH::handleReceivedData( const ConnectionBase* connection,
+  void ConnectionBOSH::handleReceivedData( const ConnectionBase* /*connection*/,
                                            const std::string& data )
   {
-    printf( "received: -------------------\n%s\n-----------------------\n", data.c_str() );
     m_buffer += data;
-    if( m_buffer != data  )
-      printf( "buffer: -------------------\n%s\n-----------------------\n", m_buffer.c_str() );
-
     std::string::size_type headerLength = 0;
     while( ( headerLength = m_buffer.find( "\r\n\r\n" ) ) != std::string::npos )
     {
       m_bufferHeader = m_buffer.substr( 0, headerLength+2 );
 
       const std::string& statusCode = m_bufferHeader.substr( 9, 3 );
-      printf( "status code: %s\n", statusCode.c_str() );
       if( statusCode != "200" )
       {
         m_logInstance.warn( LogAreaClassConnectionBOSH,
@@ -429,14 +395,10 @@ namespace gloox
         m_connMode = ModeLegacyHTTP;
       }
 
-      printf( "buffer: %d\nheader: %d\ncontent: %d\n", m_buffer.length(), headerLength,
-              m_bufferContentLength );
-
       if( m_buffer.length() >= ( headerLength + 4 + m_bufferContentLength ) )
       {
         putConnection();
-        m_openRequests--;
-        printf( "Decrementing m_openRequests to %d\n", m_openRequests );
+        --m_openRequests;
         std::string xml = m_buffer.substr( headerLength + 4, m_bufferContentLength );
         m_parser.feed( xml );
         m_buffer.erase( 0, headerLength + 4 + m_bufferContentLength );
@@ -445,17 +407,14 @@ namespace gloox
       }
       else
       {
-        printf( "buffer length mismatch\n" );
+        m_logInstance.warn( LogAreaClassConnectionBOSH, "buffer length mismatch" );
         break;
       }
     }
-
-    printf( "~ConnectionBOSH::handleReceivedData()\n" );
   }
 
-  void ConnectionBOSH::handleConnect( const ConnectionBase* connection )
+  void ConnectionBOSH::handleConnect( const ConnectionBase* /*connection*/ )
   {
-    printf( "New TCP connection %p established\n", connection );
     if( m_state == StateConnecting )
     {
       m_rid = rand() % 100000 + 1728679472;
@@ -481,10 +440,9 @@ namespace gloox
     }
   }
 
-  void ConnectionBOSH::handleDisconnect( const ConnectionBase* connection,
+  void ConnectionBOSH::handleDisconnect( const ConnectionBase* /*connection*/,
                                          ConnectionError reason )
   {
-    printf( "disconnected: %d\n", reason );
     if( m_handler && m_state == StateConnecting )
     {
       m_state = StateDisconnected;
@@ -502,7 +460,7 @@ namespace gloox
       case ModeLegacyHTTP:
       case ModePersistentHTTP:
         // FIXME do we need to do anything here?
-        printf( "A TCP connection %p was disconnected (reason: %d).\n", connection, reason );
+//         printf( "A TCP connection %p was disconnected (reason: %d).\n", connection, reason );
         break;
     }
   }
@@ -597,9 +555,6 @@ namespace gloox
 
   ConnectionBase* ConnectionBOSH::getConnection()
   {
-    printf( "getConnection, before\n" );
-    printf( "active connections:   %d\n", m_activeConnections.size() );
-    printf( "inactive connections: %d\n", m_connectionPool.size() );
     if( m_openRequests > 0 && m_openRequests >= m_maxOpenRequests )
     {
       m_logInstance.warn( LogAreaClassConnectionBOSH,
@@ -659,27 +614,17 @@ namespace gloox
     if( conn->state() == StateConnected )
     {
       m_activeConnections.push_back( conn );
-      printf( "activateConnection(1), after\n" );
-      printf( "active connections:   %d\n", m_activeConnections.size() );
-      printf( "inactive connections: %d\n", m_connectionPool.size() );
       return conn;
     }
 
     m_logInstance.dbg( LogAreaClassConnectionBOSH, "Connecting pooled connection." );
     m_connectionPool.push_back( conn );
     conn->connect();
-    printf( "activateConnection(2), after\n" );
-    printf( "active connections:   %d\n", m_activeConnections.size() );
-    printf( "inactive connections: %d\n", m_connectionPool.size() );
     return 0;
   }
 
   void ConnectionBOSH::putConnection()
   {
-    printf( "putConnection, before\n" );
-    printf( "active connections:   %d\n", m_activeConnections.size() );
-    printf( "inactive connections: %d\n", m_connectionPool.size() );
-
     ConnectionBase* conn = m_activeConnections.front();
 
     switch( m_connMode )
@@ -701,9 +646,6 @@ namespace gloox
       default:
         break;
     }
-    printf( "putConnection, after\n" );
-    printf( "active connections:   %d\n", m_activeConnections.size() );
-    printf( "inactive connections: %d\n", m_connectionPool.size() );
   }
 
 }

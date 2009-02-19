@@ -26,7 +26,7 @@ namespace gloox
       virtual void cleanup() {}
       virtual ConnectionBase* newInstance() const
       {
-        printf( "FakeConnection::newInstance(): %d\n", g_test );
+//         printf( "FakeConnection::newInstance(): %d\n", g_test );
         return new FakeConnection();
       }
       virtual void getStatistics( int &totalIn, int &totalOut ) {}
@@ -35,13 +35,13 @@ namespace gloox
 
   ConnectionError FakeConnection::connect()
   {
-    printf( "FakeConnection::connect(): %d\n", g_test );
+//     printf( "FakeConnection::connect(): %d\n", g_test );
     m_state = StateConnecting;
     return ConnNoError;
   }
   ConnectionError FakeConnection::recv( int )
   {
-    printf( "FakeConnection::recv(): %d\n", g_test );
+//     printf( "FakeConnection::recv(): %d\n", g_test );
     if( g_test == 1 )
     {
       m_state = StateConnected;
@@ -74,11 +74,18 @@ namespace gloox
   }
   bool FakeConnection::send( const std::string& data )
   {
-    printf( "FakeConnection::send(): %d\n", g_test );
+//     printf( "FakeConnection::send(): %d\n", g_test );
     return true;
   }
-  ConnectionError FakeConnection::receive() { printf( "FakeConnection::receive(): %d\n", g_test ); return ConnNoError; }
-  void FakeConnection::disconnect() { printf( "FakeConnection::disconnect(): %d\n", g_test ); }
+  ConnectionError FakeConnection::receive()
+  {
+//     printf( "FakeConnection::receive(): %d\n", g_test );
+    return ConnNoError;
+  }
+  void FakeConnection::disconnect()
+  {
+//     printf( "FakeConnection::disconnect(): %d\n", g_test );
+  }
 
   class FakeClientBase : public ConnectionDataHandler, public LogHandler
   {
@@ -90,22 +97,23 @@ namespace gloox
       virtual void handleDisconnect( const ConnectionBase* connection, ConnectionError reason );
       virtual void handleLog( LogLevel level, LogArea area, const std::string& message )
       {
-        printf("%d: ", int( time( 0 ) ) );
+//         printf("%d: ", int( time( 0 ) ) );
         switch(area)
         {
           case LogAreaXmlIncoming:
-            printf("Received XML: ");
+//             printf("Received XML: ");
             break;
           case LogAreaXmlOutgoing:
-            printf("Sent XML: ");
+//             printf("Sent XML: ");
             break;
           case LogAreaClassConnectionBOSH:
-            printf("BOSH: ");
+//             printf("BOSH: ");
             break;
           default:
-            printf("log: level: %d, area: %d, ", level, area);
+//             printf("log: level: %d, area: %d, ", level, area);
+            break;
         }
-        printf("%s\n", message.c_str() );
+//         printf("%s\n", message.c_str() );
       }
       void doLoop();
     private:
@@ -115,7 +123,7 @@ namespace gloox
 
   void FakeClientBase::handleConnect( const ConnectionBase* connection )
   {
-    printf( "FakeClientBase::handleConnect(): %d\n", g_test );
+//     printf( "FakeClientBase::handleConnect(): %d\n", g_test );
     m_stopLoop = true;
     if( g_test == 3 ) // send outgoing stream opener
     {
@@ -126,7 +134,7 @@ namespace gloox
   }
   void FakeClientBase::handleReceivedData( const ConnectionBase* connection, const std::string& data )
   {
-    printf( "FakeClientBase::handleReceivedData(): %d\n", g_test );
+//     printf( "FakeClientBase::handleReceivedData(): %d\n", g_test );
     m_stopLoop = true;
     if( g_test == 4 ) //
     {
@@ -138,11 +146,14 @@ namespace gloox
       m_bosh->send( "<auth xmlns='urn:ietf:params:xml:ns:xmpp-sasl' mechanism='DIGEST-MD5'/>" );
       ++g_test;
     }
-    else
-      printf( "RECEIVED UNHANDLED: %s\n", data.c_str() );
+//     else
+//       printf( "RECEIVED UNHANDLED: %s\n", data.c_str() );
   }
   void FakeClientBase::handleDisconnect( const ConnectionBase* connection, ConnectionError reason )
-  { printf( "FakeClientBase::handleDisconnect(): %d\n", g_test ); m_stopLoop = true; }
+  {
+//     printf( "FakeClientBase::handleDisconnect(): %d\n", g_test );
+    m_stopLoop = true;
+  }
   void FakeClientBase::doLoop()
   {
     m_stopLoop = false;
@@ -173,7 +184,7 @@ int main( int /*argc*/, char** /*argv*/ )
   if( 1 )
   {
     ++fail;
-    printf( "test '%s' failed\n", name.c_str() );
+//     printf( "test '%s' failed\n", name.c_str() );
   }
 
 
