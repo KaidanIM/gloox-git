@@ -15,7 +15,6 @@
 #include "dataform.h"
 #include "iq.h"
 #include "pubsub.h"
-#include "pubsubeventhandler.h"
 #include "pubsubresulthandler.h"
 #include "pubsubitem.h"
 #include "shim.h"
@@ -106,96 +105,6 @@ namespace gloox
     {
       return util::lookup( affiliation, affiliationValues );
     }
-
-    /*
-    static EventType eventType( const std::string& event )
-    {
-    static const char* values[] = {
-    "collection",
-    "configuration",
-    "delete",
-    "items",
-    "purge",
-    "subscription"
-  };
-    return (EventType)util::lookup( event, values );
-  }
-*/
-
-/*
-    void Manager::handleMessage( Message* msg, MessageSession* )
-    {
-    const Tag* event = msg->findChild( "event", XMLNS, XMLNS_PUBSUB_EVENT );
-    if( !event || m_eventHandlerList.empty() )
-    return;
-
-    const JID& service = msg->from();
-    const TagList& events = event->children();
-    EventType type;
-    EventHandlerList::iterator ith = m_eventHandlerList.begin();
-
-      // in case an event may contain several different notifications
-    TagList::const_iterator it = events.begin();
-    for( ; it != events.end(); ++it )
-    {
-    type = eventType( (*it)->name() );
-    for( ; ith != m_eventHandlerList.end(); ++it )
-    {
-    const std::string& node = (*it)->findAttribute( "node" );
-    switch( type )
-    {
-    case EventCollection:
-    {
-    const Tag* x = (*it)->findChild( "x" );
-    const DataForm* df = x ? new DataForm( x ) : 0;
-    (*ith)->handleNodeCreation( service, node, df );
-    delete df;
-    break;
-  }
-    case EventConfigure:
-    {
-    const Tag* x = (*it)->findChild( "x" );
-    const DataForm* df = x ? new DataForm( x ) : 0;
-    (*ith)->handleConfigurationChange( service, node, df );
-    delete df;
-    break;
-  }
-    case EventDelete:
-    {
-    (*ith)->handleNodeRemoval( service, node );
-    break;
-  }
-    case EventItems:
-    {
-    const Tag* items = (*it)->findChild( "items" );
-    const Tag* item = items->findChild( "item" );
-              // This is the collection node responsible for the notification,
-              // in case of a subscription type of 'items'. Currently unused.
-    const Tag* headers = item->findChild( "headers", "xmlns", "shim" );
-    const std::string& id= item->findAttribute( "id" );
-    (*ith)->handleItemPublication( service, node, id, item );
-    break;
-  }
-    case EventPurge:
-    {
-    (*ith)->handleNodePurge( service, node );
-    break;
-  }
-    case EventSubscription:
-    {
-    const std::string& jid  = (*it)->findAttribute( "jid" );
-    const std::string& sub  = (*it)->findAttribute( "subscription" );
-    const Tag* body = event->findChild( "body" );
-    (*ith)->handleSubscriptionChange( service, jid, node,
-    body ? body->cdata() : EmptyString,
-    subscriptionType( sub ) );
-    break;
-  }
-  }
-  }
-  }
-  }
-*/
 
     // ---- Manager::PubSubOwner ----
     Manager::PubSubOwner::PubSubOwner( TrackContext context )
