@@ -37,23 +37,17 @@ namespace gloox
      * welcome to ask questions, criticize the API and so on. For contact
      * information, see below.
      *
-     * This manager acts in concert with 2 different handlers:
+     * A ResultHandler is used to receive a request's result. Depending on the
+     * context, this can be a notification that an item has been succesfully
+     * deleted (or not), or the default node configuration for a service.
      *
-     * - ResultHandler is used to receive a request's result. Depending on the
-     *   context, this can be a notification that an item has been succesfully
-     *   deleted (or not), or the default node configuration for a service.
-     *
-     * Note that many PubSub queries will both trigger a notification from
-     * registered EventHandlers and from the ResultHandler specific to the
-     * query.
-     *
-     * To receive PubSub events in gloox:
+     * To receive PubSub events:
      * @li Tell ClientBase that you are interested in PubSub events by registering
      * an empty PubSub::Event StanzaExtension
      * @code
      * m_client->registerStanzaExtension( new PubSub::Event() );
      * @endcode
-     * @li Implement and register a MessageHandler and register it with ClientBase, or use the MessageSession interface, at your choice,
+     * @li Implement a MessageHandler and register it with ClientBase, or use the MessageSession interface, at your choice,
      * @li When receiving a Message, check it for a PubSub::Event
      * @code
      * const PubSub::Event* pse = msg.findExtension<PubSub::Event>( ExtPubSubEvent );
@@ -67,10 +61,10 @@ namespace gloox
      * }
      * @endcode
      *
-     * Next, to be able to interact with PubSub services, you will need to
+     * To interact with PubSub services, you will need to
+     * instantiate a PubSub::Manager and
      * implement the ResultHandler virtual interfaces to be notified of the
-     * result of requests and pass these along to these requests (null handlers
-     * are not allowed).
+     * result of requests and pass these along to these requests.
      *
      * @note A null ResultHandler to a query is not allowed and is a no-op.
      *
