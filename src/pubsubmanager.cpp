@@ -15,7 +15,6 @@
 #include "dataform.h"
 #include "iq.h"
 #include "pubsub.h"
-#include "pubsubeventhandler.h"
 #include "pubsubresulthandler.h"
 #include "pubsubitem.h"
 #include "shim.h"
