@@ -10,92 +10,272 @@ AM_CPPFLAGS = -Wall -pedantic -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare
 
 lib_LTLIBRARIES = libgloox.la
 
-libgloox_la_SOURCES = jid.cpp parser.cpp connectiontcpclient.cpp clientbase.cpp tag.cpp stanza.cpp logsink.cpp \
-                        dns.cpp prep.cpp base64.cpp client.cpp component.cpp \
-                        disco.cpp adhoc.cpp privatexml.cpp registration.cpp \
-                        nonsaslauth.cpp rosteritem.cpp rostermanager.cpp privacyitem.cpp \
-                        bookmarkstorage.cpp annotations.cpp privacymanager.cpp lastactivity.cpp \
-                        flexoff.cpp dataform.cpp dataformfield.cpp dataformfieldcontainer.cpp \
-                        messagesession.cpp messageeventfilter.cpp chatstatefilter.cpp gloox.cpp \
-                        inbandbytestream.cpp messagefilter.cpp vcard.cpp \
-                        vcardmanager.cpp md5.cpp sha.cpp search.cpp dataformreported.cpp dataformitem.cpp \
-                        mucroom.cpp mucmessagesession.cpp oob.cpp vcardupdate.cpp stanzaextensionfactory.cpp \
-                        delayeddelivery.cpp gpgencrypted.cpp gpgsigned.cpp \
-                        uniquemucroom.cpp instantmucroom.cpp compressionzlib.cpp tlsgnutlsclient.cpp \
-                        tlsopenssl.cpp connectionhttpproxy.cpp tlsgnutlsserveranon.cpp tlsgnutlsbase.cpp \
-                        tlsgnutlsclientanon.cpp tlsschannel.cpp tlsdefault.cpp simanager.cpp siprofileft.cpp \
-                        mutex.cpp connectionsocks5proxy.cpp socks5bytestreammanager.cpp socks5bytestream.cpp \
-                        connectiontcpbase.cpp connectiontcpserver.cpp socks5bytestreamserver.cpp amp.cpp \
-                        pubsubitem.cpp pubsubmanager.cpp \
-                        error.cpp util.cpp iq.cpp message.cpp presence.cpp \
-                        subscription.cpp capabilities.cpp chatstate.cpp connectionbosh.cpp connectiontls.cpp \
-                        messageevent.cpp receipt.cpp nickname.cpp eventdispatcher.cpp \
-                        pubsubevent.cpp xhtmlim.cpp featureneg.cpp jinglesession.cpp jinglecontent.cpp \
-                        jingleiceudp.cpp jinglerawudp.cpp \
-                        jinglertp.cpp jingledtmf.cpp \
-                        shim.cpp softwareversion.cpp attention.cpp \
-                        rap.cpp bob.cpp
+libgloox_la_SOURCES = adhoc.cpp \
+			amp.cpp \
+			annotations.cpp \
+			attention.cpp \
+			base64.cpp \
+			bob.cpp \
+			bookmarkstorage.cpp \
+			capabilities.cpp \
+			chatstate.cpp \
+			chatstatefilter.cpp \
+			clientbase.cpp \
+			client.cpp \
+			component.cpp \
+			compressiondefault.cpp \
+			compressionzlib.cpp \
+			connectionbosh.cpp \
+			connectioncompression.cpp \
+			connectionhttpproxy.cpp \
+			connectionsocks5proxy.cpp \
+			connectiontcpbase.cpp \
+			connectiontcpclient.cpp \
+			connectiontcpserver.cpp \
+			connectiontls.cpp \
+			dataform.cpp \
+			dataformfieldcontainer.cpp \
+			dataformfield.cpp \
+			dataformitem.cpp \
+			dataformreported.cpp \
+			delayeddelivery.cpp \
+			disco.cpp \
+			dns.cpp \
+			error.cpp \
+			eventdispatcher.cpp \
+			featureneg.cpp \
+			flexoff.cpp \
+			gloox.cpp \
+			gpgencrypted.cpp \
+			gpgsigned.cpp \
+			inbandbytestream.cpp \
+			instantmucroom.cpp \
+			iq.cpp \
+			jid.cpp \
+			jinglecontent.cpp \
+			jingledtmf.cpp \
+			jingleiceudp.cpp \
+			jinglerawudp.cpp \
+			jinglertp.cpp \
+			jinglesession.cpp \
+			lastactivity.cpp \
+			logsink.cpp \
+			md5.cpp \
+			message.cpp \
+			messageevent.cpp \
+			messageeventfilter.cpp \
+			messagefilter.cpp \
+			messagesession.cpp \
+			mucmessagesession.cpp \
+			mucroom.cpp \
+			mutex.cpp \
+			nickname.cpp \
+			nonsaslauth.cpp \
+			oob.cpp \
+			parser.cpp \
+			prep.cpp \
+			presence.cpp \
+			privacyitem.cpp \
+			privacymanager.cpp \
+			privatexml.cpp \
+			pubsubevent.cpp \
+			pubsubitem.cpp \
+			pubsubmanager.cpp \
+			rap.cpp \
+			receipt.cpp \
+			registration.cpp \
+			rosteritem.cpp \
+			rostermanager.cpp \
+			search.cpp \
+			sha.cpp \
+			shim.cpp \
+			simanager.cpp \
+			siprofileft.cpp \
+			socks5bytestream.cpp \
+			socks5bytestreammanager.cpp \
+			socks5bytestreamserver.cpp \
+			softwareversion.cpp \
+			stanza.cpp \
+			stanzaextensionfactory.cpp \
+			subscription.cpp \
+			tag.cpp \
+			tlsdefault.cpp \
+			tlsgnutlsbase.cpp \
+			tlsgnutlsclientanon.cpp \
+			tlsgnutlsclient.cpp \
+			tlsgnutlsserveranon.cpp \
+			tlsopenssl.cpp \
+			tlsschannel.cpp \
+			uniquemucroom.cpp \
+			util.cpp \
+			vcard.cpp \
+			vcardmanager.cpp \
+			vcardupdate.cpp \
+			xhtmlim.cpp
 
 libgloox_la_LDFLAGS = -version-info 8:0:0 -no-undefined -no-allow-shlib-undefined
 libgloox_la_LIBADD =
 libgloox_la_CFLAGS = $(CPPFLAGS)
 
 libglooxincludedir = $(includedir)/gloox
-libglooxinclude_HEADERS = adhoccommandprovider.h      privacymanager.h        tag.h \
-                            adhoc.h attention.h iqhandler.h             privatexml.h \
-                            annotations.h             client.h                privatexmlhandler.h \
-                            annotationshandler.h      component.h             registration.h \
-                            bookmarkhandler.h         registrationhandler.h   jid.h \
-                            bookmarkstorage.h         messagehandler.h        rosteritem.h \
-                            clientbase.h              rosterlistener.h        taghandler.h \
-                            connectionlistener.h      rostermanager.h         gloox.h \
-                            disco.h                   presencehandler.h       subscriptionhandler.h \
-                            discohandler.h            privacyitem.h           stanza.h \
-                            disconodehandler.h        privacylisthandler.h    loghandler.h \
-                            lastactivity.h            lastactivityhandler.h   flexoff.h \
-                            flexoffhandler.h          dataform.h              dataformfield.h \
-                            dataformitem.h            dataformfieldcontainer.h dataformreported.h \
-                            macros.h                  logsink.h               messagesession.h \
-                            messageeventhandler.h     messagesessionhandler.h chatstatehandler.h \
-                            chatstatefilter.h         messageeventfilter.h    inbandbytestream.h \
-                            messagefilter.h           vcard.h \
-                            vcardmanager.h            vcardhandler.h          adhochandler.h \
-                            search.h                  searchhandler.h         statisticshandler.h \
-                            resource.h                mucroom.h               mucroomhandler.h \
-                            mucroomconfighandler.h    parser.h                \
-                            mucinvitationhandler.h    stanzaextension.h       oob.h \
-                            vcardupdate.h             delayeddelivery.h       base64.h \
-                            gpgencrypted.h            gpgsigned.h \
-                            md5.h                     sha.h                   uniquemucroom.h \
-                            instantmucroom.h          tlsbase.h               tlshandler.h \
-                            connectionbase.h          connectiondatahandler.h compressiondatahandler.h \
-                            compressionbase.h         connectiontcpclient.h   connectionhttpproxy.h \
-                            tlsdefault.h              simanager.h             siprofilehandler.h \
-                            sihandler.h               siprofileft.h           siprofilefthandler.h \
-                            socks5bytestreammanager.h connectionsocks5proxy.h event.h \
-                            socks5bytestream.h        socks5bytestreamserver.h \
-                            softwareversion.h \
-                            eventhandler.h \
-                            mutex.h                   mutexguard.h            connectiontcpbase.h \
-                            connectiontcpserver.h     amp.h                   pubsubmanager.h \
-                            iq.h                      pubsub.h                \
-                            pubsubresulthandler.h     error.h                 chatstate.h \
-                            connectionhandler.h     iq.h \
-                            message.h                 presence.h              subscription.h \
-                            bytestream.h              bytestreamdatahandler.h bytestreamhandler.h \
-                            capabilities.h            connectionbosh.h        featureneg.h \
-                            connectiontls.h           messageevent.h          receipt.h \
-                            nickname.h                pubsubevent.h           xhtmlim.h \
-                            eventdispatcher.h         jinglesession.h         jingletransport.h \
-                            jingledescription.h       jinglesessionhandler.h  jingleplugin.h \
-                            jinglecontent.h           jinglertp.h \
-                            jingleiceudp.h jinglerawudp.h \
-                            jingledtmf.h \
-                            pubsubitem.h shim.h util.h rap.h bob.h
+libglooxinclude_HEADERS = adhoccommandprovider.h \
+			adhoc.h \
+			adhochandler.h \
+			amp.h \
+			annotations.h \
+			annotationshandler.h \
+			attention.h \
+			base64.h \
+			bob.h \
+			bookmarkhandler.h \
+			bookmarkstorage.h \
+			bytestreamdatahandler.h \
+			bytestream.h \
+			bytestreamhandler.h \
+			capabilities.h \
+			chatstatefilter.h \
+			chatstate.h \
+			chatstatehandler.h \
+			clientbase.h \
+			client.h \
+			component.h \
+			compressionbase.h \
+			compressiondatahandler.h \
+			connectionbase.h \
+			connectionbosh.h \
+			connectioncompression.h \
+			connectiondatahandler.h \
+			connectionhandler.h \
+			connectionhttpproxy.h \
+			connectionlistener.h \
+			connectionsocks5proxy.h \
+			connectiontcpbase.h \
+			connectiontcpclient.h \
+			connectiontcpserver.h \
+			connectiontls.h \
+			dataformfieldcontainer.h \
+			dataformfield.h \
+			dataform.h \
+			dataformitem.h \
+			dataformreported.h \
+			delayeddelivery.h \
+			disco.h \
+			discohandler.h \
+			disconodehandler.h \
+			error.h \
+			eventdispatcher.h \
+			event.h \
+			eventhandler.h \
+			featureneg.h \
+			flexoff.h \
+			flexoffhandler.h \
+			gloox.h \
+			gpgencrypted.h \
+			gpgsigned.h \
+			inbandbytestream.h \
+			instantmucroom.h \
+			iq.h \
+			iq.h \
+			iqhandler.h \
+			jid.h \
+			jinglecontent.h \
+			jingledescription.h \
+			jingledtmf.h \
+			jingleiceudp.h \
+			jingleplugin.h \
+			jinglerawudp.h \
+			jinglertp.h \
+			jinglesession.h \
+			jinglesessionhandler.h \
+			jingletransport.h \
+			lastactivity.h \
+			lastactivityhandler.h \
+			loghandler.h \
+			logsink.h \
+			macros.h \
+			md5.h \
+			messageeventfilter.h \
+			messageevent.h \
+			messageeventhandler.h \
+			messagefilter.h \
+			message.h \
+			messagehandler.h \
+			messagesession.h \
+			messagesessionhandler.h \
+			mucinvitationhandler.h \
+			mucroomconfighandler.h \
+			mucroom.h \
+			mucroomhandler.h \
+			mutexguard.h \
+			mutex.h \
+			nickname.h \
+			oob.h \
+			parser.h \
+			presence.h \
+			presencehandler.h \
+			privacyitem.h \
+			privacylisthandler.h \
+			privacymanager.h \
+			privatexml.h \
+			privatexmlhandler.h \
+			pubsubevent.h \
+			pubsub.h \
+			pubsubitem.h \
+			pubsubmanager.h \
+			pubsubresulthandler.h \
+			rap.h \
+			receipt.h \
+			registration.h \
+			registrationhandler.h \
+			resource.h \
+			rosteritem.h \
+			rosterlistener.h \
+			rostermanager.h \
+			search.h \
+			searchhandler.h \
+			sha.h \
+			shim.h \
+			sihandler.h \
+			simanager.h \
+			siprofileft.h \
+			siprofilefthandler.h \
+			siprofilehandler.h \
+			socks5bytestream.h \
+			socks5bytestreammanager.h \
+			socks5bytestreamserver.h \
+			softwareversion.h \
+			stanzaextension.h \
+			stanza.h \
+			statisticshandler.h \
+			subscription.h \
+			subscriptionhandler.h \
+			tag.h \
+			taghandler.h \
+			tlsbase.h \
+			tlsdefault.h \
+			tlshandler.h \
+			uniquemucroom.h \
+			util.h \
+			vcard.h \
+			vcardhandler.h \
+			vcardmanager.h \
+			vcardupdate.h \
+			xhtmlim.h
 
-noinst_HEADERS = prep.h dns.h nonsaslauth.h mucmessagesession.h stanzaextensionfactory.h tlsgnutlsclient.h \
-                   tlsgnutlsbase.h tlsgnutlsclientanon.h tlsgnutlsserveranon.h tlsopenssl.h tlsschannel.h \
-                   compressionzlib.h rosteritemdata.h
+noinst_HEADERS = compressiondefault.h \
+			compressionzlib.h \
+			dns.h \
+			nonsaslauth.h \
+			mucmessagesession.h \
+			prep.h \
+			rosteritemdata.h \
+			stanzaextensionfactory.h \
+			tlsgnutlsbase.h \
+			tlsgnutlsclient.h \
+			tlsgnutlsclientanon.h \
+			tlsgnutlsserveranon.h \
+			tlsopenssl.h \
+			tlsschannel.h
 
 EXTRA_DIST = version.rc
 

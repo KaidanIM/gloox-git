@@ -13,12 +13,13 @@
 #ifndef CONNECTIONTLS_H__
 #define CONNECTIONTLS_H__
 
-#include <string>
 #include "gloox.h"
 #include "logsink.h"
 #include "connectionbase.h"
 #include "tlsdefault.h"
 #include "connectiondatahandler.h"
+
+#include <string>
 
 namespace gloox
 {
@@ -39,6 +40,7 @@ namespace gloox
    * established, be sure not to use the connection until ConnectionDataHandler::handleConnect()
    * of the specified ConnectionDataHandler is called.
    *
+   * @author Jakob Schroeter <js@camaya.net>
    * @author Matthew Wild <mwild1@gmail.com>
    * @since 1.0
    */
@@ -57,9 +59,47 @@ namespace gloox
       ConnectionTLS( ConnectionDataHandler* cdh, ConnectionBase* conn, const LogSink& log );
 
       /**
+       * Constructs a new ConnectionTLS object.
+       * @param conn A transport connection. It should be configured to connect to
+       * the server and port you wish to make the encrypted connection to.
+       * ConnectionTLS will own the transport connection and delete it in its destructor.
+       * @param logInstance The log target. Obtain it from ClientBase::logInstance().
+       */
+      ConnectionTLS( ConnectionBase* conn, const LogSink& log );
+
+      /**
        * Virtual Destructor.
        */
       virtual ~ConnectionTLS();
+
+      /**
+       * Use this function to set a number of trusted root CA certificates which shall be
+       * used to verify a servers certificate.
+       * @param cacerts A list of absolute paths to CA root certificate files in PEM format.
+       * @note This function is a wrapper for TLSBase::setCACerts().
+       */
+      void setCACerts( const StringList& cacerts );
+
+      /**
+       * This function is used to retrieve certificate and connection info of a encrypted connection.
+       * @return Certificate information.
+       * @note This funcztion is a wrapper around TLSBase::fetchTLSInfo().
+       */
+      const CertInfo& fetchTLSInfo() const { return m_certInfo; }
+
+      /**
+       * Use this function to set the user's certificate and private key. The certificate will
+       * be presented to the server upon request and can be used for SASL EXTERNAL authentication.
+       * The user's certificate file should be a bundle of more than one certificate in PEM format.
+       * The first one in the file should be the user's certificate, each cert following that one
+       * should have signed the previous one.
+       * @note These certificates are not necessarily the same as those used to verify the server's
+       * certificate.
+       * @param clientKey The absolute path to the user's private key in PEM format.
+       * @param clientCerts A path to a certificate bundle in PEM format.
+       * @note This function is a wrapper around TLSBase::setClientCert().
+       */
+      virtual void setClientCert( const std::string& clientKey, const std::string& clientCerts );
 
       // reimplemented from ConnectionBase
       virtual ConnectionError connect();
@@ -94,14 +134,19 @@ namespace gloox
       // reimplemented from ConnectionDataHandler
       virtual ConnectionBase* newInstance() const;
 
-      // TLSHandler callbacks
+      // reimplemented from TLSHandler
       virtual void handleEncryptedData( const TLSBase*, const std::string& data );
+
+      // reimplemented from TLSHandler
       virtual void handleDecryptedData( const TLSBase*, const std::string& data );
+
+      // reimplemented from TLSHandler
       virtual void handleHandshakeResult( const TLSBase* base, bool success, CertInfo& certinfo );
 
     private:
       ConnectionBase* m_connection;
       TLSDefault* m_tls;
+      CertInfo m_certInfo;
       const LogSink & m_log;
       bool m_handshaked;
 
@@ -109,4 +154,4 @@ namespace gloox
 
 }
 
-#endif
+#endif // CONNECTIONTLS_H__

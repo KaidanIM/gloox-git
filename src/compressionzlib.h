@@ -62,6 +62,9 @@ namespace gloox
       // reimplemented from CompressionBase
       virtual void decompress( const std::string& data );
 
+      // reimplemented from CompressionBase
+      virtual void cleanup() {}
+
     private:
       z_stream m_zinflate;
       z_stream m_zdeflate;

@@ -683,6 +683,8 @@ namespace gloox
                                      * @since 0.9.4 */
     ConnCompressionFailed,          /**< Negotiating/initializing compression failed.
                                      * @since 0.9 */
+    ConnCompressionNotAvailable,    /**< TLS was required but is not compiled in.
+                                     * @since 1.1 */
     ConnAuthenticationFailed,       /**< Authentication failed. Username/password wrong or account does
                                      * not exist. Use ClientBase::authError() to find the reason. */
     ConnUserDisconnected,           /**< The user (or higher-level protocol) requested a disconnect. */
