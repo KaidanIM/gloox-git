@@ -65,6 +65,12 @@ namespace gloox
        */
       virtual void decompress( const std::string& data ) = 0;
 
+      /**
+       * Performs internal cleanup.
+       * @since 1.1
+       */
+      virtual void cleanup() = 0;
+
     protected:
       CompressionDataHandler* m_handler;
       bool m_valid;

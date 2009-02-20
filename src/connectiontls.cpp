@@ -10,7 +10,7 @@
  * This software is distributed without any warranty.
  */
 
-#include "gloox.h"
+
 #include "connectiontls.h"
 #include "tlsdefault.h"
 
@@ -18,10 +18,17 @@ namespace gloox
 {
 
   ConnectionTLS::ConnectionTLS( ConnectionDataHandler* cdh, ConnectionBase* conn, const LogSink& log )
-    : ConnectionBase( this ),
+    : ConnectionBase( cdh ),
       m_connection( conn ), m_log( log ), m_handshaked( false )
   {
-    m_handler = cdh;
+    if( m_connection )
+      m_connection->registerConnectionDataHandler( this );
+  }
+
+  ConnectionTLS::ConnectionTLS( ConnectionBase* conn, const LogSink& log )
+    : ConnectionBase( 0 ),
+      m_connection( conn ), m_log( log ), m_handshaked( false )
+  {
     if( m_connection )
       m_connection->registerConnectionDataHandler( this );
   }
@@ -29,22 +36,31 @@ namespace gloox
   ConnectionTLS::~ConnectionTLS()
   {
     delete m_connection;
+    delete m_tls;
   }
 
   ConnectionError ConnectionTLS::connect()
   {
     if( !m_connection )
-    {
       return ConnNotConnected;
-    }
-    else
-    {
-      m_tls = new TLSDefault( this, m_connection->server() );
-      m_tls->init();
-      m_state = StateConnecting;
+
+    m_tls = new TLSDefault( this, m_connection->server() );
+    if( !m_tls )
+      return ConnTlsNotAvailable;
+
+    if( !m_tls->init() )
+      return ConnTlsFailed;
+
+    m_state = StateConnecting;
+
+    if( m_connection->state() != StateConnected )
       return m_connection->connect();
-    }
-  }
+
+    if( m_tls->handshake() )
+      return ConnNoError;
+    else
+      return ConnTlsFailed;
+ }
 
   ConnectionError ConnectionTLS::recv( int timeout )
   {
@@ -128,12 +144,13 @@ namespace gloox
 
   void ConnectionTLS::handleConnect( const ConnectionBase* /*connection*/ )
   {
-    if( !m_handshaked )
-    {
-      m_log.log( LogLevelDebug, LogAreaClassConnectionTLS, "Beginning TLS handshake...." );
-      if( m_tls )
-        m_tls->handshake(); // Initiate handshake
-    }
+    if( m_handshaked )
+      return;
+
+    m_log.log( LogLevelDebug, LogAreaClassConnectionTLS, "Beginning TLS handshake...." );
+
+    if( m_tls )
+      m_tls->handshake();
   }
 
   void ConnectionTLS::handleDisconnect( const ConnectionBase* /*connection*/, ConnectionError reason )
@@ -156,7 +173,7 @@ namespace gloox
   {
     if( m_handler )
     {
-      m_log.log( LogLevelDebug, LogAreaClassConnectionTLS, "Handling decrypted data..." );
+      m_log.log( LogLevelDebug, LogAreaClassConnectionTLS, "Handling decrypted data... \n" + data );
       m_handler->handleReceivedData( this, data );
     }
     else
