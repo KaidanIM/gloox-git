@@ -71,6 +71,7 @@
 
 #include "md5.h"
 
+#include <cstdio>
 #include <string.h>
 
 namespace gloox

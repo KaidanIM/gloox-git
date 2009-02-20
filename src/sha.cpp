@@ -12,6 +12,8 @@
 
 #include "sha.h"
 
+#include <cstdio>
+
 namespace gloox
 {
 
