@@ -248,7 +248,6 @@ namespace gloox
 
     if( m_streamRestart )
     {
-      m_streamRestart = false;
       requestBody << " xmpp:restart='true' to='" << m_server << "' xml:lang='en' xmlns:xmpp='"
           << XMLNS_XMPP_BOSH << "' />";
       m_logInstance.dbg( LogAreaClassConnectionBOSH, "Restarting stream" );
@@ -262,6 +261,7 @@ namespace gloox
     {
       m_logInstance.dbg( LogAreaClassConnectionBOSH, "successfully sent m_sendBuffer" );
       m_sendBuffer = EmptyString;
+      m_streamRestart = false;
     }
     else
     {
