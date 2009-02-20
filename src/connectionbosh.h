@@ -47,8 +47,11 @@ namespace gloox
    * the server running the BOSH connection manager.
    *
    * The reason why ConnectionBOSH doesn't manage its own ConnectionTCP is that it allows it
-   * to be used with other transports (like IPv6 or chained SOCKS5/HTTP proxies, or ConnectionTLS
+   * to be used with other transports (like chained SOCKS5/HTTP proxies, or ConnectionTLS
    * for HTTPS).
+   *
+   * @note To avoid problems, you should disable TLS in gloox by calling
+   * ClientBase::setTls( TLSDisabled ).
    *
    * Sample configurations for different servers can be found in the bosh_example.cpp file included
    * with gloox in the @b src/examples directory.
