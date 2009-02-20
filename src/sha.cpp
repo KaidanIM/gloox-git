@@ -13,6 +13,8 @@
 #include "sha.h"
 #include "gloox.h"
 
+#include <cstdio>
+
 namespace gloox
 {
 
