@@ -66,6 +66,7 @@ libgloox_la_SOURCES = adhoc.cpp \
 			messageeventfilter.cpp \
 			messagefilter.cpp \
 			messagesession.cpp \
+			mucinvite.cpp \
 			mucmessagesession.cpp \
 			mucroom.cpp \
 			mutex.cpp \
@@ -203,6 +204,7 @@ libglooxinclude_HEADERS = adhoccommandprovider.h \
 			messagesession.h \
 			messagesessionhandler.h \
 			mucinvitationhandler.h \
+			mucinvite.h \
 			mucroomconfighandler.h \
 			mucroom.h \
 			mucroomhandler.h \
