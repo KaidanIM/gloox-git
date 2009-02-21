@@ -120,4 +120,4 @@ namespace gloox
 
 }
 
-#endif// BOB_H__
+#endif // BOB_H__
