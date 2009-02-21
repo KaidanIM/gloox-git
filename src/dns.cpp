@@ -344,7 +344,7 @@ namespace gloox
     if( ( fd = socket( af, socktype, proto ) ) == -1 )
     {
       cleanup();
-      return -ConnConnectionRefused;
+      return -ConnSocketError;
     }
 
 #ifdef HAVE_SETSOCKOPT
