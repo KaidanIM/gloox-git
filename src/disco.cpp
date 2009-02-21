@@ -380,7 +380,7 @@ namespace gloox
   void Disco::handleIqID( const IQ& iq, int context )
   {
     DiscoHandlerMap::iterator it = m_track.find( iq.id() );
-    if( it != m_track.end() )
+    if( it != m_track.end() && (*it).second.dh )
     {
       switch( iq.subtype() )
       {
