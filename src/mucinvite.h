@@ -12,11 +12,13 @@
 
 
 
-#ifndef RAP_H__
-#define RAP_H__
+#ifndef MUCINVITE_H__
+#define MUCINVITE_H__
 
 
 #include "stanzaextension.h"
+#include "jid.h"
+#include "gloox.h"
 
 #include <string>
 
@@ -26,12 +28,13 @@ namespace gloox
   class Tag;
 
   /**
-   * @brief This is an implementation of XEP-0168 as a StanzaExtension.
+   * @brief This is an implementation of XEP-0249 (Direct MUC Invitations) as a StanzaExtension.
    *
+   * XEP Version: 0.1
    * @author Jakob Schroeter <js@camaya.net>
-   * @since 1.0
+   * @since 1.1
    */
-  class GLOOX_API RAP : public StanzaExtension
+  class GLOOX_API MUCInvite : public StanzaExtension
   {
 
     public:
@@ -39,25 +42,19 @@ namespace gloox
        * Constructs a new object from the given Tag.
        * @param tag The Tag to parse.
        */
-      RAP( const Tag* tag = 0 );
+      MUCInvite( const Tag* tag = 0 );
 
       /**
        * Constructs a new object with the given namespace and priority.
-       * @param ns The application namespace.
-       * @param num The priority for the application namespace.
+       * @param room The bare JID of the room to invite to.
+       * @param password An optional password for the room.
        */
-      RAP( const std::string& ns, int num );
+      MUCInvite( const JID& room, const std::string& password = EmptyString );
 
       /**
        * Virtual Destructor.
        */
-      virtual ~RAP();
-
-      /**
-       * Indicates whether this is the primary resource for the given namespace.
-       * @return @b True if the server flagged this resource as primary for the given namespace, @b false otherwise.
-       */
-      bool primary() const { return m_primary; }
+      virtual ~MUCInvite();
 
       // reimplemented from StanzaExtension
       virtual const std::string& filterString() const;
@@ -65,7 +62,7 @@ namespace gloox
       // reimplemented from StanzaExtension
       virtual StanzaExtension* newInstance( const Tag* tag ) const
       {
-        return new RAP( tag );
+        return new MUCInvite( tag );
       }
 
       // reimplemented from StanzaExtension
@@ -74,16 +71,15 @@ namespace gloox
       // reimplemented from StanzaExtension
       virtual StanzaExtension* clone() const
       {
-        return new RAP();
+        return new MUCInvite( *this );
       }
 
     private:
-      std::string m_ns;
-      int m_num;
-      bool m_primary;
+      JID m_room;
+      std::string m_pwd;
 
   };
 
 }
 
-#endif // RAP_H__
+#endif // MUCINVITE_H__

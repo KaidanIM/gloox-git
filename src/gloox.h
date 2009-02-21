@@ -600,6 +600,9 @@ namespace gloox
   /** Bits of Binary namespace (XEP-0231) */
   GLOOX_API extern const std::string XMLNS_BOB;
 
+  /** Bits of Binary namespace (XEP-0231) */
+  GLOOX_API extern const std::string XMLNS_X_CONFERENCE;
+
 
   /** Supported stream version (major). */
   GLOOX_API extern const std::string XMPP_STREAM_VERSION_MAJOR;
@@ -671,6 +674,7 @@ namespace gloox
     ConnParseError,                 /**< An XML parse error occurred. */
     ConnConnectionRefused,          /**< The connection was refused by the server (on the socket level).
                                      * @since 0.9 */
+    ConnSocketError,                /**< Creation of the socket failed. */
     ConnDnsError,                   /**< Resolving the server's hostname failed.
                                      * @since 0.9 */
     ConnOutOfMemory,                /**< Out of memory. Uhoh. */
