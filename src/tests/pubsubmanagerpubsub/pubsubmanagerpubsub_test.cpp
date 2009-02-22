@@ -1,6 +1,9 @@
 #include "../../jid.h"
 #include "../../stanzaextensionfactory.h"
 #include "../../iq.h"
+
+#include "../clientbase.h"
+
 using namespace gloox;
 
 #include <string>

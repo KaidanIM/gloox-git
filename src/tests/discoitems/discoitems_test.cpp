@@ -1,15 +1,22 @@
 #include "../../tag.h"
-#define DISCO_ITEMS_TEST
-#include "../../disco.h"
 #include "../../iq.h"
 #include "../../stanzaextensionfactory.h"
+
+#include "../clientbase.h"
+
 using namespace gloox;
 
 #include <stdio.h>
 #include <locale.h>
 #include <string>
 
-int main( int /*argc*/, char** /*argv*/ )
+#define DISCO_TEST
+#define DISCO_ITEMS_TEST
+#define ADHOC_TEST
+#include "../../disco.h"
+#include "../../disco.cpp"
+
+             int main( int /*argc*/, char** /*argv*/ )
 {
   int fail = 0;
   std::string name;

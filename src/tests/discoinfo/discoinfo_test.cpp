@@ -1,13 +1,20 @@
 #include "../../tag.h"
-#define DISCO_INFO_TEST
-#include "../../disco.h"
 #include "../../iq.h"
 #include "../../stanzaextensionfactory.h"
+
+#include "../clientbase.h"
+
 using namespace gloox;
 
 #include <stdio.h>
 #include <locale.h>
 #include <string>
+
+#define DISCO_TEST
+#define DISCO_INFO_TEST
+#define ADHOC_TEST
+#include "../../disco.h"
+#include "../../disco.cpp"
 
 int main( int /*argc*/, char** /*argv*/ )
 {

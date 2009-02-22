@@ -1,13 +1,22 @@
 #include "../../tag.h"
-#define ROSTERMANAGER_TEST
-#include "../../rostermanager.h"
 #include "../../iq.h"
 #include "../../stanzaextensionfactory.h"
+
+#include "../clientbase.h"
+
 using namespace gloox;
 
 #include <stdio.h>
 #include <locale.h>
 #include <string>
+
+#define ROSTERMANAGER_TEST
+#include "../../rostermanager.h"
+#include "../../rostermanager.cpp"
+#include "../../privacymanager.h"
+#include "../../privacymanager.cpp"
+#include "../../privatexml.h"
+#include "../../privatexml.cpp"
 
 int main( int /*argc*/, char** /*argv*/ )
 {

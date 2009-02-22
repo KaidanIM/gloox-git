@@ -1,15 +1,26 @@
 #include "../../tag.h"
-#define MUCROOM_TEST
-#include "../../mucroom.h"
 #include "../../dataform.h"
 #include "../../iq.h"
 #include "../../message.h"
 #include "../../stanzaextensionfactory.h"
+
+#include "../clientbase.h"
+
 using namespace gloox;
 
 #include <stdio.h>
 #include <locale.h>
 #include <string>
+
+#define MUCROOM_TEST
+#include "../../mucroom.cpp"
+#include "../../mucroom.h"
+#include "../../disco.cpp"
+#include "../../disco.h"
+#include "../../mucmessagesession.cpp"
+#include "../../mucmessagesession.h"
+#include "../../messagesession.cpp"
+#include "../../messagesession.h"
 
 int main( int /*argc*/, char** /*argv*/ )
 {
