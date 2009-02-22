@@ -63,6 +63,12 @@ namespace gloox
        */
       virtual ~ConnectionCompression();
 
+      /**
+       * Sets the transport connection.
+       * @param connection The transport connection to use.
+       */
+      void setConnectionImpl( ConnectionBase* connection );
+
       // reimplemented from ConnectionBase
       virtual ConnectionError connect();
 

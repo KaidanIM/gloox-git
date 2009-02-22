@@ -53,6 +53,11 @@ namespace gloox
        */
       int feed( std::string& data );
 
+      /**
+       * Resets internal state.
+       */
+      void cleanup();
+
     private:
       enum ParserInternalState
       {
@@ -93,7 +98,6 @@ namespace gloox
       void addAttribute();
       void addCData();
       bool closeTag();
-      void cleanup();
       bool isWhitespace( unsigned char c );
       bool isValid( unsigned char c );
       void streamEvent( Tag* tag );

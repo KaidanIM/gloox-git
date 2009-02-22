@@ -20,7 +20,7 @@ namespace gloox
 
   ConnectionCompression::ConnectionCompression( ConnectionDataHandler* cdh, ConnectionBase* conn, const LogSink& log )
     : ConnectionBase( cdh ),
-      m_connection( conn ), m_log( log )
+      m_connection( conn ), m_compression( 0 ), m_log( log )
   {
     if( m_connection )
       m_connection->registerConnectionDataHandler( this );
@@ -28,7 +28,7 @@ namespace gloox
 
   ConnectionCompression::ConnectionCompression( ConnectionBase* conn, const LogSink& log )
     : ConnectionBase( 0 ),
-      m_connection( conn ), m_log( log )
+      m_connection( conn ), m_compression( 0 ), m_log( log )
   {
     if( m_connection )
       m_connection->registerConnectionDataHandler( this );
@@ -38,6 +38,17 @@ namespace gloox
   {
     delete m_connection;
     delete m_compression;
+  }
+
+  void ConnectionCompression::setConnectionImpl( ConnectionBase* connection )
+  {
+    if( m_connection )
+      m_connection->registerConnectionDataHandler( 0 );
+
+    m_connection = connection;
+
+    if( m_connection )
+      m_connection->registerConnectionDataHandler( this );
   }
 
   ConnectionError ConnectionCompression::connect()
@@ -60,32 +71,18 @@ namespace gloox
   ConnectionError ConnectionCompression::recv( int timeout )
   {
     if( m_connection->state() == StateConnected )
-    {
       return m_connection->recv( timeout );
-    }
-    else
-    {
-//       m_log.log( LogLevelWarning, LogAreaClassConnectionCompression,
-//                  "Attempt to receive data on a connection that is not connected (or is connecting)" );
-      return ConnNotConnected;
-    }
+
+    return ConnNotConnected;
   }
 
   bool ConnectionCompression::send( const std::string& data )
   {
-    if( m_state == StateConnected )
-    {
-      // m_log.log(LogLevelDebug, LogAreaClassConnectionCompression, "Encrypting data...");
-//       printf( "Encrypting data...\n----------------\n<%s>\n----------\n", data.c_str() );
-      m_compression->compress( data );
-      return true;
-    }
-    else
-    {
-//       m_log.log( LogLevelWarning, LogAreaClassConnectionCompression,
-//                  "Attempt to send data on a connection that is not connected (or is connecting)" );
+    if( !m_compression )
       return false;
-    }
+
+    m_compression->compress( data );
+    return true;
   }
 
   ConnectionError ConnectionCompression::receive()
@@ -131,7 +128,6 @@ namespace gloox
 
   void ConnectionCompression::handleReceivedData( const ConnectionBase* /*connection*/, const std::string& data )
   {
-//     m_log.log( LogLevelDebug, LogAreaClassConnectionCompression, "Decrypting received data..." );
     if( m_compression )
       m_compression->decompress( data );
   }
@@ -152,8 +148,6 @@ namespace gloox
 
   void ConnectionCompression::handleCompressedData( const std::string& data )
   {
-    // m_log.log(LogLevelDebug, LogAreaClassConnectionCompression,
-//     printf( "Sending encrypted data...\n" );
     if( m_connection )
       m_connection->send( data );
   }
@@ -161,14 +155,7 @@ namespace gloox
   void ConnectionCompression::handleDecompressedData( const std::string& data )
   {
     if( m_handler )
-    {
-//       m_log.log( LogLevelDebug, LogAreaClassConnectionCompression, "Handling decrypted data... \n" + data );
       m_handler->handleReceivedData( this, data );
-    }
-    else
-    {
-//       m_log.log( LogLevelDebug, LogAreaClassConnectionCompression, "Data received and decrypted but no handler" );
-    }
   }
 
 }

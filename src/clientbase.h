@@ -24,8 +24,6 @@
 #include "mutex.h"
 #include "taghandler.h"
 #include "statisticshandler.h"
-#include "tlshandler.h"
-#include "compressiondatahandler.h"
 #include "connectiondatahandler.h"
 #include "parser.h"
 
@@ -52,9 +50,9 @@ namespace gloox
   class SubscriptionHandler;
   class MUCInvitationHandler;
   class TagHandler;
-  class TLSBase;
   class ConnectionBase;
-  class CompressionBase;
+  class ConnectionTLS;
+  class ConnectionCompression;
   class StanzaExtensionFactory;
 
   /**
@@ -66,7 +64,6 @@ namespace gloox
    * @since 0.3
    */
   class GLOOX_API ClientBase : public TagHandler, public ConnectionDataHandler,
-                               public CompressionDataHandler, public TLSHandler,
                                public IqHandler
   {
 
@@ -316,38 +313,6 @@ namespace gloox
        * @since 0.9
        */
       void setConnectionImpl( ConnectionBase* cb );
-
-      /**
-       * This function returns the concrete encryption implementation currently in use.
-       * @return The concrete encryption implementation.
-       * @since 0.9
-       */
-      TLSBase* encryptionImpl() const { return m_encryption; }
-
-      /**
-       * Use this function if you have a class supporting hardware encryption (or whatever).
-       * This should be called before calling connect(). If there already is a
-       * encryption implementation set (either manually or automatically), it gets deleted.
-       * @param tb The encryption implementation to use.
-       * @since 0.9
-       */
-      void setEncryptionImpl( TLSBase* tb );
-
-      /**
-       * This function returns the concrete compression implementation currently in use.
-       * @return The concrete compression implementation.
-       * @since 0.9
-       */
-      CompressionBase* compressionImpl() const { return m_compression; }
-
-      /**
-       * Use this function if you have a class supporting some fancy compression algorithm.
-       * This should be called before calling connect(). If there already is a
-       * compression implementation set (either manually or automatically), it gets deleted.
-       * @param cb The compression implementation to use.
-       * @since 0.9
-       */
-      void setCompressionImpl( CompressionBase* cb );
 
       /**
        * Sends a whitespace ping to the server.
@@ -704,12 +669,6 @@ namespace gloox
       // reimplemented from ParserHandler
       virtual void handleTag( Tag* tag );
 
-      // reimplemented from CompressionDataHandler
-      virtual void handleCompressedData( const std::string& data );
-
-      // reimplemented from CompressionDataHandler
-      virtual void handleDecompressedData( const std::string& data );
-
       // reimplemented from ConnectionDataHandler
       virtual void handleReceivedData( const ConnectionBase* connection, const std::string& data );
 
@@ -718,15 +677,6 @@ namespace gloox
 
       // reimplemented from ConnectionDataHandler
       virtual void handleDisconnect( const ConnectionBase* connection, ConnectionError reason );
-
-      // reimplemented from TLSHandler
-      virtual void handleEncryptedData( const TLSBase* base, const std::string& data );
-
-      // reimplemented from TLSHandler
-      virtual void handleDecryptedData( const TLSBase* base, const std::string& data );
-
-      // reimplemented from TLSHandler
-      virtual void handleHandshakeResult( const TLSBase* base, bool success, CertInfo &certinfo );
 
     protected:
       /**
@@ -782,16 +732,20 @@ namespace gloox
       void processSASLError( Tag* tag );
       void startTls();
       bool hasTls();
+      bool hasCompression();
 
       JID m_jid;
       JID m_authzid;
       std::string m_authcid;
       ConnectionBase* m_connection;
-      TLSBase* m_encryption;
-      CompressionBase* m_compression;
+      ConnectionBase* m_transportConnection;
+      ConnectionTLS* m_encryption;
+      ConnectionCompression* m_compression;
       Disco* m_disco;
 
       StanzaExtensionList m_presenceExtensions;
+      LogSink m_logInstance;
+      StringList m_cacerts;
 
       std::string m_selectedResource;
       std::string m_clientCerts;
@@ -801,8 +755,6 @@ namespace gloox
       std::string m_xmllang;
       std::string m_server;
       std::string m_sid;
-      bool m_compressionActive;
-      bool m_encryptionActive;
       bool m_compress;
       bool m_authed;
       bool m_block;
@@ -875,8 +827,6 @@ namespace gloox
       void parse( const std::string& data );
       void init();
       void handleStreamError( Tag* tag );
-      TLSBase* getDefaultEncryption();
-      CompressionBase* getDefaultCompression();
 
       void notifyIqHandlers( IQ& iq );
       void notifyMessageHandlers( Message& msg );
@@ -941,7 +891,6 @@ namespace gloox
       PresenceJidHandlerList   m_presenceJidHandlers;
       SubscriptionHandlerList  m_subscriptionHandlers;
       TagHandlerList           m_tagHandlers;
-      StringList               m_cacerts;
       StatisticsHandler      * m_statisticsHandler;
       MUCInvitationHandler   * m_mucInvitationHandler;
       MessageSessionHandler  * m_messageSessionHandlerChat;
@@ -952,7 +901,6 @@ namespace gloox
       util::Mutex m_iqHandlerMapMutex;
 
       Parser m_parser;
-      LogSink m_logInstance;
       StanzaExtensionFactory* m_seFactory;
       EventDispatcher m_dispatcher;
 
