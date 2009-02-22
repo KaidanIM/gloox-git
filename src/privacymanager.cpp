@@ -111,7 +111,8 @@ namespace gloox
 
   Tag* PrivacyManager::Query::tag() const
   {
-    Tag* t = 0;
+    Tag* t = new Tag( "query" );
+    t->setXmlns( XMLNS_PRIVACY );
 
     std::string child;
     switch( m_context )
@@ -129,12 +130,13 @@ namespace gloox
       case PLUnsetActivate:
         child = "active";
         break;
+      default:
       case PLRequestNames:
-        child = "query";
+        return t;
         break;
     }
-    t = new Tag( child );
-    t->setXmlns( XMLNS_PRIVACY );
+    c = new Tag( t, child );
+
     if( !m_names.empty() )
       t->addAttribute( "name", (*m_names.begin()) );
 
