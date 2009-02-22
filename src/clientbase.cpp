@@ -142,7 +142,18 @@ namespace gloox
 
   ClientBase::~ClientBase()
   {
+    // FIXME the same code is used in handleDisconnect()
+    // try to minimise duplication
+    if( m_encryption )
+      m_encryption->setConnectionImpl( 0 );
+
+    if( m_compression )
+      m_compression->setConnectionImpl( 0 );
+    // ~FIXME
+
     delete m_connection;
+    delete m_encryption;
+    delete m_compression;
     delete m_seFactory;
     m_seFactory = 0; // to avoid usage when Disco gets deleted below
     delete m_disco;
