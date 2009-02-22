@@ -135,7 +135,7 @@ namespace gloox
         return t;
         break;
     }
-    c = new Tag( t, child );
+    Tag* c = new Tag( t, child );
 
     if( !m_names.empty() )
       t->addAttribute( "name", (*m_names.begin()) );
@@ -144,7 +144,7 @@ namespace gloox
     PrivacyListHandler::PrivacyList::const_iterator it = m_items.begin();
     for( ; it != m_items.end(); ++it )
     {
-      Tag* i = new Tag( t, "item" );
+      Tag* i = new Tag( c, "item" );
 
       switch( (*it).type() )
       {
