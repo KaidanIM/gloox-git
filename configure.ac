@@ -277,11 +277,11 @@ AC_MSG_CHECKING([whether to enable debug])
 AC_MSG_RESULT($debug)
 
 dnl getaddrinfo
-getaddrinfo="yes"
+getaddrinfo="no"
 AC_ARG_ENABLE( getaddrinfo,
-               [  --enable-getaddrinfo      use getaddrinfo for dns lookups [default=yes]],
-               [debug="yes"] )
-if test "x$debug" = "xyes"; then
+               [  --enable-getaddrinfo    use getaddrinfo for dns lookups [default=no]],
+               [getaddrinfo="yes"] )
+if test "x$getaddrinfo" = "xyes"; then
     AC_CHECK_FUNCS(getaddrinfo,,getaddrinfo="no")
 fi
 AC_MSG_CHECKING([whether to use getaddrinfo])
