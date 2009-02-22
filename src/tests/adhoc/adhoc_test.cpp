@@ -3,47 +3,15 @@
 #include "../../iqhandler.h"
 #include "../../jid.h"
 
+#include "../clientbase.h"
+
 #include <stdio.h>
-#include <locale.h>
 #include <string>
 
 gloox::JID g_jid( "foof" );
 
-namespace gloox
-{
-  class Disco;
-
-  class ClientBase
-  {
-    public:
-      ClientBase() : m_disco( 0 )  {}
-      virtual ~ClientBase() {}
-      Disco* disco() { return m_disco; }
-      const JID& jid() const { return m_jid; }
-      const std::string getID();
-      virtual void send( IQ& ) = 0;
-      virtual void send( const IQ&, IqHandler*, int ) = 0;
-      virtual void trackID( IqHandler *ih, const std::string& id, int context ) = 0;
-      void removeIqHandler( IqHandler* ih, int exttype );
-      void removeIDHandler( IqHandler* ih );
-      void registerIqHandler( IqHandler* ih, int exttype );
-      void registerStanzaExtension( StanzaExtension* ext );
-      void removeStanzaExtension( int ext );
-    protected:
-      Disco* m_disco;
-    private:
-      JID m_jid;
-  };
-  void ClientBase::removeIqHandler( IqHandler*, int ) {}
-  void ClientBase::removeIDHandler( IqHandler* ) {}
-  void ClientBase::registerIqHandler( IqHandler*, int ) {}
-  void ClientBase::registerStanzaExtension( StanzaExtension* se ) { delete se; }
-  void ClientBase::removeStanzaExtension( int ) {}
-  const std::string ClientBase::getID() { return "id"; }
-}
 using namespace gloox;
 
-#define CLIENTBASE_H__
 #define DISCO_TEST
 #define DISCO_INFO_TEST
 #define ADHOC_TEST
@@ -61,7 +29,7 @@ class AdhocTest : public ClientBase, public AdhocCommandProvider, public AdhocHa
     void setTest( int test ) { m_test = test; }
     void setAdhoc( Adhoc* adhoc ) { m_adhoc = adhoc; }
     virtual void send( IQ& iq );
-    virtual void send( const IQ& iq, IqHandler*, int );
+    virtual void send( const IQ& iq, IqHandler*, int, bool = false );
     virtual void trackID( IqHandler *ih, const std::string& id, int context );
     virtual void handleAdhocCommand( const JID& /*from*/, const Adhoc::Command& command,
                                      const std::string& /*sess*/ )
@@ -97,7 +65,7 @@ void AdhocTest::send( IQ& /*iq*/ )
 {
 }
 
-void AdhocTest::send( const IQ& iq, IqHandler*, int ctx )
+void AdhocTest::send( const IQ& iq, IqHandler*, int ctx, bool )
 {
   switch( m_test )
   {

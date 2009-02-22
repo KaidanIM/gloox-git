@@ -7,16 +7,12 @@ AM_CPPFLAGS = -pedantic -Wall -pipe -W -Wfloat-equal -Wcast-align -Wsign-compare
 noinst_PROGRAMS = mucroommuc_test
 
 mucroommuc_test_SOURCES = mucroommuc_test.cpp
-mucroommuc_test_LDADD =../../connectiontcpclient.o ../../connectiontcpbase.o \
-                        ../../disco.o ../../parser.o ../../tag.o ../../stanza.o ../../base64.o \
-                        ../../md5.o ../../tlsgnutlsclient.o ../../tlsopenssl.o ../../tlsschannel.o \
-                        ../../logsink.o ../../messagesession.o ../../prep.o ../../compressionzlib.o \
-                        ../../dns.o ../../stanzaextensionfactory.o ../../eventdispatcher.o \
-                        ../../gloox.o ../../tlsgnutlsbase.o ../../tlsdefault.o \
-                        ../../tlsgnutlsclientanon.o ../../tlsgnutlsserveranon.o ../../mutex.o \
-                        ../../iq.o ../../presence.o ../../message.o ../../subscription.o ../../util.o \
-                        ../../sha.o ../../error.o ../../clientbase.o ../../jid.o ../../dataform.o \
-                        ../../dataformfieldcontainer.o ../../dataformreported.o ../../dataformitem.o \
-                        ../../dataformfield.o ../../mucroom.o ../../delayeddelivery.o ../../mucmessagesession.o \
-                        ../../softwareversion.o
+mucroommuc_test_LDADD = ../../tag.o ../../stanza.o \
+                        ../../gloox.o ../../iq.o ../../util.o \
+			../../error.o ../../jid.o ../../prep.o \
+			../../dataform.o ../../presence.o \
+                        ../../message.o ../../dataformfieldcontainer.o ../../dataformreported.o \
+			../../dataformitem.o ../../dataformfield.o \
+			../../softwareversion.o ../../stanzaextensionfactory.o \
+			../../delayeddelivery.o
 mucroommuc_test_CFLAGS = $(CPPFLAGS)
