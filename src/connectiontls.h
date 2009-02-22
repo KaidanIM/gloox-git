@@ -78,7 +78,10 @@ namespace gloox
        * @param cacerts A list of absolute paths to CA root certificate files in PEM format.
        * @note This function is a wrapper for TLSBase::setCACerts().
        */
-      void setCACerts( const StringList& cacerts );
+      void setCACerts( const StringList& cacerts )
+      {
+        m_cacerts = cacerts;
+      }
 
       /**
        * This function is used to retrieve certificate and connection info of a encrypted connection.
@@ -99,7 +102,17 @@ namespace gloox
        * @param clientCerts A path to a certificate bundle in PEM format.
        * @note This function is a wrapper around TLSBase::setClientCert().
        */
-      virtual void setClientCert( const std::string& clientKey, const std::string& clientCerts );
+      void setClientCert( const std::string& clientKey, const std::string& clientCerts )
+      {
+        m_clientKey = clientKey;
+        m_clientCerts = clientCerts;
+      }
+
+      /**
+       * Sets the transport connection.
+       * @param connection The transport connection to use.
+       */
+      void setConnectionImpl( ConnectionBase* connection );
 
       // reimplemented from ConnectionBase
       virtual ConnectionError connect();
@@ -147,8 +160,10 @@ namespace gloox
       ConnectionBase* m_connection;
       TLSDefault* m_tls;
       CertInfo m_certInfo;
-      const LogSink & m_log;
-      bool m_handshaked;
+      const LogSink& m_log;
+      StringList m_cacerts;
+      std::string m_clientCerts;
+      std::string m_clientKey;
 
   };
 

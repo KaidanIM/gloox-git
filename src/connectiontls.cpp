@@ -19,7 +19,7 @@ namespace gloox
 
   ConnectionTLS::ConnectionTLS( ConnectionDataHandler* cdh, ConnectionBase* conn, const LogSink& log )
     : ConnectionBase( cdh ),
-      m_connection( conn ), m_log( log ), m_handshaked( false )
+      m_connection( conn ), m_tls( 0 ), m_log( log )
   {
     if( m_connection )
       m_connection->registerConnectionDataHandler( this );
@@ -27,7 +27,7 @@ namespace gloox
 
   ConnectionTLS::ConnectionTLS( ConnectionBase* conn, const LogSink& log )
     : ConnectionBase( 0 ),
-      m_connection( conn ), m_log( log ), m_handshaked( false )
+      m_connection( conn ), m_tls( 0 ), m_log( log )
   {
     if( m_connection )
       m_connection->registerConnectionDataHandler( this );
@@ -37,6 +37,17 @@ namespace gloox
   {
     delete m_connection;
     delete m_tls;
+  }
+
+  void ConnectionTLS::setConnectionImpl( ConnectionBase* connection )
+  {
+    if( m_connection )
+      m_connection->registerConnectionDataHandler( 0 );
+
+    m_connection = connection;
+
+    if( m_connection )
+      m_connection->registerConnectionDataHandler( this );
   }
 
   ConnectionError ConnectionTLS::connect()
@@ -50,6 +61,9 @@ namespace gloox
 
     if( !m_tls->init() )
       return ConnTlsFailed;
+
+    m_tls->setCACerts( m_cacerts );
+    m_tls->setClientCert( m_clientKey, m_clientCerts );
 
     m_state = StateConnecting;
 
@@ -78,19 +92,11 @@ namespace gloox
 
   bool ConnectionTLS::send( const std::string& data )
   {
-    if( m_handshaked && m_state == StateConnected )
-    {
-      // m_log.log(LogLevelDebug, LogAreaClassConnectionTLS, "Encrypting data...");
-      printf( "Encrypting data...\n----------------\n<%s>\n----------\n", data.c_str() );
-      m_tls->encrypt( data );
-      return true;
-    }
-    else
-    {
-      m_log.log( LogLevelWarning, LogAreaClassConnectionTLS,
-                 "Attempt to send data on a connection that is not connected (or is connecting)" );
+    if( m_state != StateConnected )
       return false;
-    }
+
+    m_tls->encrypt( data );
+    return true;
   }
 
   ConnectionError ConnectionTLS::receive()
@@ -118,7 +124,6 @@ namespace gloox
     delete m_tls;
     m_tls = 0;
     m_state = StateDisconnected;
-    m_handshaked = false;
   }
 
   void ConnectionTLS::getStatistics( int& totalIn, int& totalOut )
@@ -137,20 +142,20 @@ namespace gloox
 
   void ConnectionTLS::handleReceivedData( const ConnectionBase* /*connection*/, const std::string& data )
   {
-    m_log.log( LogLevelDebug, LogAreaClassConnectionTLS, "Decrypting received data..." );
     if( m_tls )
+    {
+      m_log.log( LogLevelDebug, LogAreaClassConnectionTLS, "Decrypting received data..." );
       m_tls->decrypt( data );
+    }
   }
 
   void ConnectionTLS::handleConnect( const ConnectionBase* /*connection*/ )
   {
-    if( m_handshaked )
-      return;
-
-    m_log.log( LogLevelDebug, LogAreaClassConnectionTLS, "Beginning TLS handshake...." );
-
     if( m_tls )
+    {
+      m_log.log( LogLevelDebug, LogAreaClassConnectionTLS, "Beginning TLS handshake...." );
       m_tls->handshake();
+    }
   }
 
   void ConnectionTLS::handleDisconnect( const ConnectionBase* /*connection*/, ConnectionError reason )
@@ -186,7 +191,6 @@ namespace gloox
   {
     if( success )
     {
-      m_handshaked = true;
       m_state = StateConnected;
       m_log.log( LogLevelDebug, LogAreaClassConnectionTLS, "TLS handshake succeeded" );
       if( m_handler )

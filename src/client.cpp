@@ -29,7 +29,8 @@
 #include "stanzaextensionfactory.h"
 #include "stanzaextension.h"
 #include "tag.h"
-#include "tlsbase.h"
+#include "connectiontls.h"
+#include "connectioncompression.h"
 #include "util.h"
 
 #if !defined( _WIN32 ) && !defined( _WIN32_WCE )
@@ -163,22 +164,23 @@ namespace gloox
     {
       m_streamFeatures = getStreamFeatures( tag );
 
-      if( m_tls == TLSRequired && !m_encryptionActive
-          && ( !m_encryption || !( m_streamFeatures & StreamFeatureStartTls ) ) )
+      if( m_tls == TLSRequired && ( !hasTls() || !( m_streamFeatures & StreamFeatureStartTls ) ) )
       {
         logInstance().err( LogAreaClassClient, "Client is configured to require"
                                 " TLS but either the server didn't offer TLS or"
                                 " TLS support is not compiled in." );
         disconnect( ConnTlsNotAvailable );
       }
-      else if( m_tls > TLSDisabled && m_encryption && !m_encryptionActive
-          && ( m_streamFeatures & StreamFeatureStartTls ) )
+      else if( m_tls > TLSDisabled && hasTls()
+               && ( !m_encryption || m_encryption->state() == StateDisconnected )
+               && ( m_streamFeatures & StreamFeatureStartTls ) )
       {
         notifyStreamEvent( StreamEventEncryption );
         startTls();
       }
-      else if( m_compress && m_compression && !m_compressionActive
-          && ( m_streamFeatures & StreamFeatureCompressZlib ) )
+      else if( hasCompression()
+               && ( !m_compression || m_compression->state() == StateDisconnected )
+               && ( m_streamFeatures & StreamFeatureCompressZlib ) )
       {
         notifyStreamEvent( StreamEventCompression );
         logInstance().warn( LogAreaClassClient, "The server offers compression, but negotiating Compression at this stage is not recommended. See XEP-0170 for details. We'll continue anyway." );
@@ -215,7 +217,7 @@ namespace gloox
           }
           else
           {
-            logInstance().err( LogAreaClassClient, "the server doesn't support"
+            logInstance().err( LogAreaClassClient, "The server doesn't support"
                                            " any auth mechanisms we know about" );
             disconnect( ConnNoSupportedAuth );
           }
@@ -245,8 +247,9 @@ namespace gloox
           connected();
         }
       }
-      else if( m_compress && m_compression && !m_compressionActive
-          && ( m_streamFeatures & StreamFeatureCompressZlib ) )
+      else if( hasCompression()
+               && ( !m_compression || m_compression->state() == StateDisconnected )
+               && ( m_streamFeatures & StreamFeatureCompressZlib ) )
       {
         notifyStreamEvent( StreamEventCompression );
         negotiateCompression( StreamFeatureCompressZlib );
@@ -270,17 +273,19 @@ namespace gloox
     }
     else
     {
-      const std::string& name  = tag->name(),
-                         xmlns = tag->findAttribute( XMLNS );
-      if( name == "proceed" && xmlns == XMLNS_STREAM_TLS )
+      const std::string& name  = tag->name();
+      const std::string& xmlns = tag->xmlns();
+      if( name == "proceed" && xmlns == XMLNS_STREAM_TLS && hasTls() )
       {
-        logInstance().dbg( LogAreaClassClient, "starting TLS handshake..." );
-
+        logInstance().dbg( LogAreaClassClient, "Starting TLS handshake..." );
         if( m_encryption )
-        {
-          m_encryptionActive = true;
-          m_encryption->handshake();
-        }
+          m_encryption->setConnectionImpl( m_connection );
+        else
+          m_encryption = new ConnectionTLS( this, m_connection, m_logInstance );
+        m_connection = m_encryption;
+        m_encryption->setCACerts( m_cacerts );
+        m_encryption->setClientCert( m_clientKey, m_clientCerts );
+        m_encryption->connect();
       }
       else if( name == "failure" )
       {
@@ -291,7 +296,7 @@ namespace gloox
         }
         else if( xmlns == XMLNS_COMPRESSION )
         {
-          logInstance().err( LogAreaClassClient, "stream compression init failed!" );
+          logInstance().err( LogAreaClassClient, "Stream compression init failed!" );
           disconnect( ConnCompressionFailed );
         }
         else if( xmlns == XMLNS_STREAM_SASL )
@@ -303,8 +308,13 @@ namespace gloox
       }
       else if( name == "compressed" && xmlns == XMLNS_COMPRESSION )
       {
-        logInstance().dbg( LogAreaClassClient, "stream compression inited" );
-        m_compressionActive = true;
+        logInstance().dbg( LogAreaClassClient, "Stream compression inited" );
+        if( m_compression )
+          m_compression->setConnectionImpl( m_connection );
+        else
+          m_compression = new ConnectionCompression( this, m_connection, m_logInstance );
+        m_connection = m_compression;
+        m_compression->connect();
         header();
       }
       else if( name == "challenge" && xmlns == XMLNS_STREAM_SASL )
