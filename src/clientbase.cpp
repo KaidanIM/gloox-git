@@ -222,6 +222,7 @@ namespace gloox
         logInstance().dbg( LogAreaClassClientbase, "This server is not XMPP-compliant"
             " (it does not send a 'version' attribute). Please fix it or try another one.\n" );
         disconnect( ConnStreamVersionError );
+        return;
       }
 
       m_sid = tag->findAttribute( "id" );
