@@ -85,44 +85,58 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   result = "";
 
-  // -------
-  name = "nodeprep simple casefolding";
   const std::string t2( "aBcDeFgH" );
   const std::string t3( "abcdefgh" );
+  // -------
+  name = "nodeprep simple casefolding";
+#ifndef HAVE_LIBIDN
+  printf( "Libidn not enabled. Skipped '%s' test\n", name.c_str() );
+#else
   if( !( prep::nodeprep( t2, result ) && result == t3 ) )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
   }
   result = "";
-
+#endif
   // -------
   name = "resourceprep simple casefolding (none)";
+#ifndef HAVE_LIBIDN
+  printf( "Libidn not enabled. Skipped '%s' test\n", name.c_str() );
+#else
   if( !( prep::resourceprep( t2, result ) && result == t2 ) )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
   }
   result = "";
+#endif
 
   // -------
   name = "nameprep simple casefolding";
+#ifndef HAVE_LIBIDN
+  printf( "Libidn not enabled. Skipped '%s' test\n", name.c_str() );
+#else
   if( !( prep::nameprep( t2, result ) && result == t3 ) )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
   }
   result = "";
+#endif
 
   // -------
   name = "idna example";
+#ifndef HAVE_LIBIDN
+  printf( "Libidn not enabled. Skipped '%s' test\n", name.c_str() );
+#else
   if( !( prep::idna( "www.dömäin.de", result ) && result == "www.xn--dmin-moa0i.de" ) )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
   }
   result = "";
-
+#endif
 
 
 

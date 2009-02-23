@@ -1156,6 +1156,34 @@ class ParserTest : private TagHandler
       delete m_tag;
       m_tag = 0;
 
+      //-------
+      {
+        name = "simple stress test";
+        Tag* s = new Tag( "test" );
+        s->setXmlns( "xmlnsfoo" );
+        s->addAttribute( "abc", "def" );
+        s->addAttribute( "foo", "bar" );
+        Tag* q = new Tag( s, "quizz" );
+        q->setXmlns( "quizzxmlns" );
+        q->setCData( "some cdata, eh?" );
+        q->addAttribute( "foo", "bar" );
+        q->addAttribute( "bar", "foobar" );
+        Tag* x = new Tag( q, "car" );
+        x->setXmlns( "foobar" );
+        new Tag( q, "bike" );
+        for( int c = 1; c <= 5000; ++c )
+        {
+          data = s->xml();
+          if( ( i = p->feed( data ) ) >= 0 || !m_tag || m_tag->xml() != s->xml() )
+          {
+            ++fail;
+            printf( "test '%s' (%d) failed (%d): \n%s\n%s\n", name.c_str(), c, i, s->xml().c_str(), m_tag->xml().c_str() );
+            break;
+          }
+          delete m_tag;
+          m_tag = 0;
+        }
+      }
 
 // <abc xmlns='def' xmlns:xx='xyz' xmlns:foo='ggg' foo:attr='val'><xx:dff><foo:bar/></xx:dff></abc>
 
