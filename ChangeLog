@@ -1,6 +1,9 @@
-v0.9.9.6 -- xx yyy 2008
+v0.9.9.6 -- xx yyy 2009
 -----------------------
 - prevent crashes when closing a MUCRoom
+- compile fix for gcc 4.4, fixes debian bug 505333
+- MacOS compile fix
+- fixed a potential crash when the server sends no 'version' attribute in the opening stream
 
 
 v0.9.9.5 -- 22 Mar 2008
