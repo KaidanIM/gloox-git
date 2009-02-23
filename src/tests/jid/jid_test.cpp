@@ -50,21 +50,29 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "prepped node";
+#ifndef HAVE_LIBIDN
+  printf( "Libidn not enabled. Skipped '%s' test\n", name.c_str() );
+#else
   j = JID( "ABC@server.dom" );
   if( j.bare() != "abc@server.dom" )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
   }
+#endif
 
   // -------
   name = "prepped dom";
+#ifndef HAVE_LIBIDN
+  printf( "Libidn not enabled. Skipped '%s' test\n", name.c_str() );
+#else
   j = JID( "abc@SeRvEr.dom" );
   if( j.bare() != "abc@server.dom" )
   {
     ++fail;
     printf( "test '%s' failed\n", name.c_str() );
   }
+#endif
 
   // -------
   name = "resource getter";
@@ -77,7 +85,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "node getter";
-  j = JID( "aBc@server.dom/rEsOurCe" );
+  j = JID( "abc@server.dom/rEsOurCe" );
   if( j.username() != "abc" )
   {
     ++fail;
@@ -86,7 +94,7 @@ int main( int /*argc*/, char** /*argv*/ )
 
   // -------
   name = "server getter";
-  j = JID( "abc@serVer.dom/rEsOurCe" );
+  j = JID( "abc@server.dom/rEsOurCe" );
   if( j.server() != "server.dom" )
   {
     ++fail;
