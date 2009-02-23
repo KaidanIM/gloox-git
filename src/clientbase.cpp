@@ -191,10 +191,7 @@ namespace gloox
     m_block = block;
     ConnectionError ret = m_connection->connect();
     if( ret != ConnNoError )
-    {
-      printf( "erro: %d\n", ret );
       return false;
-    }
 
     if( m_block )
       m_connection->receive();
