@@ -26,6 +26,7 @@
 #include "statisticshandler.h"
 #include "connectiondatahandler.h"
 #include "parser.h"
+#include "tlshandler.h"
 
 #include <string>
 #include <list>
@@ -64,7 +65,7 @@ namespace gloox
    * @since 0.3
    */
   class GLOOX_API ClientBase : public TagHandler, public ConnectionDataHandler,
-                               public IqHandler
+                               public IqHandler, public TLSHandler
   {
 
     friend class RosterManager;
@@ -677,6 +678,15 @@ namespace gloox
 
       // reimplemented from ConnectionDataHandler
       virtual void handleDisconnect( const ConnectionBase* connection, ConnectionError reason );
+
+      // reimplemented from TLSHandler
+      virtual void handleEncryptedData( const TLSBase* /*base*/, const std::string& /*data*/ ) {}
+
+      // reimplemented from TLSHandler
+      virtual void handleDecryptedData( const TLSBase* /*base*/, const std::string& /*data*/ ) {}
+
+      // reimplemented from TLSHandler
+      virtual void handleHandshakeResult( const TLSBase* base, bool success, CertInfo &certinfo );
 
     protected:
       /**
