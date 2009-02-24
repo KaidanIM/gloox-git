@@ -281,7 +281,10 @@ namespace gloox
         if( m_encryption )
           m_encryption->setConnectionImpl( m_connection );
         else
+        {
           m_encryption = new ConnectionTLS( this, m_connection, m_logInstance );
+          m_encryption->registerTLSHandler( this );
+        }
         m_connection = m_encryption;
         m_encryption->setCACerts( m_cacerts );
         m_encryption->setClientCert( m_clientKey, m_clientCerts );

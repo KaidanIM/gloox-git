@@ -283,27 +283,27 @@ namespace gloox
       m_statisticsHandler->handleStatistics( getStatistics() );
   }
 
-//   void ClientBase::handleHandshakeResult( const TLSBase* /*base*/, bool success, CertInfo &certinfo )
-//   {
-//     if( success )
-//     {
-//       if( !notifyOnTLSConnect( certinfo ) )
-//       {
-//         logInstance().err( LogAreaClassClientbase, "Server's certificate rejected!" );
-//         disconnect( ConnTlsFailed );
-//       }
-//       else
-//       {
-//         logInstance().dbg( LogAreaClassClientbase, "connection encryption active" );
-//         header();
-//       }
-//     }
-//     else
-//     {
-//       logInstance().err( LogAreaClassClientbase, "TLS handshake failed!" );
-//       disconnect( ConnTlsFailed );
-//     }
-//   }
+  void ClientBase::handleHandshakeResult( const TLSBase* /*base*/, bool success, CertInfo &certinfo )
+  {
+    if( success )
+    {
+      if( !notifyOnTLSConnect( certinfo ) )
+      {
+        logInstance().err( LogAreaClassClientbase, "Server's certificate rejected!" );
+        disconnect( ConnTlsFailed );
+      }
+      else
+      {
+        logInstance().dbg( LogAreaClassClientbase, "Connection encryption active" );
+        header();
+      }
+    }
+    else
+    {
+      logInstance().err( LogAreaClassClientbase, "TLS handshake failed!" );
+      disconnect( ConnTlsFailed );
+    }
+  }
 
   void ClientBase::handleReceivedData( const ConnectionBase* /*connection*/, const std::string& data )
   {

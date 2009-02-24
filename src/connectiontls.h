@@ -27,12 +27,15 @@ namespace gloox
   /**
    * @brief This is an implementation of a TLS/SSL connection.
    *
-   * Usage:
+   * You should not need to use this function directly. However,
+   * you can use it to connect to the legacy Jabber SSL port,
+   * 5223.
    *
+   * Usage:
    * @code
    * Client *c = new Client( ... );
    * c->setConnectionImpl( new ConnectionTLS( c,
-   *                                new ConnectionTCP( c->logInstance(), server, port ),
+   *                                new ConnectionTCP( c->logInstance(), server, 5223 ),
    *                                c->logInstance()) );
    * @endcode
    *
@@ -114,6 +117,16 @@ namespace gloox
        */
       void setConnectionImpl( ConnectionBase* connection );
 
+      /**
+       * Registers an TLSHandler derived object. Only the handleHandshakeResult()
+       * function will be used after a handshake took place.
+       * You can review certificate info there.
+       * @param th The TLSHandler to register.
+       * @note If no handler is set, ConnectionTLS will accept
+       * any certificate and continue with the connection.
+       */
+      void registerTLSHandler( TLSHandler* th ) { m_tlsHandler = th; }
+
       // reimplemented from ConnectionBase
       virtual ConnectionError connect();
 
@@ -159,6 +172,7 @@ namespace gloox
     private:
       ConnectionBase* m_connection;
       TLSDefault* m_tls;
+      TLSHandler* m_tlsHandler;
       CertInfo m_certInfo;
       const LogSink& m_log;
       StringList m_cacerts;
