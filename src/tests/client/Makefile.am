@@ -9,7 +9,8 @@ noinst_PROGRAMS = client_test
 client_test_SOURCES = client_test.cpp
 client_test_LDADD = ../../client.o ../../clientbase.o ../../connectiontcpbase.o ../../connectiontcpclient.o \
 			../../disco.o ../../parser.o ../../tag.o ../../stanza.o ../../base64.o ../../jid.o \
-			../../md5.o ../../tlsgnutlsclient.o ../../tlsopenssl.o ../../tlsschannel.o \
+			../../md5.o ../../tlsgnutlsclient.o ../../tlsopensslclient.o ../../tlsschannel.o \
+			../../tlsopensslbase.o ../../tlsopensslserver.o \
 			../../logsink.o ../../messagesession.o ../../prep.o ../../compressionzlib.o \
 			../../dns.o ../../stanzaextensionfactory.o \
 			../../rostermanager.o ../../nonsaslauth.o ../../sha.o ../../dataform.o \

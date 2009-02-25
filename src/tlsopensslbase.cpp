@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2005-2009 by Jakob Schroeter <js@camaya.net>
+  Copyright (c) 2009 by Jakob Schroeter <js@camaya.net>
   This file is part of the gloox library. http://camaya.net/gloox
 
   This software is distributed under a license. The full license
@@ -12,7 +12,7 @@
 
 
 
-#include "tlsopenssl.h"
+#include "tlsopensslbase.h"
 
 #ifdef HAVE_OPENSSL
 
@@ -21,43 +21,18 @@
 #include <ctime>
 #include <cstdlib>
 
+#include <openssl/err.h>
+
 namespace gloox
 {
 
-  OpenSSL::OpenSSL( TLSHandler* th, const std::string& server )
+  OpenSSLBase::OpenSSLBase( TLSHandler* th, const std::string& server )
     : TLSBase( th, server ), m_ssl( 0 ), m_ctx( 0 ), m_buf( 0 ), m_bufsize( 17000 )
   {
     m_buf = (char*)calloc( m_bufsize + 1, sizeof( char ) );
   }
 
-  bool OpenSSL::init()
-  {
-    if( m_initLib )
-      SSL_library_init();
-
-    SSL_COMP_add_compression_method( 1, COMP_zlib() );
-
-    m_ctx = SSL_CTX_new( TLSv1_client_method() );
-    if( !m_ctx )
-      return false;
-
-    if( !SSL_CTX_set_cipher_list( m_ctx, "HIGH:MEDIUM:AES:@STRENGTH" ) )
-      return false;
-
-    m_ssl = SSL_new( m_ctx );
-    SSL_set_connect_state( m_ssl );
-
-    if( !BIO_new_bio_pair( &m_ibio, 0, &m_nbio, 0 ) )
-      return false;
-
-    SSL_set_bio( m_ssl, m_ibio, m_ibio );
-    SSL_set_mode( m_ssl, SSL_MODE_AUTO_RETRY );
-
-    m_valid = true;
-    return true;
-  }
-
-  OpenSSL::~OpenSSL()
+  OpenSSLBase::~OpenSSLBase()
   {
     m_handler = 0;
     free( m_buf );
@@ -68,7 +43,37 @@ namespace gloox
     cleanup();
   }
 
-  bool OpenSSL::encrypt( const std::string& data )
+  bool OpenSSLBase::init()
+  {
+    if( m_initLib )
+      SSL_library_init();
+
+//     SSL_COMP_add_compression_method( 1, COMP_zlib() );
+    OpenSSL_add_all_algorithms();
+    if( !setType() )
+      return false;
+
+    if( !SSL_CTX_set_cipher_list( m_ctx, "HIGH:MEDIUM:AES:@STRENGTH" ) )
+      return false;
+
+    m_ssl = SSL_new( m_ctx );
+    if( !m_ssl )
+      return false;
+
+    if( !BIO_new_bio_pair( &m_ibio, 0, &m_nbio, 0 ) )
+      return false;
+
+    SSL_set_bio( m_ssl, m_ibio, m_ibio );
+    SSL_set_mode( m_ssl, SSL_MODE_AUTO_RETRY );
+
+    ERR_load_crypto_strings();
+    SSL_load_error_strings();
+
+    m_valid = true;
+    return true;
+  }
+
+  bool OpenSSLBase::encrypt( const std::string& data )
   {
     m_sendBuffer += data;
 
@@ -82,7 +87,7 @@ namespace gloox
     return true;
   }
 
-  int OpenSSL::decrypt( const std::string& data )
+  int OpenSSLBase::decrypt( const std::string& data )
   {
     m_recvBuffer += data;
 
@@ -96,7 +101,7 @@ namespace gloox
     return true;
   }
 
-  void OpenSSL::setCACerts( const StringList& cacerts )
+  void OpenSSLBase::setCACerts( const StringList& cacerts )
   {
     m_cacerts = cacerts;
 
@@ -105,25 +110,40 @@ namespace gloox
       SSL_CTX_load_verify_locations( m_ctx, (*it).c_str(), 0 );
   }
 
-  void OpenSSL::setClientCert( const std::string& clientKey, const std::string& clientCerts )
+  void OpenSSLBase::setClientCert( const std::string& clientKey, const std::string& clientCerts )
   {
     m_clientKey = clientKey;
     m_clientCerts = clientCerts;
 
     if( !m_clientKey.empty() && !m_clientCerts.empty() )
     {
-      SSL_CTX_use_certificate_chain_file( m_ctx, m_clientCerts.c_str() );
-      SSL_CTX_use_PrivateKey_file( m_ctx, m_clientKey.c_str(), SSL_FILETYPE_PEM );
+      if( !SSL_CTX_use_certificate_chain_file( m_ctx, m_clientCerts.c_str() ) )
+      {
+        char f[121];
+        ERR_error_string( ERR_get_error(), f );
+        printf( "SSL_CTX_use_certificate_chain_file() failed: %s\n", f );
+      }
+      if( !SSL_CTX_use_PrivateKey_file( m_ctx, m_clientKey.c_str(), SSL_FILETYPE_PEM ) )
+      {
+        char f[121];
+        ERR_error_string( ERR_get_error(), f );
+        printf( "SSL_CTX_use_PrivateKey_file() failed: %s\n", f );
+      }
+    }
+
+    if ( !SSL_CTX_check_private_key(m_ctx) )
+    {
+      printf( "Private key is invalid.\n");
     }
   }
 
-  void OpenSSL::cleanup()
+  void OpenSSLBase::cleanup()
   {
     m_secure = false;
     m_valid = false;
   }
 
-  void OpenSSL::doTLSOperation( TLSOperation op )
+  void OpenSSLBase::doTLSOperation( TLSOperation op )
   {
     if( !m_handler )
       return;
@@ -136,7 +156,7 @@ namespace gloox
       switch( op )
       {
         case TLSHandshake:
-          ret = SSL_connect( m_ssl );
+          ret = handshakeFunction();
           break;
         case TLSWrite:
           ret = SSL_write( m_ssl, m_sendBuffer.c_str(), m_sendBuffer.length() );
@@ -149,10 +169,13 @@ namespace gloox
       switch( SSL_get_error( m_ssl, ret ) )
       {
         case SSL_ERROR_WANT_READ:
+          printf( "want read\n" );
         case SSL_ERROR_WANT_WRITE:
+          printf( "want write\n" );
           pushFunc();
           break;
         case SSL_ERROR_NONE:
+          printf( "no error\n" );
           if( op == TLSHandshake )
             m_secure = true;
           else if( op == TLSWrite )
@@ -161,7 +184,30 @@ namespace gloox
             m_handler->handleDecryptedData( this, std::string( m_buf, ret ) );
           pushFunc();
           break;
+        case SSL_ERROR_ZERO_RETURN:
+          printf( "0 return\n" );
+          break;
+        case SSL_ERROR_WANT_ACCEPT:
+          printf( "want accept\n" );
+          break;
+        case SSL_ERROR_WANT_CONNECT:
+          printf( "want connect\n" );
+          break;
+        case SSL_ERROR_WANT_X509_LOOKUP:
+          printf( "want lookup\n" );
+          break;
+        case SSL_ERROR_SYSCALL:
+          printf( "syscall\n" );
+          break;
+        case SSL_ERROR_SSL:
+        {
+          char f[121];
+          ERR_error_string( ERR_get_error(), f );
+          printf( "error ssl: %s\n", f );
+          break;
+        }
         default:
+          printf( "default\n" );
           if( !m_secure )
             m_handler->handleHandshakeResult( this, false, m_certInfo );
           return;
@@ -175,7 +221,7 @@ namespace gloox
     while( ( onceAgain || m_recvBuffer.length() ) && ( !m_secure || op == TLSRead ) );
   }
 
-  int OpenSSL::openSSLTime2UnixTime( const char* time_string )
+  int OpenSSLBase::openSSLTime2UnixTime( const char* time_string )
   {
     char tstring[19];
 
@@ -203,7 +249,7 @@ namespace gloox
     return unixt;
   }
 
-  bool OpenSSL::handshake()
+  bool OpenSSLBase::handshake()
   {
 
     doTLSOperation( TLSHandshake );
@@ -258,7 +304,7 @@ namespace gloox
     return true;
   }
 
-  void OpenSSL::pushFunc()
+  void OpenSSLBase::pushFunc()
   {
     int wantwrite;
     size_t wantread;

@@ -189,18 +189,12 @@ namespace gloox
 
   void ConnectionTLS::handleHandshakeResult( const TLSBase* tls, bool success, CertInfo& certinfo )
   {
-    if( m_tlsHandler )
-    {
-      m_tlsHandler->handleHandshakeResult( tls, success, certinfo );
-      if( m_handler )
-        m_handler->handleConnect( this );
-      return;
-    }
-
     if( success )
     {
       m_state = StateConnected;
       m_log.log( LogLevelDebug, LogAreaClassConnectionTLS, "TLS handshake succeeded" );
+      if( m_tlsHandler )
+        m_tlsHandler->handleHandshakeResult( tls, success, certinfo );
       if( m_handler )
         m_handler->handleConnect( this );
     }
