@@ -381,6 +381,7 @@ src/tests/stanzaextensionfactory/Makefile
 src/tests/subscription/Makefile
 src/tests/tag/Makefile
 src/tests/tlsgnutls/Makefile
+src/tests/tlsopenssl/Makefile
 src/tests/uniquemucroomunique/Makefile
 src/tests/util/Makefile
 src/tests/vcard/Makefile

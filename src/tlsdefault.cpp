@@ -29,7 +29,8 @@
 # include "tlsgnutlsserveranon.h"
 #elif defined( HAVE_OPENSSL )
 # define HAVE_TLS
-# include "tlsopenssl.h"
+# include "tlsopensslclient.h"
+# include "tlsopensslserver.h"
 #elif defined( HAVE_WINTLS )
 # define HAVE_TLS
 # include "tlsschannel.h"
@@ -47,7 +48,7 @@ namespace gloox
 #ifdef HAVE_GNUTLS
         m_impl = new GnuTLSClient( th, server );
 #elif defined( HAVE_OPENSSL )
-        m_impl = new OpenSSL( th, server );
+        m_impl = new OpenSSLClient( th, server );
 #elif defined( HAVE_WINTLS )
         m_impl = new SChannel( th, server );
 #endif
@@ -63,6 +64,9 @@ namespace gloox
 #endif
         break;
       case VerifyingServer:
+#ifdef HAVE_OPENSSL
+        m_impl = new OpenSSLServer( th );
+#endif
         break;
       default:
         break;

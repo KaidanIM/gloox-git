@@ -24,11 +24,13 @@ SUBDIRS = adhoc adhoccommand adhoccommandnote amprule amp base64 \
           searchquery search \
           sha shim \
           simanager simanagersi stanzaextensionfactory subscription \
-          tag tlsgnutls \
+          tag tlsgnutls tlsopenssl\
           uniquemucroomunique \
           vcard vcardupdate \
           xpath \
           zlib util
+
+EXTRA_DIST = clientbase.h
 
 check: test
 
