@@ -295,7 +295,6 @@ namespace gloox
       else
       {
         logInstance().dbg( LogAreaClassClientbase, "Connection encryption active" );
-        header();
       }
     }
     else
@@ -809,10 +808,10 @@ namespace gloox
 
   void ClientBase::setConnectionImpl( ConnectionBase* cb )
   {
-    if( m_connection )
-    {
-      delete m_connection;
-    }
+    if( m_connection && m_connection->state() != StateDisconnected )
+      return;
+
+    delete m_connection;
     m_connection = cb;
   }
 
