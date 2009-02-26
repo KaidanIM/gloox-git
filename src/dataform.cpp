@@ -43,7 +43,7 @@ namespace gloox
   DataForm::DataForm( const DataForm& form )
     : StanzaExtension( ExtDataForm ), DataFormFieldContainer( form ),
       m_type( form.m_type ), m_instructions( form.m_instructions ),
-      m_title( form.m_title )
+      m_title( form.m_title ), m_reported( form.m_reported )
   {
   }
 
@@ -78,6 +78,8 @@ namespace gloox
         m_fields.push_back( new DataFormField( (*it) ) );
       else if( (*it)->name() == "item" )
         m_items.push_back( new DataFormItem( (*it) ) );
+      else if( (*it)->name() == "reported" )
+        m_reported.push_back( new DataFormReported( (*it) ) );
     }
 
     return true;
