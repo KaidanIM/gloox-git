@@ -29,7 +29,7 @@ namespace gloox
    *
    * This holds the information of a single resource of a contact that is online.
    *
-   * @author Jakob Schroeter <js@caaya.net>
+   * @author Jakob Schroeter <js@camaya.net>
    * @since 0.8
    */
   class GLOOX_API Resource
