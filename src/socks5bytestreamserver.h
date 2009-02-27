@@ -74,7 +74,7 @@ namespace gloox
       void stop();
 
       // reimplemented from ConnectionHandler
-      virtual void handleIncomingConnection( ConnectionBase* connection );
+      virtual void handleIncomingConnection( ConnectionBase* server, ConnectionBase* connection );
 
       // reimplemented from ConnectionDataHandler
       virtual void handleReceivedData( const ConnectionBase* connection, const std::string& data );

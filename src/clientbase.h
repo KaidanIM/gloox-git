@@ -130,7 +130,7 @@ namespace gloox
       virtual const std::string& username() const { return m_jid.username(); }
 
       /**
-       * Returns the current Jabber ID. If an authentication ID has been set (using setAuthzid())
+       * Returns the current Jabber ID. If an authorization ID has been set (using setAuthzid())
        * this authzid is returned.
        * @return A reference to the Jabber ID.
        * @note If you change the server part of the JID, the server of the connection is not synced.
