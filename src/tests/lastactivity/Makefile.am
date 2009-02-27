@@ -12,5 +12,6 @@ lastactivity_test_LDADD = ../../jid.o ../../tag.o \
                         ../../gloox.o ../../iq.o ../../stanza.o \
                         ../../error.o ../../dataformfieldcontainer.o \
                         ../../dataform.o ../../dataformfield.o \
-                        ../../dataformitem.o ../../softwareversion.o
+                        ../../dataformitem.o ../../dataformreported.o \
+                        ../../softwareversion.o
 lastactivity_test_CFLAGS = $(CPPFLAGS)

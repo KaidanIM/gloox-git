@@ -10,6 +10,7 @@ pubsubevent_test_SOURCES = pubsubevent_test.cpp
 pubsubevent_test_LDADD = ../../gloox.o ../../tag.o ../../jid.o ../../prep.o \
                            ../../util.o ../../error.o ../../pubsubevent.o \
                            ../../dataform.o ../../dataformfield.o \
-                           ../../dataformfieldcontainer.o ../../dataformitem.o
+                           ../../dataformfieldcontainer.o ../../dataformreported.o \
+                           ../../dataformitem.o
 
 pubsubevent_test_CFLAGS = $(CPPFLAGS)
