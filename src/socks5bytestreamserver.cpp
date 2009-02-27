@@ -105,7 +105,7 @@ namespace gloox
     m_hashes.remove( hash );
   }
 
-  void SOCKS5BytestreamServer::handleIncomingConnection( ConnectionBase* connection )
+  void SOCKS5BytestreamServer::handleIncomingConnection( ConnectionBase* /*server*/, ConnectionBase* connection )
   {
     connection->registerConnectionDataHandler( this );
     ConnectionInfo ci;

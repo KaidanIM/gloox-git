@@ -181,7 +181,8 @@ namespace gloox
 
       if( context == RequestRoster )
       {
-        m_parent->rosterFilled();
+        if( m_parent )
+          m_parent->rosterFilled();
 
         if( m_rosterListener )
           m_rosterListener->handleRoster( m_roster );
@@ -189,6 +190,9 @@ namespace gloox
     }
     else if( iq.subtype() == IQ::Error )
     {
+      if( context == RequestRoster && m_parent )
+        m_parent->rosterFilled();
+
       if( m_rosterListener )
         m_rosterListener->handleRosterError( iq );
     }
