@@ -40,9 +40,10 @@ namespace gloox
 
       /**
        * This function is called to receive an incoming connection.
+       * @param server The server that the connection was made to.
        * @param connection The incoming connection.
        */
-      virtual void handleIncomingConnection( ConnectionBase* connection ) = 0;
+      virtual void handleIncomingConnection( ConnectionBase* server, ConnectionBase* connection ) = 0;
 
   };
 
