@@ -43,7 +43,7 @@ namespace gloox
 
       protected:
         /** The Transport's namespace. */
-        const std::string m_xmlns;
+//         const std::string m_xmlns;
 
     };
 
