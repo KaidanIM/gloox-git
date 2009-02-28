@@ -62,9 +62,15 @@ namespace gloox
     if( !tag || tag->xmlns() != XMLNS_X_DATA || tag->name() != "x" )
       return false;
 
-    m_type = (FormType)util::lookup(tag->findAttribute( TYPE ), dfTypeValues );
-    if( m_type == TypeInvalid )
-      return false;
+    const std::string& type = tag->findAttribute( TYPE );
+    if( type.empty() )
+      m_type = TypeForm;
+    else
+    {
+      m_type = (FormType)util::lookup( type, dfTypeValues );
+      if( m_type == TypeInvalid )
+        return false;
+    }
 
     const TagList& l = tag->children();
     TagList::const_iterator it = l.begin();
