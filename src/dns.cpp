@@ -144,7 +144,9 @@ namespace gloox
       if( ns_name_ntop( srv[cnt] + SRV_SERVER, (char*)srvname, NS_MAXDNAME ) < 0 )
         printf( "handle this error!\n" );
 
-      servers[(char*)srvname] = ns_get16( srv[cnt] + SRV_PORT );
+      unsigned char* c = srv[cnt] + SRV_PORT;
+
+      servers.insert( std::make_pair( (char*)srvname, ntohs( c[1] << 8 | c[0] ) ) );
     }
 
     return servers;

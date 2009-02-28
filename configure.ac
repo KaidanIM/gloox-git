@@ -268,8 +268,6 @@ fi
 #                 AC_SEARCH_LIBS(__dn_skipname,resolv bind,,have_resolver=no))
 #  AC_SEARCH_LIBS(res_querydomain,resolv bind,,
 #                 AC_SEARCH_LIBS(__res_querydomain,resolv bind,,have_resolver=no))
-#  AC_SEARCH_LIBS(ns_get16,resolv bind,,
-#                 AC_SEARCH_LIBS(__ns_get16,resolv bind,,have_resolver=no))
 
 
 dnl Debug
@@ -297,7 +295,6 @@ AC_MSG_RESULT($getaddrinfo)
 dnl Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS(unistd.h strings.h errno.h arpa/nameser.h)
-AC_CHECK_FUNCS(ns_get16 __ns_get16)
 AC_CHECK_FUNCS(setsockopt,,[AC_CHECK_LIB(socket,setsockopt)])
 
 dnl Checks for typedefs, structures, and compiler characteristics.
