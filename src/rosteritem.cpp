@@ -123,6 +123,22 @@ namespace gloox
       m_resources[resource]->setPriority( priority );
   }
 
+  const Resource* RosterItem::highestResource() const
+  {
+    int highestPriority = -255;
+    Resource* highestResource = 0;
+    ResourceMap::const_iterator it = m_resources.begin();
+    for( ; it != m_resources.end() ; ++it )
+    {
+      if( (*it).second->priority() > highestPriority )
+      {
+        highestPriority = (*it).second->priority();
+        highestResource = (*it).second;
+      }
+    }
+    return highestResource;
+  }
+
   void RosterItem::setExtensions( const std::string& resource, const StanzaExtensionList& exts )
   {
     if( m_resources.find( resource ) == m_resources.end() )
