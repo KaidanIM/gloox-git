@@ -133,6 +133,12 @@ namespace gloox
        */
       const Resource* resource( const std::string& res ) const;
 
+      /**
+       * Returns the Resource with the highest priority.
+       * @return The Resource with the highest priority.
+       */
+      const Resource* highestResource() const;
+
     protected:
       /**
        * Sets the current presence of the resource.
