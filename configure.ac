@@ -67,6 +67,14 @@ fi
 AC_MSG_CHECKING([if Libidn should be used])
 AC_MSG_RESULT($libidn)
 
+
+dnl extra win32 libs
+case "$host_os" in
+  *mingw*)
+      LIBS="${LIBS} -lwsock32 -lgdi32 -ldnsapi";;
+esac
+
+
 ssl=no
 
 dnl schannel
@@ -74,15 +82,15 @@ AC_ARG_WITH(schannel, AC_HELP_STRING([--with-schannel],
       [Support Stream Encryption (win32 only)]),
       schannel=yes, schannel=no)
 if test "$schannel" == "yes"; then
-  ssl=yes
   case "$host_os" in
     *mingw*)
-        LIBS="${LIBS} -lwsock32 -lgdi32 -lcrypt32 -lsecur32 -ldnsapi";;
+        ssl=yes
+        LIBS="${LIBS} -lcrypt32 -lsecur32";;
     *)
+        schannel=no
         echo "*"
-        echo "* You provided the '--with-schannel' switch. SChannel is only available in MinGW. Aborting."
-        echo "*"
-        exit;;
+        echo "* You provided the '--with-schannel' switch. SChannel is only available in MinGW. Ignoring."
+        echo "*";;
   esac
   AC_MSG_CHECKING([if SChannel should be used])
   AC_MSG_RESULT($schannel)
