@@ -1399,6 +1399,8 @@ namespace gloox
 
     if( msHandler )
     {
+      if( msg.subtype() == Message::Chat && msg.body().empty() )
+        return; // don't want a new MS for empty messages
       MessageSession* session = new MessageSession( this, msg.from(), true, msg.subtype() );
       msHandler->handleMessageSession( session );
       session->handleMessage( msg );
