@@ -14,7 +14,6 @@
 #ifndef PRIVACYITEM_H__
 #define PRIVACYITEM_H__
 
-#include "macros.h"
 #include "gloox.h"
 
 #include <string>
