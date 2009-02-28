@@ -68,6 +68,14 @@ fi
 AC_MSG_CHECKING([if Libidn should be used])
 AC_MSG_RESULT($libidn)
 
+
+dnl extra win32 libs
+case "$host_os" in
+  *mingw*)
+      LIBS="${LIBS} -lwsock32 -lgdi32 -ldnsapi";;
+esac
+
+
 ssl=no
 
 dnl schannel
@@ -75,15 +83,15 @@ AC_ARG_WITH(schannel, AC_HELP_STRING([--with-schannel],
       [Support Stream Encryption (win32 only)]),
       schannel=yes, schannel=no)
 if test "$schannel" == "yes"; then
-  ssl=yes
   case "$host_os" in
     *mingw*)
-        LIBS="${LIBS} -lwsock32 -lgdi32 -lcrypt32 -lsecur32 -ldnsapi";;
+        ssl=yes
+        LIBS="${LIBS} -lcrypt32 -lsecur32";;
     *)
+        schannel=no
         echo "*"
-        echo "* You provided the '--with-schannel' switch. SChannel is only available in MinGW. Aborting."
-        echo "*"
-        exit;;
+        echo "* You provided the '--with-schannel' switch. SChannel is only available in MinGW. Ignoring."
+        echo "*";;
   esac
   AC_MSG_CHECKING([if SChannel should be used])
   AC_MSG_RESULT($schannel)
@@ -261,8 +269,6 @@ fi
 #                 AC_SEARCH_LIBS(__dn_skipname,resolv bind,,have_resolver=no))
 #  AC_SEARCH_LIBS(res_querydomain,resolv bind,,
 #                 AC_SEARCH_LIBS(__res_querydomain,resolv bind,,have_resolver=no))
-#  AC_SEARCH_LIBS(ns_get16,resolv bind,,
-#                 AC_SEARCH_LIBS(__ns_get16,resolv bind,,have_resolver=no))
 
 
 dnl Debug
@@ -290,7 +296,6 @@ AC_MSG_RESULT($getaddrinfo)
 dnl Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS(unistd.h strings.h errno.h arpa/nameser.h)
-AC_CHECK_FUNCS(ns_get16 __ns_get16)
 AC_CHECK_FUNCS(setsockopt,,[AC_CHECK_LIB(socket,setsockopt)])
 
 dnl Checks for typedefs, structures, and compiler characteristics.
