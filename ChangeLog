@@ -1,4 +1,10 @@
-v0.9.9.6 -- xx yyy 2009
+v0.9.9.7 -- xx yyy 2009
+-----------------------
+- #define GLOOX_IMPORTS for the examples, fixes compilation in MinGW
+- removed use of deprecated ns_get16()
+
+
+v0.9.9.6 -- 28 Feb 2009
 -----------------------
 - prevent crashes when closing a MUCRoom
 - compile fix for gcc 4.4, fixes debian bug 505333
