@@ -76,7 +76,8 @@ namespace gloox
          *
          * @see Manager::requestItems()
          */
-        virtual void handleItems( const JID& service,
+        virtual void handleItems( const std::string& id,
+                                  const JID& service,
                                   const std::string& node,
                                   const ItemList& itemList,
                                   const Error* error = 0 ) = 0;
@@ -91,9 +92,10 @@ namespace gloox
          *
          * @see Manager::publishItem
          */
-        virtual void handleItemPublication( const JID& service,
+        virtual void handleItemPublication( const std::string& id,
+                                            const JID& service,
                                             const std::string& node,
-                                            const std::string& item,
+                                            const ItemList& item,
                                             const Error* error = 0 ) = 0;
 
         /**
@@ -106,7 +108,8 @@ namespace gloox
          *
          * @see Manager::deleteItem
          */
-        virtual void handleItemDeletion( const JID& service,
+        virtual void handleItemDeletion( const std::string& id,
+                                         const JID& service,
                                          const std::string& node,
                                          const ItemList& itemList,
                                          const Error* error = 0 ) = 0;
@@ -123,7 +126,8 @@ namespace gloox
          *
          * @see Manager::subscribe
          */
-        virtual void handleSubscriptionResult( const JID& service,
+        virtual void handleSubscriptionResult( const std::string& id,
+                                               const JID& service,
                                                const std::string& node,
                                                const std::string& sid,
                                                const JID& jid,
@@ -141,7 +145,8 @@ namespace gloox
          *
          * @see Manager::unsubscribe
          */
-        virtual void handleUnsubscriptionResult( const JID& service,
+        virtual void handleUnsubscriptionResult( const std::string& id,
+                                                 const JID& service,
                                                  const std::string& node,
                                                  const std::string& sid,
                                                  const JID& jid,
@@ -158,7 +163,8 @@ namespace gloox
          *
          * @see Manager::getSubscriptionOptions
          */
-        virtual void handleSubscriptionOptions( const JID& service,
+        virtual void handleSubscriptionOptions( const std::string& id,
+                                                const JID& service,
                                                 const JID& jid,
                                                 const std::string& node,
                                                 const DataForm* options,
@@ -174,7 +180,8 @@ namespace gloox
          *
          * @see Manager::setSubscriptionOptions
          */
-        virtual void handleSubscriptionOptionsResult( const JID& service,
+        virtual void handleSubscriptionOptionsResult( const std::string& id,
+                                                      const JID& service,
                                                       const JID& jid,
                                                       const std::string& node,
                                                       const Error* error = 0 ) = 0;
@@ -190,7 +197,8 @@ namespace gloox
          *
          * @see Manager::getSubscribers
          */
-        virtual void handleSubscribers( const JID& service,
+        virtual void handleSubscribers( const std::string& id,
+                                        const JID& service,
                                         const std::string& node,
                                         const SubscriberList* list,
                                         const Error* error = 0 ) = 0;
@@ -204,7 +212,8 @@ namespace gloox
          *
          * @see Manager::setSubscribers
          */
-        virtual void handleSubscribersResult( const JID& service,
+        virtual void handleSubscribersResult( const std::string& id,
+                                              const JID& service,
                                               const std::string& node,
                                               const SubscriberList* list,
                                               const Error* error = 0 ) = 0;
@@ -219,7 +228,8 @@ namespace gloox
          *
          * @see Manager::getAffiliations
          */
-        virtual void handleAffiliates( const JID& service,
+        virtual void handleAffiliates( const std::string& id,
+                                       const JID& service,
                                        const std::string& node,
                                        const AffiliateList* list,
                                        const Error* error = 0 ) = 0;
@@ -233,7 +243,8 @@ namespace gloox
          *
          * @see Manager::setAffiliations
          */
-        virtual void handleAffiliatesResult( const JID& service,
+        virtual void handleAffiliatesResult( const std::string& id,
+                                             const JID& service,
                                              const std::string& node,
                                              const AffiliateList* list,
                                              const Error* error = 0 ) = 0;
@@ -249,7 +260,8 @@ namespace gloox
          *
          * @see Manager::getNodeConfig
          */
-        virtual void handleNodeConfig( const JID& service,
+        virtual void handleNodeConfig( const std::string& id,
+                                       const JID& service,
                                        const std::string& node,
                                        const DataForm* config,
                                        const Error* error = 0 ) = 0;
@@ -263,7 +275,8 @@ namespace gloox
          *
          * @see Manager::setNodeConfig
          */
-        virtual void handleNodeConfigResult( const JID& service,
+        virtual void handleNodeConfigResult( const std::string& id,
+                                             const JID& service,
                                              const std::string& node,
                                              const Error* error = 0 ) = 0;
 
@@ -276,7 +289,8 @@ namespace gloox
          *
          * @see Manager::setNodeConfig
          */
-        virtual void handleNodeCreation( const JID& service,
+        virtual void handleNodeCreation( const std::string& id,
+                                         const JID& service,
                                          const std::string& node,
                                          const Error* error = 0 ) = 0;
 
@@ -289,7 +303,8 @@ namespace gloox
          *
          * @see Manager::deleteNode
          */
-        virtual void handleNodeDeletion( const JID& service,
+        virtual void handleNodeDeletion( const std::string& id,
+                                         const JID& service,
                                          const std::string& node,
                                          const Error* error = 0 ) = 0;
 
@@ -303,7 +318,8 @@ namespace gloox
          *
          * @see Manager::purgeNode
          */
-        virtual void handleNodePurge( const JID& service,
+        virtual void handleNodePurge( const std::string& id,
+                                      const JID& service,
                                       const std::string& node,
                                       const Error* error = 0 ) = 0;
 
@@ -316,7 +332,8 @@ namespace gloox
          *
          * @see Manager::getSubscriptions
          */
-        virtual void handleSubscriptions( const JID& service,
+        virtual void handleSubscriptions( const std::string& id,
+                                          const JID& service,
                                           const SubscriptionMap& subMap,
                                           const Error* error = 0) = 0;
 
@@ -329,7 +346,8 @@ namespace gloox
          *
          * @see Manager::getAffiliations
          */
-        virtual void handleAffiliations( const JID& service,
+        virtual void handleAffiliations( const std::string& id,
+                                         const JID& service,
                                          const AffiliationMap& affMap,
                                          const Error* error = 0 ) = 0;
 
@@ -342,7 +360,8 @@ namespace gloox
          *
          * @see Manager::getDefaultNodeConfig
          */
-        virtual void handleDefaultNodeConfig( const JID& service,
+        virtual void handleDefaultNodeConfig( const std::string& id,
+                                              const JID& service,
                                               const DataForm* config,
                                               const Error* error = 0 ) = 0;
 

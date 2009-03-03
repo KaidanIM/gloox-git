@@ -204,23 +204,24 @@ namespace gloox
 
       Tag* t = new Tag( "pubsub" );
       t->setXmlns( XMLNS_PUBSUB_OWNER );
+      Tag* c = 0;
 
       switch( m_ctx )
       {
         case DeleteNode:
         {
-          new Tag( "delete", "node", m_node );
+          c = new Tag( "delete", "node", m_node );
           break;
         }
         case PurgeNodeItems:
         {
-          new Tag( "purge", "node", m_node );
+          c = new Tag( "purge", "node", m_node );
           break;
         }
         case GetNodeConfig:
         case SetNodeConfig:
         {
-          Tag* c = new Tag( t, "configure" );
+          c = new Tag( t, "configure" );
           c->addAttribute( "node", m_node );
           if( m_form )
             c->addChild( m_form->tag() );
@@ -230,15 +231,15 @@ namespace gloox
         case SetSubscriberList:
 
         {
-          Tag* sub = new Tag( t, "subscriptions" );
-          sub->addAttribute( "node", m_node );
+          c = new Tag( t, "subscriptions" );
+          c->addAttribute( "node", m_node );
           if( m_subList.size() )
           {
             Tag* s;
             SubscriberList::const_iterator it = m_subList.begin();
             for( ; it != m_subList.end(); ++it )
             {
-              s = new Tag( sub, "subscription" );
+              s = new Tag( c, "subscription" );
               s->addAttribute( "jid", (*it).jid.full() );
               s->addAttribute( "subscription", util::lookup( (*it).type, subscriptionValues ) );
               if( !(*it).subid.empty() )
@@ -250,15 +251,15 @@ namespace gloox
         case GetAffiliateList:
         case SetAffiliateList:
         {
-          Tag* aff = new Tag( t, "affiliations" );
-          aff->addAttribute( "node", m_node );
+          c = new Tag( t, "affiliations" );
+          c->addAttribute( "node", m_node );
           if( m_affList.size() )
           {
             Tag* a;
             AffiliateList::const_iterator it = m_affList.begin();
             for( ; it != m_affList.end(); ++it )
             {
-              a = new Tag( aff, "affiliation", "jid", (*it).jid.full() );
+              a = new Tag( c, "affiliation", "jid", (*it).jid.full() );
               a->addAttribute( "affiliation", util::lookup( (*it).type, affiliationValues ) );
             }
           }
@@ -266,12 +267,15 @@ namespace gloox
         }
         case DefaultNodeConfig:
         {
-          new Tag( t, "default" );
+          c = new Tag( t, "default" );
           break;
         }
         default:
           break;
       }
+
+      if( c )
+        t->addChild( c );
 
       return t;
     }
@@ -555,9 +559,9 @@ namespace gloox
       }
     }
 
-    const std::string& Manager::getSubscriptionsOrAffiliations( const JID& service,
-                                                                ResultHandler* handler,
-                                                                TrackContext context )
+    const std::string Manager::getSubscriptionsOrAffiliations( const JID& service,
+                                                               ResultHandler* handler,
+                                                               TrackContext context )
     {
       if( !m_parent || !handler || !service || context == InvalidContext )
         return EmptyString;
@@ -566,17 +570,19 @@ namespace gloox
       IQ iq( IQ::Get, service, id );
       iq.addExtension( new PubSub( context ) );
 
+      m_trackMapMutex.lock();
       m_resultHandlerTrackMap[id] = handler;
+      m_trackMapMutex.unlock();
       m_parent->send( iq, this, context );
       return id;
     }
 
-    const std::string& Manager::subscribe( const JID& service,
-                                           const std::string& node,
-                                           ResultHandler* handler,
-                                           const JID& jid,
-                                           SubscriptionObject type,
-                                           int depth )
+    const std::string Manager::subscribe( const JID& service,
+                                          const std::string& node,
+                                          ResultHandler* handler,
+                                          const JID& jid,
+                                          SubscriptionObject type,
+                                          int depth )
     {
       if( !m_parent || !handler || !service || node.empty() )
         return EmptyString;
@@ -607,17 +613,19 @@ namespace gloox
       }
       iq.addExtension( ps  );
 
+      m_trackMapMutex.lock();
       m_resultHandlerTrackMap[id] = handler;
       m_nopTrackMap[id] = node;
+      m_trackMapMutex.unlock();
       m_parent->send( iq, this, Subscription );
       return id;
     }
 
-    const std::string& Manager::unsubscribe( const JID& service,
-                                              const std::string& node,
-                                              const std::string& subid,
-                                              ResultHandler* handler,
-                                              const JID& jid )
+    const std::string Manager::unsubscribe( const JID& service,
+                                            const std::string& node,
+                                            const std::string& subid,
+                                            ResultHandler* handler,
+                                            const JID& jid )
     {
       if( !m_parent || !handler || !service )
         return EmptyString;
@@ -630,18 +638,20 @@ namespace gloox
       ps->setSubscriptionID( subid );
       iq.addExtension( ps );
 
+      m_trackMapMutex.lock();
       m_resultHandlerTrackMap[id] = handler;
+      m_trackMapMutex.unlock();
       // FIXME? need to track info for handler
       m_parent->send( iq, this, Unsubscription );
       return id;
     }
 
-    const std::string& Manager::subscriptionOptions( TrackContext context,
-                                       const JID& service,
-                                       const JID& jid,
-                                       const std::string& node,
-                                       ResultHandler* handler,
-                                       DataForm* df )
+    const std::string Manager::subscriptionOptions( TrackContext context,
+                                                    const JID& service,
+                                                    const JID& jid,
+                                                    const std::string& node,
+                                                    ResultHandler* handler,
+                                                    DataForm* df )
     {
       if( !m_parent || !handler || !service )
         return EmptyString;
@@ -653,16 +663,18 @@ namespace gloox
       ps->setOptions( node, df );
       iq.addExtension( ps );
 
+      m_trackMapMutex.lock();
       m_resultHandlerTrackMap[id] = handler;
+      m_trackMapMutex.unlock();
       m_parent->send( iq, this, context );
       return id;
     }
 
-    const std::string& Manager::requestItems( const JID& service,
-                                              const std::string& node,
-                                              const std::string& subid,
-                                              int maxItems,
-                                              ResultHandler* handler )
+    const std::string Manager::requestItems( const JID& service,
+                                             const std::string& node,
+                                             const std::string& subid,
+                                             int maxItems,
+                                             ResultHandler* handler )
     {
       if( !m_parent || !service || !handler )
         return EmptyString;
@@ -675,16 +687,18 @@ namespace gloox
       ps->setMaxItems( maxItems );
       iq.addExtension( ps );
 
+      m_trackMapMutex.lock();
       m_resultHandlerTrackMap[id] = handler;
+      m_trackMapMutex.unlock();
       m_parent->send( iq, this, RequestItems );
       return id;
     }
 
-    const std::string& Manager::requestItems( const JID& service,
-                                              const std::string& node,
-                                              const std::string& subid,
-                                              const ItemList& items,
-                                              ResultHandler* handler )
+    const std::string Manager::requestItems( const JID& service,
+                                             const std::string& node,
+                                             const std::string& subid,
+                                             const ItemList& items,
+                                             ResultHandler* handler )
     {
       if( !m_parent || !service || !handler )
         return EmptyString;
@@ -697,12 +711,14 @@ namespace gloox
       ps->setItems( items );
       iq.addExtension( ps );
 
+      m_trackMapMutex.lock();
       m_resultHandlerTrackMap[id] = handler;
+      m_trackMapMutex.unlock();
       m_parent->send( iq, this, RequestItems );
       return id;
     }
 
-    const std::string& Manager::publishItem( const JID& service,
+    const std::string Manager::publishItem( const JID& service,
                                             const std::string& node,
                                             ItemList& items,
                                             DataForm* options,
@@ -722,16 +738,18 @@ namespace gloox
       ps->setOptions( EmptyString, options );
       iq.addExtension( ps );
 
+      m_trackMapMutex.lock();
       m_resultHandlerTrackMap[id] = handler;
+      m_trackMapMutex.unlock();
       m_parent->send( iq, this, PublishItem );
       return id;
     }
 
-    const std::string& Manager::deleteItem( const JID& service,
-                                            const std::string& node,
-                                            const ItemList& items,
-                                            bool notify,
-                                            ResultHandler* handler )
+    const std::string Manager::deleteItem( const JID& service,
+                                           const std::string& node,
+                                           const ItemList& items,
+                                           bool notify,
+                                           ResultHandler* handler )
     {
       if( !m_parent || !handler || !service )
         return EmptyString;
@@ -744,15 +762,17 @@ namespace gloox
       ps->setNotify( notify );
       iq.addExtension( ps );
 
+      m_trackMapMutex.lock();
       m_resultHandlerTrackMap[id] = handler;
+      m_trackMapMutex.unlock();
       m_parent->send( iq, this, DeleteItem );
       return id;
     }
 
-    const std::string& Manager::createNode( const JID& service,
-                                            const std::string& node,
-                                            DataForm* config,
-                                            ResultHandler* handler )
+    const std::string Manager::createNode( const JID& service,
+                                           const std::string& node,
+                                           DataForm* config,
+                                           ResultHandler* handler )
     {
       if( !m_parent || !handler || !service || node.empty() )
         return EmptyString;
@@ -764,15 +784,17 @@ namespace gloox
       ps->setOptions( EmptyString, config );
       iq.addExtension( ps );
 
+      m_trackMapMutex.lock();
       m_nopTrackMap[id] = node;
       m_resultHandlerTrackMap[id] = handler;
+      m_trackMapMutex.unlock();
       m_parent->send( iq, this, CreateNode );
       return id;
     }
 
-    const std::string& Manager::deleteNode( const JID& service,
-                                            const std::string& node,
-                                            ResultHandler* handler )
+    const std::string Manager::deleteNode( const JID& service,
+                                           const std::string& node,
+                                           ResultHandler* handler )
     {
       if( !m_parent || !handler || !service || node.empty() )
         return EmptyString;
@@ -783,15 +805,17 @@ namespace gloox
       pso->setNode( node );
       iq.addExtension( pso );
 
+      m_trackMapMutex.lock();
       m_nopTrackMap[id] = node;
       m_resultHandlerTrackMap[id] = handler;
+      m_trackMapMutex.unlock();
       m_parent->send( iq, this, DeleteNode );
       return id;
     }
 
-    const std::string& Manager::getDefaultNodeConfig( const JID& service,
-                                                      NodeType type,
-                                                      ResultHandler* handler )
+    const std::string Manager::getDefaultNodeConfig( const JID& service,
+                                                     NodeType type,
+                                                     ResultHandler* handler )
     {
       if( !m_parent || !handler || !service )
         return EmptyString;
@@ -808,15 +832,17 @@ namespace gloox
       }
       iq.addExtension( pso );
 
+      m_trackMapMutex.lock();
       m_resultHandlerTrackMap[id] = handler;
+      m_trackMapMutex.unlock();
       m_parent->send( iq, this, DefaultNodeConfig );
       return id;
     }
 
-    const std::string& Manager::nodeConfig( const JID& service,
-                                            const std::string& node,
-                                            DataForm* config,
-                                            ResultHandler* handler )
+    const std::string Manager::nodeConfig( const JID& service,
+                                           const std::string& node,
+                                           DataForm* config,
+                                           ResultHandler* handler )
     {
       if( !m_parent || !handler || !service || node.empty() )
         return EmptyString;
@@ -829,16 +855,18 @@ namespace gloox
         pso->setConfig( config );
       iq.addExtension( pso );
 
+      m_trackMapMutex.lock();
       m_resultHandlerTrackMap[id] = handler;
+      m_trackMapMutex.unlock();
       m_parent->send( iq, this, config ? SetNodeConfig : GetNodeConfig );
       return id;
     }
 
-    const std::string& Manager::subscriberList( TrackContext ctx,
-                                                const JID& service,
-                                                const std::string& node,
-                                                const SubscriberList& subList,
-                                                ResultHandler* handler )
+    const std::string Manager::subscriberList( TrackContext ctx,
+                                               const JID& service,
+                                               const std::string& node,
+                                               const SubscriberList& subList,
+                                               ResultHandler* handler )
     {
       if( !m_parent || !handler || !service || node.empty() )
         return EmptyString;
@@ -849,18 +877,20 @@ namespace gloox
       pso->setNode( node );
       pso->setSubscriberList( subList );
       iq.addExtension( pso );
-      m_nopTrackMap[id] = node;
 
+      m_trackMapMutex.lock();
+      m_nopTrackMap[id] = node;
       m_resultHandlerTrackMap[id] = handler;
+      m_trackMapMutex.unlock();
       m_parent->send( iq, this, ctx );
       return id;
     }
 
-    const std::string& Manager::affiliateList( TrackContext ctx,
-                                               const JID& service,
-                                               const std::string& node,
-                                               const AffiliateList& affList,
-                                               ResultHandler* handler )
+    const std::string Manager::affiliateList( TrackContext ctx,
+                                              const JID& service,
+                                              const std::string& node,
+                                              const AffiliateList& affList,
+                                              ResultHandler* handler )
     {
       if( !m_parent || !handler || !service || node.empty() )
         return EmptyString;
@@ -870,17 +900,19 @@ namespace gloox
       PubSubOwner* pso = new PubSubOwner( ctx );
       pso->setNode( node );
       pso->setAffiliateList( affList );
-      m_nopTrackMap[id] = node;
       iq.addExtension( pso );
 
+      m_trackMapMutex.lock();
+      m_nopTrackMap[id] = node;
       m_resultHandlerTrackMap[id] = handler;
+      m_trackMapMutex.unlock();
       m_parent->send( iq, this, ctx );
       return id;
     }
 
-    const std::string& Manager::purgeNode( const JID& service,
-                                           const std::string&  node,
-                                           ResultHandler* handler  )
+    const std::string Manager::purgeNode( const JID& service,
+                                          const std::string&  node,
+                                          ResultHandler* handler  )
     {
       if( !m_parent || !handler || !service || node.empty() )
         return EmptyString;
@@ -891,27 +923,46 @@ namespace gloox
       pso->setNode( node );
       iq.addExtension( pso );
 
-      m_resultHandlerTrackMap[id] = handler;
+      m_trackMapMutex.lock();
       m_nopTrackMap[id] = node;
+      m_resultHandlerTrackMap[id] = handler;
+      m_trackMapMutex.unlock();
       m_parent->send( iq, this, PurgeNodeItems );
       return id;
     }
 
+    bool Manager::removeID( const std::string& id )
+    {
+      m_trackMapMutex.lock();
+      ResultHandlerTrackMap::iterator ith = m_resultHandlerTrackMap.find( id );
+      if( ith == m_resultHandlerTrackMap.end() )
+      {
+        m_trackMapMutex.unlock();
+        return false;
+      }
+      m_resultHandlerTrackMap.erase( ith );
+      m_trackMapMutex.unlock();
+      return true;
+    }
+
     /**
      * @todo Track context info for Unsubscription result.
-     * @todo
      */
     void Manager::handleIqID( const IQ& iq, int context )
     {
       const JID& service = iq.from();
-//       const Tag* query = iq.query();
       const std::string& id = iq.id();
 
+      m_trackMapMutex.lock();
       ResultHandlerTrackMap::iterator ith = m_resultHandlerTrackMap.find( id );
       if( ith == m_resultHandlerTrackMap.end() )
+      {
+        m_trackMapMutex.unlock();
         return;
-
+      }
       ResultHandler* rh = (*ith).second;
+      m_resultHandlerTrackMap.erase( ith );
+      m_trackMapMutex.unlock();
 
       switch( iq.subtype() )
       {
@@ -924,11 +975,13 @@ namespace gloox
             case Subscription:
             {
               const PubSub* ps = iq.findExtension<PubSub>( ExtPubSub );
-              if( ps )
+              if( !ps )
+                return;
+              SubscriptionMap sm = ps->subscriptions();
+              if( !sm.empty() )
               {
-                SubscriptionMap sm = ps->subscriptions();
                 SubscriptionMap::const_iterator it = sm.begin();
-                rh->handleSubscriptionResult( service, (*it).first,
+                rh->handleSubscriptionResult( id, service, (*it).first,
                                               (*it).second.subid,
                                               (*it).second.jid,
                                               (*it).second.type,
@@ -938,19 +991,15 @@ namespace gloox
             }
             case Unsubscription:
             {
-/*
-              FIXME: info tracking for subscription ID...
-
-              SubscriptionOperationTrackMap::iterator it = m_sopTrackMap.find( id );
-              if( it != m_sopTrackMap.end() )
+              const PubSub* ps = iq.findExtension<PubSub>( ExtPubSub );
+              if( ps )
               {
-                rh->handleUnsubscriptionResult( service, (*it).second.node,
-                                                         (*it).second.sid,
-                                                         (*it).second.jid );
-                m_sopTrackMap.erase( it );
+                const std::string& node = ps->node();
+                const std::string& sid = ps->subscriptionID();
+                const std::string& jid = ps->jid().full();
+                rh->handleUnsubscriptionResult( iq.id(), service, node, sid, jid, error );
               }
               break;
-*/
             }
             case GetSubscriptionList:
             {
@@ -958,7 +1007,7 @@ namespace gloox
               if( !ps )
                 return;
 
-              rh->handleSubscriptions( service,
+              rh->handleSubscriptions( id, service,
                                        ps->subscriptions(),
                                        error );
               break;
@@ -969,7 +1018,7 @@ namespace gloox
               if( !ps )
                 return;
 
-              rh->handleAffiliations( service,
+              rh->handleAffiliations( id, service,
                                       ps->affiliations(),
                                       error );
               break;
@@ -980,7 +1029,7 @@ namespace gloox
               if( !ps )
                 return;
 
-              rh->handleItems( service, ps->node(),
+              rh->handleItems( id, service, ps->node(),
                                ps->items(), error );
               break;
             }
@@ -989,13 +1038,9 @@ namespace gloox
               const PubSub* ps = iq.findExtension<PubSub>( ExtPubSub );
               if( ps && ps->items().size())
               {
-                const ItemList& il = ps->items();
-                ItemList::const_iterator it = il.begin();
-                for( ; it != il.end(); ++it )
-                {
-                  rh->handleItemPublication( service, ps->node(),
-                                             (*it)->id(), error );
-                }
+                const ItemList il = ps->items();
+                rh->handleItemPublication( id, service, "",
+                                           il, error );
               }
               break;
             }
@@ -1004,7 +1049,7 @@ namespace gloox
               const PubSub* ps = iq.findExtension<PubSub>( ExtPubSub );
               if( ps )
               {
-                rh->handleItemDeletion( service,
+                rh->handleItemDeletion( id, service,
                                         ps->node(),
                                         ps->items(),
                                         error );
@@ -1016,7 +1061,7 @@ namespace gloox
               const PubSubOwner* pso = iq.findExtension<PubSubOwner>( ExtPubSubOwner );
               if( pso )
               {
-                rh->handleDefaultNodeConfig( service,
+                rh->handleDefaultNodeConfig( id, service,
                                              pso->config(),
                                              error );
               }
@@ -1040,7 +1085,7 @@ namespace gloox
                   const PubSub* ps = iq.findExtension<PubSub>( ExtPubSub );
                   if( ps )
                   {
-                    rh->handleSubscriptionOptions( service,
+                    rh->handleSubscriptionOptions( id, service,
                                                    ps->jid(),
                                                    ps->node(),
                                                    ps->options(),
@@ -1065,6 +1110,7 @@ namespace gloox
                 case DeleteNode:
                 case PurgeNodeItems:
                 {
+                  m_trackMapMutex.lock();
                   NodeOperationTrackMap::iterator it = m_nopTrackMap.find( id );
                   if( it != m_nopTrackMap.end() )
                   {
@@ -1072,29 +1118,30 @@ namespace gloox
                     switch( context )
                     {
                       case SetSubscriptionOptions:
-                        rh->handleSubscriptionOptionsResult( service, JID( /* FIXME */ ), node, error );
+                        rh->handleSubscriptionOptionsResult( id, service, JID( /* FIXME */ ), node, error );
                         break;
                       case SetSubscriberList:
-                        rh->handleSubscribersResult( service, node, 0, error );
+                        rh->handleSubscribersResult( id, service, node, 0, error );
                         break;
                       case SetAffiliateList:
-                        rh->handleAffiliatesResult( service, node, 0, error );
+                        rh->handleAffiliatesResult( id, service, node, 0, error );
                         break;
                       case SetNodeConfig:
-                        rh->handleNodeConfigResult( service, node, error );
+                        rh->handleNodeConfigResult( id, service, node, error );
                         break;
                       case CreateNode:
-                        rh->handleNodeCreation( service, node, error );
+                        rh->handleNodeCreation( id, service, node, error );
                         break;
                       case DeleteNode:
-                        rh->handleNodeDeletion( service, node, error );
+                        rh->handleNodeDeletion( id, service, node, error );
                         break;
                       case PurgeNodeItems:
-                        rh->handleNodePurge( service, node, error );
+                        rh->handleNodePurge( id, service, node, error );
                         break;
                     }
                     m_nopTrackMap.erase( it );
                   }
+                  m_trackMapMutex.unlock();
                   break;
                 }
                 case GetAffiliateList:
@@ -1119,7 +1166,7 @@ namespace gloox
                   const PubSubOwner* pso = iq.findExtension<PubSubOwner>( ExtPubSubOwner );
                   if( pso )
                   {
-                    rh->handleNodeConfig( service,
+                    rh->handleNodeConfig( id, service,
                                           pso->node(),
                                           pso->config(),
                                           error );
