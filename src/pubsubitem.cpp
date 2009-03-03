@@ -34,7 +34,7 @@ namespace gloox
       m_id = tag->findAttribute( "id" );
 
       if( tag->children().size() )
-        m_payload = tag->children().front();
+        m_payload = tag->children().front()->clone();
     }
 
     Item::Item( const Item& item )
