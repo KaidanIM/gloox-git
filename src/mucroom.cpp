@@ -672,7 +672,7 @@ namespace gloox
 
   void MUCRoom::destroy( const std::string& reason, const JID& alternate, const std::string& password )
   {
-    if( !m_parent || !m_joined )
+    if( !m_parent )
       return;
 
     const std::string& id = m_parent->getID();
