@@ -1281,7 +1281,9 @@ namespace gloox
 
   void ClientBase::notifyIqHandlers( IQ& iq )
   {
+    m_iqHandlerMapMutex.lock();
     IqTrackMap::iterator it_id = m_iqIDHandlers.find( iq.id() );
+    m_iqHandlerMapMutex.unlock();
     if( it_id != m_iqIDHandlers.end() && iq.subtype() & ( IQ::Result | IQ::Error ) )
     {
       (*it_id).second.ih->handleIqID( iq, (*it_id).second.context );
