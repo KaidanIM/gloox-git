@@ -7,52 +7,71 @@ class RH : public PubSub::ResultHandler
 {
   public:
     void handleItem( const JID&, const std::string&, const Tag* ) {}
-    void handleItems( const JID&, const std::string&, const PubSub::ItemList&, const Error* ) {}
-    void handleItemPublication( const JID&, const std::string&,
-                                            const std::string&,
-                                            const Error* ) {}
-    void handleItemDeletion(  const JID&, const std::string&,
+    void handleItems( const std::string&,
+                      const JID&, const std::string&, const PubSub::ItemList&, const Error* ) {}
+    void handleItemPublication( const std::string&,
+                                const JID&, const std::string&,
+                                const PubSub::ItemList&,
+                                const Error* ) {}
+    void handleItemDeletion( const std::string&,
+                             const JID&, const std::string&,
                                           const PubSub::ItemList&,
                                           const Error* ) {}
-    void handleSubscriptionResult( const JID&, const std::string&,
+    void handleSubscriptionResult( const std::string&,
+                                   const JID&, const std::string&,
                                                const std::string&,
                                                const JID&,
                                                const PubSub::SubscriptionType,
                                                const Error* ) {}
-    void handleUnsubscriptionResult( const JID&, const std::string&,
+    void handleUnsubscriptionResult( const std::string&,
+                                     const JID&, const std::string&,
                                                  const std::string&,
                                                  const JID&,
                                                  const Error* ) {}
-    void handleSubscriptionOptions( const JID&, const JID&,
+    void handleSubscriptionOptions( const std::string&,
+                                    const JID&, const JID&,
                                                 const std::string&,
                                                 const DataForm*,
                                                 const Error*) {}
-    void handleSubscriptionOptionsResult( const JID&, const JID&,
+    void handleSubscriptionOptionsResult( const std::string&,
+                                          const JID&, const JID&,
                                                       const std::string&,
                                                       const Error* ) {}
-    void handleSubscribers( const JID&, const std::string&,
+    void handleSubscribers( const std::string&,
+                            const JID&, const std::string&,
                                         const PubSub::SubscriberList*,
                                         const Error* ) {}
-    void handleSubscribersResult( const JID&, const std::string&,
+    void handleSubscribersResult( const std::string&,
+                                  const JID&, const std::string&,
                                   const PubSub::SubscriberList*,
                                   const Error* ) {}
-    void handleAffiliates( const JID&, const std::string&,
+    void handleAffiliates( const std::string&,
+                           const JID&, const std::string&,
                                        const PubSub::AffiliateList*,
                                        const Error* ) {}
-    void handleAffiliatesResult( const JID&, const std::string&,
+    void handleAffiliatesResult( const std::string&,
+                                 const JID&, const std::string&,
                                  const PubSub::AffiliateList*,
                                  const Error* ) {}
-    void handleNodeConfig( const JID&, const std::string&,
+    void handleNodeConfig( const std::string&,
+                           const JID&, const std::string&,
                                        const DataForm*,
                                        const Error* ) {}
-    void handleNodeConfigResult( const JID&, const std::string&, const Error* ) {}
-    void handleNodeCreation( const JID&, const std::string&, const Error* ) {}
-    void handleNodeDeletion( const JID&, const std::string&, const Error* ) {}
+    void handleNodeConfigResult( const std::string&,
+                                 const JID&, const std::string&, const Error* ) {}
+    void handleNodeCreation( const std::string&,
+                             const JID&, const std::string&, const Error* ) {}
+    void handleNodeDeletion( const std::string&,
+                             const JID&, const std::string&, const Error* ) {}
 
-    void handleNodePurge( const JID&, const std::string&, const Error* ) {}
-    void handleSubscriptions( const JID&, const PubSub::SubscriptionMap&, const Error* ) {}
-    void handleAffiliations( const JID&, const PubSub::AffiliationMap&, const Error* ) {}
-    void handleDefaultNodeConfig( const JID&, const DataForm*, const Error*) {}
+    void handleNodePurge( const std::string&,
+                          const JID&, const std::string&, const Error* ) {}
+    void handleSubscriptions( const std::string&,
+                              const JID&, const PubSub::SubscriptionMap&, const Error* ) {}
+    void handleAffiliations( const std::string&,
+                             const JID&, const PubSub::AffiliationMap&, const Error* ) {}
+    void handleDefaultNodeConfig( const std::string&,
+                                  const JID&, const DataForm*, const Error*) {}
 
 };
 

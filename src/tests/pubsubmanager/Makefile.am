@@ -16,6 +16,7 @@ pubsubmanager_test_LDADD = ../../gloox.o ../../tag.o ../../iq.o \
 				 ../../dataformfieldcontainer.o \
                                  ../../dataformitem.o \
 				 ../../dataformreported.o \
-				 ../../pubsubitem.o ../../shim.o
+				 ../../pubsubitem.o ../../shim.o \
+				 ../../mutex.o
 
 pubsubmanager_test_CFLAGS = $(CPPFLAGS)

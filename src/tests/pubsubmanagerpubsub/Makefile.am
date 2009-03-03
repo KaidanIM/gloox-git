@@ -14,6 +14,7 @@ pubsubmanagerpubsub_test_LDADD =../../tag.o ../../stanza.o \
                         ../../message.o ../../dataformfieldcontainer.o ../../dataformreported.o \
 			../../dataformitem.o ../../dataformfield.o \
 			../../softwareversion.o ../../stanzaextensionfactory.o \
-			../../pubsubitem.o ../../shim.o
+			../../pubsubitem.o ../../shim.o \
+			../../mutex.o
 
 pubsubmanagerpubsub_test_CFLAGS = $(CPPFLAGS)
