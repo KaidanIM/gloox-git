@@ -2,6 +2,7 @@ v0.9.9.7 -- xx yyy 2009
 -----------------------
 - #define GLOOX_IMPORTS for the examples, fixes compilation in MinGW
 - removed use of deprecated ns_get16()
+- allow destruction of a MUC room if not currently in the room
 
 
 v0.9.9.6 -- 28 Feb 2009
