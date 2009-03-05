@@ -66,7 +66,10 @@ namespace gloox
       virtual void decompress( const std::string& data ) = 0;
 
     protected:
+      /** A handler for compressed/uncompressed data. */
       CompressionDataHandler* m_handler;
+
+      /** Whether the compression module can be used. */
       bool m_valid;
 
   };

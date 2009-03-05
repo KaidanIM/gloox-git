@@ -80,7 +80,7 @@
  *
  * The functionality provided by this function really makes sense only for IQ stanzas of type
  * get or set. As a result, there is a new function
- * @link gloox::ClientBase::send( const IQ&, IqHandler*, int ) ClientBase::send( const IQ&, IqHandler*, int ) @endlink
+ * @link gloox::ClientBase::send( const IQ&, IqHandler*, int, bool ) ClientBase::send( const IQ&, IqHandler*, int ) @endlink
  * that combines trackID()'s and send()'s functionality.
  *
  * Old code:
@@ -106,23 +106,23 @@
  *
  * @subsubsection func_DiscoHandler_handleDiscoInfoResult 1.1.3 DiscoHandler::handleDiscoInfoResult()
  *
- * The
- * @link gloox::DiscoHandler::handleDiscoInfoResult() DiscoHandler::handleDiscoInfoResult() @endlink
- * function is now deprecated in favor of
+ * The function
+ * gloox::DiscoHandler::handleDiscoInfoResult()
+ * has been removed. Replacement is:
  * @link gloox::DiscoHandler::handleDiscoInfo() DiscoHandler::handleDiscoInfo() @endlink.
  *
  * @subsubsection func_DiscoHandler_handleDiscoItemsResult 1.1.4 DiscoHandler::handleDiscoItemsResult()
  *
- * The
- * @link gloox::DiscoHandler::handleDiscoItemsResult() DiscoHandler::handleDiscoItemsResult() @endlink
- * function is now deprecated in favor of
+ * The function
+ * gloox::DiscoHandler::handleDiscoItemsResult()
+ * has been removed. Replacement is:
  * @link gloox::DiscoHandler::handleDiscoItems() DiscoHandler::handleDiscoItems() @endlink.
  *
  * @subsubsection func_DiscoHandler_handleDiscoError 1.1.5 DiscoHandler::handleDiscoError()
  *
- * The
- * @link gloox::DiscoHandler::handleDiscoError( IQ*, int ) DiscoHandler::handleDiscoError( IQ*, int ) @endlink
- * function is now deprecated in favor of
+ * The function
+ * gloox::DiscoHandler::handleDiscoError( IQ*, int )
+ * has been removed. Replacement is:
  * @link gloox::DiscoHandler::handleDiscoError( const JID&, const Error*, int ) DiscoHandler::handleDiscoError( const JID&, const Error*, int ) @endlink.
  *
  * @subsubsection func_MUCRoom_destroy 1.1.6 MUCRoom::destroy()
@@ -301,19 +301,23 @@
  * @subsubsection param_handleFTRequest 1.3.1 SIProfileFTHandler::handleFTRequest()
  *
  * The second parameter is now a Session ID (sid). This should be used with
- * @link gloox::SIProfileFT::acceptFTRequest() SIProfileFT::acceptFTRequest() @endlink or
- * @link gloox::SIProfileFT::declineFTRequest() SIProfileFT::declineFTRequest() @endlink.
+ * @link gloox::SIProfileFT::acceptFT() SIProfileFT::acceptFTRequest() @endlink or
+ * @link gloox::SIProfileFT::declineFT() SIProfileFT::declineFTRequest() @endlink.
  *
  * @subsubsection param_acceptFTRequest 1.3.2 SIProfileFT::acceptFTRequest()
  *
  * The second parameter is now a Session ID (sid). It must be the same value as the Session ID (sid)
  * passed to
  * @link gloox::SIProfileFTHandler::handleFTRequest() SIProfileFTHandler::handleFTRequest() @endlink.
+ * Further, the function has been renamed to
+ * @link gloox::SIProfileFT::acceptFT() acceptFT() @endlink.
  *
  * @subsubsection param_declineFTRequest 1.3.3 SIProfileFT::declineFTRequest()
  *
  * The second parameter is now a Session ID (sid). It must be the same value as the Session ID (sid)
  * passed to
  * @link gloox::SIProfileFTHandler::handleFTRequest() SIProfileFTHandler::handleFTRequest() @endlink.
+ * Further, the function has been renamed to
+ * @link gloox::SIProfileFT::declineFT() declineFT() @endlink.
  *
  */
