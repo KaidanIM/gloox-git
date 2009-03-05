@@ -40,7 +40,7 @@ namespace gloox
     {
       public:
         /**
-         * @brief An abstraction of the &let;payload-type&gt; element used as child of
+         * @brief An abstraction of the &lt;payload-type&gt; element used as child of
          * the &lt;description&gt; element.
          *
          * @author Jakob Schroeter <js@camaya.net>

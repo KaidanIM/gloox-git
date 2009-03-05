@@ -39,7 +39,7 @@ namespace gloox
       virtual ~Stanza();
 
       /**
-       * Sets the 'from' address of the Stanza. This useful for @link gloox::Component Components @link.
+       * Sets the 'from' address of the Stanza. This useful for @link gloox::Component Components @endlink.
        * @param from The from address.
        */
       void setFrom( const JID& from ) { m_from = from; }

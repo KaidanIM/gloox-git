@@ -36,6 +36,10 @@ namespace gloox
   class GLOOX_API MUCInvitationHandler
   {
     public:
+      /**
+       * Constructor. Prepares the given ClientBase for receiving MUC invitations..
+       * @param parent A ClientBase instance to prepare.
+       */
       MUCInvitationHandler( ClientBase* parent )
       {
         if( parent )
