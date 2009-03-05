@@ -13,10 +13,11 @@
 #ifndef PUBSUBRESULTHANDLER_H__
 #define PUBSUBRESULTHANDLER_H__
 
-#include "macros.h"
-#include "pubsub.h"
 #include "error.h"
 #include "jid.h"
+#include "macros.h"
+#include "pubsub.h"
+#include "tag.h"
 
 #include <string>
 #include <list>
@@ -28,8 +29,6 @@ namespace gloox
   class Tag;
   class Error;
   class DataForm;
-
-  typedef std::list< Tag* > TagList;
 
   namespace PubSub
   {

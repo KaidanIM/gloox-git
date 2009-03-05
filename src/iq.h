@@ -57,7 +57,7 @@ namespace gloox
        * @param to The intended receiver.
        * @param id The request's ID. Usually obtained from ClientBase::getID(). Optional,
        * will be added by ClientBase if the IQ is sent by means of
-       * @link gloox::ClientBase::send( IQ&, IqHandler*, int ) send( IQ&, IqHandler*, int ) @endlink.
+       * @link gloox::ClientBase::send( IQ&, IqHandler*, int, bool ) send( IQ&, IqHandler*, int, bool ) @endlink.
        * You should only need to pass this when creating a reply (i.e. an IQ of type Result or Error).
        */
       IQ( IqType type, const JID& to, const std::string& id = EmptyString );

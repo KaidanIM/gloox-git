@@ -105,19 +105,21 @@ namespace gloox
       };
 
       /**
-       *
+       * Available operations.
        */
       enum MUCUserOperation
       {
-        OpNone,                 /**< */
-        OpInviteTo,             /**< */
-        OpInviteFrom,           /**< */
-        OpDeclineTo,            /**< */
-        OpDeclineFrom           /**< */
+        OpNone,                 /**< No operation. */
+        OpInviteTo,             /**< Invitation being sent to soemone. */
+        OpInviteFrom,           /**< Invitation received from someone. */
+        OpDeclineTo,            /**< Someone's invitation declined. */
+        OpDeclineFrom           /**< Someone declined an invitation. */
       };
 
       /**
-       * @brief An abstraction of a MUC user query.
+       * @brief An abstraction of a MUC query.
+       *
+       * You should not need to use this class directly.
        *
        * @author Jakob Schroeter <js@camaya.net>
        * @since 1.0
@@ -191,6 +193,8 @@ namespace gloox
       /**
        * @brief An abstraction of a MUC user query.
        *
+       * You should not need to use this class directly.
+       *
        * @author Jakob Schroeter <js@camaya.net>
        * @since 1.0
        */
@@ -198,7 +202,13 @@ namespace gloox
       {
         public:
           /**
-           *
+           * Constructor.
+           * @param operation An operation to perform.
+           * @param to The recipient.
+           * @param reason The reason for the operation.
+           * @param thread If this is an invitation, and if the invitation is part of
+           * a transformation of a one-to-one chat to a MUC, include the one-to-one chat's
+           * thread ID here. Defaults to the empty string (i.e. not a continuation).
            */
           MUCUser( MUCUserOperation operation, const std::string& to, const std::string& reason,
                    const std::string& thread = EmptyString );
@@ -215,27 +225,20 @@ namespace gloox
           virtual ~MUCUser();
 
           /**
-           *
+           * Returns the current room flags.
+           * @return The current room flags.
            */
           int flags() const { return m_flags; }
 
           /**
-           *
-           */
-          static MUCRoomAffiliation getEnumAffiliation( const std::string& affiliation );
-
-          /**
-           *
-           */
-          static MUCRoomRole getEnumRole( const std::string& role );
-
-          /**
-           *
+           * Returns the user's current room affiliation.
+           * @return The user's current room affiliation.
            */
           MUCRoomAffiliation affiliation() const { return m_affiliation; }
 
           /**
-           *
+           * Returns the user's current room role.
+           * @return The user's current room role.
            */
           MUCRoomRole role() const { return m_role; }
 
@@ -270,17 +273,20 @@ namespace gloox
           const std::string* newNick() const { return m_newNick; }
 
           /**
-           *
+           * Returns an alternate venue, if set.
+           * @return An alternate venue, if set.
            */
           const std::string* alternate() const { return m_alternate; }
 
           /**
-           *
+           * Whether or not the 'continue' flag is set.
+           * @return Whether or not the 'continue' flag is set.
            */
           bool continued() const { return m_continue; }
 
           /**
-           *
+           * Returns the current operation.
+           * @return The current operation.
            */
           MUCUserOperation operation() const { return m_operation; }
 
@@ -317,6 +323,10 @@ namespace gloox
           }
 
         private:
+          static MUCRoomAffiliation getEnumAffiliation( const std::string& affiliation );
+          static MUCRoomRole getEnumRole( const std::string& role );
+
+
           MUCRoomAffiliation m_affiliation;
           MUCRoomRole m_role;
           std::string* m_jid;
@@ -742,7 +752,16 @@ namespace gloox
                                                     const std::string& node = EmptyString );
 
     protected:
+      /**
+       * Sets the room's name.
+       * @param name The room's name.
+       */
       void setName( const std::string& name ) { m_nick.setUsername( name ); }
+
+      /**
+       * Acknowledges instant room creation w/o a call to the MUCRoomConfigHandler.
+       * @return Whether an instant room is being created.
+       */
       virtual bool instantRoomHook() const { return false; }
 
       ClientBase* m_parent;

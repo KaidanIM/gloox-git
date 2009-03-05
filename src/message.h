@@ -109,14 +109,14 @@ namespace gloox
       const std::string& thread() const { return m_thread; }
 
       /**
-       * Sets the Stanza's thread ID. Only useful for message stanzas.
+       * Sets the thread ID.
        * @param thread The thread ID.
        */
       void setThread( const std::string& thread ) { m_thread = thread; }
 
       /**
-       * Sets the Message's ID. Optional.
-       * @param thread The thread ID.
+       * Sets the message's ID. Optional.
+       * @param id The ID.
        */
       void setID( const std::string& id ) { m_id = id; }
 
