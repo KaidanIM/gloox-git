@@ -51,7 +51,10 @@ namespace gloox
        */
       virtual ~DataFormReported();
 
-      // reimplemented from DataFormField
+      /**
+       * Creates and returns a Tag representation of the current object.
+       * @return A Tag representation of the current object.
+       */
       virtual Tag* tag() const;
 
   };

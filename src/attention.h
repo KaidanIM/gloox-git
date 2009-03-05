@@ -37,7 +37,6 @@ namespace gloox
     public:
       /**
        * Constructs a new object from the given Tag.
-       * @param tag The Tag to parse.
        */
       Attention();
 

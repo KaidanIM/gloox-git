@@ -722,10 +722,35 @@ namespace gloox
        * This function is called to notify about successful connection.
        */
       void notifyOnConnect();
+
+      /**
+       * This function is used to notify subscribers of stream events.
+       * @param event The event to publish.
+       */
       void notifyStreamEvent( StreamEvent event );
+
+      /**
+       * Disconnects the underlying stream and broadcasts the given reason.
+       * @param reason The reason for the disconnect.
+       */
       virtual void disconnect( ConnectionError reason );
+
+      /**
+       * Sends the stream header.
+       */
       void header();
+
+      /**
+       * Tells ClientBase that authentication was successful (or not).
+       * @param authed Whether or not authentication was successful.
+       */
       void setAuthed( bool authed ) { m_authed = authed; }
+
+      /**
+       * If authentication faailed, this function tells ClientBase
+       * the reason.
+       * @param e The reason for the authentication failure.
+       */
       void setAuthFailure( AuthenticationError e ) { m_authError = e; }
 
       /**
@@ -737,42 +762,69 @@ namespace gloox
        */
       virtual bool checkStreamVersion( const std::string& version );
 
+      /**
+       * Starts authentication using the given SASL mechanism.
+       * @param type A SASL mechanism to use for authentication.
+       */
       void startSASL( SaslMechanism type );
+
+      /**
+       * Processes the given SASL challenge and sends a response.
+       * @param challenge The SASL challenge to process.
+       */
       void processSASLChallenge( const std::string& challenge );
+
+      /**
+       * Examines the given Tag for SASL errors.
+       * @param tag The Tag to parse.
+       */
       void processSASLError( Tag* tag );
+
+      /**
+       * Starts the TLS handshake.
+       */
       void startTls();
+
+      /**
+       * Indicates whether or not TLS is supported.
+       * @return @b True if TLS is supported, @b false otherwise.
+       */
       bool hasTls();
       bool hasCompression();
 
-      JID m_jid;
-      JID m_authzid;
-      std::string m_authcid;
-      ConnectionBase* m_connection;
-      ConnectionBase* m_transportConnection;
-      ConnectionTLS* m_encryption;
-      ConnectionCompression* m_compression;
-      Disco* m_disco;
+      JID m_jid;                         /**< The 'self' JID. */
+      JID m_authzid;                     /**< An optional authorization ID. See setAuthzid(). */
+      std::string m_authcid;             /**< An alternative authentication ID. See setAuthcid(). */
+      ConnectionBase* m_connection;      /**< The transport connection. */
+      ConnectionTLS* m_encryption;       /**< Used for connection encryption. */
+      ConnectionCompression* m_compression; /**< Used for connection compression. */
+      Disco* m_disco;                    /**< The local Service Discovery client. */
 
+      /** A list of permanent presence extensions. */
       StanzaExtensionList m_presenceExtensions;
       LogSink m_logInstance;
       StringList m_cacerts;
 
-      std::string m_selectedResource;
-      std::string m_clientCerts;
-      std::string m_clientKey;
-      std::string m_namespace;
-      std::string m_password;
-      std::string m_xmllang;
-      std::string m_server;
-      std::string m_sid;
-      bool m_compress;
-      bool m_authed;
-      bool m_block;
-      bool m_sasl;
-      TLSPolicy m_tls;
-      int m_port;
+      std::string m_selectedResource;    /**< The currently selected resource.
+                                          * See Client::selectResource() and Client::binRessource(). */
+      std::string m_clientCerts;         /**< TLS client certificates. */
+      std::string m_clientKey;           /**< TLS client private key. */
+      std::string m_namespace;           /**< Default namespace. */
+      std::string m_password;            /**< Client's password. */
+      std::string m_xmllang;             /**< Default value of the xml:lang attribute. */
+      std::string m_server;              /**< The server to connect to, if different from the
+                                          * JID's server. */
+      std::string m_sid;                 /**< The stream ID. */
+      bool m_compress;                   /**< Whether stream compression
+                                          * is desired at all. */
+      bool m_authed;                     /**< Whether authentication has been completed successfully. */
+      bool m_block;                      /**< Whether blocking connection is wanted. */
+      bool m_sasl;                       /**< Whether SASL authentication is wanted. */
+      TLSPolicy m_tls;                   /**< The current TLS policy. */
+      int m_port;                        /**< The port to connect to, if not to be determined
+                                          * by querying the server's SRV records. */
 
-      int m_availableSaslMechs;
+      int m_availableSaslMechs;          /**< The SASL mechanisms the server offered. */
 
     private:
 #ifdef CLIENTBASE_TEST
@@ -829,6 +881,12 @@ namespace gloox
        * This function is called right after the opening &lt;stream:stream&gt; was received.
        */
       virtual void handleStartNode() = 0;
+
+      /**
+       * This function is called for each Tag. Only stream initiation/negotiation should
+       * be done here.
+       * @param tag A Tag to handle.
+       */
       virtual bool handleNormalNode( Tag* tag ) = 0;
       virtual void rosterFilled() = 0;
       virtual void cleanup() {}
@@ -919,6 +977,8 @@ namespace gloox
       StringMap m_streamErrorText;
       std::string m_streamErrorCData;
       Tag* m_streamErrorAppCondition;
+
+      ConnectionBase* m_transportConnection;
 
       StatisticsStruct m_stats;
 

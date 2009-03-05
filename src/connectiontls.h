@@ -57,7 +57,7 @@ namespace gloox
        * @param conn A transport connection. It should be configured to connect to
        * the server and port you wish to make the encrypted connection to.
        * ConnectionTLS will own the transport connection and delete it in its destructor.
-       * @param logInstance The log target. Obtain it from ClientBase::logInstance().
+       * @param log The log target. Obtain it from ClientBase::logInstance().
        */
       ConnectionTLS( ConnectionDataHandler* cdh, ConnectionBase* conn, const LogSink& log );
 
