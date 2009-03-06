@@ -1223,6 +1223,11 @@ namespace gloox
   typedef std::list<std::string> StringList;
 
   /**
+   * A list of pointers to strings.
+   */
+  typedef std::list<std::string*> StringPList;
+
+  /**
    * A map of strings.
    */
   typedef std::map<std::string, std::string> StringMap;
