@@ -827,6 +827,14 @@ int main( int /*argc*/, char** /*argv*/ )
   }
 //   printf( "--------------------------------------------------------------\n" );
 
+  name = "predicate includes child: /aaa[/aaa/bbb[@name='b1']]";
+  if( aaa->findTag( "/aaa[/aaa/bbb[@name='b1']]" ) != aaa )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+//   printf( "--------------------------------------------------------------\n" );
+
 //   // -------
 //   name = "deepsearch + predicate + path 1: //bbb[hhh]";
 //   result = aaa->findTagList( "//bbb[hhh]" );
