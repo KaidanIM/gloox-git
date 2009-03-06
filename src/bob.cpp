@@ -40,7 +40,7 @@ namespace gloox
   {
   }
 
-  const std::string& BOB::data() const
+  const std::string BOB::data() const
   {
     return Base64::decode64( m_data );
   }
