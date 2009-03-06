@@ -72,7 +72,7 @@ namespace gloox
        * Returns the binary data.
        * @return The binary data.
        */
-      const std::string& data() const;
+      const std::string data() const;
 
       /**
        * Returns the content ID.
