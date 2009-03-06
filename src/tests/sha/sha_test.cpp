@@ -73,6 +73,15 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   sha.reset();
 
+    // -------
+  name = "static -- The quick brown fox jumps over the lazy dog";
+  if( SHA::sha1( "The quick brown fox jumps over the lazy dog" ) != "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12" )
+  {
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+
+
 
 
   if( fail == 0 )

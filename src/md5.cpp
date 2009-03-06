@@ -161,6 +161,13 @@ namespace gloox
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
   };
 
+  const std::string MD5::md5( const std::string& data )
+  {
+    MD5 md5;
+    md5.feed( data );
+    return md5.hex();
+  }
+
   MD5::MD5()
     : m_finished( false )
   {

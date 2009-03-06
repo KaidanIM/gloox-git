@@ -70,6 +70,13 @@ namespace gloox
   {
     public:
       /**
+       * Static function that returns a hash of the given data.
+       * @param data Input data to hash.
+       * @return The data's hash in hex notation.
+       */
+      static const std::string md5( const std::string& data );
+
+      /**
        * Constructs a new MD5 object.
        */
       MD5();

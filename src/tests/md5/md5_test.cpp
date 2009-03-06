@@ -78,6 +78,15 @@ int main( int /*argc*/, char** /*argv*/ )
   }
   md5.reset();
 
+  // -------
+  name = "static -- The quick brown fox jumps over the lazy dog";
+  if( MD5::md5( "The quick brown fox jumps over the lazy dog" ) != "9e107d9d372bb6826bd81d3542a419d6" )
+  {
+    printf( "expect: 9e107d9d372bb6826bd81d3542a419d6\n" );
+    ++fail;
+    printf( "test '%s' failed\n", name.c_str() );
+  }
+
 
 
   if( fail == 0 )
