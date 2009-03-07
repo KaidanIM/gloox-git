@@ -270,6 +270,18 @@ fi
 #                 AC_SEARCH_LIBS(__res_querydomain,resolv bind,,have_resolver=no))
 
 
+dnl Maintainer mode
+maintainer="no"
+AC_ARG_ENABLE( maintainer,
+               [  --enable-maintainer     turn on Maintainer mode (-Werror) [default=no]],
+               [maintainer="yes"] )
+if test "x$maintainer" = "xyes"; then
+      CPPFLAGS="$CPPFLAGS -Wshadow -Werror"
+fi
+AC_MSG_CHECKING([whether to enable maintainer mode])
+AC_MSG_RESULT($maintainer)
+
+
 dnl Debug
 debug="no"
 AC_ARG_ENABLE( debug,
