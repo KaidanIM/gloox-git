@@ -26,17 +26,20 @@ namespace gloox
 
   // ---- LastActivity::Query ----
   LastActivity::Query::Query( const Tag* tag )
-    : StanzaExtension( ExtLastActivity )
+    : StanzaExtension( ExtLastActivity ), m_seconds( -1 )
   {
-    if( tag && tag->name() == "query" && tag->xmlns() == XMLNS_LAST
-         && tag->hasAttribute( "seconds" ) )
-    {
+    if( !tag || tag->name() != "query" || tag->xmlns() != XMLNS_LAST )
+      return;
+
+    if( tag->hasAttribute( "seconds" ) )
       m_seconds = atoi( tag->findAttribute( "seconds" ).c_str() );
-    }
+
+    m_status = tag->cdata();
   }
 
-  LastActivity::Query::Query( int, long seconds )
-    : StanzaExtension( ExtLastActivity ), m_seconds( seconds )
+  LastActivity::Query::Query( const std::string& _status, long _seconds )
+    : StanzaExtension( ExtLastActivity ), m_seconds( _seconds ),
+      m_status( _status )
   {
   }
 
@@ -56,6 +59,7 @@ namespace gloox
     Tag* t = new Tag( "query" );
     t->setXmlns( XMLNS_LAST );
     t->addAttribute( "seconds", m_seconds );
+    t->setCData( m_status );
     return t;
   }
   // ---- ~LastActivity::Query ----
