@@ -40,8 +40,9 @@ namespace gloox
        * @param jid The JID of the queried contact.
        * @param seconds The idle time or time of last presence of the contact. (Depends
        * on the JID, check the spec.)
+       * @param status If the contact is offline, this is the last presence status message. May be empty.
        */
-      virtual void handleLastActivityResult( const JID& jid, int seconds ) = 0;
+      virtual void handleLastActivityResult( const JID& jid, int seconds, const std::string& status ) = 0;
 
       /**
        * This function is called when an error is returned by the queried antity.
