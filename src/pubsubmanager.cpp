@@ -210,12 +210,12 @@ namespace gloox
       {
         case DeleteNode:
         {
-          c = new Tag( "delete", "node", m_node );
+          c = new Tag( t, "delete", "node", m_node );
           break;
         }
         case PurgeNodeItems:
         {
-          c = new Tag( "purge", "node", m_node );
+          c = new Tag( t, "purge", "node", m_node );
           break;
         }
         case GetNodeConfig:
@@ -273,9 +273,6 @@ namespace gloox
         default:
           break;
       }
-
-      if( c )
-        t->addChild( c );
 
       return t;
     }
