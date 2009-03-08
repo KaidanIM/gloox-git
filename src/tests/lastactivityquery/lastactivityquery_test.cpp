@@ -68,6 +68,34 @@ int main( int /*argc*/, char** /*argv*/ )
     }
   }
 
+  // -------
+  {
+    name = "parse test";
+    Tag* t = new Tag( "query" );
+    t->setXmlns( XMLNS_LAST );
+    t->addAttribute( "seconds", "123" );
+    t->setCData( "foo" );
+    LastActivity::Query laq( t );
+    if( laq.seconds() != 123 || laq.status() != "foo" )
+    {
+      ++fail;
+      printf( "test '%s' failed\n", name.c_str() );
+    }
+
+  // -------
+    name = "tag() test"; // uses t from previous test
+    Tag* s = laq.tag();
+    if( *t != *s )
+    {
+      ++fail;
+      printf( "test '%s' failed\n", name.c_str() );
+    }
+    delete t;
+    delete s;
+  }
+
+
+
 
   StanzaExtensionFactory sef;
   sef.registerExtension( new LastActivity::Query() );
