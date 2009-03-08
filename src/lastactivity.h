@@ -31,6 +31,8 @@ namespace gloox
    * LastActivity can be used to query remote entities about their last activity time as well
    * as answer incoming last-activity-queries.
    *
+   * XEP Version: 2.0
+   *
    * @author Jakob Schroeter <js@camaya.net>
    * @since 0.6
    */
@@ -58,10 +60,10 @@ namespace gloox
 
           /**
            * Constructs a new Query object from the given long.
-           * @param dummy Ignored.
+           * @param status A status message.
            * @param seconds The number of seconds since last activity.
            */
-          Query( int dummy, long seconds );
+          Query( const std::string& status, long seconds );
 
           /**
            * Virtual destructor.
@@ -71,8 +73,16 @@ namespace gloox
           /**
            * Returns the number of seconds since last activity.
            * @return The number of seconds since last activity.
+           * -1 if last activity is unknown.
            */
           long seconds() const { return m_seconds; }
+
+          /**
+           * Returns the last status message if the user is offline
+           * and specified a status message when logging off.
+           * @return The last status message, if any.
+           */
+          const std::string& status() const { return m_status; }
 
           // reimplemented from StanzaExtension
           virtual const std::string& filterString() const;
@@ -94,6 +104,7 @@ namespace gloox
 
         private:
           long m_seconds;
+          std::string m_status;
 
       };
 
