@@ -627,7 +627,6 @@ namespace gloox
       };
 
       typedef std::list<Node*> NodeList;
-      typedef std::list<std::string*> StringPList;
 
       Tag* m_parent;
       TagList* m_children;
