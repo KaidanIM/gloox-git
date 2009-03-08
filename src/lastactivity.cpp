@@ -118,7 +118,7 @@ namespace gloox
       if( !q || q->seconds() < 0 )
         return;
 
-      m_lastActivityHandler->handleLastActivityResult( iq.from(), q->seconds() );
+      m_lastActivityHandler->handleLastActivityResult( iq.from(), q->seconds(), q->status() );
     }
     else if( iq.subtype() == IQ::Error && iq.error() )
       m_lastActivityHandler->handleLastActivityError( iq.from(), iq.error()->error() );
