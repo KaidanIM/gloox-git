@@ -100,6 +100,7 @@ int main( int /*argc*/, char** /*argv*/ )
   t = new Tag( "stream" );
   t->setXmlns( XMLNS_STREAM );
   t->addAttribute( "id", "testsid" );
+  t->addAttribute( "version", "1.0" );
   c->handleTag( t );
   if( !c->handleStartNodeCalled() )
   {
