@@ -43,15 +43,22 @@ namespace gloox
     cleanup();
   }
 
-  bool OpenSSLBase::init()
+  bool OpenSSLBase::init( const std::string& clientKey,
+                          const std::string& clientCerts,
+                          const StringList& cacerts )
   {
     if( m_initLib )
       SSL_library_init();
 
-//     SSL_COMP_add_compression_method( 1, COMP_zlib() );
+    SSL_COMP_add_compression_method( 193, COMP_zlib() );
+
     OpenSSL_add_all_algorithms();
-    if( !setType() )
+
+    if( !setType() ) //inits m_ctx
       return false;
+
+    setClientCert( clientKey, clientCerts );
+    setCACerts( cacerts );
 
     if( !SSL_CTX_set_cipher_list( m_ctx, "HIGH:MEDIUM:AES:@STRENGTH" ) )
       return false;
@@ -68,6 +75,9 @@ namespace gloox
 
     ERR_load_crypto_strings();
     SSL_load_error_strings();
+
+    if( !privateInit() )
+      return false;
 
     m_valid = true;
     return true;
@@ -117,23 +127,19 @@ namespace gloox
 
     if( !m_clientKey.empty() && !m_clientCerts.empty() )
     {
-      if( !SSL_CTX_use_certificate_chain_file( m_ctx, m_clientCerts.c_str() ) )
+      if( SSL_CTX_use_certificate_chain_file( m_ctx, m_clientCerts.c_str() ) != 1 )
       {
-        char f[121];
-        ERR_error_string( ERR_get_error(), f );
-        printf( "SSL_CTX_use_certificate_chain_file() failed: %s\n", f );
+        // FIXME
       }
-      if( !SSL_CTX_use_PrivateKey_file( m_ctx, m_clientKey.c_str(), SSL_FILETYPE_PEM ) )
+      if( SSL_CTX_use_RSAPrivateKey_file( m_ctx, m_clientKey.c_str(), SSL_FILETYPE_PEM ) != 1 )
       {
-        char f[121];
-        ERR_error_string( ERR_get_error(), f );
-        printf( "SSL_CTX_use_PrivateKey_file() failed: %s\n", f );
+        // FIXME
       }
     }
 
-    if ( !SSL_CTX_check_private_key(m_ctx) )
+    if ( SSL_CTX_check_private_key( m_ctx ) != 1 )
     {
-      printf( "Private key is invalid.\n");
+        // FIXME
     }
   }
 
@@ -169,13 +175,10 @@ namespace gloox
       switch( SSL_get_error( m_ssl, ret ) )
       {
         case SSL_ERROR_WANT_READ:
-          printf( "want read\n" );
         case SSL_ERROR_WANT_WRITE:
-          printf( "want write\n" );
           pushFunc();
           break;
         case SSL_ERROR_NONE:
-          printf( "no error\n" );
           if( op == TLSHandshake )
             m_secure = true;
           else if( op == TLSWrite )
@@ -184,30 +187,7 @@ namespace gloox
             m_handler->handleDecryptedData( this, std::string( m_buf, ret ) );
           pushFunc();
           break;
-        case SSL_ERROR_ZERO_RETURN:
-          printf( "0 return\n" );
-          break;
-        case SSL_ERROR_WANT_ACCEPT:
-          printf( "want accept\n" );
-          break;
-        case SSL_ERROR_WANT_CONNECT:
-          printf( "want connect\n" );
-          break;
-        case SSL_ERROR_WANT_X509_LOOKUP:
-          printf( "want lookup\n" );
-          break;
-        case SSL_ERROR_SYSCALL:
-          printf( "syscall\n" );
-          break;
-        case SSL_ERROR_SSL:
-        {
-          char f[121];
-          ERR_error_string( ERR_get_error(), f );
-          printf( "error ssl: %s\n", f );
-          break;
-        }
         default:
-          printf( "default\n" );
           if( !m_secure )
             m_handler->handleHandshakeResult( this, false, m_certInfo );
           return;

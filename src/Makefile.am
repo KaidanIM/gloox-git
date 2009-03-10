@@ -107,6 +107,7 @@ libgloox_la_SOURCES = adhoc.cpp \
 			tlsgnutlsbase.cpp \
 			tlsgnutlsclientanon.cpp \
 			tlsgnutlsclient.cpp \
+			tlsgnutlsserver.cpp \
 			tlsgnutlsserveranon.cpp \
 			tlsopensslbase.cpp\
 			tlsopensslclient.cpp \
@@ -159,6 +160,7 @@ libglooxinclude_HEADERS = adhoccommandprovider.h \
 			connectiontcpclient.h \
 			connectiontcpserver.h \
 			connectiontls.h \
+			connectiontlsserver.h \
 			dataformfieldcontainer.h \
 			dataformfield.h \
 			dataform.h \
@@ -280,6 +282,7 @@ noinst_HEADERS = compressiondefault.h \
 			tlsgnutlsbase.h \
 			tlsgnutlsclient.h \
 			tlsgnutlsclientanon.h \
+			tlsgnutlsserver.h \
 			tlsgnutlsserveranon.h \
 			tlsopensslbase.h \
 			tlsopensslclient.h \

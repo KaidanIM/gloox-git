@@ -10,6 +10,7 @@ clientbase_test_SOURCES = clientbase_test.cpp
 clientbase_test_LDADD = ../../clientbase.o ../../jid.o ../../connectiontcpclient.o ../../connectiontcpbase.o \
 			../../disco.o ../../parser.o ../../tag.o ../../stanza.o ../../base64.o \
 			../../md5.o ../../tlsgnutlsclient.o ../../tlsopensslclient.o ../../tlsschannel.o \
+			../../tlsgnutlsserver.o \
 			../../tlsopensslbase.o ../../tlsopensslserver.o \
 			../../logsink.o ../../messagesession.o ../../prep.o ../../compressionzlib.o \
 			../../dns.o ../../stanzaextensionfactory.o \

@@ -55,7 +55,9 @@ namespace gloox
       virtual ~OpenSSLBase();
 
       // reimplemented from TLSBase
-      virtual bool init();
+      virtual bool init( const std::string& clientKey = EmptyString,
+                         const std::string& clientCerts = EmptyString,
+                         const StringList& cacerts = StringList() );
 
       // reimplemented from TLSBase
       virtual bool encrypt( const std::string& data );
@@ -86,6 +88,7 @@ namespace gloox
 
     private:
       void pushFunc();
+      virtual bool privateInit() { return true; }
 
       enum TLSOperation
       {

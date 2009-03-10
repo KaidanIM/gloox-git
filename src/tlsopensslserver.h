@@ -54,6 +54,8 @@ namespace gloox
 
     private:
       // reimplemented from OpenSSLBase
+      virtual bool privateInit();
+      // reimplemented from OpenSSLBase
       virtual bool setType();
 
       // reimplemented from OpenSSLBase

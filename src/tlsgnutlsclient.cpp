@@ -36,10 +36,16 @@ namespace gloox
     init();
   }
 
-  bool GnuTLSClient::init()
+  bool GnuTLSClient::init( const std::string& clientKey,
+                           const std::string& clientCerts,
+                           const StringList& cacerts )
   {
-    const int protocolPriority[] = { GNUTLS_TLS1, GNUTLS_SSL3, 0 };
-    const int kxPriority[]       = { GNUTLS_KX_RSA, 0 };
+    const int protocolPriority[] = {
+#ifdef GNUTLS_TLS1_2
+      GNUTLS_TLS1_2,
+#endif
+      GNUTLS_TLS1_1, GNUTLS_TLS1, 0 };
+      const int kxPriority[]       = { GNUTLS_KX_RSA, GNUTLS_KX_DHE_RSA, GNUTLS_KX_DHE_DSS, 0 };
     const int cipherPriority[]   = { GNUTLS_CIPHER_AES_256_CBC, GNUTLS_CIPHER_AES_128_CBC,
                                      GNUTLS_CIPHER_3DES_CBC, GNUTLS_CIPHER_ARCFOUR, 0 };
     const int compPriority[]     = { GNUTLS_COMP_ZLIB, GNUTLS_COMP_NULL, 0 };
