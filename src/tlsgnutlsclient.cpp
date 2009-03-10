@@ -88,8 +88,8 @@ namespace gloox
 
     if( !m_clientKey.empty() && !m_clientCerts.empty() )
     {
-      gnutls_certificate_set_x509_key_file( m_credentials, m_clientKey.c_str(),
-                                            m_clientCerts.c_str(), GNUTLS_X509_FMT_PEM );
+      gnutls_certificate_set_x509_key_file( m_credentials, m_clientCerts.c_str(),
+                                            m_clientKey.c_str(), GNUTLS_X509_FMT_PEM );
     }
   }
 
