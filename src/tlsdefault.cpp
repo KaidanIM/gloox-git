@@ -26,6 +26,7 @@
 # define HAVE_TLS
 # include "tlsgnutlsclient.h"
 # include "tlsgnutlsclientanon.h"
+# include "tlsgnutlsserver.h"
 # include "tlsgnutlsserveranon.h"
 #elif defined( HAVE_OPENSSL )
 # define HAVE_TLS
@@ -64,7 +65,9 @@ namespace gloox
 #endif
         break;
       case VerifyingServer:
-#ifdef HAVE_OPENSSL
+#ifdef HAVE_GNUTLS
+        m_impl = new GnuTLSServer( th );
+#elif defined( HAVE_OPENSSL )
         m_impl = new OpenSSLServer( th );
 #endif
         break;
@@ -78,9 +81,12 @@ namespace gloox
     delete m_impl;
   }
 
-  bool TLSDefault::init()
+  bool TLSDefault::init( const std::string& clientKey,
+                         const std::string& clientCerts,
+                         const StringList& cacerts )
   {
-    return m_impl ? m_impl->init() : false;
+    return m_impl ? m_impl->init( clientKey, clientCerts,
+                                  cacerts ) : false;
   }
 
   int TLSDefault::types()
@@ -92,6 +98,7 @@ namespace gloox
     types |= AnonymousServer;
 #elif defined( HAVE_OPENSSL )
     types |= VerifyingClient;
+    types |= VerifyingServer;
 #elif defined( HAVE_WINTLS )
     types |= VerifyingClient;
 #endif

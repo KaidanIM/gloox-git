@@ -57,7 +57,9 @@ namespace gloox
       virtual ~GnuTLSClient();
 
       // reimplemented from TLSBase
-      virtual bool init();
+      virtual bool init( const std::string& clientKey = EmptyString,
+                         const std::string& clientCerts = EmptyString,
+                         const StringList& cacerts = StringList() );
 
       // reimplemented from TLSBase
       virtual void setCACerts( const StringList& cacerts );

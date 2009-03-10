@@ -47,10 +47,15 @@ namespace gloox
       /**
        * Initializes the TLS module. This function must be called (and execute successfully)
        * before the module can be used.
+       * @param clientKey The absolute path to the user's private key in PEM format.
+       * @param clientCerts A path to a certificate bundle in PEM format.
+       * @param cacerts A list of absolute paths to CA root certificate files in PEM format.
        * @return @b False if initialization failed, @b true otherwise.
        * @since 1.0
        */
-      virtual bool init() = 0;
+      virtual bool init( const std::string& clientKey = EmptyString,
+                         const std::string& clientCerts = EmptyString,
+                         const StringList& cacerts = StringList() ) = 0;
 
       /**
        * Enables/disables initialization of the underlying TLS library. By default,
