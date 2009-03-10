@@ -35,7 +35,7 @@ namespace gloox
     if( m_initLib )
       SSL_library_init();
 
-    SSL_COMP_add_compression_method( 1, COMP_zlib() );
+    SSL_COMP_add_compression_method( 193, COMP_zlib() );
 
     m_ctx = SSL_CTX_new( TLSv1_client_method() );
     if( !m_ctx )
