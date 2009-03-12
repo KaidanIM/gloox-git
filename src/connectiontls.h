@@ -48,7 +48,7 @@ namespace gloox
    * @since 1.0
    */
 
-  class GLOOX_API ConnectionTLS : public TLSHandler, public ConnectionBase, ConnectionDataHandler
+  class GLOOX_API ConnectionTLS : public TLSHandler, public ConnectionBase, public ConnectionDataHandler
   {
     public:
       /**
@@ -170,8 +170,18 @@ namespace gloox
       virtual void handleHandshakeResult( const TLSBase* base, bool success, CertInfo& certinfo );
 
     private:
+      /**
+       * Returns a TLS object (client). Reimplement to change the
+       * type of the object.
+       * @return A TLS object.
+       */
+      virtual TLSBase* getTLSBase( TLSHandler* th, const std::string server )
+      {
+        return new TLSDefault( th, server, TLSDefault::VerifyingClient );
+      }
+
       ConnectionBase* m_connection;
-      TLSDefault* m_tls;
+      TLSBase* m_tls;
       TLSHandler* m_tlsHandler;
       CertInfo m_certInfo;
       const LogSink& m_log;
