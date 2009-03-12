@@ -228,6 +228,17 @@ namespace gloox
           Command( const std::string& node, Action action );
 
           /**
+           * Creates a Command object from the given Tag.
+           * @param tag A &lt;command&gt; tag in the adhoc commands' namespace.
+           */
+          Command( const Tag* tag = 0 );
+
+          /**
+           * Virtual destructor.
+           */
+          virtual ~Command();
+
+          /**
            * Returns the node identifier (the command).
            * @return The node identifier.
            */
@@ -313,17 +324,6 @@ namespace gloox
 #ifdef ADHOC_COMMANDS_TEST
         public:
 #endif
-          /**
-           * Creates a Command object from the given Tag.
-           * @param tag A &lt;command&gt; tag in the adhoc commands' namespace.
-           */
-          Command( const Tag* tag = 0 );
-
-          /**
-           * Virtual destructor.
-           */
-          virtual ~Command();
-
           NoteList m_notes;
 
           std::string m_node;

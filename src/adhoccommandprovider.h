@@ -53,6 +53,21 @@ namespace gloox
       virtual void handleAdhocCommand( const JID& from, const Adhoc::Command& command,
                                        const std::string& sessionID ) = 0;
 
+      /**
+       * This function gets called for each registered command when a remote
+       * entity requests the list of available commands.
+       * @param from The requesting entity.
+       * @param command The command's name.
+       * @return @b True if the remote entity is allowed to see the command, @b false if not.
+       * @note The return value of this function does not influence
+       * the execution of a command. That is, you have to
+       * implement additional access control at the execution
+       * stage.
+       * @note This function should not block.
+       */
+      virtual bool handleAdhocAccessRequest( const JID& from, const std::string& command )
+        { return true; }
+
   };
 
 }
