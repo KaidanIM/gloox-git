@@ -56,7 +56,12 @@ namespace gloox
     if( !m_connection )
       return ConnNotConnected;
 
-    m_compression = new CompressionDefault( this );
+    if( m_state == StateConnected )
+      return ConnNoError;
+
+    if( !m_compression )
+      m_compression = new CompressionDefault( this );
+
     if( !m_compression )
       return ConnCompressionNotAvailable;
 
@@ -65,7 +70,10 @@ namespace gloox
 
     m_state = StateConnected;
 
-    return m_connection->connect();
+    if( m_connection->state() != StateConnected )
+      return m_connection->connect();
+
+    return ConnNoError;
  }
 
   ConnectionError ConnectionCompression::recv( int timeout )
