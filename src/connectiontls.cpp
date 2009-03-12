@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2004-2009 by Jakob Schroeter <js@camaya.net>
+ * Copyright (c) 2007-2009 by Jakob Schroeter <js@camaya.net>
  * This file is part of the gloox library. http://camaya.net/gloox
  *
  * This software is distributed under a license. The full license
@@ -19,7 +19,8 @@ namespace gloox
 
   ConnectionTLS::ConnectionTLS( ConnectionDataHandler* cdh, ConnectionBase* conn, const LogSink& log )
     : ConnectionBase( cdh ),
-      m_connection( conn ), m_tls( 0 ), m_log( log )
+      m_connection( conn ), m_tls( 0 ), m_tlsHandler( 0 ),
+      m_log( log )
   {
     if( m_connection )
       m_connection->registerConnectionDataHandler( this );
@@ -27,7 +28,7 @@ namespace gloox
 
   ConnectionTLS::ConnectionTLS( ConnectionBase* conn, const LogSink& log )
     : ConnectionBase( 0 ),
-      m_connection( conn ), m_tls( 0 ), m_log( log )
+      m_connection( conn ), m_tls( 0 ), m_tlsHandler( 0 ), m_log( log )
   {
     if( m_connection )
       m_connection->registerConnectionDataHandler( this );
@@ -55,15 +56,20 @@ namespace gloox
     if( !m_connection )
       return ConnNotConnected;
 
-    m_tls = new TLSDefault( this, m_connection->server() );
+    if( m_state == StateConnected )
+      return ConnNoError;
+
+    if( !m_tls )
+      m_tls = getTLSBase( this, m_connection->server() );
+
     if( !m_tls )
       return ConnTlsNotAvailable;
 
-    if( !m_tls->init() )
+    if( !m_tls->init( m_clientKey, m_clientCerts, m_cacerts ) )
       return ConnTlsFailed;
 
-    m_tls->setCACerts( m_cacerts );
-    m_tls->setClientCert( m_clientKey, m_clientCerts );
+//     m_tls->setCACerts( m_cacerts );
+//     m_tls->setClientCert( m_clientKey, m_clientCerts );
 
     m_state = StateConnecting;
 
@@ -121,8 +127,7 @@ namespace gloox
       m_connection->cleanup();
     if( m_tls )
       m_tls->cleanup();
-    delete m_tls;
-    m_tls = 0;
+
     m_state = StateDisconnected;
   }
 
@@ -169,7 +174,7 @@ namespace gloox
   void ConnectionTLS::handleEncryptedData( const TLSBase* /*tls*/, const std::string& data )
   {
     // m_log.log(LogLevelDebug, LogAreaClassConnectionTLS,
-    printf( "Sending encrypted data...\n" );
+//     printf( "Sending encrypted data...\n" );
     if( m_connection )
       m_connection->send( data );
   }
@@ -177,10 +182,7 @@ namespace gloox
   void ConnectionTLS::handleDecryptedData( const TLSBase* /*tls*/, const std::string& data )
   {
     if( m_handler )
-    {
-      m_log.log( LogLevelDebug, LogAreaClassConnectionTLS, "Handling decrypted data... \n" + data );
       m_handler->handleReceivedData( this, data );
-    }
     else
     {
       m_log.log( LogLevelDebug, LogAreaClassConnectionTLS, "Data received and decrypted but no handler" );
@@ -202,6 +204,8 @@ namespace gloox
     {
       m_state = StateDisconnected;
       m_log.log( LogLevelWarning, LogAreaClassConnectionTLS, "TLS handshake failed" );
+      if( m_tlsHandler )
+        m_tlsHandler->handleHandshakeResult( tls, success, certinfo );
       disconnect();
     }
   }
