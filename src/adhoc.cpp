@@ -202,7 +202,7 @@ namespace gloox
 //    return StringList( 1, XMLNS_ADHOC_COMMANDS );
   }
 
-  Disco::ItemList Adhoc::handleDiscoNodeItems( const JID& /*from*/, const std::string& node )
+  Disco::ItemList Adhoc::handleDiscoNodeItems( const JID& from, const std::string& node )
   {
     Disco::ItemList l;
     if( node.empty() )
@@ -214,7 +214,13 @@ namespace gloox
       StringMap::const_iterator it = m_items.begin();
       for( ; it != m_items.end(); ++it )
       {
-        l.push_back( new Disco::Item( m_parent->jid(), (*it).first, (*it).second ) );
+        AdhocCommandProviderMap::const_iterator itp = m_adhocCommandProviders.find( (*it).first );
+        if( itp != m_adhocCommandProviders.end()
+            && (*itp).second
+            && (*itp).second->handleAdhocAccessRequest( from, (*it).first ) )
+        {
+          l.push_back( new Disco::Item( m_parent->jid(), (*it).first, (*it).second ) );
+        }
       }
     }
     return l;
