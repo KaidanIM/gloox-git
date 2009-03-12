@@ -138,7 +138,7 @@ namespace gloox
     Tag* c = new Tag( t, child );
 
     if( !m_names.empty() )
-      t->addAttribute( "name", (*m_names.begin()) );
+      c->addAttribute( "name", (*m_names.begin()) );
 
     int count = 0;
     PrivacyListHandler::PrivacyList::const_iterator it = m_items.begin();
