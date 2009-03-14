@@ -971,8 +971,7 @@ namespace gloox
     IqTrackMap::iterator it = m_iqIDHandlers.begin();
     while( it != m_iqIDHandlers.end() )
     {
-      t = it;
-      ++it;
+      t = it++;
       if( ih == (*t).second.ih )
         m_iqIDHandlers.erase( t );
     }
