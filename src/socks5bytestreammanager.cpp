@@ -58,7 +58,7 @@ namespace gloox
     : StanzaExtension( ExtS5BQuery ), m_type( TypeInvalid )
   {
     if( !tag || tag->name() != "query" || tag->xmlns() != XMLNS_BYTESTREAMS
-        || !tag->hasAttribute( "sid" ) )
+        /*|| !tag->hasAttribute( "sid" )*/ )
       return;
 
     m_sid = tag->findAttribute( "sid" );
@@ -103,7 +103,7 @@ namespace gloox
 
   Tag* SOCKS5BytestreamManager::Query::tag() const
   {
-    if( m_type == TypeInvalid || m_sid.empty() )
+    if( m_type == TypeInvalid /*|| m_sid.empty()*/ )
       return 0;
 
     Tag* t = new Tag( "query" );
