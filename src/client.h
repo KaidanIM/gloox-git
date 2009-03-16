@@ -292,7 +292,7 @@ namespace gloox
           /**
            * Constructs a new object with the given resource string.
            * @param resource The resource to set.
-           * @param bind Indicates whether this is an bind or unbind request request.
+           * @param bind Indicates whether this is an bind or unbind request.
            * Defaults to @b true (bind).
            */
           ResourceBind( const std::string& resource, bool bind = true );
