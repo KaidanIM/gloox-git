@@ -19,10 +19,10 @@
 namespace gloox
 {
 
-  Parser::Parser( TagHandler* ph )
+  Parser::Parser( TagHandler* ph, bool deleteRoot )
     : m_tagHandler( ph ), m_current( 0 ), m_root( 0 ), m_xmlnss( 0 ), m_state( Initial ),
       m_preamble( 0 ), m_quote( false ), m_haveTagPrefix( false ), m_haveAttribPrefix( false ),
-      m_attribIsXmlns( false )
+      m_attribIsXmlns( false ), m_deleteRoot( deleteRoot )
   {
   }
 
@@ -182,6 +182,22 @@ namespace gloox
       {
         case Initial:
 //           printf( "Initial: %c\n", c );
+          if( isWhitespace( c ) )
+            break;
+
+          switch( c )
+          {
+            case '<':
+              m_state = TagOpening;
+              break;
+            default:
+              cleanup();
+              return i;
+              break;
+          }
+          break;
+        case InterTag:
+//           printf( "InterTag: %c\n", c );
           m_tag = EmptyString;
           if( isWhitespace( c ) )
             break;
@@ -201,7 +217,7 @@ namespace gloox
               break;
           }
           break;
-        case TagOpening:               // opening '<' has been found before
+          case TagOpening:               // opening '<' has been found before
 //           printf( "TagOpening: %c\n", c );
           if( isWhitespace( c ) )
             break;
@@ -345,7 +361,7 @@ namespace gloox
               return i;
             }
 
-            m_state = Initial;
+            m_state = InterTag;
           }
           else
           {
@@ -404,7 +420,7 @@ namespace gloox
                 cleanup();
                 return i;
               }
-              m_state = Initial;
+              m_state = InterTag;
               break;
             default:
               m_tag += c;
@@ -657,7 +673,7 @@ namespace gloox
     if( m_tag == "stream" && m_root->xmlns() == XMLNS_STREAM )
     {
       streamEvent( m_root );
-      cleanup();
+      cleanup( m_deleteRoot );
       return;
     }
 //     else
@@ -736,15 +752,16 @@ namespace gloox
     {
 //       printf( "pushing upstream\n" );
       streamEvent( m_root );
-      cleanup();
+      cleanup( m_deleteRoot );
     }
 
     return true;
   }
 
-  void Parser::cleanup()
+  void Parser::cleanup( bool deleteRoot )
   {
-    delete m_root;
+    if( deleteRoot )
+      delete m_root;
     m_root = 0;
     m_current = 0;
     delete m_xmlnss;

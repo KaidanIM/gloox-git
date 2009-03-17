@@ -205,6 +205,32 @@ class ParserTest : private TagHandler
       delete m_tag;
       m_tag = 0;
 
+      // -------
+      name = "deferred prolog";
+      data = " <?xml version='1.0'?>";
+      p->feed( data );
+      if( ( m_tag != 0 )/* ||
+            m_tag->name() != "xml" ||
+            !m_tag->hasAttribute( "version", "1.0" )*/ )
+      {
+        ++fail;
+        printf( "test '%s: %s' failed\n", name.c_str(), data.c_str() );
+      }
+    //   printf( "stanza: %s\n", m_tag->xml().c_str() );
+      delete m_tag;
+      m_tag = 0;
+
+      // -------
+      name = "invalid prolog";
+      data = "foobar";
+      if( p->feed( data ) != 0 )
+      {
+        ++fail;
+        printf( "test '%s: %s' failed\n", name.c_str(), data.c_str() );
+      }
+    //   printf( "stanza: %s\n", m_tag->xml().c_str() );
+      delete m_tag;
+      m_tag = 0;
 
       // -------
       name = "deeply nested";
