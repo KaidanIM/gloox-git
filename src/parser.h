@@ -37,8 +37,10 @@ namespace gloox
       /**
        * Constructs a new Parser object.
        * @param ph The object to send incoming Tags to.
+       * @param deleteRoot Indicates whether a parsed Tag should be
+       * deleted after pushing it upstream. Defaults to @p true.
        */
-      Parser( TagHandler* ph );
+      Parser( TagHandler* ph, bool deleteRoot = true );
 
       /**
        * Virtual destructor.
@@ -53,10 +55,18 @@ namespace gloox
        */
       int feed( std::string& data );
 
+      /**
+       * Resets internal state.
+       * @param deleteRoot Whether to delete the m_root member. For
+       * internal use only.
+       */
+      void cleanup( bool deleteRoot = true );
+
     private:
       enum ParserInternalState
       {
         Initial,
+        InterTag,
         TagOpening,
         TagOpeningSlash,
         TagOpeningLt,
@@ -93,7 +103,6 @@ namespace gloox
       void addAttribute();
       void addCData();
       bool closeTag();
-      void cleanup();
       bool isWhitespace( unsigned char c );
       bool isValid( unsigned char c );
       void streamEvent( Tag* tag );
@@ -121,6 +130,7 @@ namespace gloox
       bool m_haveTagPrefix;
       bool m_haveAttribPrefix;
       bool m_attribIsXmlns;
+      bool m_deleteRoot;
 
   };
 
