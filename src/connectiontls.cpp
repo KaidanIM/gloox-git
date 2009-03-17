@@ -148,19 +148,13 @@ namespace gloox
   void ConnectionTLS::handleReceivedData( const ConnectionBase* /*connection*/, const std::string& data )
   {
     if( m_tls )
-    {
-      m_log.log( LogLevelDebug, LogAreaClassConnectionTLS, "Decrypting received data..." );
       m_tls->decrypt( data );
-    }
   }
 
   void ConnectionTLS::handleConnect( const ConnectionBase* /*connection*/ )
   {
     if( m_tls )
-    {
-      m_log.log( LogLevelDebug, LogAreaClassConnectionTLS, "Beginning TLS handshake...." );
       m_tls->handshake();
-    }
   }
 
   void ConnectionTLS::handleDisconnect( const ConnectionBase* /*connection*/, ConnectionError reason )
@@ -173,8 +167,6 @@ namespace gloox
 
   void ConnectionTLS::handleEncryptedData( const TLSBase* /*tls*/, const std::string& data )
   {
-    // m_log.log(LogLevelDebug, LogAreaClassConnectionTLS,
-//     printf( "Sending encrypted data...\n" );
     if( m_connection )
       m_connection->send( data );
   }
