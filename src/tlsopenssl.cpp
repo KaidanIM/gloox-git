@@ -252,6 +252,10 @@ namespace gloox
     if( tmp )
       m_certInfo.protocol = tmp;
 
+    tmp = SSL_COMP_get_name( SSL_get_current_compression( m_ssl ) );
+    if( tmp )
+      m_certInfo.compression = tmp;
+ 
     m_valid = true;
 
     m_handler->handleHandshakeResult( this, true, m_certInfo );
